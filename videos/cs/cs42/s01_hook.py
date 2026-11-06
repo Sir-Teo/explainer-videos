@@ -132,9 +132,6 @@ class Hook(VoiceoverScene):
             (rf"layout: \ {b['boxes']} blocks, \ {b['words']} words in lines", DATA),
             (r"paint: \ real fonts, \ real pixels", KERN))]).arrange(DOWN, aligned_edge=LEFT, buff=0.38)
         stages.next_to(img, RIGHT, buff=0.6).shift(UP * 0.3)
-        arrows = VGroup(*[Arrow(stages[i].get_bottom() + DOWN * 0.02, stages[i + 1].get_top() + UP * 0.02, buff=0.03,
-                                stroke_width=2, color=GREY_C, max_tip_length_to_length_ratio=0.3).align_to(
-            stages, LEFT).shift(RIGHT * 0.2) for i in range(4)])
         cap = wrapped_label(r"this series' own README, \ rendered by about 700 lines of our Python", 5.6,
                             font_size=19, color=GREY_B).next_to(stages, DOWN, buff=0.5).align_to(stages, LEFT)
         with self.voiceover(
@@ -150,7 +147,7 @@ class Hook(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(img, shift=UP * 0.2))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(s) for s in stages], lag_ratio=0.5), Create(arrows), run_time=4)
+            self.play(LaggedStart(*[FadeIn(s, shift=DOWN * 0.1) for s in stages], lag_ratio=0.5), run_time=4)
             vo.wait_until("c")
             self.play(FadeIn(cap))
         self.wait(0.4)

@@ -1,0 +1,360 @@
+{
+ "title": "计算机科学，从零搭建 · 第41部分：版本控制、构建与依赖",
+ "chapters": {
+  "Hook": "2005年的十天，以及我们自己的 git",
+  "Objects": "1. git 的对象",
+  "Merge": "2. 合并与二分查找",
+  "Storage": "3. 存储历史",
+  "Builds": "4. 构建系统",
+  "Deps": "5. 依赖",
+  "Ci": "6. 持续集成",
+  "Delivery": "7. 持续交付",
+  "Frontier": "8. 前沿：正确地合并与构建",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "b32d971b3c07": {
+   "scene": "Hook",
+   "en": "Version control is older than most of computing's habits. <bookmark mark='a'/> In the seventies and eighties, SCCS and RCS tracked one file at a time, and you locked a file to change it. CVS, in 1990, tracked whole projects on a central server; Subversion, in 2000, made commits atomic. <bookmark mark='b'/> From 2002 the Linux kernel used BitKeeper, a proprietary distributed system, under a free licence. <bookmark mark='c'/> In April 2005 that licence was withdrawn. <bookmark mark='d'/> Linus Torvalds started writing a replacement. Within days it could manage its own source code, and within a few weeks the kernel's. He called it git.",
+   "zh": "版本控制比计算领域的大多数习惯都要古老。<bookmark mark='a'/>在70年代和80年代，SCCS 和 RCS 一次只跟踪一个文件，要修改一个文件，就得先把它锁住。1990年的 CVS 在一台中央服务器上跟踪整个项目；2000年的 Subversion 让提交成为原子操作。<bookmark mark='b'/>从2002年起，Linux 内核使用 BitKeeper，这是一个专有的分布式系统，以免费许可证的方式提供。<bookmark mark='c'/>2005年4月，这份许可证被收回了。<bookmark mark='d'/>Linus Torvalds 开始写一个替代品。几天之内，它就能管理自己的源代码；几周之内，就能管理内核的源代码。他把它叫作 git。"
+  },
+  "ec80296d4ba5": {
+   "scene": "Hook",
+   "en": "Git is simpler inside than its commands suggest, simple enough to rebuild. <bookmark mark='a'/> We wrote a small object store, a few dozen lines, and asked it and the real git to record the same three files with the same author and time. <bookmark mark='b'/> Every name is identical: the three files, the directory tree, and the commit. Each object's name is the hash of its contents, Part 29's SHA-1, so any copy of git anywhere computes the same names for the same history. This part opens up the three machines every change passes through: version control, the build, and the package manager.",
+   "zh": "git 的内部比它的命令看上去要简单，简单到可以重新搭建一个。<bookmark mark='a'/>我们写了一个小小的对象存储，只有几十行，然后让它和真正的 git 用同样的作者和时间，记录同样的三个文件。<bookmark mark='b'/>每一个名字都完全相同：三个文件、目录树，以及那次提交。每个对象的名字就是它内容的哈希值，也就是第29部分的 SHA-1，所以无论在哪里，任何一份 git 对同样的历史都会算出同样的名字。这一部分要打开每一次修改都必须经过的三台机器：版本控制、构建，以及包管理器。"
+  },
+  "b31c1537360a": {
+   "scene": "Hook",
+   "en": "This is Part 41 of Computer Science, Built. <bookmark mark='a'/> We will see that git is secretly a Merkle graph of hashes; that merging is a three-way comparison and bisecting is binary search; that a build system is an incremental computation over a graph, and that choosing package versions is as hard as satisfiability. And we will follow a change through a merge queue and a canary release to the people who use it. Along the way we will measure this repository's own history, its forty versions of one file, its seventeen thousand objects and the tests each of its modules can reach, because the tools that built this series are themselves the best specimen of what this part is about.",
+   "zh": "这是计算机科学，从零搭建，第41部分。<bookmark mark='a'/>我们会看到，git 其实是一张由哈希构成的默克尔图（Merkle graph）；合并是一次三方比较，而用 bisect 二分查找，正是二分搜索；构建系统是在一张图上进行的增量计算；而选择包的版本，和可满足性问题一样难。我们还会跟着一次修改，经过合并队列和金丝雀发布，一直走到使用它的人手中。一路上，我们会测量这个代码库自己的历史：它的一个文件的40个版本、它的1万7千个对象，以及它的每个模块能触及的测试。因为制作这个系列的工具本身，就是这一部分所讲内容的最好标本。"
+  },
+  "3fbb4fc45960": {
+   "scene": "Objects",
+   "en": "Chapter one. Git's objects.",
+   "zh": "第一章：git 的对象。"
+  },
+  "f95ed9d995bd": {
+   "scene": "Objects",
+   "en": "Git stores four kinds of object, each named by the hash of its contents. <bookmark mark='a'/> A blob is a file's bytes and nothing else, not even its name. A tree is a directory: for each entry, its mode, its name and the name of the object it points to. A commit names one tree, the snapshot of the whole project, plus its parent commits, its author and a message. <bookmark mark='b'/> And a tag names a commit, usually with a signature. <bookmark mark='c'/> Nothing is ever overwritten. A new version of a file is a new blob with a new name; the old one stays. <bookmark mark='d'/> The hash was SHA-1, and since researchers produced a practical SHA-1 collision in 2017, git has been moving to SHA-256.",
+   "zh": "git 存储四种对象，每一种都以它内容的哈希值命名。<bookmark mark='a'/>blob（数据块）就是一个文件的字节，除此之外什么都没有，连文件名都没有。tree（树）是一个目录：其中每个条目，都记录它的模式、它的名字，以及它所指向的对象的名字。commit（提交）指定一棵树，也就是整个项目的快照，再加上它的父提交、作者和一条消息。<bookmark mark='b'/>而 tag（标签）指定一个提交，通常还带着一个签名。<bookmark mark='c'/>任何东西都不会被覆盖。一个文件的新版本，就是一个有新名字的新 blob；旧的那个依然保留。<bookmark mark='d'/>哈希函数原本是 SHA-1；自从研究者在2017年做出了一次实用的 SHA-1 碰撞，git 就一直在向 SHA-256 迁移。"
+  },
+  "5f4978d3fb96": {
+   "scene": "Objects",
+   "en": "Because every name is a hash of contents that include other names, the objects form a Merkle graph, Ralph Merkle's tree of hashes from Part 39's anti-entropy. <bookmark mark='a'/> Here is our small project: a commit, its tree, and below it the files and subdirectories. <bookmark mark='b'/> Change one line of one file. Its blob gets a new name; so does the tree that lists it, and the tree above that, and the root, and the commit. Everything else keeps its name and is shared between the two snapshots, not copied. <bookmark mark='c'/> Two consequences. A commit's name vouches for every byte of the project and its whole history: change anything and the name changes. And comparing two snapshots is fast: equal names mean equal subtrees, so git skips them without looking inside.",
+   "zh": "因为每个名字都是内容的哈希，而这些内容里又包含别的名字，所以这些对象构成一张默克尔图，也就是 Ralph Merkle 的哈希树，第39部分的反熵用过它。<bookmark mark='a'/>这是我们的小项目：一个提交、它的树，下面是各个文件和子目录。<bookmark mark='b'/>改动一个文件里的一行。它的 blob 得到一个新名字；列出它的那棵树也是，再上面那棵树也是，还有根，还有提交。其他一切都保留原来的名字，在两个快照之间共享，而不是复制。<bookmark mark='c'/>这有两个后果。一个提交的名字，为整个项目的每一个字节和它的全部历史作担保：改动任何东西，名字就会变。而且比较两个快照很快：名字相同就意味着子树相同，所以 git 直接跳过它们，不用往里看。"
+  },
+  "9562d16adb4c": {
+   "scene": "Objects",
+   "en": "Content addressing gives integrity checking for free. <bookmark mark='a'/> We stored a file, then flipped a single bit of it, as a failing disk might: novels became novdls. Asked for the object, our store rehashes what it read, gets a completely different name, and refuses. <bookmark mark='b'/> No disk, network or malicious server can hand you different content under the same name, and git fsck checks every object this way. <bookmark mark='c'/> It also makes signatures cheap: signing one commit's hash vouches for the whole history beneath it. <bookmark mark='d'/> That depends on the hash. In 2017 researchers published two different PDF files with the same SHA-1, after about two to the sixty-three computations. Git now detects that attack's fingerprint, and supports repositories hashed with SHA-256.",
+   "zh": "内容寻址免费带来了完整性校验。<bookmark mark='a'/>我们存了一个文件，然后像一块出故障的磁盘那样，翻转了其中的一个比特：novels 变成了 novdls。请求这个对象时，我们的存储会把读到的内容重新算一遍哈希，得到一个完全不同的名字，于是拒绝返回。<bookmark mark='b'/>没有任何磁盘、网络或恶意服务器，能在同一个名字下给你不同的内容，而 git fsck 正是这样检查每一个对象的。<bookmark mark='c'/>它也让签名变得廉价：给一个提交的哈希签名，就为它下面的整段历史作了担保。<bookmark mark='d'/>这一切都取决于哈希函数。2017年，研究者公布了两个不同的 PDF 文件，它们的 SHA-1 相同，大约花了2的63次方次计算。git 现在能检测出这种攻击的特征，并且支持用 SHA-256 做哈希的仓库。"
+  },
+  "51a0476f41f5": {
+   "scene": "Objects",
+   "en": "Hashes are not names people can use, so git adds a thin layer of mutable pointers. <bookmark mark='a'/> A branch is a small file containing one commit's name. Committing writes a new commit whose parent is the old one, and moves the branch to it. HEAD records which branch you are on. <bookmark mark='b'/> The index is the tree of the next commit, being assembled: adding a file writes its blob and records it there. <bookmark mark='c'/> Checking out another commit rewrites the working files to match its tree, touching only paths whose names differ. <bookmark mark='d'/> And the reflog records every position each branch has had, so a commit you think you lost is still there, by name, until garbage collection removes objects that nothing points to.",
+   "zh": "哈希不是人能用的名字，所以 git 在上面加了薄薄一层可变的指针。<bookmark mark='a'/>一个分支就是一个小文件，里面装着一个提交的名字。提交时，git 写入一个新提交，它的父提交是旧的那个，然后把分支移到新提交上。HEAD 记录你当前在哪个分支上。<bookmark mark='b'/>索引（index）是下一个提交的树，正在组装之中：添加一个文件，就是写入它的 blob，并在索引里记下它。<bookmark mark='c'/>检出另一个提交，会改写工作区的文件，让它们和那个提交的树一致，只触及名字不同的路径。<bookmark mark='d'/>而 reflog 记录了每个分支曾经到过的每一个位置，所以一个你以为丢掉的提交，其实还在那里，凭名字就能找到，直到垃圾回收把没有任何东西指向的对象删掉为止。"
+  },
+  "6dbb39ae3689": {
+   "scene": "Objects",
+   "en": "Most of git's confusing commands become simple once you see the three trees it keeps. <bookmark mark='a'/> HEAD is the tree of the last commit. The index is the next commit, being assembled. The working tree is the files you actually edit. Adding copies a file from the working tree into the index; committing turns the index into a new commit and moves HEAD. <bookmark mark='b'/> Status compares them pairwise: what is staged, and what is changed but not yet staged; files whose hashes agree are skipped without being read. <bookmark mark='c'/> And reset, the command people fear most, moves HEAD and then overwrites none, one or both of the other two trees, depending on whether it is soft, mixed or hard.",
+   "zh": "git 的大多数令人困惑的命令，一旦你看清它维护的三棵树，就变得简单了。<bookmark mark='a'/>HEAD 是上一次提交的树。索引是下一次提交，正在组装之中。工作区（working tree）是你实际编辑的文件。add 把一个文件从工作区复制到索引里；commit 把索引变成一个新提交，并移动 HEAD。<bookmark mark='b'/>status 两两比较它们：哪些已经暂存，哪些改动了但还没有暂存；哈希一致的文件直接跳过，根本不读。<bookmark mark='c'/>而 reset，人们最害怕的那个命令，会移动 HEAD，然后覆盖另外两棵树中的零棵、一棵或两棵，取决于它是 soft、mixed 还是 hard。"
+  },
+  "5f475b31078b": {
+   "scene": "Merge",
+   "en": "Chapter two. Merging and bisecting.",
+   "zh": "第二章：合并与二分查找。"
+  },
+  "53a7e93442db": {
+   "scene": "Merge",
+   "en": "History is a directed acyclic graph: every commit points to its parents. To merge two branches, git first finds where they diverged. <bookmark mark='a'/> A merge base is a best common ancestor: a commit that both branches contain and that is not an ancestor of another such commit, the lowest common ancestor of Part 18 generalized to graphs. <bookmark mark='b'/> Usually there is one. But in this history each branch merged the other, a criss-cross, and commits five and six have two merge bases, one and two, neither better than the other. <bookmark mark='c'/> Git's recursive strategy merges the two bases first into a virtual ancestor, and merges against that. Its replacement since 2021, called ort, does the same, many times faster.",
+   "zh": "历史是一张有向无环图：每个提交都指向它的父提交。要合并两个分支，git 首先要找到它们是在哪里分开的。<bookmark mark='a'/>合并基（merge base）是一个最佳公共祖先：两个分支都包含它，而且它不是另一个这样的提交的祖先。这就是第18部分的最近公共祖先，推广到了图上。<bookmark mark='b'/>通常只有一个。但在这段历史里，每个分支都合并过对方，形成交叉合并（criss-cross），于是提交5和提交6有两个合并基，1和2，谁也不比谁更好。<bookmark mark='c'/>git 的 recursive 策略先把两个合并基合并成一个虚拟祖先，再以它为基准进行合并。2021年起取代它的策略叫 ort，做的是同样的事，但快了很多倍。"
+  },
+  "84d33dbb34d9": {
+   "scene": "Merge",
+   "en": "How does git find merge bases quickly in a history of millions of commits? <bookmark mark='a'/> It walks backwards from both commits at once, newest first, painting each commit it reaches with the side or sides that reached it. <bookmark mark='b'/> A commit painted by both sides is a common ancestor. Its own ancestors are painted stale, so they will not be reported as well, and the walk stops when only stale commits are left. <bookmark mark='c'/> The cost depends on how far the branches have drifted, not on the length of history, and since 2018 a commit-graph file storing generation numbers lets git stop earlier still. <bookmark mark='d'/> The same walk answers which commits one branch has that another lacks, and whether a push only moves a branch forward.",
+   "zh": "在一段有数百万个提交的历史里，git 怎样快速找到合并基？<bookmark mark='a'/>它从两个提交同时往回走，最新的先走，给它到达的每个提交涂上颜色，标明是哪一边或哪两边到达了它。<bookmark mark='b'/>被两边都涂过的提交，就是一个公共祖先。它自己的祖先会被涂成“过时”，这样它们就不会也被报告出来；当只剩下过时的提交时，遍历就停止。<bookmark mark='c'/>代价取决于两个分支分开了多远，而不是历史有多长。从2018年起，一个存储世代编号（generation number）的 commit-graph 文件，让 git 能更早停下来。<bookmark mark='d'/>同样的遍历，还能回答一个分支有哪些另一个分支没有的提交，以及一次推送是否只是把分支往前移。"
+  },
+  "15f8ceebab80": {
+   "scene": "Merge",
+   "en": "Every merge rests on a diff, and Part 21 showed what a diff is: a shortest path. <bookmark mark='a'/> Lay the old text along the top and the new down the side. Moving right deletes a letter of the old; moving down inserts a letter of the new; and where the letters match, a diagonal keeps it, for free. <bookmark mark='b'/> The shortest edit script is the path with fewest horizontal and vertical steps. For Eugene Myers' own example it needs five edits and keeps four letters. <bookmark mark='c'/> His algorithm of 1986 explores paths in order of how many edits they use, keeping only the furthest point each can reach, so its time grows with the size of the difference rather than the size of the files. Since versions of a file usually differ a little, that is exactly the case that matters.",
+   "zh": "每一次合并都建立在一次差异比较（diff）之上，而第21部分已经说明了 diff 是什么：一条最短路径。<bookmark mark='a'/>把旧文本沿顶部排开，新文本沿侧边排下。向右走删除旧文本的一个字母；向下走插入新文本的一个字母；在字母相同的地方，沿对角线走就保留它，不花任何代价。<bookmark mark='b'/>最短编辑脚本，就是横向和纵向步数最少的那条路径。对于 Eugene Myers 自己举的例子，它需要5次编辑，保留4个字母。<bookmark mark='c'/>他在1986年提出的算法，按路径用掉的编辑次数依次探索，每条路径只保留它能到达的最远点，所以运行时间随差异的大小增长，而不是随文件的大小增长。由于一个文件的各个版本通常只差一点点，这恰恰是最要紧的情形。"
+  },
+  "ff1611b3934b": {
+   "scene": "Merge",
+   "en": "With a merge base in hand, the merge itself compares three versions. <bookmark mark='a'/> Here a base, and two branches: ours lower-cased the words; theirs changed twenty to ten. <bookmark mark='b'/> Diff the base against each side, with Myers' algorithm from Part 21. A region changed on only one side takes that side's version; a region changed identically on both takes it once. Our merge keeps both changes, and no person is needed. <bookmark mark='c'/> But if theirs had also rewritten line two, differently, no rule can choose, and git writes both versions between conflict markers for a person to resolve. Without the base, a two-way comparison could not tell which side changed anything at all.",
+   "zh": "有了合并基，合并本身就是比较三个版本。<bookmark mark='a'/>这里是一个基准版本和两个分支：我们这边把单词改成了小写；他们那边把20改成了10。<bookmark mark='b'/>用第21部分的 Myers 算法，分别比较基准和每一边的差异。只在一边改动的区域，取那一边的版本；两边改得完全一样的区域，只取一次。我们的合并保留了两处改动，不需要任何人介入。<bookmark mark='c'/>但如果他们那边也改写了第2行，而且改法不同，就没有任何规则能做出选择，git 会把两个版本都写在冲突标记之间，留给人来解决。如果没有基准版本，两方比较根本无法判断，到底是哪一边改动了什么。"
+  },
+  "7a915da439a4": {
+   "scene": "Merge",
+   "en": "When a merge does conflict, someone has to decide. <bookmark mark='a'/> A conflict is a question only a person, or a test, can answer: which combination of two intentions is correct? <bookmark mark='b'/> Git can at least avoid asking twice. Its rerere feature, reuse recorded resolution, remembers how you resolved a conflict, keyed by a hash of its two sides, and replays the answer when the same conflict comes back, as it does when a branch is rebased repeatedly. <bookmark mark='c'/> After resolving, build and test the result: a merge with no textual conflict can still be wrong, as the frontier chapter will show. <bookmark mark='d'/> And the cheapest conflict is the one that never happens, because changes were small and merged often.",
+   "zh": "当合并确实发生冲突时，总得有人来做决定。<bookmark mark='a'/>冲突是一个只有人、或者测试，才能回答的问题：两种意图的哪一种组合才是正确的？<bookmark mark='b'/>git 至少能避免问两次。它的 rerere 功能，也就是“重用已记录的解决方案”，会记住你是怎样解决一个冲突的，以冲突两边的哈希为键；当同一个冲突再次出现时，就重放这个答案，一个分支被反复变基时，就会这样。<bookmark mark='c'/>解决之后，要构建并测试结果：一次没有文本冲突的合并，仍然可能是错的，前沿一章会说明这一点。<bookmark mark='d'/>而代价最小的冲突，是从来不会发生的冲突，因为改动都很小，而且合并得很频繁。"
+  },
+  "28b2ce8e3317": {
+   "scene": "Merge",
+   "en": "There are two ways to bring a branch up to date. <bookmark mark='a'/> A merge commit has two parents and records history as it happened, branches and all. <bookmark mark='b'/> A rebase instead replays each of the branch's diffs on top of the new main line, making new commits with new names, and gives a straight history. <bookmark mark='c'/> Cherry-pick applies a single commit's diff elsewhere. Because rewriting changes names, the one rule is never to rebase commits that other people already have: their copies of history would refer to commits that, in yours, no longer exist.",
+   "zh": "让一个分支跟上最新进度，有两种方式。<bookmark mark='a'/>合并提交有两个父提交，按实际发生的样子记录历史，连同所有分支。<bookmark mark='b'/>变基（rebase）则是把这个分支的每一个差异，重新应用到新的主线之上，生成名字全新的新提交，得到一条笔直的历史。<bookmark mark='c'/>cherry-pick 把单个提交的差异应用到别处。因为改写会改变名字，唯一的规则是：永远不要对别人已经拿到的提交做变基。否则他们那份历史引用的提交，在你这里已经不存在了。"
+  },
+  "4fad2d776c7e": {
+   "scene": "Merge",
+   "en": "History also answers the question every developer eventually asks: when did this break? <bookmark mark='a'/> Mark one old commit good and the current one bad. Git checks out the commit halfway between; you test it and say good or bad; the range halves. <bookmark mark='b'/> In a thousand commits, the one that introduced the bug is found in ten tests. <bookmark mark='c'/> It is Part 16's binary search: a million commits need twenty. Given a script that decides good or bad, git bisect runs the whole search by itself. With merges, history is a graph rather than a line, and git picks the commit that splits the remaining candidates most evenly.",
+   "zh": "历史还能回答每个开发者迟早都会问的问题：这是什么时候坏的？<bookmark mark='a'/>把一个旧提交标记为好，把当前提交标记为坏。git 检出正中间的那个提交；你测试它，说好还是坏；范围就减半。<bookmark mark='b'/>在1000个提交里，引入这个 bug 的那一个，只需10次测试就能找到。<bookmark mark='c'/>这就是第16部分的二分查找：100万个提交也只需要20次。给它一个判断好坏的脚本，git bisect 就能自己完成整个搜索。有了合并，历史就是一张图而不是一条线，git 会挑选那个能把剩余候选分得最均匀的提交。"
+  },
+  "e06d1f3a9ebc": {
+   "scene": "Storage",
+   "en": "Chapter three. Storing history.",
+   "zh": "第三章：存储历史。"
+  },
+  "75a50e38fdb1": {
+   "scene": "Storage",
+   "en": "If every version of every file is a whole object, history should be enormous. <bookmark mark='a'/> This repository's syllabus has been committed forty times, growing to three hundred kilobytes. Stored whole, even compressed, the forty versions take four megabytes. <bookmark mark='b'/> Stored as the difference from the version before, a hundred and fifty kilobytes: nearly thirty times less. <bookmark mark='c'/> Git does this when it packs objects: it finds similar objects, often versions of the same path, and stores all but one as deltas, copy instructions and new bytes, the same idea as Part 21's diff, in chains of bounded depth so that reading any version stays fast. The object names do not change when objects are packed: content addressing describes what an object is, and packing is only a decision about how to store it, made again whenever git finds a better one.",
+   "zh": "如果每个文件的每个版本都是一个完整的对象，历史应该会大得惊人。<bookmark mark='a'/>这个仓库的教学大纲已经提交了40次，增长到300 KB。整份存储，即使压缩过，这40个版本也要占4 MB。<bookmark mark='b'/>如果存成与前一个版本的差异，只要150 KB：小了将近30倍。<bookmark mark='c'/>git 打包对象时就是这样做的：它找出相似的对象，往往是同一路径的不同版本，除了一个之外，把其余的都存成增量（delta），也就是复制指令加上新字节，这和第21部分的 diff 是同一个想法；这些增量组成深度有上限的链，所以读取任何一个版本都依然很快。对象打包之后，名字并不改变：内容寻址描述的是一个对象是什么，而打包只是关于如何存储它的一个决定，每当 git 找到更好的方案，就会重新决定。"
+  },
+  "39d700211e3a": {
+   "scene": "Storage",
+   "en": "How much does history cost in practice? We asked this repository. <bookmark mark='a'/> A hundred and sixty commits, seventeen thousand objects. The current commit's files take about nine hundred megabytes. Every object ever stored, uncompressed, is only a little more, and packed on disk it is less than the snapshot alone. <bookmark mark='b'/> Most files here were written once and rarely changed, and the few that change constantly, like the syllabus and the translation tables, pack into deltas. <bookmark mark='c'/> For repositories whose history is far larger than any snapshot, a shallow clone fetches only the latest commit, and a partial clone defers each file's contents until something actually reads it.",
+   "zh": "实践中，历史要花多少成本？我们问了这个仓库。<bookmark mark='a'/>160次提交，17000个对象。当前提交的文件大约占900 MB。曾经存储过的所有对象，不压缩，也只比这多一点；而打包后放在磁盘上，比单独一份快照还小。<bookmark mark='b'/>这里的大多数文件写过一次就很少改动；少数经常改动的文件，比如教学大纲和翻译表，被打包成了增量。<bookmark mark='c'/>对于历史远远大于任何一份快照的仓库，浅克隆只获取最新的一次提交，部分克隆则把每个文件的内容推迟到真正有东西读取它时才获取。"
+  },
+  "d9e3b7e7dffe": {
+   "scene": "Storage",
+   "en": "Which object should each delta be taken against? <bookmark mark='a'/> Any object could serve as the base for any other, so the best packing is a search problem, and git uses a heuristic. <bookmark mark='b'/> It sorts objects by type, by a hash of the end of their path, so that versions of the same file sit together, and by size, largest first; then tries each object against the ten before it, its window, and keeps the smallest delta. <bookmark mark='c'/> Chains have a bounded depth, fifty by default, so that reading any object applies at most fifty deltas: deeper chains are smaller on disk and slower to read. <bookmark mark='d'/> The same packs travel over the network. A fetch sends only the objects the other side lacks, found by the walk of the merging chapter.",
+   "zh": "每个增量应该相对于哪个对象来计算？<bookmark mark='a'/>任何对象都可以作为任何其他对象的基准，所以最优的打包是一个搜索问题，而 git 用的是一种启发式方法。<bookmark mark='b'/>它把对象按类型排序，再按路径末尾的哈希排序，让同一个文件的各个版本挨在一起，然后按大小排序，最大的在前；接着把每个对象与它前面的10个对象逐一尝试，这就是它的窗口，并保留最小的那个增量。<bookmark mark='c'/>链的深度有上限，默认是50，所以读取任何对象最多应用50个增量：链越深，磁盘上越小，读取也越慢。<bookmark mark='d'/>同样的包也在网络上传输。一次 fetch 只发送对方缺少的对象，这些对象是用合并一章里的那种遍历找出来的。"
+  },
+  "84533471a2f7": {
+   "scene": "Storage",
+   "en": "How much code can one history hold? <bookmark mark='a'/> In 2016 Rachel Potvin and Josh Levenberg described Google's monorepo: most of the company's code in a single repository, about two billion lines and eighty-six terabytes, changed by some twenty-five thousand engineers, on a custom system called Piper. <bookmark mark='b'/> One repository means one version of everything and atomic changes across projects; it requires tooling that git alone does not provide, and builds that only redo what changed. <bookmark mark='c'/> The alternative, many repositories, gives each project its own history and releases, at the price of the version management of this part's dependency chapter. <bookmark mark='d'/> Git itself has grown tools for size: shallow clones fetch recent history only, partial clones fetch file contents on demand, sparse checkouts materialize only some directories.",
+   "zh": "一段历史能容纳多少代码？<bookmark mark='a'/>2016年，Rachel Potvin 和 Josh Levenberg 介绍了 Google 的单一代码库（monorepo）：公司的大部分代码都放在同一个仓库里，大约20亿行、86 TB，由大约25000名工程师修改，运行在一个名叫 Piper 的定制系统上。<bookmark mark='b'/>一个仓库意味着所有东西只有一个版本，跨项目的修改也是原子的；它需要单靠 git 提供不了的工具，还需要只重做变化部分的构建。<bookmark mark='c'/>另一种做法是许多个仓库，让每个项目拥有自己的历史和发布，代价是要做本部分依赖一章里讲的那种版本管理。<bookmark mark='d'/>git 本身也发展出了应对规模的工具：浅克隆（shallow clone）只获取最近的历史，部分克隆（partial clone）按需获取文件内容，稀疏检出（sparse checkout）只把一部分目录展开出来。"
+  },
+  "f41f9a1fa58d": {
+   "scene": "Storage",
+   "en": "Git's model is not the only possible one. <bookmark mark='a'/> Git stores snapshots and computes differences when you ask for them. <bookmark mark='b'/> Patch-based systems, Darcs from 2003 and now Pijul, store the changes themselves, and reason about when two patches commute, meaning they can be applied in either order with the same result. Then cherry-picking is exact, and the result of a merge never depends on the order in which branches were combined. <bookmark mark='c'/> Pijul represents a file as a graph of lines in which a conflict is a perfectly valid state, recorded and resolved later by another patch. <bookmark mark='d'/> And for data whose merges can be made conflict-free, Part 39's CRDTs offer version control in which merging never needs a person at all.",
+   "zh": "git 的模型并不是唯一可能的模型。<bookmark mark='a'/>git 存储快照，在你需要的时候才计算差异。<bookmark mark='b'/>基于补丁的系统，比如2003年的 Darcs，以及现在的 Pijul，存储的是变更本身，并推理两个补丁何时可交换，也就是说，按任意顺序应用它们，结果都一样。这样一来，拣选（cherry-pick）是精确的，合并的结果也永远不取决于各个分支被合并的顺序。<bookmark mark='c'/>Pijul 把文件表示为一张由行构成的图，在其中，冲突是一种完全合法的状态，先记录下来，之后再由另一个补丁解决。<bookmark mark='d'/>而对于那些合并可以做到无冲突的数据，第39部分的 CRDT 提供了一种版本控制，在其中合并根本不需要人来参与。"
+  },
+  "c6772756f13c": {
+   "scene": "Builds",
+   "en": "Chapter four. Build systems.",
+   "zh": "第四章：构建系统。"
+  },
+  "966a24325452": {
+   "scene": "Builds",
+   "en": "Stuart Feldman wrote Make at Bell Labs in 1976, the story goes, after a colleague lost a morning debugging a program that had simply not been recompiled. <bookmark mark='a'/> A makefile lists targets, the files each one needs, and the command that makes it. Together they form a directed acyclic graph. <bookmark mark='b'/> Make walks it in topological order, Part 18's algorithm, so that every target is built after what it needs, and rebuilds a target only when one of its prerequisites is newer than it.",
+   "zh": "据说，1976年，Stuart Feldman 在贝尔实验室写出了 Make，起因是一位同事花了一上午调试一个程序，而那个程序其实只是没有被重新编译。<bookmark mark='a'/>一个 makefile 列出若干目标、每个目标需要的文件，以及生成它的命令。这些合在一起，构成一个有向无环图。<bookmark mark='b'/>Make 按拓扑顺序遍历它，也就是第18部分的算法，让每个目标都在它所需要的东西之后构建；并且只有当某个前提文件比目标更新时，才重新构建这个目标。"
+  },
+  "69a4e89a12bc": {
+   "scene": "Builds",
+   "en": "Modification times are a guess about content, and the guess is often wrong. We built both kinds of build system, on a project of two hundred source files and twenty headers. <bookmark mark='a'/> Change a comment in one source file. Make recompiles it, then relinks the library and reruns the tests, although the compiled object is byte for byte the same. A build that remembers the hash of every input, and stops when a rebuilt output is unchanged, recompiles one file and stops. <bookmark mark='b'/> A real change in a header used by thirty-nine files rebuilds the same forty-one targets in both. <bookmark mark='c'/> But check out the project afresh, which gives every file a new time and the same content: Make rebuilds all two hundred and two targets, and the hashing build rebuilds none.",
+   "zh": "修改时间是对内容的一种猜测，而这个猜测常常是错的。我们把两种构建系统都实现了，用在一个有200个源文件和20个头文件的项目上。<bookmark mark='a'/>在一个源文件里改一行注释。Make 会重新编译它，然后重新链接库、重新运行测试，尽管编译出来的目标文件逐字节完全相同。一个记住每个输入的哈希、并在重建后的输出没有变化时就停下的构建，只重新编译一个文件，然后就停下。<bookmark mark='b'/>对一个被39个文件使用的头文件做真正的修改，两者重建的都是同样的41个目标。<bookmark mark='c'/>但如果重新检出这个项目，每个文件都会得到新的时间、相同的内容：Make 会重建全部202个目标，而基于哈希的构建一个也不重建。"
+  },
+  "9126c65144ae": {
+   "scene": "Builds",
+   "en": "One famous mistake shows what a build needs. <bookmark mark='a'/> Large projects used to run a separate Make in each directory, each one seeing only its own part of the dependency graph. <bookmark mark='b'/> In 1997 Peter Miller explained why this fails: a dependency that crosses directories is invisible, so the build is either wrong, leaving something stale, or slow, rebuilding everything just to be safe. <bookmark mark='c'/> The cure is to give one tool the whole graph: a build can only be as correct as the dependencies it can see. <bookmark mark='d'/> Modern build files, Bazel's among them, declare small targets in every directory, but a single tool loads all of them into one graph before doing anything.",
+   "zh": "一个著名的错误，揭示了构建需要什么。<bookmark mark='a'/>大型项目过去常常在每个目录里各运行一个单独的 Make，每个 Make 只看得到依赖图中属于自己的那一部分。<bookmark mark='b'/>1997年，Peter Miller 解释了这为什么会失败：跨目录的依赖是看不见的，所以构建要么是错的，留下过时的东西；要么是慢的，为了保险起见什么都重建。<bookmark mark='c'/>解决办法是把整张图交给一个工具：一次构建能有多正确，取决于它能看见多少依赖。<bookmark mark='d'/>现代的构建文件，包括 Bazel 的，在每个目录里声明小的目标，但由一个工具在做任何事情之前，把它们全部加载进同一张图。"
+  },
+  "866f17783a45": {
+   "scene": "Builds",
+   "en": "Here is the idea of a minimal rebuild on a project small enough to draw: twelve sources, four headers, twelve objects, a library and a test report. <bookmark mark='a'/> Change one header. <bookmark mark='b'/> The targets that must be rebuilt are exactly those reachable from it along the graph's edges: the six objects whose sources include it, then the library and the tests. Every other target's recorded inputs still match, so it is skipped without being looked at again. <bookmark mark='c'/> That reachable set is the least work any correct build system can do, and it is the same set that test selection computed over imports: one idea, used twice.",
+   "zh": "下面在一个小到可以画出来的项目上演示最小重建的想法：12个源文件、4个头文件、12个目标文件、一个库和一份测试报告。<bookmark mark='a'/>修改一个头文件。<bookmark mark='b'/>必须重建的目标，恰好就是沿着图的边从它出发能到达的那些：源文件包含了它的6个目标文件，然后是库和测试。其他每个目标记录下的输入仍然匹配，所以直接跳过，不再看第二遍。<bookmark mark='c'/>这个可达集合，就是任何正确的构建系统所能做到的最少工作量；它也正是测试选择在导入关系上算出的那个集合：同一个想法，用了两次。"
+  },
+  "41e8f638a9eb": {
+   "scene": "Builds",
+   "en": "In 2018 Andrey Mokhov, Neil Mitchell and Simon Peyton Jones showed that the whole zoo of build systems comes from two independent choices. <bookmark mark='a'/> A scheduler decides the order in which tasks are visited: in topological order, or by starting a task and restarting or suspending it when it discovers a dependency it did not declare. A rebuilder decides whether a task must run again: a dirty bit, verifying traces like ours, or constructive traces. <bookmark mark='b'/> Constructive traces store the outputs too, keyed by the hash of the inputs, which turns the build into a shared cache: a file compiled on one machine is downloaded by everyone else. <bookmark mark='c'/> And Excel is a build system: cells are targets and formulas are rules, with dependencies that are only discovered while computing.",
+   "zh": "2018年，Andrey Mokhov、Neil Mitchell 和 Simon Peyton Jones 证明，形形色色的构建系统都来自两个相互独立的选择。<bookmark mark='a'/>调度器决定以什么顺序访问任务：按拓扑顺序；或者先启动一个任务，当它发现一个没有声明过的依赖时，再重启它或挂起它。重建器决定一个任务是否必须再次运行：用脏位，用像我们这样的验证轨迹（verifying trace），或者用构造轨迹（constructive trace）。<bookmark mark='b'/>构造轨迹把输出也存起来，以输入的哈希为键，这就把构建变成了一个共享缓存：在一台机器上编译好的文件，其他所有人都直接下载。<bookmark mark='c'/>而 Excel 也是一个构建系统：单元格是目标，公式是规则，而依赖关系只有在计算过程中才会被发现。"
+  },
+  "e2471a3812b8": {
+   "scene": "Builds",
+   "en": "We added constructive traces to our build engine: a cache shared between machines, holding every output under the hash of the task and all of its inputs. <bookmark mark='a'/> Machine A builds the project from scratch: two hundred and two tasks. Machine B checks out the same commit: it runs nothing and downloads all two hundred and two outputs. A changes a header and rebuilds the forty-one affected targets; B pulls the change and downloads those forty-one. <bookmark mark='b'/> A team builds each distinct thing once, and every other engineer and every CI machine starts where the first left off. <bookmark mark='c'/> The price is discipline: a task that reads an input it did not declare can put a wrong output in the cache, and then everyone's build is wrong.",
+   "zh": "我们给自己的构建引擎加上了构造轨迹：一个在机器之间共享的缓存，把每个输出存放在任务及其全部输入的哈希之下。<bookmark mark='a'/>机器 A 从零开始构建这个项目：202个任务。机器 B 检出同一个提交：它什么都不运行，直接下载全部202个输出。A 修改了一个头文件，重建受影响的41个目标；B 拉取这个修改，下载这41个。<bookmark mark='b'/>一个团队里，每样不同的东西只构建一次，其他每位工程师、每台 CI 机器，都从第一个人停下的地方开始。<bookmark mark='c'/>代价是纪律：一个读取了未声明输入的任务，可能会把错误的输出放进缓存，然后所有人的构建就都错了。"
+  },
+  "539281ea96f7": {
+   "scene": "Builds",
+   "en": "Independent tasks can be built at the same time. <bookmark mark='a'/> A clean build of our project has two hundred compiles of about a second each, then an eight-second link and twenty seconds of tests: two hundred and thirty-five seconds of work in total, and a longest chain, the span, of thirty-four. <bookmark mark='b'/> Part 10's bound says the time on P workers lies between the larger of work over P and the span, and their sum. <bookmark mark='c'/> One worker takes the full two hundred and thirty-five seconds; eight take fifty-four; beyond thirty-two, nothing improves, because the link and the tests cannot be split. Speeding up builds past that point means making the critical path itself shorter.",
+   "zh": "相互独立的任务可以同时构建。<bookmark mark='a'/>我们项目的一次全新构建，有200次编译，每次大约1秒，然后是8秒的链接和20秒的测试：总共235秒的工作量，而最长的一条链，也就是跨度（span），是34秒。<bookmark mark='b'/>第10部分的界限说，在 P 个工作者上所需的时间，介于“工作量除以 P”与跨度两者中较大的那个，和它们的和之间。<bookmark mark='c'/>一个工作者要花满235秒；8个工作者要54秒；超过32个，就再也没有改进了，因为链接和测试无法拆分。要让构建越过这一点继续加速，就得让关键路径本身变短。"
+  },
+  "c43e6bbaf7f8": {
+   "scene": "Builds",
+   "en": "Hash-based building only works if the hashes are honest. <bookmark mark='a'/> A hermetic build runs each task in a sandbox that sees only its declared inputs, so that the hash of those inputs really names everything the result depends on. <bookmark mark='b'/> A reproducible build produces bit-identical outputs from the same inputs, which means banishing timestamps, absolute paths and random orders from the files it writes. <bookmark mark='c'/> Eelco Dolstra's Nix stores every package under the hash of all its inputs; Google's Bazel distributes execution and caching across machines. <bookmark mark='d'/> The payoff goes beyond speed: if builds are reproducible, anyone can rebuild a released program and check that it matches, which defends against a build machine that has been compromised.",
+   "zh": "基于哈希的构建，只有在哈希诚实的时候才行得通。<bookmark mark='a'/>封闭构建（hermetic build）让每个任务都在一个沙箱里运行，沙箱只能看到它声明过的输入，这样这些输入的哈希才真正涵盖了结果所依赖的一切。<bookmark mark='b'/>可重现构建（reproducible build）用相同的输入产生逐位相同的输出，这意味着要从它写出的文件里清除时间戳、绝对路径和随机顺序。<bookmark mark='c'/>Eelco Dolstra 的 Nix 把每个软件包存放在它全部输入的哈希之下；Google 的 Bazel 把执行和缓存分布到多台机器上。<bookmark mark='d'/>好处不只是速度：如果构建是可重现的，任何人都可以重新构建一个已发布的程序，检查它是否一致，这可以防范构建机器已被攻破的情况。"
+  },
+  "7b54d2d0e290": {
+   "scene": "Builds",
+   "en": "Nix takes content addressing all the way. <bookmark mark='a'/> A package is described by every input that goes into building it: its source, the exact compiler, the exact libraries, the flags. <bookmark mark='b'/> It is installed under a directory named by the hash of all of them. Change one flag and you get a different name, a different package, installed side by side with the first. <bookmark mark='c'/> Two builds with the same name are the same build, two versions of anything can coexist, so the diamond disappears here too, and upgrading means installing new paths and switching one pointer, which is also how you roll back: switch it again.",
+   "zh": "Nix 把内容寻址贯彻到了底。<bookmark mark='a'/>一个软件包由构建它时用到的每一个输入来描述：它的源代码、确切的编译器、确切的库、编译选项。<bookmark mark='b'/>它被安装在一个以所有这些输入的哈希命名的目录下。改动一个选项，就得到一个不同的名字、一个不同的软件包，和第一个并排安装在一起。<bookmark mark='c'/>名字相同的两次构建就是同一次构建，任何东西的两个版本都可以共存，所以菱形问题在这里也消失了；而升级就是安装新的路径、再切换一个指针，这也正是回滚的方式：再切换一次。"
+  },
+  "859745de58f6": {
+   "scene": "Deps",
+   "en": "Chapter five. Dependencies.",
+   "zh": "第五章：依赖。"
+  },
+  "4c18929cb15e": {
+   "scene": "Deps",
+   "en": "Programs depend on packages, and packages on other packages, each published in many versions. <bookmark mark='a'/> Semantic versioning numbers releases major, minor, patch, and constraints say which releases a package expects to work with. <bookmark mark='b'/> Here an application needs A and B. A needs C version two or later; B version one point zero needs C before two. No single C satisfies both, and only one version of each package can be installed: the diamond. <bookmark mark='c'/> A resolver backtracks: B one point one allows C two, and everything fits. <bookmark mark='d'/> A lockfile records the answer, so every machine and every build installs exactly the same versions until someone asks to update.",
+   "zh": "程序依赖软件包，软件包又依赖其他软件包，每个软件包都发布了许多版本。<bookmark mark='a'/>语义化版本把发布编号为主版本、次版本、补丁版本，而约束说明一个软件包预期能与哪些发布配合使用。<bookmark mark='b'/>这里，一个应用需要 A 和 B。A 需要 C 版本2或更高；B 版本1.0需要低于2的 C。没有哪一个 C 能同时满足两者，而每个软件包只能安装一个版本：这就是菱形。<bookmark mark='c'/>解析器会回溯：B 1.1允许 C 2，于是一切都对上了。<bookmark mark='d'/>锁文件（lockfile）记录下这个答案，这样每台机器、每次构建都会安装完全相同的版本，直到有人要求更新。"
+  },
+  "3f83b0936e45": {
+   "scene": "Deps",
+   "en": "Semantic versioning is a promise, and promises can be checked. <bookmark mark='a'/> The promise is that upgrading within a major version never breaks you. <bookmark mark='b'/> When Steven Raemaekers and colleagues compared successive releases in Java's Maven repository, about a third of releases contained at least one breaking change, minor and patch releases included. <bookmark mark='c'/> And Hyrum's law from Part 40 means that even a genuine bug fix breaks someone who relied on the bug. <bookmark mark='d'/> So lockfiles pin exact versions, upgrades are tested, and some ecosystems check the promise mechanically: Elm refuses to publish a release whose version number understates its API changes, and Rust has tools that do the same comparison.",
+   "zh": "语义化版本是一个承诺，而承诺是可以检验的。<bookmark mark='a'/>这个承诺是：在同一个主版本之内升级，永远不会让你出问题。<bookmark mark='b'/>Steven Raemaekers 和同事比较了 Java 的 Maven 仓库里相继发布的版本，发现大约三分之一的发布至少包含一处破坏性变更，次版本和补丁版本也不例外。<bookmark mark='c'/>而第40部分的 Hyrum 定律意味着，即使是一次真正的 bug 修复，也会破坏某个依赖这个 bug 的人。<bookmark mark='d'/>所以锁文件固定确切的版本，升级要经过测试，有些生态系统还会机械地检验这个承诺：Elm 拒绝发布版本号低估了 API 变化的发布，Rust 也有做同样比较的工具。"
+  },
+  "995de6719675": {
+   "scene": "Deps",
+   "en": "How hard is this in general? As hard as anything in Part 26. <bookmark mark='a'/> Take any formula in three-variable clauses. <bookmark mark='b'/> For each variable, publish a package with two versions, zero and one. For each clause, publish a package with one version per literal, and let version k require the variable package at whichever value makes literal k true. Finally let the root require every clause package, in any version. <bookmark mark='c'/> A consistent installation chooses, in every clause, a literal that its variable choices make true: it is a satisfying assignment, and every satisfying assignment gives one. So deciding whether a set of packages can be installed is NP-complete, as Roberto Di Cosmo and colleagues showed in 2006. Our resolver, given the packages for this formula, returns an assignment that satisfies it.",
+   "zh": "一般情况下这有多难？和第26部分里的任何问题一样难。<bookmark mark='a'/>取任意一个由三变量子句构成的公式。<bookmark mark='b'/>为每个变量发布一个软件包，有两个版本，0和1。为每个子句发布一个软件包，每个文字对应一个版本，并让版本 k 依赖那个变量软件包中能使文字 k 为真的那个取值。最后，让根依赖每一个子句软件包，任何版本都行。<bookmark mark='c'/>一个一致的安装方案，会在每个子句里选出一个被变量的取值变为真的文字：它就是一个满足赋值，而每个满足赋值也都给出一个这样的安装方案。所以，判定一组软件包能否安装是 NP 完全的，Roberto Di Cosmo 和同事在2006年证明了这一点。我们的解析器拿到这个公式对应的软件包后，返回了一个满足它的赋值。"
+  },
+  "b8dd94cab829": {
+   "scene": "Deps",
+   "en": "Drawn out, the reduction looks like any package graph. <bookmark mark='a'/> At the top, the root requires every clause package. Each clause package offers one version per literal, and each of those versions requires one version of one variable package. <bookmark mark='b'/> A resolver's answer picks one version of every package, here in green. Following the chosen arrows down, every variable gets exactly one value, and every clause has a literal that value makes true. Installing these packages and satisfying the formula are the same problem, written in two notations.",
+   "zh": "画出来，这个归约看起来就和任何软件包图一样。<bookmark mark='a'/>最上面，根依赖每一个子句软件包。每个子句软件包为每个文字提供一个版本，而这些版本中的每一个，都依赖某一个变量软件包的某一个版本。<bookmark mark='b'/>解析器的答案为每个软件包选出一个版本，这里用绿色标出。沿着被选中的箭头往下走，每个变量都恰好得到一个值，而每个子句都有一个被这个值变为真的文字。安装这些软件包和满足这个公式是同一个问题，只是用两种记法写出来。"
+  },
+  "812172698a6c": {
+   "scene": "Deps",
+   "en": "Here is what a simple resolver does on the diamond, step by step. <bookmark mark='a'/> It takes the requirements in order and tries the newest allowed version of each: the application, A version one, B version one point one, and then C version three, the newest. <bookmark mark='b'/> But B one point one allows C only up to two: a conflict. The resolver undoes its choice of C and tries the next version, two, which satisfies everyone. <bookmark mark='c'/> This depth-first search, newest first, is exponential in the worst case, as the reduction promises, and quick when constraints are loose. CDCL and PubGrub add learning: once a combination has failed, it is never tried again.",
+   "zh": "下面一步一步地看，一个简单的解析器在菱形上做了什么。<bookmark mark='a'/>它按顺序处理各项需求，对每一项尝试允许范围内的最新版本：应用，A 版本1，B 版本1.1，然后是 C 版本3，也就是最新的那个。<bookmark mark='b'/>但 B 1.1只允许 C 最高到2：冲突。解析器撤销对 C 的选择，尝试下一个版本，2，它满足所有人。<bookmark mark='c'/>这种最新优先的深度优先搜索，在最坏情况下是指数级的，正如那个归约所预示的；而在约束宽松时很快。CDCL 和 PubGrub 加入了学习：一个组合一旦失败过，就再也不会被尝试。"
+  },
+  "a535d08e7fce": {
+   "scene": "Deps",
+   "en": "NP-completeness is about the worst case. <bookmark mark='a'/> Write random hard formulas as packages, at Part 26's threshold of four point two six clauses per variable, and our CDCL solver's work climbs steeply: six conflicts at twenty variables, over four hundred at eighty. <bookmark mark='b'/> Real package universes are far kinder: most constraints are loose, the newest version usually works, and conflicts are rare. Natalie Weizenbaum's PubGrub, written for Dart and now also used by Python's uv, learns from each conflict as CDCL does, and can explain in plain words why no solution exists. <bookmark mark='c'/> Go chose to remove the problem instead. Its minimal version selection allows only lower bounds, and takes the oldest version that satisfies all of them, which is computable in polynomial time.",
+   "zh": "NP 完全性说的是最坏情况。<bookmark mark='a'/>把随机的困难公式写成软件包，取第26部分的阈值，每个变量4.26个子句，我们的 CDCL 求解器的工作量就急剧攀升：20个变量时6次冲突，80个变量时超过400次。<bookmark mark='b'/>真实的软件包世界要友好得多：大多数约束都很宽松，最新版本通常能用，冲突很少见。Natalie Weizenbaum 的 PubGrub 是为 Dart 写的，现在 Python 的 uv 也在用，它像 CDCL 一样从每次冲突中学习，还能用平白的话解释为什么不存在解。<bookmark mark='c'/>Go 选择的是干脆消除这个问题。它的最小版本选择只允许下界，并取满足所有下界的最旧版本，这可以在多项式时间内算出。"
+  },
+  "ffa944d82077": {
+   "scene": "Deps",
+   "en": "Ecosystems answer the diamond differently. <bookmark mark='a'/> JavaScript's npm lets several versions of the same package coexist, each nested under the packages that need it. The diamond disappears, and an ordinary application installs thousands of packages. <bookmark mark='b'/> Python's pip and most operating-system package managers allow one version of each package, which keeps installs small and brings back the resolution problem we just saw. <bookmark mark='c'/> Small packages make long chains. In March 2016 an eleven-line npm package called left-pad was withdrawn by its author, and builds across the industry that depended on it, often without knowing, failed within hours. <bookmark mark='d'/> Today lockfiles record a hash of every package's contents, Chapter 1's idea again, so that a name and version can never silently become different code.",
+   "zh": "不同的生态系统对菱形问题给出了不同的回答。<bookmark mark='a'/>JavaScript 的 npm 允许同一个软件包的多个版本共存，每个版本嵌套在需要它的软件包之下。菱形消失了，而一个普通的应用要安装成千上万个软件包。<bookmark mark='b'/>Python 的 pip 和大多数操作系统的包管理器，每个软件包只允许一个版本，这让安装保持小巧，也把我们刚才看到的解析问题带了回来。<bookmark mark='c'/>小软件包会造成长链。2016年3月，一个只有11行、名叫 left-pad 的 npm 软件包被作者撤下，整个行业里依赖它的构建，往往在不知情的情况下，几小时之内纷纷失败。<bookmark mark='d'/>如今，锁文件会记录每个软件包内容的哈希，这又是第1章的想法，这样一个名字加版本号就永远不会悄无声息地变成另一份代码。"
+  },
+  "9283bed58609": {
+   "scene": "Deps",
+   "en": "Every dependency is code written by strangers that runs with your program's privileges. <bookmark mark='a'/> In 2018 a new maintainer of the popular event-stream package added code that tried to steal cryptocurrency wallets. In 2020 attackers who had compromised SolarWinds' build system shipped a backdoor inside a signed update. In 2024 came xz. <bookmark mark='b'/> The defences are signatures on releases and commits, software bills of materials that list everything inside a build, and the SLSA levels, which grade how trustworthy the process that produced a build was. <bookmark mark='c'/> Reproducible builds let independent parties check a binary against its source, and Part 61 returns to the deeper question of trusting software at all. <bookmark mark='d'/> Vendoring, copying dependencies into your own repository, trades easy updates for control.",
+   "zh": "每个依赖都是陌生人写的代码，以你的程序的权限运行。<bookmark mark='a'/>2018年，流行的 event-stream 软件包的一位新维护者，加入了试图窃取加密货币钱包的代码。2020年，攻破了 SolarWinds 构建系统的攻击者，在一个已签名的更新里夹带了后门。2024年，又出了 xz。<bookmark mark='b'/>防御手段有：对发布和提交的签名；软件物料清单（SBOM），列出一次构建里包含的一切；以及 SLSA 等级，用来评定产生一次构建的过程有多可信。<bookmark mark='c'/>可重现构建让独立的各方能拿二进制文件和源代码对照检查，而第61部分会回到一个更深的问题：究竟如何信任软件。<bookmark mark='d'/>供应商化（vendoring），也就是把依赖复制进你自己的仓库，是用更新的便利换取控制权。"
+  },
+  "2e6cdedeec71": {
+   "scene": "Ci",
+   "en": "Chapter six. Continuous integration.",
+   "zh": "第六章：持续集成。"
+  },
+  "f9486dfccf44": {
+   "scene": "Ci",
+   "en": "Merge queues serve a way of working. <bookmark mark='a'/> In trunk-based development everyone commits to one main line, in small changes, at least daily, and branches live for hours rather than weeks. Part 40's simulation showed why: conflicts per week of work grow with a branch's lifetime. <bookmark mark='b'/> Fast tests run before a change lands. Slower and broader ones run after, on the merged result, and when they fail, the failure is bisected to the change that caused it. <bookmark mark='c'/> Flaky tests threaten all of it. A suite of a thousand tests, each flaky one percent of the time independently, fails somewhere on almost every run, and people learn to ignore red. They must be quarantined and fixed, never allowed to block. <bookmark mark='d'/> And unfinished features ship switched off, behind flags, instead of living on long branches.",
+   "zh": "合并队列服务于一种工作方式。<bookmark mark='a'/>在基于主干的开发中，每个人都提交到同一条主线上，变更很小，至少每天一次，分支只存活几个小时，而不是几个星期。第40部分的模拟说明了原因：每周工作量里的冲突数，随着分支的存活时间增长。<bookmark mark='b'/>快的测试在变更合入之前运行。更慢、范围更广的测试在合入之后，在合并后的结果上运行；当它们失败时，就把失败二分到导致它的那项变更上。<bookmark mark='c'/>不稳定的测试威胁着这一切。一个有1000个测试的测试套件，如果每个测试都独立地有1%的概率随机失败，那几乎每次运行都会在某处失败，人们就学会了无视红色。这些测试必须被隔离并修好，绝不能让它们阻塞合入。<bookmark mark='d'/>还有，未完成的功能要关闭着发布，藏在开关后面，而不是一直待在长期分支上。"
+  },
+  "2ea8b79d381f": {
+   "scene": "Ci",
+   "en": "Continuous integration means merging into the main line at least daily, with every change tested. With hundreds of engineers, testing each change alone is too slow, and testing them separately lets two changes that each pass break main together. <bookmark mark='a'/> A merge queue tests changes in order, on top of everything ahead of them, in batches. If a batch passes, all of it lands. If not, the queue bisects the batch to find the bad changes and lands the rest. <bookmark mark='b'/> A batch of b changes is green with probability one minus p to the b. We simulated twenty thousand changes. When one change in a hundred is bad, batches of sixty-four need an eighth of a test run per change. When one in ten is bad, big batches nearly always fail, and the best batch is about four. <bookmark mark='c'/> Either way, only tested combinations ever land, so main stays green, which is how Uber's SubmitQueue and the merge queues of GitHub and GitLab let thousands of changes a day through. Uber's system goes further and predicts, from a change's history, how likely it is to fail, so that risky changes are tested alone and safe ones in large groups: the research problem at the end of this part.",
+   "zh": "持续集成，是指至少每天合并进主线一次，而且每一项变更都经过测试。工程师有好几百人时，逐个单独测试每项变更太慢；而把它们分开测试，又会让两项各自都能通过的变更，合在一起把主线弄坏。<bookmark mark='a'/>合并队列按顺序测试变更，每一项都叠在排在它前面的所有变更之上，并且成批地测试。如果一批通过，整批都合入。如果没通过，队列就对这一批做二分，找出有问题的变更，把其余的合入。<bookmark mark='b'/>一批 b 项变更全部通过的概率，是 1 减 p 的 b 次方。我们模拟了2万项变更。当100项变更里有1项有问题时，64项一批，每项变更只需要八分之一次测试运行。当10项里有1项有问题时，大批次几乎总会失败，最好的批次大小大约是4。<bookmark mark='c'/>无论哪种情况，只有经过测试的组合才会合入，所以主线始终保持绿色。Uber 的 SubmitQueue，还有 GitHub 和 GitLab 的合并队列，就是这样让每天成千上万项变更通过的。Uber 的系统走得更远：它根据一项变更的历史，预测它失败的可能性有多大，让有风险的变更单独测试，安全的变更大批一起测试。这就是本部分结尾的研究题。"
+  },
+  "b617d77b026f": {
+   "scene": "Ci",
+   "en": "The other way to make testing affordable is to run only the tests a change could affect. <bookmark mark='a'/> Walk the import graph of this repository, the one we measured in Part 40, backwards from the changed module: everything that imports it, directly or indirectly, could behave differently, and nothing else can. <bookmark mark='b'/> Change the module behind our KWIC experiment, and one test file must run. Change Pebble's assembler, and twenty-two test modules out of two hundred. Change the narration engine, caught in Part 40's cycle with the library's root, and the change reaches nearly two thousand modules and seventy-one test files. <bookmark mark='c'/> Google's test platform and Bazel do this at enormous scale. A precise dependency graph, and an architecture without needless cycles, is what makes testing every change affordable.",
+   "zh": "让测试负担得起的另一种办法，是只运行一项变更可能影响到的测试。<bookmark mark='a'/>在这个代码库的导入图上，也就是我们在第40部分测量过的那张图，从被修改的模块出发，反向往回走：所有直接或间接导入它的模块，行为都可能改变，其余的都不可能。<bookmark mark='b'/>修改我们 KWIC 实验背后的那个模块，必须运行的测试文件只有1个。修改 Pebble 的汇编器，要运行200个测试模块中的22个。修改旁白引擎，它在第40部分里和库的根模块困在同一个循环里，这项变更会波及将近2000个模块、71个测试文件。<bookmark mark='c'/>Google 的测试平台和 Bazel 在巨大的规模上做这件事。一张精确的依赖图，加上一个没有多余循环的架构，才让测试每一项变更变得负担得起。"
+  },
+  "a3ce669c9efc": {
+   "scene": "Ci",
+   "en": "How much does selection save in this repository? <bookmark mark='a'/> We changed each of the library's modules in turn, in imagination, and counted the test modules that could be affected. <bookmark mark='b'/> For the median module, one percent of the tests. On average, under five percent, and for nearly three quarters of the modules less than that. A full run is needed only for the few modules at the root of everything. <bookmark mark='c'/> The saving rests on the graph being right: a dependency the graph does not see, a file read at run time or an import computed from a string, is a test that should have run and did not.",
+   "zh": "在这个代码库里，测试选择能省下多少？<bookmark mark='a'/>我们在想象中依次修改库里的每一个模块，数出可能受影响的测试模块。<bookmark mark='b'/>对中位数的那个模块来说，是1%的测试。平均下来不到5%，而且将近四分之三的模块比这还少。只有少数几个位于一切根部的模块，才需要完整地运行一遍。<bookmark mark='c'/>这种节省，建立在这张图正确的基础上：一个图看不见的依赖，比如运行时读取的文件，或者由字符串计算出来的导入，就意味着一个本该运行却没有运行的测试。"
+  },
+  "4d0bc0f384b7": {
+   "scene": "Delivery",
+   "en": "Chapter seven. Continuous delivery.",
+   "zh": "第七章：持续交付。"
+  },
+  "d95a49e5414e": {
+   "scene": "Delivery",
+   "en": "A merged change is not yet running for anyone. Delivering it safely means never betting everything on one moment. <bookmark mark='a'/> Blue-green deployment runs the new version beside the old and switches traffic at once, keeping the old one ready to switch back. <bookmark mark='b'/> A canary, named for the birds miners carried to detect gas, sends a small share of traffic to the new version and compares it with the old. <bookmark mark='c'/> Progressive rollout widens the share in stages, one percent, five, twenty-five, all, rolling back automatically at any stage. <bookmark mark='d'/> And feature flags ship new code switched off, to be turned on for some users later, so that deploying code and releasing a feature become separate decisions.",
+   "zh": "一项已经合并的变更，还没有为任何人运行。安全地交付它，意味着永远不把一切押在某一个时刻上。<bookmark mark='a'/>蓝绿部署让新版本和旧版本并排运行，一次性切换流量，同时让旧版本随时准备好切回去。<bookmark mark='b'/>金丝雀发布，得名于矿工带下井用来检测毒气的金丝雀，它把一小部分流量发给新版本，再把它和旧版本作比较。<bookmark mark='c'/>渐进式发布分阶段扩大这个比例：1%、5%、25%、全部，在任何阶段都能自动回滚。<bookmark mark='d'/>而功能开关让新代码关闭着发布，以后再为一部分用户打开，这样，部署代码和发布功能就成了两个独立的决定。"
+  },
+  "c8121d17fe22": {
+   "scene": "Delivery",
+   "en": "How big must a canary be? It is a question of statistics. <bookmark mark='a'/> Suppose the old version fails one request in a thousand, and a bad new version fails two in a thousand: twice as often, and still rare. Compare the two with a standard test of proportions, allowing one false alarm in a hundred. <bookmark mark='b'/> With a thousand requests to each, the bad release is almost never caught: one or two failures cannot be told from noise. With three thousand, seven percent of the time; with thirty thousand, eighty. <bookmark mark='c'/> Rare failures need a lot of traffic to see, which is why canaries run for hours, and why Part 44 treats these comparisons as experiments with power calculations.",
+   "zh": "金丝雀需要多大？这是一个统计学问题。<bookmark mark='a'/>假设旧版本每1000个请求失败1个，而一个有问题的新版本每1000个失败2个：频率是两倍，但仍然很少见。用一个标准的比例检验来比较两者，允许每100次有1次误报。<bookmark mark='b'/>如果两边各有1000个请求，这个坏版本几乎永远发现不了：一两次失败，跟噪声根本分不开。有3000个时，7%的情况能发现；有3万个时，是80%。<bookmark mark='c'/>罕见的失败需要大量流量才能看出来，这就是为什么金丝雀要运行好几个小时，也是为什么第44部分把这些比较当作实验来对待，并做统计功效计算。"
+  },
+  "5b7b3fc77caf": {
+   "scene": "Delivery",
+   "en": "Some failures appear only under real traffic, so large services test there, carefully. <bookmark mark='a'/> Shadow traffic copies real requests to the new version and compares its answers with the old version's, while users only ever see the old ones. <bookmark mark='b'/> A dark launch runs a new feature's work for real users with the results hidden, to measure its cost before anyone depends on it. <bookmark mark='c'/> And a kill switch is a flag that turns a feature off in seconds without a deploy, which must itself be tested, since it is used only on the worst day. <bookmark mark='d'/> Each of these turns a release from one irreversible moment into a series of measured, reversible steps.",
+   "zh": "有些故障只在真实流量下才会出现，所以大型服务就在真实流量下测试，小心翼翼地测试。<bookmark mark='a'/>影子流量把真实请求复制一份发给新版本，把它的答案和旧版本的答案作比较，而用户看到的始终只有旧版本的答案。<bookmark mark='b'/>暗发布为真实用户运行一个新功能的工作，但把结果藏起来，以便在任何人依赖它之前，先测出它的开销。<bookmark mark='c'/>而紧急停止开关，是一个不用部署就能在几秒钟内关掉某个功能的开关；它本身也必须经过测试，因为它只会在最糟糕的那一天被用到。<bookmark mark='d'/>每一种做法，都把一次发布从一个不可逆的时刻，变成一连串经过测量、可以撤销的步骤。"
+  },
+  "7dd12d513458": {
+   "scene": "Delivery",
+   "en": "The hardest changes to deliver are changes to stored data, because during a rollout the old and new versions of the code run side by side against the same database. <bookmark mark='a'/> So schema changes go in expand and contract steps. Add the new column. Make the code write both old and new. Copy the old rows across. Switch reads to the new column. And only then, when nothing reads the old column, drop it. <bookmark mark='b'/> Each step is deployed and verified on its own and can be undone; only the last destroys anything, and it runs when nobody needs what it destroys.",
+   "zh": "最难交付的变更，是对存储数据的变更，因为在发布过程中，新旧两个版本的代码会并排运行，访问同一个数据库。<bookmark mark='a'/>所以数据库模式的变更，要分扩展和收缩几步来做。添加新列。让代码同时写旧列和新列。把旧的行复制过去。把读取切换到新列。直到这时，当再也没有东西读旧列时，才把它删掉。<bookmark mark='b'/>每一步都单独部署、单独验证，而且都可以撤销；只有最后一步会销毁东西，而它运行的时候，已经没有人需要它所销毁的东西了。"
+  },
+  "0662130e5320": {
+   "scene": "Delivery",
+   "en": "Delivery failures can be very expensive. <bookmark mark='a'/> On the first of August 2012, Knight Capital deployed new trading code that reused an old feature flag. One of its eight servers had not received the new code, so on that server the flag switched on a function that had been dead for nine years. <bookmark mark='b'/> In forty-five minutes it sent millions of unintended orders and lost about four hundred and forty million dollars; the firm needed rescuing within days. <bookmark mark='c'/> The lessons are this part's: deploy one artifact everywhere and verify that it arrived, delete dead code and retired flags, roll out gradually, and keep an automatic way to stop. <bookmark mark='d'/> Flags are a form of debt: each one doubles the states the code can be in, so they must be tracked and removed when their rollout is over.",
+   "zh": "交付失败的代价可能非常高。<bookmark mark='a'/>2012年8月1日，Knight Capital 部署了新的交易代码，这份代码复用了一个旧的功能开关。它的8台服务器中有1台没有收到新代码，于是在那台服务器上，这个开关打开了一个已经废弃了9年的函数。<bookmark mark='b'/>在45分钟里，它发出了数百万笔意料之外的订单，损失了大约4.4亿美元；几天之内，这家公司就不得不靠别人救助。<bookmark mark='c'/>教训就是本部分讲的那些：把同一个制品部署到所有地方，并验证它确实到达了；删除死代码和退役的开关；逐步发布；并保留一种自动停止的办法。<bookmark mark='d'/>开关是一种债务：每多一个开关，代码可能处于的状态就翻一倍，所以必须跟踪它们，并在发布完成后把它们删掉。"
+  },
+  "9181d40017ed": {
+   "scene": "Delivery",
+   "en": "When a release goes wrong, there are two ways out. <bookmark mark='a'/> Rolling back returns to the last good version. It is fast and safe, provided the release changed nothing that cannot be undone. <bookmark mark='b'/> Rolling forward means fixing the problem and shipping again, and it is the only option once data or clients have moved on: a schema already contracted, files already written in a new format. <bookmark mark='c'/> Small, frequent releases make both easy, because a change of ten lines is quick to revert, to review and to bisect, which is the mechanism behind Part 40's DORA finding. <bookmark mark='d'/> The rule that follows is the expand-and-contract rule again: keep every release revertible until its last irreversible step, and make that step come last.",
+   "zh": "当一次发布出了问题，有两条出路。<bookmark mark='a'/>回滚，就是回到上一个好的版本。它又快又安全，前提是这次发布没有改动任何无法撤销的东西。<bookmark mark='b'/>前滚，是指修好问题再发布一次；一旦数据或客户端已经往前走了，它就是唯一的选择：比如一个已经完成收缩的模式，或者已经用新格式写下的文件。<bookmark mark='c'/>小而频繁的发布让这两者都变得容易，因为一个10行的变更，回退、评审和二分都很快，这正是第40部分 DORA 研究结论背后的机制。<bookmark mark='d'/>由此得出的规则，又是扩展与收缩那条规则：让每次发布在最后一个不可逆的步骤之前都能回退，并让那一步放在最后。"
+  },
+  "d6fd0b9ac72b": {
+   "scene": "Delivery",
+   "en": "Follow one change through all of it: a single line in the Job's word counter. <bookmark mark='a'/> It becomes a commit, a new node in the Merkle graph whose name vouches for the whole history. People review it. The merge queue tests it on top of everything ahead of it. The build recompiles only what its hash touches and fetches the rest from the cache. A canary compares it against the old version on real traffic, and the rollout widens step by step. <bookmark mark='b'/> At every stage the question is the one the build system asked: what is the least we must redo, and how do we know we can stop?",
+   "zh": "跟着一项变更走完全程：那项任务的单词计数器里的一行代码。<bookmark mark='a'/>它变成一次提交，也就是 Merkle 图里的一个新节点，它的名字为整段历史作担保。有人评审它。合并队列把它叠在排在前面的所有变更之上进行测试。构建系统只重新编译它的哈希所触及的部分，其余的从缓存中取。金丝雀在真实流量上把它和旧版本作比较，发布范围一步步扩大。<bookmark mark='b'/>在每一个阶段，问题都是构建系统问过的那个：我们最少需要重做多少，又怎么知道可以停下来了？"
+  },
+  "e2bf8073b79c": {
+   "scene": "Frontier",
+   "en": "Chapter eight. Frontier: merging and building, correctly.",
+   "zh": "第八章：前沿：正确地合并与构建。"
+  },
+  "e26f43c481ca": {
+   "scene": "Frontier",
+   "en": "Merging by lines is the frontier's first target. <bookmark mark='a'/> Two branches each add an import, one in the middle of the list and one at the end. A line-based merge may report a conflict, although the meaning is simply a set of imports. <bookmark mark='b'/> Worse, it silently accepts edits that clash in meaning: one branch renames a function, another adds a call to its old name, and the merged program no longer runs. <bookmark mark='c'/> Structured merge parses each version and merges syntax trees, as Sven Apel and colleagues proposed in 2011 and newer tools such as Spork and Mergiraf do. <bookmark mark='d'/> The open problem is the deeper one: a merge that is semantically safe, whose result does what both changes intended, checked by tests, types or proofs.",
+   "zh": "按行合并，是前沿的第一个目标。<bookmark mark='a'/>两个分支各自添加了一条导入，一条在列表中间，一条在末尾。基于行的合并可能会报告冲突，尽管它的含义只是一个导入的集合。<bookmark mark='b'/>更糟的是，它会悄悄接受那些在含义上相互冲突的编辑：一个分支给一个函数改了名，另一个分支添加了一处对它旧名字的调用，合并后的程序就再也运行不了了。<bookmark mark='c'/>结构化合并会解析每个版本，然后合并语法树；这是 Sven Apel 和同事在2011年提出的，较新的工具，比如 Spork 和 Mergiraf，也是这样做的。<bookmark mark='d'/>开放问题是更深一层的那个：一种在语义上安全的合并，它的结果实现了两项变更各自的意图，并由测试、类型或证明来检验。"
+  },
+  "1a01d2e993f9": {
+   "scene": "Frontier",
+   "en": "Build systems have their own correctness questions. <bookmark mark='a'/> An incremental build is correct if its outputs equal those of a clean build, and minimal if nothing ran that did not need to. <bookmark mark='b'/> Both fail when the declared dependencies are wrong, so newer tools, such as Neil Mitchell's Rattle, trace every file a task actually reads instead of trusting what it declared. <bookmark mark='c'/> Version solving wants resolvers that are complete, finding a solution whenever one exists and proving and explaining it when none does, while staying as fast as a greedy guess on real universes. <bookmark mark='d'/> And reproducibility at scale is close: Debian and NixOS rebuild most of their packages bit for bit, and the last few percent are a long tail of compilers, archive formats and clocks.",
+   "zh": "构建系统有它自己的正确性问题。<bookmark mark='a'/>如果一次增量构建的输出等于一次干净构建的输出，它就是正确的；如果没有运行任何不必要的东西，它就是最小的。<bookmark mark='b'/>当声明的依赖有错时，这两点都会失败，所以较新的工具，比如 Neil Mitchell 的 Rattle，会追踪一个任务实际读取的每一个文件，而不是相信它声明了什么。<bookmark mark='c'/>版本求解需要完备的求解器：只要存在解，就能找到它；不存在解时，能证明并解释这一点；同时在真实的软件包全集上，跑得和贪心猜测一样快。<bookmark mark='d'/>而大规模的可重现性已经近在眼前：Debian 和 NixOS 能逐位一致地重建它们的大部分软件包，剩下的那几个百分点，是一条由编译器、归档格式和时钟构成的长尾。"
+  },
+  "c87fa8bf54a5": {
+   "scene": "Frontier",
+   "en": "One more frontier is arriving quickly: authors that are programs. <bookmark mark='a'/> Automated systems already made most of the changes to Google's repository in 2016, dependency updates, large refactorings and generated code, about twenty-four thousand of forty thousand changes a day. <bookmark mark='b'/> AI coding agents add authors that can write many plausible patches very quickly. The merge queue, the tests and the canary then become the judge of every one, and Part 40 showed how much a test suite can miss. <bookmark mark='c'/> Provenance matters more than ever: who or what wrote a change, from which inputs, and who reviewed it, recorded in signed commits and attestations. <bookmark mark='d'/> The open question is how to review and test changes at a rate that grows with the number of authors rather than the number of reviewers.",
+   "zh": "还有一个前沿正在快速到来：身为程序的作者。<bookmark mark='a'/>2016年，Google 代码库里的大部分变更，就已经是由自动化系统做出的：依赖更新、大规模重构和生成的代码，每天4万项变更中大约有2.4万项。<bookmark mark='b'/>AI 编程智能体带来了新的作者，它们能非常快地写出许多看似合理的补丁。于是合并队列、测试和金丝雀，就成了每一个补丁的裁判，而第40部分已经展示过，一个测试套件可能漏掉多少东西。<bookmark mark='c'/>来源证明比以往任何时候都重要：一项变更是谁或什么写的，基于哪些输入，又是谁评审的，都记录在签名的提交和证明文件里。<bookmark mark='d'/>开放问题是：如何让评审和测试变更的速度，随作者的数量增长，而不是随评审者的数量增长。"
+  },
+  "a174624139af": {
+   "scene": "Frontier",
+   "en": "Open problems. <bookmark mark='a'/> Semantic merge: detecting, before merging, that two changes which merge cleanly will break each other. <bookmark mark='b'/> Dependency evolution: predicting which upgrade will break a program, and repairing it automatically. <bookmark mark='c'/> Test selection with guarantees, choosing the fewest tests that still catch a change's bugs, even when dependencies are discovered at run time. <bookmark mark='d'/> And safe rollout: the fastest schedule that bounds the expected harm a bad release can do. <bookmark mark='e'/> This part's research problem asks for the best merge-queue policy, its batch sizes and the order of its bisection, when each change has its own learned probability of failing.",
+   "zh": "开放问题。<bookmark mark='a'/>语义合并：在合并之前就检测出，两项能干净合并的变更会互相破坏。<bookmark mark='b'/>依赖演化：预测哪一次升级会让程序出问题，并自动修复它。<bookmark mark='c'/>有保证的测试选择：选出最少的测试，仍能捕获一项变更的缺陷，即使依赖是在运行时才被发现的。<bookmark mark='d'/>还有安全发布：在限定坏版本可能造成的预期危害的前提下，找出最快的发布计划。<bookmark mark='e'/>本部分的研究题要求找出最好的合并队列策略，包括它的批次大小和二分的顺序，前提是每项变更都有它自己学习得到的失败概率。"
+  },
+  "a176f26468f6": {
+   "scene": "Outro",
+   "en": "What we built in this part. A git object store whose names match the real git, and the Merkle graph those names form. Merge bases, three-way merges and their conflicts, rebasing, and bisection in logarithmic time. Deltas that store forty versions of a file in a thirtieth of the space. A build system that trusts hashes rather than clocks and stops early, and the work and span of building in parallel. Package versions as satisfiability, NP-complete by a reduction you can read. And merge queues, test selection, canaries and migrations that deliver a change a little at a time. Three machines, one idea: name things by what they contain, and redo only what a change can reach.",
+   "zh": "我们在这一部分搭建了什么。一个 git 对象存储，它给出的名字和真正的 git 一致，以及这些名字构成的 Merkle 图。合并基础、三方合并和它们的冲突，变基，以及用对数时间完成的二分查找。增量存储，用三十分之一的空间存下一个文件的40个版本。一个相信哈希而不是时钟、并且能提前停止的构建系统，以及并行构建的工作量与跨度。把软件包版本看作可满足性问题，并通过一个你能读懂的归约，证明它是 NP 完全的。还有合并队列、测试选择、金丝雀发布和数据迁移，它们一点一点地交付一项变更。三台机器，一个思想：按内容给事物命名，只重做一项变更能触及的部分。"
+  },
+  "44a3304844c3": {
+   "scene": "Outro",
+   "en": "Where this comes back. Part 42's browser caches assets by content hash. Part 43 versions the interfaces between services and rolls them out compatibly. Part 44 turns canaries into experiments with proper statistics. Part 50 releases and rolls back under the pressure of an incident. And Parts 55 and 61 return to the supply chain, and to whether a compiler can be trusted at all.",
+   "zh": "这些内容会在哪里再出现。第42部分的浏览器按内容哈希来缓存资源。第43部分给服务之间的接口加上版本，并以兼容的方式推出它们。第44部分把金丝雀变成有正规统计的实验。第50部分在事故的压力下发布和回滚。第55部分和第61部分会回到供应链，以及一个编译器到底能不能被信任的问题。"
+  },
+  "18e7e1925b2e": {
+   "scene": "Outro",
+   "en": "In practice. Make small commits whose messages say why, rebase work that is only yours and merge work that is shared. Let git bisect run your test script when something breaks, and check the reflog before you panic. Declare every input your build uses, and make it hermetic and cached. Commit lockfiles, update dependencies on purpose, and prefer fewer, better-kept ones. And deliver through a merge queue, a canary, feature flags and expand-and-contract migrations.",
+   "zh": "实践中。做小的提交，让提交信息说明为什么；只属于你自己的工作就变基，共享的工作就合并。出问题时，让 git bisect 运行你的测试脚本；慌张之前，先查一查 reflog。声明你的构建用到的每一个输入，让构建是密封的，并且带缓存。提交锁文件，有意识地更新依赖，依赖宁可少一些、维护得好一些。还有，通过合并队列、金丝雀、功能开关和扩展—收缩式的迁移来交付。"
+  },
+  "15fe9ad8dc87": {
+   "scene": "Outro",
+   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build problem: give our build engine a shared cache of outputs, keyed by the hash of their inputs, and measure how little a second machine must do. The last, marked with a star, is a research problem: the best merge-queue policy when every change carries its own learned chance of failing.",
+   "zh": "6道习题，完整的解答在本部分的笔记里。你可以在任何一道题上暂停。第5道是一道构建题：给我们的构建引擎加一个共享的输出缓存，以输入的哈希为键，并测一测第二台机器需要做的事有多么少。最后一道标了星号，是一道研究题：当每项变更都带着它自己学习得到的失败概率时，最好的合并队列策略是什么。"
+  },
+  "e182909c1bb9": {
+   "scene": "Outro",
+   "en": "Next time, Part 42: the browser and the web. How a URL becomes pixels, through parsing, the document tree, layout and painting; JavaScript's event loop and the budget of a single frame; the same-origin policy and the attacks it stops; and caches and service workers that keep a web app working offline.",
+   "zh": "下一次，第42部分：浏览器与 Web。一个 URL 是怎样变成像素的：经过解析、文档树、布局和绘制；JavaScript 的事件循环，以及单独一帧的时间预算；同源策略，以及它能阻止的那些攻击；还有让 Web 应用离线也能工作的缓存和 service worker。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "本部分所依据的书籍和论文，都列在屏幕上和笔记里。感谢观看。"
+  }
+ },
+ "title_en": "Computer Science, Built: Part 41, Version Control, Builds and Dependencies",
+ "chapters_en": {
+  "Hook": "Ten days in 2005, and our own git",
+  "Objects": "1. Git's objects",
+  "Merge": "2. Merging and bisecting",
+  "Storage": "3. Storing history",
+  "Builds": "4. Build systems",
+  "Deps": "5. Dependencies",
+  "Ci": "6. Continuous integration",
+  "Delivery": "7. Continuous delivery",
+  "Frontier": "8. Frontier: merging and building, correctly",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}
