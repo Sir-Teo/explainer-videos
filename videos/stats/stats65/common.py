@@ -511,7 +511,7 @@ ESTC = S.EST  # estimated weights: blue
 WRONGC = S.ACCENT  # deliberately wrong weights (tempered, misspecified): gold
 BOUNDC = WHITE  # the theorem's bound
 THESISC = S.PRIOR  # the thesis itself: purple
-METHC = {"none": S.RESID, "oracle": S.KEPT, "estimated": S.EST, "tempered": S.ACCENT, "misspecified": S.TREAT}
+METHC = {"none": S.RESID, "oracle": S.KEPT, "estimated": S.EST, "tempered": S.ACCENT, "misspecified": S.ALT}
 METHN = {"none": r"no weights", "oracle": r"true weights", "estimated": r"estimated weights", "tempered": r"tempered weights",
          "misspecified": r"misspecified weights"}
 
