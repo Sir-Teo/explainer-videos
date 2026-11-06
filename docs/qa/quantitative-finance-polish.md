@@ -353,3 +353,29 @@ workspace caches, receipts and movies were not restored. No synthetic fixture wa
 substituted for a production cache, and no experiment was rerun. Restore the
 original Part 6 computation inputs before completing bilingual layout, motion,
 speech and narrated QA. Part 6 remains in progress; Part 7 has not started.
+
+### Part 6 continuation: inputs restored and statistical teaching corrections
+
+The public-data sources reproduced all 37 Part 6 cache items with their normal
+checksum checks enabled. The tracked data manifest and experiment ledger are
+unchanged, as is `compute.py`; no additional hold-out was opened. This resolves
+the preceding workspace-input blocker. The executor's bundled TeX tools are
+available after sourcing `/workspace/environment/activate.sh`.
+
+This pass corrects full-sample histogram normalization and leaves out-of-window
+observations outside the plot, including the research chapter's stored histogram.
+It fixes the MLE trail's final endpoint and expands the scale axis to show the
+complete baseline HAC ellipse. It distinguishes fixed circular bootstrap blocks
+from geometric block lengths, negative treatment-effect weights from nonnegative
+Bacon comparison weights, and conditional posterior bead positions from averaged
+posterior estimates. The DML expansion includes the squared treatment-model error;
+all higher-moment Sharpe variance terms divide by T. Likelihood, GMM, James–Stein,
+placebo, multiple-testing and Sharpe interpretations now state their assumptions.
+The associated Chinese narration, captions and lesson notes are updated.
+
+Validation: 239 focused/House tests pass, including full-sample histogram mass and
+actual MLE redraw geometry regressions. Chinese narration source coverage is
+109/109. Initial bilingual Hook and English OLS/MLE selected-frame inspections
+were completed; MLE's displayed clipping was found in that review and repaired.
+The complete bilingual final-source frame and silent-motion passes are running;
+this checkpoint does not claim full visual or production-voice acceptance.

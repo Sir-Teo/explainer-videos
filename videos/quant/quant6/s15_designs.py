@@ -58,7 +58,7 @@ class Designs(VoiceoverScene):
             f"with a true effect of a half, least squares finds about {s['ols_mean']:.1f}. <bookmark mark='b'/> With a "
             f"strong instrument, two-stage least squares centres on {s['iv_median']:.2f}. <bookmark mark='c'/> With a weak "
             f"one, first-stage F near {w['F']:.0f}, its middle half runs from {w['iv_iqr'][0]:.1f} to "
-            f"{w['iv_iqr'][1]:.1f}. The rule of thumb asks for F above ten."
+            f"{w['iv_iqr'][1]:.1f}. F above ten is only a rough diagnostic, not a universal validity guarantee."
         ) as vo:
             self.play(FadeIn(dag))
             vo.wait_until("a")
@@ -78,15 +78,15 @@ class Designs(VoiceoverScene):
         rows = [cmath(r"\beta_{IV}", r"=", r"\frac{\mathrm{cov}(z, y)}{\mathrm{cov}(z, x)}", font_size=36, colors=C_),
                 cmath(r"\hat\beta_{DiD}", r"=", r"(\bar y_{T,1} - \bar y_{T,0}) - (\bar y_{C,1} - \bar y_{C,0})",
                       font_size=36, colors=C_),
-                cmath(r"\hat\beta_{TWFE}", r"=", r"\textstyle\sum_k w_k\,\widehat{DiD}_k,\ \ \text{some } w_k < 0",
+                cmath(r"\hat\beta_{TWFE}", r"=", r"\textstyle\sum_{g,t} w_{gt}\,ATT_{gt},\ \ \text{some } w_{gt} < 0",
                       font_size=36, colors=C_),
                 cmath(r"\tau_{RD}", r"=", r"\lim_{r \downarrow c}\mathbb{E}[y \mid r] - \lim_{r \uparrow c}\mathbb{E}[y \mid r]",
                       font_size=36, colors=C_)]
         whys = [why(r"$z \perp u$: the reduced form divided by the first stage (Wald)"),
                 why(r"parallel trends: without treatment both groups would have changed alike, so the common change "
                     r"cancels"),
-                why(r"Goodman-Bacon (2021): a weighted sum of all two-by-two comparisons, including already-treated "
-                    r"units used as controls"),
+                why(r"Treatment-effect weights can be negative. Goodman-Bacon's two-by-two comparison weights are "
+                    r"nonnegative; already-treated controls can contaminate those comparisons."),
                 why(r"continuity of potential outcomes at the cutoff: just above and just below are alike")]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.6, buff=0.45, edge=6.8)
         with self.voiceover(
@@ -95,7 +95,8 @@ class Designs(VoiceoverScene):
             "group's change minus the control group's change; if both would have trended alike, the common change "
             "cancels. <bookmark mark='b'/> Its regression version, two-way fixed effects, is a weighted sum of every "
             "two-by-two comparison in the data, as Andrew Goodman-Bacon showed in 2021, and under staggered timing some "
-            "comparisons use already-treated units as controls, with negative weights. <bookmark mark='c'/> The "
+            "comparisons use already-treated units as controls. Those comparison weights are nonnegative, but the "
+            "implied weights on cohort-period treatment effects can be negative. <bookmark mark='c'/> The "
             "discontinuity: the jump in the outcome's average exactly at a cutoff, valid if nothing else jumps there."
         ) as vo:
             step(0)

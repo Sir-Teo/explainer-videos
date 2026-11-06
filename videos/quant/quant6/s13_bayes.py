@@ -71,7 +71,7 @@ class Bayes(VoiceoverScene):
                     r"hardest"),
                 why(r"empirical Bayes: the spread of the estimates minus the spread their noise alone would make"),
                 why(r"Stein (1956), James and Stein (1961): with $k \ge 3$ means, shrinking beats the raw estimates "
-                    r"in total squared error, always; Problem 5"),
+                    r"in expected total squared error for independent unit-variance Gaussian observations; Problem 5"),
                 why(r"Gibbs sampling: each conditional is a textbook distribution, so draw them in turn")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.75, edge=6.8)
         with self.voiceover(
@@ -82,7 +82,9 @@ class Bayes(VoiceoverScene):
             "zero, everything collapses onto the grand mean. <bookmark mark='b'/> Empirical Bayes estimates tau from the "
             "data: the variance of the estimates, minus the part their own noise explains, floored at zero. "
             "<bookmark mark='c'/> Charles Stein proved in 1956 that with three or more means, the raw estimates are "
-            "inadmissible: shrinking beats them in total squared error, whatever the truth. Problem five works it out. "
+            "inadmissible in the independent Gaussian model with common known variance: James-Stein shrinkage lowers "
+            "expected total squared error for every true mean vector. This is a risk guarantee, not a win in every "
+            "realized sample or for every individual industry. Problem five works it out. "
             "<bookmark mark='d'/> A full Bayesian treats tau as unknown too, and samples everything by Gibbs: each "
             "conditional is a textbook distribution, so draw the means given tau, then mu, then tau given the means, "
             "and repeat."
@@ -154,15 +156,17 @@ class Bayes(VoiceoverScene):
             "Here it is running. Each industry is a bead on its own rod, at its raw estimate, sorted from lowest to "
             "highest, tied by a spring to a bar at the grand mean. The thicker the spring, the noisier the estimate. "
             "<bookmark mark='a'/> Start the sampler. Four chains, each five thousand draws, traced on the right. "
-            "Every draw of tau sets every bead's position: when tau is large, the beads are free; when it is small, "
+            "The bead shows the conditional posterior mean at the current mu and tau, not a latent-mean draw. "
+            "Every draw of tau sets that conditional mean: when tau is large, the beads are free; when it is small, "
             "the springs win. <bookmark mark='b'/> Tau keeps falling back toward zero. The data cannot tell the "
             "industries apart, so the posterior squeezes nearly every bead onto the bar: about "
             f"{100 * gb['shrink_frac']:.0f} percent of the spread disappears. <bookmark mark='c'/> Now the second "
-            "half's realized means, in green. The shrunk beads sit far closer to them: the forecast error falls "
+            "half's realized means, in green. The reported forecast errors use posterior means averaged over retained "
+            "draws, rather than the single conditional state on screen: the error falls "
             f"from {1e4 * gb['mse_raw']:.1f} to {1e4 * gb['mse_post']:.1f}, the same as empirical Bayes. A prior is not "
             "a bias to be ashamed of; it is how you borrow strength across assets, and Parts twenty-seven and thirty "
             "use it everywhere. <bookmark mark='d'/> Pause and predict: an industry with a huge raw estimate and a "
-            "huge standard error. It shrinks the most."
+            "huge standard error. For fixed tau and mu, its shrinkage fraction is larger than an estimate with a smaller standard error."
             " Shrinkage borrows across many estimates. Next, the danger in many estimates: many tests."
         ) as vo:
             self.play(FadeIn(g), FadeIn(rods), FadeIn(ghosts), FadeIn(tg))

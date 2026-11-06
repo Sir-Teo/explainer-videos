@@ -113,14 +113,15 @@ class Stambaugh(VoiceoverScene):
                 why(r"project the return shock on the predictor shock; $e$ is what is left"),
                 why(r"the same regressor $x_t$ in both equations: the slope's error inherits $\phi$ times the "
                     r"persistence's error"),
-                why(r"the second term has mean zero ($e \perp v$); Kendall's (1954) bias of an AR(1) coefficient"),
+                why(r"In the iid Gaussian system, $e$ is independent of the predictor path; Kendall's AR(1) bias is first order in $1/T$."),
                 why(r"Shiller's annual data, 1871--2020: $\hat\phi$, $\hat\rho$ and $T$ from the regression itself")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.75, edge=6.8)
         with self.voiceover(
             "Four lines. The predictive system: returns on a persistent predictor, the predictor an autoregression. "
             "<bookmark mark='a'/> Project the return shock on the predictor's shock: phi times v, plus e unrelated to v. "
             "<bookmark mark='b'/> Both equations share the regressor, so the slope's error is phi times the persistence "
-            "error, plus a term in e. <bookmark mark='c'/> That term averages zero, and Kendall's bias is minus one plus "
+            "error, plus a term in e. <bookmark mark='c'/> In this iid Gaussian system, e is independent of the entire "
+            "predictor path, so that term averages zero. Kendall's first-order bias is minus one plus "
             "three rho over T: the tilted cloud, in symbols. <bookmark mark='d'/> On the annual data, phi is "
             f"{s['corr_uv'] * s['sd_u'] / s['sd_v']:.2f}, rho {s['rho']:.2f}, T {s['T']}: a bias of {s['bias']:+.3f}."
         ) as vo:
@@ -167,7 +168,7 @@ class Stambaugh(VoiceoverScene):
             f"of {mth['ivx']['p']:.3f}. <bookmark mark='c'/> A small, fragile slope, overstated by its usual t; Part "
             "seven takes up persistence itself. <bookmark mark='d'/> A question: what if the "
             "predictor's shocks and the return's shocks moved together? Then the bias would flip sign, and the "
-            "usual t would understate the slope instead. A biased slope in sample is one problem. Next: does it "
+            "OLS slope would be biased downward instead. This does not by itself determine the size of a t-test. A biased slope in sample is one problem. Next: does it "
             "forecast at all, out of sample?"
         ) as vo:
             self.play(FadeIn(rows[0]), FadeIn(rows[1]), FadeIn(src))

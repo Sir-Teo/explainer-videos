@@ -69,10 +69,10 @@ class GMM(VoiceoverScene):
             "sample mean minus mu. <bookmark mark='a'/> The two moments are a point in the plane; theory says it should "
             "be the origin; as mu changes, it slides along a line. <bookmark mark='b'/> No mu reaches the origin, so take "
             "the closest point. With the identity metric, inflate circles until one touches the line: the plain "
-            f"average, {th1:.3f}. <bookmark mark='c'/> But the second measure is four times as noisy. Hansen's efficient "
+            f"average, {th1:.3f}. <bookmark mark='c'/> But the second measure has four times the variance. Hansen's efficient "
             "weight, the inverse covariance of the moments, stretches the circles into ellipses; the touching point "
             f"slides toward the precise measure: {th2:.3f}. <bookmark mark='d'/> The distance left, scaled by the sample "
-            f"size, is Hansen's J, chi-squared with one degree of freedom: {t['J']:.2f}, p of {t['p_J']:.2f}."
+            f"size, is Hansen's J. Under valid moments and regular identification, its large-sample reference is chi-squared with one degree of freedom: {t['J']:.2f}, p of {t['p_J']:.2f}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(origin), FadeIn(ol), FadeIn(side[0]), FadeIn(side[1]))
             vo.wait_until("a")
@@ -119,7 +119,8 @@ class GMM(VoiceoverScene):
                 why(r"$q$ moments, $p$ directions used up fitting $\theta$: what is left is a test of the theory")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.5, buff=0.72, edge=6.8)
         with self.voiceover(
-            "In general: minimise the moments' length in a metric W. With q moments and p parameters, the sample "
+            "In general: minimise the moments' length in a metric W. Assume valid moments, an interior identified parameter, "
+            "a full-rank derivative and a suitable central limit theorem. With q moments and p parameters, the sample "
             "moments live in q dimensions and the parameters can only move them along a p-dimensional surface. "
             "<bookmark mark='a'/> At the minimum the gap is perpendicular, in W, to every direction the parameters can "
             "move: D transpose W times the gap is zero, the same condition as chapter one's normal equations. "
@@ -152,7 +153,7 @@ class GMM(VoiceoverScene):
             MathTex(r"\text{OLS:}\quad g = x_t\,(y_t - x_t^\top\beta)", font_size=32, color=EST),
             MathTex(r"\text{IV:}\quad g = z_t\,(y_t - x_t^\top\beta)", font_size=32, color=GOOD),
             MathTex(r"\text{ML:}\quad g = \nabla_\theta \log f(x_t;\theta)", font_size=32, color=ALT),
-            wrapped_label(r"exactly identified (as many moments as parameters): the moments can all be set to zero, "
+            wrapped_label(r"Exactly identified with a sample root: all moments are zero, "
                           r"$W$ does not matter, and $J = 0$; Cochrane's \textit{Asset Pricing}, chapters 10--11 and "
                           r"13--16, compares the methods", 11.6, 22, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(UP, buff=0.7)
@@ -161,7 +162,7 @@ class GMM(VoiceoverScene):
             "GMM is the umbrella: least squares uses x times the residual as moments, instrumental variables an "
             "instrument times the residual, maximum likelihood the score. Set those moments to zero and you recover "
             "each estimator, and its sandwich standard error comes along for free. <bookmark mark='a'/> Pause and "
-            "predict: exactly as many moments as parameters. What is J? <bookmark mark='b'/> Zero: every moment can be "
+            "predict: exactly as many moments as parameters. What is J? <bookmark mark='b'/> If a sample root exists, zero: every moment can be "
             "set to zero, the weight no longer matters, and nothing is left to test. A theory can only be rejected by "
             "GMM if it says more than its parameters can absorb, and the next chapter's theory says a great deal."
         ) as vo:

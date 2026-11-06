@@ -89,7 +89,7 @@ class DML(VoiceoverScene):
                 cmath(r"\partial_\eta\, \mathbb{E}[\psi(W; \theta_0, \eta)]\big|_{\eta_0}", r"=", r"0", font_size=36,
                       colors=C_),
                 cmath(r"\sqrt n(\hat\theta - \theta_0)", r"=", r"\frac{n^{-1/2}\sum \psi(W_i; \theta_0, \eta_0)}"
-                      r"{\mathbb{E}[v^2]} + O_p\big(\sqrt n\,\|\hat m - m\|\,\|\hat\ell - \ell\|\big)", font_size=32,
+                      r"{\mathbb{E}[v^2]} + O_p\big(\sqrt n\,\|\hat m - m\|\,(\|\hat\ell - \ell\| + \|\hat m - m\|)\big)", font_size=32,
                       colors=C_),
                 cmath(r"\text{plug-in:}\ \ \hat\theta", r"=", r"\frac{\sum d\,(y - \hat g(X))}{\sum d^2}"
                       r"\ \Rightarrow\ \text{error} \propto \|\hat g - g\|", font_size=34, colors=C_)]
@@ -97,7 +97,7 @@ class DML(VoiceoverScene):
                     r"nuisances $\eta$"),
                 why(r"Neyman orthogonality: a small error in either nuisance does not move the score's mean, to first "
                     r"order"),
-                why(r"so the nuisances' errors enter only as a product: each may converge slowly, $n^{-1/4}$ is enough"),
+                why(r"Second-order error: $\|\hat m-m\|(\|\hat\ell-\ell\|+\|\hat m-m\|)=o_p(n^{-1/2})$ suffices with other regularity conditions."),
                 why(r"the naive plug-in is not orthogonal: regularisation bias in $\hat g$ passes straight into "
                     r"$\hat\theta$")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.75, edge=6.8)
@@ -106,9 +106,11 @@ class DML(VoiceoverScene):
             "times residual treatment, times residual treatment, averaging zero. <bookmark mark='a'/> That score is "
             "Neyman-orthogonal: differentiate its mean with respect to the two learned functions, at the truth, and you "
             "get zero. Small errors in the learned functions do not move it, to first order. <bookmark mark='b'/> So the "
-            "error is the usual normal term plus a remainder proportional to the product of the two learners' errors. "
+            "error is the usual normal term plus a second-order remainder: the treatment-model error times the sum "
+            "of the outcome-model and treatment-model errors. "
             "Machine learners converge slowly, but if each is faster than n to the minus a quarter, the product vanishes "
-            "faster than the root-n noise, and the standard error from the score is valid. <bookmark mark='c'/> The "
+            "faster than the root-n noise. Valid inference also needs identification, suitable moments and sampling "
+            "conditions; this iid score standard error does not handle arbitrary time dependence. <bookmark mark='c'/> The "
             "naive plug-in, learn g and regress what is left on d, is not orthogonal: its derivative with respect to g "
             "is the covariance of d with the controls, not zero, so regularisation bias in g passes straight into theta. "
             "Cross-fitting handles the other danger: a learner that has memorised a point makes that point's residual "

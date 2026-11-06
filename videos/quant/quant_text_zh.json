@@ -29559,7 +29559,20 @@
     "Real log total returns, chronological expanding fits from 1927; revised data. Five predictors tried. Legacy CT values are omitted: their sign used the full sample.": "实际对数总收益，1927年起按时间扩展拟合；使用修订数据，试了五个预测变量。旧CT结果不展示，因为其符号由全部样本决定。",
     "Does an in-sample $R^2$ of 0.06\\% guarantee a positive forecast $R^2$?": "样本内$R^2$为0.06\\%，就能保证预测$R^2$为正吗？",
     "No guarantee: estimation error and changing relationships can outweigh the signal.": "不能保证：估计误差和关系变化可能超过信号。",
-    "Same stationary process, more observations: covariance scales as $1/T$. SEs above use the original sample. Robust uncertainty does not repair model fit.": "同一平稳过程，更多观测：协方差按 $1/T$ 缩小。上方标准误对应原始样本。稳健推断并不修正模型拟合。"
+    "Same stationary process, more observations: covariance scales as $1/T$. SEs above use the original sample. Robust uncertainty does not repair model fit.": "同一平稳过程，更多观测：协方差按 $1/T$ 缩小。上方标准误对应原始样本。稳健推断并不修正模型拟合。",
+    "One circular block of exactly $n$ observations: what is the mean's bootstrap standard error?": "一个长度恰好为$n$的循环区块：均值的自助标准误是多少？",
+    "Exactly identified with a sample root: all moments are zero, $W$ does not matter, and $J = 0$; Cochrane's \\textit{Asset Pricing}, chapters 10--11 and 13--16, compares the methods": "若恰好识别且样本矩方程存在解：所有矩为零，$W$无关，$J=0$；科克伦的《资产定价》第10--11和13--16章比较这些方法。",
+    "Treatment-effect weights can be negative. Goodman-Bacon's two-by-two comparison weights are nonnegative; already-treated controls can contaminate those comparisons.": "处理效应权重可以为负。古德曼–培根的两两比较权重非负，但使用已处理组作为对照可能污染这些比较。",
+    "Second-order error: $\\|\\hat m-m\\|(\\|\\hat\\ell-\\ell\\|+\\|\\hat m-m\\|)=o_p(n^{-1/2})$ suffices with other regularity conditions.": "二阶余项：$\\|\\hat m-m\\|(\\|\\hat\\ell-\\ell\\|+\\|\\hat m-m\\|)=o_p(n^{-1/2})$，还需其余正则条件。",
+    "iid observations, finite fourth moment: skewness $\\gamma_3$, kurtosis $\\kappa$; all terms divide by $T$.": "独立同分布观测，四阶矩有限：偏度$\\gamma_3$、峰度$\\kappa$；所有项均除以$T$。",
+    "height: rescaled $-\\sqrt{\\ell_{\\max} - \\ell}$; location fixed at $\\hat\\mu$": "高度：缩放后的$-\\sqrt{\\ell_{\\max}-\\ell}$；位置固定为$\\hat\\mu$",
+    "Four iid Gaussian annual returns give a Sharpe ratio of 1. Approximate standard error?": "四个独立同分布的高斯年度收益给出夏普比率1。近似标准误是多少？",
+    "no: Bonferroni needs $p < 0.0025$; the chance that one of 20 null strategies reaches $p < 0.03$ is $1 - 0.97^{20} \\approx 46\\%$ for independent exact null $p$-values": "否：邦费罗尼要求$p<0.0025$；若20个精确原假设$p$值独立，至少一个达到$p<0.03$的概率为$1-0.97^{20}\\approx46\\%$。",
+    "Stein (1956), James and Stein (1961): with $k \\ge 3$ means, shrinking beats the raw estimates in expected total squared error for independent unit-variance Gaussian observations; Problem 5": "斯坦（1956）、詹姆斯与斯坦（1961）：独立、单位方差高斯观测，$k\\ge3$时收缩降低期望总平方误差；习题5。",
+    "Benjamini and Hochberg (1995), independent $p$-values: $V$ false of $R$ rejected; exact, with $m_0$ true nulls with exact uniform null $p$-values; dependence needs additional conditions": "本雅明尼–霍赫伯格（1995）：独立且真原假设下精确均匀的$p$值；相依情形需要额外条件。",
+    "\\text{plotted sets: } 10": "\\text{显示的组数：} 10",
+    "iid benchmark: a true Sharpe of 0.5 needs 16 years for an expected $t$ of 2": "独立同分布基准：真实夏普比率0.5需16年，使期望$t$达到2",
+    "In the iid Gaussian system, $e$ is independent of the predictor path; Kendall's AR(1) bias is first order in $1/T$.": "在独立同分布高斯系统中，$e$与预测变量路径独立；肯德尔AR(1)偏差是一阶$1/T$近似。"
   },
   "phrases": {
     "you owe": "你欠",

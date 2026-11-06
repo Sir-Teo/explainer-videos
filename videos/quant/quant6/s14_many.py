@@ -96,7 +96,7 @@ class Many(VoiceoverScene):
                 why(r"Holm (1979): step down through the sorted $p$-values with thresholds $\alpha/m, \alpha/(m-1), "
                     r"\dots$; at the first true null rejected, at least $m_0$ nulls are left, so FWER $\le \alpha$"),
                 why(r"Benjamini and Hochberg (1995), independent $p$-values: $V$ false of $R$ rejected; exact, with "
-                    r"$m_0$ true nulls"),
+                    r"$m_0$ true nulls with exact uniform null $p$-values; dependence needs additional conditions"),
                 why(r"what a mixture of nulls and real effects looks like: a flat floor of height $\pi_0$ plus a spike")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.4, buff=0.8, edge=6.8)
         with self.voiceover(
@@ -106,7 +106,7 @@ class Many(VoiceoverScene):
             "At its first false rejection at least m-nought true nulls remain, so that threshold is at most alpha over "
             "m-nought, and the union bound over the true nulls still gives alpha: the same guarantee, more power. "
             "<bookmark mark='b'/> Benjamini-Hochberg control the false discovery rate, the expected share of false "
-            "discoveries; with independent p-values it is exactly the share of true nulls times q: at most q. "
+            "discoveries; with independent p-values and exact uniform null p-values it is exactly the share of true nulls times q: at most q. "
             "<bookmark mark='c'/> And a picture to keep: null p-values are uniform, so a histogram of many is a flat "
             "floor whose height is the share of nulls, plus a spike near zero from the real effects."
         ) as vo:
@@ -193,7 +193,8 @@ class Many(VoiceoverScene):
             f"discovery rate {100 * S['fdr']:.0f} percent. Pure noise: {m['noise_raw']} pass at five percent, "
             f"{m['noise_bh']} after correction. <bookmark mark='b'/> Pause and predict: twenty strategies, the best at p "
             "of three percent. Significant? No: the chance one of twenty useless strategies does that well is forty-six "
-            "percent. Part twenty-six builds the machinery."
+            "percent if their exact null p-values are independent. Bonferroni rejects none here regardless of "
+            "dependence; the forty-six percent calculation itself needs independence. Part twenty-six builds the machinery."
             " Significance is not cause. Next: designs that identify causes."
         ) as vo:
             self.play(FadeIn(card))

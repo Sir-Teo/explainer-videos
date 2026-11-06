@@ -44,9 +44,9 @@ class MLE(VoiceoverScene, ThreeDScene):
             return surface_ball(ax, f, x, y, color=YELLOW, radius=0.12)
         b = always_redraw(ball)
         trail = always_redraw(lambda: surface_path(ax, f, pts[:int(np.floor(k.get_value())) + 1] + [
-            (pts[min(int(np.floor(k.get_value())), len(pts) - 2)][0] * (1 - (k.get_value() % 1))
+            (pts[min(int(np.floor(k.get_value())), len(pts) - 1)][0] * (1 - (k.get_value() % 1))
              + pts[min(int(np.floor(k.get_value())) + 1, len(pts) - 1)][0] * (k.get_value() % 1),
-             pts[min(int(np.floor(k.get_value())), len(pts) - 2)][1] * (1 - (k.get_value() % 1))
+             pts[min(int(np.floor(k.get_value())), len(pts) - 1)][1] * (1 - (k.get_value() % 1))
              + pts[min(int(np.floor(k.get_value())) + 1, len(pts) - 1)][1] * (k.get_value() % 1))],
             color=YELLOW, stroke_width=4))
         nll = np.asarray(m["nll_path"])
@@ -58,7 +58,7 @@ class MLE(VoiceoverScene, ThreeDScene):
             label(r"log-likelihood of a Student $t$ for daily US returns", font_size=22, color=WHITE),
             label(rf"{m['n']:,} days, July 1926 -- December 2020".replace(",", "{,}"), font_size=20, color=GREY_B),
             label(r"across: degrees of freedom $\nu$; depth: scale $\sigma$", font_size=20, color=GREY_B),
-            label(r"height: $-\sqrt{\ell_{\max} - \ell}$", font_size=20, color=GREY_B),
+            label(r"height: rescaled $-\sqrt{\ell_{\max} - \ell}$; location fixed at $\hat\mu$", font_size=20, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_corner(UL, buff=0.35)
         res = MathTex(rf"\hat\nu = {m['nu']:.2f},\ \ \hat\sigma = {m['scale']:.3f}\%,\ \ \hat\mu = {m['mu']:.3f}\%",
                       font_size=32, color=EST).to_corner(DR, buff=0.4)
@@ -71,8 +71,10 @@ class MLE(VoiceoverScene, ThreeDScene):
             "density over twenty-five thousand days. <bookmark mark='a'/> Over nu and the scale it is a landscape, and "
             "maximum likelihood is its summit. <bookmark mark='b'/> Start from a bad guess, nearly normal, with nu of "
             f"{path[0][2]:.0f}, and climb by Newton's method: fit a parabola using the slope and curvature, jump to its "
-            f"top. <bookmark mark='c'/> {len(path) - 1} steps, and nu is {m['nu']:.2f}: tails so fat the variance barely "
-            f"exists. Part one's kurtosis of {m['kurtosis']:.0f} said the same."
+            f"top. <bookmark mark='c'/> {len(path) - 1} steps, and nu is {m['nu']:.2f}. In the fitted t family, the variance exists because nu "
+            f"exceeds two, but the fourth moment does not because nu is below four. The sample kurtosis, "
+            f"{m['kurtosis']:.0f}, is a finite descriptive statistic. This height is a rescaled likelihood slice with "
+            "location held at its fitted value; iterates outside the displayed window are projected to its edge."
         ) as vo:
             self.play(FadeIn(hint), Create(ax), run_time=1.5)
             vo.wait_until("a")
@@ -135,13 +137,13 @@ class MLE(VoiceoverScene, ThreeDScene):
         self.clear_scene()
 
     def ellipses(self, m):
-        g = axes([1.9, 3.0], [0.53, 0.62], x_length=6.2, y_length=4.6, xlabel=r"degrees of freedom $\nu$",
-                 ylabel=r"scale $\sigma$, \% a day", xticks=[2.0, 2.4, 2.8], yticks=[0.55, 0.58, 0.61],
+        g = axes([1.9, 3.0], [0.50, 0.65], x_length=6.2, y_length=4.6, xlabel=r"degrees of freedom $\nu$",
+                 ylabel=r"scale $\sigma$, \% a day", xticks=[2.0, 2.4, 2.8], yticks=[0.50, 0.55, 0.60, 0.65],
                  font_size=16).to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
         ax = g.ax
         ctr = np.array([m["nu"], m["scale"]])
         sw = lambda V: np.asarray(V)[::-1, ::-1]  # noqa: E731  (sigma, nu) -> (nu, sigma)
-        clip = ((1.9, 3.0), (0.53, 0.62))
+        clip = None  # full contours: sample-size area comparisons must not use clipped regions
         Tf = ValueTracker(1.0)
         e_naive = always_redraw(lambda: ellipse_curve(ax, ctr, sw(m["V_naive"]) / Tf.get_value(), EST, clip=clip))
         e_opg = always_redraw(lambda: ellipse_curve(

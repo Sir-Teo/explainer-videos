@@ -29,7 +29,7 @@ the real-world measure P.
   0.055 against iid 0.047. The Ω grid lit as iid, White, band (ch 2) and blocks (ch 3).
 * **2. Newey–West: counting dependent data** (`s03_hac`). Five-year real returns on the log dividend yield
   (1,739 overlapping windows): the scores' autocorrelations, Bartlett's window sliding open, t falling from 15.0
-  (naive) to 2.8 at L = 120. Derivation of the long-run variance (spectrum at zero; overlap inflates by h).
+  (naive) to 2.8 at L = 120. Derivation of the long-run variance (spectrum at zero; a mean of h-period iid sums has variance inflation h).
   **Lab:** `econ._hac_meat` + `ols` → naive 15.0, NW 2.8, Hansen–Hodrick 2.5, Hodrick (1992) 1B 2.3. Size in 3,000
   null worlds per cell (T = 600, h = 12, ρ = 0.95): naive 53%, NW(L = 6) 19%, NW(L = h − 1) 14%, wide NW with
   fixed-b critical value 10%, EWC (ν = 28) 8%; with ρ = 0 every test is near 5%. Fixed-b critical values simulated:
@@ -51,11 +51,12 @@ the real-world measure P.
   (ρ̂ − ρ, β̂ − β), slope φ = −0.65; the centre's bias falls from +0.055 at T = 50 to +0.017 at 150 (formula: +0.049,
   +0.016). Derivation; annual data: β = 0.034 (t 1.1), bias +0.018, corrected 0.016; Amihud–Hurvich 0.016
   (t 0.49); IVX annual p = 0.16; the House's simplified IVX on monthly data p = 0.018 (since 1952, 0.015).
-* **6. Out of sample** (`s07_oos`). Expanding-window forecasts from 1927 on Shiller monthly; the real-time slope with
-  its band and the cumulative ΔSSE (−0.0034 by 1990, −0.0081 by 2000, −0.0073 at the end). R²_OS: dividend yield
-  −0.32% (Campbell–Thompson −0.12%), earnings yield −0.16% (+0.03%), CAPE −0.03% (−0.00%), 10-year yield −0.23%
-  (+0.07%), inflation +0.35% (+0.38%; the only positive one, of five tried). Campbell–Thompson's gain R²/S²: S² =
-  1.9% monthly.
+* **6. Out of sample** (`s07_oos`). Chronological expanding-window refits from 1927 on revised Shiller data,
+  rather than a reconstruction of the data available to an investor at each date. R²_OS: dividend yield −0.32%,
+  earnings yield −0.16%, CAPE −0.03%, 10-year yield −0.23%, inflation +0.35% (the only positive one of five tried).
+  The legacy Campbell–Thompson column is omitted because its sign restriction was selected using the full sample.
+  The separate population mean–variance gain formula is taught with a stylized example, rather than treating a noisy
+  forecast score for real log total returns as an investable gain estimate.
 * **7. Maximum likelihood** (`s08_mle`). Student t on 24,896 daily market returns (1926–2020): Newton from ν = 27
   reaches ν̂ = 2.45, σ̂ = 0.575%, in 6 steps (the iterates are replayed on the 3D likelihood hill). se(ν̂): inverse
   Hessian 0.047; OPG sandwich 0.044; sandwich with the scores' long-run variance 0.170 (3.6 times the naive one).
@@ -194,8 +195,8 @@ edition, Bali–Engle–Murray's Part I, and course syllabi for Hayashi).
 
 ## Desk questions, with solutions
 
-1. **Sharpe 1 over 4 years.** For iid normal returns, se(SR) ≈ √((1 + SR²/2)/T) = √(1.5/4) ≈ 0.61 in annual units.
-   The 95% interval is about 1 ± 1.2: the data cannot tell this strategy from one with no edge.
+1. **Sharpe 1 from four iid Gaussian annual returns.** As a rough delta-method approximation, se(SR) ≈ √((1 + SR²/2)/T) = √(1.5/4) ≈ 0.61 in annual units.
+   The approximate interval is about 1 ± 1.2. Four observations are a small sample for this approximation; a monthly sampling convention gives a different calculation.
 2. **The best of 20 has p = 0.03.** If all 20 are worthless and independent, the chance that at least one has
    p ≤ 0.03 is 1 − 0.97²⁰ ≈ 46%. Bonferroni requires p < 0.05/20 = 0.0025. Correlated strategies reduce the effective
    number of tests, but the count of tries must be reported either way.
@@ -214,15 +215,15 @@ edition, Bali–Engle–Murray's Part I, and course syllabi for Hayashi).
 
 1. **The cost of overlap.** With y_t = Σ_{j=1}^{h} ε_{t+j} and a predictor that barely changes, the residuals are
    close to y_t. Neighbouring y_t share h − k shocks at lag k, so their autocorrelation is (h − k)/h, and
-   Σ_{|k|<h}(1 − |k|/h) = h. The naive variance is too small by h and the standard error by √h: √60 ≈ 7.7 for
+   Σ_{|k|<h}(1 − |k|/h) = h. In this limiting slowly moving-predictor calculation, the naive variance is too small by h and the standard error by √h: √60 ≈ 7.7 for
    five-year returns sampled monthly (compare 15.0 against 2.8).
 2. **Stambaugh's bias.** With r_{t+1} = a + βx_t + u and x_{t+1} = c + ρx_t + v, write u = φv + e, φ = σ_uv/σ_v², e
-   independent of v. OLS gives β̂ − β = φ(ρ̂ − ρ) + Σx̃e/Σx̃², whose second term has mean zero, and Kendall's
+   independent of the whole predictor path in the iid Gaussian system. OLS gives β̂ − β = φ(ρ̂ − ρ) + Σx̃e/Σx̃², whose second term has mean zero, and Kendall's
    E[ρ̂ − ρ] ≈ −(1 + 3ρ)/T. So E[β̂ − β] ≈ −φ(1 + 3ρ)/T. Annual data: ρ = 0.91, T = 149, φ = −0.72: bias
-   +0.72 × 3.72/149 = +0.018.
+   +0.72 × 3.72/149 = +0.018. This is a first-order approximation, not an exact finite-sample bias formula.
 3. **The Sharpe ratio's standard error.** SR̂ = μ̂/σ̂; with iid normal returns Var(μ̂) = σ²/T, Var(σ̂) ≈ σ²/(2T),
-   independent. The delta method gives Var(SR̂) ≈ (1 + SR²/2)/T. Fat tails add (κ − 3)SR²/4 and skewness −γ₃SR
-   (Mertens 2002).
+   independent. The delta method gives Var(SR̂) ≈ (1 + SR²/2)/T. For iid returns with finite fourth moment, fat tails add (κ − 3)SR²/4 and skewness −γ₃SR
+   to the numerator; the whole expression is divided by T (Mertens 2002).
 4. **Holm.** Reject while p₍ᵢ₎ ≤ α/(m − i + 1). With m₀ true nulls, at the first false rejection at least m₀
    hypotheses remain, so its threshold is at most α/m₀; P(any false rejection) ≤ P(min over true nulls of p ≤ α/m₀) ≤
    α. Every threshold is at least α/m, so Holm rejects at least what Bonferroni rejects.
@@ -361,3 +362,13 @@ FRED的人均实际消费与CPI；FOMC例行会议日期（1994–2020，转录�
 
 局部单位根极限（Phillips 1987；Chan与Wei 1987），预测检验（Elliott与Stock 1994；Cavanagh、Elliott与Stock 1995），邦费罗尼区间（Campbell与
 Yogo 2006），IVX（2015）。开放问题：处处有良好功效的一致有效检验；多个持久预测变量；断点与近单位根之辨。
+
+## Current polish and QA
+
+The sequential review is tracked in [the finance QA log](../../../docs/qa/quantitative-finance-polish.md).
+The MLE demonstration shows complete confidence regions and scales all three covariances by the same sample
+multiplier. Its static SE labels refer to the original sample. Histograms retain the full sample as their density
+denominator, leaving observations outside the window outside the plot. The bootstrap quiz specifies one fixed
+circular block, not a geometric block whose mean length equals the sample size. The DiD derivation distinguishes
+nonnegative two-by-two comparison weights from potentially negative treatment-effect weights. The DML remainder
+includes both the cross-product of nuisance errors and the squared treatment-model error.

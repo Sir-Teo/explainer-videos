@@ -199,15 +199,17 @@ class Bootstrap(VoiceoverScene):
         verdict = (f"Blocks help, closing about {100 * closes / gap_iid:.0f} percent of the gap, but neither reaches "
                    "ninety-five: year-long blocks are too short for volatility this persistent."
                    if 0 < closes < gap_iid else "Here the blocks do not help.")
-        q = predict(r"Block length equal to the whole sample: what is the bootstrap standard error?").to_edge(DOWN,
+        q = predict(r"One circular block of exactly $n$ observations: what is the mean's bootstrap standard error?").to_edge(DOWN,
                                                                                                       buff=0.15)
         with self.voiceover(
             "Does it work? A thousand simulated markets as long as ours, slightly autocorrelated, volatility "
             "clustering, true monthly Sharpe of an eighth; build each bootstrap's nominal ninety-five percent interval. "
             f"<bookmark mark='a'/> The iid bootstrap covers the truth {100 * cov['iid']:.1f} percent of the time, the "
             f"moving block {100 * cov['block']:.1f}, the stationary {100 * cov['stationary']:.1f}. {verdict} "
-            "<bookmark mark='b'/> Pause and predict: a block the length of the sample? Every resample is the sample "
-            "rotated: a standard error of zero."
+            "<bookmark mark='b'/> Pause and predict: one circular block of exactly n observations, the whole sample. "
+            "<bookmark mark='c'/> For the mean or Sharpe ratio, rotations leave the statistic unchanged, giving zero "
+            "bootstrap standard error. This does not hold for a stationary bootstrap whose random block length only "
+            "has mean n; it may restart before covering the sample."
             " Resampling uses only the data. Next: adding what you believed before you saw them."
         ) as vo:
             self.play(FadeIn(g), Create(nominal), FadeIn(labs), FadeIn(side))
@@ -216,5 +218,6 @@ class Bootstrap(VoiceoverScene):
                                   lag_ratio=0.5, run_time=3))
             vo.wait_until("b")
             self.play(FadeIn(q, shift=UP * 0.2))
+            vo.wait_until("c")
         self.wait(0.4)
         self.clear_scene()

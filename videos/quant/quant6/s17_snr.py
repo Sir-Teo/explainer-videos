@@ -28,17 +28,16 @@ class SNR(VoiceoverScene):
         C_ = {r"T_{yrs}": EST, r"\widehat{SR}": ALT}
         rows = [cmath(r"t = \frac{\hat\mu}{\hat\sigma / \sqrt T}", r"=", r"\widehat{SR}_{ann}\sqrt{T_{yrs}}"
                       r"\ \Rightarrow\ T_{yrs} = (t / SR)^2", font_size=36, colors=C_),
-                cmath(r"\mathrm{Var}(\widehat{SR})", r"\approx", r"\frac{1 + \tfrac12 SR^2}{T}\ \Big(+\frac{\kappa - 3}{4}"
-                      r"SR^2 - \gamma_3\,SR\Big)", font_size=36, colors=C_),
+                cmath(r"\mathrm{Var}(\widehat{SR})", r"\approx", r"\frac{1 + \tfrac12 SR^2 + \tfrac{\kappa - 3}{4}SR^2 - \gamma_3 SR}{T}", font_size=36, colors=C_),
                 cmath(r"\mathrm{Var}(\hat\alpha) = \frac{\sigma_\varepsilon^2}{T}\Big(1 + \frac{\mu_m^2}{\sigma_m^2}\Big)",
                       r",", r"\ \mathrm{Var}(\hat\beta) = \frac{\sigma_\varepsilon^2}{T \sigma_m^2}", font_size=36,
                       colors=C_)]
         whys = [why(r"annualise: the $t$-statistic of a mean return is the Sharpe ratio times the root of the years"),
-                why(r"the delta method (Lo 2002); with skewness $\gamma_3$ and kurtosis $\kappa$ (Mertens 2002)"),
+                why(r"iid observations, finite fourth moment: skewness $\gamma_3$, kurtosis $\kappa$; all terms divide by $T$."),
                 why(r"chapter one's formula for the regression on the market: $\alpha$ is a mean, $\beta$ a co-movement")]
         step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.4, buff=1.0, edge=6.8)
         with self.voiceover(
-            "The deepest problem in quantitative finance: small signal, large noise. A mean return's t-statistic is "
+            "The deepest problem in quantitative finance: small signal, large noise. In this iid approximation, a mean return's t-statistic is "
             "the mean over its standard error, the volatility over the root of T. Annualise both, and t is the Sharpe "
             "ratio times the root of the years. So a t of two needs two over the Sharpe ratio, squared, years. "
             "<bookmark mark='a'/> The Sharpe ratio's own standard error, by the delta method, adds the noise of the "
@@ -126,7 +125,7 @@ class SNR(VoiceoverScene):
         pl = VGroup(*[curve(a2, T, np.asarray(s["p_neg"][k]), c, stroke_width=3) for k, c in cols.items()])
         leg = legend([(BAD, r"SR 0.25"), (ALT, r"SR 0.5"), (GOOD, r"SR 1")], font_size=17).next_to(g2, DOWN, buff=0.25)
         p5 = float(sst.norm.cdf(-0.5 * np.sqrt(5)))
-        desk = desk_question(r"A strategy has a Sharpe ratio of 1 over 4 years. What is the standard error?",
+        desk = desk_question(r"Four iid Gaussian annual returns give a Sharpe ratio of 1. Approximate standard error?",
                              rf"$\sqrt{{(1 + SR^2/2)/T}} = \sqrt{{1.5/4}} \approx {s['se_desk']:.2f}$: the 95\% "
                              r"interval runs from below zero to above two", width=6.2, font_size=21)
         desk.next_to(leg, DOWN, buff=0.3).to_edge(RIGHT, buff=0.4)
@@ -138,7 +137,8 @@ class SNR(VoiceoverScene):
             f"needs {s['y1']:.0f}. <bookmark mark='a'/> Over shorter spans good strategies often look bad. After five "
             f"years, a Sharpe-of-a-half strategy has about a {100 * p5:.0f} percent chance of having lost money. Funds "
             "are closed and strategies abandoned on evidence like that, and bad ones are kept for the same reason. "
-            "<bookmark mark='b'/> A desk question: a Sharpe ratio of one over four years. The standard error is "
+            "<bookmark mark='b'/> A desk question using four iid Gaussian annual observations, a very small sample. "
+            "A Sharpe ratio of one has a rough delta-method standard error "
             f"about {s['se_desk']:.2f}, so the true value could be anywhere from below zero to above two. "
             "<bookmark mark='c'/> Pause and predict: to halve the standard error of alpha, how many more years? "
             "Four times as many. This is why the House seals its hold-out data in an envelope, and counts every "

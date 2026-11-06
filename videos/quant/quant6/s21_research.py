@@ -101,7 +101,7 @@ class Research(VoiceoverScene):
         lines = VGroup()
         for key, col in (("ols", OLS_C), ("c", ARM_C)):
             h = np.asarray(t["t_hist"][key], float)
-            h = h / h.sum() / (e[1] - e[0])
+            h = h / t["M"] / (e[1] - e[0])
             lines.add(curve(ax, c, h, col, stroke_width=3))
         th = t["t_hist"]
         leg = legend([(WHITE, r"$N(0, 1)$"), (OLS_C, rf"OLS $t$, mean {th['mean_ols']:.2f}"),

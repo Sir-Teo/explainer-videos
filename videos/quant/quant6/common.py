@@ -35,7 +35,11 @@ def show_card(scene, card):
 
 def hist_bars(ax, values, edges, color, opacity=0.8, density=True, cap=None):
     """Histogram bars standing on the x axis of ``ax``."""
-    h, _ = np.histogram(np.clip(values, edges[0], edges[-1]), edges, density=density)
+    values = np.asarray(values)
+    h, _ = np.histogram(values, edges)
+    if density:
+        # Keep the mass outside the plot outside it; a viewing window is not conditioning.
+        h = h / (max(len(values), 1) * np.diff(edges))
     if cap is not None:
         h = np.minimum(h, cap)
     w = ax.c2p(edges[1] - edges[0], 0)[0] - ax.c2p(0, 0)[0]

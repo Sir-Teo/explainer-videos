@@ -4,11 +4,11 @@ from explainer.quant import *  # noqa: F403
 from videos.quant.quant6.common import ALT, BAD, DATA_C, EST, GOOD, PART, load
 
 DESK = [
-    (r"A strategy has a Sharpe ratio of 1 over 4 years. What is the standard error?",
+    (r"Four iid Gaussian annual returns give a Sharpe ratio of 1. Approximate standard error?",
      r"about 0.6: $\sqrt{(1 + SR^2/2)/T} = \sqrt{1.5/4} \approx 0.61$; the 95\% interval runs from about $-0.2$ to $2.2$"),
     (r"You tested 20 strategies and the best has $p = 0.03$. Is it significant?",
      r"no: Bonferroni needs $p < 0.0025$; the chance that one of 20 null strategies reaches $p < 0.03$ is "
-     r"$1 - 0.97^{20} \approx 46\%$"),
+     r"$1 - 0.97^{20} \approx 46\%$ for independent exact null $p$-values"),
     (r"Annual returns sampled monthly over 40 years: how many observations?",
      r"about 40, not 480; use Newey--West with fixed-$b$ critical values, or EWC, and still distrust $t \approx 2$"),
     (r"Five-year returns on a persistent yield give $t = 2.5$ with Newey--West. Do you trade it?",
@@ -105,7 +105,7 @@ class Outro(VoiceoverScene):
         items = [
             (r"OLS is a projection; every standard error is a sandwich whose meat is how the scores co-move", EST),
             (rf"overlap: the dividend yield's $t$ of {o['est']['naive']['t']:.0f} is {o['est']['nw']['t']:.1f} with "
-             r"Newey--West; fixed-$b$ and EWC fix the remaining over-rejection", BAD),
+             r"Newey--West; fixed-$b$ and EWC reduce over-rejection in the shown simulations", BAD),
             (r"panels: cluster on the shock both $x$ and $u$ share; returns share the month", ALT),
             (rf"pooled ({fe['pooled']:.4f}) = within ({fe['within']:.4f}) mixed with between ({fe['between']:.4f}); "
              r"Fama--MacBeth answers the within question", GOOD),
@@ -118,7 +118,7 @@ class Outro(VoiceoverScene):
             (rf"block bootstraps: the market's Sharpe ratio has a standard error of {b['se_stationary']:.2f} after 94 "
              r"years", EST),
             (r"shrinkage and Gibbs halve the forecast error of 40 means; BH controls false discoveries", GOOD),
-            (r"causal designs and double ML; a Sharpe of 0.5 needs 16 years to prove itself", ALT),
+            (r"iid benchmark: a true Sharpe of 0.5 needs 16 years for an expected $t$ of 2", ALT),
         ]
         rows = VGroup()
         for i, (t, c) in enumerate(items, 1):
@@ -149,7 +149,8 @@ class Outro(VoiceoverScene):
         if cards.height > 7.6:
             cards.scale_to_fit_height(7.6)
         with self.voiceover(
-            "Five desk questions. A Sharpe of one over four years: a standard error of about zero point six. "
+            "Five desk questions. With four iid Gaussian annual observations, a Sharpe of one has a rough "
+            "delta-method standard error of about zero point six. "
             "<bookmark mark='a'/> Twenty strategies, the best at three percent: not significant. <bookmark mark='b'/> "
             "Forty years sampled monthly: about forty observations. <bookmark mark='c'/> A t of two and a half on "
             "five-year returns: do not trade it on that alone. <bookmark mark='d'/> Pooled against Fama-MacBeth: "

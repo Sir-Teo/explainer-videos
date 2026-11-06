@@ -160,7 +160,8 @@ class Event(VoiceoverScene):
             f"from 1994 to 2020 from the Fed's own pages: {f['n_events']} decisions. Here are forty, each a little path of "
             "abnormal returns, in calendar time. <bookmark mark='a'/> Slide each so its decision day sits at zero: "
             "calendar time becomes event time. <bookmark mark='b'/> Average them as decisions are added; the band "
-            "narrows like one over root N, fairly, since each decision has its own date. <bookmark mark='c'/> On "
+            "uses the cross-event standard deviation over root N. Separate dates avoid same-day clustering, "
+            "but serial dependence or changing regimes can still make that standard error unreliable. <bookmark mark='c'/> On "
             f"decision days the market earned {1e4 * a['mean_event']:.0f} basis points over the riskless rate, against "
             f"{1e4 * a['mean_other']:.0f} on other days, t of {a['t']:.1f}: three percent of the days carried "
             f"{100 * f['share_of_return']:.0f} percent of the excess return. David Lucca and Emanuel Moench reported in "
@@ -200,22 +201,25 @@ class Event(VoiceoverScene):
         def hb():
             v = pl[:int(n.get_value())]
             h = hist_bars(ax, v, edges, DATA_C, density=False)
-            peak = max(np.histogram(np.clip(v, lo, hi), edges)[0].max(), 1)
+            peak = max(np.histogram(v, edges)[0].max(), 1)
             return h.stretch_to_fit_height(max(3.2 * peak / max(np.histogram(pl, edges)[0].max(), 1), 0.02),
                                            about_edge=DOWN).align_to(ax.c2p(0, 0), DOWN)
         hm = always_redraw(hb)
         mk = Line(ax.c2p(real, 0), ax.c2p(real, 0.95), color=YELLOW, stroke_width=5)
         mkl = MathTex(rf"\text{{FOMC days: }} {1e4 * real:.0f}\ \text{{bp}}", font_size=26, color=YELLOW).next_to(
             mk, UP, buff=0.08)
-        cnt = always_redraw(lambda: MathTex(rf"\text{{placebo sets: }} {5 * int(n.get_value()):,}".replace(",", "{,}"),
+        cnt = always_redraw(lambda: MathTex(rf"\text{{plotted sets: }} {int(n.get_value()):,}".replace(",", "{,}"),
                                             font_size=26, color=GREY_A).next_to(g, UP, buff=0.1).align_to(g, LEFT))
         side = MathTex(rf"p = {f['p_placebo']:.4f}", font_size=34, color=EST).to_edge(RIGHT, buff=0.6)
         with self.voiceover(
             f"A check with no formula: placebos. Draw {f['n_events']} days without a decision, average their returns, "
-            "and repeat ten thousand times. That is what an average of that many ordinary days looks like, fat tails, "
-            "volatility clusters and all, with no assumption about the distribution. <bookmark mark='a'/> The real "
+            "and repeat ten thousand times. The plot shows every fifth draw. This random-day comparison preserves the "
+            "empirical return distribution, but not the original sequence of volatility clusters. Interpreting it as "
+            "a formal test needs a valid exchangeability or randomization argument; it does not establish a causal "
+            "effect of monetary policy. <bookmark mark='a'/> The real "
             f"decision days sit far in the right tail: only {100 * f['p_placebo']:.2f} percent of placebo sets do as "
-            "well. The trial counter's logic, in miniature: compare what you found with what chance finds."
+            "well. This is a descriptive comparison with randomly selected ordinary days; event timing, dependence and "
+            "other news need separate scrutiny."
         ) as vo:
             self.play(FadeIn(g))
             self.add(hm, cnt)
