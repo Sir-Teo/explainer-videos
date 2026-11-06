@@ -26,7 +26,7 @@ No part is signed off for bilingual production. The branch has zero `narration_z
 | 1 | `stats1` | 16 | English source/visual pass complete; production gates open |
 | 2 | `stats2` | 16 | Scientific source corrections complete; visual verification in progress |
 | 3 | `stats3` | 16 | Scientific source corrections complete; visual verification pending |
-| 4 | `stats4` | 14 | Not yet reviewed chapter by chapter |
+| 4 | `stats4` | 14 | Scientific source corrections complete; visual verification pending |
 | 5 | `stats5` | 16 | Not yet reviewed chapter by chapter |
 | 6 | `stats6` | 15 | Not yet reviewed chapter by chapter |
 | 7 | `stats7` | 13 | Not yet reviewed chapter by chapter |

@@ -37,9 +37,10 @@ class Blocks(VoiceoverScene):
             cmath(r"\det M", r"=", r"\det A \cdot \det(D - CA^{-1}B)", font_size=34),
         ]
         rows[1][0].set_color(EIG)
-        whys = [why(r"block Gaussian elimination"), why(r"the Schur complement of $A$"), why(r"triangular blocks")]
+        whys = [why(r"block Gaussian elimination; \ $A$ nonsingular"), why(r"the Schur complement of $A$"), why(r"triangular blocks")]
         stat = label(r"for a normal vector: \ $\mathrm{Var}(\mathbf x_2 \mid \mathbf x_1) = \Sigma_{22} - \Sigma_{21}\Sigma_{11}^{-1}"
                      r"\Sigma_{12}$ \ (Part 5)", font_size=24, color=S.ACCENT).to_edge(DOWN, buff=0.5)
+        intro = label('Eliminating a block', font_size=36)
         with self.voiceover(
             "Statistics constantly splits variables into groups: the ones we observe and the ones we don't, the "
             "parameters we care about and the nuisance ones. Matrices split with them. <bookmark mark='a'/> Write a "
@@ -50,7 +51,9 @@ class Blocks(VoiceoverScene):
             "conditional covariance of one group given the other is exactly a Schur complement of the covariance "
             "matrix."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(M), FadeIn(ml))
             step = ladder(self, rows, whys, keep=3, top=2.6, x=1.7, buff=0.55, edge=6.9)
             vo.wait_until("b")
@@ -69,19 +72,22 @@ class Blocks(VoiceoverScene):
             cmath(r"M^{-1}", r"=", r"\begin{pmatrix} A^{-1} + A^{-1}B\,S^{-1}CA^{-1} & -A^{-1}B\,S^{-1} \\ -S^{-1}CA^{-1} & S^{-1} "
                   r"\end{pmatrix}", font_size=30),
         ]
-        whys = [why(r"$S = D - CA^{-1}B$")]
+        whys = [why(r"$S = D - CA^{-1}B$; \ $A$ and $S$ nonsingular")]
         corner = label(r"the lower-right block of $M^{-1}$ is $S^{-1}$: \ inverting a big matrix by inverting small ones",
                        font_size=24, color=GREY_A)
         chk = MathTex(r"\text{checked numerically on a } 6 \times 6 \text{ matrix}", font_size=24, color=SIM)
         VGroup(corner, chk).arrange(DOWN, buff=0.3).move_to([0, -1.4, 0])
+        intro = label('The inverse in blocks', font_size=36)
         with self.voiceover(
             "Finishing the elimination gives the inverse of a block matrix. <bookmark mark='a'/> Every block of M "
             "inverse is built from A inverse and the inverse of the Schur complement S. <bookmark mark='b'/> In "
             "particular, the lower-right block is just S inverse. Inverting a big matrix reduces to inverting two "
             "small ones, and the compute file checks every block against a direct inverse."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=1, top=1.6, x=-0.8, buff=0.5, edge=6.9)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             self.play(FadeIn(corner), FadeIn(chk))
@@ -96,12 +102,13 @@ class Blocks(VoiceoverScene):
                   r"{1 + \mathbf v^\top A^{-1}\mathbf u}", font_size=32),
         ]
         rows[0][2].set_color(FIT)
-        whys = [why(r"Woodbury (1950): \ the inverse of a low-rank update"), why(r"Sherman--Morrison: \ rank one")]
+        whys = [why(r"Woodbury (1950): \ $A$, $C$ and $C^{-1}+VA^{-1}U$ nonsingular"), why(r"Sherman--Morrison: \ $1+\mathbf v^\top A^{-1}\mathbf u\ne0$")]
         cost = VGroup(label(r"a new observation adds $\mathbf x\mathbf x^\top$ to $X^\top X$: \ update the inverse in $O(p^2)$, "
                             r"\ not $O(p^3)$", font_size=24, color=GREY_A),
                       MathTex(rf"\text{{max error vs.\ direct inverse: }} {d['err_sm']:.1e}", font_size=26, color=SIM),
                       label(r"also: \ Gaussian processes and the Kalman filter (Parts 38--39)", font_size=24, color=S.ACCENT))
         cost.arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(DOWN, buff=0.6)
+        intro = label('Updating an inverse', font_size=36)
         with self.voiceover(
             "One block identity deserves its own name. <bookmark mark='a'/> The Woodbury identity gives the inverse "
             "of a matrix plus a low-rank update in terms of the inverse you already have and a small matrix the "
@@ -110,8 +117,10 @@ class Blocks(VoiceoverScene):
             "squared operations instead of p cubed, and it's the engine inside Gaussian process regression and the "
             "Kalman filter later in the degree."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=2.6, x=-0.8, buff=0.7, edge=6.9)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1, transform=False)
@@ -141,6 +150,7 @@ class Blocks(VoiceoverScene):
         nums.arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.4, -1.9, 0])
         hc = note(r"Frisch \& Waugh (1933); \ Lovell (1963)").to_corner(DR, buff=0.3)
         tag = simulated_tag(r"simulated: 300 of the World's families", corner=UR)
+        intro = label('Removing the other predictors', font_size=36)
         with self.voiceover(
             "Block inverses explain one of the most useful facts in regression. <bookmark mark='a'/> Regress a "
             "child's height on both parents. Split the columns into two blocks: the intercept and the father's "
@@ -152,9 +162,11 @@ class Blocks(VoiceoverScene):
             "what holding the father fixed means. Ignoring the father gives a slightly different answer, because in "
             "the World tall mothers tend to marry tall fathers."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tag), FadeIn(hc))
             step = ladder(self, rows, whys, keep=2, top=2.9, x=-0.2, buff=0.5, edge=6.9)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1, transform=False)
@@ -172,7 +184,7 @@ class Blocks(VoiceoverScene):
             cmath(r"y_i - \hat y_{i,(-i)}", r"=", r"\frac{e_i}{1 - h_{ii}}", font_size=40),
         ]
         rows[1][2].set_color(EXACT)
-        whys = [why(r"removing a row is a rank-one change to $X^\top X$"), why(r"Sherman--Morrison, \ simplified")]
+        whys = [why(r"removing a row is a rank-one change to $X^\top X$"), why(r"deleted design full rank; \ $h_{ii}<1$")]
         A = axes([-25, 25], [-25, 25], x_length=4.0, y_length=4.0, xlabel=r"refit 40 times", ylabel=r"formula",
                  xticks=[-20, 0, 20], yticks=[-20, 0, 20], center=[-3.6, -1.4, 0])
         ax = A.ax
@@ -183,6 +195,7 @@ class Blocks(VoiceoverScene):
                       MathTex(rf"\text{{RSS}} = {e['rss']:.0f}", font_size=28, color=GREY_A),
                       label(r"cross-validation for free: \ one fit, not forty \ (Part 19)", font_size=24, color=S.ACCENT))
         nums.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.2, -1.2, 0])
+        intro = label('Leave one observation out', font_size=36)
         with self.voiceover(
             "Sherman–Morrison has a famous consequence for regression. <bookmark mark='a'/> Suppose we want each "
             "observation's prediction from a fit that didn't use it: leave-one-out cross-validation, which seems to "
@@ -193,8 +206,10 @@ class Blocks(VoiceoverScene):
             "a little larger than the ordinary residual sum of squares, an honest estimate of prediction error, "
             "computed from one fit. Part 19 builds model selection on this idea."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=2.9, x=0.6, buff=0.5, edge=6.9)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1, transform=False)

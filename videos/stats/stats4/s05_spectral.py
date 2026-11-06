@@ -37,10 +37,11 @@ class Spectral(VoiceoverScene):
             if s_.width > 12.6:
                 s_.width = 12.6
         hdr = label(r"proof sketch", font_size=24, color=GREY_B).next_to(steps, UP, buff=0.15).align_to(steps, LEFT)
+        intro = label('The geometry of a symmetric matrix', font_size=36)
         with self.voiceover(
             "Symmetric matrices are everywhere in statistics: covariance matrices, projections, the matrices of "
             "quadratic forms. <bookmark mark='a'/> The spectral theorem says every real symmetric matrix is Q "
-            "Lambda Q transpose: a rotation, a stretch along the axes by the eigenvalues, and the rotation back. "
+            "Lambda Q transpose: an orthogonal change of coordinates, scaling by the eigenvalues, and a change back. Negative eigenvalues reverse their directions. "
             "<bookmark mark='b'/> Here's the idea of the proof. Look for the unit vector u that makes u transpose A "
             "u as large as possible; the unit sphere is compact, so it exists. <bookmark mark='c'/> At the maximum, "
             "Lagrange's condition says A u is a multiple of u: an eigenvector. <bookmark mark='d'/> Because A is "
@@ -48,7 +49,9 @@ class Spectral(VoiceoverScene):
             "the argument there, one dimension down, until the eigenvectors fill the space, every one at right "
             "angles to the others."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(th, shift=DOWN * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(hdr), FadeIn(steps[0], shift=RIGHT * 0.2))
@@ -61,7 +64,7 @@ class Spectral(VoiceoverScene):
         d = load("spectral")
         x, y = np.asarray(d["x"]), np.asarray(d["y"])
         S_, ev, V, mu = np.asarray(d["S"]), np.asarray(d["eig"]), np.asarray(d["V"]), np.asarray(d["mean"])
-        A = axes([145, 195], [140, 200], x_length=6.0, y_length=6.0 * 60 / 50 * 0.8, xlabel=r"mid-parent (cm)",
+        A = axes([145, 195], [140, 200], x_length=5.0, y_length=6.0, xlabel=r"mid-parent (cm)",
                  ylabel=r"child (cm)", xticks=[150, 170, 190], yticks=[150, 170, 190], center=[-3.4, -0.3, 0])
         ax = A.ax
         dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.03, color=DATA, fill_opacity=0.7) for a, b in zip(x, y)])
@@ -173,7 +176,7 @@ class Spectral(VoiceoverScene):
         pdesc = "tall parents, short child" if x[io] > mu[0] else "short parents, tall child"
         info = label(rf"circled: \ not extreme in either coordinate, \ Mahalanobis distance {e['md_odd']:.1f}: \ {pdesc}",
                      font_size=22, color=RES).to_edge(DOWN, buff=0.35)
-        ring_l = label(rf"$\chi^2_2$ 95\% circle: \ {100 * e['frac_out']:.1f}\% outside", font_size=22, color=EIG)
+        ring_l = label(rf"Gaussian 95\% reference (parameters fitted): \ {100 * e['frac_out']:.1f}\% outside", font_size=22, color=EIG)
         ring_l.next_to(ring, DOWN, buff=0.1)
         tag = simulated_tag(corner=UR)
         with self.voiceover(
@@ -184,8 +187,8 @@ class Spectral(VoiceoverScene):
             "spectral theorem. That map whitens the data: <bookmark mark='c'/> the tilted ellipse becomes a round "
             "cloud with identity covariance. <bookmark mark='d'/> In the whitened picture, the circled family stands "
             f"out. Neither its parents' height nor its child's is far out on its own, but {pdesc} goes against the "
-            "correlation, and the Mahalanobis distance sees it. <bookmark mark='e'/> For normal data the "
-            "squared distance is chi-squared with two degrees of freedom, so the ninety-five percent circle should "
+            "correlation, and the Mahalanobis distance sees it. <bookmark mark='e'/> For a normal population with known mean and covariance the "
+            "squared distance is chi-squared with two degrees of freedom. Here both parameters are estimated from the displayed sample, so this is an approximate Gaussian reference, so the ninety-five percent circle should "
             f"leave about five percent outside; here it leaves {100 * e['frac_out']:.1f}."
         ) as vo:
             self.play(FadeIn(A), FadeIn(dots, lag_ratio=0.003), FadeIn(tag))
@@ -215,7 +218,7 @@ class Spectral(VoiceoverScene):
             MathTex(r"\mathbf v_{k+1} = \frac{\Sigma\mathbf v_k}{\|\Sigma\mathbf v_k\|}", font_size=34),
             MathTex(r"\Sigma^k \mathbf v_0 = \sum_j c_j \lambda_j^k \mathbf q_j", r"\ \Rightarrow\ \text{the largest } \lambda \text{ wins}",
                     font_size=30),
-            MathTex(rf"\text{{error shrinks by }} \lambda_2/\lambda_1 = {e['ratio']:.3f} \text{{ per step}}", font_size=28, color=GREY_A),
+            MathTex(rf"\text{{direction error: asymptotic factor }} \lambda_2/\lambda_1 = {e['ratio']:.3f} \text{{ per step}}", font_size=28, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.4, 1.8, 0])
         tbl = VGroup(*[MathTex(rf"k = {k + 1}:\ \ \mathbf v^\top\Sigma\mathbf v = {it['lam']:.4f}", font_size=24,
                                color=EIG if k > 3 else GREY_A) for k, it in enumerate(its[:6])])
@@ -223,12 +226,12 @@ class Spectral(VoiceoverScene):
         truth = MathTex(rf"\lambda_1 = {e['lam']:.4f}", font_size=26, color=EXACT).next_to(tbl, DOWN, buff=0.2)
         with self.voiceover(
             "How does a computer actually find eigenvectors? The simplest method is beautiful. "
-            "<bookmark mark='a'/> Start with any vector, multiply by the matrix, and normalize; repeat. "
+            "<bookmark mark='a'/> For this positive definite covariance with a distinct largest eigenvalue, start with a vector having a nonzero component along its leading eigenvector. Multiply and normalize; repeat. "
             "<bookmark mark='b'/> Written in the eigenvector basis, each multiplication scales every component by "
             "its eigenvalue, so after k steps the largest eigenvalue's component dominates. <bookmark mark='c'/> For "
             "the families' covariance, starting from the horizontal direction, the vector swings onto the long axis "
             "of the ellipse in a handful of steps, <bookmark mark='d'/> and the Rayleigh quotient locks onto the "
-            "largest eigenvalue to four decimals. The error shrinks by the ratio of the two eigenvalues each step. "
+            "largest eigenvalue to four decimals. Asymptotically, the direction error shrinks at the eigenvalue ratio, and the Rayleigh-quotient error faster. For a general matrix the dominant eigenvalue is the one largest in absolute value. "
             "Variants of this power iteration compute Google's PageRank and the principal components of huge data "
             "sets."
         ) as vo:

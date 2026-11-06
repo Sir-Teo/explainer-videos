@@ -36,17 +36,21 @@ class Quad(VoiceoverScene):
         th = theorem_card(r"$\chi^2$ quadratic forms", r"for $\mathbf z \sim N(\mathbf 0, I)$ and symmetric $A$: \ "
                           r"$\mathbf z^\top A\mathbf z \sim \chi^2_r$ \ iff $A$ is a projection of rank $r$", color=EXACT,
                           width=7.4, font_size=24).to_edge(DOWN, buff=0.4)
+        intro = label('When is a quadratic form chi-squared?', font_size=36)
         with self.voiceover(
             "Here the hook's eigenvalues pay off completely. <bookmark mark='a'/> Take a standard normal vector z "
             "and a projection P, and diagonalize P. <bookmark mark='b'/> Rotating a standard normal vector gives "
             "another standard normal vector: Herschel's rotation invariance from Part 3. <bookmark mark='c'/> So z "
             "transpose P z is a sum of squared independent standard normals, one for each eigenvalue equal to one: "
             "chi-squared, with degrees of freedom equal to the rank. <bookmark mark='d'/> And the converse holds: "
-            "a quadratic form in a standard normal vector is chi-squared only if its matrix is a projection."
+            "for a symmetric matrix, the quadratic form is chi-squared only if that matrix is an orthogonal projection. A nonsymmetric matrix contributes only through its symmetric part."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.8, x=-0.6, buff=0.55, edge=6.9)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             vo.wait_until("d")
             self.play(FadeIn(th, shift=UP * 0.2))
@@ -98,6 +102,7 @@ class Quad(VoiceoverScene):
                       label(r"Part 12: \ the $t$ and $F$ tests of regression", font_size=26),
                       label(r"Part 13: \ the analysis of variance", font_size=26)).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
         uses.next_to(th, DOWN, buff=0.5)
+        intro = label('Independent perpendicular components', font_size=36)
         with self.voiceover(
             "That observation generalizes into one of the central theorems of classical statistics. "
             "<bookmark mark='a'/> If the identity splits into projections onto mutually perpendicular subspaces, "
@@ -107,7 +112,9 @@ class Quad(VoiceoverScene):
             "chi-squared law of the variance; in Part 12, the t and F tests of regression; in Part 13, the whole "
             "analysis of variance."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(th, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(u, shift=RIGHT * 0.2) for u in uses], lag_ratio=0.4))
@@ -172,21 +179,23 @@ class Quad(VoiceoverScene):
             pts = VGroup(*[Dot(ax.c2p(a, b), radius=0.018, color=col, fill_opacity=0.6) for a, b in zip(m_[:1500], v_[:1500])
                            if lo < a < hi and ylo < b < yhi])
             t = label(ttl, font_size=24, color=col).next_to(A, UP, buff=0.15)
-            c = MathTex(rf"\operatorname{{corr}} = {cc:.3f}", font_size=26, color=col).next_to(t, DOWN, buff=0.08)
+            c = MathTex(rf"\operatorname{{corr}}_{{20,000}} = {cc:.3f}", font_size=26, color=col).next_to(t, DOWN, buff=0.08)
             panels.add(VGroup(A, pts, t, c))
         head = label(r"$\bar x$ lives in $P_{\mathbf 1}$, \ $s^2$ in $I - P_{\mathbf 1}$: \ independent \emph{only} for normal data",
                      font_size=26, color=S.ACCENT).to_edge(UP, buff=0.35)
+        intro = label('Independence uses the normal model', font_size=36)
         with self.voiceover(
             "The perpendicular split has a striking consequence, and a striking limitation. <bookmark mark='a'/> The "
             "sample mean depends only on the projection onto the ones vector; the sample variance only on the "
             "perpendicular part. For normal data those parts are independent, so the mean and the variance are "
-            "independent too. <bookmark mark='b'/> Twenty thousand normal samples of ten: the cloud of means and "
+            "independent too. <bookmark mark='b'/> Twenty thousand normal samples of ten, with a subset of fifteen hundred shown: the cloud of means and "
             "variances shows no relation at all. <bookmark mark='c'/> But the argument used rotation invariance, "
-            "which only the normal has. For exponential data, the same plot shows a strong relation: samples with "
-            "larger means have larger variances, a correlation of about point seven. The normal is the only "
-            "distribution with this property, a theorem of Geary from 1936."
+            "together with independent coordinates. Rotation invariance alone is shared by many non-Gaussian spherical distributions. For exponential data, the same plot shows a strong relation: samples with "
+            "larger means have larger variances, a correlation of about point seven. Under the usual independent, identically distributed, nondegenerate finite-variance assumptions, independence of the sample mean and variance characterizes the normal: Geary's theorem from 1936."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(head))
             vo.wait_until("b")
             self.play(FadeIn(panels[0][0]), FadeIn(panels[0][2]), FadeIn(panels[0][1], lag_ratio=0.001), FadeIn(panels[0][3]))
@@ -207,6 +216,7 @@ class Quad(VoiceoverScene):
                 why(r"independent numerator and denominator: \ Part 3's $t$")]
         take = label(r"Student's 1908 result, \ in three lines of projections: \ Part 8 proves every step", font_size=26,
                      color=S.ACCENT).to_edge(DOWN, buff=0.6)
+        intro = label("Student's t from projections", font_size=36)
         with self.voiceover(
             "Put the pieces together and Student's t falls out. <bookmark mark='a'/> For normal data, the sample "
             "mean, standardized with the true sigma, is standard normal: it lives in the projection onto the ones "
@@ -216,9 +226,12 @@ class Quad(VoiceoverScene):
             "the root of an independent chi-squared over its degrees of freedom: exactly Part 3's definition of t "
             "with n minus one degrees of freedom. Gosset's 1908 result, in three lines of projections."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.6, buff=0.6, edge=6.9)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             self.play(FadeIn(take))
         self.clear_scene()

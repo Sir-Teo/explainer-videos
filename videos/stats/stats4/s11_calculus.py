@@ -31,7 +31,8 @@ class Calculus(VoiceoverScene):
         ]
         rows[3][0].set_color(FIT)
         whys = [why(r"$\sum_i a_i x_i$, \ term by term"), why(r"product rule on $\sum_{ij} x_i A_{ij} x_j$"),
-                why(r"chain rule"), why(r"set to zero: \ chapter 2's normal equations")]
+                why(r"chain rule"), why(r"full column rank: \ chapter 2's normal equations")]
+        intro = label('Derivatives of vectors and quadratic forms', font_size=36)
         with self.voiceover(
             "Statistics optimizes over vectors and matrices, so it needs their derivatives. "
             "<bookmark mark='a'/> The gradient of a linear function a transpose x is a, term by term. "
@@ -41,9 +42,12 @@ class Calculus(VoiceoverScene):
             "<bookmark mark='d'/> Set the gradient to zero, and the normal equations of chapter two fall out in "
             "three lines."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.55, edge=6.9)
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -59,17 +63,21 @@ class Calculus(VoiceoverScene):
         rows[2][2].set_color(EIG)
         whys = [why(r"factor out $\Sigma$"), why(r"$\det(I + \epsilon E') = 1 + \epsilon \operatorname{tr} E' + \dots$"),
                 why(r"read off the linear term"), why(r"$d(\Sigma^{-1}) = -\Sigma^{-1}(d\Sigma)\Sigma^{-1}$")]
+        intro = label('Differentiating a covariance matrix', font_size=36)
         with self.voiceover(
-            "Normal likelihoods need two derivatives with respect to a covariance matrix. <bookmark mark='a'/> "
+            "For symmetric positive definite Sigma and symmetric S, normal likelihoods need two derivatives. We use Frobenius gradients, paired with symmetric matrix perturbations. <bookmark mark='a'/> "
             "Nudge Sigma by a small multiple of a direction E and factor Sigma out of the determinant. "
             "<bookmark mark='b'/> To first order, the determinant of the identity plus a small matrix is one plus "
             "its trace. <bookmark mark='c'/> So the gradient of log det Sigma is Sigma inverse, a beautiful "
             "identity. <bookmark mark='d'/> And differentiating an inverse, the matrix version of minus one over x "
             "squared, gives the derivative of the trace of Sigma inverse S."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.4, buff=0.55, edge=6.9)
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=k == 1)
         self.clear_scene()
 
@@ -89,18 +97,22 @@ class Calculus(VoiceoverScene):
                       MathTex(r"\tfrac{n}{n-1}\hat\Sigma = " + mat_tex(d["S_unb"], "{:.2f}"), font_size=28))
         nums.arrange(RIGHT, buff=0.8).to_edge(DOWN, buff=0.45)
         tag = simulated_tag(r"simulated: 400 of the World's families", corner=UR)
+        intro = label('Estimating a normal covariance', font_size=36)
         with self.voiceover(
-            "With those two rules, the maximum likelihood estimate of a covariance matrix takes one line. "
+            "For independent normal observations whose centered scatter is positive definite, the covariance maximum likelihood estimate takes one line. If that scatter is singular, there is no positive definite interior maximizer. "
             "<bookmark mark='a'/> The normal log-likelihood, with the mean already estimated, is minus n over two "
             "log det Sigma, minus n over two times the trace of Sigma inverse times the sample covariance. "
             "<bookmark mark='b'/> Differentiate and set to zero. <bookmark mark='c'/> The estimate is the sample "
             "covariance with divisor n. For four hundred families it's this matrix; the unbiased version, divisor n "
             "minus one, differs slightly, for the reason the hook gave. Part 22 does likelihood in full."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tag))
             step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.6, buff=0.6, edge=6.9)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             self.play(FadeIn(nums))
         self.clear_scene()
@@ -115,10 +127,11 @@ class Calculus(VoiceoverScene):
         rows[0][2].set_color(EIG)
         whys = [why(r"the Hessian: \ differentiate the gradient"), why(r"PSD: \ the criterion is a convex bowl"),
                 why(r"exactly quadratic: \ its level sets are chapter 4's ellipses")]
-        take = label(r"a positive definite Hessian means a unique minimum, \ and Newton's method finds it in one step (Part 21)",
+        take = label(r"full-rank least squares: \ a unique minimum; \ Newton solves this quadratic in one step",
                      font_size=24, color=S.ACCENT).to_edge(DOWN, buff=0.5)
         if take.width > 13:
             take.width = 13
+        intro = label('The curvature of least squares', font_size=36)
         with self.voiceover(
             "Is the solution of the normal equations really a minimum? <bookmark mark='a'/> Differentiate the "
             "gradient again: the Hessian of the least-squares criterion is two X transpose X. "
@@ -129,9 +142,12 @@ class Calculus(VoiceoverScene):
             "<bookmark mark='d'/> For criteria that aren't quadratic, like logistic regression's, the Hessian drives "
             "Newton's method, in Part 21."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.4, buff=0.6, edge=6.9)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             vo.wait_until("d")
             self.play(FadeIn(take))
@@ -151,6 +167,7 @@ class Calculus(VoiceoverScene):
                 why(r"the information: \ the curvature"), why(r"the inverse information is the estimator's covariance")]
         take = label(r"curvature of the log-likelihood $=$ precision: \ Fisher's idea, \ Parts 9 and 22", font_size=26,
                      color=S.ACCENT).to_edge(DOWN, buff=0.5)
+        intro = label('Likelihood curvature and precision', font_size=36)
         with self.voiceover(
             "One more application shows where all this is heading. <bookmark mark='a'/> The normal log-likelihood "
             "as a function of the mean. <bookmark mark='b'/> Its gradient, the score, is n Sigma inverse times x bar "
@@ -159,9 +176,12 @@ class Calculus(VoiceoverScene):
             "information is Sigma over n, exactly the covariance of the sample mean. A sharply curved likelihood "
             "means a precise estimate. That's Fisher's great idea, and Parts 9 and 22 develop it in full."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.5, edge=6.9)
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             self.play(FadeIn(take))
         self.clear_scene()

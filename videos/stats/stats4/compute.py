@@ -90,9 +90,12 @@ def compute_projection():
     q1 = A[:, 0] / np.linalg.norm(A[:, 0])
     v = A[:, 1] - (A[:, 1] @ q1) * q1
     q2 = v / np.linalg.norm(v)
-    Q, R = np.linalg.qr(A)
+    Q, _ = np.linalg.qr(A)
+    R = np.column_stack([q1, q2]).T @ A
     assert np.allclose(np.abs(Q[:, 0]), np.abs(q1)) and np.allclose(np.abs(Q[:, 1]), np.abs(q2))
-    assert np.allclose(P, np.column_stack([q1, q2]) @ np.column_stack([q1, q2]).T)
+    basis = np.column_stack([q1, q2])
+    assert np.allclose(basis @ R, A)
+    assert np.allclose(P, basis @ basis.T)
     y = np.array([3.0, -1.0, 3.0])
     return {"A": A, "P": P, "q1": q1, "q2": q2, "R": R, "y": y, "Py": P @ y, "res": y - P @ y,
             "eig": np.sort(np.linalg.eigvalsh(P))[::-1], "rank": int(np.linalg.matrix_rank(P)),
@@ -178,12 +181,17 @@ def compute_blocks():
     inv = np.linalg.inv(M)
     assert np.allclose(inv[3:, 3:], np.linalg.inv(S))
     assert np.isclose(np.linalg.det(M), np.linalg.det(A) * np.linalg.det(S))
+    Ai_block, Si = np.linalg.inv(A), np.linalg.inv(S)
+    block_inverse = np.block([[Ai_block + Ai_block @ B @ Si @ C @ Ai_block, -Ai_block @ B @ Si],
+                              [-Si @ C @ Ai_block, Si]])
+    err_block = float(np.abs(block_inverse - inv).max())
+    assert np.allclose(block_inverse, inv)
     # Sherman-Morrison: (A + uv')^-1 = A^-1 - A^-1 u v' A^-1 / (1 + v'A^-1 u)
     Ai = np.linalg.inv(M)
     u, v = g.normal(size=n), g.normal(size=n)
     sm = Ai - np.outer(Ai @ u, v @ Ai) / (1 + v @ Ai @ u)
     err = float(np.abs(sm - np.linalg.inv(M + np.outer(u, v))).max())
-    return {"err_sm": err, "n": n, "det_ok": True}
+    return {"err_sm": err, "err_block": err_block, "n": n, "det_ok": True}
 
 
 def compute_kron():

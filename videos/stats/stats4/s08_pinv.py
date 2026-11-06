@@ -29,9 +29,10 @@ class Pinv(VoiceoverScene):
         ll = MathTex(r"x_1 + 2x_2 = 4", font_size=28, color=SPACE).next_to(ax.c2p(3.2, 0.4), UR, buff=0.1)
         t = ValueTracker(-1.2)
         moving = always_redraw(lambda: Dot(ax.c2p(t.get_value(), (4 - t.get_value()) / 2), radius=0.08, color=DATA))
-        circle = always_redraw(lambda: Circle(radius=np.hypot(*(np.array(ax.c2p(t.get_value(), (4 - t.get_value()) / 2))
-                                                                - np.array(ax.c2p(0, 0)))[:2]),
-                                              stroke_color=GREY_B, stroke_width=1.2).move_to(ax.c2p(0, 0)))
+        radius_line = always_redraw(lambda: DashedLine(ax.c2p(0, 0),
+            ax.c2p(t.get_value(), (4 - t.get_value()) / 2), color=GREY_B, stroke_width=1.5))
+        circle = Arc(radius=np.linalg.norm(ax.c2p(*xmin) - ax.c2p(0, 0)), start_angle=0, angle=PI/2,
+                     arc_center=ax.c2p(0, 0), stroke_color=GREY_B, stroke_width=1.5)
         best = Dot(ax.c2p(*xmin), radius=0.1, color=FIT)
         perp = DashedLine(ax.c2p(0, 0), ax.c2p(*xmin), color=FIT, stroke_width=2.5)
         info = VGroup(MathTex(r"A = (1\ \ 2),\quad \mathbf b = 4", font_size=32),
@@ -52,15 +53,15 @@ class Pinv(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(info[1]))
             vo.wait_until("b")
-            self.add(moving, circle)
+            self.add(moving, radius_line)
             self.play(t.animate.set_value(4.2), run_time=4.0)
             vo.wait_until("c")
             self.play(t.animate.set_value(float(xmin[0])), run_time=2.0)
-            self.play(Create(perp), FadeIn(best))
+            self.play(Create(circle), Create(perp), FadeIn(best))
             vo.wait_until("d")
             self.play(FadeIn(info[2:]))
         moving.clear_updaters()
-        circle.clear_updaters()
+        radius_line.clear_updaters()
         self.clear_scene()
 
     def definition(self):
@@ -75,6 +76,7 @@ class Pinv(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(th, DOWN, buff=0.5)
         use = label(r"rank-deficient designs (Part 13), \ ridge regression as $\lambda \to 0$ (Part 19)", font_size=24,
                     color=S.ACCENT).to_edge(DOWN, buff=0.6)
+        intro = label('An inverse for every matrix', font_size=36)
         with self.voiceover(
             "The general definition comes from the singular value decomposition. <bookmark mark='a'/> Invert every "
             "nonzero singular value, leave the zeros alone, and swap the two rotations: that's A plus, defined for "
@@ -85,7 +87,9 @@ class Pinv(VoiceoverScene):
             "<bookmark mark='d'/> It turns up whenever a design has redundant columns, and as the limit of ridge "
             "regression when the penalty vanishes."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(th, shift=DOWN * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(props[0]))
@@ -118,6 +122,7 @@ class Pinv(VoiceoverScene):
             if s_.width > 7.0:
                 s_.width = 7.0
         tag = note(r"illustrative: 12 observations in 3 regions").to_corner(DL, buff=0.3)
+        intro = label('Redundant indicator columns', font_size=36)
         with self.voiceover(
             "Here's where rank deficiency happens in practice, and it catches beginners every year. "
             "<bookmark mark='a'/> Put an intercept in a regression, and an indicator column for every one of three "
@@ -130,8 +135,10 @@ class Pinv(VoiceoverScene):
             "of the two regions' means. Such combinations are called estimable, and Part 13's designed experiments "
             "are built around them."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tag))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(X))
             vo.wait_until("b")
             self.play(FadeIn(trap))
@@ -158,16 +165,19 @@ class Pinv(VoiceoverScene):
                     r"X^+\mathbf y", font_size=30).to_edge(UP, buff=0.35)
         f[2].set_color(EXACT)
         nt = label(r"gold: \ the pseudoinverse solution", font_size=22, color=EXACT).move_to([4.6, 0.4, 0])
+        intro = label('The limit of a ridge path', font_size=36)
         with self.voiceover(
             "There's another way to reach the pseudoinverse, and it previews a central idea of modern statistics. "
-            "<bookmark mark='a'/> Add a small multiple of the identity to X transpose X before inverting. Now it's "
+            "<bookmark mark='a'/> Penalize all coefficients, including the intercept in this example, by adding a positive multiple of the identity to X transpose X. Now it's "
             "always invertible, whatever the rank: that's ridge regression, Hoerl and Kennard's method from 1970. "
             "<bookmark mark='b'/> Follow the coefficients as lambda shrinks. With a big penalty they're squashed "
             "toward zero; as the penalty vanishes, <bookmark mark='c'/> they converge exactly to the pseudoinverse "
             "solution. Adding lambda trades a little bias for a lot of stability, and Part 19 makes that trade the "
             "heart of learning from data."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(Write(f))
             vo.wait_until("b")
             self.play(FadeIn(A), LaggedStart(*[Create(c) for c in cvs], lag_ratio=0.2), FadeIn(leg), run_time=3.0)

@@ -5,7 +5,7 @@ from videos.stats.stats4.common import *  # noqa: F403
 PROBLEMS = [
     r"Show that if $P$ is a projection, so is $I - P$, \ and that $P(I - P) = 0$. \ What are the eigenvalues of $I - P$?",
     r"Show that $\operatorname{tr}(H) = p$ for $H = X(X^\top X)^{-1}X^\top$ \ by cycling the trace.",
-    r"Let $\mathbf x$ have mean $\boldsymbol\mu$ and covariance $\sigma^2 I_n$. \ Use $E[\mathbf x^\top A\mathbf x] = "
+    r"Let $\mathbf x$ have common mean $\mu_0\mathbf 1$ and covariance $\sigma^2 I_n$. \ Use $E[\mathbf x^\top A\mathbf x] = "
     r"\operatorname{tr}(A\Sigma) + \boldsymbol\mu^\top A\boldsymbol\mu$ \ to show $E\, s^2 = \sigma^2$.",
     r"Find the eigenvalues and eigenvectors of $\begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}$, \ and sketch the ellipse "
     r"$\mathbf x^\top A^{-1}\mathbf x = 1$.",
@@ -31,7 +31,7 @@ class Outro(VoiceoverScene):
             (r"$\operatorname{tr}(AB) = \operatorname{tr}(BA)$; \ $E\,\mathbf x^\top A\mathbf x$", EIG),
             (r"spectral theorem: \ ellipses and the Rayleigh quotient", EIG),
             (r"PSD $=$ possible covariance; \ Cholesky; \ Loewner", SPACE),
-            (r"SVD: \ rotate, stretch, rotate; \ Eckart--Young", S.WORLD),
+            (r"SVD: \ orthogonal maps and stretches; \ Eckart--Young", S.WORLD),
             (r"the pseudoinverse: \ minimum-norm solutions", FIT),
             (r"Schur complements; \ Woodbury updates", RES),
             (r"Kronecker products and $\operatorname{vec}$", SPACE),
@@ -52,7 +52,7 @@ class Outro(VoiceoverScene):
             "transpose A inverse, A transpose, or Q Q transpose after Gram–Schmidt. The trace cycles, and gives the "
             "expectation of any quadratic form. The spectral theorem draws ellipses, and the Rayleigh quotient "
             "finds their axes. Covariance matrices are exactly the positive semidefinite ones, and Cholesky makes "
-            "correlated normals. Every matrix rotates, stretches and rotates, and the truncated SVD is the best "
+            "correlated normals. Every matrix has orthogonal maps and stretches, and the truncated SVD is the best "
             "low-rank approximation. The pseudoinverse picks the minimum-norm solution. Schur complements and "
             "Woodbury invert in blocks; Kronecker products build structured covariances. The derivative of log det "
             "is the inverse. Quadratic forms in projections are chi-squared. And you should never invert X "
@@ -82,8 +82,9 @@ class Outro(VoiceoverScene):
             "likelihood and the linear model in depth. Woodbury in mixed models, the Kalman filter and kriging. And "
             "conditioning in optimization."
         ) as vo:
+            self.play(FadeIn(card.head))
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3),
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3),
                       run_time=6.0)
         self.clear_scene()
 

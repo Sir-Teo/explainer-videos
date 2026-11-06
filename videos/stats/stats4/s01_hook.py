@@ -47,17 +47,20 @@ class Hook(VoiceoverScene):
         hl = MathTex(r"H", r"\text{, the hat matrix}", font_size=34, color=S.ACCENT).next_to(hb, DOWN, buff=0.12)
         why_ = label(r"it puts the hat on $\mathbf y$", font_size=24, color=GREY_B).next_to(hl, DOWN, buff=0.2)
         tag = simulated_tag(r"simulated: 40 of the World's families")
+        intro = label('The matrix behind a fitted line', font_size=36)
         with self.voiceover(
             "Here's a matrix you'll meet in almost every part of this series. <bookmark mark='a'/> Forty of the "
             "World's families: the parents' average height across, the child's height up. <bookmark mark='b'/> "
             "Fit a straight line by least squares, which Part 12 will derive; each child gets a fitted value on the "
-            "line. <bookmark mark='c'/> Stack the forty heights into a vector y. The fitted values are X times the "
+            "line. <bookmark mark='c'/> With two linearly independent design columns, stack the forty heights into a vector y. The fitted values are X times the "
             "fitted coefficients, and the coefficients turn out to be X transpose X inverse, X transpose, y. "
             "<bookmark mark='d'/> So the fitted values are one matrix times the data. Statisticians call it the hat "
             "matrix, H, because it puts the hat on y."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tag))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(A), LaggedStart(*[FadeIn(dt, scale=1.5) for dt in dots], lag_ratio=0.02))
             vo.wait_until("b")
             self.play(Create(line), LaggedStart(*[FadeIn(ft) for ft in fits], lag_ratio=0.02))
@@ -88,7 +91,7 @@ class Hook(VoiceoverScene):
         with self.voiceover(
             "Here's H for the forty families, sorted by the parents' height. <bookmark mark='a'/> Each row says how "
             "a fitted value is built from all forty observed heights: families with similar parents get positive "
-            "weight, the far end negative. <bookmark mark='b'/> H has two properties that define it. It's "
+            "weight; distant families can receive negative weights. <bookmark mark='b'/> H has two properties that define it. It's "
             "symmetric, and it's idempotent: H times H is H. Fitting the fitted values changes nothing, because "
             "they're already on the line."
         ) as vo:
@@ -116,6 +119,7 @@ class Hook(VoiceoverScene):
         rows[1][2].set_color(EIG)
         rows[2][4].set_color(EIG)
         whys = [why(r"apply $H$ twice"), why(r"$H^2 = H$"), why(r"the trace sums the eigenvalues")]
+        intro = label('Eigenvalues of a projection', font_size=36)
         with self.voiceover(
             "And idempotence forces something remarkable. <bookmark mark='a'/> If v is an eigenvector of H, with "
             "eigenvalue lambda, then H squared times v is lambda squared times v. <bookmark mark='b'/> But H "
@@ -123,8 +127,10 @@ class Hook(VoiceoverScene):
             "Here are all forty. Two ones, one for each column of X, and thirty-eight zeros. <bookmark mark='d'/> "
             "The trace, the sum of the eigenvalues, counts the ones: two, the number of parameters."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=3.1, x=-0.4, buff=0.42)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1, transform=False)
@@ -159,10 +165,11 @@ class Hook(VoiceoverScene):
         take.move_to([3.6, -1.6, 0])
         if take.width > 6.2:
             take.width = 6.2
+        intro = label('Counting residual directions', font_size=36)
         with self.voiceover(
             "Why should anyone care? <bookmark mark='a'/> The residuals are I minus H, times y, and I minus H is "
-            "also a projection, with thirty-eight eigenvalues equal to one. <bookmark mark='b'/> Simulate two "
-            "thousand data sets with the same parents and noise of known variance sigma squared, and measure the "
+            "also a projection, with thirty-eight eigenvalues equal to one. <bookmark mark='b'/> Assume the mean lies in the fitted column space and errors are uncorrelated with common variance sigma squared. Simulate two "
+            "thousand data sets with the same parents and independent normal errors, and measure the "
             f"residual sum of squares each time. It averages {d['rss_mean']:.1f} sigma squared: n minus p, not n. "
             "<bookmark mark='c'/> So dividing the residual sum of squares by n underestimates the noise; dividing "
             "by n minus p is exactly right. <bookmark mark='d'/> That's what degrees of freedom are: the number of "
@@ -170,7 +177,9 @@ class Hook(VoiceoverScene):
             "of it come the n minus one of the sample variance, the chi-squared distributions, regression and the "
             "analysis of variance."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(FadeIn(A), FadeIn(h), Create(ml), FadeIn(rows[1]))

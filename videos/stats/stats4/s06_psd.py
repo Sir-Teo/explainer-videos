@@ -22,7 +22,7 @@ class PSD(VoiceoverScene):
 
     def definition(self):
         dfn = definition_card(r"Positive semidefinite", r"symmetric $A$ with $\mathbf u^\top A \mathbf u \ge 0$ for every "
-                              r"$\mathbf u$; \ equivalently, \ every eigenvalue $\ge 0$; \ \emph{definite} if $> 0$",
+                              r"$\mathbf u$; \ equivalently, \ every eigenvalue $\ge 0$; \ \emph{definite} if $\mathbf u^\top A\mathbf u>0$ for every $\mathbf u\ne0$",
                               color=EIG, width=7.0, font_size=24).to_edge(UP, buff=0.4)
         rows = [
             cmath(r"\mathrm{Var}(\mathbf u^\top \mathbf x)", r"=", r"\mathbf u^\top \Sigma\, \mathbf u", r"\ge", r"0",
@@ -36,6 +36,7 @@ class PSD(VoiceoverScene):
                            color=RES)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.35)
         ev = np.linalg.eigvalsh(np.array([[1, 0.9, -0.9], [0.9, 1, 0.9], [-0.9, 0.9, 1]]))
         evl = MathTex(rf"\lambda_{{\min}} = {ev.min():.2f}", font_size=26, color=RES).next_to(bad, RIGHT, buff=0.5)
+        intro = label('Which matrices can be covariances?', font_size=36)
         with self.voiceover(
             "Which symmetric matrices can be covariance matrices? <bookmark mark='a'/> Exactly the positive "
             "semidefinite ones: those whose quadratic form is never negative, which, by the spectral theorem, means "
@@ -47,7 +48,9 @@ class PSD(VoiceoverScene):
             "negative eigenvalue, so no three variables can have these correlations: the first two strongly "
             "positive, the second and third strongly positive, yet the first and third strongly negative."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(dfn, shift=DOWN * 0.2))
             step = ladder(self, rows, whys, keep=2, top=1.4, x=-1.6, buff=0.6)
             vo.wait_until("b")
@@ -70,7 +73,7 @@ class PSD(VoiceoverScene):
             MathTex(r"\Sigma = LL^\top", r",\quad L \text{ lower triangular}", font_size=34),
             MathTex(r"\Sigma = " + mat_tex(d["Sigma"], "{:.1f}"), r"\quad L = " + mat_tex(L, "{:.2f}"), font_size=30),
             MathTex(r"\mathbf z \sim N(\mathbf 0, I)", r"\ \Rightarrow\ ", r"L\mathbf z \sim N(\mathbf 0, LL^\top)", font_size=32),
-            MathTex(rf"\text{{sample correlation: }} {d['corr']:.3f}", font_size=28, color=SIM),
+            MathTex(rf"\text{{2,000-draw correlation (800 shown): }} {d['corr']:.3f}", font_size=28, color=SIM),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([3.5, 0.6, 0])
         rows[0][0].set_color(EIG)
         for r in rows:
@@ -109,6 +112,7 @@ class PSD(VoiceoverScene):
             label(r"``better in every direction'': \ Gauss--Markov (Part 12), \ Cram\'er--Rao (Part 45)", font_size=24,
                   color=S.ACCENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.4).move_to([0, 0.2, 0])
+        intro = label('Comparing covariance matrices', font_size=36)
         with self.voiceover(
             "PSD matrices also give a way to compare matrices. <bookmark mark='a'/> Say A is at least B, in the "
             "Loewner order, when A minus B is positive semidefinite. <bookmark mark='b'/> It's only a partial order: "
@@ -117,8 +121,11 @@ class PSD(VoiceoverScene):
             "the parameters at once. <bookmark mark='d'/> That's the sense in which least squares is best in Part "
             "12's Gauss–Markov theorem, and in which the Cramér–Rao bound of Part 45 is a floor."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()
 
@@ -139,6 +146,7 @@ class PSD(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([0, -0.8, 0])
         ex[1][0].set_color(EIG)
         ex[1][1].set_color(SIM)
+        intro = label('Covariance under a linear map', font_size=36)
         with self.voiceover(
             "One rule moves covariances through linear maps, and it's used constantly. <bookmark mark='a'/> The "
             "covariance of A x is A Sigma A transpose: expand the definition and pull the constant matrices out of "
@@ -148,8 +156,10 @@ class PSD(VoiceoverScene):
             "computing it directly from the transformed data agrees to every digit. Part 5 builds the multivariate "
             "normal on this rule, and Part 12 uses it for the covariance of regression coefficients."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=1, top=2.6, x=-0.6, buff=0.5, edge=6.9)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             self.play(FadeIn(ex[0]))
@@ -161,7 +171,7 @@ class PSD(VoiceoverScene):
         e = load("extras3")["nearcorr"]
         rows = VGroup(
             MathTex(r"\text{eigenvalues: }" + ", ".join(f"{v:.2f}" for v in e["bad_eig"]), font_size=30, color=RES),
-            label(r"the nearest valid correlation matrix: \ clip the negative eigenvalues, \ restore the unit diagonal, \ repeat",
+            label(r"the nearest valid correlation matrix: \ PSD and unit-diagonal projections, \ with Dykstra corrections (Frobenius norm)",
                   font_size=24, color=GREY_A),
             MathTex(r"\begin{pmatrix} 1 & 0.9 & -0.9 \\ 0.9 & 1 & 0.9 \\ -0.9 & 0.9 & 1 \end{pmatrix}", r"\ \longrightarrow\ ",
                     mat_tex(e["fixed"], "{:.2f}"), font_size=30),
@@ -172,17 +182,19 @@ class PSD(VoiceoverScene):
             if r.width > 12.6:
                 r.width = 12.6
         hc = note(r"N. Higham, \ ``Computing the nearest correlation matrix'' (2002): \ alternating projections").to_edge(DOWN, buff=0.5)
+        intro = label('Repairing a correlation matrix', font_size=36)
         with self.voiceover(
             "Matrices like that one appear in practice, when correlations are estimated from different subsets of "
             "the data, or by hand. <bookmark mark='a'/> Its eigenvalues are minus point eight, one point nine and "
             "one point nine. <bookmark mark='b'/> To repair it, find the nearest matrix that is a valid correlation "
-            "matrix: alternately clip the negative eigenvalues to zero and put ones back on the diagonal, which "
-            "converges, as Nicholas Higham showed in 2002. <bookmark mark='c'/> The answer here keeps the pattern of "
+            "matrix in Frobenius norm. Higham's method uses Dykstra-corrected alternating projections: clip negative eigenvalues and restore the unit diagonal, while retaining a correction from previous steps. Plain alternation can find a valid matrix without guaranteeing the nearest one. <bookmark mark='c'/> The answer here keeps the pattern of "
             "signs but shrinks every correlation to a half, and its eigenvalues are zero, one and a half, and one "
             "and a half: just barely valid. It's how risk managers and geneticists clean up estimated correlation "
             "matrices."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(FadeIn(rows[1]))
