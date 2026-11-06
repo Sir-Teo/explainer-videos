@@ -158,6 +158,21 @@ computed lines as templates with the source's placeholders spelled exactly), fil
 | potential outcomes; ignorability; SUTVA; instrumental variable; difference in differences | 潜在结果；可忽略性；SUTVA；工具变量；双重差分 |
 | uplift; persuadables; sleeping dogs; invariant causal prediction | 增益；可被说服者；沉睡的狗；不变因果预测 |
 | causal exclusion; supervenience; proportionality; epiphenomenalism | 因果排斥；随附；相称性；副现象论 |
+| verification principle; deductive-nomological; statistical relevance; unification; mechanism | 证实原则；演绎--律则；统计相关性；统一；机制 |
+| paradigm; normal science; anomaly; incommensurability; research programme; hard core, protective belt | 范式；常规科学；反常；不可通约性；研究纲领；硬核，保护带 |
+| underdetermination; no-miracles argument; pessimistic meta-induction; structural realism; constructive empiricism; entity realism | 不充分决定；无奇迹论证；悲观元归纳；结构实在论；建构经验论；实体实在论 |
+| reduction; bridge law; multiple realizability; emergence; universality; renormalization; inductive risk | 还原；桥接律；多重可实现性；涌现；普适性；重整化；归纳风险 |
+| natural selection; fitness; heritability; the Price equation; replicator dynamics; evolutionarily stable strategy (ESS) | 自然选择；适合度；遗传力；普赖斯方程；复制者动力学；演化稳定策略 |
+| kin selection; Hamilton's rule; relatedness; inclusive fitness; multilevel selection; haplodiploidy | 亲缘选择；汉密尔顿法则；亲缘系数；广义适合度；多层次选择；单倍二倍体 |
+| genetic drift; replicator, vehicle, interactor; spandrel; exaptation; adaptationism; niche construction | 遗传漂变；复制者，载具，互动者；拱肩；扩展适应；适应主义；生态位构建 |
+| etiological, proper, causal-role function; teleonomy; species concept; cladistics; parsimony | 病因学功能，专有功能，因果作用功能；目的性；物种概念；分支系统学；简约性 |
+| teleosemantics; parity thesis; autopoiesis; artificial life; Lenia; glider; open-ended evolution | 目的语义学；对等论题；自创生；人工生命；Lenia；滑翔机（滑翔体）；开放式演化 |
+| ontological commitment; regimentation; plural quantification; definite description; scope | 本体论承诺；规整化；复数量化；限定摹状词；辖域 |
+| universal; trope; nominalism; resemblance class; imperfect community; companionship | 共相；特普；唯名论；相似类；不完全共同体；伴随问题 |
+| mereology; parthood; overlap; weak, strong supplementation; fusion; extensionality; atom; gunk | 部分论；部分关系；交叠；弱、强补充；融合；外延性；原子；无原子物（gunk） |
+| special composition question; nihilism; universalism; organicism; composition as identity; problem of the many | 特殊组合问题；虚无主义；普遍主义；有机体论；组合即同一；众多问题 |
+| metaontology; quantifier variance; grounding; fundamentality; priority monism; mereotopology | 元本体论；量词变异；奠基；基础性；优先一元论；部分拓扑学 |
+| description logic; concept, role; TBox, ABox; subsumption; tableau; open-world assumption; rigidity | 描述逻辑；概念，角色；TBox，ABox；包含；表列；开放世界假设；刚性 |
 
 ## Names
 
@@ -184,3 +199,8 @@ computed lines as templates with the source's placeholders spelled exactly), fil
 | Fisher, Neyman, Pearson, Jeffreys, Lindley, Birnbaum, Mayo, Ioannidis | 费希尔，奈曼，皮尔逊，杰弗里斯，林德利，伯恩鲍姆，梅奥，约阿尼迪斯 |
 | Hume, al-Ghazālī, Mill, Mackie, Suppes, Cartwright, Woodward | 休谟，安萨里，密尔，麦基，苏佩斯，卡特赖特，伍德沃德 |
 | Spirtes, Glymour, Scheines, Rubin, Halpern, Hall, Kim, Yablo | 斯皮尔特斯，格利穆尔，沙因斯，鲁宾，哈尔彭，霍尔，金在权，亚布罗 |
+| Hempel, Kuhn, Lakatos, Feyerabend, Laudan, van Fraassen, Worrall, Hacking, Batterman | 亨普尔，库恩，拉卡托斯，费耶阿本德，劳丹，范弗拉森，沃勒尔，哈金，巴特曼 |
+| Paley, Darwin, Lewontin, Price, Hamilton, Maynard Smith, Dawkins, Gould, Sober, Okasha | 佩利，达尔文，列万廷，普赖斯，汉密尔顿，梅纳德·史密斯，道金斯，古尔德，索伯，奥卡沙 |
+| Kimura, Millikan, Cummins, Godfrey-Smith, Axelrod, Nowak, Schrödinger, Langton, Chan | 木村资生，米利肯，卡明斯，戈弗雷-史密斯，阿克塞尔罗德，诺瓦克，薛定谔，兰顿，伯特·陈 |
+| Meinong, Goodman, Armstrong, Leśniewski, van Inwagen, Sider, Schaffer, Hirsch, Thomasson | 迈农，古德曼，阿姆斯特朗，列希涅夫斯基，范因瓦根，赛德，谢弗，赫希，托马森 |
+| Boolos, Geach, Unger, Rodriguez-Pereyra, Varzi, Guarino, Welty | 布洛斯，吉奇，昂格尔，罗德里格斯-佩雷拉，瓦尔齐，瓜里诺，韦尔蒂 |
