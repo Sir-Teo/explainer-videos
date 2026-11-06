@@ -115,8 +115,10 @@ def compute_wand() -> dict:
     for q in ("white whale", "captain ahab ship", "the sea", "love marriage money", "pride prejudice"):
         terms = [T.porter(w) for w in T.tokens(q)]
         w = R.wand(post, lengths, terms)
-        ex = R.top(R.bm25_scores(post, lengths, terms))
-        rows.append({"query": q, "scored": w["scored"], "candidates": w["candidates"], "same_top10": w["top"] == ex})
+        sc = R.bm25_scores(post, lengths, terms)
+        ex = R.top(sc)
+        same = [round(sc[d], 9) for d in w["top"]] == [round(sc[d], 9) for d in ex]   # equal up to ties
+        rows.append({"query": q, "scored": w["scored"], "candidates": w["candidates"], "same_top10": same})
     return {"rows": rows}
 
 
