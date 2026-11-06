@@ -75,7 +75,8 @@ class IntegerPrograms(VoiceoverScene):
             col = fate_col[t["fate"]] if t else GREY_D
             dots.add(Dot(P(k), radius=0.08, color=col))
             if t:
-                labs.add(mono(f"{t['bound']:.0f}", 14, col).next_to(P(k), UP, buff=0.05))
+                txt = f"{t['bound']:.0f}" if math.isfinite(t["bound"]) else "x"
+                labs.add(mono(txt, 14, col).next_to(P(k), UP, buff=0.05))
             if k:
                 edges.add(Line(P(k[:-1]), P(k), color=GREY_D, stroke_width=1.4))
         side = VGroup(

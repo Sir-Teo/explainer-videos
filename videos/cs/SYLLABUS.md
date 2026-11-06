@@ -1517,40 +1517,54 @@ al. 2008; Fortune 1987; Seidel 1991, 1993; Chan 1996; Malkov & Yashunin 2016.
 *Story:* Many problems are "choose the best point of a polytope." The simplex method walks the polytope's edges.
 Duality certifies the answer from the other side. When integrality makes a problem hard, LP relaxations and random
 hyperplanes still get provably close. Online, without seeing the future, you can still be competitive.
-1. Kantorovich (1939), Dantzig (1947), Stigler's diet; standard form; the feasible region as a 3D polytope.
-2. Optima at vertices; basic feasible solutions; **simplex** walking edges (3D), with the pivot algebra.
-3. **Duality**: the dual built by bounding the objective; weak and strong duality, via Farkas' lemma and a
-   separating hyperplane; complementary slackness; shadow prices.
-4. The Klee–Minty cube (2ⁿ pivots); smoothed analysis (Spielman & Teng 2001) explains practice.
-5. Polynomial time: the ellipsoid method (Khachiyan 1979; volume shrinks by e^{−1/(2(n+1))}); separation ≡
-   optimization (Grötschel, Lovász & Schrijver); interior point (Karmarkar 1984), with the central path, the log
-   barrier and Newton steps (callback to *AI, Built* 4).
-6. LPs for combinatorics: max-flow/min-cut duality (Part 18); **total unimodularity** gives integral vertices
-   (proved for bipartite incidence matrices).
-7. Integer programming: NP-hard; relaxations and integrality gaps; branch and bound; Gomory cuts; decades of solver
-   speedups (Bixby, cited).
-8. Approximation: vertex cover 2 by maximal matching and by LP rounding; greedy set cover H_n ≈ ln n (proved), and
-   ln n hardness (Part 27).
-9. TSP:
-   - inapproximable in general (via Hamiltonian cycle);
-   - metric TSP: double tree 2, Christofides–Serdyukov 3/2, and 3/2 − 10⁻³⁶ (Karlin, Klein & Oveis Gharan);
-   - Arora's Euclidean PTAS;
-   - 2-opt and LKH; Concorde's 85,900 cities (cited).
-10. Knapsack FPTAS by rounding.
-11. **Goemans–Williamson** MAX-CUT: vectors on a sphere, a random hyperplane, cut probability θ/π, and 0.878 =
-    min 2θ/(π(1 − cos θ)) (derived); optimal under the UGC (Part 27).
-12. Online algorithms: ski rental (2, and e/(e − 1) randomized); paging, where LRU is k-competitive and no
-    deterministic algorithm does better (proved); randomized marking, O(log k).
-13. **Multiplicative weights**: regret O(√(T log n)); one algorithm behind boosting (callback to *AI, Built* 6), von
-    Neumann's minimax theorem, and fast approximate LP (Arora, Hazan & Kale).
-14. Convex optimization in a page (callbacks to *AI, Built* 4 and 11). Outro.
+1. Hook: Stigler's diet ($39.93 by insight, 1945); Laderman's simplex by hand ($39.69 and a proof, about 120
+   person-days); the three kinds of answer (proved, provably close, competitive).
+2. Linear programs: Chvátal's three-product LP; Kantorovich (1939), Dantzig (1947); modelling a transportation problem
+   (Hitchcock 1941; $355 infeasible, $365 optimal) and the standard tricks; the feasible region as a 3D polytope with 6
+   vertices and the objective plane pushed to (2, 0, 1).
+3. **Simplex**: the walk 0 → 12.5 → 13 in 2 pivots, drawn in 3D and as tableaux (ratio test, elimination); degeneracy,
+   cycling and Bland's rule; steepest edge and LU updates.
+4. **Duality**: the family of bounds (15, 13⅓, an infeasible one, 13); weak and strong duality, Farkas' lemma and a
+   separating hyperplane; shadow prices measured (⅓ against y₁ = 1); complementary slackness.
+5. The Klee–Minty cube walked through all 8 vertices; 2ⁿ − 1 Dantzig pivots to n = 12, Bland 465, greatest
+   improvement 1 (Jeroslow, Avis–Chvátal, Zadeh); smoothed analysis (Spielman & Teng 2001): random LPs and perturbed
+   cubes (1,023 → 397 → 76 pivots).
+6. Polynomial time: Khachiyan's ellipsoid (9 cuts; steps against width); separation ≡ optimization (Grötschel, Lovász
+   & Schrijver); Karmarkar's interior point, the log barrier and the central path (127 Newton steps).
+7. **Total unimodularity**: bipartite incidence matrices checked, Cramer's rule, 0 of 100 fractional; the triangle
+   (det 2, all halves), 25 of 100; Edmonds' odd sets; max-flow/min-cut as duality (Part 18); Seymour.
+8. Integer programming: knapsack branch and bound (24 nodes of 256; a few hundred at n = 160, LP gap 0.06%); Gomory
+   cuts; Bixby's speedups; the FPTAS by rounding (Ibarra & Kim).
+9. Approximation: vertex cover 2 by matching and by half-integral LP rounding, measured; Khot–Regev; greedy set cover
+   H_n (proved), the harmonic trap, Feige.
+10. TSP: no factor in general; double tree, Christofides–Serdyukov; forty instances against Held–Karp (2-opt best at
+    1.013); Karlin–Klein–Oveis Gharan, Arora/Mitchell; 300 cities and BHH; LKH and Concorde.
+11. **Goemans–Williamson**: vectors on a sphere and a random hyperplane; θ/π against (1 − cos θ)/2, α = 0.8786 at
+    134°; thirty graphs against exact MAX-CUT; KKMO and Håstad.
+12. Online: ski rental (2 − 1/B; e/(e − 1) randomized); paging on the Job's trace (LRU 1.2–6.9× Belady; random and
+    marking win at large k); the cyclic adversary and Sleator–Tarjan.
+13. **Multiplicative weights**: regret against √((T ln n)/2), measured; the potential proof; a zero-sum game converging
+    to its LP value; boosting (*AI, Built* 6) and approximate LP (Arora, Hazan & Kale).
+14. Convex optimization in a page: gradient descent (40 steps) against Newton (4) on a stretched log-sum-exp; KKT; the
+    LP ⊂ QP ⊂ SOCP ⊂ SDP ladder; Rockafellar's watershed (callbacks to *AI, Built* 4 and 11).
+15. *Frontier*: LP in matrix-multiplication time (Cohen, Lee & Song; van den Brand) and almost-linear max flow (Chen et
+    al. 2022); the Hirsch conjecture, a drawn random polytope and random diameters against n − 3, Santos, Kalai–Kleitman;
+    hardness of approximation (PCP, Håstad, the UGC, the 2-to-2 theorem, Raghavendra); open problems (strongly
+    polynomial LP, polynomial Hirsch, the UGC). Outro.
 
-*Computed:* our simplex on 3D examples and Klee–Minty pivot counts; ellipsoid steps; the central path; LP gaps; TSP
-heuristics against exact solutions (Held–Karp for small n); GW against exact MAX-CUT for small graphs; paging ratios
-on the Job's page trace; MW regret.
-*Visuals:* the polytope with the simplex walk; the dual as a family of tilted planes; ellipsoids shrinking; a
-hyperplane slicing a sphere of unit vectors; the squashed Klee–Minty cube.
-*In practice:* operations research (logistics, crew scheduling, ad allocation), LP and MIP solvers (Gurobi, HiGHS, OR-Tools), cache replacement as an online problem.
+*Computed:* every number above, in `videos/cs/cs23/compute.py` with `explainer/cs/algo/optim.py` (tested in
+`tests/test_cs23_optim.py`): the simplex under three rules, exact and floating, against HiGHS; the transportation
+optimum; duals, shadow prices and slacks; Klee–Minty, perturbed and random pivot counts; ellipsoid runs; the central
+path; total unimodularity by brute force; branch and bound, DP and the FPTAS; vertex and set cover against brute
+force; Held–Karp and the TSP heuristics; Goemans–Williamson by a Burer–Monteiro SDP against exact MAX-CUT; ski rental
+and paging on the Job's trace; Hedge regret and a zero-sum game; gradient descent and Newton; random 3D polytope
+diameters.
+*Visuals:* the polytope with the objective plane and the simplex walk; tableaux pivoting; the dual's family of bounds
+and a separating hyperplane; the squashed Klee–Minty cube; ellipsoids shrinking; the central path; the
+branch-and-bound tree; covers on a graph; tours being built; a hyperplane slicing a sphere of unit vectors; the α
+curve; expert weights converging; zigzagging gradient descent against Newton; a random polytope's longest path.
+*In practice:* operations research (logistics, crew scheduling, ad allocation), LP and MIP solvers (Gurobi, HiGHS,
+OR-Tools), cache replacement as an online problem.
 *Reading:* Bertsimas & Tsitsiklis, *Introduction to Linear Optimization*; Chvátal, *Linear Programming*; Matoušek &
 Gärtner, *Understanding and Using Linear Programming*; Schrijver, *Theory of Linear and Integer Programming*;
 Williamson & Shmoys, *The Design of Approximation Algorithms*; Vazirani, *Approximation Algorithms*; Borodin &
@@ -3343,4 +3357,5 @@ At *AI, Built*'s pace, that is one part per one or two long sessions.
 | 20 | scenes (18, with the *Frontier* chapter), computations (Freivalds, Schwartz–Zippel and the Tutte matrix, fingerprints, Karger and Karger–Stein, Fermat and Miller–Rabin, random-walk SAT, balls into bins, Bloom filters, reservoir sampling, Misra–Gries and Count-Min, the Job v3 in the Pebble language emulated for ledger row 9 and swept over hash functions in C, HyperLogLog and KMV, the AMS sketch, MinHash and LSH on the novels, Ramsey colourings and Moser–Tardos, conditional expectations and RANDU), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 55 min (estimate) |
 | 21 | scenes (18, with the *Frontier* chapter), computations (naive, Rabin–Karp, KMP, Boyer–Moore and Horspool counting their comparisons on the novels; Aho–Corasick over the corpus; suffix trees, the suffix array and LCP of all 25 MB; the BWT of *Moby-Dick* inverted and its contexts; the FM-index of the novels; LZ77 + Huffman, LZW and rANS against zlib, bzip2 and xz; Needleman–Wunsch and Smith–Waterman; Myers' diff on this syllabus's history; rsync and content-defined chunking; Manacher over the corpus; BWT runs of repetitive text), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 50 min (estimate) |
 | 22 | scenes (17, with the *Frontier* chapter), computations (Kettner's grid and adaptive predicates; Jarvis, Graham, the monotone chain, quickhull and Chan counting their work; Bentley–Ottmann; ear clipping and Fisk's colouring; Fortune's sweep; Delaunay by insertion, by Lawson's flips and by the lifting map; the EMST; Seidel's LP and Welzl's circle; kd-trees and trapezoidal maps; distance concentration, NSW and HNSW; a ham-sandwich cut; configuration spaces, visibility graphs and an RRT; 3SUM as collinearity), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 50 min (estimate) |
-| 23–61 | planned (this document) | — |
+| 23 | scenes (16, with the *Frontier* chapter), computations (Chvátal's LP as a 3D polytope with the simplex walk and its tableaux; a transportation problem; the dual's family of bounds, shadow prices and complementary slackness; Klee–Minty pivots under three rules, perturbed cubes and random LPs; an ellipsoid run and the central path; total unimodularity checked; knapsack branch and bound and the FPTAS; vertex and set cover against brute force; Held–Karp, the double tree, Christofides–Serdyukov, nearest neighbour and 2-opt; Goemans–Williamson against exact MAX-CUT; ski rental and paging on the Job's trace; multiplicative weights and a zero-sum game; gradient descent against Newton; random-polytope diameters against Hirsch), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 50 min (estimate) |
+| 24–61 | planned (this document) | — |
