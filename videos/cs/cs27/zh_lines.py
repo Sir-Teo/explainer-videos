@@ -294,19 +294,19 @@ ZH = {
         "<bookmark mark='d'/>已知最好的方法，数域筛法，更快，但仍比多项式差：829位的挑战数 RSA-250 在2020年被攻破，用了大约两千七百个核年。<bookmark "
         "mark='e'/>然而没人证明过任何函数是单向的。这样的证明会推出 P 不等于 NP。",
     "This is the bridge to the next acts of the series.":
-        "这是通向本系列下几幕的桥梁。<bookmark mark='a'/>Leonid Levin 在1986年开创了平均情形完全性的理论。<bookmark mark='b'/>Johan Håstad、Russell "
-        "Impagliazzo、Levin 和 Michael Luby 证明，任何单向函数都能变成伪随机生成器。<bookmark mark='c'/>由此得到私钥加密、签名，以及第7章的承诺："
-        "Impagliazzo 的 Minicrypt。第29部分会把它建起来。<bookmark mark='d'/>Miklós Ajtai 找到了格上的问题，其随机实例与最坏实例一样难，<bookmark "
-        "mark='e'/>而 Oded Regev 的带误差学习把它变成了能抵御量子计算机的公钥加密，如今已经标准化，见第30部分。<bookmark mark='f'/>没人能做到的，是把密码学"
-        "建立在 NP 完全问题之上：Joan Feigenbaum 与 Lance Fortnow，以及 Andrej Bogdanov 与 Luca Trevisan 的结果表明，标准技术做不到。",
+        "这是通向本系列下几幕的桥梁。<bookmark mark='a'/>Levin 在1986年开创了平均情形完全性的理论。<bookmark mark='b'/>Håstad、Impagliazzo、"
+        "Levin 和 Luby 四人证明，任何一个单向函数，不论是什么样的，都能变成伪随机生成器。<bookmark mark='c'/>由此得到私钥加密、数字签名，以及第7章用过的"
+        "承诺：这就是 Impagliazzo 所说的迷你密码国。第29部分会把它建起来。<bookmark mark='d'/>Ajtai 找到了格上的问题，它们的随机实例和最坏实例一样难，"
+        "<bookmark mark='e'/>而 Regev 的带误差学习问题把这一点变成了能抵御量子计算机的公钥加密，如今已经成为标准，见第30部分。<bookmark mark='f'/>没有人能"
+        "做到的，是把密码学建立在一个 NP 完全问题之上：Feigenbaum 与 Fortnow 的结果，以及 Bogdanov 与 Trevisan 的结果都表明，标准的技术做不到这一点。",
     # ------------------------------------------------------------------ Frontier
     "Chapter fifteen. The frontier:": "第15章。前沿：MIP* 等于 RE，以及实践中的证明。",
     "Each new kind of verifier has reached a larger class.":
-        "每一种新的验证者都到达了更大的类。<bookmark mark='a'/>读一份证明，得到 NP。<bookmark mark='b'/>用随机硬币询问一个证明者，得到 PSPACE，这是第6章"
-        "的定理。<bookmark mark='c'/>1988年，Michael Ben-Or、Shafi Goldwasser、Joe Kilian 和 Avi Wigderson 问：如果有两个证明者，分开审问，就像关在不同"
-        "房间里的嫌疑人呢？László Babai、Lance Fortnow 和 Carsten Lund 在1991年证明，这能到达非确定指数时间。它是 PCP 定理的种子。<bookmark mark='d'/>"
-        "然后允许证明者共享量子纠缠。2020年，季铮锋、Anand Natarajan、Thomas Vidick、John Wright 和袁浩森证明，这个类一路跳到了 RE。<bookmark mark='e'/>"
-        "一个多项式时间的验证者，可以被说服相信某个程序会停机，而这是任何算法都无法判定的问题。",
+        "每一种新的验证者，都到达了一个更大的类。<bookmark mark='a'/>只读一份证明，得到的是 NP。<bookmark mark='b'/>用随机硬币向一个证明者提问，得到的是 "
+        "PSPACE，这是第6章的定理。<bookmark mark='c'/>1988年，Ben-Or、Goldwasser、Kilian 和 Wigderson 四人问：如果有两个证明者，分开审问，就像关在不同"
+        "房间里的两个嫌疑人，又会怎样？Babai、Fortnow 和 Lund 在1991年证明，这样能到达非确定指数时间。它是 PCP 定理的种子。<bookmark mark='d'/>后来，"
+        "又允许这两个证明者共享量子纠缠。2020年，季铮锋、Natarajan、Vidick、Wright 和袁浩森五人证明，这个类一路跳到了 RE。<bookmark mark='e'/>一个只在"
+        "多项式时间里运行的验证者，竟然可以被说服相信某个程序会停机，而这是任何算法都无法判定的问题。",
     "The result reached far beyond complexity theory.":
         "这个结果的影响远远超出了复杂性理论。<bookmark mark='a'/>验证者检验证明者的回答是否呈现只有纠缠才能产生的关联，也就是第53部分描述的那种贝尔"
         "测试。<bookmark mark='b'/>纠缠帮助诚实的证明者，但也帮助作弊者，这正是这类博弈难以分析的原因。<bookmark mark='c'/>关键一步是压缩验证者：一个博弈"

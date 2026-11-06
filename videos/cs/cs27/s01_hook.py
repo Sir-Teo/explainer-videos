@@ -14,7 +14,7 @@ class Hook(VoiceoverScene):
                              fill_color=DATA if (i * 37 + 11) % 5 < 2 else BG, fill_opacity=0.9)
                       for i in range(96)]).arrange_in_grid(rows=4, cols=24, buff=0.02)
         marks = VGroup(*[SurroundingRectangle(sq[i], color=HEAD, buff=0.02, stroke_width=2.5) for i in (5, 42, 77)])
-        return VGroup(sq, marks)
+        return VGroup(sq, marks).scale_to_fit_width(3.6)
 
     def pic_talk(self):
         pv = label(r"prover", font_size=18, color=HEAD)
@@ -27,7 +27,7 @@ class Hook(VoiceoverScene):
             b = Arrow(vf.get_left() + LEFT * 0.1 + UP * (y - 0.07), pv.get_right() + RIGHT * 0.1 + UP * (y - 0.07),
                       buff=0, stroke_width=2, color=DATA, max_tip_length_to_length_ratio=0.12)
             arrows.add(a, b)
-        return VGroup(pv, vf, arrows)
+        return VGroup(pv, vf, arrows).scale(1.25)
 
     def pic_zk(self):
         pts = [UP * 0.55, DOWN * 0.4 + LEFT * 0.75, DOWN * 0.4 + RIGHT * 0.75, UP * 0.05 + RIGHT * 1.5,
