@@ -1709,3 +1709,4 @@ and a Reasoner library of perhaps 20–30k lines with its tests. Expect one part
 | 29 · Being and Time-Consciousness | scenes, English and Chinese narration and text, QA | ~64 min |
 | 30 · Mind and Machine | scenes, English and Chinese narration and text, QA | ~51 min |
 | 31 · Consciousness | scenes, English and Chinese narration and text, QA | ~51 min |
+| 32 · Free Will | scenes, English and Chinese narration and text, QA | ~50 min |
