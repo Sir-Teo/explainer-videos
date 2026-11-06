@@ -231,7 +231,7 @@ def run_level(level: str, init: dict, programs: dict, order: list) -> dict:
     T = {t: Txn(t, list(p) + [("commit",)]) for t, p in programs.items()}
     locks: dict = {}
     plocks: list = []                                  # predicate locks: (tid, pred)
-    rw_in, rw_out = set(), set()                       # SSI: transactions with an incoming / outgoing rw edge
+    rw: set = set()                                    # SSI: rw-antidependencies (reader, writer)
     log = []
     undo: dict = {t: [] for t in T}
 
@@ -274,8 +274,11 @@ def run_level(level: str, init: dict, programs: dict, order: list) -> dict:
                 for x in tx.wset:                      # first committer wins
                     if any(ts > tx.start for ts, _ in versions.get(x, [])):
                         return finish(tx, ok=False)
-                if level == "snapshot + SSI" and tx.tid in rw_in and tx.tid in rw_out:
-                    return finish(tx, ok=False)
+                if level == "snapshot + SSI":             # a pivot: rw edges in and out, partners alive
+                    live = {u for u in T if T[u].state != "aborted"}
+                    if any(b == tx.tid and a in live for a, b in rw) and any(
+                            a == tx.tid and b in live for a, b in rw):
+                        return finish(tx, ok=False)
                 for x, v in tx.writes.items():
                     versions.setdefault(x, []).append((clock, v))
                     db[x] = v
@@ -304,8 +307,7 @@ def run_level(level: str, init: dict, programs: dict, order: list) -> dict:
                 for u in T.values():                   # tx read a version u is overwriting: tx -rw-> u
                     if u is not tx and u.state != "aborted" and x in u.wset and (
                             u.state == "active" or u.start >= tx.start):
-                        rw_out.add(tx.tid)
-                        rw_in.add(u.tid)
+                        rw.add((tx.tid, u.tid))
             tx.rset.add(x)
             return snapshot_value(tx, x)
         return tx.writes.get(x, db.get(x))
@@ -359,8 +361,7 @@ def run_level(level: str, init: dict, programs: dict, order: list) -> dict:
             if level == "snapshot + SSI":
                 for u in T.values():                   # someone read x before this write: u -rw-> tx
                     if u is not tx and u.state != "aborted" and x in u.rset:
-                        rw_out.add(u.tid)
-                        rw_in.add(tx.tid)
+                        rw.add((u.tid, tx.tid))
             if level == "read uncommitted":
                 undo[tx.tid].append((x, db.get(x)))
                 db[x] = v

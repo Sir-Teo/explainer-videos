@@ -439,16 +439,20 @@ class Aggregate(Plan):
         self.cols = tuple(keys) + tuple(f"{fn}({a})" for fn, a in aggs)
         self.rows = ngroups
         M = db.pages(child.rows)
-        if method == "hash":
+        if not keys:                                  # one group: a single pass either way
+            self.cost = child.cost
+        elif method == "hash":
             self.cost = child.cost + (0 if db.pages(ngroups) <= db.B else 2 * M)
         else:
             self.cost = child.cost + (0 if child.order == keys[0] else sort_cost(M, db.B))
-            self.order = keys[0] if keys else None
+            self.order = keys[0]
 
     def children(self):
         return [self.c]
 
     def label(self):
+        if not self.keys:
+            return "Aggregate (one group)"
         return f"{'Hash' if self.method == 'hash' else 'Sort'} aggregate by {', '.join(self.keys)}"
 
     def iterate(self, db, stats):
