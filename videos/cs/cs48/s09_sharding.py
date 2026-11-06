@@ -45,7 +45,7 @@ class Sharding(VoiceoverScene):
                  for _ in hash_dest]
         new_h = [Square(side_length=sq, stroke_width=0, fill_color=HEAD, fill_opacity=1).move_to([3.5, 1.6, 0])
                  for _ in hash_dest]
-        inl = label(r"new rows, \ keyed by time", font_size=18, color=HEAD).move_to([0, 1.6, 0])
+        inl = label(r"new rows, \ keyed by time", font_size=18, color=HEAD).next_to([-3.5, 1.6, 0], LEFT, buff=0.3)
         anims_r, anims_h, hcount = [], [], [2, 2, 2, 2]
         for k, d in enumerate(hash_dest):
             anims_r.append(new_r[k].animate.move_to([rboxes[3].get_x(), base_y + 0.12 + (2 + k) * step, 0]))
@@ -65,8 +65,8 @@ class Sharding(VoiceoverScene):
                     color=HEAD).next_to(head, DOWN, buff=0.12)
         foot = note(r"illustrative", font_size=16).to_corner(DR, buff=0.2)
         with self.voiceover(
-            "Sharding splits one dataset across machines, each holding a part, and the choice that matters most "
-            "is the shard key. <bookmark mark='a'/> Range partitioning gives each shard a contiguous run of keys, "
+            "Sharding splits a dataset across machines, and the choice that matters most is the shard key. "
+            "<bookmark mark='a'/> Range partitioning gives each shard a contiguous run of keys, "
             "as Bigtable does with its tablets. But if the key grows with time, every new row lands on the last "
             "shard, and one machine takes all the writes. <bookmark mark='b'/> Hash partitioning scatters keys by "
             "their hash, Part 17's trick, and spreads the writes evenly. <bookmark mark='c'/> The price is order. "
@@ -138,7 +138,7 @@ class Sharding(VoiceoverScene):
             "Zipf exponent of one, the hottest key alone takes seven percent of all requests, and its shard "
             "nearly eight times the mean; at one point two, almost twenty. That is the celebrity problem: one "
             "account, followed by millions. <bookmark mark='c'/> The fix is to split the hot keys themselves. "
-            "Append one of twenty suffixes to each of the ten hottest, spread the pieces, and merge them on read. "
+            "Append one of twenty suffixes to each of the ten hottest, and merge the pieces on read. "
             "<bookmark mark='d'/> At exponent one, the busiest shard falls below twice the mean. Part 49's feeds "
             "meet the celebrity again."
         ) as vo:
@@ -214,8 +214,7 @@ class Sharding(VoiceoverScene):
             "<bookmark mark='b'/> Many systems instead create far more partitions than machines at the start, "
             "and move whole partitions: a new machine takes a few from each of the others, and no key ever "
             "changes partition. <bookmark mark='c'/> The move itself is a careful dance. Copy the partition, "
-            "stream the writes made during the copy, switch the routing table, and only then delete the old copy. "
-            "Writes keep flowing throughout."
+            "stream the writes made during the copy, switch the routing table, and only then delete the old copy."
         ) as vo:
             self.play(FadeIn(head), FadeIn(nodes[:3]), FadeIn(parts), FadeIn(foot))
             vo.wait_until("a")
@@ -248,34 +247,38 @@ class Sharding(VoiceoverScene):
                         (r"a--f", r"g--m", r"n--s", r"t--z")]).arrange(RIGHT, buff=0.25).move_to([-3.0, -1.55, 0])
         gl = label(r"a global index, \ sharded by the indexed value", font_size=19, color=YES).next_to(
             gidx, DOWN, buff=0.15)
-        one = CurvedArrow(query.get_left() + DOWN * 0.05, gidx[2].get_left() + UP * 0.1, angle=PI / 2.4,
-                          color=YES, stroke_width=2.5, tip_length=0.15)
-        new = Square(side_length=0.2, stroke_width=0, fill_color=DATA, fill_opacity=1).move_to([-6.4, 0.85, 0])
-        upd = DashedLine(shards[0].get_bottom() + DOWN * 0.05, gidx[2].get_top(), buff=0.05, color=NO,
-                         stroke_width=2, dash_length=0.1).add_tip(tip_length=0.15)
-        ul = label(r"second write, \ often asynchronous", font_size=17, color=NO).move_to([-3.6, -0.55, 0])
+        gap_x = (shards[1].get_right()[0] + shards[2].get_left()[0]) / 2
+        bend = [gap_x, gidx.get_top()[1] + 0.45, 0]
+        one = VGroup(Line(query.get_bottom() + DOWN * 0.05, bend, color=YES, stroke_width=2.5),
+                     Arrow(bend, gidx[2].get_top(), buff=0.04, color=YES, stroke_width=2.5,
+                           max_tip_length_to_length_ratio=0.25))
+        new = Square(side_length=0.2, stroke_width=0, fill_color=DATA, fill_opacity=1).move_to([1.0, 0.85, 0])
+        upd = DashedLine(shards[3].get_bottom() + DOWN * 0.05, gidx[2].get_top() + RIGHT * 0.3, buff=0.05,
+                         color=NO, stroke_width=2, dash_length=0.1).add_tip(tip_length=0.15)
+        ul = wrapped_label(r"second write, \ often asynchronous", 1.9, font_size=17, color=NO).next_to(
+            upd.get_center(), RIGHT, buff=0.15)
         tab = grid_table([r"shards asked", r"queries slow"],
                          [[f"{k}", rf"{100 * tail[k]:.1f}\%"] for k in (1, 10, 100)], widths=[2.3, 2.3],
                          row_h=0.5, font_size=20, colors=[[WHITE, NO]] * 3, mono_cols=())
-        tab.move_to([4.2, 1.5, 0])
-        tl = wrapped_label(rf"each shard slow one time in {round(1 / t['p_slow'])} \ (Part 39)", 5.0,
+        tab.move_to([4.3, 1.5, 0])
+        tl = wrapped_label(rf"each shard slow one time in {round(1 / t['p_slow'])} \ (Part 39)", 4.6,
                            font_size=18, color=GREY_A).next_to(tab, UP, buff=0.2)
         notes = VGroup(
             wrapped_label(r"\textbf{local}: \ writes stay on one shard; \ a query on any other field asks every "
-                          r"shard and waits for the slowest", 5.0, font_size=19, color=LAM),
+                          r"shard and waits for the slowest", 4.6, font_size=19, color=LAM),
             wrapped_label(r"\textbf{global}: \ the query asks one index shard; \ the write touches two, \ and the "
-                          r"index lags: \ DynamoDB's global secondary indexes are eventually consistent", 5.0,
+                          r"index lags: \ DynamoDB's global secondary indexes are eventually consistent", 4.6,
                           font_size=19, color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(tab, DOWN, buff=0.4).align_to(tl, LEFT)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(tab, DOWN, buff=0.4).align_to(tab, LEFT)
         with self.voiceover(
-            "A shard key serves one access path; others need secondary indexes, and there are two ways to shard "
-            "those. <bookmark mark='a'/> A local index lives beside the data: each shard indexes its own rows. "
+            "Other access paths need secondary indexes, and those can be sharded in two ways. "
+            "<bookmark mark='a'/> A local index lives beside the data: each shard indexes its own rows. "
             "Writes stay on one shard, but a query on any other field must ask every shard, and wait for the "
             "slowest. <bookmark mark='b'/> In Part 39's model, each server is slow one time in a hundred. A query "
             "to ten shards is then slow nearly one time in ten, and to a hundred shards, nearly two times in "
             "three. <bookmark mark='c'/> A global index is sharded by the indexed value itself, so the query asks "
             "one index shard. <bookmark mark='d'/> Now a write touches two shards, and the index is usually "
-            "updated asynchronously. DynamoDB's global secondary indexes, for example, are eventually consistent."
+            "updated asynchronously. DynamoDB's global secondary indexes are eventually consistent."
         ) as vo:
             self.play(FadeIn(head), FadeIn(query), FadeIn(shards))
             vo.wait_until("a")
@@ -286,11 +289,11 @@ class Sharding(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(VGroup(*row)) for row in tab.cells[1:]], lag_ratio=0.5))
             vo.wait_until("c")
             self.play(FadeOut(fan), FadeOut(local), FadeIn(gidx), FadeIn(gl))
-            self.play(Create(one))
+            self.play(Create(one[0]), GrowArrow(one[1]))
             vo.wait_until("d")
             self.play(FadeIn(new))
-            self.play(new.animate.move_to(shards[0]))
-            self.play(Create(upd), FadeIn(ul), FadeIn(notes[1]))
+            self.play(new.animate.move_to(shards[3]))
+            self.play(Create(upd), FadeIn(ul), FadeIn(notes[1]), FadeOut(new))
         self.wait(0.4)
         self.clear_scene()
 
@@ -314,15 +317,15 @@ class Sharding(VoiceoverScene):
         cl = wrapped_label(r"shard by customer: \ each customer's joins stay on one machine", 5.3, font_size=19,
                            color=YES).next_to(sh, DOWN, buff=0.3)
         # two-phase commit with a coordinator that crashes after deciding
-        lanes_y = {"coordinator": 1.75, "P1": 1.05, "P2": 0.45, "P3": -0.15}
+        lanes_y = {"coordinator": 1.8, "P1": 0.9, "P2": 0.0, "P3": -0.9}
         lx0, lx1 = 1.9, 6.7
         lanes = VGroup()
         for nm, y in lanes_y.items():
             lanes.add(VGroup(label(nm, font_size=17, color=GREY_A).move_to([1.2, y, 0]).align_to([0.55, 0, 0],
                                                                                                   LEFT),
                              Line([lx0, y, 0], [lx1, y, 0], color=GREY_D, stroke_width=1.5)))
-        tt = label(r"two-phase commit across three shards", font_size=20, color=WHITE).move_to([3.6, 2.4, 0])
-        xp, xv, xd, xr = 2.1, 2.55, 2.95, 5.9
+        tt = label(r"two-phase commit across three shards", font_size=20, color=WHITE).move_to([3.6, 2.75, 0])
+        xp, xv, xd, xr = 2.0, 2.65, 3.25, 6.0
         cy = lanes_y["coordinator"]
         prep = VGroup(*[Arrow([xp, cy, 0], [xv, lanes_y[p], 0], buff=0, stroke_width=1.8, color=DATA,
                               max_tip_length_to_length_ratio=0.12) for p in ("P1", "P2", "P3")])
@@ -334,12 +337,12 @@ class Sharding(VoiceoverScene):
         locks = VGroup(*[Rectangle(width=xr - xv, height=0.2, stroke_width=0, fill_color=NO, fill_opacity=0.6)
                          .move_to([(xv + xr) / 2, lanes_y[p], 0]) for p in ("P1", "P2", "P3")])
         ll = label(rf"locks held, \ waiting: \ {tx['blocked_seconds']:.1f} s", font_size=18, color=NO).next_to(
-            locks, DOWN, buff=0.18)
+            locks, DOWN, buff=0.35)
         rec = VGroup(*[Arrow([xr, cy, 0], [xr + 0.45, lanes_y[p], 0], buff=0, stroke_width=1.8, color=YES,
                              max_tip_length_to_length_ratio=0.12) for p in ("P1", "P2", "P3")])
         rl = label(r"recovers, \ resends", font_size=16, color=YES).next_to([xr, cy, 0], UP, buff=0.1)
-        brk = VGroup(Line([4.2, 2.0, 0], [4.35, -0.4, 0], color=GREY_B, stroke_width=1.5),
-                     Line([4.35, 2.0, 0], [4.5, -0.4, 0], color=GREY_B, stroke_width=1.5))
+        brk = VGroup(Line([4.2, 2.05, 0], [4.35, -1.1, 0], color=GREY_B, stroke_width=1.5),
+                     Line([4.35, 2.05, 0], [4.5, -1.1, 0], color=GREY_B, stroke_width=1.5))
         tl = label(r"time: \ the first 10 ms, \ then a break", font_size=16, color=GREY_B).next_to(
             ll, DOWN, buff=0.12)
         final = wrapped_label(r"design for one shard per operation; \ treat the cross-shard path as the rare, \ "
@@ -352,8 +355,8 @@ class Sharding(VoiceoverScene):
             "shard by customer, and keep each customer's users, orders and invoices together, so their joins stay "
             "on one machine. <bookmark mark='b'/> A transaction that must change two shards needs Part 39's "
             "two-phase commit. Every shard votes yes and locks its rows. <bookmark mark='c'/> In Part 39's run, "
-            "the coordinator crashed just after deciding to commit, and every participant held its locks, unable "
-            "to finish, for thirty-one seconds, until the coordinator recovered. <bookmark mark='d'/> So design "
+            "the coordinator crashed just after deciding to commit, and every participant held its locks "
+            "for thirty-one seconds, until the coordinator recovered. <bookmark mark='d'/> So design "
             "for one shard per operation, and treat the cross-shard path as the rare, slow, carefully guarded "
             "exception."
         ) as vo:

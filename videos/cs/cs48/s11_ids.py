@@ -183,7 +183,7 @@ class Ids(VoiceoverScene):
             "mint four thousand and ninety-six IDs a millisecond, with no coordination beyond handing out machine "
             "numbers. <bookmark mark='d'/> UUID version seven, standardised in RFC 9562 in 2024, does the same "
             "in a hundred and twenty-eight bits: forty-eight bits of Unix milliseconds first, then seventy-four "
-            "random bits. The IDs sort by creation time, and need no machine numbers at all."
+            "random bits. They sort by creation time, with no machine numbers."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -210,12 +210,12 @@ class Ids(VoiceoverScene):
         seg1 = Line(ax.c2p(0, 997), ax.c2p(7, 1004), color=DATA, stroke_width=3)
         step = DashedLine(ax.c2p(7, 1004), ax.c2p(7, 999), color=NO, stroke_width=2)
         seg2 = Line(ax.c2p(7, 999), ax.c2p(12, 1004), color=DATA, stroke_width=3)
-        st = label(r"time daemon steps it back 5 ms", font_size=17, color=NO).next_to(step, RIGHT, buff=0.1).shift(
-            UP * 0.6)
+        st = wrapped_label(r"time daemon steps \\ it back 5 ms", 3.0, font_size=17, color=NO).move_to(
+            ax.c2p(5.0, 999.0))
         lvl = DashedLine(ax.c2p(0, 1003), ax.c2p(12, 1003), color=HEAD, stroke_width=1.5)
         d1, d2 = Dot(ax.c2p(6, 1003), radius=0.08, color=HEAD), Dot(ax.c2p(11, 1003), radius=0.08, color=NO)
         l1 = label(r"ID (1003, \ 0)", font_size=17, color=HEAD).next_to(d1, UL, buff=0.08)
-        l2 = label(r"ID (1003, \ 0) \ again", font_size=17, color=NO).next_to(d2, DOWN, buff=0.15).shift(LEFT * 0.4)
+        l2 = label(r"ID (1003, \ 0) \ again", font_size=17, color=NO).move_to(ax.c2p(10.4, 999.5))
         code = code_block([
             "now = max(clock_ms(), last)   # never step back",
             "seq = seq + 1 if now == last else 0",
@@ -232,7 +232,7 @@ class Ids(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(code, DOWN, buff=0.4).align_to(code, LEFT)
         foot = note(r"illustrative", font_size=16).to_edge(DOWN, buff=0.15)
         with self.voiceover(
-            "Time-ordered IDs inherit the troubles of clocks, Part 38's subject. <bookmark mark='a'/> Suppose the "
+            "Time-ordered IDs inherit the troubles of Part 38's clocks. <bookmark mark='a'/> Suppose the "
             "time daemon steps a machine's clock back five milliseconds. <bookmark mark='b'/> The generator sees a "
             "millisecond it has already used, restarts its sequence at zero, and mints an ID it minted before. "
             "<bookmark mark='c'/> The fix is to remember the last timestamp issued and never go below it: keep "
@@ -297,7 +297,7 @@ class Ids(VoiceoverScene):
                           r"\ and every ID tells when it was made", 4.4, font_size=19, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([4.6, 0.2, 0])
         foot = note(r"200,000 inserts, \ 100 keys a page, \ computed; \ pages drawn illustrative", font_size=16)
-        foot.to_edge(DOWN, buff=0.1).set_x(4.6)
+        foot.to_edge(DOWN, buff=0.1)
         with self.voiceover(
             "Ordered IDs pay off in the index, Part 17's B-tree. <bookmark mark='a'/> Insert two hundred thousand "
             "keys into the leaf level of a B-plus tree, a hundred keys to a page. Random keys land all over the "
@@ -305,7 +305,7 @@ class Ids(VoiceoverScene):
             "eighty-nine pages. <bookmark mark='b'/> Time-ordered keys only ever touch the rightmost page, so "
             "every page fills completely: two thousand pages. <bookmark mark='c'/> The bigger difference is the "
             "working set. The last ten thousand random inserts touched two thousand seven hundred and thirty "
-            "pages, nearly the whole tree, all of which must stay in memory; ordered inserts touched a hundred and "
+            "pages, all of which must stay in memory; ordered inserts touched a hundred and "
             "one. <bookmark mark='d'/> The price: the rightmost page, or chapter eight's last range shard, becomes "
             "the hot spot, and every ID reveals when it was made."
         ) as vo:
