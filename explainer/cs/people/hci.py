@@ -113,7 +113,8 @@ def _huffman_mean(ps):
 # ---------------------------------------------------------------- keystroke-level model
 
 KLM = {"K": 0.28, "P": 1.1, "B": 0.1, "H": 0.4, "M": 1.35}
-"""Operator times in seconds from Card, Moran and Newell (1980): K a keystroke (an average typist of 40 words a
+"""Operator times in seconds from Card, Moran and Newell (1980), with B (a mouse-button press) from Kieras's later
+KLM guide: K a keystroke (an average typist of 40 words a
 minute), P pointing with a mouse, B a button press, H homing between keyboard and mouse, M mental preparation."""
 
 
