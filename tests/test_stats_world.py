@@ -74,6 +74,23 @@ class WorldTests(unittest.TestCase):
         self.assertEqual(len(np.unique(idx)), 500)
         self.assertTrue(self.w.adult[idx].all())
 
+    def test_natural_experiments_part37(self):
+        s = self.w.schooling
+        q1 = s["q"] == 1
+        ds = s["school"][q1].mean() - s["school"][~q1].mean()
+        dw = s["logwage"][q1].mean() - s["logwage"][~q1].mean()
+        self.assertLess(ds, -0.1)  # first-quarter births: less schooling
+        self.assertAlmostEqual(dw / ds, World.RETURN_TO_SCHOOLING, delta=0.03)  # the Wald ratio
+        a = self.w.age[s["idx"]]
+        self.assertTrue(((a >= 30) & (a <= 50)).all())
+        r = self.w.scholarship
+        self.assertTrue(np.array_equal(r["offer"], r["score"] >= 60))
+        near = np.abs(r["score"] - 60) < 1
+        self.assertAlmostEqual((r["y1"] - r["y0"])[near].mean(), World.SCHOLARSHIP_EFFECT, delta=0.15)
+        ro = self.w.rollout
+        self.assertEqual([int((ro["G"] == c).sum()) for c in World.ROLLOUT_COHORTS], list(World.ROLLOUT_COUNTS[:3]))
+        self.assertTrue((ro["tau"][~ro["D"]] == 0).all() and (ro["tau"][ro["D"]] > 0).all())
+
 
 class MuseumTests(unittest.TestCase):
     def test_arbuthnot_every_year_more_boys(self):
