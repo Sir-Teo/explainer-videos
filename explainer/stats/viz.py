@@ -3305,3 +3305,44 @@ class RankStrip(VGroup):
 
     def drop(self, k: int, color=None) -> Dot:
         return Dot(self.slots[k - 1].get_center(), radius=min(0.12, self.slots[0].width * 0.4), color=color or S.ACCENT)
+
+
+class ConfidenceFunnel(VGroup):
+    """Anytime-valid inference, drawn (Part 58): on axes ``ax`` with a log10 time axis, a stream's running estimate and
+    the bands around it, one per method (a fixed-n interval, a confidence sequence).  A confidence sequence's band is a
+    funnel that narrows like sqrt(log log t / t) and contains the truth at every t at once with probability 1 - alpha;
+    a fixed-n band is narrower but is crossed by the truth, sooner or later, on most streams.  ``band(lo, hi, color)``
+    draws a band (a filled region), ``estimate(color)`` the running mean, ``truth(mu)`` the true value, and
+    ``misses(lo, hi, mu)`` dots at the times a band excludes the truth."""
+
+    def __init__(self, ax, t, est):
+        super().__init__()
+        self.ax = ax
+        self.t = np.asarray(t, float)
+        self.lt = np.log10(self.t)
+        self.est = np.asarray(est, float)
+        self.ylo, self.yhi = bounds(ax)[2], bounds(ax)[3]
+
+    def _clip(self, y):
+        return np.clip(np.asarray(y, float), self.ylo, self.yhi)
+
+    def band(self, lo, hi, color, opacity: float = 0.28, stroke_width: float = 2.0) -> VGroup:
+        lo, hi = self._clip(lo), self._clip(hi)
+        top = [self.ax.c2p(a, b) for a, b in zip(self.lt, hi)]
+        bot = [self.ax.c2p(a, b) for a, b in zip(self.lt[::-1], lo[::-1])]
+        fill = Polygon(*top, *bot, stroke_width=0, fill_color=color, fill_opacity=opacity)
+        e1 = VMobject(stroke_color=color, stroke_width=stroke_width).set_points_as_corners(top)
+        e2 = VMobject(stroke_color=color, stroke_width=stroke_width).set_points_as_corners(bot)
+        return VGroup(fill, e1, e2)
+
+    def estimate(self, color=None, stroke_width: float = 2.5) -> VMobject:
+        return VMobject(stroke_color=color or WHITE, stroke_width=stroke_width).set_points_as_corners(
+            [self.ax.c2p(a, b) for a, b in zip(self.lt, self._clip(self.est))])
+
+    def truth(self, mu: float, color=None) -> DashedLine:
+        return DashedLine(self.ax.c2p(self.lt[0], mu), self.ax.c2p(self.lt[-1], mu), color=color or GREY_B, stroke_width=2)
+
+    def misses(self, lo, hi, mu: float, color=None, radius: float = 0.045) -> VGroup:
+        lo, hi = np.asarray(lo, float), np.asarray(hi, float)
+        bad = np.flatnonzero((lo > mu) | (hi < mu))
+        return VGroup(*[Dot(self.ax.c2p(self.lt[i], mu), radius=radius, color=color or S.RESID) for i in bad])
