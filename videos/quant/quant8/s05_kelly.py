@@ -203,7 +203,7 @@ class Kelly(VoiceoverScene):
             f"{100 * k['growth_at_best']:.1f}. <bookmark mark='b'/> At {100 * k['ruin_leverage']:.0f} percent, September "
             "1931 alone would have wiped you out. Hindsight found that peak; next, what happens when you must guess it."
         ) as vo:
-            self.play(FadeIn(gr), FadeIn(src), Create(zero), Create(line), run_time=2.5)
+            self.play(FadeIn(gr), FadeIn(src), Create(zero), Create(line), run_time=0.8)
             vo.wait_until("a")
             self.play(FadeIn(one), FadeIn(ol), FadeIn(best), FadeIn(bl))
             vo.wait_until("b")
