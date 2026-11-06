@@ -104,7 +104,7 @@ class Crash(VoiceoverScene):
                              .align_to(frame, DOWN).align_to(frame, LEFT))
         wl = always_redraw(lambda: MathTex(rf"{100 * w[min(int(k.get_value()), len(w) - 1)]:.0f}\%", font_size=30,
                                            color=DEL).next_to(frame, UP, buff=0.12))
-        wcap = label(r"stock weight for the next return", font_size=22, color=DEL).next_to(frame, DOWN, buff=0.12)
+        wcap = wrapped_label(r"stock weight for the next return", 2.6, 22, DEL).next_to(frame, DOWN, buff=0.12)
         def state_date():
             j = min(int(k.get_value()), len(dates)-1)
             return ("close " + datetime_str(str(ins["end_oct"]["date"]))) if j >= n else ("before " + datetime_str(dates[j]))
