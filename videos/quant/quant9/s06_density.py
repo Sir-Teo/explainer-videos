@@ -104,7 +104,7 @@ class Density(VoiceoverScene):
             MathTex(rf"\int q = {b['mass']:.5f},\quad \int s\, q = " + f"{b['mean']:,.0f}".replace(",", "{,}"), font_size=24,
                     color=Q_C),
             MathTex(rf"F = {F:,.0f}".replace(",", "{,}"), font_size=24, color=FWD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(hr, DOWN, buff=0.35).align_to(hr, LEFT)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(hr, DOWN, buff=0.35).to_edge(RIGHT, buff=0.35)
         src = real_data(rf"the Surface, expiry {b['expiry']}, {b['T'] * 365:.0f} days")
         with self.voiceover(
             f"Tile the strike axis with butterflies on the Surface, sixteen days out. Each bar is a butterfly's price over its width squared. <bookmark mark='a'/> Halve the width, and again: the bars thin and their tops converge to a smooth curve. <bookmark mark='b'/> The risk-neutral density, Breeden and Litzenberger's limit of 1978. It integrates to {b['mass']:.5f}, and its mean, {b['mean']:,.0f} dollars, is the forward. The identity uses call prices; this numerical reconstruction also uses the fitted SVI specification. The derivative identity is model independent, but these calls are interpolated and extrapolated with SVI. Finite quotes alone do not uniquely determine a density. We use zero discounting for this illustration. Here the Surface dollar curves are undiscounted forward values: inverse Bitcoin premiums times the fitted forward. They are not spot-dollar premiums. A dollar present value also needs the dollar discount factor."
