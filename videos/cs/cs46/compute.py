@@ -20,6 +20,8 @@ Items:
     dremel      repetition and definition levels for a nested column, and the column rebuilt from them
     joins       broadcast against shuffle hash join, bytes moved; the crossover
     skew        a hot key overloading one worker, and salting
+    quantiles   a KLL sketch's p50, p99 and p99.9 of 200,000 latencies, at three sizes, against exact
+    commits     optimistic commits to a lakehouse table: retries against writers, conflicting and disjoint
     job         the Job as a stream of thirty novels, some late and two duplicated: exact, no dedup, early cut;
                 ledger row 17
 """
@@ -109,6 +111,16 @@ def compute_joins() -> dict:
 def compute_skew() -> dict:
     from explainer.cs.data import columnar as C
     return C.skew()
+
+
+def compute_quantiles() -> dict:
+    from explainer.cs.data import columnar as C
+    return C.quantile_experiment()
+
+
+def compute_commits() -> dict:
+    from explainer.cs.data import columnar as C
+    return {"conflicting": C.optimistic_commits(), "disjoint_appends": C.optimistic_commits(disjoint=True)}
 
 
 def compute_job() -> dict:

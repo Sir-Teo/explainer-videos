@@ -191,3 +191,103 @@ def skew(workers=16, rows=200_000, hot_share=0.2, salt=8, seed=2):
     salted = loads([(k + f"#{rng.randrange(salt)}") if k == "hot" else k for k in keys])
     return {"workers": workers, "ideal": rows / workers, "max_plain": max(plain), "max_salted": max(salted),
             "slowdown_plain": max(plain) / (rows / workers), "slowdown_salted": max(salted) / (rows / workers)}
+
+
+# ---------------------------------------------------------------- quantile sketches
+
+class KLL:
+    """A simplified KLL sketch (Karnin, Lang and Liberty 2016): levels of buffers; a full level is sorted and every
+    other item (a random half) is promoted with double weight.  Space grows with the log of the stream."""
+
+    def __init__(self, k=200, seed=0):
+        self.k = k
+        self.levels = [[]]
+        self.rng = random.Random(seed)
+
+    def cap(self, h):
+        return max(2, int(self.k * (2 / 3) ** (len(self.levels) - 1 - h)))
+
+    def add(self, x):
+        self.levels[0].append(x)
+        h = 0
+        while len(self.levels[h]) >= self.cap(h):
+            buf = sorted(self.levels[h])
+            off = self.rng.randrange(2)
+            if h + 1 == len(self.levels):
+                self.levels.append([])
+            self.levels[h + 1] += buf[off::2]
+            self.levels[h] = []
+            h += 1
+            if h >= len(self.levels):
+                break
+
+    def size(self):
+        return sum(len(b) for b in self.levels)
+
+    def quantile(self, q):
+        items = sorted((x, 2 ** h) for h, b in enumerate(self.levels) for x in b)
+        total = sum(w for _, w in items)
+        acc = 0
+        for x, w in items:
+            acc += w
+            if acc >= q * total:
+                return x
+        return items[-1][0]
+
+
+def quantile_experiment(n=200_000, ks=(50, 200, 800), seed=3):
+    """Latencies (lognormal with a heavy tail): estimated p50, p99 and p99.9 from sketches of several sizes against
+    the exact values, with the rank error of each estimate."""
+    rng = random.Random(seed)
+    xs = [rng.lognormvariate(3, 0.6) * (10 if rng.random() < 0.01 else 1) for _ in range(n)]
+    srt = sorted(xs)
+
+    def rank(v):
+        import bisect
+        return bisect.bisect_left(srt, v) / n
+    exact = {q: srt[int(q * n)] for q in (0.5, 0.99, 0.999)}
+    rows = []
+    for k in ks:
+        sk = KLL(k, seed)
+        for x in xs:
+            sk.add(x)
+        est = {q: sk.quantile(q) for q in exact}
+        rows.append({"k": k, "stored": sk.size(), "estimates": est,
+                     "rank_error": {q: abs(rank(est[q]) - q) for q in exact}})
+    return {"n": n, "exact": exact, "rows": rows}
+
+
+# ---------------------------------------------------------------- lakehouse commits
+
+def optimistic_commits(writers=(1, 2, 4, 8, 16), commits_each=50, work=1.0, commit_time=0.05, seed=4,
+                       disjoint=False):
+    """Writers to one table on object storage, as in Iceberg or Delta: each reads the current snapshot, works, and
+    tries to swap the table's pointer from that snapshot to its new one (compare-and-swap).  If another commit won
+    in between, it retries; with disjoint=True, non-conflicting appends are rebased instead of redone."""
+    rng = random.Random(seed)
+    out = []
+    for w in writers:
+        version = 0
+        t = 0.0
+        events = []
+        for i in range(w):
+            events.append((rng.uniform(0, work), i, 0, 0))   # (finish time, writer, base version, done)
+        done = [0] * w
+        retries = 0
+        import heapq
+        heapq.heapify(events)
+        while events:
+            ft, i, base, _ = heapq.heappop(events)
+            t = ft
+            if base == version or disjoint:
+                version += 1
+                done[i] += 1
+                if done[i] < commits_each:
+                    heapq.heappush(events, (t + commit_time + rng.expovariate(1 / work), i, version, 0))
+            else:
+                retries += 1
+                heapq.heappush(events, (t + commit_time + rng.expovariate(1 / work), i, version, 0))
+        out.append({"writers": w, "commits": w * commits_each, "retries": retries,
+                    "retry_per_commit": retries / (w * commits_each), "time": t,
+                    "throughput": w * commits_each / t})
+    return out
