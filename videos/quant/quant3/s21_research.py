@@ -29,7 +29,7 @@ class Research(VoiceoverScene):
                             "abnormal earning. James Ohlson's model of how they evolve turns it into a formula, and the "
                             "data say how long excess profits last."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.4)
 
     def dynamics(self):
         rows = [cmath(r"b_t", r"=", r"b_{t-1} + x_t - d_t", font_size=34, colors={r"b_t": EQUITY}),
@@ -42,7 +42,8 @@ class Research(VoiceoverScene):
                 why(r"Ohlson (1995): they decay at rate $\omega$, as competition erodes excess profits, and are pushed by "
                     r"'other information' $\nu$ that is not yet in the accounts (an order book, a patent, an analyst's "
                     r"forecast)"),
-                why(r"the other information decays too, at rate $\gamma$; both rates lie in $[0, 1)$")]
+                why(r"$0 \le \omega,\gamma < 1$, $r>0$; shocks have conditional mean zero; discounted future book "
+                    r"vanishes in expectation")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.3, buff=0.42, edge=6.9)
         with self.voiceover(
             "Four equations. <bookmark mark='a'/> Clean surplus: book equity changes only by earnings, less dividends. "
@@ -52,7 +53,7 @@ class Research(VoiceoverScene):
             "accounts. <bookmark mark='d'/> And that information decays too, at a rate gamma. Two numbers describe "
             "how long an advantage lasts."
         ) as vo:
-            step(0)
+            step(0, run_time=0.5)
             vo.wait_until("a")
             self.wait(0.1)
             vo.wait_until("b")
@@ -74,8 +75,8 @@ class Research(VoiceoverScene):
                       r"R = 1 + r", font_size=32, colors={r"\alpha_1 = \frac{\omega}{R - \omega}": GAIN})]
         whys = [why(r"Chapter 8's residual-income identity: dividends discounted are book plus discounted abnormal earnings, "
                     r"given clean surplus and a transversality condition"),
-                why(r"iterate the dynamics: each period multiplies $x^a$ by $\omega$ and adds a geometrically decaying push "
-                    r"from $\nu$; the shocks have mean zero"),
+                why(r"iterate for $\omega\ne\gamma$; when $\omega=\gamma$, the push is "
+                    r"$\tau\omega^{\tau-1}\nu_t$ (its continuous limit)"),
                 why(r"sum the geometric series: the value is linear in the state, book plus two multiples"),
                 why(r"the first sum is $\sum(\omega/R)^\tau$; the second, after partial fractions, collapses to "
                     r"$R/((R - \omega)(R - \gamma))$")]
@@ -86,8 +87,9 @@ class Research(VoiceoverScene):
             "multiplies today's abnormal earnings by omega, and the other information adds a push that itself "
             "decays. <bookmark mark='c'/> Sum the geometric series, and the value is linear in what is known today: "
             "book, plus a multiple of abnormal earnings, plus a multiple of the other information. <bookmark "
-            "mark='d'/> The first multiple is omega over R minus omega. As persistence approaches one, it explodes: "
-            "an advantage that never fades is a perpetuity."
+            "mark='d'/> The first multiple is omega over R minus omega. As persistence approaches one, it tends to "
+            "one over r, a finite perpetuity multiple when r is positive. At eight percent, that limit is twelve "
+            "and a half. The apparent singularity when omega equals gamma also has a finite limit."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -118,17 +120,18 @@ class Research(VoiceoverScene):
         with self.voiceover(
             "Check it against brute force. <bookmark mark='a'/> Simulate twenty thousand futures of four hundred "
             "years each, discount every abnormal earning, and average. For each pair of persistence rates the "
-            "formula and the simulation agree to within the simulation's own noise."
+            "formula and the simulation are close. Monte Carlo noise and finite-horizon truncation remain; "
+            "agreement here is a numerical check, not a proof."
         ) as vo:
-            self.play(FadeIn(tab[0]), FadeIn(foot))
+            self.play(FadeIn(tab[0]), FadeIn(tab[1]), FadeIn(foot))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.3))
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in tab[2:]], lag_ratio=0.3))
         self.wait(0.4)
         self.clear_scene()
 
     def sensitivity(self, t):
         r = t["r"]
-        ws = np.linspace(0, 0.97, 200)
+        ws = np.linspace(0, 1, 201)
         pb = 1 + ws / (1 + r - ws) * 0.05
         g = axes([0, 1], [0.95, 1.7], x_length=7.6, y_length=4.0, xlabel=r"persistence $\omega$",
                  ylabel=r"price-to-book, abnormal ROE 5\%, $r$ = 8\%", xticks=[0, 0.25, 0.5, 0.75, 1], yticks=[1, 1.25, 1.5],
@@ -154,15 +157,15 @@ class Research(VoiceoverScene):
             "What persistence is worth. <bookmark mark='a'/> A firm earning five percent a year above its cost of "
             "equity, on each dollar of book. If the advantage vanishes at once, it is worth book. If it decays at "
             "Dechow, Hutton and Sloan's estimate of point six two, about seven percent more. <bookmark mark='b'/> And "
-            "if it never fades, sixty-two percent more: the curve bends up steeply as omega approaches one. Almost all "
-            "the disagreement about what a profitable firm is worth is disagreement about omega."
+            "if it never fades, sixty-two percent more: the curve bends up steeply as omega approaches one. Here "
+            "only persistence changes; real firms also differ "
+            "in book value, earnings, discount rates and other information."
         ) as vo:
-            self.play(FadeIn(g))
+            self.play(FadeIn(g), Create(line), run_time=1)
             vo.wait_until("a")
-            self.play(Create(line), run_time=2)
             self.play(FadeIn(marks[0]), FadeIn(side[:2]))
             vo.wait_until("b")
-            self.play(FadeIn(rw), FadeIn(side[3]), FadeIn(side[4]))
+            self.play(FadeIn(marks[1]), FadeIn(side[2:]), FadeIn(rw))
         self.wait(0.4)
         self.clear_scene()
 
@@ -190,17 +193,17 @@ class Research(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.35)
         fit_right(side)
         with self.voiceover(
-            "Now the data. <bookmark mark='a'/> Every American filer with book equity above ten million dollars, "
-            "fiscal 2010 to 2020, from the SEC's XBRL frames: this year's abnormal earnings against next year's, both "
+            "Now the data. <bookmark mark='a'/> Eligible American filers with matched XBRL frame observations and "
+            "book equity above ten million dollars, fiscal 2010 to 2020: this year's abnormal earnings against next year's, both "
             "per dollar of last year's book. <bookmark mark='b'/> Pooled, omega is point eight three, more persistent "
             "than Dechow, Hutton and Sloan found for 1976 to 1995. <bookmark mark='c'/> But split by sign, and the "
-            "picture is lopsided. Profits above the cost of equity fade fast, at point five four: competition at "
-            "work. Shortfalls below it linger, at point nine two: firms that earn too little on their capital tend "
-            "to go on doing so. A linear model with one omega averages two different economies."
+            "picture is lopsided. Profits above the cost of equity have a slope of point five four; shortfalls have "
+            "a slope of point nine two. These are descriptive pooled regressions, not causal estimates of competition "
+            "or a clean estimate of structural omega: the other-information state is omitted."
         ) as vo:
-            self.play(FadeIn(g))
+            self.play(FadeIn(g), FadeIn(dots), run_time=0.6)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.0005, run_time=2))
+            self.play(Indicate(dots, scale_factor=1.02, color=GREY_A))
             vo.wait_until("b")
             self.play(Create(fit), FadeIn(side[0]))
             vo.wait_until("c")
@@ -214,8 +217,8 @@ class Research(VoiceoverScene):
                           r"proxied it with analysts' forecasts. How to measure it from text or prices (Part 28) is open",
                           width=12.4, font_size=18),
             desk_question(r"open: conservatism and nonlinearity", r"accounting conservatism makes book understate value "
-                          r"(Feltham and Ohlson 1995), and the asymmetry above suggests the dynamics are not linear; a "
-                          r"tractable nonlinear model with a closed-form value is missing", width=12.4, font_size=18),
+                          r"(Feltham and Ohlson 1995). Which nonlinear dynamics capture persistence without losing "
+                          r"tractable valuation?", width=12.4, font_size=18),
             desk_question(r"open: does it price?", r"LID values with estimated $\omega$ underestimate market prices on "
                           r"average and forecast returns weakly; whether the gap is mispricing, risk or missing $\nu$ is debated",
                           width=12.4, font_size=18),
@@ -223,20 +226,22 @@ class Research(VoiceoverScene):
         with self.voiceover(
             "Three open questions. <bookmark mark='a'/> The other information is not observed. Dechow, Hutton and "
             "Sloan used analysts' forecasts; how to measure it from text or prices is the subject of Part 28, and "
-            "open. <bookmark mark='b'/> Conservative accounting makes book understate value, and the lopsided "
-            "persistence says the dynamics are not linear; a tractable nonlinear model with a closed-form value is "
-            "missing. <bookmark mark='c'/> And values built this way sit below market prices on average and forecast "
+            "open. <bookmark mark='b'/> Conservative accounting can make book understate value. Which nonlinear "
+            "dynamics best capture the persistence patterns while keeping valuation tractable? <bookmark mark='c'/> "
+            "And values built this way can sit below market prices and forecast "
             "returns only weakly: mispricing, risk, or the missing other information, nobody has settled."
         ) as vo:
+            self.play(FadeIn(cards[0]))
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
-                self.play(FadeIn(cards[k], shift=UP * 0.2))
+                if k:
+                    self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
 
     def question(self):
         q = pause_card(r"$b = 50$, $x^a = 4$, $\nu = 1$, $\omega = 0.7$, $\gamma = 0.5$, $r = 10\%$. Find $\alpha_1$, $\alpha_2$ "
-                       r"and the value. How much of it is the other information?")
+                       r"and the value. How much of it is the other information?").move_to(ORIGIN)
         with self.voiceover(
             "Pause and predict. Book of fifty, abnormal earnings of four, other information of one, omega point seven, "
             "gamma point five, and a ten percent cost of equity. Find the two multiples and the value. How much of it "
@@ -244,4 +249,41 @@ class Research(VoiceoverScene):
         ):
             self.play(FadeIn(q))
         self.wait(0.5)
+        self.clear_scene()
+        self.answer()
+
+    def answer(self):
+        title = label(r"From information to value", font_size=36, color=VALUE).to_edge(UP, buff=0.5)
+        rows = VGroup(
+            MathTex(r"R=1.1,\quad\alpha_1=\frac{0.7}{1.1-0.7}=1.75", font_size=36, color=VALUE),
+            MathTex(r"\alpha_2=\frac{1.1}{(1.1-0.7)(1.1-0.5)}=4.5833", font_size=36, color=PRICE),
+            MathTex(r"P=\underbrace{50}_{\text{book}}+\underbrace{7}_{\alpha_1 x^a}"
+                    r"+\underbrace{4.5833}_{\alpha_2\nu}=61.5833", font_size=38),
+            MathTex(r"\text{other information}:\quad\frac{4.5833}{61.5833}=7.44\%", font_size=32, color=PRICE),
+        ).arrange(DOWN, buff=0.45).move_to(DOWN * 0.1)
+        amounts = (50, 7, 4.583333333333333)
+        pieces = VGroup(*[
+            Rectangle(width=10.5 * amount / sum(amounts), height=0.35, stroke_width=0,
+                      fill_color=color, fill_opacity=0.85)
+            for amount, color in zip(amounts, (EQUITY, VALUE, PRICE))
+        ]).arrange(RIGHT, buff=0).move_to(DOWN * 3)
+        nums = VGroup(*[MathTex(text, font_size=20, color=color).next_to(piece, UP, buff=0.08)
+                        for text, piece, color in zip(("50", "7", "4.58"), pieces, (EQUITY, VALUE, PRICE))])
+        with self.voiceover(
+            "Reveal the answer. The gross discount factor is one point one, so the abnormal-earnings multiple is "
+            "one point seven five. <bookmark mark='a'/> The other-information multiple is about four point five "
+            "eight three. <bookmark mark='b'/> Book contributes fifty, abnormal earnings seven, and other information "
+            "four point five eight three: total value, sixty-one point five eight three. <bookmark mark='c'/> Other "
+            "information supplies about seven point four four percent. A small state can matter because it feeds "
+            "earnings for more than one year."
+        ) as vo:
+            self.play(FadeIn(title), FadeIn(rows[0]))
+            for i, mark in enumerate(("a", "b", "c"), 1):
+                vo.wait_until(mark)
+                self.play(FadeIn(rows[i], shift=UP * 0.15))
+                if i == 2:
+                    self.play(LaggedStart(*[GrowFromEdge(piece, LEFT) for piece in pieces], lag_ratio=0.2), FadeIn(nums))
+                elif i == 3:
+                    self.play(Indicate(pieces[2], color=PRICE, scale_factor=1.1))
+        self.wait(0.4)
         self.clear_scene()

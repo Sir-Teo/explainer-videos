@@ -93,28 +93,35 @@ class House(VoiceoverScene):
                  ylabel=r"GE revenue, \$ billion, as the store answers", xticks=[2010, 2014, 2018],
                  yticks=[100, 150], xfmt=lambda v: f"{int(v)}", font_size=17).to_edge(RIGHT, buff=0.5).shift(UP * 0.2)
         hx = h.ax
+        years = np.unique(X)
+        tag = live(r"\text{as of}", t.get_value(), 1, font_size=24, color=QC.HOUSE)
+        tag.move_to(ax.c2p(2014.5, 2022.75))
+        tag[1].add_updater(lambda m: m.set_value(t.get_value()))
 
         def lit():
             tt = t.get_value()
-            out = VGroup()
             line = Line(ax.c2p(2008.5, tt), ax.c2p(2021.2, tt), color=QC.HOUSE, stroke_width=3)
-            # a fixed readout just above the plane, clear of the sweeping line and of the dots, in the line's colour
-            tag = live(r"\text{as of}", tt, 1, font_size=24, color=QC.HOUSE).move_to(ax.c2p(2014.5, 2022.75))
-            out.add(line, tag)
+            selected, history = VGroup(), VGroup()
             xs, ys = [], []
-            for e in np.unique(X):
+            for e in years:
                 m = (X == e) & (Y <= tt)
                 if not m.any():
+                    # Keep the same children at every date; changing their count
+                    # makes redraw align an old text object with a new dot.
+                    selected.add(Dot(ax.c2p(e, 2010), radius=0.08, color=VALUE).set_opacity(0))
+                    history.add(Dot(hx.c2p(e, 90), radius=0.05, color=VALUE).set_opacity(0))
                     continue
                 j = np.flatnonzero(m)[np.argmax(Y[m])]
-                out.add(Dot(ax.c2p(X[j], Y[j]), radius=0.08, color=VALUE))
+                selected.add(Dot(ax.c2p(X[j], Y[j]), radius=0.08, color=VALUE))
+                history.add(Dot(hx.c2p(e, np.clip(vals[j], 90, 190)), radius=0.05, color=VALUE))
                 xs.append(e)
                 ys.append(vals[j])
-            if len(xs) > 1:
-                out.add(VMobject(stroke_width=3, stroke_color=VALUE).set_points_as_corners(
-                    [hx.c2p(a, np.clip(b, 90, 190)) for a, b in zip(xs, ys)]))
-            out.add(*[Dot(hx.c2p(a, np.clip(b, 90, 190)), radius=0.05, color=VALUE) for a, b in zip(xs, ys)])
-            return out
+            points = [hx.c2p(a, np.clip(b, 90, 190)) for a, b in zip(xs, ys)]
+            if len(points) < 2:
+                points = (points or [hx.c2p(2009, 90)]) * 2
+            path = VMobject(stroke_width=3, stroke_color=VALUE, fill_opacity=0).set_points_as_corners(points)
+            path.set_stroke(opacity=int(len(xs) > 1))
+            return VGroup(line, selected, path, history)
 
         lv = always_redraw(lit)
         cap = wrapped_label(r"each dot: one filed value of one year's revenue; the store's answer for each year is the "
@@ -132,11 +139,12 @@ class House(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.02, run_time=2.5))
             vo.wait_until("a")
             self.play(FadeIn(h), FadeIn(cap))
-            self.add(lv)
+            self.add(lv, tag)
             self.play(t.animate.set_value(2014.0), run_time=5, rate_func=linear)
             vo.wait_until("b")
             self.play(t.animate.set_value(2021.9), run_time=8, rate_func=linear)
         lv.clear_updaters()
+        tag[1].clear_updaters()
         self.wait(0.4)
         self.clear_scene()
 

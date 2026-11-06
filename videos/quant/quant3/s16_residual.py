@@ -82,10 +82,12 @@ class ResidualIncome(VoiceoverScene, ThreeDScene):
         rd = VGroup(MathTex(r"\text{ROE} = r:\ P/B = 1\ \text{for every } g", font_size=30, color=QC.HOUSE),
                     MathTex(r"\text{ROE} = 12\%,\ g = 4\%:\ P/B = 2", font_size=30, color=WHITE))
         rd.arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(UR, buff=0.4)
+        clipnote = wrapped_label(r"display: $P/B$ clipped to 0--5; $g>\text{ROE}$ implies net capital contributions",
+                                 7.0, 16, GREY_B).to_corner(DL, buff=0.3)
         dot = Dot3D(ax.c2p(0.12, 0.04, 2.0), radius=0.1, color=WHITE)
         self.set_camera_orientation(phi=68 * DEGREES, theta=-115 * DEGREES, zoom=0.72)
-        self.add_fixed_in_frame_mobjects(hint, rd)
-        self.remove(hint, rd)
+        self.add_fixed_in_frame_mobjects(hint, rd, clipnote)
+        self.remove(hint, rd, clipnote)
         with self.voiceover(
             "Draw that formula as a surface: return on equity across, growth of book running back, price-to-book as the height, "
             "at an eight percent cost of equity. <bookmark mark='a'/> The grey plane is a price-to-book of one, and the surface "
@@ -94,7 +96,7 @@ class ResidualIncome(VoiceoverScene, ThreeDScene):
             "chapter six's ridge in the accountant's language. <bookmark mark='c'/> A firm earning twelve percent on a book that "
             "grows at four sits at a price-to-book of two."
         ) as vo:
-            self.play(FadeIn(hint), Create(ax), run_time=1.5)
+            self.play(FadeIn(hint), FadeIn(clipnote), Create(ax), run_time=1.5)
             self.play(Create(surf), run_time=3)
             vo.wait_until("a")
             self.play(FadeIn(one), Create(seam), FadeIn(rd[0]))
@@ -102,9 +104,9 @@ class ResidualIncome(VoiceoverScene, ThreeDScene):
             self.move_camera(theta=-175 * DEGREES, phi=78 * DEGREES, run_time=4)
             vo.wait_until("c")
             self.move_camera(theta=-120 * DEGREES, phi=66 * DEGREES, run_time=2, added_anims=[FadeIn(dot), FadeIn(rd[1])])
-        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, surf, one, seam, dot)),
-                                                                  FadeOut(hint), FadeOut(rd)], run_time=1.5)
-        self.clear_scene()
+        self.play(FadeOut(VGroup(ax, surf, one, seam, dot)), FadeOut(hint), FadeOut(rd), FadeOut(clipnote), run_time=0.4)
+        self.set_camera_orientation(phi=0, theta=-90 * DEGREES, zoom=1)
+        self.clear()
 
     def fade(self, ri):
         roe, res = np.asarray(ri["fade_roe"]), np.asarray(ri["fade_ri"])

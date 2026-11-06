@@ -53,7 +53,7 @@ class Outro(VoiceoverScene):
     def recap(self):
         s, c, o = self.s, self.c, self.o
         items = [
-            (rf"prices moved {s['ratio_changes']:.0f}$\times$ as much as the present value of the dividends paid", PRICE),
+            (rf"annual price changes were {s['ratio_changes']:.0f}$\times$ as volatile as a constant-rate dividend benchmark", PRICE),
             (r"Gordon: $V = D_1/(r - g)$; a stock's duration is $(1 + r)/(r - g)$, but $g$ moves with $r$", VALUE),
             (r"the three statements are one double-entry machine; earnings $=$ cash flow $+$ accruals", CASH),
             (r"every reported number has two dates; the House answers as of the day it was filed", QC.HOUSE),
@@ -74,8 +74,9 @@ class Outro(VoiceoverScene):
         if rows.width > 13.0:
             rows.scale_to_fit_width(13.0)
         with self.voiceover(
-            f"Part three in ten lines. Prices moved about {s['ratio_changes']:.0f} times as much as the value of the dividends "
-            "paid. Gordon makes a stock a long bond, but in the data growth moves with the rate. The three statements are one "
+            f"Part three in ten lines. Annual price changes were about {s['ratio_changes']:.0f} times as volatile as a "
+            "constant-rate dividend benchmark; that descriptive chart is not a formal efficiency test. Gordon makes "
+            "a stock a long bond, but in the data growth moves with the rate. The three statements are one "
             "double-entry machine, and earnings are cash plus accruals. Every reported number has two dates. Growth adds value "
             "only above the cost of capital, and a price implies a cost of capital. Residual income turns value into book plus "
             "excess returns. A high dividend yield must be paid for, and since 1945 returns have paid it. Financing and payout "
@@ -191,11 +192,9 @@ class Outro(VoiceoverScene):
              r"(2024); Islam et al.\ (2023); Jensen, Kelly and Pedersen (2023); Gormsen and Lazarus (2023); Eisfeldt, "
              r"Kim and Papanikolaou (2022); SEC releases on Enron, Luckin and Kraft Heinz"], font_size=19)
         with self.voiceover(
-            "The textbook chapters this part covers, and the papers and reports it draws on. Every number in it was computed by the "
-            "series' own code from public data: Shiller's century and a half of prices, Kenneth French's portfolios, the "
-            "open-source predictor returns, Damodaran's implied premiums, Yahoo's prices, and filings from the SEC's EDGAR. "
-            "<bookmark mark='a'/> Next, Part four opens the mathematical toolkit: martingales and measure, the precise meaning of a "
-            "fair game, and why you cannot beat one by changing your bets."
+            "The textbook chapters this part covers, with its papers and public data sources, are listed here and "
+            "linked in the notes. <bookmark mark='a'/> Next, Part four: martingales and measure, the precise meaning "
+            "of a fair game, and why changing your bets cannot beat one."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")

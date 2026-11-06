@@ -1,7 +1,8 @@
 # Quant, Built: sequential polish and QA
 
 Source branch: `quantitative-finance`, starting at `20b4e7e0`.
-Part 1 branch: `polish/quantitative-finance`; Part 2 branch: `polish/quant2`.
+Part 1 branch: `polish/quantitative-finance`; Part 2 branch: `polish/quant2`;
+Part 3 branch: `polish/quant3`.
 The pass was rebased onto `11c5c9d4` to preserve the concurrent Part 31 work and
 shared axis-label fix; final checks use that updated base.
 
@@ -17,7 +18,8 @@ pass. A successful render is not, by itself, visual approval.
 | --- | --- |
 | 1 | Visual pass complete; full production-voice listening pending |
 | 2 | Visual pass complete; full production-voice listening pending |
-| 3–43 | Pending; do not infer approval from historical build notes |
+| 3 | Visual pass complete; full production-voice listening pending |
+| 4–43 | Pending; do not infer approval from historical build notes |
 
 ## Part 1: The Fair Game
 
@@ -89,7 +91,7 @@ Local review artifacts (git-ignored):
 - `media/quant1/narrated_qa/videos/s01_hook/480p15/Hook.mp4`: actual narrated English
   opening sample.
 
-Part 2's completed visual pass is recorded below. Parts 3–43 remain pending.
+The completed visual passes for Parts 2 and 3 are recorded below. Parts 4–43 remain pending.
 
 
 ## Part 2: The Machinery of Markets
@@ -136,7 +138,7 @@ Local review artifacts (git-ignored): `renders/quant2_polished_silent.mp4`, an E
 480p15 preview (75:49 including animation and pauses) with 21 embedded chapters and
 English subtitles, plus its `.srt` and
 `.chapters.txt`; and `media/quant2/narrated_qa/videos/s01_hook/480p15/Hook.mp4`, the
-actual narrated English opening sample. Part 3 is next in the sequential visual pass.
+actual narrated English opening sample. Part 3’s visual pass is recorded below.
 
 Reproduce Part 2 from the repository root (refresh the two changed cache items):
 
@@ -149,4 +151,65 @@ python tools/qa_series.py quant2 --motion --cached-only --resume --timeout 1800
 python tools/zh_lines.py quant2 --todo
 python tools/lecture_length.py quant2 --floor 50
 EXPLAINER_TTS=kokoro EXPLAINER_VOICE=af_heart python tools/qa_audio.py quant2 --only Hook Margin Research
+```
+
+## Part 3: Value, Accounting and the Firm
+
+Visual pass complete on `polish/quant3`, stacked on Part 2:
+
+- Distinguish the annual-change Shiller illustration from the formal variance bound,
+  and state its constant discount rate and terminal-price assumptions.
+- Replace the claim that Ohlson's multiple diverges at persistence one with its
+  finite `1/r` limit, and explain the equal-persistence limit.
+- Add a staged answer and contribution bar for the Ohlson exercise. Show the EDGAR
+  slope marker and its implied multiple rather than silently omitting them.
+- State the descriptive nature of the pooled filing regressions, and qualify causal
+  claims from Treasury-yield regressions and payout timelines.
+- Distinguish duration's local −33% approximation from the exact −25% finite change.
+- Correct the equity/debt surface description, the day-0–1 earnings-event labels,
+  and the treatment of net buybacks in aggregate and per-share valuation.
+- Explain that negative takeover probabilities expose an inconsistent fallback
+  assumption; physical probabilities require a risk-premium assumption.
+- Correct the SEC's 2009–2011 XBRL phase-in and remove empty 3D camera resets.
+- Keep as-of animation children stable so text is not copied into newly added dots.
+- Show present value outside the duration chart's 60-year window, label surface
+  display caps, and keep the takeover-model interpretation inside its panel.
+- Correct ASC 842 operating leases: EBITDA stays 100; including lease debt gives
+  EV/EBITDA 13.5 and debt/EBITDA 4.5. A rent add-back to EBITDA 120 is a separate
+  analyst adjustment. Checked against ASU 2016-02, paragraph 842-20-25-6.
+- Update the corresponding Chinese narration and captions.
+
+Validation: all 21 English and 21 Chinese narration-beat frame checks pass, as do
+all 21 English silent playback checks, with zero automated warnings. Every receipt
+matches the final source fingerprint and input signatures. Narration-beat contact
+sheets and sampled playback frames were visually reviewed, with focused rechecks
+of the changed layouts and transitions. All 22 compute items were regenerated
+against the frozen data checksums without changing registered forecast code or
+the sealed envelope. Twelve focused valuation/accounting tests pass; Chinese
+narration covers 129/129 lines; the narration estimate is 64.6 minutes.
+
+The [compact evidence record](quant3-polish-evidence.json) captures the final source
+fingerprint, input hashes, 63 scene receipts, visual-review scope and three speech
+reports. All 19 sampled English lines (Hook, Duration and Research) pass signal and
+alignment checks against current receipts. The actual 199-second narrated opening
+matches the final narration and has no blank or sparse-screen warnings. Full
+production-voice listening and synchronization remain pending; these checks do not
+certify pronunciation. Chinese coverage is narration-beat frame QA rather than
+whole-part narrated playback.
+
+Local review artifacts (git-ignored): `renders/quant3_polished_silent.mp4`, an English
+480p15 preview (75:58 including animation and pauses) with 21 embedded chapters
+and English subtitles; its `.srt` and `.chapters.txt`; and
+`media/quant3/narrated_qa/videos/s01_hook/480p15/Hook.mp4`, the narrated opening
+sample. Part 4 is next in the sequential visual pass.
+
+```bash
+SEC_USER_AGENT='explainer-videos research bot' python -m videos.quant.quant3.compute
+python tools/qa_series.py quant3 --cached-only --resume --timeout 1200
+python tools/qa_series.py quant3 --lang zh --cached-only --resume --timeout 1200
+python tools/qa_series.py quant3 --motion --cached-only --resume --timeout 1800
+python -m pytest tests/test_quant3_valuation_examples.py tests/test_quant_house.py -k 'quant3_valuation_examples or part3 or valuation_closed or modigliani or fundamentals_store' -q
+python tools/zh_lines.py quant3 --todo
+python tools/lecture_length.py quant3 --floor 50
+EXPLAINER_TTS=kokoro EXPLAINER_VOICE=af_heart python tools/qa_audio.py quant3 --only Hook Duration Research
 ```

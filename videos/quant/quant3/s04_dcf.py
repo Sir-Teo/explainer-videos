@@ -71,7 +71,8 @@ class DCF(VoiceoverScene, ThreeDScene):
             cmath(r"\frac{\partial\,\text{TV}}{\partial g} > 0", r"\iff", r"\text{RONIC} > \text{WACC}", font_size=42,
                   colors={r"\text{RONIC} > \text{WACC}": QC.HOUSE}),
         ]
-        whys = [why(r"Gordon on free cash flow, with $\text{IR} = g/\text{RONIC}$: the value-driver formula (Koller et al.)"),
+        whys = [why(r"steady state: positive NOPAT, fixed RONIC and WACC, $g<\text{WACC}$; "
+                    r"$\text{IR}=g/\text{RONIC}$ (Koller et al.)"),
                 why(r"differentiate in $g$: the sign is that of $\text{RONIC} - \text{WACC}$"),
                 why(r"growth creates value only where new investment earns more than it costs")]
         step = ladder(self, rows, whys, keep=3, top=3.0, x=-0.6, buff=0.5, edge=6.9)
@@ -129,9 +130,9 @@ class DCF(VoiceoverScene, ThreeDScene):
             "sixty. <bookmark mark='b'/> The terminal value, one line of arithmetic about everything after, is worth nearly "
             f"fifteen hundred: {100 * d['base_tv_share']:.0f} percent of the answer."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(side[:2]))
+            self.play(FadeIn(g), FadeIn(side[:2]), GrowFromEdge(bars[0], DOWN), FadeIn(xl[0]))
             vo.wait_until("a")
-            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars[:5]], lag_ratio=0.2), FadeIn(xl[:5]),
+            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars[1:5]], lag_ratio=0.2), FadeIn(xl[1:5]),
                       FadeIn(side[2]))
             vo.wait_until("b")
             self.play(GrowFromEdge(bars[5], DOWN), FadeIn(xl[5]), FadeIn(side[3]), FadeIn(tv))
@@ -189,9 +190,9 @@ class DCF(VoiceoverScene, ThreeDScene):
             vo.wait_until("c")
             self.move_camera(theta=-160 * DEGREES, phi=70 * DEGREES, added_anims=[FadeIn(rng)],
                              run_time=max(vo.remaining(1.0) - 1.0, 1.0))
-        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, surf, p0, p1)), FadeOut(hint),
-                                                                  FadeOut(rd), FadeOut(rng)], run_time=1.5)
-        self.clear_scene()
+        self.play(FadeOut(VGroup(ax, surf, p0, p1)), FadeOut(hint), FadeOut(rd), FadeOut(rng), run_time=0.4)
+        self.set_camera_orientation(phi=0, theta=-90 * DEGREES, zoom=1)
+        self.clear()
 
     def ronic(self, mc):
         gs, ron, S = np.asarray(mc["gs"]), np.asarray(mc["ronic"]), np.asarray(mc["vd"])
@@ -218,16 +219,18 @@ class DCF(VoiceoverScene, ThreeDScene):
                     MathTex(r"\text{RONIC } 16\%:\ \text{growth uphill}", font_size=28, color=QC.GAIN),
                     MathTex(r"\text{RONIC } 5\%:\ \text{growth downhill}", font_size=28, color=QC.LOSS))
         rd.arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(DR, buff=0.5)  # the landscape peaks top-right; the lower-right corner stays empty
+        clipnote = wrapped_label(r"surface clipped to 0--2{,}400; $g>\text{RONIC}$ requires external funding",
+                                 6.8, 16, GREY_B).to_corner(DL, buff=0.3)
         self.set_camera_orientation(phi=66 * DEGREES, theta=-130 * DEGREES, zoom=0.72)
-        self.add_fixed_in_frame_mobjects(hint, rd)
-        self.remove(hint, rd)
+        self.add_fixed_in_frame_mobjects(hint, rd, clipnote)
+        self.remove(hint, rd, clipnote)
         with self.voiceover(
             "That statement as a landscape: growth across, RONIC back, and the value of a hundred of operating profit at an eight "
             "percent cost of capital. <bookmark mark='a'/> Along the orange line, RONIC equals the cost of capital and the "
             "surface is flat. <bookmark mark='b'/> A firm earning sixteen percent rolls uphill as it grows. "
             "<bookmark mark='c'/> One earning five rolls downhill: growth bought below the cost of capital destroys value."
         ) as vo:
-            self.play(FadeIn(hint), Create(ax), run_time=1.5)
+            self.play(FadeIn(hint), FadeIn(clipnote), Create(ax), run_time=1.5)
             self.play(Create(surf), run_time=3)
             vo.wait_until("a")
             self.play(Create(ridge), FadeIn(rd[0]))
@@ -238,9 +241,9 @@ class DCF(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(balls[1]), FadeIn(rd[2]))
             self.play(balls[1].animate.move_to(ax.c2p(0.05, 0.05, f(0.05, 0.05))), run_time=2.5)
             self.move_camera(theta=-116 * DEGREES, run_time=max(vo.remaining(1.0) - 0.5, 1.0))
-        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, surf, ridge, balls)), FadeOut(hint),
-                                                                  FadeOut(rd)], run_time=1.5)
-        self.clear_scene()
+        self.play(FadeOut(VGroup(ax, surf, ridge, balls)), FadeOut(hint), FadeOut(rd), FadeOut(clipnote), run_time=0.4)
+        self.set_camera_orientation(phi=0, theta=-90 * DEGREES, zoom=1)
+        self.clear()
 
     def monte_carlo(self, mc):
         V = np.asarray(mc["V"])
@@ -249,7 +252,7 @@ class DCF(VoiceoverScene, ThreeDScene):
                  xticks=[1000, 2000, 3000, 4000], yticks=[], font_size=17).move_to(DOWN * 0.6 + LEFT * 1.6)
         ax = g.ax
         bins = np.linspace(800, 4000, 41)
-        k = ValueTracker(0)
+        k = ValueTracker(32)
 
         def hist():
             n = int(k.get_value())
@@ -292,8 +295,8 @@ class DCF(VoiceoverScene, ThreeDScene):
             " Every number on that surface hangs on one input, the discount rate. Next: the rate the market itself implies."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[:4]), Create(bl), FadeIn(bt))
-            vo.wait_until("a")
             self.add(hb, cnt)
+            vo.wait_until("a")
             self.play(k.animate.set_value(len(V)), run_time=8, rate_func=lambda x: x ** 2)
             vo.wait_until("b")
             self.play(Create(band_), FadeIn(side[4:]))

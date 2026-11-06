@@ -91,16 +91,17 @@ class Payout(VoiceoverScene):
         side = VGroup(
             MathTex(rf"\text{{1871--1982: }}{100 * pre:.1f}\%", font_size=30, color=CASH),
             MathTex(rf"\text{{1983--2020: }}{100 * post:.1f}\%", font_size=30, color=CASH),
-            wrapped_label(r"the same cash now comes back partly as buybacks, which a dividend yield does not count; "
-                          r"a dividend-based valuation has to add them back", 3.6, 21, GREY_A),
+            wrapped_label(r"aggregate payout includes dividends and net buybacks; a per-share DDM must account "
+                          r"for the changing share count without double counting", 3.6, 21, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
         src = real_data(r"Shiller's data: next year's dividends over January's price")
         with self.voiceover(
             "Real-world payout did change. For a century, American firms paid out about five percent of their value each year in "
             "dividends. <bookmark mark='a'/> In November 1982 the SEC adopted Rule 10b-18, a safe harbour that protected companies "
             "buying back their own shares from charges of manipulating the price. Buybacks grew to rival dividends, and the dividend "
-            "yield fell. <bookmark mark='b'/> A dividend yield that ignores buybacks makes the market look dearer than it is, and a "
-            "forecasting model fitted to dividends breaks in 1982."
+            "yield fell. <bookmark mark='b'/> This changes how aggregate cash returns to owners. Use dividends plus "
+            "net buybacks for total payout. In a per-share dividend model, track the share count and future dividends "
+            "consistently; adding buybacks again can double count. The timeline alone does not establish a causal break."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(line), run_time=2.5)
             vo.wait_until("a")

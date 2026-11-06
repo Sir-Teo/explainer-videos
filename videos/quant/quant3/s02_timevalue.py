@@ -114,9 +114,9 @@ class TimeValue(VoiceoverScene, ThreeDScene):
         for m in (rd[1], pv[1], far[1]):
             m.clear_updaters()
         conv.clear_updaters()
-        self.play(FadeOut(VGroup(conv, floor)), FadeOut(defn), FadeOut(panel))
+        self.play(FadeOut(VGroup(conv, floor)), FadeOut(defn), FadeOut(panel), run_time=0.4)
         self.set_camera_orientation(phi=0, theta=-90 * DEGREES, zoom=1.0)
-        self.clear_scene()
+        self.clear()
 
     def annuity(self, tv):
         rows = [
@@ -193,8 +193,8 @@ class TimeValue(VoiceoverScene, ThreeDScene):
 
     def two_roots(self, tv):
         rs, npv = np.asarray(tv["rs"]), np.asarray(tv["npv"])
-        g = axes([0, 0.32], [-1.6, 0.6], x_length=6.2, y_length=4.2, xlabel=r"discount rate $r$",
-                 ylabel=r"NPV of $(-100,\ +230,\ -132)$", xticks=[0, 0.1, 0.2, 0.3], yticks=[-1.5, -1, -0.5, 0, 0.5],
+        g = axes([0, 0.32], [-2.2, 0.6], x_length=6.2, y_length=4.2, xlabel=r"discount rate $r$",
+                 ylabel=r"NPV of $(-100,\ +230,\ -132)$", xticks=[0, 0.1, 0.2, 0.3], yticks=[-2, -1, 0, 0.5],
                  xfmt=lambda v: f"{100 * v:.0f}\\%", font_size=18).to_edge(LEFT, buff=0.7).shift(DOWN * 0.3)
         ax = g.ax
         zero = DashedLine(ax.c2p(0, 0), ax.c2p(0.32, 0), color=GREY_B, stroke_width=1.5)
@@ -219,12 +219,12 @@ class TimeValue(VoiceoverScene, ThreeDScene):
             "percent, is it worth doing? <bookmark mark='c'/> Yes: the NPV is positive between the roots. The NPV rule never "
             "breaks; the IRR rule is a shortcut."
         ) as vo:
-            self.play(FadeIn(g), Create(zero), FadeIn(rows[0]))
+            self.play(FadeIn(g), Create(zero), FadeIn(rows[0]), Create(line), run_time=1)
             vo.wait_until("a")
             self.play(FadeIn(rows[1]), FadeIn(w))
             self.play(FadeIn(rows[2]))
             vo.wait_until("b")
-            self.play(Create(line), run_time=2)
+            self.play(Indicate(line, color=QC.IDEA))
             self.play(LaggedStart(*[FadeIn(d, scale=1.5) for d in roots], lag_ratio=0.4), FadeIn(pp))
             vo.wait_until("c")
             d15 = Dot(ax.c2p(0.15, tv["npv15"]), radius=0.09, color=QC.GAIN)

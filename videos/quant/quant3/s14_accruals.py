@@ -133,9 +133,9 @@ class Accruals(VoiceoverScene, ThreeDScene):
             self.move_camera(phi=88 * DEGREES, theta=-90 * DEGREES, run_time=3, added_anims=[FadeIn(res[0])])
             vo.wait_until("c")
             self.move_camera(phi=88 * DEGREES, theta=0 * DEGREES, run_time=3, added_anims=[FadeIn(res[1])])
-        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, dots, plane)), FadeOut(hint),
-                                                                  FadeOut(res)], run_time=1.5)
-        self.clear_scene()
+        self.play(FadeOut(VGroup(ax, dots, plane)), FadeOut(hint), FadeOut(res), run_time=0.4)
+        self.set_camera_orientation(phi=0, theta=-90 * DEGREES, zoom=1)
+        self.clear()
 
     def real(self, a):
         R = np.asarray(a["real_points"])

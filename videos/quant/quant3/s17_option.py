@@ -51,7 +51,9 @@ class EquityOption(VoiceoverScene, ThreeDScene):
             "One more way to see a share. A firm owes F, due in five years. At maturity the owners pay if the assets are worth "
             "more and keep the rest; if not, they hand over the firm and walk away, because their liability is limited. "
             "<bookmark mark='a'/> That payoff is a call on the firm's assets, struck at the debt: Merton built a theory of "
-            "corporate debt on it in 1974, and Part ten derives the formula. <bookmark mark='b'/> And the debt is riskless debt "
+            "corporate debt on it in 1974. The pricing formula assumes lognormal traded assets, constant rates and "
+            "volatility, one zero-coupon debt claim, and no asset payouts. Part ten derives the formula. "
+            "<bookmark mark='b'/> And the debt is riskless debt "
             "minus a put: the lenders have sold the owners the right to default. <bookmark mark='c'/> One derivative carries the "
             "rest of the chapter: a call is worth more when volatility rises."
         ) as vo:
@@ -103,7 +105,8 @@ class EquityOption(VoiceoverScene, ThreeDScene):
         self.remove(hint, rd)
         with self.voiceover(
             "Here are both claims as surfaces over two inputs, the value of the assets and their volatility, with eighty of debt "
-            "due in a year. Equity is the upper sheet, debt the lower, and at every point they add up to the assets. "
+            "due in a year. Magenta is equity and blue is debt; which is higher depends on asset value. "
+            "At every point they add up to the assets. "
             "<bookmark mark='a'/> Put a firm near default: assets of sixty. <bookmark mark='b'/> Let the owners gamble, doubling "
             f"the volatility without changing the value. The equity ball climbs from {m['e0']:.2f} to {m['e_risky']:.2f}; the debt "
             f"ball sinks from {m['d0']:.2f} to {m['d_risky']:.2f}. <bookmark mark='c'/> Nothing was created; value moved from "
@@ -122,9 +125,9 @@ class EquityOption(VoiceoverScene, ThreeDScene):
             self.move_camera(theta=-60 * DEGREES, run_time=max(vo.remaining(1.0) - 0.5, 1.0))
         ball_e.clear_updaters()
         ball_d.clear_updaters()
-        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, se, sd, ball_e, ball_d)),
-                                                                  FadeOut(hint), FadeOut(rd)], run_time=1.5)
-        self.clear_scene()
+        self.play(FadeOut(VGroup(ax, se, sd, ball_e, ball_d)), FadeOut(hint), FadeOut(rd), run_time=0.4)
+        self.set_camera_orientation(phi=0, theta=-90 * DEGREES, zoom=1)
+        self.clear()
 
     def overhang(self, m):
         rows = VGroup(

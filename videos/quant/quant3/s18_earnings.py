@@ -111,7 +111,7 @@ class Earnings(VoiceoverScene):
         with self.voiceover(
             "The House's event study is six lines: take the window around day zero, subtract the market, add up. "
             f"<bookmark mark='a'/> Run it on one Apple announcement, filed after the close: a surprise of {L['sue']:.2f} standard "
-            f"deviations, {100 * L['car0']:+.1f} percent against the market on the day, {100 * L['car60']:+.1f} over sixty "
+            f"deviations, {100 * L['car0']:+.1f} percent against the market over days zero and one, {100 * L['car60']:+.1f} over sixty "
             "sessions. One event says little; you need many. <bookmark mark='b'/> Pause and predict before we run them all: a "
             "firm beats by three standard deviations and jumps five percent. Do you buy at the next open?"
         ) as vo:
@@ -145,7 +145,7 @@ class Earnings(VoiceoverScene):
             wrapped_label(rf"Apple, {pe['n_events']} announcements, Oct.\ 2015 -- Dec.\ 2020", 4.8, 21, GREY_A),
             label(rf"green: positive surprise ({pe['n_pos']}); red: negative ({pe['n_neg']})", font_size=19,
                   color=GREY_B),
-            MathTex(rf"\text{{corr(SUE, day-0 move)}} = {pe['jump_corr']:.2f}", font_size=28),
+            MathTex(rf"\text{{corr(SUE, day 0--1 move)}} = {pe['jump_corr']:.2f}", font_size=28),
             MathTex(rf"\text{{drift, day }}+1\text{{ to }}+60:\ {100 * dp:+.1f}\%\ \text{{vs}}\ {100 * dn:+.1f}\%",
                     font_size=26),
             wrapped_label((r"the drift has the textbook sign" if right else
@@ -156,8 +156,8 @@ class Earnings(VoiceoverScene):
         sign_line = "That is the textbook sign, on very few events. " if right else "That is the wrong way round. "
         with self.voiceover(
             "Now all of Apple's announcements from late 2015 to 2020, each path started at its own day zero, green when earnings "
-            "beat the seasonal forecast, red when they missed. <bookmark mark='a'/> The thick lines are the averages. The day-zero "
-            f"move barely lines up with the surprise: a correlation of {pe['jump_corr']:.2f}. <bookmark mark='b'/> After day one, "
+            "beat the seasonal forecast, red when they missed. <bookmark mark='a'/> The thick lines are the averages. "
+            f"The day-zero-to-one move barely lines up with the surprise: a correlation of {pe['jump_corr']:.2f}. <bookmark mark='b'/> After day one, "
             f"the beats drifted {100 * dp:+.1f} percent and the misses {100 * dn:+.1f}. {sign_line}But {pe['n_events']} "
             "events of one company are a lab exercise, not a test, and a seasonal forecast of net income is a crude stand-in for "
             "what analysts expected."

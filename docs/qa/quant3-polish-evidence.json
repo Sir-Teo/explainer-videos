@@ -1,0 +1,725 @@
+{
+  "video": "quant3",
+  "base_commit": "578ad40c1deace3c1777493275cdf0e50eb0b72d",
+  "source_fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+  "data_inputs": {
+    ".cache/quant3/accruals.json": {
+      "sha256": "ec348ea7f0e7b58b7b87dc9f6295a61f68ea38abba71b2d500e3be0ce012d465",
+      "bytes": 56049
+    },
+    ".cache/quant3/accruals.npz": null,
+    ".cache/quant3/campbell_shiller.json": {
+      "sha256": "e6d56290b5f20bc25682f3e1553247e0f96b63df6c80917e13779addbe963f8e",
+      "bytes": 941
+    },
+    ".cache/quant3/campbell_shiller.npz": {
+      "sha256": "3cccd57250c2832051fd0e5ffc3c62be259b6b9f415f7354917025a4a4707b98",
+      "bytes": 40351
+    },
+    ".cache/quant3/cape.json": {
+      "sha256": "e1692bd873e5f53d930fbd163d8c0e2538d486b3440ea9d32c0a3e9242f17e35",
+      "bytes": 225
+    },
+    ".cache/quant3/cape.npz": {
+      "sha256": "941eb0264fe06c2446833b4803910458b905379b6ffd62f8fc0663fe869f0f17",
+      "bytes": 42721
+    },
+    ".cache/quant3/dcf.json": {
+      "sha256": "07e13311c8011c68bdb512f6f9ec19298a0af8b3355661693f51b1715ac5b429",
+      "bytes": 96
+    },
+    ".cache/quant3/dcf.npz": {
+      "sha256": "d8056705eaac29f457cd0e10cba359a8aefeab27cf67f1d5b7f2382807861463",
+      "bytes": 10902
+    },
+    ".cache/quant3/dcf_mc.json": {
+      "sha256": "1c3f16413f676f62dc9ad9cfa8bc270527e03c7b65d2298728878a1e2f504aa5",
+      "bytes": 132
+    },
+    ".cache/quant3/dcf_mc.npz": {
+      "sha256": "89b50ae848753d1a0aacc40dc3c3aa6abdaaf9ed468d1cb68727596f861b1e77",
+      "bytes": 223964
+    },
+    ".cache/quant3/duration.json": {
+      "sha256": "ad43ac2ccdf0a5128cd8cde59ceff4b64adebb33ac9dc89fdbee92787fec2dbc",
+      "bytes": 3880
+    },
+    ".cache/quant3/duration.npz": null,
+    ".cache/quant3/envelope.json": {
+      "sha256": "5346191e1cecf87b37a3da38ce896bb113541750def29f799387cbd8575aa7da",
+      "bytes": 2704
+    },
+    ".cache/quant3/envelope.npz": null,
+    ".cache/quant3/erp.json": {
+      "sha256": "c49f7337816287782dbb61609d49956c422347cea1220f1aa2cf486560266344",
+      "bytes": 694
+    },
+    ".cache/quant3/erp.npz": {
+      "sha256": "a60cb8cf03e82855319ca97274f91810fc645dde256c59f354e0a43a0d0701c3",
+      "bytes": 2439
+    },
+    ".cache/quant3/factors.json": {
+      "sha256": "10ea8f009510d897dfb3dffc5ce2a2e527f1bd2dbef018311f48fdfe9b78842b",
+      "bytes": 155381
+    },
+    ".cache/quant3/factors.npz": null,
+    ".cache/quant3/forecaster.json": {
+      "sha256": "c34c882d8e79ff49764b6ea87f8ba87934b8194d374e7985df5be9e4dbb49db4",
+      "bytes": 694
+    },
+    ".cache/quant3/forecaster.npz": {
+      "sha256": "976fa6f99d30cf38b8d089a30d6d1120284c0b65c2a0cbc669a4238475f094bd",
+      "bytes": 75857
+    },
+    ".cache/quant3/merger.json": {
+      "sha256": "ab9cb6ae9136aa59da9ea20d05ca505cff4c938012bfb9e10100b639e4a5a003",
+      "bytes": 433
+    },
+    ".cache/quant3/merger.npz": {
+      "sha256": "ac8cb5897da0a1032b0d9929d9f0a5bcf9454ecf56cc2bbeee9e9a2f3f96cfb8",
+      "bytes": 8482
+    },
+    ".cache/quant3/merton.json": {
+      "sha256": "29496bf1344789918ec8d6498cf41d6cfaf0aea98e240566996d41ab06ee7e27",
+      "bytes": 257
+    },
+    ".cache/quant3/merton.npz": {
+      "sha256": "2fb127a6669de2d9ca8f5414d1c0e3e6cdb2e7d7712ef00ae63c59bab347bde2",
+      "bytes": 15002
+    },
+    ".cache/quant3/mscore.json": {
+      "sha256": "3d96356aec858037752a96c01ecaafd90a1f2e4501ea2f976923367dba053a68",
+      "bytes": 30769
+    },
+    ".cache/quant3/mscore.npz": null,
+    ".cache/quant3/ohlson_theory.json": {
+      "sha256": "0f2f98606a13a544efa27093965e8c42e840cd8d92fe3da225bb068dadc2cab9",
+      "bytes": 143427
+    },
+    ".cache/quant3/ohlson_theory.npz": null,
+    ".cache/quant3/osap.json": {
+      "sha256": "a04f8c5ecaf25bf98af694a3c6edbbbaad566d0c161a631a2f5d3495dab9d336",
+      "bytes": 42891
+    },
+    ".cache/quant3/osap.npz": null,
+    ".cache/quant3/payout.json": {
+      "sha256": "568040f29d02c94385010c954802dfe79cc441d29e55e752e50380231492695b",
+      "bytes": 1969
+    },
+    ".cache/quant3/payout.npz": null,
+    ".cache/quant3/pead.json": {
+      "sha256": "71c009ebbe17971351bd15c8503d3e1d4164a406e3be0e851877abdacaf366a8",
+      "bytes": 61461
+    },
+    ".cache/quant3/pead.npz": null,
+    ".cache/quant3/pit.json": {
+      "sha256": "bee41b585b7e6e592bb2432d88b947809199c425692f9b7c280743f913076ee7",
+      "bytes": 6330
+    },
+    ".cache/quant3/pit.npz": null,
+    ".cache/quant3/ri.json": {
+      "sha256": "e8aabe0ce1c755eddada94d2d3ed8936baa90049a4f5c0772aecbf7c1ee9d114",
+      "bytes": 175
+    },
+    ".cache/quant3/ri.npz": {
+      "sha256": "ebf46fe345b7c4ea130dc7eb9d0c01624a7b83b3f0948e0d3024f0870258b50f",
+      "bytes": 2360
+    },
+    ".cache/quant3/shiller.json": {
+      "sha256": "68a3b1dd3b89c43c87aa267a354aba527942904fcd4af98bab2ec8df5ae40370",
+      "bytes": 313
+    },
+    ".cache/quant3/shiller.npz": {
+      "sha256": "4b74f56427c342b1cddc9c63ec2c7da9533bf7753185d1268137637753438740",
+      "bytes": 5935
+    },
+    ".cache/quant3/statements.json": {
+      "sha256": "727ffbe245e0485fadde1281908f2adea95137b57ebc9c891bd5e080469fc2bc",
+      "bytes": 8600
+    },
+    ".cache/quant3/statements.npz": null,
+    ".cache/quant3/timevalue.json": {
+      "sha256": "2962b5430e6b8d59ff0c4942418d1b106ef30902c19f4b47318f5f7d247a2feb",
+      "bytes": 7409
+    },
+    ".cache/quant3/timevalue.npz": null
+  },
+  "scope": "English and Chinese narration-beat frames; English silent 480p15 playback; CPU speech samples",
+  "production_listening": "pending",
+  "manual_visual_review": {
+    "english_endpoint_chapters": 21,
+    "chinese_endpoint_chapters": 21,
+    "english_playback_contact_sheets": 21,
+    "updated_visuals_reviewed": [
+      "English duration tail 1.0 to 57.2 percent",
+      "English statements first quarter balanced 676.9",
+      "Chinese opening and time-value layout",
+      "Chinese duration tail",
+      "Chinese DCF and residual-income display cap notes",
+      "Research opening transition recheck",
+      "Chinese Ohlson dynamics, descriptive regressions and worked contribution-bar answer",
+      "Chinese ASC 842 table: EBITDA 100, EV/EBITDA 13.5, debt/EBITDA 4.5",
+      "Chinese closing qualifying exercises and references",
+      "Chinese frontier cards and forecast training replay"
+    ],
+    "method": "Narration-beat contact sheets and sampled playback frames, with focused rechecks of changed layouts and transitions."
+  },
+  "audio_note": "Signal and alignment checks do not certify pronunciation; full production-voice listening remains pending.",
+  "opening_sample": {
+    "path": "media/quant3/narrated_qa/videos/s01_hook/480p15/Hook.mp4",
+    "seconds": 199.06666666666655,
+    "narration_lines": 5,
+    "backend": "kokoro",
+    "voice": "af_heart",
+    "narration_matches_current_source": true,
+    "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 199 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 199 s\n",
+    "scene_source_sha256": "583cc0101b21263cda545b05953216b3363c9563641a16176ce6e9fb5e29ac1f"
+  },
+  "additional_checks": {
+    "zh_narration_coverage": "129/129",
+    "narration_minutes_estimate": 64.6,
+    "tests": [
+      {
+        "command": "python -m pytest tests/test_quant3_valuation_examples.py tests/test_quant_house.py -k 'quant3_valuation_examples or part3 or valuation_closed or modigliani or fundamentals_store' -q",
+        "passed": 12
+      }
+    ]
+  },
+  "records": {
+    "en_frames": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 210.82587500000005,
+        "frames": 10,
+        "warnings": []
+      },
+      {
+        "scene": "TimeValue",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 251.63879166666672,
+        "frames": 18,
+        "warnings": []
+      },
+      {
+        "scene": "Duration",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 211.73137500000004,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "Statements",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 183.66470833333335,
+        "frames": 19,
+        "warnings": []
+      },
+      {
+        "scene": "Accruals",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 206.53508333333335,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "House",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 219.961,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "DCF",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 230.8886666666667,
+        "frames": 21,
+        "warnings": []
+      },
+      {
+        "scene": "CostOfCapital",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 211.93316666666672,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "ResidualIncome",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 161.6591666666667,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "CAPE",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 208.21654166666673,
+        "frames": 20,
+        "warnings": []
+      },
+      {
+        "scene": "MM",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 252.42950000000002,
+        "frames": 18,
+        "warnings": []
+      },
+      {
+        "scene": "Payout",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 227.72579166666674,
+        "frames": 17,
+        "warnings": []
+      },
+      {
+        "scene": "EquityOption",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 204.65545833333337,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Earnings",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 213.42025000000004,
+        "frames": 16,
+        "warnings": []
+      },
+      {
+        "scene": "Signals",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 206.58500000000004,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "Events",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 210.290625,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Crisis",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 259.26283333333333,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "Industry",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 176.924,
+        "frames": 11,
+        "warnings": []
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 195.24808333333337,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 286.5720416666667,
+        "frames": 23,
+        "warnings": []
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 233.70170833333339,
+        "frames": 12,
+        "warnings": []
+      }
+    ],
+    "zh_frames": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 200.21383333333338,
+        "frames": 10,
+        "warnings": []
+      },
+      {
+        "scene": "TimeValue",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 242.83712500000004,
+        "frames": 18,
+        "warnings": []
+      },
+      {
+        "scene": "Duration",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 197.45920833333335,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "Statements",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 193.62316666666672,
+        "frames": 18,
+        "warnings": []
+      },
+      {
+        "scene": "Accruals",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 219.33245833333336,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "House",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 228.59983333333338,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "DCF",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 231.1568333333334,
+        "frames": 21,
+        "warnings": []
+      },
+      {
+        "scene": "CostOfCapital",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 208.88483333333338,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "ResidualIncome",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 176.20808333333338,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "CAPE",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 212.69520833333337,
+        "frames": 20,
+        "warnings": []
+      },
+      {
+        "scene": "MM",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 254.85220833333338,
+        "frames": 18,
+        "warnings": []
+      },
+      {
+        "scene": "Payout",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 220.43941666666672,
+        "frames": 17,
+        "warnings": []
+      },
+      {
+        "scene": "EquityOption",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 213.08825000000007,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Earnings",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 217.4161666666667,
+        "frames": 16,
+        "warnings": []
+      },
+      {
+        "scene": "Signals",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 227.82425000000006,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Events",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 198.58483333333334,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Crisis",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 264.45687499999997,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "Industry",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 182.29175000000004,
+        "frames": 11,
+        "warnings": []
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 208.36733333333336,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 268.0707083333333,
+        "frames": 22,
+        "warnings": []
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 238.41383333333337,
+        "frames": 12,
+        "warnings": []
+      }
+    ],
+    "en_motion": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 210.60000000000008,
+        "frames": 10,
+        "warnings": []
+      },
+      {
+        "scene": "TimeValue",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 251.33333333333232,
+        "frames": 18,
+        "warnings": []
+      },
+      {
+        "scene": "Duration",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 211.46666666666553,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "Statements",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 183.4666666666651,
+        "frames": 19,
+        "warnings": []
+      },
+      {
+        "scene": "Accruals",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 206.26666666666551,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "House",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 219.7333333333317,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "DCF",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 230.59999999999695,
+        "frames": 21,
+        "warnings": []
+      },
+      {
+        "scene": "CostOfCapital",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 211.66666666666544,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "ResidualIncome",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 161.39999999999932,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "CAPE",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 207.93333333333192,
+        "frames": 20,
+        "warnings": []
+      },
+      {
+        "scene": "MM",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 252.19999999999825,
+        "frames": 18,
+        "warnings": []
+      },
+      {
+        "scene": "Payout",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 227.46666666666522,
+        "frames": 17,
+        "warnings": []
+      },
+      {
+        "scene": "EquityOption",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 204.46666666666542,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Earnings",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 213.13333333333233,
+        "frames": 16,
+        "warnings": []
+      },
+      {
+        "scene": "Signals",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 206.2666666666655,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "Events",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 209.9999999999989,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Crisis",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 258.9999999999988,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "Industry",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 176.59999999999934,
+        "frames": 11,
+        "warnings": []
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 194.93333333333243,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 285.99999999999847,
+        "frames": 23,
+        "warnings": []
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "fingerprint": "f6d1a8985217c43dcfa182a99eeffc3713bfba26457a74f8e40d56415e236070",
+        "duration": 233.33333333333186,
+        "frames": 12,
+        "warnings": []
+      }
+    ]
+  },
+  "audio": {
+    "Hook": {
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 5,
+      "issues": []
+    },
+    "Duration": {
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 5,
+      "issues": []
+    },
+    "Research": {
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 9,
+      "issues": []
+    }
+  },
+  "preview": {
+    "path": "renders/quant3_polished_silent.mp4",
+    "seconds": 4557.861782999999,
+    "bytes": 36400335
+  }
+}

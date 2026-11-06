@@ -19,9 +19,9 @@ class Hook(VoiceoverScene):
         card = part_title(PART, r"What is a share a claim on?")
         disc = note(DISCLAIMER, font_size=18, color=GREY_C).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Part three. Value, accounting and the firm. Parts one and two treated a price as a number that moves "
-            "and a thing that trades. But a share is a claim on something: a slice of a company's future cash. If "
-            "prices are fair, they should be the value of that cash today. Are they?"
+            "Part three. Value, accounting and the firm. A share is a claim on future cash. How do we turn that "
+            "claim into a value, and what can the accounts tell us? Start with a puzzle: prices move much more "
+            "than a simple dividend-value benchmark."
         ):
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(disc))
         self.play(FadeOut(card), FadeOut(disc))
@@ -72,23 +72,24 @@ class Hook(VoiceoverScene):
             wrapped_label(r"Shiller (1981), ``Do stock prices move by too much to be justified by subsequent changes in "
                           r"dividends?''", 4.6, 19, GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.5).shift(DOWN * 1.4)
-        src = real_data(rf"Shiller's data, 1871--2020; discount rate {100 * s['r']:.1f}\% real, the average return; "
-                        r"$p^*$ in 2020 starts from that year's price")
+        src = real_data(rf"1871--2020; constant real rate {100 * s['r']:.1f}\%; terminal price fixed in 2020; "
+                        r"annual-change comparison, not a formal variance-bound test")
         with self.voiceover(
             "In 1981 Robert Shiller asked that question with a century of data; here it is with a century and a half. "
             "Start from the end. <bookmark mark='a'/> Suppose that in 2020 we knew the price and every dividend ever paid. "
             "Walk backwards a year at a time: last year's value is this year's plus the year's dividend, discounted one year at "
             "the market's average return. Each green bar is a dividend dropping into the sum. The gold line is what the market "
-            "was worth to someone who knew the future dividends: Shiller's p star. <bookmark mark='b'/> Now the actual price. If "
-            "prices were the best forecasts of p star, they should move less than it, as a forecast moves less than what it "
-            f"forecasts. Instead the price moves {s['ratio_changes']:.0f} times as much from year to year: in {s['big_moves']} "
-            "years it moved more than twenty percent, and p star never did. <bookmark mark='c'/> Either discount rates move a "
-            "great deal, or prices move for reasons other than dividends. The debate shared the 2013 Nobel prize between "
-            "Shiller, Eugene Fama and Lars Peter Hansen, and it runs through this part."
+            "would be worth under this constant-rate, fixed-terminal-price reconstruction. <bookmark mark='b'/> Now the "
+            f"actual price. Its annual log changes are {s['ratio_changes']:.0f} times as volatile: {s['big_moves']} exceed "
+            "twenty percent in magnitude, versus none for the benchmark. <bookmark mark='c'/> This is a descriptive "
+            "comparison, not Shiller's formal variance-bound test. That test concerns price levels under additional "
+            "present-value and stationarity assumptions. Time-varying discount rates and the terminal condition matter; "
+            "this chart alone does not reject market efficiency."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(rec))
-            vo.wait_until("a")
             self.add(line_ps, cur)
+            self.play(k.animate.set_value(n - 12), run_time=2, rate_func=linear)
+            vo.wait_until("a")
             self.play(FadeIn(rec_why))
             self.play(k.animate.set_value(0), run_time=14.0, rate_func=linear)
             line_ps.clear_updaters()
@@ -107,7 +108,7 @@ class Hook(VoiceoverScene):
         head = label(r"How we got here", font_size=36).to_edge(UP, buff=0.5)
         pac = label(r"1494: Luca Pacioli writes down double-entry bookkeeping, in Venice", font_size=22,
                     color=GREY_A).next_to(head, DOWN, buff=0.3)
-        late = label(r"2001: Enron \quad 2009: every filing machine-readable (XBRL)", font_size=22,
+        late = label(r"2001: Enron \quad 2009--2011: SEC XBRL phase-in", font_size=22,
                      color=QC.CRISIS).to_edge(DOWN, buff=1.2)
         with self.voiceover(
             "How we got here. The books came first: double-entry bookkeeping was written down in Venice by Luca Pacioli in 1494, "
@@ -117,18 +118,19 @@ class Hook(VoiceoverScene):
             "change that value, in a perfect market. <bookmark mark='b'/> In 1968 Ray Ball and Philip Brown showed that prices "
             "react to earnings; in 1974 Robert Merton priced a firm's equity as an option. In 1996 Richard Sloan showed that the "
             "market misread one part of earnings, and accounting became a source of trading signals. <bookmark mark='c'/> And in "
-            "2001 Enron showed what happens when the numbers themselves are false. Since 2009 every American filing has been "
-            "machine-readable, so this part can rebuild much of that history from the source."
+            "2001 Enron showed what happens when the numbers themselves are false. From 2009 to 2011 the SEC phased "
+            "in XBRL financial statements for public-company filers, making the accounts easier to read by machine."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(pac))
+            self.play(FadeIn(head), FadeIn(pac), FadeIn(strip[:-2]), FadeIn(strip.leaders[:2]),
+                      FadeIn(strip.labels[:2]))
             vo.wait_until("a")
-            self.play(FadeIn(strip[:-2]), FadeIn(strip.leaders[:2]), FadeIn(strip.labels[:2]), run_time=1.5)
+            self.play(Indicate(strip.labels[:2], color=QC.IDEA, scale_factor=1.04))
             vo.wait_until("b")
             self.play(FadeIn(strip.leaders[2:]), FadeIn(strip.labels[2:]))
             vo.wait_until("c")
             self.play(FadeIn(late))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.4)
 
     def objectives(self):
         card = objectives_card([
@@ -147,9 +149,10 @@ class Hook(VoiceoverScene):
             "hundred accounting and price signals measured before and after they were published. Then merger arbitrage, the "
             "forensic screens, the firms that value companies for a living, and a model trained to forecast earnings."
         ):
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
-                                                     lag_ratio=0.5, run_time=9))
-        self.play(FadeOut(card))
+            self.play(FadeIn(card.head), FadeIn(card.rows[0]), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows[1:]],
+                                  lag_ratio=0.3, run_time=4))
+        self.play(FadeOut(card), run_time=0.4)
 
     def house(self):
         chart = house_chart(PART, lit=("data",))

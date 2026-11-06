@@ -37,14 +37,15 @@ class Events(VoiceoverScene):
         ]
         whys = [why(r"under the risk-neutral measure the price is the discounted expected payoff: the offer $O$ if the "
                     r"deal closes, the fallback price $B$ if it breaks"),
-                why(r"solve for $p$: the market's implied chance of closing"),
+                why(r"two fixed payoffs at one date, with no interim cash flow; solve for the risk-neutral $p$"),
                 why(r"a risk-neutral probability, not a forecast: it includes a premium for bearing deal risk")]
         step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.4, buff=0.9, edge=6.9)
         with self.voiceover(
             "When one company bids cash for another, the target's shares jump towards the offer, but not all the way, and a "
             "merger arbitrageur buys and waits. Price it like Part one's fair game: the price is the discounted expected payoff, "
             "the offer if the deal closes, the fallback if it breaks. <bookmark mark='a'/> Solve for p: the market's implied "
-            "chance of closing. <bookmark mark='b'/> A target at forty-seven, an offer of fifty, a fallback of thirty-five, six "
+            "risk-neutral chance of closing in this two-payoff model, with no interim cash flow. <bookmark mark='b'/> "
+            "A target at forty-seven, an offer of fifty, a fallback of thirty-five, six "
             "months at four percent: eighty-six percent. It is risk-neutral, so it includes a premium for bearing deal risk."
         ) as vo:
             step(0)
@@ -92,7 +93,8 @@ class Events(VoiceoverScene):
         side.shift(UP * 1.4)
         lows = label(rf"the week of the ruling: \${px[np.searchsorted(d, 20241019)]:.2f}, below where it started",
                      font_size=18, color=LOSS).next_to(side, DOWN, buff=0.4).align_to(side, LEFT)
-        caveat = label(r"a case file (2023--24), not a backtest; ignoring interest", font_size=16, color=GREY_B)
+        caveat = wrapped_label(r"case file, ignoring interest; $p<0$ means the fixed fallback model fails, "
+                               r"not a negative probability", 4.0, 16, GREY_B)
         caveat.next_to(lows, DOWN, buff=0.25).align_to(side, LEFT)
         src = real_data(r"Yahoo Finance weekly closes; Tapestry and Capri releases; FTC; S.D.N.Y.")
         with self.voiceover(
@@ -101,8 +103,9 @@ class Events(VoiceoverScene):
             "<bookmark mark='a'/> The price jumped, but stopped short. Below, the implied chance of closing, recomputed every week. "
             "<bookmark mark='b'/> In April 2024 the Federal Trade Commission sued to block the deal, alleging it would reduce "
             "competition in accessible luxury handbags, and the probability fell. <bookmark mark='c'/> In October a federal judge "
-            "granted a preliminary injunction; Capri fell to about twenty-one dollars, below where it started, and the companies "
-            "terminated the agreement. A few dollars if it closes, half the price if it breaks."
+            "granted a preliminary injunction; Capri fell to about twenty-one dollars, below the assumed fallback, "
+            "and the companies terminated the agreement. The formula then gives a negative number: the fixed "
+            "fallback assumption has failed, not the rules of probability. Deal payoffs and their timing are uncertain."
         ) as vo:
             self.play(FadeIn(g), FadeIn(h), Create(fall), FadeIn(fl), FadeIn(src))
             self.add(line)

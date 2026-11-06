@@ -14,7 +14,7 @@ are labelled as allegations, and settlements without admission are said to be so
 
 *An education in methods, not investment advice.*
 
-## Chapters (about 64 minutes)
+## Chapters (about 65 minutes)
 
 * **What is a share a claim on?** Shiller (1981) rebuilt on screen: p\* by the backward recursion
   p\*ₜ = (p\*ₜ₊₁ + Dₜ)/(1 + r), 1871–2020, at the average real return (8.3%). The price moves 8× as much as p\* from
@@ -76,7 +76,7 @@ are labelled as allegations, and settlements without admission are said to be so
   Myers's overhang: a project costing 10 that adds 15 raises equity by only 5.46. Real options (illustrative).
 * **13. Earnings announcements and the drift.** Ball–Brown (schematic); SUE and CAR defined. **Lab:**
   `fundamentals.car` on Apple's 8-K 2.02 announcements, October 2015 – 2020 (21 events, SPY-adjusted): correlation of
-  SUE and the day-0 move 0.08; drift after day 1 of −1.1% for beats and +8.1% for misses (the wrong way: a lab, not a
+  SUE and the day-0–1 move 0.08; drift after day 1 of −1.1% for beats and +8.1% for misses (the wrong way: a lab, not a
   test). At scale (Chen–Zimmermann's EarningsSurprise, Foster–Olsen–Shevlin 1984): 1.13% a month in sample, 0.38 after
   publication (t 4.5), −0.01 since 2006 (t −0.1): Martineau (2022).
 * **14. Accounting signals that became factors, and decayed.** Piotroski's nine tests; Novy-Marx's gross
@@ -123,6 +123,45 @@ companies' files already in `.cache/quant_data/edgar/` (Boeing, Exxon Mobil, GE,
 Kraft Heinz; facts filed through 31 October 2026, checksummed in `videos/quant/data/manifest.json`). With a contact set,
 the same code can load any CIK; the full-panel versions of chapters 4, 13 and 16 (thousands of firms) are the natural
 extension.
+
+## Interpretation boundaries
+
+Interpretation boundaries used in the visual examples:
+
+- The opening reconstructs a constant-rate, fixed-terminal-price dividend benchmark.
+  Its annual-change comparison is descriptive; Shiller's formal variance bound is
+  about price levels under additional present-value and stationarity assumptions.
+  The chart alone does not reject market efficiency.
+- Gordon duration holds the dividend and growth fixed. At a 3% rate-growth gap,
+  +1 percentage point implies approximately −33% locally but −25% exactly. The
+  Treasury-yield regression mixes cash-flow and discount-rate news and does not
+  identify this derivative causally. The weights chart reports value after year 60;
+  the duration uses the full infinite stream, including the tail outside the view.
+- Ohlson's model needs clean surplus, conditional mean-zero shocks and discounted
+  future book value vanishing in expectation. At positive `r`, the abnormal-earnings
+  multiple tends to `1/r` as persistence reaches one. Equal persistence parameters
+  use the continuous limit rather than dividing by zero. The filing regressions
+  are descriptive pooled associations with the other-information state omitted,
+  not structural or causal estimates; the XBRL frames are a retrospective extract.
+- A takeover's two-payoff valuation assumes fixed payoffs at one date and no
+  interim cash flows. A negative implied probability means those assumptions have
+  failed. State prices do not determine physical closing odds without assumptions
+  about the risk premium.
+- Aggregate net payout includes dividends and net buybacks. Per-share dividend
+  valuation must handle share counts consistently to avoid counting buybacks twice.
+  The Apple announcement correlation uses days 0 and +1 together.
+- ASC 842 operating leases retain a single lease cost; bringing them onto the
+  balance sheet does not automatically increase EBITDA. In the example, counting
+  lease debt raises EV to 1,350 and debt to 450 while EBITDA stays 100: multiples
+  13.5 and 4.5. EBITDA 120 would be a separate analyst rent add-back. See
+  [ASU 2016-02, paragraph 842-20-25-6](https://storage.fasb.org/ASU%202016-02_Section%20A.pdf).
+- The value-driver surface displays values clipped to 0–2,400 and the price-to-book
+  surface to 0–5. Growth above RONIC or ROE respectively implies net external funding;
+  the display's flat edges are clipping limits, not extra valuation identities.
+
+The research exercise reveals both multiples and the value in stages, with a
+stacked contribution bar: book 50, abnormal earnings 7 and other information 4.58.
+The last component supplies 7.44% of the total 61.58.
 
 ## Textbook audit
 
@@ -193,7 +232,8 @@ extension.
 2. **$2 next year, 4% growth, price $50.** Rearrange Gordon: r = D₁/P + g = 2/50 + 4% = 8%.
 3. **47 under a cash offer of 50, 35 if it breaks, six months, 4% a year.** Under the risk-neutral measure:
    p·50 + (1 − p)·35 = 47 × 1.02 = 47.94, so p = 12.94/15 ≈ 86%; ignoring the interest gives 80%. A risk-neutral
-   probability carries a premium for deal risk (chapter 15's short put), so the real chance is higher still.
+   probability embeds state prices, not just physical odds. Its relation to the real chance depends on the risk
+   premium; a higher physical chance is typical when break states are especially costly, not a universal result.
 4. **ROE 12%, cost of equity 8%, book growing 4% forever: P/B?** Residual income in steady state:
    P/B = 1 + (0.12 − 0.08)/(0.08 − 0.04) = 2. Check by Gordon on dividends: payout = 1 − g/ROE = 2/3, so
    P/B = ROE × payout/(r − g) = 0.08/0.04 = 2.
@@ -302,7 +342,7 @@ is drawn from their results.
    “股价便宜”的信号，并改变股东的税负。
 2. **明年分红2美元、永续增长4%、股价50美元。** r = D₁/P + g = 2/50 + 4% = 8%。
 3. **现金要约50，现价47，失败则跌到35，六个月，年利率4%。** p·50 + (1 − p)·35 = 47 × 1.02 = 47.94，所以p ≈ 86%；忽略利息为80%。
-   风险中性概率包含交易风险溢价，真实的成交概率更高。
+   风险中性概率反映状态价格，并非真实频率；两者的大小关系取决于风险溢价，不能一概而论。
 4. **净资产收益率12%、股权成本8%、账面价值永续增长4%：市净率？** P/B = 1 + (0.12 − 0.08)/(0.08 − 0.04) = 2。用股息的戈登公式验证：
    派息率 = 1 − g/ROE = 2/3，P/B = ROE × 派息率/(r − g) = 0.08/0.04 = 2。
 
@@ -322,6 +362,14 @@ is drawn from their results.
    rd$，所以$P = (1 - k)b + k(\varphi x - d)$，$k = r\omega/(R - \omega)$，$\varphi = R/r$。
 
 ## 写给研究者
+
+本次可视化说明的边界：开场是固定折现率与终点价格的股息基准，年度变动比较并非正式的方差界检验。戈登久期是固定股息和增长的局部导数；r减g为3%时，上升一个百分点的线性近似为负33%，精确变化为负25%。国债收益率回归混合多种消息，并不能因果识别该导数。奥尔森模型要求净盈余、冲击条件均值为零与横截条件；r为正时，持久性趋于1的超额盈利倍数趋于有限的1/r，相同持久性参数用连续极限处理。申报数据的混合回归省略了其他信息，属于事后描述，并非结构或因果参数估计。风险中性并购概率与真实频率的关系取决于风险溢价；负的隐含概率说明固定支付模型失效。总派息包含股息和净回购，而每股股息模型必须一致处理股数，避免重复计入回购。苹果公告的相关系数使用第0至1天的合计变动。
+
+研究练习分步揭示两个倍数和估值，并用堆叠条形图显示贡献：账面50、超额盈利7、其他信息4.58，总计61.58，其中其他信息占7.44%。
+
+久期图注明第60年之后仍有多少现值，久期本身使用完整的无限现金流。价值驱动曲面显示范围裁切至0–2,400，市净率曲面裁切至0–5；增长高于新增资本回报率或净资产收益率时，需要净外部融资。图的平边是显示边界，并非额外的估值定理。
+
+ASC 842经营租赁保留一项经营租赁费用，上表本身不会自动提高EBITDA。例子中若计入租赁负债，企业价值为1350、债务450，EBITDA仍为100，对应倍数13.5和4.5。把租金20加回而得到EBITDA 120，是另一项分析师调整，不能当作经营租赁上表的必然结果（ASU 2016-02，842-20-25-6）。
 
 剩余收益（Preinreich 1938；Edwards与Bell 1961；Peasnell 1982）；线性信息动态（Ohlson 1995；Feltham与Ohlson 1995）；估计（Dechow、Hutton与
 Sloan 1999）。开放问题：测量$\nu$；有闭式解的非线性与稳健会计动态；LID价值能否定价。

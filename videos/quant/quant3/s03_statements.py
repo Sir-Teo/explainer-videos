@@ -128,9 +128,8 @@ class Statements(VoiceoverScene):
             "<bookmark mark='e'/> Profit less dividends is the rise in equity; receivables and plant move too. "
             "<bookmark mark='f'/> And both sides still balance: double-entry bookkeeping."
         ) as vo:
-            self.play(FadeIn(top))
+            self.play(FadeIn(top), FadeIn(inc), FadeIn(sub[0]))
             vo.wait_until("a")
-            self.play(FadeIn(inc), FadeIn(sub[0]))
             self.play(Create(hl(inc, "net income")))
             vo.wait_until("b")
             ni_flow = flow(inc.rows["net income"], cf.rows["net income"], IS_C)
@@ -208,8 +207,8 @@ class Statements(VoiceoverScene):
             "gap is the accruals."
         ) as vo:
             self.play(FadeIn(leg), FadeIn(g), FadeIn(lg))
-            vo.wait_until("a")
             self.add(bk, l_ni, l_cf)
+            vo.wait_until("a")
             self.play(q.animate.set_value(n - 1), run_time=12, rate_func=linear)
             vo.wait_until("b")
             self.play(FadeIn(note_))

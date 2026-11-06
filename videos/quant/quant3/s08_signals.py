@@ -27,7 +27,7 @@ class Signals(VoiceoverScene):
                          r"for how long?", lit=(1996,), part=PART)
         with self.voiceover("Chapter fourteen. Accounting signals that became factors, and decayed."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.4)
 
     def curves(self, f):
         g = axes([1963, 2021], [np.log10(0.4), np.log10(16)], x_length=6.9, y_length=4.8,
@@ -155,7 +155,7 @@ class Signals(VoiceoverScene):
             "<bookmark mark='c'/> Both have open-source replications. Unusually, both did as well or better after publication than "
             "before; keep them in mind as exceptions."
         ) as vo:
-            self.play(LaggedStart(*[FadeIn(c) for c in cells], lag_ratio=0.4, run_time=4))
+            self.play(FadeIn(cells), run_time=0.5)
             vo.wait_until("a")
             self.play(FadeIn(rows[0]))
             vo.wait_until("b")

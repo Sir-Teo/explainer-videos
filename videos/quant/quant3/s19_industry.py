@@ -115,7 +115,7 @@ class Industry(VoiceoverScene):
     def leases(self):
         def table(ev, ebitda, debt, title, col):
             rows = VGroup(
-                label(title, font_size=24, color=col),
+                wrapped_label(title, 5.2, 23, col),
                 MathTex(rf"\text{{enterprise value}}\ {ev:,.0f}".replace(",", "{,}"), font_size=30),
                 MathTex(rf"\text{{EBITDA}}\ {ebitda:.0f}", font_size=30),
                 MathTex(rf"\text{{debt}}\ {debt:.0f}", font_size=30, color=DEBT),
@@ -125,8 +125,9 @@ class Industry(VoiceoverScene):
             ).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
             return rows
 
-        before = table(1200, 100, 300, r"before: leases in a footnote", GREY_A).move_to(LEFT * 3.6 + DOWN * 0.3)
-        after = table(1350, 120, 450, r"after ASC 842: on the balance sheet", QC.HOUSE).move_to(RIGHT * 2.2 + DOWN * 0.3)
+        before = table(1200, 100, 300, r"excluding lease debt", GREY_A).move_to(LEFT * 3.6 + DOWN * 0.3)
+        after = table(1350, 100, 450, r"including lease debt; operating expense unchanged", QC.HOUSE)
+        after.move_to(RIGHT * 2.2 + DOWN * 0.3)
         lease = VGroup(RoundedRectangle(width=2.4, height=0.8, corner_radius=0.1, color=CASH, fill_opacity=0.2),
                        label(r"lease 150; rent 20", font_size=20, color=CASH))
         lease[1].move_to(lease[0])
@@ -137,16 +138,17 @@ class Industry(VoiceoverScene):
                           r"starting after 15 December 2018.", 12.6, 21, GREY_A),
             label(r"illustrative firm: equity 900, net debt 300, EBITDA 100, leases 150 at a rent of 20 a year",
                   font_size=18, color=GREY_B),
+            wrapped_label(r"ASC 842 operating leases retain a single lease cost; EBITDA 120 requires a separate "
+                          r"analyst rent add-back (ASC 842-20-25-6)", 12.6, 18, QC.HOUSE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "And the standard setters move the numbers under everyone's feet. In 2005 the SEC's staff estimated that American "
-            "companies had about a trillion and a quarter dollars of operating-lease commitments that never appeared on a balance "
-            "sheet. From 2019 the new lease standard put them on. <bookmark mark='a'/> Watch what that does to a firm whose business "
-            "did not change. The lease liability moves from the footnote into debt, and the rent, now split into depreciation and "
-            "interest, leaves EBITDA's costs. <bookmark mark='b'/> Enterprise value and EBITDA both rise; the multiple falls and "
-            "leverage rises. The equity is worth exactly what it was. A screen that compares multiples across 2018 and 2019 without "
-            "adjusting is comparing two accounting regimes, not two firms."
-            " More and more, the first reader of a filing is a machine. Next: the frontier."
+            "And the standard setters move the numbers under everyone's feet. ASC 842 brought most operating leases "
+            "onto American public companies' balance sheets from 2019. <bookmark mark='a'/> But operating leases keep "
+            "a single operating lease cost: rent does not automatically leave EBITDA. Here EBITDA stays one hundred. "
+            "<bookmark mark='b'/> If an analyst includes one hundred fifty of lease debt, enterprise value becomes "
+            "thirteen fifty and debt four fifty. The ratios are thirteen point five and four point five; equity "
+            "is still nine hundred. Adding twenty of rent to get EBITDA of one twenty is a separate analyst "
+            "adjustment. Keep the enterprise-value and earnings definitions consistent. Next: machines reading filings."
         ) as vo:
             self.play(FadeIn(head), FadeIn(before), FadeIn(lease))
             vo.wait_until("a")

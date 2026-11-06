@@ -60,7 +60,8 @@ class MM(VoiceoverScene):
         c = cmath(r"E_L", r"=", r"V_U - D", r"\;\Rightarrow\;", r"V_L = E_L + D = V_U", font_size=40,
                   colors={r"V_L = E_L + D = V_U": VALUE})
         VGroup(a, b, c).arrange(DOWN, buff=0.35).next_to(cap, DOWN, buff=0.45)
-        tag = why(r"Proposition I (1958): in a market without taxes or frictions, financing does not change value")
+        tag = why(r"Proposition I: no taxes or frictions; investors can borrow on the firm's terms; "
+                  r"financing leaves investment and cash flows unchanged")
         tag.next_to(c, DOWN, buff=0.2)
         with self.voiceover(
             "In 1958 Franco Modigliani and Merton Miller asked whether a firm can make itself more valuable by how it is financed. "
@@ -70,8 +71,8 @@ class MM(VoiceoverScene):
             "<bookmark mark='b'/> But you could build that payoff yourself: buy alpha of the unlevered firm and borrow alpha times D "
             "on your own account. You receive alpha X and pay alpha times the interest: the same cash, in every state of the world. "
             "<bookmark mark='c'/> Two identical payoffs must cost the same, or there is an arbitrage. So the levered firm is worth "
-            "exactly the unlevered one. Leverage you can do at home is not worth paying a firm to do. It was the first no-arbitrage "
-            "proof in finance, and a preview of Part nine."
+            "exactly the unlevered one. Leverage you can do at home is not worth paying a firm to do. This classic "
+            "no-arbitrage proof previews Part nine."
         ) as vo:
             self.play(FadeIn(U), FadeIn(L), FadeIn(cap))
             vo.wait_until("a")

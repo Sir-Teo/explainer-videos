@@ -33,7 +33,7 @@ class Duration(VoiceoverScene):
             cmath(r"r = 8\%,\ g = 5\%", r":", r"\ 33\ \text{years (modified)},\ \ 36\ \text{(Macaulay)}", font_size=36),
         ]
         whys = [why(r"take logs of Gordon's $P = D_1/(r - g)$"),
-                why(r"differentiate in $r$: the modified duration, the percentage price change per unit of rate"),
+                why(r"hold $D_1$ and $g$ fixed; the derivative is a local sensitivity, not an exact finite-change rule"),
                 why(r"$w_t$: the share of value paid in year $t$, $(1 - q)q^{t-1}$ with $q = (1+g)/(1+r)$; "
                     r"sum $t\,w_t$ (differentiate the geometric series)"),
                 why(r"a stock growing at 5\% behaves like a bond of more than thirty years")]
@@ -84,7 +84,9 @@ class Duration(VoiceoverScene):
             if lab.get_right()[0] > 6.8:
                 lab.shift(LEFT * (lab.get_right()[0] - 6.8))
             gl = live(r"g =", 100 * gt.get_value(), 1, r"\%", font_size=30, color=CASH).to_corner(UR, buff=0.5)
-            return VGroup(tri, lab, gl)
+            tail = live(r"\text{PV after year 60:}", 100 * ((1 + gt.get_value()) / (1 + r)) ** H,
+                        1, r"\%", font_size=22, color=GREY_A).to_corner(DL, buff=0.4)
+            return VGroup(tri, lab, gl, tail)
 
         bondbars = VGroup()
         for t, v in enumerate(bond, 1):
@@ -102,8 +104,9 @@ class Duration(VoiceoverScene):
             "rate, and the orange triangle the balance point, the duration. With no growth it balances at about thirteen and a "
             "half years. <bookmark mark='a'/> For scale, a thirty-year bond: coupons, and a spike of principal. "
             "<bookmark mark='b'/> Now let growth rise towards the rate. The mass slides right, the tail fattens, and the balance "
-            "point runs towards the horizon: at seven percent growth, more than a century. <bookmark mark='c'/> Most of a growth "
-            "stock's value is cash nobody alive will see paid, which is why it is so sensitive to the rate."
+            "point runs towards the horizon: at seven percent growth, more than a century. <bookmark mark='c'/> "
+            "Over half the value now lies beyond the sixty-year window. The bars show only part of the tail; "
+            "the duration includes the whole infinite stream. Distant cash flows are especially sensitive to discount rates."
         ) as vo:
             self.play(FadeIn(g), FadeIn(sl))
             self.add(st, pv)
@@ -178,27 +181,30 @@ class Duration(VoiceoverScene):
             label(r"monthly returns on the month's change in the 10-year yield", font_size=20, color=GREY_A),
             label(rf"July 1963 -- December 2020, {d['n']} months; bars $\pm$1.96 s.e.\ (Newey--West)", font_size=18,
                   color=GREY_B),
-            MathTex(rf"\text{{Gordon at }} r - g = 3\%:\ {pred:.0f}\%", font_size=32, color=QC.LOSS),
+            wrapped_label(rf"Gordon, fixed $D_1,g$: +1 percentage point gives {pred:.0f}\% locally, "
+                          r"but $-25\%$ exactly", 4.4, 23, QC.LOSS),
             wrapped_label(r"the order is right" if ordered else r"even the order is wrong", 4.4, 24,
                           QC.GAIN if ordered else QC.LOSS),
-            wrapped_label(r"the size is off by more than ten times: when yields rise on inflation, expected dividends "
-                          r"rise too, and $g$ moves with $r$", 4.6, 21, GREY_A),
+            wrapped_label(r"Treasury-yield regressions mix cash-flow news and discount-rate news; "
+                          r"they do not isolate Gordon's fixed-growth sensitivity", 4.6, 21, GREY_A),
             wrapped_label(r"Dechow, Sloan and Soliman (2004) estimate implied equity durations of about 15 years",
                           4.6, 19, GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         src = real_data(r"Kenneth French's book-to-market deciles (value-weighted); Shiller's GS10")
         order_line = ("The order is what duration predicts: growth, the longer asset, is more sensitive. " if ordered
                       else "Even the order is wrong: value moved more than growth. ")
-        pp = desk_question(r"Pause and predict: Gordon says a one-point rise in yields should cut a growth stock by a "
-                           r"third. What did the data say?", width=6.0, font_size=21).to_edge(RIGHT, buff=0.4)
+        pp = desk_question(r"Pause and predict: Gordon's local sensitivity is $-33\%$ per point. What did the "
+                           r"Treasury-yield regression say?", width=6.0, font_size=21).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "So does the market price stocks like long bonds? Pause and predict: Gordon says a one-point rise in yields should cut "
-            "a stock with r minus g of three percent by a third. <bookmark mark='a'/> Here is what happened, measured on Kenneth "
+            "So does the market price stocks like long bonds? Pause and predict: Gordon's local sensitivity is "
+            "minus thirty-three percent per rate point at a three-percent gap. An exact one-point increase, holding "
+            "dividends and growth fixed, cuts value by twenty-five percent. <bookmark mark='a'/> Compare Kenneth "
             "French's portfolios since 1963: each month's return against that month's change in the ten-year Treasury yield. The "
             f"growth stocks lost {abs(growth):.1f} percent per point, the value stocks {abs(value):.1f}. "
             f"<bookmark mark='b'/> {order_line}But the size is off by more than ten times. <bookmark mark='c'/> The formula holds "
-            "growth fixed while the rate moves. In the data, yields rise when inflation rises, and expected dividends rise with it, "
-            "so g moves with r and much of the effect cancels. Dechow, Sloan and Soliman measured implied equity durations of about "
+            "growth fixed while the discount rate moves. A Treasury-yield regression mixes several kinds of news; "
+            "it is not a causal estimate of that derivative. Growth expectations and risk premia can move too. "
+            "Dechow, Sloan and Soliman measured implied equity durations of about "
             "fifteen years, not thirty-three. A model's sensitivity is only as good as its assumption about what else moves."
             " Rates are one input; the other is the cash the firm actually earns. Next: where that number comes from, the three statements."
         ) as vo:
