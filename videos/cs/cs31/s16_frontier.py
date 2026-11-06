@@ -83,17 +83,17 @@ class Frontier(VoiceoverScene):
                        for k, c in cols.items()])
         r7 = next(r for r in rows if abs(r["load"] - 0.7) < 1e-9)
         notes = VGroup(
-            label(r"requests: \ 99.5\% take 0.5 $\mu$s, \ 0.5\% take 500 $\mu$s \ (a key-value store's gets and "
-                  r"scans)", font_size=19, color=WHITE),
-            label(rf"a queue per core, \ like receive-side scaling: \ {r7['dfcfs']:,.0f} $\mu$s at 0.7".replace(",",
-                                                                                                       "{,}"),
-                  font_size=19, color=NO),
-            label(rf"one shared queue: \ {r7['cfcfs']:.0f} $\mu$s: \ shorts still wait when 16 scans hold every core",
-                  font_size=19, color=HEAD),
-            label(rf"preempt every 5 $\mu$s \ (1 $\mu$s lost each time): \ {r7['ps']:.0f} $\mu$s", font_size=19,
+            label(r"requests: \ 99.5\% take 0.5 $\mu$s, \ 0.5\% take 500 $\mu$s \\ (a key-value store's gets and "
+                  r"scans)", font_size=20, color=WHITE),
+            label(rf"a queue per core, \ like receive-side scaling: \\ {r7['dfcfs']:,.0f} $\mu$s at 0.7".replace(",",
+                                                                                                         "{,}"),
+                  font_size=20, color=NO),
+            label(rf"one shared queue: \ {r7['cfcfs']:.0f} $\mu$s: \\ shorts still wait when 16 scans hold every core",
+                  font_size=20, color=HEAD),
+            label(rf"preempt every 5 $\mu$s \ (1 $\mu$s lost each time): \ {r7['ps']:.0f} $\mu$s", font_size=20,
                   color=YES),
-            label(r"Shinjuku \ (2019) \ preempts at 5 $\mu$s; \ Linux's timer ticks every 1--4 \textbf{milli}seconds",
-                  font_size=19, color=GREY_A),
+            label(r"Shinjuku \ (2019) \ preempts at 5 $\mu$s; \\ Linux's timer ticks every 1--4 \textbf{milli}seconds",
+                  font_size=20, color=GREY_A),
         ).arrange(DOWN, buff=0.2, aligned_edge=LEFT).next_to(ax, RIGHT, buff=0.5).align_to(ax, UP)
         fit_right(notes)
         with self.voiceover(
@@ -139,10 +139,10 @@ class Frontier(VoiceoverScene):
         best = min(qs, key=lambda q: q["p999"])
         notes = VGroup(
             label(r"too long: \ shorts wait behind scans", font_size=20, color=WHITE),
-            label(rf"too short: \ the overhead eats the cores; \ at 1 $\mu$s the scans take "
+            label(rf"too short: \ the overhead eats the cores; \\ at 1 $\mu$s the scans take "
                   rf"{qs[0]['long_mean'] / 1000:.1f} ms", font_size=20, color=NO),
             label(rf"best here: \ about {best['q']} $\mu$s", font_size=20, color=HEAD),
-            label(r"no formula gives it: \ even the mean of M/G/$k$ has no exact closed form", font_size=20,
+            label(r"no formula gives it: \\ even the mean of M/G/$k$ has no exact closed form", font_size=20,
                   color=GREY_A),
         ).arrange(DOWN, buff=0.22, aligned_edge=LEFT).next_to(ax, RIGHT, buff=0.5).align_to(ax, UP)
         fit_right(notes)

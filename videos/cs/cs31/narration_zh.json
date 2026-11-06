@@ -1,0 +1,409 @@
+{
+ "title": "计算机科学，从零搭建 · 第31部分：内核",
+ "chapters": {
+  "Hook": "一台机器，许多程序",
+  "History": "1. 从批处理到分时",
+  "Protection": "2. 保护：模式位",
+  "Traps": "3. 陷阱与系统调用",
+  "Process": "4. 进程",
+  "Switch": "5. 上下文切换",
+  "Fork": "6. fork、exec 和 wait",
+  "Scheduling": "7. 调度：FCFS、SJF、SRTF",
+  "Mlfq": "8. 轮转与多级反馈队列",
+  "Share": "9. 按比例分享：彩票、步幅、CFS",
+  "Multi": "10. 多个处理器",
+  "RealTime": "11. 实时",
+  "Queueing": "12. 排队论",
+  "Designs": "13. 内核的设计",
+  "PebbleOS": "14. PebbleOS 运行那项任务",
+  "Frontier": "15. 前沿：经过验证的内核与微秒级调度",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "bbfe9bf41c5d": {
+   "scene": "Hook",
+   "en": "In 1960 a computer cost millions of dollars, and it spent most of its time waiting. <bookmark mark='a'/> Put one person at the console, and the pattern is always the same: think for ten seconds, then ask for half a second of computing. <bookmark mark='b'/> The processor sits idle ninety-five percent of the time. <bookmark mark='c'/> The first answer was batch processing: hand your program to an operator on punched cards, and come back for the printout hours later. The machine stayed busy, and programmers waited. <bookmark mark='d'/> The second answer was time-sharing: connect many terminals, and give each user the machine for a fraction of a second in turn. <bookmark mark='e'/> Every user then sees a whole computer of their own, while the computer itself works through a queue.",
+   "zh": "1960年，一台计算机要花几百万美元，而它大部分时间都在等待。<bookmark mark='a'/>让一个人坐在控制台前，模式总是一样的：想十秒钟，然后要半秒钟的计算。<bookmark mark='b'/>处理器有百分之九十五的时间闲着。<bookmark mark='c'/>第一个办法是批处理：把程序打在穿孔卡片上交给操作员，几个小时后再来取打印结果。机器一直忙着，程序员却在等。<bookmark mark='d'/>第二个办法是分时：接上许多终端，轮流给每个用户一小段时间的整台机器。<bookmark mark='e'/>于是每个用户都看到一台属于自己的完整计算机，而计算机自己则在处理一个队列。"
+  },
+  "1761c0a6f481": {
+   "scene": "Hook",
+   "en": "By the end of this part, our own machine will do the same. Here is PebbleOS, a kernel we are about to write, booting on the Pebble computer with two programs loaded. <bookmark mark='a'/> Each program prints its letter, A or B, twenty-four times. <bookmark mark='b'/> The chart shows who has the processor, instruction by instruction: program A, then the kernel, in orange, then program B. A timer interrupts whichever program is running every nine hundred instructions, and the kernel hands the processor to the other. <bookmark mark='c'/> The output interleaves. Neither program knows the other exists. <bookmark mark='d'/> Fifteen switches, fourteen timer interrupts, fifty-two system calls. <bookmark mark='e'/> And here the kernel itself ran forty-four percent of all instructions, because every single letter was a request to the kernel. Making that cheaper is part of the story.",
+   "zh": "到这一部分结束时，我们自己的机器也会这样做。这是 PebbleOS，一个我们即将写出的内核，正在 Pebble 计算机上启动，装着两个程序。<bookmark mark='a'/>每个程序把自己的字母，A 或 B，打印二十四次。<bookmark mark='b'/>图上显示，一条指令一条指令地，谁占着处理器：程序 A，然后是内核，橙色，然后是程序 B。定时器每九百条指令打断一次正在运行的程序，内核把处理器交给另一个。<bookmark mark='c'/>输出交错在一起。两个程序都不知道对方存在。<bookmark mark='d'/>十五次切换，十四次定时器中断，五十二次系统调用。<bookmark mark='e'/>而在这里，内核自己执行了全部指令的百分之四十四，因为每一个字母都是一次对内核的请求。让它变便宜，也是这个故事的一部分。"
+  },
+  "34380655edbf": {
+   "scene": "Hook",
+   "en": "Part 31 of Computer Science, Built: The Kernel, and the start of Act Six. <bookmark mark='a'/> In this part: how time-sharing began; the protection hardware an operating system needs, which we add to Pebble; traps and system calls; processes and what it costs to switch between them; fork, exec and the shell; the schedulers, from first come first served to the one in Linux, and the rules for machines with deadlines; the queueing theory that explains why a busy server is slow; and finally PebbleOS running the Job.",
+   "zh": "计算机科学，从零搭建，第31部分：内核，也是第六幕的开始。<bookmark mark='a'/>这一部分包括：分时是怎样开始的；操作系统需要的保护硬件，我们把它加进 Pebble；陷阱与系统调用；进程，以及在进程之间切换的代价；fork、exec 和外壳；调度器，从先来先服务到 Linux 里的那一个，以及有截止期限的机器所遵循的规则；解释为什么繁忙的服务器会变慢的排队论；最后是 PebbleOS 运行那项任务。"
+  },
+  "0ac0f9abaa77": {
+   "scene": "History",
+   "en": "Chapter one. From batch to time-sharing.",
+   "zh": "第1章。从批处理到分时。"
+  },
+  "b418cdd09570": {
+   "scene": "History",
+   "en": "Five systems tell the story. <bookmark mark='a'/> In 1956, General Motors and North American Aviation wrote a monitor for the IBM 704 that loaded the next job as soon as the last one finished: batch processing, and arguably the first operating system. <bookmark mark='b'/> In 1961, Fernando Corbató's group at MIT demonstrated CTSS, the Compatible Time-Sharing System. A clock interrupted each user's program after a short slice and moved to the next, and memory protection kept the programs apart. It eventually served about thirty users at once. <bookmark mark='c'/> Multics, begun in 1965 by MIT, Bell Labs and General Electric, aimed at a computer utility, like the electricity grid, with rings of protection and a tree of files. It was ambitious and late, and Bell Labs withdrew. <bookmark mark='d'/> Two of the Bell Labs people, Ken Thompson and Dennis Ritchie, then wrote something smaller on a spare PDP-7 in 1969: Unix. They rewrote it in C in 1973 and described it in 1974. <bookmark mark='e'/> In 1991 a Finnish student, Linus Torvalds, announced a free Unix-like kernel for his PC. Today Linux runs most servers, every Android phone, and every one of the five hundred fastest supercomputers. <bookmark mark='f'/> The ideas in this part were all settled between 1961 and 1974, and they are the ones in the phone in your pocket.",
+   "zh": "五个系统讲述了这个故事。<bookmark mark='a'/>1956年，通用汽车和北美航空为 IBM 704 写了一个监控程序，上一个作业一结束就装入下一个：这就是批处理，也可以说是第一个操作系统。<bookmark mark='b'/>1961年，麻省理工学院 Fernando Corbató 的小组演示了 CTSS，兼容分时系统。时钟在一小段时间后打断每个用户的程序，转到下一个，内存保护把各个程序隔开。它最终能同时服务约三十个用户。<bookmark mark='c'/>Multics 于1965年由麻省理工、贝尔实验室和通用电气开始，目标是像电网一样的计算公用设施，有保护环和一棵文件树。它雄心勃勃而又一再延期，贝尔实验室退出了。<bookmark mark='d'/>于是贝尔实验室的两个人，Ken Thompson 和 Dennis Ritchie，1969年在一台闲置的 PDP-7 上写了个小一些的东西：Unix。他们1973年用 C 重写了它，1974年发表了论文。<bookmark mark='e'/>1991年，芬兰学生 Linus Torvalds 宣布了一个为他的个人电脑写的、免费的类 Unix 内核。如今 Linux 运行着大多数服务器、每一部安卓手机，以及全世界最快的五百台超级计算机中的每一台。<bookmark mark='f'/>这一部分的思想都在1961年到1974年间定型，也正是你口袋里那部手机里的思想。"
+  },
+  "e34fb1a0fe44": {
+   "scene": "History",
+   "en": "How many users can share one machine? Treat each user as a loop. <bookmark mark='a'/> Think for ten seconds, then ask for half a second of processor time, and wait for the answer. <bookmark mark='b'/> We simulated this, with the processor shared equally among everyone waiting, which is what fast time-slicing approximates. <bookmark mark='c'/> With a few users, nobody waits: the response time is the half second of work. <bookmark mark='d'/> But the processor can only do two jobs per second, and twenty users thinking ten seconds each ask for about two per second. Past twenty-one users, the machine is always busy, and each additional user adds half a second to everybody's response. <bookmark mark='e'/> The knee sits where the two straight lines meet, and the simulation follows them. <bookmark mark='f'/> This is the interactive response time law, from the theory of closed queues: response equals users over throughput, minus think time. We will come back to queues in chapter twelve.",
+   "zh": "一台机器能让多少用户共享？把每个用户看作一个循环。<bookmark mark='a'/>想十秒钟，然后要半秒钟的处理器时间，再等回答。<bookmark mark='b'/>我们模拟了这个过程，处理器由所有等待者平分，这正是快速时间片轮转所近似的。<bookmark mark='c'/>用户很少时，没人需要等：响应时间就是那半秒的工作。<bookmark mark='d'/>但处理器每秒只能做两个作业，而二十个各想十秒钟的用户，每秒大约就要两个。超过二十一个用户，机器就一直忙着，每多一个用户，所有人的响应时间都多出半秒。<bookmark mark='e'/>拐点就在两条直线相交的地方，模拟结果沿着它们走。<bookmark mark='f'/>这是来自封闭排队理论的交互式响应时间定律：响应时间等于用户数除以吞吐量，再减去思考时间。我们会在第12章回到排队。"
+  },
+  "5c311de008c5": {
+   "scene": "Protection",
+   "en": "Chapter two. Protection, and the mode bit.",
+   "zh": "第2章。保护，以及模式位。"
+  },
+  "0919e5adfc47": {
+   "scene": "Protection",
+   "en": "Before time-sharing, the one program running owned the machine, and could do anything. With several programs at once, any one of them can ruin everybody's day, in three ways. <bookmark mark='a'/> By an instruction: halting the machine, or reprogramming a device. <bookmark mark='b'/> By memory: storing over the kernel, or over another program's data. <bookmark mark='c'/> And by time: a loop that never gives the processor back. <bookmark mark='d'/> On the Pebble we have built so far, a single halt in any program stops everything. <bookmark mark='e'/> So the hardware must take three things away from ordinary programs: some instructions, most of memory, and control of time. <bookmark mark='f'/> And there must be exactly one way to ask for them back, through the kernel.",
+   "zh": "在分时之前，正在运行的那一个程序拥有整台机器，什么都能做。同时有几个程序时，其中任何一个都能用三种方式毁掉所有人的一天。<bookmark mark='a'/>用一条指令：让机器停机，或者重新编程某个设备。<bookmark mark='b'/>用内存：写坏内核，或者写坏别的程序的数据。<bookmark mark='c'/>还有用时间：一个永远不把处理器还回来的循环。<bookmark mark='d'/>在我们至今搭建的 Pebble 上，任何一个程序里的一条 halt 就让一切停下。<bookmark mark='e'/>所以硬件必须从普通程序手里拿走三样东西：一些指令、大部分内存，以及对时间的控制。<bookmark mark='f'/>而且要求回它们，必须有且只有一条路：经过内核。"
+  },
+  "0f02993cb174": {
+   "scene": "Protection",
+   "en": "Here is what Pebble gains, in under two hundred lines of the emulator. <bookmark mark='a'/> Four instructions, in the opcodes we left free in Part 6. E-call traps into the kernel; it is the one door. E-ret returns from a trap. And two instructions read and write control registers. <bookmark mark='b'/> The control registers hold the mode, where a trap happened and why, where traps should go, a countdown timer, and the bounds of the memory the running program may touch. <bookmark mark='c'/> And one bit of state, the mode. The machine starts in kernel mode, and the only way down to user mode is e-ret. <bookmark mark='d'/> In user mode, the privileged instructions are illegal, and any address outside the bounds, or in the device page, is a fault. <bookmark mark='e'/> The timer counts instructions down; at zero it interrupts whatever is running, and hands the processor back to the kernel. IBM's System/360 had the same idea in 1964, and called the two modes the problem state and the supervisor state.",
+   "zh": "这是 Pebble 新得到的东西，在模拟器里不到两百行。<bookmark mark='a'/>四条指令，用的是我们在第6部分留空的操作码。ecall 陷入内核；它是唯一的门。eret 从陷阱返回。还有两条指令读写控制寄存器。<bookmark mark='b'/>控制寄存器保存着模式、陷阱在哪里发生以及为什么、陷阱应该去哪里、一个倒计时定时器，以及正在运行的程序可以触碰的内存边界。<bookmark mark='c'/>还有一位状态：模式。机器在内核态启动，降到用户态的唯一方式是 eret。<bookmark mark='d'/>在用户态，特权指令是非法的，任何超出边界或落在设备页里的地址都是故障。<bookmark mark='e'/>定时器按指令倒数；到零时它打断正在运行的程序，把处理器交还给内核。IBM 的 System/360 在1964年就有同样的想法，把两种模式叫作问题态和管理态。"
+  },
+  "b6c1eb9b7e95": {
+   "scene": "Protection",
+   "en": "Now the test. PebbleOS starts four processes, three of them hostile. <bookmark mark='a'/> One prints the letter A twelve times. One executes halt. One stores a zero into the kernel's memory. And one loops sixty thousand times without ever calling the kernel. <bookmark mark='b'/> The halt is an illegal instruction in user mode: the hardware refuses it and traps, and the kernel kills that process. The store is outside the process's bounds: another trap, another kill. <bookmark mark='c'/> The hog is interrupted by the timer a hundred and twenty-one times, and the other processes run in between. The good process prints all twelve letters. <bookmark mark='d'/> In every case the offending instruction never completes. The hardware stops it and jumps into the kernel, which decides what to do. <bookmark mark='e'/> And protection is nearly free while programs behave: a comparison the hardware makes on every access, in parallel with the access itself.",
+   "zh": "现在来测试。PebbleOS 启动四个进程，其中三个怀有敌意。<bookmark mark='a'/>一个把字母 A 打印十二次。一个执行 halt。一个往内核的内存里写一个零。还有一个循环六万次，从不调用内核。<bookmark mark='b'/>halt 在用户态是非法指令：硬件拒绝执行并陷入，内核杀死那个进程。那次写入超出了进程的边界：又一次陷入，又一次杀死。<bookmark mark='c'/>那个霸占处理器的进程被定时器打断了一百二十一次，其他进程在间隙里运行。好的进程打印出全部十二个字母。<bookmark mark='d'/>每一种情况下，出错的指令都没有完成。硬件把它拦下，跳进内核，由内核决定怎么办。<bookmark mark='e'/>而只要程序守规矩，保护几乎不花代价：硬件在每次访问时做一次比较，与访问本身并行进行。"
+  },
+  "9cc8dad617c2": {
+   "scene": "Traps",
+   "en": "Chapter three. Traps, and the system call.",
+   "zh": "第3章。陷阱，以及系统调用。"
+  },
+  "061c34839710": {
+   "scene": "Traps",
+   "en": "A program asks the kernel for something by setting up its request in registers, here call number three, get my process id, and executing e-call. <bookmark mark='a'/> The hardware then does five things in a single step. It saves the program counter, so it knows where to come back. It records the cause: an e-call, or for a fault, the bad address too. It turns interrupts off. It switches to kernel mode, remembering the old mode. And it jumps to the one address the kernel chose at boot. <bookmark mark='b'/> The program cannot choose where in the kernel it lands, and that is the point: every request goes through one gate the kernel controls. <bookmark mark='c'/> E-ret reverses the last three steps, and the program continues after its e-call. <bookmark mark='d'/> The same mechanism serves every event the instruction itself causes, from an e-call to a division by zero. <bookmark mark='e'/> Interrupts from outside, like the timer, use the same five steps, between two instructions of whatever program is running.",
+   "zh": "程序向内核要东西，是把请求放进寄存器，这里是三号调用，取得我的进程号，然后执行 ecall。<bookmark mark='a'/>硬件随即在一步之内做五件事。它保存程序计数器，好知道回到哪里。它记录原因：一次 ecall，若是故障还有出错的地址。它关掉中断。它切换到内核态，并记住原来的模式。它跳到内核在启动时选定的那一个地址。<bookmark mark='b'/>程序无法选择落在内核的哪里，这正是要点：每个请求都经过内核控制的同一道门。<bookmark mark='c'/>eret 撤销后三步，程序从它的 ecall 之后继续。<bookmark mark='d'/>同一个机制服务于指令本身引起的每一个事件，从 ecall 到除以零。<bookmark mark='e'/>来自外部的中断，比如定时器，也用同样的五步，发生在正在运行的程序的两条指令之间。"
+  },
+  "e0694b60565e": {
+   "scene": "Traps",
+   "en": "Now follow one system call all the way down. A process calls get-pid, and we record every instruction the kernel executes before the process runs again. <bookmark mark='a'/> Each bar is one instruction, coloured by what it is for. <bookmark mark='b'/> First, twenty-six instructions save the program's registers into its process control block, because the kernel is about to use those registers itself. <bookmark mark='c'/> Then twenty-three find out which call this is. <bookmark mark='d'/> The work itself takes three instructions: load the process id, and store it where the program's a-zero will be restored from. <bookmark mark='e'/> Then twenty-six more put every register back, and e-ret returns. <bookmark mark='f'/> Seventy-eight instructions, to return one number. <bookmark mark='g'/> And for calls that take a buffer, the kernel first checks that the buffer lies inside the caller's memory. A program that passes a pointer into the kernel gets an error, not the kernel's secrets.",
+   "zh": "现在把一次系统调用一路跟到底。一个进程调用 getpid，我们记下进程再次运行之前内核执行的每一条指令。<bookmark mark='a'/>每一条竖条是一条指令，按它的用途着色。<bookmark mark='b'/>先是二十六条指令把程序的寄存器存进它的进程控制块，因为内核自己马上要用这些寄存器。<bookmark mark='c'/>然后二十三条查明这是哪个调用。<bookmark mark='d'/>真正的工作只要三条指令：取出进程号，存到程序的 a0 将被恢复的地方。<bookmark mark='e'/>然后又是二十六条把每个寄存器放回去，eret 返回。<bookmark mark='f'/>七十八条指令，为了返回一个数。<bookmark mark='g'/>对于带缓冲区的调用，内核先检查缓冲区是否位于调用者的内存之内。传入一个指向内核的指针的程序，得到的是一个错误，而不是内核的秘密。"
+  },
+  "2a2b77b28383": {
+   "scene": "Traps",
+   "en": "On a real machine, this one, the numbers look like this. <bookmark mark='a'/> An ordinary function call takes one and a half nanoseconds. <bookmark mark='b'/> Asking the kernel for the process id takes a hundred and twelve: about seventy-five function calls. The hardware trap is part of it. Saving state is part of it. And since 2018, the defences against Spectre and Meltdown from Part 8 add work to every crossing. <bookmark mark='c'/> Some requests skip the trap altogether. Linux maps a page of kernel code and data into every process, the vDSO, so reading the clock is an ordinary function call: twenty-nine nanoseconds, with no change of mode.",
+   "zh": "在一台真实的机器上，就是这一台，数字是这样的。<bookmark mark='a'/>一次普通的函数调用要一点五纳秒。<bookmark mark='b'/>向内核要进程号要一百一十二纳秒：大约七十五次函数调用。硬件陷入是其中一部分。保存状态是一部分。而自2018年以来，第8部分讲的针对 Spectre 和 Meltdown 的防御，给每一次穿越都增加了工作。<bookmark mark='c'/>有些请求完全不用陷入。Linux 把一页内核代码和数据映射进每个进程，叫作 vDSO，所以读时钟就是一次普通的函数调用：二十九纳秒，不用切换模式。"
+  },
+  "c8e35765c795": {
+   "scene": "Traps",
+   "en": "Because each call has a fixed cost, programs ask for as much as they can at once. <bookmark mark='a'/> Here we read a file that is already in memory, with buffers from one byte to a mebibyte. <bookmark mark='b'/> One byte per call costs two hundred and eighteen nanoseconds per byte. <bookmark mark='c'/> Four kibibytes per call costs a tenth of a nanosecond per byte, two thousand times less. <bookmark mark='d'/> The line has slope minus one until the copying itself dominates: a fixed price per call, spread over more bytes. <bookmark mark='e'/> Watch a real program with strace, the tool that prints every system call: the word counter wc reads eight mebibytes in five hundred and seventeen calls, of sixteen kibibytes each. <bookmark mark='f'/> This is why C's getc was traditionally a macro over a buffer, and why our PebbleOS programs link a small library that reads four kibibytes at a time.",
+   "zh": "因为每次调用都有固定的代价，程序会一次要尽可能多。<bookmark mark='a'/>这里我们读一个已经在内存里的文件，缓冲区从一个字节到一个 MiB。<bookmark mark='b'/>每次调用一个字节，每字节要两百一十八纳秒。<bookmark mark='c'/>每次调用四 KiB，每字节只要十分之一纳秒，少了两千倍。<bookmark mark='d'/>在复制本身占主导之前，这条线的斜率是负一：每次调用的固定价格，分摊到更多字节上。<bookmark mark='e'/>用 strace 看一个真实的程序，它会打印每一次系统调用：单词计数程序 wc 用五百一十七次调用读完八 MiB，每次十六 KiB。<bookmark mark='f'/>这就是为什么 C 的 getc 传统上是一个基于缓冲区的宏，也是为什么我们的 PebbleOS 程序都链接一个一次读四 KiB 的小库。"
+  },
+  "822a8851051f": {
+   "scene": "Process",
+   "en": "Chapter four. The process.",
+   "zh": "第4章。进程。"
+  },
+  "a55ec9cb4299": {
+   "scene": "Process",
+   "en": "A process is a program while it runs: the code, plus everything that changes as it runs. <bookmark mark='a'/> Here is the job's process under PebbleOS: one mebibyte of memory, from its lower bound to its upper bound. At the bottom, the small library that every process links, and its two buffers. Then the compiled code of the Job itself, under two kibibytes. Then its globals, mostly the hash table from Part 17. And at the top, the stack, growing down. <bookmark mark='b'/> The rest of the process lives in the kernel, in its process control block. <bookmark mark='c'/> Its state; its fifteen registers and its program counter, saved at every trap; its bounds; its number; where its input comes from and its output goes; and a few counters. <bookmark mark='d'/> That is everything the kernel needs to stop a program at any instruction, and later resume it as if nothing had happened. <bookmark mark='e'/> PebbleOS keeps four of these blocks in a table. The Linux equivalent has hundreds of fields, but the same idea.",
+   "zh": "进程就是正在运行的程序：代码，加上运行时变化的一切。<bookmark mark='a'/>这是 PebbleOS 下那项任务的进程：一 MiB 的内存，从它的下界到上界。最底下是每个进程都链接的小库和它的两个缓冲区。然后是任务本身编译出的代码，不到两 KiB。然后是它的全局变量，主要是第17部分的哈希表。最上面是栈，向下生长。<bookmark mark='b'/>进程的其余部分住在内核里，在它的进程控制块中。<bookmark mark='c'/>它的状态；它的十五个寄存器和程序计数器，每次陷入时保存；它的边界；它的编号；它的输入从哪里来、输出到哪里去；还有几个计数器。<bookmark mark='d'/>这就是内核在任意一条指令处停下一个程序、以后再若无其事地恢复它所需要的全部。<bookmark mark='e'/>PebbleOS 在一张表里放四个这样的块。Linux 里对应的东西有几百个字段，但思想相同。"
+  },
+  "1bf60c377dd2": {
+   "scene": "Process",
+   "en": "Every process moves through a few states. <bookmark mark='a'/> It is created and loaded, and becomes ready: able to run, waiting for a processor. <bookmark mark='b'/> The kernel dispatches it, and it runs. <bookmark mark='c'/> When the timer fires, it goes back to ready, and another process gets the processor. <bookmark mark='d'/> When it asks for something that is not there yet, like bytes from an empty pipe, it is blocked, and costs nothing until the bytes arrive and it is woken. <bookmark mark='e'/> When it calls exit, it is finished. <bookmark mark='f'/> The numbers are counted in PebbleOS, while our two processes ran the Job on a short passage: forty-one dispatches, thirty-eight timer interrupts, one wait for the pipe. <bookmark mark='g'/> At any moment one process per processor is running, and any number may be ready. <bookmark mark='h'/> Choosing which ready process runs next is the scheduler's whole job, and the subject of chapters seven to eleven.",
+   "zh": "每个进程都在几个状态之间移动。<bookmark mark='a'/>它被创建并装入，变为就绪：能够运行，在等处理器。<bookmark mark='b'/>内核调度它，它开始运行。<bookmark mark='c'/>定时器触发时，它回到就绪，另一个进程得到处理器。<bookmark mark='d'/>当它要的东西还没有到，比如从空管道读字节，它就被阻塞，在字节到达、它被唤醒之前不花任何代价。<bookmark mark='e'/>当它调用 exit，它就结束了。<bookmark mark='f'/>这些数字是在 PebbleOS 里数出来的，当时我们的两个进程正在一段短文上运行那项任务：四十一次调度，三十八次定时器中断，一次等待管道。<bookmark mark='g'/>任何时刻，每个处理器上有一个进程在运行，就绪的可以有任意多个。<bookmark mark='h'/>选择下一个运行哪个就绪进程，就是调度器的全部工作，也是第7到第11章的主题。"
+  },
+  "6d3d8679b59e": {
+   "scene": "Switch",
+   "en": "Chapter five. The context switch.",
+   "zh": "第5章。上下文切换。"
+  },
+  "2b8902942606": {
+   "scene": "Switch",
+   "en": "To switch from process A to process B, the kernel does three things. <bookmark mark='a'/> A trap brings it in, from the timer or a system call, and it saves A's registers and program counter in A's process control block. <bookmark mark='b'/> The scheduler chooses B. <bookmark mark='c'/> Then the kernel loads B's saved registers, sets B's bounds, and returns with e-ret, into B, at exactly the instruction where B was stopped last time. <bookmark mark='d'/> In PebbleOS that is eighteen words per process, and a switch through yield costs a hundred and eighteen kernel instructions. <bookmark mark='e'/> A real kernel saves more: the floating-point and vector registers, two kibibytes of them on a processor with AVX-512, and it changes the address space, which is Part 32's subject. <bookmark mark='f'/> And neither process can tell. Each resumes with its registers exactly as it left them.",
+   "zh": "要从进程 A 切换到进程 B，内核做三件事。<bookmark mark='a'/>一次陷阱把它带进来，来自定时器或系统调用，它把 A 的寄存器和程序计数器存进 A 的进程控制块。<bookmark mark='b'/>调度器选中 B。<bookmark mark='c'/>然后内核装入 B 保存的寄存器，设置 B 的边界，用 eret 返回，进入 B，恰好在 B 上次被停下的那条指令。<bookmark mark='d'/>在 PebbleOS 里，每个进程是十八个字，一次经由 yield 的切换要一百一十八条内核指令。<bookmark mark='e'/>真实的内核保存得更多：浮点和向量寄存器，在支持 AVX-512 的处理器上有两 KiB，而且它还要切换地址空间，那是第32部分的主题。<bookmark mark='f'/>两个进程都察觉不到。各自恢复时，寄存器都和离开时一模一样。"
+  },
+  "5910d74f5d29": {
+   "scene": "Switch",
+   "en": "How long does a switch take on a real machine? The standard experiment: two processes joined by two pipes, bouncing one byte back and forth. <bookmark mark='a'/> Each must block until the other answers, so every round trip forces two context switches and four system calls. <bookmark mark='b'/> With both processes on one processor, a round trip takes two point nine microseconds. <bookmark mark='c'/> With the processes on different processors it is much slower, twenty-five microseconds here, because the other core has gone to sleep and must be woken by an interrupt between processors, and on a virtual machine that is expensive. <bookmark mark='d'/> And the largest cost is often invisible in this measurement: the incoming process finds the caches full of the other one's data, and runs slowly until it has refilled them. <bookmark mark='e'/> So a scheduler should not switch more often than it must. How often it must is the question of the quantum.",
+   "zh": "在真实的机器上，一次切换要多久？标准实验是：两个进程用两根管道连起来，把一个字节来回传。<bookmark mark='a'/>每一方都必须阻塞，直到对方回应，所以每一次往返都迫使发生两次上下文切换和四次系统调用。<bookmark mark='b'/>两个进程在同一个处理器上时，一次往返要二点九微秒。<bookmark mark='c'/>两个进程在不同处理器上时要慢得多，这里是二十五微秒，因为另一个核已经睡了，必须用处理器之间的中断唤醒，而在虚拟机上这很昂贵。<bookmark mark='d'/>而最大的代价在这个测量里往往看不见：换进来的进程发现缓存里满是另一个进程的数据，在重新填满之前都跑得很慢。<bookmark mark='e'/>所以调度器不应该比必要时切换得更频繁。必要的频率是多少，就是时间片的问题。"
+  },
+  "78b01462956e": {
+   "scene": "Fork",
+   "en": "Chapter six. Fork, exec, and wait.",
+   "zh": "第6章。创建进程：分叉、执行与等待。"
+  },
+  "3130b09d1374": {
+   "scene": "Fork",
+   "en": "Unix creates processes with three calls. <bookmark mark='a'/> Fork makes the calling process into two. Parent and child are identical, with the same memory contents and the same open files, except that fork returns zero in the child and the child's number in the parent. <bookmark mark='b'/> Exec replaces the program a process is running with another, keeping the same process and its open files. <bookmark mark='c'/> And wait puts the parent to sleep until a child exits, then hands back its exit code. <bookmark mark='d'/> Why separate fork from exec? Because in between, the child is still running the shell's code, and it can rearrange its own files with ordinary calls before becoming the new program. That is how output redirection and pipes work, with no special support in the call that starts the program.",
+   "zh": "Unix 用三个调用创建进程。<bookmark mark='a'/>fork 把调用它的进程变成两个。父进程和子进程完全相同，内存内容相同，打开的文件也相同，只是 fork 在子进程中返回零，在父进程中返回子进程的编号。<bookmark mark='b'/>exec 把一个进程正在运行的程序换成另一个，进程本身和它打开的文件保持不变。<bookmark mark='c'/>wait 让父进程睡眠，直到某个子进程退出，然后交回它的退出码。<bookmark mark='d'/>为什么把 fork 和 exec 分开？因为在两者之间，子进程还在运行外壳的代码，它可以用普通的调用整理好自己的文件，再变成新的程序。输出重定向和管道就是这样实现的，启动程序的那个调用不需要任何特殊支持。"
+  },
+  "7e229fa1da77": {
+   "scene": "Fork",
+   "en": "With those three calls a shell is short. This one is twenty-five lines of C, and it runs on this machine. <bookmark mark='a'/> It reads a line and splits it at a bar. For each command it forks; the child connects the pipe to its standard input or output with dup-two, then execs the command. <bookmark mark='b'/> The parent closes its copies of the pipe and waits for both children. <bookmark mark='c'/> We typed echo hello world, and then echo the cat sat, piped into tr, which translates lower case to upper. <bookmark mark='d'/> The pipe is a buffer inside the kernel with two ends. Echo writes into one; tr reads from the other; neither knows the other exists. Doug McIlroy pushed pipes into Unix in 1973, and they changed how people wrote programs: small tools, joined together.",
+   "zh": "有了这三个调用，外壳就很短。这一个是二十五行 C，在这台机器上运行。<bookmark mark='a'/>它读入一行，在竖线处拆开。对每条命令它 fork 一次；子进程用 dup2 把管道接到自己的标准输入或输出上，然后 exec 那条命令。<bookmark mark='b'/>父进程关掉自己那份管道，等两个子进程结束。<bookmark mark='c'/>我们输入了 echo hello world，然后是 echo the cat sat，经管道送进 tr，它把小写转成大写。<bookmark mark='d'/>管道是内核里一个有两端的缓冲区。echo 往一端写；tr 从另一端读；谁也不知道对方存在。Doug McIlroy 在1973年把管道推进了 Unix，它改变了人们写程序的方式：小工具，连在一起。"
+  },
+  "957a3179b7b7": {
+   "scene": "Fork",
+   "en": "What does a new process cost? <bookmark mark='a'/> On this machine, a fork whose child exits at once takes a hundred and fifty microseconds. Fork followed by exec of a tiny program takes about a millisecond and a quarter, and posix-spawn, which does both in one call, about the same. <bookmark mark='b'/> But watch what happens when the parent is using memory. With a gibibyte in use, fork takes thirty-three milliseconds. <bookmark mark='c'/> Fork does not copy the memory itself: it copies the map of it, and marks every page to be copied later, only if someone writes. That trick is Part 32's. But the map grows with the memory. <bookmark mark='d'/> In 2019 researchers from Microsoft, Boston University and ETH Zurich argued that fork no longer fits modern systems, and that new code should use spawn. <bookmark mark='e'/> PebbleOS has no fork at all. With bounds but no relocation, a copy of a process would need the very same addresses. Part 32 gives each process its own addresses, and then fork becomes possible.",
+   "zh": "新建一个进程要多少代价？<bookmark mark='a'/>在这台机器上，一次子进程立即退出的 fork 要一百五十微秒。fork 之后 exec 一个很小的程序要大约一又四分之一毫秒，一次调用里两件事都做的 posix_spawn 也差不多。<bookmark mark='b'/>但看看父进程占用内存时会发生什么。占用一 GiB 时，fork 要三十三毫秒。<bookmark mark='c'/>fork 并不复制内存本身：它复制内存的映射表，把每一页标记为以后有人写时才复制。这个技巧属于第32部分。但映射表随内存增长。<bookmark mark='d'/>2019年，来自微软、波士顿大学和苏黎世联邦理工学院的研究者指出，fork 已不适合现代系统，新代码应当使用 spawn。<bookmark mark='e'/>PebbleOS 根本没有 fork。只有边界而没有重定位，一个进程的副本需要完全相同的地址。第32部分给每个进程自己的地址，那时 fork 才成为可能。"
+  },
+  "43002224c097": {
+   "scene": "Scheduling",
+   "en": "Chapter seven. Scheduling: first come first served, shortest job first, and shortest remaining time.",
+   "zh": "第7章。调度：先来先服务、短作业优先，以及最短剩余时间优先。"
+  },
+  "3e220808e385": {
+   "scene": "Scheduling",
+   "en": "A scheduler decides which ready process runs next. What should it optimise? <bookmark mark='a'/> For a batch job, the turnaround time: from arrival to finish. For a person at a keyboard, the response time: how long until the program first does something. The waiting time: how long a job sat ready but not running. The throughput: how many jobs finish per second. And fairness. <bookmark mark='b'/> These conflict. We will see that the best order for turnaround starves long jobs, and that switching often for good response time costs throughput.",
+   "zh": "调度器决定下一个运行哪个就绪进程。它应该优化什么？<bookmark mark='a'/>对批处理作业，是周转时间：从到达到完成。对坐在键盘前的人，是响应时间：程序要多久才第一次有所动作。等待时间：一个作业就绪却没在运行的时长。吞吐量：每秒完成多少作业。还有公平。<bookmark mark='b'/>这些目标互相冲突。我们会看到，对周转时间最好的顺序会让长作业挨饿，而为了好的响应时间频繁切换会损失吞吐量。"
+  },
+  "6a9d416aebce": {
+   "scene": "Scheduling",
+   "en": "The simplest scheduler runs jobs in the order they arrive, to completion: first come, first served. <bookmark mark='a'/> Three jobs arrive together. A needs a hundred ticks of processor time, B and C need ten each. <bookmark mark='b'/> If A happens to be first, B and C wait behind it, like cars behind a truck on a mountain road. The finish times are a hundred, a hundred and ten, and a hundred and twenty: a mean turnaround of a hundred and ten. This is the convoy effect. <bookmark mark='c'/> Run the short jobs first instead, and they finish at ten and twenty, and A still finishes at a hundred and twenty. The mean falls to fifty.",
+   "zh": "最简单的调度器按到达顺序运行作业，一直到完成：先来先服务。<bookmark mark='a'/>三个作业同时到达。A 需要一百个刻度的处理器时间，B 和 C 各需要十个。<bookmark mark='b'/>如果 A 恰好排在最前面，B 和 C 就在它后面等，像山路上跟在卡车后面的小汽车。完成时间是一百、一百一十和一百二十：平均周转时间一百一十。这就是护航效应。<bookmark mark='c'/>改为先运行短作业，它们在十和二十时完成，A 仍在一百二十时完成。平均值降到五十。"
+  },
+  "702734afad90": {
+   "scene": "Scheduling",
+   "en": "Shortest first is not just better here: for jobs that are all present at the start, it is the best possible order, and the proof is a single swap. <bookmark mark='a'/> Take any order in which a long job, of length L, runs immediately before a short one, of length S. <bookmark mark='b'/> Swap them. <bookmark mark='c'/> The short job now finishes L earlier, the long one finishes S later, and every other job finishes at the same time as before. <bookmark mark='d'/> So the total of the completion times changes by S minus L, which is negative. <bookmark mark='e'/> An order with a long job before a short one can always be improved, so the best order has none: shortest first. <bookmark mark='f'/> The same exchange, made whenever a new job arrives, shows that shortest remaining processing time first is optimal even when jobs arrive over time. Linus Schrage proved it in 1968.",
+   "zh": "短作业优先不只是在这里更好：对于一开始就全部在场的作业，它是最好的顺序，证明只需一次交换。<bookmark mark='a'/>取任意一个顺序，其中长度为 L 的长作业紧排在长度为 S 的短作业之前。<bookmark mark='b'/>交换它们。<bookmark mark='c'/>短作业现在早 L 完成，长作业晚 S 完成，其他每个作业的完成时间都和以前一样。<bookmark mark='d'/>所以完成时间的总和变化 S 减 L，是负数。<bookmark mark='e'/>长作业排在短作业之前的顺序总能改进，所以最好的顺序里没有这种情形：短的优先。<bookmark mark='f'/>每当有新作业到达就做同样的交换，可以证明即使作业陆续到达，最短剩余处理时间优先也是最优的。Linus Schrage 在1968年证明了这一点。"
+  },
+  "500a1444cd82": {
+   "scene": "Scheduling",
+   "en": "Jobs do not all arrive at the start. <bookmark mark='a'/> Here A starts alone, and B and C arrive ten ticks later. Shortest job first never interrupts a running job, so B and C wait for all of A: a mean turnaround of a hundred and three. <bookmark mark='b'/> Shortest remaining time first preempts: when B arrives needing ten ticks, and A still needs ninety, A is set aside. The mean falls to fifty. <bookmark mark='c'/> On four hundred random jobs arriving at eighty percent load, shortest remaining time first has the best mean turnaround, half that of first come first served. Round robin, the next chapter, has the best response time. <bookmark mark='d'/> But all of this assumes the scheduler knows how long each job will run, and it does not. Real schedulers guess, from how long each process ran the last few times.",
+   "zh": "作业并不都在开始时到达。<bookmark mark='a'/>这里 A 独自开始，B 和 C 十个刻度后到达。短作业优先从不打断正在运行的作业，所以 B 和 C 要等 A 全部做完：平均周转时间一百零三。<bookmark mark='b'/>最短剩余时间优先会抢占：B 到达时需要十个刻度，A 还需要九十个，A 就被放到一边。平均值降到五十。<bookmark mark='c'/>在八成负载下到达的四百个随机作业上，最短剩余时间优先的平均周转时间最好，只有先来先服务的一半。下一章的轮转，响应时间最好。<bookmark mark='d'/>但这一切都假定调度器知道每个作业要运行多久，而它并不知道。真实的调度器靠猜，根据每个进程最近几次运行了多久。"
+  },
+  "162b488b947c": {
+   "scene": "Mlfq",
+   "en": "Chapter eight. Round robin, and the multi-level feedback queue.",
+   "zh": "第8章。轮转，以及多级反馈队列。"
+  },
+  "59071326e9a3": {
+   "scene": "Mlfq",
+   "en": "For people at keyboards, response time is what matters, and the fix is to take turns. <bookmark mark='a'/> Three jobs of thirty ticks each. First come first served answers the third job only after sixty ticks. <bookmark mark='b'/> Round robin gives each job a quantum of five ticks, then moves to the next: every job starts within ten ticks, and the mean response time falls from thirty to five. <bookmark mark='c'/> But look at the finish times. Every job is still running near the end, so the mean turnaround rises from sixty to eighty-five. For jobs of equal length, round robin is the worst order for turnaround. <bookmark mark='d'/> This is the time-sharing of CTSS: a timer interrupt at the end of every quantum, and the next ready job.",
+   "zh": "对坐在键盘前的人，要紧的是响应时间，办法是轮流来。<bookmark mark='a'/>三个各三十个刻度的作业。先来先服务要到六十个刻度后才回应第三个作业。<bookmark mark='b'/>轮转给每个作业五个刻度的时间片，然后转到下一个：每个作业都在十个刻度内开始，平均响应时间从三十降到五。<bookmark mark='c'/>但看看完成时间。每个作业都一直运行到快结束，所以平均周转时间从六十升到八十五。对等长的作业，轮转是周转时间最差的顺序。<bookmark mark='d'/>这就是 CTSS 的分时：每个时间片结束时一次定时器中断，换下一个就绪作业。"
+  },
+  "92bbeadca607": {
+   "scene": "Mlfq",
+   "en": "How long should the quantum be? We ran round robin on the four hundred random jobs, charging one tick for every switch. <bookmark mark='a'/> With a quantum of one tick, half the processor's time goes on switching. The machine is effectively overloaded and the queue explodes. <bookmark mark='b'/> Around twelve ticks, the response time is lowest. <bookmark mark='c'/> And with a very long quantum, round robin turns back into first come first served. <bookmark mark='d'/> Real kernels choose quanta of a few milliseconds, a thousand times longer than a switch, so switching costs under one percent.",
+   "zh": "时间片应该多长？我们在那四百个随机作业上运行轮转，每次切换计一个刻度的代价。<bookmark mark='a'/>时间片为一个刻度时，处理器一半的时间花在切换上。机器实际上过载了，队列爆炸。<bookmark mark='b'/>大约十二个刻度时，响应时间最低。<bookmark mark='c'/>时间片很长时，轮转又变回先来先服务。<bookmark mark='d'/>真实的内核选几毫秒的时间片，比一次切换长一千倍，所以切换的开销不到百分之一。"
+  },
+  "f296b1591713": {
+   "scene": "Mlfq",
+   "en": "Shortest first needs to know the future. Round robin ignores it. Corbató's multi-level feedback queue, from CTSS in 1962, learns it from behaviour. <bookmark mark='a'/> There are several queues, each with a priority. A higher queue always runs first, and within a queue jobs take turns. <bookmark mark='b'/> Every new job starts at the top, where the quantum is short. <bookmark mark='c'/> A job that uses up its allotted time at a level is demoted: it has shown that it computes for long stretches. <bookmark mark='d'/> And every so often, every job goes back to the top. We will see why. <bookmark mark='e'/> Here are two long computations, H1 and H2, and an interactive job, I, which computes for one tick and then waits nine for input. The hogs sink to the bottom. I never uses up its allotment, stays at the top, and runs the moment it is ready. <bookmark mark='f'/> It finishes at three hundred and forty-one ticks, against six hundred and forty-one under round robin, and nobody told the scheduler which job was which.",
+   "zh": "短作业优先需要知道未来。轮转对它视而不见。Corbató 的多级反馈队列，来自1962年的 CTSS，从行为中学到它。<bookmark mark='a'/>有好几个队列，各有一个优先级。高的队列总是先运行，同一队列内作业轮流。<bookmark mark='b'/>每个新作业从最顶层开始，那里的时间片很短。<bookmark mark='c'/>在某一层用完配额的作业会被降级：它已经表明自己会长时间连续计算。<bookmark mark='d'/>每隔一段时间，所有作业都回到顶层。我们会看到为什么。<bookmark mark='e'/>这里有两个长计算 H1 和 H2，和一个交互式作业 I，它计算一个刻度，然后等九个刻度的输入。长计算沉到底层。I 从不用完配额，留在顶层，一就绪就运行。<bookmark mark='f'/>它在三百四十一个刻度时完成，轮转下则是六百四十一，而没有人告诉调度器哪个作业是哪种。"
+  },
+  "5b9e13e1493e": {
+   "scene": "Mlfq",
+   "en": "Any rule based on behaviour can be gamed. The first version of rule four reset a job's allotment whenever it gave up the processor for input or output. <bookmark mark='a'/> So a clever program computes for nine ticks, does a token one-tick read, and computes again, always just inside its quantum of ten. <bookmark mark='b'/> It never looks like a hog, stays in the top queue, and takes eighty-nine percent of the machine. Counting each job's time at a level in total, however it is broken up, fixes this: the gamer drops to seventeen percent. <bookmark mark='c'/> The other danger is starvation. With three interactive jobs keeping the top queue busy, a long job at the bottom got ten ticks in fifteen hundred. <bookmark mark='d'/> Rule five, the periodic boost to the top, guarantees it a slice every two hundred ticks. <bookmark mark='e'/> Variants of this design scheduled Solaris and the BSD systems, and Windows still boosts the priority of threads that have just finished waiting.",
+   "zh": "任何基于行为的规则都能被钻空子。规则四的第一个版本规定，作业只要为输入或输出让出处理器，它的配额就重置。<bookmark mark='a'/>于是一个聪明的程序计算九个刻度，象征性地读一个刻度，再接着计算，总是刚好落在十个刻度的时间片之内。<bookmark mark='b'/>它看起来永远不像长计算，留在顶层队列，占去机器的百分之八十九。把每个作业在某一层的时间按总量计算，不管它怎样拆开，就修好了：这个钻空子的程序降到百分之十七。<bookmark mark='c'/>另一个危险是饥饿。三个交互式作业让顶层队列一直忙着，底层的一个长作业在一千五百个刻度里只得到十个。<bookmark mark='d'/>规则五，定期提升到顶层，保证它每两百个刻度得到一个时间片。<bookmark mark='e'/>这个设计的各种变体调度过 Solaris 和 BSD 系统，Windows 至今仍会提升刚等待完的线程的优先级。"
+  },
+  "9e895eaf0024": {
+   "scene": "Share",
+   "en": "Chapter nine. Proportional share: lottery, stride, and Linux's completely fair scheduler.",
+   "zh": "第9章。按比例分享：彩票、步幅，以及 Linux 的完全公平调度器。"
+  },
+  "6beeab7c58b0": {
+   "scene": "Share",
+   "en": "Sometimes we want shares, not priorities: three quarters of the machine for A, one quarter for B. <bookmark mark='a'/> Carl Waldspurger and William Weihl's lottery scheduling, in 1994, gives A three hundred tickets and B a hundred, and at every quantum draws a ticket at random. <bookmark mark='b'/> On average A gets three quarters. But in any one run, after a hundred and twenty quanta, A's share might be anything from two thirds to eighty-five percent. <bookmark mark='c'/> A year later Waldspurger gave the deterministic version, stride scheduling. Each job's stride is a large number divided by its tickets, and each job keeps a pass value. Run the job with the smallest pass, and add its stride to it. <bookmark mark='d'/> Stride keeps the ratio exactly three to one, give or take one quantum, at every moment.",
+   "zh": "有时我们要的是份额，而不是优先级：机器的四分之三给 A，四分之一给 B。<bookmark mark='a'/>Carl Waldspurger 和 William Weihl 在1994年提出的彩票调度，给 A 三百张彩票、B 一百张，每个时间片随机抽一张。<bookmark mark='b'/>平均而言 A 得到四分之三。但在任何一次运行中，一百二十个时间片之后，A 的份额可能是三分之二到百分之八十五之间的任何值。<bookmark mark='c'/>一年后 Waldspurger 给出了确定性的版本，步幅调度。每个作业的步幅是一个大数除以它的彩票数，每个作业还保存一个行程值。运行行程最小的作业，再把它的步幅加上去。<bookmark mark='d'/>步幅调度在每个时刻都保持恰好三比一，误差不超过一个时间片。"
+  },
+  "b8480179f795": {
+   "scene": "Share",
+   "en": "How unfair is the lottery? Waldspurger's measure: run two jobs of equal length with equal tickets, and divide the first finishing time by the second. One means perfectly fair. <bookmark mark='a'/> For jobs of one quantum, either one finishes first, and the ratio is a half for both methods. <bookmark mark='b'/> For jobs of ten quanta, the lottery averages eighty-two hundredths, and stride ninety-five. <bookmark mark='c'/> Random draws even out only slowly, with the error shrinking like one over the square root of the number of draws; stride's shrinks like one over the number itself. <bookmark mark='d'/> The lottery has other virtues: it keeps no state, and a client can lend its tickets to a server that works on its behalf.",
+   "zh": "彩票有多不公平？Waldspurger 的度量是：让两个等长、彩票相同的作业运行，用第一个的完成时间除以第二个的。一表示完全公平。<bookmark mark='a'/>对只有一个时间片的作业，哪个先完成都可能，两种方法的比值都是二分之一。<bookmark mark='b'/>对十个时间片的作业，彩票平均为零点八二，步幅为零点九五。<bookmark mark='c'/>随机抽取只是慢慢地拉平，误差按抽取次数平方根的倒数缩小；步幅的误差则按次数本身的倒数缩小。<bookmark mark='d'/>彩票也有别的优点：它不保存状态，客户可以把自己的彩票借给代它工作的服务器。"
+  },
+  "70fba94f94c6": {
+   "scene": "Share",
+   "en": "Linux took a different road to proportional share. Since 2007 its main scheduler, Ingo Molnár's completely fair scheduler, tracks a virtual runtime for each task. <bookmark mark='a'/> The virtual runtime grows as the task runs, more slowly for tasks with more weight. <bookmark mark='b'/> The scheduler always runs the task whose virtual runtime is smallest, and keeps the tasks sorted in a red-black tree, the balanced tree of Part 17, so the choice takes logarithmic time. <bookmark mark='c'/> Tasks a and b alternate. When c arrives at tick forty, it starts at the smallest virtual runtime, not at zero, or it would monopolise the processor while it caught up. <bookmark mark='d'/> The weights come from the nice value: each level is a factor of one point two five. A task at nice zero against one at nice five gets seventy-five point four percent, as the weights predict. <bookmark mark='e'/> In 2023, Linux 6.6 replaced it with EEVDF, an algorithm from 1995 that keeps the same shares but also gives each task a virtual deadline, so that tasks needing short, frequent slices get them promptly.",
+   "zh": "Linux 走了另一条通往按比例分享的路。自2007年起，它的主调度器，Ingo Molnár 的完全公平调度器，为每个任务记录一个虚拟运行时间。<bookmark mark='a'/>任务运行时虚拟运行时间增长，权重越大的任务增长越慢。<bookmark mark='b'/>调度器总是运行虚拟运行时间最小的任务，并把任务按它排在一棵红黑树里，就是第17部分的平衡树，所以选择只需对数时间。<bookmark mark='c'/>任务 a 和 b 交替。c 在第四十个刻度到达时，从最小的虚拟运行时间开始，而不是从零开始，否则它在追赶期间会独占处理器。<bookmark mark='d'/>权重来自 nice 值：每一级是一点二五倍。nice 为零的任务对 nice 为五的任务，得到百分之七十五点四，正如权重所预测。<bookmark mark='e'/>2023年，Linux 6.6 用 EEVDF 取代了它，这是1995年的一个算法，保持同样的份额，又给每个任务一个虚拟截止期限，让需要短而频繁时间片的任务及时得到它们。"
+  },
+  "249fbdd57b34": {
+   "scene": "Multi",
+   "en": "Chapter ten. Many processors.",
+   "zh": "第10章。多个处理器。"
+  },
+  "e92f056049fd": {
+   "scene": "Multi",
+   "en": "With several processors, the first question is where the queue lives. <bookmark mark='a'/> One shared queue is simple and balances load perfectly, but every core must lock it to take a job, and a job runs on whichever core happens to be free, far from the data it left in another core's cache. <bookmark mark='b'/> So Linux, since version 2.6, keeps a queue per core. <bookmark mark='c'/> A job that stays on one core finds its data still in that core's caches. That is called affinity. <bookmark mark='d'/> Moving work is expensive. Waking a job on another core took twenty-five microseconds here, against three on the same one. <bookmark mark='e'/> But queues drift out of balance, so the kernel periodically moves work, from busy cores to idle ones, trying nearby cores first.",
+   "zh": "有好几个处理器时，第一个问题是队列放在哪里。<bookmark mark='a'/>一个共享队列很简单，负载均衡得完美，但每个核取作业都要给它加锁，而且作业在恰好空闲的那个核上运行，离它留在另一个核缓存里的数据很远。<bookmark mark='b'/>所以 Linux 从2.6版起给每个核一个队列。<bookmark mark='c'/>一直待在同一个核上的作业，会发现自己的数据还在那个核的缓存里。这叫作亲和性。<bookmark mark='d'/>搬动工作很贵。在这里，在另一个核上唤醒一个作业要二十五微秒，同一个核上只要三微秒。<bookmark mark='e'/>但队列会渐渐失衡，所以内核定期搬动工作，从忙的核搬到闲的核，先试附近的核。"
+  },
+  "3243b7a82de4": {
+   "scene": "Multi",
+   "en": "For programs that split themselves into many small tasks, there is a better scheme than a balancer. <bookmark mark='a'/> Each worker keeps its own double-ended queue of tasks, pushing and popping at the bottom. A worker that runs out picks another at random and steals from the top of its queue. <bookmark mark='b'/> We simulated a fork-join computation with eighty-three thousand units of work and a critical path of seventy-one. <bookmark mark='c'/> Blumofe and Leiserson proved in 1999 that work stealing finishes in expected time the work divided by the workers, plus a multiple of the critical path. <bookmark mark='d'/> The simulation sits right on that line, up to sixty-four workers, which run sixty times faster with only four hundred and eighty-seven steals. <bookmark mark='e'/> Steals are rare because the top of a queue holds the oldest task, which is usually the biggest. <bookmark mark='f'/> This is the scheduler inside Cilk, Java's fork-join pool, Go's runtime, and Rust's Rayon and Tokio.",
+   "zh": "对于把自己拆成许多小任务的程序，有比均衡器更好的方案。<bookmark mark='a'/>每个工作者有自己的双端任务队列，在底部压入和弹出。没活干的工作者随机挑另一个，从它队列的顶部偷一个。<bookmark mark='b'/>我们模拟了一个分叉-汇合计算，工作量八万三千个单位，关键路径七十一。<bookmark mark='c'/>Blumofe 和 Leiserson 在1999年证明，工作窃取的期望完成时间是工作量除以工作者数，再加上关键路径的若干倍。<bookmark mark='d'/>模拟结果正好落在这条线上，直到六十四个工作者，它们快了六十倍，只偷了四百八十七次。<bookmark mark='e'/>偷窃之所以少，是因为队列顶部放着最老的任务，它通常也是最大的。<bookmark mark='f'/>这就是 Cilk、Java 的 fork-join 池、Go 的运行时，以及 Rust 的 Rayon 和 Tokio 里面的调度器。"
+  },
+  "615c3cb03030": {
+   "scene": "RealTime",
+   "en": "Chapter eleven. Real time.",
+   "zh": "第11章。实时。"
+  },
+  "54fdcda34aa6": {
+   "scene": "RealTime",
+   "en": "In a car's brakes or an aircraft's controls, a late answer is a wrong answer. Real-time systems run periodic tasks, each needing some work every period, finished before the next one starts. <bookmark mark='a'/> Task one needs two ticks every five, and task two four ticks every seven. Together they keep the processor ninety-seven percent busy. <bookmark mark='b'/> The classic scheme gives fixed priorities by rate: the shorter the period, the higher the priority. That is rate-monotonic scheduling. <bookmark mark='c'/> At tick seven, task two has had only three of its four ticks, because task one keeps preempting it. It misses its deadline. <bookmark mark='d'/> Earliest deadline first instead runs whichever task's deadline is nearest, so priorities change from moment to moment. It meets every deadline. <bookmark mark='e'/> Liu and Layland proved in 1973 that on one processor, earliest deadline first succeeds whenever the total utilisation is at most one, which nothing can beat. <bookmark mark='f'/> Fixed priorities are still the common choice: they are simple, and when the system is overloaded, it is always the lowest-priority task that suffers, which engineers can plan for.",
+   "zh": "在汽车的刹车或飞机的操纵系统里，迟到的答案就是错误的答案。实时系统运行周期性任务，每个任务每个周期需要一些工作，必须在下一个周期开始前完成。<bookmark mark='a'/>任务一每五个刻度需要两个刻度，任务二每七个刻度需要四个。合起来让处理器百分之九十七都在忙。<bookmark mark='b'/>经典方案按速率给固定优先级：周期越短，优先级越高。这就是速率单调调度。<bookmark mark='c'/>在第七个刻度，任务二只得到了四个刻度中的三个，因为任务一不断抢占它。它错过了截止期限。<bookmark mark='d'/>最早截止期优先则运行截止期限最近的任务，所以优先级时时在变。它满足了每一个截止期限。<bookmark mark='e'/>Liu 和 Layland 在1973年证明，在单个处理器上，只要总利用率不超过一，最早截止期优先就能成功，没有什么能做得更好。<bookmark mark='f'/>固定优先级仍是常见的选择：它们简单，而且系统过载时受影响的总是优先级最低的任务，工程师可以为此做好计划。"
+  },
+  "cb760bdf89f5": {
+   "scene": "RealTime",
+   "en": "For rate-monotonic scheduling, Liu and Layland found a simple sufficient test. <bookmark mark='a'/> If the utilisation is at most n times two to the one over n, minus one, every deadline is met. For one task that is a hundred percent; for two, eighty-three; for four, seventy-six; and as n grows it falls to the natural logarithm of two, about sixty-nine percent. <bookmark mark='b'/> The proof sketch: the worst moment is when all tasks are released together, and the worst task set has periods within a factor of two, each task's work just filling the gap between the next two periods. <bookmark mark='c'/> But the test is only sufficient. We generated random sets of four tasks at each utilisation. <bookmark mark='d'/> The Liu-Layland test accepts almost nothing above seventy-six percent. The exact test, which computes each task's worst response time, accepts every set up to eighty percent, and most up to ninety. <bookmark mark='e'/> Earliest deadline first meets them all, up to a hundred. <bookmark mark='f'/> And when the periods divide one another, rate monotonic can use the whole processor: periods of ten, twenty and forty, at eighty-seven and a half percent, are comfortably on time.",
+   "zh": "对速率单调调度，Liu 和 Layland 找到了一个简单的充分判据。<bookmark mark='a'/>如果利用率不超过 n 乘以二的 n 分之一次方减一，每个截止期限都能满足。一个任务时是百分之百；两个时是八十三；四个时是七十六；n 增大时它降到二的自然对数，约百分之六十九。<bookmark mark='b'/>证明的梗概是：最坏的时刻是所有任务同时释放，最坏的任务集周期相差不到两倍，每个任务的工作恰好填满后面两个周期之间的空隙。<bookmark mark='c'/>但这个判据只是充分的。我们在每个利用率下生成了随机的四任务集合。<bookmark mark='d'/>Liu-Layland 判据几乎不接受任何超过百分之七十六的集合。精确判据计算每个任务的最坏响应时间，它接受直到百分之八十的全部集合，以及直到九十的大部分。<bookmark mark='e'/>最早截止期优先全部满足，直到百分之百。<bookmark mark='f'/>当各周期互相整除时，速率单调可以用满整个处理器：周期为十、二十和四十、利用率百分之八十七点五的集合，从容按时。"
+  },
+  "f2ef90e7c7d7": {
+   "scene": "RealTime",
+   "en": "Days after Mars Pathfinder landed in July 1997, its computer started resetting itself. <bookmark mark='a'/> Three tasks matter. A low-priority meteorological task takes a lock on the information bus. The high-priority bus manager arrives and waits for the lock. Then a medium-priority communications task, which needs no lock, preempts the meteorological task, and runs for a long time. <bookmark mark='b'/> The high-priority task is now stuck behind a medium-priority one: priority inversion. It misses its deadline, and a watchdog concludes that something is badly wrong and resets the system. <bookmark mark='c'/> The cure is priority inheritance: while a task holds a lock that a higher-priority task wants, it runs at that higher priority. <bookmark mark='d'/> Now the meteorological task finishes with the lock quickly, and the bus manager is done at tick thirteen. <bookmark mark='e'/> Engineers at the Jet Propulsion Laboratory reproduced the fault on a copy of the spacecraft on Earth, and fixed it by uploading a change to one setting of the VxWorks operating system, turning inheritance on.",
+   "zh": "1997年7月，火星探路者着陆几天后，它的计算机开始反复自行重启。<bookmark mark='a'/>有三个任务很关键。一个低优先级的气象任务拿到了信息总线的锁。高优先级的总线管理任务到来，等这把锁。然后一个不需要锁的中优先级通信任务抢占了气象任务，并且运行了很久。<bookmark mark='b'/>高优先级任务现在被卡在一个中优先级任务后面：优先级反转。它错过了截止期限，看门狗断定出了严重问题，重启了系统。<bookmark mark='c'/>解药是优先级继承：当一个任务持有更高优先级任务想要的锁时，它以那个更高的优先级运行。<bookmark mark='d'/>现在气象任务很快用完了锁，总线管理任务在第十三个刻度完成。<bookmark mark='e'/>喷气推进实验室的工程师在地球上的一台航天器复制品上重现了这个故障，上传了对 VxWorks 操作系统一个设置的修改，打开了继承，修好了它。"
+  },
+  "4fc902414874": {
+   "scene": "Queueing",
+   "en": "Chapter twelve. Queueing theory.",
+   "zh": "第12章。排队论。"
+  },
+  "6f00253ef691": {
+   "scene": "Queueing",
+   "en": "Queueing theory begins with a law so general it is almost a tautology. <bookmark mark='a'/> Plot the number of customers who have arrived at a server, and below it the number who have left. <bookmark mark='b'/> Between the two curves, each horizontal strip is one customer, from arrival to departure: its width is that customer's time in the system. <bookmark mark='c'/> Now read the same area by columns: at any moment the height between the curves is the number of customers inside. <bookmark mark='d'/> So the total of everyone's time equals the integral of the number present. <bookmark mark='e'/> Divide both sides by the length of time. On the left, arrivals per unit time times the mean time each spends; on the right, the mean number inside. L equals lambda W. John Little proved it in general in 1961: it holds for any queue, any order, any distribution. <bookmark mark='f'/> In our simulation at eighty percent load, the two sides agree to three decimal places.",
+   "zh": "排队论从一条普遍到几乎是同义反复的定律开始。<bookmark mark='a'/>画出到达服务器的顾客累计数，在它下面画出已离开的累计数。<bookmark mark='b'/>两条曲线之间，每一条横带是一位顾客，从到达到离开：它的宽度就是这位顾客在系统中的时间。<bookmark mark='c'/>现在按竖列读同一块面积：任何时刻，两条曲线之间的高度就是系统里的顾客数。<bookmark mark='d'/>所以所有人的时间之和，等于在场人数的积分。<bookmark mark='e'/>两边都除以时间长度。左边是单位时间的到达数乘以每人的平均停留时间；右边是系统里的平均人数。L 等于 lambda W。John Little 在1961年给出了一般性的证明：它对任何队列、任何顺序、任何分布都成立。<bookmark mark='f'/>在我们八成负载的模拟里，两边一直吻合到小数点后第三位。"
+  },
+  "f71ef3bbcafa": {
+   "scene": "Queueing",
+   "en": "The simplest queue with randomness in it is called M/M/1: customers arrive at random, at rate lambda; one server works on them at rate mu, each job taking a random, exponentially distributed time. <bookmark mark='a'/> Its state is just the number of customers inside. Arrivals push it up one, at rate lambda; completions pull it down one, at rate mu. <bookmark mark='b'/> In the long run, the flow across each cut between neighbouring states must balance: lambda times the probability of n equals mu times the probability of n plus one. <bookmark mark='c'/> So the probabilities fall off geometrically, by the ratio rho, lambda over mu, which is the fraction of time the server is busy. <bookmark mark='d'/> The mean number inside is rho over one minus rho. <bookmark mark='e'/> And by Little's law, the mean time inside is one over mu minus lambda.",
+   "zh": "带随机性的最简单的队列叫 M/M/1：顾客以速率 lambda 随机到达；一个服务器以速率 mu 处理他们，每个作业花的时间是随机的、服从指数分布。<bookmark mark='a'/>它的状态就是系统里的顾客数。到达以速率 lambda 把它推高一，完成以速率 mu 把它拉低一。<bookmark mark='b'/>长期来看，相邻状态之间每一道切口两侧的流量必须平衡：lambda 乘以 n 的概率，等于 mu 乘以 n 加一的概率。<bookmark mark='c'/>所以概率按比值 rho 几何递减，rho 是 lambda 除以 mu，也就是服务器忙碌的时间比例。<bookmark mark='d'/>系统里的平均人数是 rho 除以一减 rho。<bookmark mark='e'/>由利特尔法则，平均停留时间是一除以 mu 减 lambda。"
+  },
+  "d659c73024e4": {
+   "scene": "Queueing",
+   "en": "Plot one over one minus rho, the mean response time in units of the service time. <bookmark mark='a'/> It is the hockey stick. The dots are our simulation, a million jobs at each load, and they sit on the formula. <bookmark mark='b'/> At fifty percent load, a request takes twice as long as on an idle machine. <bookmark mark='c'/> At ninety percent, ten times as long: five times worse than at fifty, though the server is only working eighty percent harder. <bookmark mark='d'/> The tail is worse still: at ninety percent load, one request in a hundred takes forty-six service times, because the response time of this queue is itself exponentially distributed. <bookmark mark='e'/> Near a hundred percent, every extra percent of load costs more than the one before, which is why people who plan capacity aim for fifty to seventy percent, and why a server that seemed fine yesterday can fall over today with only a little more traffic.",
+   "zh": "画出一除以一减 rho，即以服务时间为单位的平均响应时间。<bookmark mark='a'/>这就是曲棍球杆。圆点是我们的模拟，每个负载一百万个作业，它们就落在公式上。<bookmark mark='b'/>负载百分之五十时，一个请求花的时间是空闲机器上的两倍。<bookmark mark='c'/>百分之九十时是十倍：比百分之五十时差五倍，而服务器只多干了百分之八十的活。<bookmark mark='d'/>尾部更糟：在百分之九十的负载下，一百个请求中有一个要花四十六个服务时间，因为这个队列的响应时间本身就服从指数分布。<bookmark mark='e'/>接近百分之百时，每多一个百分点的负载都比上一个更贵，这就是为什么做容量规划的人瞄准百分之五十到七十，也是为什么一台昨天看起来还好的服务器，今天只多了一点流量就会倒下。"
+  },
+  "8a404ba0c5ce": {
+   "scene": "Queueing",
+   "en": "Why so steep? Watch the number of jobs in the system over time. It is a random walk: up one at each arrival, down one at each completion, and it cannot go below zero. <bookmark mark='a'/> At fifty percent load the walk is pulled firmly down, and bursts of arrivals drain away quickly. <bookmark mark='b'/> At ninety percent the pull is weak. A burst builds a queue of fifteen or twenty, and it takes a long time to drain, so most jobs arrive to find a crowd. <bookmark mark='c'/> The averages hide this: the queue is usually short or very long, and it is the long stretches that people remember.",
+   "zh": "为什么这么陡？看系统里的作业数随时间的变化。这是一次随机游走：每次到达加一，每次完成减一，而且不能低于零。<bookmark mark='a'/>负载百分之五十时，游走被牢牢地往下拉，一阵阵到达很快就消化掉。<bookmark mark='b'/>负载百分之九十时，这股拉力很弱。一阵到达就堆起十五或二十个的队列，要很久才消化，所以大多数作业到达时都看到一群人。<bookmark mark='c'/>平均值把这一点藏起来了：队列通常要么很短、要么很长，而人们记住的正是那些很长的时段。"
+  },
+  "5e7d16377ccb": {
+   "scene": "Queueing",
+   "en": "Exponential service times are a convenient assumption. Felix Pollaczek and Aleksandr Khinchine found the mean response time for any distribution of service times. <bookmark mark='a'/> It depends on the variance, through the squared coefficient of variation, C squared. <bookmark mark='b'/> At eighty percent load, with mean service time one: if every job takes exactly one, the mean response is three. With exponential times, five. With a mix of many short jobs and a few long ones, twenty-three. <bookmark mark='c'/> Same load, same mean, and the variable server is nearly eight times slower than the steady one. <bookmark mark='d'/> The few long jobs block everyone behind them: the convoy effect from chapter seven, now as a formula.",
+   "zh": "指数分布的服务时间是一个方便的假设。Felix Pollaczek 和 Aleksandr Khinchine 求出了任意服务时间分布下的平均响应时间。<bookmark mark='a'/>它通过变异系数的平方，C 平方，依赖于方差。<bookmark mark='b'/>负载百分之八十，平均服务时间为一：如果每个作业都恰好花一，平均响应是三。服务时间服从指数分布时是五。许多短作业夹着几个长作业时是二十三。<bookmark mark='c'/>同样的负载、同样的均值，波动大的服务器比稳定的慢将近八倍。<bookmark mark='d'/>少数长作业挡住了后面所有人：这是第7章的护航效应，如今写成了公式。"
+  },
+  "facc8cc508d1": {
+   "scene": "Queueing",
+   "en": "The order of service matters as much. Same load, same jobs, three disciplines. <bookmark mark='a'/> Processor sharing, round robin with a tiny quantum, has a remarkable property: its mean response time is the mean size over one minus rho, whatever the distribution of sizes. Variance does not hurt it. <bookmark mark='b'/> Shortest remaining processing time first is optimal, by chapter seven's exchange argument, as Schrage proved in 1968: two point three six against five, for exponential sizes. <bookmark mark='c'/> With heavy-tailed sizes, the kind measured for files, web pages and jobs in data centres, first come first served is thirteen times worse than SRPT. <bookmark mark='d'/> The usual worry is that big jobs starve. Mor Harchol-Balter and her colleagues showed that for web servers they barely suffer, and built a server that schedules its connections this way.",
+   "zh": "服务的顺序同样要紧。同样的负载、同样的作业、三种规则。<bookmark mark='a'/>处理器共享，也就是时间片极小的轮转，有一个了不起的性质：它的平均响应时间是平均大小除以一减 rho，不论大小怎样分布。方差伤不了它。<bookmark mark='b'/>最短剩余处理时间优先是最优的，由第7章的交换论证可知，Schrage 在1968年证明了这一点：对指数分布的大小，二点三六对五。<bookmark mark='c'/>对于重尾分布的大小，也就是文件、网页和数据中心作业实测的那种，先来先服务比 SRPT 差十三倍。<bookmark mark='d'/>通常的担心是大作业会挨饿。Mor Harchol-Balter 和她的同事证明，在网页服务器上它们几乎不受影响，还做出了一个按这种方式调度连接的服务器。"
+  },
+  "c3b9629903a4": {
+   "scene": "Designs",
+   "en": "Chapter thirteen. Kernel designs.",
+   "zh": "第13章。内核的设计。"
+  },
+  "a472e280b8cc": {
+   "scene": "Designs",
+   "en": "How much of the operating system should run in kernel mode? There are four main answers. <bookmark mark='a'/> A monolithic kernel, like Unix and Linux, puts everything inside: the file systems, the drivers, the network stack, memory and scheduling. Calls between them are ordinary function calls, which is fast, but a bug in any driver can bring down the machine. <bookmark mark='b'/> A microkernel keeps only the minimum inside, messages between processes, memory and scheduling, and runs file systems and drivers as ordinary processes. A crashed driver can be restarted, but every request now costs messages and switches. <bookmark mark='c'/> An exokernel goes further: the kernel only divides the hardware safely, and each application links its own operating system as a library. <bookmark mark='d'/> And a unikernel links one application with just the operating-system code it needs into a single image, run directly on a hypervisor, the subject of Part 32.",
+   "zh": "操作系统有多少部分应该在内核态运行？主要有四种答案。<bookmark mark='a'/>宏内核，比如 Unix 和 Linux，把一切都放在里面：文件系统、驱动程序、网络栈、内存和调度。它们之间的调用就是普通的函数调用，这很快，但任何一个驱动程序的错误都能让整台机器崩溃。<bookmark mark='b'/>微内核只把最少的东西放在里面，进程间消息、内存和调度，把文件系统和驱动程序作为普通进程运行。崩溃的驱动程序可以重启，但现在每个请求都要付出消息和切换的代价。<bookmark mark='c'/>外核走得更远：内核只负责安全地分配硬件，每个应用程序把自己的操作系统作为库链接进来。<bookmark mark='d'/>单一内核则把一个应用程序和它所需的那部分操作系统代码链接成一个映像，直接运行在虚拟机管理程序上，那是第32部分的主题。"
+  },
+  "92ff146814e3": {
+   "scene": "Designs",
+   "en": "The choice was argued in public. In January 1992 Andrew Tanenbaum, author of the teaching system MINIX, posted that Linux was obsolete: <bookmark mark='a'/> a monolithic kernel, he wrote, was a giant step back into the nineteen-seventies. <bookmark mark='b'/> Linus Torvalds replied that the microkernel might be cleaner in theory, but Linux worked, and was fast, now. <bookmark mark='c'/> The argument was about the cost of messages. Mach's were slow, but Jochen Liedtke showed in the L4 kernels that a message between processes could be an order of magnitude faster, with a kernel designed around it. <bookmark mark='d'/> Sizes tell the story. PebbleOS is two hundred and eighty-four instructions. seL4, a microkernel in the L4 family, is about eight thousand seven hundred lines of C, and in 2009 it became the first general-purpose kernel with a machine-checked proof that it does what its specification says. Linux has more than thirty million lines, most of them drivers. <bookmark mark='e'/> In practice the winners mix: macOS is the Mach microkernel fused with BSD Unix, cars run the QNX microkernel, and Linux loads its drivers as modules.",
+   "zh": "这个选择曾被公开辩论。1992年1月，教学系统 MINIX 的作者 Andrew Tanenbaum 发帖说 Linux 已经过时：<bookmark mark='a'/>他写道，宏内核是倒退回七十年代的一大步。<bookmark mark='b'/>Linus Torvalds 回答说，微内核在理论上也许更干净，但 Linux 现在就能用，而且很快。<bookmark mark='c'/>争论的焦点是消息的代价。Mach 的消息很慢，但 Jochen Liedtke 在 L4 内核中证明，围绕消息设计内核，进程间的消息可以快一个数量级。<bookmark mark='d'/>规模说明了一切。PebbleOS 是两百八十四条指令。seL4 是 L4 家族中的一个微内核，大约八千七百行 C，在2009年成为第一个有机器检查过的证明、证明它确实按规格行事的通用内核。Linux 有三千多万行，大部分是驱动程序。<bookmark mark='e'/>实践中，胜出者都是混合的：macOS 是 Mach 微内核与 BSD Unix 的融合，汽车里跑着 QNX 微内核，Linux 则把驱动程序作为模块加载。"
+  },
+  "c01d9bae824c": {
+   "scene": "PebbleOS",
+   "en": "Chapter fourteen. PebbleOS runs the Job.",
+   "zh": "第14章。PebbleOS 运行那项任务。"
+  },
+  "73c9f6e55686": {
+   "scene": "PebbleOS",
+   "en": "Now PebbleOS runs the Job, and the Job becomes two processes, joined by a pipe, as a Unix user would write it. <bookmark mark='a'/> The first process, tok, reads the text from the tape and writes one lower-case word per line. It is eighteen lines of our own language. <bookmark mark='b'/> The second, job, is Part 17's hash-table program, unchanged. It reads words from the pipe as if they were the novels, and prints the same twenty lines. <bookmark mark='c'/> Both are compiled by Part 13's compiler with one change: get-c and put-c become calls into the small library, which talks to the kernel four kibibytes at a time. <bookmark mark='d'/> The kernel moves the bytes, blocks whichever end has to wait, and preempts each process after twenty thousand instructions.",
+   "zh": "现在 PebbleOS 来运行那项任务，任务变成两个用管道连起来的进程，就像 Unix 用户会写的那样。<bookmark mark='a'/>第一个进程 tok 从纸带读入文本，每行写出一个小写单词。它是用我们自己的语言写的十八行。<bookmark mark='b'/>第二个是 job，第17部分的哈希表程序，一字未改。它从管道读入单词，就像那是小说本身，并打印出同样的二十行。<bookmark mark='c'/>两者都由第13部分的编译器编译，只有一处改变：getc 和 putc 变成对那个小库的调用，它与内核一次交换四 KiB。<bookmark mark='d'/>内核搬运字节，阻塞必须等待的那一端，每两万条指令抢占一次每个进程。"
+  },
+  "fe4037090b23": {
+   "scene": "PebbleOS",
+   "en": "Here is a short passage of seven thousand bytes going through. <bookmark mark='a'/> The top chart shows who has the processor: tok in blue, job in yellow, the kernel in orange between them. <bookmark mark='b'/> Below, the number of bytes waiting in the pipe. Tok writes in four-kibibyte bursts, and the pipe fills; job reads, and it drains. <bookmark mark='c'/> Fifteen context switches, thirty-eight timer interrupts, a dozen system calls, and once, the job had to wait for an empty pipe. <bookmark mark='d'/> Neither program knows the other exists, or that it is being interrupted. <bookmark mark='e'/> And the output is byte for byte the Job's twenty lines, on every one of the thirty-two test passages.",
+   "zh": "这是一段七千字节的短文在流过。<bookmark mark='a'/>上面的图显示谁占着处理器：tok 是蓝色，job 是黄色，它们之间的内核是橙色。<bookmark mark='b'/>下面是管道里等待的字节数。tok 按四 KiB 一阵地写，管道被填满；job 读，管道被排空。<bookmark mark='c'/>十五次上下文切换，三十八次定时器中断，十来次系统调用，还有一次 job 不得不等一个空管道。<bookmark mark='d'/>两个程序都不知道对方存在，也不知道自己被打断了。<bookmark mark='e'/>输出与任务的二十行逐字节相同，在全部三十二段测试文本上都是如此。"
+  },
+  "4a09fdd8ad09": {
+   "scene": "PebbleOS",
+   "en": "What does all this cost? We ran the pipeline on thirty-two passages and counted every instruction, in each process and in the kernel, then fitted the counts and projected them to all thirty novels. <bookmark mark='a'/> Per byte of text: thirty-four instructions in tok, fifty in job, and twenty-three in the kernel. A hundred and seven in all. <bookmark mark='b'/> The bare program of Part 17 needed thirty-nine. <bookmark mark='c'/> The kernel's share is almost all copying, one byte at a time: from the tape into tok, from tok into the pipe, from the pipe into job. <bookmark mark='d'/> Tok is extra work the single program never did, and job pays eleven more instructions a byte because every get-c is now a function call. <bookmark mark='e'/> Run alone under PebbleOS, the job needs one point four four times its bare instructions. <bookmark mark='f'/> The fitted counts match passages held out of the fit to within about two percent. <bookmark mark='g'/> Copying is the price here, and later parts remove it: Part 32 lets processes share pages, and Part 34 moves data without the processor touching each byte.",
+   "zh": "这一切要多少代价？我们在三十二段文本上运行这条流水线，数出每一个进程和内核里的每一条指令，然后拟合这些计数，推算到全部三十部小说。<bookmark mark='a'/>每个文本字节：tok 里三十四条指令，job 里五十条，内核里二十三条。一共一百零七条。<bookmark mark='b'/>第17部分的裸程序需要三十九条。<bookmark mark='c'/>内核那一份几乎全是复制，一次一个字节：从纸带复制到 tok，从 tok 复制到管道，从管道复制到 job。<bookmark mark='d'/>tok 是单个程序从来不用做的额外工作，而 job 每字节多付十一条指令，因为现在每次 getc 都是一次函数调用。<bookmark mark='e'/>在 PebbleOS 下单独运行时，job 需要它裸运行时指令数的一点四四倍。<bookmark mark='f'/>拟合的计数与拟合时留出的文本吻合，误差约在百分之二以内。<bookmark mark='g'/>这里的代价是复制，后面的部分会消除它：第32部分让进程共享页面，第34部分让数据移动时不必由处理器碰每一个字节。"
+  },
+  "008da4b89fc3": {
+   "scene": "PebbleOS",
+   "en": "So the ledger gets row eleven. <bookmark mark='a'/> Two point six seven billion instructions, priced on Part 8's out-of-order core at the same rate as row eight, with the same memory stalls, and thirty-five cycles of pipeline drain for every trap and every return. <bookmark mark='b'/> Two point one seven seconds, against point eight one for the bare program: two point seven times slower. Like the garbage-collected row of Part 15, it goes backwards, and that is the honest result. <bookmark mark='c'/> An operating system does not make one program faster. It makes many programs safe from one another, lets them share the machine, and lets two programs that know nothing about each other work as one. Making that cheap is the work of the next three parts.",
+   "zh": "于是账本得到了第十一行。<bookmark mark='a'/>二十六点七亿条指令，在第8部分的乱序核心上，按与第八行相同的速率、相同的内存停顿计价，每次陷入和每次返回再加三十五个周期的流水线排空。<bookmark mark='b'/>二点一七秒，裸程序是零点八一秒：慢了二点七倍。像第15部分那一行带垃圾回收的结果一样，它退步了，这是诚实的结果。<bookmark mark='c'/>操作系统不会让一个程序变快。它让许多程序彼此安全，让它们共享机器，并让两个彼此一无所知的程序像一个程序那样协作。让这变得便宜，是接下来三个部分的工作。"
+  },
+  "459a84d8a76c": {
+   "scene": "Frontier",
+   "en": "Chapter fifteen. The frontier: verified kernels, and scheduling in microseconds.",
+   "zh": "第15章。前沿：经过验证的内核，以及微秒级的调度。"
+  },
+  "220a14d8dd0c": {
+   "scene": "Frontier",
+   "en": "The kernel is the one program everything else trusts, so it is where proofs pay most. <bookmark mark='a'/> In 2009 a team at NICTA in Sydney proved that seL4, a microkernel of eight thousand seven hundred lines of C, implements its formal specification exactly: it cannot crash, overflow a buffer or dereference a bad pointer. Later work carried the proof down to the machine code, and proved that seL4 keeps processes' data both intact and secret. <bookmark mark='b'/> CertiKOS, in 2016, verified a kernel that runs on several cores at once. Hyperkernel, in 2017, made verification push-button, with an SMT solver checking each system call automatically. <bookmark mark='c'/> The cost is the obstacle. seL4's proof is about two hundred thousand lines, some twenty person-years of work. <bookmark mark='d'/> Still, it has flown an autonomous helicopter, in a DARPA programme where professional attackers failed to break in. <bookmark mark='e'/> The open problem is to verify a kernel with the speed and the features of Linux, with proof effort that does not grow faster than the code.",
+   "zh": "内核是其他一切都信任的那个程序，所以证明在这里回报最大。<bookmark mark='a'/>2009年，悉尼 NICTA 的一个团队证明了 seL4，一个八千七百行 C 的微内核，精确地实现了它的形式化规格：它不会崩溃、不会缓冲区溢出、不会解引用坏指针。后来的工作把证明一直推到机器码，并证明了 seL4 让进程的数据既完整又保密。<bookmark mark='b'/>2016年的 CertiKOS 验证了一个同时在多个核上运行的内核。2017年的 Hyperkernel 让验证变成一键式的，用 SMT 求解器自动检查每个系统调用。<bookmark mark='c'/>代价是障碍。seL4 的证明大约二十万行，约二十人年的工作。<bookmark mark='d'/>即便如此，它已经在一架自主直升机上飞过，那是 DARPA 的一个项目，专业攻击者都没能攻进去。<bookmark mark='e'/>悬而未决的问题是：验证一个有 Linux 的速度和功能的内核，而证明的工作量增长不快于代码。"
+  },
+  "ded531d1ed75": {
+   "scene": "Frontier",
+   "en": "The second frontier is speed. A data-centre service may answer requests in half a microsecond, and its users care about the slowest one in a thousand. <bookmark mark='a'/> We simulated sixteen cores serving a mix like a key-value store's: nearly all requests take half a microsecond, and one in two hundred is a scan of five hundred. <bookmark mark='b'/> With a queue per core, as network cards usually spread requests, a short request that lands behind a scan waits for it: four thousand microseconds at the ninety-ninth point nine percentile, at seventy percent load. <bookmark mark='c'/> One shared queue is much better, but when all sixteen cores happen to be busy with scans, the short requests still wait. <bookmark mark='d'/> Preempting every five microseconds, even losing one microsecond at every preemption, brings it down to ten. <bookmark mark='e'/> That is what the Shinjuku system did in 2019, with tricks from virtualisation hardware to interrupt a core that fast. Linux's timer, by comparison, ticks every one to four milliseconds.",
+   "zh": "第二个前沿是速度。数据中心的服务可能在半微秒内回应请求，而它的用户在意的是千分之一最慢的那个。<bookmark mark='a'/>我们模拟了十六个核，服务一种类似键值存储的混合负载：几乎所有请求都花半微秒，每两百个里有一个是花五百微秒的扫描。<bookmark mark='b'/>每个核一个队列，网卡通常就是这样分发请求的，落在扫描后面的短请求就得等它：负载百分之七十时，第九十九点九百分位是四千微秒。<bookmark mark='c'/>一个共享队列好得多，但当十六个核恰好都在忙着扫描时，短请求还是要等。<bookmark mark='d'/>每五微秒抢占一次，即使每次抢占损失一微秒，也能把它降到十。<bookmark mark='e'/>这正是2019年的 Shinjuku 系统所做的，它借助虚拟化硬件的技巧，才能那么快地打断一个核。相比之下，Linux 的定时器每一到四毫秒才响一次。"
+  },
+  "e4c946302891": {
+   "scene": "Frontier",
+   "en": "How short should the quantum be? <bookmark mark='a'/> Too long, and short requests wait behind scans. <bookmark mark='b'/> Too short, and the cost of preempting eats the cores. At one microsecond, the scans spend as long being preempted as running, the machine is overloaded, and a scan takes seven and a half milliseconds. <bookmark mark='c'/> Here the best quantum is about two microseconds. <bookmark mark='d'/> But no formula tells us that. Even the mean response time of a queue with several servers and general job sizes has no exact closed form, so these choices are made by simulation and by trial.",
+   "zh": "时间片应该多短？<bookmark mark='a'/>太长，短请求就要排在扫描后面。<bookmark mark='b'/>太短，抢占的代价就吃掉了核。时间片为一微秒时，扫描花在被抢占上的时间和运行的时间一样多，机器过载，一次扫描要七点五毫秒。<bookmark mark='c'/>这里最好的时间片大约是两微秒。<bookmark mark='d'/>但没有公式告诉我们这一点。即使是多服务器、一般作业大小的队列，连平均响应时间都没有精确的闭式解，所以这些选择只能靠模拟和尝试。"
+  },
+  "394105bf0abd": {
+   "scene": "Frontier",
+   "en": "The third frontier changes what a kernel is. eBPF lets an ordinary user load small programs into the running Linux kernel. <bookmark mark='a'/> Count system calls, filter network packets, enforce a security policy. <bookmark mark='b'/> Before running anything, the kernel's verifier checks that every path through the program ends, and that every memory access stays in bounds: the halting problem of Part 25, avoided by allowing only programs simple enough to check. <bookmark mark='c'/> Then a just-in-time compiler turns it into machine code, and the kernel runs it whenever its event occurs. <bookmark mark='d'/> It now traces production systems and routes packets for large websites. <bookmark mark='e'/> But the verifier and the compilers are themselves complicated code, and their bugs have become ways to take over the kernel. <bookmark mark='f'/> So researchers are verifying the verifier: with abstract interpretation in PREVAIL, with proofs of the just-in-time compilers in Jitterbug, and by machine-checking the verifier's arithmetic on ranges in Agni.",
+   "zh": "第三个前沿改变了内核是什么。eBPF 让普通用户把小程序装进正在运行的 Linux 内核。<bookmark mark='a'/>统计系统调用、过滤网络包、执行安全策略。<bookmark mark='b'/>运行任何东西之前，内核的验证器检查程序的每条路径都会结束，每次内存访问都在界内：第25部分的停机问题，靠只允许简单到可以检查的程序而避开。<bookmark mark='c'/>然后即时编译器把它变成机器码，每当它的事件发生，内核就运行它。<bookmark mark='d'/>它如今用来跟踪生产系统，为大型网站转发数据包。<bookmark mark='e'/>但验证器和编译器本身就是复杂的代码，它们的错误已经变成了接管内核的途径。<bookmark mark='f'/>所以研究者在验证验证器：PREVAIL 用抽象解释，Jitterbug 证明即时编译器正确，Agni 用机器检查验证器对取值范围的算术。"
+  },
+  "4ef1c7f9089a": {
+   "scene": "Frontier",
+   "en": "Six open problems. <bookmark mark='a'/> Whether a verified kernel can have the performance and breadth of Linux. <bookmark mark='b'/> Exact response times for a queue with several servers and general job sizes, which queueing theory still lacks. <bookmark mark='c'/> The best schedule for tail latency on many cores, when every preemption costs time. <bookmark mark='d'/> Worst-case timing on multicore chips, where one core's memory traffic slows another, which is what blocks multicore processors in safety-critical systems. <bookmark mark='e'/> How much an eBPF verifier can accept while staying sound and fast. <bookmark mark='f'/> And how close a scheduler that does not know job sizes can come to shortest remaining time first; Mor Harchol-Balter's group has made progress with the Gittins index. <bookmark mark='g'/> This part's research problem takes a small, computable case of the third.",
+   "zh": "六个悬而未决的问题。<bookmark mark='a'/>经过验证的内核能否有 Linux 的性能和广度。<bookmark mark='b'/>多服务器、一般作业大小的队列的精确响应时间，排队论至今还没有。<bookmark mark='c'/>当每次抢占都要花时间时，多核上针对尾延迟的最佳调度。<bookmark mark='d'/>多核芯片上的最坏情况时序，一个核的内存流量会拖慢另一个，这正是多核处理器难以用于安全攸关系统的原因。<bookmark mark='e'/>eBPF 验证器能接受多少程序，同时仍然可靠而快速。<bookmark mark='f'/>以及一个不知道作业大小的调度器，能多接近最短剩余时间优先；Mor Harchol-Balter 的小组用 Gittins 指数取得了进展。<bookmark mark='g'/>本部分的研究问题，取第三个问题的一个小的、可计算的情形。"
+  },
+  "b130ca7cc4ac": {
+   "scene": "Outro",
+   "en": "What we built in this part. Time-sharing, from CTSS to Linux. A mode bit, traps and a timer for Pebble, and a kernel that uses them. Processes, context switches, and fork, exec and a shell, measured on this machine. Schedulers from first come first served to MLFQ, lottery, stride and Linux's own, with the proof that shortest first is optimal. Rate monotonic and earliest deadline first, and a bug on Mars. And queueing theory: Little's law, the hockey stick, and why variance and order matter.",
+   "zh": "这一部分我们搭建了什么。分时，从 CTSS 到 Linux。给 Pebble 的模式位、陷阱和定时器，以及一个使用它们的内核。进程、上下文切换，还有 fork、exec 和一个外壳，都在这台机器上测量过。调度器，从先来先服务到多级反馈队列、彩票、步幅和 Linux 自己的那一个，外加短作业优先最优的证明。速率单调和最早截止期优先，以及火星上的一个错误。还有排队论：利特尔法则、曲棍球杆，以及为什么方差和顺序都很重要。"
+  },
+  "a2055ad171e0": {
+   "scene": "Outro",
+   "en": "Where this comes back. Part 32 gives every process its own addresses, which makes fork cheap and lets one machine pretend to be several. Part 33 deals with the races that preemption creates. Part 34 adds a disk, its interrupts and a file system to PebbleOS. Part 40 applies Little's law to work in progress, and Part 43 to queues between services. And Parts 45 and 50 plan capacity with queueing theory, and find where time goes with eBPF.",
+   "zh": "它们会在哪里再出现。第32部分给每个进程自己的地址，让 fork 变便宜，也让一台机器能假装成好几台。第33部分处理抢占带来的竞争。第34部分给 PebbleOS 加上磁盘、它的中断和一个文件系统。第40部分把利特尔法则用于在制品，第43部分用于服务之间的队列。第45和第50部分用排队论规划容量，用 eBPF 找出时间花在哪里。"
+  },
+  "9678380d283a": {
+   "scene": "Outro",
+   "en": "In practice. Before optimising, count the system calls with strace, perf or bpftrace. Batch them, with big buffers or Linux's io-uring, and let the vDSO answer the clock. Prefer posix-spawn to fork in large programs, and pin latency-critical threads to cores. Remember that nice values and control-group weights are just shares in the fair scheduler. And plan servers to run at fifty to seventy percent, watching the ninety-ninth percentile, not the mean.",
+   "zh": "在实践中。优化之前，先用 strace、perf 或 bpftrace 数一数系统调用。把它们成批处理，用大缓冲区或 Linux 的 io_uring，让 vDSO 来回答时钟。在大程序里优先用 posix_spawn 而不是 fork，把对延迟敏感的线程绑定到核上。记住 nice 值和控制组权重不过是公平调度器里的份额。规划服务器时让它运行在百分之五十到七十，盯住第九十九百分位，而不是平均值。"
+  },
+  "80ecba478223": {
+   "scene": "Outro",
+   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build problem: give PebbleOS a sleep call and a stride scheduler. The last, marked with a star, is a research problem: how short the quantum should be when preemption costs time, which the microsecond schedulers of the frontier chapter set by trial.",
+   "zh": "六道习题，完整解答在本部分的笔记里。可以在任何一道上暂停。第五道是动手题：给 PebbleOS 一个 sleep 调用和一个步幅调度器。最后一道标着星号，是研究问题：当抢占要花时间时，时间片应该多短，前沿那一章的微秒级调度器都是靠尝试来定的。"
+  },
+  "392ae779ff57": {
+   "scene": "Outro",
+   "en": "Next time, Part 32: Virtual Memory. Every process believes it owns a huge, private, contiguous memory, and none of them does. Page tables, the translation cache that makes them fast, and page faults; which page to throw out when memory is full, and the surprise that more memory can mean more faults; and the virtual machines and containers built on top. PebbleOS gains an MMU. Part 32, Virtual Memory.",
+   "zh": "下一次，第32部分：虚拟内存。每个进程都以为自己拥有一大块私有的、连续的内存，而没有一个是真的。页表、让它们变快的地址转换缓存，以及缺页；内存满了时把哪一页扔出去，以及更多内存反而可能带来更多缺页的意外；还有建在它们之上的虚拟机和容器。PebbleOS 将得到一个内存管理单元。第32部分，虚拟内存。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "本部分所依据的书和论文，都在屏幕上和笔记里。感谢观看。"
+  }
+ },
+ "title_en": "Computer Science, Built: Part 31, The Kernel",
+ "chapters_en": {
+  "Hook": "One machine, many programs",
+  "History": "1. From batch to time-sharing",
+  "Protection": "2. Protection: the mode bit",
+  "Traps": "3. Traps and the system call",
+  "Process": "4. The process",
+  "Switch": "5. The context switch",
+  "Fork": "6. fork, exec and wait",
+  "Scheduling": "7. Scheduling: FCFS, SJF, SRTF",
+  "Mlfq": "8. Round robin and the multi-level feedback queue",
+  "Share": "9. Proportional share: lottery, stride, CFS",
+  "Multi": "10. Many processors",
+  "RealTime": "11. Real time",
+  "Queueing": "12. Queueing theory",
+  "Designs": "13. Kernel designs",
+  "PebbleOS": "14. PebbleOS runs the Job",
+  "Frontier": "15. Frontier: verified kernels and microsecond scheduling",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}
