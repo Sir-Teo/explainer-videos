@@ -155,22 +155,22 @@ class Frontier(VoiceoverScene):
             return rf"read key {op[1]}: \ [\dots, {', '.join(str(v) for v in op[2])}]"
         boxes = VGroup()
         for i, e in enumerate(ex[:2]):
-            body = VGroup(label(rf"T{e['txn']}", font_size=22, color=HEAD if i == 0 else LAM),
-                          *[label(opstr(op), font_size=17, color=WHITE) for op in e["ops"]]).arrange(
+            body = VGroup(label(rf"T{e['txn']}", font_size=26, color=HEAD if i == 0 else LAM),
+                          *[label(opstr(op), font_size=21, color=WHITE) for op in e["ops"]]).arrange(
                 DOWN, aligned_edge=LEFT, buff=0.1)
             fr = SurroundingRectangle(body, buff=0.15, color=GREY_C, corner_radius=0.1)
             boxes.add(VGroup(fr, body))
-        boxes.arrange(RIGHT, buff=2.2).move_to([0, 1.3, 0])
+        boxes.arrange(RIGHT, buff=3.4).move_to([0, 1.4, 0])
         a1 = CurvedArrow(boxes[0].get_right() + UP * 0.25, boxes[1].get_left() + UP * 0.25, angle=-0.5, color=HEAD)
         a2 = CurvedArrow(boxes[1].get_left() + DOWN * 0.25, boxes[0].get_right() + DOWN * 0.25, angle=-0.5, color=NO)
-        l1 = label(r"ww: \ 351 follows 350", font_size=17, color=HEAD).next_to(a1, UP, buff=0.05)
-        l2 = label(r"rw: \ read key 4 without 350", font_size=17, color=NO).next_to(a2, DOWN, buff=0.05)
+        l1 = label(r"ww: \ 351 follows 350", font_size=21, color=HEAD).next_to(a1, UP, buff=0.1)
+        l2 = label(r"rw: \ read key 4 without 350", font_size=21, color=NO).next_to(a2, DOWN, buff=0.1)
         rows = [[r"one copy, \ serial", f"{ok['txns']:,}", f"{ok['cyclic_components']}", f"{ok['txns_in_cycles']}"],
                 [r"reads from a lagging replica", f"{st['txns']:,}", f"{st['cyclic_components']}",
                  f"{st['txns_in_cycles']}"]]
         tab = grid_table([r"store", r"transactions", r"cycles", r"transactions in cycles"], rows,
-                         widths=[4.2, 2.2, 1.6, 3.2], row_h=0.44, font_size=19, mono_cols=())
-        tab.move_to([0, -1.2, 0])
+                         widths=[4.6, 2.4, 1.6, 3.4], row_h=0.48, font_size=21, mono_cols=())
+        tab.move_to([0, -1.35, 0])
         tab.cells[1][2].set_color(YES)
         tab.cells[2][2].set_color(NO)
         foot = wrapped_label(r"checking linearizability or serializability of an arbitrary history is NP-complete "

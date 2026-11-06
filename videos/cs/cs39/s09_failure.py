@@ -3,7 +3,7 @@ from __future__ import annotations
 import math
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs39.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, axes, load, trace)
+from videos.cs.cs39.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, axes, grid_table, load, trace)
 
 MC = {"no retries": DATA, "retries": NO, "retries, backoff": KERN, "retries, drop expired": YES}
 
@@ -70,7 +70,7 @@ class Failure(VoiceoverScene):
         band = Rectangle(width=ax.c2p(sp[1], 0)[0] - ax.c2p(sp[0], 0)[0], height=3.8, stroke_width=0,
                          fill_color=NO, fill_opacity=0.12).move_to([(ax.c2p(sp[0], 0)[0] + ax.c2p(sp[1], 0)[0]) / 2,
                                                                      ax.c2p(0, 60)[1], 0])
-        bl = label(r"load spike: \ 160/s", font_size=16, color=NO).next_to(band, UP, buff=0.05)
+        bl = label(r"load spike: \ 160/s", font_size=17, color=NO).next_to(band, RIGHT, buff=0.1).align_to(band, UP).shift(DOWN * 0.1)
         lines = {k: trace(ax, list(enumerate(v["goodput"])), MC[k], width=2.6) for k, v in m.items()}
         leg = VGroup(*[label(rf"{k}: \ after the spike {v['after']:.0f}/s", font_size=18, color=MC[k])
                        for k, v in m.items()]).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.2, 1.2, 0])
@@ -150,13 +150,13 @@ class Failure(VoiceoverScene):
                 return f"{m:.0f} min"
             return f"{m * 60:.2g} s"
         sr = [[f"{r['deps']}", f"{r['up'] * 100:.2f}\\%", down(r["up"])] for r in a["series"]]
-        t1 = grid_table([r"needs all of", r"up", r"down per year"], sr, widths=[1.9, 1.6, 2.2], row_h=0.38,
-                        font_size=18, mono_cols=())
+        t1 = grid_table([r"needs all of", r"up", r"down per year"], sr, widths=[2.1, 1.8, 2.3], row_h=0.44,
+                        font_size=20, mono_cols=())
         pr = [[f"{r['replicas']}", f"{r['up'] * 100:.7f}".rstrip("0") + r"\%", down(r["up"])] for r in a["parallel"]]
-        t2 = grid_table([r"any one of", r"up", r"down per year"], pr, widths=[1.9, 2.3, 2.2], row_h=0.38, font_size=18,
+        t2 = grid_table([r"any one of", r"up", r"down per year"], pr, widths=[2.0, 2.5, 2.2], row_h=0.44, font_size=20,
                         mono_cols=())
-        h1 = label(r"in series: \ each part 99.9\%", font_size=20, color=NO)
-        h2 = label(r"in parallel, \ if independent", font_size=20, color=YES)
+        h1 = label(r"in series: \ each part 99.9\%", font_size=23, color=NO)
+        h2 = label(r"in parallel, \ if independent", font_size=23, color=YES)
         c1 = VGroup(h1, t1).arrange(DOWN, buff=0.2).move_to([-3.4, 0.6, 0])
         c2 = VGroup(h2, t2).arrange(DOWN, buff=0.2).move_to([3.4, 1.0, 0])
         for k in range(1, len(sr) + 1):
@@ -167,7 +167,7 @@ class Failure(VoiceoverScene):
         corr = VGroup(
             wrapped_label(rf"but racks fail too \ (here 0.05\% of the time): \ three replicas in one rack are up "
                           rf"{c['same_rack'] * 100:.2f}\%, \ worse than one machine; \ in three racks, \ "
-                          rf"{c['three_racks'] * 100:.0f}\% in 2 million trials", 5.8, font_size=18, color=KERN),
+                          rf"{c['three_racks'] * 100:.0f}\% in 2 million trials", 6.2, font_size=20, color=KERN),
         ).move_to([3.4, -1.6, 0])
         foot = wrapped_label(r"a service is no more available than the product of what it needs: \ promise less than "
                              r"your dependencies, \ cut the chain, \ and place replicas in separate failure domains",

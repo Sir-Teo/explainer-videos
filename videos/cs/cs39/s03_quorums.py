@@ -25,7 +25,7 @@ class Quorums(VoiceoverScene):
     def rule(self):
         head = label(r"$R + W > N$", font_size=40).to_edge(UP, buff=0.3)
         reps = VGroup(*[Circle(radius=0.4, color=GREY_B, stroke_width=2.5) for _ in range(5)]).arrange(RIGHT, buff=0.6)
-        reps.next_to(head, DOWN, buff=0.7)
+        reps.move_to([0, 1.3, 0])
         for i in range(3):
             reps[i].set_fill(DATA, 0.4).set_stroke(DATA)
         wq = Brace(VGroup(*reps[:3]), UP, color=DATA)
@@ -201,7 +201,7 @@ class Quorums(VoiceoverScene):
         rows = [[f"{r['diffs']:,}", f"{r['merkle_bytes'] / 1024:,.1f} KB", f"{r['rounds']}",
                  r"yes" if r["found_all"] else r"no"] for r in m["rows"]]
         tab = grid_table([r"keys that differ", r"Merkle tree sends", r"round trips", r"all found"], rows,
-                         widths=[2.0, 2.2, 1.6, 1.4], row_h=0.38, font_size=18, mono_cols=())
+                         widths=[2.1, 2.3, 1.7, 1.4], row_h=0.42, font_size=19, mono_cols=())
         tab.move_to([3.4, 0.9, 0])
         for k in range(1, len(rows) + 1):
             tab.cells[k][1].set_color(YES)
