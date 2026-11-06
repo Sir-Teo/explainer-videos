@@ -209,3 +209,68 @@ class Bank:
                         "instant_total": sum(naive["balances"]), "survey": peeks,
                         "survey_total": sum(peeks.values()), "start": s["start"], "end": s.get("end")})
         return out
+
+
+# ---------------------------------------------------------------- hybrid logical clocks (Part 39)
+
+def hlc_trace(n: int = 4, events: int = 20000, eps_ms: float = 5.0, delay_ms=(0.2, 3.0), p_send: float = 0.5,
+              seed: int = 0):
+    """``n`` processes whose physical clocks are off by up to ``eps_ms`` (fixed offsets) exchange messages with
+    random delays.  Three timestamps per event: the physical clock, a Lamport clock, and a hybrid logical clock
+    (Kulkarni et al. 2014), a pair (l, c) where l tracks the largest physical time heard of and c breaks ties.
+    Returns, for each, the fraction of messages whose receive is not stamped after its send, and how far the
+    timestamp strays from true time."""
+    import random as _r
+    rng = _r.Random(seed)
+    off = [rng.uniform(-eps_ms, eps_ms) for _ in range(n)]
+    t = 0.0
+    lam = [0] * n
+    hl = [0.0] * n
+    hc = [0] * n
+    inflight: list = []
+    stats = {"physical": [0, 0.0], "lamport": [0, 0.0], "hlc": [0, 0.0]}
+    msgs = 0
+    maxc = 0
+    for _ in range(events):
+        t += rng.expovariate(1.0) * 0.5
+        i = rng.randrange(n)
+        pt = t + off[i]
+        due = [m for m in inflight if m[0] <= t and m[1] == i]
+        if due:
+            m = due[0]
+            inflight.remove(m)
+            _, _, spt, slam, sl, sc = m
+            lam[i] = max(lam[i], slam) + 1
+            lp = hl[i]
+            hl[i] = max(lp, sl, pt)
+            if hl[i] == lp and hl[i] == sl:
+                hc[i] = max(hc[i], sc) + 1
+            elif hl[i] == lp:
+                hc[i] += 1
+            elif hl[i] == sl:
+                hc[i] = sc + 1
+            else:
+                hc[i] = 0
+            msgs += 1
+            if pt <= spt:
+                stats["physical"][0] += 1
+            if (hl[i], hc[i]) <= (sl, sc):
+                stats["hlc"][0] += 1
+            if lam[i] <= slam:
+                stats["lamport"][0] += 1
+        else:
+            lam[i] += 1
+            lp = hl[i]
+            hl[i] = max(lp, pt)
+            hc[i] = hc[i] + 1 if hl[i] == lp else 0
+            if rng.random() < p_send:
+                j = rng.randrange(n - 1)
+                j = j + (j >= i)
+                inflight.append((t + rng.uniform(*delay_ms), j, pt, lam[i], hl[i], hc[i]))
+        maxc = max(maxc, hc[i])
+        stats["physical"][1] = max(stats["physical"][1], abs(pt - t))
+        stats["hlc"][1] = max(stats["hlc"][1], abs(hl[i] - t))
+    out = {k: {"violations": v[0] / max(1, msgs), "max_drift_ms": v[1]} for k, v in stats.items()}
+    out["lamport"]["max_drift_ms"] = None
+    out["lamport"]["final_value"] = max(lam)
+    return {"schemes": out, "messages": msgs, "max_c": maxc, "eps_ms": eps_ms, "true_end_ms": t}

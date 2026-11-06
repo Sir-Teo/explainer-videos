@@ -19,6 +19,17 @@ Items:
                 tasks; scaling with the number of workers; ledger row 15
     tail        fan-out against tail latency; hedged requests; the power of two choices
     meta        a metastable failure: a ten-second spike, and retries that keep the server down
+    lww         two leaders writing one key: concurrent writes and clock-skew inversions under last-writer-wins
+    merkle      anti-entropy between two replicas of a million keys: Merkle-tree bytes against one hash per key
+    rga         a sequence CRDT (RGA) against positional replay: a two-person edit, and random editing sessions
+    hot         hot keys on 100 hash shards under Zipf popularity, and with the hottest keys salted
+    balance     load balancing as queueing: random, round robin, two choices, shortest queue against load
+    nines       availability in series and in parallel; replicas in one rack against three racks
+    detect      failure detection: false suspicions against detection time, fixed timeouts and phi accrual
+    hlc         physical, Lamport and hybrid logical clocks on four skewed processes: causality and drift
+    history     an Elle-style check of 2,000 list-append transactions, serializable and on a stale replica
+    chain       tails through a chain of services; retry amplification through layers
+    overhead    an RGA document after 20,000 edits: tombstones and metadata bytes per visible character
 """
 
 from __future__ import annotations
@@ -147,6 +158,67 @@ def compute_meta() -> dict:
         r["after"] = statistics.mean(r["goodput"][60:])
         out[name] = r
     return out
+
+
+def compute_lww() -> dict:
+    from explainer.cs.dist import replicas as RP
+    return {"rows": RP.lww_pairs(), "delta_ms": 50, "rate": 5}
+
+
+def compute_merkle() -> dict:
+    from explainer.cs.dist import replicas as RP
+    return RP.merkle_sync()
+
+
+def compute_rga() -> dict:
+    from explainer.cs.dist import replicas as RP
+    sess = {k: sum(RP.edit_session(k, seed=s)["converged"] for s in range(500)) for k in ("rga", "naive")}
+    return {"demo": RP.rga_demo(), "sessions": sess, "trials": 500, "users": 3, "ops": 30}
+
+
+def compute_hot() -> dict:
+    from explainer.cs.dist import replicas as RP
+    return RP.hot_shards()
+
+
+def compute_balance() -> dict:
+    from explainer.cs.dist import service as SV
+    return {"rows": SV.balance_table(jobs=200_000), "servers": 100}
+
+
+def compute_nines() -> dict:
+    from explainer.cs.dist import service as SV
+    return SV.availability()
+
+
+def compute_detect() -> dict:
+    from explainer.cs.dist import service as SV
+    return SV.detector(timeouts_ms=(130, 150, 175, 200, 300, 500, 1000, 2000, 3000),
+                       phis=(1, 2, 3, 4, 6, 8, 12, 16), window=300)
+
+
+def compute_hlc() -> dict:
+    from explainer.cs.dist import clocks as CL
+    return CL.hlc_trace()
+
+
+def compute_history() -> dict:
+    from explainer.cs.dist import history as HI
+    out = HI.campaign()
+    for v in out.values():
+        for e in v["example"] or []:
+            e["ops"] = [[op[0], op[1], list(op[2])[-3:]] if op[0] == "r" else list(op) for op in e["ops"]]
+    return out
+
+
+def compute_chain() -> dict:
+    from explainer.cs.dist import service as SV
+    return {"chain": SV.call_chain(), "retries": SV.retry_amplification(), "median_ms": 10.0, "sigma": 0.8}
+
+
+def compute_overhead() -> dict:
+    from explainer.cs.dist import replicas as RP
+    return {"rows": RP.rga_overhead(p_delete=0.3), "p_delete": 0.3, "id_bytes": 12}
 
 
 ITEMS = {k[8:]: v for k, v in globals().items() if k.startswith("compute_")}
