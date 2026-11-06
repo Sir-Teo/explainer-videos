@@ -2849,3 +2849,67 @@ class RiskBump(VGroup):
         i = int(np.argmax(r))
         _, _, _, y1 = bounds(self.ax)
         return Dot(self.ax.c2p(xs[i], min(r[i], y1)), radius=radius, color=color or S.RESID)
+
+
+class ChainingNet(VGroup):
+    """Dudley's chaining, drawn (Part 48).  On axes ``ax`` holding a path (``ts``, ``ys``) on [0, 1], ``approx(k)`` is
+    the path seen only at the level-k dyadic net {j / 2^k}, joined by straight lines; ``links(k)`` are the vertical
+    corrections that carry the level-(k-1) picture to level k at the new points, the chain's links; ``net(k)`` marks the
+    net's points on the time axis.  ``tree(levels, width, height)`` is the free-standing picture: nested nets as rows of
+    dots, each new point tied to its parent."""
+
+    def __init__(self, ax=None, ts=None, ys=None):
+        super().__init__()
+        self.ax = ax
+        self.ts = None if ts is None else np.asarray(ts, float)
+        self.ys = None if ys is None else np.asarray(ys, float)
+
+    def _at(self, t):
+        return np.interp(t, self.ts, self.ys)
+
+    def approx(self, k: int, color=None, stroke_width: float = 3) -> VMobject:
+        t = np.linspace(0, 1, 2 ** k + 1)
+        m = VMobject(stroke_color=color or S.EST, stroke_width=stroke_width)
+        m.set_points_as_corners([self.ax.c2p(a, b) for a, b in zip(t, self._at(t))])
+        return m
+
+    def links(self, k: int, color=None, stroke_width: float = 3) -> VGroup:
+        t = np.arange(1, 2 ** k, 2) / 2 ** k
+        lo = 0.5 * (self._at(t - 2.0 ** -k) + self._at(t + 2.0 ** -k))  # the level-(k-1) chord at t
+        hi = self._at(t)
+        return VGroup(*[Line(self.ax.c2p(a, b), self.ax.c2p(a, c), color=color or S.ACCENT, stroke_width=stroke_width)
+                        for a, b, c in zip(t, lo, hi)])
+
+    def net(self, k: int, color=None, radius: float = 0.05) -> VGroup:
+        t = np.linspace(0, 1, 2 ** k + 1)
+        _, _, y0, _ = bounds(self.ax)
+        return VGroup(*[Dot(self.ax.c2p(a, y0), radius=radius, color=color or GREY_A) for a in t])
+
+    @staticmethod
+    def tree(levels: int = 5, width: float = 10.0, height: float = 3.6, colors=None, radius: float = 0.07) -> VGroup:
+        """Rows of dots, level 0 at the top; returns VGroup(rows, edges), each a VGroup indexed by level."""
+        cols = colors or [S.TRUTH, S.EST, S.ALT, S.KEPT, S.PRIOR, S.RESID, GREY_A]
+        rows, edges = VGroup(), VGroup()
+        dy = height / max(levels, 1)
+
+        def pos(k, j):
+            return np.array([-width / 2 + width * j / 2 ** k, height / 2 - k * dy, 0.0])
+
+        for k in range(levels + 1):
+            c = cols[k % len(cols)]
+            js = range(0, 2 ** k + 1) if k == 0 else range(1, 2 ** k, 2)
+            rows.add(VGroup(*[Dot(pos(k, j), radius=radius, color=c) for j in js]))
+            if k == 0:
+                edges.add(VGroup())
+                continue
+            e = VGroup()
+            for j in js:
+                # the parent is the left neighbour in the previous level's net, drawn on the row where it first appeared
+                pj = (j - 1) // 2
+                kk = k - 1
+                while kk > 0 and pj % 2 == 0:
+                    pj //= 2
+                    kk -= 1
+                e.add(Line(pos(kk, pj), pos(k, j), color=c, stroke_width=1.6, stroke_opacity=0.7))
+            edges.add(e)
+        return VGroup(rows, edges)
