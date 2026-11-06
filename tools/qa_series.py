@@ -91,9 +91,10 @@ def visible_text_bounds(m, camera=None):
 
 
 def fingerprint(video):
+    from explainer.paths import video_dir
+
     files = sorted((ROOT / "explainer").rglob("*.py"))
-    series = ROOT / "videos" / "ai"
-    files += sorted(p for p in series.iterdir() if p.suffix in (".py", ".json"))
+    known_videos = {p.parent.name for p in (ROOT / "videos").glob("*/*/manifest.py")}
     # A change in Part 30 should not invalidate Part 1's long motion render.
     # Include the requested part and every part referenced by its Python code,
     # transitively, as well as all shared helpers and language tables.
@@ -103,13 +104,17 @@ def fingerprint(video):
         if part in seen:
             continue
         seen.add(part)
-        part_files = sorted(p for p in (series / part).rglob("*") if p.suffix in (".py", ".json"))
+        directory = video_dir(part)
+        files += sorted(p for p in directory.parent.iterdir() if p.suffix in (".py", ".json"))
+        part_files = sorted(p for p in directory.rglob("*") if p.suffix in (".py", ".json"))
         files += part_files
         for p in part_files:
             if p.suffix == ".py":
                 src = p.read_text()
-                for match in re.findall(r"videos\.ai\.(ai\d+)\b|Cache\([\"'](ai\d+)[\"']\)", src):
-                    pending.extend(name for name in match if name)
+                for match in re.findall(r"videos\.\w+\.(\w+)\b|Cache\([\"'](\w+)[\"']\)", src):
+                    # Examples in docstrings can use placeholders such as
+                    # statsN; only real parts are transitive dependencies.
+                    pending.extend(name for name in match if name in known_videos)
     files += [Path(__file__), ROOT / "tools" / "dead_air.py", ROOT / "manim.cfg"]
     h = hashlib.sha256()
     for p in files:
