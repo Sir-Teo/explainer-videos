@@ -56,14 +56,14 @@ class Outro(VoiceoverScene):
             (r"rendering pipelines and their frame budgets", [51]),
             (r"proving protocols and configurations correct", [54]),
             (r"trusting the software we deploy", [55]),
-            (r"the second review: \ the whole machine at once", [56]),
             (r"distributed algorithms and their limits", [59]),
+            (r"hardware built for one job", [60]),
         ], font_size=23)
         with self.voiceover(
             "Where this comes back. Part 51 renders frames against a sixteen-millisecond budget, an objective of its "
             "own. Part 54 proves protocols and configurations correct before they ship. Part 55 asks whether the "
-            "software we deploy can be trusted at all. Part 56, the second review, runs the whole machine at once. "
-            "And Part 59 returns to the theory of distributed algorithms and what they cannot do."
+            "software we deploy can be trusted at all. Part 59 returns to the theory of distributed algorithms and "
+            "what they cannot do. And Part 60 builds hardware for one job, where every watt is budgeted."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.3), run_time=3.0)
@@ -122,10 +122,10 @@ class Outro(VoiceoverScene):
             (r"sampling, \ aliasing and mipmaps", DATA),
             (r"a path tracer whose noise falls as $1/\sqrt{N}$", LAM))]).arrange(DOWN, buff=0.35)
         with self.voiceover(
-            "Next time, Part 51, which opens the last act: light and pixels. A picture is millions of samples of "
-            "light. Projecting triangles onto a screen is linear algebra plus one division; getting the samples "
-            "right is Nyquist again; and the physics of light is one integral equation, which our own path tracer "
-            "solves one bounced ray at a time."
+            "Next time, Part 51, which opens Act Ten, Horizons and Trust: light and pixels. A picture is millions "
+            "of samples of light. Projecting triangles onto a screen is linear algebra plus one division; getting "
+            "the samples right is Nyquist again; and the physics of light is one integral equation, which our own "
+            "path tracer solves one bounced ray at a time."
         ):
             self.play(FadeIn(nxt), LaggedStart(*[FadeIn(i) for i in items], lag_ratio=0.3))
         self.wait(0.5)
