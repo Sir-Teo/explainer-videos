@@ -81,35 +81,46 @@ def _cpu() -> str:
 
 
 def _openblas():
-    """NumPy's bundled OpenBLAS, to set its thread count (None if it cannot be found)."""
-    for path in glob.glob(os.path.join(os.path.dirname(np.__file__), "..", "numpy.libs", "*openblas*.so*")):
+    """The OpenBLAS copies bundled with NumPy and with SciPy (SciPy's daxpy uses its own), as (set, get) pairs for
+    their thread counts; None if neither can be found."""
+    site = os.path.join(os.path.dirname(np.__file__), "..")
+    pairs = []
+    for path in glob.glob(os.path.join(site, "numpy.libs", "*openblas*.so*")) + \
+            glob.glob(os.path.join(site, "scipy.libs", "*openblas*.so*")):
         try:
             lib = ctypes.CDLL(path)
         except OSError:
             continue
+        found = None
         for pre in ("scipy_openblas", "openblas"):
             for suf in ("64_", "_64_", ""):
                 try:
-                    return getattr(lib, f"{pre}_set_num_threads{suf}"), getattr(lib, f"{pre}_get_num_threads{suf}")
+                    found = getattr(lib, f"{pre}_set_num_threads{suf}"), getattr(lib, f"{pre}_get_num_threads{suf}")
+                    break
                 except AttributeError:
                     continue
-    return None
+            if found:
+                break
+        if found:
+            pairs.append(found)
+    return pairs or None
 
 
 @contextlib.contextmanager
 def blas_threads(n: int | None):
-    """Run NumPy's BLAS on ``n`` threads (None: leave it alone)."""
-    fns = _openblas() if n else None
-    if not fns:
+    """Run NumPy's and SciPy's BLAS on ``n`` threads (None: leave them alone)."""
+    libs = _openblas() if n else None
+    if not libs:
         yield None
         return
-    setn, getn = fns
-    old = getn()
-    setn(n)
+    old = [get() for _, get in libs]
+    for setn, _ in libs:
+        setn(n)
     try:
         yield n
     finally:
-        setn(old)
+        for (setn, _), o in zip(libs, old):
+            setn(o)
 
 
 def peak(ns=(256, 512, 1024, 2048), threads: int | None = 1) -> dict:
@@ -165,7 +176,9 @@ def bandwidth(n: int = 1 << 26, reps: int = 5) -> dict:
 
 
 def machine(peak_ns=(256, 512, 1024, 2048), stream_n: int = 1 << 26, threads: int | None = 1) -> dict:
-    p, bw = peak(peak_ns, threads), bandwidth(stream_n)
+    p = peak(peak_ns, threads)
+    with blas_threads(threads):           # daxpy and dot go through BLAS: one core, like the elementwise kernels
+        bw = bandwidth(stream_n)
     P, beta = p["gflops"] * 1e9, bw["gbs"] * 1e9
     try:
         load = os.getloadavg()[0]
