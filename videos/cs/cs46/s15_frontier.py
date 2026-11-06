@@ -144,7 +144,7 @@ class Frontier(VoiceoverScene):
         with self.voiceover(
             "The deepest limit is time. <bookmark mark='a'/> A watermark is a guess that no older events will "
             "arrive, and every choice of how long to wait trades completeness for latency: from four fifths of the "
-            "events within two seconds to all of them after a minute. <bookmark mark='b'/> Answering early and then "
+            "events within two seconds to all but one of them after a minute. <bookmark mark='b'/> Answering early and then "
             f"correcting escapes the trade: a five-second watermark with a minute of allowed lateness fired "
             f"{al['refinements']} refinements and ended with every window exact. The price is state, and consumers "
             "that must accept corrections. <bookmark mark='c'/> Watermarks with guarantees, derived from measured "
