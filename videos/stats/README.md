@@ -1,6 +1,6 @@
 # Statistics, Built (统计学，从零搭建)
 
-**Status: in production.** Parts 1–51 are written in English (12–16 chapters each):
+**Status: in production.** Parts 1–52 are written in English (12–16 chapters each):
 - *The Shape of Data*, about an hour;
 - *Chance, Counted*, about 74 minutes, with the exact probability engine `explainer/stats/prob.py`;
 - *The Family of Distributions*, about 55 minutes, with the family-tree instrument `FamilyTree`;
@@ -51,7 +51,8 @@
 - *Empirical Processes*, about 51.1 minutes, with `statkit.empirical`, the chaining net (`ChainingNet`), Old Faithful and Newcomb's light;
 - *Semiparametric Efficiency*, about 50.3 minutes, with `statkit.semipar`, the tangent-space picture (`TangentSpace`), the NSW data and the World's survey;
 - *Minimax Theory*, about 50.4 minutes, with `statkit.gsm`, the lower-bound workbench (`LowerBoundPacking`) and the motorcycle crash;
-- *High-Dimensional Probability*, about 50.2 minutes, with `statkit.hdp`, the `SphereShell` and the Wisconsin breast cancer data.
+- *High-Dimensional Probability*, about 50.2 minutes, with `statkit.hdp`, the `SphereShell` and the Wisconsin breast cancer data;
+- *High-Dimensional Statistics*, about 50.2 minutes, with `statkit.hdstat`, the random-matrix lab (`SpectrumBulk`), Harman's 24 tests and the diabetes data.
 
 Their instruments are in `explainer/stats/`; narration and the Chinese edition follow. The chapter-by-chapter plan and the production standard are in [`SYLLABUS.md`](SYLLABUS.md).
 

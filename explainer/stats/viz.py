@@ -3080,3 +3080,31 @@ class SpectrumBulk(VGroup):
     def arrow(self, x_from: float, x_to: float, y: float, color=None) -> Arrow:
         return Arrow(self.ax.c2p(x_from, y), self.ax.c2p(x_to, y), buff=0.05, color=color or S.ACCENT, stroke_width=3,
                      max_tip_length_to_length_ratio=0.15)
+
+
+class ContractionBall(VGroup):
+    """A posterior contracting around the truth (Part 53), drawn in a two-dimensional window onto parameter space.
+    ``truth`` marks theta_0; ``cloud`` scatters posterior draws; ``ball`` draws a credible ball (a circle of a given
+    radius about a centre); ``miss`` draws the segment from the ball's centre to the truth, red when the truth falls
+    outside.  Coordinates are data units, mapped by ``to_screen`` with a fixed scale so balls at different n compare."""
+
+    def __init__(self, center=(0.0, 0.0, 0.0), scale: float = 1.0, origin=(0.0, 0.0)):
+        super().__init__()
+        self.c = np.asarray(center, float)
+        self.s = float(scale)
+        self.o = np.asarray(origin, float)
+
+    def to_screen(self, x, y):
+        return self.c + self.s * np.array([x - self.o[0], y - self.o[1], 0.0])
+
+    def truth(self, x, y, color=None, radius: float = 0.09) -> Dot:
+        return Dot(self.to_screen(x, y), radius=radius, color=color or S.TRUTH)
+
+    def cloud(self, pts, color=None, radius: float = 0.025, opacity: float = 0.7) -> VGroup:
+        return VGroup(*[Dot(self.to_screen(a, b), radius=radius, color=color or S.EST, fill_opacity=opacity) for a, b in pts])
+
+    def ball(self, x, y, r, color=None, stroke_width: float = 3) -> Circle:
+        return Circle(radius=max(r * self.s, 1e-3), stroke_color=color or S.ACCENT, stroke_width=stroke_width).move_to(self.to_screen(x, y))
+
+    def miss(self, centre, truth, inside: bool) -> Line:
+        return Line(self.to_screen(*centre), self.to_screen(*truth), color=S.KEPT if inside else S.RESID, stroke_width=2.5)
