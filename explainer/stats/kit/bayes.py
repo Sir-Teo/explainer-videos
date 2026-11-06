@@ -1,5 +1,7 @@
-"""statkit.bayes (I): conjugate updating, credible intervals, prediction, grids and a Metropolis walk (Part 15 of
-*Statistics, Built*).
+"""statkit.bayes: conjugate updating, credible intervals, prediction, grids and a Metropolis walk (I, Part 15 of
+*Statistics, Built*); the hierarchical normal model on a grid with exact draws, normal Bayes factors and Lindley's
+paradox, the Sellke-Bayarri-Berger bound, Bayesian linear regression's evidence, simulation-based calibration, and
+the Chinese restaurant process and stick-breaking (II, Part 26).
 
     from explainer.stats.kit.bayes import beta_update, credible, hpd, beta_binomial_pmf, grid_posterior, metropolis
 
@@ -143,3 +145,132 @@ def bayes_factor_binomial(s: int, n: int, p0: float = 0.5, a: float = 1.0, b: fl
     log_m1 = special.betaln(s + a, n - s + b) - special.betaln(a, b)
     log_m0 = s * np.log(p0) + (n - s) * np.log1p(-p0)
     return float(np.exp(log_m1 - log_m0))
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# II (Part 26): the hierarchical normal model
+# ---------------------------------------------------------------------------------------------------------------
+@dataclass
+class Hier:
+    """y_j ~ N(theta_j, sigma_j^2), theta_j ~ N(mu, tau^2), p(mu | tau) flat, p(tau) given on a grid (BDA section 5.4)."""
+    y: np.ndarray
+    sigma: np.ndarray
+    tau: np.ndarray
+    post_tau: np.ndarray  # density on the grid, integrating to 1
+    mu_hat: np.ndarray  # E(mu | tau, y)
+    v_mu: np.ndarray  # Var(mu | tau, y)
+
+    def cond_theta(self):
+        """E(theta_j | tau, y) and Var(theta_j | tau, y) for every grid tau: arrays (len(tau), J)."""
+        t2 = self.tau[:, None] ** 2
+        s2 = self.sigma[None, :] ** 2
+        w = t2 / (s2 + t2)  # the weight on the school's own estimate: 0 at tau = 0
+        mean = w * self.y[None, :] + (1 - w) * self.mu_hat[:, None]
+        v_cond = s2 * t2 / (s2 + t2)
+        var = v_cond + (1 - w) ** 2 * self.v_mu[:, None]
+        return mean, var
+
+    def draws(self, n: int, rng: np.random.Generator) -> dict:
+        """Exact posterior draws: tau from the grid (with jitter inside its cell), mu | tau, then theta | mu, tau."""
+        p = self.post_tau * np.gradient(self.tau)
+        p = p / p.sum()
+        k = rng.choice(len(self.tau), size=n, p=p)
+        h = np.gradient(self.tau)[k]
+        tau = np.clip(self.tau[k] + h * (rng.random(n) - 0.5), 0, None)
+        s2 = self.sigma[None, :] ** 2
+        t2 = tau[:, None] ** 2
+        wj = 1 / (s2 + t2)
+        v_mu = 1 / wj.sum(1)
+        mu_hat = v_mu * (wj * self.y[None, :]).sum(1)
+        mu = mu_hat + np.sqrt(v_mu) * rng.standard_normal(n)
+        prec = 1 / s2 + 1 / np.maximum(t2, 1e-300)
+        mean = (self.y[None, :] / s2 + mu[:, None] / np.maximum(t2, 1e-300)) / prec
+        theta = np.where(t2 > 1e-12, mean + rng.standard_normal((n, len(self.y))) / np.sqrt(prec), mu[:, None])
+        return {"tau": tau, "mu": mu, "theta": theta}
+
+
+def hier_normal(y, sigma, tau_grid, log_prior_tau=None) -> Hier:
+    """The marginal posterior of tau: p(tau | y) ∝ p(tau) V_mu^{1/2} prod_j N(y_j | mu_hat, sigma_j^2 + tau^2)."""
+    y, sigma, tau = np.asarray(y, float), np.asarray(sigma, float), np.asarray(tau_grid, float)
+    lp = np.zeros_like(tau) if log_prior_tau is None else np.asarray(log_prior_tau(tau), float)
+    V = sigma[None, :] ** 2 + tau[:, None] ** 2
+    w = 1 / V
+    v_mu = 1 / w.sum(1)
+    mu_hat = v_mu * (w * y[None, :]).sum(1)
+    ll = 0.5 * np.log(v_mu) - 0.5 * np.log(V).sum(1) - 0.5 * ((y[None, :] - mu_hat[:, None]) ** 2 * w).sum(1)
+    lpost = lp + ll
+    d = np.exp(lpost - lpost.max())
+    d = d / np.trapezoid(d, tau)
+    return Hier(y, sigma, tau, d, mu_hat, v_mu)
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# II (Part 26): Bayes factors, Lindley, evidence
+# ---------------------------------------------------------------------------------------------------------------
+def bf01_normal(xbar: float, n: int, sigma: float, tau: float) -> float:
+    """BF_01 for H0: mu = 0 against H1: mu ~ N(0, tau^2), from xbar ~ N(mu, sigma^2 / n)."""
+    v0 = sigma ** 2 / n
+    return float(stats.norm.pdf(xbar, 0, np.sqrt(v0)) / stats.norm.pdf(xbar, 0, np.sqrt(v0 + tau ** 2)))
+
+
+def sbb_bound(p):
+    """Sellke, Bayarri & Berger (2001): BF_01 >= -e p log p for p < 1/e (and 1 beyond)."""
+    p = np.asarray(p, float)
+    return np.where(p < 1 / np.e, -np.e * p * np.log(np.maximum(p, 1e-300)), 1.0)
+
+
+def blr_log_evidence(X, y, alpha: float, sigma: float) -> float:
+    """log p(y) for y = X w + e, w ~ N(0, I/alpha), e ~ N(0, sigma^2 I): y ~ N(0, sigma^2 I + X X'/alpha)."""
+    X, y = np.asarray(X, float), np.asarray(y, float)
+    C = sigma ** 2 * np.eye(len(y)) + X @ X.T / alpha
+    return float(stats.multivariate_normal(np.zeros(len(y)), C, allow_singular=False).logpdf(y))
+
+
+def blr_posterior(X, y, alpha: float, sigma: float):
+    """Posterior mean and covariance of w in Bayesian linear regression."""
+    X, y = np.asarray(X, float), np.asarray(y, float)
+    A = alpha * np.eye(X.shape[1]) + X.T @ X / sigma ** 2
+    S = np.linalg.inv(A)
+    return S @ X.T @ y / sigma ** 2, S
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# II (Part 26): checking and nonparametrics
+# ---------------------------------------------------------------------------------------------------------------
+def sbc_ranks(draw_prior, draw_data, draw_posterior, n_sims: int, L: int, rng: np.random.Generator) -> np.ndarray:
+    """Simulation-based calibration (Talts et al. 2018): for each simulation draw theta ~ prior, y ~ p(y | theta) and
+    L posterior draws; the rank of theta among them is uniform on 0..L if the posterior is computed correctly."""
+    ranks = np.empty(n_sims, int)
+    for i in range(n_sims):
+        th = draw_prior(rng)
+        yv = draw_data(th, rng)
+        post = draw_posterior(yv, L, rng)
+        ranks[i] = int(np.sum(post < th))
+    return ranks
+
+
+def crp(n: int, alpha: float, rng: np.random.Generator) -> np.ndarray:
+    """The Chinese restaurant process: table labels for n customers; customer i+1 joins table k with probability
+    n_k / (i + alpha) and a new table with probability alpha / (i + alpha)."""
+    z = np.zeros(n, int)
+    counts = [1]
+    for i in range(1, n):
+        p = np.array(counts + [alpha], float) / (i + alpha)
+        k = rng.choice(len(p), p=p)
+        if k == len(counts):
+            counts.append(1)
+        else:
+            counts[k] += 1
+        z[i] = k
+    return z
+
+
+def crp_expected_tables(n: int, alpha: float) -> float:
+    """E(number of tables) = sum_{i=0}^{n-1} alpha / (alpha + i), about alpha log(1 + n / alpha)."""
+    return float(np.sum(alpha / (alpha + np.arange(n))))
+
+
+def stick_breaking(alpha: float, K: int, rng: np.random.Generator) -> np.ndarray:
+    """The first K weights of a Dirichlet process (Sethuraman 1994): w_k = V_k prod_{j<k} (1 - V_j), V ~ Beta(1, alpha)."""
+    v = rng.beta(1, alpha, K)
+    return v * np.concatenate([[1.0], np.cumprod(1 - v)[:-1]])

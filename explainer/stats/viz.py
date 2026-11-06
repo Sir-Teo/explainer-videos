@@ -1661,3 +1661,77 @@ class ShrinkagePlot(VGroup):
             yb = ys["truth"] if truth is not None else ys["shrunk"]
             self.ticks = VGroup(*[label(f(t), font_size=font_size - 2, color=GREY_B).move_to([self.x_of(t), yb - 0.4, 0]) for t in ticks])
             self.add(self.ticks)
+
+
+class TauExplorer(VGroup):
+    """Rubin's eight schools as a function of the between-school SD (Part 26): on top, each school's conditional
+    posterior mean E(theta_j | tau, y) against tau, fanning out from the pooled mean at tau = 0 to the school's own
+    estimate as tau grows; below, the marginal posterior p(tau | y) on the same tau axis.  ``line_at(t)`` is a vertical
+    cursor through both panels, and ``dots_at(t)`` the schools' estimates at that tau, for animating with a
+    ValueTracker."""
+
+    def __init__(self, tau, cond_mean, post_tau, labels, y=None, tau_max=30.0, width=8.6, top_h=3.6, bottom_h=1.4,
+                 center=ORIGIN, y_range=(-5, 30), colors=None, font_size=20):
+        super().__init__()
+        from explainer.ai.viz import axes
+        from explainer.analysis import label
+
+        tau = np.asarray(tau, float)
+        cm = np.asarray(cond_mean, float)
+        pt = np.asarray(post_tau, float)
+        keep = tau <= tau_max
+        tau, cm, pt = tau[keep], cm[keep], pt[keep]
+        c = np.asarray(center, float)
+        top_c = c + np.array([0, bottom_h / 2 + 0.55, 0])
+        bot_c = c - np.array([0, top_h / 2 + 0.35, 0])
+        step = 10 if tau_max > 15 else 5
+        self.top = axes([0, tau_max], list(y_range), x_length=width, y_length=top_h, ylabel=r"E($\theta_j \mid \tau, y$)",
+                        yticks=list(range(int(np.ceil(y_range[0] / 10) * 10), int(y_range[1]) + 1, 10)), font_size=font_size,
+                        center=top_c)
+        ymax = float(pt.max()) * 1.1
+        self.bottom = axes([0, tau_max], [0, ymax], x_length=width, y_length=bottom_h, xlabel=r"$\tau$, \ the SD of the true effects",
+                           xticks=list(range(0, int(tau_max) + 1, step)), font_size=font_size, center=bot_c)
+        self.bottom.ylabel = label(r"p($\tau \mid y$)", font_size=font_size + 2, color=GREY_A).next_to(self.bottom.ax, LEFT, buff=0.2)
+        self.bottom.add(self.bottom.ylabel)
+        ax, bx = self.top.ax, self.bottom.ax
+        cols = colors or [S.EST] * cm.shape[1]
+        self.curves = VGroup()
+        self.names = VGroup()
+        for j in range(cm.shape[1]):
+            m = VMobject(stroke_color=cols[j], stroke_width=2.5)
+            m.set_points_smoothly([ax.c2p(t, v) for t, v in zip(tau[::4], cm[::4, j])])
+            self.curves.add(m)
+            self.names.add(label(labels[j], font_size=font_size, color=cols[j]).next_to(ax.c2p(tau[-1], cm[-1, j]), RIGHT, buff=0.12))
+        _spread(self.names, 0.24)
+        self.density = VMobject(stroke_color=S.POST, stroke_width=3)
+        self.density.set_points_smoothly([bx.c2p(t, v) for t, v in zip(tau[::4], pt[::4])])
+        pts = [bx.c2p(tau[0], 0)] + [bx.c2p(t, v) for t, v in zip(tau[::4], pt[::4])] + [bx.c2p(tau[::4][-1], 0)]
+        self.area = Polygon(*pts, stroke_width=0, fill_color=S.POST, fill_opacity=0.25)
+        self.raw = VGroup()
+        if y is not None:
+            self.raw = VGroup(*[Dot(ax.c2p(tau_max, v), radius=0.06, color=cols[j]).shift(RIGHT * 0.0)
+                                for j, v in enumerate(np.asarray(y, float)) if y_range[0] <= v <= y_range[1]])
+        self._tau, self._cm, self._cols = tau, cm, cols
+        self.add(self.top, self.bottom, self.curves, self.names, self.area, self.density)
+
+    def line_at(self, t: float) -> VGroup:
+        ax, bx = self.top.ax, self.bottom.ax
+        top = ax.c2p(t, bounds(ax)[3])
+        bot = bx.c2p(t, 0)
+        return DashedLine(bot, top, color=GREY_A, stroke_width=1.8)
+
+    def dots_at(self, t: float) -> VGroup:
+        ax = self.top.ax
+        return VGroup(*[Dot(ax.c2p(t, float(np.interp(t, self._tau, self._cm[:, j]))), radius=0.07, color=self._cols[j])
+                        for j in range(self._cm.shape[1])])
+
+
+def _spread(labels: VGroup, gap: float) -> None:
+    """Nudge a column of labels apart vertically so that neighbours are at least ``gap`` apart (keeps their order)."""
+    order = sorted(range(len(labels)), key=lambda k: labels[k].get_center()[1])
+    ys = [labels[k].get_center()[1] for k in order]
+    for i in range(1, len(ys)):
+        ys[i] = max(ys[i], ys[i - 1] + gap)
+    shift = (np.mean([labels[k].get_center()[1] for k in order]) - np.mean(ys))
+    for k, yv in zip(order, ys):
+        labels[k].set_y(yv + shift)
