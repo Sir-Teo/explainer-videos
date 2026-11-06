@@ -140,6 +140,24 @@ computed lines as templates with the source's placeholders spelled exactly), fil
 | Sleeping Beauty; halfer; thirder; double halfer; centred worlds | 睡美人；二分之一派；三分之一派；双重二分之一派；中心化世界 |
 | SSA; SIA; the Doomsday argument; the presumptuous philosopher; reference class | 自我抽样假设；自我指示假设；末日论证；自以为是的哲学家；参照类 |
 | Bayesian network; logical omniscience | 贝叶斯网络；逻辑全知 |
+| null hypothesis; alternative; $p$-value; significant; power; confidence interval | 零假设；备择假设；$p$ 值；显著；功效；置信区间 |
+| base rate; sensitivity; false-positive rate; PPV; the prosecutor's fallacy | 基础比率；灵敏度；假阳性率；阳性预测值（PPV）；检察官谬误 |
+| the garden of forking paths; $p$-hacking; the winner's curse; replication | 分岔小径的花园；$p$ 值操纵；赢家诅咒；重复研究 |
+| optional stopping; the likelihood principle; sufficiency; conditionality | 可选停止；似然原则；充分性；条件性 |
+| Bayes factor; Lindley's paradox; severity; e-value; e-process; martingale | 贝叶斯因子；林德利悖论；严格性；e值；e过程；鞅 |
+| cause; constant conjunction; occasionalism; INUS condition | 原因；恒常结合；偶因论；INUS条件 |
+| counterfactual dependence; preemption (early, late); trumping; overdetermination | 反事实依赖；先占（早期、晚期）；压倒；过度决定 |
+| screening off; prima facie cause; intervention; invariance | 屏蔽；初显原因；干预；不变性 |
+| structural causal model; causal graph; chain, fork, collider; d-separation | 结构因果模型；因果图；链，叉，对撞；d分离 |
+| the do-operator; back-door, front-door criterion; the do-calculus; identification | do算子；后门、前门准则；do演算；识别 |
+| the ladder of causation; abduction, action, prediction; twin network | 因果之梯；溯因，行动，预测；孪生网络 |
+| probability of necessity, of sufficiency (PN, PS, PNS) | 必要性概率，充分性概率（PN，PS，PNS） |
+| actual causation; double prevention; bogus prevention; degree of responsibility | 实际因果；双重预防；虚假预防；责任程度 |
+| causal Markov condition; faithfulness; common cause principle | 因果马尔可夫条件；忠实性；共同原因原则 |
+| Markov equivalence; skeleton; v-structure; CPDAG | 马尔可夫等价；骨架；v结构；CPDAG |
+| potential outcomes; ignorability; SUTVA; instrumental variable; difference in differences | 潜在结果；可忽略性；SUTVA；工具变量；双重差分 |
+| uplift; persuadables; sleeping dogs; invariant causal prediction | 增益；可被说服者；沉睡的狗；不变因果预测 |
+| causal exclusion; supervenience; proportionality; epiphenomenalism | 因果排斥；随附；相称性；副现象论 |
 
 ## Names
 
@@ -163,3 +181,6 @@ computed lines as templates with the source's placeholders spelled exactly), fil
 | Hintikka, Aumann, Halpern, Moses, Rubinstein, Zollman | 欣蒂卡，奥曼，哈尔彭，摩西，鲁宾斯坦，佐尔曼 |
 | Ramsey, de Finetti, Joyce, Jeffrey, Jaynes, Bertrand | 拉姆齐，德菲内蒂，乔伊斯，杰弗里，杰恩斯，贝特朗 |
 | Kyburg, Makinson, Leitgeb, Elga, Bostrom, Pearl | 凯伯格，梅金森，莱特格布，埃尔加，博斯特罗姆，珀尔 |
+| Fisher, Neyman, Pearson, Jeffreys, Lindley, Birnbaum, Mayo, Ioannidis | 费希尔，奈曼，皮尔逊，杰弗里斯，林德利，伯恩鲍姆，梅奥，约阿尼迪斯 |
+| Hume, al-Ghazālī, Mill, Mackie, Suppes, Cartwright, Woodward | 休谟，安萨里，密尔，麦基，苏佩斯，卡特赖特，伍德沃德 |
+| Spirtes, Glymour, Scheines, Rubin, Halpern, Hall, Kim, Yablo | 斯皮尔特斯，格利穆尔，沙因斯，鲁宾，哈尔彭，霍尔，金在权，亚布罗 |
