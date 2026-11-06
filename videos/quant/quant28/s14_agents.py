@@ -39,7 +39,7 @@ class Agents(VoiceoverScene):
                                         fill_opacity=0.15), label(a, font_size=22, color=c))
             n[1].move_to(n[0])
             n.move_to(pos + LEFT * 2.2)
-            d = label(b, font_size=16, color=GREY_A).next_to(n, DOWN, buff=0.1)
+            d = wrapped_label(b, 3.0, 16, GREY_A).next_to(n, DOWN, buff=0.1)
             nodes.add(VGroup(n, d))
         arrows = VGroup(*[CurvedArrow(nodes[k][0].get_center(), nodes[(k + 1) % 4][0].get_center(), angle=-PI / 4,
                                       color=GREY_C, stroke_width=2) for k in range(4)])
@@ -48,6 +48,7 @@ class Agents(VoiceoverScene):
         side = wrapped_label(r"the ReAct pattern (Yao et al.\ 2023): interleave reasoning in words with actions on tools. "
                              r"The model is not retrained; what changes is what it is shown", 4.6, 18,
                              GREY_A).to_edge(RIGHT, buff=0.5)
+        head = label(r"An agent: a loop around a language model", font_size=28).to_edge(UP, buff=0.35)
         with self.voiceover(
             "An agent is a loop around a language model. <bookmark mark='a'/> It observes: prices, news, its own past "
             "trades. It reasons, in words. It acts, by calling a tool: trade, or fetch more data. And it remembers, by "
@@ -55,6 +56,7 @@ class Agents(VoiceoverScene):
             "pattern, reasoning interleaved with action. Nothing in the model is retrained. Only what it is shown "
             "changes, which is why a prompt, a memory and a set of tools are all part of the strategy."
         ) as vo:
+            self.play(FadeIn(head, shift=DOWN * 0.2))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(n_) for n_ in nodes], lag_ratio=0.3), LaggedStart(*[Create(a_) for a_ in arrows],
                                                                                          lag_ratio=0.3), run_time=3)
@@ -92,6 +94,7 @@ class Agents(VoiceoverScene):
                         Arrow(trader.get_bottom(), risk.get_top(), buff=0.1, stroke_width=2, color=GREY_C))
         src = note(r"TradingAgents (Xiao, Sun, Luo and Wang 2024, arXiv 2412.20138): every box is an LLM with its own "
                    r"prompt and tools", font_size=16, color=GREY_B).to_edge(DOWN, buff=0.25)
+        head = label(r"TradingAgents: an investment firm played by prompts", font_size=26).to_edge(UP, buff=0.3)
         with self.voiceover(
             "Here is the design of one of the most discussed, TradingAgents, by Yijia Xiao, Edward Sun, Di Luo and Wei "
             "Wang. <bookmark mark='a'/> Four analyst agents read fundamentals, social-media sentiment, news and price "
@@ -101,8 +104,9 @@ class Agents(VoiceoverScene):
             "prompts. The authors report better cumulative returns, Sharpe ratios and drawdowns than standard rules "
             "on the stocks they tested."
         ) as vo:
+            self.play(FadeIn(head, shift=DOWN * 0.2), FadeIn(src))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(b) for b in boxes], lag_ratio=0.15), FadeIn(src))
+            self.play(LaggedStart(*[FadeIn(b) for b in boxes], lag_ratio=0.15))
             vo.wait_until("b")
             self.play(FadeIn(debate), GrowArrow(dv), FadeIn(dl), *[GrowArrow(a) for a in arrows[:4]])
             vo.wait_until("c")
@@ -123,8 +127,10 @@ class Agents(VoiceoverScene):
             desk_question(r"what does it cost to run?", r"a dozen model calls per stock per day, and a vendor's model "
                           r"that may change between the backtest and the trade", width=12.4, font_size=19),
         ).arrange(DOWN, buff=0.22)
-        if cards.height > 6.6:
-            cards.scale_to_fit_height(6.6)
+        head = label(r"Part 26's questions, put to an agent", font_size=28).to_edge(UP, buff=0.3)
+        if cards.height > 6.0:
+            cards.scale_to_fit_height(6.0)
+        cards.next_to(head, DOWN, buff=0.25)
         with self.voiceover(
             "Before believing any such result, ask Part twenty-six's questions. <bookmark mark='a'/> When did the "
             "underlying model stop reading? Every agent in the chart can leak the future. <bookmark mark='b'/> How "
@@ -133,6 +139,7 @@ class Agents(VoiceoverScene):
             "this one? Each is a trial for the counter. <bookmark mark='d'/> And what does it cost to run a dozen "
             "model calls per stock per day? The architecture is interesting; the evidence, so far, is thin."
         ) as vo:
+            self.play(FadeIn(head, shift=DOWN * 0.2))
             for k, mk in enumerate(("a", "b", "c", "d")):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))

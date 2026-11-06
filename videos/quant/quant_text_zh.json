@@ -29033,7 +29033,10 @@
     "Pause and predict: after forty-three parts, what do you think are the largest questions quantitative finance still cannot answer?": "暂停并预测：经过四十三个部分，你认为量化金融仍然无法回答的最大问题是什么？",
     "Tool 1: the clock": "工具一：时钟",
     "15 characteristics per coin (the stock zoo has 94)": "每个币15个特征（股票动物园有94个）",
-    "Three restrictions before a signal is believed": "信号被相信之前的三条限制"
+    "Three restrictions before a signal is believed": "信号被相信之前的三条限制",
+    "An agent: a loop around a language model": "智能体：围绕语言模型的一个循环",
+    "TradingAgents: an investment firm played by prompts": "TradingAgents：由提示词扮演的投资公司",
+    "Part 26's questions, put to an agent": "第26部分的问题，问智能体"
   },
   "phrases": {
     "you owe": "你欠",

@@ -274,16 +274,17 @@ ZH = {
         "Omer Levy和Yoav Goldberg在2014年证明，让词嵌入出名的神经网络方法word2vec，隐含地做的正是同样的分解。",
 
     "Train it on the minutes, and ask for each word's nearest neighbours.":
-        "在纪要上训练它，并询问每个词的最近邻。<bookmark mark='a'/>inflation挨着expectations、core和survey-based；purchases挨着asset、large-scale和美联储购买的"
-        "mortgage-backed证券；housing挨着residential、homebuilding和construction。<bookmark mark='b'/>tightening的最近邻是easing：扮演同一角色的反义词。"
-        "而liquidity与facilities、swap lines和emergency provision住在一起，这是2008年的词汇。这些都没有告诉模型；全在于谁与谁为伴。",
+        "在纪要上训练它，并询问每个词的最近邻。<bookmark mark='a'/>inflation（通胀）挨着expectations（预期）、core（核心）和survey-based（基于调查的）；purchases（购买）挨着asset（资产）、"
+        "large-scale（大规模）和美联储购买的mortgage-backed（抵押贷款支持）证券；housing（住房）挨着residential（住宅）、homebuilding（住宅建设）"
+        "和construction（建筑）。<bookmark mark='b'/>tightening（紧缩）的最近邻是easing（宽松）：扮演同一角色的反义词。"
+        "而liquidity（流动性）与facilities（便利工具）、swap lines（互换额度）和emergency provision（紧急供给）住在一起，这是2008年的词汇。这些都没有告诉模型；全在于谁与谁为伴。",
 
     "Project the two hundred and fifty most common words":
         "把最常见的两百五十个词投影到最能把它们分开的两个方向上。<bookmark mark='a'/>这张图很粗糙，五十维中只取了两维，但邻域显现出来：关于价格和通胀的词在一个区域，"
         "关于劳动力市场的在另一个，金融管道的在第三个。",
 
     'f"Directions carry relations, too.':
-        "方向也承载着关系。<bookmark mark='a'/>取tightening的向量，减去raise，加上lower，问哪个词离它最近。答案是{an['best'][0]}。<bookmark mark='b'/>"
+        "方向也承载着关系。<bookmark mark='a'/>取tightening（紧缩）的向量，减去raise（提高），加上lower（降低），问哪个词离它最近。答案是{an['best'][0]}。<bookmark mark='b'/>"
         "tightening之于raise，正如easing之于lower：对含义做算术，这正是让Tomas Mikolov的word2vec在2013年出名的那个技巧，这里只用美联储自己的纪要就重现了。",
 
     "Pause and predict. Tightening's nearest neighbour is easing.":
