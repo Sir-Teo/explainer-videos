@@ -3108,3 +3108,43 @@ class ContractionBall(VGroup):
 
     def miss(self, centre, truth, inside: bool) -> Line:
         return Line(self.to_screen(*centre), self.to_screen(*truth), color=S.KEPT if inside else S.RESID, stroke_width=2.5)
+
+
+class Shatterer(VGroup):
+    """Shattering, drawn (Part 54): a small panel holding a few points in the plane, coloured by a labelling, and the
+    half-plane that realizes it when one exists.  ``panel(pts, labels, w, b)`` returns the framed panel; points with
+    label 1 are filled, label 0 hollow; the line w.x = b is drawn and the side w.x > b lightly shaded.  Pass w = None
+    for a labelling no half-plane can produce (the panel is then crossed out)."""
+
+    def __init__(self, size: float = 1.6):
+        super().__init__()
+        self.size = size
+
+    def _to(self, p, centre):
+        return np.asarray(centre, float) + np.array([p[0], p[1], 0.0]) * self.size / 2.6
+
+    def panel(self, pts, labels, w=None, b: float = 0.0, centre=(0.0, 0.0, 0.0), on=None, off=None) -> VGroup:
+        on, off = on or S.ACCENT, off or S.EST
+        frame = Square(side_length=self.size, stroke_color=GREY_D, stroke_width=1.5).move_to(centre)
+        g = VGroup(frame)
+        if w is not None:
+            w = np.asarray(w, float)
+            d = np.array([-w[1], w[0]]) / (np.linalg.norm(w) + 1e-12)
+            p0 = w * b / (w @ w)
+            lo, hi = -10.0, 10.0
+            for k in range(2):  # clip p0 + t d to the box [-1.3, 1.3]^2
+                if abs(d[k]) > 1e-12:
+                    t1, t2 = (-1.3 - p0[k]) / d[k], (1.3 - p0[k]) / d[k]
+                    lo, hi = max(lo, min(t1, t2)), min(hi, max(t1, t2))
+            a, c = p0 + lo * d, p0 + hi * d
+            line = Line(self._to(a, centre), self._to(c, centre), color=GREY_B, stroke_width=2)
+            g.add(line)
+        else:
+            g.add(Line(frame.get_corner(UL), frame.get_corner(DR), color=S.RESID, stroke_width=3),
+                  Line(frame.get_corner(DL), frame.get_corner(UR), color=S.RESID, stroke_width=3))
+        for p, lab in zip(pts, labels):
+            dot = Dot(self._to(p, centre), radius=0.07, color=on if lab else off)
+            if not lab:
+                dot = Circle(radius=0.07, stroke_color=off, stroke_width=2.5).move_to(self._to(p, centre))
+            g.add(dot)
+        return g
