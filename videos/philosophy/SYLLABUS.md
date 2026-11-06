@@ -1686,3 +1686,4 @@ and a Reasoner library of perhaps 20–30k lines with its tests. Expect one part
 | 6 · Paradise and Paradox | scenes, English and Chinese narration and text, QA | ~51 min |
 | 7 · The Limits of Proof | scenes, English and Chinese narration and text, QA | ~54 min |
 | 8 · The Liar | scenes, English and Chinese narration and text, QA | ~49 min |
+| 9 · What Is Mathematics About? | scenes, English and Chinese narration and text, QA | ~63 min |
