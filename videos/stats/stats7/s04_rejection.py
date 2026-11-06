@@ -91,7 +91,7 @@ class Rejection(VoiceoverScene):
         self.clear_scene()
 
     def envelope(self):
-        A = axes([-4, 4], [0, 0.6], x_length=7.4, y_length=4.4, xlabel=r"$x$", xticks=[-4, -2, 0, 2, 4], yticks=[0, 0.2, 0.4],
+        A = axes([-4, 4], [0, 0.7], x_length=7.4, y_length=4.4, xlabel=r"$x$", xticks=[-4, -2, 0, 2, 4], yticks=[0, 0.2, 0.4],
                  center=[-2.0, -0.4, 0])
         ax = A.ax
         xs = np.linspace(-4, 4, 300)
@@ -136,15 +136,15 @@ class Rejection(VoiceoverScene):
             MathTex(r"\text{rate} = \frac{\pi^{d/2}/\Gamma(d/2 + 1)}{2^d}", font_size=30, color=BAD),
             MathTex(rf"d = 2:\ {100 * rate[1]:.0f}\%,\quad d = 10:\ {100 * rate[9]:.2f}\%,\quad d = 20:\ 2.5 \times 10^{{-8}}", font_size=26),
             label(r"in high dimensions almost every dart misses: \ the corners are everything", font_size=22, color=GREY_A),
-            label(r"the cure is a chain that stays where the mass is \ (chapter 11)", font_size=22, color=S.ACCENT),
+            label(r"one option: \ a chain that stays where the mass is \ (chapter 11)", font_size=22, color=S.ACCENT),
         ), 5.6, 0.3, [4.2, 0.6, 0])
         with self.voiceover(
             "Rejection has a weakness that grows with dimension. <bookmark mark='a'/> To draw a uniform point in a "
             "ball, throw darts into the cube around it and keep those inside. <bookmark mark='b'/> The acceptance "
             "rate is the ball's volume over the cube's. <bookmark mark='c'/> In two dimensions it's seventy-nine "
             "percent. In ten dimensions, a quarter of a percent. In twenty, two and a half in a hundred million. "
-            "<bookmark mark='d'/> In high dimensions almost all of a cube's volume is in its corners, and almost every "
-            "dart misses. <bookmark mark='e'/> The cure, for the high-dimensional problems of Bayesian statistics, is "
+            "<bookmark mark='d'/> In high dimensions almost all of a cube's volume lies outside its inscribed ball, and almost every "
+            "dart misses. <bookmark mark='e'/> One option for high-dimensional Bayesian problems is "
             "not to throw darts independently but to walk: a Markov chain that stays where the probability is. "
             "That's chapter eleven."
         ) as vo:
@@ -162,7 +162,7 @@ class Rejection(VoiceoverScene):
         self.clear_scene()
 
     def adaptive(self):
-        A = axes([-3.2, 3.2], [-5.5, 0.5], x_length=7.0, y_length=4.4, xlabel=r"$x$", ylabel=r"$\log f(x)$", xticks=[-2, 0, 2],
+        A = axes([-3.2, 3.2], [-5.5, 2.0], x_length=7.0, y_length=4.4, xlabel=r"$x$", ylabel=r"$\log f(x)$", xticks=[-2, 0, 2],
                  yticks=[-4, -2, 0], center=[-2.4, -0.4, 0])
         ax = A.ax
         lf = lambda x: -0.5 * x ** 2  # noqa: E731
@@ -177,7 +177,7 @@ class Rejection(VoiceoverScene):
             tans.add(polyline(ax, xx[keep], yy[keep], S.POST, 2))
         kd = VGroup(*[Dot(ax.c2p(k, lf(k)), radius=0.07, color=S.POST) for k in knots])
         rows = fit_rows(VGroup(
-            label(r"log-concave $f$: \ $\log f$ bends down \ (normal, gamma with $\alpha \ge 1$, logistic, most posteriors of GLMs)",
+            label(r"log-concave $f$: \ $\log f$ bends down \ (normal, gamma with $\alpha \ge 1$, logistic)",
                   font_size=22),
             label(r"tangents to $\log f$ lie above it: \ their minimum is an envelope", font_size=24, color=S.POST),
             label(r"exponentiated: \ a piecewise-exponential proposal, \ sampled by inversion", font_size=24),
@@ -187,7 +187,7 @@ class Rejection(VoiceoverScene):
         with self.voiceover(
             "Building an envelope by hand is an art; for a large family of densities it can be automatic. "
             "<bookmark mark='a'/> Call a density log-concave if its logarithm bends downwards everywhere: the normal, "
-            "the gamma with shape at least one, the logistic, and most posteriors of the regression models of later "
+            "the gamma with shape at least one, the logistic, and canonical logistic or Poisson posteriors with log-concave priors in later "
             "parts. <bookmark mark='b'/> Then every tangent line to the log density lies above it, so the lowest of a "
             "few tangents is an envelope. <bookmark mark='c'/> Exponentiate it, and the envelope is piecewise "
             "exponential, easy to sample by inversion. <bookmark mark='d'/> And each time a proposal is rejected, add a "

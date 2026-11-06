@@ -3,7 +3,7 @@
 Part 7 of a sixty-five-part course in statistics, from a first course to a PhD (see [the series plan](../README.md)
 and [the syllabus](../SYLLABUS.md)), in Stage I, Bachelor's: Foundations. Every simulation in Parts 1–6 ran on a
 machine that can only follow instructions. This part builds the randomness, shapes it into any distribution, and
-learns to use it honestly. It ends with Markov chains, the engine of modern Bayesian computation.
+learns to use it honestly. PCG stream parameters are distinct, rather than a proof of independent or nonoverlapping outputs. It ends with Markov chains, the engine of modern Bayesian computation.
 
 It opens with John von Neumann's warning (1951) that arithmetic randomness is "a state of sin". It then turns
 3,000 consecutive triples from IBM's RANDU in 3D until all of them fall on 15 planes (Marsaglia 1968). From there:
@@ -17,17 +17,17 @@ It opens with John von Neumann's warning (1951) that arithmetic randomness is "a
 - variance reduction;
 - Markov chains, their stationary laws, PageRank, the seven-shuffle theorem and the Metropolis algorithm.
 
-Every number on screen is computed in [`compute.py`](compute.py). The generators and samplers there are statkit's
-own; the riffle-shuffle distances are exact.
+Numerical examples are cached in [`compute.py`](compute.py); small seeded harness, stratification, and chain demonstrations are evaluated in their scenes. The generators and samplers there are statkit's
+own; the riffle-shuffle distances are exact. For a forward riffle with the deck listed in final order, rising sequences are one plus descents of the inverse permutation; inversion preserves the Eulerian counts used in TV. The d-ball comparison uses the same actual budget m^d for the grid error and exact Monte Carlo standard error. Displayed histograms retain omitted tail mass in their denominators. The control-variate comparison uses the known population coefficient 6(3−e), rather than fitting it to the same draws.
 
-**Built in this part:** `statkit.random` ([`explainer/stats/kit/random.py`](../../../explainer/stats/kit/random.py)),
-tested against SciPy in [`tests/test_stats_kit_random.py`](../../../tests/test_stats_kit_random.py). It contains:
+**Built in this part:** `statkit.random` ([`explainer/stats/kit/random.py`](../../../../explainer/stats/kit/random.py)),
+tested against SciPy in [`tests/test_stats_kit_random.py`](../../../../tests/test_stats_kit_random.py). It contains:
 - **generators:** `randu`, `lcg`, `PCG32`;
 - **samplers:** `inverse_cdf`, `discrete_inverse`, `rejection`, `box_muller`, `marsaglia_tsang`, `AliasTable`;
 - **the simulation-study harness:** `streams` (independent, reproducible generators), `mc_se`, and `simulate`, which
   reports bias, empirical SE and coverage, each with its Monte Carlo SE.
 
-The harness runs every later Coverage Board check. `NSpace.cloud` (in `explainer/stats/viz.py`) draws thousands of
+The harness provides the Coverage Board framework; empirical-SE MCSE uses a normal approximation across replicates. `NSpace.cloud` (in `explainer/stats/viz.py`) draws thousands of
 points in a turnable ℝ³ with one updater.
 
 ## Build it
@@ -46,10 +46,10 @@ python tools/lecture_length.py stats7 --floor 50
 |---|---|---|---|
 | 0 | A state of sin | Von Neumann (1951); his middle-square method and its cycles; RANDU's triples turned edge-on in 3D; PCG32's cube; the objectives. | 2100 → 4100 → 8100 → 6100 → 2100; 9x − 6y + z takes 15 integer values |
 | 1 | Pseudo-random generators | Lehmer's LCG (1949); periods on a 64-hour clock and Hull–Dobell; the lattice of pairs and the spectral test; PCG32 in four lines; the Mersenne Twister; χ², runs and 3-D tests. | period 16 vs 64; RANDU 1-D χ² p = 0.89 but 3-D p = 5 × 10⁻³⁰; PCG32 p = 0.87, 0.16 |
-| 2 | The inverse CDF | Proof; the exponential by −log(1 − U); 4,000 draws; discrete inversion; inverting the ECDF is resampling (the bootstrap); the normal's missing inverse. | frequencies 0.10, 0.23, 0.30, 0.21, 0.15 vs 0.10, 0.25, 0.30, 0.20, 0.15 |
+| 2 | The inverse CDF | Proof; the exponential by −log(1 − U); 4,000 draws; discrete inversion; inverting the ECDF is resampling (the bootstrap); the normal's numerical quantile. | frequencies 0.10, 0.23, 0.30, 0.21, 0.15 vs 0.10, 0.25, 0.30, 0.20, 0.15 |
 | 3 | Rejection sampling | Darts under Beta(2, 5); the proof; a Laplace envelope for the normal; adaptive rejection for log-concave densities; the curse of dimension. | kept 41.3% vs 1/M = 40.7%; normal from Laplace 76%; d-ball from cube: 79% (d = 2), 0.25% (10), 2.5 × 10⁻⁸ (20) |
 | 4 | Special methods | Box–Muller animated and proved (Rayleigh radius); Marsaglia–Tsang gamma; Walker's alias table; multivariate normals by Cholesky. | gamma acceptance 98.7%, mean 2.51; alias frequencies within 0.003 of p |
-| 5 | Monte Carlo integration | π by darts with the √n funnel; σ/√n in any dimension; grid vs MC for the d-ball; Halton points (quasi-MC); Buffon (1777); Lazzarini's suspicious 355/113. | 4,000 darts: 3.162; d = 10: grid error 61%, MC 2.3%; Buffon SE at 3,408 throws: 0.051 |
+| 5 | Monte Carlo integration | π by darts with the √n funnel; σ/√n in any dimension; grid vs MC for the d-ball; Halton points (quasi-MC); Buffon (1777); Lazzarini's suspicious 355/113. | 4,000 darts: 3.162; d = 10: grid error 61%, exact MC relative SE about 2.0% at the same rounded grid budget; Buffon SE at 3,408 throws: 0.051 |
 | 6 | Simulation studies done right | ADEMP (Morris, White & Crowther 2019); Wald interval coverage for n = 30 against the exact sum and Wilson; Monte Carlo SEs and planning R; seeds, streams, common random numbers; `simulate`. | Wald coverage 46% at p = 0.02; MCSE 0.0034 at c = 0.95, R = 4,000; p = 0.1: 0.807 ± 0.006 |
 | 7 | Variance reduction | Antithetic pairs; control variates (regression); stratified sampling; importance sampling for P(Z > 4); when importance sampling fails. | variance ÷32 (antithetic), ÷62 (control), ÷8 × 10⁵ (stratified); P(Z > 4): variance ÷6,700 |
 | 8 | Markov chains | Markov's Onegin (1913) and its two-state chain; the weather chain; probability as a flowing fluid; the ergodic theorem along one path; geometric convergence by the second eigenvalue. | vowels: chain 0.432 vs count 43.2%; π = (19, 13, 9)/41; λ₂ = 0.462 |
@@ -123,23 +123,23 @@ of darts per draw is geometric with mean M = 1.5.
 
 Var g(U) = 2/3 − π²/16 = 0.0498,
 
-and σ = 0.223. The standard error is σ/√n, so SE = 0.001 needs n = (0.223/0.001)², about 49,800. (Antithetic or
+and σ = 0.223. The standard error is σ/√n, so SE = 0.001 needs n = (0.223/0.001)², at least 49,817 using the unrounded variance. (Antithetic or
 stratified sampling would cut this by a large factor.)
 
 **5. A two-state chain.**
 
-*Solution.* Solving πP = π gives π = (b/(a + b), a/(a + b)); detailed balance π₁a = π₂b gives the same answer at once.
-The trace is 2 − a − b = 1 + λ₂, so λ₂ = 1 − a − b. The chain forgets its start geometrically at rate |1 − a − b|.
+*Solution.* Assume 0 ≤ a,b ≤ 1. If a=b=0, P=I and every distribution is stationary. Otherwise solving πP = π gives π = (b/(a + b), a/(a + b)); detailed balance π₁a = π₂b gives the same answer at once.
+The trace is 2 − a − b = 1 + λ₂, so λ₂ = 1 − a − b. When 0 < a+b < 2, the chain forgets its start geometrically at rate |1 − a − b|.
 - When a + b = 1, it forgets in one step.
 - When a = b = 1, it alternates for ever: periodic, with λ₂ = −1.
 
 **6. Metropolis with an unnormalized f.**
 
-*Solution.* For y ≠ x, the move probability is T(x → y) = q(y | x) min(1, f(y)/f(x)). Then
+*Solution.* For y ≠ x, the off-diagonal transition density is T(x → y) = q(y | x) min(1, f(y)/f(x)). Then
 
 f(x) T(x → y) = q(y | x) min(f(x), f(y)).
 
-This is symmetric in x and y because q is, so detailed balance holds and f/∫f is stationary. If f = c f̃ with c
+This is symmetric in x and y because q is, so detailed balance holds and f/∫f is stationary, assuming 0 < ∫f < ∞. Ergodic convergence requires additional chain conditions. If f = c f̃ with c
 unknown, then f(y)/f(x) = f̃(y)/f̃(x): the constant cancels, and the chain run with f̃ is the same chain.
 
 ## Where it comes back

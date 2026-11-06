@@ -84,24 +84,27 @@ class Mixing(VoiceoverScene):
         whys = [why(r"after $k$ shuffles, \ a deck's chance depends only on $r(\sigma)$, \ its number of rising sequences"),
                 why(r"$A_{n,r}$: \ how many orderings have $r$ rising sequences (Eulerian numbers): \ 52 terms, \ not $52!$")]
         ex = fit_rows(VGroup(
-            label(r"a rising sequence: \ cards $i, i+1, i+2, \dots$ appearing in order, \ interleaved with others", font_size=22,
+            label(r"deck-order convention: $r(\sigma)=1+\mathrm{descents}(\sigma^{-1})$", font_size=22,
                   color=GREY_A),
             label(r"one riffle shuffle makes at most 2; \ $k$ shuffles at most $2^k$", font_size=22, color=GREY_A),
             label(r"total variation: \ the largest difference, over any event, \ between the deck's law and the uniform", font_size=22,
                   color=GREY_A),
         ), 12.6, 0.2, [0, -2.75, 0])
+        intro = label('An exact formula under the deck-order convention', font_size=36)
         with self.voiceover(
             "How close is the deck to uniform after k shuffles? There are fifty-two factorial orderings, about eight "
             "times ten to the sixty-seven, so we can't list them. Dave Bayer and Persi Diaconis found a way around "
             "it in 1992. <bookmark mark='a'/> After k riffle shuffles, the chance of any particular ordering depends "
-            "only on its number of rising sequences: runs of consecutive cards that still appear in their original "
+            "only on its number of rising sequences, one plus the descents of the inverse deck permutation: consecutive labels appearing in their original "
             "order. A single shuffle creates at most two; k shuffles at most two to the k. <bookmark mark='b'/> So the "
             "total variation distance to the uniform, the largest error in the probability of any event, is a sum "
             "of only fifty-two terms, weighted by the Eulerian numbers that count orderings with each number of "
             "rising sequences. We can compute it exactly."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=2.4, x=-1.4, buff=1.3, edge=6.9)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             self.play(FadeIn(ex[:2]))
             vo.wait_until("b")
@@ -127,8 +130,8 @@ class Mixing(VoiceoverScene):
             "distance is essentially one: the deck is as far from random as it can be, and a clever gambler could "
             "exploit it. <bookmark mark='b'/> At five it starts to drop, point nine two; at six, point six one. "
             "<bookmark mark='c'/> At seven, a third, and from there it halves with every shuffle. "
-            "<bookmark mark='d'/> Bayer and Diaconis's verdict, which made the newspapers: seven shuffles are needed, "
-            "and more are not worth much."
+            "<bookmark mark='d'/> Bayer and Diaconis's verdict, which made the newspapers: seven is a useful rule of thumb, but total variation is still a third; "
+            "the required number depends on your tolerance, and further shuffles keep reducing the discrepancy."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
@@ -150,7 +153,7 @@ class Mixing(VoiceoverScene):
         b1 = bars(ax, np.arange(1, 9) - 0.17, ex, EXACT, width=0.3)
         b2 = bars(ax, np.arange(1, 9) + 0.17, sim, GOOD, width=0.3)
         leg = legend([(EXACT, r"exact (Bayer--Diaconis)"), (GOOD, r"simulated: \ 60,000 decks")], font_size=22).move_to([4.2, 1.8, 0])
-        rows = fit_rows(VGroup(label(r"agreement until the simulation's own noise floor, \ about 0.02", font_size=24),
+        rows = fit_rows(VGroup(label(r"empirical TV has a positive sampling-noise floor near 0.02", font_size=24),
                                label(r"120 orderings, \ 60,000 decks: \ 500 per ordering", font_size=22, color=GREY_A),
                                label(r"an exact formula and a simulation: \ each checks the other", font_size=24, color=S.ACCENT)),
                         5.2, 0.28, [4.2, -0.4, 0])
@@ -158,7 +161,7 @@ class Mixing(VoiceoverScene):
             "Can we trust the formula? Check it by simulation. <bookmark mark='a'/> With five cards there are only a "
             "hundred and twenty orderings, so we can shuffle sixty thousand decks with our generator and count. "
             "<bookmark mark='b'/> The simulated distances track the exact ones, until they reach the simulation's own "
-            "noise floor, about two percent: with five hundred decks per ordering, the counts themselves wobble by "
+            "noise floor, about two percent: this positive bias comes from adding absolute count errors, not a floor in the true distance. The aggregate discrepancy is about "
             "that much. An exact answer and a simulation, each checking the other: that's the habit this part is "
             "trying to build."
         ) as vo:
@@ -171,7 +174,7 @@ class Mixing(VoiceoverScene):
 
     def cutoff(self):
         rows = fit_rows(VGroup(
-            label(r"the cutoff phenomenon: \ distance $\approx 1$, \ then a sudden drop near $\tfrac32 \log_2 n$ shuffles", font_size=26),
+            label(r"the cutoff phenomenon: \ distance $\approx 1$, \ then an asymptotic drop near $\tfrac32 \log_2 n$ in an $O(1)$ window", font_size=26),
             MathTex(r"n = 52:\quad \tfrac32\log_2 52 \approx 8.6;\ \ \text{the drop starts at 5, and is a third by 7}", font_size=28,
                     color=S.ACCENT),
             label(r"other shuffles are far slower: \ overhand shuffling needs thousands (order $n^2 \log n$)", font_size=24,
@@ -179,6 +182,7 @@ class Mixing(VoiceoverScene):
             label(r"for MCMC (chapter 11, \ Part 27): \ how long before a chain has forgotten its start?", font_size=26, color=CHAIN),
             label(r"the answer, \ like the deck's, \ is a property of the chain, \ not of patience", font_size=24, color=GREY_A),
         ), 12.6, 0.35, [0, 0.2, 0])
+        intro = label('Mixing time depends on the chain', font_size=36)
         with self.voiceover(
             "<bookmark mark='a'/> The shape of that curve has a name: the cutoff phenomenon. The distance stays near one, "
             "then falls off a cliff, around one and a half times the base-two log of the number of cards. "
@@ -188,7 +192,10 @@ class Mixing(VoiceoverScene):
             "forgotten where it started, is the central practical question of Markov chain Monte Carlo, coming next "
             "and in Part 27. <bookmark mark='e'/> And the answer, like the deck's, depends on the chain."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m in enumerate("abcde"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()

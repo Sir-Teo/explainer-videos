@@ -32,18 +32,21 @@ class Chains(VoiceoverScene):
         hc = history_card(1913, r"Andrey Markov, \ on Pushkin's \emph{Eugene Onegin}", r"20,000 letters, \ classified as vowel or "
                           r"consonant: \ the chance of a vowel depends on the letter before. \ The first Markov chain, \ "
                           r"fitted to data", color=S.MUSEUM, width=7.6, font_size=24).move_to([0, 1.4, 0])
-        dfn = definition_card(r"Markov chain", r"$P(X_{t+1} = j \mid X_t = i, X_{t-1}, \dots, X_0) = P_{ij}$: \ the future depends "
+        dfn = definition_card(r"Time-homogeneous Markov chain", r"$P(X_{t+1} = j \mid X_t = i, X_{t-1}, \dots, X_0) = P_{ij}$: \ the future depends "
                               r"on the past only through the present", color=CHAIN, width=8.6, font_size=24).next_to(hc, DOWN, buff=0.5)
+        intro = label('A process with one-step memory', font_size=36)
         with self.voiceover(
-            "Everything so far drew independent numbers. Many of the most useful random processes have memory. "
+            "Many earlier samplers produced independent draws; antithetic pairs deliberately did not. Many of the most useful random processes have memory. "
             "<bookmark mark='a'/> In 1913 Andrey Markov took the first twenty thousand letters of Pushkin's novel in "
             "verse, Eugene Onegin, and classified each as a vowel or a consonant. The chance of a vowel was not the "
             "same after a vowel as after a consonant: the letters were dependent, but in a simple way. "
-            "<bookmark mark='b'/> A Markov chain is a sequence in which the next state depends on the past only "
+            "<bookmark mark='b'/> A time-homogeneous Markov chain is a sequence in which the next state depends on the past only "
             "through the present state: given where you are now, where you've been doesn't matter. All of its "
             "behaviour is in one table of transition probabilities."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(dfn))
@@ -77,13 +80,16 @@ class Chains(VoiceoverScene):
         rl.next_to(mat, DOWN, buff=0.35)
         if rl.width > 5.0:
             rl.width = 5.0
+        intro = label('A time-homogeneous weather model', font_size=36)
         with self.voiceover(
             "Here's a toy chain: tomorrow's weather, given today's. <bookmark mark='a'/> Three states: sunny, cloudy, "
             "rainy. <bookmark mark='b'/> From sunny, it stays sunny with chance point seven, turns cloudy with point "
             "two, rainy with point one. Each state has its own row of probabilities. <bookmark mark='c'/> Collect "
             "them into a matrix. Row i says where tomorrow goes from state i, so each row adds up to one."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(LaggedStart(*[FadeIn(n) for n in nodes], lag_ratio=0.3))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(a) for a in arrows], lag_ratio=0.1), run_time=3.0)
@@ -116,7 +122,7 @@ class Chains(VoiceoverScene):
             "Now think of probability as a fluid flowing between the states. <bookmark mark='a'/> Start certain that "
             "today is sunny: all the mass on one bar. <bookmark mark='b'/> Tomorrow's distribution is today's row "
             "vector times P: Part 2's law of total probability, as matrix multiplication. <bookmark mark='c'/> Step "
-            "after step, the mass redistributes, <bookmark mark='d'/> and settles: after about ten days it no longer "
+            "after step, the mass redistributes, <bookmark mark='d'/> and settles: after about ten days it barely "
             "changes. Forty-six percent sunny, thirty-two cloudy, twenty-two rainy. Start from rain instead and you "
             "end up in the same place: the chain forgets where it began."
         ) as vo:
@@ -146,8 +152,8 @@ class Chains(VoiceoverScene):
         A = axes([0, 12], [-4, 0], x_length=6.4, y_length=4.0, xlabel=r"day $t$", ylabel=r"distance to $\pi$ (log scale)",
                  xticks=[0, 4, 8, 12], yticks=[-4, -3, -2, -1, 0], yfmt=lambda v: f"10^{{{int(v)}}}", center=[-3.0, -0.5, 0])
         ax = A.ax
-        pts = VGroup(*[Dot(ax.c2p(t, np.log10(max(v, 1e-4))), radius=0.07, color=CHAIN) for t, v in enumerate(dist)])
-        ln = polyline(ax, np.arange(13), np.log10(np.maximum(dist, 1e-4)), CHAIN, 2.5)
+        pts = VGroup(*[Dot(ax.c2p(t, np.log10(v)), radius=0.07, color=CHAIN) for t, v in enumerate(dist) if v >= 1e-4])
+        ln = polyline(ax, np.arange(13), np.log10(dist), CHAIN, 2.5)
         guide = polyline(ax, np.arange(13), np.log10(dist[1]) + (np.arange(13) - 1) * np.log10(ev[1]), GREY_B, 1.5)
         rows = fit_rows(VGroup(
             MathTex(rf"\text{{eigenvalues of }} P:\ 1,\ {ev[1]:.3f},\ {ev[2]:.3f}", font_size=28),
@@ -159,8 +165,8 @@ class Chains(VoiceoverScene):
         with self.voiceover(
             "How fast does it forget? <bookmark mark='a'/> Plot the distance to the settled distribution, on a log "
             "scale: a straight line, so the distance shrinks by the same factor every day. <bookmark mark='b'/> "
-            "That factor is the transition matrix's second-largest eigenvalue, here point four six. The largest "
-            "is always exactly one, and its eigenvector is the settled distribution itself, which is the subject of "
+            "That factor is the transition matrix's second-largest eigenvalue magnitude, here point four six, governing the asymptotic rate for this diagonalizable chain. The largest "
+            "is always exactly one, and its left eigenvector is the settled distribution itself, which is the subject of "
             "the next chapter. The closer the second eigenvalue is to one, the slower the chain forgets."
         ) as vo:
             self.play(FadeIn(A))
@@ -181,7 +187,7 @@ class Chains(VoiceoverScene):
                 why(r"a two-state chain's long-run share: \ $b/(a + b)$")]
         res = fit_rows(VGroup(
             label(r"Markov's direct count of vowels: \ 43.2\%", font_size=26, color=S.MUSEUM),
-            label(r"the chain's stationary law reproduces it: \ the first statistical check of a Markov model", font_size=24,
+            label(r"the chain's stationary law reproduces it: \ a marginal consistency check, \ not proof of the Markov property", font_size=24,
                   color=GREY_A),
             label(r"his point: \ the law of large numbers does not need independence", font_size=24, color=S.ACCENT),
         ), 12.6, 0.3, [0, -1.9, 0])
@@ -228,17 +234,17 @@ class Chains(VoiceoverScene):
             label(r"one long run of the weather chain", font_size=24),
             label(r"the share of sunny, cloudy, rainy days $\to \pi$", font_size=24, color=EXACT),
             label(r"the ergodic theorem:", font_size=24, color=CHAIN),
-            label(r"one path's time average $=$ the average over $\pi$", font_size=24, color=CHAIN),
+            label(r"finite irreducible chain: time average $\to E_\pi g$ almost surely", font_size=24, color=CHAIN),
             label(r"why one long MCMC run can stand in", font_size=22, color=GREY_A),
-            label(r"for independent draws", font_size=22, color=GREY_A),
+            label(r"for independent draws, with autocorrelation accounted for", font_size=22, color=GREY_A),
         ), 5.0, 0.24, [4.5, -0.4, 0])
         with self.voiceover(
             "There's a second way to see the stationary law. <bookmark mark='a'/> Instead of evolving the whole "
             "distribution, simulate one long run of the chain: here are its first sixty-four days. "
             "<bookmark mark='b'/> Track the share of sunny, cloudy and rainy days so far. After a few thousand days "
             "they settle onto the stationary probabilities. <bookmark mark='c'/> That's the ergodic theorem for "
-            "Markov chains: the time average along a single path equals the average under the stationary law. It's "
-            "why one long run of a Markov chain, in chapter eleven, can stand in for independent draws."
+            "Markov chains: for a finite irreducible chain the time average converges almost surely to the stationary expectation as the run grows. It's "
+            "why one long run of a Markov chain, in chapter eleven, can estimate stationary expectations, with Monte Carlo uncertainty that accounts for autocorrelation."
         ) as vo:
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(s_) for s_ in strip], lag_ratio=0.03), FadeIn(rows[0]))
