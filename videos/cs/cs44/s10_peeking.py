@@ -44,7 +44,7 @@ class Peeking(VoiceoverScene):
     def card(self):
         card = chapter_card(9, r"Looking too often", r"Why does checking an experiment every day break it?",
                             lit=(1970, 2017), extra=((1970, r"Robbins: \ mixture sequential tests"),
-                                                     (2017, r"Johari, \ Pekelis and Walsh: \ always-valid "
+                                                     (2017, r"Johari et al.: \ always-valid "
                                                             r"p-values")), part=PART)
         with self.voiceover("Chapter nine. Looking too often."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
@@ -235,7 +235,7 @@ class Peeking(VoiceoverScene):
                           r"inequality \ (1939)", 4.3, font_size=19, color=WHITE),
             ville,
             wrapped_label(r"always-valid p-value: \ $p_n = \min(1,\ 1/\max_{m\le n}\Lambda_m)$ \ (Johari, \ "
-                          r"Pekelis and Walsh, \ 2017)", 4.3, font_size=19, color=HEAD),
+                          r"Koomen, \ Pekelis and Walsh, \ 2017)", 4.3, font_size=19, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([4.6, -0.35, 0])
         with self.voiceover(
             "The fix is a test built to be watched. <bookmark mark='a'/> Abraham Wald's sequential test compared "
@@ -244,8 +244,8 @@ class Peeking(VoiceoverScene):
             "over alpha, twenty. <bookmark mark='c'/> With no effect, the ratio is a fair bet: its expected value "
             "stays one however long you play, and Ville's inequality says it ever reaches twenty with probability "
             "at most one in twenty. <bookmark mark='d'/> In z units the boundary is no longer flat: it starts high "
-            "and comes down slowly. <bookmark mark='e'/> Ramesh Johari, Leonid Pekelis and David Walsh turned this "
-            "into always-valid p-values, safe to check every morning."
+            "and comes down slowly. <bookmark mark='e'/> Ramesh Johari, Pete Koomen, Leonid Pekelis and David "
+            "Walsh turned this into always-valid p-values, safe to check every morning."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g), Create(band), FadeIn(bl), FadeIn(curves))
             vo.wait_until("a")

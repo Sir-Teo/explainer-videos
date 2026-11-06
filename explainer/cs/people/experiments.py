@@ -5,7 +5,6 @@ discovery rates, sample-ratio mismatch, Simpson's paradox, and bandits against f
 from __future__ import annotations
 
 import math
-import random
 
 import numpy as np
 

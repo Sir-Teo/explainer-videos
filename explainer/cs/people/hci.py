@@ -125,7 +125,7 @@ def klm(ops: str) -> float:
 def klm_cases():
     cases = {
         "delete a file: menu": "HMPBMPB",          # home to mouse, think, point at file, click, think, menu item
-        "delete a file: keyboard shortcut": "MPBHMKK",
+        "delete a file: keyboard shortcut": "HMPBHMKK",   # the same start: home to mouse, select, back to keys
         "rename: dialog": "HMPBBMPB" + "MKKKKKKKK" + "K",
         "rename: inline (F2)": "HMPB" + "HMK" + "MKKKKKKKK" + "K",
     }

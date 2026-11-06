@@ -264,7 +264,8 @@ class Choice(VoiceoverScene):
                              r"what saves time is removing an $M$, \ a moment of deciding", 12.4, font_size=20,
                              color=YES).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "The keystroke-level model, which Card, Moran and Newell published in 1980, is the simplest version. "
+            "The keystroke-level model, which Card, Moran and Newell published in 1980, is the simplest version; "
+            "the button press was added in later guides by David Kieras. "
             "<bookmark mark='a'/> A keystroke takes 0.28 seconds for an average typist, pointing with a mouse 1.1, "
             "a button press a tenth, moving a hand between keyboard and mouse 0.4, and a moment of mental "
             "preparation 1.35. <bookmark mark='b'/> Write each method as a string of operators and add them up. "
