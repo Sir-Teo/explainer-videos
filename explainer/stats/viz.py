@@ -2030,3 +2030,67 @@ class PhantomPanel(Group):
         if hasattr(self, "image"):
             img.move_to(self.image)
         return img
+
+
+class PValueSea(VGroup):
+    """The p-value sea (Part 33): many p-values sorted against their rank, on axes zoomed to the smallest ranks,
+    with the Benjamini--Hochberg line p = q i / m sweeping through them.  ``bh_line(q)`` draws the line (clipped to
+    the box); ``k(q)`` is the number BH rejects; ``mark(q, color)`` returns the dots BH rejects, recoloured;
+    ``grid(...)`` (a static helper) draws every p-value as a cell of a grid, brighter for smaller p."""
+
+    def __init__(self, p, width: float = 7.0, height: float = 4.6, center=ORIGIN, ranks: int | None = None,
+                 pmax: float | None = None, dot_color=None, dot_radius: float = 0.03, font_size: int = 20):
+        super().__init__()
+        from explainer.analysis import label
+
+        self.p = np.sort(np.asarray(p, float))
+        self.m = len(self.p)
+        self.R = ranks or self.m
+        self.pmax = pmax if pmax is not None else float(self.p[self.R - 1])
+        self.w, self.h = width, height
+        self.c = np.asarray(center, float)
+        o = self.c + np.array([-width / 2, -height / 2, 0])
+        self.origin = o
+        self.axes_ = VGroup(Line(o, o + RIGHT * width, color=GREY_C, stroke_width=2),
+                            Line(o, o + UP * height, color=GREY_C, stroke_width=2))
+        self.xlabel = label(rf"rank $i$ \ (of {self.m:,})", font_size=font_size, color=GREY_A).next_to(self.axes_[0], DOWN, buff=0.15)
+        self.ylabel = label(r"$p_{(i)}$", font_size=font_size, color=GREY_A).next_to(self.axes_[1], UP, buff=0.12)
+        self.ticks = VGroup(
+            label(r"0", font_size=font_size - 2, color=GREY_B).next_to(o, DL, buff=0.06),
+            label(rf"{self.R:,}", font_size=font_size - 2, color=GREY_B).next_to(o + RIGHT * width, DOWN, buff=0.1),
+            label(rf"{self.pmax:.3g}", font_size=font_size - 2, color=GREY_B).next_to(o + UP * height, LEFT, buff=0.1))
+        idx = np.arange(self.R)
+        if self.R > 1500:
+            idx = np.unique(np.r_[np.arange(300), np.linspace(0, self.R - 1, 1200).astype(int)])
+        self.idx = idx
+        self.dots = VGroup(*[Dot(self.P(i + 1, min(self.p[i], self.pmax)), radius=dot_radius, color=dot_color or GREY_B)
+                             for i in idx])
+        self.add(self.axes_, self.xlabel, self.ylabel, self.ticks, self.dots)
+
+    def P(self, rank, pv) -> np.ndarray:
+        return self.origin + np.array([self.w * rank / self.R, self.h * pv / self.pmax, 0.0])
+
+    def k(self, q: float) -> int:
+        ok = np.flatnonzero(self.p <= q * np.arange(1, self.m + 1) / self.m)
+        return int(ok.max() + 1) if len(ok) else 0
+
+    def bh_line(self, q: float, color=None, stroke_width: float = 3) -> Line:
+        r_end = min(self.R, self.pmax * self.m / q)
+        return Line(self.P(0, 0), self.P(r_end, q * r_end / self.m), color=color or S.ACCENT, stroke_width=stroke_width)
+
+    def mark(self, q: float, color=None) -> VGroup:
+        k = self.k(q)
+        return VGroup(*[d.copy().set_color(color or S.ACCENT).scale(1.4) for d, i in zip(self.dots, self.idx) if i < k])
+
+    @staticmethod
+    def grid(p, cols: int, cell: float = 0.06, center=ORIGIN, lo: float = 1e-6) -> VGroup:
+        p = np.asarray(p, float)
+        g = VGroup()
+        rows = int(np.ceil(len(p) / cols))
+        for i, v in enumerate(p):
+            r, c = divmod(i, cols)
+            t = float(np.clip(-np.log10(max(v, lo)) / -np.log10(lo), 0, 1))
+            g.add(Square(cell * 0.9, stroke_width=0, fill_opacity=1,
+                         fill_color=interpolate_color(ManimColor("#141a26"), ManimColor(S.ACCENT), t ** 0.6))
+                  .move_to(np.asarray(center) + np.array([(c - cols / 2) * cell, (rows / 2 - r) * cell, 0])))
+        return g

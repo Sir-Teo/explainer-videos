@@ -1152,3 +1152,16 @@ def diabetes() -> tuple:
         rows = list(csv.reader(f))
     head, body = rows[0], np.array([[float(v) for v in r] for r in rows[1:]])
     return body[:, :10], body[:, 10], head[:10]
+
+
+def prostate_z() -> tuple:
+    """Singh et al.'s (2002) prostate cancer microarray, Efron's running example in *Large-Scale Inference* (2010):
+    6,033 genes on 50 healthy men and 52 with prostate cancer.  For each gene, the two-sample t statistic (cancer minus
+    healthy, 100 df) and z = Phi^{-1}(F_100(t)), computed from the expression matrix as distributed in the R package
+    ``sda`` (``singh2002``).  Returns (t, z)."""
+    from pathlib import Path
+
+    import numpy as np
+
+    d = np.loadtxt(Path(__file__).parent / "data" / "prostate_z.csv", delimiter=",", skiprows=1)
+    return d[:, 0], d[:, 1]
