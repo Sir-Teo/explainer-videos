@@ -115,7 +115,7 @@ class Substitution(VoiceoverScene):
         s = load("subst")
         head = label(r"Climbing toward English", font_size=34).to_edge(UP, buff=0.3)
         tr = s["trace"]
-        shown = [tr[i] for i in (0, 3, 6, 9, 11, 12, 13, len(tr) - 1)]
+        shown = [tr[i] for i in sorted({0, 2, 4, 6, 8, 9, 10, 11, 12, len(tr) - 1})]
         lo, hi = tr[0][1], tr[-1][1]
         rows = VGroup()
         for step, score, text in shown:
@@ -128,7 +128,7 @@ class Substitution(VoiceoverScene):
             row = VGroup(n, t, sc, bar).arrange(RIGHT, buff=0.3)
             bar.align_to(sc, LEFT).shift(RIGHT * 0.9)
             rows.add(row)
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).next_to(head, DOWN, buff=0.4).to_edge(LEFT, buff=0.6)
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(head, DOWN, buff=0.4).to_edge(LEFT, buff=0.6)
         for r in rows:
             r[3].next_to(r[2], RIGHT, buff=0.3)
         hdr = VGroup(label(r"step", font_size=16, color=GREY_C).next_to(rows[0][0], UP, buff=0.15),
@@ -153,7 +153,7 @@ class Substitution(VoiceoverScene):
             "then longer ones, and then: Call me Ishmael. Some years ago, never mind how long precisely. <bookmark "
             "mark='c'/> A climb can get stuck on a false peak, as our first attempt did, so we restart a few times "
             "from jiggled starting keys; the other five all reached the same, higher score. <bookmark mark='d'/> "
-            "Six hundred letters, every one correct, in under five seconds of Python. Edgar Allan Poe knew this in "
+            "Six hundred letters, every one correct, in a few seconds of Python. Edgar Allan Poe knew this in "
             "1843: a substitution cipher hides nothing from someone willing to count."
         ) as vo:
             self.play(FadeIn(head), FadeIn(hdr), FadeIn(rows[0]))

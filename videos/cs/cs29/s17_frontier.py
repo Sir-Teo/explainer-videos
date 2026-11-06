@@ -29,8 +29,14 @@ class Frontier(VoiceoverScene):
                 (r"PRPs \\ (Luby--Rackoff)", [1.6, 2.4]), (r"MACs, \ encryption", [4.6, 2.2]),
                 (r"commitments \\ (Naor 1991)", [-4.6, -0.6]), (r"signatures \\ (Rompel 1990)", [4.6, -0.6])]
         boxes = VGroup(*[flow_box(t, DATA, w=2.5, h=0.9, font=18).move_to([x, y, 0]) for t, (x, y) in outs])
-        arrows = VGroup(*[Arrow(owf.get_center(), b.get_center(), buff=0.55, stroke_width=2.5, color=GREY_B)
-                          for b in boxes])
+        arrows = VGroup()
+        for b in boxes:
+            if b.get_y() > owf.get_y() + 0.5:
+                st, en = owf.get_top() + RIGHT * 0.5 * np.sign(b.get_x()), b.get_bottom()
+            else:
+                st = owf.get_left() if b.get_x() < 0 else owf.get_right()
+                en = b.get_right() if b.get_x() < 0 else b.get_left()
+            arrows.add(Arrow(st, en, buff=0.08, stroke_width=2.5, color=GREY_B))
         pnp = flow_box(r"P $\ne$ NP", NO, w=2.0, h=0.7, font=22).move_to([0, -1.0, 0])
         pa = Arrow(owf.get_bottom(), pnp.get_top(), buff=0.08, stroke_width=2.5, color=NO)
         lines = VGroup(

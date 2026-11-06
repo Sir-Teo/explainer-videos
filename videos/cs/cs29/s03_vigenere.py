@@ -104,6 +104,8 @@ class Vigenere(VoiceoverScene):
         el = label(rf"English: \ {v['ioc_plain']:.3f}", font_size=16, color=YES).next_to(eng, UP, buff=0.05).align_to(
             ax, RIGHT)
         rl = label(r"random: \ $1/26 = 0.038$", font_size=16, color=NO).next_to(rnd, UP, buff=0.05).align_to(ax, RIGHT)
+        for t_ in (el, rl):
+            t_.add_background_rectangle(color=BG, opacity=0.85, buff=0.04)
         notes = VGroup(
             label(r"IC: \ the chance that two letters \\ picked at random are equal", font_size=20, color=WHITE),
             label(r"$\mathrm{IC} = \sum_c p_c^2$: \ English is lumpy, \\ so it scores high", font_size=20,
@@ -133,6 +135,7 @@ class Vigenere(VoiceoverScene):
             self.play(FadeIn(notes[3]))
             vo.wait_until("d")
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.1), run_time=2.5)
+            self.bring_to_front(el, rl)
             self.play(FadeIn(notes[4]))
         self.wait(0.3)
         self.clear_scene()
@@ -160,7 +163,7 @@ class Vigenere(VoiceoverScene):
         letters = VGroup(*[mono(A2Z[s], 13, YES if s == best else GREY_A).next_to(ax.c2p(s + 0.5, 0), DOWN, buff=0.08)
                            for s in range(26)])
         yl = label(r"mismatch with English \ ($\chi^2$, \ log scale)", font_size=16, color=GREY_A).next_to(
-            ax, UP, buff=0.1).align_to(ax, LEFT)
+            ax, UP, buff=0.3).align_to(ax, LEFT)
         xl = label(r"shift of column 1", font_size=16, color=GREY_A).next_to(letters, DOWN, buff=0.12)
         keyrow = VGroup(*[mono(c, 34, HEAD) for c in v["recovered"]]).arrange(RIGHT, buff=0.25)
         keyrow.next_to(ax, RIGHT, buff=0.9).align_to(ax, UP).shift(DOWN * 0.4)

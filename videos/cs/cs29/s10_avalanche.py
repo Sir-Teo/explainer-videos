@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs29.common import (BG, DATA, HEAD, NO, PART, YES, load)
 
 
-def bit_map(m, s=0.16, on=NO):
+def bit_map(m, s=0.135, on=NO):
     """128 bits as 16 byte-columns of 8 bits: lit where the two encryptions differ."""
     g = VGroup()
     for j, byte in enumerate(m):
@@ -33,7 +33,7 @@ class Avalanche(VoiceoverScene):
     def heat(self):
         a = load("avalanche")
         head = label(r"Flip one bit of the plaintext", font_size=34).to_edge(UP, buff=0.3)
-        maps = VGroup(*[bit_map(m) for m in a["maps"]]).arrange(RIGHT, buff=0.35).next_to(head, DOWN, buff=1.0)
+        maps = VGroup(*[bit_map(m) for m in a["maps"]]).arrange(RIGHT, buff=0.3).next_to(head, DOWN, buff=1.0)
         counts = [sum(map(sum, m)) for m in a["maps"]]
         tops = VGroup(*[label(t, font_size=19, color=GREY_A).next_to(m, UP, buff=0.18) for m, t in
                         zip(maps, [r"start", r"round 1", r"round 2", r"round 3", r"round 4"])])
