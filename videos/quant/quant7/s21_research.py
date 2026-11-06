@@ -45,7 +45,7 @@ class Research(VoiceoverScene):
             "extra coefficients are truly zero. Then in the population the two models make the same forecast, the "
             "differential is identically zero, and the normal approximation has no variance to work with."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             self.wait(0.1)
             vo.wait_until("b")
