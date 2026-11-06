@@ -1,0 +1,313 @@
+"""Precompute every number in Part 50 of *Statistics, Built* ("Minimax Theory: the Limits of Estimation").
+
+    OMP_NUM_THREADS=1 python -m videos.stats.stats50.compute            # everything missing (a few minutes)
+    python -m videos.stats.stats50.compute --force board
+
+Results are cached in ``.cache/stats50/<name>.json``.  Everything is exact arithmetic or a seeded simulation; the
+Museum's motorcycle-crash data appear as the regression example.
+
+Items:
+    hook      Stone's rates n^(-2s/(2s+d)) for several (s, d); simulated pointwise KDE risk against n
+    gsm       a regression function's Fourier coefficients against the noise level; the sequence-model picture
+    pinsker   Pinsker's shrinkage weights and risk by eps; the asymptotic constant; the least favourable prior
+    lecam     divergences; the two-point bound for a density at a point against a kernel estimator's risk
+    fano      a Varshamov-Gilbert packing; sparse means: the s log(p/s) bound against soft thresholding
+    assouad   the hypercube bound for Hoelder regression by n
+    upper     risks over the ellipsoid: Pinsker, truncation, blockwise James-Stein, soft thresholding
+    lepski    Lepski's bandwidth choice at a point: risk against the oracle and a fixed bandwidth
+    detect    the detection boundary; higher criticism's power on a grid of (beta, r)
+    clique    planted clique: the total-degree test's power by clique size
+    mcycle    the motorcycle data: Lepski at three points
+    board     Coverage Board rows
+"""
+
+from __future__ import annotations
+
+import math
+from dataclasses import asdict
+
+import numpy as np
+from scipy import stats
+
+from explainer.ai.cache import Cache
+from explainer.stats import museum
+from explainer.stats.board import Row, save_rows
+from explainer.stats.kit import gsm as GK
+
+CACHE = Cache("stats50")
+load = CACHE.load
+
+
+def rng(seed: int) -> np.random.Generator:
+    return np.random.Generator(np.random.PCG64(seed))
+
+
+def nest(obj):
+    if isinstance(obj, np.ndarray):
+        return nest(obj.tolist())
+    if isinstance(obj, dict):
+        return {str(k): nest(v) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [nest(v) for v in obj]
+    if isinstance(obj, (np.floating, np.integer)):
+        return obj.item()
+    if isinstance(obj, np.bool_):
+        return bool(obj)
+    if isinstance(obj, float) and not np.isfinite(obj):
+        return None
+    return obj
+
+
+# ---------------------------------------------------------------------------------------------------------------
+def kde_at(x, x0, h):
+    return np.mean(np.exp(-0.5 * ((x - x0) / h) ** 2), axis=-1) / (math.sqrt(2 * math.pi) * h)
+
+
+def compute_hook():
+    ns = np.logspace(2, 6, 41)
+    curves = {}
+    for s, d in ((2, 1), (2, 2), (2, 4), (2, 8), (4, 8)):
+        curves[f"{s}_{d}"] = (ns ** (-2 * s / (2 * s + d))).tolist()
+    # a normal density at 0, kernel estimate with the MSE-optimal bandwidth: risk ~ n^(-4/5)
+    r = rng(5001)
+    f0 = 1 / math.sqrt(2 * math.pi)
+    sim = []
+    for n in (100, 400, 1600, 6400):
+        h = 1.06 * n ** (-0.2)
+        reps = 2000 if n <= 1600 else 600
+        e = [kde_at(r.standard_normal(n), 0.0, h) - f0 for _ in range(reps)]
+        sim.append({"n": n, "mse": float(np.mean(np.square(e)))})
+    return {"ns": ns, "curves": curves, "sim": sim}
+
+
+def compute_gsm():
+    t = np.linspace(0, 1, 512, endpoint=False)
+    f = np.sin(4 * np.pi * t) * np.exp(-2 * t) + 0.5 * np.abs(t - 0.5)
+    K = 64
+    k = np.arange(1, K + 1)
+    basis = np.sqrt(2) * np.cos(np.pi * np.outer(k, t))
+    theta = basis @ f / len(t)
+    out = {"t": t, "f": f, "k": k, "theta": np.abs(theta)}
+    for n in (100, 10000):
+        out[f"eps{n}"] = 1 / math.sqrt(n)
+    r = rng(5002)
+    out["y100"] = np.abs(theta + r.standard_normal(K) / 10)
+    return out
+
+
+def compute_pinsker():
+    a = GK.sobolev_weights(4000, 1.0)
+    eps_list = [0.1, 0.03, 0.01, 0.003, 0.001]
+    rows = []
+    for eps in eps_list:
+        p = GK.pinsker(eps, a, 1.0)
+        rows.append({"eps": eps, "risk": p["risk"], "asym": GK.pinsker_asymptotic(eps, 1.0, 1.0), "N": p["N"], "bayes": p["bayes"]})
+    w = {}
+    for eps in (0.03, 0.003):
+        p = GK.pinsker(eps, a[:200], 1.0)
+        w[str(eps)] = p["shrink"][:120]
+        w[f"prior{eps}"] = np.sqrt(p["prior_var"][:120])
+    return {"rows": rows, "weights": w, "const": GK.pinsker_constant(1.0), "const2": GK.pinsker_constant(2.0), "k": np.arange(1, 121)}
+
+
+def compute_lecam():
+    div = []
+    for d in (0.25, 0.5, 1.0, 2.0, 3.0):
+        div.append({"d": d, "tv": GK.tv_normal(d), "h2": GK.hellinger2_normal(d), "kl": GK.kl_normal(d), "pinsker": min(1, math.sqrt(GK.kl_normal(d) / 2))})
+    ns = [250, 1000, 4000, 16000, 64000]
+    lower = [GK.lecam_density_point(n, s=2.0, L=1.0)["bound"] for n in ns]
+    # an upper bound: the kernel estimate of a smooth density at a point, its simulated MSE
+    r = rng(5003)
+    upper = []
+    f0 = 1 / math.sqrt(2 * math.pi)
+    for n in ns:
+        h = 1.06 * n ** (-0.2)
+        reps = 1000 if n <= 4000 else 200
+        e = [kde_at(r.standard_normal(n), 0.0, h) - f0 for _ in range(reps)]
+        upper.append(float(np.mean(np.square(e))))
+    best = GK.lecam_density_point(4000, s=2.0, L=1.0)
+    return {"div": div, "ns": ns, "lower": lower, "upper": upper, "best": best}
+
+
+def compute_fano():
+    r = rng(5004)
+    vg = GK.varshamov_gilbert(24, r, trials=3000)
+    p, n = 1000, 1
+    rows = []
+    for s in (1, 5, 20, 50, 100):
+        th = np.zeros(p)
+        th[:s] = 3.0 * math.sqrt(2 * math.log(p / s))  # well above the threshold: the worst case is near here
+        lam = math.sqrt(2 * math.log(p / s))
+        y = th[None, :] + r.standard_normal((400, p))
+        risk_soft = float(np.mean(np.sum((GK.est_soft(y, lam) - th) ** 2, axis=1)))
+        risk_mle = float(p)
+        rows.append({"s": s, "rate": GK.sparse_means_rate(n, p, s), "soft": risk_soft, "mle": risk_mle, "lam": lam})
+    return {"vg_M": vg["M"], "vg_guarantee": vg["guarantee"], "d": 24, "p": p, "rows": rows}
+
+
+def compute_assouad():
+    ns = [100, 1000, 10000, 100000]
+    out = {"ns": ns, "s1": [GK.assouad_holder(n, 1.0)["bound"] for n in ns], "s2": [GK.assouad_holder(n, 2.0)["bound"] for n in ns],
+           "m1": [GK.assouad_holder(n, 1.0)["m"] for n in ns]}
+    return out
+
+
+def compute_upper():
+    a = GK.sobolev_weights(1024, 1.0)
+    r = rng(5005)
+    rows = []
+    for eps in (0.05, 0.02, 0.008, 0.003):
+        p = GK.pinsker(eps, a, 1.0)
+        th = GK.hardest_theta(eps, a, 1.0)
+        y = th[None, :] + eps * r.standard_normal((300, len(a)))
+        risk = lambda e: float(np.mean(np.sum((e - th) ** 2, axis=1)))  # noqa: E731
+        trunc = min(risk(GK.est_truncation(y, N)) for N in range(1, 200, 2))
+        rows.append({"eps": eps, "bound": p["risk"], "pinsker": risk(GK.est_linear(y, p["shrink"])), "trunc_best": trunc,
+                     "bjs": risk(GK.est_block_js(y, eps)), "soft": risk(GK.est_soft(y, eps * math.sqrt(2 * math.log(len(a)))))})
+    return {"rows": rows}
+
+
+def lepski_rep(f, x0, n, hs, r, kappa=2.2):
+    ests, sds = [], []
+    x = np.arange(1, n + 1) / n
+    y = f(x) + r.standard_normal(n)
+    for h in hs:
+        m = np.abs(x - x0) <= h
+        ests.append(y[m].mean())
+        sds.append(1 / math.sqrt(m.sum()))
+    ests, sds = np.array(ests), np.array(sds)
+    j = GK.lepski(ests, sds, kappa)
+    return ests, sds, j
+
+
+def compute_lepski():
+    r = rng(5006)
+    hs = np.array([0.0025, 0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32])
+    funcs = {"smooth": (lambda x: np.sin(2 * np.pi * x), 0.25), "kink": (lambda x: 3 * np.abs(x - 0.5) ** 0.5, 0.5)}
+    n = 4000
+    out = {"hs": hs, "n": n}
+    for name, (f, x0) in funcs.items():
+        risk_by_h = np.zeros(len(hs))
+        lep, chosen = [], []
+        reps = 1500
+        f0 = f(np.array([x0]))[0]
+        for _ in range(reps):
+            e, sd, j = lepski_rep(f, x0, n, hs, r)
+            risk_by_h += (e - f0) ** 2
+            lep.append((e[j] - f0) ** 2)
+            chosen.append(j)
+        risk_by_h /= reps
+        out[name] = {"risk_by_h": risk_by_h, "lepski": float(np.mean(lep)), "oracle": float(risk_by_h.min()), "fixed": float(risk_by_h[4]),
+                     "chosen": np.bincount(chosen, minlength=len(hs)) / reps}
+    return out
+
+
+def compute_detect():
+    r = rng(5007)
+    n = 10000
+    betas = np.linspace(0.5, 1.0, 51)
+    boundary = [GK.detection_boundary(b) for b in betas]
+    null = GK.higher_criticism(r.standard_normal((400, n)))
+    crit = float(np.quantile(null, 0.95))
+    nullmax = np.max(r.standard_normal((400, n)), axis=1)
+    critmax = float(np.quantile(nullmax, 0.95))
+    grid = []
+    for b in (0.6, 0.7, 0.8, 0.9):
+        for rr in (0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8):
+            x = GK.sparse_mixture(n, b, rr, r, reps=150)
+            hc = GK.higher_criticism(x)
+            mx = np.max(x, axis=1)
+            grid.append({"beta": b, "r": rr, "hc": float(np.mean(hc > crit)), "max": float(np.mean(mx > critmax)),
+                         "above": rr > GK.detection_boundary(b)})
+    return {"n": n, "betas": betas, "boundary": boundary, "grid": grid, "crit": crit}
+
+
+def compute_clique():
+    r = rng(5008)
+    n = 400
+    ks = [0, 10, 20, 30, 40, 60, 80]
+    null = [GK.degree_stat(GK.planted_clique(n, 0, r)) for _ in range(300)]
+    crit = float(np.quantile(null, 0.95))
+    rows = []
+    for k in ks:
+        st = [GK.degree_stat(GK.planted_clique(n, k, r)) for _ in range(150)]
+        rows.append({"k": k, "power": float(np.mean(np.array(st) > crit))})
+    return {"n": n, "rows": rows, "sqrt_n": math.sqrt(n), "log_n": 2 * math.log2(n)}
+
+
+def compute_mcycle():
+    x, y = museum.mcycle()
+    x, y = np.asarray(x, float), np.asarray(y, float)
+    o = np.argsort(x)
+    x, y = x[o], y[o]
+    sigma = float(np.std(np.diff(y)) / math.sqrt(2))
+    hs = np.array([1.0, 2.0, 3.0, 4.0, 6.0, 8.0, 12.0, 16.0])
+    out = {"x": x, "y": y, "sigma": sigma, "hs": hs, "points": []}
+    for x0 in (14.0, 22.0, 40.0):
+        ests, sds = [], []
+        for h in hs:
+            m = np.abs(x - x0) <= h
+            if m.sum() < 2:
+                ests.append(np.nan)
+                sds.append(np.inf)
+                continue
+            ests.append(float(y[m].mean()))
+            sds.append(sigma / math.sqrt(m.sum()))
+        ests, sds = np.array(ests), np.array(sds)
+        ok = np.isfinite(ests)
+        j = GK.lepski(ests[ok], sds[ok])
+        out["points"].append({"x0": x0, "h": float(hs[ok][j]), "est": float(ests[ok][j]), "se": float(sds[ok][j])})
+    return out
+
+
+def compute_board():
+    r = rng(5010)
+    n, reps = 2000, 1500
+    f = lambda x: np.sin(2 * np.pi * x) + 2 * np.exp(-200 * (x - 0.5) ** 2)  # noqa: E731
+    x0 = 0.5
+    truth = float(f(np.array([x0]))[0])
+    x = np.arange(1, n + 1) / n
+    hs = np.array([0.0025, 0.005, 0.01, 0.02, 0.04, 0.08, 0.16])
+    # the MSE-optimal box bandwidth at x0, found by simulation once
+    risk = np.zeros(len(hs))
+    for _ in range(400):
+        y = f(x) + r.standard_normal(n)
+        risk += np.array([(y[np.abs(x - x0) <= h].mean() - truth) ** 2 for h in hs])
+    h_opt = float(hs[int(np.argmin(risk))])
+    idx = list(hs).index(h_opt)
+    h_under = float(hs[max(0, idx - 2)])
+    hit = {"opt": [], "under": [], "lepski": []}
+    for _ in range(reps):
+        y = f(x) + r.standard_normal(n)
+        for key, h in (("opt", h_opt), ("under", h_under)):
+            m = np.abs(x - x0) <= h
+            e, se = y[m].mean(), 1 / math.sqrt(m.sum())
+            hit[key].append(abs(e - truth) <= 1.96 * se)
+        ests = np.array([y[np.abs(x - x0) <= h].mean() for h in hs])
+        sds = np.array([1 / math.sqrt(np.sum(np.abs(x - x0) <= h)) for h in hs])
+        j = GK.lepski(ests, sds)
+        hit["lepski"].append(abs(ests[j] - truth) <= 1.96 * sds[j])
+    rows = [Row(50, r"pointwise CI, \ MSE-optimal bandwidth", r"a peak at $x_0$, \ $n = 2{,}000$", "coverage", 0.95, float(np.mean(hit["opt"])), reps),
+            Row(50, r"pointwise CI, \ undersmoothed (bandwidth / 4)", r"a peak at $x_0$, \ $n = 2{,}000$", "coverage", 0.95, float(np.mean(hit["under"])), reps),
+            Row(50, r"pointwise CI, \ Lepski's bandwidth", r"a peak at $x_0$, \ $n = 2{,}000$", "coverage", 0.95, float(np.mean(hit["lepski"])), reps)]
+    # higher criticism: the asymptotic critical value (sqrt(2 log log n)) against a simulated one
+    nn = 2000
+    null = GK.higher_criticism(r.standard_normal((3000, nn)))
+    asym = math.sqrt(2 * math.log(math.log(nn)))
+    sim_crit = float(np.quantile(GK.higher_criticism(r.standard_normal((3000, nn))), 0.95))
+    rows.append(Row(50, r"higher criticism, \ asymptotic critical value", r"null $N(0,1)$, \ $n = 2{,}000$", "size", 0.05, float(np.mean(null > asym)), 3000))
+    rows.append(Row(50, r"higher criticism, \ simulated critical value", r"null $N(0,1)$, \ $n = 2{,}000$", "size", 0.05, float(np.mean(null > sim_crit)), 3000))
+    save_rows(50, rows)
+    return {"rows": [asdict(q) | {"verdict": q.verdict, "se": q.se} for q in rows], "h_opt": h_opt, "h_under": h_under, "hs": hs,
+            "risk_by_h": risk / 400, "asym": asym, "sim_crit": sim_crit}
+
+
+ITEMS = {
+    "hook": compute_hook, "gsm": compute_gsm, "pinsker": compute_pinsker, "lecam": compute_lecam, "fano": compute_fano,
+    "assouad": compute_assouad, "upper": compute_upper, "lepski": compute_lepski, "detect": compute_detect,
+    "clique": compute_clique, "mcycle": compute_mcycle, "board": compute_board,
+}
+
+
+if __name__ == "__main__":
+    CACHE.main({k: (lambda f=f: nest(f())) for k, f in ITEMS.items()}, __doc__)
