@@ -1260,3 +1260,51 @@ def prop99() -> dict:
                 M[states.index(r["state"]), years.index(int(r["year"]))] = float(r[k])
         out[k] = M
     return out
+
+
+def nile() -> tuple:
+    """Annual flow of the Nile at Aswan, 1871-1970, in 10^8 m^3 (Cobb 1978; Durbin & Koopman's local-level example),
+    as statsmodels ships it: (years, flow).  The flow drops around 1899, when the first Aswan dam was begun and the
+    climate turned drier."""
+    import statsmodels.api as sm
+
+    d = sm.datasets.nile.load_pandas().data
+    return d["year"].to_numpy().astype(int), d["volume"].to_numpy().astype(float)
+
+
+def nile_minima() -> tuple:
+    """Yearly minimum water levels of the Nile at the Roda gauge, Cairo, 622-1284 (Toussoun 1925; Beran 1994,
+    dataset 1), from R's longmemo package (``NileMin``, GPL >= 2): (years, level).  Hurst's long-memory example."""
+    import csv
+    from pathlib import Path
+
+    import numpy as np
+
+    with open(Path(__file__).parent / "data" / "nile_minima.csv", newline="") as f:
+        rows = list(csv.DictReader(f))
+    return np.array([int(r["year"]) for r in rows]), np.array([float(r["minimum"]) for r in rows])
+
+
+def eustock() -> dict:
+    """Daily closing prices of four European stock indices, 1991-1998, business days (R's ``EuStockMarkets``, from
+    Erste Bank AG): DAX, SMI, CAC, FTSE (1,860 days each)."""
+    import csv
+    from pathlib import Path
+
+    import numpy as np
+
+    with open(Path(__file__).parent / "data" / "eustock.csv", newline="") as f:
+        rows = list(csv.DictReader(f))
+    return {k: np.array([float(r[k]) for r in rows]) for k in ("DAX", "SMI", "CAC", "FTSE")}
+
+
+def us_macro() -> dict:
+    """US quarterly macroeconomic data, 1959Q1-2009Q3 (statsmodels' ``macrodata``): real GDP, consumption, investment,
+    CPI inflation (annualized %), unemployment (%), the 3-month T-bill rate (%), and more, as NumPy arrays with
+    ``t`` the decimal date."""
+    import statsmodels.api as sm
+
+    d = sm.datasets.macrodata.load_pandas().data
+    out = {c: d[c].to_numpy().astype(float) for c in d.columns}
+    out["t"] = out["year"] + (out["quarter"] - 1) / 4
+    return out

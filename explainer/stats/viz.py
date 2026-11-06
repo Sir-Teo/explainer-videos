@@ -2346,3 +2346,45 @@ class CutoffLens(VGroup):
         if text:
             g.add(label(text, font_size=font_size, color=col).next_to(arr, RIGHT, buff=0.15))
         return g
+
+
+class KalmanEllipses(VGroup):
+    """The Kalman filter as moving Gaussian ellipses (Part 38), on axes ``ax`` whose x and y are two state coordinates
+    (position and velocity, say).  ``ellipse(m, P)`` is the k-sigma ellipse of N(m, P) (filled, outlined);
+    ``observation(y, r, coord)`` the band y +- k sqrt(r) in one coordinate, what a measurement of that coordinate says;
+    ``arrow(m_from, m_to)`` the move of the mean."""
+
+    def __init__(self, ax, k: float = 2.0):
+        super().__init__()
+        self.ax, self.k = ax, k
+
+    def ellipse(self, m, P, color=None, opacity: float = 0.18, stroke_width: float = 2.5, n: int = 72) -> VMobject:
+        m = np.asarray(m, float)
+        P = np.asarray(P, float)
+        L = np.linalg.cholesky(P + 1e-12 * np.eye(2))
+        th = np.linspace(0, 2 * np.pi, n, endpoint=False)
+        pts = m[:, None] + self.k * L @ np.vstack([np.cos(th), np.sin(th)])
+        x0, x1, y0, y1 = bounds(self.ax)
+        pts[0] = np.clip(pts[0], x0, x1)
+        pts[1] = np.clip(pts[1], y0, y1)
+        col = color or S.EST
+        return Polygon(*[self.ax.c2p(a, b) for a, b in pts.T], stroke_color=col, stroke_width=stroke_width,
+                       fill_color=col, fill_opacity=opacity)
+
+    def observation(self, y: float, r: float, coord: int = 0, color=None, opacity: float = 0.15) -> VMobject:
+        x0, x1, y0, y1 = bounds(self.ax)
+        h = self.k * np.sqrt(r)
+        col = color or S.DATA
+        if coord == 0:
+            a, b = self.ax.c2p(max(y - h, x0), y0), self.ax.c2p(min(y + h, x1), y1)
+        else:
+            a, b = self.ax.c2p(x0, max(y - h, y0)), self.ax.c2p(x1, min(y + h, y1))
+        r_ = Rectangle(width=abs(b[0] - a[0]), height=abs(b[1] - a[1]), stroke_width=0, fill_color=col, fill_opacity=opacity)
+        return r_.move_to([(a[0] + b[0]) / 2, (a[1] + b[1]) / 2, 0])
+
+    def arrow(self, m_from, m_to, color=None) -> Arrow:
+        return Arrow(self.ax.c2p(*m_from), self.ax.c2p(*m_to), buff=0.02, color=color or GREY_B, stroke_width=3,
+                     max_tip_length_to_length_ratio=0.2)
+
+    def dot(self, m, color=None, radius: float = 0.06) -> Dot:
+        return Dot(self.ax.c2p(*m), radius=radius, color=color or S.EST)
