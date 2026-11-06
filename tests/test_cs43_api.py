@@ -30,6 +30,10 @@ class Delivery(unittest.TestCase):
         self.assertGreater(r["at least once"]["error"], 0)
         self.assertEqual(r["exactly once"]["error"], 0)
 
+    def test_model_check(self):
+        self.assertFalse(delivery.model_check(True)["violation"])
+        self.assertTrue(delivery.model_check(False)["violation"])
+
     def test_job(self):
         text = "the whale the sea the ship a whale " * 400
         self.assertEqual(delivery.job_services(text, chunk=50)["wrong_counts"], 0)

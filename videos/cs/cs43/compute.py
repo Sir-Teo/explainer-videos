@@ -13,6 +13,7 @@ Items:
     doubles     JSON integers past 2^53
     evolution   seven schema changes: backward and forward compatible or not
     semantics   at most, at least and exactly once on a lossy, duplicating network
+    modelcheck  every execution of retry-until-acknowledged, with and without deduplication, explored
     job         the Job as three services: counts with and without idempotency keys, over loss and duplication
     pagination  offset against cursor paging under concurrent inserts, over insert rates
     storm       a five-second outage: immediate retries, backoff with jitter, a retry budget
@@ -24,6 +25,7 @@ Items:
     nplus1      GraphQL's N + 1 queries and batching
     visibility  visibility timeouts and dead-letter queues
     jwt         JWT verification with and without a pinned algorithm
+    balance     client-side load balancing: random, round robin, two choices, least loaded
     time        clocks: a daylight-saving gap, half-hour zones, leap seconds, 2038
 """
 
@@ -68,6 +70,14 @@ def compute_evolution() -> dict:
 def compute_semantics() -> dict:
     from explainer.cs.api import delivery
     return delivery.semantics(10_000, 0.05, 0.02)
+
+
+def compute_modelcheck() -> dict:
+    from explainer.cs.api import delivery
+    return {"dedup": delivery.model_check(True), "plain": delivery.model_check(False),
+            "dedup3": delivery.model_check(True, n_msgs=3, retries=1),
+            "growth": [{"messages": n, "states": delivery.model_check(True, n_msgs=n, retries=1)["states"]}
+                       for n in (1, 2, 3, 4)]}
 
 
 def compute_job() -> dict:
@@ -138,6 +148,11 @@ def compute_jwt() -> dict:
 def compute_time() -> dict:
     from explainer.cs.api import services
     return services.time_pitfalls()
+
+
+def compute_balance() -> dict:
+    from explainer.cs.api import services
+    return services.balancing()
 
 
 ITEMS = {k[8:]: v for k, v in globals().items() if k.startswith("compute_")}
