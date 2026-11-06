@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from explainer.cs import *  # noqa: F403
 from explainer.cs.algo import geometry as G
-from videos.cs.cs22.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, fit, load, mono, words)
+from videos.cs.cs22.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, fit, grid_table, load, mono, words)
 
 
 def edges_of(tris):

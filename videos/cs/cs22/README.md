@@ -87,8 +87,8 @@ this machine.
   - Pr ≤ 2/i, hence O(n). Measured: the optimum moved 22.6 times among 100,000 constraints (2H_n = 24.2), with
     under 3 one-dimensional steps per constraint.
   - Megiddo.
-  - Welzl's smallest enclosing circle, animated on 40 points. 100,000 points rebuild the circle 29 times (3 ln n is
-    35), in 0.47 s.
+  - Welzl's smallest enclosing circle, animated on 40 points. 100,000 points rebuild the circle 29 times (the
+    expected bound 3H_n is 36), in 0.47 s.
 * **10. Range searching.**
   - Bentley's kd-tree built level by level on 60 points; a query visits 46 of 119 nodes.
   - On up to 300,000 points the visits stay below √n + k (334 nodes).
