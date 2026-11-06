@@ -161,8 +161,8 @@ class Mpp(VoiceoverScene):
         rows = load("joins")["rows"]
         n = rows[0]["workers"]
         rb = rows[0]["broadcast_bytes"] / (rows[0]["small_rows"] * n)          # bytes per row
-        big = rows[0]["crossover_small_rows"] * (n - 1)                         # the instrument's B
-        cross = big * (n - 1) / (n * n - n + 1)                                 # the exact crossover, derived
+        big = rows[0]["big_rows"]                                               # the instrument's B
+        cross = rows[0]["crossover_small_rows"]                                 # B (N - 1) / (N^2 - N + 1)
         head = label(r"Which costs less?", font_size=36).to_edge(UP, buff=0.3)
         ylab = {8: r"100 MB", 9: r"1 GB", 10: r"10 GB", 11: r"100 GB", 12: r"1 TB"}
         ch = axes([4, 8, 1], [8, 12, 1], x_length=5.8, y_length=3.7, x_label=r"rows in the small table $S$",
