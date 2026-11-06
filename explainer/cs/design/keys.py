@@ -199,3 +199,56 @@ def job_service(qps_list=(5, 10, 20, 40, 60, 80, 95), servers=8, work_s=0.08, ca
         rows.append({"qps": qps, "utilization": qps * work_s * (1 - hits / n) / servers, "hit_rate": hits / n,
                      "p50_ms": 1000 * lat[n // 2], "p99_ms": 1000 * lat[int(0.99 * n)]})
     return {"servers": servers, "work_ms": work_s * 1000, "cache_size": cache_size, "books": books, "rows": rows}
+
+
+# ---------------------------------------------------------------- learned indexes
+
+def learned_index(keys, eps=64):
+    """A piecewise-linear model of position against key with maximum error eps (the shrinking-cone greedy of the
+    PGM-index, Ferragina and Vinciguerra 2020): each segment predicts a key's position to within eps, so a lookup is
+    one model evaluation plus a binary search over 2 eps + 1 slots."""
+    segs = []
+    i, n = 0, len(keys)
+    while i < n:
+        x0, y0 = keys[i], i
+        lo, hi = -math.inf, math.inf
+        j = i + 1
+        while j < n:
+            dx = keys[j] - x0
+            if dx == 0:
+                j += 1
+                continue
+            s_lo, s_hi = (j - eps - y0) / dx, (j + eps - y0) / dx
+            nlo, nhi = max(lo, s_lo), min(hi, s_hi)
+            if nlo > nhi:
+                break
+            lo, hi = nlo, nhi
+            j += 1
+        slope = (lo + hi) / 2 if lo > -math.inf else 0.0
+        segs.append((x0, y0, slope))
+        i = j
+    return segs
+
+
+def learned_experiment(n=1_000_000, seed=4, eps_list=(8, 32, 128, 512)):
+    """Keys: event timestamps with bursty gaps.  Segments needed and bytes, against a B+ tree's inner nodes, and
+    the comparisons per lookup."""
+    rng = random.Random(seed)
+    t, keys = 0, []
+    for k in range(n):
+        t += rng.expovariate(1.0) * (50 if (k // 10_000) % 7 == 0 else 1)
+        keys.append(t)
+    rows = []
+    for eps in eps_list:
+        segs = learned_index(keys, eps)
+        rows.append({"eps": eps, "segments": len(segs), "bytes": 24 * len(segs),
+                     "search_steps": math.ceil(math.log2(2 * eps + 1))})
+    fan = 256
+    level, inner, depth = math.ceil(n / fan), 0, 0      # leaves hold the keys; count the nodes above them
+    while level > 1:
+        level = math.ceil(level / fan)
+        inner += level
+        depth += 1
+    return {"keys": n, "rows": rows, "btree_leaves": math.ceil(n / fan), "btree_inner_nodes": inner,
+            "btree_inner_bytes": inner * fan * 16, "btree_inner_levels": depth,
+            "btree_steps": (depth + 1) * 8}
