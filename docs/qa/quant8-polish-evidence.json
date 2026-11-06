@@ -1,0 +1,1214 @@
+{
+  "video": "quant8",
+  "base_commit": "10421f9c",
+  "source_commit": "5242343c0611b0d923f64f239e0c3c801f172a40",
+  "source_fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+  "scope": "English and Chinese narration-beat frames; English silent 480p15 playback; CPU speech samples",
+  "production_listening": "pending",
+  "data_inputs": {
+    ".cache/quant8/american.json": {
+      "sha256": "5e04ab46ff1ada7b19d80241380d44a5ba9b28d9098b880445cacb5f226e7e1c",
+      "bytes": 15605
+    },
+    ".cache/quant8/american.npz": {
+      "exists": false
+    },
+    ".cache/quant8/bellman.json": {
+      "sha256": "30a3ad2edd8b0fd1cf6880d4784bbbb19d9b7fa77b437eb06b0c9baba4fc131b",
+      "bytes": 235312
+    },
+    ".cache/quant8/bellman.npz": {
+      "exists": false
+    },
+    ".cache/quant8/bellman_sweep.json": {
+      "sha256": "111a1685b17af5716251aa3b8a17d411749fcea47c85fcecbb13cafc3346beec",
+      "bytes": 177206
+    },
+    ".cache/quant8/bellman_sweep.npz": {
+      "exists": false
+    },
+    ".cache/quant8/breiman_race.json": {
+      "sha256": "5f84478f3ee5608b9c73f7f926e1f710340b4b3da6c5f563dc71a4c1bb373420",
+      "bytes": 7079
+    },
+    ".cache/quant8/breiman_race.npz": {
+      "exists": false
+    },
+    ".cache/quant8/bsde.json": {
+      "sha256": "eb7a7b4d0e21bad5a1bd01bd2eca0be3bc934bee44253e1d59c53024fc145574",
+      "bytes": 1932
+    },
+    ".cache/quant8/bsde.npz": {
+      "exists": false
+    },
+    ".cache/quant8/bsde_replay.json": {
+      "sha256": "75e18d3fefa0d64b8f5a32de8d4c067f3dbbec78c383d7847aade085aaf6b01f",
+      "bytes": 203515
+    },
+    ".cache/quant8/bsde_replay.npz": {
+      "exists": false
+    },
+    ".cache/quant8/coin.json": {
+      "sha256": "a2d641008d10d2d15b57f90d82e8793ec3c1c058f42496cb521c0922b0491daf",
+      "bytes": 81624
+    },
+    ".cache/quant8/coin.npz": {
+      "exists": false
+    },
+    ".cache/quant8/coin_live.json": {
+      "sha256": "953f7188ea2a2b42c0f4b54846e2c4e1a1a327e03dc82cfb574f80e7282fc7ce",
+      "bytes": 4143887
+    },
+    ".cache/quant8/coin_live.npz": {
+      "exists": false
+    },
+    ".cache/quant8/consumption.json": {
+      "sha256": "84f5c20944ba892ace75358df1a57d801ffab6891534d559a7171b4bd9a37d03",
+      "bytes": 5329
+    },
+    ".cache/quant8/consumption.npz": {
+      "exists": false
+    },
+    ".cache/quant8/davis_norman.json": {
+      "sha256": "ffa8e238036bed8f8d59b917653cdd4b9df9e22685c167396456ec2faa80b687",
+      "bytes": 48573
+    },
+    ".cache/quant8/davis_norman.npz": {
+      "exists": false
+    },
+    ".cache/quant8/drawdown_policy.json": {
+      "sha256": "c9078c94267f059d147322a2931a18a9bc0a0d6643838baf4074056d9539f0ae",
+      "bytes": 84020
+    },
+    ".cache/quant8/drawdown_policy.npz": {
+      "exists": false
+    },
+    ".cache/quant8/edge_error.json": {
+      "sha256": "a47cdc5a8efa2fcdc9aecd4f982cb2e2907b3b9e5ec272e536be128e62518ed8",
+      "bytes": 4054
+    },
+    ".cache/quant8/edge_error.npz": {
+      "exists": false
+    },
+    ".cache/quant8/envelope.json": {
+      "sha256": "347c24befd56c7060c0acf62c59fbc9a8eddae370e8e4beb47306ad34fa92ace",
+      "bytes": 271
+    },
+    ".cache/quant8/envelope.npz": {
+      "exists": false
+    },
+    ".cache/quant8/ergodic.json": {
+      "sha256": "d07d83c7ce743db4493c9acd64d39169cadfe329a083d94bcaf8be0c55a2edd7",
+      "bytes": 22205
+    },
+    ".cache/quant8/ergodic.npz": {
+      "exists": false
+    },
+    ".cache/quant8/ergodic_live.json": {
+      "sha256": "40fdc4fbea0b3e3663e24f5c63d9404585f3e7923fc048fde67c80e5281f164d",
+      "bytes": 33131
+    },
+    ".cache/quant8/ergodic_live.npz": {
+      "exists": false
+    },
+    ".cache/quant8/estrisk_theory.json": {
+      "sha256": "9c569cd56f2a8ae0366897fd74b741d7baa2c540adcf1e74f0b3751baa98c317",
+      "bytes": 15649
+    },
+    ".cache/quant8/estrisk_theory.npz": {
+      "exists": false
+    },
+    ".cache/quant8/fractional.json": {
+      "sha256": "f4cc3e50f13e070e0959cba9f8d4e09c3cfa1178cbc7a1e1fb2f58f67c910888",
+      "bytes": 58929
+    },
+    ".cache/quant8/fractional.npz": {
+      "exists": false
+    },
+    ".cache/quant8/hjb_fd.json": {
+      "sha256": "f370b95b5d64167936465528b5faa232a98f42575dcf63bc803b7160b80bf482",
+      "bytes": 17919
+    },
+    ".cache/quant8/hjb_fd.npz": {
+      "exists": false
+    },
+    ".cache/quant8/kelly_live.json": {
+      "sha256": "a9232dbd19ab12aaf0cdabbda7505dea1de1b0fe4d63b6f0abb8faa0ea67fa7d",
+      "bytes": 2248853
+    },
+    ".cache/quant8/kelly_live.npz": {
+      "exists": false
+    },
+    ".cache/quant8/kelly_us.json": {
+      "sha256": "52f71533c1f0a627959efe13e0f25b7801ae4106418e400ddfeb98ec3ff4912b",
+      "bytes": 11360
+    },
+    ".cache/quant8/kelly_us.npz": {
+      "exists": false
+    },
+    ".cache/quant8/ltcm.json": {
+      "sha256": "e3f17ffce654ab9fba6d4fb7ff8648061c6d2efbc806d8f6521fdcdd9b2989cd",
+      "bytes": 10470
+    },
+    ".cache/quant8/ltcm.npz": {
+      "exists": false
+    },
+    ".cache/quant8/martingale_check.json": {
+      "sha256": "7f863a4046720162143b52b161433069615aad435484837133e61a5197cf1642",
+      "bytes": 95279
+    },
+    ".cache/quant8/martingale_check.npz": {
+      "exists": false
+    },
+    ".cache/quant8/merton_us.json": {
+      "sha256": "07f7bde90a1ed273e885c585e9b013b896b5a656505ecb224781399b962ec4c9",
+      "bytes": 941
+    },
+    ".cache/quant8/merton_us.npz": {
+      "exists": false
+    },
+    ".cache/quant8/mfg_crowd.json": {
+      "sha256": "d464452e33dade2868e12f467cc7989eba1c04b9a71936cbb50d8c4d55cbcfdf",
+      "bytes": 299024
+    },
+    ".cache/quant8/mfg_crowd.npz": {
+      "exists": false
+    },
+    ".cache/quant8/myopic_loss.json": {
+      "sha256": "74709548c25cb78f204b2811c694ba0679bf226b9e38280bbd6c3eb4ebd0ece6",
+      "bytes": 54202
+    },
+    ".cache/quant8/myopic_loss.npz": {
+      "exists": false
+    },
+    ".cache/quant8/perpetual_put.json": {
+      "sha256": "a491cbb52c7d11818df6b91a26d245cb0145aa7a8b74cc4706ec658c2d15e406",
+      "bytes": 9191
+    },
+    ".cache/quant8/perpetual_put.npz": {
+      "exists": false
+    },
+    ".cache/quant8/ppo.json": {
+      "sha256": "9d80b042a4a9e8c1dc1b4b64711ac996f9bf9376218e2c8a8890a57959b96e05",
+      "bytes": 95375
+    },
+    ".cache/quant8/ppo.npz": {
+      "exists": false
+    },
+    ".cache/quant8/ppo_cost_s0.json": {
+      "sha256": "f58cf83c9687976b3d3a56441c7fc4dd39b3a40f679f489bde80e57f459658de",
+      "bytes": 16574
+    },
+    ".cache/quant8/ppo_cost_s1.json": {
+      "sha256": "20aad10ad20683d7052e2752ee404149d1254b1637d7b0b4a2de86effc3ad0b8",
+      "bytes": 16572
+    },
+    ".cache/quant8/ppo_cost_s2.json": {
+      "sha256": "0b561dd46c94b417cbea01773ac70d1b4dc5ce1837cdfb9959f2ee28c3174d50",
+      "bytes": 16559
+    },
+    ".cache/quant8/ppo_cost_s3.json": {
+      "sha256": "a6a1647f8ddcd7432310bbc8f07e87af72f292727dddeb7cb1bc5f66d8489605",
+      "bytes": 16570
+    },
+    ".cache/quant8/ppo_cost_s4.json": {
+      "sha256": "57b746957f6c88ce49dd3cadc430f36623decb502b6dc065f745b95d0ad90ebb",
+      "bytes": 16582
+    },
+    ".cache/quant8/ppo_costs.json": {
+      "sha256": "1789bdd1695ac662fd23c421d4eefc3b0653aca657ed9aeedde4f5fdb5847710",
+      "bytes": 50233
+    },
+    ".cache/quant8/ppo_costs.npz": {
+      "exists": false
+    },
+    ".cache/quant8/ppo_s1.json": {
+      "sha256": "c32ca6ec7ef49e44e8403b9c9d502357632e97d5e291b8aa24e132d2f85130ee",
+      "bytes": 81545
+    },
+    ".cache/quant8/ppo_s2.json": {
+      "sha256": "933c1bb9fd30455d6131448d4d20cb3b3f4016f3e0e81b0ce96f7f4853a51f46",
+      "bytes": 81696
+    },
+    ".cache/quant8/ppo_s3.json": {
+      "sha256": "0f3f4068769c76ff0e001f8dfeb2b058a2c48406470d7626a0498203f14cc04a",
+      "bytes": 81566
+    },
+    ".cache/quant8/ppo_s4.json": {
+      "sha256": "aea7578916bb495d7243b79746cbfadf0c33a8fdb7c508ce6bbccfc33010b0cd",
+      "bytes": 81739
+    },
+    ".cache/quant8/ppo_seeds.json": {
+      "sha256": "4d9323001fb36ccd3e56a0327f7af838de3e63738184125da968609f4d0e7940",
+      "bytes": 35455
+    },
+    ".cache/quant8/ppo_seeds.npz": {
+      "exists": false
+    },
+    ".cache/quant8/rebalance_sim.json": {
+      "sha256": "9e3317e2a46f1f4caf239c80f5d2d54f22d2ae3078f1bc358de6942ec7a96c89",
+      "bytes": 4329
+    },
+    ".cache/quant8/rebalance_sim.npz": {
+      "exists": false
+    },
+    ".cache/quant8/robust_fraction.json": {
+      "sha256": "7d5e1698d0fcd3bf14398bc60d63de486ca97d3c4c26fb973bbf4c93cb611451",
+      "bytes": 5312
+    },
+    ".cache/quant8/robust_fraction.npz": {
+      "exists": false
+    },
+    ".cache/quant8/samuelson.json": {
+      "sha256": "2e5b3b995dd1d5fa880b4a1b3554da67a7e97aba64738186320c689587d1f1f6",
+      "bytes": 540
+    },
+    ".cache/quant8/samuelson.npz": {
+      "exists": false
+    },
+    ".cache/quant8/secretary.json": {
+      "sha256": "b77076ece1cf2376a27d81a3b6776694bc6c1b5392ee6f467536e0ecc7d30413",
+      "bytes": 2022
+    },
+    ".cache/quant8/secretary.npz": {
+      "exists": false
+    },
+    ".cache/quant8/snell_rw.json": {
+      "sha256": "a3a61ebfd3d29793217f9856cb7a97951d62b323f891cb54984bb22255afa2d9",
+      "bytes": 10903
+    },
+    ".cache/quant8/snell_rw.npz": {
+      "exists": false
+    },
+    ".cache/quant8/utility_check.json": {
+      "sha256": "c6d4522ac5f0bf6c71ec304f5e2093dc4afd47c766a692c69d268a0ca068b3da",
+      "bytes": 2379
+    },
+    ".cache/quant8/utility_check.npz": {
+      "exists": false
+    },
+    ".cache/quant8/viscosity.json": {
+      "sha256": "1f6130d7d1f7da615d2fb29723cc7e13f79cc4a55c94e061564513dcd485c591",
+      "bytes": 35994
+    },
+    ".cache/quant8/viscosity.npz": {
+      "exists": false
+    },
+    ".cache/quant8/vol_target.json": {
+      "sha256": "df9879ba7669cf8208dc13daa22d003303047d16b68d68bc0ce90260bf2b2273",
+      "bytes": 36882
+    },
+    ".cache/quant8/vol_target.npz": {
+      "exists": false
+    }
+  },
+  "manual_visual_review": {
+    "english_endpoint_chapters": 22,
+    "chinese_endpoint_chapters": 22,
+    "english_playback_contact_sheets": 22,
+    "method": "Narration-beat contact sheets and 40 sampled playback frames per chapter; focused current native-frame checks of repaired charts. All sheet hashes matched the reviewed artifacts.",
+    "focused_repairs": [
+      "Exact coin growth and capped finite-horizon objective",
+      "Control, stopping and viscosity assumptions; corrected perpetual-put smooth-fit slopes",
+      "Unclamped fans, full histogram scales and explicit display omissions",
+      "Finite-horizon monthly transaction-cost approximation and bilingual side-panel placement",
+      "PPO reward floor, policy gradient and mean-fraction continuous-growth proxy",
+      "Retrospective volatility normalization and nominal drawdown illustration",
+      "Expected CE across estimation samples versus unconditional expected utility",
+      "Readable House API rows, separate illustrative sizing rules and worked shrinkage answer",
+      "Prompt first timeline and derivation content during narration"
+    ]
+  },
+  "audio_note": "Signal and token-time checks do not certify pronunciation or continuous listening. Mandarin zf_001 within-sentence character times are estimated.",
+  "opening_sample": {
+    "path": "media/quant8/narrated_qa/videos/s01_hook/480p15/Hook.mp4",
+    "seconds": 247.2666666666642,
+    "narration_lines": 8,
+    "backend": "kokoro",
+    "voice": "af_heart",
+    "narration_matches_current_source": true,
+    "manual_review": {
+      "source_fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+      "narration_matches_current_capture": true,
+      "lines": 8,
+      "seconds": 247.2666666666642,
+      "sheet_sha256": "edd50adaaf85baebec61f23bf8a8639bbe16e9e2759470df07cbd03f365e7a5b",
+      "manual_review": "32 sampled playback frames visually inspected; readable, no observed layout fault",
+      "audio_mean_volume_db": -29.2,
+      "audio_max_volume_db": -5.4,
+      "blank_or_sparse_runs_at_least_1_5_seconds": 0,
+      "scope": "sampled visual playback and audio signal integrity; no continuous listening certification"
+    },
+    "sha256": "aaf030929fb893b92cd620547d3d4aec74d4c6d442f6ea188cea5e052bf86c22",
+    "bytes": 5395812,
+    "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 247 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 247 s\n"
+  },
+  "additional_checks": {
+    "computed_items": 46,
+    "zh_narration_coverage": "125/125",
+    "narration_minutes_estimate": 65.6,
+    "tests": {
+      "command": [
+        "/workspace/explainer-videos/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/test_quant_house.py",
+        "-k",
+        "test_control_"
+      ],
+      "returncode": 0,
+      "seconds": 9.103695330999471,
+      "output": "............                                                             [100%]\n=============================== warnings summary ===============================\n.venv/lib/python3.12/site-packages/pydub/utils.py:14\n  /workspace/explainer-videos/.venv/lib/python3.12/site-packages/pydub/utils.py:14: DeprecationWarning: 'audioop' is deprecated and slated for removal in Python 3.13\n    import audioop\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n12 passed, 221 deselected, 1 warning in 6.88s\n"
+    },
+    "audit_reports": {
+      "display_audit.json": {
+        "path": "renders/qa/quant8/display_audit.json",
+        "sha256": "54324e51c400d54521494381d7d326cd6cd938049b5a13b91620664e83231014",
+        "bytes": 4027
+      },
+      "derivation_checks.json": {
+        "path": "renders/qa/quant8/derivation_checks.json",
+        "sha256": "5bd08ebffffb64b8eb2cb55f389c30a3f7ba5c19f0aa09ef31f376b4952e33d1",
+        "bytes": 605
+      },
+      "paper_checks.json": {
+        "path": "renders/qa/quant8/paper_checks.json",
+        "sha256": "0d8b970de1f14cabf53e210507495a973c3bdfee0bc77b60e3cbb2b8f007e031",
+        "bytes": 1012
+      },
+      "ppo_restore_audit.json": {
+        "path": "renders/qa/quant8/ppo_restore_audit.json",
+        "sha256": "bc23716fdf064cfb90302661798d4305958e6bb98075740cd14571815b84efc3",
+        "bytes": 672
+      },
+      "tests_report.json": {
+        "path": "renders/qa/quant8/tests_report.json",
+        "sha256": "39811932eaa5d3146cb2f55b0886eef852d4ffaf0af57ca877a44483dc34882f",
+        "bytes": 765
+      }
+    },
+    "protocol": {
+      "unchanged_since_base": [
+        "explainer/quant/house/control.py",
+        "videos/quant/quant8/compute.py",
+        "videos/quant/data/manifest.json",
+        "videos/quant/data/envelope.json",
+        "videos/quant/data/track_record.json"
+      ],
+      "part8_cumulative_trials": 310,
+      "additional_trials": 0,
+      "holdouts_opened": 0
+    }
+  },
+  "records": {
+    "en_frames": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 263.65578577441084,
+        "frames": 16,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Hook/result.json",
+        "receipt_sha256": "e2ab5c02e8085fba2f53cd7200770cd28c4a21983da6018cd49cca5afacebe34",
+        "sheet_sha256": "b16cb8edec5babf37e9a6aecc804e295ca2f1618dbbfa773c34cd1ec472712be"
+      },
+      {
+        "scene": "Utility",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 222.1072916666667,
+        "frames": 16,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Utility/result.json",
+        "receipt_sha256": "d5f399f4b03b112a59f3d972ed1e14cf28d17c09fd22a71df3e2bbfc05cfe960",
+        "sheet_sha256": "044a75cb1758f5041816341e30d5801458a0d3249b182729817984dff515cdc1"
+      },
+      {
+        "scene": "Bellman",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 178.05175000000003,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Bellman/result.json",
+        "receipt_sha256": "627f0080af57e97269e48bef4061fd70d0dd97403b005631d222a6ea8a3f0768",
+        "sheet_sha256": "5fa675fdef6ee76c3503d14473322591490772c65c1786ed96b69f2342874661"
+      },
+      {
+        "scene": "HJB",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 217.76841666666672,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/HJB/result.json",
+        "receipt_sha256": "0a0c083046f2e930ffaac02ebe07d03224ff344b177990a1194a1eb4b9011d9d",
+        "sheet_sha256": "5e59273c19567f302d69fa1437f5f41e289808b2affc8bf72c4dfcaa05c22ead"
+      },
+      {
+        "scene": "Viscosity",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 220.00916666666672,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Viscosity/result.json",
+        "receipt_sha256": "8606446fcc6136a5415fcb7794243386ff5e8cf41d6850f55f48afc5b5cce2df",
+        "sheet_sha256": "15cbdbbb79152273424978284223aa3ff4ae96ab1010781e67d0915ab35678a4"
+      },
+      {
+        "scene": "Merton",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 192.01470833333337,
+        "frames": 10,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Merton/result.json",
+        "receipt_sha256": "85d964a2b9518a70cc6c3c030156dc6ed5e8d0d00037e757c3a2c020c260a9fa",
+        "sheet_sha256": "3150b946ddbef4131fad5456ec241e62164649645d8d61765239e12b9a0e05a2"
+      },
+      {
+        "scene": "Consumption",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 201.06287500000008,
+        "frames": 17,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Consumption/result.json",
+        "receipt_sha256": "478e156ed0e197b1abecb9a2d50e817aa2ab6b318b45971fc7fc031bcf99ca76",
+        "sheet_sha256": "77c59c3965ed79e985333cdf3168eae33b3b13b271b29694809fe890d8e11b47"
+      },
+      {
+        "scene": "Costs",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 222.3499166666667,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Costs/result.json",
+        "receipt_sha256": "12de92546cf8eba62ae71d3e61012b31096adc66a6d75b4280b68e0bf5c21eca",
+        "sheet_sha256": "238629bd91845509d7062915a8f92961ada4ae9fccf6023ff135869bf787f11f"
+      },
+      {
+        "scene": "Kelly",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 187.77945833333337,
+        "frames": 16,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Kelly/result.json",
+        "receipt_sha256": "968c1454aa60a5d5d237ec682cfdff536b428827bf5fd2a011949abd6b3b6d04",
+        "sheet_sha256": "8dc7f57af1fb720f83419e8d070c36740721dacc85a7d10a7153a90ef057ef3f"
+      },
+      {
+        "scene": "LTCM",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 225.01466666666667,
+        "frames": 13,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/LTCM/result.json",
+        "receipt_sha256": "1aa1e807bf2cd14c16037e7ada4ee724c9afa353b72890672f26e9ecbea2908a",
+        "sheet_sha256": "488059ac1a8ac3b17f2c2e5154015fef14e691732c63a528afa4f42f10ce57e6"
+      },
+      {
+        "scene": "Samuelson",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 162.39991666666668,
+        "frames": 11,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Samuelson/result.json",
+        "receipt_sha256": "cf29281a7cbc0ef2f14c1c09b79aad0af5aba4b15deb4144dbc6cb8846341e42",
+        "sheet_sha256": "44cb7d908234455e1c092508f2f0ae9400ca5099a9c87748ffaa42fd97d6437c"
+      },
+      {
+        "scene": "Stopping",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 164.9887916666667,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Stopping/result.json",
+        "receipt_sha256": "8d2c9f765862dd89efb26f10d7a15497f476219d6173babc3564027e6c87927a",
+        "sheet_sha256": "440ae311a2e4b51b43f6f5c94cc3a83d1cd2abe2d1a2a7e98f02499f686c4e9b"
+      },
+      {
+        "scene": "SmoothFit",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 170.69620833333337,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/SmoothFit/result.json",
+        "receipt_sha256": "f05b926bf4979f21667682bd60619e89da0539e68f91fd6b20d0ef8088ec5c21",
+        "sheet_sha256": "13bd25574baede089b19c6e9bb3aef004fe785d310aa252798f437a310e2b065"
+      },
+      {
+        "scene": "Behaviour",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 227.88320833333336,
+        "frames": 17,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Behaviour/result.json",
+        "receipt_sha256": "44765125b0ad9a93cb09bd19ecc1770c02db92cc94a95eb487e8b420129b042c",
+        "sheet_sha256": "53184209cd0165247138c1c64bd24ef4176b91a963c2d5d5a98e0fd8d30b51eb"
+      },
+      {
+        "scene": "BSDE",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 213.30733333333336,
+        "frames": 11,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/BSDE/result.json",
+        "receipt_sha256": "14a94e718afb85cf71fb1da0f52e6e20dddc297a2ac8d3af168ff40c3f836a34",
+        "sheet_sha256": "9e2a997cf218b70c4e4471e445ccfdbddac98765a0ed6961466f2871889dd120"
+      },
+      {
+        "scene": "MFG",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 209.74800000000005,
+        "frames": 13,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/MFG/result.json",
+        "receipt_sha256": "8022aa8dcec643fa4269e8f78615aaacbe1d3482cf7e8eb88278ffb73445e539",
+        "sheet_sha256": "ccf35e56a350ba605504cd3e3cb49a766765511d97d88ef6b4f76d263880eaf4"
+      },
+      {
+        "scene": "RL",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 176.3072916666667,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/RL/result.json",
+        "receipt_sha256": "4c10fc93c6b7fa03e04cc5776facd06aae28ca314698ffa6580f7aa28574f1f9",
+        "sheet_sha256": "273c73c03586419b0f1e21a595df980d049c1d8979c201b5b3fe3e75dcc8eed5"
+      },
+      {
+        "scene": "Industry",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 232.09800000000004,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Industry/result.json",
+        "receipt_sha256": "5c6d77acb6189df3eb4179e775277f7ed2c189ef2bb64a5dba237d2f600ea088",
+        "sheet_sha256": "d1f5a1b6ec59ecfb7720ac0a7af8b6c417a64db5eedd81a0f9e0fbacc55c5b30"
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 153.0535,
+        "frames": 10,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Frontier/result.json",
+        "receipt_sha256": "3154231c393b6b92514bafff59c7c6f83b6e17e84c2f32fd351164399fcba472",
+        "sheet_sha256": "8f662db96c0a1fd08db174238284748d1d7b4ff11f3756e4a0bc053e421f67d8"
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 325.6942916666667,
+        "frames": 23,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Research/result.json",
+        "receipt_sha256": "36098ea989710a98511e737d3ed7e6e4a901c6d522d31f0bb926fec81ee90735",
+        "sheet_sha256": "8b337bad5474941df02001780ad96a6c344b4842cc3e2e2f02640fd4a52e5021"
+      },
+      {
+        "scene": "House",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 115.33879166666668,
+        "frames": 7,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/House/result.json",
+        "receipt_sha256": "199786074c4d5b53ceba9697dde41514d075d58011d8d80619febdee2413a7a9",
+        "sheet_sha256": "82d8e067ffb68cd71faefdaafd44ece8dba458734b1af3a993d7aa158992ee36"
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 202.55170833333338,
+        "frames": 10,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Outro/result.json",
+        "receipt_sha256": "20ec052d2279b6bfd93e44c8f5da7f0f389c7770d86ff180cf390f4ec41fdafd",
+        "sheet_sha256": "256fed5e0c7dd2a1bee22106bd63eb86db3bb2021285953ef1700fc16918097f"
+      }
+    ],
+    "zh_frames": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 260.44384364416345,
+        "frames": 16,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/zh/Hook/result.json",
+        "receipt_sha256": "e9e5dc06d36ce7082f8e45c18c26d7d085ae12d10ee120f93e3af75695913222",
+        "sheet_sha256": "299e1d53edaa34a75a63f7f1ce45fa48d9fed7890d27b013a8cb773c73a1e3b2"
+      },
+      {
+        "scene": "Utility",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 216.25800000000004,
+        "frames": 16,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/zh/Utility/result.json",
+        "receipt_sha256": "c1bcfae17eb8fe0a9d23f9cc04e7bfe43389de8056b8776806421392af4dd8c4",
+        "sheet_sha256": "c7b598557c6b8a53991f82c899ea0803667f8dc38c9877bb339ce6eca9043049"
+      },
+      {
+        "scene": "Bellman",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 173.729,
+        "frames": 11,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/zh/Bellman/result.json",
+        "receipt_sha256": "f421cd7c82422aa639163be725f4e169b1eccb356f87de735d194fec05c98332",
+        "sheet_sha256": "dd5c77141282dcf19f4a8b341e8a0b11dba97243dafbb457a713da9a14bcc381"
+      },
+      {
+        "scene": "HJB",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 212.57550000000003,
+        "frames": 13,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/zh/HJB/result.json",
+        "receipt_sha256": "9503dea8a3455c3ebcb4d38af75012ea0104904c518598d91952d701b767af0e",
+        "sheet_sha256": "17f92458823f2abf9d9d608d9cf7620af3ea10c3a0f84506c2bce8734a322879"
+      },
+      {
+        "scene": "Viscosity",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 202.12775000000002,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/zh/Viscosity/result.json",
+        "receipt_sha256": "b069d6f78d64e2b5b6cbab3bee81a345bd2018799cf1a951e3d12aac9734b926",
+        "sheet_sha256": "68dec8bcbfb42ed1ea6fa0af8f1458b4ff2dcd33ae18364e674abb2f4c43e0d3"
+      },
+      {
+        "scene": "Merton",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 188.84525000000002,
+        "frames": 10,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/zh/Merton/result.json",
+        "receipt_sha256": "6d22aef07a37acb855429bc0e372db893b2a4ce91093106b2b726160845ffe72",
+        "sheet_sha256": "505006161209065dbb4d5f635cca027e0a2d04d0ae2733fe474a423a045dff41"
+      },
+      {
+        "scene": "Consumption",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 180.67476628224682,
+        "frames": 17,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/zh/Consumption/result.json",
+        "receipt_sha256": "4006138ce1db8106f8cea494fac3bef3fc0cd0a0551f655d2257850c988160f3",
+        "sheet_sha256": "cdacb0051483cbc2d878f3a5b21be4cf343a12e3e0a51a5a3e7a341a68199e08"
+      },
+      {
+        "scene": "Costs",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 204.73362500000005,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/zh/Costs/result.json",
+        "receipt_sha256": "af7315fb8082654c3d618dce5bfce3c6a61187ce437d6633689b9054e369c29c",
+        "sheet_sha256": "bf53fbbe5e01ff72776c86df2a931e760462908e293e9054f2a1eaf0a5ddb749"
+      },
+      {
+        "scene": "Kelly",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 188.2545416666667,
+        "frames": 16,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/zh/Kelly/result.json",
+        "receipt_sha256": "b4469259e6a38df9b78d38d3be04674707fd9c11a8de075da7a5ff092937b24c",
+        "sheet_sha256": "2141c5e81b29c18ba7d8a3356f574708073a29a56bff4616acb7b2a7f9bab545"
+      },
+      {
+        "scene": "LTCM",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 222.45575000000002,
+        "frames": 13,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/zh/LTCM/result.json",
+        "receipt_sha256": "9e8ead549e3479ea27c7c106557364efd1f1f2a1b0d41a41ecd852065e319a19",
+        "sheet_sha256": "1ede558ba91913748f79000f02a27c9cd051d62b48ad5b4bcbdaf2cbc7f3f3da"
+      },
+      {
+        "scene": "Samuelson",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 145.9812916666667,
+        "frames": 11,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/zh/Samuelson/result.json",
+        "receipt_sha256": "0db2881bf79bd0e2d862ab1db79b638221736a0601420ccb871ab36b25f26ee1",
+        "sheet_sha256": "d674ec7af1f95ae43d390cbe002533987349ac8864f72e30aec7ca19c826025a"
+      },
+      {
+        "scene": "Stopping",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 158.5882916666667,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/zh/Stopping/result.json",
+        "receipt_sha256": "48a11ba23a07710abcbdc85c591c5bcbf0891303307dd15257a2885a4ce8ebcf",
+        "sheet_sha256": "f7d0720119657e2afa46d0d28447e2d5245962eee56b17339587e463bca61623"
+      },
+      {
+        "scene": "SmoothFit",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 141.9871666666667,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/zh/SmoothFit/result.json",
+        "receipt_sha256": "7f1a86da60bcfb0028f252d6465424fa9ac883d24e1a809ac96b5a64c7f950a9",
+        "sheet_sha256": "d48ddefae359eca3252f3969fe4b0f375299879532ce3e71d4fec7e76f9dd932"
+      },
+      {
+        "scene": "Behaviour",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 237.28825000000003,
+        "frames": 17,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/zh/Behaviour/result.json",
+        "receipt_sha256": "9df0daf005dddefb0d92ea211a16ff8f835c6f63f550d6024f6fcab7bf54969f",
+        "sheet_sha256": "a18d296f5a0ba5220f9785af0f47f9a859b83db873dbe64a87fe688408a7cd8e"
+      },
+      {
+        "scene": "BSDE",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 148.6266666666667,
+        "frames": 11,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/zh/BSDE/result.json",
+        "receipt_sha256": "26cc1fd5ed67004a69da09e57399079b2f180fd793c05ffa242f37c61385ff14",
+        "sheet_sha256": "466c714a616236de6b7d9c93882c39116d5cbb4ea50e55fb0d82f87d259d5331"
+      },
+      {
+        "scene": "MFG",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 208.7394166666667,
+        "frames": 13,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/zh/MFG/result.json",
+        "receipt_sha256": "5f4ed21b103f8e2f3a41be0b128350c55bfec3a695ba05f8cd21e62b9e1b457d",
+        "sheet_sha256": "6f80e3fd9a03b8fcb3a814e71cc960dd7e7f274d201aa5cd73bc0103612f4f9b"
+      },
+      {
+        "scene": "RL",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 165.09758333333338,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/zh/RL/result.json",
+        "receipt_sha256": "1c61ef9d4c8d0551c8038520b77de3d9521cc80a9c3aa57f6ba5d376b6d88921",
+        "sheet_sha256": "7919a7ed9ea4cb1c32136efd4d940bb55ac484e03add014ddaf1a750a390538a"
+      },
+      {
+        "scene": "Industry",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 239.19400000000007,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/zh/Industry/result.json",
+        "receipt_sha256": "02ad1cb7f2660da7207122f0c9c90bde62bc33f876b12da50abc651d5a891e5a",
+        "sheet_sha256": "923936e18e35dd650aa99ed3ce93b5bf7867fca94a8beedc000ecd60252598f2"
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 150.51258333333337,
+        "frames": 10,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/zh/Frontier/result.json",
+        "receipt_sha256": "dd0bdd53b2f98bae4b1ec33de4711b7a74e06011526b2db8012f27fc1813a42e",
+        "sheet_sha256": "00cf00e6e347e3a9bd9a89d11d0373f700f08150392516a2810c1320d0373d30"
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 311.45916666666665,
+        "frames": 24,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/zh/Research/result.json",
+        "receipt_sha256": "f735ff6f6b5ed050c1293c21b1c695d251a42c4e42a7e2578948ffc4133cc155",
+        "sheet_sha256": "70417d72b20126557cf6c59d545b40c537a0a72889bd7ac7d19424f03a6a1f9d"
+      },
+      {
+        "scene": "House",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 98.43829166666667,
+        "frames": 7,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/zh/House/result.json",
+        "receipt_sha256": "68a1b487a2c834af2b8e3055945215dc9d14ee4309dde09d275ff6e959fa41cb",
+        "sheet_sha256": "fb9890384c2c4f62b3943860ce310d91e71e88c5db8da9f4d42a9c792478fb26"
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 217.65920833333337,
+        "frames": 10,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/zh/Outro/result.json",
+        "receipt_sha256": "bbcaebc746329a13c4a07d9fc65bb3303a23ca32138415d873a851211e8176f7",
+        "sheet_sha256": "1c68f12f9c90468da4ac4769e80b34992cf89f5d630cabcb98d8290b7efdc090"
+      }
+    ],
+    "en_motion": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 263.26666666666426,
+        "frames": 16,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Hook_motion/result.json",
+        "receipt_sha256": "81296007b9723ab7d542a3ce234bac1de3c3f0e57a54522b68bcb29a943ea7c1",
+        "sheet_sha256": "0bbb25df4c5fcfe53c013f8941b845db26c8f93d799f7be62d4b801d92825e2e",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 263 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 263 s\n"
+      },
+      {
+        "scene": "Utility",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 221.73333333333144,
+        "frames": 16,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Utility_motion/result.json",
+        "receipt_sha256": "4b82b6fd4cddd2303fcb96ebb912b8063a85804699882052c2bb30827efd1957",
+        "sheet_sha256": "2d4e4ddbf36385f238592b2da495b4d72d852cf2f5db53ca59c951e6bfcc39b4",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 222 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 222 s\n"
+      },
+      {
+        "scene": "Bellman",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 177.73333333333179,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Bellman_motion/result.json",
+        "receipt_sha256": "a48a1e7fc3bfd4f6b5c6196585a7161d523424aa5f3b6ecea2ccd740319a9fcc",
+        "sheet_sha256": "4ff9dac6fa989e40acbf600e543f96ead92797eefdfde9ed081ba5a064e5c5fb",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 178 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 178 s\n"
+      },
+      {
+        "scene": "HJB",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 217.46666666666533,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/HJB_motion/result.json",
+        "receipt_sha256": "0e87e1cdc7a3d9468e60fe36cc5002eb22629ae14bf935513dadf0bab3421fd5",
+        "sheet_sha256": "95ff7a825edc9cd1935d64190aadef983ed0baa84bd867a125d1d953ce4315d1",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 218 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 218 s\n"
+      },
+      {
+        "scene": "Viscosity",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 219.73333333333204,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Viscosity_motion/result.json",
+        "receipt_sha256": "9d51b9dda418f9d830173e0f52e855251caa453699f092b353025d46db505021",
+        "sheet_sha256": "ccc7e1397e18cd1ea72aba3822c06eb1f3aa5a0e6c6c3b5bcc573e30052ea144",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 220 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 220 s\n"
+      },
+      {
+        "scene": "Merton",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 191.80000000000044,
+        "frames": 10,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Merton_motion/result.json",
+        "receipt_sha256": "3c9bcaa1e855fb2514fd5f42c2abcd3e3b9b15d6a9a5a50b44653be358ec519a",
+        "sheet_sha256": "0b2ffc13222f479d0590446f657f1817cdb41374bc3b4edfd0fe3fb665765af2",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 192 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 192 s\n"
+      },
+      {
+        "scene": "Consumption",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 200.86666666666528,
+        "frames": 17,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Consumption_motion/result.json",
+        "receipt_sha256": "0abc14409507483b1e87b1945adae3dd4147ed9eafd2c68f1e72dfd37188caa1",
+        "sheet_sha256": "459a63549032f3f86042720d1fd3f754c4525e5b194d800ba1316a12951a90bd",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 201 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 201 s\n"
+      },
+      {
+        "scene": "Costs",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 222.06666666666618,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Costs_motion/result.json",
+        "receipt_sha256": "a3e4440ef33c325f291c87bb3faee9e4fb0d0d3f498870bc902c03e5372d4edd",
+        "sheet_sha256": "4084014313d94531fc38b80fa5896a8ad4e39dbc21e7ce31a425cf1f028f4dfe",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 222 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 222 s\n"
+      },
+      {
+        "scene": "Kelly",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 187.5333333333321,
+        "frames": 16,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Kelly_motion/result.json",
+        "receipt_sha256": "62b43931c2f18eed20b13525dc8680fd5b9f1c134e5a514391b679ea6d5ca708",
+        "sheet_sha256": "d4e92a67d246f0b21305e113e7d7dc9c914b14fdd44738a1454e2939e8b25c0e",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 188 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 188 s\n"
+      },
+      {
+        "scene": "LTCM",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 224.7999999999992,
+        "frames": 13,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/LTCM_motion/result.json",
+        "receipt_sha256": "7d1751d7781d342e236a87dd4c64fcfd4a3fbb7e33fef6192fbeab466c4c7ab2",
+        "sheet_sha256": "984bc0c8992dd1d9a19359bc90a50c7f3db8d5efd8a551666819f9834774dfdb",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 225 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 225 s\n"
+      },
+      {
+        "scene": "Samuelson",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 162.19999999999902,
+        "frames": 11,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Samuelson_motion/result.json",
+        "receipt_sha256": "125a23a39abe492faf1b965588ffa82b8c59b242dd52534ad979fa4adaaac8da",
+        "sheet_sha256": "f8cad8ef85cdfee5fdfcf75ba10f20afd421f74da7022e429e789bff3ff85e9d",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 162 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 162 s\n"
+      },
+      {
+        "scene": "Stopping",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 164.66666666666603,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Stopping_motion/result.json",
+        "receipt_sha256": "8d7be01578f506416bfdcf770da263e253c97848f8e3515764835a1aba0d012d",
+        "sheet_sha256": "2a7431e57da40d60e1dbe7104b543f6bfffe67afc1b51eb157eed70e14bd4e50",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 165 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 165 s\n"
+      },
+      {
+        "scene": "SmoothFit",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 170.5333333333325,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/SmoothFit_motion/result.json",
+        "receipt_sha256": "b6368fe29ebbc1f29ce9e5514b0cc4b4fbe6c5228249ebe984597167ce53b323",
+        "sheet_sha256": "3496c662567bab335ab049e0589fd1ac9de830630051876bd8cbee1d7d377fd9",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 170 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 170 s\n"
+      },
+      {
+        "scene": "Behaviour",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 227.5999999999983,
+        "frames": 17,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Behaviour_motion/result.json",
+        "receipt_sha256": "bee32d82416574478491fab6b11d7f651a1910661db2b597b0e2446525cfbef7",
+        "sheet_sha256": "21694310e683f87b60836a6ad386694927929d5472ed57404d4df72e1cc5f2e5",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 228 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 228 s\n"
+      },
+      {
+        "scene": "BSDE",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 213.0666666666655,
+        "frames": 11,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/BSDE_motion/result.json",
+        "receipt_sha256": "ea51bb0b0094f5f5c7924f19fe28947849bc39524cd6a9491a094dbc15bb9e7d",
+        "sheet_sha256": "6f4d04d46e42652471860eab637a630df0dc087d1e16f9e9e54d096c447ee5d9",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 213 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 213 s\n"
+      },
+      {
+        "scene": "MFG",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 209.46666666666496,
+        "frames": 13,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/MFG_motion/result.json",
+        "receipt_sha256": "bed4a59827d512d7932688e48a4dec577f67f63a66a81b2c36ff84fdabffa94b",
+        "sheet_sha256": "ac067c2bba744043e3c56fe524a32c1801d94f8316b28499c8f475e50c472acb",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 210 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 210 s\n"
+      },
+      {
+        "scene": "RL",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 175.99999999999864,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/RL_motion/result.json",
+        "receipt_sha256": "74dee9b13b273c9babb6492f1ffeeaefe2c6bc46731e296987449ac7f28d5789",
+        "sheet_sha256": "9be6df2a7c1aed74d8ccb34d2a030963238069b314cb9fad27da654d7e01cabd",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 176 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 176 s\n"
+      },
+      {
+        "scene": "Industry",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 231.73333333333207,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Industry_motion/result.json",
+        "receipt_sha256": "874259ffddf303b47b4f70d5ba70e8505acdc040263f2d1747214a4e48089c21",
+        "sheet_sha256": "24a798a9af1abe114e51c1847a2f2a0c540210f30d9cb91f112cb6f3a64c2e7a",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 232 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 232 s\n"
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 152.53333333333305,
+        "frames": 10,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Frontier_motion/result.json",
+        "receipt_sha256": "890fdd4938fbcfdd10cbf09ab70b49373f2aec2b99797078941ccea84b4f7c86",
+        "sheet_sha256": "f4c6ecb8a68b4cef9b83bbdac76492ae79877f45df396c80dd07a06a8c8c6fde",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 152 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 152 s\n"
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 325.1333333333315,
+        "frames": 23,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Research_motion/result.json",
+        "receipt_sha256": "524b5a66dab3950db832278f6c376ce0e874c53cf2e83116b525b4472a6035d0",
+        "sheet_sha256": "5ba6482d87629faf09965c13a434663ffc8abb2f83405cae31fa49b6885207be",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 325 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 325 s\n"
+      },
+      {
+        "scene": "House",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 115.19999999999979,
+        "frames": 7,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/House_motion/result.json",
+        "receipt_sha256": "9af678aafec41d79a2e8ba53850647e5827c9c407752a6940977e4d55aeb2c00",
+        "sheet_sha256": "f8a3ae3bf1828cfc33a9785acb3049753259504366534362c4ae689a28d3e3f6",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 115 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 115 s\n"
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "fingerprint": "0c27cb29110e26ceb4986a7bec737c9bb17c2a4706cfefa7ac4f8f5994e0f4c6",
+        "duration": 202.19999999999894,
+        "frames": 10,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant8/en/Outro_motion/result.json",
+        "receipt_sha256": "1e5787d310de2a9daed720fc2175e757f5c829c5b7257a71f440327edf956ee9",
+        "sheet_sha256": "22ce2034ad8638ce1afd4d2063f63f073939ae51bf8a914bb3eed409d9855230",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 202 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 202 s\n"
+      }
+    ]
+  },
+  "audio": [
+    {
+      "scene": "Hook",
+      "lang": "en",
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 8,
+      "issues": [],
+      "source_current": true,
+      "report": "renders/qa/series/quant8/en/Hook/audio_result.json",
+      "report_sha256": "aede43beac27aca6078397fc2bca9d9a29c20e7aec993082e7dbb5f9df21cc1b"
+    },
+    {
+      "scene": "Samuelson",
+      "lang": "en",
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 4,
+      "issues": [],
+      "source_current": true,
+      "report": "renders/qa/series/quant8/en/Samuelson/audio_result.json",
+      "report_sha256": "7a7d3e76c02ead01a4067d05398cafed8b507c600bc7496c2b41aa5414dd5bd0"
+    },
+    {
+      "scene": "Research",
+      "lang": "en",
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 8,
+      "issues": [],
+      "source_current": true,
+      "report": "renders/qa/series/quant8/en/Research/audio_result.json",
+      "report_sha256": "f115f9c0b112de114692986cb774eb4b440c47e3685dac7de75caba7f79ff697"
+    },
+    {
+      "scene": "Hook",
+      "lang": "zh",
+      "backend": "kokoro",
+      "voice": "zf_001",
+      "lines": 8,
+      "issues": [],
+      "source_current": true,
+      "report": "renders/qa/series/quant8/zh/Hook/audio_result.json",
+      "report_sha256": "40f6457900e13b9f99616d536f981aa108c4b7958c3a13c46712448fb7c5566a"
+    }
+  ],
+  "preview": {
+    "path": "renders/quant8_polished_silent.mp4",
+    "seconds": 4477.368458,
+    "chapters": 22,
+    "sha256": "7323b7af27020ee87a71f2c8fb9ff989598da5e7c5c35cd10801cae17c21e39a",
+    "bytes": 35431972,
+    "narration": "silent timing estimate"
+  }
+}

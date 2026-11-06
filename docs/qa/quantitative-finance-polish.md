@@ -26,8 +26,9 @@ Delivery workflow: continue directly on `quantitative-finance`. Commit and push 
 | 5 | Visual pass complete; full production-voice listening pending |
 | 6 | Visual pass complete; full production-voice listening pending |
 | 7 | Visual pass complete; full production-voice listening pending |
-| 8 | In progress: decisions/control audit and data restoration |
-| 9–43 | Pending; do not infer approval from historical build notes |
+| 8 | Visual pass complete; full production-voice listening pending |
+| 9 | In progress: scientific, narration and visual QA |
+| 10–43 | Pending; do not infer approval from historical build notes |
 
 ## Part 1: The Fair Game
 
@@ -581,3 +582,69 @@ and preview hashes. Local git-ignored artifacts are:
   capture and a clean dead-air scan.
 
 Part 8 is next in the sequential pass.
+
+
+## Part 8: Decisions and Control — completed visual pass
+
+The English explanation, Chinese narration, captions and notes now distinguish
+exact results, numerical approximations, simulated scores and retrospective
+historical illustrations. The coin's exact log growth at a 40% stake is negative;
+the capped finite-horizon game has a different objective from long-run log growth.
+Kelly dominance is stated for distinct fixed fractions with a strict growth gap.
+Utility, dynamic programming, verification, viscosity convergence, martingale
+pricing, stopping and secretary results include their required assumptions. The
+perpetual-put smooth-fit slope comparison and discounted variational inequality
+are corrected. The finite-horizon monthly cost solver is distinguished from the
+continuous singular-control theory and its small-cost asymptotic formula.
+
+PPO's displayed reward includes the simulator's gross-return floor. Its policy
+gradient separates the true advantage from the learned TD estimate, and clipping
+is identified as a surrogate objective. The cached shortfall is labelled as a
+continuous-growth proxy at the mean action, rather than a full policy evaluation.
+The five restored seeds are all retained; runtime-dependent results are reported
+from that restoration. The funding example is a ratio call spread. The mean-field
+iteration is identified as a damped best-response fixed point.
+
+The research chapter distinguishes expected CE across estimation samples from
+unconditional expected utility, an analytic known-variance oracle from estimated-
+variance simulations, and a negative CE score from an expected monetary loss.
+It includes the worked shrinkage answer. Volatility targeting discloses its
+full-sample normalization and ordinary OLS reference errors. The drawdown formula
+was checked against the primary mathematical source; its nominal weekly
+illustration is distinguished from the continuous discounted-wealth theorem.
+Unverified fund return figures were removed and book claims remain attributed.
+
+The visual pass expands chart ranges, removes artificial boundary plateaus,
+discloses omitted points and histogram edge bins, uses common histogram scales,
+and repairs Chinese cost panels. House rows show callable APIs at readable sizes;
+the sizing pipeline is explicitly a combination of separate illustrative rules.
+Timeline labels, the historical growth curve and first derivation rows appear
+promptly during narration.
+
+All 46 existing compute items were restored normally. The compute source, data
+manifest, trial registry and track record are unchanged from the Part 7 completion
+commit. The as-of-Part-8 counter is 310; this pass added no market trials and
+opened no sealed holdout. Twelve existing control tests pass, with one recorded
+dependency deprecation warning.
+
+Validation: all 66 receipts match the final source and input signatures and have
+zero automated warnings: 22 English narration-beat checks, 22 Chinese checks and
+22 English silent playback checks. All endpoint sheets and all 40-frame playback
+sheets were visually reviewed. Chinese narration covers 125/125 source lines;
+the narration estimate is 65.6 minutes. Actual Kokoro samples cover Hook,
+Samuelson and Research in English and Hook in Chinese: 28 lines pass waveform
+and token-time checks. Those checks do not certify pronunciation or continuous
+listening; Mandarin character times remain estimates. Full production-voice
+listening and synchronization remain pending.
+
+The [compact evidence record](quant8-polish-evidence.json) retains the source,
+input and review hashes, 66 receipts, analytical and primary-source checks, tests,
+speech reports and preview hashes. Local git-ignored artifacts are:
+
+- `renders/quant8_polished_silent.mp4`: 74:37, 480p15,
+  22 embedded chapters and English soft subtitles, plus its subtitle and chapter files.
+- `media/quant8/narrated_qa/videos/s01_hook/480p15/Hook.mp4`: the actual English
+  opening, 247.3 seconds, matching the current narration
+  capture and with its recorded dead-air scan.
+
+Part 9 is next in the sequential pass.
