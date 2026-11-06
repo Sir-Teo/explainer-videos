@@ -235,7 +235,7 @@ class Limits(VoiceoverScene):
         bursts.add(label(rf"{L} + {L}", font_size=16, color=NO).next_to(bursts, UP, buff=0.06))
         span = BraceBetweenPoints([fx(30), base + 2.1, 0], [fx(90), base + 2.1, 0], direction=UP, color=HEAD)
         span_l = label(rf"one minute, \ {2 * L} admitted", font_size=17, color=HEAD).next_to(span, UP, buff=0.06)
-        f_title = label(r"fixed windows", font_size=21, color=NO).move_to([fx(60), base + 2.8, 0])
+        f_title = label(r"fixed windows", font_size=21, color=NO).move_to([fx(60), base + 3.1, 0])
         f_notes = VGroup(
             wrapped_label(rf"a counter per window; \ a limit of {L} lets up to {2 * L} through across a boundary",
                           5.8, font_size=19, color=WHITE),
@@ -256,7 +256,7 @@ class Limits(VoiceoverScene):
         win = Rectangle(width=60 * sk, height=1.7, stroke_color=HEAD, stroke_width=2.5, fill_opacity=0).move_to(
             [sx(54), base + 0.85, 0])
         win_l = label(r"the last minute", font_size=16, color=HEAD).next_to(win, UP, buff=0.06)
-        s_title = label(r"sliding-window counter", font_size=21, color=YES).move_to([sx(60), base + 2.8, 0])
+        s_title = label(r"sliding-window counter", font_size=21, color=YES).move_to([sx(60), base + 3.1, 0])
         formula = MathTex(r"\hat n = \text{prev}\,(1 - f) + \text{cur} = 80 \times 0.6 + 30 = 78", font_size=26,
                           color=HEAD)
         s_notes = VGroup(
@@ -264,8 +264,8 @@ class Limits(VoiceoverScene):
             wrapped_label(r"$f$: \ the fraction of the current window elapsed; \ two counters per key, \ assuming "
                           r"the previous window's requests were spread evenly", 5.8, font_size=19, color=WHITE),
             wrapped_label(rf"against an exact sliding log, \ on our bursty trace: \ mean error "
-                          rf"{100 * lim['sliding_mean_rel_error']:.0f}\%, \ worst {100 * lim['sliding_max_rel_error']:.0f}\%",
-                          5.8, font_size=19, color=NO),
+                          rf"{100 * lim['sliding_mean_rel_error']:.0f}\%, \ "
+                          rf"worst {100 * lim['sliding_max_rel_error']:.0f}\%", 5.8, font_size=19, color=NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(prev_l, DOWN, buff=0.35).align_to(s_axis, LEFT)
         foot = note(r"bursts and counts in the diagrams illustrative; \ errors and the worst minute computed",
                     font_size=16).to_edge(DOWN, buff=0.2)
@@ -324,7 +324,8 @@ class Limits(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).move_to([3.9, 0.15, 0])
         foot = note(r"schematic", font_size=16).to_edge(DOWN, buff=0.3).set_x(-2.6)
         with self.voiceover(
-            "A fleet needs one limit per caller across all its servers. <bookmark mark='a'/> The exact answer is a shared counter, an atomic increment in a store such as "
+            "A fleet needs one limit per caller across all its servers. <bookmark mark='a'/> The exact answer is a "
+            "shared counter, an atomic increment in a store such as "
             "Redis on every request. It costs a round trip each time. "
             "<bookmark mark='b'/> The cheapest splits the limit: each of N servers enforces its share, with no "
             "coordination, but unfairly when one caller's traffic is spread unevenly. "

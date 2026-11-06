@@ -123,7 +123,8 @@ class Invalidation(VoiceoverScene):
             "A time to live puts a bound on how wrong a cache can be. <bookmark mark='a'/> The database changes at "
             "the moment of the write. The cached copy carries on serving the old value until it expires. "
             "<bookmark mark='b'/> So with no invalidation at all, a value is stale for at most the TTL, and with "
-            "invalidation, the TTL still catches whatever the races let through. <bookmark mark='c'/> One trap. Keys filled together, "
+            "invalidation, the TTL still catches whatever the races let through. <bookmark mark='c'/> One trap. Keys "
+            "filled together, "
             "after a restart or a deploy, also expire together, and all miss at once. Adding a small random jitter "
             "to each TTL spreads the expiries out."
         ) as vo:
@@ -206,8 +207,9 @@ class Invalidation(VoiceoverScene):
                 outs = VGroup(Arrow(cache.get_right(), db.get_left(), buff=0.08, stroke_width=3, color=YES))
                 extra = label(r"6 wait for it", font_size=16, color=GREY_B).next_to(cache, DOWN, buff=0.15)
             else:
-                outs = VGroup(*[Arrow(cache.get_right() + UP * (0.24 - 0.08 * i), db.get_left() + UP * (0.24 - 0.08 * i),
-                                      buff=0.08, stroke_width=1.6, color=NO, max_tip_length_to_length_ratio=0.1)
+                dy = [UP * (0.24 - 0.08 * i) for i in range(7)]
+                outs = VGroup(*[Arrow(cache.get_right() + dy[i], db.get_left() + dy[i], buff=0.08,
+                                      stroke_width=1.6, color=NO, max_tip_length_to_length_ratio=0.1)
                                 for i in range(7)])
                 extra = label(r"7 queries", font_size=16, color=NO).next_to(cache, DOWN, buff=0.15)
             t = label(title, font_size=20, color=color).next_to(row, UP, buff=0.25)
@@ -272,6 +274,7 @@ class Invalidation(VoiceoverScene):
                  y_label=r"expected early refreshes", xticks=[0, 5, 10, 15, 20], yticks=[0, 1, 2, 3, 4],
                  fx=lambda v: f"{20 - v:g}", font=16)
         g.to_edge(RIGHT, buff=0.45).align_to(left, UP).shift(DOWN * 0.1)
+        g[-1].shift(UP * 0.12)                                  # the y label, clear of the top tick
         ax = g.ax
         # x is time since 20 s before expiry; r = 20 - x seconds remain
         pts = [(x, rate * beta * rec * math.exp(-(20 - x) / (beta * rec))) for x in [0.1 * i for i in range(201)]]
