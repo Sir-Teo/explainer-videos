@@ -39,10 +39,11 @@ MEM = (NPROC + 1) << 20
 # PCB fields (registers r1..r15 at 4*r)
 ST, EPC_, LO_, HI_, PID, STDIN, STDOUT, NDISP, NSYS, XCODE, NTICK = 0, 64, 68, 72, 76, 80, 84, 88, 92, 96, 100
 PTBRF, L2F = 104, 108          # Part 32: the PCB's page-table root and its L2 table
+FINO, FOFF = 112, 116           # Part 34: the open file's inode number and offset
 PTE_URW = 1 | 2 | 4 | 16        # V R W U: a fresh user data page
 FREE, READY, RUNNING, BLOCKED, EXITED = 0, 1, 2, 3, 4
 STATES = {FREE: "free", READY: "ready", RUNNING: "running", BLOCKED: "blocked", EXITED: "exited"}
-KIND = {"tape": 0, "console": 0, "pipe": 1}
+KIND = {"tape": 0, "console": 0, "pipe": 1, "file": 2}
 
 KERNEL = """
 # PebbleOS: boot, traps, system calls, a pipe, and a round-robin scheduler
@@ -54,6 +55,7 @@ KERNEL = """
 _kstart: la  t0, trap
         csrw tvec, t0           # where every trap goes
         li   sp, KSTACK
+{fs_boot}
         la   t0, procs
         sw   t0, curpcb(zero)
         li   t1, 2
@@ -134,6 +136,7 @@ syscall: lw  t1, {EPC}(t0)
         beq  t1, t2, sys_getpid
         li   t2, 4
         beq  t1, t2, preempt    # yield
+{fs_dispatch}
 bad:    li   t1, -1             # no such call, or a bad argument
         sw   t1, 12(t0)
         j    resume
@@ -160,9 +163,11 @@ checkbuf: blt a2, zero, bad
         blt  t1, t2, bad
         ret
 
-sys_read: bnez a0, bad          # fd 0 only
+sys_read: {fs_fd3}
+        bnez a0, bad          # fd 0 only
         call checkbuf
         lw   t1, {STDIN}(t0)
+{fs_stdin}
         bnez t1, read_pipe
         li   t1, {IO_TAPE}      # the tape: copy bytes until n, or its end
         li   t2, 0
@@ -324,6 +329,7 @@ resume: lw   t0, curpcb(zero)
         lw   t0, 36(t0)
         eret
 {vm_handler}
+{fs_handler}
 kend:
 
 # ---- kernel data -------------------------------------------------------------------------
@@ -339,6 +345,7 @@ pcount: .word 0
 phead:  .word 0
 pwriter: .word {pwriter}
 {vm_data}
+{fs_data}
         .align 64
 procs:
 {table}
@@ -406,6 +413,7 @@ class Proc:
     labels: dict = field(default_factory=dict)
     root: int = 0               # Part 32: physical addresses of its page tables
     l2: int = 0
+    fino: int = 0               # Part 34: with stdin "file", the inode its standard input reads
 
 
 def region(k: int) -> tuple[int, int]:
@@ -429,9 +437,10 @@ def user_asm(name: str, src: str, k: int, stdin: str = "tape", stdout: str = "co
     return Proc(name, p.image[lo:], p.labels["_start"], lo, hi, stdin, stdout, p.labels)
 
 
-def kernel_source(procs: list[Proc], quantum: int = QUANTUM, vm: dict | None = None) -> str:
+def kernel_source(procs: list[Proc], quantum: int = QUANTUM, vm: dict | None = None, fs: dict | None = None) -> str:
     """The kernel's text.  ``vm`` (Part 32): {"nextframe", "frame_end"} turns on paging, with each process's
-    ``root`` and ``l2`` page tables in its PCB."""
+    ``root`` and ``l2`` page tables in its PCB.  ``fs`` (Part 34): the parts of :mod:`explainer.cs.os.fsos` that
+    read PebbleFS from the disk (``open``, and ``read`` from a file)."""
     rows = []
     for k in range(NPROC):
         w = [0] * (PCB // 4)
@@ -443,12 +452,15 @@ def kernel_source(procs: list[Proc], quantum: int = QUANTUM, vm: dict | None = N
             w[STDIN // 4], w[STDOUT // 4] = KIND[p.stdin], KIND[p.stdout]
             if vm:
                 w[PTBRF // 4], w[L2F // 4] = p.root, p.l2
+            w[FINO // 4] = p.fino
         rows.append("        .word " + ", ".join(str(x) for x in w))
     pw = int(any(p.stdout == "pipe" for p in procs))
     f = dict(PTBRF=PTBRF, L2F=L2F, LO=LO_, HI=HI_, pte_urw=PTE_URW, **(vm or {}))
     parts = {k: (v.format(**f) if vm else "") for k, v in (("vm_boot", VM_BOOT), ("vm_dispatch", VM_DISPATCH),
                                                           ("vm_switch", VM_SWITCH), ("vm_handler", VM_HANDLER),
                                                           ("vm_data", VM_DATA))}
+    fsk = ("fs_boot", "fs_dispatch", "fs_fd3", "fs_stdin", "fs_handler", "fs_data")
+    parts.update({k: (fs[k] if fs else "") for k in fsk})
     return KERNEL.format(**parts, NPROC=NPROC, PCB=PCB, quantum=quantum, pmask=PIPESZ - 1, KSTACK=KSTACK, EPC=EPC_, LO=LO_,
                          HI=HI_, PID=PID, STDIN=STDIN, STDOUT=STDOUT, NDISP=NDISP, NSYS=NSYS, XCODE=XCODE,
                          NTICK=NTICK, IO_TAPE=IO_TAPE, IO_CONSOLE=IO_CONSOLE, PIPESZ=PIPESZ, pwriter=pw,
