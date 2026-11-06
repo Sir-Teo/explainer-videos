@@ -79,8 +79,9 @@ class Order(VoiceoverScene, TreeMixin):
         f = MathTex(r"U_{(k)}", r"\sim", r"\text{beta}(k,\ n + 1 - k)", font_size=34, color=EXACT).move_to([4.4, 0.9, 0])
         f2 = MathTex(r"f(x) \propto x^{k-1}(1 - x)^{n-k}", font_size=28).next_to(f, DOWN, buff=0.25)
         mean = MathTex(r"E\, U_{(k)} = \frac{k}{n+1}", font_size=30).next_to(f2, DOWN, buff=0.3)
-        gb = label(r"also: \ $\Gamma_a / (\Gamma_a + \Gamma_b)$ \ for independent gammas with a common scale", font_size=22, color=GREY_B)
-        gb.next_to(mean, DOWN, buff=0.35)
+        gb = VGroup(label(r"also: \ $\Gamma_a / (\Gamma_a + \Gamma_b)$", font_size=22, color=GREY_B),
+                    label(r"independent gammas with the same scale", font_size=22, color=GREY_B))
+        gb.arrange(DOWN, buff=0.12).next_to(mean, DOWN, buff=0.35)
         tag = note(r"simulated: 20,000 samples of 10 uniforms").to_corner(DR, buff=0.3)
         with self.voiceover(
             "For uniform draws, F of x is just x, and the formula becomes a polynomial: x to the k minus one times "
@@ -144,7 +145,8 @@ class Order(VoiceoverScene, TreeMixin):
         tk = VGroup(*[MathTex(str(v), font_size=20, color=GREY_B).next_to(line.n2p(v), DOWN, buff=0.12)
                       for v in range(0, 321, 80)])
         dots = VGroup(*[Dot(line.n2p(v), radius=0.08, color=SIM) for v in serial])
-        sl = VGroup(*[MathTex(str(v), font_size=20, color=SIM).next_to(dt, UP, buff=0.12) for v, dt in zip(serial, dots)])
+        sl = VGroup(*[MathTex(str(v), font_size=20, color=SIM).next_to(dt, UP, buff=0.15 + 0.35 * (i % 3))
+                      for i, (v, dt) in enumerate(zip(serial, dots))])
         mx = serial.max()
         est = d["est"]
         el = Line(line.n2p(est) + DOWN * 0.3, line.n2p(est) + UP * 0.5, color=S.EST, stroke_width=4)

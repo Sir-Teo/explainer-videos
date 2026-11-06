@@ -1,0 +1,83 @@
+{
+  "fingerprint": "293e019072aaa984d33657c4ee70f9b2872e4d43bd34ea7218da690ca47cd7f3",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 13,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 56
+      },
+      "input_record": "renders/qa/native1080/stats3/en/Hook/result.json",
+      "input_sha256": "e0c34bae5bd87804e95d93bbff9d5046de8ef3b31a860b0c35a2756aa6af96af"
+    },
+    {
+      "scene": "Rare",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 64
+      },
+      "input_record": "renders/qa/native1080/stats3/en/Rare/result.json",
+      "input_sha256": "ab73bf876d9f326ef1b57bb2c3b0cccd0459bb8d485212ba543a88f1069f6c79"
+    },
+    {
+      "scene": "Normal",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 66
+      },
+      "input_record": "renders/qa/native1080/stats3/en/Normal/result.json",
+      "input_sha256": "1ff6ce25355a66652643ed26d35227684a4470104f046f0eac411577bd734743"
+    },
+    {
+      "scene": "Transforms",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 53
+      },
+      "input_record": "renders/qa/native1080/stats3/en/Transforms/result.json",
+      "input_sha256": "d05534008092bc0d5bfd30bac6b4e1e25f4da1f0a6340201253c30909a050091"
+    },
+    {
+      "scene": "Sampling",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 59
+      },
+      "input_record": "renders/qa/native1080/stats3/en/Sampling/result.json",
+      "input_sha256": "8ebba7b90ff420f3fc62246342233010fc3d3422b9c7e6de3e564fbecf35a7c0"
+    },
+    {
+      "scene": "Order",
+      "status": "needs-review",
+      "frames": 16,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 54
+      },
+      "input_record": "renders/qa/native1080/stats3/en/Order/result.json",
+      "input_sha256": "a84e2ae9df56bfdc9d3a6eab9b347d4936bb2b23b7ea0850007996866e6cae1b"
+    },
+    {
+      "scene": "Mixtures",
+      "status": "needs-review",
+      "frames": 15,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 56
+      },
+      "input_record": "renders/qa/native1080/stats3/en/Mixtures/result.json",
+      "input_sha256": "b7ed183a6185abd000742d37334c9c274f660030e9100730cbb463a83cc64c68"
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+ "video": "stats3",
+ "scene": "Normal",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 7,
+ "lines": [
+  {
+   "raw": "Chapter six. The normal, three ways.",
+   "spoken": "Chapter six. The normal, three ways.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/713821b766f737d4.wav",
+   "duration": 2.95,
+   "tokens": 6,
+   "peak": 0.363525390625,
+   "issues": [],
+   "elapsed": 11.23,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "The bell curve was found first as an approximation. <bookmark mark='a'/> In 1733 Abraham de Moivre, a French Protestant exile living in London and making his living as a consultant to gamblers, wanted binomial probabilities for large numbers of tosses, where the factorials are hopeless. <bookmark mark='b'/> Rescale the binomial so it's centred and has unit spread. For ten tosses, a lumpy histogram; <bookmark mark='c'/> for fifty, smoother; <bookmark mark='d'/> for two hundred, a smooth curve. <bookmark mark='e'/> De Moivre found the limit, one over root two pi, times e to the minus z squared over two, using the approximation to n factorial that we now call Stirling's formula. It's already accurate for small n. This is the first central limit theorem, proved in general in Part 6.",
+   "spoken": "The bell curve was found first as an approximation. In 1733 Abraham de Moivre, a French Protestant exile living in London and making his living as a consultant to gamblers, wanted binomial probabilities for large numbers of tosses, where the factorials are hopeless. Rescale the binomial so it's centred and has unit spread. For ten tosses, a lumpy histogram; for fifty, smoother; for two hundred, a smooth curve. De Moivre found the limit, one over root two pi, times e to the minus z squared over two, using the approximation to n factorial that we now call Stirling's formula. It's already accurate for small n. This is the first central limit theorem, proved in general in Part 6.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/bda34aa313f387e1.wav",
+   "duration": 44.35,
+   "tokens": 118,
+   "peak": 0.582611083984375,
+   "issues": [],
+   "elapsed": 24.32,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "The second way came from astronomy. <bookmark mark='a'/> In 1809 Carl Friedrich Gauss asked: if we average repeated measurements of a star's position, for which law of errors is the average the most probable value? <bookmark mark='b'/> Write the error density as f, and its logarithm as g. The average maximizes the likelihood for every possible data set exactly when the derivative of g balances whenever the deviations balance. <bookmark mark='c'/> That forces g prime to be linear, <bookmark mark='d'/> and integrating gives e to the minus c u squared over two: the same curve. This characterizes a smooth positive error density under independent, identically distributed errors. It does not establish those assumptions for real measurements, but it bound the normal to least squares, and Laplace soon connected both to sums of many small errors.",
+   "spoken": "The second way came from astronomy. In 1809 Carl Friedrich Gauss asked: if we average repeated measurements of a star's position, for which law of errors is the average the most probable value? Write the error density as f, and its logarithm as g. The average maximizes the likelihood for every possible data set exactly when the derivative of g balances whenever the deviations balance. That forces g prime to be linear, and integrating gives e to the minus c u squared over two: the same curve. This characterizes a smooth positive error density under independent, identically distributed errors. It does not establish those assumptions for real measurements, but it bound the normal to least squares, and Laplace soon connected both to sums of many small errors.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/a99e99459017d389.wav",
+   "duration": 49.4,
+   "tokens": 127,
+   "peak": 0.55865478515625,
+   "issues": [],
+   "elapsed": 30.26,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "The third way is the most beautiful. <bookmark mark='a'/> Throw darts at a target, or think of the velocity of a gas molecule. Suppose the errors in the two directions are independent, and their joint law looks the same in every direction: it doesn't care how you turn the axes. We assume a nondegenerate, regular density. <bookmark mark='b'/> Here's a cloud of independent normal pairs; turn it, and nothing changes. <bookmark mark='c'/> Independence says the joint density is f of x times f of y; rotation invariance says it depends only on the distance from the centre, x squared plus y squared. <bookmark mark='d'/> A product that's a function of a sum of squares: the only solutions are exponentials of x squared. John Herschel gave this argument in 1850, and James Clerk Maxwell used it ten years later to derive the distribution of molecular velocities.",
+   "spoken": "The third way is the most beautiful. Throw darts at a target, or think of the velocity of a gas molecule. Suppose the errors in the two directions are independent, and their joint law looks the same in every direction: it doesn't care how you turn the axes. We assume a nondegenerate, regular density. Here's a cloud of independent normal pairs; turn it, and nothing changes. Independence says the joint density is f of x times f of y; rotation invariance says it depends only on the distance from the centre, x squared plus y squared. A product that's a function of a sum of squares: the only solutions are exponentials of x squared. John Herschel gave this argument in 1850, and James Clerk Maxwell used it ten years later to derive the distribution of molecular velocities.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/65c893313676623a.wav",
+   "duration": 49.525,
+   "tokens": 137,
+   "peak": 0.7716064453125,
+   "issues": [],
+   "elapsed": 28.56,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "One loose end: where does the root two pi come from? <bookmark mark='a'/> Call the integral of e to the minus x squared over two I. The integrand has no elementary antiderivative. <bookmark mark='b'/> But I squared is the same integral in two variables, over the whole plane: the volume under the two-dimensional bell. <bookmark mark='c'/> Herschel's rotation invariance suggests polar coordinates. The area of a thin ring is r d r d theta, <bookmark mark='d'/> and that extra r makes the integral easy: two pi. <bookmark mark='e'/> So I is root two pi, and the normal density, with its constant, integrates to one. It's Poisson's trick, and it's one of the great one-line proofs in mathematics.",
+   "spoken": "One loose end: where does the root two pi come from? Call the integral of e to the minus x squared over two I. The integrand has no elementary antiderivative. But I squared is the same integral in two variables, over the whole plane: the volume under the two-dimensional bell. Herschel's rotation invariance suggests polar coordinates. The area of a thin ring is r d r d theta, and that extra r makes the integral easy: two pi. So I is root two pi, and the normal density, with its constant, integrates to one. It's Poisson's trick, and it's one of the great one-line proofs in mathematics.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/801909810e1bf520.wav",
+   "duration": 36.7,
+   "tokens": 107,
+   "peak": 0.621795654296875,
+   "issues": [],
+   "elapsed": 19.63,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "With the constant in hand, the normal gives the most quoted numbers in statistics. <bookmark mark='a'/> Within one standard deviation of the mean lies sixty-eight point three percent of the probability; <bookmark mark='b'/> within two, ninety-five point four; <bookmark mark='c'/> within three, ninety-nine point seven. <bookmark mark='d'/> The World's men's heights are close to normal by construction, and their actual fractions match to a tenth of a percent: 68.2, 95.4 and 99.7. But the rule is a fact about the normal, not about data: for the World's incomes it fails badly, as Part 1's heavy tails would predict.",
+   "spoken": "With the constant in hand, the normal gives the most quoted numbers in statistics. Within one standard deviation of the mean lies sixty-eight point three percent of the probability; within two, ninety-five point four; within three, ninety-nine point seven. The World's men's heights are close to normal by construction, and their actual fractions match to a tenth of a percent: 68.2, 95.4 and 99.7. But the rule is a fact about the normal, not about data: for the World's incomes it fails badly, as Part 1's heavy tails would predict.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/fd9d13cc2c1c3ccc.wav",
+   "duration": 35.15,
+   "tokens": 90,
+   "peak": 0.5478515625,
+   "issues": [],
+   "elapsed": 18.86,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Two arrows into the normal: <bookmark mark='t'/> de Moivre's, from the binomial with many trials, and the Poisson with a large mean, which is a sum of many small Poissons.",
+   "spoken": "Two arrows into the normal: de Moivre's, from the binomial with many trials, and the Poisson with a large mean, which is a sum of many small Poissons.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/5b1c81ab7b3ee9e8.wav",
+   "duration": 9.525,
+   "tokens": 28,
+   "peak": 0.533966064453125,
+   "issues": [],
+   "elapsed": 4.72,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats3/en/Normal/result.json",
+ "input_sha256": "81168120906f7f42cc880adb910bed933ead2199f600e864eb5e64c750f51b3b"
+}

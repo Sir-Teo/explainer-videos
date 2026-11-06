@@ -92,7 +92,7 @@ class Sampling(VoiceoverScene, TreeMixin):
         leg = legend([(GREY_A, r"normal"), (cols["30"], r"$\nu = 30$"), (cols["3"], r"$\nu = 3$"),
                       (cols["1"], r"$\nu = 1$")], font_size=22).move_to(ax.c2p(3.6, 0.33))
         hc = history_card(1908, r"W. S. Gosset (``Student''), \ Guinness brewery, Dublin",
-                          r"small samples of barley and yeast: \ the mean over its \emph{estimated} standard error",
+                          r"small samples of barley and yeast: \ the centered mean over its \emph{estimated} standard error",
                           color=S.MUSEUM, width=5.4, font_size=22).move_to([4.3, 2.3, 0])
         f = VGroup(MathTex(r"T = \frac{Z}{\sqrt{V/\nu}}", font_size=34, color=EXACT),
                    MathTex(r"Z \sim N(0,1),\ V \sim \chi^2_\nu\text{ independent}", font_size=24))

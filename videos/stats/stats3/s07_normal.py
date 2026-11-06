@@ -119,7 +119,7 @@ class Normal(VoiceoverScene, TreeMixin):
         d = load("normal")
         xy = np.asarray(d["xy"])
         c0 = np.array([-3.4, -0.3, 0])
-        sc = 0.95
+        sc = 0.82
         cloud = VGroup(*[Dot(c0 + sc * np.array([x, y, 0]), radius=0.025, color=SIM) for x, y in xy])
         axes_ = VGroup(Line(c0 + LEFT * 3.2, c0 + RIGHT * 3.2, color=GREY_D), Line(c0 + DOWN * 3.2, c0 + UP * 3.2,
                                                                                     color=GREY_D))
@@ -223,7 +223,7 @@ class Normal(VoiceoverScene, TreeMixin):
         intro = label('The Gaussian integral', font_size=36)
         with self.voiceover(
             "One loose end: where does the root two pi come from? <bookmark mark='a'/> Call the integral of e to "
-            "the minus x squared over two I. It has no formula in elementary functions. <bookmark mark='b'/> But I "
+            "the minus x squared over two I. The integrand has no elementary antiderivative. <bookmark mark='b'/> But I "
             "squared is the same integral in two variables, over the whole plane: the volume under the "
             "two-dimensional bell. <bookmark mark='c'/> Herschel's rotation invariance suggests polar coordinates. "
             "The area of a thin ring is r d r d theta, <bookmark mark='d'/> and that extra r makes the integral "

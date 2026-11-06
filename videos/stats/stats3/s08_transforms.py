@@ -88,12 +88,13 @@ class Transforms(VoiceoverScene, TreeMixin):
         # a strip stretched by the map
         A = axes([0, 1], [0, 4], x_length=3.4, y_length=3.4, xticks=[0, 1], yticks=[0, 2, 4], center=[-4.6, -1.6, 0])
         ax = A.ax
-        xs = np.linspace(0.02, 1, 200)
-        g_ = curve(ax, xs, -np.log(xs), GREY_A, 2.5)
+        xs = np.linspace(0.02, 0.98, 200)
+        g_ = curve(ax, xs, -np.log1p(-xs), GREY_A, 2.5)
+        g_label = MathTex(r"g(x)=-\log(1-x)", font_size=22, color=GREY_A).next_to(A, UP, buff=0.15)
         strips = VGroup()
         for x0 in (0.1, 0.5, 0.85):
             dx = 0.05
-            y0, y1 = -np.log(x0 + dx), -np.log(x0)
+            y0, y1 = -np.log1p(-x0), -np.log1p(-x0 - dx)
             strips.add(Rectangle(width=ax.c2p(dx, 0)[0] - ax.c2p(0, 0)[0], height=0.12, stroke_width=0, fill_color=SIM,
                                  fill_opacity=0.8).move_to(ax.c2p(x0 + dx / 2, 0) + UP * 0.06),
                        Rectangle(width=0.12, height=ax.c2p(0, y1)[1] - ax.c2p(0, y0)[1], stroke_width=0,
@@ -109,7 +110,7 @@ class Transforms(VoiceoverScene, TreeMixin):
             "<bookmark mark='d'/> In several dimensions a smooth invertible map uses the absolute Jacobian of its inverse. Multiple inverse branches must be added. That determinant is "
             "determinant: how much the map changes small areas, or volumes."
         ) as vo:
-            self.play(FadeIn(A), Create(g_))
+            self.play(FadeIn(A), Create(g_), FadeIn(g_label))
             step = ladder(self, rows, whys, keep=4, top=3.0, x=1.6, buff=0.5, edge=6.9)
             vo.wait_until("a")
             step(0, transform=False)

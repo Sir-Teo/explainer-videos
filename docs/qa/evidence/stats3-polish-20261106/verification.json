@@ -1,0 +1,29 @@
+{
+  "part": "stats3",
+  "fingerprint": "293e019072aaa984d33657c4ee70f9b2872e4d43bd34ea7218da690ca47cd7f3",
+  "english_endpoints": 16,
+  "native_1080_endpoints": 7,
+  "silent_motion_chapters": 2,
+  "audio_scene": "Normal",
+  "audio_lines": 7,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats3/en/Normal/videos/s07_normal/480p15/Normal.mp4",
+    "seconds": 235.799674,
+    "narration_sha256": "17a5f790db9c33d06b3456db9f79cacf4a3617af254d1e6e276a24a0aa76628e",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 236 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 236 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ],
+  "tests": {
+    "command": "python -m pytest tests/test_stats*.py tests/test_qa*.py -q",
+    "passed": 554,
+    "subtests_passed": 5,
+    "warnings": 15
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "fingerprint": "293e019072aaa984d33657c4ee70f9b2872e4d43bd34ea7218da690ca47cd7f3",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Transforms",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats3/en/Transforms_motion/result.json",
+      "input_sha256": "5bc4e4abc637845da24af0a77c51cc5ac1cab43d1096790b2a76197fb84f4e97",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 214 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 214 s\n"
+    },
+    {
+      "scene": "Sampling",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats3/en/Sampling_motion/result.json",
+      "input_sha256": "a5162241dcd1b3d339fca259d1b973708ee460c37e3f99ded0107a438e8badaa",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 216 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 216 s\n"
+    }
+  ]
+}
