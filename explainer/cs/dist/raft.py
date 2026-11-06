@@ -295,7 +295,7 @@ class Cluster:
 
     def run(self, until: float = 10.0, client_rate: float = 20.0):
         if client_rate:
-            self._push(self.rng.expovariate(client_rate), "client", None)
+            self._push(self.t + self.rng.expovariate(client_rate), "client", None)
         while self.events:
             if self.events[0][0] > until:                  # leave later events queued: runs can be resumed
                 self.t = until
