@@ -731,8 +731,8 @@ def fsck(d: Disk, repair: bool = False) -> list[tuple[str, str]]:
         want = names.get(inum, 0) if ino["type"] == FILE else 2 + subdirs.get(inum, 0)
         if ino["nlink"] != want:
             probs.append(("bad link count", f"inode {inum}: {ino['nlink']}, should be {want}"))
-    for i in range(1, sb["ninodes"]):
-        if _bit(ib, i) and i not in seen:
+    for i in range(1, sb["ninodes"]):                      # the whole inode table, as fsck's first pass reads it
+        if i not in seen and (_bit(ib, i) or fs.iget(i)["type"] != FREE_T):
             probs.append(("leaked inode", f"inode {i}"))
     for i in range(sb["ndata"]):
         if _bit(dbm, i) and sb["data"] + i not in owner:
@@ -773,10 +773,11 @@ def _repair(d, fs, sb, seen, owner, dirs_fix, size_fix):
 
 
 def fsck_reads(d: Disk) -> int:
-    """How many blocks a full check reads: the cost that grows with the disk, not with what went wrong."""
+    """How many distinct blocks a full check reads: the cost that grows with the disk, not with what went wrong."""
     c = d.copy()
+    c.log = []
     fsck(c)
-    return c.reads
+    return len({b for op, b in c.log if op == "r"})
 
 
 # ---- crash injection ----------------------------------------------------------------------------------------------
