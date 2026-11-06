@@ -28,18 +28,7 @@ CHAPTERS = {
     'Outro': '回顾、交易台问题与习题',
 }
 
-PHRASES = {
-    "below": "低于",
-    "above": "高于",
-    "smaller than": "小于",
-    "no better than": "并不优于",
-    "It hits a floor,": "它撞上了一个底，",
-    "It falls, but slowly, towards a floor,": "它在下降，但很慢，趋向一个底，",
-    "the actual-volatility hedge": "按实际波动率对冲",
-    "the implied-volatility hedge": "按隐含波动率对冲",
-    "within a hundredth.": "相差不到百分之一。",
-    "rounding level": "舍入误差的水平",
-}
+PHRASES = {'below': '低于', 'above': '高于', 'smaller than': '小于', 'no better than': '并不优于', 'the actual-volatility hedge': '按实际波动率对冲', 'the implied-volatility hedge': '按隐含波动率对冲', 'within a hundredth.': '相差不到百分之一。', 'rounding level': '舍入误差的水平', 'The measured curve flattens,': '测得的曲线趋于平坦，', 'The measured curve keeps falling slowly,': '测得的曲线仍缓慢下降，'}
 
 ZH = {
     'Part ten. Black, Scholes and Merton. In their continuous, frictionless model, an':
@@ -101,7 +90,7 @@ ZH = {
     'f"Chop the year into steps':
         "把一年切成许多步，二叉树的节点就成了空间里的点：横向是时间，纵向是股价，高度是看涨期权的价值。这是一棵四步的树，每个节点都在倒推给出的价值上，后面半透明的是Black–Scholes曲面。<bookmark mark='a'/>十六步。<bookmark mark='b'/>六十四步。<bookmark mark='c'/>二百五十六步。节点越来越多，并落到曲面上：节点与曲面之间最大的差距从{t3['max_gap'][0]:.2f}降到{t3['max_gap'][-1]:.2f}，步数每乘以4，差距大约减半，最大的差距出现在收益有折角的地方。二叉树不是对某一点价格的近似。它是整个曲面的一个离散化的副本。误差用绝对对数现价行权价比小于0.4的未到期节点计算。视图只画现价50至200范围，每棵树最多显示500个节点。",
     'Why it must converge is a short calculation.':
-        "它为什么必然收敛，只需一段简短的计算。每个节点都是它两个后继节点的贴现风险中性平均。<bookmark mark='a'/>上涨幅度取e的σ乘以根号Δt次方，风险中性概率就是二分之一加上一个根号Δt量级的修正。<bookmark mark='b'/>把两个后继节点的价值做泰勒展开：根号Δt的项带着斜率，Δt的项带着曲率。<bookmark mark='c'/>代入，合并同次项，除以Δt，这个递推就是Black–Scholes方程加上一个Δt量级的误差。二叉树就是离散化的方程。",
+        "它为什么必然收敛，只需一段简短的计算。每个节点都是它两个后继节点的贴现风险中性平均。<bookmark mark='a'/>上涨幅度取e的σ乘以根号Δt次方，风险中性概率就是二分之一加上一个根号Δt量级的修正。<bookmark mark='b'/>把两个后继节点的价值做泰勒展开：根号Δt的项带着斜率，Δt的项带着曲率。<bookmark mark='c'/>代入，合并同次项，除以Δt，这个递推就是Black–Scholes方程加上一个Δt量级的误差。二叉树就是离散化的方程。这里算的是光滑内部区域的局部一致性；收敛还需要单调性、稳定性与支付边界条件。",
     'f"Add steps and the tree\'s price converges to the formula.':
         "步数增加，二叉树的价格收敛到公式。这是从一步到四百步的每一个价格，边算边画。它是锯齿形的。停下来预测一下：偶数步的树恰好在行权价上有一个节点。这些树的价格在公式之上，还是之下？<bookmark mark='a'/>这里是{side}：两族从两侧逼近，按N分之一收敛，还带着一个由行权价落在两个节点之间的位置决定的摆动，弗朗辛和马克·迪纳在2004年把它精确地算了出来，第16部分更平滑的树会把它消除。<bookmark mark='b'/>四百步时，二叉树给出{d['big_N_price']:.4f}；公式给出{exact:.4f}。",
     'f"The House\'s tree is one loop backwards from expiry':
@@ -171,7 +160,7 @@ ZH = {
     'Chapter eleven. Turning the formula inside out: implied volatility.':
         '第11章。把公式反过来用：隐含波动率。',
     'f"Traders invert a pricing model: given a price, find its implied volatility. Ca':
-        "交易员反演定价模型：给定价格，求隐含波动率。持有成本、贴现和结算约定都是转换的一部分。<bookmark mark='a'/>这里取2025年12月10日一份比特币看涨期权的拟合远期和已报隐含波动率，生成未贴现的Black远期价值，再反演。它检验的是输入波动率的数值恢复，不是独立成交价的拟合。<bookmark mark='b'/>从Corrado–Miller近似出发，用带保护的牛顿步骤恢复到{100 * its[-1]:.2f}%。数值恢复不等于市场定价准确。",
+        "交易员反演定价模型：给定价格，求隐含波动率。持有成本、贴现和结算约定都是转换的一部分。<bookmark mark='a'/>这里取2025年12月10日一份比特币看涨期权的拟合远期和由标记价重建的Surface隐含波动率，生成未贴现的Black远期价值，再反演。它检验的是输入波动率的数值恢复，不是独立成交价的拟合。<bookmark mark='b'/>从Corrado–Miller近似出发，用带保护的牛顿步骤恢复到{100 * its[-1]:.2f}%。数值恢复不等于市场定价准确。",
     'When does a finite positive IV exist? With positive forward, strike and time, th':
         "什么时候存在有限正隐含波动率？远期、行权价和期限为正，所用价格单位下，价格必须严格介于内在价值与上界之间。边界对应零或无穷波动率的极限，不一致的报价没有这种解。用远期乘行权价的平方根归一化，价格只依赖对数价内外程度x和总波动率s。<bookmark mark='a'/>Vega为正，使边界内的解唯一。平值远期价值近似为0.4s。<bookmark mark='b'/>临近到期且深虚值时，Vega很小，价格误差会放大成波动率误差。括区间保护牛顿法。Jäckel在2015年的方法利用变换和高阶修正，在适用范围内达到浮点精度。",
     'f"The House\'s loop: tighten a bracket':
@@ -180,8 +169,8 @@ ZH = {
         "现在全部{r['n']}个报价同时求解。左边，灰色：真实的微笑；每个橙色的点从我们公司的初始猜测出发，跳到它上面。右边：最大误差，对数坐标。<bookmark mark='a'/>到第{int(np.argmax(hm < -9))}次迭代，最大误差已低于十的负九次方。<bookmark mark='b'/>红色的是从固定的50%出发的普通牛顿法：{r['naive_broke']}个报价被甩到无穷大或零以下，{r['naive_unfinished']}个再也没有回来。停下来预测一下：一个深度虚值的报价，比应有的价格高出远期的万分之一。它的波动率会错多少？在最慢的那个报价上，{100 * r['tick_shift']:.0f}个点。下一章：在真实的微笑曲线上运行求解器。散点图只显示绝对对数价内外程度不超过0.9、存储的正隐含波动率小于3的点。非有限存储迭代值略去，不挪到边缘。原有诊断把非有限误差记为9.99，有限尖峰则不设上限完整显示。",
     "Chapter twelve. The first smile, and the Surface's first row.":
         '第12章。第一条微笑曲线与基准曲面的第一行。',
-    'Now invert every option traded that morning':
-        "现在把那天上午汇总报价中的隐含波动率画出来，横轴是行权价与远期之比的对数，每个到期日一条曲线。停下来预测一下：若常波动率Black–Scholes模型成立，曲线是什么形状？<bookmark mark='a'/>同一到期日应当平坦，可它们却微笑、倾斜。微笑对尾部支付的定价不同于常波动率对数正态模型。这涉及风险中性价格，不识别真实世界的崩盘概率。忘掉远期也会画出偏斜，第13章会检查这种影响。<bookmark mark='b'/>虚线是Vega加权拟合的结果，每个到期日一个波动率。",
+    'f"Reconstruct IVs from the mark prices attached to trades, using the parity-fitt':
+        "我们用平价拟合的远期比率，从成交记录附带的标记价重建隐含波动率，再取每个合约的中位数，保留虚值合约。Surface含{len(k)}个合约报价、{len(d['flat_fit'])}个到期日。这里画出{len(show)}个选定期限，绝对对数行权价远期比不超过0.8。<bookmark mark='a'/>常波动率模型在每个期限给出平坦微笑；实际曲线却弯曲、倾斜，对尾部支付定价不同。它们涉及风险中性估值，不识别真实崩盘概率；持有成本约定也重要，下一章会检查。<bookmark mark='b'/>虚线是Vega加权的平坦波动率拟合。",
     'Put every expiry together':
         "把所有到期日放在一起，就是本系列的基准曲面：两百五十多个隐含波动率，分布在行权价和期限上，冻结在一个上午。本系列的每一个定价模型都会对它校准，并以它评分。前面的短期微笑又陡又高：那是美联储公布利率决定的上午。<bookmark mark='a'/>灰色线是Black–Scholes的最大努力，每个到期日一个平的波动率：每个到期日的水平对了，别的都不对。",
     'f"The first Surface row: one volatility per expiry has vega-weighted IV RMSE {ro':
@@ -263,7 +252,7 @@ ZH = {
     "Fifty years on, chapter eleven's problem is still a race.":
         "五十年后，第11章的问题仍是一场竞赛。仅在2026年：Schadner把隐含波动率写成封闭形式，作为逆高斯分布的一个分位数。法比安·勒弗洛克和杰雷克·希利问它能有多快。<bookmark mark='a'/>一个包括布兰卡·霍瓦特和汉斯·比勒在内的团队，把彼得·耶克尔的求解器包装成一个可微分的层，按他们的统计，在一块显卡上每秒反解十七亿九千万个报价。萨米拉·阿米里扬和尤尼斯·布泰布训练了一个带门控的神经网络来给出初始猜测，再用两步豪斯霍尔德迭代收尾。<bookmark mark='b'/>连推导也焕然一新：第3章的那条路，从高斯核到看涨期权价格，现在已经被计算机证明助手逐行检验过。这些都是预印本：把它们当作主张来读，而不是定论。",
     'f"A small two-input network learns total volatility from {nv[\'n_train\']:,} synth':
-        "小型双输入网络用{nv['n_train']:,}份合成报价学习总波动率，训练5个种子。这是教学实现，不是带门控Householder方法的复现。右边保留每个训练损失记录和完整种子范围；左边是种子0在各检查点对输入报价隐含波动率的预测，坐标使用对数刻度。未训练预测最高达到{100 * max(nv['snaps'][keys[0]]):.0f}%，完整显示。<bookmark mark='a'/>各种子报价误差中位数再取中位数为{100 * g0:.2f}点，{cmp_word}Corrado–Miller的{100 * nv['cm_med']:.2f}。一步牛顿后的中位数为{100 * g1:.2f}点，两步为{two_txt}。{worst_line}中位精度不认证最坏情形，我们也未与论文进行运行时间基准比较。",
+        "小型双输入网络用{nv['n_train']:,}份合成报价学习总波动率，训练5个种子。这是教学实现，不是带门控Householder方法的复现。右边显示全部损失记录和完整种子范围；左边是种子0对输入Surface隐含波动率的预测，用对数坐标。未训练预测最高达到{100 * max(nv['snaps'][keys[0]]):.0f}%，完整保留。<bookmark mark='a'/>各种子报价误差中位数再取中位数为{100 * g0:.2f}点，{cmp_word}Corrado–Miller的{100 * nv['cm_med']:.2f}。一步牛顿后为{100 * g1:.3f}点，两步后约为{100000000 * g2med:.1f}个百万分之一波动率点；{worst_line}中位数不认证最坏情形，我们也未与论文进行运行时间比较。",
     'f"but the worst quote is still':
         '但最差的报价仍然差{100 * g2max:.0f}个点：深度虚值，在那里第11章那张平坦的曲面会把牛顿法甩来甩去。这就是为什么那些论文按区域给网络加门控、用三阶的一步收尾，也是为什么我们公司保留了它的区间括号。',
     'and even the worst quote of the Surface is at rounding level.':
@@ -303,3 +292,5 @@ ZH = {
 }
 
 ZH.update({'Match variance C divided by N.': '令方差C除以N相同。带宽规则需要256乘2.64再除以11.9，渐近近似下约57次交易。'})
+
+ZH.update({'The measured curve keeps falling slowly,': '测得的曲线仍缓慢下降，'})

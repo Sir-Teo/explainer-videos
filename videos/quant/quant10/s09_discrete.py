@@ -155,16 +155,21 @@ class Discrete(VoiceoverScene):
                            stroke_width=1.5)
         leg = legend([(SPOT, r"GBM: matched log-return variance rate"), (LOSS, r"Merton jumps: 2 a year, mean log jump $-5\%$"),
                       (LOSS, rf"dashed: lognormal-proxy jump reference, {jf['floor']:.2f}")], font_size=22)
+        if leg.width > 5.0:
+            leg.scale_to_fit_width(5.0)
         leg.next_to(g, RIGHT, buff=0.3).align_to(g, UP)
         C = {r"\Gamma": GAM, r"J": LOSS}
-        eq = cmath(r"V(Se^J) - V(S) - \Delta S(e^J - 1)", r"\approx", r"\tfrac12", r"\Gamma", r"S^2", r"J", r"^2",
-                   font_size=30, colors=C).next_to(leg, DOWN, buff=0.5).align_to(leg, LEFT)
-        if eq.get_right()[0] > 6.9:  # keep it in frame
-            eq.scale_to_fit_width(6.9 - eq.get_left()[0])
-        eqn = label(r"a jump is not made smaller by hedging more often", font_size=22, color=GREY_A)
+        eq = VGroup(
+            cmath(r"R_J", r"=", r"V(Se^J)-V(S)-\Delta S(e^J-1)", font_size=25, colors=C),
+            cmath(r"R_J", r"\approx", r"\tfrac12\Gamma S^2J^2", font_size=32, colors=C),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+        if eq.width > 5.0:
+            eq.scale_to_fit_width(5.0)
+        eq.next_to(leg, DOWN, buff=0.4).align_to(leg, LEFT)
+        eqn = wrapped_label(r"a jump is not made smaller by hedging more often", 5.0, 22, GREY_A)
         eqn.next_to(eq, DOWN, buff=0.15).align_to(eq, LEFT)
         holds = jf["ratio_jump"] < 2
-        floor_phrase = "It hits a floor," if holds else "It falls, but slowly, towards a floor,"
+        floor_phrase = "The measured curve flattens," if holds else "The measured curve keeps falling slowly,"
         with self.voiceover(
             f"""Add Poisson log-price jumps, twice a year with a minus five percent mean log jump. Compare with GBM at the same log-return variance rate. A single Black volatility does not complete this jump market. Without jumps, frequent hedging reduces the error. <bookmark mark='a'/> With jumps, its measured standard deviation falls from {J.mean(0)[0]:.2f} to {J.mean(0)[-1]:.2f}. {floor_phrase} A jump leaves the exact nonlinear remainder shown on screen; half gamma S squared J squared is only its small-log-jump approximation. The dashed {jf['floor']:.2f} is a quadrature reference for jump-remainder risk using a lognormal spot proxy. It is not a proved variance floor for these simulated Merton paths. Increasing frequency cannot eliminate unspanned jump risk."""
         ) as vo:

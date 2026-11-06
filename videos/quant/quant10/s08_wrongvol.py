@@ -109,7 +109,7 @@ class WrongVol(VoiceoverScene, ThreeDScene):
                      MathTex(rf"\text{{P\&L}}\ {w['pnl_far']:+.2f}", font_size=26, color=REA)).arrange(DOWN, buff=0.1)
         res.next_to(base, DOWN, buff=0.15)
         self.set_camera_orientation(phi=64 * DEGREES, theta=-65 * DEGREES, zoom=0.85)
-        fixed = [hint, base, ctitle, res]
+        fixed = [hint, base, ctitle, res, c_near, c_far]
         for m in fixed:
             self.add_fixed_in_frame_mobjects(m)
             self.remove(m)

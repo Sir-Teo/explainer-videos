@@ -154,12 +154,7 @@ class Tree(VoiceoverScene, ThreeDScene):
                 why(r"collect powers of $\sqrt{\Delta t}$, divide by $\Delta t$: the Black--Scholes PDE")]
         step = ladder(self, rows, whys, keep=4, top=2.8, x=-1.0, buff=0.75, edge=6.9)
         with self.voiceover(
-            "Why it must converge is a short calculation. Each node is the discounted risk-neutral average of its "
-            "two successors. <bookmark mark='a'/> With an up move of e to the sigma root delta t, the risk-neutral "
-            "probability is one half plus a correction of order root delta t. <bookmark mark='b'/> Expand the two "
-            "successors' values in a Taylor series: the root delta t terms carry the slope, the delta t terms "
-            "the curvature. <bookmark mark='c'/> Substitute, collect powers, divide by delta t, and the recursion "
-            "is the Black-Scholes equation plus an error of order delta t. The tree is the equation, discretized."
+            "Why it must converge is a short calculation. Each node is the discounted risk-neutral average of its two successors. <bookmark mark='a'/> With an up move of e to the sigma root delta t, the risk-neutral probability is one half plus a correction of order root delta t. <bookmark mark='b'/> Expand the two successors' values in a Taylor series: the root delta t terms carry the slope, the delta t terms the curvature. <bookmark mark='c'/> Substitute, collect powers, divide by delta t, and the recursion is the Black-Scholes equation plus an error of order delta t. The tree is the equation, discretized. This is local consistency in a smooth interior region; monotonicity, stability and the payoff boundary are also needed for convergence."
         ) as vo:
             step(0, run_time=0.15)
             vo.wait_until("a")

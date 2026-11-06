@@ -28,8 +28,8 @@ class American(VoiceoverScene, ThreeDScene):
     def calls(self):
         rows = VGroup(
             MathTex(r"C_{\text{American}}", r"\;\ge\;", r"C_{\text{European}}", r"\;\ge\;", r"S - K e^{-rT}",
-                    r"\;>\;", r"S - K", font_size=42),
-            label(r"alive, a call is worth more than exercised: never exercise early (no dividends)",
+                    r"\;\ge\;", r"S - K", font_size=42),
+            label(r"no dividends, $r\ge0$: early exercise gives no advantage",
                   font_size=28, color=GREY_A),
         ).arrange(DOWN, buff=0.4).shift(UP * 1.3)
         rows[0][2].set_color(OPT)
@@ -73,7 +73,7 @@ class American(VoiceoverScene, ThreeDScene):
             MathTex(rf"\text{{early-exercise premium}}\ {d['american_put'] - d['european_put']:.4f}", font_size=28,
                     color=OPT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(leg, DOWN, buff=0.6).align_to(leg, LEFT)
-        params = note(r"$K = 100$, $T = 1$, $\sigma = 20\%$, $r = 5\%$", font_size=20).to_corner(DR, buff=0.3)
+        params = note(r"$K=100$, $T=1$, $\sigma=20\%$, $r=5\%$; curves: 600 steps, ATM price: 2000 steps", font_size=20).to_corner(DR, buff=0.3)
         with self.voiceover(
             "The tree of chapter five solves it, with its one extra line: each node is worth the larger of "
             "exercising now and waiting. A one-year put, five percent interest rate. The European put, in blue, "

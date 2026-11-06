@@ -28,7 +28,7 @@ PROBLEMS = [
     r"vols; estimate the error at the money for $b = 4\%$, $T = 0.5$, $\sigma = 45\%$.",    r"(qual) For a Brownian motion with variance rate $v$ and $\tau$ its exit time from $(-a, a)$, show by optional "
     r"stopping that $\mathbb E\tau = a^2/v$ and $\operatorname{Var}\tau = 2a^4/(3v^2)$; deduce that a hedge rebalanced at "
     r"such times has error variance $\frac16\Gamma^2a^4$ per interval, against $\frac12\Gamma^2a^4$ at equal times.",
-    r"(qual) Minimize $\int \frac16\Gamma^2a^2v\,dt$ subject to $\int v/a^2\,dt = N$ over band widths $a(t)$. Show "
+    r"(qual) For deterministic coefficient functions, minimize $\int \frac16\Gamma^2a^2v\,dt$ subject to $\int v/a^2\,dt = N$ over band widths $a(t)$. Show "
     r"$a \propto |\Gamma|^{-1/2}$, $N\operatorname{Var} = \frac16(\int|\Gamma|v\,dt)^2$, and that this is at most a third of "
     r"the equal-time constant $\frac T2\int\Gamma^2v^2dt$.",
 ]

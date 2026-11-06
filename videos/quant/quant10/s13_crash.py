@@ -85,7 +85,7 @@ class Crash(VoiceoverScene):
         dates = [str(int(x)) for x in ins["dates"]]
         S, V, w = np.asarray(ins["S"], float), np.asarray(ins["V"], float), np.asarray(ins["w"], float)
         j1 = int(np.searchsorted(np.asarray(ins["dates"]), 19871031))
-        n = j1 + 1
+        n = j1
         xs = np.arange(len(S))
         g = axes([0, n], [70, 115], x_length=8.2, y_length=4.4, ylabel=r"value, 1 July 1987 $= 100$",
                  yticks=[80, 95, 110], font_size=18).to_edge(LEFT, buff=0.6).shift(DOWN * 0.4)
@@ -94,9 +94,9 @@ class Crash(VoiceoverScene):
         fl_lab = label(rf"the floor at the horizon, {ins['floor_value']:.1f}", font_size=20, color=LOSS)
         fl_lab.next_to(ax.c2p(0, ins["floor_value"]), DOWN + RIGHT, buff=0.08)
         k = ValueTracker(1)
-        mkt = always_redraw(lambda: curve(ax, xs[:max(int(k.get_value()), 2)], S[:max(int(k.get_value()), 2)],
+        mkt = always_redraw(lambda: curve(ax, xs[:max(int(k.get_value()) + 1, 2)], S[:max(int(k.get_value()) + 1, 2)],
                                           SPOT, stroke_width=2.5))
-        port = always_redraw(lambda: curve(ax, xs[:max(int(k.get_value()), 2)], V[:max(int(k.get_value()), 2)],
+        port = always_redraw(lambda: curve(ax, xs[:max(int(k.get_value()) + 1, 2)], V[:max(int(k.get_value()) + 1, 2)],
                                            WHITE, stroke_width=3.5))
         frame = Rectangle(width=0.6, height=3.0, stroke_color=GREY_C, stroke_width=1.5).move_to([5.6, -0.6, 0])
         fill = always_redraw(lambda: Rectangle(width=0.6, height=max(3.0 * w[min(int(k.get_value()), len(w) - 1)], 0.01),
@@ -104,15 +104,19 @@ class Crash(VoiceoverScene):
                              .align_to(frame, DOWN).align_to(frame, LEFT))
         wl = always_redraw(lambda: MathTex(rf"{100 * w[min(int(k.get_value()), len(w) - 1)]:.0f}\%", font_size=30,
                                            color=DEL).next_to(frame, UP, buff=0.12))
-        wcap = label(r"in stocks", font_size=22, color=DEL).next_to(frame, DOWN, buff=0.12)
-        day = always_redraw(lambda: label(datetime_str(dates[min(int(k.get_value()), len(dates) - 1)]), font_size=26,
-                                          color=GREY_A).to_corner(UR, buff=0.4))
+        wcap = label(r"stock weight for the next return", font_size=22, color=DEL).next_to(frame, DOWN, buff=0.12)
+        def state_date():
+            j = min(int(k.get_value()), len(dates)-1)
+            return ("close " + datetime_str(str(ins["end_oct"]["date"]))) if j >= n else ("before " + datetime_str(dates[j]))
+        day = always_redraw(lambda: label(state_date(), font_size=26, color=GREY_A).to_corner(UR, buff=0.4))
         leg = legend([(SPOT, r"the US market (French)"), (WHITE, r"the insured portfolio")], font_size=20)
         leg.next_to(g, UP, buff=0.25).align_to(g, LEFT)
         params = note(rf"illustrative: one-year floor at {ins['floor']:.0f}, $\sigma = {100 * ins['sigma']:.0f}\%$, "
                       r"bills at the daily T-bill rate, rebalanced at each close", font_size=18).to_edge(DOWN, buff=0.25)
+        i5 = dates.index(str(ins["oct5"]["date"]))
         i16 = dates.index(str(ins["oct16"]["date"]))
         i19 = dates.index(str(ins["oct19"]["date"]))
+        i20 = dates.index(str(ins["oct20"]["date"]))
         o5, o16, o19, o20, eo = ins["oct5"], ins["oct16"], ins["oct19"], ins["oct20"], ins["end_oct"]
         floor_word = "below" if ins["breach"] else "above"
         brady = VGroup(
@@ -139,8 +143,11 @@ class Crash(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(g), Create(fl), FadeIn(fl_lab), FadeIn(leg), FadeIn(frame), FadeIn(wcap), FadeIn(params))
             self.add(mkt, port, fill, wl, day)
-            self.play(k.animate.set_value(i16 - 8), run_time=max(vo.until("a") - 0.5, 4.0), rate_func=linear)
-            self.play(k.animate.set_value(i19), run_time=max(vo.until("b") - 0.5, 2.0), rate_func=linear)
+            self.play(k.animate.set_value(i5), run_time=max(vo.until("a") - 0.5, 4.0), rate_func=linear)
+            self.play(k.animate.set_value(i16), run_time=max(vo.until("b") - 0.5, 2.0), rate_func=linear)
+            vo.wait_until("b")
+            self.play(k.animate.set_value(i19), run_time=0.6, rate_func=linear)
+            self.play(k.animate.set_value(i20), run_time=2, rate_func=linear)
             self.play(k.animate.set_value(n), run_time=4, rate_func=linear)
             for m_ in (mkt, port, fill, wl, day):
                 m_.clear_updaters()

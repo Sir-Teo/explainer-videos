@@ -191,7 +191,7 @@ python tools/qa_scene.py quant10 Ledger           # one chapter, silent, with a 
    a⁴ − 6va²Eτ + 3v²Eτ² = 0, Eτ² = 5a⁴/(3v²) and Var τ = 2a⁴/(3v²). Over the interval the hedge error is
    ½Γ[(ΔX)² − vτ] = ½Γv(Eτ − τ), with variance ¼Γ²v²·2a⁴/(3v²) = Γ²a⁴/6. An equal-time step of the same mean length
    Δt = a²/v has error ½Γv Δt(Z² − 1), variance ½Γ²v²Δt² = Γ²a⁴/2.
-9. **(qual) The optimal band.** Per unit time the error variance accrues at (1/6)Γ²a²v (intervals of variance Γ²a⁴/6
+9. **(qual) The optimal band.** For deterministic coefficient functions in this pathwise exercise, per unit time the error variance accrues at (1/6)Γ²a²v (intervals of variance Γ²a⁴/6
    at rate v/a²) and trades at v/a². The Lagrangian (1/6)Γ²a²v + λv/a² is minimized pointwise at a⁴ = 6λ/Γ², so
    a ∝ |Γ|^{−1/2}. Then Var = (c²/6)∫|Γ|v and N = (1/c²)∫|Γ|v with a = c|Γ|^{−1/2}, so N·Var = (1/6)(∫|Γ|v dt)². By
    Cauchy–Schwarz (∫|Γ|v dt)² ≤ T∫Γ²v²dt, so N·Var ≤ (1/6)T∫Γ²v² = (1/3)·(T/2)∫Γ²v², the equal-time constant.
@@ -247,8 +247,8 @@ Fukasawa's asymptotic theorem requires its structure, refinement and
 uniform-integrability conditions. Expected error quadratic variation equals terminal
 variance here under the driftless square-integrable assumptions.
 
-The selected quote inversion recovers a reported IV from its repriced undiscounted
-forward Black value. It is a numerical round trip, not an independent fit to an
+The selected quote inversion recovers a Surface IV reconstructed from a mark price
+from its repriced undiscounted forward Black value. It is a numerical round trip, not an independent fit to an
 executable spot-dollar premium. For a coin discount factor of one, an inverse-call
 premium is this forward value divided by F; spot times that premium gives its
 spot-dollar value. Discount conventions must be consistent. The Surface error is

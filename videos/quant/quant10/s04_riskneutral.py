@@ -101,7 +101,7 @@ class RiskNeutral(VoiceoverScene):
                 m.scale_to_fit_width(4.9)
         VGroup(tab, gir).to_edge(RIGHT, buff=0.35)
         params = note(rf"$S_0 = K = 100$, $T = 1$, $\sigma = {100 * sig:.0f}\%$; "
-                      rf"{d['n_mc']:,} simulated outcomes".replace(",", "{,}"), font_size=18).to_corner(DR, buff=0.25)
+                      rf"{d['n_mc']:,} pricing samples; $\pm$ one standard error".replace(",", "{,}"), font_size=18).to_corner(DR, buff=0.25)
         with self.voiceover(
             f"Two worlds, built from the same random numbers. In amber, the real world: the stock grows at an expected {100 * mu:.0f} percent a year. <bookmark mark='a'/> Average the discounted payoff of a one-year at-the-money call over these paths and you get {d['mc_P']:.2f}. That is not the option's price. <bookmark mark='b'/> In violet, the same paths with the drift replaced by the riskless rate, {100 * r:.0f} percent: the average is {d['mc_Q']:.2f}, give or take {d['se_Q']:.2f}, the Black-Scholes price, {d['exact']:.2f}. <bookmark mark='c'/> Girsanov's theorem says the two worlds are the same paths with different weights: weight each real-world path by this exponential and the real-world average turns into the risk-neutral one, {d['mc_W']:.2f}. The theta in it, mu minus r over sigma, is the market price of risk, which the option's price does not need to know. The fan shows eighty paths. Both histograms use sixty thousand terminal observations on the same count scale; the pricing averages use four hundred thousand samples."
         ) as vo:

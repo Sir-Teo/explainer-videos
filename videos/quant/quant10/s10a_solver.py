@@ -29,7 +29,7 @@ class Solver(VoiceoverScene, ThreeDScene):
         F, K, T, target = d["solver_F"], d["solver_K"], d["solver_T"], d["solver_price"]
         sig = np.linspace(0.05, 1.2, 200)
         prices = bs.price(F, K, T, sig) / 1000
-        g = axes([0, 1.2], [0, 16], x_length=6.6, y_length=4.2, xlabel=r"volatility $\sigma$",
+        g = axes([0, 1.2], [0, 17.5], x_length=6.6, y_length=4.2, xlabel=r"volatility $\sigma$",
                  ylabel=r"undiscounted Black forward value, thousands", xticks=[0.25, 0.5, 0.75, 1.0],
                  yticks=[0, 5, 10, 15], xfmt=lambda v: f"{100 * v:.0f}\\%", font_size=20)
         g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.3)
@@ -53,7 +53,7 @@ class Solver(VoiceoverScene, ThreeDScene):
                           label(r"then Newton steps, kept inside a bisection bracket", font_size=20, color=GREY_B))
         rows_lab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(rows, DOWN, buff=0.3).align_to(rows, LEFT)
         with self.voiceover(
-            f"""Traders invert a pricing model: given a price, find its implied volatility. Carry, discounting and settlement conventions are part of that conversion. <bookmark mark='a'/> Here we take one Bitcoin call's fitted forward and reported IV from the tenth of December 2025, generate its undiscounted Black forward value, and invert that value. This checks numerical recovery of an input IV, rather than matching an independent execution price. <bookmark mark='b'/> From a Corrado-Miller approximation, guarded Newton steps recover {100 * its[-1]:.2f} percent. Numerical recovery does not establish market-price accuracy."""
+            f"""Traders invert a pricing model: given a price, find its implied volatility. Carry, discounting and settlement conventions are part of that conversion. <bookmark mark='a'/> Here we take one Bitcoin call's fitted forward and Surface IV reconstructed from mark prices from the tenth of December 2025, generate its undiscounted Black forward value, and invert that value. This checks numerical recovery of an input IV, rather than matching an independent execution price. <bookmark mark='b'/> From a Corrado-Miller approximation, guarded Newton steps recover {100 * its[-1]:.2f} percent. Numerical recovery does not establish market-price accuracy."""
         ) as vo:
             self.play(FadeIn(g), Create(line))
             vo.wait_until("a")
@@ -117,7 +117,7 @@ class Solver(VoiceoverScene, ThreeDScene):
         eqs_all = VGroup(*[VGroup(e_, w_) for e_, w_ in zip(eqs, whys_)]).arrange(DOWN, aligned_edge=LEFT, buff=0.16)
         eqs_all.to_corner(DR, buff=0.3)  # the lower right stays empty in every camera view
         for g_ in eqs_all:
-            g_.add_to_back(BackgroundRectangle(g_, color=BACKGROUND, fill_opacity=0.85, buff=0.06))
+            g_.add_to_back(BackgroundRectangle(g_, color=BACKGROUND, fill_opacity=1.0, buff=0.08))
         self.set_camera_orientation(phi=66 * DEGREES, theta=-62 * DEGREES, zoom=0.72)
         for m in (hint, eqs_all):
             self.add_fixed_in_frame_mobjects(m)

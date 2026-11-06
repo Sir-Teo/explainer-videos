@@ -30007,7 +30007,82 @@
     "Newton: 50\\% start; stored dots $0<\\sigma<3$": "牛顿法：从50\\%开始；存储点满足$0<\\sigma<3$",
     "stored max error (log); invalid sentinel 9.99": "存储的最大误差（对数）；无效值记为9.99",
     "Derive the short seller's P\\&L, $\\tfrac12\\Gamma S^2(\\sigma_i^2 - \\sigma_r^2)\\,dt$, and test it on paths": "推导卖方盈亏$\\tfrac12\\Gamma S^2(\\sigma_i^2 - \\sigma_r^2)\\,dt$，并在路径上检验",
-    "Test a DVOL-priced BTC model, replay 1987 and 1998, and examine current practice": "检验DVOL定价的BTC模型，重放1987和1998年，并检查当前实践"
+    "Test a DVOL-priced BTC model, replay 1987 and 1998, and examine current practice": "检验DVOL定价的BTC模型，重放1987和1998年，并检查当前实践",
+    "Model dollar call: 30 days, strike = today's spot": "模型美元看涨期权：30天，行权价为当天现价",
+    "the DVOL proxy used in the model": "模型使用的DVOL代理",
+    "20,000 paths per volatility; hedge $\\sigma_i=20\\%$; common bins and count scale": "每个波动率20000条路径；按$\\sigma_i=20\\%$对冲；共用分箱和计数尺度",
+    "no dividends, $r\\ge0$: early exercise gives no advantage": "无股息、$r\\ge0$：提前行权没有优势",
+    "shares for the next return": "下一期收益对应的股票权重",
+    "in Whalley--Wilmott's small-cost setting (Part 11), the asymptotic no-trade width scales as $\\varepsilon^{1/3}$; study a specified portfolio, objective, cost model and trade budget": "在Whalley--Wilmott的小成本框架中（第11部分），渐近不交易带宽按$\\varepsilon^{1/3}$缩放；研究前须明确组合、目标、成本模型和交易次数预算",
+    "the benchmark is asymptotic; finite-frequency error is visible (2.8 against 2.64 here). Measure corrections and uncertainty under a specified model": "基准是渐近结论，有限频率误差可见（本例2.8对2.64）；在明确模型下衡量修正与不确定性",
+    "call value $V$": "看涨期权价值$V$",
+    "\\text{price}\\ 9.9705": "\\text{价格}\\ 9.9705",
+    "\\text{central live-node max gap}\\ 0.993": "\\text{中央区域节点最大差}\\ 0.993",
+    "\\text{price}\\ 10.3267": "\\text{价格}\\ 10.3267",
+    "\\text{central live-node max gap}\\ 0.456": "\\text{中央区域节点最大差}\\ 0.456",
+    "\\text{price}\\ 10.4194": "\\text{价格}\\ 10.4194",
+    "\\text{central live-node max gap}\\ 0.218": "\\text{中央区域节点最大差}\\ 0.218",
+    "\\text{price}\\ 10.4428": "\\text{价格}\\ 10.4428",
+    "\\text{central live-node max gap}\\ 0.107": "\\text{中央区域节点最大差}\\ 0.107",
+    "backward induction: the discounted risk-neutral average": "反向递推：贴现后的风险中性平均值",
+    "expand $q = (e^{r\\Delta t} - 1/u)/(u - 1/u)$ in $\\sqrt{\\Delta t}$": "把$q = (e^{r\\Delta t} - 1/u)/(u - 1/u)$按$\\sqrt{\\Delta t}$展开",
+    "Taylor in $\\ln S$ to order $\\Delta t$": "对$\\ln S$作泰勒展开，保留到$\\Delta t$阶",
+    "collect powers of $\\sqrt{\\Delta t}$, divide by $\\Delta t$: the Black--Scholes PDE": "收集$\\sqrt{\\Delta t}$的幂，除以$\\Delta t$：得到Black--Scholes偏微分方程",
+    "Lab: backward induction": "实验：反向递推",
+    "explainer/quant/house/trees.py (crr, abridged)": "explainer/quant/house/trees.py（crr，节选）",
+    "crr(100, 100, 1, 0.2, 0.05, N=4)  ->  9.970523": "crr(100, 100, 1, 0.2, 0.05, N=4)  ->  9.970523",
+    "crr(100, 100, 1, 0.2, 0.05, N=64)  ->  10.419400": "crr(100, 100, 1, 0.2, 0.05, N=64)  ->  10.419400",
+    "crr(100, 100, 1, 0.2, 0.05, N=400)  ->  10.445586": "crr(100, 100, 1, 0.2, 0.05, N=400)  ->  10.445586",
+    "price(100, 100, 1, 0.2, 0.05)      ->  10.450584": "price(100, 100, 1, 0.2, 0.05)      ->  10.450584",
+    "dashed: lognormal-proxy jump reference, 1.59": "虚线：对数正态代理下的跳跃风险参考，1.59",
+    "\\text{model forward value}\\ \\$5{,}745": "\\text{模型远期价值}\\ \\$5{,}745",
+    "finite differences for the American put (Part 16 solves it as a complementarity problem)": "美式看跌期权的有限差分（第16部分把它作为互补问题求解）",
+    "approximate the exercise premium's time dependence: a quadratic, solved at the critical price": "近似行权溢价的时间依赖，并在临界价处求解",
+    "one snapshot: DVOL minus ATM = 1.8 points": "单个快照：DVOL减平值波动率 = 1.8点",
+    "single-snapshot sensitivity only: +1.00": "仅单个快照敏感性：+1.00",
+    "When to rebalance a hedge": "何时重新平衡对冲",
+    "For the same number of trades, how much smaller can the hedging error be?": "同样的交易次数下，对冲误差能减少多少？",
+    "Chapter 9: between rebalances the hedge misses half gamma times the squared move, less its average": "第9章：两次调仓之间，误差约为二分之一Gamma乘平方位移与其均值之差",
+    "$Z^2 - 1$ has variance 2": "$Z^2 - 1$的方差为2",
+    "$N = T/\\Delta t$ steps of variance proportional to $\\Delta t^2$: the total falls like $1/N$, with this constant. For a three-month at-the-money call at 20\\%, it is 11.9 (per 100 of stock, squared)": "$N = T/\\Delta t$个区间，每个方差正比于$\\Delta t^2$，总方差按$1/N$下降，常数如上。本例三个月期、20\\%波动率的平值期权为11.9（每100现价的平方单位）",
+    "\\inf\\{t : |S_t - S_0| = a\\},\\qquad (\\Delta S)^2 = a^2\\ \\text{exactly}": "\\inf\\{t : |S_t - S_0| = a\\},\\qquad (\\Delta S)^2 = a^2\\ \\text{严格成立}",
+    "\\tfrac16\\Gamma^2a^4\\ \\ \\text{against}\\ \\ \\tfrac12\\Gamma^2a^4": "\\tfrac16\\Gamma^2a^4\\ \\ \\text{对比}\\ \\ \\tfrac12\\Gamma^2a^4",
+    "the error is now the randomness of the time it took": "误差来自首次到达所用时间的随机性",
+    "the exit time of a Brownian motion from $(-a, a)$: the moments follow from optional stopping on $W^2 - t$ and $W^4 - 6tW^2 + 3t^2$ (Part 4)": "布朗运动退出$(-a, a)$的时间，其矩由对$W^2 - t$和$W^4 - 6tW^2 + 3t^2$应用可选停止得到（第4部分）",
+    "for the same average interval, an equal-time step has variance $\\frac12\\Gamma^2a^4$: trading on moves cuts the variance by a factor of three, before any optimization": "平均长度相同时，等时间区间的误差方差为$\\frac12\\Gamma^2a^4$；局部冻结近似下，按位移交易的方差降为三分之一，尚未优化带宽",
+    "a band of width $a(t, S)$: the error accrues at rate $\\frac16\\Gamma^2a^2\\sigma^2S^2$, trades at rate $\\sigma^2S^2/a^2$": "带宽为$a(t,S)$时，误差按$\\frac16\\Gamma^2a^2\\sigma^2S^2$累积，交易次数按$\\sigma^2S^2/a^2$累积",
+    "pointwise Lagrange condition: the band is narrow where gamma is large, wide where it is small; in delta terms, trade when the delta has drifted by the square root of gamma": "逐点拉格朗日条件：Gamma大时带宽窄，小的时候宽；Delta阈值正比于Gamma平方根",
+    "and by Cauchy--Schwarz this is at most a third of the equal-time constant: for our call 2.64 against 11.9, a factor of 4.5. Fixed price or delta bands give 3.98": "由柯西--施瓦茨不等式，最多为等时间常数的三分之一；本例2.64对11.9，改善4.5倍；固定价格或Delta带宽的常数为3.98",
+    "under Fukasawa's structure, refinement and uniform-integrability conditions, $\\liminf\\ \\mathbb E[N]\\,\\mathbb E\\langle \\text{error}\\rangle \\ge \\frac16\\big(\\mathbb E\\!\\int|\\Gamma|\\sigma^2S^2dt\\big)^2$, attained by the band $|\\Delta_t - \\Delta_\\tau|^2 = h\\Gamma_\\tau$ as $h \\to 0$": "在Fukasawa的结构、细化与一致可积条件下，$\\liminf\\ \\mathbb E[N]\\,\\mathbb E\\langle \\text{误差}\\rangle \\ge \\frac16\\big(\\mathbb E\\!\\int|\\Gamma|\\sigma^2S^2dt\\big)^2$，带宽规则$|\\Delta_t - \\Delta_\\tau|^2 = h\\Gamma_\\tau$在$h\\to0$时达到该界",
+    "Asymptotically efficient discrete hedging": "渐近有效的离散对冲",
+    "Fukasawa (2011); with jumps, Rosenbaum and Tankov (2014)": "Fukasawa（2011）；含跳跃扩展：Rosenbaum和Tankov（2014）",
+    "average number of trades, $N$": "平均交易次数$N$",
+    "standard deviation of the hedging error, per 100 of stock (log scale)": "每100现价的对冲误差标准差（对数刻度）",
+    "equal times": "等时间",
+    "price band, fixed width": "固定宽度价格带",
+    "band $\\propto \\Gamma^{-1/2}$ in price": "价格带宽$\\propto\\Gamma^{-1/2}$",
+    "a short three-month at-the-money call, $\\sigma = 20\\%$, 3{,}000 paths on a grid of $2^{14}$ steps; lines: $\\sqrt{C/N}$ with the constants from the formulas, dots: simulation (a delta band of fixed width lands on the price band's line)": "三个月期平值看涨空头，$\\sigma=20\\%$，3{,}000条路径，网格为$2^{14}$步；线为理论$\\sqrt{C/N}$，点为模拟；固定宽度Delta带与固定价格带共用一条理论线",
+    "$N \\times \\operatorname{Var}$ of the error": "误差的$N\\times\\operatorname{Var}$",
+    "delta band, fixed width": "固定宽度Delta带",
+    "theory: the limits as $N \\to \\infty$; the simulated values approach them as the band narrows (at $N \\approx 16$ the bands are wide and the local approximation is rough). The two fixed-width bands share one constant, $\\frac16 \\mathbb E\\!\\int\\sigma^2S^2\\,dt\\cdot \\mathbb E\\!\\int\\Gamma^2\\sigma^2S^2\\,dt$": "理论值为$N\\to\\infty$的极限；带宽缩小时模拟趋近它。$N\\approx16$时带宽大，局部近似较粗。两种固定宽度带共用常数$\\frac16\\mathbb E\\!\\int\\sigma^2S^2\\,dt\\cdot\\mathbb E\\!\\int\\Gamma^2\\sigma^2S^2\\,dt$",
+    "Bitcoin, 30-day calls": "比特币30天看涨期权",
+    "mean error": "平均误差",
+    "sd of error": "误差标准差",
+    "47 at-the-money calls written every 15 days on BTCUSDT one-minute closes, 2019--2020, each priced and hedged at the volatility its own month realized (hindsight, so only the timing of trades is tested); errors in \\% of the premium, positive when the hedger keeps money. Both rules end with a positive mean; its sources, among them microstructure noise in one-minute realized variance (Part 5), are not separated here. The comparison is of the spread": "47份平值看涨期权，每15天开始一个窗口，用2019--2020年的分钟收盘价；按各自未来实现的波动率定价和对冲。误差为权利金的\\%，正值表示留有盈余；平均偏差来源未分离，比较的是误差标准差",
+    "with proportional costs the optimal rule is a band too (Whalley and Wilmott, Part 11), but with width $\\propto \\varepsilon^{1/3}$; study a specified portfolio, cost model and trade budget; existing cost-sensitive theories are starting points": "在Whalley--Wilmott的小成本框架中（第11部分），渐近不交易带宽按$\\varepsilon^{1/3}$缩放；须明确组合、目标、成本模型与交易次数预算",
+    "the bound is asymptotic; at a few dozen trades, where desks live, the gap to the limit is visible (2.8 against 2.64 here), and corrections are known only in special cases": "基准是渐近结论，有限频率误差可见（本例2.8对2.64）；在明确模型下衡量修正与不确定性",
+    "with jumps the optimal times change (Rosenbaum and Tankov 2014); specify the risk criterion, admissible rules and model before seeking an efficient extension": "含跳跃时最优交易时点改变（Rosenbaum和Tankov，2014）；研究有效扩展前，应明确风险准则、可容许规则与模型",
+    "Pause and predict: equal-time hedging needs 256 trades to reach some error. Using the constants 11.9 and 2.64, roughly how many trades does the optimal band need for the same error?": "暂停预测：等时间对冲用256次交易达到某个误差。利用常数11.9和2.64，带宽规则达到相同误差大约需要多少次交易？",
+    "(qual) For a Brownian motion with variance rate $v$ and $\\tau$ its exit time from $(-a, a)$, show by optional stopping that $\\mathbb E\\tau = a^2/v$ and $\\operatorname{Var}\\tau = 2a^4/(3v^2)$; deduce that a hedge rebalanced at such times has error variance $\\frac16\\Gamma^2a^4$ per interval, against $\\frac12\\Gamma^2a^4$ at equal times.": "（资格题）布朗运动的方差率为$v$，退出$(-a,a)$的时间为$\\tau$。用可选停止证明$\\mathbb E\\tau=a^2/v$及$\\operatorname{Var}\\tau=2a^4/(3v^2)$；在冻结Gamma的局部模型中，推出每个退出区间的误差方差为$\\frac16\\Gamma^2a^4$，对比等时间区间的$\\frac12\\Gamma^2a^4$",
+    "(qual) Minimize $\\int \\frac16\\Gamma^2a^2v\\,dt$ subject to $\\int v/a^2\\,dt = N$ over band widths $a(t)$. Show $a \\propto |\\Gamma|^{-1/2}$, $N\\operatorname{Var} = \\frac16(\\int|\\Gamma|v\\,dt)^2$, and that this is at most a third of the equal-time constant $\\frac T2\\int\\Gamma^2v^2dt$.": "（资格题）对确定性系数函数，在$\\int v/a^2\\,dt=N$约束下最小化$\\int\\frac16\\Gamma^2a^2v\\,dt$。证明$a\\propto|\\Gamma|^{-1/2}$、$N\\operatorname{Var}=\\frac16(\\int|\\Gamma|v\\,dt)^2$，且最多为等时间常数$\\frac T2\\int\\Gamma^2v^2dt$的三分之一",
+    "(qual) For deterministic coefficient functions, minimize $\\int \\frac16\\Gamma^2a^2v\\,dt$ subject to $\\int v/a^2\\,dt = N$ over band widths $a(t)$. Show $a \\propto |\\Gamma|^{-1/2}$, $N\\operatorname{Var} = \\frac16(\\int|\\Gamma|v\\,dt)^2$, and that this is at most a third of the equal-time constant $\\frac T2\\int\\Gamma^2v^2dt$.": "（资格题）对确定性系数函数，在$\\int v/a^2\\,dt=N$约束下最小化$\\int\\frac16\\Gamma^2a^2v\\,dt$。证明$a\\propto|\\Gamma|^{-1/2}$、$N\\operatorname{Var}=\\frac16(\\int|\\Gamma|v\\,dt)^2$，且最多为等时间常数$\\frac T2\\int\\Gamma^2v^2dt$的三分之一",
+    "DVOL-priced dollar-call model: 1,706 overlapping 30-day windows; hourly spot hedges.": "按DVOL代理定价的美元看涨模型：1706个重叠的30天窗口，每小时现货对冲",
+    "\\text{positive windows}\\ 81\\%": "\\text{正收益窗口}\\ 81\\%",
+    "+72 windows above 5": "另有72个窗口高于5",
+    "$K=100$, $T=1$, $\\sigma=20\\%$, $r=5\\%$; curves: 600 steps, ATM price: 2000 steps": "$K=100$、$T=1$、$\\sigma=20\\%$、$r=5\\%$；曲线用600步，显示的平值价格用2000步",
+    "47 overlapping 30-day calls, every 15 days in 2019--2020. Hindsight realized volatility and a band tuned on all tested windows; no costs. Errors in \\% of model premium; positive means money kept. The nonzero means remain unexplained.": "47份重叠的30天看涨期权，2019--2020年每15天开始。使用事后实际波动率，带宽在全部受测窗口上调参，不含成本。误差以模型权利金的\\%计，正值表示留有盈余，非零均值的成因尚未识别",
+    "$S_0 = K = 100${,} $T = 1${,} $\\sigma = 25\\%$; 400{,}000 pricing samples; $\\pm$ one standard error": "$S_0=K=100$、$T=1$、$\\sigma=25\\%$；400{,}000个定价样本；$\\pm$一个标准误",
+    "stock weight for the next return": "下一期收益对应的股票权重"
   },
   "phrases": {
     "you owe": "你欠",
@@ -30042,9 +30117,47 @@
     "quadrature reference": "求积基准",
     "almost surely": "几乎处处",
     "forward dollar value:": "美元远期价值：",
-    "iid reference": "独立参考"
+    "iid reference": "独立参考",
+    "price": "价格",
+    "central live-node max gap": "中央区域节点最大差",
+    "model forward value": "模型远期价值",
+    "exactly": "严格成立",
+    "against": "对比",
+    "positive windows": "正收益窗口"
   },
   "patterns": [
+    [
+      "^before ([0-9]+) July ([0-9]+)$",
+      "\\2年7月\\1日开盘前"
+    ],
+    [
+      "^close ([0-9]+) July ([0-9]+)$",
+      "\\2年7月\\1日收盘"
+    ],
+    [
+      "^before ([0-9]+) August ([0-9]+)$",
+      "\\2年8月\\1日开盘前"
+    ],
+    [
+      "^close ([0-9]+) August ([0-9]+)$",
+      "\\2年8月\\1日收盘"
+    ],
+    [
+      "^before ([0-9]+) September ([0-9]+)$",
+      "\\2年9月\\1日开盘前"
+    ],
+    [
+      "^close ([0-9]+) September ([0-9]+)$",
+      "\\2年9月\\1日收盘"
+    ],
+    [
+      "^before ([0-9]+) October ([0-9]+)$",
+      "\\2年10月\\1日开盘前"
+    ],
+    [
+      "^close ([0-9]+) October ([0-9]+)$",
+      "\\2年10月\\1日收盘"
+    ],
     [
       "^Part (\\d+) \\\\textperiodcentered\\\\ Chapter (\\d+)$",
       "第\\1部分 \\\\textperiodcentered\\\\ 第\\2章"

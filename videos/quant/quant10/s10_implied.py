@@ -60,14 +60,7 @@ class Implied(VoiceoverScene, ThreeDScene):
                    rf"{len(k)} out-of-the-money quotes from {d['q0']['n_trades']:,} trades".replace(",", "{,}", 1),
                    font_size=18).to_corner(DR, buff=0.25)
         with self.voiceover(
-            "Now invert every option traded that morning, and plot each implied volatility against its strike, "
-            "measured as the log of strike over forward, one curve per expiry. Pause and predict: if the "
-            "Black-Scholes world were the real one, what shape would these curves have? <bookmark mark='a'/> "
-            "Flat: the underlying has one volatility, whatever strike you ask about. Instead they smile, and "
-            "lean. Out-of-the-money puts, to the left, are dearer than calls the same distance away, and both "
-            "wings rise above the middle. The smile prices tail payoffs differently from a constant-volatility lognormal model. It concerns risk-neutral prices, not an identified physical crash probability. And it is not bookkeeping: chapter thirteen shows "
-            "the much smaller skew a forgotten forward would draw. <bookmark mark='b'/> The dashed lines are the "
-            "best Black-Scholes can do: one volatility per expiry."
+            f"""Reconstruct IVs from the mark prices attached to trades, using the parity-fitted forward ratio; take each instrument's median and retain out-of-the-money instruments. The Surface contains {len(k)} instrument quotes across {len(d['flat_fit'])} expiries. Here we show {len(show)} selected expiries with absolute log strike over forward at most point eight. <bookmark mark='a'/> A constant-volatility model gives a flat smile at each maturity. The observed curves bend and lean, pricing tail payoffs differently. They concern risk-neutral valuation, not identified physical crash probabilities. Carry conventions also matter, as the next chapter shows. <bookmark mark='b'/> Dashed lines are the vega-weighted flat-IV fits."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             for grp, lb in zip(groups, labels_):

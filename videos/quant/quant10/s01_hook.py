@@ -75,7 +75,7 @@ class Hook(VoiceoverScene):
         legend_.to_corner(DR, buff=0.45)
         src = note(rf"BTC/USDT hourly, Binance; implied volatility: Deribit DVOL; from {ts_date(b['pick_start'])}",
                    font_size=17, color=GREY_B).to_corner(UR, buff=0.2)
-        call = VGroup(label(r"Sold: a 30-day call, strike = today's price", font_size=26),
+        call = VGroup(label(r"Model dollar call: 30 days, strike = today's spot", font_size=26),
                       VGroup(label(r"priced at", font_size=24, color=GREY_A),
                              MathTex(rf"\sigma_i = {100 * b['pick_iv']:.0f}\%", font_size=30, color=IMP),
                              label(r"a year:", font_size=24, color=GREY_A),
@@ -123,7 +123,7 @@ class Hook(VoiceoverScene):
     def the_question(self, b):
         iv = MathTex(rf"\sigma_i = {100 * b['pick_iv']:.0f}\%", font_size=54, color=IMP)
         rv = MathTex(rf"\sigma_r = {100 * b['pick_rv']:.0f}\%", font_size=54, color=REA)
-        ivl = label(r"the volatility the market charged", font_size=26, color=IMP)
+        ivl = label(r"the DVOL proxy used in the model", font_size=26, color=IMP)
         rvl = label(r"the volatility Bitcoin delivered", font_size=26, color=REA)
         left = VGroup(iv, ivl).arrange(DOWN, buff=0.2)
         right = VGroup(rv, rvl).arrange(DOWN, buff=0.2)

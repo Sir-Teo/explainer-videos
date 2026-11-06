@@ -46,8 +46,8 @@ class BTC(VoiceoverScene):
                       (REA, r"realized over the next 30 days (Binance, hourly)")], font_size=22)
         leg.move_to(ax.c2p(2024.9, 1.42))
         setup = wrapped_label(
-            rf"Every day at 08:00 UTC from {ts_date(b['start'][0], '%B %Y')}: sell a 30-day at-the-money call at "
-            rf"DVOL, hedge every hour until expiry. {b['n']:,} trades.".replace(",", "{,}", 1), 6.4, 24, GREY_A)
+            rf"DVOL-priced dollar-call model: {b['n']:,} overlapping 30-day windows; hourly spot hedges.",
+            6.4, 24, GREY_A)
         setup.to_corner(UR, buff=0.35)
         with self.voiceover(
             f"Does the mechanism appear in historical prices? Every day at eight from {ts_date(b['start'][0], '%B %Y')}, price a hypothetical thirty-day dollar call using DVOL and hedge hourly on Binance: {b['n']:,} overlapping windows. DVOL is a smile-wide index, rather than an executable ATM call quote. <bookmark mark='a'/> Orange is starting DVOL; teal is realized volatility over the following thirty days, both aligned at the start. The window averages are {100 * b['mean_iv']:.0f} and {100 * b['mean_rv']:.0f} percent. <bookmark mark='b'/> Realized volatility sometimes surges above the proxy. This is a historical model experiment, with zero rates and no funding or execution constraints. The implementation aligns hourly DVOL closes at the supplied candle timestamps and interpolates twelve missing spot hours. Entry-time data availability has not been established, so it is not a point-in-time strategy backtest."
@@ -110,13 +110,13 @@ class BTC(VoiceoverScene):
         bars = VGroup(*[Rectangle(width=g.ax.x_length / 54 * 0.94, height=max(g.ax.y_length * v, 0.002), stroke_width=0,
                                   fill_color=GAIN if (e[i] + e[i + 1]) / 2 > 0 else LOSS, fill_opacity=0.85)
                         .move_to(g.ax.c2p((e[i] + e[i + 1]) / 2, 0), aligned_edge=DOWN) for i, v in enumerate(h)])
-        over_lab = label(rf"+{over} months above {hi}", font_size=22, color=GAIN).move_to(g.ax.c2p(3.7, 0.95))
+        over_lab = label(rf"+{over} windows above {hi}", font_size=22, color=GAIN).move_to(g.ax.c2p(3.7, 0.95))
         gap_pts = 100 * (im["dvol_ref"] - im["atm30"])
         adj = b["mean_cost"] - b["mean_vega"] * (im["dvol_ref"] - im["atm30"])
         stats = VGroup(
             MathTex(rf"\text{{mean}}\ {b['mean']:+.2f}", font_size=34, color=GAIN),
             label(rf"on an average premium of {np.mean(b['premium']):.2f}", font_size=22, color=GREY_A),
-            MathTex(rf"\text{{winning months}}\ {100 * b['p_win']:.0f}\%", font_size=32),
+            MathTex(rf"\text{{positive windows}}\ {100 * b['p_win']:.0f}\%", font_size=32),
             MathTex(rf"\text{{worst}}\ {b['worst']:+.2f},\ \text{{best}}\ {b['best']:+.2f}", font_size=30),
             label(rf"non-overlapping months: {b['nonoverlap_mean']:+.2f} $\pm$ {b['nonoverlap_se']:.2f} "
                   rf"(n = {b['nonoverlap_n']})", font_size=22, color=GREY_A),

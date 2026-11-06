@@ -220,12 +220,9 @@ class Research(VoiceoverScene):
                 cell.move_to([hx[i], 1.9 - 0.62 * j, 0])
             row[0].align_to(np.array([hx[0] - 2.8, 0, 0]), LEFT)
             tab.add(row)
-        foot = wrapped_label(rf"{b['n_options']} at-the-money calls written every 15 days on BTCUSDT one-minute closes, "
-                             r"2019--2020, each priced and hedged at the volatility its own month realized (hindsight, so "
-                             r"only the timing of trades is tested); errors in \% of the premium, positive when the hedger keeps "
-                             r"money. Both rules end with a positive mean; its sources, among them microstructure noise in "
-                             r"one-minute realized variance (Part 5), are not separated here. The comparison is of the "
-                             r"spread",
+        foot = wrapped_label(rf"{b['n_options']} overlapping 30-day calls, every 15 days in 2019--2020. "
+                             r"Hindsight realized volatility and a band tuned on all tested windows; no costs. "
+                             r"Errors in \% of model premium; positive means money kept. The nonzero means remain unexplained.",
                              11.8, 16, GREY_A).to_edge(DOWN, buff=0.4)
         f, l_ = b["rows"][0], b["rows"][1]
         with self.voiceover(
@@ -241,11 +238,8 @@ class Research(VoiceoverScene):
 
     def open_problems(self):
         cards = VGroup(
-            desk_question(r"research: costs and timing together", r"with proportional costs the optimal rule is a band too "
-                          r"(Whalley and Wilmott, Part 11), but with width $\propto \varepsilon^{1/3}$; study a specified portfolio, cost model and trade budget; existing cost-sensitive theories are starting points", width=12.4, font_size=18),
-            desk_question(r"research: beyond the leading order", r"the bound is asymptotic; at a few dozen trades, where desks "
-                          r"live, the gap to the limit is visible (2.8 against 2.64 here), and corrections are known only "
-                          r"in special cases", width=12.4, font_size=18),
+            desk_question(r"research: costs and timing together", r"in Whalley--Wilmott's small-cost setting (Part 11), the asymptotic no-trade width scales as $\varepsilon^{1/3}$; study a specified portfolio, objective, cost model and trade budget", width=12.4, font_size=18),
+            desk_question(r"research: beyond the leading order", r"the benchmark is asymptotic; finite-frequency error is visible (2.8 against 2.64 here). Measure corrections and uncertainty under a specified model", width=12.4, font_size=18),
             desk_question(r"research: rough and jumpy prices", r"with jumps the optimal times change (Rosenbaum and Tankov "
                           r"2014); specify the risk criterion, admissible rules and model before seeking an efficient extension",
                           width=12.4, font_size=18),
@@ -264,6 +258,7 @@ class Research(VoiceoverScene):
     def question(self):
         q = pause_card(r"equal-time hedging needs 256 trades to reach some error. Using the constants 11.9 and 2.64, "
                        r"roughly how many trades does the optimal band need for the same error?")
+        q.move_to(UP * 0.8)
         with self.voiceover(
             "Pause and predict. Equal-time hedging needs two hundred and fifty-six trades to reach some error. Using the "
             "two constants, eleven point nine and two point six four, about how many does the optimal band need?"
@@ -271,7 +266,6 @@ class Research(VoiceoverScene):
             self.play(FadeIn(q))
         self.wait(2)
         answer = MathTex(r"N_{\rm band} \approx 256\,\frac{2.64}{11.9} = 56.8 \approx 57", font_size=38, color=GAIN)
-        q.shift(UP * 0.8)
         answer.next_to(q, DOWN, buff=0.6)
         with self.voiceover("Match variance C divided by N. The band needs 256 times 2.64 divided by 11.9, about 57 trades in the asymptotic approximation."):
             self.play(FadeIn(answer))

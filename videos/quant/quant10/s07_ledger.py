@@ -225,14 +225,16 @@ class Ledger(VoiceoverScene):
     # ------------------------------------------------------------------
     def distributions(self, L):
         rows = L["rows"]
-        lo, hi = -4.5, 3.5
+        lo, hi = -5.5, 3.5
         panels = VGroup()
+        hist_peak = max(np.histogram(np.asarray(L[f"pnl_many_{j}"]), bins=60, range=(lo, hi))[0].max()
+                        for j in range(3))
         for j, col in ((0, GAIN), (1, GREY_B), (2, LOSS)):
             pnl = np.asarray(L[f"pnl_many_{j}"], float)
             g = axes([lo, hi], [0, 1.05], x_length=3.8, y_length=2.2, xlabel=r"P\&L at expiry",
                      xticks=[-4, -2, 0, 2], font_size=18)
-            h, e = np.histogram(np.clip(pnl, lo, hi), bins=60, range=(lo, hi))
-            h = h / h.max()
+            h, e = np.histogram(pnl, bins=60, range=(lo, hi))
+            h = h / hist_peak
             bars = VGroup(*[Rectangle(width=g.ax.x_length / 60 * 0.95, height=max(g.ax.y_length * v, 0.002),
                                       stroke_width=0, fill_color=col, fill_opacity=0.85)
                             .move_to(g.ax.c2p((e[i] + e[i + 1]) / 2, 0), aligned_edge=DOWN)
@@ -245,7 +247,7 @@ class Ledger(VoiceoverScene):
             stat.next_to(g, DOWN, buff=0.15)
             panels.add(VGroup(g, bars, zero, head, stat))
         panels.arrange(RIGHT, buff=0.45).shift(UP * 0.4)
-        cap = label(r"20,000 paths at each realized volatility, all hedged at $\sigma_i = 20\%$", font_size=24,
+        cap = label(r"20,000 paths per volatility; hedge $\sigma_i=20\%$; common bins and count scale", font_size=24,
                     color=GREY_A).to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "Pause and predict: when realized equals implied, does every path end at zero? Twenty thousand paths "
