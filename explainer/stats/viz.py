@@ -3187,11 +3187,16 @@ class ProofMap(VGroup):
             a, b = self.boxes[k], self.boxes[k + 1]
             if abs(a.get_y() - b.get_y()) < 1e-6:
                 ar = Arrow(a.get_right(), b.get_left(), buff=0.05, stroke_width=2.5, color=GREY_C, max_tip_length_to_length_ratio=0.35)
-            else:  # wrap: from the end of one row down to the start of the next
-                p0 = a.get_bottom() + DOWN * 0.32
-                ar = VGroup(Line(a.get_bottom() + DOWN * 0.3, p0, stroke_width=2.5, color=GREY_C).set_opacity(0),
-                            Arrow(p0 + LEFT * 0.0, b.get_top() + UP * 0.02, buff=0.05, stroke_width=2.5, color=GREY_C,
-                                  max_tip_length_to_length_ratio=0.08))
+            else:  # wrap: an elbow from the end of one row, under its tags, to the start of the next
+                gap = a.get_bottom()[1] - b.get_top()[1]
+                y1 = a.get_bottom()[1] - 0.62 * gap
+                p0 = np.array([a.get_right()[0] + 0.12, a.get_y(), 0.0])
+                p1 = np.array([p0[0], y1, 0.0])
+                p2 = np.array([b.get_x(), y1, 0.0])
+                ar = VGroup(Line(a.get_right(), p0, stroke_width=2.5, color=GREY_C), Line(p0, p1, stroke_width=2.5, color=GREY_C),
+                            Line(p1, p2, stroke_width=2.5, color=GREY_C),
+                            Arrow(p2, b.get_top(), buff=0.0, stroke_width=2.5, color=GREY_C, max_tip_length_to_length_ratio=0.5,
+                                  max_stroke_width_to_length_ratio=20))
             self.arrows.add(ar)
         self.add(self.boxes, self.texts, self.tags, self.arrows)
         self.move_to(ORIGIN)
@@ -3207,3 +3212,63 @@ class ProofMap(VGroup):
         c = color or S.KEPT
         return AnimationGroup(*[b.animate.set_stroke(c, width=3).set_fill(c, opacity=0.14) for b in self.boxes],
                               *[a.animate.set_color(c) for a in self.arrows], *[t.animate.set_color(c) for t in self.tags])
+
+
+class SelectionWindow(VGroup):
+    """Conditioning on selection, drawn (Part 56): on axes ``ax``, the law N(mu, sigma^2) of a statistic, faint; the
+    selection region [a, b] it was observed in, shaded; the same law truncated to that region and renormalized, bold;
+    the observed value y; and the truncated law's upper tail beyond y, filled, whose area is the selective pivot.
+    ``at(mu)`` returns that picture for a given mu (so a scene can slide mu and watch the pivot change), and
+    ``pivot(mu)`` its value."""
+
+    def __init__(self, ax, a: float, b: float, y: float, sigma: float = 1.0, x_range=None, full_color=None,
+                 trunc_color=None, obs_color=None, region_color=None, height_scale: float = 1.0):
+        super().__init__()
+        self.ax, self.a, self.b, self.y, self.sigma = ax, a, b, y, sigma
+        lo, hi = x_range if x_range is not None else (ax.x_range[0], ax.x_range[1])
+        self.lo, self.hi = lo, hi
+        self.full_color = full_color or GREY_B
+        self.trunc_color = trunc_color or S.EST
+        self.obs_color = obs_color or S.ACCENT
+        self.region_color = region_color or S.ALT
+        self.k = height_scale
+        top = ax.y_range[1]
+        ra, rb = max(a, lo), min(b, hi)
+        self.region = Rectangle(width=ax.c2p(rb, 0)[0] - ax.c2p(ra, 0)[0], height=ax.c2p(0, top)[1] - ax.c2p(0, 0)[1],
+                                stroke_width=0, fill_color=self.region_color, fill_opacity=0.10)
+        self.region.move_to([(ax.c2p(ra, 0)[0] + ax.c2p(rb, 0)[0]) / 2, (ax.c2p(0, 0)[1] + ax.c2p(0, top)[1]) / 2, 0])
+        self.obs = DashedLine(ax.c2p(y, 0), ax.c2p(y, top), color=self.obs_color, stroke_width=3)
+        self.add(self.region, self.obs)
+
+    def _mass(self, mu):
+        from scipy import stats as _st
+
+        return float(_st.norm.cdf((self.b - mu) / self.sigma) - _st.norm.cdf((self.a - mu) / self.sigma))
+
+    def pivot(self, mu) -> float:
+        from explainer.stats.kit.selective import truncnorm_sf
+
+        return truncnorm_sf(self.y, mu, self.sigma, self.a, self.b)
+
+    def at(self, mu) -> VGroup:
+        from scipy import stats as _st
+
+        ax = self.ax
+        top = ax.y_range[1]
+        xs = np.linspace(self.lo, self.hi, 400)
+        f = _st.norm.pdf(xs, mu, self.sigma) * self.k
+        full = VMobject(stroke_color=self.full_color, stroke_width=2.5, stroke_opacity=0.7)
+        full.set_points_as_corners([ax.c2p(x, min(v, top)) for x, v in zip(xs, f)])
+        m = max(self._mass(mu), 1e-300)
+        inside = (xs >= self.a) & (xs <= self.b)
+        g = np.where(inside, f / m, 0.0)
+        tr = VMobject(stroke_color=self.trunc_color, stroke_width=4)
+        tr.set_points_as_corners([ax.c2p(x, min(v, top)) for x, v in zip(xs, g)])
+        tx = xs[(xs >= max(self.y, self.a)) & (xs <= self.b)]
+        if len(tx) >= 2:
+            tg = _st.norm.pdf(tx, mu, self.sigma) * self.k / m
+            pts = [ax.c2p(tx[0], 0)] + [ax.c2p(x, min(v, top)) for x, v in zip(tx, tg)] + [ax.c2p(tx[-1], 0)]
+            tail = Polygon(*pts, stroke_width=0, fill_color=self.trunc_color, fill_opacity=0.35)
+        else:
+            tail = VGroup()
+        return VGroup(full, tr, tail)
