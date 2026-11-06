@@ -200,9 +200,8 @@ class Hook(VoiceoverScene):
             "and in 2017 the learning algorithm we will test. <bookmark mark='c'/> One tree, rooted in expected utility: how "
             "much to bet, how to decide over time, against a crowd, how people really decide, and how a machine learns it."
         ) as vo:
-            self.play(Create(line), run_time=1)
-            for k in range(4):
-                self.play(FadeIn(dots[k], scale=1.5), FadeIn(labs[k], shift=UP * 0.1), run_time=0.6)
+            self.play(Create(line), FadeIn(dots[:4], scale=1.5),
+                      FadeIn(labs[:4], shift=UP * 0.1), run_time=0.6)
             vo.wait_until("a")
             for k in range(4, 8):
                 self.play(FadeIn(dots[k], scale=1.5), FadeIn(labs[k], shift=UP * 0.1), run_time=0.6)
