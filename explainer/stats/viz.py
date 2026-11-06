@@ -3008,3 +3008,75 @@ class LowerBoundPacking(VGroup):
                     edges.add(Line(self._p(verts[a]), self._p(verts[b]), color=color or GREY_B, stroke_width=1.8))
         dots = VGroup(*[Dot(self._p(v), radius=0.08, color=color or S.ACCENT) for v in verts])
         return VGroup(edges, dots)
+
+
+class SphereShell(VGroup):
+    """High-dimensional geometry drawn in the plane (Part 51).  A circle of radius r stands for the sphere S^{n-1};
+    ``band(t)`` shades the equatorial band |x_1| <= t (in units of the radius), the set holding most of the sphere's
+    area in high dimension; ``shell(lo, hi)`` the annulus where a Gaussian vector's norm lives; ``cloud(coords)`` scatters
+    sample points given by (first coordinate, angle) pairs.  The picture is a schematic: the band's width is the true
+    half-width for the stated n, not a projection."""
+
+    def __init__(self, center=(0.0, 0.0, 0.0), radius: float = 2.2):
+        super().__init__()
+        self.c = np.asarray(center, float)
+        self.r = radius
+
+    def circle(self, color=None) -> Circle:
+        return Circle(radius=self.r, stroke_color=color or GREY_B, stroke_width=2.5).move_to(self.c)
+
+    def band(self, t: float, color=None, opacity: float = 0.35) -> VMobject:
+        """The region of the disc with |y| <= t r (the 'equator' is the horizontal diameter)."""
+        h = min(max(t, 0.0), 1.0) * self.r
+        a = math.asin(h / self.r)
+        right = [self.c + self.r * np.array([math.cos(u), math.sin(u), 0.0]) for u in np.linspace(-a, a, 40)]
+        left = [self.c + self.r * np.array([math.cos(u), math.sin(u), 0.0]) for u in np.linspace(math.pi - a, math.pi + a, 40)]
+        m = VMobject(fill_color=color or S.ACCENT, fill_opacity=opacity, stroke_color=color or S.ACCENT, stroke_width=1.5)
+        m.set_points_as_corners(right + left + [right[0]])
+        return m
+
+    def shell(self, lo: float, hi: float, color=None, opacity: float = 0.3) -> Annulus:
+        return Annulus(inner_radius=lo * self.r, outer_radius=hi * self.r, fill_color=color or S.EST, fill_opacity=opacity,
+                       stroke_width=0).move_to(self.c)
+
+    def cloud(self, x1, color=None, radius: float = 0.035, seed: int = 0) -> VGroup:
+        """Dots on the circle at heights x1 (in units of r), on a random side."""
+        rng = np.random.default_rng(seed)
+        x1 = np.clip(np.asarray(x1, float), -1, 1)
+        side = rng.choice([-1.0, 1.0], len(x1))
+        pts = [self.c + self.r * np.array([s * math.sqrt(1 - y * y), y, 0.0]) for s, y in zip(side, x1)]
+        return VGroup(*[Dot(p, radius=radius, color=color or S.TRUTH) for p in pts])
+
+
+class SpectrumBulk(VGroup):
+    """The random-matrix lab (Part 52): the spectrum of a sample covariance or Wigner matrix drawn on an axes ``ax``
+    (a manim Axes in data coordinates).  ``bars`` draws the eigenvalue histogram (the bulk); ``law`` the limiting
+    density over it (Marchenko-Pastur, the semicircle); ``edge`` a dashed line at an edge of the support;
+    ``spikes`` the eigenvalues that escape the bulk, as stems topped by dots; ``arrow`` a marker from a population
+    spike to the sample eigenvalue it becomes (the BBP map).  Heights of spikes are in the axes' y units."""
+
+    def __init__(self, ax):
+        super().__init__()
+        self.ax = ax
+
+    def bars(self, edges, heights, color=None, opacity: float = 0.55) -> VGroup:
+        return hist_bars(self.ax, edges, heights, color=color or S.ALT, opacity=opacity)
+
+    def law(self, x, f, color=None, stroke_width: float = 4) -> VMobject:
+        m = VMobject(stroke_color=color or S.TRUTH, stroke_width=stroke_width)
+        m.set_points_as_corners([self.ax.c2p(a, b) for a, b in zip(x, f)])
+        return m
+
+    def edge(self, x: float, height: float, color=None, stroke_width: float = 2.5) -> DashedLine:
+        return DashedLine(self.ax.c2p(x, 0), self.ax.c2p(x, height), color=color or S.TRUTH, stroke_width=stroke_width)
+
+    def spikes(self, xs, height: float, color=None, radius: float = 0.09) -> VGroup:
+        out = VGroup()
+        for x in xs:
+            out.add(VGroup(Line(self.ax.c2p(x, 0), self.ax.c2p(x, height), color=color or S.ACCENT, stroke_width=3),
+                           Dot(self.ax.c2p(x, height), radius=radius, color=color or S.ACCENT)))
+        return out
+
+    def arrow(self, x_from: float, x_to: float, y: float, color=None) -> Arrow:
+        return Arrow(self.ax.c2p(x_from, y), self.ax.c2p(x_to, y), buff=0.05, color=color or S.ACCENT, stroke_width=3,
+                     max_tip_length_to_length_ratio=0.15)
