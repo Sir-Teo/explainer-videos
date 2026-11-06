@@ -99,7 +99,7 @@ def compile_program(src: str | P.Program, level: int = 2, passes=None, rotate: b
     prog = P.parse(src) if isinstance(src, str) else copy.deepcopy(src)
     info = C.check(prog)
     m = L.lower(prog, info, rotate=level >= 2 if rotate is None else rotate)
-    if target == "os":
+    if target in ("os", "vm"):
         to_syscalls(m)
     stats: dict = {"ir_lowered": sum(f.count() for f in m.funcs)}
     middle(m, level, passes, stats)
@@ -107,6 +107,9 @@ def compile_program(src: str | P.Program, level: int = 2, passes=None, rotate: b
     if target == "os":
         from explainer.cs.os.ulib import ULIB
         parts = [f".org {origin:#x}", ULIB]
+    elif target == "vm":
+        from explainer.cs.os.ulib import ULIB_VM
+        parts = [f".org {origin:#x}", ULIB_VM]
     else:
         parts = [G.RUNTIME]
     mfs = []
@@ -117,6 +120,8 @@ def compile_program(src: str | P.Program, level: int = 2, passes=None, rotate: b
             G.cleanup(mf)
         parts.append(G.emit(mf))
         mfs.append(mf)
+    if target == "vm":
+        parts.append("        .align 4096")      # data on pages of its own
     parts.append(G.data_section(m.globals))
     asm = "\n".join(parts)
     prog_ = assemble(asm)

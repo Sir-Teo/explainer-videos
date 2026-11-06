@@ -61,7 +61,8 @@ RESERVED = {52: "cas", 53: "amoadd"}
 OPCODE = {m: op for op, (m, _) in ALL_OPS.items()}
 FORMAT = {m: f for _, (m, f) in ALL_OPS.items()}
 # control registers (Part 31): csrr rd, name  /  csrw name, rs
-CSR = {"status": 0, "epc": 1, "cause": 2, "tvec": 3, "scratch": 4, "timer": 5, "tval": 6, "lo": 7, "hi": 8}
+CSR = {"status": 0, "epc": 1, "cause": 2, "tvec": 3, "scratch": 4, "timer": 5, "tval": 6, "lo": 7, "hi": 8,
+       "ptbr": 9}  # ptbr: the page-table root (Part 32's MMU)
 CSR_NAMES = {v: k for k, v in CSR.items()}
 BASE = tuple(m for _, (m, _) in sorted(OPS.items()) if m not in M_EXT)
 

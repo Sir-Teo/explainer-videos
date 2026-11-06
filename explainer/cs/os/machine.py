@@ -83,6 +83,9 @@ class OSMachine(Machine):
             self._dec[pc] = d
         return d
 
+    def _csr_written(self, i: int) -> None:
+        """A hook for machines with more control registers (Part 32's MMU flushes its TLB on a new page table)."""
+
     # -- traps ------------------------------------------------------------------------
     def trap(self, cause: int, tval: int = 0) -> None:
         c = self.csr
@@ -147,7 +150,7 @@ class OSMachine(Machine):
                 if user:
                     raise Trap(ILLEGAL, w)
                 if op == "eret":
-                    self.events.append((self.steps, ERET, c[EPC], 1))
+                    self.events.append((self.steps, ERET, c[EPC], c[9] if len(c) > 9 else 1))
                     s = c[STATUS]
                     self.mode = 1 if s & PM else 0
                     c[STATUS] = (IE if s & PIE else 0) | PIE
@@ -160,6 +163,7 @@ class OSMachine(Machine):
                     c[imm] = self.regs[rs1] & MASK
                     if imm == TIMER_CSR:
                         self.pending = False
+                    self._csr_written(imm)
                     self.pc = pc + 4
                 self.steps += 1
                 self.ksteps += 1
