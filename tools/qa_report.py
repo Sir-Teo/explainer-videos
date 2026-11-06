@@ -1,5 +1,9 @@
 #!/usr/bin/env python
-"""Build an offline index of chapter QA evidence: python tools/qa_report.py."""
+"""Build an offline index of chapter QA evidence.
+
+    python tools/qa_report.py --series stats
+    python tools/qa_report.py stats1
+"""
 
 import html
 import hashlib
@@ -36,7 +40,11 @@ def audio_checks_completed(audio):
             and not any(line.get("issues") or line.get("asr_review_leads") for line in lines))
 
 
-def main():
+def main(video=None, series="ai"):
+    from explainer.paths import video_dir, video_package
+
+    if video:
+        series = video_dir(video).parent.name
     review_file = OUT / "review.json"
     review = json.loads(review_file.read_text()) if review_file.exists() else {}
     reviewed = review.get("manual_contact_sheet_review", {})
@@ -49,9 +57,9 @@ def main():
         return image.exists() and proof.get("sheet_sha256") == hashlib.sha256(image.read_bytes()).hexdigest()
     blocks, checked, total, issues = [], 0, 0, 0
     visual_checked, motion_checked, motion_clean, audio_checked, audio_clean = 0, 0, 0, 0, 0
-    for video in all_videos("ai"):
+    for video in ([video] if video else all_videos(series)):
         key = fingerprint(video)
-        manifest = importlib.import_module(f"videos.ai.{video}.manifest")
+        manifest = importlib.import_module(f"{video_package(video)}.manifest")
         rows = []
         for lang in ("en", "zh"):
             for _, scene, title in manifest.SCENES:
@@ -142,13 +150,14 @@ def main():
                       f'</thead><tbody>{"".join(rows)}</tbody></table></details>')
     OUT.mkdir(parents=True, exist_ok=True)
     page = '''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width">
-<title>AI series QA</title><style>
+<title>Chapter QA</title><style>
 body{font:16px/1.5 system-ui;margin:40px auto;max-width:1250px;padding:0 20px;background:#0e1117;color:#e6edf3}
 h1{font-size:32px}p{max-width:950px;color:#b7c2ce}details{border:1px solid #334155;border-radius:8px;margin:12px 0}
 summary{padding:18px;cursor:pointer;font-weight:650}table{border-collapse:collapse;width:100%;font-size:14px}
 td,th{text-align:left;padding:12px;border-top:1px solid #334155;vertical-align:top}small{display:block;color:#9baabc}
 a{color:#8ecaff}.good{color:#9ad886}.pending{color:#e5ba75}th{color:#9baabc}
-</style><h1>AI series QA evidence</h1>'''
+</style>'''
+    page += f'<h1>{html.escape(series.upper())} series QA evidence</h1>'
     page += (f'<p>Endpoint preflight: {checked} of {total} language/chapter cases attempted; '
              f'{total - issues} current cases without automated warnings; {issues} untested or needing follow-up.</p>'
              f'<p>Sampled-frame review: {visual_checked}/{total} current endpoint sheets. '
@@ -179,10 +188,16 @@ a{color:#8ecaff}.good{color:#9ad886}.pending{color:#e5ba75}th{color:#9baabc}
                  f'already rendered chapters have matching audio for {html.escape(audio["voice"])}. '
                  'This checks existing audio files; speech content and narrated synchronization still require review.</p>')
     page += "".join(blocks) + "</html>"
-    path = OUT / "index.html"
+    path = OUT / ("index.html" if series == "ai" else f"index_{series}.html")
     path.write_text(page)
     print(path)
 
 
 if __name__ == "__main__":
-    main()
+    import argparse
+
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("video", nargs="?")
+    parser.add_argument("--series", default="ai")
+    args = parser.parse_args()
+    main(args.video, args.series)
