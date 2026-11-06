@@ -2094,3 +2094,69 @@ class PValueSea(VGroup):
                          fill_color=interpolate_color(ManimColor("#141a26"), ManimColor(S.ACCENT), t ** 0.6))
                   .move_to(np.asarray(center) + np.array([(c - cols / 2) * cell, (rows / 2 - r) * cell, 0])))
         return g
+
+
+class ScoreLadder(VGroup):
+    """The score ladder (Part 34): n calibration scores, sorted, as a row of bars; the conformal rank
+    k = ceil((n + 1)(1 - alpha)) picked out, and the threshold q drawn across the ladder.  ``new_slot(s)`` is where a
+    new score s would land among the n + 1 (its rank, which is uniform under exchangeability); ``threshold(color)``
+    the dashed line at q; ``kept()`` the bars at or below q, recoloured; ``rung(k)`` one bar."""
+
+    def __init__(self, scores, alpha: float = 0.1, width: float = 8.0, height: float = 3.2, center=ORIGIN,
+                 smax: float | None = None, bar_color=None, font_size: int = 20, show_ranks: bool = True):
+        super().__init__()
+        from explainer.analysis import label
+
+        self.s = np.sort(np.asarray(scores, float))
+        self.n = len(self.s)
+        self.alpha = alpha
+        self.kq = int(np.ceil((self.n + 1) * (1 - alpha)))
+        self.q = float(self.s[self.kq - 1]) if self.kq <= self.n else float("inf")
+        self.smax = smax if smax is not None else float(self.s[-1]) * 1.08
+        self.w, self.h = width, height
+        self.c = np.asarray(center, float)
+        self.origin = self.c + np.array([-width / 2, -height / 2, 0])
+        self.slot = width / (self.n + 1)
+        self.base = Line(self.origin, self.origin + RIGHT * width, color=GREY_C, stroke_width=2)
+        self.bars = VGroup(*[self._bar(i, v, bar_color or GREY_B) for i, v in enumerate(self.s)])
+        self.add(self.base, self.bars)
+        self.ranks = VGroup()
+        if show_ranks and self.n <= 40:
+            for i in range(self.n):
+                self.ranks.add(label(rf"{i + 1}", font_size=font_size - 4, color=GREY_B)
+                               .next_to(self.base.point_from_proportion((i + 0.5) / (self.n + 1)), DOWN, buff=0.1))
+            self.add(self.ranks)
+
+    def x_of(self, i: float) -> float:
+        return float(self.origin[0] + self.slot * (i + 0.5))
+
+    def y_of(self, v: float) -> float:
+        return float(self.origin[1] + self.h * min(v, self.smax) / self.smax)
+
+    def _bar(self, i, v, color):
+        h = max(1e-3, self.h * min(v, self.smax) / self.smax)
+        return Rectangle(width=self.slot * 0.72, height=h, stroke_width=0, fill_color=color, fill_opacity=0.85) \
+            .move_to([self.x_of(i), self.origin[1], 0], aligned_edge=DOWN)
+
+    def rung(self, k: int | None = None, color=None) -> Rectangle:
+        k = self.kq if k is None else k
+        return self.bars[k - 1].copy().set_fill(color or S.ACCENT, 1.0)
+
+    def kept(self, color=None) -> VGroup:
+        return VGroup(*[b.copy().set_fill(color or S.KEPT, 0.9) for b, v in zip(self.bars, self.s) if v <= self.q])
+
+    def threshold(self, color=None, stroke_width: float = 3) -> DashedLine:
+        y = self.y_of(self.q) if np.isfinite(self.q) else self.origin[1] + self.h
+        return DashedLine([self.origin[0], y, 0], [self.origin[0] + self.w, y, 0], color=color or S.ACCENT,
+                          stroke_width=stroke_width, dash_length=0.12)
+
+    def rank_of(self, s_new: float) -> int:
+        """Where a new score lands: the number of calibration scores below it (0..n)."""
+        return int(np.sum(self.s < s_new))
+
+    def new_slot(self, s_new: float, color=None) -> Rectangle:
+        """A bar for a new score, placed in the gap it falls into (between bar r and bar r + 1)."""
+        r = self.rank_of(s_new)
+        h = max(1e-3, self.h * min(s_new, self.smax) / self.smax)
+        return Rectangle(width=self.slot * 0.28, height=h, stroke_width=0, fill_color=color or S.TREAT,
+                         fill_opacity=0.95).move_to([self.origin[0] + self.slot * r, self.origin[1], 0], aligned_edge=DOWN)
