@@ -1,0 +1,133 @@
+from __future__ import annotations
+
+from videos.stats.stats60.common import *  # noqa: F403
+
+
+class OpenProblems(LectureMixin, VoiceoverScene):
+    def construct(self):
+        self.card_voiceover("Chapter eleven. Open problems in robustness and distribution shift.", 11, r"Open problems",
+                            r"Where the guarantees stop")
+        self.map_()
+        self.op_gaps()
+        self.op_which()
+        self.op_radius()
+        self.op_deep()
+        self.op_inference()
+        self.problems()
+
+    def map_(self):
+        hdr = [r"threat", r"assumption", r"method", r"guarantee"]
+        body = [
+            [r"$\varepsilon$ of the data adversarial", r"Gaussian inliers", r"depth; \ the filter", r"$O(\varepsilon)$, \ free of $d$"],
+            [r"most data adversarial", r"$\alpha$ inliers", r"list decoding", r"a list, \ $O(1/\sqrt\alpha)$"],
+            [r"heavy tails", r"two moments", r"median of means", r"sub-Gaussian width"],
+            [r"covariate shift", r"$P(y \mid x)$ fixed, \ overlap", r"importance weights", r"coverage kept"],
+            [r"label shift", r"$P(x \mid y)$ fixed", r"BBSE, \ EM", r"consistent prevalence"],
+            [r"unknown shift", r"$Q$ in a ball", r"DRO", r"a risk certificate"],
+            [r"interventions", r"causal structure", r"ICP, \ anchors", r"robust to anchor shifts"],
+        ]
+        cols = [GREY_B, BADC, BADC, DEPTHC, TGTC, TGTC, FIXC, FIXC]
+        tab = table_rows([hdr] + body, font_size=24, col_buff=0.6, row_buff=0.28, colors=cols).move_to([0, 0.1, 0])
+        if tab.width > 13.4:
+            tab.width = 13.4
+        with self.voiceover(
+            "<bookmark mark='a'/> The part in one table: each threat, the assumption that tames it, the method, and what it "
+            "guarantees. <bookmark mark='b'/> A small adversarial fraction, against Gaussian inliers: depth and the filter, "
+            "with error free of the dimension. A majority of adversarial points: a list. Heavy tails: median of means. "
+            "Covariate shift, with the conditional law fixed and overlap: importance weights. Label shift: BBSE and EM. An "
+            "unknown shift in a ball: distributionally robust optimization. And interventions on a causal system: invariance "
+            "and anchors."
+        ) as vo:
+            self.play(FadeIn(tab[0]))
+            vo.wait_until("a")
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in tab[1:]], lag_ratio=0.6), run_time=18.0)
+        self.wait(1.0)
+        self.clear_scene()
+
+    def op_gaps(self):
+        self.lad_voiceover(
+            "<bookmark mark='a'/> Problem one: what can be computed. <bookmark mark='b'/> For Gaussian means, the efficient "
+            "error epsilon root log one over epsilon is matched by a statistical query lower bound, from Diakonikolas, Kane "
+            "and Stewart in 2017, while the information-theoretic error is epsilon. <bookmark mark='c'/> For sparse means, "
+            "covariances in some norms, and mixtures, the gaps between what is possible and what is efficient are known "
+            "only in restricted models of computation. <bookmark mark='d'/> Which gaps are real, under standard complexity "
+            "assumptions, is open.",
+            [(r"\text{problem 1}", r":", r"\text{statistical-computational gaps}", 40),
+             (r"\text{Gaussian mean}", r":", r"\varepsilon \ \text{possible}; \ \varepsilon\sqrt{\log(1/\varepsilon)} \ \text{efficient (SQ)}", 36),
+             (r"\text{harder problems}", r":", r"\text{gaps only in restricted models}", 40),
+             (r"\text{open}", r":", r"\text{which gaps are real}", 40)],
+            [r"computation as a resource", r"Diakonikolas, \ Kane \& Stewart (2017)", r"sparse, \ covariance, \ mixtures", r"Part 59's hard phase, \ again"],
+            colors=[(3, NAIVEC)])
+
+    def op_which(self):
+        self.lad_voiceover(
+            "<bookmark mark='a'/> Problem two: which shift is it? <bookmark mark='b'/> Covariate shift and label shift need "
+            "opposite assumptions, and from unlabelled target data alone they cannot always be told apart. <bookmark "
+            "mark='c'/> Real shifts mix them, and add changes in the mechanism, as the ImageNet rebuild did, where no "
+            "simple assumption held. <bookmark mark='d'/> Identifying the kind of shift from data, or bounding the target "
+            "risk under every shift consistent with what one sees, partial identification in Manski's sense, is open.",
+            [(r"\text{problem 2}", r":", r"\text{identifying the kind of shift}", 40),
+             (r"\text{covariate vs label}", r":", r"\text{opposite assumptions}", 40),
+             (r"\text{real shifts}", r":", r"\text{mixtures, \ plus a changed mechanism}", 40),
+             (r"\text{open}", r":", r"\text{identification, \ or sharp bounds}", 40)],
+            [r"the modelling question", r"chapters 5--6", r"the hook", r"Part 37's Manski bounds"],
+            colors=[(3, NAIVEC)])
+
+    def op_radius(self):
+        self.lad_voiceover(
+            "<bookmark mark='a'/> Problem three: how large a ball? <bookmark mark='b'/> DRO's certificate is only as good "
+            "as its uncertainty set, and the radius is usually a guess. <bookmark mark='c'/> Choosing it by cross-validation "
+            "defeats the purpose, since the validation data come from the training distribution. <bookmark mark='d'/> "
+            "Principled, data-driven uncertainty sets, from several past environments, from domain knowledge, or from a "
+            "model of how the world drifts, with guarantees for the next environment, are open.",
+            [(r"\text{problem 3}", r":", r"\text{choosing the uncertainty set}", 40),
+             (r"\text{radius}", r":", r"\text{usually a guess}", 40),
+             (r"\text{cross-validation}", r":", r"\text{validates the wrong distribution}", 40),
+             (r"\text{open}", r":", r"\text{sets learned from past environments}", 40)],
+            [r"DRO's weak point", r"chapter 7", r"a circularity", r"meta-distributional"],
+            colors=[(3, NAIVEC)])
+
+    def op_deep(self):
+        self.lad_voiceover(
+            "<bookmark mark='a'/> Problem four: robustness at scale. <bookmark mark='b'/> The WILDS benchmark of Pang Wei "
+            "Koh and co-authors, in 2021, collected real shifts, across hospitals, cameras and countries, and found large "
+            "gaps between in-distribution and out-of-distribution accuracy that no method closed. <bookmark mark='c'/> One "
+            "regularity, found by John Miller and co-authors that year: across many models, out-of-distribution accuracy is "
+            "close to a linear function of in-distribution accuracy, on a probit scale. <bookmark mark='d'/> A theory of "
+            "why, and of which training choices move models off that line, is open, and is Part sixty-four's question.",
+            [(r"\text{problem 4}", r":", r"\text{robustness of large models}", 40),
+             (r"\text{WILDS}", r":", r"\text{real shifts, \ persistent gaps}", 40),
+             (r"\text{accuracy on the line}", r":", r"\Phi^{-1}(\text{OOD}) \approx a + b\,\Phi^{-1}(\text{ID})", 40),
+             (r"\text{open}", r":", r"\text{why, \ and how to beat the line}", 40)],
+            [r"beyond linear models", r"Koh et al. (2021)", r"Miller et al. (2021)", r"Part 64"],
+            colors=[(3, NAIVEC)])
+
+    def op_inference(self):
+        self.lad_voiceover(
+            "<bookmark mark='a'/> Problem five: inference, not just prediction, under shift. <bookmark mark='b'/> Chapter "
+            "five's interval kept its coverage with estimated weights in four covariates. In high dimensions, estimated "
+            "weights are noisy and extreme, and the effective sample size collapses. <bookmark mark='c'/> Doubly robust "
+            "estimators, balancing weights, and weighted conformal prediction each help, under their own assumptions. "
+            "<bookmark mark='d'/> Valid confidence statements for target parameters under estimated high-dimensional shift, "
+            "with honest accounting for weak overlap, are open.",
+            [(r"\text{problem 5}", r":", r"\text{inference under shift}", 40),
+             (r"\text{high dimensions}", r":", r"\text{extreme weights, \ small } n_{\text{eff}}", 40),
+             (r"\text{partial tools}", r":", r"\text{doubly robust, \ balancing, \ conformal}", 40),
+             (r"\text{open}", r":", r"\text{honest intervals with weak overlap}", 40)],
+            [r"beyond point predictions", r"chapter 5's price", r"Parts 41 and 57", r"Part 62's overlap problem"],
+            colors=[(3, NAIVEC)])
+
+    def problems(self):
+        self.list_voiceover(
+            "<bookmark mark='a'/> Five open problems. <bookmark mark='b'/> Which statistical-computational gaps in robust "
+            "estimation are real. <bookmark mark='c'/> Identifying the kind of shift, or bounding its damage. <bookmark "
+            "mark='d'/> Principled uncertainty sets. <bookmark mark='e'/> A theory of robustness for large models. "
+            "<bookmark mark='f'/> And honest inference under estimated shift.",
+            [(r"Open problems", S.ACCENT),
+             (r"1. \ statistical-computational gaps in robust estimation", WHITE),
+             (r"2. \ identifying the kind of shift, \ or sharp bounds", WHITE),
+             (r"3. \ principled uncertainty sets for DRO", WHITE),
+             (r"4. \ robustness and the accuracy line for large models", WHITE),
+             (r"5. \ honest inference under estimated shift", WHITE)],
+            buff=0.42, font_size=25, head_size=40)
