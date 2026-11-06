@@ -115,7 +115,7 @@ class Timeline(VoiceoverScene):
         for i, (nm, a, w, t) in enumerate(cands):
             txt = label(rf"{nm}, \ {t} h old", font_size=18, color=WHITE)
             feat = label(rf"${a:.2f} \times {w:.1f} \times e^{{-{t}/12}}$", font_size=18, color=GREY_A)
-            bar = Rectangle(width=max(0.05, 2.6 * sc[i] / max(sc)), height=0.24, stroke_width=0, fill_color=YES,
+            bar = Rectangle(width=max(0.05, 2.2 * sc[i] / max(sc)), height=0.24, stroke_width=0, fill_color=YES,
                             fill_opacity=0.85)
             val = label(f"{sc[i]:.2f}", font_size=17, color=YES)
             txt.move_to([-4.9, 0, 0])
@@ -133,7 +133,7 @@ class Timeline(VoiceoverScene):
         ill = note(r"illustrative posts and weights", font_size=16).next_to(hdr, UP, buff=0.1).to_edge(RIGHT,
                                                                                                     buff=0.5)
         side = wrapped_label(r"EdgeRank \ (Facebook, \ 2010): \ affinity $\times$ weight $\times$ time decay, \ "
-                             r"summed over a post's interactions", 3.0, font_size=18, color=HEAD).move_to([5.1, 1.2, 0])
+                             r"summed over a post's interactions", 2.6, font_size=18, color=HEAD).move_to([5.45, 1.2, 0])
         foot = wrapped_label(r"today: \ learned models predict each action \ (a like, \ a reply, \ a hide) \ "
                              r"from many features, \ Part 47's learning to rank; \ a cheap stage picks "
                              r"candidates, \ a heavy one orders the survivors", 12.4, font_size=19,
@@ -251,7 +251,7 @@ class Timeline(VoiceoverScene):
                           r"has applied it \ (Part 39's session guarantees)", 3.9, font_size=18, color=YES),
             wrapped_label(r"\textbf{3.} \ the app shows your own post itself, \ before the server does", 3.9,
                           font_size=18, color=HEAD),
-        ).arrange(RIGHT, buff=0.35, aligned_edge=UP).to_edge(DOWN, buff=1.0)
+        ).arrange(RIGHT, buff=0.35, aligned_edge=UP).move_to([0, -1.5, 0])
         foot = wrapped_label(r"only the writer needs this; \ everyone else may see the post a second late", 12.4,
                              font_size=19, color=GREY_A).to_edge(DOWN, buff=0.35)
         with self.voiceover(
