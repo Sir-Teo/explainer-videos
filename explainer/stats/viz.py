@@ -3528,3 +3528,52 @@ class TradeoffPlot(VGroup):
         alpha, beta = np.asarray(alpha, float), np.asarray(beta, float)
         b = float(np.interp(at, alpha, beta))
         return Line(self.ax.c2p(at, 1 - at), self.ax.c2p(at, b), color=color or WHITE, stroke_width=3)
+
+
+class Leaderboard(VGroup):
+    """A leaderboard with its error bars (Part 64): one row per model, sorted by score, each with a dot at the
+    estimate and a bar for its interval, on axes ``ax`` whose x-axis is the score and whose rows sit at y = 1, 2, ...
+    from the top.  ``rows()`` draws them; ``ties(level)`` brackets the models whose intervals overlap the leader's,
+    the honest rank-1 set; ``shift(new)`` returns the dots moved to new estimates (a re-run of the benchmark)."""
+
+    def __init__(self, ax, names, est, se, z: float = 1.96, colors=None):
+        super().__init__()
+        self.ax = ax
+        order = np.argsort(-np.asarray(est, float))
+        self.names = [names[k] for k in order]
+        self.est = np.asarray(est, float)[order]
+        self.se = np.asarray(se, float)[order]
+        self.z = z
+        self.colors = [colors[k] for k in order] if colors is not None else [S.EST] * len(order)
+        self.order = order
+
+    def y(self, k: int) -> float:
+        return len(self.names) - k
+
+    def rows(self, font_size: int = 22, radius: float = 0.08) -> VGroup:
+        from explainer.analysis import label
+
+        g = VGroup()
+        for k, (nm, e, s, c) in enumerate(zip(self.names, self.est, self.se, self.colors)):
+            yy = self.y(k)
+            bar = Line(self.ax.c2p(e - self.z * s, yy), self.ax.c2p(e + self.z * s, yy), color=c, stroke_width=5, stroke_opacity=0.55)
+            dot = Dot(self.ax.c2p(e, yy), radius=radius, color=c)
+            lab = label(nm, font_size=font_size, color=c).next_to(self.ax.c2p(bounds(self.ax)[0], yy), LEFT, buff=0.25)
+            g.add(VGroup(bar, dot, lab))
+        return g
+
+    def ties(self, color=None) -> VGroup:
+        """The models whose intervals reach the leader's lower end: a bracket over their rows."""
+        lo = self.est[0] - self.z * self.se[0]
+        k = int(np.sum(self.est + self.z * self.se >= lo))
+        top, bot = self.ax.c2p(bounds(self.ax)[0], self.y(0) + 0.4), self.ax.c2p(bounds(self.ax)[0], self.y(k - 1) - 0.4)
+        x = self.ax.get_right()[0] + 0.25
+        br = VGroup(Line([x, top[1], 0], [x, bot[1], 0], color=color or S.ACCENT, stroke_width=3),
+                    Line([x - 0.12, top[1], 0], [x, top[1], 0], color=color or S.ACCENT, stroke_width=3),
+                    Line([x - 0.12, bot[1], 0], [x, bot[1], 0], color=color or S.ACCENT, stroke_width=3))
+        br.count = k
+        return br
+
+    def shift(self, new_est) -> list:
+        new = np.asarray(new_est, float)[self.order]
+        return [self.ax.c2p(e, self.y(k)) for k, e in enumerate(new)]

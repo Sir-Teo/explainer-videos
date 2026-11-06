@@ -1453,3 +1453,21 @@ def onegin() -> "np.ndarray":
     lines = (Path(__file__).parent / "data" / "onegin_vc.txt").read_text().splitlines()
     bits = "".join(ln.strip() for ln in lines if ln and not ln.startswith("#"))
     return np.array([int(c) for c in bits], int)
+
+
+def compas() -> dict:
+    """ProPublica's COMPAS data (Angwin, Larson, Mattu & Kirchner, *Machine Bias*, 2016), Broward County, Florida, with
+    ProPublica's own filters (screening within 30 days of arrest, a known recidivism outcome, no ordinary-traffic
+    charges, a valid score): 6,172 defendants.  Only non-identifying columns are kept: age, sex, race, priors_count,
+    decile_score (1-10) and two_year_recid.  Source: github.com/propublica/compas-analysis, compas-scores-two-years.csv."""
+    import csv
+    from pathlib import Path
+
+    import numpy as np
+
+    with open(Path(__file__).parent / "data" / "compas.csv", newline="") as f:
+        rows = list(csv.DictReader(f))
+    out = {k: np.array([r[k] for r in rows]) for k in ("sex", "race")}
+    for k in ("age", "priors_count", "decile_score", "two_year_recid"):
+        out[k] = np.array([int(r[k]) for r in rows])
+    return out
