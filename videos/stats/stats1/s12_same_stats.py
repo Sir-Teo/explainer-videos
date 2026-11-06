@@ -14,7 +14,8 @@ class SameStats(VoiceoverScene):
 
     def card(self):
         card = chapter_card(11, r"Same statistics, different pictures", r"What do the numbers leave out?",
-                            lit=(1973, 2017), part=PART)
+                            lit={1973: r"Anscombe's quartet", 2017: r"Matejka--Fitzmaurice: same stats, different graphs"},
+                            part=PART)
         with self.voiceover("Chapter eleven. Same statistics, different pictures."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
@@ -41,7 +42,7 @@ class SameStats(VoiceoverScene):
         for r in tab:
             r[1].next_to(r[0], RIGHT, buff=0.4)
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([4.3, 0.3, 0])
-        same = label(r"the same in all four, \ to two decimals", font_size=26, color=S.ACCENT).next_to(tab, DOWN,
+        same = label(r"nearly equal in all four", font_size=26, color=S.ACCENT).next_to(tab, DOWN,
                                                                                                     buff=0.4)
         src = historical_tag(r"Anscombe (1973), \emph{The American Statistician}")
         descr = [r"a line, with noise", r"a curve", r"a line, and one outlier", r"no relation, and one lever"]
@@ -50,9 +51,10 @@ class SameStats(VoiceoverScene):
         with self.voiceover(
             "Everything so far has been a summary: a centre, a spread, a correlation. Here's what summaries can "
             "hide. <bookmark mark='a'/> In 1973 Francis Anscombe published four small datasets, eleven points each. "
-            "<bookmark mark='b'/> All four have the same mean of x and of y, the same variances, the same "
-            "correlation, and the same best-fitting line, to two decimal places. As far as these numbers can tell, "
-            "they're the same data. <bookmark mark='c'/> Now look. The first is what you'd imagine: a line with "
+            "<bookmark mark='b'/> All four have nearly the same means, variances, correlation, and best-fitting "
+            "line. The published observations are rounded, so the summaries differ slightly in their last digits. "
+            "As far as these summaries suggest, they're almost the same data. <bookmark mark='c'/> Now look. "
+            "The first is what you'd imagine: a line with "
             "noise. The second is a smooth curve, with no noise at all. The third is a perfect line, except for one "
             "point that drags the fit. And in the fourth, x doesn't vary at all, except for a single point that "
             "creates the entire correlation by itself. <bookmark mark='d'/> Anscombe's moral was blunt: make both "
@@ -125,8 +127,8 @@ class SameStats(VoiceoverScene):
             "five summary statistics, computed live from the points on the screen. <bookmark mark='b'/> Watch the "
             "points, and then watch the numbers. <bookmark mark='c'/> The cloud is becoming a word, and not one of "
             f"the five statistics moves in the second decimal place. <bookmark mark='d'/> And from the word to a "
-            "ring. Same means, same spreads, same correlation. Three completely different datasets that every "
-            "summary in this part so far would call identical."
+            "ring. Same means, same spreads, same correlation. Three completely different datasets that these "
+            "five summaries call identical. Other summaries, such as quantiles, can distinguish them."
         ) as vo:
             self.play(Create(box), FadeIn(dots, lag_ratio=0.01), FadeIn(rows), FadeIn(head), FadeIn(tag))
             vo.wait_until("b")

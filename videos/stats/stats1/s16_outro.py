@@ -7,7 +7,7 @@ PROBLEMS = [
     r"unique?",
     r"Show that $\sum_i (x_i - c)^2 = \sum_i (x_i - \bar x)^2 + n(\bar x - c)^2$ \ algebraically, \ and deduce that "
     r"the mean minimizes the left side.",
-    r"For the data $1, 2, 3, 4, 100$, \ compute the mean, median, standard deviation, MAD and IQR. \ Which "
+    r"For the data $1, 2, 3, 4, 100$, \ compute the mean, median, standard deviation (divisor $n$), MAD and IQR. \ Which "
     r"describe this data well?",
     r"Show that $r$ is unchanged when $x$ becomes $a + bx$ with $b > 0$, \ and changes sign when $b < 0$. \ What "
     r"happens to the slope of $y$ on $x$?",
@@ -35,7 +35,7 @@ class Outro(VoiceoverScene):
             (r"variance: \ Pythagoras in $\mathbb R^n$", DEV),
             (r"the ECDF, \ quantiles, \ box plots", MEDIAN),
             (r"skew, \ heavy tails, \ power laws", S.ACCENT),
-            (r"QQ plots: \ straight iff the right family", S.EST),
+            (r"QQ plots: \ near a line for the right family", S.EST),
             (r"Box--Cox: \ the log is $\lambda = 0$", S.LIK),
             (r"correlation $= \cos\theta$", MEDIAN),
             (r"same statistics, \ different pictures", S.MUSEUM),
@@ -87,9 +87,10 @@ class Outro(VoiceoverScene):
             "Heavy tails return in robust statistics, Simpson's paradox in causal inference, and the Coverage "
             "Board in every part that makes a promise."
         ) as vo:
+            self.play(FadeIn(card.head))
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
-                                                     lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
+                                 lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):

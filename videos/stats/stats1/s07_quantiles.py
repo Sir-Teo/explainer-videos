@@ -3,6 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from videos.stats.stats1.common import *  # noqa: F403
+from videos.stats.stats1.compute import inverse_quantiles
 
 
 class Quantiles(VoiceoverScene):
@@ -14,7 +15,8 @@ class Quantiles(VoiceoverScene):
         self.regions()
 
     def card(self):
-        card = chapter_card(6, r"Quantiles and the box plot", r"Where does each person stand?", lit=(1977,), part=PART)
+        card = chapter_card(6, r"Quantiles and the box plot", r"Where does each person stand?",
+                            lit={1977: r"Tukey's \emph{Exploratory Data Analysis}"}, part=PART)
         with self.voiceover("Chapter six. Quantiles and the box plot."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
@@ -70,9 +72,10 @@ class Quantiles(VoiceoverScene):
     def inverse(self):
         d = load("quantiles")
         x = np.asarray(d["x"])
+        q = inverse_quantiles(x)
         ax = self.A.ax
-        qs = [(0.5, d["q50"], r"median", MEDIAN), (0.25, d["q25"], r"$Q_1$", MODE), (0.75, d["q75"], r"$Q_3$", MODE),
-              (0.9, d["q90"], r"90th percentile", S.ACCENT)]
+        qs = [(0.5, q["q50"], r"lower median", MEDIAN), (0.25, q["q25"], r"$Q_1$", MODE), (0.75, q["q75"], r"$Q_3$", MODE),
+              (0.9, q["q90"], r"90th percentile", S.ACCENT)]
         reads = VGroup()
         for p, v, name, col in qs:
             h = DashedLine(ax.c2p(0, p), ax.c2p(v, p), color=col, stroke_width=2.5)
@@ -80,7 +83,7 @@ class Quantiles(VoiceoverScene):
             t = label(rf"{name}: \ {v:.1f}", font_size=24, color=col).next_to(ax.c2p(v, p), RIGHT, buff=0.15)
             t.add_background_rectangle(color=BACKGROUND, opacity=0.8, buff=0.05)
             reads.add(VGroup(h, vv, t))
-        eq = cmath(r"\hat Q(p)", r"=", r"\min\{x : \hat F(x) \ge p\}", font_size=36).to_edge(UP, buff=0.35)
+        eq = cmath(r"\hat Q(p)", r"=", r"\min\{x : \hat F(x) \ge p\},\quad 0 < p \le 1", font_size=36).to_edge(UP, buff=0.35)
         # the quantile function: the staircase reflected in the diagonal
         B = axes([0, 1], [0, 180], x_length=4.4, y_length=4.4, xlabel=r"$p$", ylabel=r"$\hat Q(p)$",
                  xticks=[0, 0.5, 1], yticks=[0, 60, 120, 180], center=[4.4, -0.3, 0])
@@ -93,13 +96,14 @@ class Quantiles(VoiceoverScene):
         with self.voiceover(
             "Read the staircase the other way, and you get quantiles. <bookmark mark='a'/> Pick a share, say a "
             "half. Go across at height one half until you hit the staircase, then down. The income you land on is "
-            f"the median: {d['q50']:.1f} thousand. Half the sample earns no more than this. <bookmark mark='b'/> At "
-            f"one quarter, the first quartile, {d['q25']:.1f}; at three quarters, the third, {d['q75']:.1f}. "
-            f"<bookmark mark='c'/> And at nine tenths, the ninetieth percentile, {d['q90']:.1f}. "
+            f"the lower median: {q['q50']:.1f} thousand. Half the sample earns no more than this. <bookmark mark='b'/> At "
+            f"one quarter, the first quartile, {q['q25']:.1f}; at three quarters, the third, {q['q75']:.1f}. "
+            f"<bookmark mark='c'/> And at nine tenths, the ninetieth percentile, {q['q90']:.1f}. "
             "<bookmark mark='d'/> This rule, the smallest x whose share reaches p, is the quantile function: the "
             "inverse of the staircase, defined even where the staircase is flat or jumps. <bookmark mark='e'/> "
             "Geometrically it's the same staircase reflected in the diagonal, with the axes swapped. Quantiles are "
-            "how growth charts, exam percentiles and income deciles are reported, because unlike the mean, they "
+            "how growth charts, exam percentiles and income deciles are reported. Software also uses interpolated "
+            "quantiles; we'll use that convention for the box plots next. Unlike the mean, quantiles "
             "say where a person stands."
         ) as vo:
             vo.wait_until("a")
@@ -151,14 +155,15 @@ class Quantiles(VoiceoverScene):
                           r"points worth a second look", color=S.MUSEUM, width=4.6, font_size=20).to_corner(UR, buff=0.3)
         with self.voiceover(
             "Five quantiles make a summary that fits on a line. <bookmark mark='a'/> The minimum, the first "
-            "quartile, the median, the third quartile and the maximum: Tukey's five-number summary. "
+            "quartile, the median, the third quartile and the maximum: a five-number summary. Here the quartiles "
+            "use linear interpolation between observations, and the median averages the two middle incomes. "
             "<bookmark mark='b'/> Tukey drew it as a box from the first to the third quartile, with the median "
             "inside: the box holds the middle half of the data, and its width is the interquartile range. "
             "<bookmark mark='c'/> Then whiskers reach out to the most extreme points that are within one and a half "
             "box widths of the box. <bookmark mark='d'/> Anything beyond, here "
             f"{len(five['outliers'])} incomes, is drawn as a separate point, an outlier. <bookmark mark='e'/> "
             "Tukey meant it as a flag, not a verdict: a point worth a second look. Here it isn't an error at all. "
-            "The World's incomes have a long right tail, and these five are simply the tail. A rule built for "
+            "The World's incomes have a long right tail, and these flagged values are simply the tail. A rule built for "
             "symmetric data calls the rich outliers."
         ) as vo:
             self.play(FadeIn(A), LaggedStart(*[FadeIn(p, shift=DOWN * 0.2) for p in pts], lag_ratio=0.02),
@@ -178,15 +183,19 @@ class Quantiles(VoiceoverScene):
 
     def regions(self):
         d = load("quantiles")
-        A = axes([0, 120], [0, 11], x_length=10.0, y_length=5.6, xlabel=r"income (thousands), \ 300 adults per region",
-                 xticks=[0, 30, 60, 90, 120], center=[0.6, -0.3, 0])
+        A = axes([0, 140], [0, 11], x_length=10.0, y_length=5.6, xlabel=r"income (thousands), \ 300 adults per region",
+                 xticks=[0, 35, 70, 105, 140], center=[0.6, -0.3, 0])
         A.ax.y_axis.set_opacity(0)
         ax = A.ax
-        boxes, truths, names = VGroup(), VGroup(), VGroup()
+        boxes, truths, names, overflow = VGroup(), VGroup(), VGroup(), VGroup()
         for k, five in enumerate(d["regions"]):
             y = ax.c2p(0, 10.5 - k)[1]
             bp = box_plot(ax, five, y=y, height=0.32, color=REGION_COLORS[k], stroke_width=2)
             boxes.add(bp)
+            count = sum(v > 140 for v in five["outliers"])
+            if count:
+                overflow.add(label(rf"$\to {count}$", font_size=18, color=S.RESID)
+                             .next_to(ax.c2p(140, 10.5 - k), RIGHT, buff=0.15))
             tv = d["region_median_true"][k]
             truths.add(Line([ax.c2p(tv, 0)[0], y - 0.22, 0], [ax.c2p(tv, 0)[0], y + 0.22, 0], color=S.TRUTH,
                             stroke_width=4))
@@ -194,6 +203,7 @@ class Quantiles(VoiceoverScene):
                       .next_to([ax.c2p(0, 0)[0], y, 0], LEFT, buff=0.2))
         meds = [f["median"] for f in d["regions"]]
         tag = simulated_tag()
+        key = note(r"right arrows count outliers beyond 140 thousand").to_edge(UP, buff=0.3)
         with self.voiceover(
             "Box plots are made for comparing groups. <bookmark mark='a'/> Here are three hundred adults from each "
             "of the World's ten regions. The medians wander, from "
@@ -205,9 +215,9 @@ class Quantiles(VoiceoverScene):
             "between those boxes is the luck of who was sampled. Learning to tell a real difference from this kind "
             "of noise takes up much of the bachelor's degree; Part 10 starts on it properly."
         ) as vo:
-            self.play(FadeIn(A), FadeIn(names), FadeIn(tag))
+            self.play(FadeIn(A), FadeIn(names), FadeIn(tag), FadeIn(key))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(b) for b in boxes], lag_ratio=0.12), run_time=3.0)
+            self.play(LaggedStart(*[FadeIn(b) for b in boxes], lag_ratio=0.12), FadeIn(overflow), run_time=3.0)
             vo.wait_until("b")
             self.play(LaggedStart(*[Create(t) for t in truths], lag_ratio=0.08))
             vo.wait_until("c")

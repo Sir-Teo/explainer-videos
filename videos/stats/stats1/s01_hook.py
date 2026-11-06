@@ -49,8 +49,8 @@ class Hook(VoiceoverScene):
         with self.voiceover(
             "In 1662 a London haberdasher named John Graunt published a short book about lists of the dead. "
             "<bookmark mark='a'/> Every week, the parish clerks of London printed a Bill of Mortality: how many people "
-            "were buried, and of what, and how many children were christened. Nobody had thought of them as more "
-            "than a warning of when the plague was coming. <bookmark mark='b'/> Here are those numbers, year by year, "
+            "were buried, and of what, and how many children were christened. Readers used them especially as "
+            "warnings of when the plague was coming. <bookmark mark='b'/> Here are those numbers, year by year, "
             "from 1629 to 1710. Christenings in blue, burials in red. <bookmark mark='c'/> And here is 1665, the "
             f"Great Plague: {money(g['burials_1665'])} burials in one year, {money(g['plague_1665'])} of them from "
             "plague, three years after Graunt's book. Graunt had read decades of these lists, and he asked a "
@@ -142,7 +142,7 @@ class Hook(VoiceoverScene):
             "thirty-six died before the age of six. <bookmark mark='b'/> For the rest of life he assumed a steady "
             "loss, decade after decade: sixty-four alive at six, forty at sixteen, twenty-five at twenty-six, sixteen "
             "at thirty-six, and on down to one at seventy-six. <bookmark mark='c'/> It's rough, and the second half "
-            "is an assumption, not a measurement. But it's the first life table: the ancestor of every survival "
+            "is an assumption, not a measurement. But it's a pioneering life table: an ancestor of every survival "
             "curve in medicine and every insurance premium. Its modern descendant, the Kaplan–Meier curve, "
             "arrives in Part 40."
         ) as vo:

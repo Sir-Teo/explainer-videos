@@ -308,6 +308,10 @@ def timeline(lit=(), width=12.0, show_labels=True, font_size=18) -> VGroup:
         d = Dot([X(yr), 0, 0], radius=0.065 if on else 0.035, color=S.ACCENT if on else GREY_C)
         g.add(d)
         if on and show_labels:
+            # A chapter can name its relevant event without listing every topic
+            # the full course associates with that year.
+            if isinstance(lit, dict):
+                name = lit[yr]
             t = label(rf"{yr}\; {name}", font_size=font_size, color=S.ACCENT)
             t.next_to(d, UP if side > 0 else DOWN, buff=0.14 if side > 0 else 0.4)
             side = -side

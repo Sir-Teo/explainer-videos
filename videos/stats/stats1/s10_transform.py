@@ -94,7 +94,10 @@ class Transform(VoiceoverScene):
         def hist():
             t = boxcox(y, lam.get_value())
             z = (t - t.mean()) / t.std()
-            return histogram(ax, np.clip(z, -3.49, 5.49), edges, density=True, color=S.EST, stroke_width=0.5)
+            # Omit off-scale tails; preserve their mass in the denominator rather
+            # than moving them into the end bins or renormalizing the visible data.
+            counts = np.histogram(z, edges)[0]
+            return hist_bars(ax, edges, counts / (len(z) * np.diff(edges)), color=S.EST, stroke_width=0.5)
 
         h = always_redraw(hist)
         readout = always_redraw(lambda: VGroup(
@@ -105,6 +108,7 @@ class Transform(VoiceoverScene):
         bell = curve(ax, zz, stats.norm.pdf(zz), S.TRUTH, 3, smooth=True)
         bl = label(r"a bell, for reference", font_size=22, color=S.TRUTH).move_to([4.6, -0.2, 0])
         tag = simulated_tag(r"simulated: 300 World incomes")
+        tails = note(r"tails outside the axis are omitted; \ density uses all 300 incomes").to_edge(UP, buff=0.3)
         with self.voiceover(
             "Watch what the dial does to real data. <bookmark mark='a'/> Three hundred World incomes, transformed, "
             "then standardized so the pictures are comparable. At lambda equal to one the histogram is the raw "
@@ -114,7 +118,7 @@ class Transform(VoiceoverScene):
             f"overshoot: the skew turns negative, {b['skew']['-0.5']:.1f}, and the long tail is now on the left. "
             "There's a best setting, and it's near zero."
         ) as vo:
-            self.play(FadeIn(A), FadeIn(tag), Create(bell), FadeIn(bl))
+            self.play(FadeIn(A), FadeIn(tag), FadeIn(tails), Create(bell), FadeIn(bl))
             self.add(h, readout)
             vo.wait_until("b")
             self.play(lam.animate.set_value(0.5), run_time=2.5)
@@ -152,7 +156,8 @@ class Transform(VoiceoverScene):
         ci = Line(ax.c2p(lo, top - 1.92), ax.c2p(hi, top - 1.92), color=S.EST, stroke_width=6)
         cil = label(rf"plausible: \ ${lo:.2f}$ to ${hi:.2f}$", font_size=26, color=S.EST).next_to(ci, RIGHT, buff=0.3)
         eq = cmath(r"\ell(\lambda)", r"=", r"-\tfrac n2 \log \hat\sigma^2(\lambda)", r"+",
-                   r"(\lambda - 1)\sum_i \log y_i", font_size=32, colors={r"(\lambda - 1)\sum_i \log y_i": S.ACCENT})
+                   r"(\lambda - 1)\sum_i \log y_i", r"+ C", font_size=32, colors={r"(\lambda - 1)\sum_i \log y_i": S.ACCENT})
+        eq.scale_to_fit_width(7.0)
         eq.move_to([3.4, 2.4, 0])
         jac = label(r"the Jacobian: \ changing the ruler changes the density", font_size=22,
                     color=S.ACCENT).next_to(eq, DOWN, buff=0.15)

@@ -237,6 +237,28 @@ def qq_points(x):
     return stats.norm.ppf(p), x
 
 
+def qq_demo(men):
+    """A seeded random subset, paired with quantiles for its own sample size."""
+    return qq_points(rng(71).choice(men, 15, replace=False))
+
+
+def inverse_quantiles(x):
+    """Empirical generalized-inverse quantiles, distinct from interpolated quartiles."""
+    return dict(zip(("q10", "q25", "q50", "q75", "q90"),
+                    np.quantile(x, [0.1, 0.25, 0.5, 0.75, 0.9], method="inverted_cdf")))
+
+
+def correlation_cloud(r, n, g):
+    """Illustrative points with exactly the displayed sample correlation."""
+    a = g.standard_normal(n)
+    a = (a - a.mean()) / a.std()
+    noise = g.standard_normal(n)
+    noise -= noise.mean()
+    noise -= (noise @ a) / (a @ a) * a
+    noise /= noise.std()
+    return a, r * a + np.sqrt(max(1 - r * r, 0)) * noise
+
+
 def compute_qq():
     chest = np.repeat(museum.CHEST_IN, museum.CHEST_COUNT).astype(float)
     # grouped data: one point per class, at the normal quantile of its mid cumulative proportion

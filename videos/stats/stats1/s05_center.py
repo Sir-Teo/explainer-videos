@@ -11,6 +11,7 @@ class Center(VoiceoverScene):
         self.squares()
         self.absolute()
         self.lp()
+        self.mode()
         self.clock()
 
     def card(self):
@@ -46,14 +47,15 @@ class Center(VoiceoverScene):
                              .next_to([ax.c2p(c.get_value(), 0)[0], ys[-1] + 0.3, 0], UP, buff=0.08))
         sticks = always_redraw(lambda: VGroup(*[Line([ax.c2p(c.get_value(), 0)[0], y, 0], [ax.c2p(v, 0)[0], y, 0],
                                                      color=DEV, stroke_width=3) for v, y in zip(x, ys)]))
-        grid = np.asarray(d["grid"])
-        sq = np.asarray(d["sq"])
+        grid = np.linspace(0, 200, 401)
+        sq = np.sum((x[None, :] - grid[:, None]) ** 2, axis=1)
         F = axes([0, 200], [0, sq.max() * 1.05], x_length=11.0, y_length=2.4, center=[0, -2.25, 0])
         fax = F.ax
-        fl = label(r"$\sum_i (x_i - c)^2$", font_size=28, color=DEV).next_to(F, LEFT, buff=0.15).shift(UP * 0.6)
+        fl = label(r"$\sum_i (x_i - c)^2$", font_size=28, color=DEV)
+        fl.next_to(fax.c2p(0, sq.max() * 1.05), DR, buff=0.15)
         sel = (grid >= 0) & (grid <= 200)
         loss = curve(fax, grid[sel], sq[sel], DEV, 3)
-        rider = always_redraw(lambda: Dot(fax.c2p(c.get_value(), float(np.interp(c.get_value(), grid, sq))),
+        rider = always_redraw(lambda: Dot(fax.c2p(c.get_value(), float(np.sum((x - c.get_value()) ** 2))),
                                           radius=0.08, color=S.ACCENT))
         tag = simulated_tag(r"simulated: nine World incomes")
         steps = [
@@ -129,17 +131,22 @@ class Center(VoiceoverScene):
         def count():
             left = int(np.sum(x < c.get_value() - 1e-9))
             right = int(np.sum(x > c.get_value() + 1e-9))
-            return MathTex(rf"\text{{left}}: {left} \qquad \text{{right}}: {right} \qquad \text{{slope}} = {left - right}",
+            tied = len(x) - left - right
+            slope = (rf"\text{{left/right slopes}} = {left - right - tied},\ {left - right + tied}" if tied
+                     else rf"\text{{slope}} = {left - right}")
+            return MathTex(rf"\text{{left}}: {left} \qquad \text{{right}}: {right} \qquad " + slope,
                            font_size=32).move_to([0, -0.4, 0])
 
         cnt = always_redraw(count)
-        grid, ab = np.asarray(d["grid"]), np.asarray(d["ab"])
+        grid = np.unique(np.r_[np.linspace(0, 200, 401), x])
+        ab = np.sum(np.abs(x[None, :] - grid[:, None]), axis=1)
         F = axes([0, 200], [0, ab.max() * 1.05], x_length=11.0, y_length=2.0, center=[0, -2.4, 0])
         fax = F.ax
         sel = (grid >= 0) & (grid <= 200)
         loss = curve(fax, grid[sel], ab[sel], MEDIAN, 3)
-        fl = label(r"$\sum_i |x_i - c|$", font_size=28, color=MEDIAN).next_to(F, LEFT, buff=0.15).shift(UP * 0.5)
-        rider = always_redraw(lambda: Dot(fax.c2p(c.get_value(), float(np.interp(c.get_value(), grid, ab))),
+        fl = label(r"$\sum_i |x_i - c|$", font_size=28, color=MEDIAN)
+        fl.next_to(fax.c2p(0, ab.max() * 1.05), DR, buff=0.15)
+        rider = always_redraw(lambda: Dot(fax.c2p(c.get_value(), float(np.sum(np.abs(x - c.get_value())))),
                                           radius=0.08, color=S.ACCENT))
         med_l = Line([ax.c2p(d["median9"], 0)[0], 0.85, 0], [ax.c2p(d["median9"], 0)[0], ys[-1] + 0.3, 0],
                      color=MEDIAN, stroke_width=4)
@@ -151,9 +158,10 @@ class Center(VoiceoverScene):
             "Now change the loss. <bookmark mark='a'/> Instead of squared distances, add up the plain distances, "
             "the absolute values. Laplace preferred this one. <bookmark mark='b'/> Its derivative is easy to read "
             "off the picture: every income to the left of c pulls the total up as c moves right, one unit per unit, "
-            "and every income to the right pulls it down. So the slope is the number on the left minus the number "
-            "on the right. <bookmark mark='c'/> It's a tug of war. The total keeps falling while more people are on "
-            "the right, and stops falling when the two sides are equal: <bookmark mark='d'/> at the middle "
+            "and every income to the right pulls it down. Away from an observation, the slope is the number on "
+            "the left minus the number on the right. At an observation the two one-sided slopes can differ. "
+            "<bookmark mark='c'/> It's a tug of war. The total keeps falling while more people are on the right, "
+            "and reaches a minimum when neither side holds more than half: <bookmark mark='d'/> at the middle "
             f"observation, the median, {d['median9']:.1f} thousand. <bookmark mark='e'/> The median doesn't care how "
             "far away people are, only which side they're on. Make the richest person three times richer, and the "
             "median doesn't move. The mean does."
@@ -173,7 +181,8 @@ class Center(VoiceoverScene):
             self.play(FadeIn(med_l), FadeIn(med_t))
             vo.wait_until("e")
             arrows.clear_updaters()
-            self.play(FadeOut(arrows), FadeOut(cline), FadeOut(rider), FadeOut(cnt))
+            self.play(FadeOut(arrows), FadeOut(cline), FadeOut(rider), FadeOut(cnt),
+                      FadeOut(F), FadeOut(loss), FadeOut(fl))
             rich = k["dots"][-1]
             mean_track = always_redraw(lambda: Line(
                 [ax.c2p(np.mean(np.r_[x[:-1], top.get_value()]), 0)[0], 0.85, 0],
@@ -181,10 +190,18 @@ class Center(VoiceoverScene):
                 color=MEAN, stroke_width=4))
             self.remove(k["mean_l"])
             self.add(mean_track)
+            offscale = Arrow([ax.c2p(200, 0)[0] - 0.5, ys[-1], 0],
+                             [ax.c2p(200, 0)[0] + 0.3, ys[-1], 0], color=S.DATA, buff=0)
+            rich_value = always_redraw(lambda: label(
+                rf"richest income: \ {top.get_value():.1f} thousand; \ beyond the axis when $>200$",
+                font_size=26, color=S.DATA).move_to([0, -1.5, 0]))
+            self.add(rich_value)
             rich.add_updater(lambda m: m.move_to([ax.c2p(min(top.get_value(), 200), 0)[0], ys[-1], 0]))
+            self.play(FadeIn(offscale))
             self.play(top.animate.set_value(float(x[-1]) * 3), run_time=3.0)
             rich.clear_updaters()
             mean_track.clear_updaters()
+            rich_value.clear_updaters()
         self.clear_scene()
 
     def lp(self):
@@ -198,7 +215,7 @@ class Center(VoiceoverScene):
         g = np.random.Generator(np.random.PCG64(6))
         pts = VGroup(*[Dot(ax.c2p(v, 0) + UP * (0.15 + 0.5 * g.random()), radius=0.035, color=S.DATA)
                        for v in x])
-        formula = cmath(r"c_p", r"=", r"\arg\min_c \sum_i |x_i - c|^p", font_size=40).to_edge(UP, buff=0.5)
+        formula = cmath(r"c_p", r"=", r"\arg\min_c \sum_i |x_i - c|^p,\quad p \ge 1", font_size=40).to_edge(UP, buff=0.5)
         marks = {r"median": (1.0, d["median200"], MEDIAN), r"mean": (2.0, d["mean200"], MEAN),
                  r"midrange": (np.inf, d["midrange"], MIDRANGE)}
         ticks = VGroup()
@@ -227,20 +244,16 @@ class Center(VoiceoverScene):
             return m
 
         mk = always_redraw(marker)
-        mode = load("centers")["modes"]
         with self.voiceover(
             "Squares and absolute values are two members of one family. <bookmark mark='a'/> Raise the distances to "
-            "any power p, add them up, and minimize. p equals one gives the median; p equals two gives the mean. "
+            "a power p at least one, add them up, and minimize. p equals one gives the median; p equals two gives the mean. "
             "<bookmark mark='b'/> Here's the whole family on two hundred incomes. Start at p equals one, at the "
             f"median, {d['median200']:.1f} thousand. <bookmark mark='c'/> As p grows, far-away incomes count for more "
             f"and more, and the centre is dragged toward them: {d['mean200']:.1f} at p equals two, and then far past "
             "anything typical. <bookmark mark='d'/> As p goes to infinity only the two most extreme incomes matter, "
             f"and the centre becomes the midrange, halfway between the smallest and the largest: {d['midrange']:.1f} "
-            "thousand, an income almost nobody has. <bookmark mark='e'/> And at the other end, as p shrinks toward "
-            "zero, the loss just counts how many points you miss, and the centre becomes the mode: the most crowded "
-            f"place. For the World's heights, the most crowded five-centimetre window is centred at {mode[2][1]:.1f}. "
-            "So the choice of a centre is a choice of a loss: how much do you mind being far from the people who are "
-            "far away?"
+            "thousand, an income almost nobody has. <bookmark mark='e'/> The choice of a centre is a choice of a "
+            "loss: how much do you mind being far from the people who are far away?"
         ) as vo:
             self.play(FadeIn(L), FadeIn(pts, lag_ratio=0.005), Write(formula))
             vo.wait_until("a")
@@ -255,6 +268,34 @@ class Center(VoiceoverScene):
             vo.wait_until("e")
             self.play(pv.animate.set_value(0), run_time=2.0)
         mk.clear_updaters()
+        self.clear_scene()
+
+    def mode(self):
+        d = load("centers")
+        x = np.asarray(d["heights400"])
+        width, center = d["modes"][2]
+        A = axes([140, 205], [0, 60], x_length=10.6, y_length=3.8, xlabel=r"height (cm)",
+                 xticks=[140, 150, 160, 170, 180, 190, 200], center=[0, -0.5, 0])
+        bars = histogram(A.ax, x, np.arange(140, 206, 2.5), color=S.EST)
+        window = Polygon(A.ax.c2p(center - width / 2, 0), A.ax.c2p(center + width / 2, 0),
+                         A.ax.c2p(center + width / 2, 60), A.ax.c2p(center - width / 2, 60),
+                         stroke_color=MODE, fill_color=MODE, fill_opacity=0.2)
+        head = label(rf"mode by a window: \ width {width:g} cm, \ centre {center:.1f} cm",
+                     font_size=32, color=MODE).to_edge(UP, buff=0.5)
+        tag = simulated_tag(r"simulated: 400 World adults; \ the window width is a choice")
+        with self.voiceover(
+            "The mode answers a different question: which value occurs most often? It minimizes the number "
+            "of exact mismatches. <bookmark mark='a'/> For continuously measured heights, exact repeats are rare, "
+            "so that rule alone gives no useful unique centre. Instead, choose a window and find where it holds "
+            f"the most observations. Here a five-centimetre window is most crowded at {center:.1f} centimetres. "
+            "<bookmark mark='b'/> Change the window width, and the answer can change, just as changing histogram "
+            "bins changes the picture. A mode estimate needs a scale as well as data."
+        ) as vo:
+            self.play(FadeIn(A), FadeIn(bars), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(window), FadeIn(head))
+            vo.wait_until("b")
+            self.play(Indicate(window, color=MODE, scale_factor=1.02))
         self.clear_scene()
 
     def clock(self):
