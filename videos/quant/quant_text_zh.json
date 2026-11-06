@@ -29558,7 +29558,8 @@
     "\\text{stylized: } S=0.10,\\ R^2_{pop}=0.001\\quad\\Rightarrow\\quad\\text{gain}\\approx10.1\\%": "\\text{示意：} S=0.10,\\ R^2_{pop}=0.001\\quad\\Rightarrow\\quad\\text{增益}\\approx10.1\\%",
     "Real log total returns, chronological expanding fits from 1927; revised data. Five predictors tried. Legacy CT values are omitted: their sign used the full sample.": "实际对数总收益，1927年起按时间扩展拟合；使用修订数据，试了五个预测变量。旧CT结果不展示，因为其符号由全部样本决定。",
     "Does an in-sample $R^2$ of 0.06\\% guarantee a positive forecast $R^2$?": "样本内$R^2$为0.06\\%，就能保证预测$R^2$为正吗？",
-    "No guarantee: estimation error and changing relationships can outweigh the signal.": "不能保证：估计误差和关系变化可能超过信号。"
+    "No guarantee: estimation error and changing relationships can outweigh the signal.": "不能保证：估计误差和关系变化可能超过信号。",
+    "Same stationary process, more observations: covariance scales as $1/T$. SEs above use the original sample. Robust uncertainty does not repair model fit.": "同一平稳过程，更多观测：协方差按 $1/T$ 缩小。上方标准误对应原始样本。稳健推断并不修正模型拟合。"
   },
   "phrases": {
     "you owe": "你欠",

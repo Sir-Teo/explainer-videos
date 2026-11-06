@@ -327,3 +327,29 @@ The current checkpoint updates the opening, OLS, HAC, clustering, Fama–MacBeth
 The out-of-sample illustration is labelled as a chronological refit on revised historical data. Its legacy CT column is omitted because the legacy implementation selected a sign using the full sample. The population excess-return investment formula is taught separately from the empirical real log total-return forecast scores, with a staged stylized example and quiz answer. Its 11 English endpoint frames passed with zero geometry warnings and were visually reviewed; this is a partial layout check, not completed Part 6 QA.
 
 Checkpoint validation: seven focused tests pass; all 109 Chinese source entries are covered; the seven original registered compute functions and every prior experiment record are preserved. Remaining chapter corrections and the complete bilingual, motion and narrated checks are still pending. Continue committing and pushing directly to `quantitative-finance`; do not create another PR.
+
+### Part 6 continuation: MLE confidence-region animation
+
+The MLE sample-size demonstration now redraws the grey independent-score sandwich
+region along with the gold and pink regions. All three divide covariance by the
+same sample multiplier, use the same plotting window, and clear their redraw
+updaters at the end. The question has a separate answer bookmark in both languages.
+The caption distinguishes the original-sample SE readouts from the hypothetical
+larger-sample regions. Narration states the stationary-process assumption behind
+inverse-T scaling and the regularity/identification assumptions behind a
+pseudo-true quasi-likelihood target; robust uncertainty does not establish model fit.
+
+Validation: four tests pass (the three existing inference checks plus a regression
+exercising the scene's actual Manim redraw constructors at 25 sample multipliers,
+including 1, 2 and 4). The fixture uses synthetic positive-definite covariance
+matrices and checks every curve control point relative to the unchanged estimate;
+it is not production-data visual acceptance. Chinese narration coverage remains
+109/109. No registered computation or experiment record changed.
+
+**Current environment blocker:** this resumed workspace has no `.cache/quant6/`
+payloads. English and Chinese `qa_series.py quant6 --only MLE --cached-only`
+checks both report `missing-data: quant6/mle`, with zero frames evaluated. Previous
+workspace caches, receipts and movies were not restored. No synthetic fixture was
+substituted for a production cache, and no experiment was rerun. Restore the
+original Part 6 computation inputs before completing bilingual layout, motion,
+speech and narrated QA. Part 6 remains in progress; Part 7 has not started.

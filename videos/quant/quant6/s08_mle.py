@@ -144,7 +144,8 @@ class MLE(VoiceoverScene, ThreeDScene):
         clip = ((1.9, 3.0), (0.53, 0.62))
         Tf = ValueTracker(1.0)
         e_naive = always_redraw(lambda: ellipse_curve(ax, ctr, sw(m["V_naive"]) / Tf.get_value(), EST, clip=clip))
-        e_opg = ellipse_curve(ax, ctr, sw(m["V_sandwich"]), GREY_B, stroke_width=2)
+        e_opg = always_redraw(lambda: ellipse_curve(
+            ax, ctr, sw(m["V_sandwich"]) / Tf.get_value(), GREY_B, stroke_width=2, clip=clip))
         e_hac = always_redraw(lambda: ellipse_curve(ax, ctr, sw(m["V_hac"]) / Tf.get_value(), ALT, clip=clip))
         dot = Dot(ax.c2p(*ctr), radius=0.06, color=WHITE)
         sn, ss, sh = m["se_naive"], m["se_sandwich"], m["se_hac"]
@@ -153,8 +154,8 @@ class MLE(VoiceoverScene, ThreeDScene):
             MathTex(rf"\text{{inverse Hessian: se}}(\hat\nu) = {sn[2]:.3f}", font_size=28, color=EST),
             MathTex(rf"\text{{sandwich, independent days: }} {ss[2]:.3f}", font_size=28, color=GREY_B),
             MathTex(rf"\text{{sandwich, scores' long-run variance: }} {sh[2]:.3f}", font_size=28, color=ALT),
-            wrapped_label(r"volatility clusters, so the scores of nearby days are correlated: the iid Student $t$ is "
-                          r"the wrong model, and only the dependence-robust sandwich admits it", 5.2, 20, GREY_A),
+            wrapped_label(r"Same stationary process, more observations: covariance scales as $1/T$. "
+                          r"SEs above use the original sample. Robust uncertainty does not repair model fit.", 5.2, 20, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.35)
         Tro = always_redraw(lambda: MathTex(rf"\text{{sample}} \times {Tf.get_value():.1f}", font_size=28,
                                             color=WHITE).next_to(g, UP, buff=0.05).align_to(g, RIGHT))
@@ -169,8 +170,10 @@ class MLE(VoiceoverScene, ThreeDScene):
             "violent day is followed by violent days, and each pushes nu the same way. So the score's variance needs "
             "chapter two's long-run variance. With it, the standard error of nu is "
             f"{sh[2]:.3f}, {ratio:.1f} times the naive one, the pink ellipse. The naive standard error trusts a model "
-            "the data reject; the estimate itself, a quasi-maximum-likelihood estimate, is still fine. "
-            "<bookmark mark='c'/> Pause and predict: double the sample. What happens to the ellipse? Each axis shrinks "
+            "the data reject. Under stationarity, identification and regularity, quasi-maximum likelihood "
+            "targets the best expected log-density in this family, not a proven true return law. "
+            "<bookmark mark='c'/> Pause and predict: twice as many observations from the same stationary process. "
+            "What happens to the ellipse? <bookmark mark='d'/> Holding the long-run information fixed, each axis shrinks "
             "by the square root of two, so its area halves. Quadruple it, and both axes halve."
             " Likelihood needs the whole distribution. Next: a method that needs only moments."
         ) as vo:
@@ -182,9 +185,10 @@ class MLE(VoiceoverScene, ThreeDScene):
             vo.wait_until("c")
             self.add(Tro)
             self.play(FadeIn(q, shift=UP * 0.2))
+            vo.wait_until("d")
             self.play(Tf.animate.set_value(2.0), run_time=2)
             self.play(Tf.animate.set_value(4.0), run_time=2)
-        for x in (e_naive, e_hac, Tro):
+        for x in (e_naive, e_opg, e_hac, Tro):
             x.clear_updaters()
         self.wait(0.4)
         self.clear_scene()
