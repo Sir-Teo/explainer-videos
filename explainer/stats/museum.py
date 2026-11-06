@@ -1201,3 +1201,24 @@ ISIS2 = {"aspirin": (804, 8587), "placebo": (1016, 8600),
 # CAST (Echt et al., NEJM 1991): encainide or flecainide vs placebo after heart attack, in patients whose
 # arrhythmias the drugs had suppressed; 1,498 patients, mean follow-up 10 months.
 CAST = {"deaths_drug": 63, "deaths_placebo": 26, "arrhythmic_drug": 43, "arrhythmic_placebo": 16, "n": 1498}
+
+
+def nsw() -> dict:
+    """LaLonde's (1986) National Supported Work data in Dehejia & Wahba's (1999) subsample: the 185 treated men and 260
+    experimental controls (``sample == 'experiment'``, from R's Matching package), and the 429 PSID comparison men of
+    MatchIt's ``lalonde`` (``sample == 'psid'``).  Covariates: age, years of education, black, hispanic, married, no
+    high-school degree, real earnings in 1974 and 1975; outcome: real earnings in 1978 (1982 dollars).  Returns a dict
+    of NumPy arrays."""
+    import csv
+    from pathlib import Path
+
+    import numpy as np
+
+    with open(Path(__file__).parent / "data" / "nsw.csv", newline="") as f:
+        rows = list(csv.DictReader(f))
+    out = {"sample": np.array([r["sample"] for r in rows])}
+    for k in ("treat", "age", "educ", "black", "hisp", "married", "nodegree"):
+        out[k] = np.array([int(r[k]) for r in rows])
+    for k in ("re74", "re75", "re78"):
+        out[k] = np.array([float(r[k]) for r in rows])
+    return out
