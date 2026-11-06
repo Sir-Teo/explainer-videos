@@ -1799,3 +1799,52 @@ class PuckSurface(VGroup):
 
     def puck(self, x, y, color=None, radius: float = 0.1) -> Dot:
         return Dot(self.to_screen(x, y, 0.05), radius=radius, color=color or S.ACCENT)
+
+
+class CriterionBench(VGroup):
+    """The model-selection bench (Part 28): one column per candidate model, a stacked bar of misfit (the deviance
+    above the best model's) and penalty, a dot at their sum, and the winner ringed.  ``bars(penalty)`` rebuilds the
+    stack for another penalty (AIC's 2k, BIC's k log n), so the change of winner can be animated."""
+
+    def __init__(self, misfit, k, labels, penalty_per_k: float = 2.0, width: float = 8.0, height: float = 4.0,
+                 center=ORIGIN, y_max: float | None = None, colors=None, font_size=20):
+        super().__init__()
+        from explainer.ai.viz import axes
+        from explainer.analysis import label
+
+        self.misfit = np.asarray(misfit, float) - np.min(misfit)
+        self.k = np.asarray(k, float)
+        n = len(self.misfit)
+        top = y_max if y_max is not None else float(np.max(self.misfit + self.k * penalty_per_k)) * 1.05
+        self.axes_ = axes([-0.6, n - 0.4], [0, top], x_length=width, y_length=height, xlabel=r"", ylabel=r"criterion",
+                          xticks=[], yticks=[], font_size=font_size, center=center)
+        self.ax = self.axes_.ax
+        self.cols = colors or {"misfit": S.EST, "penalty": S.RESID, "total": S.ACCENT}
+        self.names = VGroup(*[label(t, font_size=font_size, color=GREY_A).next_to(self.ax.c2p(i, 0), DOWN, buff=0.15)
+                              for i, t in enumerate(labels)])
+        self.add(self.axes_, self.names)
+        self.stack = self.bars(penalty_per_k)
+        self.add(self.stack)
+
+    def bars(self, penalty_per_k: float) -> VGroup:
+        ax = self.ax
+        w = (ax.c2p(1, 0)[0] - ax.c2p(0, 0)[0]) * 0.55
+        top_y = bounds(ax)[3]
+        g = VGroup()
+        fit = VGroup()
+        pen = VGroup()
+        dots = VGroup()
+        totals = self.misfit + self.k * penalty_per_k
+        for i, (m, t) in enumerate(zip(self.misfit, totals)):
+            m_c, t_c = min(m, top_y), min(t, top_y)
+            y0, y1, y2 = ax.c2p(i, 0)[1], ax.c2p(i, m_c)[1], ax.c2p(i, t_c)[1]
+            fit.add(Rectangle(width=w, height=max(y1 - y0, 1e-3), stroke_width=0, fill_color=self.cols["misfit"], fill_opacity=0.8)
+                    .move_to([ax.c2p(i, 0)[0], (y0 + y1) / 2, 0]))
+            pen.add(Rectangle(width=w, height=max(y2 - y1, 1e-3), stroke_width=0, fill_color=self.cols["penalty"], fill_opacity=0.7)
+                    .move_to([ax.c2p(i, 0)[0], (y1 + y2) / 2, 0]))
+            dots.add(Dot(ax.c2p(i, t_c), radius=0.06, color=self.cols["total"]))
+        best = int(np.argmin(totals))
+        ring = Circle(radius=0.16, stroke_color=self.cols["total"], stroke_width=3).move_to(dots[best])
+        g.fit, g.pen, g.dots, g.ring, g.best = fit, pen, dots, ring, best
+        g.add(fit, pen, dots, ring)
+        return g
