@@ -701,6 +701,69 @@ class World:
                 "mcar": u[0] < p_mcar, "mar": u[1] < p_mar, "mnar": u[2] < p_mnar, "sbp_miss": u[3] < p_sbp}
 
     # ------------------------------------------------------------------
+    # The ministry of health's two questions (Part 42): a trial to design and an observational survey to analyse
+    # ------------------------------------------------------------------
+    TOWN_SD = 3.5  # SD of the towns' lasting effects on systolic pressure (mm Hg)
+    TOWN_DRIFT = 1.5  # SD of a town's change from the pilot year to the trial year
+    PERSON_SD = 16.0  # SD of systolic pressure between adults within a town
+    PILOT_M = 30  # adults measured per town in the pilot survey
+    PROGRAMME_EFFECT = -4.0  # mm Hg: the community health workers' effect on a town's adults
+    SUBSTITUTE_EFFECT = -3.0  # mm Hg: the salt substitute's effect on everyone who uses it
+    SUBSTITUTE_N = 3000
+
+    @cached_property
+    def ministry(self) -> dict:
+        """The ministry of health's pilot survey and observational study (Part 42).
+
+        ``pilot``: 30 adults measured in each of the 200 towns, pressure mu + u_j + e_ij with u_j ~ N(0, 3.5^2) (the
+        towns' lasting differences: water, diet, clinics) and e_ij ~ N(0, 16^2); ``u`` the true town effects and
+        ``drift`` each town's change by the trial year (N(0, 1.5^2)).  A trial year's town effect is u_j + drift_j,
+        so the intraclass correlation then is (3.5^2 + 1.5^2) / (3.5^2 + 1.5^2 + 16^2) = 0.054.
+
+        ``survey``: 3,000 adults where a potassium-enriched salt substitute went on sale a year earlier.  Uptake is
+        logistic in age, sex, BMI, log income and having been told of high pressure (the propensity ``ps``); a year on,
+        pressure is the World's ``sbp`` minus 1.5 per SD of log income (a better diet) plus ``SUBSTITUTE_EFFECT`` for
+        users, through urinary potassium (``potassium``, the mediator), and N(0, 5^2) of change; a clinic visit this
+        year (``visited``) is caused by both uptake and pressure (a collider).  Income is withheld by more than a
+        third, more by the young and less by users and those with higher pressure (MAR given what is seen):
+        ``income_miss``."""
+        g = self.rng("ministry")
+        towns = np.arange(len(self.towns["xy"]))
+        nt = len(towns)
+        u = self.TOWN_SD * g.standard_normal(nt)
+        drift = self.TOWN_DRIFT * g.standard_normal(nt)
+        mu = float(np.nanmean(self.health["sbp"]))
+        p_town = np.repeat(towns, self.PILOT_M)
+        p_sbp = np.round(mu + u[p_town] + self.PERSON_SD * g.standard_normal(len(p_town)), 1)
+
+        pool = np.flatnonzero(self.adult)
+        idx = np.sort(g.choice(pool, self.SUBSTITUTE_N, replace=False))
+        li = np.log(self.income[idx])
+        zi = (li - li.mean()) / li.std()
+        d = self.substitute_draw(g, self.age[idx].astype(float), self.male[idx], self.health["bmi"][idx], zi,
+                                 self.health["told_high"][idx], self.health["sbp"][idx])
+        return {"mu": mu, "u": u, "drift": drift, "pilot_town": p_town, "pilot_sbp": p_sbp, "idx": idx,
+                "log_income": li, **d}
+
+    @classmethod
+    def substitute_draw(cls, g: np.random.Generator, age, male, bmi, zi, told, sbp0) -> dict:
+        """The salt substitute's law (Part 42), given the adults' age, sex, BMI, standardized log income ``zi``,
+        diagnosis and pressure: uptake, potassium (the mechanism: -0.1 mm Hg per mmol, and users gain 30 mmol, so the
+        effect is ``SUBSTITUTE_EFFECT``), a clinic visit (the collider) and who withholds income."""
+        n = len(age)
+        lp = -1.3 + 0.03 * (age - 50) - 0.25 * male + 0.04 * (bmi - 27) + 0.45 * zi + 1.3 * told
+        ps = 1 / (1 + np.exp(-lp))
+        t = g.random(n) < ps
+        potassium = 65 + 30 * t + 12 * g.standard_normal(n)  # mmol a day in urine
+        sbp = sbp0 - 1.5 * zi + cls.SUBSTITUTE_EFFECT / 30 * (potassium - 65) + 5.0 * g.standard_normal(n)
+        lv = -2.0 + 1.5 * t + 0.10 * (sbp - 130)
+        visited = g.random(n) < 1 / (1 + np.exp(-lv))
+        lm = -1.3 - 0.035 * (age - 50) - 0.6 * t - 0.07 * (sbp - 130)
+        income_miss = g.random(n) < 1 / (1 + np.exp(-lm))
+        return {"age": age, "male": male, "bmi": bmi, "told_high": told, "ps": ps, "uptake": t, "sbp": np.round(sbp, 1),
+                "potassium": np.round(potassium, 1), "visited": visited, "income_miss": income_miss}
+
+    # ------------------------------------------------------------------
     # Sampling and the truth
     # ------------------------------------------------------------------
     def sample(self, n: int, among: np.ndarray | None = None, seed: int = 0) -> np.ndarray:
