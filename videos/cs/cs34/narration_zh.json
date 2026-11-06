@@ -1,0 +1,441 @@
+{
+ "title": "计算机科学，从零搭建 · 第34部分：存储",
+ "chapters": {
+  "Hook": "一次追加，三次写",
+  "Persist": "1. 持久性",
+  "Disks": "2. 磁盘",
+  "Flash": "3. 闪存",
+  "Files": "4. 文件与目录",
+  "SimpleFS": "5. 一个简单的文件系统",
+  "Locality": "6. 局部性",
+  "Crash": "7. 崩溃一致性",
+  "Journal": "8. 日志",
+  "Lfs": "9. 日志结构文件系统",
+  "Cow": "10. 写时复制与校验和",
+  "Raid": "11. RAID",
+  "Field": "12. 真实世界中的磁盘",
+  "Fsync": "13. fsync，以及应用程序必须做什么",
+  "Lsm": "14. LSM 树",
+  "PebbleDisk": "15. PebbleOS 有了磁盘",
+  "Frontier": "16. 前沿：可以信赖的存储",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "30dcfb833e57": {
+   "scene": "Hook",
+   "en": "You add a line to a file, and the power fails. <bookmark mark='a'/> What is on the disk? To append a block, the file system must change three blocks: a bitmap, to mark a free block as used; the block itself, with the new data; and the file's inode, to point at it and record the new length. <bookmark mark='b'/> In memory all three change at once. But the disk writes one block at a time, and it is free to reorder them for speed. <bookmark mark='c'/> So a crash can leave any subset of the three on the disk. Eight possible disks.",
+   "zh": "你往文件里加了一行，然后断电了。<bookmark mark='a'/>磁盘上现在是什么？要追加一个块，文件系统必须改动三个块：一个位图，把某个空闲块标成已用；那个块本身，装着新数据；还有文件的 inode，让它指向这个块，并记下新的长度。<bookmark mark='b'/>在内存里，三者同时改变。可磁盘一次只写一个块，而且为了速度，它可以随意调换顺序。<bookmark mark='c'/>所以一次崩溃可能在磁盘上留下这三者的任意子集。八种可能的磁盘。"
+  },
+  "3394c3673d2c": {
+   "scene": "Hook",
+   "en": "Here they are, all eight, each mounted and checked. <bookmark mark='a'/> Nothing written: the old file, intact. Only the data written: also fine, the new block sits unused. <bookmark mark='b'/> Bitmap without inode: a block is marked used that nobody owns. A leak, harmless but wasteful. <bookmark mark='c'/> The inode without the bitmap: the file points at a block the bitmap calls free, and the next file to be written will be handed it too. Corrupt. <bookmark mark='d'/> And the worst: bitmap and inode, but not the data. The checker finds nothing wrong at all. Yet the file now ends with whatever that block held before: here, a password from a file someone deleted. <bookmark mark='e'/> Across four common operations our checker finds 34 crash points that corrupt the file system and 22 that show the wrong bytes. With a journal, every one comes back intact. This part is about why.",
+   "zh": "这就是全部八种，每一种都挂载并检查过。<bookmark mark='a'/>什么都没写：旧文件，完好无损。只写了数据：也没问题，新块闲置着。<bookmark mark='b'/>有位图没有 inode：一个块被标成已用，却不属于任何人。这是泄漏，无害但浪费。<bookmark mark='c'/>有 inode 没有位图：文件指向一个位图认为空闲的块，下一个写入的文件也会被分到它。这是损坏。<bookmark mark='d'/>最糟的是：有位图和 inode，却没有数据。检查器完全看不出问题。可文件的结尾现在是那个块以前装的东西：这里，是某个已删除文件里的一个密码。<bookmark mark='e'/>在四种常见操作上，我们的检查器找到了 34 个让文件系统损坏的崩溃点，以及 22 个读出错误字节的崩溃点。有了日志，每一个都完好恢复。这一部分讲的就是为什么。"
+  },
+  "15d77fa6189d": {
+   "scene": "Hook",
+   "en": "This is Part 34 of Computer Science, Built: Storage, the last part of the operating systems act. <bookmark mark='a'/> We begin at the bottom, with disks and flash, and model the time each takes. We build a Unix file system and put its blocks where reading them is fast. Then we crash it, at every point, and check it each time, and build the defences one by one: careful ordering, journaling, logs, copy-on-write trees with checksums, and RAID, with the failure rates disks really have. We ask what fsync promises and what applications must do, meet the LSM trees behind most modern databases, and end with PebbleOS reading the thirty novels from a file system of its own.",
+   "zh": "这是计算机科学，从零搭建，第34部分：存储，操作系统这一幕的最后一部分。<bookmark mark='a'/>我们从最底层开始，从磁盘和闪存开始，为两者各建一个时间模型。我们搭一个 Unix 文件系统，把它的块放在读起来快的地方。然后在每一个点上让它崩溃，每次都检查，再逐一建起防线：小心排序、日志、日志结构、带校验和的写时复制树，以及 RAID，并用上磁盘真实的故障率。我们会问 fsync 承诺了什么、应用程序必须做什么，认识大多数现代数据库背后的 LSM 树，最后让 PebbleOS 从它自己的文件系统里读出那三十部小说。"
+  },
+  "80b8af46021a": {
+   "scene": "Persist",
+   "en": "Chapter one. Persistence.",
+   "zh": "第1章。持久性。"
+  },
+  "c687d8475895": {
+   "scene": "Persist",
+   "en": "Part 9 drew the memory hierarchy, and stopped at main memory. Below it is storage. <bookmark mark='a'/> On a scale of time, a register answers in a third of a nanosecond, the first cache in about one, main memory in about a hundred. <bookmark mark='b'/> Then a gap. A flash drive reads a random page in about eighty microseconds. <bookmark mark='c'/> A spinning disk takes about thirteen milliseconds. If a memory read took one second, a disk read would take a day and a half. <bookmark mark='d'/> Flash closed most of that gap, but storage is still a thousand times slower than memory, and everything in this part is shaped by that.",
+   "zh": "第9部分画出了存储层级，停在了主存。主存之下是外存。<bookmark mark='a'/>放在时间刻度上，寄存器三分之一纳秒就能响应，一级缓存大约一纳秒，主存大约一百纳秒。<bookmark mark='b'/>然后是一道鸿沟。闪存读一个随机页大约要八十微秒。<bookmark mark='c'/>旋转的磁盘大约要十三毫秒。如果读一次内存要一秒，读一次磁盘就要一天半。<bookmark mark='d'/>闪存填平了这道鸿沟的大部分，但外存仍比内存慢上千倍，这一部分的一切都由此而来。"
+  },
+  "044a92c54a72": {
+   "scene": "Persist",
+   "en": "Why have storage at all? <bookmark mark='a'/> Because memory forgets. A bit of main memory is a little charge on a capacitor, and it leaks away; Part 5's DRAM is refreshed every sixty-four milliseconds, and when the power goes, its contents fade within minutes. <bookmark mark='b'/> Storage keeps a bit without power: as a magnetized patch on a spinning platter, or as charge trapped behind an insulator in flash. It lasts for years. The price is that storage is read and written in whole blocks, and slowly. <bookmark mark='c'/> IBM's first disk, in 1956, held five million characters on fifty platters two feet across. A modern drive holds four million times as much in the palm of a hand, by the same principle.",
+   "zh": "为什么非要有外存？<bookmark mark='a'/>因为内存会遗忘。主存的一个比特是电容上的一点电荷，它会慢慢漏掉；第5部分的 DRAM 每六十四毫秒刷新一次，断电之后，里面的内容几分钟内就会消散。<bookmark mark='b'/>外存不需要电也能留住比特：在旋转盘片上是一小块磁化区域，在闪存里是困在绝缘层后面的电荷。它能保存许多年。代价是外存只能整块地读写，而且慢。<bookmark mark='c'/>1956 年 IBM 的第一台磁盘，在五十张直径两英尺的盘片上存了五百万个字符。一块现代硬盘，同样的原理，在掌心大小的盒子里装下了它的四百万倍。"
+  },
+  "9d647c81245e": {
+   "scene": "Persist",
+   "en": "Underneath all the variety, the operating system sees one simple thing: a numbered array of blocks. <bookmark mark='a'/> It can read block n, or write block n; nothing smaller. Devices use blocks of 512 bytes or 4 kilobytes; our file system will use one kilobyte. <bookmark mark='b'/> Two facts about this interface carry the whole part. A single block write is atomic: after a crash, the block holds either the old contents or the new ones. <bookmark mark='c'/> But two block writes are not. A crash can come between them, and the disk may even have done the second one first. <bookmark mark='d'/> File systems and databases are, in the end, ways of building big atomic changes out of small ones.",
+   "zh": "形形色色的设备底下，操作系统看到的是一样简单的东西：一个编了号的块数组。<bookmark mark='a'/>它可以读第 n 块，或写第 n 块；没有更小的单位。设备用 512 字节或 4 KB 的块；我们的文件系统用 1 KB。<bookmark mark='b'/>这个接口的两个事实支撑着整个这一部分。写一个块是原子的：崩溃之后，这个块要么是旧内容，要么是新内容。<bookmark mark='c'/>但写两个块就不是了。崩溃可能落在两次写之间，磁盘甚至可能先完成了第二次。<bookmark mark='d'/>说到底，文件系统和数据库都是用小的原子变化搭出大的原子变化的方法。"
+  },
+  "84504ed98983": {
+   "scene": "Disks",
+   "en": "Chapter two. Disks.",
+   "zh": "第2章。磁盘。"
+  },
+  "0ad439553948": {
+   "scene": "Disks",
+   "en": "A hard disk is a stack of platters spinning on one spindle, with an arm that carries a head over each surface. Reading a block takes three steps. <bookmark mark='a'/> First the seek: the arm swings to the right track. It accelerates and then brakes, so the time grows like the square root of the distance: half a millisecond to the next track, sixteen across the whole disk, almost nine on average. <bookmark mark='b'/> Then the rotation: the head waits for the sector to come round. At 7200 turns a minute, a turn is 8.3 milliseconds, so the average wait is half that. <bookmark mark='c'/> Then the transfer, as the sector passes under the head: 150 megabytes a second, so four kilobytes take 27 microseconds. <bookmark mark='d'/> A random read: thirteen milliseconds, and nearly all of it is spent waiting for things to move.",
+   "zh": "硬盘是一摞绕同一根主轴旋转的盘片，一条机械臂在每个盘面上方带着一个磁头。读一个块分三步。<bookmark mark='a'/>先是寻道：机械臂摆到正确的磁道。它先加速再刹车，所以所需时间按距离的平方根增长：到相邻磁道半毫秒，横跨整个盘面十六毫秒，平均将近九毫秒。<bookmark mark='b'/>然后是旋转：磁头等着扇区转过来。每分钟 7200 转，转一圈 8.3 毫秒，平均等待是它的一半。<bookmark mark='c'/>然后是传输，扇区从磁头下经过时读出：每秒 150 兆字节，四千字节要 27 微秒。<bookmark mark='d'/>一次随机读：十三毫秒，几乎全花在等东西移动上。"
+  },
+  "412282002717": {
+   "scene": "Disks",
+   "en": "That waiting is the whole story of disk performance. <bookmark mark='a'/> Read the disk in order, and after one seek every block arrives as it passes the head: 150 megabytes a second. <bookmark mark='b'/> Read four-kilobyte blocks at random places, and each one costs a seek and half a turn: 77 reads a second, a third of a megabyte a second. <bookmark mark='c'/> Nearly five hundred times slower, for the same disk. <bookmark mark='d'/> So the rule for everything that follows: keep together what will be read together, and write in long runs. File systems, logs and databases are designed around it.",
+   "zh": "这种等待就是磁盘性能的全部故事。<bookmark mark='a'/>按顺序读磁盘，寻一次道之后，每个块从磁头下经过时就到手：每秒 150 兆字节。<bookmark mark='b'/>在随机位置读四千字节的块，每一次都要一次寻道加半圈：每秒 77 次读，每秒三分之一兆字节。<bookmark mark='c'/>同一块磁盘，慢了将近五百倍。<bookmark mark='d'/>所以后面的一切都遵循这条规则：把会一起读的东西放在一起，写的时候写成长长的一段。文件系统、日志和数据库都是围绕它设计的。"
+  },
+  "94bb3ad7b83c": {
+   "scene": "Disks",
+   "en": "A busy disk has a queue of requests, and the order it serves them in matters. Here is the textbook example: the head at cylinder 53, eight requests waiting. <bookmark mark='a'/> First come, first served zigzags across the disk: 640 cylinders of travel. <bookmark mark='b'/> Shortest seek first always goes to the nearest request: 236. <bookmark mark='c'/> SCAN, the elevator, sweeps one way serving everything on its path, then the other way: 299 here. <bookmark mark='d'/> C-SCAN sweeps one way only and jumps back, so every cylinder waits about the same: 322, not counting the jump.",
+   "zh": "忙碌的磁盘有一队请求，服务的顺序很要紧。这是教科书上的例子：磁头在第 53 柱面，八个请求在排队。<bookmark mark='a'/>先来先服务在盘面上来回折返：移动 640 个柱面。<bookmark mark='b'/>最短寻道优先总是去最近的请求：236。<bookmark mark='c'/>SCAN，也就是电梯算法，朝一个方向扫过去，服务路上的所有请求，再掉头：这里是 299。<bookmark mark='d'/>C-SCAN 只朝一个方向扫，然后跳回起点，于是每个柱面的等待都差不多：322，不算回跳。"
+  },
+  "e12bc26771b1": {
+   "scene": "Disks",
+   "en": "Static queues hide the real problem, so here is a simulated disk with 72 random requests arriving every second, close to the most it can serve. <bookmark mark='a'/> First come, first served keeps up only just: the mean response is near a tenth of a second. <bookmark mark='b'/> Shortest seek first cuts the mean by a factor of three, but its worst case is long: a request at the far edge keeps losing to nearer ones. That is starvation. <bookmark mark='c'/> SCAN matches its mean and bounds the wait, because the sweep always comes back. <bookmark mark='d'/> Today the drive does much of this itself: it accepts a queue of commands and orders them, because only it knows where the platter is. For flash, with no arm at all, Linux often schedules nothing.",
+   "zh": "静态的队列掩盖了真正的问题，所以这里模拟一块磁盘，每秒到达 72 个随机请求，接近它所能服务的上限。<bookmark mark='a'/>先来先服务勉强跟得上：平均响应时间接近十分之一秒。<bookmark mark='b'/>最短寻道优先把平均值降到三分之一，但最坏情况很长：远在边缘的请求一次次输给更近的请求。这就是饥饿。<bookmark mark='c'/>SCAN 的平均值与之相当，等待却有上限，因为扫描总会回来。<bookmark mark='d'/>如今这些多半由磁盘自己来做：它接收一队命令并自行排序，因为只有它知道盘片转到了哪里。对于完全没有机械臂的闪存，Linux 常常干脆不做调度。"
+  },
+  "f5ce2a5d5e0b": {
+   "scene": "Flash",
+   "en": "Chapter three. Flash.",
+   "zh": "第3章。闪存。"
+  },
+  "4b83fc4a365a": {
+   "scene": "Flash",
+   "en": "Flash stores a bit as charge trapped on a floating gate, behind an insulator. Its shape dictates everything a flash drive does. <bookmark mark='a'/> The chip is read a page at a time, a few kilobytes, in tens of microseconds. <bookmark mark='b'/> It is written a page at a time too, but only into a page that has been erased: programming can only push bits one way. <bookmark mark='c'/> And erasing works only on a whole block of hundreds of pages, and takes milliseconds. <bookmark mark='d'/> Worse, every erase wears the insulator a little; today's dense chips survive a few thousand per block. <bookmark mark='e'/> So you cannot simply overwrite a page. Rewriting four kilobytes in place would mean erasing and rewriting a whole block, and wearing it out.",
+   "zh": "闪存把一个比特存成困在浮栅上、被绝缘层包住的电荷。它的这种构造决定了闪存盘所做的一切。<bookmark mark='a'/>芯片按页读取，一页几千字节，几十微秒。<bookmark mark='b'/>写入也按页，但只能写进已擦除的页：编程只能把比特往一个方向推。<bookmark mark='c'/>而擦除只能对整个块进行，一块有几百页，要几毫秒。<bookmark mark='d'/>更糟的是，每次擦除都会磨损一点绝缘层；如今高密度的芯片，每块只经得起几千次。<bookmark mark='e'/>所以你不能简单地覆写一页。原地改写四千字节，就意味着擦除并重写整个块，还把它磨损掉。"
+  },
+  "554c747d6c78": {
+   "scene": "Flash",
+   "en": "The answer is a piece of software inside every drive, the flash translation layer, and it is a log. <bookmark mark='a'/> The host writes logical pages A, B, C, D, and they go to the next free pages, in order. <bookmark mark='b'/> Now the host rewrites B. The drive does not touch the old page: it writes the new B to the next free page, marks the old one dead, and updates its map from logical to physical pages. The same for A. <bookmark mark='c'/> Free pages run out, so a garbage collector picks a victim block, copies the pages still alive in it to a fresh block, and erases it. <bookmark mark='d'/> Those copies are writes the host never asked for. The ratio of what the flash writes to what the host writes is the write amplification, and it costs both speed and lifetime.",
+   "zh": "答案是每块闪存盘里的一段软件，闪存转换层，而它是一个日志。<bookmark mark='a'/>主机写逻辑页 A、B、C、D，它们按顺序进入下一个空闲页。<bookmark mark='b'/>现在主机改写 B。盘不碰旧页：它把新的 B 写进下一个空闲页，把旧页标成作废，并更新从逻辑页到物理页的映射。A 也一样。<bookmark mark='c'/>空闲页用完了，于是垃圾回收器挑一个受害块，把其中仍然有效的页复制到一个新块，再擦除它。<bookmark mark='d'/>这些复制是主机从未要求过的写。闪存写的量与主机写的量之比，就是写放大，它既耗速度，又耗寿命。"
+  },
+  "ea771be01d3f": {
+   "scene": "Flash",
+   "en": "How bad is it? We simulate a drive of 256 blocks, fill it, then write six times its capacity at random places. <bookmark mark='a'/> The one parameter that matters is the spare flash the drive keeps hidden from the host, the over-provisioning. <bookmark mark='b'/> With seven percent spare, typical of a consumer drive, the flash writes seven and a half pages for every page the host writes. With 28 percent, an enterprise figure, about two and a half. <bookmark mark='c'/> The dots follow a simple estimate closely: one plus p, over two p. With little spare, the collector's victim is still mostly alive, and copying it is most of the work. <bookmark mark='d'/> Collecting the oldest block instead of the emptiest is a little worse everywhere.",
+   "zh": "有多糟？我们模拟一块 256 个块的盘，把它写满，再往随机位置写入六倍容量的数据。<bookmark mark='a'/>真正要紧的参数只有一个：盘对主机隐藏起来的备用闪存，也就是预留空间。<bookmark mark='b'/>预留百分之七，这是消费级盘的典型值，主机每写一页，闪存要写七页半。预留百分之二十八，这是企业级的数字，大约两页半。<bookmark mark='c'/>这些点紧贴一个简单的估计：一加 p，除以二 p。预留少时，回收器的受害块大部分还活着，复制它就是主要的工作。<bookmark mark='d'/>改为回收最旧的块而不是最空的块，处处都稍差一些。"
+  },
+  "49f2dde0a2c5": {
+   "scene": "Flash",
+   "en": "Three more things every drive must handle. <bookmark mark='a'/> Real traffic is skewed. With writes spread evenly, the blocks wear evenly. Send ninety percent of the writes to a tenth of the data, and the amplification hardly changes, but the busiest blocks are erased almost three times as often as the average, and would die first. So drives practise wear leveling, moving cold data onto worn blocks to rest them. <bookmark mark='b'/> Second, the drive cannot know which pages hold files you have deleted, and faithfully copies them forward. TRIM is the command by which the file system tells it. With a fifth of the drive trimmed, amplification falls from seven and a half to about two. <bookmark mark='c'/> And third, a drive is dozens of chips that can all work at once. NVMe gives it tens of thousands of queues, one per core, so no lock stands between the cores and the chips.",
+   "zh": "每块盘还得处理三件事。<bookmark mark='a'/>真实的流量是偏斜的。写入均匀分布时，各块磨损均匀。把百分之九十的写入集中到十分之一的数据上，写放大几乎不变，但最忙的块被擦除的次数接近平均的三倍，会最先报废。所以盘要做磨损均衡，把冷数据搬到磨损多的块上，让它们歇一歇。<bookmark mark='b'/>第二，盘不知道哪些页装的是你已删除的文件，还会老老实实地把它们往前复制。TRIM 就是文件系统告诉它的那条命令。修剪掉五分之一的空间，写放大从七点五降到大约二。<bookmark mark='c'/>第三，一块盘是几十个能同时工作的芯片。NVMe 给了它成千上万个队列，每个核心一个，于是核心与芯片之间不再隔着锁。"
+  },
+  "911bd8109fe0": {
+   "scene": "Files",
+   "en": "Chapter four. Files and directories.",
+   "zh": "第4章。文件与目录。"
+  },
+  "9d78740ac97e": {
+   "scene": "Files",
+   "en": "To a program, a file is a name and an array of bytes. The operating system splits that in two. <bookmark mark='a'/> The bytes, wherever they are on the disk, are described by an inode: a small record of the file's type, size, owner, permissions and times, and where its blocks lie. Inodes are numbered. <bookmark mark='b'/> A directory is just another file, whose contents are a table pairing names with inode numbers. <bookmark mark='c'/> So a path is followed one step at a time: the root directory's table gives the inode of novels, whose table gives the inode of emma. Multics introduced this tree of directories in 1965, and Unix made it simple. <bookmark mark='d'/> Notice that the name is not part of the file. It lives in a directory, so a file can have several.",
+   "zh": "对程序来说，文件是一个名字和一个字节数组。操作系统把它拆成两半。<bookmark mark='a'/>那些字节不管在磁盘的哪里，都由一个 inode 描述：一条小记录，写着文件的类型、大小、属主、权限和时间，以及它的块在哪里。inode 是编了号的。<bookmark mark='b'/>目录只是另一个文件，内容是一张把名字和 inode 号配对的表。<bookmark mark='c'/>所以路径是一步一步走的：根目录的表给出 novels 的 inode，novels 的表再给出 emma 的 inode。Multics 在 1965 年引入了这种目录树，Unix 让它变得简单。<bookmark mark='d'/>注意，名字并不是文件的一部分。它住在目录里，所以一个文件可以有好几个名字。"
+  },
+  "beb2eed2a48e": {
+   "scene": "Files",
+   "en": "Programs reach files through a handful of system calls, unchanged since early Unix. <bookmark mark='a'/> Open walks the path, checks permission once, and returns a small integer, the file descriptor. <bookmark mark='b'/> Read copies bytes from the current offset and moves it forward; lseek moves it anywhere. <bookmark mark='c'/> Write copies bytes in, but usually only into memory, the page cache. It returns long before the data is on the disk. Fsync is the call that waits until it is: chapter 13 is about what that really means. <bookmark mark='d'/> Inside the kernel, the descriptor indexes the process's table, which points to an open-file entry holding the offset, which points to the inode.",
+   "zh": "程序通过一小组系统调用来访问文件，自早期 Unix 以来几乎没变。<bookmark mark='a'/>open 走一遍路径，只检查一次权限，返回一个小整数，即文件描述符。<bookmark mark='b'/>read 从当前偏移处复制字节，并把偏移往前推；lseek 可以把它移到任何地方。<bookmark mark='c'/>write 把字节复制进去，但通常只到内存，也就是页缓存。它在数据落盘之前很久就返回了。fsync 才是等到数据落盘的那个调用：第 13 章讲它真正意味着什么。<bookmark mark='d'/>在内核里，描述符是进程那张表的下标，表项指向一个记着偏移的打开文件条目，它再指向 inode。"
+  },
+  "0161e94548e9": {
+   "scene": "Files",
+   "en": "Because names live in directories, a file can have more than one. <bookmark mark='a'/> Link adds a second directory entry for the same inode, and the inode counts its links: two. <bookmark mark='b'/> Unlink removes one name. There is no call to delete a file: its blocks are freed when the last name is gone and no process still has it open. <bookmark mark='c'/> Rename moves a name, atomically, even over an existing file; we will lean on that. <bookmark mark='d'/> A symbolic link is something else: a tiny file containing a path, followed when it is opened. Our file system has the first three, and the tests check every one.",
+   "zh": "因为名字住在目录里，一个文件可以有不止一个名字。<bookmark mark='a'/>link 为同一个 inode 再加一个目录项，inode 记下它的链接数：二。<bookmark mark='b'/>unlink 删除一个名字。并没有删除文件的调用：最后一个名字没了、也没有进程还打开着它时，它的块才被释放。<bookmark mark='c'/>rename 原子地移动一个名字，即使目标文件已经存在；我们会倚重这一点。<bookmark mark='d'/>符号链接是另一回事：一个装着路径的小文件，打开时顺着它走。我们的文件系统有前三种，测试逐一检查。"
+  },
+  "826a0df7acd4": {
+   "scene": "SimpleFS",
+   "en": "Chapter five. A simple file system.",
+   "zh": "第5章。一个简单的文件系统。"
+  },
+  "e3bb349288ae": {
+   "scene": "SimpleFS",
+   "en": "Now we build one: PebbleFS, a small Unix file system in the style of the original, on a disk of eight thousand one-kilobyte blocks. <bookmark mark='a'/> Block zero is the superblock, which says where everything else is. <bookmark mark='b'/> Then two bitmaps, one bit per inode and one per data block, saying which are free. <bookmark mark='c'/> Then the inode table: 256 inodes of 64 bytes, sixteen to a block. <bookmark mark='d'/> A journal, which we will need in chapter 8. <bookmark mark='e'/> And the rest, almost all of the disk, for data. The bar is drawn on a square-root scale; otherwise the metadata would be invisible.",
+   "zh": "现在我们来搭一个：PebbleFS，一个仿照最初那种风格的小 Unix 文件系统，放在一块有八千个一千字节块的磁盘上。<bookmark mark='a'/>第零块是超级块，说明其他一切在哪里。<bookmark mark='b'/>然后是两个位图，每个 inode 一位、每个数据块一位，表示哪些空闲。<bookmark mark='c'/>然后是 inode 表：256 个 64 字节的 inode，每块十六个。<bookmark mark='d'/>一个日志，第 8 章会用到。<bookmark mark='e'/>其余的，几乎整个磁盘，都用来放数据。这根条是按平方根比例画的；否则元数据会小得看不见。"
+  },
+  "38767ebe8542": {
+   "scene": "SimpleFS",
+   "en": "Here is a PebbleFS inode: sixteen words. <bookmark mark='a'/> The type, the number of links, the size in bytes. <bookmark mark='b'/> Then ten direct pointers, each the number of one data block: enough for a file of ten kilobytes. <bookmark mark='c'/> For larger files, a single-indirect pointer names a block that holds 256 more pointers. <bookmark mark='d'/> And a double-indirect pointer names a block of 256 pointers to such blocks: sixty-five thousand more. <bookmark mark='e'/> So the largest file is just over 64 megabytes. The tree is lopsided on purpose: most files are small, and they need no indirect block at all, while a big one pays one extra read per 256 blocks.",
+   "zh": "这是一个 PebbleFS 的 inode：十六个字。<bookmark mark='a'/>类型、链接数、以字节计的大小。<bookmark mark='b'/>然后是十个直接指针，每个是一个数据块的编号：够一个十千字节的文件用。<bookmark mark='c'/>更大的文件，一个一级间接指针指向一个装着另外 256 个指针的块。<bookmark mark='d'/>一个二级间接指针指向一个由 256 个指针组成的块，每个指针又指向这样一个块：再多六万五千个。<bookmark mark='e'/>所以最大的文件略超过 64 兆字节。这棵树是故意不对称的：大多数文件很小，根本不需要间接块，而一个大文件每 256 个块才多付一次读。"
+  },
+  "a2c19ea8e730": {
+   "scene": "SimpleFS",
+   "en": "Watch the disk while a program opens slash novels slash emma and reads it. This is PebbleOS's kernel doing it, the one chapter 15 builds, and every block is logged. <bookmark mark='a'/> At boot, the superblock. <bookmark mark='b'/> Then the root's inode, from the inode table. <bookmark mark='c'/> The root directory's block: the entry novels gives inode 2. Its inode is in the same table block, already in the kernel's buffer, so no read. <bookmark mark='d'/> Then the novels directory, where emma is inode 3. <bookmark mark='e'/> And then the file's own blocks, one after another. Two hundred kilobytes cost 201 reads: the data, one indirect block, and the four reads of the lookup.",
+   "zh": "看着磁盘，一个程序打开 /novels/emma 并读它。这是 PebbleOS 的内核在做，也就是第 15 章要搭的那个，每个块都记录下来。<bookmark mark='a'/>启动时，读超级块。<bookmark mark='b'/>然后从 inode 表读根目录的 inode。<bookmark mark='c'/>根目录的块：条目 novels 给出 inode 2。它的 inode 在同一个表块里，已经在内核的缓冲区中，不用再读。<bookmark mark='d'/>然后是 novels 目录，那里 emma 是 inode 3。<bookmark mark='e'/>然后是文件自己的块，一个接一个。二十万字节花了 201 次读：数据、一个间接块，以及查找路径时的四次读。"
+  },
+  "40973bd09ca4": {
+   "scene": "Locality",
+   "en": "Chapter six. Locality.",
+   "zh": "第6章。局部性。"
+  },
+  "27cb3dff4a93": {
+   "scene": "Locality",
+   "en": "The first Unix file system put blocks wherever a free one happened to be. Free blocks were kept on a list in the order they were freed, so after a while a file's blocks lay all over the disk. <bookmark mark='a'/> Measured at Berkeley, it delivered about two percent of what the disk could do. <bookmark mark='b'/> McKusick and his colleagues' fast file system of 1984 divided the disk into cylinder groups, each a little file system of its own, with its bitmaps, its inodes and its data close together. <bookmark mark='c'/> A file's inode goes in the same group as its directory, and its blocks near its inode, so a directory listing and a file read stay in one place. <bookmark mark='d'/> A very large file is moved to a fresh group every so often, so that it cannot crowd out its neighbours. <bookmark mark='e'/> And blocks grew to four kilobytes. Together these made the file system many times faster.",
+   "zh": "最早的 Unix 文件系统碰到哪个空闲块就用哪个。空闲块按释放的顺序串在一张链表上，所以用上一阵子，一个文件的块就散落得满盘都是。<bookmark mark='a'/>在伯克利测得，它只发挥出磁盘能力的百分之二左右。<bookmark mark='b'/>McKusick 和同事们 1984 年的快速文件系统把磁盘分成柱面组，每组自成一个小文件系统，位图、inode 和数据都挨在一起。<bookmark mark='c'/>文件的 inode 放在它所在目录的组里，它的块放在 inode 附近，这样列目录和读文件都在一个地方。<bookmark mark='d'/>很大的文件每隔一段就换到一个新组，以免挤占邻居。<bookmark mark='e'/>块也增大到四千字节。这些合在一起，让文件系统快了许多倍。"
+  },
+  "14cb8362a488": {
+   "scene": "Locality",
+   "en": "We can measure this with PebbleFS and the disk model. One four-megabyte file, laid out three ways, then read in full. <bookmark mark='a'/> Written alone, its blocks are handed out in a row, and reading it takes 41 milliseconds, close to the 28 it takes the platter to pass that much data under the head. <bookmark mark='b'/> Written while another file grows beside it, the two files take turns: every other block is the neighbour's. In the model the head just waits for the gaps to pass, so this costs less than twice as much; but each run is now one block long. <bookmark mark='c'/> On an aged disk, where free blocks are scattered, every block costs a seek. Seventeen seconds: four hundred times slower. Even flash, with no arm, is two hundred times slower, because it serves four thousand tiny requests instead of a few large ones.",
+   "zh": "我们可以用 PebbleFS 和磁盘模型来测。一个四兆字节的文件，按三种方式布局，然后完整读一遍。<bookmark mark='a'/>单独写入时，它的块连成一排，读它要 41 毫秒，接近盘片让这么多数据从磁头下经过所需的 28 毫秒。<bookmark mark='b'/>旁边另有一个文件同时增长时，两个文件轮流分块：每隔一个块就是邻居的。在模型里磁头只需等空隙转过去，所以代价不到两倍；但现在每一段只有一个块长。<bookmark mark='c'/>在一块老化的磁盘上，空闲块四散，每个块都要一次寻道。十七秒：慢了四百倍。即使没有机械臂的闪存也慢了两百倍，因为它要服务四千个小请求，而不是几个大请求。"
+  },
+  "6cdff937c060": {
+   "scene": "Locality",
+   "en": "Modern file systems push the idea further. <bookmark mark='a'/> Instead of one pointer per block, they record extents: a first block and a length. One ext4 extent maps a run of up to 128 megabytes, so a big contiguous file is described in a few records rather than thousands of pointers. <bookmark mark='b'/> Delayed allocation decides where the blocks go only when the data is finally written out, by which time the file system knows how big the file is, and two files growing together no longer interleave. <bookmark mark='c'/> And a program that knows its size can reserve a run in advance. <bookmark mark='d'/> On flash, the drive remaps blocks under the file system anyway, but large sequential requests still beat small scattered ones. Delayed allocation has a price, though, and chapter 13 will make us pay it.",
+   "zh": "现代文件系统把这个思路推得更远。<bookmark mark='a'/>它们不再每块一个指针，而是记录区段：一个起始块加一个长度。一个 ext4 区段能映射长达 128 兆字节的一段，所以一个连续的大文件用几条记录就能描述，而不是成千上万个指针。<bookmark mark='b'/>延迟分配要等数据最终写出时才决定块放在哪里，到那时文件系统已经知道文件有多大，两个一起增长的文件也不再交错。<bookmark mark='c'/>知道自己大小的程序还可以预先保留一段。<bookmark mark='d'/>在闪存上，盘本来就会在文件系统底下重新映射块，但大的顺序请求仍胜过小而分散的请求。不过延迟分配是有代价的，第 13 章会让我们付这笔账。"
+  },
+  "4127fc0b317c": {
+   "scene": "Crash",
+   "en": "Chapter seven. Crash consistency.",
+   "zh": "第7章。崩溃一致性。"
+  },
+  "7acef14ebfb0": {
+   "scene": "Crash",
+   "en": "What does it mean for a file system to survive a crash? Its structures must agree with each other. The Unix tool fsck, the file system check, tests exactly these. <bookmark mark='a'/> Every block in use is marked used. <bookmark mark='b'/> Every block marked used belongs to some file; if not, it has leaked, which wastes space but harms nothing. <bookmark mark='c'/> No block belongs to two files. <bookmark mark='d'/> Every directory entry names a live inode. <bookmark mark='e'/> Link counts match the names. <bookmark mark='f'/> And sizes are covered by blocks. Our fsck checks all six, and can repair them. <bookmark mark='g'/> What no checker can see is a file that is perfectly consistent but full of the wrong bytes, as in the hook.",
+   "zh": "文件系统挺过一次崩溃，是什么意思？它的各个结构必须彼此一致。Unix 的工具 fsck，也就是文件系统检查，查的正是这些。<bookmark mark='a'/>每个在用的块都标为已用。<bookmark mark='b'/>每个标为已用的块都属于某个文件；否则它就泄漏了，浪费空间但不伤害任何东西。<bookmark mark='c'/>没有哪个块属于两个文件。<bookmark mark='d'/>每个目录项都指向一个活着的 inode。<bookmark mark='e'/>链接数与名字数相符。<bookmark mark='f'/>大小有块覆盖。我们的 fsck 检查全部六条，还能修复。<bookmark mark='g'/>任何检查器都看不见的，是一个完全一致、却装满了错误字节的文件，就像开场那样。"
+  },
+  "54ecc19317a0": {
+   "scene": "Crash",
+   "en": "To study this honestly we need every crash, not a few lucky ones. So the file system records every block write and every flush it makes. <bookmark mark='a'/> A flush is a barrier: writes before it are safely on the disk. Of the writes after the last flush, the disk may have done any subset, in any order. <bookmark mark='b'/> For every possible disk, the checker mounts it, runs fsck, and reads the files back. <bookmark mark='c'/> Four everyday operations: appending, creating, unlinking, renaming. <bookmark mark='d'/> Written with no care at all, as the hook did, they give 126 crash points. 34 leave the file system corrupt, and 22 more show the wrong bytes.",
+   "zh": "要诚实地研究这件事，我们需要每一种崩溃，而不是几次运气好的。所以文件系统把它做的每次块写和每次刷新都记录下来。<bookmark mark='a'/>刷新是一道屏障：它之前的写已经安全落盘。最后一次刷新之后的那些写，磁盘可能做了其中任意子集，顺序任意。<bookmark mark='b'/>对每一种可能的磁盘，检查器把它挂载上，运行 fsck，再把文件读回来。<bookmark mark='c'/>四种日常操作：追加、创建、删除链接、重命名。<bookmark mark='d'/>像开场那样毫不讲究地写，它们给出 126 个崩溃点。其中 34 个让文件系统损坏，另有 22 个读出错误的字节。"
+  },
+  "9acc10896875": {
+   "scene": "Crash",
+   "en": "The first defence is order. Most of the damage comes from a pointer reaching the disk before the thing it points to. <bookmark mark='a'/> So when allocating, write the data first, then the bitmap, then any indirect block, then the inode, then the directory entry, and flush between them. <bookmark mark='b'/> When freeing, go the other way: clear the pointer before freeing what it pointed to. <bookmark mark='c'/> The checker confirms it. With careful ordering, no crash point is corrupt, and no file shows the wrong bytes. The worst a crash can do is leak a block or an inode, which fsck can reclaim at leisure. <bookmark mark='d'/> The price is waiting: thirteen flushes instead of five. Ganger and Patt's soft updates keep the same order without the waits, by tracking which buffered blocks depend on which, and FreeBSD has used them for decades.",
+   "zh": "第一道防线是顺序。大部分损害来自一个指针先于它所指的东西到达磁盘。<bookmark mark='a'/>所以分配时，先写数据，再写位图，再写间接块，再写 inode，最后写目录项，中间各刷新一次。<bookmark mark='b'/>释放时反过来：先清除指针，再释放它指向的东西。<bookmark mark='c'/>检查器证实了这一点。小心排序之后，没有一个崩溃点是损坏的，也没有文件读出错误字节。崩溃最多泄漏一个块或一个 inode，fsck 可以慢慢回收。<bookmark mark='d'/>代价是等待：十三次刷新而不是五次。Ganger 和 Patt 的软更新保持同样的顺序却不必等待，办法是记住缓冲中的哪些块依赖哪些块，FreeBSD 已经用了几十年。"
+  },
+  "5fc9a54ab352": {
+   "scene": "Crash",
+   "en": "Fsck itself has two problems. <bookmark mark='a'/> It must read every inode and every directory, whatever went wrong, so its cost grows with the disk: four times the disk, about four times the reads. <bookmark mark='b'/> On a disk of many terabytes that meant hours with the machine down, after every power cut. <bookmark mark='c'/> And it restores consistency, not correctness: it can make the structures agree, but it has no idea what any file should contain. <bookmark mark='d'/> What if, instead, the file system wrote down what it was about to do before doing it? Then recovery would only have to read that note.",
+   "zh": "fsck 本身有两个问题。<bookmark mark='a'/>不管出了什么错，它都得读遍每个 inode 和每个目录，所以代价随磁盘增长：磁盘大四倍，读的次数也差不多多四倍。<bookmark mark='b'/>在好几 TB 的磁盘上，这意味着每次停电之后机器都要停摆几个小时。<bookmark mark='c'/>而且它恢复的是一致性，不是正确性：它能让各结构彼此相符，却完全不知道任何文件该装什么。<bookmark mark='d'/>如果文件系统在动手之前，先把要做的事写下来呢？那恢复时只需读那张便条。"
+  },
+  "93efb39a67d1": {
+   "scene": "Journal",
+   "en": "Chapter eight. Journaling.",
+   "zh": "第8章。日志。"
+  },
+  "b992242b8fd2": {
+   "scene": "Journal",
+   "en": "A journal, or write-ahead log, is a reserved area of the disk where the file system writes down what it is about to do. Here is one append, every block write in order. <bookmark mark='a'/> First, in ordered mode, the new data goes straight to its block, and the disk is flushed. Nothing points at it yet, so this is harmless. <bookmark mark='b'/> Then, into the journal: a descriptor saying which home blocks this transaction changes, here the bitmap and the inode, followed by copies of their new contents. Flush. <bookmark mark='c'/> Then one more block: the commit. A single block write is atomic, so this is the moment the whole transaction happens. Flush. <bookmark mark='d'/> Only now are the bitmap and the inode written to their real places, the checkpoint, and then the journal is cleared for the next transaction.",
+   "zh": "日志，或者说预写日志，是磁盘上一块保留区域，文件系统在那里写下它将要做的事。这是一次追加，每次块写按顺序排开。<bookmark mark='a'/>首先，在有序模式下，新数据直接写进它的块，然后刷新磁盘。还没有任何东西指向它，所以这是无害的。<bookmark mark='b'/>然后写进日志：一个描述块，说明这个事务改动哪些原位块，这里是位图和 inode，后面跟着它们新内容的副本。刷新。<bookmark mark='c'/>然后再写一个块：提交块。写一个块是原子的，所以这就是整个事务发生的那一刻。刷新。<bookmark mark='d'/>直到这时，位图和 inode 才被写到它们真正的位置，这叫检查点，然后清空日志，留给下一个事务。"
+  },
+  "bc00812b345f": {
+   "scene": "Journal",
+   "en": "Now crash after each of those writes, and mount the disk. <bookmark mark='a'/> Before the commit block, the journal holds an unfinished transaction. Recovery sees no commit and throws it away: the old file, intact. <bookmark mark='b'/> After the commit, recovery copies the journaled blocks to their homes, whether or not the checkpoint got there first. Replaying twice gives the same result, so a crash during recovery is harmless too. The new file, intact. <bookmark mark='c'/> And recovery reads only the journal: a handful of blocks, on a disk of any size. That is why journaling replaced the long fsck.",
+   "zh": "现在在每一次写之后让它崩溃，再挂载磁盘。<bookmark mark='a'/>在提交块之前，日志里是一个未完成的事务。恢复程序看不到提交，就把它扔掉：旧文件，完好无损。<bookmark mark='b'/>提交之后，恢复程序把日志里的块复制到原位，不管检查点有没有先到。重放两次结果相同，所以恢复途中崩溃也无害。新文件，完好无损。<bookmark mark='c'/>而且恢复只读日志：几个块，不管磁盘多大。这就是日志取代漫长 fsck 的原因。"
+  },
+  "c81ec37207b7": {
+   "scene": "Journal",
+   "en": "There is a choice about what goes through the journal. <bookmark mark='a'/> Journal only the metadata, and let data blocks reach the disk whenever they like, and the structures always survive. But 90 of the crash points leave a file ending in someone else's old bytes. <bookmark mark='b'/> Ordered mode, the default in ext3 and ext4, writes the data to its home before the metadata that points to it commits, which is what we traced. Every crash point comes back intact. <bookmark mark='c'/> Journaling the data too is just as safe but writes every data block twice. <bookmark mark='d'/> Real journals also batch: ext4 gathers the changes of many operations into one transaction, committed every five seconds by default.",
+   "zh": "哪些东西走日志，是可以选择的。<bookmark mark='a'/>只记元数据，让数据块想什么时候落盘就什么时候落盘，结构总能保住。但有 90 个崩溃点让文件的结尾变成别人留下的旧字节。<bookmark mark='b'/>有序模式是 ext3 和 ext4 的默认模式，它在指向数据的元数据提交之前，先把数据写到原位，也就是我们刚才追踪的那样。每个崩溃点都完好恢复。<bookmark mark='c'/>连数据也记进日志同样安全，但每个数据块都要写两次。<bookmark mark='d'/>真实的日志还会批处理：ext4 把许多操作的改动汇成一个事务，默认每五秒提交一次。"
+  },
+  "b952d2f52cb7": {
+   "scene": "Journal",
+   "en": "Each flush makes the file system wait for the disk, so it is tempting to drop one. <bookmark mark='a'/> Remove the flush between the journal copies and the commit block, and the disk may write the commit first. <bookmark mark='b'/> The checker finds 25 crash points where recovery sees a commit, replays the journal, and copies in blocks that were never written for this transaction: stale contents from an earlier one. Corruption, created by the recovery itself. <bookmark mark='c'/> The fix is a checksum of the copies, stored in the commit block. Recovery replays only a transaction whose copies match, and every crash point comes back intact. ext4 does exactly this. <bookmark mark='d'/> It all still rests on the disk telling the truth about its flushes, which we will question in chapter 13.",
+   "zh": "每次刷新都让文件系统等磁盘，所以去掉一次很有诱惑力。<bookmark mark='a'/>去掉日志副本与提交块之间的那次刷新，磁盘就可能先写提交块。<bookmark mark='b'/>检查器找到 25 个崩溃点：恢复程序看到了提交，重放日志，却复制进了从未为这个事务写过的块，也就是之前某个事务留下的过期内容。损坏，是恢复本身造成的。<bookmark mark='c'/>办法是把副本的校验和存进提交块。恢复程序只重放副本相符的事务，每个崩溃点都完好恢复。ext4 正是这样做的。<bookmark mark='d'/>这一切仍然建立在磁盘如实报告刷新的基础上，第 13 章会质疑这一点。"
+  },
+  "52d6ff5c0296": {
+   "scene": "Lfs",
+   "en": "Chapter nine. The log-structured file system.",
+   "zh": "第9章。日志结构文件系统。"
+  },
+  "9eaef90f7a10": {
+   "scene": "Lfs",
+   "en": "In 1992 Rosenblum and Ousterhout asked a radical question. <bookmark mark='a'/> Memories had grown large enough that most reads were served from the cache, so what a disk mostly did was write. And small writes scattered over the disk are the slowest thing it can do. <bookmark mark='b'/> So buffer every change, file data and inodes alike, and write them all out together, in order, as one long segment, at the disk's full speed. Never write anything in place. <bookmark mark='c'/> But then an inode moves every time it changes. A map of where each inode now is is written into the log too, and a checkpoint region at a fixed place says where the newest map is. Crash recovery starts from the last checkpoint and reads forward. <bookmark mark='d'/> The catch: every overwrite leaves a dead copy behind, and the free space fills with holes.",
+   "zh": "1992 年，Rosenblum 和 Ousterhout 提出了一个激进的问题。<bookmark mark='a'/>内存已经大到多数读都能由缓存满足，所以磁盘主要在做的是写。而散落在盘面各处的小写，正是它做得最慢的事。<bookmark mark='b'/>那就把每个改动都缓冲起来，文件数据和 inode 一视同仁，按顺序一起写出去，成为长长的一段，用磁盘的全速。绝不原地写任何东西。<bookmark mark='c'/>可这样 inode 每变一次就换一个地方。每个 inode 现在在哪里，也写进日志里的一张映射表，固定位置的检查点区域则指出最新的映射表在哪里。崩溃恢复从最后一个检查点开始往前读。<bookmark mark='d'/>麻烦在于：每次覆写都留下一个作废的旧副本，空闲空间变得千疮百孔。"
+  },
+  "adf3c6e2ac24": {
+   "scene": "Lfs",
+   "en": "The cleaner reclaims the holes. It reads some segments, writes their live blocks back out compactly, and the old segments are free again. <bookmark mark='a'/> To free a segment whose live fraction is u, it reads the whole segment and writes back u of it, to gain 1 minus u of space for new data. So each byte of new data costs two over one minus u bytes of disk traffic. If the cleaner had to clean segments as full as the disk is on average, the cost would explode as the disk fills. <bookmark mark='b'/> Our simulation, after Rosenblum's, does better than that line, because the cleaner picks the emptiest segments, which are emptier than average. <bookmark mark='c'/> With hot and cold data, ninety percent of the writes going to a tenth of the files, the greedy cleaner gains only a little. <bookmark mark='d'/> Rosenblum's cost-benefit policy does much better, as the next picture explains.",
+   "zh": "清理器负责回收这些空洞。它读进一些段，把其中有效的块紧凑地写回去，旧段就又空了。<bookmark mark='a'/>要清理一个有效比例为 u 的段，它要读整段，写回其中的 u，换来 1 减 u 的空间给新数据。所以新数据每一字节要花二除以一减 u 字节的磁盘流量。如果清理器只能清理与磁盘平均一样满的段，磁盘一满，代价就会爆炸。<bookmark mark='b'/>我们仿照 Rosenblum 的模拟，结果比这条线好，因为清理器挑的是最空的段，它们比平均要空。<bookmark mark='c'/>数据分冷热时，百分之九十的写落在十分之一的文件上，贪心清理器只多得一点点好处。<bookmark mark='d'/>Rosenblum 的成本收益策略要好得多，下一张图会解释原因。"
+  },
+  "773ed6f21262": {
+   "scene": "Lfs",
+   "en": "Here is when each segment was cleaned, and how full it was. <bookmark mark='a'/> The greedy cleaner always takes the emptiest segment. Hot segments empty quickly and are cleaned again and again. Cold segments, full of data that rarely changes, empty only slowly, are seldom the emptiest, and hold on to their scraps of free space for a long time. <bookmark mark='b'/> Rosenblum's cost-benefit rule weighs the free space gained by how long it is likely to stay free: one minus u, times the age of the data, over the cost, one plus u. <bookmark mark='c'/> Now cold segments are worth cleaning while still quite full, because once compacted they stay compact, and hot segments are left alone until they are nearly empty. Two peaks, exactly the shape the paper reported. <bookmark mark='d'/> The idea outlived its file system: every flash drive runs a cleaner like this one, and so does every LSM tree.",
+   "zh": "这是每个段被清理时有多满。<bookmark mark='a'/>贪心清理器总是挑最空的段。热段很快就空了，一遍又一遍地被清理。冷段装着很少变化的数据，空得很慢，很少成为最空的那个，便把零零碎碎的空闲空间长期攥在手里。<bookmark mark='b'/>Rosenblum 的成本收益规则，按释放出的空间可能保持空闲多久来加权：一减 u，乘以数据的年龄，除以代价一加 u。<bookmark mark='c'/>这样一来，冷段在还相当满的时候就值得清理，因为一旦压紧，它就保持紧凑；热段则留到快空了再说。两个峰，正是论文报告的形状。<bookmark mark='d'/>这个思想比它的文件系统活得更久：每块闪存盘都运行着这样的清理器，每棵 LSM 树也是。"
+  },
+  "975ea24449eb": {
+   "scene": "Cow",
+   "en": "Chapter ten. Copy-on-write and checksums.",
+   "zh": "第10章。写时复制与校验和。"
+  },
+  "ef384b2e495f": {
+   "scene": "Cow",
+   "en": "A third answer to crashes: never overwrite anything. NetApp's WAFL file system did this in 1994, and ZFS and btrfs later. The whole file system is a tree of blocks hanging from one root. <bookmark mark='a'/> To change one data block, write the new contents to a fresh block. Its parent must now point somewhere else, so write a fresh copy of the parent too, and so on up to a new root. <bookmark mark='b'/> In our tree of depth three that is four blocks, and every other block is shared between the old tree and the new. <bookmark mark='c'/> The last step is one small write: the uberblock, at a fixed place, switches to the new root. <bookmark mark='d'/> Crash before that write, and the old tree is untouched. Crash after, and the new one is complete. There is no journal to replay and nothing for fsck to do.",
+   "zh": "对付崩溃的第三种答案：什么都不覆写。NetApp 的 WAFL 文件系统在 1994 年这么做，后来是 ZFS 和 btrfs。整个文件系统是一棵挂在一个根上的块树。<bookmark mark='a'/>要改一个数据块，就把新内容写进一个新块。它的父块现在得指向别处，于是父块也写一份新副本，如此一直到一个新的根。<bookmark mark='b'/>在我们这棵三层的树里，这是四个块，其余每个块都由新旧两棵树共享。<bookmark mark='c'/>最后一步是一次小小的写：固定位置上的超级根块切换到新的根。<bookmark mark='d'/>在这次写之前崩溃，旧树原封不动。之后崩溃，新树完整无缺。没有日志要重放，也没有什么要 fsck 做的。"
+  },
+  "46b14407d46a": {
+   "scene": "Cow",
+   "en": "Copy-on-write makes a second idea cheap. <bookmark mark='a'/> Since a parent is rewritten whenever a child changes anyway, let it store, next to each pointer, a checksum of the child. This is Part 29's Merkle tree. <bookmark mark='b'/> The root's checksum now vouches for every block in the file system. <bookmark mark='c'/> Suppose a bit rots in a data block, or the disk returns the wrong block. A traditional file system would hand the bad bytes to the program. Here, the parent's checksum does not match, and the error is caught. <bookmark mark='d'/> With a mirror, the file system reads the other copy, checks it, and rewrites the bad one. <bookmark mark='e'/> ZFS does this for every block, and scrubs the whole pool in the background to find rot before anyone reads it.",
+   "zh": "写时复制让第二个想法变得廉价。<bookmark mark='a'/>反正子块一变父块就要重写，那就让父块在每个指针旁边存上子块的校验和。这就是第 29 部分的默克尔树。<bookmark mark='b'/>现在根的校验和为文件系统里的每个块作保。<bookmark mark='c'/>假设某个数据块里有一位腐坏了，或者磁盘返回了错误的块。传统的文件系统会把坏字节交给程序。这里，父块的校验和对不上，错误被逮住了。<bookmark mark='d'/>有了镜像，文件系统读另一份副本，检查它，再重写坏的那份。<bookmark mark='e'/>ZFS 对每个块都这样做，并在后台擦洗整个存储池，赶在有人读之前找出腐坏。"
+  },
+  "ffde82463c1a": {
+   "scene": "Cow",
+   "en": "And a third gift. <bookmark mark='a'/> Keep an old root instead of freeing it, and you have a snapshot: the whole file system as it was, for the cost of one pointer. <bookmark mark='b'/> After thirteen writes to our tree, the current version and Monday's snapshot together need 113 blocks, where two copies would need 170: fifty-seven are still shared. <bookmark mark='c'/> There is a price. Every small write rewrites the path above it, and since nothing is updated in place, a file that is rewritten piecemeal ends up scattered. <bookmark mark='d'/> So ZFS gathers seconds of writes into one transaction group, and writes the shared upper levels once for all of them.",
+   "zh": "还有第三份礼物。<bookmark mark='a'/>旧的根不释放而是留着，就得到一个快照：整个文件系统当时的样子，代价只是一个指针。<bookmark mark='b'/>在我们的树上写了十三次之后，当前版本加上周一的快照一共需要 113 个块，而两份完整拷贝需要 170 个：仍有五十七个是共享的。<bookmark mark='c'/>代价是有的。每次小写都要重写它上方的路径，而且因为没有东西原地更新，一个被零零碎碎改写的文件最后会四散分布。<bookmark mark='d'/>所以 ZFS 把几秒钟的写汇成一个事务组，共享的上层只为它们统一写一次。"
+  },
+  "f77f4de796fe": {
+   "scene": "Raid",
+   "en": "Chapter eleven. RAID.",
+   "zh": "第11章。RAID。"
+  },
+  "8b2278c5d612": {
+   "scene": "Raid",
+   "en": "In 1988 Patterson, Gibson and Katz argued that an array of small, cheap disks could beat one big expensive one, if it were organised well. <bookmark mark='a'/> Striping, RAID 0, spreads consecutive blocks across the disks, so they all work at once; but one disk failing loses everything. <bookmark mark='b'/> Mirroring, RAID 1, keeps every block on two disks: half the capacity, and either copy will do. <bookmark mark='c'/> RAID 5 adds one parity block to each stripe, rotating which disk holds it so no disk becomes a bottleneck. It survives the loss of any one disk, at the cost of one disk's capacity. <bookmark mark='d'/> Here is the trade in one table, for N disks. Random writes are the weak spot of parity, for a reason we will see next.",
+   "zh": "1988 年，Patterson、Gibson 和 Katz 主张，一组小而便宜的磁盘，组织得当，就能胜过一块又大又贵的磁盘。<bookmark mark='a'/>条带化，即 RAID 0，把相邻的块分散到各盘上，让它们同时工作；但坏一块盘就丢掉一切。<bookmark mark='b'/>镜像，即 RAID 1，每个块存在两块盘上：容量减半，任一副本都行。<bookmark mark='c'/>RAID 5 给每个条带加一个校验块，并轮换由哪块盘存放，使没有一块盘成为瓶颈。它能挺过任意一块盘的丢失，代价是一块盘的容量。<bookmark mark='d'/>这张表概括了 N 块盘时的取舍。随机写是校验的弱点，原因马上就会看到。"
+  },
+  "fc916cf1a594": {
+   "scene": "Raid",
+   "en": "The parity block is the exclusive or of the data blocks in its stripe, bit by bit, Part 28's simplest error-correcting code. <bookmark mark='a'/> If any one disk dies, we know which one, so each of its blocks is just the exclusive or of the survivors, parity included. <bookmark mark='b'/> But updating one block is expensive. The new parity depends on the old: read the old data and the old parity, then write the new data and the new parity. Four disk operations for one block. That is the small-write problem, and why databases often prefer mirrors. <bookmark mark='c'/> RAID 6 adds a second check block, Q, a weighted sum over the field with 256 elements, the field of Part 28's Reed-Solomon codes. Two equations, two unknowns: any two failed disks can be rebuilt. Our implementation rebuilds every one of the fifteen pairs of lost disks from six, exactly.",
+   "zh": "校验块是它所在条带中各数据块逐位的异或，也就是第 28 部分最简单的纠错码。<bookmark mark='a'/>坏了任意一块盘，我们知道是哪一块，所以它的每个块就是幸存者的异或，校验块也算在内。<bookmark mark='b'/>但更新一个块很贵。新的校验依赖旧的：先读旧数据和旧校验，再写新数据和新校验。一个块要四次磁盘操作。这就是小写问题，也是数据库常常偏爱镜像的原因。<bookmark mark='c'/>RAID 6 再加一个校验块 Q，是在 256 个元素的域上的加权和，也就是第 28 部分 Reed-Solomon 码所用的域。两个方程，两个未知数：任意两块坏盘都能重建。我们的实现把六块盘中丢两块的全部十五种情形都精确重建了出来。"
+  },
+  "7c93a1e89b7d": {
+   "scene": "Raid",
+   "en": "Now the arithmetic of a real failure. Eight disks of sixteen terabytes in RAID 5; one dies. Rebuilding its contents means reading all seven survivors from end to end, at perhaps a hundred megabytes a second: about 44 hours. <bookmark mark='a'/> What can go wrong in that time? Another disk can fail. At the failure rate on the datasheet, the chance is three in ten thousand; at the three percent a year seen in the field, about one in a thousand. <bookmark mark='b'/> But the rebuild reads nine times ten to the fourteen bits, and drives are specified to fail to read about one sector per ten to the fifteen bits, or, for cheaper drives, per ten to the fourteen. At those rates the chance of hitting an unreadable sector is 59 percent, or near certainty. Those are worst-case bounds, and real drives usually do better, but the lesson stands: the danger is not the second disk, it is the bad sector. <bookmark mark='c'/> The classic formula for the mean time to data loss, which assumes failures are independent, gives RAID 5 tens of thousands of years, and our simulation agrees with the formula's model. <bookmark mark='d'/> Hence RAID 6, checksums, and scrubbing, which reads everything regularly so that bad sectors are found and repaired while the redundancy is still there.",
+   "zh": "现在来算一次真实故障。八块 16 TB 的盘组成 RAID 5；坏了一块。重建它的内容意味着把七块幸存的盘从头读到尾，速度大约每秒一百兆字节：约 44 小时。<bookmark mark='a'/>这期间会出什么错？另一块盘可能坏掉。按规格书上的故障率，概率是万分之三；按现场观察到的每年百分之三，约为千分之一。<bookmark mark='b'/>可重建要读九乘十的十四次方个比特，而按规格，磁盘大约每十的十五次方个比特就有一个扇区读不出来，便宜的盘则是每十的十四次方个。按这样的比率，碰上不可读扇区的概率是百分之五十九，或者几乎必然。这些是最坏情况的上界，真实的盘通常好一些，但教训依然成立：危险不是第二块盘，而是坏扇区。<bookmark mark='c'/>经典的平均数据丢失时间公式假设故障相互独立，给 RAID 5 算出几万年，我们的模拟也与公式的模型吻合。<bookmark mark='d'/>所以有了 RAID 6、校验和，以及擦洗：定期读遍一切，趁冗余还在，把坏扇区找出来修好。"
+  },
+  "47cd3db30651": {
+   "scene": "Field",
+   "en": "Chapter twelve. Disks in the field.",
+   "zh": "第12章。真实世界中的磁盘。"
+  },
+  "f19e4f93cd5a": {
+   "scene": "Field",
+   "en": "Every reliability calculation so far took the numbers on the datasheet. A million hours between failures sounds like a hundred years. <bookmark mark='a'/> It means that a large population should lose under one percent of its disks a year. <bookmark mark='b'/> In 2007 Schroeder and Gibson looked at the replacement logs of about a hundred thousand disks in real data centres. Typical yearly replacement rates were two to four percent, <bookmark mark='c'/> and on some systems thirteen. <bookmark mark='d'/> The failures did not follow the textbook bathtub, flat for years before wearing out: rates rose steadily from the second year. <bookmark mark='e'/> And they clustered. A disk being replaced made another replacement soon more likely, which is exactly what RAID's arithmetic assumes never happens. <bookmark mark='f'/> Even with independent failures, the mean time to data loss falls more than tenfold when the real rate is used.",
+   "zh": "到目前为止，每一个可靠性计算都用的是规格书上的数字。一百万小时的平均故障间隔，听起来像一百年。<bookmark mark='a'/>它的意思是，一大批盘每年坏掉的应当不到百分之一。<bookmark mark='b'/>2007 年，Schroeder 和 Gibson 查看了真实数据中心里大约十万块盘的更换记录。典型的年更换率是百分之二到四，<bookmark mark='c'/>有些系统高达百分之十三。<bookmark mark='d'/>故障并不遵循教科书上的浴盆曲线，先平稳多年再磨损：从第二年起，故障率就稳步上升。<bookmark mark='e'/>而且故障成簇出现。换掉一块盘，很快再换一块的可能性就变大，这恰恰是 RAID 的算术假定绝不会发生的。<bookmark mark='f'/>即使故障相互独立，换成真实的故障率，平均数据丢失时间也要缩短十倍以上。"
+  },
+  "89a412c02209": {
+   "scene": "Field",
+   "en": "Whole-disk failures at least announce themselves. Worse are the errors that do not. <bookmark mark='a'/> A latent sector error is a sector that has quietly become unreadable. A study of one and a half million disks found them in three and a half percent within 32 months, and they are discovered only when someone reads, which may be during a rebuild. <bookmark mark='b'/> Silent corruption is a disk returning the wrong bytes without any error at all: the same group counted over four hundred thousand checksum mismatches in that population. <bookmark mark='c'/> Some writes are acknowledged and then lost, or written to the wrong place, and the disk's own error-correcting code cannot notice, because it is correct for the block it is attached to. <bookmark mark='d'/> And every layer in between, from firmware to cables to memory, can do damage.",
+   "zh": "整盘故障至少会宣告自己。更糟的是那些不声不响的错误。<bookmark mark='a'/>潜在扇区错误是一个悄悄变得读不出来的扇区。一项针对一百五十万块盘的研究发现，32 个月内有百分之三点五的盘出现了这种错误，而且只有在有人去读时才会发现，那可能正是重建的时候。<bookmark mark='b'/>静默损坏是磁盘返回了错误的字节，却没有任何报错：同一个团队在那批盘中数出了四十多万次校验和不符。<bookmark mark='c'/>有些写被确认之后却丢失了，或者写到了错误的位置，磁盘自己的纠错码察觉不到，因为对它所附着的那个块来说，它是正确的。<bookmark mark='d'/>而中间的每一层，从固件到线缆再到内存，都可能造成破坏。"
+  },
+  "e536713b1c4e": {
+   "scene": "Field",
+   "en": "What can be trusted, then? <bookmark mark='a'/> Saltzer, Reed and Clark's end-to-end argument says that a check made in the middle of a path cannot vouch for the whole of it; only a check at the ends can. A disk's own error correction protects the platter, but not the cable, the controller, or a write that went to the wrong place. <bookmark mark='b'/> So the file system itself should checksum what it writes and verify what it reads, as ZFS and btrfs do, and as databases do for their pages. <bookmark mark='c'/> Scrubbing reads everything regularly, so latent errors are found and repaired while the redundancy to repair them still exists. <bookmark mark='d'/> And because whole machines and whole buildings fail too, the final defence is copies elsewhere, which Parts 39 and 45 take up.",
+   "zh": "那还有什么可以信任？<bookmark mark='a'/>Saltzer、Reed 和 Clark 的端到端论证说，在路径中间做的检查不能为整条路径作保；只有两端的检查才能。磁盘自己的纠错保护的是盘片，却保护不了线缆、控制器，或写到了错误位置的数据。<bookmark mark='b'/>所以文件系统自己应当为写出的东西算校验和、在读入时验证，就像 ZFS 和 btrfs 那样，也像数据库对它们的页所做的那样。<bookmark mark='c'/>擦洗定期读遍一切，趁着用来修复的冗余还在，把潜在错误找出来修好。<bookmark mark='d'/>而因为整台机器、整栋楼也会出故障，最后一道防线是别处的副本，这是第 39 和第 45 部分的话题。"
+  },
+  "d9e8d8367aa1": {
+   "scene": "Fsync",
+   "en": "Chapter thirteen. Fsync, and what applications must do.",
+   "zh": "第13章。fsync，以及应用程序必须做什么。"
+  },
+  "f1c1f6e33a22": {
+   "scene": "Fsync",
+   "en": "When a program writes, where do the bytes go? <bookmark mark='a'/> With buffered input and output, first into the program's own buffer, which not even the kernel can see. <bookmark mark='b'/> Then into the kernel's page cache. The write call returns here, and the kernel writes the page back to the disk at its convenience, within about thirty seconds. <bookmark mark='c'/> Even then, the drive may hold it in its own volatile cache. <bookmark mark='d'/> Only then is it durable. <bookmark mark='e'/> Fsync is the call that pushes a file through every stage: its pages, its metadata, and a flush command to the drive. <bookmark mark='f'/> A new file's name lives in its directory, so the directory needs an fsync too. <bookmark mark='g'/> And all of it, journals included, rests on drives honouring flushes, which some cheap ones have not.",
+   "zh": "程序写数据时，字节去了哪里？<bookmark mark='a'/>用带缓冲的输入输出时，先进程序自己的缓冲区，连内核都看不到。<bookmark mark='b'/>然后进内核的页缓存。write 调用在这里就返回了，内核方便时再把页写回磁盘，大约三十秒以内。<bookmark mark='c'/>即便那时，磁盘也可能把它放在自己的易失缓存里。<bookmark mark='d'/>到这一步才算持久。<bookmark mark='e'/>fsync 是把一个文件推过每一层的调用：它的页、它的元数据，以及发给磁盘的一条刷新命令。<bookmark mark='f'/>新文件的名字住在它的目录里，所以目录也需要一次 fsync。<bookmark mark='g'/>而这一切，包括日志在内，都依赖于磁盘老老实实地执行刷新，有些便宜的盘并没有做到。"
+  },
+  "b77ba2d22fdc": {
+   "scene": "Fsync",
+   "en": "Now the application's side. A program wants to replace a small file, a configuration or a saved game, and our checker crashes each way of doing it at every point, on ordered PebbleFS. <bookmark mark='a'/> Overwriting it in place tears it: a crash between the block writes leaves half old and half new. Journaling metadata does not protect data written in place. <bookmark mark='b'/> Writing a new file and renaming it over the old one is the classic idiom, because rename is atomic. With blocks allocated at once, it survives. But with delayed allocation, the rename can reach the disk before the new file's data even has blocks. A crash then leaves an empty file. This is exactly what happened when ext4 arrived in 2009, and users lost their settings. <bookmark mark='c'/> The safe way: write the new file, fsync it, then rename, then fsync the directory. Every crash point leaves either the old file or the new one.",
+   "zh": "现在看应用程序这一边。一个程序要替换一个小文件，比如配置或存档，我们的检查器在有序模式的 PebbleFS 上，把每种做法的每一个点都崩溃一遍。<bookmark mark='a'/>原地覆写会撕裂它：在两次块写之间崩溃，留下一半旧一半新。只记元数据的日志保护不了原地写的数据。<bookmark mark='b'/>写一个新文件，再把它重命名盖过旧文件，是经典做法，因为 rename 是原子的。块立即分配时，它能挺过来。但有了延迟分配，重命名可能在新文件的数据都还没有块之前就落了盘。这时崩溃，留下一个空文件。2009 年 ext4 推出时恰恰发生了这种事，用户丢了自己的设置。<bookmark mark='c'/>安全的做法：写新文件，fsync 它，再重命名，再 fsync 目录。每个崩溃点留下的要么是旧文件，要么是新文件。"
+  },
+  "e954bf7df09b": {
+   "scene": "Fsync",
+   "en": "Real programs get this wrong all the time. <bookmark mark='a'/> In 2014 Pillai and colleagues built a tool that records a program's system calls and explores the crash states a file system allows. Across eleven widely used applications, databases and version control among them, it found sixty places where a crash could lose or corrupt data. <bookmark mark='b'/> Part of the trouble is that each file system persists operations in its own order, and the standard promises very little, so code that is safe on one can fail on another. <bookmark mark='c'/> And in 2018 the PostgreSQL developers discovered that when Linux failed to write a page back, it reported the error once, then marked the page clean. PostgreSQL retried the fsync, the retry succeeded, and the write was silently lost. <bookmark mark='d'/> The lesson: a failed fsync means the data is gone. Do not retry. PostgreSQL now stops, and recovers from its own write-ahead log, which is where Part 35 picks up.",
+   "zh": "真实的程序总是在这里出错。<bookmark mark='a'/>2014 年，Pillai 和同事们做了一个工具，记录程序的系统调用，并探索文件系统所允许的崩溃状态。在十一个广泛使用的应用里，包括数据库和版本控制，它找到六十处崩溃会丢失或损坏数据的地方。<bookmark mark='b'/>部分原因在于，每个文件系统按自己的顺序持久化操作，而标准承诺得很少，所以在一个文件系统上安全的代码，换一个就可能失败。<bookmark mark='c'/>而在 2018 年，PostgreSQL 的开发者发现，当 Linux 没能把一页写回时，它只报告一次错误，随后就把这一页标成干净的。PostgreSQL 重试 fsync，重试成功了，那次写却悄无声息地丢了。<bookmark mark='d'/>教训是：fsync 失败就意味着数据没了。不要重试。PostgreSQL 现在会停下来，从它自己的预写日志恢复，这正是第 35 部分接着讲的地方。"
+  },
+  "5c5499afcbbb": {
+   "scene": "Lsm",
+   "en": "Chapter fourteen. LSM trees.",
+   "zh": "第14章。LSM 树。"
+  },
+  "78f3f9fa3575": {
+   "scene": "Lsm",
+   "en": "A B-tree updates its pages in place: each insert reads a page and writes it back, a random write. In 1996 O'Neil and colleagues proposed the log-structured merge tree, which never does that. <bookmark mark='a'/> A put is appended to a log, for crash recovery, and inserted into a sorted table in memory, the memtable. No seek at all. <bookmark mark='b'/> When the memtable fills, it is written out in one sequential sweep as a sorted, immutable run, an SSTable. <bookmark mark='c'/> A lookup checks the memtable, then each run from newest to oldest. Each run carries a Bloom filter, Part 20's, so runs that cannot hold the key are skipped without reading them. <bookmark mark='d'/> Runs accumulate, so they are merged in the background. Google's Bigtable, LevelDB, RocksDB and Cassandra are all built this way.",
+   "zh": "B 树原地更新它的页：每次插入都读一页再写回，是一次随机写。1996 年，O'Neil 和同事们提出了日志结构合并树，它从不这样做。<bookmark mark='a'/>一次 put 追加到一个日志里，供崩溃恢复，并插入内存中一张有序表，即内存表。完全没有寻道。<bookmark mark='b'/>内存表满了，就一次顺序地写出去，成为一个有序、不可变的段，即 SSTable。<bookmark mark='c'/>查找先查内存表，再从新到旧查每个段。每个段带一个布隆过滤器，第 20 部分的那种，所以不可能含有该键的段不用读就能跳过。<bookmark mark='d'/>段越积越多，所以在后台合并。谷歌的 Bigtable、LevelDB、RocksDB 和 Cassandra 都是这样构造的。"
+  },
+  "6b2c9d74bc4d": {
+   "scene": "Lsm",
+   "en": "There are two classic ways to merge. Here is a tiny tree, four entries per memtable, growing one flush at a time. <bookmark mark='a'/> On the left, leveled compaction, LevelDB's and RocksDB's default. Each level holds a single run, three times larger than the level above. When a run arrives at a level it is merged straight into that level's run, which is rewritten. <bookmark mark='b'/> On the right, tiered compaction, Cassandra's default. A level collects up to three runs, and only when it has three are they merged together into one run on the next level. <bookmark mark='c'/> Watch the difference. Leveled keeps few runs, so a lookup checks few places, but rewrites the same data again and again. Tiered writes each entry once per level, but leaves many runs to search.",
+   "zh": "合并有两种经典方式。这是一棵很小的树，每个内存表四个条目，一次刷写一次刷写地长大。<bookmark mark='a'/>左边是分层合并，LevelDB 和 RocksDB 的默认方式。每层只有一个段，是上一层的三倍大。一个段到达某层时，直接并进该层的段，那个段被重写。<bookmark mark='b'/>右边是分级合并，Cassandra 的默认方式。一层最多攒三个段，攒满三个才把它们合成一个段，放到下一层。<bookmark mark='c'/>看看差别。分层合并段少，查找要看的地方少，但同样的数据被一遍又一遍地重写。分级合并每个条目每层只写一次，却留下许多段要查。"
+  },
+  "4eb408650409": {
+   "scene": "Lsm",
+   "en": "Now at scale: two hundred thousand puts over a hundred thousand keys, a memtable of a thousand, size ratio ten. <bookmark mark='a'/> Three costs. Write amplification: bytes written to disk per byte put. Read amplification: runs read per lookup. Space amplification: entries stored per live key. <bookmark mark='b'/> Leveled writes each entry about twelve times; tiered about twice. But tiered leaves nineteen runs, and without filters a lookup for a missing key reads all of them. <bookmark mark='c'/> Ten bits of Bloom filter per key bring that down to almost nothing for both. <bookmark mark='d'/> And a B-tree, for comparison, writes a whole four-kilobyte page to change a hundred-byte record: forty times amplification, falling only when much of the tree fits in memory. <bookmark mark='e'/> No design wins on all three costs. Athanassoulis and colleagues called this the RUM conjecture, and tuning an LSM tree is choosing a point in that triangle.",
+   "zh": "现在放大规模：二十万次 put，落在十万个键上，内存表一千条，大小比为十。<bookmark mark='a'/>三种代价。写放大：每写入一字节，磁盘写多少字节。读放大：每次查找读多少个段。空间放大：每个有效键存了多少条目。<bookmark mark='b'/>分层合并每个条目写大约十二次；分级合并大约两次。但分级合并留下十九个段，没有过滤器时，查一个不存在的键要把它们全读一遍。<bookmark mark='c'/>每键十位的布隆过滤器让两者的这项代价都几乎降到零。<bookmark mark='d'/>作为对比，B 树为了改一条一百字节的记录要写整整一个四千字节的页：四十倍的写放大，只有当树的很大一部分放得进内存时才会下降。<bookmark mark='e'/>没有哪种设计能在三项代价上同时取胜。Athanassoulis 和同事们把这称为 RUM 猜想，调优一棵 LSM 树，就是在这个三角形里选一个点。"
+  },
+  "8b1636cef013": {
+   "scene": "PebbleDisk",
+   "en": "Chapter fifteen. PebbleOS gets a disk.",
+   "zh": "第15章。PebbleOS 有了磁盘。"
+  },
+  "10e2263bcdaf": {
+   "scene": "PebbleDisk",
+   "en": "Now our own machine. PebbleOS gets a disk. <bookmark mark='a'/> The device is three registers on the I/O page that only the kernel can reach: a block number, a memory address, and a command. Store a one in the command, and the block is copied straight into memory: direct memory access. <bookmark mark='b'/> The kernel gains a file system that reads PebbleFS, two hundred and sixty instructions of Pebble assembly: read the superblock at boot, a buffer cache of four blocks, find an inode, and bmap, which follows the direct, indirect and double-indirect pointers. <bookmark mark='c'/> There is a new system call, open, that walks a path from the root, and read now works on an open file, or on standard input when a shell has redirected it from a file. <bookmark mark='d'/> Run cat on slash novels slash emma, and two hundred thousand bytes come out exactly, from 201 block reads, in the order the Python file system says they should come.",
+   "zh": "现在轮到我们自己的机器。PebbleOS 有了一块磁盘。<bookmark mark='a'/>设备是 I/O 页上只有内核能碰的三个寄存器：块号、内存地址和命令。往命令寄存器里存一个一，这个块就被直接复制进内存：直接内存访问。<bookmark mark='b'/>内核多了一个读 PebbleFS 的文件系统，两百六十条 Pebble 汇编指令：启动时读超级块、一个四块的缓冲区缓存、找 inode，以及 bmap，它沿着直接、一级间接和二级间接指针找到块。<bookmark mark='c'/>新增了一个系统调用 open，从根开始走一条路径；read 现在可以读打开的文件，也可以读被 shell 从文件重定向过来的标准输入。<bookmark mark='d'/>对 /novels/emma 运行 cat，二十万字节一字不差地出来，用了 201 次块读，顺序与 Python 文件系统预测的完全一样。"
+  },
+  "0e57a13ade83": {
+   "scene": "PebbleDisk",
+   "en": "Now the Job's own data. <bookmark mark='a'/> The thirty novels are written to a PebbleFS disk, one file each, twenty-five million bytes, and fsck finds nothing wrong. <bookmark mark='b'/> Reading all of them takes 24,640 block reads. Laid out as our allocator lays them, the model disk moves its arm only 76 times, for the lookups and indirect blocks, and the whole corpus streams off in half a second. <bookmark mark='c'/> On an aged disk, with every block somewhere else, it would take a hundred seconds. On flash, seventeen milliseconds, or two seconds if scattered.",
+   "zh": "现在是任务自己的数据。<bookmark mark='a'/>三十部小说写进一块 PebbleFS 磁盘，每部一个文件，两千五百万字节，fsck 查不出任何问题。<bookmark mark='b'/>全部读一遍要 24,640 次块读。按我们的分配器的布局，模型磁盘的机械臂只移动了 76 次，用于路径查找和间接块，整个语料半秒钟就流了出来。<bookmark mark='c'/>在一块老化的磁盘上，每个块都在别处，就要一百秒。在闪存上是十七毫秒，分散时是两秒。"
+  },
+  "2e6051ad7803": {
+   "scene": "PebbleDisk",
+   "en": "And one layer more. <bookmark mark='a'/> We count the words of Pride and Prejudice into chapter 14's LSM tree. <bookmark mark='b'/> Each of its runs becomes a file on PebbleFS: sorted eight-byte entries, written once and never changed, which is exactly the kind of file a file system handles best. <bookmark mark='c'/> Looking words up reads those files back, newest first, and every count comes back right. <bookmark mark='d'/> That is what a storage engine is: a structure built from files, as files are built from blocks. Part 35 builds a database on that idea.",
+   "zh": "再往上一层。<bookmark mark='a'/>我们把《傲慢与偏见》的词频统计进第 14 章的 LSM 树。<bookmark mark='b'/>它的每个段都成了 PebbleFS 上的一个文件：有序的八字节条目，写一次、永不修改，这正是文件系统最擅长处理的那种文件。<bookmark mark='c'/>查词时从新到旧把这些文件读回来，每个计数都正确。<bookmark mark='d'/>存储引擎就是这样：一个由文件搭成的结构，就像文件由块搭成一样。第 35 部分就在这个思想上搭一个数据库。"
+  },
+  "a8cdc0b55397": {
+   "scene": "PebbleDisk",
+   "en": "So the ledger gets row twelve. <bookmark mark='a'/> The tokenizer now reads the novels from the file system instead of the tape, and pipes words to the job, as in Part 31. We fit the instruction counts on thirty-two passages read through PebbleOS, check the fit on held-out ones, and project the corpus: 2.65 billion instructions, priced exactly as row eleven. <bookmark mark='b'/> Reading through a real file system costs the kernel no more than the tape did, about twenty-two instructions a byte, because the work is the same byte-by-byte copy. <bookmark mark='c'/> What is new is the disk: half a second for the model disk to deliver twenty-five megabytes. Two point six six seconds in all. On flash the disk time all but vanishes; on an aged disk it would be a hundred seconds, nearly fifty times the computation. Where the blocks are matters more than the code that reads them.",
+   "zh": "于是账本有了第十二行。<bookmark mark='a'/>分词器现在从文件系统而不是磁带读取小说，再像第 31 部分那样，把词经管道送给任务程序。我们在 PebbleOS 读出的三十二段文字上拟合指令数，在留出的段落上检验拟合，再推算整个语料：26.5 亿条指令，计价方法与第十一行完全相同。<bookmark mark='b'/>通过真正的文件系统读取，内核的花费并不比读磁带多，每字节约二十二条指令，因为工作同样是逐字节的复制。<bookmark mark='c'/>新增的是磁盘：模型磁盘送出两千五百万字节要半秒钟。总共 2.66 秒。在闪存上，磁盘时间几乎消失；在老化的磁盘上要一百秒，将近计算时间的五十倍。块放在哪里，比读它们的代码更要紧。"
+  },
+  "c63c770a619f": {
+   "scene": "Frontier",
+   "en": "Chapter sixteen. Frontier: storage that can be trusted.",
+   "zh": "第16章。前沿：可以信赖的存储。"
+  },
+  "21da20000515": {
+   "scene": "Frontier",
+   "en": "Chapter 14 found that no LSM design wins on every cost. Research now treats the whole space as one continuum to be navigated. <bookmark mark='a'/> A small example. The usual tree gives every run the same number of Bloom filter bits per key, so every level has the same false-positive rate, and a lookup for an absent key wastes that much at each level. <bookmark mark='b'/> Dayan, Athanassoulis and Idreos observed in 2017 that the levels differ enormously in size. Bits spent on a small level are cheap, so give the small levels more and the big one fewer, until each level's false-positive rate is proportional to its size. <bookmark mark='c'/> With the same total memory, the wasted reads fall three and a half times. <bookmark mark='d'/> Their next design, Dostoevsky, mixed leveling and tiering within one tree; how to choose and change such a design as a workload drifts is still open.",
+   "zh": "第 14 章发现，没有一种 LSM 设计能在每项代价上都取胜。如今的研究把整个设计空间看作一个可以在其中航行的连续体。<bookmark mark='a'/>一个小例子。通常的树给每个段每键同样多位的布隆过滤器，于是每层的误判率都一样，查一个不存在的键在每一层都浪费这么多。<bookmark mark='b'/>Dayan、Athanassoulis 和 Idreos 在 2017 年注意到，各层的大小相差悬殊。花在小层上的比特很便宜，所以给小层多一些、给最大的一层少一些，直到每层的误判率与它的大小成正比。<bookmark mark='c'/>总内存不变，浪费的读少了三倍半。<bookmark mark='d'/>他们的下一个设计 Dostoevsky 在一棵树里混用分层与分级；随着负载漂移，如何选择并改变这样的设计，仍是开放问题。"
+  },
+  "847f24d3fae2": {
+   "scene": "Frontier",
+   "en": "Our checker tried every crash, and that does not scale. <bookmark mark='a'/> With k writes between flushes the disk can be left in two to the k states: nine for three writes, over a thousand for ten. Exhaustive checking works for small operations, not for whole programs. <bookmark mark='b'/> So researchers prove instead. FSCQ, in 2015, was a file system proved correct in the Coq proof assistant, with a logic for crashes: whatever point it crashes at, recovery leads to a state its specification allows. <bookmark mark='c'/> Yggdrasil made such proofs push-button, by handing them to an SMT solver. <bookmark mark='d'/> CrashMonkey went the other way, testing Linux file systems systematically over short sequences of operations, and found new bugs in widely used ones. <bookmark mark='e'/> What is missing is a verified file system as fast as ext4, with concurrency and delayed allocation, and a precise model of what real drives actually promise.",
+   "zh": "我们的检查器尝试了每一种崩溃，这样做无法扩展。<bookmark mark='a'/>两次刷新之间有 k 次写，磁盘就可能处于二的 k 次方种状态：三次写九种，十次写一千多种。穷举检查适用于小操作，不适用于整个程序。<bookmark mark='b'/>所以研究者转而证明。2015 年的 FSCQ 是一个在 Coq 证明助手中被证明正确的文件系统，用的是一种关于崩溃的逻辑：无论在哪一点崩溃，恢复都会到达其规约所允许的状态。<bookmark mark='c'/>Yggdrasil 把这类证明交给 SMT 求解器，做到了一键完成。<bookmark mark='d'/>CrashMonkey 走了另一条路，在短的操作序列上系统地测试 Linux 文件系统，在广泛使用的文件系统中发现了新的缺陷。<bookmark mark='e'/>还缺的是一个和 ext4 一样快、支持并发和延迟分配的已验证文件系统，以及一个准确描述真实磁盘究竟承诺了什么的模型。"
+  },
+  "bdc871406bc2": {
+   "scene": "Frontier",
+   "en": "Chapter 3's translation layer hides flash behind the old interface of rewritable blocks, and pays for it in write amplification and spare capacity. Zoned storage stops pretending. <bookmark mark='a'/> Shingled disks, whose tracks overlap like roof tiles, and the zoned SSDs standardized for NVMe in 2020, divide themselves into zones. Each zone is written strictly in order, at a write pointer, and reset as a whole. <bookmark mark='b'/> The device no longer cleans; the host does, and it can write sequentially by design. In our simulator, rewriting pages in order gives an amplification of exactly one, against seven and a half for random writes on the same spare space. <bookmark mark='c'/> Log-structured software fits zones naturally: LFS, LSM trees, flash file systems. <bookmark mark='d'/> Bringing everything else along is open.",
+   "zh": "第 3 章的转换层把闪存藏在可改写块这一旧接口后面，代价是写放大和备用容量。分区存储不再假装。<bookmark mark='a'/>叠瓦式磁盘的磁道像屋瓦一样相互叠压，2020 年为 NVMe 标准化的分区固态盘也一样，它们都把自己分成若干区。每个区只能在写指针处严格按顺序写，并整体重置。<bookmark mark='b'/>设备不再做清理，由主机来做，而主机可以从设计上就按顺序写。在我们的模拟器里，按顺序改写页的写放大恰好是一，同样的备用空间下随机写则是七点五。<bookmark mark='c'/>日志结构的软件天然适合分区：LFS、LSM 树、闪存文件系统。<bookmark mark='d'/>让其余的一切也跟上来，仍是开放问题。"
+  },
+  "ef4f83833328": {
+   "scene": "Frontier",
+   "en": "Six problems at the frontier. <bookmark mark='a'/> A precise, portable model of what a file system promises after a crash, one that programs could rely on everywhere. <bookmark mark='b'/> Verified file systems that are as fast as the best unverified ones. <bookmark mark='c'/> Choosing, and re-choosing, an LSM tree's design automatically as its workload changes. <bookmark mark='d'/> Placing data on flash by how long it will live, which nobody knows in advance, so that whole blocks die together. <bookmark mark='e'/> File systems and databases that run on zoned devices at full speed. <bookmark mark='f'/> And models of durability that match the field, where failures are correlated across disks, racks and sites. The research problem at the end of this part asks a small, sharp question of its own: the fewest flushes that make an operation safe.",
+   "zh": "前沿上的六个问题。<bookmark mark='a'/>一个准确、可移植的模型，描述文件系统在崩溃后承诺了什么，让程序处处都能依赖。<bookmark mark='b'/>与最好的未经验证的文件系统一样快的已验证文件系统。<bookmark mark='c'/>随着负载变化，自动选择并重新选择 LSM 树的设计。<bookmark mark='d'/>按数据将活多久来安排它在闪存上的位置，而这事先没人知道，好让整块一起死去。<bookmark mark='e'/>能全速运行在分区设备上的文件系统和数据库。<bookmark mark='f'/>以及与现场相符的持久性模型，在那里故障跨磁盘、机架和站点相关联。这一部分最后的研究题提出了一个小而尖锐的问题：让一个操作安全所需的最少刷新。"
+  },
+  "6812e9529d80": {
+   "scene": "Outro",
+   "en": "What we built in this part. A model of the disk, where reading in order is nearly five hundred times faster than reading at random, and a simulated flash drive with its translation layer and garbage collector. A Unix file system, crashed at every write and checked each time. The defences: careful ordering, journaling with its commit block, logs and their cleaners, copy-on-write trees with checksums, RAID and the failure rates disks really have. What fsync means, LSM trees, and PebbleOS reading the novels from a disk of its own.",
+   "zh": "这一部分我们搭了什么。一个磁盘模型，在那里按顺序读比随机读快将近五百倍；一块模拟的闪存盘，带着它的转换层和垃圾回收器。一个 Unix 文件系统，在每次写时崩溃、每次都检查。各道防线：小心排序、带提交块的日志、日志结构及其清理器、带校验和的写时复制树、RAID 以及磁盘真实的故障率。fsync 意味着什么，LSM 树，以及 PebbleOS 从它自己的磁盘上读出小说。"
+  },
+  "87014536a611": {
+   "scene": "Outro",
+   "en": "Where this comes back. Part 35's database keeps a write-ahead log, recovers with ARIES, and indexes with B-plus trees and this part's LSM trees. Part 39 puts copies on other machines, because one machine's disks are never enough. Part 45 prices durability in the cloud. Part 46 builds streaming systems on the partitioned log, the sequential write at datacenter scale. And Part 50 does availability arithmetic with the failure rates of chapter 12.",
+   "zh": "这些内容会在哪里再出现。第 35 部分的数据库保留一个预写日志，用 ARIES 恢复，用 B+ 树和这一部分的 LSM 树建索引。第 39 部分把副本放到别的机器上，因为一台机器的盘永远不够。第 45 部分为云中的持久性标价。第 46 部分在分区日志上搭建流处理系统，那是数据中心规模的顺序写。第 50 部分则用第 12 章的故障率做可用性的算术。"
+  },
+  "95dce6a04744": {
+   "scene": "Outro",
+   "en": "In practice. Use ext4 or XFS unless you need checksums and snapshots, which ZFS and btrfs give. To replace a file durably, write a new one, fsync it, rename it over the old, and fsync the directory; and if fsync ever fails, treat the data as lost. Leave flash some spare room, keep TRIM on, and watch its wear. Protect large disks with RAID 6 or mirrors, scrub them, and remember that RAID is not a backup: it faithfully copies your mistakes. And pick an LSM engine for write-heavy data, a B-tree for read-heavy, and tune compaction to the workload.",
+   "zh": "实践中。用 ext4 或 XFS，除非你需要校验和与快照，那就用 ZFS 或 btrfs。要持久地替换一个文件，写一个新文件，fsync 它，重命名盖过旧文件，再 fsync 目录；fsync 一旦失败，就当数据已经丢了。给闪存留些空余，开着 TRIM，留意它的磨损。用 RAID 6 或镜像保护大容量磁盘，定期擦洗，并记住 RAID 不是备份：它会忠实地复制你的错误。写多的数据选 LSM 引擎，读多的选 B 树，并按负载调整合并。"
+  },
+  "4448febb6638": {
+   "scene": "Outro",
+   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build problem: teach PebbleOS to write files, and crash-test your code with our checker. The last, marked with a star, is a research problem: the fewest flushes that make each operation safe, which careful ordering only approximates.",
+   "zh": "六道题，完整解答在这一部分的笔记里。可以在任何一道上暂停。第五道是动手题：教 PebbleOS 写文件，并用我们的检查器对你的代码做崩溃测试。最后一道标着星号，是研究题：让每个操作安全所需的最少刷新，小心排序只是它的近似。"
+  },
+  "e28ca465719c": {
+   "scene": "Outro",
+   "en": "Next time, Part 35: Databases. In 1970 Codd said that programs should say what data they want, never how to find it. From that came relational algebra, an optimizer that searches for the cheapest plan, and transactions that let thousands of users act as if each were alone, even through crashes, using this part's log. The Job becomes one line of SQL. Part 35, Databases.",
+   "zh": "下一次，第35部分：数据库。1970 年，Codd 说程序应当说明想要什么数据，而绝不说明怎么去找。由此产生了关系代数、一个搜索最便宜计划的优化器，以及让成千上万的用户仿佛各自独处的事务，即使经历崩溃也一样，用的正是这一部分的日志。任务变成一行 SQL。第35部分，数据库。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "这一部分所依据的书和论文都在屏幕上和笔记里。感谢观看。"
+  }
+ },
+ "title_en": "Computer Science, Built: Part 34, Storage",
+ "chapters_en": {
+  "Hook": "One append, three writes",
+  "Persist": "1. Persistence",
+  "Disks": "2. Disks",
+  "Flash": "3. Flash",
+  "Files": "4. Files and directories",
+  "SimpleFS": "5. A simple file system",
+  "Locality": "6. Locality",
+  "Crash": "7. Crash consistency",
+  "Journal": "8. Journaling",
+  "Lfs": "9. The log-structured file system",
+  "Cow": "10. Copy-on-write and checksums",
+  "Raid": "11. RAID",
+  "Field": "12. Disks in the field",
+  "Fsync": "13. fsync, and what applications must do",
+  "Lsm": "14. LSM trees",
+  "PebbleDisk": "15. PebbleOS gets a disk",
+  "Frontier": "16. Frontier: storage that can be trusted",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}
