@@ -215,7 +215,7 @@ TIMELINE = [
     (1951, r"a state of sin; Robbins--Monro; Hurst's Nile; Krige's boreholes; Donsker's invariance principle; Hodges's estimator"),
     (1952, r"classical scaling; Donsker's theorem"),
     (1953, r"MCMC; Doob's \emph{Stochastic Processes}; Scheff\'e's projections; Le Cam's superefficiency theorem"),
-    (1956, r"Stein's paradox; Robbins's empirical Bayes; kernel densities; Prokhorov's metric; Kiefer--Wolfowitz; Karlin--Rubin; Stein's adaptation question"),
+    (1956, r"Stein's paradox; Robbins's empirical Bayes; kernel densities; Prokhorov's metric; Kiefer--Wolfowitz; Karlin--Rubin; Stein's adaptation question; Bahadur--Savage"),
     (1957, r"Lindley's paradox; Lloyd's $k$-means"),
     (1958, r"Kaplan--Meier; Fisher on smoking; Cox's two instruments"),
     (1959, r"Mantel--Haenszel; Cornfield's inequality; Buehler's relevant subsets"),
@@ -271,10 +271,10 @@ TIMELINE = [
     (2009, r"FISTA; INLA; singular learning theory; the dead salmon; Lee bounds; restricted eigenvalues; the primal--dual witness; matrix completion"),
     (2010, r"WAIC; the horseshoe; MCP; SoftImpute; to explain or to predict; Prop 99; the credibility revolution; spatial confounding; what hazard ratios mean"),
     (2011, r"false-positive psychology; the SPDE approach"),
-    (2012, r"Imbens--Kalyanaraman; matrix Bernstein; decomposable regularizers"),
+    (2012, r"Imbens--Kalyanaraman; matrix Bernstein; decomposable regularizers; distribution-free conditional coverage"),
     (2013, r"CUPED; PoSI; Lin's adjustment; RMST; Berthet--Rigollet's sparse PCA gap"),
     (2015, r"knockoffs; the Reproducibility Project; asthma and pneumonia; MR-Egger; the Xbox poll; polished tails; semiparametric BvM; spike-and-slab rates"),
-    (2014, r"NUTS; the debiased lasso; double selection; forest intervals; robust RD; statistical dimension"),
+    (2014, r"NUTS; the debiased lasso; double selection; forest intervals; robust RD; statistical dimension; Lei--Wasserman's impossibility"),
     (2016, r"the ASA on $p$-values; target trials; NNGP; the polyhedral lemma"),
     (2017, r"same stats, different graphs; Stan; temperature scaling; SHAP; E-values; SafeBayes"),
     (2018, r"double machine learning; robust bias correction; causal forests; randomized selective inference"),
@@ -282,8 +282,8 @@ TIMELINE = [
     (2020, r"Bayesian workflow; best subset vs lasso; adaptive prediction sets; robustness values; benign overfitting"),
     (2021, r"jackknife+; adaptive conformal; Goodman-Bacon; Callaway--Sant'Anna; synthetic DiD; missingness graphs; the salt substitute trial"),
     (2022, r"tF; post-clustering inference"),
-    (2024, r"pretrained forecasters; inference on winners"),
-    (2023, r"e-values; PPI; honest parallel trends; conformal survival; data fission; conformal selection"),
+    (2024, r"pretrained forecasters; inference on winners; conformal risk control"),
+    (2023, r"e-values; PPI; honest parallel trends; conformal survival; data fission; conformal selection; nonexchangeable conformal; outlier p-values"),
 ]
 T0, T1 = 1650, 2030
 

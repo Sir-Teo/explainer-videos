@@ -3272,3 +3272,36 @@ class SelectionWindow(VGroup):
         else:
             tail = VGroup()
         return VGroup(full, tr, tail)
+
+
+class RankStrip(VGroup):
+    """The quantile lemma, drawn (Part 57): n + 1 slots in a row, one per possible rank of the test point among the
+    n calibration scores and itself.  Under exchangeability the test point is equally likely to land in any slot; the
+    last floor((n + 1) alpha) slots (the largest ranks) are shaded as the miss region, so the covered fraction,
+    ceil((n + 1)(1 - alpha))/(n + 1), can be read off.  ``drop(k)`` returns a dot placed in slot k (1-based)."""
+
+    def __init__(self, n: int, alpha: float, width: float = 12.0, height: float = 0.55, hit_color=None, miss_color=None):
+        super().__init__()
+        from explainer.analysis import label
+
+        self.n, self.alpha = n, alpha
+        self.hit_color = hit_color or S.KEPT
+        self.miss_color = miss_color or S.RESID
+        m = n + 1
+        k = math.ceil(m * (1 - alpha))
+        self.k = k
+        w = width / m
+        self.slots = VGroup()
+        for i in range(m):
+            col = self.hit_color if i < k else self.miss_color
+            r = Rectangle(width=w * 0.86, height=height, stroke_color=col, stroke_width=1.5, fill_color=col,
+                          fill_opacity=0.18 if i < k else 0.35)
+            r.move_to([-width / 2 + w * (i + 0.5), 0, 0])
+            self.slots.add(r)
+        self.lab_lo = label(r"rank 1", font_size=18, color=GREY_B).next_to(self.slots[0], DOWN, buff=0.12)
+        self.lab_hi = label(rf"rank {m}", font_size=18, color=GREY_B).next_to(self.slots[-1], DOWN, buff=0.12)
+        self.brace_hit = BraceBetweenPoints(self.slots[0].get_corner(UL), self.slots[k - 1].get_corner(UR), UP, color=self.hit_color)
+        self.add(self.slots, self.lab_lo, self.lab_hi)
+
+    def drop(self, k: int, color=None) -> Dot:
+        return Dot(self.slots[k - 1].get_center(), radius=min(0.12, self.slots[0].width * 0.4), color=color or S.ACCENT)
