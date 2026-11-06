@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs23.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, View3, load, mono, words)
+from videos.cs.cs23.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, View3, grid_table, load, mono, words)
 
 
 class LinearPrograms(VoiceoverScene):
@@ -57,44 +57,45 @@ class LinearPrograms(VoiceoverScene):
     def modelling(self):
         t = load("lp")["transport"]
         head = label(r"Modelling: \ Kantorovich's kind of problem", font_size=32).to_edge(UP, buff=0.35)
-        P = [np.array([-5.6, 1.0 - 2.2 * i, 0]) for i in range(2)]
-        Q = [np.array([-1.9, 1.6 - 1.6 * j, 0]) for j in range(3)]
-        plants = VGroup(*[VGroup(Circle(radius=0.36, color=DATA), label(rf"{'AB'[i]}", font_size=24, color=DATA))
+        P = [np.array([-5.7, 1.5 - 1.9 * i, 0]) for i in range(2)]
+        Q = [np.array([-2.6, 2.0 - 1.35 * j, 0]) for j in range(3)]
+        plants = VGroup(*[VGroup(Circle(radius=0.34, color=DATA), label(rf"{'AB'[i]}", font_size=24, color=DATA))
                           for i in range(2)])
-        stores = VGroup(*[VGroup(Square(side_length=0.62, color=HEAD), label(rf"{j + 1}", font_size=24, color=HEAD))
+        stores = VGroup(*[VGroup(Square(side_length=0.58, color=HEAD), label(rf"{j + 1}", font_size=24, color=HEAD))
                           for j in range(3)])
         for g, p in zip(plants, P):
             g.move_to(p)
         for g, q in zip(stores, Q):
             g.move_to(q)
-        slab = VGroup(*[label(rf"makes {t['supply'][i]}", font_size=18, color=DATA).next_to(plants[i], LEFT, buff=0.15)
+        slab = VGroup(*[label(rf"makes \\ {t['supply'][i]}", font_size=18, color=DATA).next_to(plants[i], LEFT, buff=0.12)
                         for i in range(2)])
-        dlab = VGroup(*[label(rf"needs {t['demand'][j]}", font_size=18, color=HEAD).next_to(stores[j], RIGHT, buff=0.15)
+        dlab = VGroup(*[label(rf"needs {t['demand'][j]}", font_size=18, color=HEAD).next_to(stores[j], RIGHT, buff=0.12)
                         for j in range(3)])
-        roads, costs, flows, amts = VGroup(), VGroup(), VGroup(), VGroup()
+        roads, flows, amts = VGroup(), VGroup(), VGroup()
         for i in range(2):
             for j in range(3):
-                ln = Line(P[i], Q[j], buff=0.4, color=GREY_D, stroke_width=1.5)
-                roads.add(ln)
-                f = 0.3 if j != 1 else 0.62
-                costs.add(label(rf"\${t['cost'][i][j]}", font_size=17, color=GREY_A).move_to(
-                    ln.point_from_proportion(f) + 0.17 * UP))
+                roads.add(Line(P[i], Q[j], buff=0.38, color=GREY_D, stroke_width=1.5))
                 x = t["ship"][i][j]
                 if x > 0:
-                    flows.add(Line(P[i], Q[j], buff=0.4, color=YES, stroke_width=1.5 + x / 3))
-                    amts.add(label(rf"{x:.0f}", font_size=19, color=YES).move_to(ln.point_from_proportion(0.62 if j != 1
-                                                                                                         else 0.3)
-                                                                                 + 0.2 * DOWN))
+                    fl = Line(P[i], Q[j], buff=0.38, color=YES, stroke_width=1.5 + x / 3)
+                    flows.add(fl)
+                    amts.add(label(rf"{x:.0f}", font_size=19, color=YES).move_to(fl.point_from_proportion(0.8) + 0.2 * UP))
+        ctab = grid_table([r"cost per unit", r"store 1", r"store 2", r"store 3"],
+                          [[rf"plant {'AB'[i]}"] + [rf"\${c}" for c in t["cost"][i]] for i in range(2)],
+                          widths=[1.6, 0.9, 0.9, 0.9], row_h=0.36, font_size=18, mono_cols=(),
+                          colors=[[DATA, GREY_A, GREY_A, GREY_A]] * 2)
+        ctab.next_to(VGroup(plants, stores, slab, dlab), DOWN, buff=0.45).align_to(slab, LEFT)
         side = VGroup(
-            label(r"one variable per road: \ $x_{ij}$ units from plant $i$ to store $j$", font_size=21, color=WHITE),
-            MathTex(r"\min \sum_{ij} c_{ij} x_{ij} \quad \text{s.t.} \quad \sum_j x_{ij} \le s_i,\ \ \sum_i x_{ij} "
-                    r"= d_j,\ \ x \ge 0", font_size=28, color=LAM),
+            label(r"one variable per road: \\ $x_{ij}$ units from plant $i$ to store $j$", font_size=21, color=WHITE),
+            MathTex(r"\min \sum_{ij} c_{ij} x_{ij}", font_size=30, color=LAM),
+            MathTex(r"\text{s.t.} \ \ \sum_j x_{ij} \le s_i,\ \ \sum_i x_{ij} = d_j,\ \ x \ge 0", font_size=28,
+                    color=LAM),
             label(rf"each store from its cheapest plant: \ \${t['naive']}, \\ but plant B can't make 50", font_size=21,
                   color=NO),
-            label(rf"the optimum: \ \${t['total']:.0f}, \ store 3 split between both plants", font_size=21, color=YES),
+            label(rf"the optimum: \ \${t['total']:.0f}, \\ store 3 split between both plants", font_size=21, color=YES),
             label(r"the tricks: \ $=$ is two $\le$; \ a free $x$ is $x^+ - x^-$; \\ $\min \max_k \ell_k(x)$ becomes "
-                  r"$\min t$ with $\ell_k(x) \le t$; \ $|x| \le t$ is two inequalities", font_size=20, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4).shift(DOWN * 0.2)
+                  r"$\min t$ with $\ell_k(x) \le t$; \\ $|x| \le t$ is two inequalities", font_size=20, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.4).shift(DOWN * 0.2)
         room = 7.0 - (dlab.get_right()[0] + 0.4)
         if side.width > room:
             side.width = room
@@ -117,17 +118,17 @@ class LinearPrograms(VoiceoverScene):
             self.play(FadeIn(head))
             vo.wait_until("a")
             self.play(FadeIn(plants), FadeIn(stores), FadeIn(slab), FadeIn(dlab), LaggedStart(
-                *[Create(r) for r in roads], lag_ratio=0.1), FadeIn(costs))
+                *[Create(r) for r in roads], lag_ratio=0.1), FadeIn(ctab))
             vo.wait_until("b")
             self.play(FadeIn(side[0]))
             vo.wait_until("c")
-            self.play(FadeIn(side[1]))
+            self.play(FadeIn(side[1]), FadeIn(side[2]))
             vo.wait_until("d")
-            self.play(FadeIn(side[2]))
+            self.play(FadeIn(side[3]))
             vo.wait_until("e")
-            self.play(FadeIn(side[3]), LaggedStart(*[Create(f) for f in flows], lag_ratio=0.2), FadeIn(amts))
+            self.play(FadeIn(side[4]), LaggedStart(*[Create(f) for f in flows], lag_ratio=0.2), FadeIn(amts))
             vo.wait_until("f")
-            self.play(FadeIn(side[4]))
+            self.play(FadeIn(side[5]))
         self.wait(0.3)
         self.clear_scene()
 
@@ -194,7 +195,7 @@ class LinearPrograms(VoiceoverScene):
             self.add(opt)
             self.play(FadeIn(side[3]), Flash(opt.get_center(), color=HEAD))
             vo.wait_until("e")
-            self.play(FadeIn(side[4]), view.th.animate.set_value(-0.5), run_time=2.5)
+            self.play(FadeIn(side[4]), view.th.animate.set_value(-1.2), run_time=2.5)
         for m in (poly, ax, pl, opt, vdots):
             m.clear_updaters()
         self.wait(0.3)

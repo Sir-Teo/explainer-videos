@@ -52,9 +52,9 @@ class Duality(VoiceoverScene):
             "at most the combined right side. <bookmark mark='c'/> Three times the first constraint gives "
             "six, nine and three, which covers five, four and three, so the profit is at most fifteen. Five thirds "
             "of the third constraint proves thirteen and a third. Five quarters of the second fails: it doesn't "
-            "cover the coefficient of the second product. And one of the first plus one of the third proves exactly "
-            "thirteen. <bookmark mark='d'/> Finding the best bound is itself a linear program, the dual: minimize "
-            "five y one plus eleven y two plus eight y three, subject to the covering conditions."
+            "cover the coefficients of the second and third products. And one of the first plus one of the third "
+            "proves exactly thirteen. <bookmark mark='d'/> Finding the best bound is itself a linear program, the "
+            "dual: minimize five y one plus eleven y two plus eight y three, subject to the covering conditions."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
