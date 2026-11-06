@@ -281,7 +281,7 @@
   "additional_checks": {
     "computed_items": 28,
     "zh_source_coverage": "143/143 source lines and spliced sentences; 135 voiceover calls",
-    "narration_minutes_estimate": 73.0,
+    "narration_minutes_estimate": 64.4,
     "tests": {
       "command": [
         "/workspace/explainer-videos/.venv/bin/python",
@@ -342,7 +342,9 @@
       "additional_trials": 0,
       "holdouts_opened": 0,
       "2025_pricing_data": "existing public observational examples, not sealed forecasting evaluations"
-    }
+    },
+    "silent_speech_allocation_minutes": 73.0,
+    "narration_estimate_basis": "Source words at168wpm, the calibrated Quant estimate; silent receipt durations use the silent backend pace."
   },
   "records": {
     "en_frames": [

@@ -691,7 +691,9 @@ Validation: all 63 receipts match the final source and input signatures, with ze
 automated warnings: 21 English endpoint checks, 21 Mandarin checks and 21 English
 silent playback checks. All endpoint sheets and all forty-frame motion sheets
 were visually reviewed. Chinese coverage is 143/143 source lines and spliced
-sentences. The narration estimate is 73.0 minutes.
+sentences. The source narration estimate is 64.4 minutes at the calibrated 168 words per minute.
+The silent backend allocates 73.0 minutes to its speech timing; its preview includes
+additional animation and pauses.
 
 Actual Kokoro samples cover Hook, Continuous and Research in English and Hook in
 Mandarin: 30 lines pass signal and token-time checks. Technical-line word-count
