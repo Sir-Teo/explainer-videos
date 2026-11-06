@@ -22,6 +22,9 @@ Items:
     metrics     twenty metrics with no real effect: any false positive, naively and with Benjamini–Hochberg
     srm         a sample-ratio mismatch detected by chi-squared
     simpson     a redesign that wins in every segment and loses overall
+    interference a marketplace with limited supply: the A/B estimate against the effect of launching to everyone
+    privacy     randomized response: a deniable answer per person, the population rate recovered
+    glyph       the word "Job" rasterized at 8-24 px, one bit per pixel and antialiased (PNG files)
     bandit      Thompson sampling against a 50/50 split: regret and precision
 """
 
@@ -116,6 +119,43 @@ def compute_simpson() -> dict:
 def compute_bandit() -> dict:
     from explainer.cs.people import experiments as E
     return E.bandit(trials=200)
+
+
+def compute_glyph() -> dict:
+    """The word "Job" rasterized at small pixel sizes, as one bit per pixel and with grey-level antialiasing, each
+    enlarged with visible pixels for the screen; saved as PNGs in the cache."""
+    from PIL import Image, ImageDraw, ImageFont
+    from explainer.tts import REPO_ROOT
+    CACHE.dir.mkdir(parents=True, exist_ok=True)
+    font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf"
+    out = []
+    for px in (8, 12, 16, 24):
+        f = ImageFont.truetype(font_path, px)
+        for mode in ("1", "L"):
+            w, h = int(px * 2.4) + 4, int(px * 1.4)
+            im = Image.new(mode, (w, h), 0)
+            d = ImageDraw.Draw(im)
+            if mode == "1":
+                d.fontmode = "1"
+            d.text((3, 0), "Job", font=f, fill=255 if mode == "L" else 1)
+            im = im.convert("L")
+            big = im.resize((w * 12, h * 12), Image.NEAREST)
+            path = CACHE.dir / f"glyph_{px}_{'mono' if mode == '1' else 'aa'}.png"
+            big.save(path)
+            levels = len(set(im.getdata()))
+            out.append({"px": px, "mode": "mono" if mode == "1" else "antialiased", "w": w, "h": h,
+                        "grey_levels": levels, "png": str(path.relative_to(REPO_ROOT))})
+    return {"rows": out}
+
+
+def compute_interference() -> dict:
+    from explainer.cs.people import experiments as E
+    return {"limited": E.interference(supply=3000, trials=100), "ample": E.interference(supply=10_000, trials=100)}
+
+
+def compute_privacy() -> dict:
+    from explainer.cs.people import experiments as E
+    return E.randomized_response()
 
 
 ITEMS = {k[8:]: v for k, v in globals().items() if k.startswith("compute_")}
