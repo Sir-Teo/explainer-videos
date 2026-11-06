@@ -72,7 +72,8 @@ class Hook(VoiceoverScene):
     def wave(self):
         w = load("wave")["os"]
         head = label(r"Sixteen cells, \ passing numbers to their neighbours", font_size=36).to_edge(UP, buff=0.3)
-        view = SystolicView(w, size=0.78, gap=0.14, font_size=20).move_to(DOWN * 0.75 + RIGHT * 1.6)
+        view = SystolicView(w, size=0.9, gap=0.14, font_size=22)
+        view.shift(RIGHT * 1.9 + DOWN * 0.6 - view.boxes.get_center())     # place by the grid, not its queues
         clock = label(r"cycle 0", font_size=26, color=HEAD).to_corner(UL, buff=0.5).shift(DOWN * 0.9)
         side = VGroup(label(r"each cell: \ $s \leftarrow s + a \cdot b$", font_size=22, color=WHITE),
                       label(r"$a$ moves right, \ $b$ moves down", font_size=20, color=GREY_A),

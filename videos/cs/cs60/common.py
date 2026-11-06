@@ -88,7 +88,7 @@ class SystolicView(VGroup):
             top = self.box(0, j).get_top()
             for k in range(n):
                 d = j + k - t
-                q = label(rf"{B[k][j]}", font_size=self.fs - 6, color=LAM).move_to(top + UP * (0.05 + max(d, 1) * step * 0.58))
+                q = label(rf"{B[k][j]}", font_size=self.fs - 6, color=LAM).move_to(top + UP * (0.05 + max(d, 1) * step * 0.45))
                 qb.add(q.set_opacity(1 if d >= 1 else 0))
         return qa, qb
 
