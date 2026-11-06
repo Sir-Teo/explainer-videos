@@ -176,7 +176,8 @@ def evolution_cases():
     }
     out = []
     for name, v2 in cases.items():
-        back = compatible(v1, v2)        # new code reads old data
-        fwd = compatible(v2, v1)         # old code reads new data
+        base = {1: ("word", "string", True), 2: ("count", "int32", False)} if name.startswith("widen") else v1
+        back = compatible(base, v2)      # new code reads old data
+        fwd = compatible(v2, base)       # old code reads new data (large values truncate)
         out.append({"change": name, "backward": not back, "forward": not fwd, "problems": back + fwd})
     return out
