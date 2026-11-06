@@ -173,3 +173,54 @@ def bandit(p=(0.050, 0.055), n=100_000, trials=200, seed=5):
         est_ts.append((s[1] - 1) / max(1, pulls[1]) - (s[0] - 1) / max(1, pulls[0]))
     return {"p": p, "n": n, "regret_ab": float(np.mean(reg_ab)), "regret_ts": float(np.mean(reg_ts)),
             "sd_ab": float(np.std(est_ab)), "sd_ts": float(np.std(est_ts)), "true_diff": p[1] - p[0]}
+
+
+def interference(buyers=10_000, supply=3_000, q=(0.30, 0.36), trials=200, seed=6):
+    """A marketplace with limited supply: treatment makes buyers keener, but every item a treated buyer takes is one
+    a control buyer cannot.  The A/B difference (half treated) against the true effect of launching to everyone
+    (all treated against none)."""
+    rng = np.random.default_rng(seed)
+
+    def run(frac):
+        treated = rng.random(buyers) < frac
+        want = rng.random(buyers) < np.where(treated, q[1], q[0])
+        order = rng.permutation(buyers)
+        got = np.zeros(buyers, bool)
+        left = supply
+        for i in order:
+            if left == 0:
+                break
+            if want[i]:
+                got[i] = True
+                left -= 1
+        return treated, got
+    ab, glob = [], []
+    for _ in range(trials):
+        t, g = run(0.5)
+        ab.append(g[t].mean() - g[~t].mean())
+        _, g1 = run(1.0)
+        _, g0 = run(0.0)
+        glob.append(g1.mean() - g0.mean())
+    return {"buyers": buyers, "supply": supply, "q": q, "ab_estimate": float(np.mean(ab)),
+            "true_global": float(np.mean(glob)), "unconstrained": q[1] - q[0]}
+
+
+def randomized_response(true_rate=0.2, ns=(100, 1_000, 10_000, 100_000), p_truth=0.75, trials=400, seed=7):
+    """Warner's randomized response (1965), the simplest local differential privacy: each person answers truthfully
+    with probability p_truth and otherwise flips a fair coin.  Any one answer is deniable (epsilon = ln of the odds
+    ratio), but the population rate is recovered as (observed - (1 - p)/2) / p, with more noise."""
+    rng = np.random.default_rng(seed)
+    eps = math.log((p_truth + (1 - p_truth) / 2) / ((1 - p_truth) / 2))
+    rows = []
+    for n in ns:
+        errs_rr, errs_plain = [], []
+        for _ in range(trials):
+            truth = rng.random(n) < true_rate
+            honest = rng.random(n) < p_truth
+            coin = rng.random(n) < 0.5
+            ans = np.where(honest, truth, coin)
+            est = (ans.mean() - (1 - p_truth) / 2) / p_truth
+            errs_rr.append(abs(est - true_rate))
+            errs_plain.append(abs(truth.mean() - true_rate))
+        rows.append({"n": n, "err_private": float(np.mean(errs_rr)), "err_plain": float(np.mean(errs_plain))})
+    return {"true_rate": true_rate, "p_truth": p_truth, "epsilon": eps, "rows": rows}
