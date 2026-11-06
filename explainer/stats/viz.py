@@ -2445,3 +2445,73 @@ class FieldSurface(VGroup):
         if text:
             g.add(label(text, font_size=font_size, color=GREY_B).next_to(bar, UP, buff=0.1))
         return g
+
+
+class KMStaircase(VGroup):
+    """The Kaplan--Meier staircase (Part 40) on axes ``ax`` (time, survival): ``curve()`` the step function, drawn
+    from the KM table; ``ticks()`` the censoring marks on it; ``people(y, x0, x1)`` a row of dots, one per subject in
+    order of their times (red: an event; grey: censored), to show the risk set shrinking; ``drop(k)`` the vertical
+    piece at the k-th event time with a label of n_k and d_k; ``band(lo, hi)`` a pointwise interval as a shaded
+    staircase."""
+
+    def __init__(self, ax, time, event, color=None):
+        super().__init__()
+        from explainer.stats.kit import survival as SV
+
+        self.ax = ax
+        self.time, self.event = np.asarray(time, float), np.asarray(event, int)
+        self.km = SV.kaplan_meier(self.time, self.event)
+        self.color = color or S.EST
+        self.t_end = float(bounds(ax)[1])
+
+    def _steps(self, ys, t0=0.0):
+        t = self.km["t"]
+        pts = [(t0, 1.0)]
+        prev = 1.0
+        for tk, s in zip(t, ys):
+            pts += [(tk, prev), (tk, s)]
+            prev = s
+        last = min(self.t_end, max(float(self.time.max()), float(t[-1]) if len(t) else 0.0))
+        pts.append((last, prev))
+        return pts
+
+    def curve(self, stroke_width: float = 4.0, color=None) -> VMobject:
+        m = VMobject(stroke_color=color or self.color, stroke_width=stroke_width)
+        m.set_points_as_corners([self.ax.c2p(a, b) for a, b in self._steps(self.km["surv"])])
+        return m
+
+    def ticks(self, color=None, size: float = 0.09) -> VGroup:
+        from explainer.stats.kit import survival as SV
+
+        g = VGroup()
+        for t in self.time[self.event == 0]:
+            if t > self.t_end:
+                continue
+            s = float(SV.km_at(self.km, [t])[0])
+            p = self.ax.c2p(t, s)
+            g.add(Line(p + DOWN * size, p + UP * size, color=color or GREY_A, stroke_width=2.5))
+        return g
+
+    def band(self, lo, hi, color=None, opacity: float = 0.25) -> VMobject:
+        up = self._steps(np.asarray(hi, float))
+        dn = self._steps(np.asarray(lo, float))
+        pts = [self.ax.c2p(a, b) for a, b in up] + [self.ax.c2p(a, b) for a, b in dn[::-1]]
+        return Polygon(*pts, stroke_width=0, fill_color=color or self.color, fill_opacity=opacity)
+
+    def people(self, y: float, x0: float, x1: float, radius: float = 0.07) -> VGroup:
+        o = np.lexsort((1 - self.event, self.time))
+        xs = np.linspace(x0, x1, len(o))
+        g = VGroup(*[Dot([x, y, 0], radius=radius, color=S.RESID if self.event[i] else GREY_B) for x, i in zip(xs, o)])
+        g.order = o
+        return g
+
+    def drop(self, k: int, font_size: int = 20) -> VGroup:
+        t = self.km["t"][k]
+        s0 = 1.0 if k == 0 else self.km["surv"][k - 1]
+        s1 = self.km["surv"][k]
+        ln = Line(self.ax.c2p(t, s0), self.ax.c2p(t, s1), color=S.ACCENT, stroke_width=6)
+        from explainer.analysis import label
+
+        lab = label(rf"$n = {int(self.km['n'][k])}$, \ $d = {int(self.km['d'][k])}$", font_size=font_size, color=S.ACCENT)
+        lab.next_to(ln, RIGHT, buff=0.12)
+        return VGroup(ln, lab)

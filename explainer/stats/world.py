@@ -609,6 +609,56 @@ class World:
                 "weather": e}
 
     # ------------------------------------------------------------------
+    # A cohort followed for 15 years (Part 40): lifetimes, censoring, competing causes, frailty
+    # ------------------------------------------------------------------
+    COHORT_N = 4000
+    COHORT_YEARS = 15.0
+    CVD_GOMPERTZ = 0.08  # log-hazard per year of age, cardiovascular death
+    OTHER_GOMPERTZ = 0.09  # other causes
+    CVD_SBP = 0.02  # log-hazard per mm Hg of systolic pressure (an HR of 1.22 per 10 mm Hg)
+    CVD_MALE = 0.45
+    CVD_BMI = 0.03
+    OTHER_MALE = 0.30
+    FRAILTY_VAR = 0.6  # gamma frailty on the cardiovascular hazard
+    DROPOUT = 0.03  # loss to follow-up per year
+
+    @cached_property
+    def cohort(self) -> dict:
+        """4,000 adults aged 40-79 drawn at random in 2010 and followed to 2025 (Part 40).  Cardiovascular death has a
+        Gompertz hazard in attained age, exp(log 0.006 + 0.08 (age + t - 60) + 0.02 (sbp - 140) + 0.45 male + 0.03 (bmi -
+        27)), times a person's gamma frailty Z (mean 1, variance 0.6); other causes exp(log 0.006 + 0.09 (age + t - 60)
+        + 0.3 male), with no frailty.  ``t_cvd``, ``t_other`` are the latent times (possibly beyond 15 years); loss to
+        follow-up is exponential (3% a year) and follow-up ends at 15 years.  ``time``, ``status`` (0 censored, 1
+        cardiovascular, 2 other) are what a study sees.  ``statin`` is the time a statin is started (rate 3% a year,
+        higher with pressure), only while alive and followed; statins have no effect on either hazard here."""
+        g = self.rng("cohort")
+        h = self.health
+        a = self.age.astype(float)
+        pool = np.flatnonzero(self.adult & (a >= 40) & (a < 80))
+        idx = np.sort(g.choice(pool, self.COHORT_N, replace=False))
+        age, male, sbp, bmi = a[idx], self.male[idx], h["sbp"][idx], h["bmi"][idx]
+        Z = g.gamma(1 / self.FRAILTY_VAR, self.FRAILTY_VAR, self.COHORT_N)
+
+        def gompertz(rate0, b):
+            e = g.exponential(1.0, self.COHORT_N)
+            return np.log1p(b * e / rate0) / b
+
+        lp1 = (np.log(0.006) + self.CVD_GOMPERTZ * (age - 60) + self.CVD_SBP * (sbp - 140) + self.CVD_MALE * male
+               + self.CVD_BMI * (bmi - 27))
+        lp2 = np.log(0.006) + self.OTHER_GOMPERTZ * (age - 60) + self.OTHER_MALE * male
+        t1 = gompertz(Z * np.exp(lp1), self.CVD_GOMPERTZ)
+        t2 = gompertz(np.exp(lp2), self.OTHER_GOMPERTZ)
+        drop = g.exponential(1 / self.DROPOUT, self.COHORT_N)
+        cens = np.minimum(drop, self.COHORT_YEARS)
+        time = np.minimum.reduce([t1, t2, cens])
+        status = np.where(time == cens, 0, np.where(time == t1, 1, 2))
+        st = g.exponential(1 / (0.03 * np.exp(0.04 * (sbp - 140))), self.COHORT_N)
+        statin = np.where(st < time, st, np.inf)
+        return {"idx": idx, "age": age, "male": male, "sbp": sbp, "bmi": bmi, "frailty": Z, "lp_cvd": lp1, "lp_other": lp2,
+                "t_cvd": t1, "t_other": t2, "dropout": drop, "time": np.round(time, 3), "status": status,
+                "statin": statin}
+
+    # ------------------------------------------------------------------
     # Sampling and the truth
     # ------------------------------------------------------------------
     def sample(self, n: int, among: np.ndarray | None = None, seed: int = 0) -> np.ndarray:
