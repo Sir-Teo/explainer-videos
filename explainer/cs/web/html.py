@@ -5,6 +5,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+FORMATTING = {"b", "i", "em", "strong", "code", "a", "u", "s"}
 INLINE_CONTEXT = {"pre", "p", "li", "b", "i", "a", "code", "h1", "h2", "h3", "span", "em", "strong"}
 VOID = {"br", "img", "hr", "meta", "link", "input"}
 BLOCK_CLOSES_P = {"p", "div", "h1", "h2", "h3", "ul", "ol", "li", "pre", "table", "blockquote", "hr"}
@@ -29,6 +30,11 @@ class Node:
             yield from c.walk()
 
 
+def _unescape(s):
+    import html as std
+    return std.unescape(s)
+
+
 def tokenize(src: str, trace: list | None = None):
     """States: data, tag open, end tag open, tag name, before attribute name, attribute name, before attribute value,
     attribute value (quoted or not), self-closing, comment.  Errors are recovered from, never raised: a stray "<"
@@ -43,7 +49,7 @@ def tokenize(src: str, trace: list | None = None):
     def emit_text():
         nonlocal buf
         if buf:
-            tokens.append(("text", buf))
+            tokens.append(("text", _unescape(buf)))       # character references: &lt; becomes <
             buf = ""
     while i <= n:
         c = src[i] if i < n else ""
@@ -162,7 +168,10 @@ def build(tokens):
         top = stack[-1]
         if kind == "text":
             if t.strip() or top.tag in INLINE_CONTEXT:     # whitespace between inline elements is a space
-                top.append(Node("#text", text=t))
+                if top.children and top.children[-1].tag == "#text":
+                    top.children[-1].text += t                # adjacent text is one node
+                else:
+                    top.append(Node("#text", text=t))
         elif kind == "start":
             name = t["name"]
             if name in BLOCK_CLOSES_P and any(s.tag == "p" for s in stack):
@@ -179,10 +188,16 @@ def build(tokens):
         elif kind == "end":
             name = t["name"]
             if any(s.tag == name for s in stack[1:]):
+                reopen = []
                 while stack[-1].tag != name:
                     fixes.append(f"</{name}> also closed <{stack[-1].tag}>")
+                    if name in FORMATTING and stack[-1].tag in FORMATTING:
+                        reopen.append(stack[-1])
                     stack.pop()
                 stack.pop()
+                for f in reversed(reopen):     # misnested formatting is reopened (the "adoption agency", simplified)
+                    stack.append(stack[-1].append(Node(f.tag, attrs=dict(f.attrs))))
+                    fixes.append(f"<{f.tag}> reopened after </{name}>")
             else:
                 fixes.append(f"stray </{name}> ignored")
     return doc, fixes

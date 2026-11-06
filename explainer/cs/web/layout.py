@@ -244,3 +244,32 @@ def paint(boxes, page_width: int, height: int, path: str, bg="#121722", outline=
             d.text((x, y), t, font=font(fk, sz), fill=col)
     im.save(path)
     return path
+
+
+# ---------------------------------------------------------------- the cost of nested intrinsic sizing
+
+def nested_measure(depth: int, cache: bool):
+    """A column of nested flex containers, each of which measures its child's preferred size before laying it out
+    for real: two layouts of the child per level, so 2^depth layouts of the innermost box without a cache, and two
+    per level with one keyed by (box, available width)."""
+    calls = [0]
+    memo = {}
+
+    def lay(level, width):
+        key = (level, width)
+        if cache and key in memo:
+            return memo[key]
+        calls[0] += 1
+        if level == depth:
+            r = min(width, 100)
+        else:
+            pref = lay(level + 1, 10 ** 9)          # intrinsic (max-content) measure
+            r = lay(level + 1, min(width, pref))    # the real layout at the width it gets
+        memo[key] = r
+        return r
+    lay(0, 800)
+    return calls[0]
+
+
+def nesting_table(depths=(1, 2, 4, 8, 12, 16, 20)):
+    return [{"depth": d, "naive": nested_measure(d, False), "cached": nested_measure(d, True)} for d in depths]

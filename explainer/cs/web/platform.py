@@ -148,3 +148,46 @@ def cls(shifts):
     if start is not None:
         windows.append(cur)
     return {"windows": windows, "score": max(windows) if windows else 0.0}
+
+
+# ---------------------------------------------------------------- mobile radio energy
+
+LTE = {"promotion_s": 0.26, "promotion_w": 1.2, "active_w": 1.3, "tail_s": 11.6, "tail_w": 1.06}
+"""Parameters of the LTE radio-state model, rounded from Huang et al., MobiSys 2012 (promotion about 0.26 s, a tail
+of about 11.6 s at about 1.06 W before the radio returns to idle)."""
+
+
+def radio_energy(times, transfer_s=0.3, p=LTE):
+    """Energy (J) for transfers starting at the given times: each burst pays a promotion if the radio is idle, then
+    transfer time at active power, then the tail, which a later transfer can cut short."""
+    times = sorted(times)
+    e, end_tail = 0.0, -1e9
+    timeline = []
+    for k, t in enumerate(times):
+        if t >= end_tail:
+            e += p["promotion_s"] * p["promotion_w"]
+            start = t + p["promotion_s"]
+            timeline.append(("promote", t, start))
+        else:
+            start = t
+        e += transfer_s * p["active_w"]
+        fin = start + transfer_s
+        nxt = times[k + 1] if k + 1 < len(times) else None
+        tail_end = fin + p["tail_s"]
+        if nxt is not None and nxt < tail_end:
+            e += max(0.0, nxt - fin) * p["tail_w"]
+            timeline.append(("active", start, fin))
+            timeline.append(("tail", fin, max(fin, nxt)))
+        else:
+            e += p["tail_s"] * p["tail_w"]
+            timeline.append(("active", start, fin))
+            timeline.append(("tail", fin, tail_end))
+        end_tail = tail_end
+    return {"joules": e, "timeline": timeline}
+
+
+def batching(n=10, period=20.0):
+    spread = radio_energy([k * period for k in range(n)])
+    batched = radio_energy([0.0 + 0.01 * k for k in range(n)])
+    return {"spread_J": spread["joules"], "batched_J": batched["joules"], "ratio": spread["joules"] /
+            batched["joules"], "spread": spread["timeline"], "batched": batched["timeline"]}

@@ -126,3 +126,33 @@ def matching_cost(doc, selectors):
             if _matches_compound(n, parts[0]) and len(parts) > 1:
                 lr += sum(1 for d in n.walk() if not d.tag.startswith("#")) - 1
     return {"right_to_left": rl[0], "left_to_right": lr, "elements": len(nodes), "selectors": len(selectors)}
+
+
+def synthetic_page(n=2000, seed=0):
+    """A deep page shaped like a real one: nested div and section wrappers, lists, paragraphs and inline spans, with
+    a few classes; n elements."""
+    import random
+    from explainer.cs.web.html import Node
+    rng = random.Random(seed)
+    doc = Node("#document")
+    body = doc.append(Node("body"))
+    open_ = [(body, 1)]
+    count = 1
+    classes = ["card", "title", "nav", "item", "active", "note", "warning", "x", "y"]
+    while count < n:
+        par, d = rng.choice(open_[-40:])
+        tag = rng.choice(["div", "div", "div", "section", "ul", "li", "p", "span", "a", "b"])
+        attrs = {"class": rng.choice(classes)} if rng.random() < 0.3 else {}
+        el = par.append(Node(tag, attrs=attrs))
+        count += 1
+        if tag in ("div", "section", "ul", "li", "p") and d < 24:
+            open_.append((el, d + 1))
+    return doc
+
+
+def depth(node):
+    d, x = 0, node
+    while x.parent is not None:
+        d += 1
+        x = x.parent
+    return d

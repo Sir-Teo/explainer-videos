@@ -239,7 +239,7 @@ class Deps(VoiceoverScene):
             if kind == "try":
                 txt, col = rf"try \texttt{{{p} {ver(p, v)}}}, \ the newest allowed", WHITE
             elif kind == "conflict":
-                txt, col = rf"conflict: \ \texttt{{{p} {ver(p, v)}}} chosen, \ but something needs {p} in "
+                txt = rf"conflict: \ \texttt{{{p} {ver(p, v)}}} chosen, \ but something needs {p} in "
                 txt += r"\{" + ", ".join(ver(p, a) for a in allowed) + r"\}"
                 col = NO
             else:
