@@ -123,7 +123,7 @@ class Crdt(VoiceoverScene):
         names = {"gcounter": r"G-counter", "pncounter": r"PN-counter", "orset": r"observed-remove set",
                  "lww": r"last-writer-wins register", "naive-set": r"naive set \ (replay the other's log)"}
         rows = [[names[r["kind"]], f"{r['converged']} of {r['trials']}"] for r in c["rows"]]
-        tab = grid_table([r"type", r"runs in which all replicas agree"], rows, widths=[5.6, 4.2], row_h=0.5,
+        tab = grid_table([r"data type", r"runs in which all replicas agree"], rows, widths=[5.6, 4.2], row_h=0.5,
                          font_size=22, mono_cols=())
         tab.next_to(head, DOWN, buff=0.6).set_x(0)
         for k, r in enumerate(c["rows"], start=1):
