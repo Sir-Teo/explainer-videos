@@ -68,6 +68,7 @@ class Variables(VoiceoverScene):
         pmf = label(r"$P(X = x)$: \ counts over $36$", font_size=24, color=GREY_A).next_to(A, DOWN, buff=0.05)
         code = code_block(["two = die * die", "X = two.map(sum)        # the push-forward"], font_size=20)
         code.next_to(A, DOWN, buff=0.35)
+        intro = label('A random variable is a function', font_size=36)
         with self.voiceover(
             "So far we've asked about events. Most statistical questions are about numbers. <bookmark mark='a'/> "
             "Here are the thirty-six outcomes of two dice again. <bookmark mark='b'/> Write in each cell the sum of "
@@ -80,7 +81,9 @@ class Variables(VoiceoverScene):
             "calls this map: it carries the probability from the outcomes to the values, and statisticians call the "
             "result the push-forward of P."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(LaggedStart(*[FadeIn(c) for c in grid], lag_ratio=0.01), FadeIn(dice_hdr), FadeIn(dice_side),
                       FadeIn(om))
             vo.wait_until("b")
@@ -107,7 +110,7 @@ class Variables(VoiceoverScene):
         st = staircase(ax, list(range(2, 13)), F, EXACT)
         props = VGroup(
             label(r"non-decreasing", font_size=26),
-            label(r"from $0$ to $1$", font_size=26),
+            label(r"limits at $-\infty$, $+\infty$: \ $0$, $1$", font_size=26),
             label(r"right-continuous: \ each jump lands on its dot", font_size=26),
             label(r"jump at $x$ \ $=$ \ $P(X = x)$", font_size=26, color=EXACT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.7, 0.6, 0])
@@ -123,7 +126,8 @@ class Variables(VoiceoverScene):
             "<bookmark mark='a'/> F of x is the probability that X is at most x. For the sum of two dice it's a "
             "staircase, climbing from zero to one, with a jump at each possible value. <bookmark mark='b'/> The "
             "height of each jump is the probability of that value: six thirty-sixths at seven. <bookmark mark='c'/> "
-            "Every CDF has the same three properties: it never decreases, it goes from zero to one, and it's "
+            "Every CDF has the same three properties: it never decreases, its limits at minus and plus infinity "
+            "are zero and one, and it's "
             "continuous from the right, so at each jump the function takes the upper value. And every function with "
             "those properties is the CDF of some random variable. <bookmark mark='d'/> If this looks familiar, it "
             "should: Part 1's empirical distribution function is exactly this, for the data."
@@ -141,7 +145,7 @@ class Variables(VoiceoverScene):
 
     def kinds(self):
         panels = VGroup()
-        specs = [(r"discrete", r"a die: \ jumps only", S.EST), (r"continuous", r"a waiting time: \ a density, \ "
+        specs = [(r"discrete", r"a die: \ jumps only", S.EST), (r"with a density", r"a waiting time: \ a density, \ "
                                                                               r"$F' = f$", S.LIK),
                  (r"mixed", r"a day's rain: \ $P(0) = 0.6$, \ then smooth", S.POST)]
         for k, (name, sub, col) in enumerate(specs):
@@ -163,11 +167,13 @@ class Variables(VoiceoverScene):
         tag = note(r"illustrative").to_corner(DR, buff=0.3)
         with self.voiceover(
             "CDFs come in kinds. <bookmark mark='a'/> A discrete variable, like a die, has a CDF that only jumps. "
-            "<bookmark mark='b'/> A continuous one, like the time until the next bus arrives, has a smooth CDF with "
-            "no jumps at all: each single value has probability zero, and probability is spread with a density, "
-            "the CDF's slope. <bookmark mark='c'/> And some are mixed. The rainfall on a given day is exactly zero "
+            "<bookmark mark='b'/> An absolutely continuous distribution, like the exponential waiting time drawn "
+            "here, has a density. Its CDF has no jumps, and integrating the density gives its probabilities. "
+            "Having no jumps alone will turn out to be weaker than having a density. <bookmark mark='c'/> "
+            "And some distributions are mixed. The rainfall on a given day is exactly zero "
             "with probability, say, sixty percent, a jump at zero, and otherwise it's spread smoothly over positive "
-            "amounts. <bookmark mark='d'/> Discrete, continuous and mixed: is that every kind? Surprisingly, no."
+            "amounts. <bookmark mark='d'/> Discrete distributions, ones with a density, and their mixtures: is "
+            "that every kind? Surprisingly, no."
         ) as vo:
             self.play(FadeIn(tag))
             for k, m in enumerate("abc"):
@@ -208,7 +214,7 @@ class Variables(VoiceoverScene):
         chk = VGroup(MathTex(rf"E X = \tfrac12 \quad \text{{simulated }} {d['cantor_mean']:.4f}", font_size=26, color=SIM),
                      MathTex(rf"\mathrm{{Var}}\, X = \tfrac18 \quad \text{{simulated }} {d['cantor_var']:.4f}",
                              font_size=26, color=SIM)).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.9, -1.7, 0])
-        leb = label(r"every distribution $=$ discrete $+$ continuous $+$ singular parts \ (Lebesgue; \ Part 43)",
+        leb = label(r"every distribution: atomic $+$ density $+$ singular continuous parts \ (Lebesgue; \ Part 43)",
                     font_size=24, color=GREY_B).to_edge(DOWN, buff=0.3)
         tag = note(r"computed: 20,000 draws, 30 ternary digits each").to_corner(UR, buff=0.25)
         with self.voiceover(
@@ -221,8 +227,9 @@ class Variables(VoiceoverScene):
             "probability. But it's flat almost everywhere, so there's no density either: all the probability lives "
             "on the Cantor set, a dust of points with total length zero. <bookmark mark='e'/> Twenty thousand draws "
             "from the coin-flip recipe fall right on the staircase, with mean a half and variance an eighth, as the "
-            "theory predicts. <bookmark mark='f'/> Distributions like this are called singular, and Lebesgue showed "
-            "that every distribution is a mixture of a discrete part, a continuous part and a singular part. Part "
+            "theory predicts. <bookmark mark='f'/> This distribution is singular continuous: its CDF is continuous "
+            "but it has no density. Every real distribution splits uniquely into an atomic part, an absolutely "
+            "continuous part with a density, and a singular continuous part. Part "
             "43 proves it. For the rest of Stage One, discrete and continuous will be enough, and Part 3 names the "
             "shapes that keep appearing."
         ) as vo:

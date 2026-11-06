@@ -325,6 +325,10 @@ def compute_independence():
 
 def cantor_cdf(x, levels=30):
     """The Cantor function at x in [0, 1] (to ``levels`` ternary digits)."""
+    if x <= 0:
+        return 0.0
+    if x >= 1:
+        return 1.0
     y, scale = 0.0, 0.5
     for _ in range(levels):
         x *= 3

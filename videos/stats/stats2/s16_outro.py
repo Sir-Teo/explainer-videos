@@ -42,7 +42,7 @@ class Outro(VoiceoverScene):
             (r"linearity of expectation needs no independence", EXACT),
             (r"St.\ Petersburg: \ an infinite mean", S.ACCENT),
             (r"generating functions: \ sums become products", S.PRIOR),
-            (r"frequency, \ logic, \ belief: \ one set of axioms", GREY_A),
+            (r"frequency, \ logic, \ belief: \ shared probability rules", GREY_A),
         ]
         rows = VGroup(*[label(rf"{i + 1}.\ \ {t}", font_size=31, color=c) for i, (t, c) in enumerate(items)])
         cols = VGroup(VGroup(*rows[:8]).arrange(DOWN, aligned_edge=LEFT, buff=0.44),
@@ -66,8 +66,8 @@ class Outro(VoiceoverScene):
             "evidence. In Monty Hall, the host's protocol is part of the data. Independence is a product rule, and "
             "pairwise is not mutual. Random variables push probability forward onto numbers, sometimes in strange "
             "ways. Expectation is linear without any independence; the St. Petersburg game has no finite mean; "
-            "generating functions turn sums into products. And three different meanings of probability lead to the "
-            "same axioms."
+            "generating functions turn sums into products. Different interpretations can support the same "
+            "probability calculus; assumptions about infinite collections still matter."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -95,8 +95,9 @@ class Outro(VoiceoverScene):
             "testing and learning theory. Measure theory returns in Part 43; the meaning of probability in Parts "
             "15 and 26."
         ) as vo:
+            self.play(FadeIn(card.head))
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
                                                      lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 

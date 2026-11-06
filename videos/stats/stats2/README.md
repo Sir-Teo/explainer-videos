@@ -25,7 +25,7 @@ Every exact answer on screen is checked against a seeded simulation. The screeni
 
 ## Build it
 
-From the repo root, after the one-time setup in the [top-level README](../../README.md):
+From the repo root, after the one-time setup in the [top-level README](../../../README.md):
 
 ```bash
 python -m videos.stats.stats2.compute          # once: every computed item (seconds; cached in .cache/stats2)
@@ -42,7 +42,7 @@ python tools/lecture_length.py stats2 --floor 50
 | 0 | The problem of points | Pascal and Fermat, 1654. Pacioli's split by the past (1494) and Tartaglia's objection. Fermat completes the future: 4 equally likely continuations. Pascal's backward recursion, the table of values for a game to three, and expectation. | A's share 3/4 → 48 of 64 pistoles; 10,000 simulated finishes 0.7515 |
 | 1 | Before the axioms | Cardano's circuit and the classical definition. Galileo's three dice: 25 vs 27 orderings. De Méré's two bets, exactly and simulated. Huygens' *value of a chance* (1657). | 671/1296 = 0.5177 vs 0.4914; a double six needs 25 throws |
 | 2 | Counting | The multiplication principle; n!, and 52! with its 68 digits. C(n, k) derived on screen. Pascal's triangle and the general problem of points. Stars and bars: 56 unordered rolls of three dice, *not* equally likely (Bose–Einstein aside). | C(49, 6) = 13,983,816 |
-| 3 | Bertrand's paradox | Three ways to pick a random chord: 1/3, 1/2, 1/4, each simulated 3,000 times. The chords' midpoints form three different clouds, three measures on the same set. Jaynes's invariance argument (1973). | 0.343, 0.495, 0.242 |
+| 3 | Bertrand's paradox | Three ways to pick a random chord: 1/3, 1/2, 1/4, each simulated 3,000 times. The chords' midpoints form three different clouds, three measures on the same set. Jaynes's stationary, isotropic line-sampling model (1973). | 0.343, 0.495, 0.242 |
 | 4 | Kolmogorov's axioms | Probability as area (1933). Complement, monotonicity, inclusion–exclusion and the union bound derived. De Méré's bet by inclusion–exclusion, with Bonferroni's alternating partial sums. Montmort's hat-check problem → 1/e (exact for n ≤ 8 by enumeration; 10,000 shuffles). Continuity. | 9 of 24 derangements of 4; 1/e = 0.3679, simulated 0.3701 |
 | 5 | Conditioning | The two-dice grid sliced by "the sum is 8". The definition as renormalized area. The multiplication rule (two aces 1/221). Total probability on a tree of three urns, and its reversal. The two-child problem. | P(six \| sum 8) = 2/5; P(BB \| ≥ 1 boy) = 1/3, simulated 0.334 |
 | 6 | Bayes' theorem | Bayes (1763) and Laplace (1774). The World's screening test as an icon array and a natural-frequency tree (Gigerenzer & Hoffrage 1995). Odds form: prior odds × likelihood ratio 18. The posterior by age group. A second test. | P(condition \| +) = 0.150 exactly, 0.151 in the World; two positives 0.760 (World 0.758) |
@@ -51,9 +51,9 @@ python tools/lecture_length.py stats2 --floor 50
 | 9 | Independence | The product rule; independent is not disjoint. Bernstein's tetrahedron (rotating, painted): pairwise but not mutually independent. The World's two tests: dependent overall, independent given the condition. | P(B \| A) = 0.18 vs P(B) = 0.06 overall; 0.90 vs 0.90 given the condition |
 | 10 | Random variables | The sum of two dice as a function on Ω, sorted into its distribution (the push-forward). The CDF and its properties. Discrete, continuous and mixed; then the Cantor distribution: continuous, no density (devil's staircase, five levels, 20,000 draws). | E X = 1/2, Var X = 1/8; simulated 0.5004, 0.1259 |
 | 11 | Expectation | The balance point; LOTUS. The layer-cake formula on a die. Linearity without independence. Matches in a shuffle (E = Var = 1, exact for n ≤ 8; 10,000 decks against e⁻¹/k!). Birthdays (23 people). The coupon collector, n H_n. | P₂₃ = 0.507 (sim 0.505); 50 stickers: 225.0 packs (sim 224.0) |
-| 12 | Variance, and a game worth infinity | Var X = E X² − μ², derived. Variances of sums and σ/√n. The St. Petersburg game (N. Bernoulli 1713, D. Bernoulli 1738): infinite expectation; 2²⁰ simulated games, the running mean tracking log₂ n (Feller 1945). Log utility: a fair price of 4 ducats. | Var(die) = 35/12; Var(10 dice) = 175/6 |
+| 12 | Variance, and a game worth infinity | Var X = E X² − μ², derived. Variances of sums and σ/√n. The St. Petersburg game (N. Bernoulli 1713, D. Bernoulli 1738): infinite expectation; 2²⁰ simulated games, typical running-mean growth on the log₂ n scale (Feller 1945, convergence in probability). Log utility: a 4-ducat certainty equivalent for the prize, with entry fees depending on wealth. | Var(die) = 35/12; Var(10 dice) = 175/6 |
 | 13 | Generating functions | G(s) = E sˣ. Sums become products: the convolution grid. Moments by differentiation. Sicherman's dice by factoring (Gardner 1978), checked by the engine. | G'(1) = 7/2, G''(1) = 35/3 |
-| 14 | What probability means | Frequency (Venn, von Mises), logic (Keynes), belief (Ramsey, de Finetti). The Dutch book. Cox's theorem (1946; Halpern 1999). Frequentist and Bayesian, and how the series uses both. | — |
+| 14 | What probability means | Frequency (Venn, von Mises), logic (Keynes), belief (Ramsey, de Finetti). Finite Dutch books give finite additivity; countable additivity needs continuity. Cox-style results require regularity and richness assumptions (1946; Halpern 1999). Frequentist and Bayesian, and how the series uses both. | — |
 | 15 | Outro | Fifteen-line recap, where the ideas return, problems, references, the Transcript, and Part 3's question. | — |
 
 ## Sources
@@ -133,9 +133,10 @@ Even a 99%-accurate test mostly raises false alarms for a condition this rare.
 
 **4. Monty Hall with n doors.**
 
-*Solution.* Whatever your pick, the host can always open n − 2 goat doors, so his action has the same probability
-whatever is behind your door. Your door therefore keeps probability 1/n. When your pick is a goat (probability
-(n − 1)/n), the car must be behind the single other closed door. Switching wins with probability (n − 1)/n.
+*Solution.* Assume a knowledgeable host always opens n − 2 goat doors and always offers the switch. Switching
+wins exactly when your initial pick is a goat, so its unconditional success probability is (n − 1)/n, regardless
+of how the host chooses among eligible doors. Conditional odds after a particular set of doors is opened also
+require the host's selection rule; that finer observation need not be independent of the car's location.
 
 **5. Different faces in n rolls.**
 

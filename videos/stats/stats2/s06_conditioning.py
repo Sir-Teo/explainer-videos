@@ -48,6 +48,7 @@ class Conditioning(VoiceoverScene):
         each = MathTex(r"\text{each } \tfrac15", font_size=30, color=EVENT).next_to(target, DOWN, buff=0.3)
         q2 = MathTex(r"P(\text{a six} \mid \text{sum } 8)", r"=", r"\tfrac25", font_size=36).next_to(each, DOWN, buff=0.4)
         q2[2].set_color(EXACT)
+        intro = label('Condition on the sum', font_size=36)
         with self.voiceover(
             "Two dice are rolled out of your sight. <bookmark mark='a'/> Thirty-six equally likely outcomes. "
             "<bookmark mark='b'/> What's the chance that at least one die shows a six? Eleven of the thirty-six "
@@ -59,7 +60,9 @@ class Conditioning(VoiceoverScene):
             "thirty-sixths, about thirty percent, to two fifths, forty percent. Learning something has changed the "
             "probability."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(LaggedStart(*[FadeIn(c, scale=0.85) for c in grid], lag_ratio=0.01), FadeIn(xl), FadeIn(yl),
                       run_time=1.6)
             vo.wait_until("b")
@@ -167,6 +170,7 @@ class Conditioning(VoiceoverScene):
         name = label(r"the law of total probability", font_size=26, color=S.ACCENT).next_to(eq, UP, buff=0.35)
         back = label(r"and backwards: \ given red, \ which urn?", font_size=28, color=S.POST).move_to([3.6, -1.4, 0])
         post = MathTex(r"\tfrac16,\ \ \tfrac13,\ \ \tfrac12", font_size=36, color=S.POST).next_to(back, DOWN, buff=0.3)
+        intro = label('The law of total probability', font_size=36)
         with self.voiceover(
             "The multiplication rule runs along a tree; adding over branches gives the law of total probability. "
             "<bookmark mark='a'/> Three urns, holding a quarter, a half and three quarters red balls. Pick an urn "
@@ -179,7 +183,9 @@ class Conditioning(VoiceoverScene):
             "chance of the evidence given the cause to the chance of the cause given the evidence, has a name: "
             "Bayes' theorem."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(LaggedStart(*[FadeIn(u, shift=UP * 0.2) for u in urns], lag_ratio=0.3))
             vo.wait_until("b")
             self.play(FadeIn(tree, lag_ratio=0.05), run_time=2.0)
@@ -215,6 +221,7 @@ class Conditioning(VoiceoverScene):
                       color=SIM).next_to(r1, DOWN, buff=0.3)
         warn = label(r"what you condition on is \emph{how you learned it}: \ next, three doors", font_size=28,
                      color=S.ACCENT).to_edge(DOWN, buff=0.4)
+        intro = label('What information did we learn?', font_size=36)
         with self.voiceover(
             "Conditioning is simple to state and easy to get wrong, because you must condition on exactly what you "
             "learned. <bookmark mark='a'/> A family has two children. Elder and younger, each a boy or a girl, gives "
@@ -226,7 +233,9 @@ class Conditioning(VoiceoverScene):
             "rarely learn a clean event. We learn that someone told us something, and the way the information "
             "reached us is part of what we learned. We'll meet that again with three doors and a game-show host."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(cap), LaggedStart(*[FadeIn(b, shift=UP * 0.2) for b in boxes], lag_ratio=0.2))
             vo.wait_until("b")
             self.play(FadeIn(c1), boxes[3].animate.set_opacity(0.2))

@@ -153,6 +153,7 @@ class Axioms(VoiceoverScene):
         bon = VGroup(label(r"partial sums alternate above and below:", font_size=24, color=GREY_A),
                      label(r"Bonferroni's inequalities", font_size=24, color=S.ACCENT)).arrange(DOWN, buff=0.15)
         bon.move_to([4.6, -1.2, 0])
+        intro = label('Inclusion--exclusion', font_size=36)
         with self.voiceover(
             "Inclusion–exclusion extends to any number of events, and it gives us de Méré's first bet a second "
             "way. <bookmark mark='a'/> Let A i be the event that throw i is a six. At least one six is the union of "
@@ -164,7 +165,9 @@ class Axioms(VoiceoverScene):
             "goes: these are Bonferroni's inequalities, and they turn inclusion–exclusion into a source of upper and "
             "lower bounds."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(Write(eq[:9]), FadeIn(sub), run_time=2.5)
             vo.wait_until("b")
             self.play(Write(eq[9:]))
@@ -285,6 +288,7 @@ class Axioms(VoiceoverScene):
         ex[4].set_color(EXACT)
         take = label(r"the axioms say how probabilities must fit together, \ not what they \emph{mean}: \ chapter 14",
                      font_size=28, color=S.ACCENT).to_edge(DOWN, buff=0.6)
+        intro = label('Continuity of probability', font_size=36)
         with self.voiceover(
             "The third axiom's infinite sums buy one more property, continuity. <bookmark mark='a'/> If events grow, "
             "each containing the last, the probability of their union is the limit of their probabilities. "
@@ -296,7 +300,9 @@ class Axioms(VoiceoverScene):
             "come back to that question at the end of the part. First, the most useful operation in all of "
             "probability: learning something, and updating."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(th, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(Write(ex))
