@@ -215,7 +215,7 @@ class Timeline(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head), FadeIn(lst), FadeIn(lt), FadeIn(ill))
             vo.wait_until("a")
-            self.play(*[Indicate(lst[i], color=WHITE) for i in range(page)])
+            self.play(*[lst[i][0].animate.set_stroke(WHITE, width=3) for i in range(page)])
             self.play(FadeIn(r1))
             vo.wait_until("b")
             fresh.next_to(lst, UP, buff=0.05).shift(UP * 0.5)

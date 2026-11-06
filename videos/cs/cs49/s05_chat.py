@@ -162,8 +162,8 @@ class Chat(VoiceoverScene):
                          max_tip_length_to_length_ratio=0.1)
         m1 = VGroup(msg("ben", "srv", 1.5, 0.9, DATA), msg("srv", "ana", 0.9, 0.3, DATA))
         m2 = VGroup(msg("ana", "srv", -0.3, -0.9, LAM), msg("srv", "ben", -0.9, -1.5, LAM))
-        s1 = label(r"\textbf{41}", font_size=18, color=HEAD).next_to([xs["srv"], 0.9, 0], RIGHT, buff=0.08)
-        s2 = label(r"\textbf{42}", font_size=18, color=HEAD).next_to([xs["srv"], -0.9, 0], LEFT, buff=0.08)
+        s1 = label(r"\textbf{41}", font_size=18, color=HEAD).move_to([xs["srv"] - 0.3, 0.9 - 0.3, 0])
+        s2 = label(r"\textbf{42}", font_size=18, color=HEAD).move_to([xs["srv"] + 0.3, -0.9 - 0.3, 0])
         t1 = label(r"``Dinner at 8?''\\stamped 10:00:00", font_size=16, color=DATA).next_to(
             [xs["ben"], 1.5, 0], LEFT, buff=0.1)
         t2 = label(r"``Yes!''\\stamped 09:59:58", font_size=16, color=LAM).next_to([xs["ana"], -0.3, 0], RIGHT,
