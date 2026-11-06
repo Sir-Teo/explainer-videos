@@ -1690,3 +1690,4 @@ and a Reasoner library of perhaps 20–30k lines with its tests. Expect one part
 | 10 · The Mind's Own Laws | scenes, English and Chinese narration and text, QA | ~50 min |
 | 11 · What Is Knowledge? | scenes, English and Chinese narration and text, QA | ~53 min |
 | 12 · Knowledge Among Many | scenes, English and Chinese narration and text, QA | ~49 min |
+| 13 · Degrees of Belief | scenes, English and Chinese narration and text, QA | ~58 min |
