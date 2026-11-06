@@ -17,7 +17,7 @@ class Frontier(VoiceoverScene):
 
     def card(self):
         card = chapter_card(14, r"Frontier: \ layout, \ engines and proofs",
-                            r"Can a browser be fast, \ correct and safe at once?", lit=(2010, 2024),
+                            r"Can a browser be fast, \ correct and safe at once?", lit=(2010, 2016),
                             extra=((2010, r"Featherweight Firefox; \ Akhawe et al."),
                                    (2016, r"Cassius: \ CSS in a solver")), part=PART)
         with self.voiceover("Chapter fourteen, the frontier. Can a browser be fast, correct and safe, all at once?"):
@@ -56,7 +56,7 @@ class Frontier(VoiceoverScene):
         naive = VMobject(color=NO, stroke_width=3).set_points_as_corners([pt(r["depth"], r["naive"]) for r in rows])
         cached = VMobject(color=YES, stroke_width=3).set_points_as_corners([pt(r["depth"], r["cached"]) for r in rows])
         nl = label(rf"no cache: \ $2^{{d+1}}-1$, \ {rows[-1]['naive']:,} at depth {dmax}", font_size=18,
-                   color=NO).next_to(pt(dmax, rows[-1]["naive"]), LEFT, buff=0.15).shift(DOWN * 0.3)
+                   color=NO).next_to(pt(dmax, rows[-1]["naive"]), LEFT, buff=0.3).shift(DOWN * 0.9 + LEFT * 0.6)
         cl = label(rf"cached by (box, \ width): \ $2d+1$, \ {rows[-1]['cached']}", font_size=18,
                    color=YES).next_to(pt(dmax, rows[-1]["cached"]), UP, buff=0.35).shift(LEFT * 1.4)
         with self.voiceover(
@@ -193,13 +193,13 @@ class Frontier(VoiceoverScene):
                                  fill_opacity=1).move_to([*p, 0])
             boxes.add(VGroup(r, label(t, font_size=20, color=c).move_to(r)))
         msgs = VGroup(
-            Arrow(boxes[0].get_bottom() + RIGHT * 0.3, boxes[1].get_bottom() + LEFT * 0.3, path_arc=0.6, color=GREY_B,
-                  stroke_width=2),
-            Arrow(boxes[2].get_bottom() + LEFT * 0.3, boxes[0].get_bottom() + RIGHT * 0.9, path_arc=-0.5, color=NO,
-                  stroke_width=2))
-        ml = VGroup(label(r"requests, \ cookies, \ redirects", font_size=16, color=GREY_B).next_to(msgs[0], DOWN,
-                                                                                               buff=0.05),
-                    label(r"a forged cross-site request", font_size=16, color=NO).next_to(msgs[1], DOWN, buff=0.05))
+            Arrow(boxes[0].get_right(), boxes[1].get_left(), buff=0.1, color=GREY_B, stroke_width=2),
+            CurvedArrow(boxes[2].get_bottom() + DOWN * 0.05, boxes[0].get_bottom() + DOWN * 0.05, angle=-0.45,
+                        color=NO, stroke_width=2))
+        ml = VGroup(label(r"requests, \ cookies, \ redirects", font_size=16, color=GREY_B).next_to(msgs[0], UP,
+                                                                                               buff=0.08),
+                    label(r"a forged cross-site request", font_size=16, color=NO).move_to(
+                        [0, boxes.get_bottom()[1] - 1.05, 0]))
         rows = VGroup(
             wrapped_label(r"\textbf{Akhawe, \ Barth, \ Lam, \ Mitchell and Song} \ (2010): \ the web's actors and "
                           r"rules in Alloy; \ the analyzer found new attacks on proposed defences", 12.4, font_size=20,
