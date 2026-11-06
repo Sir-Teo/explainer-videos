@@ -1181,3 +1181,23 @@ def breast_cancer() -> tuple:
         rows = list(csv.reader(f))
     body = np.array([[float(v) for v in r] for r in rows[1:]])
     return body[:, :30], body[:, 30].astype(int), rows[0][:30]
+
+
+# The 1954 field trial of the Salk polio vaccine (Francis 1955), as summarized by Meier (1972) and by Freedman, Pisani
+# & Purves's *Statistics* (Table 1 of chapter 1): children in each group, and paralytic polio cases per 100,000.
+SALK = {
+    "randomized": [("treatment (vaccine)", 200_000, 28), ("control (placebo)", 200_000, 71),
+                   ("no consent", 350_000, 46)],
+    "nfip": [("grade 2, vaccinated", 225_000, 25), ("grades 1 and 3, control", 725_000, 54),
+             ("grade 2, no consent", 125_000, 44)],
+}
+
+# ISIS-2 (Lancet 1988): aspirin vs placebo in 17,187 patients with suspected heart attack; vascular deaths at five
+# weeks, and the astrological subgroup the investigators reported to make a point about subgroups.
+ISIS2 = {"aspirin": (804, 8587), "placebo": (1016, 8600),
+         "gemini_libra": "9% (SD 13) increase in deaths, not significant",
+         "other_signs": "28% (SD 5) reduction, 2p < 0.00001"}
+
+# CAST (Echt et al., NEJM 1991): encainide or flecainide vs placebo after heart attack, in patients whose
+# arrhythmias the drugs had suppressed; 1,498 patients, mean follow-up 10 months.
+CAST = {"deaths_drug": 63, "deaths_placebo": 26, "arrhythmic_drug": 43, "arrhythmic_placebo": 16, "n": 1498}

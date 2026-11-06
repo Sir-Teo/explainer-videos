@@ -2160,3 +2160,77 @@ class ScoreLadder(VGroup):
         h = max(1e-3, self.h * min(s_new, self.smax) / self.smax)
         return Rectangle(width=self.slot * 0.28, height=h, stroke_width=0, fill_color=color or S.TREAT,
                          fill_opacity=0.95).move_to([self.origin[0] + self.slot * r, self.origin[1], 0], aligned_edge=DOWN)
+
+
+class ScienceTable(VGroup):
+    """The science table (Part 35): one row per unit, with both potential outcomes Y(0) and Y(1) and the unit's own
+    effect tau = Y(1) - Y(0), which the World can show and no real study can.  ``mask(z)`` returns the grey '?'
+    patches that an assignment z puts over the outcomes it hides (Holland's fundamental problem): Y(1) for units
+    with z = 0, Y(0) for z = 1, and every tau; ``observed(z)`` the revealed cells, recoloured; ``column(name)`` one
+    column ('y0', 'y1', 'tau' or an extra column's name)."""
+
+    def __init__(self, y0, y1, labels=None, extra=None, center=ORIGIN, font_size: int = 24, fmt: str = "{:.0f}",
+                 col_buff: float = 0.55, row_buff: float = 0.16, colors=None):
+        super().__init__()
+        from explainer.analysis import label
+
+        self.y0, self.y1 = np.asarray(y0, float), np.asarray(y1, float)
+        n = len(self.y0)
+        labels = labels or [rf"{i + 1}" for i in range(n)]
+        extra = extra or []
+        colors = colors or {"y0": S.CTRL, "y1": S.TREAT, "tau": S.ACCENT}
+        heads = [r"unit"] + [e[0] for e in extra] + [r"$Y_i(0)$", r"$Y_i(1)$", r"$\tau_i$"]
+        self.names = ["unit"] + [e[0] for e in extra] + ["y0", "y1", "tau"]
+        rows = [heads]
+        for i in range(n):
+            r = [labels[i]] + [e[1][i] if isinstance(e[1][i], str) else fmt.format(e[1][i]) for e in extra]
+            r += [fmt.format(self.y0[i]), fmt.format(self.y1[i]), ("{:+.0f}" if fmt == "{:.0f}" else "{:+.1f}").format(self.y1[i] - self.y0[i])]
+            rows.append(r)
+        cells = [[label(c, font_size=font_size) for c in r] for r in rows]
+        ncol = len(heads)
+        widths = [max(cells[i][j].width for i in range(len(cells))) for j in range(ncol)]
+        y = 0.0
+        self.rows = VGroup()
+        for i, r in enumerate(cells):
+            row = VGroup()
+            x = 0.0
+            for j, c in enumerate(r):
+                c.move_to([x + widths[j] / 2, y, 0])
+                if i == 0:
+                    c.set_color(GREY_A)
+                elif self.names[j] in colors:
+                    c.set_color(colors[self.names[j]])
+                row.add(c)
+                x += widths[j] + col_buff
+            self.rows.add(row)
+            y -= max(c.height for c in r) + row_buff
+        self.add(self.rows)
+        self.move_to(center)
+        self.cell_w = [w + col_buff * 0.6 for w in widths]
+
+    def column(self, name: str) -> VGroup:
+        j = self.names.index(name)
+        return VGroup(*[r[j] for r in self.rows])
+
+    def _patch(self, cell, j, color=GREY_D):
+        from explainer.analysis import label
+
+        box = Rectangle(width=self.cell_w[j], height=cell.height + 0.12, stroke_width=0, fill_color=color, fill_opacity=0.95)
+        box.move_to(cell)
+        q = label(r"?", font_size=22, color=GREY_B).move_to(box)
+        return VGroup(box, q)
+
+    def mask(self, z) -> VGroup:
+        z = np.asarray(z, bool)
+        j0, j1, jt = self.names.index("y0"), self.names.index("y1"), self.names.index("tau")
+        g = VGroup()
+        for i, zi in enumerate(z):
+            r = self.rows[i + 1]
+            g.add(self._patch(r[j0] if zi else r[j1], j0 if zi else j1))
+            g.add(self._patch(r[jt], jt))
+        return g
+
+    def observed(self, z, color=None) -> VGroup:
+        z = np.asarray(z, bool)
+        j0, j1 = self.names.index("y0"), self.names.index("y1")
+        return VGroup(*[self.rows[i + 1][j1 if zi else j0].copy().set_color(color or WHITE) for i, zi in enumerate(z)])
