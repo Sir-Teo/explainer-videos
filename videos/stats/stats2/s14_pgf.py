@@ -31,6 +31,7 @@ class Generating(VoiceoverScene):
         faces_ = dice_row(range(1, 7), size=0.5, buff=0.55).next_to(g, DOWN, buff=0.6).shift(RIGHT * 0.9)
         note_ = label(r"the coefficient of $s^k$ \ is $P(X = k)$: \ the exponent is the value, \ the coefficient its "
                       r"chance", font_size=26, color=GREY_A).to_edge(DOWN, buff=0.6)
+        intro = label('A distribution as a power series', font_size=36)
         with self.voiceover(
             "Here's a device that turns probability into algebra, invented by de Moivre and made systematic by "
             "Laplace. <bookmark mark='a'/> For a variable that takes the values zero, one, two and so on, its "
@@ -39,7 +40,9 @@ class Generating(VoiceoverScene):
             "plus s squared, up to s to the sixth. <bookmark mark='c'/> The exponents record the values and the "
             "coefficients record their chances. A distribution has become a polynomial."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(dfn, shift=DOWN * 0.2))
             vo.wait_until("b")
             self.play(Write(g))
@@ -81,6 +84,7 @@ class Generating(VoiceoverScene):
             poly.width = 13.2
         same = label(r"the two-dice grid again: \ each anti-diagonal one total", font_size=24, color=GREY_B)
         same.next_to(poly, UP, buff=0.25)
+        intro = label('Sums become products', font_size=36)
         with self.voiceover(
             "Why bother? Because generating functions turn sums into products. <bookmark mark='a'/> The generating "
             "function of X plus Y is the expectation of s to the X times s to the Y. <bookmark mark='b'/> If X and Y "
@@ -92,8 +96,10 @@ class Generating(VoiceoverScene):
             "distribution of the sum of two dice. It's the two-dice grid of chapter ten, in algebra. Adding "
             "independent variables convolves their distributions, and multiplying polynomials does exactly that."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=2.6, x=2.6, buff=0.55, edge=6.9)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1)
@@ -125,7 +131,7 @@ class Generating(VoiceoverScene):
             "and every term becomes k times the probability of k: the expectation. <bookmark mark='b'/> "
             "Differentiate twice and you get the expectation of X times X minus one. <bookmark mark='c'/> Combine "
             "them for the variance. <bookmark mark='d'/> For one die this gives thirty-five twelfths, the answer of "
-            "the last chapter, now by calculus. Part 3 meets the generating function's continuous cousin, the "
+            "the last chapter, now by calculus. Part 3 meets another transform, the "
             "moment generating function, and Part 6 uses its complex cousin, the characteristic function, to prove "
             "the central limit theorem."
         ) as vo:
@@ -161,6 +167,7 @@ class Generating(VoiceoverScene):
         chk = code_block(["(A + B).p == (die + die).p   # True"], font_size=22).next_to(dd, RIGHT, buff=0.8)
         hc = label(r"George Sicherman; \ Martin Gardner's column, \ 1978", font_size=22, color=S.MUSEUM)
         hc.next_to(chk, DOWN, buff=0.2)
+        intro = label('Different dice, the same sums', font_size=36)
         with self.voiceover(
             "Here's the most charming use of generating functions. Are ordinary dice the only pair whose totals have "
             "the usual distribution? <bookmark mark='a'/> Factor the die's polynomial over the integers: s, times one "
@@ -174,7 +181,9 @@ class Generating(VoiceoverScene):
             "them together, and every total from two to twelve comes up with exactly the same probability as with "
             "ordinary dice. The engine agrees, outcome by outcome."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(Write(fac))
             vo.wait_until("b")
             self.play(Write(sq))

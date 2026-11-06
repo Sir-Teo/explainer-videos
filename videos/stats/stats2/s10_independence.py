@@ -65,6 +65,7 @@ class Independence(VoiceoverScene):
         chk[2].set_color(EXACT)
         warn = label(r"independent is \emph{not} disjoint: \ disjoint events with positive probability are "
                      r"dependent", font_size=24, color=S.RESID).to_edge(DOWN, buff=0.35)
+        intro = label('What independence means', font_size=36)
         with self.voiceover(
             "Squaring one in eight thousand five hundred assumed independence. So what is it, exactly? "
             "<bookmark mark='a'/> Two events are independent if the probability that both happen is the product of "
@@ -73,10 +74,13 @@ class Independence(VoiceoverScene):
             "columns, <bookmark mark='c'/> and B the second die showing five or six, a third of the rows. "
             "<bookmark mark='d'/> Their overlap is six cells of thirty-six: exactly a half times a third. The dice "
             "don't influence each other, and the arithmetic says so. <bookmark mark='e'/> Don't confuse independent "
-            "with disjoint. Disjoint events can't both happen, so if one happens the other certainly didn't: that's "
-            "as dependent as it gets."
+            "with disjoint. Disjoint events can't both happen, so learning that one happened changes the other's "
+            "probability to zero. When both have positive probability, they are dependent, though the dependence "
+            "need not be perfect."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(dfn, shift=RIGHT * 0.2))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(c) for c in grid], lag_ratio=0.01), FadeIn(la))

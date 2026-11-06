@@ -50,6 +50,7 @@ class Counting(VoiceoverScene):
         rule = theorem_card(r"the multiplication principle", r"a choice made in $m$ ways, then another in $n$ ways "
                             r"whatever the first was, \ can be made in $m \times n$ ways", color=EXACT, width=6.6,
                             font_size=23, kind=r"Rule").to_edge(DOWN, buff=0.25).shift(RIGHT * 2.6)
+        intro = label('The multiplication principle', font_size=36)
         with self.voiceover(
             "Classical probability turns every question into a count, so we need to count well. "
             "<bookmark mark='a'/> The first rule is multiplication. One die: six outcomes. <bookmark mark='b'/> Two "
@@ -58,7 +59,9 @@ class Counting(VoiceoverScene):
             "and sixteen. <bookmark mark='d'/> In general, if one choice can be made in m ways and then another in n "
             "ways, whatever the first was, the pair can be made in m times n ways."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(LaggedStart(*[FadeIn(f, scale=0.7) for f in one], lag_ratio=0.15), FadeIn(l1))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(c, scale=0.8) for c in two], lag_ratio=0.01), run_time=1.6)
@@ -89,6 +92,7 @@ class Counting(VoiceoverScene):
             big.width = 13.4
         cap = label(rf"a {d['perm_52_digits']}-digit number: \ a well-shuffled deck is almost surely in an order "
                     r"no deck has ever been in", font_size=24, color=GREY_A).next_to(big, DOWN, buff=0.3)
+        intro = label('Arrangements and factorials', font_size=36)
         with self.voiceover(
             "Arrangements next. <bookmark mark='a'/> In how many orders can five different balls be put in a row? "
             "<bookmark mark='b'/> Five choices for the first place; whichever we chose, four left for the second; "
@@ -99,7 +103,9 @@ class Counting(VoiceoverScene):
             "they would not have made a dent in it. A well-shuffled deck is almost surely in an order no deck has "
             "ever been in."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(balls), FadeIn(slots))
             vo.wait_until("b")
             order = [2, 0, 4, 1, 3]
@@ -233,7 +239,8 @@ class Counting(VoiceoverScene):
         probs.arrange(RIGHT, buff=1.0).move_to([0, -2.0, 0])
         warn = label(r"$56$ rolls, \ but \emph{not} equally likely", font_size=30, color=S.RESID).next_to(probs, DOWN,
                                                                                                          buff=0.35)
-        bose = label(r"for photons they are: \ Bose and Einstein, 1924", font_size=22, color=GREY_B)
+        bose = label(r"bosons: count occupation states; \ probabilities also require a physical model",
+                     font_size=22, color=GREY_B)
         bose.to_corner(DR, buff=0.3)
         with self.voiceover(
             "One more counting trick, and one more trap. <bookmark mark='a'/> If we ignore the order of three dice, "
@@ -245,9 +252,10 @@ class Counting(VoiceoverScene):
             "<bookmark mark='e'/> And here's the trap Galileo avoided. Fifty-six rolls, but they are not equally "
             "likely. Five, five, five happens one way in two hundred and sixteen; three, three, six three ways; one, "
             "two, three six ways. Divide by fifty-six and you get the wrong answer for real dice. <bookmark mark='f'/> "
-            "Strangely, nature uses both kinds of counting. For photons, the unordered states really are equally "
-            "likely: that's Bose–Einstein statistics, and lasers depend on it. Which cases are equally likely is a "
-            "fact about the world, not about counting."
+            "Nature also uses occupation-number counting for indistinguishable bosons, including photons. "
+            "That does not make every occupation pattern equally likely: the physical state and the energies "
+            "determine the probabilities. Which cases are equally likely is a modelling assumption, not a "
+            "consequence of counting."
         ) as vo:
             self.play(FadeIn(title))
             vo.wait_until("b")

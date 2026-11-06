@@ -177,9 +177,10 @@ class Bertrand(VoiceoverScene):
         dfn = definition_card(r"A probability model", r"a set of outcomes $\Omega$, \ and a rule $P$ that gives "
                               r"each event a probability. \ ``At random'' means nothing until $P$ is chosen.",
                               color=EXACT, width=6.4, font_size=24).move_to([-3.3, 1.9, 0])
-        hc = history_card(1973, r"E. T. Jaynes, \ ``The well-posed problem''", r"if the answer must not depend on the "
-                          r"circle's position, size or orientation, \ only method 2 survives: \ $\tfrac12$. \ Straws "
-                          r"thrown at a circle agree.", color=S.MUSEUM, width=5.8, font_size=22).move_to([3.5, 1.9, 0])
+        hc = history_card(1973, r"E. T. Jaynes, \ ``The well-posed problem''",
+                          r"stationary, isotropic line sampling, \ conditioned on hitting the circle, \ gives "
+                          r"method 2: \ $\tfrac12$. \ This specifies an extra sampling model.",
+                          color=S.MUSEUM, width=5.8, font_size=22).move_to([3.5, 1.9, 0])
         take = label(r"on a continuum, \ ``equally likely'' is a \emph{choice of measure}", font_size=32,
                      color=S.ACCENT).move_to([0, -0.15, 0])
         nxt = label(r"next: \ Kolmogorov makes the measure the foundation", font_size=24, color=GREY_B)
@@ -190,9 +191,10 @@ class Bertrand(VoiceoverScene):
             "Counting equally likely cases is one such rule, and it works for dice. On a continuum, like the set of "
             "all chords, there's no natural count, and at random means nothing until you've chosen the rule. "
             "<bookmark mark='b'/> Can a principle choose it for us? In 1973 the physicist Edwin Jaynes argued that "
-            "if the answer mustn't change when the circle is moved, enlarged or turned, only the second method "
-            "survives, giving one half, and that straws tossed onto a circle agree. It's an elegant argument, and "
-            "it's an extra assumption, not a consequence of the words at random. <bookmark mark='c'/> On a "
+            "for a line-sampling process defined independently of the circle, invariant under translation and "
+            "rotation. Conditional on a line hitting the circle, this gives the second method and one half. "
+            "That specifies an extra physical sampling model. Simply rotating or scaling each of our three "
+            "constructions along with its circle does not distinguish them. <bookmark mark='c'/> On a "
             "continuum, equally likely is a choice of measure. <bookmark mark='d'/> So the measure itself must be "
             "part of the foundations. In 1933 Andrey Kolmogorov wrote those foundations down."
         ) as vo:

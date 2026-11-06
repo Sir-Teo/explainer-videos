@@ -5,7 +5,7 @@ The branch contains **65 parts and 888 chapters**. All manifests resolve to exis
 
 ## Current checkpoint
 
-Part 1, *The Shape of Data*, has received a chapter-by-chapter English source review and visual repair pass. All 16 current English endpoint captures are free of runtime, clipping and blank-beat warnings. Six chapters have native 1080p captures, four have silent motion checks, and the narrated Centre preview has six clean waveform/alignment checks. The 540-test statistics/QA suite passes. Part 2 is now under review. [Repair details and reproducible evidence](evidence/stats1-polish-20261106/README.md).
+Part 1, *The Shape of Data*, has received a chapter-by-chapter English source review and visual repair pass. All 16 current English endpoint captures are free of runtime, clipping and blank-beat warnings. Six chapters have native 1080p captures, four have silent motion checks, and the narrated Centre preview has six clean waveform/alignment checks. The 540-test statistics/QA suite passes. Part 2's English scientific source pass and six reference regressions are complete; chapter renders are in progress. [Repair details and reproducible evidence](evidence/stats1-polish-20261106/README.md).
 
 No part is signed off for bilingual production. The branch has zero `narration_zh.json` tables and no `stats_text_zh.json`; full narrated masters and continuous listening/playback remain separate gates. Existing translation warnings remain visible.
 
@@ -24,7 +24,7 @@ No part is signed off for bilingual production. The branch has zero `narration_z
 | Part | Video | Chapters | Review status |
 |---|---|---:|---|
 | 1 | `stats1` | 16 | English source/visual pass complete; production gates open |
-| 2 | `stats2` | 16 | Source review in progress |
+| 2 | `stats2` | 16 | Scientific source corrections complete; visual verification in progress |
 | 3 | `stats3` | 16 | Not yet reviewed chapter by chapter |
 | 4 | `stats4` | 14 | Not yet reviewed chapter by chapter |
 | 5 | `stats5` | 16 | Not yet reviewed chapter by chapter |

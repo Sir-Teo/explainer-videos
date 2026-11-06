@@ -114,12 +114,13 @@ class Expectation(VoiceoverScene):
         whys = [why(r"the definition, \ on $\Omega$"), why(r"split the sum"), why(r"\emph{no independence needed}")]
         ind = definition_card(r"Indicator", r"$\mathbf 1_A = 1$ if $A$ happens, \ $0$ if not; \quad "
                               r"$E\, \mathbf 1_A = P(A)$", color=S.ACCENT, width=6.2, font_size=24).to_edge(DOWN, buff=0.4)
-        title = label(r"Linearity", font_size=38).to_edge(UP, buff=0.4)
+        title = label(r"Linearity: finite expectations", font_size=38).to_edge(UP, buff=0.4)
         with self.voiceover(
             "The most useful fact about expectation is the simplest. <bookmark mark='a'/> The expectation of a sum "
             "is a sum over outcomes, <bookmark mark='b'/> and a sum over outcomes splits in two. "
             "<bookmark mark='c'/> So the expectation of X plus Y is the expectation of X plus the expectation of Y. "
-            "Always. X and Y can be as dependent as you like. <bookmark mark='d'/> Combine that with indicators, "
+            "Here the expectations are finite, so there is no undefined infinity minus infinity. X and Y can be "
+            "as dependent as you like. <bookmark mark='d'/> Combine that with indicators, "
             "variables that are one when an event happens and zero when it doesn't, whose expectation is the "
             "event's probability, and you can compute averages of things whose distributions are hopeless."
         ) as vo:
@@ -160,6 +161,7 @@ class Expectation(VoiceoverScene):
         pts = VGroup(*[Dot(ax.c2p(k, p), radius=0.07, color=EXACT) for k, p in enumerate(pois[:7])])
         leg = legend([(SIM, rf"{fmt_int(10_000)} shuffles, \ mean {d['deck_mean']:.3f}"),
                       (EXACT, r"$e^{-1}/k!$: \ Part 3's Poisson")], font_size=20).next_to(A, UP, buff=0.15)
+        intro = label('Matches in a shuffled deck', font_size=36)
         with self.voiceover(
             "Here's linearity working a miracle. <bookmark mark='a'/> Shuffle a deck, and count how many cards end "
             "up in their original position. Write that count as a sum of indicators, one per card. "
@@ -171,8 +173,10 @@ class Expectation(VoiceoverScene):
             "real deck average one match, with a distribution that's almost exactly e to the minus one over k "
             "factorial, a shape Part 3 will name: the Poisson."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=3.0, x=-0.4, buff=0.45)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1, transform=False)
@@ -202,6 +206,7 @@ class Expectation(VoiceoverScene):
                    color=GREY_B).next_to(pairs, DOWN, buff=0.2)
         if pw.width > 5.6:
             pw.width = 5.6
+        intro = label('The birthday problem', font_size=36)
         with self.voiceover(
             "Two more classics. <bookmark mark='a'/> How many people must be in a room for it to be more likely than "
             "not that two share a birthday? Ignoring leap years and assuming birthdays are equally likely, the "
@@ -212,7 +217,9 @@ class Expectation(VoiceoverScene):
             "fifty-three pairs. By indicators and linearity, the expected number of shared pairs is two hundred and "
             "fifty-three over three sixty-five, about seven tenths."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(A), Write(f1))
             vo.wait_until("b")
             self.play(Create(cv), Create(half), run_time=2.0)
@@ -249,6 +256,7 @@ class Expectation(VoiceoverScene):
         hb = hist_bars(B.ax, edges, np.histogram(times, edges)[0] / (len(times) * np.diff(edges)), color=SIM)
         ml = Line(B.ax.c2p(d["mean_t"], 0), B.ax.c2p(d["mean_t"], 0.009), color=EXACT, stroke_width=3)
         hl = label(rf"$2{{,}}000$ albums: \ mean {d['sim_mean_t']:.1f}", font_size=22, color=SIM).next_to(B, UP, buff=0.1)
+        intro = label('The coupon collector', font_size=36)
         with self.voiceover(
             "Last, the coupon collector. <bookmark mark='a'/> An album has fifty different stickers, and each pack "
             "contains one, chosen at random. How many packs do you expect to buy to fill the album? "
@@ -261,7 +269,9 @@ class Expectation(VoiceoverScene):
             f"stickers, {d['mean_t']:.0f} packs. <bookmark mark='g'/> Two thousand simulated albums average "
             f"{d['sim_mean_t']:.0f}, with a long right tail: some collectors need four hundred."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(A))
             vo.wait_until("b")
             step = ladder(self, rows, whys, keep=3, top=3.3, x=3.3, buff=0.45, edge=6.9)

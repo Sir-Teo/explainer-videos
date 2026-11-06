@@ -37,7 +37,8 @@ class Variance(VoiceoverScene):
         sd = label(r"standard deviation: \ $\sqrt{\mathrm{Var}\, X}$, \ in the units of $X$", font_size=26,
                    color=GREY_A).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "Expectation is the centre. Variance measures the spread around it, as it did for data in Part 1. "
+            "Expectation is the centre. With a finite second moment, variance measures the spread around it, as "
+            "it did for data in Part 1. "
             "<bookmark mark='a'/> The variance of X is the expected squared distance from its mean, mu. "
             "<bookmark mark='b'/> Expand the square and use linearity: expected X squared, minus two mu times the "
             "expectation of X, plus mu squared. <bookmark mark='c'/> The expectation of X is mu, so this collapses "
@@ -65,12 +66,13 @@ class Variance(VoiceoverScene):
                   font_size=36),
         ]
         rows[2][2].set_color(EXACT)
-        whys = [why(r"$\mathrm{Cov}(X, Y) = E[(X - EX)(Y - EY)]$"), why(r"independent: \ every covariance is $0$"),
+        whys = [why(r"$\mathrm{Cov}(X, Y) = E[(X - EX)(Y - EY)]$"), why(r"iid, finite variance: \ covariances $0$, same variance"),
                 why(r"the engine: \ \texttt{die.iid\_sum(10).var()}")]
         sd = label(r"so the SD of a sum of $n$ grows like $\sqrt n$, \ and the SD of an \emph{average} shrinks like "
                    r"$1/\sqrt n$", font_size=26, color=S.ACCENT).to_edge(DOWN, buff=0.9)
         back = label(r"Part 1's $\sigma/\sqrt{n}$, \ explained: \ Part 6 makes it a law", font_size=24, color=GREY_B)
         back.next_to(sd, DOWN, buff=0.2)
+        intro = label("Variances of independent sums", font_size=36)
         with self.voiceover(
             "Variances of sums are where independence earns its keep. <bookmark mark='a'/> In general the variance "
             "of a sum is the sum of the variances plus twice the covariance, which measures how X and Y move "
@@ -81,9 +83,12 @@ class Variance(VoiceoverScene):
             "shrinks like one over root n. That's the sigma over root n we met at the end of Part 1, now derived; "
             "Part 6 turns it into the law of large numbers."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.4, x=0.2, buff=0.6)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             vo.wait_until("d")
             self.play(FadeIn(sd), FadeIn(back))
@@ -143,20 +148,21 @@ class Variance(VoiceoverScene):
                  ylabel=r"average prize so far (ducats)", xticks=[0, 5, 10, 15, 20], yticks=[0, 10, 20, 30],
                  xfmt=lambda v: rf"2^{{{int(v)}}}", center=[-1.0, -0.3, 0])
         ax = A.ax
-        cv = curve(ax, lg, np.clip(run, 0, 32), SIM, 2.5)
+        cv = curve(ax, lg, run, SIM, 2.5)
         guide = curve(ax, lg, lg, EXACT, 2.5)
         gl = MathTex(r"\log_2 n", font_size=30, color=EXACT).next_to(ax.c2p(20, 20), UR, buff=0.1)
         tag = note(rf"simulated: $2^{{20}} = {fmt_int(d['n_games'])}$ games; \ largest prize "
                    rf"{fmt_int(int(d['max_pay']))} ducats").to_corner(DR, buff=0.3)
-        feller = label(r"no limit: \ the average keeps climbing, \ like $\log_2 n$ \ (Feller, 1945)", font_size=24,
+        feller = label(r"$S_n/(n\log_2 n) \to 1$ in probability \ (Feller, 1945)", font_size=24,
                        color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "What actually happens if you play, again and again? <bookmark mark='a'/> Here are a million simulated "
             "games, and the average prize so far, with the number of games on a doubling scale. <bookmark mark='b'/> "
             "The average never settles. It drifts upward, jumping whenever a long run of tails pays out a huge prize, "
             f"and the biggest of the million paid {money(d['max_pay'])} ducats. <bookmark mark='c'/> William Feller "
-            "showed that the average of n games grows like the base-two logarithm of n: about ten ducats after a "
-            "thousand games, twenty after a million. An infinite expectation doesn't mean infinite winnings. It means "
+            "showed that the average of n games, divided by the base-two logarithm of n, converges to one in "
+            "probability. That describes typical growth, with occasional much larger excursions; it is not a "
+            "promise that every running path hugs this line. An infinite expectation doesn't mean infinite winnings. It means "
             "there's no average for the averages to settle down to, and the law of averages in Part 6 will need a "
             "finite mean."
         ) as vo:
@@ -173,13 +179,13 @@ class Variance(VoiceoverScene):
         d = load("variance")
         rows = [
             cmath(r"E \log_2(\text{prize})", r"=", r"\sum_{k \ge 1} \frac{k}{2^k}", r"=", r"2", font_size=38),
-            cmath(r"\text{fair price}", r"=", r"2^{E \log_2(\text{prize})}", r"=", r"4 \text{ ducats}", font_size=38),
+            cmath(r"\text{certainty equivalent of prize}", r"=", r"2^{E \log_2(\text{prize})}", r"=", r"4 \text{ ducats}", font_size=32),
         ]
         rows[0][4].set_color(EXACT)
         rows[1][4].set_color(EXACT)
         whys = [why(r"Bernoulli: \ value money by its logarithm"), why(r"the sure amount with the same expected log")]
-        A = axes([0, 34], [0, 5.5], x_length=4.6, y_length=2.8, xlabel=r"wealth", ylabel=r"$\log_2$",
-                 xticks=[0, 8, 16, 32], yticks=[0, 5], center=[-3.8, -1.6, 0])
+        A = axes([0, 34], [-1, 5.5], x_length=4.6, y_length=2.8, xlabel=r"wealth", ylabel=r"$\log_2$",
+                 xticks=[0, 8, 16, 32], yticks=[-1, 0, 5], center=[-3.8, -1.6, 0])
         xs = np.linspace(0.5, 34, 200)
         lc = curve(A.ax, xs, np.log2(xs), S.LIK, 3)
         lab = label(r"each doubling adds the same utility", font_size=22, color=S.LIK).next_to(A, UP, buff=0.15)
@@ -189,17 +195,21 @@ class Variance(VoiceoverScene):
         if take.width > 7.4:
             take.width = 7.4
         take.move_to([2.7, -1.8, 0])
+        intro = label('Valuing a random prize', font_size=36)
         with self.voiceover(
             "Daniel Bernoulli's own answer changed economics. <bookmark mark='a'/> A ducat means less to a rich man "
             "than to a poor one, he argued, so we should value money by its logarithm: each doubling of wealth adds "
             "the same amount of satisfaction. <bookmark mark='b'/> The expected logarithm of the prize is the sum of "
             "k over two to the k, which is exactly two. <bookmark mark='c'/> So the game is worth the sure amount "
-            "whose logarithm is two: four ducats. That's the simplest version of his calculation, for a player with "
-            "nothing else; with other wealth the price changes, but it stays modest. <bookmark mark='d'/> The "
+            "whose logarithm is two: four ducats. This is the certainty equivalent of the prize alone, not an "
+            "entry fee. A player's willingness to pay depends on initial wealth: compare the expected log of "
+            "wealth minus the fee plus the prize with the log of starting wealth. <bookmark mark='d'/> The "
             "expectation of money is not the value of money. Two centuries later the idea became expected utility "
             "theory, and the logarithm became Kelly's rule for sizing bets."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(A), Create(lc), FadeIn(lab))
             step = ladder(self, rows, whys, keep=2, top=2.6, x=0.8, buff=0.7)
             vo.wait_until("b")

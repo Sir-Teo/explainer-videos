@@ -37,6 +37,7 @@ class Monty(VoiceoverScene):
         opened = Rectangle(width=1.9, height=3.0, stroke_color="#C9A27E", stroke_width=2, fill_color="#0B0F17",
                            fill_opacity=1).move_to(ds[2].body)
         goat3 = prize("goat").move_to(opened)
+        intro = label('Three doors, one car', font_size=36)
         with self.voiceover(
             "In 1990 a puzzle about a game show became one of the most argued-over questions in the history of "
             "probability. <bookmark mark='a'/> There are three doors. Behind one is a car; behind the other two, "
@@ -45,7 +46,9 @@ class Monty(VoiceoverScene):
             "asks: do you want to stay with door one, or switch to door two? Two doors left, one car. Does it "
             "matter?"
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(LaggedStart(*[FadeIn(dr, shift=UP * 0.2) for dr in ds], lag_ratio=0.2))
             vo.wait_until("b")
             self.play(Create(pick), FadeIn(you))
@@ -148,13 +151,13 @@ class Monty(VoiceoverScene):
         d = load("monty")
         run = np.asarray(d["running"])
         n = d["n"]
-        A = axes([0, n], [0.3, 0.9], x_length=7.4, y_length=4.2, xlabel=r"games played", ylabel=r"fraction won by "
-                 r"switching", xticks=[0, 1000, 2000, 3000], yticks=[0.33, 0.5, 0.67, 0.9],
+        A = axes([0, n], [0, 1], x_length=7.4, y_length=4.2, xlabel=r"games played", ylabel=r"fraction won by "
+                 r"switching", xticks=[0, 1000, 2000, 3000], yticks=[0, 1/3, 0.5, 2/3, 1],
                  xfmt=lambda v: fmt_int(v), yfmt=lambda v: f"{v:.2f}", center=[-2.6, -0.4, 0])
         ax = A.ax
         xs = np.arange(1, n + 1)
         idx = np.unique(np.geomspace(5, n, 300).astype(int)) - 1
-        path = curve(ax, xs[idx], np.clip(run[idx], 0.3, 0.9), SIM, 3)
+        path = curve(ax, xs[idx], run[idx], SIM, 3)
         gold = DashedLine(ax.c2p(0, 2 / 3), ax.c2p(n, 2 / 3), color=EXACT, stroke_width=3)
         half = DashedLine(ax.c2p(0, 0.5), ax.c2p(n, 0.5), color=GREY_C, stroke_width=2)
         hl = label(r"``fifty--fifty''", font_size=22, color=GREY_B).next_to(ax.c2p(n, 0.5), RIGHT, buff=0.1)
@@ -189,7 +192,7 @@ class Monty(VoiceoverScene):
             (r"knows; \ prefers door 3 with probability $q$ when he can choose", r"\tfrac{1}{1+q}"),
         ]
         head = VGroup(label(r"the host's rule", font_size=26, color=GREY_A),
-                      label(r"$P(\text{switch wins})$", font_size=26, color=GREY_A))
+                      label(r"$P(\text{switch wins}\mid\text{opens 3, goat})$", font_size=22, color=GREY_A))
         for txt, val in table:
             rows.add(VGroup(label(txt, font_size=24), MathTex(val, font_size=34, color=EXACT)))
         allrows = VGroup(head, *rows)
@@ -211,9 +214,11 @@ class Monty(VoiceoverScene):
             "by luck, it hid a goat. Now the answer is a half: his door told you nothing about the others except "
             "that this one is empty. <bookmark mark='c'/> Suppose he's devious, and opens a door only when you've "
             "already picked the car, to tempt you away. Then switching always loses. <bookmark mark='d'/> And if "
-            "he knows, but prefers door three whenever he has a choice, with probability q, then switching wins "
+            "he knows, but prefers door three whenever he has a choice, with probability q, then, conditional "
+            "on seeing door three opened with a goat, switching wins "
             "with probability one over one plus q: anywhere from a half to certainty, <bookmark mark='e'/> but "
-            "never less than a half. <bookmark mark='f'/> So the data are not only what you saw, but how it came "
+            "never less than a half. Averaging over whichever door he opens, switching still wins two thirds "
+            "of all games under this knowledgeable host. <bookmark mark='f'/> So the data are not only what you saw, but how it came "
             "to be shown to you. The probability of the evidence under each hypothesis depends on the process that "
             "produced it; that probability is the likelihood, the central object of Parts 9 and 22."
         ) as vo:

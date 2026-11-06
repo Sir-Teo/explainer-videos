@@ -142,15 +142,17 @@ class Prosecutor(VoiceoverScene):
 
     def compare(self):
         rows = [
-            cmath(r"\frac{P(\text{innocent} \mid E)}{P(\text{guilty} \mid E)}", r"=",
-                  r"\frac{P(\text{two SIDS})}{P(\text{two murders})}", r"\times", r"\frac{P(E \mid \text{innocent})}{P(E "
-                  r"\mid \text{guilty})}", font_size=32),
+            cmath(r"\frac{P(\text{double SIDS} \mid E)}{P(\text{double homicide} \mid E)}", r"=",
+                  r"\frac{P(\text{two SIDS})}{P(\text{two murders})}", r"\times", r"\frac{P(E \mid \text{double SIDS})}{P(E "
+                  r"\mid \text{double homicide})}", font_size=32),
         ]
         rows[0][0].set_color(S.POST)
         rows[0][2].set_color(S.PRIOR)
         rows[0][4].set_color(S.LIK)
+        if rows[0].width > 12.8:
+            rows[0].width = 12.8
         rows[0].move_to([0, 2.3, 0])
-        lr = label(r"$E$: \ two babies died suddenly. \ Both explanations produce $E$, \ so the green ratio is about $1$",
+        lr = label(r"$E$: \ two deaths alone. \ Within this two-explanation model, both imply $E$: ratio $1$",
                    font_size=24, color=S.LIK).next_to(rows[0], DOWN, buff=0.3)
         both = label(r"compare two rare events \emph{with each other}", font_size=30, color=S.ACCENT)
         both.next_to(lr, DOWN, buff=0.35)
@@ -159,25 +161,31 @@ class Prosecutor(VoiceoverScene):
         for ratio in (4.5, 9.0):
             k = int(round(100 * ratio / (1 + ratio)))
             arr = icon_array([INNOCENT] * k + [GUILTY] * (100 - k), cols=10, size=0.26, buff=0.05)
-            cap = label(rf"ratio ${ratio:g} : 1$: \ {k} of 100 innocent", font_size=24, color=INNOCENT)
+            cap = label(rf"ratio ${ratio:g} : 1$: \ {k} of 100 double SIDS", font_size=24, color=INNOCENT)
             arrays.add(VGroup(arr, cap.next_to(arr, DOWN, buff=0.2)))
         arrays.arrange(RIGHT, buff=2.0).move_to([0, -1.95, 0])
-        head = label(r"of 100 families with two such deaths:", font_size=24, color=GREY_A).next_to(arrays, UP, buff=0.25)
+        head = label(r"schematic: only these two explanations, \ before other case evidence",
+                     font_size=24, color=GREY_A).next_to(arrays, UP, buff=0.25)
         src = note(r"double SIDS $:$ double murder \ estimated at $4.5$ to $9 : 1$ \ (Hill 2004); \ schematic").to_corner(
             UR, buff=0.3)
+        intro = label('Compare competing explanations', font_size=36)
         with self.voiceover(
-            "Bayes' theorem in odds form says exactly what to compare. <bookmark mark='a'/> The odds of innocence "
-            "against guilt, given the evidence, are the prior odds, how often two sudden infant deaths are natural "
-            "compared with how often they are murders, times the likelihood ratio. <bookmark mark='b'/> Here the "
-            "evidence is two sudden deaths, and both explanations produce it, so the likelihood ratio is about one. "
+            "Bayes' theorem in odds form says what must be compared. <bookmark mark='a'/> For a schematic model "
+            "with just double SIDS and double homicide as explanations, posterior odds equal prior odds times "
+            "the likelihood ratio. <bookmark mark='b'/> Take the evidence here to mean only that two deaths "
+            "occurred. Both explanations imply that coarse event, so its likelihood ratio is one. Other medical "
+            "and case evidence would contribute different likelihood ratios. "
             "<bookmark mark='c'/> Everything rests on comparing two rare events with each other: a double cot "
             "death, and a double murder of babies by their mother, which is rarer still. <bookmark mark='d'/> Hill "
             "estimated that in families with two such deaths, double SIDS was between four and a half and nine "
             "times as likely as double murder. <bookmark mark='e'/> On those figures, of a hundred families like "
-            "this, somewhere between eighty-two and ninety are innocent. Not one in seventy-three million: the "
-            "statistics, read correctly, pointed the other way."
+            "this restricted model, about eighty-two to ninety would be double SIDS. That is not a probability "
+            "of innocence for a particular defendant. It illustrates why a rare natural explanation must be "
+            "compared with the alternatives, using all the evidence."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(Write(rows[0]))
             vo.wait_until("b")
             self.play(FadeIn(lr))
@@ -207,8 +215,8 @@ class Prosecutor(VoiceoverScene):
         items.arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([0, 0.9, 0])
         rule = MathTex(r"P(E \mid H)", r"\ne", r"P(H \mid E)", font_size=50).to_edge(DOWN, buff=1.2)
         rule[1].set_color(GUILTY)
-        mirror = label(r"its mirror image, the \emph{defence attorney's fallacy}, \ ignores weak evidence that adds "
-                       r"up: \ I. J. Good on the Simpson trial (1995)", font_size=22, color=GREY_B)
+        mirror = label(r"the \emph{defence attorney's fallacy}: \ a common match is not automatically irrelevant; "
+                       r"compare hypotheses and prior odds", font_size=22, color=GREY_B)
         mirror.to_edge(DOWN, buff=0.4)
         if mirror.width > 13:
             mirror.width = 13
@@ -222,8 +230,9 @@ class Prosecutor(VoiceoverScene):
             "<bookmark mark='d'/> Sally Clark had spent more than three years in prison. She died in 2007, aged "
             "forty-two. <bookmark mark='e'/> The lesson is a single line. The probability of the evidence given a "
             "hypothesis is not the probability of the hypothesis given the evidence. <bookmark mark='f'/> And the "
-            "fallacy has a mirror image, the defence attorney's: dismissing evidence because each piece of it is "
-            "weak on its own, when together it is strong. Both are the same failure to do Bayes' theorem."
+            "fallacy has a mirror image, the defence attorney's: dismissing a match simply because many innocent "
+            "people could share it. A match frequency alone is not a posterior probability. The likelihoods "
+            "under competing hypotheses and the prior odds must both enter the comparison."
         ) as vo:
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)

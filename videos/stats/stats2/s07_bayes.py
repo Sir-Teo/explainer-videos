@@ -277,8 +277,9 @@ class Bayes(VoiceoverScene):
                        font_size=30, color=SIM).to_edge(DOWN, buff=1.0)
         take = label(r"evidence multiplies odds; \ the prior never disappears, \ but it can be overwhelmed",
                      font_size=28, color=S.ACCENT).to_edge(DOWN, buff=0.35)
+        intro = label('A second positive test', font_size=36)
         with self.voiceover(
-            "What should a doctor do with a positive? Test again. <bookmark mark='a'/> After one positive, the odds "
+            "What happens if we observe a second positive test? <bookmark mark='a'/> After one positive, the odds "
             "are the prior odds times eighteen. That posterior becomes the prior for the next test. "
             "<bookmark mark='b'/> A second positive multiplies by eighteen again, provided the two tests make their "
             "mistakes independently of each other, among people with the condition and among people without; "
@@ -288,8 +289,10 @@ class Bayes(VoiceoverScene):
             "multiplies odds. The prior never disappears from the calculation, but enough evidence can overwhelm "
             "it. That one sentence is the whole of Bayesian statistics, which begins in Part 15."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.4, x=0.4, buff=0.7)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1)
