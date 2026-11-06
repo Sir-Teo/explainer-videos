@@ -55,7 +55,7 @@ class LTCM(VoiceoverScene):
             "bank of volatility. At the end of 1997 its balance sheet was about twenty-eight times its capital, "
             "with more than a trillion dollars of derivatives on top, by the General Accounting Office's "
             "count. <bookmark mark='b'/> In August 1998 Russia defaulted. Investors everywhere fled to the most "
-            "liquid assets; every spread LTCM was betting would narrow widened instead, all at once, and implied "
+            "liquid assets; many convergence positions moved against LTCM together, and implied "
             "volatilities jumped. By the end of August it had lost more than half its capital, and by September "
             "almost ninety percent."
         ) as vo:
@@ -93,14 +93,9 @@ class LTCM(VoiceoverScene):
                               color=IMP)).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.5).shift(UP * 1.5)
         ill = wrapped_label(r"illustrative: the VIX is a 30-day index; LTCM's options were long-dated, and their "
                             r"volatilities moved less", 3.6, 20, GREY_B).to_edge(RIGHT, buff=0.4).shift(DOWN * 1.2)
-        src = note(r"FRED: VIXCLS (Cboe)", font_size=18).to_corner(DR, buff=0.25)
+        src = note(r"FRED: VIXCLS (Cboe), later-methodology historical backcast", font_size=18).to_corner(DR, buff=0.25)
         with self.voiceover(
-            "What selling volatility meant that autumn, in one picture. The VIX, the market's thirty-day implied "
-            f"volatility of the S and P five hundred, through 1998: {v['jul1']:.0f} on the first of July. "
-            f"<bookmark mark='a'/> It peaked at {v['peak']:.0f}. Below, the mark-to-market of a book short one "
-            "unit of vega per volatility point from July: an illustration, since LTCM's options were long-dated "
-            "and their volatilities moved less, but the sign is the point. Every short-volatility position in the "
-            "world lost at once, and had to post margin at once."
+            f"""This is the Cboe VIXCLS historical series for 1998, reconstructed under the later S and P five hundred methodology. It differs from the contemporary index now called VXO. It reads {v['jul1']:.0f} on July first. <bookmark mark='a'/> Its peak is {v['peak']:.0f}. Below is an illustrative constant short-vega mark per volatility point, excluding theta, convexity, term structure and funding. It is not LTCM's actual option book or return. Volatility increases can produce losses and margin demands, with the outcome depending on the contract and the rest of the portfolio."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(b), FadeIn(src))
             self.add(line, bl)
@@ -135,7 +130,7 @@ class LTCM(VoiceoverScene):
             "<bookmark mark='a'/> What broke were the assumptions under every hedge in this part: that you can keep "
             "trading, that you can fund the position until it converges, and that the others are not all doing "
             "the same trade. 1987 broke the first. 1998 broke all three. Part forty-one tells the story with the "
-            "data: margin spirals, fire sales, and why liquidity is the risk factor no formula prices."
+            "data: margin spirals, fire sales, and why liquidity and financing require explicit models beyond this replication formula."
             " Next: the formula at work today."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))

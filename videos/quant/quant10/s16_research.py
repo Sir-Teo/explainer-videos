@@ -54,7 +54,7 @@ class Research(VoiceoverScene):
             "to T over two times the expected integral of gamma squared sigma to the fourth S to the fourth. For our "
             "three-month call that constant is eleven point nine."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             self.wait(0.1)
             vo.wait_until("b")
@@ -73,7 +73,7 @@ class Research(VoiceoverScene):
                       r"{\sigma^4S^4}", font_size=32, colors={r"\operatorname{Var}\tau": SPOT}),
                 cmath(r"\operatorname{Var}\varepsilon", r"=", r"\tfrac16\Gamma^2a^4\ \ \text{against}\ \ \tfrac12\Gamma^2a^4",
                       font_size=32, colors={r"\operatorname{Var}\varepsilon": GAIN})]
-        whys = [why(r"instead, rebalance when the price has moved by $a$: the squared move is no longer random"),
+        whys = [why(r"local model: freeze $S,\sigma,\Gamma$; driftless arithmetic Brownian increments"),
                 why(r"the error is now the randomness of the time it took"),
                 why(r"the exit time of a Brownian motion from $(-a, a)$: the moments follow from optional stopping on "
                     r"$W^2 - t$ and $W^4 - 6tW^2 + 3t^2$ (Part 4)"),
@@ -81,15 +81,9 @@ class Research(VoiceoverScene):
                     r"cuts the variance by a factor of three, before any optimization")]
         step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.3, buff=0.44, edge=6.9)
         with self.voiceover(
-            "Now trade on moves instead of on the clock. <bookmark mark='a'/> Rebalance when the price has moved by a "
-            "fixed amount a. The squared move is then exactly a squared: that source of randomness is gone. "
-            "<bookmark mark='b'/> What is left is the randomness of how long the move took. <bookmark mark='c'/> For "
-            "the exit time of Brownian motion from an interval, optional stopping, from Part 4, gives the mean and the "
-            "variance: two thirds of the mean squared. <bookmark mark='d'/> So the error per interval has variance one "
-            "sixth gamma squared a to the fourth, against one half for an equal-time step of the same average length. "
-            "Trading on moves cuts the variance by a factor of three, before any optimization at all."
+            """Locally freeze gamma, volatility and spot, approximating the price increment by a driftless arithmetic Brownian motion. <bookmark mark='a'/> Trade when its absolute displacement first reaches a. For this local model the squared exit move is exactly a squared. <bookmark mark='b'/> The leading hedge error is random because the exit time is random. <bookmark mark='c'/> Brownian exit-time moments, justified by stopped martingales and integrability, give variance two thirds of the mean time squared. <bookmark mark='d'/> The frozen-coefficient error variance is one sixth gamma squared a to the fourth, against one half at an equal deterministic interval with the same mean length. The factor of three is a local asymptotic comparison, not an exact finite-band identity for GBM."""
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             self.wait(0.1)
             vo.wait_until("b")
@@ -107,7 +101,7 @@ class Research(VoiceoverScene):
                       colors={r"\min_a\ \mathbb E\!\int \tfrac16\Gamma^2a^2\sigma^2S^2\,dt": GAIN}),
                 cmath(r"a^*", r"\propto", r"|\Gamma|^{-1/2}\quad\Longleftrightarrow\quad |\Delta_t - \Delta_{\tau}|^2 = h\,"
                       r"\Gamma_{\tau}", font_size=32, colors={r"a^*": GAM}),
-                cmath(r"N\operatorname{Var}", r"\to", r"\frac16\Big(\mathbb E\!\int_0^T |\Gamma|\sigma^2S^2\,dt\Big)^2\ \le\ "
+                cmath(r"\mathbb E[N]\operatorname{Var}(\varepsilon)", r"\to", r"\frac16\Big(\mathbb E\!\int_0^T |\Gamma|\sigma^2S^2\,dt\Big)^2\ \le\ "
                       r"\frac13\cdot\frac{T}{2}\,\mathbb E\!\int_0^T\Gamma^2\sigma^4S^4\,dt", font_size=28,
                       colors={r"N\operatorname{Var}": GAIN})]
         whys = [why(r"a band of width $a(t, S)$: the error accrues at rate $\frac16\Gamma^2a^2\sigma^2S^2$, trades at rate "
@@ -118,22 +112,14 @@ class Research(VoiceoverScene):
                     r"11.9, a factor of 4.5. Fixed price or delta bands give 3.98")]
         step = ladder(self, rows, whys, keep=3, top=2.8, x=-0.3, buff=0.5, edge=6.9)
         thm = theorem_card(r"Asymptotically efficient discrete hedging", wrapped_label(
-            r"among rebalancing rules made of stopping times, $\liminf\ \mathbb E[N]\,\mathbb E\langle \text{error}\rangle "
+            r"under Fukasawa's structure, refinement and uniform-integrability conditions, $\liminf\ \mathbb E[N]\,\mathbb E\langle \text{error}\rangle "
             r"\ge \frac16\big(\mathbb E\!\int|\Gamma|\sigma^2S^2dt\big)^2$, attained by the band $|\Delta_t - \Delta_\tau|^2 = "
             r"h\Gamma_\tau$ as $h \to 0$", 10.6, 20, GREY_A), who=r"Fukasawa (2011); with jumps, Rosenbaum and Tankov (2014)",
             width=11.6, font_size=22).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "Now let the band vary. <bookmark mark='a'/> A band of width a, depending on time and price, accrues error "
-            "at one rate and trades at another; minimize the error for a given number of trades. <bookmark mark='b'/> "
-            "The Lagrange condition holds point by point: the width is proportional to one over the square root of "
-            "gamma. Narrow near the strike close to expiry, wide far from it. In delta terms: trade when the delta has "
-            "drifted by the square root of gamma. <bookmark mark='c'/> N times the variance then tends to one sixth of "
-            "the squared expected integral of gamma sigma squared S squared, and by Cauchy-Schwarz that is at most a "
-            "third of the equal-time constant. For our call, two point six four against eleven point nine. "
-            "<bookmark mark='d'/> Masaaki Fukasawa proved in 2011 that no rule built from stopping times does better, "
-            "asymptotically, and that this band attains the bound."
+            """Allow the band to depend on current information. <bookmark mark='a'/> Minimize leading error variance subject to an expected trade-count budget. <bookmark mark='b'/> The local Lagrange condition gives price-band width proportional to gamma to the minus one half for our convex call. Its delta threshold is proportional to root gamma. <bookmark mark='c'/> Expected trade count times terminal error variance tends to the constant displayed: two point six four against eleven point nine for equal times. Cauchy-Schwarz gives the one-third comparison. <bookmark mark='d'/> Fukasawa's theorem concerns expected quadratic variation of error for an admissible class of stopping-time schemes under structure, refinement and uniform-integrability conditions. In our driftless square-integrable example that risk equals terminal variance. It is an asymptotic result, not a finite-trade guarantee."""
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             self.wait(0.1)
             vo.wait_until("b")
@@ -243,14 +229,7 @@ class Research(VoiceoverScene):
                              11.8, 16, GREY_A).to_edge(DOWN, buff=0.4)
         f, l_ = b["rows"][0], b["rows"][1]
         with self.voiceover(
-            "And on real prices: Bitcoin calls, a month long, written every fifteen days in 2019 and 2020, hedged on "
-            "one-minute closes. Each is priced at the volatility its own month realized, a hindsight that leaves only "
-            "the timing of trades to test. <bookmark mark='a'/> With about sixteen trades, the error's standard "
-            f"deviation is {f['time']['sd_pct_premium']:.0f} percent of the premium at equal times, and "
-            f"{f['fukasawa']['sd_pct_premium']:.0f} percent with the optimal band. <bookmark mark='b'/> With sixty-"
-            f"four, {l_['time']['sd_pct_premium']:.0f} against {l_['fukasawa']['sd_pct_premium']:.0f}. Fat tails and "
-            "clustered volatility do not erase the advantage; if anything they widen it, because a move-based rule "
-            "trades when the market moves, not when the clock says."
+            f"""On Bitcoin minute closes, these thirty-day calls start every fifteen days in 2019 and 2020, so windows overlap. Each uses its own future realized volatility. The common band threshold is also tuned using all these windows to match the average trade count. Both choices are retrospective. <bookmark mark='a'/> At about sixteen trades, the measured error spread is {f['time']['sd_pct_premium']:.0f} versus {f['fukasawa']['sd_pct_premium']:.0f} percent of model premium. <bookmark mark='b'/> At sixty-four, {l_['time']['sd_pct_premium']:.0f} versus {l_['fukasawa']['sd_pct_premium']:.0f}. This descriptive timing comparison excludes costs and does not test a deployable policy or establish the cause of its positive mean."""
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(foot))
             vo.wait_until("a")
@@ -262,26 +241,21 @@ class Research(VoiceoverScene):
 
     def open_problems(self):
         cards = VGroup(
-            desk_question(r"open: costs and timing together", r"with proportional costs the optimal rule is a band too "
-                          r"(Whalley and Wilmott, Part 11), but with width $\propto \varepsilon^{1/3}$; a unified asymptotic "
-                          r"theory for many options, costs and a trade budget is incomplete", width=12.4, font_size=18),
-            desk_question(r"open: beyond the leading order", r"the bound is asymptotic; at a few dozen trades, where desks "
+            desk_question(r"research: costs and timing together", r"with proportional costs the optimal rule is a band too "
+                          r"(Whalley and Wilmott, Part 11), but with width $\propto \varepsilon^{1/3}$; study a specified portfolio, cost model and trade budget; existing cost-sensitive theories are starting points", width=12.4, font_size=18),
+            desk_question(r"research: beyond the leading order", r"the bound is asymptotic; at a few dozen trades, where desks "
                           r"live, the gap to the limit is visible (2.8 against 2.64 here), and corrections are known only "
                           r"in special cases", width=12.4, font_size=18),
-            desk_question(r"open: rough and jumpy prices", r"with jumps the optimal times change (Rosenbaum and Tankov "
-                          r"2014); for rough volatility and for many assets hedged at once the efficient rule is open",
+            desk_question(r"research: rough and jumpy prices", r"with jumps the optimal times change (Rosenbaum and Tankov "
+                          r"2014); specify the risk criterion, admissible rules and model before seeking an efficient extension",
                           width=12.4, font_size=18),
         ).arrange(DOWN, buff=0.22)
         with self.voiceover(
-            "Three open questions. <bookmark mark='a'/> With trading costs the optimal rule is also a band, Whalley and "
-            "Wilmott's from Part 11, but its width scales like the cube root of the cost; a unified theory for a book "
-            "of options, with costs and a budget of trades, is incomplete. <bookmark mark='b'/> The bound is "
-            "asymptotic. At a few dozen trades, where desks actually live, the gap is visible, and corrections are "
-            "known only in special cases. <bookmark mark='c'/> And with jumps the optimal times change, as Mathieu "
-            "Rosenbaum and Peter Tankov showed; for rough volatility, or many assets hedged together, the efficient "
-            "rule is open."
+            """Three research directions, each requiring a precise model and objective. <bookmark mark='a'/> Combine proportional costs and trade-count budgets for a portfolio. Cost-sensitive bands and broader discretization theories already exist; this example does not settle their joint practical design. <bookmark mark='b'/> Quantify finite-frequency corrections and uncertainty at a few dozen trades. <bookmark mark='c'/> Extend the chosen criterion to jumps, rough volatility and multiple assets, building on existing results such as Rosenbaum and Tankov. These are directions for a specified project, rather than claims that each whole topic is unsolved."""
         ) as vo:
-            for k, mk in enumerate(("a", "b", "c")):
+            self.play(FadeIn(cards[0], shift=UP * 0.2), run_time=0.6)
+            vo.wait_until("a")
+            for k, mk in ((1, "b"), (2, "c")):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
@@ -295,5 +269,11 @@ class Research(VoiceoverScene):
             "two constants, eleven point nine and two point six four, about how many does the optimal band need?"
         ):
             self.play(FadeIn(q))
+        self.wait(2)
+        answer = MathTex(r"N_{\rm band} \approx 256\,\frac{2.64}{11.9} = 56.8 \approx 57", font_size=38, color=GAIN)
+        q.shift(UP * 0.8)
+        answer.next_to(q, DOWN, buff=0.6)
+        with self.voiceover("Match variance C divided by N. The band needs 256 times 2.64 divided by 11.9, about 57 trades in the asymptotic approximation."):
+            self.play(FadeIn(answer))
         self.wait(0.5)
         self.clear_scene()

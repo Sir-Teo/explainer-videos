@@ -127,14 +127,7 @@ class Industry(VoiceoverScene):
         for e_, n_ in zip(eqs, notes_):
             n_.next_to(e_, DOWN, buff=0.05).align_to(e_, LEFT)
         with self.voiceover(
-            "The floor's mental arithmetic is the formula too. At the money, forward, the price is F times two N "
-            "of half sigma root T, minus one. Expand it, and the leading term is sigma root T over root two pi, "
-            "point three nine nine: Menachem Brenner and Marti Subrahmanyam's rule, C is about point four F sigma "
-            "root T. <bookmark mark='a'/> How good is it on a real market? Here it is against the exact price "
-            "for every expiry of the Surface, at its own at-the-money volatility. Short-dated, the only error is "
-            f"rounding point three nine nine to point four, a quarter of a percent; the longest expiry, at a total "
-            f"volatility of {ind['s_max']:.2f}, is off by {100 * ind['max_abs_rel']:.1f} percent, the second term "
-            "of the expansion. Good enough to quote a price in a crowd."
+            f"""At the forward, the undiscounted Black call value is F times the quantity two N of half sigma root T minus one. Its small-total-volatility approximation is point four F sigma root T. <bookmark mark='a'/> Evaluate both formulas using each Surface expiry's interpolated ATM IV. At total volatility {ind['s_max']:.2f}, the largest relative discrepancy here is {100 * ind['max_abs_rel']:.1f} percent. This compares an approximation with a Black model value, not with independent executable ATM prices. Discount both consistently when a present value is needed."""
         ) as vo:
             self.play(FadeIn(eqs[0]), FadeIn(notes_[0]))
             self.play(FadeIn(eqs[1]), FadeIn(notes_[1]))
@@ -154,8 +147,7 @@ class Industry(VoiceoverScene):
             (r"Negative prices, April 2020", r"CME switched some energy options to Bachelier's model (Part 5)", LOSS),
             (r"The VIX", r"a strip of options, priced in volatility (Part 12)", IMP),
             (r"Employee stock options", r"a fair value at grant, from an option model (Part 3)", OPT),
-            (r"Deribit, Bitcoin options", r"Black-76, settled in coin; bought by Coinbase for \$2.9 billion, "
-                                          r"completed 14 August 2025", SPOT),
+            (r"Deribit, Bitcoin options", r"Black-76, settled in coin; Coinbase acquisition completed 14 August 2025", SPOT),
             (r"IBIT options, Nasdaq", r"first day 19 November 2024: 353,716 contracts", SPOT),
         )]).arrange(DOWN, aligned_edge=LEFT, buff=0.24).to_edge(LEFT, buff=0.8)
         if rows.height > 6.8:
@@ -163,13 +155,7 @@ class Industry(VoiceoverScene):
         src = note(r"sources: Coinbase and Deribit's announcement (14 Aug 2025); Nasdaq (19 Nov 2024)", font_size=18)
         src.to_corner(DR, buff=0.25)
         with self.voiceover(
-            "The formula sits in the plumbing. Options on futures use Black's 1976 version; when oil went negative "
-            "in April 2020, the Chicago Mercantile Exchange switched some options to Bachelier's model, Part five's "
-            "story. The VIX is a strip of options. <bookmark mark='a'/> And the newest market adopted the oldest "
-            "formula: Deribit quotes Black-76 in coin, and Coinbase completed its two point nine billion dollar "
-            "purchase in August 2025; options on BlackRock's Bitcoin fund opened on Nasdaq on the nineteenth of "
-            "November 2024 with three hundred and fifty-three thousand contracts on day one."
-            " Last, the frontier."
+            """The formula sits in the plumbing. Futures options often use Black's lognormal convention; negative underlyings require a compatible model, such as Bachelier or a shifted model. The VIX instead uses a strip of option prices. <bookmark mark='a'/> Coinbase completed its acquisition of Deribit in August 2025. Options on the iShares Bitcoin Trust opened on Nasdaq on the nineteenth of November 2024; Nasdaq reports 353,716 contracts on day one. Those are dated industry facts. They do not validate a particular pricing model."""
         ) as vo:
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows[:4]], lag_ratio=0.5, run_time=5))
             vo.wait_until("a")

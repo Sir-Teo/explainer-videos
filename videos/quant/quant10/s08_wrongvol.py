@@ -35,7 +35,7 @@ class WrongVol(VoiceoverScene, ThreeDScene):
             row(r"V^h_t", r"+", r"\tfrac12", r"\sigma_h^2", r"S^2", r"V^h_{SS}", r"=", r"0"),
             row(r"dV^h", r"=", r"V^h_t\,dt", r"+", r"V^h_S\,dS", r"+", r"\tfrac12", r"V^h_{SS}", r"\,", r"\sigma_t^2",
                 r"S^2", r"\,dt"),
-            row(r"d(V^h - V^h_S S)", r"=", r"\tfrac12", r"\Gamma^h", r"S^2", r"\big(", r"\sigma_t^2", r"-",
+            row(r"dV^h - V^h_S\,dS", r"=", r"\tfrac12", r"\Gamma^h", r"S^2", r"\big(", r"\sigma_t^2", r"-",
                 r"\sigma_h^2", r"\big)\,dt"),
             row(r"\text{P\&L}_T", r"=", r"\tfrac12\int_0^T", r"\Gamma^h", r"S^2", r"\big(", r"\sigma_h^2", r"-",
                 r"\sigma_t^2", r"\big)\,dt", fs=40),
@@ -43,23 +43,14 @@ class WrongVol(VoiceoverScene, ThreeDScene):
         ]
         whys = [why(r"the price at the hedge volatility $\sigma_h$ solves Black--Scholes ($r = 0$)"),
                 why(r"It\^o under the true dynamics: the stock's variance is $\sigma_t^2$, whatever it is"),
-                why(r"substitute the PDE; holding $V^h_S$ shares cancels the $dS$ term"),
+                why(r"self-financing gains: $dV^h - V^h_S\,dS$; include cash when rebalancing"),
                 why(r"short the option at $\sigma_h$ and integrate: the payoff is $V^h_T$"),
                 why(r"a convex payoff: El Karoui, Jeanblanc and Shreve (1998)")]
         step = ladder(self, rows, whys, keep=4, top=3.0, x=-2.2, buff=0.6, edge=6.9)
         with self.voiceover(
-            "Chapter seven assumed the world's volatility was a constant. Drop that, and prove what the hedger "
-            "earns. Sell the option, priced and hedged at a volatility sigma h, which solves the Black-Scholes "
-            "equation at that volatility. <bookmark mark='a'/> The stock, meanwhile, moves with whatever "
-            "volatility the world delivers, sigma t, changing as it likes; Ito's lemma uses that one. "
-            "<bookmark mark='b'/> Substitute the equation, and the hedged position changes by half gamma S "
-            "squared times the gap between the two variances: nothing else. <bookmark mark='c'/> Integrate over "
-            "the option's life: the seller's profit is half the integral of dollar gamma times the variance gap. "
-            "<bookmark mark='d'/> And if the world's volatility never exceeds sigma h, and the payoff is convex, "
-            "every term is positive: the seller cannot lose, whatever the model, whatever the path. Nicole El "
-            "Karoui, Monique Jeanblanc and Steven Shreve proved it in 1998. It is why a false model can run a desk."
+            """Let the true instantaneous volatility vary with time and the path, while the call is priced and hedged at a fixed sigma h. Assume a continuous stock diffusion, zero rates, no costs, continuous self-financing trading, and sufficient regularity and integrability. <bookmark mark='a'/> Ito uses the true variance sigma t squared. <bookmark mark='b'/> Subtract delta times the stock gain from the option's differential. This is not the differential of option minus delta times stock, which would include changes in delta. <bookmark mark='c'/> Integrating gives the short seller's variance-gap P and L. <bookmark mark='d'/> For a convex payoff, gamma is nonnegative. If true instantaneous volatility stays below sigma h almost surely, the continuous hedge super-replicates under these assumptions. El Karoui, Jeanblanc and Shreve, 1998. Jumps, discrete trading and costs fall outside this conclusion."""
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -97,7 +88,7 @@ class WrongVol(VoiceoverScene, ThreeDScene):
             def f():
                 i = max(int(k.get_value()), 1)
                 return VMobject(stroke_color=colour[name], stroke_width=3).set_points_as_corners(
-                    [ax.c2p(a, b, 0) for a, b in zip(t[:i + 1], np.clip(Pth[name][:i + 1], 88, 132))])
+                    [ax.c2p(a, b, 0) for a, b in zip(t[:i + 1], Pth[name][:i + 1])])
             return always_redraw(f)
 
         def column(name, x_off):
@@ -123,15 +114,7 @@ class WrongVol(VoiceoverScene, ThreeDScene):
             self.add_fixed_in_frame_mobjects(m)
             self.remove(m)
         with self.voiceover(
-            "Here is the weight in that integral, as a landscape: dollar gamma over time and stock price, for a "
-            "three-month call sold at twenty-five percent. A ridge runs along the strike and climbs into a spike "
-            "at expiry. <bookmark mark='a'/> Now two paths walk across the floor. Both realize almost exactly "
-            "twenty percent, so the seller has a five-point edge on both. The blue one stays near the strike, "
-            "under the ridge; the green one drifts away early, into the plain. On the right, each path's column "
-            "fills with the dollar gamma it has collected. <bookmark mark='b'/> The blue column ends "
-            f"{cols['near'][-1] / cols['far'][-1]:.0f} times taller, and so does the profit: "
-            f"{w['pnl_near']:.2f} against {w['pnl_far']:.2f}. Same realized volatility; a trader who sells "
-            "options is betting on volatility where her gamma is."
+            f"""Dollar gamma is a landscape over time and spot. The displayed near-expiry spike is capped at five hundred. <bookmark mark='a'/> From twenty thousand simulated paths, select the largest and smallest integrated gamma among {w['n_band']:,} paths with realized volatility near twenty percent. This deliberately chosen pair illustrates path weighting; it is not a typical-path comparison. The paths and cumulative weights are shown together. <bookmark mark='b'/> The integrated-gamma ratio is {cols['near'][-1] / cols['far'][-1]:.1f}. Finite-step profits are {w['pnl_near']:.2f} and {w['pnl_far']:.2f}; their ratio also reflects discrete hedging and the small difference in realized variance."""
         ) as vo:
             self.play(FadeIn(hint), Create(ax), run_time=1.5)
             self.play(FadeIn(surf), run_time=2)
@@ -141,21 +124,23 @@ class WrongVol(VoiceoverScene, ThreeDScene):
             self.play(k.animate.set_value(n), run_time=max(vo.until("b") - 0.5, 4.0), rate_func=linear)
             self.play(FadeIn(res))
         self.wait(0.3)
-        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(Group(*[m for m in self.mobjects if not isinstance(m, ValueTracker)]))], run_time=1.2)
-        self.clear_scene()
+        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(Group(*[m for m in self.mobjects if not isinstance(m, ValueTracker)]))], run_time=0.5)
+        self.clear_scene(run_time=0.1)
 
     # ------------------------------------------------------------------
     def choice(self, h):
         s30, s25 = h["stats_30"], h["stats_25"]
-        lo, hi = -1.5, 5.5
+        lo, hi = -1.5, 6.5
         panels = VGroup()
+        hist_peak = max(np.histogram(np.asarray(h[key]), bins=56, range=(lo, hi))[0].max()
+                        for key in ("imp_30", "act_30"))
         for name, arr, col, st in ((r"hedged at implied, 20\%", h["imp_30"], IMP, (s30["imp_mean"], s30["imp_sd"])),
                                    (r"hedged at actual, 30\%", h["act_30"], REA, (s30["act_mean"], s30["act_sd"]))):
             g = axes([lo, hi], [0, 1.05], x_length=5.2, y_length=2.3, xlabel=r"P\&L at expiry, per 100 of stock",
                      xticks=[0, 2, 4], font_size=18)
             pnl = np.asarray(arr, float)
-            hh, e = np.histogram(np.clip(pnl, lo, hi), bins=56, range=(lo, hi))
-            hh = hh / hh.max()
+            hh, e = np.histogram(pnl, bins=56, range=(lo, hi))
+            hh = hh / hist_peak
             bars = VGroup(*[Rectangle(width=g.ax.x_length / 56 * 0.95, height=max(g.ax.y_length * v, 0.002),
                                       stroke_width=0, fill_color=col, fill_opacity=0.85)
                             .move_to(g.ax.c2p((e[i] + e[i + 1]) / 2, 0), aligned_edge=DOWN) for i, v in enumerate(hh)])
@@ -174,13 +159,7 @@ class WrongVol(VoiceoverScene, ThreeDScene):
                                 rf"{100 * s25['act_loss']:.2f}\%", font_size=24, color=GREY_B)]).to_edge(DOWN, buff=0.3)
         loss_more = "the actual-volatility hedge" if s25["act_loss"] > s25["imp_loss"] else "the implied-volatility hedge"
         with self.voiceover(
-            "Now the buyer's side. You bought a call at twenty percent, sure the stock will realize thirty. Which "
-            "volatility do you hedge with? Riaz Ahmad and Paul Wilmott asked in 2005. Pause and predict. "
-            "<bookmark mark='a'/> Hedge at thirty, and the final profit is nearly the same on every path: "
-            f"{s30['locked']:.2f}, locked in at the start, spread {s30['act_sd']:.2f} from hedging in steps, "
-            "though the mark-to-market swings on the way. <bookmark mark='b'/> Hedge at the market's twenty: the "
-            f"same average, {s30['imp_mean']:.2f}, but path-dependent, sd {s30['imp_sd']:.2f}. "
-            f"<bookmark mark='c'/> If the world realizes only twenty-five, {loss_more} has more losing paths."
+            f"""Buy a call at twenty percent, then compare hedges on twenty thousand GBM paths with constant thirty-percent volatility and ten-percent annual drift. Zero rates and costs. Pause: which hedge has less terminal dispersion? <bookmark mark='a'/> Hedging at the known true volatility would lock in {s30['locked']:.2f} continuously; in steps its standard deviation is {s30['act_sd']:.2f}. <bookmark mark='b'/> Hedging at twenty gives a sample mean of {s30['imp_mean']:.2f} and standard deviation {s30['imp_sd']:.2f}. The displayed histograms share bins and a count scale. Similar sample means here are not a general equality under arbitrary physical dynamics. <bookmark mark='c'/> On the separate twenty-five-percent-volatility paths, {loss_more} has more losing paths. Knowing future constant volatility is an assumption, not an available forecast."""
         ) as vo:
             self.play(FadeIn(top))
             vo.wait_until("a")
@@ -198,18 +177,18 @@ class WrongVol(VoiceoverScene, ThreeDScene):
         pnl = np.asarray(w["heston_pnl"], float)
         pred = np.asarray(w["heston_pred"], float)
         n = 1500
-        left = axes([0.04, 0.44], [-3.5, 5], x_length=5.4, y_length=4.0, xlabel=r"realized volatility",
-                    ylabel=r"the seller's P\&L", xticks=[0.1, 0.25, 0.4], yticks=[-2, 0, 2, 4],
+        left = axes([0.04, 0.6], [-7, 5], x_length=5.4, y_length=4.0, xlabel=r"realized volatility",
+                    ylabel=r"the seller's P\&L", xticks=[0.1, 0.3, 0.5], yticks=[-6, -3, 0, 3],
                     xfmt=lambda v: f"{100 * v:.0f}\\%", font_size=20)
-        right = axes([-3.5, 5], [-3.5, 5], x_length=4.4, y_length=4.0,
+        right = axes([-7, 5], [-7, 5], x_length=4.4, y_length=4.0,
                      xlabel=r"$\tfrac12\int \Gamma S^2(\sigma_i^2 - v_t)\,dt$", ylabel=r"the seller's P\&L",
-                     xticks=[-2, 0, 2, 4], yticks=[-2, 0, 2, 4], font_size=20)
+                     xticks=[-6, -3, 0, 3], yticks=[-6, -3, 0, 3], font_size=20)
         VGroup(left, right).arrange(RIGHT, buff=1.1).shift(DOWN * 0.3)
         d1 = VGroup(*[Dot(left.ax.c2p(a, b), radius=0.022, color=REA, fill_opacity=0.6) for a, b in
-                      zip(rv[:n], np.clip(pnl[:n], -3.4, 4.9))])
+                      zip(rv[:n], pnl[:n])])
         d2 = VGroup(*[Dot(right.ax.c2p(a, b), radius=0.022, color=GAM, fill_opacity=0.6) for a, b in
-                      zip(np.clip(pred[:n], -3.4, 4.9), np.clip(pnl[:n], -3.4, 4.9))])
-        diag = DashedLine(right.ax.c2p(-3.4, -3.4), right.ax.c2p(4.9, 4.9), color=GREY_B, stroke_width=1.5)
+                      zip(pred[:n], pnl[:n])])
+        diag = DashedLine(right.ax.c2p(-7, -7), right.ax.c2p(5, 5), color=GREY_B, stroke_width=1.5)
         be = DashedLine(left.ax.c2p(0.25, -3.5), left.ax.c2p(0.25, 5), color=IMP, stroke_width=1.5)
         c1 = MathTex(rf"\rho = {w['corr_rv']:.2f}", font_size=34, color=REA).next_to(left, UP, buff=0.2)
         c2 = MathTex(rf"\rho = {w['corr_pred']:.2f}", font_size=34, color=GAM).next_to(right, UP, buff=0.2)
@@ -217,12 +196,7 @@ class WrongVol(VoiceoverScene, ThreeDScene):
         params = note(rf"{len(rv):,} Heston paths (volatility of volatility {hp['xi']}, correlation {hp['rho']}); "
                       r"sold and hedged at 25\%".replace(",", "{,}", 1), font_size=20).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            f"When volatility itself moves, the weighting is the main effect. {len(rv):,} Heston paths, sold and "
-            "hedged at twenty-five percent. Profit against realized volatility: correlation "
-            f"{w['corr_rv']:.2f}, loose. <bookmark mark='a'/> Against the gamma-weighted formula from each path's "
-            f"own variance: {w['corr_pred']:.2f}, on the diagonal. The formula explains essentially every dollar; "
-            "pay plain variance with no gamma weight and you have a variance swap, Part twelve."
-            " All of this assumed continuous hedging. Next: hedging in steps."
+            f"""Across {len(rv):,} Heston paths, profit and realized volatility have correlation {w['corr_rv']:.2f}. The panels show the first fifteen hundred paths; reported correlations use all four thousand. <bookmark mark='a'/> Against each path's gamma-weighted variance-gap integral, correlation is {w['corr_pred']:.2f}. The close relation is an approximation with discrete-hedging residuals, not exact replication of stochastic volatility. A variance swap instead weights realized variance without option gamma."""
         ) as vo:
             self.play(FadeIn(left), Create(be), FadeIn(params))
             self.play(LaggedStart(*[FadeIn(d) for d in d1], lag_ratio=0.001, run_time=2.5), FadeIn(c1))

@@ -64,7 +64,7 @@ class Ledger(VoiceoverScene):
             "squared times the gap between implied and realized variance, every instant: a bet that the stock "
             "moves less than you charged for, weighted by gamma."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             self.play(FadeIn(legend_))
             vo.wait_until("a")
             step(1)

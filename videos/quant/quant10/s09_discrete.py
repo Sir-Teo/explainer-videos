@@ -26,31 +26,25 @@ class Discrete(VoiceoverScene):
     # ------------------------------------------------------------------
     def derive(self):
         rows = [
-            cmath(r"\text{error}_k", r"=", r"\tfrac12", r"\Gamma", r"S^2", r"\sigma^2", r"\Delta t", r"\,(", r"Z^2 - 1",
+            cmath(r"\text{error}_k", r"\approx", r"\tfrac12", r"\Gamma", r"S^2", r"\sigma^2", r"\Delta t", r"\,(", r"Z^2 - 1",
                   r")", font_size=40, colors=C_),
-            cmath(r"\operatorname{Var}(\text{error}_k)", r"=", r"\tfrac12", r"\Gamma^2", r"S^4", r"\sigma^4",
+            cmath(r"\operatorname{Var}(\text{error}_k\mid\mathcal F_{t_k})", r"\approx", r"\tfrac12", r"\Gamma^2", r"S^4", r"\sigma^4",
                   r"\Delta t^2", font_size=40, colors={**C_, r"\Gamma^2": GAM, r"\Delta t^2": SPOT}),
-            cmath(r"\operatorname{sd}(\text{P\&L})", r"=", r"\sigma^2", r"\sqrt{\tfrac12\,\Delta t\int_0^T "
+            cmath(r"\operatorname{sd}(\text{P\&L})", r"\sim", r"\sigma^2", r"\sqrt{\tfrac12\,\Delta t\int_0^T "
                   r"\mathbb E\big[\Gamma_t^2 S_t^4\big]\,dt}", r"\;\propto\;", r"\tfrac{1}{\sqrt N}", font_size=40,
                   colors=C_),
         ]
         whys = [why(r"one step: the squared move $\sigma^2 S^2 Z^2\Delta t$ against its average"),
                 why(r"$\operatorname{Var}(Z^2) = 2$"),
-                why(r"steps are independent: add the variances")]
+                why(r"leading martingale differences: variances add; weights are path dependent")]
         step = ladder(self, rows, whys, keep=3, top=2.6, x=-1.2, buff=0.75, edge=6.9)
         hist = note(r"Boyle and Emanuel (1980); Derman and Kamal (Goldman Sachs, 1998): $\operatorname{sd} \approx "
                     r"\sqrt{\pi/4}\;\text{vega}\;\sigma/\sqrt N$ at the money, $\sqrt{\pi/4} = 0.886$",
                     font_size=24).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Real hedgers trade in steps. Over one step the hedge leaves half gamma S squared times the squared "
-            "move minus its average: sigma squared S squared delta t times Z squared minus one. "
-            "<bookmark mark='a'/> Z squared has variance two, so each step's error has variance half gamma squared "
-            "S to the fourth sigma to the fourth delta t squared. <bookmark mark='b'/> The steps are independent, "
-            "T over delta t of them, so one power of delta t is left: the error shrinks like the square root of the "
-            "step. Phelim Boyle and David Emanuel, 1980; Emanuel Derman and Michael Kamal at Goldman Sachs gave "
-            "the rule of thumb at the bottom, with its root pi over four."
+            """At zero rates under driftless GBM, freeze gamma and spot over one short step. Its leading error is half gamma S squared sigma squared delta t, times Z squared minus one. <bookmark mark='a'/> Conditional on the starting information, the variance is half gamma squared S to the fourth sigma to the fourth delta t squared. <bookmark mark='b'/> The leading centered increments are martingale differences. Their variances add even though their gamma weights depend on previous moves. With the usual moment and convergence conditions, total standard deviation is asymptotically proportional to the square root of the step. Boyle and Emanuel, 1980; the ATM approximation below is Derman and Kamal's rule of thumb."""
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -159,8 +153,8 @@ class Discrete(VoiceoverScene):
         bg = seed_band(ax, lx, np.log10(G), SPOT, stroke_width=3.5, opacity=0.3)
         floor = DashedLine(ax.c2p(1.1, np.log10(jf["floor"])), ax.c2p(3.1, np.log10(jf["floor"])), color=LOSS,
                            stroke_width=1.5)
-        leg = legend([(SPOT, r"no jumps: GBM, same total volatility"), (LOSS, r"Merton jumps: 2 a year, mean $-5\%$"),
-                      (LOSS, rf"dashed: the jump term alone, {jf['floor']:.2f}")], font_size=22)
+        leg = legend([(SPOT, r"GBM: matched log-return variance rate"), (LOSS, r"Merton jumps: 2 a year, mean log jump $-5\%$"),
+                      (LOSS, rf"dashed: lognormal-proxy jump reference, {jf['floor']:.2f}")], font_size=22)
         leg.next_to(g, RIGHT, buff=0.3).align_to(g, UP)
         C = {r"\Gamma": GAM, r"J": LOSS}
         eq = cmath(r"V(Se^J) - V(S) - \Delta S(e^J - 1)", r"\approx", r"\tfrac12", r"\Gamma", r"S^2", r"J", r"^2",
@@ -172,16 +166,7 @@ class Discrete(VoiceoverScene):
         holds = jf["ratio_jump"] < 2
         floor_phrase = "It hits a floor," if holds else "It falls, but slowly, towards a floor,"
         with self.voiceover(
-            "And here is where the law stops. Emanuel Derman and Nassim Taleb's point, in 2005: dynamic "
-            "replication assumes the price moves continuously. Give the stock jumps, twice a year on average, "
-            "about five percent down, and hedge at the right total volatility. In blue, the same stock without "
-            "jumps: its error keeps halving every time the hedging quadruples. <bookmark mark='a'/> In red, with "
-            f"jumps: from sixteen hedges to a thousand and twenty-four, the error falls only from "
-            f"{J.mean(0)[0]:.2f} to {J.mean(0)[-1]:.2f}. "
-            + f"{floor_phrase} and the floor is the jump term: a jump of size J costs half gamma S squared J squared however "
-            f"often you rebalance, which by itself leaves {jf['floor']:.2f}. Hedging frequency buys you nothing "
-            "against a gap. Part eleven measures it on Bitcoin's real jumps; Part thirteen prices them. And every "
-            "step costs money. Next: Leland's answer."
+            f"""Add Poisson log-price jumps, twice a year with a minus five percent mean log jump. Compare with GBM at the same log-return variance rate. A single Black volatility does not complete this jump market. Without jumps, frequent hedging reduces the error. <bookmark mark='a'/> With jumps, its measured standard deviation falls from {J.mean(0)[0]:.2f} to {J.mean(0)[-1]:.2f}. {floor_phrase} A jump leaves the exact nonlinear remainder shown on screen; half gamma S squared J squared is only its small-log-jump approximation. The dashed {jf['floor']:.2f} is a quadrature reference for jump-remainder risk using a lognormal spot proxy. It is not a proved variance floor for these simulated Merton paths. Increasing frequency cannot eliminate unspanned jump risk."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(bg), FadeIn(leg[0]))
             vo.wait_until("a")

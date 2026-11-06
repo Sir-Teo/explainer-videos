@@ -41,12 +41,7 @@ class American(VoiceoverScene, ThreeDScene):
             label(r"a deep put: exercise, take $K$ now, and earn interest on it", font_size=28, color=GREY_A),
         ).arrange(DOWN, buff=0.35).next_to(rows, DOWN, buff=0.9)
         with self.voiceover(
-            "European options are exercised only at expiry; most stock options are American, exercisable any day. "
-            "For a call on a stock without dividends the right is worthless: parity bounds the call below by the "
-            "stock minus the discounted strike, more than the stock minus the strike. Merton, 1973. "
-            "<bookmark mark='a'/> A put is different: exercising a deep one hands you the strike now, to earn "
-            "interest on. At some price stopping beats waiting: optimal stopping, Part eight's subject, with no "
-            "closed form at finite maturity."
+            """European options exercise at expiry; American options allow earlier exercise. For a non-dividend-paying stock with nonnegative rates, the call's lower bound is at least its exercise value, so early exercise gives no advantage. Merton, 1973. This conclusion needs those rate and yield assumptions. <bookmark mark='a'/> A put at positive rates can benefit from receiving the strike early. The exercise boundary is an optimal-stopping problem; the general finite-maturity put has no elementary closed formula."""
         ) as vo:
             self.play(Write(rows[0]), run_time=2)
             self.play(FadeIn(rows[1]))
@@ -132,7 +127,7 @@ class American(VoiceoverScene, ThreeDScene):
             self.remove(m)
         with self.voiceover(
             "Here is the whole early-exercise premium, the American put minus the European, over the stock price "
-            "and the time left, from a tree at every point. Far above the strike it is zero: no one exercises a "
+            "and the time left, from a tree at every point. Far above the strike it is small: no one exercises a "
             "put that is out of the money. <bookmark mark='a'/> It grows as the stock falls, and below a certain "
             "price it becomes exactly the gap between exercising now and the European value. The gold curve, where "
             "the shape changes, is the free boundary: the stock price at which exercise becomes optimal, for each "
@@ -144,8 +139,8 @@ class American(VoiceoverScene, ThreeDScene):
             vo.wait_until("a")
             self.play(Create(gold), run_time=2)
             self.move_camera(theta=-25 * DEGREES, phi=60 * DEGREES, run_time=max(vo.remaining(1.0) - 0.5, 1.5))
-        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(Group(*[m for m in self.mobjects if not isinstance(m, ValueTracker)]))], run_time=1.2)
-        self.clear_scene()
+        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(Group(*[m for m in self.mobjects if not isinstance(m, ValueTracker)]))], run_time=0.5)
+        self.clear_scene(run_time=0.1)
 
     # ------------------------------------------------------------------
     def free_boundary(self, a):
@@ -179,7 +174,7 @@ class American(VoiceoverScene, ThreeDScene):
             f"located between nodes, the integral gives {a['kim']:.4f} against the tree's {a['tree']:.4f}: "
             + f"{gap_line} Pause and predict: rates go to zero; where does the boundary go? To zero."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -196,9 +191,9 @@ class American(VoiceoverScene, ThreeDScene):
     def approximations(self, a):
         sp, bc = np.asarray(a["spots"], float), np.asarray(a["baw_curve"], float)
         cards = VGroup(
-            history_card(1977, r"Brennan and Schwartz", r"the first finite-difference solution of the American put "
+            history_card(1977, r"Brennan and Schwartz", r"finite differences for the American put "
                          r"(Part 16 solves it as a complementarity problem)", width=4.2, font_size=22),
-            history_card(1987, r"Barone-Adesi and Whaley", r"drop the early-exercise term's time derivative: a "
+            history_card(1987, r"Barone-Adesi and Whaley", r"approximate the exercise premium's time dependence: a "
                          r"quadratic, solved at the critical price", width=4.2, font_size=22),
         ).arrange(DOWN, buff=0.3, aligned_edge=LEFT).to_edge(LEFT, buff=0.4).shift(UP * 0.5)
         nums = VGroup(
@@ -220,13 +215,7 @@ class American(VoiceoverScene, ThreeDScene):
                     "ex-dividend." if before else
                     "With one cash dividend the tree's call exercise nodes cluster before the dividend date.")
         with self.voiceover(
-            "Desks once needed something quicker than a tree. Brennan and Schwartz solved the put by finite "
-            "differences in 1977, Part sixteen's method. <bookmark mark='a'/> Barone-Adesi and Whaley, 1987, "
-            "dropped the premium's time derivative and solved what was left in closed form: "
-            f"{a['baw']:.4f} against the tree's {a['tree']:.4f}, critical price {a['baw_critical']:.1f} against "
-            f"{a['smooth_critical']:.1f}. <bookmark mark='b'/> And dividends bring calls back. {div_line}"
-            " The trade around it is Part eleven's."
-            " Next: the formula against real Bitcoin, selling volatility."
+            f"""Brennan and Schwartz studied finite differences for the American put in 1977. <bookmark mark='a'/> Barone-Adesi and Whaley's 1987 approximation simplifies the time dependence of the exercise premium, then solves a nonlinear equation for the critical price. It gives {a['baw']:.4f} against the tree's {a['tree']:.4f}, and a boundary of {a['baw_critical']:.1f} versus {a['smooth_critical']:.1f}. These are numerical approximations. <bookmark mark='b'/> {div_line} Our cash-dividend tree uses an escrowed-dividend model. Its exercise timing is conditional on that model, one known dividend and nonnegative rates."""
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")

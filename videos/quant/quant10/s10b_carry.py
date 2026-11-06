@@ -36,15 +36,15 @@ class Carry(VoiceoverScene):
         t = np.linspace(0, T, n + 1)
         rng = np.random.default_rng(1013)
         W = np.concatenate([np.zeros((m, 1)), np.cumsum(rng.standard_normal((m, n)) * np.sqrt(T / n), 1)], 1)
-        g = axes([0, 1], [50, 200], x_length=6.4, y_length=4.4, xlabel=r"years", ylabel=r"stock price under $\mathbb Q$",
-                 xticks=[0, 0.5, 1], yticks=[50, 100, 150, 200], font_size=18).to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
+        g = axes([0, 1], [40, 180], x_length=6.4, y_length=4.4, xlabel=r"years", ylabel=r"stock price under $\mathbb Q$",
+                 xticks=[0, 0.5, 1], yticks=[50, 100, 150], font_size=18).to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
         ax = g.ax
         b = ValueTracker(0.05)
 
         def fan():
             bb = b.get_value()
             P = S0 * np.exp((bb - 0.5 * sig ** 2) * t + sig * W)
-            grp = path_fan(ax, t, np.clip(P, 50, 200), color=QQ, opacity=0.3, stroke_width=1.2)
+            grp = path_fan(ax, t, P, color=QQ, opacity=0.3, stroke_width=1.2)
             grp.add(curve(ax, t, S0 * np.exp(bb * t), QQ, stroke_width=4))
             return grp
 
@@ -73,13 +73,7 @@ class Carry(VoiceoverScene):
                                               color=QQ).move_to([4.5, 1.9, 0]))
         params = note(r"$S = K = 100$, $T = 1$, $\sigma = 25\%$, $r = 5\%$", font_size=20).to_corner(DR, buff=0.25)
         with self.voiceover(
-            "So far the stock paid nothing and cost nothing to hold. Real underlyings have carry: dividends, a "
-            "currency's own interest rate, a borrow fee on a stock hard to short. All of it enters through one "
-            "number, the carry b, the rate minus the yield, and it moves the forward, the centre of the "
-            "risk-neutral fan. <bookmark mark='a'/> Raise the dividend yield: the fan tilts down, the call loses, "
-            "the put gains. Pause and predict: the call's delta? <bookmark mark='b'/> It falls too: the forward is "
-            "lower, and each share held pays dividends the option holder never gets. <bookmark mark='c'/> A borrow "
-            "fee works like a dividend: Part nine's GameStop puts."
+            """Carry changes the forward: dividends, foreign interest, or securities-lending income under an idealized model enter as a reinvestable yield q. With constant rates, b equals r minus q. <bookmark mark='a'/> Raise q: the risk-neutral fan tilts down, the call loses value and the put gains. Pause: the call's share delta? <bookmark mark='b'/> It falls too, including the yield discount. <bookmark mark='c'/> Treating a borrow fee as this yield requires symmetric access and reinvestment. Actual hard-to-borrow constraints can break that equality, as Part nine emphasized."""
         ) as vo:
             self.play(FadeIn(g), Create(kline), FadeIn(params))
             self.add(fan_, bars_, bread, fread)
@@ -117,7 +111,7 @@ class Carry(VoiceoverScene):
             "measured from the forward. <bookmark mark='c'/> The hedge in shares carries an extra discount, e to "
             "the minus q T; hedged with futures on the forward, it is N of d one discounted at r."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -132,10 +126,10 @@ class Carry(VoiceoverScene):
         items = [
             (r"a stock paying a dividend yield", r"$q$ = the yield", r"Merton (1973)"),
             (r"a stock index", r"$q$ = the index's dividend yield", r"Merton (1973)"),
-            (r"a hard-to-borrow stock", r"$q$ includes the borrow fee", r"Part 9: GameStop"),
+            (r"a hard-to-borrow stock", r"idealized reinvestable borrow yield", r"Part 9: GameStop"),
             (r"a currency", r"$q$ = the foreign interest rate", r"Garman--Kohlhagen (1983)"),
             (r"a futures contract", r"$b = 0$: $F$ is the underlying", r"Black (1976)"),
-            (r"a Bitcoin option on Deribit", r"Black-76, paid in coin: $V/F$", r"Alexander, Chen, Imeraj (2023)"),
+            (r"a Bitcoin option on Deribit", r"coin premium: $B/F$, $D_{\rm BTC}=1$", r"Alexander, Chen, Imeraj (2023)"),
         ]
         rows = VGroup()
         for a, b_, c in items:
@@ -154,14 +148,7 @@ class Carry(VoiceoverScene):
         foot = note(r"discrete cash dividends: the escrowed model, $S$ minus the dividends' present value "
                     r"(chapter 14); the trade around them: Part 11", font_size=20).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "So every listed variant of Black-Scholes is this one formula on the forward. A stock with a dividend "
-            "yield, and a whole index, are Merton's 1973 extension. A hard-to-borrow stock: the fee joins the "
-            "yield. A currency: the foreign interest rate plays the dividend, Garman and Kohlhagen's formula of "
-            "1983. <bookmark mark='a'/> A futures contract costs nothing to hold, so its carry is zero, and the "
-            "formula on the futures price is Fischer Black's of 1976, still the market's formula for options on "
-            "futures. And Deribit's Bitcoin options are Black-76 paid in coin: the dollar value divided by the "
-            "forward, which Carol Alexander and her coauthors worked out in 2023. Dividends paid as cash on a "
-            "date are handled by taking their present value out of the stock, as chapter fourteen's tree does."
+            """The same lognormal forward formula serves several models, with their assumptions stated. Continuous yield gives Merton's stock or index extension; foreign interest gives Garman-Kohlhagen for currencies. An idealized borrow yield can enter similarly. <bookmark mark='a'/> With deterministic rates and a lognormal futures price, Black's 1976 formula discounts its expected payoff. An inverse Bitcoin option needs coin-numeraire accounting: write its premium as the undiscounted forward Black value divided by F when the coin discount factor is one. Its spot-dollar value is then spot times that coin premium. Dividing a discounted dollar premium by the forward would mix units. A known cash dividend can instead be modeled with an escrowed risky component; this is a modeling choice, not a universal exact dividend correction."""
         ) as vo:
             self.play(FadeIn(title))
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows[:4]], lag_ratio=0.5, run_time=5))

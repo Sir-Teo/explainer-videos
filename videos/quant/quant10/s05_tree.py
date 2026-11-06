@@ -81,7 +81,7 @@ class Tree(VoiceoverScene, ThreeDScene):
     # ------------------------------------------------------------------
     def lattice(self, t3):
         K, T, sig, r = t3["K"], t3["T"], t3["sigma"], t3["r"]
-        ax = ThreeDAxes(x_range=[0, 1, 0.25], y_range=[50, 200, 50], z_range=[0, 100, 25], x_length=7.0,
+        ax = ThreeDAxes(x_range=[0, 1, 0.25], y_range=[50, 200, 50], z_range=[0, 110, 25], x_length=7.0,
                         y_length=6.0, z_length=3.6, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
         ax.shift(DOWN * 1.0)  # the deep-in-the-money corner rises high: keep it in frame
@@ -95,7 +95,7 @@ class Tree(VoiceoverScene, ThreeDScene):
             if len(idx) > cap:
                 idx = idx[np.linspace(0, len(idx) - 1, cap).astype(int)]
             rad = {4: 0.09, 16: 0.06, 64: 0.04, 256: 0.03}[N]
-            return VGroup(*[Dot3D(ax.c2p(t[i], S[i], min(V[i], 100)), radius=rad, color=YELLOW, resolution=(4, 4))
+            return VGroup(*[Dot3D(ax.c2p(t[i], S[i], V[i]), radius=rad, color=YELLOW, resolution=(4, 4))
                             for i in idx])
 
         groups = {N: nodes(N) for N in t3["N"]}
@@ -108,21 +108,14 @@ class Tree(VoiceoverScene, ThreeDScene):
             j = list(t3["N"]).index(N)
             return VGroup(MathTex(rf"N = {N}", font_size=36, color=YELLOW),
                           MathTex(rf"\text{{price}}\ {t3[f'price_{N}']:.4f}", font_size=30, color=OPT),
-                          MathTex(rf"\text{{worst node gap}}\ {t3['max_gap'][j]:.3f}", font_size=26, color=GREY_A)
+                          MathTex(rf"\text{{central live-node max gap}}\ {t3['max_gap'][j]:.3f}", font_size=26, color=GREY_A)
                           ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_corner(UR, buff=0.4)
 
         self.set_camera_orientation(phi=68 * DEGREES, theta=-60 * DEGREES, zoom=0.74)
         self.add_fixed_in_frame_mobjects(hint)
         self.remove(hint)
         with self.voiceover(
-            "Chop the year into steps and the tree's nodes become points in space: time across, stock price "
-            "along, and the call's value as height. Here is a four-step tree, every node at the value backward "
-            "induction gives it, and behind it, translucent, the Black-Scholes surface. "
-            "<bookmark mark='a'/> Sixteen steps. <bookmark mark='b'/> Sixty-four. <bookmark mark='c'/> Two hundred "
-            "and fifty-six. The nodes multiply and settle onto the surface: the worst gap between a node and the "
-            f"surface falls from {t3['max_gap'][0]:.2f} to {t3['max_gap'][-1]:.2f}, roughly halving every time the "
-            "steps are multiplied by four, and the largest gaps sit where the payoff has its kink. The tree is not "
-            "an approximation to the price at one point. It is a whole discretized copy of the surface."
+            f"Chop the year into steps and the tree's nodes become points in space: time across, stock price along, and the call's value as height. Here is a four-step tree, every node at the value backward induction gives it, and behind it, translucent, the Black-Scholes surface. <bookmark mark='a'/> Sixteen steps. <bookmark mark='b'/> Sixty-four. <bookmark mark='c'/> Two hundred and fifty-six. The nodes multiply and settle onto the surface: the worst gap between a node and the surface falls from {t3['max_gap'][0]:.2f} to {t3['max_gap'][-1]:.2f}, roughly halving every time the steps are multiplied by four, and the largest gaps sit where the payoff has its kink. The tree is not an approximation to the price at one point. It is a whole discretized copy of the surface. The gap uses live nodes with absolute log spot over strike below point four. The view shows at most five hundred nodes per lattice, in the fifty to two hundred spot window."
         ) as vo:
             self.play(FadeIn(hint), Create(ax), run_time=1.5)
             self.play(FadeIn(surf), run_time=1.0)
@@ -139,8 +132,8 @@ class Tree(VoiceoverScene, ThreeDScene):
                 cur, tg = groups[N], nt
             self.move_camera(theta=-20 * DEGREES, phi=62 * DEGREES, run_time=max(vo.remaining(1.0) - 0.5, 1.5))
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, surf, cur)), FadeOut(hint),
-                                                                  FadeOut(tg)], run_time=1.5)
-        self.clear_scene()
+                                                                  FadeOut(tg)], run_time=0.5)
+        self.clear_scene(run_time=0.1)
 
     # ------------------------------------------------------------------
     def derive(self):
@@ -168,7 +161,7 @@ class Tree(VoiceoverScene, ThreeDScene):
             "the curvature. <bookmark mark='c'/> Substitute, collect powers, divide by delta t, and the recursion "
             "is the Black-Scholes equation plus an error of order delta t. The tree is the equation, discretized."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")

@@ -176,12 +176,7 @@ class Crash(VoiceoverScene):
         src = note(r"Kenneth French's data library: the value-weighted US market (Mkt$-$RF $+$ RF), "
                    r"dividends included", font_size=18).to_corner(DR, buff=0.25)
         with self.voiceover(
-            "Everyone did. Insurers' selling pushed futures below the stocks; arbitrageurs bought futures and "
-            "sold stocks; stocks fell; the rule said sell again. <bookmark mark='a'/> On Monday the nineteenth "
-            f"the broad US market, in Kenneth French's data, fell {-100 * c['ret']:.1f} percent; the S and P five "
-            f"hundred, 20.5. Part one measured it: {-c['z']:.0f} standard deviations, impossible under a normal "
-            "law; Jackwerth and Rubinstein put the futures' fall at ten to the minus one hundred and sixty under "
-            "the lognormal. The hedge assumed it could always trade near the last price. That day it could not."
+            f"""The Brady Commission described a feedback mechanism: portfolio-insurance sales pressured futures; index-arbitrage trades could transmit pressure to stocks, prompting further model sales. This was one mechanism among several, not evidence that every investor followed one rule. <bookmark mark='a'/> French's value-weighted US market fell {-100 * c['ret']:.1f} percent; the S and P five hundred fell 20.5. The log return is {-c['z']:.0f} times the preceding year's estimated daily standard deviation. A plug-in Gaussian tail is extraordinarily small, not mathematically impossible. Jackwerth and Rubinstein reported about ten to the minus one hundred and sixty for a separate futures calculation. Both comparisons challenge a calibrated distributional model; they are not directly observed event probabilities."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             self.play(LaggedStart(*[GrowFromEdge(b_, UP if r[i] < 0 else DOWN) for i, b_ in enumerate(bars) if i < i0],

@@ -34,14 +34,14 @@ class BTC(VoiceoverScene):
     # ------------------------------------------------------------------
     def series(self, b):
         t1 = np.array([year_of(x) for x in b["dvol_t"]])
-        t2 = np.array([year_of(x) for x in b["rv30_t"]])
+        t2 = np.array([year_of(x - 30 * 86400) for x in b["rv30_t"]])
         iv, rv = np.asarray(b["dvol"], float), np.asarray(b["rv30"], float)
         g = axes([2021.25, 2026], [0.15, 1.6], x_length=11.6, y_length=4.4, xlabel=r"",
                  ylabel=r"annualized volatility", xticks=[2022, 2023, 2024, 2025], yticks=[0.5, 1.0, 1.5],
                  xfmt=lambda v: f"{int(v)}", yfmt=lambda v: f"{100 * v:.0f}\\%", font_size=20).shift(DOWN * 0.6)
         ax = g.ax
         l_iv = curve(ax, t1, iv, IMP, stroke_width=2.5)
-        l_rv = curve(ax, t2, np.minimum(rv, 1.59), REA, stroke_width=2)
+        l_rv = curve(ax, t2, rv, REA, stroke_width=2)
         leg = legend([(IMP, r"implied: Deribit DVOL (30 days ahead)"),
                       (REA, r"realized over the next 30 days (Binance, hourly)")], font_size=22)
         leg.move_to(ax.c2p(2024.9, 1.42))
@@ -50,12 +50,7 @@ class BTC(VoiceoverScene):
             rf"DVOL, hedge every hour until expiry. {b['n']:,} trades.".replace(",", "{,}", 1), 6.4, 24, GREY_A)
         setup.to_corner(UR, buff=0.35)
         with self.voiceover(
-            "Chapter seven said a hedged seller earns the gap between implied and realized volatility. Is there a "
-            f"gap in a real market? Every day at eight from {ts_date(b['start'][0], '%B %Y')}, the House sells a "
-            "thirty-day at-the-money Bitcoin call at Deribit's DVOL and hedges it hourly on Binance: "
-            f"{b['n']:,} trades. <bookmark mark='a'/> Orange, the implied volatility sold; teal, what Bitcoin "
-            f"realized next. On average {100 * b['mean_iv']:.0f} against {100 * b['mean_rv']:.0f} percent. "
-            "<bookmark mark='b'/> But in crashes teal spikes far above."
+            f"Does the mechanism appear in historical prices? Every day at eight from {ts_date(b['start'][0], '%B %Y')}, price a hypothetical thirty-day dollar call using DVOL and hedge hourly on Binance: {b['n']:,} overlapping windows. DVOL is a smile-wide index, rather than an executable ATM call quote. <bookmark mark='a'/> Orange is starting DVOL; teal is realized volatility over the following thirty days, both aligned at the start. The window averages are {100 * b['mean_iv']:.0f} and {100 * b['mean_rv']:.0f} percent. <bookmark mark='b'/> Realized volatility sometimes surges above the proxy. This is a historical model experiment, with zero rates and no funding or execution constraints. The implementation aligns hourly DVOL closes at the supplied candle timestamps and interpolates twelve missing spot hours. Entry-time data availability has not been established, so it is not a point-in-time strategy backtest."
         ) as vo:
             self.play(FadeIn(g), FadeIn(setup))
             self.play(Create(l_iv), FadeIn(leg[0]), run_time=4)
@@ -65,7 +60,7 @@ class BTC(VoiceoverScene):
             vo.wait_until("b")
             spikes = np.where(rv - np.interp(t2, t1, iv) > 0.15)[0]
             if len(spikes):
-                marks = VGroup(*[Dot(ax.c2p(t2[i], min(rv[i], 1.59)), radius=0.05, color=LOSS) for i in spikes[::3]])
+                marks = VGroup(*[Dot(ax.c2p(t2[i], rv[i]), radius=0.05, color=LOSS) for i in spikes[::3]])
                 self.play(LaggedStart(*[FadeIn(m, scale=2) for m in marks], lag_ratio=0.05))
         self.wait(0.3)
         self.clear_scene()
@@ -74,14 +69,14 @@ class BTC(VoiceoverScene):
     def scatter(self, b):
         gap = np.asarray(b["iv"], float) - np.asarray(b["rv"], float)
         pnl = np.asarray(b["pnl"], float)
-        g = axes([-0.5, 0.5], [-4, 11], x_length=6.2, y_length=4.6, xlabel=r"implied minus realized volatility",
+        g = axes([-0.6, 0.75], [-4, 11], x_length=6.2, y_length=4.6, xlabel=r"implied minus realized volatility",
                  ylabel=r"the seller's P\&L, per 100 of BTC", xticks=[-0.4, -0.2, 0, 0.2, 0.4], yticks=[-4, 0, 4, 8],
                  xfmt=lambda v: f"{100 * v:+.0f}" if v else "0", font_size=20).to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
         ax = g.ax
-        dots = VGroup(*[Dot(ax.c2p(np.clip(x, -0.49, 0.49), np.clip(y, -3.9, 10.9)), radius=0.025,
+        dots = VGroup(*[Dot(ax.c2p(x, y), radius=0.025,
                             color=GAIN if y > 0 else LOSS, fill_opacity=0.65) for x, y in zip(gap, pnl)])
         zero = VGroup(DashedLine(ax.c2p(0, -4), ax.c2p(0, 11), color=GREY_C, stroke_width=1.2),
-                      DashedLine(ax.c2p(-0.5, 0), ax.c2p(0.5, 0), color=GREY_C, stroke_width=1.2))
+                      DashedLine(ax.c2p(-0.6, 0), ax.c2p(0.75, 0), color=GREY_C, stroke_width=1.2))
         corr = float(np.corrcoef(gap, pnl)[0, 1])
         res = np.asarray(b["residual"], float)
         expl = VGroup(
@@ -93,10 +88,7 @@ class BTC(VoiceoverScene):
             label(r"(averages; the residual is the mean absolute size)", font_size=20, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.6)
         with self.voiceover(
-            "Each dot is one month: across, implied minus realized; up, the hedged profit per hundred dollars. "
-            f"Correlation {corr:.2f}: the profit is the volatility gap; the scatter is chapter eight's gamma "
-            "weighting. <bookmark mark='a'/> And the ledger's theta and gamma terms explain each month to within "
-            "a few hundredths, even on hourly Bitcoin."
+            f"""Each dot is one overlapping window: the volatility gap across, hedged profit per hundred up. Correlation {corr:.2f} summarizes this sample; gamma weighting makes the relation path dependent. <bookmark mark='a'/> The ledger separates gamma, theta and a residual. The displayed residual is its average absolute size, so it does not bound the largest error."""
         ) as vo:
             self.play(FadeIn(g), Create(zero))
             self.play(LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.0008, run_time=3))
@@ -132,19 +124,12 @@ class BTC(VoiceoverScene):
         honest = VGroup(
             label(r"Before believing it:", font_size=26, color=IMP),
             label(rf"costs of 2 bp per trade: mean {b['mean_cost']:+.2f}", font_size=22, color=GREY_A),
-            label(rf"DVOL sits about {gap_pts:.1f} points above at-the-money vol", font_size=22, color=GREY_A),
-            label(rf"(it includes the smile): about {adj:+.2f} left", font_size=22, color=GREY_A),
-            label(r"the left tail is where the risk lives", font_size=22, color=LOSS),
+            label(rf"one snapshot: DVOL minus ATM = {gap_pts:.1f} points", font_size=22, color=GREY_A),
+            label(rf"single-snapshot sensitivity only: {adj:+.2f}", font_size=22, color=GREY_A),
+            label(r"dollar-call model; no inverse-contract hedge", font_size=22, color=LOSS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(stats, DOWN, buff=0.45).align_to(stats, LEFT)
         with self.voiceover(
-            f"Over all {b['n']:,} months the seller made {b['mean']:.2f} per hundred, on premiums of "
-            f"{np.mean(b['premium']):.2f}, winning {100 * b['p_win']:.0f} percent of them. With one trade per "
-            f"thirty days, {b['nonoverlap_mean']:.2f} plus or minus {b['nonoverlap_se']:.2f} over "
-            f"{b['nonoverlap_n']} months: the variance risk premium. Is it safe? <bookmark mark='a'/> Costs, "
-            f"even two basis points a trade, take it to {b['mean_cost']:.2f}. DVOL sat about {gap_pts:.1f} points "
-            f"above at-the-money volatility on our Surface morning; selling there leaves about {adj:.2f}. Still "
-            "positive, with a left tail. And Deribit pays in coin while the House hedges a dollar call: second "
-            "order here, Carol Alexander and coauthors show."
+            f"""Across {b['n']:,} windows, mean gross profit is {b['mean']:.2f} per hundred on average model premiums of {np.mean(b['premium']):.2f}; {100 * b['p_win']:.0f} percent are positive. Sampling every thirty days gives {b['nonoverlap_mean']:.2f} plus or minus {b['nonoverlap_se']:.2f}, an ordinary standard error over {b['nonoverlap_n']} non-overlapping windows. They may still be dependent. <bookmark mark='a'/> Two basis points per unit of spot traded reduce the mean to {b['mean_cost']:.2f}, excluding option spreads and funding. Our single Surface snapshot puts DVOL {gap_pts:.1f} points above ATM volatility. Applying that gap to all years is only a sensitivity illustration: {adj:.2f}, not an estimated executable return. Coin settlement also changes numeraire and hedge accounting; this dollar-call experiment does not implement the inverse contract."""
         ) as vo:
             self.play(FadeIn(g), LaggedStart(*[GrowFromEdge(x, DOWN) for x in bars], lag_ratio=0.02, run_time=2.5))
             self.play(FadeIn(over_lab))
@@ -176,15 +161,15 @@ class BTC(VoiceoverScene):
             ok = slice(5, j)
             g = VGroup()
             lo_, hi_ = np.nanmin(lo[:, ok], 0), np.nanmax(hi[:, ok], 0)
-            g.add(band(top.ax, t[ok], np.clip(lo_, -1, 4), np.clip(hi_, -1, 4), IMP, 0.25))
-            g.add(curve(top.ax, t[:j], np.clip(run[:j], -1, 4), WHITE, stroke_width=3))
+            g.add(band(top.ax, t[ok], lo_, hi_, IMP, 0.25))
+            g.add(curve(top.ax, t[:j], run[:j], WHITE, stroke_width=3))
             return g
 
         def lower():
             j = max(int(k.get_value()), 1)
             return VGroup(*[Rectangle(width=0.09, height=max(abs(bot.ax.c2p(0, v)[1] - bot.ax.c2p(0, 0)[1]), 0.01),
                                       stroke_width=0, fill_color=GAIN if v > 0 else LOSS, fill_opacity=0.9)
-                            .move_to(bot.ax.c2p(a, np.clip(v, -6, 6) / 2)) for a, v in zip(t[:j], x[:j])])
+                            .move_to(bot.ax.c2p(a, v / 2)) for a, v in zip(t[:j], x[:j])])
 
         def side():
             j = min(max(int(k.get_value()), 1), n) - 1
@@ -195,7 +180,7 @@ class BTC(VoiceoverScene):
                           ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(RIGHT, buff=0.5).shift(UP * 0.4)
 
         up_, low_, side_ = always_redraw(upper), always_redraw(lower), always_redraw(side)
-        cap = note(r"band: 90\% block-bootstrap interval of the running mean (5 seeds $\times$ 200 resamples)",
+        cap = note(r"pointwise 90\% block-bootstrap intervals; 5 seeds $\times$ 200 resamples; shaded: outer envelope",
                    font_size=18).to_edge(DOWN, buff=0.25)
         fp = r["first_positive"] if r["first_positive"] is not None else r["start"][-1]
         clear_early = bool(np.nanmin(lo[:, 5]) > 0)
@@ -204,11 +189,7 @@ class BTC(VoiceoverScene):
                      f"It lifts clear of zero only from {ts_date(fp, '%B %Y')}, and ends between "
                      f"{r['final_lo']:.2f} and {r['final_hi']:.2f}.")
         with self.voiceover(
-            f"Now watch the study run, one independent month at a time, all {n} of them. Below, each month's "
-            "hedged profit drops in. On the right, the ledger's two terms for that month: the gamma paid, the "
-            "theta collected. Above, the running average, and around it how sure we can be of it: a bootstrap "
-            "band, resampling the months in blocks, five seeds of two hundred resamples each. "
-            f"<bookmark mark='a'/> Early on the band is wide. {band_line} The premium is real; pinning down its size took years of data."
+            f"""Replay all {n} non-overlapping windows. Below is each profit; on the right its gamma and theta terms. Above is the running mean with pointwise ninety-percent block-bootstrap intervals. Five seeds with two hundred resamples each show Monte Carlo variability of the intervals, not five independent market histories. <bookmark mark='a'/> {band_line} These intervals depend on the resampling assumptions, and repeated inspection is not a simultaneous confidence statement. The result describes our DVOL-priced model experiment."""
         ) as vo:
             self.play(FadeIn(top), FadeIn(bot), Create(z1), Create(z2), FadeIn(cap))
             self.add(up_, low_, side_)

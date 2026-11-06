@@ -28,7 +28,7 @@ Delivery workflow: continue directly on `quantitative-finance`. Commit and push 
 | 7 | Visual pass complete; full production-voice listening pending |
 | 8 | Visual pass complete; full production-voice listening pending |
 | 9 | Visual pass complete; full production-voice listening pending |
-| 10 | In progress: scientific, narration and visual QA |
+| 10 | Scientific corrections pushed; bilingual frame QA in progress |
 | 11–43 | Pending; do not infer approval from historical build notes |
 
 ## Part 1: The Fair Game

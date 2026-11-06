@@ -65,8 +65,7 @@ class Implied(VoiceoverScene, ThreeDScene):
             "Black-Scholes world were the real one, what shape would these curves have? <bookmark mark='a'/> "
             "Flat: the underlying has one volatility, whatever strike you ask about. Instead they smile, and "
             "lean. Out-of-the-money puts, to the left, are dearer than calls the same distance away, and both "
-            "wings rise above the middle. The market is charging for big moves, mostly down, more often than a "
-            "lognormal allows: Part one's fat tails, priced. And it is not bookkeeping: chapter thirteen shows "
+            "wings rise above the middle. The smile prices tail payoffs differently from a constant-volatility lognormal model. It concerns risk-neutral prices, not an identified physical crash probability. And it is not bookkeeping: chapter thirteen shows "
             "the much smaller skew a forgotten forward would draw. <bookmark mark='b'/> The dashed lines are the "
             "best Black-Scholes can do: one volatility per expiry."
         ) as vo:
@@ -86,18 +85,18 @@ class Implied(VoiceoverScene, ThreeDScene):
         q = d["q0"]
         k, iv, T = np.asarray(q["k"], float), np.asarray(q["iv"], float), np.asarray(q["T"], float)
         keep = (np.abs(k) <= 0.8) & (T >= 2 / 365)
-        ax = ThreeDAxes(x_range=[-0.8, 0.8, 0.4], y_range=[0, 0.8, 0.2], z_range=[0.3, 1.0, 0.2], x_length=8.0,
+        ax = ThreeDAxes(x_range=[-0.8, 0.8, 0.4], y_range=[0, 0.8, 0.2], z_range=[0.3, 1.1, 0.2], x_length=8.0,
                         y_length=5.4, z_length=3.6, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
         ax.shift(DOWN * 1.1)  # the short-dated wing rises high: keep it under the title
-        pts = smile_points3d(ax, k[keep], np.minimum(T[keep], 0.8), iv[keep], color=IMP, radius=0.045)
+        pts = smile_points3d(ax, k[keep], T[keep], iv[keep], color=IMP, radius=0.045)
         exp = np.array(q["expiry"])[keep]
         lines = VGroup()
         planes = VGroup()
         for e in sorted(set(exp)):
             m = exp == e
             o = np.argsort(k[keep][m])
-            kk, tt, vv = k[keep][m][o], np.minimum(T[keep][m][o], 0.8), iv[keep][m][o]
+            kk, tt, vv = k[keep][m][o], T[keep][m][o], iv[keep][m][o]
             if len(kk) >= 2:
                 lines.add(VMobject(stroke_color=IMP, stroke_width=2, stroke_opacity=0.7).set_points_as_corners(
                     [ax.c2p(a, b, c) for a, b, c in zip(kk, tt, vv)]))
@@ -125,8 +124,8 @@ class Implied(VoiceoverScene, ThreeDScene):
             self.play(LaggedStart(*[Create(p_) for p_ in planes], lag_ratio=0.1, run_time=2))
             self.move_camera(theta=-30 * DEGREES, phi=72 * DEGREES, run_time=max(vo.remaining(1.0) - 0.5, 1.0))
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, pts, lines, planes)),
-                                                                  FadeOut(hint), FadeOut(title)], run_time=1.5)
-        self.clear_scene()
+                                                                  FadeOut(hint), FadeOut(title)], run_time=0.5)
+        self.clear_scene(run_time=0.1)
 
     # ------------------------------------------------------------------
     def scoreboard(self, d):
@@ -166,16 +165,7 @@ class Implied(VoiceoverScene, ThreeDScene):
         dv = note(rf"DVOL that morning: {100 * d['dvol_ref']:.1f}\%; the Surface's 30-day at-the-money volatility: "
                   rf"{100 * d['atm30']:.1f}\%", font_size=20).next_to(unit, UP, buff=0.15)
         with self.voiceover(
-            "So the Surface gets its first row. Black-Scholes with one volatility per expiry misses the market's "
-            f"implied volatilities by {row['rmse_in']:.2f} volatility points, weighted by vega, on the day it was "
-            f"fitted, and by {row['rmse_out']:.2f} the next morning with its parameters held. It has no calendar "
-            "arbitrage, and eleven parameters, one per expiry. <bookmark mark='a'/> The rows below are empty: the "
-            "smile models of Part twelve, stochastic volatility and jumps in thirteen, rough volatility in "
-            "fourteen, neural networks in seventeen. Each will be fitted to the same quotes and judged by the "
-            "same numbers. One more number for later: Deribit's own volatility index, DVOL, computed the way the "
-            f"VIX is, stood at {100 * d['dvol_ref']:.1f} percent that morning, a little above the at-the-money "
-            f"thirty-day volatility, {100 * d['atm30']:.1f}, because it includes the smile's wings."
-            " Part of that smile is not about volatility at all. Next: dividends, borrow and the forward."
+            f"""The first Surface row: one volatility per expiry has vega-weighted IV RMSE {row['rmse_in']:.2f} points in sample and {row['rmse_out']:.2f} the following morning with the parameters held. These are weighted averages, not worst-quote errors. At the eleven sampled maturities, fitted total variance does not decrease; that sampled normalized check is not a general arbitrage certificate for interpolation, carry or execution. <bookmark mark='a'/> Later models use the same frozen quotes. DVOL is {100 * d['dvol_ref']:.1f} percent, against interpolated ATM thirty-day IV of {100 * d['atm30']:.1f}. The index includes option wings and uses a different construction; their difference is not a constant correction across dates."""
         ) as vo:
             self.play(FadeIn(title), FadeIn(rows[0]))
             self.play(FadeIn(rows[1], shift=UP * 0.2), Create(hl))

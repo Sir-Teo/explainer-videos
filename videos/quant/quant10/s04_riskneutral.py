@@ -4,7 +4,7 @@ import numpy as np
 from scipy import stats
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant10.common import CASH, DEL, OPT, PART, PP, QQ, SPOT, computed, load
+from videos.quant.quant10.common import common_side_density, CASH, DEL, OPT, PART, PP, QQ, SPOT, computed, load
 
 C_ = {r"\mu": PP, r"r": CASH, r"\mathbb Q": QQ, r"\mathbb P": PP, r"S_T": SPOT, r"S_0": SPOT, r"S": SPOT,
       r"W^{\mathbb Q}_t": QQ, r"W_t": PP, r"V_0": OPT, r"N(d_1)": DEL, r"N(d_2)": QQ}
@@ -49,9 +49,7 @@ class RiskNeutral(VoiceoverScene):
             "is an average over: random paths. <bookmark mark='a'/> Read the Black-Scholes equation that way, and "
             "the option's value today is the discounted average of its payoff over paths of a stock that grows at "
             "the riskless rate r. <bookmark mark='b'/> Not at mu. The average is not over the world's "
-            "probabilities, P, but over another set, Q, under which every asset is expected to earn exactly the "
-            "riskless rate: the risk-neutral measure. Harrison, Kreps and Pliska proved that its existence is "
-            "the absence of arbitrage; that is Part nine's theorem. Here we watch it work."
+            "probabilities, P, but over another set, Q, under which the discounted non-dividend stock is a true martingale in this constant-coefficient model: the risk-neutral measure. Here the positive pricing measure exists, with the admissibility and regularity conditions discussed in Part nine; that is Part nine's theorem. Here we watch it work."
         ) as vo:
             self.play(FadeIn(pde))
             vo.wait_until("a")
@@ -65,9 +63,9 @@ class RiskNeutral(VoiceoverScene):
     # ------------------------------------------------------------------
     def two_worlds(self, d):
         S0, K, T, r, mu, sig = d["S0"], d["K"], d["T"], d["r"], d["mu"], d["sigma"]
-        lo, hi = 40, 260
+        lo, hi = 30, 400
         g = axes([0, 1], [lo, hi], x_length=6.2, y_length=4.6, xlabel=r"years", ylabel=r"stock price",
-                 xticks=[0, 0.5, 1], yticks=[50, 100, 150, 200, 250], font_size=18)
+                 xticks=[0, 0.5, 1], yticks=[50, 100, 200, 300, 400], font_size=18)
         g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.3)
         ax = g.ax
         t = d["t"]
@@ -77,8 +75,9 @@ class RiskNeutral(VoiceoverScene):
         fanP = path_fan(ax, t, P, color=PP, opacity=0.35, stroke_width=1.3)
         fanQ = path_fan(ax, t, Q, color=QQ, opacity=0.35, stroke_width=1.3)
         kline = DashedLine(ax.c2p(0, K), ax.c2p(1, K), color=QC.STRIKE, stroke_width=1.5)
-        densP = side_density(ax, d["ST_P"], (lo, hi), bins=55, width=1.6, color=PP, opacity=0.6)
-        densQ = side_density(ax, d["ST_Q"], (lo, hi), bins=55, width=1.6, color=QQ, opacity=0.6)
+        peak = max(np.histogram(d[key], bins=55, range=(lo, hi))[0].max() for key in ("ST_P", "ST_Q"))
+        densP = common_side_density(ax, d["ST_P"], (lo, hi), peak, color=PP)
+        densQ = common_side_density(ax, d["ST_Q"], (lo, hi), peak, color=QQ)
         right_x = 4.35
         tab = VGroup(
             label(r"discounted average payoff", font_size=26, color=GREY_A),
@@ -104,15 +103,7 @@ class RiskNeutral(VoiceoverScene):
         params = note(rf"$S_0 = K = 100$, $T = 1$, $\sigma = {100 * sig:.0f}\%$; "
                       rf"{d['n_mc']:,} simulated outcomes".replace(",", "{,}"), font_size=18).to_corner(DR, buff=0.25)
         with self.voiceover(
-            "Two worlds, built from the same random numbers. In amber, the real world: the stock grows "
-            f"at an expected {100 * mu:.0f} percent a year. <bookmark mark='a'/> Average the discounted payoff of "
-            f"a one-year at-the-money call over these paths and you get {d['mc_P']:.2f}. That is not the "
-            "option's price. <bookmark mark='b'/> In violet, the same paths with the drift replaced by the "
-            f"riskless rate, {100 * r:.0f} percent: the average is {d['mc_Q']:.2f}, give or take "
-            f"{d['se_Q']:.2f}, the Black-Scholes price, {d['exact']:.2f}. <bookmark mark='c'/> Girsanov's theorem "
-            "says the two worlds are the same paths with different weights: weight each real-world path by this "
-            f"exponential and the real-world average turns into the risk-neutral one, {d['mc_W']:.2f}. The theta in it, mu minus r over sigma, is the market "
-            "price of risk, which the option's price does not need to know."
+            f"Two worlds, built from the same random numbers. In amber, the real world: the stock grows at an expected {100 * mu:.0f} percent a year. <bookmark mark='a'/> Average the discounted payoff of a one-year at-the-money call over these paths and you get {d['mc_P']:.2f}. That is not the option's price. <bookmark mark='b'/> In violet, the same paths with the drift replaced by the riskless rate, {100 * r:.0f} percent: the average is {d['mc_Q']:.2f}, give or take {d['se_Q']:.2f}, the Black-Scholes price, {d['exact']:.2f}. <bookmark mark='c'/> Girsanov's theorem says the two worlds are the same paths with different weights: weight each real-world path by this exponential and the real-world average turns into the risk-neutral one, {d['mc_W']:.2f}. The theta in it, mu minus r over sigma, is the market price of risk, which the option's price does not need to know. The fan shows eighty paths. Both histograms use sixty thousand terminal observations on the same count scale; the pricing averages use four hundred thousand samples."
         ) as vo:
             self.play(FadeIn(g), Create(kline))
             self.play(LaggedStart(*[Create(m) for m in fanP], lag_ratio=0.02, run_time=3))
@@ -150,7 +141,7 @@ class RiskNeutral(VoiceoverScene):
             "sigma root T. Subtract K times the discounted probability and it is the formula again, by a "
             "second road. Part nine reads N of d one as a probability too, under the measure that counts in shares."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -166,8 +157,8 @@ class RiskNeutral(VoiceoverScene):
         q, w = np.asarray(m["q"], float), np.asarray(m["w"], float)
         ex = m["exact"]
         lx = np.log10(n)
-        g = axes([2, lx[-1]], [10.0, 14.5], x_length=8.6, y_length=4.4, xlabel=r"simulated outcomes $n$",
-                 ylabel=r"Monte Carlo price", xticks=[2, 3, 4, 5], yticks=[10.5, 12.5, 14.5],
+        g = axes([2, lx[-1]], [8.5, 14.8], x_length=8.6, y_length=4.4, xlabel=r"simulated outcomes $n$",
+                 ylabel=r"Monte Carlo price", xticks=[2, 3, 4, 5], yticks=[9, 12, 14],
                  xfmt=lambda v: f"10^{{{int(v)}}}", font_size=20).to_edge(LEFT, buff=0.7).shift(DOWN * 0.3)
         ax = g.ax
         line = DashedLine(ax.c2p(2, ex), ax.c2p(lx[-1], ex), color=OPT, stroke_width=2)
@@ -175,7 +166,7 @@ class RiskNeutral(VoiceoverScene):
 
         def upto(runs, col):
             j = max(int(np.searchsorted(lx, k.get_value(), side="right")), 2)
-            return seed_band(ax, lx[:j], np.clip(runs[:, :j], 10.0, 14.5), col, stroke_width=3, opacity=0.25)
+            return seed_band(ax, lx[:j], runs[:, :j], col, stroke_width=3, opacity=0.25)
 
         bq = always_redraw(lambda: upto(q, QQ))
         bw = always_redraw(lambda: upto(w, PP))

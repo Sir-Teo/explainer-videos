@@ -67,7 +67,7 @@ class Leland(VoiceoverScene, ThreeDScene):
             self.remove(m)
         free_best = lg["best"][0]
         with self.voiceover(
-            "Every rebalance pays a cost, a fraction k of the value traded. Here is what that does to the last "
+            "Every rebalance pays a cost, a one-way fraction k of the value traded. The formula below instead labels round-trip cost as k; twice the one-way rate. Here is what that does to the last "
             "chapter's short call: across, the hedges in the quarter; deep, the cost in basis points; up, the "
             "expected cost plus one standard deviation of the hedging error. <bookmark mark='a'/> At zero cost "
             f"more hedging always helps: the best in our grid is {free_best} hedges, the most we tried. As costs "
@@ -82,8 +82,8 @@ class Leland(VoiceoverScene, ThreeDScene):
             vo.wait_until("b")
             self.play(Create(ridge), FadeIn(balls), FadeIn(tab), run_time=2)
             self.move_camera(theta=-45 * DEGREES, run_time=max(vo.remaining(1.0) - 0.5, 1.0))
-        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(Group(*[m for m in self.mobjects if not isinstance(m, ValueTracker)]))], run_time=1.2)
-        self.clear_scene()
+        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(Group(*[m for m in self.mobjects if not isinstance(m, ValueTracker)]))], run_time=0.5)
+        self.clear_scene(run_time=0.1)
 
     # ------------------------------------------------------------------
     def derive(self):
@@ -112,7 +112,7 @@ class Leland(VoiceoverScene, ThreeDScene):
             "<bookmark mark='c'/> So absorb it into the volatility: sell and hedge at Leland's sigma L. Error "
             "shrinks like root delta t, cost grows like its inverse: the valley."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -191,13 +191,7 @@ class Leland(VoiceoverScene, ThreeDScene):
                     "the limit, and in the price." if sd_last < sd_first else
                     f"In our runs its spread stops shrinking: {sd_first:.2f} to {sd_last:.2f}.")
         with self.voiceover(
-            "Follow the recipe to its end and it breaks. Fix the cost, hedge ever more often: sigma L climbs from "
-            f"{100 * rows_[0]['sigma_L']:.0f} percent to {100 * rows_[-1]['sigma_L']:.0f}, and the premium from "
-            f"{rows_[0]['premium']:.2f} to {rows_[-1]['premium']:.2f}, without bound in the limit. <bookmark mark='a'/> Soner, Shreve and Cvitanic proved in 1995 that the "
-            "cheapest sure cover for a call with costs is to buy the share; Kabanov and Safarian showed in 1997 "
-            f"that with a constant cost Leland's error does not go to zero. {kab_line} The practical answer is a "
-            "band where you do not trade: Parts eleven and seventeen."
-            " So far volatility went in and a price came out. Next: the reverse."
+            f"""Fix the transaction-cost rate and increase hedging frequency. Sigma L grows from {100 * rows_[0]['sigma_L']:.0f} to {100 * rows_[-1]['sigma_L']:.0f} percent; the premium rises from {rows_[0]['premium']:.2f} to {rows_[-1]['premium']:.2f}. Volatility diverges in the limit, but the zero-yield Black call price is bounded and approaches the stock price. <bookmark mark='a'/> In continuous diffusion models with proportional costs and the required admissibility conditions, the perfect-superhedging result of Soner, Shreve and Cvitanic leads to buying the share, with the model's bid-ask accounting. Kabanov and Safarian showed why the original fixed-cost Leland strategy need not have vanishing error. {kab_line} These are model-specific limits, not a claim that an option premium can grow without bound. A practical alternative is a no-trade band."""
         ) as vo:
             self.play(FadeIn(title), FadeIn(head))
             self.play(LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.3, run_time=3), FadeIn(computed()))

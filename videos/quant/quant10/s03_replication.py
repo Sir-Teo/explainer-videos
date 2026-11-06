@@ -96,7 +96,7 @@ class Replication(VoiceoverScene):
             "that a hedged position is riskless, so it earns the riskless rate; Merton's self-financing copy "
             "reaches the same equation and is the version that survives scrutiny."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             br1 = Brace(VGroup(*rows[1][2:12]), DOWN, buff=0.08, color=GREY_B)

@@ -30,19 +30,19 @@ class Solver(VoiceoverScene, ThreeDScene):
         sig = np.linspace(0.05, 1.2, 200)
         prices = bs.price(F, K, T, sig) / 1000
         g = axes([0, 1.2], [0, 16], x_length=6.6, y_length=4.2, xlabel=r"volatility $\sigma$",
-                 ylabel=r"Black--Scholes price, thousands of dollars", xticks=[0.25, 0.5, 0.75, 1.0],
+                 ylabel=r"undiscounted Black forward value, thousands", xticks=[0.25, 0.5, 0.75, 1.0],
                  yticks=[0, 5, 10, 15], xfmt=lambda v: f"{100 * v:.0f}\\%", font_size=20)
         g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.3)
         ax = g.ax
         line = curve(ax, sig, prices, OPT, stroke_width=4)
         tgt = DashedLine(ax.c2p(0, target / 1000), ax.c2p(1.2, target / 1000), color=GREY_B, stroke_width=1.5)
-        tgt_lab = MathTex(rf"\text{{market price}}\ \${target:,.0f}".replace(",", "{,}"), font_size=26, color=GREY_A)
+        tgt_lab = MathTex(rf"\text{{model forward value}}\ \${target:,.0f}".replace(",", "{,}"), font_size=26, color=GREY_A)
         tgt_lab.next_to(ax.c2p(1.2, target / 1000), UP, buff=0.1).shift(LEFT * 1.2)
         its = np.asarray(d["solver_iters"], float)
         dot = glow_dot(ax.c2p(its[-1], target / 1000), color=IMP, radius=0.07)
         drop = DashedLine(ax.c2p(its[-1], target / 1000), ax.c2p(its[-1], 0), color=IMP, stroke_width=2)
         quote = VGroup(
-            label(r"one real quote, 10 December 2025, 08:00 UTC", font_size=24, color=GREY_A),
+            label(r"quote-IV repricing, 10 December 2025, 08:00 UTC", font_size=24, color=GREY_A),
             label(rf"a BTC call, strike \${K:,.0f}, {T * 365:.0f} days".replace(",", "{,}"), font_size=26),
             label(rf"forward \${F:,.0f} (from put--call parity)".replace(",", "{,}"), font_size=24, color=SPOT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(UR, buff=0.5)
@@ -53,14 +53,7 @@ class Solver(VoiceoverScene, ThreeDScene):
                           label(r"then Newton steps, kept inside a bisection bracket", font_size=20, color=GREY_B))
         rows_lab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(rows, DOWN, buff=0.3).align_to(rows, LEFT)
         with self.voiceover(
-            "The formula has five inputs. Four can be looked up: the underlying's price, the strike, the time and "
-            "the interest rate. The fifth, volatility, cannot. So traders turn the formula around: given the "
-            "market's price, find the volatility that reproduces it. That number is the implied volatility, and "
-            "since 1973 options have been quoted in it. <bookmark mark='a'/> One real quote from the House's data: "
-            "a Bitcoin call on Deribit, the largest crypto options exchange, on the morning of the tenth of "
-            "December 2025. The price rises steadily with volatility, so exactly one volatility matches it. "
-            "<bookmark mark='b'/> The House's solver starts from Corrado and Miller's approximation and a few "
-            f"Newton steps finish the job to twelve digits: {100 * its[-1]:.2f} percent."
+            f"""Traders invert a pricing model: given a price, find its implied volatility. Carry, discounting and settlement conventions are part of that conversion. <bookmark mark='a'/> Here we take one Bitcoin call's fitted forward and reported IV from the tenth of December 2025, generate its undiscounted Black forward value, and invert that value. This checks numerical recovery of an input IV, rather than matching an independent execution price. <bookmark mark='b'/> From a Corrado-Miller approximation, guarded Newton steps recover {100 * its[-1]:.2f} percent. Numerical recovery does not establish market-price accuracy."""
         ) as vo:
             self.play(FadeIn(g), Create(line))
             vo.wait_until("a")
@@ -76,7 +69,7 @@ class Solver(VoiceoverScene, ThreeDScene):
     # ------------------------------------------------------------------
     def sheet(self, r):
         xs, ss, B = np.asarray(r["bx"], float), np.asarray(r["bs_"], float), np.asarray(r["B"], float)
-        ax = ThreeDAxes(x_range=[-1, 1, 0.5], y_range=[0, 1.2, 0.3], z_range=[0, 0.6, 0.2], x_length=7.6,
+        ax = ThreeDAxes(x_range=[-1, 1, 0.5], y_range=[0, 1.2, 0.3], z_range=[0, 1.2, 0.4], x_length=7.6,
                         y_length=5.6, z_length=3.4, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
         ax.shift(DOWN * 0.4)
@@ -86,9 +79,9 @@ class Solver(VoiceoverScene, ThreeDScene):
             s_ = max(s_, 1e-3)
             return float(np.exp(a / 2) * ndtr(a / s_ + s_ / 2) - np.exp(-a / 2) * ndtr(a / s_ - s_ / 2))
 
-        surf = Surface(lambda u, v: ax.c2p(u, v, min(bfun(u, v), 0.6)), u_range=[-1, 1], v_range=[0.02, 1.2],
+        surf = Surface(lambda u, v: ax.c2p(u, v, bfun(u, v)), u_range=[-1, 1], v_range=[0.02, 1.2],
                        resolution=(28, 24))
-        surf.set_fill_by_value(axes=ax, colorscale=[(QC.Q, 0), (OPT, 0.25), (WHITE, 0.6)], axis=2)
+        surf.set_fill_by_value(axes=ax, colorscale=[(QC.Q, 0), (OPT, 0.25), (WHITE, 1.2)], axis=2)
         surf.set_style(fill_opacity=0.65, stroke_width=0.3, stroke_color=GREY_D)
         beta = 0.12
         plane = Surface(lambda u, v: ax.c2p(u, v, beta), u_range=[-1, 1], v_range=[0.02, 1.2], resolution=(2, 2))
@@ -130,14 +123,7 @@ class Solver(VoiceoverScene, ThreeDScene):
             self.add_fixed_in_frame_mobjects(m)
             self.remove(m)
         with self.voiceover(
-            "Why is this always possible, and when is it hard? Divide the price by root forward times strike and "
-            "it depends on two numbers, the log-moneyness x and the total volatility s: one smooth sheet. "
-            "<bookmark mark='a'/> It rises in s everywhere, its slope is vega, so a quote, a horizontal plane, "
-            "cuts it in one curve: one volatility per strike. At the money it is nearly the line point four s, the "
-            "floor's rule. <bookmark mark='b'/> In the red corner, short-dated and far from the money, the sheet "
-            "is flat, vega nearly zero, and Newton, dividing by vega, can throw a step anywhere. Hence the House's "
-            "bracket and its Corrado-Miller start; Peter Jaeckel's Let's be rational, 2015, starts so well that "
-            "two steps reach machine precision."
+            """When does a finite positive IV exist? With positive forward, strike and time, the price must lie strictly between intrinsic value and the upper bound, in the chosen discounted or forward units. At the boundaries the limits are zero or infinite volatility; inconsistent quotes have no such solution. Normalize by root forward times strike: price depends on log-moneyness x and total volatility s. <bookmark mark='a'/> Vega is positive, giving uniqueness inside those bounds. At the money the forward value is nearly point four s. <bookmark mark='b'/> Deep out of the money near expiry, vega is tiny: price errors amplify into large IV errors. Brackets protect Newton. Jaeckel's 2015 method uses careful transformations and high-order refinement for floating-point precision in its supported domain."""
         ) as vo:
             self.play(FadeIn(hint), Create(ax), run_time=1.5)
             self.play(FadeIn(surf), FadeIn(eqs_all[0]), run_time=2)
@@ -149,8 +135,8 @@ class Solver(VoiceoverScene, ThreeDScene):
                                                                                           FadeIn(eqs_all[3])],
                              run_time=3)
             self.wait(max(vo.remaining(1.0) - 1.0, 0.5))
-        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(Group(*[m for m in self.mobjects if not isinstance(m, ValueTracker)]))], run_time=1.2)
-        self.clear_scene()
+        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(Group(*[m for m in self.mobjects if not isinstance(m, ValueTracker)]))], run_time=0.5)
+        self.clear_scene(run_time=0.1)
 
     # ------------------------------------------------------------------
     def lab(self, r):
@@ -189,24 +175,24 @@ class Solver(VoiceoverScene, ThreeDScene):
         H, Nv = np.asarray(r["house_paths"], float), np.asarray(r["naive_paths"], float)
         n_it = H.shape[0]
         keep = np.abs(k) <= 0.9
-        left = axes([-0.9, 0.9], [0.2, 1.4], x_length=6.0, y_length=4.2, xlabel=r"log-moneyness $\ln(K/F)$",
-                    ylabel=r"implied volatility", xticks=[-0.6, 0, 0.6], yticks=[0.4, 0.8, 1.2],
+        left = axes([-0.9, 0.9], [0, 2.6], x_length=6.0, y_length=4.2, xlabel=r"log-moneyness $\ln(K/F)$",
+                    ylabel=r"implied volatility", xticks=[-0.6, 0, 0.6], yticks=[0.5, 1, 2, 2.5],
                     yfmt=lambda v: f"{100 * v:.0f}\\%", font_size=18).to_edge(LEFT, buff=0.5).shift(DOWN * 0.4)
-        right = axes([0, n_it - 1], [-15, 1], x_length=5.2, y_length=4.2, xlabel=r"iteration",
-                     ylabel=r"worst error, vol units (log)", xticks=[0, 4, 8, 12], yticks=[-15, -10, -5, 0],
+        right = axes([0, n_it - 1], [-15, 27], x_length=5.2, y_length=4.2, xlabel=r"iteration",
+                     ylabel=r"stored max error (log); invalid sentinel 9.99", xticks=[0, 4, 8, 12], yticks=[-15, -5, 5, 15, 25],
                      yfmt=lambda v: f"10^{{{int(v)}}}", font_size=18).to_edge(RIGHT, buff=0.5).shift(DOWN * 0.4)
         it = ValueTracker(0)
 
         def dots(P, col):
             def f():
                 i = min(int(round(it.get_value())), n_it - 1)
-                y = np.clip(np.where(np.isfinite(P[i]), P[i], 1.39), 0.21, 1.39)
+                y = P[i]
                 return VGroup(*[Dot(left.ax.c2p(a, b), radius=0.03, color=col, fill_opacity=0.8)
-                                for a, b in zip(k[keep], y[keep])])
+                                for a, b in zip(k[keep], y[keep]) if np.isfinite(b)])
             return always_redraw(f)
 
-        hm = np.log10(np.clip(np.asarray(r["house_max"], float), 1e-15, 10))
-        nm = np.log10(np.clip(np.asarray(r["naive_max"], float), 1e-15, 10))
+        hm = np.log10(np.maximum(np.asarray(r["house_max"], float), 1e-15))
+        nm = np.log10(np.maximum(np.asarray(r["naive_max"], float), 1e-15))
         its = np.arange(n_it)
 
         def err(line, col):
@@ -216,19 +202,12 @@ class Solver(VoiceoverScene, ThreeDScene):
             return always_redraw(f)
 
         leg = legend([(IMP, r"the House: Corrado--Miller start, bracketed Newton"),
-                      (LOSS, r"plain Newton from $\sigma = 50\%$")], font_size=20).to_edge(UP, buff=0.4)
+                      (LOSS, r"Newton: 50\% start; stored dots $0<\sigma<3$")], font_size=20).to_edge(UP, buff=0.4)
         truth = VGroup(*[Dot(left.ax.c2p(a, b), radius=0.022, color=GREY_B) for a, b in zip(k[keep], iv[keep])])
         cnt = always_redraw(lambda: MathTex(rf"\text{{iteration}}\ {int(it.get_value())}", font_size=28, color=IMP)
                             .next_to(left, UP, buff=0.1))
         with self.voiceover(
-            f"Now all {r['n']} quotes solve at once. Left, grey: the true smile; each orange dot starts at the "
-            "House's first guess and jumps onto it. Right: the worst error, on a log scale. "
-            f"<bookmark mark='a'/> By iteration {int(np.argmax(hm < -9))} the worst error is below ten to the minus "
-            "nine. <bookmark mark='b'/> In red, plain Newton from a flat fifty percent: "
-            f"{r['naive_broke']} quotes are thrown to infinity or below zero, {r['naive_unfinished']} never "
-            "return. Pause and predict: a far out-of-the-money quote one hundredth of a percent of the forward too "
-            f"high. How wrong is its volatility? On the slowest quote, {100 * r['tick_shift']:.0f} points."
-            " Next: the solver, run on a real smile."
+            f"Now all {r['n']} quotes solve at once. Left, grey: the true smile; each orange dot starts at the House's first guess and jumps onto it. Right: the worst error, on a log scale. <bookmark mark='a'/> By iteration {int(np.argmax(hm < -9))} the worst error is below ten to the minus nine. <bookmark mark='b'/> In red, plain Newton from a flat fifty percent: {r['naive_broke']} quotes are thrown to infinity or below zero, {r['naive_unfinished']} never return. Pause and predict: a far out-of-the-money quote one hundredth of a percent of the forward too high. How wrong is its volatility? On the slowest quote, {100 * r['tick_shift']:.0f} points. Next: the solver, run on a real smile. The dot panel shows absolute log-moneyness at most point nine and only stored positive IVs below three. Nonfinite stored iterates are omitted, not moved to an edge. The unchanged diagnostic substitutes nine point nine nine for a nonfinite error; its finite spikes are shown without an upper cap."
         ) as vo:
             self.play(FadeIn(left), FadeIn(right), FadeIn(truth), FadeIn(leg[0]))
             dh, eh = dots(H, IMP), err(hm, IMP)

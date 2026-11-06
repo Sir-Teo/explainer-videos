@@ -84,7 +84,7 @@ class Heat(VoiceoverScene, ThreeDScene):
             return VGroup(line, prod, dot)
 
         kern = always_redraw(kernel)
-        klab = label(r"violet: the heat kernel at $\tau = 0.4$; shaded: kernel $\times$ payoff", font_size=22,
+        klab = label(r"$\tau=0.4$: kernel height $\times9$, product $\times0.25$ (cap 40); finite window; dot: Black value", font_size=22,
                      color=QC.Q).to_edge(DOWN, buff=0.3).shift(LEFT * 1.5)
         self.set_camera_orientation(phi=70 * DEGREES, theta=-55 * DEGREES, zoom=0.78)  # the surface stays below the corner key
         for m in (hint, params, klab):
@@ -99,8 +99,7 @@ class Heat(VoiceoverScene, ThreeDScene):
             "spreads along a cold rod with one hot end. <bookmark mark='b'/> And here is what the equation "
             "actually computes. At one time left, take this violet bell: the heat kernel, a normal density whose "
             "width grows like sigma times the square root of the time left. Multiply it by the payoff, shade the "
-            "product, and add it up: that area, discounted, is the height of the surface above the bell's "
-            "centre, the yellow dot. <bookmark mark='c'/> Slide the bell, and the dot rides the surface. Every "
+            "product, and add it up: the full unscaled integral, discounted, is the Black value at the yellow dot. The drawn kernel is drift shifted; its height and shaded product are rescaled and windowed for illustration. <bookmark mark='c'/> Slide the bell, and the dot rides the surface. Every "
             "point of the price is an average of the payoff, weighted by a Gaussian."
         ) as vo:
             self.play(FadeIn(hint), FadeIn(params), Create(ax), Create(payoff), run_time=2)
@@ -118,8 +117,8 @@ class Heat(VoiceoverScene, ThreeDScene):
         kern.clear_updaters()
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, payoff, grow, surf, kern)),
                                                                   FadeOut(hint), FadeOut(params), FadeOut(klab)],
-                         run_time=1.5)
-        self.clear_scene()
+                         run_time=0.5)
+        self.clear_scene(run_time=0.1)
 
     # ------------------------------------------------------------------
     def derive(self):
@@ -148,11 +147,10 @@ class Heat(VoiceoverScene, ThreeDScene):
             "profile with a Gaussian whose variance is sigma squared tau. Our profile is the payoff. "
             "<bookmark mark='c'/> Split the integral at the strike, where the payoff switches on; each half is a "
             "Gaussian integral, and completing the square in the first gives the two Ns. <bookmark mark='d'/> "
-            "Undo the substitutions and there is the formula. Notice that the equation only ever sees sigma "
-            "squared times tau. So pause and predict: double the volatility, and how long does the kink take to "
+            "Undo the substitutions and there is the formula. In the shifted, undiscounted heat coordinates, smoothing depends on sigma squared times tau. So pause and predict: double the volatility, and how long does the kink take to "
             "melt? A quarter of the time."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")

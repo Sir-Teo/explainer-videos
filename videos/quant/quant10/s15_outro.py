@@ -9,7 +9,7 @@ DESK = [
     (r"You are long an at-the-money straddle and the stock does not move for a week. Did you make or lose money, "
      r"and roughly how much?", r"you lost a week of theta: $\tfrac12\Gamma S^2\sigma_i^2$ per year, for a week"),
     (r"What is the delta of an at-the-money digital call as expiry approaches, and why does that matter to the "
-     r"desk that sold it?", r"it explodes: the hedge flips between none and all; desks hedge digitals as call spreads"),
+     r"desk that sold it?", r"ATM delta $\sim 1/(S\sigma\sqrt{2\pi\tau})$; a narrow call spread smooths the payoff"),
 ]
 
 PROBLEMS = [
@@ -50,11 +50,11 @@ class Outro(VoiceoverScene):
             (r"the same price as a $\mathbb Q$-expectation, and as the limit of a tree", OPT),
             (r"the Greeks are one surface; $\Theta + rS\Delta + \tfrac12\sigma^2S^2\Gamma = rV$", GAM),
             (r"the hedger earns $\tfrac12\Gamma S^2(\sigma_i^2 - \sigma_r^2)$, weighted by gamma (EKJS)", GAM),
-            (r"hedging in steps: error $\propto\sqrt{\Delta t}$, and a floor under jumps", REA),
-            (r"costs: Leland's volatility, the valley, and why perfect hedging is unbounded", REA),
+            (r"hedging in steps: asymptotic $\sqrt{\Delta t}$ error; jumps leave residual risk", REA),
+            (r"costs: Leland's volatility diverges; the call price remains bounded", REA),
             (r"implied volatility: one root, found fast; the smile; the Surface's first row", IMP),
             (r"carry moves the forward; early exercise has a free boundary and a premium integral", IMP),
-            (r"selling volatility on Bitcoin earned a premium, with a left tail", IMP),
+            (r"BTC model-premium experiment: overlapping windows, costs and left-tail risk", IMP),
             (r"1987 and 1998: every hedge assumes you can trade, fund, and are not alone", QC.CRISIS),
             (r"desks speak in volatility; the 2026 frontier still races to invert it", QC.IDEA),
         ]
@@ -71,17 +71,10 @@ class Outro(VoiceoverScene):
             rows.scale_to_fit_height(6.4)
         rows.next_to(title, DOWN, buff=0.35)
         with self.voiceover(
-            "Part ten in twelve lines. An option is manufactured from stock and cash, and the expected return "
-            "drops out. The equation is the heat equation, so the price is a Gaussian average of the payoff, an "
-            "expectation under Q, and the limit of a tree. The Greeks are slopes of one surface. A hedged option "
-            "is a bet on realized volatility, weighted by gamma. Hedging in steps leaves an error like the root of "
-            "the step, and none of it helps across jumps; costs raise the price, without limit if you insist on "
-            "perfection. Implied volatility exists, is found to machine precision, and smiles. Carry moves the "
-            "forward; early exercise is a free boundary. Selling Bitcoin volatility paid, with a left tail. 1987 "
-            "and 1998 showed what every hedge assumes. And desks speak the formula's language."
+            """Part ten. A stock-and-cash strategy replicates a vanilla payoff under the stated frictionless diffusion assumptions. Heat kernels, risk-neutral expectation and trees reach the same price. Gamma weights the variance gap. Discrete hedging leaves error, and jumps add unspanned risk. Costs change the hedge; a diverging Leland volatility still gives a bounded call price. Implied volatility is unique for prices strictly inside its bounds, but numerical conditioning matters. Carry and exercise conventions matter too. The Bitcoin illustration uses model premiums and overlapping historical windows. The crisis studies show the cost of broken assumptions."""
         ):
-            self.play(FadeIn(title), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in rows], lag_ratio=0.5,
-                                                 run_time=20))
+            self.play(FadeIn(title), FadeIn(rows[0], shift=RIGHT * 0.2), run_time=0.6)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in rows[1:]], lag_ratio=0.5), run_time=8)
         self.wait(0.5)
         self.clear_scene()
 

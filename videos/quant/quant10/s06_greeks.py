@@ -68,8 +68,8 @@ class Greeks(VoiceoverScene, ThreeDScene):
             self.play(Create(slice_), run_time=1.5)
             self.move_camera(theta=-36 * DEGREES, run_time=max(vo.remaining(1.0) - 1.0, 1.0))
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, surf, payoff, slice_)),
-                                                                  FadeOut(hint), FadeOut(params)], run_time=1.5)
-        self.clear_scene()
+                                                                  FadeOut(hint), FadeOut(params)], run_time=0.5)
+        self.clear_scene(run_time=0.1)
 
     # ------------------------------------------------------------------
     def panel(self, y_range, ylabel, yticks, y_len=1.85):
@@ -146,7 +146,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
             "predict: at the money, with no rates, as the maturity grows without limit, what happens to the "
             "call's delta? It goes to one, because d one is half sigma root T."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -210,7 +210,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
         eq = cmath(r"\text{vega}", r"=", r"\sigma\,(T - t)\,S^2", r"\,\Gamma", font_size=44,
                    colors={r"\text{vega}": VEG, r"\,\Gamma": GAM}).to_edge(UP, buff=0.6)
         table = VGroup(
-            label(r"long an option:", font_size=28, color=GREY_A),
+            label(r"long a vanilla call or put ($r=q=0$):", font_size=28, color=GREY_A),
             label(r"long gamma \ $\Leftrightarrow$ \ short theta \ $\Leftrightarrow$ \ long vega", font_size=28),
             label(r"short an option: all three signs flip", font_size=28, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.5).shift(DOWN * 0.3)
@@ -219,7 +219,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
         with self.voiceover(
             "Last, vega: how much the value rises with volatility. Another bump at the strike, growing with the "
             "time left, the opposite of gamma. <bookmark mark='a'/> For Black-Scholes it is sigma times time left "
-            "times S squared gamma: gamma, theta and vega are one bump seen three ways. Long an option is long "
+            "times S squared gamma: gamma, theta and vega are one bump seen three ways. For these vanilla calls and puts at zero rates and yield, a long position is long "
             "gamma, short theta, long vega; the second-order Greeks, vanna and volga, come with the smile in Part "
             "eleven."
             " Next: where those Greeks turn into money, in the hedger's ledger."

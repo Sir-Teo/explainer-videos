@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant10.common import GAIN, IMP, LOSS, OPT, PART, QQ, SPOT, computed, load
+from videos.quant.quant10.common import FullRangeReplay, GAIN, IMP, LOSS, OPT, PART, QQ, SPOT, computed, load
 
 
 class Frontier(VoiceoverScene):
@@ -71,14 +71,18 @@ class Frontier(VoiceoverScene):
         ck = [max(int(k_), int(ep[0])) for k_ in keys]
 
         def frame(i):
-            g = axes([0.2, 1.4], [0.2, 1.4], x_length=4.2, y_length=3.6, xlabel=r"true implied vol",
-                     ylabel=r"the network's guess", xticks=[0.4, 0.8, 1.2], yticks=[0.4, 0.8, 1.2], font_size=15)
-            p = np.clip(np.asarray(snaps[keys[i]], float), 0.2, 1.4)
-            diag = DashedLine(g.ax.c2p(0.2, 0.2), g.ax.c2p(1.4, 1.4), color=GREY_B, stroke_width=1.2)
-            pts = VGroup(*[Dot(g.ax.c2p(a, b), radius=0.025, color=QQ, fill_opacity=0.8) for a, b in zip(iv, p)])
+            g = axes(np.log10([0.3, 1.2]), np.log10([0.2, 22]), x_length=4.2, y_length=3.6,
+                     xlabel=r"input quote IV (log scale)", ylabel=r"seed 0 guess (log scale)",
+                     xticks=np.log10([0.4, 0.8, 1.2]), yticks=np.log10([0.2, 1, 5, 20]),
+                     xfmt=lambda v: f"{100 * 10**v:.0f}\\%", yfmt=lambda v: f"{100 * 10**v:.0f}\\%", font_size=15)
+            p = np.asarray(snaps[keys[i]], float)
+            diag = DashedLine(g.ax.c2p(np.log10(0.3), np.log10(0.3)),
+                              g.ax.c2p(np.log10(1.2), np.log10(1.2)), color=GREY_B, stroke_width=1.2)
+            pts = VGroup(*[Dot(g.ax.c2p(np.log10(a), np.log10(b)), radius=0.025, color=QQ, fill_opacity=0.8)
+                          for a, b in zip(iv, p)])
             return VGroup(g, diag, pts)
 
-        rp = TrainingReplay(ep, loss, frame, ck, ylabel=r"training loss (log)", xlabel=r"epoch", log_y=True)
+        rp = FullRangeReplay(ep, loss, frame, ck, ylabel=r"training loss (log)", xlabel=r"epoch", log_y=True)
         rp.scale(0.88).shift(UP * 0.25)  # the bottom strip holds the results
         fin = nv["final"]
 
@@ -106,15 +110,7 @@ class Frontier(VoiceoverScene):
                       "eleven's flat sheet throws Newton around. That is why the papers gate the network by region and "
                       "finish with a third-order step, and why the House keeps its bracket.")
         with self.voiceover(
-            "The House tries the last idea in miniature. A small network, two inputs, the log-moneyness and the "
-            "log of the normalized price, learns to output the total volatility, trained on "
-            f"{nv['n_train']:,} synthetic quotes, five seeds. On the right the training loss, the band the spread "
-            "of the seeds; on the left, its guess for every quote of the real Surface against the truth, "
-            "checkpoint by checkpoint. <bookmark mark='a'/> The cloud collapses onto the diagonal. Its median "
-            f"error is {100 * g0:.2f} volatility points, {cmp_word} the classical Corrado-Miller start's "
-            f"{100 * nv['cm_med']:.2f}. A guess is only a start: one Newton step takes the median to "
-            f"{100 * g1:.2f} points, two to {two_txt}, {worst_line} Learn the start; keep the mathematics for the "
-            "finish."
+            f"""A small two-input network learns total volatility from {nv['n_train']:,} synthetic quotes, with five seeds. This is a teaching implementation, not a replication of the gated Householder method. Right: every logged training loss, with the full seed range. Left: seed zero's checkpoint predictions against the input quote IVs, on logarithmic axes. The untrained guess reaches {100 * max(nv['snaps'][keys[0]]):.0f} percent and remains visible. <bookmark mark='a'/> Across seeds, the median quote error's median is {100 * g0:.2f} points, {cmp_word} Corrado-Miller's {100 * nv['cm_med']:.2f}. One Newton step gives a median of {100 * g1:.2f} points; two give {two_txt}. {worst_line} Median accuracy cannot certify the worst case, and we did not benchmark runtime against the papers."""
         ) as vo:
             self.play(FadeIn(title), FadeIn(rp))
             rp.play(self, run_time=max(vo.until("a") - 1.5, 5.0))

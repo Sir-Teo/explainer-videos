@@ -20,10 +20,7 @@ class Hook(VoiceoverScene):
         card = part_title(PART, r"Manufacturing an option")
         disc = note(DISCLAIMER, font_size=18, color=GREY_C).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Part ten. Black, Scholes and Merton. In 1973 three economists showed that an option, a bet on a "
-            "price, can be built out of the thing it bets on and cash. That one idea created a market that now "
-            "trades trillions of dollars of contracts, and it still runs every options desk in the world. We "
-            "start with what it looks like on a real month of prices."
+            """Part ten. Black, Scholes and Merton. In their continuous, frictionless model, an option can be replicated with stock and cash. We derive that result, examine its failures, and start with a stylized experiment on a real month of Bitcoin prices."""
         ):
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(disc))
         self.play(FadeOut(card), FadeOut(disc))
@@ -96,20 +93,7 @@ class Hook(VoiceoverScene):
         pay_lab.next_to(pay.ax.c2p(62, 47), RIGHT, buff=0.15)  # starts right of the y-axis
         call_slot = call.copy().scale_to_fit_width(4.4).to_edge(RIGHT, buff=0.35).set_y(-1.7)
         with self.voiceover(
-            f"The first of October 2021. Bitcoin trades at about {b['pick_S0']:,.0f} dollars. You sell someone "
-            "a call: the right to buy bitcoin thirty days from now at today's price. The market quotes "
-            f"Bitcoin's volatility at {100 * b['pick_iv']:.0f} percent a year, and at that volatility the call is "
-            f"worth {prem:.1f} dollars for every hundred dollars of bitcoin. You collect it. <bookmark mark='a'/> "
-            f"Then Bitcoin goes up. Not a little: {S[-1] - 100:.0f} percent in a month. "
-            f"<bookmark mark='b'/> At expiry you owe the buyer the whole rise, {S[-1] - 100:.0f} dollars per "
-            f"hundred. Unhedged, the red line, you lose {S[-1] - 100 - prem:.0f}. Pause and predict: did a seller "
-            "who hedged lose too? <bookmark mark='c'/> A "
-            f"seller who, every hour, held a certain number of coins, the yellow bar, about "
-            f"{b['pick_delta'][0]:.2f} of a coin at the start and rising towards one "
-            "as the call went deeper into the money, ended the month on the white line. Up "
-            f"{b['pick_pnl']:.2f}. The rally that cost the unhedged seller a fortune cost the hedger nothing. And "
-            f"this was not a lucky month: of the {b['n']:,} months we will hedge in chapter fifteen, this one's profit is "
-            "the median."
+            f"""The first of October 2021. Bitcoin is about {b['pick_S0']:,.0f} dollars. Suppose we sell a thirty-day dollar call at today's spot. We use DVOL, {100 * b['pick_iv']:.0f} percent, as a proxy for its volatility: a model premium of {prem:.1f} per hundred of Bitcoin, rather than an observed call execution. <bookmark mark='a'/> Bitcoin rises {S[-1] - 100:.0f} percent. <bookmark mark='b'/> The payoff is {S[-1] - 100:.0f} per hundred; unhedged, the loss is {S[-1] - 100 - prem:.0f}. Pause: how does hourly hedging change it? <bookmark mark='c'/> The seller starts with {b['pick_delta'][0]:.2f} coin units per call, increasing towards one. The white line finishes up {b['pick_pnl']:.2f}, before costs and funding. This window was selected retrospectively for its median profit among {b['n']:,} overlapping windows. It illustrates the mechanism, rather than an executable trading record."""
         ) as vo:
             self.play(FadeIn(call, scale=0.95))
             self.play(FadeIn(pay), Create(pay_line), FadeIn(pay_lab))
@@ -147,12 +131,7 @@ class Hook(VoiceoverScene):
         q = label(r"How can a bet on a price be built out of the price itself?", font_size=34)
         q.next_to(pair, DOWN, buff=1.0)
         with self.voiceover(
-            "How is that possible? The number of coins the hedger held is the option's delta, given by the "
-            "Black-Scholes formula. Hold delta coins, and the option's ups and downs are cancelled by the coins', "
-            "hour by hour. What is left is not luck about direction. It is a gap between two volatilities. "
-            f"<bookmark mark='a'/> The market charged {100 * b['pick_iv']:.0f} percent; Bitcoin, for all its "
-            f"rally, moved at {100 * b['pick_rv']:.0f}. The hedger was paid for the difference. "
-            "<bookmark mark='b'/> The question underneath it is the one Bachelier asked in 1900."
+            f"""The shares follow the model delta. Continuous replication cancels first-order stock risk; hourly hedging leaves an error. What pays the seller in this example is the variance gap, weighted by gamma. <bookmark mark='a'/> The DVOL proxy is {100 * b['pick_iv']:.0f} percent against realized volatility of {100 * b['pick_rv']:.0f}. Their difference alone does not determine profit: the path's gamma weights matter. <bookmark mark='b'/> That is the question behind the formula."""
         ) as vo:
             vo.wait_until("a")
             self.play(FadeOut(self.month), run_time=1.0)
@@ -168,10 +147,10 @@ class Hook(VoiceoverScene):
         card = objectives_card([
             r"Derive the price by replication, solve the PDE as a heat equation, read it as an expectation and a tree",
             r"Read the Greeks as the geometry of one surface, and find the identity that ties gamma to theta",
-            r"Derive the hedger's P\&L, $\tfrac12\Gamma S^2(\sigma_r^2 - \sigma_i^2)\,dt$, and watch it on real paths",
+            r"Derive the short seller's P\&L, $\tfrac12\Gamma S^2(\sigma_i^2 - \sigma_r^2)\,dt$, and test it on paths",
             r"Measure hedging in steps, with jumps, with costs (Leland) and with the wrong volatility",
             r"Invert the formula on 254 real quotes; add the carry; price early exercise",
-            r"Sell volatility on real Bitcoin, replay 1987 and 1998, and see how desks and researchers use it now",
+            r"Test a DVOL-priced BTC model, replay 1987 and 1998, and examine current practice",
         ], title=r"In this part", font_size=29)
         with self.voiceover(
             "The plan. The formula derived and solved three ways. The Greeks as one surface. The hedger's profit "
@@ -179,8 +158,9 @@ class Hook(VoiceoverScene):
             "The formula inverted on a real market, with dividends and early exercise. And real data: Bitcoin, "
             "1987 replayed, 1998, and how desks and researchers use the formula today."
         ):
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
-                                                     lag_ratio=0.35, run_time=6))
+            self.play(FadeIn(card.head), FadeIn(card.rows[0], shift=RIGHT * 0.2), run_time=0.6)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows[1:]],
+                                 lag_ratio=0.35), run_time=6)
         self.wait(0.3)
         self.clear_scene()
 

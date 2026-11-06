@@ -10,11 +10,11 @@ returns. Schematics and made-up examples are labeled on screen.
 
 *An education in methods, not investment advice.*
 
-## Chapters (about 63 minutes)
+## Chapters (about 61 minutes of narration)
 
-* **Manufacturing an option.** A real month, October 2021: a 30-day Bitcoin call sold at Deribit's DVOL (89%);
-  Bitcoin rises 37%; unhedged the seller loses 27 per 100, hedged every hour the seller makes 1.15 (the median of the
-  1,706 months of chapter 15). Pause and predict; implied 89% against realized 61%; objectives; the House's vol desk.
+* **Manufacturing an option.** A real month, October 2021: a hypothetical 30-day dollar Bitcoin call priced using DVOL (89%);
+  Bitcoin rises 37%; unhedged the seller loses 27 per 100, hedged every hour the seller makes 1.15 (selected retrospectively for its median P&L among
+  1,706 overlapping windows; before costs and funding). Pause and predict; implied 89% against realized 61%; objectives; the House's vol desk.
 * **1. Before the formula.** Bachelier (1900); Sprenkle (1961), Boness (1964), Samuelson (1965) and their two
   unknown rates μ and ρ; Thorp and Kassouf (1967) and the warrant hedge (Thorp's discount-free formula, as MacKenzie
   2003 reports); Black–Scholes and Merton; the JPE's and REStat's first rejections; the CBOE opens (26 April 1973:
@@ -28,7 +28,7 @@ returns. Schematics and made-up examples are labeled on screen.
   Gaussian integral by hand. **Replay:** Monte Carlo under Q with 8 seeds closing on the formula, and the
   Girsanov-reweighted estimator as the baseline (here narrower: sd ratio 0.62, importance sampling by accident).
 * **5. The tree and its limit.** One step (Part 9 builds it); **3D:** whole CRR lattices (N = 4, 16, 64, 256)
-  settling onto the Black–Scholes surface (worst node gap 0.99 → 0.11); the recursion expanded into the PDE; the
+  settling onto the Black–Scholes surface (central live-node maximum gap 0.99 → 0.11; thinning and spot window disclosed); the recursion expanded into the PDE; the
   N = 1…400 sawtooth (Diener–Diener 2004). **Lab:** `trees.crr`'s backward loop: 9.9705, 10.4194, 10.4456 vs 10.4506.
 * **6. The Greeks as geometry.** The value surface in 3D; delta and gamma as time runs out; the identity
   Sφ(d₁) = Ke^{−rT}φ(d₂) and two-line derivations; Θ = −½σ²S²Γ computed; vega = σ(T − t)S²Γ.
@@ -44,14 +44,14 @@ returns. Schematics and made-up examples are labeled on screen.
 * **10. Paying for it: Leland's volatility.** **3D:** the cost–risk landscape over hedges and costs, with the ridge of
   optimal frequency (252 at zero cost; 26 at 25 bp; 13 at 50 bp); Leland derived; **Lab:** `bs.leland_vol` (21.2%
   daily, 20.6% weekly at 0.2% round trip) and the weekly check (−0.53 → −0.25 → +0.01 without the end trades);
-  the limit: σ_L 21% → 38% and the premium 4.26 → 7.49 as hedging speeds up (Soner–Shreve–Cvitanić 1995;
+  the limit: σ_L 21% → 38% and the premium 4.26 → 7.49 as hedging speeds up; only σ_L diverges, while the zero-yield call price approaches spot (Soner–Shreve–Cvitanić 1995;
   Kabanov–Safarian 1997).
-* **11. Turning the formula inside out.** One real quote inverted; **3D:** Jäckel's normalized price b(x, s) and a
+* **11. Turning the formula inside out.** A quote IV repriced to an undiscounted forward Black value and recovered numerically; **3D:** Jäckel's normalized price b(x, s) and a
   quote's plane; existence, Brenner–Subrahmanyam, Newton and its flat corner; **Lab:** `bs.implied_vol` (now freezing
   converged quotes); **Replay:** all 254 Surface quotes solving at once (median 3 iterations, worst 11), against plain
   Newton from 50% (10 quotes thrown off, 9 never return); one tick on the flattest quote moves its vol by 19 points.
 * **12. The first smile, and the Surface's first row.** The smiles of 10 December 2025; the Surface in 3D; the first
-  row: 4.36 vol points in sample, 4.74 the next day, no calendar arbitrage, 11 parameters; DVOL 45.9% vs ATM30 44.1%.
+  row: 4.36 vol points in sample, 4.74 the next day, no decreases at the sampled normalized total-variance maturities, 11 parameters; DVOL 45.9% vs ATM30 44.1%.
 * **13. Dividends, borrow and the forward.** The carry slider moving the risk-neutral fan; the PDE with a yield; one
   formula on the forward (Merton 1973, Garman–Kohlhagen 1983, Black 1976, inverse options); the Surface's basis
   (2.6% to 4.8% a year) and the fake skew from forgetting the forward (+1.2/−1.2 points at 51 days, +3.3/−2.7 at 289).
@@ -59,8 +59,8 @@ returns. Schematics and made-up examples are labeled on screen.
   **3D:** the early-exercise premium over (S, τ) with the free boundary; value matching, smooth pasting; Kim's
   integral from the tree's boundary (6.0947); Brennan–Schwartz (1977); Barone-Adesi–Whaley (6.0976, critical 81.7);
   the call exercised only just before a dividend.
-* **15. Selling volatility on real Bitcoin.** 1,706 thirty-day calls sold at DVOL and hedged hourly: mean +1.35 per
-  100, 81% winning months; **Replay:** the 57 independent months swept with a block-bootstrap band (5 seeds × 200),
+* **15. Selling volatility on real Bitcoin.** 1,706 overlapping thirty-day dollar-call windows, model-priced at DVOL and hedged hourly: mean +1.35 per
+  100, 81% winning months; **Replay:** the 57 non-overlapping, potentially dependent windows swept with a block-bootstrap band (5 seeds × 200),
   ending between 1.05 and 1.86; costs; inverse settlement; the worst month (August 2024).
 * **16. October 1987.** Portfolio insurance (Rubinstein–Leland 1981); **Lab:** `hedge.replicate_put`; the insured
   portfolio replayed on French's daily data from 1 July 1987: 93% in stocks on 5 October, 64% going into Black
@@ -154,10 +154,7 @@ python tools/qa_scene.py quant10 Ledger           # one chapter, silent, with a 
 2. **You are long an at-the-money straddle and the stock does not move for a week. Did you make or lose money?** You
    lost: a long straddle is long gamma and short theta, and with no move the gamma earns nothing while theta is paid
    in full. For a one-month 20% straddle on 100 that is about 0.53 for the week (twice a call's theta).
-3. **The delta of an at-the-money digital call near expiry.** The digital pays 1 above the strike; its delta is the
-   risk-neutral density at the strike, φ(d₂)/(Sσ√τ), which grows like 1/√τ. A tiny move flips the hedge between none
-   and a large position: unhedgeable in practice, so desks over-hedge digitals as a tight call spread (long a call at
-   K − ε, short one at K, scaled by 1/ε) and charge for the spread.
+3. **The delta of an at-the-money digital call near expiry.** The unit cash digital has delta e^{−rτ}φ(d₂)/(Sσ√τ) with zero yield. This is (K/S) times the discounted risk-neutral terminal density at K; at S = K and zero rates it grows like 1/√τ. The hedge develops a narrow spike, potentially above one share. A lower-strike call spread (long K − ε, short K, scaled by 1/ε) dominates the digital payoff at expiry in this model; execution and funding still matter.
 
 ## Problems, with solutions
 
@@ -176,11 +173,10 @@ python tools/qa_scene.py quant10 Ledger           # one chapter, silent, with a 
 4. **Leland.** σ_L² = σ²(1 + √(2/π) k / (σ√Δt)) with round-trip cost k = 0.2%. Daily (Δt = 1/252): σ_L = 21.2%;
    weekly (Δt = 1/52): σ_L = 20.6%. Weekly hedging is cheaper to sell, because it trades less, but its hedging error
    is about √5 ≈ 2.2 times larger (chapter 9).
-5. **Early exercise.** A call is worth at least S − K e^{−rT} ≥ S − K, so it is always worth at least as much alive as
+5. **Early exercise.** With no dividends and r ≥ 0, a call is worth at least S − K e^{−rT} ≥ S − K, so it is always worth at least as much alive as
    exercised, and strictly more when r > 0: never exercise early without dividends. A put is worth at least
    K e^{−rT} − S, which is less than K − S when r > 0: exercising a deep put can win, because the strike received now
-   earns interest. At r = 0 that bound is K − S itself, so the put is never exercised early either: early exercise
-   of a put requires a positive interest rate.
+   earns interest. At r = 0 that bound is K − S itself, so the put is never exercised early either: with zero dividends, this removes the benefit of early put exercise. The argument assumes nonnegative rates; other carry conventions require a separate analysis.
 6. **Leland derived.** Over a step, delta changes by δΔ ≈ Γ δS = ΓSσ√Δt Z, so the shares traded are |δΔ| and the
    expected cost of the step is (k/2)·S·E|δΔ| = (k/2)ΓS²σ√Δt·√(2/π) for a round-trip cost k (half on each trade).
    Per unit of time that is ½ΓS²·σk√(2/π)/√Δt: the same form as the variance term ½ΓS²σ² of the hedging P&L. Adding
@@ -205,8 +201,7 @@ python tools/qa_scene.py quant10 Ledger           # one chapter, silent, with a 
 * Deribit option trades of 10 and 11 December 2025, 00:00–12:00 UTC (6,060 and 7,843 trades) from
   `history.deribit.com`; DVOL hourly, April 2021 – December 2025; Binance BTCUSDT hourly candles; Kenneth French's
   daily factors through 2025. Each raw piece's SHA-256 is in [`../data/manifest.json`](../data/manifest.json).
-* Seeds are fixed in every compute item. The BTC experiment's months overlap; chapter 11 also reports the statistic on
-  57 non-overlapping months.
+* Seeds are fixed in every compute item. The BTC experiment uses overlapping windows; chapter 15 also reports 57 non-overlapping windows. Non-overlap does not establish independence.
 
 ## For the researcher
 
@@ -216,10 +211,59 @@ python tools/qa_scene.py quant10 Ledger           # one chapter, silent, with a 
   strategies with jumps," *Ann. Appl. Probab.* 24 (arXiv:1108.5940).
 * **Simplifications.** One option, zero rates, the leading-order (small band) approximation; E[N]·Var rather than
   Fukasawa's E[N]·E⟨error⟩; the bands are checked on a grid of 2^14 steps, so overshoot widens them slightly.
-* **Open problems.** Costs and a trade budget together for a book of options; corrections at a few dozen trades; jumps,
-  rough volatility and many assets.
+* **Research directions.** Specify the portfolio, costs, trade-count objective and admissible rule class before studying their joint design, finite-frequency corrections, jumps, rough volatility or multiple assets. Existing cost-sensitive and multidimensional discretization results are starting points; these broad topics are not being claimed wholly unsolved.
 
 ---
+
+
+## Interpretation of the numerical experiments
+
+The Bitcoin study is a historical dollar-call model experiment. DVOL is a volatility
+index spanning the smile, rather than an executable ATM option quote. Its hourly
+closes are aligned at supplied timestamps and twelve missing spot hours are
+interpolated; entry-time information availability is not established. The displayed
+opening window was selected retrospectively for median profit. Option spreads,
+funding, capacity, venue constraints and inverse-contract accounting are absent.
+Two basis points per unit of spot traded is a stated sensitivity, not a complete
+execution model. The December 2025 DVOL–ATM gap applied to all years is a
+single-snapshot sensitivity, not an estimate of achievable historical returns.
+
+The 57 non-overlapping windows may remain dependent. The ordinary standard error
+and pointwise 90% block-bootstrap intervals rely on their respective assumptions;
+the five bootstrap seeds measure simulation variability, not five market histories.
+The first pointwise interval excluding zero is not a simultaneous test over time.
+The research timing study uses overlapping 2019–2020 windows, each window's future
+realized volatility, and a common band threshold tuned on all tested windows.
+It compares retrospective timing errors without costs, rather than an implementable policy.
+
+The WrongVol identity uses self-financing gains dV − Δ dS, not d(V − ΔS).
+Its robust convex-payoff conclusion assumes a continuous diffusion, continuous
+trading without costs, a pathwise instantaneous-volatility bound and appropriate
+regularity/admissibility. Weighted discrete errors are leading martingale
+differences, not independent observations. The dashed jump-risk reference uses a
+lognormal spot proxy and is not a proved Merton-model variance floor. Brownian
+exit-time moments are exact for the locally frozen arithmetic diffusion;
+Fukasawa's asymptotic theorem requires its structure, refinement and
+uniform-integrability conditions. Expected error quadratic variation equals terminal
+variance here under the driftless square-integrable assumptions.
+
+The selected quote inversion recovers a reported IV from its repriced undiscounted
+forward Black value. It is a numerical round trip, not an independent fit to an
+executable spot-dollar premium. For a coin discount factor of one, an inverse-call
+premium is this forward value divided by F; spot times that premium gives its
+spot-dollar value. Discount conventions must be consistent. The Surface error is
+vega-weighted IV RMSE, and its calendar diagnostic checks sampled normalized
+maturities. Neither is a global arbitrage or execution certificate.
+
+Leland's adjusted volatility can diverge while the zero-yield Black call price stays
+bounded and approaches spot. The 3D tree gap is measured on central live nodes;
+the drawing thins each lattice to at most 500 nodes in its stated spot window.
+Charts preserve the recorded neural and solver overshoots; invalid Newton dots are
+omitted with a disclosure, while their full error trace remains visible. The
+neural IV exercise is a small teaching implementation, with all five seed results,
+and does not replicate or benchmark the 2026 papers. Their performance figures
+are attributed claims from preprints. The VIX chart uses the later-methodology
+historical backcast, and its short-vega book is illustrative, not LTCM's actual book.
 
 # 量化金融，从零搭建 — 第10部分：Black–Scholes–Merton
 
@@ -229,9 +273,9 @@ python tools/qa_scene.py quant10 Ledger           # one chapter, silent, with a 
 
 *本视频讲授方法，不构成投资建议。*
 
-## 章节（约63分钟）
+## 章节（旁白约61分钟）
 
-* **用股票和现金造出一份期权。** 2021年10月：按DVOL（89%）卖出30天比特币看涨期权，比特币上涨37%；不对冲亏27（每100），每小时对冲赚1.15。
+* **用股票和现金造出一份期权。** 2021年10月：用DVOL（89%）代理定价假想的30天美元看涨期权，事后选择盈利居中的窗口，比特币上涨37%；不对冲亏27（每100），每小时对冲赚1.15。
 * **1. 公式之前。** 巴舍利耶；斯普伦克尔、博内斯、萨缪尔森的两个未知数μ和ρ；索普与卡苏夫的对冲；论文最初被拒；芝加哥期权交易所开业（911张合约）；布莱克的理论价格表。
 * **2. 无风险组合。** 自融资复制组合：dW项相等得Δ = ∂V/∂S，dt项相等时μ抵消，得到Black–Scholes偏微分方程。
 * **3. 解方程：倒着运行的热传导。** （三维）价值曲面从收益中升起、热核滑过；变量代换得热方程、卷积、公式。**实验：** `bs.price` 与新的 `bs.heat_price` 一致到12位小数。
@@ -246,12 +290,12 @@ python tools/qa_scene.py quant10 Ledger           # one chapter, silent, with a 
 * **12. 第一条微笑曲线与基准曲面的第一行。** 2025年12月10日的微笑；三维曲面；第一行：样本内4.36，次日4.74个波动率点。
 * **13. 股息、借券与远期。** 持有成本滑块；写在远期上的同一个公式（Merton、Garman–Kohlhagen、Black-76、反向期权）；基准曲面的基差与忘掉远期造成的假偏斜。
 * **14. 提前行权与自由边界。** （三维）提前行权溢价曲面与自由边界；Kim积分；Brennan–Schwartz；Barone-Adesi–Whaley；除息前的看涨期权。
-* **15. 在真实的比特币上卖出波动率。** 1706笔交易；**回放：** 57个独立月份逐月展开，块自助法置信带；最差的月份。
+* **15. 在真实的比特币上卖出波动率。** 1706个重叠窗口，以DVOL代理定价假想的美元看涨期权；**回放：** 57个不重叠但仍可能相关的窗口逐月展开，块自助法置信带；最差的月份。
 * **16. 1987年10月。** 投资组合保险；**实验：** `hedge.replicate_put`，在1987年真实数据上重放；布雷迪委员会的数字；偏斜的诞生。
 * **17. 诺贝尔奖，然后是LTCM。** 杠杆约28倍、表外名义金额超过一万亿美元（GAO 1999）；1998年的VIX；救助；每个对冲的前提。
 * **18. 业界：公式如何谋生。** 布莱克的价格表与交易池；奥康纳联合公司；用波动率报价；0.4·Fσ√T 法则在基准曲面上的误差；Deribit 与 IBIT 期权。
 * **19. 前沿：2023至2026年。** 2026年的隐含波动率求解竞赛（预印本）；Lean 中机器验证的 Black–Scholes；**回放：** 小网络学习初始猜测（5个种子）；反向期权、比特币期权对冲、最小方差Delta（第13部分）。
-* **写给研究者：何时再平衡对冲。** 等时间：误差的N·Var → (T/2)E∫Γ²σ⁴S⁴dt（三个月期平值看涨、σ = 20%时，每100股为11.9）。价格移动a时再平衡：平方变动恰为a²，误差为½Γσ²S²(Eτ − τ)，由Eτ = a²/(σ²S²)、Var τ = (2/3)a⁴/(σS)⁴，每个区间方差为Γ²a⁴/6，等时间为Γ²a⁴/2：三倍。优化宽度a ∝ |Γ|^{−1/2}（用Delta表示为|Δ_t − Δ_τ|² = hΓ_τ）得N·Var → (1/6)(E∫|Γ|σ²S²dt)² = 2.64，由柯西–施瓦茨至多为等时间常数的三分之一（深泽2011在停时规则上的下界；有跳跃时罗森鲍姆与坦科夫2014）；固定价格带或Delta带为3.98。模拟（3,000条路径、2^14步），N ≈ 16/64/256时：等时间10.3/12.2/12.8，价格带4.5/4.3/4.6，Delta带5.1/4.1/4.1，最优带3.2/3.0/2.8。比特币：2019–2020年每15天写一份30天期看涨，共47份，用一分钟收盘价、以各自实现的（事后）波动率对冲：误差标准差在等时间下为期权费的25.6%，用带为10.1%（16次交易）；64次时为19.0%对8.6%；平均误差+4.5/+11.9%与+8.4/+10.8%，来源未分离。三个开放问题；暂停题：256 × 2.64/11.9 ≈ 57次。
+* **写给研究者：何时再平衡对冲。** 等时间：误差的N·Var → (T/2)E∫Γ²σ⁴S⁴dt（三个月期平值看涨、σ = 20%时，每100股为11.9）。价格移动a时再平衡：平方变动恰为a²，误差为½Γσ²S²(Eτ − τ)，由Eτ = a²/(σ²S²)、Var τ = (2/3)a⁴/(σS)⁴，每个区间方差为Γ²a⁴/6，等时间为Γ²a⁴/2：三倍。优化宽度a ∝ |Γ|^{−1/2}（用Delta表示为|Δ_t − Δ_τ|² = hΓ_τ）得N·Var → (1/6)(E∫|Γ|σ²S²dt)² = 2.64，由柯西–施瓦茨至多为等时间常数的三分之一（深泽2011在停时规则上的下界；有跳跃时罗森鲍姆与坦科夫2014）；固定价格带或Delta带为3.98。模拟（3,000条路径、2^14步），N ≈ 16/64/256时：等时间10.3/12.2/12.8，价格带4.5/4.3/4.6，Delta带5.1/4.1/4.1，最优带3.2/3.0/2.8。比特币：2019–2020年每15天写一份30天期看涨，共47份，用一分钟收盘价、以各自实现的（事后）波动率对冲：误差标准差在等时间下为期权费的25.6%，用带为10.1%（16次交易）；64次时为19.0%对8.6%；平均误差+4.5/+11.9%与+8.4/+10.8%，来源未分离。三个需要明确模型和目标的研究方向；暂停题：256 × 2.64/11.9 ≈ 57次。
 * **回顾、交易台问题、九道习题（两道为资格考试水平）。**
 
 教科书对照表与论文列表见英文部分。
@@ -260,7 +304,7 @@ python tools/qa_scene.py quant10 Ledger           # one chapter, silent, with a 
 
 1. **一年期平值看涨期权，波动率 20%，现价 100，利率为零：心算价格。** 平值时 d₁ = σ√T/2 很小，C ≈ Sφ(0)σ√T ≈ 0.4 × 0.2 × 100 = 8；公式给出 7.97。
 2. **你持有平值跨式组合，股价一周不动，赚了还是亏了？** 亏了：多头跨式是多 gamma、空 theta；价格不动时 gamma 一分不赚，theta 却照付。一个月期、20% 波动率、标的 100 的跨式，一周约亏 0.53（两倍看涨期权的 theta）。
-3. **临近到期时平值数字期权的 delta。** 数字期权的 delta 是风险中性密度在行权价处的值 φ(d₂)/(Sσ√τ)，按 1/√τ 增长；微小的价格变动就会让对冲在“零”和“大量持仓”之间翻转。实务中交易台用很窄的看涨价差来超额对冲，并为此收费。
+3. **临近到期时平值数字期权的 delta。** 零收益率下，单位现金数字期权的Delta为e^{−rτ}φ(d₂)/(Sσ√τ)，等于K/S乘行权价K处贴现的风险中性终值密度。S = K且零利率时，它按1/√τ增长，形成可能超过1股的窄尖峰。买K − ε看涨、卖K看涨并除以ε，终值支付在本模型中不低于数字期权，但执行与融资仍重要。
 
 ## 习题与解答
 
@@ -268,7 +312,7 @@ python tools/qa_scene.py quant10 Ledger           # one chapter, silent, with a 
 2. **二叉树的概率。** quS + (1 − q)dS = Se^{rΔt}，股票平均以 r 增长，贴现后的价格是鞅。r = 0 时 q = ½ − σ√Δt/4 + O(Δt) → ½。
 3. **波动率交易员的估算。** r = 0 且无漂移时，以 σᵢ 卖出并对冲、股票实际波动率为 σᵣ，期望对冲损益恰为 C(σᵢ) − C(σᵣ)。三个月平值、25% 对 20%：4.98 − 3.99 = 1.00（每 100 名义），约等于 vega × (σᵢ − σᵣ) = 19.9 × 0.05。若把 gamma 固定在平值处，½(σᵢ² − σᵣ²)∫ΓS²dt 给出 1.79，偏高：真实路径会离开行权价，那里的 gamma 更小（第8章）。
 4. **Leland。** σ_L² = σ²(1 + √(2/π)·k/(σ√Δt))，双边成本 k = 0.2%。每日对冲 σ_L = 21.2%，每周对冲 σ_L = 20.6%。每周对冲成本低、卖价也低，但对冲误差约大 √5 ≈ 2.2 倍（第9章）。
-5. **提前行权。** 看涨期权至少值 S − Ke^{−rT} ≥ S − K，不付股息时永远不应提前行权。看跌期权的下界是 Ke^{−rT} − S，在 r > 0 时小于 K − S：深度实值时提前行权、现在收到行权价并赚取利息，可能更优。r = 0 时看跌期权也不会提前行权：看跌期权提前行权需要正利率。
+5. **提前行权。** 无股息且r ≥ 0时，看涨期权至少值 S − Ke^{−rT} ≥ S − K，提前行权没有优势。看跌期权的下界是 Ke^{−rT} − S，在 r > 0 时小于 K − S：深度实值时提前行权、现在收到行权价并赚取利息，可能更优。无股息且r = 0时，看跌期权提前行权没有收益；其他持有成本或利率约定需要另行分析。
 6. **推导利兰波动率。** 一步内 δΔ ≈ ΓδS = ΓSσ√Δt·Z，期望成本 (k/2)·S·E|δΔ| = (k/2)ΓS²σ√Δt·√(2/π)（k 为双边成本）。除以 Δt 得 ½ΓS²·σk√(2/π)/√Δt，与损益中的方差项 ½ΓS²σ² 同形，并入方差即 σ_L² = σ²(1 + √(2/π)k/(σ√Δt))。
 7. **忘掉远期。** 用 F = Se^{bT} 定价的平值远期看涨期权，若用 S 且不计持有成本反解，公式会以为它实值 ln(F/S) = bT，于是用更高的波动率解释价格。一阶近似 δσ ≈ N(d₁)·bT/(φ(d₁)√T) ≈ 0.5 × 0.02/(0.399 × 0.707) ≈ 3.5 个点（b = 4%，T = 0.5，σ = 45%）；看跌期权大致低同样多。精确反解（`carry` 计算项）：看涨 49.0%（+4.0），看跌 41.8%（−3.2），不对称来自二阶项。
 8. **（资格考试）退出时间的矩。** 局部地X = σS·W，方差速率v = σ²S²，τ = inf{t: |X_t| = a}。X² − vt是鞅，所以a² = vEτ，Eτ = a²/v。X⁴ − 6vtX² + 3v²t²是鞅（伊藤），所以a⁴ − 6va²Eτ + 3v²Eτ² = 0，Eτ² = 5a⁴/(3v²)，Var τ = 2a⁴/(3v²)。区间内对冲误差为½Γ[(ΔX)² − vτ] = ½Γv(Eτ − τ)，方差Γ²a⁴/6。相同平均长度Δt = a²/v的等时间步误差为½ΓvΔt(Z² − 1)，方差Γ²a⁴/2。
@@ -279,3 +323,29 @@ python tools/qa_scene.py quant10 Ledger           # one chapter, silent, with a 
 * **定理。** 深泽正彰（2011），《渐近有效的离散对冲》，收于*Stochastic Analysis with Financial Applications*（Birkhäuser）：在停时规则上lim E[N]·E⟨误差⟩ ≥ (1/6)(E∫|Γ|σ²S²dt)²，由带|Δ_t − Δ_τ|² = hΓ_τ达到；罗森鲍姆与坦科夫（2014），*Ann. Appl. Probab.* 24（arXiv:1108.5940），含跳跃。
 * **简化。** 单一期权、零利率、首阶（窄带）近似；用E[N]·Var而非深泽的E[N]·E⟨误差⟩；带在2^14步的网格上检验，越界使带略宽。
 * **开放问题。** 一整本期权在成本与交易预算下的联合问题；几十次交易时的修正；跳跃、粗糙波动率与多资产。
+
+
+## 数值实验的解释边界
+
+比特币章节是历史美元看涨期权的模型实验。DVOL覆盖整条微笑，不是可成交的平值期权报价。
+程序把小时收盘值按提供的时间戳对齐，插值补齐12个现货小时，未验证入场时数据已经可用。
+开场窗口按事后盈利中位数选择，未建模期权价差、融资、容量、场所约束和反向合约记账。
+现货2基点成本和用单个2025年快照的DVOL与平值差调整所有年份，都只是敏感性示例。
+57个不重叠窗口仍可能相关；普通标准误和逐点90%区块自助法区间各有假设。
+5个重采样种子不是5段独立历史，反复查看逐点区间也不是同时检验。
+研究章节还用到每个窗口未来的实际波动率，并在全部受测窗口上调公共带宽阈值，
+且窗口重叠、不含成本，因此比较的是事后对冲时点误差，不是可部署策略。
+
+错波动率恒等式使用自融资增益dV − ΔdS，不是d(V − ΔS)。连续扩散、无成本连续交易、
+瞬时波动率上界和正则、可容许条件是凸支付超复制结论的前提。
+首阶加权离散误差是鞅差，不是独立观测。跳跃虚线用对数正态现价代理积分，
+不是Merton模型方差下界的证明。布朗退出时间矩对局部冻结的算术扩散精确；
+Fukasawa渐近定理需要结构、细化和一致可积条件，本例零漂移、平方可积时才把风险等同终值方差。
+
+选定报价的反演检验，是从已报隐含波动率重定价未贴现的Black远期价值再恢复输入，
+不是对独立可执行美元现值的拟合。币贴现因子为1时，币权利金为该远期价值除以F，
+乘现价才是现货美元价值。Surface误差是Vega加权均方根误差，日历诊断只查采样归一化期限，
+都不是一般无套利或执行认证。Leland波动率可发散，但零收益率看涨价格有界并趋近现价。
+图中保留神经网络与求根器的初始超调，无效牛顿点略去但保留完整误差轨迹。
+教学网络不是2026年论文的复现或速度基准，论文性能数字均作预印本作者的报告。
+VIX使用后来方法回算的历史序列，固定空头Vega账本为示意，不是LTCM实际组合。
