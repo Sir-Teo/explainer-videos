@@ -77,15 +77,18 @@ class PebbleDisk(VoiceoverScene):
         head = label(r"Thirty novels on PebbleFS", font_size=36).to_edge(UP, buff=0.3)
         names = VGroup(*[label(rf"\texttt{{{s['name']}}}", font_size=14, color=FILEC)
                          for s in lay["next"]["sizes"]])
-        names.arrange_in_grid(rows=10, cols=3, buff=(0.25, 0.08), col_alignments="lll").move_to([-3.4, 0.4, 0])
+        names.arrange_in_grid(rows=10, cols=3, buff=(0.25, 0.08), col_alignments="lll")
+        if names.width > 5.6:
+            names.width = 5.6
+        names.move_to([-3.6, 0.2, 0])
         nl = label(r"\texttt{ls /novels}", font_size=18, color=GREY_B).next_to(names, UP, buff=0.15).align_to(names,
                                                                                                          LEFT)
         nx, rd = lay["next"], lay["random"]
         rows = [[r"laid out by our allocator", rf"{nx['hdd_s']:.2f} s", rf"{nx['ssd_s'] * 1000:.0f} ms"],
                 [r"on an aged disk", rf"{rd['hdd_s']:.0f} s", rf"{rd['ssd_s']:.1f} s"]]
-        tab = grid_table([r"", r"the model disk", r"the model flash"], rows, widths=[3.6, 2.2, 2.2], row_h=0.5,
+        tab = grid_table([r"", r"the model disk", r"the model flash"], rows, widths=[3.0, 1.9, 1.9], row_h=0.5,
                          font_size=19, mono_cols=())
-        tab.move_to([3.4, 0.9, 0])
+        tab.move_to([3.55, 0.9, 0])
         tab.cells[1][1].set_color(YES)
         tab.cells[2][1].set_color(NO)
         info = VGroup(
