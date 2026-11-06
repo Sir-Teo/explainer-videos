@@ -206,6 +206,10 @@ class OneOverN(VoiceoverScene):
             desk_question(r"the common thread", r"every fix shrinks something toward something simpler: the means, the "
                           r"covariance, or the weights themselves", width=12.4, font_size=19),
         ).arrange(DOWN, buff=0.25)
+        head = label(r"Neither the optimizer nor 1/N alone: combine them", font_size=28).to_edge(UP, buff=0.4)
+        if cards.height > 6.0:
+            cards.scale_to_fit_height(6.0)
+        cards.next_to(head, DOWN, buff=0.3)
         with self.voiceover(
             "If neither the optimizer nor one over N is right, combine them. <bookmark mark='a'/> Raymond Kan and Guofu Zhou "
             "proposed in 2007 a three-fund rule: cash, the estimated tangency portfolio, and the estimated minimum-variance "
@@ -214,6 +218,7 @@ class OneOverN(VoiceoverScene):
             "<bookmark mark='c'/> The common thread runs through the whole part: every fix shrinks something toward "
             "something simpler, whether the means, the covariance or the weights themselves."
         ) as vo:
+            self.play(FadeIn(head))
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))

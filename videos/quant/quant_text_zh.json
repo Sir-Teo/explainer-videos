@@ -29052,7 +29052,8 @@
     "\\texttt{corr(ts\\_rank(ret, 20), corr(ts\\_rank\\ldots}": "\\texttt{corr(ts\\_rank(ret, 20), corr(ts\\_rank\\ldots}",
     "\\texttt{((ts\\_max(high, 20) * (low * volume)\\ldots}": "\\texttt{((ts\\_max(high, 20) * (low * volume)\\ldots}",
     "\\texttt{(low / (ts\\_rank(high, 20) / ts\\_std(\\ldots}": "\\texttt{(low / (ts\\_rank(high, 20) / ts\\_std(\\ldots}",
-    "\\texttt{(ts\\_std(ts\\_max(vwap, 5), 10) / rank\\ldots}": "\\texttt{(ts\\_std(ts\\_max(vwap, 5), 10) / rank\\ldots}"
+    "\\texttt{(ts\\_std(ts\\_max(vwap, 5), 10) / rank\\ldots}": "\\texttt{(ts\\_std(ts\\_max(vwap, 5), 10) / rank\\ldots}",
+    "Neither the optimizer nor 1/N alone: combine them": "单靠优化器或1/N都不够：把两者结合"
   },
   "phrases": {
     "you owe": "你欠",
