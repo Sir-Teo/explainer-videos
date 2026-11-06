@@ -1,0 +1,169 @@
+from __future__ import annotations
+
+from videos.philosophy.philosophy41.common import *  # noqa: F403
+
+
+class Criteria(VoiceoverScene):
+    def construct(self):
+        card = chapter_card(2, r"Three kinds of fairness", r"What does a fair prediction look like?", lit=(2016,), part=PART)
+        with self.voiceover("Chapter two. Three kinds of fairness."):
+            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
+        self.play(FadeOut(card))
+        self.three()
+        self.pairs()
+        self.tradeoff()
+        self.measurement()
+
+    def three(self):
+        head = history_card(2016, r"Hardt, \ Price and Srebro", r"``Equality of Opportunity in Supervised Learning''", width=6.0, color=HIST).to_corner(UL, buff=0.3)
+        rows = [
+                (r"independence", r"$\hat Y \perp A$: \ each group is labelled high risk at the same rate \ (demographic parity)", FAIRC),
+                (r"separation", r"$\hat Y \perp A \mid Y$: \ equal false-positive and false-negative rates \ (equalized odds)", RESP),
+                (r"sufficiency", r"$Y \perp A \mid R$: \ a score means the same in every group \ (calibration; \ predictive parity)", EXPL),
+                (r"the vocabulary", r"Barocas, \ Hardt and Narayanan, \ \textit{Fairness and Machine Learning}: \ fairness as conditional independence", GOAL)]
+        g = rows_table(rows, top=1.0, gap=0.5, width=8.4, x_text=-2.0, label_size=20, text_size=20)
+        with self.voiceover(
+            "Each side of the dispute was using a precise criterion, and they can be stated as conditional "
+            "independence, following Solon Barocas, Moritz Hardt and Arvind Narayanan. Write A for the group, Y for "
+            "the outcome, R for the score and Y hat for the decision. <bookmark mark='a'/>Independence: the decision "
+            "is independent of the group, so each group is labelled high risk at the same rate, demographic parity. "
+            "<bookmark mark='b'/>Separation: the decision is independent of the group given the outcome, so the "
+            "groups have equal false-positive and false-negative rates; this is what ProPublica checked. <bookmark "
+            "mark='c'/>Sufficiency: the outcome is independent of the group given the score, so a score means the "
+            "same in every group; this is what Northpointe checked. <bookmark mark='d'/>Each criterion is a different "
+            "answer to the question what fairness asks of a prediction."
+        ) as vo:
+            self.play(FadeIn(head))
+            for mk, r in zip("abcd", g):
+                vo.wait_until(mk)
+                self.play(FadeIn(r))
+        self.clear_scene()
+
+    def tradeoff(self):
+        sw = load("sweep")
+        ts, H, R = sw["ts"], sw["hist"], sw["rates"]
+        assert len(ts) == 17 and ts[8] == 0.5
+        head = label(r"One threshold, \ two groups", font_size=30, color=CONN).to_edge(UP, buff=0.25)
+        x0, x1 = -6.4, 1.0
+        w = (x1 - x0) / 20
+        base = {"A": 1.25, "B": -1.75}
+        cols = {"A": GA, "B": GB}
+        panels = VGroup()
+        for g in "AB":
+            grp = VGroup()
+            for k in range(20):
+                h1, h0 = H[f"{g}1"][k] * 13, H[f"{g}0"][k] * 13
+                x = x0 + (k + 0.5) * w
+                if h1 > 1e-3:
+                    grp.add(Rectangle(width=w * 0.88, height=h1, fill_color=RESP, fill_opacity=0.75,
+                                      stroke_width=0).move_to([x, base[g] + h1 / 2, 0]))
+                if h0 > 1e-3:
+                    grp.add(Rectangle(width=w * 0.88, height=h0, fill_color=GREY_B, fill_opacity=0.55,
+                                      stroke_width=0).move_to([x, base[g] - h0 / 2, 0]))
+            grp.add(Line([x0, base[g], 0], [x1, base[g], 0], color=GREY_C, stroke_width=1.5))
+            grp.add(label(rf"group {g}: \ base rate {R[g][0]['base'] * 100:.0f}\%", font_size=19,
+                          color=cols[g]).move_to([x0 + 1.3, base[g] + 1.2, 0]))
+            panels.add(grp)
+        axis = VGroup(*[label(f"{v:.1f}", font_size=14, color=GREY_B).move_to([x0 + v * (x1 - x0), -3.25, 0])
+                        for v in (0, 0.2, 0.4, 0.6, 0.8, 1.0)])
+        axl = label(r"risk score", font_size=16, color=GREY_B).move_to([(x0 + x1) / 2, -3.6, 0])
+        key = label(r"above each axis: \ went on to reoffend; \ below: \ did not", font_size=17,
+                    color=GREY_A).move_to([(x0 + x1) / 2, 2.85, 0])
+        t = ValueTracker(0.5)
+        line = always_redraw(lambda: DashedLine([x0 + t.get_value() * (x1 - x0), -3.05, 0],
+                                                [x0 + t.get_value() * (x1 - x0), 2.55, 0], color=EXPL, stroke_width=3))
+        tl = always_redraw(lambda: label(rf"threshold {t.get_value():.2f}", font_size=18, color=EXPL).next_to(
+            line, UP, buff=0.05))
+        names = [("fpr", r"false-positive rate", RESP), ("fnr", r"false-negative rate", FAIRC),
+                 ("ppv", r"precision \ (PPV)", EXPL), ("selected", r"labelled high risk", GREY_A)]
+        table = VGroup()
+        hdr = VGroup(label(r"A", font_size=22, color=GA).move_to([4.6, 1.9, 0]),
+                     label(r"B", font_size=22, color=GB).move_to([6.0, 1.9, 0]))
+        table.add(hdr)
+        for k, (key_, nm, c) in enumerate(names):
+            y = 1.3 - 0.75 * k
+            table.add(label(nm, font_size=18, color=c).move_to([2.7, y, 0]))
+            for g, x in (("A", 4.6), ("B", 6.0)):
+                vals = [r[key_] for r in R[g]]
+                d = DecimalNumber(0, num_decimal_places=2, font_size=26, color=WHITE).move_to([x, y, 0])
+                d.add_updater(lambda m, vals=vals: m.set_value(float(np.interp(t.get_value(), ts, vals))))
+                table.add(d)
+        with self.voiceover(
+            "The Reasoner builds its own population to see what is going on. <bookmark mark='a'/>Two groups. In group "
+            "A, thirty percent go on to reoffend; in group B, fifty percent. Each person's score is their true risk, "
+            "so the score is perfectly calibrated in both groups: among everyone scored point six, sixty percent "
+            "reoffend. Above each axis are those who reoffended; below, those who did not. <bookmark mark='b'/>A "
+            "single threshold labels everyone above it high risk. At point five, the table shows each group's "
+            "false-positive rate, its false-negative rate, and its precision, the share of those labelled high risk "
+            "who reoffend. <bookmark mark='c'/>Because group B's scores sit higher, more of its innocent members "
+            "cross the line: its false-positive rate is three times A's. <bookmark mark='d'/>Move the threshold down, "
+            "and both groups' false positives rise; move it up, and false negatives rise. <bookmark mark='e'/>At no "
+            "threshold do the two groups' error rates match, though the score itself treats everyone alike."
+        ) as vo:
+            self.play(FadeIn(head))
+            vo.wait_until("a")
+            self.play(FadeIn(panels), FadeIn(axis), FadeIn(axl), FadeIn(key))
+            vo.wait_until("b")
+            self.play(Create(line), FadeIn(tl), FadeIn(table))
+            vo.wait_until("c")
+            self.play(Indicate(table[1:], color=RESP, scale_factor=1.02))
+            vo.wait_until("d")
+            self.play(t.animate.set_value(0.3), run_time=2.5)
+            self.play(t.animate.set_value(0.75), run_time=3)
+            vo.wait_until("e")
+            self.play(t.animate.set_value(0.5), run_time=2)
+        for m in table:
+            m.clear_updaters()
+        self.clear_scene()
+
+    def measurement(self):
+        head = label(r"What the label measures", font_size=30, color=CONN).to_edge(UP, buff=0.35)
+        rows = [
+                (r"the label", r"$Y$ is usually an arrest or a reconviction, \ not an offence: \ it measures policing as well as behaviour", RESP),
+                (r"Lum and Isaac \ (2016)", r"`To Predict and Serve?': \ trained on Oakland drug arrests, \ a predictive-policing model would have sent patrols mostly to Black neighbourhoods, \ though surveys put drug use about evenly across the city", EXPL),
+                (r"Ensign et al. \ (2018)", r"runaway feedback loops: \ patrol where crime was found, \ and find crime where you patrol", BAD),
+                (r"Jacobs and Wallach \ (2021)", r"`Measurement and Fairness': \ every criterion inherits the gap between a construct and what is measured", FAIRC)]
+        g = rows_table(rows, top=1.5, gap=0.5, width=8.4, x_text=-2.0, label_size=20, text_size=20)
+        with self.voiceover(
+            "All three criteria take the outcome Y for granted. But what is Y? <bookmark mark='a'/>In criminal "
+            "justice it is usually a new arrest or a reconviction, not a new offence. An arrest records where the "
+            "police were looking as well as what people did. <bookmark mark='b'/>Kristian Lum and William Isaac ran a "
+            "predictive-policing algorithm on Oakland's records of drug arrests. It would have sent patrols mostly to "
+            "Black neighbourhoods, though public-health surveys put drug use about evenly across the city. <bookmark "
+            "mark='c'/>Danielle Ensign and colleagues showed how this can run away: patrol where crime was recorded, "
+            "record more crime where you patrol, and the data confirm the patrols. <bookmark mark='d'/>Abigail Jacobs "
+            "and Hanna Wallach drew the general lesson. A fairness criterion is a condition on measured variables, "
+            "and every one of them inherits the gap between the thing we care about, like offending or need, and the "
+            "thing we managed to measure. A perfectly calibrated score for arrests can be a biased score for crime."
+        ) as vo:
+            self.play(FadeIn(head))
+            for mk, r in zip("abcd", g):
+                vo.wait_until(mk)
+                self.play(FadeIn(r))
+        self.clear_scene()
+
+    def pairs(self):
+        head = label(r"Any two collide \ (Barocas, \ Hardt and Narayanan)", font_size=30, color=CONN).to_edge(UP, buff=0.35)
+        rows = [
+                (r"independence and sufficiency", r"if the base rates differ, \ a score that means the same in every group cannot be handed out at equal rates", FAIRC),
+                (r"independence and separation", r"if the base rates differ and the score is informative at all, \ equal rates and equal errors cannot both hold", RESP),
+                (r"separation and sufficiency", r"if the base rates differ and prediction is imperfect, \ equal errors and equal meaning cannot both hold: \ chapter three", EXPL),
+                (r"so", r"with unequal base rates, \ every pair of the three criteria is incompatible", GOAL)]
+        g = rows_table(rows, top=1.5, gap=0.5, width=8.4, x_text=-2.0, label_size=20, text_size=20)
+        with self.voiceover(
+            "How do the three criteria relate? Barocas, Hardt and Narayanan prove that, once base rates differ, every "
+            "pair of them conflicts. <bookmark mark='a'/>Independence and sufficiency: if a score means the same "
+            "thing in every group and the groups differ in base rate, their scores must differ too, so they cannot be "
+            "labelled at equal rates. <bookmark mark='b'/>Independence and separation: if the score carries any "
+            "information about the outcome, equal labelling rates and equal error rates cannot both hold when the "
+            "base rates differ. <bookmark mark='c'/>Separation and sufficiency: if the base rates differ and "
+            "prediction is imperfect, equal error rates and equal meaning cannot both hold. That is the theorem of "
+            "chapter three, and the dispute between ProPublica and Northpointe. <bookmark mark='d'/>So with unequal "
+            "base rates there is no way to satisfy two of the three at once, let alone all three. Every deployed "
+            "system has chosen, whether it says so or not."
+        ) as vo:
+            self.play(FadeIn(head))
+            for mk, r in zip("abcd", g):
+                vo.wait_until(mk)
+                self.play(FadeIn(r))
+        self.clear_scene()

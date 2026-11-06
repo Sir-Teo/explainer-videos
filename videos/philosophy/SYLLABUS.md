@@ -1718,3 +1718,8 @@ and a Reasoner library of perhaps 20–30k lines with its tests. Expect one part
 | 38 · Justice | scenes, English and Chinese narration and text, QA | ~50 min |
 | 39 · The Arithmetic of Democracy | scenes, English and Chinese narration and text, QA | ~50 min |
 | 40 · Beauty | scenes, English and Chinese narration and text, QA | ~50 min |
+| 41 · Fair Machines | scenes, English and Chinese narration and text, QA | ~50 min |
+| 42 · Aligning Reasoners | scenes, English and Chinese narration and text, QA | ~50 min |
+
+**The series is complete:** forty-two parts, about 37 hours in each of English and Chinese, with every number on
+screen computed by the Reasoner (`explainer/philosophy/reasoner/`, 47 modules, checked by 269 tests).
