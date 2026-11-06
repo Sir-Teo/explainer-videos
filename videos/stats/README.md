@@ -1,6 +1,6 @@
 # Statistics, Built (统计学，从零搭建)
 
-**Status: in production.** Parts 1–64 are written in English (12–16 chapters each):
+**Status: complete.** All sixty-five parts, Parts 1–65, are written in English (10–16 chapters each):
 - *The Shape of Data*, about an hour;
 - *Chance, Counted*, about 74 minutes, with the exact probability engine `explainer/stats/prob.py`;
 - *The Family of Distributions*, about 55 minutes, with the family-tree instrument `FamilyTree`;
@@ -64,7 +64,8 @@
 - *Optimal Transport in Statistics*, about 51.0 minutes, with `statkit.ot`, the transport flow (`TransportFlow`), NHANES and Old Faithful;
 - *Frontiers of Causal Inference*, about 50.7 minutes, with `statkit.frontier`, the exposure map (`ExposureMap`) and the NSW data;
 - *Privacy and Fairness*, about 66.4 minutes, with `statkit.privacy`, the trade-off plot (`TradeoffPlot`) and ProPublica's COMPAS data;
-- *Statistics in the Age of AI*, about 57.5 minutes, with `statkit.evals` and the leaderboard (`Leaderboard`).
+- *Statistics in the Age of AI*, about 57.5 minutes, with `statkit.evals` and the leaderboard (`Leaderboard`);
+- *The Dissertation*, about 50.3 minutes, with the thesis (`statkit.thesis`, its preregistered protocol and a short paper) and the board mosaic (`BoardMosaic`).
 
 Their instruments are in `explainer/stats/`; narration and the Chinese edition follow. The chapter-by-chapter plan and the production standard are in [`SYLLABUS.md`](SYLLABUS.md).
 
