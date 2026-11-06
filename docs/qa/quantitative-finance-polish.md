@@ -27,8 +27,9 @@ Delivery workflow: continue directly on `quantitative-finance`. Commit and push 
 | 6 | Visual pass complete; full production-voice listening pending |
 | 7 | Visual pass complete; full production-voice listening pending |
 | 8 | Visual pass complete; full production-voice listening pending |
-| 9 | Motion pacing repair pushed; final QA refresh in progress |
-| 10–43 | Pending; do not infer approval from historical build notes |
+| 9 | Visual pass complete; full production-voice listening pending |
+| 10 | In progress: scientific, narration and visual QA |
+| 11–43 | Pending; do not infer approval from historical build notes |
 
 ## Part 1: The Fair Game
 
@@ -647,4 +648,65 @@ speech reports and preview hashes. Local git-ignored artifacts are:
   opening, 247.3 seconds, matching the current narration
   capture and with its recorded dead-air scan.
 
-Part 9 is next in the sequential pass.
+Part 9’s completed visual pass is recorded below.
+
+
+## Part 9: No Arbitrage — completed visual pass
+
+Repeated introductions and explanations were shortened bilingually to meet the
+lecture length target. The English explanation, Mandarin narration and captions now state the assumptions
+behind pricing, replication and numerical bounds. The boundary state-price vector
+is (0, 0, 1); a weak separating plane at an endpoint does not rule out arbitrage.
+Incomplete-market extensions are explicitly selected, and closed hedge limits are
+distinguished from prices under strictly positive measures. Continuous-time claims
+distinguish local martingales, supermartingales and true pricing expectations.
+
+The Bitcoin example separates its $8,597 undiscounted forward value from its
+approximately $8,479 spot-dollar present value under the stated discount choices.
+The density reconstruction discloses its interpolation and extrapolation model,
+weighted RMSE, endpoint requirements and invalid positive-part spline diagnostic.
+The historical density ratio is an illustration with limited identification.
+
+Martingale transport uses normalized finite marginals. Finite LP certificates,
+interpolated hedge violations, non-nested grid sensitivity and raw entropic
+iterates are distinguished. The square-payoff hedge includes its dynamic term.
+All three neural seeds and their optimizer overshoots are retained; raw costs and
+weighted mean shortfalls do not certify a bound. Method attribution and the
+referenced papers’ publication status were checked against primary sources.
+
+The fractional-price chapter distinguishes a log-increment score from
+self-financing wealth, an iid risk reference from a theorem, and retrospective
+signal direction from prospective evidence. Its final worked answer is visible.
+The doubling example discloses its finite clock, unhit paths, schematic barrier
+endpoints and omitted display tails. Chart ranges, camera cleanup, opening rows,
+Chinese panels and callable API labels were repaired and visually checked.
+
+All 28 existing compute items were restored normally. The compute source, pricing
+algorithms, data manifest, trial registry and track record are unchanged from the
+Part 8 completion commit; one neural-result docstring was corrected. Nine existing
+tests pass, with one dependency deprecation warning. The counter remains 310;
+this pass added no market trials and opened no sealed holdout.
+
+Validation: all 63 receipts match the final source and input signatures, with zero
+automated warnings: 21 English endpoint checks, 21 Mandarin checks and 21 English
+silent playback checks. All endpoint sheets and all forty-frame motion sheets
+were visually reviewed. Chinese coverage is 143/143 source lines and spliced
+sentences. The narration estimate is 73.0 minutes.
+
+Actual Kokoro samples cover Hook, Continuous and Research in English and Hook in
+Mandarin: 30 lines pass signal and token-time checks. Technical-line word-count
+warnings remain a listening lead. These checks do not certify pronunciation;
+Mandarin character times are estimates. Full production-voice listening and
+synchronization remain pending.
+
+The [compact evidence record](quant9-polish-evidence.json) retains the final source,
+input and review hashes, receipts, derivation checks, primary-source checks, tests
+and speech reports. Local git-ignored review artifacts are:
+
+- `renders/quant9_polished_silent.mp4`: 76:07, 480p15, with 21 embedded chapters,
+  English soft subtitles and companion subtitle and chapter files.
+- `media/quant9/narrated_qa/videos/s01_hook/480p15/Hook.mp4`: the actual English
+  opening, 107.4 seconds, matching the final narration
+  and accompanied by its reviewed contact sheet and dead-air scan.
+
+Part 10 is next in the sequential pass.
