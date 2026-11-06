@@ -115,7 +115,7 @@ class Dense(VoiceoverScene):
         cw = 0.18
         rng = random.Random(5)
         cells = VGroup(*[Rectangle(width=cw, height=0.5, stroke_width=0.5, stroke_color=BG,
-                                   fill_color=interpolate_color(DATA, LAM, rng.random()), fill_opacity=0.9)
+                                   fill_color=interpolate_color(ManimColor(DATA), ManimColor(LAM), rng.random()), fill_opacity=0.9)
                          for _ in range(dim)]).arrange(RIGHT, buff=0)
         cells.next_to(head, DOWN, buff=0.75)
         top_l = label(rf"one passage vector: \ {dim} floats, \ {row8['float_bytes']} bytes", font_size=19,

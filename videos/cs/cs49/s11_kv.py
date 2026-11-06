@@ -7,7 +7,7 @@ from videos.cs.cs49.common import (BG, DATA, HEAD, KERN, LAM, NO, PART, YES, cod
 
 def ring(center, r, names="ABCDEFGH", font=18, dot=0.12):
     """Nodes on a hash ring, the first at the top, the rest clockwise."""
-    center = np.array(center, dtype=float)
+    center = np.array([*center, 0][:3], dtype=float)
     circ = Circle(radius=r, color=GREY_C, stroke_width=2).move_to(center)
     nodes, names_ = VGroup(), VGroup()
     for k, n in enumerate(names):

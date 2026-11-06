@@ -75,7 +75,8 @@ class Collab(VoiceoverScene):
             "<bookmark mark='e'/> The load is tiny, perhaps fifty operations a second for a busy document. The hard "
             "part is order."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(clients))
+            self.play(FadeIn(head), FadeIn(clients), Create(links), FadeIn(ws), FadeIn(server), GrowArrow(a1),
+                      FadeIn(log), GrowArrow(a2), FadeIn(snap), FadeIn(comp))
             vo.wait_until("a")
             self.play(FadeIn(reqs[0]))
             vo.wait_until("b")
@@ -83,8 +84,7 @@ class Collab(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(reqs[2]))
             vo.wait_until("d")
-            self.play(Create(links), FadeIn(ws), FadeIn(server), GrowArrow(a1), FadeIn(log), GrowArrow(a2),
-                      FadeIn(snap), FadeIn(comp))
+            self.play(Indicate(server, color=KERN))
             p = Dot(clients[0].get_right(), radius=0.09, color=HEAD)
             self.play(FadeIn(p), FadeIn(op))
             self.play(p.animate.move_to(server.get_left()), run_time=0.8)
@@ -184,9 +184,8 @@ class Collab(VoiceoverScene):
             "original algorithm was later found to diverge, so Jupiter, in 1995, and later Google Docs route every "
             "operation through one server, which fixes a single order."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(c1))
             vo.wait_until("a")
-            self.play(FadeIn(c1))
             self.play(GrowArrow(arr), FadeIn(why), FadeIn(c2))
             vo.wait_until("b")
             self.play(FadeIn(fin), FadeIn(same))
@@ -246,9 +245,9 @@ class Collab(VoiceoverScene):
             "edits, delivered in random order, the array always converged. Replaying positions as sent, no session "
             "did."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(base))
             vo.wait_until("a")
-            self.play(FadeIn(base))
+            self.play(Indicate(VGroup(*[e[1] for e in base]), color=HEAD))
             vo.wait_until("b")
             self.play(FadeIn(i1), FadeIn(w1), GrowArrow(r1), FadeIn(i2), FadeIn(w2), GrowArrow(r2), FadeIn(after))
             vo.wait_until("c")
@@ -308,6 +307,7 @@ class Collab(VoiceoverScene):
                       good.animate.move_to(caret(new[12], YES)), gl.animate.next_to(caret(new[12], YES), UP,
                                                                                    buff=0.15),
                       bl.animate.next_to(caret(new[at], NO), DOWN, buff=0.15), run_time=1.6)
+            self.bring_to_front(good, bad)
             vo.wait_until("b")
             self.play(Indicate(good, color=YES), Indicate(gl, color=YES))
             vo.wait_until("c")

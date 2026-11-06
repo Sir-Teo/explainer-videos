@@ -31,7 +31,7 @@ class Index(VoiceoverScene):
         terms = ["the", "and", "whale", "sea", "ahab", "ship", "love", "darci", "holm", "moor"]
         dens = {"the": (0.97, 0.97, 0.97), "and": (0.92, 0.92, 0.92), "whale": (0, 0.6, 0), "sea": (0.1, 0.55, 0.1),
                 "ahab": (0, 0.35, 0), "ship": (0.05, 0.4, 0.05), "love": (0.35, 0.1, 0.1), "darci": (0.5, 0, 0),
-                "holm": (0, 0, 0.6), "moor": (0, 0, 0.15)}
+                "holm": (0, 0, 0.6), "moor": (0, 0, 0.3)}
         rng = random.Random(47)
         cell, ncol = 0.36, 20
         x0, y0 = -5.3, 1.85
@@ -99,8 +99,8 @@ class Index(VoiceoverScene):
                                    fill_color=BG, fill_opacity=1).move_to([-5.55, y, 0])
             tt = mono(t, size=20, color=WHITE).move_to(box).align_to(box, LEFT).shift(RIGHT * 0.15)
             df = label(f"{ix['df'][t]}", font_size=22, color=HEAD).move_to(box).align_to(box, RIGHT).shift(LEFT * 0.15)
-            ids = VGroup(*[tag_box(str(d), color=DATA, size=18, w=0.82, h=0.5) for d in ix["sample"][t][:10]])
-            ids.arrange(RIGHT, buff=0.08).move_to([0, y, 0]).align_to([-3.55, 0, 0], LEFT)
+            ids = VGroup(*[tag_box(str(d), color=DATA, size=18, w=0.78, h=0.5) for d in ix["sample"][t][:11]])
+            ids.arrange(RIGHT, buff=0.07).move_to([0, y, 0]).align_to([-3.55, 0, 0], LEFT)
             more = label(r"\dots", font_size=22, color=GREY_B).next_to(ids, RIGHT, buff=0.12)
             arr = Arrow(box.get_right(), ids.get_left(), buff=0.06, stroke_width=2, color=GREY_B,
                         max_tip_length_to_length_ratio=0.3)
@@ -108,7 +108,9 @@ class Index(VoiceoverScene):
         h1 = label(r"dictionary: \ term, \ df", font_size=21, color=HEAD).next_to(rows[0][0], UP, buff=0.2)
         h2 = label(r"postings: \ passage ids, \ each with its positions", font_size=21, color=DATA).next_to(
             rows[0][2], UP, buff=0.2).align_to(rows[0][2], LEFT)
-        run = SurroundingRectangle(VGroup(*rows[0][2][:10]), color=YES, buff=0.06, stroke_width=2.5)
+        wl = ix["sample"]["whale"]
+        n_run = next((k for k in range(1, len(wl)) if wl[k] != wl[k - 1] + 1), len(wl))
+        run = SurroundingRectangle(VGroup(*rows[0][2][:min(n_run, 11)]), color=YES, buff=0.06, stroke_width=2.5)
         notes = VGroup(
             wrapped_label(r"\textbf{dictionary}: \ each term, \ its document frequency \ (df), \ and where its list "
                           r"begins; \ a hash table \ (Part 17), \ or a sorted array or tree for prefix searches",
@@ -116,7 +118,7 @@ class Index(VoiceoverScene):
             wrapped_label(rf"\textbf{{postings}}: \ passage ids in increasing order, \ each with the positions of "
                           rf"the term; \ a passage averages {ix['tokens'] / ix['docs']:.0f} tokens and "
                           rf"{ix['postings'] / ix['docs']:.0f} distinct terms", 12.4, font_size=20, color=DATA),
-            wrapped_label(r"\texttt{whale} opens with a run, \ 659 to 669: \ the first passages of "
+            wrapped_label(rf"\texttt{{whale}} opens with a run, \ {wl[0]} to {wl[n_run - 1]}: \ the first passages of "
                           r"\textit{Moby-Dick}, \ with its pages of quotations about whales; \ runs mean small gaps "
                           r"\ (Chapter 4)", 12.4, font_size=20, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.35)
@@ -259,7 +261,7 @@ class Index(VoiceoverScene):
             wrapped_label(rf"at the end, \ merge all the blocks at once \ (a $k$-way merge, \ Part 16); \ our builder "
                           rf"is this with a single block: \ one pass over {ix['docs']:,} passages", 12.4,
                           font_size=20, color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.35)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(frame, DOWN, buff=0.7).set_x(0)
         with self.voiceover(
             "Blocked sorting needs a table from every term to an integer, kept in memory throughout, and it sorts "
             "pairs that could have been grouped as they arrived. <bookmark mark='a'/> Single-pass in-memory "
@@ -317,7 +319,7 @@ class Index(VoiceoverScene):
             wrapped_label(r"deletions are marked in a bitmap and dropped at the next merge; \ Lucene, \ beneath "
                           r"Elasticsearch and OpenSearch, \ keeps immutable segments merged in much this way, \ like "
                           r"Part 34's LSM trees", 12.4, font_size=20, color=NO),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(DOWN, buff=0.45)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(bitrow, DOWN, buff=0.9).set_x(0)
         with self.voiceover(
             "Real collections change. <bookmark mark='a'/> New documents go into a small index in memory, searched "
             "beside the others, and when it fills it is written out as a segment. <bookmark mark='b'/> Segments of "

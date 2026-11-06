@@ -215,7 +215,7 @@ class Limits(VoiceoverScene):
         lim = load("limiter")
         head = label(r"Counting in windows", font_size=36).to_edge(UP, buff=0.3)
         L = lim["limit"]
-        base = 0.9
+        base = -0.2
 
         def tl(xa, xb):
             k = (xb - xa) / 120.0
@@ -231,10 +231,11 @@ class Limits(VoiceoverScene):
         for a in (50, 60):
             r = Rectangle(width=10 * fk, height=1.2, stroke_width=0, fill_color=NO, fill_opacity=0.8)
             r.move_to([fx(a + 5), base + 0.6, 0])
-            bursts.add(VGroup(r, label(rf"{L}", font_size=16, color=NO).next_to(r, UP, buff=0.06)))
+            bursts.add(r)
+        bursts.add(label(rf"{L} + {L}", font_size=16, color=NO).next_to(bursts, UP, buff=0.06))
         span = BraceBetweenPoints([fx(30), base + 2.1, 0], [fx(90), base + 2.1, 0], direction=UP, color=HEAD)
         span_l = label(rf"one minute, \ {2 * L} admitted", font_size=17, color=HEAD).next_to(span, UP, buff=0.06)
-        f_title = label(r"fixed windows", font_size=21, color=NO).move_to([fx(60), base + 2.95, 0])
+        f_title = label(r"fixed windows", font_size=21, color=NO).move_to([fx(60), base + 2.8, 0])
         f_notes = VGroup(
             wrapped_label(rf"a counter per window; \ a limit of {L} lets up to {2 * L} through across a boundary",
                           5.8, font_size=19, color=WHITE),
@@ -255,7 +256,7 @@ class Limits(VoiceoverScene):
         win = Rectangle(width=60 * sk, height=1.7, stroke_color=HEAD, stroke_width=2.5, fill_opacity=0).move_to(
             [sx(54), base + 0.85, 0])
         win_l = label(r"the last minute", font_size=16, color=HEAD).next_to(win, UP, buff=0.06)
-        s_title = label(r"sliding-window counter", font_size=21, color=YES).move_to([sx(60), base + 2.95, 0])
+        s_title = label(r"sliding-window counter", font_size=21, color=YES).move_to([sx(60), base + 2.8, 0])
         formula = MathTex(r"\hat n = \text{prev}\,(1 - f) + \text{cur} = 80 \times 0.6 + 30 = 78", font_size=26,
                           color=HEAD)
         s_notes = VGroup(
@@ -283,7 +284,7 @@ class Limits(VoiceoverScene):
             self.play(FadeIn(head), FadeIn(foot))
             vo.wait_until("a")
             self.play(FadeIn(f_title), Create(f_axis), FadeIn(f_ticks), FadeIn(f_names), FadeIn(f_notes[0]))
-            self.play(LaggedStart(*[FadeIn(b, shift=UP * 0.2) for b in bursts], lag_ratio=0.5))
+            self.play(LaggedStart(*[FadeIn(b, shift=UP * 0.2) for b in bursts], lag_ratio=0.4))
             self.play(GrowFromCenter(span), FadeIn(span_l))
             vo.wait_until("b")
             self.play(FadeIn(f_notes[1]))

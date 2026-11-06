@@ -72,18 +72,18 @@ class Ltr(VoiceoverScene):
         head = label(r"Ranking as learning", font_size=36).to_edge(UP, buff=0.3)
         pair = VGroup(tag_box(r"query", color=DATA, size=17, h=0.45), label(r"$+$", font_size=26),
                       tag_box(r"passage", color=LAM, size=17, h=0.45)).arrange(RIGHT, buff=0.2)
-        pair.move_to([-5.0, 0.74, 0])
+        pair.move_to([-5.2, 0.6, 0])
         feats = [(r"BM25", 0.8, DATA), (r"tf-idf cosine", 0.6, DATA), (r"phrase match", 0.3, HEAD),
                  (r"terms close together", 0.5, HEAD), (r"passage length", 0.4, GREY_B),
                  (r"PageRank \ (web)", 0.7, KERN), (r"clicks \ (web)", 0.55, LAM)]
         bars = VGroup()
         for r, (name, v, c) in enumerate(feats):
-            y = 2.0 - r * 0.42
-            b = Rectangle(width=2.0 * v, height=0.28, stroke_width=0, fill_color=c, fill_opacity=0.85)
+            y = 2.1 - r * 0.5
+            b = Rectangle(width=2.0 * v, height=0.32, stroke_width=0, fill_color=c, fill_opacity=0.85)
             b.move_to([-0.15 + v, y, 0])
-            t = label(name, font_size=17, color=c).move_to([-0.3, y, 0], aligned_edge=RIGHT)
+            t = label(name, font_size=19, color=c).move_to([-0.3, y, 0], aligned_edge=RIGHT)
             bars.add(VGroup(t, b))
-        a1 = Arrow(pair.get_right(), bars.get_left() + RIGHT * 0.2, buff=0.1, color=GREY_B, stroke_width=2)
+        a1 = Arrow(pair.get_right(), [bars.get_left()[0], pair.get_y(), 0], buff=0.12, color=GREY_B, stroke_width=2)
         model = module_box(r"model $f$", YES, w=1.8, h=0.75).move_to([3.0, bars.get_y(), 0])
         a2 = Arrow(bars.get_right(), model.get_left(), buff=0.15, color=GREY_B, stroke_width=2)
         score = label(r"a score; \ sort", font_size=19, color=YES).next_to(model, RIGHT, buff=0.25)
@@ -256,19 +256,21 @@ class Ltr(VoiceoverScene):
             t.move_to([x_list, y_top - 6 * dy - 0.05, 0])
 
         def tree(feat, col):
-            root = tag_box(feat, color=col, size=14, h=0.36)
-            l1 = tag_box(r"+0.4", color=YES, size=13, h=0.32)
-            l2 = tag_box(r"-0.2", color=NO, size=13, h=0.32)
-            leaves = VGroup(l1, l2).arrange(RIGHT, buff=0.3).next_to(root, DOWN, buff=0.35)
+            root = tag_box(feat, color=col, size=17, h=0.42)
+            l1 = tag_box(r"+0.4", color=YES, size=16, h=0.38)
+            l2 = tag_box(r"-0.2", color=NO, size=16, h=0.38)
+            leaves = VGroup(l1, l2).arrange(RIGHT, buff=0.2).next_to(root, DOWN, buff=0.4)
             ed = VGroup(Line(root.get_bottom(), l1.get_top(), color=GREY_C, stroke_width=1.5),
                         Line(root.get_bottom(), l2.get_top(), color=GREY_C, stroke_width=1.5))
             return VGroup(root, leaves, ed)
-        trees = VGroup(tree(r"BM25 > 8?", DATA), tree(r"phrase?", HEAD), tree(r"length < 300?", GREY_B))
-        plus = [label(r"$+\,\eta\,\cdot$", font_size=24) for _ in range(3)]
+        trees = VGroup(tree(r"BM25>8?", DATA), tree(r"phrase?", HEAD), tree(r"len<300?", GREY_B))
+        plus = [label(r"$\eta\,\cdot$" if i == 0 else r"$+\;\eta\,\cdot$", font_size=26) for i in range(3)]
         f0 = label(r"$f(x) \;=\;$", font_size=26)
         dots = label(r"$+ \cdots$", font_size=24)
         expr = VGroup(f0, plus[0], trees[0], plus[1], trees[1], plus[2], trees[2], dots).arrange(RIGHT, buff=0.15)
-        expr.scale_to_fit_width(7.4).move_to([2.95, 1.25, 0])
+        if expr.width > 7.6:
+            expr.scale_to_fit_width(7.6)
+        expr.move_to([2.95, 1.3, 0])
         ill = label(r"illustrative: \ scores, \ trees, \ and each tree fitting the lambdas exactly", font_size=16,
                     color=GREY_B).next_to(expr, DOWN, buff=0.25)
         lines = VGroup(
@@ -310,8 +312,8 @@ class Ltr(VoiceoverScene):
         n = 10
         exam = [1 / (1 + 0.45 * r) for r in range(n)]          # an illustrative examination curve
         attract = [0.5, 0.3, 0.7, 0.2, 0.4, 0.6, 0.3, 0.2, 0.5, 0.3]
-        bw, gap, hmax = 0.42, 0.14, 2.6
-        x0, y0 = -6.2, -1.6
+        bw, gap, hmax = 0.42, 0.14, 3.0
+        x0, y0 = -6.2, -1.4
         ex_bars, cl_bars, nums = VGroup(), VGroup(), VGroup()
         for r in range(n):
             x = x0 + r * (bw + gap) + bw / 2
