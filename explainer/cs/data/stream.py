@@ -155,7 +155,7 @@ def barrier_snapshot(events, workers=3, checkpoint_every=500, crash_at=1700, see
 
 
 def job_stream(text: bytes, books=30, per_book_delay=(0.0, 3.0), late_books=3, dup_books=2, seed=3,
-               modes=("exactly once", "no dedup", "watermark closes at 15 s")):
+               modes=("exactly once", "no dedup", "watermark lag 5 s")):
     """The Job as a stream: each novel's words arrive as events; some novels arrive late, two twice.  A top-20 that
     deduplicates by (book, position) and keeps all-time state converges to the batch answer; without dedup it is
     wrong; with a watermark that closes early it misses the late books."""
@@ -175,8 +175,8 @@ def job_stream(text: bytes, books=30, per_book_delay=(0.0, 3.0), late_books=3, d
     ev.sort(key=lambda e: e[1])
     truth = Counter(words).most_common(20)
     res = {}
-    for name, dedup, close_at in (("exactly once", True, None), ("no dedup", False, None),
-                                  ("watermark closes at 15 s", True, 15.0)):
+    for name, dedup, lag in (("exactly once", True, None), ("no dedup", False, None),
+                             ("watermark lag 5 s", True, 5.0)):
         if name not in modes:
             continue
         c = Counter()
@@ -184,7 +184,7 @@ def job_stream(text: bytes, books=30, per_book_delay=(0.0, 3.0), late_books=3, d
         for b, at, _ in ev:
             if dedup and b in seen:
                 continue
-            if close_at is not None and at > close_at:
+            if lag is not None and at - b > lag:      # later than the watermark allows: dropped
                 continue
             seen.add(b)
             chunk = words[b * per:(b + 1) * per] if b < books - 1 else words[b * per:]
@@ -192,4 +192,4 @@ def job_stream(text: bytes, books=30, per_book_delay=(0.0, 3.0), late_books=3, d
         top = c.most_common(20)
         res[name] = {"top": top[:5], "matches_batch": top == truth, "total": sum(c.values())}
     return {"books": books, "late": sorted(late), "duplicated": sorted(dups), "words": n, "results": res,
-            "truth": truth[:5]}
+            "truth": truth[:5], "arrivals": [(b, at) for b, at, _ in ev]}
