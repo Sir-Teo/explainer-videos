@@ -2913,3 +2913,52 @@ class ChainingNet(VGroup):
                 e.add(Line(pos(kk, pj), pos(k, j), color=c, stroke_width=1.6, stroke_opacity=0.7))
             edges.add(e)
         return VGroup(rows, edges)
+
+
+class TangentSpace(VGroup):
+    """The geometry of semiparametric efficiency (Part 49), drawn in an oblique 3D picture of L2_0(P).  ``plane()`` is
+    the model's tangent space (spanned by the first two axes), ``line(u)`` a subspace inside it (a nuisance tangent
+    space), ``arrow(v)`` a function (a gradient, a score) as a vector, and ``drop(v, onto)`` its orthogonal projection,
+    with the dashed perpendicular and the foot of it.  Coordinates are in an orthonormal basis of a 3D slice of L2_0;
+    ``to_screen`` maps them to the frame."""
+
+    def __init__(self, origin=(0.0, -0.6, 0.0), scale: float = 1.6, tilt: float = 0.5, angle: float = 0.55):
+        super().__init__()
+        self.o = np.asarray(origin, float)
+        self.k = scale
+        self.tilt = tilt
+        self.ang = angle
+
+    def to_screen(self, v) -> np.ndarray:
+        x, y, z = (float(c) for c in v)
+        return self.o + self.k * np.array([x + self.tilt * y * math.cos(self.ang), z + self.tilt * y * math.sin(self.ang), 0.0])
+
+    def plane(self, extent: float = 2.2, color=None, opacity: float = 0.18) -> VGroup:
+        e = extent
+        pts = [self.to_screen(p) for p in ((-e, -e, 0), (e, -e, 0), (e, e, 0), (-e, e, 0))]
+        face = Polygon(*pts, fill_color=color or S.KEPT, fill_opacity=opacity, stroke_color=color or S.KEPT, stroke_width=1.5)
+        return VGroup(face)
+
+    def line(self, u, extent: float = 2.2, color=None, stroke_width: float = 3) -> Line:
+        u = np.asarray(u, float)
+        u = u / np.linalg.norm(u)
+        return Line(self.to_screen(-extent * u), self.to_screen(extent * u), color=color or S.RESID, stroke_width=stroke_width)
+
+    def arrow(self, v, color=None, stroke_width: float = 5, start=(0, 0, 0)) -> Arrow:
+        return Arrow(self.to_screen(start), self.to_screen(v), buff=0, color=color or S.EST, stroke_width=stroke_width,
+                     max_tip_length_to_length_ratio=0.12)
+
+    @staticmethod
+    def project(v, onto) -> np.ndarray:
+        """Project v on the span of the rows of ``onto`` (Euclidean in the slice's orthonormal basis)."""
+        B = np.atleast_2d(np.asarray(onto, float))
+        v = np.asarray(v, float)
+        c = np.linalg.lstsq(B.T, v, rcond=None)[0]
+        return B.T @ c
+
+    def drop(self, v, onto, color=None) -> VGroup:
+        """The dashed perpendicular from v to its projection, the projected arrow, and a right-angle mark."""
+        p = self.project(v, onto)
+        dash = DashedLine(self.to_screen(v), self.to_screen(p), color=GREY_B, stroke_width=2.5, dash_length=0.08)
+        foot = self.arrow(p, color=color or S.KEPT)
+        return VGroup(dash, foot)
