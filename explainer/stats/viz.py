@@ -2736,7 +2736,7 @@ class BettingPaths(VGroup):
 
 class RiskSet(VGroup):
     """The risk set of a two-state decision problem (Part 45): every non-randomized rule as a point (R(theta_1, d),
-    R(theta_2, d)) on axes ``ax``; ``hull()`` the convex set of randomized rules; ``lower(boundary)`` its admissible
+    R(theta_2, d)) on axes ``ax``; ``rule_dots()`` draws them; ``hull()`` the convex set of randomized rules; ``lower(boundary)`` its admissible
     lower-left edge; ``bayes_line(prior, value)`` the supporting line pi R_1 + (1 - pi) R_2 = value that picks out a
     Bayes rule; ``diagonal()`` the equal-risk line R_1 = R_2 on which a minimax equalizer sits."""
 
@@ -2745,7 +2745,7 @@ class RiskSet(VGroup):
         self.ax = ax
         self.R = np.asarray(points, float)
 
-    def points(self, color=None, radius: float = 0.07, highlight=None, hcolor=None) -> VGroup:
+    def rule_dots(self, color=None, radius: float = 0.07, highlight=None, hcolor=None) -> VGroup:
         g = VGroup()
         for i, (a, b) in enumerate(self.R):
             c = hcolor if highlight is not None and i in highlight else (color or S.EST)
@@ -2781,3 +2781,42 @@ class RiskSet(VGroup):
 
     def diagonal(self, color=None, stroke_width: float = 2):
         return self._clip_line(lambda x: x, color or GREY_B, stroke_width, True)
+
+
+class NeymanSlices(VGroup):
+    """Neyman structure (Part 46), slice by slice: for each value t of a sufficient statistic for the nuisance
+    parameter, the conditional null pmf of the test statistic as bars, with the part the test rejects (phi times the
+    pmf) painted over them.  Each slice rejects with conditional probability alpha, so the whole test is similar.
+    ``slices`` is a list of (label, xs, pmf, phi); the panels are laid out left to right."""
+
+    def __init__(self, slices, width: float = 12.0, height: float = 2.6, color=None, reject_color=None, font_size=20):
+        super().__init__()
+        from explainer.analysis import label
+
+        color, reject_color = color or S.EST, reject_color or S.RESID
+        k = len(slices)
+        pw = width / k
+        self.panels = VGroup()
+        for i, (name, xs, pmf, phi) in enumerate(slices):
+            xs, pmf, phi = np.asarray(xs, float), np.asarray(pmf, float), np.asarray(phi, float)
+            top = max(pmf.max(), 1e-9)
+            bw = 0.8 * pw / max(len(xs), 1)
+            g = VGroup()
+            base = Line([-pw * 0.45, 0, 0], [pw * 0.45, 0, 0], color=GREY_B, stroke_width=1.5)
+            g.add(base)
+            bars, rej = VGroup(), VGroup()
+            for j, (x, p, f) in enumerate(zip(xs, pmf, phi)):
+                cx = -pw * 0.4 + (j + 0.5) * (0.8 * pw / len(xs))
+                h = height * p / top
+                bars.add(Rectangle(width=bw * 0.85, height=max(h, 1e-3), stroke_width=0, fill_color=color, fill_opacity=0.75)
+                         .move_to([cx, h / 2, 0]))
+                if f > 0:
+                    hr = h * f
+                    rej.add(Rectangle(width=bw * 0.85, height=max(hr, 1e-3), stroke_width=0, fill_color=reject_color,
+                                      fill_opacity=0.95).move_to([cx, h - hr / 2, 0]))
+            title = label(name, font_size=font_size, color=GREY_A).next_to(base, DOWN, buff=0.15)
+            panel = VGroup(g, bars, rej, title)
+            panel.bars, panel.rej, panel.title = bars, rej, title
+            panel.move_to([-width / 2 + (i + 0.5) * pw, 0, 0], aligned_edge=DOWN)
+            self.panels.add(panel)
+        self.add(self.panels)
