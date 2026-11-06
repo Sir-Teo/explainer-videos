@@ -143,7 +143,7 @@ class Serverless(VoiceoverScene):
             "a small server completely busy, two hundred requests every second. Its hourly price is spread over "
             "seven hundred and twenty thousand requests: about thirteen cents per million. "
             "<bookmark mark='d'/> So a function costs nearly eight times as much per request as a busy server. It "
-            "wins whenever the server would be idle more than seven eighths of the time, below about twenty-six "
+            "wins whenever the server would be idle more than about eighty-seven percent of the time, below about twenty-six "
             "requests a second, the break-even chapter twelve plots. Serverless is a bet on low "
             "utilization."
         ) as vo:

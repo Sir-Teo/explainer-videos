@@ -154,7 +154,7 @@ class Packing(VoiceoverScene):
         with self.voiceover(
             "Recall partition, from Part 26: can some numbers be split into two halves with equal sums? "
             "<bookmark mark='a'/> Divide each by half the total, and ask whether the items fit in two bins. "
-            "Three, one, one, two, two and one total ten; three and two make five, and so does the rest. "
+            "Three, one, one, two, two and one total ten; three, one and one make five, and so do two, two and one. "
             "<bookmark mark='b'/> Three, three, three and one also total ten, but nothing makes five: a third "
             "bin is needed. <bookmark mark='c'/> So a fast packer would solve partition, and bin packing is NP-"
             "hard. Telling two bins from three is already hard, so no fast algorithm can promise better than "
