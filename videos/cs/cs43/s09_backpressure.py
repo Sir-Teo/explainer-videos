@@ -223,7 +223,7 @@ class Backpressure(VoiceoverScene):
             "a token, each success earns back a tenth of one, and when the bucket is less than half full, the "
             "client stops retrying and reports the failure at once. <bookmark mark='b'/> In our outage the bucket "
             "falls below half within the first second: only forty-nine failures are retried. The peak is a hundred "
-            "and thirty-nine, and the service is normal one second after it returns. "
+            "and thirty-nine, and the service is back to normal as soon as it returns. "
             "<bookmark mark='c'/> The cost: nine hundred requests, every one that arrived during the "
             "outage, got an error instead of an answer. Whether that is acceptable is a product decision; the "
             "alternative was almost ninety more seconds of overload for everyone."
