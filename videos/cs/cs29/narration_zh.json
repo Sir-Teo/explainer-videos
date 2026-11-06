@@ -1,0 +1,421 @@
+{
+ "title": "计算机科学，从零搭建 · 第29部分：秘密",
+ "chapters": {
+  "Hook": "两千年的秘密",
+  "Substitution": "1. 替换密码与频率分析",
+  "Vigenere": "2. 维吉尼亚密码与重合指数",
+  "Enigma": "3. Enigma",
+  "Perfect": "4. 完美保密",
+  "Definitions": "5. 安全意味着什么",
+  "Prg": "6. 伪随机生成器",
+  "Prf": "7. 伪随机函数与伪随机置换",
+  "Aes": "8. AES",
+  "Avalanche": "9. 雪崩",
+  "Modes": "10. 工作模式",
+  "Integrity": "11. 完整性",
+  "Hashes": "12. 哈希函数",
+  "HashUses": "13. 哈希的用途",
+  "Cryptanalysis": "14. 密码分析",
+  "SideChannels": "15. 侧信道与糟糕的随机数",
+  "Frontier": "16. 前沿：证明、量子与轻量级密码",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "a818395abea7": {
+   "scene": "Hook",
+   "en": "This is our logo: a hundred and twenty-eight by ninety-six grey pixels, one byte each. <bookmark mark='a'/> Now encrypt it with AES, the cipher that protects most of the world's traffic, with a 128-bit key. Here is the ciphertext, drawn as pixels. You can still see the logo. <bookmark mark='b'/> Nothing is wrong with AES. The image was cut into seven hundred and sixty-eight blocks of sixteen bytes, and each block was encrypted on its own, the obvious way. Equal blocks of background give equal blocks of ciphertext: only eighty-five different blocks appear, exactly as many as in the picture. <bookmark mark='c'/> The same cipher with the same key, used in a mode that chains each block to the one before, gives this: every block different. <bookmark mark='d'/> To see the difference plainly, paint each sixteen-byte block of ciphertext with a colour made from its own first three bytes. Under ECB the logo is unmistakable; chained, it is confetti. <bookmark mark='e'/> A cipher is a component. Secrecy comes from how it is used, and from proving that using it that way is safe. That is this part.",
+   "zh": "这是我们的标志：一百二十八乘九十六个灰色像素，每个一字节。<bookmark mark='a'/>现在用 AES 加密它，这是保护着世界上大部分通信的密码，密钥 128 位。这是密文，画成像素。你仍然能看出这个标志。<bookmark mark='b'/>AES 本身没有任何问题。图像被切成七百六十八个十六字节的块，每一块都单独加密，用的是最直接的办法。相同的背景块给出相同的密文块：只出现了八十五种不同的块，和原图里一样多。<bookmark mark='c'/>同一个密码、同一把密钥，换成把每一块和前一块链起来的模式，得到的是这个：每一块都不同。<bookmark mark='d'/>为了看清差别，给每个十六字节的密文块涂上一种颜色，颜色就取它自己的前三个字节。在 ECB 下，标志一目了然；链起来以后，只剩五彩纸屑。<bookmark mark='e'/>密码只是一个部件。保密来自它的用法，以及证明这样用是安全的。这就是这一部分。"
+  },
+  "e3891b38c660": {
+   "scene": "Hook",
+   "en": "For two thousand years secret writing was a contest between the people who made ciphers and the people who broke them, and the breakers usually won. <bookmark mark='a'/> Julius Caesar shifted letters. In the ninth century al-Kindi showed how to break any such cipher by counting letters. Ciphers with many shifts held out for three hundred years, and the Enigma machine for a decade, until Polish and British mathematicians broke it, again by counting. <bookmark mark='b'/> Then in 1949 Claude Shannon proved what perfect secrecy costs: a key as long as the message itself. <bookmark mark='c'/> Modern cryptography gets around his theorem with one assumption: the attacker's computing power is limited. It builds everything on that, from the Data Encryption Standard to AES, and then attacks its own constructions as hard as it can.",
+   "zh": "两千年来，秘密书写是造密码的人和破密码的人之间的较量，而破译者通常赢。<bookmark mark='a'/>Caesar 平移字母。九世纪，al-Kindi 说明了怎样靠数字母来破解任何这类密码。用许多种平移的密码撑了三百年，Enigma 机撑了十年，直到波兰和英国的数学家攻破它，靠的还是计数。<bookmark mark='b'/>然后在1949年，Claude Shannon 证明了完美保密的代价：一把和消息本身一样长的密钥。<bookmark mark='c'/>现代密码学用一个假设绕开了他的定理：攻击者的计算能力是有限的。从数据加密标准到 AES，一切都建在这个假设上，然后再用尽全力攻击自己的构造。"
+  },
+  "80d22db1ada3": {
+   "scene": "Hook",
+   "en": "Part 29 of Computer Science, Built: Secrets. <bookmark mark='a'/> In this part: the classical ciphers and how they fell, ending with Enigma; Shannon's perfect secrecy, and what security can mean when keys are short; pseudorandom generators, functions and permutations, the objects the rest is built from; AES, from scratch, on Part 28's field of bytes; the modes, message authentication codes and hash functions that make it safe to use; and the attacks: differential cryptanalysis, timing, and bad randomness.",
+   "zh": "计算机科学，从零搭建，第29部分：秘密。<bookmark mark='a'/>这一部分包括：古典密码以及它们如何陷落，止于 Enigma；Shannon 的完美保密，以及密钥很短时安全能意味着什么；伪随机生成器、伪随机函数与伪随机置换，其余一切都由它们搭成；从零写出 AES，建在第28部分的字节域上；让它能安全使用的工作模式、消息认证码和哈希函数；还有各种攻击：差分密码分析、计时，以及糟糕的随机数。"
+  },
+  "434aa89bd7ab": {
+   "scene": "Substitution",
+   "en": "Chapter one. Substitution, and frequency analysis.",
+   "zh": "第1章。替换密码与频率分析。"
+  },
+  "84e15c401a01": {
+   "scene": "Substitution",
+   "en": "The oldest ciphers replace each letter by another. <bookmark mark='a'/> Caesar shifted every letter three places along the alphabet. There are only twenty-six shifts, so anyone who suspects a shift can simply try them all. <bookmark mark='b'/> A substitution cipher allows any rearrangement of the alphabet as the key. Here is one, and the opening of Moby-Dick under it. <bookmark mark='c'/> There are twenty-six factorial keys, about four times ten to the twenty-six. Trying a billion a second would take thirteen billion years, about the age of the universe. <bookmark mark='d'/> A large key space is necessary, but it is not enough. This cipher falls in seconds.",
+   "zh": "最古老的密码把每个字母换成另一个。<bookmark mark='a'/>Caesar 把每个字母沿字母表平移三位。平移一共只有二十六种，所以只要怀疑是平移，谁都可以把它们全试一遍。<bookmark mark='b'/>替换密码允许用字母表的任意一种重排作为密钥。这是一把，以及《白鲸》开头在它之下的样子。<bookmark mark='c'/>密钥有二十六的阶乘个，大约四乘十的二十六次方。每秒试十亿个，要试一百三十亿年，差不多是宇宙的年龄。<bookmark mark='d'/>巨大的密钥空间是必要的，但并不够。这个密码几秒钟就会被攻破。"
+  },
+  "4a0a71b597e2": {
+   "scene": "Substitution",
+   "en": "The method was written down in Baghdad in the ninth century by the philosopher al-Kindi, in a manuscript on deciphering cryptographic messages. <bookmark mark='a'/> Count how often each letter appears in the ciphertext, and compare with how often letters appear in the language. A substitution moves the bars around, but cannot change their heights. <bookmark mark='b'/> Here the commonest ciphertext letter is W, at almost thirteen percent, and the commonest English letter is E, at almost thirteen percent. W is probably E. <bookmark mark='c'/> Matching every letter by rank gives a first guess at the key. <bookmark mark='d'/> It is wrong in most places, because six hundred letters do not rank the rarer letters reliably. But it is a start, and the rest is search.",
+   "zh": "这个方法是九世纪时由哲学家 al-Kindi 在巴格达写下的，收在一部关于破译密信的手稿里。<bookmark mark='a'/>数一数密文里每个字母出现的次数，再和这门语言里字母出现的频率比较。替换会把柱子挪来挪去，却改变不了它们的高度。<bookmark mark='b'/>这里密文中最常见的字母是 W，占将近百分之十三；英语中最常见的字母是 E，也占将近百分之十三。W 多半就是 E。<bookmark mark='c'/>按名次把每个字母配起来，就得到密钥的第一个猜测。<bookmark mark='d'/>它大部分位置都是错的，因为六百个字母不足以可靠地给较少见的字母排名。但这是一个起点，剩下的就是搜索。"
+  },
+  "300779a25df5": {
+   "scene": "Substitution",
+   "en": "To search, we need a way to score a guess. <bookmark mark='a'/> We count every run of four letters in six million letters of other novels, and score a candidate text by how likely its own runs are. English scores high; gibberish scores low. <bookmark mark='b'/> Then climb: swap two letters of the key, and keep the swap if the score improves. Watch the text sharpen. Common short words appear first, then longer ones, and then: Call me Ishmael. Some years ago, never mind how long precisely. <bookmark mark='c'/> A climb can get stuck on a false peak, as our first attempt did, so we restart a few times from jiggled starting keys; the other five all reached the same, higher score. <bookmark mark='d'/> Six hundred letters, every one correct, in a few seconds of Python. Edgar Allan Poe knew this in 1843: a substitution cipher hides nothing from someone willing to count.",
+   "zh": "要搜索，我们需要给猜测打分的办法。<bookmark mark='a'/>我们在其他小说的六百万个字母里数出每一段四个字母的连写，再按候选文本中这些连写出现的可能性给它打分。英语得分高，乱码得分低。<bookmark mark='b'/>然后爬山：交换密钥中的两个字母，如果分数提高就保留这次交换。看文本逐渐清晰。先冒出常见的短词，再是长一些的，然后：叫我以实玛利吧。几年前，别管具体多久。<bookmark mark='c'/>爬山可能困在一个假的山峰上，我们的第一次尝试就是这样，所以我们从稍加扰动的起始密钥重来几次；另外五次都到达了同一个更高的分数。<bookmark mark='d'/>六百个字母，个个正确，Python 只用了几秒。Edgar Allan Poe 在1843年就知道：对一个肯花功夫计数的人，替换密码什么也藏不住。"
+  },
+  "964f3dd71e8d": {
+   "scene": "Vigenere",
+   "en": "Chapter two. Vigenère, and the index of coincidence.",
+   "zh": "第2章。维吉尼亚密码与重合指数。"
+  },
+  "63d6f06cd82e": {
+   "scene": "Vigenere",
+   "en": "The defence against counting is to use many substitutions. <bookmark mark='a'/> Giovan Battista Bellaso described it in 1553, and it was later credited to Blaise de Vigenère: shift each letter by the next letter of a keyword, here BABBAGE, repeating. A shifts by zero, B by one, G by six. <bookmark mark='b'/> Now the same plaintext letter becomes different ciphertext letters. These five E's are enciphered as K, E, F, E and K. The letter counts flatten out, and al-Kindi's method has nothing to grip. <bookmark mark='c'/> It was called the indecipherable cipher, and trusted for three hundred years. <bookmark mark='d'/> Then Charles Babbage, in 1854, and Friedrich Kasiski, in 1863, saw the weakness: once you know the length of the keyword, the cipher falls apart into simple shifts.",
+   "zh": "对付计数的办法是使用许多种替换。<bookmark mark='a'/>Giovan Battista Bellaso 在1553年描述了它，后来它被归到 Blaise de Vigenère 名下：用一个关键词的下一个字母来平移每个字母，这里是 BABBAGE，循环使用。A 平移零位，B 平移一位，G 平移六位。<bookmark mark='b'/>现在同一个明文字母会变成不同的密文字母。这五个 E 分别被加密成 K、E、F、E 和 K。字母计数被抹平了，al-Kindi 的方法无从下手。<bookmark mark='c'/>它被称为不可破译的密码，被信任了三百年。<bookmark mark='d'/>然后，Charles Babbage 在1854年、Friedrich Kasiski 在1863年看出了弱点：一旦知道关键词的长度，这个密码就散成一个个简单的平移。"
+  },
+  "688e0f325ffa": {
+   "scene": "Vigenere",
+   "en": "William Friedman gave the test its modern form in 1922. <bookmark mark='a'/> The index of coincidence is the chance that two letters picked at random from a text are the same. English is lumpy, with many E's and T's, so it scores about six and a half percent; letters spread evenly score one in twenty-six, under four percent. <bookmark mark='b'/> Our whole ciphertext scores four and a half: close to random, as the cipher intends. <bookmark mark='c'/> Now guess a key length, and split the ciphertext into that many columns: every first letter, every second letter, and so on. If the guess is right, each column was shifted by a single letter, and its index jumps back up to English. <bookmark mark='d'/> Try every length from one to twenty. Seven stands out, and fourteen, its double. The key has seven letters.",
+   "zh": "William Friedman 在1922年给了这个检验现代的形式。<bookmark mark='a'/>重合指数是从一段文本里随机挑两个字母、它们相同的概率。英语很不均匀，E 和 T 很多，所以得分约百分之六点五；字母均匀分布时得分是二十六分之一，不到百分之四。<bookmark mark='b'/>我们整段密文得分百分之四点五：接近随机，正如密码所期望的。<bookmark mark='c'/>现在猜一个密钥长度，把密文分成那么多列：每组的第一个字母、第二个字母，依此类推。如果猜对了，每一列只被一个字母平移过，它的指数就跳回英语的水平。<bookmark mark='d'/>把一到二十的每个长度都试一遍。七格外突出，还有十四，它的两倍。密钥有七个字母。"
+  },
+  "f1f6f257443b": {
+   "scene": "Vigenere",
+   "en": "With the length known, each column is a Caesar cipher. <bookmark mark='a'/> For the first column, try all twenty-six shifts and measure how far each result's letter counts are from English. One shift, B, fits far better than any other. <bookmark mark='b'/> Repeat for each of the seven columns, and the keyword reads itself off: BABBAGE. All six hundred letters decrypt. <bookmark mark='c'/> The lesson outlives the cipher. A short key used over and over leaves patterns in the ciphertext, and statistics will find them. Every cipher in this part either uses its key once, like Shannon's, or stretches it into something that never repeats.",
+   "zh": "知道了长度，每一列就是一个凯撒密码。<bookmark mark='a'/>对第一列，试遍二十六种平移，衡量每个结果的字母计数离英语有多远。有一种平移，B，比其他任何一种都吻合得多。<bookmark mark='b'/>对七列中的每一列重复，关键词就自己显现出来：BABBAGE。全部六百个字母都解密了。<bookmark mark='c'/>这个教训比这个密码活得更久。一把短密钥反复使用，会在密文里留下规律，而统计会找到它们。这一部分里的每个密码，要么像 Shannon 的那样只用一次密钥，要么把它拉伸成永不重复的东西。"
+  },
+  "df23619e01a6": {
+   "scene": "Enigma",
+   "en": "Chapter three. Enigma.",
+   "zh": "第3章。Enigma。"
+  },
+  "a63f311da6a5": {
+   "scene": "Enigma",
+   "en": "Enigma, patented by Arthur Scherbius in 1918 and used by every branch of the German military, mechanised Vigenère's idea. <bookmark mark='a'/> Pressing a key sends a current through a plugboard, then through three rotors, each a fixed wiring of the twenty-six letters: a permutation. <bookmark mark='b'/> A reflector sends it back through the rotors and plugboard to light a lamp. Before each letter the right rotor steps, and now and then the others, so every letter is enciphered by a different permutation. <bookmark mark='c'/> Our simulation passes the standard test, and enciphers a weather report. The reflector has two consequences: enciphering the ciphertext again gives back the message, and no letter is ever enciphered as itself. Look down the columns: never the same letter. <bookmark mark='d'/> The plugboard's ten cables could be placed in a hundred and fifty million million ways. <bookmark mark='e'/> With the choice and order of three rotors from five and their starting positions, an operator chose each day among a hundred and fifty-nine billion billion keys.",
+   "zh": "Enigma 由 Arthur Scherbius 在1918年申请专利，德国军队的每个军种都在用，它把维吉尼亚的想法机械化了。<bookmark mark='a'/>按下一个键，电流先经过接线板，再穿过三个转子，每个转子都是二十六个字母的一种固定接线：一个置换。<bookmark mark='b'/>反射器把电流送回去，再穿过转子和接线板，点亮一盏灯。每个字母之前，右边的转子转一格，其他转子时不时也转，所以每个字母都由不同的置换加密。<bookmark mark='c'/>我们的模拟通过了标准测试，并加密了一份天气报告。反射器带来两个后果：把密文再加密一次就还原出消息，而且没有字母会被加密成它自己。顺着每一列看：从来不是同一个字母。<bookmark mark='d'/>接线板的十根线有一百五十万亿种接法。<bookmark mark='e'/>再加上从五个转子中选三个及其顺序、以及它们的起始位置，操作员每天要从一亿五千九百亿亿把密钥中选一把。"
+  },
+  "90382731cc0b": {
+   "scene": "Enigma",
+   "en": "The first break came from mathematics. Marian Rejewski, a young Polish mathematician, worked on Enigma in 1932. <bookmark mark='a'/> Operators began each message with a three-letter message key, enciphered twice for safety. So the first and fourth letters were the same letter under two different permutations, and from a day's worth of messages Rejewski could reconstruct the product of the two: a permutation of the alphabet. <bookmark mark='b'/> Here is that product for one setting of our simulated rotors, written as cycles: A goes to I, I to D, and so on, two cycles of thirteen. Now add ten plugboard cables. The letters in the cycles change completely; the lengths of the cycles do not. <bookmark mark='c'/> That is a theorem from group theory: the plugboard S is applied on the way in and on the way out, so it conjugates the product, and conjugation renames letters without changing the shape of the cycles. <bookmark mark='d'/> So the cycle lengths, the day's characteristic, depend only on the rotors. A different setting gives a different shape. <bookmark mark='e'/> The Poles built a device to catalogue the characteristic of every rotor setting, a hundred thousand of them, and then found each day's setting by looking it up, ignoring the plugboard's hundred and fifty million million possibilities entirely.",
+   "zh": "第一次突破来自数学。年轻的波兰数学家 Marian Rejewski 在1932年开始研究 Enigma。<bookmark mark='a'/>操作员在每条消息开头放一个三个字母的消息密钥，为了保险加密两遍。所以第一个和第四个字母是同一个字母在两个不同置换下的结果；从一天的消息里，Rejewski 能重建这两个置换的乘积：字母表的一个置换。<bookmark mark='b'/>这是我们模拟的转子在某个设置下的这个乘积，写成循环：A 到 I，I 到 D，依此类推，两个长度为十三的循环。现在接上十根接线板的线。循环里的字母完全变了；循环的长度没有变。<bookmark mark='c'/>这是群论里的一条定理：接线板 S 在进去和出来时各用一次，所以它对乘积做了共轭，而共轭只给字母改名，不改变循环的形状。<bookmark mark='d'/>所以循环长度，也就是这一天的特征，只取决于转子。换一个设置，形状就不同。<bookmark mark='e'/>波兰人造了一台设备，把每一种转子设置的特征编成目录，共十万种，然后靠查表找出每天的设置，完全无视接线板那一百五十万亿种可能。"
+  },
+  "096291078799": {
+   "scene": "Enigma",
+   "en": "In 1939, weeks before the war, the Poles gave everything they had to the British and French. At Bletchley Park the work moved from mathematics to machinery. <bookmark mark='a'/> The British relied on cribs: words a message probably contained. Weather stations sent weather reports, in a fixed format, every day. <bookmark mark='b'/> To place a crib, slide it along the ciphertext. Wherever a crib letter lines up with the same ciphertext letter, that position is impossible, because Enigma never enciphers a letter as itself. <bookmark mark='c'/> On our message, nine of the fifteen positions are ruled out at once. <bookmark mark='d'/> Alan Turing, with Gordon Welchman, designed the Bombe: an electrical machine that took a placed crib and ran through rotor settings, rejecting every one that led to a contradiction. <bookmark mark='e'/> By the end of the war over two hundred Bombes were running, and the Colossus machines, the first programmable electronic computers, were breaking a different German cipher, the Lorenz teleprinter. The reflector's elegant symmetry was the machine's weakness.",
+   "zh": "1939年，开战前几个星期，波兰人把他们掌握的一切交给了英国和法国。在布莱切利园，工作从数学转向了机器。<bookmark mark='a'/>英国人依靠已知明文片段：一条消息很可能包含的词。气象站每天都按固定格式发送天气报告。<bookmark mark='b'/>要给片段定位，就把它沿着密文滑动。只要片段中某个字母对上了同一个密文字母，那个位置就不可能，因为 Enigma 从不把字母加密成它自己。<bookmark mark='c'/>在我们的消息上，十五个位置中有九个立刻被排除。<bookmark mark='d'/>Turing 和 Welchman 设计了 Bombe：一台电气机器，拿一个已定位的片段去试遍转子设置，凡是导致矛盾的设置都排除。<bookmark mark='e'/>到战争结束时，两百多台 Bombe 在运转，而 Colossus，第一批可编程的电子计算机，正在破译另一种德国密码：Lorenz 电传密码。反射器优雅的对称性，正是这台机器的弱点。"
+  },
+  "8824164f1c91": {
+   "scene": "Perfect",
+   "en": "Chapter four. Perfect secrecy.",
+   "zh": "第4章。完美保密。"
+  },
+  "361206de2640": {
+   "scene": "Perfect",
+   "en": "Is there a cipher no amount of cleverness can break? <bookmark mark='a'/> In 1917 Gilbert Vernam, at AT and T, combined each bit of a teleprinter message with a bit of a random key tape: exclusive or. Here is HI, sixteen bits, a key, and the ciphertext. Use the key once, and never again. <bookmark mark='b'/> In 1949 Shannon made secrecy precise. A cipher is perfectly secret if seeing the ciphertext does not change the probability of any message: what an attacker believes afterwards is what they believed before. <bookmark mark='c'/> The pad meets it. For two bits, look at the table: each row, one message, contains every ciphertext exactly once. So any ciphertext comes from any message under exactly one key, and with a uniform key every ciphertext is equally likely whatever the message was. <bookmark mark='d'/> Not hard to break: impossible. No computer, no amount of time, no quantum machine helps.",
+   "zh": "有没有一种密码，再聪明也破不了？<bookmark mark='a'/>1917年，AT&T 的 Gilbert Vernam 把电传消息的每一位与随机密钥纸带上的一位结合起来：异或。这是 HI，十六位，一把密钥，以及密文。密钥只用一次，永不再用。<bookmark mark='b'/>1949年，Shannon 把保密说得精确了。如果看到密文不改变任何消息的概率，这个密码就是完美保密的：攻击者事后相信的，就是他们事先相信的。<bookmark mark='c'/>一次一密满足它。以两位为例，看这张表：每一行，也就是一条消息，恰好包含每个密文一次。所以任何密文都能由任何消息在恰好一把密钥下得到；密钥均匀时，不管消息是什么，每个密文都同样可能。<bookmark mark='d'/>不是难以破解，而是不可能。任何计算机、任何时间、任何量子机器都无济于事。"
+  },
+  "747436763417": {
+   "scene": "Perfect",
+   "en": "Shannon also proved the catch, and the proof is three lines. <bookmark mark='a'/> Take any ciphertext, and decrypt it under every possible key. You get at most one message per key. <bookmark mark='b'/> If there are fewer keys than messages, some message is missing from that list: given this ciphertext, its probability is zero. <bookmark mark='c'/> But before the ciphertext arrived, it was possible. Seeing the ciphertext changed what the attacker believes, so the cipher is not perfectly secret. <bookmark mark='d'/> Perfect secrecy needs at least as many keys as messages, so a key as long as everything you will ever send. <bookmark mark='e'/> And that key must reach the other side in secret. If you have a secure way to send a key that long, you could have sent the message instead.",
+   "zh": "Shannon 也证明了其中的代价，证明只有三行。<bookmark mark='a'/>任取一个密文，在每一把可能的密钥下解密。每把密钥至多给出一条消息。<bookmark mark='b'/>如果密钥比消息少，这张列表里就缺某条消息：给定这个密文，它的概率是零。<bookmark mark='c'/>可是密文到达之前，它是可能的。看到密文改变了攻击者的信念，所以这个密码不是完美保密的。<bookmark mark='d'/>完美保密需要至少和消息一样多的密钥，也就是一把和你将要发送的一切一样长的密钥。<bookmark mark='e'/>而这把密钥必须秘密地送到另一方。如果你有安全的办法送出这么长的密钥，你本可以直接把消息送过去。"
+  },
+  "0f497269d79b": {
+   "scene": "Perfect",
+   "en": "And the pad must be used once. <bookmark mark='a'/> Encrypt two messages with the same key, and an eavesdropper who XORs the two ciphertexts gets the XOR of the two messages: the key cancels out. <bookmark mark='b'/> That is not yet either message, but English is redundant. Guess a common word, space T H E space, at some position in one message; XOR it in, and you read what the other message says there. Slide it along. <bookmark mark='c'/> At three offsets the result is English: code, under, and bridge. Each hit reveals a piece of both messages, and each piece suggests the next guess. <bookmark mark='d'/> This happened. In 1942 a Soviet factory under wartime pressure printed some pad pages twice. American codebreakers in the VENONA project noticed, and over the following decades read parts of about three thousand messages, exposing atomic spies. <bookmark mark='e'/> The pad's perfection has three conditions, and every one is fragile: random, secret, once.",
+   "zh": "而且一次一密只能用一次。<bookmark mark='a'/>用同一把密钥加密两条消息，窃听者把两个密文异或，就得到两条消息的异或：密钥抵消了。<bookmark mark='b'/>那还不是任何一条消息，但英语是有冗余的。在一条消息的某个位置猜一个常见词，空格 T H E 空格；把它异或进去，就能读出另一条消息在那里说了什么。沿着滑动。<bookmark mark='c'/>在三个偏移处，结果是英语：code、under 和 bridge。每一次命中都揭开两条消息各一小段，每一段又提示下一个猜测。<bookmark mark='d'/>这真的发生过。1942年，一家苏联工厂在战时压力下把一些密码本页印了两份。美国 VENONA 项目的破译者注意到了，在此后几十年里读出了大约三千条消息的部分内容，揭露了原子间谍。<bookmark mark='e'/>一次一密的完美有三个条件，每一个都很脆弱：随机、保密、只用一次。"
+  },
+  "ecd0a80aa3a6": {
+   "scene": "Definitions",
+   "en": "Chapter five. What secure means.",
+   "zh": "第5章。安全意味着什么。"
+  },
+  "439fbf8fd7ee": {
+   "scene": "Definitions",
+   "en": "Shannon's theorem is final: with keys shorter than messages, a ciphertext always leaks something to an attacker with unlimited time. So modern cryptography limits the attacker. <bookmark mark='a'/> First, a rule from Auguste Kerckhoffs in 1883: assume the enemy knows how your system works. Only the key is secret, because algorithms leak, get published, get stolen. <bookmark mark='b'/> Second, the attacker is an efficient algorithm: one that may flip coins, and runs in time polynomial in the key length. <bookmark mark='c'/> Third, its advantage over blind guessing must be negligible: smaller than one over any polynomial, like two to the minus n. <bookmark mark='d'/> In concrete numbers: trying every key of DES took a special machine fifty-six hours in 1998. Every Bitcoin miner together computes about two to the ninety-four hashes a year. Two to the hundred and twenty-eight is seventeen billion times more. That is the margin AES is built to.",
+   "zh": "Shannon 的定理是定论：密钥比消息短时，密文总会向拥有无限时间的攻击者泄露些什么。所以现代密码学限制攻击者。<bookmark mark='a'/>第一，Auguste Kerckhoffs 在1883年提出的一条规则：假定敌人知道你的系统如何工作。只有密钥是秘密，因为算法会泄露、会被公开、会被偷走。<bookmark mark='b'/>第二，攻击者是一个高效算法：它可以抛硬币，运行时间是密钥长度的多项式。<bookmark mark='c'/>第三，它比盲猜多出的优势必须是可忽略的：小于任何多项式分之一，比如二的负 n 次方。<bookmark mark='d'/>具体数字：1998年，一台专用机器花了五十六个小时试遍 DES 的每一把密钥。全世界所有比特币矿工加起来，一年大约计算二的九十四次方个哈希。二的一百二十八次方是它的一百七十亿倍。这就是 AES 所留的余量。"
+  },
+  "7ce809769aed": {
+   "scene": "Definitions",
+   "en": "What should the attacker be unable to do? Shafi Goldwasser and Silvio Micali answered in 1982 with a game. <bookmark mark='a'/> A challenger holds a secret key. The adversary may ask for the encryption of any messages it likes: chosen plaintexts. <bookmark mark='b'/> Then it hands over two messages of its choice. The challenger secretly flips a coin and returns the encryption of one of them. <bookmark mark='c'/> The adversary may ask more questions, and finally guesses which one it got. <bookmark mark='d'/> The scheme is secure if no efficient adversary guesses right noticeably more than half the time. If you cannot even tell which of two messages you chose was encrypted, you learn nothing useful about any message: Goldwasser and Micali proved this equivalent to semantic security, and it won them the Turing Award. <bookmark mark='e'/> One consequence is immediate. If encryption is deterministic, the adversary simply asks for the encryption of m-zero in advance and compares. Secure encryption must be randomised, which is exactly what our logo was missing.",
+   "zh": "攻击者应该做不到什么？Shafi Goldwasser 和 Silvio Micali 在1982年用一个游戏回答了这个问题。<bookmark mark='a'/>挑战者持有一把秘密密钥。敌手可以要求加密任何它想要的消息：选择明文。<bookmark mark='b'/>然后它交出自己选的两条消息。挑战者暗中抛一枚硬币，返回其中一条的密文。<bookmark mark='c'/>敌手还可以再提问，最后猜它拿到的是哪一条。<bookmark mark='d'/>如果没有高效的敌手能明显多于一半的时间猜对，这个方案就是安全的。如果你连自己选的两条消息中哪条被加密都分辨不出，你就学不到关于任何消息的任何有用信息：Goldwasser 和 Micali 证明了这等价于语义安全，并因此获得图灵奖。<bookmark mark='e'/>一个推论立刻出现。如果加密是确定性的，敌手只要事先要来 m 零的密文比较一下就行。安全的加密必须是随机化的，这正是我们的标志所缺少的。"
+  },
+  "e1ff0b29b6b4": {
+   "scene": "Definitions",
+   "en": "How do you prove a scheme wins this game? Not directly: nobody knows how. Instead, by reduction, the method of Part 26. <bookmark mark='a'/> Suppose some adversary A breaks the scheme. Build a new algorithm B that attacks a simpler primitive, say a pseudorandom generator, by running A inside it, simulating the scheme for A with the primitive it was handed. <bookmark mark='b'/> If A wins with some advantage, B wins with nearly as much. <bookmark mark='c'/> So if the primitive is secure, the scheme is. <bookmark mark='d'/> Why not prove the primitive secure too? Because a proof that any efficient algorithm fails against it would separate P from NP. <bookmark mark='e'/> So cryptography is a tower: schemes reduced to primitives, primitives reduced to a few hard problems, and the hard problems attacked by everyone, for decades. The next two chapters build the primitives.",
+   "zh": "怎样证明一个方案赢得这个游戏？不能直接证：没人知道怎么做。而是靠归约，第26部分的方法。<bookmark mark='a'/>假设某个敌手 A 攻破了这个方案。构造一个新算法 B 去攻击一个更简单的原语，比如伪随机生成器：B 在内部运行 A，用它拿到的原语为 A 模拟这个方案。<bookmark mark='b'/>如果 A 以某个优势获胜，B 获胜的优势也差不多。<bookmark mark='c'/>所以只要原语是安全的，方案就是安全的。<bookmark mark='d'/>为什么不连原语也证明安全？因为证明任何高效算法都对付不了它，就会把 P 与 NP 分开。<bookmark mark='e'/>所以密码学是一座塔：方案归约到原语，原语归约到少数几个难题，而这些难题被所有人攻击了几十年。接下来两章搭建这些原语。"
+  },
+  "fd8b9d194c82": {
+   "scene": "Prg",
+   "en": "Chapter six. Pseudorandom generators.",
+   "zh": "第6章。伪随机生成器。"
+  },
+  "0cabdc8069e1": {
+   "scene": "Prg",
+   "en": "Shannon needs a key as long as the message. A pseudorandom generator makes a short key look long. <bookmark mark='a'/> It is an efficient function G that stretches a random seed of n bits into more bits. <bookmark mark='b'/> The requirement: no efficient test, given a string, can tell whether it came from G with a random seed, or was truly random, with more than negligible advantage. <bookmark mark='c'/> Then XOR the message with G of the key. If an attacker could learn anything about the message from this ciphertext, we could turn that attacker into a test that tells G's output from random. So the cipher is as secure as the generator. <bookmark mark='d'/> Andrew Yao showed in 1982 that passing every test is the same as one simple property: nobody can predict the next bit from the bits before it. <bookmark mark='e'/> And by 1999, pseudorandom generators had been built from any one-way function at all: any function easy to compute and hard to invert.",
+   "zh": "Shannon 需要一把和消息一样长的密钥。伪随机生成器让一把短密钥看起来很长。<bookmark mark='a'/>它是一个高效函数 G，把 n 位的随机种子拉伸成更多的位。<bookmark mark='b'/>要求是：对一个给定的串，没有任何高效的检验能以超过可忽略的优势分辨它是来自随机种子下的 G，还是真正随机的。<bookmark mark='c'/>然后把消息与 G 作用在密钥上的输出异或。如果攻击者能从这个密文中学到关于消息的任何东西，我们就能把这个攻击者变成一个把 G 的输出和随机区分开的检验。所以这个密码和生成器一样安全。<bookmark mark='d'/>姚期智在1982年证明，通过所有检验等价于一个简单的性质：没有人能根据前面的位预测下一位。<bookmark mark='e'/>到1999年，人们已经能从任何单向函数造出伪随机生成器：任何容易计算、难以求逆的函数都行。"
+  },
+  "11148ac2268d": {
+   "scene": "Prg",
+   "en": "Passing statistical tests is not enough; the definition says every efficient test. <bookmark mark='a'/> Here is the linear feedback shift register of Part 5: seventeen bits, with a feedback polynomial chosen so its period is the maximum, a hundred and thirty-one thousand bits. Its output is balanced and looks random. <bookmark mark='b'/> But every bit is a fixed XOR of earlier bits. Part 28's Berlekamp-Massey algorithm, run over the two-element field, finds the shortest register that produces any sequence, from twice its length. <bookmark mark='c'/> Given these thirty-four bits, it returns the feedback polynomial, and from there every later bit: all two thousand predicted, no errors. As a keystream, this is useless. <bookmark mark='d'/> Real designs add nonlinearity. GSM phones combined three registers with irregular clocking, and that was broken too, eventually in real time with precomputed tables.",
+   "zh": "通过统计检验是不够的；定义说的是每一个高效检验。<bookmark mark='a'/>这是第5部分的线性反馈移位寄存器：十七位，反馈多项式选得让周期达到最大，十三万一千多位。它的输出很均衡，看起来是随机的。<bookmark mark='b'/>但每一位都是前面若干位的固定异或。第28部分的 Berlekamp-Massey 算法，在二元域上运行，能从任何序列两倍长度的位里找出产生它的最短寄存器。<bookmark mark='c'/>给它这三十四位，它就返回反馈多项式，从此每一个后续的位都能算出：两千位全部预测正确，没有错误。作为密钥流，这毫无用处。<bookmark mark='d'/>真正的设计会加入非线性。GSM 手机把三个寄存器以不规则的时钟组合起来，那也被攻破了，最后借助预先计算的表做到了实时破解。"
+  },
+  "3c74d9cac888": {
+   "scene": "Prg",
+   "en": "What is used in practice? Daniel Bernstein's ChaCha20, from 2008. <bookmark mark='a'/> Its state is a four by four grid of thirty-two-bit words: four constants, eight words of key, a block counter, and a nonce, a number used once per message. <bookmark mark='b'/> The whole cipher is one small function, the quarter-round, using only three operations: add, rotate, XOR. <bookmark mark='c'/> Twenty rounds apply it to each column, then to each diagonal, so that every word soon depends on every other. <bookmark mark='d'/> Add the starting grid back in, and you have sixty-four bytes of keystream; increment the counter for the next sixty-four. <bookmark mark='e'/> Our implementation matches the standard's test vectors. It manages about seven hundred kilobytes a second in Python; vectorised C runs at gigabytes per second. With no lookup tables and no branches that depend on secrets, it leaks nothing through timing. <bookmark mark='f'/> It encrypts TLS 1.3, WireGuard and SSH connections, and generates Linux's random numbers.",
+   "zh": "实践中用的是什么？Daniel Bernstein 在2008年提出的 ChaCha20。<bookmark mark='a'/>它的状态是一个四乘四的三十二位字网格：四个常数、八个字的密钥、一个块计数器，以及一个随机数，也就是每条消息只用一次的数。<bookmark mark='b'/>整个密码就是一个小函数，四分之一轮，只用三种运算：加、循环移位、异或。<bookmark mark='c'/>二十轮先把它作用在每一列上，再作用在每条对角线上，于是每个字很快就依赖于其他所有字。<bookmark mark='d'/>再把起始网格加回去，就得到六十四字节的密钥流；计数器加一，得到下一个六十四字节。<bookmark mark='e'/>我们的实现与标准的测试向量一致。在 Python 里大约每秒七百千字节；向量化的 C 每秒几个吉字节。没有查找表，也没有依赖秘密的分支，它不会通过时间泄露任何东西。<bookmark mark='f'/>它加密 TLS 1.3、WireGuard 和 SSH 连接，也为 Linux 生成随机数。"
+  },
+  "febe71f71a32": {
+   "scene": "Prf",
+   "en": "Chapter seven. Pseudorandom functions and permutations.",
+   "zh": "第7章。伪随机函数与伪随机置换。"
+  },
+  "e9a05bf6dc8d": {
+   "scene": "Prf",
+   "en": "A generator gives one long random-looking string. Often we need more: a function that gives a random-looking answer for any input we ask about, the same answer each time. <bookmark mark='a'/> A pseudorandom function is a keyed function that no efficient attacker can tell from a truly random one, even choosing the inputs. <bookmark mark='b'/> Oded Goldreich, Shafi Goldwasser and Silvio Micali built one from any generator in 1986. Take a generator that doubles its input, and split the output into a left half and a right half. Start from the key at the root, and walk down a tree, following the bits of the input: zero means take the left half, one the right. <bookmark mark='c'/> With SHA-256 as the generator, input one, zero, one leads here, and this leaf is the output. <bookmark mark='d'/> The proof is a hybrid argument. Replace the top level with true randomness; then the next; and so on, one level at a time. If any step could be noticed, that would break the generator. After n steps the function is truly random.",
+   "zh": "生成器给出一个看起来随机的长串。我们常常需要更多：一个函数，对我们问的任何输入都给出看起来随机的答案，而且每次都一样。<bookmark mark='a'/>伪随机函数是一个带密钥的函数，即使由攻击者来选输入，也没有高效的攻击者能把它和真正随机的函数区分开。<bookmark mark='b'/>Goldreich、Goldwasser 和 Micali 在1986年用任意生成器造出了一个。取一个把输入长度加倍的生成器，把输出分成左半和右半。从根上的密钥出发，沿着一棵树往下走，按输入的各位走：零表示取左半，一表示取右半。<bookmark mark='c'/>用 SHA-256 作生成器，输入一、零、一走到这里，这片叶子就是输出。<bookmark mark='d'/>证明是一个混合论证。把最上面一层换成真正的随机；再换下一层；依此类推，一次一层。如果任何一步能被察觉，那就攻破了生成器。n 步之后，这个函数就是真正随机的。"
+  },
+  "840c7e550714": {
+   "scene": "Prf",
+   "en": "A block cipher must be a permutation: every ciphertext must decrypt to one plaintext. A random-looking function need not be invertible. Horst Feistel, at IBM, found the bridge. <bookmark mark='a'/> Split the block into halves. The right half goes through any function f, the result is XORed into the left half, and the halves swap. Whatever f is, the round can be undone: you know R, so you can compute f of R again and XOR it back off. <bookmark mark='b'/> How many rounds make it look random? Two are not enough. Feed in two inputs with the same right half: the left halves of the outputs always differ by exactly the difference of the inputs. Our test catches one and two rounds every time. <bookmark mark='c'/> Michael Luby and Charles Rackoff proved in 1988 that three rounds with pseudorandom round functions give a pseudorandom permutation, and four give one that stays secure even when the attacker can also ask for decryptions. On three rounds, our test never fires. <bookmark mark='d'/> The Data Encryption Standard of 1977 is sixteen Feistel rounds.",
+   "zh": "分组密码必须是一个置换：每个密文必须解密成唯一的明文。而看起来随机的函数不一定可逆。IBM 的 Horst Feistel 找到了桥梁。<bookmark mark='a'/>把分组分成两半。右半经过任意一个函数 f，结果异或进左半，然后两半交换。不管 f 是什么，这一轮都能撤销：你知道 R，就能再算一次 f(R)，把它异或掉。<bookmark mark='b'/>要几轮才能看起来随机？两轮不够。输入两个右半相同的数：输出的左半之差总是恰好等于输入之差。我们的检验每次都能抓住一轮和两轮。<bookmark mark='c'/>Luby 和 Rackoff 在1988年证明，用伪随机轮函数的三轮给出伪随机置换，四轮给出一个即使攻击者还能要求解密也依然安全的置换。在三轮上，我们的检验从未触发。<bookmark mark='d'/>1977年的数据加密标准就是十六轮 Feistel。"
+  },
+  "45f21858f045": {
+   "scene": "Prf",
+   "en": "Is a pseudorandom permutation also a pseudorandom function? Almost, and the difference matters. <bookmark mark='a'/> A permutation never gives the same output twice. A random function does, by the birthday paradox of Part 17, after about the square root of the number of possible outputs. <bookmark mark='b'/> Until then the two look the same: the advantage of telling them apart is at most q squared over two to the n plus one, for q queries. <bookmark mark='c'/> For a sixty-four-bit block, as in triple DES or Blowfish, the square root is two to the thirty-two blocks: just thirty-two gigabytes. <bookmark mark='d'/> In 2016 the Sweet32 attack used exactly this. In long-lived HTTPS connections with sixty-four-bit ciphers, colliding ciphertext blocks revealed the XOR of two plaintext blocks, and eventually a secret cookie. <bookmark mark='e'/> This is why AES has a hundred-and-twenty-eight-bit block, and why protocols change keys long before the birthday bound.",
+   "zh": "伪随机置换也是伪随机函数吗？几乎是，而差别很重要。<bookmark mark='a'/>置换从不两次给出同一个输出。随机函数会，按第17部分的生日悖论，大约在可能输出个数的平方根之后。<bookmark mark='b'/>在那之前两者看起来一样：对 q 次查询，区分它们的优势至多是 q 的平方除以二的 n 加一次方。<bookmark mark='c'/>对六十四位的分组，比如三重 DES 或 Blowfish，平方根是二的三十二次方个分组：只有三十二吉字节。<bookmark mark='d'/>2016年的 Sweet32 攻击正是利用了这一点。在使用六十四位密码、长期保持的 HTTPS 连接中，碰撞的密文块泄露了两个明文块的异或，最终泄露了一个秘密 cookie。<bookmark mark='e'/>这就是 AES 采用一百二十八位分组的原因，也是协议远在生日界之前就更换密钥的原因。"
+  },
+  "48cea0cc20b2": {
+   "scene": "Aes",
+   "en": "Chapter eight. The Advanced Encryption Standard.",
+   "zh": "第8章。高级加密标准。"
+  },
+  "4a403261f299": {
+   "scene": "Aes",
+   "en": "DES, the Data Encryption Standard, was designed at IBM and published in 1977, with a fifty-six-bit key that critics said from the start was too short. <bookmark mark='a'/> In 1998 the Electronic Frontier Foundation built Deep Crack, a machine of custom chips, for a quarter of a million dollars, and it found a DES key in fifty-six hours. <bookmark mark='b'/> The replacement was chosen in the open. From 1997 the US standards institute ran a contest: fifteen designs from around the world, three years of public attack. The winner was Rijndael, by two Belgian cryptographers, Joan Daemen and Vincent Rijmen, published as AES in 2001. <bookmark mark='c'/> It is not a Feistel network but a substitution-permutation network: a layer of nonlinear substitutions, a layer of linear mixing, a round key, repeated ten times for a hundred-and-twenty-eight-bit key. Twenty-five years on, nothing much better than trying every key is known.",
+   "zh": "DES，数据加密标准，由 IBM 设计，1977年发布，密钥五十六位，批评者从一开始就说它太短。<bookmark mark='a'/>1998年，电子前哨基金会用定制芯片造了一台叫 Deep Crack 的机器，花了二十五万美元，它在五十六小时内找到了一把 DES 密钥。<bookmark mark='b'/>替代者是公开选出的。从1997年起，美国标准机构举办了一场竞赛：来自世界各地的十五个设计，三年的公开攻击。获胜的是两位比利时密码学家 Daemen 和 Rijmen 的 Rijndael，2001年以 AES 之名发布。<bookmark mark='c'/>它不是 Feistel 网络，而是代换–置换网络：一层非线性代换，一层线性混合，一把轮密钥，对一百二十八位密钥重复十次。二十五年过去了，人们知道的攻击并不比试遍所有密钥好多少。"
+  },
+  "c969168c5976": {
+   "scene": "Aes",
+   "en": "AES works on a four by four grid of bytes, the state, filled column by column. Here is the example from the standard, after the key has been XORed in. A round has four steps. <bookmark mark='a'/> SubBytes replaces every byte by its S-box value. The S-box is the field of bytes from Part 28: take the byte's inverse in the field, then apply a fixed affine map. Fifty-three, inverted, is C A, and comes out as E D. Inversion is what makes AES nonlinear, and it was chosen because it is as far from linear as a function on bytes can be. <bookmark mark='b'/> ShiftRows rotates row one by one place, row two by two, row three by three. <bookmark mark='c'/> MixColumns multiplies each column by a fixed matrix over the same field. The matrix is maximum distance separable, the property of Reed-Solomon codes: change one byte of a column and all four output bytes change. <bookmark mark='d'/> Finally XOR the round key, derived from the cipher key by a small schedule. Substitution confuses; shifting and mixing diffuse.",
+   "zh": "AES 作用在一个四乘四的字节网格上，叫作状态，按列填充。这是标准里的例子，已经异或进了密钥。一轮有四步。<bookmark mark='a'/>SubBytes 把每个字节换成它的 S 盒值。S 盒就是第28部分的字节域：取这个字节在域中的逆，再施加一个固定的仿射变换。五十三的逆是 C A，输出是 E D。求逆让 AES 成为非线性的；选它，是因为它是字节上的函数所能达到的离线性最远的。<bookmark mark='b'/>ShiftRows 把第一行循环移一位，第二行移两位，第三行移三位。<bookmark mark='c'/>MixColumns 把每一列乘以同一个域上的一个固定矩阵。这个矩阵是最大距离可分的，正是 Reed-Solomon 码的性质：改变一列中的一个字节，输出的四个字节全都改变。<bookmark mark='d'/>最后异或轮密钥，它由密码密钥经一个小小的密钥编排得到。代换负责混淆；移位和混合负责扩散。"
+  },
+  "2398945af863": {
+   "scene": "Aes",
+   "en": "Now run all ten rounds. <bookmark mark='a'/> Here is the state after each one. Within two rounds, every byte depends on every byte of the input and the key. The last round leaves out MixColumns, which makes decryption, the inverse steps in reverse order, the same shape as encryption. <bookmark mark='b'/> After round ten: sixty-nine, C four, E zero, D eight. The standard's appendix gives the same sixteen bytes. Our AES also matches the standard's second example, and decrypts what it encrypts. <bookmark mark='c'/> This is code for learning. Never use it, or anything like it, for real: it is slow, and as chapter fifteen shows, its table lookups leak the key through timing. <bookmark mark='d'/> Since 2010 most processors have had AES instructions, one round per instruction, at about a byte per clock cycle.",
+   "zh": "现在把十轮全部跑完。<bookmark mark='a'/>这是每一轮之后的状态。两轮之内，每个字节都依赖于输入和密钥的每个字节。最后一轮省掉 MixColumns，这让解密，也就是逆序执行的逆步骤，和加密形状相同。<bookmark mark='b'/>第十轮之后：六九、C 四、E 零、D 八。标准的附录给出同样的十六个字节。我们的 AES 也与标准的第二个例子一致，并且能解密自己加密的东西。<bookmark mark='c'/>这是用来学习的代码。永远不要把它或任何类似的东西用于真实场合：它很慢，而且正如第十五章所示，它的查表会通过时间泄露密钥。<bookmark mark='d'/>自2010年以来，大多数处理器都有 AES 指令，一条指令一轮，大约每个时钟周期一个字节。"
+  },
+  "b18d6ff7822e": {
+   "scene": "Avalanche",
+   "en": "Chapter nine. The avalanche.",
+   "zh": "第9章。雪崩。"
+  },
+  "182155497b56": {
+   "scene": "Avalanche",
+   "en": "How quickly does AES forget where a change came from? <bookmark mark='a'/> Encrypt two plaintexts that differ in a single bit, under the same key, and after each round light up the state bits that differ. At the start, one bit. <bookmark mark='b'/> After round one, the S-box has turned that one bit into several bits of its byte, and MixColumns has spread them over the whole column: four bytes, seventeen bits. <bookmark mark='c'/> In round two, ShiftRows sends those four bytes to four different columns, and MixColumns spreads each again: all sixteen bytes. <bookmark mark='d'/> After that, about half the bits differ, and in no visible pattern. Horst Feistel called this the avalanche: a small change in the input should change the output completely.",
+   "zh": "AES 多快会忘掉一个改动来自哪里？<bookmark mark='a'/>在同一把密钥下加密两个只差一位的明文，每一轮之后点亮状态中不同的位。开始时，一位。<bookmark mark='b'/>第一轮之后，S 盒把这一位变成了它所在字节的好几位，MixColumns 又把它们扩散到整列：四个字节，十七位。<bookmark mark='c'/>第二轮，ShiftRows 把这四个字节送到四个不同的列，MixColumns 再把每个扩散开：全部十六个字节。<bookmark mark='d'/>此后，大约一半的位不同，而且看不出任何规律。Horst Feistel 称之为雪崩：输入的一个小改动应当彻底改变输出。"
+  },
+  "050a6af3fcba": {
+   "scene": "Avalanche",
+   "en": "One example could be luck, so we flipped a random bit of a random plaintext four hundred times. <bookmark mark='a'/> On average one bit differs at the start, sixteen after round one, and from round two on, sixty-four: half of the hundred and twenty-eight. <bookmark mark='b'/> After all ten rounds, here is how many bits differed, trial by trial. A random permutation would give a binomial distribution, centred on sixty-four with a standard deviation of five point six six. We measure sixty-three point six and five point four five: as random as four hundred samples can show. <bookmark mark='c'/> Stafford Tavares and Robert Webster called this the strict avalanche criterion: every output bit should flip with probability one half whenever any single input bit flips.",
+   "zh": "一个例子可能是运气，所以我们把随机明文的一个随机位翻转了四百次。<bookmark mark='a'/>平均而言，开始时一位不同，第一轮后十六位，从第二轮起六十四位：一百二十八位的一半。<bookmark mark='b'/>十轮全部结束后，这是每次试验中不同的位数。随机置换会给出二项分布，以六十四为中心，标准差五点六六。我们测得六十三点六和五点四五：四百个样本所能显示的最随机的程度。<bookmark mark='c'/>Tavares 和 Webster 称之为严格雪崩准则：只要任意一个输入位翻转，每个输出位都应以二分之一的概率翻转。"
+  },
+  "5f33f28c77b7": {
+   "scene": "Avalanche",
+   "en": "If two rounds already diffuse everything, why ten? Because diffusion is not security. <bookmark mark='a'/> The best attacks on AES-128 with fewer rounds, using impossible differentials and meet-in-the-middle ideas, reach seven rounds, needing vast amounts of data and time. The last three rounds are a margin. <bookmark mark='b'/> On the full cipher, the best known key recovery, the biclique attack of 2011, needs two to the one hundred and twenty-six point one operations: four times faster than trying every key, and still impossible. <bookmark mark='c'/> Designers set the number of rounds from the best attack they know, plus a margin. Faster designs are mostly older designs with rounds removed. <bookmark mark='d'/> And there is no proof that AES is a pseudorandom permutation. Its security rests on twenty-five years of the world's cryptanalysts failing, which is how block ciphers have always earned trust.",
+   "zh": "既然两轮已经把一切都扩散开了，为什么要十轮？因为扩散不等于安全。<bookmark mark='a'/>对轮数减少的 AES-128，最好的攻击用不可能差分和中间相遇的思路，能达到七轮，需要海量的数据和时间。最后三轮是余量。<bookmark mark='b'/>对完整的密码，已知最好的密钥恢复，2011年的双团攻击，需要二的一百二十六点一次方次运算：比试遍所有密钥快四倍，依然不可能。<bookmark mark='c'/>设计者按照他们所知的最好攻击，再加上余量，来确定轮数。更快的设计多半就是删掉了几轮的老设计。<bookmark mark='d'/>而且并没有证明说 AES 是伪随机置换。它的安全建立在全世界的密码分析者二十五年来的失败之上，分组密码一向就是这样赢得信任的。"
+  },
+  "48206b78cf9c": {
+   "scene": "Modes",
+   "en": "Chapter ten. Modes of operation.",
+   "zh": "第10章。工作模式。"
+  },
+  "98f1153d4981": {
+   "scene": "Modes",
+   "en": "A block cipher encrypts sixteen bytes. A mode of operation says how to encrypt a message of any length. <bookmark mark='a'/> The obvious mode, electronic codebook, encrypts each block on its own. It is deterministic, so by chapter five it cannot be secure, and our logo shows why: the eighty-five distinct blocks of the picture become eighty-five distinct blocks of ciphertext, in the same places. <bookmark mark='b'/> Cipher block chaining, from 1976, XORs each plaintext block with the previous ciphertext block before encrypting, starting from a random initial value. Now every block is different. <bookmark mark='c'/> Counter mode encrypts a nonce followed by a block counter and XORs the result into the plaintext. It turns the block cipher into a stream cipher, like chapter six's: blocks can be done in parallel, or any one decrypted alone. <bookmark mark='d'/> Its one rule is absolute. Never encrypt two messages under one key with the same nonce, or you have made a two-time pad.",
+   "zh": "分组密码加密十六个字节。工作模式说明怎样加密任意长度的消息。<bookmark mark='a'/>最直接的模式，电子密码本，把每一块单独加密。它是确定性的，所以按第五章的结论它不可能安全，我们的标志说明了原因：图中八十五种不同的块变成八十五种不同的密文块，位置不变。<bookmark mark='b'/>密码分组链接，1976年提出，在加密前把每个明文块和前一个密文块异或，从一个随机初始值开始。现在每一块都不同。<bookmark mark='c'/>计数器模式加密一个随机数接着一个块计数器，再把结果异或进明文。它把分组密码变成了流密码，就像第六章那样：各块可以并行处理，也可以单独解密任意一块。<bookmark mark='d'/>它有一条绝对的规则。永远不要在同一把密钥下用同一个随机数加密两条消息，否则你就造出了一个两次一密。"
+  },
+  "376bf8d357c2": {
+   "scene": "Modes",
+   "en": "CBC has its own trap, and it shows how a single bit of leaked information can unravel everything. <bookmark mark='a'/> Messages are padded to a whole number of blocks; the usual rule fills the last block with n bytes, each of value n. <bookmark mark='b'/> Decryption of a block is the block cipher's inverse, XORed with the previous ciphertext block. So whatever the attacker XORs into the previous block appears, bit for bit, in the decrypted plaintext. <bookmark mark='c'/> Now suppose the server decrypts, checks the padding, and reports a padding error differently from any other error, by message or just by timing. <bookmark mark='d'/> The attacker sends a doctored previous block, changing its last byte by a guess. <bookmark mark='e'/> The padding is valid only when the plaintext's last byte has become one, and that happens exactly when the guess was right. <bookmark mark='f'/> At most two hundred and fifty-six tries reveal one byte; then the attacker aims for two twos, then three threes, working right to left. <bookmark mark='g'/> Serge Vaudenay described it in 2002, and versions of it broke SSL and TLS more than once in the following decade.",
+   "zh": "CBC 有它自己的陷阱，它显示了泄露的一点点信息怎样让一切土崩瓦解。<bookmark mark='a'/>消息被填充成整数个块；通常的规则是用 n 个字节填满最后一块，每个字节的值都是 n。<bookmark mark='b'/>解密一个块，就是分组密码的逆，再异或上前一个密文块。所以攻击者往前一块里异或进什么，解密后的明文里就逐位出现什么。<bookmark mark='c'/>现在假设服务器解密、检查填充，并以不同于其他错误的方式报告填充错误，不管是靠错误信息还是仅仅靠时间。<bookmark mark='d'/>攻击者发送一个篡改过的前一块，用一个猜测改变它的最后一个字节。<bookmark mark='e'/>只有当明文的最后一个字节变成了一，填充才有效，而这恰好在猜对时发生。<bookmark mark='f'/>至多两百五十六次尝试就揭开一个字节；然后攻击者瞄准两个二，再瞄准三个三，从右往左推进。<bookmark mark='g'/>Serge Vaudenay 在2002年描述了它，此后十年里，它的各种变体不止一次攻破了 SSL 和 TLS。"
+  },
+  "fb0f9a630e49": {
+   "scene": "Modes",
+   "en": "We built the server and ran the attack. <bookmark mark='a'/> Three blocks of ciphertext, encrypted under AES with a key the attacker never sees. Each query asks only: is the padding valid? Watch the plaintext appear, byte by byte, from the right of each block. <bookmark mark='b'/> It reads: PIN equals four nine two one; transfer approved by the bank. <bookmark mark='c'/> Six thousand four hundred and twelve queries, about a hundred and thirty-four per byte, two seconds. Recovering the key instead would take two to the hundred and twenty-eight tries. AES was never attacked at all. <bookmark mark='d'/> The flaw is decrypting data before checking that it is genuine. The fix is integrity, which is the next chapter.",
+   "zh": "我们搭了服务器，跑了这个攻击。<bookmark mark='a'/>三个密文块，用攻击者从未见过的密钥在 AES 下加密。每次查询只问：填充有效吗？看明文一个字节一个字节地出现，从每一块的右边开始。<bookmark mark='b'/>它写着：PIN 等于四九二一；转账已获银行批准。<bookmark mark='c'/>六千四百一十二次查询，每字节约一百三十四次，两秒。换成恢复密钥，要试二的一百二十八次方次。AES 根本没有被攻击。<bookmark mark='d'/>缺陷在于先解密数据，再检查它是否真实。解决办法是完整性，那是下一章。"
+  },
+  "8501d7e85020": {
+   "scene": "Integrity",
+   "en": "Chapter eleven. Integrity.",
+   "zh": "第11章。完整性。"
+  },
+  "1a94cd1483df": {
+   "scene": "Integrity",
+   "en": "Encryption keeps a message secret. It does not keep it intact. <bookmark mark='a'/> Here is a payment instruction, encrypted in counter mode. The attacker cannot read it, but suppose they know its format. <bookmark mark='b'/> Counter mode XORs a keystream into the message, so XORing something into the ciphertext XORs the same thing into the plaintext. The attacker XORs in the difference between zero zero one zero and nine nine one zero, at the right position. <bookmark mark='c'/> The receiver decrypts and pays Alice nine thousand nine hundred and ten dollars instead of ten. No key was needed. Counter mode, CBC and the one-time pad are all malleable like this. <bookmark mark='d'/> Protection needs a different tool: a message authentication code. The sender attaches a tag computed with a key, and the requirement is that without the key nobody can produce a valid tag for any message they have not seen tagged, even after seeing many.",
+   "zh": "加密让消息保密，却不让它保持完整。<bookmark mark='a'/>这是一条付款指令，用计数器模式加密。攻击者读不了它，但假设他们知道它的格式。<bookmark mark='b'/>计数器模式把密钥流异或进消息，所以往密文里异或进什么，明文里就异或进同样的东西。攻击者在正确的位置异或进零零一零与九九一零之差。<bookmark mark='c'/>接收方解密，付给 Alice 九千九百一十美元，而不是十美元。不需要密钥。计数器模式、CBC 和一次一密都像这样可延展。<bookmark mark='d'/>保护需要另一种工具：消息认证码。发送方附上一个用密钥计算的标签，要求是：没有密钥的人，即使看过许多带标签的消息，也造不出任何一条没见过的消息的有效标签。"
+  },
+  "fea6a1e7a619": {
+   "scene": "Integrity",
+   "en": "The first MACs were built from block ciphers. <bookmark mark='a'/> CBC-MAC runs CBC encryption with a zero starting value and keeps only the last block as the tag. For messages of one fixed length, it is provably secure if the cipher is a pseudorandom permutation. <bookmark mark='b'/> But allow different lengths, and here is what an attacker can do with two tagged one-block messages. <bookmark mark='c'/> Append to the first message the second message XORed with the first tag. Running the chain, the first tag cancels, and the chain is back to encrypting the second message alone: the tag of the new, two-block message is the second tag. <bookmark mark='d'/> Our forgery verifies. Prefixing the length fixes it; the standard mode, CMAC, fixes it by treating the last block specially. <bookmark mark='e'/> The other standard is HMAC, from 1996: hash the key with the message, then hash the key with that result. It works with any good hash function and any message length, and it secures most web APIs' signed requests and tokens.",
+   "zh": "最早的 MAC 是用分组密码搭的。<bookmark mark='a'/>CBC-MAC 以零为初始值运行 CBC 加密，只保留最后一块作为标签。对固定长度的消息，只要密码是伪随机置换，它就可证明是安全的。<bookmark mark='b'/>但一旦允许不同长度，攻击者拿两条带标签的单块消息就能做到这一点。<bookmark mark='c'/>在第一条消息后面接上第二条消息与第一个标签的异或。沿着链计算，第一个标签被抵消，链又回到单独加密第二条消息：这条新的两块消息的标签，就是第二个标签。<bookmark mark='d'/>我们的伪造通过了验证。前置长度能修好它；标准模式 CMAC 的修法是对最后一块作特殊处理。<bookmark mark='e'/>另一个标准是1996年的 HMAC：把密钥和消息一起哈希，再把密钥和这个结果一起哈希。它适用于任何好的哈希函数和任意长度的消息，保护着大多数网络 API 的签名请求和令牌。"
+  },
+  "f3ae6c28c696": {
+   "scene": "Integrity",
+   "en": "Combine encryption and a MAC, and in which order? <bookmark mark='a'/> Mihir Bellare and Chanathip Namprempre showed in 2000 that encrypting first and then computing a MAC over the ciphertext is always secure, while the other orders can fail, as the padding oracle did. Receivers check the tag first and never decrypt a forgery. <bookmark mark='b'/> Modern modes do both at once: authenticated encryption. Galois counter mode, GCM, encrypts in counter mode and computes its tag with a polynomial: the ciphertext blocks are the coefficients, evaluated at a secret point H of the field with two to the one hundred and twenty-eight elements. Part 28's algebra again. TLS 1.3 allows only modes like this. <bookmark mark='c'/> Ours matches the standard's test vectors. <bookmark mark='d'/> The polynomial makes nonces critical. Two messages tagged with the same nonce give an equation whose roots include H, and with H anyone can forge tags. <bookmark mark='e'/> A 2016 survey found a hundred and eighty-four HTTPS servers repeating GCM nonces. <bookmark mark='f'/> ChaCha20 pairs with Poly1305, the same idea with a polynomial modulo the prime two to the hundred and thirty minus five.",
+   "zh": "加密和 MAC 要结合起来，先后顺序如何？<bookmark mark='a'/>Bellare 和 Namprempre 在2000年证明，先加密、再对密文计算 MAC，总是安全的，而其他顺序可能失败，填充预言机就是例子。接收方先检查标签，从不解密伪造品。<bookmark mark='b'/>现代模式一次完成两件事：认证加密。伽罗瓦计数器模式 GCM 用计数器模式加密，并用一个多项式计算标签：密文块是系数，在有二的一百二十八次方个元素的域中一个秘密点 H 处求值。又是第28部分的代数。TLS 1.3 只允许这类模式。<bookmark mark='c'/>我们的实现与标准的测试向量一致。<bookmark mark='d'/>这个多项式让随机数变得至关重要。用同一个随机数打标签的两条消息给出一个方程，它的根中包含 H，有了 H，任何人都能伪造标签。<bookmark mark='e'/>2016年的一项调查发现一百八十四台 HTTPS 服务器在重复使用 GCM 随机数。<bookmark mark='f'/>ChaCha20 与 Poly1305 搭配，思路相同，用的是模素数二的一百三十次方减五的多项式。"
+  },
+  "8cf0201efb93": {
+   "scene": "Hashes",
+   "en": "Chapter twelve. Hash functions.",
+   "zh": "第12章。哈希函数。"
+  },
+  "3d4c8643894d": {
+   "scene": "Hashes",
+   "en": "A hash function squeezes any input to a short fixed-length output: SHA-256 gives two hundred and fifty-six bits. <bookmark mark='a'/> The central property is collision resistance: nobody can find two different inputs with the same hash. Since there are infinitely many inputs, collisions exist; they must just be impossible to find. <bookmark mark='b'/> There is always a generic attack: hash random inputs until two outputs match. By Part 17's birthday paradox, that takes about the square root of the number of possible outputs: two to the n over two. <bookmark mark='c'/> We cut SHA-256 down to sixteen, twenty, up to thirty-two bits and searched for collisions. The averages sit on the prediction. <bookmark mark='d'/> So a two-hundred-and-fifty-six-bit hash offers a hundred and twenty-eight bits of security against collisions, matching AES-128.",
+   "zh": "哈希函数把任意输入压缩成一个固定长度的短输出：SHA-256 给出两百五十六位。<bookmark mark='a'/>核心性质是抗碰撞：没有人能找到两个哈希值相同的不同输入。输入有无穷多个，所以碰撞一定存在；只是必须无法找到。<bookmark mark='b'/>通用攻击总是存在的：对随机输入求哈希，直到两个输出相同。按第17部分的生日悖论，这大约需要可能输出个数的平方根：二的 n 除以二次方。<bookmark mark='c'/>我们把 SHA-256 截短到十六、二十，直到三十二位，去找碰撞。平均值都落在预测线上。<bookmark mark='d'/>所以两百五十六位的哈希对碰撞提供一百二十八位的安全性，与 AES-128 相当。"
+  },
+  "43383b5748ff": {
+   "scene": "Hashes",
+   "en": "Real hash functions have broken, and it took years each time to stop using them. <bookmark mark='a'/> MD5, from 1992, has a hundred-and-twenty-eight-bit output, so the birthday attack needs two to the sixty-four. In 2004 Wang Xiaoyun and her colleagues found collisions using its internal structure; today a laptop finds one in seconds. <bookmark mark='b'/> In 2008 researchers used MD5 collisions to create a rogue certificate authority, and in 2012 the Flame malware used the same idea to forge a Microsoft code-signing certificate. <bookmark mark='c'/> SHA-1 fell in 2017: two different PDF files with the same hash, after two to the sixty-three operations. By 2020, any two chosen documents could be made to collide for about forty-five thousand dollars of computing. <bookmark mark='d'/> No attack is known on SHA-256 or SHA-3. But the lesson is agility: build systems that can change their hash function before it breaks, not after.",
+   "zh": "真实的哈希函数被攻破过，每一次都花了好几年才停止使用。<bookmark mark='a'/>MD5 诞生于1992年，输出一百二十八位，所以生日攻击需要二的六十四次方。2004年，王小云和她的同事利用它的内部结构找到了碰撞；如今一台笔记本几秒钟就能找到一个。<bookmark mark='b'/>2008年，研究者用 MD5 碰撞造出了一个流氓证书颁发机构；2012年，Flame 恶意软件用同样的思路伪造了一张微软的代码签名证书。<bookmark mark='c'/>SHA-1 在2017年倒下：两个不同的 PDF 文件有同样的哈希，用了二的六十三次方次运算。到2020年，任意两份选定的文档都能以大约四万五千美元的计算量造成碰撞。<bookmark mark='d'/>对 SHA-256 或 SHA-3 还没有已知的攻击。但教训是敏捷性：把系统造得能在哈希函数被攻破之前更换它，而不是之后。"
+  },
+  "231ad91ec625": {
+   "scene": "Hashes",
+   "en": "How are hashes like SHA-256 built? <bookmark mark='a'/> Ralph Merkle and Ivan Damgård showed in 1989 how to hash any length with a compression function f that takes a fixed-size state and one block. Chain it: pad the message with its length, feed the blocks through f one by one, and output the final state. If f resists collisions, so does the chain. <bookmark mark='b'/> But the output is the chain's whole state, so anyone holding a hash can keep going. <bookmark mark='c'/> Suppose a server authenticates requests with the hash of a secret key followed by the message. We see a request and its tag. Without knowing the secret, we append the padding the server would have added, then role equals admin, and continue the chain from the tag. <bookmark mark='d'/> The server accepts our forged tag. This broke Flickr's API in 2009, and it is exactly why HMAC exists.",
+   "zh": "像 SHA-256 这样的哈希是怎样搭成的？<bookmark mark='a'/>Ralph Merkle 和 Ivan Damgård 在1989年说明了怎样用一个压缩函数 f 对任意长度求哈希，f 接受一个固定大小的状态和一个块。把它链起来：用消息长度填充消息，把各块逐一送进 f，输出最终状态。如果 f 抗碰撞，这条链也抗碰撞。<bookmark mark='b'/>但输出就是链的整个状态，所以任何拿到哈希值的人都能继续往下算。<bookmark mark='c'/>假设一台服务器用秘密密钥接上消息的哈希来认证请求。我们看到一个请求和它的标签。不知道秘密，我们接上服务器本会加上的填充，再接上 role 等于 admin，从标签处继续这条链。<bookmark mark='d'/>服务器接受了我们伪造的标签。2009年，这攻破了 Flickr 的 API，这也正是 HMAC 存在的原因。"
+  },
+  "86d3db710851": {
+   "scene": "Hashes",
+   "en": "When SHA-1 began to crack, the US standards institute ran another open contest, and in 2012 chose Keccak, by Guido Bertoni, Joan Daemen, Michaël Peeters and Gilles Van Assche, as SHA-3. It is built differently. <bookmark mark='a'/> The state is sixteen hundred bits, scrambled by one fixed permutation f. <bookmark mark='b'/> The state is split into a rate and a capacity. To absorb the message, XOR each block into the rate part and apply f. To squeeze out the hash, read the rate part, apply f, and read again, as much as you need. <bookmark mark='c'/> The capacity part is never output and never directly touched by the message. That hidden half is the security: an attacker cannot continue the computation from an output, so length extension is impossible. <bookmark mark='d'/> Our SHA-3, like our SHA-256, matches Python's library on every test. Ours is pure Python, the library's is optimised C, which is the difference in speed.",
+   "zh": "SHA-1 开始出现裂缝时，美国标准机构又举办了一场公开竞赛，2012年选中了 Bertoni、Daemen、Peeters 和 Van Assche 设计的 Keccak 作为 SHA-3。它的构造方式不同。<bookmark mark='a'/>状态有一千六百位，由一个固定的置换 f 打乱。<bookmark mark='b'/>状态分成速率部分和容量部分。吸收消息时，把每一块异或进速率部分，再施加 f。挤出哈希时，读出速率部分，施加 f，再读，要多少读多少。<bookmark mark='c'/>容量部分从不输出，也从不被消息直接触及。这隐藏的一半就是安全所在：攻击者无法从输出继续计算，所以长度扩展是不可能的。<bookmark mark='d'/>我们的 SHA-3 和我们的 SHA-256 一样，在每个测试上都与 Python 的库一致。我们的是纯 Python，库的是优化过的 C，速度的差别就在这里。"
+  },
+  "2233cf45060a": {
+   "scene": "HashUses",
+   "en": "Chapter thirteen. Hashes at work.",
+   "zh": "第13章。哈希的用途。"
+  },
+  "108e1668af32": {
+   "scene": "HashUses",
+   "en": "Collision resistance turns a hash into a commitment: whoever publishes a hash is bound to the data behind it. Ralph Merkle's trees, from 1979, extend this to many items. <bookmark mark='a'/> Hash each item; then hash the hashes in pairs; and so on up to a single root. The root fixes every item below it: changing any one would change the root, unless you can find a collision. <bookmark mark='b'/> Now a server holding the tree can prove that one item, the commit that fixed an overflow, is in it, by sending only the three sibling hashes along its path. The verifier, who knows only the root, rehashes upward and compares. <bookmark mark='c'/> The proof is the logarithm of the number of items. Ours verifies; change one character of the commit, and the rebuilt root no longer matches. <bookmark mark='d'/> This structure is everywhere later in the series: git names every commit by such a hash, Certificate Transparency logs every web certificate in one, file systems like ZFS checksum every block with one, and blockchains chain them.",
+   "zh": "抗碰撞性把哈希变成一种承诺：谁公布了一个哈希，谁就被绑定在它背后的数据上。Ralph Merkle 在1979年提出的树把这推广到许多项。<bookmark mark='a'/>对每一项求哈希；再把哈希两两配对求哈希；如此一直到单一的根。根固定了它下面的每一项：改动任何一项都会改变根，除非你能找到碰撞。<bookmark mark='b'/>现在，持有这棵树的服务器只需发送沿途的三个兄弟哈希，就能证明某一项，也就是修复溢出的那次提交，在树里。只知道根的验证者向上重新求哈希并比较。<bookmark mark='c'/>证明的长度是项数的对数。我们的证明通过验证；把那次提交改一个字符，重建的根就对不上了。<bookmark mark='d'/>这个结构在本系列后面随处可见：git 用这样的哈希为每次提交命名，证书透明日志把每张网站证书记在一棵这样的树里，ZFS 之类的文件系统用它为每个块做校验，区块链则把它们串成链。"
+  },
+  "8927b30e4a67": {
+   "scene": "HashUses",
+   "en": "The same binding works for a single secret. <bookmark mark='a'/> Alice and Bob want to flip a coin by telephone. Alice chooses heads, and sends the hash of a long random string followed by her choice. <bookmark mark='b'/> Bob calls tails. <bookmark mark='c'/> Alice reveals the random string and her choice; Bob hashes them and checks. <bookmark mark='d'/> The commitment is hiding: the random string keeps Bob from simply hashing both possible choices. <bookmark mark='e'/> And it is binding: to claim tails afterwards, Alice would need a collision. <bookmark mark='f'/> Manuel Blum described coin flipping by telephone in 1981. Commitments run through sealed-bid auctions and the zero-knowledge proofs of Part 27.",
+   "zh": "同样的绑定也适用于单个秘密。<bookmark mark='a'/>Alice 和 Bob 想在电话里抛硬币。Alice 选了正面，发送一个长随机串接上她的选择之后的哈希。<bookmark mark='b'/>Bob 猜反面。<bookmark mark='c'/>Alice 公开随机串和她的选择；Bob 求哈希并核对。<bookmark mark='d'/>这个承诺是隐藏的：随机串让 Bob 无法简单地把两种可能的选择都哈希一遍。<bookmark mark='e'/>它也是绑定的：事后想声称是反面，Alice 需要一个碰撞。<bookmark mark='f'/>Manuel Blum 在1981年描述了电话抛硬币。承诺贯穿于密封投标拍卖，以及第27部分的零知识证明。"
+  },
+  "a375f18aa8b3": {
+   "scene": "HashUses",
+   "en": "Hashes also guard passwords, and here the danger is not a clever attack but a fast one. <bookmark mark='a'/> A server should never store passwords, only a random salt and a deliberately slow hash of the salt and password. <bookmark mark='b'/> The salt means each guess must be hashed separately for each user, and makes precomputed tables useless. In 2012 LinkedIn lost six and a half million unsalted SHA-1 hashes, and most were cracked. <bookmark mark='c'/> Slowness is a dial. We measured: one SHA-256 takes under half a microsecond, so every lowercase eight-letter password can be tried in about a day on one core. PBKDF2, which iterates a hash six hundred thousand times as current guidance recommends, takes a sixth of a second per guess: imperceptible at login, and over a thousand years for that search. <bookmark mark='d'/> But attackers use graphics cards with thousands of cores. Memory-hard functions, scrypt and the competition winner Argon2, need megabytes of memory per guess, which those cores do not have. Use one.",
+   "zh": "哈希也守护着密码，而这里的危险不是巧妙的攻击，而是快速的攻击。<bookmark mark='a'/>服务器永远不应存储密码，只存一个随机的盐，以及对盐和密码做的一个故意很慢的哈希。<bookmark mark='b'/>有了盐，每个猜测都必须对每个用户单独求哈希，预先计算的表也就毫无用处。2012年，LinkedIn 泄露了六百五十万个没有加盐的 SHA-1 哈希，其中大部分被破解。<bookmark mark='c'/>慢是一个可调的旋钮。我们测量过：一次 SHA-256 不到半微秒，所以在一个核上大约一天就能试遍所有八个小写字母的密码。PBKDF2 按当前指南的建议把哈希迭代六十万次，每次猜测要六分之一秒：登录时察觉不到，而那样的搜索要一千多年。<bookmark mark='d'/>但攻击者用的是有成千上万个核的显卡。内存困难函数，scrypt 和竞赛的获胜者 Argon2，每次猜测需要几兆字节内存，而那些核没有这么多内存。用其中一个。"
+  },
+  "c64ed95c98d2": {
+   "scene": "Cryptanalysis",
+   "en": "Chapter fourteen. Cryptanalysis.",
+   "zh": "第14章。密码分析。"
+  },
+  "8c42a08927ff": {
+   "scene": "Cryptanalysis",
+   "en": "How are ciphers like AES attacked, and how are they designed to resist? We use a teaching cipher by Howard Heys, small enough to break. <bookmark mark='a'/> Sixteen bits, four rounds, each a key XOR, four four-bit S-boxes, and a permutation of the wires. <bookmark mark='b'/> Eli Biham and Adi Shamir's differential cryptanalysis, published in 1990, follows not values but differences: pairs of inputs that differ by a fixed XOR. The key XOR leaves a difference unchanged. Only the S-boxes change it, and not uniformly: this table counts, for each input difference, how often each output difference occurs. Input difference B gives output difference two in eight of the sixteen cases. <bookmark mark='c'/> Chain likely cells through three rounds, following the wires, and you have a trail: a difference that survives with probability eight sixteenths, times six sixteenths, times six sixteenths squared. <bookmark mark='d'/> Twenty-seven in a thousand and twenty-four. Of five thousand chosen pairs, about a hundred and thirty should follow it all the way to the last round.",
+   "zh": "像 AES 这样的密码是怎样被攻击的，又是怎样被设计来抵抗的？我们用 Howard Heys 的一个教学用密码，它小到可以被攻破。<bookmark mark='a'/>十六位，四轮，每轮一次密钥异或、四个四位的 S 盒，以及一次线路置换。<bookmark mark='b'/>Biham 和 Shamir 在1990年发表的差分密码分析，追踪的不是值而是差分：相差一个固定异或的输入对。密钥异或不改变差分。只有 S 盒改变它，而且并不均匀：这张表对每个输入差分，统计每个输出差分出现的次数。输入差分 B 在十六种情况中有八种给出输出差分二。<bookmark mark='c'/>沿着线路，把可能性大的格子串过三轮，就得到一条路径：一个以十六分之八乘十六分之六、再乘十六分之六的平方的概率存活的差分。<bookmark mark='d'/>一千零二十四分之二十七。五千个选择的明文对中，大约一百三十对应当一路沿着它走到最后一轮。"
+  },
+  "52de47c11d41": {
+   "scene": "Cryptanalysis",
+   "en": "Now the attack. We encrypt five thousand pairs of chosen plaintexts with that input difference, under an unknown key. <bookmark mark='a'/> The trail predicts the difference just before the last S-boxes. Guess the eight key bits that feed the two active S-boxes; undo those S-boxes on both ciphertexts; and count how many pairs show the predicted difference. <bookmark mark='b'/> For the right guess, the trail's pairs show up: a hundred and forty-six, against the hundred and thirty-two expected. Wrong guesses see only chance: the best wrong one gets eighty. <bookmark mark='c'/> A third of a second, and eight key bits are known; the rest of the key follows the same way. <bookmark mark='d'/> IBM's designers knew this technique in 1974, as Don Coppersmith revealed twenty years later, and chose DES's S-boxes to resist it. <bookmark mark='e'/> Mitsuru Matsui's linear cryptanalysis tracks biased XORs of bits instead of differences, and broke DES with two to the forty-three known plaintexts. <bookmark mark='f'/> AES was designed with proofs against both: its mixing guarantees at least twenty-five active S-boxes in any four-round trail, so no trail is likelier than two to the minus one hundred and fifty.",
+   "zh": "现在开始攻击。我们在一把未知的密钥下，加密五千对具有那个输入差分的选择明文。<bookmark mark='a'/>路径预言了最后一层 S 盒之前的差分。猜测送入两个活跃 S 盒的八个密钥位；在两个密文上撤销这两个 S 盒；统计有多少对呈现出预言的差分。<bookmark mark='b'/>对正确的猜测，路径上的那些对出现了：一百四十六对，预期是一百三十二。错误的猜测只看到偶然：最好的错误猜测得到八十。<bookmark mark='c'/>三分之一秒，八个密钥位就知道了；其余的密钥用同样的办法得出。<bookmark mark='d'/>IBM 的设计者在1974年就知道这种技术，Don Coppersmith 二十年后才公开，他们选择 DES 的 S 盒来抵抗它。<bookmark mark='e'/>松井充的线性密码分析追踪的是位的有偏异或而不是差分，用二的四十三次方个已知明文攻破了 DES。<bookmark mark='f'/>AES 在设计时就带着对付这两者的证明：它的混合保证任何四轮路径至少有二十五个活跃 S 盒，所以没有路径的概率能高于二的负一百五十次方。"
+  },
+  "4146a71a7daf": {
+   "scene": "Cryptanalysis",
+   "en": "One more attack, on a tempting idea. <bookmark mark='a'/> If one key is too short, encrypt twice with two keys. With our toy cipher's sixteen-bit keys, does that make a thirty-two-bit key? <bookmark mark='b'/> No. Given a plaintext and its ciphertext, encrypt the plaintext under every first key and store the results. Then decrypt the ciphertext under every second key, and look each result up. Where they match, the two halves meet in the middle. Whitfield Diffie and Martin Hellman pointed this out in 1977: a hundred and thirty-one thousand cipher calls instead of four billion. <bookmark mark='c'/> With a second plaintext pair, two candidate key pairs survive: the true one, and one impostor that happens to fit both. A third pair would settle it. <bookmark mark='d'/> So double DES is barely stronger than DES, which is why the banks' long-lived workaround was triple DES, at about a hundred and twelve bits of security, finally retired by the standards institute in 2023.",
+   "zh": "再看一个攻击，针对一个诱人的想法。<bookmark mark='a'/>如果一把密钥太短，就用两把密钥加密两次。我们的玩具密码的密钥是十六位，这样就成了三十二位的密钥吗？<bookmark mark='b'/>不是。给定一个明文和它的密文，在每一把第一密钥下加密明文，把结果存起来。再在每一把第二密钥下解密密文，逐个去表里查。两者相符的地方，两半就在中间相遇了。Diffie 和 Hellman 在1977年指出了这一点：十三万一千次密码调用，而不是四十亿次。<bookmark mark='c'/>用第二个明文对，还有两组候选密钥存活：真的那一组，以及一个恰好两对都吻合的冒充者。第三对就能定论。<bookmark mark='d'/>所以双重 DES 几乎不比 DES 强，这就是银行长期以来的权宜之计是三重 DES 的原因，它约有一百一十二位的安全性，最终在2023年被标准机构淘汰。"
+  },
+  "4def76b6d627": {
+   "scene": "SideChannels",
+   "en": "Chapter fifteen. Side channels, and bad randomness.",
+   "zh": "第15章。侧信道与糟糕的随机数。"
+  },
+  "c8a99f1cf5bd": {
+   "scene": "SideChannels",
+   "en": "Everything so far attacked the mathematics. Real systems also leak through how long they take, how much power they draw, what they leave in the cache. <bookmark mark='a'/> Here is the obvious way to check a MAC tag: compare byte by byte, and stop at the first difference. <bookmark mark='b'/> We timed it against guesses with more and more correct leading bytes. The time climbs steadily, about twenty nanoseconds per correct byte, measured from Python, where the noise is worst. <bookmark mark='c'/> An attacker submitting forged tags can now find the right first byte by trying all two hundred and fifty-six and keeping the slowest; then the second; and so on. Four thousand tries instead of two to the hundred and twenty-eight. <bookmark mark='d'/> The fix is code whose running time does not depend on secrets: XOR every pair of bytes, OR the results together, decide at the end. Its line is flat. Paul Kocher showed in 1996 that timing alone recovers RSA and Diffie-Hellman keys. Python ships the constant-time comparison; use it.",
+   "zh": "到目前为止的一切攻击针对的都是数学。真实的系统还会通过耗时多久、耗电多少、在缓存里留下什么而泄露。<bookmark mark='a'/>这是检查 MAC 标签最直接的办法：逐字节比较，遇到第一个不同就停下。<bookmark mark='b'/>我们用前导正确字节越来越多的猜测给它计时。时间稳步上升，每个正确字节大约二十纳秒，这还是在噪声最大的 Python 里测的。<bookmark mark='c'/>提交伪造标签的攻击者现在可以试遍两百五十六种值、保留最慢的那个，找到正确的第一个字节；再找第二个；依此类推。四千次尝试，而不是二的一百二十八次方次。<bookmark mark='d'/>解决办法是运行时间不依赖于秘密的代码：把每对字节异或，把结果或在一起，最后再判断。它的线是平的。Paul Kocher 在1996年证明，仅凭时间就能恢复 RSA 和 Diffie-Hellman 的密钥。Python 自带常数时间比较；用它。"
+  },
+  "2fa5671d6631": {
+   "scene": "SideChannels",
+   "en": "Timing leaks through memory too. <bookmark mark='a'/> Fast software AES replaces the S-box and MixColumns with lookups in four tables of a kilobyte each, indexed by bytes of the plaintext XORed with the key. A kilobyte is sixteen cache lines, Part 9's unit. <bookmark mark='b'/> An attacker running on the same machine fills the cache with its own data, lets AES run, then times its own accesses: the line AES used is now slow for the attacker, because AES evicted it. <bookmark mark='c'/> Which line was used reveals the top four bits of the plaintext byte XOR the key byte. With known plaintexts, that is half of every key byte, and later rounds give the rest. <bookmark mark='d'/> Daniel Bernstein, and then Dag Arne Osvik, Adi Shamir and Eran Tromer, recovered full AES keys this way across process boundaries in 2005 and 2006, the same mechanism Spectre would exploit in 2018. <bookmark mark='e'/> The fixes: hardware AES instructions, or bitsliced code that touches the same addresses whatever the key. <bookmark mark='f'/> And power analysis reads keys from smart cards through their power consumption, one trace at a time.",
+   "zh": "时间也会通过内存泄露。<bookmark mark='a'/>快速的软件 AES 把 S 盒和 MixColumns 换成在四张各一千字节的表里查找，下标是明文字节与密钥字节的异或。一千字节是十六个缓存行，第9部分的单位。<bookmark mark='b'/>在同一台机器上运行的攻击者用自己的数据填满缓存，让 AES 运行，再给自己的访问计时：AES 用过的那一行对攻击者来说变慢了，因为 AES 把它挤了出去。<bookmark mark='c'/>用的是哪一行，就暴露了明文字节与密钥字节异或的高四位。有了已知明文，这就是每个密钥字节的一半，后面的轮次给出其余部分。<bookmark mark='d'/>Bernstein，以及随后的 Osvik、Shamir 和 Tromer，在2005年和2006年用这种方法跨进程恢复了完整的 AES 密钥，这和 Spectre 在2018年利用的是同一种机制。<bookmark mark='e'/>修复方法：硬件 AES 指令，或者位切片代码，无论密钥是什么都访问同样的地址。<bookmark mark='f'/>还有功耗分析，透过智能卡的功耗读出密钥，一条轨迹接一条轨迹。"
+  },
+  "433ecd18bd5e": {
+   "scene": "SideChannels",
+   "en": "The last failure is the most basic: the key was never random. <bookmark mark='a'/> In 2006 a Debian maintainer, silencing a warning from a memory-checking tool, removed a line from OpenSSL that mixed entropy into its random number generator. What remained was the process ID: at most thirty-two thousand seven hundred and sixty-seven values. <bookmark mark='b'/> For two years, every SSH key and certificate generated on Debian and Ubuntu came from a short list, and attackers simply generated the whole list. <bookmark mark='c'/> Here is the same mistake in miniature: a hundred-and-twenty-eight-bit AES key, seeded from a process ID. We tried every ID in turn, and found the key after twenty-three thousand tries, in two seconds. A hundred and twenty-eight bits of key, fifteen bits of randomness. <bookmark mark='d'/> And randomness can be sabotaged deliberately. Dual EC DRBG, a generator standardised in 2006, used two elliptic-curve constants of unexplained origin; whoever knew the relation between them could predict its output. It was withdrawn in 2014. <bookmark mark='e'/> The rule: take random numbers from the operating system's generator, which collects real entropy and runs it through a cipher like ChaCha20, and nowhere else.",
+   "zh": "最后一种失败最为基本：密钥从来就不是随机的。<bookmark mark='a'/>2006年，一位 Debian 维护者为了消除一个内存检查工具的警告，从 OpenSSL 里删掉了一行代码，而那一行正是把熵混入随机数生成器的地方。剩下的只有进程号：至多三万两千七百六十七个值。<bookmark mark='b'/>两年里，在 Debian 和 Ubuntu 上生成的每一把 SSH 密钥和每一张证书都来自一张短短的列表，攻击者干脆把整张列表生成了出来。<bookmark mark='c'/>这是同一个错误的缩影：一把一百二十八位的 AES 密钥，用进程号作种子。我们依次试每个进程号，两万三千次尝试、两秒钟后找到了密钥。一百二十八位的密钥，十五位的随机性。<bookmark mark='d'/>随机性也可能被蓄意破坏。Dual EC DRBG 是2006年标准化的一个生成器，用了两个来历不明的椭圆曲线常数；知道它们之间关系的人就能预测它的输出。它在2014年被撤回。<bookmark mark='e'/>规则是：随机数只取自操作系统的生成器，它收集真正的熵，再用 ChaCha20 这样的密码加工，别处一概不用。"
+  },
+  "c8cfbf74fc74": {
+   "scene": "Frontier",
+   "en": "Chapter sixteen. The frontier: proofs, quantum attackers, and lightweight ciphers.",
+   "zh": "第16章。前沿：证明、量子攻击者与轻量级密码。"
+  },
+  "863fce481a84": {
+   "scene": "Frontier",
+   "en": "The theory in this part has a remarkable shape. <bookmark mark='a'/> From any one-way function, a function easy to compute and hard to invert, you can build pseudorandom generators, pseudorandom functions and permutations, secure encryption and MACs, commitments, even digital signatures. And each of these gives back a one-way function. Russell Impagliazzo called this world Minicrypt: all of symmetric cryptography stands or falls with one assumption. <bookmark mark='b'/> But one-way functions imply that P is not NP, so a proof that they exist would settle Part 26's question, and more. <bookmark mark='c'/> In 2020 Yanyi Liu and Rafael Pass found an unexpected equivalent: one-way functions exist exactly when a problem about the compressibility of strings, time-bounded Kolmogorov complexity, is mildly hard on average. Cryptography and the theory of information turned out to be one question. <bookmark mark='d'/> Meanwhile the ciphers we actually use are not built from one-way functions at all. AES is conjectured to be a pseudorandom permutation, and the only evidence is that no one has broken it.",
+   "zh": "这一部分的理论有一个了不起的形状。<bookmark mark='a'/>从任何单向函数，也就是容易计算、难以求逆的函数，可以造出伪随机生成器、伪随机函数和伪随机置换、安全的加密和 MAC、承诺，甚至数字签名。而它们中的每一个又能反过来给出一个单向函数。Impagliazzo 把这个世界称为迷你密码国：整个对称密码学取决于一个假设，成则俱成，败则俱败。<bookmark mark='b'/>但单向函数蕴含 P 不等于 NP，所以证明它们存在，就会解决第26部分的问题，而且不止于此。<bookmark mark='c'/>2020年，刘彦屹和 Rafael Pass 找到了一个出人意料的等价条件：单向函数存在，恰好当一个关于字符串可压缩性的问题，即时间有界的柯尔莫哥洛夫复杂度，在平均意义下有一点难。密码学和信息论原来是同一个问题。<bookmark mark='d'/>与此同时，我们实际使用的密码根本不是用单向函数造的。人们猜想 AES 是伪随机置换，唯一的证据是还没有人攻破它。"
+  },
+  "0a41cb956a1a": {
+   "scene": "Frontier",
+   "en": "Public-key cryptography falls to a large quantum computer, as Part 30 explains. Symmetric cryptography fares better. <bookmark mark='a'/> Lov Grover's algorithm, which Part 53 builds, searches two to the k keys in about two to the k over two quantum steps: a square root. <bookmark mark='b'/> But those steps must run one after another. Spreading the search over many machines helps only by the square root of their number, and each step needs error-corrected quantum hardware. <bookmark mark='c'/> So AES-128 is still judged adequate by the standards bodies, and AES-256 is the conservative choice for secrets that must last decades. <bookmark mark='d'/> A stranger threat came from Daniel Simon's algorithm, which finds hidden periods. From 2010 on, researchers used it to break the three-round Feistel network, the Even-Mansour cipher, CBC-MAC and GCM's authentication in polynomial time. <bookmark mark='e'/> The catch: the attacker must be able to run the keyed cipher on a superposition of inputs, which a remote server never allows. <bookmark mark='f'/> Which designs survive even that, and what a real quantum attack would cost, are active questions.",
+   "zh": "公钥密码学会被大型量子计算机攻破，第30部分会讲到。对称密码学的处境好一些。<bookmark mark='a'/>Grover 的算法，第53部分会搭建它，用大约二的 k 除以二次方步量子运算搜索二的 k 次方个密钥：一个平方根。<bookmark mark='b'/>但这些步骤必须一步接一步地执行。把搜索分到许多台机器上，只能按机器数的平方根加速，而且每一步都需要经过纠错的量子硬件。<bookmark mark='c'/>所以标准机构仍然认为 AES-128 够用，而对需要保存几十年的秘密，AES-256 是稳妥的选择。<bookmark mark='d'/>一个更奇特的威胁来自 Simon 的算法，它能找出隐藏的周期。从2010年起，研究者用它在多项式时间内攻破了三轮 Feistel 网络、Even-Mansour 密码、CBC-MAC 以及 GCM 的认证。<bookmark mark='e'/>前提是：攻击者必须能在输入的叠加态上运行带密钥的密码，而远程服务器从不允许这样做。<bookmark mark='f'/>哪些设计连这也能经受住，一次真实的量子攻击要花多少代价，都是活跃的研究问题。"
+  },
+  "9f7de28b63b0": {
+   "scene": "Frontier",
+   "en": "Two other frontiers meet in one shape. <bookmark mark='a'/> A key-alternating cipher XORs a key, applies a fixed public permutation, XORs another key, and repeats. AES is of this shape. <bookmark mark='b'/> Shimon Even and Yishay Mansour proved in 1991 that a single round is secure up to the birthday bound, if the permutation is truly random. <bookmark mark='c'/> In 2014 Shan Chen and John Steinberger proved the exact security of t rounds: about two to the t n over t plus one queries, rising toward the full key length as rounds are added. <bookmark mark='d'/> The gap: the rounds of real ciphers are not random permutations, so the proofs explain the design without guaranteeing it. <bookmark mark='e'/> The same idea drives lightweight cryptography. Ascon, chosen by the US standards institute in 2023, is a sponge around a three-hundred-and-twenty-bit permutation, small enough for a few thousand logic gates. <bookmark mark='f'/> It is meant for the sensors, implants and tags whose power budget is measured in microwatts.",
+   "zh": "另外两个前沿汇合于同一个形状。<bookmark mark='a'/>密钥交替密码异或一把密钥，施加一个固定的公开置换，再异或另一把密钥，如此重复。AES 就是这种形状。<bookmark mark='b'/>Even 和 Mansour 在1991年证明，如果置换是真正随机的，单独一轮在生日界以内是安全的。<bookmark mark='c'/>2014年，陈杉和 John Steinberger 证明了 t 轮的确切安全性：大约二的 t 乘 n 除以 t 加一次方次查询，随着轮数增加逼近完整的密钥长度。<bookmark mark='d'/>差距在于：真实密码的轮不是随机置换，所以这些证明解释了设计，却不能担保它。<bookmark mark='e'/>同样的思路推动着轻量级密码学。美国标准机构在2023年选中的 Ascon，是一个包着三百二十位置换的海绵结构，小到几千个逻辑门就能实现。<bookmark mark='f'/>它面向的是传感器、植入设备和标签，它们的功耗预算以微瓦计。"
+  },
+  "752e1ab996b5": {
+   "scene": "Frontier",
+   "en": "Six open problems. <bookmark mark='a'/> Whether one-way functions exist at all. <bookmark mark='b'/> Whether they can be built from the worst-case hardness of an NP-complete problem, so that breaking a cipher would mean solving every instance of, say, satisfiability. Known barriers say ordinary proofs cannot do it. <bookmark mark='c'/> Whether anyone can attack the full AES meaningfully faster than brute force. <bookmark mark='d'/> What a quantum key search really costs once error correction is counted. <bookmark mark='e'/> How much differential trails cluster: designers bound the best single trail, but an attacker gains from every trail with the same start and end, and for real ciphers nobody can compute the sum. <bookmark mark='f'/> And whether indistinguishability obfuscation, which would let a program be published with its secrets unreadable, and which was finally built from well-studied assumptions in 2021, can ever be fast enough to use. <bookmark mark='g'/> This part's research problem takes a small, computable case of the fifth.",
+   "zh": "六个未解决的问题。<bookmark mark='a'/>单向函数究竟是否存在。<bookmark mark='b'/>能否用某个 NP 完全问题的最坏情况困难性造出单向函数，使得攻破一个密码就意味着能解比如可满足性问题的每一个实例。已知的障碍表明，普通的证明做不到这一点。<bookmark mark='c'/>是否有人能以明显快于暴力搜索的速度攻击完整的 AES。<bookmark mark='d'/>把纠错算进去之后，量子密钥搜索真正要花多少代价。<bookmark mark='e'/>差分路径聚集得有多严重：设计者为最好的单条路径定界，但攻击者能从起点和终点相同的每一条路径获益，而对真实的密码，没有人能算出这个和。<bookmark mark='f'/>以及不可区分混淆，它能让一个程序公开发布而其中的秘密无法读出，2021年终于用经过充分研究的假设构造了出来，它能否快到可以实用。<bookmark mark='g'/>这一部分的研究题取第五个问题的一个可计算的小情形。"
+  },
+  "ce79ec29c66c": {
+   "scene": "Outro",
+   "en": "What we built in this part. Substitution ciphers broken by counting and climbing, and Vigenère by the index of coincidence. Enigma, simulated, and Rejewski's theorem that the plugboard cannot hide the cycle structure. Shannon's perfect secrecy and its price. Pseudorandom generators, functions and permutations, with Feistel's networks. AES from scratch, matching the standard, its avalanche, and the modes and MACs that make it safe, with the padding oracle that shows why. And hash functions, the birthday bound, and the attacks: differential, timing, and a key that was never random.",
+   "zh": "这一部分我们搭建了什么。靠计数和爬山攻破的替换密码，以及用重合指数攻破的维吉尼亚密码。模拟的 Enigma，以及 Rejewski 的定理：接线板藏不住循环结构。Shannon 的完美保密及其代价。伪随机生成器、伪随机函数和伪随机置换，还有 Feistel 网络。从零写出、与标准一致的 AES，它的雪崩，以及让它能安全使用的工作模式和 MAC，外加说明原因的填充预言机。还有哈希函数、生日界，以及各种攻击：差分、计时，和一把从来不随机的密钥。"
+  },
+  "3d0a955d2fd0": {
+   "scene": "Outro",
+   "en": "Where this comes back. Part 30 adds public keys, and two of our machines then run a TLS 1.3 handshake using this part's authenticated encryption and HMAC; its certificates are logged in Merkle trees. Part 34's file systems checksum every block with a Merkle tree. Part 38's blockchains are hash chains. Part 41's git names every object by its hash. And Part 55 returns to passwords, one-time codes built from HMAC, and passkeys.",
+   "zh": "这些内容在哪里还会出现。第30部分加入公钥，然后我们的两台机器用这一部分的认证加密和 HMAC 跑一次 TLS 1.3 握手；它的证书记录在 Merkle 树里。第34部分的文件系统用 Merkle 树为每个块做校验。第38部分的区块链是哈希链。第41部分的 git 用哈希为每个对象命名。第55部分则回到密码、由 HMAC 构成的一次性验证码，以及通行密钥。"
+  },
+  "255b70cdc68f": {
+   "scene": "Outro",
+   "en": "In practice. Never invent a cipher, a mode or a protocol; use TLS, a library like libsodium, or your platform's authenticated encryption. Never reuse a nonce, and if you cannot guarantee that, use a mode designed to survive it. Store passwords with Argon2 or scrypt and a salt per user. Sign tokens with HMAC and compare tags in constant time. And take randomness only from the operating system.",
+   "zh": "实践中。永远不要自己发明密码、模式或协议；用 TLS、libsodium 这样的库，或你所用平台的认证加密。永远不要重复使用随机数；如果你保证不了，就用专门设计来经受这种误用的模式。用 Argon2 或 scrypt 存储密码，每个用户一个盐。用 HMAC 给令牌签名，用常数时间比较标签。随机数只取自操作系统。"
+  },
+  "1d8ecd336d60": {
+   "scene": "Outro",
+   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build problem: attack your own server, then fix it. The last, marked with a star, is a research problem: how much trails cluster as rounds grow is not known even for this toy cipher's larger relatives, and the notes say where to start.",
+   "zh": "六道习题，完整解答见本部分的笔记。可以在任何一道上暂停。第五道是动手题：攻击你自己的服务器，然后修好它。最后一道标着星号，是研究题：随着轮数增加，路径聚集得有多严重，即使对这个玩具密码的更大的同类也还不知道，笔记里说明了从哪里入手。"
+  },
+  "dc46d1d723f9": {
+   "scene": "Outro",
+   "en": "Next time: public keys. Everything in this part assumed the two sides already share a key. Part 30 shows how two strangers can agree on one while everyone listens: Diffie and Hellman's exchange, RSA built from scratch, elliptic curves, and a full TLS handshake between two of our machines, ending with the lattices meant to survive a quantum computer. Part 30, Public Keys.",
+   "zh": "下一次：公钥。这一部分的一切都假定双方已经共享一把密钥。第30部分展示两个素不相识的人怎样在众目睽睽之下商定一把：Diffie 与 Hellman 的交换、从零搭建的 RSA、椭圆曲线，以及我们两台机器之间一次完整的 TLS 握手，最后是有望经受住量子计算机的格。第30部分，公钥。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "这一部分所依据的书和论文都在屏幕上和笔记里。感谢观看。"
+  }
+ },
+ "title_en": "Computer Science, Built: Part 29, Secrets",
+ "chapters_en": {
+  "Hook": "Two thousand years of secrets",
+  "Substitution": "1. Substitution and frequency analysis",
+  "Vigenere": "2. Vigenère and the index of coincidence",
+  "Enigma": "3. Enigma",
+  "Perfect": "4. Perfect secrecy",
+  "Definitions": "5. What secure means",
+  "Prg": "6. Pseudorandom generators",
+  "Prf": "7. Pseudorandom functions and permutations",
+  "Aes": "8. AES",
+  "Avalanche": "9. The avalanche",
+  "Modes": "10. Modes of operation",
+  "Integrity": "11. Integrity",
+  "Hashes": "12. Hash functions",
+  "HashUses": "13. Hashes at work",
+  "Cryptanalysis": "14. Cryptanalysis",
+  "SideChannels": "15. Side channels and bad randomness",
+  "Frontier": "16. Frontier: proofs, quanta and lightweight ciphers",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}
