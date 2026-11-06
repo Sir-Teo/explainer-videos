@@ -21,7 +21,9 @@ class Hawkes(VoiceoverScene):
     def card(self):
         c = chapter_card(14, r"Hawkes: jumps that cause jumps", r"Do large moves arrive at random, or in families?",
                          part=PART)
-        with self.voiceover("Chapter fourteen. Hawkes processes: jumps that cause jumps."):
+        with self.voiceover(
+            'Chapter fourteen. Hawkes processes: jumps that cause jumps.'
+        ):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -59,14 +61,15 @@ class Hawkes(VoiceoverScene):
         outs = [f"hawkes_thinning(0.2, 1.4, 2.0, T=2000), 50 runs",
                 f"mean count {hc['mean_count']:.0f} +/- {hc['sd_count']:.0f}   theory mu T/(1 - alpha/beta) = {hc['theory']:.0f}"]
         with self.voiceover(
-            "Large moves cluster: one makes another more likely soon after. Alan Hawkes wrote down a process with "
-            "that property in 1971: its intensity jumps by alpha after every event and decays back toward a base rate "
-            "mu at speed beta. <bookmark mark='a'/> Yosihiko Ogata's thinning, from 1981, simulates it in a dozen "
-            "lines. Between events the intensity only decays, so its current value is an upper bound: draw a "
-            "candidate from a Poisson clock at that bound. <bookmark mark='b'/> Accept it with probability true "
-            "intensity over bound. The yellow dots are accepted and kick the red curve up; the grey ones fall "
-            "through. <bookmark mark='c'/> Fifty runs over two thousand days give a mean count of "
-            f"{hc['mean_count']:.0f}, against the theory's {hc['theory']:.0f}."
+            f'Large moves cluster: one makes another more likely soon after. Alan Hawkes wrote down a '
+            f'process with that property in 1971: its intensity jumps by alpha after every event and '
+            f"decays back toward a base rate mu at speed beta. <bookmark mark='a'/> Yosihiko Ogata's "
+            f'thinning, from 1981, simulates it in a dozen lines. Between events the intensity only '
+            f'decays, so its current value is an upper bound: draw a candidate from a Poisson clock at '
+            f"that bound. <bookmark mark='b'/> Accept it with probability true intensity over bound. The"
+            f' yellow dots are accepted and kick the red curve up; the grey ones fall through. <bookmark'
+            f" mark='c'/> Fifty runs over two thousand days give a mean count of {hc['mean_count']:.0f}"
+            f", against the stationary large-horizon approximation of {hc['theory']:.0f}."
         ) as vo:
             self.play(FadeIn(eq), FadeIn(g))
             vo.wait_until("a")
@@ -104,17 +107,19 @@ class Hawkes(VoiceoverScene):
                 why(r"take expectations; stationary only if $n < 1$", 18),
                 why(r"generations form a geometric series (Hawkes and Oakes 1974)", 18)]
         step = ladder(self, rows, whys, keep=2, top=3.4, x=-2.2, buff=0.3, edge=6.9)  # two rows clear the tree
-        res = label(rf"here $n = 0.7$: {hc['n_clusters']} families, mean size {hc['mean_cluster']:.2f} against "
-                    rf"$1/(1 - n) = {hc['cluster_theory']:.2f}$", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.2)
+        res = label(rf"$n=0.7$: {hc['n_clusters']} windowed families, mean {hc['mean_cluster']:.2f}; uncensored total-size theory "
+                    rf"$1/(1-n)={hc['cluster_theory']:.2f}$", font_size=18, color=GREY_A).to_edge(DOWN, buff=0.2)
         with self.voiceover(
-            "The same process can be seen as families. Immigrants arrive at the base rate mu, and every event, "
-            "immigrant or not, has children: a Poisson number of them, with mean n equal to alpha over beta, the "
-            "total mass of the kernel, called the branching ratio. <bookmark mark='a'/> Redraw the events as a family "
-            "tree, generation by generation, each child hanging from its parent. <bookmark mark='b'/> Taking "
-            "expectations, the long-run rate satisfies lambda bar equals mu plus n times lambda bar, so it is mu over "
-            "one minus n, which exists only if n is below one: above it, the families never die out. A family's mean "
-            "size is one plus n plus n squared and so on, one over one minus n, and here the simulated families "
-            f"average {hc['mean_cluster']:.2f}, against {hc['cluster_theory']:.2f}."
+            f'The same process can be seen as families. Immigrants arrive at the base rate mu, and every'
+            f' event, immigrant or not, has children: a Poisson number of them, with mean n equal to '
+            f'alpha over beta, the total mass of the kernel, called the branching ratio. <bookmark '
+            f"mark='a'/> Redraw the events as a family tree, generation by generation, each child "
+            f"hanging from its parent. <bookmark mark='b'/> Taking expectations, the long-run rate "
+            f'satisfies lambda bar equals mu plus n times lambda bar, so it is mu over one minus n, '
+            f'which exists only if n is below one: above one a family has positive probability of never '
+            f"dying out; at one it dies out almost surely but its expected size is infinite. A family's "
+            f'mean size is one plus n plus n squared and so on, one over one minus n, and here the '
+            f"simulated families average {hc['mean_cluster']:.2f}, against {hc['cluster_theory']:.2f}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(ticks))
             vo.wait_until("a")
@@ -137,7 +142,7 @@ class Hawkes(VoiceoverScene):
 
         def frame(i):
             a = axes([0, T], [0, 3.4], x_length=5.4, y_length=3.0, xlabel=r"days since 1 January 2018",
-                     ylabel=r"fitted intensity, a day", xticks=[0, 500, 1000], yticks=[0, 1, 2, 3], font_size=14)
+                     ylabel=r"intensity/day (capped at 3.4)", xticks=[0, 500, 1000], yticks=[0, 1, 2, 3], font_size=14)
             p = hr["ck_params"][min(i, len(hr["ck"]) - 1)]
             lam = np.minimum(np.asarray(hr["lams"][min(i, len(hr["ck"]) - 1)]), 3.4)
             tks = VGroup(*[Line(a.ax.c2p(e, 0), a.ax.c2p(e, 0.2), stroke_width=1, color=BM) for e in ev])
@@ -158,12 +163,15 @@ class Hawkes(VoiceoverScene):
                            color=GREY_A)).arrange(DOWN, buff=0.1).to_edge(DOWN, buff=0.25)
         src = real_data(r"events: Bitcoin hours with $|r| > 4\times$ the past month's volatility, 2018--2020", corner=UL)
         with self.voiceover(
-            f"Now fit it to the {f['n']} hours since 2018 when Bitcoin moved more than four times its recent "
-            "volatility. The log-likelihood is the sum of log intensities at the events minus the integrated "
-            "intensity, computed in one pass by Ozaki's recursion. <bookmark mark='a'/> The House maximizes it from "
-            "eight random starts: the log-likelihood climbs on the right, the Poisson clock's value dashed, and the "
-            "fitted intensity takes shape on the left. <bookmark mark='b'/> All eight starts agree. The branching "
-            f"ratio is {f['branching']:.2f}, and the excitement halves in about {h['half_life_hours']:.0f} hours."
+            f"Now fit it to the {f['n']}"
+            f' hours since 2018 when Bitcoin moved more than four times its recent volatility. The '
+            f'log-likelihood is the sum of log intensities at the events minus the integrated intensity,'
+            f" computed in one pass by Ozaki's recursion. <bookmark mark='a'/> The House maximizes it "
+            f"from eight random starts: the log-likelihood climbs on the right, the Poisson clock's "
+            f"value dashed, and the fitted intensity takes shape on the left. <bookmark mark='b'/> All "
+            f'eight starts reach essentially the same fitted objective; this is a numerical check, not a'
+            f" global-optimum guarantee. The branching ratio is {f['branching']:.2f}"
+            f", and the excitement halves in about {h['half_life_hours']:.0f} hours."
         ) as vo:
             self.play(FadeIn(rp), Create(base), FadeIn(bl), FadeIn(src))
             vo.wait_until("a")
@@ -192,16 +200,20 @@ class Hawkes(VoiceoverScene):
         qh = VGroup(*[Dot(g.ax.c2p(min(q[i], 6), min(rs["qq_h"][i], 6)), radius=0.035, color=DRIFT) for i in sel])
         qp = VGroup(*[Dot(g.ax.c2p(min(q[i], 6), min(rs["qq_p"][i], 6)), radius=0.035, color=GREY_B) for i in sel])
         side = VGroup(
-            label(rf"Kolmogorov--Smirnov: Hawkes $p = {rs['p_hawkes']:.2f}$", font_size=20, color=DRIFT),
+            label(f"nominal in-sample KS: Hawkes $p = {rs['p_hawkes']:.2f}$", font_size=20, color=DRIFT),
             label(rf"Poisson clock $p = {sci(rs['p_poisson'], 0)}$", font_size=20, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(g, DOWN, buff=0.2).align_to(g, LEFT)
-        note_ = wrapped_label(r"Hardiman, Bercot and Bouchaud (2013) estimated $n$ near the critical value 1 for E-mini "
-                              r"futures mid-price changes, 1998--2011; Filimonov and Sornette (2012) reported a rising "
-                              r"$n$; the estimates depend on the kernel and the window. Nearly critical Hawkes processes "
-                              r"lead to rough volatility (Jaisson and Rosenbaum 2016): Parts 14 and 36.", 6.4, 18, GREY_A)
+        note_ = wrapped_label((
+                                  (
+                                      'Hardiman, Bercot and Bouchaud (2013) estimated $n$ near the critical value 1 for E-mini futures '
+                                      'mid-price changes, 1998--2011; Filimonov and Sornette (2012) reported a rising $n$; the estimates '
+                                      'depend on the kernel and the window. Heavy-tailed nearly critical Hawkes scaling limits lead to '
+                                      'rough volatility (Jaisson and Rosenbaum 2016): Parts 14 and 36. QQ plots cap both axes at 6.'
+                                  )
+                              ), 6.4, 18, GREY_A)
         note_.to_corner(DL, buff=0.3)
         n_ = h["fit"]["branching"]
-        pc, ans = pause(rf"Branching ratio ${n_:.2f}$. What fraction of large moves were triggered by earlier ones?",
+        pc, ans = pause(f'Branching ratio ${n_:.2f}$. What triggered fraction does the stationary Hawkes model assign?',
                         rf"{100 * n_:.0f}\%: in a stationary Hawkes process the triggered share equals $n$.", width=4.6,
                         font_size=18)
         VGroup(pc, ans).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(side, DOWN, buff=0.25).align_to(g, LEFT)
@@ -211,16 +223,7 @@ class Hawkes(VoiceoverScene):
                    f"{rs['p_hawkes']:.2f}; the Poisson clock's do not, with a p-value too small to read."
                    if good else f"Here the test is less clear: p equal to {rs['p_hawkes']:.2f} for Hawkes.")
         with self.voiceover(
-            "Is the fit any good? Run the clock at the fitted intensity: measure time by the integrated intensity "
-            "instead of the calendar. <bookmark mark='a'/> Under a correct model the clustered events slide apart "
-            "into an even rain, a unit-rate Poisson process: the point-process cousin of chapter four's "
-            "Dambis-Dubins-Schwarz clock. <bookmark mark='b'/> Compare the rescaled gaps with exponential quantiles. "
-            f"{verdict} <bookmark mark='c'/> On the record, Hardiman, Bercot and Bouchaud, at Capital Fund Management, "
-            "estimated a branching ratio near one for E-mini futures; such nearly critical processes lead to rough "
-            "volatility, in Part fourteen. <bookmark mark='d'/> A pause: with branching ratio "
-            f"{h['fit']['branching']:.2f}, what fraction of moves were triggered? Exactly that: "
-            f"{100 * h['fit']['branching']:.0f} percent."
-            " Nearly critical clustering leaves memory in volatility. Next: a process with memory built in."
+            f"Is the fit any good? Run the clock at the fitted intensity: measure time by the integrated intensity instead of the calendar. <bookmark mark='a'/> Under a correct model the clustered events slide apart into an even rain, a unit-rate Poisson process: the point-process cousin of chapter four's Dambis-Dubins-Schwarz clock. <bookmark mark='b'/> Compare the rescaled gaps with exponential quantiles. These are in-sample diagnostics: parameters were fitted to these events and the event times are rounded to hours, so the nominal KS p-values are not calibrated model-validation tests. {verdict} <bookmark mark='c'/> On the record, Hardiman, Bercot and Bouchaud, at Capital Fund Management, estimated a branching ratio near one for E-mini futures; heavy-tailed, nearly critical Hawkes scaling limits can produce rough volatility, in Part fourteen. <bookmark mark='d'/> A pause: with branching ratio {h['fit']['branching']:.2f}, what long-run fraction is assigned to offspring by this fitted stationary Hawkes model? <bookmark mark='e'/> About {100 * h['fit']['branching']:.0f} percent. That is a latent model decomposition, not proof that one observed market move caused another. Nearly critical clustering leaves memory in volatility. Next: a process with memory built in."
         ) as vo:
             self.play(FadeIn(top), FadeIn(t1))
             vo.wait_until("a")
@@ -232,6 +235,9 @@ class Hawkes(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(note_))
             vo.wait_until("d")
-            self.play(FadeIn(pc), FadeIn(ans))
+            self.play(FadeIn(pc))
+            vo.wait_until("e")
+            self.wait(0.8)
+            self.play(FadeIn(ans))
         self.wait(0.4)
         self.clear_scene()

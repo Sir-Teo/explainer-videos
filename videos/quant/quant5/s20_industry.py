@@ -29,8 +29,10 @@ class Industry(VoiceoverScene):
     def card(self):
         c = chapter_card(17, r"Industry: how desks build, test and run SDE models", r"What happens when the model's "
                          r"state space is wrong?", lit=(2020,), part=PART)
-        with self.voiceover("Chapter seventeen. How exchanges, brokers, clearing houses and banks actually use this "
-                            "calculus, from the public record."):
+        with self.voiceover(
+            'Chapter seventeen. How exchanges, brokers, clearing houses and banks actually use this calculus, '
+            'from the public record.'
+        ):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -77,15 +79,17 @@ class Industry(VoiceoverScene):
                             r"strikes; back to Black-76 and Whaley on 31 August 2020 (Advisory 20-320)", 6.4, 16, GREY_A)
         cme.next_to(card, DOWN, buff=0.2).align_to(card, LEFT)
         src = real_data(r"FRED DCOILWTICO; CFTC press release 8432-21; CME Clearing advisories", corner=DR)
+        src.scale(0.78).to_corner(DL, buff=0.2)
         with self.voiceover(
-            "The crisis file. On the twentieth of April 2020, with storage at Cushing, Oklahoma, filling up, the May "
-            "oil future settled at minus thirty-seven dollars and sixty-three cents a barrel; the Cushing spot price "
-            f"on FRED reads {v[i]:.2f}. <bookmark mark='a'/> Geometric Brownian motion says that cannot happen: the "
-            "log of a negative number does not exist. Bachelier's arithmetic Brownian motion crosses zero without "
-            "noticing. <bookmark mark='b'/> CME Clearing moved options on WTI and related energy futures to the "
-            "Bachelier model, effective the twenty-second of April, to allow negative prices and strikes, and moved "
-            "back at the end of August. <bookmark mark='c'/> In a put, Black's formula stops at a zero futures price; "
-            "Bachelier's carries on."
+            f'The crisis file. On the twentieth of April 2020, with storage at Cushing, Oklahoma, '
+            f'filling up, the May oil future settled at minus thirty-seven dollars and sixty-three cents'
+            f' a barrel; the Cushing spot price on FRED reads {v[i]:.2f}'
+            f". <bookmark mark='a'/> Geometric Brownian motion says that cannot happen: the log of a "
+            f"negative number does not exist. Bachelier's arithmetic Brownian motion crosses zero "
+            f"without noticing. <bookmark mark='b'/> CME Clearing moved options on WTI and related "
+            f'energy futures to the Bachelier model, effective the twenty-second of April, to allow '
+            f"negative prices and strikes, and moved back at the end of August. <bookmark mark='c'/> In "
+            f"a put, Black's formula stops at a zero futures price; Bachelier's carries on."
         ) as vo:
             self.play(FadeIn(g), Create(zero), Create(line), FadeIn(src), run_time=2)
             self.play(FadeIn(dot, scale=2), FadeIn(card))
@@ -108,12 +112,13 @@ class Industry(VoiceoverScene):
                          source=r"CFTC press release 8432-21; Interactive Brokers press release 21 April 2020 "
                                 r"(provisional loss about \$88M) and Form 10-Q for Q2 2020", width=9.4, font_size=21)
         with self.voiceover(
-            "The firm file. In a settled order in September 2021, the Commodity Futures Trading Commission found that "
-            "Interactive Brokers did not adequately prepare and configure its trading system to recognize negative "
-            "prices, although it was on notice that they were possible. <bookmark mark='a'/> It imposed a penalty of "
-            "one point seven five million dollars and restitution of eighty-two point five seven million, credited "
-            "because the firm had already compensated customers. The firm reported a loss of about a hundred and four "
-            "million. A state space is a modelling assumption, and here it was also a software assumption."
+            'The firm file. In a settled order in September 2021, the Commodity Futures Trading Commission found '
+            'that Interactive Brokers did not adequately prepare and configure its trading system to recognize '
+            "negative prices, although it was on notice that they were possible. <bookmark mark='a'/> It imposed "
+            'a penalty of one point seven five million dollars and restitution of eighty-two point five seven '
+            'million, credited because the firm had already compensated customers. The firm reported a loss of '
+            'about a hundred and four million. A state space is a modelling assumption, and here it was also a '
+            'software assumption.'
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -139,11 +144,11 @@ class Industry(VoiceoverScene):
                           r"34-90763 (2020), on the Options Clearing Corporation's methodology", 11.6, 20, GREY_A)
         q.next_to(steps, DOWN, buff=0.6)
         with self.voiceover(
-            "Clearing houses run this calculus every night. According to its filings with the Securities and Exchange "
-            "Commission, the Options Clearing Corporation's margin system, STANS, calibrates a model for each risk "
-            "factor, ties them together with a copula, and simulates ten thousand Monte Carlo scenarios per factor, "
-            "<bookmark mark='a'/> then reprices every position in every scenario and aggregates the losses into a "
-            "margin requirement."
+            'Clearing houses run this calculus every night. According to its filings with the Securities and '
+            "Exchange Commission, the Options Clearing Corporation's margin system, STANS, calibrates a model for"
+            ' each risk factor, ties them together with a copula, and simulates ten thousand Monte Carlo '
+            "scenarios per factor, <bookmark mark='a'/> then reprices every position in every scenario and uses "
+            'the portfolio-loss distribution, together with stress and other adjustments, to set margin.'
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(s_) for s_ in steps[:3]], lag_ratio=0.5),
                       LaggedStart(*[GrowArrow(a) for a in arrows[:2]], lag_ratio=0.5), run_time=4)
@@ -177,22 +182,28 @@ class Industry(VoiceoverScene):
                         r"whose It\^o drift is exactly $\tfrac12\sigma^2$.", width=5.0, font_size=19)
         VGroup(pc, ans).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Itô's lemma is also a product. Apply it to the logarithm of the price. <bookmark mark='a'/> Rearranged, "
-            "realized variance is twice the gain from holding one over S shares, minus twice the log return. "
-            "<bookmark mark='b'/> And by Taylor's formula the log payoff is a forward plus puts and calls weighted by "
-            "one over strike squared: the variance swap of Demeterfi, Derman, Kamal and Zou, and the weights of "
-            "Cboe's VIX. <bookmark mark='c'/> On ten thousand Heston paths, the replication misses by "
-            f"{vs['252_heston']['sd'] * 1e4:.1f} ten-thousandths of variance with daily steps, and "
-            f"{vs['2520_heston']['sd'] * 1e4:.2f} with ten times as many. Add jumps, and a bias appears, exactly "
-            f"chapter twelve's jump term: {vs['2520_jump']['mean'] * 1e4:+.1f} against a predicted "
-            f"{vs['jump_bias_theory'] * 1e4:+.1f}."
+            f"Itô's lemma is also a product. Apply it to the logarithm of the price. <bookmark "
+            f"mark='a'/> Rearranged, for a strictly positive continuous price with zero rates and "
+            f'dividends, quadratic variation of log price is twice the gain from holding one over S '
+            f"shares, minus twice the log return. <bookmark mark='b'/> And by Taylor's formula the log "
+            f'payoff is a forward plus puts and calls weighted by one over strike squared: the variance '
+            f'swap of Demeterfi, Derman, Kamal and Zou, and the idealized weights underlying Cboe’s VIX.'
+            f' Exact static replication assumes a full strike continuum and suitable integrability; '
+            f'quoted-strike and discrete-monitoring implementations introduce additional errors. '
+            f"<bookmark mark='c'/> On ten thousand Heston paths, the replication misses by "
+            f"{vs['252_heston']['sd'] * 10000.0:.1f} ten-thousandths of variance with daily steps, and "
+            f"{vs['2520_heston']['sd'] * 10000.0:.2f}"
+            f" with ten times as many. Add jumps, and a bias appears, exactly chapter twelve's jump term: "
+            f"{vs['2520_jump']['mean'] * 10000.0:+.1f} against a predicted "
+            f"{vs['jump_bias_theory'] * 10000.0:+.1f}."
         ) as vo:
             step(0)
             vo.wait_until("a")
             step(1)
+            self.play(FadeIn(pc))
             vo.wait_until("b")
             step(2)
-            self.play(FadeIn(pc), FadeIn(ans))
+            self.play(FadeIn(ans))
             vo.wait_until("c")
             self.play(FadeOut(pc), FadeOut(ans), FadeIn(tab))
         self.wait(0.4)
@@ -233,14 +244,13 @@ class Industry(VoiceoverScene):
         th = label(r"the House's validation report: each simulator against a case with a known answer (Rule 6)",
                    font_size=21, color=QC.HOUSE).next_to(sr, DOWN, buff=0.3).align_to(sr, LEFT)
         with self.voiceover(
-            "Finally, who checks the models. American banks' model risk was supervised under SR 11-7, from 2011. On "
-            "the seventeenth of April 2026 the Federal Reserve, the OCC and the FDIC replaced it with SR 26-2, which "
-            "keeps effective challenge, conceptual soundness, ongoing monitoring, outcomes analysis and a model "
-            "inventory, adds tailoring to materiality, is aimed mainly at banks above thirty billion dollars, and "
-            "leaves generative and agentic AI outside its scope. <bookmark mark='a'/> The House's version is Rule 6: "
-            "no simulator prices anything until it has reproduced a known answer. Here is this part's validation "
-            "report."
-            " Last, the frontier."
+            "Finally, who checks the models. American banks' model risk was supervised under SR 11-7, from 2011. "
+            'On the seventeenth of April 2026 the Federal Reserve, the OCC and the FDIC replaced it with SR 26-2,'
+            ' which keeps effective challenge, conceptual soundness, ongoing monitoring, outcomes analysis and a '
+            'model inventory, adds tailoring to materiality, is aimed mainly at banks above thirty billion '
+            "dollars, and leaves generative and agentic AI outside its scope. <bookmark mark='a'/> The House's "
+            'version is Rule 6: no simulator prices anything until it has reproduced a known answer. Here is this'
+            " part's validation report. Last, the frontier."
         ) as vo:
             self.play(FadeIn(sr[0]))
             self.play(FadeIn(sr[1]), FadeIn(sr[2]))

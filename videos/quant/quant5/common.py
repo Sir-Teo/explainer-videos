@@ -5,6 +5,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
+from explainer.ai.lecture import pause_card as _boxed_pause_card
 
 from .compute import load  # noqa: F401
 
@@ -24,7 +25,7 @@ def real_data(text: str, corner=DR):
 
 def pause(question: str, answer: str, width=6.2, font_size=24):
     """A pause-and-predict card and its answer (a label), unplaced; the scene positions them."""
-    pc = pause_card(question, width=width, font_size=font_size)
+    pc = _boxed_pause_card(question, width=width, font_size=font_size, color=QC.IDEA)
     ans = wrapped_label(answer, width, font_size - 2, QC.GAIN)
     return pc, ans
 

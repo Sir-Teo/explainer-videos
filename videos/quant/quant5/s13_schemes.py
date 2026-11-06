@@ -18,8 +18,9 @@ class Schemes(VoiceoverScene):
     def card(self):
         c = chapter_card(5, r"SDEs: existence, and how to simulate them", r"When does $dX = a\,dt + b\,dW$ have a "
                          r"solution, and how do you compute it?", part=PART)
-        with self.voiceover("Chapter five. Stochastic differential equations: when they have solutions, and how to "
-                            "compute them."):
+        with self.voiceover(
+            'Chapter five. Stochastic differential equations: when they have solutions, and how to compute them.'
+        ):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -47,14 +48,17 @@ class Schemes(VoiceoverScene):
         rows[0].to_edge(DOWN, buff=0.75).shift(LEFT * 1.2)  # under the shortened chart
         why0.next_to(rows[0], DOWN, buff=0.15)
         with self.voiceover(
-            "Does d X equals sine of X d t plus a half cosine of X d W have exactly one solution? Itô answered in "
-            "1951 with Picard iteration. Start with a constant guess. <bookmark mark='a'/> Plug it into the "
-            "right-hand side, integrate along the one Brownian path we have, and repeat. <bookmark mark='b'/> The "
-            f"iterates snap together: the largest gap falls from {p['dist'][0]:.2f} to {p['dist'][3]:.3f} in four "
-            "rounds, and to a millionth in nine. <bookmark mark='c'/> Doob's inequality and the isometry make the "
-            "gaps shrink like a power over a factorial. With Lipschitz coefficients the solution exists, is unique, "
-            "and is built from the path: a strong solution. <bookmark mark='d'/> Tanaka's equation, d X equals the "
-            "sign of X d W, has only weak ones."
+            f'Does d X equals sine of X d t plus a half cosine of X d W have exactly one solution? Itô '
+            f"answered in 1951 with Picard iteration. Start with a constant guess. <bookmark mark='a'/> "
+            f'Plug it into the right-hand side, integrate along the one Brownian path we have, and '
+            f"repeat. <bookmark mark='b'/> The iterates snap together: the largest gap falls from "
+            f"{p['dist'][0]:.2f} to {p['dist'][3]:.3f}"
+            f" in four rounds, and to a millionth in nine. <bookmark mark='c'/> Doob's inequality and "
+            f'the isometry make the gaps shrink like a power over a factorial. Global spatial Lipschitz '
+            f'and linear-growth bounds, with square-integrable initial data, give a unique strong '
+            f"solution. The coefficients in this example satisfy those bounds. <bookmark mark='d'/> "
+            f'Tanaka’s equation, d X equals sign of X d W with X initially zero and sign of zero defined'
+            f' as one, has a weak solution but no strong solution driven by that Brownian motion.'
         ) as vo:
             self.play(FadeIn(g), FadeIn(eq), Create(lines[0]))
             vo.wait_until("a")
@@ -92,14 +96,14 @@ class Schemes(VoiceoverScene):
         whys = [why(r"expand $b(X_s)$ by the lemma, to first order in $W_s - W_t$", 19),
                 why(r"chapter 3's left-point integral of $W$ against itself", 19)]
         with self.voiceover(
-            "To compute a solution, step it forward. Here is the House's code. Euler-Maruyama: the drift times the "
-            "step, plus the volatility times the Brownian increment, exactly the left-point sum of chapter three. "
-            "Milstein adds one line, in gold. <bookmark mark='a'/> Where does it come from? Inside a step the "
-            "volatility itself moves. Expanded by the lemma, it changes by b prime times b times the Brownian move so "
-            "far, and integrating that against d W gives chapter three's left-point integral: half the squared "
-            "increment minus the step. <bookmark mark='b'/> Run both on geometric Brownian motion, where the exact "
-            "solution is known path by path, with twenty thousand paths shared between the two schemes, so that their "
-            "errors can be compared path by path."
+            "To compute a solution, step it forward. Here is the House's code. Euler-Maruyama: the drift times "
+            'the step, plus the volatility times the Brownian increment, exactly the left-point sum of chapter '
+            "three. Milstein adds one line, in gold. <bookmark mark='a'/> Where does it come from? Inside a step "
+            'the volatility itself moves. Expanded by the lemma, it changes by b prime times b times the Brownian'
+            " move so far, and integrating that against d W gives chapter three's left-point integral: half the "
+            "squared increment minus the step. <bookmark mark='b'/> Run both on geometric Brownian motion, where "
+            'the exact solution is known path by path, with twenty thousand paths shared between the two schemes,'
+            ' so that their errors can be compared path by path.'
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -141,18 +145,20 @@ class Schemes(VoiceoverScene):
         pc.next_to(side, DOWN, buff=0.3).align_to(side, LEFT)
         ans.next_to(pc, DOWN, buff=0.1).align_to(pc, LEFT)
         with self.voiceover(
-            "The step shrinks from a quarter to one two-hundred-and-fifty-sixth, and each scheme's error at time one "
-            "is plotted as it arrives. <bookmark mark='a'/> A pause: halve the step, and by how much does Euler's "
-            "path error shrink? <bookmark mark='b'/> Only by the square root of two: strong order one half, measured "
-            f"at {o['slope_strong_euler']:.2f}. The reason is the term Euler drops, half b b prime times the squared "
-            "increment minus the step: it has size of order the step, but it is a martingale sum, so its errors add "
-            "in quadrature to the square root of the step. Milstein keeps it, and buys strong order one: "
-            f"{o['slope_strong_milstein']:.2f}. <bookmark mark='c'/> For prices, which are averages, both are already "
-            "order one: the dropped term has mean zero, so it cancels in expectation. So choose by the question: "
-            "prices need weak accuracy, hedging simulations strong. And strong order, a property of single paths, "
-            "also sets the cost of averages: it decides how well multilevel Monte Carlo works, Part sixteen's "
-            "subject."
-            " Next: two equations every desk simulates, the mean-reverting ones."
+            f"The step shrinks from a quarter to one two-hundred-and-fifty-sixth, and each scheme's "
+            f"error at time one is plotted as it arrives. <bookmark mark='a'/> A pause: halve the step, "
+            f"and by how much does Euler's path error shrink? <bookmark mark='b'/> Only by the square "
+            f"root of two: strong order one half, measured at {o['slope_strong_euler']:.2f}"
+            f'. The reason is the term Euler drops, half b b prime times the squared increment minus the'
+            f' step: it has size of order the step, but it is a martingale sum, so its errors add in '
+            f'quadrature to the square root of the step. Milstein keeps it, and buys strong order one: '
+            f"{o['slope_strong_milstein']:.2f}"
+            f". <bookmark mark='c'/> For sufficiently smooth payoff expectations and regular "
+            f'coefficients, both schemes have weak order one. The dropped term’s zero mean is part of '
+            f'the explanation; nonsmooth payoffs need separate analysis. So choose by the question: '
+            f'prices need weak accuracy, hedging simulations strong. And strong order, a property of '
+            f'single paths, also sets the cost of averages: it decides how well multilevel Monte Carlo '
+            f"works, Part sixteen's subject. Next: two equations every desk simulates, the mean-reverting ones."
         ) as vo:
             self.play(FadeIn(g))
             for k in range(len(dt)):

@@ -18,7 +18,9 @@ class Girsanov(VoiceoverScene):
 
     def card(self):
         c = chapter_card(8, r"Girsanov: re-weighting paths", r"Is drift just a change of measure?", part=PART)
-        with self.voiceover("Chapter eight. Girsanov's theorem: re-weighting paths."):
+        with self.voiceover(
+            "Chapter eight. Girsanov's theorem: re-weighting paths."
+        ):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -58,18 +60,22 @@ class Girsanov(VoiceoverScene):
                             .next_to(z, RIGHT, buff=0.6))
         res = MathTex(rf"\textstyle\sum Z\,W_T / \sum Z = {g['wmean']:.3f} \quad (\theta T = {th:.0f})", font_size=28,
                       color=QCOL).to_corner(UR, buff=0.35)
+        view_note = note(r"paths clipped to $[-3,4]$ for display; histograms show a finite window", font_size=15,
+                         color=GREY_B).to_edge(DOWN, buff=0.18)
         with self.voiceover(
-            "Here is the theorem as a picture. Three hundred Brownian paths with no drift, in amber, the colour of "
-            "the real-world measure P; their endpoints form a histogram centred at zero. <bookmark mark='a'/> Now "
-            "turn a dial theta from zero to one. The paths do not move. Instead each path's weight becomes Z, the "
-            "exponential of theta times its endpoint minus half theta squared. Paths that ended high grow heavy and "
-            "violet, the colour of the new measure Q; paths that ended low fade. <bookmark mark='b'/> The weighted "
-            "histogram slides to a Gaussian centred at theta: over two hundred thousand paths, the weighted mean "
-            f"endpoint is {g['wmean']:.3f}. <bookmark mark='c'/> On the right, the honest way to get drift: every path "
-            "moved up by theta t. Its histogram is the same. Re-weighting paths and moving them give the same "
-            "distribution."
+            f'Here is the theorem as a picture. Three hundred Brownian paths with no drift, in amber, '
+            f'the colour of the real-world measure P; their endpoints form a histogram centred at zero. '
+            f"<bookmark mark='a'/> Now turn a dial theta from zero to one. The paths do not move. "
+            f"Instead each path's weight becomes Z, the exponential of theta times its endpoint minus "
+            f'half theta squared. Paths that ended high grow heavy and violet, the colour of the new '
+            f"measure Q; paths that ended low fade. <bookmark mark='b'/> The weighted histogram slides "
+            f'to a Gaussian centred at theta: over two hundred thousand paths, the weighted mean endpoint is '
+            f"{g['wmean']:.3f}"
+            f". <bookmark mark='c'/> On the right, the honest way to get drift: every path moved up by "
+            f'theta t. Its histogram is the same. Re-weighting paths and moving them give the same distribution.'
         ) as vo:
-            self.play(FadeIn(g1), LaggedStart(*[Create(p) for p in paths], lag_ratio=0.003, run_time=3), FadeIn(z))
+            self.play(FadeIn(g1), LaggedStart(*[Create(p) for p in paths], lag_ratio=0.003, run_time=3),
+                      FadeIn(z), FadeIn(view_note))
             self.play(LaggedStart(*[GrowFromEdge(b, LEFT) for b in hp], lag_ratio=0.03))
             vo.wait_until("a")
             self.add(thr)
@@ -99,28 +105,38 @@ class Girsanov(VoiceoverScene):
         whys = [why(r"Part 4's coin: the ratio of two Gaussian densities; complete the square"),
                 why(r"the continuous limit; by the lemma, $Z$ is the stochastic exponential of $\int \theta\,dW$"),
                 why(r"the product rule: $-Z\theta\,dt$ from $d\widetilde W$ cancels $+\theta Z\,dt$ from the covariation"),
-                why(r"so $Z\widetilde W$ is a $P$-martingale, i.e.\ $\widetilde W$ a $Q$-martingale (Bayes); "
-                    r"$\langle \widetilde W\rangle_t = t$; by L\'evy's characterization, a Brownian motion"),
-                why(r"Novikov (1972); without it $Z$ is only a supermartingale, and $Q$ loses mass")]
+                why((
+                        'localize: $Z\\widetilde W$ is a $P$-local martingale; under $Q$, $\\widetilde W$ is a local '
+                        "martingale; $\\langle \\widetilde W\\rangle_t = t$; by L\\'evy's characterization, a Brownian motion"
+                    )),
+                why((
+                        'Novikov (1972) is sufficient, not necessary; if $Z$ is a strict local martingale, its terminal '
+                        'density loses mass'
+                    ))]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=-1.3, buff=0.55, edge=6.9)
-        th = theorem_card(r"Cameron--Martin and Girsanov", r"Cameron and Martin (1944): shifting Wiener measure by a "
-                          r"smooth deterministic path $h$ multiplies it by $e^{\int h'\,dW - \frac12\int h'^2}$. "
-                          r"Girsanov (1960): the same for an adapted drift $\theta_t$.", color=QCOL, width=6.0,
+        th = theorem_card(r"Cameron--Martin and Girsanov", (
+                                                               'Cameron and Martin (1944): shifting Wiener measure by a smooth deterministic path $h$ multiplies it '
+                                                               "by $e^{\\int h'\\,dW - \\frac12\\int h'^2}$. Girsanov (1960): the same for a predictable drift "
+                                                               '$\\theta_t$ with $\\int_0^T\\theta_t^2dt<\\infty$ and $\\mathbb E Z_T=1$.'
+                                                           ), color=QCOL, width=6.0,
                           font_size=19).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "The proof starts from Part four's coin. On a grid, the likelihood ratio of drifting against driftless "
-            "increments is a product of ratios of Gaussian densities; completing the square gives the exponential of "
-            "theta times the increments minus a half theta squared times the steps. <bookmark mark='a'/> In the limit "
-            "that is Z, which by the lemma solves d Z equals theta Z d W: a stochastic exponential, a martingale with "
-            "mean one. Cameron and Martin had it in 1944 for deterministic shifts. <bookmark mark='b'/> Girsanov's "
-            "step: subtract the drift from W, giving W tilde, and multiply by Z. By the product rule, the minus theta "
-            "Z d t from W tilde cancels the plus theta Z d t from the covariation exactly. <bookmark mark='c'/> So Z "
-            "times W tilde is a martingale under P. Bayes's rule turns that into a statement under Q: the "
-            "Q-expectation of a later value, given the past, is the P-expectation of Z times that value, divided by Z "
-            "now. So W tilde is a martingale under Q; its quadratic variation is still t; and by Lévy's "
-            "characterization it is a Brownian motion. <bookmark mark='d'/> One condition: Z must have mean one. "
-            "Novikov's condition, a finite exponential moment of the integrated theta squared, guarantees it. Without "
-            "it, Z can be a strict supermartingale and Q is not a probability at all."
+            "The proof starts from Part four's coin. On a grid, the likelihood ratio of drifting against "
+            'driftless increments is a product of ratios of Gaussian densities; completing the square gives the '
+            'exponential of theta times the increments minus a half theta squared times the steps. <bookmark '
+            "mark='a'/> In the limit that is Z, which by the lemma solves d Z equals theta Z d W: a stochastic "
+            'exponential, a martingale with mean one. Cameron and Martin had it in 1944 for deterministic shifts.'
+            " <bookmark mark='b'/> Girsanov's step: subtract the drift from W, giving W tilde, and multiply by Z."
+            ' By the product rule, the minus theta Z d t from W tilde cancels the plus theta Z d t from the '
+            "covariation exactly. <bookmark mark='c'/> For a general predictable drift, localize the product, "
+            'which is a local martingale under P. Bayes’s rule and localization transfer the local martingale '
+            'property to Q: the Q-expectation of a later value, given the past, is the P-expectation of Z times '
+            'that value, divided by Z now, whenever the conditional expectations are integrable. Thus W tilde is '
+            "a local martingale under Q; its quadratic variation is still t; and by Lévy's characterization it is"
+            " a Brownian motion. <bookmark mark='d'/> One condition: Z must have mean one. Novikov’s finite "
+            'exponential-moment condition is sufficient, not necessary. If Z is a strict local martingale '
+            'instead, its terminal density has mass less than one. Constant theta satisfies Novikov on every '
+            'finite horizon.'
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -138,7 +154,7 @@ class Girsanov(VoiceoverScene):
 
     def collapse(self, g):
         ess = g["ess"]
-        bars_ax = axes([-0.6, 3.6], [-8, 0.3], x_length=6.0, y_length=4.0, xlabel=r"horizon $T$",
+        bars_ax = axes([-0.6, 3.6], [-8, 0.3], x_length=6.0, y_length=4.0, xlabel=r"horizon $T$ (log spacing)",
                        ylabel=r"effective sample size, share of $10^5$ (log scale)", xticks=[0, 1, 2, 3],
                        xfmt=lambda u: str([1, 4, 16, 64][int(u)]), yticks=[-8, -6, -4, -2, 0],
                        yfmt=lambda u: rf"10^{{{int(u)}}}" if u else "1", font_size=16).to_edge(LEFT, buff=0.6)
@@ -150,8 +166,7 @@ class Girsanov(VoiceoverScene):
         floor = DashedLine(ax.c2p(-0.6, -5), ax.c2p(3.6, -5), color=JUMP, stroke_width=1.5)
         fl = label(r"one path in $10^5$", font_size=16, color=JUMP).next_to(ax.c2p(3.6, -5), UP, buff=0.05).align_to(
             ax.c2p(3.6, -5), RIGHT)
-        rows = VGroup(*[MathTex(rf"T = {e['T']}:\ \ \text{{ESS}} = {e['ess']:.3g},\ \ \textstyle\frac1N\sum Z = "
-                                rf"{e['mean_w']:.3f}", font_size=24, color=GREY_A) for e in ess])
+        rows = VGroup(*[MathTex(f"T = {e['T']}:\\ \\ \\text{{ESS}}/N = {e['ess']:.3g},\\ \\ \\textstyle\\frac1N\\sum Z = {e['mean_w']:.3f}", font_size=24, color=GREY_A) for e in ess])
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.15)
         side = VGroup(MathTex(r"\text{ESS} = \frac{(\sum Z)^2}{\sum Z^2} \approx N e^{-\theta^2 T}", font_size=30,
                               color=QCOL), rows,
@@ -164,15 +179,18 @@ class Girsanov(VoiceoverScene):
         pc.to_corner(UL, buff=0.3)
         ans.next_to(pc, DOWN, buff=0.15).align_to(pc, LEFT)
         with self.voiceover(
-            "When does it fail? A pause: under P, what is the expected value of Z? <bookmark mark='a'/> One, when "
-            f"Novikov's condition holds; a hundred thousand samples give {g['EZ']:.4f}. <bookmark mark='b'/> Now let "
-            "the horizon grow, with theta a half. The effective number of paths that carry weight falls like e to the "
-            f"minus theta squared T: {100 * ess[2]['ess']:.1f} percent of them at T equals sixteen; at sixty-four, "
-            "fewer than one path in our sample, and the measured weights no longer even average one, but "
-            f"{ess[-1]['mean_w']:.2f}. <bookmark mark='c'/> On an infinite horizon the two measures are singular: one "
-            "infinitely long path reveals its drift. Girsanov works on finite horizons, which is all that pricing "
-            "needs."
-            " Next: Girsanov at work."
+            f"When does it fail? A pause: under P, what is the expected value of Z? <bookmark mark='a'/>"
+            f" One, when Novikov's condition holds; two hundred thousand samples give {g['EZ']:.4f}"
+            f". <bookmark mark='b'/> Now let the horizon grow, with theta a half. For large samples the "
+            f'effective fraction approaches the population moment ratio, e to the minus theta squared T.'
+            f" In this sample it is {100 * ess[2]['ess']:.1f}"
+            f' percent of them at T equals sixteen; at sixty-four, the population approximation would '
+            f'give less than one effective path, while the empirical formula gives about thirty-three. '
+            f'Its large-sample approximation has broken down. The measured weights average only '
+            f"{ess[-1]['mean_w']:.2f}"
+            f". <bookmark mark='c'/> On an infinite horizon the two measures are singular: one "
+            f'infinitely long path reveals its drift. Girsanov works on finite horizons, which is all '
+            f'that pricing needs. Next: Girsanov at work.'
         ) as vo:
             self.play(FadeIn(pc))
             vo.wait_until("a")

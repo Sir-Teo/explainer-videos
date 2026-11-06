@@ -19,7 +19,9 @@ class JumpData(VoiceoverScene):
     def card(self):
         c = chapter_card(13, r"Jumps in data, and the hedge they break", r"Are there jumps in real prices, and what do "
                          r"they cost a hedger?", part=PART)
-        with self.voiceover("Chapter thirteen. Jumps in real prices, and the hedge they break."):
+        with self.voiceover(
+            'Chapter thirteen. Jumps in real prices, and the hedge they break.'
+        ):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -32,18 +34,22 @@ class JumpData(VoiceoverScene):
         whys = [why(r"quadratic variation counts every jump's square, as in chapter 12 ($[\widetilde N] = N$)"),
                 why(r"$\mathbb{E}|Z| = \sqrt{2/\pi}$; a jump touches a product only next to a neighbour of size "
                     r"$O(\sqrt{\Delta t})$, so it vanishes"),
-                why(r"the difference isolates the jumps (Barndorff-Nielsen and Shephard 2004)")]
+                why((
+                        'under suitable jump-activity and volatility conditions, the difference estimates jump variation; '
+                        'hourly outliers are only diagnostics'
+                    ))]
         step = ladder(self, rows, whys, keep=3, top=2.4, x=-1.6, buff=0.9, edge=6.9)
         with self.voiceover(
-            "Do real prices jump? Quadratic variation sees diffusion and jumps alike: the sum of squared returns "
-            "converges to the integrated variance plus the sum of the squared jumps, as the compensated Poisson "
-            "process of the last chapter showed. <bookmark mark='a'/> Ole Barndorff-Nielsen and Neil Shephard found a "
-            "sum that ignores the jumps: products of neighbouring absolute returns, scaled by pi over two, because "
-            "the mean absolute value of a standard Gaussian is the square root of two over pi. A jump appears in only "
-            "two products, each time beside a small diffusive return of order the square root of the step, so its "
-            "contribution vanishes as the sampling gets finer. <bookmark mark='b'/> The difference between the two "
-            "measures the jumps, and dividing each return by a bipower volatility from the past week makes the jumps "
-            "stand out."
+            'Do real prices jump? Quadratic variation sees diffusion and jumps alike: the sum of squared returns '
+            'converges to the integrated variance plus the sum of the squared jumps, as the compensated Poisson '
+            "process of the last chapter showed. <bookmark mark='a'/> Ole Barndorff-Nielsen and Neil Shephard "
+            'found a sum that ignores the jumps: products of neighbouring absolute returns, scaled by pi over '
+            'two, because the mean absolute value of a standard Gaussian is the square root of two over pi. A '
+            'jump appears in only two products, each time beside a small diffusive return of order the square '
+            "root of the step, so its contribution vanishes as the sampling gets finer. <bookmark mark='b'/> "
+            'Under the relevant high-frequency assumptions their difference estimates jump variation. At hourly '
+            'resolution, scaling by a past-week bipower estimate gives an outlier diagnostic, not a proof that a '
+            'path is discontinuous.'
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -72,7 +78,8 @@ class JumpData(VoiceoverScene):
             col = JUMP if abs(m_) > 5 else BM
             bars.add(Rectangle(width=ax.c2p(w * 0.9, 0)[0] - ax.c2p(0, 0)[0], height=top[1] - bot[1], stroke_width=0,
                                fill_color=col, fill_opacity=0.85).move_to((top + bot) / 2))
-        gl = curve(ax, mid, np.log10(np.maximum(gauss, 0.1)), DRIFT, stroke_width=3)
+        shown = gauss >= 0.1
+        gl = curve(ax, mid[shown], np.log10(gauss[shown]), DRIFT, stroke_width=3)
         cut = VGroup(DashedLine(ax.c2p(5, -1), ax.c2p(5, 4.2), color=JUMP, stroke_width=1.5),
                      DashedLine(ax.c2p(-5, -1), ax.c2p(-5, 4.2), color=JUMP, stroke_width=1.5))
         py = j["per_year"]
@@ -81,19 +88,22 @@ class JumpData(VoiceoverScene):
             MathTex(rf"\text{{beyond 5 local sd: }} {j['n_jumps']} \text{{ hours}}", font_size=30, color=JUMP),
             MathTex(rf"\text{{a Gaussian would give }} {j['gauss_expected']:.3f}", font_size=30, color=DRIFT),
             label(rf"by year: {py['2018']}, {py['2019']}, {py['2020']}", font_size=21, color=GREY_A),
-            MathTex(rf"\text{{share of all variance: }} {100 * j['share_of_variance']:.0f}\%", font_size=30, color=JUMP),
-            wrapped_label(r"scale: bipower variation over the past week, known before the hour", 4.6, 19, GREY_B),
+            MathTex(rf"\text{{share of squared returns: }} {100 * j['share_of_variance']:.0f}\%", font_size=28, color=JUMP),
+            wrapped_label(r"past-week bipower scale, known before the hour; outliers are not identified jumps; values beyond 12 are pooled in edge bins", 4.6, 18, GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.4)
         src = real_data(r"Binance BTCUSDT one-hour candles, January 2018 -- December 2020")
         with self.voiceover(
-            "Take Bitcoin's hourly returns for three years and divide each by the bipower volatility of the week "
-            "before it, which a single jump barely moves. <bookmark mark='a'/> If the hours were Gaussian, the "
-            f"histogram would follow the green curve, and you would expect {j['gauss_expected']:.3f} hours beyond five "
-            f"standard deviations in three years. <bookmark mark='b'/> There were {j['n_jumps']}, about "
-            f"{j['n_jumps'] / 3:.0f} a year, spread evenly across the three years, and those hours alone carry "
-            f"{100 * j['share_of_variance']:.0f} percent of all the variance. The jumps are not rare accidents; they "
-            "are a structural part of how this market moves, and a model without them misprices every option whose "
-            "payoff cares about the tails."
+            f"Take Bitcoin's hourly returns for three years and divide each by the bipower volatility of"
+            f" the week before it, which a single jump barely moves. <bookmark mark='a'/> If these "
+            f'standardized returns were exactly standard Gaussian with a known scale, the histogram '
+            f"would follow the green curve, and you would expect {j['gauss_expected']:.3f}"
+            f" hours beyond five standard deviations in three years. <bookmark mark='b'/> There were "
+            f"{j['n_jumps']}, about {j['n_jumps'] / 3:.0f}"
+            f' a year, spread evenly across the three years, and those hours alone carry '
+            f"{100 * j['share_of_variance']:.0f}"
+            f' percent of all the variance. These are flagged hours, not identified jumps. Continuous '
+            f'stochastic volatility, heavy tails and scale-estimation error can also create such '
+            f'outliers. Their squared-return share is not a separately estimated jump quadratic variation.'
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]))
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.01, run_time=2))
@@ -136,20 +146,7 @@ class JumpData(VoiceoverScene):
         flat = jh["rows"][-1]["jump"] > 0.8 * jh["rows"][2]["jump"]
         verdict = ("barely moves" if flat else "keeps falling, more slowly")
         with self.voiceover(
-            "What do jumps do to a hedge? Sell a three-month at-the-money call and delta-hedge it with the "
-            "Black-Scholes delta at the diffusion's volatility, rebalancing from thirteen to four thousand times a "
-            "year, on ten thousand paths. <bookmark mark='a'/> Without jumps, the spread of the error falls like one "
-            "over the square root of the number of trades, as in chapter ten. <bookmark mark='b'/> Add Merton's "
-            f"jumps, six a year with a mean of minus five percent, and the error {verdict}: at four thousand "
-            f"rebalances it is {jh['floor_ratio']:.0f} times the jump-free error. <bookmark mark='c'/> The reason is "
-            "one line of Itô's formula for jumps. At a jump of relative size J, the hedged book gains or loses half "
-            "gamma times S squared times J squared, plus higher terms. A position in the stock is linear in J and "
-            "cannot offset a quadratic, and no single delta is right for jumps of two different sizes: two unknowns, "
-            "one instrument. The market is incomplete, and the risk-neutral measure is no longer unique: the Esscher "
-            "transform is one choice among many. <bookmark mark='d'/> A pause: rebalance every second, and does the "
-            "jump error vanish? No. A jump happens between two trades, however close they are. Part eleven hedges "
-            "with options instead."
-            " And jumps in real markets cluster. Next: jumps that cause jumps."
+            f"What do jumps do to a hedge? Sell a three-month at-the-money call and delta-hedge it with the Black-Scholes delta at the diffusion's volatility, rebalancing from thirteen to four thousand times a year, on ten thousand paths. <bookmark mark='a'/> Without jumps, the spread of the error falls like one over the square root of the number of trades, as in chapter ten. <bookmark mark='b'/> Add Merton's jumps, six a year with a mean log-jump of minus five percent, and the error {verdict}: at four thousand rebalances it is {jh['floor_ratio']:.0f} times the jump-free error. <bookmark mark='c'/> The reason is one line of Itô's formula for jumps. At a jump of relative size J, the hedged book gains or loses half gamma times S squared times J squared, plus higher terms. A position in the stock is linear in J and cannot offset a quadratic, and no single delta is right for jumps of two different sizes: two unknowns, one instrument. The market is incomplete, and the risk-neutral measure is no longer unique: the Esscher transform is one choice among many. <bookmark mark='d'/> A pause: rebalance every second, and does the jump error vanish? <bookmark mark='e'/> No. A jump happens between two trades, however close they are. Part eleven hedges with options instead. And jumps in real markets cluster. Next: jumps that cause jumps."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg))
             vo.wait_until("a")
@@ -160,6 +157,9 @@ class JumpData(VoiceoverScene):
             self.play(FadeIn(rows[0]), FadeIn(w0))
             self.play(FadeIn(es))
             vo.wait_until("d")
-            self.play(FadeIn(pc), FadeIn(ans))
+            self.play(FadeIn(pc))
+            vo.wait_until("e")
+            self.wait(0.8)
+            self.play(FadeIn(ans))
         self.wait(0.4)
         self.clear_scene()

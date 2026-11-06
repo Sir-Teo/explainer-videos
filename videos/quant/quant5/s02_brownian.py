@@ -17,7 +17,9 @@ class Brownian(VoiceoverScene):
 
     def card(self):
         c = chapter_card(2, r"Quadratic variation, accumulating", r"Why is $(dW)^2 = dt$?", part=PART)
-        with self.voiceover("Chapter two. Quadratic variation, watched as it accumulates, and then proved."):
+        with self.voiceover(
+            'Chapter two. Quadratic variation, watched as it accumulates, and then proved.'
+        ):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -62,13 +64,14 @@ class Brownian(VoiceoverScene):
         regrid(finals, gap=0.35)
         cur = sums(ns[0])
         with self.voiceover(
-            "Draw one Brownian path, on a grid of two hundred and fifty-six steps, and keep three running totals over "
-            "its steps: the sizes of the moves, their squares, and their cubes. <bookmark mark='a'/> The length races "
-            "off the chart. The cubes barely leave the floor. The squares climb along the diagonal, close to the "
-            "elapsed time. <bookmark mark='b'/> Now refine the grid, from sixteen steps to four thousand. The length "
-            "grows like the square root of the number of steps: a Brownian path is infinitely long on every interval. "
-            "The cubes vanish. The squares hug the line y equals t. <bookmark mark='c'/> That is what d W squared "
-            "equals d t means: not a rule of algebra, but a sum of many small squares that has become deterministic."
+            'Draw one Brownian path, on a grid of two hundred and fifty-six steps, and keep three running totals '
+            "over its steps: the sizes of the moves, their squares, and their cubes. <bookmark mark='a'/> The "
+            'length races off the chart. The cubes barely leave the floor. The squares climb along the diagonal, '
+            "close to the elapsed time. <bookmark mark='b'/> Now refine the grid, from sixteen steps to four "
+            'thousand. The length grows like the square root of the number of steps: a Brownian path is '
+            'infinitely long on every interval. The cubes vanish. The squares hug the line y equals t. <bookmark '
+            "mark='c'/> That is what d W squared equals d t means: not a rule of algebra, but a sum of many small"
+            ' squares that has become deterministic.'
         ) as vo:
             self.add(path, *live)
             self.play(FadeIn(g1), FadeIn(g2), Create(diag), FadeIn(dl), FadeIn(leg))
@@ -97,9 +100,9 @@ class Brownian(VoiceoverScene):
         whys = [why(r"each increment has variance $\Delta t_k$"),
                 why(r"independent increments; a Gaussian's fourth moment is $3\Delta t^2$, so each square has variance "
                     r"$2\Delta t^2$"),
-                why(r"so the sum converges to $T$ in mean square; the paths are continuous, so "
-                    r"$\max|\Delta W| \to 0$ and the length is infinite: no Stieltjes integral"),
-                why(r"observed prices carry noise $\varepsilon$ at each tick: $n$ extra squares, which grow with $n$")]
+                why(r"along dyadic grids, QV tends to $T$ almost surely and $\max|\Delta W|\to0$: infinite total variation; "
+                    r"ordinary bounded-variation integration does not apply"),
+                why(r"iid mean-zero observation noise independent of the efficient price adds $2n\mathbb E\varepsilon^2$ in expectation")]
         step = ladder(self, rows, whys, keep=3, top=3.2, x=-1.5, buff=0.5, edge=6.9)
         ns = q["ns"]
         tab = VGroup(*[MathTex(rf"n = {n:,}:\ \ {sd:.4f} \text{{ against }} \sqrt{{2/n}} = {th:.4f}".replace(",", "{,}"),
@@ -114,15 +117,16 @@ class Brownian(VoiceoverScene):
         pc.to_corner(DR, buff=0.35)
         ans.next_to(pc, UP, buff=0.2).align_to(pc, LEFT)
         with self.voiceover(
-            "The proof takes two lines. The expected sum of squared increments is the sum of the steps: T. "
-            "<bookmark mark='a'/> Its variance: each squared increment has variance twice its step squared, so the "
-            "variance of the sum is at most two T times the largest step, which goes to zero. <bookmark mark='b'/> "
-            "And the length is at least the sum of squares divided by the largest move, which goes to zero because "
-            "the path is continuous. So the length is infinite, no Stieltjes integral exists, and the next chapter "
-            "has to build a new one. <bookmark mark='c'/> A pause: sample twice as fast, and by how much does the "
-            "spread of the estimate shrink? <bookmark mark='d'/> By the square root of two; four thousand paths agree "
-            "at every grid. <bookmark mark='e'/> One more line, for real prices: noise on each observed price adds n "
-            "extra squares, and the estimate grows with n instead of settling."
+            'The proof takes two lines. The expected sum of squared increments is the sum of the steps: T. '
+            "<bookmark mark='a'/> Its variance: each squared increment has variance twice its step squared, so "
+            'the variance of the sum is at most two T times the largest step, which goes to zero. <bookmark '
+            "mark='b'/> And the length is at least the sum of squares divided by the largest move, which goes to "
+            'zero because the path is continuous. Thus total variation is infinite. The usual integration theory '
+            'for a bounded-variation integrator does not apply; some particular pathwise integrals still exist. '
+            "We need a different general construction. <bookmark mark='c'/> A pause: sample twice as fast, and by"
+            " how much does the spread of the estimate shrink? <bookmark mark='d'/> By the square root of two; "
+            "four thousand paths agree at every grid. <bookmark mark='e'/> One more line, for real prices: noise "
+            'on each observed price adds n extra squares, and the estimate grows with n instead of settling.'
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -158,23 +162,31 @@ class Brownian(VoiceoverScene):
             MathTex(rf"\text{{every day: }} {100 * vol[-1]:.0f}\%", font_size=32, color=DRIFT),
             MathTex(r"\widehat{\mathbb{E}\,\varepsilon^2} = \frac{RV_{1\,\mathrm{min}} - RV_{1\,\mathrm{day}}}{2n}",
                     font_size=30, color=ITO),
-            MathTex(rf"\text{{noise: about }} {q['noise_bp']:.1f} \text{{ basis points a tick}}", font_size=28, color=ITO),
-            wrapped_label(r"the volatility signature plot (Andersen, Bollerslev, Diebold and Labys 2000); "
-                          r"subsampling over offsets (Zhang, Mykland and A\"it-Sahalia 2005) averages the noise down",
+            MathTex(f"\\text{{implied iid noise: }} {q['noise_bp']:.1f} \\text{{ bp per log-price observation}}", font_size=28, color=ITO),
+            wrapped_label((
+                              'the volatility signature plot (Andersen, Bollerslev, Diebold and Labys 2000); subsampling over '
+                              'offsets (Zhang, Mykland and A\\"it-Sahalia 2005) averages sampling-phase variability; it does not '
+                              'remove leading noise bias'
+                          ),
                           4.6, 19, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.45)
         src = real_data(r"Binance BTCUSDT one-minute candles, 2020; subsampled over up to 30 offsets")
         with self.voiceover(
-            "Try it on Bitcoin in 2020. If the price were a Brownian motion with constant volatility, the sum of "
-            "squared returns would give the same answer at every sampling interval. <bookmark mark='a'/> Squared "
-            f"daily returns give a volatility of {100 * vol[-1]:.0f} percent; squared one-minute returns give "
-            f"{100 * vol[0]:.0f}. <bookmark mark='b'/> The last line of the proof explains the rise: the bid-ask "
-            "bounce is noise, and its squares pile up as the sampling gets faster. Read backwards, the gap between "
-            f"the one-minute and the one-day estimates measures it: about {q['noise_bp']:.1f} basis points a tick. "
-            "Practitioners sample every five minutes or so, a compromise between noise and too few observations, or "
-            "they subsample: compute the sum from every starting offset and average, as Zhang, Mykland and "
-            "Aït-Sahalia proposed. Part seven builds volatility forecasts on these sums."
-            " That accumulating variance is exactly what breaks ordinary calculus on these paths. Next: the integral that works."
+            f'Try it on Bitcoin in 2020. If the price were a Brownian motion with constant volatility, '
+            f'the sum of squared returns would give the same answer at every sampling interval. '
+            f"<bookmark mark='a'/> Squared daily returns give a volatility of {100 * vol[-1]:.0f}"
+            f' percent; squared one-minute returns give {100 * vol[0]:.0f}'
+            f". <bookmark mark='b'/> Independent observation noise would add such a rise. If we "
+            f'attribute the entire one-minute versus one-day variance gap to that noise, its implied '
+            f"standard deviation is about {q['noise_bp']:.1f}"
+            f' basis points per observed log price. This is an illustrative decomposition, not an '
+            f'identified noise estimate: finite sampling and changing volatility also matter. '
+            f'Practitioners often sample every five minutes or so, a compromise between noise and too '
+            f'few observations, or they subsample: average across starting offsets to reduce '
+            f'sampling-phase variability. Averaging alone does not remove the leading noise bias; '
+            f'two-scale and kernel estimators do more. Part seven builds volatility forecasts on these '
+            f'sums. That accumulating variance is exactly what breaks ordinary calculus on these paths. '
+            f'Next: the integral that works.'
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             vo.wait_until("a")

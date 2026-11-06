@@ -485,6 +485,12 @@ def compute_cir_mle() -> dict:
                   "best": max(fits, key=lambda f: f["loglik"])})
 
 
+def _full_sample_histogram_density(values, edges, weights=None):
+    """Density bins retain their unconditional mass, including out-of-view samples."""
+    values, edges = np.asarray(values), np.asarray(edges)
+    return np.histogram(values, bins=edges, weights=weights)[0] / (len(values) * np.diff(edges))
+
+
 def compute_fp_surface() -> dict:
     """The transition density p(t, x) of CIR from x_0 = 4%: with the fitted parameters (2 kappa theta / sigma^2 = 0.58:
     a wall of probability at 0) and with sigma lowered so that 2 kappa theta / sigma^2 = 2 (the density pinches to 0),
@@ -509,7 +515,8 @@ def compute_fp_surface() -> dict:
     p_fit = dens(k, th, s)
     p_two = dens(k, th, s2)
     X = sim.cir_exact(x0, k, th, s, 5.0, 60, 20000, seed=33)[:, -1]
-    h, e = np.histogram(X, bins=60, range=(0, 0.12), density=True)
+    e = np.linspace(0, 0.12, 61)
+    h = _full_sample_histogram_density(X, e)
     c = s ** 2 * (1 - np.exp(-k * 5)) / (4 * k)
     mid = (e[:-1] + e[1:]) / 2
     exact = (ncx2.cdf(e[1:] / c, 4 * k * th / s ** 2, x0 * np.exp(-k * 5) / c)
@@ -567,9 +574,9 @@ def compute_girsanov_paths() -> dict:
     big = np.random.default_rng(37).standard_normal(200000)
     wb = np.exp(th * big - th ** 2 / 2)
     edges = np.linspace(-3.5, 4.5, 41)
-    h_p, _ = np.histogram(big, edges, density=True)
-    h_q, _ = np.histogram(big, edges, weights=wb, density=True)
-    h_m, _ = np.histogram(big + th, edges, density=True)
+    h_p = _full_sample_histogram_density(big, edges)
+    h_q = _full_sample_histogram_density(big, edges, weights=wb)
+    h_m = _full_sample_histogram_density(big + th, edges)
     ess = []
     for T in (1, 4, 16, 64):
         x = np.random.default_rng(38).standard_normal(100000) * np.sqrt(T)

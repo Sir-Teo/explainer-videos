@@ -20,7 +20,9 @@ class Signatures(VoiceoverScene, ThreeDScene):
     def card(self):
         c = chapter_card(16, r"Rough paths and signatures", r"What does an integral need to know about a path?",
                          part=PART)
-        with self.voiceover("Chapter sixteen. Rough paths, and signatures."):
+        with self.voiceover(
+            'Chapter sixteen. Rough paths, and signatures.'
+        ):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -48,23 +50,26 @@ class Signatures(VoiceoverScene, ThreeDScene):
         tab = VGroup(*[MathTex(rf"n = {k}:\ \sup|X| = {hx[k]['sup']:.3f},\ \ Y^3_1 = {hx[k]['Y3_end']:.3f}", font_size=24,
                                color=cols[k]) for k in ns]).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         tab.next_to(eq, DOWN, buff=0.35).align_to(eq, LEFT)
-        rows = VGroup(MathTex(r"A_t = \tfrac12\int_0^t \big(X^1 dX^2 - X^2 dX^1\big) = \tfrac12 \cdot \tfrac{1}{n^2} \cdot n^2 t "
-                              r"= \tfrac{t}{2}", font_size=26, color=ITO),
-                      label(r"a circle of radius $r$ at angular speed $\omega$ sweeps area at rate $\tfrac12 r^2\omega$; "
-                            r"$Y^3 = 2A$", font_size=18, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+        rows = VGroup(MathTex(r"A_t^{(n)} = \tfrac12\int_0^t \big(Y^1 dX^2 - Y^2 dX^1\big)",
+                              font_size=25, color=ITO),
+                      MathTex(r"Y^3_t = 2A_t^{(n)} = t - \frac{\sin(n^2t)}{n^2}\ \longrightarrow\ t",
+                              font_size=25, color=ITO),
+                      label(r"signed area to the chord; $Y = X-X_0$ accounts for the initial offset",
+                            font_size=18, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         rows.to_corner(DR, buff=0.35)
         self.set_camera_orientation(phi=0 * DEGREES, theta=-90 * DEGREES, zoom=0.9)
         self.add_fixed_in_frame_mobjects(eq, tab, rows)
         self.remove(eq, tab, rows)
         with self.voiceover(
             "Why does integration need more than the path? Terry Lyons's example: a path running in tiny fast "
-            "circles, radius one over n, n squared radians a unit of time. Seen from above, it shrinks to a point as "
-            "n grows. <bookmark mark='a'/> Feed it to a simple equation whose third coordinate integrates Y one d X "
-            "two minus Y two d X one. <bookmark mark='b'/> Turn the camera to the side: the solutions are helices "
-            "whose shadows shrink while their height still climbs to about one. <bookmark mark='c'/> The height is "
-            "twice the Lévy area the path sweeps, and a small circle swept fast accrues area at a constant rate. So "
-            "the solution map is not continuous in the path alone. Lyons proved in 1998 that it is continuous in the "
-            "path together with its area: that pair is a rough path."
+            'circles, radius one over n, n squared radians a unit of time. Seen from above, it shrinks to a point'
+            " as n grows. <bookmark mark='a'/> Feed it to a simple equation whose third coordinate integrates Y "
+            "one d X two minus Y two d X one. <bookmark mark='b'/> Turn the camera to the side: the solutions are"
+            " helices whose shadows shrink while their height still climbs to about one. <bookmark mark='c'/> The"
+            ' height is twice the Lévy area the path sweeps, and a small circle swept fast accrues area at a '
+            'constant rate. Thus the solution map is not continuous in the uniform norm of the driving path '
+            'alone. Rough-path continuity uses an enhanced path and its p-variation metric. For p between two and'
+            ' three, increments and area suffice; rougher signals require higher iterated integrals.'
         ) as vo:
             self.play(Create(ax), FadeIn(eq[0]))
             for k in ns:
@@ -81,8 +86,8 @@ class Signatures(VoiceoverScene, ThreeDScene):
             self.move_camera(theta=-20 * DEGREES, run_time=max(vo.remaining(0.5) - 0.5, 2))
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0,
                          added_anims=[FadeOut(VGroup(ax, *floors.values(), *sols.values())), FadeOut(eq), FadeOut(tab),
-                                      FadeOut(rows)], run_time=1.5)
-        self.clear_scene()
+                                      FadeOut(rows)], run_time=1.0)
+        self.clear_scene(run_time=0.2)
 
     def chen(self):
         a = np.array([[0, 0], [1, 0], [1, 1]], float)
@@ -113,19 +118,23 @@ class Signatures(VoiceoverScene, ThreeDScene):
                               r"of level 2 the L\'evy area", 7.0, 18, GREY_B),
                 wrapped_label(r"Chen (1957): concatenating paths multiplies signatures; a straight segment's is the "
                               r"tensor exponential", 7.0, 18, GREY_B),
-                why(r"the simplex has volume $1/k!$: truncation error decays factorially", 18),
+                why((
+                        'for bounded-variation paths of length $L$, level $k$ is bounded by $L^k/k!$; rough paths have an '
+                        'analogous bound'
+                    ), 18),
                 why(r"the shuffle product: linear functionals form an algebra; with time added, Stone--Weierstrass "
                     r"gives universal approximation on compact sets", 18)]
         step = ladder(self, rows, whys, keep=4, top=3.3, x=0.8, buff=0.42, edge=6.95)  # room for Chen's identity at full size
         with self.voiceover(
-            "A pause. Right then up, or up then right: same start, same end, same increments. Which statistic tells "
-            "them apart? <bookmark mark='a'/> The signed area to the chord: plus a half and minus a half. Kuo-Tsai "
-            "Chen showed in 1957 that a path is captured by all its iterated integrals, its signature; level one is "
-            "the increment, level two contains the area. <bookmark mark='b'/> Chen's identity: joining paths "
-            "multiplies signatures, and a straight segment's signature is the tensor exponential of its increment. "
-            "<bookmark mark='c'/> The levels shrink factorially. <bookmark mark='d'/> And products of linear "
-            "functions of the signature are again linear, so by Stone-Weierstrass, linear functions of the signature "
-            "approximate any continuous function of the path."
+            'A pause. Right then up, or up then right: same start, same end, same increments. Which statistic '
+            "tells them apart? <bookmark mark='a'/> The signed area to the chord: plus a half and minus a half. "
+            'Kuo-Tsai Chen studied the iterated integrals that make up a path’s signature; level one is the '
+            "increment, level two contains the area. <bookmark mark='b'/> Chen's identity: joining paths "
+            "multiplies signatures, and a straight segment's signature is the tensor exponential of its "
+            "increment. <bookmark mark='c'/> The levels shrink factorially. <bookmark mark='d'/> And products of "
+            'linear functions of the signature are again linear, so Stone-Weierstrass gives uniform approximation'
+            ' on suitable compact sets where signatures separate paths. Include time and fix the starting point '
+            'to remove ambiguities from reparametrization and tree-like pieces.'
         ) as vo:
             self.play(FadeIn(plane), Create(pa), Create(pb), FadeIn(pc), run_time=2)
             vo.wait_until("a")
@@ -159,12 +168,13 @@ class Signatures(VoiceoverScene, ThreeDScene):
         outs = [f"S = signature(unit square, 2):  level 1 = {S[1].round(3).tolist()},  area = {(S[2][0, 1] - S[2][1, 0]) / 2:.3f}",
                 f"signature_batch: {sr['N']:,} paths, depth 5 -> {sr['n_feats'][-1]} features (time + 2 assets)"]
         with self.voiceover(
-            "Here is the House's signature, exactly as the identity reads. Start with the signature of nothing: one, "
-            "then zeros. For each straight segment, build its tensor exponential level by level, each level the "
-            "previous one times the increment, divided by k, and multiply it into the running signature with Chen's "
-            "product. <bookmark mark='a'/> Run it on the unit square traversed once: the increments are zero, and the "
-            "area is one. <bookmark mark='b'/> A batched version computes it for twenty thousand paths at once, three "
-            "hundred and sixty-three numbers per path at depth five, which the experiment needs."
+            "Here is the House's signature, exactly as the identity reads. Start with the signature of nothing: "
+            'one, then zeros. For each straight segment, build its tensor exponential level by level, each level '
+            'the previous one times the increment, divided by k, and multiply it into the running signature with '
+            "Chen's product. <bookmark mark='a'/> Run it on the unit square traversed once: the increments are "
+            "zero, and the area is one. <bookmark mark='b'/> A batched version computes it for twenty thousand "
+            'paths at once, three hundred and sixty-three numbers per path at depth five, which the experiment '
+            'needs.'
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -185,7 +195,7 @@ class Signatures(VoiceoverScene, ThreeDScene):
             d = sr["scatter"][k]
             pr, tr = np.asarray(d["pred"]), np.asarray(d["true"])
             hi = float(np.percentile(tr, 99)) * 1.1
-            a = axes([0, hi], [0, hi], x_length=4.0, y_length=4.0, xlabel=r"true Asian payoff", ylabel=r"predicted",
+            a = axes([0, hi], [0, hi], x_length=4.0, y_length=4.0, xlabel=r"true payoff (display clipped)", ylabel=r"predicted (display clipped)",
                      xticks=[0], yticks=[0], font_size=14)
             dots = VGroup(*[Dot(a.ax.c2p(min(x, hi), np.clip(y, 0, hi)), radius=0.025, color=ITO, fill_opacity=0.7)
                             for x, y in zip(tr, pr)])
@@ -209,19 +219,22 @@ class Signatures(VoiceoverScene, ThreeDScene):
                   rf"{base['last']:.3f}", font_size=18, color=ITO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).to_edge(DOWN, buff=0.15)
         over = rm[-1] < rm[best - 1] - 0.005
-        verdict = (f"It peaks at depth {best}, {rm[best - 1]:.3f}, and slips at depth five, {rm[-1]:.3f}: "
-                   f"{sr['n_feats'][-1]} features begin to overfit twelve thousand training paths."
+        verdict = (f"It peaks at depth {best}, {rm[best - 1]:.3f}, and slips at depth five, {rm[-1]:.3f}: {sr['n_feats'][-1]} features show worse test performance here, consistent with excess complexity for twelve thousand training paths."
                    if over else f"It climbs to {rm[-1]:.3f} at depth five.")
         with self.voiceover(
-            "Now learn with it: twenty thousand paths of two correlated assets plus time, and linear regressions on "
-            "the truncated signature, scored on unseen paths over five splits. <bookmark mark='a'/> Two checks: the "
-            "average price is exactly linear in level two, and so is the area between the assets; at depth two both "
-            f"reach an R squared of {tg['average']['r2_mean'][1]:.3f}, while all sixty-five raw prices explain "
-            f"{100 * tg['area']['base']['path']:.1f} percent of the area. <bookmark mark='b'/> Then an Asian call, "
-            "which is linear in nothing. Scrub through the depths: the predictions tighten onto the diagonal. "
-            f"{verdict} The raw path manages {base['path']:.3f}. <bookmark mark='c'/> Signatures return in the next "
-            "two chapters, and in Parts fourteen, seventeen and forty-two."
-            " Next: how desks build, test and run these models."
+            f'Now learn with it: twenty thousand paths of two correlated assets plus time, and linear '
+            f'regressions on the truncated signature, scored on unseen simulated paths over five '
+            f"overlapping train-validation-test splits. <bookmark mark='a'/> Two checks: the average "
+            f'price is exactly linear in level two, and so is the area between the assets; at depth two '
+            f"both reach an R squared of {tg['average']['r2_mean'][1]:.3f}"
+            f', while a linear regression on both assets at all sixty-five timestamps explains '
+            f"{100 * tg['area']['base']['path']:.1f}"
+            f" percent of the area. <bookmark mark='b'/> Then an Asian call, a nonlinear function of the"
+            f' average. Scrub through the depths: the predictions tighten onto the diagonal. {verdict}'
+            f" The raw path manages {base['path']:.3f}"
+            f". <bookmark mark='c'/> Signatures are nonlinear features of the same raw paths, not extra "
+            f'observations. They return in the next two chapters, and in Parts fourteen, seventeen and '
+            f'forty-two. Next: how desks build, test and run these models.'
         ) as vo:
             self.play(FadeIn(rp), FadeIn(bl))
             vo.wait_until("a")

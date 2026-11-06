@@ -1,0 +1,819 @@
+{
+  "video": "quant5",
+  "base_commit": "0abcb2fb19571a214ed517f17d0f4ce4bd4a130a",
+  "source_fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+  "data_inputs": {
+    ".cache/quant5/cir_mle.json": {
+      "sha256": "30301eb3b85d163a4a7aa8ba7b97c78c9292a92ef68d7665c6755312cd9ab537",
+      "bytes": 59997
+    },
+    ".cache/quant5/cir_mle.npz": null,
+    ".cache/quant5/construct.json": {
+      "sha256": "1d03ff77613f6510428b85a631289483b2596829956261bd49bb645ebb551b14",
+      "bytes": 275750
+    },
+    ".cache/quant5/construct.npz": null,
+    ".cache/quant5/cont_das.json": {
+      "sha256": "b6614b00a3e9c11a4daaa420ed09ef331dfdc73d0acb79189bec765fc16fdbcb",
+      "bytes": 22767
+    },
+    ".cache/quant5/cont_das.npz": null,
+    ".cache/quant5/envelope2.json": {
+      "sha256": "4268417288aaeb3c5ee006a67eb6370948d1af1d8e849fd6e1a80dc9e49b5b1c",
+      "bytes": 468
+    },
+    ".cache/quant5/envelope2.npz": null,
+    ".cache/quant5/fbm_morph.json": {
+      "sha256": "e9e2b8d37c2f305b185052c8edb793b83e6006e9e4dc499ad4b470879253bd68",
+      "bytes": 461581
+    },
+    ".cache/quant5/fbm_morph.npz": null,
+    ".cache/quant5/fk_check.json": {
+      "sha256": "6c0754f6020c7512d4dd569fde69b18249391e1c12a7a0eb421caa21bfa40d96",
+      "bytes": 4162
+    },
+    ".cache/quant5/fk_check.npz": null,
+    ".cache/quant5/fp_surface.json": {
+      "sha256": "a608dd48efac73727c7a9b83e540669e29494be3ea6be3d6e57b32da299d2941",
+      "bytes": 117142
+    },
+    ".cache/quant5/fp_surface.npz": null,
+    ".cache/quant5/girsanov_paths.json": {
+      "sha256": "660c559761d95d655959f68ce6e5003ec6e0af0751ff6519179b7068d3c420f9",
+      "bytes": 373558
+    },
+    ".cache/quant5/girsanov_paths.npz": null,
+    ".cache/quant5/hawkes.json": {
+      "sha256": "599d0302c06ed8a5d319007f208d0900508395f4e2921c636f05a779b74c14ad",
+      "bytes": 159105
+    },
+    ".cache/quant5/hawkes.npz": null,
+    ".cache/quant5/hawkes_check.json": {
+      "sha256": "b00b302420da2ec78ce11b6bfab6d5b399bbf3abf39424c3adb5c330bf9bddd0",
+      "bytes": 5301
+    },
+    ".cache/quant5/hawkes_check.npz": null,
+    ".cache/quant5/hawkes_replay.json": {
+      "sha256": "30baf614b2e0c7c236e6a909b573f5fc79f796bc347f1dec902091284c453ebc",
+      "bytes": 199735
+    },
+    ".cache/quant5/hawkes_replay.npz": null,
+    ".cache/quant5/hawkes_rescale.json": {
+      "sha256": "3f819cc0f8971f4b9feb134b09e32bb9cd0f9732424464dd6c72585db5028cf6",
+      "bytes": 20224
+    },
+    ".cache/quant5/hawkes_rescale.npz": null,
+    ".cache/quant5/hedge_rates.json": {
+      "sha256": "374222775d5ee8d696b2f5db617cf5b33e72c6e34203998357387226c9fcfe54",
+      "bytes": 53322
+    },
+    ".cache/quant5/hedge_rates.npz": null,
+    ".cache/quant5/helix.json": {
+      "sha256": "82f3abe6ca013dfe872236f508a2fc2d09cd0d683b015f98e2d41ad1efc7cdf5",
+      "bytes": 700369
+    },
+    ".cache/quant5/helix.npz": null,
+    ".cache/quant5/is_run.json": {
+      "sha256": "6417becc5c2f23d8e1b32f8ace3462e8e5f9ea887858e26c3e4fd74a0bc86008",
+      "bytes": 12723
+    },
+    ".cache/quant5/is_run.npz": null,
+    ".cache/quant5/ito.json": {
+      "sha256": "3bdcded1e99f9756c389c71dc196280aba760d4c06eefb74cfc2cd4b05ba118a",
+      "bytes": 12247
+    },
+    ".cache/quant5/ito.npz": null,
+    ".cache/quant5/jump_hedge.json": {
+      "sha256": "e04018df04f77359598f0df9f0b636c77b330ff2ac397f34a5ec7525d289382e",
+      "bytes": 564
+    },
+    ".cache/quant5/jump_hedge.npz": null,
+    ".cache/quant5/jumps.json": {
+      "sha256": "c88cc3573cb374d1f24024f5c62bc7c8dfa80e4b922b17920de21823c9088b19",
+      "bytes": 59805
+    },
+    ".cache/quant5/jumps.npz": null,
+    ".cache/quant5/lemma_column.json": {
+      "sha256": "084a37babeee9c0246bcf0fbe2eb73755cb9248749b3cf25ecf980ddec732a83",
+      "bytes": 69220
+    },
+    ".cache/quant5/lemma_column.npz": null,
+    ".cache/quant5/levy_layers.json": {
+      "sha256": "dded8f0f2dc2b178a9dd2ba3ff3a457bee43a4a761b3e86da793088313a93856",
+      "bytes": 186109
+    },
+    ".cache/quant5/levy_layers.npz": null,
+    ".cache/quant5/nsde.json": {
+      "sha256": "101a2ea80823cf5f10c9e1441fbc3727dffb43911656cf2c5ed289b7821816b4",
+      "bytes": 5765526
+    },
+    ".cache/quant5/nsde.npz": null,
+    ".cache/quant5/nsde_eval.json": {
+      "sha256": "a887469e13c99b01d9bd948acf65d2290155bf9d364e9f335e83041483a37ba7",
+      "bytes": 2429
+    },
+    ".cache/quant5/nsde_eval.npz": null,
+    ".cache/quant5/observability.json": {
+      "sha256": "792303e3ba701cd184ec4447cb337265d1165f0200565ec8782a70b86a36125b",
+      "bytes": 34082
+    },
+    ".cache/quant5/observability.npz": null,
+    ".cache/quant5/orders.json": {
+      "sha256": "d80f062677bdebadee2e7b644d4a7dc242ab1f46afd61e81cc753cc38a0b6c69",
+      "bytes": 991
+    },
+    ".cache/quant5/orders.npz": null,
+    ".cache/quant5/ou_lab.json": {
+      "sha256": "3a9c72bea9edcc613a1f17a07831a8ee924ae1b51ab466722e600236cea3b087",
+      "bytes": 1316027
+    },
+    ".cache/quant5/ou_lab.npz": null,
+    ".cache/quant5/picard.json": {
+      "sha256": "ee4ce5bdbff268b82e16045fd27ed3ebd45218d31fc5fb3fc83d22fd236f0872",
+      "bytes": 42975
+    },
+    ".cache/quant5/picard.npz": null,
+    ".cache/quant5/qv_live.json": {
+      "sha256": "0036de6d591d5ca6e7876af6a911addaf200b4297f4caab02c89ad01b28f3c2d",
+      "bytes": 424903
+    },
+    ".cache/quant5/qv_live.npz": null,
+    ".cache/quant5/rates.json": {
+      "sha256": "c4f597e8806affbd22dc2bb013739e4b782011aac3a7f969909cad1f069433e7",
+      "bytes": 151186
+    },
+    ".cache/quant5/rates.npz": null,
+    ".cache/quant5/reflection.json": {
+      "sha256": "bb2631ba57dd29a63581df3c324328b455d50e2c8a0f90abb088fcf5362e11b4",
+      "bytes": 24328
+    },
+    ".cache/quant5/reflection.npz": null,
+    ".cache/quant5/rough.json": {
+      "sha256": "5c209ad7ebbc2cf0a9b7607c1e5f2887b3af2a33a941dacdf8edf166af646400",
+      "bytes": 27039
+    },
+    ".cache/quant5/rough.npz": null,
+    ".cache/quant5/rv_theory.json": {
+      "sha256": "375beed511863cfdf9176550b11082d263419efcf7a6abc394e09a58791eea64",
+      "bytes": 3510
+    },
+    ".cache/quant5/rv_theory.npz": null,
+    ".cache/quant5/sig_regression.json": {
+      "sha256": "3f772ddbf5171006403ad785eb795393a16d505261750d80796f6d46a6061bf2",
+      "bytes": 87503
+    },
+    ".cache/quant5/sig_regression.npz": null,
+    ".cache/quant5/signature.json": {
+      "sha256": "f8d6069959dc489baffd8cf0b7874c0b78c375dcf3fdd58bd76d9f9184c5c73f",
+      "bytes": 636
+    },
+    ".cache/quant5/signature.npz": null,
+    ".cache/quant5/stoploss.json": {
+      "sha256": "6a008dece3f9a5324f57755b40726f4a968f7ebfbdc48709204e9e7bf2a94394",
+      "bytes": 204698
+    },
+    ".cache/quant5/stoploss.npz": null,
+    ".cache/quant5/tanaka.json": {
+      "sha256": "50463c83326b2cfbd985cd15566e9785baea0533bb9e9323fa6eccba6b18b657",
+      "bytes": 48967
+    },
+    ".cache/quant5/tanaka.npz": null,
+    ".cache/quant5/varswap.json": {
+      "sha256": "3562c69fa75ce830c86ea2940d428a901eaa289816a8b8c4e0d73041d76f98af",
+      "bytes": 31706
+    },
+    ".cache/quant5/varswap.npz": null,
+    ".cache/quant5/wong_zakai.json": {
+      "sha256": "ba61922ef56498028a446f95dee315718e89e5be6ae706dda2946cba26f35237",
+      "bytes": 21061
+    },
+    ".cache/quant5/wong_zakai.npz": null,
+    ".cache/quant5/wti.json": {
+      "sha256": "71ad6ec363d02dc9867f1da11e1dfea6d85779023f216983cfef55314bd80536",
+      "bytes": 4985
+    },
+    ".cache/quant5/wti.npz": null
+  },
+  "scope": "English and Chinese narration-beat frames; English silent 480p15 playback; CPU speech samples",
+  "production_listening": "pending",
+  "manual_visual_review": {
+    "english_endpoint_chapters": 21,
+    "chinese_endpoint_chapters": 21,
+    "english_playback_contact_sheets": 21,
+    "updated_visuals_reviewed": [
+      "Hook EN12frame sheet: compact shortfall table clears strike label; boxed pause works; average-shortfall explanation present",
+      "Actual Hook finalspacingframe56.2s: optionpricecomparisonclearbelowstrikelabel;138.267snewmoviezero1.5sblank/sparseruns",
+      "Current Ito EN sheet shows time-midpoint probability limit andX0=1 question clearly;currentConstruct CH sheet identifiespreselectedplayer",
+      "CurrentactualHook objectives frame103.53s showsfirstthreerows immediately;final138.267s moviehaszero1.5sblankorsparseruns",
+      "LatestChinese Ito sheet: time-midpointlimitandexplicitX0=1 question fit;Rough sheet:unitvariancec_H note andunderlyingOU legendfit;Industry sheet:sourcefooterbottomleftclearsputaxisandquestionappearsbeforederivation",
+      "Updated English playback sheets rechecked Construct arcsine card, Brownian assumptions, Girsanov clipping and ESS, Sampling pricing premise, Representation marked wealth, LocalTime mean/path-SD table, Jumps finite-cutoff caption, Hawkes window/cap captions, Rough normalization and Signatures clipped axes.",
+      "Latest Lemma playback: theoremcard fits and59.47–61.87s transition reviewed; no blank/sparse hold>=1.5s. PDE Dynkin bounded-stop row fits in EN andZH. Research revised logtable, positivequarticity condition andsqrtIV interval fit.",
+      "Industry English playback andlatestChinese sheet:creditfooter clears chart axes;VIXquestion precedesweightsderivation. Frontier window-pooled footnote andstagedanswer fit. Hook finalobjectives/pricefocus clear.",
+      "FinalSignatures63.27–65.67s reset anddrawingtransitionreviewed; zero>=1.5sblank/sparseholds",
+      "FinalPDE71.07–73.47s reset/forwardrowreveal reviewed;bothfirstproofrowswritein.4s,zero>=1.5sblank/sparseholds in245splayback",
+      "FinalResearch14–16.4s transitionreviewed:theoremcardappearsasthenarrationstarts;current328splaybackzero>=1.5sblank/sparseholds. Allfocusedvisualrecheckscomplete."
+    ],
+    "method": "Narration-beat contact sheets and sampled playback frames, with focused rechecks of changed layouts and transitions."
+  },
+  "audio_note": "Signal and alignment checks do not certify pronunciation; full production-voice listening remains pending.",
+  "opening_sample": {
+    "path": "media/quant5/narrated_qa/videos/s01_hook/480p15/Hook.mp4",
+    "seconds": 138.26666666666588,
+    "narration_lines": 5,
+    "backend": "kokoro",
+    "voice": "af_heart",
+    "narration_matches_current_source": true,
+    "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 138 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 138 s\n",
+    "scene_source_sha256": "e958bddd59cda02d667f387ba7fa0142ec971c7047829afb06841ab03cd35533"
+  },
+  "additional_checks": {
+    "zh_narration_coverage": "122/122",
+    "narration_minutes_estimate": 64.9,
+    "tests": [
+      {
+        "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 EXPLAINER_TTS=silent python -m pytest tests/test_quant5_density_display.py tests/test_quant_house.py -k 'quant5_density or simulation_library or neural_sde_generator or envelope_seals or trial_counter' -q",
+        "passed": 7
+      },
+      {
+        "command": "EXPLAINER_TTS=silent python -m pytest tests/test_quant5_marked_hedge.py -q",
+        "passed": 1
+      }
+    ],
+    "density_display": {
+      "window_mass_simulated": 0.9945,
+      "window_mass_analytic": 0.9945663575,
+      "L1": 0.037556675,
+      "normalization": "full sample; weighted Girsanov also uses full N"
+    },
+    "hedge_wealth": "Marked on the fine Brownian grid between rebalances; every cached rebalance wealth is asserted unchanged.",
+    "protocol": {
+      "protected_function_sources_unchanged": [
+        "compute_hawkes",
+        "compute_rough",
+        "compute_cir_mle",
+        "compute_nsde"
+      ],
+      "complete_registration_seal_opening_history_unchanged": true,
+      "part5_cumulative_trials": 236,
+      "additional_trials": 0,
+      "holdouts_opened": 0
+    }
+  },
+  "records": {
+    "en_frames": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 142.96100000000004,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "Construct",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 243.97950000000003,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "Brownian",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 190.44616666666667,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Ito",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 203.89433333333335,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "Lemma",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 217.416625,
+        "frames": 17,
+        "warnings": []
+      },
+      {
+        "scene": "Schemes",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 193.92770833333338,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "MeanReversion",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 221.09991666666667,
+        "frames": 17,
+        "warnings": []
+      },
+      {
+        "scene": "PDE",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 245.44429166666671,
+        "frames": 20,
+        "warnings": []
+      },
+      {
+        "scene": "Girsanov",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 214.42583333333334,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Sampling",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 206.11837500000004,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Representation",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 223.31475,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "LocalTime",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 218.1165416666667,
+        "frames": 16,
+        "warnings": []
+      },
+      {
+        "scene": "Jumps",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 197.39995833333336,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "JumpData",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 199.30545833333335,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Hawkes",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 238.7572916666667,
+        "frames": 17,
+        "warnings": []
+      },
+      {
+        "scene": "Rough",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 233.76279166666671,
+        "frames": 17,
+        "warnings": []
+      },
+      {
+        "scene": "Signatures",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 225.59433333333334,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Industry",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 227.11470833333337,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 217.89062500000003,
+        "frames": 11,
+        "warnings": []
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 328.7349583333333,
+        "frames": 19,
+        "warnings": []
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 188.69987500000002,
+        "frames": 9,
+        "warnings": []
+      }
+    ],
+    "zh_frames": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 154.94291666666672,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "Construct",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 237.96620833333336,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "Brownian",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 184.58016666666668,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Ito",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 215.926625,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "Lemma",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 220.01733333333334,
+        "frames": 17,
+        "warnings": []
+      },
+      {
+        "scene": "Schemes",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 189.3882916666667,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "MeanReversion",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 229.65220833333336,
+        "frames": 17,
+        "warnings": []
+      },
+      {
+        "scene": "PDE",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 240.31962500000006,
+        "frames": 20,
+        "warnings": []
+      },
+      {
+        "scene": "Girsanov",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 210.75570833333336,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Sampling",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 215.30920833333334,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Representation",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 232.80808333333337,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "LocalTime",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 213.25804166666668,
+        "frames": 16,
+        "warnings": []
+      },
+      {
+        "scene": "Jumps",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 194.09175000000005,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "JumpData",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 203.656875,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Hawkes",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 246.69875000000008,
+        "frames": 17,
+        "warnings": []
+      },
+      {
+        "scene": "Rough",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 248.1835416666667,
+        "frames": 17,
+        "warnings": []
+      },
+      {
+        "scene": "Signatures",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 235.4056666666667,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Industry",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 243.6777916666667,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 242.48129166666672,
+        "frames": 11,
+        "warnings": []
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 337.46266666666656,
+        "frames": 19,
+        "warnings": []
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 208.7172916666667,
+        "frames": 9,
+        "warnings": []
+      }
+    ],
+    "en_motion": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 142.6666666666656,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "Construct",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 243.7333333333318,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "Brownian",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 190.33333333333266,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Ito",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 203.5999999999989,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "Lemma",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 217.13333333333338,
+        "frames": 17,
+        "warnings": []
+      },
+      {
+        "scene": "Schemes",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 193.73333333333244,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "MeanReversion",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 220.79999999999905,
+        "frames": 17,
+        "warnings": []
+      },
+      {
+        "scene": "PDE",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 245.13333333333142,
+        "frames": 20,
+        "warnings": []
+      },
+      {
+        "scene": "Girsanov",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 214.19999999999916,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Sampling",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 205.7999999999996,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Representation",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 223.13333333333247,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "LocalTime",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 217.8666666666657,
+        "frames": 16,
+        "warnings": []
+      },
+      {
+        "scene": "Jumps",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 197.13333333333253,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "JumpData",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 199.06666666666595,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Hawkes",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 238.46666666666513,
+        "frames": 17,
+        "warnings": []
+      },
+      {
+        "scene": "Rough",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 233.46666666666596,
+        "frames": 17,
+        "warnings": []
+      },
+      {
+        "scene": "Signatures",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 225.26666666666657,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Industry",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 226.86666666666542,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 217.6666666666661,
+        "frames": 11,
+        "warnings": []
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 328.1999999999981,
+        "frames": 19,
+        "warnings": []
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "fingerprint": "46a73141cdd497366a3d9b9f92bf928e273c44bd5fa18a498c6c332bc9a38f3a",
+        "duration": 188.3333333333325,
+        "frames": 9,
+        "warnings": []
+      }
+    ]
+  },
+  "audio": {
+    "Hook": {
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 5,
+      "issues": []
+    },
+    "Representation": {
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 4,
+      "issues": []
+    },
+    "Research": {
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 9,
+      "issues": []
+    }
+  },
+  "preview": {
+    "path": "renders/quant5_polished_silent.mp4",
+    "seconds": 4572.586979999999,
+    "bytes": 37692426,
+    "chapters": 21,
+    "streams": [
+      {
+        "codec_name": "h264",
+        "codec_type": "video"
+      },
+      {
+        "codec_name": "aac",
+        "codec_type": "audio"
+      },
+      {
+        "codec_name": "mov_text",
+        "codec_type": "subtitle"
+      },
+      {
+        "codec_name": "bin_data",
+        "codec_type": "data"
+      }
+    ],
+    "container_seconds": 4572.587
+  }
+}

@@ -21,7 +21,9 @@ class Lemma(VoiceoverScene, ThreeDScene):
 
     def card(self):
         c = chapter_card(4, r"It\^o's lemma, proved", r"Where does the extra term come from?", part=PART)
-        with self.voiceover("Chapter four. Itô's lemma, proved, and seen."):
+        with self.voiceover(
+            "Chapter four. Itô's lemma, proved, and seen."
+        ):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -78,14 +80,15 @@ class Lemma(VoiceoverScene, ThreeDScene):
         self.remove(hint)
         lp, bl, pl, co = always_redraw(lifted), always_redraw(ball), always_redraw(plane), always_redraw(column)
         with self.voiceover(
-            "Here is the lemma as a picture: a surface, x squared times a decaying exponential, and a Brownian path "
-            "lifted onto it. <bookmark mark='a'/> At each step, ordinary calculus predicts the next height from the "
-            "tangent plane: the time slope times the time step, plus the space slope times the move. "
-            "<bookmark mark='b'/> The surface curves upward, so the true height is always a little above the plane. "
-            "Stack those misses in the red column. For a smooth path they would be of the order of the step squared, "
-            "and the column would stay empty. Here it fills, steadily, toward the white bar: half the integral of the "
-            "second derivative. <bookmark mark='c'/> The misses are not noise. They add up to a drift, and that drift "
-            "is Itô's extra term."        ) as vo:
+            'Here is the lemma as a picture: a surface, x squared times a decaying exponential, and a Brownian '
+            "path lifted onto it. <bookmark mark='a'/> At each step, ordinary calculus predicts the next height "
+            'from the tangent plane: the time slope times the time step, plus the space slope times the move. '
+            "<bookmark mark='b'/> The curvature in the price direction gives a positive leading correction. Time "
+            'and mixed terms can have either sign on a finite step. Stack the residuals in the red column. For a '
+            'smooth path they would be of the order of the step squared, and the column would stay empty. Here it'
+            ' fills, steadily, toward the white bar: half the integral of the second derivative. <bookmark '
+            "mark='c'/> The misses are not noise. They add up to a drift, and that drift is Itô's extra term."
+        ) as vo:
             self.play(Create(ax), FadeIn(surf), FadeIn(hint[:2]), run_time=2)
             self.add(lp, bl)
             vo.wait_until("a")
@@ -101,8 +104,8 @@ class Lemma(VoiceoverScene, ThreeDScene):
             m.clear_updaters()
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0,
                          added_anims=[FadeOut(VGroup(ax, surf, lp, bl, pl, co, ref)), FadeOut(hint)],
-                         run_time=1.5)
-        self.clear_scene()
+                         run_time=1.0)
+        self.clear_scene(run_time=0.2)
 
     def misses(self, L):
         t = np.asarray(L["t"])
@@ -122,10 +125,10 @@ class Lemma(VoiceoverScene, ThreeDScene):
         lab2 = MathTex(rf"{L['cum_miss2'][-1]:.3f} \text{{ against }} \langle X, Y\rangle_1 = {L['rho']:.1f}",
                        font_size=24).next_to(g2, UP, buff=0.2)
         with self.voiceover(
-            f"Flattened: the stacked misses end at {L['cum_miss'][-1]:.3f}, against {L['theory'][-1]:.3f}; the gap is "
-            "the discretisation error of four hundred steps. <bookmark mark='a'/> With two Brownian motions "
-            "correlated at minus point seven and the function x times y, the misses come from the cross term and pile "
-            "up to the covariation: the product rule, seen happening."
+            f"Flattened: the stacked misses end at {L['cum_miss'][-1]:.3f}, against {L['theory'][-1]:.3f}"
+            f"; the gap is the discretisation error of four hundred steps. <bookmark mark='a'/> With two"
+            f' Brownian motions correlated at minus point seven and the function x times y, the misses '
+            f'come from the cross term and pile up to the covariation: the product rule, seen happening.'
         ) as vo:
             self.play(FadeIn(g1), Create(th1), Create(m1), FadeIn(lab1), run_time=2)
             vo.wait_until("a")
@@ -146,22 +149,26 @@ class Lemma(VoiceoverScene, ThreeDScene):
         whys = [why(r"Taylor to second order on each step"),
                 why(r"a martingale sum: the terms are uncorrelated, each with variance $2 f_{xx}^2 \Delta t^2$, as in "
                     r"chapter 2"),
-                why(r"the remainder is $o\big((\Delta W)^2\big)$ uniformly on compacts, and $\sum |\Delta W|^3 \to 0$"),
+                why((
+                        'localize; uniform continuity of $f_t,f_x,f_{xx}$ controls the summed remainder for $f\\in C^{1,2}$'
+                    )),
                 why(r"the three sums converge: It\^o's lemma"),
                 why(r"the same proof in two variables; for Brownian motions $d\langle W, B\rangle = \rho\,dt$"),
                 why(r"take $f = xy$: the product rule, with its covariation term")]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=-1.4, buff=0.55, edge=6.9)
         with self.voiceover(
-            "Now the proof. On each step, expand the function to second order: the time slope times the time step, "
-            "the space slope times the move, half the curvature times the move squared, and a remainder. "
-            "<bookmark mark='a'/> Replace each squared move by its time step. The error is a sum of terms with mean "
-            "zero, uncorrelated because the moves are independent, each with variance two times the curvature squared "
-            "times the step squared: the same computation as for quadratic variation, so it vanishes in mean square. "
-            "<bookmark mark='b'/> The remainder is smaller than the cube of the move, uniformly on bounded sets, and "
-            "the sum of cubed moves goes to zero. <bookmark mark='c'/> What is left is Itô's lemma: the first-order "
-            "terms, plus half the curvature times d t. <bookmark mark='d'/> With two processes, the same argument "
-            "produces a cross term, the mixed derivative times the covariation, which for two Brownian motions is rho "
-            "d t. <bookmark mark='e'/> And f equal to x times y gives the stochastic product rule, which solves the "
+            'Now the proof. On each step, expand the function to second order: the time slope times the time '
+            'step, the space slope times the move, half the curvature times the move squared, and a remainder. '
+            "<bookmark mark='a'/> Replace each squared move by its time step. The error is a sum of terms with "
+            'mean zero, orthogonal because their past-measurable coefficients multiply conditionally centered '
+            'squared increments, each with variance two times the curvature squared times the step squared: the '
+            "same computation as for quadratic variation, so it vanishes in mean square. <bookmark mark='b'/> "
+            'Localize to bounded paths. For a C-one-two function, uniform continuity of the derivatives makes the'
+            ' summed Taylor remainder vanish in probability; bounded third derivatives give the simpler cubic '
+            "bound. <bookmark mark='c'/> What is left is Itô's lemma: the first-order terms, plus half the "
+            "curvature times d t. <bookmark mark='d'/> With two processes, the same argument produces a cross "
+            'term, the mixed derivative times the covariation, which for two Brownian motions is rho d t. '
+            "<bookmark mark='e'/> And f equal to x times y gives the stochastic product rule, which solves the "
             "Ornstein-Uhlenbeck equation and proves Girsanov's theorem."
         ) as vo:
             step(0)
@@ -185,10 +192,10 @@ class Lemma(VoiceoverScene, ThreeDScene):
                   rf"$\mathbb{{E}}\log S_1/S_0 = {L['mean_log']:.3f}$ against $\mu - \tfrac12\sigma^2 = "
                   rf"{L['drag_theory']:.3f}$; $\log \mathbb{{E}} S_1/S_0 = {L['log_mean']:.3f}$", font_size=22,
                   color=GREY_A),
-            theorem_card(r"L\'evy's characterization", r"A continuous local martingale $M$ with $\langle M\rangle_t = t$ is "
+            theorem_card(r"L\'evy's characterization", r"A continuous local martingale $M$ starting at zero, with $\langle M\rangle_t = t$, is "
                          r"a Brownian motion: by the lemma $e^{iuM_t + u^2 t/2}$ is a martingale, so the increments are "
-                         r"Gaussian. Dambis, Dubins and Schwarz (1965): every continuous martingale is a Brownian motion "
-                         r"run on the clock $\langle M\rangle_t$.", who=r"L\'evy (1948); Dambis (1965), Dubins and Schwarz "
+                         r"Gaussian. Dambis, Dubins and Schwarz (1965): $M_t-M_0=B_{\langle M\rangle_t}$ for a continuous local martingale; "
+                         r"stop $B$ at a finite terminal clock and extend the probability space if needed.", who=r"L\'evy (1948); Dambis (1965), Dubins and Schwarz "
                          r"(1965)", color=ITO, width=8.6, font_size=21),
         ).arrange(DOWN, buff=0.35).to_edge(UP, buff=0.4)
         pc, ans = pause(r"What is $\mathbb{E}[W_t^4]$?", rf"$3t^2$: $d(W^4) = 4W^3\,dW + 6W^2\,dt$, so "
@@ -196,15 +203,18 @@ class Lemma(VoiceoverScene, ThreeDScene):
                         font_size=22)
         VGroup(pc, ans).arrange(RIGHT, buff=0.4).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Consequences. The lemma solves geometric Brownian motion: its log grows at mu minus half sigma squared. "
-            "<bookmark mark='a'/> On twenty thousand paths with ten percent drift and forty percent volatility, the "
-            f"mean log return is {L['mean_log']:.3f}, the volatility drag, while the log of the mean return is "
-            f"{L['log_mean']:.3f}. <bookmark mark='b'/> Paul Lévy's characterization: a continuous martingale whose "
-            "quadratic variation is t is a Brownian motion. Dambis, Dubins and Schwarz: every continuous martingale "
-            "is a Brownian motion running on the clock of its own quadratic variation. <bookmark mark='c'/> A desk "
-            "classic: the expected fourth power of W at time t? <bookmark mark='d'/> Three t squared, by the lemma; "
-            f"the simulation gives {L['EW4']:.3f} at t equals one."
-            " The lemma solves a few equations exactly. Most must be simulated. Next."
+            f'Consequences. The lemma solves geometric Brownian motion: its log grows at mu minus half '
+            f"sigma squared. <bookmark mark='a'/> On twenty thousand paths with ten percent drift and "
+            f"forty percent volatility, the mean log return is {L['mean_log']:.3f}"
+            f", the volatility drag, while the log of the mean return is {L['log_mean']:.3f}"
+            f". <bookmark mark='b'/> Paul Lévy's characterization: a continuous local martingale "
+            f'starting at zero, with quadratic variation t, is Brownian motion. Dambis, Dubins and '
+            f'Schwarz represent its increment from the initial value as Brownian motion on the '
+            f'quadratic-variation clock; stop that Brownian path at the clock’s terminal value, '
+            f"extending the space if necessary. <bookmark mark='c'/> A desk classic: the expected fourth"
+            f" power of W at time t? <bookmark mark='d'/> Three t squared, by the lemma; the simulation gives "
+            f"{L['EW4']:.3f}"
+            f' at t equals one. The lemma solves a few equations exactly. Most must be simulated. Next.'
         ) as vo:
             self.play(FadeIn(rows[0]))
             vo.wait_until("a")

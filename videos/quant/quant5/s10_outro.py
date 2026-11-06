@@ -25,10 +25,18 @@ PROBLEMS = [
     r"From the first-passage density $f_{\tau_a}(t) = \frac{a}{\sqrt{2\pi t^3}}e^{-a^2/2t}$, show that "
     r"$\mathbb{E}\,\tau_a = \infty$ although $P(\tau_a < \infty) = 1$.",
     r"Compute the Clark--Ocone integrand of $F = W_T^3$, and check it with It\^o's lemma.",
-    r"(qual) For $dX = \sigma_t dW$ with deterministic $\sigma_t$, prove $\sqrt n(\mathrm{RV}_n - \int\sigma^2) \Rightarrow "
-    r"N(0, 2\int\sigma^4)$ by the Lindeberg CLT.",
-    r"(qual) With iid noise $\varepsilon$ of variance $\omega^2$ added to each price, show $\mathbb E\,\mathrm{RV}_n(Y) = "
-    r"\mathrm{IV} + 2n\omega^2$ and $\mathrm{RV}_n(Y)/2n \to \omega^2$.",
+    (
+        '(qual) For $dX = \\sigma_t dW$ with deterministic continuous bounded $\\sigma_t$ and positive '
+        'integrated quarticity, prove $\\sqrt n(\\mathrm{RV}_n - \\int\\sigma^2) \\Rightarrow N(0, 2\\int\\sigma^4)$'
+        ' by the Lindeberg CLT.'
+    ),
+    (
+        (
+            '(qual) For a driftless efficient martingale price, add independent iid mean-zero noise $\\varepsilon$'
+            ' of variance $\\omega^2$, show $\\mathbb E\\,\\mathrm{RV}_n(Y) = \\mathbb E\\,\\mathrm{IV} + 2n\\omega^2$ '
+            'and $\\mathrm{RV}_n(Y)/2n \\to \\omega^2$.'
+        )
+    ),
 ]
 
 
@@ -50,21 +58,27 @@ class Outro(VoiceoverScene):
     def recap(self):
         items = [
             (r"Brownian motion: the universal limit of walks, and L\'evy's construction; reflection doubles the tail", BM),
-            (r"quadratic variation is time: proved, and measured on Bitcoin through the microstructure noise", BM),
+            ((
+                 'quadratic variation is time: proved, and Bitcoin signature plots illustrate sampling and '
+                 'observation-noise effects'
+             ), BM),
             (r"the It\^o integral is a completed ledger of bets: an isometry, a martingale; smooth noise is Stratonovich",
              ITO),
-            (r"It\^o's lemma: the misses above the tangent plane pile up to $\tfrac12 f_{xx}\,dt$; Picard, Euler, "
-             r"Milstein", ITO),
-            (rf"OU and CIR solved and fitted: exact likelihood puts CIR's Feller ratio at {self.m['best']['feller']:.2f}",
+            ((
+                 "It\\^o's lemma: curvature residuals beyond the tangent plane pile up to $\\tfrac12 f_{xx}\\,dt$; "
+                 'Picard, Euler, Milstein'
+             ), ITO),
+            (f"OU and CIR solved and fitted: CIR transition pseudo-likelihood on monthly averages: Feller ratio {self.m['best']['feller']:.2f}",
              DRIFT),
             (r"Fokker--Planck pushes densities forward, Feynman--Kac pulls prices back", DRIFT),
             (r"Girsanov re-weights paths: drift changes, volatility cannot; importance sampling", STRAT),
-            (r"martingale representation: every Brownian payoff is a hedge; a second noise or jumps break it", STRAT),
+            ((
+                 'martingale representation: $L^2$ payoffs in the Brownian filtration; tradable assets must span the '
+                 'risk'
+             ), STRAT),
             (r"local time: the free stop-loss hedge loses the option's whole time value", JUMP),
-            (rf"jumps: {self.j['n_jumps']} Bitcoin hours beyond 5 sd; Hawkes branching {self.h['fit']['branching']:.2f}, "
-             r"passed the time-rescaling test", JUMP),
-            (rf"roughness: $H \approx {self.r['hurst']['H']:.2f}$ on Bitcoin, but a smooth OU can look rough; "
-             r"signatures read order and area", ITO),
+            (f"hourly outliers: {self.j['n_jumps']} Bitcoin hours beyond 5 sd; Hawkes branching {self.h['fit']['branching']:.2f}, nominal in-sample time-rescaling diagnostic", JUMP),
+            (f"roughness: $H \\approx {self.r['hurst']['H']:.2f}$ on Bitcoin, but an ordinary OU can look rough; signatures read order and area", ITO),
         ]
         rows = VGroup()
         for i, (t, c) in enumerate(items, 1):
@@ -75,16 +89,14 @@ class Outro(VoiceoverScene):
         if rows.width > 13.2:
             rows.scale_to_fit_width(13.2)
         with self.voiceover(
-            "Part five in eleven lines. Brownian motion is the universal limit of random walks, and Lévy built it "
-            "directly; the reflection principle doubles its tail. Its quadratic variation is time, proved and "
-            "measured. The Itô integral is a completed ledger of bets, an isometry and a martingale, while smooth "
-            "noise leads to Stratonovich. Itô's lemma is the misses above a tangent plane, piling up. Stochastic "
-            "differential equations exist by Picard iteration and are simulated at known orders. Mean-reverting rates "
-            "can be solved and fitted exactly, and their densities and prices obey partial differential equations. "
-            "Girsanov re-weights paths: drift changes, volatility cannot. Every Brownian payoff is a hedge, until a "
-            "second noise or a jump arrives. Local time is why the free hedge costs the option's price. Jumps are "
-            "real, and they cluster. And volatility looks rough, though a fast but smooth process can look rough too, "
-            "and signatures read what a path did, in order."
+            'Part five in eleven lines. Iid centered finite-variance walks have a Brownian limit, and quadratic '
+            'variation measures its roughness. Predictable square-integrable positions define the Itô integral; '
+            'curvature gives its chain rule. Regularity conditions justify SDE solutions and simulation orders. '
+            'Exact transition laws provide working models, with care about how rates are observed. Girsanov '
+            'changes drift, while replication needs tradable risk spanning. Local time resolves the stop-loss '
+            'puzzle. Jumps leave residual hedging risk; Hawkes describes clustering without identifying '
+            'causation. Roughness estimates need caution, and enhanced paths and signatures record area and '
+            'order. The research chapter adds asymptotic error bars, whose finite-sample coverage we measured.'
         ):
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.6,
                                                  run_time=20))
@@ -96,11 +108,11 @@ class Outro(VoiceoverScene):
         if cards.height > 7.4:
             cards.scale_to_fit_height(7.4)
         with self.voiceover(
-            "Three desk questions, all classics. Brownian motion leaves an interval from minus a to b after an "
-            "expected time a times b, by Dynkin's formula. <bookmark mark='a'/> The chance that Brownian motion hits plus one before minus two is two "
-            "thirds, by optional stopping, exactly as for the walk in Part four. <bookmark mark='b'/> And a digital "
-            "call in Black and Scholes is worth the discounted risk-neutral probability of finishing in the money: "
-            "N of d two. Full solutions are in the notes."
+            'Three desk questions, all classics. Brownian motion leaves an interval from minus a to b after an '
+            "expected time a times b, by Dynkin's formula. <bookmark mark='a'/> The chance that Brownian motion "
+            'hits plus one before minus two is two thirds, by optional stopping, exactly as for the walk in Part '
+            "four. <bookmark mark='b'/> And a digital call in Black and Scholes is worth the discounted "
+            'risk-neutral probability of finishing in the money: N of d two. Full solutions are in the notes.'
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -113,11 +125,11 @@ class Outro(VoiceoverScene):
     def problems(self):
         ps = problem_set(PROBLEMS, font_size=19)
         with self.voiceover(
-            "And nine problems: the variations of Brownian motion, the two integrals of W against itself, Milstein's "
-            "correction, the Vasicek distribution, a Hawkes process's long-run rate, the infinite mean of a first "
-            "passage time, a Clark-Ocone integrand, and two at the level of a qualifying exam: realized variance's "
-            "central limit theorem, and the bias that noise adds to it. Solutions, in English and Chinese, are in the "
-            "notes."
+            'And nine problems: the variations of Brownian motion, the two integrals of W against itself, '
+            "Milstein's correction, the Vasicek distribution, a Hawkes process's long-run rate, the infinite mean"
+            ' of a first passage time, a Clark-Ocone integrand, and two at the level of a qualifying exam: '
+            "realized variance's central limit theorem, and the bias that noise adds to it. Solutions, in English"
+            ' and Chinese, are in the notes.'
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=4))
             self.wait(6)
@@ -132,11 +144,11 @@ class Outro(VoiceoverScene):
             (r"the simulation library, schemes and signatures", [15, 16, 17, 42]),
         ])
         with self.voiceover(
-            "Where this comes back. Girsanov and martingale representation are the step from the real world to the "
-            "pricing world in Parts nine and ten. Local time and jumps explain hedging errors in eleven to thirteen. "
-            "Mean reversion returns in the rates part, nineteen. Hawkes processes and rough volatility return in "
-            "fourteen and thirty-six. And the simulation library, the schemes and signatures power the computing "
-            "parts, fifteen to seventeen, and the machines of forty-two."
+            'Where this comes back. Girsanov and martingale representation are the step from the real world to '
+            'the pricing world in Parts nine and ten. Local time and jumps explain hedging errors in eleven to '
+            'thirteen. Mean reversion returns in the rates part, nineteen. Hawkes processes and rough volatility '
+            'return in fourteen and thirty-six. And the simulation library, the schemes and signatures power the '
+            'computing parts, fifteen to seventeen, and the machines of forty-two.'
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r_) for r_ in card.rows], lag_ratio=0.4, run_time=4))
         self.wait(0.4)
@@ -162,9 +174,9 @@ class Outro(VoiceoverScene):
              r"Industry: CFTC 8432-21 (2021); CME Clearing 20-171 (2020); SEC Release 34-90763 (OCC STANS); "
              r"Demeterfi, Derman, Kamal and Zou (1999); Fed, OCC and FDIC SR 26-2 (2026)"])
         with self.voiceover(
-            "The textbook chapters this part covers, and the papers it draws on. Every number was computed by the "
-            "series' own code: Bitcoin by the minute and by the hour from Binance, and Treasury bill yields and the "
-            "oil price from the St. Louis Fed. One command rebuilds them all."
+            'The textbook chapters this part covers, and the papers it draws on. Every number was computed by the'
+            " series' own code: Bitcoin by the minute and by the hour from Binance, and Treasury bill yields and "
+            'the oil price from the St. Louis Fed. One command rebuilds them all.'
         ):
             self.play(FadeIn(card))
             self.wait(3)
@@ -175,11 +187,12 @@ class Outro(VoiceoverScene):
         smap = series_map(current=PART + 1, done=PART)
         nxt = label(r"Next: Part 6, Financial Econometrics", font_size=32, color=QC.IDEA).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "The House can now simulate almost anything, and its sixth rule stands: no desk prices with a simulator "
-            f"that has not first reproduced a known answer. The trial counter reads {self.env['trials']}. "
-            "<bookmark mark='a'/> Next, Part six: financial econometrics. "
-            "How to estimate the parameters of these models from data that is short, noisy and overlapping, and how "
-            "not to fool yourself while doing it."
+            f'The House can now simulate almost anything, and its sixth rule stands: no desk prices with'
+            f' a simulator that has not first reproduced a known answer. The trial counter reads '
+            f"{self.env['trials']}"
+            f". <bookmark mark='a'/> Next, Part six: financial econometrics. How to estimate the "
+            f'parameters of these models from data that is short, noisy and overlapping, and how not to '
+            f'fool yourself while doing it.'
         ) as vo:
             self.play(FadeIn(chart))
             vo.wait_until("a")

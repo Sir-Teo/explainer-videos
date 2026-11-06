@@ -21,7 +21,9 @@ class Sampling(VoiceoverScene):
     def card(self):
         c = chapter_card(9, r"Girsanov at work, and what it cannot change", r"Which parameters can a path reveal?",
                          part=PART)
-        with self.voiceover("Chapter nine. Girsanov at work, and the one thing it cannot change."):
+        with self.voiceover(
+            'Chapter nine. Girsanov at work, and the one thing it cannot change.'
+        ):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -42,10 +44,10 @@ class Sampling(VoiceoverScene):
                 f"({i['is_mean']:.5f}, {i['is_sd']:.5f})    exact {i['exact']:.5f}",
                 f"plain Monte Carlo: {i['plain_mean']:.4f} +/- {i['plain_sd']:.4f}"]
         with self.voiceover(
-            "Girsanov is also a computational tool. Price a digital option paying one dollar if a stock now at a "
-            "hundred ends the year above a hundred and sixty. Almost no simulated path gets there. "
-            "<bookmark mark='a'/> The House's version: shift every Gaussian draw so the typical path ends at the "
-            "strike, and multiply each payoff by the likelihood ratio that undoes the shift, Girsanov's Z for one "
+            'Girsanov is also a computational tool. Price a digital option paying one dollar if a stock now at a '
+            'hundred ends the year above a hundred and sixty. Almost no simulated path gets there. <bookmark '
+            "mark='a'/> The House's version: shift every Gaussian draw so the typical path ends at the strike, "
+            "and multiply each payoff by the likelihood ratio that undoes the shift, Girsanov's Z for one "
             "Gaussian. <bookmark mark='b'/> Run it with twenty thousand draws."
         ) as vo:
             self.play(FadeIn(card))
@@ -85,14 +87,16 @@ class Sampling(VoiceoverScene):
         vr = MathTex(rf"\text{{variance}} \div {i['var_ratio']:.0f}", font_size=40, color=DRIFT).next_to(leg, DOWN,
                                                                                                      buff=0.5)
         with self.voiceover(
-            "Watch the two estimates race, path by path, each with a band of two standard errors. "
-            "<bookmark mark='a'/> The plain estimate sits at zero for the first few hundred paths, then jumps every "
-            "time a rare path pays, and its band stays wide. The re-weighted one locks onto the exact price almost at "
-            "once: half its paths now pay, each with a small weight. <bookmark mark='b'/> Both are unbiased, but the "
-            f"variance is {i['var_ratio']:.0f} times smaller: one re-weighted path is worth about {i['var_ratio']:.0f} "
-            "plain ones. The shift was chosen by eye, to put the typical path at the strike; how to choose it "
-            "optimally, and when re-weighting backfires, is Part sixteen's subject. Every risk system that prices "
-            "rare events uses some version of this."
+            f'Watch the two estimates race, path by path, each with a band of two standard errors. '
+            f"<bookmark mark='a'/> The plain estimate sits at zero for the first few hundred paths, then"
+            f' jumps every time a rare path pays, and its band stays wide. The re-weighted one locks '
+            f'onto the exact price almost at once: half its paths now pay, each with a small weight. '
+            f"<bookmark mark='b'/> Both are unbiased, but the variance is {i['var_ratio']:.0f}"
+            f" times smaller: one re-weighted path is worth about {i['var_ratio']:.0f}"
+            f' plain ones. The shift was chosen by eye, to put the typical path at the strike; how to '
+            f"choose it optimally, and when re-weighting backfires, is Part sixteen's subject. "
+            f'Importance sampling is one common rare-event tool; its variance benefit depends on the '
+            f'event and the chosen change of measure.'
         ) as vo:
             self.add(b1, b2, l1, l2)
             self.play(FadeIn(g), Create(exact), FadeIn(el), FadeIn(leg))
@@ -133,15 +137,17 @@ class Sampling(VoiceoverScene):
         ans.next_to(pc, DOWN, buff=0.1).align_to(pc, LEFT)
         keep_in_frame(VGroup(pc, ans), 0.3)  # the card is wider than the column above it
         with self.voiceover(
-            "Now the limit of the theorem: it changes drift, never volatility. Simulate a year of one-minute prices, "
-            "twenty percent volatility and eight percent drift, and estimate both as the year unrolls. "
-            "<bookmark mark='a'/> The volatility estimate, from squared returns, settles within days. The drift "
-            "estimate wanders across tens of points all year. <bookmark mark='b'/> The volatility estimate's error "
-            "shrinks with the number of observations, half a million of them. The drift estimate depends only on the "
-            "first and last prices, so its error shrinks only with the length of history. Two hundred simulated "
-            f"years: {o['sd_mu']:.2f} for the drift, against {o['sd_sigma'] * 1e4:.0f} hundredths of a point for the "
-            "volatility. <bookmark mark='c'/> A pause: sample every second instead of every minute; which estimate "
-            "improves? <bookmark mark='d'/> Only the volatility."
+            f'Now the limit of the theorem: it changes drift, never volatility. In a noiseless '
+            f'constant-parameter geometric Brownian model, simulate a year of one-minute prices, twenty '
+            f'percent volatility and eight percent drift, and estimate both as the year unrolls. '
+            f"<bookmark mark='a'/> The volatility estimate, from squared returns, settles within days. "
+            f"The drift estimate wanders across tens of points all year. <bookmark mark='b'/> The "
+            f"volatility estimate's error shrinks with the number of observations, half a million of "
+            f'them. The drift estimate depends only on the first and last prices, so its error shrinks '
+            f"only with the length of history. Two hundred simulated years: {o['sd_mu']:.2f}"
+            f" for the drift, against {o['sd_sigma'] * 10000.0:.0f}"
+            f" hundredths of a point for the volatility. <bookmark mark='c'/> A pause: sample every "
+            f"second instead of every minute; which estimate improves? <bookmark mark='d'/> Only the volatility."
         ) as vo:
             self.add(ls, lm)
             self.play(FadeIn(g1), FadeIn(g2), Create(tr1), Create(tr2))
@@ -166,22 +172,23 @@ class Sampling(VoiceoverScene):
                     r"0.04\,T\big) = 0", font_size=32, color=ITO),
             label(r"they disagree with certainty about an observable event: the measures are singular, and no $Z$ "
                   r"turns one into the other", font_size=24, color=GREY_A),
-            label(r"two models with different drifts agree on every such event: they are equivalent, and $Z$ converts "
-                  r"one into the other", font_size=24, color=GREY_A),
-            MathTex(r"\Rightarrow\ \text{prices may depend on } \sigma,\ \text{never on } \mu", font_size=36,
-                    color=QCOL),
+            wrapped_label(r"constant-drift models with the same volatility are equivalent on finite horizons: same null events, different probabilities",
+                          12.8, 24, GREY_A),
+            wrapped_label(r"complete, frictionless Black--Scholes: replication removes $\mu$ from price", 12.6, 29, QCOL),
             label(r"the risk-neutral measure of Parts 9 and 10 changes $\mu$ to $r$ and keeps $\sigma$", font_size=22,
                   color=GREY_B),
         ).arrange(DOWN, buff=0.35)
         with self.voiceover(
-            "This asymmetry is the root of option pricing. Take two models that differ only in volatility, twenty and "
-            "twenty-one percent. The quadratic variation of the log price is a property of one path: one model says "
-            "it is four hundredths per year with certainty, the other says that is impossible. <bookmark mark='a'/> "
-            "The measures are singular: no likelihood ratio connects them. Two models that differ only in drift are "
-            "equivalent, and Girsanov's Z converts one into the other. <bookmark mark='b'/> So a price, which must "
-            "not depend on whose drift you believe, can depend on volatility and cannot depend on mu. The "
-            "risk-neutral measure of Parts nine and ten swaps the drift for the riskless rate and keeps sigma."
-            " If the price does not depend on the drift, the hedge must remove it. Next: why a hedge exists at all."
+            'This asymmetry is the root of option pricing. Take two models that differ only in volatility, twenty'
+            ' and twenty-one percent. The quadratic variation of the log price is a property of one path: one '
+            'model says it is four hundredths per year with certainty, the other says that is impossible. '
+            "<bookmark mark='a'/> The measures are singular: no likelihood ratio connects them. Two models that "
+            "differ only in drift are equivalent, and Girsanov's Z converts one into the other. <bookmark "
+            "mark='b'/> In the complete, frictionless Black–Scholes model, replication removes the physical drift"
+            ' mu from a derivative’s no-arbitrage price. Measure equivalence alone does not prove that conclusion'
+            ' for an incomplete market. The risk-neutral measure of Parts nine and ten swaps the drift for the '
+            'riskless rate and keeps sigma. If the price does not depend on the drift, the hedge must remove it. '
+            'Next: why a hedge exists at all.'
         ) as vo:
             self.play(FadeIn(rows[0]), FadeIn(rows[1]))
             vo.wait_until("a")

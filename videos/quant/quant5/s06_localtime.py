@@ -21,7 +21,9 @@ class LocalTime(VoiceoverScene):
     def card(self):
         c = chapter_card(11, r"Local time and Tanaka: the paradox resolved", r"Where did the money go?",
                          part=PART)
-        with self.voiceover("Chapter eleven. Local time, Tanaka's formula, and the paradox resolved."):
+        with self.voiceover(
+            "Chapter eleven. Local time, Tanaka's formula, and the paradox resolved."
+        ):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -63,13 +65,14 @@ class LocalTime(VoiceoverScene):
                 why(r"the same limit at every level $a$: local time is an occupation density", 18)]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=2.4, buff=0.55, edge=6.9)
         with self.voiceover(
-            "Itô's lemma needs two derivatives, and the absolute value has a kink at zero. Hiroshi Tanaka's idea, in "
-            "1963, was to round it off. <bookmark mark='a'/> Inside a band of half-width epsilon, replace the kink by "
-            "a parabola. Its second derivative is one over epsilon on the band: the red box, whose area is always "
-            "two. <bookmark mark='b'/> Apply the lemma: the second-order term is one over two epsilon times the time "
-            "spent in the band. <bookmark mark='c'/> Shrink epsilon. The band thins, the box grows taller, and the "
-            "term converges: the local time at zero. The absolute value of W is the integral of its sign, plus local "
-            "time. <bookmark mark='d'/> The same limit at every level gives an occupation density."
+            "Itô's lemma needs two derivatives, and the absolute value has a kink at zero. Hiroshi Tanaka's idea,"
+            " in 1963, was to round it off. <bookmark mark='a'/> Inside a band of half-width epsilon, replace the"
+            ' kink by a parabola. Its second derivative is one over epsilon on the band: the red box, whose area '
+            "is always two. <bookmark mark='b'/> Apply the lemma: the second-order term is one over two epsilon "
+            "times the time spent in the band. <bookmark mark='c'/> Shrink epsilon. The band thins, the box grows"
+            ' taller, and the term converges: the local time at zero. The absolute value of W is the integral of '
+            "its sign, plus local time. <bookmark mark='d'/> The same limit at every level gives an occupation "
+            'density.'
         ) as vo:
             self.add(lf, lb, el)
             self.play(FadeIn(g), FadeIn(g2), Create(absx))
@@ -120,25 +123,28 @@ class LocalTime(VoiceoverScene):
         # the title is the widest line: stack it with the rows and place the block as one, inside the frame
         VGroup(el, eps.arrange(DOWN, aligned_edge=LEFT, buff=0.08)).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_corner(
             UR, buff=0.35)
+        bandwidth_note = wrapped_label(r"finite-grid estimates depend on bandwidth: refine time before sending the band width to zero",
+                                       4.4, 16, GREY_B).next_to(eps, DOWN, buff=0.2).to_edge(RIGHT, buff=0.35)
         pc, ans = pause(r"The expected local time at 0 of Brownian motion by $t = 1$?",
                         rf"$\mathbb{{E}}|W_1| = \sqrt{{2/\pi}} = {tn['theory']:.3f}$ (Tanaka, in expectation). Measured: "
                         rf"{tn['mean_occ']:.3f} by occupation, {tn['mean_tan']:.3f} by Tanaka.", width=4.8, font_size=19)
         VGroup(pc, ans).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Watch it on one path. As it runs, the purple sandpile records the time spent at each level, growing "
-            "sideways; local time at zero is the pile's height at the dashed line. <bookmark mark='a'/> It grows only "
-            "while the path is near zero. <bookmark mark='b'/> On a fine path, the time-in-band estimates settle "
-            f"toward Tanaka's value, {tn['tan_one']:.3f}, as epsilon shrinks. <bookmark mark='c'/> A pause: what is "
-            "the expected local time at zero by time one? <bookmark mark='d'/> Take expectations in Tanaka's formula: "
-            f"the expected absolute value of W, about {tn['theory']:.2f}; twenty thousand paths agree. And Lévy showed "
-            "that local time has the law of the running maximum."
+            f'Watch it on one path. As it runs, the purple sandpile records the time spent at each '
+            f"level, growing sideways; local time at zero is the pile's height at the dashed line. "
+            f"<bookmark mark='a'/> It grows only while the path is near zero. <bookmark mark='b'/> On a "
+            f"fine path, the time-in-band estimates settle toward Tanaka's value, {tn['tan_one']:.3f}"
+            f", as epsilon shrinks. <bookmark mark='c'/> A pause: what is the expected local time at "
+            f"zero by time one? <bookmark mark='d'/> Take expectations in Tanaka's formula: the expected"
+            f" absolute value of W, about {tn['theory']:.2f}"
+            f'; twenty thousand paths agree. And Lévy showed that local time has the law of the running maximum.'
         ) as vo:
             self.add(path, sp, lt)
             self.play(FadeIn(g), Create(zl))
             vo.wait_until("a")
             self.play(tk.animate.set_value(len(w) - 1), run_time=6, rate_func=linear)
             vo.wait_until("b")
-            self.play(FadeIn(el), LaggedStart(*[FadeIn(r) for r in eps], lag_ratio=0.2))
+            self.play(FadeIn(el), FadeIn(bandwidth_note), LaggedStart(*[FadeIn(r) for r in eps], lag_ratio=0.2))
             vo.wait_until("c")
             self.play(FadeIn(pc))
             vo.wait_until("d")
@@ -162,16 +168,17 @@ class LocalTime(VoiceoverScene):
                 why(r"take expectations: the missing term is worth exactly the option's time value (Carr and Jarrow 1990)")]
         step = ladder(self, rows, whys, keep=3, top=2.5, x=-1.0, buff=1.0, edge=6.9)
         with self.voiceover(
-            "Back to the opening puzzle. A call's payoff has the same kink, at the strike, and Tanaka's formula, "
-            "applied to the price, says what happens there. The payoff equals its starting value, plus the gains from "
-            "holding one share whenever the stock is above the strike, which is exactly the stop-loss hedge, plus one "
-            "more term. <bookmark mark='a'/> That term is half the local time at the strike: how long the path spent "
-            "within a hair of K, measured in quadratic variation, and rescaled by the hair's width. For a smooth path "
-            "it would be zero. A Brownian path that touches K touches it infinitely often, and the local time is "
-            "positive. <bookmark mark='b'/> Take expectations under the pricing measure. The gains term has mean "
-            "zero, so the missing term is worth the call's price minus its intrinsic value: its time value. Peter "
-            "Carr and Robert Jarrow published this resolution in 1990. The hedge is free only on paths that never "
-            "come near the strike."
+            'Back to the opening puzzle, with zero rates, no dividends and the stock starting at the strike. A '
+            "call's payoff has the same kink, at the strike, and Tanaka's formula, applied to the price, says "
+            'what happens there. The payoff equals its starting value, plus the gains from holding one share '
+            'whenever the stock is above the strike, which is exactly the stop-loss hedge, plus one more term. '
+            "<bookmark mark='a'/> That term is half the local time at the strike: how long the path spent within "
+            "a hair of K, measured in quadratic variation, and rescaled by the hair's width. For a smooth path it"
+            ' would be zero. After hitting the strike, a nondegenerate diffusion returns repeatedly; local time '
+            "then accrues. It is zero at the instant of a first hit. <bookmark mark='b'/> Take expectations under"
+            " the pricing measure. The gains term has mean zero, so the missing term is worth the call's price "
+            'minus its intrinsic value: its time value. Peter Carr and Robert Jarrow published this resolution in'
+            ' 1990. The hedge is free only on paths that never come near the strike.'
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -192,21 +199,15 @@ class LocalTime(VoiceoverScene):
         dots = VGroup(*[Dot(ax.c2p(min(a, hi), min(b, hi)), radius=0.03, color=JUMP, fill_opacity=0.6) for a, b in zip(L, e)])
         diag = DashedLine(ax.c2p(0, 0), ax.c2p(hi, hi), color=GREY_B, stroke_width=2)
         rows = s["rows"]
-        tab = VGroup(*[MathTex(rf"{r['n']:,}\text{{ trades: }} {r['mean_err']:.2f} \pm {r['sd_err']:.2f}".replace(",", "{,}"),
+        tab = VGroup(*[MathTex(rf"n = {r['n']:,}:\ {r['mean_err']:.2f} \pm {r['sd_err']:.2f}".replace(",", "{,}"),
                                font_size=26, color=GREY_A) for r in rows]).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         side = VGroup(
-            label(r"average shortfall, by rebalancing frequency:", font_size=22, color=GREY_A), tab,
+            wrapped_label(rf"mean shortfall $\pm$ path sd; $n$ is intervals/year; {len(e)} of 4{{,}}000 paths displayed", 5.0, 18, GREY_A), tab,
             MathTex(rf"\text{{the call's time value: }} {s['call']:.2f}", font_size=30, color=WHITE),
-            MathTex(rf"\text{{correlation, path by path: }} {sc['corr']:.2f}", font_size=30, color=JUMP),
+            MathTex(rf"\text{{all-path correlation: }} {sc['corr']:.2f}", font_size=28, color=JUMP),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.5)
         with self.voiceover(
-            "Now all four thousand paths: the hedge's shortfall against half the local time at the strike. "
-            f"<bookmark mark='a'/> They line up, with a correlation of {sc['corr']:.2f}. Paths that never came near "
-            "the strike cost nothing; paths that lingered there cost a lot. <bookmark mark='b'/> On average the "
-            f"shortfall is the call's whole time value, about {s['call']:.0f} dollars, at every frequency. Local time "
-            "is real money: it is why options near the strike close to expiry are the hardest to hedge, and Dupire's "
-            "local volatility, in Part twelve, uses the same term."
-            " Local time is what a continuous path costs a hedger. Real prices also jump. Next."
+            f"Across four thousand paths: the hedge's shortfall against half the local time at the strike. <bookmark mark='a'/> They line up, with a correlation of {sc['corr']:.2f}. Paths that never came near the strike cost nothing; paths that lingered there cost a lot. <bookmark mark='b'/> On average the shortfall is the call's whole time value, about {s['call']:.0f} dollars, at every frequency. Local time is real money: it is why options near the strike close to expiry are the hardest to hedge, and Dupire's local volatility, in Part twelve, uses the same term. Local time is what a continuous path costs a hedger. Real prices also jump. Next."
         ) as vo:
             self.play(FadeIn(g), Create(diag))
             self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.002, run_time=3))

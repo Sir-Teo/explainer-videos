@@ -18,8 +18,10 @@ class Jumps(VoiceoverScene):
     def card(self):
         c = chapter_card(12, r"Jumps: from Poisson to L\'evy--It\^o", r"What if prices don't move continuously?",
                          part=PART)
-        with self.voiceover("Chapter twelve. Jumps: from the Poisson clock to the Lévy-Itô decomposition, and Itô's "
-                            "lemma for jumps."):
+        with self.voiceover(
+            "Chapter twelve. Jumps: from the Poisson clock to the Lévy-Itô decomposition, and Itô's lemma for "
+            'jumps.'
+        ):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -60,15 +62,7 @@ class Jumps(VoiceoverScene):
                     rf"{lv['cp_var']:.4f} against $\lambda t\,\mathbb{{E}}Y^2 = {lv['cp_var_theory']:.4f}$", font_size=18,
                     color=GREY_A).to_edge(DOWN, buff=0.12)
         with self.voiceover(
-            "Brownian paths are continuous; prices are not always. News arrives in lumps. The simplest model of a "
-            "lump is a Poisson clock, ringing at random times with independent exponential gaps. <bookmark mark='a'/> "
-            "Each ring adds one to a counter, a staircase that climbs on average at rate lambda, so it is not a "
-            "martingale. <bookmark mark='b'/> Subtract the average climb, lambda t, and it is: the compensated "
-            "Poisson process, a sawtooth. Its quadratic variation is the counter itself, since a jump of one, "
-            "squared, is still one. <bookmark mark='c'/> Attach a random size to each ring and you have a compound "
-            "Poisson process; its characteristic function follows by conditioning on the count, and fifty thousand "
-            f"paths give a mean of {lv['cp_mean']:+.4f} and the predicted variance. <bookmark mark='d'/> A pause: at "
-            "six jumps a year, the chance of a month with none? E to the minus a half: sixty-one percent."
+            f"Brownian paths are continuous; prices are not always. News arrives in lumps. The simplest model of a lump is a Poisson clock, ringing at random times with independent exponential gaps. <bookmark mark='a'/> Each ring adds one to a counter, a staircase that climbs on average at rate lambda, so it is not a martingale. <bookmark mark='b'/> Subtract the average climb, lambda t, and it is: the compensated Poisson process, a sawtooth. Its quadratic variation is the counter itself, since a jump of one, squared, is still one. <bookmark mark='c'/> Attach a random size to each ring and you have a compound Poisson process; its characteristic function follows by conditioning on the count, and fifty thousand paths give a mean of {lv['cp_mean']:+.4f} and the predicted variance. <bookmark mark='d'/> A pause: at six jumps a year, the chance of a month with none? <bookmark mark='e'/> E to the minus a half: sixty-one percent."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2))
             self.play(LaggedStart(*[FadeIn(tk, shift=DOWN * 0.2) for tk in ticks], lag_ratio=0.3))
@@ -84,7 +78,10 @@ class Jumps(VoiceoverScene):
             self.play(FadeIn(res))
             vo.wait_until("d")
             # the last two rows give the question their corner
-            self.play(FadeOut(VGroup(rows[2], whys[2], rows[3], whys[3])), FadeIn(pc), FadeIn(ans))
+            self.play(FadeOut(VGroup(rows[2], whys[2], rows[3], whys[3])), FadeIn(pc))
+            vo.wait_until("e")
+            self.wait(0.8)
+            self.play(FadeIn(ans))
         self.wait(0.4)
         self.clear_scene()
 
@@ -120,18 +117,10 @@ class Jumps(VoiceoverScene):
                      r"t\int_{\varepsilon \le |x| < 1} x\,\nu(dx)\Big)", font_size=24).to_edge(UP, buff=0.3)
         lk = MathTex(r"\mathbb{E}\,e^{iuX_t} = e^{t\psi(u)},\ \ \psi(u) = iub - \tfrac12\sigma^2u^2 + \int \big(e^{iux} - 1 - "
                      r"iux\mathbf{1}_{|x|<1}\big)\,\nu(dx)", font_size=24, color=ITO).to_edge(DOWN, buff=0.55)
-        lkr = label(rf"checked on 20{{,}}000 simulated $X_1$: largest gap between the empirical and the formula's "
-                    rf"characteristic function {lv['cf_err']:.3f}", font_size=18, color=GREY_B).to_edge(DOWN, buff=0.15)
+        lkr = label(rf"20{{,}}000 draws; cutoff $\varepsilon=0.005$; empirical versus truncated-law CF: max gap "
+                    rf"{lv['cf_err']:.3f}", font_size=18, color=GREY_B).to_edge(DOWN, buff=0.15)
         with self.voiceover(
-            "Every process with independent, stationary increments, a Lévy process, is built from four layers. Here "
-            f"is one path of a tempered stable process, with infinitely many small jumps and {lv['n_big']} big ones, "
-            "taken apart. <bookmark mark='a'/> A drift. A Brownian part. The big jumps, a compound Poisson process. "
-            "<bookmark mark='b'/> And the small jumps, so many that their sum converges only after subtracting their "
-            f"average, the compensator. Slide the cutoff epsilon toward zero: {lv['n_small']['0.3']} jumps become "
-            f"{lv['n_small']['0.005']}, the compensator grows, and the strip turns from sparse spikes into something "
-            "almost Brownian. <bookmark mark='c'/> This is the Lévy-Itô decomposition. The layers are independent, so "
-            "their characteristic functions multiply: the Lévy-Khintchine formula. Our simulations match it to "
-            f"{lv['cf_err']:.2f}, the sampling noise of twenty thousand draws."
+            f"A Lévy process has stationary independent increments, stochastic continuity and a right-continuous version with left limits. It is built from four layers. Here is one path of a tempered stable process, with infinitely many small jumps and {lv['n_big']} big ones, taken apart. <bookmark mark='a'/> A drift. A Brownian part. The big jumps, a compound Poisson process. <bookmark mark='b'/> And, in this infinite-variation example, small jumps whose sum requires compensation. Other Lévy measures can have summable small jumps without that subtraction. Slide the cutoff epsilon toward zero: {lv['n_small']['0.3']} jumps become {lv['n_small']['0.005']}, the compensator grows, and the strip turns from sparse spikes into something almost Brownian. <bookmark mark='c'/> This is the Lévy-Itô decomposition. The layers are independent, so their characteristic functions multiply: the Lévy-Khintchine formula. For the finite-cutoff law, twenty thousand draws agree to {lv['cf_err']:.2f}, the sampling noise of twenty thousand draws."
         ) as vo:
             self.play(FadeIn(eq), FadeIn(strips))
             vo.wait_until("a")
@@ -168,15 +157,16 @@ class Jumps(VoiceoverScene):
                              r"\texttt{merton\_jumps}, its mean checked against $S_0 e^{\mu t}$", 5.6, 20, GREY_A)
         side.to_corner(DR, buff=0.6)
         with self.voiceover(
-            "Itô's lemma extends to jumps with one honest change. Between jumps the path is continuous, so the old "
-            "lemma applies, with the quadratic variation of the continuous part. At a jump, the first-order term "
-            "guesses the change linearly, f prime times the jump; replace that guess by the true change of f. "
-            "<bookmark mark='a'/> For example, take f equal to e to the x: at a jump of size y the price is "
-            "multiplied by e to the y, not by one plus y. Apply this to Merton's 1976 model, Brownian motion plus a "
-            "compound Poisson process of log-normal jumps. To keep the expected return at mu, the drift must pay back "
-            "the average jump: lambda times k bar, where k bar is the mean of e to the y minus one. "
-            "<bookmark mark='b'/> These are its paths: diffusion most of the time, and gaps now and then. The next "
-            "chapter looks for such gaps in real prices, and shows what they do to a hedge."
+            "Itô's lemma extends to jumps with one honest change. Between jumps the path is continuous, so the "
+            'old lemma applies, with the quadratic variation of the continuous part. At a jump, the first-order '
+            'term guesses the change linearly, f prime times the jump; replace that guess by the true change of '
+            "f. <bookmark mark='a'/> For example, take f equal to e to the x: at a jump of size y the price is "
+            "multiplied by e to the y, not by one plus y. Apply this to Merton's 1976 model, Brownian motion plus"
+            ' a compound Poisson process of Gaussian log-price jumps, or equivalently log-normal price '
+            'multipliers. To keep the expected return at mu, the drift must pay back the average jump: lambda '
+            "times k bar, where k bar is the mean of e to the y minus one. <bookmark mark='b'/> These are its "
+            'paths: diffusion most of the time, and gaps now and then. The next chapter looks for such gaps in '
+            'real prices, and shows what they do to a hedge.'
         ) as vo:
             step(0)
             vo.wait_until("a")

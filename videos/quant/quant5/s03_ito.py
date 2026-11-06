@@ -19,7 +19,9 @@ class Ito(VoiceoverScene):
     def card(self):
         c = chapter_card(3, r"Constructing the It\^o integral, and Stratonovich's", r"How do you integrate against a path "
                          r"of infinite length?", lit=(1944,), part=PART)
-        with self.voiceover("Chapter three. Constructing the Itô integral, and Stratonovich's alternative."):
+        with self.voiceover(
+            "Chapter three. Constructing the Itô integral, and Stratonovich's alternative."
+        ):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -61,13 +63,14 @@ class Ito(VoiceoverScene):
             MathTex(rf"\tfrac12(W_1^2 - 1) = {i['ito_limit']:+.3f}", font_size=28, color=ITO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3)
         with self.voiceover(
-            "A Brownian path has infinite length, so the integral of calculus does not exist. Itô built a different "
-            "one, easiest to see as a ledger of bets. <bookmark mark='a'/> On top, the price. In the middle, a "
-            "position: here, as many units as the price itself, decided at the start of each period and held through "
-            "it. <bookmark mark='b'/> Each period the price moves, the position earns position times move, and the "
-            "gains drop into a running total at the bottom. That sum is the Itô integral of a simple integrand. "
-            "<bookmark mark='c'/> Trade sixty-four times instead of eight, and the total converges to a half of W "
-            "squared minus a half: not the half W squared of ordinary calculus."
+            'A Brownian path has infinite total variation, so ordinary bounded-variation integration is not a '
+            'general solution. Itô built a different one, easiest to see as a ledger of bets. <bookmark '
+            "mark='a'/> On top, the price. In the middle, a position: here, as many units as the price itself, "
+            "decided at the start of each period and held through it. <bookmark mark='b'/> Each period the price "
+            'moves, the position earns position times move, and the gains drop into a running total at the '
+            "bottom. That sum is the Itô integral of a simple integrand. <bookmark mark='c'/> Trade sixty-four "
+            'times instead of eight, and the total converges to a half of W squared minus a half: not the half W '
+            'squared of ordinary calculus.'
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2), FadeIn(g3), Create(path), run_time=1.5)
             vo.wait_until("a")
@@ -98,17 +101,18 @@ class Ito(VoiceoverScene):
                 why(r"true for every simple sum, and preserved in the $L^2$ limit: the integral is a martingale")]
         step = ladder(self, rows, whys, keep=4, top=3.0, x=-2.4, buff=0.6, edge=6.9)
         with self.voiceover(
-            "Now the construction. Square the sum and take expectations. The squares give the position squared times "
-            "the step. Each cross term pairs an earlier gain, H j times delta W j, with a later position H k, all of "
-            "them known at the start of step k, times the later move, whose mean given everything known then is zero. "
-            "<bookmark mark='a'/> So the cross terms vanish, and the mean square of the gain is the integrated "
-            "squared position: the Itô isometry. That is how a hedger's risk is measured: by how much is held, for "
-            "how long. <bookmark mark='b'/> An isometry preserves distance. Staircases that converge to an integrand "
-            "give integrals that form a Cauchy sequence in mean square, and the limit is the Itô integral, for any "
-            "predictable integrand with finite integrated square. <bookmark mark='c'/> Each simple sum is a "
-            "martingale, and conditional expectations survive mean-square limits, so the limit is a martingale too. "
-            "Positions chosen before the moves cannot earn anything against a martingale: that one fact is "
-            "no-arbitrage pricing, in Part nine."
+            'Now the construction. Square the sum and take expectations. The squares give the position squared '
+            'times the step. Each cross term pairs an earlier gain, H j times delta W j, with a later position H '
+            'k, all of them known at the start of step k, times the later move, whose mean given everything known'
+            " then is zero. <bookmark mark='a'/> So the cross terms vanish, and the mean square of the gain is "
+            "the integrated squared position: the Itô isometry. That is how a hedger's risk is measured: by how "
+            "much is held, for how long. <bookmark mark='b'/> An isometry preserves distance. Staircases that "
+            'converge to an integrand give integrals that form a Cauchy sequence in mean square, and the limit is'
+            ' the Itô integral, for a predictable integrand whose integrated square has finite expectation. '
+            "<bookmark mark='c'/> Each simple sum is a martingale, and conditional expectations survive "
+            'mean-square limits, so the limit is a martingale too. Under these integrability conditions, '
+            'predictable trading gains have mean zero. No-arbitrage pricing also needs a pricing measure and '
+            'admissible strategies; Part nine supplies them.'
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -138,15 +142,16 @@ class Ito(VoiceoverScene):
             label(rf"left points (It\^o) $\to \tfrac12(W_1^2 - 1) = {i['ito_limit']:+.3f}$", font_size=22, color=ITO),
             label(rf"midpoints (Stratonovich) $\to \tfrac12 W_1^2 = {i['strat_limit']:+.3f}$", font_size=22,
                   color=STRAT),
-            MathTex(r"\text{gap} = \tfrac12 \sum (\Delta W)^2 \to \tfrac12 T", font_size=30, color=GREY_A),
-            wrapped_label(r"the midpoint sum peeks half a step into the future; the extra is half the quadratic "
-                          r"variation of chapter 2", 4.6, 20, GREY_B),
+            MathTex(r"\text{gap}_n \xrightarrow{\mathbb P} \tfrac12 T", font_size=30, color=GREY_A),
+            wrapped_label(r"time-midpoint sums: the gap converges to $T/2$. An exact half-grid-QV identity uses the "
+                          r"average of both endpoints", 4.6, 19, GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "On one path, evaluate the price at the left end of each step, Itô's choice, or at the midpoint, "
-            f"Stratonovich's. <bookmark mark='a'/> The left sums settle at {i['ito_limit']:+.3f}, the midpoint sums at "
-            f"{i['strat_limit']:+.3f}. <bookmark mark='b'/> The gap is half the quadratic variation: the midpoint "
-            "peeks half a step ahead."
+            f"On one path, evaluate the price at the left end of each step, Itô's choice, or at the "
+            f"midpoint, Stratonovich's. <bookmark mark='a'/> The left sums settle at {i['ito_limit']:+.3f}"
+            f", the midpoint sums at {i['strat_limit']:+.3f}"
+            f". <bookmark mark='b'/> The gap is half the quadratic variation: the midpoint peeks half a "
+            f'step ahead.'
         ) as vo:
             self.play(FadeIn(g), Create(lim_i), Create(lim_s))
             vo.wait_until("a")
@@ -162,7 +167,7 @@ class Ito(VoiceoverScene):
                       colors={r"\tfrac12 \langle H, W\rangle_T": STRAT}),
                 cmath(r"dX = b(X) \circ dW", r"\iff", r"dX = \tfrac12\,b\,b'(X)\,dt + b(X)\,dW", font_size=32,
                       colors={r"\tfrac12\,b\,b'(X)\,dt": STRAT})]
-        whys = [why(r"midpoint minus left point: half the covariation", 20),
+        whys = [why(r"for continuous semimartingale $H$: the correction is half the covariation", 20),
                 why(r"put $H = b(X)$: $d\langle b(X), W\rangle = b'(X)\,b(X)\,dt$", 20)]
         step = ladder(self, rows, whys, keep=2, top=3.3, x=-2.2, buff=0.45, edge=6.9)
         t = np.asarray(wz["t"])
@@ -184,20 +189,13 @@ class Ito(VoiceoverScene):
         theory = MathTex(rf"e^{{1/2}} = {wz['strat']:.3f} \qquad \mathbb{{E}}\,e^{{W_1 - 1/2}} = 1", font_size=26)
         right = VGroup(label(r"$\mathbb{E}X_1$ for $dX = X\,dW$, 20{,}000 paths", font_size=20, color=GREY_A), grid,
                        theory).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_corner(DR, buff=0.4)
-        pc, ans = pause(r"A physicist simulates $dX = X\,dW$ by smoothing the noise. The mean of $X_1$?",
+        pc, ans = pause(r"Start at $X_0=1$ and smooth the noise in $dX = X\,dW$. The mean of $X_1$?",
                         rf"About {wz['strat']:.2f}, not 1: smooth noise is Stratonovich noise.", width=5.2,
                         font_size=21)
         pc.to_edge(RIGHT, buff=0.4).set_y(0.2)
         with self.voiceover(
-            "The rule connecting them: Stratonovich's integral is Itô's plus half the covariation. "
-            "<bookmark mark='a'/> So a Stratonovich equation is an Itô equation with an extra drift, a half b times b "
-            "prime. Which is right? <bookmark mark='b'/> A pause: a physicist simulates d X equals X d W by smoothing "
-            "the noise. What is the mean of X at time one? <bookmark mark='c'/> Wong and Zakai proved in 1965 that "
-            "smoothed noise converges to the Stratonovich solution. On twenty thousand paths the smoothed equation "
-            f"gives {wz['rows'][-1]['ode']:.2f}, the square root of e, while Euler's Itô scheme gives "
-            f"{wz['rows'][-1]['em']:.2f}. <bookmark mark='d'/> Physics usually wants Stratonovich; finance wants Itô, "
-            "because positions are set before prices move."
-            " With the integral in hand, we need its chain rule. Next: Itô's lemma."       ) as vo:
+            f"The rule connecting them: Stratonovich's integral is Itô's plus half the covariation. <bookmark mark='a'/> So a Stratonovich equation is an Itô equation with an extra drift, a half b times b prime. Which is right? <bookmark mark='b'/> A pause: start X at one, and smooth the noise in d X equals X d W. What is its mean at time one? <bookmark mark='c'/> For this smooth scalar equation and the usual piecewise-linear noise approximations, Wong and Zakai’s limit is the Stratonovich solution. On twenty thousand paths the smoothed equation gives {wz['rows'][-1]['ode']:.2f}, the square root of e, while Euler's Itô scheme gives {wz['rows'][-1]['em']:.2f}. <bookmark mark='d'/> The appropriate convention comes from the model and its approximation. Self-financing financial positions use Itô’s predictable convention. With the integral in hand, we need its chain rule. Next: Itô's lemma."
+        ) as vo:
             step(0)
             vo.wait_until("a")
             step(1)

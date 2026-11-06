@@ -6,6 +6,16 @@ from explainer.quant import *  # noqa: F403
 from videos.quant.quant5.common import BM, DRIFT, ITO, JUMP, PART, STRAT, load, pause
 
 
+def _marked_wealth(W, n):
+    """Mark fixed positions between n rebalances on an aligned fine Brownian grid."""
+    W = np.asarray(W, float)
+    intervals = len(W) - 1
+    assert n > 0 and intervals % n == 0
+    stride = intervals // n
+    starts = np.arange(intervals) // stride * stride
+    return np.r_[1.0, 1.0 + np.cumsum(2 * W[starts] * np.diff(W))]
+
+
 class Representation(VoiceoverScene):
     def construct(self):
         h = load("hedge_rates")
@@ -17,18 +27,20 @@ class Representation(VoiceoverScene):
     def card(self):
         c = chapter_card(10, r"Martingale representation: why a hedge exists", r"Is every payoff a trading strategy?",
                          part=PART)
-        with self.voiceover("Chapter ten. Martingale representation, and Clark-Ocone: why a hedge exists, and when "
-                            "it does not."):
+        with self.voiceover(
+            'Chapter ten. Martingale representation, and Clark-Ocone: why a hedge exists, and when it does not.'
+        ):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
     def live(self, h):
         t = np.asarray(h["t"])
         W, M = np.asarray(h["W"]), np.asarray(h["M"])
+        marked = {n: _marked_wealth(W, n) for n in (8, 512)}
         g1 = axes([0, 1], [W.min() - 0.1, W.max() + 0.1], x_length=7.6, y_length=2.0, ylabel=r"$W_t$", xticks=[],
                   yticks=[0], font_size=15)
-        lo = min(M.min(), min(min(v["V"]) for v in h["hedges"].values())) - 0.1
-        hi = max(M.max(), max(max(v["V"]) for v in h["hedges"].values())) + 0.1
+        lo = min(M.min(), min(v.min() for v in marked.values())) - 0.1
+        hi = max(M.max(), max(v.max() for v in marked.values())) + 0.1
         g2 = axes([0, 1], [lo, hi], x_length=7.6, y_length=3.6, xlabel=r"time",
                   ylabel=r"$M_t = \mathbb{E}[W_1^2 \mid \mathcal{F}_t] = W_t^2 + 1 - t$ and the hedge",
                   xticks=[0, 0.5, 1], yticks=[1], font_size=15)
@@ -39,31 +51,33 @@ class Representation(VoiceoverScene):
 
         def hedge(n, col):
             d = h["hedges"][str(n)]
-            tt, V = np.asarray(d["t"]), np.asarray(d["V"])
-            pts = [g2.ax.c2p(tt[0], V[0])]
-            for k in range(1, len(tt)):
-                pts += [g2.ax.c2p(tt[k], V[k - 1]), g2.ax.c2p(tt[k], V[k])] if n <= 16 else [g2.ax.c2p(tt[k], V[k])]
-            return VMobject(stroke_color=col, stroke_width=3).set_points_as_corners(pts), V[-1]
+            V = marked[n]
+            np.testing.assert_allclose(V[::(len(t) - 1) // n], d["V"], atol=1e-10)
+            return curve(g2.ax, t, V, col, stroke_width=3), V[-1]
         h8, v8 = hedge(8, DRIFT)
         h512, v512 = hedge(512, DRIFT)
         gap8 = Line(g2.ax.c2p(1, M[-1]), g2.ax.c2p(1, v8), color=JUMP, stroke_width=6)
         gap512 = Line(g2.ax.c2p(1, M[-1]), g2.ax.c2p(1, v512), color=JUMP, stroke_width=6)
         side = VGroup(
             MathTex(r"F = W_1^2", font_size=32),
-            MathTex(r"V_t = \mathbb{E}F + \sum_k H_{t_k}\,\Delta W_k,\quad H_t = 2W_t", font_size=28, color=DRIFT),
+            MathTex(r"V_t^{(n)} = 1 + \int_0^t 2W_{\lfloor ns\rfloor/n}\,dW_s", font_size=28, color=DRIFT),
             MathTex(rf"n = 8:\ |V_1 - F| = {abs(v8 - M[-1]):.3f}", font_size=28, color=JUMP),
             MathTex(rf"n = 512:\ |V_1 - F| = {abs(v512 - M[-1]):.3f}", font_size=28, color=JUMP),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "Why does a hedge exist at all? Take a payoff that depends on a Brownian path: here, W at time one, "
-            "squared. Its conditional expectation given the path so far is a martingale: W squared plus the time "
-            "remaining, because the future increment adds its variance and nothing else. <bookmark mark='a'/> Watch "
-            "the path and that martingale unroll together. <bookmark mark='b'/> Now a trader who starts with the "
-            "payoff's expected value, one, and holds two W units of the Brownian asset, rebalancing eight times. The "
-            "green staircase is the trader's wealth. It wanders near the martingale but misses at the end, by the red "
-            "gap. <bookmark mark='c'/> Rebalance five hundred and twelve times, and the wealth lies on top of the "
-            "martingale; the gap all but vanishes. The payoff is a trading strategy. Every Brownian payoff is, and "
-            "the next proof says why."
+            (
+                'Why does a hedge exist at all? Take a payoff that depends on a Brownian path: here, W at time one, '
+                'squared. Its conditional expectation given the path so far is a martingale: W squared plus the time '
+                "remaining, because the future increment adds its variance and nothing else. <bookmark mark='a'/> "
+                "Watch the path and that martingale unroll together. <bookmark mark='b'/> Now a trader who starts "
+                "with the payoff's expected value, one, and holds two W units of the Brownian asset, rebalancing "
+                "eight times. The green line marks the trader's wealth between rebalances. It wanders near the "
+                "martingale but misses at the end, by the red gap. <bookmark mark='c'/> Rebalance five hundred and "
+                'twelve times, and the wealth lies on top of the martingale; the gap all but vanishes. The payoff is '
+                'a trading strategy. Every square-integrable payoff in the augmented natural Brownian filtration has '
+                'such a representation. Turning it into a stock hedge also requires tradable assets spanning that '
+                'Brownian risk.'
+            )
         ) as vo:
             self.add(lw, lm)
             self.play(FadeIn(g1), FadeIn(g2), FadeIn(side[0]))
@@ -92,20 +106,25 @@ class Representation(VoiceoverScene):
         whys = [why(r"exponentials are integrals: the stochastic exponential solves $d\mathcal{E} = h\mathcal{E}\,dW$"),
                 why(r"they are total in $L^2(\mathcal{F}^W_T)$: orthogonal to all of them means zero (Fourier uniqueness)"),
                 why(r"limits of integrals are integrals, by the isometry: every square-integrable $F$ (It\^o 1951)"),
-                why(r"Clark (1970), Ocone (1984): $D_t F$, the Malliavin derivative, is $F$'s sensitivity to a bump in "
-                    r"$dW$ at $t$"),
+                why((
+                        "Clark (1970), Ocone (1984), $F\\in\\mathbb D^{1,2}$: $D_t F$, the Malliavin derivative, is $F$'s "
+                        'sensitivity to a bump in $dW$ at $t$'
+                    )),
                 why(r"$D_t W_T^3 = 3W_T^2$, and $\mathbb{E}[W_T^2 \mid \mathcal{F}_t] = W_t^2 + T - t$")]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=-1.6, buff=0.55, edge=6.9)
         with self.voiceover(
-            "The proof idea is short. First, exponentials are integrals: by the lemma, a stochastic exponential is "
-            "one plus a stochastic integral. <bookmark mark='a'/> Second, they are rich enough: a variable orthogonal "
-            "to all of them has zero Fourier transform at every finite set of times, so it is zero. "
-            "<bookmark mark='b'/> Third, the isometry: limits of integrals are integrals. So every square-integrable "
-            "payoff is its mean plus a stochastic integral, and every Brownian martingale a running integral: the "
-            "martingale representation theorem. <bookmark mark='c'/> It says a hedge exists, not what it is. Clark "
-            "and Ocone gave the formula: the expected Malliavin derivative, the payoff's sensitivity to a bump in the "
-            "path at time t. For a call it is the delta of Part ten. <bookmark mark='d'/> For W cubed it is three "
-            "times W squared plus the time remaining."
+            'The proof idea is short. Work in the augmented natural Brownian filtration. First, exponentials with'
+            ' deterministic step-function integrands are integrals: by the lemma, a stochastic exponential is one'
+            " plus a stochastic integral. <bookmark mark='a'/> Second, they are rich enough: a variable "
+            'orthogonal to all of them has zero Fourier transform at every finite set of times, so it is zero. '
+            "<bookmark mark='b'/> Third, the isometry: limits of integrals are integrals. So every "
+            'square-integrable payoff is its mean plus a stochastic integral, and every Brownian martingale a '
+            "running integral: the martingale representation theorem. <bookmark mark='c'/> It says a hedge "
+            'exists, not what it is. For Malliavin-differentiable square-integrable payoffs, Clark and Ocone gave'
+            " the formula: the expected Malliavin derivative, the payoff's sensitivity to a bump in the path at "
+            'time t. For a discounted stock payoff, converting this Brownian exposure into shares gives the delta'
+            " hedge of Part ten. <bookmark mark='d'/> For W cubed it is three times the sum of W squared and the "
+            'time remaining.'
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -151,18 +170,7 @@ class Representation(VoiceoverScene):
         verdict = (f"stays flat, slope {h['slope']['two']:.2f}: no amount of trading in W hedges the noise in B."
                    if flat else f"falls, slope {h['slope']['two']:.2f}, more than expected.")
         with self.voiceover(
-            "How fast does a discrete hedge converge? Five seeds of four thousand paths each, rebalanced from eight "
-            "to two thousand times. <bookmark mark='a'/> For W squared, the hedge error is exactly the "
-            "quadratic-variation error of chapter two: the payoff minus the hedge's final wealth is the sum of the "
-            "squared increments minus T. So its spread is the square root of two over n, slope minus a half, and the "
-            "bands sit on that line. <bookmark mark='b'/> A Black-Scholes call hedged with its delta converges at the "
-            "same rate, minus a half: between rebalances the book earns half gamma times the squared move minus its "
-            "theta, and those mismatches are again a quadratic-variation error, as Part eleven will explain. "
-            "<bookmark mark='c'/> Now break the theorem's assumption. Let the payoff depend on a second, independent "
-            f"Brownian motion B, and hedge with W alone, using the best position in W. The error {verdict} The market "
-            "is incomplete, and Parts eleven and thirteen live there. <bookmark mark='d'/> A pause: four times as "
-            "many trades. The spread halves."
-            " But one hedge refuses to converge: the one from the start of this part. Next, the paradox resolved."
+            f"How fast does a discrete hedge converge? Five seeds of four thousand paths each, rebalanced from eight to two thousand times. <bookmark mark='a'/> For W squared, the hedge error is exactly the quadratic-variation error of chapter two: the payoff minus the hedge's final wealth is the sum of the squared increments minus T. So its spread is the square root of two over n, slope minus a half, and the bands sit on that line. <bookmark mark='b'/> A Black-Scholes call hedged with its delta converges at the same rate, minus a half: between rebalances the book earns half gamma times the squared move minus its theta, and those mismatches are again a quadratic-variation error, as Part eleven will explain. <bookmark mark='c'/> Now break the theorem's assumption. Let the payoff depend on a second, independent Brownian motion B, and hedge with W alone, using the best position in W. The error {verdict} The market is incomplete, and Parts eleven and thirteen live there. <bookmark mark='d'/> A pause: four times as many trades. <bookmark mark='e'/> The spread halves. But one hedge refuses to converge: the one from the start of this part. Next, the paradox resolved."
         ) as vo:
             self.play(FadeIn(g), Create(theory), FadeIn(leg[3]))
             vo.wait_until("a")
@@ -172,6 +180,9 @@ class Representation(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(bands["two"]), FadeIn(leg[2]))
             vo.wait_until("d")
-            self.play(FadeIn(pc), FadeIn(ans))
+            self.play(FadeIn(pc))
+            vo.wait_until("e")
+            self.wait(0.8)
+            self.play(FadeIn(ans))
         self.wait(0.4)
         self.clear_scene()

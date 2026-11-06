@@ -25,8 +25,9 @@ class PDE(VoiceoverScene, ThreeDScene):
     def card(self):
         c = chapter_card(7, r"From paths to PDEs: Fokker--Planck and Feynman--Kac", r"What equation does a cloud of "
                          r"paths obey?", part=PART)
-        with self.voiceover("Chapter seven. From paths to partial differential equations: Fokker-Planck and "
-                            "Feynman-Kac."):
+        with self.voiceover(
+            'Chapter seven. From paths to partial differential equations: Fokker-Planck and Feynman-Kac.'
+        ):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -58,14 +59,16 @@ class PDE(VoiceoverScene, ThreeDScene):
         self.add_fixed_in_frame_mobjects(hint, nu2, cap)
         self.remove(hint, nu2, cap)
         with self.voiceover(
-            "One path is random; a cloud of paths is not. Here are forty CIR paths on the floor, time running away "
-            "from us, all starting at four percent. <bookmark mark='a'/> Above them, their density: a surface that "
-            "rises from a spike and spreads as time passes. It obeys the Fokker-Planck equation, derived next. "
-            "<bookmark mark='b'/> Look at the edge where the rate is zero. With the fitted parameters nu is below "
-            "one, and probability piles up against the floor: a wall. <bookmark mark='c'/> Lower the volatility until "
-            "nu equals two, and the same edge pinches to zero. That is Feller's condition, as the shape of a surface. "
-            "<bookmark mark='d'/> Looking down the time axis, each slice is the histogram of the paths stopped at "
-            "that moment."
+            'One path is random; its population distribution follows a deterministic equation. A finite simulated'
+            ' cloud still has sampling noise. Here are forty CIR paths on the floor, time running away from us, '
+            "all starting at four percent. <bookmark mark='a'/> Above them, their density: a surface that rises "
+            'from a spike and spreads as time passes. It obeys the Fokker-Planck equation, derived next. '
+            "<bookmark mark='b'/> Look at the edge where the rate is zero. With the fitted parameters nu is below"
+            " one, and probability piles up against the floor: a wall. <bookmark mark='c'/> Lower the volatility "
+            'until nu equals two, and the same edge pinches to zero. The density near zero scales as the rate to '
+            'the power nu minus one; zero is inaccessible already at nu at least one. Nu equal to two is a clear '
+            "example on that inaccessible side, not the threshold. <bookmark mark='d'/> Looking down the time "
+            'axis, each slice is the histogram of the paths stopped at that moment.'
         ) as vo:
             self.play(Create(ax), FadeIn(hint[:2]), LaggedStart(*[Create(p) for p in fan], lag_ratio=0.05, run_time=3))
             vo.wait_until("a")
@@ -79,8 +82,8 @@ class PDE(VoiceoverScene, ThreeDScene):
             self.move_camera(theta=-90 * DEGREES, phi=80 * DEGREES, run_time=max(vo.remaining(0.5) - 0.5, 2))
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0,
                          added_anims=[FadeOut(VGroup(ax, s_two, fan)), FadeOut(hint[:2]), FadeOut(nu2), FadeOut(cap)],
-                         run_time=1.5)
-        self.clear_scene()
+                         run_time=1.0)
+        self.clear_scene(run_time=0.2)
 
     def forward(self):
         rows = [cmath(r"\mathcal{L}\varphi", r"=", r"a\,\varphi' + \tfrac12 b^2 \varphi''", font_size=36,
@@ -96,18 +99,18 @@ class PDE(VoiceoverScene, ThreeDScene):
                 why(r"true for every test function $\varphi$: the Fokker--Planck (forward Kolmogorov) equation")]
         step = ladder(self, rows, whys, keep=4, top=3.0, x=-1.8, buff=0.65, edge=6.9)
         with self.voiceover(
-            "The derivation starts from the generator: for a smooth test function phi, the drift times its slope, "
-            "plus half the squared volatility times its curvature. <bookmark mark='a'/> By Itô's lemma, phi of X "
-            "changes by the generator times d t plus a Brownian term with mean zero, so the expected value of phi of "
-            "X changes at the rate of the expected generator: Dynkin's formula in differential form. "
-            "<bookmark mark='b'/> Write that expectation as an integral against the density p, and integrate by parts "
-            "twice, once for the slope and twice for the curvature, to move every derivative from phi onto a times p "
-            "and onto b squared times p. The boundary terms vanish because phi has compact support. "
+            'The derivation starts from the generator: for a smooth test function phi, the drift times its slope,'
+            " plus half the squared volatility times its curvature. <bookmark mark='a'/> By Itô's lemma, phi of X"
+            ' changes by the generator times d t plus a Brownian term with mean zero, so the expected value of '
+            "phi of X changes at the rate of the expected generator: Dynkin's formula in differential form. "
+            "<bookmark mark='b'/> Write that expectation as an integral against the density p, and integrate by "
+            'parts twice, once for the slope and twice for the curvature, to move every derivative from phi onto '
+            'a times p and onto b squared times p. The boundary terms vanish because phi has compact support. '
             "<bookmark mark='c'/> The identity holds for every test function, so the density itself obeys the "
-            "Fokker-Planck equation: the time derivative of p equals minus the slope of the drift flux plus half the "
-            "curvature of the variance flux. It is carried forward by the adjoint of the generator."
+            'Fokker-Planck equation: the time derivative of p equals minus the slope of the drift flux plus half '
+            'the curvature of the variance flux. It is carried forward by the adjoint of the generator.'
         ) as vo:
-            step(0)
+            step(0, run_time=0.4)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -146,17 +149,21 @@ class PDE(VoiceoverScene, ThreeDScene):
         within = abs(fk["mc"] - fk["closed"]) < 2 * fk["mc_se"]
         verdict = ("within two standard errors" if within else "a little more than two standard errors apart")
         with self.voiceover(
-            "Now backwards. Follow the discounted value of a function u along a path. <bookmark mark='a'/> Its drift "
-            "is u's time derivative plus the generator minus the rate. <bookmark mark='b'/> If u solves that "
-            "equation, with the payoff as final condition, the discounted value is a martingale and today's value is "
-            "the expected discounted payoff: the Feynman-Kac formula, from 1949. <bookmark mark='c'/> For Vasicek, an "
-            "exponential-affine guess turns it into two ordinary differential equations. <bookmark mark='d'/> Twenty "
-            f"thousand rate paths price a ten-year bond at {fk['mc']:.4f}; the formula says {fk['closed']:.4f}: "
-            f"{verdict}. <bookmark mark='e'/> But from December 2020's bill rate the model's ten-year yield is "
-            f"{100 * fk['closed_yield']:.2f} percent, against an actual 0.93: real-world parameters do not price "
-            "bonds. Part nineteen calibrates to the curve."
+            f'Now backwards. Follow the discounted value of a function u along a path. <bookmark '
+            f"mark='a'/> Its drift is u's time derivative plus the generator minus the rate. <bookmark "
+            f"mark='b'/> If u solves that equation, with the payoff as final condition, with the "
+            f'regularity and integrability that make the stochastic integral a true martingale, today’s '
+            f'value is the expected discounted payoff: the Feynman-Kac formula, from 1949. <bookmark '
+            f"mark='c'/> For Vasicek, an exponential-affine guess turns it into two ordinary "
+            f"differential equations. <bookmark mark='d'/> Twenty thousand rate paths price a ten-year bond at "
+            f"{fk['mc']:.4f}; the formula says {fk['closed']:.4f}: {verdict}"
+            f". <bookmark mark='e'/> But from December 2020's bill rate the model's ten-year yield is "
+            f"{100 * fk['closed_yield']:.2f}"
+            f' percent, against an actual 0.93: using historical parameters as pricing parameters '
+            f'amounts to an extra zero-risk-premium assumption, and this curve misses the observed '
+            f'yield. Part nineteen specifies the pricing measure and calibrates to the curve.'
         ) as vo:
-            step(0)
+            step(0, run_time=0.4)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -171,11 +178,11 @@ class PDE(VoiceoverScene, ThreeDScene):
         self.clear_scene()
 
     def dynkin(self, fk):
-        rows = [cmath(r"\mathbb{E}\,f(X_\tau)", r"=", r"f(x) + \mathbb{E}\int_0^\tau \mathcal{L}f(X_s)\,ds", font_size=36),
+        rows = [cmath(r"\mathbb{E}\,W_{\tau\wedge t}^2", r"=", r"\mathbb{E}(\tau\wedge t)\le4", font_size=36),
                 cmath(r"\mathbb{E}\,W_\tau^2", r"=", r"\mathbb{E}\,\tau", font_size=36),
                 cmath(r"\mathbb{E}\,\tau", r"=", r"b^2\,\tfrac{a}{a+b} + a^2\,\tfrac{b}{a+b} = ab", font_size=36,
                       colors={r"b^2\,\tfrac{a}{a+b} + a^2\,\tfrac{b}{a+b} = ab": ITO})]
-        whys = [why(r"Dynkin's formula: the lemma, stopped at an exit time"),
+        whys = [why(r"Dynkin at a bounded stop; bounded positions give $\mathbb E\tau<\infty$ by monotone convergence"),
                 why(r"$f = x^2$ for Brownian motion: $\mathcal{L}f = 1$"),
                 why(r"the exit probabilities from $(-a, b)$ are $\tfrac{a}{a+b}$ (up) and $\tfrac{b}{a+b}$ (down)")]
         step = ladder(self, rows, whys, keep=3, top=1.6, x=-1.2, buff=0.6, edge=6.9)
@@ -185,12 +192,15 @@ class PDE(VoiceoverScene, ThreeDScene):
         pc.to_edge(UP, buff=0.35)
         ans.to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "A pause: Brownian motion starts at zero. How long, on average, until it leaves the interval from minus "
-            "one to two? <bookmark mark='a'/> Dynkin's formula, the lemma stopped at a random time, with f equal to x "
-            "squared: the expected squared exit point equals the expected exit time. <bookmark mark='b'/> The exit "
-            "point is two with probability one third, so the time is a times b: two. <bookmark mark='c'/> Simulated: "
-            f"{fk['dynkin']:.3f}, the small excess being the overshoot of a discrete path."
-            " Expectations depend on the probabilities. Next: how to change them, by re-weighting paths."
+            f'A pause: Brownian motion starts at zero. How long, on average, until it leaves the '
+            f"interval from minus one to two? <bookmark mark='a'/> First stop at the exit time or a "
+            f'fixed horizon, whichever comes first. Dynkin with f equal to x squared gives an expected '
+            f'stopped time bounded by four. Monotone convergence gives a finite expected exit time; '
+            f"bounded stopped positions then justify passing to the actual exit. <bookmark mark='b'/> "
+            f'The exit point is two with probability one third, so the time is a times b: two. <bookmark'
+            f" mark='c'/> Simulated: {fk['dynkin']:.3f}"
+            f', the small excess being the overshoot of a discrete path. Expectations depend on the '
+            f'probabilities. Next: how to change them, by re-weighting paths.'
         ) as vo:
             self.play(FadeIn(pc))
             vo.wait_until("a")

@@ -2,7 +2,8 @@
 
 Source branch: `quantitative-finance`, starting at `20b4e7e0`.
 Part 1 branch: `polish/quantitative-finance`; Part 2 branch: `polish/quant2`;
-Part 3 branch: `polish/quant3`; Part 4 branch: `polish/quant4`.
+Part 3 branch: `polish/quant3`; Part 4 branch: `polish/quant4`;
+Part 5 branch: `polish/quant5`.
 The pass was rebased onto `11c5c9d4` to preserve the concurrent Part 31 work and
 shared axis-label fix; final checks use that updated base.
 
@@ -20,7 +21,8 @@ pass. A successful render is not, by itself, visual approval.
 | 2 | Visual pass complete; full production-voice listening pending |
 | 3 | Visual pass complete; full production-voice listening pending |
 | 4 | Visual pass complete; full production-voice listening pending |
-| 5–43 | Pending; do not infer approval from historical build notes |
+| 5 | Visual pass complete; full production-voice listening pending |
+| 6–43 | Pending; do not infer approval from historical build notes |
 
 ## Part 1: The Fair Game
 
@@ -278,4 +280,35 @@ EXPLAINER_TTS=silent python -m pytest tests/test_plain_cjk_wrap.py -q
 python tools/zh_lines.py quant4 --todo
 python tools/lecture_length.py quant4 --floor 50
 EXPLAINER_TTS=kokoro EXPLAINER_VOICE=af_heart python tools/qa_audio.py quant4 --only Hook House Research
+```
+
+
+## Part 5: Stochastic Calculus
+
+Completed on `polish/quant5`, stacked on Part 4.
+
+- Clarify the stopping hedge's mean shortfall and cash account; mark wealth between rebalances while preserving every cached rebalance value.
+- Normalize density displays by the full Monte Carlo sample, including weighted Girsanov paths; preserve probability mass outside the visible range.
+- State conditions for integration, martingale representation, measure changes, simulation orders and asymptotic variance intervals. Correct the time-midpoint limit, fractional-Brownian normalization and helix's initial-offset term.
+- Treat monthly-average CIR fitting as transition pseudo-likelihood, thresholded returns as outliers, Hawkes p-values as nominal in-sample diagnostics and the neural SDE's 2020 split as research testing.
+- Add a worked realized-variance interval, reveal quiz answers after questions, translate the revised English content and captions, and fix the local boxed pause helper.
+- Clear the opening's strike/price labels, Chinese source credits and proof/table layouts; shorten sparse equation reveals and the three 3D reset transitions.
+
+All 42 compute items were generated; corrected density displays were regenerated. All 63 current checks pass with zero automated warnings: 21 English narration-beat frame checks, 21 Chinese frame checks and 21 English silent playback renders. All 21 chapters were visually reviewed in each mode through contact sheets and sampled playback frames, with focused rechecks of changed text, plots and transitions. This is not a complete real-time viewing of both narrated productions.
+
+Eight focused tests pass. Chinese source coverage is 122/122 and the narration estimate is 64.9 minutes. Eighteen CPU speech samples (Hook 5, Representation 4, Research 9) pass waveform and alignment checks. The actual narrated opening lasts 138.267 seconds, matches the current narration and has no blank or sparse-screen hold of at least 1.5 seconds. Full production-voice listening and synchronization remain pending; signal checks do not certify pronunciation.
+
+The four registered computation function sources and the complete registration, seal and opening history match the Part 4 base. The cumulative Part 5 trial count remains 236; no additional trial or hold-out opening was introduced. The density window contains simulated mass 0.9945 versus analytic 0.994566, with L1 discrepancy about 0.038.
+
+The [compact evidence record](quant5-polish-evidence.json) records source and input hashes, all 63 receipts, visual scope, current speech reports and the narrated opening. Local artifacts remain git-ignored: `renders/quant5_polished_silent.mp4` (76:13, 480p15, 21 embedded chapters, English subtitles, H.264/AAC/mov_text), its `.srt` and chapter list, and `media/quant5/narrated_qa/videos/s01_hook/480p15/Hook.mp4`. Part 6 is next in the sequential visual pass.
+
+```bash
+python -m videos.quant.quant5.compute
+python tools/qa_series.py quant5 --cached-only --resume --timeout 1800
+python tools/qa_series.py quant5 --lang zh --cached-only --resume --timeout 1800
+python tools/qa_series.py quant5 --motion --cached-only --resume --timeout 1800
+EXPLAINER_TTS=silent python -m pytest tests/test_quant5_density_display.py tests/test_quant5_marked_hedge.py tests/test_quant_house.py -k 'quant5 or simulation_library or neural_sde_generator or envelope_seals or trial_counter' -q
+python tools/zh_lines.py quant5 --todo
+python tools/lecture_length.py quant5 --floor 50
+EXPLAINER_TTS=kokoro EXPLAINER_VOICE=af_heart python tools/qa_audio.py quant5 --only Hook Representation Research
 ```
