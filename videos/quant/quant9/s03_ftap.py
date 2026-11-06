@@ -116,7 +116,7 @@ class FTAP(VoiceoverScene):
             "paying less than zero."
         ) as vo:
             self.play(FadeIn(g), LaggedStart(*[GrowArrow(a) for a in arrows], lag_ratio=0.3), FadeIn(slabs),
-                      FadeIn(side[1]), run_time=2.5)
+                      FadeIn(side[1]), run_time=1.0)
             vo.wait_until("a")
             self.play(FadeIn(cone), FadeIn(dot), FadeIn(side[0]), FadeIn(side[2]))
             vo.wait_until("b")
