@@ -11,7 +11,9 @@ Levels:
         register allocation
     3   level 2 with inlining of small functions first
 
-``passes`` overrides the level's pass list (for the pass-by-pass measurements).
+``passes`` overrides the level's pass list (for the pass-by-pass measurements).  ``target="os"`` (Part 31) compiles
+for a user process under PebbleOS: ``getc`` and ``putc`` become calls into a small library that buffers them over
+the ``read`` and ``write`` system calls, and ``main`` returning makes the ``exit`` call instead of halting.
 """
 from __future__ import annotations
 
@@ -81,16 +83,32 @@ def middle(m: Module, level: int, passes=None, stats=None) -> Module:
     return m
 
 
-def compile_program(src: str | P.Program, level: int = 2, passes=None, rotate: bool | None = None) -> Compiled:
+def to_syscalls(m: Module) -> None:
+    """getc and putc as calls to the user library (``__getc``, ``__putc``), for a process under PebbleOS."""
+    from explainer.cs.lang.compiler.ir import I
+    for f in m.funcs:
+        for b in f.blocks:
+            b.ins = [I("call", i.dst, [], "__getc") if i.op == "getc" else
+                     I("call", None, list(i.args), "__putc") if i.op == "putc" else i for i in b.ins]
+
+
+def compile_program(src: str | P.Program, level: int = 2, passes=None, rotate: bool | None = None,
+                    target: str = "bare", origin: int = 0) -> Compiled:
     from explainer.cs.pebble.asm import assemble
 
     prog = P.parse(src) if isinstance(src, str) else copy.deepcopy(src)
     info = C.check(prog)
     m = L.lower(prog, info, rotate=level >= 2 if rotate is None else rotate)
+    if target == "os":
+        to_syscalls(m)
     stats: dict = {"ir_lowered": sum(f.count() for f in m.funcs)}
     middle(m, level, passes, stats)
     stats["ir_final"] = sum(f.count() for f in m.funcs)
-    parts = [G.RUNTIME]
+    if target == "os":
+        from explainer.cs.os.ulib import ULIB
+        parts = [f".org {origin:#x}", ULIB]
+    else:
+        parts = [G.RUNTIME]
     mfs = []
     for f in m.funcs:
         mf = G.select(f)
