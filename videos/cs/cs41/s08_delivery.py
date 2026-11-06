@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs41.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, axes, load, module_box, trace)
+from videos.cs.cs41.common import (BG, DATA, HEAD, KERN, LAM, NO, PART, YES, axes, load, module_box, trace)
 
 
 class Delivery(VoiceoverScene):
