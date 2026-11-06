@@ -266,7 +266,7 @@ class Research(VoiceoverScene):
 
     def question(self):
         q = pause_card(r"at $H = 0.6$ the best trading frequency with a 1 bp cost is about 2,300 a year. If the cost "
-                       r"doubles to 2 bp, by what factor does $n^*$ change?")
+                       r"doubles to 2 bp, by what factor does $n^*$ change?").move_to(UP * 0.9)
         with self.voiceover(
             """Pause and predict. At H of point six, one basis point gives a best proxy frequency of about twenty-three hundred a year. If the charge doubles, by what factor does the optimum change? <bookmark mark='a'/> The formula gives two to the power minus one over H: about point three one five. The frequency falls to roughly seven hundred and thirty a year, within this mean-score approximation."""
         ) as vo:
