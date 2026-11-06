@@ -17,6 +17,8 @@ Built on *AI, Built*'s plotting helpers (``axes``, ``curve``, ``legend``) and dr
 
 from __future__ import annotations
 
+import math
+
 import numpy as np
 from manim import *  # noqa: F403
 
@@ -2696,3 +2698,86 @@ class ConvergenceLab(VGroup):
             g.add(Rectangle(width=p1[0] - p0[0], height=p1[1] - p0[1], stroke_width=0, fill_color=color or S.ALT,
                             fill_opacity=opacity).move_to((p0 + p1) / 2))
         return g
+
+
+class BettingPaths(VGroup):
+    """Wealth paths of a betting test (Part 44): each path is a nonnegative martingale (a likelihood ratio) plotted on
+    log10 axes ``ax`` (x: toss number, y: log10 wealth).  ``paths(color)`` draws them; ``threshold(alpha)`` the line at
+    1/alpha that Ville's inequality says a null path crosses with probability at most alpha; ``crossers(alpha)`` the paths
+    that did, recoloured."""
+
+    def __init__(self, ax, xs, log10_paths, ymin: float = -6.0, ymax: float = 3.0):
+        super().__init__()
+        self.ax = ax
+        self.xs = np.asarray(xs, float)
+        self.P = [np.clip(np.asarray(p, float), ymin, ymax) for p in log10_paths]
+        self.raw = [np.asarray(p, float) for p in log10_paths]
+
+    def _line(self, p, color, stroke_width, opacity):
+        m = VMobject(stroke_color=color, stroke_width=stroke_width, stroke_opacity=opacity)
+        m.set_points_as_corners([self.ax.c2p(a, b) for a, b in zip(self.xs, p)])
+        return m
+
+    def paths(self, color=None, stroke_width: float = 1.6, opacity: float = 0.7) -> VGroup:
+        return VGroup(*[self._line(p, color or S.EST, stroke_width, opacity) for p in self.P])
+
+    def threshold(self, alpha: float, color=None) -> VGroup:
+        y = math.log10(1 / alpha)
+        from explainer.analysis import label
+
+        line = DashedLine(self.ax.c2p(self.xs[0], y), self.ax.c2p(self.xs[-1], y), color=color or S.RESID, stroke_width=3)
+        t = label(rf"wealth $1/\alpha = {1 / alpha:g}$", font_size=20, color=color or S.RESID).next_to(line, UP, buff=0.08).align_to(line, RIGHT)
+        return VGroup(line, t)
+
+    def crossers(self, alpha: float, color=None, stroke_width: float = 2.6) -> VGroup:
+        y = math.log10(1 / alpha)
+        return VGroup(*[self._line(p, color or S.RESID, stroke_width, 1.0) for p, r in zip(self.P, self.raw) if np.max(r) >= y])
+
+
+class RiskSet(VGroup):
+    """The risk set of a two-state decision problem (Part 45): every non-randomized rule as a point (R(theta_1, d),
+    R(theta_2, d)) on axes ``ax``; ``hull()`` the convex set of randomized rules; ``lower(boundary)`` its admissible
+    lower-left edge; ``bayes_line(prior, value)`` the supporting line pi R_1 + (1 - pi) R_2 = value that picks out a
+    Bayes rule; ``diagonal()`` the equal-risk line R_1 = R_2 on which a minimax equalizer sits."""
+
+    def __init__(self, ax, points):
+        super().__init__()
+        self.ax = ax
+        self.R = np.asarray(points, float)
+
+    def points(self, color=None, radius: float = 0.07, highlight=None, hcolor=None) -> VGroup:
+        g = VGroup()
+        for i, (a, b) in enumerate(self.R):
+            c = hcolor if highlight is not None and i in highlight else (color or S.EST)
+            g.add(Dot(self.ax.c2p(a, b), radius=radius, color=c))
+        return g
+
+    def hull(self, color=None, opacity: float = 0.22) -> Polygon:
+        from scipy.spatial import ConvexHull
+
+        P = np.unique(np.round(self.R, 12), axis=0)
+        h = ConvexHull(P)
+        return Polygon(*[self.ax.c2p(*P[i]) for i in h.vertices], stroke_width=2, stroke_color=color or S.EST,
+                       fill_color=color or S.EST, fill_opacity=opacity)
+
+    def lower(self, boundary, color=None, stroke_width: float = 5) -> VMobject:
+        m = VMobject(stroke_color=color or S.KEPT, stroke_width=stroke_width)
+        m.set_points_as_corners([self.ax.c2p(a, b) for a, b in np.asarray(boundary, float)])
+        return m
+
+    def _clip_line(self, f, color, stroke_width, dashed):
+        x0, x1, y0, y1 = bounds(self.ax)
+        xs = np.linspace(x0, x1, 400)
+        ys = f(xs)
+        k = (ys >= y0) & (ys <= y1)
+        if k.sum() < 2:
+            return VGroup()
+        a, b = self.ax.c2p(xs[k][0], ys[k][0]), self.ax.c2p(xs[k][-1], ys[k][-1])
+        return (DashedLine if dashed else Line)(a, b, color=color, stroke_width=stroke_width)
+
+    def bayes_line(self, prior: float, value: float, color=None, stroke_width: float = 3, dashed: bool = False):
+        """The line prior R_1 + (1 - prior) R_2 = value, in data coordinates (the axes must start at 0)."""
+        return self._clip_line(lambda x: (value - prior * x) / (1 - prior), color or S.ACCENT, stroke_width, dashed)
+
+    def diagonal(self, color=None, stroke_width: float = 2):
+        return self._clip_line(lambda x: x, color or GREY_B, stroke_width, True)
