@@ -25,8 +25,9 @@ Delivery workflow: continue directly on `quantitative-finance`. Commit and push 
 | 4 | Visual pass complete; full production-voice listening pending |
 | 5 | Visual pass complete; full production-voice listening pending |
 | 6 | Visual pass complete; full production-voice listening pending |
-| 7 | In progress: time-series/volatility audit and data restoration |
-| 8–43 | Pending; do not infer approval from historical build notes |
+| 7 | Visual pass complete; full production-voice listening pending |
+| 8 | In progress: decisions/control audit and data restoration |
+| 9–43 | Pending; do not infer approval from historical build notes |
 
 ## Part 1: The Fair Game
 
@@ -523,3 +524,60 @@ Local review artifacts (git-ignored):
   English opening.
 - `renders/qa/series/quant6/{en,zh}/`: chapter receipts, images, text captures,
   speech reports and English silent clips.
+
+
+## Part 7: Time Series and Volatility — completed visual pass
+
+The scientific pass aligns the English explanation, Chinese narration, captions,
+and worked solutions. The Dickey–Fuller derivation now includes the fitted
+constant used by its simulation. Wold, Ljung–Box, GARCH stationarity, stochastic
+volatility, realized-variance limits, QLIKE and forecast-comparison results state
+the assumptions needed for their conclusions. DCC's multistep expectation keeps
+the normalized correlation matrix inside the recursion; its persistence half-life
+is identified as a linearized summary.
+
+The evaluation chapters distinguish the neural training and validation dates from
+the classical fit dates, label the 2020 comparison as retrospective, and explain
+fixed seed averaging and later entrants. The foundation example is identified as
+a token-embedding MLP illustration. The quoted foundation-model comparison was
+checked against Brini's Table 6, and HARNet authorship against the DOI metadata.
+The nested-forecast chapter includes a worked DM/CW calculation and explains why
+its adjusted standard error must normally be estimated separately.
+
+The visual pass restores Kalman density curves in the correct data coordinates,
+expands ranges to include the observed crisis values and coefficient paths, uses
+one probability scale throughout the foundation replay, and removes contaminated
+histogram edge bins. Chinese question cards fit their side panels. House API rows
+remain readable. The opening objectives, first ADF equation, first smoother row, and forecast-comparison opening
+appear promptly; fresh playback scans and the narrated opening have no blank
+or sparse holds of 1.5 seconds or longer.
+
+All 30 existing compute items were restored from the public data without changing
+`quant7/compute.py`, the data manifest, trial registry, or track record. The
+as-of-Part-7 counter is 307. This pass added no market trials and opened no sealed
+holdout. The raw global registry count is not used as this part's trial count.
+
+Validation: all 63 receipts are current with matching input signatures and zero
+automated warnings: 21 English narration-beat checks, 21 Chinese checks, and 21
+English silent playback checks. All endpoint sheets and all 40-frame playback
+sheets were visually reviewed, including the refreshed repaired scenes. The House
+and inference checks passed 236 tests; seven expected dependency/mock-data
+warnings are recorded separately from visual QA. Chinese narration coverage is
+156/156 source lines, and the narration estimate is 57.2 minutes.
+
+Actual Kokoro samples cover Hook, Garch and Research in English and Hook in
+Chinese: 29 lines pass waveform and token-time checks. These checks do not certify
+pronunciation or continuous listening; Mandarin within-sentence character times
+remain estimates. Full production-voice listening remains pending.
+
+The [compact evidence record](quant7-polish-evidence.json) retains source/input
+hashes, all 63 receipts, manual-review hashes, paper checks, tests, speech reports,
+and preview hashes. Local git-ignored artifacts are:
+
+- `renders/quant7_polished_silent.mp4`: 69:23, 480p15, 21 embedded chapters
+  and English soft subtitles, plus its `.srt` and chapter list.
+- `media/quant7/narrated_qa/videos/s01_hook/480p15/Hook.mp4`: the actual English
+  opening, 199.9 seconds, with its current narration
+  capture and a clean dead-air scan.
+
+Part 8 is next in the sequential pass.

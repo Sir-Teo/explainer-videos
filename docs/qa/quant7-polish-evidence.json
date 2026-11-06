@@ -1,0 +1,1076 @@
+{
+  "video": "quant7",
+  "base_commit": "1e560529",
+  "source_commit": "39e1f122a58f5da2145f1fb00b5ae0560a2c597d",
+  "source_fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+  "scope": "English and Chinese narration-beat frames; English silent 480p15 playback; CPU speech samples",
+  "production_listening": "pending",
+  "data_inputs": {
+    ".cache/quant7/acf_arma.json": {
+      "sha256": "e5d800462f5ca5fbcab2a2d2caa94869801acfb2fbbf3410e3333123c5203bb2",
+      "bytes": 90821
+    },
+    ".cache/quant7/acf_arma.npz": {
+      "exists": false
+    },
+    ".cache/quant7/coint.json": {
+      "sha256": "5eea3fbf743635c49d68d720ef9d3d7fa471db25eff45945e650459c6c941223",
+      "bytes": 31558
+    },
+    ".cache/quant7/coint.npz": {
+      "exists": false
+    },
+    ".cache/quant7/daily.json": {
+      "sha256": "ca8d7227a16972675015b3902fd2a41c1af24780488007660cfe5695b2154a6b",
+      "bytes": 71299
+    },
+    ".cache/quant7/daily.npz": {
+      "exists": false
+    },
+    ".cache/quant7/dcc.json": {
+      "sha256": "0b99c7c72cc4b8bf371eb8c21052b572b21f660dabe9ee5ab5f22b8313ea88eb",
+      "bytes": 131651
+    },
+    ".cache/quant7/dcc.npz": {
+      "exists": false
+    },
+    ".cache/quant7/dcc_ell.json": {
+      "sha256": "6d35e7835e1d69f4c9dc553619e07b7a4e8cb1fe1c96fe9a0034333bb8889b06",
+      "bytes": 140953
+    },
+    ".cache/quant7/dcc_ell.npz": {
+      "exists": false
+    },
+    ".cache/quant7/envelope.json": {
+      "sha256": "b819780266db59e29bfa8c0831ff34c53b5363e019d12d264e403686e22d4164",
+      "bytes": 424
+    },
+    ".cache/quant7/envelope.npz": {
+      "exists": false
+    },
+    ".cache/quant7/envelope2.json": {
+      "sha256": "90b237b2cbbe1577668246099872dd0fe82252cfa42772631633b5c764e64236",
+      "bytes": 523
+    },
+    ".cache/quant7/envelope2.npz": {
+      "exists": false
+    },
+    ".cache/quant7/foundation.json": {
+      "sha256": "7a42e15ed1d2c2f1af18e8ddfaf84ff8285df90fc9d685cf117d0fdde7fa6caf",
+      "bytes": 72284
+    },
+    ".cache/quant7/foundation.npz": {
+      "exists": false
+    },
+    ".cache/quant7/garch.json": {
+      "sha256": "53ca814e90c102661b61f42605dff24c6d02c316f9b5c394e3a2fa85863edda9",
+      "bytes": 337399
+    },
+    ".cache/quant7/garch.npz": {
+      "exists": false
+    },
+    ".cache/quant7/garch_lik.json": {
+      "sha256": "055b61aafa7044bdb9801023206919cf86e1598d85899471f6f03a677476f1f3",
+      "bytes": 268301
+    },
+    ".cache/quant7/garch_lik.npz": {
+      "exists": false
+    },
+    ".cache/quant7/garch_persist.json": {
+      "sha256": "6366af266a5900e1031e20f2a24a911373b9cad7c7fe38a59292c5a6784674b4",
+      "bytes": 38029
+    },
+    ".cache/quant7/garch_persist.npz": {
+      "exists": false
+    },
+    ".cache/quant7/har.json": {
+      "sha256": "8c0db110bcdd9021150e4458c214bc890017858d6c2028924131ff23c1362c73",
+      "bytes": 32476
+    },
+    ".cache/quant7/har.npz": {
+      "exists": false
+    },
+    ".cache/quant7/har_roll.json": {
+      "sha256": "41f15bf6740744940200df5ff18f7dfafab89cc40f2ebe3897e1a3cc7d68b9cb",
+      "bytes": 33245
+    },
+    ".cache/quant7/har_roll.npz": {
+      "exists": false
+    },
+    ".cache/quant7/house_fc.json": {
+      "sha256": "4850c8960c858e7214b3cf445e67d40e20e036357ae122cf9f2907a0c922b813",
+      "bytes": 431
+    },
+    ".cache/quant7/house_fc.npz": {
+      "exists": false
+    },
+    ".cache/quant7/industry.json": {
+      "sha256": "7b3e2772577c3f6a7db5146b2844aa3c20c3719d84cc88b0c5463a1dd79cc2d2",
+      "bytes": 516155
+    },
+    ".cache/quant7/industry.npz": {
+      "exists": false
+    },
+    ".cache/quant7/johansen.json": {
+      "sha256": "99c4096705c2db3907327877ce193b7fc81f3a9f972a242147d6ec33269dabe1",
+      "bytes": 122595
+    },
+    ".cache/quant7/johansen.npz": {
+      "exists": false
+    },
+    ".cache/quant7/kalman.json": {
+      "sha256": "bf3881c9529bb5f1550113f87180011d8b9e224b2f10beb1f59aa4293f5cf162",
+      "bytes": 533970
+    },
+    ".cache/quant7/kalman.npz": {
+      "exists": false
+    },
+    ".cache/quant7/nested_theory.json": {
+      "sha256": "7189a801653e2f4de410325f9b39a3caf83b2444f83f60783a06b53faa94a082",
+      "bytes": 2884
+    },
+    ".cache/quant7/nested_theory.npz": {
+      "exists": false
+    },
+    ".cache/quant7/race.json": {
+      "sha256": "2b02f1dc194a23fc6ee7d124cbd99a3995ff823780126f5773638e4e8173dcdf",
+      "bytes": 71024
+    },
+    ".cache/quant7/race.npz": {
+      "exists": false
+    },
+    ".cache/quant7/race2.json": {
+      "sha256": "a3912b00b8e21448c1dedb7899e32c3ce29cd0364c03292e41c4735901b14f0b",
+      "bytes": 47485
+    },
+    ".cache/quant7/race2.npz": {
+      "exists": false
+    },
+    ".cache/quant7/realized.json": {
+      "sha256": "4013878c41ae44e415b1e94f6fb687cc4516fd005b2f450b0b321179a1cfc156",
+      "bytes": 251730
+    },
+    ".cache/quant7/realized.npz": {
+      "exists": false
+    },
+    ".cache/quant7/regimes.json": {
+      "sha256": "0bec61dddfa4c1527d9a44357960090461ad29d1573ab4e68fbe026eeffd62f6",
+      "bytes": 63802
+    },
+    ".cache/quant7/regimes.npz": {
+      "exists": false
+    },
+    ".cache/quant7/regimes_em.json": {
+      "sha256": "41ab2c7a79a1d500d9ca4d2c6c97ce2367a2bde47a9d3fdad3a9c8c5f6485f51",
+      "bytes": 91630
+    },
+    ".cache/quant7/regimes_em.npz": {
+      "exists": false
+    },
+    ".cache/quant7/rough.json": {
+      "sha256": "79c031e31153809587234243a9d7dfe13488e7f6d4e4a5bbc886405370ea142e",
+      "bytes": 144521
+    },
+    ".cache/quant7/rough.npz": {
+      "exists": false
+    },
+    ".cache/quant7/scaling.json": {
+      "sha256": "a7c12af7d9afbecd4a02186bcfbf2e8e688b1d1753b7fc981bc38363ba5e9189",
+      "bytes": 12956
+    },
+    ".cache/quant7/scaling.npz": {
+      "exists": false
+    },
+    ".cache/quant7/scoring.json": {
+      "sha256": "6c00418be65a26e8e818c8621e6d37419dc865a84d58f9a3a1cc9930bbc53f7a",
+      "bytes": 32826
+    },
+    ".cache/quant7/scoring.npz": {
+      "exists": false
+    },
+    ".cache/quant7/signature.json": {
+      "sha256": "729f596316cf19e59497c9ab8a30cccd6161ccc1db092677a037a97cb79451a4",
+      "bytes": 174681
+    },
+    ".cache/quant7/signature.npz": {
+      "exists": false
+    },
+    ".cache/quant7/spurious.json": {
+      "sha256": "56f45cbcb17b3823b5e4278ad0545958d0ab9179130cf00e7a36d005ab9bac6e",
+      "bytes": 99961
+    },
+    ".cache/quant7/spurious.npz": {
+      "exists": false
+    },
+    ".cache/quant7/training.json": {
+      "sha256": "efe6b8cb33e159a54f5d12984c8b96e6dc77fce1e1c970fe206d896c253a0f49",
+      "bytes": 217190
+    },
+    ".cache/quant7/training.npz": {
+      "exists": false
+    },
+    ".cache/quant7/unitroot.json": {
+      "sha256": "3f9de5f115e9c9e00c7021515789faff67638908659678ae21cb71a2764b5b9a",
+      "bytes": 112747
+    },
+    ".cache/quant7/unitroot.npz": {
+      "exists": false
+    }
+  },
+  "manual_visual_review": {
+    "english_endpoint_chapters": 21,
+    "chinese_endpoint_chapters": 21,
+    "english_playback_contact_sheets": 21,
+    "method": "Narration-beat contact sheets and 40 sampled playback frames per chapter; focused current native-frame checks of repaired charts. All sheet hashes matched the reviewed artifacts.",
+    "focused_repairs": [
+      "Demeaned Dickey-Fuller derivation and full histogram density range",
+      "Cointegration pause question stays inside its bilingual side panel",
+      "Kalman prior, likelihood and posterior bells restored in data coordinates",
+      "DCC multistep expectation distinguishes Q from normalized R",
+      "Full crisis, conditional variance and HAR display ranges",
+      "Foundation probability bins share one fixed y scale",
+      "Readable House API rows and prospective research standard",
+      "Worked nested-forecast DM/CW answer and complete bilingual exercises"
+    ]
+  },
+  "audio_note": "Signal and token-time checks do not certify pronunciation or continuous listening. Mandarin zf_001 within-sentence character times are estimated.",
+  "opening_sample": {
+    "path": "media/quant7/narrated_qa/videos/s01_hook/480p15/Hook.mp4",
+    "seconds": 199.89166666666523,
+    "narration_lines": 7,
+    "backend": "kokoro",
+    "voice": "af_heart",
+    "narration_matches_current_source": true,
+    "sha256": "57169578a076554da39cce52d68713b645c5f2ad9cff60a86235fc38678448ff",
+    "bytes": 4793328,
+    "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 200 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 200 s\n"
+  },
+  "additional_checks": {
+    "computed_items": 30,
+    "zh_narration_coverage": "156/156",
+    "narration_minutes_estimate": 57.2,
+    "tests": {
+      "command": "python -m pytest -q tests/test_quant_house.py tests/test_quant6_inference.py",
+      "passed": 236,
+      "warnings": 7,
+      "seconds": 118.77,
+      "completion": "exec session21823",
+      "scope": "House and inference numerical tests; subsequent edits only Part7 scenes/narration/captions/notes",
+      "warning_note": "pydub audioop deprecation and expected zero-variance mocked-portfolio divisions"
+    },
+    "audit_reports": {
+      "display_audit.json": {
+        "path": "renders/qa/quant7/display_audit.json",
+        "sha256": "c3d8e0dbcf0e60bca5952d8aa876840d79e35f48ddb88670ba196d85102056c0",
+        "bytes": 2533
+      },
+      "derivation_checks.json": {
+        "path": "renders/qa/quant7/derivation_checks.json",
+        "sha256": "3ad12ae9f6288a96690a6fbe11ba9c5152767ca1b4c0b1b135f8043bd2c5baec",
+        "bytes": 793
+      },
+      "paper_checks.json": {
+        "path": "renders/qa/quant7/paper_checks.json",
+        "sha256": "1f30f08059b2c460b47b4f81b093d73a7d89abe76c798c035474e1a8ab810f44",
+        "bytes": 1562
+      },
+      "harnet_crossref.json": {
+        "path": "renders/qa/quant7/harnet_crossref.json",
+        "sha256": "03bc10c1ec53e9cf36be08ae03f647d5eaa71e388328406f9706c627e434843f",
+        "bytes": 10832
+      },
+      "tests_report.json": {
+        "path": "renders/qa/quant7/tests_report.json",
+        "sha256": "294f37fff776f6e7700e6a9d03629bbf99c6366a321d79695d0615b888bdb643",
+        "bytes": 400
+      }
+    },
+    "protocol": {
+      "unchanged_since_base": [
+        "videos/quant/quant7/compute.py",
+        "videos/quant/data/manifest.json",
+        "videos/quant/data/envelope.json",
+        "videos/quant/data/track_record.json"
+      ],
+      "part7_cumulative_trials": 307,
+      "additional_trials": 0,
+      "holdouts_opened": 0
+    }
+  },
+  "records": {
+    "en_frames": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 197.93316666666672,
+        "frames": 17,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Hook/result.json",
+        "receipt_sha256": "45bd83e7224d7c9757a7a324fbb6a3ff8143c82447d7f56763c2d6961f023450",
+        "sheet_sha256": "80833c37e0ebc53835e0efe54f481bfb613c1f39c1811c1aaaab2e90892e0c0e"
+      },
+      {
+        "scene": "Arma",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 216.33320833333337,
+        "frames": 18,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Arma/result.json",
+        "receipt_sha256": "6d83890f15e8780487b878e563868c028ca0a62640029bc52c99427f9fe184ae",
+        "sheet_sha256": "62d87bcf7b600dfb24c33e9903ddcb38bf173e66ac1fdfe4c3ee2fc99f803f4b"
+      },
+      {
+        "scene": "Series",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 281.86279166666674,
+        "frames": 19,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Series/result.json",
+        "receipt_sha256": "0eb45fe06df9a486a97e36ab06330fa964d83c99354b08051a175c72a04ac672",
+        "sheet_sha256": "8b0f3b22cddb43c166a03bc17f0050ce266790b2d3c9983cca44676413c02652"
+      },
+      {
+        "scene": "Coint",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 168.8850416666667,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Coint/result.json",
+        "receipt_sha256": "101b31d70b792805a7628d9d295ae67c55864725a9fbeed1344fb98dd2c7498c",
+        "sheet_sha256": "d5fa9f1bdd313eb21b146a7faf61f671ee33563cc49bf2a9e14154a4905b71d7"
+      },
+      {
+        "scene": "Regimes",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 222.77395833333335,
+        "frames": 16,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Regimes/result.json",
+        "receipt_sha256": "be4f399ae6381d1b345a5856bcde52a2847487d70e9d814313a0d8d1f2c98537",
+        "sheet_sha256": "3074fddd9815f505d0bf373f1e904a07e8a5c1f08e2b043a729bd476613cc51a"
+      },
+      {
+        "scene": "Kalman",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 249.10508459595968,
+        "frames": 18,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Kalman/result.json",
+        "receipt_sha256": "1275c8e837e4eec185defd04d60d331ba8462732df61cc827245605b74b178b9",
+        "sheet_sha256": "21f6e10126192b70ea84452aa357f8ba422e02762d374e17c8376c30577b9dcb"
+      },
+      {
+        "scene": "Garch",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 212.54250000000005,
+        "frames": 19,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Garch/result.json",
+        "receipt_sha256": "dd4b43c957128e7c38c514411fe3ad07a8f48658321a783a5670f07f38366186",
+        "sheet_sha256": "1157bc3681217a4bc1973a52743e8b2421cd20c3fa0b911b5d61ad4cb0645e40"
+      },
+      {
+        "scene": "Zoo",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 222.79250000000008,
+        "frames": 19,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Zoo/result.json",
+        "receipt_sha256": "9663e796f9a22b5b72da03a81cd1ba2508986dfafd03ba3a273db0911b9bae10",
+        "sheet_sha256": "e095218d0d035969b6a24fc20a7588d90e6a4270e73ecf0c5cb009bc20601953"
+      },
+      {
+        "scene": "Dcc",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 198.07025000000007,
+        "frames": 13,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Dcc/result.json",
+        "receipt_sha256": "5fa938c5842f18ef6b2cb6b584f8677e7f8eeca691f620bbcdb4fc8db00035c5",
+        "sheet_sha256": "fa6a181a94b72c14728cbbc0d4f68dba5da6ed40ff396208c1d3350832899ebb"
+      },
+      {
+        "scene": "Realized",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 193.412875,
+        "frames": 18,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Realized/result.json",
+        "receipt_sha256": "97a8cf77dd0a0f0989bbd27764d64be319bafc33e102d6dd4f1f6835bab1480d",
+        "sheet_sha256": "f898318bdd8d348357a5e6834233020f0a3648b721bfae2859713139b826dcc2"
+      },
+      {
+        "scene": "Har",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 160.14433333333335,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Har/result.json",
+        "receipt_sha256": "cde150c0ff7be1265eb452245f7be3700c7655af92d9e1483ccfb78da3f6d564",
+        "sheet_sha256": "933af87d8a0c3bbb1cb2cfa28d1c8b789228ea7244bf142519bb70c6921e891f"
+      },
+      {
+        "scene": "Rough",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 93.16470833333334,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Rough/result.json",
+        "receipt_sha256": "c7f0fd398759032072a0921bd0fff73586cb61a20c3061116eec6f5b65c1067a",
+        "sheet_sha256": "4fed47e7d10e2d24e6aa89cf7d626e9d06e3380fa80e0c7400e6ba3575e01525"
+      },
+      {
+        "scene": "Scoring",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 198.32766666666672,
+        "frames": 15,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Scoring/result.json",
+        "receipt_sha256": "e90b2e29607d93a801a058192983294524d0ca1920e2d4ec72a71440608654dc",
+        "sheet_sha256": "0a7b559018449a40834cb9269ce7777ae5a38230ccaeb624cea5e3cf8cf46215"
+      },
+      {
+        "scene": "Training",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 207.34612500000006,
+        "frames": 16,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Training/result.json",
+        "receipt_sha256": "8ad68ab1fe0342beb248fc8ec831ffcf95fba84070124a0894ef5a0c5b50e1cc",
+        "sheet_sha256": "6564244ef54969356a40ebd583548a87da7db4fc26c0fcf80fee05e11587a9e4"
+      },
+      {
+        "scene": "Race",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 229.81091666666674,
+        "frames": 19,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Race/result.json",
+        "receipt_sha256": "27d4ee3b248196c9431fe3a20013ff141a92877a6b27c571434d1beb9dfc0740",
+        "sheet_sha256": "6b599aa72f714c68bf4e4eb4248d14f28cf6d3ff68a1d7431d4d5eed36406006"
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 209.8184166666667,
+        "frames": 13,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Frontier/result.json",
+        "receipt_sha256": "83cd7e732ff5f76ba711e4a7e85e8af2eec449d45a6b3df04a97b942815031e8",
+        "sheet_sha256": "f0321f5c18c0fe1e3e36056291f6bbddf461350c346acc7020b4c1cfa1b1670c"
+      },
+      {
+        "scene": "March",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 152.88875000000002,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/March/result.json",
+        "receipt_sha256": "64db5a59c5402016ee03cb29716baf5d00ea26ac0597f15b658e6ede8ee12400",
+        "sheet_sha256": "55496645c9e93b16cd255b73352a86f0b1ecc40a5984fe91d2a05e3be0589e4a"
+      },
+      {
+        "scene": "Industry",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 197.9684166666667,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Industry/result.json",
+        "receipt_sha256": "9ebd1868a8925d4b0031df21e0d928f3a3d35fc0e7238b0636ac400c3f8ed6a8",
+        "sheet_sha256": "916d69535629432ee9f825f50ed06bbfdfe5269f68976352640679b2995b1ee5"
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 293.60904166666666,
+        "frames": 21,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Research/result.json",
+        "receipt_sha256": "54f3a40137ddaafb1e70d34a5569e9b0bb6ffc95d7f241064d5c9060dd8e81d2",
+        "sheet_sha256": "4c67e0501f565a07859c61d76cb6afd31a54d8dbb4c8ce56fadab97ef7bdf553"
+      },
+      {
+        "scene": "House",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 103.235125,
+        "frames": 7,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/House/result.json",
+        "receipt_sha256": "66515b8b61bddd38e858fc73daa5a3794ac776c8c711bf0e27f4641be6bd571e",
+        "sheet_sha256": "eb54b2b65a920a3d5dbdcacd3e06b977c0da97a27e25c66933e6dbd845a1fd42"
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 161.1535416666667,
+        "frames": 10,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Outro/result.json",
+        "receipt_sha256": "11c9abf442879ea2027f13ac28ac744dcf85e20cf7f11904828a644f8e241b90",
+        "sheet_sha256": "e2569d23aecd96112d95417450440d9f57202b2e7c812da88fc990c90d739401"
+      }
+    ],
+    "zh_frames": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 215.4951666666667,
+        "frames": 17,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/zh/Hook/result.json",
+        "receipt_sha256": "d56aa62f628e5fdd341a1bfc57053709d1ee044e962dbe628e7ef54352f2d598",
+        "sheet_sha256": "2bb44248af89a27a3f887c6bc14aa648ca44a2bb11c7d85c3a37b0f1924cebe9"
+      },
+      {
+        "scene": "Arma",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 161.6859583333334,
+        "frames": 17,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/zh/Arma/result.json",
+        "receipt_sha256": "0e9c7387837c732616b221eba07a1662e616c36c415823fd2a2a2bbe684fb4dc",
+        "sheet_sha256": "c58f28ffc589696fe8c60a9d5a4e3acab2d09339614b7ef3132bd7a4d493d244"
+      },
+      {
+        "scene": "Series",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 267.7545,
+        "frames": 19,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/zh/Series/result.json",
+        "receipt_sha256": "b06597fe01daba70c9ce4a167da70bd7ef9d94741238b24d5dbe1e5a254e2fac",
+        "sheet_sha256": "a079d2ed7a850a90441fd724615702515397138f756c6cbdfd07dfedd19b2388"
+      },
+      {
+        "scene": "Coint",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 143.415,
+        "frames": 13,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/zh/Coint/result.json",
+        "receipt_sha256": "9246214da1eaa4a523b444d2f2a8b2ed35cc1f3ccbc1ea49a268ec0f08100313",
+        "sheet_sha256": "2f3f099872f05d138ecbe3a3b5da43ee645ba6489f2212feefa3952ce2e60aa1"
+      },
+      {
+        "scene": "Regimes",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 220.98479166666672,
+        "frames": 17,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/zh/Regimes/result.json",
+        "receipt_sha256": "d1a0523ed147d6122340ccbe8b0b3df554539f6747cb51776801c57b027d18cb",
+        "sheet_sha256": "e19811c98b514651837e944a6f9af87c0294176f77d08190e2e264089a1556ae"
+      },
+      {
+        "scene": "Kalman",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 201.72721268558666,
+        "frames": 17,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/zh/Kalman/result.json",
+        "receipt_sha256": "d173744b366e33ca23d96f26fdad3bd24e6839cb3ab105c559b94b5bd25cea78",
+        "sheet_sha256": "045c5d501832b612bd1fdeccd2e65c3ec2b5e48d57215567a5bc3b7277689f7f"
+      },
+      {
+        "scene": "Garch",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 149.26383333333334,
+        "frames": 17,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/zh/Garch/result.json",
+        "receipt_sha256": "73dd56ff016b75d1a9b51b65500603550b8f49eab5d6c79ec815045569d4d536",
+        "sheet_sha256": "04a53b9de4a97c1f5b9460b556d4a5ac0640f5c63c8a382fcdb4d8afe9facd56"
+      },
+      {
+        "scene": "Zoo",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 212.81033333333338,
+        "frames": 19,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/zh/Zoo/result.json",
+        "receipt_sha256": "b0d1158d4143c5ba3eac656d7d8ae0022d52bd1305d266d62ec2077061a47c48",
+        "sheet_sha256": "0721d064c436d60f4e1145a90354b7852a30df16c7da403ebd6b69380dd90ce2"
+      },
+      {
+        "scene": "Dcc",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 185.32195833333336,
+        "frames": 15,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/zh/Dcc/result.json",
+        "receipt_sha256": "7672758bced21521f44312482948339aac740a5dbbe23960a3b93a68ebe71957",
+        "sheet_sha256": "1302e7ef3bb0bc6fd4710e836e2b6b65c99e767289eecbfd30ca83ffb1d658b9"
+      },
+      {
+        "scene": "Realized",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 183.78129166666673,
+        "frames": 18,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/zh/Realized/result.json",
+        "receipt_sha256": "bbc156d74a60156720dbff6f80a7c80b0994c6de72420596e9ea6c5d58300165",
+        "sheet_sha256": "adec1b09bc14239b1d8155a4139fe2a631ad0eee3019671ffeca36c079281fba"
+      },
+      {
+        "scene": "Har",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 157.25804166666668,
+        "frames": 15,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/zh/Har/result.json",
+        "receipt_sha256": "1089c69b60e8e232e90da1835611035528899aee7a89d14fd18b8bbffcebbda6",
+        "sheet_sha256": "da006cc3a2291ac1949b0d6e7996444c4856cbe805b5f8f0f3a219fa4bdd11a0"
+      },
+      {
+        "scene": "Rough",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 120.710375,
+        "frames": 13,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/zh/Rough/result.json",
+        "receipt_sha256": "1aa933bd3ddcd1ffb24dae3bdd285a2db531a72684160df669dab50ed09ba416",
+        "sheet_sha256": "3f13a8b81c7599816a884af55d5ce7bc598305708ed8f67450d8a802ba480da6"
+      },
+      {
+        "scene": "Scoring",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 177.60216666666668,
+        "frames": 15,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/zh/Scoring/result.json",
+        "receipt_sha256": "a439d2f1f879715b9c36b34a18834cadbd7b7a14818ddd637c8db4cb2a96f051",
+        "sheet_sha256": "2104a5d434de1a527d9a97c2f8da8ebe5ef526467196f0b86b429cb3f9561fb8"
+      },
+      {
+        "scene": "Training",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 170.253375,
+        "frames": 15,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/zh/Training/result.json",
+        "receipt_sha256": "e507421d9d7361db83022cd29cb8177bfcfe78e0cf181cfc8a35cc0d23b1f537",
+        "sheet_sha256": "bde9d452f13ddd322b0208c25eefb568b53be92d89bb0c7988277ac9410257ce"
+      },
+      {
+        "scene": "Race",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 217.88012500000005,
+        "frames": 19,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/zh/Race/result.json",
+        "receipt_sha256": "d74c5a5071cb83eb955185153b8e523ea7ad137283aba03774a6a74710fe9142",
+        "sheet_sha256": "d1adfc8bb80c80d31d6a27fd0ddd96282a843847727376524df61ac0b273ae87"
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 184.34637500000005,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/zh/Frontier/result.json",
+        "receipt_sha256": "5bbf89d4abc664cbeda6d61ddc3b0392b7cd181fadd73cb9954b68ef51919eeb",
+        "sheet_sha256": "4787a6b57cae36acba16268c20721a2b72483990d6c63a748b9787bbfd1e10a5"
+      },
+      {
+        "scene": "March",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 153.6219583333334,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/zh/March/result.json",
+        "receipt_sha256": "d5880703cd7bc5a2963acba2ea9df10aa44e3549245c7ac927191bd766c18161",
+        "sheet_sha256": "2955b12bfad80c40d34d18199937102dac7ae30924d164ce003ed120450c71c6"
+      },
+      {
+        "scene": "Industry",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 191.833625,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/zh/Industry/result.json",
+        "receipt_sha256": "fc4ade682fa5272e2d384b05c19b42afb908a51da99fcbbd77cce2d0c25f9526",
+        "sheet_sha256": "0a3c89547092e96e3bcc1b51f680ab7fd27fe61e58dde9cccf03819537fa32fb"
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 283.832375,
+        "frames": 21,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/zh/Research/result.json",
+        "receipt_sha256": "05ae6a456af1aa469029d57f0e0dd95ee412536a8ca79f7b48e7196a32a23b39",
+        "sheet_sha256": "42d5d426c53fbcab48ecb0e9926517c3004213ee253e29e25d97f057ffa763fa"
+      },
+      {
+        "scene": "House",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 97.49758333333334,
+        "frames": 8,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/zh/House/result.json",
+        "receipt_sha256": "81fe77a9c8c5315922c2d587d1959195956affc7278f85f94d54306107c91143",
+        "sheet_sha256": "59c9b5d603d1d865c0a0bab738d7a9de52959d0a239d5ed4f5999e6d4fc1a3d1"
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 167.68245833333336,
+        "frames": 10,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/zh/Outro/result.json",
+        "receipt_sha256": "9cbc1eee20ff7c01b1febbc0ae403ae6f693cf03bf82d5cffe80380a75124790",
+        "sheet_sha256": "703ed14398d3d546cd3e75d6d6ce5b3af3ff5442548f48caf051dfe9b3c02088"
+      }
+    ],
+    "en_motion": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 197.466666666664,
+        "frames": 17,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Hook_motion/result.json",
+        "receipt_sha256": "1f0475f10a99db10381185ccf494d0e86f06d388747ca70a4894493bae555288",
+        "sheet_sha256": "b01e3943cc8372a1b4df9ac493bf4736692aefd33ea7e4dbc004017ddca0f39f",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 198 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 198 s\n"
+      },
+      {
+        "scene": "Arma",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 215.86666666666528,
+        "frames": 18,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Arma_motion/result.json",
+        "receipt_sha256": "42671c433b6c832ec103cb6e3c1716abfc045c246fcad370ed8744cf4aaea00f",
+        "sheet_sha256": "39a4a4aa9d002baa6ea61ba642ced17de363f22db8cd04fbe3f6c2690505a03e",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 216 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 216 s\n"
+      },
+      {
+        "scene": "Series",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 281.33333333333167,
+        "frames": 19,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Series_motion/result.json",
+        "receipt_sha256": "45ebb31764c722a1d7aa5b1835a76d136984cbafb0f5602d4f865c2020aca83d",
+        "sheet_sha256": "ccfb2faaa1c8318119991378beab3e178ebb0059c1a78243b3461b9a6861b729",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 281 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 281 s\n"
+      },
+      {
+        "scene": "Coint",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 168.59999999999886,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Coint_motion/result.json",
+        "receipt_sha256": "3b996fe7657a48b8213f4860cff032dedebbd4e68f01fc74b9ed6eba4e098e3a",
+        "sheet_sha256": "ad62da8b71d2bdaf3013c11c5d96a66a9118a57d8d35febe71a604bb4e3424ca",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 168 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 168 s\n"
+      },
+      {
+        "scene": "Regimes",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 222.39999999999924,
+        "frames": 16,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Regimes_motion/result.json",
+        "receipt_sha256": "9c9bfae3618218bc5b798a46c113b96b4f739e5125973dbe6cdcc3e827f00572",
+        "sheet_sha256": "4367093ea2d5c69b4eec496914b8abfc5d9d67e719a86aa46a46ada543bb7800",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 222 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 222 s\n"
+      },
+      {
+        "scene": "Kalman",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 249.19999999999837,
+        "frames": 18,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Kalman_motion/result.json",
+        "receipt_sha256": "c75cf52263686e4c2e486087d33cc95c25cad709618914693c3e20a0dbd2ae1a",
+        "sheet_sha256": "9cbb17cef5ca5e65594fac9add65a630955f1bd44123e6c641c018a731dce8ef",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 249 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 249 s\n"
+      },
+      {
+        "scene": "Garch",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 212.13333333333216,
+        "frames": 19,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Garch_motion/result.json",
+        "receipt_sha256": "31943b021e031d76857532733f6b8ac9bc377a0d2d4fd3928346bcb22c86eb84",
+        "sheet_sha256": "d9ecff2f06351370c31ba070bc89d1f81d678e2a90ee2b66d39ee69792a51abf",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 212 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 212 s\n"
+      },
+      {
+        "scene": "Zoo",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 222.3999999999984,
+        "frames": 19,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Zoo_motion/result.json",
+        "receipt_sha256": "9481c658349a511ef73a8827eaa8589581d4ea7ba1d7eb9c665b69c4d0c088f3",
+        "sheet_sha256": "60336a2bb555e399a6699eaeeadd666524503c8e49dc91cbec1ece2b065da0c7",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 222 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 222 s\n"
+      },
+      {
+        "scene": "Dcc",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 197.59999999999923,
+        "frames": 13,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Dcc_motion/result.json",
+        "receipt_sha256": "42a317af699cd025d23aea9cf814b53981b0c9f0a93426e14e253ffc7cc5e0ca",
+        "sheet_sha256": "860ebb07ab5f40d3e0472db8b672d968bc406a7b2fbe5ed19cdebf26952f3f80",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 198 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 198 s\n"
+      },
+      {
+        "scene": "Realized",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 193.0666666666655,
+        "frames": 18,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Realized_motion/result.json",
+        "receipt_sha256": "226222e2fbde747286ba716550677aedb9e5707dbebd28e91c7f3db8c5a0e8a3",
+        "sheet_sha256": "aff4a42c777bfc28624b1c970aef2be054f67a6ffc383ad5f1e23c8ad1272eb1",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 193 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 193 s\n"
+      },
+      {
+        "scene": "Har",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 159.73333333333068,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Har_motion/result.json",
+        "receipt_sha256": "492b819d2b0cb00d2dabe9d9a5fc1d2567654991a2b4093f9621a05641bd3505",
+        "sheet_sha256": "b14f64eb3a90bea1003fddb2e30f8a0f6d2bc349ddfc1e5626ae01c35204d93d",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 160 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 160 s\n"
+      },
+      {
+        "scene": "Rough",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 92.79999999999994,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Rough_motion/result.json",
+        "receipt_sha256": "8c4f5fb43c8ade0a34aff6c03003337a35e0a0ad7e8e7f426b455a776c2582ec",
+        "sheet_sha256": "a891db1a23f07b4c7b121d7822e19c055935befff9defdae4491515dfc38b042",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 93 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 93 s\n"
+      },
+      {
+        "scene": "Scoring",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 197.8666666666655,
+        "frames": 15,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Scoring_motion/result.json",
+        "receipt_sha256": "fbb99a80acd02958ee4a8cdef818aca68ec251a37b8cab5be2337329b85a8512",
+        "sheet_sha256": "b2e407f1d9659e8e32dde6270ee0dcb995d625f245ad066f3e3ce20d795454e2",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 198 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 198 s\n"
+      },
+      {
+        "scene": "Training",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 206.7999999999988,
+        "frames": 16,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Training_motion/result.json",
+        "receipt_sha256": "855851c6e3dab307e2b715c34305a4248af90f6534fb8dece01c92d404c823fc",
+        "sheet_sha256": "fafbee9550ea6e51cb621e6df2c2d7f125cb84b4260efb8d71f87666424647d1",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 207 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 207 s\n"
+      },
+      {
+        "scene": "Race",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 229.39999999999895,
+        "frames": 19,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Race_motion/result.json",
+        "receipt_sha256": "6b1a5fa82d9723bbe5f98f3fa6a82b57cd04bc4badcf644613901c3b6d78b904",
+        "sheet_sha256": "60131dda24d10e931c1ee54d7bf9c47a1159aca35f491ed2b604978e810a958a",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 230 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 230 s\n"
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 209.33333333333155,
+        "frames": 13,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Frontier_motion/result.json",
+        "receipt_sha256": "aabbbfd1e6c9f763523e7358af03d5b58e6d01007a7b1508792ead018533899c",
+        "sheet_sha256": "2361ce708bdea501c46035e3b1f151f10bc0a7e389cdf1b08f2e7f8a827e57bc",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 209 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 209 s\n"
+      },
+      {
+        "scene": "March",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 152.59999999999934,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/March_motion/result.json",
+        "receipt_sha256": "18f161b278f93b51eb92ec0ab47a3d6869c7da930f2f1c400d0b5a34771993b6",
+        "sheet_sha256": "573b27107ea1fefa4becc3440d09a3509a11203d403fe8bc3a746d149db2f095",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 152 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 152 s\n"
+      },
+      {
+        "scene": "Industry",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 197.599999999999,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Industry_motion/result.json",
+        "receipt_sha256": "069c8660e14d6b9287298432b38847f293569a76199fb922cb9fd0636e31efd0",
+        "sheet_sha256": "1dcf1e1ece3905be04d50cf1ba0dd695ce66231f7d7310ba7b247dc8194133b5",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 198 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 198 s\n"
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 292.9333333333319,
+        "frames": 21,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Research_motion/result.json",
+        "receipt_sha256": "a7d43525828044098f49626605eac0945a2f0abe924e035f0937d70483d5760c",
+        "sheet_sha256": "314e45eb4f15a3f16bc6eaedbc0fede3ca6d398849efa679403c2fc2973a1afe",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 293 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 293 s\n"
+      },
+      {
+        "scene": "House",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 103.06666666666655,
+        "frames": 7,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/House_motion/result.json",
+        "receipt_sha256": "aeaacfb7c00da5a4df37cffdfb3d3a25bf02febe6a675f5bb6348f751d021a21",
+        "sheet_sha256": "8e788010fcb32c00c99756880c56cc8ba186feae3c3f378fe0825e4d1b8bad80",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 103 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 103 s\n"
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "fingerprint": "e92b363668311ff9e7c2c3ea872bbdad53070ec96c74a8a5cf2801fb34dfae5f",
+        "duration": 160.79999999999927,
+        "frames": 10,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant7/en/Outro_motion/result.json",
+        "receipt_sha256": "c87eeb38aa3bfdc5110993e271dd49c872542fd96cd15c30d7b95dd7ffe1431f",
+        "sheet_sha256": "c0c2d7f6a1fba00ad005ea14351b44c1ca1a739ae024c3204a44f3adac454f0b",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 161 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 161 s\n"
+      }
+    ]
+  },
+  "audio": [
+    {
+      "scene": "Hook",
+      "lang": "en",
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 7,
+      "issues": [],
+      "source_current": true,
+      "report": "renders/qa/series/quant7/en/Hook/audio_result.json",
+      "report_sha256": "e8aaf1008a71c973ea34dafd3058b6214ded463f522a1edc3868b73f6d5e5aac"
+    },
+    {
+      "scene": "Garch",
+      "lang": "en",
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 5,
+      "issues": [],
+      "source_current": true,
+      "report": "renders/qa/series/quant7/en/Garch/audio_result.json",
+      "report_sha256": "90c3133f90f5fc5eebe1253547ff974f176dc094033331c14081ae033413386c"
+    },
+    {
+      "scene": "Research",
+      "lang": "en",
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 10,
+      "issues": [],
+      "source_current": true,
+      "report": "renders/qa/series/quant7/en/Research/audio_result.json",
+      "report_sha256": "98d37033834356483bd504ab10b6cb55f27bcabbd741e5bd79d4ded9bf9db92a"
+    },
+    {
+      "scene": "Hook",
+      "lang": "zh",
+      "backend": "kokoro",
+      "voice": "zf_001",
+      "lines": 7,
+      "issues": [],
+      "source_current": true,
+      "report": "renders/qa/series/quant7/zh/Hook/audio_result.json",
+      "report_sha256": "deb3a55ed2bcd621947949da6e8af8336060e8e132eb46a618c12bddacb29811"
+    }
+  ],
+  "preview": {
+    "path": "renders/quant7_polished_silent.mp4",
+    "seconds": 4163.025479,
+    "chapters": 21,
+    "sha256": "c86b17c37f727a4d0b26bd5e5ace541c3f204e467788c69afb21757f58dca194",
+    "bytes": 35397690,
+    "narration": "silent timing estimate"
+  }
+}
