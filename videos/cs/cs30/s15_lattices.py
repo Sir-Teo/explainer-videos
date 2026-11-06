@@ -36,11 +36,11 @@ class Lattices(VoiceoverScene):
                     pts.add(Dot(P(v), radius=0.028, color=GREY_B))
         good = VGroup(Arrow(P((0, 0)), P(r1), buff=0, color=YES, stroke_width=4, max_tip_length_to_length_ratio=0.25),
                       Arrow(P((0, 0)), P(r2), buff=0, color=YES, stroke_width=4, max_tip_length_to_length_ratio=0.25))
-        far = VGroup(Arrow(P((0, 0)), P((b1[0] / 4, b1[1] / 4)), buff=0, color=NO, stroke_width=3),
-                     Arrow(P((0, 0)), P((b2[0] / 4, b2[1] / 4)), buff=0, color=NO, stroke_width=3))
+        far = VGroup(Arrow(P((0, 0)), P((b1[0] / 6, b1[1] / 6)), buff=0, color=NO, stroke_width=3),
+                     Arrow(P((0, 0)), P((b2[0] / 6, b2[1] / 6)), buff=0, color=NO, stroke_width=3))
         notes = VGroup(
             label(r"a \textbf{lattice}: \ all integer combinations \\ of some basis vectors", font_size=21, color=WHITE),
-            label(rf"bad basis: \ $({b1[0]}, {b1[1]})$, \ $({b2[0]}, {b2[1]})$ \\ (red, \ drawn at quarter length)",
+            label(rf"bad basis: \ $({b1[0]}, {b1[1]})$, \ $({b2[0]}, {b2[1]})$ \\ (red, \ drawn at a sixth of their length)",
                   font_size=21, color=NO),
             label(rf"Gauss's reduction, \ {len(steps) - 1} steps: \\ $({r1[0]}, {r1[1]})$, \ $({r2[0]}, {r2[1]})$: \ "
                   r"the same points", font_size=21, color=YES),
@@ -115,24 +115,31 @@ class Lattices(VoiceoverScene):
         q = L["q"]
         head = label(r"Learning with errors", font_size=34).to_edge(UP, buff=0.3)
         eq = MathTex(r"b = A s + e \pmod q", font_size=42, color=WHITE).next_to(head, DOWN, buff=0.45)
-        ax = Axes(x_range=[0, q, 832], y_range=[0, 60, 20], x_length=7.2, y_length=2.6,
+        lo, hi, bw = -q // 4, 3 * q // 4, 32
+        shift = lambda v: v if v < hi else v - q      # noqa: E731
+        counts = {}
+        for bit, vals in ((0, L["lwe_d0"]), (1, L["lwe_d1"])):
+            for v in vals:
+                b_ = (shift(v) - lo) // bw
+                counts[(bit, b_)] = counts.get((bit, b_), 0) + 1
+        top = max(counts.values())
+        ax = Axes(x_range=[lo, hi, q // 4], y_range=[0, top * 1.15, max(1, top // 2)], x_length=7.2, y_length=2.6,
                   axis_config={"color": GREY_D, "include_numbers": False}).next_to(eq, DOWN, buff=0.6)
 
-        def hist(vals, col):
-            bins = {}
-            for v in vals:
-                b = (v // 16) * 16
-                bins[b] = bins.get(b, 0) + 1
+        def hist(bit, col):
             g = VGroup()
-            for b, n in bins.items():
-                base, top = ax.c2p(b + 8, 0), ax.c2p(b + 8, n)
-                g.add(Rectangle(width=ax.c2p(16, 0)[0] - ax.c2p(0, 0)[0], height=top[1] - base[1], stroke_width=0,
+            for (bb, b_), n in counts.items():
+                if bb != bit:
+                    continue
+                x0 = lo + b_ * bw
+                base, tp = ax.c2p(x0 + bw / 2, 0), ax.c2p(x0 + bw / 2, n)
+                g.add(Rectangle(width=ax.c2p(bw, 0)[0] - ax.c2p(0, 0)[0], height=tp[1] - base[1], stroke_width=0,
                                 fill_color=col, fill_opacity=0.85).move_to(base, aligned_edge=DOWN))
             return g
-        h0, h1 = hist(L["lwe_d0"], DATA), hist(L["lwe_d1"], HEAD)
+        h0, h1 = hist(0, DATA), hist(1, HEAD)
         xt = VGroup(*[label(t, font_size=15, color=GREY_A).next_to(ax.c2p(x, 0), DOWN, buff=0.08)
-                      for x, t in ((0, "0"), (q // 4, r"$q/4$"), (q // 2, r"$q/2$"), (3 * q // 4, r"$3q/4$"),
-                                   (q, r"$q$"))])
+                      for x, t in ((lo, r"$-q/4$"), (0, "0"), (q // 4, r"$q/4$"), (q // 2, r"$q/2$"),
+                                   (3 * q // 4, r"$3q/4$"))])
         k = VGroup(label(r"encrypted 0", font_size=17, color=DATA), label(r"encrypted 1", font_size=17, color=HEAD)
                    ).arrange(RIGHT, buff=0.5).next_to(ax, UP, buff=0.1)
         lines = VGroup(

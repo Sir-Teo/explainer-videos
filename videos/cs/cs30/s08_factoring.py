@@ -26,11 +26,11 @@ class Factoring(VoiceoverScene):
         w = load("rhowalk")
         head = label(r"Pollard's rho", font_size=34).to_edge(UP, buff=0.3)
         walk, tail, cyc = w["walk"], w["tail"], w["cycle"]
-        c0 = np.array([-2.6, 0.9, 0])
-        R = 1.5
+        c0 = np.array([-4.0, 1.25, 0])
+        R = 1.45
         pos = []
         for i in range(tail):
-            pos.append(c0 + np.array([0, -R - 0.55 * (tail - i), 0]))
+            pos.append(c0 + np.array([0, -R - 0.37 * (tail - i), 0]))
         for j in range(cyc):
             ang = -math.pi / 2 + 2 * math.pi * j / cyc
             pos.append(c0 + R * np.array([math.cos(ang), math.sin(ang), 0]))
@@ -52,7 +52,8 @@ class Factoring(VoiceoverScene):
                   color=YES),
             label(r"Floyd's tortoise and hare \ (Part 17) \ finds the cycle in constant memory", font_size=21,
                   color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.26).move_to([2.6, 0.3, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.26)
+        notes.move_to([-1.6 + notes.width / 2, 0.3, 0])
         fit_right(notes)
         with self.voiceover(
             "The simplest fast factoring method is John Pollard's, from 1975. <bookmark mark='a'/> Pick a starting "

@@ -78,7 +78,7 @@ class Oracle(VoiceoverScene):
         yl = label(r"bits of uncertainty about $m$", font_size=17, color=GREY_A).next_to(ax, UP, buff=0.1).align_to(
             ax, LEFT)
         keys = VGroup(*[label(rf"{r['bits']}-bit key", font_size=18, color=cols[r['bits']]) for r in (r0, r1)]).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.1).move_to(ax.c2p(110000, 350))
+            DOWN, aligned_edge=LEFT, buff=0.1).move_to(ax.c2p(80000, 150))
         notes = VGroup(
             label(rf"256-bit key: \\ {r0['queries']:,} queries, \ {r0['seconds']:.0f} s".replace(",", "{,}"),
                   font_size=20, color=DATA),
