@@ -21,8 +21,10 @@ a ``halt`` instruction until Part 31 gives the machine an operating system to re
 
 Later parts add the extensions the syllabus lists.  Part 7 adds ``mul mulh div rem`` (the M extension: Part 4's
 multiplier and divider, wired into the pipeline; ``BASE`` is the 34 instructions of Part 6, which the gate-level
-CPU implements); still reserved are ``ecall eret csrr csrw`` (Part 31) and ``cas amoadd``
-(Parts 10 and 33).  Opcode 0 is illegal, so a jump into zeroed memory stops the machine.
+CPU implements).  Part 31 adds the privileged extension, ``PRIV``: ``ecall`` (trap into the kernel), ``eret`` (return
+from a trap), and ``csrr``/``csrw`` (read and write a control register, named in ``CSR``), which only
+:class:`explainer.cs.os.machine.OSMachine` executes; still reserved are ``cas amoadd`` (Parts 10 and 33).  Opcode 0
+is illegal, so a jump into zeroed memory stops the machine.
 """
 
 from __future__ import annotations
@@ -51,10 +53,16 @@ OPS = {
     63: ("halt", "J"),
 }
 M_EXT = ("mul", "mulh", "div", "rem")
-RESERVED = {48: "ecall", 49: "eret", 50: "csrr", 51: "csrw",
-            52: "cas", 53: "amoadd"}
-OPCODE = {m: op for op, (m, _) in OPS.items()}
-FORMAT = {m: f for _, (m, f) in OPS.items()}
+# the privileged extension (Part 31): kept out of OPS, so the base machines treat these words as illegal
+PRIV = {48: ("ecall", "J"), 49: ("eret", "J"), 50: ("csrr", "I"), 51: ("csrw", "I")}
+PRIV_OPS = tuple(m for m, _ in PRIV.values())
+ALL_OPS = OPS | PRIV
+RESERVED = {52: "cas", 53: "amoadd"}
+OPCODE = {m: op for op, (m, _) in ALL_OPS.items()}
+FORMAT = {m: f for _, (m, f) in ALL_OPS.items()}
+# control registers (Part 31): csrr rd, name  /  csrw name, rs
+CSR = {"status": 0, "epc": 1, "cause": 2, "tvec": 3, "scratch": 4, "timer": 5, "tval": 6, "lo": 7, "hi": 8}
+CSR_NAMES = {v: k for k, v in CSR.items()}
 BASE = tuple(m for _, (m, _) in sorted(OPS.items()) if m not in M_EXT)
 
 IMM_BITS = {"R": 0, "I": 18, "S": 18, "J": 22}
@@ -111,9 +119,9 @@ def encode(ins: Instr) -> int:
 
 def decode(word: int) -> Instr:
     op = (word >> 26) & 0x3F
-    if op not in OPS:
+    if op not in ALL_OPS:
         raise ValueError(f"illegal instruction {word:#010x} (opcode {op})")
-    m, f = OPS[op]
+    m, f = ALL_OPS[op]
     a, b, c = (word >> 22) & 0xF, (word >> 18) & 0xF, (word >> 14) & 0xF
     if f == "R":
         return Instr(m, rd=a, rs1=b, rs2=c)
@@ -127,7 +135,7 @@ def decode(word: int) -> Instr:
 def fields(word: int) -> list[tuple[str, int, int, int]]:
     """The bit fields of an encoded instruction, for drawing: (name, high bit, low bit, value)."""
     op = (word >> 26) & 0x3F
-    f = OPS[op][1] if op in OPS else "R"
+    f = ALL_OPS[op][1] if op in ALL_OPS else "R"
     out = [("op", 31, 26, op)]
     if f == "R":
         out += [("rd", 25, 22, (word >> 22) & 0xF), ("rs1", 21, 18, (word >> 18) & 0xF),
@@ -154,8 +162,12 @@ def disasm(word: int, pc: int | None = None, labels: dict[int, str] | None = Non
         t = pc + 4 * imm
         return (labels or {}).get(t, f"{t:#x}")
 
-    if i.op == "halt":
-        return "halt"
+    if i.op in ("halt", "ecall", "eret"):
+        return i.op
+    if i.op == "csrr":
+        return f"csrr {R[i.rd]}, {CSR_NAMES.get(i.imm, i.imm)}"
+    if i.op == "csrw":
+        return f"csrw {CSR_NAMES.get(i.imm, i.imm)}, {R[i.rs1]}"
     if i.fmt == "R":
         return f"{i.op} {R[i.rd]}, {R[i.rs1]}, {R[i.rs2]}"
     if i.op in ("lw", "lb", "lbu", "jalr"):

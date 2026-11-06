@@ -13,6 +13,7 @@
 Pass 1 walks the lines, sizing every instruction and directive and recording where each label lands; pass 2 encodes,
 now that every label has an address.  Comments start with ``#`` or ``;``.  Directives: ``.org addr``, ``.align n``,
 ``.word v, ...``, ``.byte v, ...``, ``.ascii "text"``, ``.asciiz "text"``, ``.space n``, ``.equ name, value``.
+Part 31's privileged instructions are written ``ecall``, ``eret``, ``csrr rd, epc`` and ``csrw epc, rs``.
 Pseudo-instructions, expanded here: ``nop mv li la not neg j jr call ret beqz bnez bltz bgez bgt ble bgtu bleu``.
 """
 
@@ -22,7 +23,7 @@ import ast
 import re
 from dataclasses import dataclass, field
 
-from .isa import FORMAT, REG_NUM, Instr, encode, sext
+from .isa import CSR, FORMAT, REG_NUM, Instr, encode, sext
 
 PSEUDO = {"nop", "mv", "li", "la", "not", "neg", "j", "jr", "call", "ret", "beqz", "bnez", "bltz", "bgez", "bgt",
           "ble", "bgtu", "bleu"}
@@ -219,8 +220,14 @@ class _Asm:
         if op not in FORMAT:
             raise AsmError(f"line {ln}: unknown instruction {op!r}")
         f = FORMAT[op]
-        if op == "halt":
-            return [Instr("halt")]
+        if op in ("halt", "ecall", "eret"):
+            return [Instr(op)]
+        if op in ("csrr", "csrw"):
+            name = args[1] if op == "csrr" else args[0]
+            num = CSR[name.strip().lower()] if name.strip().lower() in CSR else v(name, ln)
+            if op == "csrr":
+                return [Instr(op, rd=r(args[0], ln), imm=num)]
+            return [Instr(op, rs1=r(args[1], ln), imm=num)]
         if f == "R":
             return [Instr(op, rd=r(args[0], ln), rs1=r(args[1], ln), rs2=r(args[2], ln))]
         if op in ("lw", "lb", "lbu"):
