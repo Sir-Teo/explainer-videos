@@ -2555,3 +2555,67 @@ class MaskGrid(VGroup):
         for c in range(1, k):
             g.add(self.grid.copy().set_opacity(0.25).shift(RIGHT * dx * c + DOWN * dy * -c))
         return g
+
+
+class ExamCard(VGroup):
+    """An exam problem as a card (Part 42): a header strip with the problem's number and topic, the parts it draws on
+    and its marks; the question beneath; and a pause clock at the right.  ``sweep(run_time)`` turns the clock's hand
+    once (the viewer's time to try it), ``stamp(text)`` returns a 'solved' seal for the header, and ``shrink()`` an
+    animation that lifts the card to the top of the frame so the solution can be worked beneath it."""
+
+    def __init__(self, number: int, topic: str, parts: str, question, marks: int = 10, width: float = 12.8,
+                 font_size: int = 24, color=None):
+        super().__init__()
+        from explainer.analysis import label
+
+        self.color = color or S.ACCENT
+        lines = [question] if isinstance(question, str) else list(question)
+        q = VGroup(*[label(s, font_size=font_size) for s in lines]).arrange(DOWN, aligned_edge=LEFT, buff=0.16)
+        if q.width > width - 1.6:
+            q.width = width - 1.6
+        strip = Rectangle(width=width, height=0.62, stroke_width=0, fill_color=self.color, fill_opacity=0.22)
+        num = label(rf"Problem {number}" if number else r"Example", font_size=26, color=self.color)
+        top = label(topic, font_size=26)
+        right = label(rf"{parts} \ \textbullet\ \ {marks} marks" if marks else parts, font_size=20, color=GREY_A)
+        num.move_to(strip.get_left() + RIGHT * (0.25 + num.width / 2))
+        top.next_to(num, RIGHT, buff=0.35)
+        right.move_to(strip.get_right() + LEFT * (0.25 + right.width / 2))
+        body = Rectangle(width=width, height=q.height + 0.5, stroke_color=self.color, stroke_width=1.5, fill_color="#10141d",
+                         fill_opacity=0.92)
+        body.next_to(strip, DOWN, buff=0)
+        q.move_to(body.get_left() + RIGHT * (0.3 + q.width / 2)).set_y(body.get_y())
+        r = 0.3
+        face = Circle(radius=r, stroke_color=GREY_B, stroke_width=2).move_to(body.get_right() + LEFT * 0.6)
+        face.set_y(body.get_y())
+        self.clock_center, self.clock_r = face.get_center(), r
+        self.hand = AnnularSector(inner_radius=0, outer_radius=r * 0.92, angle=-1e-3, start_angle=PI / 2, stroke_width=0,
+                                  fill_color=self.color, fill_opacity=0.65).shift(self.clock_center)
+        self.frame = VGroup(body, strip)
+        self.strip, self.question, self.face = strip, q, face
+        self.add(body, strip, num, top, right, q, face, self.hand)
+
+    def sweep(self, run_time: float = 5.0) -> Animation:
+        c, r, col = self.clock_center.copy(), self.clock_r * 0.92, self.color
+        start = self.hand.copy()
+
+        def upd(m, a):
+            if a <= 1e-3:
+                m.become(start)
+                return
+            sc = self.face.width / (2 * self.clock_r)
+            m.become(AnnularSector(inner_radius=0, outer_radius=r * sc, angle=-a * TAU, start_angle=PI / 2, stroke_width=0,
+                                   fill_color=col, fill_opacity=0.65).shift(self.face.get_center()))
+
+        return UpdateFromAlphaFunc(self.hand, upd, run_time=run_time, rate_func=linear)
+
+    def stamp(self, text: str = r"solved") -> VGroup:
+        from explainer.analysis import label
+
+        t = label(text, font_size=22, color=S.KEPT)
+        box = SurroundingRectangle(t, buff=0.1, color=S.KEPT, stroke_width=2.5, corner_radius=0.08)
+        g = VGroup(box, t).rotate(0.12)
+        g.move_to(self.face.get_center())
+        return g
+
+    def shrink(self, scale: float = 0.78, buff: float = 0.25) -> Animation:
+        return self.animate.scale(scale).to_edge(UP, buff=buff)
