@@ -28,19 +28,19 @@ class People(VoiceoverScene):
                               r"copies of the communication structures of these organizations.'' \ --- \ Melvin "
                               r"Conway, 1968", 12.0, font_size=24, color=HEAD).next_to(head, DOWN, buff=0.55)
         teams = VGroup(*[Circle(radius=0.45, color=c, fill_opacity=0.2).set_fill(c) for c in (DATA, YES, LAM)]
-                       ).arrange(RIGHT, buff=1.4).move_to([-3.4, -0.6, 0])
+                       ).arrange(RIGHT, buff=1.1).move_to([-3.9, -0.6, 0])
         tl = VGroup(*[label(t, font_size=17, color=WHITE).move_to(c) for t, c in zip((r"web", r"payments", r"data"),
                                                                                    teams)])
         mods = VGroup(*[RoundedRectangle(width=1.4, height=0.7, corner_radius=0.1, stroke_color=c, fill_color=c,
-                                         fill_opacity=0.15) for c in (DATA, YES, LAM)]).arrange(RIGHT, buff=0.9)
-        mods.move_to([3.4, -0.6, 0])
+                                         fill_opacity=0.15) for c in (DATA, YES, LAM)]).arrange(RIGHT, buff=0.6)
+        mods.move_to([3.9, -0.6, 0])
         ml = VGroup(*[label(t, font_size=16, color=WHITE).move_to(m) for t, m in zip((r"front end", r"billing API",
                                                                                      r"warehouse"), mods)])
         e1 = VGroup(Line(teams[0].get_right(), teams[1].get_left(), color=GREY_B),
                     Line(teams[1].get_right(), teams[2].get_left(), color=GREY_B))
         e2 = VGroup(Line(mods[0].get_right(), mods[1].get_left(), color=GREY_B),
                     Line(mods[1].get_right(), mods[2].get_left(), color=GREY_B))
-        arrow = Arrow([-0.6, -0.6, 0], [0.9, -0.6, 0], color=HEAD, buff=0)
+        arrow = Arrow([-1.2, -0.6, 0], [0.95, -0.6, 0], color=HEAD, buff=0)
         lines = VGroup(
             wrapped_label(r"teams that never talk produce modules that do not fit; \ a module owned by three teams "
                           r"changes slowly", 12.4, font_size=21, color=WHITE),
@@ -115,7 +115,7 @@ class People(VoiceoverScene):
         ax = g.ax
         base = DashedLine(ax.c2p(0, b["base"]), ax.c2p(22, b["base"]), color=GREY_B)
         bl = label(rf"no one added: \ month {b['base']:.1f}", font_size=17, color=GREY_B).next_to(
-            ax.c2p(22, b["base"]), UP, buff=0.08).shift(LEFT * 1.0)
+            ax.c2p(4, b["base"]), UP, buff=0.1)
         pts = [(r["add_at"], r["finish"]) for r in b["late"]]
         cur = VGroup(trace(ax, pts, HEAD, width=3), *[Dot(ax.c2p(x, y), radius=0.06,
                                                           color=YES if y < b["base"] else NO) for x, y in pts])

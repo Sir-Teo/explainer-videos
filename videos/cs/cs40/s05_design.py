@@ -105,26 +105,26 @@ class Design(VoiceoverScene):
         for i in range(4):
             for j in range(4):
                 sq = Square(cell, stroke_color=GREY_D, stroke_width=1.2)
-                sq.move_to([-3.6 + j * cell, 1.0 - i * cell, 0])
+                sq.move_to([-4.3 + j * cell, 1.0 - i * cell, 0])
                 if i == 3 or j == 3:
                     sq.set_stroke(GREY_C, opacity=0.5).set_fill(NO, 0.08)
                 grid.add(sq)
         for j, o in enumerate(ops + [r"new op?"]):
-            grid.add(label(o, font_size=19, color=YES if j < 3 else NO).move_to([-3.6 + j * cell, 1.0 + cell * 0.75,
+            grid.add(label(o, font_size=19, color=YES if j < 3 else NO).move_to([-4.3 + j * cell, 1.0 + cell * 0.75,
                                                                                0]))
         for i, k in enumerate(kinds + [r"new type?"]):
-            grid.add(label(k, font_size=19, color=DATA if i < 3 else NO).move_to([-3.6 - cell * 1.05,
+            grid.add(label(k, font_size=19, color=DATA if i < 3 else NO).move_to([-4.3 - cell * 1.05,
                                                                                 1.0 - i * cell, 0]))
         notes = VGroup(
             wrapped_label(r"\textbf{objects} store the table by rows: \ a new type is one new class; \ a new "
-                          r"operation edits every class", 5.4, font_size=20, color=DATA),
+                          r"operation edits every class", 5.0, font_size=20, color=DATA),
             wrapped_label(r"\textbf{functions over variants} \ (Part 14's algebraic types) \ store it by columns: \ "
-                          r"a new operation is one function; \ a new type edits every function", 5.4, font_size=20,
+                          r"a new operation is one function; \ a new type edits every function", 5.0, font_size=20,
                           color=YES),
             wrapped_label(r"Wadler \ (1998): \ add both, \ without editing or recompiling old code, \ and keep static "
-                          r"type safety; \ answers include type classes, \ object algebras, \ open multimethods", 5.4,
+                          r"type safety; \ answers include type classes, \ object algebras, \ open multimethods", 5.0,
                           font_size=20, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.7, 0.0, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.1, 0.0, 0])
         with self.voiceover(
             "One tension underlies much of design, and Philip Wadler named it the expression problem. "
             "<bookmark mark='a'/> Picture a table: rows are kinds of data, here numbers, sums and products; "

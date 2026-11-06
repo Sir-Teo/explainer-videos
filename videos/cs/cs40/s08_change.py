@@ -41,7 +41,8 @@ class Change(VoiceoverScene):
             "    return 0.9 if customer.vip else 1.0",
             "",
             "def price(order):",
-            "    return round(subtotal(order) * discount(order.customer), 2)",
+            "    t = subtotal(order) * discount(order.customer)",
+            "    return round(t, 2)",
         ], size=16)
         pair = VGroup(before, after).arrange(RIGHT, buff=0.8, aligned_edge=UP).next_to(head, DOWN, buff=0.5)
         arrow = Arrow(before.get_right(), after.get_left(), buff=0.1, color=YES, stroke_width=3)

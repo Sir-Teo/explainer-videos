@@ -53,38 +53,38 @@ class Parnas(VoiceoverScene):
 
     def _d1(self):
         names = ["Input", "Circular Shift", "Alphabetizer", "Output"]
-        mods = VGroup(*[module_box(n, DATA, w=2.4) for n in names]).arrange(RIGHT, buff=0.35)
-        master = module_box("Master", GREY_B, w=2.0)
-        data = module_box(r"shared data: \ words, \ line starts, \ shifts", NO, w=7.0, h=0.6, font=17)
-        master.next_to(mods, UP, buff=0.45)
-        data.next_to(mods, DOWN, buff=0.6)
-        arrows = VGroup(*[Line(m.get_bottom(), data.get_top() + RIGHT * (m.get_x() - data.get_x()) * 0.9,
-                               color=NO, stroke_width=2) for m in mods])
+        mods = VGroup(*[module_box(n, DATA, w=1.85, font=17) for n in names]).arrange(RIGHT, buff=0.22)
+        master = module_box("Master", GREY_B, w=1.6, font=17)
+        data = module_box(r"shared data: \ words, \ line starts, \ shifts", NO, w=7.6, h=0.6, font=16)
+        master.next_to(mods, UP, buff=0.55)
+        data.next_to(mods, DOWN, buff=0.7)
+        arrows = VGroup(*[Line(m.get_bottom(), [m.get_x(), data.get_top()[1], 0], color=NO, stroke_width=2.5)
+                          for m in mods])
         calls = VGroup(*[Line(master.get_bottom(), m.get_top(), color=GREY_C, stroke_width=1.5) for m in mods])
         g = VGroup(calls, arrows, master, mods, data)
         g.mods = {n: m for n, m in zip(names, mods)}
         return g
 
     def _d2(self):
-        st = module_box("Line Storage", YES, w=2.4)
-        inp = module_box("Input", DATA, w=2.0)
-        sh = module_box("Circular Shifter", YES, w=2.6)
-        al = module_box("Alphabetizer", YES, w=2.4)
-        out = module_box("Output", DATA, w=2.0)
-        master = module_box("Master", GREY_B, w=2.0)
-        top = VGroup(inp, out).arrange(RIGHT, buff=3.0)
-        mid = VGroup(sh, al).arrange(RIGHT, buff=1.2)
-        master.move_to(UP * 1.0)
-        top.next_to(master, DOWN, buff=0.4)
-        mid.next_to(top, DOWN, buff=0.4)
-        st.next_to(mid, DOWN, buff=0.4)
+        inp = module_box("Input", DATA, w=1.6, font=17)
+        sh = module_box("Circular Shifter", YES, w=2.1, font=17)
+        al = module_box("Alphabetizer", YES, w=1.85, font=17)
+        out = module_box("Output", DATA, w=1.6, font=17)
+        row = VGroup(inp, sh, al, out).arrange(RIGHT, buff=0.45)
+        master = module_box("Master", GREY_B, w=1.6, font=17).next_to(row, UP, buff=0.55)
+        st = module_box("Line Storage", YES, w=2.6, font=17).next_to(row, DOWN, buff=0.7)
+        st.set_x((inp.get_x() + sh.get_x()) / 2)
 
-        def uses(a, b):
-            return Arrow(a.get_bottom(), b.get_top(), buff=0.06, stroke_width=2, color=GREY_B,
-                         max_tip_length_to_length_ratio=0.15)
-        arrows = VGroup(uses(inp, st), uses(sh, st), uses(al, sh), uses(out, al), uses(out, sh))
-        arrows[0].put_start_and_end_on(inp.get_bottom(), st.get_left() + UP * 0.1)
-        g = VGroup(arrows, master, top, mid, st)
+        def uses(a, b, start=None, end=None):
+            return Arrow(start if start is not None else a.get_bottom(), end if end is not None else b.get_top(),
+                         buff=0.06, stroke_width=2.5, color=GREY_B, max_tip_length_to_length_ratio=0.15)
+        arrows = VGroup(uses(inp, st, end=st.get_top() + LEFT * 0.5), uses(sh, st, end=st.get_top() + RIGHT * 0.5),
+                        uses(al, sh, start=al.get_left(), end=sh.get_right()),
+                        uses(out, al, start=out.get_left(), end=al.get_right()),
+                        CurvedArrow(out.get_bottom() + LEFT * 0.2, sh.get_bottom() + RIGHT * 0.3, angle=-0.9,
+                                    color=GREY_B, stroke_width=2))
+        calls = VGroup(*[Line(master.get_bottom(), m.get_top(), color=GREY_C, stroke_width=1.5) for m in row])
+        g = VGroup(calls, arrows, master, row, st)
         g.mods = {"Line Storage": st, "Input": inp, "Circular Shifter": sh, "Alphabetizer": al, "Output": out}
         return g
 
@@ -94,10 +94,10 @@ class Parnas(VoiceoverScene):
         sample = code_block(k["index"][:6], size=16).to_corner(UL, buff=0.5).shift(DOWN * 0.6)
         sl = label(r"a keyword-in-context index: \ every circular shift of every title, \ sorted", font_size=19,
                    color=GREY_A).next_to(sample, UP, buff=0.15).align_to(sample, LEFT)
-        d1 = self._d1().scale(0.78).move_to([-3.4, -1.2, 0])
-        d2 = self._d2().scale(0.78).move_to([3.6, -1.0, 0])
+        d1 = self._d1().scale(0.78).move_to([-3.55, -1.0, 0])
+        d2 = self._d2().scale(0.78).move_to([3.55, -1.0, 0])
         l1 = label(r"1. \ the flowchart: \ one module per step", font_size=21, color=NO).next_to(d1, UP, buff=0.3)
-        l2 = label(r"2. \ one module per design decision", font_size=21, color=YES).next_to(d2, UP, buff=0.15)
+        l2 = label(r"2. \ one module per design decision", font_size=21, color=YES).next_to(d2, UP, buff=0.3)
         with self.voiceover(
             "In 1972 David Parnas answered with an experiment on paper, and we will run it for real. "
             "<bookmark mark='a'/> The program is a keyword-in-context index: take a list of titles, form every "
