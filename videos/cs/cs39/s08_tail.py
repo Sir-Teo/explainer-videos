@@ -198,14 +198,15 @@ class Tail(VoiceoverScene):
         rows = [[f"{r['depth']}", f"{r['p50']:.0f} ms", f"{r['p99']:.0f} ms", f"{r['sum_of_p99']:.0f} ms"]
                 for r in c["chain"]]
         t1 = grid_table([r"services in a row", r"median", r"99th pct", r"sum of their 99ths"], rows,
-                        widths=[2.4, 1.4, 1.5, 2.4], row_h=0.4, font_size=18, mono_cols=())
+                        widths=[2.1, 1.3, 1.3, 2.0], row_h=0.46, font_size=19, mono_cols=())
         rr = [[f"{r['layers']}", f"{r['attempts']:,}", f"{r['budgeted']:.2f}"] for r in c["retries"]]
-        t2 = grid_table([r"layers retrying", r"3 retries each", r"10\% retry budget"], rr, widths=[2.2, 2.0, 2.4],
-                        row_h=0.4, font_size=18, mono_cols=())
+        t2 = grid_table([r"layers retrying", r"3 retries each", r"10\% retry budget"], rr, widths=[2.0, 1.8, 2.2],
+                        row_h=0.46, font_size=19, mono_cols=())
         h1 = label(r"latency in series \ (each: median 10 ms, \ 99th 65 ms)", font_size=19, color=HEAD)
         h2 = label(r"attempts reaching a failed bottom service", font_size=19, color=NO)
-        c1 = VGroup(h1, t1).arrange(DOWN, buff=0.2).move_to([-3.3, 0.7, 0])
-        c2 = VGroup(h2, t2).arrange(DOWN, buff=0.2).move_to([3.5, 0.7, 0])
+        c1 = VGroup(h1, t1).arrange(DOWN, buff=0.25).move_to([-3.5, 0.9, 0])
+        c2 = VGroup(h2, t2).arrange(DOWN, buff=0.25).move_to([3.75, 0.9, 0])
+        c2.align_to(c1, UP)
         for k in range(1, len(rr) + 1):
             t2.cells[k][1].set_color(NO)
             t2.cells[k][2].set_color(YES)
