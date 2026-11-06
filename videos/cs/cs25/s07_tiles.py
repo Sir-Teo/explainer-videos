@@ -34,7 +34,7 @@ class Tiles(VoiceoverScene):
         tab.next_to(grid, RIGHT, buff=0.6).align_to(grid, UP)
         notes = VGroup(
             label(r"rules: \ no rotations; \ touching edges must match in colour", font_size=20, color=WHITE),
-            label(rf"periodic tilings would show up on a torus: \ all {t['refuted']} tori up to $8 \times 8$ "
+            label(rf"periodic tilings would show up on a torus: \\ all {t['refuted']} tori up to $8 \times 8$ "
                   r"(two left open) \ refuted by exhaustive search", font_size=20, color=NO),
             label(r"Jeandel and Rao \ (2015): \ these 11 tiles tile the plane, \ but \textbf{only aperiodically}; \ "
                   r"and no smaller set does", font_size=20, color=HEAD),
