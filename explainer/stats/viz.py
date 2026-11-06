@@ -3463,3 +3463,68 @@ class TransportFlow(VGroup):
                 g.add(Square(side_length=cell, stroke_width=0.3, stroke_color=GREY_D, fill_color=color or S.ACCENT,
                              fill_opacity=float(v)).move_to(np.array([j * cell, -i * cell, 0])))
         return g.move_to(ORIGIN)
+
+
+class ExposureMap(VGroup):
+    """A network experiment, drawn (Part 62): units at positions ``pos`` on axes ``ax``, joined by ``edges``, each
+    coloured by its exposure condition under an assignment, Aronow and Samii's four: control with no treated
+    neighbour, control with a treated neighbour (a spillover), treated alone, treated with treated neighbours.
+    ``links()`` draws the edges, ``units(exposure)`` the coloured nodes, ``legend()`` the four conditions."""
+
+    COLORS = (GREY_B, S.ALT, S.TREAT, S.ACCENT)
+    NAMES = (r"control, \ no treated neighbour", r"control, \ a treated neighbour", r"treated, \ alone", r"treated, \ treated neighbours")
+
+    def __init__(self, ax, pos, edges):
+        super().__init__()
+        self.ax = ax
+        self.pos = np.asarray(pos, float)
+        self.edge_list = np.asarray(edges, int)
+
+    def links(self, color=None, stroke_width: float = 1.0, opacity: float = 0.4) -> VGroup:
+        return VGroup(*[Line(self.ax.c2p(*self.pos[i]), self.ax.c2p(*self.pos[j]), color=color or GREY_C, stroke_width=stroke_width,
+                             stroke_opacity=opacity) for i, j in self.edge_list])
+
+    def units(self, exposure, radius: float = 0.06) -> VGroup:
+        return VGroup(*[Dot(self.ax.c2p(*p), radius=radius, color=self.COLORS[int(e)]) for p, e in zip(self.pos, exposure)])
+
+    def legend(self, font_size: int = 22) -> VGroup:
+        from explainer.analysis import label
+
+        rows = VGroup(*[VGroup(Dot(radius=0.07, color=c), label(t, font_size=font_size, color=c)).arrange(RIGHT, buff=0.15)
+                        for c, t in zip(self.COLORS, self.NAMES)])
+        return rows.arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+
+
+class TradeoffPlot(VGroup):
+    """Privacy as a hypothesis test, drawn (Part 63): on axes ``ax`` with type I error alpha across and type II error
+    beta up, an attacker who must tell two neighbouring datasets apart picks a test, a point (alpha, beta). Perfect
+    privacy leaves only the diagonal beta = 1 - alpha, blind guessing. A mechanism's trade-off curve f bounds every
+    test from below: f-DP (Dong, Roth & Su) says no test can do better. ``diagonal()`` draws the line of guessing,
+    ``curve(alpha, beta)`` a trade-off curve, ``region(alpha, beta)`` the attacker's forbidden zone below it,
+    ``test(a, b)`` one attack's operating point."""
+
+    def __init__(self, ax):
+        super().__init__()
+        self.ax = ax
+
+    def diagonal(self, color=None, stroke_width: float = 2.0) -> DashedLine:
+        return DashedLine(self.ax.c2p(0, 1), self.ax.c2p(1, 0), color=color or GREY_B, stroke_width=stroke_width)
+
+    def curve(self, alpha, beta, color, stroke_width: float = 3.5) -> VMobject:
+        m = VMobject(stroke_color=color, stroke_width=stroke_width)
+        m.set_points_as_corners([self.ax.c2p(float(a), float(b)) for a, b in zip(alpha, beta)])
+        return m
+
+    def region(self, alpha, beta, color, opacity: float = 0.25) -> Polygon:
+        """The tests no attacker can reach: between the axes and the trade-off curve."""
+        pts = [self.ax.c2p(0, 0)] + [self.ax.c2p(float(a), float(b)) for a, b in zip(alpha, beta)] + [self.ax.c2p(1, 0)]
+        return Polygon(*pts, stroke_width=0, fill_color=color, fill_opacity=opacity)
+
+    def test(self, a: float, b: float, color=None, radius: float = 0.09) -> Dot:
+        return Dot(self.ax.c2p(a, b), radius=radius, color=color or WHITE)
+
+    def gap(self, alpha, beta, color=None, at: float = 0.5) -> Line:
+        """The vertical distance from guessing down to the curve at alpha = ``at``: the attacker's best advantage there."""
+        alpha, beta = np.asarray(alpha, float), np.asarray(beta, float)
+        b = float(np.interp(at, alpha, beta))
+        return Line(self.ax.c2p(at, 1 - at), self.ax.c2p(at, b), color=color or WHITE, stroke_width=3)
