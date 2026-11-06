@@ -2515,3 +2515,43 @@ class KMStaircase(VGroup):
         lab = label(rf"$n = {int(self.km['n'][k])}$, \ $d = {int(self.km['d'][k])}$", font_size=font_size, color=S.ACCENT)
         lab.next_to(ln, RIGHT, buff=0.12)
         return VGroup(ln, lab)
+
+
+class MaskGrid(VGroup):
+    """A data table as a grid of cells (Part 41): rows are units, columns variables.  ``mark(mask, color)`` greys
+    out the missing cells of one column (True = missing); ``fill(col, rows, color)`` paints imputed cells; ``copies(k)``
+    stacks k offset copies, the m completed data sets of multiple imputation.  Cells keep their order, so the same
+    respondent can be followed across mechanisms."""
+
+    def __init__(self, n_rows: int, names, cell_w: float = 0.9, cell_h: float = 0.16, center=ORIGIN, font_size: int = 18):
+        super().__init__()
+        from explainer.analysis import label
+
+        self.n_rows, self.n_cols = n_rows, len(names)
+        self.cell_w, self.cell_h = cell_w, cell_h
+        x0 = -self.n_cols * cell_w / 2
+        y0 = n_rows * cell_h / 2
+        self.cells = [[Rectangle(width=cell_w * 0.94, height=cell_h * 0.82, stroke_width=0, fill_color=S.EST, fill_opacity=0.8)
+                       .move_to([x0 + (j + 0.5) * cell_w, y0 - (i + 0.5) * cell_h, 0]) for j in range(self.n_cols)]
+                      for i in range(n_rows)]
+        self.grid = VGroup(*[c for row in self.cells for c in row])
+        self.heads = VGroup(*[label(nm, font_size=font_size, color=GREY_A).move_to([x0 + (j + 0.5) * cell_w, y0 + 0.25, 0])
+                              for j, nm in enumerate(names)])
+        self.add(self.grid, self.heads)
+        self.move_to(center)
+
+    def column(self, j: int) -> VGroup:
+        return VGroup(*[self.cells[i][j] for i in range(self.n_rows)])
+
+    def mark(self, j: int, mask, color=None, opacity: float = 0.9):
+        """Animations that turn the masked cells of column j to the 'missing' colour."""
+        return [self.cells[i][j].animate.set_fill(color or "#141821", opacity=opacity).set_stroke(GREY_B, width=1.2) for i, m in enumerate(mask) if m]
+
+    def fill(self, j: int, rows, color=None, opacity: float = 0.85):
+        return [self.cells[i][j].animate.set_fill(color or S.ACCENT, opacity=opacity) for i in rows]
+
+    def copies(self, k: int, dx: float = 0.18, dy: float = -0.12) -> VGroup:
+        g = VGroup()
+        for c in range(1, k):
+            g.add(self.grid.copy().set_opacity(0.25).shift(RIGHT * dx * c + DOWN * dy * -c))
+        return g

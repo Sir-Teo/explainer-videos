@@ -1,6 +1,6 @@
 # Statistics, Built (统计学，从零搭建)
 
-**Status: in production.** Parts 1–40 are written in English (12–16 chapters each):
+**Status: in production.** Parts 1–41 are written in English (12–16 chapters each):
 - *The Shape of Data*, about an hour;
 - *Chance, Counted*, about 74 minutes, with the exact probability engine `explainer/stats/prob.py`;
 - *The Family of Distributions*, about 55 minutes, with the family-tree instrument `FamilyTree`;
@@ -40,7 +40,8 @@
 - *Natural Experiments*, about 60 minutes, with the World's schooling survey, scholarship and rollout, `statkit.quasi`, the cutoff lens (`CutoffLens`), Snow's Table IX, Card and Krueger's means and the Prop 99 panel;
 - *Time Series in Depth*, about 51 minutes, with `statkit.ts` (II), the Kalman ellipses (`KalmanEllipses`), Toussoun's Nile minima, the Nile's flow, the DAX and US macro data;
 - *Space*, about 50.6 minutes, with `statkit.spatial`, the field surface (`FieldSurface`), the World's pollution field, Meuse's heavy metals and Snow's map;
-- *Time to Event*, about 50.4 minutes, with `statkit.survival`, the KM staircase (`KMStaircase`), the World's cohort, Gehan's 6-MP trial, Mayo's PBC trial, the Stanford heart transplants and MGUS.
+- *Time to Event*, about 50.4 minutes, with `statkit.survival`, the KM staircase (`KMStaircase`), the World's cohort, Gehan's 6-MP trial, Mayo's PBC trial, the Stanford heart transplants and MGUS;
+- *What You Didn't See*, about 51.2 minutes, with `statkit.mi`, the mask grid (`MaskGrid`), the World's survey masks and opt-in poll, New York's ozone, NHANES's sodium recalls and Mroz's women.
 
 Their instruments are in `explainer/stats/`; narration and the Chinese edition follow. The chapter-by-chapter plan and the production standard are in [`SYLLABUS.md`](SYLLABUS.md).
 
