@@ -547,6 +547,68 @@ class World:
         return self.rollout_panel(self.rng("rollout"))
 
     # ------------------------------------------------------------------
+    # Space (Part 39): a pollution field over the island
+    # ------------------------------------------------------------------
+    POLLUTION_SIGMA, POLLUTION_RANGE, POLLUTION_NU = 2.5, 1.5, 1.5
+    POLLUTION_NUGGET = 0.8  # measurement-error SD at a station
+    POLLUTION_TRAFFIC = 3.0  # effect of one SD of the traffic index
+
+    @staticmethod
+    def on_island(x, y) -> np.ndarray:
+        """The island's shape: the noisy superellipse the towns were drawn in."""
+        x, y = np.asarray(x, float), np.asarray(y, float)
+        r = (np.abs(x / 5) ** 2.6 + np.abs(y / 3.4) ** 2.6) ** (1 / 2.6)
+        th = np.arctan2(y, x)
+        return r < 0.86 + 0.1 * np.sin(3 * th + 0.7) + 0.05 * np.cos(5 * th)
+
+    @cached_property
+    def pollution(self) -> dict:
+        """Annual mean fine-particle pollution over the island (Part 39), on a 0.1-unit grid (``gx``, ``gy``;
+        ``land`` marks island nodes).  field = 20 + 3 traffic + w(s), with traffic a standardized log of the
+        town-size-weighted density of towns (a kernel of SD 0.4 around each), and w a Matern field (sigma 2.5,
+        range 1.5, nu = 3/2) simulated exactly on the grid by circulant embedding (Wood & Chan 1994).  300 stations
+        at random land nodes (``station`` indices into the land nodes) measure it with error SD 0.8 (``annual``), and
+        ``daily`` gives 365 days of readings: the annual value plus a shared AR(1) weather effect (SD 2, rho 0.7)
+        plus station-day noise (SD 1.5)."""
+        g = self.rng("pollution")
+        h = 0.1
+        gx = np.round(np.arange(-5.5, 5.5 + h / 2, h), 2)
+        gy = np.round(np.arange(-3.8, 3.8 + h / 2, h), 2)
+        nx, ny = len(gx), len(gy)
+        # circulant embedding of the Matern covariance on a (2nx) x (2ny) torus
+        mx, my = 2 * nx, 2 * ny
+        dx = np.minimum(np.arange(mx), mx - np.arange(mx)) * h
+        dy = np.minimum(np.arange(my), my - np.arange(my)) * h
+        D = np.sqrt(dx[None, :] ** 2 + dy[:, None] ** 2)
+        s = np.sqrt(3) * D / self.POLLUTION_RANGE
+        C = self.POLLUTION_SIGMA ** 2 * (1 + s) * np.exp(-s)
+        lam = np.clip(np.fft.fft2(C).real, 0, None)
+        Z = g.standard_normal((my, mx)) + 1j * g.standard_normal((my, mx))
+        F = np.fft.fft2(np.sqrt(lam / (mx * my)) * Z)
+        w = F.real[:ny, :nx]
+        X, Y = np.meshgrid(gx, gy)
+        land = self.on_island(X, Y)
+        t = self.towns
+        dens = sum(wt * np.exp(-((X - c[0]) ** 2 + (Y - c[1]) ** 2) / (2 * 0.4 ** 2)) for c, wt in zip(t["xy"], t["weight"]))
+        traffic = np.log(dens + 1e-4)
+        traffic = (traffic - traffic[land].mean()) / traffic[land].std()
+        field = 20 + self.POLLUTION_TRAFFIC * traffic + w
+        land_idx = np.flatnonzero(land.ravel())
+        station = np.sort(g.choice(len(land_idx), 300, replace=False))
+        node = land_idx[station]
+        sx, sy = X.ravel()[node], Y.ravel()[node]
+        truth = field.ravel()[node]
+        annual = truth + self.POLLUTION_NUGGET * g.standard_normal(300)
+        e = np.zeros(365)
+        e[0] = 2 * g.standard_normal()
+        for k in range(1, 365):
+            e[k] = 0.7 * e[k - 1] + 2 * np.sqrt(1 - 0.49) * g.standard_normal()
+        daily = truth[None, :] + e[:, None] + 1.5 * g.standard_normal((365, 300))
+        return {"gx": gx, "gy": gy, "land": land, "field": field, "w": w, "traffic": traffic, "station": station,
+                "sx": sx, "sy": sy, "s_traffic": traffic.ravel()[node], "truth": truth, "annual": annual, "daily": daily,
+                "weather": e}
+
+    # ------------------------------------------------------------------
     # Sampling and the truth
     # ------------------------------------------------------------------
     def sample(self, n: int, among: np.ndarray | None = None, seed: int = 0) -> np.ndarray:

@@ -2388,3 +2388,60 @@ class KalmanEllipses(VGroup):
 
     def dot(self, m, color=None, radius: float = 0.06) -> Dot:
         return Dot(self.ax.c2p(*m), radius=radius, color=color or S.EST)
+
+
+class FieldSurface(VGroup):
+    """A kriging or GP surface (Part 39): coloured cells at grid nodes (xs, ys, values; flattened), mapped into a box
+    of the given ``width`` centred at ``center`` with equal x and y scales.  Colours run through a five-stop
+    perceptual ramp (deep blue to yellow).  ``uncertainty(sd)`` returns an overlay that greys cells in proportion to
+    their standard deviation; ``dots(px, py)`` places points (stations, samples) in the same coordinates;
+    ``key(text)`` a colour bar."""
+
+    RAMP = ["#1b2a6b", "#2c7fb8", "#41b6a4", "#a6d96a", "#fde725"]
+
+    def __init__(self, xs, ys, values, cell: float, width: float = 8.0, center=ORIGIN, lo=None, hi=None,
+                 opacity: float = 0.95):
+        super().__init__()
+        xs, ys, v = (np.asarray(a, float).ravel() for a in (xs, ys, values))
+        self.x0, self.x1, self.y0, self.y1 = xs.min() - cell / 2, xs.max() + cell / 2, ys.min() - cell / 2, ys.max() + cell / 2
+        self.s = width / (self.x1 - self.x0)
+        self.c = np.asarray(center, float)
+        self.lo = float(np.nanmin(v)) if lo is None else lo
+        self.hi = float(np.nanmax(v)) if hi is None else hi
+        self.xs, self.ys, self.cell = xs, ys, cell
+        self.cells = VGroup(*[Square(side_length=cell * self.s * 1.02, stroke_width=0, fill_color=self.colour(val),
+                                     fill_opacity=opacity).move_to(self.p(x, y)) for x, y, val in zip(xs, ys, v)])
+        self.add(self.cells)
+
+    def p(self, x, y):
+        cx, cy = (self.x0 + self.x1) / 2, (self.y0 + self.y1) / 2
+        return self.c + np.array([(x - cx) * self.s, (y - cy) * self.s, 0.0])
+
+    def colour(self, v):
+        t = float(np.clip((v - self.lo) / max(self.hi - self.lo, 1e-12), 0, 1)) * (len(self.RAMP) - 1)
+        i = min(int(t), len(self.RAMP) - 2)
+        return interpolate_color(ManimColor(self.RAMP[i]), ManimColor(self.RAMP[i + 1]), t - i)
+
+    def uncertainty(self, sd, smax=None, max_opacity: float = 0.75) -> VGroup:
+        sd = np.asarray(sd, float).ravel()
+        smax = float(np.nanmax(sd)) if smax is None else smax
+        return VGroup(*[Square(side_length=self.cell * self.s * 1.02, stroke_width=0, fill_color="#0b0f17",
+                               fill_opacity=float(np.clip(s / smax, 0, 1)) * max_opacity).move_to(self.p(x, y))
+                        for x, y, s in zip(self.xs, self.ys, sd)])
+
+    def dots(self, px, py, color=WHITE, radius: float = 0.04, opacity: float = 1.0) -> VGroup:
+        return VGroup(*[Dot(self.p(x, y), radius=radius, color=color, fill_opacity=opacity) for x, y in zip(px, py)])
+
+    def key(self, text: str = "", width: float = 2.6, font_size: int = 20, fmt="{:.0f}") -> VGroup:
+        from explainer.analysis import label
+
+        n = 30
+        bar = VGroup(*[Rectangle(width=width / n, height=0.18, stroke_width=0, fill_opacity=1,
+                                 fill_color=self.colour(self.lo + (self.hi - self.lo) * (k + 0.5) / n)) for k in range(n)])
+        bar.arrange(RIGHT, buff=0)
+        a = label(fmt.format(self.lo), font_size=font_size, color=GREY_B).next_to(bar, LEFT, buff=0.12)
+        b = label(fmt.format(self.hi), font_size=font_size, color=GREY_B).next_to(bar, RIGHT, buff=0.12)
+        g = VGroup(bar, a, b)
+        if text:
+            g.add(label(text, font_size=font_size, color=GREY_B).next_to(bar, UP, buff=0.1))
+        return g
