@@ -39,23 +39,23 @@ class RL(VoiceoverScene):
         self.play(FadeOut(c))
 
     def derive(self):
-        rows = [cmath(r"s_n = (t_n, \log W_n)", r",\ ", r"a_n = \pi_n,\quad r_n = \log\big(1 + r\Delta + "
-                      r"\pi_n(R_n - r\Delta)\big)", font_size=30),
-                cmath(r"\nabla_\vartheta J", r"=", r"\mathbb{E}\big[\nabla_\vartheta \log p_\vartheta(a \mid s)\,"
-                      r"\hat A\big]", font_size=32),
+        rows = [cmath(r"s_n = (t_n, \log W_n)", r",\ ", r"a_n = \pi_n,\quad r_n = \log\max\{10^{-6},\,1 + r\Delta + "
+                      r"\pi_n(R_n - r\Delta)\}", font_size=30),
+                cmath(r"\nabla_\vartheta J", r"=", r"\mathbb{E}_\pi\big[\sum_n\nabla_\vartheta \log p_\vartheta(a_n \mid s_n)\,"
+                      r"A_n^\pi\big]", font_size=32),
                 cmath(r"\hat A_n", r"=", r"r_n + V(s_{n+1}) - V(s_n)", font_size=32, colors={r"\hat A_n": ALT}),
                 cmath(r"L^{\mathrm{clip}}", r"=", r"\mathbb{E}\,\min\big(\rho\,\hat A,\ \mathrm{clip}(\rho, 1 \pm "
                       r"\epsilon)\,\hat A\big),\quad \rho = \frac{p_\vartheta(a \mid s)}{p_{\mathrm{old}}(a \mid s)}",
                       font_size=30, colors={r"L^{\mathrm{clip}}": KELLY})]
         whys = [why(r"Merton as a Markov decision process: the state, the action (a fraction), the reward (log growth: "
                     r"$\gamma = 1$)", font_size=21),
-                why(r"the policy gradient: push up the log-probability of actions that did better than expected",
+                why(r"finite-horizon policy gradient under differentiation/integrability conditions: sum action scores times true advantages",
                     font_size=21),
                 why(r"one-step TD advantage: lower-horizon noise, but a learned critic can introduce bias", font_size=21),
                 why(r"PPO (Schulman et al.\ 2017): clips a surrogate objective; no hard bound on updates, ratios or KL divergence", font_size=21)]
         step = ladder(self, rows, whys, keep=4, top=3.1, x=-0.4, buff=0.75, edge=6.9)
         with self.voiceover(
-            """Now a learner given the simulated market and reward, but not Merton's analytic optimum. State: time and log wealth. Action: a fraction. Reward: quarterly log growth, with a numerical floor when gross wealth becomes nonpositive. <bookmark mark='a'/> The policy-gradient expression averages action scores over state visits. <bookmark mark='b'/> A one-step TD advantage uses a learned critic, which can introduce bias. <bookmark mark='c'/> PPO clips its surrogate objective; it does not enforce a hard bound on every policy update or on KL divergence."""
+            """The learner receives the simulated market and reward, without Merton's analytic optimum. State: time and log wealth. Action: a fraction. Reward: log gross wealth, floored at one millionth before taking the log. <bookmark mark='a'/> With suitable differentiation and integrability, the true finite-horizon policy gradient sums action scores times true advantages across the episode. <bookmark mark='b'/> We estimate advantage using a one-step TD error from a learned critic; this estimate can be biased. <bookmark mark='c'/> PPO clips its surrogate objective. It does not enforce a hard bound on each policy update or KL divergence."""
         ) as vo:
             step(0, run_time=0.15)
             vo.wait_until("a")

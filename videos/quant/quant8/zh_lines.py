@@ -235,8 +235,8 @@ ZH = {
         "暂停预测：你知道另外九家基金这周在卖同一只股票。你会比单独时卖得更快还是更慢？<bookmark mark='a'/>更快。单独一家，直线；两家，曲线弯曲；十家，更弯；在平均场极限下，这一大笔股票被抢着卖掉。<bookmark mark='b'/>右边是五百家仓位不同的基金，各自回应同一个人群：整个库存分布很早就冲向零，每家基金都在为别人的匆忙买单。<bookmark mark='c'/>这就是拥挤交易的数学。皮埃尔·卡尔达利亚盖和夏尔-阿尔贝·勒阿勒在2018年这样为拥挤交易建模；卡林、洛博和维斯瓦纳坦研究了少数人之间的掠夺性交易；拉克和扎里福普卢证明，相互比较考核的基金会承担更多风险。第36和37部分会回到这里。下一章：机器能只靠经验学会这些规则吗？",
     'Chapter sixteen. Reinforcement learning':
         '第16章。默顿问题上的强化学习。',
-    "Now a learner given the simulated market and reward, but not Merton's analytic o":
-        "学习器获得模拟市场和奖励，但没有默顿解析最优值。状态是时间和对数财富，动作是比例，奖励是季度对数增长；总财富非正时使用数值下限。<bookmark mark='a'/>策略梯度对访问的状态和动作得分取平均。<bookmark mark='b'/>一步TD优势使用学习的评价器，可能有偏。<bookmark mark='c'/>PPO截断代理目标，不硬性约束每次策略更新或KL散度。",
+    "The learner receives the simulated market and reward, without Merton's analytic ":
+        "学习器获得模拟市场与奖励，但没有默顿解析最优值。状态为时间和对数财富，动作为比例，奖励为总财富因子的对数；取对数前先设置百万分之一的下限。<bookmark mark='a'/>可交换微分与期望且可积时，真实的有限期限策略梯度，是每一期动作得分乘真实优势的总和。<bookmark mark='b'/>我们用学习评价器的一步TD误差估计优势，可能有偏。<bookmark mark='c'/>PPO截断代理目标，并不硬性限制每次策略更新或KL散度。",
     'f"Lab five: a thousand and twenty-four ten-year episodes per iteration, three hu':
         "实验五：每轮一千零二十四条十年路径，共三百轮。动作是无界高斯比例，总财富下限为百万分之一。这是数值模拟器，不是杠杆几何布朗运动的可容许性定理。<bookmark mark='a'/>五个种子的最终平均比例为{100 * min(fin):.0f}%至{100 * max(fin):.0f}%，有限求积基准为{100 * ps['discrete']:.0f}%。所示差距最多每年{100 * max(ps['shortfall']):.2f}%，比较的是平均比例处的连续增长公式，不是完整学习策略的季度绩效。",
     'Here is the training, scrubbed checkpoint':
