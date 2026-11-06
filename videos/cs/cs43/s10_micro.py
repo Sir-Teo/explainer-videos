@@ -12,7 +12,6 @@ class Micro(VoiceoverScene):
         self.cuts()
         self.fanout()
         self.deadline()
-        self.balance()
 
     def card(self):
         card = chapter_card(9, r"Monoliths and microservices", r"When is one program better as many?",
