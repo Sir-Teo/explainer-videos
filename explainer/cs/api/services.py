@@ -276,3 +276,42 @@ def time_pitfalls():
             "lord_howe_offset": str(c.utcoffset()),
             "leap_seconds_since_1972": 27,
             "unix_2038": datetime.fromtimestamp(2 ** 31 - 1, ZoneInfo("UTC")).isoformat()}
+
+
+# ---------------------------------------------------------------- client-side load balancing
+
+def balancing(servers=50, rho=0.9, n=200_000, seed=5):
+    """Requests arrive at a fleet; each client picks a server at random, round robin, by the power of two random
+    choices (Part 20), or the least loaded of all (needs global knowledge).  Exponential service times; reports the
+    mean and 99th-percentile time in system."""
+    import heapq
+    out = {}
+    for policy in ("random", "round robin", "two choices", "least loaded"):
+        rng = random.Random(seed)
+        t = 0.0
+        q = [[] for _ in range(servers)]          # departure times per server, as heaps
+        free = [0.0] * servers
+        times = []
+        rr = 0
+        for _ in range(n):
+            t += rng.expovariate(rho * servers)
+            for s in q:
+                while s and s[0] <= t:
+                    heapq.heappop(s)
+            if policy == "random":
+                k = rng.randrange(servers)
+            elif policy == "round robin":
+                k = rr % servers
+                rr += 1
+            elif policy == "two choices":
+                a, b = rng.randrange(servers), rng.randrange(servers)
+                k = a if len(q[a]) <= len(q[b]) else b
+            else:
+                k = min(range(servers), key=lambda i: len(q[i]))
+            start = max(t, free[k])
+            free[k] = start + rng.expovariate(1.0)
+            heapq.heappush(q[k], free[k])
+            times.append(free[k] - t)
+        times.sort()
+        out[policy] = {"mean": sum(times) / n, "p99": times[int(0.99 * n)]}
+    return {"servers": servers, "load": rho, "policies": out}

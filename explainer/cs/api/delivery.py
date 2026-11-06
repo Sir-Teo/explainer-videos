@@ -205,3 +205,65 @@ def retry_storm(capacity=100.0, demand=90.0, outage=(20, 30), horizon=120, polic
     return {"policy": policy, "series": series, "recovered_at": recovered,
             "peak_offered": max(s["offered"] for s in series), "gave_up": dropped,
             "served": sum(s["served"] for s in series)}
+
+
+# ---------------------------------------------------------------- exactly once, model-checked
+
+def model_check(dedup: bool, n_msgs: int = 2, retries: int = 2, max_dups: int = 1):
+    """Explore every execution of a sender that retries each of n_msgs increments until acknowledged (up to
+    `retries` resends), over a network that may deliver in-flight messages in any order, drop them, or duplicate
+    them (at most max_dups times in all); acknowledgements can be dropped too.  Checks, in every final state where
+    the sender has seen every acknowledgement, that the counter equals n_msgs (exactly once), and in every state that
+    it never exceeds n_msgs (at most once).  Returns the number of states and a counterexample trace if any."""
+    from collections import deque
+    start = (tuple([retries + 1] * n_msgs), (), 0, frozenset(), frozenset(), 0)
+    # (sends left per msg, in-flight multiset as sorted tuple of (kind, i), counter, applied ids, acked ids, dups)
+    seen = {start: None}
+    q = deque([start])
+    bad = None
+    finals = 0
+    while q:
+        st = q.popleft()
+        left, fl, cnt, applied, acked, dups = st
+        if cnt > n_msgs and bad is None:
+            bad = st
+        succ = []
+        for i in range(n_msgs):
+            if i not in acked and left[i] > 0:
+                nl = list(left)
+                nl[i] -= 1
+                succ.append(((tuple(nl), tuple(sorted(fl + (("m", i),))), cnt, applied, acked, dups),
+                             f"send {i}"))
+        for k, (kind, i) in enumerate(set(fl)):
+            rest = list(fl)
+            rest.remove((kind, i))
+            rest = tuple(rest)
+            succ.append(((left, rest, cnt, applied, acked, dups), f"drop {kind}{i}"))
+            if dups < max_dups:
+                succ.append(((left, tuple(sorted(fl + ((kind, i),))), cnt, applied, acked, dups + 1),
+                             f"duplicate {kind}{i}"))
+            if kind == "m":
+                if dedup and i in applied:
+                    nc, na = cnt, applied
+                else:
+                    nc, na = cnt + 1, applied | {i}
+                succ.append(((left, tuple(sorted(rest + (("a", i),))), nc, na, acked, dups), f"deliver m{i}"))
+            else:
+                succ.append(((left, rest, cnt, applied, acked | {i}, dups), f"deliver a{i}"))
+        if not succ:
+            finals += 1
+            if len(acked) == n_msgs and cnt != n_msgs and bad is None:
+                bad = st
+        for s2, lab in succ:
+            if s2 not in seen:
+                seen[s2] = (st, lab)
+                q.append(s2)
+    trace = []
+    if bad is not None:
+        x = bad
+        while seen[x] is not None:
+            x, lab = seen[x]
+            trace.append(lab)
+        trace.reverse()
+    return {"dedup": dedup, "states": len(seen), "final_states": finals, "violation": bad is not None,
+            "trace": trace, "counter_at_violation": bad[2] if bad else None}
