@@ -1708,3 +1708,4 @@ and a Reasoner library of perhaps 20–30k lines with its tests. Expect one part
 | 28 · Meaning in Use | scenes, English and Chinese narration and text, QA | ~52 min |
 | 29 · Being and Time-Consciousness | scenes, English and Chinese narration and text, QA | ~64 min |
 | 30 · Mind and Machine | scenes, English and Chinese narration and text, QA | ~51 min |
+| 31 · Consciousness | scenes, English and Chinese narration and text, QA | ~51 min |
