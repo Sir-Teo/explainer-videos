@@ -135,7 +135,8 @@ class Time(VoiceoverScene):
                                                                                                  buff=0.55)
         ghost = label(wall.strftime("%H:%M") + r"\ ?", font_size=19, color=NO).move_to(gap).shift(UP * 0.18)
         n_dot = Dot([X(norm), y, 0], radius=0.1, color=YES)
-        n_l = label(norm.strftime("%H:%M ") + names[norm.utcoffset()], font_size=17, color=YES).next_to(n_dot, DOWN, buff=0.55)
+        n_l = label(norm.strftime("%H:%M ") + names[norm.utcoffset()], font_size=17, color=YES).next_to(
+            n_dot, DOWN, buff=0.55)
         br = BraceBetweenPoints([X(start), y - 0.95, 0], [X(norm), y - 0.95, 0], direction=DOWN, color=GREY_A)
         bl = label(rf"{g['elapsed_hours']:g} real hour", font_size=17, color=GREY_A).next_to(br, DOWN, buff=0.08)
         code = code_block([

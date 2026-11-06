@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs43.common import (BG, DATA, HEAD, KERN, LAM, NO, PART, YES, bar_chart, grid_table, load,
+from videos.cs.cs43.common import (BG, DATA, HEAD, KERN, LAM, NO, PART, YES, grid_table, load,
                                    module_box, mono)
 
 
@@ -172,8 +172,8 @@ class Micro(VoiceoverScene):
             "<bookmark mark='b'/> With one back end, under two percent of requests take more than a hundred "
             "milliseconds. With a hundred back ends, forty-six percent do, and the median itself has quadrupled. "
             "<bookmark mark='c'/> The chance that at least one of k back ends has a bad moment is one minus point "
-            "nine nine to the k: sixty-three percent at a hundred. The measured share is lower, because not "
-            "every bad moment crosses a hundred milliseconds. It is Part 39's tail at "
+            "nine nine to the k: sixty-three percent at a hundred. At many back ends the measured share is lower, "
+            "because not every bad moment crosses a hundred milliseconds. It is Part 39's tail at "
             "scale: the slowest of many decides."
         ) as vo:
             self.play(FadeIn(head), FadeIn(front), FadeIn(wait))
@@ -255,54 +255,6 @@ class Micro(VoiceoverScene):
             self.play(FadeIn(slack), FadeIn(sl))
             vo.wait_until("c")
             self.play(FadeIn(note))
-        self.wait(0.4)
-        self.clear_scene()
-
-    def balance(self):
-        bal = load("balance")
-        P = bal["policies"]
-        order = [("random", r"random", NO), ("round robin", r"round robin", KERN),
-                 ("two choices", r"two choices", YES), ("least loaded", r"least loaded", DATA)]
-        head = label(r"Which server?", font_size=36).to_edge(UP, buff=0.3)
-        sub = label(rf"{bal['servers']} servers at {bal['load'] * 100:.0f}\% load; \ time in system, \ in service "
-                    r"times", font_size=19, color=GREY_A).next_to(head, DOWN, buff=0.25)
-        cols = [c for _, _, c in order]
-        names = [n for _, n, _ in order]
-        mean = bar_chart([P[k]["mean"] for k, _, _ in order], names, cols, height=2.6, bar_w=0.8, gap=0.55,
-                         fmt_=lambda v: f"{v:.1f}", font_size=19)
-        p99 = bar_chart([P[k]["p99"] for k, _, _ in order], names, cols, height=2.6, bar_w=0.8, gap=0.55,
-                        fmt_=lambda v: f"{v:.1f}", font_size=19)
-        mean.move_to([-3.4, 0.0, 0])
-        p99.move_to([3.4, 0.0, 0])
-        mt = label(r"mean", font_size=20, color=WHITE).next_to(mean, UP, buff=0.2)
-        pt = label(r"99th percentile", font_size=20, color=WHITE).next_to(p99, UP, buff=0.2)
-        note = wrapped_label(r"\textbf{two choices}: \ ask two random servers, \ send to the shorter queue \ (Part "
-                             r"20's balls into bins); \ \textbf{least loaded} needs every queue's length, \ "
-                             r"everywhere, \ always fresh", 12.4, font_size=19, color=WHITE).to_edge(DOWN, buff=0.35)
-        for ch in (mean, p99):
-            for bb in ch.bars:
-                bb.save_state()
-                bb.stretch_to_fit_height(0.001, about_edge=DOWN)
-        with self.voiceover(
-            "Finally, when a service runs on many servers, which one should take each request? Here, fifty servers "
-            "at ninety percent load. <bookmark mark='a'/> Choosing at random, the mean time in the system is about "
-            "ten service times, and the ninety-ninth percentile forty-nine. Round robin halves both. "
-            "<bookmark mark='b'/> Asking two random servers and choosing the shorter queue, Part 20's power of two "
-            "choices, brings the mean to two point six and the tail to nine. <bookmark mark='c'/> Knowing every "
-            "queue would do better still, one point two, but that needs global knowledge, kept fresh, on every "
-            "client. Two probes get most of the way there."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(sub), FadeIn(mt), FadeIn(pt), FadeIn(mean.names), FadeIn(p99.names),
-                      FadeIn(mean[0]), FadeIn(p99[0]), *[FadeIn(b) for b in mean.bars], *[FadeIn(b) for b in p99.bars])
-            for mk, idx in (("a", (0, 1)), ("b", (2,)), ("c", (3,))):
-                vo.wait_until(mk)
-                anims = []
-                for i in idx:
-                    for ch in (mean, p99):
-                        anims += [ch.bars[i].animate.restore(), FadeIn(ch.vals[i])]
-                self.play(*anims)
-                if mk == "b":
-                    self.play(FadeIn(note))
         self.wait(0.4)
         self.clear_scene()
 
