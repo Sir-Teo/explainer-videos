@@ -333,8 +333,8 @@ we find that every summary jiggles from sample to sample. A statistic is random,
 3. **Pictures first.** Dot plots and histograms; bin width as a choice (Sturges 1926, Scott 1979, Freedman–Diaconis
    1981; derived in Part 29).
 4. **The centre as an optimization.**
-   - The mean minimizes Σ(xᵢ − c)². The median minimizes Σ|xᵢ − c|: the subgradient as a tug-of-war. The mode is the
-     limit of 0–1 loss, the midrange the L∞ centre; the Lᵖ centre sliding as p goes from 1 to ∞.
+   - The mean minimizes Σ(xᵢ − c)². The median minimizes Σ|xᵢ − c|: the subgradient as a tug-of-war. Discrete modes minimize 0–1 loss; density modes arise from shrinking local windows under regularity.
+     The midrange is the L∞ centre; the Lᵖ centre sliding as p goes from 1 to ∞.
    - The Fréchet mean on a circle (clock times).
 5. **Spread.** Σ(xᵢ − c)² = Σ(xᵢ − x̄)² + n(x̄ − c)² as Pythagoras in Rⁿ (`NSpace`); SD, MAD, IQR; Chebyshev's
    guarantee (Part 6).
@@ -342,7 +342,7 @@ we find that every summary jiggles from sample to sample. A statistic is random,
    outliers.
 7. **Shape.** Skewness; kurtosis as tails (Westfall 2014); Pareto's income law (1896) in the World; log scales; mean
    vs median income.
-8. **The QQ plot** (Wilk & Gnanadesikan 1968). Why a straight line means the same family up to location and scale;
+8. **The QQ plot** (Wilk & Gnanadesikan 1968). A straight population QQ relation characterizes location and scale; finite QQ plots are diagnostic evidence;
    reading the curvature; Quetelet's 5,738 Scottish chests (1846).
 9. **Transformations.** Log, square root, Box–Cox (1964); variance stabilization (Part 6's delta method).
 10. **Two variables.** Covariance; correlation as the cosine between centred vectors; |r| ≤ 1 by Cauchy–Schwarz;
@@ -378,13 +378,13 @@ shapes need naming (→ Part 3).
    the published record.
 8. **Monty Hall** (Selvin 1975; vos Savant 1990). The host's protocol; variants enumerated exactly.
 9. **Independence.** Pairwise but not mutual (Bernstein's tetrahedron); conditional independence.
-10. **Random variables.** Functions on Ω; CDFs; discrete, continuous, mixed and singular (the Cantor distribution).
+10. **Random variables.** Functions on Ω; CDFs; atomic laws, laws with a density, mixtures and singular continuous laws (the Cantor distribution).
 11. **Expectation.** The layer-cake formula; LOTUS; linearity; indicators (fixed points, birthdays, the coupon
     collector's nH_n).
 12. **Variance and moments.** Var of sums; St. Petersburg (D. Bernoulli 1738) and log utility.
 13. **Generating functions, first look.** pgfs of dice sums; convolution as polynomial multiplication.
 14. **What probability means.** Frequency, logic and belief (von Mises, Keynes, Ramsey, de Finetti); the Dutch book
-    (de Finetti 1937); Cox's theorem (1946).
+    (de Finetti 1937): finite bets enforce finite additivity; countable additivity needs continuity. Cox-style results (1946) require explicit regularity and richness assumptions.
 15. **Outro.**
 
 *Built:* an exact probability engine on finite spaces (Python fractions), checked against simulation.
@@ -395,15 +395,15 @@ shapes need naming (→ Part 3).
 The family tree is assembled arrow by arrow. One variable at a time is not enough, and many variables need matrices
 (→ Part 4).
 
-0. **Hook: Bortkiewicz (1898).** 200 corps-years: 109, 65, 22, 3, 1 deaths against Poisson(0.61): 108.7, 66.3, 20.2,
-   4.1, 0.6.
+0. **Hook: Bortkiewicz (1898).** 200 corps-years: counts 109, 65, 22, 3, 1 in death categories 0, 1, 2, 3, 4+,
+   against Poisson(0.61): 108.7, 66.3, 20.2, 4.1, 0.7.
 1. **Bernoulli → binomial.** Lattice paths; mean and variance by indicators.
 2. **The law of rare events.** Binomial(n, λ/n) → Poisson, derived; Le Cam's inequality.
-3. **Waiting.** Geometric and negative binomial; memorylessness; the negative binomial as gamma–Poisson.
+3. **Waiting.** Geometric and negative binomial; memorylessness; subtract the success count to pass from total trials to the gamma–Poisson failures convention.
 4. **Without replacement.** The hypergeometric; capture–recapture on the World's lake.
 5. **Continuous time.** The Poisson process; exponential and gamma waits; the inspection paradox (computed).
 6. **The normal, three ways.** de Moivre (1733) via Stirling; Gauss (1809) from "the mean is best"; Herschel–Maxwell
-   from rotation invariance; the Gaussian integral in polar coordinates.
+   from independent coordinates and rotation invariance; the Gaussian integral in polar coordinates.
 7. **Transformations.** The CDF method; Jacobians in 1D and 2D; Box–Muller; the log-normal as a multiplicative CLT.
 8. **The sampling family.** χ² (Helmert 1876), t, F; Cauchy as t₁ and as a lighthouse beam; Beta and gamma
    relations.
@@ -413,8 +413,8 @@ The family tree is assembled arrow by arrow. One variable at a time is not enoug
 11. **Generating functions.** MGFs and characteristic functions; moments from derivatives; uniqueness (proved in Part
     43); sums by products.
 12. **Mixtures and hierarchies.** Beta-binomial, gamma–Poisson, scale mixtures → t.
-13. **Exponential families, first look.** h(x) exp(ηT(x) − A(η)); A′(η) is the mean.
-14. **The family tree** (Leemis & McQueston 2008), every arrow derived lit.
+13. **Exponential families, first look.** h(x) exp(ηT(x) − A(η)); A′(η) is the expectation of T(X).
+14. **The family tree** (Leemis & McQueston 2008), relationships introduced and lit, with several full limit proofs deferred to Parts 6 and 43.
 15. **Outro.**
 
 *Built:* the family-tree explorer (each arrow a live transformation).

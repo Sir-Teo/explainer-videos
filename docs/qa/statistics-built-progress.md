@@ -5,7 +5,9 @@ The branch contains **65 parts and 888 chapters**. All manifests resolve to exis
 
 ## Current checkpoint
 
-Part 1, *The Shape of Data*, has received a chapter-by-chapter English source review and visual repair pass. All 16 current English endpoint captures are free of runtime, clipping and blank-beat warnings. Six chapters have native 1080p captures, four have silent motion checks, and the narrated Centre preview has six clean waveform/alignment checks. The 540-test statistics/QA suite passes. Part 2's English scientific source pass and six reference regressions are complete; chapter renders are in progress. [Repair details and reproducible evidence](evidence/stats1-polish-20261106/README.md).
+Parts 1 and 2 have received chapter-by-chapter English source reviews and visual repair passes. All 32 current English endpoint captures are free of runtime, clipping and blank-beat warnings. Each part has six native 1080p cases; Part 1 has four silent motion checks and Part 2 has two. Representative narrated previews each have six clean signal/alignment checks. The combined statistics/QA suite passes 554 tests and five subtests. [Part 1 evidence](evidence/stats1-polish-20261106/README.md) and [Part 2 evidence](evidence/stats2-polish-20261106/README.md).
+
+Parts 3 and 4 have completed their scientific source correction passes. Part 3's final render checks and Part 4's first visual sweep are in progress.
 
 No part is signed off for bilingual production. The branch has zero `narration_zh.json` tables and no `stats_text_zh.json`; full narrated masters and continuous listening/playback remain separate gates. Existing translation warnings remain visible.
 
@@ -24,9 +26,9 @@ No part is signed off for bilingual production. The branch has zero `narration_z
 | Part | Video | Chapters | Review status |
 |---|---|---:|---|
 | 1 | `stats1` | 16 | English source/visual pass complete; production gates open |
-| 2 | `stats2` | 16 | Scientific source corrections complete; visual verification in progress |
-| 3 | `stats3` | 16 | Scientific source corrections complete; visual verification pending |
-| 4 | `stats4` | 14 | Scientific source corrections complete; visual verification pending |
+| 2 | `stats2` | 16 | English source/visual pass complete; production gates open |
+| 3 | `stats3` | 16 | Scientific source corrections complete; final visual verification in progress |
+| 4 | `stats4` | 14 | Scientific source corrections complete; visual verification in progress |
 | 5 | `stats5` | 16 | Not yet reviewed chapter by chapter |
 | 6 | `stats6` | 15 | Not yet reviewed chapter by chapter |
 | 7 | `stats7` | 13 | Not yet reviewed chapter by chapter |

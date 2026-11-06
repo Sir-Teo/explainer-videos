@@ -35,7 +35,7 @@ class Variables(VoiceoverScene):
 
     def card(self):
         card = chapter_card(10, r"Random variables", r"Numbers that depend on chance, and their distributions",
-                            lit=(1933,), part=PART)
+                            lit={1933: "Kolmogorov: probability foundations"}, part=PART)
         with self.voiceover("Chapter ten. Random variables."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
@@ -165,6 +165,7 @@ class Variables(VoiceoverScene):
             s_ = label(sub, font_size=22, color=GREY_A).next_to(A, DOWN, buff=0.2)
             panels.add(VGroup(A, g, t, s_))
         tag = note(r"illustrative").to_corner(DR, buff=0.3)
+        intro = label("Three kinds of CDF", font_size=36)
         with self.voiceover(
             "CDFs come in kinds. <bookmark mark='a'/> A discrete variable, like a die, has a CDF that only jumps. "
             "<bookmark mark='b'/> An absolutely continuous distribution, like the exponential waiting time drawn "
@@ -175,9 +176,11 @@ class Variables(VoiceoverScene):
             "amounts. <bookmark mark='d'/> Discrete distributions, ones with a density, and their mixtures: is "
             "that every kind? Surprisingly, no."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(intro), FadeIn(tag))
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(panels[k][0]), FadeIn(panels[k][2]), FadeIn(panels[k][3]), Create(panels[k][1]))
             vo.wait_until("d")
             self.play(*[p.animate.fade(0.65) for p in panels])

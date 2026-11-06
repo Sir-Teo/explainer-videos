@@ -54,13 +54,14 @@ class Bayes(VoiceoverScene):
             self.play(FadeIn(hc))
             step = ladder(self, rows, whys, keep=3, top=1.5, x=-0.6, buff=0.55)
             vo.wait_until("b")
+            self.play(FadeOut(hc))
             step(0)
             vo.wait_until("c")
             step(1, transform=False)
             vo.wait_until("d")
             step(2)
             vo.wait_until("e")
-            self.play(FadeOut(hc), FadeIn(th, shift=UP * 0.2))
+            self.play(FadeIn(th, shift=UP * 0.2))
         self.clear_scene()
 
     def screening(self):

@@ -21,7 +21,7 @@ class Axioms(VoiceoverScene):
 
     def card(self):
         card = chapter_card(4, r"Kolmogorov's axioms", r"Three rules from which everything else follows",
-                            lit=(1933,), part=PART)
+                            lit={1933: "Kolmogorov's axioms"}, part=PART)
         with self.voiceover("Chapter four. Kolmogorov's axioms."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
@@ -91,6 +91,15 @@ class Axioms(VoiceoverScene):
         fb = cb.copy().set_fill(B_COL, opacity=0.35).set_stroke(width=0)
         la = MathTex(r"A", font_size=32, color=A_COL).move_to(ca.get_center() + LEFT * 0.5)
         lb = MathTex(r"B", font_size=32, color=B_COL).move_to(cb.get_center() + RIGHT * 0.5)
+        complement = Difference(sq, ca, stroke_width=0, fill_color=B_COL, fill_opacity=0.3)
+        ac_label = MathTex(r"A^c", font_size=30, color=B_COL).move_to(sq.get_center() + DR * 1.35)
+        inside = Circle(radius=0.72, stroke_color=A_COL, stroke_width=2.5,
+                        fill_color=A_COL, fill_opacity=0.35).move_to(sq.get_center() + LEFT * 0.3)
+        outside = Circle(radius=1.5, stroke_color=B_COL, stroke_width=2.5,
+                         fill_color=B_COL, fill_opacity=0.2).move_to(sq)
+        nested = VGroup(outside, inside,
+                        MathTex("A", font_size=32, color=A_COL).move_to(inside),
+                        MathTex("B", font_size=32, color=B_COL).move_to(sq.get_center() + RIGHT * 1.1))
         lens = Intersection(ca, cb, stroke_width=0, fill_color=WHITE, fill_opacity=0.55)
         twice = label(r"counted twice", font_size=22, color=WHITE).next_to(sq, DOWN, buff=0.2)
         rows = [
@@ -116,10 +125,13 @@ class Axioms(VoiceoverScene):
             self.play(FadeIn(sq))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=1.9, buff=0.75)
             vo.wait_until("a")
+            self.play(FadeIn(complement), FadeIn(fa), Create(ca), FadeIn(la), FadeIn(ac_label))
             step(0, transform=False)
             vo.wait_until("b")
+            self.play(FadeOut(VGroup(complement, fa, ca, la, ac_label)), FadeIn(nested))
             step(1, transform=False)
             vo.wait_until("c")
+            self.play(FadeOut(nested))
             self.play(Create(ca), Create(cb), FadeIn(la), FadeIn(lb))
             self.play(FadeIn(fa), FadeIn(fb))
             vo.wait_until("d")
