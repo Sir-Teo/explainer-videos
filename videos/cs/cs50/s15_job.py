@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs50.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, axes, load, trace
+from videos.cs.cs50.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, axes, grid_table, load, trace
 
 CFG = (("naive", r"naive: \ round robin, \ no timeouts", NO),
        ("timeouts and retry", r"150 ms timeout, \ one retry elsewhere", HEAD),
