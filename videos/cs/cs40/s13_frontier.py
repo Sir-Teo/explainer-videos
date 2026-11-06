@@ -62,7 +62,7 @@ class Frontier(VoiceoverScene):
                           r"as a fix if the project's own new tests pass", 12.4, font_size=21, color=YES),
             wrapped_label(r"but tests are an incomplete oracle: \ audits found accepted patches that were wrong, \ "
                           r"and benchmark problems that leaked into training data", 12.4, font_size=21, color=NO),
-            wrapped_label(rf"our own assembler's tests accept {surv} of {m['mutants']} single-character changes to "
+            wrapped_label(rf"our own assembler's tests accept {surv} of {m['mutants']} one-site changes to "
                           r"its code \ (Chapter 6): \ any of them, \ submitted as a patch, \ would be scored correct",
                           12.4, font_size=21, color=KERN),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(formula, DOWN, buff=0.45)

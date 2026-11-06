@@ -69,9 +69,9 @@ class Process(VoiceoverScene):
         cx, cy, R = 3.6, 1.0, 1.3
         for i, p in enumerate([r"plan", r"build", r"review", r"ship", r"learn"]):
             a = PI / 2 - i * TAU / 5
-            pos = [cx + R * math.cos(a), cy + R * math.sin(a), 0]
-            loop.add(label(p, font_size=18, color=YES).move_to(pos))
-        ring = Circle(radius=R, color=YES, stroke_width=1.5).move_to([cx, cy, 0]).set_opacity(0.5)
+            pos = [cx + (R + 0.45) * math.cos(a), cy + (R + 0.35) * math.sin(a), 0]
+            loop.add(label(p, font_size=21, color=YES).move_to(pos))
+        ring = Circle(radius=R, color=YES, stroke_width=1.5, fill_opacity=0).move_to([cx, cy, 0]).set_stroke(opacity=0.5)
         lines = VGroup(
             wrapped_label(r"Royce's 1970 paper drew the waterfall \ --- \ and called it ``risky and invites "
                           r"failure'': \ testing comes last, \ when changes cost most", 12.4, font_size=21,

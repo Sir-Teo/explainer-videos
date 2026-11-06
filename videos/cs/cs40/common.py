@@ -25,6 +25,12 @@ def module_box(name, color, w=2.3, h=0.6, font=18):
 
 def code_block(lines, size=17, color=None, buff=0.08):
     """Lines of code, left-aligned, in the series' monospace face."""
-    g = VGroup(*[mono(s, size=size, color=color) if color else mono(s, size=size) for s in lines])
+    h = mono("Xg", size=size).height
+
+    def one(s):
+        if not s.strip():                       # a blank line: an invisible spacer of one line's height
+            return Rectangle(width=0.01, height=h, stroke_width=0, fill_opacity=0)
+        return mono(s, size=size, color=color) if color else mono(s, size=size)
+    g = VGroup(*[one(s) for s in lines])
     g.arrange(DOWN, aligned_edge=LEFT, buff=buff)
     return g

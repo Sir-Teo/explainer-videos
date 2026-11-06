@@ -23,17 +23,17 @@ class Testing(VoiceoverScene):
 
     def pyramid(self):
         head = label(r"The test pyramid", font_size=36).to_edge(UP, buff=0.3)
-        levels = [(r"end-to-end: \ the whole system, \ as a user", NO, 2.6),
-                  (r"integration: \ several modules, \ real dependencies", HEAD, 4.6),
-                  (r"unit: \ one module, \ milliseconds each", YES, 6.6)]
+        levels = [(r"end-to-end: \\ the whole system", NO, 3.2),
+                  (r"integration: \ several modules", HEAD, 5.2),
+                  (r"unit: \ one module, \ milliseconds each", YES, 7.2)]
         tiers = VGroup()
         for i, (t, c, w) in enumerate(levels):
             tr = Polygon([-w / 2, 0, 0], [w / 2, 0, 0], [w / 2 - 1.0, 1.0, 0], [-w / 2 + 1.0, 1.0, 0],
                          stroke_color=c, stroke_width=2, fill_color=c, fill_opacity=0.15)
             tr.move_to([-2.8, 1.4 - i * 1.1, 0])
             lb = label(t, font_size=17, color=WHITE).move_to(tr)
-            if lb.width > w - 0.6:
-                lb.scale_to_fit_width(w - 0.6)
+            if lb.width > w - 2.1:
+                lb.scale_to_fit_width(w - 2.1)
             tiers.add(VGroup(tr, lb))
         notes = VGroup(
             wrapped_label(r"many fast, \ focused tests at the bottom; \ few slow, \ broad ones at the top \ (Cohn, "
@@ -75,7 +75,7 @@ class Testing(VoiceoverScene):
         for k in range(1, len(rows) + 1):
             tab.cells[k][2].set_color(NO)
         stats = VGroup(
-            label(rf"{f['tests']} tests, \ {len(f['rows'])} of them flaky, \ {f['runs']} runs in random orders: \ "
+            label(rf"{f['tests']} tests, \ 8 of them planted flaky, \ {f['runs']} runs in random orders: \ "
                   rf"{f['red_runs'] * 100:.0f}\% of runs red", font_size=21, color=NO),
             label(rf"re-run each failure {f['retries']} more times: \ still red in {f['red_after_retry'] * 100:.0f}\% "
                   r"--- \ and the order bug now hides", font_size=21, color=HEAD),

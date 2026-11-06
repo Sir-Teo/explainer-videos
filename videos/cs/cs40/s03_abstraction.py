@@ -157,9 +157,9 @@ class Abstraction(VoiceoverScene):
 
     def hyrum(self):
         head = label(r"Interfaces in time", font_size=36).to_edge(UP, buff=0.3)
-        inner = Circle(radius=1.0, color=YES, fill_opacity=0.15).set_fill(YES).move_to([-3.6, -0.2, 0])
+        inner = Circle(radius=1.05, color=YES, fill_opacity=0.15).set_fill(YES).move_to([-3.6, -0.2, 0])
         outer = Circle(radius=2.2, color=NO, stroke_width=2).move_to([-3.6, -0.2, 0])
-        il = label(r"the documented interface", font_size=18, color=YES).move_to(inner)
+        il = label(r"documented \\ interface", font_size=18, color=YES).move_to(inner)
         obs = VGroup(*[label(t, font_size=16, color=NO).move_to([-3.6 + 1.65 * math.cos(a), -0.2 + 1.65 *
                                                                  math.sin(a), 0])
                        for t, a in ((r"timing", 0.4), (r"error text", 1.5), (r"iteration order", 2.6),
