@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs31.common import (BG, CODE, DATA, HEAD, KERN, LAM, NO, PART, YES, edge_arrow, grid_table, load,
+from videos.cs.cs31.common import (BG, CODE, DATA, HEAD, KERN, LAM, NO, PART, YES, edge_arrow, fit_right, grid_table, load,
                                    state_node)
 
 
@@ -51,7 +51,8 @@ class Process(VoiceoverScene):
                   color=WHITE),
             label(rf"PebbleOS keeps {d['nproc']} PCBs in a table; \ Linux's \texttt{{task\_struct}} has hundreds of "
                   r"fields", font_size=21, color=GREY_A),
-        ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.35)
+        ).arrange(DOWN, buff=0.15, aligned_edge=LEFT).next_to(tab, DOWN, buff=0.45).align_to(tab, LEFT)
+        fit_right(lines)
         with self.voiceover(
             "A process is a program while it runs: the code, plus everything that changes as it runs. <bookmark "
             "mark='a'/> Here is the job's process under PebbleOS: one mebibyte of memory, from its lower bound to its "

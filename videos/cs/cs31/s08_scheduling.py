@@ -102,7 +102,7 @@ class Scheduling(VoiceoverScene):
             for name, L, c in order:
                 r = Rectangle(width=L * sc, height=0.6, stroke_color=BG, stroke_width=1, fill_color=c,
                               fill_opacity=0.85).move_to([x + L * sc / 2, 0, 0])
-                g.add(VGroup(r, label(name, font_size=20, color=GREY_A if c == GREY_D else BG).move_to(r)))
+                g.add(VGroup(r, label(name, font_size=20, color=GREY_A if c is GREY_D else BG).move_to(r)))
                 x += L * sc
             return g
         before = bars([("earlier jobs", 14, GREY_D), ("long", 24, NO), ("short", 8, YES), ("later", 14, GREY_D)])

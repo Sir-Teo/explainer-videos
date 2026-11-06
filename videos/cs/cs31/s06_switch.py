@@ -40,7 +40,7 @@ class Switch(VoiceoverScene):
         up = Arrow(pb.get_top() + LEFT * 0.5, cpu.get_bottom() + RIGHT * 0.8, buff=0.1, color=HEAD, stroke_width=3)
         dl = label(r"1. \ trap: \ save A", font_size=22, color=DATA).next_to(down, LEFT, buff=0.1)
         ul = label(r"3. \ restore B, \ \texttt{eret}", font_size=22, color=HEAD).next_to(up, RIGHT, buff=0.1)
-        mid = label(r"2. \ the scheduler \\ picks B", font_size=22, color=KERN).move_to([0, -0.55, 0])
+        mid = label(r"2. \ the scheduler \\ picks B", font_size=22, color=KERN).move_to([0, -1.75, 0])
         lines = VGroup(
             label(rf"PebbleOS: \ {d['saved_words']} words per process \ (15 registers, \ pc, \ bounds); \ a switch "
                   rf"through \texttt{{yield}} takes {d['kernel_per_switch']:.0f} kernel instructions", font_size=21,

@@ -130,7 +130,7 @@ ZH = {
         "<bookmark mark='d'/>而最大的代价在这个测量里往往看不见：换进来的进程发现缓存里满是另一个进程的数据，在重新填满之前都跑得很慢。<bookmark "
         "mark='e'/>所以调度器不应该比必要时切换得更频繁。必要的频率是多少，就是时间片的问题。",
     # ------------------------------------------------------------------ Fork
-    "Chapter six. Fork, exec, and wait.": "第6章。fork、exec 和 wait。",
+    "Chapter six. Fork, exec, and wait.": "第6章。创建进程：分叉、执行与等待。",
     "Unix creates processes with three calls.":
         "Unix 用三个调用创建进程。<bookmark mark='a'/>fork 把调用它的进程变成两个。父进程和子进程完全相同，内存内容相同，打开的文件也相同，只是 fork 在"
         "子进程中返回零，在父进程中返回子进程的编号。<bookmark mark='b'/>exec 把一个进程正在运行的程序换成另一个，进程本身和它打开的文件保持不变。"

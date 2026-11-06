@@ -33,16 +33,16 @@ class PebbleOS(VoiceoverScene):
                         ((tape, tok), (tok, pipe), (pipe, job), (job, con))])
         tags = VGroup(*[label(t, font_size=16, color=GREY_A).next_to(a, UP, buff=0.08) for t, a in zip(
             (r"\texttt{read}", r"\texttt{write}", r"\texttt{read}", r"\texttt{write}"), arrs)])
-        src = code(TOK.strip().splitlines(), size=15).to_edge(LEFT, buff=0.6).shift(DOWN * 1.2)
+        src = code(TOK.strip().splitlines(), size=14).to_edge(LEFT, buff=0.5).shift(DOWN * 1.2)
         notes = VGroup(
-            label(r"\texttt{tok}: \ the text in, \ one lower-case word per line out \ (Pebble language, \ 18 lines)",
-                  font_size=20, color=DATA),
-            label(r"\texttt{job}: \ Part 17's hash table, \ unchanged: \ it reads the words as if they were the "
-                  r"novels", font_size=20, color=HEAD),
-            label(r"both compiled by Part 13's compiler for PebbleOS: \ \texttt{getc} and \texttt{putc} become calls "
-                  r"into the 4 KiB-buffered library", font_size=20, color=WHITE),
-            label(r"the kernel: \ moves bytes, \ blocks whichever end must wait, \ preempts every 20{,}000 "
-                  r"instructions", font_size=20, color=KERN),
+            label(r"\texttt{tok}: \ the text in, \ one lower-case word \\ per line out \ (Pebble language, \ 18 lines)",
+                  font_size=21, color=DATA),
+            label(r"\texttt{job}: \ Part 17's hash table, \ unchanged: \\ it reads the words as if they were the "
+                  r"novels", font_size=21, color=HEAD),
+            label(r"both compiled by Part 13's compiler for PebbleOS: \\ \texttt{getc} and \texttt{putc} become calls "
+                  r"into \\ the 4 KiB-buffered library", font_size=21, color=WHITE),
+            label(r"the kernel: \ moves bytes, \ blocks whichever end \\ must wait, \ preempts every 20{,}000 "
+                  r"instructions", font_size=21, color=KERN),
         ).arrange(DOWN, buff=0.2, aligned_edge=LEFT).next_to(src, RIGHT, buff=0.5).align_to(src, UP)
         fit_right(notes)
         with self.voiceover(
@@ -78,7 +78,7 @@ class PebbleOS(VoiceoverScene):
                   axis_config={"color": GREY_D, "include_numbers": False}).move_to([0.4, -0.6, 0])
         pts = [ax.c2p(i, v) for i, v in enumerate(fill)]
         fl = VMobject(color=KERN, stroke_width=2).set_points_as_corners(pts)
-        fln = label(r"bytes in the pipe", font_size=17, color=KERN).next_to(ax, LEFT, buff=0.1).shift(UP * 0.4)
+        fln = label(r"bytes in \\ the pipe", font_size=17, color=KERN).next_to(ax, LEFT, buff=0.1).shift(DOWN * 0.2)
         fln.scale_to_fit_width(min(fln.width, 1.5))
         full = label(r"4096: \ full", font_size=15, color=GREY_B).next_to(ax.c2p(0, 4096), LEFT, buff=0.05)
         xa = time_axis(g, [0, 200000, 400000, 600000, 800000], y=ax.get_bottom()[1], font=13)
@@ -120,10 +120,10 @@ class PebbleOS(VoiceoverScene):
         p = load("pebbleos")
         head = label(r"Where the instructions go, \ per byte of the novels", font_size=34).to_edge(UP, buff=0.3)
         pb = p["per_byte"]
-        sc = 0.095
+        sc = 0.083
         parts = [("tok", pb["tok"], DATA), ("job", pb["job"], HEAD), ("kernel", pb["kernel"], KERN)]
         bar = VGroup()
-        x = -5.0
+        x = -5.9
         for name, v, c in parts:
             r = Rectangle(width=v * sc, height=0.7, stroke_width=0, fill_color=c, fill_opacity=0.85)
             r.move_to([x + v * sc / 2, 1.4, 0])
@@ -132,7 +132,7 @@ class PebbleOS(VoiceoverScene):
         tot = sum(v for _, v, _ in parts)
         bt = label(rf"{tot:.0f} instructions a byte", font_size=21, color=WHITE).next_to(bar, RIGHT, buff=0.25)
         r8 = Rectangle(width=p["row8_per_byte"] * sc, height=0.7, stroke_width=0, fill_color=GREY_B,
-                       fill_opacity=0.7).move_to([-5.0 + p["row8_per_byte"] * sc / 2, 0.3, 0])
+                       fill_opacity=0.7).move_to([-5.9 + p["row8_per_byte"] * sc / 2, 0.3, 0])
         r8l = label(rf"row 8, \ bare metal: \ {p['row8_per_byte']:.1f}", font_size=18, color=BG).move_to(r8)
         e = p["errors"]
         notes = VGroup(
