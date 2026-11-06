@@ -152,7 +152,7 @@ class DensitySurface(VoiceoverScene, ThreeDScene):
             self.move_camera(theta=-55 * DEGREES, run_time=max(vo.remaining(1.0) - 0.5, 1.5))
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0,
                          added_anims=[FadeOut(VGroup(ax, ridges, floors)), FadeOut(names), FadeOut(info)], run_time=0.5)
-        self.clear_scene()
+        self.clear_scene(run_time=0.1)
 
     def specs(self, sp):
         Kg = np.asarray(sp["Kg"])
