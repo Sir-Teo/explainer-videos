@@ -48,7 +48,7 @@ class Research(VoiceoverScene):
             vo.wait_until("b")
             step(1)
         self.wait(0.5)
-        self.clear_scene()
+        self.clear_scene(run_time=0.6)
 
     def unit_root(self):
         rows = [cmath(r"\rho", r"=", r"1 + \tfrac{c}{T}", font_size=34, colors={r"\rho": X_C}),
@@ -78,7 +78,7 @@ class Research(VoiceoverScene):
             "mean near minus one and a half, so with phi negative the t-statistic is shifted right. And nothing in this "
             "limit depends on the sample size: more data do not cure it."
         ) as vo:
-            step(0)
+            step(0, run_time=0.4)
             vo.wait_until("a")
             self.wait(0.1)
             vo.wait_until("b")
