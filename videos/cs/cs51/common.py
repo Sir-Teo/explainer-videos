@@ -33,3 +33,18 @@ def timeline_bar(x0: float, x1: float, y: float, color, h=0.32, scale=1.0, label
             t.move_to(r)
             return VGroup(r, t)
     return VGroup(r)
+
+
+def image(arr, height: float = 3.0, nearest: bool = True):
+    """An ImageMobject from a cached uint8 array (H x W x 3 or H x W), with a thin frame."""
+    import numpy as np
+    a = np.asarray(arr)
+    if a.ndim == 2:
+        a = np.stack([a] * 3, axis=-1)
+    if a.shape[-1] == 3:
+        a = np.concatenate([a, np.full(a.shape[:2] + (1,), 255, np.uint8)], axis=-1)
+    img = ImageMobject(a.astype(np.uint8))
+    if nearest:
+        img.set_resampling_algorithm(RESAMPLING_ALGORITHMS["nearest"])
+    img.height = height
+    return Group(img, SurroundingRectangle(img, buff=0.0, color=GREY_D, stroke_width=1.2))
