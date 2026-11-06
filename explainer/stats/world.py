@@ -455,6 +455,98 @@ class World:
         return e["u"] < p
 
     # ------------------------------------------------------------------
+    # Natural experiments (Part 37): an instrument, a cutoff and a rollout
+    # ------------------------------------------------------------------
+    SCHOOLING_N = 200_000
+    RETURN_TO_SCHOOLING = 0.075  # log points of weekly wage per year of schooling
+
+    @cached_property
+    def schooling(self) -> dict:
+        """A labour-force survey linked to the school registry (Part 37): 200,000 men and women aged 30 to 50.
+        Quarter of birth ``q`` (1-4) is as good as random.  Ability ``a`` ~ N(0, 1).  Compulsory schooling lets
+        people leave at 16, and those born in the first quarter start school older, so reach 16 having done less:
+        S = 12.6 + 1.5 a - 0.15 [q = 1] - 0.06 [q = 2] + N(0, 1.2^2), rounded to whole years in 6..20.  Log weekly
+        wage w = 6.0 + 0.075 S + 0.22 a + N(0, 0.30^2): ability raises both, so OLS overstates the return, and quarter
+        of birth is a (weak) instrument.  ``idx`` are the residents surveyed, ``region`` their regions."""
+        g = self.rng("schooling")
+        eligible = np.flatnonzero((self.age >= 30) & (self.age <= 50))
+        idx = np.sort(g.choice(eligible, self.SCHOOLING_N, replace=False))
+        n = len(idx)
+        q = g.integers(1, 5, n)
+        a = g.standard_normal(n)
+        s = 12.6 + 1.5 * a - 0.15 * (q == 1) - 0.06 * (q == 2) + 1.2 * g.standard_normal(n)
+        s = np.clip(np.round(s), 6, 20)
+        w = 6.0 + self.RETURN_TO_SCHOOLING * s + 0.22 * a + 0.30 * g.standard_normal(n)
+        return {"idx": idx, "region": self.region[idx], "q": q, "ability": a, "school": s, "logwage": w}
+
+    SCHOLARSHIP_N = 40_000
+    SCHOLARSHIP_CUTOFF = 60.0
+    SCHOLARSHIP_EFFECT = 3.0  # thousands a year at the cutoff
+
+    @staticmethod
+    def scholarship_tau(r):
+        """The scholarship's effect on earnings at 30 (thousands) for a school-leaver with score r: larger for weaker
+        students, 3.0 at the cutoff."""
+        return 3.0 - 0.10 * (np.asarray(r, float) - 60.0)
+
+    @cached_property
+    def scholarship(self) -> dict:
+        """Ten years of school-leavers (Part 37): 40,000 exam scores ``r`` = 52 + 14 (0.75 a + 0.66 N(0,1)) on a
+        0-100 scale, to one decimal, where a ~ N(0,1) is aptitude.  Scoring at least 60 wins a university
+        scholarship.  Earnings at 30 (thousands), convex in the score: y0 = 20 + 0.015 r^2 + 4 a + N(0, 5^2) and
+        y1 = y0 + tau(r) + N(0, 1), tau(r) = 3.0 - 0.1 (r - 60).  ``offer`` = r >= 60 (sharp); ``took``: 80% of those
+        offered take it up and 5% of the others win one on appeal (fuzzy).  ``remarked``: the scores after teachers
+        re-mark 35% of the scripts that fell in [56, 60) to just above the line (manipulation)."""
+        g = self.rng("scholarship")
+        n = self.SCHOLARSHIP_N
+        a = g.standard_normal(n)
+        r = np.clip(np.round(52 + 14 * (0.75 * a + 0.66 * g.standard_normal(n)), 1), 0, 100)
+        y0 = 20 + 0.015 * r ** 2 + 4 * a + 5 * g.standard_normal(n)
+        y1 = y0 + self.scholarship_tau(r) + g.standard_normal(n)
+        offer = r >= self.SCHOLARSHIP_CUTOFF
+        took = np.where(offer, g.random(n) < 0.80, g.random(n) < 0.05)
+        bump = (r >= 56) & (r < 60) & (g.random(n) < 0.35)
+        remarked = np.where(bump, np.round(60 + g.random(n), 1), r)
+        return {"score": r, "aptitude": a, "y0": y0, "y1": y1, "offer": offer, "took": took, "remarked": remarked}
+
+    ROLLOUT_YEARS = np.arange(2000, 2020)
+    ROLLOUT_COHORTS = (2004, 2009, 2014)
+    ROLLOUT_COUNTS = (76, 56, 48, 20)  # towns in the three cohorts, then never
+    ROLLOUT_SLOPES = (0.7, 0.3, 0.05)  # points of employment gained per year since adoption, by cohort
+
+    @classmethod
+    def rollout_panel(cls, g: np.random.Generator) -> dict:
+        """One draw from the law of the rollout (``rollout`` is the World's own draw; the Board draws more).  Town
+        employment rates (%) for 2000-2019: y0_it = a_i + g_t + e_it with a_i ~ N(60, 5^2), a common trend and
+        cycle g_t = 0.1 t + 1.5 sin(2 pi t/9), and AR(1) shocks (rho 0.8, innovations 0.6).  Towns adopt a jobs
+        programme in 2004, 2009 or 2014, or never, at random (76, 56, 48 and 20 towns).  Its effect grows with time
+        since adoption, faster in earlier cohorts: tau_it = s_g (t - G_i + 1) with s = 0.7, 0.3, 0.05."""
+        years = cls.ROLLOUT_YEARS
+        T = len(years)
+        G = np.repeat(list(cls.ROLLOUT_COHORTS) + [np.inf], cls.ROLLOUT_COUNTS).astype(float)
+        g.shuffle(G)
+        n_towns = len(G)
+        a = 60 + 5 * g.standard_normal(n_towns)
+        gam = 0.1 * np.arange(T) + 1.5 * np.sin(2 * np.pi * np.arange(T) / 9)
+        e = np.zeros((n_towns, T))
+        e[:, 0] = g.standard_normal(n_towns)
+        for t in range(1, T):
+            e[:, t] = 0.8 * e[:, t - 1] + 0.6 * g.standard_normal(n_towns)
+        y0 = a[:, None] + gam[None, :] + e
+        tau = np.zeros((n_towns, T))
+        for c, s in zip(cls.ROLLOUT_COHORTS, cls.ROLLOUT_SLOPES):
+            m = G == c
+            tau[m] = np.where(years[None, :] >= c, s * (years[None, :] - c + 1), 0.0)
+        D = years[None, :] >= G[:, None]
+        return {"years": years, "G": G, "y0": y0, "tau": tau, "y": y0 + tau, "D": D, "att": float(tau[D].mean())}
+
+    @cached_property
+    def rollout(self) -> dict:
+        """The World's staggered rollout (Part 37): ``rollout_panel`` drawn once from the block's stream for the 200
+        towns.  ``att`` is the true average effect over treated town-years."""
+        return self.rollout_panel(self.rng("rollout"))
+
+    # ------------------------------------------------------------------
     # Sampling and the truth
     # ------------------------------------------------------------------
     def sample(self, n: int, among: np.ndarray | None = None, seed: int = 0) -> np.ndarray:

@@ -1222,3 +1222,41 @@ def nsw() -> dict:
     for k in ("re74", "re75", "re78"):
         out[k] = np.array([float(r[k]) for r in rows])
     return out
+
+
+# Snow (1855), *On the Mode of Communication of Cholera*, 2nd ed., Table IX: cholera deaths in the first seven weeks of
+# the 1854 epidemic by the company supplying each house.  Southwark & Vauxhall drew from the Thames at Battersea, below
+# the sewer outfalls; Lambeth had moved its intake upstream to Thames Ditton in 1852.
+SNOW = [("Southwark & Vauxhall", 40_046, 1_263, 315), ("Lambeth", 26_107, 98, 37),
+        ("rest of London", 256_423, 1_422, 59)]
+
+# Card & Krueger (AER 1994), Table 3: mean full-time-equivalent employment per fast-food restaurant before (Feb-Mar
+# 1992) and after (Nov-Dec 1992) New Jersey's minimum wage rose from $4.25 to $5.05 on 1 April 1992; standard errors
+# in parentheses in the paper.  410 restaurants (331 in New Jersey, 79 in eastern Pennsylvania).
+CARD_KRUEGER = {"PA": (23.33, 21.17), "NJ": (20.44, 21.03), "se_PA": (1.35, 0.94), "se_NJ": (0.51, 0.52),
+                "did": 2.76, "se_did": 1.36, "n_NJ": 331, "n_PA": 79}
+
+
+def prop99() -> dict:
+    """Per-capita cigarette sales (packs) in 39 US states, 1970-2000 (Abadie, Diamond & Hainmueller 2010): California,
+    whose Proposition 99 raised the tobacco tax and funded anti-smoking programmes from 1989, and the 38 states without
+    large tobacco-control programmes in the period.  From R's tidysynth package (``smoking``, MIT licence).  Returns
+    ``states``, ``years`` and the matrix ``cigsale`` [state, year], with the covariates ``lnincome``, ``beer``,
+    ``age15to24`` and ``retprice`` (NaN where missing)."""
+    import csv
+    from pathlib import Path
+
+    import numpy as np
+
+    with open(Path(__file__).parent / "data" / "prop99.csv", newline="") as f:
+        rows = list(csv.DictReader(f))
+    states = sorted({r["state"] for r in rows})
+    years = sorted({int(r["year"]) for r in rows})
+    out = {"states": states, "years": np.array(years)}
+    for k in ("cigsale", "lnincome", "beer", "age15to24", "retprice"):
+        M = np.full((len(states), len(years)), np.nan)
+        for r in rows:
+            if r[k] != "":
+                M[states.index(r["state"]), years.index(int(r["year"]))] = float(r[k])
+        out[k] = M
+    return out

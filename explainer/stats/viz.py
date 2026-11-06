@@ -2288,3 +2288,61 @@ class CausalGraph(VGroup):
 
     def open(self, path, Z=()) -> bool:
         return self.dag.is_open(path, Z)
+
+
+class CutoffLens(VGroup):
+    """The regression-discontinuity lens (Part 37) on axes ``ax``: binned means of the outcome against the running
+    variable (left of the cutoff in ``left_color``, right in ``right_color``) and the cutoff as a dashed line.
+    ``window(h)`` shades the kernel's reach [c - h, c + h] with the triangular weights drawn along the floor;
+    ``fit(coef, h, side)`` draws a local polynomial (coefficients in powers of (x - c)/h, as statkit.quasi returns them)
+    on one side; ``jump(a_left, a_right)`` the gap between the two intercepts at c, with a label."""
+
+    def __init__(self, ax, mids, means, c: float, left_color=None, right_color=None, radius: float = 0.05,
+                 opacity: float = 0.85):
+        super().__init__()
+        self.ax, self.c = ax, float(c)
+        self.lc, self.rc = left_color or S.CTRL, right_color or S.TREAT
+        mids, means = np.asarray(mids, float), np.asarray(means, float)
+        ok = np.isfinite(means)
+        self.dots = VGroup(*[Dot(ax.c2p(x, y), radius=radius, color=self.lc if x < c else self.rc, fill_opacity=opacity)
+                             for x, y in zip(mids[ok], means[ok])])
+        self._y0 = bounds(ax)[2:]
+        self.line = DashedLine(ax.c2p(c, self._y0[0]), ax.c2p(c, self._y0[1]), color=GREY_B, stroke_width=2)
+        self.add(self.line, self.dots)
+
+    def window(self, h: float, color=None, opacity: float = 0.12) -> VGroup:
+        col = color or S.ACCENT
+        y0, y1 = self._y0
+        x0, x1 = bounds(self.ax)[:2]
+        a, b = self.ax.c2p(max(self.c - h, x0), y0), self.ax.c2p(min(self.c + h, x1), y1)
+        box = Rectangle(width=b[0] - a[0], height=b[1] - a[1], stroke_width=0, fill_color=col, fill_opacity=opacity)
+        box.move_to([(a[0] + b[0]) / 2, (a[1] + b[1]) / 2, 0])
+        peak = 0.18 * (b[1] - a[1])
+        us = np.linspace(max(self.c - h, x0), min(self.c + h, x1), 41)
+        pts = [self.ax.c2p(u, y0) + np.array([0, peak * max(0.0, 1 - abs(u - self.c) / h), 0]) for u in us]
+        tri = Polygon(self.ax.c2p(us[0], y0), *pts, self.ax.c2p(us[-1], y0), stroke_color=col, stroke_width=2,
+                      fill_color=col, fill_opacity=0.35)
+        return VGroup(box, tri)
+
+    def fit(self, coef, h: float, side: str = "right", color=None, stroke_width: float = 4, n: int = 60):
+        coef = np.asarray(coef, float)
+        x0, x1 = bounds(self.ax)[:2]
+        xs = np.linspace(self.c, min(self.c + h, x1), n) if side == "right" else np.linspace(max(self.c - h, x0), self.c, n)
+        u = (xs - self.c) / h
+        ys = sum(cf * u ** k for k, cf in enumerate(coef))
+        y0, y1 = self._y0
+        keep = (ys >= y0) & (ys <= y1)
+        m = VMobject(stroke_color=color or (self.rc if side == "right" else self.lc), stroke_width=stroke_width)
+        m.set_points_smoothly([self.ax.c2p(a, b) for a, b in zip(xs[keep], ys[keep])])
+        return m
+
+    def jump(self, a_left: float, a_right: float, text: str | None = None, color=None, font_size: int = 22):
+        from explainer.analysis import label
+
+        col = color or S.ACCENT
+        p, q = self.ax.c2p(self.c, a_left), self.ax.c2p(self.c, a_right)
+        arr = DoubleArrow(p, q, buff=0, color=col, stroke_width=4, tip_length=0.14, max_tip_length_to_length_ratio=0.4)
+        g = VGroup(Dot(p, radius=0.07, color=self.lc), Dot(q, radius=0.07, color=self.rc), arr)
+        if text:
+            g.add(label(text, font_size=font_size, color=col).next_to(arr, RIGHT, buff=0.15))
+        return g
