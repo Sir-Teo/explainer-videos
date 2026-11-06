@@ -1,0 +1,419 @@
+{
+ "title": "计算机科学，从零搭建 · 第36部分：网络（一）：搬运比特",
+ "chapters": {
+  "Hook": "一个数据报",
+  "Packets": "1. 电路与分组",
+  "Layers": "2. 分层与端到端论证",
+  "Phy": "3. 导线上的比特",
+  "Link": "4. 帧",
+  "Mac": "5. 共享一个信道",
+  "Bridges": "6. 网桥与交换机",
+  "Ip": "7. IP",
+  "Forwarding": "8. 转发",
+  "Dv": "9. 距离向量",
+  "Ls": "10. 链路状态",
+  "Bgp": "11. BGP",
+  "Sdn": "12. 软件定义网络",
+  "Internet": "13. 我们的互联网",
+  "Wireless": "14. 无线",
+  "Frontier": "15. 前沿：可编程、可验证、可收敛",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "19262bd5ab93": {
+   "scene": "Hook",
+   "en": "Pebble 1, a computer in San Francisco, sends sixteen bytes to Pebble 2 in Frankfurt: call me Ishmael. <bookmark mark='a'/> By the time they leave the machine they are sixty-four bytes. The message is wrapped in a UDP header, which names the program it is for; that in an IP header, which names the machine; that in an Ethernet frame, which names the next box on the cable, and ends with a checksum. <bookmark mark='b'/> Here are the actual bytes, as our network builds them. <bookmark mark='c'/> Every layer adds its own envelope, and every one of them is there for a reason this part will find.",
+   "zh": "Pebble 1 是旧金山的一台计算机，它向法兰克福的 Pebble 2 发送十六个字节：Call me Ishmael。<bookmark mark='a'/>等它们离开机器时，已经变成了六十四个字节。消息被包进一个 UDP 头部，标明它交给哪个程序；再包进 IP 头部，标明哪台机器；再包进以太网帧，标明电缆上的下一个盒子，最后附上一个校验和。<bookmark mark='b'/>这是我们的网络构造出的真实字节。<bookmark mark='c'/>每一层都加上自己的信封，而每一个信封的存在，都有这一部分将要找出的理由。"
+  },
+  "5b2b1e79d1b7": {
+   "scene": "Hook",
+   "en": "The bytes cross an internet that we simulate in this part: eight cities, ten cables, routers that forward by the rules real routers use. <bookmark mark='a'/> The route: San Francisco to New York, across the Atlantic to Paris, on to Frankfurt. <bookmark mark='b'/> Traceroute reveals it, by a trick we will meet in chapter seven, router by router: forty-six milliseconds to New York and back, a hundred and three to Paris, a hundred and eight to Frankfurt. <bookmark mark='c'/> And here is the surprise. Eleven thousand kilometres of glass, there and back, at two thirds of the speed of light, take a hundred and eight milliseconds. The routers and queues add almost nothing. The network is as fast as physics allows; what is hard is everything else.",
+   "zh": "这些字节穿过一个我们在这一部分模拟的互联网：八座城市，十条电缆，路由器按照真实路由器所用的规则转发。<bookmark mark='a'/>路线是：旧金山到纽约，横跨大西洋到巴黎，再到法兰克福。<bookmark mark='b'/>traceroute 用一个第七章会讲到的技巧，逐个路由器地揭示了它：到纽约往返四十六毫秒，到巴黎一百零三，到法兰克福一百零八。<bookmark mark='c'/>惊人之处在这里。一万一千公里的玻璃，一去一回，以三分之二的光速，需要一百零八毫秒。路由器和队列几乎没有增加什么。网络已经快到物理允许的极限；难的是其余的一切。"
+  },
+  "6b7be7048566": {
+   "scene": "Hook",
+   "en": "This is Part 36 of Computer Science, Built: Networks, moving bits, the first part of the act about many machines. <bookmark mark='a'/> We start with the idea of the packet, and the layers that carry it. We derive what limits each layer: Shannon's capacity for a wire, a checksum's power, the throughput of a shared channel. We build switches, addresses and a forwarding table, then the three ways the Internet routes: distance vector, link state, and BGP, the protocol that holds the Internet's networks together and that can be hijacked. And we finish with our own internet, wireless, and networks you can program.",
+   "zh": "这是计算机科学，从零搭建，第36部分：网络，搬运比特，关于许多台机器的这一幕的第一部分。<bookmark mark='a'/>我们从分组的想法，以及承载它的分层开始。我们推导出每一层的极限：一根导线的香农容量，校验和的能力，共享信道的吞吐量。我们搭建交换机、地址和转发表，然后是互联网路由的三种方式：距离向量，链路状态，以及 BGP，那个把互联网的众多网络连在一起、又可能被劫持的协议。最后是我们自己的互联网、无线，以及可以编程的网络。"
+  },
+  "8d96031b01a6": {
+   "scene": "Packets",
+   "en": "Chapter one. Circuits and packets.",
+   "zh": "第一章。电路与分组。"
+  },
+  "bbb906c41b4e": {
+   "scene": "Packets",
+   "en": "The telephone network was built on circuits. <bookmark mark='a'/> A call reserved a path of wires and switches from end to end for as long as it lasted, which guaranteed it a fixed share of every link, whether anyone spoke or not. <bookmark mark='b'/> Computers do not talk like people. They are silent, then send a burst, then are silent again, and a reserved line sits idle most of the time. <bookmark mark='c'/> The alternative is to cut data into packets, each carrying its destination, and let every packet share every link. The six bursty users here fit on two shared lines, with a short queue when bursts coincide. <bookmark mark='d'/> The price is that nothing is guaranteed: packets can wait, arrive out of order, or be dropped when a queue overflows.",
+   "zh": "电话网是建立在电路之上的。<bookmark mark='a'/>一次通话从头到尾预留一条由导线和交换机组成的路径，持续整个通话，这保证了它在每条链路上占有固定的份额，不管有没有人说话。<bookmark mark='b'/>计算机说话的方式与人不同。它们先沉默，然后突发一阵，再沉默，于是预留的线路大部分时间都闲着。<bookmark mark='c'/>另一种做法是把数据切成分组，每个分组带着自己的目的地，让每个分组共享每条链路。这里六个突发的用户挤进了两条共享线路，突发碰在一起时排一个短队。<bookmark mark='d'/>代价是什么都不保证：分组可能要等，可能乱序到达，队列溢出时还可能被丢弃。"
+  },
+  "c9e88d46a553": {
+   "scene": "Packets",
+   "en": "How much does sharing save? Suppose each user is active a tenth of the time, independently, and a link can carry ten active users at once. <bookmark mark='a'/> With circuits, it serves ten users. With packets, thirty-five users can share it: the number active at once follows a binomial distribution, and more than ten are active only four times in ten thousand. <bookmark mark='b'/> The saving grows with scale. A thousand users need a thousand circuits, but a packet link sized for a hundred and thirty-seven of them overflows less than once in ten thousand. <bookmark mark='c'/> This is the law of large numbers from Part 20, and it is the economic reason the Internet is built from packets.",
+   "zh": "共享能省多少？假设每个用户有十分之一的时间活跃，彼此独立，一条链路同时能承载十个活跃用户。<bookmark mark='a'/>用电路，它服务十个用户。用分组，三十五个用户可以共享它：同时活跃的人数服从二项分布，超过十个的概率只有万分之四。<bookmark mark='b'/>规模越大，节省越多。一千个用户需要一千条电路，而一条按一百三十七人设计的分组链路，溢出的概率不到万分之一。<bookmark mark='c'/>这是第20部分的大数定律，也是互联网由分组构成的经济原因。"
+  },
+  "eb61a170d85a": {
+   "scene": "Packets",
+   "en": "The idea had two inventors. <bookmark mark='a'/> Paul Baran at RAND, in 1964, designed a network for the Cold War, a mesh of small message blocks that would keep working after losing most of its nodes. <bookmark mark='b'/> Donald Davies in Britain, independently, called them packets. <bookmark mark='c'/> In 1969 the ARPANET sent its first message, from UCLA to the Stanford Research Institute. It was meant to be LOGIN; the system crashed after two letters. <bookmark mark='d'/> In 1974 Vint Cerf and Bob Kahn designed a protocol to connect different networks into one, an inter-network. <bookmark mark='e'/> On the first of January 1983, ARPANET switched to it, TCP and IP. <bookmark mark='f'/> Today some seventy-five thousand independent networks run it as one Internet.",
+   "zh": "这个想法有两位发明者。<bookmark mark='a'/>1964 年，兰德公司的 Paul Baran 为冷战设计了一种网络，一张由小消息块组成的网，即使失去大部分节点也能继续工作。<bookmark mark='b'/>英国的 Donald Davies 独立地想到了它，并称之为分组。<bookmark mark='c'/>1969 年，ARPANET 发出了第一条消息，从加州大学洛杉矶分校到斯坦福研究所。本来要发的是 LOGIN；系统在两个字母之后崩溃了。<bookmark mark='d'/>1974 年，Vint Cerf 和 Bob Kahn 设计了一个把不同网络连成一个的协议，一个网际网络。<bookmark mark='e'/>1983 年 1 月 1 日，ARPANET 切换到了它，TCP 和 IP。<bookmark mark='f'/>如今大约七万五千个独立的网络运行着它，构成同一个互联网。"
+  },
+  "7ca1cf9eec8b": {
+   "scene": "Layers",
+   "en": "Chapter two. Layers.",
+   "zh": "第二章。分层。"
+  },
+  "f962a332f252": {
+   "scene": "Layers",
+   "en": "Networks are built in layers, each a service for the one above. <bookmark mark='a'/> At the top, the application, here our sixteen bytes. Below it, transport, which delivers to the right program; network, which moves packets between machines anywhere; link, which moves frames across one cable; and the physical layer, which turns bits into signals. <bookmark mark='b'/> Sending, each layer wraps what it is given in its own header: data, then a UDP header, then IP, then an Ethernet frame. <bookmark mark='c'/> Each layer's header is read only by the same layer at the other end, as if the two talked directly. <bookmark mark='d'/> A router in the middle implements only the bottom three. It strips the frame, reads the IP header to choose the next link, and wraps the packet in a new frame for that link.",
+   "zh": "网络是分层构建的，每一层为上面一层提供服务。<bookmark mark='a'/>最上面是应用，这里是我们的十六个字节。下面是传输层，把数据交给正确的程序；网络层，在任意地方的机器之间搬运分组；链路层，在一条电缆上搬运帧；还有物理层，把比特变成信号。<bookmark mark='b'/>发送时，每一层都把收到的东西包进自己的头部：数据，然后是 UDP 头部，然后是 IP，然后是以太网帧。<bookmark mark='c'/>每一层的头部只由另一端的同一层读取，就像两者在直接交谈。<bookmark mark='d'/>中间的路由器只实现底下三层。它剥掉帧，读 IP 头部来选择下一条链路，再为那条链路把分组包进一个新的帧。"
+  },
+  "6a85076a1aaa": {
+   "scene": "Layers",
+   "en": "Draw the protocols the Internet actually uses, layer by layer, and the picture is an hourglass. <bookmark mark='a'/> Many applications on top; a few transports; many kinds of link at the bottom. And in the middle, at the waist, exactly one protocol: IP. <bookmark mark='b'/> Because everything speaks IP, any application runs over any link. Wi-Fi and 5G arrived without changing the web, and the web arrived without changing Ethernet. The cost is that the waist itself is almost impossible to change: IPv6 was specified in 1998, and the Internet is still moving to it. <bookmark mark='c'/> And envelopes cost bytes: sixteen bytes of data take eighty-four on the wire, a fifth efficient; full-sized packets are ninety-six percent.",
+   "zh": "把互联网实际使用的协议一层一层画出来，得到的是一个沙漏。<bookmark mark='a'/>顶上是许多应用；几种传输协议；底下是许多种链路。而在中间的腰部，恰好只有一个协议：IP。<bookmark mark='b'/>因为大家都说 IP，任何应用都能跑在任何链路上。Wi-Fi 和 5G 来了，网页不用改；网页来了，以太网也不用改。代价是腰部本身几乎无法改变：IPv6 在 1998 年就已制定，互联网至今仍在向它迁移。<bookmark mark='c'/>信封也要花字节：十六个字节的数据在线路上占八十四个字节，效率五分之一；满尺寸的分组是百分之九十六。"
+  },
+  "17275e4e3017": {
+   "scene": "Layers",
+   "en": "Which layer should do what? In 1984 Jerome Saltzer, David Reed and David Clark gave the answer that shaped the Internet. <bookmark mark='a'/> Suppose you copy a file across the network, and every link checks every frame with a CRC. <bookmark mark='b'/> A router can still corrupt a packet while it sits in the router's own memory, where no link check can see it. Say this happens once in a billion packets. <bookmark mark='c'/> A gigabyte crosses fifteen hops in seven hundred thousand packets, and about one copy in a hundred arrives damaged, every link check having passed. <bookmark mark='d'/> Only the two ends, comparing a checksum of the whole file, can know. So the network can be simple and best-effort, and the hard guarantees live at the edges. <bookmark mark='e'/> David Clark later wrote down the priorities: the first goal was to keep working when parts of the network failed. Accounting came last.",
+   "zh": "哪一层该做什么？1984 年，Jerome Saltzer、David Reed 和 David Clark 给出了塑造互联网的答案。<bookmark mark='a'/>假设你通过网络复制一个文件，每条链路都用 CRC 检查每一帧。<bookmark mark='b'/>路由器仍然可能在自己的内存里损坏一个分组，而那里是任何链路检查都看不到的。假设这种事十亿个分组发生一次。<bookmark mark='c'/>一个千兆字节分成七十万个分组，经过十五跳，大约每一百份拷贝就有一份损坏到达，而每一次链路检查都通过了。<bookmark mark='d'/>只有两端比较整个文件的校验和，才能知道。所以网络可以简单、尽力而为，硬性的保证放在边缘。<bookmark mark='e'/>David Clark 后来写下了各项目标的优先次序：第一个目标是在网络部分失效时仍能工作。计费排在最后。"
+  },
+  "d3084cd84ea3": {
+   "scene": "Phy",
+   "en": "Chapter three. Bits on a wire.",
+   "zh": "第三章。导线上的比特。"
+  },
+  "bcc4d1658e55": {
+   "scene": "Phy",
+   "en": "The physical layer turns bits into a signal: a voltage on copper, light in glass, a radio wave. Two results bound what it can do. <bookmark mark='a'/> Harry Nyquist showed in 1928 that a channel of bandwidth B can carry at most two B independent pulses each second. <bookmark mark='b'/> And Claude Shannon showed in 1948, the theorem we met in Part 28, that with noise the capacity is B times the logarithm of one plus the signal-to-noise ratio. Below that rate, coding can make errors as rare as you like. Above it, nothing can. <bookmark mark='c'/> For a telephone line, thirty-six kilobits a second; for an eighty-megahertz Wi-Fi channel, eight hundred megabits; <bookmark mark='d'/> and the last dial-up modems reached thirty-three point six kilobits on such a line. The bound is not just theory: engineering gets close to it.",
+   "zh": "物理层把比特变成信号：铜线上的电压，玻璃里的光，无线电波。有两个结果限定了它能做什么。<bookmark mark='a'/>Harry Nyquist 在 1928 年证明，带宽为 B 的信道每秒最多承载 2B 个独立脉冲。<bookmark mark='b'/>Claude Shannon 在 1948 年证明，也就是我们在第28部分见过的定理，有噪声时容量是 B 乘以一加信噪比的对数。低于这个速率，编码可以让错误想多少就多少。高于它，什么都做不到。<bookmark mark='c'/>对电话线，每秒三万六千比特；对八十兆赫的 Wi-Fi 信道，八亿比特；<bookmark mark='d'/>而最后一代拨号调制解调器在这样的线路上达到了每秒三万三千六百比特。这个界限不只是理论：工程能逼近它。"
+  },
+  "587de5bddfbb": {
+   "scene": "Phy",
+   "en": "How do real systems approach the limit? <bookmark mark='a'/> By sending, in each symbol, one of M points in a plane: an amplitude and a phase, which together encode log two of M bits. Sixteen points, four bits a symbol. The labels are Gray-coded, so neighbouring points differ in one bit. <bookmark mark='b'/> Noise scatters each received point into a cloud, and the receiver picks the nearest point. At twenty-four decibels the clouds are tight; at fourteen they touch, and several percent of symbols are wrong. <bookmark mark='c'/> Sixty-four points carry six bits, but packed closer, they need about six decibels more signal for the same error rate.",
+   "zh": "真实系统怎样逼近这个极限？<bookmark mark='a'/>在每个符号里发送平面上 M 个点中的一个：一个幅度和一个相位，合起来编码 log 以二为底 M 个比特。十六个点，每个符号四个比特。标号是格雷码，所以相邻的点只差一个比特。<bookmark mark='b'/>噪声把每个收到的点散成一团云，接收方挑最近的点。在二十四分贝，云团很紧；在十四分贝，它们碰在一起，有百分之几的符号错了。<bookmark mark='c'/>六十四个点承载六个比特，但挤得更密，同样的错误率需要多约六分贝的信号。"
+  },
+  "8960d5aff684": {
+   "scene": "Phy",
+   "en": "We sent two hundred thousand random symbols for each size and signal level, and counted errors. <bookmark mark='a'/> The measured rates fall on the textbook formula's curves, and each curve sits further right, needing more signal, as the points multiply. <bookmark mark='b'/> Now compare with Shannon. To carry four bits a symbol, Shannon needs a signal-to-noise ratio of fifteen, under twelve decibels; uncoded 16-QAM needs twenty to reach one error in a million bits. The gap is about eight and a half decibels, whatever the size. <bookmark mark='c'/> Closing it is the job of Part 28's error-correcting codes. Modern links with LDPC or polar codes run within a fraction of a decibel of the limit.",
+   "zh": "对每种大小和每个信号电平，我们发送了二十万个随机符号，并统计错误。<bookmark mark='a'/>测得的错误率落在教科书公式的曲线上，点越多，曲线越往右，需要的信号越强。<bookmark mark='b'/>现在和香农比较。每个符号承载四个比特，香农需要的信噪比是十五，不到十二分贝；未编码的 16-QAM 要到二十分贝，才能达到百万分之一的误比特率。差距大约八点五分贝，不管大小如何。<bookmark mark='c'/>弥合这个差距，是第28部分纠错码的工作。采用 LDPC 或极化码的现代链路，离极限只差零点几分贝。"
+  },
+  "01bd3fc756e0": {
+   "scene": "Phy",
+   "en": "Capacity is one limit; distance is the other. <bookmark mark='a'/> Light in glass travels about two hundred thousand kilometres a second, two thirds of its speed in vacuum. A round trip from New York to London takes at least fifty-five milliseconds; to Singapore and back from London, a hundred and eighteen. No engineering can lower these. <bookmark mark='b'/> Multiply the rate by the round trip and you get the bandwidth-delay product, the bytes that must be in flight to keep the pipe full. At a hundred gigabits a second across the Atlantic, six hundred and eighty-eight megabytes are in the cable at once. Part 37's TCP has to manage exactly that.",
+   "zh": "容量是一个极限；距离是另一个。<bookmark mark='a'/>光在玻璃里每秒大约走二十万公里，是真空中速度的三分之二。纽约到伦敦的往返至少要五十五毫秒；伦敦到新加坡再回来，一百一十八毫秒。任何工程都无法降低这些数字。<bookmark mark='b'/>把速率乘以往返时间，就得到带宽时延积，也就是为了填满管道必须同时在途的字节数。以每秒一千亿比特横跨大西洋，同时在电缆里的有六亿八千八百万字节。第37部分的 TCP 要管理的正是这个。"
+  },
+  "613120e1b4af": {
+   "scene": "Link",
+   "en": "Chapter four. Frames.",
+   "zh": "第四章。帧。"
+  },
+  "88a7c7c6a503": {
+   "scene": "Link",
+   "en": "A link carries a stream of bits. The first problem is to know where each frame begins and ends. <bookmark mark='a'/> One answer marks each end with a special pattern, a flag: zero, six ones, zero. <bookmark mark='b'/> But data can contain that pattern too. So the sender, whenever it has sent five ones in a row, inserts a zero, and the receiver, seeing five ones and a zero, removes it. <bookmark mark='c'/> Now six ones in a row can never appear inside a frame, and the flag is unambiguous, whatever the data. This is bit stuffing, from the HDLC family of protocols. <bookmark mark='d'/> Ethernet does it differently: a fixed preamble before each frame, and silence between them.",
+   "zh": "链路承载的是一串比特。第一个问题是知道每一帧从哪里开始、到哪里结束。<bookmark mark='a'/>一种答案是用一个特殊的模式标记两端，一个标志：零，六个一，零。<bookmark mark='b'/>但数据里也可能出现这个模式。所以发送方每连续发出五个一，就插入一个零；接收方看到五个一加一个零，就把它删掉。<bookmark mark='c'/>这样帧内部永远不会出现连续六个一，标志就没有歧义了，不管数据是什么。这叫比特填充，来自 HDLC 一族协议。<bookmark mark='d'/>以太网的做法不同：每帧前面一个固定的前导码，帧与帧之间是静默。"
+  },
+  "0fbbf4ec997e": {
+   "scene": "Link",
+   "en": "Below framing there is a quieter problem: the receiver must sample each bit at the right moment, and it has no wire carrying the sender's clock. <bookmark mark='a'/> It recovers the clock from the signal's edges. Sent as plain levels, a long run of zeros is a flat line, and the receiver's clock drifts until it miscounts the bits. <bookmark mark='b'/> The first Ethernet used Manchester coding: every bit is a transition, up for a one, down for a zero, so edges never stop, at the cost of signalling twice as fast. <bookmark mark='c'/> Faster Ethernets use cheaper codes: four bits in five symbols, eight in ten, and at ten gigabits and above, sixty-four bits in sixty-six, with the bits scrambled so long runs are vanishingly rare. Ninety-seven percent of the line carries data.",
+   "zh": "在分帧之下还有一个更隐蔽的问题：接收方必须在正确的时刻对每个比特采样，而没有一根导线传送发送方的时钟。<bookmark mark='a'/>它从信号的跳变中恢复时钟。以普通电平发送时，一长串零是一条平线，接收方的时钟就会漂移，直到数错比特。<bookmark mark='b'/>最早的以太网使用曼彻斯特编码：每个比特都是一次跳变，一为向上，零为向下，所以跳变永不停止，代价是信号速率翻倍。<bookmark mark='c'/>更快的以太网使用更省的编码：五个符号装四个比特，十个装八个，到每秒一百亿比特及以上，六十六个装六十四个，并把比特加扰，使长串几乎不可能出现。线路的百分之九十七承载着数据。"
+  },
+  "3be14339f878": {
+   "scene": "Link",
+   "en": "The second problem is noise. <bookmark mark='a'/> Each Ethernet frame ends with a frame check sequence: the remainder when the frame, read as a polynomial over two elements, is divided by a fixed polynomial of degree thirty-two. This is the cyclic redundancy check of Part 28, the same one zip files and PNG images use. <bookmark mark='b'/> We corrupted a hundred thousand frames four ways. Single flipped bits, pairs, bursts up to thirty-two bits long: every one detected, as the algebra guarantees. Even frames replaced by pure noise: none slipped through. <bookmark mark='c'/> Random garbage passes only once in four billion tries. <bookmark mark='d'/> But a CRC only detects. A damaged frame is thrown away, and whether it is ever sent again is another layer's business.",
+   "zh": "第二个问题是噪声。<bookmark mark='a'/>每个以太网帧末尾是一个帧校验序列：把帧看成系数为二元的多项式，除以一个固定的三十二次多项式得到的余数。这就是第28部分的循环冗余校验，zip 文件和 PNG 图像用的也是它。<bookmark mark='b'/>我们用四种方式损坏了十万个帧。单个比特翻转、两个比特、长达三十二位的突发：每一个都被检出，正如代数所保证的。即使把帧换成纯噪声：也没有一个漏过。<bookmark mark='c'/>随机的垃圾只有四十亿分之一的机会通过。<bookmark mark='d'/>但 CRC 只负责检测。损坏的帧被扔掉，至于它会不会被重发，是另一层的事。"
+  },
+  "edc53b63c08e": {
+   "scene": "Link",
+   "en": "Here is an Ethernet frame, field by field, with our bytes. <bookmark mark='a'/> Six bytes of destination address and six of source. These are MAC addresses: forty-eight bits, fixed in each network interface when it is made, the first half naming the manufacturer. <bookmark mark='b'/> An address of all ones is broadcast: every machine on the cable takes the frame. <bookmark mark='c'/> Two bytes of type say what the payload is, here IPv4, so the receiving machine knows which layer to hand it to. <bookmark mark='d'/> Then the payload, and the CRC. A frame is never shorter than sixty-four bytes, and the reason is the subject of the next chapter.",
+   "zh": "这是一个以太网帧，逐个字段，用的是我们的字节。<bookmark mark='a'/>六个字节的目的地址，六个字节的源地址。这些是 MAC 地址：四十八位，在网络接口出厂时固定，前一半标明制造商。<bookmark mark='b'/>全一的地址是广播：电缆上的每台机器都接收这一帧。<bookmark mark='c'/>两个字节的类型说明载荷是什么，这里是 IPv4，于是接收的机器知道该交给哪一层。<bookmark mark='d'/>然后是载荷和 CRC。一帧从不短于六十四个字节，原因是下一章的主题。"
+  },
+  "48b73fcd1a71": {
+   "scene": "Mac",
+   "en": "Chapter five. Sharing a channel.",
+   "zh": "第五章。共享一个信道。"
+  },
+  "9ddfa6c02367": {
+   "scene": "Mac",
+   "en": "In 1970 Norman Abramson's ALOHAnet linked the Hawaiian islands by radio, every station sharing one frequency, with the simplest possible rule: when you have a frame, send it. <bookmark mark='a'/> If two frames overlap, both are garbled, and each sender tries again later, at random. <bookmark mark='b'/> How much gets through? Let frames start as a Poisson process, G of them per frame time, counting retries. A frame survives only if no other starts in the frame time before it or the frame time after: a window of two. <bookmark mark='c'/> The chance of that is e to the minus two G, so the throughput is G e to the minus two G. Its maximum, at G equal to a half, is one over two e: eighteen percent. <bookmark mark='d'/> If stations may start only at slot boundaries, the window halves, and the throughput doubles to one over e.",
+   "zh": "1970 年，Norman Abramson 的 ALOHAnet 用无线电连接了夏威夷群岛，每个站共享同一个频率，规则简单到极点：有帧就发。<bookmark mark='a'/>如果两帧重叠，两者都被搅乱，每个发送方随后在随机的时刻重试。<bookmark mark='b'/>能通过多少？让帧的开始构成一个泊松过程，每个帧时间G 个，包括重试。一帧只有在它之前的一个帧时间和之后的一个帧时间里都没有别的帧开始时才能幸存：一个长为二的窗口。<bookmark mark='c'/>这件事的概率是 e 的负二 G 次方，所以吞吐量是 G 乘 e 的负二 G 次方。它的最大值在 G 等于二分之一处，是二 e 分之一：百分之十八。<bookmark mark='d'/>如果只允许在时隙边界开始，窗口减半，吞吐量翻倍，成为 e 分之一。"
+  },
+  "e4e2daa7e550": {
+   "scene": "Mac",
+   "en": "We simulated eighty thousand frames at each load. <bookmark mark='a'/> Pure ALOHA's measured throughput falls on G e to the minus two G, peaking at point one eight four; slotted ALOHA's on G e to the minus G, peaking at point three six eight. <bookmark mark='b'/> Past the peak the curves fall: more traffic means more collisions, which mean more retries, which mean more traffic. Offered too much, a random-access channel collapses, and every such protocol must keep its load below the peak.",
+   "zh": "在每种负载下我们模拟了八万帧。<bookmark mark='a'/>纯 ALOHA 测得的吞吐量落在 G 乘 e 的负二 G 次方上，峰值零点一八四；时隙 ALOHA 落在 G 乘 e 的负 G 次方上，峰值零点三六八。<bookmark mark='b'/>过了峰值曲线就下降：流量越多，冲突越多，重试越多，流量又越多。给得太多，随机接入的信道就会崩溃，每一个这类协议都必须把负载保持在峰值以下。"
+  },
+  "6eb9393a1ebe": {
+   "scene": "Mac",
+   "en": "Bob Metcalfe's Ethernet, at Xerox in 1973, improved on ALOHA in three ways. <bookmark mark='a'/> Listen before sending, and wait if the cable is busy. <bookmark mark='b'/> While sending, keep listening; if the signal is garbled, someone else started too, so stop at once. <bookmark mark='c'/> Then wait a random number of slots, doubling the range after each collision, so the more crowded the cable, the more the stations spread out. <bookmark mark='d'/> A slot is the time for a signal to cross the longest cable and come back, and a frame must last at least that long, or a sender could finish before hearing the collision. That is why frames are at least sixty-four bytes. <bookmark mark='e'/> We simulated twenty busy stations. With delay small relative to the frame, efficiency is over ninety percent. Metcalfe and Boggs's formula matches the idealized protocol exactly, and real backoff does as well or better.",
+   "zh": "1973 年，Bob Metcalfe 在施乐设计的以太网，在三个方面改进了 ALOHA。<bookmark mark='a'/>发送前先听，电缆忙就等待。<bookmark mark='b'/>发送时继续听；如果信号被搅乱，说明别人也开始了，立刻停下。<bookmark mark='c'/>然后等待随机数目的时隙，每次冲突后把范围加倍，于是电缆越拥挤，各站就散得越开。<bookmark mark='d'/>一个时隙是信号穿过最长的电缆再返回的时间，一帧至少要持续这么久，否则发送方可能在听到冲突之前就发完了。这就是为什么帧至少有六十四个字节。<bookmark mark='e'/>我们模拟了二十个忙碌的站。时延相对于帧很小时，效率超过百分之九十。Metcalfe 和 Boggs 的公式与理想化的协议完全吻合，而真实的退避做得一样好，甚至更好。"
+  },
+  "86945f2ed82f": {
+   "scene": "Mac",
+   "en": "Radio breaks carrier sense. <bookmark mark='a'/> Stations A and C can both reach the access point B, but not each other. Each listens, hears silence, and sends, and their frames collide at B. <bookmark mark='b'/> To each other they are back to ALOHA, and the throughput collapses as the load grows. <bookmark mark='c'/> The fix is to ask first: a short request to send, which can still collide but costs little, and B's reply, clear to send, which both A and C hear, and which reserves the air for the frame. In our simulation, at a load of two, it more than doubles the throughput. <bookmark mark='d'/> And because a radio cannot listen while it transmits, Wi-Fi cannot detect collisions as Ethernet does. It avoids them, and acknowledges every frame.",
+   "zh": "无线电让载波侦听失效。<bookmark mark='a'/>站 A 和站 C 都能到达接入点 B，但彼此听不见。每个都先听，听到一片寂静，于是发送，它们的帧在 B 处相撞。<bookmark mark='b'/>对彼此而言，它们又回到了 ALOHA，负载一高，吞吐量就崩溃。<bookmark mark='c'/>解决办法是先问：一个短短的请求发送，它仍可能冲突，但代价很小；然后是 B 的回答，允许发送，A 和 C 都能听到，它为这一帧预留了空中信道。在我们的模拟里，负载为二时，它让吞吐量翻了一倍多。<bookmark mark='d'/>又因为无线电发送时无法同时收听，Wi-Fi 不能像以太网那样检测冲突。它只能避免冲突，并对每一帧进行确认。"
+  },
+  "5f26682a5d71": {
+   "scene": "Bridges",
+   "en": "Chapter six. Bridges and switches.",
+   "zh": "第六章。网桥与交换机。"
+  },
+  "ad55b2ab6f34": {
+   "scene": "Bridges",
+   "en": "Ethernets grew by joining segments with bridges, now called switches. Connect them with spare links for redundancy, and the network has loops. <bookmark mark='a'/> A bridge that does not know where a destination is sends the frame out of every port except the one it arrived on, and a broadcast always goes everywhere. <bookmark mark='b'/> In a loop, each copy comes back around and is copied again. In our five-bridge network one broadcast becomes more than a million frames within twenty hops, and nothing stops it: unlike IP packets, Ethernet frames carry no hop count. This is a broadcast storm, and it brings a network down in seconds.",
+   "zh": "以太网靠用网桥连接网段而扩大，网桥如今叫交换机。为了冗余加上备用链路，网络就有了环。<bookmark mark='a'/>一个不知道目的地在哪里的网桥，会把帧从除入口外的每个端口发出去，而广播总是发往各处。<bookmark mark='b'/>在环里，每份拷贝绕一圈回来，又被复制一次。在我们的五网桥网络里，一个广播在二十跳之内变成了一百多万帧，而且没有什么能阻止它：与 IP 分组不同，以太网帧不带跳数。这就是广播风暴，几秒钟就能让网络瘫痪。"
+  },
+  "9ede394ab41b": {
+   "scene": "Bridges",
+   "en": "Radia Perlman, at Digital Equipment in 1985, found the cure, and wrote it up as a poem. <bookmark mark='a'/> Each bridge keeps a belief: which bridge is the root, how far away it is, and through which neighbour. Bridges tell their neighbours their beliefs, and each adopts the best offer it hears: the lowest root, then the shortest distance. <bookmark mark='b'/> The bridge with the lowest identifier becomes the root; every other bridge keeps one port towards it, and ports on any other loop-forming link are blocked. The links that stay active form a spanning tree. <bookmark mark='c'/> Now the broadcast crosses each tree link once, reaches each host once, and stops. <bookmark mark='d'/> When a link fails, the bridges recompute the tree, and a blocked port wakes up.",
+   "zh": "1985 年，数字设备公司的 Radia Perlman 找到了解药，还把它写成了一首诗。<bookmark mark='a'/>每个网桥保持一个信念：哪个网桥是根，离它有多远，经过哪个邻居。网桥把信念告诉邻居，每个网桥采纳听到的最好的提议：根最小的，其次是距离最短的。<bookmark mark='b'/>标识符最小的网桥成为根；其他每个网桥保留一个通往根的端口，其余构成环的链路上的端口被阻塞。保持活跃的链路构成一棵生成树。<bookmark mark='c'/>现在广播在每条树边上只走一次，每台主机只收到一次，然后停止。<bookmark mark='d'/>当一条链路失效时，网桥重新计算这棵树，一个被阻塞的端口醒了过来。"
+  },
+  "b0b11a284608": {
+   "scene": "Bridges",
+   "en": "Bridges also learn. <bookmark mark='a'/> Each one notes the source address of every frame it sees and the port it arrived on. <bookmark mark='b'/> A frame for an address it has never seen is flooded along the tree; a frame for an address it has learned goes out of one port only. <bookmark mark='c'/> The first frame from Ana to Ben costs seven copies. Ben's reply costs three, and after that, so does every frame between them, and the rest of the network never sees them. <bookmark mark='d'/> None of this needs configuring. Plug in a switch and it works, which is a large part of why Ethernet won.",
+   "zh": "网桥还会学习。<bookmark mark='a'/>每个网桥记下它见到的每一帧的源地址，以及到达的端口。<bookmark mark='b'/>发往从未见过的地址的帧，沿着树泛洪；发往已经学到的地址的帧，只从一个端口出去。<bookmark mark='c'/>Ana 发给 Ben 的第一帧要七份拷贝。Ben 的回复要三份，此后他们之间的每一帧都是三份，网络的其余部分根本看不到它们。<bookmark mark='d'/>这一切都不需要配置。插上一台交换机它就能工作，这是以太网胜出的一大原因。"
+  },
+  "0e50b497f359": {
+   "scene": "Ip",
+   "en": "Chapter seven. IP.",
+   "zh": "第七章。IP。"
+  },
+  "616eabb23a3b": {
+   "scene": "Ip",
+   "en": "IP names every interface with a thirty-two-bit address, written as four numbers. <bookmark mark='a'/> The address is read as a prefix and a rest: here the first twenty-four bits name a network, ten dot four dot zero, and the last eight a machine on it. Routers forward on prefixes, not on single addresses. <bookmark mark='b'/> Since 1993 prefixes can have any length, and neighbouring prefixes that go the same way can be merged into one shorter prefix, which keeps routing tables small. <bookmark mark='c'/> Four billion addresses turned out not to be enough. Most homes now share a single public address through network address translation, the router rewriting ports on the way out and back. <bookmark mark='d'/> IPv6 has a hundred and twenty-eight bits: enough for about seven times ten to the twenty-three addresses for every square metre of the planet.",
+   "zh": "IP 用一个三十二位的地址命名每个接口，写成四个数。<bookmark mark='a'/>地址被读成前缀加其余部分：这里前二十四位命名一个网络，十点四点零，后八位命名其中的一台机器。路由器按前缀转发，而不是按单个地址。<bookmark mark='b'/>自 1993 年起，前缀可以是任意长度，走向相同的相邻前缀可以合并成一个更短的前缀，这让路由表保持很小。<bookmark mark='c'/>四十亿个地址后来证明不够。如今大多数家庭通过网络地址转换共用一个公网地址，路由器在出去和回来时改写端口。<bookmark mark='d'/>IPv6 有一百二十八位：足够让地球上每平方米分到大约七乘十的二十三次方个地址。"
+  },
+  "ac0cf05a8a5c": {
+   "scene": "Ip",
+   "en": "Every IP packet starts with twenty bytes. <bookmark mark='a'/> A version, a length, an identifier, the protocol inside, a checksum of the header, and the two addresses. <bookmark mark='b'/> And a time to live: every router subtracts one, and a router that brings it to zero drops the packet. That is what keeps a routing loop from circulating a packet for ever, the safeguard Ethernet frames lack. <bookmark mark='c'/> A packet too big for the next link can be cut into fragments, each with its own header, its offset in units of eight bytes, and a flag saying more follow; only the destination puts them back together. <bookmark mark='d'/> Fragments cause trouble, a lost one ruins the whole packet, so modern hosts discover the smallest link size on the path instead.",
+   "zh": "每个 IP 分组都以二十个字节开头。<bookmark mark='a'/>一个版本号，一个长度，一个标识符，里面的协议，头部的校验和，以及两个地址。<bookmark mark='b'/>还有一个生存时间：每个路由器减一，把它减到零的路由器就丢弃这个分组。正是它让路由环路不能永远转着一个分组，这是以太网帧所缺的保护。<bookmark mark='c'/>对下一条链路来说太大的分组可以被切成分片，每片有自己的头部、以八字节为单位的偏移，以及一个表示后面还有的标志；只有目的地才把它们重新拼起来。<bookmark mark='d'/>分片会带来麻烦，丢一片整个分组就毁了，所以现代主机改为探测路径上最小的链路尺寸。"
+  },
+  "c71cdb3fb993": {
+   "scene": "Ip",
+   "en": "A packet carries two pairs of addresses, and they do different jobs. <bookmark mark='a'/> Follow our datagram hop by hop. The IP addresses, Pebble 1 to Pebble 2, never change; only the time to live counts down. But the Ethernet addresses change at every hop: each frame is addressed from this cable's sender to this cable's receiver, the next router. <bookmark mark='b'/> How does Pebble 1 learn its router's hardware address? It broadcasts a question on its local network: who has ten dot one dot zero dot one? The router answers with its MAC address, and Pebble 1 remembers it. That is ARP, the address resolution protocol. <bookmark mark='c'/> Nothing checks the answer, so on a local network anyone can claim to be the gateway, which is why switches in offices now watch for false replies.",
+   "zh": "一个分组带着两对地址，它们各司其职。<bookmark mark='a'/>逐跳跟踪我们的数据报。IP 地址，Pebble 1 到 Pebble 2，始终不变；只有生存时间在倒数。但以太网地址每一跳都变：每一帧都从这条电缆的发送方发往这条电缆的接收方，也就是下一个路由器。<bookmark mark='b'/>Pebble 1 怎样知道路由器的硬件地址？它在本地网络上广播一个问题：谁是十点一点零点一？路由器用它的 MAC 地址回答，Pebble 1 记住它。这就是 ARP，地址解析协议。<bookmark mark='c'/>没有任何东西检查这个回答，所以在本地网络上任何人都可以冒充网关，这就是为什么如今办公室里的交换机会监视虚假的回答。"
+  },
+  "f3ef5cf0c80a": {
+   "scene": "Ip",
+   "en": "The time to live also gives us traceroute, the tool behind the opening's list of routers. <bookmark mark='a'/> Send a packet with a time to live of one. The first router decrements it to zero, drops it, and, as the rules require, sends back an error message, time exceeded, from its own address. <bookmark mark='b'/> Send another with two, and the second router answers; and so on, until the destination itself replies. In our simulation: San Francisco, New York, Paris, Frankfurt, and Pebble 2. <bookmark mark='c'/> Van Jacobson wrote it in 1987, a diagnostic built entirely out of an error message. <bookmark mark='d'/> On the real Internet some routers decline to answer, and traceroute prints stars.",
+   "zh": "生存时间还给了我们 traceroute，开头那张路由器列表背后的工具。<bookmark mark='a'/>发送一个生存时间为一的分组。第一个路由器把它减到零，丢弃它，并按照规则，从自己的地址发回一条错误消息：超时。<bookmark mark='b'/>再发一个生存时间为二的，第二个路由器回答；依此类推，直到目的地本身回复。在我们的模拟里：旧金山、纽约、巴黎、法兰克福，然后是 Pebble 2。<bookmark mark='c'/>Van Jacobson 在 1987 年写了它，一个完全用错误消息搭成的诊断工具。<bookmark mark='d'/>在真实的互联网上，有些路由器拒绝回答，traceroute 就打印星号。"
+  },
+  "1badd2335160": {
+   "scene": "Forwarding",
+   "en": "Chapter eight. Forwarding.",
+   "zh": "第八章。转发。"
+  },
+  "e8324c15e647": {
+   "scene": "Forwarding",
+   "en": "A router's forwarding table maps prefixes to next hops. <bookmark mark='a'/> A packet arrives for ten dot four dot zero dot two. <bookmark mark='b'/> Four entries contain it, from the default route, which contains everything, to a slash twenty-four. <bookmark mark='c'/> The rule is that the longest matching prefix wins, so it leaves on port seven. <bookmark mark='d'/> That rule is what lets a provider announce one large aggregate and still route a few exceptions differently. <bookmark mark='e'/> The difficulty is size. A router in the core of the Internet holds about a million IPv4 prefixes and must search them for every packet.",
+   "zh": "路由器的转发表把前缀映射到下一跳。<bookmark mark='a'/>来了一个发往十点四点零点二的分组。<bookmark mark='b'/>有四个表项包含它，从包含一切的默认路由，到一个斜杠二十四。<bookmark mark='c'/>规则是最长的匹配前缀胜出，所以它从端口七出去。<bookmark mark='d'/>正是这条规则，让一家运营商可以通告一个大的聚合前缀，同时把少数例外路由到别处。<bookmark mark='e'/>难点在于规模。互联网核心的一台路由器存有大约一百万个 IPv4 前缀，而且每个分组都要在其中查找。"
+  },
+  "9a15b4497337": {
+   "scene": "Forwarding",
+   "en": "We built a table of a hundred thousand prefixes with the real Internet's mix of lengths, and searched it four ways. <bookmark mark='a'/> Checking every prefix is hopeless: a hundred thousand comparisons, thirty milliseconds in Python. <bookmark mark='b'/> The binary trie of Part 17 follows the address one bit at a time down a tree of prefixes, remembering the last next hop it passed: about twenty-one memory reads. <bookmark mark='c'/> A multibit trie takes eight bits at each step, expanding short prefixes so that every slot of a node is filled: under three reads, at the cost of more memory per node. <bookmark mark='d'/> All four give the same answer for every address we tried. The design choice is how much memory to spend to save reads.",
+   "zh": "我们按真实互联网的长度分布建了一张十万个前缀的表，用四种方法查找。<bookmark mark='a'/>逐个检查每个前缀毫无希望：十万次比较，在 Python 里三十毫秒。<bookmark mark='b'/>第17部分的二叉字典树沿着前缀树一次跟随地址的一个比特，记住经过的最后一个下一跳：大约二十一次内存读取。<bookmark mark='c'/>多比特字典树每一步取八个比特，把短前缀展开，填满节点的每个槽：不到三次读取，代价是每个节点更多的内存。<bookmark mark='d'/>对我们试过的每个地址，四种方法给出的答案都相同。设计上的选择是：花多少内存来省下读取。"
+  },
+  "7b09d03ed8ae": {
+   "scene": "Forwarding",
+   "en": "How fast must this be? <bookmark mark='a'/> A port at four hundred gigabits a second receives a minimum-size packet, sixty-four bytes plus twenty of preamble and gap, every one point seven nanoseconds. <bookmark mark='b'/> A read from DRAM takes about fifty: thirty packets arrive while one memory access completes. Software cannot keep up. <bookmark mark='c'/> So routers use a special memory, the ternary content-addressable memory, which compares a key against every entry in parallel, with don't-care bits, and reports the first match. <bookmark mark='d'/> Store the prefixes longest first, and the first match is the longest match: one lookup every clock cycle. <bookmark mark='e'/> TCAMs are power-hungry, so routers also pipeline compressed tries in fast on-chip memory. Forwarding is algorithms and hardware designed together.",
+   "zh": "这必须多快？<bookmark mark='a'/>一个每秒四千亿比特的端口，每一点七纳秒就收到一个最小尺寸的分组，六十四个字节加上二十个字节的前导码和间隔。<bookmark mark='b'/>一次 DRAM 读取要五十纳秒左右：一次内存访问完成之前，三十个分组已经到了。软件跟不上。<bookmark mark='c'/>所以路由器使用一种特殊的存储器，三态内容寻址存储器，它把一个键同时与每个表项比较，允许无关位，并报告第一个匹配。<bookmark mark='d'/>把前缀按从长到短存放，第一个匹配就是最长匹配：每个时钟周期一次查找。<bookmark mark='e'/>TCAM 很耗电，所以路由器还在快速的片上存储器里流水化地处理压缩的字典树。转发是算法与硬件共同设计的结果。"
+  },
+  "6b02c33c6b9a": {
+   "scene": "Forwarding",
+   "en": "A fast lookup is only half of a router. <bookmark mark='a'/> The other half is the switching fabric that joins its line cards: in each time slot, every input may send one cell to one output. <bookmark mark='b'/> If each input keeps a single queue, a cell whose output is busy blocks every cell behind it, even cells for outputs sitting idle. <bookmark mark='c'/> We simulated saturated switches. Two ports deliver seventy-five percent; as the switch grows, throughput falls towards two minus the square root of two, fifty-eight point six percent, the limit Karol, Hluchyj and Morgan derived in 1987. <bookmark mark='d'/> The cure is a separate queue at each input for each output, and a matching computed every slot between inputs and outputs, as Nick McKeown's iSLIP does. Then the fabric runs at full rate.",
+   "zh": "快速查找只是路由器的一半。<bookmark mark='a'/>另一半是连接各线卡的交换结构：在每个时隙，每个输入可以向一个输出发送一个信元。<bookmark mark='b'/>如果每个输入只有一个队列，一个输出正忙的信元就会挡住它后面的所有信元，即使那些信元要去的输出正闲着。<bookmark mark='c'/>我们模拟了饱和的交换机。两个端口时传送百分之七十五；交换机越大，吞吐量越接近二减根号二，百分之五十八点六，这是 Karol、Hluchyj 和 Morgan 在 1987 年推导出的极限。<bookmark mark='d'/>解药是在每个输入为每个输出各设一个队列，并在每个时隙计算输入与输出之间的一个匹配，就像 Nick McKeown 的 iSLIP 那样。这样交换结构就能满速运行。"
+  },
+  "66b6ba81f489": {
+   "scene": "Dv",
+   "en": "Chapter nine. Distance vector.",
+   "zh": "第九章。距离向量。"
+  },
+  "f3f7eb30c5b0": {
+   "scene": "Dv",
+   "en": "The oldest way to compute routes is to gossip. <bookmark mark='a'/> Each router knows only the cost of its own links. Periodically it sends its neighbours its current table of distances, its distance vector. <bookmark mark='b'/> Each router then recomputes: the best distance to y is the cheapest neighbour, counting the link to that neighbour plus the distance the neighbour claims. This is the Bellman equation of Part 18, solved by many machines at once. <bookmark mark='c'/> Here is router u's table, round by round. At first it knows only its neighbours. Each round, news travels one hop further, <bookmark mark='d'/> and after four rounds every table has settled on the true shortest distances, the same as Dijkstra computes on the whole map. The ARPANET routed this way from 1969, and RIP still does.",
+   "zh": "计算路由最古老的办法是传闲话。<bookmark mark='a'/>每个路由器只知道自己链路的代价。它定期把当前的距离表，也就是它的距离向量，发给邻居。<bookmark mark='b'/>然后每个路由器重新计算：到 y 的最佳距离来自最便宜的那个邻居，算上到这个邻居的链路，再加上这个邻居声称的距离。这就是第18部分的贝尔曼方程，由许多台机器同时求解。<bookmark mark='c'/>这是路由器 u 的表，一轮一轮地看。起初它只知道邻居。每一轮，消息多传一跳，<bookmark mark='d'/>四轮之后，每张表都稳定在真正的最短距离上，与 Dijkstra 在整张图上算出的相同。ARPANET 从 1969 年起就这样路由，RIP 至今仍然如此。"
+  },
+  "d5c17a9587c1": {
+   "scene": "Dv",
+   "en": "Distance vector has a famous flaw. Take three routers in a line. <bookmark mark='a'/> The link from B to C fails. B knows at once that its direct route is gone. <bookmark mark='b'/> But A has been telling B, every round, that A can reach C at distance two. B does not know that A's route runs through B itself, so B concludes it can reach C through A, at three. Then A hears B say three, and updates to four. <bookmark mark='c'/> Good news spreads in a few rounds; bad news crawls, one step a round, while packets for C bounce between A and B. It ends only at the number the protocol calls infinity: sixteen, in RIP, which is why RIP networks are limited to fifteen hops.",
+   "zh": "距离向量有一个著名的缺陷。取三个排成一线的路由器。<bookmark mark='a'/>从 B 到 C 的链路断了。B 立刻知道它的直达路由没了。<bookmark mark='b'/>但 A 每一轮都在告诉 B，A 能以距离二到达 C。B 不知道 A 的路由恰恰经过 B 自己，于是 B 断定可以经 A 到达 C，距离三。接着 A 听到 B 说三，更新为四。<bookmark mark='c'/>好消息几轮就传开；坏消息却一轮一步地爬，而去往 C 的分组在 A 和 B 之间来回弹跳。直到协议称为无穷大的那个数才结束：在 RIP 里是十六，这就是为什么 RIP 网络限制在十五跳以内。"
+  },
+  "3889b38246b6": {
+   "scene": "Dv",
+   "en": "There are patches. <bookmark mark='a'/> Split horizon: never advertise a route to the neighbour you use for it. A would not tell B about C at all. <bookmark mark='b'/> Poisoned reverse: tell that neighbour the route is infinitely long. On the line, both settle in two rounds. <bookmark mark='c'/> But in a triangle feeding a fourth router, the loop has three members, and each can still learn the dead route from another: our simulation counts to infinity just as before, with either patch. <bookmark mark='d'/> The real cure is to give routers more than a number: the whole map, which is link state, or the whole path, which is BGP.",
+   "zh": "有一些补丁。<bookmark mark='a'/>水平分割：不要把一条路由通告给你为它所用的那个邻居。A 根本不会把 C 告诉 B。<bookmark mark='b'/>毒性逆转：告诉那个邻居这条路由无限长。在直线上，两者都在两轮内稳定。<bookmark mark='c'/>但在一个连着第四个路由器的三角形里，环有三个成员，每个仍能从另一个那里学到已经死掉的路由：无论用哪个补丁，我们的模拟都和之前一样数到无穷大。<bookmark mark='d'/>真正的解药是给路由器比一个数字更多的信息：整张地图，也就是链路状态；或者整条路径，也就是 BGP。"
+  },
+  "ffb73e493256": {
+   "scene": "Dv",
+   "en": "How does distance vector do on our eight-city internet? <bookmark mark='a'/> From empty tables it converges in four rounds, the hop count of the longest shortest path. <bookmark mark='b'/> Now cut the cable from Amsterdam to Frankfurt. London's route had used it; but a path through Paris costs exactly the same, and the tables settle in three rounds. With split horizon, Amsterdam has no route at all for a round, then finds the nine-millisecond one through London and Paris. <bookmark mark='c'/> When a good alternative exists, its good news overtakes the bad. The count to infinity needs a destination that is really cut off, or an alternative far longer than what was lost. <bookmark mark='d'/> And every answer matches Dijkstra's, computed without any router ever seeing the map.",
+   "zh": "距离向量在我们八城市的互联网上表现如何？<bookmark mark='a'/>从空表开始，它在四轮内收敛，等于最长的最短路径的跳数。<bookmark mark='b'/>现在剪断阿姆斯特丹到法兰克福的电缆。伦敦的路由原本用着它；但经巴黎的路径代价完全相同，表在三轮内稳定。用水平分割时，阿姆斯特丹有一轮完全没有路由，然后找到经伦敦和巴黎的九毫秒路由。<bookmark mark='c'/>有好的替代路径时，好消息会追上坏消息。数到无穷大需要一个真正被切断的目的地，或者一条比失去的路由长得多的替代路径。<bookmark mark='d'/>而每个答案都与 Dijkstra 的一致，却没有任何路由器见过地图。"
+  },
+  "e9e67cefe47b": {
+   "scene": "Ls",
+   "en": "Chapter ten. Link state.",
+   "zh": "第十章。链路状态。"
+  },
+  "294852000578": {
+   "scene": "Ls",
+   "en": "The ARPANET abandoned distance vector in 1980 for a different idea. <bookmark mark='a'/> Each router describes only its own links, in a small message called a link-state advertisement, with a sequence number so that newer news replaces older. <bookmark mark='b'/> It floods the advertisement: every router that receives a new one passes it on over every other link, once. London's reaches all eight routers of our internet in three hops. <bookmark mark='c'/> Soon every router holds the same map of the whole network, and runs Dijkstra's algorithm from Part 18 to find its shortest paths. This is OSPF, and IS-IS, inside nearly every large network today. <bookmark mark='d'/> And a failure is simply announced. Nobody has to infer it from silence, so there is no counting to infinity.",
+   "zh": "1980 年，ARPANET 放弃了距离向量，转向另一个想法。<bookmark mark='a'/>每个路由器只描述自己的链路，写成一条叫链路状态通告的小消息，带一个序号，让新消息取代旧消息。<bookmark mark='b'/>它泛洪这条通告：每个收到新通告的路由器，都把它从其他每条链路转发出去，只转一次。伦敦的通告在三跳之内到达我们互联网的全部八个路由器。<bookmark mark='c'/>很快每个路由器都持有同一张完整的网络地图，并运行第18部分的 Dijkstra 算法求自己的最短路径。这就是 OSPF 和 IS-IS，如今几乎每个大型网络内部都在用。<bookmark mark='d'/>故障只需宣布。没有人需要从沉默中推断它，所以不会数到无穷大。"
+  },
+  "afcfb2d490e3": {
+   "scene": "Ls",
+   "en": "Link state is not instantaneous either. <bookmark mark='a'/> In our internet, the cable from Amsterdam to Frankfurt fails. London has been reaching Frankfurt through Amsterdam. <bookmark mark='b'/> The news floods, and each router recomputes when it gets to it: Amsterdam first, London last, two hundred milliseconds later. <bookmark mark='c'/> In between, the tables disagree. Amsterdam now sends Frankfurt's traffic back to London, and London still sends it to Amsterdam: a loop. <bookmark mark='d'/> We sent forty packets from London to Frankfurt, one every ten milliseconds, from the moment of the cut. Five died at the dead link. Sixteen bounced between London and Amsterdam until their time to live ran out. Only when London updated did packets flow again, via Paris. Real networks shorten these windows by computing backup routes in advance.",
+   "zh": "链路状态也不是瞬时的。<bookmark mark='a'/>在我们的互联网里，阿姆斯特丹到法兰克福的电缆断了。伦敦一直是经阿姆斯特丹到达法兰克福的。<bookmark mark='b'/>消息泛洪开来，每个路由器在处理到它时重新计算：阿姆斯特丹最先，伦敦最后，晚了两百毫秒。<bookmark mark='c'/>在这之间，各张表互相矛盾。阿姆斯特丹现在把去法兰克福的流量送回伦敦，而伦敦仍然把它送往阿姆斯特丹：一个环。<bookmark mark='d'/>我们从断线那一刻起，每十毫秒从伦敦向法兰克福发一个分组，共四十个。五个死在断掉的链路上。十六个在伦敦和阿姆斯特丹之间弹跳，直到生存时间耗尽。直到伦敦更新，分组才经巴黎重新流动。真实的网络会预先算好备份路由，来缩短这样的窗口。"
+  },
+  "ee34c63485ba": {
+   "scene": "Bgp",
+   "en": "Chapter eleven. BGP.",
+   "zh": "第十一章。BGP。"
+  },
+  "29b046bb358e": {
+   "scene": "Bgp",
+   "en": "Between networks, the Internet routes by policy, not by distance. <bookmark mark='a'/> It is made of about seventy-five thousand autonomous systems, each a network under one administration, connected as customers and providers, or as peers who exchange traffic for free. At the top, a handful of tier-one networks peer with each other and buy from nobody. <bookmark mark='b'/> They speak BGP. A route carries its whole path of systems, so a system that sees itself in a path rejects it: no counting to infinity. <bookmark mark='c'/> Then money decides. Prefer routes learned from customers, who pay you; then peers; then providers, whom you pay. <bookmark mark='d'/> And never carry traffic between two of your providers for free: export peer and provider routes only to customers. <bookmark mark='e'/> Lixin Gao and Jennifer Rexford proved in 2001 that these economic rules guarantee BGP converges. <bookmark mark='f'/> On our synthetic internet of a hundred and twenty-five systems, a stub's prefix reaches every system in six rounds, over paths of three or four.",
+   "zh": "在网络之间，互联网按策略而不是按距离路由。<bookmark mark='a'/>它由大约七万五千个自治系统组成，每个是一个由单一机构管理的网络，彼此以客户和供应商的关系相连，或者作为免费交换流量的对等方。最顶上，少数几个一级网络彼此对等，不向任何人购买。<bookmark mark='b'/>它们说 BGP。一条路由带着它经过的所有系统的完整路径，所以一个系统在路径里看到自己就拒绝它：不会数到无穷大。<bookmark mark='c'/>然后由钱来决定。优先选择从客户那里学到的路由，客户付钱给你；其次是对等方；最后是供应商，你付钱给它们。<bookmark mark='d'/>而且绝不免费在你的两个供应商之间转运流量：对等方和供应商的路由只导出给客户。<bookmark mark='e'/>高立新和 Jennifer Rexford 在 2001 年证明，这些经济规则保证 BGP 收敛。<bookmark mark='f'/>在我们一百二十五个系统的合成互联网上，一个末端网络的前缀在六轮之内到达每个系统，路径长三到四。"
+  },
+  "1f4c96ba0e44": {
+   "scene": "Bgp",
+   "en": "BGP believes what it is told. <bookmark mark='a'/> In February 2008 Pakistan Telecom was ordered to block YouTube within Pakistan. <bookmark mark='b'/> It announced a slash-twenty-four inside YouTube's address block, to send local traffic nowhere, and the announcement leaked to its provider, and from there to the world. <bookmark mark='c'/> Because the longest prefix wins, most of the Internet sent YouTube's traffic to Pakistan for about two hours. <bookmark mark='d'/> We repeated it on our internet. A stub claiming the same prefix as the victim captures the forty percent of systems that are closer to it. A stub claiming a more specific prefix captures every one.",
+   "zh": "BGP 别人说什么就信什么。<bookmark mark='a'/>2008 年 2 月，巴基斯坦电信奉命在巴基斯坦境内屏蔽 YouTube。<bookmark mark='b'/>它通告了YouTube 地址块里的一个斜杠二十四，想把本地流量引向虚无，而这条通告泄漏给了它的供应商，再从那里传遍世界。<bookmark mark='c'/>由于最长前缀胜出，大半个互联网把 YouTube 的流量送到了巴基斯坦，持续了大约两个小时。<bookmark mark='d'/>我们在自己的互联网上重演了一遍。一个末端网络声称与受害者相同的前缀，夺走了离它更近的那百分之四十的系统。一个声称更具体前缀的末端网络，夺走了每一个。"
+  },
+  "f54ade57fa3f": {
+   "scene": "Bgp",
+   "en": "The defence is cryptography, from Part 30. <bookmark mark='a'/> Through the resource public key infrastructure, the holder of an address block signs a statement: this system may originate this prefix, and nothing longer. <bookmark mark='b'/> A system that validates drops any announcement such a statement contradicts. <bookmark mark='c'/> How many must validate? Choosing validators at random on our internet, a quarter of systems validating protects about half the rest, because one validator on a path is enough to stop the bad route spreading. <bookmark mark='d'/> And if the twenty-five transit networks validate, no stub is fooled at all. <bookmark mark='e'/> Origin validation stops mistakes like Pakistan Telecom's, but not a deliberate forgery of the path, which newer proposals aim at.",
+   "zh": "防御靠的是密码学，来自第30部分。<bookmark mark='a'/>通过资源公钥基础设施，地址块的持有者签署一份声明：这个系统可以发起这个前缀，不得更长。<bookmark mark='b'/>一个进行验证的系统，丢弃任何与这类声明矛盾的通告。<bookmark mark='c'/>需要多少系统验证？在我们的互联网上随机选择验证者，四分之一的系统验证，就保护了其余大约一半，因为路径上只要有一个验证者，就足以阻止坏路由扩散。<bookmark mark='d'/>如果二十五个转接网络都验证，就没有一个末端网络会被骗。<bookmark mark='e'/>起源验证能阻止巴基斯坦电信那样的失误，却挡不住对路径的蓄意伪造，那是更新的提案所针对的。"
+  },
+  "4f1ff7150eef": {
+   "scene": "Sdn",
+   "en": "Chapter twelve. Software-defined networks.",
+   "zh": "第十二章。软件定义网络。"
+  },
+  "c8d49b2e53de": {
+   "scene": "Sdn",
+   "en": "Everything so far has had each router compute its own routes and forward its own packets. <bookmark mark='a'/> Software-defined networking pulls those apart. <bookmark mark='b'/> The switches only forward, by looking packets up in tables of match and action. A controller, a program on ordinary servers with a view of the whole network, computes what every table should hold and installs it. That was OpenFlow, from Stanford in 2008. <bookmark mark='c'/> Google's private backbone between its data centres runs this way, driving its links close to full, because a program with the whole picture can place traffic far better than independent routers.",
+   "zh": "到目前为止，每个路由器都自己计算路由、自己转发分组。<bookmark mark='a'/>软件定义网络把这两件事分开。<bookmark mark='b'/>交换机只负责转发，在匹配与动作的表里查找分组。一个控制器，运行在普通服务器上、看得见整个网络的程序，计算每张表应当装什么，并把它装进去。这就是 2008 年来自斯坦福的 OpenFlow。<bookmark mark='c'/>谷歌在各数据中心之间的私有骨干网就是这样运行的，把链路推到接近满载，因为一个掌握全局的程序安排流量，远胜于各自独立的路由器。"
+  },
+  "9b3109d35550": {
+   "scene": "Sdn",
+   "en": "Inside a data centre the network looks different again. <bookmark mark='a'/> Instead of a few huge routers, thousands of small identical switches are wired in layers, a Clos network, so that between any two racks there are many equally short paths. A four-port fat tree already gives four between every pair of pods. <bookmark mark='b'/> Switches spread traffic over the paths by hashing each flow's addresses and ports, equal-cost multipath, so that one flow's packets follow one path and stay in order. <bookmark mark='c'/> But hashing is the balls-into-bins game of Part 20. With equal flows, the busiest path carries one and a half to two times its share. Real flows are heavy-tailed, and a few elephants make it two to five times. <bookmark mark='d'/> So fabrics split flows at natural pauses, spray packets and reorder them at the receiver, or let a controller with the whole picture place the elephants.",
+   "zh": "在数据中心里，网络的样子又不一样了。<bookmark mark='a'/>这里不是少数几台巨型路由器，而是成千上万台小而相同的交换机分层连接，一个 Clos 网络，使任意两个机架之间都有许多条同样短的路径。一棵四端口的胖树，每对 pod 之间就已有四条。<bookmark mark='b'/>交换机通过对每条流的地址和端口做哈希，把流量分散到各条路径上，即等价多路径，于是一条流的分组走同一条路径，保持顺序。<bookmark mark='c'/>但哈希就是第20部分的球与箱子游戏。流量均等时，最忙的路径承载一倍半到两倍的份额。真实的流是重尾的，几头大象流能让它达到两到五倍。<bookmark mark='d'/>所以交换结构会在自然的停顿处切分流，喷洒分组并在接收端重排，或者让掌握全局的控制器来安放大象流。"
+  },
+  "679606d39cba": {
+   "scene": "Sdn",
+   "en": "The next step made the switches themselves programmable. <bookmark mark='a'/> In P4, a language from 2014, the programmer declares the packet's headers, a sequence of tables, and their actions, and a compiler maps them onto the switch chip, which still runs at line rate. Here is a small one, written with our instruments: parse, an access list, a longest-prefix route, a quality-of-service counter, the time to live. <bookmark mark='b'/> Four packets through it. One forwarded on port three; a voice packet counted and forwarded; one blocked by the access list; one whose time to live ran out. <bookmark mark='c'/> A new protocol used to need new chips, years away. Now it is a recompile.",
+   "zh": "下一步让交换机本身变得可编程。<bookmark mark='a'/>在 2014 年的语言 P4 里，程序员声明分组的头部、一系列表以及它们的动作，由编译器映射到交换芯片上，芯片仍以线速运行。这是一个小例子，用我们的工具写成：解析、访问控制列表、最长前缀路由、服务质量计数器、生存时间。<bookmark mark='b'/>四个分组穿过它。一个从端口三转发；一个语音分组被计数并转发；一个被访问控制列表阻止；一个生存时间耗尽。<bookmark mark='c'/>新协议过去要等新芯片，一等好几年。现在只是重新编译一次。"
+  },
+  "1d9a2e2aa65a": {
+   "scene": "Internet",
+   "en": "Chapter thirteen. Our internet.",
+   "zh": "第十三章。我们的互联网。"
+  },
+  "1a3e1299bf68": {
+   "scene": "Internet",
+   "en": "Now the whole stack at once. <bookmark mark='a'/> Our internet has eight routers in eight cities, ten cables of realistic length, and four Pebbles attached to it. Routers flood link state, compute shortest paths by delay, and forward every packet by longest-prefix match, decrementing its time to live. <bookmark mark='b'/> Pinging every pair: Frankfurt to London, seven milliseconds; San Francisco to Tokyo, eighty-one; Frankfurt to Tokyo goes east through Singapore, a hundred and sixty. <bookmark mark='c'/> Each number is the length of the cables divided by the speed of light in glass, plus a few microseconds of transmission and queueing.",
+   "zh": "现在把整个协议栈放在一起。<bookmark mark='a'/>我们的互联网有八座城市里的八个路由器，十条长度真实的电缆，接着四台 Pebble。路由器泛洪链路状态，按时延计算最短路径，按最长前缀匹配转发每个分组，并递减它的生存时间。<bookmark mark='b'/>两两互 ping：法兰克福到伦敦，七毫秒；旧金山到东京，八十一；法兰克福到东京向东经过新加坡，一百六十。<bookmark mark='c'/>每个数字都是电缆长度除以玻璃中的光速，再加上几微秒的发送和排队。"
+  },
+  "bbbec7d3bf5f": {
+   "scene": "Internet",
+   "en": "Propagation is fixed, but queueing is not. <bookmark mark='a'/> We loaded a hundred-megabit link in our internet with random full-sized packets and sent four hundred pings across it. <bookmark mark='b'/> At low load the pings barely notice. As the link gets busy, the time spent waiting grows like rho over one minus rho, the Pollaczek-Khinchine formula of Part 31, and the measured waits follow it. <bookmark mark='c'/> The tail grows faster still: at ninety-five percent load, one ping in a hundred spends four and a half milliseconds in the queue. <bookmark mark='d'/> Real routers with huge buffers can turn this into seconds, a problem called bufferbloat, and how full those buffers get is decided by the congestion control of the next part.",
+   "zh": "传播时延是固定的，排队却不是。<bookmark mark='a'/>我们让互联网中一条每秒一亿比特的链路承载随机的满尺寸分组，并在其上发送了四百个 ping。<bookmark mark='b'/>负载低时，ping 几乎感觉不到。链路越忙，等待的时间按 rho 除以一减 rho 增长，也就是第31部分的 Pollaczek–Khinchine 公式，测得的等待与它吻合。<bookmark mark='c'/>尾部增长得更快：在百分之九十五的负载下，每一百个 ping 就有一个在队列里等四点五毫秒。<bookmark mark='d'/>缓冲区巨大的真实路由器能把这变成几秒，这个问题叫缓冲膨胀，而这些缓冲区会有多满，由下一部分的拥塞控制决定。"
+  },
+  "33f764306f52": {
+   "scene": "Internet",
+   "en": "And then we cut a cable. <bookmark mark='a'/> Traffic from London to Frankfurt had gone through Amsterdam, in seven milliseconds. After the cut, and after the routers reconverge, it goes through Paris, in eight. <bookmark mark='b'/> In between, as in chapter ten, five packets died at the dead link and sixteen looped until their time to live ran out. <bookmark mark='c'/> Every mechanism of this part took part: flooding, Dijkstra, longest-prefix match, the time to live that ended the loop. <bookmark mark='d'/> And nobody was in charge. The network found its own way around the damage, which is exactly what Paul Baran designed it to do.",
+   "zh": "然后我们剪断一条电缆。<bookmark mark='a'/>从伦敦到法兰克福的流量原本经过阿姆斯特丹，七毫秒。断线之后，路由器重新收敛，它改经巴黎，八毫秒。<bookmark mark='b'/>在这之间，和第十章一样，五个分组死在断掉的链路上，十六个打转直到生存时间耗尽。<bookmark mark='c'/>这一部分的每一个机制都参与了：泛洪、Dijkstra、最长前缀匹配，以及终结了环路的生存时间。<bookmark mark='d'/>而且没有任何人在指挥。网络自己找到了绕过损伤的路，这正是 Paul Baran 设计它的初衷。"
+  },
+  "316f58ccc9d8": {
+   "scene": "Wireless",
+   "en": "Chapter fourteen. Wireless.",
+   "zh": "第十四章。无线。"
+  },
+  "e7d69ea276da": {
+   "scene": "Wireless",
+   "en": "Radio adds an enemy that wires do not have. <bookmark mark='a'/> A signal reaches the receiver along many paths, bouncing off walls and buildings, and the copies arrive at slightly different times. They add or cancel, and moving a few centimetres can change the received power a hundredfold. This is fading. <bookmark mark='b'/> On a wire, errors fall exponentially as the signal grows. Under fading they fall only in proportion: in our simulation, at ten decibels, a wire makes four errors in a million bits, and a fading channel one in forty. <bookmark mark='c'/> The cure is never to depend on one path: spread the bits over many frequencies, times or antennas, so that they do not all fade together.",
+   "zh": "无线电多了一个导线没有的敌人。<bookmark mark='a'/>信号沿许多条路径到达接收方，从墙壁和建筑上反弹，各个副本到达的时间略有不同。它们相加或相消，移动几厘米，收到的功率就能变化一百倍。这就是衰落。<bookmark mark='b'/>在导线上，错误随信号增强呈指数下降。在衰落下，它们只按比例下降：在我们的模拟里，十分贝时，导线每一百万个比特错四个，衰落信道每四十个错一个。<bookmark mark='c'/>解药是永远不要依赖一条路径：把比特分散到许多频率、时间或天线上，让它们不会同时衰落。"
+  },
+  "318b4d322171": {
+   "scene": "Wireless",
+   "en": "Echoes also smear one symbol into the next. <bookmark mark='a'/> The modern answer is to send many slow streams instead of one fast one: split the band into dozens or thousands of narrow subcarriers. Each is so narrow that the channel looks to it like a single multiplier, which the receiver can divide out. <bookmark mark='b'/> The transmitter builds the whole symbol with one inverse FFT, the algorithm of Part 19, and the receiver takes it apart with another. <bookmark mark='c'/> One trick makes it exact: repeat the end of each symbol at its start, a cyclic prefix longer than the longest echo. Then the echo is a circular convolution, which the FFT turns into multiplication. In our simulation, without the prefix, two bits in a hundred are wrong; with a prefix as long as the echo, about one in a thousand, from carriers in a deep fade. <bookmark mark='d'/> This is OFDM, the waveform of Wi-Fi, 4G, 5G and DSL.",
+   "zh": "回声还会把一个符号抹进下一个。<bookmark mark='a'/>现代的答案是发送许多条慢速的流，而不是一条快速的流：把频带分成几十乃至几千个窄的子载波。每个都窄到让信道在它看来只是一个乘数，接收方可以把它除掉。<bookmark mark='b'/>发送方用一次逆 FFT，也就是第19部分的算法，构造整个符号，接收方再用一次 FFT 把它拆开。<bookmark mark='c'/>一个技巧让这件事精确成立：把每个符号的结尾在开头重复一遍，一个比最长回声还长的循环前缀。这样回声就是循环卷积，而 FFT 把它变成乘法。在我们的模拟里，没有前缀时每一百个比特错两个；前缀与回声一样长时，大约每一千个错一个，来自处于深衰落的子载波。<bookmark mark='d'/>这就是 OFDM，Wi-Fi、4G、5G 和 DSL 的波形。"
+  },
+  "372047045743": {
+   "scene": "Wireless",
+   "en": "The last trick turns the enemy into an ally. <bookmark mark='a'/> Put several antennas at each end. With many paths between them, the channel is a random matrix, and the capacity is the expected log determinant of this expression. <bookmark mark='b'/> We averaged it over four hundred random channels. One antenna at each end, at twenty decibels: six bits per second per hertz. Two: eleven. Four: twenty-two. Eight: forty-four. <bookmark mark='c'/> Capacity grows linearly with the number of antennas, with no extra power and no extra spectrum. Gerard Foschini and Emre Telatar showed it in the late 1990s. <bookmark mark='d'/> The scattering that caused fading has become a set of parallel channels, and a 5G base station now carries sixty-four antennas.",
+   "zh": "最后一个技巧把敌人变成了盟友。<bookmark mark='a'/>在两端各放几根天线。它们之间有许多路径时，信道是一个随机矩阵，容量是这个表达式的对数行列式的期望。<bookmark mark='b'/>我们对四百个随机信道取了平均。两端各一根天线，二十分贝时：每赫兹每秒六比特。两根：十一。四根：二十二。八根：四十四。<bookmark mark='c'/>容量随天线数线性增长，不需要额外的功率，也不需要额外的频谱。Gerard Foschini 和 Emre Telatar 在 1990 年代后期证明了这一点。<bookmark mark='d'/>造成衰落的散射变成了一组并行的信道，如今一个 5G 基站装有六十四根天线。"
+  },
+  "2f9620ccccbd": {
+   "scene": "Frontier",
+   "en": "Chapter fifteen. Frontier: programmable, verified, convergent.",
+   "zh": "第十五章。前沿：可编程、可验证、可收敛。"
+  },
+  "e88e1c432ddb": {
+   "scene": "Frontier",
+   "en": "The first frontier is knowing a network is right. <bookmark mark='a'/> Testing sends packets and sees what happens; verification reasons about every possible packet, directly from the forwarding tables. <bookmark mark='b'/> Our verifier follows every prefix from every router through the tables. On a snapshot taken halfway through chapter thirteen's reconvergence, it finds the London-Amsterdam loop, for two prefixes, without sending a packet; after convergence, nothing. <bookmark mark='c'/> Header space analysis, in 2012, made this general: a header is a point in a space of bits, and every rule a function on that space. <bookmark mark='d'/> Tools like Batfish now check entire configurations before they are deployed, and large clouds verify every change. <bookmark mark='e'/> The worst case is exponential in the number of header bits; what makes it fast in practice, and how to verify networks whose rules change every second, are open.",
+   "zh": "第一个前沿是知道一个网络是对的。<bookmark mark='a'/>测试是发送分组看会发生什么；验证则直接从转发表出发，对每一个可能的分组进行推理。<bookmark mark='b'/>我们的验证器从每个路由器出发，沿着表跟踪每个前缀。在第十三章重新收敛进行到一半时拍下的快照上，它找到了伦敦与阿姆斯特丹之间的环，涉及两个前缀，一个分组也没发；收敛之后，什么都没有。<bookmark mark='c'/>2012 年的头部空间分析把这推广开来：一个头部是比特空间中的一个点，每条规则是这个空间上的一个函数。<bookmark mark='d'/>像 Batfish 这样的工具如今在部署之前检查整套配置，大型云平台验证每一次变更。<bookmark mark='e'/>最坏情况随头部比特数呈指数增长；是什么让它在实践中很快，以及如何验证规则每秒都在变化的网络，仍是开放问题。"
+  },
+  "a92c0e72924a": {
+   "scene": "Frontier",
+   "en": "Once switches are programmable, they can do more than forward. <bookmark mark='a'/> In-band telemetry has every switch append its queue depth and a timestamp to passing packets, so the receiver sees, hop by hop, where congestion is. <bookmark mark='b'/> NetCache put a small key-value cache inside the switch, answering the hottest keys at billions of queries a second before they reach a server. <bookmark mark='c'/> And switches can sum the gradients of distributed machine learning as they pass through. <bookmark mark='d'/> What a pipeline with a few megabytes of memory and a fixed number of stages can compute, and how to verify it, are open.",
+   "zh": "交换机一旦可编程，能做的就不只是转发。<bookmark mark='a'/>带内遥测让每台交换机在经过的分组上附加自己的队列深度和时间戳，于是接收方能逐跳看到拥塞在哪里。<bookmark mark='b'/>NetCache 在交换机内部放了一个小小的键值缓存，在最热的键到达服务器之前，就以每秒数十亿次查询的速度回答它们。<bookmark mark='c'/>交换机还能在分布式机器学习的梯度经过时把它们加起来。<bookmark mark='d'/>一条只有几兆字节内存、级数固定的流水线能计算什么，以及如何验证它，仍是开放问题。"
+  },
+  "c4d883b0dd58": {
+   "scene": "Frontier",
+   "en": "The second frontier is convergence. <bookmark mark='a'/> Here are three systems around a destination. Each would rather reach it through its clockwise neighbour than directly. <bookmark mark='b'/> Start with everyone going direct. Each then sees its preferred route available and switches to it; but now each neighbour's route is indirect, so the preferred routes no longer exist, and all switch back. Our simulation cycles for ever. <bookmark mark='c'/> Timothy Griffin, Bruce Shepherd and Gordon Wilfong called this BAD GADGET, and proved that deciding whether arbitrary policies have any stable solution is NP-complete. The Gao-Rexford rules avoid it, but real policies are messier, and the guarantee is open.",
+   "zh": "第二个前沿是收敛。<bookmark mark='a'/>这里有三个围绕一个目的地的系统。每个都宁愿经过顺时针方向的邻居到达它，而不是直达。<bookmark mark='b'/>从大家都直达开始。接着每个都看到自己偏好的路由可用，于是换过去；但这样一来每个邻居的路由都成了间接的，偏好的路由不复存在，大家又都换回来。我们的模拟永远在循环。<bookmark mark='c'/>Timothy Griffin、Bruce Shepherd 和 Gordon Wilfong 称之为 BAD GADGET，并证明判定任意策略是否存在稳定解是 NP 完全的。高立新与 Rexford 的规则避开了它，但真实的策略更复杂，这一保证仍是开放问题。"
+  },
+  "c6c1e72e4fae": {
+   "scene": "Frontier",
+   "en": "Six problems at the frontier. <bookmark mark='a'/> Verifying networks whose rules change thousands of times a second. <bookmark mark='b'/> Updating every router's table in an order that never loops or drops traffic, and as quickly as possible. <bookmark mark='c'/> Securing BGP's paths, not only their origins, in a way that helps even when only some networks adopt it. <bookmark mark='d'/> Routing between networks with convergence guaranteed under the policies networks actually use. <bookmark mark='e'/> Programmable switches that are verified as well as fast. <bookmark mark='f'/> And radio that comes closer to its limits in crowded, moving channels. The research problem at the end of this part asks for the second in its simplest form: after one link fails, in what order should routers change their tables so that no packet ever loops?",
+   "zh": "前沿上的六个问题。<bookmark mark='a'/>验证规则每秒变化数千次的网络。<bookmark mark='b'/>按一种永不成环、永不丢流量的顺序更新每个路由器的表，而且尽可能快。<bookmark mark='c'/>保护 BGP 的路径而不只是起源，并且在只有部分网络采用时也有帮助。<bookmark mark='d'/>在网络实际使用的策略下，保证网络之间的路由收敛。<bookmark mark='e'/>既经过验证又足够快的可编程交换机。<bookmark mark='f'/>以及在拥挤、移动的信道中更接近极限的无线电。这一部分末尾的研究问题以最简单的形式问第二个：一条链路失效后，路由器应当按什么顺序改变它们的表，才能让任何分组都不打转？"
+  },
+  "565c5fe86033": {
+   "scene": "Outro",
+   "en": "What we built in this part. Packets instead of circuits, and the layers that wrap them. Shannon's limit and QAM measured against it. Bit stuffing and CRCs; ALOHA, Ethernet's backoff and Wi-Fi's hidden terminals; switches that learn and a spanning tree that tames loops. Addresses, prefixes and tries for forwarding in nanoseconds. Distance vector and its count to infinity, link state and its microloops, BGP's policies and its hijacks. Our own internet, wireless channels, and networks you can program and verify.",
+   "zh": "这一部分我们搭建了什么。用分组代替电路，以及包裹它们的分层。香农极限，以及与之对照测量的 QAM。比特填充和 CRC；ALOHA、以太网的退避和 Wi-Fi 的隐藏终端；会学习的交换机，以及驯服环路的生成树。用于纳秒级转发的地址、前缀和字典树。距离向量及其数到无穷大，链路状态及其微环路，BGP 的策略及其劫持。我们自己的互联网、无线信道，以及可以编程和验证的网络。"
+  },
+  "8995c18ad46e": {
+   "scene": "Outro",
+   "en": "Where this comes back. Part 37 builds TCP, a reliable stream on top of packets that can be lost, and the congestion control that keeps the Internet from collapsing as ALOHA does. Part 38 makes machines agree over a network that delays and drops messages. Part 39 replicates data across these latencies. Part 42 puts HTTP and the browser on top. And Part 45 rents networks by the hour, in the cloud.",
+   "zh": "它们会在哪里再出现。第37部分构建 TCP，在可能丢失的分组之上提供可靠的流，以及防止互联网像 ALOHA 那样崩溃的拥塞控制。第38部分让机器在会延迟和丢弃消息的网络上达成一致。第39部分在这样的时延下复制数据。第42部分把 HTTP 和浏览器放在上面。第45部分则在云里按小时租用网络。"
+  },
+  "cc82d0610755": {
+   "scene": "Outro",
+   "en": "In practice. Plan addresses with CIDR, and run IPv6 alongside IPv4. Diagnose with ping and traceroute, or mtr, which combines them, and look at the packets themselves with tcpdump or Wireshark. When small transfers work and large ones hang, suspect a link with a smaller MTU whose error messages are being filtered. For Wi-Fi, choose uncrowded channels, and use several quiet access points rather than one loud one. And if you run BGP, filter what your customers may announce, sign your routes, and drop invalid ones.",
+   "zh": "在实践中。用 CIDR 规划地址，并让 IPv6 与 IPv4 并行运行。用 ping 和 traceroute 诊断，或者用把两者结合起来的 mtr，再用 tcpdump 或 Wireshark 查看分组本身。小的传输正常、大的传输卡住时，怀疑某条 MTU 更小的链路，它的错误消息被过滤掉了。对 Wi-Fi，选择不拥挤的信道，用几个安静的接入点，而不是一个响亮的。如果你运行 BGP，过滤你的客户可以通告什么，给你的路由签名，并丢弃无效的路由。"
+  },
+  "4f74a85c0a3d": {
+   "scene": "Outro",
+   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build problem: add the RIP protocol to our internet as real packets, and watch the count to infinity happen to traffic. The last, marked with a star, is a research problem: after a link fails, in what order should routers install their new tables so that nothing ever loops, and how fast can that be done?",
+   "zh": "六道习题，完整解答在这一部分的笔记里。任何一道都可以暂停来看。第五道是动手题：把 RIP 协议作为真实的分组加进我们的互联网，看数到无穷大怎样发生在流量身上。最后一道标着星号，是研究问题：一条链路失效后，路由器应当按什么顺序安装新表，才能让任何东西都不打转，又能多快完成？"
+  },
+  "6ebef57b1ff2": {
+   "scene": "Outro",
+   "en": "Next time, Part 37: Networks, reliable conversation. IP loses, reorders and duplicates packets, and TCP turns that into a reliable stream. In October 1986 the Internet collapsed under its own traffic, and Van Jacobson's fix, additive increase and multiplicative decrease, is why it still works. We fetch the novels over our own TCP on a lossy link. Part 37, Networks.",
+   "zh": "下一次，第37部分：网络，可靠的对话。IP 会丢失、乱序和复制分组，而 TCP 把它变成可靠的流。1986 年 10 月，互联网在自身的流量下崩溃，Van Jacobson 的修正，加性增、乘性减，是它至今仍能工作的原因。我们用自己的 TCP 在有损链路上取回那些小说。第37部分，网络。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "这一部分所依据的书和论文都在屏幕上和笔记里。感谢观看。"
+  }
+ },
+ "title_en": "Computer Science, Built: Part 36, Networks I: Moving Bits",
+ "chapters_en": {
+  "Hook": "One datagram",
+  "Packets": "1. Circuits and packets",
+  "Layers": "2. Layers and the end-to-end argument",
+  "Phy": "3. Bits on a wire",
+  "Link": "4. Frames",
+  "Mac": "5. Sharing a channel",
+  "Bridges": "6. Bridges and switches",
+  "Ip": "7. IP",
+  "Forwarding": "8. Forwarding",
+  "Dv": "9. Distance vector",
+  "Ls": "10. Link state",
+  "Bgp": "11. BGP",
+  "Sdn": "12. Software-defined networks",
+  "Internet": "13. Our internet",
+  "Wireless": "14. Wireless",
+  "Frontier": "15. Frontier: programmable, verified, convergent",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}
