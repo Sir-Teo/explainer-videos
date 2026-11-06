@@ -591,3 +591,26 @@ def efron_morris() -> tuple:
     names = [r[0] for r in EFRON_MORRIS]
     return names, np.array([r[1] for r in EFRON_MORRIS], float), np.array([r[2] for r in EFRON_MORRIS], float), \
         np.array([r[3] for r in EFRON_MORRIS], float)
+
+
+# The eight schools (Alderman & Powers 1980; Rubin 1981, J. Educational Statistics 6, 377-401; Gelman et al., Bayesian
+# Data Analysis, Table 5.2): estimated effects of special SAT-V coaching programmes in eight high schools, in SAT points,
+# with their standard errors, each from a separate randomized experiment.
+EIGHT_SCHOOLS = [("A", 28, 15), ("B", 8, 10), ("C", -3, 16), ("D", 7, 11), ("E", -1, 9), ("F", 1, 11), ("G", 18, 10),
+                 ("H", 12, 18)]
+
+
+def eight_schools() -> tuple:
+    """Rubin's eight schools: (labels, estimated effects y_j, standard errors sigma_j)."""
+    import numpy as np
+
+    return [r[0] for r in EIGHT_SCHOOLS], np.array([r[1] for r in EIGHT_SCHOOLS], float), \
+        np.array([r[2] for r in EIGHT_SCHOOLS], float)
+
+
+# The PEAR random event generator data (Jahn, Dunne & Nelson 1987), as reanalysed by W. Jefferys, J. Scientific
+# Exploration 4 (1990), 153-169, the standard example of the Jeffreys-Lindley paradox: n Bernoulli trials during which
+# operators tried to influence the machine, with s "successes".  (Some later sources print s = 52,263,471; the
+# conclusions do not change.)
+PEAR_N = 104_490_000
+PEAR_S = 52_263_470
