@@ -128,6 +128,18 @@ computed lines as templates with the source's placeholders spelled exactly), fil
 | luminous; anti-luminosity; margin for error; the KK principle | 透明的；反透明性；误差余量；KK原则 |
 | closure; contextualism; subject-sensitive invariantism | 封闭性；语境主义；主体敏感的不变论 |
 | foundationalism; coherentism; infinitism | 基础主义；融贯论；无穷主义 |
+| common knowledge; public announcement; the muddy children; the coordinated attack | 共同知识；公开宣告；泥孩子；协同进攻 |
+| testimony; peer disagreement; equal weight; higher-order evidence | 证言；同行分歧；同等权重；高阶证据 |
+| credence; coherence; probabilism; Dutch book; bookie | 信念度；融贯性；概率主义；荷兰赌；庄家 |
+| accuracy; Brier score; (strictly) proper scoring rule; calibration | 准确性；布里尔评分；（严格）恰当评分规则；校准 |
+| conditionalization; Jeffrey conditioning; prior; posterior; washing out | 条件化；杰弗里条件化；先验；后验；冲刷 |
+| principle of indifference; maximum entropy; Bertrand's paradox | 无差别原则；最大熵；贝特朗悖论 |
+| chance; the Principal Principle; admissible; the big bad bug | 机遇；主要原则；可容许的；大坏虫 |
+| imprecise credence; credal set; dilation | 不精确的信念度；信度集；扩张 |
+| the Lockean thesis; the lottery paradox; the preface paradox; stable belief | 洛克论题；彩票悖论；序言悖论；稳定信念 |
+| Sleeping Beauty; halfer; thirder; double halfer; centred worlds | 睡美人；二分之一派；三分之一派；双重二分之一派；中心化世界 |
+| SSA; SIA; the Doomsday argument; the presumptuous philosopher; reference class | 自我抽样假设；自我指示假设；末日论证；自以为是的哲学家；参照类 |
+| Bayesian network; logical omniscience | 贝叶斯网络；逻辑全知 |
 
 ## Names
 
@@ -147,3 +159,7 @@ computed lines as templates with the source's placeholders spelled exactly), fil
 | Gettier, Nozick, Sosa, Goldman, Zagzebski | 盖蒂尔，诺齐克，索萨，戈德曼，扎格泽博斯基 |
 | Pritchard, DeRose, Dretske, Lehrer, BonJour, Greco, Lackey | 普理查德，德罗斯，德雷斯克，雷勒，邦茹，格雷科，拉基 |
 | Dharmottara, Zhuangzi, Sextus Empiricus | 法上，庄子，塞克斯都·恩披里柯 |
+| Ann, Bob, Cath (Part 12's card players) | 安，鲍勃，凯丝 |
+| Hintikka, Aumann, Halpern, Moses, Rubinstein, Zollman | 欣蒂卡，奥曼，哈尔彭，摩西，鲁宾斯坦，佐尔曼 |
+| Ramsey, de Finetti, Joyce, Jeffrey, Jaynes, Bertrand | 拉姆齐，德菲内蒂，乔伊斯，杰弗里，杰恩斯，贝特朗 |
+| Kyburg, Makinson, Leitgeb, Elga, Bostrom, Pearl | 凯伯格，梅金森，莱特格布，埃尔加，博斯特罗姆，珀尔 |
