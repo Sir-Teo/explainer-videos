@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from explainer.cs import *  # noqa: F403
 from explainer.cs.algo import crypto as K
-from videos.cs.cs29.common import (DATA, HEAD, NO, PART, YES, fit_right, load, mono)
+from videos.cs.cs29.common import (BG, DATA, HEAD, NO, PART, YES, fit_right, load, mono)
 
 A2Z = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
