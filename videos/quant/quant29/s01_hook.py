@@ -35,9 +35,13 @@ class Hook(VoiceoverScene):
         forms = [A.to_str(A.random_tree(rng, 4)) for _ in range(60)]
         cols = [RAND_C, FORMULA, GP_C, RL_C]
         labs = VGroup()
+        # a jittered 4 x 15 grid: a flood, but every formula legible
         for k, f in enumerate(forms):
-            t = label(tt(f, 46), font_size=13, color=cols[k % 4])
-            t.move_to([rng.uniform(-5.4, 5.4), rng.uniform(-3.2, 3.2), 0])
+            t = label(tt(f, 38), font_size=13, color=cols[k % 4])
+            if t.width > 3.1:
+                t.scale_to_fit_width(3.1)
+            col, row = k % 4, k // 4
+            t.move_to([-5.1 + 3.4 * col + rng.uniform(-0.15, 0.15), 3.25 - 0.465 * row, 0])
             t.set_opacity(0.35 + 0.5 * rng.random())
             labs.add(t)
         count = MathTex(rf"{comma(r['n'])}\ \text{{formulas}}", font_size=56, color=HURDLE)
@@ -48,7 +52,6 @@ class Hook(VoiceoverScene):
             "bottom. <bookmark mark='b'/> We drew ten thousand of them, and asked each one how well it would have "
             "predicted tomorrow's returns on the coins Binance traded in 2018 and 2019."
         ) as vo:
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(t) for t in labs], lag_ratio=0.03, run_time=3))
             vo.wait_until("b")
             self.play(FadeIn(box), FadeIn(count))
