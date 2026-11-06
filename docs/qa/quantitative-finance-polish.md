@@ -379,3 +379,37 @@ actual MLE redraw geometry regressions. Chinese narration source coverage is
 were completed; MLE's displayed clipping was found in that review and repaired.
 The complete bilingual final-source frame and silent-motion passes are running;
 this checkpoint does not claim full visual or production-voice acceptance.
+
+### Part 6 continuation: visual and motion repairs
+
+The current review has reached the later chapters. Actual selected-frame and
+motion inspection found and repaired a HAC question covering the formula column,
+a sparse roadmap reveal, empty camera-reset intervals, the Chinese event-study
+statistic falling below the frame, an overflowing Chinese Bayesian error readout,
+and an SNR prompt covering its axis label. The DML expansion is split into readable
+score and remainder lines. DML axes now become residual axes as the cloud moves.
+The RD and DML scatterplots and both confidence-region examples show their full
+plotted values rather than moving observations onto the viewing-window edges.
+
+The Euler Monte Carlo histogram now uses a fixed full-sample denominator while
+samples appear, and its scale includes its actual 0.082 peak instead of capping it
+at 0.04. Event-time paths use a range containing all 40 displayed paths; narration
+distinguishes the final mean path from the sequential day-zero readout. DiD states
+that its illustrated target averages cells with not-yet-treated controls. IVX and
+the local-to-unity limit state their assumptions; the SNR discussion drops the
+unsupported half-century precision claim. All computation sources and experiment
+history remain unchanged.
+
+Seven focused checks pass, including a new fixed-denominator partial-reveal
+regression; the preceding 239-test House/inference run remains recorded above.
+The actual English narrated opening is 191.53 seconds (480p15, Kokoro af_heart),
+with five speech blocks, matching the captured opening narration. Its blank/sparse
+scan finds no intervals of at least 1.5 seconds. Its 32-frame sheet was visually
+reviewed. All five English and five Chinese opening speech samples pass waveform
+and alignment checks; all four English MLE speech samples pass too. Those checks
+do not certify pronunciation or continuous listening.
+
+Bilingual frame and English motion acceptance remain in progress. Some interim
+translation warnings arose when a worker imported source before an edit and then
+checked translations after that edit; those receipts are not accepted as final.
+The final source-fingerprint/input gate must be satisfied after the repairs finish.

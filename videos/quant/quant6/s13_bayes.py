@@ -146,8 +146,11 @@ class Bayes(VoiceoverScene):
         oos = VGroup(*[Dot(ax.c2p(j + 1, np.clip(v, 0, 0.18)), radius=0.05, color=GOOD) for j, v in enumerate(later)])
         res = VGroup(
             MathTex(rf"\text{{posterior median of }} \tau: {100 * gb['tau_median']:.1f}\%", font_size=26, color=EST),
-            MathTex(rf"\text{{error vs.\ 1974--2020: raw }} {1e4 * gb['mse_raw']:.1f},\ \text{{Gibbs }} "
-                    rf"{1e4 * gb['mse_post']:.1f},\ \text{{EB }} {1e4 * gb['mse_eb']:.1f}", font_size=24, color=GOOD),
+            VGroup(
+                MathTex(rf"\text{{error vs.\ 1974--2020: raw }} {1e4 * gb['mse_raw']:.1f}", font_size=24, color=GOOD),
+                MathTex(rf"\text{{Gibbs }} {1e4 * gb['mse_post']:.1f},\ \text{{EB }} {1e4 * gb['mse_eb']:.1f}",
+                        font_size=24, color=GOOD),
+            ).arrange(DOWN, aligned_edge=LEFT, buff=0.10),
             label(r"mean squared error, (\% a year)$^2$; green dots: the second half", font_size=17, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(tau_ro, DOWN, buff=0.35).align_to(tg, LEFT)
         q = predict(r"One industry has a huge raw estimate and a huge standard error. Does it shrink most or least?",

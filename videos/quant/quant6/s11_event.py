@@ -42,7 +42,7 @@ class Event(VoiceoverScene):
                 why(r"independent events, ignoring estimation error: the variance shrinks like $1/N$", 21),
                 why(r"events that share a calendar date share its shocks: no diversification (MacKinlay 1997)", 21),
                 why(r"the test statistic", 21)]
-        step = ladder(self, rows, whys, keep=5, top=1.2, x=-0.8, buff=0.5, edge=6.8)
+        step = ladder(self, rows, whys, keep=4, top=1.2, x=-0.8, buff=0.5, edge=6.8)
         with self.voiceover(
             "An event study asks what happens to prices around an event. In 1969 Fama, Fisher, Jensen and Roll lined up "
             "nine hundred and forty stock splits in event time: prices rose in the months before, and did not drift "
@@ -109,25 +109,25 @@ class Event(VoiceoverScene):
         paths = np.asarray(f["paths"])
         dates = np.asarray(f["pick_dates"])
         yr = dates // 10000 + ((dates // 100) % 100 - 1) / 12
-        cal = axes([1993.5, 2021], [-0.06, 0.06], x_length=12.0, y_length=1.6, xticks=[1995, 2000, 2005, 2010, 2015,
+        cal = axes([1993.5, 2021], [-0.075, 0.075], x_length=12.0, y_length=1.6, xticks=[1995, 2000, 2005, 2010, 2015,
                    2020], yticks=[], font_size=15).to_edge(UP, buff=0.5)
         cax = cal.ax
-        evt = axes([-5.5, 5.5], [-0.05, 0.05], x_length=5.6, y_length=3.6, xlabel=r"trading days from the FOMC "
+        evt = axes([-5.5, 5.5], [-0.075, 0.075], x_length=5.6, y_length=3.6, xlabel=r"trading days from the FOMC "
                    r"decision", ylabel=r"cumulative abnormal return", xticks=[-5, -1, 0, 1, 5],
-                   yticks=[-0.04, 0, 0.04], yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=15)
+                   yticks=[-0.05, 0, 0.05], yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=15)
         evt.to_edge(LEFT, buff=0.6).to_edge(DOWN, buff=0.45)
         eax = evt.ax
         taus = np.arange(-5, 6)
         small = VGroup()
         big = VGroup()
         for p, y in zip(paths, yr):
-            pts = [cax.c2p(y + t * 0.035, np.clip(v, -0.06, 0.06)) for t, v in zip(taus, p)]
+            pts = [cax.c2p(y + t * 0.035, v) for t, v in zip(taus, p)]
             small.add(VMobject(stroke_color=DATA_C, stroke_width=1.6, stroke_opacity=0.8).set_points_as_corners(pts))
-            pts2 = [eax.c2p(t, np.clip(v, -0.05, 0.05)) for t, v in zip(taus, p)]
+            pts2 = [eax.c2p(t, v) for t, v in zip(taus, p)]
             big.add(VMobject(stroke_color=DATA_C, stroke_width=1.4, stroke_opacity=0.45).set_points_as_corners(pts2))
         car = np.asarray(f["car"])
         mean_line = curve(eax, taus, car, YELLOW, stroke_width=4)
-        zero = DashedLine(eax.c2p(0, -0.05), eax.c2p(0, 0.05), color=GREY_C, stroke_width=1.5)
+        zero = DashedLine(eax.c2p(0, -0.075), eax.c2p(0, 0.075), color=GREY_C, stroke_width=1.5)
         run = f["run"]
         k = ValueTracker(0)
 
@@ -159,7 +159,8 @@ class Event(VoiceoverScene):
             "Now the days the Federal Reserve announces its decisions. We transcribed every scheduled FOMC meeting "
             f"from 1994 to 2020 from the Fed's own pages: {f['n_events']} decisions. Here are forty, each a little path of "
             "abnormal returns, in calendar time. <bookmark mark='a'/> Slide each so its decision day sits at zero: "
-            "calendar time becomes event time. <bookmark mark='b'/> Average them as decisions are added; the band "
+            "calendar time becomes event time. <bookmark mark='b'/> The yellow curve is the final mean path across all "
+            "decisions. The running readout adds decisions at day zero; its uncertainty "
             "uses the cross-event standard deviation over root N. Separate dates avoid same-day clustering, "
             "but serial dependence or changing regimes can still make that standard error unreliable. <bookmark mark='c'/> On "
             f"decision days the market earned {1e4 * a['mean_event']:.0f} basis points over the riskless rate, against "

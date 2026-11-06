@@ -51,7 +51,7 @@ class Many(VoiceoverScene):
         bonf = DashedLine(ax.c2p(0, np.log10(0.05 / n)), ax.c2p(n + 1, np.log10(0.05 / n)), color=BAD, stroke_width=2.5)
         q = ValueTracker(0.0005)
         bh = always_redraw(lambda: curve(ax, k, np.maximum(np.log10(q.get_value() * k / n), -4), ALT, stroke_width=3))
-        q_ro = always_redraw(lambda: MathTex(rf"\text{{BH line: }} p_{{(i)}} \le i\,q/m,\ q = {q.get_value():.3f}",
+        q_ro = always_redraw(lambda: MathTex(rf"\text{{BH line: }} p_{{(i)}} \le i\,q/m,\ q = {q.get_value():.4f}",
                                              font_size=26, color=ALT).next_to(g, UP, buff=0.05).align_to(g, RIGHT))
         side = VGroup(
             label(r"49 industries, 1926--2020, Newey--West $t$", font_size=21, color=GREY_A),

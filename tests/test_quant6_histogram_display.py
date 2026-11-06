@@ -23,3 +23,11 @@ def test_counts_exclude_outside_values_and_include_the_rightmost_edge():
     ax = Axes(x_range=[0, 1], y_range=[0, 4], tips=False)
     bars = hist_bars(ax, [-1, 0.1, 0.2, 0.5, 0.75, 1.2], [0, 0.25, 0.75], BLUE, density=False)
     np.testing.assert_allclose(bar_heights_in_data_units(ax, bars), [2, 2])
+
+
+def test_partial_reveal_uses_a_fixed_denominator_without_a_tall_initial_spike():
+    ax = Axes(x_range=[0, 1], y_range=[0, 2], tips=False)
+    edges = np.array([0, 0.25, 0.75])
+    bars = hist_bars(ax, [0.1], edges, BLUE, total=4)
+    # One of four eventual draws is revealed, contributing exactly one quarter.
+    assert bar_heights_in_data_units(ax, bars)[0] * np.diff(edges)[0] == 0.25

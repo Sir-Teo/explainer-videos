@@ -58,8 +58,8 @@ class Research(VoiceoverScene):
                       r"\sqrt{1 - \phi^2}\;Z", font_size=34, colors={r"t_{\hat\beta}": OLS_C}),
                 cmath(r"c = 0", r":", r"\phi\,\tau_{DF} + \sqrt{1 - \phi^2}\,Z,\quad \mathbb E\,\tau_{DF} \approx -1.5",
                       font_size=34, colors={r"c = 0": OLS_C})]
-        whys = [why(r"local to unity (Phillips 1987; Chan and Wei 1987): let the root approach one as the sample grows, so "
-                    r"it is 'near one' at every sample size"),
+        whys = [why(r"For this law: zero predictor drift and initial value, iid shocks, no trend; an intercept is fitted. "
+                    r"Local to unity: $\rho=1+c/T$ (Phillips; Chan--Wei 1987)."),
                 why(r"the persistence estimate converges at rate $T$, not $\sqrt T$, to a ratio of stochastic integrals of "
                     r"the demeaned Ornstein--Uhlenbeck process $J_c^\mu$, a non-normal law (Dickey and Fuller at $c = 0$)"),
                 why(r"Elliott and Stock (1994); Cavanagh, Elliott and Stock (1995): the slope's $t$ mixes that law, weighted "
@@ -68,7 +68,8 @@ class Research(VoiceoverScene):
                     r"shifted right, and nothing in the limit depends on $T$")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.3, buff=0.42, edge=6.9)
         with self.voiceover(
-            "The tool is the local-to-unity device. <bookmark mark='a'/> Let the root approach one as the sample "
+            "The tool is the local-to-unity device. For the displayed law, assume zero predictor drift and initial "
+            "value, iid shocks and no trend, while fitting an intercept. <bookmark mark='a'/> Let the root approach one as the sample "
             "grows, so that it stays near one at every sample size. <bookmark mark='b'/> Then the persistence estimate "
             "converges faster than usual, at rate T, and to a law that is not normal: a ratio of stochastic integrals "
             "of an Ornstein-Uhlenbeck process, the Dickey-Fuller law when the root is exactly one. <bookmark "

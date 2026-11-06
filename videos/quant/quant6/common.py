@@ -33,13 +33,14 @@ def show_card(scene, card):
     scene.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
 
 
-def hist_bars(ax, values, edges, color, opacity=0.8, density=True, cap=None):
+def hist_bars(ax, values, edges, color, opacity=0.8, density=True, cap=None, total=None):
+    """Use ``total`` for a partial reveal from a fixed Monte Carlo sample."""
     """Histogram bars standing on the x axis of ``ax``."""
     values = np.asarray(values)
     h, _ = np.histogram(values, edges)
     if density:
         # Keep the mass outside the plot outside it; a viewing window is not conditioning.
-        h = h / (max(len(values), 1) * np.diff(edges))
+        h = h / (max(len(values) if total is None else total, 1) * np.diff(edges))
     if cap is not None:
         h = np.minimum(h, cap)
     w = ax.c2p(edges[1] - edges[0], 0)[0] - ax.c2p(0, 0)[0]

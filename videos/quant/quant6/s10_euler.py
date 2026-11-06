@@ -138,22 +138,22 @@ class Euler(VoiceoverScene, ThreeDScene):
         for x in (ball, trail):
             x.clear_updaters()
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, surf, ball, trail, ridge)),
-                                                                  FadeOut(hint), FadeOut(note_)], run_time=1.2)
-        self.clear_scene()
+                                                                  FadeOut(hint), FadeOut(note_)], run_time=0.6)
+        self.clear_scene(run_time=0.1)
 
     def montecarlo(self, mc, g):
         gh = np.asarray(mc["gamma_hat"])
         q = mc["q"]
-        gax = axes([-60, 60], [0, 0.04], x_length=6.0, y_length=3.8, xlabel=r"$\hat\gamma$ in a simulated economy "
-                   r"(true $\gamma = 2$)", xticks=[-50, -25, 0, 25, 50], yticks=[], font_size=16).to_edge(LEFT, buff=0.6)
+        gax = axes([-60, 60], [0, 0.10], x_length=6.0, y_length=3.8, xlabel=r"$\hat\gamma$ in a simulated economy "
+                   r"(true $\gamma = 2$)", ylabel=r"density, full Monte Carlo sample", xticks=[-50, -25, 0, 25, 50], yticks=[], font_size=16).to_edge(LEFT, buff=0.6)
         gax.shift(DOWN * 0.2)
         ax = gax.ax
         edges = np.linspace(-60, 60, 49)
         n = ValueTracker(1)
-        hb = always_redraw(lambda: hist_bars(ax, gh[:max(int(n.get_value()), 1)], edges, EST, density=True, cap=0.04))
-        cnt = always_redraw(lambda: MathTex(rf"\text{{economies: }} {int(n.get_value())}", font_size=26,
+        hb = always_redraw(lambda: hist_bars(ax, gh[:max(int(n.get_value()), 1)], edges, EST, density=True, total=len(gh)))
+        cnt = always_redraw(lambda: MathTex(rf"\text{{economies revealed: }} {int(n.get_value())}/{len(gh)}", font_size=26,
                                             color=GREY_A).next_to(gax, UP, buff=0.05).align_to(gax, RIGHT))
-        truth = DashedLine(ax.c2p(2, 0), ax.c2p(2, 0.04), color=GOOD, stroke_width=3)
+        truth = DashedLine(ax.c2p(2, 0), ax.c2p(2, 0.10), color=GOOD, stroke_width=3)
         side = VGroup(
             label(r"400 economies where the model is true", font_size=23, color=WHITE),
             wrapped_label(rf"$\beta = 1$, $\gamma = 2$, lognormal consumption and returns with the data's volatilities "
@@ -169,7 +169,7 @@ class Euler(VoiceoverScene, ThreeDScene):
         if side.width > 6.0:  # the column must clear the histogram on the left
             side.scale_to_fit_width(6.0)
         side.to_edge(RIGHT, buff=0.35)
-        beyond = ("beyond every one of them. The model is not just imprecise; it is wrong." if g["J"] > max(mc["J"])
+        beyond = ("beyond every one of them. This is strong evidence against the joint moment restrictions in this specification, subject to the sampling and estimation assumptions." if g["J"] > max(mc["J"])
                   else "large, but not beyond what a true model sometimes produces.")
         with self.voiceover(
             "How bad at our sample size? Build four hundred economies where the model is exactly true, gamma two, with "

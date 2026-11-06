@@ -58,18 +58,18 @@ class SNR(VoiceoverScene):
 
     def ellipse(self, ep):
         P = ep["path"]
-        g = axes([-0.4, 0.45], [0.0, 1.6], x_length=6.6, y_length=4.8, xlabel=r"$\alpha$, annual", ylabel=r"$\beta$",
-                 xticks=[-0.3, 0, 0.3], xfmt=lambda u: f"{100 * u:.0f}\\%", yticks=[0.4, 0.8, 1.2, 1.6], font_size=16)
+        g = axes([-0.4, 0.7], [0.0, 2.3], x_length=6.6, y_length=4.8, xlabel=r"$\alpha$, annual", ylabel=r"$\beta$",
+                 xticks=[-0.3, 0, 0.3, 0.6], xfmt=lambda u: f"{100 * u:.0f}\\%", yticks=[0.5, 1, 1.5, 2], font_size=16)
         g.to_edge(LEFT, buff=0.8).shift(DOWN * 0.2)
         ax = g.ax
         k = ValueTracker(0)
-        clip = ((-0.4, 0.45), (0.0, 1.6))
+        clip = None  # keep the full region visible during its contraction
 
         def shape():
             i = int(min(k.get_value(), len(P) - 1))
             p = P[i]
             e = ellipse_curve(ax, (p["alpha"], p["beta"]), p["V"], EST, clip=clip)
-            d = Dot(ax.c2p(np.clip(p["alpha"], -0.4, 0.45), np.clip(p["beta"], 0, 1.6)), radius=0.06, color=EST)
+            d = Dot(ax.c2p(p["alpha"], p["beta"]), radius=0.06, color=EST)
             V = np.asarray(p["V"])
             ro = VGroup(
                 MathTex(rf"{p['date'] // 100}:\ {p['months'] / 12:.0f}\ \text{{{'year' if round(p['months'] / 12) == 1 else 'years'}}}",
@@ -80,8 +80,8 @@ class SNR(VoiceoverScene):
             ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(RIGHT, buff=0.6).shift(UP * 0.6)
             return VGroup(e, d, ro)
         sm = always_redraw(shape)
-        zero = DashedLine(ax.c2p(0, 0), ax.c2p(0, 1.6), color=GREY_B, stroke_width=2)
-        notes = VGroup(label(r"$\beta$ axis: a co-movement, pinned down in months", font_size=21, color=GOOD),
+        zero = DashedLine(ax.c2p(0, 0), ax.c2p(0, 2.3), color=GREY_B, stroke_width=2)
+        notes = VGroup(label(r"$\beta$ axis: a co-movement", font_size=21, color=GOOD),
                        label(r"$\alpha$ axis: a mean, it creeps", font_size=21, color=ALT),
                        label(r"tobacco on the market, refitted every quarter from 1961", font_size=19, color=GREY_B)
                        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(RIGHT, buff=0.5).shift(DOWN * 1.8)
@@ -92,8 +92,8 @@ class SNR(VoiceoverScene):
             "<bookmark mark='a'/> In the first years it is enormous. Within a few years the beta axis collapses to a "
             "sliver. The alpha axis creeps, and creeps, and creeps. <bookmark mark='b'/> After sixty years, tobacco's "
             f"alpha is {100 * last['alpha']:.1f} percent a year, give or take "
-            f"{196 * np.sqrt(np.asarray(last['V'])[0, 0]):.1f}. Its beta has been known to within a tenth for half a "
-            "century."
+            f"{196 * np.sqrt(np.asarray(last['V'])[0, 0]):.1f}. Its beta is tightly estimated under this constant-parameter "
+            "regression. Whether the beta changes over time is a separate question."
         ) as vo:
             self.play(FadeIn(g), Create(zero), FadeIn(notes[2]))
             self.add(sm)
@@ -111,7 +111,7 @@ class SNR(VoiceoverScene):
         sr, yrs = np.asarray(s["sr"]), np.asarray(s["years"])
         g = axes([0.2, 2.0], [0, 100], x_length=5.6, y_length=4.0, xlabel=r"true Sharpe ratio, annual",
                  ylabel=r"years for an expected $t$ of 2", xticks=[0.5, 1.0, 1.5, 2.0], yticks=[0, 16, 50, 100],
-                 font_size=16).to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
+                 font_size=16).to_edge(LEFT, buff=0.6).shift(UP * 0.45)
         ax = g.ax
         line = curve(ax, sr, np.minimum(yrs, 100), EST, stroke_width=3.5)
         dots = VGroup(Dot(ax.c2p(0.5, s["y05"]), radius=0.08, color=BAD), Dot(ax.c2p(1.0, s["y1"]), radius=0.08,

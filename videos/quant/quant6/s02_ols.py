@@ -88,8 +88,8 @@ class OLS(VoiceoverScene, ThreeDScene):
             self.play(Create(right))
             self.move_camera(phi=78 * DEGREES, theta=-20 * DEGREES, run_time=max(vo.remaining(1.0) - 0.5, 1.0))
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, plane, a1, a2, ay, ah, drop, right)),
-                                                                  FadeOut(legend_)], run_time=1.2)
-        self.clear_scene()
+                                                                  FadeOut(legend_)], run_time=0.6)
+        self.clear_scene(run_time=0.1)
 
     def derive(self):
         C_ = {r"\hat\beta": EST, r"\Omega": BAD}

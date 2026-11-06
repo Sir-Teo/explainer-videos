@@ -171,8 +171,9 @@ class Hook(VoiceoverScene):
             'years a Sharpe ratio needs. Everything here lives under the real-world measure, P: statements about '
             'the data we observe, not about prices.'
         ):
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
-                                                     lag_ratio=0.5, run_time=12))
+            self.play(FadeIn(card.head), FadeIn(card.rows[0], shift=RIGHT * 0.2), run_time=0.6)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows[1:]],
+                                  lag_ratio=0.5, run_time=10))
         self.play(FadeOut(card))
 
     def house(self):

@@ -91,8 +91,8 @@ class MLE(VoiceoverScene, ThreeDScene):
         for x in (b, trail):
             x.clear_updaters()
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, surf, b, trail)), FadeOut(ro),
-                                                                  FadeOut(hint), FadeOut(res)], run_time=1.2)
-        self.clear_scene()
+                                                                  FadeOut(hint), FadeOut(res)], run_time=0.6)
+        self.clear_scene(run_time=0.1)
 
     def derive(self):
         C_ = {r"\mathcal{I}": EST, r"H^{-1} J H^{-1}": ALT}

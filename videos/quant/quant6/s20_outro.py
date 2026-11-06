@@ -65,7 +65,7 @@ class Outro(VoiceoverScene):
             (r"\texttt{fama\_macbeth}, \texttt{within\_between}, \texttt{two\_pass}, \texttt{grs}",
              r"panels, the within/between split, two-pass with Shanken, GRS"),
             (r"\texttt{mle}, \texttt{gmm}", r"Newton with replayable iterates, sandwich errors; two-step GMM with $J$"),
-            (r"\texttt{oos\_r2}, \texttt{augmented\_predictive}, \texttt{ivx}", r"out of sample; Stambaugh-proof tests"),
+            (r"\texttt{oos\_r2}, \texttt{augmented\_predictive}, \texttt{ivx}", r"out of sample; bias-aware predictive inference"),
             (r"\texttt{event\_mean\_test}, \texttt{placebo\_means}", r"event studies with placebos"),
             (r"\texttt{stationary\_bootstrap}, \texttt{stationary\_indices}", r"resampling that keeps dependence"),
             (r"\texttt{gibbs\_hierarchical}, \texttt{shrink\_means}", r"Bayesian and empirical-Bayes shrinkage"),
@@ -86,7 +86,7 @@ class Outro(VoiceoverScene):
         with self.voiceover(
             "The House's statistics module now holds this part's tools, each tested on a simulated case with a known "
             "answer. <bookmark mark='a'/> Robust standard errors and long-run variances; panels and two passes; "
-            "likelihood and GMM; out-of-sample and Stambaugh-proof tests; event studies; bootstraps; Gibbs; multiple "
+            "likelihood and GMM; out-of-sample and bias-aware predictive inference; event studies; bootstraps; Gibbs; multiple "
             "testing; causal designs and double ML. <bookmark mark='b'/> And rule seven: no number leaves the House "
             "without a standard error that respects the sampling, and the count of everything tried. With this part's "
             f"registrations, the trial counter reads {env['trials']}."
@@ -137,7 +137,7 @@ class Outro(VoiceoverScene):
             "Persistent predictors carry Stambaugh's bias and lose out of sample. Curvature is precision, and GMM "
             "rejects the Euler equation. FOMC days carried a quarter of the excess return. Block bootstraps keep "
             "dependence. Shrinkage beats forty means; Benjamini-Hochberg controls false discoveries. Causal questions "
-            "need designs. And a good strategy needs sixteen years."
+            "need designs. In the iid benchmark, a true Sharpe of a half needs sixteen years for an expected t of two."
         ):
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.6,
                                                  run_time=20))

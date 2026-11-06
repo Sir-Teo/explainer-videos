@@ -39,11 +39,11 @@ class DML(VoiceoverScene):
     def slide(self, dm):
         d, y, x1, rd, ry = (np.asarray(dm[k]) for k in ("d", "y", "x1", "rd", "ry"))
         fold = np.asarray(dm["fold"])
-        g = axes([-4, 4], [-6, 6], x_length=6.2, y_length=5.0, xlabel=r"treatment $d$", ylabel=r"outcome $y$",
-                 xticks=[-3, 0, 3], yticks=[-5, 0, 5], font_size=16).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
+        g = axes([-5.5, 5.5], [-5, 10], x_length=6.2, y_length=5.0, xlabel=r"treatment $d$", ylabel=r"outcome $y$",
+                 xticks=[-5, 0, 5], yticks=[-5, 0, 5, 10], font_size=16).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
         ax = g.ax
         cmap = lambda v: interpolate_color(ManimColor(DATA_C), ManimColor(ALT), (v + 2) / 4)  # noqa: E731
-        dots = VGroup(*[Dot(ax.c2p(np.clip(a, -4, 4), np.clip(b, -6, 6)), radius=0.03, color=cmap(c_))
+        dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.03, color=cmap(c_))
                         for a, b, c_ in zip(d, y, x1)])
         xs = np.array([-3.8, 3.8])
         raw = Line(ax.c2p(xs[0], y.mean() + dm["slope_raw"] * (xs[0] - d.mean())),
@@ -73,8 +73,11 @@ class DML(VoiceoverScene):
             vo.wait_until("a")
             self.play(Create(raw), FadeIn(side[2]))
             vo.wait_until("b")
-            self.play(FadeOut(raw), *[p.animate.move_to(ax.c2p(np.clip(a, -4, 4), np.clip(b, -6, 6)))
-                                      for p, a, b in zip(dots, rd, ry)], run_time=3)
+            residual_x = label(r"residual treatment $d - \hat m(X)$", font_size=18, color=GREY_A).move_to(g.xlabel)
+            residual_y = label(r"residual outcome $y - \hat\ell(X)$", font_size=18, color=GREY_A)
+            residual_y.next_to(ax, UP, buff=0.18).align_to(ax, LEFT)
+            self.play(FadeOut(raw), Transform(g.xlabel, residual_x), Transform(g.ylabel, residual_y),
+                      *[p.animate.move_to(ax.c2p(a, b)) for p, a, b in zip(dots, rd, ry)], run_time=3)
             vo.wait_until("c")
             self.play(Create(res), FadeIn(side[3]))
             vo.wait_until("d")
@@ -88,19 +91,19 @@ class DML(VoiceoverScene):
                       font_size=34, colors=C_),
                 cmath(r"\partial_\eta\, \mathbb{E}[\psi(W; \theta_0, \eta)]\big|_{\eta_0}", r"=", r"0", font_size=36,
                       colors=C_),
-                cmath(r"\sqrt n(\hat\theta - \theta_0)", r"=", r"\frac{n^{-1/2}\sum \psi(W_i; \theta_0, \eta_0)}"
-                      r"{\mathbb{E}[v^2]} + O_p\big(\sqrt n\,\|\hat m - m\|\,(\|\hat\ell - \ell\| + \|\hat m - m\|)\big)", font_size=32,
-                      colors=C_),
+                cmath(r"\sqrt n(\hat\theta - \theta_0)", r"=", r"Z_n + R_n", font_size=36, colors=C_),
+                cmath(r"R_n", r"=", r"O_p\big(\sqrt n\,a_n(a_n+b_n)\big)", font_size=36, colors=C_),
                 cmath(r"\text{plug-in:}\ \ \hat\theta", r"=", r"\frac{\sum d\,(y - \hat g(X))}{\sum d^2}"
                       r"\ \Rightarrow\ \text{error} \propto \|\hat g - g\|", font_size=34, colors=C_)]
         whys = [why(r"the residual-on-residual score; $\ell = \mathbb{E}[y \mid X]$, $m = \mathbb{E}[d \mid X]$ are the "
                     r"nuisances $\eta$"),
                 why(r"Neyman orthogonality: a small error in either nuisance does not move the score's mean, to first "
                     r"order"),
-                why(r"Second-order error: $\|\hat m-m\|(\|\hat\ell-\ell\|+\|\hat m-m\|)=o_p(n^{-1/2})$ suffices with other regularity conditions."),
+                why(r"$Z_n=n^{-1/2}\sum_i\psi(W_i;\theta_0,\eta_0)/\mathbb E[v^2]$: the score's CLT term"),
+                why(r"$a_n=\|\hat m-m\|$, $b_n=\|\hat\ell-\ell\|$; require $a_n(a_n+b_n)=o_p(n^{-1/2})$ and regularity."),
                 why(r"the naive plug-in is not orthogonal: regularisation bias in $\hat g$ passes straight into "
                     r"$\hat\theta$")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.75, edge=6.8)
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.6, buff=0.65, edge=6.8)
         with self.voiceover(
             "Why residualise both? The estimate solves the residual-on-residual score: residual outcome minus theta "
             "times residual treatment, times residual treatment, averaging zero. <bookmark mark='a'/> That score is "
@@ -121,8 +124,9 @@ class DML(VoiceoverScene):
             step(1)
             vo.wait_until("b")
             step(2)
-            vo.wait_until("c")
             step(3)
+            vo.wait_until("c")
+            step(4)
         self.wait(0.5)
         self.clear_scene()
 

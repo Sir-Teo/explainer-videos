@@ -177,10 +177,10 @@ class Designs(VoiceoverScene):
         truth = DashedLine(h.ax.c2p(s["truth"], 0), h.ax.c2p(s["truth"], 1), color=YELLOW, stroke_width=3)
         side = VGroup(
             legend([(BAD, rf"two-way fixed effects: {s['twfe_mean']:.2f}"),
-                    (GOOD, rf"Callaway--Sant'Anna: {s['cs_mean']:.2f}"), (YELLOW, rf"truth: {s['truth']:.2f}")],
+                    (GOOD, rf"Callaway--Sant'Anna: {s['cs_mean']:.2f}"), (YELLOW, rf"supported-cell truth: {s['truth']:.2f}")],
                    font_size=19),
             wrapped_label(r"three cohorts, effects growing 0.3 a period after treatment; every unit is eventually "
-                          r"treated", 4.6, 18, GREY_B),
+                          r"treated; the target shown averages only cells with not-yet-treated controls", 4.6, 18, GREY_B),
             wrapped_label(r"Baker, Larcker and Wang (2022): re-estimating published staggered designs in finance and "
                           r"accounting with robust estimators often changed the conclusions", 4.6, 19, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4).shift(DOWN * 0.8)
@@ -188,9 +188,9 @@ class Designs(VoiceoverScene):
             "Most rules arrive in waves, and the standard regression quietly uses early-treated firms as controls for "
             "later ones. <bookmark mark='a'/> Here are its weights on each treated cohort and period when effects grow "
             "after treatment: the first cohort's late periods get negative weight. <bookmark mark='b'/> Over two hundred "
-            f"panels the truth is {s['truth']:.2f}; two-way fixed effects finds {s['twfe_mean']:.2f}, about "
+            f"panels, the target averages cells with not-yet-treated controls. Later effects lack those controls. The target is {s['truth']:.2f}; two-way fixed effects finds {s['twfe_mean']:.2f}, about "
             f"{100 * s['twfe_mean'] / s['truth']:.0f} percent of it. Callaway and Sant'Anna's estimator, comparing each "
-            f"cohort only with units not yet treated, centres on {s['cs_mean']:.2f}. <bookmark mark='c'/> Baker, Larcker "
+            f"cohort only with units not yet treated in this simplified implementation, centres on {s['cs_mean']:.2f}. <bookmark mark='c'/> Baker, Larcker "
             "and Wang re-ran published staggered studies in 2022, and conclusions often changed."
         ) as vo:
             self.play(FadeIn(g), FadeIn(clab))
@@ -212,14 +212,14 @@ class Designs(VoiceoverScene):
         ex = r["example"]
         x, y = np.asarray(ex["x"]), np.asarray(ex["y"])
         bws = r["bw"]
-        g = axes([-5, 5], [-10, 16], x_length=6.6, y_length=4.4, xlabel=r"index rank minus 1{,}000 (hundreds)",
-                 ylabel=r"outcome, simulated", xticks=[-4, -2, 0, 2, 4], yticks=[-5, 0, 5, 10], font_size=15)
+        g = axes([-5, 5], [-26, 28], x_length=6.6, y_length=4.4, xlabel=r"index rank minus 1{,}000 (hundreds)",
+                 ylabel=r"outcome, simulated", xticks=[-4, -2, 0, 2, 4], yticks=[-20, 0, 20], font_size=15)
         g.to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
         ax = g.ax
         pick = np.random.default_rng(0).choice(len(x), 700, replace=False)
-        dots = VGroup(*[Dot(ax.c2p(a, np.clip(b, -10, 16)), radius=0.022, color=DATA_C if a < 0 else EST,
+        dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.022, color=DATA_C if a < 0 else EST,
                             fill_opacity=0.6) for a, b in zip(x[pick], y[pick])])
-        cut = DashedLine(ax.c2p(0, -10), ax.c2p(0, 16), color=GREY_B, stroke_width=1.5)
+        cut = DashedLine(ax.c2p(0, -26), ax.c2p(0, 28), color=GREY_B, stroke_width=1.5)
         k = ValueTracker(0)
 
         def fits():
@@ -227,8 +227,8 @@ class Designs(VoiceoverScene):
             bw = bws[i] / 100
             f = ex["fits"][str(bws[i])]
             L, R = f["left"], f["right"]
-            win = Rectangle(width=ax.c2p(bw, 0)[0] - ax.c2p(-bw, 0)[0], height=ax.c2p(0, 16)[1] - ax.c2p(0, -10)[1],
-                            stroke_width=0, fill_color=YELLOW, fill_opacity=0.07).move_to(ax.c2p(0, 3))
+            win = Rectangle(width=ax.c2p(bw, 0)[0] - ax.c2p(-bw, 0)[0], height=ax.c2p(0, 28)[1] - ax.c2p(0, -26)[1],
+                            stroke_width=0, fill_color=YELLOW, fill_opacity=0.07).move_to(ax.c2p(0, 1))
             ll = Line(ax.c2p(-bw, L[0] - L[1] * bw), ax.c2p(0, L[0]), color=DATA_C, stroke_width=4)
             rr = Line(ax.c2p(0, R[0]), ax.c2p(bw, R[0] + R[1] * bw), color=EST, stroke_width=4)
             jump = Line(ax.c2p(0, L[0]), ax.c2p(0, R[0]), color=YELLOW, stroke_width=5)
@@ -247,7 +247,7 @@ class Designs(VoiceoverScene):
         best = bws[int(np.argmin(r["rmse"]))]
         cite = wrapped_label(r"real data: Chang, Hong and Liskovich (2015), the Russell 1000/2000 cutoff", 4.6, 18,
                              GREY_B).next_to(leg, DOWN, buff=0.25).align_to(e, LEFT)
-        q = predict(r"Every firm is eventually treated and the effect grows over time. Is the TWFE estimate too big "
+        q = predict(r"In the shown three-cohort design with growing effects, is the TWFE estimate too big "
                     r"or too small?", width=5.6).to_corner(DR, buff=0.3)
         with self.voiceover(
             "The discontinuity. Russell ranks stocks by size: number one thousand joins the large-cap index, one "
@@ -256,7 +256,8 @@ class Designs(VoiceoverScene):
             "planted jump of two: <bookmark mark='a'/> fit a line on each side within a window, read the jump, and widen "
             "the window. Narrow windows are noisy; wide ones reach where the relation curves, and are biased. "
             f"<bookmark mark='b'/> Over two hundred samples the error is smallest near {best} ranks: the bandwidth "
-            "trade-off again. <bookmark mark='c'/> Pause and predict: staggered adoption, growing effects. Is two-way "
+            "trade-off again. <bookmark mark='c'/> Pause and predict: in the shown staggered-adoption design with growing "
+            "effects, is two-way "
             "fixed effects too big or too small? Too small, possibly negative."
             " When there are too many controls for any design, machine learning can help, carefully. Next."
         ) as vo:

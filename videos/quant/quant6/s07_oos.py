@@ -185,10 +185,10 @@ class OutOfSample(VoiceoverScene):
             f'guaranteed by that one in-sample number. So far, least squares. Next: the method behind '
             f'most models in this series, maximum likelihood.'
         ) as vo:
-            self.play(FadeIn(VGroup(*head)))
+            self.play(FadeIn(VGroup(*head, *cells[4::4])), FadeIn(note_[0]), run_time=0.6)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(c) for c in cells[4:]], lag_ratio=0.03, run_time=3))
-            self.play(FadeIn(note_[0]))
+            self.play(LaggedStart(*[FadeIn(c) for i, c in enumerate(cells[4:]) if i % 4],
+                                  lag_ratio=0.03, run_time=3))
             vo.wait_until("b")
             self.play(FadeIn(note_[1]))
             vo.wait_until("c")

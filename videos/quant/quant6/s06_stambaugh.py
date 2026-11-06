@@ -149,8 +149,9 @@ class Stambaugh(VoiceoverScene):
             MathTex(rf"\text{{IVX, monthly 1871--2020: }} p = {mth['ivx']['p']:.3f};\ \ \text{{since 1952: }} "
                     rf"p = {post['ivx']['p']:.3f}", font_size=30, color=ALT),
             wrapped_label(r"IVX instruments $x_t$ with a filtered version of its own changes, $z_t = \sum_j "
-                          r"\rho_z^{t-j}\Delta x_j$, $\rho_z = 1 - 1/T^{0.95}$: less persistent than $x$ whatever "
-                          r"$x$'s persistence, so the Wald test is $\chi^2(1)$ without knowing $\rho$. (The House's "
+                          r"\rho_z^{t-j}\Delta x_j$, $\rho_z = 1 - 1/T^{0.95}$: mildly persistent when "
+                          r"the predictor is near a unit root. Under the paper's assumptions, the Wald test has an asymptotic "
+                          r"$\chi^2(1)$ reference across its persistence regimes. (The House's "
                           r"version omits the finite-sample correction.)", 11.6, 20, GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(UP, buff=0.45)
         src = real_data(r"Shiller's data: annual (January) and monthly, 1871--2020; nominal annual, real monthly returns")
@@ -163,7 +164,8 @@ class Stambaugh(VoiceoverScene):
             "the predictor's estimated shock as a second regressor, purging the bias inside the regression: "
             f"{a['aug']['beta']:.3f}, t of {a['aug']['t']:.2f}. <bookmark mark='b'/> Kostakis, Magdalinos and "
             "Stamatogiannis's IVX, from 2015, needs no persistence estimate: instrument the yield with a filtered "
-            "version of its own changes, mildly persistent by construction, and the test is chi-squared either way. "
+            "version of its own changes. Under the paper's assumptions, its Wald test has an asymptotic chi-squared "
+            "reference across the persistence regimes considered. "
             f"Annual p-value: {a['ivx']['p']:.2f}. On monthly data the House's simplified IVX {mono} at five percent, p "
             f"of {mth['ivx']['p']:.3f}. <bookmark mark='c'/> A small, fragile slope, overstated by its usual t; Part "
             "seven takes up persistence itself. <bookmark mark='d'/> A question: what if the "

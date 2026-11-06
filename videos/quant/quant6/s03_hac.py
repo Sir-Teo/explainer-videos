@@ -228,7 +228,7 @@ class HAC(VoiceoverScene):
         if cvtab.width > 5.4:
             cvtab.scale_to_fit_width(5.4)
         q = predict(r"Monthly returns, no overlap ($h = 1$), a predictor with $\rho = 0$. Does Newey--West still "
-                    r"over-reject?", width=5.6).to_corner(DR, buff=0.3)
+                    r"over-reject?", width=5.2).to_corner(DR, buff=0.3)
         r0 = rates["0.0|1"]
         with self.voiceover(
             f'Do the corrections work? Simulate worlds where nothing predicts anything, with '
@@ -260,7 +260,7 @@ class HAC(VoiceoverScene):
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for grp in groups for b in grp[3:]], lag_ratio=0.1,
                                   run_time=2), FadeIn(txt[2]))
             vo.wait_until("d")
-            # the critical-value table has been read; the question takes its place
-            self.play(FadeOut(cvtab), FadeIn(q, shift=UP * 0.2))
+            # The formulas have been read; the question needs the whole lower column.
+            self.play(FadeOut(cvtab), FadeOut(txt[1:]), FadeIn(q, shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
