@@ -158,7 +158,7 @@ class RandomSearch(VoiceoverScene):
         top = float(np.ceil(max(max(trs), max(hurdle)) * 100) / 100)
         lo = float(np.floor(min(0.0, min(vas)) * 100) / 100)
         g = axes([1, 4], [lo, top], x_length=7.0, y_length=4.6, xlabel=r"formulas tried, $N$ (log scale)",
-                 ylabel=r"IC of the best so far", xticks=[1, 2, 3, 4], yticks=[lo, 0, top], font_size=15,
+                 ylabel=r"IC of the best so far", xticks=[1, 2, 3, 4], yticks=sorted({lo, 0.0, top}), font_size=15,
                  xfmt=lambda v: f"{10 ** v:,.0f}".replace(",", "{,}"), yfmt=lambda v: f"{v:.2f}").move_to(LEFT * 1.9 + DOWN * 0.2)
         ax = g.ax
         lt = curve(ax, xs, trs, TRAIN_C, stroke_width=3)

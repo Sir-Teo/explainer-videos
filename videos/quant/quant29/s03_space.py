@@ -117,7 +117,7 @@ class Space(VoiceoverScene):
         bars = VGroup()
         vals = [(r"draws", n_all, GREY_B), (r"distinct formulas", n_str, FORMULA), (r"distinct scores", n_score, RAND_C)]
         for k, (t, n, col) in enumerate(vals):
-            w = 9.0 * n / n_all
+            w = 7.6 * n / n_all
             bars.add(VGroup(label(t, font_size=20, color=col).move_to([-4.6, 1.4 - 1.1 * k, 0]),
                             Rectangle(width=w, height=0.5, stroke_width=0, fill_color=col, fill_opacity=0.8).move_to(
                                 [-3.0 + w / 2, 1.4 - 1.1 * k, 0]).shift(RIGHT * 0.4),

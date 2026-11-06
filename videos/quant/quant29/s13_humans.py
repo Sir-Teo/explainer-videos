@@ -85,6 +85,10 @@ class Humans(VoiceoverScene):
                           r"strongest: where borrowing is costly, or where retail attention is high; that is the test, "
                           r"and it must be stated before the data are seen", width=12.4, font_size=19),
         ).arrange(DOWN, buff=0.25)
+        head = label(r"Calm coins beat wild ones: who would leave that on the table?", font_size=28).to_edge(UP, buff=0.4)
+        if cards.height > 6.0:
+            cards.scale_to_fit_height(6.0)
+        cards.next_to(head, DOWN, buff=0.3)
         with self.voiceover(
             "Take the pattern our miners found: calm coins beat wild ones. A researcher's first job is to ask why anyone "
             "would leave that on the table. <bookmark mark='a'/> One answer is leverage constraints: investors who "
@@ -95,6 +99,7 @@ class Humans(VoiceoverScene):
             "predicts where the effect should be strongest, and the prediction is written down before the data are "
             "looked at. A story told afterwards, to fit what was found, is just one more trial."
         ) as vo:
+            self.play(FadeIn(head))
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
