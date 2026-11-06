@@ -23,9 +23,9 @@ class Benchmarking(VoiceoverScene):
         b = load("bench")
         runs = b["runs"]
         head = label(r"The same program, \ thirty times", font_size=34).to_edge(UP, buff=0.3)
-        lo, hi = 34.0, 56.0
-        ax = NumberLine(x_range=[lo, hi, 2], length=10.0, color=GREY_D, include_numbers=False).move_to(UP * 0.6)
-        ticks = VGroup(*[mono(f"{v:.0f}", 15, GREY_B).next_to(ax.n2p(v), DOWN, buff=0.12) for v in range(34, 57, 4)])
+        lo, hi = 35.0, 80.0
+        ax = NumberLine(x_range=[lo, hi, 5], length=11.0, color=GREY_D, include_numbers=False).move_to(UP * 0.6)
+        ticks = VGroup(*[mono(f"{v:.0f}", 15, GREY_B).next_to(ax.n2p(v), DOWN, buff=0.12) for v in range(35, 81, 5)])
         ml = label(r"milliseconds", font_size=18, color=GREY_A).next_to(ticks, DOWN, buff=0.1)
         rng = random.Random(2)
         first = VGroup(*[Dot(ax.n2p(min(hi, r[0] * 1000)) + UP * (0.9 + 0.5 * rng.random()), radius=0.05, color=NO)
@@ -67,12 +67,12 @@ class Benchmarking(VoiceoverScene):
         b = load("bench")
         pads = b["pads"]
         head = label(r"Two traps", font_size=34).to_edge(UP, buff=0.3)
-        ax = Axes(x_range=[0, 4096, 1024], y_range=[30, 50, 5], x_length=6.0, y_length=3.0,
+        ax = Axes(x_range=[0, 4096, 1024], y_range=[30, 80, 10], x_length=6.0, y_length=3.0,
                   axis_config={"color": GREY_D, "include_numbers": False}).to_edge(LEFT, buff=1.0).shift(UP * 0.4)
         xt = VGroup(*[mono(str(v), 14, GREY_B).next_to(ax.c2p(v, 30), DOWN, buff=0.1) for v in range(0, 4097, 1024)])
-        yt = VGroup(*[mono(str(v), 14, GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1) for v in range(30, 51, 5)])
+        yt = VGroup(*[mono(str(v), 14, GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1) for v in range(30, 81, 10)])
         xl = label(r"bytes of environment variables", font_size=18, color=GREY_A).next_to(xt, DOWN, buff=0.1)
-        yl = label(r"median ms, \ 5 runs", font_size=18, color=GREY_A).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
+        yl = label(r"ms: \ median of 5 runs, \ and the range", font_size=18, color=GREY_A).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
         pts = VGroup(*[Line(ax.c2p(p["pad"], p["min"] * 1000), ax.c2p(p["pad"], p["max"] * 1000), color=GREY_C,
                             stroke_width=1.5) for p in pads])
         med = VGroup(*[Dot(ax.c2p(p["pad"], p["median"] * 1000), radius=0.05, color=HEAD) for p in pads])

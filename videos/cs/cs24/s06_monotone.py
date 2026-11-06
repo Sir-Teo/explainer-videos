@@ -137,8 +137,8 @@ class Monotone(VoiceoverScene):
         h = d["h"]
         area, lo, hi, hh = d["rect"]
         head = label(r"Monotonic stacks: \ the largest rectangle under a histogram", font_size=30).to_edge(UP, buff=0.3)
-        bw, sc = 0.62, 0.48
-        x0, y0 = -6.2, -1.6
+        bw, sc = 0.5, 0.46
+        x0, y0 = -6.6, -1.6
         bars = VGroup(*[Rectangle(width=bw, height=v * sc, stroke_color=GREY_B, stroke_width=1.2).set_fill(DATA, 0.55)
                         .move_to([x0 + i * bw + bw / 2, y0 + v * sc / 2, 0]) for i, v in enumerate(h)])
         vals = VGroup(*[mono(str(v), 16, GREY_A).next_to(b, DOWN, buff=0.08) for v, b in zip(h, bars)])
@@ -147,17 +147,17 @@ class Monotone(VoiceoverScene):
         side = VGroup(
             label(r"\textbf{next greater element}: \ keep a stack of positions still waiting; \\ each new value "
                   r"answers every smaller one on top", font_size=21, color=LAM),
-            label(r"the stack's values are monotone, \ hence the name; \ each position is pushed and popped once",
+            label(r"the stack's values are monotone, \ hence the name; \\ each position is pushed and popped once",
                   font_size=21, color=WHITE),
             label(r"histogram: \ when a bar is popped, \ the bar that popped it and the one below it \\ are its "
                   r"right and left limits: \ a candidate rectangle", font_size=21, color=HEAD),
-            label(rf"best here: \ height {hh}, \ bars {lo}--{hi}, \ area {area} \ (brute force agrees: "
+            label(rf"best here: \ height {hh}, \ bars {lo}--{hi}, \ area {area} \\ (brute force agrees: "
                   rf"{d['rect_brute']})", font_size=21, color=YES),
-            label(r"the same idea: \ stock spans, \ trapping rain water, \ the skyline problem, \ maximal "
+            label(r"the same idea: \ stock spans, \ trapping rain water, \\ the skyline problem, \ maximal "
                   r"rectangles of 1s", font_size=20, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.35).shift(DOWN * 0.2)
-        if side.width > 6.4:
-            side.width = 6.4
+        if side.width > 6.2:
+            side.width = 6.2
             side.to_edge(RIGHT, buff=0.35).shift(DOWN * 0.2)
         with self.voiceover(
             "A stack can be monotone too. <bookmark mark='a'/> For each element, find the next element to its right "

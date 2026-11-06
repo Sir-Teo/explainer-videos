@@ -25,15 +25,15 @@ class Bits(VoiceoverScene):
         tab = grid_table([r"$i$", r"binary", r"popcount", r"$i \mathbin{\&} -i$", r"Gray code"], rows,
                          widths=[0.8, 1.4, 1.5, 1.6, 1.6], row_h=0.27, font_size=17, mono_cols=(1, 4),
                          colors=[[WHITE, DATA, YES, LAM, HEAD]] * len(rows))
-        tab.to_edge(LEFT, buff=0.5).shift(DOWN * 0.35)
+        tab.next_to(head, DOWN, buff=0.35).to_edge(LEFT, buff=0.5)
         notes = VGroup(
-            label(r"\textbf{popcount}: \ one instruction on every modern CPU; \ $x \mathbin{\&} (x - 1)$ clears the "
+            label(r"\textbf{popcount}: \ one instruction on every modern CPU; \\ $x \mathbin{\&} (x - 1)$ clears the "
                   r"lowest set bit", font_size=21, color=YES),
             label(r"\textbf{lowest set bit}: \ $x \mathbin{\&} -x$ \ (chapter 2's Fenwick tree)", font_size=21,
                   color=LAM),
-            label(r"\textbf{Gray code}: \ $i \oplus (i \gg 1)$; \ neighbours differ in one bit \ (rotary encoders, \ Karnaugh maps)",
+            label(r"\textbf{Gray code}: \ $i \oplus (i \gg 1)$; \\ neighbours differ in one bit \ (rotary encoders, \ Karnaugh maps)",
                   font_size=21, color=HEAD),
-            label(r"sets as words: \ union $|$, \ intersection $\&$, \ membership by one shift", font_size=21,
+            label(r"sets as words: \ union $|$, \ intersection $\&$, \\ membership by one shift", font_size=21,
                   color=DATA),
             label(r"Warren's \textit{Hacker's Delight}: \ the catalogue", font_size=20, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.26).next_to(tab, RIGHT, buff=0.5).align_to(tab, UP)

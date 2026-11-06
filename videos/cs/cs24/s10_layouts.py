@@ -131,18 +131,18 @@ class Layouts(VoiceoverScene):
         big_ = rows[-1]
         small = rows[0]
         side = VGroup(
-            label(rf"{words(small['bytes'] // 4)} keys: \ branchy {small['branchy']:.0f} ns, \ B-tree "
+            label(rf"{words(small['bytes'] // 4)} keys: \\ branchy {small['branchy']:.0f} ns, \ B-tree "
                   rf"{small['btree']:.0f} ns", font_size=20, color=WHITE),
-            label(rf"{words(big_['bytes'] // 4)} keys \ ({human_bytes(big_['bytes'])}): \ {big_['branchy']:.0f} ns "
+            label(rf"{words(big_['bytes'] // 4)} keys \ ({human_bytes(big_['bytes'])}): \\ {big_['branchy']:.0f} ns "
                   rf"against {big_['btree']:.0f} ns, \ {big_['branchy'] / big_['btree']:.1f}$\times$", font_size=20,
                   color=YES),
-            label(r"branch-free code did not help on this CPU: \ the misses are memory, \ not branches", font_size=20,
+            label(r"branch-free code did not help on this CPU: \\ the misses are memory, \ not branches", font_size=20,
                   color=GREY_A),
-            label(r"the layout changes nothing in the RAM model \ and everything on the machine", font_size=20,
+            label(r"the layout changes nothing in the RAM model \\ and everything on the machine", font_size=20,
                   color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.3)
-        if side.width > 4.6:
-            side.width = 4.6
+        if side.width > 5.0:
+            side.width = 5.0
             side.to_edge(RIGHT, buff=0.3)
         with self.voiceover(
             "A million random searches at each size, from a thousand keys to sixty-four million. <bookmark "
@@ -174,7 +174,7 @@ class Layouts(VoiceoverScene):
         head = label(r"When branches do matter", font_size=34).to_edge(UP, buff=0.35)
         code_ = VGroup(*[mono(t, 22, c) for t, c in (("for (i = 0; i < n; i++)", WHITE),
                                                       ("    if (a[i] >= 128) s += a[i];", NO),
-                                                      ("", WHITE),
+                                                      ("// or, with no branch:", GREY_B),
                                                       ("    s += a[i] & -(a[i] >= 128);", YES))]).arrange(
             DOWN, aligned_edge=LEFT, buff=0.08).next_to(head, DOWN, buff=0.45)
         rows = [[r"with a branch", f"{b['random_branchy']:.2f}", f"{b['sorted_branchy']:.2f}"],
@@ -212,7 +212,7 @@ class Layouts(VoiceoverScene):
             self.play(FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule), FadeIn(VGroup(*tab.cells[1])),
                       FadeIn(notes[0]), FadeIn(notes[1]))
             vo.wait_until("c")
-            self.play(FadeIn(code_[3]), FadeIn(VGroup(*tab.cells[2])), FadeIn(notes[2]))
+            self.play(FadeIn(code_[2:]), FadeIn(VGroup(*tab.cells[2])), FadeIn(notes[2]))
             vo.wait_until("d")
             self.play(FadeIn(notes[3]))
         self.wait(0.3)

@@ -38,19 +38,19 @@ class Sorting(VoiceoverScene):
         big_ = rows[-1]
         small = rows[0]
         side = VGroup(
-            label(r"comparison sorts need $\log_2 n!$ comparisons \ (Part 16); \ radix sort compares nothing: \ "
+            label(r"comparison sorts need $\log_2 n!$ comparisons \ (Part 16); \\ radix sort compares nothing: \ "
                   r"$O(wn / 8)$ for $w$-bit keys", font_size=20, color=WHITE),
             label(rf"{small['n']} keys: \ \texttt{{std::sort}} {small['std_sort']:.0f} ns a key, \ radix "
-                  rf"{small['radix']:.0f}: \ counting 256 buckets four times is overhead", font_size=20, color=NO),
+                  rf"{small['radix']:.0f}: \\ counting 256 buckets four times is overhead", font_size=20, color=NO),
             label(rf"crossover: \ about {d['crossover']} keys", font_size=20, color=HEAD),
             label(rf"{words(big_['n'])} keys: \ {big_['std_sort']:.0f} against {big_['radix']:.0f} ns, \ "
-                  rf"{big_['std_sort'] / big_['radix']:.1f}$\times$; \ the jump at $2^{{22}}$ is the array "
+                  rf"{big_['std_sort'] / big_['radix']:.1f}$\times$; \\ the jump at $2^{{22}}$ is the array "
                   r"leaving the cache", font_size=20, color=YES),
-            label(r"in practice: \ hybrids. \ ska\_sort, \ vqsort \ (Google, 2021, SIMD), \ IPS$^4$o \ (parallel, "
+            label(r"in practice: \ hybrids. \ ska\_sort, \ vqsort \ (Google, 2021, SIMD), \\ IPS$^4$o \ (parallel, "
                   r"in place); \ Timsort for nearly sorted data", font_size=20, color=LAM),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.24).to_edge(RIGHT, buff=0.3)
-        if side.width > 5.0:
-            side.width = 5.0
+        if side.width > 5.4:
+            side.width = 5.4
             side.to_edge(RIGHT, buff=0.3)
         with self.voiceover(
             "Part 16 proved that sorting by comparisons needs n log n of them. <bookmark mark='a'/> Radix sort "
