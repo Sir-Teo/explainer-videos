@@ -388,6 +388,11 @@ LAPLACE = {"sample_pop": 2037615, "sample_births_3yr": 215599, "france_births": 
 # intelligence estimates and the German records found after the war (as tabulated in later accounts of their paper).
 TANKS = [("June 1940", 169, 1000, 122), ("June 1941", 244, 1550, 271), ("August 1942", 327, 1550, 342)]
 
+# Robbins's empirical Bayes (Part 45).  B. Efron & T. Hastie, *Computer Age Statistical Inference* (2016), Table 6.1:
+# one year's claims on 9,461 automobile insurance policies from a European company, as the number of policies with
+# 0, 1, ..., 7 claims.
+INSURANCE_CLAIMS = [7840, 1317, 239, 42, 14, 4, 4, 1]
+
 # --- Part 10: significance ---
 # Darwin's Zea mays (1876), as Fisher analysed it in *The Design of Experiments* (1935), ch. 3: the differences in
 # height, cross- minus self-fertilized, of 15 pairs grown in the same pots, in eighths of an inch.
@@ -1430,3 +1435,21 @@ def kidney() -> dict:
     R's survival ``kidney``, LGPL >= 2): two times per patient (``id``), ``time`` (days), ``status``, ``age``, ``sex``
     (1 male, 2 female), ``disease``."""
     return _table("kidney.csv")
+
+
+# Markov (1913), "An example of statistical investigation of the text Eugene Onegin concerning the connection of
+# samples in chains": the first 20,000 letters of Pushkin's novel (hard and soft signs excluded) as vowels and
+# consonants.  Markov's own counts were 8,638 vowels, 1,104 vowel-vowel and 3,827 consonant-consonant pairs.
+MARKOV_1913 = {"letters": 20000, "vowels": 8638, "vv": 1104, "cc": 3827}
+
+
+def onegin() -> "np.ndarray":
+    """The 20,000 letters as a 0/1 array (1 = vowel), recomputed from the public-domain text (modern orthography;
+    the short i counted as a vowel, as Markov did)."""
+    from pathlib import Path
+
+    import numpy as np
+
+    lines = (Path(__file__).parent / "data" / "onegin_vc.txt").read_text().splitlines()
+    bits = "".join(ln.strip() for ln in lines if ln and not ln.startswith("#"))
+    return np.array([int(c) for c in bits], int)
