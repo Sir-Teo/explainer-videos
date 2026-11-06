@@ -2234,3 +2234,57 @@ class ScienceTable(VGroup):
         z = np.asarray(z, bool)
         j0, j1 = self.names.index("y0"), self.names.index("y1")
         return VGroup(*[self.rows[i + 1][j1 if zi else j0].copy().set_color(color or WHITE) for i, zi in enumerate(z)])
+
+
+class CausalGraph(VGroup):
+    """A causal diagram (Part 36): named nodes at given positions, arrows for direct causes, and the kit's DAG for
+    d-separation.  ``path(nodes, color)`` returns the arrows along a path, recoloured (a back-door path, say);
+    ``condition(names)`` the boxes that mark conditioned-on nodes; ``node(name)`` one node; ``open(path, Z)`` whether a
+    path is open given Z."""
+
+    def __init__(self, positions: dict, edges, center=ORIGIN, scale: float = 1.0, font_size: int = 26, radius: float = 0.36,
+                 colors: dict | None = None, labels: dict | None = None):
+        super().__init__()
+        from explainer.analysis import label
+        from explainer.stats.kit.causal import DAG
+
+        self.dag = DAG(edges)
+        self.edges = [tuple(e) for e in edges]
+        colors = colors or {}
+        labels = labels or {}
+        c = np.asarray(center, float)
+        self.pos = {k: c + scale * np.array([v[0], v[1], 0.0]) for k, v in positions.items()}
+        self.radius = radius
+        self.nodes = {}
+        for k, p in self.pos.items():
+            col = colors.get(k, GREY_A)
+            circ = Circle(radius=radius, stroke_color=col, stroke_width=3, fill_color="#141a26", fill_opacity=1).move_to(p)
+            t = label(labels.get(k, rf"${k}$" if len(k) <= 2 else k), font_size=font_size, color=col).move_to(p)
+            if t.width > 1.7 * radius:
+                t.width = 1.7 * radius
+            self.nodes[k] = VGroup(circ, t)
+        self.arrows = {}
+        for a, b in self.edges:
+            pa, pb = self.pos[a], self.pos[b]
+            d = (pb - pa) / np.linalg.norm(pb - pa)
+            self.arrows[(a, b)] = Arrow(pa + d * radius, pb - d * radius, buff=0.02, color=GREY_B, stroke_width=3,
+                                        max_tip_length_to_length_ratio=0.18)
+        self.add(*self.arrows.values(), *self.nodes.values())
+
+    def node(self, name):
+        return self.nodes[name]
+
+    def path(self, nodes, color=None, stroke_width: float = 6) -> VGroup:
+        g = VGroup()
+        for a, b in zip(nodes[:-1], nodes[1:]):
+            arr = self.arrows.get((a, b)) or self.arrows.get((b, a))
+            if arr is not None:
+                g.add(arr.copy().set_color(color or S.ACCENT).set_stroke(width=stroke_width))
+        return g
+
+    def condition(self, names, color=None) -> VGroup:
+        return VGroup(*[Square(side_length=2.5 * self.radius, stroke_color=color or S.KEPT, stroke_width=3)
+                        .move_to(self.pos[n]) for n in names])
+
+    def open(self, path, Z=()) -> bool:
+        return self.dag.is_open(path, Z)
