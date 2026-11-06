@@ -65,7 +65,7 @@ class Costs(VoiceoverScene):
                     font_size=28),
             wrapped_label(rf"$\gamma = 3$, a cost of 1\% of every dollar traded: the wedge from {100 * lo:.1f}\% to "
                           rf"{100 * hi:.1f}\% in stocks, around Merton's {100 * pm:.1f}\%", 4.4, 19, GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(cnt, DOWN, buff=0.5).align_to(cnt, LEFT)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(cnt, DOWN, buff=0.5).to_edge(RIGHT, buff=0.5)
         src = illustration(r"simulation: one market, weekly, 15 years; band from dynamic programming")
         with self.voiceover(
             f"Merton's investor trades every instant to hold a constant fraction. If every trade costs one percent of the amount traded, that is ruinous: continuous rebalancing has infinite turnover. What should she do? <bookmark mark='a'/> Draw her wealth as a point in a plane: dollars in bonds across, dollars in stocks up. Merton's rule is a ray from the origin: every point on it has the same stock share. <bookmark mark='b'/> With costs, the ray opens into a wedge. Inside it, do nothing. When the market pushes the point to an edge, trade just enough to stay on the edge, never back to the middle. <bookmark mark='c'/> Watch fifteen years of one market. The point wanders freely inside the wedge, and each flash at an edge is a tiny trade. Count them against an investor who goes back to the ray every week. <bookmark mark='d'/> The wedge trades {100 * w['turn_band']:.1f} percent of wealth a year; staying on the ray, {100 * w['turn_ray']:.0f} percent. Mathematically the point is a diffusion reflected at the edges of a cone. The path uses weekly trades with a band computed by a monthly finite-horizon approximation. It illustrates the wedge; it is not an exact simulation of the continuous singular-control optimum."
@@ -172,8 +172,7 @@ class Costs(VoiceoverScene):
         leg = legend([(KELLY, r"$\varepsilon^{1/3}$ rule"), (VALUE, r"dynamic programming, monthly")], font_size=18)
         leg.next_to(g, UP, buff=0.1).align_to(g, LEFT)
         g1 = d["g1"]
-        q = predict(r"Costs double. Does the band double?", width=5.0, font_size=22).to_edge(RIGHT, buff=0.4).shift(
-            UP * 2.0)
+        q = predict(r"Costs double. Does the band double?", width=5.0, font_size=22).to_edge(RIGHT, buff=0.4).set_y(2.0)
         ans = MathTex(r"\times\, 2^{1/3} \approx 1.26", font_size=36, color=KELLY).next_to(q, DOWN, buff=0.25)
         res = VGroup(
             label(r"log utility, 1\% cost, quarterly, 10 years:", font_size=21, color=GREY_A),
