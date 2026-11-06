@@ -21,7 +21,7 @@ class Hook(VoiceoverScene):
         xt = VGroup(*[label(rf"{v:,}", font_size=16, color=GREY_B).next_to(ax.c2p(v, lo * 0.9), DOWN, buff=0.1)
                       for v in (0, 1024, 2048, 3072, 4096)])
         xl = label(r"bytes added to the environment", font_size=18, color=GREY_A).next_to(ax, DOWN, buff=0.45)
-        yt = VGroup(*[label(rf"{v:.2f}", font_size=16, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.12)
+        yt = VGroup(*[label(rf"{v:.3f}", font_size=16, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.12)
                       for v in (lo, (lo + hi) / 2, hi)])
         yl = label(r"seconds", font_size=18, color=GREY_A).next_to(yt, UP, buff=0.25).align_to(yt, RIGHT)
         dots = VGroup(*[Dot(ax.c2p(r["bytes"], r["median"]), radius=0.06, color=HEAD) for r in env])
