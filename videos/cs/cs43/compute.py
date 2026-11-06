@@ -16,7 +16,7 @@ Items:
     modelcheck  every execution of retry-until-acknowledged, with and without deduplication, explored
     job         the Job as three services: counts with and without idempotency keys, over loss and duplication
     pagination  offset against cursor paging under concurrent inserts, over insert rates
-    storm       a five-second outage: immediate retries, backoff with jitter, a retry budget
+    storm       a ten-second outage: immediate retries, backoff with jitter, a retry budget
     outbox      commit-then-publish, publish-then-commit and the transactional outbox under crashes
     saga        an order saga: outcomes, compensations and the consistency invariant
     fanout      latency of a fan-out to 1-100 back ends: medians and tails
