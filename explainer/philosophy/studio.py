@@ -293,7 +293,7 @@ WALL = {
          r"no common knowledge over unreliable channels (Halpern--Moses)", 1990, r"act without certainty"),
     13: (r"Bertrand", r"one rational prior from ignorance", r"Bertrand's paradox", 1889,
          r"priors are choices"),
-    14: (r"Lewis triviality", r"conditionals as propositions with probability P(C|A)",
+    14: (r"Lewis triviality", r"conditionals as propositions with probability $P(C \mid A)$",
          r"Lewis's triviality; Gärdenfors's impossibility", 1976, r"conditionals may not state facts"),
     15: (r"No free lunch", r"induction justified without assumptions",
          r"Hume; grue; no free lunch (Wolpert); Gold's theorem", 1996, r"every learner bets on a world"),
