@@ -41,15 +41,18 @@ class Mixtures(VoiceoverScene, TreeMixin):
                    color=GREY_B).move_to([4.2, -1.8, 0])
         if ex.width > 5.6:
             ex.width = 5.6
+        intro = label('When success chances vary', font_size=36)
         with self.voiceover(
             "So far every parameter has been a fixed number. Let the parameter itself be random. "
             "<bookmark mark='a'/> Choose a success chance p from a beta distribution, then run twenty trials with "
             "that p. Each unit, a player, a hospital, a batch, has its own rate. <bookmark mark='b'/> The count is "
             "beta-binomial. <bookmark mark='c'/> Compared with a binomial with the same average chance, grey, it's "
             f"far more spread out: variance {d['bb_var']:.0f} against about five. That extra spread is called "
-            "overdispersion, and real counts nearly always have it."
+            "overdispersion, and it is common in real counts, although underdispersion is possible too."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(steps))
             vo.wait_until("b")
             self.play(FadeIn(A), FadeIn(bars), FadeIn(bb))
@@ -72,6 +75,7 @@ class Mixtures(VoiceoverScene, TreeMixin):
         cap = VGroup(label(r"noise within units", font_size=24, color=DISC),
                      label(r"$+$ \ variation between units", font_size=24, color=S.PRIOR)).arrange(RIGHT, buff=0.3)
         cap.to_edge(DOWN, buff=0.7)
+        intro = label('Within and between variation', font_size=36)
         with self.voiceover(
             "Where does the extra variance come from? <bookmark mark='a'/> The law of total variance splits it in "
             "two: the average variance within units, given their p, plus the variance of their means between "
@@ -80,9 +84,12 @@ class Mixtures(VoiceoverScene, TreeMixin):
             "twenty, exactly what the simulation found. This decomposition, within plus between, is the seed of "
             "the analysis of variance in Part 13 and of the mixed models in Part 25."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.6, buff=0.6)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=k > 0)
             self.play(FadeIn(cap))
         self.clear_scene()
@@ -104,15 +111,18 @@ class Mixtures(VoiceoverScene, TreeMixin):
         mv = MathTex(rf"\text{{mean }} {d['gp_mean']:.2f},\ \text{{variance }} {d['gp_var']:.2f}", font_size=26, color=SIM)
         mv.move_to([4.4, 0.3, 0])
         leg = legend([(EXACT, r"negative binomial"), (GREY_A, r"Poisson, same mean")], font_size=22).move_to([4.4, -0.8, 0])
+        intro = label('When Poisson rates vary', font_size=36)
         with self.voiceover(
             "Now chapter three's promise. <bookmark mark='a'/> Give each unit its own Poisson rate, drawn from a "
             "gamma distribution: some corps more dangerous than others, some roads more accident-prone. "
-            "<bookmark mark='b'/> The resulting counts are exactly negative binomial; integrating the Poisson "
+            "<bookmark mark='b'/> The resulting counts are exactly negative binomial in the failures convention, starting at zero. Add the shape parameter r to recover chapter three's total-trials convention when r is an integer. Integrating the Poisson "
             "against the gamma gives its formula. <bookmark mark='c'/> The mean is three, but the variance is "
             "about seven and a half, where a Poisson's would equal its mean. That's why the negative binomial is "
             "the standard model for overdispersed counts, in Part 24."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(steps[:2]))
             vo.wait_until("b")
             self.play(FadeIn(A), FadeIn(bars), FadeIn(nb), FadeIn(steps[2]))
@@ -140,6 +150,7 @@ class Mixtures(VoiceoverScene, TreeMixin):
         take.move_to([4.2, -0.8, 0])
         if take.width > 5.6:
             take.width = 5.6
+        intro = label('Heavy tails from mixed variances', font_size=36)
         with self.voiceover(
             "Mixtures explain heavy tails too. <bookmark mark='a'/> Draw a normal, but first choose its variance at "
             "random, from an inverse chi-squared: most of the time a modest spread, occasionally a huge one. "
@@ -147,7 +158,9 @@ class Mixtures(VoiceoverScene, TreeMixin):
             "the occasional wide component makes the mixture's tails heavy. It's the basis of robust statistical "
             "models, in Part 30."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(steps[:2]))
             vo.wait_until("b")
             self.play(FadeIn(A), FadeIn(h), Create(tc), Create(nc), FadeIn(steps[2]), FadeIn(leg), FadeIn(take))

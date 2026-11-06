@@ -31,20 +31,23 @@ class ExpFam(VoiceoverScene):
             brace_note(f[5], r"sufficient statistic", direction=UP, color=S.LIK, font_size=22),
             brace_note(f[7], r"log-normalizer", direction=DOWN, color=S.POST, font_size=22),
         )
-        hc = label(r"Darmois, Koopman, Pitman (1935--36): \ the families with fixed-size sufficient statistics",
+        hc = label(r"Darmois, Koopman, Pitman (1935--36): \ under regularity and fixed support: \ fixed-size sufficient statistics",
                    font_size=22, color=GREY_B).to_edge(DOWN, buff=0.5)
         if hc.width > 13:
             hc.width = 13
+        intro = label('One formula for many families', font_size=36)
         with self.voiceover(
             "Look across the family tree and one formula keeps appearing. <bookmark mark='a'/> The density is a "
             "function of x alone, times the exponential of a parameter eta times a statistic T of x, minus a "
             "function A of eta. <bookmark mark='b'/> Eta is the natural parameter, T is the sufficient statistic, "
             "and A, the log-normalizer, is whatever makes the density integrate to one. <bookmark mark='c'/> "
             "Families of this form are called exponential families. Three mathematicians, Darmois, Koopman and "
-            "Pitman, showed independently in the mid-1930s that they're exactly the families in which a fixed "
+            "Pitman showed independently in the mid-1930s that, under regularity conditions including parameter-independent support, these are the families in which a fixed "
             "number of summaries can capture everything a sample of any size says about the parameter."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(Write(f))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(b) for b in braces], lag_ratio=0.4))
@@ -72,15 +75,15 @@ class ExpFam(VoiceoverScene):
                 m.move_to([x, y, 0])
             y -= 0.95
         line = Line([-6.4, 2.15, 0], [6.4, 2.15, 0], color=GREY_D)
-        note_ = label(r"not members: \ the uniform on $[0, \theta]$, \ Cauchy, \ $t$: \ their supports or tails do not fit",
+        note_ = label(r"not members: \ the uniform on $[0, \theta]$, \ Cauchy, \ $t$: \ in their usual varying-parameter forms",
                       font_size=22, color=GREY_B).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "Many of our distributions fit the form. <bookmark mark='a'/> The Bernoulli: write p to the x times one "
             "minus p to the one minus x as an exponential, and the natural parameter is the log odds, the logit. "
             "<bookmark mark='b'/> The Poisson: the natural parameter is log lambda. The normal with known variance: "
-            "the mean itself. The exponential, and the binomial with a fixed number of trials. "
+            "the mean itself when the known variance is one, as in this table. The exponential, and the binomial with a fixed number of trials. "
             "<bookmark mark='c'/> Not everything fits: the uniform on zero to theta, whose support moves with the "
-            "parameter, and the Cauchy and t, whose tails don't have the exponential form."
+            "parameter, and the usual Cauchy location-scale and Student location-scale or degrees-of-freedom families. Heavy tails alone are not an exclusion: a Pareto with known lower threshold is an exponential family."
         ) as vo:
             self.play(FadeIn(head), Create(line))
             vo.wait_until("a")
@@ -105,6 +108,7 @@ class ExpFam(VoiceoverScene):
                 why(r"once more: \ $A$ is convex")]
         chk = VGroup(*[MathTex(rf"\text{{{r[0]}}}: A'(\eta) = {r[2]:.6f},\ \ E T = {r[3]:g}", font_size=22, color=SIM)
                        for r in d["rows"][::2]]).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_corner(DR, buff=0.35)
+        intro = label('Derivatives of the log-normalizer', font_size=36)
         with self.voiceover(
             "The log-normalizer is more than a constant: it generates the moments. <bookmark mark='a'/> The density "
             "integrates to one for every value of eta. <bookmark mark='b'/> Differentiate that identity with "
@@ -113,9 +117,12 @@ class ExpFam(VoiceoverScene):
             "is never negative, so A is convex. For the Poisson, A is e to the eta, and both derivatives give "
             "lambda: mean and variance equal, as we've seen. Numerical derivatives confirm it."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.4, buff=0.5)
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=k in (2, 3))
             self.play(FadeIn(chk))
         self.clear_scene()
@@ -124,8 +131,8 @@ class ExpFam(VoiceoverScene):
         items = VGroup(
             label(r"sufficiency: \ $\sum_i T(x_i)$ says everything about $\eta$ \ (Parts 9, 45)", font_size=28),
             label(r"maximum likelihood: \ solve $A'(\hat\eta) = \bar T$ \ (Part 22)", font_size=28),
-            label(r"generalized linear models: \ $\eta$ linear in covariates \ (Part 24)", font_size=28),
-            label(r"conjugate priors: \ posteriors stay in the family \ (Part 15)", font_size=28),
+            label(r"canonical-link GLMs: \ $\eta$ linear in covariates \ (Part 24)", font_size=28),
+            label(r"conjugate priors: \ posterior stays in the prior family \ (Part 15)", font_size=28),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.42)
         head = label(r"Why the form matters", font_size=36, color=S.ACCENT).to_edge(UP, buff=0.6)
         with self.voiceover(
@@ -133,8 +140,8 @@ class ExpFam(VoiceoverScene):
             "sample carries all the information about the parameter: that's sufficiency, Parts 9 and 45. "
             "<bookmark mark='b'/> Maximum likelihood reduces to matching A prime to the sample average of T. "
             "<bookmark mark='c'/> Make the natural parameter a linear function of covariates and you have the "
-            "generalized linear models of Part 24, logistic and Poisson regression among them. "
-            "<bookmark mark='d'/> And Bayesian updating stays inside the family, with conjugate priors, in Part 15."
+            "canonical-link generalized linear models of Part 24, logistic and log-link Poisson regression among them. Other GLMs use other links. "
+            "<bookmark mark='d'/> And with a conjugate prior, Bayesian updating stays inside that prior family, in Part 15."
         ) as vo:
             self.play(FadeIn(head))
             for k, m in enumerate("abcd"):

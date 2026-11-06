@@ -27,7 +27,7 @@ class Outro(VoiceoverScene):
 
     def recap(self):
         items = [
-            (r"horse kicks are Poisson: \ Bortkiewicz, 1898", S.MUSEUM),
+            (r"horse kicks fit a Poisson model: \ Bortkiewicz, 1898", S.MUSEUM),
             (r"binomial: \ paths, \ $\binom nk$, \ $np$ and $np(1-p)$", DISC),
             (r"many rare chances $\to$ Poisson; \ Le Cam's bound", DISC),
             (r"geometric and exponential forget the past", DISC),
@@ -51,7 +51,7 @@ class Outro(VoiceoverScene):
         head = label(r"Part 3, \ in fourteen lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Part three in fourteen lines. <bookmark mark='a'/> Horse kicks follow Poisson's law. The binomial counts "
+            "Part three in fourteen lines. <bookmark mark='a'/> The horse-kick counts fit a Poisson model. The binomial counts "
             "paths, with mean n p and variance n p q. Many rare chances make a Poisson, and Le Cam said how closely. "
             "The geometric and the exponential forget the past. Sampling without replacement is hypergeometric, and "
             "the capture–recapture ratio is biased. You land in long gaps between buses. The normal came three ways. "
@@ -85,8 +85,9 @@ class Outro(VoiceoverScene):
             "Bayesian and mixed models. The Poisson process returns in time series and survival analysis, heavy "
             "tails in robust statistics, and capture–recapture in surveys and missing data."
         ) as vo:
+            self.play(FadeIn(card.head))
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
                                                      lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 

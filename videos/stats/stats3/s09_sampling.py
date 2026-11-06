@@ -32,7 +32,13 @@ class Sampling(VoiceoverScene, TreeMixin):
         A = axes([0, 12], [0, 0.6], x_length=7.4, y_length=4.2, xlabel=r"$x$", xticks=[0, 2, 4, 6, 8, 10, 12],
                  yticks=[0, 0.25, 0.5], center=[-2.4, -0.4, 0])
         ax = A.ax
-        curves = VGroup(*[curve(ax, xs, np.clip(np.asarray(d["chi"][k]), 0, 0.6), CHI_COLS[k], 3) for k in ("1", "2", "3", "5")])
+        curves = VGroup()
+        for k in ("1", "2", "3", "5"):
+            density = np.asarray(d["chi"][k])
+            visible = density <= 0.6
+            curves.add(curve(ax, xs[visible], density[visible], CHI_COLS[k], 3))
+        crop_note = label(r"$k=1$: density diverges at $0$; curve continues above the panel",
+                          font_size=20, color=GREY_B).to_edge(DOWN, buff=0.3)
         labs = VGroup(*[label(rf"$k = {k}$", font_size=22, color=CHI_COLS[k]) for k in ("1", "2", "3", "5")])
         labs.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to(ax.c2p(10.5, 0.45))
         s3 = np.asarray(d["s3"])
@@ -49,6 +55,7 @@ class Sampling(VoiceoverScene, TreeMixin):
                       font_size=24, color=SIM).move_to([4.3, 0.1, 0])
         gam = MathTex(r"\chi^2_k", r"=", r"\text{gamma}\left(\tfrac k2,\ 2\right)", font_size=32, color=EXACT)
         gam.move_to([4.3, -1.0, 0])
+        intro = label('Sums of squared normals', font_size=36)
         with self.voiceover(
             "Some distributions are created by statistics itself, as the laws of the quantities we compute from "
             "normal data. <bookmark mark='a'/> The first is the sum of k squared independent standard normals: "
@@ -59,10 +66,12 @@ class Sampling(VoiceoverScene, TreeMixin):
             "variance, and Karl Pearson in 1900 made it the basis of his famous test. <bookmark mark='e'/> And it's "
             "a relative we already know: chi-squared is a gamma, with shape k over two and scale two."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(dfn))
             vo.wait_until("b")
-            self.play(FadeIn(A), LaggedStart(*[Create(c) for c in curves], lag_ratio=0.3), FadeIn(labs), run_time=3.0)
+            self.play(FadeIn(A), LaggedStart(*[Create(c) for c in curves], lag_ratio=0.3), FadeIn(labs), FadeIn(crop_note), run_time=3.0)
             vo.wait_until("c")
             self.play(FadeIn(h), FadeIn(chk))
             vo.wait_until("d")
@@ -85,23 +94,28 @@ class Sampling(VoiceoverScene, TreeMixin):
         hc = history_card(1908, r"W. S. Gosset (``Student''), \ Guinness brewery, Dublin",
                           r"small samples of barley and yeast: \ the mean over its \emph{estimated} standard error",
                           color=S.MUSEUM, width=5.4, font_size=22).move_to([4.3, 2.3, 0])
-        f = MathTex(r"T = \frac{Z}{\sqrt{V/\nu}}", r",\quad V \sim \chi^2_\nu", font_size=32, color=EXACT).move_to([4.3, 0.4, 0])
+        f = VGroup(MathTex(r"T = \frac{Z}{\sqrt{V/\nu}}", font_size=34, color=EXACT),
+                   MathTex(r"Z \sim N(0,1),\ V \sim \chi^2_\nu\text{ independent}", font_size=24))
+        f.arrange(DOWN, buff=0.18).move_to([4.3, 0.3, 0])
         notes = VGroup(label(r"heavier tails: \ uncertainty about $\sigma$", font_size=22, color=GREY_A),
                        label(r"$\nu \to \infty$: \ the normal", font_size=22, color=cols["30"]),
                        label(r"$\nu = 1$: \ the Cauchy", font_size=22, color=cols["1"])).arrange(DOWN, aligned_edge=LEFT,
                                                                                             buff=0.15)
         notes.move_to([4.3, -1.2, 0])
+        intro = label('Estimating the spread', font_size=36)
         with self.voiceover(
             "The second was found in a brewery. <bookmark mark='a'/> William Sealy Gosset worked for Guinness in "
             "Dublin, testing barley and yeast in small samples. Guinness let him publish only under a pseudonym, "
-            "Student, and in 1908 Student worked out the law of the sample mean divided by its estimated standard "
+            "Student, and in 1908 Student worked out the law of the sample mean minus the population mean, divided by its estimated standard "
             "error. <bookmark mark='b'/> In modern form: a standard normal, divided by the square root of an "
             "independent chi-squared over its degrees of freedom. <bookmark mark='c'/> Compared with the normal, "
             "grey, its tails are heavier, because the estimated spread is itself uncertain. <bookmark mark='d'/> "
             "As the degrees of freedom grow the estimate firms up and t becomes the normal. With one degree of "
             "freedom its tails are so heavy that it has no mean at all: that's the Cauchy. Part 8 puts t to work."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(hc))
             vo.wait_until("b")
             self.play(Write(f))
@@ -117,8 +131,9 @@ class Sampling(VoiceoverScene, TreeMixin):
         A = axes([0, 5], [0, 0.8], x_length=6.0, y_length=3.6, xlabel=r"$x$", xticks=[0, 1, 2, 3, 4, 5],
                  yticks=[0, 0.4, 0.8], center=[-3.0, -0.6, 0])
         cv = curve(A.ax, fx, fd, EXACT, 3)
-        f = MathTex(r"F = \frac{V_1 / d_1}{V_2 / d_2}", r",\quad V_i \sim \chi^2_{d_i}", font_size=34, color=EXACT)
-        f.move_to([3.6, 1.4, 0])
+        f = VGroup(MathTex(r"F = \frac{V_1 / d_1}{V_2 / d_2}", font_size=34, color=EXACT),
+                   MathTex(r"V_i \sim \chi^2_{d_i}\text{ independent}", font_size=24))
+        f.arrange(DOWN, buff=0.18).move_to([3.6, 1.4, 0])
         cap = label(r"$F_{5,\,10}$", font_size=24, color=EXACT).next_to(A, UP, buff=0.15)
         hc = label(r"R. A. Fisher (1924); \ named $F$ in his honour by George Snedecor (1934)", font_size=24,
                    color=GREY_B).move_to([3.6, 0.0, 0])
@@ -128,13 +143,16 @@ class Sampling(VoiceoverScene, TreeMixin):
                     color=GREY_A).move_to([3.6, -1.0, 0])
         if use.width > 6.0:
             use.width = 6.0
+        intro = label('A ratio of independent variances', font_size=36)
         with self.voiceover(
             "The third is a ratio. <bookmark mark='a'/> Divide one chi-squared by its degrees of freedom, and "
             "another, independent one by its own, and take the ratio. <bookmark mark='b'/> Ronald Fisher studied it "
             "in 1924, and George Snedecor named it F in his honour. <bookmark mark='c'/> It's the law of a ratio of "
             "two estimated variances, and it powers the analysis of variance in Parts 12 and 13."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(Write(f), FadeIn(A), Create(cv), FadeIn(cap))
             vo.wait_until("b")
             self.play(FadeIn(hc))
@@ -160,12 +178,12 @@ class Sampling(VoiceoverScene, TreeMixin):
                 beams.add(Line(lh, [x, shore_y, 0], color=S.ACCENT, stroke_width=1, stroke_opacity=0.4))
                 hits.add(Dot([x, shore_y, 0], radius=0.05, color=SIM))
         run_c, run_n = np.asarray(d["run_c"]), np.asarray(d["run_n"])
-        A = axes([0, 20000], [-3, 3], x_length=5.6, y_length=2.8, xlabel=r"flashes recorded", xticks=[0, 10000, 20000],
-                 xfmt=lambda v: fmt_int(v), yticks=[-2, 0, 2], center=[3.9, -1.25, 0])
+        A = axes([0, 20000], [-9, 3], x_length=5.6, y_length=2.8, xlabel=r"flashes recorded", xticks=[0, 10000, 20000],
+                 xfmt=lambda v: fmt_int(v), yticks=[-8, -4, 0], center=[3.9, -1.25, 0])
         ax = A.ax
         idx = np.unique(np.geomspace(5, 20000, 300).astype(int)) - 1
-        cc = curve(ax, idx + 1, np.clip(run_c[idx], -3, 3), S.RESID, 2.5)
-        cn = curve(ax, idx + 1, np.clip(run_n[idx], -3, 3), S.LIK, 2.5)
+        cc = curve(ax, idx + 1, run_c[idx], S.RESID, 2.5)
+        cn = curve(ax, idx + 1, run_n[idx], S.LIK, 2.5)
         leg = legend([(S.RESID, r"running mean: lighthouse"), (S.LIK, r"running mean: normal")], font_size=20)
         leg.next_to(A, UP, buff=0.15)
         f = MathTex(r"X = \tan\Theta,\ \ \Theta \sim U\!\left(-\tfrac\pi2, \tfrac\pi2\right)", r"\ \Rightarrow\ ",
@@ -179,7 +197,7 @@ class Sampling(VoiceoverScene, TreeMixin):
         with self.voiceover(
             "The Cauchy has a vivid story. <bookmark mark='a'/> A lighthouse stands a kilometre off a straight "
             "shore. Its lamp spins, and flashes at a random moment, so in a random direction. <bookmark mark='b'/> "
-            "Record where each flash hits the shore. The position is the tangent of a uniform angle, and the CDF "
+            "Condition on the beam pointing toward the shore, and record independent flashes. The position is the tangent of a uniform angle, and the CDF "
             "method gives its density: one over pi times one plus x squared, the Cauchy. "
             "<bookmark mark='c'/> Now average the recorded positions. For normal data, green, the running mean "
             "settles down. For the lighthouse, red, it never does: every so often a flash at a shallow angle lands "

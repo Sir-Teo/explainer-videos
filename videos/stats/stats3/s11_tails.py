@@ -30,25 +30,30 @@ class Tails(VoiceoverScene, TreeMixin):
         ax = A.ax
         lx = np.linspace(0, 3, 200)
         par = curve(ax, lx, -2 * lx, MLE, 3)
-        ex = curve(ax, lx, np.clip(np.log10(np.exp(-(10 ** lx - 1) / 2)), -6, 0), GREY_A, 3)
+        log_survival = -(10 ** lx - 1) / (2 * np.log(10))
+        visible = log_survival >= -6
+        ex = curve(ax, lx[visible], log_survival[visible], GREY_A, 3)
         leg = legend([(MLE, r"Pareto, $\alpha = 2$: \ a straight line"), (GREY_A, r"exponential: \ falls off a cliff")],
                      font_size=22).move_to([3.4, 0.6, 0])
-        facts = VGroup(label(r"moments of order $\ge \alpha$ are infinite \ (Part 1's incomes, $\alpha \approx 2$)",
+        facts = VGroup(label(r"Pareto moments of order $\ge \alpha$ are infinite; \ World tail model: $\alpha=2.1$",
                              font_size=22, color=GREY_A),
                        label(r"$\log X$ is exponential: \ chapter 7's arrow", font_size=22, color=GREY_A))
         facts.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.4, -1.2, 0])
         for f_ in facts:
             if f_.width > 6.6:
                 f_.width = 6.6
+        intro = label('A power-law tail', font_size=36)
         with self.voiceover(
             "Part 1 met heavy tails in the World's incomes. Here's the distribution behind them. "
             "<bookmark mark='a'/> A Pareto tail: the chance of exceeding x falls like a power of x, not "
             "exponentially. <bookmark mark='b'/> On log–log axes a power law is a straight line with slope minus "
             "alpha, while an exponential tail falls off a cliff. <bookmark mark='c'/> Moments of order alpha and "
-            "above are infinite, which is why the World's incomes, with alpha near two, have an unstable variance. "
+            "above are infinite in the idealized Pareto law. The World uses a tail exponent of two point one: its generating law has finite variance but no third moment. Its fixed finite population has finite empirical moments of every order, although rare high incomes can make sample variances unstable. "
             "And the logarithm of a Pareto variable is exponential: the arrow we drew in chapter seven."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(dfn))
             vo.wait_until("b")
             self.play(FadeIn(A), Create(par), Create(ex), FadeIn(leg))
@@ -63,7 +68,7 @@ class Tails(VoiceoverScene, TreeMixin):
                  xticks=[0, 1, 2], yticks=[3, 4, 5], center=[-2.4, -0.4, 0])
         ax = A.ax
         dots = VGroup(*[Dot(ax.c2p(np.log10(r), np.log10(p)), radius=0.04, color=S.WORLD) for r, p in zip(ranks, pops)])
-        fit = Line(ax.c2p(0, np.log10(pops[0])), ax.c2p(np.log10(150), np.log10(pops[0]) + d["slope_rank"] * np.log10(150)),
+        fit = Line(ax.c2p(0, d["intercept_rank"] / np.log(10)), ax.c2p(np.log10(150), d["intercept_rank"] / np.log(10) + d["slope_rank"] * np.log10(150)),
                    color=S.ACCENT, stroke_width=3)
         lab = MathTex(rf"\text{{slope}} \approx {d['slope_rank']:.2f}", font_size=30, color=S.ACCENT).move_to([4.2, 1.8, 0])
         hc = label(r"Zipf's law for cities: \ Auerbach (1913), Zipf (1949)", font_size=24, color=GREY_A).move_to([4.2, 0.9, 0])
@@ -100,7 +105,7 @@ class Tails(VoiceoverScene, TreeMixin):
         cvs = VGroup(*[curve(ax, qs, np.asarray(d["lorenz_par"][a]), c, 3) for a, c in cols.items()])
         diag = DashedLine(ax.c2p(0, 0), ax.c2p(1, 1), color=GREY_D, stroke_width=1.5)
         p80 = Dot(ax.c2p(0.2, 0.2 ** (1 - 1 / 1.16)), radius=0.08, color=S.RESID)
-        f = MathTex(r"\text{share of the top } q", r"=", r"q^{\,1 - 1/\alpha}", font_size=32).move_to([3.4, 2.6, 0])
+        f = MathTex(r"\text{Pareto, }\alpha>1:\ \text{top }q", r"=", r"q^{\,1 - 1/\alpha}", font_size=32).move_to([3.4, 2.6, 0])
         f[2].set_color(EXACT)
         leg = legend([(S.RESID, r"$\alpha = 1.16$: \ the 80/20 rule"), (S.ACCENT, r"$\alpha = 2$"),
                       (S.LIK, r"$\alpha = 3$")], font_size=22).move_to([3.4, 1.2, 0])
@@ -114,8 +119,8 @@ class Tails(VoiceoverScene, TreeMixin):
             nt.width = 6.0
         tag = simulated_tag()
         with self.voiceover(
-            "Pareto's own observation was about concentration. <bookmark mark='a'/> For a Pareto tail with exponent "
-            "alpha, the richest fraction q of people hold a share q to the one minus one over alpha of the total. "
+            "Pareto's own observation was about concentration. <bookmark mark='a'/> For a whole-population Pareto model with exponent "
+            "alpha greater than one, the richest fraction q of people hold a share q to the one minus one over alpha of the total. "
             "<bookmark mark='b'/> With alpha about one point one six, the top twenty percent hold eighty percent: "
             "the famous eighty–twenty rule. Heavier tails, smaller alpha, concentrate more. <bookmark mark='c'/> "
             f"In the World, the top twenty percent of adults earn {100 * sh['0.2']:.0f} percent of all income, and "
@@ -160,6 +165,7 @@ class Tails(VoiceoverScene, TreeMixin):
         if hc.width > 13:
             hc.width = 13
         tag = note(r"simulated").to_corner(DL, buff=0.3).shift(UP * 0.4)
+        intro = label('How should we fit a power law?', font_size=36)
         with self.voiceover(
             "Power laws are easy to claim and hard to establish. <bookmark mark='a'/> The tempting method: draw a "
             "histogram on log–log axes and fit a straight line by least squares. Here's one simulated sample of five "
@@ -171,7 +177,9 @@ class Tails(VoiceoverScene, TreeMixin):
             "log–log method is systematically misleading, and that many published power laws, tested properly, "
             "were no better than a log-normal. A straight line on a log–log plot is a hypothesis, not a proof."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(A), FadeIn(pts), FadeIn(tl), FadeIn(tag))
             self.play(Create(ls_line))
             vo.wait_until("b")

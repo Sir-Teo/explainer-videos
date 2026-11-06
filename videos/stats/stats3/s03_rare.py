@@ -158,6 +158,7 @@ class Rare(VoiceoverScene, TreeMixin):
         bk.to_edge(DOWN, buff=0.9)
         od = label(r"a variance well above the mean signals something more: \ chapter 12", font_size=22, color=GREY_B)
         od.next_to(bk, DOWN, buff=0.2)
+        intro = label('The Poisson mean and variance', font_size=36)
         with self.voiceover(
             "One more property of the Poisson, and it's the one Bortkiewicz checked. <bookmark mark='a'/> Its mean: "
             "cancel one k against the factorial, and what's left is lambda times a whole Poisson distribution, "
@@ -166,9 +167,12 @@ class Rare(VoiceoverScene, TreeMixin):
             "equal. <bookmark mark='d'/> The horse kicks pass this test, point six one and point six one. When real "
             "counts have a variance far above their mean, something else is going on, and chapter twelve says what."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.6, x=-1.0, buff=0.6, edge=6.9)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             vo.wait_until("d")
             self.play(FadeIn(bk), FadeIn(od))

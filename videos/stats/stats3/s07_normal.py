@@ -50,6 +50,7 @@ class Normal(VoiceoverScene, TreeMixin):
                               color=GREY_A) for r in d["stirling"][1:]]).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
         st.move_to([4.5, -0.8, 0])
         f = MathTex(r"\frac{1}{\sqrt{2\pi}} e^{-z^2/2}", font_size=36, color=EXACT).move_to([4.4, 0.4, 0])
+        intro = label('The bell as a binomial limit', font_size=36)
         with self.voiceover(
             "The bell curve was found first as an approximation. <bookmark mark='a'/> In 1733 Abraham de Moivre, a "
             "French Protestant exile living in London and making his living as a consultant to gamblers, wanted "
@@ -61,7 +62,9 @@ class Normal(VoiceoverScene, TreeMixin):
             "It's already accurate for small n. This is the first central limit theorem, proved in general in "
             "Part 6."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(hc))
             vo.wait_until("b")
             self.play(FadeIn(A), FadeIn(sets[0][1]), FadeIn(lab[0]))
@@ -87,17 +90,20 @@ class Normal(VoiceoverScene, TreeMixin):
         whys = [why(r"the mean maximizes the likelihood, \ for every data set"), why(r"so $g'$ is linear"),
                 why(r"integrate $g = \log f$")]
         side = label(r"Laplace (1810) then linked it to sums: \ Part 6", font_size=22, color=GREY_B).to_edge(DOWN, buff=0.4)
+        intro = label('Which error law favors the mean?', font_size=36)
         with self.voiceover(
             "The second way came from astronomy. <bookmark mark='a'/> In 1809 Carl Friedrich Gauss asked: if we "
             "average repeated measurements of a star's position, for which law of errors is the average the most "
             "probable value? <bookmark mark='b'/> Write the error density as f, and its logarithm as g. The average "
             "maximizes the likelihood for every possible data set exactly when the derivative of g balances "
             "whenever the deviations balance. <bookmark mark='c'/> That forces g prime to be linear, "
-            "<bookmark mark='d'/> and integrating gives e to the minus c u squared over two: the same curve. It was "
-            "a circular argument, assuming the answer it wanted, but it bound the normal to least squares forever, "
+            "<bookmark mark='d'/> and integrating gives e to the minus c u squared over two: the same curve. This characterizes a smooth positive error density under independent, identically distributed errors. It "
+            "does not establish those assumptions for real measurements, but it bound the normal to least squares, "
             "and Laplace soon connected both to sums of many small errors."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(hc, shift=RIGHT * 0.2))
             step = ladder(self, rows, whys, keep=3, top=0.1, x=0.4, buff=0.5, edge=6.9)
             vo.wait_until("b")
@@ -135,7 +141,7 @@ class Normal(VoiceoverScene, TreeMixin):
         with self.voiceover(
             "The third way is the most beautiful. <bookmark mark='a'/> Throw darts at a target, or think of the "
             "velocity of a gas molecule. Suppose the errors in the two directions are independent, and their joint "
-            "law looks the same in every direction: it doesn't care how you turn the axes. "
+            "law looks the same in every direction: it doesn't care how you turn the axes. We assume a nondegenerate, regular density. "
             "<bookmark mark='b'/> Here's a cloud of independent normal pairs; turn it, and nothing changes. "
             "<bookmark mark='c'/> Independence says the joint density is f of x times f of y; rotation invariance "
             "says it depends only on the distance from the centre, x squared plus y squared. <bookmark mark='d'/> "
@@ -214,6 +220,7 @@ class Normal(VoiceoverScene, TreeMixin):
         rings = VGroup(*[Circle(radius=r, stroke_color=EXACT, stroke_width=1.5, stroke_opacity=0.9 - 0.15 * k)
                          for k, r in enumerate((0.4, 0.8, 1.2, 1.6, 2.0))]).move_to([-4.6, -1.2, 0])
         rl = label(r"the volume, in rings", font_size=22, color=GREY_B).next_to(rings, DOWN, buff=0.15)
+        intro = label('The Gaussian integral', font_size=36)
         with self.voiceover(
             "One loose end: where does the root two pi come from? <bookmark mark='a'/> Call the integral of e to "
             "the minus x squared over two I. It has no formula in elementary functions. <bookmark mark='b'/> But I "
@@ -223,9 +230,12 @@ class Normal(VoiceoverScene, TreeMixin):
             "easy: two pi. <bookmark mark='e'/> So I is root two pi, and the normal density, with its constant, "
             "integrates to one. It's Poisson's trick, and it's one of the great one-line proofs in mathematics."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=5, top=3.2, x=0.8, buff=0.45, edge=6.9)
             for k, m in enumerate("abcde"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=k > 0)
                 if m == "c":
                     self.play(Create(rings), FadeIn(rl))

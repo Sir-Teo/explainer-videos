@@ -87,7 +87,7 @@ def compute_binomial():
     p180 = float((h > 180).mean())
     polls = np.array([int((W.height[W.sample(100, among=W.adult, seed=7000 + s)] > 180).sum()) for s in range(2000)])
     poll_k = np.arange(0, 41)
-    poll_emp = np.bincount(np.minimum(polls, 40), minlength=41)[:41] / len(polls)
+    poll_emp = np.bincount(polls, minlength=41)[:41] / len(polls)
     poll_pmf = stats.binom.pmf(poll_k, 100, p180)
     return {"p180": p180, "poll_k": poll_k, "poll_emp": poll_emp, "poll_pmf": poll_pmf,
             "poll_mean": float(polls.mean()), "poll_var": float(polls.var()),
@@ -138,7 +138,7 @@ def compute_waiting():
     counts = g.poisson(rates)
     kk = np.arange(0, 16)
     nb2 = stats.nbinom.pmf(kk, shape, 1 / (1 + scale))
-    emp = np.bincount(np.minimum(counts, 15), minlength=16)[:16] / len(counts)
+    emp = np.bincount(counts, minlength=16)[:16] / len(counts)
     return {"p": p, "ks": ks, "geo": geo, "mean_wait": float(waits.mean()), "lhs": lhs, "rhs": rhs, "exact_ml": exact,
             "s": s_, "t": t_, "r": r, "nb": nb, "gp_k": kk, "gp_nb": nb2, "gp_emp": emp,
             "gp_mean": float(counts.mean()), "gp_var": float(counts.var()), "shape": shape, "scale": scale}
@@ -154,7 +154,8 @@ def compute_capture():
     m = int(tagged[second].sum())
     reps = 2000
     ms = stats.hypergeom.rvs(N, n1, n2, size=reps, random_state=g)
-    lp = n1 * n2 / np.maximum(ms, 1)
+    with np.errstate(divide="ignore"):
+        lp = n1 * n2 / ms  # zero recaptures mean no finite ratio estimate, never impute one
     chap = (n1 + 1) * (n2 + 1) / (ms + 1) - 1
     kk = np.arange(0, 61)
     hyp = stats.hypergeom.pmf(kk, N, n1, n2)
@@ -273,7 +274,7 @@ def compute_order():
 def compute_tails():
     pops = np.sort(W.towns["pop"] if "pop" in W.towns else np.bincount(W.town, minlength=200))[::-1]
     ranks = np.arange(1, len(pops) + 1)
-    slope_rank = float(np.polyfit(np.log(ranks[:150]), np.log(pops[:150]), 1)[0])
+    slope_rank, intercept_rank = np.polyfit(np.log(ranks[:150]), np.log(pops[:150]), 1)
     # Clauset-Shalizi-Newman: fitting a power law by least squares on a log-log histogram is biased
     g = rng(2009)
     alpha, xmin, n = 2.5, 1.0, 500
@@ -296,7 +297,7 @@ def compute_tails():
     qs = np.linspace(0.01, 1, 100)
     lorenz_par = {str(a): (qs ** (1 - 1 / a)).tolist() for a in (1.16, 2.0, 3.0)}
     return {"shares": shares, "a8020": a8020, "qs": qs, "lorenz_par": lorenz_par,
-            "pops": pops, "ranks": ranks, "slope_rank": slope_rank, "alpha": alpha, "n": n,
+            "pops": pops, "ranks": ranks, "slope_rank": float(slope_rank), "intercept_rank": float(intercept_rank), "alpha": alpha, "n": n,
             "ls": np.array(ls), "mle": np.array(mle), "ls_mean": float(np.mean(ls)), "ls_sd": float(np.std(ls)),
             "mle_mean": float(np.mean(mle)), "mle_sd": float(np.std(mle)), "ex_mid": mid[h > 0], "ex_h": h[h > 0]}
 
@@ -306,7 +307,7 @@ def compute_mgf():
     a, b = 1.5, 2.5
     s = g.poisson(a, 50_000) + g.poisson(b, 50_000)
     kk = np.arange(0, 14)
-    return {"a": a, "b": b, "kk": kk, "emp": np.bincount(np.minimum(s, 13), minlength=14)[:14] / len(s),
+    return {"a": a, "b": b, "kk": kk, "emp": np.bincount(s, minlength=14)[:14] / len(s),
             "pois": stats.poisson.pmf(kk, a + b)}
 
 
@@ -327,7 +328,7 @@ def compute_mixtures():
     ts = np.linspace(-6, 6, 300)
     return {"n": n, "a": a, "b": b, "kk": kk, "bb_pmf": bb_pmf, "bin_pmf": bin_pmf,
             "bb_emp": np.bincount(bb, minlength=n + 1)[:n + 1] / len(bb), "bb_var": float(bb.var()),
-            "bin_var": float(plain.var()), "mean": n * a / (a + b), "nu": nu, "t_x": x[np.abs(x) < 6][:20000],
+            "bin_var": float(plain.var()), "mean": n * a / (a + b), "nu": nu, "t_x": x[:20000],
             "ts": ts, "tden": stats.t.pdf(ts, nu), "nden": stats.norm.pdf(ts)}
 
 

@@ -52,6 +52,7 @@ class Binomial(VoiceoverScene, TreeMixin):
         dfn = definition_card(r"Bernoulli trial", r"one trial, success with probability $p$: \ $X \in \{0, 1\}$; \ "
                               r"named for Jacob Bernoulli, \emph{Ars Conjectandi} (1713)", color=DISC, width=5.6,
                               font_size=23).move_to([3.6, 2.4, 0])
+        intro = label('Independent trials and their paths', font_size=36)
         with self.voiceover(
             "The simplest random variable is a single trial that succeeds or fails: one if it succeeds, with "
             "probability p, zero if not. <bookmark mark='a'/> It's named for Jacob Bernoulli, whose book on "
@@ -60,7 +61,9 @@ class Binomial(VoiceoverScene, TreeMixin):
             f"Here n is ten and p is {p}. <bookmark mark='c'/> Each path ends at its number of successes, "
             "<bookmark mark='d'/> and piling up the endpoints of many paths builds the distribution of the count."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(dfn))
             vo.wait_until("b")
             self.play(FadeIn(lattice), FadeIn(xlab), FadeIn(ylab))
@@ -84,6 +87,7 @@ class Binomial(VoiceoverScene, TreeMixin):
                  yticks=[0, 0.1, 0.2, 0.3], center=[-1.8, -2.0, 0])
         bars = pmf_bars(A.ax, range(n + 1), d["pmf"], DISC, width=0.6)
         eng = code_block(["coin(0.3).iid_sum(10).P(3)   # exact"], font_size=20).next_to(A, RIGHT, buff=0.6)
+        intro = label('Counting the paths', font_size=36)
         with self.voiceover(
             "The formula is two ideas from Part 2. <bookmark mark='a'/> Any one path with k up-steps has "
             "probability p to the k times one minus p to the n minus k, because the trials are independent. "
@@ -91,8 +95,10 @@ class Binomial(VoiceoverScene, TreeMixin):
             "Multiply, and you have the binomial distribution. <bookmark mark='c'/> For ten trials with p equal to "
             "zero point three, it peaks at three, and the engine computes it exactly."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=2.6, x=0.6, buff=0.55)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1, transform=False)
@@ -113,6 +119,7 @@ class Binomial(VoiceoverScene, TreeMixin):
                       color=EXACT).to_edge(DOWN, buff=1.2)
         sim = MathTex(rf"\text{{simulated, 20{{,}}000 runs:}}\ \ {d['sim_mean']:.3f},\ \ {d['sim_var']:.3f}",
                       font_size=28, color=SIM).next_to(chk, DOWN, buff=0.2)
+        intro = label('Mean and variance from indicators', font_size=36)
         with self.voiceover(
             "The mean and variance need no sums over the formula at all. <bookmark mark='a'/> Write the count as a "
             "sum of the n trials' indicators. <bookmark mark='b'/> By linearity, the expectation is n times p. "
@@ -120,9 +127,12 @@ class Binomial(VoiceoverScene, TreeMixin):
             "squared, so the variance is n p times one minus p. <bookmark mark='d'/> For our example, three and two "
             "point one, and twenty thousand simulated runs agree."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.6, buff=0.55)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             vo.wait_until("d")
             self.play(FadeIn(chk), FadeIn(sim))
@@ -143,18 +153,18 @@ class Binomial(VoiceoverScene, TreeMixin):
                       MathTex(rf"\text{{2{{,}}000 polls: mean }} {d['poll_mean']:.2f},\ \text{{variance }} {d['poll_var']:.2f}",
                               font_size=24, color=SIM)).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
         info.move_to([3.6, 2.6, 0])
-        wr = label(r"sampled without replacement from $741{,}311$: \ chapter 4 explains why it is still binomial",
+        wr = label(r"sampled without replacement from $741{,}311$: \ chapter 4 explains the binomial approximation",
                    font_size=22, color=GREY_B).to_edge(DOWN, buff=0.3)
         tag = simulated_tag(corner=UL)
         with self.voiceover(
-            "Binomials are everywhere in statistics because every yes-or-no question asked of a random sample is one. "
+            "Binomials describe counts of independent yes-or-no trials with the same success chance. "
             "<bookmark mark='a'/> In the World, the share of adults taller than a hundred and eighty centimetres is "
             f"a parameter: {p:.4f}. <bookmark mark='b'/> Poll a hundred adults at random and count the tall ones. "
             "<bookmark mark='c'/> Two thousand polls, blue, against the binomial with n a hundred and that p, gold. "
             f"They agree, mean about {100 * p:.1f} and variance about {100 * p * (1 - p):.1f}. "
             "<bookmark mark='d'/> Strictly, a poll samples without replacement, so the count isn't exactly binomial; "
-            "chapter four shows why, from a population this large, the difference vanishes. The spread of this "
-            "count is the margin of error of every opinion poll, and Part 8 builds it into an interval."
+            "chapter four shows why, from a population this large, the difference is tiny. The spread of this "
+            "count determines a simple random poll's sampling error; Part 8 builds it into an interval."
         ) as vo:
             self.play(FadeIn(tag))
             vo.wait_until("a")

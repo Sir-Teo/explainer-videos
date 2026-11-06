@@ -36,6 +36,7 @@ class Waiting(VoiceoverScene, TreeMixin):
         sim = MathTex(rf"\text{{simulated}}\ {d['mean_wait']:.3f}", font_size=26, color=SIM).next_to(m, DOWN, buff=0.2)
         why_ = label(r"layer cake: \ $E T = \sum_{k \ge 0} P(T > k) = \sum (1-p)^k = 1/p$", font_size=22, color=GREY_B)
         why_.to_edge(DOWN, buff=0.3)
+        intro = label('Waiting for the first success', font_size=36)
         with self.voiceover(
             "Instead of counting successes in a fixed number of trials, wait for the first one. <bookmark mark='a'/> "
             "Throw a die until it shows a six. The wait T is k throws if the first k minus one fail and the k-th "
@@ -45,7 +46,9 @@ class Waiting(VoiceoverScene, TreeMixin):
             "a die. The layer-cake formula of Part 2 gives it in one line, and fifty thousand simulated waits "
             "agree."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(Write(f), FadeIn(fw))
             vo.wait_until("b")
             self.play(FadeIn(A), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.04), run_time=2.5)
@@ -103,6 +106,7 @@ class Waiting(VoiceoverScene, TreeMixin):
         whys = [why(r"condition on the first throw; \ no memory: \ $T'$ is a fresh $T$"), why(r"rearrange"), None]
         pas = label(r"Pascal's method from Part 2: \ value now $=$ average of the values next", font_size=24,
                     color=GREY_B).to_edge(DOWN, buff=0.4)
+        intro = label('Condition on the first throw', font_size=36)
         with self.voiceover(
             "Memorylessness gives a second, slicker way to the mean, and it's Pascal's method from Part 2. "
             "<bookmark mark='a'/> Condition on the first throw. With probability p it's a six, and you're done in "
@@ -113,7 +117,9 @@ class Waiting(VoiceoverScene, TreeMixin):
             "analysis solves waiting problems far harder than this one, from the gambler's ruin to Markov chains "
             "in Part 7."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(tree), FadeIn(done))
             vo.wait_until("b")
             self.play(FadeIn(again))
@@ -139,21 +145,24 @@ class Waiting(VoiceoverScene, TreeMixin):
         if fw.width > 6.0:
             fw.width = 6.0
         m = MathTex(r"T_r = G_1 + \cdots + G_r", r",\quad E T_r = \frac{r}{p} = 18", font_size=32).move_to([4.0, 0.6, 0])
-        nxt = label(r"its other life: \ a Poisson whose rate is random \ (chapter 12)", font_size=24, color=GREY_A)
+        nxt = label(r"failures $T_r-r$: \ a gamma--Poisson mixture \ (chapter 12)", font_size=24, color=GREY_A)
         nxt.move_to([4.0, -0.6, 0])
         if nxt.width > 6.0:
             nxt.width = 6.0
+        intro = label('Waiting for the third success', font_size=36)
         with self.voiceover(
             "Wait for more than one success and you get the negative binomial. <bookmark mark='a'/> The wait for the "
             "third six is k throws if the k-th throw is a six and exactly two of the first k minus one were: k minus "
             "one choose two, times p cubed, times the failures. <bookmark mark='b'/> It's also a sum: the wait for "
             "the first six, plus the further wait for the second, plus the wait for the third, three independent "
             "geometric waits, because the die has no memory. So the mean is r over p, eighteen. "
-            "<bookmark mark='c'/> The negative binomial has a second life, as a Poisson count whose rate is itself "
+            "<bookmark mark='c'/> Count failures instead of total trials, subtracting r, and the negative binomial has a second life as a Poisson count whose rate is itself "
             "random, and in that guise it's the workhorse for counts more variable than a Poisson allows. We'll "
             "derive that in chapter twelve."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(Write(f), FadeIn(fw), FadeIn(A), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars],
                                                                     lag_ratio=0.03), run_time=2.5)
             vo.wait_until("b")
