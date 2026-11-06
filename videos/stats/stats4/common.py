@@ -37,14 +37,16 @@ class ProjectionLab:
         A = np.atleast_2d(np.asarray(A, float))
         if A.shape[0] != 3:
             A = A.T
+        if A.shape[0] != 3 or A.shape[1] not in (1, 2) or np.linalg.matrix_rank(A) != A.shape[1]:
+            raise ValueError("ProjectionLab needs one or two independent columns in R^3")
         self.A, self.y = A, np.asarray(y, float)
-        self.P = A @ np.linalg.solve(A.T @ A, A.T)
+        q, _ = np.linalg.qr(A, mode="reduced")
+        self.P = q @ q.T
         self.Py = self.P @ self.y
         self.r = self.y - self.Py
         self.ns = NSpace(scale=scale, center=center, angle=angle, tilt=tilt, axis_len=axis_len)
         ns = self.ns
         if A.shape[1] == 2:
-            q, _ = np.linalg.qr(A)
             self.space = ns.plane(q[:, 0], q[:, 1], extent=3.4, color=SPACE, opacity=0.16)
         else:
             self.space = ns.line(A[:, 0], extent=1.3 * float(np.linalg.norm(self.y)), color=SPACE)

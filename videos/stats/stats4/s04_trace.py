@@ -35,6 +35,7 @@ class Trace(VoiceoverScene):
                 why(r"a number is its own trace")]
         chk = MathTex(rf"B_{{3\times5}}, C_{{5\times3}}:\ \operatorname{{tr}}(BC) = {d['trBC']:.6f},\ \operatorname{{tr}}(CB) = "
                       rf"{d['trCB']:.6f}", font_size=24, color=SIM).to_edge(DOWN, buff=0.4)
+        intro = label('Cycling a product inside a trace', font_size=36)
         with self.voiceover(
             "The trace, the sum of a matrix's diagonal, looks too simple to matter. It matters because of one "
             "identity. <bookmark mark='a'/> The trace of A B is a double sum of A i j times B j i. "
@@ -44,9 +45,12 @@ class Trace(VoiceoverScene):
             "statisticians use daily: a quadratic form, x transpose A x, is a single number, so it's its own trace, "
             "and cycling turns it into the trace of A times x x transpose, a matrix we can take expectations of."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.4, buff=0.55)
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=k in (1,))
                 if m == "b":
                     self.play(FadeIn(chk))
@@ -70,19 +74,23 @@ class Trace(VoiceoverScene):
         chk.arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.6)
         use = label(r"with $A = I - H$: \ $E\,\mathrm{RSS} = \sigma^2 \operatorname{tr}(I - H) = (n - p)\sigma^2$", font_size=26,
                     color=S.ACCENT).next_to(chk, UP, buff=0.4)
+        intro = label('Expected quadratic forms', font_size=36)
         with self.voiceover(
             "Here's that trick earning its keep. <bookmark mark='a'/> The expectation of a quadratic form is the "
             "expectation of a trace, and since trace and expectation are both linear, they swap. "
             "<bookmark mark='b'/> The expected outer product of x is its covariance matrix plus the mean's outer "
             "product. <bookmark mark='c'/> So the expected quadratic form is the trace of A Sigma plus mu transpose "
             "A mu, for any distribution with a covariance, normal or not. A Monte Carlo check with two hundred "
-            "thousand draws agrees to the second decimal. <bookmark mark='d'/> Put A equal to I minus H and Sigma "
-            "equal to sigma squared times the identity, and out comes the hook's result: the expected residual sum "
+            "thousand draws differs by less than three hundredths. <bookmark mark='d'/> Put A equal to I minus H and Sigma "
+            "equal to sigma squared times the identity, with the mean in the column space of X, and out comes the hook's result: the expected residual sum "
             "of squares is n minus p times sigma squared."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.8, x=-0.6, buff=0.55)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             self.play(FadeIn(chk))
             vo.wait_until("d")
@@ -99,6 +107,7 @@ class Trace(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.45).move_to([0, 0.4, 0])
         take = label(r"cycling the trace turns an $n \times n$ question into a $p \times p$ one", font_size=28,
                      color=S.ACCENT).to_edge(DOWN, buff=0.8)
+        intro = label('Trace and rank of a projection', font_size=36)
         with self.voiceover(
             "One more use. <bookmark mark='a'/> A projection can be diagonalized, with its eigenvalues, ones and "
             "zeros, on the diagonal. <bookmark mark='b'/> Cycle the orthogonal factors around, and the trace of the "
@@ -107,8 +116,11 @@ class Trace(VoiceoverScene):
             "trace of an n by n matrix becomes the trace of the p by p identity: p. Cycling the trace turns big "
             "questions into small ones."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
             self.play(FadeIn(take))
         self.clear_scene()
@@ -127,17 +139,21 @@ class Trace(VoiceoverScene):
         nums.move_to([0, -1.2, 0])
         geo = label(r"$\det\Sigma$: \ the squared volume of the ellipse, \ up to a constant", font_size=24, color=S.ACCENT)
         geo.to_edge(DOWN, buff=0.5)
+        intro = label('Total and generalized variance', font_size=36)
         with self.voiceover(
             "Two numbers summarize a whole covariance matrix, and both come from its eigenvalues. "
             "<bookmark mark='a'/> The trace is the sum of the eigenvalues, so the trace of a covariance matrix is "
             "the total variance, summed over all directions. <bookmark mark='b'/> The determinant is their product, "
             "which Samuel Wilks called the generalized variance: it measures the volume of the cloud's ellipse. "
             "<bookmark mark='c'/> And the trace also gives the Frobenius norm, the matrix version of a sum of "
-            "squares, which chapter six used to measure the error of an approximation. <bookmark mark='d'/> For the "
+            "squares, which chapter six will use to measure the error of an approximation. <bookmark mark='d'/> For the "
             "four hundred families, both identities check exactly."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
             vo.wait_until("d")
             self.play(FadeIn(nums), FadeIn(geo))
@@ -157,6 +173,7 @@ class Trace(VoiceoverScene):
         cap = VGroup(label(r"mean squared error \ $=$ \ total variance \ $+$ \ squared bias", font_size=28, color=S.ACCENT),
                      label(r"the bias--variance trade-off: \ Parts 9, 19 and 25", font_size=24, color=GREY_B)).arrange(DOWN, buff=0.2)
         cap.to_edge(DOWN, buff=0.7)
+        intro = label('Variance and squared bias', font_size=36)
         with self.voiceover(
             "The same identity splits the error of any estimator. <bookmark mark='a'/> Let theta hat estimate a vector "
             "of parameters theta. Its expected squared error is the expected trace of an outer product. "
@@ -165,8 +182,10 @@ class Trace(VoiceoverScene):
             "squared error is variance plus bias squared. Accepting a little bias to remove a lot of variance is the "
             "bias–variance trade-off, and it's behind ridge regression, shrinkage and most of modern statistics."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=2.4, x=-0.4, buff=0.7, edge=6.9)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1)

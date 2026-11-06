@@ -37,6 +37,7 @@ class Kron(VoiceoverScene):
         eq = MathTex(r"=", font_size=40).move_to([0.0, -0.8, 0])
         props = label(r"$(A \otimes B)^{-1} = A^{-1} \otimes B^{-1}$, \ $\det$ and eigenvalues factor: \ big covariances, "
                       r"small work", font_size=24, color=S.ACCENT).to_edge(DOWN, buff=0.35)
+        intro = label('A covariance with space and time structure', font_size=36)
         with self.voiceover(
             "Measurements in space and time have covariances with structure. <bookmark mark='a'/> The Kronecker "
             "product of A and B replaces each entry of A by that entry times the whole of B. "
@@ -46,7 +47,9 @@ class Kron(VoiceoverScene):
             "<bookmark mark='e'/> Its inverse, determinant and eigenvalues all factor into those of the small "
             "pieces, which is what makes the spatial and longitudinal models of Parts 25 and 39 computable."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(Write(f))
             vo.wait_until("b")
             self.play(FadeIn(hs), FadeIn(ls))
@@ -69,6 +72,7 @@ class Kron(VoiceoverScene):
         whys = [why(r"a matrix as one long vector"), why(r"the identity everything rests on"),
                 why(r"a matrix equation as an ordinary linear system")]
         chk = MathTex(rf"\text{{checked: max error }} {d['err']:.1e}", font_size=26, color=SIM).to_edge(DOWN, buff=0.6)
+        intro = label('Stack the columns', font_size=36)
         with self.voiceover(
             "The Kronecker product's partner is vec. <bookmark mark='a'/> Vec of a matrix stacks its columns into "
             "one long vector. <bookmark mark='b'/> And then a product of three matrices, unpacked, is a Kronecker "
@@ -76,9 +80,12 @@ class Kron(VoiceoverScene):
             "<bookmark mark='c'/> That turns any linear matrix equation into an ordinary system of equations, and "
             "it's the bridge between matrix calculus and ordinary calculus in the next chapter."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.8, buff=0.7, edge=6.9)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
                 if m == "b":
                     self.play(FadeIn(chk))
@@ -97,6 +104,7 @@ class Kron(VoiceoverScene):
         chk = MathTex(r"\text{site} \otimes \text{time: } " + ", ".join(f"{v:.3f}" for v in e["kron"]), font_size=24, color=SIM)
         chk2 = MathTex(rf"\text{{products of the small eigenvalues: max difference }} {e['err']:.0e}", font_size=24, color=SIM)
         VGroup(chk, chk2).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.6)
+        intro = label('Eigenvalues of a Kronecker product', font_size=36)
         with self.voiceover(
             "Why do Kronecker structures make big problems small? <bookmark mark='a'/> If u is an eigenvector of A "
             "and v of B, the Kronecker product of u and v is an eigenvector of A Kronecker B, with the product of "
@@ -105,9 +113,12 @@ class Kron(VoiceoverScene):
             "n-dimensional one. <bookmark mark='c'/> The determinant follows. For the site-time covariance, the six "
             "eigenvalues match the products exactly."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.6, buff=0.6, edge=6.9)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             self.play(FadeIn(chk), FadeIn(chk2))
         self.clear_scene()
@@ -115,16 +126,18 @@ class Kron(VoiceoverScene):
     def field(self):
         e = load("extras3")["field"]
         a, b = np.asarray(e["a"]), np.asarray(e["b"])
-        A = axes([0, 60], [-3.2, 3.2], x_length=10.0, y_length=3.6, xlabel=r"time", xticks=[0, 20, 40, 60],
+        limit = max(3.2, np.ceil(max(np.abs(a).max(), np.abs(b).max())))
+        A = axes([0, 60], [-limit, limit], x_length=10.0, y_length=3.6, xlabel=r"time", xticks=[0, 20, 40, 60],
                  yticks=[-2, 0, 2], center=[0, -0.8, 0])
         ax = A.ax
-        ca = curve(ax, np.arange(60), np.clip(a, -3.2, 3.2), SPACE, 3)
-        cb = curve(ax, np.arange(60), np.clip(b, -3.2, 3.2), EIG, 3)
+        ca = curve(ax, np.arange(60), a, SPACE, 3)
+        cb = curve(ax, np.arange(60), b, EIG, 3)
         leg = legend([(SPACE, r"site 1"), (EIG, r"site 2")], font_size=22).move_to([5.2, 1.6, 0])
         f = MathTex(r"\mathbf x = (L_{\text{site}} \otimes L_{\text{time}})\,\mathbf z", r",\qquad",
                     r"\mathrm{Cov}\,\mathbf x = \Sigma_{\text{site}} \otimes \Sigma_{\text{time}}", font_size=32).to_edge(UP, buff=0.4)
         sub = label(rf"AR(1) in time, \ $\rho = 0.9$; \ sites correlated $0.7$ \ (this draw: {e['corr']:.2f})", font_size=22,
                     color=GREY_B).next_to(f, DOWN, buff=0.15)
+        intro = label('Simulating a space--time field', font_size=36)
         with self.voiceover(
             "And Kronecker structure makes simulation cheap too. <bookmark mark='a'/> The Cholesky factor of a "
             "Kronecker product is the Kronecker product of the Cholesky factors. Multiply a vector of independent "
@@ -133,7 +146,9 @@ class Kron(VoiceoverScene):
             "correlated, and the two sites move together, because the sites are. Part 39 fits models like this to "
             "real measurements."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(Write(f), FadeIn(sub))
             vo.wait_until("b")
             self.play(FadeIn(A), Create(ca), Create(cb), FadeIn(leg), run_time=3.0)

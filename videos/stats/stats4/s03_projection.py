@@ -38,7 +38,7 @@ class Projection(VoiceoverScene):
             "Projecting onto a line is the simplest case. Statistics needs projections onto any subspace, spanned "
             "by the columns of a matrix A. <bookmark mark='a'/> The projection of y has to lie in the column space, "
             "so it's A times some vector b. <bookmark mark='b'/> And the residual has to be at right angles to every "
-            "column, which is A transpose times the residual equal to zero. <bookmark mark='c'/> Solve: b is A "
+            "column, which is A transpose times the residual equal to zero. <bookmark mark='c'/> For linearly independent columns of A, solve: b is A "
             "transpose A inverse, A transpose y. These are the normal equations of least squares, named for the "
             "normal, the perpendicular. <bookmark mark='d'/> So the projection matrix is A, A transpose A inverse, A "
             "transpose: the hat matrix again. Multiply it by itself and the middle cancels, so it's idempotent; and "
@@ -113,8 +113,8 @@ class Projection(VoiceoverScene):
         a2 = ns.vector(A[:, 1], color=GREY_A)
         comp = ns.vector((A[:, 1] @ q1) * q1, color=GREY_C, stroke_width=3)
         perp_v = ns.vector(A[:, 1] - (A[:, 1] @ q1) * q1, color=EIG, origin=(A[:, 1] @ q1) * q1)
-        v1 = ns.vector(q1 * 2, color=SPACE)
-        v2 = ns.vector(q2 * 2, color=SPACE)
+        v1 = ns.vector(q1, color=SPACE)
+        v2 = ns.vector(q2, color=SPACE)
         rows = [
             cmath(r"\mathbf q_1", r"=", r"\frac{\mathbf a_1}{\|\mathbf a_1\|}", font_size=32),
             cmath(r"\mathbf q_2", r"=", r"\frac{\mathbf a_2 - \langle \mathbf a_2, \mathbf q_1\rangle \mathbf q_1}"
@@ -163,8 +163,9 @@ class Projection(VoiceoverScene):
             MathTex(rf"\text{{eigenvalues: }} {', '.join(f'{v:.0f}' for v in np.round(d['eig']))},\qquad "
                     rf"\operatorname{{rank}} P = \operatorname{{tr}} P = {d['trace']:.0f}", font_size=32, color=EIG),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.4).move_to([0, 0.6, 0])
-        take = label(r"a projection is decided by its eigenvalues: \ ones on the subspace, \ zeros off it", font_size=28,
+        take = label(r"a projection preserves its subspace and removes the perpendicular component", font_size=28,
                      color=S.ACCENT).to_edge(DOWN, buff=0.8)
+        intro = label('Preserve a subspace, remove its complement', font_size=36)
         with self.voiceover(
             "The eigenvalues of a projection now make geometric sense. <bookmark mark='a'/> Every vector already in "
             "the plane is left alone: eigenvalue one. <bookmark mark='b'/> Every vector at right angles to the plane "
@@ -172,8 +173,11 @@ class Projection(VoiceoverScene):
             "zero, and its rank, the dimension of the plane, equals its trace. Ones on the subspace, zeros off it: "
             "that's all a projection is."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
             self.play(FadeIn(take))
         self.clear_scene()
@@ -200,6 +204,7 @@ class Projection(VoiceoverScene):
         nums[0][2].set_color(FIT)
         nums[0][4].set_color(RES)
         tag = simulated_tag(r"simulated: the hook's 40 families", corner=UR)
+        intro = label('Nested projections split variation', font_size=36)
         with self.voiceover(
             "Projections onto nested subspaces give the analysis of variance its shape. <bookmark mark='a'/> For "
             "the hook's forty families, split the identity into three projections: onto the ones vector; onto the "
@@ -211,10 +216,13 @@ class Projection(VoiceoverScene):
             f"the share explained, R squared, is {e['r2']:.2f}: parents' heights explain about a quarter of the "
             "variation in children's."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tag))
             step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.6, buff=0.55, edge=6.9)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=k == 2)
             vo.wait_until("d")
             self.play(FadeIn(nums, shift=UP * 0.2))

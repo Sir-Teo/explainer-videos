@@ -4,7 +4,7 @@ Part 4 of a sixty-five-part course in statistics, from a first course to a PhD (
 and [the syllabus](../SYLLABUS.md)), in Stage I, Bachelor's: Foundations. This part is the toolkit every later part
 reaches into.
 
-It opens with the hat matrix H = X(XᵀX)⁻¹Xᵀ of a regression on the World's families. Because H is a projection, its
+It opens with the hat matrix H = X(XᵀX)⁻¹Xᵀ of a full-column-rank regression on the World's families. Because H is a projection, its
 eigenvalues can only be 0 and 1. From that one fact come degrees of freedom, the n − p of the residual variance,
 χ² quadratic forms, Student's t, regression and the analysis of variance.
 
@@ -38,14 +38,14 @@ python tools/lecture_length.py stats4 --floor 50
 | 2 | Projections | P = A(AᵀA)⁻¹Aᵀ derived; the lab; Pythagoras; Gram–Schmidt and QR; eigenvalues of a projection; ANOVA as nested projections; leverage. | 19.00 = 8.71 + 10.29; SS 3,736 = 946 + 2,790, R² = 0.253; leverages sum to 2 |
 | 3 | Trace tricks | tr(AB) = tr(BA); E[xᵀAx] = tr(AΣ) + μᵀAμ (Monte Carlo); MSE = tr Cov + bias²; rank = trace; tr and det of Σ. | 13.456 exact vs 13.481 MC; det S = 1,677 = λ₁λ₂ |
 | 4 | The spectral theorem | Statement and proof sketch; ellipses of the families' covariance; the Rayleigh quotient around the circle; Mahalanobis distance and whitening; power iteration. | λ = 85.06, 19.71; 3.75% outside the χ²₂ 95% circle; power iteration converges in about 5 steps |
-| 5 | Positive semidefinite matrices | Covariances are PSD; an impossible "correlation" matrix, repaired by Higham's alternating projections; Cholesky makes correlated normals; Var(Ax) = AΣAᵀ; the Loewner order. | λ_min = −0.8 → nearest valid matrix with all correlations ±0.5; simulated r = 0.795 for target 0.8 |
-| 6 | The SVD | Rotate–stretch–rotate on the unit circle; Mᵀ M; Eckart–Young; low-rank approximations of the World's population map; PCA as the SVD of the centred data. | errors match √(Σ_{k>r} σ²_k) exactly; first PC 81% |
+| 5 | Positive semidefinite matrices | Covariances are PSD; an impossible "correlation" matrix, repaired by Higham's Dykstra-corrected alternating projections; Cholesky makes correlated normals; Var(Ax) = AΣAᵀ; the Loewner order. | λ_min = −0.8 → nearest valid matrix with all correlations ±0.5; simulated r = 0.795 for target 0.8 |
+| 6 | The SVD | Orthogonal maps and stretches on the unit circle (reflections allowed in general); Mᵀ M; Eckart–Young; low-rank approximations of the World's population map; PCA as the SVD of the centred data. | errors match √(Σ_{k>r} σ²_k) exactly; first PC 81% |
 | 7 | Generalized inverses | Minimum-norm solution of x₁ + 2x₂ = 4; Moore–Penrose; the dummy-variable trap and estimable contrasts; the ridge path converging to X⁺y. | A⁺b = (0.8, 1.6); region difference 11.00 in every solution |
 | 8 | Block matrices | Schur complement; block inverse and determinant; Woodbury and Sherman–Morrison; Frisch–Waugh–Lovell on mother's height given father's; leave-one-out residuals eᵢ/(1 − hᵢᵢ). | FWL 0.4552 = full-regression coefficient; LOO formula vs 40 refits: 1e−12; PRESS 3,105 vs RSS 2,790 |
 | 9 | Kronecker products and vec | A ⊗ B; site × time covariance; vec(ABC) = (Cᵀ ⊗ A)vec B; eigenvalues are products; a simulated space–time field. | max error 9e−16 |
 | 10 | Matrix calculus | ∂aᵀx, ∂xᵀAx, least squares in three lines; the Hessian 2XᵀX; ∂ log det Σ = Σ⁻¹; the Gaussian MLE of Σ; score and Fisher information for μ. | Σ̂_MLE for 400 families |
 | 11 | Quadratic forms in normal vectors | zᵀPz ~ χ²_rank; 20,000 simulations of zᵀHz and zᵀ(I − H)z; Cochran's theorem (1934); noncentral χ² and power; independence of x̄ and s² (normal) vs strong dependence (exponential); Student's t from projections. | means 3.01 and 6.92; power 25% and 85% at ‖Pμ‖ = 2, 4; corr(x̄, s²) −0.002 vs 0.70 |
-| 12 | Conditioning and numerics | 0.1 + 0.2; condition numbers; κ(XᵀX) = κ(X)²; normal equations vs QR on near-collinear columns; centring a quadratic in height; catastrophic cancellation in the one-pass variance; how software solves least squares. | at κ = 2×10⁷, error 0.17 vs 4×10⁻¹⁰; κ 6.2×10⁶ → 220 after centring; offset 10⁸: s² = 90.20 vs 93.26 |
+| 12 | Conditioning and numerics | 0.1 + 0.2; condition numbers; κ(XᵀX) = κ(X)²; normal equations vs QR on near-collinear columns (exact floating-point errors depend on the platform); centring a quadratic in height; catastrophic cancellation in the one-pass variance; how software solves least squares. | at κ = 2×10⁷, error 0.17 vs 4×10⁻¹⁰; κ 6.2×10⁶ → 220 after centring; offset 10⁸: s² = 90.20 vs 93.26 |
 | 13 | Outro | Recap, payoffs, problems, references, the Transcript, Part 5's question. | — |
 
 ## Sources

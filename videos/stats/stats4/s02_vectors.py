@@ -115,7 +115,7 @@ class Vectors(VoiceoverScene):
         pl = ns.plane(u, w, extent=13.0, color=RES, opacity=0.16)
         vr = ns.vector(y - y.mean(), color=RES)
         rows = [
-            cmath(r"\mathbf r \perp \mathbf 1", r"\ \Rightarrow\ ", r"\mathbf r \in \text{a plane of dimension } n - 1",
+            cmath(r"\mathbf r \perp \mathbf 1", r"\ \Rightarrow\ ", r"\mathbf r \in \text{a hyperplane of dimension } n - 1",
                   font_size=32),
             cmath(r"\operatorname{tr}\!\left(I - \tfrac1n J\right)", r"=", r"n - 1", font_size=34),
             cmath(r"s^2", r"=", r"\frac{\|\mathbf r\|^2}{n - 1}", font_size=38),
@@ -169,6 +169,7 @@ class Vectors(VoiceoverScene):
         cov[0].set_color(EIG)
         cw = label(r"$X_c$: \ each column centred \ ($I - \tfrac1n J$)", font_size=22, color=GREY_B).next_to(cov, DOWN, buff=0.2)
         tag = note(r"illustrative").to_corner(DL, buff=0.3)
+        intro = label('Two views of a data matrix', font_size=36)
         with self.voiceover(
             "With several variables, the data become a matrix. <bookmark mark='a'/> One row per person, one column "
             "per variable: height, weight, income. <bookmark mark='b'/> There are two ways to look at it, and "
@@ -180,8 +181,10 @@ class Vectors(VoiceoverScene):
             "covariance matrix is X c transpose X c over n minus one. Every entry is an inner product of two "
             "columns."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tag))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(rows_v), FadeIn(heads))
             vo.wait_until("b")
             self.play(FadeIn(views[0], shift=LEFT * 0.2))
@@ -193,7 +196,7 @@ class Vectors(VoiceoverScene):
 
     def upgrade(self):
         card = upgrade_card(1, r"correlation is the cosine of the angle between centred vectors, \ drawn for $n = 3$",
-                            r"that the picture in $\mathbb R^3$ is the whole story", r"it holds in $\mathbb R^n$ for any $n$, \ "
+                            r"that the picture in $\mathbb R^3$ is the whole story", r"for nonconstant columns it holds in $\mathbb R^n$ for any $n$, \ "
                             r"and regression is a projection between those vectors", width=10.0, font_size=24)
         card.to_edge(UP, buff=0.35)
         rows = [
@@ -203,18 +206,21 @@ class Vectors(VoiceoverScene):
                   r"r\, \frac{\|\mathbf y_c\|}{\|\mathbf x_c\|}", r"=", r"r\, \frac{s_y}{s_x}", font_size=34),
         ]
         rows[1][0].set_color(FIT)
-        whys = [why(r"Part 1, \ unchanged in $\mathbb R^n$"), why(r"the slope: \ project $\mathbf y_c$ onto $\mathbf x_c$")]
+        whys = [why(r"nonconstant columns; \ Part 1 in $\mathbb R^n$"), why(r"the slope: \ project $\mathbf y_c$ onto $\mathbf x_c$")]
+        intro = label('Correlation in any sample dimension', font_size=36)
         with self.voiceover(
             "This is our first upgrade: a result from an earlier part, made more general. <bookmark mark='a'/> Part "
             "1 showed that correlation is the cosine of the angle between centred vectors, drawn with three people. "
-            "It quietly suggested that the three-dimensional picture was the whole story. Now we know it holds in "
+            "We can now write the same geometry in "
             "any number of dimensions, because inner products and angles do. <bookmark mark='b'/> And one more "
             "fact comes with it. The slope of the regression of y on x is the coefficient of the projection of the "
             "centred y onto the centred x: the inner product over the squared length. <bookmark mark='c'/> Rewrite it "
             "with the cosine, and the slope is r times the ratio of the standard deviations, which is why Part 1 "
             "warned that correlation is not slope."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(card, shift=DOWN * 0.2))
             step = ladder(self, rows, whys, keep=2, top=-0.5, x=-0.6, buff=0.55, edge=6.9)
             step(0, transform=False)
