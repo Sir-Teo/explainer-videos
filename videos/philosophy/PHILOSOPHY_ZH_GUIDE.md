@@ -225,3 +225,7 @@ computed lines as templates with the source's placeholders spelled exactly), fil
 | Ramsey, Stern, Nordhaus, Weitzman, Thorstad, Greaves, Ord, Wilkinson, Beckstead, Basu, Mitra | 拉姆齐，斯特恩，诺德豪斯，魏茨曼，索斯塔德，格里夫斯，奥德，威尔金森，贝克斯特德，巴苏，米特拉 |
 | Moore, Ayer, Stevenson, Blackburn, Gibbard, Geach, Schroeder, Mackie, Street, Schurz | 摩尔，艾耶尔，史蒂文森，布莱克本，吉巴德，吉奇，施罗德，麦基，斯特里特，舒尔茨 |
 | Haidt, Greene, Mikhail, Mencius, Xunzi, Gaozi, Mozi, Ivanhoe, Van Norden | 海特，格林，米哈伊尔，孟子，荀子，告子，墨子，艾文贺，万百安 |
+| Thrasymachus, Glaucon, Gyges, Rousseau, Rawls, Nozick, Dworkin, Anderson, Nussbaum, Sandel, Walzer, Okin, Pogge | 色拉叙马霍斯，格劳孔，古各斯，卢梭，罗尔斯，诺齐克，德沃金，安德森，努斯鲍姆，桑德尔，沃尔泽，奥金，博格 |
+| Berlin, MacCallum, Pettit, Steinhaus, Selfridge, Conway, Gale, Shapley, Roth, Chan Joseph, Bai Tongdong, Daniel Bell | 伯林，麦卡勒姆，佩蒂特，施泰因豪斯，塞尔弗里奇，康威，盖尔，沙普利，罗斯，陈祖为，白彤东，贝淡宁 |
+| Condorcet, Borda, Llull, Arrow, May, Gibbard, Satterthwaite, Black, Kemeny, Schulze, List, Guilbaud, Tang Pingzhong, Lin Fangzhen | 孔多塞，博达，柳利，阿罗，梅，吉巴德，萨特思韦特，布莱克，凯梅尼，舒尔策，李斯特，吉尔博，唐平中，林方真 |
+| Pythagoras, Helmholtz, Plomp, Levelt, Sethares, Fedorov, Birkhoff, Fechner, Burke, Weitz, Danto, Dickie, Goodman, Xie He, Wang Guowei | 毕达哥拉斯，亥姆霍兹，普洛姆普，莱维尔特，塞瑟里斯，费奥多罗夫，伯克霍夫，费希纳，伯克，韦茨，丹托，迪基，古德曼，谢赫，王国维 |
