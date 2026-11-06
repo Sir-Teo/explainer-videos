@@ -1735,3 +1735,67 @@ def _spread(labels: VGroup, gap: float) -> None:
     shift = (np.mean([labels[k].get_center()[1] for k in order]) - np.mean(ys))
     for k, yv in zip(order, ys):
         labels[k].set_y(yv + shift)
+
+
+class PuckSurface(VGroup):
+    """Hamiltonian Monte Carlo's picture (Part 27): the potential energy U(x, y) = -log density drawn as a wireframe
+    bowl in an oblique projection (azimuth ``az``, elevation ``el``), with ``to_screen(x, y)`` placing a point on the
+    surface, so that a puck's leapfrog path can be drawn sliding over it.  Heights are capped at ``z_cap``; lines
+    farther from the viewer are drawn fainter."""
+
+    def __init__(self, U, x_range, y_range, n: int = 18, width: float = 7.0, height: float = 4.2, z_cap: float = None,
+                 az: float = 0.65, el: float = 0.55, center=ORIGIN, color=None, stroke_width: float = 1.4):
+        super().__init__()
+        self.U = U
+        self.x0, self.x1 = x_range
+        self.y0, self.y1 = y_range
+        xs = np.linspace(self.x0, self.x1, 60)
+        ys = np.linspace(self.y0, self.y1, 60)
+        X, Y = np.meshgrid(xs, ys)
+        Z = np.asarray(U(X, Y), float)
+        self.z_min = float(Z.min())
+        self.z_cap = float(np.quantile(Z, 0.9)) if z_cap is None else float(z_cap)
+        self.az, self.el = az, el
+        # normalized coordinates in [-1, 1]
+        self._raw = lambda x, y, z: self._project(2 * (x - self.x0) / (self.x1 - self.x0) - 1,
+                                                  2 * (y - self.y0) / (self.y1 - self.y0) - 1,
+                                                  (min(z, self.z_cap) - self.z_min) / (self.z_cap - self.z_min))
+        corners = [self._raw(a, b, c) for a in (self.x0, self.x1) for b in (self.y0, self.y1) for c in (self.z_min, self.z_cap)]
+        cx = [p[0] for p in corners]
+        cy = [p[1] for p in corners]
+        self._sx = width / (max(cx) - min(cx))
+        self._sy = height / (max(cy) - min(cy))
+        self._off = np.array([(max(cx) + min(cx)) / 2, (max(cy) + min(cy)) / 2])
+        self._c = np.asarray(center, float)
+        col = color or S.EST
+        self.wire = VGroup()
+        for k, xv in enumerate(np.linspace(self.x0, self.x1, n)):
+            pts = [self.to_screen(xv, yv) for yv in np.linspace(self.y0, self.y1, 50)]
+            m = VMobject(stroke_color=col, stroke_width=stroke_width, stroke_opacity=0.25 + 0.5 * k / (n - 1))
+            m.set_points_as_corners(pts)
+            self.wire.add(m)
+        for k, yv in enumerate(np.linspace(self.y0, self.y1, n)):
+            pts = [self.to_screen(xv, yv) for xv in np.linspace(self.x0, self.x1, 50)]
+            m = VMobject(stroke_color=col, stroke_width=stroke_width, stroke_opacity=0.75 - 0.5 * k / (n - 1))
+            m.set_points_as_corners(pts)
+            self.wire.add(m)
+        self.add(self.wire)
+
+    def _project(self, x, y, z):
+        ca, sa = np.cos(self.az), np.sin(self.az)
+        X = x * ca - y * sa
+        depth = x * sa + y * ca
+        return np.array([X, depth * np.sin(self.el) + z * 1.6 * np.cos(self.el)])
+
+    def to_screen(self, x, y, lift: float = 0.0):
+        z = float(self.U(np.asarray(x, float), np.asarray(y, float)))
+        p = self._raw(x, y, z)
+        return np.array([(p[0] - self._off[0]) * self._sx + self._c[0], (p[1] - self._off[1]) * self._sy + self._c[1] + lift, 0.0])
+
+    def path(self, points, color=None, stroke_width: float = 3.0) -> VMobject:
+        m = VMobject(stroke_color=color or S.ACCENT, stroke_width=stroke_width)
+        m.set_points_as_corners([self.to_screen(a, b, 0.03) for a, b in points])
+        return m
+
+    def puck(self, x, y, color=None, radius: float = 0.1) -> Dot:
+        return Dot(self.to_screen(x, y, 0.05), radius=radius, color=color or S.ACCENT)

@@ -180,8 +180,10 @@ class Hier:
         s2 = self.sigma[None, :] ** 2
         t2 = tau[:, None] ** 2
         wj = 1 / (s2 + t2)
-        v_mu = 1 / wj.sum(1)
-        mu_hat = v_mu * (wj * self.y[None, :]).sum(1)
+        mp = getattr(self, "mu_prior", None)
+        m0, p0 = (0.0, 0.0) if mp is None else (float(mp[0]), 1 / float(mp[1]) ** 2)
+        v_mu = 1 / (wj.sum(1) + p0)
+        mu_hat = v_mu * ((wj * self.y[None, :]).sum(1) + p0 * m0)
         mu = mu_hat + np.sqrt(v_mu) * rng.standard_normal(n)
         prec = 1 / s2 + 1 / np.maximum(t2, 1e-300)
         mean = (self.y[None, :] / s2 + mu[:, None] / np.maximum(t2, 1e-300)) / prec
@@ -189,19 +191,24 @@ class Hier:
         return {"tau": tau, "mu": mu, "theta": theta}
 
 
-def hier_normal(y, sigma, tau_grid, log_prior_tau=None) -> Hier:
-    """The marginal posterior of tau: p(tau | y) ∝ p(tau) V_mu^{1/2} prod_j N(y_j | mu_hat, sigma_j^2 + tau^2)."""
+def hier_normal(y, sigma, tau_grid, log_prior_tau=None, mu_prior=None) -> Hier:
+    """The marginal posterior of tau: p(tau | y) ∝ p(tau) V_mu^{1/2} prod_j N(y_j | mu_hat, sigma_j^2 + tau^2) with a
+    flat prior on mu, or, with ``mu_prior = (m0, s0)``, mu ~ N(m0, s0^2) (integrated out the same way)."""
     y, sigma, tau = np.asarray(y, float), np.asarray(sigma, float), np.asarray(tau_grid, float)
     lp = np.zeros_like(tau) if log_prior_tau is None else np.asarray(log_prior_tau(tau), float)
     V = sigma[None, :] ** 2 + tau[:, None] ** 2
     w = 1 / V
-    v_mu = 1 / w.sum(1)
-    mu_hat = v_mu * (w * y[None, :]).sum(1)
-    ll = 0.5 * np.log(v_mu) - 0.5 * np.log(V).sum(1) - 0.5 * ((y[None, :] - mu_hat[:, None]) ** 2 * w).sum(1)
+    m0, p0 = (0.0, 0.0) if mu_prior is None else (float(mu_prior[0]), 1 / float(mu_prior[1]) ** 2)
+    v_mu = 1 / (w.sum(1) + p0)
+    mu_hat = v_mu * ((w * y[None, :]).sum(1) + p0 * m0)
+    quad = (w * y[None, :] ** 2).sum(1) + p0 * m0 ** 2 - mu_hat ** 2 / v_mu
+    ll = 0.5 * np.log(v_mu) - 0.5 * np.log(V).sum(1) - 0.5 * quad
     lpost = lp + ll
     d = np.exp(lpost - lpost.max())
     d = d / np.trapezoid(d, tau)
-    return Hier(y, sigma, tau, d, mu_hat, v_mu)
+    h = Hier(y, sigma, tau, d, mu_hat, v_mu)
+    h.mu_prior = mu_prior
+    return h
 
 
 # ---------------------------------------------------------------------------------------------------------------
