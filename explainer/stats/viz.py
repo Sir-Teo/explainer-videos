@@ -2619,3 +2619,80 @@ class ExamCard(VGroup):
 
     def shrink(self, scale: float = 0.78, buff: float = 0.25) -> Animation:
         return self.animate.scale(scale).to_edge(UP, buff=buff)
+
+
+class ConvergenceLab(VGroup):
+    """The weak-convergence lab (Part 43) on CDF axes ``ax``: a law F_n against its limit G.  ``curve_F()`` /
+    ``curve_G()`` draw them (F as a staircase when built from atoms); ``kolmogorov_bar(x)`` the vertical gap at x, the
+    Kolmogorov distance where it is largest; ``levy_box(x, eps)`` the eps-by-eps box that Lévy's metric fits between
+    the graphs; ``area()`` the region between them, whose area is the Wasserstein-1 distance."""
+
+    def __init__(self, ax, G, F=None, atoms=None, probs=None, x_range=None, color_F=None, color_G=None, m: int = 600):
+        super().__init__()
+        self.ax = ax
+        b = bounds(ax)
+        self.x0, self.x1 = (b[0], b[1]) if x_range is None else x_range
+        self.G = G
+        self.atoms = None if atoms is None else np.asarray(atoms, float)
+        self.probs = None if probs is None else np.asarray(probs, float)
+        if F is None and self.atoms is not None:
+            c = np.cumsum(self.probs)
+            a = self.atoms
+
+            def F(x):
+                i = np.searchsorted(a, np.asarray(x, float), side="right")
+                return np.where(i > 0, c[np.maximum(i - 1, 0)], 0.0)
+        self.F = F
+        self.cF, self.cG = color_F or S.EST, color_G or S.TRUTH
+        self.xs = np.linspace(self.x0, self.x1, m)
+
+    def _pts_F(self):
+        if self.atoms is None:
+            return [(x, float(self.F(np.array([x]))[0])) for x in self.xs]
+        pts, prev = [(self.x0, float(self.F(np.array([self.x0]))[0]))], float(self.F(np.array([self.x0]))[0])
+        for a in self.atoms:
+            if self.x0 < a < self.x1:
+                nxt = float(self.F(np.array([a]))[0])
+                pts += [(a, prev), (a, nxt)]
+                prev = nxt
+        pts.append((self.x1, prev))
+        return pts
+
+    def curve_F(self, stroke_width: float = 4.0) -> VMobject:
+        m = VMobject(stroke_color=self.cF, stroke_width=stroke_width)
+        m.set_points_as_corners([self.ax.c2p(a, b) for a, b in self._pts_F()])
+        return m
+
+    def curve_G(self, stroke_width: float = 3.5) -> VMobject:
+        m = VMobject(stroke_color=self.cG, stroke_width=stroke_width)
+        m.set_points_smoothly([self.ax.c2p(x, float(self.G(np.array([x]))[0])) for x in self.xs])
+        return m
+
+    def kolmogorov_bar(self, x: float, top: float | None = None, bottom: float | None = None, color=None) -> VGroup:
+        g = float(self.G(np.array([x]))[0])
+        f = float(self.F(np.array([x]))[0]) if top is None else top
+        lo = g if bottom is None else bottom
+        line = Line(self.ax.c2p(x, lo), self.ax.c2p(x, f), color=color or S.ACCENT, stroke_width=6)
+        dots = VGroup(Dot(self.ax.c2p(x, lo), radius=0.06, color=color or S.ACCENT), Dot(self.ax.c2p(x, f), radius=0.06, color=color or S.ACCENT))
+        return VGroup(line, dots)
+
+    def levy_box(self, x: float, eps: float, y: float | None = None, color=None) -> Rectangle:
+        y = float(self.G(np.array([x]))[0]) if y is None else y
+        p0, p1 = self.ax.c2p(x - eps / 2, y - eps / 2), self.ax.c2p(x + eps / 2, y + eps / 2)
+        return Rectangle(width=p1[0] - p0[0], height=p1[1] - p0[1], stroke_color=color or S.PRIOR, stroke_width=3,
+                         fill_color=color or S.PRIOR, fill_opacity=0.25).move_to((p0 + p1) / 2)
+
+    def area(self, color=None, opacity: float = 0.35) -> VGroup:
+        """The region between the two CDFs, as thin vertical strips (its area is the Wasserstein-1 distance)."""
+        g = VGroup()
+        xs = np.linspace(self.x0, self.x1, 240)
+        w = (xs[1] - xs[0])
+        for x in xs:
+            a = float(self.F(np.array([x]))[0])
+            b = float(self.G(np.array([x]))[0])
+            if abs(a - b) < 1e-4:
+                continue
+            p0, p1 = self.ax.c2p(x - w / 2, min(a, b)), self.ax.c2p(x + w / 2, max(a, b))
+            g.add(Rectangle(width=p1[0] - p0[0], height=p1[1] - p0[1], stroke_width=0, fill_color=color or S.ALT,
+                            fill_opacity=opacity).move_to((p0 + p1) / 2))
+        return g
