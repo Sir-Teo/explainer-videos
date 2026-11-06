@@ -171,8 +171,9 @@ def join_cost(big_rows=1e9, small_rows=1e6, row_bytes=100, workers=100):
     every row of both tables to the worker that owns its key's hash (all but 1/workers of them move)."""
     broadcast = small_rows * row_bytes * workers
     shuffle = (big_rows + small_rows) * row_bytes * (1 - 1 / workers)
-    crossover = big_rows / (workers - 1)
-    return {"broadcast_bytes": broadcast, "shuffle_bytes": shuffle, "small_rows": small_rows,
+    # broadcast = shuffle:  S N = (B + S)(1 - 1/N)  =>  S* = B (N - 1) / (N^2 - N + 1)
+    crossover = big_rows * (workers - 1) / (workers * workers - workers + 1)
+    return {"broadcast_bytes": broadcast, "shuffle_bytes": shuffle, "small_rows": small_rows, "big_rows": big_rows,
             "crossover_small_rows": crossover, "workers": workers}
 
 
