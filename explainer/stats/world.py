@@ -385,6 +385,76 @@ class World:
         return {"x": x, "group": group, "delta": delta, "nonnull": nonnull, "pathway": np.repeat(np.arange(nb), B)}
 
     # ------------------------------------------------------------------
+    # The clinic trial (Part 35): both potential outcomes for every patient
+    # ------------------------------------------------------------------
+    TRIAL_N = 2000
+
+    @cached_property
+    def trial(self) -> dict:
+        """The World's blood-pressure drug trial (Part 35), with the science table no real trial has.  The candidates
+        (``pool``) are the island's adults aged 40+ who are not on blood-pressure medicine and whose measured pressure
+        (mean of three readings) is 140+.  For each candidate, the systolic pressure after 12 weeks without the drug is
+        y0 = sbp - 3 + N(0, 7^2) (regression to the mean and visit noise), and with it y1 = y0 + tau, where the drug's
+        effect tau = -(9 + 0.3 (sbp - 150) + 0.08 (age - 60)) + N(0, 4^2) is larger for higher pressure and greater
+        age.  2,000 patients enrol, younger ones likelier (weight 1 / (1 + exp((age - 58) / 7))), so the trial is not
+        a sample of the pool (chapter 14).  Each patient has a compliance type: never-taker (does not take the drug
+        if assigned; likelier when young or when the pressure is lower, so they feel well), always-taker (gets the drug
+        anyway; likelier at higher pressure), or complier.  ``doctor`` is
+        the probability a doctor would prescribe the drug in practice, rising steeply with pressure: the selection
+        bias of chapter three."""
+        g = self.rng("trial")
+        h = self.health
+        a = self.age.astype(float)
+        meas = np.full(self.n, np.nan)
+        meas[self.adult] = h["sbp_read"][self.adult].mean(1)
+        cand = self.adult & ~h["bp_meds"] & (a >= 40) & (meas >= 140)
+        pool = np.flatnonzero(cand)
+        sp, ap = h["sbp"][pool], a[pool]
+        y0 = sp - 3 + 7 * g.standard_normal(len(pool))
+        tau = -(9 + 0.3 * (sp - 150) + 0.08 * (ap - 60)) + 4 * g.standard_normal(len(pool))
+        w = 1 / (1 + np.exp((ap - 58) / 7))
+        pos = np.sort(g.choice(len(pool), self.TRIAL_N, replace=False, p=w / w.sum()))
+        idx = pool[pos]
+        at = a[idx]
+        bt = meas[idx]
+        p_never = np.clip(0.30 - 0.004 * (at - 45) - 0.012 * (bt - 150), 0.05, 0.6)  # who feels well skips the pill
+        p_always = np.clip(0.07 + 0.006 * (bt - 150), 0.02, 0.25)  # the sickest find the drug anyway
+        u = g.random(len(idx))
+        ctype = np.where(u < p_never, 1, np.where(u < p_never + p_always, 2, 0))  # 0 complier, 1 never, 2 always
+        doctor = 1 / (1 + np.exp(-(meas[idx] - 152) / 6))
+        return {"pool": pool, "y0_pool": y0, "tau_pool": tau, "sbp_pool": sp, "age_pool": ap,
+                "female_pool": ~self.male[pool], "bmi_pool": h["bmi"][pool], "base_pool": meas[pool],
+                "pos": pos, "idx": idx, "age": at, "female": ~self.male[idx], "bmi": h["bmi"][idx], "base": meas[idx],
+                "y0": y0[pos], "y1": y0[pos] + tau[pos], "tau": tau[pos], "ctype": ctype, "doctor": doctor}
+
+    # ------------------------------------------------------------------
+    # An epidemic (Part 35): interference between neighbours
+    # ------------------------------------------------------------------
+    EPI_PER_TOWN = 100
+
+    @cached_property
+    def epidemic(self) -> dict:
+        """A seasonal infection in the 200 towns (Part 35), 100 residents sampled per town.  Town j has a baseline
+        attack rate r_j (log-normal around 15%, larger in bigger towns).  A resident's chance of infection is
+        r_j (1 - 0.6 v) (1 - 0.6 s_j), where v is their own vaccination and s_j the share of the town vaccinated: a
+        direct effect and a spillover (herd) effect.  ``u`` fixes each resident's luck, so ``infected(v, s)`` is a
+        deterministic potential outcome for any vaccination pattern."""
+        g = self.rng("epidemic")
+        k = N_TOWNS
+        town = np.repeat(np.arange(k), self.EPI_PER_TOWN)
+        size = self.towns["weight"]
+        r = np.exp(np.log(0.15) + 0.25 * (np.log(size) - np.log(size).mean()) / np.log(size).std()
+                   + 0.3 * g.standard_normal(k))
+        return {"town": town, "rate": np.clip(r, 0.02, 0.6), "u": g.random(len(town))}
+
+    def infected(self, v, share) -> np.ndarray:
+        """The epidemic's potential outcomes: infection given each resident's vaccination ``v`` and each town's
+        vaccinated share ``share`` (length 200)."""
+        e = self.epidemic
+        p = e["rate"][e["town"]] * (1 - 0.6 * np.asarray(v, float)) * (1 - 0.6 * np.asarray(share, float)[e["town"]])
+        return e["u"] < p
+
+    # ------------------------------------------------------------------
     # Sampling and the truth
     # ------------------------------------------------------------------
     def sample(self, n: int, among: np.ndarray | None = None, seed: int = 0) -> np.ndarray:
