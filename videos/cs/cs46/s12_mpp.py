@@ -280,8 +280,8 @@ class Mpp(VoiceoverScene):
             "holding a fifth. The busiest worker gets almost four times its fair share, and a query finishes only "
             "when its slowest worker does. Part 39's backup tasks cannot help: that worker is not slow, its share is "
             "large. <bookmark mark='c'/> The fix is salting: split the hot key into eight random sub-keys, and copy "
-            "its matches on the small side eight times. The slowest worker now carries one point six times the "
-            "ideal. <bookmark mark='d'/> Chapter 6's heavy-hitter sketches find hot keys cheaply, and Spark's "
+            "its matches on the small side eight times. The slowest worker now carries "
+            f"{s['slowdown_salted']:.1f} times the ideal. <bookmark mark='d'/> Chapter 6's heavy-hitter sketches find hot keys cheaply, and Spark's "
             "adaptive execution splits skewed partitions as the query runs."
         ) as vo:
             self.play(FadeIn(head), FadeIn(src), Create(baseline), FadeIn(names), FadeIn(mid), FadeIn(illus))

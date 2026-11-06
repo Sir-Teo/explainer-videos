@@ -8,6 +8,7 @@ import gzip
 import math
 import random
 import struct
+import zlib
 from collections import Counter
 
 
@@ -186,7 +187,7 @@ def skew(workers=16, rows=200_000, hot_share=0.2, salt=8, seed=2):
     def loads(ks):
         c = [0] * workers
         for k in ks:
-            c[hash(k) % workers] += 1
+            c[zlib.crc32(k.encode()) % workers] += 1    # a stable hash: same answer in every run
         return c
     plain = loads(keys)
     salted = loads([(k + f"#{rng.randrange(salt)}") if k == "hot" else k for k in keys])
