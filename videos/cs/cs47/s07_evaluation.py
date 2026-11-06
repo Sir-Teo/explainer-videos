@@ -223,6 +223,7 @@ class Evaluation(VoiceoverScene):
         a1 = Arrow(cols.get_right(), pool_g.get_left(), buff=0.15, color=GREY_C, stroke_width=2)
         a2 = Arrow(pool_g.get_right(), judged_g.get_left(), buff=0.15, color=GREY_C, stroke_width=2)
         ill = note(r"illustrative", font_size=17).next_to(cols, DOWN, buff=0.15).align_to(cols, LEFT)
+        VGroup(cols, pool_g, judged_g, a1, a2, ill).set_x(0)
         lines = VGroup(
             wrapped_label(r"a \textbf{test collection}: \ fixed documents, \ fixed queries, \ and judgments \ "
                           r"(Cleverdon's Cranfield experiments, \ 1960s)", 12.4, font_size=19, color=WHITE),
