@@ -1682,3 +1682,4 @@ and a Reasoner library of perhaps 20–30k lines with its tests. Expect one part
 | 2 · The Laws of Thought | scenes, English and Chinese narration and text, QA | ~58 min |
 | 3 · All and Some | scenes, English and Chinese narration and text, QA | ~65 min |
 | 4 · Necessity and Possibility | scenes, English and Chinese narration and text, QA | ~50 min |
+| 5 · Beyond True and False | scenes, English and Chinese narration and text, QA | ~59 min |
