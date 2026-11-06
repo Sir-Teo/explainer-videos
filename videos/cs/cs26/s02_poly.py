@@ -60,8 +60,7 @@ class Polynomial(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
             vo.wait_until("a")
-            self.play(*[FadeIn(VGroup(*[r[c] for r in tab.cells[1:]] + [r[0] for r in tab.cells[1:]]))
-                        for c in (1, 2)])
+            self.play(*[FadeIn(VGroup(*[r[c] for r in tab.cells[1:]])) for c in (0, 1, 2)])
             vo.wait_until("b")
             self.play(*[FadeIn(VGroup(*[r[c] for r in tab.cells[1:]])) for c in (3, 4)])
             vo.wait_until("c")

@@ -279,13 +279,13 @@ def compute_famous() -> dict:
             var = lambda i, c: (i - 1) * k + c + 1  # noqa: E731
             out["schur_44_colouring"] = [next(c for c in range(k) if model[var(i, c)]) for i in range(1, n + 1)]
     t = time.perf_counter()
-    model, st = X.cdcl(*X.schur_cnf(45, 4), max_conflicts=200_000)
+    model, st = X.cdcl(*X.schur_cnf(45, 4), max_conflicts=30_000)
     out["schur_45_4"] = {"status": st["status"], "conflicts": st["conflicts"], "seconds": time.perf_counter() - t}
     py = []
     for n in (500, 1000, 2000, 3000):
         nv, cl = X.pythagorean_cnf(n)
         t = time.perf_counter()
-        model, st = X.cdcl(nv, cl, max_conflicts=200_000)
+        model, st = X.cdcl(nv, cl, max_conflicts=30_000)
         py.append({"n": n, "triples": len(cl) // 2, "status": st["status"], "conflicts": st["conflicts"],
                    "seconds": time.perf_counter() - t})
     out["pythagorean"] = py

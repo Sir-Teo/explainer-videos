@@ -39,8 +39,8 @@ class Sat(VoiceoverScene):
             label(r"plus restarts \ (Luby) \ and saved phases: \ the solver used throughout this part, \ about 200 "
                   r"lines of Python", font_size=20, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(head, DOWN, buff=0.4).to_edge(LEFT, buff=0.7)
-        rows = [[str(r["n"]), words(r["dpll_nodes"]), f"{r['dpll_s'] * 1000:.1f} ms",
-                 words(r["cdcl_steps"]), f"{r['cdcl_s'] * 1000:.1f} ms"] for r in s["rows"]]
+        rows = [[str(r["n"]), words(int(r["dpll_nodes"])), f"{r['dpll_s'] * 1000:.1f} ms",
+                 words(int(r["cdcl_steps"])), f"{r['cdcl_s'] * 1000:.1f} ms"] for r in s["rows"]]
         tab = grid_table([r"$n$", r"DPLL nodes", r"time", r"CDCL steps", r"time"], rows,
                          widths=[1.0, 2.0, 1.6, 2.0, 1.6], row_h=0.36, font_size=18, mono_cols=(),
                          colors=[[WHITE, GREY_A, NO, DATA, YES]] * len(rows))
@@ -101,7 +101,7 @@ class Sat(VoiceoverScene):
             label(r"few clauses: \ almost always satisfiable, \ found at once; \ many: \ refuted quickly",
                   font_size=20, color=WHITE),
             label(rf"near 4.27 clauses per variable the probability drops through $\tfrac12$, \ and the work peaks: "
-                  rf"\ {words(r150[4.3]['median_conflicts'])} conflicts at $n$ = 150", font_size=20, color=NO),
+                  rf"\ {words(int(r150[4.3]['median_conflicts']))} conflicts at $n$ = 150", font_size=20, color=NO),
             label(r"the curves sharpen with $n$: \ the threshold is sharp \ (Friedgut, 1999); \ its exact place is "
                   r"proved only for large $k$ \ (Ding, \ Sly, \ Sun, \ 2015)", font_size=20, color=HEAD),
         ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.3)

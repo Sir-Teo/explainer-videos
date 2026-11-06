@@ -25,14 +25,14 @@ class Np(VoiceoverScene):
             RoundedRectangle(width=2.6, height=1.0, corner_radius=0.1, color=DATA).set_fill(DATA, 0.12),
             RoundedRectangle(width=2.6, height=1.0, corner_radius=0.1, color=HEAD).set_fill(HEAD, 0.12),
             RoundedRectangle(width=2.6, height=1.0, corner_radius=0.1, color=YES).set_fill(YES, 0.12),
-        ).arrange(RIGHT, buff=1.4).next_to(head, DOWN, buff=0.8)
+        ).arrange(RIGHT, buff=1.4).next_to(head, DOWN, buff=1.7)
         bl = VGroup(label(r"input $x$", font_size=22, color=DATA).move_to(boxes[0]),
                     label(r"verifier $V$", font_size=22, color=HEAD).move_to(boxes[1]),
                     label(r"accept", font_size=22, color=YES).move_to(boxes[2]))
         cert = VGroup(RoundedRectangle(width=2.6, height=0.8, corner_radius=0.1, color=LAM).set_fill(LAM, 0.12),
                       label(r"certificate $c$", font_size=22, color=LAM))
         cert[1].move_to(cert[0])
-        cert.next_to(boxes[1], UP, buff=0.5).shift(LEFT * 2.0)
+        cert.next_to(boxes[1], UP, buff=0.35).shift(LEFT * 2.0)
         arrows = VGroup(Arrow(boxes[0].get_right(), boxes[1].get_left(), buff=0.1, color=GREY_B),
                         Arrow(boxes[1].get_right(), boxes[2].get_left(), buff=0.1, color=GREY_B),
                         Arrow(cert.get_right(), boxes[1].get_top() + LEFT * 0.4, buff=0.1, color=LAM))
@@ -44,7 +44,7 @@ class Np(VoiceoverScene):
                   r"factor", font_size=21, color=DATA),
             label(r"a \textbf{no} answer needs no certificate: \ NP is lopsided \ (chapter 9)", font_size=21,
                   color=NO),
-        ).arrange(DOWN, buff=0.25).next_to(boxes, DOWN, buff=0.7)
+        ).arrange(DOWN, buff=0.25).next_to(boxes, DOWN, buff=0.55)
         with self.voiceover(
             "Here is the definition that makes the hook's question precise. <bookmark mark='a'/> A verifier is a "
             "polynomial-time program that takes the input and a certificate, a proposed proof. <bookmark mark='b'/> "
