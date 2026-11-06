@@ -80,20 +80,22 @@ class Frontier(VoiceoverScene):
             DOWN, aligned_edge=LEFT, buff=0.25)
         VGroup(left, right).arrange(RIGHT, buff=1.0, aligned_edge=UP).next_to(head, DOWN, buff=0.5)
 
-        def records(rows, xkey, ykey, ymax, col, ylab):
-            ax = Axes(x_range=[0, 6.2, 1], y_range=[0, ymax, ymax / 4], x_length=5.2, y_length=2.2,
+        def records(rows, xkey, ykey, ymax, col, ylab, x0=0, y0=0):
+            ax = Axes(x_range=[x0, 6.2, 1], y_range=[y0, ymax, (ymax - y0) / 4], x_length=5.2, y_length=2.2,
                       axis_config={"color": GREY_D, "include_ticks": False})
             pts = [ax.c2p(math.log10(r[xkey]), r[ykey]) for r in rows]
             stair = VMobject(color=col, stroke_width=2.5).set_points_as_corners(
                 [p for a, b in zip(pts, pts[1:] + [ax.c2p(6.2, rows[-1][ykey])]) for p in (a, [b[0], a[1], 0])])
             dots = VGroup(*[Dot(p, radius=0.045, color=col) for p in pts])
-            xt = VGroup(*[label(rf"$10^{{{k}}}$", font_size=14, color=GREY_B).next_to(ax.c2p(k, 0), DOWN, buff=0.08)
-                          for k in range(0, 7, 2)])
-            yt = label(ylab, font_size=15, color=GREY_B).next_to(ax, UP, buff=0.08).align_to(ax, LEFT)
-            return VGroup(ax, xt, yt, stair, dots)
+            xt = VGroup(*[label(rf"$10^{{{k}}}$", font_size=14, color=GREY_B).next_to(ax.c2p(k, y0), DOWN, buff=0.08)
+                          for k in range(x0, 7, 2 if x0 == 0 else 1)])
+            yt = VGroup(*[label(rf"{v}", font_size=14, color=GREY_B).next_to(ax.c2p(x0, v), LEFT, buff=0.08)
+                          for v in (y0, ymax)])
+            yl = label(ylab, font_size=15, color=GREY_B).next_to(ax, UP, buff=0.08).align_to(ax, LEFT)
+            return VGroup(ax, VGroup(xt, yt), yl, stair, dots)
 
         gplot = records(g["records"], "n", "p", 650, HEAD, r"smallest prime needed, \ each new record")
-        cplot = records(c["records"], "n", "steps", 560, YES, r"steps to reach 1, \ each new record")
+        cplot = records(c["records"], "n", "steps", 550, YES, r"steps to reach 1, \ each new record", x0=4, y0=300)
         gplot.next_to(left, DOWN, buff=0.4).align_to(left, LEFT)
         cplot.next_to(right, DOWN, buff=0.4).align_to(right, LEFT)
         VGroup(gplot, cplot).align_to(VGroup(gplot, cplot), DOWN)
