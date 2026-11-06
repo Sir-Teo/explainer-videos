@@ -137,7 +137,7 @@ class Web(VoiceoverScene):
                                                                                          ("B", "T"))])
         pl = label(r"the palette: \ True, \ False, \ Base", font_size=19, color=GREY_A).next_to(pal, DOWN, buff=0.2)
         # an OR gadget, drawn
-        g = {"a": [-1.2, 1.4], "b": [-1.2, -0.6], "u": [0.2, 1.0], "w": [0.2, -0.2], "o": [1.4, 0.4]}
+        g = {"a": [-2.4, 1.2], "b": [-2.4, -0.8], "u": [-1.2, 0.8], "w": [-1.2, -0.4], "o": [-0.1, 0.2]}
         gad = VGroup()
         for a_, b_ in (("a", "u"), ("b", "w"), ("u", "w"), ("u", "o"), ("w", "o")):
             gad.add(Line([*g[a_], 0], [*g[b_], 0], buff=0.25, color=GREY_B))
@@ -148,18 +148,19 @@ class Web(VoiceoverScene):
         gl = label(r"OR gadget: \ $o$ can be True \\ only if $a$ or $b$ is", font_size=19, color=GREY_A).next_to(
             gad, DOWN, buff=0.2)
         notes = VGroup(
-            label(r"each variable: \ $x_i$ and $\bar x_i$ joined to each other and to B: \\ one is True, \ one False",
+            label(r"each variable: \ $x_i$ and $\bar x_i$ joined \\ to each other and to B: \\ one is True, \ one False",
                   font_size=20, color=WHITE),
-            label(r"each clause: \ two OR gadgets in a row; \ the output is joined to F and B, \\ so it must be "
+            label(r"each clause: \ two OR gadgets in a row; \\ the output is joined to F and B, \\ so it must be "
                   r"True: \ some literal is True", font_size=20, color=LAM),
-            label(rf"our formula: \ {w['vertices']} vertices, \ {w['edges']} edges; \ as SAT for our solver: \ "
+            label(rf"our formula: \ {w['vertices']} vertices, \ {w['edges']} edges; \\ as SAT for our solver: \ "
                   rf"{w['cnf_vars']} variables, \ {w['cnf_clauses']} clauses", font_size=20, color=DATA),
-            label(r"the colouring it found, \ read back: \ $x_i$ = colour of $x_i$ is T: \ "
-                  + ", ".join("T" if b else "F" for b in w["mapped"]) + r" \ (satisfies the formula)",
+            label(r"the colouring it found, \ read back \\ ($x_i$ true iff coloured like T): \ "
+                  + ", ".join("T" if b else "F" for b in w["mapped"]) + r" \\ (satisfies the formula)",
                   font_size=20, color=YES),
-            label(r"an unsatisfiable formula gives a graph with \textbf{no} 3-colouring \ (checked)", font_size=20,
+            label(r"an unsatisfiable formula gives a graph \\ with \textbf{no} 3-colouring \ (checked)", font_size=20,
                   color=NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(gad, RIGHT, buff=0.6).align_to(pal, UP)
+        notes.shift(UP * 0.3)
         fit_right(notes)
         with self.voiceover(
             "Second disguise: colouring a graph with three colours. <bookmark mark='a'/> Start with a triangle whose "

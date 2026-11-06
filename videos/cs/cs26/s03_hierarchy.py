@@ -30,14 +30,14 @@ class Hierarchy(VoiceoverScene):
             "    else:          accept",
         ]
         prog = VGroup(*[mono(ln, 22, LAM) for ln in code_lines]).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
-        prog.next_to(thm, DOWN, buff=0.45).to_edge(LEFT, buff=1.2)
+        prog.next_to(thm, DOWN, buff=0.45).to_edge(LEFT, buff=0.7)
         frame = SurroundingRectangle(prog, color=LAM, buff=0.2, corner_radius=0.08)
         lines = VGroup(
-            label(r"$D$ runs in time about $f(n) \log f(n)$: \ simulation with a clock", font_size=21, color=WHITE),
-            label(r"suppose some $M$ decides the same language in time $f(n)$", font_size=21, color=DATA),
-            label(r"run $D$ on $\langle M \rangle$: \ the clock is enough, \ so $D$ does the \textbf{opposite} of "
+            label(r"$D$ runs in time about $f(n) \log f(n)$: \\ simulation with a clock", font_size=21, color=WHITE),
+            label(r"suppose some $M$ decides \\ the same language in time $f(n)$", font_size=21, color=DATA),
+            label(r"run $D$ on $\langle M \rangle$: \ the clock is enough, \\ so $D$ does the \textbf{opposite} of "
                   r"$M$", font_size=21, color=NO),
-            label(r"so no $f(n)$-time machine decides $D$'s language", font_size=21, color=YES),
+            label(r"so no $f(n)$-time machine \\ decides $D$'s language", font_size=21, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(frame, RIGHT, buff=0.6)
         if lines.get_right()[0] > 6.9:
             lines.width = 6.9 - lines.get_left()[0]

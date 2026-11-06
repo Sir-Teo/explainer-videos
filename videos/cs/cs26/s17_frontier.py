@@ -27,19 +27,19 @@ class Frontier(VoiceoverScene):
         hist = {int(k): v for k, v in f["hist"].items() if k != "None"}
         ks = sorted(hist)
         ch = bar_chart([hist[k] for k in ks], [str(k) for k in ks], [YES if k <= 5 else (HEAD if k < 10 else NO)
-                                                                    for k in ks], height=3.0, bar_w=0.55, gap=0.35,
+                                                                    for k in ks], height=3.0, bar_w=0.42, gap=0.22,
                        fmt_=lambda v: f"{int(v)}", font_size=18)
-        ch.next_to(head, DOWN, buff=0.6).to_edge(LEFT, buff=1.0)
+        ch.next_to(head, DOWN, buff=0.6).to_edge(LEFT, buff=0.7)
         cl = label(r"leaves in the smallest AND/OR formula \ (literals as leaves)", font_size=18,
                    color=GREY_A).next_to(ch, DOWN, buff=0.15)
         notes = VGroup(
             label(rf"all {f['functions']} Boolean functions of 3 inputs, \\ exactly, \ by dynamic programming",
                   font_size=20, color=WHITE),
-            label(rf"majority: \ {f['majority']} leaves; \ parity: \ {f['parity']}, \ the most of all", font_size=20,
+            label(rf"majority: \ {f['majority']} leaves; \\ parity: \ {f['parity']}, \ the most of all", font_size=20,
                   color=NO),
-            label(r"Khrapchenko \ (1971): \ parity of $n$ bits needs $n^2$; \ here 9 $\le$ 10", font_size=20,
+            label(r"Khrapchenko \ (1971): \ parity of $n$ bits \\ needs $n^2$; \ here 9 $\le$ 10", font_size=20,
                   color=HEAD),
-            label(r"Shannon \ (1949): \ counting shows \textbf{almost every} function of $n$ inputs \\ needs circuits of "
+            label(r"Shannon \ (1949): \ counting shows \\ \textbf{almost every} function of $n$ inputs \\ needs circuits of "
                   r"size $2^n / n$", font_size=20, color=DATA),
             label(r"yet for no \textbf{explicit} function in NP \\ can we prove more than about $3.1\,n$ gates",
                   font_size=20, color=NO),

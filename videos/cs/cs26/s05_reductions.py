@@ -60,31 +60,32 @@ class Reductions(VoiceoverScene):
 
     def complete(self):
         head = label(r"Hardness and completeness", font_size=34).to_edge(UP, buff=0.35)
-        np_ = Ellipse(width=6.0, height=4.0, color=HEAD).set_fill(HEAD, 0.06).shift(LEFT * 3.2 + DOWN * 0.5)
-        p_ = Ellipse(width=2.4, height=1.6, color=DATA).set_fill(DATA, 0.15).move_to(np_.get_center() + LEFT * 1.4
+        np_ = Ellipse(width=5.2, height=4.0, color=HEAD).set_fill(HEAD, 0.06).shift(LEFT * 4.0 + DOWN * 0.5)
+        p_ = Ellipse(width=2.0, height=1.4, color=DATA).set_fill(DATA, 0.15).move_to(np_.get_center() + LEFT * 1.2
                                                                                    + DOWN * 0.6)
-        npc = Ellipse(width=2.2, height=1.4, color=NO).set_fill(NO, 0.2).move_to(np_.get_center() + RIGHT * 1.5
+        npc = Ellipse(width=2.0, height=1.3, color=NO).set_fill(NO, 0.2).move_to(np_.get_center() + RIGHT * 1.2
                                                                                + UP * 0.6)
         lab = VGroup(label(r"NP", font_size=24, color=HEAD).next_to(np_.get_top(), DOWN, buff=0.15),
                      label(r"P", font_size=24, color=DATA).move_to(p_),
                      label(r"NP-complete", font_size=20, color=NO).move_to(npc))
         dots_ = VGroup(*[Dot(np_.get_center() + np.array([x, y, 0]), radius=0.05, color=GREY_B)
-                         for x, y in ((-2.2, 0.4), (-0.3, 1.1), (0.2, -1.2), (-1.0, 0.6), (1.0, -0.6), (2.1, -0.3))])
+                         for x, y in ((-1.9, 0.4), (-0.3, 1.1), (0.2, -1.2), (-0.9, 0.6), (0.9, -0.6), (1.8, -0.4))])
         arrows = VGroup(*[Arrow(d.get_center(), npc.get_center(), buff=0.12, stroke_width=1.5, color=GREY_C,
                                 max_tip_length_to_length_ratio=0.12) for d in dots_])
         lines = VGroup(
             label(r"$B$ is \textbf{NP-hard} if every problem in NP reduces to it", font_size=22, color=WHITE),
             label(r"\textbf{NP-complete}: \ NP-hard and in NP", font_size=22, color=NO),
-            label(r"one NP-complete problem in P \ $\Rightarrow$ \ every NP problem in P: \ P = NP", font_size=22,
+            label(r"one NP-complete problem in P \ $\Rightarrow$ \\ every NP problem in P: \ P = NP", font_size=22,
                   color=YES),
             label(r"one NP-complete problem \textbf{not} in P \ $\Rightarrow$ \ none of them is", font_size=22,
                   color=NO),
-            label(r"but does any NP-complete problem exist? \ That needs a reduction \textbf{from every} NP "
+            label(r"but does any NP-complete problem exist? \\ That needs a reduction \textbf{from every} NP "
                   r"problem at once", font_size=22, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4).shift(DOWN * 0.2)
-        if lines.width > 7.0:
-            lines.width = 7.0
-            lines.to_edge(RIGHT, buff=0.4)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(np_, RIGHT, buff=0.4).shift(UP * 0.2)
+        if lines.get_right()[0] > 6.9:
+            left = lines.get_left()[0]
+            lines.width = 6.9 - left
+            lines.shift(RIGHT * (left - lines.get_left()[0]))
         with self.voiceover(
             "Now the key definitions. <bookmark mark='a'/> A problem is NP-hard if every problem in NP reduces to "
             "it. <bookmark mark='b'/> It is NP-complete if, in addition, it is in NP itself: the hardest problems in "
