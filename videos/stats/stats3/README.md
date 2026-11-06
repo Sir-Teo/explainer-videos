@@ -7,7 +7,7 @@ Poisson's formula, and asks why the same few distributions turn up everywhere. T
 family. Every member is related to the others by a sum, a limit, a transformation or a mixture.
 
 **Built in this part:** the family-tree explorer (`explainer.stats.FamilyTree`), 18 distributions joined by 24
-arrows. Each chapter lights the arrows it derives, and the finale walks the whole tree.
+arrows. Each chapter lights its relationships, and the finale walks the whole tree. Several limit results receive their full proofs in Parts 6 and 43.
 
 **New in the World and the Museum:**
 - the World's lake (`World.lake`, about 8,000 fish, for capture–recapture);
@@ -15,7 +15,7 @@ arrows. Each chapter lights the arrows it derives, and the finale walks the whol
 
 ## Build it
 
-From the repo root, after the one-time setup in the [top-level README](../../README.md):
+From the repo root, after the one-time setup in the [top-level README](../../../README.md):
 
 ```bash
 python -m videos.stats.stats3.compute          # once: every computed item (seconds; cached in .cache/stats3)
@@ -32,7 +32,7 @@ python tools/lecture_length.py stats3 --floor 50
 | 0 | Deaths by horse kick | Bortkiewicz's 200 corps-years against 200 × Poisson(0.61); mean and variance; the dark family tree; objectives. | 109, 65, 22, 3, 1 vs 108.7, 66.3, 20.2, 4.1, 0.7 |
 | 1 | Bernoulli to binomial | Lattice paths; the formula from Part 2's counting; mean and variance by indicators; a World poll of 100 adults (how many over 180 cm). | p = 0.1446; 2,000 polls: mean 14.42, variance 12.60 |
 | 2 | The law of rare events | Binomial(n, λ/n) → Poisson, derived on screen; total variation as n grows; Le Cam's inequality; the Poisson's mean and variance. | TV 0.174 (n = 4) → 0.0005 (n = 1,000) |
-| 3 | Waiting | The geometric; memorylessness shown by rescaling the tail; first-step analysis (Pascal's method) for E T = 1/p; the negative binomial. | simulated mean wait 5.996; P(T > 8 \| T > 5) = 0.578 vs 0.579 |
+| 3 | Waiting | The geometric; memorylessness shown by rescaling the tail; first-step analysis (Pascal's method) for E T = 1/p; the negative binomial (total trials; subtract the success count for the failures convention). | simulated mean wait 5.996; P(T > 8 \| T > 5) = 0.578 vs 0.579 |
 | 4 | Without replacement | The hypergeometric; capture–recapture on the World's lake; Lincoln–Petersen and Chapman over 2,000 repetitions. | N = 8,107; one estimate 6,452; L–P mean 8,525, Chapman 8,198 |
 | 5 | Continuous time | The Poisson process; exponential gaps; the gamma wait; superposition and thinning; the inspection paradox. | wait 10.04 min, gap you land in 20.09 min |
 | 6 | The normal, three ways | de Moivre (1733) and Stirling; Gauss (1809); Herschel–Maxwell rotation invariance; ∫e^{−x²/2} = √(2π) in polar coordinates; 68–95–99.7 on the World's men. | 68.24%, 95.41%, 99.73% vs 68.27%, 95.45%, 99.73% |
@@ -43,7 +43,7 @@ python tools/lecture_length.py stats3 --floor 50
 | 11 | Generating functions | MGFs and moments; the normal's by completing the square; Poisson sums; sums of exponentials are gamma; characteristic functions. | — |
 | 12 | Mixtures and hierarchies | Beta-binomial overdispersion; the law of total variance (4 + 16 = 20); gamma–Poisson = negative binomial; a normal scale mixture is t. | variance 20.0 vs 4.9; NB mean 3.04, variance 7.71 |
 | 13 | Exponential families | h(x) exp(ηT − A(η)); Bernoulli, Poisson, normal, exponential, binomial; A′ = E T, A″ = Var T; what the form buys (Parts 9, 15, 22, 24). | A′ checked numerically |
-| 14 | The family tree | All 24 arrows walked and lit; Leemis & McQueston (2008). | — |
+| 14 | The family tree | All 24 relationships walked and lit; Leemis & McQueston (2008). | — |
 | 15 | Outro | Recap, where it comes back, problems, references, the Transcript, Part 4's question. | — |
 
 ## Sources

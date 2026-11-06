@@ -43,7 +43,7 @@ class Capture(VoiceoverScene, TreeMixin):
             label(rf"3. \ count the tagged: \ $m = {d['m']}$", font_size=26, color=TAG),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.2, 1.0, 0])
         q = label(r"how many fish, $N$?", font_size=32, color=S.ACCENT).move_to([4.2, -1.2, 0])
-        tag = simulated_tag(r"simulated: the World's lake")
+        tag = simulated_tag(r"simulated: the World's lake; dots schematic")
         recap = VGroup(*[Circle(radius=0.09, stroke_color=WHITE, stroke_width=1.5).move_to(fish[i])
                          for i in g.choice(len(pts), 20, replace=False)])
         with self.voiceover(
@@ -85,6 +85,7 @@ class Capture(VoiceoverScene, TreeMixin):
         leg.move_to([4.4, 0.4, 0])
         nt = label(r"without replacement \ $\approx$ \ with, \ when $N \gg n_2$", font_size=24, color=GREY_A)
         nt.move_to([4.4, -0.6, 0])
+        intro = label('Sampling without replacement', font_size=36)
         with self.voiceover(
             "First, what should the number of tagged fish look like, if there are N fish in all? "
             "<bookmark mark='a'/> The second catch is four hundred fish drawn without replacement. The chance of "
@@ -94,7 +95,9 @@ class Capture(VoiceoverScene, TreeMixin):
             "it's almost exactly a binomial: when the lake is much bigger than the catch, taking a fish out barely "
             "changes the chances for the next one, so sampling without replacement is nearly sampling with it."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(Write(f), FadeIn(fw))
             vo.wait_until("b")
             self.play(FadeIn(A), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.02), run_time=2.0)
@@ -114,16 +117,19 @@ class Capture(VoiceoverScene, TreeMixin):
         whys = [why(r"the tagged share of the lake, \ seen in the catch"), why(r"Petersen 1896; \ Lincoln 1930")]
         truth = MathTex(r"N", r"=", rf"{money(d['N'])}", font_size=40, color=S.TRUTH).move_to([0, -1.6, 0])
         tl = label(r"the World knows the truth", font_size=24, color=S.TRUTH).next_to(truth, DOWN, buff=0.2)
+        intro = label('Estimate the population size', font_size=36)
         with self.voiceover(
             "Now estimate. <bookmark mark='a'/> The share of the lake that's tagged, five hundred over N, should be "
             "about the share of the catch that's tagged, m over four hundred. <bookmark mark='b'/> Solve for N: five "
             f"hundred times four hundred, over {d['m']}, about {money(round(d['estimate'], -1))} fish. It's called the "
-            "Lincoln–Petersen estimate. <bookmark mark='c'/> And because this is the World, we can check it. The "
+            "Lincoln–Petersen estimate. It assumes a closed population, retained tags, mixing and comparable capture chances; with no recaptured tags this ratio has no finite estimate. <bookmark mark='c'/> And because this is the World, we can check it. The "
             f"lake actually holds {money(d['N'])} fish. Our estimate is off by a fifth. Was the method wrong, or "
             "were we unlucky?"
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=2.4, x=0.0, buff=0.7)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1, transform=False)

@@ -48,6 +48,7 @@ class Transforms(VoiceoverScene, TreeMixin):
         wl.next_to(rows[0], DOWN, buff=0.25)
         inv = label(r"run backwards, \ it turns uniforms into anything: \ Part 7", font_size=22, color=GREY_A)
         inv.next_to(wl, DOWN, buff=0.2)
+        intro = label('Transforming a uniform draw', font_size=36)
         with self.voiceover(
             "If X has a known distribution, what's the distribution of a function of X? <bookmark mark='a'/> "
             "Start with a uniform random number between zero and one, the kind every computer produces. "
@@ -57,7 +58,9 @@ class Transforms(VoiceoverScene, TreeMixin):
             "the exponential distribution, gold. <bookmark mark='e'/> Run this idea backwards and it lets a computer "
             "turn uniform random numbers into draws from any distribution at all, the subject of Part 7."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(A), FadeIn(hu))
             vo.wait_until("b")
             self.play(GrowArrow(arrow), FadeIn(al))
@@ -98,12 +101,12 @@ class Transforms(VoiceoverScene, TreeMixin):
         cap = label(r"equal widths in $x$, \ unequal heights in $y$", font_size=20, color=GREY_B).next_to(A, DOWN,
                                                                                                     buff=0.15)
         with self.voiceover(
-            "The general rule is about conserving probability. <bookmark mark='a'/> If g is increasing, Y lands in "
+            "The general rule is about conserving probability. <bookmark mark='a'/> For a smooth one-to-one transformation, Y lands in "
             "a tiny interval near y exactly when X lands in the matching interval near x. <bookmark mark='b'/> The "
             "two probabilities are equal, but the intervals have different widths, <bookmark mark='c'/> so the "
             "density of Y is the density of X at the matching point, times the stretch factor, the derivative of "
             "the inverse. Where the map stretches, the density thins; where it squeezes, the density piles up. "
-            "<bookmark mark='d'/> In several dimensions the stretch factor is the absolute value of the Jacobian "
+            "<bookmark mark='d'/> In several dimensions a smooth invertible map uses the absolute Jacobian of its inverse. Multiple inverse branches must be added. That determinant is "
             "determinant: how much the map changes small areas, or volumes."
         ) as vo:
             self.play(FadeIn(A), Create(g_))
@@ -140,6 +143,7 @@ class Transforms(VoiceoverScene, TreeMixin):
         why_.move_to([4.0, -1.3, 0])
         chk = MathTex(rf"\text{{mean }} {d['z_mean']:.3f},\ \text{{SD }} {d['z_sd']:.3f}", font_size=26, color=SIM)
         chk.move_to([4.2, -2.3, 0])
+        intro = label('From a square to a bell', font_size=36)
         with self.voiceover(
             "Here's a two-dimensional transformation that's in every statistics library. <bookmark mark='a'/> In "
             "1958 George Box and Mervin Muller showed how to turn two independent uniforms into two independent "
@@ -151,7 +155,9 @@ class Transforms(VoiceoverScene, TreeMixin):
             "normals, Herschel's rotation invariance built in. The Jacobian makes it precise, and the sample's mean "
             "and SD come out zero and one."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(hc))
             vo.wait_until("b")
             self.play(Create(frame), FadeIn(dots, lag_ratio=0.002))
@@ -185,18 +191,20 @@ class Transforms(VoiceoverScene, TreeMixin):
                     MathTex(rf"\text{{skewness }} {d['logp_skew']:.3f}", font_size=26, color=GREY_A).next_to(B, UP, buff=0.2))
         title = label(r"each factor uniform on $[0.8,\, 1.25]$: \ growth that compounds", font_size=26,
                       color=GREY_A).to_edge(UP, buff=0.4)
-        take = label(r"sums $\to$ normal; \ products $\to$ log-normal: \ incomes, city sizes, particle sizes",
+        take = label(r"CLT approximation: \ sums $\approx$ normal; \ products $\approx$ log-normal: \ incomes, city sizes, particle sizes",
                      font_size=24, color=S.ACCENT).to_edge(DOWN, buff=0.35)
+        intro = label('Products and their logarithms', font_size=36)
         with self.voiceover(
             "One last transformation, and it explains Part 1's incomes. <bookmark mark='a'/> Take sixty random "
             "factors, each between point eight and one point two five, and multiply them: growth that compounds, a "
             "year of good luck or bad luck at a time. <bookmark mark='b'/> The products are wildly skewed. "
             "<bookmark mark='c'/> But their logarithms are sums of sixty small random terms, and sums make bells: "
-            "the logarithm is normal, skewness essentially zero. <bookmark mark='d'/> A variable whose logarithm is "
-            "normal is called log-normal. Sums of many small effects give normals; products of many small effects "
-            "give log-normals, which is why incomes, city sizes and particle sizes are skewed the way they are."
+            "the logarithm is approximately normal, with skewness essentially zero; a finite sum of log-uniform terms is not exactly Gaussian. <bookmark mark='d'/> A variable whose logarithm is "
+            "normal is called log-normal. Under central-limit conditions, independent small effects give approximately normal sums and approximately log-normal products. This is one useful model for positive skewed measurements; it does not establish a log-normal law for every income, city size or particle."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(title))
             vo.wait_until("b")
             self.play(FadeIn(A), FadeIn(hp), FadeIn(sk[0]))

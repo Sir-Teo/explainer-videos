@@ -15,7 +15,7 @@ class Order(VoiceoverScene, TreeMixin):
         self.median()
         self.tanks()
         self.tree_voiceover("Two arrows into the beta: <bookmark mark='t'/> the order statistics of uniforms, and the "
-                            "share X over X plus Y of two independent gammas.", 9)
+                            "share X over X plus Y of two independent gammas with the same scale.", 9)
 
     def card(self):
         card = chapter_card(9, r"Order statistics", r"The smallest, the largest, and everything in between",
@@ -48,7 +48,7 @@ class Order(VoiceoverScene, TreeMixin):
             "at x, we need k minus one of the draws below x, one in the window, and the rest above. That's a "
             "multinomial count, from Part 2: <bookmark mark='d'/> n factorial over the three factorials, times the "
             "chance of each part. Divide by the window's width and you have the density of the k-th order "
-            "statistic, for any continuous distribution."
+            "statistic, for independent, identically distributed draws from a distribution with a density."
         ) as vo:
             self.play(Create(line))
             vo.wait_until("a")
@@ -79,7 +79,7 @@ class Order(VoiceoverScene, TreeMixin):
         f = MathTex(r"U_{(k)}", r"\sim", r"\text{beta}(k,\ n + 1 - k)", font_size=34, color=EXACT).move_to([4.4, 0.9, 0])
         f2 = MathTex(r"f(x) \propto x^{k-1}(1 - x)^{n-k}", font_size=28).next_to(f, DOWN, buff=0.25)
         mean = MathTex(r"E\, U_{(k)} = \frac{k}{n+1}", font_size=30).next_to(f2, DOWN, buff=0.3)
-        gb = label(r"also: \ $\Gamma_a / (\Gamma_a + \Gamma_b)$ \ for independent gammas", font_size=22, color=GREY_B)
+        gb = label(r"also: \ $\Gamma_a / (\Gamma_a + \Gamma_b)$ \ for independent gammas with a common scale", font_size=22, color=GREY_B)
         gb.next_to(mean, DOWN, buff=0.35)
         tag = note(r"simulated: 20,000 samples of 10 uniforms").to_corner(DR, buff=0.3)
         with self.voiceover(
@@ -88,7 +88,7 @@ class Order(VoiceoverScene, TreeMixin):
             "Here are twenty thousand simulated samples of ten: the smallest, the third, the eighth and the largest "
             "of each, against the beta densities. The smallest hugs zero, the largest hugs one, and the k-th "
             "averages k over n plus one, as if the ten points split the interval into eleven equal gaps on "
-            "average. <bookmark mark='c'/> The beta has another parent too: if X and Y are independent gammas, X "
+            "average. <bookmark mark='c'/> The beta has another parent too: if X and Y are independent gammas with the same scale, X "
             "over X plus Y is beta. That's the arrow from gamma, and it's why the beta returns in Part 15 as the "
             "natural prior for a probability."
         ) as vo:
@@ -115,6 +115,7 @@ class Order(VoiceoverScene, TreeMixin):
         f = MathTex(r"n = 2m + 1:\quad U_{(m+1)} \sim \text{beta}(m+1,\ m+1)", font_size=30, color=EXACT).move_to([3.8, 0.2, 0])
         sd = MathTex(r"\mathrm{SD} \approx \frac{1}{2\sqrt n}", font_size=32).move_to([4.0, -0.9, 0])
         nxt = label(r"the median's own law: \ robust estimation, \ Part 30", font_size=22, color=GREY_B).move_to([4.0, -1.9, 0])
+        intro = label('The median has a sampling law', font_size=36)
         with self.voiceover(
             "Put k in the middle and you get the law of the sample median. <bookmark mark='a'/> For an odd number "
             "of uniform draws, n equals two m plus one, the median is the m plus first order statistic, a symmetric "
@@ -123,7 +124,9 @@ class Order(VoiceoverScene, TreeMixin):
             "n, the same root n rate as the mean. The median has a sampling distribution of its own, and Part 30 "
             "uses it to build estimators that heavy tails can't break."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(A), Write(f))
             vo.wait_until("b")
             self.play(LaggedStart(*[Create(c) for c in cvs], lag_ratio=0.4), FadeIn(leg), run_time=3.0)
@@ -149,23 +152,26 @@ class Order(VoiceoverScene, TreeMixin):
         f = MathTex(r"\hat N", r"=", r"\max\Big(1 + \frac1k\Big) - 1", r"=", rf"{mx} \cdot \tfrac98 - 1", r"=",
                     rf"{est:.0f}", font_size=32).move_to([0, -1.8, 0])
         f[6].set_color(S.EST)
-        why_ = label(r"the gaps between sorted serials average $N/k$: \ add one average gap to the maximum",
+        why_ = label(r"$k+1$ unobserved gaps share $N-k$ missing serials: \ estimate $N$ from the maximum",
                      font_size=22, color=GREY_B).next_to(f, DOWN, buff=0.2)
         res = MathTex(rf"N = {d['N']}:\ \ 5{{,}}000\text{{ repetitions: estimate averages }} {d['ests_mean']:.1f};\ \ "
                       rf"\text{{the maximum alone }} {d['max_mean']:.1f}", font_size=26, color=SIM).to_edge(DOWN, buff=0.35)
+        intro = label('Estimating from serial numbers', font_size=36)
         with self.voiceover(
             "Order statistics once helped win a war. <bookmark mark='a'/> During the Second World War the Allies "
             "wanted to know how many tanks Germany was producing. Captured tanks carried serial numbers, numbered "
             "in sequence. Here are eight serials from a factory that, in our simulation, built three hundred. "
             f"<bookmark mark='b'/> The largest serial, {mx}, is a lower bound. But the sorted serials split the "
-            "range into gaps of average size N over k, so the maximum is short of N by about one gap. "
-            f"<bookmark mark='c'/> Add one: the estimate is the maximum times one plus one over k, minus one, here "
+            "range into k plus one gaps of missing serials, with expected size N minus k over k plus one. In particular the expected maximum is k times N plus one over k plus one. "
+            f"<bookmark mark='c'/> Solve that expectation identity: the unbiased estimate is the maximum times one plus one over k, minus one, here "
             f"{est:.0f}. <bookmark mark='d'/> Over five thousand repetitions it averages {d['ests_mean']:.0f}, "
             "unbiased, while the maximum alone falls short. After the war, the statisticians' estimates turned out "
             "to be far closer to Germany's own records than the intelligence reports had been. Part 9 proves that "
             "this estimator is the best unbiased one."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(hc), Create(line), FadeIn(tk))
             self.play(LaggedStart(*[FadeIn(dt, scale=1.5) for dt in dots], lag_ratio=0.15), FadeIn(sl))
             vo.wait_until("b")

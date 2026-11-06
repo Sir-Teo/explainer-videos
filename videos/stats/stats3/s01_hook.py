@@ -95,9 +95,7 @@ class Hook(VoiceoverScene):
             "average rate, here zero point six one. <bookmark mark='b'/> Multiply by two hundred, and the formula "
             "predicts a hundred and eight point seven corps-years with no deaths, sixty-six point three with one, "
             "twenty point two with two, four point one with three, under one with four or more. "
-            "<bookmark mark='c'/> Gold dots, the formula; the historical counts, the bars. They agree almost "
-            "perfectly. Even the mean and variance match, zero point six one and zero point six one, as this "
-            "formula says they must. A law, hidden inside two hundred tragedies."
+            "<bookmark mark='c'/> Gold dots, the formula; the historical counts, the bars. They agree closely. The observed mean and sample variance both round to zero point six one. Equality of mean and variance is a property of a Poisson population, not a requirement that every finite sample matches exactly. A law, hidden inside two hundred tragedies."
         ) as vo:
             vo.wait_until("a")
             self.play(Write(f))
@@ -111,6 +109,7 @@ class Hook(VoiceoverScene):
     def question(self):
         ft = FamilyTree().scale(0.92)
         q = label(r"Why do the same few shapes keep appearing?", font_size=40, color=S.ACCENT).to_edge(UP, buff=0.3)
+        intro = label('Why do these shapes recur?', font_size=36)
         with self.voiceover(
             "Bortkiewicz's horse kicks raise the question of this part. <bookmark mark='a'/> Why do the same few "
             "shapes keep appearing: the Poisson for rare events, the bell curve for measurements, the exponential "
@@ -119,7 +118,9 @@ class Hook(VoiceoverScene):
             "transformation, a mixture. <bookmark mark='c'/> Here is the family tree, still dark. Each arrow is a "
             "derivation. By the end of this part, we'll have derived every one of them, and lit the whole tree."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(q))
             vo.wait_until("b")
             self.play(FadeIn(ft, lag_ratio=0.02), run_time=2.5)

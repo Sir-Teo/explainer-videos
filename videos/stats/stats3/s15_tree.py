@@ -20,7 +20,7 @@ class Tree(VoiceoverScene):
         self.reference()
 
     def card(self):
-        card = chapter_card(14, r"The family tree", r"Every arrow, derived", lit=(), part=PART)
+        card = chapter_card(14, r"The family tree", r"Sums, limits, transformations and mixtures", lit=(), part=PART)
         with self.voiceover("Chapter fourteen. The family tree."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
@@ -40,9 +40,9 @@ class Tree(VoiceoverScene):
             "Muller, to the normal, the normal to the log-normal, and the exponential to the Pareto. "
             "<bookmark mark='e'/> The sampling family grows from the normal: chi-squared, a special gamma, then "
             "Student's t, Fisher's F, and at the edges of t, the Cauchy and the normal again. <bookmark mark='f'/> "
-            "Order statistics of uniforms are beta, and so are ratios of gammas. <bookmark mark='g'/> And mixing "
+            "Order statistics of uniforms are beta, and so is X over X plus Y for independent gammas with a common scale. <bookmark mark='g'/> And mixing "
             "closes two loops: a Poisson with a gamma rate is negative binomial, and a binomial with a beta chance "
-            "is beta-binomial. <bookmark mark='h'/> Twenty-four arrows, every one derived and checked by simulation. "
+            "is beta-binomial. <bookmark mark='h'/> Twenty-four relationships, introduced through derivations and simulation. Some limit proofs await Part 6, and the general theory returns in Part 43. "
             "This is why the same few shapes keep appearing. They aren't independent inventions; they're relatives, "
             "and the operations that relate them, sums, limits, transformations and mixtures, are the operations "
             "nature performs."
@@ -63,6 +63,7 @@ class Tree(VoiceoverScene):
         more.next_to(hc, DOWN, buff=0.5)
         nxt = label(r"still missing: \ several variables at once \ (Parts 4--5)", font_size=28, color=S.ACCENT)
         nxt.next_to(more, DOWN, buff=0.4)
+        intro = label('A map of distribution relationships', font_size=36)
         with self.voiceover(
             "Our tree is a small part of a much bigger one. <bookmark mark='a'/> In 2008 Lawrence Leemis and "
             "Jacquelyn McQueston published a chart of seventy-six distributions and the arrows between them. "
@@ -70,7 +71,9 @@ class Tree(VoiceoverScene):
             "And one thing is conspicuously missing: every distribution here describes one variable. Real data come "
             "in rows of many variables at once, and to describe them we need matrices."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(more))

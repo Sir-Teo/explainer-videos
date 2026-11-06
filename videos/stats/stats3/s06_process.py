@@ -44,7 +44,7 @@ class Process(VoiceoverScene, TreeMixin):
         A = axes([-0.6, 16.6], [0, 0.18], x_length=5.2, y_length=2.8, xlabel=r"buses in an hour",
                  xticks=[0, 4, 8, 12, 16], center=[3.6, -1.3, 0])
         A.ax.y_axis.set_opacity(0)
-        emp = np.bincount(np.minimum(per, 16), minlength=17)[:17] / len(per)
+        emp = np.bincount(per, minlength=17)[:17] / len(per)
         from scipy import stats as st
         bars = pmf_bars(A.ax, range(17), emp, SIM, width=0.65)
         dots = pmf_dots(A.ax, range(17), st.poisson.pmf(range(17), 6), EXACT, radius=0.05)
@@ -144,6 +144,7 @@ class Process(VoiceoverScene, TreeMixin):
                      r"is still rare", font_size=22, color=GREY_B).to_edge(DOWN, buff=0.3)
         if why_.width > 13:
             why_.width = 13
+        intro = label('Combining and thinning processes', font_size=36)
         with self.voiceover(
             "Poisson processes combine beautifully. <bookmark mark='a'/> Two independent bus routes stop at the same "
             "corner, one every ten minutes on average and one every fifteen, each a Poisson process. "
@@ -153,7 +154,9 @@ class Process(VoiceoverScene, TreeMixin):
             "form a Poisson process too, with the rate multiplied by point six. <bookmark mark='d'/> Superposition "
             "and thinning, and simulation confirms both: mean gaps of six minutes and sixteen and two thirds."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(Create(lines[0]), Create(lines[1]), FadeIn(names[:2]), FadeIn(ma), FadeIn(mb))
             vo.wait_until("b")
             self.play(Create(lines[2]), FadeIn(names[2]), TransformFromCopy(VGroup(ma, mb), mm), run_time=2.0)
@@ -189,6 +192,7 @@ class Process(VoiceoverScene, TreeMixin):
                      r"sampling", font_size=24, color=S.ACCENT).to_edge(DOWN, buff=0.45)
         if why_.width > 13:
             why_.width = 13
+        intro = label('Arriving at a random moment', font_size=36)
         with self.voiceover(
             "And now a paradox. <bookmark mark='a'/> You walk to the stop at a random moment. How long, on average, "
             "until the next bus? <bookmark mark='b'/> The gaps average ten minutes, so surely, landing somewhere in "
@@ -198,10 +202,12 @@ class Process(VoiceoverScene, TreeMixin):
             "have the same cause. Long gaps cover more of the clock, so a random moment is more likely to fall in a "
             "long one. And memorylessness says that from the moment you arrive, the wait is a fresh exponential, "
             "ten minutes on average. It's called the inspection paradox, and it's everywhere: the class sizes "
-            "students report are bigger than the average class, and the friends you meet have more friends than "
+            "students report are bigger than the average class, and, on average, a randomly chosen person's friends have more friends than "
             "you."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(q), Create(line), FadeIn(segs), FadeIn(marks))
             self.play(LaggedStart(*[FadeIn(p, shift=DOWN * 0.2) for p in pdots], lag_ratio=0.05))
             vo.wait_until("b")
