@@ -38,7 +38,7 @@ class Caching(VoiceoverScene):
                   (r"database", LAM, r"pages of tables and indexes: \ the buffer pool"),
                   (r"storage", GREY_B, r"the data itself")]
         boxes = VGroup(*[module_box(n, c, w=1.85, h=0.7, font=19) for n, c, _ in layers]).arrange(RIGHT, buff=0.3)
-        boxes.move_to([0, 1.1, 0])
+        boxes.move_to([0, 0.6, 0])
         links = VGroup(*[Arrow(boxes[i][0].get_right(), boxes[i + 1][0].get_left(), buff=0.03, stroke_width=2,
                                color=GREY_B, max_tip_length_to_length_ratio=0.35) for i in range(5)])
         descs = VGroup(*[wrapped_label(d, 1.85, font_size=17, color=c).next_to(b, DOWN, buff=0.25)
@@ -81,46 +81,46 @@ class Caching(VoiceoverScene):
     def patterns(self):
         head = label(r"Four ways to wire a cache", font_size=36).to_edge(UP, buff=0.3)
 
-        def mini(title, color, a1, a2, desc, curved=None, dashed=False):
-            app = module_box(r"app", DATA, w=1.3, h=0.55, font=18).move_to([-2.3, 0, 0])
-            cache = module_box(r"cache", YES, w=1.3, h=0.55, font=18).move_to([0, 0, 0])
-            db = module_box(r"database", LAM, w=1.3, h=0.55, font=17).move_to([2.3, 0, 0])
+        def mini(title, color, a1, a2, desc, at, curved=None, dashed=False):
+            app = module_box(r"app", DATA, w=1.2, h=0.55, font=18).move_to([-2.4, 0, 0])
+            cache = module_box(r"cache", YES, w=1.2, h=0.55, font=18).move_to([0, 0, 0])
+            db = module_box(r"database", LAM, w=1.2, h=0.55, font=16).move_to([2.4, 0, 0])
             g = VGroup(app, cache, db)
             ar1 = Arrow(app[0].get_right(), cache[0].get_left(), buff=0.04, stroke_width=2.5, color=WHITE,
                         max_tip_length_to_length_ratio=0.25)
-            l1 = label(a1, font_size=16, color=GREY_A).next_to(ar1, UP, buff=0.12)
+            g.add(ar1, label(a1, font_size=17, color=GREY_A).move_to([ar1.get_x(), 0.55, 0]))
             if a2 is not None:
                 ar2 = Arrow(cache[0].get_right(), db[0].get_left(), buff=0.04, stroke_width=2.5, color=WHITE,
                             max_tip_length_to_length_ratio=0.25)
                 if dashed:
                     ar2 = DashedLine(cache[0].get_right(), db[0].get_left(), buff=0.04, color=WHITE,
                                      dash_length=0.08).add_tip(tip_length=0.15)
-                l2 = label(a2, font_size=16, color=GREY_A).next_to(ar2, UP, buff=0.12)
-                g.add(ar2, l2)
+                g.add(ar2, label(a2, font_size=17, color=GREY_A).move_to([ar2.get_x(), 0.55, 0]))
             if curved is not None:
-                arc = CurvedArrow(app[0].get_bottom(), db[0].get_bottom(), angle=PI / 3, color=WHITE,
+                arc = CurvedArrow(app[0].get_bottom(), db[0].get_bottom(), angle=PI / 4, color=WHITE,
                                   stroke_width=2.5, tip_length=0.15)
-                lc = label(curved, font_size=16, color=GREY_A).next_to(arc, DOWN, buff=0.08)
+                lc = label(curved, font_size=17, color=GREY_A).next_to(arc, DOWN, buff=0.06)
                 g.add(arc, lc)
-            g.add(ar1, l1)
-            t = label(title, font_size=22, color=color).next_to(g, UP, buff=0.2)
-            d = wrapped_label(desc, 5.8, font_size=18, color=color).next_to(g, DOWN, buff=0.2)
-            return VGroup(t, g, d)
+            t = label(title, font_size=23, color=color).move_to([0, 1.05, 0])
+            d = wrapped_label(desc, 6.0, font_size=18, color=color).move_to([0, -1.3, 0])
+            return VGroup(t, g, d).shift(at)
         aside = mini(r"cache-aside", DATA, r"1 get, \ 3 set", None,
-                     r"writes: \ update the database, \ delete the cached copy", curved=r"2 on a miss: \ read")
+                     r"writes: \ update the database, \ delete the cached copy", [-3.45, 1.15, 0],
+                     curved=r"2 on a miss: \ read")
         through_r = mini(r"read-through", YES, r"1 get", r"2 miss: \ load",
-                         r"the cache does the loading; \ the app sees one store")
+                         r"the cache does the loading; \ the app sees one store", [3.45, 1.15, 0])
         through_w = mini(r"write-through", HEAD, r"1 write", r"2 write, \ then ack",
-                         r"never stale; \ every write pays for both")
+                         r"never stale; \ every write pays for both", [-3.45, -1.75, 0])
         back = mini(r"write-back", NO, r"1 write: \ ack at once", r"2 later, \ in batches",
-                    r"fast writes; \ unwritten data is lost if the cache dies \ (Part 9)", dashed=True)
-        grid = VGroup(aside, through_r, through_w, back).arrange_in_grid(rows=2, cols=2, buff=(0.9, 0.45))
-        grid.next_to(head, DOWN, buff=0.35)
+                    r"fast writes; \ unwritten data is lost if the cache dies \ (Part 9)", [3.45, -1.75, 0],
+                    dashed=True)
+        grid = VGroup(aside, through_r, through_w, back)
         with self.voiceover(
             "There are four common ways to connect a cache to the data behind it. <bookmark mark='a'/> In "
             "cache-aside, the commonest, the application asks the cache, and on a miss reads the database and "
             "fills the cache itself; on a write it updates the database and deletes the cached copy. "
-            "<bookmark mark='b'/> In read-through, the cache does the loading itself. <bookmark mark='c'/> Write-through sends each write through the cache to the database "
+            "<bookmark mark='b'/> In read-through, the cache does the loading itself. <bookmark mark='c'/> "
+            "Write-through sends each write through the cache to the database "
             "before acknowledging it: never stale, but every write is slower. <bookmark mark='d'/> Write-back "
             "acknowledges at once and writes the database later, as Part 9's processor caches do: fast, but what "
             "it has not yet written is lost if it fails."
@@ -251,7 +251,7 @@ class Caching(VoiceoverScene):
         lines = VGroup(*[VGroup(e, w) for e, w in zip(eqs, whys)])
         for e, w in zip(eqs, whys):
             e.move_to([-2.7, 0, 0])
-            w.move_to([4.1, 0, 0])
+            w.move_to([4.1, 0, 0]).align_to([1.5, 0, 0], LEFT)
         for k, ln in enumerate(lines):
             ln.set_y(0.0 - k * 1.05)
         foot = wrapped_label(rf"at {r1k['size']:,} entries: \ simulated LRU {pct(r1k['lru'], 1)}\%, \ the formula "
@@ -307,15 +307,16 @@ class Caching(VoiceoverScene):
                           for t, cl in ((r"LRU, \ simulated", DATA), (r"Che's formula", WHITE),
                                         (r"LFU", LAM), (r"W-TinyLFU", YES),
                                         (r"best fixed set: \ the most popular items", HEAD))])
-        legend.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([4.3, 1.5, 0])
+        legend.arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+        legend.move_to([0, 1.55, 0]).align_to([1.7, 0, 0], LEFT)
         err = max(abs(r["lru"] - r["che"]) for r in rows)
         notes = VGroup(
             wrapped_label(rf"{c['items']:,} items, \ Zipf popularity \ ($s = {c['zipf_s']}$), \ {c['requests']:,} "
-                          r"requests; \ computed", 4.8, font_size=18, color=GREY_B),
-            wrapped_label(rf"Che against simulation: \ within {100 * err:.1f} percentage points at every size", 4.8,
+                          r"requests; \ computed", 5.0, font_size=18, color=GREY_B),
+            wrapped_label(rf"Che against simulation: \ within {100 * err:.1f} percentage points at every size", 5.0,
                           font_size=19, color=WHITE),
             wrapped_label(rf"1\% of the catalogue \ ({1000:,} entries) \ serves {pct(by[1000]['lru'])}\% "
-                          rf"\ (LRU) \ to {pct(by[1000]['tinylfu'])}\% \ (TinyLFU) \ of requests", 4.8, font_size=19,
+                          rf"\ (LRU) \ to {pct(by[1000]['tinylfu'])}\% \ (TinyLFU) \ of requests", 5.0, font_size=19,
                           color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(legend, DOWN, buff=0.4).align_to(legend, LEFT)
         mark = DashedLine(ax.c2p(3, 0), ax.c2p(3, 0.8), color=GREY_B, dash_length=0.08)

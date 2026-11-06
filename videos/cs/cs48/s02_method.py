@@ -210,11 +210,11 @@ class Method(VoiceoverScene):
                           "GET /users/{u}/pastes?cursor=...", "  -> 200 {ids, next_cursor}"], size=17)
         api.move_to([2.6, 1.0, 0])
         api_notes = VGroup(
-            wrapped_label(r"an idempotency key \ (Part 43): \ a retried create makes one paste, \ not two", 6.6,
+            wrapped_label(r"an idempotency key \ (Part 43): \ a retried create makes one paste, \ not two", 5.6,
                           font_size=19, color=HEAD),
-            wrapped_label(r"expired is \textit{gone} \ (410), \ not \textit{never existed} \ (404)", 6.6,
+            wrapped_label(r"expired is \textit{gone} \ (410), \ not \textit{never existed} \ (404)", 5.6,
                           font_size=19, color=DATA),
-            wrapped_label(r"a cursor, \ not a page number: \ the list stays correct while it changes", 6.6,
+            wrapped_label(r"a cursor, \ not a page number: \ the list stays correct while it changes", 5.6,
                           font_size=19, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(api, DOWN, buff=0.4).align_to(api, LEFT)
         foot = note(r"illustrative", font_size=16).to_edge(DOWN, buff=0.25)
