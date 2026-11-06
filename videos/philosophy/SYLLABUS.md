@@ -1692,3 +1692,4 @@ and a Reasoner library of perhaps 20–30k lines with its tests. Expect one part
 | 12 · Knowledge Among Many | scenes, English and Chinese narration and text, QA | ~49 min |
 | 13 · Degrees of Belief | scenes, English and Chinese narration and text, QA | ~58 min |
 | 14 · Changing Your Mind | scenes, English and Chinese narration and text, QA | ~49 min |
+| 15 · The Problem of Induction | scenes, English and Chinese narration and text, QA | ~52 min |
