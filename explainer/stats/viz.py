@@ -3346,3 +3346,38 @@ class ConfidenceFunnel(VGroup):
         lo, hi = np.asarray(lo, float), np.asarray(hi, float)
         bad = np.flatnonzero((lo > mu) | (hi < mu))
         return VGroup(*[Dot(self.ax.c2p(self.lt[i], mu), radius=radius, color=color or S.RESID) for i in bad])
+
+
+class StateEvolution(VGroup):
+    """AMP's state evolution, drawn as a cobweb (Part 59): on axes ``ax`` with tau_t^2 across and tau_{t+1}^2 up, the
+    map F (``map_curve``), the diagonal (``diagonal``), and the staircase from tau_0^2 that iterating F traces
+    (``cobweb(t2s)``), converging to F's fixed point (``fixed_point``); ``iterates(t2s)`` marks an algorithm's measured
+    tau_t^2 on the diagonal, so AMP's empirical iterates can be checked against the theory step by step."""
+
+    def __init__(self, ax, grid, fmap):
+        super().__init__()
+        self.ax = ax
+        self.grid = np.asarray(grid, float)
+        self.fmap = np.asarray(fmap, float)
+        self.lo, self.hi = bounds(ax)[0], bounds(ax)[1]
+
+    def map_curve(self, color=None, stroke_width: float = 4) -> VMobject:
+        return VMobject(stroke_color=color or S.EST, stroke_width=stroke_width).set_points_as_corners(
+            [self.ax.c2p(a, b) for a, b in zip(self.grid, self.fmap)])
+
+    def diagonal(self, color=None) -> DashedLine:
+        return DashedLine(self.ax.c2p(self.lo, self.lo), self.ax.c2p(self.hi, self.hi), color=color or GREY_B, stroke_width=2)
+
+    def cobweb(self, t2s, color=None, stroke_width: float = 2.5) -> VGroup:
+        t2s = np.asarray(t2s, float)
+        g = VGroup()
+        for a, b in zip(t2s[:-1], t2s[1:]):
+            g.add(Line(self.ax.c2p(a, a), self.ax.c2p(a, b), color=color or S.ACCENT, stroke_width=stroke_width))
+            g.add(Line(self.ax.c2p(a, b), self.ax.c2p(b, b), color=color or S.ACCENT, stroke_width=stroke_width))
+        return g
+
+    def fixed_point(self, t2: float, color=None) -> Dot:
+        return Dot(self.ax.c2p(t2, t2), radius=0.09, color=color or S.KEPT)
+
+    def iterates(self, t2s, color=None, radius: float = 0.06) -> VGroup:
+        return VGroup(*[Dot(self.ax.c2p(a, a), radius=radius, color=color or WHITE) for a in np.asarray(t2s, float)])

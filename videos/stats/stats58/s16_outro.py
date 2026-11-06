@@ -1,0 +1,139 @@
+from __future__ import annotations
+
+from videos.stats.stats58.common import *  # noqa: F403
+
+PROBLEMS = [
+    r"Show that Wald's thresholds give $P_0(\text{reject}) \le \alpha/(1 - \beta)$, \ by a change of measure.",
+    r"Prove Wald's identity $E[S_N] = E[N]\,E[Z_1]$ for a stopping time with $E N < \infty$.",
+    r"Prove Ville's inequality $P(\sup_t M_t \ge 1/\alpha) \le \alpha$ for a nonnegative martingale with $M_0 = 1$.",
+    r"Show that $f_\kappa(p) = \kappa p^{\kappa - 1}$ is a calibrator, \ and that the mean of e-values is an e-value.",
+    r"Derive Robbins's normal-mixture confidence sequence from the mixture martingale.",
+    r"Show that e-BH controls the FDR at $\alpha m_0/m$ under arbitrary dependence.",
+]
+
+
+class Outro(LectureMixin, VoiceoverScene):
+    def construct(self):
+        self.recap()
+        self.upgrade()
+        self.payoffs()
+        self.problems()
+        self.references()
+        self.transcript()
+
+    def recap(self):
+        items = [
+            (r"the SPRT: \ half the shells, \ exactly", SPRTC), (r"Wald--Wolfowitz: \ nothing does better", SPRTC),
+            (r"group-sequential looks, \ and biased early stops", FIXEDC), (r"Ville: \ a test martingale rarely gets rich", WEALTHC),
+            (r"e-values: \ calibrate, \ average, \ multiply", WEALTHC), (r"composite nulls: \ split LRT, \ GROW", WEALTHC),
+            (r"confidence sequences, \ by mixtures and bets", CSC), (r"CAST: \ wealth 333 against the drugs", FIXEDC),
+            (r"e-BH under any dependence; \ CUSUM on the Nile", CHANGEC), (r"Thompson sampling: \ earn while learning", BANDITC),
+            (r"adaptive data: \ biased means, \ weighted AIPW", BANDITC), (r"off-policy values; \ five open problems", S.ACCENT),
+        ]
+        rows = VGroup(*[label(rf"{i}.\ \ {t}", font_size=26, color=c) for i, (t, c) in enumerate(items)])
+        cols = VGroup(VGroup(*rows[:6]).arrange(DOWN, aligned_edge=LEFT, buff=0.42),
+                      VGroup(*rows[6:]).arrange(DOWN, aligned_edge=LEFT, buff=0.42)).arrange(RIGHT, buff=0.8, aligned_edge=UP)
+        if cols.width > 13.3:
+            cols.width = 13.3
+        head = label(r"Part 58, \ in twelve lines", font_size=38).to_edge(UP, buff=0.4)
+        cols.next_to(head, DOWN, buff=0.5)
+        with self.voiceover(
+            "<bookmark mark='a'/> Part fifty-eight in twelve lines. Wald's sequential test needs about half the shells of "
+            "the fixed test, and no test does better. Planned looks are handled by spending functions, but early stops "
+            "overstate effects. Ville's inequality makes peeking safe for any test martingale. E-values calibrate p-values, "
+            "average under any dependence and multiply in sequence; composite nulls need a split or a projection. <bookmark "
+            "mark='b'/> Confidence sequences hold at all times, built by mixtures or by betting. CAST's deaths made a "
+            "gambler three hundred times richer. E-BH controls false discoveries under any dependence, and CUSUM caught the "
+            "Nile's drop in two years. Thompson sampling earns while it learns; its data need weighted estimators; and the "
+            "logs can evaluate policies never run."
+        ) as vo:
+            self.play(FadeIn(head))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in rows[:6]], lag_ratio=0.5), run_time=12.0)
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in rows[6:]], lag_ratio=0.5), run_time=12.0)
+        self.wait(1.0)
+        self.clear_scene()
+
+    def upgrade(self):
+        card = upgrade_card(58, r"guarantees under a model with a fixed number of parameters", r"$p$ stays small as $n$ grows",
+                            r"Part 59: \ classical statistics when $p$ and $n$ grow together")
+        with self.voiceover(
+            "<bookmark mark='a'/> A promise for the next part. Most of this part's models had a fixed, small number of "
+            "parameters. <bookmark mark='b'/> It assumed p stays small while n grows. <bookmark mark='c'/> Part fifty-nine asks "
+            "what happens to likelihood ratios, maximum likelihood and the bootstrap when p and n grow together."
+        ) as vo:
+            vo.wait_until("a")
+            self.play(FadeIn(card[0]), FadeIn(card[1][0]), FadeIn(card[1][1][0]))
+            vo.wait_until("b")
+            self.play(FadeIn(card[1][1][1]))
+            vo.wait_until("c")
+            self.play(FadeIn(card[1][1][2]))
+        self.clear_scene()
+
+    def payoffs(self):
+        card = payoff_card([
+            (r"robustness when the future shifts", [60]), (r"adaptive and sequential causal designs", [62]),
+            (r"privacy budgets spent over time", [63]), (r"evaluating AI systems as they are deployed", [64]),
+            (r"the dissertation's monitoring plan", [65]),
+        ], font_size=22)
+        with self.voiceover(
+            "Where it comes back. <bookmark mark='a'/> Part sixty's robustness when the future shifts. Part sixty-two's "
+            "adaptive and sequential causal designs. Part sixty-three's privacy budgets, spent over time. Part sixty-four's "
+            "evaluation of AI systems as they are deployed. And the dissertation's monitoring plan."
+        ) as vo:
+            vo.wait_until("a")
+            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+        self.clear_scene()
+
+    def problems(self):
+        ps = problem_set(PROBLEMS, font_size=20)
+        with self.voiceover(
+            "Six problems, with full solutions in the README. <bookmark mark='a'/> Wald's error bound; Wald's identity; Ville's "
+            "inequality; calibrators and merging; Robbins's mixture sequence; and e-BH's guarantee. Pause here if you want to "
+            "try them."
+        ) as vo:
+            self.play(FadeIn(ps.head))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(r, shift=UP * 0.1) for r in ps.rows], lag_ratio=0.3), run_time=4.0)
+        self.wait(4.0)
+        self.clear_scene()
+
+    def references(self):
+        card = reference_card(
+            [r"A. Wald, \ \emph{Sequential Analysis} (1947); \ D. Siegmund, \ \emph{Sequential Analysis} (1985)",
+             r"C. Jennison \& B. Turnbull, \ \emph{Group Sequential Methods} (2000); \ G. Shafer \& V. Vovk, \ \emph{Game-Theoretic Foundations} (2019)",
+             r"A. Ramdas \& R. Wang, \ \emph{Hypothesis Testing with E-values} (2024); \ T. Lattimore \& C. Szepesv\'ari, \ \emph{Bandit Algorithms} (2020)"],
+            [r"J. Ville (1939); \ H. Robbins, \ \emph{Ann. Math. Stat.} (1970); \ E. Page, \ \emph{Biometrika} (1954); \ G. Lorden (1971)",
+             r"G. Shafer, \ \emph{JRSS A} (2021); \ V. Vovk \& R. Wang, \ \emph{Ann. Stat.} (2021); \ L. Wasserman et al., \ \emph{PNAS} (2020)",
+             r"S. Howard et al., \ \emph{Ann. Stat.} (2021); \ I. Waudby-Smith \& A. Ramdas, \ \emph{JRSS B} (2024); \ R. Wang \& A. Ramdas, \ \emph{JRSS B} (2022)",
+             r"P. Gr\"unwald et al., \ \emph{JRSS B} (2024); \ V. Hadad et al., \ \emph{PNAS} (2021); \ M. Kasy \& A. Sautmann, \ \emph{Econometrica} (2021)"])
+        with self.voiceover(
+            "The books behind this part: Wald's and Siegmund's on sequential analysis; Jennison and Turnbull on group "
+            "sequential methods; Shafer and Vovk's game-theoretic foundations; Ramdas and Wang on e-values; and Lattimore and "
+            "Szepesvári on bandits; with the papers from Ville to the present."
+        ):
+            self.play(FadeIn(card))
+        self.wait(2.0)
+        self.clear_scene()
+
+    def transcript(self):
+        tr = transcript_card(done=58, current=None)
+        nxt = VGroup(label(r"Part 59", font_size=30, color=GREY_B), label(r"High-Dimensional Asymptotics", font_size=48),
+                     label(r"what happens to classical statistics when $p$ and $n$ grow together?", font_size=28, color=GREY_A))
+        nxt.arrange(DOWN, buff=0.25)
+        tr.to_edge(UP, buff=0.8)
+        nxt.next_to(tr, DOWN, buff=1.0)
+        with self.voiceover(
+            "Fifty-eight parts of sixty-five. <bookmark mark='a'/> Fit a logistic regression with one variable for every five "
+            "observations, and the textbook likelihood-ratio test, the one every software package prints, is badly "
+            "miscalibrated: its p-values are far too small. Pragya Sur and Emmanuel Candès worked out why, and what the "
+            "right answer is. <bookmark mark='b'/> Next, Part fifty-nine: high-dimensional asymptotics."
+        ) as vo:
+            self.play(FadeIn(tr))
+            vo.wait_until("a")
+            self.play(*[tr.cells[i].animate.set_fill(S.ACCENT, opacity=0.9) for i in range(58)])
+            vo.wait_until("b")
+            self.play(FadeIn(nxt, shift=UP * 0.2))
+        self.wait(1.5)
+        self.clear_scene()
