@@ -29,7 +29,7 @@ class Research(VoiceoverScene):
 
     def card(self):
         c = research_card(r"Arbitrage with frictions", r"Fractional prices, admissibility, and what small trading costs change", part=PART)
-        with self.voiceover("""For the researcher: fractional Brownian log prices and trading frictions. With H different from one half, the price exponential is not a semimartingale, so classical frictionless stochastic integration needs care. We will distinguish a sign-increment score from investment wealth, then give a consistent-price-system condition for no arbitrage with costs."""):
+        with self.voiceover("""Fractional Brownian log prices require care: H different from one half excludes semimartingales. We will separate a sign-increment score from investment wealth, then state a no-arbitrage condition with costs."""):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -47,7 +47,7 @@ class Research(VoiceoverScene):
                 why(r"for $H<1/2$, infinite quadratic variation excludes a continuous semimartingale; for $H>1/2$, zero quadratic variation AND infinite total variation exclude one")]
         step = ladder(self, rows, whys, keep=3, top=2.7, x=-0.3, buff=0.5, edge=6.9)
         with self.voiceover(
-            """Take fractional Brownian motion as a log price, with H strictly between zero and one. <bookmark mark='a'/> Its covariance is shown here; H of one half is ordinary Brownian motion. <bookmark mark='b'/> Equal consecutive increments have correlation two to the power two H minus one, minus one, at every scale. <bookmark mark='c'/> Below one half, quadratic variation diverges, excluding a continuous semimartingale. Above one half it is zero, which alone is not enough: fractional Brownian motion also has infinite total variation. A continuous semimartingale with zero quadratic variation must have finite variation. Thus H different from one half excludes a semimartingale. Classical arbitrage results additionally specify the trading and admissibility classes."""
+            """For fractional Brownian log prices, zero is less than H, less than one. <bookmark mark='a'/> The covariance reduces to Brownian motion at one half. <bookmark mark='b'/> Consecutive equal-length increments have correlation two to the power two H minus one, minus one, at every scale. <bookmark mark='c'/> Below one half, quadratic variation diverges. Above one half it vanishes, while total variation is infinite. A continuous semimartingale cannot have either combination: zero quadratic variation requires finite variation. Arbitrage conclusions additionally depend on the trading class."""
         ) as vo:
             step(0, run_time=0.15)
             vo.wait_until("a")
@@ -72,7 +72,7 @@ class Research(VoiceoverScene):
                 why(r"the $\sqrt n$ scaling assumes independent scores; serial covariance changes annual risk. This reference formula proves neither asymptotic arbitrage nor NFLVR failure")]
         step = ladder(self, rows, whys, keep=3, top=2.7, x=-0.3, buff=0.5, edge=6.9)
         with self.voiceover(
-            """Consider a sign-increment score, not a self-financing investment return. <bookmark mark='a'/> At each step use the sign of the previous log increment, following positive correlation and reversing negative correlation. <bookmark mark='b'/> For a correlated normal pair, the expected signed increment follows from conditional expectation and the mean absolute normal. This gives the displayed per-step mean. <bookmark mark='c'/> If these scores were independent, annualizing their one-step mean and variance would give the square-root-n reference shown here. They are dependent: the formula ignores serial covariance. A positive mean or a diverging reference Sharpe ratio is not a proof of arbitrage. Rogers and Cheridito study actual fractional-market arbitrage under specified strategy classes."""
+            """Use the previous increment's sign, <bookmark mark='a'/> following positive correlation or reversing negative correlation. This scores log increments, not self-financing wealth. <bookmark mark='b'/> Conditional normal expectation gives the displayed mean signed increment. <bookmark mark='c'/> Annualizing one-step moments as independent gives the square-root-n reference. Serial covariance invalidates that annual risk formula; neither a positive mean nor a diverging reference Sharpe establishes arbitrage. Rogers and Cheridito analyze specified fractional-market trading classes."""
         ) as vo:
             step(0, run_time=0.15)
             vo.wait_until("a")
@@ -104,7 +104,7 @@ class Research(VoiceoverScene):
             leg, DOWN, buff=0.3)
         fit_right(side)
         with self.voiceover(
-            """Here are the existing simulations without costs. <bookmark mark='a'/> Dots show annual score mean divided by its sample standard deviation across a hundred and sixty independent one-year paths. <bookmark mark='b'/> The lines annualize one-step moments as if scores were independent, a reference rather than an exact annual risk formula. <bookmark mark='c'/> At H of one half the conditional mean edge is zero. Differences between dots and lines measure, among other things, dependence and finite-sample error; none of these scores establish an admissible investment arbitrage."""
+            """The existing costless simulations compare <bookmark mark='a'/> annual mean over standard deviation across one hundred and sixty independent yearly paths <bookmark mark='b'/> with the iid one-step reference. Dependence and sampling error explain discrepancies. <bookmark mark='c'/> At H of one half the conditional edge vanishes. These scores do not establish investment arbitrage."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(side))
             vo.wait_until("a")
@@ -130,7 +130,7 @@ class Research(VoiceoverScene):
                 why(r"the proxy mean has a finite optimum: at $H=0.6$, $\sigma=20\%$, 1 bp gives $n^*\approx2{,}300$; 10 bp, about 50. This is not a no-arbitrage theorem")]
         step = ladder(self, rows, whys, keep=3, top=2.7, x=-0.3, buff=0.5, edge=6.9)
         with self.voiceover(
-            """Now charge a linear turnover penalty in the score proxy. <bookmark mark='a'/> The position changes by two when adjacent increment signs differ. Sheppard's normal-pair formula gives that switching probability. <bookmark mark='b'/> Subtract epsilon times turnover. Ignoring initial and terminal boundary terms, the mean score is the displayed m of n: the gross edge shrinks per step while the turnover charge does not. <bookmark mark='c'/> Differentiation gives a finite best frequency. This optimizes this particular proxy mean. It does not prove absence of arbitrage and is not exact proportional-cost wealth in the exponential price market."""
+            """Charge linear turnover in the score proxy. <bookmark mark='a'/> Position changes by two when consecutive signs differ; Sheppard's formula supplies the switching probability. <bookmark mark='b'/> Subtract epsilon times turnover, omitting initial and terminal boundary terms. Gross edge shrinks per step; the turnover charge does not. <bookmark mark='c'/> Differentiating the mean gives a finite optimum for this proxy. It neither proves absence of arbitrage nor represents exact proportional-cost wealth."""
         ) as vo:
             step(0, run_time=0.15)
             vo.wait_until("a")
@@ -177,7 +177,7 @@ class Research(VoiceoverScene):
         fit_right(side)
         b1, b10 = r["best"]["1bp"], r["best"]["10bp"]
         with self.voiceover(
-            f"Here it is at H of point six. <bookmark mark='a'/> Without a cost the mean keeps rising, off the top of the chart. <bookmark mark='b'/> At one basis point it peaks near twenty-three hundred trades a year, at about {100 * b1['mean']:.0f} percent, and turns negative beyond ten thousand. <bookmark mark='c'/> At ten basis points the peak is about fifty trades a year and {100 * b10['mean']:.0f} percent. The simulations sit on the formula. The percentages on this plot are log-increment score units, not percentages of invested wealth. The same fixed simulations are used for every displayed charge."
+            f"""At H of point six, <bookmark mark='a'/> the costless mean rises beyond the chart. <bookmark mark='b'/> One basis point peaks near twenty-three hundred trades yearly and {100 * b1['mean']:.0f} percent, then turns negative beyond ten thousand. <bookmark mark='c'/> Ten basis points peaks near fifty trades and {100 * b10['mean']:.0f} percent. These are log-increment score units, not investment returns; each charge uses the same fixed paths."""
         ) as vo:
             self.play(FadeIn(g), Create(zero), FadeIn(side))
             vo.wait_until("a")
@@ -203,7 +203,7 @@ class Research(VoiceoverScene):
         if note_.width > 12.6:
             note_.scale_to_fit_width(12.6)
         with self.voiceover(
-            """A consistent price system gives a sufficient condition for no arbitrage with a spread. <bookmark mark='a'/> Require an equivalent probability measure and a discounted local martingale inside the bid and ask at every time, together with the usual admissibility conditions. Converse results require further hypotheses. This multiplicative spread is distinct from our linear score charge. <bookmark mark='b'/> A strictly positive continuous process with conditional full support admits such systems for arbitrarily small positive spreads. Conditional full support means every uniform neighborhood of every positive continuous continuation has positive conditional probability. The exponential of fractional Brownian motion qualifies. <bookmark mark='c'/> Rough volatility puts roughness in variance. A stochastic-integral price can remain a semimartingale, but that fact alone does not prove no arbitrage; a valid pricing measure and admissibility are still required."""
+            """A consistent price system suffices for no arbitrage under usual admissibility: <bookmark mark='a'/> an equivalent measure and a discounted local martingale inside the bid and ask at every time. Converses need further hypotheses. This multiplicative spread differs from the score's linear charge. <bookmark mark='b'/> Positive continuous processes with conditional full support admit such systems for every positive spread. Every uniform neighborhood of every positive continuous continuation must have positive conditional probability; exponential fractional Brownian motion qualifies. <bookmark mark='c'/> Rough variance can generate a semimartingale price, but no arbitrage still requires a valid pricing measure and admissibility."""
         ) as vo:
             self.play(FadeIn(thm))
             vo.wait_until("a")
@@ -235,7 +235,7 @@ class Research(VoiceoverScene):
                              11.8, 16, GREY_A).to_edge(DOWN, buff=0.45)
         be_max = max(v["breakeven_bp"] for v in b.values())
         with self.voiceover(
-            f"""What do existing Bitcoin observations show? These are 2019 and 2020 log increments sampled every one, five, fifteen and sixty minutes. <bookmark mark='a'/> Their full-sample correlations are small and negative. Inverting the fractional formula labels an implied H; it does not establish that price follows fractional Brownian motion. The same full sample selects the reversal direction, so this is retrospective. <bookmark mark='b'/> The table reports the existing sign-increment scores, break-even linear turnover charges, and scores after one basis point. <bookmark mark='c'/> These are descriptive results, without an untouched forecasting test, and omit execution spreads, impact and funding. The consistent-price-system theorem predicts neither the measured correlation nor its break-even charge."""
+            f"""The Bitcoin table samples 2019 and 2020 at one, five, fifteen and sixty minutes. <bookmark mark='a'/> Correlations are slightly negative. Inverting the fractional formula labels an H without identifying that model. The same full sample selects reversal, making this retrospective. <bookmark mark='b'/> Existing sign-increment scores, break-even charges and one-basis-point results follow. <bookmark mark='c'/> They omit execution spreads, impact and funding, with no untouched forecasting test. The pricing-system theorem predicts neither these correlations nor their break-even charges."""
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(foot))
             vo.wait_until("a")
@@ -254,7 +254,7 @@ class Research(VoiceoverScene):
             desk_question(r"project: prospective empirical evidence", r"freeze signal direction and sampling rules, then use untouched data and executable costs; no new test is run here", width=12.4, font_size=18),
         ).arrange(DOWN, buff=0.22)
         with self.voiceover(
-            """Three project research directions. <bookmark mark='a'/> For a specified fractional-price model and spread, construct a consistent price system and useful super-replication bands. <bookmark mark='b'/> Solve a clearly specified utility problem with memory, costs and admissibility, and study its small-cost behavior. <bookmark mark='c'/> For an empirical extension, predefine direction and sampling choices, then test whether a signal survives execution costs on untouched data. This lesson performs no such new test."""
+            """Three project directions: <bookmark mark='a'/> construct a consistent price system and useful hedge bands for a specified fractional model and spread; <bookmark mark='b'/> study utility with memory, costs and explicit admissibility; <bookmark mark='c'/> predefine empirical direction and sampling, then test untouched data with execution costs. No new test is run here."""
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -268,7 +268,7 @@ class Research(VoiceoverScene):
         q = pause_card(r"at $H = 0.6$ the best trading frequency with a 1 bp cost is about 2,300 a year. If the cost "
                        r"doubles to 2 bp, by what factor does $n^*$ change?").move_to(UP * 0.9)
         with self.voiceover(
-            """Pause and predict. At H of point six, one basis point gives a best proxy frequency of about twenty-three hundred a year. If the charge doubles, by what factor does the optimum change? <bookmark mark='a'/> The formula gives two to the power minus one over H: about point three one five. The frequency falls to roughly seven hundred and thirty a year, within this mean-score approximation."""
+            """At H of point six, one basis point gives about twenty-three hundred proxy trades a year. Double the charge: how does frequency change? <bookmark mark='a'/> By two to the power minus one over H, about point three one five: roughly seven hundred and thirty yearly."""
         ) as vo:
             self.play(FadeIn(q))
             vo.wait_until("a")

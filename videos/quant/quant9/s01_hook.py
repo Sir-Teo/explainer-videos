@@ -21,8 +21,7 @@ class Hook(VoiceoverScene):
         card = part_title(PART, r"One price")
         disc = note(DISCLAIMER, font_size=18, color=GREY_C).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Part nine. No arbitrage. The derivatives act begins with one idea, from which the rest "
-            "of option pricing follows: two ways to get the same payoff must cost the same."
+            """Part nine. No arbitrage: matching payoffs must have matching prices."""
         ):
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(disc))
         self.play(FadeOut(card), FadeOut(disc))
@@ -38,7 +37,7 @@ class Hook(VoiceoverScene):
                 why(r"both sides are 3: parity is consistent. At put 6: buy put, sell call, buy stock, borrow 99; cost 0, payoff 1")]
         step = ladder(self, rows, whys, keep=2, top=1.0, x=-0.6, buff=0.95, edge=6.9)
         with self.voiceover(
-            "A desk interview question. A call costs ten and a put seven, both struck at a hundred, same expiry. The stock is at a hundred and three, and rates are zero. Is there an arbitrage? <bookmark mark='a'/> Own the call and sell the put: at expiry you get the stock minus a hundred, whatever happens. That is a forward, so the two must cost the same: put-call parity, from Hans Stoll in 1969. <bookmark mark='b'/> Both sides are three: no parity arbitrage. At a put of six, you would lock in a dollar for nothing. This establishes consistency of this parity relation under frictionless matching settlement assumptions; it does not certify every possible market trade."
+            """A call costs ten, a put seven, strike one hundred, same expiry. The stock is at one hundred and three; rates are zero. Arbitrage? <bookmark mark='a'/> Call minus put pays stock minus strike: a forward. Stoll's put-call parity equates their prices. <bookmark mark='b'/> Both sides are three. At a put of six, the matching frictionless trade locks in a dollar. This checks parity, rather than every possible trade."""
         ) as vo:
             self.play(FadeIn(q, shift=UP * 0.2))
             vo.wait_until("a")
@@ -70,7 +69,7 @@ class Hook(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         src = real_data(r"Deribit BTC option trades, 10 December 2025, 00:00--12:00 UTC (the Surface)")
         with self.voiceover(
-            f"""Parity also lets us compare observed prices. On Deribit, inverse Bitcoin options satisfy the displayed parity when the Bitcoin discount factor is one. Calls and puts at the same strike and expiry are paired within ten minutes. <bookmark mark='a'/> The Surface day gives {p['n_pairs']} pairs, half within {p['trade_p50']:.1f} basis points of the expiry's median implied forward. These are asynchronous observations, not a simultaneous bid-ask arbitrage test. <bookmark mark='b'/> The observed annualized forward basis rises from about three to five percent, reflecting carry and market conditions. This part combines existing market observations, seeded numerical examples and separately cited published facts. It registers no new strategy trial."""
+            f"""Deribit's inverse Bitcoin parity here assumes a Bitcoin discount factor of one. We pair trades within ten minutes. <bookmark mark='a'/> Of {p['n_pairs']} pairs, half lie within {p['trade_p50']:.1f} basis points of their expiry's median forward. Asynchronous trades do not establish executable arbitrage. <bookmark mark='b'/> The annualized forward basis rises from three to five percent. These are existing observations; no new strategy trial is registered."""
         ) as vo:
             self.play(FadeIn(side[0]), FadeIn(side[1]), FadeIn(src))
             self.play(FadeIn(g))
@@ -113,14 +112,7 @@ class Hook(VoiceoverScene):
         head = label(r"How we got here", font_size=34).to_edge(UP, buff=0.35)
         strip = VGroup(line, ticks, dots, leads, labs).shift(DOWN * 0.1)
         with self.voiceover(
-            "How we got here. In 1902 Gyula Farkas proved a lemma about linear inequalities that is "
-            "the whole theorem in one period. <bookmark mark='a'/> Arrow priced state securities in "
-            "1964, Stoll wrote down parity in 1969, and Ross showed in 1976 that options complete a "
-            "market. <bookmark mark='b'/> Then the theory: the binomial tree and Harrison and Kreps "
-            "in 1979, Harrison and Pliska in 1981, Delbaen and Schachermayer in 1994. <bookmark "
-            "mark='c'/> And the frontier and the failures: model-free bounds and the fall of "
-            "Long-Term Capital in 1998, martingale transport in 2013, Ross recovery in 2015, and "
-            "GameStop in 2021."
+            """The timeline runs from Farkas's inequalities <bookmark mark='a'/> through Arrow, Stoll and Ross, <bookmark mark='b'/> to binomial pricing and continuous-time theorems, <bookmark mark='c'/> then transport bounds, recovery and the failures of convergence trades. We will derive the links."""
         ) as vo:
             self.play(FadeIn(head), Create(line), FadeIn(ticks))
             self.play(GrowFromCenter(dots[0]), FadeIn(labs[0]), Create(leads[0]))
@@ -140,9 +132,7 @@ class Hook(VoiceoverScene):
         card = pause_at(r"Before chapter one: to spot the arbitrage in the desk question, is $C - P = S - K$ "
                         r"enough, or do you need to know what the stock will do?")
         with self.voiceover(
-            "A question to hold on to. To spot the arbitrage in the desk question, did you need any "
-            "forecast of the stock? <bookmark mark='a'/> No: only today's prices. That is the spirit "
-            "of this part: what prices alone can say, with no model of the future."
+            """Did parity require a stock forecast? <bookmark mark='a'/> No: matching payoffs and today's prices suffice."""
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -165,11 +155,7 @@ class Hook(VoiceoverScene):
             r"Industry and frontier: ETFs, box spreads, LTCM; neural and Sinkhorn transport",
         ], color=QC.IDEA, font_size=23)
         with self.voiceover(
-            "The plan: parity, checked against Bitcoin futures, and where it breaks; the fundamental "
-            "theorem, seen in three dimensions, proved, and solved by a simplex; state prices and Q; "
-            "the binomial tree; incomplete markets; continuous time; changing numeraire; the density "
-            "inside option prices; Ross recovery; model-free bounds; and how the industry trades all "
-            "of it."
+            """We will connect replication, state prices, incomplete-market intervals, measure changes and option-implied distributions, then examine numerical bounds and their trading limits."""
         ):
             self.play(FadeIn(card.head), *[FadeIn(r) for r in card.rows[:3]], run_time=0.5)
             self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows[3:]],
@@ -179,7 +165,7 @@ class Hook(VoiceoverScene):
     def house(self):
         chart = house_chart(PART, lit=("data",))
         with self.voiceover(
-            """In the House, this part builds the arbitrage checker. <bookmark mark='a'/> It diagnoses parity and shape inconsistencies under explicit assumptions. Fitting, repairing and checking a surface are iterative; sampled diagnostics do not certify an entire market free of executable arbitrage."""
+            """The House gains an arbitrage checker. <bookmark mark='a'/> Its sampled diagnostics depend on trading assumptions; fitting and repair do not certify an entire market."""
         ) as vo:
             self.play(FadeIn(chart))
             self.play(Indicate(chart.desk["data"], color=QC.HOUSE, scale_factor=1.05))

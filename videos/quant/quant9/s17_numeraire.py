@@ -30,7 +30,7 @@ class Numeraire(VoiceoverScene):
                          who=r"Geman, El Karoui and Rochet (1995); Jamshidian (1989) for the bond", color=Q_C,
                          width=10.4, font_size=25).move_to(UP * 0.5)
         with self.voiceover(
-            """So far prices were measured in units of the bank account. A strictly positive tradable asset can serve instead if its discounted price is a true martingale, so the proposed density has mean one. <bookmark mark='a'/> With suitable integrability this gives pricing in the new unit. Geman, El Karoui and Rochet made this a general tool in 1995. A strict local martingale, such as the previous bubble, does not meet the mean-one requirement automatically."""
+            """Replace the bank account with a positive tradable numeraire. Its discounted price must be a true martingale, giving a mean-one density. <bookmark mark='a'/> With pricing integrability, this changes the unit and measure. Geman, El Karoui and Rochet, 1995. A strict local martingale need not qualify."""
         ) as vo:
             self.play(FadeIn(t, shift=UP * 0.2))
             vo.wait_until("a")
@@ -54,7 +54,7 @@ class Numeraire(VoiceoverScene):
                     r"(Girsanov with $\sigma$): $N(d_1)$ and $N(d_2)$ are one event's probability under two measures", 21)]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.6, buff=0.55, edge=6.9)
         with self.voiceover(
-            "Two lines. A price divided by the numeraire is an expectation under its measure; divided by the bank account, under Q. <bookmark mark='a'/> Both hold for every claim, so the measures differ by the numeraires' relative growth. <bookmark mark='b'/> Use it on a call: the share you receive minus the strike you pay, if in the money. <bookmark mark='c'/> The strike part is a Q-probability; the share part, in units of shares, a probability under the stock's measure. <bookmark mark='d'/> There the log-price drifts a full sigma squared higher: N of d one and N of d two are one event seen in two units. Here the equalities concern replicable claims whose discounted values are true martingales. The displayed normal probabilities use a non-dividend-paying constant-volatility stock."
+            """Divide a replicable claim by the numeraire or bank account. <bookmark mark='a'/> Their expectation formulas identify the measure density as relative numeraire growth. <bookmark mark='b'/> Split a call into the share received and strike paid. <bookmark mark='c'/> These give exercise probabilities under the stock measure and Q. <bookmark mark='d'/> For a non-dividend-paying constant-volatility stock, their log drifts differ by sigma squared: N of d one and N of d two. The equalities require true pricing martingales."""
         ) as vo:
             step(0, run_time=0.15)
             vo.wait_until("a")
@@ -102,14 +102,7 @@ class Numeraire(VoiceoverScene):
                           r"how much stock it ends with", 4.4, 19, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "See it. A stock at a hundred, twenty-five percent volatility, one year, a call at a "
-            f"hundred. Q's density, and the chance of ending in the money: {n['Nd2']:.4f}, N of d two. "
-            "<bookmark mark='a'/> Change the unit to the stock: multiply the density by the price. It "
-            f"leans right, and the same event has probability {n['Nd1']:.4f}, N of d one. <bookmark "
-            f"mark='b'/> A hundred times the first minus a hundred times the second: {n['call']:.2f}. "
-            "One payoff, two units, one price."
-            " Under Q the log-price drifts at minus half sigma squared; under the stock's measure at "
-            "plus half sigma squared: the two densities differ by exactly the factor s over S naught."
+            f"""Stock and strike are one hundred, volatility twenty-five percent, maturity one year. The Q exercise probability is {n['Nd2']:.4f}. <bookmark mark='a'/> Weight the density by terminal stock over today's price: under the stock measure it becomes {n['Nd1']:.4f}. <bookmark mark='b'/> Their price-weighted difference gives {n['call']:.2f}. The two log drifts are minus and plus half sigma squared."""
         ) as vo:
             self.add(D)
             self.play(FadeIn(g), Create(kl), FadeIn(side[0]), FadeIn(area), FadeIn(side[2]))
@@ -141,16 +134,7 @@ class Numeraire(VoiceoverScene):
                     color=ALT),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "It pays off on an option to exchange one asset for another. In units of the second "
-            "asset, the payoff is a call on their ratio, struck at one. <bookmark mark='a'/> Under "
-            "that asset's measure the ratio is a martingale, with a volatility from both and their "
-            "correlation. <bookmark mark='b'/> So the price is Black and Scholes on the ratio, with "
-            "no rates: Margrabe, 1978. <bookmark mark='c'/> At these numbers the formula says "
-            f"{n['margrabe']:.2f}; a million paths under Q, {n['mc_Q']:.2f}; a million under the "
-            f"second asset's measure, {n['mc_S2']:.2f}."
-            " With equal volatilities and correlation one half, the ratio's volatility equals each "
-            "asset's own, thirty percent; with correlation one it would be zero, and the option at "
-            "the money worthless."
+            f"""For an option exchanging two assets, divide by asset two: the payoff becomes a ratio call struck at one. <bookmark mark='a'/> Its volatility combines both volatilities and correlation. <bookmark mark='b'/> Apply Black-Scholes to this ratio: Margrabe, 1978. <bookmark mark='c'/> The formula gives {n['margrabe']:.2f}; the two million-path checks give {n['mc_Q']:.2f} and {n['mc_S2']:.2f}. Equal thirty-percent volatilities and correlation one half give thirty-percent ratio volatility. Correlation one would make the at-the-money option worthless."""
         ) as vo:
             step(0, run_time=0.15)
             vo.wait_until("a")
@@ -190,7 +174,7 @@ class Numeraire(VoiceoverScene):
         ).arrange(DOWN, buff=0.22).next_to(items, DOWN, buff=0.5)
         src = real_data(r"the Surface's density for 27 March 2026 (chapter 12)")
         with self.voiceover(
-            f"""The bond gives the forward measure, and the annuity gives the swap measure. Black's swaption formula additionally needs a lognormal swap-rate model. <bookmark mark='a'/> For Bitcoin, this fitted finite-grid example gives an undiscounted dollar forward value of {n['usd']:,.0f}, and a Bitcoin premium of {n['btc']:.4f}. They are not the same spot-dollar amount. <bookmark mark='b'/> Choose a Bitcoin discount factor of one and a consistent dollar discount factor of {df_usd:.5f}, using the fitted grid mean. Multiplying the Bitcoin premium by today's spot, {spot:,.0f}, gives the dollar present value, {spot_pv:,.0f}. Multiplying by the fitted forward mean instead gives the undiscounted forward value. The ITM probabilities differ, {n['Q_itm']:.2f} versus {n['QB_itm']:.2f}, while discounted prices agree after conversion into the same current unit. These discount choices illustrate the identity rather than estimate both currency curves independently."""
+            f"""Bonds and annuities generate forward and swap measures; Black's swaption formula also assumes lognormal swap rates. <bookmark mark='a'/> The Bitcoin grid gives an undiscounted dollar forward value of {n['usd']:,.0f} and premium {n['btc']:.4f} Bitcoin. <bookmark mark='b'/> Choose Bitcoin discounting of one and consistent dollar discounting {df_usd:.5f}. Multiplying the premium by spot {spot:,.0f} gives present value {spot_pv:,.0f}; using the grid's forward mean instead gives the forward value. Exercise probabilities differ, {n['Q_itm']:.2f} versus {n['QB_itm']:.2f}. Discounted prices agree in the same current unit. These choices illustrate conversion, rather than independently estimate currency curves."""
         ) as vo:
             self.play(LaggedStart(*[FadeIn(i_) for i_ in items[:2]], lag_ratio=0.4))
             vo.wait_until("a")
@@ -204,10 +188,7 @@ class Numeraire(VoiceoverScene):
         card = pause_at(r"Under the stock's own measure $Q^S$, does the stock drift faster or slower than the riskless "
                         r"rate?")
         with self.voiceover(
-            "Pause and predict. Under the stock's own measure, does the stock drift faster or slower "
-            "than the riskless rate? <bookmark mark='a'/> Faster, by sigma squared: weighting paths "
-            "by where they end tilts the drift up."
-            " Next: reading Q's whole distribution straight from option prices."
+            """Under the stock measure, is its drift above the riskless rate? <bookmark mark='a'/> Yes, by sigma squared. Terminal-price weighting tilts the drift up."""
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

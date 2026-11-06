@@ -28,20 +28,20 @@ CHAPTERS = {
 }
 
 ZH = {
-    'Part nine. No arbitrage. The derivatives act begins':
-        '第9部分。无套利。衍生品篇从一个想法开始，期权定价的其余一切都由它推出：得到同一收益的两种方法，必须花同样的钱。',
-    'A desk interview question. A call costs ten':
-        "一道交易台面试题。一份看涨期权10元，一份看跌期权7元，行权价都是100，到期日相同。股价103，利率为零。有套利吗？<bookmark mark='a'/>买入看涨、卖出看跌：到期时无论发生什么，你都得到股价减100。这就是一份远期，所以两者必须同价：这就是看涨看跌平价，汉斯·斯托尔在1969年写下了它。<bookmark mark='b'/>两边都是3：没有平价套利。如果看跌期权是6元，你就能白白锁定1元。这只在无摩擦且结算匹配的假设下证明该平价关系一致，并不认证所有可能的市场交易。",
-    'f"Parity also lets us compare observed prices. On Deribit, inverse Bitcoin optio':
-        "平价也能比较观测价格。在BTC贴现因子为一时，Deribit反向比特币期权满足图中的平价。相同执行价与到期日的看涨、看跌成交在十分钟内配对。<bookmark mark='a'/>曲面当天有{p['n_pairs']}对，一半距该到期日的隐含远期中位数不超过{p['trade_p50']:.1f}基点。这些是异步观测，不是同时买卖价的套利检验。<bookmark mark='b'/>观测年化远期基差约从百分之三升至五，反映持有成本与市场条件。本部分结合已有市场观测、固定种子的数值例子，以及单独引用的文献事实，没有注册新的策略试验。",
-    'How we got here. In 1902 Gyula Farkas':
-        "我们怎样走到这里。1902年，法卡斯·久拉证明了一个关于线性不等式的引理，它就是单期中的整个定理。<bookmark mark='a'/>阿罗在1964年为状态证券定价，斯托尔在1969年写下平价，罗斯在1976年证明期权让市场完备。<bookmark mark='b'/>然后是理论：1979年的二叉树与哈里森和克雷普斯，1981年的哈里森和普利斯卡，1994年的德尔班和沙赫迈尔。<bookmark mark='c'/>还有前沿与失败：1998年不依赖模型的界和长期资本管理公司的倒下，2013年的鞅最优传输，2015年的罗斯复原，以及2021年的游戏驿站。",
-    'A question to hold on to.':
-        "先记住一个问题。要发现交易台问题里的套利，你需要对股票做任何预测吗？<bookmark mark='a'/>不需要：只要今天的价格。这就是本部分的精神：仅凭价格，不对未来建任何模型，能说出什么。",
-    'The plan: parity, checked against Bitcoin futures':
-        '本部分的安排：平价关系，用比特币期货检验，以及它在哪里失效；基本定理，在三维中看见、证明，再用单纯形法求解；状态价格与Q；二叉树；不完备市场；连续时间；计价单位变换；期权价格里的密度；罗斯复原；不依赖模型的界；以及业界怎样做这一切。',
-    "In the House, this part builds the arbitrage checker. <bookmark mark='a'/> It di":
-        "本部分为House搭建套利检查器。<bookmark mark='a'/>它在明确假设下诊断平价与形状不一致。曲面的拟合、修复和检查需要迭代；抽样诊断不能认证整个市场没有可执行套利。",
+    'Part nine. No arbitrage: matching payoffs must have matching prices.':
+        '第9部分。无套利：相同支付必须有相同价格。',
+    'A call costs ten, a put seven, strike one hundred, same expiry. The stock is at ':
+        "看涨期权10，看跌7，行权价100，到期相同。股票103，利率为零。有套利吗？<bookmark mark='a'/>看涨减看跌支付股票减行权价，就是远期。斯托尔的看涨看跌平价要求两者价格相等。<bookmark mark='b'/>两边都是3。看跌若为6，匹配条款下的无摩擦交易可以锁定1元。这检验的是平价关系，并非所有可能的交易。",
+    'f"Deribit\'s inverse Bitcoin parity here assumes a Bitcoin discount factor of one':
+        "这里德里比特反向比特币平价假定比特币贴现因子为1。交易配对最多相隔十分钟。<bookmark mark='a'/>在{p['n_pairs']}对中，一半距各自到期日的中位远期不超过{p['trade_p50']:.1f}个基点。异步交易不能证明可执行套利。<bookmark mark='b'/>年化远期基差从约3%升至5%。这里使用已有观测，不登记新策略试验。",
+    "The timeline runs from Farkas's inequalities <bookmark mark='a'/> through Arrow,":
+        "这条时间线从法尔卡什的不等式出发，<bookmark mark='a'/>经过阿罗、斯托尔和罗斯，<bookmark mark='b'/>走向二叉树定价与连续时间定理，<bookmark mark='c'/>再到运输界、恢复理论以及收敛交易的失败。接下来推导它们的联系。",
+    "Did parity require a stock forecast? <bookmark mark='a'/> No: matching payoffs a":
+        "检验平价需要预测股价吗？<bookmark mark='a'/>不需要：匹配的支付与今天的价格就够了。",
+    'We will connect replication, state prices, incomplete-market intervals, measure ':
+        '接下来连接复制、状态价格、不完备市场区间、测度变换与期权隐含分布，再考察数值界及其交易限制。',
+    "The House gains an arbitrage checker. <bookmark mark='a'/> Its sampled diagnosti":
+        "量化屋加入套利检查器。<bookmark mark='a'/>抽样诊断依赖交易假设；拟合和修复不能为整个市场提供无套利认证。",
     'Chapter one. Parity, assembled.':
         '第1章。平价关系，亲手拼出来。',
     'A definition first. An arbitrage costs nothing':
@@ -174,26 +174,26 @@ ZH = {
         "暂停预测一下。加倍策略不花钱，最后也从不亏钱。为什么它不是套利？<bookmark mark='a'/>它不是可容许的：途中需要无限的信用，而一旦亏损有界，它就不再稳赢。Q以现金为计价单位定价。下一章：用任何你喜欢的单位定价。",
     'Chapter eleven. Change of numeraire.':
         '第11章。计价单位变换。',
-    'So far prices were measured in units of the bank account. A strictly positive tr':
-        "此前价格用银行账户衡量。严格正的可交易资产也可作为单位，但其贴现价格必须为真鞅，保证所定义密度的均值为一。<bookmark mark='a'/>配合适当可积性，就可用新单位定价。Geman、El Karoui和Rochet于1995年把它发展成一般工具。上一章泡沫那样的严格局部鞅并不自动满足均值为一的要求。",
-    'Two lines. A price divided by the numeraire':
-        "两行就够。价格除以计价单位，是它的测度下的期望；除以银行账户，是Q下的期望。<bookmark mark='a'/>两者对每个收益都成立，所以两个测度相差的就是两个计价单位的相对增长。<bookmark mark='b'/>用在看涨期权上：实值时，你收到的股票减去你支付的行权价。<bookmark mark='c'/>行权价那部分是Q概率；股票那部分，以股票为单位，是股票测度下的概率。<bookmark mark='d'/>在那里对数价格的漂移高出整整一个sigma平方：N(d1)和N(d2)是同一个事件在两种单位下的样子。这里的等式针对贴现价值为真鞅的可复制支付。图中的正态概率使用无分红、常波动率股票。",
-    'f"See it. A stock at a hundred':
-        "看一看。股价100，波动率25%，一年，行权价100的看涨期权。Q的密度，以及到期实值的概率：{n['Nd2']:.4f}，也就是N(d2)。<bookmark mark='a'/>把单位换成股票：密度乘以价格。它向右倾斜，同一个事件的概率变成{n['Nd1']:.4f}，也就是N(d1)。<bookmark mark='b'/>100乘以前者减去100乘以后者：{n['call']:.2f}。一个收益，两种单位，一个价格。在Q下，对数价格的漂移是负二分之一sigma平方；在股票测度下是正二分之一sigma平方：两个密度之间恰好差一个因子，s除以S0。",
-    'f"It pays off on an option to exchange':
-        "它在交换期权上立了大功。以第二种资产为单位，收益就是两者比值上行权价为1的看涨期权。<bookmark mark='a'/>在那种资产的测度下，比值是鞅，波动率由两者的波动率和相关性决定。<bookmark mark='b'/>所以价格就是比值上的布莱克—斯科尔斯，没有利率：马格雷布，1978年。<bookmark mark='c'/>在这组数字下，公式给出{n['margrabe']:.2f}；Q下的一百万条路径给出{n['mc_Q']:.2f}；第二种资产测度下的一百万条路径给出{n['mc_S2']:.2f}。波动率相同、相关性为二分之一时，比值的波动率等于各自的波动率，30%；相关性为1时它是零，平值的交换期权一文不值。",
-    'f"The bond gives the forward measure, and the annuity gives the swap measure. Bl':
-        "债券给出远期测度，年金给出互换测度。Black互换期权公式还需要互换利率对数正态模型。<bookmark mark='a'/>在这个拟合有限网格例子里，未贴现的美元远期价值为{n['usd']:,.0f}，比特币权利金为{n['btc']:.4f}。两者不是同一个即期美元金额。<bookmark mark='b'/>取BTC贴现因子为一，用拟合网格均值选择一致的美元贴现因子{df_usd:.5f}。BTC权利金乘今日现价{spot:,.0f}，得到美元现值{spot_pv:,.0f}；乘拟合远期均值则得到未贴现远期价值。价内概率分别为{n['Q_itm']:.2f}与{n['QB_itm']:.2f}，但贴现价格换成同一当前单位后相等。这些贴现选择用于演示恒等式，不是独立估计两条货币曲线。",
-    "Pause and predict. Under the stock's own measure":
-        "暂停预测一下。在股票自己的测度下，股票的漂移比无风险利率快还是慢？<bookmark mark='a'/>快，快sigma平方：按终点给路径加权，会把漂移往上推。下一章：直接从期权价格中读出Q的整个分布。",
+    'Replace the bank account with a positive tradable numeraire. Its discounted pric':
+        "用正的可交易计价资产替代银行账户。其贴现价格必须是真鞅，才能得到均值为1的密度。<bookmark mark='a'/>在定价可积条件下，由此改变单位与测度。这是热芒、卡鲁伊和罗歇1995年的工具。严格局部鞅未必满足条件。",
+    "Divide a replicable claim by the numeraire or bank account. <bookmark mark='a'/>":
+        "把可复制支付分别除以计价资产或银行账户。<bookmark mark='a'/>两种期望公式给出测度密度，即计价资产的相对增长。<bookmark mark='b'/>把看涨拆成收到的股票与支付的行权价。<bookmark mark='c'/>对应股票测度和Q下的行权概率。<bookmark mark='d'/>对于无股息、常波动率股票，两种对数漂移相差sigma平方，得到N(d1)和N(d2)。等式要求定价过程是真鞅。",
+    'f"Stock and strike are one hundred, volatility twenty-five percent, maturity one':
+        "股票与行权价均为100，波动率25%，期限一年。Q下行权概率为{n['Nd2']:.4f}。<bookmark mark='a'/>用终值股价除以今天的价格加权密度，股票测度下概率变为{n['Nd1']:.4f}。<bookmark mark='b'/>两者按价格加权相减得到{n['call']:.2f}。两种对数漂移分别为负和正的二分之sigma平方。",
+    'f"For an option exchanging two assets, divide by asset two: the payoff becomes a':
+        "交换两种资产的期权除以资产2后，变成行权价1的比率看涨期权。<bookmark mark='a'/>比率波动率结合两种波动率与相关性。<bookmark mark='b'/>对比率应用布莱克斯科尔斯，得到马格拉贝1978年公式。<bookmark mark='c'/>公式为{n['margrabe']:.2f}；两组百万路径检查给出{n['mc_Q']:.2f}和{n['mc_S2']:.2f}。两种波动率都为30%、相关性为二分之一时，比率波动率也是30%。相关性为1时，平值期权价值为零。",
+    'f"Bonds and annuities generate forward and swap measures; Black\'s swaption formu':
+        "债券和年金产生远期与互换测度；布莱克互换期权公式还假定互换利率对数正态。<bookmark mark='a'/>比特币网格给出未贴现美元远期价值{n['usd']:,.0f}，保费为{n['btc']:.4f}比特币。<bookmark mark='b'/>选择比特币贴现因子1、相容美元贴现因子{df_usd:.5f}。保费乘现货{spot:,.0f}得到现值{spot_pv:,.0f}；乘网格远期均值则得到远期价值。行权概率分别为{n['Q_itm']:.2f}和{n['QB_itm']:.2f}。换成相同当前单位后，贴现价格一致。这些选择演示换算，并非独立估计两条货币曲线。",
+    "Under the stock measure, is its drift above the riskless rate? <bookmark mark='a":
+        "股票测度下，股票漂移高于无风险利率吗？<bookmark mark='a'/>高sigma平方。按终值价格加权使漂移上移。",
     'Chapter twelve. Butterflies build the density.':
         '第12章。蝶式价差拼出密度。',
     "Chapter five's state price can be bought with calls.":
         "第5章的状态价格可以用看涨期权买到。在90买入一份。<bookmark mark='a'/>在100卖出两份。<bookmark mark='b'/>在110买入一份：一顶帐篷，也就是蝶式价差，只在100附近支付。<bookmark mark='c'/>它的价格就是落在这个区间的价格：一个状态价格，而且永远不低于零。除以h平方之后，帐篷的面积是1：一根小小的直方图柱子，所以不同宽度的柱子可以互相比较。",
-    'f"Tile the strike axis with butterflies':
-        "用蝶式价差铺满行权价轴，用曲面上16天后到期的期权。每根柱子是一个蝶式价差的价格除以宽度的平方。<bookmark mark='a'/>宽度减半，再减半：柱子变细，顶端收敛到一条光滑的曲线。<bookmark mark='b'/>这就是风险中性密度，布里登和利曾伯格1978年的极限。它的积分是{b['mass']:.5f}，均值{b['mean']:,.0f}美元，正是远期。导数恒等式使用看涨价格；本数值重建还使用拟合SVI的设定。导数恒等式不依赖特定模型，但这里的看涨价格由SVI插值和外推。有限报价本身不能唯一确定密度。本示例采用零贴现。这里曲面的美元曲线是未贴现远期价值，即反向BTC权利金乘拟合远期；不是即期美元权利金。美元现值还要乘美元贴现因子。",
-    'The proof is two derivatives.':
-        "证明就是求两次导数。看涨期权是收益的贴现期望。<bookmark mark='a'/>对行权价求导：得到负的贴现后到期高于行权价的概率，也就是一个数字期权的价格。<bookmark mark='b'/>再求一次：就是密度。<bookmark mark='c'/>而蝶式价差除以h平方是二阶差分，所以它收敛到二阶导数。<bookmark mark='d'/>静态无套利的必要形状条件为：看涨价格随行权价下降，降得不比债券快，并且向上弯。算一个例子：如果行权价99和101之间的看涨价差值1.1，那么到期高于100的概率大约是1.1除以2，也就是0.55，还没算贴现。这些密度公式假定终值分布绝对连续且足够光滑。一般情况下二阶执行价导数是测度；有原子时数字期权使用单侧导数。完整静态无套利刻画除递减、凸性和斜率界外，还需要支付界和正确端点极限。看涨价差例子中，要再除以贴现因子才得到概率。",
+    'f"Tile strikes with butterfly prices divided by width squared, using the Surface':
+        "用蝶式价格除以宽度平方铺满行权价轴，数据来自16天到期的曲面。<bookmark mark='a'/>缩小宽度，柱顶接近平滑曲线。<bookmark mark='b'/>布里登利曾伯格密度积分为{b['mass']:.5f}，均值为远期{b['mean']:,.0f}。导数恒等式不依赖模型，但有限报价需要插值和外推，这里使用SVI。美元曲线是未贴现远期价值，即反向比特币保费乘远期。现货美元现值还需要美元贴现。",
+    "A call is a discounted payoff expectation. <bookmark mark='a'/> Strike different":
+        "看涨期权是支付的贴现期望。<bookmark mark='a'/>对行权价求导，得到负的贴现生存概率，即数字期权价格。<bookmark mark='b'/>再求导得到密度。<bookmark mark='c'/>蝶式除以宽度平方，收敛到这个二阶导数。<bookmark mark='d'/>递减凸的看涨价格还需要斜率界、支付界和正确端点极限。密度公式要求终值分布绝对连续且足够光滑；一般曲率是测度，有原子时需单侧导数。99到101的看涨价差若值1.1，对应概率约为0.55，再除以贴现因子。",
     'Both derivatives on the real call curve':
         "两个导数放在真实的看涨曲线上：切线的斜率是到期高于行权价的概率，弯曲程度是密度。<bookmark mark='a'/>把行权价往上滑：概率在曲线最弯的地方，也就是远期附近，下降得最快；远处的曲线是直的，市场几乎看不到概率。",
     'f"The House checks these conditions on every surface':
@@ -302,40 +302,40 @@ ZH = {
         "传输之外，Guyon的2024年框架研究SPX与VIX联合校准，以及其约束下的无套利可行性问题。<bookmark mark='a'/>Neufeld、Papapantoleon和Xiang推导多资产超对冲界，并用半无限规划计算，包括60资产的例子。<bookmark mark='b'/>Bartl、Beiglbock和Pammer发展适应Wasserstein几何，包括其过程空间中鞅的闭性与测地凸性。<bookmark mark='c'/>Heston、Jacobs和Kim发现，仅凭期权拟合区分经济性质不同的定价核，统计功效较低。单调性与路径独立限制在其经验模型内消除异常。Horvath的复原研究与Shikhman等人的逆密度分析是另外两个例子；各项结论都依赖自身模型、数据与假设。",
     'Pause and predict. When is a neural dual cost a certified upper bound? <bookmark':
         "暂停预测：神经对偶成本何时才是经认证的上界？<bookmark mark='a'/>必须先证明对冲在支付的整个支持集上占优。罚项并不强制满足约束。有限支持上逐对检查可认证离散问题；密集抽样本身不能认证连续域。",
-    'f"The House\'s arbitrage checker holds the tools: <bookmark mark=\'a\'/> parity dia':
-        "House套利检查器汇集了这些工具：<bookmark mark='a'/>平价诊断、状态价格、超复制、抽样静态与日历检查、有限网格传输界，以及带假设说明的罗斯复原。<bookmark mark='b'/>第十条规则是检查拟合价格与输入一致性，修复或拒绝被标记曲面，并区分数值诊断与可执行套利。本部分恢复已有计算及回顾性得分示例。计数为{env['trials']}，没有新增注册试验，也没有打开留出集。",
-    'Part nine in ten lines. Parity diagnoses matching payoff prices under trading as':
-        '第九部分十条要点。平价在交易假设下诊断同支付价格。借券约束改变价格界。有限状态无套利等价于严格正状态价格存在。给定P后，状态价格定义贴现因子与Q。完备模型复制支付，不完备模型给出区间。足够多独立支付可使有限市场完备。连续时间需要可容许性与NFLVR。计价单位变换要求均值为一的密度。完整价格曲线的曲率识别测度，有限报价则需拟合假设。复原依赖定价核限制，传输对指定边缘分布给出条件价格界。',
-    'Four desk questions. The call at ten and put at seven satisfy parity: both sides':
-        "四个交易台问题。看涨10、看跌7满足平价，两边都是3；这是在匹配交易假设下检查这一关系。<bookmark mark='a'/>一年后支付10、利率百分之四的欧式箱式组合约值9.61；美式提前行权可能破坏固定支付。<bookmark mark='b'/>宽度为一的看涨价差成本为0.5，只是数字期权近似；两个有限报价不能唯一确定精确价格。执行价处连续时，价差收窄趋于看涨价格斜率的负值，并包含贴现。<bookmark mark='c'/>负残值交易遇到借券、召回、融资期限与事件风险时，并不是无风险可执行交易。讲义列出假设与计算。",
-    'And nine problems':
-        '还有九道习题：含借券费用的平价，由施蒂姆克引理证明定理，二叉树概率，蝶式价差与密度，三叉区间及其对偶，远期开始看涨期权的区间，以及用计价单位变换推导马格雷布公式。其中两道是资格考试题：分数布朗运动的记忆，以及有成本时的最佳交易频率。中英文解答见笔记。',
-    'Where this comes back:':
-        '这些内容会在哪里再出现：第10部分的布莱克、斯科尔斯和默顿；第12部分的波动率曲面；第14和15部分的奇异期权；第18和19部分的远期测度；第23部分的贴现因子；第21和41部分的融资与危机；第38部分的ETF。最重要的是，第10部分会把本部分的连续时间定理变成一个公式和一个可以运行的对冲。',
-    'The textbooks and papers provide the theorem assumptions and published observati':
-        '教材与论文提供定理假设和已发表的观测。数值例子使用已有固定种子计算，市场示例使用已登记数据源。',
-    'The House can now tell a price from an arbitrage.':
-        "我们的公司现在能分辨价格与套利了。<bookmark mark='a'/>下一部分，第10部分：布莱克、斯科尔斯和默顿，波动率交易台随之开张。",
-    'For the researcher: fractional Brownian log prices and trading frictions. With H':
-        '研究者部分：分数布朗对数价格与交易摩擦。H不等于二分之一时，价格指数不是半鞅，经典无摩擦随机积分需要谨慎处理。我们先区分符号增量得分和投资财富，再介绍交易成本下排除套利的一致价格系统条件。',
-    'Take fractional Brownian motion as a log price, with H strictly between zero and':
-        "把分数布朗运动作为对数价格，H严格介于零与一之间。<bookmark mark='a'/>协方差如图；H等于二分之一时就是普通布朗运动。<bookmark mark='b'/>等长相邻增量的相关系数在每个尺度都相同，等于二的二H减一次方再减一。<bookmark mark='c'/>低于二分之一时二次变差发散，排除连续半鞅。高于二分之一时二次变差为零，这还不够：分数布朗运动的总变差也无限。而二次变差为零的连续半鞅必须有有限变差。因此H不等于二分之一时不是半鞅。经典套利结果还需要规定交易策略和可容许条件。",
-    'Consider a sign-increment score, not a self-financing investment return. <bookma':
-        "考虑符号增量得分，它不是自融资投资收益。<bookmark mark='a'/>每步使用上一对数增量的符号，正相关时跟随，负相关时反向。<bookmark mark='b'/>对相关正态变量，用条件期望和正态绝对值均值可以算出图中的单步期望。<bookmark mark='c'/>若这些得分独立，把单步均值和方差年化，会得到这里的根号n参考线。但得分存在依赖，公式忽略序列协方差。正均值或发散的参考夏普比率都不能证明套利。罗杰斯和切里迪托研究的是特定策略类别下分数市场的实际套利。",
-    "Here are the existing simulations without costs. <bookmark mark='a'/> Dots show ":
-        "这是已有的无成本模拟。<bookmark mark='a'/>点表示160条独立一年路径中，年度得分均值除以样本标准差。<bookmark mark='b'/>线把单步矩当作得分独立来年化，只是参考，并非精确年度风险公式。<bookmark mark='c'/>H等于二分之一时条件均值优势为零。点与线的差异包含依赖和有限样本误差；这些得分不能证明可容许投资套利。",
-    "Now charge a linear turnover penalty in the score proxy. <bookmark mark='a'/> Th":
-        "现在给代理得分加上线性换手惩罚。<bookmark mark='a'/>相邻增量符号不同时，头寸变化为二。正态对的谢泼德公式给出翻转概率。<bookmark mark='b'/>减去epsilon乘换手，忽略初始和终止边界项，得到图中的均值得分m(n)：单步毛优势缩小，而换手收费不变。<bookmark mark='c'/>求导得到有限最优频率。它只优化这个特定代理均值，不能证明无套利，也不是指数价格市场中比例交易成本下的精确财富。",
-    "f'Here it is at H of point six.":
-        "这是H为零点六的情形。<bookmark mark='a'/>没有成本时，均值一直上升，冲出图表顶部。<bookmark mark='b'/>一个基点时，它在每年约两千三百次交易处达到峰值，约为{100 * b1['mean']:.0f}%，超过一万次后变为负值。<bookmark mark='c'/>十个基点时，峰值约在每年五十次交易，为{100 * b10['mean']:.0f}%。模拟落在公式上。图中的百分比表示对数增量得分单位，不是投入财富的收益率。各收费情景都使用相同的固定模拟。",
-    'A consistent price system gives a sufficient condition for no arbitrage with a s':
-        "一致价格系统给出有价差时无套利的充分条件。<bookmark mark='a'/>要求存在等价概率测度，以及在每个时刻都位于贴现买卖价之间的局部鞅，并配以通常可容许条件。逆向结果还需要其他假设。这里的乘法价差不同于前面的线性得分收费。<bookmark mark='b'/>有条件全支持的严格正连续过程，对任意小的正价差都有这样的系统。条件全支持是指，每条正连续未来路径的任意一致邻域都有正条件概率。分数布朗运动的指数满足条件。<bookmark mark='c'/>粗糙波动率把粗糙性放在方差中。随机积分价格仍可为半鞅，但这一点本身不能证明无套利；仍需有效定价测度和可容许条件。",
-    'f"What do existing Bitcoin observations show? These are 2019 and 2020 log increm':
-        "已有比特币观测说明什么？这里使用2019和2020年的对数增量，采样间隔为1、5、15、60分钟。<bookmark mark='a'/>全样本相关系数很小且为负。反演分数公式只得到一个标为隐含H的数，并不能证明价格遵循分数布朗运动。同一全样本还选择了反向交易方向，因此这是回顾性展示。<bookmark mark='b'/>表中报告已有的符号增量得分、线性换手收费的盈亏平衡点，以及收取1基点后的得分。<bookmark mark='c'/>这些只是描述性结果，没有未触碰的预测检验，并忽略执行价差、冲击和融资。一致价格系统定理既不预测测得的相关系数，也不预测其盈亏平衡收费。",
-    "Three project research directions. <bookmark mark='a'/> For a specified fraction":
-        "三个项目研究方向。<bookmark mark='a'/>对指定的分数价格模型和价差，构造一致价格系统及实用的超复制价格带。<bookmark mark='b'/>在明确的记忆、成本和可容许条件下求解效用问题，研究小成本行为。<bookmark mark='c'/>实证扩展应预先定义方向和采样选择，再在未触碰数据上检验信号能否覆盖执行成本。本课没有进行这种新检验。",
-    'Pause and predict. At H of point six, one basis point gives a best proxy frequen':
-        "暂停预测：H为0.6时，1基点收费给出每年约2300次的代理最优频率。收费翻倍，最优频率变为多少倍？<bookmark mark='a'/>公式给出二的负一除以H次方，约0.315。频率降至每年约730次；结论仅限这个均值得分近似。",
+    'f"The House now has parity diagnostics, <bookmark mark=\'a\'/> state prices, super':
+        "量化屋已有平价诊断，<bookmark mark='a'/>状态价格、超复制、曲面抽样检查、有限网格运输和带条件的恢复方法。<bookmark mark='b'/>第十条规则：检查输入与假设，修复或拒绝有问题的拟合，区分诊断和可执行交易。计数仍为{env['trials']}，没有新增试验或开启留出检验。",
+    'The ten-line recap connects matching-payoff parity to strictly positive state pr':
+        '十行回顾把相同支付的平价连接到严格正状态价格、复制与不完备市场区间。连续时间还需要可容许性和NFLVR；计价单位变换需要均值为1的密度。完整期权曲线决定曲率测度，有限报价则依赖拟合假设。恢复理论限制定价核，运输方法则为给定边际下的支付求界。',
+    "Four desk answers. Parity gives three on both sides. <bookmark mark='a'/> A Euro":
+        "四道面试题的答案。平价两边都是3。<bookmark mark='a'/>一年后支付10的欧式箱式组合，4%利率下值9.61；提前行权可能改变支付。<bookmark mark='b'/>一宽看涨价差值0.5，只近似数字期权。在连续点，价差不断变窄的极限给出看涨价格的负斜率，其中已含贴现。<bookmark mark='c'/>负残值仍面临借券、召回、融资和事件风险。",
+    'The notes solve all nine problems in English and Chinese, including two qualifyi':
+        '笔记用中英文解答全部九题，包括两道资格考试推导：分数增量的记忆性，以及带成本评分代理的最优交易频率。',
+    'These tools return in volatility surfaces, exotics, rates, funding and ETFs. Par':
+        '这些工具还会出现在波动率曲面、奇异期权、利率、融资和ETF中。第10部分从布莱克、斯科尔斯和默顿开始：定价公式与可运行的对冲。',
+    'The references separate theorem assumptions, published facts, seeded simulations':
+        '参考文献区分定理假设、已发表事实、固定种子模拟和登记的市场观测。',
+    "The arbitrage checker is in place. <bookmark mark='a'/> Next: Black, Scholes and":
+        "套利检查器已经就位。<bookmark mark='a'/>接下来：布莱克、斯科尔斯和默顿。",
+    'Fractional Brownian log prices require care: H different from one half excludes ':
+        '分数布朗对数价格需要谨慎：H不等于二分之一时不是半鞅。下面区分符号增量评分与投资财富，再给出带成本的无套利条件。',
+    'For fractional Brownian log prices, zero is less than H, less than one. <bookmar':
+        "分数布朗对数价格的H介于0和1之间。<bookmark mark='a'/>H等于二分之一时，协方差退化为布朗运动。<bookmark mark='b'/>相邻等长增量在每个尺度的相关系数都是2的2H减1次方，再减1。<bookmark mark='c'/>H小于二分之一时二次变差发散；大于二分之一时二次变差为零，而总变差无限。连续半鞅不能满足这两种组合：二次变差为零就必须具有有限变差。套利结论还取决于允许的交易类别。",
+    "Use the previous increment's sign, <bookmark mark='a'/> following positive corre":
+        "使用前一个增量的符号，<bookmark mark='a'/>正相关时跟随，负相关时反向。这里评分的是对数增量，不是自融资财富。<bookmark mark='b'/>正态条件期望给出显示的带符号增量均值。<bookmark mark='c'/>把单步矩当作独立来年化，得到根号n参考值。序列协方差使它不能作为精确年风险公式；正均值或发散的参考夏普率都不能证明套利结论。罗杰斯和切里迪托研究的是指定交易类别下的分数市场。",
+    "The existing costless simulations compare <bookmark mark='a'/> annual mean over ":
+        "已有无成本模拟比较两种数值：<bookmark mark='a'/>160条独立年度路径上的年评分均值除以标准差，<bookmark mark='b'/>以及单步独立参考公式。依赖性和抽样误差会造成差异。<bookmark mark='c'/>H等于二分之一时条件优势消失。这些评分不能证明投资套利。",
+    "Charge linear turnover in the score proxy. <bookmark mark='a'/> Position changes":
+        "给评分代理加入线性换手费。<bookmark mark='a'/>相邻符号不同时仓位变化2；谢泼德公式给出切换概率。<bookmark mark='b'/>减去epsilon乘换手量，略去初始和终止边界项。每步毛优势随频率缩小，换手费则不会。<bookmark mark='c'/>对均值求导得到这个代理的有限最优频率；它既不证明无套利，也不代表精确比例成本财富。",
+    'f"At H of point six, <bookmark mark=\'a\'/> the costless mean rises beyond the cha':
+        "H为0.6时，<bookmark mark='a'/>无成本均值升到图外。<bookmark mark='b'/>1基点成本在每年约2300次交易、{100 * b1['mean']:.0f}%处达到峰值，超过一万次后变负。<bookmark mark='c'/>10基点成本在约50次、{100 * b10['mean']:.0f}%处达峰。这些是对数增量评分单位，不是投资收益率；不同费用使用同一组固定路径。",
+    'A consistent price system suffices for no arbitrage under usual admissibility: <':
+        "在通常可容许条件下，一致价格系统足以保证无套利：<bookmark mark='a'/>存在等价测度，以及每个时刻都位于买卖价之间的贴现局部鞅。反向结论需要额外假设。这种乘法价差不同于评分的线性费用。<bookmark mark='b'/>具有条件完全支撑的正连续过程，对任意正价差都存在这种系统：每条正连续未来路径的每个一致邻域，都有正条件概率。分数布朗运动的指数满足条件。<bookmark mark='c'/>粗糙方差可以产生半鞅价格，但无套利仍需要有效定价测度和可容许性。",
+    'f"The Bitcoin table samples 2019 and 2020 at one, five, fifteen and sixty minute':
+        "比特币表格以1、5、15和60分钟采样2019与2020年。<bookmark mark='a'/>相关系数略负。反演分数公式只给H标签，不能识别该模型。同一全样本又选择反向交易，因此结果是回顾性的。<bookmark mark='b'/>表中列出已有符号增量评分、盈亏平衡费用和1基点费用结果。<bookmark mark='c'/>它们省略执行价差、冲击和融资，也没有未触碰的预测检验。价格系统定理并不预测这些相关性或盈亏平衡费用。",
+    "Three project directions: <bookmark mark='a'/> construct a consistent price syst":
+        "三个项目方向：<bookmark mark='a'/>为指定分数模型和价差构建一致价格系统及有用对冲界；<bookmark mark='b'/>在明确可容许性下研究记忆、成本和效用；<bookmark mark='c'/>事先固定经验方向和采样规则，再用执行成本检验未触碰数据。这里不运行新检验。",
+    'At H of point six, one basis point gives about twenty-three hundred proxy trades':
+        "H为0.6时，1基点费用对应每年约2300次代理交易。费用翻倍后，频率如何变化？<bookmark mark='a'/>乘以2的负1除以H次方，约0.315，即每年约730次。",
 }
 
 ZH.update({'These are comparisons of observations over the same hours.': '这些观测来自同一时段。没有同时可执行的买卖价、融资与费用，不能证明存在现金持有套利利润。'})

@@ -68,7 +68,7 @@ class Outro(VoiceoverScene):
         rule = wrapped_label(r"Rule 10: check fitted prices and input consistency under explicit assumptions; repair or reject flagged surfaces. Sampled checks are not a market-wide certificate. "
                              rf"Existing trials: {env['trials']}; no new registrations or holdouts in this part.", 12.4, 21, QC.HOUSE).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            f"""The House's arbitrage checker holds the tools: <bookmark mark='a'/> parity diagnostics; state prices and super-replication; sampled static and calendar checks; finite-grid transport bounds; and Ross recovery with its assumptions. <bookmark mark='b'/> Rule ten is to check fitted prices and input consistency, repair or reject flagged surfaces, and distinguish numerical diagnostics from executable arbitrage. This part restores existing computations and retrospective score illustrations. The counter is {env['trials']}, with no new registered trial or holdout opened."""
+            f"""The House now has parity diagnostics, <bookmark mark='a'/> state prices, super-replication, sampled surface checks, finite-grid transport and conditional recovery. <bookmark mark='b'/> Rule ten: check inputs and assumptions, repair or reject flagged fits, and distinguish diagnostics from executable trades. The counter remains {env['trials']}; no new trial or holdout was opened."""
         ) as vo:
             self.play(FadeIn(chart))
             self.play(Indicate(chart.desk["data"], color=QC.HOUSE, scale_factor=1.05))
@@ -106,7 +106,7 @@ class Outro(VoiceoverScene):
         if rows.width > 13.2:
             rows.scale_to_fit_width(13.2)
         with self.voiceover(
-            """Part nine in ten lines. Parity diagnoses matching payoff prices under trading assumptions. Borrowing constraints modify the bounds. Finite-state no arbitrage means existence of strictly positive state prices. Those prices define discount factors and Q once P is specified. Complete models replicate; incomplete models give intervals. Enough independent payoffs complete a finite market. Continuous time needs admissibility and NFLVR. Numeraire changes require a mean-one density. Option curvature identifies a measure under a full price curve, while finite quotes need fitting assumptions. Recovery needs a kernel restriction, and transport gives conditional bounds for specified marginals."""
+            """The ten-line recap connects matching-payoff parity to strictly positive state prices, replication and incomplete-market intervals. Continuous time adds admissibility and NFLVR; numeraire changes need a mean-one density. A full option curve identifies a curvature measure; finite quotes require fitting assumptions. Recovery restricts the pricing kernel, and transport bounds claims for specified marginals."""
         ):
             self.play(FadeIn(title), *[FadeIn(r_) for r_ in rows[:3]], run_time=0.5)
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows[3:]],
@@ -119,7 +119,7 @@ class Outro(VoiceoverScene):
         if cards.height > 7.6:
             cards.scale_to_fit_height(7.6)
         with self.voiceover(
-            """Four desk questions. The call at ten and put at seven satisfy parity: both sides are three. This checks that relation under matching trading assumptions. <bookmark mark='a'/> A European box paying ten in one year at four percent costs about nine sixty-one; American exercise can disrupt the fixed payment. <bookmark mark='b'/> The one-wide call spread costs point five. It approximates a digital; two finite quotes do not identify its exact price. At a continuity strike, narrowing the spread gives minus the call slope, including discounting. <bookmark mark='c'/> A negative stub is not a riskless executable trade when borrowing, recall, funding horizon and event risk prevent the hedge. The notes give the assumptions and calculations."""
+            """Four desk answers. Parity gives three on both sides. <bookmark mark='a'/> A European box paying ten in a year at four percent costs nine sixty-one; early exercise can change that payment. <bookmark mark='b'/> The one-wide call spread costs point five, approximating a digital. At a continuity strike, its narrowing limit gives minus the call-price slope. <bookmark mark='c'/> A negative stub still faces borrowing, recall, funding and event risk."""
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -134,11 +134,7 @@ class Outro(VoiceoverScene):
     def problems(self):
         ps = problem_set(PROBLEMS, font_size=18)
         with self.voiceover(
-            "And nine problems: parity with a borrowing fee, the theorem from Stiemke's lemma, the "
-            "binomial probability, the butterfly and the density, the trinomial interval and its "
-            "dual, the forward-start call's band, and Margrabe by change of numeraire. Two are "
-            "qualifying-exam problems: the memory of fractional Brownian motion, and the best trading "
-            "frequency under costs. Solutions, in English and Chinese, are in the notes."
+            """The notes solve all nine problems in English and Chinese, including two qualifying-exam derivations: fractional-increment memory and the proxy's optimal frequency under costs."""
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))
             self.wait(4)
@@ -155,12 +151,7 @@ class Outro(VoiceoverScene):
             (r"ETF arbitrage and market making", [38]),
         ])
         with self.voiceover(
-            "Where this comes back: Black, Scholes and Merton in Part ten; the volatility surface in "
-            "twelve; exotics in fourteen and fifteen; forward measures in eighteen and nineteen; the "
-            "discount factor in twenty-three; funding and crises in twenty-one and forty-one; ETFs in "
-            "thirty-eight."
-            " Above all, Part ten turns this part's continuous-time theorem into a formula and a hedge "
-            "you can run."
+            """These tools return in volatility surfaces, exotics, rates, funding and ETFs. Part ten starts with Black, Scholes and Merton: a pricing formula and a working hedge."""
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r_) for r_ in card.rows], lag_ratio=0.4, run_time=4))
         self.wait(0.4)
@@ -188,7 +179,7 @@ class Outro(VoiceoverScene):
         if card.height > 7.6:
             card.scale_to_fit_height(7.6)
         with self.voiceover(
-            """The textbooks and papers provide the theorem assumptions and published observations. Numerical examples use existing, seeded computations; market illustrations use the registered data sources."""
+            """The references separate theorem assumptions, published facts, seeded simulations and registered market observations."""
         ):
             self.play(FadeIn(card))
             self.wait(4)
@@ -199,8 +190,7 @@ class Outro(VoiceoverScene):
         smap = series_map(current=PART + 1, done=PART)
         nxt = label(r"Next: Part 10, Black--Scholes--Merton", font_size=32, color=QC.IDEA).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "The House can now tell a price from an arbitrage. <bookmark mark='a'/> Next, Part ten: "
-            "Black, Scholes and Merton, and the volatility desk opens."
+            """The arbitrage checker is in place. <bookmark mark='a'/> Next: Black, Scholes and Merton."""
         ) as vo:
             self.play(FadeIn(chart))
             vo.wait_until("a")
