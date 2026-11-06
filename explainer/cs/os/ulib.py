@@ -79,3 +79,9 @@ __in:   .word 0, 0
 __out:  .word 0
         .space {BUFSZ}
 """
+
+# Part 32: the same library for a paged process.  The buffers get pages of their own, so code pages can be mapped
+# read-and-execute only, and data pages read-and-write only (W^X); compiled code starts on the page after them.
+ULIB_VM = ULIB.replace("        .align 4\n__in:", "        .align 4096\n__in:").rstrip() + "\n        .align 4096\n__ucode:\n"
+VBASE = 0x400000          # every process's virtual base: 4 MiB, the second L1 slot
+VSIZE = 1 << 20

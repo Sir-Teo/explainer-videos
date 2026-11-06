@@ -38,6 +38,8 @@ KSTACK = 0x8000
 MEM = (NPROC + 1) << 20
 # PCB fields (registers r1..r15 at 4*r)
 ST, EPC_, LO_, HI_, PID, STDIN, STDOUT, NDISP, NSYS, XCODE, NTICK = 0, 64, 68, 72, 76, 80, 84, 88, 92, 96, 100
+PTBRF, L2F = 104, 108          # Part 32: the PCB's page-table root and its L2 table
+PTE_URW = 1 | 2 | 4 | 16        # V R W U: a fresh user data page
 FREE, READY, RUNNING, BLOCKED, EXITED = 0, 1, 2, 3, 4
 STATES = {FREE: "free", READY: "ready", RUNNING: "running", BLOCKED: "blocked", EXITED: "exited"}
 KIND = {"tape": 0, "console": 0, "pipe": 1}
@@ -61,6 +63,7 @@ _kstart: la  t0, trap
         sw   t1, {NDISP}(t0)
         li   t1, QUANTUM
         csrw timer, t1
+{vm_boot}
         j    resume
 
 # ---- every trap: save the user's registers in its PCB ----------------------------------
@@ -90,7 +93,8 @@ trap:   sw   t0, ksave(zero)    # one register freed, to hold the PCB's address
         beq  t1, t2, syscall
         li   t2, 16
         beq  t1, t2, tick
-        sub  t1, zero, t1       # any other cause is a fault: kill the process
+{vm_dispatch}
+kfault: sub  t1, zero, t1       # any other cause is a fault: kill the process
         sw   t1, {XCODE}(t0)
         lw   t1, nfault(zero)
         addi t1, t1, 1
@@ -286,6 +290,7 @@ found:  li   t1, 2              # ready -> running
         lw   t1, nswitch(zero)  # a context switch
         addi t1, t1, 1
         sw   t1, nswitch(zero)
+{vm_switch}
 same:   lw   t1, {NDISP}(t0)
         addi t1, t1, 1
         sw   t1, {NDISP}(t0)
@@ -318,6 +323,7 @@ resume: lw   t0, curpcb(zero)
         lw   s2, 60(t0)
         lw   t0, 36(t0)
         eret
+{vm_handler}
 kend:
 
 # ---- kernel data -------------------------------------------------------------------------
@@ -332,12 +338,60 @@ nfault: .word 0
 pcount: .word 0
 phead:  .word 0
 pwriter: .word {pwriter}
+{vm_data}
         .align 64
 procs:
 {table}
 procs_end:
 pipebuf: .space {PIPESZ}
 """
+
+
+VM_BOOT = """        lw   t1, {PTBRF}(t0)
+        csrw ptbr, t1           # the first process's page table: translation on"""
+VM_DISPATCH = """        li   t2, 12
+        beq  t1, t2, pfault
+        li   t2, 13
+        beq  t1, t2, pfault
+        li   t2, 15
+        beq  t1, t2, pfault"""
+VM_SWITCH = """        lw   t1, {PTBRF}(t0)
+        csrw ptbr, t1           # its address space (and a flushed TLB)"""
+VM_HANDLER = """
+# ---- a page fault: inside the process's range and unmapped, give it a zeroed frame -----
+pfault: csrr s0, tval           # the faulting virtual address
+        lw   t1, {LO}(t0)
+        bltu s0, t1, segv
+        lw   t1, {HI}(t0)
+        bgeu s0, t1, segv       # outside its memory: a segmentation fault
+        srli t2, s0, 12
+        andi t2, t2, 1023
+        slli t2, t2, 2
+        lw   t1, {L2F}(t0)
+        add  s1, t1, t2         # where its page-table entry lives
+        lw   t2, 0(s1)
+        andi t2, t2, 1
+        bnez t2, segv           # mapped, but not for this access: a protection fault
+        lw   s2, nextframe(zero)
+        li   t1, {frame_end}
+        bgeu s2, t1, segv       # out of memory
+        li   t2, 4096
+        add  t1, s2, t2
+        sw   t1, nextframe(zero)
+        mv   t2, s2
+pz:     sw   zero, 0(t2)        # zero it: a fresh page must not leak another's data
+        addi t2, t2, 4
+        bne  t2, t1, pz
+        ori  t2, s2, {pte_urw}
+        sw   t2, 0(s1)          # map it
+        lw   t1, npfault(zero)
+        addi t1, t1, 1
+        sw   t1, npfault(zero)
+        j    resume             # and run the instruction again
+segv:   csrr t1, cause
+        j    kfault"""
+VM_DATA = """nextframe: .word {nextframe}
+npfault: .word 0"""
 
 
 @dataclass
@@ -350,6 +404,8 @@ class Proc:
     stdin: str = "tape"
     stdout: str = "console"
     labels: dict = field(default_factory=dict)
+    root: int = 0               # Part 32: physical addresses of its page tables
+    l2: int = 0
 
 
 def region(k: int) -> tuple[int, int]:
@@ -373,7 +429,9 @@ def user_asm(name: str, src: str, k: int, stdin: str = "tape", stdout: str = "co
     return Proc(name, p.image[lo:], p.labels["_start"], lo, hi, stdin, stdout, p.labels)
 
 
-def kernel_source(procs: list[Proc], quantum: int = QUANTUM) -> str:
+def kernel_source(procs: list[Proc], quantum: int = QUANTUM, vm: dict | None = None) -> str:
+    """The kernel's text.  ``vm`` (Part 32): {"nextframe", "frame_end"} turns on paging, with each process's
+    ``root`` and ``l2`` page tables in its PCB."""
     rows = []
     for k in range(NPROC):
         w = [0] * (PCB // 4)
@@ -383,9 +441,15 @@ def kernel_source(procs: list[Proc], quantum: int = QUANTUM) -> str:
             w[2] = p.hi                      # sp: the top of its region
             w[EPC_ // 4], w[LO_ // 4], w[HI_ // 4], w[PID // 4] = p.entry, p.lo, p.hi, k + 1
             w[STDIN // 4], w[STDOUT // 4] = KIND[p.stdin], KIND[p.stdout]
+            if vm:
+                w[PTBRF // 4], w[L2F // 4] = p.root, p.l2
         rows.append("        .word " + ", ".join(str(x) for x in w))
     pw = int(any(p.stdout == "pipe" for p in procs))
-    return KERNEL.format(NPROC=NPROC, PCB=PCB, quantum=quantum, pmask=PIPESZ - 1, KSTACK=KSTACK, EPC=EPC_, LO=LO_,
+    f = dict(PTBRF=PTBRF, L2F=L2F, LO=LO_, HI=HI_, pte_urw=PTE_URW, **(vm or {}))
+    parts = {k: (v.format(**f) if vm else "") for k, v in (("vm_boot", VM_BOOT), ("vm_dispatch", VM_DISPATCH),
+                                                          ("vm_switch", VM_SWITCH), ("vm_handler", VM_HANDLER),
+                                                          ("vm_data", VM_DATA))}
+    return KERNEL.format(**parts, NPROC=NPROC, PCB=PCB, quantum=quantum, pmask=PIPESZ - 1, KSTACK=KSTACK, EPC=EPC_, LO=LO_,
                          HI=HI_, PID=PID, STDIN=STDIN, STDOUT=STDOUT, NDISP=NDISP, NSYS=NSYS, XCODE=XCODE,
                          NTICK=NTICK, IO_TAPE=IO_TAPE, IO_CONSOLE=IO_CONSOLE, PIPESZ=PIPESZ, pwriter=pw,
                          table="\n".join(rows))
@@ -424,6 +488,14 @@ def report(m: OSMachine) -> dict:
             "steps": m.steps, "kernel_words": L["kend"] // 4, "procs": pcbs(m)}
 
 
+def _owner(m, pc, root):
+    """Which process an eret returns to: by its page table under paging (all share one virtual range), else by pc."""
+    for p in m.procs:
+        if (p.root and p.root == root) or (not p.root and p.lo <= pc < p.hi):
+            return p.name
+    raise ValueError(f"no process at {pc:#x}")
+
+
 def attribute(m: OSMachine) -> dict:
     """Instructions per process (user mode) and in the kernel, from the trap and eret events: user instructions
     run from each eret to the next trap."""
@@ -431,10 +503,10 @@ def attribute(m: OSMachine) -> dict:
     who = {p.name: 0 for p in m.procs}
     traps = erets = 0
     cur, start = None, None
-    for step, cause, pc, _ in m.events:
+    for step, cause, pc, root in m.events:
         if cause == ERET:
             erets += 1
-            cur = next(p.name for p in m.procs if p.lo <= pc < p.hi)
+            cur = _owner(m, pc, root)
             start = step + 1
         else:
             traps += 1
@@ -448,10 +520,10 @@ def timeline(m: OSMachine) -> list[tuple[int, int, str]]:
     """(start, end, who) for every stretch: a process's name, or "kernel"."""
     from explainer.cs.os.machine import ERET
     out, last, cur = [], 0, "kernel"
-    for step, cause, pc, _ in m.events:
+    for step, cause, pc, root in m.events:
         if cause == ERET:
             out.append((last, step + 1, "kernel"))
-            cur = next(p.name for p in m.procs if p.lo <= pc < p.hi)
+            cur = _owner(m, pc, root)
             last = step + 1
         else:
             out.append((last, step, cur))
