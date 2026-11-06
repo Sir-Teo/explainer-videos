@@ -69,7 +69,7 @@ class Rdt(VoiceoverScene):
               (4.0, 5.0, r"packet A \ (again)", True, SEG), (5.0, 6.0, r"ACK", False, ACKC)]
         sd = seq_diagram(ev, t_max=6.6, height=4.6, gap=5.0).move_to([-3.3, -0.6, 0])
         dup = label(r"a new packet, \ or A again?", font_size=20, color=NO).next_to(sd.arrows[2][0].get_end(), UP,
-                                                                              buff=0.35).shift(LEFT * 1.4)
+                                                                              buff=0.7).shift(LEFT * 1.2)
         fix = VGroup(
             wrapped_label(r"the receiver cannot tell a retransmission from new data, \ so it would deliver A twice",
                           5.2, font_size=21, color=NO),

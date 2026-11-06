@@ -1,0 +1,361 @@
+{
+ "title": "计算机科学，从零搭建 · 第38部分：分布式系统（一）：达成一致",
+ "chapters": {
+  "Hook": "五台 Pebble，一份日志",
+  "Generals": "1. 部分失效",
+  "Time": "2. 没有时钟的时间",
+  "Snapshot": "3. 快照",
+  "Models": "4. 模型与共识",
+  "Flp": "5. FLP",
+  "Paxos": "6. Paxos",
+  "Raft": "7. Raft",
+  "OurRaft": "8. 受到攻击的我们的 Raft",
+  "Byzantine": "9. 拜占庭将军",
+  "Nakamoto": "10. 中本聪共识",
+  "Frontier": "11. 前沿：证明与攻破",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "4357198b8d51": {
+   "scene": "Hook",
+   "en": "Five Pebbles keep one log of commands between them, a replicated log, and agree on every entry. One of them leads; the others follow. <bookmark mark='a'/> Here are nine seconds of their lives, while we do our worst. At one and a half seconds we crash the leader. Within a fifth of a second the others notice, hold an election, and a new leader carries on. <bookmark mark='b'/> At three seconds we cut the network in two: two Pebbles on one side, three on the other, one of the three already down. Neither side has a majority, so neither can commit anything, and the candidates on one side call election after election, in vain. <bookmark mark='c'/> We heal the network, restart the dead, crash another leader. Every time, the survivors agree. <bookmark mark='d'/> In this run they commit two hundred and thirty-six commands through fifteen terms of leadership, and every check we know of passes. We ran a thousand random storms like it. Not one broke the agreement.",
+   "zh": "五台 Pebble 共同维护一份命令日志，也就是一份复制日志，并且对其中的每一条都达成一致。其中一台是领导者，其余的是追随者。<bookmark mark='a'/>这是它们生活中的九秒钟，而我们在这期间使尽坏招。在一点五秒时，我们让领导者崩溃。不到五分之一秒，其余几台就察觉了，举行选举，由一位新的领导者接着干下去。<bookmark mark='b'/>在三秒时，我们把网络切成两半：一边两台 Pebble，另一边三台，而这三台里有一台已经宕掉。哪一边都没有多数派，所以哪一边都提交不了任何东西，其中一边的候选者一次又一次地发起选举，全是徒劳。<bookmark mark='c'/>我们修复网络，重启死掉的机器，再让另一位领导者崩溃。每一次，幸存者们都达成一致。<bookmark mark='d'/>在这次运行中，它们历经十五个领导任期，提交了二百三十六条命令，我们所知的每一项检查都通过了。像这样的随机风暴，我们跑了一千次。没有一次破坏了一致性。"
+  },
+  "c35ac671402f": {
+   "scene": "Hook",
+   "en": "And yet there is a theorem that says this is impossible. <bookmark mark='a'/> Leslie Lamport once defined a distributed system as one in which the failure of a computer you did not even know existed can render your own computer unusable. <bookmark mark='b'/> In 1985 Michael Fischer, Nancy Lynch and Michael Paterson proved that no deterministic protocol can guarantee that machines agree on even a single bit, if messages can be delayed without limit and even one machine may crash. <bookmark mark='c'/> The five Pebbles agree anyway. So what did they give up? That is the story of this part.",
+   "zh": "然而，有一条定理说，这是不可能的。<bookmark mark='a'/>Leslie Lamport 曾经这样定义分布式系统：在这样的系统里，一台你甚至不知道其存在的计算机出了故障，就能让你自己的计算机无法使用。<bookmark mark='b'/>1985 年，Michael Fischer、Nancy Lynch 和 Michael Paterson 证明了：如果消息可以被无限期地延迟，而且哪怕只有一台机器可能崩溃，那么没有任何确定性协议能保证机器们在哪怕一个比特上达成一致。<bookmark mark='c'/>可这五台 Pebble 还是达成了一致。那么，它们放弃了什么？这就是这一部分要讲的故事。"
+  },
+  "af05aedae44b": {
+   "scene": "Hook",
+   "en": "This is Part 38 of Computer Science, Built: Distributed systems, agreement. <bookmark mark='a'/> We start with two generals who provably cannot coordinate, and with time when there is no clock to read: Lamport's clocks, vector clocks, and snapshots of a system that never stops. We define consensus, solve it in f plus one rounds when time is kept, and prove, with Fischer, Lynch and Paterson, that it cannot be guaranteed when it is not. Then the ways around: randomness, failure detectors, partial synchrony; Paxos and Raft, with their proofs; our own Raft, attacked a thousand times; and finally traitors, from the Byzantine generals to Bitcoin.",
+   "zh": "这是计算机科学，从零搭建，第38部分：分布式系统，达成一致。<bookmark mark='a'/>我们从两位可以证明无法协同行动的将军讲起，再讲没有时钟可读时的时间：Lamport 时钟、向量时钟，以及一个永不停止的系统的快照。我们定义共识，在时间有保障时用 f 加一轮解决它，并且和 Fischer、Lynch、Paterson 一起证明：时间没有保障时，共识无法得到保证。然后是绕过去的办法：随机性、故障检测器、部分同步；Paxos 和 Raft，连同它们的证明；我们自己的 Raft，被攻击了一千次；最后是叛徒，从拜占庭将军一直到 Bitcoin。"
+  },
+  "7a7d9997bed2": {
+   "scene": "Generals",
+   "en": "Chapter one. Partial failure.",
+   "zh": "第一章。部分失效。"
+  },
+  "070419ba97e7": {
+   "scene": "Generals",
+   "en": "A program on one computer never has to think about three things that every distributed program must. <bookmark mark='a'/> Partial failure: some machines crash while the rest carry on, and the rest must decide what to do without them. <bookmark mark='b'/> No global clock: every machine's clock drifts, by tens of parts per million, seconds a day, so two machines cannot even agree what time it is. <bookmark mark='c'/> And asynchrony: a message can take any time to arrive. Wait for a reply that does not come, and you cannot tell whether the other machine is dead or merely slow. <bookmark mark='d'/> Every protocol in this part is a way of living with these three facts, and every impossibility theorem in it is one of them, stated precisely.",
+   "zh": "单台计算机上的程序从来不必考虑三件事，而每个分布式程序都必须考虑。<bookmark mark='a'/>部分失效：一些机器崩溃了，其余的还在继续运行，而剩下的这些必须在没有它们的情况下决定该做什么。<bookmark mark='b'/>没有全局时钟：每台机器的时钟都会漂移，幅度是百万分之几十，一天差上好几秒，所以两台机器连现在几点都无法达成一致。<bookmark mark='c'/>还有异步：一条消息可以花任意长的时间才到达。等一个迟迟不来的回复，你没法分辨对方机器是死了，还是只是慢。<bookmark mark='d'/>这一部分里的每个协议，都是与这三个事实共处的一种方式；而其中的每条不可能性定理，都是把其中一个事实精确地表述出来。"
+  },
+  "ed3cc2fc8b30": {
+   "scene": "Generals",
+   "en": "Jim Gray told the problem as a story in 1978. Two generals camp on two hills with an enemy in the valley between. Together they can win; alone, either is destroyed. They can communicate only by messenger, and any messenger may be captured. <bookmark mark='a'/> General A sends: attack at dawn. But A cannot attack until it knows B got the message, so B must reply. Then B cannot attack until it knows its reply arrived, so A must acknowledge the reply. <bookmark mark='b'/> And so on, for ever. <bookmark mark='c'/> Whatever the last message is, its sender does not know whether it arrived. <bookmark mark='d'/> Sending many messengers makes success likely: with one in ten captured, six messengers make it a millionth of a chance that all are lost. But likely is not certain, and the theorem says certain is impossible.",
+   "zh": "Jim Gray 在 1978 年把这个问题讲成了一个故事。两位将军驻扎在两座山头上，中间的山谷里是敌军。联手，他们能赢；单独进攻，谁都会被消灭。他们只能靠信使通信，而任何一个信使都可能被俘。<bookmark mark='a'/>将军 A 送出消息：拂晓进攻。但 A 在知道 B 收到消息之前不能进攻，所以 B 必须回复。接着，B 在知道自己的回复已经送达之前也不能进攻，所以 A 必须确认这条回复。<bookmark mark='b'/>如此往复，永无止境。<bookmark mark='c'/>无论最后一条消息是什么，它的发送者都不知道它是否送到了。<bookmark mark='d'/>派出许多信使，能让成功的可能性很大：如果十个里有一个被俘，派六个信使，全部丢失的概率只有百万分之一。但很可能并不等于确定，而这条定理说，确定是不可能的。"
+  },
+  "80bd3f591d5c": {
+   "scene": "Generals",
+   "en": "The proof is an induction on messages. <bookmark mark='a'/> Suppose some protocol does guarantee that both attack or neither does. <bookmark mark='b'/> Look at a run in which both attack, using as few messages as possible: k of them. <bookmark mark='c'/> Now imagine the last message is lost. Its sender sees exactly what it saw before, so it still attacks, and so, for the guarantee to hold, the receiver must attack too. But that is a run with k minus one messages in which both attack: fewer than the fewest. <bookmark mark='d'/> The only escape is k equal to zero, and with no messages neither general can know the other's plan. <bookmark mark='e'/> No single message can be the one that makes agreement certain. Real protocols, like TCP's handshake and its closing, settle for likely, and use timeouts for the rest.",
+   "zh": "证明是对消息数做归纳。<bookmark mark='a'/>假设某个协议确实能保证：要么双方都进攻，要么都不进攻。<bookmark mark='b'/>看一次双方都进攻、且所用消息尽可能少的运行：用了 k 条。<bookmark mark='c'/>现在设想最后一条消息丢了。它的发送者看到的和之前完全一样，所以它仍然进攻；于是，为了让保证成立，接收者也必须进攻。但这就是一次只用了 k 减一条消息、双方都进攻的运行：比最少还少。<bookmark mark='d'/>唯一的出路是 k 等于零，而没有任何消息，哪位将军都不可能知道对方的计划。<bookmark mark='e'/>没有哪一条消息能成为让一致变得确定的那一条。真实的协议，比如 TCP 的握手和它的关闭，满足于很可能，剩下的交给超时。"
+  },
+  "6aad979d5949": {
+   "scene": "Time",
+   "en": "Chapter two. Time without a clock.",
+   "zh": "第二章。没有时钟的时间。"
+  },
+  "e3fe2d7bc3e2": {
+   "scene": "Time",
+   "en": "First, the obvious approach: set every clock from a good one. David Mills's network time protocol does this across the Internet. <bookmark mark='a'/> The client notes its time when it sends a request, t zero; the server notes when it receives it, t one, and when it replies, t two; the client notes when the reply arrives, t three. <bookmark mark='b'/> If the trip there and the trip back take equal time, the offset between the clocks is this average, and the round trip is this difference. <bookmark mark='c'/> With a true offset of five seconds and forty milliseconds each way, the estimate is exact. But if the request takes seventy milliseconds and the reply ten, the estimate is thirty milliseconds off, and nothing the client can measure reveals it. <bookmark mark='d'/> Clocks set this way are good to milliseconds on the Internet and microseconds on a local network. Useful, but never good enough to decide which of two nearly simultaneous events came first.",
+   "zh": "先看最直接的办法：用一台好时钟去校准所有时钟。David Mills 的网络时间协议，就在整个互联网上做这件事。<bookmark mark='a'/>客户端记下它发出请求时的时间，t 零；服务器记下收到请求的时间，t 一，以及回复的时间，t 二；客户端记下回复到达的时间，t 三。<bookmark mark='b'/>如果去程和回程花的时间相等，两台时钟之间的偏差就是这个平均值，而往返时间就是这个差。<bookmark mark='c'/>真实偏差是五秒、单程各四十毫秒时，估计是精确的。但如果请求花了七十毫秒、回复花了十毫秒，估计就差了三十毫秒，而客户端能测量的任何东西都揭示不了这一点。<bookmark mark='d'/>这样校准的时钟，在互联网上能准到毫秒，在局域网上能准到微秒。有用，但永远不足以判定两个几乎同时的事件里哪个先发生。"
+  },
+  "289272a2f42e": {
+   "scene": "Time",
+   "en": "In 1978 Leslie Lamport replaced time by causality. Draw each process as a line, its events as dots in order, and messages as arrows. <bookmark mark='a'/> Event a happened before event b if a comes earlier on the same process, or a sends a message that b receives, or there is a chain of such steps from a to b. <bookmark mark='b'/> If neither happened before the other, they are concurrent: no information could have passed between them, so no observer can ever say which came first, and it does not matter. Happened-before is a partial order, and it is the only order a distributed system can know.",
+   "zh": "1978 年，Leslie Lamport 用因果关系取代了时间。把每个进程画成一条线，它的事件按顺序画成线上的点，消息画成箭头。<bookmark mark='a'/>如果 a 在同一个进程上比 b 早，或者 a 发出了一条被 b 接收的消息，或者从 a 到 b 有一串这样的步骤，就说事件 a 先于事件 b 发生。<bookmark mark='b'/>如果两者谁都不先于谁，它们就是并发的：它们之间不可能传递过任何信息，所以没有哪个观察者能说出谁先谁后，而这也无关紧要。先于关系（happened-before）是一个偏序，也是分布式系统唯一能知道的顺序。"
+  },
+  "3777058bfc15": {
+   "scene": "Time",
+   "en": "Lamport's clocks turn the partial order into numbers. <bookmark mark='a'/> Each process keeps a counter and adds one at every event. Every message carries the sender's counter, and the receiver jumps past it: the maximum of its own and the message's, plus one. <bookmark mark='b'/> Then if a happened before b, a's number is smaller. Ties are broken by process number, and the result is a total order that every process agrees on, consistent with causality, which is enough to build a mutual exclusion lock with no central server. <bookmark mark='c'/> But the converse fails. In two hundred random executions we checked, concurrent pairs got different numbers almost every time, nineteen thousand of twenty-three thousand, so a smaller number does not mean earlier.",
+   "zh": "Lamport 时钟把这个偏序变成数。<bookmark mark='a'/>每个进程维护一个计数器，每发生一个事件就加一。每条消息都带着发送者的计数器，而接收者会跳过它：取自己的和消息里的两者中较大的那个，再加一。<bookmark mark='b'/>于是，如果 a 先于 b 发生，a 的数就更小。数相等时按进程编号打破平局，结果就是一个所有进程都认同、并且与因果一致的全序，这足以在没有中央服务器的情况下搭建一把互斥锁。<bookmark mark='c'/>但反过来不成立。在我们检查的二百次随机执行里，并发的事件对几乎每次都得到不同的数，二万三千对里有一万九千对，所以数更小并不意味着更早。"
+  },
+  "01fab8f5fe01": {
+   "scene": "Time",
+   "en": "To capture causality exactly, each process keeps not one counter but a vector, one entry per process: how many events of each process it has heard of. This is Colin Fidge's and Friedemann Mattern's vector clock, from 1988. <bookmark mark='a'/> A process increments its own entry at each event, and on receiving a message takes the element-wise maximum with the vector it carries. <bookmark mark='b'/> Now a happened before b exactly when a's vector is less than or equal to b's in every entry and smaller in one. The proof: a's entry for its own process counts a's position, and b's vector reaches that count only if some chain of messages carried it there. <bookmark mark='c'/> We checked the theorem on two hundred random executions, forty-two thousand pairs of events: exact every time. The data race detectors of Part 33 use exactly this, with threads for processes.",
+   "zh": "要精确地捕捉因果关系，每个进程维护的不是一个计数器，而是一个向量，每个进程占一项：它听说过每个进程的多少个事件。这就是 Colin Fidge 和 Friedemann Mattern 在 1988 年提出的向量时钟。<bookmark mark='a'/>进程在每个事件上把自己那一项加一，收到消息时，与消息携带的向量逐项取最大值。<bookmark mark='b'/>现在，a 先于 b 发生，当且仅当 a 的向量在每一项上都小于或等于 b 的，并且至少有一项更小。证明是这样的：a 的向量里属于它自己进程的那一项，记录的是 a 的位置，而 b 的向量要达到这个计数，只能是某条消息链把它带了过去。<bookmark mark='c'/>我们在二百次随机执行、四万二千对事件上检验了这条定理：每一次都精确无误。第33部分的数据竞争检测器用的正是这个，只是把进程换成了线程。"
+  },
+  "3d399ad8a2b4": {
+   "scene": "Snapshot",
+   "en": "Chapter three. Snapshots.",
+   "zh": "第三章。快照。"
+  },
+  "54d24098840d": {
+   "scene": "Snapshot",
+   "en": "A snapshot records each process's state, but the processes cannot all stop at the same instant, because there is no instant. So a snapshot is a cut through the space-time diagram: one point on each process's line. <bookmark mark='a'/> A cut is consistent if every message received before it was also sent before it. Such a cut is a state the system could have been in, even if it never was at any one real moment. <bookmark mark='b'/> Here the red cut records a message arriving at P one that, in the picture, P zero has not yet sent. Money appears from nowhere, or a lock is held by two processes. That cut describes a state that could never have happened.",
+   "zh": "快照记录每个进程的状态，但这些进程无法在同一瞬间全部停下，因为根本不存在这样一个瞬间。所以快照是穿过时空图的一道割：在每个进程的线上取一个点。<bookmark mark='a'/>如果每一条在割之前被接收的消息，也都是在割之前被发送的，这道割就是一致割。这样的割是系统可能处于过的一个状态，即使它从未在任何一个真实时刻处于这个状态。<bookmark mark='b'/>这里，红色的割记录了一条到达 P 一的消息，而在图中，P 零还没有发送它。钱凭空出现了，或者一把锁同时被两个进程持有。这道割描述的是一个绝不可能发生过的状态。"
+  },
+  "363683839008": {
+   "scene": "Snapshot",
+   "en": "K. Mani Chandy and Leslie Lamport found how to take a consistent cut while the system keeps running, in 1985. <bookmark mark='a'/> The process that starts the snapshot records its own state and sends a special message, a marker, on each of its outgoing channels. <bookmark mark='b'/> A process receiving its first marker records its own state at that moment, notes that channel as empty, and sends markers on all of its own channels. <bookmark mark='c'/> On every other incoming channel, it records whatever arrives until that channel's marker comes: those messages were in flight across the cut. <bookmark mark='d'/> It works because channels are first in, first out: the marker divides everything sent before the sender recorded its state from everything sent after.",
+   "zh": "K. Mani Chandy 和 Leslie Lamport 在 1985 年找到了在系统持续运行时取得一致割的方法。<bookmark mark='a'/>发起快照的进程记录自己的状态，并在它的每一条出信道上发送一条特殊的消息：标记。<bookmark mark='b'/>一个进程收到它的第一个标记时，记录下自己此刻的状态，把那条信道记为空，并在自己的所有信道上发送标记。<bookmark mark='c'/>在其余每一条入信道上，它记录到达的一切，直到那条信道的标记到来：这些消息当时正在穿越这道割的途中。<bookmark mark='d'/>它之所以行得通，是因为信道是先进先出的：标记把发送者记录状态之前发出的一切，与之后发出的一切分隔开来。"
+  },
+  "94928893b06a": {
+   "scene": "Snapshot",
+   "en": "We gave four processes a thousand units of money and let them send random amounts to each other over channels with random delays, never stopping. Then process zero started a snapshot. <bookmark mark='a'/> The recorded balances add up to seven hundred and forty-eight, and the money caught in transit on five channels to two hundred and fifty-two: exactly a thousand. <bookmark mark='b'/> A naive survey, asking each process its balance one second after the other, found seven hundred and forty-seven: money in flight was missed, and some was counted twice. Over fifty runs every snapshot was exact, and every survey was wrong. <bookmark mark='c'/> The same algorithm checkpoints the stream processors of Part 46, and detects when a distributed computation has deadlocked or finished.",
+   "zh": "我们给四个进程一千单位的钱，让它们通过延迟随机的信道互相发送随机数额，永不停止。然后，进程零发起了一次快照。<bookmark mark='a'/>记录下的余额加起来是七百四十八，五条信道上被截在途中的钱是二百五十二：恰好一千。<bookmark mark='b'/>一次天真的普查，挨个询问每个进程的余额，每问一个隔一秒，得到的是七百四十七：在途的钱漏掉了，还有一些被算了两次。在五十次运行里，每次快照都精确无误，而每次普查都是错的。<bookmark mark='c'/>同一个算法为第46部分的流处理器做检查点，还能检测出一个分布式计算何时陷入了死锁，或者已经结束。"
+  },
+  "b1d4209ae392": {
+   "scene": "Models",
+   "en": "Chapter four. Models and consensus.",
+   "zh": "第四章。模型与共识。"
+  },
+  "021c686c4ee0": {
+   "scene": "Models",
+   "en": "Every result in this part depends on two choices of model. The first is how machines may fail. <bookmark mark='a'/> A crash: the machine stops and never sends another message. <bookmark mark='b'/> Crash and recovery: it stops, then restarts with whatever it had saved on disk, which is the model Raft is designed for. <bookmark mark='c'/> Omission: some of its messages vanish. <bookmark mark='d'/> And Byzantine failure, named for Lamport's generals: the machine may do anything at all, including telling different lies to different listeners. A bug, a flipped bit in memory and a hostile operator all look like this.",
+   "zh": "这一部分的每个结果，都取决于对模型的两个选择。第一个是机器可能怎样失效。<bookmark mark='a'/>崩溃：机器停下来，再也不发任何消息。<bookmark mark='b'/>崩溃恢复：它停下来，然后带着磁盘上保存的一切重新启动，这正是 Raft 所针对的模型。<bookmark mark='c'/>遗漏：它的一些消息消失了。<bookmark mark='d'/>还有拜占庭失效，以 Lamport 的将军们命名：机器可能做出任何事，包括对不同的听者说不同的谎。一个程序错误、内存里一个翻转的比特、一个怀有敌意的运维者，看起来都是这样。"
+  },
+  "a1242ef25498": {
+   "scene": "Models",
+   "en": "The second choice is how time behaves. <bookmark mark='a'/> In a synchronous system there are known bounds on how long a message takes and how slow a machine can be, so computation proceeds in rounds, and a missing message proves a crash. In an asynchronous system there are no bounds at all, and a slow machine looks exactly like a dead one. Between them, Cynthia Dwork, Nancy Lynch and Larry Stockmeyer's partial synchrony: bounds exist but are unknown, or hold only after some unknown moment. That is the Internet on a good day. <bookmark mark='b'/> Tushar Chandra and Sam Toueg packaged timing as an oracle, a failure detector that suspects machines and may be wrong, and found the weakest one that makes consensus possible: it need only, eventually, stop suspecting one correct machine.",
+   "zh": "第二个选择是时间怎样表现。<bookmark mark='a'/>在同步系统里，一条消息要花多久、一台机器能有多慢，都有已知的上界，所以计算按轮推进，而一条消息缺席就证明发生了崩溃。在异步系统里根本没有上界，一台慢机器看起来和一台死机器一模一样。介于两者之间的，是 Cynthia Dwork、Nancy Lynch 和 Larry Stockmeyer 提出的部分同步：上界存在但未知，或者只在某个未知时刻之后才成立。这就是状态好的时候的互联网。<bookmark mark='b'/>Tushar Chandra 和 Sam Toueg 把时序包装成一个预言机，也就是故障检测器：它会怀疑机器，也可能怀疑错；他们还找到了使共识成为可能的最弱的那一个：它只需要最终不再怀疑某一台正确的机器。"
+  },
+  "72fc5ef7c2c0": {
+   "scene": "Models",
+   "en": "Now the problem itself. Each process proposes a value, and each correct process must eventually decide on one. <bookmark mark='a'/> Agreement: no two correct processes decide differently. <bookmark mark='b'/> Validity: the decision is one of the proposals, so the trivial protocol, always decide zero, is ruled out. <bookmark mark='c'/> Termination: every correct process does decide. <bookmark mark='d'/> Solve this for one value and you can solve it for a sequence: the next entry in a log, the next leader, whether a transaction commits, who holds a lock. Consensus is the core of every replicated system.",
+   "zh": "现在来看问题本身。每个进程提议一个值，每个正确的进程最终都必须决定其中一个。<bookmark mark='a'/>一致性：没有两个正确的进程做出不同的决定。<bookmark mark='b'/>有效性：决定的值是某个提议之一，所以那个平凡的协议，总是决定零，就被排除了。<bookmark mark='c'/>终止性：每个正确的进程确实都会做出决定。<bookmark mark='d'/>对一个值解决了这个问题，你就能对一个序列解决它：日志里的下一条、下一位领导者、一个事务是否提交、谁持有一把锁。共识是每个复制系统的核心。"
+  },
+  "de5d61052bab": {
+   "scene": "Models",
+   "en": "If time is kept, consensus is easy, given enough rounds. <bookmark mark='a'/> In FloodSet, each round every process sends every value it has seen to everyone, and after the last round each decides the smallest value it has seen. The difficulty is a crash part-way through a round, when some processes get the dying machine's message and others do not. <bookmark mark='b'/> We checked every crash pattern: who crashes, in which round, and exactly which messages get out first. With f crashes allowed, f rounds always have a counterexample, and f plus one rounds never do. <bookmark mark='c'/> Here is the simplest: three processes, one round. Process zero, holding the only zero, crashes after its message reaches process one but not process two. One decides zero, two decides one.",
+   "zh": "如果时间有保障，只要轮数足够，共识就很容易。<bookmark mark='a'/>在 FloodSet 里，每一轮，每个进程都把它见过的每个值发给所有人，最后一轮结束后，每个进程决定它见过的最小值。难点在于一轮进行到一半时发生的崩溃：一些进程收到了那台垂死机器的消息，另一些没有。<bookmark mark='b'/>我们检查了每一种崩溃模式：谁崩溃，在哪一轮，以及到底哪些消息先发了出去。允许 f 次崩溃时，f 轮总存在反例，而 f 加一轮从来没有。<bookmark mark='c'/>这是最简单的一个：三个进程，一轮。进程零持有唯一的零，它在消息送达进程一、但还没送达进程二时崩溃了。进程一决定零，进程二决定一。"
+  },
+  "1541f55a8db6": {
+   "scene": "Models",
+   "en": "Both halves are provable. <bookmark mark='a'/> Sufficiency first. With at most f crashes in f plus one rounds, some round has no crash at all. In that clean round every live process sends its whole set to every other, so afterwards all the live sets are equal, and later rounds keep them equal: everyone sees the same minimum. <bookmark mark='b'/> Necessity was proved by Michael Fischer and Nancy Lynch, and by Danny Dolev and Ray Strong. Against any protocol that decides in f rounds, crash one process per round, each just after it has told a single other. This builds a chain of executions, each indistinguishable from the next to some correct process, running from all inputs zero to all inputs one, and somewhere along it two neighbouring executions must decide differently. <bookmark mark='c'/> So even with perfect clocks, tolerating f crashes costs f plus one rounds of messages. And without clocks it gets much worse.",
+   "zh": "两半都可以证明。<bookmark mark='a'/>先看充分性。在 f 加一轮里至多发生 f 次崩溃，所以总有某一轮完全没有崩溃。在这干净的一轮里，每个活着的进程都把自己的整个集合发给其他每一个进程，所以此后所有活着的集合都相等，而之后的各轮会让它们保持相等：每个人看到的是同一个最小值。<bookmark mark='b'/>必要性由 Michael Fischer 和 Nancy Lynch，以及 Danny Dolev 和 Ray Strong 证明。对付任何在 f 轮内做出决定的协议，每一轮让一个进程崩溃，每个都恰好在只告诉了另一个进程之后崩溃。这样就构造出一条执行链，链上每一个执行，在某个正确进程看来都与下一个无法区分，从所有输入都是零一直延伸到所有输入都是一，而沿着这条链，必然有某两个相邻的执行做出不同的决定。<bookmark mark='c'/>所以，即使时钟完美，容忍 f 次崩溃也要付出 f 加一轮消息的代价。而没有时钟，情况要糟得多。"
+  },
+  "7c01f72a5ae5": {
+   "scene": "Flp",
+   "en": "Chapter five. FLP.",
+   "zh": "第五章。FLP。"
+  },
+  "29b6f9141f1d": {
+   "scene": "Flp",
+   "en": "The proof of Fischer, Lynch and Paterson rests on one idea. <bookmark mark='a'/> A configuration is a snapshot of everything: every process's state and every message in flight. <bookmark mark='b'/> Call it zero-valent if every way the run can continue ends in the decision zero, one-valent if every way ends in one, and bivalent if both outcomes are still possible. <bookmark mark='c'/> A correct protocol must, at some step, pass from bivalent to univalent: that step is where the decision is really made. The theorem shows that an adversary who controls only the order of message delivery, and may crash one process, can always avoid that step.",
+   "zh": "Fischer、Lynch 和 Paterson 的证明建立在一个想法之上。<bookmark mark='a'/>一个格局是对一切的快照：每个进程的状态，以及每一条在途的消息。<bookmark mark='b'/>如果这次运行无论怎样继续下去，最后都判定为零，就称它是零价的；如果无论怎样都判定为一，就是一价的；如果两种结果都还有可能，就是二价的。<bookmark mark='c'/>一个正确的协议，必然会在某一步从二价走到单价：那一步，才是真正做出决定的地方。这个定理表明，一个只控制消息投递顺序、并且可以让一个进程崩溃的对手，总能避开那一步。"
+  },
+  "f47b96e1fe1a": {
+   "scene": "Flp",
+   "en": "We can watch the dilemma on tiny protocols. Three processes, each with a bit; one may crash. Each sends its bit to the others, and our explorer tries every order of delivery and every crash. <bookmark mark='a'/> The first protocol waits for two values, since it cannot wait for a process that may have crashed, and decides the majority, breaking ties toward zero. Three input patterns are bivalent, and in each of them some schedule makes two processes decide differently: one hears zero and one, the other hears one and one. <bookmark mark='b'/> The second waits for all three values. It never disagrees, but if one process crashes, the others wait for ever. <bookmark mark='c'/> Wait too little and you can be wrong; wait for everyone and you can be stuck. FLP says every deterministic protocol, however clever, falls into one of these two holes.",
+   "zh": "我们可以在很小的协议上看清这个两难。三个进程，各持一个比特；其中一个可能崩溃。每个进程把自己的比特发给其他进程，而我们的探索器尝试每一种投递顺序和每一种崩溃。<bookmark mark='a'/>第一个协议等待两个值，因为它不能去等一个可能已经崩溃的进程，然后按多数做决定，平局时取零。有三种输入模式是二价的，在每一种里，都有某个调度让两个进程做出不同的决定：一个听到的是零和一，另一个听到的是一和一。<bookmark mark='b'/>第二个协议等待全部三个值。它从不出现分歧，但只要有一个进程崩溃，其他进程就会永远等下去。<bookmark mark='c'/>等得太少，你可能会错；等所有人，你可能会卡住。FLP 说，每一个确定性协议，无论多么巧妙，都会落进这两个坑中的一个。"
+  },
+  "f658d9828886": {
+   "scene": "Flp",
+   "en": "The proof has two lemmas. <bookmark mark='a'/> The first says some starting configuration is bivalent. Line up the inputs from all zeros to all ones, changing one process at a time. The first is zero-valent and the last one-valent, so somewhere two neighbours differ. They differ only in one process's input, and if that process crashes at the very start, no one can tell them apart, so they cannot have opposite valencies after all: one of them must be bivalent. We saw three such configurations in our table. <bookmark mark='b'/> The second lemma says that from a bivalent configuration, whatever message is pending, the adversary can deliver it and still land somewhere bivalent. Otherwise there would be a critical step, and a case analysis shows that steps on different processes commute, while a step on the same process can be hidden by crashing that process. <bookmark mark='c'/> Now start bivalent and keep delivering the oldest message, staying bivalent each time. Every message arrives eventually; no one is ever silenced; and no one ever decides.",
+   "zh": "这个证明有两个引理。<bookmark mark='a'/>第一个说，某个初始格局是二价的。把输入从全零到全一排成一列，每次只改变一个进程的输入。第一个是零价的，最后一个是一价的，所以中间某处有两个相邻的格局，价不相同。它们只在一个进程的输入上有差别，而如果那个进程在一开始就崩溃，谁也分辨不出它们，所以它们终究不可能有相反的价：其中一个必定是二价的。我们在表里看到过三个这样的格局。<bookmark mark='b'/>第二个引理说，从一个二价格局出发，无论哪条消息在等待投递，对手都可以投递它，并且仍然落在某个二价格局上。否则就会存在一个关键步，而分情况讨论表明，不同进程上的步骤可以交换次序，同一进程上的步骤则可以通过让那个进程崩溃而被掩盖。<bookmark mark='c'/>现在从二价出发，一直投递最老的那条消息，每次都保持二价。每条消息最终都会到达；没有谁被永远噤声；而也没有谁会做出决定。"
+  },
+  "13ba0e855640": {
+   "scene": "Flp",
+   "en": "FLP is about guarantees, and there are three ways to weaken what is guaranteed. <bookmark mark='a'/> Give up determinism: flip coins. The adversary controls the schedule but cannot predict the coins, and Michael Ben-Or's protocol of 1983 terminates with probability one. <bookmark mark='b'/> Give up pure asynchrony: assume the network eventually behaves, for long enough. Dwork, Lynch and Stockmeyer showed that protocols can then be always safe, and live whenever that happens. <bookmark mark='c'/> Or add an oracle: a failure detector, which in practice is a timeout that is sometimes wrong. <bookmark mark='d'/> What nobody can have is a deterministic protocol that is always safe and always live. Paxos and Raft choose: safety always, liveness only while the network is good. That is what the five Pebbles gave up.",
+   "zh": "FLP 讲的是保证，而削弱保证的方式有三种。<bookmark mark='a'/>放弃确定性：抛硬币。对手控制调度，却无法预测硬币，Michael Ben-Or 1983 年的协议以概率一终止。<bookmark mark='b'/>放弃纯粹的异步：假设网络最终会守规矩，并且守得足够久。Dwork、Lynch 和 Stockmeyer 证明了，这样一来，协议就能始终安全，并且只要网络守规矩，就能保持活性。<bookmark mark='c'/>或者加一个预言机：故障检测器，在实践中就是一个有时会出错的超时。<bookmark mark='d'/>谁也得不到的，是一个始终安全、又始终有活性的确定性协议。Paxos 和 Raft 做出了选择：安全性永远保证，活性只在网络良好时保证。这正是那五台 Pebble 所放弃的。"
+  },
+  "65166a78021d": {
+   "scene": "Flp",
+   "en": "Here is Ben-Or's protocol at work. <bookmark mark='a'/> In each phase every process reports its value. If a majority reports the same value, a process proposes it; if more than f processes propose the same value, it decides; if it sees any proposal it adopts that value, and otherwise it flips a coin. Once enough coins agree, the next phase decides. <bookmark mark='b'/> With five processes, two of them crashed, and random delays, we ran it two thousand times. On average it decided in four rounds, three quarters of the time within five, and the longest run took twenty-seven. <bookmark mark='c'/> It never disagreed. It always terminated, eventually, but no bound on the number of rounds holds in every run, exactly as FLP requires.",
+   "zh": "这是 Ben-Or 的协议在运行。<bookmark mark='a'/>在每个阶段，每个进程报告自己的值。如果多数派报告了同一个值，进程就提议这个值；如果超过 f 个进程提议了同一个值，它就做出决定；如果它看到了任何提议，就采纳那个值，否则就抛硬币。一旦足够多的硬币结果一致，下一个阶段就会做出决定。<bookmark mark='b'/>五个进程，其中两个崩溃，再加上随机延迟，我们把它运行了两千次。平均来看，它在四轮内做出决定，四分之三的情况在五轮以内，最长的一次用了二十七轮。<bookmark mark='c'/>它从未出现分歧。它总会终止，最终总会，但没有任何一个轮数上限能在每次运行中都成立，这恰恰是 FLP 所要求的。"
+  },
+  "4e9481e7ade5": {
+   "scene": "Paxos",
+   "en": "Chapter six. Paxos.",
+   "zh": "第六章。Paxos。"
+  },
+  "cd3dd00c9091": {
+   "scene": "Paxos",
+   "en": "Leslie Lamport wrote Paxos up in 1989 as the legislature of an imaginary Greek island, and the parable was so baffling that the paper waited nine years to be published. Here it is plainly. Some processes propose values, and a set of acceptors, five here, vote. <bookmark mark='a'/> In phase one a proposer picks a ballot number larger than any it has used, and asks every acceptor to prepare. <bookmark mark='b'/> Each acceptor that has not promised a higher ballot promises to ignore lower ones from now on, and reports the highest-numbered proposal it has already accepted, if any. <bookmark mark='c'/> With promises from a majority, the proposer enters phase two. It must propose the value of the highest ballot reported to it; only if none was reported may it propose its own. <bookmark mark='d'/> Acceptors accept unless they have since promised a higher ballot, and a value is chosen the moment a majority have accepted it in the same ballot.",
+   "zh": "Leslie Lamport 在 1989 年写下了 Paxos，把它写成一个虚构希腊岛屿上的议会，这个寓言令人如此费解，以至于论文等了九年才得以发表。这里我们直白地讲。一些进程提议值，一组接受者投票，这里是五个。<bookmark mark='a'/>在第一阶段，提议者选一个比它用过的任何编号都大的选票编号，请求每个接受者做准备。<bookmark mark='b'/>每个还没有对更高选票做出承诺的接受者，就承诺从此忽略更低的选票，并报告它已经接受过的、编号最高的提议，如果有的话。<bookmark mark='c'/>拿到多数派的承诺后，提议者进入第二阶段。它必须提议报告给它的最高选票的那个值；只有在没有任何报告时，才可以提议它自己的值。<bookmark mark='d'/>接受者会接受，除非它在此期间已经承诺了更高的选票；而一旦多数派在同一张选票中接受了某个值，这个值就在那一刻被选定。"
+  },
+  "f291a583d644": {
+   "scene": "Paxos",
+   "en": "Safety is a short induction. <bookmark mark='a'/> Suppose v was chosen in ballot b. We show every accept request with a larger ballot carries v. <bookmark mark='b'/> Take such a ballot, b prime. Its proposer collected promises from some majority, and the majority that accepted v in ballot b overlaps it, because any two majorities of five acceptors share at least one. <bookmark mark='c'/> That shared acceptor reported having accepted something in ballot b or later, so the highest ballot reported to the proposer lies between b and b prime, and by the induction its value is v. The proposer is forced to propose v. <bookmark mark='d'/> So whatever happens later, and however messages are delayed, no other value can ever be chosen. The proof uses no timing assumption at all; the intersection of majorities does all the work.",
+   "zh": "安全性是一个简短的归纳。<bookmark mark='a'/>假设 v 在选票 b 中被选定。我们证明，每个选票更大的接受请求都携带 v。<bookmark mark='b'/>取这样一张选票，b 撇。它的提议者从某个多数派那里收集了承诺，而在选票 b 中接受了 v 的那个多数派与它有重叠，因为五个接受者中的任意两个多数派，至少共享一个成员。<bookmark mark='c'/>那个共享的接受者报告说，它在选票 b 或更晚的选票中接受过某个值，所以报告给提议者的最高选票位于 b 和 b 撇之间，而由归纳假设，它的值就是 v。提议者被迫提议 v。<bookmark mark='d'/>所以无论之后发生什么，无论消息怎样延迟，都不可能再有别的值被选定。这个证明完全不用任何时间假设；所有的工作，都由多数派的交集完成。"
+  },
+  "6c152bffa391": {
+   "scene": "Paxos",
+   "en": "Paxos is always safe, but it need not make progress. <bookmark mark='a'/> Two proposers can duel: A prepares ballot one, B prepares ballot two before A's accepts arrive, so A's accepts are refused; A prepares ballot three, which refuses B's accepts; and so on. We ran it four hundred times with one to four proposers, five percent loss, and proposers that retry the instant they are refused. With four, a value took thirty-four ballots on average. With a random pause before retrying, about four. <bookmark mark='b'/> Safety held in every run; only progress suffered, which is exactly the freedom FLP leaves. <bookmark mark='c'/> The real cure is to elect one distinguished proposer, a leader, and electing a leader needs timeouts, so it relies on the network eventually behaving.",
+   "zh": "Paxos 始终安全，但它不一定能取得进展。<bookmark mark='a'/>两个提议者可能会决斗：A 准备选票一，B 在 A 的接受请求到达之前准备了选票二，于是 A 的接受请求被拒绝；A 再准备选票三，这又让 B 的接受请求被拒绝；如此往复。我们把它运行了四百次，提议者有一到四个，丢包率百分之五，而且提议者一被拒绝就立即重试。有四个提议者时，选定一个值平均要三十四张选票。如果重试前随机停顿一下，大约四张。<bookmark mark='b'/>每次运行中安全性都成立；受损的只有进展，这正是 FLP 留下的那份自由。<bookmark mark='c'/>真正的解药是选出一个特殊的提议者，也就是领导者，而选举领导者需要超时，所以它依赖于网络最终守规矩。"
+  },
+  "89ea7e5d7a9b": {
+   "scene": "Paxos",
+   "en": "One decision is not a system. Multi-Paxos runs one instance per slot of a log. <bookmark mark='a'/> A stable leader runs phase one once, for all future slots at once, and from then on each command costs a single round trip to a majority. <bookmark mark='b'/> Google built its Chubby lock service on this, and later Spanner. Brian Oki and Barbara Liskov's viewstamped replication, of 1988, is essentially the same protocol, found independently. <bookmark mark='c'/> But the engineers who built Chubby wrote that the gap between the paper and a working system was enormous: disk corruption, leases, snapshots, changing the set of machines, all left as exercises. Raft was designed to close that gap.",
+   "zh": "一个决定还不是一个系统。Multi-Paxos 为日志的每个槽位运行一个实例。<bookmark mark='a'/>一个稳定的领导者只运行一次第一阶段，一次性覆盖未来所有的槽位，从那以后，每条命令只需要到多数派的一次往返。<bookmark mark='b'/>Google 在此基础上构建了它的 Chubby 锁服务，后来又构建了 Spanner。Brian Oki 和 Barbara Liskov 1988 年的视图戳复制，本质上是同一个协议，是独立发现的。<bookmark mark='c'/>但构建 Chubby 的工程师们写道，论文与一个能运行的系统之间，差距是巨大的：磁盘损坏、租约、快照、更换机器集合，全都留作了习题。Raft 正是为了弥合这道鸿沟而设计的。"
+  },
+  "378ed4d99025": {
+   "scene": "Raft",
+   "en": "Chapter seven. Raft.",
+   "zh": "第七章。Raft。"
+  },
+  "ba3aa10e0fcc": {
+   "scene": "Raft",
+   "en": "Diego Ongaro and John Ousterhout designed Raft in 2014 with one explicit goal: to be understood. It decomposes consensus into leader election, log replication and safety. <bookmark mark='a'/> Every server is a follower, a candidate or a leader. A follower that hears nothing from a leader for a while times out and becomes a candidate; a candidate that gathers votes from a majority becomes leader; anyone who sees a message from a higher term steps down to follower. <bookmark mark='b'/> Time is cut into numbered terms, each with at most one leader, and every message carries its sender's term, which plays the role of Paxos's ballot. <bookmark mark='c'/> In a study with students at Stanford and Berkeley, Raft was indeed easier to learn than Paxos.",
+   "zh": "Diego Ongaro 和 John Ousterhout 在 2014 年设计了 Raft，目标只有一个，而且明明白白：要让人看得懂。它把共识分解为领导者选举、日志复制和安全性。<bookmark mark='a'/>每台服务器要么是追随者，要么是候选者，要么是领导者。一个追随者如果一段时间都没有收到领导者的消息，就会超时，成为候选者；一个候选者如果拿到多数派的选票，就成为领导者；任何人只要看到来自更高任期的消息，就退回追随者。<bookmark mark='b'/>时间被切分成编了号的任期，每个任期最多一个领导者，每条消息都携带发送方的任期，它扮演的正是 Paxos 中选票的角色。<bookmark mark='c'/>在一项针对斯坦福和伯克利学生的研究中，Raft 确实比 Paxos 更容易学。"
+  },
+  "bd9e7a7d5cdf": {
+   "scene": "Raft",
+   "en": "An election. <bookmark mark='a'/> The candidate increments the term, votes for itself, and asks everyone else. Each server grants one vote per term, to the first candidate that asks, and only if that candidate's log is at least as up to date as its own; we will see why. <bookmark mark='b'/> If two servers time out at the same moment, they split the votes, nobody wins, and they time out together again: FLP's endless indecision, in practice. Raft's remedy is to randomize the timeouts. <bookmark mark='c'/> We crashed the leader of five servers three hundred times and timed the election. With identical timeouts, nobody was ever elected, not even at the start. With two percent of randomness, most runs never elected a leader either, and the rest needed ten terms. With timeouts spread over a factor of two, as the paper recommends, a new leader took one term and under two hundred milliseconds.",
+   "zh": "一次选举。<bookmark mark='a'/>候选者把任期加一，给自己投票，然后向其他所有人请求选票。每台服务器每个任期只投一票，投给第一个来请求的候选者，而且只有当那个候选者的日志至少和自己的一样新时才投；我们会看到这是为什么。<bookmark mark='b'/>如果两台服务器在同一时刻超时，它们就会分掉选票，谁也赢不了，然后又一起超时：这就是 FLP 那种无休止的犹豫不决，出现在了实践中。Raft 的补救办法是把超时随机化。<bookmark mark='c'/>我们让五台服务器中的领导者崩溃了三百次，并给选举计时。超时完全相同时，从来没有选出过领导者，连一开始都没有。加上百分之二的随机性，大多数运行也从未选出领导者，其余的需要十个任期。超时分布在两倍的范围内，正如论文所推荐的，新的领导者只用了一个任期，不到两百毫秒。"
+  },
+  "c9d7f25248de": {
+   "scene": "Raft",
+   "en": "Once elected, the leader takes commands from clients, appends them to its log, and sends them to the followers. Each square here is a log entry, labelled with the term in which a leader created it. <bookmark mark='a'/> Each AppendEntries message carries the new entries and the index and term of the entry just before them. A follower whose log does not hold that entry refuses, and the leader backs up one entry and tries again, until it finds where they agree; then the follower discards anything after that point and takes the leader's entries. <bookmark mark='b'/> This gives the log matching property: if two logs hold an entry with the same index and term, they are identical up to that point, by induction, since every append checked its predecessor. <bookmark mark='c'/> The third follower here holds two entries from term two that a deposed leader never managed to commit. They will be overwritten.",
+   "zh": "领导者一旦当选，就从客户端接收命令，把它们追加到自己的日志里，再发送给追随者。这里的每个方块是一个日志条目，标着创建它的领导者所在的任期。<bookmark mark='a'/>每条 AppendEntries 消息携带新的条目，以及紧挨在它们之前那个条目的索引和任期。追随者的日志里如果没有那个条目，就会拒绝，领导者就后退一个条目再试，直到找到双方一致的位置；然后追随者丢弃那个位置之后的所有内容，接收领导者的条目。<bookmark mark='b'/>这就给出了日志匹配性质：如果两份日志在相同的索引上有任期相同的条目，那么到那个位置为止，它们完全相同；这由归纳可得，因为每一次追加都检查了它的前一个条目。<bookmark mark='c'/>这里的第三个追随者持有两个来自任期二的条目，一个被废黜的领导者始终没能提交它们。它们将被覆盖。"
+  },
+  "85a75bbe7005": {
+   "scene": "Raft",
+   "en": "When is an entry safe? <bookmark mark='a'/> An entry is committed once the leader that created it has stored it on a majority of servers, and committed entries are applied, in order, to each server's state machine. <bookmark mark='b'/> Commitment must survive changes of leader. That is the job of the voting restriction: a server votes only for a candidate whose log is at least as up to date, and since a winner needs a majority of votes, and the entry is on a majority, some voter holds it, so the winner must too. Every committed entry is in every later leader's log. <bookmark mark='c'/> There is one subtle trap, the paper's Figure 8. A leader must not commit an entry from an earlier term just by counting replicas: such an entry can sit on a majority and still be overwritten by a later leader. It commits old entries only indirectly, by committing one of its own term after them. <bookmark mark='d'/> We planted exactly that bug in our Raft. In a thousand random fault schedules, it was exposed once: a later leader lacked an entry that had been committed. The bug is real, and random testing barely finds it.",
+   "zh": "一个条目什么时候是安全的？<bookmark mark='a'/>一旦创建它的领导者把它存到了多数派服务器上，这个条目就被提交了，而已提交的条目会按顺序应用到每台服务器的状态机上。<bookmark mark='b'/>提交必须在领导者更替之后依然有效。这正是投票限制的任务：服务器只投票给日志至少和自己一样新的候选者，而既然获胜者需要多数派的选票，这个条目又在多数派上，那么必有某个投票者持有它，所以获胜者也必定持有它。每个已提交的条目，都在之后每一个领导者的日志中。<bookmark mark='c'/>还有一个微妙的陷阱，就是论文中的图八。领导者不能仅仅靠数副本数，来提交一个来自更早任期的条目：这样的条目可能已经位于多数派上，却仍然会被之后的领导者覆盖。它只能间接地提交旧条目，办法是在它们之后提交一条自己任期的条目。<bookmark mark='d'/>我们在自己的 Raft 里恰好埋下了这个漏洞。在一千个随机故障调度中，它只暴露了一次：一个之后的领导者，缺少一个已经提交的条目。这个漏洞是真实存在的，而随机测试几乎找不到它。"
+  },
+  "9b0165c8523c": {
+   "scene": "OurRaft",
+   "en": "Chapter eight. Our Raft, attacked.",
+   "zh": "第八章。我们的 Raft，遭受攻击。"
+  },
+  "a0506353001b": {
+   "scene": "OurRaft",
+   "en": "Our Raft is about three hundred lines of Python, following the paper's one-page summary of the rules. Correctness is not something you can see by reading it, so we check, after every single event, the four properties the paper proves. <bookmark mark='a'/> Election safety: at most one leader per term. <bookmark mark='b'/> Log matching. <bookmark mark='c'/> Leader completeness: a committed entry is in the log of every later leader. <bookmark mark='d'/> And the one that users care about: no two servers ever apply different commands at the same position. <bookmark mark='e'/> Servers keep their term, their vote and their log across crashes, as if on disk, and forget everything else; messages are delayed, lost one in ten, and cut off by partitions.",
+   "zh": "我们的 Raft 大约有三百行 Python，遵循的是论文里那一页的规则摘要。正确性不是读一读代码就能看出来的，所以我们在每一个事件之后，都检查论文所证明的四条性质。<bookmark mark='a'/>选举安全：每个任期最多一个领导者。<bookmark mark='b'/>日志匹配。<bookmark mark='c'/>领导者完整性：已提交的条目，在之后每一个领导者的日志中。<bookmark mark='d'/>还有用户真正关心的那一条：任何两台服务器，都不会在同一位置上应用不同的命令。<bookmark mark='e'/>服务器在崩溃后保留它们的任期、选票和日志，就像存在磁盘上一样，其余的全部忘掉；消息会被延迟，每十条丢一条，还会被分区切断。"
+  },
+  "ab57c2db7c3d": {
+   "scene": "OurRaft",
+   "en": "Here is the storm from the opening again, now as each server's commit index: how many log entries it knows to be committed. <bookmark mark='a'/> In calm weather the five lines climb together, a few milliseconds apart. When the leader crashes, its line drops to zero, because the commit index is not saved to disk, and the others pause for a fifth of a second, elect a new leader and climb on. <bookmark mark='b'/> Through the partition every line is flat. The side with the old leader has only two servers, and the other side has two live servers of three, so neither has a majority of five. Raft chooses consistency over availability, exactly as Part 39's CAP theorem says something must. <bookmark mark='c'/> When the network heals, the restarted servers relearn everything from the new leader, and within a second all five lines are together again.",
+   "zh": "这又是开头的那场风暴，现在画的是每台服务器的提交索引：它知道已经提交的日志条目有多少。<bookmark mark='a'/>天气平静时，五条线一起攀升，彼此只差几毫秒。领导者崩溃时，它的线掉到零，因为提交索引并不存到磁盘上，其他服务器则停顿五分之一秒，选出新的领导者，继续攀升。<bookmark mark='b'/>在分区期间，每条线都是平的。有旧领导者的那一侧只有两台服务器，另一侧三台里只有两台活着，所以哪一侧都没有五台中的多数派。Raft 选择一致性而不是可用性，正如第39部分的 CAP 定理所说，总有一样必须让步。<bookmark mark='c'/>网络恢复后，重启的服务器从新领导者那里重新学到一切，不到一秒，五条线又重新汇合在一起。"
+  },
+  "23c645f0653b": {
+   "scene": "OurRaft",
+   "en": "We ran a thousand six-second storms against correct Raft and against three versions with one rule broken each. <bookmark mark='a'/> Correct Raft: no violation in any run, with random faults or with targeted ones. <bookmark mark='b'/> A version that commits older terms' entries by counting replicas, the Figure 8 trap: broken once in a thousand. <bookmark mark='c'/> A version whose voters skip the up-to-date check: broken in eight hundred and seventy-seven, losing committed entries all over the place. <bookmark mark='d'/> A version that forgets its vote when it restarts, so it can vote twice in a term: random faults never caught it. But aim one fault, crash a voter in the instant after it votes, and eighty-seven runs elected two leaders in the same term. <bookmark mark='e'/> Testing distributed systems is a search problem, and where you look matters more than how long.",
+   "zh": "我们针对正确的 Raft，以及三个各破坏了一条规则的版本，运行了一千场、每场六秒的风暴。<bookmark mark='a'/>正确的 Raft：无论是随机故障还是有针对性的故障，没有任何一次运行出现违规。<bookmark mark='b'/>一个靠数副本数来提交更早任期条目的版本，也就是图八的陷阱：一千次中出错一次。<bookmark mark='c'/>一个投票者跳过“日志是否够新”检查的版本：一千次中出错八百七十七次，到处丢失已提交的条目。<bookmark mark='d'/>一个重启时会忘记自己选票的版本，因此能在一个任期里投两次票：随机故障从来没抓到它。但只要瞄准一个故障，在投票者投票之后的那一瞬间让它崩溃，就有八十七次运行在同一个任期里选出了两个领导者。<bookmark mark='e'/>测试分布式系统是一个搜索问题，往哪里找，比找多久更重要。"
+  },
+  "c0a3a8620efb": {
+   "scene": "OurRaft",
+   "en": "What is the log for? Fred Schneider's state machine approach, of 1990. <bookmark mark='a'/> If every replica starts in the same state and applies the same deterministic commands in the same order, every replica ends in the same state. Consensus supplies the order. Any service, a lock server, a key-value store, a configuration database, can be made fault-tolerant this way. <bookmark mark='b'/> The commands must really be deterministic: no reading the clock, no random numbers, not even iterating over a hash table whose order depends on a random seed, as Part 17's tables do. etcd, ZooKeeper and Consul are exactly this, and Kubernetes keeps its whole state in etcd.",
+   "zh": "日志是用来做什么的？Fred Schneider 1990 年的状态机方法。<bookmark mark='a'/>如果每个副本都从相同的状态出发，按相同的顺序应用相同的确定性命令，那么每个副本最终都处于相同的状态。共识提供的，就是这个顺序。任何服务，锁服务器、键值存储、配置数据库，都可以这样做到容错。<bookmark mark='b'/>这些命令必须真正是确定性的：不读时钟，不用随机数，甚至不能遍历一个顺序取决于随机种子的哈希表，而第17部分的表正是这样。etcd、ZooKeeper 和 Consul 正是这样的系统，而 Kubernetes 把它的全部状态都存放在 etcd 里。"
+  },
+  "d81d547ca72d": {
+   "scene": "OurRaft",
+   "en": "One more trap: reads. <bookmark mark='a'/> A leader might answer a read from its own state, but it may have been deposed without knowing it, cut off by a partition while a new leader commits writes on the other side. Its answer would be stale. <bookmark mark='b'/> To be linearizable, the leader first confirms that it is still leader, with one round of heartbeats to a majority, or puts the read through the log like a write. <bookmark mark='c'/> Or it holds a lease: followers promise not to elect anyone else for some period, so the leader may answer alone until the lease runs out. That trades a round trip for an assumption about clocks. <bookmark mark='d'/> With a ten-second lease and clocks drifting by a hundred parts per million, the margin must exceed two milliseconds, which is easy, but a process paused for a long garbage collection, as in Part 15, can outlive any lease and wake up believing it still leads.",
+   "zh": "还有一个陷阱：读。<bookmark mark='a'/>领导者也许会根据自己的状态来回答一次读请求，但它可能已经被废黜而不自知：被分区切断，而另一侧的新领导者正在提交写入。它的回答就会是过时的。<bookmark mark='b'/>为了做到可线性化，领导者要先确认自己仍是领导者，向多数派发一轮心跳；或者像写入一样，让读请求经过日志。<bookmark mark='c'/>或者它持有一份租约：追随者承诺在一段时间内不选举任何别人，于是领导者在租约到期之前，可以独自回答。这是用一个关于时钟的假设，换掉了一次往返。<bookmark mark='d'/>租约为十秒，时钟漂移为百万分之一百，余量就必须超过两毫秒，这很容易做到；但一个因为漫长的垃圾回收而停顿的进程，就像第15部分那样，可以活过任何租约，醒来时还以为自己仍是领导者。"
+  },
+  "591121596585": {
+   "scene": "Byzantine",
+   "en": "Chapter nine. Byzantine generals.",
+   "zh": "第九章。拜占庭将军。"
+  },
+  "a580fb0106d0": {
+   "scene": "Byzantine",
+   "en": "In 1982 Lamport, Robert Shostak and Marshall Pease asked what happens when the faulty machines may lie. They told it as Byzantine generals: a commander sends an order, attack or retreat, to lieutenants, who then tell each other what they heard. Loyal lieutenants must agree, and if the commander is loyal, they must obey it. <bookmark mark='a'/> With three generals and one traitor it is impossible. On the left the commander is loyal and orders attack, but traitorous lieutenant one tells lieutenant two that the commander said retreat. <bookmark mark='b'/> On the right the commander is the traitor: it orders lieutenant one to retreat and lieutenant two to attack, and loyal lieutenant one truthfully reports: he said retreat. <bookmark mark='c'/> Lieutenant two receives exactly the same messages in both worlds, so it must act the same in both. On the left it must attack, to obey a loyal commander, so on the right it attacks too. Now apply the same argument to lieutenant one, comparing the right-hand world with one where the commander loyally orders retreat and lieutenant two is the liar: lieutenant one must retreat. On the right, the two loyal lieutenants disagree.",
+   "zh": "1982 年，Lamport、Robert Shostak 和 Marshall Pease 提出了一个问题：如果出故障的机器会说谎，会发生什么？他们把它讲成拜占庭将军的故事：一位指挥官向各位副将发出命令，进攻或撤退，副将们再互相转告自己听到了什么。忠诚的副将必须达成一致，而如果指挥官是忠诚的，他们就必须服从它的命令。<bookmark mark='a'/>三位将军、一个叛徒，这是不可能的。在左边，指挥官是忠诚的，下令进攻，但叛徒副将一号告诉副将二号：指挥官说的是撤退。<bookmark mark='b'/>在右边，指挥官是叛徒：它命令副将一号撤退，命令副将二号进攻，而忠诚的副将一号如实转告：他说的是撤退。<bookmark mark='c'/>副将二号在两个世界里收到的消息一模一样，所以它在两个世界里必须做同样的事。在左边，它必须进攻，以服从忠诚的指挥官，所以在右边它也进攻。现在对副将一号用同样的论证，把右边的世界和另一个世界相比：在那里，指挥官忠诚地下令撤退，而说谎的是副将二号。于是副将一号必须撤退。在右边，两位忠诚的副将意见不一。"
+  },
+  "a4917425f690": {
+   "scene": "Byzantine",
+   "en": "With more generals it works. <bookmark mark='a'/> In the oral messages algorithm, OM of m, the commander sends its value, and every lieutenant then acts as commander in a recursive OM of m minus one, to tell the others what it heard; each lieutenant decides the majority. <bookmark mark='b'/> We checked it exhaustively, letting every message a traitor sends be zero or one in every combination. Three generals with one traitor: broken, as the argument says. Four generals with one traitor, wherever it is: always agree. Four with two traitors: broken. Seven generals, two traitors and two rounds: always agree, in every strategy we tried.",
+   "zh": "将军多一些，就行得通了。<bookmark mark='a'/>在口头消息算法，也就是 OM m 中，指挥官发出它的值，然后每位副将各自充当指挥官，递归地运行 OM m 减一，把自己听到的告诉其他人；每位副将按多数作出决定。<bookmark mark='b'/>我们穷举地检验了它，让叛徒发出的每一条消息都取零或一，遍历所有组合。三位将军、一个叛徒：失败，正如论证所说。四位将军、一个叛徒，无论叛徒在哪里：总是一致。四位将军、两个叛徒：失败。七位将军、两个叛徒、两轮：总是一致，在我们试过的每一种策略下都是如此。"
+  },
+  "fdcca764a4e4": {
+   "scene": "Byzantine",
+   "en": "The bound is exact. <bookmark mark='a'/> Necessary: if three f generals or fewer could tolerate f traitors, divide them into three groups of at most f, and let each of three generals simulate a whole group. That would solve the three-general problem with one traitor, which we just proved impossible. <bookmark mark='b'/> Sufficient: OM of f works whenever there are at least three f plus one generals, though its messages grow as n to the power f plus one. <bookmark mark='c'/> Signatures change everything: a traitor cannot forge what the commander signed, and with the digital signatures of Part 30, agreement is possible with any number of traitors. <bookmark mark='d'/> In an asynchronous network, the three f plus one bound holds for every Byzantine protocol. To survive one liar you need four machines; to survive two, seven.",
+   "zh": "这个界是精确的。<bookmark mark='a'/>必要性：如果三 f 位或更少的将军就能容忍 f 个叛徒，那就把他们分成三组，每组至多 f 位，让三位将军各自模拟一整组。这样就解决了有一个叛徒的三将军问题，而我们刚刚证明了它不可能。<bookmark mark='b'/>充分性：只要至少有三 f 加一位将军，OM f 就行得通，尽管它的消息数按 n 的 f 加一次方增长。<bookmark mark='c'/>签名改变了一切：叛徒无法伪造指挥官签过名的东西，有了第30部分的数字签名，无论有多少叛徒，都能达成一致。<bookmark mark='d'/>在异步网络中，三 f 加一这个界对每一个拜占庭协议都成立。要挺过一个说谎者，你需要四台机器；要挺过两个，需要七台。"
+  },
+  "6f5dba851dcb": {
+   "scene": "Byzantine",
+   "en": "Here is PBFT deciding one request, with four replicas, one of them faulty and silent. <bookmark mark='a'/> The client sends its request to the primary. <bookmark mark='b'/> The primary assigns it a sequence number and sends a pre-prepare to every backup. <bookmark mark='c'/> Each backup that accepts it broadcasts a prepare to all the others. A replica that holds the pre-prepare and matching prepares from two f plus one replicas, itself included, knows that no loyal replica can prepare a different request with this number. <bookmark mark='d'/> Then everyone broadcasts commit, and once two f plus one commits arrive, the request is executed. That second all-to-all round makes the order survive a change of primary. <bookmark mark='e'/> Each replica replies, and the client waits for f plus one identical answers, of which at least one is from a loyal replica. Faulty replica three said nothing, and nothing was lost.",
+   "zh": "这是 PBFT 决定一个请求的过程，一共四个副本，其中一个出了故障，一声不吭。<bookmark mark='a'/>客户端把请求发给主节点。<bookmark mark='b'/>主节点给它分配一个序号，并向每个备份副本发送预准备消息。<bookmark mark='c'/>每个接受了它的备份副本，都向其他所有副本广播一条准备消息。一个副本如果持有预准备消息，以及来自二 f 加一个副本、其中包括它自己的匹配的准备消息，就知道没有哪个忠诚的副本能用这个序号准备另一个请求。<bookmark mark='d'/>接着每个副本都广播提交，一旦收到二 f 加一条提交，就执行这个请求。这第二轮全体对全体的通信，让这个顺序在更换主节点之后依然保得住。<bookmark mark='e'/>每个副本都发出回复，客户端等待 f 加一个相同的答复，其中至少有一个来自忠诚的副本。出故障的副本三什么也没说，而什么也没有丢失。"
+  },
+  "44f3e9ef4238": {
+   "scene": "Byzantine",
+   "en": "Practical Byzantine protocols came much later. <bookmark mark='a'/> Miguel Castro and Barbara Liskov's PBFT, in 1999, ran a file system that tolerated lying replicas at nearly the speed of an unreplicated one. A primary orders the requests, and each passes three phases, pre-prepare, prepare and commit, each waiting for two f plus one matching signed messages, so that any two such quorums share a loyal replica. If the primary misbehaves, a view change replaces it. Every replica talks to every other, so the messages grow as n squared. <bookmark mark='b'/> HotStuff, in 2019, sends votes only to the leader, which combines them into a single threshold signature: linear messages per phase. For a hundred replicas, OM would need ten to the sixty-sixth messages, PBFT about twenty thousand, HotStuff six hundred.",
+   "zh": "实用的拜占庭协议出现得晚得多。<bookmark mark='a'/>Miguel Castro 和 Barbara Liskov 的 PBFT，在 1999 年运行了一个文件系统，它能容忍说谎的副本，速度却几乎和不做复制的文件系统一样快。一个主节点为请求排序，每个请求都要经过三个阶段：预准备、准备和提交，每个阶段都要等待二 f 加一条匹配的签名消息，这样任意两个这样的法定人数都共享一个忠诚的副本。如果主节点行为不端，视图切换就会把它换掉。每个副本都和其他每个副本交谈，所以消息数按 n 的平方增长。<bookmark mark='b'/>HotStuff 在 2019 年提出，它只把投票发给领导者，由领导者把它们合并成单个门限签名：每个阶段的消息数是线性的。对一百个副本来说，OM 需要十的六十六次方条消息，PBFT 大约两万条，HotStuff 六百条。"
+  },
+  "62acccf79292": {
+   "scene": "Nakamoto",
+   "en": "Chapter ten. Nakamoto consensus.",
+   "zh": "第十章。Nakamoto 共识。"
+  },
+  "dcf40c1aa39f": {
+   "scene": "Nakamoto",
+   "en": "Every protocol so far assumes we know who the participants are. Byzantine agreement needs at least three f plus one of them, which presumes counting. <bookmark mark='a'/> On an open network, where anyone can join, one attacker can pretend to be a million participants. In 2008 the pseudonymous Satoshi Nakamoto replaced identities with computation. <bookmark mark='b'/> A block of transactions counts only if its hash, Part 29's SHA-256, falls below a target, which takes on average a fixed amount of guessing to find. Votes are weighted by computing power, which cannot be faked. <bookmark mark='c'/> Every block names its predecessor, and everyone extends the chain with the most work behind it. Two miners may find blocks at once and fork the chain, but one side soon pulls ahead. A merchant trusts a payment once z blocks are built on top of it.",
+   "zh": "到目前为止的每一个协议，都假定我们知道参与者是谁。拜占庭一致至少需要三 f 加一个参与者，这就预设了可以清点人数。<bookmark mark='a'/>在一个任何人都能加入的开放网络上，一个攻击者可以假装成一百万个参与者。2008 年，化名 Satoshi Nakamoto 的人用计算取代了身份。<bookmark mark='b'/>一个装着交易的区块，只有当它的哈希值，也就是第29部分的 SHA-256，落在某个目标值以下时才算数，而要找到这样的区块，平均需要固定数量的猜测。投票按计算能力加权，而计算能力是无法伪造的。<bookmark mark='c'/>每个区块都指明它的前一个区块，每个人都去延长背后工作量最多的那条链。两个矿工可能同时找到区块，让链分叉，但其中一边很快就会领先。一笔付款之上又建起 z 个区块之后，商家才信任这笔付款。"
+  },
+  "50d5888444f0": {
+   "scene": "Nakamoto",
+   "en": "How safe is a payment with z confirmations? <bookmark mark='a'/> An attacker with a share q of the computing power mines a rival chain in secret, one that omits the payment, and races to overtake the honest chain. Each block found is the attacker's with probability q, a random walk biased against it, and from k blocks behind it ever catches up with probability q over p to the k. <bookmark mark='b'/> Nakamoto's paper computed the risk with a Poisson approximation. The exact answer, worked out by Meni Rosenfeld in 2014, uses the negative binomial, and our two hundred thousand simulated races agree with the exact answer, not the paper's: for a ten percent attacker and six confirmations, the risk is not two hundredths of a percent but six hundredths. <bookmark mark='c'/> For a risk of one in a thousand you need six blocks against a ten percent attacker, thirty-two against thirty percent, a hundred and thirty-three against forty. Safety here is probabilistic, and it decays exponentially with waiting.",
+   "zh": "一笔有 z 个确认的付款有多安全？<bookmark mark='a'/>一个拥有计算能力份额 q 的攻击者，秘密地挖一条对手链，其中略去这笔付款，并竞速去超过诚实的链。每找到一个区块，它属于攻击者的概率是 q，这是一个对攻击者不利的有偏随机游走；从落后 k 个区块的位置出发，它最终追上的概率是 q 比 p 的 k 次方。<bookmark mark='b'/>Nakamoto 的论文用泊松近似计算了这个风险。精确的答案由 Meni Rosenfeld 在 2014 年算出，用的是负二项分布，而我们二十万次模拟的竞速吻合的是精确答案，而不是论文：对于一个百分之十的攻击者和六个确认，风险不是百分之零点零二，而是百分之零点零六。<bookmark mark='c'/>要把风险降到千分之一，面对百分之十的攻击者需要六个区块，面对百分之三十需要三十二个，面对百分之四十需要一百三十三个。这里的安全是概率性的，它随着等待呈指数衰减。"
+  },
+  "bcf47d8e27fe": {
+   "scene": "Nakamoto",
+   "en": "Bitcoin's security argument assumed that a miner's best strategy is to follow the rules. In 2014 Ittay Eyal and Emin Gün Sirer showed otherwise. <bookmark mark='a'/> A selfish pool keeps the blocks it finds secret, and publishes them only to override blocks the honest miners find, so the honest work is wasted. <bookmark mark='b'/> We simulated two hundred thousand blocks at each pool size, and the results lie on their formula. <bookmark mark='c'/> On the dashed line, revenue equals hash power, the fair share. The selfish pool rises above it once it has a third of the power, or a quarter if half the honest miners side with its blocks in a tie. <bookmark mark='d'/> An honest majority is not enough. In open systems, the incentives are part of the protocol.",
+   "zh": "Bitcoin 的安全论证假定，矿工的最佳策略就是遵守规则。2014 年，Ittay Eyal 和 Emin Gün Sirer 证明了事实并非如此。<bookmark mark='a'/>一个自私的矿池把自己找到的区块秘而不宣，只在要推翻诚实矿工找到的区块时才发布它们，于是诚实的工作就白费了。<bookmark mark='b'/>我们在每一种矿池规模下都模拟了二十万个区块，结果都落在他们的公式上。<bookmark mark='c'/>在虚线上，收益等于算力，也就是公平的份额。一旦自私矿池拥有三分之一的算力，它就会升到这条线之上；如果在平局时有一半诚实矿工站在它的区块一边，那么四分之一就够了。<bookmark mark='d'/>诚实的多数是不够的。在开放系统中，激励本身就是协议的一部分。"
+  },
+  "a551316a7941": {
+   "scene": "Nakamoto",
+   "en": "Open membership has a price. <bookmark mark='a'/> Bitcoin settles about seven transactions a second, one block every ten minutes, and its miners consume electricity on the scale of a mid-sized country: the cost of voting by computation. <bookmark mark='b'/> Proof of stake weights votes instead by currency deposited, which a validator caught signing conflicting blocks forfeits. Ethereum switched in 2022 and cut its energy use by more than ninety-nine point nine percent. <bookmark mark='c'/> Underneath, proof-of-stake chains run a Byzantine agreement protocol among their validators, and the bound of three f plus one returns, counted in coins rather than machines. <bookmark mark='d'/> The difference that remains is finality: Nakamoto's chain is only ever probably final, more so the longer you wait; a BFT decision is final the moment a quorum signs it.",
+   "zh": "开放的成员资格是有代价的。<bookmark mark='a'/>Bitcoin 每秒大约结算七笔交易，每十分钟一个区块，而它的矿工消耗的电力相当于一个中等国家的规模：这就是用计算来投票的代价。<bookmark mark='b'/>权益证明则按存入的货币来给投票加权，一个验证者如果被抓到签署相互冲突的区块，这笔押金就会被罚没。Ethereum 在 2022 年完成了转换，把能耗削减了百分之九十九点九以上。<bookmark mark='c'/>在底层，权益证明的链在它们的验证者之间运行一个拜占庭一致协议，于是三 f 加一这个界又回来了，只不过按币来计数，而不是按机器。<bookmark mark='d'/>剩下的区别是终局性：Nakamoto 的链永远只是很可能已经终局，等得越久，可能性越大；而一个 BFT 决定，在法定人数签名的那一刻就是终局的。"
+  },
+  "ff1b229f55ef": {
+   "scene": "Frontier",
+   "en": "Chapter eleven. Frontier: proving and breaking.",
+   "zh": "第十一章。前沿：证明与破坏。"
+  },
+  "232ca8fdead4": {
+   "scene": "Frontier",
+   "en": "How does anyone know a distributed system is correct? There are three answers, and the field uses all of them. <bookmark mark='a'/> Check a model. Engineers at Amazon wrote specifications of S3, DynamoDB and other systems in Lamport's TLA plus, and the model checker found bugs that design reviews and testing had missed, one needing a precise sequence of thirty-five steps. <bookmark mark='b'/> Test the real thing. Kyle Kingsbury's Jepsen partitions real databases and checks the histories against linearizability, the property of Part 33, and it has found lost writes and stale reads in a long list of systems whose documentation promised otherwise. <bookmark mark='c'/> Or prove the implementation itself. In 2015 the Verdi project, in Coq, and IronFleet, in Dafny, verified working implementations of Raft and Paxos, at the cost of several lines of proof for every line of code. <bookmark mark='d'/> Our own campaign shows why the first two are hard: the Figure 8 bug surfaced once in a thousand random storms, and the forgotten vote never, until one well-aimed fault exposed it in eighty-seven.",
+   "zh": "人们怎么知道一个分布式系统是正确的？有三种答案，而这个领域三种都在用。<bookmark mark='a'/>检验一个模型。Amazon 的工程师们用 Lamport 的 TLA+ 为 S3、DynamoDB 和其他系统写了规约，模型检验器找出了设计评审和测试都漏掉的缺陷，其中一个需要一串精确的三十五步才会出现。<bookmark mark='b'/>测试真实的系统。Kyle Kingsbury 的 Jepsen 给真实的数据库制造网络分区，并对照可线性化，也就是第33部分的那个性质，来检查历史记录；它在一长串系统中找到了丢失的写入和过时的读取，而这些系统的文档承诺的却是另一回事。<bookmark mark='c'/>或者证明实现本身。2015 年，用 Coq 写的 Verdi 项目和用 Dafny 写的 IronFleet，验证了 Raft 和 Paxos 的可运行实现，代价是每一行代码都要配上好几行证明。<bookmark mark='d'/>我们自己的测试战役说明了为什么前两种方法很难：图八的那个缺陷在一千场随机风暴中只出现了一次，而遗忘投票的缺陷一次也没出现，直到一个瞄得很准的故障在八十七次运行中把它暴露了出来。"
+  },
+  "a15083cddf4f": {
+   "scene": "Frontier",
+   "en": "Fifty years of lower bounds say what agreement must cost. <bookmark mark='a'/> Crash failures with clocks: f plus one rounds. Without clocks, no deterministic protocol at all. Lying machines: n at least three f plus one, unless messages are signed. And Danny Dolev and Rüdiger Reischuk proved that any deterministic Byzantine agreement must, in the worst case, send a number of messages growing as n squared. Only in 2022 did protocols for partial synchrony match that bound in the worst case. <bookmark mark='b'/> HotStuff's linear cost per leader is the good case: a run of faulty leaders makes it quadratic again, and designing protocols that are cheap when things go well and optimal when they do not is current research.",
+   "zh": "五十年来的下界，说明了达成一致必须付出什么代价。<bookmark mark='a'/>有时钟的崩溃故障：f 加一轮。没有时钟：根本不存在确定性的协议。会说谎的机器：n 至少是三 f 加一，除非消息带签名。而 Danny Dolev 和 Rüdiger Reischuk 证明了：任何确定性的拜占庭一致协议，在最坏情况下，发送的消息数都必须按 n 的平方增长。直到 2022 年，部分同步下的协议才在最坏情况下达到了这个界。<bookmark mark='b'/>HotStuff 每个领导者的线性代价只是好的情形：一连串出故障的领导者会让它重新变成平方级，而设计出在一切顺利时便宜、在不顺利时又最优的协议，是当前的研究课题。"
+  },
+  "8960ac83a9b6": {
+   "scene": "Frontier",
+   "en": "Where this leaves the field. <bookmark mark='a'/> Finding bugs efficiently: which fault schedules expose which bugs? Random search is hopeless for deep ones, and smarter strategies, guided by coverage or by which messages each result depended on, help in practice, without any theory of how many runs suffice. <bookmark mark='b'/> Verifying what actually runs: proofs cover protocols, but real systems add changes of membership, snapshots and storage that silently corrupts data, and the proofs rarely keep pace with the code. <bookmark mark='c'/> The best achievable combination of latency and message count for Byzantine agreement. <bookmark mark='d'/> And gray failure: machines that are slow, or fail only some requests, which defeat every clean model in this part. <bookmark mark='e'/> This part's research problem asks for a fault-injection strategy that finds all three of our planted Raft bugs in as few runs as possible.",
+   "zh": "这个领域如今走到了哪里。<bookmark mark='a'/>高效地发现缺陷：哪些故障调度会暴露哪些缺陷？对深层的缺陷，随机搜索毫无希望；更聪明的策略，由覆盖率引导，或者由每个结果依赖于哪些消息来引导，在实践中有帮助，但还没有任何理论说明需要运行多少次才够。<bookmark mark='b'/>验证真正在运行的东西：证明覆盖的是协议，但真实系统还加上了成员变更、快照，以及会悄无声息地损坏数据的存储，而证明很少能跟上代码的步伐。<bookmark mark='c'/>拜占庭一致在延迟和消息数上可以达到的最佳组合。<bookmark mark='d'/>还有灰色故障：机器变慢了，或者只让部分请求失败，它们会击败这一部分里每一个干净的模型。<bookmark mark='e'/>这一部分的研究问题，请你设计一种故障注入策略，用尽可能少的运行次数，找出我们植入 Raft 的全部三个缺陷。"
+  },
+  "090def4905ad": {
+   "scene": "Outro",
+   "en": "What we built in this part. The two generals, who cannot be certain. Causality instead of time, with Lamport's clocks and vector clocks, and snapshots of a system that never stops. Consensus in f plus one rounds when time is kept, and FLP's proof that it cannot be guaranteed when it is not. Coins, failure detectors and partial synchrony as the ways around. Paxos and Raft, safe because majorities intersect, and our Raft surviving a thousand storms while its broken twins did not. And traitors: three f plus one, PBFT, HotStuff, and Nakamoto's chain of work.",
+   "zh": "这一部分我们搭建了什么。两位将军，他们永远无法确定。用因果关系代替时间，有 Lamport 时钟和向量时钟，还有对一个永不停止的系统拍下的快照。在时间有保证的时候，f 加一轮就能达成共识；而 FLP 证明了，在时间没有保证的时候，共识无法得到保证。硬币、故障检测器和部分同步，是绕过它的几条路。Paxos 和 Raft，之所以安全，是因为多数派必然相交；我们的 Raft 挺过了一千场风暴，而它那些坏掉的孪生兄弟没有。还有叛徒：三 f 加一、PBFT、HotStuff，以及 Nakamoto 的工作量之链。"
+  },
+  "84ba11d831b2": {
+   "scene": "Outro",
+   "en": "Where this comes back. Part 39 replicates data at scale: quorums, two-phase commit, the CAP theorem, Spanner's atomic clocks, and the Job itself on sixteen Pebbles, one of which crashes. Part 45's Kubernetes keeps its state in etcd, which is Raft. Part 46's stream processors checkpoint with Chandy and Lamport's snapshots. And Part 54 returns to TLA plus and proofs.",
+   "zh": "它们会在哪里再出现。第39部分在大规模上复制数据：法定人数、两阶段提交、CAP 定理、Spanner 的原子钟，还有作业本身，在十六台 Pebble 上运行，其中一台会崩溃。第45部分的 Kubernetes 把它的状态存在 etcd 里，而 etcd 就是 Raft。第46部分的流处理器用 Chandy 和 Lamport 的快照来做检查点。而第54部分会回到 TLA+ 和证明。"
+  },
+  "1689f12457fd": {
+   "scene": "Outro",
+   "en": "In practice. Do not write your own consensus: use etcd, ZooKeeper or Consul for leader election, locks and configuration. Run three or five voters, never four, since four tolerate no more failures than three. Make election timeouts much longer than a round trip, randomize them, and beware of garbage-collection pauses. Give every lock a fencing token that the protected resource checks, or a paused holder will wake up and write. And test with injected faults, aimed at the moments that matter.",
+   "zh": "在实践中。不要自己写共识：用 etcd、ZooKeeper 或 Consul 来做领导者选举、锁和配置。运行三个或五个投票者，绝不要四个，因为四个能容忍的故障并不比三个多。让选举超时远远长于一个往返时间，把它随机化，并当心垃圾回收造成的停顿。给每一把锁配一个隔离令牌，由受保护的资源来检查，否则一个被暂停的持锁者会醒过来，然后写入。还有，用注入的故障来测试，瞄准那些要紧的时刻。"
+  },
+  "87c9c37205e7": {
+   "scene": "Outro",
+   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build problem: add membership changes to our Raft, the part every real deployment needs, and extend the checker to cover them. The last, marked with a star, is a research problem: find a way of injecting faults that exposes all three of our planted bugs quickly, and argue that it would find bugs you have not planted.",
+   "zh": "六道习题，完整解答在这一部分的笔记里。任何一道都可以暂停来看。第五道是动手题：给我们的 Raft 加上成员变更，这是每个真实部署都需要的部分，并扩展检查器来覆盖它。最后一道标着星号，是研究问题：找到一种注入故障的方法，能很快暴露我们植入的全部三个缺陷，并论证它也能找到你没有植入的缺陷。"
+  },
+  "af6a71162967": {
+   "scene": "Outro",
+   "en": "Next time, Part 39: Distributed systems, scale. Replication and quorums, two-phase commit and why it can block for ever, the CAP theorem stated precisely, and Spanner, which buys consistency with atomic clocks. And the Job runs on sixteen Pebbles, one of which crashes in the middle: ledger row fifteen.",
+   "zh": "下一次，第39部分：分布式系统，规模。复制与法定人数，两阶段提交以及它为什么可能永远阻塞，精确表述的 CAP 定理，还有 Spanner，它用原子钟换来了一致性。而作业会在十六台 Pebble 上运行，其中一台会在中途崩溃：账本第十五行。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "这一部分所依据的书和论文都在屏幕上和笔记里。感谢观看。"
+  }
+ },
+ "title_en": "Computer Science, Built: Part 38, Distributed Systems I: Agreement",
+ "chapters_en": {
+  "Hook": "Five Pebbles, one log",
+  "Generals": "1. Partial failure",
+  "Time": "2. Time without a clock",
+  "Snapshot": "3. Snapshots",
+  "Models": "4. Models and consensus",
+  "Flp": "5. FLP",
+  "Paxos": "6. Paxos",
+  "Raft": "7. Raft",
+  "OurRaft": "8. Our Raft, attacked",
+  "Byzantine": "9. Byzantine generals",
+  "Nakamoto": "10. Nakamoto consensus",
+  "Frontier": "11. Frontier: proving and breaking",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}
