@@ -175,7 +175,7 @@ class Delaunay(VoiceoverScene):
     def emst(self):
         d = load("emst")
         P = [tuple(p) for p in d["P"]]
-        f, s = fit(P, center=LEFT * 2.8 + DOWN * 0.35, w=6.6, h=5.6)
+        f, s = fit(P, center=LEFT * 4.0 + DOWN * 0.35, w=5.2, h=5.6)
         head = label(r"The minimum spanning tree lives in the triangulation", font_size=30).to_edge(UP, buff=0.3)
         sd = VGroup(*[Dot(f(p), radius=0.05, color=HEAD) for p in P])
         D = VGroup(*[Line(f(P[int(a)]), f(P[int(b)]), color=GREY_D, stroke_width=1.2) for a, b in d["delaunay"]])
@@ -183,7 +183,7 @@ class Delaunay(VoiceoverScene):
         rows = [[words(r["n"]), words(r["delaunay_edges"]), words(r["pairs"]), r"yes" if r["same"] else r"NO",
                  f"{r['t_delaunay']:.2f} s", f"{r['t_prim']:.2f} s"] for r in d["rows"]]
         tab = grid_table([r"points", r"Delaunay edges", r"all pairs", r"same tree", r"via Delaunay", r"Prim"],
-                         rows, widths=[1.2, 1.7, 1.7, 1.3, 1.5, 1.0], row_h=0.42, font_size=18, mono_cols=(),
+                         rows, widths=[1.2, 1.8, 1.9, 1.3, 1.6, 1.0], row_h=0.44, font_size=20, mono_cols=(),
                          colors=[[WHITE, YES, NO, YES, YES, GREY_A]] * len(rows))
         side = VGroup(
             label(r"if an MST edge $ab$ were not Delaunay, \\ some point inside the circle on $ab$ \\ would give "
@@ -192,9 +192,9 @@ class Delaunay(VoiceoverScene):
             label(r"Kruskal over $3n$ edges instead of $n^2/2$: \\ $O(n \log n)$ in all \ (Shamos and Hoey, 1975)",
                   font_size=21, color=LAM),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.3)
-        if side.width > 7.0:
-            side.width = 7.0
-            side.to_edge(RIGHT, buff=0.3)
+        if side.width > 7.2:
+            side.width = 7.2
+        side.to_edge(RIGHT, buff=0.3)
         with self.voiceover(
             "Here is the claim tested. <bookmark mark='a'/> Seventy points, their Delaunay triangulation in grey, "
             "and in green their minimum spanning tree, the shortest network that connects them all. Every green "
