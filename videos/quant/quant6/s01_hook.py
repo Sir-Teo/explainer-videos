@@ -23,8 +23,9 @@ class Hook(VoiceoverScene):
         card = part_title(PART, r"One regression, five verdicts")
         disc = note(DISCLAIMER, font_size=18, color=GREY_C).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Part six. Financial econometrics. The mathematics of the last two parts describes how prices move. This "
-            "part is about the harder problem: learning from the one history we have, without fooling ourselves."
+            'Part six. Financial econometrics. The mathematics of the last two parts describes how prices move. '
+            'This part is about the harder problem: learning from the one history we have, without fooling '
+            'ourselves.'
         ):
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(disc))
         self.play(FadeOut(card), FadeOut(disc))
@@ -43,11 +44,10 @@ class Hook(VoiceoverScene):
             labs.add(Tex(r"\begin{tabular}{c}" + SHORT[k] + r"\end{tabular}", font_size=18, color=GREY_A).next_to(
                 ax.c2p(i + 0.5, -1), DOWN, buff=0.1))
             vals.add(MathTex(f"{t:.2f}", font_size=24, color=col).next_to(b, UP, buff=0.08))
-        sixth = tbar(ax, 5.5, fe["t_within_cluster"], GREY_C, width=0.55).set_fill(opacity=0.35)
+        sixth = MathTex("?", font_size=36, color=GREY_B).move_to(ax.c2p(5.5, 2.5))
         six_l = Tex(r"\begin{tabular}{c}pooled,\\month effects\end{tabular}", font_size=18, color=GREY_B).next_to(
             ax.c2p(5.5, -1), DOWN, buff=0.1)
-        six_v = MathTex(f"{fe['t_within_cluster']:.2f}", font_size=24, color=GREY_B).next_to(sixth, UP, buff=0.08)
-        six_q = label(r"chapter 4", font_size=18, color=GREY_B).next_to(six_v, UP, buff=0.08)
+        six_q = label(r"chapter 4", font_size=18, color=GREY_B).next_to(sixth, UP, buff=0.08)
         two = DashedLine(ax.c2p(0, 1.96), ax.c2p(6, 1.96), color=GREY_B, stroke_width=2)
         tl = label(r"1.96", font_size=18, color=GREY_B).next_to(ax.c2p(6, 1.96), RIGHT, buff=0.08)
         side = VGroup(
@@ -55,25 +55,31 @@ class Hook(VoiceoverScene):
             label(r"49 industries, 1928--2020, 51{,}858 observations", font_size=20, color=GREY_B),
             MathTex(rf"\hat\beta = {res['pooled OLS']['beta']:.4f} \ \text{{(pooled)}}", font_size=28, color=EST),
             MathTex(rf"\hat\beta = {res['Fama-MacBeth']['beta']:.4f} \ \text{{(Fama--MacBeth)}}", font_size=28, color=ALT),
-            wrapped_label(r"same data, same question: the answer depends on which variation the estimator uses and "
-                          r"how it counts the noise", 4.4, 21, GREY_A),
+            wrapped_label((
+                              'same observations: different weighting and assumptions about dependent noise'
+                          ), 4.4, 21, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.4)
         src = real_data(r"Kenneth French's 49 industry portfolios, monthly; the House's \texttt{econ}")
         q = predict(r"A sixth estimate, pooled least squares with a separate intercept for every month, waits in grey. "
                     r"Which of the five will it sit closest to?", width=5.6).to_corner(DR, buff=0.5)  # under the notes, off the chart
         with self.voiceover(
-            "Here is a question an analyst might ask on a Monday morning. Does an industry's return over the past year "
-            "predict its return next month? Kenneth French's forty-nine industries, ninety-three years, fifty-two "
-            "thousand observations. Run one regression. <bookmark mark='a'/> Ordinary least squares says the slope "
-            f"is positive, with a t-statistic of {res['pooled OLS']['t']:.2f}, almost significant. "
-            "<bookmark mark='b'/> But industries in the same month share a market shock. Cluster by month, and the "
-            f"t-statistic is {res['clustered by month']['t']:.2f}: nothing. <bookmark mark='c'/> Fama and MacBeth's "
-            "method, a slope each month, averaged, gives a different slope altogether, "
-            f"{res['Fama-MacBeth']['beta'] / res['pooled OLS']['beta']:.0f} times larger, with a t-statistic of "
-            f"{res['Fama-MacBeth']['t']:.1f}. <bookmark mark='d'/> Same data, same question, five verdicts. And a sixth, in "
-            "grey: least squares with a separate intercept for every month. <bookmark mark='e'/> Pause and predict: "
-            "which will it sit closest to? Chapter four shows that none of these numbers is wrong; each answers its own "
-            "question."
+            f"Here is a question an analyst might ask on a Monday morning. Does an industry's return "
+            f"over the past year predict its return next month? Kenneth French's forty-nine industries, "
+            f'ninety-three years, fifty-two thousand observations. Run one regression. <bookmark '
+            f"mark='a'/> Ordinary least squares says the slope is positive, with a t-statistic of "
+            f"{res['pooled OLS']['t']:.2f}"
+            f', below the familiar normal-reference cutoff; that reference itself needs suitable '
+            f"sampling assumptions. <bookmark mark='b'/> But industries in the same month share a market"
+            f" shock. Cluster by month, and the t-statistic is {res['clustered by month']['t']:.2f}"
+            f": much weaker evidence, not proof that the effect is zero. <bookmark mark='c'/> Fama and "
+            f"MacBeth's method, a slope each month, averaged, gives a different slope altogether, "
+            f"{res['Fama-MacBeth']['beta'] / res['pooled OLS']['beta']:.0f}"
+            f" times larger, with a t-statistic of {res['Fama-MacBeth']['t']:.1f}"
+            f". <bookmark mark='d'/> Same observations, different weighting and noise assumptions, five "
+            f'verdicts. And a sixth, in grey: least squares with a separate intercept for every month. '
+            f"<bookmark mark='e'/> Pause and predict: which will it sit closest to? Chapter four "
+            f'separates different estimands from standard-error assumptions; no one bar establishes a '
+            f'trading rule.'
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]), FadeIn(side[1]), Create(two), FadeIn(tl), FadeIn(labs))
             vo.wait_until("a")
@@ -84,7 +90,7 @@ class Hook(VoiceoverScene):
             vo.wait_until("c")
             self.play(GrowFromEdge(bars[4], DOWN), FadeIn(vals[4]), FadeIn(side[3]))
             vo.wait_until("d")
-            self.play(FadeIn(side[4]), GrowFromEdge(sixth, DOWN), FadeIn(six_l), FadeIn(six_v), FadeIn(six_q))
+            self.play(FadeIn(side[4]), FadeIn(sixth), FadeIn(six_l), FadeIn(six_q))
             vo.wait_until("e")
             self.play(FadeIn(q, shift=UP * 0.2))
         self.wait(0.4)
@@ -122,13 +128,14 @@ class Hook(VoiceoverScene):
             cards.add(VGroup(lead, c))
         head = label(r"How we got here", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "How we got here. In 1933 Alfred Cowles asked whether forecasters could forecast: mostly not. "
-            "<bookmark mark='a'/> In 1969 Fama, Fisher, Jensen and Roll invented the event study. <bookmark mark='b'/> In "
-            "1973 Fama and MacBeth averaged monthly cross-sections. <bookmark mark='c'/> In 1982 Hansen gave GMM; in 1987 "
-            "Newey and West, the standard error for correlated data. <bookmark mark='d'/> Then the reckoning: in 2009 "
-            "Petersen found forty-two percent of panel papers had not adjusted their standard errors; in 2016 Harvey, "
-            "Liu and Zhu counted three hundred and sixteen factors; in 2024 a hundred and sixty-four teams given the same "
-            "data disagreed far more than their standard errors said."
+            'How we got here. In 1933 Alfred Cowles asked whether forecasters could forecast: mostly not. '
+            "<bookmark mark='a'/> In 1969 Fama, Fisher, Jensen and Roll invented the event study. <bookmark "
+            "mark='b'/> In 1973 Fama and MacBeth averaged monthly cross-sections. <bookmark mark='c'/> In 1982 "
+            'Hansen gave GMM; in 1987 Newey and West, the standard error for correlated data. <bookmark '
+            "mark='d'/> Then the reckoning: in 2009 Petersen found forty-two percent of panel papers had not "
+            'adjusted their standard errors; in 2016 Harvey, Liu and Zhu counted three hundred and sixteen '
+            'factors; in 2024 a hundred and sixty-four teams given the same data disagreed far more than their '
+            'standard errors said.'
         ) as vo:
             self.play(FadeIn(head), Create(line), FadeIn(ticks))
             self.play(FadeIn(dots[0]), FadeIn(cards[0]))
@@ -155,13 +162,14 @@ class Hook(VoiceoverScene):
             r"Multiple testing; causal designs and double ML; how many years a Sharpe ratio needs",
         ], color=QC.IDEA, font_size=24)
         with self.voiceover(
-            "The plan. Least squares as geometry, and the three shapes of dependence that break its standard errors: "
-            "overlap, persistence and shared shocks. Fama-MacBeth and the two-pass test of the CAPM, where the five "
-            "verdicts are resolved. Predictive regressions, in and out of sample. Likelihood and the generalized method "
-            "of moments, and the consumption Euler equation, which fails. Event studies on Federal Reserve decision days. "
-            "Bootstraps for dependent data, Bayes sampled by Gibbs, multiple testing, causal designs and double machine "
-            "learning. And the hardest number in finance: how many years a Sharpe ratio needs. Everything here lives "
-            "under the real-world measure, P: statements about the data we observe, not about prices."
+            'The plan. Least squares as geometry, and the three shapes of dependence that break its standard '
+            'errors: overlap, persistence and shared shocks. Fama-MacBeth and the two-pass test of the CAPM, '
+            'where the five verdicts are resolved. Predictive regressions, in and out of sample. Likelihood and '
+            'the generalized method of moments, and the consumption Euler equation, which fails. Event studies on'
+            ' Federal Reserve decision days. Bootstraps for dependent data, Bayes sampled by Gibbs, multiple '
+            'testing, causal designs and double machine learning. And the hardest number in finance: how many '
+            'years a Sharpe ratio needs. Everything here lives under the real-world measure, P: statements about '
+            'the data we observe, not about prices.'
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
                                                      lag_ratio=0.5, run_time=12))
@@ -170,9 +178,10 @@ class Hook(VoiceoverScene):
     def house(self):
         chart = house_chart(PART, lit=("data",))
         with self.voiceover(
-            "In the House, this part builds the statistics module: robust standard errors, panel methods, bootstraps "
-            "for dependent data, corrections for multiple testing, and double machine learning. <bookmark mark='a'/> "
-            "Every number the research desk reports from Part twenty-three onward will pass through it."
+            'In the House, this part builds the statistics module: robust standard errors, panel methods, '
+            'bootstraps for dependent data, corrections for multiple testing, and double machine learning. '
+            "<bookmark mark='a'/> Every number the research desk reports from Part twenty-three onward will pass "
+            'through it.'
         ) as vo:
             self.play(FadeIn(chart))
             self.play(Indicate(chart.desk["data"], color=QC.HOUSE, scale_factor=1.05))

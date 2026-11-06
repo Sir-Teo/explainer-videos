@@ -39,7 +39,9 @@ class OLS(VoiceoverScene, ThreeDScene):
     def card(self):
         c = chapter_card(1, r"Least squares, seen as geometry", r"What does a regression actually compute?",
                          part=PART)
-        with self.voiceover("Chapter one. Least squares, seen as geometry."):
+        with self.voiceover(
+            'Chapter one. Least squares, seen as geometry.'
+        ):
             show_card(self, c)
         self.play(FadeOut(c))
 
@@ -69,12 +71,13 @@ class OLS(VoiceoverScene, ThreeDScene):
         self.add_fixed_in_frame_mobjects(legend_)
         self.remove(legend_)
         with self.voiceover(
-            "Start with the picture every regression rests on. Give each observation its own axis: three months of "
-            "returns are one point in three dimensions, the white arrow. <bookmark mark='a'/> The regressors are more "
-            "arrows, and every combination X times b is a plane. <bookmark mark='b'/> Least squares finds the point of "
-            "the plane closest to y: drop a perpendicular. Its foot is the fitted values; the perpendicular is the "
-            "residual. <bookmark mark='c'/> The residual is at right angles to every regressor: X transpose times the "
-            "residual is zero. Everything follows from that, in three dimensions or a thousand."
+            'Start with the picture every regression rests on. Give each observation its own axis: three months '
+            "of returns are one point in three dimensions, the white arrow. <bookmark mark='a'/> The regressors "
+            "are more arrows, and every combination X times b is a plane. <bookmark mark='b'/> Least squares "
+            'finds the point of the plane closest to y: drop a perpendicular. Its foot is the fitted values; the '
+            "perpendicular is the residual. <bookmark mark='c'/> The residual is at right angles to every "
+            'regressor: X transpose times the residual is zero. Everything follows from that, in three dimensions'
+            ' or a thousand.'
         ) as vo:
             self.play(Create(ax), FadeIn(ay), FadeIn(legend_[0]), run_time=1.5)
             vo.wait_until("a")
@@ -103,12 +106,13 @@ class OLS(VoiceoverScene, ThreeDScene):
                 why(r"only if the errors are uncorrelated and equally noisy do we get the textbook formula")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.75, edge=6.8)
         with self.voiceover(
-            "The algebra, line by line. The residual is perpendicular to the columns of X: the normal equations. "
-            "<bookmark mark='a'/> Solve them. <bookmark mark='b'/> Substitute the true model, and the estimation error "
-            "is a weighted sum of the scores, each regressor times its error. <bookmark mark='c'/> Its variance is a "
-            "sandwich: bread, X transpose X inverse, around a filling, X transpose omega X, where omega is the "
-            "covariance of all the errors. <bookmark mark='d'/> Only if omega is a constant times the identity does it "
-            "collapse to the textbook formula. Every standard error in this part is a claim about the filling."
+            'The algebra, line by line. The residual is perpendicular to the columns of X: the normal equations. '
+            "<bookmark mark='a'/> Solve them. <bookmark mark='b'/> Substitute the true model, and the estimation "
+            "error is a weighted sum of the scores, each regressor times its error. <bookmark mark='c'/> For a "
+            'full-rank fixed-design calculation with zero conditional mean errors, its conditional variance is a '
+            'sandwich: X transpose X inverse around X transpose omega X. Omega is the conditional error '
+            "covariance. <bookmark mark='d'/> Only if omega is a constant times the identity does it collapse to "
+            'the textbook formula. Every standard error in this part is a claim about the filling.'
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -150,16 +154,23 @@ class OLS(VoiceoverScene, ThreeDScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.35)
         src = real_data(rf"Kenneth French: tobacco (Smoke), market and SMB, monthly 1927--2020, {f['n']:,} months"
                         .replace(",", "{,}"))
-        q = predict(r"Add a regressor that is uncorrelated with SMB. Does SMB's slope change?", width=5.6).to_corner(DR, buff=0.5)  # under the notes, off the scatter
+        q = predict((
+                        "After removing existing controls, a new regressor's residual is orthogonal to SMB's residual. Does "
+                        "SMB's slope change?"
+                    ), width=5.6).to_corner(DR, buff=0.5)  # under the notes, off the scatter
         with self.voiceover(
-            "What does it mean to control for something? Ask how tobacco stocks load on the size factor. Alone, the "
-            f"slope is {f['alone']:+.2f}: tobacco looks like a small-stock industry. <bookmark mark='a'/> But size and the "
-            "market move together. The Frisch-Waugh-Lovell theorem: regress tobacco on the market and keep the "
-            "residual; do the same for size. Every point slides to its residual position. <bookmark mark='b'/> The slope "
-            f"of residual on residual is {f['fwl']:+.4f}: net of the market, tobacco behaves like a big-company stock. "
-            "<bookmark mark='c'/> And it equals the multiple-regression coefficient to sixteen decimal places. A control "
-            "is a projection, applied to both sides. <bookmark mark='d'/> Pause and predict: add a regressor "
-            "uncorrelated with size. Does size's slope change? No; its standard error can."
+            f'What does it mean to control for something? Ask how tobacco stocks load on the size '
+            f"factor. Alone, the slope is {f['alone']:+.2f}"
+            f": tobacco looks like a small-stock industry. <bookmark mark='a'/> But size and the market "
+            f'move together. The Frisch-Waugh-Lovell theorem: regress tobacco on the market and keep the'
+            f' residual; do the same for size. Every point slides to its residual position. <bookmark '
+            f"mark='b'/> The slope of residual on residual is {f['fwl']:+.4f}"
+            f": net of the market, tobacco behaves like a big-company stock. <bookmark mark='c'/> And it"
+            f' equals the multiple-regression coefficient to sixteen decimal places. A control is a '
+            f"projection, applied to both sides. <bookmark mark='d'/> Pause and predict: after removing "
+            f"the existing controls, add a regressor whose residual is orthogonal to size's residual. "
+            f"Does size's slope change? No; its standard error can. Marginal uncorrelatedness alone "
+            f'would not suffice.'
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.003, run_time=1.5))
             self.play(Create(fit_raw), FadeIn(side[0]), FadeIn(side[1]))
@@ -199,14 +210,16 @@ class OLS(VoiceoverScene, ThreeDScene):
                           GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "The sandwich as a picture. The meat is the errors' covariance matrix: row and column t are month t. Under "
-            "iid, only the diagonal is lit, all equally. <bookmark mark='a'/> Halbert White's 1980 estimator lets each "
-            "diagonal cell have its own size, estimated by the squared residual, x t x t transpose times u hat squared: "
-            "consistent even though each single cell is a terrible estimate, because the sandwich only needs their "
-            f"average. For tobacco's size slope it gives {se_w[2]:.3f} against {se_n[2]:.3f}. <bookmark mark='b'/> But "
-            "finance lives off the diagonal. Overlapping returns and persistent predictors light a band: chapter two. "
-            "<bookmark mark='c'/> Shocks shared within a month light blocks: chapter three. The estimate never changes; "
-            "how much it can be trusted does. The next three chapters are three shapes of meat."
+            f"The sandwich as a picture. The meat is the errors' covariance matrix: row and column t are"
+            f" month t. Under iid, only the diagonal is lit, all equally. <bookmark mark='a'/> Halbert "
+            f"White's 1980 estimator lets each diagonal cell have its own size, estimated by the squared"
+            f' residual, x t x t transpose times u hat squared: consistent even though each single cell '
+            f"is a terrible estimate, because the sandwich only needs their average. For tobacco's size "
+            f'slope it gives {se_w[2]:.3f} against {se_n[2]:.3f}'
+            f". <bookmark mark='b'/> But finance lives off the diagonal. Overlapping returns and "
+            f"persistent predictors light a band: chapter two. <bookmark mark='c'/> Shocks shared within"
+            f' a month light blocks: chapter three. The estimate never changes; how much it can be '
+            f'trusted does. The next three chapters are three shapes of meat.'
         ) as vo:
             self.play(FadeIn(sand), FadeIn(tags), FadeIn(name), FadeIn(side[0]))
             vo.wait_until("a")

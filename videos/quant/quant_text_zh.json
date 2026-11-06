@@ -29544,7 +29544,21 @@
     "Grinold and Kahn, \\textit{Active Portfolio Management} (2nd ed., 2000); Isichenko, \\textit{Quantitative Portfolio Management} (2021); Paleologo, \\textit{The Elements of Quantitative Investing}; Narang, \\textit{Inside the Black Box}; Boyd et al., \\textit{Multi-Period Trading via Convex Optimization} (2017)": "Grinold和Kahn，\\textit{Active Portfolio Management}（第2版，2000）；Isichenko，\\textit{Quantitative Portfolio Management}（2021）；Paleologo，\\textit{The Elements of Quantitative Investing}；Narang，\\textit{Inside the Black Box}；Boyd等，\\textit{Multi-Period Trading via Convex Optimization}（2017）",
     "Blume (1971, 1975); Vasicek (1973); Rosenberg (1974); Chen, Roll and Ross (1986); Connor and Korajczyk (1986); Brinson, Hood and Beebower (1986); Perold (1988); Grinold (1989); Connor (1995); Torre (1997); Almgren and Chriss (2000); Clarke, de Silva and Thorley (2002); Berk and Green (2004); Buckle (2004); Qian and Hua (2004); Almgren, Thum, Hauptmann and Li (2005)": "Blume（1971，1975）；Vasicek（1973）；Rosenberg（1974）；Chen、Roll和Ross（1986）；Connor和Korajczyk（1986）；Brinson、Hood和Beebower（1986）；Perold（1988）；Grinold（1989）；Connor（1995）；Torre（1997）；Almgren和Chriss（2000）；Clarke、de Silva和Thorley（2002）；Berk和Green（2004）；Buckle（2004）；Qian和Hua（2004）；Almgren、Thum、Hauptmann和Li（2005）",
     "Khandani and Lo (2007, 2011); Ding (2010); T\\'oth et al.\\ (2011); Garleanu and Pedersen (2013); Lou and Polk (comomentum); Berk and van Binsbergen (2015); Novy-Marx and Velikov (2016); Ding and Martin (2017); Frazzini, Israel and Moskowitz (2018). Data: Binance's public market data; Kenneth French's data library": "Khandani和Lo（2007，2011）；Ding（2010）；T\\'oth等\\ （2011）；Garleanu和Pedersen（2013）；Lou和Polk（共动量）；Berk和van Binsbergen（2015）；Novy-Marx和Velikov（2016）；Ding和Martin（2017）；Frazzini、Israel和Moskowitz（2018）。数据：Binance公开市场数据；Kenneth French数据库",
-    "Next: Part 32, Systematic Macro and Alternative Premia": "下一部分：第32部分，系统化宏观与另类溢价"
+    "Next: Part 32, Systematic Macro and Alternative Premia": "下一部分：第32部分，系统化宏观与另类溢价",
+    "same observations: different weighting and assumptions about dependent noise": "同样的观测：不同的加权方式和相依噪声假设",
+    "After removing existing controls, a new regressor's residual is orthogonal to SMB's residual. Does SMB's slope change?": "剔除已有控制变量后，新增变量的残差与SMB的残差正交。SMB的斜率会变吗？",
+    "Does the negative between-month estimate prove there is no predictability?": "负的月间估计能证明不存在预测能力吗？",
+    "for the mean of these iid-innovation sums: variance inflation $h$; a slope also depends on its regressor": "对这些独立同分布创新之和的样本均值：方差放大$h$倍；斜率还依赖回归变量",
+    "Bartlett weights give a positive-semidefinite $\\hat S$; a flat-weight truncated sum can be indefinite": "巴特利特权重给出半正定的$\\hat S$；平权重截断和可能不是半正定的",
+    "under the null, build the variance from one-month residuals times backward predictor sums; retain the long-horizon coefficient": "在零假设下，用一个月残差乘以向后累加的预测变量构建方差，保留长期限回归系数",
+    "Chronological refits on revised historical data": "在修订后的历史数据上按时间逐次重估",
+    "slope on the log dividend yield, chronological refit ($\\pm 2$ Newey--West s.e.)": "对数股息率斜率：按时间逐次重估（$\\pm 2$ 纽维–韦斯特标准误）",
+    "Shiller, revised history: real log total returns; historical release vintages and publication lags are not reconstructed": "席勒修订后的历史数据：实际对数总收益；未还原历史发布版本和公布滞后",
+    "Separate excess-return model: population moments, mean-variance investor, fixed risk; $S$ is an excess-return Sharpe ratio (Campbell--Thompson 2008)": "另一个超额收益模型：总体矩已知、均值–方差投资者、固定风险；$S$是超额收益夏普比率（坎贝尔–汤普森，2008）",
+    "\\text{stylized: } S=0.10,\\ R^2_{pop}=0.001\\quad\\Rightarrow\\quad\\text{gain}\\approx10.1\\%": "\\text{示意：} S=0.10,\\ R^2_{pop}=0.001\\quad\\Rightarrow\\quad\\text{增益}\\approx10.1\\%",
+    "Real log total returns, chronological expanding fits from 1927; revised data. Five predictors tried. Legacy CT values are omitted: their sign used the full sample.": "实际对数总收益，1927年起按时间扩展拟合；使用修订数据，试了五个预测变量。旧CT结果不展示，因为其符号由全部样本决定。",
+    "Does an in-sample $R^2$ of 0.06\\% guarantee a positive forecast $R^2$?": "样本内$R^2$为0.06\\%，就能保证预测$R^2$为正吗？",
+    "No guarantee: estimation error and changing relationships can outweigh the signal.": "不能保证：估计误差和关系变化可能超过信号。"
   },
   "phrases": {
     "you owe": "你欠",

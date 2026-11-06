@@ -24,7 +24,9 @@ class FamaMacBeth(VoiceoverScene):
     def construct(self):
         fe = load("panel_fe")
         p = load("panel")
-        tp = load("twopass")
+        tp = load((
+                      'twopass_inference_v2'
+                  ))
         self.card()
         self.stack(fe)
         self.lab(fe, p)
@@ -35,7 +37,9 @@ class FamaMacBeth(VoiceoverScene):
     def card(self):
         c = chapter_card(4, r"Fama--MacBeth, and five verdicts resolved", r"Which question does each estimator answer?",
                          lit=(1973,), part=PART)
-        with self.voiceover("Chapter four. Fama-MacBeth, and the five verdicts resolved."):
+        with self.voiceover(
+            'Chapter four. Fama-MacBeth, and the five verdicts resolved.'
+        ):
             show_card(self, c)
         self.play(FadeOut(c))
 
@@ -88,12 +92,13 @@ class FamaMacBeth(VoiceoverScene):
         cm, hm = always_redraw(cross), always_redraw(hist)
         src = real_data(r"Kenneth French's 49 industries, monthly 1928--2020; signal: months $t-12$ to $t-2$")
         with self.voiceover(
-            "Fama and MacBeth, in 1973, turned a panel into a time series. Each month, take the cross-section: "
-            "forty-nine industries, past-year return across, next month's return up, and fit a line: did this month's "
-            "winners beat its losers? <bookmark mark='a'/> Drop the slope on a pile, move to the next month. Eleven "
-            "hundred months later, the pile is a histogram. <bookmark mark='b'/> The estimate is the average slope, its "
-            "standard error that of a time-series mean. Each slope already contains its month's shared shock, so the "
-            "correlation that sank pooled least squares is absorbed."
+            'Fama and MacBeth, in 1973, turned a panel into a time series. Each month, take the cross-section: '
+            "forty-nine industries, past-year return across, next month's return up, and fit a line: did this "
+            "month's winners beat its losers? <bookmark mark='a'/> Drop the slope on a pile, move to the next "
+            "month. Eleven hundred months later, the pile is a histogram. <bookmark mark='b'/> The estimate is "
+            'the average slope, its standard error that of a time-series mean. The variation of monthly slopes '
+            'reflects shocks shared within each month. Inference still needs enough dates and appropriate '
+            'treatment of serial dependence between the slopes.'
         ) as vo:
             self.play(FadeIn(g), FadeIn(h), FadeIn(src))
             self.add(cm, hm)
@@ -114,10 +119,11 @@ class FamaMacBeth(VoiceoverScene):
                 f"fama_macbeth(Y, X, nw_lags=6)                  t = {fe['fm_t_nw']:.2f}",
                 f"share of months with a positive slope: {100 * fe['share_positive']:.0f}%"]
         with self.voiceover(
-            "The House's version: loop over months, regress the cross-section, keep the slopes; the estimate is their "
-            "mean, the standard error their spread over root T, or Newey-West on the slopes. <bookmark mark='a'/> On the "
-            f"industries: a slope of {fm['beta']:.3f}, t-statistic {fm['t']:.1f}; {fe['fm_t_nw']:.1f} with Newey-West. In "
-            f"{100 * fe['share_positive']:.0f} percent of months, winners beat losers."
+            f"The House's version: loop over months, regress the cross-section, keep the slopes; the "
+            f'estimate is their mean, the standard error their spread over root T, or Newey-West on the '
+            f"slopes. <bookmark mark='a'/> On the industries: a slope of {fm['beta']:.3f}, t-statistic "
+            f"{fm['t']:.1f}; {fe['fm_t_nw']:.1f} with Newey-West. In {100 * fe['share_positive']:.0f}"
+            f' percent of months, winners beat losers.'
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -164,17 +170,23 @@ class FamaMacBeth(VoiceoverScene):
             MathTex(rf"\text{{equal-weighted FM: }} {res['Fama-MacBeth']['beta']:.4f}", font_size=28, color=ALT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "Now the verdicts. Why was the pooled slope "
-            f"{res['Fama-MacBeth']['beta'] / res['pooled OLS']['beta']:.0f} times smaller? Three months on one picture: "
-            "each cloud has its own centre. <bookmark mark='a'/> Subtract each month's means, and the clouds slide to "
-            "the origin. The slope through them is the within-month slope, least squares with month effects: "
-            f"{fe['within']:.4f}, t of {fe['t_within_cluster']:.2f} clustered by month. It equals the Fama-MacBeth "
-            "average weighted by each month's cross-sectional dispersion. <bookmark mark='b'/> What was subtracted, the "
-            "month means, has its own slope: when the whole market rose over the past year, did it rise next month? "
-            f"No: {fe['between']:.4f}, t of {fe['t_between_nw']:.2f}. <bookmark mark='c'/> Pooled least squares mixes the "
-            f"two, {100 * w:.0f} percent within, and lands at {fe['pooled']:.4f}. So dispersion weighting explains only "
-            f"part of the gap, from {res['Fama-MacBeth']['beta']:.4f} to {fe['fm_weighted']:.4f}; the rest is market "
-            "timing mixed into a cross-sectional question. None of the verdicts was wrong."
+            f'Now the verdicts. Why was the pooled slope '
+            f"{res['Fama-MacBeth']['beta'] / res['pooled OLS']['beta']:.0f}"
+            f' times smaller? Three months on one picture: each cloud has its own centre. <bookmark '
+            f"mark='a'/> Subtract each month's means, and the clouds slide to the origin. The slope "
+            f"through them is the within-month slope, least squares with month effects: {fe['within']:.4f}"
+            f", t of {fe['t_within_cluster']:.2f}"
+            f" clustered by month. It equals the Fama-MacBeth average weighted by each month's "
+            f"cross-sectional dispersion. <bookmark mark='b'/> What was subtracted, the month means, has"
+            f' its own slope: did months with higher average industry momentum precede higher average '
+            f"industry returns? This between-month estimate is negative but very imprecise: {fe['between']:.4f}"
+            f", t of {fe['t_between_nw']:.2f}. <bookmark mark='c'/> Pooled least squares mixes the two, "
+            f"{100 * w:.0f} percent within, and lands at {fe['pooled']:.4f}"
+            f". So dispersion weighting explains only part of the gap, from {res['Fama-MacBeth']['beta']:.4f}"
+            f" to {fe['fm_weighted']:.4f}"
+            f'; the rest is market timing mixed into a cross-sectional question. The coefficients use '
+            f'different variation; their standard errors still need suitable dependence assumptions. '
+            f'These industry averages are not the market portfolio itself.'
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[0]), LaggedStart(*[FadeIn(c) for c in clouds], lag_ratio=0.4),
                       FadeIn(means))
@@ -213,14 +225,15 @@ class FamaMacBeth(VoiceoverScene):
                     r"variance)")]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.6, buff=0.38, edge=6.8)
         with self.voiceover(
-            "The algebra. Fama-MacBeth averages the monthly slopes, each month counting once. <bookmark mark='a'/> The "
-            "within estimator divides the centred cross-products, summed over all months, by the centred squares, summed "
-            "over all months. Each month's own slope is that month's cross-products over that month's squares, so "
-            "multiply and divide: the within estimator is a weighted average of the monthly slopes, "
-            "<bookmark mark='b'/> each weighted by its month's share of the total cross-sectional variation. Turbulent "
-            "months, when industries' past returns were far apart, count most. <bookmark mark='c'/> And split the total "
-            "variation of the regressor into within-month and between-month sums of squares: the cross term vanishes "
-            "inside every month, so pooled is the variation-weighted average of the within and between slopes. Problem six."
+            'The algebra. Fama-MacBeth averages the monthly slopes, each month counting once. <bookmark '
+            "mark='a'/> The within estimator divides the centred cross-products, summed over all months, by the "
+            "centred squares, summed over all months. Each month's own slope is that month's cross-products over "
+            "that month's squares, so multiply and divide: the within estimator is a weighted average of the "
+            "monthly slopes, <bookmark mark='b'/> each weighted by its month's share of the total cross-sectional"
+            " variation. Turbulent months, when industries' past returns were far apart, count most. <bookmark "
+            "mark='c'/> And split the total variation of the regressor into within-month and between-month sums "
+            'of squares: the cross term vanishes inside every month, so pooled is the variation-weighted average '
+            'of the within and between slopes. Problem six.'
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -259,19 +272,24 @@ class FamaMacBeth(VoiceoverScene):
                     r"\sigma_\gamma^2 + \Sigma_f\big]", font_size=26),
             label(r"Shanken (1992): the betas are estimated", font_size=19, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.35)
-        q = predict(r"Is the market's own past year a buy signal for the market?", width=5.6).to_corner(DR, buff=0.3)
+        q = predict(r"Does the negative between-month estimate prove there is no predictability?", width=5.6).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Fama and MacBeth built the method to test the CAPM in two passes: estimate betas from time series, then "
-            "each month regress returns on betas, and average. The CAPM says the line passes through zero with the "
-            "market's premium as slope: the green line. <bookmark mark='a'/> On "
-            f"{tp['N']} portfolios since 1963, the fitted line is flat: a premium for beta of {100 * lam[1]:.3f} percent a "
-            f"month against the market's {100 * tp['mkt_mean']:.2f}, and an intercept of {100 * lam[0]:.2f} with t of "
-            f"{tp['t_fm'][0]:.1f}. <bookmark mark='b'/> The betas are estimates, so Jay Shanken's 1992 correction "
-            "inflates the second-pass variance; here the slope is so near zero it barely matters. The Gibbons, Ross and "
-            f"Shanken test rejects too, p of {tp['grs_p']:.3f}; Part twenty-four goes further. <bookmark mark='c'/> Pause "
-            "and predict: is the market's own past year a buy signal for the market? No: the between slope was "
-            f"{fe['between']:.4f}."
-            " From explaining returns across stocks to forecasting the market through time. Next: predictive regressions, and their bias."
+            f'Fama and MacBeth built the method to test the CAPM in two passes: estimate betas from time'
+            f' series, then each month regress returns on betas, and average. The CAPM says the line '
+            f"passes through zero with the market's premium as slope: the green line. <bookmark mark='a'/> On "
+            f"{tp['N']} portfolios since 1963, the fitted line is flat: a premium for beta of "
+            f"{100 * lam[1]:.3f} percent a month against the market's {100 * tp['mkt_mean']:.2f}"
+            f", and an intercept of {100 * lam[0]:.2f} with t of {tp['t_fm'][0]:.1f}"
+            f". <bookmark mark='b'/> The betas are estimates, so Jay Shanken's 1992 correction inflates "
+            f'the second-pass variance; here the slope is so near zero it barely matters. Using '
+            f'consistently normalized covariances, the Gibbons, Ross and Shanken test gives p of '
+            f"{tp['grs_p']:.3f}"
+            f" under the iid normal-error model. Shanken's correction also has model assumptions; these "
+            f'are model-based diagnostics, not a general test of every pricing model. Part twenty-four '
+            f"goes further. <bookmark mark='c'/> Pause and predict: does the negative between-month "
+            f"estimate prove no predictability? No: the industry-mean slope was {fe['between']:.4f}"
+            f', with little precision. Failure to reject is not proof of no effect. From explaining '
+            f'returns across stocks to forecasting through time. Next: predictive regressions, and their bias.'
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[0]), LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.02))
             self.play(Create(capm), FadeIn(side[2]))
