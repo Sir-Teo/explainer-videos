@@ -1704,3 +1704,4 @@ and a Reasoner library of perhaps 20–30k lines with its tests. Expect one part
 | 24 · Laws, Chance and the Arrow | scenes, English and Chinese narration and text, QA | ~57 min |
 | 25 · Space and Time | scenes, English and Chinese narration and text, QA | ~50 min |
 | 26 · The Quantum Puzzle | scenes, English and Chinese narration and text, QA | ~51 min |
+| 27 · Sense and Reference | scenes, English and Chinese narration and text, QA | ~55 min |
