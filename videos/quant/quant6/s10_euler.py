@@ -75,7 +75,7 @@ class Euler(VoiceoverScene, ThreeDScene):
                         width=8.6, font_size=18).to_corner(UL, buff=0.35)
         outs = [f"beta  = {g['beta']:.3f}  (se {g['se'][0]:.3f})",
                 f"gamma = {g['gamma']:.1f}    (se {g['se'][1]:.1f})",
-                f"J = {g['J']:.1f}, {g['df']} df, p = {g['p_J']:.4f}"]
+                f"J = {g['J']:.1f}, {g['df']} df, nominal p = {g['p_J']:.4f}"]
         src = real_data(r"FRED: real PCE per capita (A794RX0Q048SBEA), CPI; French: market and T-bill; quarterly "
                         r"1947--2020")
         with self.voiceover(
@@ -83,7 +83,7 @@ class Euler(VoiceoverScene, ThreeDScene):
             "weights; reweight by S inverse and minimise again; the Jacobian gives standard errors, the leftover gives "
             "J. <bookmark mark='a'/> On seventy-three years of American consumption, stocks and bills: patience "
             f"{g['beta']:.3f}, risk aversion {g['gamma']:.1f} with a standard error of {g['se'][1]:.1f}, and J of "
-            f"{g['J']:.0f} on {g['df']} degrees of freedom, a p-value of {g['p_J']:.4f}. Rejected."
+            f"{g['J']:.0f} on {g['df']} degrees of freedom, a nominal asymptotic p-value of {g['p_J']:.4f}. Rejected."
         ) as vo:
             self.play(FadeIn(card), FadeIn(src))
             vo.wait_until("a")
@@ -213,7 +213,8 @@ class Euler(VoiceoverScene, ThreeDScene):
             "covariance with consumption, and it is tiny."
             " From the economy's average investor to single news days. Next: event studies."
         ) as vo:
-            self.play(LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.5, run_time=4))
+            self.play(FadeIn(rows[0]), FadeIn(rows[1]), run_time=0.6)
+            self.play(LaggedStart(*[FadeIn(r) for r in rows[2:]], lag_ratio=0.5, run_time=2.4))
             vo.wait_until("a")
             self.play(FadeIn(q))
             vo.wait_until("b")

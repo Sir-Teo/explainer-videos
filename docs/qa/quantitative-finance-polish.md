@@ -428,3 +428,28 @@ assumption. Its displayed expansion separates the second-order bias remainder
 from other `o_p(1)` terms, while retaining the corrected treatment-error-squared
 term and the faster-than-quarter-rate condition. This change requires fresh
 bilingual frame and narration captures before final acceptance.
+
+### Part 6 continuation: research chapter and exercises
+
+All 21 English chapters now have an initial render. The research chapter exposed
+21 missing Chinese text entries, a derivation footer below the frame, and an
+empty narrated opening to its question cards. Its initial repaired English pass
+has 17 selected states and zero warnings. The derivation now retains three rows,
+the density scale includes the simulated peaks, and the larger question cards
+and centered final prompt have dedicated space. Multivariate inference is framed
+as requiring additional conditions, rather than claiming no joint theory exists.
+The revised Chinese chapter and final-source regressions are still running.
+
+The exercises now provide the covariance ratio needed for the numerical
+Stambaugh calculation, state independence and expected risk for James–Stein, and
+use within-month sums of squares for the possibly unbalanced panel. The arithmetic
+in the notes uses `1 + 3*0.91 = 3.73`. The remaining recap and qualifying-exercise
+captions are translated. Negative DiD weights receive a color flash without
+changing their magnitudes; the last sparse Euler reveal is shortened. Its GMM
+p-value is labelled nominal/asymptotic. Bootstrap coverage is reported as the
+observed result rather than assigning all residual undercoverage to block length.
+
+Audio QA now records the actual language-dependent voice. Mandarin Kokoro uses
+`zf_001`; its within-sentence character times are estimated, and passing their
+monotonicity checks does not establish word-level forced alignment or listening
+approval. The earlier signal-check scope remains unchanged.

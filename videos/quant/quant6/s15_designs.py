@@ -197,7 +197,7 @@ class Designs(VoiceoverScene):
             vo.wait_until("a")
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN if b.get_center()[1] > ax.c2p(0, 0)[1] else UP)
                                     for b in bars], lag_ratio=0.1, run_time=2))
-            self.play(*[Indicate(b, color=BAD) for b in bars if b.get_center()[1] < ax.c2p(0, 0)[1]])
+            self.play(*[Indicate(b, color=WHITE, scale_factor=1) for b in bars if b.get_center()[1] < ax.c2p(0, 0)[1]])
             vo.wait_until("b")
             self.play(FadeIn(h), Create(truth), FadeIn(side[0]), FadeIn(side[1]))
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in ht], lag_ratio=0.02))

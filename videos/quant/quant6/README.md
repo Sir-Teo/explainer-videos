@@ -220,7 +220,7 @@ edition, Bali–Engle–Murray's Part I, and course syllabi for Hayashi).
 2. **Stambaugh's bias.** With r_{t+1} = a + βx_t + u and x_{t+1} = c + ρx_t + v, write u = φv + e, φ = σ_uv/σ_v², e
    independent of the whole predictor path in the iid Gaussian system. OLS gives β̂ − β = φ(ρ̂ − ρ) + Σx̃e/Σx̃², whose second term has mean zero, and Kendall's
    E[ρ̂ − ρ] ≈ −(1 + 3ρ)/T. So E[β̂ − β] ≈ −φ(1 + 3ρ)/T. Annual data: ρ = 0.91, T = 149, φ = −0.72: bias
-   +0.72 × 3.72/149 = +0.018. This is a first-order approximation, not an exact finite-sample bias formula.
+   +0.72 × 3.73/149 = +0.018. This is a first-order approximation, not an exact finite-sample bias formula.
 3. **The Sharpe ratio's standard error.** SR̂ = μ̂/σ̂; with iid normal returns Var(μ̂) = σ²/T, Var(σ̂) ≈ σ²/(2T),
    independent. The delta method gives Var(SR̂) ≈ (1 + SR²/2)/T. For iid returns with finite fourth moment, fat tails add (κ − 3)SR²/4 and skewness −γ₃SR
    to the numerator; the whole expression is divided by T (Mertens 2002).

@@ -197,7 +197,7 @@ class Bootstrap(VoiceoverScene):
         gap_st = 0.95 - cov["stationary"]
         closes = gap_iid - gap_st
         verdict = (f"Blocks help, closing about {100 * closes / gap_iid:.0f} percent of the gap, but neither reaches "
-                   "ninety-five: year-long blocks are too short for volatility this persistent."
+                   "ninety-five in this experiment: year-long blocks do not fully repair coverage."
                    if 0 < closes < gap_iid else "Here the blocks do not help.")
         q = predict(r"One circular block of exactly $n$ observations: what is the mean's bootstrap standard error?").to_edge(DOWN,
                                                                                                       buff=0.15)

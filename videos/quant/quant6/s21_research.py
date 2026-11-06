@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant6.common import BAD, EST, GOOD, PART, load
+from videos.quant.quant6.common import BAD, EST, GOOD, PART, load, predict
 
 OLS_C, ARM_C, X_C = BAD, GOOD, EST
 
@@ -66,7 +66,7 @@ class Research(VoiceoverScene):
                     r"by $\phi$, with an independent normal for the part of $u$ unrelated to $v$"),
                 why(r"at a unit root $\tau_{DF}$ is skewed left with mean near $-1.5$; with $\phi < 0$ the $t$-statistic is "
                     r"shifted right, and nothing in the limit depends on $T$")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.3, buff=0.42, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.3, buff=0.42, edge=6.9)
         with self.voiceover(
             "The tool is the local-to-unity device. For the displayed law, assume zero predictor drift and initial "
             "value, iid shocks and no trend, while fitting an intercept. <bookmark mark='a'/> Let the root approach one as the sample "
@@ -93,12 +93,12 @@ class Research(VoiceoverScene):
     def laws(self, t):
         e = np.linspace(-4, 6, 41)
         c = (e[:-1] + e[1:]) / 2
-        g = axes([-4, 6], [0, 0.45], x_length=8.2, y_length=3.8, xlabel=r"$t$-statistic of $\hat\beta$, $\beta = 0$",
+        g = axes([-4, 6], [0, 0.65], x_length=8.2, y_length=3.8, xlabel=r"$t$-statistic of $\hat\beta$, $\beta = 0$",
                  ylabel=r"density", xticks=[-2, 0, 1.645, 4], yticks=[], font_size=13).move_to(LEFT * 1.4 + DOWN * 0.3)
         ax = g.ax
         xs = np.linspace(-4, 6, 300)
         nrm = curve(ax, xs, np.exp(-xs ** 2 / 2) / np.sqrt(2 * np.pi), WHITE, stroke_width=2.5)
-        crit = DashedLine(ax.c2p(1.645, 0), ax.c2p(1.645, 0.45), color=GREY_B, stroke_width=1.5)
+        crit = DashedLine(ax.c2p(1.645, 0), ax.c2p(1.645, 0.65), color=GREY_B, stroke_width=1.5)
         lines = VGroup()
         for key, col in (("ols", OLS_C), ("c", ARM_C)):
             h = np.asarray(t["t_hist"][key], float)
@@ -171,31 +171,37 @@ class Research(VoiceoverScene):
     def open_problems(self):
         cards = VGroup(
             desk_question(r"open: uniformly valid and powerful", r"Campbell and Yogo's (2006) Bonferroni intervals and IVX "
-                          r"(Kostakis, Magdalinos and Stamatogiannakis 2015) are valid across $\rho$; which is more "
-                          r"powerful depends on the true $\rho$, and no test is best for all", width=12.4, font_size=18),
-            desk_question(r"open: many predictors at once", r"several persistent predictors with correlated shocks, or a "
-                          r"high-dimensional set (Part 27): the local-to-unity theory for joint tests is incomplete",
-                          width=12.4, font_size=18),
+                          r"(Kostakis, Magdalinos and Stamatogiannis 2015) cover their specified persistence regimes under their assumptions; relative "
+                          r"power depends on the true $\rho$", width=12.4, font_size=26),
+            desk_question(r"open: many predictors at once", r"joint tests with many persistent predictors require joint identification and dependence conditions; "
+                          r"the scalar illustration does not settle the high-dimensional case (Part 27)",
+                          width=12.4, font_size=26),
             desk_question(r"open: breaks against near unit roots", r"a shift in the predictor's mean looks like a root near "
                           r"one (Lettau and Van Nieuwerburgh 2008), and the two are hard to tell apart in a century of data",
-                          width=12.4, font_size=18),
+                          width=12.4, font_size=26),
         ).arrange(DOWN, buff=0.22)
+        head = label(r"Open questions", font_size=32).to_edge(UP, buff=0.3)
+        if cards.height > 6.4:
+            cards.scale_to_fit_height(6.4)
+        cards.next_to(head, DOWN, buff=0.25)
         with self.voiceover(
-            "Three open questions. <bookmark mark='a'/> Bonferroni intervals and IVX are both valid whatever the "
-            "persistence; which is more powerful depends on the persistence you cannot know, and no test is best for "
-            "all. <bookmark mark='b'/> Several persistent predictors at once, or the hundreds of Part 27, have no "
-            "complete local-to-unity theory. <bookmark mark='c'/> And a break in the predictor's mean looks like a "
+            "Three open questions. <bookmark mark='a'/> Bonferroni intervals and IVX cover their specified persistence "
+            "regimes under their assumptions; relative power depends on the persistence. <bookmark mark='b'/> With many "
+            "persistent predictors, joint identification and dependence conditions matter. This scalar illustration "
+            "does not settle the high-dimensional case of Part 27. <bookmark mark='c'/> And a break in the predictor's mean looks like a "
             "root near one; in a century of data the two are hard to tell apart."
         ) as vo:
-            for k, mk in enumerate(("a", "b", "c")):
+            self.play(FadeIn(head), FadeIn(cards[0], shift=UP * 0.2), run_time=0.6)
+            vo.wait_until("a")
+            for k, mk in enumerate(("b", "c"), 1):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
 
     def question(self):
-        q = pause_card(r"with $\phi = -1$ and $\rho = 1$, the OLS $t$ of $\hat\beta$ is exactly minus the Dickey--Fuller $t$ "
-                       r"of $\hat\rho$. Roughly how often does a nominal 5\% one-sided test then reject?")
+        q = predict(r"with $\phi = -1$ and $\rho = 1$, the OLS $t$ of $\hat\beta$ is exactly minus the Dickey--Fuller $t$ "
+                       r"of $\hat\rho$. Roughly how often does a nominal 5\% one-sided test then reject?", width=11.6).move_to(ORIGIN)
         with self.voiceover(
             "Pause and predict. When the shocks are perfectly negatively correlated and the root is one, the slope's t "
             "is exactly minus the Dickey-Fuller t of the persistence. Roughly how often does a nominal five percent "

@@ -23,13 +23,13 @@ PROBLEMS = [
     r"For $h$-month sums of iid returns regressed on a slowly moving predictor, show that the naive standard "
     r"error understates the true one by roughly $\sqrt{h}$.",
     r"From Kendall's $\mathbb{E}[\hat\rho - \rho] \approx -(1 + 3\rho)/T$, derive Stambaugh's bias; evaluate it for "
-    r"$\rho = 0.91$, corr$(u, v) = -0.83$, $T = 149$.",
+    r"$\rho = 0.91$, $\phi=\sigma_{uv}/\sigma_v^2=-0.72$, $T = 149$.",
     r"Derive the standard error of a Sharpe ratio from iid normal returns by the delta method.",
     r"Show that Holm's procedure controls the family-wise error rate and rejects at least as much as Bonferroni.",
-    r"For $k \ge 3$ means $x_i \sim N(\mu_i, 1)$, show that $(1 - (k - 2)/\|x\|^2)\,x$ has lower total squared "
-    r"error than $x$ (James--Stein).",
+    r"For $k \ge 3$ independent observations $x_i \sim N(\mu_i, 1)$, show that $(1 - (k - 2)/\|x\|^2)\,x$ has lower total squared "
+    r"error in expectation than $x$ (James--Stein).",
     r"Show that pooled OLS with month fixed effects equals the Fama--MacBeth average weighted by each month's "
-    r"cross-sectional variance of $x$, and that pooled OLS without them averages the within and between slopes.",
+    r"within-month sum of squared centred $x$, and that pooled OLS without them averages the within and between slopes.",
     r"Show that the iid bootstrap variance of $\sqrt n\,\bar x^*$ is $\hat\Gamma_0$, and that moving blocks of "
     r"length $\ell$ give approximately a Bartlett-weighted long-run variance.",
     r"(qual) With $\rho = 1 + c/T$, show $T(\hat\rho - \rho) \Rightarrow \int_0^1 J_c\,dW/\int_0^1 J_c^2$, $dJ_c = cJ_c\,dt + dW$ "
