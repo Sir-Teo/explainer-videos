@@ -23,7 +23,7 @@ class House(VoiceoverScene):
         rows = [
             ("crra, certainty_equivalent", r"preferences and money values"),
             ("bellman_merton, hjb_fd_merton", r"dynamic programming and HJB"),
-            ("no_trade_band, merton_fraction", r"costs and spending"),
+            ("no_trade_band, merton_consumption_rate", r"costs and spending"),
             ("kelly_binary, realized_growth", r"Kelly and historical growth"),
             ("snell_envelope, perpetual_put", r"stopping and smooth fit"),
             ("cpt_value, robust_fraction", r"prospect theory and doubt"),
