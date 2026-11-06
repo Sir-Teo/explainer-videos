@@ -252,7 +252,7 @@ class Series(VoiceoverScene):
             "the residuals. Choosing the terms wrongly is the most common way to get a unit-root test wrong."
             " Yet two series with unit roots can still be tied together. Next: cointegration."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")

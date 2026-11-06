@@ -194,8 +194,9 @@ class Hook(VoiceoverScene):
             "derived and fitted. Realized volatility, HAR and roughness. Then scoring, networks trained here, the "
             "race and foundation models. And March 2020, and the industry."
         ):
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
-                                                     lag_ratio=0.5, run_time=9))
+            self.play(FadeIn(card.head), FadeIn(card.rows[0], shift=RIGHT * 0.2), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows[1:]],
+                                 lag_ratio=0.5, run_time=8.5))
         self.play(FadeOut(card))
 
     def house(self):

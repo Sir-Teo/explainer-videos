@@ -225,7 +225,7 @@ class Kalman(VoiceoverScene):
             "the smoother."
             " Stochastic volatility treats volatility as hidden. GARCH makes it a function of past returns, far easier to fit. Next."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             step(1)
             vo.wait_until("a")
             vo.wait_until("b")
