@@ -336,6 +336,7 @@ class Record(VoiceoverScene):
                       label(rf"worst drawdown {100 * hold['maxdd']:.1f}\%; one trial", font_size=17, color=GREY_A)
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.5).shift(UP * 0.4)
         rs, rn, hs, hn = res["sharpe"], res["sharpe_net"], hold["sharpe"], hold["sharpe_net"]
+        head = label(r"The House's own row, registered here with one trial", font_size=28).to_edge(UP, buff=0.4)
         with self.voiceover(
             "And the House's own row, registered in this part with one trial. <bookmark mark='a'/> Equal risk across "
             "the ten classic factors, weights fixed from their volatilities in the decade to twenty twenty. "
@@ -343,6 +344,7 @@ class Record(VoiceoverScene):
             f"<bookmark mark='c'/> In the hold-out, {hs:.2f}, and {hn:.2f} after costs. Diversification across "
             "published premia, the dullest strategy in the series, kept most of its promise."
         ) as vo:
+            self.play(FadeIn(head))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(b_, shift=UP * 0.2) for b_ in bars], lag_ratio=0.1), FadeIn(info[0]), run_time=2)
             vo.wait_until("b")

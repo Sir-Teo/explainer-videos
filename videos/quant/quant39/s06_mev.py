@@ -199,6 +199,10 @@ class MEV(VoiceoverScene):
             desk_question(r"sandwiches and just-in-time liquidity", r"trading around someone else's swap: a pure transfer "
                           r"from the user", width=12.4, font_size=19),
         ).arrange(DOWN, buff=0.25)
+        head = label(r"Three kinds of extractable value (Daian et al., Flash Boys 2.0, 2020)", font_size=28).to_edge(UP, buff=0.4)
+        if cards.height > 6.0:
+            cards.scale_to_fit_height(6.0)
+        cards.next_to(head, DOWN, buff=0.3)
         with self.voiceover(
             "Three kinds of extractable value, first catalogued by Philip Daian and coauthors in Flash Boys two point "
             "oh, in twenty twenty. <bookmark mark='a'/> Arbitrage, between pools and against centralised exchanges, the "
@@ -207,6 +211,7 @@ class MEV(VoiceoverScene):
             "race for position in the block. <bookmark mark='c'/> And sandwiches and just-in-time liquidity: trading "
             "around another user's swap, a pure transfer from that user."
         ) as vo:
+            self.play(FadeIn(head))
             for k, m_ in enumerate(("a", "b", "c")):
                 vo.wait_until(m_)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))

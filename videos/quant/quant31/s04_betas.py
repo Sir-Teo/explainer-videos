@@ -64,6 +64,7 @@ class Betas(VoiceoverScene):
                     r"toward one in the next; the coefficients are close to these"),
                 why(r"the rule of thumb printed on financial terminals as the adjusted beta, ever since")]
         step = ladder(self, rows, whys, keep=2, top=2.2, x=-0.3, buff=0.7, edge=6.9)
+        head = label(r"Blume (1971): betas regress toward one", font_size=28).to_edge(UP, buff=0.4)
         with self.voiceover(
             "Betas. Marshall Blume noticed in 1971 that betas estimated in one period regress toward one in the next. "
             "<bookmark mark='a'/> A portfolio with a high beta now will probably have a lower one later, and a low one a "
@@ -71,6 +72,7 @@ class Betas(VoiceoverScene):
             "<bookmark mark='b'/> Two thirds of the estimate plus one third of one became the adjusted beta printed on "
             "financial terminals. Blume read it partly as real drift, and partly as the statistics of noisy estimates."
         ) as vo:
+            self.play(FadeIn(head))
             vo.wait_until("a")
             step(0)
             vo.wait_until("b")

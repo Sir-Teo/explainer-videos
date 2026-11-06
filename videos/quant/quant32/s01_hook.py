@@ -96,6 +96,10 @@ class Hook(VoiceoverScene):
                           r"commodity futures, index funds on rebalancing days, pension funds at month end", width=12.4,
                           font_size=19),
         ).arrange(DOWN, buff=0.25)
+        head = label(r"What makes a premium alternative?", font_size=28).to_edge(UP, buff=0.4)
+        if cards.height > 6.0:
+            cards.scale_to_fit_height(6.0)
+        cards.next_to(head, DOWN, buff=0.3)
         with self.voiceover(
             "What makes a premium alternative? It is a return earned by a rule, not by owning the market, and it has to "
             "come from somewhere. <bookmark mark='a'/> A risk premium is paid for bearing a risk that hurts in bad times. "
@@ -104,6 +108,7 @@ class Hook(VoiceoverScene):
             "hedgers, index funds, pension funds. Each premium in this part will be asked which of the three it is, "
             "because that decides whether it should survive."
         ) as vo:
+            self.play(FadeIn(head))
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))

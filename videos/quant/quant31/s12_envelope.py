@@ -160,6 +160,7 @@ class Envelope(VoiceoverScene):
                             rf"{dg['days_affected']} of {comma(dg['n_days'])} days; the rest of the book: a Sharpe ratio of "
                             rf"{dg['sr_rest']:.2f} (a diagnosis, not a new strategy: the holdout has been seen)", 11.0, 19,
                             GREY_A).next_to(bar, DOWN, buff=0.7)
+        head = label(r"The diagnosis, on the registered rule exactly as it was", font_size=28).to_edge(UP, buff=0.4)
         with self.voiceover(
             "The diagnosis, run on the registered rule exactly as it was. <bookmark mark='a'/> Split each day's profit "
             "and loss by coin. On "
@@ -171,6 +172,7 @@ class Envelope(VoiceoverScene):
             "diagnosis, not a result: the sealed years have now been seen, and a repaired rule would be a new trial, on "
             "data that is no longer sealed."
         ) as vo:
+            self.play(FadeIn(head))
             vo.wait_until("a")
             self.play(GrowFromEdge(low, LEFT), FadeIn(l1))
             self.play(GrowFromEdge(rest, LEFT))
@@ -215,6 +217,10 @@ class Envelope(VoiceoverScene):
             desk_question(r"a universe that knows what assets are", r"stablecoins, pegged and halted instruments "
                           r"excluded by rule, before any signal sees them", width=12.4, font_size=19),
         ).arrange(DOWN, buff=0.25)
+        head = label(r"What the House changes for every future rule (no trial: not a strategy)", font_size=28).to_edge(UP, buff=0.4)
+        if cards.height > 6.0:
+            cards.scale_to_fit_height(6.0)
+        cards.next_to(head, DOWN, buff=0.3)
         with self.voiceover(
             "What the House changes, for every future rule, and charges as no trial because it is not a strategy. "
             "<bookmark mark='a'/> A floor under every forecast variance, set from the asset class. "
@@ -222,6 +228,7 @@ class Envelope(VoiceoverScene):
             "daily volume. <bookmark mark='c'/> And a universe that knows what its assets are: pegged and halted "
             "instruments removed before any signal sees them."
         ) as vo:
+            self.play(FadeIn(head))
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))

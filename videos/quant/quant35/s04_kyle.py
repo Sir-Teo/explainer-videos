@@ -230,6 +230,10 @@ class Kyle(VoiceoverScene):
                           r"noise part of a move never reverses, because the market maker cannot tell it from information",
                           width=12.4, font_size=19),
         ).arrange(DOWN, buff=0.25)
+        head = label(r"Kyle's three dimensions of liquidity", font_size=28).to_edge(UP, buff=0.4)
+        if cards.height > 6.0:
+            cards.scale_to_fit_height(6.0)
+        cards.next_to(head, DOWN, buff=0.3)
         with self.voiceover(
             "Kyle also named the three dimensions of liquidity that the rest of this act measures. "
             "<bookmark mark='a'/> Tightness: the cost of turning a position round, the spread. <bookmark mark='b'/> Depth: "
@@ -237,6 +241,7 @@ class Kyle(VoiceoverScene):
             "the price recovers from a shock that carried no information. Real markets have all three; the order book of "
             "Part thirty-six measures them separately."
         ) as vo:
+            self.play(FadeIn(head))
             for k_, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k_], shift=UP * 0.2))

@@ -148,6 +148,10 @@ class Costs(VoiceoverScene):
             desk_question(r"the consequence", r"the paper anomaly is the gross return; the investable one is what is "
                           r"left after the trades it requires", width=12.4, font_size=19),
         ).arrange(DOWN, buff=0.25)
+        head = label(r"Which anomalies survive trading costs?", font_size=28).to_edge(UP, buff=0.4)
+        if cards.height > 6.0:
+            cards.scale_to_fit_height(6.0)
+        cards.next_to(head, DOWN, buff=0.3)
         with self.voiceover(
             "Robert Novy-Marx and Mihail Velikov asked which anomalies survive costs. <bookmark mark='a'/> Those that trade "
             "rarely, such as value, size and profitability, survive; the high-turnover ones, such as short-term reversal, "
@@ -155,6 +159,7 @@ class Costs(VoiceoverScene):
             "do not trade, and a cost charged inside the optimisation rather than subtracted afterwards. "
             "<bookmark mark='c'/> The anomaly on paper is gross; the investable one is what is left."
         ) as vo:
+            self.play(FadeIn(head))
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))

@@ -113,6 +113,10 @@ class Sims(VoiceoverScene):
             desk_question(r"adaptation", r"real competitors learn back: a strategy that pays changes the population "
                           r"that made it pay, which a fixed simulator never does", width=12.4, font_size=19),
         ).arrange(DOWN, buff=0.25)
+        head = label(r"Three sources of the gap between simulation and reality", font_size=28).to_edge(UP, buff=0.4)
+        if cards.height > 6.0:
+            cards.scale_to_fit_height(6.0)
+        cards.next_to(head, DOWN, buff=0.3)
         with self.voiceover(
             "So the gap between simulation and reality has three sources. <bookmark mark='a'/> Artefacts: a learner "
             "finds whatever pays in the simulator, including its simplifications. A noise trader that is too patient "
@@ -120,6 +124,7 @@ class Sims(VoiceoverScene):
             "and how it would move with you is assumed, not measured. <bookmark mark='c'/> And adaptation: real "
             "competitors learn back, so a strategy that pays changes the population that made it pay."
         ) as vo:
+            self.play(FadeIn(head))
             for k, m_ in enumerate(("a", "b", "c")):
                 vo.wait_until(m_)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))

@@ -49,6 +49,10 @@ class Market(VoiceoverScene):
             desk_question(r"a common driver", r"the gaps rose together when buying pressure rose: arbitrage capital, "
                           r"not information, was the scarce input", width=12.4, font_size=19),
         ).arrange(DOWN, buff=0.25)
+        head = label(r"Makarov and Schoar: crypto arbitrage", font_size=28).to_edge(UP, buff=0.4)
+        if cards.height > 6.0:
+            cards.scale_to_fit_height(6.0)
+        cards.next_to(head, DOWN, buff=0.3)
         with self.voiceover(
             "Igor Makarov and Antoinette Schoar's study of crypto arbitrage. <bookmark mark='a'/> Within a country, "
             "exchanges in the same currency stayed close, because coins and cash move easily between them. "
@@ -56,6 +60,7 @@ class Market(VoiceoverScene):
             "percent in early twenty eighteen. <bookmark mark='c'/> And the gaps rose together when buying pressure rose. "
             "What was scarce was arbitrage capital that could cross the border, not information."
         ) as vo:
+            self.play(FadeIn(head))
             for k, m_ in enumerate(("a", "b", "c")):
                 vo.wait_until(m_)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))

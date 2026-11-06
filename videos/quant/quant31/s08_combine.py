@@ -102,12 +102,17 @@ class Combine(VoiceoverScene):
                           r"scores, with a penalty that shrinks it toward equal weights: the penalty set from 0 to $10^6$",
                           width=12.4, font_size=19),
         ).arrange(DOWN, buff=0.25)
+        head = label(r"Three combinations, from the humblest to the most ambitious", font_size=28).to_edge(UP, buff=0.4)
+        if cards.height > 6.0:
+            cards.scale_to_fit_height(6.0)
+        cards.next_to(head, DOWN, buff=0.3)
         with self.voiceover(
             "Three combinations, from the most humble to the most ambitious. <bookmark mark='a'/> Equal weights, with "
             "each signal's sign from training. <bookmark mark='b'/> Weights in proportion to the training ICs, ignoring "
             "how the signals correlate. <bookmark mark='c'/> And the regression itself, pooled over every coin and day "
             "of training, with a ridge penalty that ranges from none to a great deal."
         ) as vo:
+            self.play(FadeIn(head))
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))

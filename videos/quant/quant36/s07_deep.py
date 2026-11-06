@@ -91,6 +91,10 @@ class Deep(VoiceoverScene):
                           r"memory, which a model of the current state alone cannot capture (the research chapter)",
                           width=12.4, font_size=19),
         ).arrange(DOWN, buff=0.25)
+        head = label(r"What Sirignano and Cont found, in more detail", font_size=28).to_edge(UP, buff=0.4)
+        if cards.height > 6.0:
+            cards.scale_to_fit_height(6.0)
+        cards.next_to(head, DOWN, buff=0.3)
         with self.voiceover(
             "What Sirignano and Cont found, in more detail, because it is the strongest positive result. "
             "<bookmark mark='a'/> Universality: one model for all stocks beat a model per stock, even on stocks it had "
@@ -99,6 +103,7 @@ class Deep(VoiceoverScene):
             "the forecast. Price formation has memory, which a model of the current state alone cannot capture. The "
             "research chapter meets the same fact from the other side."
         ) as vo:
+            self.play(FadeIn(head))
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))

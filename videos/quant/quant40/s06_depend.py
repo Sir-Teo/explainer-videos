@@ -52,6 +52,10 @@ class Depend(VoiceoverScene):
             desk_question(r"correlation does not fix the tail", r"two models with the same marginals and the same "
                           r"correlation can have very different chances of joint crashes", width=12.4, font_size=19),
         ).arrange(DOWN, buff=0.25)
+        head = label(r"Embrechts, McNeil and Straumann: pitfalls of correlation", font_size=28).to_edge(UP, buff=0.4)
+        if cards.height > 6.0:
+            cards.scale_to_fit_height(6.0)
+        cards.next_to(head, DOWN, buff=0.3)
         with self.voiceover(
             "Paul Embrechts, Alexander McNeil and Daniel Straumann's pitfalls of correlation. <bookmark mark='a'/> Zero "
             "correlation is not independence. <bookmark mark='b'/> Not every correlation is possible: for lognormal "
@@ -59,6 +63,7 @@ class Depend(VoiceoverScene):
             "correlation does not fix the tail: the same marginals and the same correlation can give very different "
             "chances of crashing together."
         ) as vo:
+            self.play(FadeIn(head))
             for k, m_ in enumerate(("a", "b", "c")):
                 vo.wait_until(m_)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))

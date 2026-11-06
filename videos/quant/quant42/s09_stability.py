@@ -95,6 +95,10 @@ class Stability(VoiceoverScene):
             desk_question(r"Kirilenko and Lo (2013)", r"the gap between them is the risk: technology outruns the "
                           r"controls built for slower markets", width=12.4, font_size=19),
         ).arrange(DOWN, buff=0.25)
+        head = label(r"Kirilenko and Lo: the problem in two laws", font_size=28).to_edge(UP, buff=0.4)
+        if cards.height > 6.0:
+            cards.scale_to_fit_height(6.0)
+        cards.next_to(head, DOWN, buff=0.3)
         with self.voiceover(
             "Andrei Kirilenko and Andrew Lo put the problem in two laws. <bookmark mark='a'/> Moore's law: computing "
             "keeps getting faster and cheaper, so more trading is automated. <bookmark mark='b'/> Murphy's law: "
@@ -102,6 +106,7 @@ class Stability(VoiceoverScene):
             "<bookmark mark='c'/> The risk is the gap between them: technology that outruns the controls built for "
             "slower markets."
         ) as vo:
+            self.play(FadeIn(head))
             for k, m_ in enumerate(("a", "b", "c")):
                 vo.wait_until(m_)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
@@ -118,6 +123,7 @@ class Stability(VoiceoverScene):
                         for d_, w_, c_ in events]).arrange(DOWN, aligned_edge=LEFT, buff=0.32).move_to(ORIGIN)
         if rows.width > 13.0:
             rows.scale_to_fit_width(13.0)
+        head = label(r"Machine-speed failures so far, from the public record", font_size=28).to_edge(UP, buff=0.4)
         with self.voiceover(
             "What machine-speed failures have looked like so far, from the public record. <bookmark mark='a'/> The "
             "flash crash of twenty ten, Part thirty-five. <bookmark mark='b'/> Knight Capital in twenty twelve, which "
@@ -127,6 +133,7 @@ class Stability(VoiceoverScene):
             "fall of about six percent in twenty sixteen. <bookmark mark='e'/> None was caused by learning machines. "
             "All were automated liquidity withdrawing together, faster than controls could act."
         ) as vo:
+            self.play(FadeIn(head))
             for k, m_ in enumerate(("a", "b", "c", "d", "e")):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))

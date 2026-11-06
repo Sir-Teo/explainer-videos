@@ -159,6 +159,10 @@ class Calendar(VoiceoverScene):
             desk_question(r"earnings drift", r"prices keep moving in the direction of an earnings surprise for weeks "
                           r"(Bernard and Thomas 1989): Part 28 read the same delay in text", width=12.4, font_size=19),
         ).arrange(DOWN, buff=0.25)
+        head = label(r"Event-driven strategies: flows around corporate events", font_size=28).to_edge(UP, buff=0.4)
+        if cards.height > 6.0:
+            cards.scale_to_fit_height(6.0)
+        cards.next_to(head, DOWN, buff=0.3)
         with self.voiceover(
             "Event-driven strategies harvest similar flows around corporate events. <bookmark mark='a'/> Merger "
             "arbitrage buys a takeover target after the deal is announced and earns the spread if it closes. Mark "
@@ -168,6 +172,7 @@ class Calendar(VoiceoverScene):
             "effect has shrunk as traders learned to position ahead of it. <bookmark mark='c'/> And prices drift after "
             "earnings surprises for weeks, a delay Part twenty-eight read in text."
         ) as vo:
+            self.play(FadeIn(head))
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))

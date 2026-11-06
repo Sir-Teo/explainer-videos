@@ -126,12 +126,14 @@ class Coint(VoiceoverScene):
             r.move_to([-3.0, 0.9 - 1.3 * j, 0], aligned_edge=LEFT)
             bars.add(VGroup(label(nm, font_size=21, color=col).next_to(r, UP, buff=0.12).align_to(r, LEFT), r,
                             MathTex(rf"{100 * v:.1f}\%", font_size=28).next_to(r, RIGHT, buff=0.2)))
+        head = label(r"Does a pair that passes this year pass next year?", font_size=28).to_edge(UP, buff=0.4)
         with self.voiceover(
             "The harder test: does a pair that passes this year pass next year? <bookmark mark='a'/> Of the pairs that "
             f"passed in one year, {100 * c['persist']:.1f} percent passed again the next. <bookmark mark='b'/> For a pair "
             f"chosen at random, the rate is {100 * avg:.1f} percent. Passing once is almost no evidence of passing "
             "again. A screen that selects pairs on this test is selecting, mostly, on noise."
         ) as vo:
+            self.play(FadeIn(head))
             vo.wait_until("a")
             self.play(FadeIn(bars[0]))
             vo.wait_until("b")

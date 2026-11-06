@@ -202,6 +202,10 @@ class Pairs(VoiceoverScene):
                           r"financial stocks; a pair whose short leg cannot be held is not a pair", width=12.4,
                           font_size=19),
         ).arrange(DOWN, buff=0.25)
+        head = label(r"The short leg a portfolio backtest hides", font_size=28).to_edge(UP, buff=0.4)
+        if cards.height > 6.0:
+            cards.scale_to_fit_height(6.0)
+        cards.next_to(head, DOWN, buff=0.3)
         with self.voiceover(
             "A backtest on portfolios hides the short leg. On stocks it is real. <bookmark mark='a'/> Borrowing a share "
             "to sell it costs a fee, usually small, but tens of percent a year for hard-to-borrow names, and the "
@@ -211,6 +215,7 @@ class Pairs(VoiceoverScene):
             "September 2008 the SEC temporarily banned short sales of hundreds of financial stocks. A pair whose short "
             "leg cannot be held is not a pair."
         ) as vo:
+            self.play(FadeIn(head))
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))

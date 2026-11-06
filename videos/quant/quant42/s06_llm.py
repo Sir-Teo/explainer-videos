@@ -161,6 +161,10 @@ class LLM(VoiceoverScene):
             desk_question(r"a new target", r"text written for machine readers, true or false, becomes a way to move "
                           r"prices; the defence is provenance, not a better model", width=12.4, font_size=19),
         ).arrange(DOWN, buff=0.25)
+        head = label(r"What language-model traders could do to a market", font_size=28).to_edge(UP, buff=0.4)
+        if cards.height > 6.0:
+            cards.scale_to_fit_height(6.0)
+        cards.next_to(head, DOWN, buff=0.3)
         with self.voiceover(
             "What language-model traders could do to a market, in principle. <bookmark mark='a'/> Prices should absorb "
             "news faster, since machines read every headline at once. <bookmark mark='b'/> But the same few models "
@@ -168,6 +172,7 @@ class LLM(VoiceoverScene):
             "time. <bookmark mark='c'/> And text written for machine readers, true or false, becomes a way to move "
             "prices. The defence there is knowing where text came from, not a better model."
         ) as vo:
+            self.play(FadeIn(head))
             for k, m_ in enumerate(("a", "b", "c")):
                 vo.wait_until(m_)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))

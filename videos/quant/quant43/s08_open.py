@@ -91,12 +91,17 @@ class Open(VoiceoverScene):
             desk_question(r"settled: a backtest is not a forecast", r"the Track Record: research Sharpe ratios shrink, "
                           r"by about half above the average, when the envelope opens", width=12.4, font_size=19),
         ).arrange(DOWN, buff=0.25)
+        head = label(r"Three things the series did settle, for its own data", font_size=28).to_edge(UP, buff=0.4)
+        if cards.height > 6.0:
+            cards.scale_to_fit_height(6.0)
+        cards.next_to(head, DOWN, buff=0.3)
         with self.voiceover(
             "And three things the series did settle, at least for its own data. <bookmark mark='a'/> A normal VaR fails: "
             "on ninety years of the American market it was exceeded far more often than promised, in clusters. "
             "<bookmark mark='b'/> Learning algorithms can collude without speaking. <bookmark mark='c'/> And a backtest "
             "is not a forecast: research Sharpe ratios shrink when the envelope opens."
         ) as vo:
+            self.play(FadeIn(head))
             for k, m_ in enumerate(("a", "b", "c")):
                 vo.wait_until(m_)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))

@@ -221,6 +221,10 @@ class Deep(VoiceoverScene):
             desk_question(r"too few examples, too much noise", r"a daily IC near zero needs years of data to separate from "
                           r"noise, and every architecture and seed tried is another trial", width=12.4, font_size=19),
         ).arrange(DOWN, buff=0.25)
+        head = label(r"Why it fails here, and why that is no verdict on the paper", font_size=28).to_edge(UP, buff=0.4)
+        if cards.height > 6.0:
+            cards.scale_to_fit_height(6.0)
+        cards.next_to(head, DOWN, buff=0.3)
         with self.voiceover(
             "Why it fails here, and why that is not a verdict on the paper. <bookmark mark='a'/> The universe is wrong: "
             "forty-nine industries have little residual predictability; the paper used hundreds of single stocks. "
@@ -229,6 +233,7 @@ class Deep(VoiceoverScene):
             "<bookmark mark='c'/> And a near-zero daily signal needs years of data to tell from noise, and every "
             "architecture tried is another trial."
         ) as vo:
+            self.play(FadeIn(head))
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))

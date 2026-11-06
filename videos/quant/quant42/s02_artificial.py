@@ -239,6 +239,7 @@ class Artificial(VoiceoverScene):
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(grid, RIGHT, buff=0.6)
         fit_right(side)
         kurt_b, acf_b, kt, at = b["kurt"], b["acf20"], ms["target"][0], ms["target"][1]
+        head = label(r"Fitting the agent market to the real one: simulated moments", font_size=28).to_edge(UP, buff=0.4)
         with self.voiceover(
             "Can the agent market be fitted to the real one? The method of simulated moments, on a grid of two "
             "parameters: how hard chartists extrapolate, and how noisy their orders are. <bookmark mark='a'/> Each "
@@ -249,6 +250,7 @@ class Artificial(VoiceoverScene):
             f"loss {ratio:.1f}-fold; changing how hard chartists extrapolate moves it by at most {spread:.0f} percent. "
             "These two moments identify one behaviour, not two: the first warning of Chapter three."
         ) as vo:
+            self.play(FadeIn(head))
             vo.wait_until("a")
             self.play(FadeIn(sq), FadeIn(xl), FadeIn(yl), run_time=1.5)
             vo.wait_until("b")

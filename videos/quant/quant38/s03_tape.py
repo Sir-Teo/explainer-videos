@@ -341,6 +341,10 @@ class Tape(VoiceoverScene):
                           r"inventory P\&L into a basis trade; none of that is in a single-book replay", width=12.4,
                           font_size=19),
         ).arrange(DOWN, buff=0.25)
+        head = label(r"What the replay leaves out", font_size=28).to_edge(UP, buff=0.4)
+        if cards.height > 6.0:
+            cards.scale_to_fit_height(6.0)
+        cards.next_to(head, DOWN, buff=0.3)
         with self.voiceover(
             "What the replay leaves out, so the conclusion is not overstated. <bookmark mark='a'/> Real makers react in "
             "microseconds; our fast maker is an idealisation, and the replay cannot see inside a tenth of a second. "
@@ -348,6 +352,7 @@ class Tape(VoiceoverScene):
             "far less toxic. <bookmark mark='c'/> And they hedge on other venues. The lesson stands: the spread itself "
             "pays for almost nothing."
         ) as vo:
+            self.play(FadeIn(head))
             for k, m_ in enumerate(("a", "b", "c")):
                 vo.wait_until(m_)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))

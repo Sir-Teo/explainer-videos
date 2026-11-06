@@ -114,6 +114,10 @@ class House(VoiceoverScene):
             desk_question(r"no fees, no latency, no hidden size", r"the markouts ignore fees and rebates, assume the "
                           r"order arrives instantly, and see only displayed size", width=12.0, font_size=19),
         ).arrange(DOWN, buff=0.25)
+        head = label(r"What this part did not measure", font_size=28).to_edge(UP, buff=0.4)
+        if cards.height > 6.0:
+            cards.scale_to_fit_height(6.0)
+        cards.next_to(head, DOWN, buff=0.3)
         with self.voiceover(
             "What this part did not measure, so that nobody quotes it for more than it is. <bookmark mark='a'/> The best "
             "quotes only, on one exchange, in four days of one week: every number is a measurement of that market, not "
@@ -121,6 +125,7 @@ class House(VoiceoverScene):
             "happens inside a step is approximated. <bookmark mark='c'/> And no fees, no latency, no hidden size. The "
             "House writes these limits next to the numbers, every time."
         ) as vo:
+            self.play(FadeIn(head))
             for k_, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k_], shift=UP * 0.2))

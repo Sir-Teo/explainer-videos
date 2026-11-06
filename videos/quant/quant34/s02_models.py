@@ -110,6 +110,10 @@ class Models(VoiceoverScene):
                           r"2012, and the EU agreed in its 2024 market reforms to phase it out by mid-2026", width=12.4,
                           font_size=19),
         ).arrange(DOWN, buff=0.25)
+        head = label(r"One part of market making deserves its own card", font_size=28).to_edge(UP, buff=0.4)
+        if cards.height > 6.0:
+            cards.scale_to_fit_height(6.0)
+        cards.next_to(head, DOWN, buff=0.3)
         with self.voiceover(
             "One part of the market-making business deserves its own card. <bookmark mark='a'/> In the United States, "
             "wholesale market makers pay retail brokers for their customers' orders. Retail orders are less likely to "
@@ -119,6 +123,7 @@ class Models(VoiceoverScene):
             "the answer differs: Britain's regulator treated the practice as incompatible with its rules from 2012, and "
             "the European Union agreed to phase it out by mid-2026."
         ) as vo:
+            self.play(FadeIn(head))
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))

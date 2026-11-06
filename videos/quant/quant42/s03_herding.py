@@ -158,6 +158,7 @@ class Herding(VoiceoverScene):
         cap = label(rf"total variation, simulation against the exact law: {k['bi']['tv_exact_sim']:.3f} and "
                     rf"{k['uni']['tv_exact_sim']:.3f}; exact against beta-binomial: below $10^{{-14}}$", font_size=17,
                     color=GREY_A).to_edge(DOWN, buff=0.4)
+        head = label(r"The check: forty million steps against the exact law", font_size=28).to_edge(UP, buff=0.4)
         with self.voiceover(
             "The check. Forty million steps of each chain, against the law the theorem gives, in white. "
             "<bookmark mark='a'/> Herding: the U, with heavy mass at the edges. <bookmark mark='b'/> Independent: a hump "
@@ -165,6 +166,7 @@ class Herding(VoiceoverScene):
             f"{k['bi']['tv_exact_sim']:.3f} and {k['uni']['tv_exact_sim']:.3f} in total variation, and the chain's law "
             "matches the beta-binomial formula to the last digit."
         ) as vo:
+            self.play(FadeIn(head))
             vo.wait_until("a")
             self.play(FadeIn(out[0][0]), FadeIn(out[0][1]), Create(out[0][2]))
             vo.wait_until("b")

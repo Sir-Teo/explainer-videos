@@ -339,6 +339,10 @@ class Collusion(VoiceoverScene):
             desk_question(r"why markets should care", r"a quoting model licensed to many dealers is the same structure; "
                           r"the House's audit runs on vendor models too", width=12.4, font_size=19),
         ).arrange(DOWN, buff=0.25)
+        head = label(r"The cases regulators have brought so far", font_size=28).to_edge(UP, buff=0.4)
+        if cards.height > 6.0:
+            cards.scale_to_fit_height(6.0)
+        cards.next_to(head, DOWN, buff=0.3)
         with self.voiceover(
             "And the cases regulators have brought so far are of a different kind. <bookmark mark='a'/> In twenty "
             "twenty-four the American Justice Department sued RealPage, alleging that its rent-pricing software let "
@@ -348,6 +352,7 @@ class Collusion(VoiceoverScene):
             "<bookmark mark='c'/> A quoting model licensed to many dealers has the same structure, which is why the "
             "House's audit runs on vendor models too."
         ) as vo:
+            self.play(FadeIn(head))
             for k, m_ in enumerate(("a", "b", "c")):
                 vo.wait_until(m_)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))

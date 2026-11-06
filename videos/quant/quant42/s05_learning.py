@@ -338,6 +338,7 @@ class Learning(VoiceoverScene):
             t = label(nm, font_size=19, color=GREY_A).next_to(b, UP, buff=0.08).align_to(b, LEFT)
             n = label(rf"{v:.0f}", font_size=20).next_to(b, RIGHT, buff=0.15)
             bars.add(VGroup(b, t, n))
+        head = label(r"Why a backtest is not an environment", font_size=28).to_edge(UP, buff=0.4)
         with self.voiceover(
             "And why a backtest is not an environment. Record a session of the two-tick rule: who traded, and when. "
             f"<bookmark mark='a'/> Live, it earns {rp['live2']:.0f}. <bookmark mark='b'/> Now evaluate a four-tick rule "
@@ -346,6 +347,7 @@ class Learning(VoiceoverScene):
             "two-tick rule, because wider quotes drive the noise traders away. The tape recorded who traded with the "
             "old quotes, not who would have traded with the new ones."
         ) as vo:
+            self.play(FadeIn(head))
             for k, m_ in enumerate(("a", "b", "c")):
                 vo.wait_until(m_)
                 self.play(FadeIn(bars[k], shift=RIGHT * 0.2))
