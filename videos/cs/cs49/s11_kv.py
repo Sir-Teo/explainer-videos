@@ -313,8 +313,9 @@ class Kv(VoiceoverScene):
                                max_tip_length_to_length_ratio=0.12)
                          for a, b in ((0, 1), (1, 2), (1, 3), (2, 4), (3, 4))])
         via = VGroup(label(r"via Y", font_size=16, color=DATA).next_to(edges[1], UP, buff=0.02),
-                     label(r"via Z: \ pen removed", font_size=16, color=LAM).next_to(
-                         edges[2].point_from_proportion(0.3), DL, buff=0.05))
+                     VGroup(label(r"via Z:", font_size=16, color=LAM),
+                            label(r"pen removed", font_size=16, color=LAM)).arrange(DOWN, buff=0.05).move_to(
+                         [-2.6, 0.8, 0]))
         sib = wrapped_label(r"neither descends from the other: \ a get returns both \ (\textbf{siblings}); \ the cart "
                             r"merges them by union, \ so the removed pen comes back", 3.0, font_size=18,
                             color=HEAD).move_to([5.25, 1.55, 0])
