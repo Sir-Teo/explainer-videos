@@ -284,3 +284,18 @@ def flow_box(text, color=DATA, w=1.5, h=0.7, font=20):
     r = RoundedRectangle(width=w, height=h, corner_radius=0.1, stroke_color=color, stroke_width=2, fill_color=BG,
                          fill_opacity=1)
     return VGroup(r, label(text, font_size=font, color=WHITE).move_to(r))
+
+
+def block_image(vals, w, h, height=3.0):
+    """Ciphertext drawn block by block: each 16-byte block painted in the colour given by its own first three bytes,
+    so equal blocks show as equal colours."""
+    a = np.array(vals, dtype=np.uint8).reshape(h, w)
+    rgb = np.zeros((h, w, 4), dtype=np.uint8)
+    rgb[..., 3] = 255
+    for r in range(h):
+        for j in range(0, w, 16):
+            rgb[r, j:j + 16, :3] = a[r, j:j + 3]
+    img = ImageMobject(rgb)
+    img.set_resampling_algorithm(RESAMPLING_ALGORITHMS["nearest"])
+    img.height = height
+    return img

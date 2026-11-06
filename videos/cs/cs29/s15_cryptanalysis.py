@@ -25,16 +25,14 @@ def spn_diagram(dx=0.34, top=2.4, rh=1.25):
                             fill_opacity=1).move_to([(xs[4 * s] + xs[4 * s + 3]) / 2, sy, 0])
             on = r < 3 and s in TRAIL[r]
             if on:
-                box.set_stroke(NO, width=3)
-                trail.add(box.copy())
+                trail.add(box.copy().set_stroke(NO, width=3).set_fill(opacity=0))
             g.add(box, label(rf"$S_{{{r + 1}{s + 1}}}$", font_size=13, color=GREY_A).move_to(box))
         for i in range(16):
-            col = NO if i in active else GREY_D
-            seg = Line([xs[i], y + 0.25, 0] if r == 0 else [xs[i], y + 0.05, 0], [xs[i], sy + 0.18, 0], color=col,
-                       stroke_width=2.5 if i in active else 1)
+            seg = Line([xs[i], y + 0.25, 0] if r == 0 else [xs[i], y + 0.05, 0], [xs[i], sy + 0.18, 0], color=GREY_D,
+                       stroke_width=1)
             g.add(seg)
             if i in active:
-                trail.add(seg.copy())
+                trail.add(seg.copy().set_stroke(NO, width=2.5))
         if r == 3:
             fk = Line([xs[0] - 0.25, sy - 0.5, 0], [xs[-1] + 0.25, sy - 0.5, 0], color=HEAD, stroke_width=2)
             g.add(fk, label(r"$K_5$", font_size=16, color=HEAD).next_to(fk, LEFT, buff=0.1))
@@ -49,11 +47,10 @@ def spn_diagram(dx=0.34, top=2.4, rh=1.25):
         ny = y - rh
         for i in range(16):
             on = i in out
-            ln = Line([xs[i], sy - 0.18, 0], [xs[perm(i)], ny + 0.05, 0], color=NO if on else GREY_D,
-                      stroke_width=2.5 if on else 1)
+            ln = Line([xs[i], sy - 0.18, 0], [xs[perm(i)], ny + 0.05, 0], color=GREY_D, stroke_width=1)
             g.add(ln)
             if on:
-                trail.add(ln.copy())
+                trail.add(ln.copy().set_stroke(NO, width=2.5))
         active = {perm(i) for i in out}
         y = ny
     return g, trail
@@ -148,7 +145,7 @@ class Cryptanalysis(VoiceoverScene):
                                fill_color=YES if k == true else DATA, fill_opacity=1).move_to(base, aligned_edge=DOWN))
         ti = keys.index(true)
         tl = label(rf"\texttt{{{true >> 8:X}}}, \ \texttt{{{true & 15:X}}}: \ {counts[ti]} pairs", font_size=18,
-                   color=YES).next_to(ax.c2p(ti + 0.5, counts[ti]), UP, buff=0.1)
+                   color=YES).next_to(ax.c2p(ti + 0.5, counts[ti]), LEFT, buff=0.15)
         yt = VGroup(*[label(str(y), font_size=15, color=GREY_A).next_to(ax.c2p(0, y), LEFT, buff=0.08)
                       for y in (0, 40, 80, 120, 160)])
         xl = label(r"the 256 guesses for the last-round key bits under $S_{42}$ and $S_{44}$", font_size=17,

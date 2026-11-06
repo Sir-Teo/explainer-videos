@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs29.common import (BG, DATA, HEAD, NO, PART, YES, load, mono, pixel_image)
+from videos.cs.cs29.common import (block_image, BG, DATA, HEAD, NO, PART, YES, load, mono, pixel_image)
 
 
 class Modes(VoiceoverScene):
@@ -22,7 +22,8 @@ class Modes(VoiceoverScene):
     def four(self):
         p = load("penguin")
         head = label(r"The logo, \ four ways", font_size=34).to_edge(UP, buff=0.3)
-        imgs = Group(*[pixel_image(p[k], p["w"], p["h"], height=2.1) for k in ("plain", "ecb", "cbc", "ctr")])
+        imgs = Group(pixel_image(p["plain"], p["w"], p["h"], height=2.1),
+                     *[block_image(p[k], p["w"], p["h"], height=2.1) for k in ("ecb", "cbc", "ctr")])
         imgs.arrange(RIGHT, buff=0.35).next_to(head, DOWN, buff=0.4)
         names = [(r"plaintext", GREY_A), (r"ECB", NO), (r"CBC", YES), (r"CTR", YES)]
         forms = [r"P_i", r"C_i = E_k(P_i)", r"C_i = E_k(P_i \oplus C_{i-1})", r"C_i = P_i \oplus E_k(N \,\|\, i)"]
@@ -39,6 +40,8 @@ class Modes(VoiceoverScene):
                   r"random access", font_size=20, color=DATA),
             label(r"CTR's rule: \ never reuse a nonce under one key, \ or it is the two-time pad of chapter 4",
                   font_size=20, color=HEAD),
+            label(r"(ciphertexts drawn block by block, \ each in the colour of its own first three bytes)",
+                  font_size=17, color=GREY_B),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "A block cipher encrypts sixteen bytes. A mode of operation says how to encrypt a message of any length. "
@@ -52,7 +55,7 @@ class Modes(VoiceoverScene):
             "parallel, or any one decrypted alone. <bookmark mark='d'/> Its one rule is absolute. Never encrypt two "
             "messages under one key with the same nonce, or you have made a two-time pad."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(imgs[0]), FadeIn(caps[0]))
+            self.play(FadeIn(head), FadeIn(imgs[0]), FadeIn(caps[0]), FadeIn(lines[4]))
             vo.wait_until("a")
             self.play(FadeIn(imgs[1]), FadeIn(caps[1]), FadeIn(lines[0]))
             vo.wait_until("b")

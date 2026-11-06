@@ -60,10 +60,10 @@ class Aes(VoiceoverScene):
         a = load("aes")
         st = dict(a["steps"])
         head = label(r"One round, \ on FIPS-197's example", font_size=34).to_edge(UP, buff=0.3)
-        cell = 0.62
-        g0 = state_grid(st["AddRoundKey 0"], cell=cell, font=19).next_to(head, DOWN, buff=0.7).to_edge(LEFT, buff=1.2)
+        cell = 0.8
+        g0 = state_grid(st["AddRoundKey 0"], cell=cell, font=23).next_to(head, DOWN, buff=0.7).to_edge(LEFT, buff=1.2)
         name = label(r"plaintext $\oplus$ key", font_size=20, color=GREY_A).next_to(g0, UP, buff=0.2)
-        panel_x = 0.6
+        panel_x = 0.2
         notes = {
             "sub": VGroup(
                 label(r"\textbf{SubBytes}: \ every byte through the S-box", font_size=22, color=DATA),
@@ -93,7 +93,7 @@ class Aes(VoiceoverScene):
                 v.set_x(panel_x + v.width / 2)
         seq = [("SubBytes 1", "sub", r"after SubBytes"), ("ShiftRows 1", "shift", r"after ShiftRows"),
                ("MixColumns 1", "mix", r"after MixColumns"), ("AddRoundKey 1", "key", r"after round 1")]
-        grids = {k: state_grid(st[k], cell=cell, font=19).move_to(g0) for k, _, _ in seq}
+        grids = {k: state_grid(st[k], cell=cell, font=23).move_to(g0) for k, _, _ in seq}
         with self.voiceover(
             "AES works on a four by four grid of bytes, the state, filled column by column. Here is the example from "
             "the standard, after the key has been XORed in. A round has four steps. <bookmark mark='a'/> SubBytes "
@@ -108,27 +108,22 @@ class Aes(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head), FadeIn(g0), FadeIn(name))
             cur = g0
+            prev = None
             for (k, nk, nm), mk in zip(seq, "abcd"):
                 vo.wait_until(mk)
                 new = grids[k]
                 newname = label(nm, font_size=20, color=GREY_A).next_to(new, UP, buff=0.2)
+                out = [FadeOut(notes[prev])] if prev else []
                 if nk == "shift":
-                    moves = []
-                    for r in range(4):
-                        for c in range(4):
-                            moves.append(cur.vals[r][c].animate.move_to(cur.cells[r][(c - r) % 4]))
-                    self.play(FadeIn(notes[nk]), *moves, Transform(name, newname), run_time=1.5)
-                    self.remove(cur)
-                    self.add(new)
+                    anims = [cur.vals[r][c].animate.move_to(cur.cells[r][(c - r) % 4]) for r in range(4)
+                             for c in range(4)]
                 else:
-                    self.play(FadeIn(notes[nk]), *[Transform(cur.vals[r][c], new.vals[r][c]) for r in range(4) for c in
-                                                   range(4)], Transform(name, newname), run_time=1.5)
-                    self.remove(cur)
-                    self.add(new)
+                    anims = [Transform(cur.vals[r][c], new.vals[r][c]) for r in range(4) for c in range(4)]
+                self.play(*out, FadeIn(notes[nk]), *anims, Transform(name, newname), run_time=1.5)
+                self.remove(cur)
+                self.add(new)
                 cur = new
-                self.wait(2.0)
-                if nk != "key":
-                    self.play(FadeOut(notes[nk]))
+                prev = nk
         self.wait(0.3)
         self.clear_scene()
 

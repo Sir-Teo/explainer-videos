@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs29.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, load, pixel_image)
+from videos.cs.cs29.common import (block_image, CTRL, DATA, HEAD, LAM, NO, PART, YES, load, pixel_image)
 
 
 class Hook(VoiceoverScene):
@@ -15,6 +15,8 @@ class Hook(VoiceoverScene):
         head = label(r"One cipher, \ used two ways", font_size=36).to_edge(UP, buff=0.3)
         imgs = Group(*[pixel_image(p[k], p["w"], p["h"], height=2.7) for k in ("plain", "ecb", "cbc")])
         imgs.arrange(RIGHT, buff=0.55).next_to(head, DOWN, buff=0.45)
+        blk = Group(*[block_image(p[k], p["w"], p["h"], height=2.7).move_to(im) for k, im in
+                      (("ecb", imgs[1]), ("cbc", imgs[2]))])
         caps = VGroup(
             label(r"our logo: \ 128 $\times$ 96 grey bytes", font_size=20, color=GREY_A),
             label(r"AES, \ each block alone \ (ECB)", font_size=20, color=NO),
@@ -27,6 +29,8 @@ class Hook(VoiceoverScene):
                   r"equal ciphertext", font_size=22, color=WHITE),
             label(rf"chained, \ the same key gives {p['distinct_cbc']} different blocks: \ noise", font_size=22,
                   color=YES),
+            label(r"paint each ciphertext block with its own first three bytes: \ equal blocks, \ equal colours",
+                  font_size=22, color=WHITE),
             label(r"the cipher was not broken: \ it was \textbf{used} wrongly", font_size=24, color=HEAD),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.35)
         with self.voiceover(
@@ -37,7 +41,9 @@ class Hook(VoiceoverScene):
             "and each block was encrypted on its own, the obvious way. Equal blocks of background give equal blocks "
             "of ciphertext: only eighty-five different blocks appear, exactly as many as in the picture. <bookmark "
             "mark='c'/> The same cipher with the same key, used in a mode that chains each block to the one before, "
-            "gives this: every block different, and nothing to see. <bookmark mark='d'/> A cipher is a component. "
+            "gives this: every block different. <bookmark mark='d'/> To see the difference plainly, paint each "
+            "sixteen-byte block of ciphertext with a colour made from its own first three bytes. Under ECB the logo "
+            "is unmistakable; chained, it is confetti. <bookmark mark='e'/> A cipher is a component. "
             "Secrecy comes from how it is used, and from proving that using it that way is safe. That is this part."
         ) as vo:
             self.play(FadeIn(head), FadeIn(imgs[0]), FadeIn(caps[0]))
@@ -48,7 +54,9 @@ class Hook(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(imgs[2]), FadeIn(caps[2]), FadeIn(lines[1]))
             vo.wait_until("d")
-            self.play(FadeIn(lines[2]))
+            self.play(FadeOut(imgs[1]), FadeIn(blk[0]), FadeOut(imgs[2]), FadeIn(blk[1]), FadeIn(lines[2]))
+            vo.wait_until("e")
+            self.play(FadeIn(lines[3]))
         self.wait(0.3)
         self.clear_scene()
 
