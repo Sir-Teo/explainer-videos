@@ -1,0 +1,383 @@
+{
+ "title": "计算机科学，从零搭建 · 第40部分：软件工程",
+ "chapters": {
+  "Hook": "软件危机，以及这个代码库",
+  "Parnas": "1. 复杂性，以及 Parnas 的准则",
+  "Abstraction": "2. 抽象与契约",
+  "Coupling": "3. 耦合，量出来",
+  "Design": "4. 设计，大处与小处",
+  "Testing": "5. 测试，以及会说谎的测试",
+  "Mutation": "6. 测试测试本身",
+  "Change": "7. 修改能工作的代码",
+  "Process": "8. 评审与流程",
+  "People": "9. 团队",
+  "Estimation": "10. 估算",
+  "Profession": "11. 这门职业",
+  "Frontier": "12. 前沿：证据，以及会写代码的机器",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "99ee657ef9d6": {
+   "scene": "Hook",
+   "en": "In October 1968, about fifty people met in the Bavarian town of Garmisch for a NATO conference with a deliberately provocative title. <bookmark mark='a'/> Software Engineering. Building bridges was engineering; writing programs, so far, was not. <bookmark mark='b'/> The participants spoke of a software crisis: large systems arriving years late, far over budget, unreliable, and almost impossible to change. <bookmark mark='c'/> The most famous example was IBM's operating system for the System/360, which at its peak occupied more than a thousand people. Fred Brooks, who managed it, wrote a book about what went wrong, The Mythical Man-Month. <bookmark mark='d'/> Its best-known sentence is Brooks' law: adding manpower to a late software project makes it later. We will test that, and much else, with simulations and with data.",
+   "zh": "1968年10月，大约五十人聚集在巴伐利亚小镇加尔米施（Garmisch），参加一次 NATO 会议，会议的标题是有意挑衅的：<bookmark mark='a'/>“软件工程”。建造桥梁是工程；而写程序，直到那时还不是。<bookmark mark='b'/>与会者谈到了一场软件危机：大型系统晚交付好几年，严重超出预算，不可靠，而且几乎无法修改。<bookmark mark='c'/>最著名的例子是 IBM 为 System/360 开发的操作系统，高峰时有一千多人参与。负责管理它的 Fred Brooks 写了一本书，讲述哪里出了问题：《人月神话》（The Mythical Man-Month）。<bookmark mark='d'/>书中最有名的一句话是 Brooks 定律：向一个已经延期的软件项目增加人手，只会让它更加延期。我们会用模拟和数据来检验这一点，以及其他许多说法。"
+  },
+  "7da7b6a1ddd8": {
+   "scene": "Hook",
+   "en": "This part is about software as something large and long-lived, built and changed by many hands. So the first specimen is the software that made this series. <bookmark mark='a'/> Each square is one Python module of this repository, coloured by where it lives: the shared library, the scenes of each series, the tools and the tests. <bookmark mark='b'/> About two and a half thousand modules and six hundred thousand lines, joined by five and a half thousand imports. <bookmark mark='c'/> We will measure it like any other system: its dependencies, its cycles, the places where its own rules are broken. There are five import cycles, and two imports that run the wrong way between its layers. <bookmark mark='d'/> And it has a history: about a hundred and sixty commits in its first five days, every one of them recorded, which we will mine for a kind of coupling no import statement shows. It is not a large system by industrial standards, but it is large enough to show every problem in this part.",
+   "zh": "这一部分讲的是作为庞大而长寿之物的软件：由许多人建造，也由许多人修改。所以第一件标本，就是制作这个系列的软件本身。<bookmark mark='a'/>每个方块是这个代码库里的一个 Python 模块，按它所在的位置着色：共享库、各个系列的场景、工具，以及测试。<bookmark mark='b'/>大约两千五百个模块、六十万行代码，由五千五百条导入（import）连在一起。<bookmark mark='c'/>我们会像测量任何其他系统一样测量它：它的依赖、它的环，以及它自己的规则被打破的地方。它有五个导入环，还有两条导入在层与层之间走错了方向。<bookmark mark='d'/>它还有一段历史：最初五天里大约一百六十次提交，每一次都有记录。我们会从中挖掘出一种任何导入语句都显示不出来的耦合。按工业标准，这不是一个大型系统，但它已经大到足以展示这一部分里的每一个问题。"
+  },
+  "60a72538301e": {
+   "scene": "Hook",
+   "en": "This is Part 40 of Computer Science, Built, and the start of Act Eight, Building Software. <bookmark mark='a'/> We begin where the discipline began, with complexity, and with David Parnas' rule for dividing a program into modules, tested by building one program both ways. Then abstraction and contracts; coupling, measured on this repository; the design principles and patterns of industry; testing, and how to tell whether tests are any good; and the human side: review, process, teams, and the estimates that are always wrong in the same direction.",
+   "zh": "这是计算机科学，从零搭建，第40部分，也是第八幕“构建软件”的开始。<bookmark mark='a'/>我们从这门学科起步的地方开始：复杂性，以及 David Parnas 把程序划分为模块的准则，并通过用两种方式构建同一个程序来检验它。然后是抽象与契约；耦合，在这个代码库上测量；工业界的设计原则与模式；测试，以及如何判断测试到底好不好；还有人的一面：评审、流程、团队，以及那些总是朝同一个方向出错的估算。"
+  },
+  "90e0ca81acc5": {
+   "scene": "Parnas",
+   "en": "Chapter one. Complexity, and Parnas' rule.",
+   "zh": "第一章。复杂性，以及 Parnas 的准则。"
+  },
+  "74bd991b6e08": {
+   "scene": "Parnas",
+   "en": "Eighteen years after Garmisch, Brooks wrote an essay called No Silver Bullet. He split the difficulty of software in two. <bookmark mark='a'/> Essential complexity lives in the problem itself: the tax code, the network protocol, the physics being simulated. No tool removes it. <bookmark mark='b'/> Accidental complexity lives in how we build: managing memory by hand, waiting for slow builds, untangling code. High-level languages, Part 13's compilers and Part 15's garbage collectors removed a great deal of it. <bookmark mark='c'/> Brooks argued that once the accidental part is small, no single technique can deliver a tenfold gain within a decade. <bookmark mark='d'/> What remains is the essential complexity, and the main tool for it is division: splitting a system into parts that can each be understood, built and changed on their own. But split along which lines?",
+   "zh": "加尔米施会议十八年后，Brooks 写了一篇文章，题为《没有银弹》（No Silver Bullet）。他把软件的困难一分为二。<bookmark mark='a'/>本质复杂性存在于问题本身：税法、网络协议、被模拟的物理过程。没有任何工具能消除它。<bookmark mark='b'/>偶然复杂性存在于我们构建的方式之中：手工管理内存、等待缓慢的构建、理清纠缠的代码。高级语言、第13部分的编译器和第15部分的垃圾回收器，已经消除了其中很大一部分。<bookmark mark='c'/>Brooks 认为，一旦偶然的部分已经很小，就没有任何单一技术能在十年之内带来十倍的提升。<bookmark mark='d'/>剩下的是本质复杂性，而对付它的主要工具是分解：把系统拆成若干部分，每一部分都能单独地被理解、构建和修改。但是，该沿着哪些线来拆呢？"
+  },
+  "5e7c4ebef033": {
+   "scene": "Parnas",
+   "en": "In 1972 David Parnas answered with an experiment on paper, and we will run it for real. <bookmark mark='a'/> The program is a keyword-in-context index: take a list of titles, form every circular shift of each one, and print them all in alphabetical order, so that every word can be looked up in context. <bookmark mark='b'/> The obvious decomposition follows the flowchart: one module per processing step, input, shifting, sorting, output, all reading and writing shared tables of words and positions. <bookmark mark='c'/> Parnas' decomposition looks almost the same but cuts differently. One module, line storage, owns how lines are stored, and nobody else knows. Another owns how a circular shift is represented; another, when and how sorting happens. We wrote both, in this repository, and they produce the same thirty-one lines.",
+   "zh": "1972年，David Parnas 用一个纸上的实验给出了回答，而我们会真正把它运行一遍。<bookmark mark='a'/>这个程序是一个上下文关键词索引，也就是 KWIC：取一组标题，为每个标题生成所有的循环移位，再把它们全部按字母顺序打印出来，这样每个词都能在上下文中查到。<bookmark mark='b'/>显而易见的分解方式沿着流程图走：每个处理步骤一个模块，输入、移位、排序、输出，全都读写共享的单词表和位置表。<bookmark mark='c'/>Parnas 的分解看上去几乎一样，但切法不同。一个模块，即行存储，掌管行如何存储，其他人都不知道。另一个模块掌管循环移位如何表示；还有一个掌管排序在何时、以何种方式进行。我们在这个代码库里把两种都写了出来，它们输出同样的三十一行。"
+  },
+  "7943ca32f4ce": {
+   "scene": "Parnas",
+   "en": "Now change one design decision, as Parnas did. <bookmark mark='a'/> Store each word as a number in a vocabulary, to save memory. <bookmark mark='b'/> In the flowchart design, three of the five modules read the word tables directly, so all three must be rewritten, sixteen lines in all. <bookmark mark='c'/> In Parnas' design, one module changes: line storage, nine lines. Nobody else knew how words were stored.",
+   "zh": "现在，像 Parnas 那样，改变一个设计决策。<bookmark mark='a'/>为了节省内存，把每个词存成词汇表里的一个编号。<bookmark mark='b'/>在流程图设计里，五个模块中有三个直接读取单词表，所以这三个都必须重写，一共十六行。<bookmark mark='c'/>在 Parnas 的设计里，只有一个模块要改：行存储，九行。其他人从来不知道词是怎么存储的。"
+  },
+  "0b85ee2cc6f9": {
+   "scene": "Parnas",
+   "en": "We made four of Parnas' changes to both programs and checked every variant against the original index. <bookmark mark='a'/> Changing the input format touches one module in both designs, because both kept reading input in one place. Storing shifts in full instead of as positions: three modules against one. Sorting on demand instead of all at once: two against one. <bookmark mark='b'/> Each time, the cost of a change is the number of modules that knew about the decision being changed.",
+   "zh": "我们对两个程序都做了 Parnas 提出的四项修改，并把每个变体都与原来的索引进行了核对。<bookmark mark='a'/>改变输入格式，在两种设计里都只涉及一个模块，因为两者都把读取输入放在同一个地方。把移位完整存储，而不是存成位置：三个模块对一个。按需排序，而不是一次全部排好：两个对一个。<bookmark mark='b'/>每一次，一项修改的代价，都等于知道这个被修改的决策的模块数目。"
+  },
+  "fc2aba5418c8": {
+   "scene": "Parnas",
+   "en": "Parnas stated the principle in one sentence. <bookmark mark='a'/> Begin with a list of difficult design decisions, or decisions likely to change, and design each module to hide one of them from the others. <bookmark mark='b'/> What a module promises is its interface; everything else is its secret. <bookmark mark='c'/> John Ousterhout calls the best modules deep: a small interface over a lot of functionality, like the handful of Unix calls, open, read, write, seek and close, in front of the whole file system of Part 34. <bookmark mark='d'/> Most of this part is variations on Parnas: contracts state the interface precisely, coupling measures how much leaks through it, and tests pin it down.",
+   "zh": "Parnas 用一句话陈述了这条原则。<bookmark mark='a'/>先列出那些困难的设计决策，或者可能会改变的决策，然后设计每个模块，让它对其他模块隐藏其中的一个。<bookmark mark='b'/>一个模块所承诺的，是它的接口；其余的一切，都是它的秘密。<bookmark mark='c'/>John Ousterhout 把最好的模块称为深模块：在大量功能之上，只有一个小小的接口，就像 Unix 的那几个调用，open、read、write、seek 和 close，挡在第34部分的整个文件系统前面。<bookmark mark='d'/>这一部分的大部分内容，都是 Parnas 思想的变奏：契约精确地陈述接口，耦合衡量有多少东西从接口中泄漏出去，而测试把接口固定下来。"
+  },
+  "264608b60f6b": {
+   "scene": "Abstraction",
+   "en": "Chapter two. Abstraction and contracts.",
+   "zh": "第二章。抽象与契约。"
+  },
+  "b270d7e5b00f": {
+   "scene": "Abstraction",
+   "en": "Barbara Liskov and Stephen Zilles gave Parnas' idea a form a compiler can enforce. <bookmark mark='a'/> An abstract data type is known only by its operations; its representation is private. Here a set of integers is represented by a list. <bookmark mark='b'/> Two pieces of reasoning make such a type correct. The representation invariant says which lists are legal: sorted, with no repeats. <bookmark mark='c'/> The abstraction function says what a legal list means: the set of its elements. <bookmark mark='d'/> Every operation must preserve the invariant, and then the others may rely on it: size can simply return the length of the list, because the invariant guarantees there are no repeats. Liskov later received the Turing Award for this work.",
+   "zh": "Barbara Liskov 和 Stephen Zilles 为 Parnas 的思想赋予了一种编译器能够强制执行的形式。<bookmark mark='a'/>一个抽象数据类型只通过它的操作为人所知；它的表示是私有的。这里，一个整数集合用一个列表来表示。<bookmark mark='b'/>有两项推理使这样一个类型正确。表示不变式规定哪些列表是合法的：有序，且没有重复。<bookmark mark='c'/>抽象函数规定一个合法的列表意味着什么：由它的元素组成的集合。<bookmark mark='d'/>每个操作都必须保持这个不变式，然后其他操作就可以依赖它：size 可以直接返回列表的长度，因为不变式保证了没有重复。Liskov 后来因为这项工作获得了图灵奖。"
+  },
+  "ead92e80d8a1": {
+   "scene": "Abstraction",
+   "en": "Bertrand Meyer turned interfaces into contracts. <bookmark mark='a'/> A precondition is what the caller must guarantee: here, a positive amount no larger than the balance. A postcondition is what the function then guarantees in return: the balance went down by exactly that amount. An invariant holds before and after every operation. <bookmark mark='b'/> Contracts settle arguments: if a precondition fails, the caller has the bug; if a postcondition fails, the implementation does. <bookmark mark='c'/> They are the triples of Hoare logic, which Part 54 will prove, checked at run time instead: assertions, type checkers, and contract clauses in languages like Eiffel and Ada. Checking contracts costs time, so many teams check them in tests and debug builds and switch the expensive ones off in production; others keep them on, preferring a clear crash to silently wrong results.",
+   "zh": "Bertrand Meyer 把接口变成了契约。<bookmark mark='a'/>前置条件是调用者必须保证的：这里是一个正的金额，且不大于余额。后置条件是函数随后反过来保证的：余额恰好减少了这个金额。不变式则在每个操作之前和之后都成立。<bookmark mark='b'/>契约能平息争论：如果前置条件不满足，错误在调用者；如果后置条件不满足，错误在实现。<bookmark mark='c'/>它们就是 Hoare 逻辑的三元组，第54部分会证明它们，只不过这里改为在运行时检查：断言、类型检查器，以及 Eiffel 和 Ada 这类语言里的契约子句。检查契约要花时间，所以许多团队在测试和调试构建中检查它们，在生产环境中关掉代价高的那些；另一些团队则一直开着，宁可清清楚楚地崩溃，也不要悄无声息的错误结果。"
+  },
+  "47533275adbf": {
+   "scene": "Abstraction",
+   "en": "Inheritance adds a trap. A square is a rectangle in geometry. <bookmark mark='a'/> So make Square a subclass of Rectangle, and keep the sides equal by changing both whenever either is set. <bookmark mark='b'/> A client that was written for rectangles expects that after setting width w and height h, the area is w times h. We tested that property the way QuickCheck does, on random inputs. <bookmark mark='c'/> On rectangles it held a thousand times out of a thousand. On squares it failed on the first try, and shrinking found the smallest failing case: width zero, height one, area one. <bookmark mark='d'/> Barbara Liskov and Jeannette Wing made the rule precise in 1994. A subtype may demand no more and promise no less than its parent, must keep its invariants, and must not add new ways of changing state. Square adds one: setting the width changes the height. In code, it is not a rectangle.",
+   "zh": "继承带来了一个陷阱。在几何里，正方形是一种长方形。<bookmark mark='a'/>那么就让 Square 成为 Rectangle 的子类，并且每当设置任意一条边时，就同时修改两条边，让它们保持相等。<bookmark mark='b'/>一个为长方形编写的客户端期望：在把宽度设为 w、高度设为 h 之后，面积是 w 乘以 h。我们像 QuickCheck 那样，用随机输入测试了这条性质。<bookmark mark='c'/>在长方形上，它一千次里成立一千次。在正方形上，第一次尝试就失败了，而收缩找到了最小的失败用例：宽度为零，高度为一，面积为一。<bookmark mark='d'/>Barbara Liskov 和 Jeannette Wing 在1994年把这条规则表述得很精确。子类型要求的不能比父类型多，承诺的不能比父类型少，必须保持它的不变式，而且不能增加改变状态的新方式。Square 就增加了一种：设置宽度会改变高度。在代码里，它不是一个长方形。"
+  },
+  "927700f4383b": {
+   "scene": "Abstraction",
+   "en": "Contracts describe interfaces at one moment, but interfaces live for years. <bookmark mark='a'/> Inside is the documented behaviour. Around it is everything else a user can observe: timing, the text of error messages, the order in which a collection is iterated, rounding, even the bugs. <bookmark mark='b'/> Hyrum Wright, at Google, put it as a law: with enough users, every observable behaviour will be depended on by somebody, whatever the contract says. Changing any of it breaks someone. <bookmark mark='c'/> Semantic versioning tries to make change legible: the major number rises for incompatible changes, the minor for additions, the patch for fixes, and Part 41 will solve the constraint puzzles this creates. <bookmark mark='d'/> A real case: Python's dictionaries started keeping insertion order in version 3.6 as an accident of a new implementation. So much code came to rely on it that version 3.7 made it part of the language.",
+   "zh": "契约描述的是某一时刻的接口，但接口会存活许多年。<bookmark mark='a'/>里面是有文档记载的行为。围绕着它的，是用户能观察到的其他一切：时间、错误信息的文本、遍历一个集合的顺序、舍入方式，甚至还有那些 bug。<bookmark mark='b'/>Google 的 Hyrum Wright 把它总结成一条定律：只要用户足够多，每一种可观察到的行为都会被某个人所依赖，不管契约怎么说。改动其中任何一点，都会让某个人出问题。<bookmark mark='c'/>语义化版本试图让变化一目了然：不兼容的修改提升主版本号，新增功能提升次版本号，修复提升补丁号；第41部分会去解决由此产生的约束难题。<bookmark mark='d'/>一个真实的例子：Python 的字典从3.6版开始保持插入顺序，这原本只是一种新实现的偶然结果。后来依赖它的代码太多了，于是3.7版把它变成了语言的一部分。"
+  },
+  "bc1c2f2ada4e": {
+   "scene": "Coupling",
+   "en": "Chapter three. Coupling, measured.",
+   "zh": "第三章。耦合，量出来。"
+  },
+  "f02cc5079aa6": {
+   "scene": "Coupling",
+   "en": "This repository has a layered design, a rule that no file states but every file is supposed to obey. <bookmark mark='a'/> The library, explainer, holds the shared instruments: the Pebble machine, the simulators, the drawing helpers. The scenes, in videos, use the library. <bookmark mark='b'/> Over two thousand imports go downward, from scenes to library, as they should. <bookmark mark='c'/> And two go up. One library module, which loads the thirty novels, reaches into the first AI video to reuse its code. It works today; it means the library cannot be used without that video, and a change to the video can break every part that loads the novels. <bookmark mark='d'/> Tools and tests sit beside the library and depend on it too.",
+   "zh": "这个代码库采用分层设计：这条规则没有写在任何文件里，但每个文件都应当遵守。<bookmark mark='a'/>库，也就是 explainer，存放共享的仪器：Pebble 机器、各种模拟器、绘图辅助代码。场景，放在 videos 里，使用这个库。<bookmark mark='b'/>两千多条导入是向下的，从场景指向库，理应如此。<bookmark mark='c'/>还有两条是向上的。一个负责加载那三十部小说的库模块，伸手进入第一部 AI 视频，去复用那里的代码。今天它能工作；但这意味着离开那部视频，这个库就没法用，而对那部视频的一次修改，就可能破坏每一个加载小说的部分。<bookmark mark='d'/>工具和测试位于库的旁边，也同样依赖它。"
+  },
+  "d0082037ee5c": {
+   "scene": "Coupling",
+   "en": "Robert Martin turned coupling into numbers. <bookmark mark='a'/> For each module count the modules that depend on it, the afferent couplings, and the modules it depends on, the efferent ones. Its instability is the second count over the total. A module that everything uses and that uses nothing is stable: changing it is expensive, so it should rarely need to change. <bookmark mark='b'/> Here is the distribution over this repository. Most modules, the scenes themselves, have instability one: they use the library and nothing uses them, so they are free to change. A few hundred sit near zero. <bookmark mark='c'/> These are the most depended upon: the library's packages, imported by hundreds of modules each, and importing almost nothing. <bookmark mark='d'/> That is Martin's stable dependencies principle in practice: depend in the direction of stability, never on something likely to change more often than you.",
+   "zh": "Robert Martin 把耦合变成了数字。<bookmark mark='a'/>对每个模块，数一数依赖它的模块，即传入耦合，以及它所依赖的模块，即传出耦合。它的不稳定度，是第二个数除以两者之和。一个人人都用、自己却什么都不用的模块是稳定的：修改它代价高昂，所以它应该很少需要修改。<bookmark mark='b'/>这是整个代码库上的分布。大多数模块，也就是那些场景本身，不稳定度是一：它们使用库，却没有谁使用它们，所以可以自由地修改。有几百个模块接近零。<bookmark mark='c'/>这些是被依赖得最多的：库里的各个包，每个都被几百个模块导入，自己却几乎什么都不导入。<bookmark mark='d'/>这就是 Martin 的稳定依赖原则在实践中的样子：朝着稳定的方向依赖，永远不要依赖一个可能比你变得更频繁的东西。"
+  },
+  "7f33b5fa9ffe": {
+   "scene": "Coupling",
+   "en": "Strongly connected components, Part 18's algorithm, find the cycles. <bookmark mark='a'/> This repository has five. Four are inside single AI videos, where a compute script and its helpers import each other. The first is in the library itself: its root package, the narration engine and the voice-over scene import each other in a ring. <bookmark mark='b'/> A cycle fuses its modules into one: none can be tested, reused or understood alone, and the order in which they load starts to matter. <bookmark mark='c'/> The standard cure is dependency inversion. When high-level policy calls a low-level detail that also needs the policy, give the policy an interface and make the detail depend on that. Both arrows now point at the abstraction, and the cycle is broken.",
+   "zh": "强连通分量，也就是第18部分的算法，能找出这些环。<bookmark mark='a'/>这个代码库有五个。其中四个在单个 AI 视频内部，一个计算脚本和它的辅助模块互相导入。第一个则在库本身里：它的根包、旁白引擎和配音场景彼此导入，围成一个环。<bookmark mark='b'/>一个环会把它的模块熔成一体：没有一个能单独地被测试、复用或理解，而且它们加载的顺序开始变得要紧。<bookmark mark='c'/>标准的解药是依赖倒置。当高层策略调用一个低层细节，而这个细节又需要这个策略时，就给策略一个接口，让细节去依赖这个接口。现在两个箭头都指向抽象，环就被打破了。"
+  },
+  "c772511eab17": {
+   "scene": "Coupling",
+   "en": "Imports show only one kind of coupling. Version control shows another. <bookmark mark='a'/> Harald Gall and colleagues proposed in 1998 to look for files that change in the same commits. We mined this repository's history. <bookmark mark='b'/> Every commit that changed the project's instructions file also changed the series syllabus, and almost all of them the series plan. The reason is mundane: each of the three records how many parts are built. <bookmark mark='c'/> One fact stored in three places, so every new part edits all three, and forgetting one leaves them disagreeing. Refactoring books call it shotgun surgery. The cure is one source of truth from which the others are generated. Our own process has the smell this chapter teaches you to find.",
+   "zh": "导入只显示了一种耦合。版本控制显示了另一种。<bookmark mark='a'/>Harald Gall 和同事们在1998年提出，去寻找那些在同一次提交中一起变化的文件。我们挖掘了这个代码库的历史。<bookmark mark='b'/>每一次修改项目说明文件的提交，也都修改了系列教学大纲，而且几乎每一次都修改了系列计划。原因很平凡：这三个文件都记录着已经建成了多少部分。<bookmark mark='c'/>一个事实存放在三个地方，于是每新增一部分，都要编辑这三个文件，而忘掉一个，它们就会互相矛盾。重构方面的书把这叫作霰弹式修改。解药是单一的事实来源，其他的都由它生成。我们自己的流程，就带有这一章教你去发现的那种坏味道。"
+  },
+  "63ed3b1507ad": {
+   "scene": "Design",
+   "en": "Chapter four. Design, in the large and the small.",
+   "zh": "第四章。设计，大处与小处。"
+  },
+  "e9d0f10c4633": {
+   "scene": "Design",
+   "en": "Industry condensed decades of design advice into five letters, popularized by Robert Martin. <bookmark mark='a'/> Each is easiest to understand through the mistake it prevents. Single responsibility: a class that formats a report, queries the database and sends the email has three reasons to change. Open-closed: code that switches on a type must be edited for every new case. Liskov substitution is our square. Interface segregation: do not force every printer to implement fax. And dependency inversion is the cure for the cycles of the last chapter. <bookmark mark='b'/> They are heuristics, not laws. Each is Parnas' hiding seen from one side, and each can be overdone, into layers of indirection that hide nothing.",
+   "zh": "业界把几十年的设计经验浓缩成了五个字母，由 Robert Martin 推广开来。<bookmark mark='a'/>每一条原则，都最容易从它所防止的错误入手来理解。单一职责：一个类既要格式化报表、又要查询数据库、还要发送邮件，它就有三个需要改动的理由。开闭原则：按类型做分支的代码，每增加一种新情况都必须修改。里氏替换，就是我们那个正方形的例子。接口隔离：不要强迫每一台打印机都去实现传真功能。而依赖倒置，正是治疗上一章那些循环依赖的良方。<bookmark mark='b'/>它们是经验法则，不是定律。每一条都是从某个侧面看到的 Parnas 的信息隐藏；每一条也都可能用过了头，变成一层又一层什么也没隐藏的间接层。"
+  },
+  "6be5072f08ce": {
+   "scene": "Design",
+   "en": "In 1994 four authors, the Gang of Four, catalogued design patterns: solutions that keep reappearing, given names so that people can talk about them. <bookmark mark='a'/> We have used many already. Strategy swaps an algorithm behind one interface, like the congestion controllers of Part 37. Observer notifies subscribers of changes. Visitor walks a fixed tree of types, as Part 13's compiler passes did. Adapter, decorator and factory wrap, extend and choose. <bookmark mark='b'/> Many patterns exist because the languages of 1994 lacked features. Peter Norvig showed that in a language with first-class functions, sixteen of the twenty-three become invisible or simpler: a strategy is just a function passed as an argument.",
+   "zh": "一九九四年，四位作者，也就是 Gang of Four，整理出了一份设计模式的目录：那些反复出现的解决方案，被起了名字，好让人们能够谈论它们。<bookmark mark='a'/>其中很多我们已经用过了。策略模式在同一个接口后面替换算法，就像第37部分里的拥塞控制器。观察者模式在发生变化时通知订阅者。访问者模式遍历一棵类型固定的树，就像第13部分编译器的那些遍。适配器、装饰器和工厂，分别负责包装、扩展和选择。<bookmark mark='b'/>很多模式之所以存在，是因为一九九四年的语言缺少某些特性。Peter Norvig 指出，在拥有一等函数的语言里，二十三个模式中有十六个会变得无形，或者更加简单：一个策略，不过就是作为参数传进去的一个函数。"
+  },
+  "25e2e8e1a97c": {
+   "scene": "Design",
+   "en": "One tension underlies much of design, and Philip Wadler named it the expression problem. <bookmark mark='a'/> Picture a table: rows are kinds of data, here numbers, sums and products; columns are operations, evaluate, print, simplify. Every cell is some code. <bookmark mark='b'/> Object-oriented code stores the table by rows: each class holds its row. Adding a new kind of data is one new class, but adding an operation means editing every class. <bookmark mark='c'/> Functional code, with Part 14's algebraic data types, stores it by columns. A new operation is one function, but a new kind of data means editing every function. <bookmark mark='d'/> The problem is to allow both, without touching old code and without losing type safety. Type classes, object algebras and multimethods are partial answers; which axis your program will grow along is the real design decision.",
+   "zh": "有一种张力贯穿了设计的方方面面，Philip Wadler 给它起了名字，叫作表达式问题。<bookmark mark='a'/>想象一张表：每一行是一种数据，这里是数字、和与积；每一列是一种操作：求值、打印、化简。每个格子里都是一段代码。<bookmark mark='b'/>面向对象的代码按行来存放这张表：每个类保存自己的那一行。新增一种数据只需要一个新类，但新增一种操作，就得修改每一个类。<bookmark mark='c'/>函数式的代码，借助第14部分的代数数据类型，按列来存放这张表。新增一种操作只需要一个函数，但新增一种数据，就得修改每一个函数。<bookmark mark='d'/>问题在于如何两者兼得：既不改动旧代码，也不丢失类型安全。类型类、对象代数和多重方法都只是部分的答案；你的程序会沿着哪条轴增长，才是真正的设计决策。"
+  },
+  "3898b9f9949d": {
+   "scene": "Design",
+   "en": "Industry has also absorbed functional ideas. <bookmark mark='a'/> On the left, an order with two flags and an optional tracking number: eight combinations, including an order that is both paid and cancelled. On the right, a type with exactly the four shapes the business allows. Yaron Minsky's slogan: make illegal states unrepresentable, and a whole class of bugs cannot be written. <bookmark mark='b'/> Gary Bernhardt's design puts every decision in pure functions, which can be tested with plain values, and keeps input, output and time in a thin shell around them. <bookmark mark='c'/> And immutable values can be shared between threads, Part 33's hardest problem, and cached without fear.",
+   "zh": "业界也吸收了函数式的思想。<bookmark mark='a'/>左边是一个订单，带有两个标志位和一个可选的物流单号：一共八种组合，其中包括一个既已付款、又已取消的订单。右边是一个类型，恰好只有业务所允许的四种形态。Yaron Minsky 的口号是：让非法状态无法表示，这样一整类 bug 就根本写不出来。<bookmark mark='b'/>Gary Bernhardt 的设计把每一个决策都放进纯函数里，这些函数可以用普通的值来测试；而输入、输出和时间，则放在包裹着它们的一层薄薄的外壳里。<bookmark mark='c'/>不可变的值还可以在线程之间共享，这正是第33部分最难的问题；它们也可以放心地缓存。"
+  },
+  "55139821fb3e": {
+   "scene": "Testing",
+   "en": "Chapter five. Testing, and tests that lie.",
+   "zh": "第五章。测试，以及会说谎的测试。"
+  },
+  "93528e9af3c4": {
+   "scene": "Testing",
+   "en": "Tests are how a team keeps an interface from silently changing. <bookmark mark='a'/> Mike Cohn's pyramid says how to spend them: many small unit tests that each check one module in milliseconds, fewer integration tests that wire real modules together, and a handful of end-to-end tests that drive the whole system as a user would. <bookmark mark='b'/> To test a module alone, its dependencies are replaced by doubles: a fake actually works, like an in-memory database; a stub returns canned answers; a mock records how it was called. <bookmark mark='c'/> Doubles make tests fast and repeatable, at a price: they can drift away from the real thing they imitate.",
+   "zh": "测试，是一个团队防止接口悄悄改变的手段。<bookmark mark='a'/>Mike Cohn 的测试金字塔告诉我们该怎样分配它们：大量小型的单元测试，每个在几毫秒内检查一个模块；少一些的集成测试，把真实的模块连接起来；再加上屈指可数的几个端到端测试，像用户那样驱动整个系统。<bookmark mark='b'/>要单独测试一个模块，就要把它的依赖换成测试替身：伪造对象真的能工作，比如一个内存数据库；桩返回预先准备好的答案；模拟对象则记录自己是如何被调用的。<bookmark mark='c'/>测试替身让测试又快又可重复，但也有代价：它们可能会渐渐偏离自己所模仿的那个真实对象。"
+  },
+  "c0342bd07558": {
+   "scene": "Testing",
+   "en": "A flaky test passes and fails on the same code. Qingzhou Luo and colleagues studied hundreds of them in open-source projects and found the usual causes: waiting a fixed time for something asynchronous, tests that depend on the order they run in, time and dates, and assuming an order for unordered collections. <bookmark mark='a'/> We planted eight such tests among a hundred and eighty-one sound ones and ran the suite four hundred times in random orders. The victim of a polluted cache fails more than half the time in the suite and never alone; the test that needs a setter fails half the time in the suite and always alone. <bookmark mark='b'/> Eight flaky tests out of a hundred and eighty-nine turned more than four runs in five red. Automatic re-runs hide some failures, including the order bug, and teach everyone to ignore red. <bookmark mark='c'/> At Google's scale, John Micco reported in 2016 that about one and a half percent of all test runs were flaky, and almost one test in six had been flaky at some time.",
+   "zh": "不稳定测试（flaky test），就是在同一份代码上时而通过、时而失败的测试。Qingzhou Luo 和同事研究了开源项目中的数百个这样的测试，找出了常见的原因：对异步的操作只等待一段固定的时间；测试依赖于运行的顺序；时间和日期；以及假定无序的集合有某种顺序。<bookmark mark='a'/>我们把八个这样的测试混进一百八十一个正常的测试里，以随机的顺序把整套测试运行了四百次。被污染的缓存的那个受害者，在整套测试中失败的次数超过一半，单独运行时却从不失败；而那个需要别的测试先替它设好状态的测试，在整套测试中有一半时间失败，单独运行时则总是失败。<bookmark mark='b'/>一百八十九个测试中只有八个不稳定，却让超过五分之四的运行变红。自动重跑能掩盖一部分失败，包括那个顺序问题，同时也教会了每个人对红色视而不见。<bookmark mark='c'/>在 Google 的规模上，John Micco 在二零一六年报告说，所有测试运行中大约百分之一点五是不稳定的，而且将近六分之一的测试曾经在某个时候不稳定过。"
+  },
+  "3dba2d310e6e": {
+   "scene": "Testing",
+   "en": "When a test fails only after others, which one is to blame? <bookmark mark='a'/> In one failing order, a hundred and fifty-nine tests ran before the victim. <bookmark mark='b'/> Run the first half of them followed by the victim. If it still fails, the polluter is in that half; otherwise in the other. Halve again. <bookmark mark='c'/> Seven runs instead of a hundred and fifty-nine, and the culprit is the test that leaves an administrator in the shared cache: Part 16's binary search, applied to a test suite. <bookmark mark='d'/> The fixes are boring and effective: reset shared state in every test, wait for conditions rather than fixed times, inject the clock, and sort before comparing.",
+   "zh": "当一个测试只在其他测试之后运行才失败时，该怪谁呢？<bookmark mark='a'/>在一个失败的顺序里，受害者之前运行了一百五十九个测试。<bookmark mark='b'/>先运行其中的前一半，再运行受害者。如果它还是失败，污染者就在这一半里；否则就在另一半里。然后再对半分。<bookmark mark='c'/>只需七次运行，而不是一百五十九次，罪魁祸首就找到了：那个在共享缓存里留下了一个管理员的测试。这就是第16部分的二分查找，用在了测试套件上。<bookmark mark='d'/>修复的办法枯燥而有效：每个测试都重置共享状态；等待条件成立，而不是等待固定的时间；把时钟注入进来；比较之前先排序。"
+  },
+  "6c1a114aed98": {
+   "scene": "Testing",
+   "en": "Tests check the inputs someone thought of. Fuzzing tries the ones nobody did. <bookmark mark='a'/> In 1990 Barton Miller fed random characters to Unix utilities and crashed about a quarter of them. We did the same to Pebble's assembler, with a little more care: twenty thousand random programs built from real instruction names and operand shapes. <bookmark mark='b'/> Its contract is to assemble the program or reject it with an error naming the line. Most programs were rejected cleanly. But more than seven thousand crashed, at twenty-four different places in the code. <bookmark mark='c'/> The smallest examples are embarrassing: an add with no operands, a dot-equ with nothing after it. Instead of a clean error, Python raises an index error from deep inside the assembler. Every unit test passes; none of them tried this. <bookmark mark='d'/> Coverage-guided fuzzers such as AFL and libFuzzer steer the random inputs toward code not yet reached, and have found thousands of security bugs in widely used software.",
+   "zh": "测试检查的是有人想到过的输入。模糊测试尝试的，是谁都没想到的那些。<bookmark mark='a'/>一九九零年，Barton Miller 把随机字符喂给 Unix 的工具程序，弄崩了其中大约四分之一。我们对 Pebble 的汇编器做了同样的事，只是更细心一些：用真实的指令名和操作数形式，构造了两万个随机程序。<bookmark mark='b'/>它的契约是：要么汇编这个程序，要么拒绝它，并给出一条指明出错行的错误信息。大多数程序都被干净利落地拒绝了。但有七千多个导致了崩溃，崩在代码里二十四个不同的地方。<bookmark mark='c'/>最小的例子令人尴尬：一条没有操作数的 add，一个后面什么都没有的点 equ。汇编器没有给出干净的错误，而是由 Python 从它的深处抛出一个索引错误。每一个单元测试都通过了；可没有一个尝试过这种情况。<bookmark mark='d'/>覆盖率引导的模糊测试工具，比如 AFL 和 libFuzzer，会把随机输入引向尚未到达的代码，它们已经在广泛使用的软件中发现了成千上万个安全漏洞。"
+  },
+  "7d2a5b2f97c2": {
+   "scene": "Mutation",
+   "en": "Chapter six. Testing the tests.",
+   "zh": "第六章。测试测试本身。"
+  },
+  "c6dcec5aea2f": {
+   "scene": "Mutation",
+   "en": "Tests check the code; what checks the tests? <bookmark mark='a'/> The usual answer is coverage: the fraction of lines the tests run. But running a line is not checking it. A test that calls a function and ignores the answer covers every line it touches. <bookmark mark='b'/> In 1978 Richard DeMillo, Richard Lipton and Fred Sayward proposed a sharper measure. Make many small wrong versions of the program, mutants, each with one deliberate change: a less-than for a less-or-equal, a plus for a minus, a constant off by one. Then run the tests on each. <bookmark mark='c'/> If the tests fail, the mutant is killed. If they pass, it survives: a wrong program the suite cannot tell from the right one. <bookmark mark='d'/> A few survivors are equivalent, behaving exactly as the original does, and deciding which ones are is, by Rice's theorem from Part 25, undecidable in general.",
+   "zh": "测试检查代码；那么，谁来检查测试呢？<bookmark mark='a'/>通常的答案是覆盖率：测试运行到的代码行所占的比例。但运行了一行代码，并不等于检查了它。一个调用了函数、却忽略返回结果的测试，也覆盖了它经过的每一行。<bookmark mark='b'/>一九七八年，Richard DeMillo、Richard Lipton 和 Fred Sayward 提出了一种更犀利的度量。制造出程序的许多个略有错误的小版本，叫作变异体，每个只带一处故意的改动：把小于等于换成小于，把减号换成加号，让一个常数差一。然后在每个变异体上运行测试。<bookmark mark='c'/>如果测试失败，这个变异体就被杀死了。如果测试通过，它就存活了下来：这是一个错误的程序，而测试套件却分辨不出它和正确的程序有什么不同。<bookmark mark='d'/>少数存活者是等价的，行为和原程序完全一样；而判断哪些是等价的，根据第25部分的莱斯定理，在一般情况下是不可判定的。"
+  },
+  "eb5765d2530d": {
+   "scene": "Mutation",
+   "en": "We turned this on a real module of this repository: the assembler for Pebble, from Part 6, and its unit tests, which all pass. <bookmark mark='a'/> Our mutation tool rewrote the assembler's syntax tree one site at a time, comparisons, arithmetic, logic and integer constants, a hundred and forty-six mutants in all, and ran the tests on each. <bookmark mark='b'/> The tests run seventy-seven percent of the assembler's statements, which sounds respectable. But they kill only sixty-two percent of the mutants. <bookmark mark='c'/> Most survivors live on lines the tests never run: error paths and directives nobody tested. Ten are worse. They change lines the tests do run, and the tests still pass.",
+   "zh": "我们把这个方法用在了本仓库里一个真实的模块上：第6部分的 Pebble 汇编器，以及它的单元测试，这些测试全部通过。<bookmark mark='a'/>我们的变异工具每次在一个位置改写汇编器的语法树，涉及比较、算术、逻辑和整数常量，一共生成了一百四十六个变异体，并在每一个上运行测试。<bookmark mark='b'/>这些测试运行到了汇编器百分之七十七的语句，听起来还算体面。但它们只杀死了百分之六十二的变异体。<bookmark mark='c'/>大多数存活者位于测试从未运行过的代码行上：错误处理路径，以及没人测试过的伪指令。有十个更糟糕。它们改动的是测试确实运行过的代码行，而测试依然通过。"
+  },
+  "58c274bc1b59": {
+   "scene": "Mutation",
+   "en": "The ten are worth reading. <bookmark mark='a'/> One makes a dot-word directive reserve five bytes per word instead of four. The tests use dot-word, but never check an address that comes after one, so a broken assembler passes. <bookmark mark='b'/> Others make the jump and return pseudo-instructions overwrite the return-address register; no test looks at it afterwards. <bookmark mark='c'/> Each survivor is a missing test, and the remedy is to assert on effects rather than merely run code. <bookmark mark='d'/> Mutation testing used to be too slow for industry. Google now runs it inside code review, showing developers a few relevant surviving mutants on each change, and many of them write the missing test.",
+   "zh": "这十个值得细读。<bookmark mark='a'/>其中一个让点 word 伪指令为每个字保留五个字节，而不是四个。测试用到了点 word，却从不检查它后面某个位置的地址，于是一个坏掉的汇编器也能通过。<bookmark mark='b'/>还有几个让跳转和返回这两条伪指令覆盖掉返回地址寄存器；之后没有任何测试去查看它。<bookmark mark='c'/>每一个存活者都对应着一个缺失的测试，补救的办法是对效果做断言，而不只是把代码跑一遍。<bookmark mark='d'/>变异测试过去太慢，没法在工业界使用。如今 Google 在代码评审中运行它，在每次变更上给开发者展示几个相关的存活变异体，而他们当中很多人会把缺失的测试补上。"
+  },
+  "efa6c84f3e24": {
+   "scene": "Mutation",
+   "en": "Coverage criteria form a ladder. <bookmark mark='a'/> Take one line with three conditions. Statement coverage needs a single test that runs it. Branch coverage needs the decision to go both ways: two tests. All combinations of the conditions would need eight, and in general two to the n. <bookmark mark='b'/> Between them sits MC/DC, modified condition and decision coverage: for each condition, a pair of tests in which only that condition changes and the decision changes with it. That needs only n plus one tests, here four, yet shows that every condition matters. Aviation's standard requires it for the most critical flight software. <bookmark mark='c'/> Coverage says what ran; mutation says what was checked. Use the first to find code nobody tested, and the second to find tests that check nothing.",
+   "zh": "覆盖准则构成了一架梯子。<bookmark mark='a'/>拿一行带有三个条件的代码来说。语句覆盖只需要一个运行到它的测试。分支覆盖需要判定的两个方向都走到：两个测试。条件的全部组合则需要八个，一般来说是二的 n 次方。<bookmark mark='b'/>介于两者之间的是 MC/DC，也就是修正条件判定覆盖：对每一个条件，都要有一对测试，其中只有这个条件发生变化，而判定的结果也随之改变。这只需要 n 加一个测试，这里是四个，却能表明每一个条件都起作用。航空业的标准要求最关键的飞行软件必须达到它。<bookmark mark='c'/>覆盖率说明什么被运行了；变异测试说明什么被检查了。用前者找出没人测试过的代码，用后者找出什么也没检查的测试。"
+  },
+  "b399f03c51f4": {
+   "scene": "Change",
+   "en": "Chapter seven. Changing code that works.",
+   "zh": "第七章。修改能工作的代码。"
+  },
+  "b702c1387a1c": {
+   "scene": "Change",
+   "en": "Most of a programmer's working life is spent changing code that already works. <bookmark mark='a'/> William Opdyke's thesis of 1992 defined refactorings: changes of structure that provably preserve behaviour, done in small named steps. Here a price calculation is split by extracting two functions. Nothing a caller can observe has changed; the next change, a new kind of discount, now touches one small function. <bookmark mark='b'/> For code nobody understands, Michael Feathers' first step is to write characterization tests: record what the code does now, right or wrong, and keep that fixed while you restructure. <bookmark mark='c'/> Code smells, long functions, duplicated logic, a class that knows about everything, are hints of where to start; they are symptoms, not proofs.",
+   "zh": "程序员职业生涯的大部分时间，都花在修改已经能正常工作的代码上。<bookmark mark='a'/>William Opdyke 在一九九二年的论文中定义了重构：可以证明保持行为不变的结构改动，以一个个有名字的小步骤来完成。这里，通过提取两个函数，把一段价格计算拆分开来。调用者能观察到的一切都没有改变；而下一次改动，也就是加入一种新的折扣，现在只会触及一个小函数。<bookmark mark='b'/>对于没人看得懂的代码，Michael Feathers 的第一步是编写特征测试：把代码现在的行为记录下来，不管它是对是错，在调整结构的过程中保持它不变。<bookmark mark='c'/>代码坏味道，比如过长的函数、重复的逻辑、一个什么都知道的类，提示你该从哪里下手；但它们只是症状，而不是证据。"
+  },
+  "104743c96aaa": {
+   "scene": "Change",
+   "en": "Ward Cunningham compared shipping code you know is not right to borrowing money. <bookmark mark='a'/> We turned the metaphor into a small model. A team ships ten points of features a week on clean code. Every feature shipped in haste adds debt, and debt slows all later work: that is the interest. Time spent refactoring pays it back. <bookmark mark='b'/> A team that never refactors is ahead after a quarter and far behind after two years, crawling at a third of its first speed. Spending a fifth of the time on cleanup delivers the most. Spending more also loses. <bookmark mark='c'/> This is a model of a metaphor, not data. The shape is the lesson: debt is a loan, and like a loan it can be worth taking, if you know the rate and plan to repay.",
+   "zh": "Ward Cunningham 把发布明知不对的代码，比作借钱。<bookmark mark='a'/>我们把这个比喻做成了一个小模型。一个团队在干净的代码上，每周交付十个点的功能。每一个仓促发布的功能都会增加债务，而债务会拖慢之后所有的工作：这就是利息。花在重构上的时间，则用来偿还它。<bookmark mark='b'/>一个从不重构的团队，一个季度之后处于领先，两年之后却远远落后，只能以最初速度的三分之一缓慢爬行。把五分之一的时间花在清理上，交付得最多。花得更多，同样会吃亏。<bookmark mark='c'/>这是一个比喻的模型，而不是数据。曲线的形状才是教训：债务是一笔贷款，和贷款一样，它可能值得去借，前提是你知道利率，并且计划好偿还。"
+  },
+  "d8ff0a10d095": {
+   "scene": "Change",
+   "en": "Much of what the field knows about change rests on surprisingly little. <bookmark mark='a'/> A famous curve says a defect fixed in production costs a hundred times as much as one fixed in design. It goes back to Barry Boehm's data from a few large projects of the nineteen seventies. <bookmark mark='b'/> In 2016 Tim Menzies and colleagues looked at a hundred and seventy-one modern projects and found no such effect: the effort to fix an issue did not grow with the phase in which it was found. <bookmark mark='c'/> Laurent Bossavit traced several of the field's most quoted numbers back to their sources and found very little underneath. <bookmark mark='d'/> The habit to keep is to ask for the data behind any claim about how software is built, including the claims in this part.",
+   "zh": "这个领域关于变更的许多认识，所依据的东西少得惊人。<bookmark mark='a'/>有一条著名的曲线说，在生产环境中修复一个缺陷的成本，是在设计阶段修复的一百倍。它可以追溯到 Barry Boehm 在二十世纪七十年代从少数几个大型项目得到的数据。<bookmark mark='b'/>二零一六年，Tim Menzies 和同事考察了一百七十一个现代项目，并没有发现这样的效应：修复一个问题所需的工作量，并没有随着发现它的阶段而增长。<bookmark mark='c'/>Laurent Bossavit 把这个领域里几个被引用最多的数字追溯到它们的来源，发现底下几乎没有什么支撑。<bookmark mark='d'/>值得保持的习惯是：对任何关于软件如何构建的说法，都追问背后的数据，包括这一部分里的说法。"
+  },
+  "88145a5421bb": {
+   "scene": "Process",
+   "en": "Chapter eight. Review and process.",
+   "zh": "第八章。评审与流程。"
+  },
+  "27ac9efb74b2": {
+   "scene": "Process",
+   "en": "Before a change is merged, someone else reads it. <bookmark mark='a'/> Michael Fagan's inspections at IBM in the nineteen seventies were formal meetings that walked through code line by line, and they caught many defects before testing. <bookmark mark='b'/> Modern review is lighter: a diff and a conversation. When Alberto Bacchelli and Christian Bird studied it at Microsoft, developers said they reviewed to find defects, but most comments were about understanding the change, alternatives and style. The largest benefit was knowledge spreading through the team. <bookmark mark='c'/> Size matters: reviewers do well on a few hundred lines at a time, read at a few hundred lines an hour, and poorly beyond that. <bookmark mark='d'/> The mechanical part belongs to machines: formatters, linters, type checkers and the static analyses of Part 54, run on every change.",
+   "zh": "一项变更在合并之前，要先由别人读一遍。<bookmark mark='a'/>二十世纪七十年代，Michael Fagan 在 IBM 推行的代码检查是正式的会议，逐行走查代码，在测试之前就发现了许多缺陷。<bookmark mark='b'/>现代的代码评审要轻量得多：一份差异，加上一场对话。Alberto Bacchelli 和 Christian Bird 在 Microsoft 研究它时，开发者说他们评审是为了发现缺陷，但大多数评论关注的是理解这项变更、替代方案和代码风格。最大的收益，是知识在团队中的传播。<bookmark mark='c'/>规模很重要：评审者一次看几百行代码时表现良好，阅读速度是每小时几百行；超出这个范围，效果就很差。<bookmark mark='d'/>机械性的部分应该交给机器：格式化工具、lint 工具、类型检查器，以及第54部分的静态分析，在每一次变更上运行。"
+  },
+  "a9214b69bdc8": {
+   "scene": "Process",
+   "en": "How should the work itself be organized? <bookmark mark='a'/> The waterfall, one phase after another from requirements to operation, is usually traced to Winston Royce's paper of 1970. But Royce drew it in order to criticize it: he called it risky and an invitation to failure, because testing comes last, when mistakes are most expensive to fix. <bookmark mark='b'/> The alternative that won is iterative: short cycles, each ending in working software that people can use and react to. Scrum organizes the cycles as sprints of a few weeks, each planned, demonstrated and reviewed; Kanban as a continuous flow of items across a board; and the Agile Manifesto of 2001, written by seventeen practitioners at a ski resort in Utah, gave the movement its name and its values: working software over documentation, and responding to change over following a plan.",
+   "zh": "工作本身应该如何组织？<bookmark mark='a'/>瀑布模型，从需求到运维，一个阶段接着一个阶段，通常被追溯到 Winston Royce 一九七零年的论文。但 Royce 画出它，恰恰是为了批评它：他说这种做法有风险，是在招致失败，因为测试排在最后，而那时错误的修复代价最高。<bookmark mark='b'/>最终胜出的替代方案是迭代式的：一个个短周期，每个周期结束时都产出可以工作的软件，让人们能够使用并做出反应。Scrum 把这些周期组织成为期几周的冲刺，每个冲刺都要计划、演示和评审；Kanban 则把它组织成在看板上持续流动的一项项工作；而二零零一年的敏捷宣言，由十七位实践者在犹他州的一个滑雪胜地写成，给了这场运动名字和价值观：可工作的软件高于文档，响应变化高于遵循计划。"
+  },
+  "7aa5f9addf90": {
+   "scene": "Process",
+   "en": "How often should a developer's work be merged into everyone else's? <bookmark mark='a'/> We simulated ten people editing four hundred files, a few of them hot, six edits a day each, each on a branch merged back at a fixed interval. A conflict is two branches changing the same region of a file. <bookmark mark='b'/> Merging every hour, almost nothing conflicts. Daily, a third of merges conflict, lightly. Weekly, nearly every merge conflicts, with eleven clashes to resolve. And per week of work, the conflicts keep growing as branches live longer: three a week for daily merges, fifteen for two-week branches. <bookmark mark='c'/> That is the argument for continuous integration, Kent Beck's and Martin Fowler's practice of merging to the main line at least daily, with tests run on every merge: small, frequent merges are cheaper in total, not just individually.",
+   "zh": "一个开发者的工作，应该多久合并进其他所有人的工作一次？<bookmark mark='a'/>我们模拟了十个人编辑四百个文件，其中少数几个是热点文件，每人每天编辑六次，每个人都在自己的分支上工作，并按固定的间隔合并回去。所谓冲突，就是两个分支修改了同一个文件的同一个区域。<bookmark mark='b'/>每小时合并一次，几乎什么都不会冲突。每天合并一次，三分之一的合并会有冲突，但都很轻微。每周合并一次，几乎每次合并都会冲突，要解决的冲突多达十一处。而且按每周的工作来算，分支存活得越久，冲突就越多：每天合并时每周三次，两周的分支则是每周十五次。<bookmark mark='c'/>这就是支持持续集成的理由，也就是 Kent Beck 和 Martin Fowler 提倡的做法：至少每天合并一次到主线，并在每次合并时运行测试。小而频繁的合并，不只是每一次更便宜，总的代价也更低。"
+  },
+  "bc0fae719206": {
+   "scene": "Process",
+   "en": "Kanban's central rule is a limit on work in progress, and Part 31's queueing explains why. <bookmark mark='a'/> We simulated four people receiving new items at random, eight a day for every ten days, each needing four days of work, where juggling several items costs a little focus for each extra one. With no limit, everyone starts everything: over a thousand items end up in progress, output collapses, and an item takes years. <bookmark mark='b'/> With a limit of eight, throughput matches the arrivals and an item started is done in about six days. Tighter limits shorten that further, while the wait in the backlog grows: from request to done stays about ten days. <bookmark mark='c'/> It is Little's law, L equals lambda W: at a given throughput, the time each item spends in progress is proportional to the number in progress. Stop starting; start finishing.",
+   "zh": "Kanban 的核心规则是限制在制品的数量，而第31部分的排队论解释了其中的原因。<bookmark mark='a'/>我们模拟了四个人，他们随机地接收新的工作项，平均每十天来八项，每项需要四天的工作量，而且同时处理多项时，每多一项都会损失一点专注力。没有限制时，每个人都把所有事情都开了头：最终有一千多项处于进行中，产出崩溃，一项工作要花上好几年。<bookmark mark='b'/>限制为八项时，吞吐量与到达量持平，一项工作一旦开始，大约六天就能完成。更紧的限制会进一步缩短这个时间，而在待办列表里的等待则会变长：从提出请求到完成，始终大约是十天。<bookmark mark='c'/>这就是利特尔法则，L 等于 lambda 乘以 W：在给定的吞吐量下，每项工作处于进行中的时间，与进行中的项数成正比。别再忙着开始，开始专注完成。"
+  },
+  "baf95eecfb53": {
+   "scene": "Process",
+   "en": "Can delivery be measured at all? Nicole Forsgren, Jez Humble and Gene Kim proposed four numbers, from years of surveys of tens of thousands of professionals. <bookmark mark='a'/> How often a team deploys; how long a change takes from commit to production; what fraction of changes cause a failure; and how long it takes to restore service. In their 2019 report the elite teams deployed many times a day, shipped changes within a day, failed on at most fifteen percent of them and recovered within an hour. <bookmark mark='b'/> The striking finding is that speed and stability were not a trade-off: the teams that deployed most often also failed least. Small, frequent changes are easier to review, test and undo. <bookmark mark='c'/> And a caution from the economist Charles Goodhart: once a measure becomes a target, it stops being a good measure.",
+   "zh": "交付能被衡量吗？Nicole Forsgren、Jez Humble 和 Gene Kim 基于多年来对数万名从业者的调查，提出了四个数字。<bookmark mark='a'/>一个团队多久部署一次；一项变更从提交到上线需要多长时间；有多大比例的变更会导致故障；以及恢复服务需要多长时间。在他们二零一九年的报告中，精英团队每天部署许多次，一天之内就能交付变更，最多百分之十五的变更导致故障，并能在一小时内恢复。<bookmark mark='b'/>引人注目的发现是，速度和稳定性并不是此消彼长的关系：部署最频繁的团队，故障也最少。小而频繁的变更，更容易评审、测试和撤销。<bookmark mark='c'/>还有来自经济学家 Charles Goodhart 的一句告诫：一项指标一旦变成目标，它就不再是一个好的指标。"
+  },
+  "6dd38be3707a": {
+   "scene": "People",
+   "en": "Chapter nine. Teams.",
+   "zh": "第九章：团队。"
+  },
+  "06deddcd213b": {
+   "scene": "People",
+   "en": "In 1968 Melvin Conway observed that organizations produce systems shaped like themselves. <bookmark mark='a'/> Three teams, connected the way their people talk, build three modules connected the same way. <bookmark mark='b'/> Teams that never talk produce modules that do not fit, and a module owned by three teams changes slowly. <bookmark mark='c'/> Companies now use the law on purpose, the inverse Conway manoeuvre: decide the architecture first, then draw the teams to match it, one team for each service. <bookmark mark='d'/> There is evidence: a study of Windows Vista found that measures of the organization, how many people and teams touched a component, predicted which components would fail better than measures of the code did.",
+   "zh": "1968年，Melvin Conway 观察到：组织设计出的系统，形状就像组织自身。<bookmark mark='a'/>三个团队，按照成员之间的沟通方式彼此相连，就会造出三个以同样方式相连的模块。<bookmark mark='b'/>从不沟通的团队，造出的模块彼此对不上；而一个由三个团队共同拥有的模块，修改起来很慢。<bookmark mark='c'/>如今，公司会有意地利用这条定律，这就是逆康威策略：先定下架构，再按架构来划分团队，每个服务一个团队。<bookmark mark='d'/>这有证据支持：一项针对 Windows Vista 的研究发现，衡量组织的指标，也就是有多少人、多少团队改动过一个组件，比衡量代码的指标更能预测哪些组件会出故障。"
+  },
+  "b9a06d1cbe24": {
+   "scene": "People",
+   "en": "Brooks gave the arithmetic behind his law. <bookmark mark='a'/> Work can be split among n people, but if every pair must coordinate, there are n times n minus one over two channels: three for three people, ten for five, twenty-eight for eight, sixty-six for twelve. <bookmark mark='b'/> The work shrinks like one over n; the talking grows like n squared. <bookmark mark='c'/> Hence small teams with narrow interfaces between them, which is Parnas' principle applied to people, and Amazon's rule that a team should be small enough to feed with two pizzas.",
+   "zh": "Brooks 给出了他那条定律背后的算术。<bookmark mark='a'/>工作可以分给 n 个人，但如果每两个人之间都要协调，沟通渠道就有 n 乘以 n 减一、再除以二条：三个人有三条，五个人有十条，八个人有二十八条，十二个人有六十六条。<bookmark mark='b'/>工作量按 n 分之一缩小，交谈却按 n 的平方增长。<bookmark mark='c'/>因此要用小团队，团队之间的接口要窄，这就是把 Parnas 的准则用在人身上；还有 Amazon 的规矩：一个团队要小到两个披萨就能喂饱。"
+  },
+  "a8357bd15c0a": {
+   "scene": "People",
+   "en": "Is Brooks' law true? We built a model with his mechanisms and nothing else. <bookmark mark='a'/> Six people and a hundred and twenty person-months of work. Newcomers need six months to reach full speed, and while they learn they take half the time of an experienced colleague; every pair pays a small tax for coordination. Without changes the project ends in month twenty-two. <bookmark mark='b'/> Add four people in month two, and it ends in month eighteen. <bookmark mark='c'/> Add the same four in month sixteen, with less time left than their ramp-up, and it ends later than if nobody had come. So the law holds, with a condition Brooks implied: it applies when the project is already late, and the newcomers cannot become productive before the end. <bookmark mark='d'/> And from the start, more people help until coordination dominates: in this model a team of twenty-four is fastest, and forty is slower.",
+   "zh": "布鲁克斯定律是真的吗？我们按照他说的机制搭了一个模型，别的什么都没加。<bookmark mark='a'/>六个人，一百二十人月的工作量。新人需要六个月才能达到全速，而在学习期间，他们要占用一位有经验的同事一半的时间；每两个人之间都要为协调付出一点小小的代价。不做任何调整，项目在第二十二个月结束。<bookmark mark='b'/>在第二个月加入四个人，项目在第十八个月结束。<bookmark mark='c'/>在第十六个月加入同样的四个人，这时剩下的时间比他们的上手期还短，项目结束得反而比没人加入时更晚。所以这条定律成立，但带着一个 Brooks 暗含的条件：它适用于项目已经延期、而新人在项目结束前无法形成生产力的情况。<bookmark mark='d'/>而如果从一开始就加人，人越多越有帮助，直到协调的开销占了上风：在这个模型里，二十四人的团队最快，四十人反而更慢。"
+  },
+  "2ed2d1a782dd": {
+   "scene": "People",
+   "en": "Conway's law has a darker corollary: knowledge lives in people. <bookmark mark='a'/> A project's truck factor is the smallest number of people whose loss would stall it, because nobody else understands their code. <bookmark mark='b'/> Guilherme Avelino and colleagues estimated it for a hundred and thirty-three popular open-source projects: almost two thirds had a truck factor of one or two. <bookmark mark='c'/> The remedies are the ones this part keeps meeting: review spreads knowledge, documented interfaces and explanatory tests preserve it, and rotating who changes what keeps it shared. <bookmark mark='d'/> And a lone maintainer is also a security risk. In 2024 a backdoor was found in xz, a compression library present on most Linux systems; its author, overworked and alone, had been befriended over years by an attacker who became co-maintainer. Part 61 returns to it.",
+   "zh": "康威定律还有一个更阴暗的推论：知识存在于人身上。<bookmark mark='a'/>一个项目的卡车因子，是指最少失去几个人，项目就会停摆，因为没有别人懂他们的代码。<bookmark mark='b'/>Guilherme Avelino 和同事为一百三十三个流行的开源项目估算了这个数：将近三分之二的项目，卡车因子只有一或二。<bookmark mark='c'/>补救的办法，还是这一部分反复遇到的那些：评审让知识扩散开来，有文档的接口和起解释作用的测试把知识保存下来，而轮换谁来改哪一部分，则让知识保持共享。<bookmark mark='d'/>而孤身一人的维护者，也是一种安全风险。2024年，人们在 xz 里发现了一个后门。xz 是一个压缩库，大多数 Linux 系统上都有它；它的作者工作过度、孤立无援，一名攻击者花了好几年和他交上朋友，最后成了共同维护者。第61部分会再回到这件事。"
+  },
+  "9ec1511b2d4d": {
+   "scene": "Estimation",
+   "en": "Chapter ten. Estimates.",
+   "zh": "第十章：估算。"
+  },
+  "f4a02001d256": {
+   "scene": "Estimation",
+   "en": "Estimates fail in a consistent direction, and a picture of one task explains much of it. <bookmark mark='a'/> How long a task takes is skewed: it can finish a little early, or very late, when something unexpected turns up. A lognormal shape fits such durations well. <bookmark mark='b'/> If the most likely value, the median, is five days, the mean is six, because of the long right tail. An honest estimate gives the median; the schedule experiences the mean. <bookmark mark='c'/> And people anchor on the best case of the task in front of them rather than on how long similar tasks took before: Daniel Kahneman and Amos Tversky called it the planning fallacy. It survives experience: people who know their last projects ran late still expect this one to be on time.",
+   "zh": "估算总是朝同一个方向出错，而一张关于单个任务的图，就能解释其中的大部分原因。<bookmark mark='a'/>一个任务要花多长时间，分布是偏斜的：它可能提前一点完成，也可能在冒出意外情况时拖得很晚。对数正态分布能很好地拟合这类工期。<bookmark mark='b'/>如果最可能的值，也就是中位数，是五天，那么均值就是六天，因为右边有一条长尾。诚实的估算给出的是中位数；而日程实际经历的是均值。<bookmark mark='c'/>而且，人们会锚定在眼前这个任务的最好情况上，而不是参考以往类似的任务实际花了多久：Daniel Kahneman 和 Amos Tversky 把这叫作规划谬误。它经得住经验的检验：明知自己上几个项目都延期了的人，仍然期待这一个能按时完成。"
+  },
+  "0ede44880c61": {
+   "scene": "Estimation",
+   "en": "Now plan a project of twenty such tasks, each with a median of five days, and simulate it a hundred thousand times. <bookmark mark='a'/> Done one after another, the plan says a hundred days. With a modest spread the project meets the plan only about a quarter of the time; with the spread we drew, one time in eight; with a wide spread, one in twenty-five, and the bad cases run to two and a half times the plan. <bookmark mark='b'/> Splitting the work into parallel streams makes it worse: the project ends when its slowest stream ends, a maximum, like the fan-out tail of Part 39. With four streams the plan is met one time in a hundred.",
+   "zh": "现在规划一个由二十个这样的任务组成的项目，每个任务的中位数都是五天，然后把它模拟十万次。<bookmark mark='a'/>如果一个接一个地做，计划说要一百天。分散程度不大时，项目只有大约四分之一的情况能按计划完成；按我们画出的分散程度，八次里只有一次；分散程度很大时，二十五次里只有一次，而且糟糕的情况会拖到计划的两倍半。<bookmark mark='b'/>把工作拆成几条并行的工作流，情况反而更糟：项目要等最慢的那条工作流结束才算结束，这是一个最大值，就像第39部分里扇出的长尾。有四条工作流时，一百次里只有一次能按计划完成。"
+  },
+  "723eeea963a5": {
+   "scene": "Estimation",
+   "en": "Uncertainty also has a shape over the life of a project. <bookmark mark='a'/> Barry Boehm, and later Steve McConnell, summarized it as a cone. At the first idea, the final effort is anywhere from a quarter of the estimate to four times it. By the time the product is defined, half to double; with requirements complete, within fifty percent; with the design detailed, within ten. <bookmark mark='b'/> The cone narrows only as decisions are actually made, not as time passes. A project that defers its decisions stays at the wide end however long it runs.",
+   "zh": "不确定性在项目的整个生命周期里也有一个形状。<bookmark mark='a'/>Barry Boehm，以及后来的 Steve McConnell，把它概括成一个锥形。在最初有想法的时候，最终的工作量可能是估算值的四分之一，也可能是它的四倍。等到产品定义好时，是一半到两倍；需求完备时，误差在百分之五十以内；详细设计完成时，在百分之十以内。<bookmark mark='b'/>这个锥只会随着决策真正做出而收窄，而不是随着时间流逝而收窄。一个总在推迟决策的项目，无论做多久，都停留在锥的宽口那一端。"
+  },
+  "64686a416102": {
+   "scene": "Estimation",
+   "en": "What helps? <bookmark mark='a'/> Give a range, or a percentile, instead of a date: eighty percent likely by the fifteenth. <bookmark mark='b'/> Bent Flyvbjerg's reference-class forecasting starts from how long similar projects actually took, before looking at the details of this one. <bookmark mark='c'/> When the date is fixed, cut scope rather than quality, and re-estimate from the throughput you have actually measured.",
+   "zh": "怎样才有帮助？<bookmark mark='a'/>给出一个范围，或者一个百分位数，而不是一个日期：有百分之八十的把握在十五号之前完成。<bookmark mark='b'/>Bent Flyvbjerg 的参照类预测，先看类似的项目实际花了多久，然后才去看这个项目的细节。<bookmark mark='c'/>当日期固定时，要砍范围，而不是砍质量，并根据实际测得的吞吐量重新估算。"
+  },
+  "1d7cce5b37b4": {
+   "scene": "Profession",
+   "en": "Chapter eleven. The profession.",
+   "zh": "第十一章：这门职业。"
+  },
+  "4b02dbc889d1": {
+   "scene": "Profession",
+   "en": "Almost every program written today is mostly other people's code, and that code comes with licenses. <bookmark mark='a'/> Permissive licenses, like MIT, BSD and Apache, let anyone use, change and sell the code, asking mainly that the notice be kept. Weak copyleft, like the LGPL, keeps changes to those particular files open. The GPL, Richard Stallman's copyleft, requires anyone who distributes a derived program to share its source on the same terms, and the AGPL extends that to programs offered as a service. <bookmark mark='b'/> These are legal obligations, and builds check them, as Part 41 will. <bookmark mark='c'/> And there is an economic oddity: code that much of industry depends on is often maintained by a few volunteers. When the Heartbleed bug was found in OpenSSL in 2014, the library that secured a large part of the web was being maintained by a handful of people.",
+   "zh": "今天写出来的几乎每一个程序，大部分都是别人的代码，而这些代码都附带着许可证。<bookmark mark='a'/>宽松许可证，比如 MIT、BSD 和 Apache，允许任何人使用、修改和出售代码，主要要求保留许可声明。弱 copyleft（著佐权），比如 LGPL，要求对那些特定文件的修改保持开放。GPL，也就是 Richard Stallman 的 copyleft，要求任何分发衍生程序的人，都按同样的条款公开它的源代码；AGPL 则把这一点扩展到以服务形式提供的程序。<bookmark mark='b'/>这些是法律义务，构建过程会检查它们，第41部分就会这样做。<bookmark mark='c'/>这里还有一个经济上的怪现象：大半个行业都依赖的代码，往往只由几个志愿者维护。2014年在 OpenSSL 里发现 Heartbleed 漏洞时，这个为很大一部分网络提供安全保障的库，只由寥寥几个人在维护。"
+  },
+  "7d87315aebfa": {
+   "scene": "Profession",
+   "en": "Engineering ethics is not abstract. <bookmark mark='a'/> From 1999, the British Post Office's Horizon accounting system showed shortfalls at branch counters, and the Post Office prosecuted more than nine hundred sub-postmasters for theft and false accounting. Courts presumed that the computer was right. <bookmark mark='b'/> In 2019 a High Court judgment found that Horizon had bugs, errors and defects capable of causing such shortfalls. Convictions have since been overturned, some after the people convicted had died. <bookmark mark='c'/> In 2018 and 2019, two Boeing 737 MAX aircraft crashed, killing three hundred and forty-six people, after flight-control software acted on a single faulty sensor, in a system that pilots had been told too little about. <bookmark mark='d'/> The lessons are this part's own: evidence over assumption, honest reviews of risk, and no single point of failure, whether a sensor or a presumption.",
+   "zh": "工程伦理并不抽象。<bookmark mark='a'/>从1999年起，英国 Post Office 的 Horizon 会计系统在各个网点的柜台上显示出账目短缺，Post Office 以盗窃和做假账为由，起诉了九百多名邮政分局局长。法院推定计算机是对的。<bookmark mark='b'/>2019年，英国高等法院的一项判决认定，Horizon 存在漏洞、错误和缺陷，足以造成这样的短缺。此后，这些定罪陆续被推翻，其中一些是在被定罪的人去世之后。<bookmark mark='c'/>2018年和2019年，两架 Boeing 737 MAX 飞机坠毁，造成三百四十六人遇难，起因是飞控软件依据一个出了故障的传感器采取了行动，而关于这个系统，飞行员被告知得太少。<bookmark mark='d'/>教训正是这一部分自己的教训：证据胜过假定，诚实地评审风险，以及不要有单点故障，无论它是一个传感器，还是一个推定。"
+  },
+  "7c3a9cc38ceb": {
+   "scene": "Profession",
+   "en": "A profession has obligations beyond the code. <bookmark mark='a'/> Privacy by design: collect only the data a purpose needs, use it only for that purpose, and delete it when done, principles that the European Union's data protection regulation made law in 2018. <bookmark mark='b'/> Accessibility: software that works with screen readers, keyboards alone and captions, which many countries require and every user benefits from. <bookmark mark='c'/> Safety: in the nineteen eighties the Therac-25 radiation machine gave massive overdoses to patients, after software, with a race condition of the kind Part 33 studied, replaced the hardware interlocks of earlier models. Nancy Leveson's investigation is still required reading. <bookmark mark='d'/> The ACM's Code of Ethics asks computing professionals to contribute to society, avoid harm, be honest, respect privacy, and review systems and their risks thoroughly. None of this is separate from engineering: privacy is a requirement like latency, accessibility a requirement like correctness, and the safest systems are those whose designers assumed that their own code, like every other code, contains bugs.",
+   "zh": "一门职业承担的义务，不止于代码。<bookmark mark='a'/>隐私设计：只收集某个目的所需的数据，只把它用于那个目的，用完就删除；欧盟的数据保护条例在2018年把这些原则写进了法律。<bookmark mark='b'/>无障碍：软件要能配合读屏软件使用，能只靠键盘操作，要有字幕；许多国家对此有要求，而每一位用户都会从中受益。<bookmark mark='c'/>安全：上世纪八十年代，Therac-25 放射治疗机给病人造成了严重的过量照射，起因是软件取代了早期型号里的硬件联锁，而这款软件里有一个竞态条件，正是第33部分研究过的那一类。Nancy Leveson 的调查至今仍是必读文献。<bookmark mark='d'/>ACM 的道德规范要求计算专业人士为社会作贡献、避免伤害、诚实、尊重隐私，并彻底地审查系统及其风险。这些都不是工程之外的事：隐私是一项需求，就像延迟一样；无障碍也是一项需求，就像正确性一样；而最安全的系统，出自那些假定自己的代码和其他所有代码一样都含有缺陷的设计者之手。"
+  },
+  "8a79787ca446": {
+   "scene": "Frontier",
+   "en": "Chapter twelve. Frontier: evidence, and machines that write code.",
+   "zh": "第十二章，前沿：证据，以及会写代码的机器。"
+  },
+  "0e572b932415": {
+   "scene": "Frontier",
+   "en": "Software engineering is still building its evidence base. <bookmark mark='a'/> Controlled experiments are expensive and small: a few dozen students for a few hours stand in for professionals working over years. <bookmark mark='b'/> Mining software repositories gives scale, millions of commits, reviews and bug reports, but mostly correlations. <bookmark mark='c'/> Some findings have held up well, and some can be checked in minutes on any codebase. <bookmark mark='d'/> Natural experiments, preregistered studies and replications are arriving, late, as they did in medicine and psychology.",
+   "zh": "软件工程仍在建立自己的证据基础。<bookmark mark='a'/>受控实验昂贵而且规模小：几十个学生做上几个小时，就被用来代表多年工作的专业人员。<bookmark mark='b'/>挖掘软件仓库能带来规模，数以百万计的提交、评审和缺陷报告，但得到的大多是相关性。<bookmark mark='c'/>有些发现很好地经受住了考验，有些在任何代码库上几分钟就能验证。<bookmark mark='d'/>自然实验、预注册研究和重复研究正在到来，来得虽晚，就像当年在医学和心理学里一样。"
+  },
+  "dff13369c121": {
+   "scene": "Frontier",
+   "en": "Here is a finding from that evidence base that we can replicate in a minute. <bookmark mark='a'/> Train a trigram model, which predicts each word from the two before it, on four fifths of the thirty novels, and measure its surprise on the last fifth: about eight bits per word. <bookmark mark='b'/> Do the same on the Python code of this repository's library, token by token: four and a half bits. Code is far more predictable than prose. <bookmark mark='c'/> Abram Hindle and his colleagues found the same in 2012 for Java and C, and called it the naturalness of software. It is why code completion works, and it is the observation that grew into today's code-writing models.",
+   "zh": "这里有一个来自那个证据基础的发现，我们一分钟就能重现。<bookmark mark='a'/>训练一个三元语法模型，它根据前两个词来预测每一个词；用三十部小说中的五分之四来训练，再在剩下的五分之一上测量它的意外程度：每个词大约八比特。<bookmark mark='b'/>在这个仓库里那套库的 Python 代码上，逐个词元做同样的事：四点五比特。代码远比文章更可预测。<bookmark mark='c'/>Abram Hindle 和同事在2012年对 Java 和 C 发现了同样的现象，并把它称为软件的自然性。这正是代码补全之所以可行的原因，也是后来发展成今天那些会写代码的模型的那个观察。"
+  },
+  "37e795cbc1b0": {
+   "scene": "Frontier",
+   "en": "Programs that write programs need the same scrutiny as people do. <bookmark mark='a'/> OpenAI's HumanEval of 2021 posed a hundred and sixty-four small functions, each with tests. Sample n programs from a model, count the c that pass, and this formula estimates the chance that at least one of k attempts would. <bookmark mark='b'/> SWE-bench, in 2023, raised the bar to real issues from GitHub projects: an agent's patch counts as a fix if the tests the human developers wrote for that issue pass. <bookmark mark='c'/> But tests are an incomplete oracle. Later audits found accepted patches that were wrong, and benchmark problems that had leaked into the models' training data. <bookmark mark='d'/> Our own measurements show why. The tests of our assembler, which pass, also pass on many slightly broken versions of it, as the mutation chapter showed. Any of those, submitted as a patch, would be scored as correct.",
+   "zh": "会写程序的程序，需要和人一样接受审视。<bookmark mark='a'/>OpenAI 在2021年推出的 HumanEval，给出了一百六十四个小函数，每个都配有测试。从一个模型中采样 n 个程序，数出其中通过的 c 个，这个公式就能估算出 k 次尝试中至少有一次通过的概率。<bookmark mark='b'/>2023年的 SWE-bench 把门槛提高到 GitHub 项目里的真实问题：如果人类开发者为这个问题写的测试能够通过，智能体的补丁就算修复了它。<bookmark mark='c'/>但测试是一个不完整的判定准则（oracle）。后来的审查发现，有些被接受的补丁其实是错的，还有些基准题目已经泄漏进了模型的训练数据。<bookmark mark='d'/>我们自己的测量说明了原因。我们汇编器的测试是通过的，但在它的许多稍有缺陷的版本上也照样通过，正如变异测试那一章所展示的。其中任何一个版本，作为补丁提交上去，都会被判为正确。"
+  },
+  "ea115133c2bf": {
+   "scene": "Frontier",
+   "en": "Where the field is. <bookmark mark='a'/> The oracle problem: when tests are incomplete, how can a machine judge whether a patch is right? Comparing against other implementations, writing specifications, and scoring tests by the mutants they kill all help, and none is complete. <bookmark mark='b'/> Measuring productivity: what does a tool, a process or an AI assistant really change, measured in the field rather than by asking people how they feel? <bookmark mark='c'/> Maintainability: a number that predicts how expensive code will be to change better than its size already does. <bookmark mark='d'/> And flaky tests: predicting them from their code, and repairing them automatically. <bookmark mark='e'/> This part's research problem asks for a score of a test suite that predicts whether a patch it accepts is really correct, checked on patches whose correctness we know: our assembler's mutants.",
+   "zh": "这个领域现在走到了哪里。<bookmark mark='a'/>判定准则问题：当测试不完整时，机器怎样判断一个补丁是否正确？与其他实现做比较、编写规约、按测试能杀死多少变异体来给测试打分，这些都有帮助，但没有一种是完备的。<bookmark mark='b'/>衡量生产率：一个工具、一套流程或者一个 AI 助手，到底改变了什么？要在实际环境中测量，而不是去问人们感觉如何。<bookmark mark='c'/>可维护性：一个数，能比代码规模本身更好地预测修改这段代码的代价有多高。<bookmark mark='d'/>还有不稳定的测试：根据测试的代码预测它们，并自动修复它们。<bookmark mark='e'/>这一部分的研究题，要求为测试套件设计一个分数，用来预测它所接受的补丁是否真的正确，并在我们已知正误的补丁上检验：也就是我们汇编器的那些变异体。"
+  },
+  "023e00a27383": {
+   "scene": "Outro",
+   "en": "What we built in this part. Parnas' index, built two ways, and changes that cost three modules or one. Abstract types, contracts, and a square that is not a rectangle. This repository measured: its layers, its two upward imports, its five cycles, and the stability of its core. SOLID, patterns and the expression problem. Flaky tests found and bisected, a fuzzer that crashed our assembler twenty-four ways, and a mutation score that coverage hid. Code shown to be more predictable than prose. Debt as a model, and evidence that much folklore lacks. Little's law for work in progress, Conway's law, Brooks' law with its condition, and estimates with their tails.",
+   "zh": "这一部分我们搭建了什么。Parnas 的索引程序，用两种方式搭建，以及要改三个模块或只改一个模块的修改。抽象类型，契约，以及一个不是长方形的正方形。把这个代码仓库量了一遍：它的分层，它的两处向上导入，它的五个环，以及它核心的稳定性。SOLID、设计模式和表达式问题。找出不稳定的测试并二分定位，一个让我们的汇编器以二十四种方式崩溃的模糊测试器，以及一个被覆盖率掩盖住的变异分数。证明了代码比文章更可预测。把技术债当作一个模型，以及很多民间说法所缺乏的证据。用于在制品的 Little 定律，康威定律，带着条件的布鲁克斯定律，以及带着长尾的估算。"
+  },
+  "6d2047e79498": {
+   "scene": "Outro",
+   "en": "Where this comes back. Part 41 builds version control and build systems, which are this part's dependency graphs made into machines. Part 43 designs the interfaces between services and the teams behind them. Part 44 delivers software continuously and measures it. Part 50 handles incidents, and Part 54 replaces tests with proofs where proofs are affordable.",
+   "zh": "它们会在哪里再出现。第41部分搭建版本控制和构建系统，它们就是这一部分的依赖图，被做成了机器。第43部分设计服务之间的接口，以及服务背后的团队。第44部分持续地交付软件，并对它进行测量。第50部分处理故障事件，而第54部分会在证明负担得起的地方，用证明取代测试。"
+  },
+  "8f074f2afa39": {
+   "scene": "Outro",
+   "en": "In practice. Before large changes, write a design document: the problem, the options considered, and the decision, and review that before the code. Name the secret each module hides, and keep its interface small. Write many fast tests and few slow ones, and fix flaky tests instead of retrying them. Keep changes small so that review is quick, and let machines check the style. And estimate in ranges, cutting scope rather than quality when time runs out.",
+   "zh": "在实践中。做大的修改之前，先写一份设计文档：问题、考虑过的方案，以及最终的决定；在写代码之前先评审它。说出每个模块隐藏的秘密，并让它的接口保持小巧。多写快速的测试，少写慢速的测试；修复不稳定的测试，而不是重试它们。让修改保持小规模，这样评审就快；代码风格交给机器去检查。还有，用范围来估算；时间不够时，砍范围，而不是砍质量。"
+  },
+  "4a92902383db": {
+   "scene": "Outro",
+   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build problem: write the tests that kill the ten survivors on lines our tests already run, and measure the new score. The last, marked with a star, is a research problem: a score for test suites that predicts whether a patch they accept is really correct.",
+   "zh": "六道习题，完整解答在这一部分的笔记里。任何一道都可以暂停来看。第五道是动手题：编写测试，杀死那十个存活的变异体，它们所在的代码行，我们的测试已经运行到了；然后测量新的分数。最后一道标着星号，是研究题：为测试套件设计一个分数，用来预测它所接受的补丁是否真的正确。"
+  },
+  "2313860f09c8": {
+   "scene": "Outro",
+   "en": "Next time, Part 41: version control, builds and dependencies. Git turns out to be a Merkle graph of content-addressed objects; merging is a three-way comparison with a common ancestor; a build system is an incremental computation over a graph; and choosing versions of dependencies is NP-complete.",
+   "zh": "下一次，第41部分：版本控制、构建与依赖。原来 Git 是一张由内容寻址对象组成的 Merkle 图；合并是一种借助共同祖先的三路比较；构建系统是在一张图上进行的增量计算；而为依赖选择版本，是一个 NP 完全问题。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "这一部分所依据的书和论文都在屏幕上和笔记里。感谢观看。"
+  }
+ },
+ "title_en": "Computer Science, Built: Part 40, Software Engineering",
+ "chapters_en": {
+  "Hook": "The software crisis, and this repository",
+  "Parnas": "1. Complexity, and Parnas' rule",
+  "Abstraction": "2. Abstraction and contracts",
+  "Coupling": "3. Coupling, measured",
+  "Design": "4. Design, in the large and the small",
+  "Testing": "5. Testing, and tests that lie",
+  "Mutation": "6. Testing the tests",
+  "Change": "7. Changing code that works",
+  "Process": "8. Review and process",
+  "People": "9. Teams",
+  "Estimation": "10. Estimates",
+  "Profession": "11. The profession",
+  "Frontier": "12. Frontier: evidence, and machines that code",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}

@@ -126,8 +126,8 @@ class Process(VoiceoverScene):
         ).arrange(DOWN, buff=0.25).next_to(tab, DOWN, buff=0.4)
         with self.voiceover(
             "Kanban's central rule is a limit on work in progress, and Part 31's queueing explains why. "
-            "<bookmark mark='a'/> We simulated four people receiving new items at random, eight a day for every ten "
-            "days, each needing four days of work, where juggling several items costs a little focus for each extra "
+            "<bookmark mark='a'/> We simulated four people receiving new items at random, eight every ten days on "
+            "average, each needing four days of work, where juggling several items costs a little focus for each extra "
             "one. With no limit, everyone starts everything: over a thousand items end up in progress, output "
             "collapses, and an item takes years. <bookmark mark='b'/> With a limit of eight, throughput matches the "
             "arrivals and an item started is done in about six days. Tighter limits shorten that further, while the "
