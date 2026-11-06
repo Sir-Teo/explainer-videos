@@ -122,11 +122,11 @@ class Async(VoiceoverScene):
         with self.voiceover(
             "How long is the delay? Part 31 answered that. <bookmark mark='a'/> With random arrivals and random job "
             "sizes, the mean time in the system is one over one minus the utilization, in "
-            "units of the service time: two at half load, ten at ninety percent, twenty at ninety-five. "
+            "units of the service time: two at half load, ten at ninety percent, about twenty-one at ninety-five. "
             "<bookmark mark='b'/> The slowest one percent are worse: forty-eight service times at ninety percent. "
             "<bookmark mark='c'/> And variability costs as much as load. At eighty percent, jobs of identical size "
             "wait three service times on average; exponential sizes, five; and sizes that vary ten times as much, "
-            "twenty-three. <bookmark mark='d'/> So a design leaves headroom, and watches how long jobs wait in the "
+            "twenty-two. <bookmark mark='d'/> So a design leaves headroom, and watches how long jobs wait in the "
             "queue, not merely how busy the workers are."
         ) as vo:
             self.play(FadeIn(head), Create(g), FadeIn(foot))
@@ -170,7 +170,8 @@ class Async(VoiceoverScene):
             wrapped_label(rf"order is worth as much as speed: \ shortest jobs first cut the mean from "
                           rf"{d['fcfs']:.1f} to {d['srpt']:.1f} service times \ (Part 31's simulation)", 12.4,
                           font_size=20, color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(DOWN, buff=0.45)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(bars, DOWN, buff=0.7)
+        notes.to_edge(LEFT, buff=0.5)
         with self.voiceover(
             "Not all jobs are equally urgent. <bookmark mark='a'/> Keep separate queues: an interactive one, for "
             "work someone is waiting on, and a batch one, so that a flood of batch "
@@ -196,15 +197,15 @@ class Async(VoiceoverScene):
         line = Arrow([x0, y, 0], [x1 + 0.4, y, 0], buff=0, stroke_width=2, color=GREY_C,
                      max_tip_length_to_length_ratio=0.02)
         tl = label(r"a sorted set, \ scored by due time", font_size=17, color=GREY_B).next_to(line, UP,
-                                                                                            buff=0.5).align_to(
+                                                                                            buff=1.0).align_to(
             line, LEFT)
         due = [(-4.6, "reminder"), (-2.9, "retry 2"), (-0.8, "digest"), (1.6, "retry 3"), (4.2, "expire")]
         tags = VGroup(*[tag_box(t, color=LAM, size=16).move_to([x, y + 0.45, 0]) for x, t in due])
         ticks = VGroup(*[Line([x, y - 0.1, 0], [x, y + 0.1, 0], color=LAM, stroke_width=2) for x, _ in due])
         now = VGroup(Line([x0 + 0.2, y - 0.35, 0], [x0 + 0.2, y + 0.2, 0], color=HEAD, stroke_width=4),
                      label(r"now", font_size=17, color=HEAD).move_to([x0 + 0.2, y - 0.55, 0]))
-        ready = VGroup(*[Square(side_length=0.42, stroke_color=GREY_C, stroke_width=1.5) for _ in range(6)]).arrange(
-            RIGHT, buff=0).move_to([0.0, 0.25, 0])
+        ready = VGroup(*[Rectangle(width=1.3, height=0.5, stroke_color=GREY_C, stroke_width=1.5)
+                         for _ in range(5)]).arrange(RIGHT, buff=0).move_to([0.0, 0.25, 0])
         rl = label(r"ready queue", font_size=17, color=GREY_A).next_to(ready, LEFT, buff=0.2)
         # retries: delays doubling, with jitter, then the dead-letter queue
         base = [1, 2, 4, 8]
@@ -249,7 +250,7 @@ class Async(VoiceoverScene):
             slot = 0
             for (x, _), t in zip(due[:3], tags[:3]):
                 self.play(now.animate.set_x(x + 0.05), run_time=0.8, rate_func=linear)
-                self.play(t.animate.scale(0.8).move_to(ready[slot]), run_time=0.6)
+                self.play(t.animate.scale(0.9).move_to(ready[slot]), run_time=0.6)
                 slot += 1
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(b) for b in bars], lag_ratio=0.3), FadeIn(lines[1]), run_time=1.6)
@@ -294,7 +295,8 @@ class Async(VoiceoverScene):
             "times the time each one takes. <bookmark mark='a'/> Take the napkin's two hundred and ten writes a "
             "second, and suppose each starts a job of half a second. On average, a hundred and five workers are "
             "busy. <bookmark mark='b'/> Add headroom, running at seventy percent: a pool of a hundred and fifty. "
-            "One shared queue feeding many workers can run hotter than many small queues: Erlang's pooling. <bookmark mark='c'/> Scale the pool on the age of the oldest waiting job, not "
+            "One shared queue feeding many workers can run hotter than many small queues: Erlang's pooling. <bookmark "
+            "mark='c'/> Scale the pool on the age of the oldest waiting job, not "
             "on processor load, and bound the queue so that overload is refused early. <bookmark mark='d'/> Part 49 "
             "will size whole systems this way, and Part 50 will decide what waits they may promise."
         ) as vo:
