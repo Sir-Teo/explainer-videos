@@ -4,8 +4,8 @@ Part 5 of a sixty-five-part course in statistics, from a first course to a PhD (
 and [the syllabus](../SYLLABUS.md)), in Stage I, Bachelor's: Foundations. Parts 2–3 built one random variable at a
 time and Part 4 built the matrices; this part puts several variables together and asks how they move.
 
-It opens with Francis Galton's table of 928 adult children and their mid-parents (1886). The counts lie on nested
-ellipses, all with the same centre and the same shape; the children of tall parents are tall, but less so. From that
+It opens with Francis Galton's table of 928 adult children and their mid-parents (1886). A fitted Gaussian gives nested
+ellipses with one centre and shape, approximating the count pattern; the children of tall parents are tall, but less so. From that
 one picture come joint, marginal and conditional distributions, conditional expectation as the best predictor (a
 projection), Eve's law, the multivariate normal and its conditioning formula, regression to the mean, the three
 lines through an ellipse, change of variables, latent variables, copulas, exchangeability and de Finetti, measures of
@@ -15,7 +15,7 @@ Every number on screen is computed in [`compute.py`](compute.py). Galton's count
 (`museum.GALTON_*`, from HistData; Hanley 2004). Everything else is the World (seed 1662) or a seeded simulation, and
 is tagged as such.
 
-**Built in this part:** the Gaussian slicer (`GaussianSlicer` in [`explainer/stats/viz.py`](../../../explainer/stats/viz.py)).
+**Built in this part:** the Gaussian slicer (`GaussianSlicer` in [`explainer/stats/viz.py`](../../../../explainer/stats/viz.py)).
 It is a bivariate normal density drawn as a turnable wireframe surface over its floor. It cuts the surface at chosen
 values of x, and each slice, renormalized, is the conditional density of y given x: a normal whose centre moves along
 the regression line and whose width never changes. It is used for the World's families (mid-parent and son), and it
@@ -43,16 +43,16 @@ python tools/lecture_length.py stats5 --floor 50
 | 2 | Dependence | A gallery of uncorrelated-but-dependent shapes (Y = X², the ring, the random-sign pair); covariance as a bilinear form; the variance of an average of equicorrelated variables (diversification); Bernstein's pairwise-but-not-mutually independent coins. | r ≈ 0.000, −0.006, −0.007; Var(X̄)/σ² → ρ |
 | 3 | Conditional expectation | The World's log incomes by age: the best constant, the best line, the conditional mean; the proof that E[Y \| X] minimizes mean squared error; the tower property; E[Y \| X] as an orthogonal projection in L²; the conditional median under absolute loss and conditional quantiles. | MSE 0.408 / 0.405 / 0.360; R² 0.007 for the line vs 0.119 for E[Y \| X] |
 | 4 | Eve's law | Var Y = E Var(Y \| X) + Var E[Y \| X], derived; Galton's children; the World's incomes by age; Pearson's correlation ratio η² against r²; a rare switch that makes the conditional variance larger. | Galton 6.33 = 4.93 + 1.40 (η² 0.221 vs r² 0.210); log income 0.408 = 0.367 + 0.041 |
-| 5 | The multivariate normal | AZ + μ moving a round cloud into an ellipse; the density from the change of variables; affine images, marginals, Cramér–Wold; two normals that are not jointly normal; squared Mahalanobis distances against χ²₃ as a check of multivariate normality. | sample covariance matches AAᵀ; 4,000 draws on the χ²₃ diagonal |
+| 5 | The multivariate normal | AZ + μ moving a round cloud into an ellipse; the density from the change of variables; affine images, marginals, Cramér–Wold; two normals that are not jointly normal; squared Mahalanobis distances against χ²₃ as a radial diagnostic (insufficient to establish joint normality). | sample covariance matches AAᵀ; 4,000 draws on the χ²₃ diagonal |
 | 6 | Conditioning a Gaussian | The conditioning theorem (Schur complement) and its proof by decorrelation; the two-variable case is the regression line; Galton's numbers; the precision matrix of a chain X → Y → Z, whose zero means conditional independence. | conditional SD √(1 − r²)·s_y; corr(X, Z) = 0.56 but K₁₃ = 0 |
-| 7 | Regression to the mean | The World's tallest tenth of mid-parents and their sons; both directions; Galton's stable variance via Eve's law; skill + luck test–retest; Kahneman's flight instructors. | +8.76 → +6.60 cm; 6.33 = 1.34 + 5.00; top tenth 2.42 → 1.17 SD, bottom −2.46 → −1.22 |
+| 7 | Regression to the mean | The World's tallest tenth of mid-parents and their sons; both directions; Galton's stable variance via Eve's law; skill + luck test–retest; Kahneman's flight instructors. | +8.76 → +6.60 cm; 6.33 = 1.33 + 5.00; top tenth about 1.71 → 0.83 SD, bottom about −1.74 → −0.86 |
 | 8 | Three lines through one ellipse | Y on X, X on Y and the major axis on Galton's ellipse; what each minimizes; errors in variables and Spearman's attenuation. | slopes 0.646, 1/0.326, 2.02; slope 1.01 → 0.49 with reliability ½ |
 | 9 | Change of variables | The density of a transformed vector and its Jacobian; the sum of two uniforms by convolution (a triangle); the ratio of two normals (Cauchy); polar coordinates and the Rayleigh distribution. | E R = √(π/2) = 1.2533 vs simulated 1.2567 |
 | 10 | Latent variables | The World's adult heights as a mixture of men and women; marginalizing a latent class; Pearson's crabs (1894); the posterior class probability (the E step of EM); Simpson's paradox in Part 1's clinic as a latent variable. | men 176.0 ± 7.1, women 163.0 ± 6.4, all SD 9.37; clinic: treated 0.624 vs 0.737 overall, but higher within each severity |
 | 11 | Copulas | Sklar's theorem (1959); Gaussian, Clayton and Gumbel copulas with the same Kendall's τ and different tails; sampling from a copula with any margins; Li's Gaussian copula and the crisis. | τ = 0.5; joint tail rates (lower/upper) 0.45/0.375, 0.68/0.12, 0.33/0.555; τ 0.507 survives every step |
 | 12 | Exchangeability | The Pólya urn machine; its limiting fractions are uniform; exchangeable sequences; de Finetti's theorem (1931); finite exchangeability without replacement and the Diaconis–Freedman bound. | RRB, RBR, BRR each 1/12; urn RRBB: P(RR) = 1/6 vs 1/4, corr −1/3 |
-| 13 | Measuring dependence | Pearson, Spearman, Kendall, distance correlation and mutual information on six shapes; rank correlations defined; their invariance under an increasing transform, measured; dCor and MI. | Pearson 0.283 → 0.202; Spearman 0.274 and Kendall 0.184 unchanged |
-| 14 | The simplex | The multinomial and its negative covariances; the Dirichlet in four shapes; the Dirichlet as normalized gammas (and independent of their total); Dirichlet–multinomial conjugacy; Pearson's spurious correlation of ratios. | corr(X/Z, Y/Z) = 0.54 from independent X, Y, Z |
+| 13 | Measuring dependence | Pearson, Spearman, Kendall, distance correlation and mutual information on six shapes; rank correlations defined; their invariance under an increasing transform, measured; dCor and MI. | Pearson 0.396 → 0.301; Spearman 0.379 and Kendall 0.259 unchanged |
+| 14 | The simplex | The multinomial and its negative covariances; the Dirichlet in four shapes; the Dirichlet as normalized gammas (and independent of their total); Dirichlet–multinomial conjugacy; Pearson's spurious correlation of ratios. | sample corr(X/Z, Y/Z) = 0.46 from independent positive lognormal X, Y, Z |
 | 15 | Outro | Recap, payoffs, problems, references, the Transcript, Part 6's question. | — |
 
 ## Sources
@@ -98,7 +98,7 @@ python tools/lecture_length.py stats5 --floor 50
 - Y is a function of X, so they are as dependent as can be; correlation sees none of it, because the relationship
   is not monotone.
 
-**2. Eve's law.**
+**2. Eve's law.** Assume Y has a finite second moment.
 
 *Solution.* Write μ(X) = E[Y | X]. Then
 - Var Y = E(Y − EY)² = E(Y − μ(X) + μ(X) − EY)².
@@ -117,7 +117,7 @@ So Var Y = E Var(Y | X) + Var E[Y | X].
 - The regression of X on Y has slope ρσ_X/σ_Y = 0.4. Drawn on the same (x, y) axes, that line has slope 1/0.4 = 2.5,
   steeper than the Y-on-X slope of 0.9.
 
-**4. A retest.** 2 SD above the mean, test–retest correlation 0.7.
+**4. A retest.** Assume a bivariate normal model, 2 SD above the mean, test–retest correlation 0.7.
 
 *Solution.* In standard units, E[Z₂ | Z₁ = 2] = ρ · 2 = 1.4. The predicted retest is 1.4 SD above the mean, with
 conditional SD √(1 − 0.49) = 0.71. That is regression to the mean; nobody's skill changed.

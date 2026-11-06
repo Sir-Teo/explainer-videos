@@ -25,14 +25,14 @@ class Lines(VoiceoverScene):
         mx, my = d["mx"], d["my"]
         g = np.random.Generator(np.random.PCG64(3))
         jx, jy = x + g.uniform(-0.45, 0.45, len(x)), y + g.uniform(-0.45, 0.45, len(y))
-        A = axes([62, 75], [60, 77], x_length=5.6, y_length=5.6 * 17 / 13 * 0.82, xlabel=r"mid-parent (in)", ylabel=r"child (in)",
-                 xticks=[64, 68, 72], yticks=[62, 66, 70, 74], center=[-3.2, -0.3, 0])
+        A = axes([62, 75], [60, 77], x_length=4.6, y_length=4.6 * 17 / 13, xlabel=r"mid-parent (in)", ylabel=r"child (in)",
+                 xticks=[64, 68, 72], yticks=[62, 66, 70, 74], center=[-3.8, -0.2, 0])
         ax = A.ax
         pts = scatter(ax, jx, jy, color=DATA, radius=0.02, opacity=0.4)
         S_ = np.asarray(d["S"])
         ell = ellipse_curve(ax, [mx, my], S_, 2.0, GREY_B, 2.0, 0.8)
         def line(slope, col):
-            x0, x1 = 62, 75
+            x0, x1 = max(62, mx + (60 - my) / slope), min(75, mx + (77 - my) / slope)
             return Line(ax.c2p(x0, my + slope * (x0 - mx)), ax.c2p(x1, my + slope * (x1 - mx)), color=col, stroke_width=3.5)
         l_yx = line(d["b_yx"], LINE_YX)
         l_xy = line(1 / d["b_xy"], LINE_XY)
@@ -67,26 +67,30 @@ class Lines(VoiceoverScene):
 
     def why_differ(self):
         rows = VGroup(
-            MathTex(r"\text{the } Y\text{-on-}X \text{ line minimizes vertical distances}", font_size=30, color=LINE_YX),
-            MathTex(r"\text{the } X\text{-on-}Y \text{ line minimizes horizontal distances}", font_size=30, color=LINE_XY),
-            MathTex(r"\text{the major axis minimizes perpendicular distances}", font_size=30, color=LINE_MAJ),
+            MathTex(r"\text{the } Y\text{-on-}X \text{ line minimizes squared vertical distances}", font_size=30, color=LINE_YX),
+            MathTex(r"\text{the } X\text{-on-}Y \text{ line minimizes squared horizontal distances}", font_size=30, color=LINE_XY),
+            MathTex(r"\text{the major axis minimizes squared perpendicular distances}", font_size=30, color=LINE_MAJ),
             MathTex(r"\text{they coincide only when } |r| = 1", font_size=32, color=S.ACCENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.38).move_to([0, 0.8, 0])
         use = VGroup(label(r"predicting $Y$ from $X$: \ use $Y$ on $X$", font_size=26),
                      label(r"measuring a relationship with error in both variables: \ errors-in-variables (Part 23)", font_size=26,
                            color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.7)
+        intro = label('Three squared-distance objectives', font_size=36)
         with self.voiceover(
             "Why three? Because they answer three questions. <bookmark mark='a'/> The regression of y on x minimizes "
-            "the vertical distances from the points: the best way to predict y from x. <bookmark mark='b'/> The "
-            "regression of x on y minimizes the horizontal ones: the best way to predict x from y. "
-            "<bookmark mark='c'/> The major axis minimizes perpendicular distances, treating the two variables "
+            "the squared vertical distances from the points: the best way to predict y from x. <bookmark mark='b'/> The "
+            "regression of x on y minimizes the squared horizontal ones: the best way to predict x from y. "
+            "<bookmark mark='c'/> The major axis minimizes squared perpendicular distances, treating the two variables "
             "symmetrically. <bookmark mark='d'/> Only for a perfect correlation do the three agree. "
             "<bookmark mark='e'/> To predict, use the regression of the variable you're predicting. When both "
             "variables are measured with error and you want the underlying relationship, neither regression is right; "
             "that's the errors-in-variables problem of Part 23."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
             vo.wait_until("e")
             self.play(FadeIn(use))
@@ -118,7 +122,7 @@ class Lines(VoiceoverScene):
                       font_size=22, color=GREY_A).to_edge(DOWN, buff=0.4).shift(RIGHT * 2.6)
         if spear.width > 7.4:
             spear.width = 7.4
-        tag = note(r"simulated: 700 points").to_corner(DL, buff=0.3)
+        tag = note(r"simulated: subset of 1,500; off-panel points omitted; slopes use all draws").to_corner(DL, buff=0.3)
         with self.voiceover(
             "Here's what goes wrong when x is measured with error. <bookmark mark='a'/> In blue, y against the true "
             "x, with slope one. <bookmark mark='b'/> Now we don't see x, only x plus independent noise of the same "

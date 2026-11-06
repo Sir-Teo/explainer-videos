@@ -103,7 +103,7 @@ class Hook(VoiceoverScene):
         cov = np.array([[S_[1, 1], S_[0, 1]], [S_[0, 1], S_[0, 0]]])
         ells = VGroup(*[ellipse_curve(ax, [d["my"], d["mx"]], cov, c, S.ACCENT, 2.5, 1.0 - 0.25 * k)
                         for k, c in enumerate((0.7, 1.4, 2.1))])
-        cap = label(r"smoothed (Galton averaged each $2 \times 2$ block): \ the counts lie on ellipses", font_size=24,
+        cap = label(r"smoothed (Galton averaged each $2 \times 2$ block): \ ellipses from a fitted Gaussian", font_size=24,
                     color=S.ACCENT).to_edge(UP, buff=0.35)
         side = VGroup(label(r"nested: \ one centre, \ one shape", font_size=26, color=S.ACCENT),
                       label(r"the same ellipses as Part 4's spectral theorem", font_size=22, color=GREY_B))
@@ -113,10 +113,10 @@ class Hook(VoiceoverScene):
                 s_.width = 4.0
         with self.voiceover(
             "Galton smoothed the table, replacing each count by the average of a block of four, and then drew lines "
-            "through cells with equal counts. <bookmark mark='a'/> What emerged were ellipses, all with the same "
+            "through cells with equal counts. <bookmark mark='a'/> The contours were approximately elliptical. A fitted Gaussian has ellipses with the same "
             "centre and the same shape, nested inside one another. <bookmark mark='b'/> He took them to a mathematician, J. D. Hamilton "
             "Dickson, who confirmed that they're exactly what a bivariate normal law predicts. They're the ellipses of "
-            "Part 4's spectral theorem, drawn by nature in a table of heights."
+            "Part 4's spectral theorem, used as a model of a table of heights, rather than exact contours of its noisy counts."
         ) as vo:
             self.play(FadeOut(VGroup(grid, xl, yl, xt, yt)), FadeIn(A))
             self.play(FadeIn(dots, lag_ratio=0.01), FadeIn(cap))
@@ -180,6 +180,7 @@ class Hook(VoiceoverScene):
         prereq = note(r"prerequisites: \ Parts 3 and 4").to_corner(DL, buff=0.3)
         built = label(r"Built in this part: \ a Gaussian slicer, \ and a P\'olya urn machine", font_size=28, color=S.ACCENT)
         built.to_edge(DOWN, buff=0.8)
+        intro = label('What does one variable tell us about another?', font_size=36)
         with self.voiceover(
             "This part asks: what does knowing one thing tell you about another? <bookmark mark='a'/> Part five: many "
             "variables at once. <bookmark mark='b'/> Joint, marginal and conditional distributions; dependence; "
@@ -189,7 +190,9 @@ class Hook(VoiceoverScene):
             "simplex. <bookmark mark='c'/> We'll build a Gaussian slicer, to cut a density and renormalize the slice, "
             "and a Pólya urn machine."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(head, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq))

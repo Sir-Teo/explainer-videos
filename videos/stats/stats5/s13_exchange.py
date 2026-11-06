@@ -81,7 +81,7 @@ class Exchange(VoiceoverScene):
         xs = np.arange(runs.shape[1]) * 5 + 1
         cols = [interpolate_color(ManimColor(BLUE), ManimColor(RED), k / len(runs)) for k in range(len(runs))]
         paths = VGroup(*[curve(ax, xs, r_, c, 1.6) for r_, c in zip(runs[np.argsort(runs[:, -1])], cols)])
-        B = axes([0, 1], [0, 1.6], x_length=4.4, y_length=3.0, xlabel=r"limiting share", xticks=[0, 0.5, 1], yticks=[0, 1],
+        B = axes([0, 1], [0, 1.6], x_length=4.4, y_length=3.0, xlabel=r"share after 500 draws", xticks=[0, 0.5, 1], yticks=[0, 1],
                  center=[3.6, -0.4, 0])
         ed = np.linspace(0, 1, 21)
         hb = hist_bars(B.ax, ed, np.histogram(lim, ed)[0] / (len(lim) * np.diff(ed)), color=S.ACCENT)
@@ -89,8 +89,8 @@ class Exchange(VoiceoverScene):
         fl = label(r"uniform $=$ beta$(1, 1)$", font_size=22, color=EXACT).next_to(B, UP, buff=0.15)
         tag = note(r"simulated: 30 urns of 1,000 draws; \ 4,000 urns of 500").to_corner(DL, buff=0.3)
         with self.voiceover(
-            "Run thirty urns for a thousand draws each. <bookmark mark='a'/> Each share wanders early, then freezes: "
-            "after a few hundred draws, one more ball hardly changes it. But different urns freeze at different "
+            "Run thirty urns for a thousand draws each. <bookmark mark='a'/> Each share wanders early, then changes more slowly: "
+            "after a few hundred draws, one more ball hardly changes it. But different urns approach different "
             "values, anywhere from nearly zero to nearly one. <bookmark mark='b'/> Collect the final shares of four "
             "thousand urns. They're spread evenly across the interval: the limit of Pólya's urn, starting from one "
             "ball of each colour, is uniformly distributed, a beta of one and one. Start with a red and b blue and "
@@ -117,15 +117,18 @@ class Exchange(VoiceoverScene):
         dfn = definition_card(r"Exchangeable", r"$P(X_1, \dots, X_n)$ is unchanged by any reordering: \ the order carries no "
                               r"information; \ not independent: \ an early red makes a later red likelier", color=S.ACCENT,
                               width=8.4, font_size=24).to_edge(DOWN, buff=0.4)
+        intro = label('The order does not change the probability', font_size=36)
         with self.voiceover(
             "The draws are clearly not independent: each one changes the urn. Yet they have a beautiful symmetry. "
             "<bookmark mark='a'/> The chance of red, red, blue is a half times two thirds times a quarter: one "
             "twelfth. <bookmark mark='b'/> Red, blue, red: a half times a third times two quarters: also a twelfth. "
             "And blue, red, red: the same. <bookmark mark='c'/> Only the number of reds matters, not their order. "
-            "Sequences like this are called exchangeable: any reordering has the same probability. Exchangeable is "
-            "weaker than independent, and it's exactly the right assumption for a lot of real data."
+            "Sequences like this are called exchangeable: any reordering has the same probability. Exchangeability is "
+            "weaker than independent and identically distributed, and it's exactly the right assumption for a lot of real data."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(FadeIn(rows[1:]), FadeIn(eng))
@@ -142,10 +145,11 @@ class Exchange(VoiceoverScene):
         f[2].set_color(S.PRIOR)
         polya = label(r"P\'olya's urn: \ $p$ is the urn's limiting share, \ and $\pi$ is beta$(1, 1)$", font_size=26, color=S.ACCENT)
         polya.next_to(f, DOWN, buff=0.4)
-        why_ = label(r"believing only that order doesn't matter \ $\Rightarrow$ \ acting as if there is an unknown $p$ with a prior: "
+        why_ = label(r"infinite exchangeability of Bernoulli observations \ $\Rightarrow$ \ acting as if there is an unknown $p$ with a prior: "
                      r"\ Part 15", font_size=22, color=GREY_B).to_edge(DOWN, buff=0.4)
         if why_.width > 13:
             why_.width = 13
+        intro = label('Infinite exchangeability gives a mixture of i.i.d. laws', font_size=36)
         with self.voiceover(
             "And exchangeability has a stunning consequence. <bookmark mark='a'/> Bruno de Finetti proved in 1931 that "
             "any infinite exchangeable sequence of zeros and ones behaves as if there were an unknown probability p, "
@@ -153,11 +157,13 @@ class Exchange(VoiceoverScene):
             "symbols, the probability of any sequence is an average of independent Bernoulli probabilities over a "
             "distribution for p. <bookmark mark='c'/> For Pólya's urn, p is the urn's limiting share, and its "
             "distribution is uniform. <bookmark mark='d'/> De Finetti, a subjectivist, read this as a justification "
-            "for Bayesian statistics: if you believe only that the order of the data doesn't matter, you must act as "
+            "for Bayesian statistics: if your Bernoulli observations form an infinite exchangeable sequence, you must act as "
             "though there's an unknown parameter with a prior distribution. Part 15 begins there; Part 44 proves "
             "the theorem."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(th, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(Write(f))
@@ -173,26 +179,30 @@ class Exchange(VoiceoverScene):
             label(r"an urn of 2 red and 2 blue, \ drawn \emph{without} replacement:", font_size=26),
             MathTex(rf"P(\text{{R, R}}) = {e['p_rr']}\ \ne\ P(\text{{R}})^2 = {e['p_r2']}", r",\qquad \operatorname{corr} = "
                     rf"{e['corr']:.2f}", font_size=30),
-            label(r"exchangeable, \ but \emph{negatively} correlated: \ no mixture of i.i.d.\ sequences can do that", font_size=24,
+            label(r"exchangeable, \ but \emph{negatively} correlated: \ no mixture of i.i.d.\ Bernoulli sequences can do that", font_size=24,
                   color=S.RESID),
             VGroup(label(r"de Finetti needs an \emph{infinite} sequence;", font_size=24, color=GREY_A),
-                   label(r"for $n$ draws from an exchangeable sequence of length $N$, \ the error is at most about $n^2/N$ \ "
+                   label(r"for $n$ draws from an exchangeable sequence of length $N$, \ the total variation error is at most about $n^2/N$ \ "
                          r"(Diaconis \& Freedman 1980)", font_size=24, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.12),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([0, 0.4, 0])
         for r in rows:
             if r.width > 12.8:
                 r.width = 12.8
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([0, 0.4, 0])  # re-align after clamping
+        intro = label('Finite exchangeability needs care', font_size=36)
         with self.voiceover(
             "There's a fine print to de Finetti's theorem. <bookmark mark='a'/> Draw without replacement from an urn "
             "of two red and two blue balls. The sequence is exchangeable, since every order of the colours is "
             "equally likely, <bookmark mark='b'/> but the draws are negatively correlated: a red first makes red "
-            "less likely second. <bookmark mark='c'/> No mixture of independent sequences can produce negative "
+            "less likely second. <bookmark mark='c'/> No mixture of identically distributed independent Bernoulli sequences can produce negative "
             "correlation, so the theorem fails here. <bookmark mark='d'/> It needs the sequence to go on forever, "
             "or at least to be much longer than the part we see: Persi Diaconis and David Freedman showed in 1980 "
-            "that the error is at most about n squared over N for n draws from an exchangeable sequence of length N."
+            "that the total variation error is at most about n squared over N for n draws from an exchangeable sequence of length N."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()

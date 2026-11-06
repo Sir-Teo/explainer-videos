@@ -156,6 +156,10 @@ def compute_eve():
     m = np.array([li[grp == k].mean() for k in ks])
     v = np.array([li[grp == k].var() for k in ks])
     out["logage"] = {"within": float((w * v).sum()), "between": float((w * (m - li.mean()) ** 2).sum()), "total": float(li.var())}
+    ks = np.unique(reg)
+    w = np.array([np.mean(reg == k) for k in ks])
+    m = np.array([li[reg == k].mean() for k in ks])
+    out["logregion"] = {"share": float((w * (m - li.mean()) ** 2).sum() / li.var())}
     # Galton: child height within and between mid-parent rows
     x, y = galton_points()
     ks = np.unique(x)
@@ -189,12 +193,12 @@ def compute_regression():
     g = rng(1973)
     n = 10_000
     skill = g.normal(0, 1, n)
-    t1 = skill + g.normal(0, 1, n)
-    t2 = skill + g.normal(0, 1, n)
+    t1 = (skill + g.normal(0, 1, n)) / np.sqrt(2)
+    t2 = (skill + g.normal(0, 1, n)) / np.sqrt(2)
     best = t1 >= np.quantile(t1, 0.9)
     worst = t1 <= np.quantile(t1, 0.1)
     return nest({"mid_dev": mid_dev, "ch_dev": ch_dev, "ratio": ch_dev / mid_dev,
-                 "slope": float(np.cov(mid, ch)[0, 1] / mid.var()),
+                 "slope": float(np.cov(mid, ch, ddof=0)[0, 1] / mid.var()),
                  "t1": t1[:1500], "t2": t2[:1500], "best_t1": float(t1[best].mean()), "best_t2": float(t2[best].mean()),
                  "worst_t1": float(t1[worst].mean()), "worst_t2": float(t2[worst].mean()),
                  "r12": float(np.corrcoef(t1, t2)[0, 1])})
@@ -206,7 +210,7 @@ def compute_jacobian():
     s = u.sum(axis=1)
     z = g.normal(size=(40_000, 2))
     ratio = z[:, 0] / z[:, 1]
-    return nest({"s": s[:20000], "ratio": ratio[np.abs(ratio) < 6][:20000], "u": u[:800]})
+    return nest({"s": s, "ratio": ratio, "u": u[:800]})
 
 
 def compute_latent():
@@ -218,7 +222,7 @@ def compute_latent():
     ff = stats.norm.pdf(xs, h[~m].mean(), h[~m].std())
     return nest({"xs": xs, "fm": pm * fm, "ff": (1 - pm) * ff, "mix": pm * fm + (1 - pm) * ff, "pm": pm,
                  "mu_m": float(h[m].mean()), "mu_f": float(h[~m].mean()), "sd_m": float(h[m].std()),
-                 "sd_f": float(h[~m].std()), "hist": np.histogram(h, np.linspace(140, 205, 66), density=True)[0],
+                 "sd_f": float(h[~m].std()), "hist": np.histogram(h, np.linspace(140, 205, 66))[0] / len(h),
                  "edges": np.linspace(140, 205, 66), "sd_all": float(h.std())})
 
 
@@ -346,7 +350,7 @@ def compute_extras():
     out["div_ns"] = ns
     # stable variance in Galton: b^2 var(mid) + residual = var(child)
     x, y = galton_points()
-    b = np.cov(x, y)[0, 1] / x.var()
+    b = np.cov(x, y, ddof=0)[0, 1] / x.var()
     resid = y - (y.mean() + b * (x - x.mean()))
     out["stable"] = {"b2vx": float(b ** 2 * x.var()), "res": float(resid.var()), "vy": float(y.var()), "vx": float(x.var())}
     # MVN check: squared Mahalanobis distances of 3-d normal draws against chi-square 3
@@ -368,12 +372,14 @@ def compute_extras():
                      "t_sev": float(rec[tr & sev].mean()), "c_sev": float(rec[~tr & sev].mean()),
                      "p_sev_t": float(sev[tr].mean()), "p_sev_c": float(sev[~tr].mean())}
     # Pearson's spurious correlation of ratios (1897)
-    a, b2, cc = g.normal(10, 2, (3, 5000))
+    sdlog = np.sqrt(np.log1p(0.2 ** 2))
+    a, b2, cc = g.lognormal(np.log(10) - sdlog ** 2 / 2, sdlog, (3, 5000))
     out["spurious"] = {"r_raw": float(np.corrcoef(a, b2)[0, 1]), "r_ratio": float(np.corrcoef(a / cc, b2 / cc)[0, 1]),
                        "x": (a / cc)[:1200], "y": (b2 / cc)[:1200]}
     # Spearman vs Pearson under a monotone transform: the World's fathers and sons, son's height made exponential
     f = W.families
-    idx = rng(9).choice(len(f["father"]), 800, replace=False)
+    son_rows = np.flatnonzero(f["son"])
+    idx = rng(9).choice(son_rows, 800, replace=False)
     fa, so = f["father"][idx], f["child"][idx]
     ys = np.exp((so - 170) / 6)
     out["mono"] = {"p_raw": float(np.corrcoef(fa, so)[0, 1]), "p_exp": float(np.corrcoef(fa, ys)[0, 1]),

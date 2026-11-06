@@ -35,20 +35,24 @@ class Dependence(VoiceoverScene):
             panels.add(VGroup(A, pts, t, rr))
         sign = label(rf"knowing $|X| > 1.5$ makes $|Y| > 1.5$ certain: \ {100 * d['p_big']:.0f}\% $\to$ "
                      rf"{100 * d['p_big_given']:.0f}\%", font_size=24, color=GREY_A).to_edge(DOWN, buff=0.4)
+        intro = label('Dependence beyond a straight line', font_size=36)
         with self.voiceover(
             "Correlation measures one kind of dependence: how well a straight line fits. <bookmark mark='a'/> Here y "
-            "is x squared, plus a little noise: completely determined by x. Yet the correlation is zero, because "
-            "the parabola's two arms cancel. <bookmark mark='b'/> A ring: knowing x pins y to two values, yet the "
-            "correlation is zero. <bookmark mark='c'/> And here y is x times a random sign. Each variable is "
+            "is x squared, plus independent noise: its mean is determined by x. The population correlation is zero, because "
+            "the parabola's two arms cancel. <bookmark mark='b'/> A noisy ring: knowing x restricts y to two narrow bands, yet the population "
+            "correlation is zero. <bookmark mark='c'/> And here y is x times a random sign. With an independent fair sign, each variable is "
             "standard normal, the correlation is zero, but the size of y is exactly the size of x: if x is beyond "
-            "one and a half, so is y, every time. <bookmark mark='d'/> Independence implies zero correlation. Zero "
+            "one and a half, so is y, every time. <bookmark mark='d'/> For finite, positive variances, independence implies zero correlation. Zero "
             "correlation implies nothing of the kind."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(panels[k][0]), FadeIn(panels[k][2]), FadeIn(panels[k][1], lag_ratio=0.002),
                           FadeIn(panels[k][3]))
-            self.play(FadeIn(sign))
+            self.play(FadeIn(sign), FadeIn(note(r"simulated: 1,200 of 2,000 draws; summaries use all 2,000").to_edge(UP, buff=0.3)))
             vo.wait_until("d")
             self.play(*[Indicate(p[3], color=S.RESID) for p in panels])
         self.clear_scene()
@@ -66,6 +70,7 @@ class Dependence(VoiceoverScene):
                 why(r"PSD: \ Part 4, chapter 5"), why(r"Cauchy--Schwarz in $L^2$: \ $|\rho| \le 1$")]
         lp = label(r"random variables with finite variance form an inner-product space, \ $L^2$: \ $\langle X, Y\rangle = E[XY]$",
                    font_size=24, color=S.ACCENT).to_edge(DOWN, buff=0.5)
+        intro = label('Covariance and finite second moments', font_size=36)
         with self.voiceover(
             "Covariance is what correlation is built from. <bookmark mark='a'/> The expected product of the two "
             "deviations from the means, or the mean of the product minus the product of the means. "
@@ -77,9 +82,12 @@ class Dependence(VoiceoverScene):
             "product. Covariance is an inner product, correlation a cosine, and in the next chapter conditional "
             "expectation will be a projection."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.6, buff=0.5, edge=6.9)
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             vo.wait_until("e")
             self.play(FadeIn(lp))

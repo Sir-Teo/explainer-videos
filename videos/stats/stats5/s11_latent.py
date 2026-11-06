@@ -66,6 +66,7 @@ class Latent(VoiceoverScene):
         hist = history_card(1894, r"Karl Pearson, \ Naples crabs", r"Weldon's forehead measurements of 1,000 crabs: \ fitted as a "
                             r"mixture of two normals by the method of moments, \ suspecting two subspecies", color=S.MUSEUM,
                             width=7.0, font_size=22).to_edge(DOWN, buff=0.4)
+        intro = label('Average over the latent class', font_size=36)
         with self.voiceover(
             "In symbols, a latent class Z with probabilities pi k, and given the class a density for x. "
             "<bookmark mark='a'/> Marginalize the class away: sum over it, weighting by its probabilities. "
@@ -75,8 +76,10 @@ class Latent(VoiceoverScene):
             "are fitted by the EM algorithm of Part 22, and the latent variables of factor analysis and topic models "
             "grow from this one formula."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1, transform=False)
@@ -132,6 +135,7 @@ class Latent(VoiceoverScene):
         rows[0][0].set_color(S.TREAT)
         rows[0][2].set_color(S.CTRL)
         tag = simulated_tag(r"simulated: the World's clinic (Part 1)")
+        intro = label('Different groups, different mixing weights', font_size=36)
         with self.voiceover(
             "Latent variables explain a paradox from Part 1. <bookmark mark='a'/> In the World's clinic, the treated "
             "recovered less often overall, yet more often within each level of severity. <bookmark mark='b'/> "
@@ -141,8 +145,10 @@ class Latent(VoiceoverScene):
             "Different weights on very different groups reverse the comparison. Simpson's paradox is a latent "
             "variable that the treatment depends on, and Part 36 shows when we can adjust for it."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tag))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(card, shift=DOWN * 0.2), FadeIn(rows[0]))
             vo.wait_until("c")
             self.play(FadeIn(rows[1]))

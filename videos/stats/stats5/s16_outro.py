@@ -75,6 +75,7 @@ class Outro(VoiceoverScene):
             (r"exchangeability, de Finetti", [15, 34, 44]),
             (r"Dirichlet--multinomial", [14, 15, 26]),
         ], font_size=22)
+        intro = label('Where these tools return', font_size=36)
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Conditional expectation is the backbone of regression, causal "
             "inference and martingales. Within and between returns in the analysis of variance and random effects. "
@@ -83,7 +84,9 @@ class Outro(VoiceoverScene):
             "copulas in robust statistics; exchangeability in Bayesian statistics and in the conformal prediction of "
             "Part 34; and the Dirichlet with counts and categories."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3),
                       run_time=6.0)
         self.clear_scene()
