@@ -24,7 +24,7 @@ class Fail(VoiceoverScene):
         A = axes([0, 4], yr, x_length=5.6, y_length=4.0, xlabel=r"$n$ (log scale)", xticks=[0, 1, 2, 3, 4],
                  yticks=[yr[0], (yr[0] + yr[1]) / 2, yr[1]], xfmt=lambda v: f"10^{{{int(v)}}}", center=[cx, -0.6, 0])
         ax = A.ax
-        paths = VGroup(*[polyline(ax, np.log10(steps), np.clip(m, yr[0], yr[1]), color, 2, 0.85) for m in np.asarray(d[key])])
+        paths = VGroup(*[polyline(ax, np.log10(steps), m, color, 2, 0.85) for m in np.asarray(d[key])])
         t = label(title, font_size=26, color=color).next_to(A, UP, buff=0.15)
         return A, paths, t
 
@@ -32,7 +32,8 @@ class Fail(VoiceoverScene):
         d = load("cauchy")
         A1, p1, t1 = self.running(d, "normal", -3.5, SIM, [-3, 3], r"running means: \ normal")
         A2, p2, t2 = self.running(d, "cauchy", 3.3, BOUND, [-3, 3], r"running means: \ Cauchy")
-        tag = note(r"simulated: 6 sequences of 10,000 each; \ Cauchy paths clipped to $\pm 3$").to_corner(DR, buff=0.25)
+        tag = note(r"simulated: 6 sequences of 10,000 each; \ paths leave the viewport at $\pm 3$").to_corner(DR, buff=0.25)
+        intro = label('Averages without a mean', font_size=36)
         with self.voiceover(
             "Every theorem so far assumed something: a finite mean, a finite variance. Here's what happens without "
             "them. <bookmark mark='a'/> On the left, running means of standard normal draws: six sequences of ten "
@@ -41,8 +42,10 @@ class Fail(VoiceoverScene):
             "jerks the average somewhere new, and after ten thousand draws it's no more settled than after ten. "
             "The Cauchy has no mean, so there is nothing for the average to converge to."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tag))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(A1), FadeIn(t1), LaggedStart(*[Create(p) for p in p1], lag_ratio=0.15), run_time=3.0)
             vo.wait_until("b")
             self.play(FadeIn(A2), FadeIn(t2), LaggedStart(*[Create(p) for p in p2], lag_ratio=0.15), run_time=4.0)
@@ -62,6 +65,7 @@ class Fail(VoiceoverScene):
         tab = VGroup(*[MathTex(rf"n = {n}:\ \ \text{{quartiles}}\ {iq[n][0]:+.2f},\ {iq[n][2]:+.2f}", font_size=28, color=GREY_A)
                        for n in ("1", "10", "100")]).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.6)
         tag = note(r"simulated: 20,000 means of each size").to_corner(DR, buff=0.3)
+        intro = label('A Cauchy average is still Cauchy', font_size=36)
         with self.voiceover(
             "It's worse than slow. <bookmark mark='a'/> The Cauchy's characteristic function is e to the minus the "
             "absolute value of t. <bookmark mark='b'/> The mean of n independent copies has characteristic function "
@@ -70,9 +74,12 @@ class Fail(VoiceoverScene):
             "single one. Averaging buys nothing. <bookmark mark='d'/> The simulation agrees: the quartiles of the "
             "mean stay at minus one and plus one whether you average one, ten or a hundred."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.6, x=-1.0, buff=0.9, edge=6.9)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             vo.wait_until("d")
             self.play(FadeIn(tab), FadeIn(tag))
@@ -95,6 +102,7 @@ class Fail(VoiceoverScene):
                 r.width = 5.4
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.1, 0.0, 0])
         tag = note(r"simulated: 6 sequences of 10,000").to_corner(DR, buff=0.25)
+        intro = label('A finite mean with infinite variance', font_size=36)
         with self.voiceover(
             "Between the normal and the Cauchy lies a whole family of heavy tails. <bookmark mark='a'/> Take a "
             "Pareto variable with tail index one and a half: the chance of exceeding x falls like x to the minus one "
@@ -102,11 +110,13 @@ class Fail(VoiceoverScene):
             "head for three, since the weak law needs only a finite mean, but slowly and in jumps, each time a big "
             "draw arrives. <bookmark mark='c'/> The central limit theorem fails: the errors shrink like n to the "
             "minus a third, not n to the minus a half, and their limit is not normal but a skewed law called stable. "
-            "Recall that the World's incomes have tail index two point one: just inside the territory where the "
+            "Recall that the unbounded model generating the World's income tail has index two point one: just inside the territory where the "
             "variance is finite, which is why chapter seven found them so slow."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tag))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(rows[:2]))
             vo.wait_until("b")
             self.play(FadeIn(A), FadeIn(t), Create(mean), FadeIn(ml), LaggedStart(*[Create(p) for p in paths], lag_ratio=0.15),
@@ -117,13 +127,13 @@ class Fail(VoiceoverScene):
 
     def stable(self):
         thm = theorem_card(r"The generalized central limit theorem", r"if suitably centred and scaled sums of i.i.d.\ variables "
-                           r"converge at all, \ the limit is a \emph{stable} law, \ with index $0 < \alpha \le 2$; \ $\alpha = 2$ is the "
-                           r"normal, \ needing only a finite variance", who=r"L\'evy, 1925; \ Gnedenko \& Kolmogorov, 1949",
+                           r"converge to a non-degenerate law, \ the limit is a \emph{stable} law, \ with index $0 < \alpha \le 2$; \ $\alpha = 2$ is the "
+                           r"normal; finite variance is sufficient for its domain of attraction", who=r"L\'evy, 1925; \ Gnedenko \& Kolmogorov, 1949",
                            color=S.PRIOR, width=10.6, font_size=24).to_edge(UP, buff=0.5)
         rows = VGroup(
             MathTex(r"\alpha = 2:\ \text{normal},\ \ \text{scale } \sqrt n", font_size=30, color=EXACT),
-            MathTex(r"1 < \alpha < 2:\ \text{mean finite, variance infinite},\ \ \text{scale } n^{1/\alpha}", font_size=30, color=S.POST),
-            MathTex(r"\alpha = 1:\ \text{Cauchy},\ \ \text{scale } n \text{ (averaging does nothing)}", font_size=30, color=BOUND),
+            MathTex(r"1 < \alpha < 2:\ \text{mean finite, variance infinite},\ \ \text{scale } n^{1/\alpha}L(n)", font_size=30, color=S.POST),
+            MathTex(r"\alpha = 1:\ \text{includes the symmetric Cauchy},\ \ \text{scale } n \text{ (averaging does nothing)}", font_size=30, color=BOUND),
             label(r"heavy tails in the wild: \ city sizes, \ insurance claims, \ wealth, \ daily stock returns (Mandelbrot, 1963)",
                   font_size=22, color=GREY_A),
             label(r"before you average, \ look at the tail (Part 30, \ Part 60)", font_size=26, color=S.ACCENT),
@@ -132,18 +142,20 @@ class Fail(VoiceoverScene):
             if r.width > 12.6:
                 r.width = 12.6
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(thm, DOWN, buff=0.5)
+        intro = label('Possible non-degenerate limits of sums', font_size=36)
         with self.voiceover(
             "There's a complete answer. <bookmark mark='a'/> If sums of independent, identically distributed "
-            "variables converge at all, after centring and scaling, the limit must be a stable law, a family with an "
+            "variables converge to a non-degenerate law along the full sequence, after deterministic centring and scaling, the limit must be a stable law, a family with an "
             "index alpha between zero and two. Paul Lévy found them in 1925; Boris Gnedenko and Kolmogorov wrote "
             "the theory down in 1949. <bookmark mark='b'/> Index two is the normal, and it attracts everything with "
             "a finite variance. <bookmark mark='c'/> Between one and two, the mean exists, the variance doesn't, and "
-            "sums grow like n to the one over alpha. <bookmark mark='d'/> At one, the Cauchy, where averaging does "
-            "nothing at all. <bookmark mark='e'/> Heavy tails are common in the real world: city sizes, insurance "
+            "the normalization is n to the one over alpha times a slowly varying factor, which is constant for a pure Pareto tail. <bookmark mark='d'/> At one, the symmetric Cauchy is one example where averaging buys nothing. Other index-one stable laws can be skewed and need different centring. <bookmark mark='e'/> Heavy tails are common in the real world: city sizes, insurance "
             "claims, fortunes; Benoit Mandelbrot argued in 1963 that cotton prices had them. <bookmark mark='f'/> "
             "Before you trust an average, look at the tail."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(thm, shift=DOWN * 0.2))
             for k, m in enumerate("bcdef"):
                 vo.wait_until(m)

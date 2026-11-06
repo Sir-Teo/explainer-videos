@@ -65,6 +65,44 @@ def nest(obj):
     return obj
 
 
+def histogram_density(draws, edges):
+    """Density on the shown interval, retaining omitted tails in the denominator."""
+    return np.histogram(draws, edges)[0] / (len(draws) * np.diff(edges))
+
+
+def normal_cdf_distance(values, probabilities=None):
+    """Kolmogorov distance to Phi, checking both sides of every CDF jump."""
+    order = np.argsort(values)
+    x = np.asarray(values)[order]
+    p = np.full(len(x), 1 / len(x)) if probabilities is None else np.asarray(probabilities)[order]
+    right = np.cumsum(p)
+    reference = stats.norm.cdf(x)
+    return float(max(np.max(np.abs(right - reference)), np.max(np.abs(right - p - reference))))
+
+
+def clipped_segments(xs, ys, rectangle):
+    """Clip line segments to a rectangle without flattening off-scale values."""
+    xmin, xmax, ymin, ymax = rectangle
+    points = np.column_stack((xs, ys))
+    result = []
+    for start, end in zip(points[:-1], points[1:]):
+        if not np.isfinite([start, end]).all():
+            continue
+        delta = end - start
+        lo, hi = 0.0, 1.0
+        for k, lower, upper in ((0, xmin, xmax), (1, ymin, ymax)):
+            if delta[k] == 0:
+                if not lower <= start[k] <= upper:
+                    hi = -1
+                    break
+            else:
+                a, b = sorted(((lower - start[k]) / delta[k], (upper - start[k]) / delta[k]))
+                lo, hi = max(lo, a), min(hi, b)
+        if lo <= hi:
+            result.append((start + lo * delta, start + hi * delta))
+    return result
+
+
 def compute_ox():
     deg = np.asarray(museum.OX_DEGREES, float)
     est = np.asarray(museum.OX_ESTIMATES, float)
@@ -99,7 +137,7 @@ def compute_markov():
     ch_y = [float(np.mean(np.abs(y - mu) >= k * y.std())) for k in ks]
     # the income density for the picture (thousands), with the tail beyond 3 * mean shaded
     ed = np.linspace(0, 300, 121)
-    hist = np.histogram(y / 1000, ed, density=True)[0]
+    hist = histogram_density(y / 1000, ed)
     return nest({"mu": mu, "sd": float(y.std()), "a": a, "frac": frac, "markov": 1 / a, "ks": ks, "cheb": 1 / ks ** 2,
                  "cheb_height": ch_h, "cheb_income": ch_y, "edges": ed, "hist": hist,
                  "elog": float(np.log(y).mean()), "logE": float(np.log(mu)), "gmean": float(np.exp(np.log(y).mean())),
@@ -115,6 +153,8 @@ def exact_n(p, eps, delta, lo, hi):
         ok.append(stats.binom.cdf(k_hi, n, p) - stats.binom.cdf(k_lo - 1, n, p) >= 1 - delta)
     ok = np.asarray(ok)
     bad = np.where(~ok)[0]
+    if not ok[-1]:
+        raise ValueError("Search range ends before a successful suffix; increase hi")
     return int(ns[bad[-1] + 1]) if len(bad) else int(lo), int(ns[np.argmax(ok)])
 
 
@@ -126,7 +166,9 @@ def compute_bernoulli():
     hoef = np.log(2 / delta) / (2 * eps ** 2)
     z = stats.norm.ppf(1 - delta / 2)
     norm = z ** 2 * p * (1 - p) / eps ** 2
-    ex_all, ex_first = exact_n(p, eps, delta, 5000, 8000)
+    # Check every intervening n up to the Hoeffding guarantee; larger n are
+    # covered analytically, so the stated threshold is not a finite-range guess.
+    ex_all, ex_first = exact_n(p, eps, delta, 5000, int(np.ceil(hoef)))
     return {"bernoulli": b["n"], "chebyshev": float(np.ceil(cheb)), "hoeffding": float(np.ceil(hoef)),
             "normal": float(np.ceil(norm)), "exact": ex_all, "exact_first": ex_first, "delta": delta, "z": float(z)}
 
@@ -160,8 +202,7 @@ def compute_lopsided():
         ks = np.array(s.support(), float)
         ps = np.array([float(s.P(lambda v, k=k: v == k)) for k in s.support()])
         z = (ks - n * float(mu)) / np.sqrt(n * float(var))
-        F = np.cumsum(ps)
-        sup = float(np.max(np.abs(F - stats.norm.cdf((ks + 0.5 - n * float(mu)) / np.sqrt(n * float(var))))))
+        sup = normal_cdf_distance(z, ps)
         out["pmf"][str(n)] = {"k": ks, "p": ps, "z": z}
         out["sup"][str(n)] = sup
     return nest(out)
@@ -216,13 +257,13 @@ def mean_sims(pop, ns, reps, g):
         m = x.mean(1)
         s = x.std(1, ddof=1)
         z = np.sort((m - mu) / (sd / np.sqrt(n)))
-        sup = float(np.max(np.abs(np.arange(1, reps + 1) / reps - stats.norm.cdf(z))))
+        sup = normal_cdf_distance(z)
         t = (m - mu) / (s / np.sqrt(n))
         q = stats.t.ppf(0.975, n - 1)
         cover = float(np.mean(np.abs(t) <= q))
         lo, hi = float(np.mean(t < -q)), float(np.mean(t > q))
         out[str(n)] = {"sup": sup, "cover": cover, "miss_lo": lo, "miss_hi": hi,
-                       "hist": np.histogram((m - mu) / (sd / np.sqrt(n)), np.linspace(-4, 4, 61), density=True)[0],
+                       "hist": histogram_density((m - mu) / (sd / np.sqrt(n)), np.linspace(-4, 4, 61)),
                        "skew_m": float(stats.skew(m))}
     return out
 
@@ -241,7 +282,9 @@ def compute_n30():
     mu, sd = ln.mean(), ln.std()
     rho = np.mean(np.abs(ln - mu) ** 3)
     be = [float(0.4748 * rho / (sd ** 3 * np.sqrt(n))) for n in ns]
+    income_ratio = float(np.mean(np.abs(y - y.mean()) ** 3) / y.std() ** 3)
     return nest({"ns": ns, "income": inc, "height": hgt, "lognormal": lnm, "be": be, "be_ratio": float(rho / sd ** 3),
+                 "income_be_ratio": income_ratio,
                  "skew_income": float(stats.skew(y)), "skew_ln": float(stats.skew(ln)),
                  "top_share": float(np.sort(y)[-len(y) // 100:].sum() / y.sum()), "edges": np.linspace(-4, 4, 61)})
 
@@ -283,7 +326,7 @@ def compute_slutsky():
         for n in (10, 30, 100):
             x = pop[g.integers(0, len(pop), (20000, n))]
             t = (x.mean(1) - mu) / (x.std(1, ddof=1) / np.sqrt(n))
-            out[f"{name}_{n}"] = {"hist": np.histogram(t, out["edges"], density=True)[0],
+            out[f"{name}_{n}"] = {"hist": histogram_density(t, out["edges"]),
                                   "cover": float(np.mean(np.abs(t) <= stats.t.ppf(0.975, n - 1))),
                                   "mean_t": float(t.mean())}
     return nest(out)
@@ -327,11 +370,11 @@ def compute_maxima():
     out["gumbel"] = np.exp(-xs - np.exp(-xs))
     for n in (10, 100, 1000):
         m = g.exponential(size=(20000, n)).max(1) - np.log(n)
-        out[f"exp_{n}"] = np.histogram(m, np.linspace(-3, 6, 46), density=True)[0]
+        out[f"exp_{n}"] = histogram_density(m, np.linspace(-3, 6, 46))
         u = n * (1 - g.random((20000, n)).max(1))  # n (1 - max U) -> Exp(1): the reversed Weibull, shape 1
-        out[f"unif_{n}"] = np.histogram(u, np.linspace(0, 5, 41), density=True)[0]
+        out[f"unif_{n}"] = histogram_density(u, np.linspace(0, 5, 41))
         pa = g.pareto(2.0, (20000, n)) + 1  # Pareto alpha 2: max / sqrt(n) -> Frechet(2)
-        out[f"par_{n}"] = np.histogram(pa.max(1) / np.sqrt(n), np.linspace(0, 6, 49), density=True)[0]
+        out[f"par_{n}"] = histogram_density(pa.max(1) / np.sqrt(n), np.linspace(0, 6, 49))
     out["exp_edges"] = np.linspace(-3, 6, 46)
     out["unif_edges"] = np.linspace(0, 5, 41)
     out["par_edges"] = np.linspace(0, 6, 49)
@@ -355,7 +398,7 @@ def gev_nll(theta, x):
 
 
 def return_level(mu, s, xi, T):
-    yp = -np.log(1 - 1 / T)
+    yp = -np.log1p(-1 / T)
     return mu - s / xi * (1 - yp ** (-xi)) if abs(xi) > 1e-8 else mu - s * np.log(yp)
 
 
@@ -364,6 +407,8 @@ def compute_portpirie():
     years = np.asarray(museum.PORTPIRIE_YEARS)
     r = optimize.minimize(gev_nll, [x.mean(), np.log(x.std()), 0.0], args=(x,), method="Nelder-Mead",
                           options={"xatol": 1e-10, "fatol": 1e-10, "maxiter": 20000})
+    if not r.success or not np.isfinite(r.fun):
+        raise RuntimeError(f"GEV fit failed: {r.message}")
     mu, logs, xi = r.x
     s = float(np.exp(logs))
     Ts = np.array([2, 5, 10, 20, 50, 100, 200, 500, 1000, 10000])
@@ -379,13 +424,20 @@ def compute_portpirie():
             ss = np.exp(ls)
             m = z + ss / xx * (1 - yp ** (-xx)) if abs(xx) > 1e-8 else z + ss * np.log(yp)
             return gev_nll([m, ls, xx], x)
-        best = min((optimize.minimize(nll, [logs, x0], method="Nelder-Mead", options={"xatol": 1e-9, "fatol": 1e-9})
-                    for x0 in (-0.2, -0.05, 0.1)), key=lambda o: o.fun)
+        candidates = [optimize.minimize(nll, [logs, x0], method="Nelder-Mead",
+                                       options={"xatol": 1e-9, "fatol": 1e-9, "maxiter": 5000})
+                      for x0 in (-0.2, -0.05, 0.1)]
+        valid = [o for o in candidates if o.success and np.isfinite(o.fun) and o.fun < 1e10]
+        if not valid:
+            raise RuntimeError(f"GEV profile fit failed at return level {z}")
+        best = min(valid, key=lambda o: o.fun)
         prof.append(-float(best.fun))
     prof = np.asarray(prof)
-    cut = prof.max() - stats.chi2.ppf(0.95, 1) / 2
+    cut = -r.fun - stats.chi2.ppf(0.95, 1) / 2
     above = prof >= cut
     i0, i1 = np.argmax(above), len(above) - 1 - np.argmax(above[::-1])
+    if not above.any() or i0 == 0 or i1 == len(zs) - 1:
+        raise RuntimeError("Profile grid does not bracket both confidence limits")
     lo = float(np.interp(cut, [prof[i0 - 1], prof[i0]], [zs[i0 - 1], zs[i0]]))
     hi = float(np.interp(cut, [prof[i1 + 1], prof[i1]], [zs[i1 + 1], zs[i1]]))
     # empirical return periods (Gringorten-free, simple Weibull plotting positions)

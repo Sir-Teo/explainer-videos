@@ -22,8 +22,9 @@ class Thirty(VoiceoverScene):
 
     def panel(self, d, key, n, cx, color, title):
         ed = np.asarray(d["edges"])
-        A = axes([-4, 4], [0, 0.62], x_length=3.8, y_length=2.6, xticks=[-2, 0, 2], center=[cx, -0.9, 0])
-        h = hist_bars(A.ax, ed, np.clip(np.asarray(d[key][str(n)]["hist"]), 0, 0.62), color=color, opacity=0.75)
+        ymax = max(.62, max(max(d[key][str(k)]["hist"]) for k in d["ns"]) * 1.05)
+        A = axes([-4, 4], [0, ymax], x_length=3.8, y_length=2.6, xticks=[-2, 0, 2], center=[cx, -0.9, 0])
+        h = hist_bars(A.ax, ed, np.asarray(d[key][str(n)]["hist"]), color=color, opacity=0.75)
         xs = np.linspace(-4, 4, 200)
         cv = curve(A.ax, xs, normal_pdf(xs), EXACT, 2.5)
         t = MathTex(rf"n = {n}", font_size=30).next_to(A, UP, buff=0.15)
@@ -141,25 +142,26 @@ class Thirty(VoiceoverScene):
         ln = VGroup(polyline(ax, np.log10(ns), np.log10([d["lognormal"][str(int(n))]["sup"] for n in ns]), S.PRIOR, 3))
         inc = VGroup(polyline(ax, np.log10(ns), np.log10([d["income"][str(int(n))]["sup"] for n in ns]), WORLD, 3))
         leg = legend([(BOUND, r"the bound, \ for the lognormal"), (S.PRIOR, r"the lognormal, \ simulated"),
-                      (WORLD, r"incomes: \ $\rho = \infty$, \ no bound")], font_size=22).move_to([3.7, -0.4, 0])
+                      (WORLD, r"incomes: finite World; loose Berry--Esseen bound")], font_size=22).move_to([3.7, -0.4, 0])
         rows = VGroup(label(r"a guarantee for every $n$, \ but a cautious one", font_size=24, color=GREY_A),
-                      label(r"the World's incomes have no third moment: \ the theorem says nothing", font_size=24, color=WORLD))
+                      label(r"finite World: all moments exist; the underlying Pareto tail has no third moment", font_size=24, color=WORLD))
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.7, -2.3, 0])
         for r in rows:
             if r.width > 6.0:
                 r.width = 6.0
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.7, -2.3, 0])
+        intro = label('How large can the CDF error be?', font_size=36)
         with self.voiceover(
             "Is there a guarantee? <bookmark mark='a'/> Yes, if the third absolute moment is finite: the "
             "Berry–Esseen theorem, proved by Andrew Berry in 1941 and Carl-Gustav Esseen in 1942. The gap between "
             "the CDFs is at most a constant times the third absolute moment over sigma cubed, over root n. Irina "
             "Shevtsova showed in 2011 that the constant can be taken below point four eight. <bookmark mark='b'/> For "
             "the lognormal, the bound, in red, falls like one over root n. <bookmark mark='c'/> The truth, in purple, "
-            "is far below it: the bound is safe but cautious. <bookmark mark='d'/> For the World's incomes, whose "
-            "Pareto tail makes the third moment infinite, the theorem offers nothing at all, and the green curve "
-            "crawls down at its own slow pace."
+            "is far below it: the bound is safe but cautious. <bookmark mark='d'/> For the finite World, every moment exists, but its third absolute moment makes the bound very loose. The unbounded Pareto model that generated the tail has index two point one and no third moment, so Berry--Esseen gives that idealized model no bound. The green simulation here samples the finite World."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(thm, shift=DOWN * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(A), Create(be), FadeIn(leg[0]))
@@ -187,18 +189,18 @@ class Thirty(VoiceoverScene):
             if r.width > 12.6:
                 r.width = 12.6
         recs.arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(DOWN, buff=0.6)
+        intro = label('No universal sample-size threshold', font_size=36)
         with self.voiceover(
             "So what's the right rule? <bookmark mark='a'/> Chapter four told us: the skewness of the mean is the "
             "skewness of one observation divided by root n. <bookmark mark='b'/> Heights have none to speak of. The "
             "lognormal's is about two, so a few dozen observations bring it down to a third. The World's incomes "
-            "have a sample skewness in the seventies, and since their third moment is infinite, even that number is "
-            "an underestimate that grows with the sample. <bookmark mark='c'/> There is no magic number. For "
-            "skewed data, transform first, as Part 1 did with logarithms; or resample, with the bootstrap of Part "
-            "16; or model the tail directly, as chapter twelve begins to. And remember that a heavy tail is a "
+            "have a large finite-population skewness. In the underlying unbounded Pareto model the third moment is infinite, so a sample skewness can be unstable and does not estimate a finite population value. <bookmark mark='c'/> There is no magic number. Transformations can help when the transformed quantity answers the question; a mean log income is not the log of mean income. The bootstrap in Part 16 also needs care with rare tails, since resampling cannot invent unseen high earners. Another option is to model the tail, as chapter twelve begins to. And remember that a heavy tail is a "
             "warning: your sample may simply not have met it yet."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=2.6, x=-0.6, buff=0.9, edge=6.9)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1, transform=False)

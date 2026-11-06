@@ -31,8 +31,9 @@ class WeakLaw(VoiceoverScene):
         whys = [why(r"independence: \ the covariances vanish (Part 5)"), why(r"Chebyshev, \ with $k\sigma = \varepsilon$"),
                 why(r"as $n \to \infty$")]
         thm = theorem_card(r"The weak law of large numbers", r"if $X_1, X_2, \dots$ are independent with mean $\mu$ and finite "
-                           r"variance, \ then $\bar X_n \to \mu$ in probability", who=r"Chebyshev's proof, 1867",
+                           r"common variance $\sigma^2<\infty$, \ then $\bar X_n \to \mu$ in probability", who=r"Chebyshev's proof, 1867",
                            color=S.ACCENT, width=8.6, font_size=24).to_edge(DOWN, buff=0.5)
+        intro = label('Why the average approaches its mean', font_size=36)
         with self.voiceover(
             "With Chebyshev's inequality the law of large numbers takes three lines. <bookmark mark='a'/> The variance "
             "of an average of n independent variables, each with variance sigma squared, is sigma squared over n: "
@@ -40,11 +41,14 @@ class WeakLaw(VoiceoverScene):
             "that it misses the mean by epsilon or more is at most sigma squared over n epsilon squared. "
             "<bookmark mark='c'/> For any fixed epsilon, however small, that goes to zero as n grows. "
             "<bookmark mark='d'/> That's the weak law: the average converges to the mean in probability. Notice how "
-            "little it needed: independence, or even just zero correlation, and a finite variance."
+            "little it needed: a common mean and variance and pairwise zero covariance. For i.i.d. observations, even a finite absolute first moment suffices, as the strong law in chapter three implies."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.7, x=-0.6, buff=0.8, edge=6.9)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             vo.wait_until("d")
             self.play(FadeIn(thm, shift=UP * 0.2))
@@ -93,8 +97,8 @@ class WeakLaw(VoiceoverScene):
         ax = A.ax
         lines = VGroup(*[polyline(ax, steps, e, SIM, 1.4, 0.55) for e in excess[:20]])
         nn = np.linspace(1, 4000, 200)
-        hi = curve(ax, nn, np.sqrt(nn), EXACT, 2.5)
-        lo = curve(ax, nn, -np.sqrt(nn), EXACT, 2.5)
+        hi = curve(ax, nn, np.sqrt(nn) / 2, EXACT, 2.5)
+        lo = curve(ax, nn, -np.sqrt(nn) / 2, EXACT, 2.5)
         rows = VGroup(label(r"the \emph{share} of heads converges;", font_size=26),
                       label(r"the \emph{count} of extra heads does not:", font_size=26),
                       label(r"it typically grows like $\sqrt n / 2$", font_size=26, color=EXACT),
@@ -108,7 +112,7 @@ class WeakLaw(VoiceoverScene):
         with self.voiceover(
             "Now a trap. If the share of heads is drawn to a half, surely a run of tails must be made up by extra "
             "heads later? <bookmark mark='a'/> Plot not the share but the count: heads minus half the tosses. "
-            "<bookmark mark='b'/> It doesn't return to zero. It wanders further and further, typically by about "
+            "<bookmark mark='b'/> It is not forced to compensate for earlier tosses. It can return to zero, and for a fair coin does so infinitely often; yet at a fixed large n its typical size is about "
             "root n over two, the gold curves. <bookmark mark='c'/> The share converges only because the wandering "
             "count is divided by n, which grows faster. The coin has no memory and owes you nothing. Believing it "
             "does is the gambler's fallacy, and the law of large numbers gives it no support at all."

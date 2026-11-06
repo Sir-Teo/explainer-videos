@@ -27,8 +27,9 @@ class Floods(VoiceoverScene):
                           r"Netherlands, \ more than 300 in England", color=S.MUSEUM, width=8.4, font_size=24).move_to([0, 1.5, 0])
         rows = VGroup(label(r"the Delta Committee: \ how high must the dikes be?", font_size=26),
                       label(r"its mathematician, David van Dantzig: \ an economic answer (1956)", font_size=26, color=GREY_A),
-                      label(r"the standard adopted for central Holland: \ fail at most once in 10,000 years", font_size=26,
+                      label(r"the standard adopted for central Holland: \ design water-level exceedance probability $10^{-4}$ per year", font_size=26,
                             color=S.ACCENT)).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(hc, DOWN, buff=0.6)
+        intro = label('Choosing a design water level', font_size=36)
         with self.voiceover(
             "On the night of the thirty-first of January 1953, a storm surge driven down the North Sea arrived with a "
             "spring tide. <bookmark mark='a'/> The dikes of the south-west Netherlands broke in dozens of places. "
@@ -36,10 +37,12 @@ class Floods(VoiceoverScene):
             "England. <bookmark mark='b'/> The Dutch government set up the Delta Committee to decide how high the "
             "defences must be. <bookmark mark='c'/> Its mathematician, David van Dantzig, treated it as a problem of "
             "statistics and economics together. <bookmark mark='d'/> The standard that emerged for the heart of "
-            "Holland: the defences should fail, on average, at most once in ten thousand years. To set a height for "
+            "Holland: the design water level should have annual exceedance probability one in ten thousand. Exceeding that level and failure of the defences are different engineering events. To set a height for "
             "that, you must estimate a sea level that no one has ever seen."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(hc, shift=UP * 0.2))
             for k, m in enumerate("bcd"):
                 vo.wait_until(m)
@@ -60,8 +63,7 @@ class Floods(VoiceoverScene):
         with self.voiceover(
             "We'll use a record that statisticians have studied for decades. <bookmark mark='a'/> Port Pirie, a "
             "harbour town in South Australia: the highest sea level of each year from 1923 to 1987, sixty-five "
-            "values. These are maxima, each the largest of a whole year of tides, so the law of maxima says they "
-            "should follow a generalized extreme value distribution. <bookmark mark='b'/> The highest in the record, "
+            "values. These are maxima, each the largest of a whole year of tides, so a generalized extreme value law is a natural approximate model, rather than an automatic consequence for a finite, possibly changing record. We assume a stationary annual-maxima model here. <bookmark mark='b'/> The highest in the record, "
             "four point six nine metres, came in 1934."
         ) as vo:
             self.play(FadeIn(A), FadeIn(tag))
@@ -134,7 +136,8 @@ class Floods(VoiceoverScene):
         ]
         rows[1][2].set_color(EXACT)
         whys = [why(r"the $T$-year return level"), why(r"invert the GEV's CDF")]
-        rk = label(r"a 100-year level in the next 30 years: \ $1 - 0.99^{30} = 26\%$", font_size=22, color=GREY_A).to_corner(DR, buff=0.4)
+        rk = label(r"independent stationary years: 100-year level in 30 years: \ $1 - 0.99^{30} = 26\%$", font_size=22, color=GREY_A).to_corner(DR, buff=0.4)
+        intro = label('Annual exceedance probabilities', font_size=36)
         with self.voiceover(
             "Engineers speak of return levels. <bookmark mark='a'/> The T-year return level is the height exceeded in "
             "any one year with probability one over T. <bookmark mark='b'/> Inverting the fitted distribution gives "
@@ -142,10 +145,12 @@ class Floods(VoiceoverScene):
             "curve; the white dots are the sixty-five observed maxima at their empirical return periods. "
             "<bookmark mark='d'/> The hundred-year level: four point six nine metres, the height of the 1934 "
             "record. <bookmark mark='e'/> The ten-thousand-year level: five point three four. Note what a hundred-year "
-            "level does not mean: the chance of seeing one in the next thirty years is twenty-six percent."
+            "level does not mean: assuming independent years with the same exceedance probability, the chance of at least one exceedance in thirty years is twenty-six percent. A changing climate can invalidate that stationarity assumption."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=3.1, x=-0.6, buff=0.85, edge=6.9)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1, transform=False)
@@ -172,7 +177,7 @@ class Floods(VoiceoverScene):
         seg = Line(ax.c2p(lo, 0.15), ax.c2p(hi, 0.15), color=S.ACCENT, stroke_width=6)
         rows = VGroup(
             MathTex(rf"\hat z_{{100}} = {d['rl'][5]:.2f}\ \text{{m}}", font_size=30, color=EXACT),
-            MathTex(rf"95\%\ \text{{interval: }} [{lo:.2f},\ {hi:.2f}]", font_size=30, color=S.ACCENT),
+            MathTex(rf"\text{{approx. }}95\%\ \text{{profile interval: }} [{lo:.2f},\ {hi:.2f}]", font_size=30, color=S.ACCENT),
             label(r"lopsided: \ the data rule out low levels better than high ones", font_size=22, color=GREY_A),
             label(r"65 years of data, \ asked about 100;", font_size=24, color=BOUND),
             label(r"the Delta Committee asked about 10,000", font_size=24, color=BOUND),
@@ -186,11 +191,11 @@ class Floods(VoiceoverScene):
             "How sure can we be? <bookmark mark='a'/> For each candidate hundred-year level, refit the other two "
             "parameters as well as possible and record the best log-likelihood: the profile likelihood, which Part 22 "
             "develops. <bookmark mark='b'/> Levels where it falls less than about two units below its peak are "
-            "plausible. <bookmark mark='c'/> That gives an interval from about four point four nine to five point two "
+            "plausible. <bookmark mark='c'/> The approximate likelihood-ratio cutoff gives a model-based interval from about four point four nine to five point two "
             "six metres: lopsided, because the data rule out low values more firmly than high ones. "
             "<bookmark mark='d'/> Sixty-five years of data asked about a hundred is already a stretch. The Delta "
             "Committee needed ten thousand. Extrapolation is where extreme-value statistics earns its keep, and "
-            "where it's most humble."
+            "where assumptions about stationarity, dependence and tail shape matter most. This interval does not cover all that model uncertainty."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
@@ -213,10 +218,11 @@ class Floods(VoiceoverScene):
         rows[2][2].set_color(S.ACCENT)
         whys = [why(r"a Gumbel tail: \ the exceedance chance falls exponentially with height"),
                 why(r"$V$: \ what a flood destroys; \ $\delta$: \ the discount rate; \ $k$: \ cost per metre"),
-                why(r"the optimal height: \ worth raising until the next metre costs more than it saves")]
+                why(r"interior optimum in this stationary cost model: worth raising until the next metre costs more than it saves")]
         hc = note(r"D. van Dantzig, \ ``Economic decision problems for flood prevention'', \ \emph{Econometrica} 24 (1956)")
         hc.to_edge(DOWN, buff=0.25)
         tail = label(r"statistics as decision-making: \ Part 45", font_size=24, color=GREY_A).to_corner(UR, buff=0.4)
+        intro = label('A stationary cost model for dike height', font_size=36)
         with self.voiceover(
             "Van Dantzig's own contribution was to turn the question into a decision. <bookmark mark='a'/> Above the "
             "current dike height, the chance that the sea goes over falls roughly exponentially with each extra "
@@ -226,9 +232,12 @@ class Floods(VoiceoverScene):
             "until the next metre costs more than the flood damage it prevents. The ten-thousand-year standard came "
             "out of reasoning like this, which is statistics as decision-making, the subject of Part 45."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.6, x=-1.0, buff=1.0, edge=6.9)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             self.play(FadeIn(tail), FadeIn(hc))
         self.clear_scene()

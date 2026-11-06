@@ -56,7 +56,7 @@ class Delta(VoiceoverScene):
             "the square root. <bookmark mark='c'/> Over such a narrow band the curve is almost straight: it's its "
             "tangent line. <bookmark mark='d'/> And a straight line maps a normal to a normal, stretching its width "
             "by the slope. So g of the mean is nearly normal too, centred at g of mu, with standard deviation "
-            "g-prime of mu times sigma over root n."
+            "the absolute value of g-prime of mu times sigma over root n."
         ) as vo:
             self.play(FadeIn(A), Create(cv))
             vo.wait_until("a")
@@ -78,7 +78,8 @@ class Delta(VoiceoverScene):
         rows[2][2].set_color(S.POST)
         whys = [why(r"Taylor, \ to first order; \ $\bar X_n - \mu$ is of size $n^{-1/2}$"), why(r"multiply by $\sqrt n$"),
                 why(r"the CLT, \ and Slutsky's theorem (chapter 9) for the remainder")]
-        note_ = label(r"needs $g'(\mu) \ne 0$; \ otherwise, \ second order (below)", font_size=22, color=GREY_B).to_edge(DOWN, buff=0.6)
+        note_ = label(r"$g$ differentiable at $\mu$; $g'(\mu)\ne0$ for a non-degenerate normal limit", font_size=22, color=GREY_B).to_edge(DOWN, buff=0.6)
+        intro = label('A first-order Taylor approximation', font_size=36)
         with self.voiceover(
             "In symbols. <bookmark mark='a'/> Expand g around mu to first order. The remainder is smaller than the "
             "deviation of the mean, which is itself of size one over root n. <bookmark mark='b'/> Multiply through "
@@ -87,9 +88,12 @@ class Delta(VoiceoverScene):
             "remainder vanishes in the limit, by the theorem of the next chapter. That's the delta method, and it "
             "works whenever g has a non-zero derivative at mu."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.4, buff=0.9, edge=6.9)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             self.play(FadeIn(note_))
         self.clear_scene()
@@ -117,17 +121,20 @@ class Delta(VoiceoverScene):
         whys = [why(r"Poisson counts: \ the spread grows with the mean"), why(r"delta method, \ $g = \sqrt{\ }$: \ the spread no longer "
                                                                           r"depends on $\lambda$")]
         tag = note(r"exact: \ sums over the Poisson probabilities").to_corner(DR, buff=0.3)
+        intro = label('A square root stabilizes large Poisson counts', font_size=36)
         with self.voiceover(
             "One of the delta method's best uses explains a trick from Part 1. <bookmark mark='a'/> A Poisson count "
             "has variance equal to its mean: big counts are noisier, which makes comparisons awkward. "
             "<bookmark mark='b'/> Take the square root. The derivative of root x at lambda is one over two root "
-            "lambda; squared and multiplied by lambda, the variance becomes a quarter, whatever lambda is. "
+            "lambda; squared and multiplied by lambda, the first-order variance approximation is a quarter, becoming accurate for large lambda. "
             "<bookmark mark='c'/> Computed exactly: the raw variance, in blue, climbs with lambda; the variance of the "
             "square root, in orange, settles onto a quarter once lambda is above about five. That's a "
             "variance-stabilizing transformation, and it's why Part 1 took square roots of counts."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=2.7, x=3.0, buff=0.9, edge=6.9)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1, transform=False)
@@ -150,7 +157,7 @@ class Delta(VoiceoverScene):
             MathTex(r"g(p) = \arcsin\sqrt p:\ \ g'(p)^2\,p(1 - p) = \frac14", font_size=30),
             MathTex(r"\mathrm{Var} \arcsin\sqrt{\hat p} \approx \frac{1}{4n}", font_size=30, color=S.POST),
             label(rf"exact, \ $n = {n}$: \ within 5\% of $1/4n$ for $0.2 < p < 0.8$", font_size=22, color=GREY_A),
-            label(r"a model that stabilizes more gently: \ the logit (Part 14)", font_size=22, color=GREY_B),
+            label(r"the logit is a model link, not a variance-stabilizing transform (Part 14)", font_size=22, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
         for r in rows:
             if r.width > 5.8:
@@ -186,9 +193,10 @@ class Delta(VoiceoverScene):
         rows[0][2].set_color(S.POST)
         rows[2][4].set_color(S.POST)
         whys = [why(r"many means at once: \ the gradient takes the place of $g'$ (Part 4's quadratic form)"),
-                why(r"a ratio of means: \ survey estimates (Part 18), \ odds ratios (Part 14)"),
+                why(r"$b\ne0$, gradient at the population means; ratio estimates (Part 18)"),
                 why(r"log of the mean of 50 of the World's heights")]
         tag = note(r"simulated: 20,000 samples of 50 heights").to_corner(DR, buff=0.3)
+        intro = label('Several means and a gradient', font_size=36)
         with self.voiceover(
             "With several averages at once, the derivative becomes a gradient. <bookmark mark='a'/> For a smooth "
             "function of a vector of means, the limit is normal with variance gradient transpose Sigma gradient: "
@@ -198,10 +206,13 @@ class Delta(VoiceoverScene):
             "the World's heights. The delta method predicts sigma over mu root n; the simulation agrees to the "
             "third significant figure."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tag))
             step = ladder(self, rows, whys, keep=3, top=2.5, x=-0.8, buff=1.0, edge=6.9)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -215,15 +226,18 @@ class Delta(VoiceoverScene):
         rows[2][2].set_color(S.PRIOR)
         whys = [why(r"the linear term vanishes"), why(r"$\sqrt n(\bar X_n - \mu)/\sigma \to Z$, \ and $Z^2 \sim \chi^2_1$ (Part 3)"),
                 why(r"a faster rate, \ $1/n$, \ and a skewed limit")]
+        intro = label('When the first derivative vanishes', font_size=36)
         with self.voiceover(
-            "What if the derivative is zero at mu? <bookmark mark='a'/> Then the linear term disappears and the "
-            "quadratic one leads. <bookmark mark='b'/> Multiply by n instead of root n, and the limit is a scaled "
+            "What if the derivative is zero at mu? <bookmark mark='a'/> If g is twice differentiable there, the linear term disappears. A nonzero second derivative makes the quadratic term lead; if it too vanishes, higher order is needed. <bookmark mark='b'/> Multiply by n instead of root n, and the limit is a scaled "
             "chi-squared with one degree of freedom: the square of a normal, from Part 3. <bookmark mark='c'/> The "
             "simplest case: the squared mean of variables whose mean is zero. It shrinks faster, like one over n, "
             "and its limit is skewed, not normal. Tests based on likelihoods, in Part 10, live exactly here."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.4, x=0.6, buff=0.9, edge=6.9)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()

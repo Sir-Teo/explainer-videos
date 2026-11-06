@@ -33,7 +33,7 @@ class Inequalities(VoiceoverScene):
         lb = MathTex(r"a\,\mathbf 1\{x \ge a\}", font_size=28, color=BOUND).next_to(ax.c2p(5.0, a), DOWN, buff=0.15)
         lt = MathTex(r"a", font_size=26, color=GREY_B).next_to(ax.c2p(a, 0), DOWN, buff=0.15)
         rows = [
-            cmath(r"a\,\mathbf 1\{X \ge a\}", r"\le", r"X", r"\qquad (X \ge 0)", font_size=34),
+            cmath(r"a\,\mathbf 1\{X \ge a\}", r"\le", r"X", r"\qquad (X \ge 0,\ a>0)", font_size=34),
             cmath(r"a\,P(X \ge a)", r"\le", r"E X", font_size=34),
             cmath(r"P(X \ge a)", r"\le", r"\frac{E X}{a}", font_size=38),
         ]
@@ -91,7 +91,7 @@ class Inequalities(VoiceoverScene):
             "<bookmark mark='b'/> In green, the share of adults earning at least a times the mean. Twice the mean: "
             f"{100 * frac[1]:.1f} percent, against a bound of fifty. Three times: {100 * frac[2]:.1f} percent, against a "
             "third. <bookmark mark='c'/> The bound always holds, and it's always far from the truth, because it "
-            "uses nothing but the mean. That's the price of a guarantee that needs no assumptions. We'll sharpen it "
+            "uses nothing but the mean. That's the price of a guarantee that needs only nonnegativity and a finite mean. We'll sharpen it "
             "by feeding it more."
         ) as vo:
             self.play(FadeIn(A), FadeIn(tag))
@@ -111,9 +111,9 @@ class Inequalities(VoiceoverScene):
             cmath(r"P(|X - \mu| \ge k\sigma)", r"\le", r"\frac{E(X - \mu)^2}{k^2\sigma^2}", r"=", r"\frac{1}{k^2}", font_size=34),
         ]
         rows[1][4].set_color(BOUND)
-        whys = [why(r"square both sides"), why(r"Markov, \ applied to $(X - \mu)^2 \ge 0$")]
+        whys = [why(r"square both sides"), why(r"$0<\sigma^2<\infty$, $k>0$: Markov on $(X-\mu)^2$")]
         A = axes([0.8, 4.2], [0, 1.05], x_length=5.6, y_length=3.0, xlabel=r"$k$ (standard deviations)", xticks=[1, 2, 3, 4],
-                 yticks=[0, 0.25, 0.5, 1], center=[-2.6, -2.1, 0])
+                 yticks=[0, 0.25, 0.5, 1], center=[-2.6, -1.8, 0])
         ax = A.ax
         kk = np.linspace(1, 4.2, 100)
         bnd = curve(ax, kk, 1 / kk ** 2, BOUND, 3)
@@ -124,6 +124,7 @@ class Inequalities(VoiceoverScene):
         hc = history_card(1867, r"Bienaym\'e (1853), \ Chebyshev (1867)", r"the first general bound on how far a variable "
                           r"strays from its mean, \ with nothing assumed but a variance", color=S.MUSEUM, width=4.6,
                           font_size=20).move_to([4.4, -0.15, 0])
+        intro = label('From a variance to a probability bound', font_size=36)
         with self.voiceover(
             "Feed it the variance. <bookmark mark='a'/> The event that X is k standard deviations or more from its "
             "mean is the same as the event that the squared deviation is at least k squared sigma squared. "
@@ -134,8 +135,10 @@ class Inequalities(VoiceoverScene):
             f"{100 * d['cheb_height'][2]:.1f} percent of the time; its incomes, {100 * d['cheb_income'][2]:.1f} percent. Both "
             "far below the bound."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=2.9, x=-2.2, buff=0.7, edge=6.9)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1, transform=False)
@@ -185,7 +188,7 @@ class Inequalities(VoiceoverScene):
 
     def jensen(self):
         d = load("markov")
-        A = axes([0, 3.2], [0, 3.2], x_length=5.0, y_length=4.4, xlabel=r"$x$", center=[-3.8, -0.5, 0])
+        A = axes([0, 3.2], [0, 3.8], x_length=5.0, y_length=4.4, xlabel=r"$x$", center=[-3.8, -0.5, 0])
         ax = A.ax
         A.ax.x_axis.set_opacity(0.5)
         f = lambda x: 0.35 * x ** 2 + 0.2  # noqa: E731
@@ -218,7 +221,7 @@ class Inequalities(VoiceoverScene):
             "above it. <bookmark mark='b'/> Let X take two values with equal chance. The average of phi of X is the "
             "midpoint of the chord; phi of the average is the curve below it. <bookmark mark='c'/> So for convex phi, "
             "phi of the mean is at most the mean of phi: Johan Jensen's inequality, 1906, and by approximation it "
-            "holds for any distribution. <bookmark mark='d'/> With phi equal to x squared it says the variance can't "
+            "holds for general integrable X when the expectations are well defined. <bookmark mark='d'/> With phi equal to x squared it says the variance can't "
             "be negative. <bookmark mark='e'/> With minus the logarithm, applied to the World's incomes: the mean of "
             "the log is below the log of the mean, so the geometric mean income, about forty thousand, is below "
             "the ordinary mean, forty-nine thousand. Jensen will turn up again whenever a logarithm meets an "

@@ -21,24 +21,26 @@ class Concentration(VoiceoverScene):
         self.play(FadeOut(card))
 
     def statement(self):
-        thm = theorem_card(r"Hoeffding's inequality", r"if $X_1, \dots, X_n$ are independent with $a \le X_i \le b$: \ "
+        thm = theorem_card(r"Hoeffding's inequality", r"if $X_1, \dots, X_n$ are independent with common mean $\mu$ and $a \le X_i \le b$, $a<b$: \ "
                            r"$P\big(|\bar X_n - \mu| \ge \varepsilon\big) \le 2\exp\!\Big(-\dfrac{2n\varepsilon^2}{(b - a)^2}\Big)$",
                            who=r"Wassily Hoeffding, 1963", color=S.PRIOR, width=10.2, font_size=26).move_to([0, 1.6, 0])
         rows = VGroup(label(r"Chebyshev: \ the tail falls like $1/n$", font_size=26, color=BOUND),
-                      label(r"the CLT: \ like $e^{-n\varepsilon^2/2\sigma^2}$, \ but only in the limit", font_size=26, color=EXACT),
+                      label(r"the CLT: central deviations, not fixed-$\varepsilon$ tail rates", font_size=26, color=EXACT),
                       label(r"Hoeffding: \ exponentially, \ for \emph{every} $n$, \ if the variables are bounded", font_size=26,
                             color=S.PRIOR)).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(thm, DOWN, buff=0.6)
+        intro = label('A bound for every sample size', font_size=36)
         with self.voiceover(
             "The central limit theorem is a statement about the limit. Chebyshev's inequality holds for every n, but "
-            "it's weak. Can we have both: a guarantee at every sample size, as sharp as the normal tail? "
+            "it's weak. Can we have both: a guarantee at every sample size, with exponential decay? "
             "<bookmark mark='a'/> For bounded variables, yes. Wassily Hoeffding proved in 1963 that if each variable "
             "lies between a and b, the chance that the mean misses by epsilon is at most twice e to the minus two n "
             "epsilon squared over b minus a squared. <bookmark mark='b'/> Chebyshev's bound falls like one over n. "
-            "<bookmark mark='c'/> The normal tail falls exponentially, but the central limit theorem only promises it "
-            "eventually. <bookmark mark='d'/> Hoeffding's falls exponentially and holds for every n, with no "
+            "<bookmark mark='c'/> A normal approximation suggests exponential decay, but the CLT alone does not determine the rate at a fixed epsilon: the standardized threshold is moving into the tail. <bookmark mark='d'/> Hoeffding's falls exponentially and holds for every n, with no "
             "approximation at all."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(thm, shift=DOWN * 0.2))
             for k, m in enumerate("bcd"):
                 vo.wait_until(m)
@@ -59,19 +61,23 @@ class Concentration(VoiceoverScene):
         whys = [why(r"Markov, \ applied to $e^{\lambda(S_n - ES_n)}$: \ Chernoff's trick (1952)"),
                 why(r"independence; \ then Hoeffding's lemma for one bounded variable"),
                 why(r"choose the best $\lambda = 4t/n(b - a)^2$"), why(r"same for the lower tail: \ the 2")]
+        intro = label("Chernoff's exponential trick", font_size=36)
         with self.voiceover(
             "The proof is Markov's inequality with a twist. <bookmark mark='a'/> Exponentiate first: the event that "
             "the sum exceeds its mean by t is the event that e to the lambda times the excess exceeds e to the "
             "lambda t. Apply Markov to that. This is Herman Chernoff's trick. <bookmark mark='b'/> By independence "
-            "the expectation factors into one MGF per variable, and Hoeffding's lemma bounds the MGF of any variable "
+            "the expectation factors into one MGF per variable, and Hoeffding's lemma bounds the MGF of any centered variable "
             "confined to an interval of width b minus a by e to the lambda squared b minus a squared over eight. "
             "<bookmark mark='c'/> Now choose lambda to make the bound as small as possible: a quadratic in the "
             "exponent, minimized in one line. <bookmark mark='d'/> Put t equal to n epsilon and you have Hoeffding's "
             "inequality, for one tail; double it for both."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.4, buff=0.62, edge=6.9)
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -128,6 +134,7 @@ class Concentration(VoiceoverScene):
                      r"``with high probability'' you will read", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.6)
         if uses.width > 12.8:
             uses.width = 12.8
+        intro = label('Many proportions at once', font_size=36)
         with self.voiceover(
             "Exponential tails have a remarkable consequence. <bookmark mark='a'/> Suppose you estimate m different "
             "proportions at once, and want all of them right. The chance that any one fails is at most the sum of "
@@ -138,9 +145,12 @@ class Concentration(VoiceoverScene):
             "That logarithm is the engine of machine-learning theory in Part 54, and of every result you'll read "
             "that holds with high probability."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.4, x=0.4, buff=0.9, edge=6.9)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             vo.wait_until("d")
             self.play(FadeIn(uses))
@@ -157,10 +167,10 @@ class Concentration(VoiceoverScene):
         nm = (a - p) ** 2 / (2 * p * (1 - p))
         c1 = curve(ax, a, kl, S.LIK, 3.5)
         c2 = curve(ax, a, ho, S.PRIOR, 3)
-        c3 = curve(ax, a, np.clip(nm, 0, 0.6), EXACT, 2.5)
+        c3 = curve(ax, a, nm, EXACT, 2.5)
         leg = legend([(S.LIK, r"Cram\'er: \ $\mathrm{KL}(a \,\|\, p)$"), (S.PRIOR, r"Hoeffding: \ $2(a - p)^2$"),
                       (EXACT, r"normal: \ $(a - p)^2/2pq$")], font_size=22).move_to([3.6, 1.8, 0])
-        rows = VGroup(MathTex(r"P(\bar X_n \ge a) = e^{-n I(a) + o(n)}", font_size=30),
+        rows = VGroup(MathTex(r"P(\text{tail toward }a) = e^{-n I(a) + o(n)},\quad a\ne p", font_size=30),
                       MathTex(r"I(a) = a\log\frac{a}{p} + (1 - a)\log\frac{1 - a}{1 - p}", font_size=28, color=S.LIK),
                       label(r"Harald Cram\'er (1938): \ the exact exponential rate", font_size=22, color=GREY_A),
                       label(r"the Kullback--Leibler divergence appears: \ Part 22", font_size=22, color=GREY_B))
@@ -171,7 +181,7 @@ class Concentration(VoiceoverScene):
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.6, -0.6, 0])
         with self.voiceover(
             "How fast, exactly, do such tails fall? <bookmark mark='a'/> Harald Cramér answered in 1938. Take a coin "
-            "that lands heads nine times in ten. The chance that the share of heads in n tosses reaches a level a "
+            "that lands heads nine times in ten. The chance that the share of heads in n tosses reaches a fixed level a above p, or falls below a fixed a below p, "
             "decays like e to the minus n times a rate, I of a. "
             "<bookmark mark='b'/> For coins the rate is this expression, which Part 22 will recognize as the "
             "Kullback–Leibler divergence between a coin with chance a and one with chance p. <bookmark mark='c'/> "

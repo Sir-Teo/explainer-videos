@@ -24,8 +24,8 @@ class CLTSeen(VoiceoverScene):
     def convolution(self):
         d = load("lopsided")
         mu, var = d["mu"], d["var"]
-        A = axes([-3.6, 3.6], [0, 0.62], x_length=8.4, y_length=4.4, xlabel=r"standardized sum \ $(S_n - n\mu)/\sqrt{n}\,\sigma$",
-                 xticks=[-3, -2, -1, 0, 1, 2, 3], yticks=[0, 0.2, 0.4], center=[-1.6, -0.6, 0])
+        A = axes([-3.6, 3.6], [0, 1.1], x_length=8.4, y_length=4.4, xlabel=r"standardized sum \ $(S_n - n\mu)/(\sigma\sqrt{n})$",
+                 xticks=[-3, -2, -1, 0, 1, 2, 3], yticks=[0, 0.5, 1], center=[-1.6, -0.6, 0])
         ax = A.ax
 
         def bars(n):
@@ -36,7 +36,7 @@ class CLTSeen(VoiceoverScene):
             g = VGroup()
             for zz, hh in zip(z, dens):
                 if -3.6 <= zz <= 3.6:
-                    lo, hi = ax.c2p(zz - 0.42 * w, 0), ax.c2p(zz + 0.42 * w, min(hh, 0.62))
+                    lo, hi = ax.c2p(zz - 0.42 * w, 0), ax.c2p(zz + 0.42 * w, hh)
                     g.add(Rectangle(width=max(0.01, hi[0] - lo[0]), height=max(1e-3, hi[1] - lo[1]), stroke_width=0,
                                     fill_color=SIM, fill_opacity=0.8).move_to([(lo[0] + hi[0]) / 2, (lo[1] + hi[1]) / 2, 0]))
             return g
@@ -55,8 +55,7 @@ class CLTSeen(VoiceoverScene):
             "the sum exactly, by convolution, with Part 2's engine. Rescale it to mean zero and standard deviation "
             "one. <bookmark mark='c'/> Three copies. Five. <bookmark mark='d'/> Ten. <bookmark mark='e'/> Thirty. "
             "The gold curve is the standard normal density. The shape we started with is gone, and the bell has "
-            "taken its place. The number on the right, the largest gap between the two CDFs, falls from a fifth to "
-            "about one percent."
+            "taken its place. The number on the right, the largest gap between the two CDFs, falls steadily as n grows; unlike a continuity-corrected comparison, this checks both sides of every discrete CDF jump."
         ) as vo:
             self.play(FadeIn(A), FadeIn(law))
             vo.wait_until("a")
@@ -77,7 +76,7 @@ class CLTSeen(VoiceoverScene):
             cmath(r"\kappa_r(S_n)", r"=", r"n\,\kappa_r(X)", r"\qquad \text{cumulants add (Part 3)}", font_size=32),
             cmath(r"\text{skewness}(S_n)", r"=", r"\frac{n\,\kappa_3}{(n\,\kappa_2)^{3/2}}", r"=", r"\frac{\text{skewness}(X)}{\sqrt n}",
                   font_size=32),
-            cmath(r"\text{excess kurtosis}(S_n)", r"=", r"\frac{n\,\kappa_4}{(n\,\kappa_2)^{2}}", r"=", r"\frac{\text{kurtosis}(X)}{n}",
+            cmath(r"\text{excess kurtosis}(S_n)", r"=", r"\frac{n\,\kappa_4}{(n\,\kappa_2)^{2}}", r"=", r"\frac{\text{excess kurtosis}(X)}{n}",
                   font_size=32),
             cmath(r"\kappa_r\Big(\frac{S_n - n\mu}{\sqrt n\,\sigma}\Big)", r"\to", r"0 \quad (r \ge 3)", font_size=32),
         ]
@@ -86,19 +85,23 @@ class CLTSeen(VoiceoverScene):
         rows[3][2].set_color(EXACT)
         whys = [why(r"independent sums: \ the cumulant generating functions add"), why(r"asymmetry fades like $1/\sqrt n$"),
                 why(r"heavy shoulders fade like $1/n$"), why(r"only the normal has every cumulant beyond the second zero")]
+        intro = label('Cumulants explain the shape under moment assumptions', font_size=36)
         with self.voiceover(
-            "Why does this happen? Part 3 gave us the tool: cumulants. <bookmark mark='a'/> For a sum of independent "
+            "For laws with an MGF near zero, Part 3 gives an explanation using cumulants. More general laws need the characteristic-function proof. <bookmark mark='a'/> For a sum of independent "
             "variables, every cumulant adds: the r-th cumulant of the sum is n times that of one variable. "
             "<bookmark mark='b'/> Now standardize. Skewness is the third cumulant over the variance to the power "
             "three halves; for the sum it's the original skewness divided by root n. <bookmark mark='c'/> Excess "
             "kurtosis, the fourth, is divided by n. <bookmark mark='d'/> Every cumulant beyond the second dies away, "
             "the higher ones faster. And the only distribution whose third, fourth and all higher cumulants are zero "
-            "is the normal. That's the central limit theorem, in a sentence, and also a warning: skewness is the "
+            "is the normal. That's the mechanism behind the theorem in this setting, and also a warning: skewness is the "
             "last feature to disappear, at the slow rate of one over root n."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.2, buff=0.58, edge=6.9)
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -168,7 +171,7 @@ class CLTSeen(VoiceoverScene):
             ed = np.linspace(-3.6, 3.6, 37) if key != "lop" else (np.arange(draws[key].min() - 0.5, draws[key].max() + 1.5)
                                                                    - mus[key]) / sds[key]
             ed = ed[(ed >= -3.6) & (ed <= 3.6)]
-            h = hist_bars(A.ax, ed, np.histogram(z, ed, density=True)[0], color=SIM, opacity=0.7)
+            h = hist_bars(A.ax, ed, np.histogram(z, ed)[0] / (len(z) * np.diff(ed)), color=SIM, opacity=0.7)
             cv = curve(A.ax, xs, normal_pdf(xs), EXACT, 2.5)
             t = label(nm, font_size=24).move_to([cx, 2.6, 0])
             if key in one:
@@ -181,19 +184,22 @@ class CLTSeen(VoiceoverScene):
             arrow = Arrow([cx, 0.75, 0], [cx, 0.15, 0], buff=0, color=GREY_B, stroke_width=3)
             panels.add(VGroup(t, top, arrow, A, h, cv))
         cap = MathTex(r"\text{sums of } n = 30", font_size=26, color=GREY_A).move_to([-6.0, 0.45, 0])
-        take = label(r"whatever the ingredient, \ provided its variance is finite", font_size=26, color=S.ACCENT).to_edge(DOWN, buff=0.3)
+        take = label(r"i.i.d. ingredients, finite positive variance: an asymptotic statement", font_size=26, color=S.ACCENT).to_edge(DOWN, buff=0.3)
         tag = note(r"simulated: 20,000 sums each").to_corner(UR, buff=0.25)
+        intro = label('Independent sums, one limiting shape', font_size=36)
         with self.voiceover(
             "The remarkable thing is that the ingredient hardly matters. <bookmark mark='a'/> Flat, uniform "
             "numbers; <bookmark mark='b'/> steeply skewed exponential waiting times; <bookmark mark='c'/> our "
             "lopsided law. <bookmark mark='d'/> Sum thirty of any of them, standardize, and the histogram follows "
             "the same gold curve. Abraham de Moivre found the bell in 1733 for coin tosses; Pierre-Simon Laplace "
-            "saw in 1810 that it holds for sums of almost anything. <bookmark mark='e'/> Almost: the variance must "
-            "be finite. Chapter ten shows what happens when it isn't."
+            "saw in 1810 that it holds for sums of almost anything. <bookmark mark='e'/> Almost: the summands must be independent and identically distributed with finite positive variance; no universal finite sample size guarantees a close normal approximation. Chapter ten shows what happens when it isn't."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tag))
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(panels[k][:3]))
             vo.wait_until("d")
             self.play(*[FadeIn(p[3:]) for p in panels], FadeIn(cap))
