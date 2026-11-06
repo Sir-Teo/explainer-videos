@@ -1355,3 +1355,78 @@ def snow_map() -> dict:
     d = np.array([[float(r["x"]), float(r["y"])] for r in rows if r["kind"] == "death"])
     p = [r for r in rows if r["kind"] == "pump"]
     return {"deaths": d, "pumps": {"label": [r["label"] for r in p], "xy": np.array([[float(r["x"]), float(r["y"])] for r in p])}}
+
+
+# --- Freireich et al. (1963), as tabulated by Gehan (1965): weeks in remission, acute leukaemia ---
+# 6-MP arm: True = relapse observed, False = still in remission when last seen (censored).
+GEHAN_6MP = [(6, True), (6, True), (6, True), (6, False), (7, True), (9, False), (10, True), (10, False), (11, False),
+             (13, True), (16, True), (17, False), (19, False), (20, False), (22, True), (23, True), (25, False),
+             (32, False), (32, False), (34, False), (35, False)]
+GEHAN_PLACEBO = [1, 1, 2, 2, 3, 4, 4, 5, 5, 8, 8, 8, 8, 11, 11, 12, 12, 15, 17, 22, 23]  # every one relapsed
+
+
+def gehan() -> dict:
+    """Freireich et al.'s (1963) 6-MP trial in childhood acute leukaemia, as tabulated by Gehan (1965) (also MASS's
+    ``gehan``): weeks in remission for 21 children on 6-mercaptopurine (12 censored) and 21 on placebo (none
+    censored).  Returns ``time``, ``event`` (1 = relapse) and ``group`` (1 = 6-MP, 0 = placebo)."""
+    import numpy as np
+
+    t = [a for a, _ in GEHAN_6MP] + GEHAN_PLACEBO
+    e = [int(b) for _, b in GEHAN_6MP] + [1] * len(GEHAN_PLACEBO)
+    g = [1] * len(GEHAN_6MP) + [0] * len(GEHAN_PLACEBO)
+    return {"time": np.array(t, float), "event": np.array(e), "group": np.array(g)}
+
+
+def _num(v):
+    try:
+        return float(v)
+    except ValueError:
+        return float("nan") if v == "" else v
+
+
+def _table(name) -> dict:
+    import numpy as np
+
+    rows = _csv(name)
+    out = {}
+    for k in rows[0]:
+        vals = [_num(r[k]) for r in rows]
+        out[k] = np.array(vals, float) if all(isinstance(v, float) for v in vals) else np.array(vals)
+    return out
+
+
+def pbc() -> dict:
+    """Mayo Clinic primary biliary cholangitis data, 1974-84 (Fleming & Harrington 1991; R's survival package, LGPL >= 2):
+    418 patients, the first 312 in a randomized trial of D-penicillamine (``trt`` 1 drug, 2 placebo; NaN for the 106
+    not randomized).  ``time`` in days; ``status`` 0 censored, 1 transplant, 2 death; ``age`` in years; ``sex`` 'm'/'f';
+    ``edema`` 0, 0.5, 1; ``bili`` (mg/dl), ``albumin`` (g/dl), ``protime`` (s), ``stage`` 1-4, and other labs."""
+    return _table("pbc.csv")
+
+
+def stanford_heart() -> dict:
+    """The Stanford heart transplant programme, 1967-74 (Crowley & Hu 1977; R's survival ``jasa1``, LGPL >= 2), in
+    start-stop form: one row per patient per interval (``start``, ``stop`` in days from acceptance, ``event`` = death at
+    ``stop``), ``transplant`` 0 before and 1 after a transplant; ``age`` is age minus 48 years; ``year`` of acceptance
+    since 1 October 1967; ``surgery`` prior bypass surgery."""
+    return _table("stanford_heart.csv")
+
+
+def mgus2() -> dict:
+    """Monoclonal gammopathy of undetermined significance at the Mayo Clinic (Kyle et al. 2002; R's survival ``mgus2``,
+    LGPL >= 2): 1,384 patients, ``ptime``/``pstat`` months to progression to a plasma cell malignancy, ``futime``/``death``
+    months to death or last contact; ``age``, ``sex`` 'F'/'M', ``hgb``, ``creat``, ``mspike``."""
+    return _table("mgus2.csv")
+
+
+def veteran() -> dict:
+    """The Veterans' Administration lung cancer trial (Kalbfleisch & Prentice 1980; R's survival ``veteran``, LGPL >= 2):
+    137 men, ``trt`` 1 standard / 2 test chemotherapy, ``celltype``, ``time`` (days), ``status``, Karnofsky score
+    ``karno``, ``diagtime`` (months from diagnosis), ``age``, ``prior`` therapy (0/10)."""
+    return _table("veteran.csv")
+
+
+def kidney() -> dict:
+    """Recurrent infections at the catheter insertion point in 38 kidney dialysis patients (McGilchrist & Aisbett 1991;
+    R's survival ``kidney``, LGPL >= 2): two times per patient (``id``), ``time`` (days), ``status``, ``age``, ``sex``
+    (1 male, 2 female), ``disease``."""
+    return _table("kidney.csv")
