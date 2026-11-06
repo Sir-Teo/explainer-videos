@@ -78,8 +78,8 @@ class Study(LectureMixin, VoiceoverScene):
     def chart(self):
         st = cells()
         g = 1.0
-        A = axes([0.35, 1.65], [0.5, 0.95], x_length=7.0, y_length=4.4, xlabel=r"shift $\mu$ (target $N(\mu, 1)$)",
-                 ylabel=r"target coverage, \ $\gamma = 1$", xticks=MUS, yticks=[0.5, 0.6, 0.7, 0.8, 0.9], yfmt=lambda v: f"{100 * v:.0f}\\%",
+        A = axes([0.35, 1.65], [0.3, 0.95], x_length=7.0, y_length=4.4, xlabel=r"shift $\mu$ (target $N(\mu, 1)$)",
+                 ylabel=r"target coverage, \ $\gamma = 1$", xticks=MUS, yticks=[0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9], yfmt=lambda v: f"{100 * v:.0f}\\%",
                  center=[-2.5, 0.2, 0])
         ax = A.ax
         nom = DashedLine(ax.c2p(0.35, 0.9), ax.c2p(1.65, 0.9), color=GREY_B, stroke_width=2)
@@ -87,13 +87,13 @@ class Study(LectureMixin, VoiceoverScene):
         for m in METHS:
             ys = [st[(mu, g, m)]["coverage"] for mu in MUS]
             lines[m] = VGroup(polyline(ax, MUS, ys, METHC[m], 3.5), *[Dot(ax.c2p(a, b), radius=0.07, color=METHC[m]) for a, b in zip(MUS, ys)])
-            bs = [max(0.5, st[(mu, g, m)]["bound"]) for mu in MUS]
+            bs = [st[(mu, g, m)]["bound"] for mu in MUS]
             bounds[m] = DashedVMobject(polyline(ax, MUS, bs, METHC[m], 2.0, 0.8), num_dashes=16)
         n15 = st[(1.5, g, "none")]["coverage"]
         side = side_groups([
             [(rf"red: \ no weights, \ {100 * n15:.0f}\% at $\mu = 1.5$", NAIVEC)],
             [(r"green and blue: \ true and estimated", HONC), (r"weights, \ at or above 90\%", ESTC)],
-            [(r"gold and orange: \ tempered and", WRONGC), (r"misspecified weights", METHC["misspecified"])],
+            [(r"gold and teal: \ tempered and", WRONGC), (r"misspecified weights", METHC["misspecified"])],
             [(r"dashes: \ each method's bound;", WHITE), (r"every curve stays above its own", WHITE)],
         ])
         with self.voiceover(
@@ -203,7 +203,7 @@ class Study(LectureMixin, VoiceoverScene):
             [(r"the price of coverage", WHITE)],
             [(rf"red: \ no weights, \ {n15:.1f} wide at $\mu = 1.5$", NAIVEC), (r"narrow, \ and wrong", NAIVEC)],
             [(rf"green, \ blue: \ {o15:.1f} wide", HONC), (r"the target's noise is larger", HONC)],
-            [(r"gold, \ orange: \ in between", WRONGC)],
+            [(r"gold, \ teal: \ in between", WRONGC)],
         ])
         with self.voiceover(
             f"<bookmark mark='a'/> The price of the coverage, in width. <bookmark mark='b'/> Without weights the interval "
