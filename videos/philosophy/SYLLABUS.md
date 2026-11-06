@@ -1688,3 +1688,4 @@ and a Reasoner library of perhaps 20–30k lines with its tests. Expect one part
 | 8 · The Liar | scenes, English and Chinese narration and text, QA | ~49 min |
 | 9 · What Is Mathematics About? | scenes, English and Chinese narration and text, QA | ~63 min |
 | 10 · The Mind's Own Laws | scenes, English and Chinese narration and text, QA | ~50 min |
+| 11 · What Is Knowledge? | scenes, English and Chinese narration and text, QA | ~53 min |
