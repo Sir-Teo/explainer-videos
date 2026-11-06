@@ -21,7 +21,9 @@ class Hook(VoiceoverScene):
         xt = VGroup(*[label(rf"{v:,}", font_size=16, color=GREY_B).next_to(ax.c2p(v, lo * 0.9), DOWN, buff=0.1)
                       for v in (0, 1024, 2048, 3072, 4096)])
         xl = label(r"bytes added to the environment", font_size=18, color=GREY_A).next_to(ax, DOWN, buff=0.45)
-        yl = label(r"seconds", font_size=18, color=GREY_A).next_to(ax, LEFT, buff=0.3).shift(UP * 1.6)
+        yt = VGroup(*[label(rf"{v:.2f}", font_size=16, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.12)
+                      for v in (lo, (lo + hi) / 2, hi)])
+        yl = label(r"seconds", font_size=18, color=GREY_A).next_to(yt, UP, buff=0.25).align_to(yt, RIGHT)
         dots = VGroup(*[Dot(ax.c2p(r["bytes"], r["median"]), radius=0.06, color=HEAD) for r in env])
         line = VMobject(color=HEAD, stroke_width=1.5).set_points_as_corners([d.get_center() for d in dots])
         spread = label(rf"spread of the medians: \ {100 * b['env_spread']:.0f}\%", font_size=22, color=NO).next_to(
@@ -39,7 +41,7 @@ class Hook(VoiceoverScene):
             "effect and some is other programs running at the same time. Telling the two apart, and not fooling "
             "yourself, is what this part is about."
         ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(xl), FadeIn(yl), FadeIn(foot))
+            self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl), FadeIn(foot))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(d, scale=0.5) for d in dots], lag_ratio=0.08), run_time=3)
             vo.wait_until("b")
@@ -61,7 +63,7 @@ class Hook(VoiceoverScene):
             g = VGroup(label(t, font_size=24, color=c), wrapped_label(d, 2.6, font_size=17, color=GREY_A)).arrange(
                 DOWN, buff=0.2).move_to(r)
             steps.add(VGroup(r, g))
-        steps.arrange(RIGHT, buff=0.45).next_to(head, DOWN, buff=0.8)
+        steps.arrange(RIGHT, buff=0.45).move_to(UP * 0.4)
         arrows = VGroup(*[Arrow(steps[i].get_right(), steps[i + 1].get_left(), buff=0.05, color=GREY_C,
                                 stroke_width=2) for i in range(3)])
         foot = wrapped_label(r"this series has quoted a thousand results; \ each one went through these four steps, "
