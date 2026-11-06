@@ -132,7 +132,7 @@ class Optimizer(VoiceoverScene):
             row = VGroup(*[box(0.42 * k + 0.5, 0.5, rf"\text{{{s}}}", [DATA, HEAD, LAM, KERN, YES][k - 1],
                                font_size=18) for s in subs]).arrange(RIGHT, buff=0.18)
             levels.add(row)
-        levels.arrange(UP, buff=0.32).move_to([-3.6, 0.1, 0])
+        levels.arrange(UP, buff=0.32).move_to([-2.7, 0.1, 0])
         lv = VGroup(*[label(rf"{k} table{'s' if k > 1 else ''}", font_size=16, color=GREY_B).next_to(levels[k - 1],
                                                                                                     LEFT, buff=0.25)
                       for k in range(1, 6)])
