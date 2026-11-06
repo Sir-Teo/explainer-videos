@@ -29,19 +29,23 @@ class Inverse(VoiceoverScene):
         ]
         rows[1][6].set_color(EXACT)
         whys = [why(r"Part 3's probability integral transform, \ run backwards"),
-                why(r"$F$ is increasing, \ so $F^{-1}(u) \le x \iff u \le F(x)$; \ and $P(U \le t) = t$"),
-                why(r"the generalized inverse: \ it works for jumps and flat stretches too")]
+                why(r"$F$ is nondecreasing and right-continuous, \ so $F^{-1}(u) \le x \iff u \le F(x)$; \ and $P(U \le t) = t$"),
+                why(r"the generalized inverse, $0<u<1$: \ jumps and flat stretches are allowed")]
+        intro = label('From uniforms to a target distribution', font_size=36)
         with self.voiceover(
             "With a good source of uniform numbers, how do we get any other distribution? The first answer is "
             "Part 3's probability integral transform, run backwards. <bookmark mark='a'/> Take a uniform U and "
             "apply the inverse of the CDF you want. <bookmark mark='b'/> The chance that the result is at most x is "
-            "the chance that U is at most F of x, because F is increasing. And for a uniform, that chance is just F "
+            "the chance that U is at most F of x, because F is nondecreasing and right-continuous. And for a uniform, that chance is just F "
             "of x. So X has CDF F, exactly. <bookmark mark='c'/> For CDFs with jumps or flat stretches, use the "
             "generalized inverse: the smallest x at which F reaches u. The proof is the same."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.6, buff=0.95, edge=6.9)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -56,7 +60,7 @@ class Inverse(VoiceoverScene):
         inv = MathTex(r"F^{-1}(u) = -\log(1 - u)", font_size=32, color=EXACT).move_to([4.6, 2.2, 0])
         darts = []
         for k in range(10):
-            uu, xx = float(u[k]), float(min(x[k], 5))
+            uu, xx = float(u[k]), float(x[k])
             h = Line(ax.c2p(0, uu), ax.c2p(xx, uu), color=GOOD, stroke_width=2)
             v = Line(ax.c2p(xx, uu), ax.c2p(xx, 0), color=GOOD, stroke_width=2)
             du = Dot(ax.c2p(0, uu), radius=0.06, color=GOOD)
@@ -98,12 +102,12 @@ class Inverse(VoiceoverScene):
         cv = curve(A.ax, xs, np.exp(-xs), EXACT, 3)
         rows = fit_rows(VGroup(label(r"4,000 draws, \ each from one PCG32 uniform", font_size=24, color=GOOD),
                                label(r"gold: \ the density $e^{-x}$", font_size=24, color=EXACT),
-                               label(r"one uniform in, \ one draw out: \ the cheapest possible sampler", font_size=24, color=GREY_A)),
+                               label(r"one uniform in, \ one draw out: \ plus the cost of evaluating the quantile", font_size=24, color=GREY_A)),
                         4.8, 0.3, [4.4, 0.8, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Four thousand draws this way, each using a single uniform from our PCG generator. "
-            "<bookmark mark='b'/> The histogram follows the exponential density exactly. <bookmark mark='c'/> One "
-            "uniform in, one draw out: when the inverse CDF has a formula, nothing is cheaper. The same trick turns "
+            "<bookmark mark='b'/> The histogram approximates the exponential density; omitted tail draws stay in the denominator. <bookmark mark='c'/> One "
+            "uniform in, one draw out: when the quantile is easy to evaluate, inversion is convenient. The same trick turns "
             "uniforms into Cauchys, with the tangent function; into Paretos, with a power; into Weibulls and "
             "logistics."
         ) as vo:
@@ -136,7 +140,8 @@ class Inverse(VoiceoverScene):
         b1 = bars(A.ax, np.arange(5) - 0.18, pmf, EXACT, width=0.34)
         b2 = bars(A.ax, np.arange(5) + 0.18, freq, GOOD, width=0.34)
         leg = legend([(EXACT, r"$P(X = k)$"), (GOOD, r"2,000 draws")], font_size=22).move_to([2.6, -1.6, 0])
-        cost = label(r"cost: \ a search through the CDF, \ up to $k$ steps per draw", font_size=22, color=GREY_A).move_to([3.4, -2.6, 0])
+        cost = label(r"CDF search: \ $O(k)$ linear, \ $O(\log k)$ binary", font_size=22, color=GREY_A).move_to([3.4, -2.6, 0])
+        intro = label('Cut the unit interval at cumulative probabilities', font_size=36)
         with self.voiceover(
             "Inversion works for discrete laws too. <bookmark mark='a'/> Lay the probabilities end to end along the "
             "unit interval: a tenth for zero, a quarter for one, and so on. The cut points are the CDF. "
@@ -144,7 +149,9 @@ class Inverse(VoiceoverScene):
             "draws reproduce the probabilities. <bookmark mark='d'/> The only cost is the search for the right "
             "piece, which for a law with many values can take many steps. Chapter four's alias method removes it."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(LaggedStart(*[FadeIn(s_) for s_ in segs], lag_ratio=0.2), FadeIn(ticks), FadeIn(lab))
             vo.wait_until("b")
             g = np.random.Generator(np.random.PCG64(4))
@@ -162,17 +169,17 @@ class Inverse(VoiceoverScene):
     def limits(self):
         rows = fit_rows(VGroup(
             label(r"inversion needs $F^{-1}$ in a usable form", font_size=28),
-            MathTex(r"\text{normal: } \Phi^{-1}(u) \text{ has no closed form}", font_size=30, color=BAD),
-            label(r"it can be computed (Wichura's algorithm AS 241, 1988, to 16 digits), \ but slowly", font_size=24, color=GREY_A),
-            MathTex(r"\text{gamma, beta: } F \text{ itself has no closed form}", font_size=30, color=BAD),
+            MathTex(r"\text{normal: } \Phi^{-1}(u) \text{ has no elementary formula}", font_size=30, color=BAD),
+            label(r"it can be computed (Wichura's algorithm AS 241, 1988, to about 16 digits), \ using numerical approximation", font_size=24, color=GREY_A),
+            MathTex(r"\text{gamma, beta: no elementary quantile in general}", font_size=30, color=BAD),
             label(r"so: \ samplers that never invert anything \ (chapters 3 and 4)", font_size=26, color=S.ACCENT),
         ), 12.4, 0.35, [0, 0.3, 0])
         with self.voiceover(
             "Inversion has one requirement: an inverse CDF you can compute. <bookmark mark='a'/> The normal's "
-            "inverse CDF has no closed form. It can be computed to sixteen digits, with a rational approximation "
+            "inverse CDF has no elementary formula. It can be computed to sixteen digits, with a rational approximation "
             "like Michael Wichura's algorithm of 1988, but every draw then costs a careful numerical evaluation. "
-            "<bookmark mark='b'/> For the gamma and the beta, even the CDF itself has no formula. "
-            "<bookmark mark='c'/> So we need samplers that never invert anything. The next two chapters build them."
+            "<bookmark mark='b'/> Gamma and beta CDFs use special functions in general; their quantiles usually need numerical inversion. "
+            "<bookmark mark='c'/> Alternative samplers can avoid numerical inversion. The next two chapters build them."
         ) as vo:
             self.play(FadeIn(rows[0]))
             vo.wait_until("a")
@@ -213,7 +220,7 @@ class Inverse(VoiceoverScene):
             "Invert it. A uniform u lands on one step, and so picks one observation, each with chance one fifth. "
             "<bookmark mark='c'/> Five uniforms give five picks, with repeats: a sample drawn from the data with "
             "replacement. That's a resample, and simulating many of them is Bradley Efron's bootstrap of 1979, which "
-            "Part 16 builds into a way of computing standard errors for almost anything."
+            "Part 16 builds into a way of computing standard errors under appropriate regularity conditions."
         ) as vo:
             self.play(FadeIn(A), FadeIn(dots))
             vo.wait_until("a")

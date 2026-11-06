@@ -69,19 +69,23 @@ class VarRed(VoiceoverScene):
                   r"\rho = \operatorname{corr}(e^U, U) = 0.99", font_size=28),
         ]
         rows[2][2].set_color(S.ACCENT)
-        whys = [why(r"$U$ has known mean $\tfrac12$: \ subtract its error"), why(r"the regression slope (Part 5), \ estimated from the draws"),
+        whys = [why(r"$U$ has known mean $\tfrac12$: \ subtract its error"), why(r"fixed population slope here: $b^*=6(3-e)$"),
                 why(r"the variance that $U$ cannot explain (Part 5's $1 - \rho^2$)")]
+        intro = label('Cancel noise with a known expectation', font_size=36)
         with self.voiceover(
             "A second trick uses something you already know. <bookmark mark='a'/> The uniforms themselves have a known "
             "mean, a half. If the sample of U's happens to be high, e to the U is probably high too, so subtract a "
             "multiple of the U's error. <bookmark mark='b'/> The best multiple is the regression slope of e to the U on "
-            "U, estimated from the same draws: Part 5's slope. <bookmark mark='c'/> What remains is the variance that "
+            "U, here known analytically as six times three minus e. With an unknown slope, a separate pilot or cross-fitting can preserve unbiasedness; a same-sample fitted slope need not. <bookmark mark='c'/> What remains is the variance that "
             "U can't explain, one minus rho squared, and since e to the u is nearly a straight line on the unit "
             "interval, rho is point nine nine. Control variates are regression, used to cancel noise."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.6, buff=1.0, edge=6.9)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -147,7 +151,7 @@ class VarRed(VoiceoverScene):
         with self.voiceover(
             "The most powerful trick changes where you sample. <bookmark mark='a'/> Suppose we want the chance that a "
             "standard normal exceeds four: about three in a hundred thousand. With a hundred thousand plain draws, "
-            "you'd see about three exceedances, and in about one run in fifteen, none at all. The estimate is "
+            "you'd see about three exceedances, and in about one run in twenty-four, none at all. The estimate is "
             "mostly noise. <bookmark mark='b'/> Instead, draw from a normal centred at four, where half the draws "
             "exceed four, and reweight each by the ratio of the densities. <bookmark mark='c'/> The expectation is "
             "unchanged, by a one-line change of measure. <bookmark mark='d'/> But the variance falls by a factor of "
@@ -170,23 +174,27 @@ class VarRed(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"importance sampling can also fail, \ silently", font_size=30),
             MathTex(r"\mathrm{Var} = \int \frac{h(y)^2 \phi(y)^2}{g(y)}\,dy - I^2", font_size=32),
-            label(r"a proposal with lighter tails than the target: \ rare huge weights, \ possibly infinite variance", font_size=24,
+            label(r"require $g>0$ wherever $h\phi\ne0$; \ lighter tails can cause \ rare huge weights, \ possibly infinite variance", font_size=24,
                   color=BAD),
             label(r"the estimate looks stable for a long time, \ then jumps", font_size=24, color=BAD),
-            label(r"rule: \ proposals should have \emph{heavier} tails than the target; \ check the weights (Part 27's PSIS)",
+            label(r"check support and finite $\int h^2\phi^2/g$; \ heavier tails can help (Part 27: PSIS)",
                   font_size=24, color=S.ACCENT),
         ), 12.6, 0.35, [0, 0.2, 0])
+        intro = label('Check importance weights and their moments', font_size=36)
         with self.voiceover(
             "<bookmark mark='a'/> Importance sampling can also fail, and silently. <bookmark mark='b'/> Its variance "
             "involves the target density squared over the proposal. <bookmark mark='c'/> If the proposal has lighter "
             "tails than the target, then far out the ratio explodes: a rare draw gets an enormous weight, and the "
             "variance can be infinite, Part 6's heavy tails all over again. <bookmark mark='d'/> Worse, the estimate "
             "can look perfectly stable for a long time before one draw moves it. <bookmark mark='e'/> The rule: "
-            "choose proposals with heavier tails than the target, and always look at the weights. Part 27 turns that "
+            "cover the integrand's support, check the second moment of the weights, and inspect them. Heavier tails can help but are not a universal guarantee. Part 27 turns that "
             "advice into a diagnostic."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m in enumerate("abcde"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()
 

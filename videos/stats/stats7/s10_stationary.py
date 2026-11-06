@@ -27,7 +27,7 @@ class Stationary(VoiceoverScene):
         d = load("chain")
         st_ = np.asarray(d["stationary"])
         rows = [
-            cmath(r"\pi P", r"=", r"\pi", r",\qquad", r"\textstyle\sum_i \pi_i = 1", font_size=36),
+            cmath(r"\pi P", r"=", r"\pi", r",\qquad", r"\textstyle\sum_i \pi_i = 1,\quad \pi_i\ge0", font_size=36),
             cmath(r"\pi_1", r"=", r"0.7\pi_1 + 0.3\pi_2 + 0.2\pi_3", r",\ \dots", font_size=32),
             cmath(r"\pi", r"=", rf"({st_[0]:.4f},\ {st_[1]:.4f},\ {st_[2]:.4f})", r"=", r"\big(\tfrac{19}{41},\ \tfrac{13}{41},\ "
                   r"\tfrac{9}{41}\big)", font_size=32),
@@ -39,18 +39,22 @@ class Stationary(VoiceoverScene):
                            r"periodic has exactly one stationary $\pi$, \ and $\pi_0 P^t \to \pi$ from every start",
                            who=r"Perron (1907), \ Frobenius (1912); \ Markov (1906)", color=CHAIN, width=10.4,
                            font_size=22).to_edge(DOWN, buff=0.4)
+        intro = label('Solve for a stationary probability law', font_size=36)
         with self.voiceover(
             "The settled distribution is the one that doesn't change in a step. <bookmark mark='a'/> A row vector pi "
             "with pi times P equal to pi: a left eigenvector of the transition matrix, with eigenvalue one, scaled to "
-            "add up to one. <bookmark mark='b'/> Each equation says that the mass flowing into a state equals the mass "
+            "add up to one, with nonnegative entries. <bookmark mark='b'/> Each equation says that the mass flowing into a state equals the mass "
             "already there. <bookmark mark='c'/> For the weather chain, solving them gives nineteen forty-firsts "
             "sunny, thirteen forty-firsts cloudy, nine forty-firsts rainy. <bookmark mark='d'/> And a theorem of Oskar "
             "Perron and Georg Frobenius guarantees, for a finite chain that can get from anywhere to anywhere and "
             "doesn't cycle, that this distribution exists, is unique, and is reached from every start."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.8, buff=0.95, edge=6.9)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             vo.wait_until("d")
             self.play(FadeIn(thm, shift=UP * 0.2))
@@ -66,20 +70,23 @@ class Stationary(VoiceoverScene):
         rem = fit_rows(VGroup(
             label(r"stationary: \ the total flow into each state balances; \ detailed: \ each pair of states balances", font_size=24,
                   color=GREY_A),
-            label(r"a chain with detailed balance is \emph{reversible}: \ run backwards, it looks the same", font_size=24, color=CHAIN),
+            label(r"a chain with detailed balance is \emph{reversible}: \ started at stationarity, \ its time reversal has the same law", font_size=24, color=CHAIN),
             label(r"the easy way to build a chain with a chosen $\pi$: \ chapter 11", font_size=24, color=S.ACCENT),
         ), 12.6, 0.3, [0, -1.8, 0])
+        intro = label('Pairwise probability flows', font_size=36)
         with self.voiceover(
             "There's an easier condition to check. <bookmark mark='a'/> Detailed balance: for every pair of states, the "
             "flow of probability from i to j equals the flow back from j to i. <bookmark mark='b'/> Sum it over i, and "
             "the right side becomes pi j, since each row of P sums to one. So detailed balance implies stationarity. "
             "<bookmark mark='c'/> Stationarity balances the total flow into each state; detailed balance balances "
             "every pair. A chain that satisfies it is reversible: filmed and played backwards, it looks statistically "
-            "the same. And it's the easy way to design a chain with any stationary distribution we want, which is "
+            "the same when started at stationarity. And it's the easy way to design a chain with any stationary distribution we want, which is "
             "exactly what chapter eleven will do."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=2.4, x=-0.6, buff=1.1, edge=6.9)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1, transform=False)
@@ -92,7 +99,7 @@ class Stationary(VoiceoverScene):
         edges, deg, sq = d["edges"], np.asarray(d["deg"]), np.asarray(d["walk_stat"])
         pos = [np.array([x, y, 0]) for x, y in GRAPH_POS]
         lines = VGroup(*[Line(pos[a], pos[b], color=GREY_C, stroke_width=2.5) for a, b in edges])
-        nodes = VGroup(*[VGroup(Circle(radius=0.22 + 1.4 * sq[i], color=CHAIN, stroke_width=3, fill_color=CHAIN, fill_opacity=0.25),
+        nodes = VGroup(*[VGroup(Circle(radius=0.65 * np.sqrt(sq[i] / sq.max()), color=CHAIN, stroke_width=3, fill_color=CHAIN, fill_opacity=0.25),
                                 MathTex(str(int(deg[i])), font_size=24)).move_to(pos[i]) for i in range(6)])
         rows = fit_rows(VGroup(
             label(r"walk on a graph: \ step to a random neighbour", font_size=26),
@@ -107,7 +114,7 @@ class Stationary(VoiceoverScene):
             "it has. <bookmark mark='b'/> Guess that the stationary chance of a node is its degree, over twice the "
             "number of edges. <bookmark mark='c'/> Check detailed balance: pi i times one over degree i is one over "
             "twice the edges, the same in both directions. So the guess is right: a random walker spends time in "
-            "proportion to how connected a node is. The circles are drawn to that size."
+            "proportion to how connected a node is. Circle areas are proportional to stationary probability."
         ) as vo:
             self.play(Create(lines), FadeIn(nodes))
             vo.wait_until("a")
@@ -131,7 +138,7 @@ class Stationary(VoiceoverScene):
                 arrows.add(Arrow(pos[i] + u * 0.45, pos[j] - u * 0.45, buff=0, color=GREY_C, stroke_width=2,
                                  max_tip_length_to_length_ratio=0.1))
         nodes = VGroup(*[Circle(radius=0.35, color=S.EST, stroke_width=3, fill_color=S.EST, fill_opacity=0.2).move_to(p) for p in pos])
-        big = VGroup(*[Circle(radius=0.25 + 1.6 * pr[i], color=S.EST, stroke_width=3, fill_color=S.EST, fill_opacity=0.35).move_to(pos[i])
+        big = VGroup(*[Circle(radius=0.7 * np.sqrt(pr[i] / pr.max()), color=S.EST, stroke_width=3, fill_color=S.EST, fill_opacity=0.35).move_to(pos[i])
                        for i in range(7)])
         labs = VGroup(*[MathTex(f"{pr[i]:.2f}", font_size=22).move_to(pos[i]) for i in range(7)])
         grp = VGroup(arrows, nodes, big, labs).shift(LEFT * 1.6)
@@ -140,7 +147,7 @@ class Stationary(VoiceoverScene):
             label(r"or jump to any page (0.15)", font_size=24),
             MathTex(r"G = 0.85\, L + 0.15\, \tfrac{1}{n}\mathbf 1\mathbf 1^\top", font_size=28),
             MathTex(r"\text{PageRank} = \text{the stationary } \pi \text{ of } G", font_size=28, color=S.EST),
-            label(r"power iteration: \ $\pi \leftarrow \pi G$, \ 40 steps", font_size=22, color=GREY_A),
+            label(r"power iteration: \ $\pi \leftarrow \pi G$, \ 40 steps; \ node areas proportional to probability", font_size=22, color=GREY_A),
             label(r"the jump makes the chain irreducible and aperiodic: \ Perron--Frobenius applies", font_size=22, color=GREY_A),
         ), 4.8, 0.28, [4.4, 0.3, 0])
         hc = note(r"S. Brin \& L. Page, \ ``The anatomy of a large-scale hypertextual web search engine'' (1998)").to_edge(DOWN, buff=0.3)
@@ -177,15 +184,18 @@ class Stationary(VoiceoverScene):
                                label(r"periodic: \ returns only at even times", font_size=22, color=GREY_A),
                                label(r"the cure: \ a little laziness, \ $P' = \tfrac12(I + P)$", font_size=22, color=S.ACCENT)),
                         5.2, 0.25, [3.8, -0.6, 0])
+        intro = label('Stationary does not imply convergence from a point', font_size=36)
         with self.voiceover(
             "One condition in that theorem is easy to overlook. <bookmark mark='a'/> A chain on two states that always "
             "switches. Half and half is stationary. <bookmark mark='b'/> But start on the left, and the chance of "
             "being on the left goes one, zero, one, zero, for ever. It never converges, because the chain is "
             "periodic: it can only return at even times. <bookmark mark='c'/> The cure is a little laziness: stay put "
-            "with chance a half. Every chain used in practice is built to be aperiodic."
+            "with chance a half. Aperiodicity ensures convergence in distribution here; even this periodic chain has convergent time averages."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(mat), FadeIn(A))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(Create(half), FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(Create(ln), LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.1), FadeIn(rows[1:3]))

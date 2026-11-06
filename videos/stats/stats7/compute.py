@@ -52,6 +52,29 @@ def nest(obj):
     return obj
 
 
+def clipped_segments(xs, ys, rectangle):
+    """Clip line segments to a rectangle without flattening off-scale values."""
+    xmin, xmax, ymin, ymax = rectangle
+    points = np.column_stack((xs, ys))
+    result = []
+    for start, end in zip(points[:-1], points[1:]):
+        if not np.isfinite([start, end]).all():
+            continue
+        delta = end - start
+        lo, hi = 0.0, 1.0
+        for k, lower, upper in ((0, xmin, xmax), (1, ymin, ymax)):
+            if delta[k] == 0:
+                if not lower <= start[k] <= upper:
+                    hi = -1
+                    break
+            else:
+                a, b = sorted(((lower - start[k]) / delta[k], (upper - start[k]) / delta[k]))
+                lo, hi = max(lo, a), min(hi, b)
+        if lo <= hi:
+            result.append((start + lo * delta, start + hi * delta))
+    return result
+
+
 def compute_randu():
     r = randu(1, 3 * 3000 + 2) / M31
     trip = np.c_[r[:-2], r[1:-1], r[2:]][::3][:3000]
@@ -108,14 +131,19 @@ def compute_tests():
     return nest(out)
 
 
+def histogram_density(draws, edges):
+    """Keep omitted tail mass in the denominator of a displayed histogram."""
+    return np.histogram(draws, edges)[0] / (len(draws) * np.diff(edges))
+
+
 def compute_inverse():
     u = PCG32(11).random(4000)
-    x = -np.log(1 - u)
+    x = -np.log1p(-u)
     ed = np.linspace(0, 6, 31)
     pmf = np.array([0.1, 0.25, 0.3, 0.2, 0.15])
     cdf = np.cumsum(pmf)
     k = np.searchsorted(cdf, u[:2000], side="right")
-    return nest({"u": u[:60], "x": x[:60], "hist": np.histogram(x, ed, density=True)[0], "edges": ed, "pmf": pmf, "cdf": cdf,
+    return nest({"u": u[:60], "x": x[:60], "hist": histogram_density(x, ed), "edges": ed, "pmf": pmf, "cdf": cdf,
                  "freq": np.bincount(k, minlength=5) / 2000})
 
 
@@ -134,7 +162,7 @@ def compute_rejection():
 
 def compute_special():
     g = PCG32(21)
-    u1, u2 = g.random(1500), g.random(1500)
+    u1, u2 = 1 - g.random(1500), g.random(1500)  # U1 in (0, 1]: log is finite
     r = np.sqrt(-2 * np.log(u1))
     z1, z2 = r * np.cos(2 * np.pi * u2), r * np.sin(2 * np.pi * u2)
     gam, rate = marsaglia_tsang(2.5, 4000, np.random.Generator(np.random.PCG64(22)))
@@ -146,7 +174,7 @@ def compute_special():
     keep = gg.random(30000) < prob[col]
     draws = np.where(keep, col, alias[col])
     return nest({"u1": u1[:600], "u2": u2[:600], "z1": z1, "z2": z2, "gamma_rate": rate, "gamma_mean": float(gam.mean()),
-                 "gamma_hist": np.histogram(gam, np.linspace(0, 10, 41), density=True)[0], "p": p, "prob": prob, "alias": alias,
+                 "gamma_hist": histogram_density(gam, np.linspace(0, 10, 41)), "p": p, "prob": prob, "alias": alias,
                  "alias_freq": np.bincount(draws, minlength=6) / 30000})
 
 
@@ -155,20 +183,17 @@ def compute_montecarlo():
     x, y = g.random(4000), g.random(4000)
     inside = (x * x + y * y) <= 1
     est = 4 * np.cumsum(inside) / np.arange(1, 4001)
-    # d-ball volume: MC vs midpoint grid with the same budget of 10^6 points (cube [-1, 1]^d)
+    # d-ball: exact MC standard error and midpoint-grid error at the same actual budget m**d.
     from math import gamma, pi
 
-    rng = np.random.Generator(np.random.PCG64(32))
-    out = {"d": [], "true": [], "mc_err": [], "grid_err": []}
+    out = {"d": [], "true": [], "mc_err": [], "grid_err": [], "grid_n": []}
     N = 1_000_000
     for d in range(1, 11):
-        true = pi ** (d / 2) / gamma(d / 2 + 1)
-        errs = []
-        for _ in range(20):
-            p = rng.uniform(-1, 1, (N // 10, d))
-            errs.append(2 ** d * np.mean((p ** 2).sum(1) <= 1) - true)
-        mc = float(np.sqrt(np.mean(np.square(errs))) / np.sqrt(10))  # rescale to N points
+        true = 2.0 if d == 1 else pi ** (d / 2) / gamma(d / 2 + 1)
         m = int(round(N ** (1 / d)))
+        actual_n = m ** d
+        mc = np.sqrt(true * (2 ** d - true) / actual_n)
+        out["grid_n"].append(actual_n)
         t2 = (2 * np.arange(m) + 1 - m) ** 2  # lattice coordinate (2j + 1 - m)/m, squared and scaled by m^2
         dist = {0: 1}
         for _ in range(d):  # the distribution of sum of t^2 over the grid, by repeated convolution
@@ -194,7 +219,7 @@ def compute_montecarlo():
         ests.append(2 * l * 3408 / (t * hits) if hits else np.nan)
     ests = np.asarray(ests)
     p_lazz = float(np.mean(np.abs(ests - np.pi) <= abs(355 / 113 - np.pi)))
-    return nest({"x": x[:1500], "y": y[:1500], "inside": inside[:1500].astype(int), "est": est[::10], "est_n": np.arange(1, 4001)[::10],
+    return nest({"x": x[:1500], "y": y[:1500], "inside": inside[:1500].astype(int), "est": est[np.r_[np.arange(0, 4000, 10), 3999]], "est_n": np.r_[np.arange(1, 4001, 10), 4000],
                  "ball": out, "buffon_sd": float(np.nanstd(ests)), "buffon_p": p_lazz, "lazz": 355 / 113,
                  "lazz_err": float(abs(355 / 113 - np.pi)), "buffon_hits_lazz": 1808})
 
@@ -237,7 +262,7 @@ def compute_varred():
         h = rng.random(n // 2)
         anti.append(((np.exp(h) + np.exp(1 - h)) / 2).mean())
         f = np.exp(u)
-        b = np.cov(f, u)[0, 1] / u.var()
+        b = 6 * (3 - np.e)  # known population Cov(exp(U),U)/Var(U); fixed, unbiased control
         ctrl.append(f.mean() - b * (u.mean() - 0.5))
     truth = np.e - 1
     # importance sampling for P(Z > 4)
@@ -248,7 +273,7 @@ def compute_varred():
     ys = rng.standard_normal((200, N)) + 4
     w = np.exp(-4 * ys + 8)  # phi(y) / phi(y - 4)
     imp = ((ys > 4) * w).mean(1)
-    return nest({"truth": truth, "sd_plain": float(np.std(plain)), "sd_anti": float(np.std(anti)), "sd_ctrl": float(np.std(ctrl)),
+    return nest({"truth": truth, "control_b": 6 * (3 - np.e), "sd_plain": float(np.std(plain)), "sd_anti": float(np.std(anti)), "sd_ctrl": float(np.std(ctrl)),
                  "mean_plain": float(np.mean(plain)), "mean_anti": float(np.mean(anti)), "mean_ctrl": float(np.mean(ctrl)),
                  "p_true": p_true, "plain_is": plain_is[:60], "imp": imp[:60], "sd_plain_is": float(plain_is.std()),
                  "sd_imp": float(imp.std()), "zero_share": float(np.mean(plain_is == 0)), "N": N})
@@ -292,7 +317,11 @@ def compute_chain():
 
 
 def eulerian_row(n: int) -> list[int]:
-    """A(n, r) for r = 1..n: permutations of n with exactly r rising sequences (= r - 1 descents)."""
+    """Eulerian counts; inversion preserves the counts used in forward-riffle TV.
+
+    For a deck listed in its final order, forward-riffle rising sequences are
+    descents of its inverse permutation plus one, not descents of the deck.
+    """
     row = [1]
     for k in range(2, n + 1):
         new = [0] * k
@@ -359,7 +388,7 @@ def compute_metropolis():
                 x, acc = y, acc + 1
             xs.append(x)
         xs = np.asarray(xs)
-        out[str(sd)] = {"trace": xs[:600], "rate": acc / 6000, "hist": np.histogram(xs, np.linspace(-5, 6, 45), density=True)[0],
+        out[str(sd)] = {"trace": xs[:600], "rate": acc / 6000, "hist": histogram_density(xs, np.linspace(-5, 6, 45)),
                         "mean": float(xs.mean())}
     grid = np.linspace(-5, 6, 300)
     out["grid"] = grid

@@ -75,7 +75,7 @@ class Studies(VoiceoverScene):
             "<bookmark mark='b'/> For each p, four thousand simulated samples. Red: the coverage, with bars of two "
             "Monte Carlo standard errors. It's rarely ninety-five, it's ragged, and near zero and one it collapses "
             "below fifty percent. <bookmark mark='c'/> The gold line is the exact coverage, which for this simple "
-            "problem we can compute by summing the binomial: the simulation agrees, within its error bars. "
+            "problem we can compute by summing the binomial: the simulation is consistent with Monte Carlo noise. These are pointwise bars, not simultaneous guarantees over all forty-nine values. "
             "<bookmark mark='d'/> Edwin Wilson's interval from 1927, in green, does far better. Part 11 explains why."
         ) as vo:
             self.play(FadeIn(A), Create(nom))
@@ -98,21 +98,25 @@ class Studies(VoiceoverScene):
             cmath(r"\mathrm{MCSE}(\widehat{\text{bias}})", r"=", r"\frac{\widehat{\mathrm{SE}}_{\text{emp}}}{\sqrt R}", font_size=32),
         ]
         rows[1][2].set_color(S.ACCENT)
-        whys = [why(r"coverage is a proportion of $R$ replicates"), why(r"so a reported 94.8\% means $94.8 \pm 0.7$"),
+        whys = [why(r"coverage is a proportion of $R$ replicates"), why(r"approximate 95\% MC interval: $94.8 \pm 0.7$ percentage points"),
                 why(r"plan $R$ for the precision you need: \ to tell 94\% from 95\%"), why(r"a bias is a mean of $R$ errors")]
+        intro = label('Simulation results have sampling error', font_size=36)
         with self.voiceover(
             "Every number a simulation produces is an estimate, and needs an error bar. <bookmark mark='a'/> A "
             "coverage is a proportion of R replicates, so its Monte Carlo standard error is root c times one minus c "
             "over R. <bookmark mark='b'/> With four thousand replicates and coverage near ninety-five percent, "
             "that's about a third of a percentage point: a reported ninety-four point eight means ninety-four point "
-            "eight plus or minus point seven. <bookmark mark='c'/> Turn it around to plan the study: to resolve a "
+            "eight plus or minus point seven, as an approximate ninety-five-percent Monte Carlo interval. <bookmark mark='c'/> Turn it around to plan the study: to resolve a "
             "quarter of a point, you need about seventy-six hundred replicates. <bookmark mark='d'/> A bias is an "
             "average of R errors, so its standard error is the empirical standard error over root R. Report them; "
             "otherwise a difference between methods might be nothing but simulation noise."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.4, buff=0.65, edge=6.9)
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -127,17 +131,17 @@ class Studies(VoiceoverScene):
         ], font_size=22).move_to([0, 1.3, 0])
         rows = fit_rows(VGroup(
             label(r"one seed, \ written down: \ anyone can rerun the study exactly", font_size=26),
-            label(r"independent streams per scenario: \ changing one never changes another", font_size=26, color=GOOD),
-            label(r"the same data sets for every method: \ comparisons are paired, \ and far less noisy", font_size=26,
+            label(r"spawned streams per scenario: \ keep scenario-to-stream assignments stable", font_size=26, color=GOOD),
+            label(r"the same data sets for every method: \ comparisons are paired; \ positive covariance reduces difference variance", font_size=26,
                   color=GOOD),
             label(r"never reseed in a loop, \ never pick the seed that gives the nicest answer", font_size=26, color=BAD),
         ), 12.6, 0.3, [0, -1.6, 0])
         with self.voiceover(
             "Randomness in a study must be controlled. <bookmark mark='a'/> Use one seed, and write it down: anyone "
             "can then rerun the study and get the same numbers. <bookmark mark='b'/> Give each scenario its own "
-            "independent stream, spawned from that seed, so that adding or changing a scenario never changes the "
+            "independent stream, spawned from that seed, keeping assignments stable; appending scenarios preserves existing streams, while reordering can change the "
             "others. <bookmark mark='c'/> Apply every method to the same simulated data sets. The comparison is then "
-            "paired, like a crossover trial, and the noise in the difference between methods is much smaller than "
+            "paired, like a crossover trial, and positive covariance can make the noise in the difference smaller than "
             "the noise in each. <bookmark mark='d'/> And never pick the seed that gives the nicest answer: that's "
             "Lazzarini's needle again."
         ) as vo:
@@ -162,7 +166,7 @@ class Studies(VoiceoverScene):
                     font_size=30, color=BAD),
             MathTex(rf"\text{{bias}} = {out['bias']:+.4f} \pm {out['bias_mcse']:.4f},\ \ \text{{SE}}_{{\text{{emp}}}} = {out['emp_se']:.4f}",
                     font_size=28),
-            label(r"the Coverage Board: \ every interval in this series, \ run through this harness", font_size=24, color=GREY_A),
+            label(r"Coverage Board framework: \ bias / coverage MCSE; empirical-SE MCSE uses a normal approximation", font_size=24, color=GREY_A),
         ), 12.6, 0.4, [0, 0.4, 0])
         built = label(r"Built: \ \texttt{statkit.random.simulate}", font_size=24, color=S.ACCENT).to_corner(UR, buff=0.4)
         with self.voiceover(
@@ -171,7 +175,7 @@ class Studies(VoiceoverScene):
             "Wald interval at p equal to point one with thirty trials, its coverage is about eighty-one percent, "
             "plus or minus about point six. <bookmark mark='c'/> It reports bias and empirical standard error, each "
             "with its Monte Carlo error. <bookmark mark='d'/> The Coverage Board that appears throughout this series "
-            "is this harness, run on every interval we build."
+            "uses this framework; the empirical-standard-error MCSE uses a normal approximation across replicates."
         ) as vo:
             self.play(FadeIn(built))
             for k, m in enumerate("abcd"):

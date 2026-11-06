@@ -32,6 +32,7 @@ class Generators(VoiceoverScene):
         facts = VGroup(label(r"fast, \ tiny, \ reproducible: \ the same seed gives the same sequence", font_size=24, color=GREY_A),
                        label(r"but its period is at most $m$, \ and its structure is linear", font_size=24, color=BAD))
         facts.arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(DOWN, buff=0.8)
+        intro = label('A reproducible recurrence', font_size=36)
         with self.voiceover(
             "In 1949 Derrick Lehmer proposed the scheme that dominated for fifty years. <bookmark mark='a'/> Keep "
             "one integer. To get the next, multiply by a constant a, add c, and take the remainder after dividing "
@@ -41,8 +42,10 @@ class Generators(VoiceoverScene):
             "<bookmark mark='d'/> But it can never produce more than m different numbers before repeating, and its "
             "structure is linear, which is what doomed RANDU."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=2.4, x=-0.8, buff=1.0, edge=6.9)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1, transform=False)
@@ -128,16 +131,18 @@ class Generators(VoiceoverScene):
 
     def pcg(self):
         code = code_block([
-            "state = state * 6364136223846793005 + inc   # a 64-bit LCG",
-            "x = ((old >> 18) ^ old) >> 27              # xorshift: mix high bits down",
-            "rot = old >> 59                            # top 5 bits choose a rotation",
-            "out = rotate_right(x, rot)                 # 32 output bits",
+            "old = state;  state = (old * 6364136223846793005 + inc) & (2**64-1)",
+            "x = (((old >> 18) ^ old) >> 27) & (2**32-1)",
+            "rot = old >> 59                            # odd increment; rotate 32 bits",
+            "out = ((x >> rot) | (x << ((-rot) & 31))) & (2**32-1)",
         ], font_size=22).move_to([0, 1.2, 0])
+        if code.width > 12.6:
+            code.width = 12.6
         rows = fit_rows(VGroup(
             label(r"the state is a plain LCG, \ with period $2^{64}$", font_size=26),
-            label(r"the output \emph{permutes} it: \ the rotation depends on the state, \ so no lattice survives", font_size=26,
+            label(r"the 32-bit output mixes and rotates bits of the 64-bit state", font_size=26,
                   color=GOOD),
-            label(r"$2^{63}$ streams: \ different increments, \ independent sequences for parallel simulations", font_size=26,
+            label(r"$2^{63}$ odd increments: \ distinct stream parameters, \ not proof of independence", font_size=26,
                   color=GREY_A),
         ), 12.6, 0.3, [0, -1.6, 0])
         hc = note(r"M. E. O'Neill, \ ``PCG: a family of simple fast space-efficient statistically good algorithms'' (2014)")
@@ -148,9 +153,9 @@ class Generators(VoiceoverScene):
             "by Melissa O'Neill in 2014, in four lines. Its state is a sixty-four-bit linear congruential generator, "
             "with a period of two to the sixty-four. <bookmark mark='b'/> But it never outputs the state directly. "
             "It mixes the high bits down with a shift and an exclusive or, then rotates the result by an amount "
-            "chosen by the state's own top five bits. That data-dependent rotation destroys the lattice. "
+            "chosen by the state's own top five bits. That data-dependent rotation conceals the simple state lattice in the output. "
             "<bookmark mark='c'/> And by changing the increment you get two to the sixty-three separate streams, "
-            "so parallel simulations never overlap. It's what we've built into statkit, and NumPy's default "
+            "but this does not guarantee independent or nonoverlapping output sequences. It's what we've built into statkit, and NumPy's default "
             "generator is its sixty-four-bit sibling."
         ) as vo:
             self.play(FadeIn(built), FadeIn(hc))
@@ -165,10 +170,11 @@ class Generators(VoiceoverScene):
     def tests(self):
         d = load("tests")
         r, p = d["randu"], d["pcg"]
+        mantissa, exponent = f"{r['p3']:.1e}".split("e")
         hdr = VGroup(*[label(t, font_size=26, color=GREY_A) for t in (r"test", r"RANDU", r"PCG32")])
         rows_ = [(r"$\chi^2$, \ 10 bins (1-D)", rf"$p = {r['p1']:.2f}$", rf"$p = {p['p1']:.2f}$", GOOD, GOOD),
                  (r"runs above / below the median", rf"$z = {r['runs_z']:+.2f}$", rf"$z = {p['runs_z']:+.2f}$", GOOD, GOOD),
-                 (r"$\chi^2$, \ 1,000 cells (3-D)", r"$p = 5 \times 10^{-30}$", rf"$p = {p['p3']:.2f}$", BAD, GOOD)]
+                 (r"$\chi^2$, \ 1,000 cells (3-D)", rf"$p = {mantissa} \times 10^{{{int(exponent)}}}$", rf"$p = {p['p3']:.2f}$", BAD, GOOD)]
         tab = VGroup()
         xs = [-3.6, 1.4, 4.4]
         for j, h in enumerate(hdr):
@@ -189,7 +195,7 @@ class Generators(VoiceoverScene):
             "into ten bins and compare the counts with a chi-squared test: both generators pass, with large p-values. "
             "<bookmark mark='b'/> Count runs above and below the median: both look like independent draws. "
             "<bookmark mark='c'/> Now group the numbers into triples and count them in a thousand little cubes. "
-            "PCG passes. RANDU fails with a p-value of five times ten to the minus thirty: its triples avoid most of "
+            "PCG passes. RANDU fails with the tiny p-value shown: its triples occupy the cubes very unevenly, "
             "the cubes, because they live on fifteen planes. <bookmark mark='d'/> A test can only reject. Passing "
             "is evidence, never proof, so modern generators face batteries of over a hundred tests, like the "
             "BigCrush suite of Pierre L'Ecuyer and Richard Simard."
@@ -205,24 +211,28 @@ class Generators(VoiceoverScene):
     def twister(self):
         rows = fit_rows(VGroup(
             label(r"the Mersenne Twister \ (Matsumoto \& Nishimura, 1998)", font_size=28, color=S.MUSEUM),
-            MathTex(r"\text{period } 2^{19937} - 1, \ \ 623\text{-dimensionally equidistributed}", font_size=30),
+            MathTex(r"\text{period } 2^{19937} - 1, \ \ 623\text{-dimensionally equidistributed at 32-bit accuracy}", font_size=30),
             label(r"the default in Python's \texttt{random}, \ in R, \ in MATLAB, \ for a quarter of a century", font_size=24,
                   color=GREY_A),
             label(r"but it is linear over the bits: \ it fails two of BigCrush's linear-complexity tests", font_size=24, color=BAD),
             label(r"and its 2.5 KB state recovers from a bad seed slowly", font_size=24, color=BAD),
             label(r"a long period is necessary, \ never sufficient", font_size=28, color=S.ACCENT),
         ), 12.6, 0.32, [0, 0.2, 0])
+        intro = label('Period and equidistribution are different checks', font_size=36)
         with self.voiceover(
             "You've almost certainly used another generator. <bookmark mark='a'/> In 1998 Makoto Matsumoto and Takuji "
             "Nishimura published the Mersenne Twister. <bookmark mark='b'/> Its period is two to the nineteen thousand "
             "nine hundred and thirty-seven, minus one, a number with six thousand digits, and its output is evenly "
-            "spread in up to six hundred and twenty-three dimensions. <bookmark mark='c'/> It became the default in "
+            "spread in up to six hundred and twenty-three dimensions at thirty-two-bit accuracy. <bookmark mark='c'/> It became the default in "
             "Python, R and MATLAB. <bookmark mark='d'/> But it is linear in its bits, so it fails the tests in BigCrush "
             "that look for exactly that, <bookmark mark='e'/> and its large state recovers slowly from a seed with too "
             "many zeros. <bookmark mark='f'/> The lesson: an astronomically long period is necessary, but it is never "
             "enough."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m in enumerate("abcdef"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()

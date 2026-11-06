@@ -56,7 +56,7 @@ class Outro(VoiceoverScene):
             "a protocol, Monte Carlo standard errors and controlled seeds. Antithetic pairs, control variates and "
             "importance sampling make each draw count for more. A Markov chain moves probability like a fluid "
             "toward its stationary law; detailed balance builds chains, random walks favour hubs, and PageRank "
-            "ranks the web. Seven riffle shuffles mix a deck, with a cutoff. And Metropolis builds a chain with any "
+            "ranks the web. Seven riffle shuffles leave about a third in total variation; the mixing threshold depends on tolerance, with an asymptotic cutoff. And Metropolis builds a chain with any "
             "stationary law we like."
         ) as vo:
             self.play(FadeIn(head))
@@ -74,14 +74,17 @@ class Outro(VoiceoverScene):
             (r"Metropolis, MCMC", [15, 26, 27]),
             (r"random walks on graphs", [39, 44]),
         ], font_size=22)
+        intro = label('Where sampling and simulation return', font_size=36)
         with self.voiceover(
-            "Where it comes back. <bookmark mark='a'/> statkit's generator and harness run every simulation from here "
+            "Where it comes back. <bookmark mark='a'/> statkit's generator and harness support simulation work from here "
             "on: sampling distributions in Part 8, coverage in Part 11, the bootstrap in Part 16, thousands of tests "
             "in Part 33. Importance sampling returns in Bayesian computation and model comparison. Markov chains "
             "return in time series and, with full rigour, in Part 44. And Metropolis grows into the whole of "
             "Bayesian computation in Part 27."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3),
                       run_time=6.0)
         self.clear_scene()

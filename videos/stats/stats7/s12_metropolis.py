@@ -34,6 +34,7 @@ class Metropolis(VoiceoverScene):
             label(r"the problem it solves: \ sample from $f \propto e^{-\text{energy}}$ \ without knowing the normalizing constant",
                   font_size=24, color=S.ACCENT),
         ), 12.6, 0.28, [0, -1.4, 0])
+        intro = label('Sampling without a normalizing constant', font_size=36)
         with self.voiceover(
             "Chapter three ended with a problem: in high dimensions, independent darts almost all miss. The fix was "
             "found at Los Alamos. <bookmark mark='a'/> In 1953 Nicholas Metropolis, Arianna and Marshall Rosenbluth, "
@@ -41,9 +42,11 @@ class Metropolis(VoiceoverScene):
             "computer. Arianna Rosenbluth wrote the program. <bookmark mark='b'/> Seventeen years later Keith "
             "Hastings generalized it. <bookmark mark='c'/> It samples from a density known only up to a constant, "
             "which is exactly the situation of Bayesian statistics, where the posterior's normalizing constant is an "
-            "integral nobody can compute."
+            "an integral that may be difficult to compute."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(hc, shift=UP * 0.2), FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(FadeIn(rows[1]))
@@ -53,10 +56,10 @@ class Metropolis(VoiceoverScene):
 
     def algorithm(self):
         code = code_block([
-            "x = start",
+            "x = start                         # f(start) > 0; 0 < integral f < infinity",
             "repeat:",
             "    y = x + s * normal()            # propose a step",
-            "    if uniform() < f(y) / f(x):     # better: always; worse: sometimes",
+            "    if log(uniform()) < logf(y) - logf(x):",
             "        x = y                        # accept",
             "    record x                         # (a rejected step repeats x)",
         ], font_size=24)
@@ -65,8 +68,9 @@ class Metropolis(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"only the \emph{ratio} $f(y)/f(x)$: \ the unknown constant cancels", font_size=26, color=S.ACCENT),
             label(r"uphill moves are always taken; \ downhill ones with chance $f(y)/f(x)$", font_size=26),
-            label(r"the walk spends time in each region in proportion to its probability", font_size=26, color=CHAIN),
+            label(r"with ergodicity, time averages converge to target expectations", font_size=26, color=CHAIN),
         ), 12.6, 0.3, [0, -1.9, 0])
+        intro = label('A symmetric proposal and an acceptance ratio', font_size=36)
         with self.voiceover(
             "The algorithm fits in six lines. <bookmark mark='a'/> From the current point x, propose a random step to "
             "y. If y has higher density, move there. If lower, move there anyway with chance equal to the ratio of "
@@ -75,7 +79,9 @@ class Metropolis(VoiceoverScene):
             "taken; downhill moves sometimes; and the result is a walk that spends time in each region in proportion "
             "to its probability."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(code, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(rows[0], shift=RIGHT * 0.2))
@@ -92,17 +98,21 @@ class Metropolis(VoiceoverScene):
         rows[2][2].set_color(EXACT)
         whys = [why(r"propose with $q$, \ symmetric: \ $q(y \mid x) = q(x \mid y)$"), why(r"symmetric in $x$ and $y$"),
                 why(r"detailed balance (chapter 9): \ $f$ is stationary")]
+        intro = label('Detailed balance establishes stationarity', font_size=36)
         with self.voiceover(
-            "Why does it work? Chapter nine's detailed balance. <bookmark mark='a'/> The chance of moving from x to y "
-            "is the chance of proposing y, times the acceptance probability. <bookmark mark='b'/> Multiply by f of x: "
+            "Why does it work? Chapter nine's detailed balance. <bookmark mark='a'/> The off-diagonal transition density from x to y "
+            "is the proposal density at y, times the acceptance probability. <bookmark mark='b'/> Multiply by f of x: "
             "you get the proposal density times the smaller of f of x and f of y, which is symmetric in x and y, "
             "because the proposal is. <bookmark mark='c'/> So the flow from x to y equals the flow from y to x: "
             "detailed balance, and f is the chain's stationary distribution. Run it long enough and its states are "
-            "draws from f."
+            "dependent draws with a distribution approaching normalized f, under irreducibility and appropriate recurrence and aperiodicity conditions. Detailed balance alone establishes stationarity."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.4, x=-1.0, buff=1.0, edge=6.9)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -113,18 +123,18 @@ class Metropolis(VoiceoverScene):
             tr = np.asarray(d[sd]["trace"])
             A = axes([0, 600], [-5, 5.5], x_length=9.4, y_length=1.6, yticks=[-2, 2], center=[1.6, 2.0 - 2.15 * k, 0], font_size=16)
             A.ax.x_axis.set_opacity(0.3)
-            ln = polyline(A.ax, np.arange(len(tr)), np.clip(tr, -5, 5.5), c, 1.6)
+            ln = polyline(A.ax, np.arange(len(tr)), tr, c, 1.6)
             t = label(rf"step $s = {float(sd):g}$: \ accepts {100 * d[sd]['rate']:.0f}\%", font_size=22, color=c)
             t.next_to(A, LEFT, buff=0.2).shift(UP * 0.4)
             if t.width > 2.4:
                 t.width = 2.4
             t.to_edge(LEFT, buff=0.2)
             panels.add(VGroup(A, ln, t))
-        cap = label(r"target: \ a two-humped density, \ modes at $-2$ and $+2$; \ 600 steps of each chain", font_size=22,
+        cap = label(r"target: \ a two-humped density, \ modes at $-2$ and $+2$; \ first 600 steps shown; acceptance from all 6,000", font_size=22,
                     color=GREY_A).to_edge(DOWN, buff=0.25)
         with self.voiceover(
             "The one thing you must choose is the step size. Here's a target with two humps, at minus two and plus "
-            "two, and three chains of six hundred steps each. <bookmark mark='a'/> With tiny steps, nearly every "
+            "two, and the first six hundred steps of three longer chains; acceptance rates use all six thousand steps. <bookmark mark='a'/> With tiny steps, nearly every "
             "proposal is accepted, but the chain crawls, and it never leaves the hump where it started. "
             "<bookmark mark='b'/> With steps of one and a half, about half the proposals are accepted and the chain "
             "moves freely between the humps. <bookmark mark='c'/> With huge steps, most proposals land in empty "
@@ -152,13 +162,13 @@ class Metropolis(VoiceoverScene):
             MathTex(r"\text{means: } " + rf"s = 0.1:\ {d['0.1']['mean']:.2f},\ \ s = 1.5:\ {d['1.5']['mean']:.2f},\ \ s = 20:\ {d['20.0']['mean']:.2f}",
                     font_size=24),
             MathTex(rf"\text{{truth: }} {d['true_mean']:.2f}", font_size=24, color=EXACT),
-            label(r"the tiny-step chain is confidently wrong: \ it never found the other hump", font_size=22, color=BAD),
+            label(r"the tiny-step chain gives a misleading mean: \ it never found the other hump", font_size=22, color=BAD),
         ), 5.2, 0.28, [4.2, 0.4, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Six thousand steps of the well-tuned chain: the histogram of its states matches the "
             "target, both humps in the right proportions. <bookmark mark='b'/> Compare the three chains' estimates of "
             "the mean. The truth is point eight. The well-tuned chain and the big-step chain get close. The tiny-step "
-            "chain reports two point oh five, and nothing in its own output warns you: it simply never found the "
+            "chain reports two point oh five, and its histogram and acceptance rate alone can mislead: it simply never found the "
             "other hump. That's the danger of Markov chain Monte Carlo, and Part 27 builds the diagnostics against it."
         ) as vo:
             self.play(FadeIn(A), Create(cv), FadeIn(rows[0]))
@@ -170,18 +180,18 @@ class Metropolis(VoiceoverScene):
 
     def lessons(self):
         rows = fit_rows(VGroup(
-            label(r"draws are dependent: \ the effective sample size is smaller than the number of steps", font_size=26),
-            label(r"the start matters until the chain has mixed: \ discard a burn-in", font_size=26),
+            label(r"draws are dependent: \ effective sample size is often smaller; \ negative autocorrelation can reverse this", font_size=26),
+            label(r"the start matters until the chain has mixed: \ discarding early steps cannot repair missing modes", font_size=26),
             label(r"several chains from scattered starts: \ do they agree? \ (Gelman \& Rubin's $\hat R$, Part 27)", font_size=26),
-            label(r"in high dimensions, \ random-walk steps must shrink: \ Hamiltonian Monte Carlo (Part 27)", font_size=26),
+            label(r"in high dimensions, \ random-walk steps often shrink in common high-dimensional models: \ Hamiltonian Monte Carlo (Part 27)", font_size=26),
             label(r"the same machine samples Part 15's posteriors, \ when conjugacy runs out", font_size=26, color=S.ACCENT),
         ), 12.6, 0.38, [0, 0.2, 0])
         with self.voiceover(
             "This was a first look; Part 27 does it in full. <bookmark mark='a'/> The draws are dependent, so a chain "
-            "of six thousand steps carries less information than six thousand independent draws. <bookmark mark='b'/> "
-            "The start matters until the chain has mixed, so the early steps are discarded. <bookmark mark='c'/> "
-            "Running several chains from scattered starts, and checking that they agree, catches the tiny-step "
-            "failure we just saw. <bookmark mark='d'/> In high dimensions, random-walk proposals must become tiny, and "
+            "of six thousand steps usually carries less information for a given estimand than six thousand independent draws; negative autocorrelation can improve efficiency. <bookmark mark='b'/> "
+            "The start matters until the chain has mixed, so early steps are often discarded, but burn-in cannot fix a chain that never explores missing modes. <bookmark mark='c'/> "
+            "Running several chains from scattered starts, and checking that they agree, can reveal the tiny-step "
+            "failure we just saw. <bookmark mark='d'/> In high dimensions, random-walk proposals often need to shrink in common models, and "
             "better proposals use the gradient of the density: Hamiltonian Monte Carlo. <bookmark mark='e'/> And this "
             "is the machine that samples posterior distributions in Bayesian statistics, once the conjugate formulas "
             "of Part 15 run out."

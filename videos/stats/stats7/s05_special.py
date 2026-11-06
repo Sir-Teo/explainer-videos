@@ -29,7 +29,7 @@ class Special(VoiceoverScene):
         z1, z2 = np.asarray(d["z1"])[:600], np.asarray(d["z2"])[:600]
         A = axes([0, 1], [0, 1], x_length=4.0, y_length=4.0, xlabel=r"$U_1$", ylabel=r"$U_2$", xticks=[0, 1], yticks=[0, 1],
                  center=[-4.2, -0.6, 0])
-        B = axes([-3.5, 3.5], [-3.5, 3.5], x_length=4.4, y_length=4.4, xlabel=r"$Z_1$", ylabel=r"$Z_2$", xticks=[-2, 0, 2],
+        B = axes([-4.5, 4.5], [-4.5, 4.5], x_length=4.4, y_length=4.4, xlabel=r"$Z_1$", ylabel=r"$Z_2$", xticks=[-2, 0, 2],
                  yticks=[-2, 0, 2], center=[1.0, -0.6, 0])
         dots = VGroup(*[Dot(A.ax.c2p(a, b), radius=0.025, color=GOOD, fill_opacity=0.8) for a, b in zip(u1, u2)])
         f = VGroup(MathTex(r"R = \sqrt{-2\log U_1}", font_size=28), MathTex(r"\Theta = 2\pi U_2", font_size=28),
@@ -42,7 +42,7 @@ class Special(VoiceoverScene):
         if res.width > 3.8:
             res.width = 3.8
         with self.voiceover(
-            "The normal has no usable inverse CDF, but it has something better: rotational symmetry. "
+            "The normal quantile is computable, but rotational symmetry gives another efficient sampler. "
             "<bookmark mark='a'/> Take two independent uniforms, a point in the unit square. <bookmark mark='b'/> "
             "Turn the first into a radius, root minus two log U one, and the second into an angle, two pi U two. "
             "<bookmark mark='c'/> The point with that radius and angle has two coordinates that are independent "
@@ -56,7 +56,7 @@ class Special(VoiceoverScene):
             self.play(FadeIn(f[:2]))
             vo.wait_until("c")
             self.play(FadeIn(B), GrowArrow(arrow), FadeIn(f[2]))
-            self.play(*[dt.animate.move_to(B.ax.c2p(np.clip(a, -3.5, 3.5), np.clip(b, -3.5, 3.5))) for dt, a, b in zip(dots, z1, z2)],
+            self.play(*[dt.animate.move_to(B.ax.c2p(a, b)) for dt, a, b in zip(dots, z1, z2)],
                       run_time=3.5)
             self.play(FadeIn(res))
         self.clear_scene()
@@ -73,6 +73,7 @@ class Special(VoiceoverScene):
                 why(r"angle uniform, \ radius Rayleigh (Part 5), \ independent"), why(r"and the Rayleigh is sampled by inversion")]
         note_ = label(r"Marsaglia's polar method (1964) avoids the sine and cosine \ by rejection from the disc", font_size=22,
                       color=GREY_B).to_edge(DOWN, buff=0.6)
+        intro = label('The normal pair in polar coordinates', font_size=36)
         with self.voiceover(
             "Why does it work? Part 5 did the hard part. <bookmark mark='a'/> Two independent standard normals have a "
             "joint density that depends only on the distance from the centre; in polar coordinates, with the "
@@ -82,9 +83,12 @@ class Special(VoiceoverScene):
             "Two inversions and a change of coordinates make two normals. A variant by Marsaglia avoids computing "
             "sines and cosines, by rejection from a disc."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.6, x=-1.2, buff=0.95, edge=6.9)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             self.play(FadeIn(note_))
         self.clear_scene()
@@ -110,20 +114,23 @@ class Special(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(rf"$\alpha = 2.5$: \ acceptance {100 * d['gamma_rate']:.1f}\%", font_size=24, color=ACC),
             label(rf"4,000 draws, \ mean {d['gamma_mean']:.2f} \ (truth 2.5)", font_size=24),
-            label(r"Marsaglia \& Tsang (2000): \ a squeezed rejection sampler, \ nearly always accepting", font_size=22,
+            label(r"Marsaglia \& Tsang (2000): \ shape $\alpha\ge1$, scale 1; \ optional quick squeeze omitted here", font_size=22,
                   color=GREY_A),
-            label(r"betas from gammas: \ $G_1 / (G_1 + G_2)$ \ (Part 5's Dirichlet)", font_size=22, color=GREY_A),
+            label(r"independent, same-scale gammas: \ $G_1 / (G_1 + G_2)$ is beta \ (Part 5's Dirichlet)", font_size=22, color=GREY_A),
         ), 12.6, 0.25, [0, -2.5, 0])
+        intro = label('A rejection sampler for gamma draws', font_size=36)
         with self.voiceover(
             "For the gamma, there's a rejection sampler so good it almost never rejects. <bookmark mark='a'/> George "
             "Marsaglia and Wai Wan Tsang published it in 2000: transform a normal draw by a cubic, then accept or "
             "reject with one logarithmic test. Six lines. <bookmark mark='b'/> With shape two and a half, it kept "
             "ninety-nine draws in a hundred, and the four thousand draws follow the gamma density. "
-            "<bookmark mark='c'/> From gammas come betas, as a ratio, and Dirichlets, exactly as Part 5 showed. "
+            "<bookmark mark='c'/> From independent gammas with the same scale come betas, as a ratio, and Dirichlets, exactly as Part 5 showed. "
             "Most of the samplers inside NumPy and R are designs like these: one clever transformation per "
             "family."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(code, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(A), FadeIn(h), Create(cv), FadeIn(rows[:2]))
@@ -158,6 +165,7 @@ class Special(VoiceoverScene):
             label(r"$O(1)$ per draw, \ whatever the number of outcomes: \ Walker (1974); \ Vose (1991)", font_size=22,
                   color=GREY_A),
         ), 6.0, 0.3, [3.7, 0.2, 0])
+        intro = label('Constant-time discrete sampling', font_size=36)
         with self.voiceover(
             "For discrete laws, inversion needs a search; the alias method needs none. <bookmark mark='a'/> Take six "
             "outcomes with these probabilities. Multiply each by six, so the average is one. "
@@ -168,7 +176,9 @@ class Special(VoiceoverScene):
             "Two uniforms, no search, for any number of outcomes. Alastair Walker invented it in 1974, and Michael "
             "Vose made the table-building fast in 1991. Thirty thousand draws reproduce the probabilities."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(pl))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(c) for c in cols_], lag_ratio=0.2), Create(top), FadeIn(rows[0]))
@@ -183,12 +193,13 @@ class Special(VoiceoverScene):
         ]
         rows[0][2].set_color(GOOD)
         rows[1][4].set_color(EXACT)
-        whys = [why(r"Part 4's Cholesky factor; \ $\mathbf Z$ from Box--Muller"), why(r"Part 5's affine rule")]
+        whys = [why(r"positive-definite $\Sigma$: Cholesky; \ PSD also permits an eigenfactor"), why(r"Part 5's affine rule")]
         recipe = fit_rows(VGroup(
             label(r"uniforms $\to$ normals $\to$ correlated normals $\to$ \ (Part 5's copulas) \ any margins", font_size=26,
                   color=S.ACCENT),
-            label(r"every random variable in this series is a function of PCG's uniforms", font_size=24, color=GREY_A),
+            label(r"these samplers transform streams of pseudo-random uniforms", font_size=24, color=GREY_A),
         ), 12.6, 0.3, [0, -1.6, 0])
+        intro = label('From independent to correlated normals', font_size=36)
         with self.voiceover(
             "And for many variables at once, Part 4 and Part 5 already did the work. <bookmark mark='a'/> Draw a "
             "vector of independent normals with Box and Muller, and multiply by the Cholesky factor of the "
@@ -197,8 +208,10 @@ class Special(VoiceoverScene):
             "Part 5's copulas turn those into any margins we like. Every random quantity in this series, every "
             "World, every simulated study, is a function of a stream of uniforms."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=2.4, x=-0.6, buff=1.0, edge=6.9)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1, transform=False)

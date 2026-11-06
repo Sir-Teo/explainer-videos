@@ -37,8 +37,8 @@ class Hook(VoiceoverScene):
             "1951 John von Neumann, who needed random numbers by the million to simulate neutrons for the "
             "hydrogen bomb, gave the answer that every generator since has had to live with. <bookmark mark='b'/> "
             "Anyone who considers arithmetical methods of producing random digits, he wrote, is, of course, in a "
-            "state of sin. A program's output is determined by its input; it cannot be random. The best we can do "
-            "is a sequence that behaves as if it were, and knowing exactly how it might fail."
+            "state of sin. A deterministic generator with a fixed seed has a determined output. We use "
+            "a sequence that behaves like random draws, while checking how it might fail."
         ) as vo:
             self.play(FadeIn(tl))
             vo.wait_until("a")
@@ -62,6 +62,7 @@ class Hook(VoiceoverScene):
         trap.arrange(RIGHT, buff=0.15)
         lab2 = label(r"but some seeds fall into short cycles, \ and others decay to zero", font_size=24, color=BAD)
         grp = VGroup(rows, sq, chain, lab2, trap).arrange(DOWN, buff=0.45).move_to([0, 0.2, 0])
+        intro = label('Arithmetic randomness and short cycles', font_size=36)
         with self.voiceover(
             "Von Neumann's own method shows the danger. <bookmark mark='a'/> Take a four-digit number, square it, "
             "and keep the middle four digits of the eight-digit result: that's the next number. "
@@ -71,7 +72,9 @@ class Hook(VoiceoverScene):
             "seeds decay to zero and stay there. Von Neumann knew this; he reportedly liked the method because it was "
             "fast, and because when it failed, it failed obviously. The dangerous failures are the ones you can't see."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(rows), FadeIn(sq))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(c) for c in chain], lag_ratio=0.2))
@@ -81,8 +84,8 @@ class Hook(VoiceoverScene):
 
     def randu(self):
         d = load("randu")
-        P = np.asarray(d["randu"])[:2400] - 0.5
-        Q = np.asarray(d["pcg"])[:2400] - 0.5
+        P = np.asarray(d["randu"])[:3000] - 0.5
+        Q = np.asarray(d["pcg"])[:3000] - 0.5
         ns = NSpace(scale=4.2, center=[-0.6, -0.3, 0], angle=0.9, tilt=0.35, axis_len=0.6,
                     axis_labels=[r"$u_k$", r"$u_{k+1}$", r"$u_{k+2}$"])
         cl = ns.cloud(P, color=BAD, radius=0.016, opacity=0.8)
@@ -92,8 +95,8 @@ class Hook(VoiceoverScene):
         f = MathTex(r"x_{k+1} = 65539\, x_k \bmod 2^{31}", font_size=30, color=BAD).to_corner(UL, buff=0.4)
         why_ = MathTex(r"65539 = 2^{16} + 3:\ \ x_{k+2} = 6x_{k+1} - 9x_k \pmod{2^{31}}", font_size=26, color=GREY_A)
         why_.next_to(f, DOWN, buff=0.2).align_to(f, LEFT)
-        tag = note(r"3,000 consecutive triples, \ shown in the unit cube").to_corner(DL, buff=0.3)
-        good = label(r"PCG32 (2014): \ no planes to find", font_size=26, color=GOOD).to_corner(DR, buff=0.4)
+        tag = note(r"3,000 consecutive triples, \ cube centered by subtracting $1/2$").to_corner(DL, buff=0.3)
+        good = label(r"PCG32 (2014): \ no visible RANDU-style planes", font_size=26, color=GOOD).to_corner(DR, buff=0.4)
         with self.voiceover(
             "In the 1960s IBM distributed a generator called RANDU with its System/360 computers. "
             "<bookmark mark='a'/> Multiply by sixty-five thousand five hundred and thirty-nine, and take the "
@@ -104,7 +107,7 @@ class Hook(VoiceoverScene):
             "number is six times the last minus nine times the one before, so nine x minus six y plus z is always "
             "an integer. George Marsaglia published the general result in 1968: random numbers fall mainly in the "
             "planes. <bookmark mark='e'/> RANDU stayed in wide use for years, in simulations nobody could easily recheck. A modern generator, PCG, "
-            "fills the cube with no structure that anyone has found."
+            "shows no visible RANDU-style planes at this resolution; that picture is not proof of randomness."
         ) as vo:
             self.add(ns)
             self.play(FadeIn(ns.axes3), FadeIn(tag))
@@ -140,10 +143,10 @@ class Hook(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> Part seven: randomness on demand. <bookmark mark='b'/> We'll build a generator and "
             "learn to test one; turn uniform numbers into any distribution we like; integrate by throwing darts; "
-            "learn to run a simulation study honestly, the method behind every check in this series; make "
+            "learn to run a simulation study honestly, a framework for evaluating statistical methods; make "
             "simulations cheaper; and meet Markov chains, which mix decks of cards and power the algorithms of "
-            "modern Bayesian statistics. <bookmark mark='c'/> And we'll build statkit dot random, the library every "
-            "later part's simulations will use."
+            "modern Bayesian statistics. <bookmark mark='c'/> And we'll build statkit dot random, a library that "
+            "later simulations can use."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head, shift=UP * 0.2))

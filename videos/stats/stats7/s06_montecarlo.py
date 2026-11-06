@@ -35,19 +35,19 @@ class MonteCarlo(VoiceoverScene):
         pi_l = DashedLine(B.ax.c2p(1, np.pi), B.ax.c2p(4000, np.pi), color=EXACT, stroke_width=2)
         sd = 4 * np.sqrt(np.pi / 4 * (1 - np.pi / 4))
         nn = np.linspace(20, 4000, 200)
-        hi = curve(B.ax, nn, np.minimum(np.pi + 2 * sd / np.sqrt(nn), 3.5), GREY_B, 1.5)
-        lo = curve(B.ax, nn, np.maximum(np.pi - 2 * sd / np.sqrt(nn), 2.8), GREY_B, 1.5)
-        path = polyline(B.ax, n[n >= 20], np.clip(est[n >= 20], 2.8, 3.5), GOOD, 2.5)
+        hi = curve(B.ax, nn, np.pi + 2 * sd / np.sqrt(nn), GREY_B, 1.5)
+        lo = curve(B.ax, nn, np.pi - 2 * sd / np.sqrt(nn), GREY_B, 1.5)
+        path = polyline(B.ax, n[n >= 20], est[n >= 20], GOOD, 2.5)
         f = MathTex(r"\pi = 4\,P(U_1^2 + U_2^2 \le 1) = 4\int\!\!\int \mathbf 1\{u_1^2 + u_2^2 \le 1\}\,du_1 du_2", font_size=28)
         f.to_edge(UP, buff=0.4)
-        res = MathTex(rf"4{{,}}000 \text{{ darts: }} {est[-1]:.3f}", font_size=28, color=GOOD).next_to(B, UP, buff=0.1).align_to(B, RIGHT)
+        res = MathTex(rf"4{{,}}000 \text{{ darts (1,500 shown): }} {est[-1]:.3f}", font_size=28, color=GOOD).next_to(B, UP, buff=0.1).align_to(B, RIGHT)
         with self.voiceover(
             "Every expectation is an integral, and every integral is an expectation. That's the whole idea of Monte "
             "Carlo, the name Stanislaw Ulam, John von Neumann and Nicholas Metropolis used at Los Alamos, after the casino. "
             "<bookmark mark='a'/> Pi is four times the chance that a uniform point in the unit square lands inside "
             "the quarter circle. <bookmark mark='b'/> So throw darts and count. <bookmark mark='c'/> The running "
-            "estimate wanders, then settles, inside the funnel of two standard errors from Part 6. After four "
-            "thousand darts it's three point one six: two correct digits. To get a third you need a hundred times "
+            "estimate wanders around pi. The two-standard-error funnel is pointwise, not a guarantee for the whole path. After four "
+            "thousand darts the estimate is shown. Reducing the root mean square error tenfold takes a hundred times "
             "as many."
         ) as vo:
             self.play(FadeIn(A), Create(arc))
@@ -70,18 +70,22 @@ class MonteCarlo(VoiceoverScene):
         ]
         rows[2][2].set_color(S.ACCENT)
         whys = [why(r"an integral, \ read as an expectation"), why(r"the weak law: \ consistent (Part 6)"),
-                why(r"the CLT gives the error bar, \ and the dimension of $\mathbf x$ appears nowhere")]
+                why(r"IID draws, finite $\sigma_g^2$: \ SE $=\sigma_g/\sqrt n$; \ $\sigma_g$ can grow with dimension")]
+        intro = label('An integral as an average', font_size=36)
         with self.voiceover(
             "In general: <bookmark mark='a'/> an integral of g against a density f is the expectation of g of X, "
             "with X drawn from f. <bookmark mark='b'/> Estimate it by averaging g over n draws; Part 6's weak law "
-            "makes the average converge. <bookmark mark='c'/> And the central limit theorem gives the error: sigma "
+            "makes the average converge. <bookmark mark='c'/> For independent identically distributed draws with finite variance, the standard error is sigma "
             "over root n, where sigma, estimated from the same draws, is the spread of g. Look at what's missing "
             "from that formula: the dimension. The error falls like one over root n whether x has one coordinate "
-            "or a thousand."
+            "or a thousand, but sigma itself can increase sharply with dimension."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.6, buff=0.95, edge=6.9)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -97,7 +101,7 @@ class MonteCarlo(VoiceoverScene):
         ax = A.ax
         l1 = VGroup(polyline(ax, ds[1:], mc[1:], GOOD, 3), *[Dot(ax.c2p(a, v), radius=0.06, color=GOOD) for a, v in zip(ds[1:], mc[1:])])
         l2 = VGroup(polyline(ax, ds[1:], gr[1:], BAD, 3), *[Dot(ax.c2p(a, v), radius=0.06, color=BAD) for a, v in zip(ds[1:], gr[1:])])
-        leg = legend([(BAD, r"a grid of $10^6$ points"), (GOOD, r"$10^6$ random points")], font_size=22).move_to([4.3, 1.8, 0])
+        leg = legend([(BAD, r"grid absolute relative error"), (GOOD, r"MC relative standard error, same $N=m^d$")], font_size=22).move_to([4.3, 1.8, 0])
         rows = fit_rows(VGroup(
             label(r"a grid of $N$ points has $N^{1/d}$ per side: \ in 10 dimensions, \ 4", font_size=24),
             label(r"Monte Carlo's error: \ $\sigma/\sqrt N$, \ in any dimension", font_size=24, color=GOOD),
@@ -105,11 +109,11 @@ class MonteCarlo(VoiceoverScene):
         ), 5.0, 0.3, [4.3, -0.6, 0])
         with self.voiceover(
             "Here's why that matters. <bookmark mark='a'/> Estimate the volume of a ball in d dimensions with a "
-            "budget of a million points. A grid in d dimensions has only the d-th root of a million points per "
+            "budget near a million points, rounded to a whole number per side. Each random estimate uses exactly the matching grid budget. A grid in d dimensions has only the d-th root of a million points per "
             "side: a thousand in two dimensions, but ten in six and four in ten. Its error explodes. "
-            "<bookmark mark='b'/> A million random points do far better: their error grows a little with d, because "
+            "<bookmark mark='b'/> The blue curve is the exact standard error of a random estimate, not a realized error. It grows with dimension because "
             "the ball becomes a smaller and smaller target inside the cube, but the rate stays one over root N. "
-            "<bookmark mark='c'/> In one dimension, the grid wins easily. In ten, it isn't close. That's why "
+            "<bookmark mark='c'/> In one dimension both methods are exact. In ten, the grid error here is much larger than the Monte Carlo standard error. That's why "
             "high-dimensional integrals, in Bayesian statistics, physics and finance, are done by simulation."
         ) as vo:
             self.play(FadeIn(A))
@@ -171,6 +175,7 @@ class MonteCarlo(VoiceoverScene):
             label(r"the lesson: \ a simulation is only as honest as its stopping rule, \ and its error bar", font_size=26,
                   color=S.ACCENT),
         ), 12.6, 0.3, [0, 0.2, 0])
+        intro = label('A historical warning about stopping rules', font_size=36)
         with self.voiceover(
             "And one of them is a cautionary tale. <bookmark mark='a'/> In 1901 the Italian mathematician Mario "
             "Lazzarini reported three thousand four hundred and eight throws of a needle five sixths as long as the "
@@ -182,7 +187,9 @@ class MonteCarlo(VoiceoverScene):
             "<bookmark mark='e'/> The lesson for every simulation in this course: report the error bar, and decide "
             "in advance when to stop."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(FadeIn(rows[1:3]))
@@ -214,11 +221,12 @@ class MonteCarlo(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"quasi-Monte Carlo:", font_size=24),
             label(r"points spread deliberately evenly", font_size=24),
-            MathTex(r"\text{error} \approx \frac{(\log n)^d}{n} \ \text{vs}\ \frac{\sigma}{\sqrt n}", font_size=26, color=S.ACCENT),
+            MathTex(r"\text{QMC bound: } O\!\left(\frac{(\log n)^d}{n}\right) \ \text{vs}\ \frac{\sigma}{\sqrt n}", font_size=26, color=S.ACCENT),
             label(r"Halton (1960), \ Sobol' (1967)", font_size=20, color=GREY_A),
-            label(r"wins for smooth integrands, \ moderate $d$", font_size=22, color=GREY_A),
-            label(r"randomized to get error bars", font_size=22, color=GREY_A),
+            label(r"bound requires finite Hardy--Krause variation", font_size=22, color=GREY_A),
+            label(r"independent randomized replicates give error bars", font_size=22, color=GREY_A),
         ), 4.6, 0.26, [4.2, -0.2, 0])
+        intro = label('Deliberately spread integration points', font_size=36)
         with self.voiceover(
             "Random points have a flaw for integration: by chance, they clump and leave gaps. "
             "<bookmark mark='a'/> Here are four hundred random points in the square. <bookmark mark='b'/> And four "
@@ -228,7 +236,9 @@ class MonteCarlo(VoiceoverScene):
             "over root n, for smooth integrands in moderate dimension. The price is that the error bar must be "
             "recovered by randomizing the points, as finance practitioners do every day."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(A), FadeIn(t1), FadeIn(pr, lag_ratio=0.003))
             vo.wait_until("b")
             self.play(FadeIn(B), FadeIn(t2), FadeIn(ph, lag_ratio=0.003))
