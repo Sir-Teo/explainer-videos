@@ -18,6 +18,10 @@ class Duality(LectureMixin, VoiceoverScene):
         self.brenier()
 
     def couplings(self):
+        head = label(r"A transport plan preserves the source and target masses", font_size=36).move_to([0, 3.3, 0])
+        if head.width > 12.6:
+            head.width = 12.6
+        self.play(FadeIn(head))
         self.lad_voiceover(
             "<bookmark mark='a'/> For discrete distributions, with weights a on n source points and b on m target points, a "
             "coupling is a matrix P with nonnegative entries. <bookmark mark='b'/> Its rows sum to a: every source point "
@@ -112,6 +116,10 @@ class Duality(LectureMixin, VoiceoverScene):
             colors=[(1, PLANC)])
 
     def brenier(self):
+        head = label(r"In higher dimensions, convex gradients replace quantile ordering", font_size=36).move_to([0, 3.3, 0])
+        if head.width > 12.6:
+            head.width = 12.6
+        self.play(FadeIn(head))
         self.lad_voiceover(
             "<bookmark mark='a'/> In several dimensions, convex gradients replace scalar monotone rearrangement. <bookmark mark='b'/> For quadratic cost and laws with finite second moments, absolute continuity of the source ensures a unique optimal transport map almost everywhere, given by the gradient of a convex potential. <bookmark mark='c'/> Such gradients are monotone in the displayed inner-product sense and satisfy cyclic monotonicity. Monotonicity alone does not imply injectivity or an arbitrary no-crossing claim. <bookmark mark='d'/> For half squared-distance cost, the convex potential equals half the source norm squared minus a source Kantorovich potential.",
             [(r"d > 1", r":", r"\text{no ordering}", 40),
