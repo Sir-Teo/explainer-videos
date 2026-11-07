@@ -33,6 +33,7 @@ class Failure(VoiceoverScene):
         rows[1][2].set_color(OBS)
         whys = [why(r"Part 9's tank factory, \ continuous"), why(r"the maximum serial number seen"),
                 why(r"Part 9: \ always below $\theta$"), why(r"the error shrinks like $1/n$, \ not $1/\sqrt n$")]
+        intro = label('The maximum has a nonregular sampling distribution', font_size=36)
         with self.voiceover(
             "Chapter eight's failure was gentle: intervals a little too short. Here's a case where the bootstrap fails "
             "completely, and it's one we know well. <bookmark mark='a'/> Part 9's tank factory, in its continuous form: fifty "
@@ -43,10 +44,13 @@ class Failure(VoiceoverScene):
             "with an error of order one over n, and it isn't a smooth function of the data's distribution: it depends only on "
             "the edge."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def spike(self):
@@ -147,6 +151,7 @@ class Failure(VoiceoverScene):
         rows[1][2].set_color(HIT)
         whys = [why(r"Part 11: \ a pivot from the model"), why(r"exact coverage for every $\theta$"),
                 why(r"use the model, \ when there is one"), why(r"Bickel, \ G\"otze \& van Zwet (1997)")]
+        intro = label('A model-based pivot repairs this endpoint problem', font_size=36)
         with self.voiceover(
             "How to fix it. <bookmark mark='a'/> When there's a model, use it, with a pivot in Part 11's sense: the maximum over theta has a "
             "Beta n, one distribution, whatever theta is. <bookmark mark='b'/> That gives an exact interval, from the maximum "
@@ -156,10 +161,13 @@ class Failure(VoiceoverScene):
             "than you have, m out of n, and rescale. Take m tending to infinity but m over n tending to zero. Use m times the bootstrap maximum gap to approximate n times the true gap; the spike then shrinks; Peter Bickel, Friedrich "
             "Götze and Willem van Zwet showed in 1997 that this repairs many failures, at a cost in efficiency."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def other(self):

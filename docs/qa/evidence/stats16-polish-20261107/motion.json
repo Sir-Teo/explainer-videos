@@ -1,0 +1,94 @@
+{
+  "fingerprint": "8ec6b83a819406975bed48516f3fe1c6a0cf18951445c3979dc5a28f7967d131",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Permutation",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats16/en/Permutation_motion/result.json",
+      "input_sha256": "1ca3ff19455d9add5d7b77900e228e40996728262afaad0b07648529fd796232",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 228 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 228 s\n"
+    },
+    {
+      "scene": "SignedRank",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats16/en/SignedRank_motion/result.json",
+      "input_sha256": "45456335afd034ca682e5a2d1655327a074874bc93990099ef176b0dccd24782",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 373 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 373 s\n"
+    },
+    {
+      "scene": "MannWhitney",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats16/en/MannWhitney_motion/result.json",
+      "input_sha256": "c9a315383fab961371715cb41e57628202e9bd4e610202157c8f8df2429e7562",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 279 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 279 s\n"
+    },
+    {
+      "scene": "Principle",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats16/en/Principle_motion/result.json",
+      "input_sha256": "4de3515fd491e28bb8cc8779dd1d0663a7fec5eca8a2156945f8c629e2ee5d51",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 308 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 308 s\n"
+    },
+    {
+      "scene": "BootIntervals",
+      "status": "needs-review",
+      "frames": 35,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats16/en/BootIntervals_motion/result.json",
+      "input_sha256": "764435f0ab29ca16075907c8bbf32eb12a0af69f499850d5cd5a169f41056d14",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 376 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 376 s\n"
+    },
+    {
+      "scene": "Failure",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats16/en/Failure_motion/result.json",
+      "input_sha256": "fe4974d1cdfe0543f1dcf20fd159cef5b946d5663bd21aa82d64fe923adc20c0",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 303 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 303 s\n"
+    },
+    {
+      "scene": "CrossValidation",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats16/en/CrossValidation_motion/result.json",
+      "input_sha256": "8d92a39ee533a68542198c6fa5d0c9ffb34393232e33e0981c64b65fb36ff593",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 267 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 267 s\n"
+    },
+    {
+      "scene": "Density",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats16/en/Density_motion/result.json",
+      "input_sha256": "1e5e177141d8fdbe4221d07a0ff903155421edc4b1833b2328db29ecd4427b92",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 220 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 220 s\n"
+    }
+  ]
+}

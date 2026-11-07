@@ -134,6 +134,7 @@ class Density(VoiceoverScene):
         rows[3][2].set_color(BOOT)
         whys = [why(r"a wide bump flattens peaks: \ curvature"), why(r"a narrow bump sees few points"),
                 why(r"slower than a parametric $1/n$: \ a smooth nonparametric model"), why(r"(1986): \ a rule of thumb for near-normal data")]
+        intro = label('Bandwidth trades smoothing bias against sampling variance', font_size=36)
         with self.voiceover(
             "<bookmark mark='a'/> For IID draws from a twice-differentiable density at an interior point, the Gaussian-kernel trade-off can be written down. A wide bump flattens peaks and fills valleys: the bias is "
             "about one half h squared times the curvature of the density. <bookmark mark='b'/> A narrow bump averages over few "
@@ -143,6 +144,8 @@ class Density(VoiceoverScene):
             "<bookmark mark='d'/> Bernard Silverman's rule of thumb, from his 1986 book, picks a bandwidth a little narrower than "
             "the best one for normal data, with a guard against outliers: four point one six centimetres for our sixty heights."
         ) as vo:
+            intro.scale_to_fit_width(min(intro.width, 12.5)).move_to([0, 3.2, 0])
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

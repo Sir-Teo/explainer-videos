@@ -1,0 +1,149 @@
+{
+  "fingerprint": "8ec6b83a819406975bed48516f3fe1c6a0cf18951445c3979dc5a28f7967d131",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 35
+      },
+      "input_record": "renders/qa/series/stats16/en/Hook/result.json",
+      "input_sha256": "a45add924b5b396f70126386041a2d79e26d7976922f71e0128527f3191288d2"
+    },
+    {
+      "scene": "Permutation",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 46
+      },
+      "input_record": "renders/qa/series/stats16/en/Permutation/result.json",
+      "input_sha256": "4b86ab3d1228ff020350f81a2f0fd477f69dd2312dc2286cfd8da6977ba04e7c"
+    },
+    {
+      "scene": "SignedRank",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 49
+      },
+      "input_record": "renders/qa/series/stats16/en/SignedRank/result.json",
+      "input_sha256": "531ebcbb71489034aca41b7bfdf6e6ed1afef27e75dfd05aec4a7dbe67de90f0"
+    },
+    {
+      "scene": "MannWhitney",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 37
+      },
+      "input_record": "renders/qa/series/stats16/en/MannWhitney/result.json",
+      "input_sha256": "25cee8ec993371d99fff1f078e3695f553189fe35c03f27f1685ae7152ff8bb4"
+    },
+    {
+      "scene": "MoreRanks",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 40
+      },
+      "input_record": "renders/qa/series/stats16/en/MoreRanks/result.json",
+      "input_sha256": "1b195e27be1d948e1c46c50f111f21503391cc435a7299671ba45eddf49b1276"
+    },
+    {
+      "scene": "Efficiency",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 46
+      },
+      "input_record": "renders/qa/series/stats16/en/Efficiency/result.json",
+      "input_sha256": "bd651a48840bbd76e50754a402dda5dc0355e077374798499b0bb6cb765ac36c"
+    },
+    {
+      "scene": "Jackknife",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 32
+      },
+      "input_record": "renders/qa/series/stats16/en/Jackknife/result.json",
+      "input_sha256": "1368afa4065fb991d0ac9cf734e5bb7d73fb88c9aad020ca818a5dd2d301fc1a"
+    },
+    {
+      "scene": "Principle",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 45
+      },
+      "input_record": "renders/qa/series/stats16/en/Principle/result.json",
+      "input_sha256": "804c3e6f3d9abb47d8ea34acfe1811206a39d99f371882bc39a40349993c39de"
+    },
+    {
+      "scene": "BootIntervals",
+      "status": "needs-review",
+      "frames": 35,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 46
+      },
+      "input_record": "renders/qa/series/stats16/en/BootIntervals/result.json",
+      "input_sha256": "3ed285e3b940d0d7d6ab1aa8cb2f07dc710d46f46e89d8f3ac20fe739cf04b6d"
+    },
+    {
+      "scene": "Failure",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 51
+      },
+      "input_record": "renders/qa/series/stats16/en/Failure/result.json",
+      "input_sha256": "9010e9efa90b997184bdfb75a5daf88ed29b6c9be6b363095fd58f2c21c01dab"
+    },
+    {
+      "scene": "CrossValidation",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 51
+      },
+      "input_record": "renders/qa/series/stats16/en/CrossValidation/result.json",
+      "input_sha256": "9c098cfd09615b7028c8065f0396bc8456ea91909cb135acdad6a8485d41c11f"
+    },
+    {
+      "scene": "Density",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 31
+      },
+      "input_record": "renders/qa/series/stats16/en/Density/result.json",
+      "input_sha256": "48d209bb817334a4abcd46970a3fb9e8eebc03cda124193ea6d8f95659db129c"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 7,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 60
+      },
+      "input_record": "renders/qa/series/stats16/en/Outro/result.json",
+      "input_sha256": "55e83a5c7f8fc7c0cb5d1cfd78d267dd674799bc5175d83ad60be5c800ce6000"
+    }
+  ]
+}

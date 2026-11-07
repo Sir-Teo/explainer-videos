@@ -277,6 +277,7 @@ class SignedRank(VoiceoverScene):
             label(r"four honest answers to four slightly different questions", font_size=24, color=OBS),
             label(r"the sign test is smallest here: \ it can't see that the two misses are big", font_size=22, color=GREY_A),
         ), 12.0, 0.25, [0, -2.6, 0])
+        intro = label('Different tests use different information and assumptions', font_size=36)
         with self.voiceover(
             "<bookmark mark='a'/> Side by side. The sign test, using only signs: point oh oh seven. Wilcoxon's, using signs and "
             "ranks: point oh four one. Fisher's flip, using the sizes themselves: point oh five three. And the paired t-test, "
@@ -286,6 +287,8 @@ class SignedRank(VoiceoverScene):
             "thing that worries the others: the two negative differences are large. Choose the test before looking, for the "
             "assumptions you're willing to make, and never shop among them for the smallest p."
         ) as vo:
+            intro.scale_to_fit_width(min(intro.width, 12.5)).move_to([0, 3.2, 0])
+            self.play(FadeIn(intro))
             vo.wait_until("a")
             self.play(FadeIn(tab[0]))
             self.play(LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.4), run_time=2.5)

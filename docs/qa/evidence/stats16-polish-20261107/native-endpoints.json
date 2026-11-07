@@ -1,0 +1,105 @@
+{
+  "fingerprint": "8ec6b83a819406975bed48516f3fe1c6a0cf18951445c3979dc5a28f7967d131",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Permutation",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 46
+      },
+      "input_record": "renders/qa/native1080/stats16/en/Permutation/result.json",
+      "input_sha256": "df330d826a5b73c1921c202e209c734ea32958ad9e98b4fb27c2afb551ad2fa9"
+    },
+    {
+      "scene": "SignedRank",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 49
+      },
+      "input_record": "renders/qa/native1080/stats16/en/SignedRank/result.json",
+      "input_sha256": "ad32c6a0bdf6dcc1a68090e1dc63ace03a8746e7884229e85fa2689acd5896de"
+    },
+    {
+      "scene": "MannWhitney",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 37
+      },
+      "input_record": "renders/qa/native1080/stats16/en/MannWhitney/result.json",
+      "input_sha256": "1134ac9188fc84e9cfa5e5a30a426d89d88562952de05b2ae9d9496c42c1e2cb"
+    },
+    {
+      "scene": "Jackknife",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 32
+      },
+      "input_record": "renders/qa/native1080/stats16/en/Jackknife/result.json",
+      "input_sha256": "074ac64647e39bd8c2d811eed9c30ce0879afc6fefca92f482730049fc55fe78"
+    },
+    {
+      "scene": "Principle",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 45
+      },
+      "input_record": "renders/qa/native1080/stats16/en/Principle/result.json",
+      "input_sha256": "6e51a83f4fc78f748c6a0eba597f0f0dff79deeac0351e38ac2d3b7d30a51e1a"
+    },
+    {
+      "scene": "BootIntervals",
+      "status": "needs-review",
+      "frames": 35,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 46
+      },
+      "input_record": "renders/qa/native1080/stats16/en/BootIntervals/result.json",
+      "input_sha256": "eefe1cd36d21d227eb1c3e421c46712eb01de8f92dcbebecea6860678f669236"
+    },
+    {
+      "scene": "Failure",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 51
+      },
+      "input_record": "renders/qa/native1080/stats16/en/Failure/result.json",
+      "input_sha256": "d4ae32a8b3f3ad5e14c698d96f30d558fa4b1a437165f19e6db6c341e7625043"
+    },
+    {
+      "scene": "CrossValidation",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 51
+      },
+      "input_record": "renders/qa/native1080/stats16/en/CrossValidation/result.json",
+      "input_sha256": "22cc956bea94546d31041afbbbe90d301665700993a721aa8d1e5e541b69f365"
+    },
+    {
+      "scene": "Density",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 31
+      },
+      "input_record": "renders/qa/native1080/stats16/en/Density/result.json",
+      "input_sha256": "767e56b615c0dee284779e7c13a4ff0c726259b648680bc1fe81510e683bea4b"
+    }
+  ]
+}

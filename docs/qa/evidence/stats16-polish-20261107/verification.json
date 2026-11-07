@@ -1,0 +1,23 @@
+{
+  "part": "stats16",
+  "fingerprint": "8ec6b83a819406975bed48516f3fe1c6a0cf18951445c3979dc5a28f7967d131",
+  "english_endpoints": 13,
+  "native_1080_endpoints": 9,
+  "silent_motion_chapters": 8,
+  "audio_scene": "Principle",
+  "audio_lines": 7,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats16/en/Principle/videos/s08_principle/480p15/Principle.mp4",
+    "seconds": 268.666341,
+    "narration_sha256": "610c1cc436f080ce5e3d3304151e2bf2bb707f54848fbcf9d10c018cce03f13e",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 269 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 269 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

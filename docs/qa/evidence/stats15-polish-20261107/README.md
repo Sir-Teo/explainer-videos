@@ -1,6 +1,6 @@
 # Part 15 English source and visual review
 
-All 12 chapters received source review and endpoint inspection. Scientific corrections are recorded in [scientific-review.md](scientific-review.md). Current fingerprint: `69aca101ec7a13b96544b0d004d56469ae08da521c7adc2d2401cf9a63769d79`.
+All 12 chapters received source review and endpoint inspection. Scientific corrections are recorded in [source-review.json](source-review.json). Current fingerprint: `69aca101ec7a13b96544b0d004d56469ae08da521c7adc2d2401cf9a63769d79`.
 
 - All 12 endpoint captures pass runtime, bounds and blank-beat checks; translation warnings remain visible.
 - Nine native 1080p cases cover Machinery, Conjugacy, Summaries, Prediction, Priors, Grids, Metropolis, Frequency and Hypotheses. The interval chart and captions have clear vertical separation.

@@ -1,0 +1,95 @@
+{
+ "video": "stats16",
+ "scene": "Principle",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 7,
+ "lines": [
+  {
+   "raw": "Chapter seven. The bootstrap principle.",
+   "spoken": "Chapter seven. The bootstrap principle.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/452ce740c1b7a1fc.wav",
+   "duration": 2.95,
+   "tokens": 5,
+   "peak": 0.3853759765625,
+   "issues": [],
+   "elapsed": 0.06,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Here is the bootstrap as a machine: the fifteen law schools as tokens. <bookmark mark='b'/> Draw a school at random, copy it down, put it back, and draw again, fifteen times. Some schools are copied twice or three times, some not at all. That's a resample: a new dataset of the same size, drawn with replacement from the sample. <bookmark mark='c'/> Compute its correlation, and drop it on the line. <bookmark mark='d'/> Clear, and resample again. Each resample is a dataset the population might plausibly have given us, if the population looked like the sample. Again. And again.",
+   "spoken": "Here is the bootstrap as a machine: the fifteen law schools as tokens. Draw a school at random, copy it down, put it back, and draw again, fifteen times. Some schools are copied twice or three times, some not at all. That's a resample: a new dataset of the same size, drawn with replacement from the sample. Compute its correlation, and drop it on the line. Clear, and resample again. Each resample is a dataset the population might plausibly have given us, if the population looked like the sample. Again. And again.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/9a5ae9cbb49b6796.wav",
+   "duration": 29.625,
+   "tokens": 92,
+   "peak": 0.44281005859375,
+   "issues": [],
+   "elapsed": 0.04,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Do it two thousand times. The computer takes a fraction of a second. <bookmark mark='b'/> The bootstrap standard error is just the standard deviation of the two thousand resampled correlations: point one three five. <bookmark mark='c'/> The histogram is skewed to the left, because a correlation can't exceed one: the sampling distribution isn't normal, and the bootstrap shows it. <bookmark mark='d'/> The normal-theory formula said point one one five, <bookmark mark='e'/> the jackknife point one four three. Efron's paper used exactly this example, and found the same thing: a standard error for a statistic with no formula, or with a formula we don't trust, by brute force.",
+   "spoken": "Do it two thousand times. The computer takes a fraction of a second. The bootstrap standard error is just the standard deviation of the two thousand resampled correlations: point one three five. The histogram is skewed to the left, because a correlation can't exceed one: the sampling distribution isn't normal, and the bootstrap shows it. The normal-theory formula said point one one five, the jackknife point one four three. Efron's paper used exactly this example, and found the same thing: a standard error for a statistic with no formula, or with a formula we don't trust, by brute force.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/dc76e630500f450c.wav",
+   "duration": 37.225,
+   "tokens": 99,
+   "peak": 0.551055908203125,
+   "issues": [],
+   "elapsed": 0.06,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Efron's diagram makes the logic plain. <bookmark mark='a'/> In the real world, an unknown distribution F produces our sample, and the sample produces the estimate. If we could repeat that, we'd see the estimate's sampling distribution, but we get one sample. <bookmark mark='b'/> So build a stand-in for F from the sample: the empirical distribution, F-hat, which puts mass one over n on each observation. <bookmark mark='c'/> In the bootstrap world F-hat plays the part of the population. Sampling from it, with replacement, is resampling; and there we can repeat as often as we like. <bookmark mark='d'/> We want the distribution of the estimate's error under F, which we can't see. <bookmark mark='e'/> We can compute the distribution of the resampled estimate's error under F-hat. <bookmark mark='f'/> The bootstrap is the plug-in principle, Part 9's idea, applied to a whole sampling distribution: use the second as an estimate of the first. Part 30 will show when that's justified.",
+   "spoken": "Efron's diagram makes the logic plain. In the real world, an unknown distribution F produces our sample, and the sample produces the estimate. If we could repeat that, we'd see the estimate's sampling distribution, but we get one sample. So build a stand-in for F from the sample: the empirical distribution, F-hat, which puts mass one over n on each observation. In the bootstrap world F-hat plays the part of the population. Sampling from it, with replacement, is resampling; and there we can repeat as often as we like. We want the distribution of the estimate's error under F, which we can't see. We can compute the distribution of the resampled estimate's error under F-hat. The bootstrap is the plug-in principle, Part 9's idea, applied to a whole sampling distribution: use the second as an estimate of the first. Part 30 will show when that's justified.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/30193bc96d33534e.wav",
+   "duration": 53.025,
+   "tokens": 146,
+   "peak": 0.615875244140625,
+   "issues": [],
+   "elapsed": 0.09,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Can we check the principle? In the World, yes, because we can draw as many real samples as we like. <bookmark mark='a'/> The statistic is the median income, from samples of twenty-five. On the left, the real sampling distribution, two thousand samples from the World, centred on the true median of thirty-nine thousand. <bookmark mark='b'/> On the right, the bootstrap from a separate fixed sample, whose median is thirty-seven point seven. <bookmark mark='c'/> The real standard deviation is six point oh six; the bootstrap's, four point seven two. In the right ballpark, from one sample, but low. <bookmark mark='d'/> And the bootstrap histogram is spiky: the median of a resample can be any of the 25 sample values. These 2,000 replicates happen to visit sixteen of them. With a median and twenty-five observations, the bootstrap is rough. For smooth statistics like means and correlations it does much better.",
+   "spoken": "Can we check the principle? In the World, yes, because we can draw as many real samples as we like. The statistic is the median income, from samples of twenty-five. On the left, the real sampling distribution, two thousand samples from the World, centred on the true median of thirty-nine thousand. On the right, the bootstrap from a separate fixed sample, whose median is thirty-seven point seven. The real standard deviation is six point oh six; the bootstrap's, four point seven two. In the right ballpark, from one sample, but low. And the bootstrap histogram is spiky: the median of a resample can be any of the 25 sample values. These 2,000 replicates happen to visit sixteen of them. With a median and twenty-five observations, the bootstrap is rough. For smooth statistics like means and correlations it does much better.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/4496501ad60c9467.wav",
+   "duration": 50.05,
+   "tokens": 140,
+   "peak": 0.461151123046875,
+   "issues": [],
+   "elapsed": 0.07,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> How many resamples? Fifteen schools can be drawn in fifteen to the fifteenth ordered ways; as unordered collections, there are seventy-seven million distinct resamples. <bookmark mark='b'/> The ideal bootstrap would average uniformly over ordered draws, or give unordered multisets their multinomial weights. They are not equally likely. <bookmark mark='c'/> Instead we sample B of them: Part 7's Monte Carlo, with error shrinking like one over root B. There are now two errors: the sampling error, from having one sample, which no amount of computing removes; and the Monte Carlo error, from finite B, which we can make as small as we like. <bookmark mark='d'/> For a regular distribution with finite fourth moments, a thousand resamples can give a standard error to within a few percent. Interval endpoints sit in the tails, where draws are scarce, and need a few thousand.",
+   "spoken": "How many resamples? Fifteen schools can be drawn in fifteen to the fifteenth ordered ways; as unordered collections, there are seventy-seven million distinct resamples. The ideal bootstrap would average uniformly over ordered draws, or give unordered multisets their multinomial weights. They are not equally likely. Instead we sample B of them: Part 7's Monte Carlo, with error shrinking like one over root B. There are now two errors: the sampling error, from having one sample, which no amount of computing removes; and the Monte Carlo error, from finite B, which we can make as small as we like. For a regular distribution with finite fourth moments, a thousand resamples can give a standard error to within a few percent. Interval endpoints sit in the tails, where draws are scarce, and need a few thousand.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/43c212a8cb18bf07.wav",
+   "duration": 50.575,
+   "tokens": 134,
+   "peak": 0.661773681640625,
+   "issues": [],
+   "elapsed": 0.04,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> What does the bootstrap assume? <bookmark mark='b'/> That the observations are independent draws from one distribution: you must resample in the way the data were sampled. Pairs stay pairs, as the law schools' LSAT and GPA did; clusters are resampled as clusters; time series need blocks, which is Part 17. <bookmark mark='c'/> That the empirical distribution is close to the real one, which needs a reasonable sample. <bookmark mark='d'/> And that the statistic depends smoothly on the distribution. Means and correlations do. A maximum doesn't, and chapter nine shows what happens then. <bookmark mark='e'/> What it doesn't assume is the gift: no normality, and no formula for the standard error.",
+   "spoken": "What does the bootstrap assume? That the observations are independent draws from one distribution: you must resample in the way the data were sampled. Pairs stay pairs, as the law schools' LSAT and GPA did; clusters are resampled as clusters; time series need blocks, which is Part 17. That the empirical distribution is close to the real one, which needs a reasonable sample. And that the statistic depends smoothly on the distribution. Means and correlations do. A maximum doesn't, and chapter nine shows what happens then. What it doesn't assume is the gift: no normality, and no formula for the standard error.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/0a33c7b5baa43f45.wav",
+   "duration": 37.525,
+   "tokens": 102,
+   "peak": 0.57061767578125,
+   "issues": [],
+   "elapsed": 0.05,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats16/en/Principle_motion/result.json",
+ "input_sha256": "4de3515fd491e28bb8cc8779dd1d0663a7fec5eca8a2156945f8c629e2ee5d51"
+}

@@ -219,6 +219,7 @@ class Principle(VoiceoverScene):
             label(r"the statistic depends smoothly on $F$: \ means, \ correlations, \ yes; \ maxima, \ no", font_size=24, color=RES),
             label(r"no normality, \ no formula: \ that's the gift", font_size=26, color=OBS),
         ), 12.4, 0.46, [0, 0, 0])
+        intro = label('The bootstrap needs sampling and regularity assumptions', font_size=36)
         with self.voiceover(
             "<bookmark mark='a'/> What does the bootstrap assume? <bookmark mark='b'/> That the observations are independent "
             "draws from one distribution: you must resample in the way the data were sampled. Pairs stay pairs, as the law "
@@ -228,6 +229,8 @@ class Principle(VoiceoverScene):
             "maximum doesn't, and chapter nine shows what happens then. <bookmark mark='e'/> What it doesn't assume is the gift: "
             "no normality, and no formula for the standard error."
         ) as vo:
+            intro.scale_to_fit_width(min(intro.width, 12.5)).move_to([0, 3.2, 0])
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
