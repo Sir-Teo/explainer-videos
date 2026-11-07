@@ -37,7 +37,7 @@ from explainer.ai.cache import Cache
 from explainer.stats import museum
 from explainer.stats.board import Row, save_rows
 from explainer.stats.kit import causal as CA
-from explainer.stats.kit import sequential as Q
+from . import checked as Q
 
 CACHE = Cache("stats58")
 load = CACHE.load
@@ -73,7 +73,7 @@ def compute_hook():
     th = Q.sprt_bounds(ALPHA, BETA)
     q0 = np.cumsum(e0["stop_n"])
     q1 = np.cumsum(e1["stop_n"])
-    return {"p0": P0, "p1": P1, "alpha": ALPHA, "beta": BETA, "A": th["A"], "B": th["B"], "a": e0["a"], "b": e0["b"],
+    return {"p0": P0, "p1": P1, "alpha": ALPHA, "beta": BETA, "A": th["A"], "B": th["B"], "asn0_bounds": [e0["asn_lower"], e0["asn_upper"]], "asn1_bounds": [e1["asn_lower"], e1["asn_upper"]], "a": e0["a"], "b": e0["b"],
             "size": e0["accept_h1"], "power": e1["accept_h1"], "asn0": e0["asn"], "asn1": e1["asn"], "fixed": fx,
             "saving0": 1 - e0["asn"] / fx["n"], "saving1": 1 - e1["asn"] / fx["n"],
             "q90_0": int(np.searchsorted(q0, 0.9)) , "q90_1": int(np.searchsorted(q1, 0.9)),
@@ -86,7 +86,7 @@ def compute_oc():
     for p in ps:
         ex = Q.sprt_bernoulli_exact(float(p), P0, P1, ALPHA, BETA)
         wa = Q.sprt_wald_approx(float(p), P0, P1, ALPHA, BETA)
-        rows.append({"p": float(p), "accept_h1": ex["accept_h1"], "asn": ex["asn"], "wald_accept_h1": wa["accept_h1"], "wald_asn": wa["asn"]})
+        rows.append({"p": float(p), "accept_h1": ex["accept_h1"], "asn": ex["asn"], "asn_bounds": [ex["asn_lower"], ex["asn_upper"]], "unfinished": ex["unfinished"], "wald_accept_h1": wa["accept_h1"], "wald_asn": wa["asn"]})
     return {"rows": rows, "fixed_n": Q.fixed_n_binomial(P0, P1, ALPHA, BETA)["n"]}
 
 
@@ -107,15 +107,15 @@ def compute_paths():
 
 def compute_gs():
     K = 5
-    obf = CA.obrien_fleming(K)
-    poc = CA.pocock(K)
+    poc, obf, ld = Q.sequential_boundaries(K)
     r = rng(5802)
     thetas = [0.0, 0.1, 0.2, 0.3, 0.4]
     rows = []
     for th in thetas:
         b = Q.stopped_mean_bias(th, obf, 40, 40000, r)
         rows.append({"theta": th, **{k: v for k, v in b.items() if k != "stop_look"}, "stop_look": b["stop_look"]})
-    return {"K": K, "obf": obf, "pocock": poc, "n_per_look": 40, "rows": rows}
+    return {"K": K, "obf": obf, "pocock": poc, "n_per_look": 40, "rows": rows, "ld": ld,
+            "null_crossing": Q.crossing_probs(obf).sum()}
 
 
 def compute_ville():
@@ -128,13 +128,13 @@ def compute_ville():
     Xa = r.standard_normal((12, 1000)) + 0.3
     logMa = np.cumsum(0.3 * Xa - 0.045, axis=1) / math.log(10)
     return {"ns": ns, "curve": curve, **v, "null_paths": logM[:, ::5], "alt_paths": logMa[:, ::5], "t": np.arange(1, 1001)[::5],
-            "null_cross": float(np.mean(logM.max(1) >= math.log10(20)))}
+            "curve_mcse": np.sqrt(curve*(1-curve)/20000), "null_cross": float(np.mean(logM.max(1) >= math.log10(20)))}
 
 
 def compute_evalues():
     ps = [0.1, 0.05, 0.01, 0.005, 0.001]
     rows = [{"p": p, "e_half": float(Q.calibrate_p_to_e(p, 0.5)), "e_tenth": float(Q.calibrate_p_to_e(p, 0.1)),
-             "e_sharp": float(1 / (p * math.log(1 / p) ** 2)) if p < math.exp(-2) else None} for p in ps]
+             "calibrator_kappa_scope": "0 < kappa < 1"} for p in ps]
     # growth: expected log e per observation for the normal likelihood ratio, by the bet mu1, when the truth is mu
     mus = np.linspace(0, 1, 11)
     bets = [0.2, 0.5, 1.0]
@@ -156,7 +156,8 @@ def compute_ui():
         x = r.normal(mu, 1.0, (reps, n))
         t = x.mean(1) / (x.std(1, ddof=1) / math.sqrt(n))
         rows.append({"mu": mu, "ui_reject": float(np.mean(e >= 20)), "t_reject": float(np.mean(np.abs(t) >= stats.t.isf(0.025, n - 1))),
-                     "median_e": float(np.median(e))})
+                     "median_e": float(np.median(e)), "ui_mcse": math.sqrt(np.mean(e >= 20)*(1-np.mean(e >= 20))/reps),
+                     "t_mcse": math.sqrt(np.mean(np.abs(t) >= stats.t.isf(.025,n-1))*(1-np.mean(np.abs(t) >= stats.t.isf(.025,n-1)))/reps)})
     return {"n": n, "reps": reps, "rows": rows}
 
 
@@ -189,7 +190,7 @@ def compute_cs():
     cov["hoeffding"] = Q.cs_coverage(lambda z: Q.hoeffding_fixed(np.cumsum(z) / tc, tc, 0.05), samp, Tc, reps, p, r, t_min=20)
     cov["betting"] = Q.cs_coverage(lambda z: (lambda d: (d["lo"], d["hi"]))(Q.betting_cs(z, 0.05)), samp, Tc, reps, p, r, t_min=20)
     cov["mixture"] = Q.cs_coverage(lambda z: Q.normal_mixture_cs(np.cumsum(z) / tc, tc, 0.05, tau2=0.04, sigma=0.5), samp, Tc, reps, p, r, t_min=20)
-    return {"p": p, "T": T, "series": widths, "final": final, "coverage": cov, "Tc": Tc, "reps": reps, "t_min": 20}
+    return {"p": p, "T": T, "series": widths, "final": final, "coverage": cov, "Tc": Tc, "reps": reps, "t_min": 20, "betting_inversion": bc["inversion"], "cell_width_max": bc["cell_width_max"]}
 
 
 def compute_cast():
@@ -218,7 +219,8 @@ def compute_cast():
     first = np.asarray(first)
     z = (s - n / 2) / math.sqrt(n / 4)
     return {"n": n, "s": s, "final_e": final, "p_from_e": 1 / final, "z": z, "p_z": float(2 * stats.norm.sf(z)),
-            "paths": paths, "first_median": float(np.median(first[first > 0])), "first_q10": float(np.quantile(first[first > 0], 0.1)),
+            "working_model": "IID balanced Bernoulli death labels, not clinical trial assignment/risk-set model",
+            "order_scope": "2000 simulated orders conditional on published totals; first 30 shown", "paths": paths, "first_median": float(np.median(first[first > 0])), "first_q10": float(np.quantile(first[first > 0], 0.1)),
             "first_q90": float(np.quantile(first[first > 0], 0.9)), "ever": float(np.mean(first > 0))}
 
 
@@ -241,7 +243,7 @@ def compute_ebh():
         for nm, rj in (("bh", rb), ("ebh", re)):
             res[nm]["fdp"].append(rj[: m - k].sum() / max(1, rj.sum()))
             res[nm]["pow"].append(rj[m - k:].mean())
-    return {"m": m, "k": k, "rho": 0.6, "q": q, **{nm: {"fdr": float(np.mean(v["fdp"])), "power": float(np.mean(v["pow"]))} for nm, v in res.items()}}
+    return {"m": m, "k": k, "reps": reps, "rho": 0.6, "q": q, **{nm: {"fdr": float(np.mean(v["fdp"])), "power": float(np.mean(v["pow"])), "fdr_mcse": Q.mcse(v["fdp"]), "power_mcse": Q.mcse(v["pow"]), "fdp_draws": v["fdp"], "power_draws": v["pow"]} for nm, v in res.items()}}
 
 
 def compute_nile():
@@ -255,15 +257,17 @@ def compute_nile():
     cp_year = [int(years[t] - rl[t] + 1) for t in range(len(years))]
     last = R[-1]
     return {"years": years, "flow": flow, "mu0": mu0, "sd": sd, "W": c["W"], "alarm_year": int(years[c["alarm"]]) if c["alarm"] >= 0 else None,
-            "h": 4.0, "R_top": R[1:, :60], "map_cp": cp_year, "final_cp": int(years[-1] - int(np.argmax(last)) + 1),
-            "pre_mean": float(flow[years < 1899].mean()), "post_mean": float(flow[years >= 1899].mean())}
+            "h": 4.0, "R_top": R[1:], "map_cp": cp_year, "final_cp": int(years[-1] - int(np.argmax(last)) + 1),
+            "scope": "retrospective historical analysis; first 28 observations estimate baseline", "pre_mean": float(flow[years < 1899].mean()), "post_mean": float(flow[years >= 1899].mean())}
 
 
 def compute_arl():
     r = rng(5809)
     rows = []
     for h in (2.0, 3.0, 4.0, 5.0):
-        rows.append({"h": h, "arl0": Q.cusum_arl(0.0, 0.0, 1.0, h, 400, r), "arl1": Q.cusum_arl(1.0, 0.0, 1.0, h, 2000, r)})
+        a = Q.cusum_arl(0.0, 0.0, 1.0, h, 400, r)
+        b = Q.cusum_arl(1.0, 0.0, 1.0, h, 2000, r)
+        rows.append({"h": h, "arl0": a["mean"], "arl1": b["mean"], "arl0_audit": a, "arl1_audit": b})
     return {"rows": rows}
 
 
@@ -276,12 +280,15 @@ def compute_bandit():
         d = Q.thompson_bernoulli(means, T, r, floor=0.0, n_mc=60)
         regret_ts.append(np.cumsum(means[1] - np.asarray(means)[d["arm"]]))
         alloc.append(d["e"][:, 1])
+    regret_draws = np.asarray(regret_ts)
     regret_ts = np.mean(regret_ts, 0)
     alloc = np.mean(alloc, 0)
     lr = (means[1] - means[0]) / (means[0] * math.log(means[0] / means[1]) + (1 - means[0]) * math.log((1 - means[0]) / (1 - means[1])))
     idx = np.unique(np.round(np.geomspace(1, T, 120)).astype(int)) - 1
     return {"means": means, "T": T, "t": np.arange(1, T + 1)[idx], "regret_ts": regret_ts[idx], "regret_balanced": (0.5 * 0.02 * np.arange(1, T + 1))[idx],
-            "alloc": alloc[idx], "lai_robbins_coef": lr, "final_ts": float(regret_ts[-1]), "final_bal": 0.5 * 0.02 * T}
+            "policy": "finite-MC probability matching, 60 posterior draws per action",
+            "final_regret_draws": regret_draws[:, -1], "final_regret_mcse": Q.mcse(regret_draws[:, -1]),
+            "regret_mcse": regret_draws[:, idx].std(0, ddof=1)/math.sqrt(reps), "alloc": alloc[idx], "lai_robbins_coef": lr, "final_ts": float(regret_ts[-1]), "final_bal": 0.5 * 0.02 * T}
 
 
 def compute_adapt():
@@ -300,6 +307,8 @@ def compute_adapt():
     ne, ae = np.asarray(out["naive_est"]), np.asarray(out["aw_est"])
     return {"means": means, "T": T, "reps": reps, "floor": 0.01, "naive_cov": float(np.mean(out["naive"])), "aw_cov": float(np.mean(out["aw"])),
             "naive_bias": float(ne.mean() - 0.5), "aw_bias": float(ae.mean() - 0.5), "naive_est": ne, "aw_est": ae,
+            "naive_cov_mcse": Q.mcse(out["naive"]), "aw_cov_mcse": Q.mcse(out["aw"]),
+            "naive_bias_mcse": Q.mcse(ne), "aw_bias_mcse": Q.mcse(ae), "policy": "finite-MC matching; true .01 mixture floor",
             "n0_q10": float(np.quantile(out["n0"], 0.1)), "n0_q90": float(np.quantile(out["n0"], 0.9))}
 
 
@@ -316,19 +325,23 @@ def compute_ope():
         dr.append(v["dr"])
         cov_ipw += abs(v["ipw"] - means[0]) <= 1.96 * v["ipw_se"]
         cov_dr += abs(v["dr"] - means[0]) <= 1.96 * v["dr_se"]
-    return {"means": means, "T": T, "reps": reps, "ipw_mean": float(np.mean(ipw)), "ipw_sd": float(np.std(ipw)), "dr_mean": float(np.mean(dr)),
-            "dr_sd": float(np.std(dr)), "ipw_cov": cov_ipw / reps, "dr_cov": cov_dr / reps}
+    return {"means": means, "T": T, "reps": reps, "ipw_mean": float(np.mean(ipw)), "ipw_sd": float(np.std(ipw, ddof=1)), "dr_mean": float(np.mean(dr)),
+            "dr_sd": float(np.std(dr, ddof=1)), "ipw_cov": cov_ipw / reps, "dr_cov": cov_dr / reps, "ipw_draws": ipw, "dr_draws": dr,
+            "ipw_mean_mcse": Q.mcse(ipw), "dr_mean_mcse": Q.mcse(dr),
+            "ipw_cov_mcse": math.sqrt(cov_ipw/reps*(1-cov_ipw/reps)/reps),
+            "dr_cov_mcse": math.sqrt(cov_dr/reps*(1-cov_dr/reps)/reps),
+            "scope": "fixed target, known positive auxiliary-conditional propensities, predictable fixed model; normal CIs asymptotic"}
 
 
 def compute_board():
     rows = []
     cs = load("cs")
     cov = cs["coverage"]
-    rows.append(Row(58, r"fixed-$n$ CLT interval, \ checked every visit", r"conversion 12\%, \ visitors 20 to 2{,}000", "coverage", 0.95, cov["clt"]["uniform"], cs["reps"]))
-    rows.append(Row(58, r"betting confidence sequence", r"conversion 12\%, \ visitors 20 to 2{,}000", "coverage", 0.95, cov["betting"]["uniform"], cs["reps"]))
+    rows.append(Row(58, r"fixed-$n$ CLT interval, \ checked every visit", r"conversion 12\%, \ visitors 20 to 2{,}000", "coverage", 0.95, cov["clt"]["uniform"], cs["reps"], mc_se=cov["clt"]["uniform_mcse"]))
+    rows.append(Row(58, r"betting confidence sequence", r"conversion 12\%, \ visitors 20 to 2{,}000", "coverage", 0.95, cov["betting"]["uniform"], cs["reps"], mc_se=cov["betting"]["uniform_mcse"]))
     ad = load("adapt")
-    rows.append(Row(58, r"naive interval after Thompson sampling", r"two equal arms, \ 1{,}000 visitors", "coverage", 0.95, ad["naive_cov"], ad["reps"]))
-    rows.append(Row(58, r"adaptively weighted AIPW interval", r"two equal arms, \ 1{,}000 visitors", "coverage", 0.95, ad["aw_cov"], ad["reps"]))
+    rows.append(Row(58, r"naive interval after Thompson sampling", r"two equal arms, \ 1{,}000 visitors", "coverage", 0.95, ad["naive_cov"], ad["reps"], mc_se=ad["naive_cov_mcse"]))
+    rows.append(Row(58, r"adaptively weighted AIPW interval", r"two equal arms, \ 1{,}000 visitors", "coverage", 0.95, ad["aw_cov"], ad["reps"], mc_se=ad["aw_cov_mcse"]))
     save_rows(58, rows)
     return {"rows": [asdict(q) | {"verdict": q.verdict, "se": q.se} for q in rows]}
 

@@ -19,12 +19,18 @@ class Ville(LectureMixin, VoiceoverScene):
         self.anytime_p()
 
     def definition(self):
+        heading = label('The guarantee and its assumptions', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> A test martingale for a null hypothesis is a process M t with three properties. It starts "
-            "at one. <bookmark mark='b'/> It is never negative. <bookmark mark='c'/> And under the null, it is a martingale: "
-            "its expected next value, given everything so far, is its current value. <bookmark mark='d'/> The likelihood "
-            "ratio of any alternative against a simple null is one: Part forty-four met it as the wealth of a gambler betting "
-            "against the null at fair odds.",
+            (
+            "<bookmark mark='a'/> A test martingale for a null hypothesis is a process M t with three properties. "
+            "It starts at one. <bookmark mark='b'/> It is never negative. <bookmark mark='c'/> And under the null, "
+            'it is a martingale: its expected next value, given everything so far, is its current value. <bookmark '
+            "mark='d'/> The likelihood ratio of any alternative against a simple null is one: Part forty-four met "
+            'it as the wealth of a gambler betting against the null at fair odds.'
+        ),
             [(r"M_0", r"=", r"1", 40),
              (r"M_t", r"\ge", r"0", 40),
              (r"E_{H_0}[M_{t+1} \mid \mathcal F_t]", r"=", r"M_t \quad (\text{or} \le)", 38),
@@ -33,12 +39,19 @@ class Ville(LectureMixin, VoiceoverScene):
             colors=[(2, WEALTHC), (3, SPRTC)])
 
     def inequality(self):
+        heading = label("Ville's inequality", font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> Jean Ville proved in 1939 that a nonnegative martingale starting at one rarely gets large, "
-            "at any time at all: <bookmark mark='b'/> the probability that it ever reaches one over alpha is at most alpha. "
-            "<bookmark mark='c'/> That is Markov's inequality, but for the whole path at once rather than one fixed time. "
-            "<bookmark mark='d'/> So the test that rejects the null the first time the martingale reaches twenty has "
-            "type-one error at most five percent, however long you watch, and however you decide to stop.",
+            (
+            "<bookmark mark='a'/> Jean Ville proved in 1939 that a nonnegative martingale starting at one rarely "
+            "gets large, at any time at all: <bookmark mark='b'/> the probability that it ever reaches one over "
+            "alpha is at most alpha. <bookmark mark='c'/> That is Markov's inequality, but for the whole path at "
+            "once rather than one fixed time. <bookmark mark='d'/> So the test that rejects the null the first time "
+            'the martingale reaches twenty has type-one error at most five percent, however long you watch, and '
+            'however you decide to stop.'
+        ),
             [(r"\text{Ville (1939)}", r":", r"P_{H_0}\Big(\sup_{t \ge 0} M_t \ge \tfrac1\alpha\Big) \le \alpha", 40),
              (r"\text{e.g.}", r":", r"P(\text{ever } \ge 20) \le 5\%", 40),
              (r"\text{compare}", r":", r"\text{Markov: \ } P(M_t \ge 1/\alpha) \le \alpha \text{ at one } t", 38),
@@ -47,14 +60,21 @@ class Ville(LectureMixin, VoiceoverScene):
             colors=[(0, WEALTHC), (3, CSC)])
 
     def proof(self):
+        heading = label('The error-control proof', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> The proof is optional stopping. Let tau be the first time the martingale reaches one over "
-            "alpha, and stop there, or at a large time T if it never does. <bookmark mark='b'/> A stopped martingale is still "
-            "a martingale, so its expected value at the stop is still one. <bookmark mark='c'/> On the event that it crossed, "
-            "it is at least one over alpha; elsewhere it is at least zero. So one is at least the probability of crossing "
-            "over alpha. <bookmark mark='d'/> Let T grow, and the bound holds for the supremum over all time.",
+            (
+            "<bookmark mark='a'/> Stop at the first threshold crossing, or at a fixed horizon T if there is none. "
+            "This is a bounded stopping time. <bookmark mark='b'/> Optional stopping gives expected stopped wealth "
+            "one for a test martingale, and at most one for a nonnegative supermartingale. <bookmark mark='c'/> At "
+            'a crossing, stopped wealth is at least one over alpha. Elsewhere it is nonnegative. Thus the crossing '
+            "probability is at most alpha. <bookmark mark='d'/> Increase T without limit. The crossing events "
+            "increase to the event of ever crossing, proving Ville's inequality."
+        ),
             [(r"\tau", r"=", r"\inf\{t: M_t \ge 1/\alpha\} \wedge T", 38),
-             (r"E[M_\tau]", r"=", r"1 \quad (\text{optional stopping})", 38),
+             (r"E[M_\tau]", r"\le", r"1 \quad (\text{optional stopping})", 38),
              (r"1", r"\ge", r"\tfrac1\alpha\,P(\tau \le T,\ M_\tau \ge \tfrac1\alpha)", 38),
              (r"T \to \infty", r":", r"P(\sup_t M_t \ge 1/\alpha) \le \alpha \qquad \blacksquare", 38)],
             [r"a stopping time", r"Part 44's theorem", r"Markov's step", r"monotone limit"],
@@ -112,8 +132,8 @@ class Ville(LectureMixin, VoiceoverScene):
             f"multiplying her capital by the likelihood ratio at each observation. <bookmark mark='b'/> On forty null streams "
             f"the wealth decays towards zero: betting against a true null loses. <bookmark mark='c'/> A few paths touch twenty "
             f"on the way, {round(40 * d['null_cross'])} of these forty; those are the false alarms, and Ville caps their "
-            f"long-run share at five percent. <bookmark mark='d'/> When the mean really is point three, wealth grows "
-            f"exponentially, and every path crosses twenty soon."
+            f"population crossing probability at five percent; forty paths have sampling variation. <bookmark mark='d'/> When the mean really is point three, wealth grows "
+            f"exponentially, and it crosses twenty eventually almost surely under this IID alternative; individual waiting times vary."
         ) as vo:
             self.play(FadeIn(A), FadeIn(bp.threshold(0.05)), FadeIn(simulated_tag(r"simulated")))
             vo.wait_until("a")
@@ -127,13 +147,19 @@ class Ville(LectureMixin, VoiceoverScene):
         self.clear_scene()
 
     def sprt_again(self):
+        heading = label('A power-one test uses the upper boundary alone', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> Chapter one's SPRT is a special case. Its likelihood ratio is a test martingale under the "
-            "null. <bookmark mark='b'/> Rejecting when it reaches A, one minus beta over alpha, gives size at most one over A "
-            "by Ville: the bound of chapter one, without any change of measure. <bookmark mark='c'/> What is new is that the "
-            "upper boundary alone is enough: no lower boundary, no planned end. <bookmark mark='d'/> That is a test of power "
-            "one: if the alternative is true it rejects eventually with probability one, and if the null is true it rejects "
-            "with probability at most alpha, ever. Herbert Robbins and his colleagues studied such tests from the late 1960s.",
+            (
+            "<bookmark mark='a'/> The SPRT's likelihood ratio is a test martingale under its simple null. <bookmark "
+            "mark='b'/> Ville bounds the chance of ever reaching A by one over A, the relaxed error bound from "
+            "chapter one. <bookmark mark='c'/> We can also dispense with the lower boundary. For size alpha, use "
+            "the upper boundary one over alpha. <bookmark mark='d'/> Under IID observations from the specified "
+            'alternative, with positive finite log-likelihood drift, wealth eventually crosses that boundary almost '
+            'surely. This is a power-one test: it can continue forever under the null.'
+        ),
             [(r"\text{SPRT}", r":", r"\Lambda_t \text{ is a test martingale under } H_0", 38),
              (r"\text{Ville}", r":", r"P_0(\Lambda_t \text{ ever} \ge A) \le 1/A", 38),
              (r"\text{new}", r":", r"\text{no lower boundary, \ no planned end}", 38),
@@ -142,30 +168,45 @@ class Ville(LectureMixin, VoiceoverScene):
             colors=[(1, WEALTHC), (3, CSC)])
 
     def stopping(self):
+        heading = label('Stopping within a valid filtration', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> What exactly is protected? Any stopping rule at all: stop when the result looks good, when "
-            "the budget runs out, when a manager asks. <bookmark mark='b'/> At any stopping time, the stopped martingale is "
-            "an e-value: its expectation under the null is at most one. <bookmark mark='c'/> So one over it is a valid p-value "
-            "at that time, and continuing to collect data cannot hurt. <bookmark mark='d'/> What is not allowed is to change "
-            "the bet after seeing the next observation: the bets must be predictable, chosen before the data they are "
-            "applied to.",
+            (
+            "<bookmark mark='a'/> A stopping rule can depend on the evidence so far, on a budget, or on a manager's "
+            'request, provided it is a stopping time for the filtration in which the process is valid. <bookmark '
+            "mark='b'/> At any almost surely finite stopping time, a nonnegative test supermartingale has expected "
+            "stopped wealth at most one. <bookmark mark='c'/> Consequently, the minimum of one and its reciprocal "
+            'is a valid p-value at that stop. More data preserve the error guarantee, though wealth can fall. '
+            "<bookmark mark='d'/> The bets must be chosen before the outcomes to which they apply. Future "
+            "information cannot be used to choose today's stake."
+        ),
             [(r"\text{any stopping rule}", r":", r"\text{good news, \ budgets, \ managers}", 38),
              (r"E_{H_0}[M_\tau]", r"\le", r"1 \text{ for every stopping time } \tau", 38),
-             (r"\Rightarrow", r"\;", r"1/M_\tau \text{ is a valid } p\text{-value}", 38),
+             (r"\Rightarrow", r"\;", r"\min(1,1/M_\tau) \text{ is a valid } p\text{-value}", 38),
              (r"\text{but}", r":", r"\text{bets fixed before each observation is seen}", 38)],
             [r"the stopping rule is free", r"optional stopping", r"Markov", r"predictability"],
             colors=[(1, WEALTHC), (2, CSC), (3, FIXEDC)])
 
     def anytime_p(self):
+        heading = label('Reciprocal running wealth gives an anytime p-value', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> The running minimum of one over M is an anytime-valid p-value: <bookmark mark='b'/> the "
-            "probability, under the null, that it ever falls below alpha is at most alpha. <bookmark mark='c'/> Compare "
-            "Part ten's p-value, valid only at the one sample size planned in advance. <bookmark mark='d'/> The price is "
-            "power: an anytime-valid test is a little less powerful at any fixed time than the best fixed-sample test there, "
-            "the price of insurance against every stopping rule.",
-            [(r"p_t", r"=", r"\min_{s \le t} 1/M_s", 40),
+            (
+            "<bookmark mark='a'/> Include the starting wealth of one, and take the reciprocal of the largest wealth "
+            "seen so far. This gives an anytime-valid p-value. <bookmark mark='b'/> Ville bounds the probability "
+            "that it ever falls below alpha by alpha. <bookmark mark='c'/> An ordinary fixed-sample p-value "
+            "generally lacks this guarantee when repeatedly inspected. <bookmark mark='d'/> A chosen sequential "
+            'procedure may sacrifice power at some sample sizes to work well at others. There is no universal '
+            'strict power penalty at every fixed time: one can always wait for a chosen fixed-sample test. The '
+            'challenge is to distribute power across possible stopping times.'
+        ),
+            [(r"p_t", r"=", r"1/\max_{0 \le s \le t} M_s", 40),
              (r"P_{H_0}(\exists t: p_t \le \alpha)", r"\le", r"\alpha", 40),
              (r"\text{Part 10}", r":", r"\text{valid at one planned } n", 38),
-             (r"\text{price}", r":", r"\text{less power at any fixed } n", 38)],
+             (r"\text{price}", r":", r"\text{allocate power across possible stopping times}", 38)],
             [r"anytime-valid", r"Ville, \ restated", r"the fixed-$n$ $p$", r"insurance"],
             colors=[(1, CSC), (3, FIXEDC)])

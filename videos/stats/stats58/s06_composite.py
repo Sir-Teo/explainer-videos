@@ -19,13 +19,20 @@ class Composite(LectureMixin, VoiceoverScene):
         self.tests_compare()
 
     def problem(self):
+        heading = label('Fairness against every null member', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> So far the null was simple: one distribution. Most nulls are composite: a normal mean of "
-            "zero with unknown variance, or independence of two variables. <bookmark mark='b'/> An e-value must then have "
-            "expectation at most one under every distribution in the null at once. <bookmark mark='c'/> A likelihood ratio "
-            "against one member of the null is not enough: under another member it can have expectation far above one. "
-            "<bookmark mark='d'/> Two answers have emerged: universal inference, which is simple and always valid, and the "
-            "growth-optimal e-values of safe testing, which are efficient.",
+            (
+            "<bookmark mark='a'/> So far the null was simple: one distribution. Most nulls are composite: a normal "
+            "mean of zero with unknown variance, or independence of two variables. <bookmark mark='b'/> An e-value "
+            'must then have expectation at most one under every distribution in the null at once. <bookmark '
+            "mark='c'/> A likelihood ratio against one member of the null is not enough: under another member it "
+            "can have expectation far above one. <bookmark mark='d'/> Two answers have emerged: universal "
+            'inference, valid with correct split likelihoods, and the growth-optimal e-values of safe testing, '
+            'which are efficient.'
+        ),
             [(r"\text{composite}", r":", r"H_0 = \{P_\theta: \theta \in \Theta_0\}", 40),
              (r"\text{need}", r":", r"E_{P}[E] \le 1 \text{ for every } P \in H_0", 40),
              (r"\text{a single LR}", r":", r"\text{fair against one member only}", 38),
@@ -34,30 +41,47 @@ class Composite(LectureMixin, VoiceoverScene):
             colors=[(1, WEALTHC)])
 
     def universal(self):
+        heading = label('Independent split likelihood ratios', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> Larry Wasserman, Aaditya Ramdas and Sivaraman Balakrishnan's universal inference, from "
-            "2020. Split the data in two halves. <bookmark mark='b'/> On the first half, fit any estimate of the alternative "
-            "you like, theta hat one. <bookmark mark='c'/> On the second half, compute the likelihood at theta hat one, "
-            "divided by the likelihood maximized over the null. <bookmark mark='d'/> That ratio is an e-value for the whole "
-            "composite null, with no regularity conditions at all: no smoothness, no asymptotics, no boundary problems.",
+            (
+            "<bookmark mark='a'/> Universal inference begins with independent training and evaluation halves from a "
+            'correctly specified IID model. It needs normalized likelihoods, but not a regular asymptotic '
+            "approximation. <bookmark mark='b'/> Fit any proper alternative density on the training half. <bookmark "
+            "mark='c'/> On the independent evaluation half, divide its likelihood by the supremum of the null "
+            'likelihood. That denominator must be the true supremum, or a certified upper bound; a failed '
+            "optimization can invalidate the guarantee. <bookmark mark='d'/> The result is an e-value for every "
+            'null member. This is a fixed-sample construction; repeatedly reusing it at new sample sizes does not '
+            'automatically produce an e-process.'
+        ),
             [(r"\text{split}", r":", r"D_0, \ D_1", 40),
              (r"\text{on } D_0", r":", r"\hat\theta_1 = \text{any estimate}", 40),
              (r"\text{on } D_1", r":", r"U = \frac{\prod_{D_1} p_{\hat\theta_1}(x)}{\sup_{\theta \in \Theta_0}\prod_{D_1} p_\theta(x)}", 38),
              (r"\text{then}", r":", r"E_{P}[U] \le 1 \text{ for every } P \in H_0", 40)],
-            [r"Wasserman, \ Ramdas \& Balakrishnan (2020)", r"anything: \ MLE, \ Bayes, \ a guess", r"the split LRT", r"no regularity"],
+            [r"Wasserman, \ Ramdas \& Balakrishnan (2020)", r"anything: \ MLE, \ Bayes, \ a guess", r"the split LRT", r"correct independent likelihood model"],
             colors=[(2, WEALTHC), (3, CSC)])
 
     def why_valid(self):
+        heading = label('Why the split ratio is an e-value', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> Why? Fix a true member theta star of the null. The denominator, the maximum over the null, "
-            "is at least the likelihood at theta star. <bookmark mark='b'/> So U is at most the likelihood ratio of theta hat "
-            "one against theta star on the second half. <bookmark mark='c'/> Theta hat one was fitted on the other half, so "
-            "it is fixed given the first half, and that likelihood ratio has expectation exactly one under theta star. "
-            "<bookmark mark='d'/> Hence the expectation of U is at most one: three lines, no conditions. Repeating the split "
-            "and averaging the e-values keeps validity and removes the randomness of one split.",
+            (
+            "<bookmark mark='a'/> Fix a true null member. The null likelihood supremum is at least its likelihood "
+            "on the evaluation half. <bookmark mark='b'/> The split ratio is therefore bounded above by a "
+            "likelihood ratio against that true distribution. <bookmark mark='c'/> Conditional on the independent "
+            'training half, the fitted alternative is fixed. Its likelihood ratio has expectation at most one, with '
+            'equality when the alternative is absolutely continuous with respect to the true distribution. '
+            "<bookmark mark='d'/> Taking expectations proves the e-value guarantee. Averaging a fixed collection of "
+            'valid split e-values preserves validity and reduces dependence on one random split, without '
+            'necessarily removing all split randomness.'
+        ),
             [(r"\sup_{\Theta_0} L_1(\theta)", r"\ge", r"L_1(\theta^*)", 40),
              (r"U", r"\le", r"L_1(\hat\theta_1)/L_1(\theta^*)", 40),
-             (r"E_{\theta^*}\big[L_1(\hat\theta_1)/L_1(\theta^*) \mid D_0\big]", r"=", r"1", 38),
+             (r"E_{\theta^*}\big[L_1(\hat\theta_1)/L_1(\theta^*) \mid D_0\big]", r"\le", r"1", 38),
              (r"\Rightarrow", r"\;", r"E_{\theta^*}[U] \le 1 \qquad \blacksquare", 40)],
             [r"$\theta^*$ is in the null", r"a bigger denominator", r"$\hat\theta_1$ fixed given $D_0$", r"average over splits too"],
             colors=[(3, CSC)])
@@ -80,7 +104,7 @@ class Composite(LectureMixin, VoiceoverScene):
             f"the time and universal inference {100 * r0['ui_reject']:.1f} percent: both valid, the second very conservative. "
             f"<bookmark mark='c'/> At a mean of a half, the t-test's power is {100 * r5['t_reject']:.0f} percent, universal "
             f"inference's only {100 * r5['ui_reject']:.0f}. <bookmark mark='d'/> Validity came free; efficiency did not. The "
-            f"split throws away half the data for fitting, and the threshold twenty is stricter than a p-value of five percent."
+            f"split throws away half the data for fitting, and the split likelihood ratio and Markov threshold are conservative in this example; both tests target five-percent size."
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(simulated_tag(r"simulated")))
             vo.wait_until("a")
@@ -94,13 +118,20 @@ class Composite(LectureMixin, VoiceoverScene):
         self.clear_scene()
 
     def price(self):
+        heading = label('Validity and the efficiency of this split test', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> The price can be read off. Universal inference's rejection threshold corresponds roughly to "
-            "a likelihood-ratio statistic of two log of one over alpha, computed on half the data. <bookmark mark='b'/> In "
-            "regular problems, where Wilks's chi-squared threshold applies, that makes it clearly less powerful, as the table "
-            "showed. <bookmark mark='c'/> It is a price worth paying where Wilks fails: mixtures, shape constraints such as "
-            "log-concavity, and boundaries, where no classical test has a known null distribution. <bookmark mark='d'/> Robin "
-            "Dunn and colleagues, for example, built from it a practical test of log-concavity.",
+            (
+            "<bookmark mark='a'/> The price can be read off. Universal inference's rejection threshold corresponds "
+            'roughly to a likelihood-ratio statistic of two log of one over alpha, computed on half the data. '
+            "<bookmark mark='b'/> In regular problems, where Wilks's chi-squared threshold applies, that makes it "
+            "clearly less powerful, as the table showed. <bookmark mark='c'/> It is a price worth paying where "
+            'Wilks fails: mixtures, shape constraints such as log-concavity, and boundaries, where no classical '
+            "test has a known null distribution. <bookmark mark='d'/> Robin Dunn and colleagues, for example, built "
+            'from it a practical test of log-concavity.'
+        ),
             [(r"\text{threshold}", r":", r"2\log U \ge 2\log(1/\alpha) \text{ on half the data}", 38),
              (r"\text{regular problems}", r":", r"\text{less power than the classical test}", 38),
              (r"\text{where it shines}", r":", r"\text{mixtures, \ shape constraints, \ boundaries}", 38),
@@ -109,29 +140,45 @@ class Composite(LectureMixin, VoiceoverScene):
             colors=[(2, CSC)])
 
     def grow(self):
+        heading = label('Growth optimality for a specified alternative', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> Peter Grünwald, Rianne de Heide and Wouter Koolen asked for the best e-value instead. For "
-            "a given alternative Q, choose the e-value that maximizes the expected log under Q, among all e-values valid for "
-            "the whole null: the GROW criterion, growth-rate optimal in the worst case. <bookmark mark='b'/> Its answer is a "
-            "likelihood ratio, Q over a special mixture of the null: the reverse information projection of Q onto the null's "
-            "convex hull, the null mixture closest to Q in Kullback–Leibler divergence. <bookmark mark='c'/> For the t-test's "
-            "null, group invariance makes the optimal e-value explicit: an anytime-valid t-test. <bookmark mark='d'/> Validity is exact, and power is "
-            "near the classical test's.",
-            [(r"\text{GROW}", r":", r"\max_E \min_{Q \in H_1} E_Q[\log E] \text{ over valid } E", 36),
+            (
+            "<bookmark mark='a'/> For a specified alternative Q, maximize expected log payoff among all e-values "
+            'valid for the null family. This is the simple-alternative version of the growth-optimal criterion; a '
+            "composite alternative requires a separate worst-case optimization. <bookmark mark='b'/> Under suitable "
+            'domination, existence and integrability conditions, the solution is q divided by its reverse '
+            'information projection onto the closed convex null family. The projection may be a mixture, rather '
+            "than a member of the original null. <bookmark mark='c'/> For suitable invariant problems, including a "
+            'scale-invariant t-test, the maximal-invariant likelihood ratio has an optimality result. <bookmark '
+            "mark='d'/> Its stopping guarantee is relative to the maximal-invariant filtration. An arbitrary "
+            'raw-data stopping rule can invalidate its stopped e-value; the filtration is part of the theorem.'
+        ),
+            [(r"\text{GROW}", r":", r"\max_E E_Q[\log E] \text{ over valid } E \quad (Q\text{ fixed})", 36),
              (r"\text{answer}", r":", r"E^* = q / p_{\mathrm{RIPr}}, \ \ p_{\mathrm{RIPr}} = \arg\min_{p \in \mathrm{conv}(H_0)} \mathrm{KL}(q \,\|\, p)", 34),
-             (r"\text{t-test}", r":", r"\text{by invariance: \ an anytime-valid } t\text{-test}", 38),
-             (r"\text{result}", r":", r"\text{exact validity, \ near-classical power}", 38)],
+             (r"\text{t-test}", r":", r"\text{stopping within the maximal-invariant filtration}", 38),
+             (r"\text{result}", r":", r"\text{validity and optimality under the theorem assumptions}", 38)],
             [r"Gr\"unwald, \ de Heide \& Koolen (2024)", r"the reverse information projection", r"P\'erez-Ortiz et al. (2024)", r"efficient"],
             colors=[(1, WEALTHC), (3, CSC)])
 
     def ripr(self):
+        heading = label('Projection conditions imply fairness', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> Why does the projection make the bet fair? <bookmark mark='b'/> The optimality condition "
-            "of the projection says that, for every distribution P in the null's convex hull, the expectation under P of q "
-            "over the projection is at most one. <bookmark mark='c'/> That is exactly validity for the whole null. <bookmark "
-            "mark='d'/> So the growth-optimal e-value is a likelihood ratio after all, against the one member of the null "
-            "that the alternative finds hardest to tell apart from itself: Part fifty's least favourable distribution, in "
-            "the language of bets.",
+            (
+            "<bookmark mark='a'/> Suppose the reverse information projection exists as a dominating density and the "
+            "differentiation conditions hold. <bookmark mark='b'/> Perturb that minimizing density toward any "
+            'density in the convex null family. The nonnegative directional derivative of the Kullback-Leibler '
+            'objective says that the null expectation of q divided by the projection is at most one. <bookmark '
+            "mark='c'/> This is precisely the e-value requirement for every original null member. <bookmark "
+            "mark='d'/> The least favourable comparison can lie in the convex hull rather than the original family. "
+            'Without an attained projection, a generalized projection theorem is needed; the displayed ratio is not '
+            'an unconditional existence claim.'
+        ),
             [(r"\text{why fair}", r":", r"\text{the projection's first-order condition}", 38),
              (r"E_P\big[q/p_{\mathrm{RIPr}}\big]", r"\le", r"1 \text{ for all } P \in \mathrm{conv}(H_0)", 38),
              (r"=", r"\;", r"\text{validity for the whole null}", 38),
@@ -141,13 +188,17 @@ class Composite(LectureMixin, VoiceoverScene):
 
     def tests_compare(self):
         self.list_voiceover(
-            "<bookmark mark='a'/> A summary for composite nulls. <bookmark mark='b'/> Universal inference: one split, any "
-            "model, valid always, often conservative. <bookmark mark='c'/> GROW e-values: optimal growth, exact validity, "
-            "explicit for the t-test, two-by-two tables and exponential families, harder elsewhere. <bookmark mark='d'/> "
-            "Mixtures and plug-in alternatives give e-processes, valid at every stopping time, for both. <bookmark mark='e'/> "
-            "Which to use is a question of how much of the problem's structure one can compute with.",
+            (
+            "<bookmark mark='a'/> Composite nulls require a bet fair against the whole family. <bookmark mark='b'/> "
+            'Split likelihood ratios give fixed-sample e-values under correct independent evaluation likelihoods, '
+            "often conservatively. <bookmark mark='c'/> Growth-optimal constructions can exploit structure, but "
+            "their existence, optimality and filtration assumptions matter. <bookmark mark='d'/> Mixtures preserve "
+            'a common sequential validity guarantee, and predictable plug-in alternatives work against a simple '
+            "conditional null. Neither device alone solves an arbitrary composite null. <bookmark mark='e'/> Choose "
+            'a construction whose assumptions and stopping information match the scientific experiment.'
+        ),
             [(r"for composite nulls:", GREY_A),
-             (r"universal inference: \ one split, \ any model, \ always valid, \ often conservative", WEALTHC),
+             (r"universal inference: \ independent split, \ correct likelihood model; \ often conservative", WEALTHC),
              (r"GROW e-values: \ optimal growth; \ explicit for $t$-tests, \ $2 \times 2$ tables, \ exponential families", CSC),
-             (r"mixtures or plug-in bets: \ e-processes, \ valid at every stopping time", SPRTC),
+             (r"sequential extensions need validity in the stated filtration", SPRTC),
              (r"the choice: \ how much structure can be computed with", GREY_A)])

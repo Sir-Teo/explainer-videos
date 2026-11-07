@@ -486,3 +486,106 @@ class LectureMixin:
 
     def card_voiceover(self, text, k, title, subtitle, lit=()):
         return card_voiceover(self, text, k, title, subtitle, lit=lit)
+
+
+# Part-local viewport intersections preserve crossings and missing breaks.
+
+def polyline(ax, xs, ys, color, stroke_width=2.5, opacity=1.0):
+    m=VMobject(stroke_color=color,stroke_width=stroke_width,stroke_opacity=opacity)
+    last=None
+    for p,q in clipped_segments(xs,ys,bounds(ax)):
+        if last is None or not np.allclose(last,p,atol=1e-12,rtol=0):
+            m.start_new_path(ax.c2p(*p))
+        m.add_line_to(ax.c2p(*q))
+        last=q
+    return m
+
+
+def clip_curve(ax,xs,ys,color,stroke_width=3,ymin=None,ymax=None):
+    rectangle=list(bounds(ax))
+    if ymin is not None:rectangle[2]=max(rectangle[2],ymin)
+    if ymax is not None:rectangle[3]=min(rectangle[3],ymax)
+    m=VMobject(stroke_color=color,stroke_width=stroke_width)
+    last=None
+    for p,q in clipped_segments(xs,ys,rectangle):
+        if last is None or not np.allclose(last,p,atol=1e-12,rtol=0):m.start_new_path(ax.c2p(*p))
+        m.add_line_to(ax.c2p(*q));last=q
+    return m
+
+
+def curve(ax,xs,ys,color,stroke_width=3):
+    return polyline(ax,xs,ys,color,stroke_width)
+
+
+def clipped_segments(xs, ys, rectangle):
+    """Intersect segments with the viewport, preserving crossings and missing breaks."""
+    xmin, xmax, ymin, ymax = rectangle
+    points = np.column_stack((xs, ys))
+    result = []
+    for start, end in zip(points[:-1], points[1:]):
+        if not np.isfinite([start, end]).all():
+            continue
+        delta = end-start
+        lo, hi = 0., 1.
+        for j, lower, upper in ((0, xmin, xmax), (1, ymin, ymax)):
+            if delta[j] == 0:
+                if not lower <= start[j] <= upper:
+                    hi = -1
+                    break
+            else:
+                a, b = sorted(((lower-start[j])/delta[j], (upper-start[j])/delta[j]))
+                lo, hi = max(lo, a), min(hi, b)
+        if lo <= hi:
+            result.append((start+lo*delta, start+hi*delta))
+    return result
+
+# These overrides intersect the viewport; omitted values are never flattened.
+_OriginalBettingPaths = BettingPaths
+class BettingPaths(_OriginalBettingPaths):
+    def __init__(self, ax, xs, log10_paths, ymin=-6., ymax=3.):
+        super().__init__(ax, xs, log10_paths, ymin, ymax)
+        self.P = self.raw
+
+    def _line(self, p, color, stroke_width, opacity):
+        return polyline(self.ax, self.xs, p, color, stroke_width, opacity)
+
+
+def _clip_polygon(points, rectangle):
+    polygon = [np.asarray(p, float) for p in points]
+    for j, value, sense in ((0, rectangle[0], 1), (0, rectangle[1], -1),
+                            (1, rectangle[2], 1), (1, rectangle[3], -1)):
+        out = []
+        if not polygon:
+            break
+        previous = polygon[-1]
+        for current in polygon:
+            pin, cin = sense*(previous[j]-value) >= 0, sense*(current[j]-value) >= 0
+            if pin != cin:
+                fraction = (value-previous[j])/(current[j]-previous[j])
+                out.append(previous+fraction*(current-previous))
+            if cin:
+                out.append(current)
+            previous = current
+        polygon = out
+    return polygon
+
+
+_OriginalConfidenceFunnel = ConfidenceFunnel
+class ConfidenceFunnel(_OriginalConfidenceFunnel):
+    def band(self, lo, hi, color, opacity=.28, stroke_width=2.):
+        lo, hi = np.asarray(lo,float), np.asarray(hi,float)
+        fills = VGroup()
+        for i in range(len(self.lt)-1):
+            points = [(self.lt[i],lo[i]),(self.lt[i+1],lo[i+1]),
+                      (self.lt[i+1],hi[i+1]),(self.lt[i],hi[i])]
+            if not np.isfinite(points).all():
+                continue
+            polygon = _clip_polygon(points, bounds(self.ax))
+            if len(polygon) >= 3:
+                fills.add(Polygon(*[self.ax.c2p(*p) for p in polygon], stroke_width=0,
+                                  fill_color=color, fill_opacity=opacity))
+        return VGroup(fills, polyline(self.ax,self.lt,lo,color,stroke_width),
+                      polyline(self.ax,self.lt,hi,color,stroke_width))
+
+    def estimate(self, color=None, stroke_width=2.5):
+        return polyline(self.ax,self.lt,self.est,color or WHITE,stroke_width)

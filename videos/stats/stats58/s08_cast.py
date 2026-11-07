@@ -34,18 +34,26 @@ class CAST(LectureMixin, VoiceoverScene):
 
     def bet(self):
         d = load("cast")
+        heading = label('A working death-label model', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            f"<bookmark mark='a'/> A betting test needs only the deaths. The arms were nearly equal in size, so under the null "
-            f"of no effect each death is equally likely to fall in either arm. <bookmark mark='b'/> A gambler who does not "
-            f"know which way the effect goes bets with a mixture: she averages over the unknown share q of deaths in the drug "
-            f"arm, uniformly. <bookmark mark='c'/> After s of n deaths have fallen in the drug arm, her wealth is the Beta "
-            f"function of s plus one and n minus s plus one, times two to the n: a test martingale under the null. <bookmark "
-            f"mark='d'/> With all {d['n']} deaths, {d['s']} in the drug arm, it is {d['final_e']:.0f}.",
-            [(r"H_0", r":", r"\text{each death in either arm w.p. } \tfrac12", 38),
+            (
+            "<bookmark mark='a'/> The extract gives aggregate deaths, not individual risk sets, follow-up times, or "
+            'their sequence. We illustrate a working model in which successive death labels are IID fair coins '
+            "under the null. Nearly equal trial arms do not by themselves justify that model. <bookmark mark='b'/> "
+            "Mix alternative death-label probabilities uniformly between zero and one. <bookmark mark='c'/> After s "
+            'drug labels among n deaths, the mixture likelihood ratio is two to the n times the Beta function of s '
+            'plus one and n minus s plus one. It is a test martingale under this working label model. <bookmark '
+            "mark='d'/> At the recorded totals, sixty-three of eighty-nine deaths, the terminal wealth is about "
+            "three hundred and thirty-three. This does not reconstruct the clinical trial's sequential analysis."
+        ),
+            [(r"H_0", r":", r"\text{working model: IID fair death labels}", 38),
              (r"\text{bet}", r":", r"\text{mix over the share } q \sim \mathrm{Uniform}(0, 1)", 38),
              (r"W_n", r"=", r"2^n\,B(s + 1, n - s + 1)", 40),
              (r"\text{at the end}", r":", rf"n = {d['n']}, \ s = {d['s']}: \ W = {d['final_e']:.0f}", 40)],
-            [r"equal arms", r"either direction", r"a mixture martingale", r"exact"],
+            [r"a working label model", r"either direction", r"a mixture martingale", r"exact"],
             colors=[(2, WEALTHC), (3, WEALTHC)])
 
     def chart(self):
@@ -62,19 +70,23 @@ class CAST(LectureMixin, VoiceoverScene):
             if len(hit):
                 firsts.add(Dot(A.ax.c2p(x[hit[0]], path[hit[0]]), radius=0.06, color=FIXEDC))
         side = fit_rows(VGroup(
-            label(r"the order of the 89 deaths is not published:", font_size=22),
-            label(r"30 orders consistent with the totals, \ drawn at random", font_size=22, color=WEALTHC),
+            label(r"actual order unavailable in this extract:", font_size=22),
+            label(r"30 of 2,000 simulated orders conditional on totals", font_size=22, color=WEALTHC),
             label(rf"red dots: \ wealth first reaches 20; \ median {d['first_median']:.0f} deaths", font_size=22, color=FIXEDC),
             label(rf"10\% to 90\% of orders: \ {d['first_q10']:.0f} to {d['first_q90']:.0f} deaths", font_size=22, color=GREY_A),
             label(rf"final wealth {d['final_e']:.0f}: \ anytime-valid $p \le {d['p_from_e']:.4f}$", font_size=22, color=CSC),
         ), 4.4, 0.36, [4.6, 0.3, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The order in which the deaths occurred is not in the published record, so we draw orders "
-            f"at random, consistent with the totals. <bookmark mark='b'/> Here are thirty, each the wealth of the mixture "
-            f"gambler death by death. <bookmark mark='c'/> Wealth first reaches twenty after a median of "
-            f"{d['first_median']:.0f} deaths; <bookmark mark='d'/> for most orders, between {d['first_q10']:.0f} and "
-            f"{d['first_q90']:.0f}. <bookmark mark='e'/> At the end it is {d['final_e']:.0f}, an anytime-valid p-value below "
-            f"{say(d['p_from_e'], 4)}: valid whenever the board had looked, and whatever made it stop."
+            (
+            "<bookmark mark='a'/> The actual death order is unavailable in our extract. We simulate two thousand "
+            "orders conditional on the final totals. <bookmark mark='b'/> Thirty are shown; these are illustrative "
+            "paths, not recovered patient histories. <bookmark mark='c'/> Across the two thousand simulated orders, "
+            "the median first crossing of wealth twenty is forty-five deaths. <bookmark mark='d'/> The tenth to "
+            'ninetieth percentiles describe those random permutations only. They do not establish when the actual '
+            "monitoring board could have acted. <bookmark mark='e'/> Every ordering ends at the same wealth, about "
+            'three hundred and thirty-three. Its reciprocal bounds the anytime p-value under the working fair-label '
+            'model; an actual running maximum requires the actual sequence.'
+        )
         ) as vo:
             self.play(FadeIn(A), FadeIn(bp.threshold(0.05)), FadeIn(museum_tag(r"Echt et al., \ \emph{NEJM} (1991); \ orders simulated")))
             vo.wait_until("a")
@@ -91,29 +103,40 @@ class CAST(LectureMixin, VoiceoverScene):
 
     def compare(self):
         d = load("cast")
+        heading = label('Contrasting guarantees', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            f"<bookmark mark='a'/> Against the classical analysis. The z statistic for {d['s']} of {d['n']} is "
-            f"{say(d['z'], 2)}, a fixed-sample p-value of about {d['p_z'] * 1e4:.0f} in ten thousand. <bookmark mark='b'/> The "
-            f"betting test's p-value is about {d['p_from_e'] * 1000:.0f} in a thousand: thirty times weaker on paper. "
-            f"<bookmark mark='c'/> But the fixed-sample p-value assumes the analysis was planned at exactly {d['n']} deaths, "
-            f"and the trial was stopped because the evidence looked strong, which is precisely when fixed-sample p-values "
-            f"overstate. <bookmark mark='d'/> The betting test's number needs no plan: it is the evidence, as money, whenever "
-            f"anyone looked.",
+            (
+            "<bookmark mark='a'/> A normal approximation to a fixed-size fair-label count gives z about three point "
+            "nine two for sixty-three of eighty-nine labels. This is not the original clinical trial's two-arm "
+            "analysis. <bookmark mark='b'/> Under the same illustrative label model, terminal mixture wealth is "
+            'about three hundred and thirty-three; its reciprocal is about point zero zero three. <bookmark '
+            "mark='c'/> The count test is a fixed-n comparison, while a properly specified mixture process permits "
+            'monitoring over time. The difference here reflects both construction and monitoring, and is not a '
+            "universal loss of power for e-values. <bookmark mark='d'/> A clinical guarantee would need the trial's "
+            'randomization, evolving exposures and risk sets. The aggregate totals alone do not supply them.'
+        ),
             [(r"\text{fixed sample}", r":", rf"z = {d['z']:.2f}, \ p \approx {sci(d['p_z'])}", 38),
              (r"\text{betting}", r":", rf"W = {d['final_e']:.0f}, \ p \le {d['p_from_e']:.4f}", 38),
              (r"\text{but}", r":", r"\text{the fixed } p \text{ assumes a planned } n", 38),
-             (r"\text{betting}", r":", r"\text{valid at whatever time the board stopped}", 38)],
+             (r"\text{betting}", r":", r"\text{anytime under the working label model only}", 38)],
             [r"Part 10's test", r"anytime-valid", r"stopped because it looked strong", r"no plan needed"],
             colors=[(0, FIXEDC), (1, CSC)])
 
     def lessons(self):
         self.list_voiceover(
-            "<bookmark mark='a'/> What CAST teaches. <bookmark mark='b'/> Evidence of harm arrived early and clearly; an "
-            "anytime-valid test would have flagged it, at a pre-set wealth of twenty, after about half the deaths. <bookmark "
-            "mark='c'/> Monitoring boards need exactly this: freedom to look whenever, with honest error rates. <bookmark "
-            "mark='d'/> And the strongest lesson is Part thirty-five's: the trial was needed at all because a surrogate had "
-            "been trusted. No sequential method rescues the wrong endpoint.",
+            (
+            "<bookmark mark='a'/> CAST demonstrates the importance of mortality endpoints and safety monitoring. "
+            "<bookmark mark='b'/> The aggregate totals also support an illustrative betting calculation under an "
+            'explicit working model, but the simulated paths cannot locate the actual earliest warning. <bookmark '
+            "mark='c'/> Monitoring boards need sequential methods matched to the trial's assignment and outcome "
+            "processes. <bookmark mark='d'/> The central clinical lesson remains: improvement in a surrogate did "
+            'not establish improved survival. A sequential method cannot repair a scientifically inappropriate '
+            'endpoint.'
+        ),
             [(r"what CAST teaches:", GREY_A),
-             (r"harm showed early: \ wealth 20 after about half the deaths", FIXEDC),
+             (r"illustrative simulated paths cannot date the actual warning", FIXEDC),
              (r"boards need to look whenever, \ with honest error rates", CSC),
              (r"no sequential method rescues the wrong endpoint \ (Part 35)", WEALTHC)])

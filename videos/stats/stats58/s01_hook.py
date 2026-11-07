@@ -29,13 +29,16 @@ class Hook(LectureMixin, VoiceoverScene):
             label(r"Wallis (1980): \ one of the most seminal statistical ideas of its time", font_size=24, color=WEALTHC),
         ), 12.4, 0.35, [0, -1.8, 0])
         with self.voiceover(
+            (
             "<bookmark mark='a'/> In 1943, at the Statistical Research Group at Columbia University, a Navy officer "
-            "complained about a test comparing two alternative methods. It had to run its full planned length, though a "
-            "seasoned observer could have called the answer long before. W. Allen Wallis and Milton Friedman wondered "
-            "whether a test could stop as soon as the evidence sufficed, and took the question to Abraham Wald. <bookmark "
-            "mark='b'/> Wald's answer was the sequential probability ratio test. <bookmark mark='c'/> It was classified "
-            "until 1945, then published, and in 1947 became a book. <bookmark mark='d'/> Wallis, writing the group's history "
-            "in 1980, counted it among the most seminal statistical ideas of its time."
+            'complained about a test comparing two alternative methods. It had to run its full planned length, '
+            'though a seasoned observer could have called the answer long before. W. Allen Wallis and Milton '
+            'Friedman wondered whether a test could stop as soon as the evidence sufficed, and took the question to '
+            "Abraham Wald. <bookmark mark='b'/> Wald's answer was the sequential probability ratio test. <bookmark "
+            "mark='c'/> It was classified until 1945, then published, and in 1947 became a book. <bookmark "
+            "mark='d'/> Wallis, writing the group's history in 1980, counted it among the most seminal statistical "
+            'ideas of its time.'
+        )
         ) as vo:
             self.play(FadeIn(tl))
             vo.wait_until("a")
@@ -46,12 +49,19 @@ class Hook(LectureMixin, VoiceoverScene):
         self.clear_scene()
 
     def idea(self):
+        heading = label('The sequential likelihood-ratio rule', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> The idea fits in one line. After each observation, compute the likelihood ratio of the "
-            "alternative against the null. <bookmark mark='b'/> If it climbs above a threshold A, stop and reject the null. "
-            "<bookmark mark='c'/> If it falls below a threshold B, stop and accept it. <bookmark mark='d'/> Otherwise take "
-            "another observation. Wald showed that A equal to one minus beta over alpha, and B equal to beta over one minus "
-            "alpha, give error rates close to alpha and beta, whatever the data turn out to be.",
+            (
+            "<bookmark mark='a'/> The idea fits in one line. After each observation, compute the likelihood ratio "
+            "of the alternative against the null. <bookmark mark='b'/> If it climbs above a threshold A, stop and "
+            "reject the null. <bookmark mark='c'/> If it falls below a threshold B, stop and accept it. <bookmark "
+            "mark='d'/> Otherwise take another observation. Wald showed that A equal to one minus beta over alpha, "
+            'and B equal to beta over one minus alpha, are approximate target thresholds. Overshoot changes actual '
+            'errors; we compute them for this IID example.'
+        ),
             [(r"\Lambda_n", r"=", r"\prod_{i \le n} \frac{f_1(X_i)}{f_0(X_i)}", 38),
              (r"\Lambda_n \ge A", r":", r"\text{stop; \ reject } H_0", 38),
              (r"\Lambda_n \le B", r":", r"\text{stop; \ accept } H_0", 38),
@@ -62,13 +72,12 @@ class Hook(LectureMixin, VoiceoverScene):
     def numbers(self):
         d = load("hook")
         fx = d["fixed"]
+        heading = label('A nonrandomized fixed-count comparison', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            f"<bookmark mark='a'/> Wald's own kind of example: lots of shells, where a defective rate of ten percent is "
-            f"acceptable and twenty percent is not, with alpha five percent and beta ten. <bookmark mark='b'/> The best "
-            f"fixed-sample test needs {fx['n']} shells, rejecting with {fx['c']} or more defectives. <bookmark mark='c'/> The "
-            f"sequential test, computed exactly, needs on average {d['asn0']:.0f} shells when the rate is ten percent and "
-            f"{d['asn1']:.0f} when it is twenty: <bookmark mark='d'/> a saving of about {100 * d['saving0']:.0f} percent, with "
-            f"its error rates at {100 * d['size']:.1f} and {100 * (1 - d['power']):.1f} percent, inside the targets.",
+            f"<bookmark mark='a'/> Wald's own kind of example: lots of shells, where a defective rate of ten percent is acceptable and twenty percent is not, with alpha five percent and beta ten. <bookmark mark='b'/> The smallest nonrandomized one-sided binomial count test meeting these targets needs {fx['n']} shells, rejecting with {fx['c']} or more defectives. <bookmark mark='c'/> The sequential test, computed exactly, needs on average {d['asn0']:.0f} shells when the rate is ten percent and {d['asn1']:.0f} when it is twenty: <bookmark mark='d'/> a saving of about {100 * d['saving0']:.0f} percent, with its error rates at {100 * d['size']:.1f} and {100 * (1 - d['power']):.1f} percent, inside the targets.",
             [(r"p_0 = 0.1, \ p_1 = 0.2", r":", r"\alpha = 0.05, \ \beta = 0.10", 38),
              (r"\text{fixed sample}", r":", rf"n = {fx['n']}, \ \text{{reject if }} \ge {fx['c']} \text{{ defective}}", 36),
              (r"\text{SPRT}", r":", rf"E_{{p_0}} N = {d['asn0']:.1f}, \ \ E_{{p_1}} N = {d['asn1']:.1f}", 36),
@@ -80,6 +89,10 @@ class Hook(LectureMixin, VoiceoverScene):
         d = load("ville")
         ns, cv = d["ns"], d["curve"]
         lab = {n: c for n, c in zip(ns, cv)}
+        heading = label('Repeated fixed-sample tests inflate error', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
             f"<bookmark mark='a'/> But the SPRT is the disciplined way to look early. The undisciplined way is to run an "
             f"ordinary five percent test, and check it after every new observation. <bookmark mark='b'/> If there is no "
@@ -105,12 +118,14 @@ class Hook(LectureMixin, VoiceoverScene):
 
     def turn(self):
         self.list_voiceover(
-            "<bookmark mark='a'/> So there are two questions. <bookmark mark='b'/> The first is how to test so that you may "
-            "look whenever you like, and stop whenever you like, and keep your error rate. <bookmark mark='c'/> The answer "
-            "will be a single inequality from 1939, Jean Ville's, and the idea of betting against the null. <bookmark "
-            "mark='d'/> The second is how to experiment when you choose what to collect as you go, as an A/B platform or an "
-            "adaptive trial does. <bookmark mark='e'/> Then the data are no longer independent of the design, and inference "
-            "needs its own tools.",
+            (
+            "<bookmark mark='a'/> So there are two questions. <bookmark mark='b'/> The first is how to test so that "
+            'you may look whenever you like, and stop whenever you like, and keep your error rate. <bookmark '
+            "mark='c'/> The answer will be a single inequality from 1939, Jean Ville's, and the idea of betting "
+            "against the null. <bookmark mark='d'/> The second is how to experiment when you choose what to collect "
+            "as you go, as an A/B platform or an adaptive trial does. <bookmark mark='e'/> Then the data are no "
+            'longer independent of the design, and inference needs its own tools.'
+        ),
             [(r"two questions:", GREY_A),
              (r"1. \ test so that you may look, \ and stop, \ whenever you like", WEALTHC),
              (r"answer: \ Ville's inequality (1939), \ betting, \ e-values, \ confidence sequences", CSC),
@@ -126,10 +141,13 @@ class Hook(LectureMixin, VoiceoverScene):
         ]
         VGroup(*cards).arrange(DOWN, buff=0.4).move_to(ORIGIN)
         with self.voiceover(
-            "<bookmark mark='a'/> Two promises come due. Part ten computed a p-value once, at a sample size fixed in "
-            "advance, and assumed you look once. Chapters three to seven build e-values and test martingales, valid at every "
-            "look. <bookmark mark='b'/> Part thirty-five gave group-sequential boundaries for looks planned in advance. "
-            "Chapter two puts them in the Brownian picture, and chapter six allows a look at any time."
+            (
+            "<bookmark mark='a'/> Two promises come due. Part ten computed a p-value once, at a sample size fixed "
+            'in advance, and assumed you look once. Chapters three to seven build e-values and test martingales, '
+            "valid at every look. <bookmark mark='b'/> Part thirty-five gave group-sequential boundaries for looks "
+            'planned in advance. Chapter two puts them in the Brownian picture, and chapter six allows a look at '
+            'any time.'
+        )
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(cards[0], shift=UP * 0.2))
@@ -150,11 +168,14 @@ class Hook(LectureMixin, VoiceoverScene):
         prereq = note(r"prerequisites: \ Parts 35, \ 44, \ 46").to_corner(DL, buff=0.3)
         built = note(r"built: \ \texttt{statkit.sequential}, \ the confidence funnel").to_corner(DR, buff=0.3)
         with self.voiceover(
-            "<bookmark mark='a'/> Part fifty-eight: anytime-valid inference and adaptive experiments. <bookmark mark='b'/> "
-            "The sequential probability ratio test, computed exactly; group-sequential theory and estimation after stopping; "
-            "test martingales and Ville's inequality; testing by betting and e-values, for simple and composite nulls; "
-            "confidence sequences; the CAST trial as a betting test; multiple testing with e-values; change detection on the "
-            "Nile; and bandits, adaptive designs, and the inference they need, with off-policy evaluation and open problems."
+            (
+            "<bookmark mark='a'/> Part fifty-eight: anytime-valid inference and adaptive experiments. <bookmark "
+            "mark='b'/> The sequential probability ratio test, computed exactly; group-sequential theory and "
+            "estimation after stopping; test martingales and Ville's inequality; testing by betting and e-values, "
+            'for simple and composite nulls; confidence sequences; the CAST trial as a betting test; multiple '
+            'testing with e-values; change detection on the Nile; and bandits, adaptive designs, and the inference '
+            'they need, with off-policy evaluation and open problems.'
+        )
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head, shift=UP * 0.2))

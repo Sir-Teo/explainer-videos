@@ -15,12 +15,19 @@ class OffPolicy(LectureMixin, VoiceoverScene):
         self.uses()
 
     def question(self):
+        heading = label('A fixed target policy and logged actions', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> The adaptive experiment is over, and its logs record, for each visitor, the design shown, "
-            "the probability of showing it, and the response. <bookmark mark='b'/> A manager asks: what would the conversion "
-            "rate have been if we had always shown design A? <bookmark mark='c'/> That policy was never run; but every "
-            "visitor who happened to see A is evidence about it. <bookmark mark='d'/> This is Part thirty-five's potential "
-            "outcomes question, with a known, changing assignment mechanism.",
+            (
+            "<bookmark mark='a'/> The adaptive experiment is over, and its logs record, for each visitor, the "
+            "design shown, the probability of showing it, and the response. <bookmark mark='b'/> A manager asks: "
+            "what would the conversion rate have been if we had always shown design A? <bookmark mark='c'/> That "
+            'policy was never run; but every visitor who happened to see A is evidence about it. <bookmark '
+            "mark='d'/> This is Part thirty-five's potential outcomes question, with a known, changing assignment "
+            'mechanism.'
+        ),
             [(r"\text{logs}", r":", r"(A_t, \ e_t(A_t), \ Y_t), \ t = 1, \dots, T", 40),
              (r"\text{target}", r":", r"V(\pi) = E[Y(\pi)] \text{ for a policy } \pi", 40),
              (r"\text{e.g.}", r":", r"\pi = \text{always show A}", 40),
@@ -29,13 +36,21 @@ class OffPolicy(LectureMixin, VoiceoverScene):
             colors=[(1, BANDITC)])
 
     def ipw(self):
+        heading = label('Known positive conditional propensities', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> Inverse-propensity weighting: reweight each logged outcome by how much more often the "
-            "target policy would have chosen that action than the logging policy did. <bookmark mark='b'/> Its expectation "
-            "is the target policy's value, exactly, given the logs' propensities, because each weight undoes the logging "
-            "policy's choice. <bookmark mark='c'/> It needs the logging policy to give every action the target might take a "
-            "positive probability: overlap, again. <bookmark mark='d'/> Its variance grows with the size of the weights, so "
-            "a target far from the logging policy is estimated badly.",
+            (
+            "<bookmark mark='a'/> For a fixed target policy, weight each logged response by target action "
+            "probability divided by its known conditional logging probability. <bookmark mark='b'/> Under "
+            'sequential randomization and the stationary outcome model, each score has the target value in '
+            'conditional expectation. Its mean is unbiased over repetitions of the experiment, not conditional on '
+            "the complete realized logs. <bookmark mark='c'/> Every action used by the target needs positive "
+            'logging probability. With contextual policies these probabilities and outcome models must condition on '
+            "the relevant context. <bookmark mark='d'/> Small overlap can produce large variance. Normal confidence "
+            'intervals need additional variance and martingale limit conditions.'
+        ),
             [(r"\hat V_{\mathrm{IPW}}", r"=", r"\frac1T\textstyle\sum_t \frac{\pi(A_t)}{e_t(A_t)}\,Y_t", 40),
              (r"E[\hat V_{\mathrm{IPW}}]", r"=", r"V(\pi)", 40),
              (r"\text{needs}", r":", r"e_t(a) > 0 \text{ wherever } \pi(a) > 0", 40),
@@ -44,16 +59,24 @@ class OffPolicy(LectureMixin, VoiceoverScene):
             colors=[(0, WEALTHC)])
 
     def dr(self):
+        heading = label('Predictable outcome models and augmentation', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> The doubly robust estimator adds a model of each action's mean, m hat. <bookmark mark='b'/> "
-            "Predict the policy's value from the model, then correct the prediction with the weighted residuals of the "
-            "logged outcomes. <bookmark mark='c'/> It is unbiased if the propensities are right, whatever the model; and "
-            "with a good model, the residuals are small and so is the variance. <bookmark mark='d'/> Miroslav Dudík, John "
-            "Langford and Lihong Li brought it to bandit logs in 2011; it is Part thirty-six's augmented IPW, with "
-            "propensities that the experiment itself recorded.",
+            (
+            "<bookmark mark='a'/> Add a fixed or predictable model of each arm's mean to obtain an augmented "
+            "estimator. <bookmark mark='b'/> Predict the target value, then correct it using weighted residuals for "
+            "the actions actually taken. <bookmark mark='c'/> With the true positive logging probabilities, the "
+            'estimator remains unbiased even if this predictable model is wrong. A model fitted using the same '
+            'future responses needs additional justification, such as a suitable independent evaluation design. A '
+            'good model can reduce variance, but improvement is not automatic for an arbitrary fit. <bookmark '
+            "mark='d'/> Dudik, Langford and Li developed this approach for bandit policy evaluation in 2011. Our "
+            'numerical example uses a fixed constant model and asymptotic normal intervals.'
+        ),
             [(r"\hat V_{\mathrm{DR}}", r"=", r"\frac1T\textstyle\sum_t \Big\{\sum_a \pi(a)\hat m(a) + \frac{\pi(A_t)}{e_t(A_t)}\big(Y_t - \hat m(A_t)\big)\Big\}", 34),
              (r"\text{model term}", r":", r"\text{the prediction}", 40),
-             (r"\text{unbiased}", r":", r"\text{if the propensities are right; \ smaller variance}", 38),
+             (r"\text{unbiased}", r":", r"\text{known propensities, predictable model; \ potential variance gain}", 38),
              (r"\text{history}", r":", r"\text{Dud\'ik, \ Langford \& Li (2011)}", 38)],
             [r"Part 36's AIPW", r"plug in", r"double robustness", r"bandit logs"],
             colors=[(0, CSC)])
@@ -90,13 +113,20 @@ class OffPolicy(LectureMixin, VoiceoverScene):
         self.clear_scene()
 
     def variance(self):
+        heading = label('An actual minimum assignment probability', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> Why did the experiment's floor matter? The weight on a visitor who saw design A is one over "
-            "the probability of showing A. <bookmark mark='b'/> Thompson sampling drove that probability down as A looked "
-            "worse; without a floor it could reach a thousandth, and a single such visitor would carry a weight of a "
-            "thousand. <bookmark mark='c'/> The floor of five percent caps every weight at twenty. <bookmark mark='d'/> So an "
-            "adaptive experiment meant for later evaluation should keep every arm's probability above a floor: a small cost "
-            "in welfare, a large gain in what the logs can answer.",
+            (
+            "<bookmark mark='a'/> Why did the experiment's floor matter? The weight on a visitor who saw design A "
+            "is one over the probability of showing A. <bookmark mark='b'/> Thompson sampling drove that "
+            'probability down as A looked worse; without a floor it can become very small, and a single such '
+            "visitor would carry a weight of a thousand. <bookmark mark='c'/> The floor of five percent caps every "
+            "weight at twenty. <bookmark mark='d'/> So an adaptive experiment meant for later evaluation should "
+            "keep every arm's probability above a floor: a small cost in welfare, a large gain in what the logs can "
+            'answer.'
+        ),
             [(r"\text{weight}", r"=", r"1/e_t(\mathrm{A})", 40),
              (r"\text{no floor}", r":", r"e_t \to 0.001: \ \text{weight } 1{,}000", 40),
              (r"\text{floor } 0.05", r":", r"\text{weights} \le 20", 40),
@@ -106,11 +136,13 @@ class OffPolicy(LectureMixin, VoiceoverScene):
 
     def uses(self):
         self.list_voiceover(
-            "<bookmark mark='a'/> Where off-policy evaluation is used. <bookmark mark='b'/> Recommendation systems and "
-            "advertising, to test a new ranking policy on old logs before deploying it. <bookmark mark='c'/> Medicine, to "
-            "evaluate dynamic treatment regimes from sequentially randomized trials, a subject for Part sixty-two. <bookmark "
-            "mark='d'/> And reinforcement learning, where the policy acts over many steps and the weights multiply, the "
-            "hardest case of all.",
+            (
+            "<bookmark mark='a'/> Where off-policy evaluation is used. <bookmark mark='b'/> Recommendation systems "
+            "and advertising, to test a new ranking policy on old logs before deploying it. <bookmark mark='c'/> "
+            'Medicine, to evaluate dynamic treatment regimes from sequentially randomized trials, a subject for '
+            "Part sixty-two. <bookmark mark='d'/> And reinforcement learning, where the policy acts over many steps "
+            'and the weights multiply, the hardest case of all.'
+        ),
             [(r"where it is used:", GREY_A),
              (r"recommenders and advertising: \ test a policy on old logs", BANDITC),
              (r"medicine: \ dynamic treatment regimes \ (Part 62)", CSC),
