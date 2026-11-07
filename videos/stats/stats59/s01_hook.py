@@ -19,23 +19,25 @@ class Hook(LectureMixin, VoiceoverScene):
     def story(self):
         tl = timeline(lit=(2019,)).to_edge(UP, buff=0.35)
         hc = history_card(2019, r"P. Sur \& E. Cand\`es, \ \emph{A modern maximum-likelihood theory for high-dimensional logistic regression}",
-                          r"in \emph{PNAS}: \ with one variable for every five observations, \ the logistic MLE overestimates every "
-                          r"effect by half, \ its standard errors are too small, \ and the likelihood-ratio test's $\chi^2$ "
-                          r"approximation rejects true nulls far too often", color=CLASSC, width=11.4, font_size=23).move_to([0, 1.0, 0])
+                          "in \\emph{PNAS}: \\ with one variable for every five observations, \\ the logistic MLE has inflation factor 1.50 in the stated Gaussian example, \\ its standard errors are too small, \\ and the likelihood-ratio test's $\\chi^2$ approximation rejects true nulls far too often", color=CLASSC, width=11.4, font_size=23).move_to([0, 1.0, 0])
         rows = fit_rows(VGroup(
-            label(r"the textbook: \ unbiased MLE, \ inverse Fisher information, \ Wilks's $\chi^2$", font_size=26, color=GREY_A),
+            label(r"the textbook: \ asymptotically centered MLE, \ inverse Fisher information, \ Wilks's $\chi^2$", font_size=26, color=GREY_A),
             label(r"all three are fixed-$p$ results: \ $p$ stays put while $n \to \infty$", font_size=26, color=CLASSC),
             label(r"but genomics, \ advertising and surveys now have $p$ a fifth of $n$, \ or more", font_size=26, color=PROPC),
         ), 12.4, 0.35, [0, -1.8, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In 2019 Pragya Sur and Emmanuel Candès published a short alarm in the Proceedings of the "
-            "National Academy of Sciences. Fit a logistic regression with one variable for every five observations, and the "
-            "maximum-likelihood estimates overestimate every effect by about a half; their standard errors are too small; and "
-            "the likelihood-ratio test's chi-squared approximation rejects true null hypotheses far too often. <bookmark "
-            "mark='b'/> The textbook says the MLE is unbiased, its variance is the inverse Fisher information, and twice the "
-            "log likelihood ratio is chi-squared. <bookmark mark='c'/> All three are statements in which p stays fixed while n "
-            "goes to infinity. <bookmark mark='d'/> But genomics, advertising and surveys routinely have p a fifth of n, or "
-            "more."
+            (
+            "<bookmark mark='a'/> Sur and Candes developed a modern proportional-limit theory for logistic maximum "
+            'likelihood. In their Gaussian example with p over n equal to one-fifth and signal variance five, '
+            'estimates have an inflation factor about one point five, a larger noise scale than the textbook '
+            'prediction, and a rescaled likelihood-ratio law. A realized coefficient need not individually '
+            "overestimate its truth. <bookmark mark='b'/> Classical theory says that under regularity, "
+            "fixed-dimensional MLEs are asymptotically centered and normal, and Wilks's statistic has a chi-squared "
+            "limit. It does not claim every finite-sample MLE is unbiased. <bookmark mark='c'/> Those asymptotic "
+            "conclusions hold in a different limiting regime, with dimension fixed. <bookmark mark='d'/> When a "
+            'substantial fraction of observations is used to fit parameters, the proportional regime can better '
+            'describe the errors.'
+        )
         ) as vo:
             self.play(FadeIn(tl))
             vo.wait_until("a")
@@ -47,6 +49,10 @@ class Hook(LectureMixin, VoiceoverScene):
 
     def claims(self):
         d = load("hook")
+        heading = label('The Gaussian logistic example and its scaling', font_size=30, color=PROPC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
             f"<bookmark mark='a'/> Their setting: n observations, p equal to a fifth of n, Gaussian covariates, and coefficients "
             f"scaled so that the linear predictor has variance gamma squared equal to five. <bookmark mark='b'/> In the limit, "
@@ -71,7 +77,7 @@ class Hook(LectureMixin, VoiceoverScene):
         ax = A.ax
         r = np.random.default_rng(0)
         jit = r.uniform(-0.12, 0.12, len(beta)) * bv
-        dots = VGroup(*[Dot(ax.c2p(a + j, float(np.clip(b, -lim, lim))), radius=0.035, color=SIMC, fill_opacity=0.6) for a, b, j in zip(beta, bh, jit)])
+        dots = VGroup(*[Dot(ax.c2p(a + j, float(b)), radius=0.035, color=SIMC, fill_opacity=0.6) for a, b, j in zip(beta, bh, jit)])
         ident = Line(ax.c2p(-lim, -lim), ax.c2p(lim, lim), color=GREY_B, stroke_width=2)
         theo = Line(ax.c2p(-lim / d["alpha"], -lim), ax.c2p(lim / d["alpha"], lim), color=PROPC, stroke_width=3)
         side = fit_rows(VGroup(
@@ -123,7 +129,7 @@ class Hook(LectureMixin, VoiceoverScene):
             f"<bookmark mark='a'/> The likelihood-ratio test, run {d['reps']} times on a coefficient that is truly zero. "
             f"<bookmark mark='b'/> With the textbook chi-squared, the p-values pile up near zero: {100 * d['size_classic']:.1f} "
             f"percent fall below five percent, and {100 * d['size_classic_01']:.1f} below one. <bookmark mark='c'/> Divide the "
-            f"statistic by Sur and Candès's factor, {say(d['factor'], 3)}, and the histogram is flat: "
+            f"statistic by Sur and Candès's factor, {say(d['factor'], 3)}, and the histogram is closer to uniform, with finite-sample and Monte Carlo error: "
             f"{100 * d['size_rescaled']:.1f} percent below five percent."
         ) as vo:
             self.play(FadeIn(A), FadeIn(B), Create(f1), Create(f2), FadeIn(simulated_tag(r"simulated")))
@@ -145,16 +151,19 @@ class Hook(LectureMixin, VoiceoverScene):
 
     def why_now(self):
         self.list_voiceover(
-            "<bookmark mark='a'/> Why classical asymptotics fail. <bookmark mark='b'/> Fixed-p theory expands around the truth, "
-            "and the error of each estimated coordinate is of order one over root n. <bookmark mark='c'/> With p coordinates "
-            "all estimated at once, those errors add up: the remainder terms grow like p over root n, which does not vanish "
-            "when p is proportional to n. <bookmark mark='d'/> So the limits change: not just bigger standard errors, but "
-            "different laws, with bias, inflated variance and rescaled statistics. <bookmark mark='e'/> This part finds them "
-            "exactly, with four tools: random matrix theory, approximate message passing, Gordon's comparison inequality, "
-            "and the physicists' replica method.",
+            (
+            "<bookmark mark='a'/> Why can fixed-dimensional approximations fail? <bookmark mark='b'/> With ordinary "
+            'unit-scale predictors, individual coordinate errors often shrink at the root-n rate in regular '
+            "fixed-dimensional models. <bookmark mark='c'/> Across p coordinates the total squared error is of "
+            'order p over n, which need not vanish when p is proportional to n. Taylor remainder rates depend on '
+            "the model; p over root n is not a universal formula. <bookmark mark='d'/> Nonnegligible joint "
+            "estimation error can change centering, spread and likelihood-ratio limits. <bookmark mark='e'/> We "
+            'study exact limiting formulas under stated model assumptions, using random matrices, AMP, Gaussian '
+            'comparison and replica predictions with rigorous results where available.'
+        ),
             [(r"why fixed-$p$ theory fails:", GREY_A),
              (r"each coordinate's error is $O(1/\sqrt n)$", GREY_A),
-             (r"$p$ of them at once: \ remainders of order $p/\sqrt n$, \ which do not vanish", CLASSC),
+             (r"$p$ coordinates: \ total squared error can be of order $p/n$", CLASSC),
              (r"new limits: \ bias, \ inflated variance, \ rescaled statistics", PROPC),
              (r"the tools: \ random matrices, \ AMP, \ Gordon's comparison, \ the replica method", AMPC)])
 
@@ -167,10 +176,12 @@ class Hook(LectureMixin, VoiceoverScene):
         ]
         VGroup(*cards).arrange(DOWN, buff=0.4).move_to(ORIGIN)
         with self.voiceover(
-            "<bookmark mark='a'/> Two promises come due. Part twenty-two said the MLE is efficient and Wilks's statistic is "
-            "chi-squared, assuming p fixed as n grows; chapters one and nine give the proportional limits and the corrections. "
-            "<bookmark mark='b'/> Part fifty-two gave high-dimensional rates, up to constants, under sparsity; chapters three "
-            "to eight give exact errors, constants included."
+            (
+            "<bookmark mark='a'/> Two promises come due. Part twenty-two said the MLE is efficient and Wilks's "
+            'statistic is chi-squared, assuming p fixed as n grows; chapters one and nine give the proportional '
+            "limits and the corrections. <bookmark mark='b'/> Part fifty-two gave high-dimensional rates, up to "
+            'constants, under sparsity; chapters three to eight give exact errors, constants included.'
+        )
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(cards[0], shift=UP * 0.2))
@@ -190,11 +201,13 @@ class Hook(LectureMixin, VoiceoverScene):
         prereq = note(r"prerequisites: \ Parts 32, \ 51, \ 52").to_corner(DL, buff=0.3)
         built = note(r"built: \ \texttt{statkit.amp}, \ the state-evolution cobweb").to_corner(DR, buff=0.3)
         with self.voiceover(
-            "<bookmark mark='a'/> Part fifty-nine: high-dimensional asymptotics. <bookmark mark='b'/> The proportional regime, "
-            "and the logistic MLE and likelihood-ratio test solved exactly; random matrix tools, Stieltjes transforms and free "
-            "convolution; exact risks for ridge and ridgeless regression; robust regression in high dimensions; approximate "
-            "message passing and its state evolution; Gordon's comparison inequality; the replica method; random features; "
-            "corrected inference; and open problems."
+            (
+            "<bookmark mark='a'/> Part fifty-nine: high-dimensional asymptotics. <bookmark mark='b'/> The "
+            'proportional regime, and the logistic MLE and likelihood-ratio test solved exactly; random matrix '
+            'tools, Stieltjes transforms and free convolution; exact risks for ridge and ridgeless regression; '
+            "robust regression in high dimensions; approximate message passing and its state evolution; Gordon's "
+            'comparison inequality; the replica method; random features; corrected inference; and open problems.'
+        )
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head, shift=UP * 0.2))

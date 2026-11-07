@@ -171,7 +171,7 @@ python tools/lecture_length.py stats58 --floor 50
 
 ## QA reconciliation
 
-Detailed [scientific source review](../../../../docs/qa/evidence/stats58-polish-20261107/source-review.md), including corrected methods, Monte Carlo errors and remaining production gates:
+Detailed [scientific source review](../../../docs/qa/evidence/stats58-polish-20261107/source-review.md), including corrected methods, Monte Carlo errors and remaining production gates:
 
 All sixteen English scenes and the shared sequential helpers were reviewed. Twenty-three checks pass (18 local parameterized cases, five legacy tests). All sixteen inputs were regenerated. This is a scientific-source checkpoint, with visual production verification pending.
 

@@ -21,13 +21,20 @@ class AMP(LectureMixin, VoiceoverScene):
         self.proof()
 
     def algorithm(self):
+        heading = label('AMP with a correctly scaled Gaussian matrix', font_size=30, color=PROPC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> David Donoho, Arian Maleki and Andrea Montanari introduced approximate message passing in "
-            "2009, for compressed sensing: recover a sparse x from y equal to A x plus noise, with A an n by p Gaussian "
-            "matrix. <bookmark mark='b'/> Each step forms a pseudo-observation, the current estimate plus A transpose times "
-            "the residual, <bookmark mark='c'/> and soft-thresholds it, as the lasso does. <bookmark mark='d'/> The residual "
-            "carries one extra term, the Onsager correction: the previous residual, times the fraction of coordinates "
-            "currently nonzero, divided by delta, the ratio n over p.",
+            (
+            "<bookmark mark='a'/> David Donoho, Arian Maleki and Andrea Montanari introduced approximate message "
+            'passing in 2009, for compressed sensing: recover a sparse x from y equal to A x plus noise, with A an '
+            "n by p Gaussian matrix. <bookmark mark='b'/> Each step forms a pseudo-observation, the current "
+            "estimate plus A transpose times the residual, <bookmark mark='c'/> and soft-thresholds it, as the "
+            "lasso does. <bookmark mark='d'/> The residual carries one extra term, the Onsager correction: the "
+            'previous residual, times the fraction of coordinates currently nonzero, divided by delta, the ratio n '
+            'over p.'
+        ),
             [(r"\text{problem}", r":", r"y = Ax + w, \ \ A_{ij} \sim N(0, 1/n), \ \ \delta = n/p", 38),
              (r"r^t", r"=", r"x^t + A'z^t", 40),
              (r"x^{t+1}", r"=", r"\eta(r^t; \theta\tau_t), \ \ \eta = \text{soft threshold}", 40),
@@ -36,13 +43,20 @@ class AMP(LectureMixin, VoiceoverScene):
             colors=[(3, AMPC)])
 
     def onsager(self):
+        heading = label('The reaction term cancels leading feedback', font_size=30, color=PROPC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> Without the Onsager term, this is iterative soft thresholding, Part twenty-one's ISTA, "
-            "and its pseudo-observations are a tangle of correlated errors. <bookmark mark='b'/> The extra term cancels, to "
-            "leading order, the correlation between the current estimate and the noise in A transpose z. <bookmark "
-            "mark='c'/> The effect is remarkable: at every iteration, the pseudo-observation behaves like the truth plus "
-            "independent Gaussian noise, coordinate by coordinate. <bookmark mark='d'/> The idea comes from statistical "
-            "physics, where Thouless, Anderson and Palmer used such a reaction term for spin glasses in 1977.",
+            (
+            "<bookmark mark='a'/> Without the Onsager term, this resembles iterative soft thresholding with a unit "
+            'step; ordinary ISTA also needs a suitable step size, and its pseudo-observations are a tangle of '
+            "correlated errors. <bookmark mark='b'/> The extra term cancels, to leading order, the correlation "
+            "between the current estimate and the noise in A transpose z. <bookmark mark='c'/> The effect is "
+            'remarkable: at every iteration, the pseudo-observation behaves like the truth plus independent '
+            "Gaussian noise, coordinate by coordinate. <bookmark mark='d'/> The idea comes from statistical "
+            'physics, where Thouless, Anderson and Palmer used such a reaction term for spin glasses in 1977.'
+        ),
             [(r"\text{without it}", r":", r"\text{ISTA: \ correlated errors}", 40),
              (r"\text{with it}", r":", r"\text{the correlation with the past cancels}", 40),
              (r"r^t", r"\approx", r"x + \tau_t Z \ \ \text{coordinatewise, \ } Z \sim N(0, 1)", 40),
@@ -51,17 +65,24 @@ class AMP(LectureMixin, VoiceoverScene):
             colors=[(2, AMPC)])
 
     def se(self):
+        heading = label('State evolution at each fixed iteration', font_size=30, color=PROPC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> Then the noise level obeys a one-dimensional recursion, the state evolution. <bookmark "
-            "mark='b'/> The next noise variance is the measurement noise, plus one over delta times the mean squared error "
-            "of the soft-threshold denoiser applied to the truth plus noise at the current level. <bookmark mark='c'/> The "
-            "expectation is over one scalar: a coordinate of x drawn from its empirical distribution, and an independent "
-            "standard normal. <bookmark mark='d'/> Mohsen Bayati and Montanari proved in 2011 that this holds exactly in the "
-            "proportional limit, for Gaussian matrices, at every fixed iteration.",
+            (
+            "<bookmark mark='a'/> Then the noise level obeys a one-dimensional recursion, the state evolution. "
+            "<bookmark mark='b'/> The next noise variance is the measurement noise, plus one over delta times the "
+            'mean squared error of the soft-threshold denoiser applied to the truth plus noise at the current '
+            "level. <bookmark mark='c'/> The expectation is over one scalar: a coordinate of x drawn from its "
+            "empirical distribution, and an independent standard normal. <bookmark mark='d'/> Mohsen Bayati and "
+            'Montanari proved in 2011 that this holds exactly in the proportional limit, for Gaussian matrices, at '
+            'every fixed iteration.'
+        ),
             [(r"\tau_{t+1}^2", r"=", r"\sigma^2 + \tfrac1\delta\,E\big[(\eta(X + \tau_t Z; \theta\tau_t) - X)^2\big]", 38),
              (r"\text{the map}", r":", r"\tau^2 \mapsto F(\tau^2)", 40),
              (r"\text{a scalar expectation}", r":", r"X \sim \text{the signal's law}, \ Z \sim N(0, 1)", 38),
-             (r"\text{theorem}", r":", r"\text{exact in the limit, \ every } t", 40)],
+             (r"\text{theorem}", r":", r"\text{proportional limit at every fixed } t", 40)],
             [r"state evolution", r"the cobweb's curve", r"one dimension", r"Bayati \& Montanari (2011)"],
             colors=[(0, AMPC), (3, PROPC)])
 
@@ -110,12 +131,16 @@ class AMP(LectureMixin, VoiceoverScene):
     def compare(self):
         d = load("amp")
         t_amp, t_se = d["tau2_amp"], d["tau2_se"]
+        heading = label('Measured iterates and limiting predictions', font_size=30, color=PROPC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
             f"<bookmark mark='a'/> The numbers, side by side. After one iteration, AMP's noise variance is "
             f"{say(t_amp[1], 4)}, and state evolution predicts {say(t_se[1], 4)}. <bookmark mark='b'/> After three, "
             f"{say(t_amp[3], 4)} against {say(t_se[3], 4)}. <bookmark mark='c'/> After twenty-five, the estimate's mean "
             f"squared error is {say(d['mse_amp'][-1], 4)}. <bookmark mark='d'/> At two thousand dimensions the agreement is "
-            f"already to two or three digits; the theorem says it becomes exact as the dimension grows.",
+            f"close in this single simulation; the theorem says it becomes exact as the dimension grows.",
             [(r"t = 1", r":", rf"\text{{AMP }} {t_amp[1]:.4f}, \ \ \text{{SE }} {t_se[1]:.4f}", 40),
              (r"t = 3", r":", rf"{t_amp[3]:.4f}, \ \ {t_se[3]:.4f}", 40),
              (r"t = 25", r":", rf"\text{{MSE}} = {d['mse_amp'][-1]:.4f}", 40),
@@ -124,14 +149,21 @@ class AMP(LectureMixin, VoiceoverScene):
             colors=[(3, PROPC)])
 
     def dt(self):
+        heading = label('The noiseless weak recovery boundary', font_size=30, color=PROPC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> State evolution explains Part thirty-two's Donoho–Tanner curve. With no noise, the fixed "
-            "point at zero is stable, and the signal is recovered exactly, when the map's slope at zero is below one. "
-            "<bookmark mark='b'/> That slope depends on the sparsity rho, the undersampling delta, and the threshold. "
-            "<bookmark mark='c'/> Minimizing over the threshold gives the boundary in closed form: rho of delta is the "
-            "maximum over z of one minus two over delta times a Gaussian integral, divided by one plus z squared minus twice "
-            "that integral. <bookmark mark='d'/> Donoho, Maleki and Montanari showed it is exactly the curve Donoho and "
-            "Tanner had found from the geometry of random polytopes.",
+            (
+            "<bookmark mark='a'/> State evolution explains Part thirty-two's Donoho–Tanner curve. With no noise, "
+            "the fixed point at zero is stable, and the signal is recovered exactly, when the map's slope at zero "
+            "is below one. <bookmark mark='b'/> That slope depends on the sparsity rho, the undersampling delta, "
+            "and the threshold. <bookmark mark='c'/> Minimizing over the threshold gives the boundary in closed "
+            'form: rho of delta is the maximum over z of one minus two over delta times a Gaussian integral, '
+            "divided by one plus z squared minus twice that integral. <bookmark mark='d'/> Donoho, Maleki and "
+            'Montanari showed it is exactly the curve Donoho and Tanner had found from the geometry of random '
+            'polytopes.'
+        ),
             [(r"\sigma = 0", r":", r"\text{recovery} \iff F'(0) < 1", 40),
              (r"F'(0)", r"=", r"\text{a function of } \rho, \delta, \theta", 40),
              (r"\rho_{\mathrm{DT}}(\delta)", r"=", r"\max_z \frac{1 - \frac2\delta[(1 + z^2)\Phi(-z) - z\phi(z)]}{1 + z^2 - 2[(1 + z^2)\Phi(-z) - z\phi(z)]}", 32),
@@ -174,25 +206,47 @@ class AMP(LectureMixin, VoiceoverScene):
         self.clear_scene()
 
     def proof(self):
+        heading = label('Empirical limits, not exact finite Gaussian errors', font_size=30, color=PROPC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> How is state evolution proved? Erwin Bolthausen's conditioning technique: condition on "
-            "everything the algorithm has seen so far, and the part of A it has not used is still Gaussian. <bookmark "
-            "mark='b'/> The Onsager term is exactly what removes the dependence on the used part. <bookmark mark='c'/> "
-            "Induction over iterations then shows each pseudo-observation is the truth plus independent Gaussian noise, "
-            "with variance given by the recursion. <bookmark mark='d'/> And because AMP's fixed points are the lasso's "
-            "solutions, state evolution also gives the lasso's exact error: the bridge from an algorithm to an estimator.",
+            (
+            "<bookmark mark='a'/> A proof conditions on the matrix information revealed by earlier iterates. For an "
+            'IID Gaussian design the unexplored component retains a controlled Gaussian distribution. <bookmark '
+            "mark='b'/> The Onsager correction cancels the leading feedback from reusing the same matrix. <bookmark "
+            "mark='c'/> Induction proves an empirical distributional state-evolution limit at every fixed "
+            'iteration, under denoiser and moment conditions. It does not say finite-dimensional errors are exactly '
+            'independent Gaussians, or justify exchanging iteration and dimension limits without more work. '
+            "<bookmark mark='d'/> At a converged fixed point, the soft threshold's KKT conditions match a lasso "
+            'with a calibrated positive penalty. Additional convergence analysis connects fixed-iteration AMP '
+            "theory to the estimator's limiting risk."
+        ),
             [(r"\text{Bolthausen}", r":", r"\text{condition on what the algorithm has used}", 38),
              (r"\text{Onsager}", r":", r"\text{removes the used part's influence}", 40),
-             (r"\text{induction}", r":", r"r^t = x + \tau_t Z \text{ at every } t", 40),
-             (r"\text{fixed points}", r":", r"\text{AMP's} = \text{the lasso's: \ its exact error}", 40)],
+             (r"\text{induction}", r":", r"(x_j,r_j^t)\Rightarrow(X,X+\tau_tZ) \text{ empirically; }t\text{ fixed}", 40),
+             (r"\text{fixed points}", r":", r"\text{KKT matches lasso at a calibrated positive penalty}", 40)],
             [r"Bolthausen (2014)", r"why the term", r"the theorem", r"Bayati \& Montanari (2012)"],
             colors=[(3, PROPC)])
 
     def cost(self):
+        heading = label('Dense matrix products and convergence limits', font_size=30, color=PROPC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> What AMP costs. Each iteration multiplies by A once and by A transpose once: two matrix-vector products, of order n times p operations. <bookmark mark='b'/> Here that is about two million operations an iteration, and twenty-five iterations converged. <bookmark mark='c'/> Coordinate descent for the lasso costs about the same per sweep, and interior-point methods far more. <bookmark mark='d'/> So AMP is fast, and uniquely, its error at every iteration is known in advance; the price is fragility, since for matrices far from Gaussian its iterations can diverge, which damped and vector versions of AMP were built to repair.",
+            (
+            "<bookmark mark='a'/> Each dense AMP step multiplies by A and by its transpose. This costs order n "
+            "times p operations. <bookmark mark='b'/> At a thousand by two thousand, the two products use about "
+            'four million multiply-accumulate pairs, or eight million elementary floating-point operations. The '
+            "illustration runs twenty-five iterations. <bookmark mark='c'/> Coordinate descent can have a "
+            'comparable order per sweep, but wall-clock speed depends on implementation, conditioning and stopping '
+            "accuracy. <bookmark mark='d'/> State evolution predicts AMP's limiting trajectory under its "
+            'assumptions. Ordinary AMP can fail for correlated or poorly conditioned designs; damping and vector '
+            'variants have their own conditions, rather than a universal repair.'
+        ),
             [('\\text{per iteration}', ':', "Ax, \\ A'z: \\ O(np)", 40),
-             ('\\text{here}', ':', '\\approx 2 \\times 10^6 \\text{ operations}, \\ 25 \\text{ iterations}', 40),
+             ('\\text{here}', ':', '\\approx 4 \\times 10^6 \\text{ multiply--accumulate pairs}, \\ 25 \\text{ iterations}', 40),
              ('\\text{compare}', ':', '\\text{coordinate descent: \\ similar; \\ interior point: \\ more}', 38),
              ('\\text{the catch}', ':', '\\text{non-Gaussian } A \\text{ can make it diverge}', 40)],
             ['two products', '$n = 1{,}000$, \\ $p = 2{,}000$', "Part 21's solvers", 'damped and vector AMP'],

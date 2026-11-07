@@ -32,7 +32,7 @@ from scipy import stats
 from explainer.ai.cache import Cache
 from explainer.stats import museum
 from explainer.stats.board import Row, save_rows
-from explainer.stats.kit import amp as M
+from . import checked as M
 
 CACHE = Cache("stats59")
 load = CACHE.load
@@ -78,6 +78,7 @@ def compute_hook():
     X, beta = _design_beta(n, p, r)
     y = (r.random(n) < 1 / (1 + np.exp(-(X @ beta)))).astype(float)
     b, _, ok = M.logistic_mle(X, y)
+    if not ok:raise RuntimeError("hook finite MLE failed")
     sc = M.sur_candes(KAPPA, math.sqrt(GAMMA2))
     nz = beta != 0
     slope = float(np.sum(b[nz] * beta[nz]) / np.sum(beta[nz] ** 2))
@@ -95,17 +96,22 @@ def compute_lrt():
     n, p = 1000, 200
     reps = 500
     llr = []
+    failures = 0
     for _ in range(reps):
         X, beta = _design_beta(n, p, r)
         y = (r.random(n) < 1 / (1 + np.exp(-(X @ beta)))).astype(float)
         out = M.lrt_one(X, y, p - 1)  # the last coefficient is a null
         if out["ok"]:
             llr.append(out["llr2"])
+        else:
+            failures += 1
     llr = np.asarray(llr)
     sc = M.sur_candes(p / n, math.sqrt(GAMMA2))
     p_classic = stats.chi2.sf(llr, 1)
     p_rescaled = stats.chi2.sf(llr / sc["factor"], 1)
-    return {"n": n, "p": p, "reps": len(llr), "factor": sc["factor"], "llr": llr, "p_classic": p_classic, "p_rescaled": p_rescaled,
+    return {"n": n, "p": p, "reps": len(llr), "attempts": reps, "failed_finite_fits": failures,
+            "size_classic_mcse": math.sqrt(np.mean(p_classic<.05)*(1-np.mean(p_classic<.05))/len(llr)),
+            "size_rescaled_mcse": math.sqrt(np.mean(p_rescaled<.05)*(1-np.mean(p_rescaled<.05))/len(llr)), "factor": sc["factor"], "llr": llr, "p_classic": p_classic, "p_rescaled": p_rescaled,
             "size_classic": float(np.mean(p_classic < 0.05)), "size_rescaled": float(np.mean(p_rescaled < 0.05)),
             "size_classic_01": float(np.mean(p_classic < 0.01)), "size_rescaled_01": float(np.mean(p_rescaled < 0.01)),
             "mean_llr": float(np.mean(llr))}
@@ -144,9 +150,11 @@ def compute_free():
     D = np.diag(r.choice([-1.0, 1.0], N))
     ev = np.linalg.eigvalsh(W + D)
     xs = np.linspace(-2.2, 2.2, 221)
-    dens = M.free_semicircle_plus_pm1(xs, s2, eta=2e-3)
-    naive = 0.5 * (stats.norm.pdf(xs, -1, math.sqrt(s2)) + stats.norm.pdf(xs, 1, math.sqrt(s2)))
-    return {"N": N, "s2": s2, "ev": ev, "xs": xs, "dens": dens, "naive": naive}
+    audit = M.free_semicircle_plus_pm1(xs, s2, eta=2e-3, return_audit=True)
+    dens = audit["density"]
+    semicircle = lambda x: np.sqrt(np.maximum(4*s2-x*x,0))/(2*math.pi*s2)
+    naive = .5*(semicircle(xs-1)+semicircle(xs+1))
+    return {"N": N, "s2": s2, "ev": ev, "xs": xs, "dens": dens, "naive": naive, "stieltjes_audit": audit, "naive_scope": "ordinary convolution of the actual semicircle and +/-1 laws"}
 
 
 def compute_ridge():
@@ -157,8 +165,8 @@ def compute_ridge():
     for g in (0.5, 2.0):
         th = M.ridge_risk(lams, g, snr)
         sim_l = lams[::6]
-        sim = M.ridge_sim(400, g, snr, sim_l, 20, r)
-        out[str(g)] = {"bias": th["bias"], "var": th["var"], "risk": th["risk"], "sim_l": sim_l, "sim": sim, "opt_lam": g / snr,
+        sim = M.ridge_sim(400, g, snr, sim_l, 20, r, return_draws=True)
+        out[str(g)] = {"bias": th["bias"], "var": th["var"], "risk": th["risk"], "sim_l": sim_l, "sim": sim["mean"], "sim_audit": sim, "opt_lam": g / snr,
                        "opt_risk": M.optimal_ridge_risk(g, snr)}
     gs = np.r_[np.linspace(0.05, 0.95, 19), np.linspace(1.05, 4.0, 30)]
     out["gammas"] = gs
@@ -166,7 +174,8 @@ def compute_ridge():
     out["opt_curve"] = [M.optimal_ridge_risk(g, snr) for g in gs]
     sim_g = [0.25, 0.5, 0.75, 0.9, 1.1, 1.5, 2.0, 3.0, 4.0]
     out["sim_g"] = sim_g
-    out["sim_ridgeless"] = [float(M.ridge_sim(300, g, snr, [0.0], 12, r)[0]) for g in sim_g]
+    out["sim_ridgeless_audit"] = [M.ridge_sim(300,g,snr,[0.],12,r,return_draws=True) for g in sim_g]
+    out["sim_ridgeless"] = [float(d["mean"][0]) for d in out["sim_ridgeless_audit"]]
     out["null_risk"] = snr  # predicting zero: E(x'beta)^2 = ||beta||^2
     return out
 
@@ -186,7 +195,7 @@ def compute_robust():
             bl = M.lad_fit(X, e)
             eo.append(np.sum(bo ** 2))
             el.append(np.sum(bl ** 2))
-        res.append({"kappa": k, "ols": float(np.mean(eo)), "lad": float(np.mean(el)), "ols_exact": p / (n - p - 1)})
+        res.append({"kappa": k, "ols": float(np.mean(eo)), "lad": float(np.mean(el)), "ols_exact": p / (n - p - 1), "ols_mcse": M.mcse(eo), "lad_mcse": M.mcse(el), "ols_draws": eo, "lad_draws": el})
     return {"n": n, "rows": res}
 
 
@@ -218,17 +227,18 @@ def compute_bayes():
         b = M.bayes_mmse(math.sqrt(t2), eps)
         las = M.lasso_se_mse(float(d), eps, sigma2)
         rows.append({"delta": float(d), "bayes": b, "lasso": las["mse"], "theta": las["theta"]})
-    dt = float(np.interp(eps, M.minimax_threshold_curve(deltas) * deltas, deltas))  # rho * delta = eps on the DT curve
-    return {"eps": eps, "sigma2": sigma2, "rows": rows, "dt_delta": dt}
+    from scipy.optimize import brentq
+    dt = brentq(lambda d: float(M.minimax_threshold_curve([d])[0])*d-eps,.01,.99)  # rho * delta = eps on the DT curve
+    return {"eps": eps, "sigma2": sigma2, "rows": rows, "dt_delta": dt, "scope": "uninformative-initialized Bayes-denoising AMP fixed point, not globally optimized replica MMSE; lasso threshold grid, nonzero measurement noise"}
 
 
 def compute_rf():
     r = rng(5908)
     n, d = 300, 30
     Ns = [10, 30, 60, 100, 150, 200, 250, 280, 300, 320, 350, 400, 500, 700, 1000, 1500, 2500]
-    err0 = M.random_features_sim(n, d, Ns, 0.0, 6, r)
-    err1 = M.random_features_sim(n, d, Ns, 1e-3, 6, r)
-    return {"n": n, "d": d, "Ns": Ns, "ridgeless": err0, "ridge": err1}
+    audit = M.random_features_experiment(n,d,Ns,[0.,1e-3],6,r)
+    err0,err1 = audit["mean"]
+    return {"n": n, "d": d, "Ns": Ns, "ridgeless": err0, "ridge": err1, "audit": audit}
 
 
 def compute_real():
@@ -243,6 +253,7 @@ def compute_real():
     reps = 200
     g2 = GAMMA2
     slopes = []
+    failures = 0
     for _ in range(reps):
         o = r.permutation(len(Z))
         idx, ho = o[:n_sub], o[n_sub:]
@@ -251,19 +262,21 @@ def compute_real():
         beta *= math.sqrt(g2 / np.var(Xs @ beta))
         ys = (r.random(n_sub) < 1 / (1 + np.exp(-(Xs @ beta)))).astype(float)
         b, _, ok = M.logistic_mle(Xs, ys)
-        if not ok or not np.all(np.isfinite(b)) or np.max(np.abs(b)) > 1e5:
+        if not ok or not np.all(np.isfinite(b)):
+            failures += 1
             continue
         eh, et = Xh @ b, Xh @ beta
         slopes.append(float(np.sum(eh * et) / np.sum(et * et)))
     sc = M.sur_candes(p / n_sub, math.sqrt(g2))
     return {"n": n_sub, "p": p, "kappa": p / n_sub, "gamma2": g2, "reps": len(slopes), "slope_mean": float(np.mean(slopes)),
-            "slope_q": [float(np.quantile(slopes, q)) for q in (0.1, 0.5, 0.9)], "alpha_theory": sc["alpha"], "slopes": slopes}
+            "slope_q": [float(np.quantile(slopes, q)) for q in (0.1, 0.5, 0.9)], "alpha_theory": sc["alpha"], "slopes": slopes, "attempts": reps, "failed_finite_fits": failures, "slope_mean_mcse": M.mcse(slopes),
+            "scope": "fixed empirical design, random subsampling/beta/outcomes; conditional on finite converged MLE; not a calibration theorem for non-Gaussian predictors"}
 
 
 def compute_board():
     d = load("lrt")
-    rows = [Row(59, r"LRT with the $\chi^2_1$ approximation", r"logistic, \ $p/n = 0.2$, \ $\gamma^2 = 5$", "size", 0.05, d["size_classic"], d["reps"]),
-            Row(59, r"LRT rescaled by $\kappa\sigma_\star^2/\lambda_\star$", r"logistic, \ $p/n = 0.2$, \ $\gamma^2 = 5$", "size", 0.05, d["size_rescaled"], d["reps"])]
+    rows = [Row(59, r"LRT with the $\chi^2_1$ approximation", r"logistic, \ $p/n = 0.2$, \ $\gamma^2 = 5$", "size", 0.05, d["size_classic"], d["reps"], mc_se=d["size_classic_mcse"]),
+            Row(59, r"LRT rescaled by $\kappa\sigma_\star^2/\lambda_\star$", r"logistic, \ $p/n = 0.2$, \ $\gamma^2 = 5$", "size", 0.05, d["size_rescaled"], d["reps"], mc_se=d["size_rescaled_mcse"])]
     save_rows(59, rows)
     return {"rows": [asdict(q) | {"verdict": q.verdict, "se": q.se} for q in rows]}
 
