@@ -9,11 +9,11 @@ survey block (seed 1662); everything else is a seeded simulation on it.
 Items:
     digest      the World's Literary Digest: frame, mailing, returns; frame and nonresponse bias; an SRS of 1,000
     meng        Meng's identity for the Digest's returns and a self-selected half; effective sample sizes
-    srs         the finite-population correction in a town of 3,000, sampling half
+    srs         the finite-population correction in a middling town, sampling half
     strat       mean income by register income band: proportional vs Neyman allocation, theory and simulation
     cluster     20 towns x 50 adults: the ICC of the vote, the design effect, naive vs cluster SE
     pps         towns drawn with probability proportional to size: Hansen-Hurwitz vs equal-probability
-    ratio       the regression estimator of mean income using age; Laplace's 1802 ratio
+    ratio       the ratio estimator of mean income using last year's register; Laplace's 1802 ratio
     rake        raking the Digest's returns to the census margins (region, age band, income band)
     polls       a dialled poll with MAR vs MNAR nonresponse: raw and raked
     board       Coverage Board rows
@@ -53,6 +53,38 @@ def nest(obj):
     if isinstance(obj, np.bool_):
         return bool(obj)
     return obj
+
+
+def clipped_segments(xs, ys, rectangle):
+    """Clip line segments to a rectangle without flattening off-scale values."""
+    xmin, xmax, ymin, ymax = rectangle
+    points = np.column_stack((xs, ys))
+    result = []
+    for start, end in zip(points[:-1], points[1:]):
+        if not np.isfinite([start, end]).all():
+            continue
+        delta = end - start
+        lo, hi = 0.0, 1.0
+        for k, lower, upper in ((0, xmin, xmax), (1, ymin, ymax)):
+            if delta[k] == 0:
+                if not lower <= start[k] <= upper:
+                    hi = -1
+                    break
+            else:
+                a, b = sorted(((lower - start[k]) / delta[k], (upper - start[k]) / delta[k]))
+                lo, hi = max(lo, a), min(hi, b)
+        if lo <= hi:
+            result.append((start + lo * delta, start + hi * delta))
+    return result
+
+
+
+def integer_allocation(target, total):
+    """Largest remainders: preserve the requested fixed sample size."""
+    target = np.asarray(target, float)
+    result = np.floor(target).astype(int)
+    result[np.argsort(-(target-result), kind="stable")[:total-result.sum()]] += 1
+    return result
 
 
 def adults():
@@ -134,7 +166,8 @@ def compute_strat():
     Nh = np.bincount(b, minlength=3)
     Sh = np.array([y[b == k].std(ddof=1) for k in range(3)])
     n = 1000
-    prop, ney = S.proportional_allocation(Nh, n), S.neyman_allocation(Nh, Sh, n)
+    prop = integer_allocation(S.proportional_allocation(Nh, n), n)
+    ney = integer_allocation(S.neyman_allocation(Nh, Sh, n), n)
     g = rng(34)
     est = {"srs": [], "prop": [], "ney": []}
     idx_by = [np.flatnonzero(b == k) for k in range(3)]
@@ -147,7 +180,7 @@ def compute_strat():
                 m += Nh[k] / Nh.sum() * y[g.choice(idx_by[k], nk, replace=False)].mean()
             est[key].append(m)
     return nest({"Nh": Nh, "Sh": Sh, "means": [y[b == k].mean() for k in range(3)], "prop": prop, "ney": ney,
-                 "se_srs": y.std() / np.sqrt(n), "se_prop": np.sqrt(S.stratified_variance(Nh, Sh, prop)),
+                 "se_srs": np.sqrt((1-n/len(y))*y.var(ddof=1)/n), "se_prop": np.sqrt(S.stratified_variance(Nh, Sh, prop)),
                  "se_ney": np.sqrt(S.stratified_variance(Nh, Sh, ney)),
                  "sim_sd": {k: float(np.std(v)) for k, v in est.items()}, "truth": y.mean()})
 
@@ -217,7 +250,7 @@ def compute_ratio():
     k = g.choice(len(y), 400, replace=False)
     one = S.ratio_mean(y[k], last[k], last.mean())
     return nest({"corr_last": np.corrcoef(y, last)[0, 1], "sd_plain": np.std(pr), "sd_ratio": np.std(rr), "truth": y.mean(),
-                 "mean_ratio": np.mean(rr), "mean_plain": np.mean(pr), "one": one, "one_plain": y[k].mean(),
+                 "mean_ratio": np.mean(rr), "mean_plain": np.mean(pr), "one": one, "one_plain": y[k].mean(), "one_indices": k, "one_last": last[k], "one_income": y[k],
                  "laplace": {"pop_sample": 2_037_615, "births_sample": 71_866, "births_all": 1_000_000,
                              "ratio": 2_037_615 / 71_866, "estimate": 1_000_000 * 2_037_615 / 71_866}})
 
@@ -229,6 +262,23 @@ def rake_returns(P, R):
         vals, cnt = np.unique(var, return_counts=True)
         targets.append({int(a): c / len(var) for a, c in zip(vals, cnt)})
     return S.rake(margins, targets, iters=100)
+
+
+def raking_steps(P, R, passes):
+    """The displayed two-margin IPF iterations, independent of the three-margin fit."""
+    ib, ab = inc_band(P["income"][R]), age_band(P["age"][R])
+    ti = np.bincount(inc_band(P["income"]), minlength=3) / len(P["income"])
+    ta = np.bincount(age_band(P["age"]), minlength=4) / len(P["age"])
+    w = np.ones(R.sum())
+    out = []
+    for k in range(passes + 1):
+        out.append((np.bincount(ib, weights=w, minlength=3)/w.sum(),
+                    np.bincount(ab, weights=w, minlength=4)/w.sum()))
+        if k % 2 == 0:
+            w *= (ti / out[-1][0])[ib]
+        else:
+            w *= (ta / out[-1][1])[ab]
+    return out, ti, ta
 
 
 def compute_rake():

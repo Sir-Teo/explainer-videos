@@ -33,17 +33,22 @@ class Polls(VoiceoverScene):
         rows[2][2].set_color(RES)
         whys = [why(r"Gallup's method in 1936"), why(r"not a lottery"), why(r"purposive selection, \ chapter three"),
                 why(r"Neyman's objection, \ again")]
+        intro = label('Quota sampling leaves selection within each cell uncontrolled', font_size=36)
         with self.voiceover(
-            "Gallup's triumph of 1936 used quota sampling. <bookmark mark='a'/> Each interviewer had to fill quotas: so many "
-            "men and women, so many young and old, so many from each region and class. <bookmark mark='b'/> But within the "
-            "quotas, the interviewer chose whom to ask. <bookmark mark='c'/> And interviewers, reasonably, chose people who were "
-            "easy to find and willing to talk, who differ from those who aren't. <bookmark mark='d'/> It's chapter three's "
-            "purposive selection in a new form: no lottery, and so no theory of the error."
+            "Gallup's triumph of 1936 used quota sampling. <bookmark mark='a'/> Each interviewer had to fill quotas: "
+            "so many men and women, so many young and old, so many from each region and class. <bookmark mark='b'/> "
+            "But within the quotas, the interviewer chose whom to ask. <bookmark mark='c'/> And interviewers, "
+            "reasonably, chose people who were easy to find and willing to talk, who differ from those who aren't. "
+            "<bookmark mark='d'/> It's chapter three's purposive selection in a new form: no lottery, and so no "
+            "theory of the error."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def dewey(self):
@@ -60,13 +65,13 @@ class Polls(VoiceoverScene):
         ), 12.4, 0.3, [0, -2.3, 0])
         tag = historical_tag(r"Mosteller et al., \ \emph{The Pre-election Polls of 1948} (1949)", corner=UR)
         with self.voiceover(
-            "<bookmark mark='a'/> In 1948 quota sampling had its own disaster. Gallup's final poll had Thomas Dewey, the "
-            "challenger, at forty-nine and a half percent and President Harry Truman at forty-four and a half. "
-            "<bookmark mark='b'/> Truman won, with forty-nine point six. <bookmark mark='c'/> All three major pollsters had "
-            "called it for Dewey. A committee of the Social Science Research Council, led by Frederick Mosteller, found several "
-            "causes: the quota interviewers' choices, polls that stopped weeks before the vote, and the assumption that the "
-            "undecided would split like the decided. <bookmark mark='d'/> Afterwards the pollsters moved to probability samples "
-            "of households."
+            "<bookmark mark='a'/> In 1948 quota sampling had its own disaster. Gallup's final poll had Thomas Dewey, "
+            "the challenger, at forty-nine and a half percent and President Harry Truman at forty-four and a half. "
+            "<bookmark mark='b'/> Truman won, with forty-nine point six. <bookmark mark='c'/> All three major "
+            "pollsters had called it for Dewey. A committee of the Social Science Research Council, led by Frederick "
+            "Mosteller, found several causes: the quota interviewers' choices, polls that stopped weeks before the "
+            "vote, and the assumption that the undecided would split like the decided. <bookmark mark='d'/> "
+            "Afterwards the pollsters moved to probability samples of households."
         ) as vo:
             self.add(tag)
             vo.wait_until("a")
@@ -90,17 +95,18 @@ class Polls(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"random-digit dialling: \ a probability sample of telephones", font_size=22),
             label(r"Pew's typical telephone survey: \ 36\% (1997) \ to 6\% (2018)", font_size=22, color=RES),
-            label(r"a probability sample of the people who answer", font_size=22, color=OBS),
+            label(r"respondents have unknown response probabilities", font_size=22, color=OBS),
             label(r"so every modern poll is weighted", font_size=22, color=WEIGHT),
         ), 4.4, 0.42, [4.7, 0.3, 0])
         tag = historical_tag(r"Pew Research Center (2019), \ read from its chart", corner=DR)
         with self.voiceover(
-            "<bookmark mark='a'/> From the 1970s, polls dialled telephone numbers at random: a true probability sample of "
-            "telephones. <bookmark mark='b'/> But people stopped answering. The Pew Research Center's typical telephone survey "
-            "reached thirty-six percent of the people it tried in 1997, and six percent by 2018. <bookmark mark='c'/> A random "
-            "sample with six percent response is a probability sample of the people who answer the phone, and Meng's "
-            "correlation is back. <bookmark mark='d'/> So every modern poll is weighted, and its accuracy depends on whether "
-            "the weighting variables capture who answers."
+            "<bookmark mark='a'/> From the 1970s, polls dialled telephone numbers at random: a true probability "
+            "sample of telephones. <bookmark mark='b'/> But people stopped answering. The Pew Research Center's "
+            "typical telephone survey reached thirty-six percent of the people it tried in 1997, and six percent by "
+            "2018. <bookmark mark='c'/> The original telephone draw has known probabilities, but the respondents' "
+            "overall inclusion probabilities also depend on unknown response propensities, and Meng's correlation is "
+            "back. <bookmark mark='d'/> So every modern poll is weighted, and its accuracy depends on whether the "
+            "weighting variables capture who answers."
         ) as vo:
             self.play(FadeIn(A), FadeIn(tag))
             vo.wait_until("a")
@@ -134,13 +140,15 @@ class Polls(VoiceoverScene):
         ), 12.4, 0.3, [0, -2.0, 0])
         tag = simulated_tag(r"the World's polling firm", corner=DR)
         with self.voiceover(
-            "The World can show why. Its polling firm dials twenty thousand random numbers; about one in ten answers. "
-            "<bookmark mark='a'/> First suppose answering depends only on income and age. The raw poll overstates Blue at "
-            "forty-two percent; raked to income, age and region it comes back to thirty-nine, close to the truth of "
-            "thirty-eight. <bookmark mark='b'/> Now suppose answering also depends on the vote, as it does among the World's "
-            "Digest readers. The raw poll says fifty-one, and weighting only brings it to forty-eight. "
-            "<bookmark mark='c'/> The same weighting, the same response rate; the difference is whether the response depends on "
-            "the answer once the weights' variables are accounted for."
+            "The World can show why. Its polling firm dials twenty thousand random numbers; about one in ten answers."
+            " <bookmark mark='a'/> First suppose answering depends only on income and age. The raw poll overstates "
+            "Blue at forty-two percent; raked to income, age and region it comes back to thirty-nine, closer to the "
+            "truth of thirty-eight. MAR alone does not make this coarse marginal raking exact: continuous "
+            "propensities and interactions can leave residual bias. <bookmark mark='b'/> Now suppose answering also "
+            "depends on the vote, as it does among the World's Digest readers. The raw poll says fifty-one, and "
+            "weighting only brings it to forty-eight. <bookmark mark='c'/> The same weighting variables, with "
+            "response rates of about eight and eleven percent; the key difference is whether response also depends on"
+            " the answer once the weights' variables are accounted for."
         ) as vo:
             self.play(FadeIn(A), Create(tr), FadeIn(trl), FadeIn(tag))
             vo.wait_until("a")
@@ -160,13 +168,14 @@ class Polls(VoiceoverScene):
             label(r"college graduates answer polls more, \ and voted Clinton", font_size=22, color=GREY_A),
         ), 12.4, 0.48, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In 2016, national polls in the United States were close to the result: Hillary Clinton won "
-            "the popular vote by two point one points, and the polls averaged about three. <bookmark mark='b'/> But state polls "
-            "in Michigan, Wisconsin and Pennsylvania underestimated Donald Trump, and those states decided the election. "
-            "<bookmark mark='c'/> The American Association for Public Opinion Research's review found two main causes. Voters "
-            "who decided late broke for Trump. <bookmark mark='d'/> And many state polls didn't weight by education, "
-            "<bookmark mark='e'/> although college graduates are more likely to answer polls, and that year voted heavily for "
-            "Clinton. A missing weighting variable, exactly chapter nine's lesson."
+            "<bookmark mark='a'/> In 2016, national polls in the United States were close to the result: Hillary "
+            "Clinton won the popular vote by two point one points, and the polls averaged about three. <bookmark "
+            "mark='b'/> But state polls in Michigan, Wisconsin and Pennsylvania underestimated Donald Trump, and "
+            "those states decided the election. <bookmark mark='c'/> The American Association for Public Opinion "
+            "Research's review found two main causes. Voters who decided late broke for Trump. <bookmark mark='d'/> "
+            "And many state polls didn't weight by education, <bookmark mark='e'/> although college graduates are "
+            "more likely to answer polls, and that year voted heavily for Clinton. A missing weighting variable, "
+            "exactly chapter nine's lesson."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
@@ -183,13 +192,14 @@ class Polls(VoiceoverScene):
             label(r"missing not at random: \ the Digest's problem, \ in miniature", font_size=24, color=RES),
         ), 12.4, 0.48, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In 2020 the national polls overstated Joe Biden's winning margin by about three point nine "
-            "points, <bookmark mark='b'/> the largest polling error in forty years, according to AAPOR's 2021 task force. "
-            "<bookmark mark='c'/> This time most polls did weight by education, and late deciders didn't explain the miss. "
-            "<bookmark mark='d'/> The task force couldn't prove a cause, but the leading explanation was that Trump's supporters "
-            "were less likely to take part in polls, even after accounting for age, education and everything else the polls "
-            "weighted on. <bookmark mark='e'/> Nonresponse that depends on the answer itself: the Digest's problem, eighty-four "
-            "years later, at a small fraction of the size, and still beyond the reach of weighting."
+            "<bookmark mark='a'/> In 2020 the national polls overstated Joe Biden's winning margin by about three "
+            "point nine points, <bookmark mark='b'/> the largest polling error in forty years, according to AAPOR's "
+            "2021 task force. <bookmark mark='c'/> This time most polls did weight by education, and late deciders "
+            "didn't explain the miss. <bookmark mark='d'/> The task force couldn't prove a cause, but the leading "
+            "explanation was that Trump's supporters were less likely to take part in polls, even after accounting "
+            "for age, education and everything else the polls weighted on. <bookmark mark='e'/> Nonresponse that "
+            "depends on the answer itself: the Digest's problem, eighty-four years later, at a small fraction of the "
+            "size, and still beyond the reach of weighting."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
@@ -199,25 +209,30 @@ class Polls(VoiceoverScene):
     def xbox(self):
         rows = fit_rows(VGroup(
             label(r"2012: \ an opt-in poll on Microsoft's Xbox games console", font_size=24),
-            label(r"345,858 interviews; \ 93\% of respondents men, \ two thirds aged 18--29", font_size=22, color=RES),
+            label(r"345,858 unique respondents; \ 93\% of respondents men, \ two thirds aged 18--29", font_size=22, color=RES),
             label(r"raw: \ badly skewed toward Romney", font_size=22, color=GREY_A),
             label(r"multilevel regression and post-stratification to the electorate", font_size=22, color=WEIGHT),
             label(r"close to the result, \ and to the best probability polls", font_size=22, color=HIT),
             label(r"Wang, \ Rothschild, \ Goel \& Gelman (2015): \ the model does the work the lottery can't", font_size=20, color=GREY_B),
         ), 12.4, 0.42, [0, 0, 0])
+        intro = label('Strong adjustment can help an opt-in sample', font_size=36)
         with self.voiceover(
-            "Can a self-selected sample ever be rescued? Sometimes, with a strong model. <bookmark mark='a'/> In 2012 a poll was "
-            "run on Microsoft's Xbox games console, open to anyone who wanted to answer. <bookmark mark='b'/> It collected three "
-            "hundred and forty-five thousand interviews from respondents who were ninety-three percent men and mostly young: "
-            "about as unrepresentative as a poll can be. <bookmark mark='c'/> Taken raw, it favoured Mitt Romney. "
-            "<bookmark mark='d'/> Wei Wang, Andrew Gelman and colleagues fitted a multilevel regression of vote on demographics "
-            "and then post-stratified it to the composition of the electorate. <bookmark mark='e'/> Their estimates came close "
-            "to the result, and to the best probability polls. <bookmark mark='f'/> The model did the work the lottery couldn't, "
-            "which only succeeds if, within its cells, the people who answered resemble those who didn't. Part 25 builds the "
-            "method."
+            "Can a self-selected sample ever be rescued? Sometimes, with a strong model. <bookmark mark='a'/> In 2012"
+            " a poll was run on Microsoft's Xbox games console, open to anyone who wanted to answer. <bookmark "
+            "mark='b'/> It collected about seven hundred and fifty thousand interviews from three hundred and "
+            "forty-five thousand distinct respondents who were ninety-three percent men and mostly young: about as "
+            "unrepresentative as a poll can be. <bookmark mark='c'/> Taken raw, it favoured Mitt Romney. <bookmark "
+            "mark='d'/> Wei Wang, Andrew Gelman and colleagues fitted a multilevel regression of vote on demographics"
+            " and then post-stratified it to the composition of the electorate. <bookmark mark='e'/> Their estimates "
+            "came close to the result, and to the best probability polls. <bookmark mark='f'/> The model did the work"
+            " the lottery couldn't, which only succeeds if, within its cells, the people who answered resemble those "
+            "who didn't. Part 25 builds the method."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcdef"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()
 
@@ -225,16 +240,17 @@ class Polls(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"ask how the sample was chosen before asking how big it is", font_size=24),
             label(r"a margin of error covers sampling error only", font_size=24, color=GREY_A),
-            label(r"random selection is what makes the data defect correlation vanish", font_size=24, color=HIT),
+            label(r"an SRS makes data defect correlation zero on average", font_size=24, color=HIT),
             label(r"nonresponse brings it back; \ weighting fixes only what it can see", font_size=24, color=RES),
             label(r"next: \ models of the population can help: \ MRP (Part 25), \ missing data (Part 41)", font_size=22, color=WEIGHT),
         ), 12.4, 0.5, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> So: ask how a sample was chosen before you ask how big it is. <bookmark mark='b'/> A margin of "
-            "error covers sampling error only. <bookmark mark='c'/> Random selection is what makes the data defect correlation "
-            "vanish, <bookmark mark='d'/> nonresponse brings it back, and weighting fixes only what it can see. "
-            "<bookmark mark='e'/> Models of the population can help further: multilevel regression and post-stratification in "
-            "Part 25, and the theory of missing data in Part 41."
+            "<bookmark mark='a'/> So: ask how a sample was chosen before you ask how big it is. <bookmark mark='b'/> "
+            "A margin of error covers sampling error only. <bookmark mark='c'/> A simple random sample makes the data"
+            " defect correlation zero in expectation, with random error in each realized sample, <bookmark mark='d'/>"
+            " nonresponse brings it back, and weighting fixes only what it can see. <bookmark mark='e'/> Models of "
+            "the population can help further: multilevel regression and post-stratification in Part 25, and the "
+            "theory of missing data in Part 41."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
