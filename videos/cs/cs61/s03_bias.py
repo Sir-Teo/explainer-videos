@@ -358,6 +358,7 @@ class Bias(VoiceoverScene):
         how = wrapped_label(rf"4{{,}}000 imaginary experiments: \ {len(ENV)} medians of {B['reps']}, \ each drawn "
                             rf"from the {len(POOL)} runs with an empty environment", 6.0, font_size=17,
                             color=GREY_B).to_edge(DOWN, buff=0.25).align_to(bars, LEFT)
+        stk = load("stack")
         shown = VGroup(label(r"shown", font_size=22, color=YES),
                        wrapped_label(rf"the medians moved by {100 * B['env_spread']:.0f}\% as an unused variable "
                                      rf"grew, \ and by under 1\% across link orders", 5.6, font_size=19,
@@ -365,8 +366,10 @@ class Bias(VoiceoverScene):
         not_shown = VGroup(label(r"not shown", font_size=22, color=NO),
                            wrapped_label(r"that the environment caused it: \ noise alone explains a spread this size",
                                          5.6, font_size=19, color=WHITE),
-                           wrapped_label(r"Linux starts the stack at a random place on every run, \ in 16-byte steps: "
-                                         r"\ checked here", 5.6, font_size=19, color=GREY_A)).arrange(
+                           wrapped_label(r"Linux starts the stack at a random place on every run: \ "
+                                         rf"{stk['distinct']} addresses in {stk['runs']} runs of a C probe, \ "
+                                         rf"{stk['line_offsets']} offsets within a cache line", 5.6, font_size=19,
+                                         color=GREY_A)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.15)
         VGroup(shown, not_shown).arrange(DOWN, aligned_edge=LEFT, buff=0.5).move_to([3.7, 0.2, 0])
         with self.voiceover(
@@ -379,7 +382,8 @@ class Bias(VoiceoverScene):
             "while an unused variable grew, and by under one percent across link orders. <bookmark mark='d'/> We "
             "have not shown that the environment caused it. And there is a reason it may not have: on this "
             "machine, with address randomization on, Linux starts the stack at a different place on every run, "
-            "in sixteen-byte steps; we checked. That is a setup randomization done for us, and it smears the "
+            f"in sixteen-byte steps. We checked: a tiny C program printed {say(stk['distinct'])} different "
+            f"addresses in {say(stk['runs'])} runs. That is a setup randomization done for us, and it smears the "
             "alignment effect into every setting's noise. To find a cause, you would switch it off and intervene."
         ) as vo:
             self.play(FadeIn(head), Create(base), FadeIn(xt), FadeIn(xl), FadeIn(how))
