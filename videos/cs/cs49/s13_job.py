@@ -77,7 +77,7 @@ class Job(VoiceoverScene):
         foot = wrapped_label(r"workers at Part 45's on-demand list price \ (m5.large, \ 2024); \ storage, \ network and "
                              r"people not included", 12.4, font_size=18, color=GREY_B).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Then we simulated an hour at the peak. <bookmark mark='a'/> The median request finishes in about "
+            "Then we simulated an hour at the peak. <bookmark mark='a'/> The median count that reaches a worker finishes in about "
             f"{j['p50_ms']:.0f} milliseconds, and the ninety-ninth percentile in about {j['p99_ms']:.0f}: the long tail "
             "of an exponential service time, not of queueing, because the workers are only sixty percent busy. "
             f"<bookmark mark='b'/> {j['servers']} workers rented at Part 45's list price cost about "
@@ -114,7 +114,7 @@ class Job(VoiceoverScene):
         with self.voiceover(
             "The ledger gets row eighteen. <bookmark mark='a'/> On this service the thirty novels are thirty "
             "requests running in parallel, and the slowest of thirty counts sets the time: about a third of a "
-            "second, for a few thousandths of a cent. <bookmark mark='b'/> Part 6's single Pebble took two hundred "
+            f"second, for about {row['dollars'] * 1000:.0f} thousandths of a dollar. <bookmark mark='b'/> Part 6's single Pebble took two hundred "
             "and eighty seconds. Every layer of the series in between, pipelines, caches, compilers, algorithms, "
             "networks and services, is somewhere in that factor."
         ) as vo:

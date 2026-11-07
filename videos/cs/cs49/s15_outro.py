@@ -138,7 +138,7 @@ class Outro(VoiceoverScene):
              r"CRDTs)",
              r"Huang et al. \ (2014, \ BBA); \ Yin et al. \ (2015, \ MPC); \ Kuhn \ (1955, \ assignment)",
              r"Yuan et al. \ (2014); \ Gunawi et al. \ (2016); \ Bloom \ (1970)",
-             r"Najork and Heydon \ (2001, \ Mercator); \ Perrin and Marlinspike \ (2016, \ double ratchet)"])
+             r"Heydon and Najork \ (1999, \ Mercator); \ Perrin and Marlinspike \ (2016, \ double ratchet)"])
         credit = note(rf"narration: \ {narration_credit()}", font_size=18).to_edge(DOWN, buff=0.15)
         with self.voiceover("The books and papers this part follows are on screen and in the notes. Thank you for "
                             "watching."):

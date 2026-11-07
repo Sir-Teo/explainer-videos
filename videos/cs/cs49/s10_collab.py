@@ -233,7 +233,7 @@ class Collab(VoiceoverScene):
             txt.arrange(DOWN, buff=0.12)
             v = label(rf"converged in {100 * r[kind]['converged']:.0f}\% of 50 sessions", font_size=19, color=col)
             res.add(VGroup(t, txt, v).arrange(DOWN, buff=0.2).move_to([x, -1.65, 0]))
-        cap = label(r"three people, \ 30 edits a session, \ delivered in random order: \ one session's three copies",
+        cap = label(r"three people, \ 30 edits a session, \ delivered in random causal order: \ one session's three copies",
                     font_size=18, color=GREY_B).to_edge(DOWN, buff=0.25)
         with self.voiceover(
             "The other answer is to stop using positions. <bookmark mark='a'/> In a sequence CRDT, here the "
@@ -242,7 +242,7 @@ class Collab(VoiceoverScene):
             "after. Here two people type after the t at once. <bookmark mark='c'/> A fixed rule decides: the larger "
             "name comes first, on every replica, in any arrival order. A deleted character stays as a tombstone, so "
             "later inserts can still name it. <bookmark mark='d'/> In fifty sessions of three people making thirty "
-            "edits, delivered in random order, the array always converged. Replaying positions as sent, no session "
+            "edits, delivered in a random order that respects causality, the array always converged. Replaying positions as sent, no session "
             "did."
         ) as vo:
             self.play(FadeIn(head), FadeIn(base))
