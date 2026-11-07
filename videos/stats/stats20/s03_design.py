@@ -31,6 +31,9 @@ class Design(VoiceoverScene):
         rows[3][2].set_color(SALT)
         whys = [why(r"Part 18: \ clusters, \ strata, \ Hansen \& Hurwitz"), why(r"segments of a few blocks"),
                 why(r"from address lists"), why(r"oversampling: \ the next picture")]
+        intro = label('NHANES uses a multistage probability design', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "Chapter one's population is two hundred and thirty-six million people; NHANES examines about five thousand "
             "adults every two years. How it picks them is Part 18 in action. <bookmark mark='a'/> First it chooses counties, "
@@ -39,10 +42,13 @@ class Design(VoiceoverScene):
             "<bookmark mark='c'/> within them households, <bookmark mark='d'/> and within households people, with some groups "
             "deliberately chosen at higher rates. None of this is a simple random sample, and the analysis has to know it."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.72, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def psus(self):
@@ -58,7 +64,7 @@ class Design(VoiceoverScene):
             label(rf"{d['strata']} strata $\times$ 2 PSUs $=$ {d['psus']} ``masked variance units''", font_size=24, color=DES),
             label(r"the real counties are hidden, \ to protect who took part", font_size=22, color=GREY_A),
             label(r"degrees of freedom for SEs: \ 30 PSUs $-$ 15 strata $=$ 15", font_size=24, color=OBS),
-            label(r"5,000 people, \ but only 30 independent clusters of them", font_size=22, color=RES),
+            label(r"the public variance estimator uses 30 masked PSUs in 15 strata", font_size=22, color=RES),
         ), 12.0, 0.35, [0, -1.7, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The public files describe the design in a disguised form: fifteen strata, each with two "
@@ -128,6 +134,9 @@ class Design(VoiceoverScene):
         rows[0][2].set_color(DES)
         whys = [why(r"Horvitz--Thompson (Part 18), \ then nonresponse, \ post-strata"), why(r"the exam weight, \ adults 20+"),
                 why(r"a ninety-fold spread"), why(r"matched to Census totals by age, \ sex, \ race")]
+        intro = label('Survey weights connect sampled adults to their population', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> Each person carries a weight: one over their probability of selection, as in Part 18's "
             "Horvitz–Thompson estimator, then adjusted for people who refused the interview or the exam, and post-stratified so "
@@ -136,10 +145,13 @@ class Design(VoiceoverScene):
             "large, from under five thousand for the most oversampled to over four hundred thousand. <bookmark mark='d'/> And "
             "the weights add up to the population, two hundred and thirty-six million adults."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.75, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def means(self):
@@ -188,18 +200,26 @@ class Design(VoiceoverScene):
             cmath(r"n_{\text{eff}}", r":", rf"4{{,}}948 / {d['deff']:.1f} \approx {d['neff']:,.0f}", font_size=30),
         ]
         rows[2][2].set_color(RES)
-        whys = [why(r"Taylor linearization over strata and PSUs"), why(r"$s / \sqrt n$, \ ignoring the design"),
+        whys = [why(r"Taylor linearization over strata and PSUs"), why(r"weighted population SD $/ \sqrt n$, \ SRS reference"),
                 why(r"clusters (Kish) and unequal weights"), why(r"what the sample is worth for this mean")]
+        intro = label('Compare precision against a stated simple-random-sample reference', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> And the design changes the uncertainty. The design-based standard error of that mean, "
-            "computed by linearization across the strata and PSUs, is point four nine. <bookmark mark='b'/> Pretending the "
-            "adults were a simple random sample gives point two nine. <bookmark mark='c'/> The ratio of variances, the design "
-            "effect, is three point six: clustering, as in Part 18, plus unequal weights, which Kish showed cost precision "
-            "too. <bookmark mark='d'/> For this mean, four thousand nine hundred and forty-eight examined adults are worth "
-            "about thirteen hundred and sixty-five chosen at random. Ignore the design and every interval is too narrow."
+            "<bookmark mark='a'/> And the design changes the uncertainty. The design-based standard error of that "
+            "mean, computed by linearization across the strata and PSUs, is point four nine. <bookmark mark='b'/> "
+            "Using the weighted population variance as an equal-size simple-random-sample reference gives point two "
+            "six. <bookmark mark='c'/> The ratio of variances, the design effect, is three point six: clustering, as "
+            "in Part 18, plus unequal weights, which Kish showed cost precision too. <bookmark mark='d'/> For this "
+            "mean, four thousand nine hundred and forty-eight examined adults are worth about thirteen hundred and "
+            "sixty-five chosen at random. For this mean the naive interval is too narrow; stratification can also "
+            "reduce variance for other outcomes."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.75, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()

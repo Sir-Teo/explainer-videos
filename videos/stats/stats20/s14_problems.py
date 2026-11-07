@@ -4,10 +4,10 @@ from videos.stats.stats20.common import *  # noqa: F403
 
 PROBLEMS = [
     {"part": r"Parts 2 and 15", "color": RES,
-     "q": r"A condition affects 1\% of adults. \ Two independent tests each detect it 90\% of the time and give false alarms 5\% of the time. \ Both are positive: \ how likely is the condition?",
+     "q": r"A condition affects 1\% of adults. \ Two tests, conditionally independent given disease status, each detect it 90\% of the time and give false alarms 5\% of the time. \ Both are positive: \ how likely is the condition?",
      "steps": [r"P(\text{both} + \mid \text{sick}) = 0.9^2 = 0.81", r"P(\text{both} + \mid \text{well}) = 0.05^2 = 0.0025",
                r"\frac{0.01 \times 0.81}{0.01 \times 0.81 + 0.99 \times 0.0025} = \frac{0.0081}{0.010575} \approx 0.77"],
-     "say": "From Parts 2 and 15: a condition affecting one percent of adults, and two independent tests, each detecting it ninety "
+     "say": "From Parts 2 and 15: a condition affecting one percent of adults, and two tests conditionally independent within both the affected and unaffected groups, each detecting it ninety "
             "percent of the time with five percent false alarms. Both come back positive. How likely is the condition? Given the "
             "condition, both are positive with probability point eight one; without it, point oh oh two five. Bayes's rule gives "
             "point eight one times one percent, over that plus point oh oh two five times ninety-nine percent: about seventy-seven "
@@ -39,7 +39,7 @@ PROBLEMS = [
             "point five millimetres per gram, with a standard deviation of fifteen within each arm. How many people per arm for "
             "eighty percent power at the five percent level? The difference to detect is five point seven five. The sample size "
             "formula is two times one point nine six plus point eight four, squared, times the variance, over the difference "
-            "squared: about a hundred and seven per arm. Our World trial, with two hundred per arm, had power to spare."},
+            "squared: about a hundred and seven per arm. Our World trial, with two hundred per arm, has a smaller true effect of one point five per gram, so this power calculation does not apply to it."},
     {"part": r"Parts 16 and 18", "color": DES,
      "q": r"NHANES's public design: \ 15 strata with 2 PSUs each. \ How many different Rao--Wu bootstrap replicates are there?",
      "steps": [r"\text{each stratum draws } n_h - 1 = 1 \text{ of its 2 PSUs}", r"2^{15} = 32{,}768 \text{ replicates in all}",
@@ -55,8 +55,8 @@ PROBLEMS = [
      "say": "From Parts 10 and 19: sixty-four analyses, each with a five percent false-positive rate. What is the chance that "
             "at least one comes out significant? If they were independent, it's one minus point nine five to the sixty-fourth: "
             "ninety-six percent. With a Bonferroni correction, each must reach a p-value of point oh oh oh seven eight, and the overall "
-            "rate is at most five percent. Our sixty-four analyses are strongly correlated, which is why none of them was "
-            "significant: they're closer to a handful of independent forks."},
+            "rate is at most five percent. Our sixty-four analyses are strongly correlated. Correlation reduces the effective number of opportunities, but does not explain or guarantee the absence of a "
+            "significant result."},
 ]
 
 

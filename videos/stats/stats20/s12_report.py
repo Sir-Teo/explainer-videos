@@ -24,22 +24,22 @@ class Report(VoiceoverScene):
         bad = VGroup(label(r"three ways to report it badly", font_size=26, color=RES),
                      label(r"``Salt has no effect on blood pressure'' \ (p = 0.81)", font_size=22),
                      label(r"``A non-significant trend toward higher pressure''", font_size=22),
-                     label(r"``After adjustment, the effect rose to 0.60 mm Hg per gram''", font_size=22)).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
+                     label(r"``After calibration, the effect rose to 0.37 mm Hg per gram''", font_size=22)).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
         good = VGroup(label(r"one way to report it well", font_size=26, color=HIT),
                       label(rf"Among US adults not taking BP medicine (2017--18, $n = {d['n']:,}$), each extra gram of", font_size=21),
                       label(rf"sodium on the recall day went with {d['est']:+.2f} mm Hg systolic pressure (95\% CI {d['lo']:+.2f} to {d['hi']:+.2f}).", font_size=21),
-                      label(r"A single day's recall is too noisy to detect the 2--3 mm Hg per gram found in trials,", font_size=21),
+                      label(r"Recall error and confounding limit comparison with randomized diet effects", font_size=21),
                       label(r"so this survey neither confirms nor contradicts them.", font_size=21)).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
         VGroup(bad, good).arrange(DOWN, aligned_edge=LEFT, buff=0.7).move_to(ORIGIN)
         crosses = VGroup(*[Cross(r, stroke_color=RES, stroke_width=2).scale(0.98) for r in bad[1:]])
         with self.voiceover(
-            "The analysis is done; now it has to be said. <bookmark mark='a'/> Here are three ways to say it badly. Salt "
-            "has no effect on blood pressure: a causal claim, from an absence of evidence. <bookmark mark='b'/> A "
-            "non-significant trend toward higher pressure: a phrase that dresses noise up as a finding. <bookmark mark='c'/> "
-            "After adjustment, the effect rose to point six: an unplanned, hopelessly imprecise number promoted to a "
-            "headline. <bookmark mark='d'/> And one way to say it well: who, when and how many; the estimate in its units, "
-            "with its interval; and the one limitation that changes how to read it, stated plainly, with what it means for "
-            "the trials."
+            "The analysis is done; now it has to be said. <bookmark mark='a'/> Here are three ways to say it badly. "
+            "Salt has no effect on blood pressure: a causal claim, from an absence of evidence. <bookmark mark='b'/> "
+            "A non-significant trend toward higher pressure: a phrase that dresses noise up as a finding. <bookmark "
+            "mark='c'/> After calibration, the effect rose to point three seven: an unplanned, hopelessly imprecise "
+            "number promoted to a headline. <bookmark mark='d'/> And one way to say it well: who, when and how many; "
+            "the estimate in its units, with its interval; and the one limitation that changes how to read it, stated"
+            " plainly, with what it means for the trials."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(bad[0]), FadeIn(bad[1]))
@@ -64,7 +64,7 @@ class Report(VoiceoverScene):
             sec(r"QUESTION", r"How does systolic pressure vary with usual sodium intake, among adults alike in age, sex, BMI and energy?"),
             sec(r"DATA", rf"NHANES 2017--18; \ {d['n']:,} adults 20+ not on BP medicine; \ design-weighted, \ 15 df."),
             sec(r"FINDING", rf"{d['est']:+.2f} mm Hg per g/day (95\% CI {d['lo']:+.2f} to {d['hi']:+.2f}); \ 64 alternative analyses: \ all near 0."),
-            sec(r"BUT", rf"one day's recall: \ reliability {d['reliability']:.2f}, \ about 0.06 given energy; \ corrected: \ $-1.9$ to $+3.1$."),
+            sec(r"BUT", rf"one day's recall: \ correlation {d['reliability']:.2f}, \ calibration slope 0.06 given energy; \ correction without energy: \ $-1.9$ to $+2.7$."),
             sec(r"SO", r"Consistent with no effect and with the trials' 2--3 mm Hg per g. \ The survey cannot decide."),
             sec(r"NOT", r"Evidence that salt is harmless. \ Causal claims rest on randomized trials."),
         )
@@ -120,16 +120,17 @@ class Report(VoiceoverScene):
                  xticks=[1, 5, 10], yticks=[0, 40, 80, 120], center=[3.4, 0.2, 0], font_size=18)
         la = VGroup(polyline(A.ax, xs, ys, RES, 3), *[Dot(A.ax.c2p(a, b), radius=0.07, color=RES) for a, b in zip(xs, ys)])
         lb = VGroup(polyline(B.ax, xs, ys, HIT, 3), *[Dot(B.ax.c2p(a, b), radius=0.07, color=HIT) for a, b in zip(xs, ys)])
-        ta = label(r"axis from 117: \ drama from noise", font_size=22, color=RES).next_to(A, UP, buff=0.2)
-        tb = label(r"axis from 0: \ flat, \ as it is", font_size=22, color=HIT).next_to(B, UP, buff=0.2)
+        ta = label(r"axis from 117: \ small differences emphasized", font_size=22, color=RES).next_to(A, UP, buff=0.2)
+        tb = label(r"axis from 0: \ small differences compressed", font_size=22, color=HIT).next_to(B, UP, buff=0.2)
         foot = label(r"Part 1's rule: \ the axis should not manufacture the finding", font_size=24, color=OBS).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "<bookmark mark='a'/> The figures need the same honesty as the sentences, Part 1's rules of graphic integrity. "
-            "Chapter four's decile means, plotted on an axis from a hundred and seventeen to a hundred and twenty-five, become "
-            "a jagged mountain range. A reader sees structure: a peak in the fourth decile, a rise at the top. "
-            "<bookmark mark='b'/> On an axis from zero, the same ten numbers are a flat line, which is what they are. Neither "
-            "axis is always right; for blood pressure a range of clinical interest is reasonable. <bookmark mark='c'/> But the "
-            "axis should never manufacture the finding, and every plot should show its uncertainty."
+            "<bookmark mark='a'/> The figures need the same honesty as the sentences, Part 1's rules of graphic "
+            "integrity. Chapter four's decile means, plotted on an axis from a hundred and seventeen to a hundred and"
+            " twenty-five, become a jagged mountain range. A reader sees structure: a peak in the fourth decile, a "
+            "rise at the top. <bookmark mark='b'/> On an axis from zero, the same differences look much smaller. "
+            "Neither axis proves the differences are real or mere noise; for blood pressure a range of clinical "
+            "interest is reasonable. <bookmark mark='c'/> But the axis should never manufacture the finding, and "
+            "every plot should show its uncertainty."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(A), Create(la), FadeIn(ta), run_time=2.0)
@@ -148,13 +149,19 @@ class Report(VoiceoverScene):
             label(r"the checks of chapter six; \ the World's replay of chapter ten", font_size=24, color=WLD),
             label(r"the code, \ and how to rerun it", font_size=24, color=HIT),
         ), 12.4, 0.48, [0, 0, 0])
+        intro = label('A short report needs a reproducible supporting appendix', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> The page is short because the appendix is long. <bookmark mark='b'/> It holds the decision "
             "log, <bookmark mark='c'/> the analysis plan and any deviation from it, <bookmark mark='d'/> all sixty-four analyses "
             "and the exploratory interaction, clearly labelled, <bookmark mark='e'/> the model checks and the replay on the "
             "World, <bookmark mark='f'/> and the code, which is the subject of the next chapter."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcdef"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()

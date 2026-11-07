@@ -32,6 +32,9 @@ class FirstModel(VoiceoverScene):
         rows[2][2].set_color(SALT)
         whys = [why(r"Part 12's least squares"), why(r"$w_i$: \ the day-1 dietary weights"),
                 why(r"the difference per gram, \ others held fixed"), why(r"chapter six checks it")]
+        intro = label('A weighted linear projection defines the recall-day coefficient', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> Here is the model from the plan: systolic pressure as a linear function of sodium, age, sex, "
             "body mass index and energy, plus an error. <bookmark mark='b'/> It's fitted by Part 12's least squares, with each "
@@ -40,33 +43,44 @@ class FirstModel(VoiceoverScene):
             "<bookmark mark='d'/> We're assuming each relationship is a straight line and that sodium's slope is the same for "
             "everyone. Those are assumptions to check, which is chapter six."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.2, buff=0.75, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def weighting(self):
         rows = fit_rows(VGroup(
             label(r"why weight a regression?", font_size=28),
-            label(r"if the model is right and the slope the same for everyone: \ weights only cost precision", font_size=22, color=GREY_A),
-            label(r"if slopes differ between groups: \ unweighted, \ a sample-shaped average", font_size=22, color=RES),
+            label(r"with a correct mean model and ignorable sampling, \ coefficients may agree", font_size=22, color=GREY_A),
+            label(r"if the model is misspecified: \ the sample distribution changes its projection", font_size=22, color=RES),
             label(r"weighted: \ the slope you'd get by fitting the whole population", font_size=22, color=DES),
             label(r"DuMouchel \& Duncan (1983); \ Solon, \ Haider \& Wooldridge (2015)", font_size=20, color=GREY_B),
             label(r"we pre-specified weights; \ chapter eight shows both", font_size=22, color=OBS),
         ), 12.4, 0.42, [0, 0, 0])
+        intro = label('Regression weighting depends on the target and sampling model', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Chapter two said weighting a mean isn't optional. For a regression slope the argument is "
-            "subtler. <bookmark mark='b'/> If the model is exactly right and the slope is the same for everyone, the weights "
-            "don't remove any bias, and because they're so unequal they cost precision. <bookmark mark='c'/> But if the slope "
-            "differs between groups, an unweighted fit averages those slopes in the proportions of the sample, which "
-            "oversampled some groups on purpose. <bookmark mark='d'/> The weighted fit estimates the slope you'd get by fitting "
-            "the whole population: a well-defined descriptive estimand even when the model is wrong. <bookmark mark='e'/> "
-            "William DuMouchel and Greg Duncan made this argument in 1983, and Gary Solon and colleagues revisited it in 2015. "
-            "<bookmark mark='f'/> We chose weights in the plan, and chapter eight shows the answer both ways."
+            "<bookmark mark='a'/> Chapter two said weighting a mean isn't optional. For a regression slope the "
+            "argument is subtler. <bookmark mark='b'/> Under a correct conditional-mean model and sampling "
+            "independent of the residual given its predictors, unweighted regression can estimate the same "
+            "coefficients. Whether weights improve precision depends on the variance and sampling models. <bookmark "
+            "mark='c'/> But if the slope differs between groups, an unweighted fit targets a sample-distribution "
+            "projection, influenced by group frequencies and covariate variation. <bookmark mark='d'/> The weighted "
+            "fit estimates the slope you'd get by fitting the whole population: a well-defined descriptive estimand "
+            "even when the model is wrong. <bookmark mark='e'/> William DuMouchel and Greg Duncan made this argument "
+            "in 1983, and Gary Solon and colleagues revisited it in 2015. <bookmark mark='f'/> We chose weights in "
+            "the plan, and chapter eight shows the answer both ways."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcdef"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()
 
@@ -110,17 +124,25 @@ class FirstModel(VoiceoverScene):
         rows[3][2].set_color(SALT)
         whys = [why(r"precisely estimated: \ $\pm 0.5$"), why(r"obesity and pressure, \ well known"),
                 why(r"of the same age, \ size and energy"), why(r"$p = 0.81$: \ indistinguishable from zero")]
+        intro = label('Read a coefficient in its units, with its uncertainty', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Reading the coefficients as a reader would: ten years of age go with four millimetres more, "
-            "precisely estimated. <bookmark mark='b'/> Five units of BMI, roughly the difference between a normal weight and "
-            "obesity at a given height, go with two point six more. <bookmark mark='c'/> Women average five less than men "
-            "like them. <bookmark mark='d'/> And a gram of sodium a day goes with seven hundredths of a millimetre, with a "
-            "p-value of point eight one. Chapter one's descriptive estimand is, as far as these data can tell, zero."
+            "<bookmark mark='a'/> Reading the coefficients as a reader would: ten years of age go with four "
+            "millimetres more, precisely estimated. <bookmark mark='b'/> Five units of BMI, roughly the difference "
+            "between a normal weight and obesity at a given height, go with two point six more. <bookmark mark='c'/> "
+            "Women average five less than men like them. <bookmark mark='d'/> And a gram of sodium a day goes with "
+            "seven hundredths of a millimetre, with a p-value of point eight one. The recall-day coefficient is "
+            "compatible with zero and with a range of small positive or negative associations. It is not the "
+            "usual-intake causal effect."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.75, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def forest(self):
@@ -138,16 +160,17 @@ class FirstModel(VoiceoverScene):
         el = label(r"NHANES: \ the survey's slope", font_size=22, color=SALT).next_to(ci, DOWN, buff=0.25)
         rows = fit_rows(VGroup(
             label(r"not ``no effect'': \ an interval that ends at $+0.63$", font_size=24),
-            label(r"and excludes what the trials found", font_size=24, color=RES),
-            label(r"the survey and the trials disagree: \ one of them is not measuring what we think", font_size=22, color=OBS),
+            label(r"the displayed trial effects lie outside this recall-day interval", font_size=24, color=RES),
+            label(r"recall-day association and randomized diet effects have different estimands", font_size=22, color=OBS),
         ), 12.0, 0.3, [0, -2.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Let's put it on a line with the trials. In gold, the survey's slope and its ninety-five "
-            "percent interval. <bookmark mark='b'/> In green, the range randomized trials have found: two to three millimetres "
-            "per gram. <bookmark mark='c'/> The honest reading is not no effect. It's an interval that runs up to plus point "
-            "six three, <bookmark mark='d'/> and so excludes what the trials found, by a wide margin. <bookmark mark='e'/> Two "
-            "careful bodies of evidence disagree. Either salt doesn't do what the trials say, or this survey slope is not "
-            "measuring the effect of salt. The next four chapters find out which."
+            "<bookmark mark='a'/> Let's put it on a line with the trials. In gold, the survey's slope and its "
+            "ninety-five percent interval. <bookmark mark='b'/> In green, the range randomized trials have found: two"
+            " to three millimetres per gram. <bookmark mark='c'/> The honest reading is not no effect. It's an "
+            "interval that runs up to plus point six three, <bookmark mark='d'/> and does not overlap the displayed "
+            "trial effects. Those trials and this recall-day regression target different quantities. <bookmark "
+            "mark='e'/> This is not a formal contradiction: different exposures, populations and interventions can "
+            "give different slopes. The next chapters examine measurement error, model assumptions and confounding."
         ) as vo:
             self.play(FadeIn(A), Create(zero))
             vo.wait_until("a")
@@ -167,6 +190,9 @@ class FirstModel(VoiceoverScene):
             label(r"are the intervals right? \ chapter seven", font_size=24, color=DES),
             label(r"does it depend on our choices? \ is the exposure measured well? \ chapter eight", font_size=24, color=SALT),
         ), 12.4, 0.5, [0, 0, 0])
+        intro = label('A compatible-with-zero result still needs its assumptions checked', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> We followed the plan, and the primary result goes in the report as it came out. "
             "<bookmark mark='b'/> A null result from three thousand people measured this carefully is information, not a "
@@ -174,7 +200,10 @@ class FirstModel(VoiceoverScene):
             "hides the effect? <bookmark mark='d'/> Are the intervals right? <bookmark mark='e'/> And does the answer depend on "
             "the choices we made, and on how badly one day's recall measures the usual diet?"
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()

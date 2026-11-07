@@ -76,17 +76,18 @@ class Checking(VoiceoverScene):
         pts = VGroup(*[Dot(ax.c2p(a, b), radius=0.05, color=RES) for a, b in zip(th[m], sm[m])])
         rows = fit_rows(VGroup(
             label(rf"skewness {d['skew']:.2f}: \ a long right tail", font_size=24, color=RES),
-            label(r"the slope's interval: \ still fine, \ by the CLT (Part 6)", font_size=22, color=HIT),
+            label(r"design-based intervals do not require normal individual residuals", font_size=22, color=HIT),
             label(r"an interval for one person's pressure: \ would not be", font_size=22, color=OBS),
             label(r"a log scale would tame the tail, \ at the cost of a harder estimand", font_size=22, color=GREY_A),
         ), 5.4, 0.42, [3.6, 0.2, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Next, a normal quantile plot of the residuals. They bend upward on the right: a long right "
-            "tail, skewness about one, the same tail we saw in chapter four. <bookmark mark='b'/> Does it matter? For the "
-            "slope and its interval, hardly: with three thousand people the central limit theorem of Part 6 takes care of "
-            "it. <bookmark mark='c'/> For predicting one person's pressure, it would: a normal interval would miss the high "
-            "values. <bookmark mark='d'/> Modelling log pressure would tame the tail, but then the estimand becomes a percent "
-            "change, and the plan asked for millimetres."
+            "<bookmark mark='a'/> Next, a normal quantile plot of the residuals. They bend upward on the right: a "
+            "long right tail, skewness about one, the same tail we saw in chapter four. <bookmark mark='b'/> Does it "
+            "matter? Normal individual residuals are not required for a design-based slope interval. Its "
+            "approximation depends on the sampled PSUs and regularity, not merely the number of people; thirty masked"
+            " PSUs are a modest basis. <bookmark mark='c'/> For predicting one person's pressure, it would: a normal "
+            "interval would miss the high values. <bookmark mark='d'/> Modelling log pressure would tame the tail, "
+            "but then the estimand becomes a percent change, and the plan asked for millimetres."
         ) as vo:
             self.play(FadeIn(A), Create(diag))
             vo.wait_until("a")
@@ -109,18 +110,20 @@ class Checking(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"grey: \ the straight line", font_size=22, color=GREY_B),
             label(r"blue: \ a restricted cubic spline, \ knots 25, \ 40, \ 55, \ 70", font_size=22, color=MODEL_C),
-            label(rf"flat, \ then steeper: \ Wald $\chi^2_2 = {d['wald']:.1f}$, \ $p = {d['wald_p']:.3f}$", font_size=22, color=OBS),
+            label(rf"flat, \ then steeper: \ Wald $F_{{2,15}} = {d['wald'] / 2:.2f}$, \ $p = {d['wald_p']:.3f}$", font_size=22, color=OBS),
             label(rf"sodium's slope: \ {load('model')['est']:+.2f} $\to$ {sp['est']:+.2f}", font_size=24, color=SALT),
-            label(r"real curvature, \ irrelevant to our question", font_size=22, color=HIT),
+            label(r"this spline barely changes the sodium estimate", font_size=22, color=HIT),
         ), 4.3, 0.4, [4.6, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The model forced age to be a straight line. Replace it with a restricted cubic spline, a "
-            "smooth curve built from cubic pieces joined at four knots and kept straight beyond the outer ones. "
-            "<bookmark mark='b'/> The spline is flat in the twenties and thirties and climbs steeply after that, <bookmark mark='c'/> "
-            "and the curvature is real: a design-based Wald test on the two extra terms gives a p-value under one percent. "
-            "<bookmark mark='d'/> But what happens to sodium's slope? It moves from point zero seven to point zero four. "
-            "<bookmark mark='e'/> The age curve was wrong in a way that doesn't touch our question. That's the purpose of a "
-            "check: not to make the model perfect, but to see whether its flaws change the answer."
+            "<bookmark mark='a'/> The model forced age to be a straight line. Replace it with a restricted cubic "
+            "spline, a smooth curve built from cubic pieces joined at four knots and kept straight beyond the outer "
+            "ones. <bookmark mark='b'/> The spline is flat in the twenties and thirties and climbs steeply after "
+            "that, <bookmark mark='c'/> and the design-based Wald F test on the two extra terms, using fifteen "
+            "denominator degrees of freedom, gives a p-value of about point zero two two. <bookmark mark='d'/> But "
+            "what happens to sodium's slope? It moves from point zero seven to point zero four. <bookmark mark='e'/> "
+            "This particular age adjustment barely changes the sodium coefficient; it does not establish that all "
+            "model misspecification is harmless. That's the purpose of a check: not to make the model perfect, but to"
+            " see whether its flaws change the answer."
         ) as vo:
             self.play(FadeIn(A), Create(knots), Create(lin), FadeIn(rows[0]))
             vo.wait_until("a")
@@ -136,7 +139,7 @@ class Checking(VoiceoverScene):
     def interaction(self):
         d = load("checks")
         m = load("model")
-        b1 = m["est"]
+        b1 = d["inter_main"]
         at = lambda a: b1 + d["inter"] * (a - 50)  # noqa: E731
         rows = [
             cmath(r"\text{add}", r":", r"\beta_6\,\text{sodium} \times (\text{age} - 50)", font_size=30),
@@ -147,6 +150,9 @@ class Checking(VoiceoverScene):
         rows[3][2].set_color(RES)
         whys = [why(r"does salt matter more at some ages?"), why(r"$t = -2.6$, \ $p = 0.02$"),
                 why(r"the trials: \ older people are \emph{more} salt-sensitive"), why(r"a forking path: \ report it, \ flagged")]
+        intro = label('An interaction changes both the main slope and its age dependence', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> The model also assumed sodium's slope is the same at every age. Let it vary, with an "
             "interaction between sodium and age. <bookmark mark='b'/> The interaction comes out negative, minus point zero four "
@@ -157,10 +163,13 @@ class Checking(VoiceoverScene):
             "exploratory, with chapter nine's likely explanation: older people with high pressure have often been told to cut "
             "their salt."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.75, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def influence(self):
@@ -174,36 +183,50 @@ class Checking(VoiceoverScene):
         rows[2][2].set_color(SALT)
         whys = [why(r"Part 12: \ leverage $\times$ residual, \ weighted"), why(r"a check, \ not a new analysis"),
                 why(r"well inside one SE"), why(r"robust to the most influential points")]
+        intro = label('Sensitivity to influential observations is one diagnostic', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Finally, influence: Part 12's Cook's distance measures how much the fit would move if each "
-            "adult were left out. Big survey weights can make a few people very influential. <bookmark mark='b'/> As a check, "
-            "not a new analysis, drop the thirty most influential adults, one percent of the sample. <bookmark mark='c'/> "
-            "Sodium's slope goes from plus point zero seven to minus point zero two, well within one standard error. "
-            "<bookmark mark='d'/> No handful of people is producing the null."
+            "<bookmark mark='a'/> Finally, influence: Part 12's Cook's distance measures how much the fit would move "
+            "if each adult were left out. Big survey weights can make a few people very influential. <bookmark "
+            "mark='b'/> As a check, not a new analysis, drop the thirty most influential adults, one percent of the "
+            "sample. <bookmark mark='c'/> Sodium's slope goes from plus point zero seven to minus point zero two, "
+            "well within one standard error. <bookmark mark='d'/> Removing this influential subset changes the "
+            "estimate little. That check does not rule out every influential group or model problem."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.75, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def summary(self):
         rows = fit_rows(VGroup(
             label(r"residuals: \ no systematic pattern", font_size=24, color=HIT),
-            label(r"a skewed tail: \ harmless for the slope", font_size=24, color=HIT),
+            label(r"a skewed tail: \ normality is not required for design inference", font_size=24, color=HIT),
             label(r"age is curved: \ fixing it leaves sodium unchanged", font_size=24, color=HIT),
             label(r"an unplanned interaction: \ reported, \ flagged, \ not believed yet", font_size=24, color=OBS),
             label(r"no influential handful", font_size=24, color=HIT),
-            label(r"the model is not what hides the effect", font_size=26, color=SALT),
+            label(r"these checks do not establish that the model is correct", font_size=26, color=SALT),
         ), 12.4, 0.45, [0, 0, 0])
+        intro = label('Diagnostics can reveal problems without proving a model correct', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> So: the residuals show no systematic pattern; <bookmark mark='b'/> the skewed tail doesn't "
-            "matter for the slope; <bookmark mark='c'/> the curvature in age is real but leaves sodium alone; "
-            "<bookmark mark='d'/> an interaction turned up that we didn't plan, and it's reported with that label; "
-            "<bookmark mark='e'/> and no few people drive the result. <bookmark mark='f'/> Whatever separates this survey from "
-            "the trials, it isn't the shape of the model."
+            "<bookmark mark='a'/> So: the residuals show no systematic pattern; <bookmark mark='b'/> the tail does "
+            "not itself require normality for design-based inference; <bookmark mark='c'/> the spline suggests "
+            "curvature but barely moves sodium; <bookmark mark='d'/> an interaction turned up that we didn't plan, "
+            "and it's reported with that label; <bookmark mark='e'/> and no few people drive the result. <bookmark "
+            "mark='f'/> These checks leave the main recall-day estimate similar. They cannot prove the model correct "
+            "or explain every difference from trials."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcdef"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()

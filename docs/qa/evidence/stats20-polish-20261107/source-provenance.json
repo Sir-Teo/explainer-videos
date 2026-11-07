@@ -1,0 +1,46 @@
+{
+  "download_date": "2026-11-07",
+  "sources": {
+    "BMX_J.xpt": {
+      "sha256": "8d675e42d8826ac98714b2c3dd4c5138a5e353fb4424f7eff5e6db4a01ce838a",
+      "bytes": 1466000,
+      "url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/BMX_J.xpt"
+    },
+    "BPQ_J.xpt": {
+      "sha256": "63cfe1c331a1e7d3534328ac86312a21ffee3e01aa189bc1f74d06855239e5aa",
+      "bytes": 544560,
+      "url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/BPQ_J.xpt"
+    },
+    "BPX_J.xpt": {
+      "sha256": "f98f1d9a4c18173e715c749b4294f6f1525140d5ad5751316bb17cc038fb3423",
+      "bytes": 1466000,
+      "url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/BPX_J.xpt"
+    },
+    "DEMO_J.xpt": {
+      "sha256": "c0b46e0345ea19404928656277c8b0d10b0cca348a9b2fe4fc3c67e8b7ee73ec",
+      "bytes": 3412720,
+      "url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/DEMO_J.xpt"
+    },
+    "DR1TOT_J.xpt": {
+      "sha256": "390ae5205acfbcb87e0ca3d9aabd1c801b60657d3f2802ac08d5b3ed93f0af6d",
+      "bytes": 11722480,
+      "url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/DR1TOT_J.xpt"
+    },
+    "DR2TOT_J.xpt": {
+      "sha256": "b73be9b0a4787e73eb831d22b356d03657ffae7d41e5713b60aaa49b828d9c1b",
+      "bytes": 5931360,
+      "url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/DR2TOT_J.xpt"
+    },
+    "explainer/stats/data/nhanes_bp.csv": {
+      "sha256": "ae9be14330c2d18a719fca7ef379643b3f8f08f85abdf81ef993e713a4d5d1f5",
+      "bytes": 591643
+    },
+    "videos/stats/stats20/data/nhanes_day2_weights.csv": {
+      "sha256": "9d96506116cc30afd450658a6aaf794c8ea4a6783bf284a9439822e8f3b648be",
+      "bytes": 72856
+    }
+  },
+  "validation": "All 5533 original rows/29 columns reproduce byte-for-byte from all six current CDC files; WTDR2D supplement aligned by unique SEQN and rounded to one decimal using the extraction script.",
+  "guidance": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/DR2TOT_J.htm",
+  "guidance_excerpt": "A set of adjusted weights, WTDR2D, is to be used when an analysis uses the smaller sample with completed Day 1 and Day 2 dietary data."
+}

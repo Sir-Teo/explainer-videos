@@ -18,8 +18,8 @@ class Outro(VoiceoverScene):
             (r"cleaning: \ 5,533 $\to$ 3,071, \ logged", OBS), (r"age confounds, \ the other way", GREY_A),
             (r"the plan: \ $+0.07$ [$-0.50$, $+0.63$]", SALT), (r"checks: \ curvature, \ no harm", HIT),
             (r"four SEs; \ $t$ with 15 df", DES), (r"64 analyses, \ all near zero", OBS),
-            (r"one day: \ reliability 0.32, \ 0.06", RES), (r"the trials: \ 2--3 mm Hg per g", HIT),
-            (r"the World: \ 0.24, \ 0.78, \ 1.0, \ trial 1.9", WLD), (r"one page; \ one command", SALT),
+            (r"two recalls: \ $r=0.32$; \ conditional calibration 0.06", RES), (r"the trials: \ 2--3 mm Hg per g", HIT),
+            (r"the World: \ 0.23, \ 0.74, \ 0.96; \ trial 1.9", WLD), (r"one page; \ one command", SALT),
         ]
         rows = VGroup(*[label(rf"{i + 1}.\ \ {t}", font_size=26, color=c) for i, (t, c) in enumerate(items)])
         cols = VGroup(VGroup(*rows[:7]).arrange(DOWN, aligned_edge=LEFT, buff=0.4),
@@ -29,15 +29,18 @@ class Outro(VoiceoverScene):
         head = label(r"Part 20, \ in fourteen lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Part twenty in fourteen lines. <bookmark mark='a'/> We turned a question about salt into an estimand for a stated "
-            "population. NHANES's strata, PSUs and weights changed the mean pressure by three points and tripled its variance. "
-            "Cleaning took five and a half thousand adults to three thousand and seventy-one, every step logged, and "
-            "exploration showed age confounding the relationship the other way. The planned model found plus point zero seven "
-            "millimetres per gram, with an interval from minus point five to plus point six; the checks found curvature but no "
-            "harm; four kinds of standard error agreed; and sixty-four alternative analyses all stayed near zero. But one day's "
-            "recall turned out to be mostly noise, so the survey can't contradict the trials' two to three millimetres per gram. "
-            "On the World, the same pipeline found point two four, calibration point seven eight, perfect measurement one, and a "
-            "small randomized trial the truth. And it all fits on one page, rebuilt by one command."
+            "Part twenty in fourteen lines. <bookmark mark='a'/> We turned a question about salt into an estimand for"
+            " a stated population. NHANES's strata, PSUs and weights changed the mean pressure by three points and "
+            "tripled its variance. Cleaning took five and a half thousand adults to three thousand and seventy-one, "
+            "every step logged, and exploration showed age confounding the relationship the other way. The "
+            "illustrative plan's model found plus point zero seven millimetres per gram, with an interval from minus "
+            "point five to plus point six; the checks found curvature but no harm; the four standard errors differed,"
+            " while all four intervals included zero; and sixty-four alternative analyses all stayed near zero. But "
+            "the repeat recalls exposed measurement concerns, so the recall-day association is not directly "
+            "comparable to randomized diet effects. On repeated World surveys, the recall-day estimate averaged point"
+            " two three, calibration point seven four and true intake point nine six; a randomized trial's intervals "
+            "covered the structural effect at roughly their promised rate. And it all fits on one page, rebuilt by "
+            "one command."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -90,14 +93,21 @@ class Outro(VoiceoverScene):
             label(r"and one analysis, \ start to finish", font_size=26, color=SALT),
             label(r"the Bachelor's", font_size=48, color=S.ACCENT),
         ), 12.4, 0.5, [0, 0, 0])
+        intro = label('The course completes its bachelor-level stage', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> That completes the first two stages: the foundations, <bookmark mark='b'/> and the methods. "
-            "<bookmark mark='c'/> Probability and inference, regression and experimental design, counts and Bayes, the "
-            "bootstrap, time series, surveys and prediction, <bookmark mark='d'/> and one real analysis, done honestly from "
-            "beginning to end. <bookmark mark='e'/> That is a bachelor's degree in statistics."
+            "<bookmark mark='a'/> That completes the first two stages: the foundations, <bookmark mark='b'/> and the "
+            "methods. <bookmark mark='c'/> Probability and inference, regression and experimental design, counts and "
+            "Bayes, the bootstrap, time series, surveys and prediction, <bookmark mark='d'/> and one real analysis, "
+            "done honestly from beginning to end. <bookmark mark='e'/> That completes this course's bachelor-level "
+            "stage; the curriculum is not an accredited degree."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=UP * 0.15))
         self.wait(1.5)
         self.clear_scene()

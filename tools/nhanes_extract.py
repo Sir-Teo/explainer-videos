@@ -56,5 +56,19 @@ def main(src: str, out: str) -> None:
     print(f"{len(df)} adults -> {out}")
 
 
+def day2_weights(src: str, extract: str, out: str) -> None:
+    """Export WTDR2D aligned by SEQN without changing the original 29-column extract."""
+    base = pd.read_csv(extract, usecols=["seqn"])
+    extra = pd.read_sas(f"{src}/DR2TOT_J.xpt", format="xport")[["SEQN", "WTDR2D"]]
+    extra = extra.rename(columns={"SEQN": "seqn", "WTDR2D": "wt_diet2"})
+    result = base.merge(extra, on="seqn", how="left", validate="one_to_one", sort=False)
+    result["seqn"] = result["seqn"].astype(int)
+    result["wt_diet2"] = result["wt_diet2"].round(1)
+    result.to_csv(out, index=False)
+
+
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2])
+    if len(sys.argv) == 5 and sys.argv[1] == "--day2-weights":
+        day2_weights(*sys.argv[2:])
+    else:
+        main(sys.argv[1], sys.argv[2])

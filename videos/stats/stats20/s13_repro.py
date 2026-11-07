@@ -35,7 +35,7 @@ class Reproducibility(VoiceoverScene):
         boxes = VGroup(
             step_box(r"CDC files", r"six .xpt files, \ public", NH),
             step_box(r"extract", r"\texttt{tools/nhanes\_extract.py}", DES),
-            step_box(r"one CSV", rf"{d['rows']:,} rows, \ {d['cols']} columns", NH),
+            step_box(r"CSV + two-day weights", rf"{d['rows']:,} rows, \ {d['cols']} columns", NH),
             step_box(r"the pipeline", r"\texttt{pipeline.py}: \ clean, \ fit", SALT),
             step_box(r"compute", r"\texttt{compute.py}: \ every number, \ seeded", SALT),
             step_box(r"cache", r"JSON, \ one file per result", GREY_A),
@@ -48,16 +48,18 @@ class Reproducibility(VoiceoverScene):
         arrows = VGroup(*[Arrow(boxes[i].get_right(), boxes[i + 1].get_left(), buff=0.05, stroke_width=3, color=GREY_B) for i in (0, 1, 2)],
                         Arrow(boxes[3].get_bottom(), boxes[4].get_top(), buff=0.05, stroke_width=3, color=GREY_B),
                         *[Arrow(boxes[i].get_left(), boxes[i + 1].get_right(), buff=0.05, stroke_width=3, color=GREY_B) for i in (4, 5)])
-        foot = label(r"\texttt{python -m videos.stats.stats20.compute}: \ one command reruns everything", font_size=22,
+        foot = label(r"\texttt{python -m videos.stats.stats20.compute --force}: \ one command reruns everything", font_size=22,
                      color=OBS).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "<bookmark mark='a'/> Here is the chain from the CDC's files to every number in this part. Six public files, "
-            "downloaded unchanged. <bookmark mark='b'/> A short extraction script that keeps the columns we use and renames "
-            "them, nothing more. <bookmark mark='c'/> One CSV file. <bookmark mark='d'/> The pipeline, where every decision "
-            "of chapters three to eight lives, as code. <bookmark mark='e'/> A compute script that produces every number, with "
-            "fixed random seeds for the bootstrap and the World. <bookmark mark='f'/> Its results, cached. <bookmark mark='g'/> "
-            "And the scenes and the report, which only read the cache. No number on screen was typed by hand, and one command "
-            "reruns it all."
+            "<bookmark mark='a'/> Here is the chain from the CDC's files to every number in this part. Six public "
+            "files, downloaded unchanged. <bookmark mark='b'/> A short extraction script that keeps the columns we "
+            "use and renames them, nothing more. <bookmark mark='c'/> The original twenty-nine-column CSV plus a "
+            "SEQN-aligned supplement containing the CDC two-day dietary weights. <bookmark mark='d'/> The pipeline, "
+            "where every decision of chapters three to eight lives, as code. <bookmark mark='e'/> A compute script "
+            "that produces every number, with fixed random seeds for the bootstrap and the World. <bookmark "
+            "mark='f'/> Its results, cached. <bookmark mark='g'/> And the scenes and the report, which only read the "
+            "cache. Numerical results come from the computation, while some labels and narrative summaries are "
+            "rounded by hand. Force recomputation after source changes; one command reruns it all."
         ) as vo:
             for k, m_ in enumerate("abcdefg"):
                 vo.wait_until(m_)
@@ -81,6 +83,9 @@ class Reproducibility(VoiceoverScene):
         rows[1][2].set_color(OBS)
         whys = [why(r"where the data came from"), why(r"any change to the file changes it"),
                 why(r"random, \ but repeatable"), why(r"which code produced which number")]
+        intro = label('Record data, seeds, code and software versions', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "Reproducibility needs four things recorded. <bookmark mark='a'/> Where the data came from. <bookmark mark='b'/> "
             "A fingerprint of the exact file: a SHA-256 hash, which changes if a single digit changes, so a reader can confirm "
@@ -88,10 +93,13 @@ class Reproducibility(VoiceoverScene):
             "come out identically. <bookmark mark='d'/> And the versions of the code and the packages. Without these, a "
             "result can't be checked, only believed."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.78, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def privacy(self):
@@ -105,6 +113,9 @@ class Reproducibility(VoiceoverScene):
         ]
         whys = [why(r"chapter two"), why(r"a 97-year-old in a small town is findable"), why(r"so are the very rich"),
                 why(r"by application, \ with oversight"), why(r"the people behind the rows")]
+        intro = label('Public data protect participants through several layers', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "Public data must protect the people in it. NHANES does it in layers. <bookmark mark='a'/> No locations: only "
             "thirty masked PSUs. <bookmark mark='b'/> Age is top-coded at eighty, because a ninety-seven-year-old in a small "
@@ -113,10 +124,13 @@ class Reproducibility(VoiceoverScene):
             "by application. <bookmark mark='e'/> And every participant gave informed consent to a protocol approved by an "
             "ethics review board. Part 63 will show how statistics itself can guarantee privacy."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=5, top=2.8, x=-0.6, buff=0.62, edge=6.9)
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def ethics(self):
@@ -127,6 +141,9 @@ class Reproducibility(VoiceoverScene):
             label(r"consequences: \ a careless headline can change what millions eat", font_size=22, color=RES),
             label(r"the analyst's duty: \ say what the data show, \ and no more", font_size=24, color=SALT),
         ), 12.4, 0.5, [0, 0, 0])
+        intro = label('Communicate what the data can support', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "And the ethics of the analysis itself. <bookmark mark='a'/> NHANES records race and ethnicity, and differences "
             "between groups are real, but they reflect social and environmental conditions; reporting them as biology causes "
@@ -136,8 +153,11 @@ class Reproducibility(VoiceoverScene):
             "harmless could change what millions of people eat. <bookmark mark='e'/> The analyst's duty is to say what the "
             "data show, as precisely as they show it, and no more."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()
 

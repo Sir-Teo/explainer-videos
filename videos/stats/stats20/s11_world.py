@@ -35,6 +35,9 @@ class OnTheWorld(VoiceoverScene):
         rows[0][2].set_color(TRUE)
         whys = [why(r"the truth: \ 1.5 mm Hg per g, \ for every adult"), why(r"so energy and sodium go together"),
                 why(r"the backwards loop of chapter nine"), why(r"correlation between days: \ 0.37, \ like NHANES")]
+        intro = label('The simulation supplies a known structural sodium effect', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "The World now has a health block, built for this part, with laws we wrote down. <bookmark mark='a'/> Each "
             "adult's systolic pressure follows age, body size and sex, plus one point five millimetres for every gram of "
@@ -46,11 +49,14 @@ class OnTheWorld(VoiceoverScene):
             "averages match NHANES too: three point four seven grams of sodium, a hundred and twenty-four millimetres of "
             "pressure."
         ) as vo:
+            self.play(FadeIn(intro))
             self.add(simulated_tag(r"simulated: \ the World's health block"))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.2, buff=0.78, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def one_survey(self):
@@ -75,13 +81,13 @@ class OnTheWorld(VoiceoverScene):
         foot = label(rf"one survey of the World: \ 10 regions $\times$ 2 towns $\times$ 250 adults; \ {one['n']:,} in the primary sample",
                      font_size=22, color=GREY_A).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "<bookmark mark='a'/> Now survey the World the way NHANES surveys America: ten regions as strata, two towns drawn in "
-            "each with probability proportional to size, two hundred and fifty adults per town, older people oversampled, "
-            "weights from the selection probabilities. Then run exactly the same code. <bookmark mark='b'/> The plan's analysis "
-            "finds a slope of point two five: a sixth of the truth, and its interval excludes it. <bookmark mark='c'/> "
-            "Regression calibration with the second recall brings it to point eight three. <bookmark mark='d'/> And an "
-            "analysis no real survey could do, using each person's true intake, gives point eight four. Even perfect "
-            "measurement doesn't reach one point five."
+            "<bookmark mark='a'/> Use an illustrative NHANES-shaped design: ten regions, two PPS town draws per "
+            "region, and two hundred and fifty adults in each draw, with older adults oversampled by age-stratified "
+            "random sampling. The draw and within-age probabilities are exact. This is not NHANES's actual selection "
+            "algorithm. Run the same analysis pipeline. <bookmark mark='b'/> In this survey the recall-day estimate "
+            "is point three five. <bookmark mark='c'/> Joint regression calibration gives one point two three, with a"
+            " much wider interval. <bookmark mark='d'/> Using true current intake gives one point zero zero. Even "
+            "perfect sodium measurement does not automatically recover the structural effect, one point five."
         ) as vo:
             self.add(simulated_tag(r"simulated: \ the World"))
             self.play(FadeIn(A), Create(truth), FadeIn(tl), FadeIn(foot))
@@ -103,16 +109,18 @@ class OnTheWorld(VoiceoverScene):
         strips, labs = VGroup(), VGroup()
         for k, (key, txt, c) in enumerate(METHODS):
             y = 3 - k
-            e = np.clip(np.asarray(sm[key]["est"]), -1, 3.5)
+            e = np.asarray(sm[key]["est"])
+            e = e[(e >= -1) & (e <= 3.5)]
             strips.add(VGroup(*[Dot(ax.c2p(v, y + 0.5 * (g.random() - 0.5)), radius=0.035, color=c, fill_opacity=0.7) for v in e]))
             labs.add(label(rf"mean {sm[key]['mean']:.2f}; \ covers 1.5: \ {100 * sm[key]['cover']:.0f}\%", font_size=19, color=c)
                      .next_to(ax.c2p(-1, y), LEFT, buff=0.15))
         with self.voiceover(
-            "<bookmark mark='a'/> One survey could be unlucky, so here are two hundred. <bookmark mark='b'/> The plan's "
-            "analysis averages point two four, and its intervals contain the truth in none of them. <bookmark mark='c'/> "
-            "Calibration averages point seven eight, scattered widely, and covers the truth sixty-nine percent of the time. "
-            "<bookmark mark='d'/> With true intake: an average of one point zero, and coverage of only fifty-four percent, "
-            "because its intervals are narrow and centred in the wrong place."
+            "<bookmark mark='a'/> Repeat for two hundred survey draws from this fixed World. <bookmark mark='b'/> The"
+            " one-day analysis averages point two three, and none of its intervals contains one point five. <bookmark"
+            " mark='c'/> Calibration averages point seven four and its joint design intervals cover in sixty-nine "
+            "point five percent of draws. <bookmark mark='d'/> True intake gives an average of point nine six and "
+            "coverage of fifty-three point five percent. These are empirical operating characteristics for this "
+            "particular simulation and pipeline, not universal properties of survey analysis."
         ) as vo:
             self.add(simulated_tag(r"simulated: \ the World"))
             self.play(FadeIn(A), Create(truth))
@@ -126,27 +134,35 @@ class OnTheWorld(VoiceoverScene):
     def why_short(self):
         d = load("world")["summary"]
         rows = [
-            cmath(r"1.5 \to 1.0", r":", r"\text{diagnosis cuts salt where pressure is high}", font_size=28),
-            cmath(r"1.0 \to 0.8", r":", r"\text{calibration recovers what noise took, \ imprecisely}", font_size=28),
-            cmath(r"0.8 \to 0.24", r":", r"\text{one day's noise, \ given energy}", font_size=28),
-            cmath(r"\text{lesson}", r":", r"\text{measurement can be fixed; \ confounding cannot}", font_size=28),
+            cmath(r"1.5 \to 0.96", r":", r"\text{diagnosis, \ selection and model projection}", font_size=28),
+            cmath(r"0.96 \to 0.74", r":", r"\text{replicate calibration relies on an approximate error model}", font_size=28),
+            cmath(r"0.74 \to 0.23", r":", r"\text{one day's noise, \ given energy}", font_size=28),
+            cmath(r"\text{lesson}", r":", r"\text{replicates alone cannot identify a causal effect}", font_size=28),
         ]
         rows[3][2].set_color(OBS)
-        whys = [why(r"reverse causation: \ a confounder no recall can remove"), why(r"the second recall, \ chapter eight"),
-                why(r"attenuation, \ $\lambda \approx 0.3$"), why(r"not by better measurement")]
+        whys = [why(r"diagnosis, \ treatment selection and projection"), why(r"joint uncertainty from both regressions"),
+                why(r"noisy energy and correlated within-day recall variation"), why(r"further causal design or assumptions are needed")]
+        intro = label('A descriptive regression need not recover a structural effect', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "The World lets us account for every step between the truth and the survey's answer. <bookmark mark='a'/> From "
-            "one point five to one: people whose pressure is high get told, and cut their salt, so the highest pressures go "
-            "with slightly lower sodium. That's confounding by the backwards loop, present even with perfect measurement. "
-            "<bookmark mark='b'/> From one to about point eight: calibration undoes the recall noise, on average, but "
-            "imprecisely. <bookmark mark='c'/> And from point eight to point two four: what a single day's noise does, once "
-            "energy is held fixed. <bookmark mark='d'/> The lesson: noise in measurement can be corrected with replicates. "
-            "Confounding can't be, because no measurement of sodium tells you why someone eats what they eat."
+            "The simulation separates several problems, but these differences are not an additive causal "
+            "decomposition. <bookmark mark='a'/> Even the true-intake regression is a descriptive projection, not the"
+            " structural effect: diagnosis changes diet, medication exclusion selects adults, and the analysis's "
+            "linear age and sex terms differ from the generating laws. <bookmark mark='b'/> Replicate calibration "
+            "remains imperfect because its linear predictor and error assumptions are approximations. <bookmark "
+            "mark='c'/> The simulated energy and sodium recalls share within-day reporting variation, so conditioning"
+            " on noisy energy complicates classical attenuation. <bookmark mark='d'/> Better measurement can help, "
+            "but cannot by itself establish causal identification. Confounding may be addressed only with further "
+            "design or defensible assumptions, not by sodium replicates alone."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.78, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def trial(self):
@@ -155,8 +171,8 @@ class OnTheWorld(VoiceoverScene):
                  xticks=[100, 110, 120, 130, 140, 150], center=[-1.4, 0.9, 0])
         ax = A.ax
         g = np.random.Generator(np.random.PCG64(11))
-        lo = VGroup(*[Dot(ax.c2p(min(154, max(96, v)), 2.1 + 0.6 * (g.random() - 0.5)), radius=0.04, color=HIT) for v in d["y_low"]])
-        hi = VGroup(*[Dot(ax.c2p(min(154, max(96, v)), 0.9 + 0.6 * (g.random() - 0.5)), radius=0.04, color=SALT) for v in d["y_high"]])
+        lo = VGroup(*[Dot(ax.c2p(v, 2.1 + 0.6 * (g.random() - 0.5)), radius=0.04, color=HIT) for v in d["y_low"] if 95 <= v <= 155])
+        hi = VGroup(*[Dot(ax.c2p(v, 0.9 + 0.6 * (g.random() - 0.5)), radius=0.04, color=SALT) for v in d["y_high"] if 95 <= v <= 155])
         ml = Line(ax.c2p(d["mean_low"], 1.7), ax.c2p(d["mean_low"], 2.5), color=HIT, stroke_width=5)
         mh = Line(ax.c2p(d["mean_high"], 0.5), ax.c2p(d["mean_high"], 1.3), color=SALT, stroke_width=5)
         rows = fit_rows(VGroup(
@@ -193,10 +209,11 @@ class OnTheWorld(VoiceoverScene):
         b = coverage_board(rows, lit_part=20, placeholders=0, font_size=20, row_h=0.62)
         b.scale_to_fit_width(min(b.width, 13.0)).move_to(ORIGIN)
         with self.voiceover(
-            "<bookmark mark='a'/> Three rows for the Board, each a ninety-five percent interval for the World's sodium effect. "
-            "The survey analysis as planned: zero percent, broken. <bookmark mark='b'/> With regression calibration: sixty-nine "
-            "percent, still broken, because confounding remains. <bookmark mark='c'/> The randomized trial: ninety-six "
-            "percent, kept."
+            "<bookmark mark='a'/> Three rows for the Board, each a ninety-five percent interval for the World's "
+            "sodium effect. The survey analysis as planned: zero percent, broken for this structural target. "
+            "<bookmark mark='b'/> With joint regression calibration: sixty-nine point five percent, still below its "
+            "nominal promise; causal and measurement assumptions remain unmet. <bookmark mark='c'/> The randomized "
+            "trial: ninety-six percent, kept."
         ) as vo:
             self.play(FadeIn(b.head), FadeIn(b.axis), FadeIn(b.legend))
             vo.wait_until("a")

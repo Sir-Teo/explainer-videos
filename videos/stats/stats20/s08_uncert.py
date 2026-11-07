@@ -34,19 +34,26 @@ class Uncertainty(VoiceoverScene):
                 why(r"Part 12's White SEs"),
                 why(r"the sandwich summed over PSUs, \ within strata"),
                 why(r"Rao \& Wu (1988): \ resample PSUs, \ 1,000 times")]
+        intro = label('Different standard errors make different assumptions', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "The slope for sodium was plus point zero seven. How uncertain is it? There are four answers on offer. "
-            "<bookmark mark='a'/> The model-based standard error treats the weights as if they were precisions and the "
-            "errors as independent with equal variance: point two three. <bookmark mark='b'/> Part 12's sandwich, robust to "
-            "unequal variances but still treating people as independent: point three one. <bookmark mark='c'/> The "
-            "design-based standard error, the same sandwich but with scores summed within each PSU, so that people in the same "
-            "cluster count together: point two seven. <bookmark mark='d'/> And a bootstrap that resamples whole PSUs within "
-            "strata, Rao and Wu's method, a thousand times: point two seven again."
+            "<bookmark mark='a'/> The model-based standard error treats the weights as if they were precisions and "
+            "the errors as independent with variance inversely proportional to those weights: point two three. "
+            "<bookmark mark='b'/> Part 12's sandwich, robust to unequal variances but still treating people as "
+            "independent: point three one. <bookmark mark='c'/> The design-based standard error, the same sandwich "
+            "but with scores summed within each PSU, so that people in the same cluster count together: point two "
+            "seven. <bookmark mark='d'/> And a bootstrap that resamples whole PSUs within strata, Rao and Wu's "
+            "method, a thousand times: point two seven again."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.8, buff=0.75, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def bootstrap(self):
@@ -105,15 +112,16 @@ class Uncertainty(VoiceoverScene):
                      .next_to(ax.c2p(-1, y), LEFT, buff=0.2))
         foot = fit_rows(VGroup(
             label(rf"15 degrees of freedom: \ $t_{{0.975}} = {d['t']:.2f}$, \ not 1.96", font_size=22, color=SALT),
-            label(r"the plan's choice: \ design-based, \ $t_{15}$; \ the widest, \ and the honest one", font_size=22, color=OBS),
+            label(r"the plan's choice: \ design-based, \ $t_{15}$; \ an approximation from 30 PSUs", font_size=22, color=OBS),
         ), 12.0, 0.25, [0, -2.7, 0])
         with self.voiceover(
             "<bookmark mark='a'/> As intervals: model-based, sandwich, and design-based with the normal multiplier. "
-            "<bookmark mark='b'/> And the design-based one with t, not z. Fifteen degrees of freedom means a multiplier of two "
-            "point one three instead of one point nine six, which is Part 11's small-sample lesson reappearing: the "
-            "standard error itself is estimated from only thirty PSUs. <bookmark mark='c'/> The plan chose that last interval, "
-            "minus point five oh to plus point six three. It's the widest, and the honest one. Every interval agrees on the "
-            "conclusion: small, and indistinguishable from zero."
+            "<bookmark mark='b'/> And the design-based one with t, not z. Fifteen degrees of freedom means a "
+            "multiplier of two point one three instead of one point nine six, which is Part 11's small-sample lesson "
+            "reappearing: the standard error itself is estimated from only thirty PSUs. <bookmark mark='c'/> The plan"
+            " chose that last interval, minus point five oh to plus point six three. It reflects our chosen design "
+            "approximation, though the independent-unit sandwich interval is wider here. Each is compatible with "
+            "zero; that is not proof of a zero effect."
         ) as vo:
             self.play(FadeIn(A), Create(zero))
             vo.wait_until("a")
@@ -135,18 +143,25 @@ class Uncertainty(VoiceoverScene):
         rows[3][2].set_color(OBS)
         whys = [why(r"adults not on BP medicine"), why(r"$s / \sqrt n$"), why(r"two methods agree"),
                 why(r"means suffer more from clustering than slopes")]
+        intro = label('Design effects depend on the estimand', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Compare a plain mean: average pressure in the same population, a hundred and twenty point "
-            "four. <bookmark mark='b'/> As a simple random sample, its standard error would be point three three. "
-            "<bookmark mark='c'/> By design, point five four, and the bootstrap agrees. <bookmark mark='d'/> A design effect of "
-            "two point seven for the mean, but only about one point four for the slope. That's typical: whole clusters differ "
-            "in their average pressure, perhaps through geography or income, but within-cluster differences, "
-            "which drive a slope, are less affected. Cluster effects hurt means the most."
+            "<bookmark mark='a'/> Compare a plain mean: average pressure in the same population, a hundred and twenty"
+            " point four. <bookmark mark='b'/> As a simple random sample, its standard error would be point three "
+            "three. <bookmark mark='c'/> By design, point five four, and the bootstrap agrees. <bookmark mark='d'/> A"
+            " design effect of two point seven for the mean, but only about one point four for the slope. That's "
+            "typical: whole clusters differ in their average pressure, perhaps through geography or income, but "
+            "within-cluster differences, which drive a slope, are less affected. Clustering can affect means and "
+            "slopes differently; the direction depends on the outcome and covariate patterns."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.75, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def silent(self):
@@ -157,6 +172,9 @@ class Uncertainty(VoiceoverScene):
             label(r"who chooses to eat salt, \ and why \ (chapter nine)", font_size=24, color=TRUE),
             label(r"Part 11: \ an interval is only as honest as its assumptions", font_size=22, color=GREY_A),
         ), 12.4, 0.5, [0, 0, 0])
+        intro = label('Sampling uncertainty does not remove measurement or causal bias', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> One caution about all of these intervals. They measure one thing: the luck of which people "
             "the survey happened to draw. <bookmark mark='b'/> They say nothing about two other problems, which may be far "
@@ -164,7 +182,10 @@ class Uncertainty(VoiceoverScene):
             "spreading it. <bookmark mark='d'/> The other is who eats salt, and why. <bookmark mark='e'/> As Part 11 put it, an "
             "interval is only as honest as its assumptions, and the next two chapters examine those."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()

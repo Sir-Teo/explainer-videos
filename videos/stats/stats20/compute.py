@@ -109,7 +109,8 @@ def compute_design():
     okn = np.isfinite(na) & (d["diet1_ok"][a] == 1)
     wn = d["wt_diet1"][a][okn]
     nw = SV.svy_mean(na[okn], wn, d["strata"][a][okn], d["psu"][a][okn])
-    srs_se = float(np.std(s[ok], ddof=1) / np.sqrt(ok.sum()))
+    # Same SRS baseline as svy_mean.deff: the weighted population variance / n.
+    srs_se = float(np.sqrt(np.average((s[ok] - sw["mean"]) ** 2, weights=w[ok]) / ok.sum()))
     return nest({"n": int(a.sum()), "strata": int(len(np.unique(d["strata"]))), "psus": int(len({(x, y) for x, y in zip(d["strata"], d["psu"])})),
                  "pop": float(w.sum()), "w_min": float(w.min()), "w_max": float(w.max()), "w_median": float(np.median(w)),
                  "shares": shares, "old_sample": float(old.mean()), "old_weighted": float(np.sum(w * old) / w.sum()),
@@ -155,8 +156,12 @@ def compute_explore():
                    for a, b in bands] for sx in ("men", "women")}
     cuts = wquant(na, w, np.linspace(0.1, 0.9, 9))
     dec = np.digitize(na, cuts)
-    decs = [{"na": wmean(na[dec == j], w[dec == j]), "sbp": wmean(y[dec == j], w[dec == j]),
-             "se": float(np.std(y[dec == j], ddof=1) / np.sqrt(np.sum(dec == j)))} for j in range(10)]
+    # Domain scores retain zero contributions from every sampled PSU outside the decile.
+    decs = []
+    for j in range(10):
+        domain_w = np.where(dec == j, w, 0.0)
+        dm = SV.svy_mean(y, domain_w, d["strata"][k], d["psu"][k])
+        decs.append({"na": wmean(na, domain_w), "sbp": dm["mean"], "se": dm["se"]})
     g = rng(21)
     sub = g.choice(k.sum(), 700, replace=False)
     return nest({"edges_sbp": e_s, "hist_sbp": h_s, "edges_na": e_n, "hist_na": h_n, "bands": bands, "by_age": by_age,
@@ -214,9 +219,13 @@ def compute_checks():
     kk = k.copy()
     kk[np.flatnonzero(k)[top]] = False
     rd = P.fit(d, keep=kk)
+    df = df_design(d, k)
     return nest({"rvf": rvf, "qq": qq, "skew": float(stats.skew(e)), "ages": ages, "curve_spline": curve_s, "curve_linear": curve_l,
-                 "wald": wald, "wald_df": len(jj), "wald_p": float(stats.chi2.sf(wald, len(jj))),
-                 "inter": float(ri["b"][-1]), "inter_se": float(ri["se_design"][-1]), "n_drop": len(top),
+                 "wald": wald, "wald_df": len(jj), "wald_denom_df": df,
+                 "wald_p": float(stats.f.sf(wald / len(jj), len(jj), df)),
+                 "inter_main": float(ri["b"][1]), "inter": float(ri["b"][-1]),
+                 "inter_p": float(2 * stats.t.sf(abs(ri["b"][-1] / ri["se_design"][-1]), df)),
+                 "inter_se": float(ri["se_design"][-1]), "n_drop": len(top),
                  "est_drop": rd["est"], "est_drop_se": rd["est_se"], "est": r["est"], "cook_top": np.sort(cook)[::-1][:10]})
 
 
@@ -252,17 +261,20 @@ def compute_spec():
         spec = dict(zip([a for a, _ in SPEC_AXES], combo))
         keep, _ = P.clean(d, spec["meds"])
         r = P.fit(d, spec, keep=keep)
-        out.append({"spec": spec, "est": r["est"], "se": r["est_se"], "n": r["n"]})
+        out.append({"spec": spec, "est": r["est"], "se": r["est_se"], "n": r["n"],
+                    "critical": float(stats.t.ppf(0.975, df_design(d, r["keep"])))})
     est = np.array([o["est"] for o in out])
     return nest({"axes": [a for a, _ in SPEC_AXES], "runs": out, "min": est.min(), "max": est.max(), "median": float(np.median(est)),
-                 "n_pos_sig": int(sum(o["est"] - 2 * o["se"] > 0 for o in out)), "n_neg_sig": int(sum(o["est"] + 2 * o["se"] < 0 for o in out))})
+                 "n_pos_sig": int(sum(o["est"] - o["critical"] * o["se"] > 0 for o in out)),
+                 "n_neg_sig": int(sum(o["est"] + o["critical"] * o["se"] < 0 for o in out))})
 
 
 def compute_meas():
     d, k, _ = frame()
     k2 = k & (d["diet2_ok"] == 1)
     n1, n2 = d["na1"][k2] / 1000, d["na2"][k2] / 1000
-    rel = C.reliability(n1, n2)
+    # Correlation is a descriptive diagnostic; it equals reliability only under equal error variances.
+    rel = float(np.corrcoef(n1, n2)[0, 1])
     c = P.calibrated(d)
     c0 = P.calibrated(d, {"energy": False})
     r0 = P.fit(d, {"energy": False})
@@ -361,7 +373,9 @@ def compute_repro():
     p = Path(__file__).resolve().parents[3] / "explainer" / "stats" / "data" / "nhanes_bp.csv"
     h = hashlib.sha256(p.read_bytes()).hexdigest()
     d = P.nhanes_frame()
+    supplement = Path(__file__).with_name("data") / "nhanes_day2_weights.csv"
     return nest({"sha256": h, "bytes": p.stat().st_size, "rows": len(d["age"]), "cols": len(d),
+                 "day2_weights_sha256": hashlib.sha256(supplement.read_bytes()).hexdigest(),
                  "age80": int(np.sum(d["age"] == 80)), "pir5": int(np.sum(d["pir"] == 5)),
                  "psus_masked": int(len({(a, b) for a, b in zip(d["strata"], d["psu"])}))})
 
