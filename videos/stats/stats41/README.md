@@ -19,8 +19,7 @@ darkened by mechanism, imputed cells painted, and offset copies for the m comple
 - Mroz's (1987) 753 married women from the 1975 PSID (R's `sampleSelection`, GPL ≥ 2).
 
 It opens with Wald's bombers (1943) in a stylized World of 2,000 planes, 1,252 of which return. The engines are 15%
-of the surface but carry 10.5% of the survivors' hits: 30% of their expected hits are missing, because those hits
-were fatal (Mangel & Samaniego 1984).
+of the surface but carry 10.5% of the survivors' hits: the relative area-normalized hit-share deficit is about 30%. This is not the 40% per-hit engine kill probability in the toy generator (Mangel & Samaniego 1984).
 
 From there the part covers:
 - **Mechanisms.**
@@ -31,17 +30,15 @@ From there the part covers:
   - Monotone and arbitrary patterns; dropout in trials. MCAR is testable (Little 1988); MAR against MNAR is not
     (Molenberghs et al. 2008).
 - **The easy methods' sins.**
-  - Complete cases: on the true mean log income of 10.583, MCAR gives 10.585, MAR 10.609 and MNAR 10.358. They are
-    unbiased for a regression when missingness depends on x alone.
+  - Complete cases: on the true mean log income of 10.583, MCAR gives 10.585, MAR 10.609 and MNAR 10.358. A correctly specified conditional regression remains valid under selection on x alone, with adequate support; misspecified regression projections can change under selection.
   - The missing-indicator method (Greenland & Finkle 1995); available cases.
   - Mean imputation cuts the SD from 0.653 to 0.544. Regression imputation inflates the correlation with age from
-    0.103 to 0.127; adding noise restores both.
+    0.103 to 0.127; appropriate stochastic draws restore residual variation in distribution, rather than reproducing both statistics exactly in one draw.
   - LOCF in a seeded trial: the true effect is −4.84, LOCF gives −4.47, MAR imputation −4.96.
 - **Likelihood under MAR.**
   - EM for the normal (Dempster, Laird & Rubin 1977); Buck (1960); why EM climbs; the missing information principle
     and Louis's SEs; FIML.
-  - New York's ozone: EM converges in 12 iterations. The mean is 41.9 against 42.1 from complete cases, because the
-    missing days were as hot as the others.
+  - New York's ozone: EM converges in 12 iterations. The mean is 41.9 against 42.1 from complete cases, under a working multivariate-normal MAR model. Missing days have similar average temperature, which does not establish the full missingness mechanism.
 - **Multiple imputation.**
   - Rubin's rules derived; proper draws and PMM; chained equations (van Buuren); how many imputations; derived
     variables; congeniality (Meng 1994).
@@ -50,21 +47,20 @@ From there the part covers:
 - **Weighting.**
   - IPW = Horvitz–Thompson with a response propensity; the missing-data / causal dictionary; AIPW (Robins, Rotnitzky
     & Zhao 1994); calibration (Deville & Särndal 1992).
-  - On the MAR mask: IPW 10.589 with the right model and 10.607 with the wrong one. AIPW is 10.589 when either model
-    is right and 10.607 when both are wrong.
+  - On the MAR mask: IPW 10.589 with the right model and 10.607 with the wrong one. AIPW is 10.589 with a correct response specification and a rich working outcome model and 10.607 when both are wrong.
   - Weights up to 3.3; 1,372 respondents are worth 1,279; balance on age is restored (47.5 against 47.5).
 - **MNAR.**
   - Heckman (1979) and the inverse Mills ratio.
   - Mroz: 428 of 753 worked; 62% of women with no child under 6 worked, against 39% with one and 27% with two.
     The return to a year of education is 0.1075 by OLS, 0.1091 by Heckman's two steps and 0.1084 by ML, with ρ̂ near
-    0: selection barely matters.
+    0: the residual correlation is near zero within this restrictive joint-normal specification, not proof that selection is absent.
   - Exclusion restrictions; Manski's bounds; pattern mixtures (Little 1993).
-  - A tipping-point analysis on the MNAR mask reaches the truth near δ ≈ 0.7 (refusers about twice as rich). ICH E9(R1).
+  - A sensitivity analysis on the MNAR mask reaches the truth near δ ≈ 0.7 (refusers about twice as rich). ICH E9(R1).
 - **MRP.**
   - The Xbox poll (Wang et al. 2015); Gelman & Little (1997).
   - The World's election, with Blue at 38.2%, and an opt-in poll of 3,000 that is 40% under-30 (against 22%) and 65%
-    male. Raw 42.3%; raked 39.4%; MRP 38.7% (90% interval 36.9–40.6).
-  - By region: raw RMSE 3.2 points, MRP 2.8 (small regions are pooled toward the island).
+    male. Raw 42.3%; raked 39.4%; MRP 38.9% (approximate conditional 90% interval 37.0–41.0).
+  - By region: raw RMSE 3.2 points, MRP 2.6 (small regions are pooled toward the island).
   - YouGov 2017; small-area cousins; limits.
 - **Measurement error.**
   - Spearman (1904); regression dilution; the classical picture.
@@ -108,10 +104,22 @@ The Coverage Board gains nine rows:
 | single regression imputation, naive SE | same | 70.8% | broken |
 | multiple imputation (m = 10), Rubin's rules | same | 89.3% | kept |
 | AIPW mean, influence-function SE | same | 86.5% | broken (extreme weights) |
-| opt-in poll, raw share | the World's election, a self-selected sample of 1,500 | 4.5% | broken |
-| MRP, 90% posterior interval | same | 83.0% | broken (too narrow) |
+| opt-in poll, raw share | the World's election, a self-selected sample of 1,500 | 2.5% | broken |
+| MRP, approximate conditional 90% posterior interval | same | 81.0% | broken |
 | OLS slope on an error-prone w | reliability 0.61, n = 500 | 0.0% | broken |
-| regression calibration, bootstrap SE | same, with a replicate | 88.3% | kept |
+| regression calibration, bootstrap SE | same, with a replicate; 199 resamples per dataset | 88.9% | kept |
+
+Scientific conditions and implementation scope:
+
+- Wald’s displayed hit-share deficit is normalized by total hits on returning planes. It illustrates survivorship selection, but is not itself an estimate of a hit’s kill probability. The toy model assumes independent Poisson strikes and location-dependent survival.
+- MAR ignorability needs distinct, variation-independent parameters and a suitable observed-data likelihood; Bayesian ignorability additionally needs the relevant prior factorization. MCAR has testable implications, but a non-significant diagnostic does not prove it. General missingness graphs require more than the simple arrow examples.
+- Conditional complete-case regression needs a correct conditional model and adequate covariate support. Marginal means and misspecified projections need not be preserved. The ten-column 60% example assumes independent holes. Missing-indicator trial adjustment requires appropriate baseline design, model and standard errors; pairwise covariance estimates can form an indefinite matrix even though individual pairwise correlations remain bounded.
+- EM accounts for missing conditional covariance under its fitted model; it does not guarantee a correct model, global optimum or universally correct spread. Its local convergence matrix involves a fraction of missing information; that ratio alone does not determine absolute interval width. Imputation counts and chained-equation mixing require diagnostics. The large-df relative variance share differs from finite-df FMI. Derived-variable imputations must preserve the substantive model’s needed interactions and nonlinear structure; a generic direct-term recipe need not preserve deterministic identities.
+- Known-probability Horvitz–Thompson means are unbiased under the stated MAR and positivity assumptions. Normalized or fitted-propensity estimators generally have finite-sample bias. AIPW double robustness concerns consistency; efficiency and standard-error claims require regularity and suitable nuisance estimation. The rich World outcome regression is a working approximation, not a known exact conditional mean. Trimming can introduce bias or change the target; Kish’s weight-only effective sample size is a diagnostic rather than a universal precision equivalence.
+- Heckman’s exclusions and joint-normal assumptions are identifying restrictions, not verified facts. Schooling coefficients are associations. The delta curve now reuses 20 completed datasets at every value, removing Monte Carlo noise between sensitivity settings. The oracle mean-matching shift is 0.6904 log-income units; it is not identified from observed data or a claim that every conditional distribution has that exact shift. A decision tipping point also needs a stated decision threshold.
+- Worked and repeated-poll MRP use the same factor structure, including age-by-sex effects, and the same group-SD grid (0.1, 0.3, 0.6). Intervals use a normal approximation at the posterior mode conditional on grid-selected group spreads. They omit hyperparameter uncertainty, and coarse cells leave residual selection. The study does not isolate the sources of undercoverage.
+- The NHANES analysis is an unweighted complete-case association among 2,805 adults not recorded as taking prescribed antihypertensives. Medication fields are unrecorded for 2,622 of them, including structural skips; this is not a verified all-off-medication cohort or a nationally representative causal sodium effect. Equal-variance, independent classical errors are assumptions behind interpreting repeat-day correlation as reliability. Regression calibration and replicate-instrument IV can share a population target while differing in finite samples.
+- Misclassification curves show odds ratios formed from expected cell proportions, not the exact expectation of a sample ratio. Toward-null population results need informative common error rates in the stated simple setting. The matrix example reports point corrections; an interval would additionally need sampling and error-rate uncertainty. Perfect specificity with common positive sensitivity preserves a population risk ratio, rather than making every sample ratio unbiased.
 
 ## Build it
 
@@ -134,8 +142,8 @@ python tools/lecture_length.py stats41 --floor 50
 | 4 | Multiple imputation | FMI 0.17–0.34; 70.8% vs 89.3% |
 | 5 | Weighting is causal inference | AIPW right if either model is |
 | 6 | Missing not at random | ρ̂ ≈ 0.03; tipping δ ≈ 0.7 |
-| 7 | MRP | 42.3% → 38.7% (truth 38.2%) |
-| 8 | Measurement error | λ = 0.34; RC 0.77 |
+| 7 | MRP | 42.3% → 38.9% (truth 38.2%) |
+| 8 | Measurement error | repeat-day correlation 0.34; conditional working λ = 0.24; RC 0.77 |
 | 9 | Misclassification | OR 2.29 → 1.67 → 2.07 |
 | 10 | Outro | — |
 
@@ -176,7 +184,7 @@ python tools/lecture_length.py stats41 --floor 50
    second factor does not depend on Y_mis, so it leaves the integral: P(R | Y_obs, φ) ∫ f(Y_obs, Y_mis | θ) dY_mis =
    P(R | Y_obs, φ) f(Y_obs | θ). With θ and φ distinct, the first factor is constant in θ.
 2. **Selection on x.** If R depends on x only, f(y | x, R = 1) = f(y | x)P(R = 1 | x)/P(R = 1 | x) = f(y | x). So
-   E[y | x, R = 1] is the true regression, and least squares on complete cases is unbiased. But E[y | R = 1] =
+   E[y | x, R = 1] is the true regression, and least squares on complete cases is unbiased under the correctly specified conditional-mean model and adequate support. But E[y | R = 1] =
    E[E(y | x) | R = 1] averages the regression over the selected x's, which differ from the population's.
 3. **Rubin's variance.** Var(Q | Y_obs) = E[Var(Q | Y) | Y_obs] + Var[E(Q | Y) | Y_obs]. Estimate the first by W and
    the second by B. Averaging m draws adds simulation variance B/m to the mean, giving T = W + B + B/m.
@@ -187,7 +195,7 @@ python tools/lecture_length.py stats41 --floor 50
 5. **Dilution.** Cov(W, Y) = Cov(X + U, α + βX + ε) = βσ²_X and Var W = σ²_X + σ²_U. So the OLS slope tends to
    βσ²_X/(σ²_X + σ²_U) = λβ.
 6. **The matrix method.** E[share reporting exposure] = Se p + (1 − Sp)(1 − p) = (Se + Sp − 1)p + (1 − Sp), which is
-   linear in p. So p = (E[share] − (1 − Sp))/(Se + Sp − 1), exactly, whenever Se + Sp > 1.
+   linear in p. So p = (E[share] − (1 − Sp))/(Se + Sp − 1), as an inversion of expected proportions when Se + Sp > 1. Nonlinear sample odds-ratio corrections are not thereby exactly unbiased; incompatible rates may require a constrained model.
 
 ## Glossary
 

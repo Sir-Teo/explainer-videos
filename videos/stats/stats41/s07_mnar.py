@@ -61,6 +61,9 @@ class MNAR(VoiceoverScene):
             "term rho sigma times the inverse Mills ratio of the selection index. Ordinary least squares on workers omits "
             "that term."
         ) as vo:
+            heading = label('Selection models identify outcomes through stated restrictions', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -100,15 +103,16 @@ class MNAR(VoiceoverScene):
             label(rf"Thomas Mroz (1987): \ {d['n']} married women in the 1975 Panel Study of Income Dynamics", font_size=26),
             label(rf"{d['n_work']} worked for pay; \ mean wage \${d['mean_wage']:.2f} an hour", font_size=26, color=OBSV),
             label(rf"with no child under 6: \ {100 * d['kids5_rate'][0]:.0f}\% worked; \ with one: \ {100 * d['kids5_rate'][1]:.0f}\%; \ with two: \ {100 * d['kids5_rate'][2]:.0f}\%", font_size=26, color=MNC),
-            label(r"young children move women out of work, \ but should not change their offered wage", font_size=26, color=TAUC),
+            label(r"excluding young children from the wage equation is an assumption, not a verified fact", font_size=26, color=TAUC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Thomas Mroz's data of 1987, " + str(d["n"]) + " married women from the 1975 wave of the "
             "Panel Study of Income Dynamics. <bookmark mark='b'/> " + str(d["n_work"]) + " worked for pay. <bookmark "
             "mark='c'/> Of women with no child under six, " + str(round(100 * d["kids5_rate"][0])) + " percent worked; with "
-            "one, " + str(round(100 * d["kids5_rate"][1])) + "; with two, " + str(round(100 * d["kids5_rate"][2])) + ". "
-            "<bookmark mark='d'/> Young children strongly affect whether a woman works but, plausibly, not the wage she "
-            "would be offered: an exclusion restriction, like Part thirty-seven's instruments."
+            "one, " + str(round(100 * d["kids5_rate"][1])) + "; with two, " + str(round(100 * d["kids5_rate"][2])) + ". <bookmark mark='d'/> Using young children as an exclusion assumes that, conditional on the included "
+            "covariates, they affect participation but not offered log wages. Effects through availability, past "
+            "experience or other channels can violate this assumption: an exclusion restriction, like Part "
+            "thirty-seven's instruments."
         ) as vo:
             self.add(mroz_tag())
             for k, m_ in enumerate("abcd"):
@@ -124,15 +128,16 @@ class MNAR(VoiceoverScene):
                 [r"$\hat\rho$", r"---", f"{d['two']['rho']:.3f}", f"{d['mle']['rho']:.3f}"]]
         tab = table_rows(rows, font_size=28, col_buff=0.9, row_buff=0.36, colors=[GREY_A, OBSV, MNC, MNC]).move_to([0, 0.8, 0])
         foot = fit_rows(VGroup(
-            label(r"selection barely matters here: \ $\hat\rho$ is near zero", font_size=24, color=TAUC),
-            label(r"each year of schooling raises wages about 11\% \ either way", font_size=24, color=GREY_A),
+            label(r"near-zero fitted residual correlation within this joint-normal specification", font_size=24, color=TAUC),
+            label(r"schooling coefficients are associations; causal returns need further identification", font_size=24, color=GREY_A),
         ), 12.4, 0.3, [0, -1.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The results. <bookmark mark='b'/> Ordinary least squares on the workers says a year of "
-            "education raises the wage by about " + str(round(100 * d["ols"]["beta"][1])) + " percent. Heckman's two steps "
-            "and maximum likelihood agree. <bookmark mark='c'/> The estimated correlation is close to zero: for these "
-            "women, whatever made them work was nearly unrelated to their wage, once education and experience are known. "
-            "A famous model, and here a famous non-result, which is the most common outcome in practice."
+            "<bookmark mark='a'/> The results. <bookmark mark='b'/> Ordinary least squares on the workers says a year"
+            " of education is associated with a log-wage difference of about " + str(round(100 * d["ols"]["beta"][1])) + " percent. Heckman's two steps and maximum likelihood agree. <bookmark mark='c'/> The estimated "
+            "correlation is close to zero: within this restrictive joint-normal model, the fitted residual selection "
+            "correlation is near zero. That estimate does not establish an absence of selection under other "
+            "specifications. A famous model, and here a famous non-result, whose interpretation depends on exclusion "
+            "and distributional assumptions."
         ) as vo:
             self.add(mroz_tag())
             vo.wait_until("a")
@@ -166,8 +171,8 @@ class MNAR(VoiceoverScene):
         rows = [
             cmath(r"\text{selection model}", r":", r"f(y)\, P(R \mid y)", font_size=32),
             cmath(r"\text{pattern mixture}", r":", r"P(R)\, f(y \mid R)", font_size=32),
-            cmath(r"f(y \mid R = 0)", r"=", r"f(y \mid R = 1, x) \text{ shifted by } \delta", font_size=30),
-            cmath(r"\delta", r":", r"\text{not estimable: \ chosen, \ and varied}", font_size=32),
+            cmath(r"f(y \mid R = 0,x)", r"=", r"f(y \mid R = 1, x) \text{ shifted by } \delta", font_size=30),
+            cmath(r"\delta", r":", r"\text{not identified from observed data alone; vary or inform with additional data}", font_size=32),
         ]
         rows[2][-1].set_color(MNC)
         whys = [why(r"Heckman's factorization"), why(r"Little (1993)"), why(r"delta adjustment"), why(r"a sensitivity parameter")]
@@ -179,6 +184,9 @@ class MNAR(VoiceoverScene):
             "<bookmark mark='d'/> Delta cannot be estimated from the data. It is chosen, and varied, and the analysis "
             "reports how the conclusion moves with it."
         ) as vo:
+            heading = label('Pattern-mixture sensitivity varies an unidentified departure', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -190,7 +198,9 @@ class MNAR(VoiceoverScene):
         R = d["rows"]
         dl = np.array([r["delta"] for r in R])
         est, lo, hi = (np.array([r[k] for r in R]) for k in ("est", "lo", "hi"))
-        A = axes([0, 1], [10.3, 10.7], x_length=7.4, y_length=4.2, xlabel=r"$\delta$: \ how much richer the refusers are \ (log scale)",
+        lower = min(10.3, float(np.floor(lo.min()*10)/10))
+        upper = max(10.7, float(np.ceil(hi.max()*10)/10))
+        A = axes([0, 1], [lower, upper], x_length=7.4, y_length=4.2, xlabel=r"$\delta$: \ how much richer the refusers are \ (log scale)",
                  ylabel=r"mean log income", xticks=[0, 0.25, 0.5, 0.75, 1], yticks=[10.3, 10.4, 10.5, 10.6, 10.7],
                  xfmt=lambda v: f"{v:g}", yfmt=lambda v: f"{v:.1f}", center=[-2.5, 0.2, 0])
         ax = A.ax
@@ -200,8 +210,8 @@ class MNAR(VoiceoverScene):
         side = fit_rows(VGroup(
             label(r"the MNAR mask: \ impute under MAR, \ then add $\delta$", font_size=22),
             label(r"$\delta = 0$: \ the MAR answer, \ far too low", font_size=22, color=MNC),
-            label(rf"gold: \ the truth, \ reached near $\delta \approx {d['true_delta']:.1f}$", font_size=22, color=TRUEC),
-            label(r"tipping point: \ the $\delta$ that flips the answer", font_size=22, color=TAUC),
+            label(rf"gold: oracle mean-matching reference, near $\delta \approx {d['true_delta']:.1f}$", font_size=22, color=TRUEC),
+            label(r"a decision tipping point additionally needs a prespecified decision threshold", font_size=22, color=TAUC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
             "<bookmark mark='a'/> A tipping-point analysis on the World's not-at-random mask. Impute under missing at "
@@ -230,12 +240,14 @@ class MNAR(VoiceoverScene):
             label(r"the best fix for missing data is not to have it: \ design for follow-up", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Regulators now expect this: the international guideline on estimands of 2019 asks trials "
-            "to state what is being estimated when patients stop treatment, and to show sensitivity analyses. <bookmark "
-            "mark='b'/> Trials assume, for example, that dropouts on the drug behave like the control arm afterwards. "
-            "<bookmark mark='c'/> Surveys can do better still, by chasing a random subsample of non-respondents to learn "
-            "delta directly. <bookmark mark='d'/> And the best fix for missing data is the oldest: design the study so "
-            "that less of it goes missing."
+            "<bookmark mark='a'/> Regulators now expect this: the international guideline on estimands of 2019 asks "
+            "trials to state the target effect in the presence of intercurrent events, such as stopping treatment. "
+            "Treatment discontinuation is not itself the same as missing follow-up data; and to show sensitivity "
+            "analyses. <bookmark mark='b'/> Trials assume, for example, that dropouts on the drug behave like the "
+            "control arm afterwards. <bookmark mark='c'/> Following a probability subsample of non-respondents can "
+            "inform the departure, but further nonresponse and measurement error still need to be addressed. "
+            "<bookmark mark='d'/> And the best fix for missing data is the oldest: design the study so that less of "
+            "it goes missing."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -259,6 +271,9 @@ class MNAR(VoiceoverScene):
             "be useful. <bookmark mark='d'/> Each defensible assumption, such as that refusers are no less likely to vote "
             "than responders, narrows them, the partial identification of Part thirty-seven."
         ) as vo:
+            heading = label('Known outcome bounds limit the missing-data contribution', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

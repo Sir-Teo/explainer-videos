@@ -30,18 +30,23 @@ class Sins(VoiceoverScene):
         rows = [
             cmath(r"\text{complete cases}", r":", r"\text{drop every row with a hole}", font_size=32),
             cmath(r"\text{MCAR}", r":", r"\text{unbiased, \ but wasteful}", font_size=32),
-            cmath(r"\text{MAR}", r":", r"\text{biased if } R \text{ depends on what predicts } Y", font_size=30),
-            cmath(r"\text{many variables}", r":", r"\text{10 columns, \ 5\% missing each: \ } 0.95^{10} = 60\% \text{ survive}", font_size=28),
+            cmath(r"\text{MAR}", r":", r"\text{the complete-case marginal mean can be biased under selection}", font_size=30),
+            cmath(r"\text{many variables}", r":", r"\text{independent holes: }10\text{ columns, }5\%\text{ each: }0.95^{10}\approx60\%", font_size=28),
         ]
         rows[2][-1].set_color(CCC)
         whys = [why(r"the software default"), why(r"a smaller random sample"), why(r"a selected sample"), why(r"the holes compound")]
         with self.voiceover(
-            "<bookmark mark='a'/> The default in most software is to drop every row with a hole. <bookmark mark='b'/> If "
-            "the data are missing completely at random, what remains is a smaller random sample: unbiased, but wasteful. "
-            "<bookmark mark='c'/> Under missing at random, the remaining rows are a selected sample, and estimates are "
-            "biased whenever the selection depends on something that predicts the outcome. <bookmark mark='d'/> And the "
-            "waste compounds: with ten variables each five percent missing, only sixty percent of the rows survive."
+            "<bookmark mark='a'/> The default in most software is to drop every row with a hole. <bookmark mark='b'/>"
+            " If the data are missing completely at random, what remains is a smaller random sample: unbiased, but "
+            "wasteful. <bookmark mark='c'/> Under missing at random, the remaining rows are a selected sample, and "
+            "the unadjusted marginal mean can be biased when the selection depends on something that predicts the "
+            "outcome. <bookmark mark='d'/> And the waste compounds: if the missingness indicators across ten "
+            "variables are independent and each variable is five percent missing, only sixty percent of the rows "
+            "survive."
         ) as vo:
+            heading = label('Complete-case validity depends on the estimand and model', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -80,20 +85,24 @@ class Sins(VoiceoverScene):
 
     def when_ok(self):
         rows = [
-            cmath(r"\text{regression of } Y \text{ on } X", r":", r"\text{complete cases are unbiased if } R \text{ depends on } X \text{ only}", font_size=28),
+            cmath(r"\text{regression of } Y \text{ on } X", r":", r"\text{correct conditional model and selection on }X\text{ only; adequate support}", font_size=28),
             cmath(r"\text{because}", r":", r"f(y \mid x, R = 1) = f(y \mid x)", font_size=32),
             cmath(r"\text{but not}", r":", r"\text{if } R \text{ depends on } Y \text{, even given } X", font_size=30),
-            cmath(r"\text{and the mean}", r":", r"E(Y) \text{ is still biased: \ the } X \text{ mix is wrong}", font_size=30),
+            cmath(r"\text{and the mean}", r":", r"E(Y) \text{can differ because the selected }X\text{ mix changes}", font_size=30),
         ]
         rows[1][-1].set_color(MIC)
         whys = [why(r"a useful exception"), why(r"selection on the regressor"), why(r"selection on the outcome"), why(r"chapter 4's Board")]
         with self.voiceover(
             "<bookmark mark='a'/> There is a useful exception. If missingness depends only on the covariates of a "
-            "regression, the complete cases still estimate the regression correctly, <bookmark mark='b'/> because, given "
-            "x, being observed tells us nothing more about y. <bookmark mark='c'/> That fails if missingness depends on the "
-            "outcome itself. <bookmark mark='d'/> And even when the regression is fine, the overall mean of y is not, "
-            "because the complete cases have the wrong mix of x. The Board tests both."
+            "regression, a correctly specified conditional regression can still be estimated from complete cases, "
+            "provided selection leaves adequate covariate support, <bookmark mark='b'/> because, given x, being "
+            "observed tells us nothing more about y. <bookmark mark='c'/> That fails if missingness depends on the "
+            "outcome itself. <bookmark mark='d'/> And even when the regression is fine, the complete-case marginal "
+            "mean of y need not be, because the complete cases have the wrong mix of x. The Board tests both."
         ) as vo:
+            heading = label('Selection on covariates preserves a correct conditional model', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -115,13 +124,14 @@ class Sins(VoiceoverScene):
             label(r"regression imputation keeps the mean but invents certainty: \ the filled values lie on a line", font_size=24, color=MNC),
         ), 12.4, 0.3, [0, -2.0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Filling the holes is tempting. With incomes missing completely at random, <bookmark "
-            "mark='b'/> filling them with the observed mean leaves the mean right, but shrinks the standard deviation by a "
-            "sixth and pulls the correlation with age toward zero. <bookmark mark='c'/> Filling with a regression prediction "
-            "is better, but every filled value lies exactly on the regression line, so the spread is too small and the "
-            "correlation too strong. <bookmark mark='d'/> Adding noise of the right size to each prediction restores both. "
-            "That is the first step toward multiple imputation; the second, chapter four, is admitting that we do not know "
-            "the regression either."
+            "<bookmark mark='a'/> Filling the holes is tempting. With incomes missing completely at random, <bookmark"
+            " mark='b'/> filling them with the observed mean leaves the mean right, but shrinks the standard "
+            "deviation by a sixth and pulls the correlation with age toward zero. <bookmark mark='c'/> Filling with a"
+            " regression prediction is better, but every filled value lies exactly on the regression line, so the "
+            "spread is too small and the correlation too strong. <bookmark mark='d'/> Stochastic draws under a "
+            "suitable model can restore the missing residual variation in distribution; one draw need not reproduce "
+            "either statistic exactly. That is the first step toward multiple imputation; the second, chapter four, "
+            "is admitting that we do not know the regression either."
         ) as vo:
             self.add(missing_tag())
             vo.wait_until("a")
@@ -227,17 +237,17 @@ class Sins(VoiceoverScene):
     def indicator(self):
         rows = fit_rows(VGroup(
             label(r"the missing-indicator method: \ fill with 0, \ add a dummy for missing", font_size=26, color=MNC),
-            label(r"biased for covariates even under MCAR \ (Greenland \& Finkle 1995)", font_size=26, color=MNC),
-            label(r"except in a randomized trial, \ for baseline covariates: \ there it is fine", font_size=26, color=MIC),
+            label(r"can bias covariate coefficients even under MCAR \ (Greenland \& Finkle 1995)", font_size=26, color=MNC),
+            label(r"baseline trial adjustment can preserve treatment contrasts; use appropriate model and SEs", font_size=26, color=MIC),
             label(r"a reminder: \ whether a method works depends on the design", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Another shortcut fills a missing covariate with zero and adds an indicator for having been "
-            "missing. <bookmark mark='b'/> Sander Greenland and William Finkle showed in 1995 that it biases the other "
-            "coefficients even when the data are missing completely at random, because the filled zeros distort the "
-            "covariate's relation to everything else. <bookmark mark='c'/> There is one honest use: for baseline covariates "
-            "in a randomized trial, where randomization protects the treatment comparison. <bookmark mark='d'/> Whether a "
-            "method is safe depends on the design, not only on the data."
+            "<bookmark mark='a'/> Another shortcut fills a missing covariate with zero and adds an indicator for "
+            "having been missing. <bookmark mark='b'/> Sander Greenland and William Finkle showed in 1995 that it can"
+            " bias covariate coefficients even when the data are missing completely at random, because the filled "
+            "zeros distort the covariate's relation to everything else. <bookmark mark='c'/> There is one honest use:"
+            " for baseline covariates in a randomized trial, where randomization protects the treatment comparison. "
+            "<bookmark mark='d'/> Whether a method is safe depends on the design, not only on the data."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -253,14 +263,19 @@ class Sins(VoiceoverScene):
             cmath(r"\text{and}", r":", r"\text{each entry comes from a different subsample}", font_size=30),
         ]
         rows[2][-1].set_color(TAUC)
-        whys = [why(r"pairwise deletion"), why(r"more information"), why(r"impossible correlations"), why(r"no single population")]
+        whys = [why(r"pairwise deletion"), why(r"more information"), why(r"impossible correlations"), why(r"possible covariance incoherence")]
         with self.voiceover(
-            "<bookmark mark='a'/> Available-case analysis computes each mean, variance and covariance from whatever rows have "
-            "the variables it needs. <bookmark mark='b'/> It uses more of the data than complete cases. <bookmark mark='c'/> "
-            "But the resulting covariance matrix need not be positive definite: it can imply correlations above one, and "
-            "regressions built on it can be nonsense. <bookmark mark='d'/> Each entry describes a different subsample, so "
-            "together they describe no population at all."
+            "<bookmark mark='a'/> Available-case analysis computes each mean, variance and covariance from whatever "
+            "rows have the variables it needs. <bookmark mark='b'/> It uses more of the data than complete cases. "
+            "<bookmark mark='c'/> But the resulting covariance matrix need not be positive definite: its entries can "
+            "form an indefinite matrix even though individually computed pairwise correlations stay between minus one"
+            " and one; regressions built on it can be nonsense. <bookmark mark='d'/> Each entry describes a different"
+            " subsample, so the assembled entries can be incoherent as one covariance matrix. Under MCAR they can "
+            "still be consistent, so incoherence is a finite-sample possibility rather than a universal failure."
         ) as vo:
+            heading = label('Pairwise estimates can form an incoherent covariance matrix', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -270,16 +285,19 @@ class Sins(VoiceoverScene):
     def outcome_vs_covariate(self):
         rows = fit_rows(VGroup(
             label(r"missing outcomes and missing covariates are different problems", font_size=26, color=TAUC),
-            label(r"outcome missing at random given covariates: \ complete cases are efficient for the regression", font_size=26, color=MIC),
+            label(r"correct conditional outcome likelihood: missing outcomes add no information without auxiliaries", font_size=26, color=MIC),
             label(r"covariates missing: \ complete cases waste the outcome information of every incomplete row", font_size=26, color=MNC),
             label(r"imputation helps most when covariates, \ not outcomes, \ have the holes", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Where the holes are matters as much as why. <bookmark mark='b'/> If only the outcome is "
-            "missing, and at random given the covariates, complete cases are not just unbiased for the regression but nearly "
-            "efficient: imputing the outcome from the same covariates adds nothing. <bookmark mark='c'/> If covariates are "
-            "missing, dropping those rows throws away their outcomes and their other covariates, which carry real "
-            "information. <bookmark mark='d'/> So imputation earns its keep mostly when the holes are in the covariates."
+            "<bookmark mark='a'/> Where the holes are matters as much as why. <bookmark mark='b'/> If only the "
+            "outcome is missing, and at random given the covariates, under a correctly specified conditional outcome "
+            "model, with no additional auxiliary information, complete cases already provide its likelihood "
+            "information: imputing from that same model creates no new information. Auxiliary measurements and "
+            "different estimands can change the comparison. <bookmark mark='c'/> If covariates are missing, dropping "
+            "those rows throws away their outcomes and their other covariates, which carry real information. "
+            "<bookmark mark='d'/> This is one reason imputation can be especially helpful when the holes are in the "
+            "covariates."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

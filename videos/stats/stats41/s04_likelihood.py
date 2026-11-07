@@ -29,14 +29,14 @@ class Likelihood(VoiceoverScene):
             label(rf"New York, \ May to September 1973: \ {d['n']} days of ozone, \ sunlight, \ wind and temperature", font_size=26),
             label(rf"ozone missing on {d['n_miss_oz']} days, \ solar radiation on {d['n_miss_solar']}", font_size=26, color=GREY_A),
             label(rf"complete cases: \ {d['n_cc']} days; \ a quarter of the data thrown away", font_size=26, color=CCC),
-            label(r"MAR is plausible: \ the monitor's failures need not depend on the ozone", font_size=26, color=MIC),
+            label(r"MAR is a working assumption; monitor-failure causes are not established here", font_size=26, color=MIC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> A real data set with holes: daily air quality in New York from May to September 1973, "
             "one of R's oldest examples. <bookmark mark='b'/> Ozone is missing on " + str(d["n_miss_oz"]) + " of the "
             + str(d["n"]) + " days, and solar radiation on " + str(d["n_miss_solar"]) + ". <bookmark mark='c'/> Dropping "
-            "incomplete days leaves " + str(d["n_cc"]) + ", throwing away a quarter of the data. <bookmark mark='d'/> Missing "
-            "at random is plausible: the monitors failed for reasons that need not depend on the ozone that day, and "
+            "incomplete days leaves " + str(d["n_cc"]) + ", throwing away a quarter of the data. <bookmark mark='d'/> Missing at random is a working assumption, "
+            "not established by this table. We have not verified the causes of each missing monitor reading; and "
             "temperature and wind, always recorded, carry information about it."
         ) as vo:
             self.add(air_tag())
@@ -63,6 +63,9 @@ class Likelihood(VoiceoverScene):
             "spread is not understated. <bookmark mark='d'/> Arthur Dempster, Nan Laird and Donald Rubin proved in 1977 that "
             "the observed-data likelihood never decreases."
         ) as vo:
+            heading = label('EM carries conditional means and variances through its updates', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -76,9 +79,9 @@ class Likelihood(VoiceoverScene):
         A = axes([55, 100], [0, 170], x_length=7.4, y_length=4.2, xlabel=r"temperature ($^\circ$F)", ylabel=r"ozone (ppb)",
                  xticks=[60, 70, 80, 90, 100], yticks=[0, 50, 100, 150], xfmt=lambda v: f"{v:g}", yfmt=lambda v: f"{v:g}", center=[-2.5, 0.2, 0])
         ax = A.ax
-        obs = scatter(ax, temp[~miss], np.clip(oz[~miss], 0, 168), OBSV, 0.05)
+        obs = scatter(ax, temp[~miss], oz[~miss], OBSV, 0.05)
         fills = np.asarray(d["fills"], float)
-        fdots = scatter(ax, temp[miss], np.clip(fills, 0, 168), IMPC, 0.06)
+        fdots = scatter(ax, temp[miss], fills, IMPC, 0.06)
         rugs = VGroup(*[Line(ax.c2p(t, 0), ax.c2p(t, 6), color=IMPC, stroke_width=2) for t in temp[miss]])
         side = fit_rows(VGroup(
             label(r"blue: \ days with ozone measured", font_size=22, color=OBSV),
@@ -124,10 +127,10 @@ class Likelihood(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> The observed log-likelihood climbs at every iteration and settles within "
             + str(d["iters"]) + ". <bookmark mark='b'/> The mean ozone from the complete cases is " + say(d["cc_mean"], 1)
-            + " parts per billion; <bookmark mark='c'/> EM's maximum likelihood estimate is " + say(d["em_mean"], 1) + ". "
-            "<bookmark mark='d'/> They are close, because the days without readings were, on average, just as hot as the "
-            "others. EM helps most when the missing differ on the observed predictors; and it always gives the right "
-            "spread, which complete cases need not."
+            + " parts per billion; <bookmark mark='c'/> EM's maximum likelihood estimate is " + say(d["em_mean"], 1) + ". <bookmark mark='d'/> They are close, because the days without readings were, on average, just as hot "
+            "as the others. EM helps most when the missing differ on the observed predictors; and its covariance "
+            "accounts for conditional imputation uncertainty under the fitted normal model. Skewed ozone and an "
+            "incorrect missingness model can still produce bias."
         ) as vo:
             self.add(air_tag())
             vo.wait_until("a")
@@ -156,6 +159,9 @@ class Likelihood(VoiceoverScene):
             "largest at the current guess. <bookmark mark='d'/> So any step that raises Q raises the likelihood, the "
             "argument of Part twenty-two, here with the missing values as the latent variables."
         ) as vo:
+            heading = label('Exact EM steps do not decrease observed-data likelihood', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -170,12 +176,14 @@ class Likelihood(VoiceoverScene):
             label(r"its weakness: \ one model for everything; \ change the analysis, \ refit the model", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Maximizing the observed-data likelihood directly is called full-information maximum "
-            "likelihood: each row contributes the likelihood of whatever it has. <bookmark mark='b'/> It is the standard in "
-            "structural equation software, and gives the same estimates as EM. <bookmark mark='c'/> Its standard errors must "
-            "come from the observed information, which Thomas Louis showed in 1982 how to extract from EM. <bookmark "
-            "mark='d'/> Its weakness is that the missing-data model and the analysis are one and the same; every new "
-            "analysis needs a new likelihood. Multiple imputation separates them."
+            "<bookmark mark='a'/> Maximizing the observed-data likelihood directly is called full-information maximum"
+            " likelihood: each row contributes the likelihood of whatever it has. <bookmark mark='b'/> It is the "
+            "standard in structural equation software, and has the same observed-data objective as EM; agreement "
+            "requires reaching the same optimum, and EM need not find a unique global maximum. <bookmark mark='c'/> "
+            "Its standard errors must come from the observed information, which Thomas Louis showed in 1982 how to "
+            "extract from EM. <bookmark mark='d'/> Its weakness is that the missing-data model and the analysis are "
+            "one and the same; a different analysis may require changing the joint model, though multiple estimands "
+            "can be extracted from one fitted joint model. Multiple imputation separates them."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -186,18 +194,22 @@ class Likelihood(VoiceoverScene):
         rows = [
             cmath(r"\text{Buck (1960)}", r":", r"\text{regress each variable on the others, \ fill the holes}", font_size=30),
             cmath(r"\text{then}", r":", r"\text{add the residual variance back to the covariance}", font_size=30),
-            cmath(r"\text{iterate}", r":", r"\text{until nothing changes: \ that is EM}", font_size=30),
+            cmath(r"\text{iterate}", r":", r"\text{conditional moments anticipate normal-model EM; not every regression cycle is EM}", font_size=30),
             cmath(r"\text{lesson}", r":", r"\text{filling is fine if the uncertainty is put back}", font_size=30),
         ]
         rows[2][-1].set_color(TAUC)
         whys = [why(r"an early method"), why(r"the correction"), why(r"seventeen years before EM"), why(r"the theme of the part")]
         with self.voiceover(
-            "<bookmark mark='a'/> The idea is older than EM. In 1960 S. F. Buck filled holes in a multivariate data set by "
-            "regressing each variable on the others. <bookmark mark='b'/> Crucially, he added the residual variance back "
-            "when computing the covariance matrix, so the filled values did not shrink it. <bookmark mark='c'/> Repeat until "
-            "nothing changes, and you have the EM algorithm for the normal, seventeen years before it had a name. <bookmark "
-            "mark='d'/> The lesson runs through this part: filling holes is fine, as long as the uncertainty is put back."
+            "<bookmark mark='a'/> The idea is older than EM. In 1960 S. F. Buck filled holes in a multivariate data "
+            "set by regressing each variable on the others. <bookmark mark='b'/> Crucially, he added the residual "
+            "variance back when computing the covariance matrix, so the filled values did not shrink it. <bookmark "
+            "mark='c'/> The conditional-moment correction anticipates normal-model EM. A generic cycle of regression "
+            "fills is not automatically EM or guaranteed to maximize the same likelihood. <bookmark mark='d'/> The "
+            "lesson runs through this part: filling holes is fine, as long as the uncertainty is put back."
         ) as vo:
+            heading = label('Conditional-moment corrections anticipate normal-model EM', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -207,20 +219,25 @@ class Likelihood(VoiceoverScene):
     def louis(self):
         rows = [
             cmath(r"I_{\text{obs}}", r"=", r"I_{\text{complete}} - I_{\text{missing}}", font_size=32),
-            cmath(r"\text{EM's speed}", r":", r"\text{the rate is the fraction of missing information}", font_size=30),
-            cmath(r"\text{so}", r":", r"\text{much missing information: \ slow EM, \ wide intervals}", font_size=30),
+            cmath(r"\text{EM's speed}", r":", r"\text{local convergence matrix: a matrix fraction of missing information}", font_size=30),
+            cmath(r"\text{so}", r":", r"\text{high relative missing information can slow local convergence}", font_size=30),
             cmath(r"\text{SEs}", r":", r"\text{Louis (1982), \ SEM (Meng \& Rubin 1991), \ or the bootstrap}", font_size=28),
         ]
         rows[0][-1].set_color(TAUC)
         whys = [why(r"the missing information principle"), why(r"Dempster et al."), why(r"one number, \ two meanings"), why(r"three routes")]
         with self.voiceover(
-            "<bookmark mark='a'/> The information in the observed data is the information we would have had with complete "
-            "data, minus the information the holes took away: Orchard and Woodbury's missing information principle. "
-            "<bookmark mark='b'/> EM's rate of convergence is exactly the fraction of information missing, <bookmark "
-            "mark='c'/> so a slow EM is a warning that the data say little, and the intervals will be wide. <bookmark "
-            "mark='d'/> Standard errors come from Louis's formula, from Meng and Rubin's supplemented EM, or from the "
-            "bootstrap."
+            "<bookmark mark='a'/> The information in the observed data is the information we would have had with "
+            "complete data, minus the information the holes took away: Orchard and Woodbury's missing information "
+            "principle. <bookmark mark='b'/> Locally, under regularity conditions, EM’s convergence matrix is a "
+            "matrix fraction of missing information; its dominant eigenvalue controls the asymptotic rate, <bookmark "
+            "mark='c'/> so high relative missing information can slow convergence. That ratio alone does not "
+            "determine absolute interval width, which also depends on sample information and parameter scale. "
+            "<bookmark mark='d'/> Standard errors come from Louis's formula, from Meng and Rubin's supplemented EM, "
+            "or from the bootstrap."
         ) as vo:
+            heading = label('Missing information affects uncertainty and local convergence', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

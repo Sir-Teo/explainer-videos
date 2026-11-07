@@ -137,21 +137,22 @@ class Hook(VoiceoverScene):
 
     def table(self):
         d = load("wald")
-        rows = [[r"area", r"share of surface", r"share of returners' hits", r"missing hits"]]
+        rows = [[r"area", r"share of surface", r"share of returners' hits", r"relative hit-share deficit"]]
         for a, s_, r_, df in zip(d["areas"], d["share"], d["ret_share"], d["deficit"]):
             rows.append([a, f"{100 * s_:.0f}\\%", f"{100 * r_:.1f}\\%", f"{100 * df:+.0f}\\%" if df > 0 else f"{100 * df:.0f}\\%"])
         cols = [GREY_A] + [MNC if df > 0.1 else None for df in d["deficit"]]
         tab = table_rows(rows, font_size=26, col_buff=0.9, row_buff=0.34, colors=cols).move_to([0, 0.6, 0])
-        foot = label(r"the engines carry 15\% of the surface but 10.5\% of the survivors' hits: \ the rest went down with their planes",
+        foot = label(r"the engines carry 15\% of the surface but 10.5\% of the survivors' hits: \ an area-normalized share deficit, not a kill probability",
                      font_size=22, color=MNC).move_to([0, -2.0, 0])
         if foot.width > 12.4:
             foot.width = 12.4
         with self.voiceover(
             "<bookmark mark='a'/> The numbers. <bookmark mark='b'/> The engines are fifteen percent of the surface but "
-            "carry only " + say(100 * d["ret_share"][0], 1) + " percent of the survivors' hits: thirty percent of the hits "
-            "they should have are missing. The fuel system is short too. <bookmark mark='c'/> The fuselage and wings carry "
-            "more than their share, because hits there were survivable. The holes we can see tell us where it is safe to be "
-            "hit."
+            "carry only " + say(100 * d["ret_share"][0], 1) + " percent of the survivors' hits: thirty percent of the hits expected from area alone are missing in "
+            "relative-share terms. This is not the per-hit kill probability: normalizing by all survivors’ hits "
+            "changes the denominator. The fuel system is short too. <bookmark mark='c'/> The fuselage and wings carry"
+            " more than their share, because hits there were survivable. Under this toy model, relatively frequent "
+            "surviving hits suggest less lethal locations, not places universally safe to be hit."
         ) as vo:
             self.add(seeded_tag())
             vo.wait_until("a")
@@ -210,15 +211,15 @@ class Hook(VoiceoverScene):
             label(r"the famous picture of a plane covered in red dots: \ drawn decades later", font_size=26, color=GREY_A),
             label(r"Wald's memoranda were equations: \ kill probabilities from hit counts", font_size=26, color=TAUC),
             label(r"he treated the unseen planes as data with a known cause of absence", font_size=26, color=MNC),
-            label(r"the first modern analysis of data missing not at random", font_size=26, color=MIC),
+            label(r"an early analysis of outcome-dependent missingness", font_size=26, color=MIC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> A note on the legend. The famous picture of a returning bomber covered in red dots was drawn "
-            "decades later, and the details of the story have grown in the retelling. <bookmark mark='b'/> Wald's actual "
-            "memoranda were mathematics: from the counts of hits on returning planes, he derived estimates of the chance that "
-            "a hit in each area would bring a plane down. <bookmark mark='c'/> He treated the planes that never came back as "
-            "data, missing for a reason he could model. <bookmark mark='d'/> It is one of the first modern analyses of data "
-            "missing not at random."
+            "<bookmark mark='a'/> A note on the legend. The famous picture of a returning bomber covered in red dots "
+            "was drawn decades later, and the details of the story have grown in the retelling. <bookmark mark='b'/> "
+            "Wald's actual memoranda were mathematics: from the counts of hits on returning planes, he derived "
+            "estimates of the chance that a hit in each area would bring a plane down. <bookmark mark='c'/> He "
+            "treated the planes that never came back as data, missing for a reason he could model. <bookmark "
+            "mark='d'/> It is an early analysis of data missing not at random."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

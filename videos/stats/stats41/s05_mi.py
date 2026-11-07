@@ -92,6 +92,9 @@ class MultipleImputation(VoiceoverScene):
             "Intervals use a t distribution whose degrees of freedom grow as B shrinks relative to W, refined for small "
             "samples by John Barnard and Rubin in 1999."
         ) as vo:
+            heading = label('Rubin combines within- and between-imputation uncertainty', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -103,18 +106,22 @@ class MultipleImputation(VoiceoverScene):
             cmath(r"\text{Var}(Q \mid Y_{\text{obs}})", r"=", r"E[\text{Var}(Q \mid Y) \mid Y_{\text{obs}}] + \text{Var}[E(Q \mid Y) \mid Y_{\text{obs}}]", font_size=28),
             cmath(r"\phantom{V}", r"\approx", r"W + B", font_size=32),
             cmath(r"\text{finite } m", r":", r"\text{Var}(\bar Q) \text{ adds } B/m", font_size=30),
-            cmath(r"\gamma", r"=", r"(1 + 1/m) B / T: \ \text{the fraction of missing information}", font_size=30),
+            cmath(r"\gamma", r"=", r"(1 + 1/m) B / T: \ \text{large-df relative variance share; finite-df FMI is adjusted}", font_size=30),
         ]
         rows[3][-1].set_color(TAUC)
         whys = [why(r"the law of total variance"), why(r"Bayesian reading"), why(r"simulation error"), why(r"how much the holes cost")]
         with self.voiceover(
-            "<bookmark mark='a'/> The rules come from the law of total variance, read in a Bayesian way: the posterior "
-            "variance of a quantity given the observed data is the average of its variance if the data were complete, "
-            "plus the variance, across the plausible completions, of its value. <bookmark mark='b'/> W estimates the first, "
-            "B the second. <bookmark mark='c'/> With finitely many copies the average itself has simulation error, B over "
-            "m. <bookmark mark='d'/> The share of the total variance due to the holes, gamma, is the fraction of missing "
-            "information; it is often far smaller than the fraction of missing values."
+            "<bookmark mark='a'/> The rules come from the law of total variance, read in a Bayesian way: the "
+            "posterior variance of a quantity given the observed data is the average of its variance if the data were"
+            " complete, plus the variance, across the plausible completions, of its value. <bookmark mark='b'/> W "
+            "estimates the first, B the second. <bookmark mark='c'/> With finitely many copies the average itself has"
+            " simulation error, B over m. <bookmark mark='d'/> The share of the total variance due to the holes, is a"
+            " large-degrees-of-freedom relative variance share. The reported finite-sample FMI also includes a "
+            "degrees-of-freedom correction; it is often far smaller than the fraction of missing values."
         ) as vo:
+            heading = label('Finite imputation counts add Monte Carlo variation', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -131,13 +138,17 @@ class MultipleImputation(VoiceoverScene):
         rows[1][-1].set_color(MIC)
         whys = [why(r"too little variance"), why(r"draw the parameters first"), why(r"then the value"), why(r"Little (1988)")]
         with self.voiceover(
-            "<bookmark mark='a'/> The draws must be proper. Adding noise to the fitted regression treats its coefficients as "
-            "known, and understates B. <bookmark mark='b'/> A proper imputation first draws the residual variance and the "
-            "coefficients from their posterior, <bookmark mark='c'/> then draws the missing value from that regression. "
-            "<bookmark mark='d'/> Predictive mean matching, popularized by Roderick Little, instead borrows an observed "
-            "value from a donor whose prediction is close, so imputations are always plausible values: no negative "
-            "incomes, no fractional children."
+            "<bookmark mark='a'/> The draws must be proper. Adding noise to the fitted regression treats its "
+            "coefficients as known, and understates B. <bookmark mark='b'/> A proper imputation first draws the "
+            "residual variance and the coefficients from their posterior, <bookmark mark='c'/> then draws the missing"
+            " value from that regression. <bookmark mark='d'/> Predictive mean matching, popularized by Roderick "
+            "Little, instead borrows an observed value from a donor whose prediction is close, so each imputation "
+            "stays within the observed donor support. This does not guarantee that a value is plausible for every "
+            "covariate pattern or that the joint model is correct: no negative incomes, no fractional children."
         ) as vo:
+            heading = label('Proper draws include model-parameter uncertainty', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -149,14 +160,16 @@ class MultipleImputation(VoiceoverScene):
             label(r"many variables with holes: \ chained equations \ (van Buuren 2006; \ \texttt{mice})", font_size=26, color=TAUC),
             label(r"impute each in turn from all the others, \ with its own model: \ linear, \ logistic, \ PMM", font_size=26),
             label(r"cycle 10 to 20 times; \ start again for each of the $m$ copies", font_size=26, color=GREY_A),
-            label(r"no joint model need exist; \ in practice it works remarkably well", font_size=26, color=MIC),
+            label(r"check convergence and compatibility; conditional models need not define one joint law", font_size=26, color=MIC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> With holes in many variables, Stef van Buuren's chained equations are the standard. "
-            "<bookmark mark='b'/> Impute each variable in turn from all the others, each with a model suited to it, a linear "
-            "regression, a logistic, or predictive mean matching. <bookmark mark='c'/> Cycle through them ten or twenty "
-            "times, and repeat from scratch for each copy. <bookmark mark='d'/> The conditional models need not fit together "
-            "into any joint distribution, which worries theorists, but in study after study the method works well."
+            "<bookmark mark='a'/> With holes in many variables, Stef van Buuren's chained equations are the standard."
+            " <bookmark mark='b'/> Impute each variable in turn from all the others, each with a model suited to it, "
+            "a linear regression, a logistic, or predictive mean matching. <bookmark mark='c'/> Check mixing and "
+            "convergence across chains rather than assuming a fixed number of sweeps suffices. This demonstration "
+            "uses ten sweeps, and repeat from scratch for each copy. <bookmark mark='d'/> The conditional models need"
+            " not fit together into any joint distribution, and incompatible conditionals can create inconsistent "
+            "results or dependence on update order. Diagnostics and sensitivity to the imputation models matter."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -236,12 +249,13 @@ class MultipleImputation(VoiceoverScene):
             label(r"rule: \ impute with every variable in the analysis, \ the outcome included, \ and more", font_size=26, color=MIC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> One rule matters above all. Xiao-Li Meng called it congeniality: the imputation model must "
-            "be at least as rich as the analysis. <bookmark mark='b'/> Impute a covariate without using the outcome, and "
-            "the imputed values carry no relation to the outcome, so the estimated association is diluted toward zero. "
-            "<bookmark mark='c'/> Analyse an interaction the imputer ignored, and it is attenuated in the same way. "
-            "<bookmark mark='d'/> So impute with every variable the analysis will use, including the outcome, and any "
-            "others that predict the missing values or the missingness."
+            "<bookmark mark='a'/> One rule matters above all. Xiao-Li Meng called it congeniality: the imputation and"
+            " analysis procedures must have compatible assumptions. Including the analysis variables is necessary "
+            "practical advice, but not by itself a full congeniality theorem. <bookmark mark='b'/> Impute a covariate"
+            " without using the outcome, and the imputed values carry no relation to the outcome, so the estimated "
+            "association is diluted toward zero. <bookmark mark='c'/> Analyse an interaction the imputer ignored, and"
+            " it is attenuated in the same way. <bookmark mark='d'/> So impute with every variable the analysis will "
+            "use, including the outcome, and any others that predict the missing values or the missingness."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -261,18 +275,23 @@ class MultipleImputation(VoiceoverScene):
         rows = [
             cmath(r"\text{efficiency}", r"=", r"(1 + \gamma / m)^{-1}: \ m = 5, \gamma = 0.3 \text{ gives } 94\%", font_size=30),
             cmath(r"\text{but SEs and } p", r":", r"\text{need more copies to be stable}", font_size=30),
-            cmath(r"\text{rule of thumb}", r":", r"m \approx 100 \gamma \ \text{(White et al.\ 2011; \ von Hippel 2020)}", font_size=28),
+            cmath(r"\text{rule of thumb}", r":", r"m\approx1+\gamma^2/(2c^2),\quad c=\operatorname{MCSD}(\widehat{\rm SE})/{\rm SE}", font_size=28),
             cmath(r"\text{computers}", r":", r"\text{are cheap: \ use 20 to 100}", font_size=30),
         ]
         rows[2][-1].set_color(TAUC)
-        whys = [why(r"Rubin's original answer"), why(r"the second moment"), why(r"the modern advice"), why(r"no reason to skimp")]
+        whys = [why(r"Rubin's original answer"), why(r"the second moment"), why(r"large-sample SE-stability approximation; von Hippel (2020)"), why(r"no reason to skimp")]
         with self.voiceover(
-            "<bookmark mark='a'/> How many copies? Rubin's answer was that a handful suffice: with five copies and thirty "
-            "percent missing information, the estimate is ninety-four percent as efficient as with infinitely many. "
-            "<bookmark mark='b'/> But standard errors and p-values need more copies to stop wobbling from one run to the "
-            "next. <bookmark mark='c'/> A modern rule takes about a hundred times the fraction of missing information, "
-            "<bookmark mark='d'/> and since computing is cheap, twenty to a hundred copies are now routine."
+            "<bookmark mark='a'/> How many copies? Rubin's answer was that a handful suffice: with five copies and "
+            "thirty percent missing information, the estimate is ninety-four percent as efficient as with infinitely "
+            "many. <bookmark mark='b'/> But standard errors and p-values need more copies to stop wobbling from one "
+            "run to the next. <bookmark mark='c'/> A useful large-sample planning approximation is one plus gamma "
+            "squared divided by twice the desired squared relative Monte Carlo standard deviation of the reported "
+            "standard error, <bookmark mark='d'/> and since computing is cheap, twenty to a hundred copies are common"
+            " starting points; high missing information or precise tail probabilities can require more."
         ) as vo:
+            heading = label('Choose imputation counts for the required Monte Carlo stability', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -283,16 +302,18 @@ class MultipleImputation(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"derived variables: \ BMI from height and weight, \ a squared term, \ an interaction", font_size=26, color=TAUC),
             label(r"impute, \ then transform: \ consistent, \ but may break the relationships", font_size=26, color=MNC),
-            label(r"just another variable: \ impute the derived term directly \ (von Hippel 2009)", font_size=26, color=MIC),
+            label(r"choose passive, direct-term or substantive-model-compatible imputation to suit the analysis", font_size=26, color=MIC),
             label(r"or impute separately by group, \ so interactions survive", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Derived variables need thought: a body mass index computed from height and weight, a squared "
-            "term, an interaction. <bookmark mark='b'/> Imputing the ingredients and then computing the derived value keeps "
-            "the arithmetic consistent, but can lose the relationships the analysis cares about. <bookmark mark='c'/> Paul "
-            "von Hippel's advice is to treat the derived term as just another variable and impute it directly. <bookmark "
-            "mark='d'/> For interactions with a group, impute separately within each group, so that each group keeps its "
-            "own relationships."
+            "<bookmark mark='a'/> Derived variables need thought: a body mass index computed from height and weight, "
+            "a squared term, an interaction. <bookmark mark='b'/> Imputing the ingredients and then computing the "
+            "derived value keeps the arithmetic consistent, but can lose the relationships the analysis cares about. "
+            "<bookmark mark='c'/> Treating a derived term as another imputed variable can help for some analyses, but"
+            " may break deterministic identities. Passive imputation or substantive-model-compatible chained "
+            "equations can preserve the required nonlinear and interaction structure. <bookmark mark='d'/> For "
+            "interactions with a group, impute separately within each group, so that each group keeps its own "
+            "relationships."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
