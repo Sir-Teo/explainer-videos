@@ -114,7 +114,7 @@ class PPI(VoiceoverScene):
             "<bookmark mark='a'/> Here is the problem. By age, the true mean pressure rises steadily, <bookmark mark='b'/> "
             "and the watch agrees, <bookmark mark='c'/> over the ages it was trained on. <bookmark mark='d'/> Beyond fifty "
             "it falls behind, because a forest cannot extrapolate: for a pressure higher than any it saw in training, it "
-            "can only repeat the highest it knows. For the over-eighties, the truth averages a hundred and fifty-one, the "
+            "cannot extrapolate its prediction beyond the range of training responses. For the over-eighties, the truth averages a hundred and fifty-one, the "
             "watch a hundred and thirty-six. <bookmark mark='e'/> Over the whole island, its guesses are about three "
             "millimetres of mercury too low."
         ) as vo:
@@ -182,11 +182,14 @@ class PPI(VoiceoverScene):
             "<bookmark mark='a'/> The idea is one line of algebra. The mean of Y equals the mean of the guesses, minus "
             "the mean error of the guesses. <bookmark mark='b'/> Estimate the first term with the many unlabelled cases, "
             "and the second, the rectifier, with the few labelled ones, where we have both the guess and the truth. "
-            "<bookmark mark='c'/> The result is unbiased for any prediction function, however bad. That is Anastasios "
+            "<bookmark mark='c'/> For a fixed prediction function, independent representative samples and finite moments, the mean estimator is unbiased even if the predictions are biased. That is Anastasios "
             "Angelopoulos, Stephen Bates, Clara Fannjiang, Michael Jordan and Tijana Zrnic's prediction-powered "
             "inference, published in Science in 2023. <bookmark mark='d'/> Here, the rectifier says the watch reads about "
             "three millimetres low on the labelled cases, and the estimate adds that back."
         ) as vo:
+            intro=label('A representative labelled sample estimates prediction bias',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -200,7 +203,7 @@ class PPI(VoiceoverScene):
             cmath(r"\mathrm{Var}\,\hat\theta^{PP}", r"=", r"\dfrac{\mathrm{Var} f(X)}{N} + \dfrac{\mathrm{Var}\big(Y - f(X)\big)}{n}", font_size=30),
             cmath(r"\text{classical}", r":", r"\mathrm{Var}(Y)/n", font_size=32),
             cmath(r"\text{better when}", r":", r"\mathrm{Var}(Y - f) < \mathrm{Var}(Y) \ \text{(and } N \gg n)", font_size=30),
-            cmath(r"\text{here}", r":", rf"\mathrm{{se}}\ {se[2]:.2f} \text{{ vs }} {se[0]:.2f}: \ 300 \text{{ visits act like }} {d['n_equiv']:,.0f}", font_size=28),
+            cmath(r"\text{here}", r":", rf"\mathrm{{se}}\ {se[3]:.2f} \text{{ vs }} {se[0]:.2f}: \ 300 \text{{ visits with PPI++ act like }} {d['n_equiv']:,.0f}", font_size=28),
         ]
         rows[3][-1].set_color(BANDC)
         whys = [why(r"two independent samples"), why(r"labels alone"), why(r"a good model has small residuals"),
@@ -214,6 +217,9 @@ class PPI(VoiceoverScene):
             "a half. Three hundred clinic visits, helped by twenty thousand biased guesses, are worth about "
             + f"{d['n_equiv']:,.0f}" + " visits alone."
         ) as vo:
+            intro=label('Independent sample variances determine the precision gain',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -230,11 +236,11 @@ class PPI(VoiceoverScene):
             cmath(r"\text{PPI++}", r":", rf"\hat\lambda \approx {d['bad_lam']:.2f}, \ \mathrm{{se}}\ {b[2]:.2f}", font_size=32),
         ]
         rows[3][-1].set_color(BANDC)
-        whys = [why(r"unbiased for every $\lambda$"), why(r"the variance-minimizing weight"),
+        whys = [why(r"unbiased for fixed $\lambda$; estimated weights need asymptotics"), why(r"the variance-minimizing weight"),
                 why(r"guesses plus noise of SD 25"), why(r"Angelopoulos, \ Duchi \& Zrnic (2023)")]
         with self.voiceover(
             "<bookmark mark='a'/> What if the model is bad? Put a weight lambda on the guesses. The estimate stays "
-            "unbiased for every lambda, <bookmark mark='b'/> and the lambda that minimizes its variance is a regression "
+            "unbiased for every fixed lambda; estimating lambda from the same data need not preserve exact unbiasedness, <bookmark mark='b'/> and the lambda that minimizes its variance is a regression "
             "coefficient of Y on the guesses, slightly shrunk. Angelopoulos, John Duchi and Zrnic call this PPI plus plus. "
             "<bookmark mark='c'/> Loosen the watch strap, so that each guess carries extra noise with a standard deviation "
             "of twenty-five. Plain prediction-powered inference, with lambda one, now has a standard error of "
@@ -243,6 +249,9 @@ class PPI(VoiceoverScene):
             "better than the classical one. With lambda estimated, it is never worse than ignoring the guesses, up to "
             "terms that vanish with n."
         ) as vo:
+            intro=label('Fixed-weight unbiasedness differs from estimated-weight asymptotics',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -284,15 +293,15 @@ class PPI(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"the labelled cases must be a random sample of the same population", font_size=26, color=MISSC),
             label(r"the model must be trained on other data, \ or cross-fitted", font_size=26, color=MISSC),
-            label(r"then: \ any model, \ however biased, \ helps or does no harm", font_size=26, color=BANDC),
+            label(r"power tuning can protect asymptotic efficiency; plain PPI can hurt", font_size=26, color=BANDC),
             label(r"next: \ what do interpretation methods estimate?", font_size=26, color=CALC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Two conditions carry the guarantee. The labelled cases must be a random sample from the "
             "same population as the unlabelled ones; if the clinic only sees the sick, no rectifier can save us. "
             "<bookmark mark='b'/> And the model must not have been trained on the labelled cases, or its errors there will "
-            "look too small; with only one data set, cross-fitting does the job. <bookmark mark='c'/> Given those, any "
-            "model, however biased, either helps or does no harm. <bookmark mark='d'/> One last question about black "
+            "look too small; with only one data set, cross-fitting does the job. <bookmark mark='c'/> With regularity conditions and asymptotically valid power tuning, a "
+            "model can improve precision; plain PPI with weight one can increase variance. <bookmark mark='d'/> One last question about black "
             "boxes: when we ask one to explain itself, what are we estimating?"
         ) as vo:
             for k, m_ in enumerate("abcd"):

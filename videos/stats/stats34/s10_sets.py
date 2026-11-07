@@ -37,14 +37,19 @@ class Sets(VoiceoverScene):
         whys = [why(r"low probability for the truth: \ a strange case"), why(r"every label that would not be strange"),
                 why(r"the quantile lemma again"), why(r"Sadinle, \ Lei \& Wasserman (2019)")]
         with self.voiceover(
-            "<bookmark mark='a'/> For classification, the prediction is a set of labels. The simplest score is one minus "
-            "the probability the model gave to the true label: a case is strange if the model thought its true class "
-            "unlikely. <bookmark mark='b'/> For a new case, include every label whose score would not be strange, that is, "
-            "every label whose probability is at least one minus q hat. <bookmark mark='c'/> The quantile lemma guarantees "
-            "that the true label is in the set with probability one minus alpha. <bookmark mark='d'/> Mauricio Sadinle, "
-            "Lei and Wasserman showed in 2019 that these sets are the smallest on average among all sets with the "
-            "coverage. The set's size is itself informative: one label when the model is sure, several when it is not."
+            "<bookmark mark='a'/> For classification, the prediction is a set of labels. The simplest score is one "
+            "minus the probability the model gave to the true label: a case is strange if the model thought its true "
+            "class unlikely. <bookmark mark='b'/> For a new case, include every label whose score would not be "
+            "strange, that is, every label whose probability is at least one minus q hat. <bookmark mark='c'/> The "
+            "quantile lemma guarantees that the true label is in the set with probability at least one minus alpha under exchangeability. <bookmark "
+            "mark='d'/> Mauricio Sadinle, Lei and Wasserman showed in 2019 that population probability-threshold sets"
+            " are optimal in expected size when the true class probabilities are known. Estimated probabilities do "
+            "not automatically attain that oracle optimum. The set's size is itself informative: one label when the "
+            "model is sure, several when it is not."
         ) as vo:
+            intro=label('Label-probability scores produce marginally valid prediction sets',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -55,22 +60,28 @@ class Sets(VoiceoverScene):
         rows = [
             cmath(r"\text{rank the labels}", r":", r"\hat p_{(1)} \ge \hat p_{(2)} \ge \cdots", font_size=32),
             cmath(r"S_i", r"=", r"\textstyle\sum_{j \text{ ranked above } y_i} \hat p_j + U_i\, \hat p(y_i)", font_size=30),
-            cmath(r"C(x)", r"=", r"\text{the top labels until their mass reaches } \hat q", font_size=30),
+            cmath(r"C(x)", r"=", r"\text{include labels with randomized cumulative score }\le\hat q", font_size=30),
             cmath(r"\text{aim}", r":", r"\text{coverage closer to conditional}", font_size=32),
         ]
         rows[1][-1].set_color(CALC)
-        whys = [why(r"most to least likely"), why(r"$U_i$ uniform: \ exact coverage with ties"),
+        whys = [why(r"most to least likely"), why(r"$U_i$ uniform; rank rounding still applies"),
                 why(r"adaptive prediction sets"), why(r"Romano, \ Sesia \& Cand\`es (2020)")]
         with self.voiceover(
-            "<bookmark mark='a'/> Smallest on average is not always what we want: such sets can be too small for the hard "
-            "cases and too large for the easy ones. Yaniv Romano, Matteo Sesia and Candès proposed adaptive prediction "
-            "sets in 2020. Rank the labels from most to least probable. <bookmark mark='b'/> A case's score is the total "
-            "probability of the labels ranked above its true label, plus a uniformly random share of the true label's own "
-            "probability, which breaks ties and makes the coverage exact. <bookmark mark='c'/> The set for a new case "
-            "takes labels in order of probability until their mass reaches q hat. <bookmark mark='d'/> If the model's "
-            "probabilities were correct, these sets would have exact conditional coverage; with a real model, they come "
-            "closer to it."
+            "<bookmark mark='a'/> Smallest on average is not always what we want: such sets can be too small for the "
+            "hard cases and too large for the easy ones. Yaniv Romano, Matteo Sesia and Candès proposed adaptive "
+            "prediction sets in 2020. Rank the labels from most to least probable. <bookmark mark='b'/> A case's "
+            "score is the total probability of the labels ranked above its true label, plus a uniformly random share "
+            "of the true label's own probability, which makes the score continuous when probabilities are positive. "
+            "Coverage follows the finite calibration rank level, with rounding. <bookmark mark='c'/> The set for a "
+            "new case includes labels whose randomized cumulative-probability score is at most q hat, using one "
+            "shared random number for the new case. The boundary label may be included or excluded. <bookmark "
+            "mark='d'/> If the model's probabilities were correct, their population score would be uniform "
+            "conditional on the inputs. With estimated probabilities, improved conditional coverage is a goal, not a "
+            "guarantee."
         ) as vo:
+            intro=label('Randomized cumulative scores allow an adaptive boundary label',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -124,10 +135,10 @@ class Sets(VoiceoverScene):
             tab.height = 6.4
         with self.voiceover(
             "<bookmark mark='a'/> Eight test flowers from one split. The model's three probabilities, and the set. "
-            "<bookmark mark='b'/> Each setosa gets the set setosa alone. Flowers the model splits between versicolor and "
-            "virginica mostly get both; flower five, at fifty-seven to forty-three, kept only one, because the random "
-            "tie-breaking share of the adaptive score happened to be small. All eight are covered here; over many flowers, "
-            "about one in ten would not be. The set says what the classifier knows, and what it does not."
+            "<bookmark mark='b'/> Each setosa gets the set setosa alone. Flowers the model splits between versicolor "
+            "and virginica mostly get both; flower five, at fifty-seven to forty-three, kept only one, because of the"
+            " randomized boundary decision. All eight are covered here; over many flowers, about one in ten would not"
+            " be. The set says what the classifier knows, and what it does not."
         ) as vo:
             self.add(iris_tag())
             vo.wait_until("a")
@@ -217,13 +228,13 @@ class Sets(VoiceoverScene):
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Back to the biopsies, with a deliberately simple logistic regression on three features "
-            "and ninety-five percent sets. <bookmark mark='b'/> The coverage is " + say(100 * d["bc_cover"], 1) + " percent "
-            "overall, though malignant cases are covered a little less often than benign: the Mondrian version would fix "
-            "that, and for a cancer test it should. <bookmark mark='c'/> Nearly every set has one label. A few contain both "
-            "labels, and about two percent are empty. <bookmark mark='d'/> An empty set is the score-based method's way of "
-            "spending its five percent: for a case the model puts near fifty-fifty, neither label is probable enough to "
-            "pass the threshold. Adaptive sets would return both labels there instead; for a clinic, both is the more "
-            "useful answer: send this one to a pathologist."
+            "and ninety-five percent sets. <bookmark mark='b'/> The coverage is " + say(100 * d["bc_cover"], 1) + " percent overall, though malignant cases are covered a little less often than benign: the Mondrian "
+            "version would fix that, and for a cancer test it should. <bookmark mark='c'/> Nearly every set has one "
+            "label. A few contain both labels, and about two percent are empty. <bookmark mark='d'/> An empty set is "
+            "the score-based method's way of spending its five percent: for a case the model puts near fifty-fifty, "
+            "neither label is probable enough to pass the threshold. Adaptive sets can also be empty under "
+            "randomization. Enlarging an empty set to both labels preserves the marginal coverage lower bound, while "
+            "changing efficiency; clinical decisions need their own validation."
         ) as vo:
             self.add(bc_tag())
             for k, m_ in enumerate("abcd"):
@@ -247,9 +258,12 @@ class Sets(VoiceoverScene):
             "with the calibration data, this p-value is valid. A small one says the case is unlike anything seen: an "
             "outlier, a fraud, a new kind of tumour. <bookmark mark='c'/> With many new cases, run Part 33's "
             "Benjamini–Hochberg procedure on their conformal p-values. <bookmark mark='d'/> They share the calibration set "
-            "and so are dependent, but Stephen Bates, Candès, Lei, Romano and Sesia proved in 2023 that the dependence is "
+            "and so are dependent, but Stephen Bates, Candès, Lei, Romano and Sesia proved this for independently sampled null test cases and calibration data with a separately fitted score. In that setting the dependence is "
             "of the positive kind BH tolerates, so the false discovery rate is controlled."
         ) as vo:
+            intro=label('Conformal ranks support testing under specified joint assumptions',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

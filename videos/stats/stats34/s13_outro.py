@@ -6,8 +6,8 @@ PROBLEMS = [
     r"Show that $B$ identically distributed predictions with pairwise correlation $\rho$ average to variance $\rho\sigma^2 + (1-\rho)\sigma^2/B$.",
     r"Show that $\arg\min_F E[e^{-YF} \mid x] = \frac12 \log\{P(Y = 1 \mid x)/P(Y = -1 \mid x)\}$.",
     r"For continuous scores, \ prove $1 - \alpha \le P(S_{n+1} \le \hat q) \le 1 - \alpha + 1/(n+1)$.",
-    r"Show that, \ given the calibration set, \ the coverage $F(\hat q)$ is $\mathrm{Beta}(k, n + 1 - k)$.",
-    r"Show $\hat\theta^{PP}_\lambda$ is unbiased for every $\lambda$; \ find the $\lambda$ minimizing its variance.",
+    r"Show that, \ given the calibration set, \ for i.i.d. continuous scores, the coverage $F(\hat q)$ is $\mathrm{Beta}(k, n + 1 - k)$.",
+    r"Show $\hat\theta^{PP}_\lambda$ is unbiased for every fixed $\lambda$; \ find the $\lambda$ minimizing its variance.",
     r"Prove the ACI bound $|\frac1T\sum_t \mathrm{err}_t - \alpha| \le (\max(\alpha_1, 1 - \alpha_1) + \gamma)/(\gamma T)$.",
 ]
 
@@ -40,8 +40,8 @@ class Outro(VoiceoverScene):
             "lower risk. Caruana's team rebuilt the analysis on over fourteen thousand patients with an intelligible "
             "model, and found the same pattern, and others like it. <bookmark mark='b'/> The model was right about the "
             "data. Asthmatics who came in with pneumonia were sent straight to intensive care and treated aggressively, "
-            "and that treatment made them less likely to die. <bookmark mark='c'/> Used to decide who can go home, the "
-            "model would have sent the asthmatics home, and some of them would have died. <bookmark mark='d'/> A perfect "
+            "and the authors proposed treatment intensity as an explanation for the association; predictive accuracy alone does not establish that causal effect. <bookmark mark='c'/> Used to decide who can go home, the "
+            "model could incorrectly classify asthmatics as suitable for less intensive care. That counterfactual risk is not measured by predictive accuracy. <bookmark mark='d'/> A perfect "
             "predictor of what happened is not a guide to what to do. Prediction answers what will happen if we carry on "
             "as before. Decisions need the answer to a different question: what would happen if we acted differently."
         ) as vo:
@@ -114,17 +114,18 @@ class Outro(VoiceoverScene):
             (r"distribution shift", [60]), (r"causal forests and heterogeneous effects", [62]),
             (r"LLM labels, \ PPI and its successors", [64]),
         ], font_size=22)
+        self.add(card.head)
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part 35 begins with the difference between predicting and "
             "intervening. Part 36's double machine learning uses forests and boosting to fit nuisance functions. Part 40 "
             "grows survival forests and conformal bands for censored times. Part 54 proves generalization bounds for "
             "learners. Part 57 proves the distribution-free results of this part, and their limits. Part 58's anytime-valid "
-            "inference shares adaptive conformal's guarantees for any sequence. Part 60 studies distribution shift in depth. "
+            "inference uses probability guarantees that differ from adaptive conformal’s long-run miss-frequency control. Part 60 studies distribution shift in depth. "
             "Part 62 grows causal forests for treatment effects that vary from person to person. And Part 64 returns to "
             "machine-learning labels, with language models as the labellers."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):

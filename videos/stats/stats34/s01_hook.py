@@ -100,18 +100,19 @@ class Hook(VoiceoverScene):
     def lessons(self):
         rows = fit_rows(VGroup(
             label(r"\textbf{Rashomon}: \ many different models predict equally well", font_size=26, color=TREEC),
-            label(r"\textbf{Occam}: \ simplicity and accuracy are in conflict", font_size=26, color=BOOSTC),
+            label(r"\textbf{Occam}: \ simplicity and accuracy can trade off", font_size=26, color=BOOSTC),
             label(r"\textbf{Bellman}: \ more features can be a blessing, \ not a curse", font_size=26, color=PREDC),
             label(r"his examples: \ forests beat logistic regression on medical data", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> He named three lessons. The Rashomon effect, after Kurosawa's film in which four "
-            "witnesses tell four different stories of one crime: many quite different models fit the data equally well, so "
-            "which one tells the truth? <bookmark mark='b'/> Occam's dilemma: the most accurate predictors, forests and "
-            "ensembles, are the least interpretable, and simplicity costs accuracy. <bookmark mark='c'/> And Bellman's "
-            "dimensionality: for prediction, more features are often a blessing, not the curse that classical theory "
-            "fears. <bookmark mark='d'/> His examples were medical: on a hepatitis survival data set and others, random "
-            "forests, which he had just invented, beat logistic regression."
+            "witnesses tell four different stories of one crime: many quite different models fit the data equally "
+            "well, so which one tells the truth? <bookmark mark='b'/> Occam's dilemma: the most accurate predictors, "
+            "forests and ensembles, are the least interpretable, and simplicity may cost accuracy in some problems; "
+            "this is an empirical tradeoff, not a universal law. <bookmark mark='c'/> And Bellman's dimensionality: "
+            "for prediction, more features are often a blessing, not the curse that classical theory fears. <bookmark"
+            " mark='d'/> His examples were medical: on a hepatitis survival data set and others, random forests, "
+            "which he had just invented, beat logistic regression."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -153,17 +154,17 @@ class Hook(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"2009: \ the Netflix Prize, \ won by a blend of hundreds of models", font_size=26),
             label(r"2012: \ deep networks win the ImageNet competition", font_size=26),
-            label(r"tabular data: \ boosted trees still win (Grinsztajn et al. 2022)", font_size=26, color=BOOSTC),
+            label(r"tabular data: \ boosted trees performed strongly in this benchmark (Grinsztajn et al. 2022)", font_size=26, color=BOOSTC),
             label(r"the algorithms won prediction; \ statistics was asked a new question", font_size=26, color=CALC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In the twenty-five years since, prediction contests went Breiman's way. The Netflix Prize "
-            "in 2009 was won by a blend of hundreds of models that no one could interpret. <bookmark mark='b'/> In 2012 "
-            "a deep convolutional network won the ImageNet image-recognition competition by a wide margin, and machine "
-            "learning took over vision, speech and language. <bookmark mark='c'/> On ordinary tables of data, gradient "
-            "boosted trees are still the ones to beat, as Grinsztajn, Oyallon and Varoquaux found in 2022. "
-            "<bookmark mark='d'/> So the algorithms won prediction. But that left statistics with a new question, and it is "
-            "the question of this part."
+            "<bookmark mark='a'/> In the twenty-five years since, prediction contests went Breiman's way. The Netflix"
+            " Prize in 2009 was won by a large blend of models. <bookmark mark='b'/> In 2012 a deep convolutional "
+            "network won the ImageNet image-recognition competition by a wide margin, and machine learning took over "
+            "vision, speech and language. <bookmark mark='c'/> On ordinary tables of data, gradient boosted trees are"
+            " still the ones to beat, as Grinsztajn, Oyallon and Varoquaux found in 2022. <bookmark mark='d'/> So the"
+            " algorithms won prediction. But that left statistics with a new question, and it is the question of this"
+            " part."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -220,12 +221,13 @@ class Hook(VoiceoverScene):
         prereq = note(r"prerequisites: \ Parts 16, 19 and 33").to_corner(DL, buff=0.3)
         built = note(r"built: \ \texttt{statkit.conformal}, \ \texttt{statkit.ppi}; \ the score ladder").to_corner(DR, buff=0.3)
         with self.voiceover(
-            "<bookmark mark='a'/> Part thirty-four: prediction with guarantees. <bookmark mark='b'/> We'll see why good "
-            "predictors do not explain; treat forests and boosting as estimators, with a variance, an importance measure "
-            "and confidence intervals; ask what cross-validation actually estimates, and when a probability can be "
-            "trusted; then build conformal prediction, which wraps any model, forest or neural network, in intervals and "
-            "sets with a finite-sample guarantee that needs no model at all; use machine-learning guesses to sharpen a "
-            "valid estimate, with prediction-powered inference; and finish with what interpretation methods estimate."
+            "<bookmark mark='a'/> Part thirty-four: prediction with guarantees. <bookmark mark='b'/> We'll see why "
+            "good predictors do not explain; treat forests and boosting as estimators, with a variance, an importance"
+            " measure and confidence intervals; ask what cross-validation actually estimates, and when a probability "
+            "can be trusted; then build conformal prediction, which wraps any model, forest or neural network, in "
+            "intervals and sets with a marginal finite-sample guarantee under exchangeability and proper separation "
+            "of training and calibration; use machine-learning guesses to sharpen a valid estimate, with "
+            "prediction-powered inference; and finish with what interpretation methods estimate."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head, shift=UP * 0.2))

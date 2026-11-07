@@ -136,6 +136,31 @@ def poly_age(a):
 # ----------------------------------------------------------------------------------------------------------- items
 
 
+def forest_components(T):
+    """Remove finite-tree noise when estimating correlation across training sets."""
+    R,B,_=T.shape
+    within=T.var(axis=1,ddof=1).mean(axis=0)
+    mean_var=T.mean(axis=1).var(axis=0,ddof=1)
+    between=mean_var-within/B
+    sigma2=between+within
+    return {"sigma2":sigma2,"rho":float(between.mean()/sigma2.mean())}
+
+
+def tied_isotonic(score,y):
+    """Pool equal predictor scores before weighted pool-adjacent-violators."""
+    unique,inv,count=np.unique(score,return_inverse=True,return_counts=True)
+    mean=np.bincount(inv,weights=y)/count
+    blocks=[]
+    for j,(v,w) in enumerate(zip(mean,count)):
+        blocks.append([v,float(w),[j]])
+        while len(blocks)>1 and blocks[-2][0]>blocks[-1][0]:
+            v2,w2,j2=blocks.pop();v1,w1,j1=blocks.pop()
+            blocks.append([(v1*w1+v2*w2)/(w1+w2),w1+w2,j1+j2])
+    fit=np.empty(len(unique))
+    for v,w,js in blocks:fit[js]=v
+    return unique,fit
+
+
 def compute_rashomon():
     """Fifty bootstrap samples of the breast cancer data; a depth-3 tree on each.  Their test accuracies are all about
     the same; the feature at the root, and the top three by importance, are not."""
@@ -214,14 +239,13 @@ def compute_variance():
             X, y = friedman1(300, g)
             f = CF.Forest(X, y, B=B, mtry=mtry, min_leaf=3, rng=g)
             T[r] = f.tree_preds(Xt)
-        s2 = T.reshape(R * B, -1).var(0)
-        within = T.var(1).mean(0)  # E_r Var_b
-        between_cov = s2 - within  # Cov between two trees of one forest = Var_r(E_b)
-        rho = float(np.mean(between_cov) / np.mean(s2))
+        components = forest_components(T)
+        s2 = components["sigma2"]
+        rho = components["rho"]
         forest_pred = T.mean(1)
         mse = float(np.mean((forest_pred - mu[None, :]) ** 2))
-        bias2 = float(np.mean((forest_pred.mean(0) - mu) ** 2))
-        out[str(mtry)] = {"sigma2": float(np.mean(s2)), "rho": rho, "forest_var": float(np.mean(forest_pred.var(0))),
+        bias2 = float(np.mean((forest_pred.mean(0) - mu) ** 2) - np.mean(forest_pred.var(0, ddof=1))/R)
+        out[str(mtry)] = {"sigma2": float(np.mean(s2)), "rho": rho, "forest_var": float(np.mean(forest_pred.var(0, ddof=1))),
                           "mse": mse, "bias2": bias2}
     Bgrid = [1, 2, 5, 10, 20, 50, 100, 200, 500]
     curves = {k: [v["rho"] * v["sigma2"] + (1 - v["rho"]) * v["sigma2"] / b for b in Bgrid] for k, v in out.items()}
@@ -247,9 +271,9 @@ def compute_ij_sub():
     res = np.array([_ij_rep(g, x0, B=2000, subsample=50) for _ in range(reps)])
     extra = np.array([_ij_rep(g, x0, B=2000, subsample=50)[0] for _ in range(100)])
     preds, se = res[:, 0], np.sqrt(res[:, 1])
-    Ef = float(np.mean(np.r_[preds, extra]))
+    Ef = float(np.mean(extra))
     z = stats.norm.ppf(0.95)
-    return nest({"mu0": mu0, "Ef": Ef, "bias": Ef - mu0, "sd_pred": float(np.std(np.r_[preds, extra])),
+    return nest({"mu0": mu0, "Ef": Ef, "Ef_pilot_se": float(np.std(extra, ddof=1)/math.sqrt(len(extra))), "Ef_pilot_reps": len(extra), "bias": Ef - mu0, "sd_pred": float(np.std(np.r_[preds, extra])),
                  "mean_se": float(np.mean(se)), "cov_E": float(np.mean(np.abs(preds - Ef) <= z * se)),
                  "cov_mu": float(np.mean(np.abs(preds - mu0) <= z * se)), "reps": reps, "s": 50, "B": 2000,
                  "first": [{"pred": float(p), "se": float(s)} for p, s in zip(preds[:30], se[:30])]})
@@ -265,12 +289,12 @@ def compute_ij():
     preds, vs = res[:, 0], res[:, 1]
     # E f(x0), from the replications themselves plus 200 more
     extra = np.array([_ij_rep(g, x0)[0] for _ in range(200)])
-    Ef = float(np.mean(np.r_[preds, extra]))
+    Ef = float(np.mean(extra))
     z = stats.norm.ppf(0.95)
     se = np.sqrt(vs)
     cov_E = float(np.mean(np.abs(preds - Ef) <= z * se))
     cov_mu = float(np.mean(np.abs(preds - mu0) <= z * se))
-    return nest({"x0": x0[0], "mu0": mu0, "Ef": Ef, "bias": Ef - mu0, "sd_pred": float(np.std(np.r_[preds, extra])),
+    return nest({"x0": x0[0], "mu0": mu0, "Ef": Ef, "Ef_pilot_se": float(np.std(extra, ddof=1)/math.sqrt(len(extra))), "Ef_pilot_reps": len(extra), "bias": Ef - mu0, "sd_pred": float(np.std(np.r_[preds, extra])),
                  "mean_se": float(np.mean(se)), "cov_E": cov_E, "cov_mu": cov_mu, "reps": reps,
                  "first": [{"pred": float(p), "se": float(s)} for p, s in zip(preds[:30], se[:30])]})
 
@@ -349,7 +373,7 @@ def compute_calib():
         p = {"nb": sigmoid(zt)}
         a, b = CF.platt(zc, yf[ca])
         p["nb_platt"] = sigmoid(a + b * zt)
-        ss, fit = CF.isotonic(zc, yf[ca])
+        ss, fit = tied_isotonic(zc, yf[ca])
         p["nb_iso"] = np.interp(zt, ss, fit)
         T = CF.temperature(zc, yf[ca])
         temps.append(T)
@@ -357,7 +381,7 @@ def compute_calib():
         rf = CF.Forest(X[tr], yf[tr], B=150, mtry=5, min_leaf=1, rng=g)
         pc, pt = rf.predict(X[ca]), rf.predict(X[te])
         p["rf"] = pt
-        ss, fit = CF.isotonic(pc, yf[ca])
+        ss, fit = tied_isotonic(pc, yf[ca])
         p["rf_iso"] = np.interp(pt, ss, fit)
         for k, v in p.items():
             pooled[k][0].extend(v.tolist())
@@ -528,7 +552,7 @@ def compute_diab():
 def _shift_rep(g, w_all, n_tr=1000, n_ca=1000, n_te=2000):
     """Calibration from all adults; test from adults reweighted towards mid-career by w(age)."""
     w, idx, wt = w_all
-    take = g.choice(idx, n_tr + n_ca, replace=False)
+    take = g.choice(idx, n_tr + n_ca, replace=True)
     te = g.choice(idx, n_te, replace=True, p=wt / wt.sum())
     a = w.age.astype(float)
     y = w.income / 1000.0
@@ -694,7 +718,7 @@ def _ppi_setup():
     young = adults[(w.age[adults] >= 18) & (w.age[adults] <= 50)]
     tr = g.choice(young, 2000, replace=False)
     rf = CF.Forest(feats(tr), y_all[tr], B=60, mtry=3, min_leaf=10, rng=g)
-    pool = g.choice(adults, 200_000, replace=False)  # the island as the study sees it
+    pool = adults  # the complete empirical target population; predictions are fixed before sampling
     f_pool = rf.predict(feats(pool))
     truth = float(y_all[adults].mean())
     _PPI["setup"] = (pool, y_all[pool], f_pool, truth)
@@ -703,8 +727,8 @@ def _ppi_setup():
 
 def _ppi_rep(g, setup, n=300, N=20_000):
     pool, y, f, truth = setup
-    k = g.permutation(len(pool))
-    lab, unl = k[:n], k[n:n + N]
+    lab = g.integers(0, len(pool), n)
+    unl = g.integers(0, len(pool), N)
     c = PPI.classical_mean(y[lab])
     nv = PPI.naive_mean(f[unl])
     pp = PPI.ppi_mean(y[lab], f[lab], f[unl], lam=1.0)
@@ -757,7 +781,7 @@ def compute_interp():
     loco = []
     for j in range(X2.shape[1]):
         k = np.arange(X2.shape[1]) != j
-        f = CF.Forest(X2[:, k], y, B=120, mtry=4, min_leaf=3, rng=g)
+        f = CF.Forest(X2[:, k], y, B=200, mtry=4, min_leaf=3, rng=g)
         loco.append(float(np.mean((f.predict(Xt2[:, k]) - yt) ** 2) - base))
     # partial dependence for x1, x3, x4
     grid = np.linspace(0.02, 0.98, 25)
@@ -814,12 +838,8 @@ def compute_interp():
 # ----------------------------------------------------------------------------------------------------------- board
 
 
-def eff_reps(per_rep, nominal=0.9) -> int:
-    """For a coverage averaged over many test points in each replication, the number of independent hits whose
-    binomial SE matches the actual SE of the mean (from the spread across replications), so that the Board's
-    three-SE verdict is judged against the real Monte Carlo error."""
-    v = np.var(np.asarray(per_rep, float), ddof=1) / len(per_rep)
-    return int(round(nominal * (1 - nominal) / max(v, 1e-12)))
+def mean_mc_se(per_rep):
+    return float(np.std(per_rep, ddof=1) / math.sqrt(len(per_rep)))
 
 
 def compute_board():
@@ -834,9 +854,9 @@ def compute_board():
         cq.append(np.mean((r["y"] >= r["cqr"]["lo"]) & (r["y"] <= r["cqr"]["hi"])))
     # per-rep coverage averages over 2000 test points; the board's reps count test draws as one per rep
     rows.append(Row(34, r"split conformal, \ 90\%", r"World incomes, \ cubic in age, \ $n_{\rm cal} = 500$", "coverage",
-                    0.9, float(np.mean(sc)), eff_reps(sc)))
+                    0.9, float(np.mean(sc)), reps, mc_se=mean_mc_se(sc)))
     rows.append(Row(34, r"CQR, \ 90\%", r"World incomes, \ cubic in age, \ $n_{\rm cal} = 500$", "coverage", 0.9,
-                    float(np.mean(cq)), eff_reps(cq)))
+                    float(np.mean(cq)), reps, mc_se=mean_mc_se(cq)))
     # Barber's regime: p = n = 100
     j = compute_jack_board(g)
     rows.append(Row(34, r"in-sample residuals, \ 90\%", r"least squares, \ $p = n = 100$", "coverage", 0.9,
@@ -848,9 +868,9 @@ def compute_board():
     wt = shift_weight(w.age[idx])
     res = np.array([_shift_rep(g, (w, idx, wt), n_te=400)[:2] for _ in range(reps)])
     rows.append(Row(34, r"split conformal, \ unweighted", r"test ages shifted to 40--60", "coverage", 0.9,
-                    float(res[:, 0].mean()), eff_reps(res[:, 0])))
+                    float(res[:, 0].mean()), reps, mc_se=mean_mc_se(res[:, 0])))
     rows.append(Row(34, r"weighted conformal, \ 90\%", r"test ages shifted to 40--60", "coverage", 0.9,
-                    float(res[:, 1].mean()), eff_reps(res[:, 1])))
+                    float(res[:, 1].mean()), reps, mc_se=mean_mc_se(res[:, 1])))
     # PPI
     setup = _ppi_setup()
     truth = setup[3]
@@ -879,7 +899,7 @@ def compute_board():
     save_rows(34, rows)
     return nest({"rows": [asdict(r) | {"verdict": r.verdict, "se": r.se} for r in rows], "ppi_hits": hits,
                  "split": float(np.mean(sc)), "cqr": float(np.mean(cq)), "jack": j,
-                 "shift": res.mean(0)})
+                 "shift": res.mean(0), "split_replicates": sc, "cqr_replicates": cq, "shift_replicates": res})
 
 
 def compute_jack_board(g, reps=300):

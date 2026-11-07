@@ -53,6 +53,9 @@ class Calibration(VoiceoverScene):
             "<bookmark mark='d'/> Calibration is not accuracy. A classifier can rank cases perfectly and still say ninety "
             "nine percent when it should say sixty."
         ) as vo:
+            intro=label('Calibration compares probabilities with outcome frequencies',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -73,7 +76,7 @@ class Calibration(VoiceoverScene):
         side = fit_rows(VGroup(
             label(r"Gaussian naive Bayes, \ all 30 features", font_size=22),
             label(rf"{100 * (h[0] + h[-1]) / h.sum():.0f}\% of its predictions below 0.1 or above 0.9", font_size=22, color=MISSC),
-            label(r"between: \ it says 0.6--0.9, \ the truth is near 0.4", font_size=22, color=MISSC),
+            label(r"between: \ it says 0.6--0.9, \ observed frequencies in these small bins are near 0.4", font_size=22, color=MISSC),
             label(rf"accuracy {100 * d['acc']['nb']:.1f}\%; \ ECE {d['ece']['nb']:.3f}", font_size=22, color=CALC),
         ), 4.6, 0.35, [3.0, -1.6, 0])
         with self.voiceover(
@@ -109,12 +112,15 @@ class Calibration(VoiceoverScene):
                 why(r"overconfident"), why(r"so the accuracy survives")]
         with self.voiceover(
             "<bookmark mark='a'/> The reason is in its formula. Naive Bayes adds up the log likelihood ratios of the "
-            "thirty features, as independent pieces of evidence. <bookmark mark='b'/> But the radius, perimeter and area "
-            "of a nucleus are one fact measured three ways, and similar families run through the data, so the same "
-            "evidence is counted many times. <bookmark mark='c'/> The log odds come out many times too large. <bookmark "
-            "mark='d'/> The ordering of the cases, which is what accuracy depends on, is much less damaged. This is the "
-            "typical failure: right direction, wrong confidence."
+            "thirty features, as independent pieces of evidence. <bookmark mark='b'/> But the radius, perimeter and "
+            "area of a nucleus are one fact measured three ways, and similar families run through the data, so the "
+            "same evidence is counted many times. <bookmark mark='c'/> The log odds come out many times too large. "
+            "<bookmark mark='d'/> The ordering of the cases, which determines ranking measures such as A U C, is much"
+            " less damaged. This is the typical failure: right direction, wrong confidence."
         ) as vo:
+            intro=label('Dependent features can multiply evidence in naive Bayes',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -131,18 +137,22 @@ class Calibration(VoiceoverScene):
         ]
         rows[3][-1].set_color(CALC)
         whys = [why(r"Platt (1999), \ for SVMs"), why(r"Zadrozny \& Elkan (2002); \ Part 21's PAVA"),
-                why(r"Guo, \ Pleiss, \ Sun \& Weinberger (2017)"), why(r"the log odds were 8 times too large")]
+                why(r"Guo, \ Pleiss, \ Sun \& Weinberger (2017)"), why(r"median fitted temperature across 40 splits")]
         with self.voiceover(
-            "<bookmark mark='a'/> Calibration can be repaired after the fact, on a separate calibration set that the model "
-            "was not trained on. John Platt's method of 1999, invented to turn support vector machine scores into "
-            "probabilities, is a logistic regression of the label on the model's score. <bookmark mark='b'/> Isotonic "
-            "calibration, from Bianca Zadrozny and Charles Elkan, fits the best monotone step function of the score by "
-            "Part 21's pool-adjacent-violators algorithm, assuming nothing about the shape. <bookmark mark='c'/> And "
-            "temperature scaling, which Chuan Guo and his colleagues showed in 2017 fixes most of the overconfidence of "
-            "modern neural networks, divides the log odds by a single number T. <bookmark mark='d'/> On the biopsies, the "
-            "fitted temperature is about eight: naive Bayes's log odds were about eight times too large, roughly as many "
-            "times as the evidence was over-counted."
+            "<bookmark mark='a'/> Calibration can be repaired after the fact, on a separate calibration set that the "
+            "model was not trained on. John Platt's method of 1999, invented to turn support vector machine scores "
+            "into probabilities, is a logistic regression of the label on the model's score. <bookmark mark='b'/> "
+            "Isotonic calibration, from Bianca Zadrozny and Charles Elkan, fits the best monotone step function of "
+            "the score by Part 21's pool-adjacent-violators algorithm, assuming monotonicity but no parametric shape."
+            " Equal scores must be pooled before fitting. <bookmark mark='c'/> And temperature scaling, which Chuan "
+            "Guo and his colleagues showed in 2017 fixes most of the overconfidence of modern neural networks, "
+            "divides the log odds by a single number T. <bookmark mark='d'/> On the biopsies, the fitted temperature "
+            "is about eight: naive Bayes's log odds were about eight times too large, roughly as many times as the "
+            "evidence was over-counted."
         ) as vo:
+            intro=label('Separate calibration data can fit a new probability scale',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -165,12 +175,14 @@ class Calibration(VoiceoverScene):
             label(r"forests are \emph{under}confident at the extremes", font_size=22, color=TREEC),
         ), 5.4, 0.42, [3.2, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> After isotonic calibration, naive Bayes's points move towards the diagonal, and its expected "
-            "calibration error falls from point oh six two to point oh three eight. <bookmark mark='b'/> A random forest's "
-            "probability, the share of trees voting malignant, fails the other way. <bookmark mark='c'/> Averaging many "
-            "trees pulls predictions in from zero and one, because some trees always disagree, so a forest says eighty "
-            "percent for cases that are malignant nearly always: it is underconfident at the extremes, as Alexandru "
-            "Niculescu-Mizil and Rich Caruana found for bagged trees in 2005. Isotonic calibration fixes that too."
+            "<bookmark mark='a'/> After isotonic calibration, naive Bayes's points move towards the diagonal, and its"
+            " expected calibration error falls from point oh six two to point oh three eight. <bookmark mark='b'/> A "
+            "random forest's probability, the share of trees voting malignant, fails the other way. <bookmark "
+            "mark='c'/> Averaging many trees pulls predictions in from zero and one, because some trees always "
+            "disagree, so a forest says eighty percent for cases that are malignant nearly always: it is "
+            "underconfident at the extremes, as Alexandru Niculescu-Mizil and Rich Caruana found for bagged trees in "
+            "2005. Isotonic calibration improves the reliability diagram here; finite-data recalibration is not "
+            "guaranteed to improve every score."
         ) as vo:
             self.add(bc_tag())
             self.play(FadeIn(A), Create(diag), FadeIn(nb), FadeIn(side[0]))
@@ -216,15 +228,16 @@ class Calibration(VoiceoverScene):
             label(r"calibration is an average over cases: \ `of all the patients told 0.8, \ 80\% have cancer'", font_size=26),
             label(r"it says nothing about \emph{this} patient's 0.8", font_size=26, color=MISSC),
             label(r"calibrated within groups? \ multicalibration (H\'ebert-Johnson et al. 2018)", font_size=26, color=GREY_A),
-            label(r"next: \ a guarantee that needs no model at all", font_size=26, color=CALC),
+            label(r"next: \ a marginal guarantee under exchangeability", font_size=26, color=CALC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Calibration is a promise about averages: of all the patients told point eight, eighty "
-            "percent have cancer. <bookmark mark='b'/> It says nothing about whether this patient's point eight is right, "
-            "and a model can be perfectly calibrated overall while badly wrong for every patient in some subgroup. "
-            "<bookmark mark='c'/> Demanding calibration within many overlapping groups at once is multicalibration, "
-            "proposed in 2018 by Úrsula Hébert-Johnson and her colleagues, and we will meet it again in Part 63 on "
-            "fairness. <bookmark mark='d'/> Next, a promise about a single new case, which needs no model at all."
+            "<bookmark mark='a'/> Calibration is a promise about averages: of all the patients told point eight, "
+            "eighty percent have cancer. <bookmark mark='b'/> It says nothing about whether this patient's point "
+            "eight is right, and a model can be perfectly calibrated overall while badly wrong for every patient in "
+            "some subgroup. <bookmark mark='c'/> Demanding calibration within many overlapping groups at once is "
+            "multicalibration, proposed in 2018 by Úrsula Hébert-Johnson and her colleagues, and we will meet it "
+            "again in Part 63 on fairness. <bookmark mark='d'/> Next, a marginal guarantee for a new exchangeable "
+            "case. It does not promise conditional coverage for each individual."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

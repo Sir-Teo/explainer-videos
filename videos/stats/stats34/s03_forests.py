@@ -42,15 +42,19 @@ class Forests(VoiceoverScene):
         whys = [why(r"Part 19's CART, \ grown deep"), why(r"Breiman (1996)"), why(r"Breiman (2001); \ Ho (1995); \ Amit \& Geman (1997)"),
                 why(r"Breiman's recommendations")]
         with self.voiceover(
-            "<bookmark mark='a'/> A decision tree grown deep, as in Part 19, has little bias, since it can follow almost "
-            "any shape, and enormous variance: change a few training cases and the tree changes completely. <bookmark "
-            "mark='b'/> In 1996 Breiman proposed bootstrap aggregation, bagging: grow a tree on each of B bootstrap "
-            "samples and average their predictions. <bookmark mark='c'/> In 2001 he added one more twist, building on "
-            "ideas of Tin Kam Ho and of Yali Amit and Donald Geman: at every split, let each tree consider only a random "
-            "subset of m try features. That is a random forest. <bookmark mark='d'/> His defaults, the square root of p "
-            "for classification and a third of p for regression, are still the defaults today. Why would deliberately "
-            "hobbling each tree make the average better?"
+            "<bookmark mark='a'/> A decision tree grown deep, as in Part 19, has little bias, since it can follow "
+            "almost any shape, and enormous variance: change a few training cases and the tree changes completely. "
+            "<bookmark mark='b'/> In 1996 Breiman proposed bootstrap aggregation, bagging: grow a tree on each of B "
+            "bootstrap samples and average their predictions. <bookmark mark='c'/> In 2001 he added one more twist, "
+            "building on ideas of Tin Kam Ho and of Yali Amit and Donald Geman: at every split, let each tree "
+            "consider only a random subset of m try features. That is a random forest. <bookmark mark='d'/> His "
+            "defaults, the square root of p for classification and a third of p for regression, are historical "
+            "recommendations; software defaults and useful tuning choices vary. Why would deliberately hobbling each "
+            "tree make the average better?"
         ) as vo:
+            intro=label('Bagging averages resampled trees; forests also randomize features',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -77,6 +81,9 @@ class Forests(VoiceoverScene):
             "never falls below rho sigma squared. Bagging can only shrink the second term. Restricting the features at "
             "each split shrinks rho, at the price of making each tree a little worse."
         ) as vo:
+            intro=label('Correlated trees leave a variance floor as the forest grows',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -86,10 +93,10 @@ class Forests(VoiceoverScene):
     def var_chart(self):
         d = load("variance")
         Bg = np.log10(np.asarray(d["Bgrid"], float))
-        A = axes([0, 2.7], [0, 15], x_length=7.2, y_length=4.4, xlabel=r"trees $B$", ylabel=r"Var of the forest",
+        A = axes([0, 2.7], [0, max(max(v) for v in d["curves"].values())*1.05], x_length=7.2, y_length=4.4, xlabel=r"trees $B$", ylabel=r"Var of the forest",
                  xticks=[0, 1, 2], yticks=[0, 5, 10, 15], xfmt=lambda v: rf"{10 ** v:.0f}", center=[-2.0, 0.2, 0])
         ax = A.ax
-        cs = {k: polyline(ax, Bg, np.minimum(np.asarray(v), 15), MTRY_C[k], 3.5) for k, v in d["curves"].items()}
+        cs = {k: polyline(ax, Bg, np.asarray(v), MTRY_C[k], 3.5) for k, v in d["curves"].items()}
         floors = {k: DashedLine(ax.c2p(0, v["rho"] * v["sigma2"]), ax.c2p(2.7, v["rho"] * v["sigma2"]),
                                 color=MTRY_C[k], stroke_width=1.5) for k, v in d["by_mtry"].items()}
         bm = d["by_mtry"]
@@ -108,8 +115,9 @@ class Forests(VoiceoverScene):
             "trees are correlated at " + say(bm['10']['rho']) + ". <bookmark mark='c'/> With "
             "three features per split, rho falls to " + say(bm['3']['rho']) + ", <bookmark "
             "mark='d'/> and with a single random feature per split, to " + say(bm['1']['rho'])
-            + ". <bookmark mark='e'/> Each curve falls with B towards its own dashed floor, rho sigma squared, and after "
-            "a hundred trees there is almost nothing left to gain from more."
+            + ". <bookmark mark='e'/> Each curve falls with B towards its own dashed floor, rho sigma squared, and "
+            "after a hundred trees the remaining Monte Carlo term depends on rho and the tree count; adding trees can"
+            " still help."
         ) as vo:
             self.add(friedman_tag())
             self.play(FadeIn(A), FadeIn(side[0]))
@@ -156,7 +164,7 @@ class Forests(VoiceoverScene):
     def cancer(self):
         d = load("forest")
         Bs = np.log10(np.asarray(d["Bs"], float))
-        A = axes([0, 2.6], [0, 0.1], x_length=7.2, y_length=4.4, xlabel=r"trees $B$", ylabel=r"test error",
+        A = axes([0, 2.6], [0, max(max(d["err_bag"]),max(d["err_rf"]),1-d["acc_tree"])*1.1], x_length=7.2, y_length=4.4, xlabel=r"trees $B$", ylabel=r"test error",
                  xticks=[0, 1, 2], yticks=[0, 0.05, 0.1], xfmt=lambda v: rf"{10 ** v:.0f}", yfmt=lambda v: rf"{100 * v:.0f}\%",
                  center=[-2.0, 0.2, 0])
         ax = A.ax
@@ -208,6 +216,9 @@ class Forests(VoiceoverScene):
             "order, as two noisy estimates of one error rate should be. <bookmark mark='d'/> It costs nothing: a "
             "cross-validation that comes free with the forest."
         ) as vo:
+            intro=label('Out-of-bag predictions exclude the case being evaluated',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -245,11 +256,11 @@ class Forests(VoiceoverScene):
         pim = np.asarray(d["perm"])[idx]
         names = [d["names"][i].replace("_", " ") for i in idx]
         names[-2], names[-1] = r"noise (continuous)", r"noise (coin)"
-        A = axes([0, 8], [0, 1], x_length=8.0, y_length=4.0, xlabel=r"", ylabel=r"share of the largest",
+        A = axes([0, 8], [min(0,float(pim.min()/pim.max()))*1.1, 1.05], x_length=8.0, y_length=4.0, xlabel=r"", ylabel=r"share of the largest",
                  xticks=[], yticks=[0, 0.5, 1], center=[-1.6, 0.4, 0])
         ax = A.ax
         bi = bars_at(ax, np.arange(8) + 0.32, imp / imp.max(), 0.34, TREEC)
-        bp = bars_at(ax, np.arange(8) + 0.68, np.maximum(pim, 0) / pim.max(), 0.34, CALC)
+        bp = bars_at(ax, np.arange(8) + 0.68, pim / pim.max(), 0.34, CALC)
         labs = VGroup(*[label(n, font_size=15, color=MISSC if i >= 6 else GREY_A).rotate(PI / 6)
                         .next_to(ax.c2p(i + 0.5, 0), DOWN, buff=0.35) for i, n in enumerate(names)])
         ratio = d["noise_imp"][0] / max(d["noise_imp"][1], 1e-9)
@@ -302,6 +313,9 @@ class Forests(VoiceoverScene):
             "mark='d'/> Then an interval is the prediction plus or minus one point six four five standard errors, for "
             "ninety percent. One forest, no refitting."
         ) as vo:
+            intro=label('The infinitesimal jackknife approximates sampling variance',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -329,9 +343,9 @@ class Forests(VoiceoverScene):
         side = fit_rows(VGroup(
             label(r"a peak of Friedman's surface", font_size=22),
             label(rf"truth $\mu(x_0) = {d['mu0']:.1f}$", font_size=22, color=TRUEC),
-            label(rf"forests average $\mathrm{{E}}\hat f(x_0) = {d['Ef']:.1f}$", font_size=22, color=TREEC),
-            label(rf"covers $\mathrm{{E}}\hat f$: \ only {100 * d['cov_E']:.0f}\%", font_size=22, color=MISSC),
-            label(rf"mean SE {d['mean_se']:.2f}; \ true SD {d['sd_pred']:.2f}", font_size=22, color=CALC),
+            label(rf"independent pilot mean $\mathrm{{E}}\hat f(x_0) = {d['Ef']:.1f}$", font_size=22, color=TREEC),
+            label(rf"covers pilot mean: \ only {100 * d['cov_E']:.0f}\%", font_size=22, color=MISSC),
+            label(rf"mean SE {d['mean_se']:.2f}; \ sampling SD estimate {d['sd_pred']:.2f}", font_size=22, color=CALC),
         ), 4.2, 0.4, [4.6, 0.3, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Try it at a point x nought near a peak of Friedman's surface. Three hundred training sets "
@@ -343,7 +357,7 @@ class Forests(VoiceoverScene):
             + f"{100 * d['cov_E']:.0f}" + " percent. <bookmark mark='e'/> Their standard errors average " + say(d["mean_se"])
             + ", but the forests' predictions really vary with a standard deviation of " + say(d["sd_pred"]) + ". The "
             "infinitesimal jackknife captures only the linear part of an estimator's variability, and a deep tree grown "
-            "on a bootstrap sample of the whole data set is far from linear in the data."
+            "on a bootstrap sample of the whole data set does not ensure an accurate linear approximation at this sample size."
         ) as vo:
             self.add(friedman_tag())
             self.play(FadeIn(A), FadeIn(side[0]), LaggedStart(*[FadeIn(b) for b in bars], lag_ratio=0.1), run_time=3.0)
@@ -363,21 +377,22 @@ class Forests(VoiceoverScene):
         side = fit_rows(VGroup(
             label(rf"each tree: \ {d['s']} of the 250 points, \ no replacement", font_size=22),
             label(rf"{d['B']:,} trees; \ the subsampling IJ", font_size=22, color=TREEC),
-            label(rf"covers $\mathrm{{E}}\hat f$: \ {100 * d['cov_E']:.0f}\%", font_size=22, color=BANDC),
+            label(rf"covers pilot mean: \ {100 * d['cov_E']:.0f}\%", font_size=22, color=BANDC),
             label(rf"but $\mathrm{{E}}\hat f = {d['Ef']:.1f}$: \ covers $\mu$ {100 * d['cov_mu']:.0f}\%", font_size=22, color=MISSC),
         ), 4.2, 0.42, [4.6, 0.3, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Wager and Athey's remedy is to grow each tree on a small subsample drawn without "
-            "replacement, here fifty of the two hundred and fifty points. Then each tree depends on any one case only "
-            "rarely, the forest becomes nearly linear in the data, like a U-statistic, and the infinitesimal jackknife, "
-            "with the subsampling correction, captures most of its variance. <bookmark mark='b'/> With two thousand "
-            "trees per forest, <bookmark mark='c'/> the intervals now cover the forests' own average "
+            "replacement, here fifty of the two hundred and fifty points. Subsampling alone does not establish the "
+            "honest-forest asymptotic theorem. Then each tree depends on any one case only rarely, the forest becomes"
+            " nearly linear in the data, like a U-statistic, and the infinitesimal jackknife, with the subsampling "
+            "correction, captures most of its variance. <bookmark mark='b'/> With two thousand trees per forest, "
+            "<bookmark mark='c'/> the intervals now cover the forests' own average "
             + f"{100 * d['cov_E']:.0f}" + " percent of the time: far better, though still short of ninety, because the "
             "standard errors remain about a tenth too small on average, and are themselves noisy. <bookmark mark='d'/> But trees on fifty points are "
             "coarser, so the forests are more biased, averaging " + say(d["Ef"], 1) + " against the true "
             + say(d["mu0"], 1) + ", and the intervals almost never cover the truth. Honest variance, dishonest centre: the "
             "infinitesimal jackknife measures variance, not bias. Wager and Athey's asymptotic theory makes the bias "
-            "negligible by letting the subsample grow with n, at a carefully chosen rate."
+            "negligible under conditions on honest tree construction, regularity and the subsampling rate. These ordinary CART trees are not an implementation of their honest forest theorem."
         ) as vo:
             self.add(friedman_tag())
             self.play(FadeIn(A), FadeIn(side[0]))

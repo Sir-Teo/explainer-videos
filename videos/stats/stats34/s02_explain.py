@@ -74,6 +74,9 @@ class Explain(VoiceoverScene):
             "average answers the scientific question wrongly, however small its variance. <bookmark mark='d'/> "
             "Prediction cares about the sum, and will happily accept some bias to buy a larger fall in variance."
         ) as vo:
+            intro=label('Prediction risk combines noise, squared bias and sampling variance',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -83,13 +86,13 @@ class Explain(VoiceoverScene):
     def wrong_wins(self):
         rows = [
             cmath(r"y", r"=", r"\beta_1 x_1 + \beta_2 x_2 + \varepsilon, \ \ \beta_2 \text{ small}", font_size=30),
-            cmath(r"\text{full model}", r":", r"\mathrm{EPE} = \sigma^2 (1 + 2/n)", font_size=30),
+            cmath(r"\text{full model}", r":", r"\mathrm{EPE} \approx \sigma^2 (1 + 2/n)", font_size=30),
             cmath(r"\text{drop } x_2", r":", r"\mathrm{EPE} \approx \sigma^2(1 + 1/n) + \beta_2^2 \mathrm{Var}(x_2)", font_size=30),
             cmath(r"\text{wrong wins if}", r":", r"\beta_2^2 \mathrm{Var}(x_2) < \sigma^2 / n", font_size=30),
         ]
         rows[3][-1].set_color(PREDC)
         whys = [why(r"the true model has both"), why(r"unbiased, \ two coefficients"), why(r"biased, \ one coefficient"),
-                why(r"a standard result; \ Shmueli (2010)")]
+                why(r"orthogonal-design, large-$n$ approximation")]
         with self.voiceover(
             "<bookmark mark='a'/> A small example makes it concrete. Suppose the truth has two predictors, and the second "
             "has a small coefficient. <bookmark mark='b'/> The correct model is unbiased and, with independent "
@@ -99,6 +102,9 @@ class Explain(VoiceoverScene):
             "better whenever that bias is smaller than sigma squared over n: when the effect is smaller than the noise "
             "can resolve. The model that explains correctly is not always the one that predicts best."
         ) as vo:
+            intro=label('Omitting a weak predictor can improve risk in an orthogonal approximation',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -188,16 +194,17 @@ class Explain(VoiceoverScene):
         foot = fit_rows(VGroup(
             label(r"three logistic regressions on disjoint pairs of features", font_size=24),
             label(r"each `explains' the diagnosis with different variables", font_size=24, color=CALC),
-            label(r"each coefficient is significant; \ none is the mechanism", font_size=24, color=MISSC),
+            label(r"prediction alone does not establish a biological mechanism", font_size=24, color=MISSC),
         ), 12.4, 0.4, [0, -1.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The same happens with a data model. Here are three logistic regressions, each on two "
-            "standardized features, with no feature in common. <bookmark mark='b'/> The first uses the mean concave points "
-            "and the worst perimeter; the second, the worst concave points and worst radius; the third, the worst area and "
-            "worst texture. Their accuracies are ninety-five, ninety-five and ninety-three percent. <bookmark mark='c'/> "
-            "Each would make a respectable paper: two highly significant predictors of malignancy, with a biological "
-            "story. <bookmark mark='d'/> None of them is the mechanism. They are three witnesses to one crime, each "
-            "telling the story from where it stood."
+            "<bookmark mark='a'/> The same happens with a data model. Here are three logistic regressions, each on "
+            "two standardized features, with no feature in common. <bookmark mark='b'/> The first uses the mean "
+            "concave points and the worst perimeter; the second, the worst concave points and worst radius; the "
+            "third, the worst area and worst texture. Their accuracies are ninety-five, ninety-five and ninety-three "
+            "percent. <bookmark mark='c'/> Each would make a respectable paper: two predictive associations with "
+            "malignancy. We have not calculated significance tests for these displayed coefficients. <bookmark "
+            "mark='d'/> None of them is the mechanism. They are three witnesses to one crime, each telling the story "
+            "from where it stood."
         ) as vo:
             self.add(bc_tag())
             vo.wait_until("a")
@@ -221,15 +228,20 @@ class Explain(VoiceoverScene):
         whys = [why(r"the Rashomon set"), why(r"how much one model uses $x_j$"),
                 why(r"Fisher, \ Rudin \& Dominici (2019)"), why(r"Semenova, \ Rudin \& Parr (2022)")]
         with self.voiceover(
-            "<bookmark mark='a'/> Cynthia Rudin and her colleagues turned the effect into an object. The Rashomon set is "
-            "every model in a class whose loss is within epsilon of the best. <bookmark mark='b'/> For one model, the "
-            "reliance on feature j is how much its loss grows when that feature is scrambled. <bookmark mark='c'/> "
-            "Instead of reporting one model's reliance, Aaron Fisher, Rudin and Francesca Dominici proposed reporting its "
-            "range over the whole Rashomon set: the least and the most any good model needs the feature. A feature that "
-            "every good model needs is important; one that some good models ignore is not, whatever a single forest says. "
-            "<bookmark mark='d'/> And when the Rashomon set is large, it is likely to contain a simple, interpretable "
-            "model as accurate as the black box, which is Rudin's argument for using one in high-stakes decisions."
+            "<bookmark mark='a'/> Cynthia Rudin and her colleagues turned the effect into an object. The Rashomon set"
+            " is every model in a class whose loss is within epsilon of the best. <bookmark mark='b'/> For one model,"
+            " the reliance on feature j is how much its loss grows when that feature is scrambled. <bookmark "
+            "mark='c'/> Instead of reporting one model's reliance, Aaron Fisher, Rudin and Francesca Dominici "
+            "proposed reporting its range over the whole Rashomon set: the least and the most any good model needs "
+            "the feature. A feature that every good model needs is important; one that some good models ignore is not"
+            " indispensable within that model class, although it may remain useful. <bookmark mark='d'/> And when the"
+            " Rashomon set is large, it may contain a simple, interpretable model with comparable predictive "
+            "accuracy; this is not guaranteed by its size alone, which is Rudin's argument for using one in "
+            "high-stakes decisions."
         ) as vo:
+            intro=label('Model reliance can vary across comparably accurate models',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
