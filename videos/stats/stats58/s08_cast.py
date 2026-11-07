@@ -136,7 +136,7 @@ class CAST(LectureMixin, VoiceoverScene):
             'not establish improved survival. A sequential method cannot repair a scientifically inappropriate '
             'endpoint.'
         ),
-            [(r"what CAST teaches:", GREY_A),
+            [('Lessons from CAST for sequential clinical trials', GREY_A),
              (r"illustrative simulated paths cannot date the actual warning", FIXEDC),
              (r"boards need to look whenever, \ with honest error rates", CSC),
-             (r"no sequential method rescues the wrong endpoint \ (Part 35)", WEALTHC)])
+             (r"no sequential method rescues the wrong endpoint \ (Part 35)", WEALTHC)], head_size=36)

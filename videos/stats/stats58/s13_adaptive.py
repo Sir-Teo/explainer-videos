@@ -185,7 +185,7 @@ class Adaptive(LectureMixin, VoiceoverScene):
             'Record the assignment probabilities, including the information used for each randomization. Missing '
             'logs obstruct these methods, although other design-specific analyses may sometimes remain possible.'
         ),
-            [(r"two routes:", GREY_A),
+            [('Two routes to inference under adaptive sampling', GREY_A),
              (r"asymptotic: \ weighted AIPW, \ batched OLS, \ intervals at the end", CSC),
              (r"anytime-valid: \ IPW test martingales, \ confidence sequences throughout", WEALTHC),
-             (r"either way: \ record the propensities $e_t(k)$", FIXEDC)])
+             (r"either way: \ record the propensities $e_t(k)$", FIXEDC)], head_size=36)

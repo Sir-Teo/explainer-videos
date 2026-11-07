@@ -138,8 +138,8 @@ class EBH(LectureMixin, VoiceoverScene):
             'select only successful finished experiments and redefine the family size, or repeatedly report the '
             'last significant e-BH set without an additional theorem.'
         ),
-            [(r"a platform, \ end to end:", GREY_A),
+            [('An end-to-end platform for online FDR control', GREY_A),
              (r"each experiment: \ a confidence sequence, \ watched at will", CSC),
              (r"each stopped experiment: \ an e-value", WEALTHC),
              (r"across experiments: \ e-BH, \ FDR under any dependence", WEALTHC),
-             (r"stopping filtration and hypothesis-family selection still matter", SPRTC)])
+             (r"stopping filtration and hypothesis-family selection still matter", SPRTC)], head_size=36)
