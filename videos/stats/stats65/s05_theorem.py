@@ -19,22 +19,17 @@ class Theorem(LectureMixin, VoiceoverScene):
 
     def statement(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Theorem. <bookmark mark='b'/> Suppose the calibration pairs are independent draws from P, "
-            "the test pair is drawn from Q, independent of them, and both share the conditional law of Y given X. "
-            "<bookmark mark='c'/> Let w hat be a fixed positive weight function, independent of the calibration data, with "
-            "finite mean under P. <bookmark mark='d'/> Then the weighted split-conformal set built with w hat satisfies: "
-            "coverage under Q is at least one minus alpha minus the total variation distance between P sub w hat and the "
-            "covariate law of Q.",
+            "<bookmark mark='a'/> Theorem. <bookmark mark='b'/> Suppose the calibration pairs are independent draws from P, the test pair is drawn from Q, independent of them, and both share the conditional law of Y given X. <bookmark mark='c'/> Let w hat be a fixed positive weight function, independent of calibration and test data, with finite nonzero source mean. Condition also on any independently trained score model. For random independently learned weights the bound is conditional on their training; averaging introduces the expected TV penalty. <bookmark mark='d'/> Then the weighted split-conformal set built with w hat satisfies: coverage under Q is at least one minus alpha minus the total variation distance between P sub w hat and the covariate law of Q.",
             [(r"(X_i, Y_i)_{i \le n}", r"\overset{\text{iid}}{\sim}", r"P, \ \ (X, Y) \sim Q, \ \ P_{Y \mid X} = Q_{Y \mid X}", 38),
              (r"\hat w", r":", r"\text{fixed, \ positive, \ } E_P \hat w < \infty", 40),
              (r"\Rightarrow", r"\ ", r"Q(Y \in \hat C_{\hat w}(X)) \ge 1 - \alpha - \mathrm{TV}(P_{\hat w}, Q_X)", 40),
              (r"\text{proof}", r":", r"\text{three steps}", 40)],
-            [r"the setting", r"split sample", r"the claim", r"next"],
+            [r"the setting", r"independent weight and score training", r"the claim", r"next"],
             colors=[(2, THESISC)])
 
     def step1(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Step one: the method is exact for the reweighted source. <bookmark mark='b'/> Define P "
+            "<bookmark mark='a'/> Step one: the method gives at least nominal marginal coverage for the reweighted source. <bookmark mark='b'/> Define P "
             "sub w hat by its density, w hat of x over the mean of w hat, relative to P. <bookmark mark='c'/> Then w hat is, "
             "up to a constant that the weighted quantile ignores, exactly the likelihood ratio of P sub w hat to P. "
             "<bookmark mark='d'/> So by Tibshirani and colleagues' theorem, applied with P sub w hat as the target, a test "
@@ -78,27 +73,17 @@ class Theorem(LectureMixin, VoiceoverScene):
 
     def corollary(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Two corollaries, both used in the study. <bookmark mark='b'/> Tempered Gaussian-tilt "
-            "weights: the bound of chapter three, exactly. <bookmark mark='c'/> A logistic classifier on x, under a Gaussian "
-            "mean shift, estimates the log ratio as a line with slope b hat; reweighting N of zero and one by it gives N of "
-            "b hat and one, so the bound is one minus alpha minus two Phi of the absolute difference of b hat and mu over two, "
-            "plus one. <bookmark mark='d'/> Consistency follows: if b hat tends to mu, coverage tends to at least one minus "
-            "alpha, at the rate at which b hat converges.",
+            "<bookmark mark='a'/> Two corollaries, both used in the study. <bookmark mark='b'/> Tempered Gaussian-tilt weights: the bound of chapter three, exactly. <bookmark mark='c'/> A logistic classifier on x, under a Gaussian mean shift, estimates the log ratio as a line with slope b hat; reweighting N of zero and one by it gives N of b hat and one, so the bound is one minus alpha minus two Phi of the absolute difference of b hat and mu over two, plus one. <bookmark mark='d'/> Consistency follows: if b hat tends to mu, the lower bound tends to one minus alpha. Under a regular correctly specified fixed-dimensional logistic classifier, with source and target auxiliary sizes growing proportionally, its penalty is root auxiliary-sample-size in probability. This does not assert that absolute coverage error is root-n or remove finite-calibration conservatism.",
             [(r"\hat w = w^\lambda", r":", r"1 - \alpha - (2\Phi(|1 - \lambda||\mu|/2) - 1)", 40),
              (r"\text{logistic, \ slope } \hat b", r":", r"1 - \alpha - (2\Phi(|\hat b - \mu|/2) - 1)", 40),
              (r"\hat b \to \mu", r"\Rightarrow", r"\liminf \text{coverage} \ge 1 - \alpha", 40),
              (r"\text{rate}", r":", r"\text{loss} \approx |\hat b - \mu| \, \phi(0) = O_P(n^{-1/2})", 40)],
-            [r"chapter 3's formula", r"the estimated case", r"consistency", r"a root-n loss"],
+            [r"chapter 3's formula", r"the estimated case", r"consistency", r"root auxiliary-$n$ penalty under regularity"],
             colors=[(1, ESTC)])
 
     def remarks(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> What the theorem does not say. <bookmark mark='b'/> It needs the weights fixed in "
-            "advance. Estimating them on the calibration data itself, or cross-fitting, couples the weights to the scores; "
-            "that case is not covered here. <bookmark mark='c'/> It is a lower bound only, and the doubts of chapter three "
-            "suggest it may be far from tight. <bookmark mark='d'/> And it is close to known results: Barber and colleagues' "
-            "2023 bounds for weighted methods, under any departure from exchangeability, are of the same kind. The contribution is the clean statement with one computable "
-            "distance, and what the study shows about its tightness. Saying so is part of the work.",
+            "<bookmark mark='a'/> What the theorem does not say. <bookmark mark='b'/> It needs the weights fixed in advance. Estimating them on the calibration data itself, or cross-fitting, couples the weights to the scores; that case is not covered here. <bookmark mark='c'/> It is a lower bound only, and the doubts of chapter three suggest it may be far from tight. <bookmark mark='d'/> And it is close to known results: Barber and colleagues' 2023 bounds for weighted methods, under any departure from exchangeability, are of the same kind. The value here is a teaching reformulation and a measured illustration of slack. We have not established a novel theorem or exhaustive priority claim. Saying so is part of the work.",
             [(r"\text{needs}", r":", r"\hat w \text{ independent of calibration}", 40),
              (r"\text{only}", r":", r"\text{a lower bound}", 40),
              (r"\text{prior art}", r":", r"\text{close to Barber et al. (2023)}", 40),
@@ -140,13 +125,7 @@ class Theorem(LectureMixin, VoiceoverScene):
 
     def kl(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> A practical variant. Total variation is hard to estimate from samples; the "
-            "Kullback-Leibler divergence often is not. <bookmark mark='b'/> Pinsker's inequality, from Part fifty, bounds "
-            "total variation by the square root of half the KL divergence. <bookmark mark='c'/> So coverage is at least one "
-            "minus alpha minus the square root of KL over two. <bookmark mark='d'/> For the tempered Gaussian weights, the "
-            "KL divergence between N of lambda mu and N of mu is one minus lambda squared times mu squared over two, so the "
-            "loss is at most the absolute value of one minus lambda times mu, over two: a line, a little looser than the "
-            "exact curve, and easy to remember.",
+            "<bookmark mark='a'/> A practical variant. Both total variation and KL can be difficult to estimate reliably. In specified parametric models, KL sometimes has a convenient closed form; no automatic data-based certificate follows. <bookmark mark='b'/> Pinsker's inequality, from Part fifty, bounds total variation by the square root of half the KL divergence. <bookmark mark='c'/> So coverage is at least one minus alpha minus the square root of KL over two. <bookmark mark='d'/> For the tempered Gaussian weights, the KL divergence between N of lambda mu and N of mu is the square of one minus lambda, times mu squared over two, so the loss is at most the absolute value of one minus lambda times mu, over two: a line, a little looser than the exact curve, and easy to remember.",
             [(r"\text{Pinsker}", r":", r"\mathrm{TV} \le \sqrt{\mathrm{KL}/2}", 40),
              (r"\text{so}", r":", r"\text{coverage} \ge 1 - \alpha - \sqrt{\mathrm{KL}(Q_X \| P_{\hat w})/2}", 40),
              (r"\mathrm{KL}(N(\mu,1) \| N(\lambda\mu, 1))", r"=", r"(1 - \lambda)^2\mu^2/2", 40),

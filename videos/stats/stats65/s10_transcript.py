@@ -85,7 +85,7 @@ class TranscriptComplete(LectureMixin, VoiceoverScene):
             "Part two. <bookmark mark='d'/> Machines for single ideas: the Galton board, the tank factory, the interval "
             "rain, the permutation machine, the likelihood landscape, the trade-off plot, the leaderboard. <bookmark "
             "mark='e'/> And statkit, a statistics library of more than fifty modules, from random number generators to "
-            "conformal prediction and privacy accounting, every function tested against a known answer.",
+            "conformal prediction and privacy accounting, with numerical tests and audits of the examples used in this series. Tests can be incomplete and do not prove every function correct.",
             [(r"the instruments:", GREY_A),
              (r"the World \ and the Museum", S.EST),
              (r"the Coverage Board; \ the exact probability engine", S.KEPT),
@@ -97,7 +97,7 @@ class TranscriptComplete(LectureMixin, VoiceoverScene):
         f = load("fullboard")
         self.lad_voiceover(
             f"<bookmark mark='a'/> The series by its numbers. <bookmark mark='b'/> Sixty-five parts, each about an hour of "
-            f"narration: well over sixty hours, a full degree's worth of lectures. <bookmark mark='c'/> {f['n']} promises "
+            f"narration: well over sixty hours, a substantial teaching sequence rather than an accredited degree or a substitute for supervised research. <bookmark mark='c'/> {f['n']} promises "
             f"tested on the Coverage Board, across {f['parts']} parts. <bookmark mark='d'/> Dozens of instruments, more than "
             f"fifty statkit modules with their tests, and the Museum's real datasets, every one of them a reason to believe "
             f"a number rather than to take it on trust.",

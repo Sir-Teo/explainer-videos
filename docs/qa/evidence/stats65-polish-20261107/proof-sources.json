@@ -1,0 +1,11 @@
+{
+  "source": "https://arxiv.org/pdf/1904.06019",
+  "downloaded_pdf_sha256": "d80dba944a136e075bbfe281009152ce42041e0a455f68f73684ace83cfc3fed",
+  "read": [
+    "Corollary 1: common conditional law, absolute continuity, at-least-nominal coverage, infinity atom",
+    "Remark 3: proportional ratios suffice because normalization cancels",
+    "Section 2.2, equation 10: fixed independently trained prediction model; conditional coverage given training"
+  ],
+  "attribution": "Teaching TV reformulation of known weighted-conformal robustness arguments; no established novelty or exhaustive literature-gap claim",
+  "protocol": "PROTOCOL preserved unchanged; QA-AMENDMENT post hoc and committed before this corrected rerun as 48f91352"
+}

@@ -61,12 +61,12 @@ class Hook(LectureMixin, VoiceoverScene):
             "<bookmark mark='a'/> The dissertation in one sentence. <bookmark mark='b'/> Weighted conformal prediction "
             "keeps its coverage under covariate shift when the shift is known; in practice it is estimated, and the "
             "question is how much coverage the estimation costs. <bookmark mark='c'/> The answer here: a theorem that "
-            "bounds the loss by a total variation distance, a preregistered simulation study that tests the bound and five "
+            "bounds the loss by a total variation distance, a protocol-guided simulation study that tests the bound and five "
             "predictions, and an application to the Museum's NHANES data. <bookmark mark='d'/> Some predictions will "
             "hold and some may not; the report says which.",
             [(r"\text{the question}", r":", r"\text{coverage with estimated weights}", 40),
              (r"\text{the theorem}", r":", r"\text{loss} \le \mathrm{TV}(P_{\hat w}, Q)", 40),
-             (r"\text{the evidence}", r":", r"\text{a preregistered study, \ NHANES}", 40),
+             (r"\text{the evidence}", r":", r"\text{a protocol-guided study, \ NHANES}", 40),
              (r"\text{the report}", r":", r"\text{whatever it shows}", 40)],
             [r"one sentence", r"chapters 1--4", r"chapters 5--6", r"chapter 7"],
             colors=[(1, THESISC)])
@@ -75,12 +75,12 @@ class Hook(LectureMixin, VoiceoverScene):
         self.list_voiceover(
             "<bookmark mark='a'/> The plan. <bookmark mark='b'/> Chapters one to four: choosing the question, reading the "
             "literature, stating a conjecture, and proving a theorem. <bookmark mark='c'/> Chapters five to seven: the "
-            "preregistered simulation study, the real-data application, and writing it up for review. <bookmark mark='d'/> "
+            "protocol-guided simulation study, the real-data application, and writing it up for review. <bookmark mark='d'/> "
             "Chapters eight to ten: the full Coverage Board of the whole degree, the completed transcript, and where to go "
             "next.",
             [(r"the plan:", GREY_A),
              (r"1--4: \ the question, \ the literature, \ a conjecture, \ a theorem", THESISC),
-             (r"5--7: \ a preregistered study, \ NHANES, \ writing and review", HONC),
+             (r"5--7: \ a protocol-guided study, \ NHANES, \ writing and review", HONC),
              (r"8--10: \ the full Board, \ the transcript, \ what next", S.ACCENT)])
 
     def upgrade(self):
@@ -88,14 +88,14 @@ class Hook(LectureMixin, VoiceoverScene):
             upgrade_card(57, r"weighted conformal coverage under covariate shift", r"the likelihood ratio is known",
                          r"chapters 3--6: \ when it is estimated"),
             upgrade_card(7, r"simulation as a tool for checking methods", r"simulations are designed after the fact",
-                         r"chapter 5: \ a protocol written before the run"),
+                         r"chapter 5: \ the original protocol plus an explicit post hoc QA amendment"),
         ]
         VGroup(*cards).arrange(DOWN, buff=0.4).move_to(ORIGIN)
         with self.voiceover(
             "<bookmark mark='a'/> The last two promises. Part fifty-seven's weighted conformal prediction assumed the "
             "shift's likelihood ratio was known; chapters three to six estimate it, and count the cost. <bookmark "
             "mark='b'/> Part seven taught simulation as a way to check methods, without saying when to decide what to "
-            "simulate; chapter five writes the protocol down before running it."
+            "simulate; chapter five distinguishes an original written protocol from the present post hoc corrected rerun."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(cards[0], shift=UP * 0.2))
@@ -108,17 +108,14 @@ class Hook(LectureMixin, VoiceoverScene):
         head = VGroup(label(r"Part 65", font_size=34, color=GREY_B), label(r"The Dissertation", font_size=56)).arrange(DOWN, buff=0.25)
         obj = objectives_card([
             r"choosing a question; \ reading a paper; \ a precise conjecture",
-            r"a theorem with its proof; \ a preregistered simulation study, \ reported whatever it shows",
+            r"a theorem with its proof; \ a protocol-guided simulation study, \ reported whatever it shows",
             r"a real application with known selection; \ writing, \ review and reproducibility",
             r"the full Coverage Board; \ the completed transcript; \ where to go next",
         ], color=S.ACCENT, font_size=26)
         prereq = note(r"prerequisites: \ everything").to_corner(DL, buff=0.3)
         built = note(r"built: \ the thesis, \ \texttt{statkit.thesis}, \ the board mosaic").to_corner(DR, buff=0.3)
         with self.voiceover(
-            "<bookmark mark='a'/> Part sixty-five: the dissertation. <bookmark mark='b'/> Choosing a question; reading the "
-            "papers; stating a conjecture precisely; proving a theorem; a simulation study whose protocol was written "
-            "before it ran; an application to real data; writing and review; and then the whole degree, every promise on "
-            "the Coverage Board, the completed transcript, and the road beyond the series."
+            "<bookmark mark='a'/> Part sixty-five: the dissertation. <bookmark mark='b'/> Choosing a question; reading the papers; stating a conjecture precisely; proving a theorem; a simulation study whose original protocol is preserved alongside a transparent post hoc QA amendment; an application to real data; writing and review; and then the whole degree, every promise on the Coverage Board, the completed transcript, and the road beyond the series."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head, shift=UP * 0.2))
@@ -129,12 +126,7 @@ class Hook(LectureMixin, VoiceoverScene):
 
     def doctorate(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> What a doctorate certifies. <bookmark mark='b'/> Not that its author knows everything "
-            "in the field: the earlier parts' exams did that. <bookmark mark='c'/> That its author has added something to "
-            "what is known, however small, and can defend it: state it precisely, prove what can be proved, test what can be "
-            "tested, and say plainly where it stops. <bookmark mark='d'/> A committee of experts reads it, as referees "
-            "would, and asks the questions chapter seven anticipates. The rest of this part is that process, at the scale of "
-            "one question.",
+            "<bookmark mark='a'/> A doctorate is a supervised research qualification assessed by a university, rather than a checklist of topics. <bookmark mark='b'/> This series' exams and transcript are teaching metaphors; watching the course does not award a degree or establish mastery of everything in statistics. <bookmark mark='c'/> A dissertation typically contributes defensible knowledge: formulate a question, establish what follows under assumptions, test computational claims and state limitations. <bookmark mark='d'/> We illustrate that workflow on one small conformal-prediction problem. The result is a teaching derivation and reproducible study, with no claim that its theorem is novel or that a committee has examined this lesson.",
             [(r"\text{not}", r":", r"\text{knowing everything}", 40),
              (r"\text{but}", r":", r"\text{adding something, \ defensibly}", 40),
              (r"\text{how}", r":", r"\text{state, \ prove, \ test, \ limit}", 40),

@@ -6,7 +6,7 @@ PROBLEMS = [
     r"Show that weighted conformal with weights $c\,\hat w$ gives the same set for every constant $c > 0$.",
     r"Show that $\mathrm{TV}(N(a, 1), N(b, 1)) = 2\Phi(|a - b|/2) - 1$.",
     r"Show that reweighting $N(0, 1)$ by $e^{\lambda\mu x}$ gives $N(\lambda\mu, 1)$.",
-    r"Show that if the scores do not depend on $x$, \ unweighted split conformal covers $Q$ at $\ge 1 - \alpha$ under any covariate shift.",
+    r"Show that if the conditional score law is constant in $x$, with an independently trained score, \ unweighted split conformal covers $Q$ at $\ge 1 - \alpha$ under any covariate shift.",
     r"Show that $|Q(A) - \tilde Q(A)| \le \mathrm{TV}(Q_X, \tilde Q_X)$ when $Q$ and $\tilde Q$ share $P_{Y \mid X}$.",
     r"Design a simulation, \ with ADEMP, \ that could refute the theorem if its independence assumption were dropped.",
 ]
@@ -28,7 +28,7 @@ class Outro(LectureMixin, VoiceoverScene):
         items = [
             (r"the question: \ coverage of weighted conformal with estimated weights", THESISC),
             (r"the theorem: \ loss $\le \mathrm{TV}(P_{\hat w}, Q)$, \ with weights fixed in advance", THESISC),
-            (rf"the study: \ the bound held in {held} of {len(st)} cells", HONC),
+            (rf"the study: \ estimates compatible with bound in {held} of {len(st)} cells", HONC),
             (rf"NHANES: \ 73\% unweighted, \ {100 * nh['coverage']['estimated']:.0f}\% with estimated weights", ESTC),
             (r"open: \ cross-fitted weights, \ and a bound that sees the scores", S.ACCENT),
         ]
@@ -39,8 +39,8 @@ class Outro(LectureMixin, VoiceoverScene):
         rows.next_to(head, DOWN, buff=0.6)
         with self.voiceover(
             f"<bookmark mark='a'/> The dissertation in five lines. A question that matters to every deployed model whose "
-            f"population drifts. A theorem, with weights fixed in advance: coverage falls by at most a total variation "
-            f"distance. <bookmark mark='b'/> A preregistered study in which the bound held in {held} of {len(st)} cells. "
+            f"population drifts. A teaching theorem, conditional on independently trained weights and score model: coverage falls by at most a total variation "
+            f"distance. <bookmark mark='b'/> A post hoc corrected study whose estimates were compatible with the bound in {held} of {len(st)} cells. "
             f"An application in which estimated weights restored coverage from seventy-three to "
             f"{100 * nh['coverage']['estimated']:.0f} percent. <bookmark mark='c'/> And what is still open: weights "
             f"estimated on the same data, and a sharper bound that looks at the scores as well as the covariates."

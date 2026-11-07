@@ -1,0 +1,22 @@
+{
+  ".cache/stats65/bound.json": {
+    "bytes": 9506,
+    "sha256": "332b6961eca16ba99b7e724495a57fc3b0bcafd96374528aeb6d79ae15655bf3"
+  },
+  ".cache/stats65/pilot.json": {
+    "bytes": 1629,
+    "sha256": "d7ea51709e80f60a6ded706f9099d7968f2310da3d8e47470771b95ff5424864"
+  },
+  ".cache/stats65/study.json": {
+    "bytes": 14664,
+    "sha256": "5aac8f8ef0ab7748340a94b4d43cb4b105810e1488a9595256c637085e208978"
+  },
+  ".cache/stats65/nhanes.json": {
+    "bytes": 1456,
+    "sha256": "2292194e8d150df82f1290046e0dcc2566554f5c61469c8aee28d44acbc3ce8c"
+  },
+  ".cache/stats65/board.json": {
+    "bytes": 1414,
+    "sha256": "5f6c7888cbf78610cc01158e444725102bca18b87b342668c2ac55b7ad6d821e"
+  }
+}

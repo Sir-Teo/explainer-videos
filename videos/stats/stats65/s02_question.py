@@ -47,13 +47,7 @@ class Question(LectureMixin, VoiceoverScene):
 
     def chosen(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The setting, from Part fifty-seven. <bookmark mark='b'/> Calibration data come from a "
-            "source distribution P, and the test point from a target Q with the same conditional law of Y given X, but "
-            "different covariates: covariate shift. <bookmark mark='c'/> Ryan Tibshirani, Rina Foygel Barber, Emmanuel "
-            "Candes and Aaditya Ramdas showed in 2019 that weighting each calibration score by the likelihood ratio w of x "
-            "restores the guarantee: coverage at least one minus alpha under Q. <bookmark mark='d'/> But w is the density of "
-            "Q over the density of P, which nobody knows. It is estimated, usually with Part sixty's classifier trick, and "
-            "then the guarantee is not proved.",
+            "<bookmark mark='a'/> The setting, from Part fifty-seven. <bookmark mark='b'/> Calibration data come from a source distribution P, and the test point from a target Q with the same conditional law of Y given X, but different covariates: covariate shift. <bookmark mark='c'/> Ryan Tibshirani, Rina Foygel Barber, Emmanuel Candes and Aaditya Ramdas showed in 2019 that weighting each calibration score by the likelihood ratio w of x restores the guarantee: coverage at least one minus alpha under Q. <bookmark mark='d'/> But w is the density of Q over the density of P, which nobody knows. It is estimated, usually with Part sixty's classifier trick, and the oracle theorem no longer applies automatically. Existing robustness results analyze estimated weights; this lesson derives one simple bound rather than establishing a new unsolved field.",
             [(r"\text{covariate shift}", r":", r"P_X \ne Q_X, \ \ P_{Y \mid X} = Q_{Y \mid X}", 40),
              (r"\text{weights}", r":", r"w(x) = dQ_X / dP_X", 40),
              (r"\text{known } w", r"\Rightarrow", r"Q(Y \in \hat C(X)) \ge 1 - \alpha", 40),
@@ -65,7 +59,7 @@ class Question(LectureMixin, VoiceoverScene):
         self.lad_voiceover(
             "<bookmark mark='a'/> Why it matters. <bookmark mark='b'/> A model trained on one hospital's patients and "
             "deployed at another, a survey's volunteers standing in for a population, a benchmark's questions for a user's: "
-            "each is covariate shift, and each uses estimated weights if it corrects at all. <bookmark mark='c'/> A "
+            "each can involve covariate shift, but equal conditional outcome laws must be justified rather than assumed from different populations alone, and each uses estimated weights if it corrects at all. <bookmark mark='c'/> A "
             "practitioner needs to know whether the promised ninety percent is still about ninety, or sixty. <bookmark "
             "mark='d'/> The question, stated so it can be answered: by how much can coverage fall, as a function of how wrong "
             "the weights are?",
@@ -78,12 +72,7 @@ class Question(LectureMixin, VoiceoverScene):
 
     def scope(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Cutting the question to size. <bookmark mark='b'/> Split conformal only, not full "
-            "conformal or jackknife+, because its calibration set is cleanly separate. <bookmark mark='c'/> Covariate shift "
-            "only, with the conditional law of Y given X unchanged, because that is the setting where weights are the "
-            "right fix. <bookmark mark='d'/> Weights estimated on data independent of the calibration set, because that is "
-            "the case a clean proof can reach; the harder case, where the same data estimate both, is left open and said "
-            "to be open.",
+            "<bookmark mark='a'/> Cutting the question to size. <bookmark mark='b'/> Split conformal only, not full conformal or jackknife+, because its calibration set is cleanly separate. <bookmark mark='c'/> Covariate shift only, with the conditional law of Y given X unchanged, because that is the setting where weights are the right fix. <bookmark mark='d'/> Weights estimated on data independent of the calibration set, because that is the case a clean proof can reach; same-sample estimation and cross-fitting need additional analysis outside this proof. That does not mean all such cases are globally unsolved in the literature.",
             [(r"\text{method}", r":", r"\text{split conformal only}", 40),
              (r"\text{shift}", r":", r"\text{covariate shift only}", 40),
              (r"\text{weights}", r":", r"\text{estimated on independent data}", 40),
