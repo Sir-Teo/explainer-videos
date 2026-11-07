@@ -26,21 +26,20 @@ class Paths(VoiceoverScene):
         self.play(FadeOut(c))
 
     def inverse(self):
-        g = axes([-3.2, 3.2], [0, 1], x_length=7.0, y_length=4.2, xlabel=r"$x$", ylabel=r"$u = \Phi(x)$",
+        u = np.random.default_rng(3).random(160)
+        x = ndtri(u)
+        xr = data_range(x, [-3.2, 3.2])
+        g = axes(xr, [0, 1], x_length=7.0, y_length=4.2, xlabel=r"$x$", ylabel=r"$u = \Phi(x)$",
                  xticks=[-3, -2, -1, 0, 1, 2, 3], yticks=[0, 0.5, 1], font_size=16)
         g.to_edge(LEFT, buff=0.8).shift(DOWN * 0.2)
         ax = g.ax
-        xs = np.linspace(-3.2, 3.2, 200)
+        xs = np.linspace(*xr, 200)
         cdf = curve(ax, xs, ndtr(xs), SPOT, stroke_width=3)
-        u = np.random.default_rng(3).random(160)
-        x = ndtri(u)
-        bins = np.linspace(-3.2, 3.2, 25)
+        bins = np.linspace(*xr, 25)
         counts = np.zeros(len(bins) - 1)
         stacks = VGroup()
         drops = []
         for ui, xi in zip(u, x):
-            if abs(xi) >= 3.2:
-                continue
             b = int(np.searchsorted(bins, xi) - 1)
             counts[b] += 1
             x_c = 0.5 * (bins[b] + bins[b + 1])
@@ -60,7 +59,7 @@ class Paths(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(g), Create(cdf), FadeIn(side))
             for ui, xi, sq in drops[:4]:
-                p0, p1, p2 = ax.c2p(-3.2, ui), ax.c2p(xi, ui), ax.c2p(xi, 0)
+                p0, p1, p2 = ax.c2p(xr[0], ui), ax.c2p(xi, ui), ax.c2p(xi, 0)
                 path = VGroup(Line(p0, p1, stroke_color=GREY_B, stroke_width=1.5),
                               Line(p1, p2, stroke_color=GREY_B, stroke_width=1.5))
                 self.play(Create(path), run_time=0.6)
@@ -77,7 +76,8 @@ class Paths(VoiceoverScene):
         u1, u2 = g.random(450), g.random(450)
         r = np.sqrt(-2 * np.log(u1))
         z1, z2 = r * np.cos(2 * np.pi * u2), r * np.sin(2 * np.pi * u2)
-        plane = axes([-3.5, 3.5], [-3.5, 3.5], x_length=5.0, y_length=5.0, xlabel=r"$Z_1$", ylabel=r"$Z_2$",
+        lim = float(np.max(np.hypot(z1, z2))) * 1.05
+        plane = axes([-lim, lim], [-lim, lim], x_length=5.0, y_length=5.0, xlabel=r"$Z_1$", ylabel=r"$Z_2$",
                      xticks=[-3, 0, 3], yticks=[-3, 0, 3], font_size=15).to_edge(LEFT, buff=1.0).shift(DOWN * 0.1)
         ax = plane.ax
         t = ValueTracker(0.0)
@@ -85,7 +85,7 @@ class Paths(VoiceoverScene):
         def pts():
             rr = t.get_value()
             y1, y2 = z1, rr * z1 + np.sqrt(1 - rr * rr) * z2
-            return VGroup(*[Dot(ax.c2p(np.clip(a, -3.5, 3.5), np.clip(b, -3.5, 3.5)), radius=0.025, color=SPOT)
+            return VGroup(*[Dot(ax.c2p(a, b), radius=0.025, color=SPOT)
                             for a, b in zip(y1, y2)])
 
         cloud = always_redraw(pts)
@@ -99,12 +99,7 @@ class Paths(VoiceoverScene):
                           rf"$\rho = {rho}$, Heston's correlation between price and variance", 5.6, 19, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).to_edge(RIGHT, buff=0.5)
         with self.voiceover(
-            "A second way, from George Box and Mervin Muller in 1958, makes two normals at once. One uniform sets a "
-            "radius, the square root of minus twice its log; the other sets an angle. The result is a round cloud of "
-            "independent pairs. <bookmark mark='a'/> Models need correlated noise: Heston's price and variance move "
-            f"with correlation {rho}. Multiply the pair by a lower-triangular matrix L whose product with its "
-            "transpose is the covariance, the Cholesky factor, and watch the round cloud shear into the tilted "
-            "ellipse the model wants."
+            f"Box and Muller's construction makes two independent standard normals from two independent uniforms: a radius equal to the square root of minus twice the first log, and an independent uniform angle. All 450 saved pairs are drawn without moving tail observations to an edge. <bookmark mark='a'/> For correlation {rho}, use the two rows of this Cholesky factor. The transformed vector has the target covariance because L times its transpose equals that covariance. The sample cloud illustrates the transformation; a finite cloud does not itself prove its distribution or independence."
         ) as vo:
             self.play(FadeIn(plane), FadeIn(cloud), FadeIn(eq[0]), FadeIn(eq[1]))
             vo.wait_until("a")
@@ -165,11 +160,7 @@ class Paths(VoiceoverScene):
         txt = wrapped_label(r"fed the identity matrix, the function returns its own $L$; multiply out $LL^\top$ and "
                             r"compare with $\min(t_i, t_j)$", 4.6, 19, GREY_A).to_corner(UR, buff=0.5)
         with self.voiceover(
-            "Here is the House's Brownian bridge, twelve lines. The first normal fixes where the path ends; each pass "
-            "halves the gaps, placing every midpoint at its conditional mean given its two neighbours, plus its "
-            "conditional standard deviation times the next normal. <bookmark mark='a'/> Feed it the identity "
-            "matrix and it hands back its own L. Multiply L by its transpose and compare with the minimum of the "
-            "times: they agree to the last bit of double precision, for eight steps and for sixty-four."
+            "The bridge assigns the first normal to the endpoint and the next ones to conditional midpoints. At each midpoint, add the conditional standard deviation times an independent normal to the conditional mean. This implementation uses a uniform grid with a power-of-two number of steps. <bookmark mark='a'/> Feeding an identity matrix reveals its linear map L. For eight and sixty-four steps, L times its transpose agrees with the Brownian covariance to the displayed floating-point roundoff. This is a covariance check, rather than a claim of exact arithmetic or bitwise equality between different path constructions."
         ) as vo:
             self.play(FadeIn(card), FadeIn(txt))
             vo.wait_until("a")
@@ -188,7 +179,7 @@ class Paths(VoiceoverScene):
                                     fill_opacity=0.9), Text(str(j), font_size=12, color=WHITE)))
         tiles.arrange_in_grid(rows=4, cols=n, buff=0.06).to_edge(UP, buff=0.9)
         order = list(np.random.default_rng(3).permutation(len(tiles)))
-        head = label(r"path $j$ draws from Philox(key $= 2026$, counter from $j$): any order, the same numbers",
+        head = label(r"path $j$: Philox(key $= [2026,j]$); same implementation, any evaluation order",
                      font_size=21, color=GREY_A).next_to(tiles, DOWN, buff=0.25)
         stats = VGroup(
             MathTex(rf"\text{{1{{,}}000 paths, shuffled order: identical bits}}\ ({'yes' if rng['philox_same'] else 'no'})",
@@ -204,16 +195,7 @@ class Paths(VoiceoverScene):
                     font_size=21).to_corner(DR, buff=0.3)
         ans = MathTex(r"(0.9,\ \sqrt{0.19}) = (0.9,\ 0.436)", font_size=28, color=GOOD).next_to(q, LEFT, buff=0.4).align_to(q, DOWN)
         with self.voiceover(
-            "Last, where the uniforms come from on a real machine. numpy's default generator is a sequential "
-            "stream: each number follows from the state the last one left. Which numbers a path gets then depends on "
-            "how many were drawn before it, and a rerun of one trade's paths, or ten thousand GPU threads, need "
-            "something else. <bookmark mark='a'/> Counter-based generators, "
-            "like Philox from D. E. Shaw Research in 2011, make each number a pure function of a key and a counter. "
-            "Give path j its own key and compute the paths in any order: the numbers are identical, bit for bit. "
-            "<bookmark mark='b'/> Both normal recipes pass a Kolmogorov–Smirnov test on a million draws; and a Python "
-            f"loop over payoffs is about {rng['speedup']:,.0f} times slower than one vectorised line. <bookmark mark='c'/> Pause and predict: the Cholesky factor for correlation 0.9. "
-            "<bookmark mark='d'/> Its second row is 0.9 and the square root of 0.19."
-            " With paths in hand, the work is to need fewer of them. Next: variance reduction."
+            f"A path must receive the same random stream when scheduling changes. A sequential generator can use fixed blocks or skip-ahead; this example instead gives path j the Philox key [2026,j]. <bookmark mark='a'/> With the generator, normal transformation and software environment fixed, evaluating these paths in another order reproduces their bits. This demonstrates scheduling reproducibility, not a proof that every chosen stream is statistically independent or bit-identical on every device. <bookmark mark='b'/> The two normal samples have the displayed Kolmogorov–Smirnov statistics. These marginal diagnostics do not establish serial independence or all tail properties. The recorded Python-to-vectorized timing ratio is {rng['speedup']:,.0f} for this 100,000-payoff benchmark on shared hardware. <bookmark mark='c'/> For unit variances and correlation 0.9, what is the second Cholesky row? <bookmark mark='d'/> It is 0.9 and the square root of 0.19. Next, use fewer paths through variance reduction."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(tiles[k]) for k in order], lag_ratio=0.03, run_time=3), FadeIn(head))
             vo.wait_until("a")

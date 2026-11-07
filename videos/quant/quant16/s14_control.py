@@ -7,15 +7,15 @@ from videos.quant.quant16.common import BAD, GOOD, METHOD_COL, OPT, PART, SPOT, 
 
 
 def hist_bars(ax, values, lo, hi, bins, color, top=None, opacity=0.75):
-    h, e = np.histogram(np.clip(values, lo, hi), bins=bins, range=(lo, hi))
-    top = top or max(h.max(), 1)
+    h, e = np.histogram(values, bins=bins, range=(lo, hi))
+    top = len(values)
     g = VGroup()
     for k in range(bins):
         if h[k] == 0:
             continue
         x0, x1 = ax.c2p(e[k], 0)[0], ax.c2p(e[k + 1], 0)[0]
-        y0, y1 = ax.c2p(0, 0)[1], ax.c2p(0, min(h[k] / top, 1.0))[1]
-        g.add(Rectangle(width=max(x1 - x0 - 0.01, 0.01), height=max(y1 - y0, 0.005), stroke_width=0, fill_color=color,
+        y0, y1 = ax.c2p(0, 0)[1], ax.c2p(0, h[k] / top)[1]
+        g.add(Rectangle(width=max(x1 - x0 - 0.01, 0.01), height=y1 - y0, stroke_width=0, fill_color=color,
                         fill_opacity=opacity).move_to([(x0 + x1) / 2, (y0 + y1) / 2, 0]))
     return g
 
@@ -43,19 +43,29 @@ class Control(VoiceoverScene):
         EC = c["geo_exact"]
         sg = c["summary"]["geo"]
         ss = c["summary"]["stock"]
-        g = axes([0, 25], [0, 25], x_length=5.0, y_length=4.6, xlabel=r"geometric Asian $C$ (known exactly)",
+        gx = [0, float(np.max(Cg)) * 1.06]
+        gy = [0, float(np.max(Y)) * 1.06]
+        g = axes(gx, gy, x_length=5.0, y_length=4.6, xlabel=r"geometric payoff $C$ (known expectation)",
                  ylabel=r"arithmetic Asian $Y$", xticks=[0, 10, 20], yticks=[0, 10, 20], font_size=15)
         g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.25)
         ax = g.ax
-        dots = VGroup(*[Dot(ax.c2p(min(a, 25), min(b, 25)), radius=0.02, color=SPOT) for a, b in zip(Cg, Y)])
+        dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.02, color=SPOT) for a, b in zip(Cg, Y)])
         b = ValueTracker(0.0)
         mx, my = Cg.mean(), Y.mean()
-        line = always_redraw(lambda: Line(ax.c2p(0, np.clip(my - b.get_value() * mx, -2, 27)),
-                                          ax.c2p(25, np.clip(my + b.get_value() * (25 - mx), -2, 27)), stroke_color=OPT,
-                                          stroke_width=3))
-        h = axes([-6, 18], [0, 1], x_length=5.0, y_length=3.4, xlabel=r"$Y - b\,(C - \mathbb{E}C)$", xticks=[0, 10],
+        def fitted_segment():
+            slope = b.get_value()
+            intercept = my - slope * mx
+            left, right = gx
+            if slope > 1e-12:
+                left = max(left, (gy[0] - intercept) / slope)
+                right = min(right, (gy[1] - intercept) / slope)
+            return Line(ax.c2p(left, intercept + slope * left), ax.c2p(right, intercept + slope * right),
+                        stroke_color=OPT, stroke_width=3)
+        line = always_redraw(fitted_segment)
+        hr = data_range(Y, Y - sg["b"] * (Cg - EC))
+        h = axes(hr, [0, 1], x_length=5.0, y_length=3.4, xlabel=r"$Y - b\,(C - \mathbb{E}C)$", ylabel=r"fraction of saved paths per bin", xticks=[0, 10],
                  font_size=15).to_edge(RIGHT, buff=0.6).shift(DOWN * 0.6)
-        hist = always_redraw(lambda: hist_bars(h.ax, Y - b.get_value() * (Cg - EC), -6, 18, 60, OPT, top=900))
+        hist = always_redraw(lambda: hist_bars(h.ax, Y - b.get_value() * (Cg - EC), *hr, 60, OPT))
         rd = VGroup(readout(r"b =", lambda: b.get_value(), digits=3, font_size=28, color=OPT),
                     readout(r"\text{sd} =", lambda: float(np.std(Y - b.get_value() * (Cg - EC))), digits=3, font_size=28,
                             color=OPT)).arrange(RIGHT, buff=1.0).next_to(h, UP, buff=0.25)
@@ -67,15 +77,7 @@ class Control(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_corner(UR, buff=0.35)
         src = illustration(r"arithmetic Asian call, 64 fixings, one year; 2{,}000 paths drawn, 20{,}000 $\times$ 5 seeds counted")
         with self.voiceover(
-            "Chapter one's error is sigma over root n; we can change the sigma. The most powerful trick is a control "
-            "variate. Each dot is one path of an Asian option on sixty-four fixings: across, "
-            "the payoff of the geometric average, whose price Kemna and Vorst wrote down in 1990; up, the arithmetic "
-            "average we want, which has no formula. <bookmark mark='a'/> They are almost the same number. So subtract "
-            "b times the geometric payoff's error, whose mean is known to be zero. As b turns from zero to the "
-            "regression slope, watch the histogram on the right. <bookmark mark='b'/> It collapses from a wide bell to a "
-            f"needle: with a correlation of {sg['rho']:.4f}, the variance falls by a factor of about "
-            f"{sg['ratio']:,.0f}. <bookmark mark='c'/> The stock itself, a weaker control, buys only "
-            f"{ss['ratio']:.1f} times."
+            f"A control variate subtracts b times a centered quantity whose expectation is known. Each of these 2,000 points is a discounted Asian payoff pair, with 64 fixings. The geometric payoff varies by path; its expectation has a formula. All saved points and residuals remain visible. <bookmark mark='a'/> Turn b from zero toward the fitted slope. The histograms share fixed bins and divide by all 2,000 observations, so the changing height represents concentration rather than a separate normalization. <bookmark mark='b'/> Across five original 20,000-path runs, the mean reported geometric-control variance ratio is {sg['ratio']:,.0f}, with mean correlation {sg['rho']:.4f}. These are empirical summaries. <bookmark mark='c'/> The stock-control ratio is {ss['ratio']:.1f} in this example. Gains depend on payoff, model and the cost of producing the control."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.0005, run_time=2))
             vo.wait_until("a")
@@ -103,8 +105,8 @@ class Control(VoiceoverScene):
                   r"\sum_k p_k(\mu_k - \mu)^2\Big)", font_size=34, colors={r"\operatorname{Var}_{\text{strat}}": GOOD}),
         ]
         whys = [why(r"expand the square: a parabola in $b$"),
-                why(r"set its derivative to zero, then substitute; estimating $b^*$ from the same paths adds only an "
-                    r"$O(1/n)$ bias"),
+                why(r"set its derivative to zero, then substitute; a fixed population coefficient gives the identity; same-sample fitting may bias it (often "
+                    r"$O(1/n)$ under regularity); an independent pilot avoids this dependence"),
                 why(r"pair each normal with its mirror; for a monotone payoff $\rho \le 0$, so at equal work the gain "
                     r"is $1/(1 + \rho)$"),
                 why(r"proportional allocation, one stratum at a time: the law of total variance drops the "
@@ -114,16 +116,7 @@ class Control(VoiceoverScene):
         ans = MathTex(rf"\rho_{{\text{{call}}}} = {an['call']:+.2f},\ \ \rho_{{\text{{straddle}}}} = {an['straddle']:+.2f}",
                       font_size=28, color=GOOD).next_to(q, LEFT, buff=0.5).align_to(q, DOWN)
         with self.voiceover(
-            "Why it works. The variance of the controlled estimator is a parabola in b. <bookmark mark='a'/> Its "
-            "minimum sits at the covariance over the control's variance, the regression slope, and what is left is the "
-            f"variance times one minus the squared correlation. A correlation of {c['summary']['geo']['rho']:.4f} "
-            f"leaves {1 - c['summary']['geo']['rho'] ** 2:.4f} of it. <bookmark mark='b'/> Antithetic pairs average each path with its mirror image. The pair's variance is "
-            "half the variance times one plus the correlation between a path and its mirror, which is negative for a "
-            f"payoff that only rises: for the call it is {an['call']:.2f}, so pairs are worth twice the paths. "
-            "<bookmark mark='c'/> And stratification splits the draws into equally likely slices, with the right "
-            "number of paths in each. The law of total variance shows what disappears: the spread between slices. "
-            "<bookmark mark='d'/> Pause and predict: mirror pairs for a straddle? "
-            f"Its payoff falls and then rises, the correlation is {an['straddle']:+.2f}, and the pairs make it worse."
+            f"For a fixed coefficient, expanding the variance gives a quadratic in b. <bookmark mark='a'/> If the control variance is positive, its population minimum is covariance divided by control variance, leaving the factor one minus squared correlation. Estimating b from the same observations may introduce finite-sample bias; a coefficient fitted on an independent pilot remains unbiased when frozen for production. <bookmark mark='b'/> For scalar monotone payoffs, antithetic pairing can give negative correlation. At equal payoff evaluations, the variance ratio is one over one plus that correlation: about two for this call, whose measured correlation is {an['call']:.2f}. <bookmark mark='c'/> Stratification with independent samples inside strata and proportional allocation removes the between-strata component of variance. Integer allocation and setup costs still matter. <bookmark mark='d'/> For the straddle, the measured mirror correlation is {an['straddle']:+.2f}; pairing increases variance at equal evaluations in this benchmark."
         ) as vo:
             for i, mk in enumerate("abc"):
                 step(i)
@@ -147,17 +140,19 @@ class Control(VoiceoverScene):
         rnd = VGroup(*[Dot(line.n2p(x) + DOWN * 0.45, radius=0.07, color=GREY_B) for x in ur])
         lab = VGroup(label(r"one uniform per sixteenth (stratified)", font_size=20, color=GOOD).next_to(line, UP, buff=0.25),
                      label(r"sixteen independent uniforms", font_size=20, color=GREY_B).next_to(rnd, DOWN, buff=0.2))
-        h = axes([7, 14], [0, 1], x_length=6.0, y_length=2.8, xlabel=r"estimate of the call from 64 paths (500 runs)",
+        hr = data_range(sm["plain"], sm["strat"])
+        height = max(np.histogram(sm[k], bins=40, range=hr)[0].max() / len(sm[k]) for k in ["plain", "strat"])
+        h = axes(hr, [0, height * 1.15], x_length=6.0, y_length=2.8, xlabel=r"call estimate: 64 paths, 500 runs", ylabel=r"fraction of runs per bin",
                  xticks=[8, 10.45, 13], xfmt=lambda v: f"{v:g}", font_size=15).to_edge(LEFT, buff=0.8).to_edge(DOWN, buff=0.5)
-        hp = hist_bars(h.ax, sm["plain"], 7, 14, 40, GREY_B, top=110, opacity=0.6)
-        hs = hist_bars(h.ax, sm["strat"], 7, 14, 40, GOOD, top=110, opacity=0.8)
+        hp = hist_bars(h.ax, sm["plain"], *hr, 40, GREY_B, opacity=0.6)
+        hs = hist_bars(h.ax, sm["strat"], *hr, 40, GOOD, opacity=0.8)
         nums = VGroup(
             MathTex(rf"n = {st['n']:,}:\ \ 16\ \text{{strata}}\ \div {(st['plain_sd'] / st['s16_sd']) ** 2:.0f},\ \ "
                     rf"256\ \div {(st['plain_sd'] / st['s256_sd']) ** 2:.0f}".replace(",", "{,}"), font_size=28, color=GOOD),
             MathTex(rf"\text{{Latin hypercube, 64-dim Asian:}}\ \div {(lh['mc_sd'] / lh['lhs_sd']) ** 2:.1f}", font_size=28,
                     color=QC.THETA),
             wrapped_label(r"a Latin hypercube stratifies every coordinate at once (one point in each row and column); "
-                          r"moment matching rescales the normals to mean 0 and variance 1 exactly", 5.2, 18, GREY_A),
+                          r"moment matching imposes sample moments, changing the joint sampling law; nonlinear estimates may be biased", 5.2, 18, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4).to_edge(DOWN, buff=0.6)
         with self.voiceover(
             "Stratification, live. Cut the unit interval into sixteen equal pieces and put exactly one uniform in "
