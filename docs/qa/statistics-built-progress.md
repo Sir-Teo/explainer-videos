@@ -7,7 +7,7 @@ The branch contains **65 parts and 888 chapters**. All manifests resolve to exis
 
 Parts 1–24 have completed chapter-by-chapter English source/visual passes, recorded in their evidence folders and commits. [Part 23](evidence/stats23-polish-20261107/README.md) includes thirteen endpoint captures, twelve native 1080p cases, eleven motion checks and a 333.932-second narrated Cluster preview with nine clean speech checks. Part 26 also has a completed English source/visual pass: fifteen chapter captures, fourteen native and motion checks and an eight-line narrated Hierarchy preview. Part 25 also has a completed English source/visual pass: fifteen chapter captures, fourteen native and motion checks, and a 276.199-second GLMM preview with seven clean speech checks. Parts 27–30 are progressing through their remaining verification phases; the table below distinguishes them.
 
-A [shared World programme-name collision](evidence/world-programmes-20261107/README.md) has been corrected. The [Coverage Board now preserves empirical Monte Carlo uncertainty](evidence/board-mc-20261107/README.md) for correlated intervals within one simulation. Legacy-row values are unchanged. Parts 1–22 retain the visual inspections recorded at their commits; their conservative shared-code fingerprints are being refreshed after the Board correction. Parts 1–5 have completed that latest refresh; further parts remain queued. Part 23's final receipts include the corrected shared source.
+A [shared World programme-name collision](evidence/world-programmes-20261107/README.md) has been corrected. The [Coverage Board now preserves empirical Monte Carlo uncertainty](evidence/board-mc-20261107/README.md) for correlated intervals within one simulation. Legacy-row values are unchanged. Parts 1–22 retain the visual inspections recorded at their commits; their conservative shared-code fingerprints are being refreshed after the Board correction. Parts 1–6 have completed that latest refresh; further parts remain queued. Part 23's final receipts include the corrected shared source.
 
 The earlier broad statistics/QA run passed 645 tests and five subtests. The related Parts 23–27 regression passed 108 tests and five subtests after the latest shared corrections; individual evidence folders retain their focused numerical checks and input hashes. These results do not establish production playback approval.
 
@@ -58,7 +58,7 @@ No part is signed off for bilingual production. The branch has zero narration_zh
 | 29 | `stats29` | 14 | Scientific source corrections complete; visual verification in progress |
 | 30 | `stats30` | 12 | Scientific source corrections complete; visual verification in progress |
 | 31 | `stats31` | 12 | Scientific source corrections complete; visual verification in progress |
-| 32 | `stats32` | 13 | Not yet reviewed chapter by chapter |
+| 32 | `stats32` | 13 | Source review and numerical verification in progress |
 | 33 | `stats33` | 14 | Not yet reviewed chapter by chapter |
 | 34 | `stats34` | 13 | Not yet reviewed chapter by chapter |
 | 35 | `stats35` | 16 | Not yet reviewed chapter by chapter |
