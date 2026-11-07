@@ -1,0 +1,23 @@
+{
+  "part": "stats26",
+  "fingerprint": "e4079d7d9a3edf50e7dd8de8537919ed5c45b3cb1255462151c9f20029190b4c",
+  "english_endpoints": 15,
+  "native_1080_endpoints": 14,
+  "silent_motion_chapters": 14,
+  "audio_scene": "Hierarchy",
+  "audio_lines": 8,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats26/en/Hierarchy/videos/s03_hierarchy/480p15/Hierarchy.mp4",
+    "seconds": 225.799023,
+    "narration_sha256": "70e454396a7143598b750384f7d48bc7755fc1390b32c47ecc9338ac215acfde",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 226 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 226 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

@@ -1,0 +1,106 @@
+{
+ "video": "stats26",
+ "scene": "Hierarchy",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 8,
+ "lines": [
+  {
+   "raw": "Chapter two. Hierarchical models.",
+   "spoken": "Chapter two. Hierarchical models.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/8dbd1ccf8376ad59.wav",
+   "duration": 2.85,
+   "tokens": 4,
+   "peak": 0.393035888671875,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The model has three levels. Each school's estimate is its true effect plus noise of known size. <bookmark mark='b'/> The true effects come from a normal population with mean mu and spread tau. <bookmark mark='c'/> And mu and tau get a prior, here flat, a choice chapter three examines. <bookmark mark='d'/> Bayes's rule then gives one joint posterior for all ten unknowns: eight effects, a mean and a spread.",
+   "spoken": "The model has three levels. Each school's estimate is its true effect plus noise of known size. The true effects come from a normal population with mean mu and spread tau. And mu and tau get a prior, here flat, a choice chapter three examines. Bayes's rule then gives one joint posterior for all ten unknowns: eight effects, a mean and a spread.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/4c17f259a5347d4a.wav",
+   "duration": 22.15,
+   "tokens": 63,
+   "peak": 0.6231689453125,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Ten dimensions sound hard, but the posterior factors. <bookmark mark='b'/> Integrating out the effects and the mean leaves a one-dimensional posterior for tau, which a wide nonuniform grid approximates, checked against adaptive integration to infinity. <bookmark mark='c'/> Given tau, the mean is normal, centred at a precision-weighted average of the schools. <bookmark mark='d'/> Given both, each school's effect is Part 15's normal update: a weighted average of its own estimate and the population mean. Draw tau, then mu, then the effects, and the conditional normal steps are exact, while tau uses a checked numerical approximation. These independent draws need no Markov chain.",
+   "spoken": "Ten dimensions sound hard, but the posterior factors. Integrating out the effects and the mean leaves a one-dimensional posterior for tau, which a wide nonuniform grid approximates, checked against adaptive integration to infinity. Given tau, the mean is normal, centred at a precision-weighted average of the schools. Given both, each school's effect is Part 15's normal update: a weighted average of its own estimate and the population mean. Draw tau, then mu, then the effects, and the conditional normal steps are exact, while tau uses a checked numerical approximation. These independent draws need no Markov chain.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/90e279de55f457c0.wav",
+   "duration": 39.35,
+   "tokens": 96,
+   "peak": 0.62738037109375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> This is the tau explorer. The top panel shows each school's estimate given tau. <bookmark mark='b'/> At tau equal to zero, every school sits at the pooled mean, seven point seven. <bookmark mark='c'/> As tau grows, each school is trusted more, and the lines fan out towards the schools' own estimates: A's climbs towards twenty-eight. <bookmark mark='d'/> The bottom panel is the posterior for tau. It is highest at zero and falls slowly: the data can't rule out identical schools, but can't rule out differences of fifteen or twenty points either. <bookmark mark='e'/> Its median is five, and its ninety-five percent interval runs from nearly zero to twenty. The Bayesian answer averages the top panel over the bottom one.",
+   "spoken": "This is the tau explorer. The top panel shows each school's estimate given tau. At tau equal to zero, every school sits at the pooled mean, seven point seven. As tau grows, each school is trusted more, and the lines fan out towards the schools' own estimates: A's climbs towards twenty-eight. The bottom panel is the posterior for tau. It is highest at zero and falls slowly: the data can't rule out identical schools, but can't rule out differences of fifteen or twenty points either. Its median is five, and its ninety-five percent interval runs from nearly zero to twenty. The Bayesian answer averages the top panel over the bottom one.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/583d932c7e5d7466.wav",
+   "duration": 38.875,
+   "tokens": 111,
+   "peak": 0.584625244140625,
+   "issues": [],
+   "elapsed": 0.04,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> What does a draw from this posterior look like? Each line is one independent numerical draw of all eight effects together, coloured by its value of tau. <bookmark mark='b'/> Draws with small tau are nearly flat: in those worlds the schools barely differ. <bookmark mark='c'/> Draws with large tau zigzag: in those worlds coaching worked very differently from school to school. <bookmark mark='d'/> The posterior is the whole collection, and every summary that follows is a summary of draws like these.",
+   "spoken": "What does a draw from this posterior look like? Each line is one independent numerical draw of all eight effects together, coloured by its value of tau. Draws with small tau are nearly flat: in those worlds the schools barely differ. Draws with large tau zigzag: in those worlds coaching worked very differently from school to school. The posterior is the whole collection, and every summary that follows is a summary of draws like these.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/05677d2200e741a1.wav",
+   "duration": 26.3,
+   "tokens": 75,
+   "peak": 0.52398681640625,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The result, school by school. In blue, each school's own estimate. <bookmark mark='b'/> In green, its posterior median and ninety-five percent interval. <bookmark mark='c'/> School A's twenty-eight becomes ten, with an interval from minus two to about thirty-two: probably a positive effect, probably much smaller than its own experiment suggested. <bookmark mark='d'/> C's minus three becomes six and a half. <bookmark mark='e'/> All are pulled towards the population mean of about eight: further than no pooling allows, not as far as complete pooling forces.",
+   "spoken": "The result, school by school. In blue, each school's own estimate. In green, its posterior median and ninety-five percent interval. School A's twenty-eight becomes ten, with an interval from minus two to about thirty-two: probably a positive effect, probably much smaller than its own experiment suggested. C's minus three becomes six and a half. All are pulled towards the population mean of about eight: further than no pooling allows, not as far as complete pooling forces.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/4762d3930a5798df.wav",
+   "duration": 28.2,
+   "tokens": 76,
+   "peak": 0.42303466796875,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The posterior draws answer any question directly, with no new theory. <bookmark mark='b'/> The probability that coaching helped more at A than at C is point six eight: suggestive, far from certain. <bookmark mark='c'/> The probability that A had the largest effect of all eight is a quarter. <bookmark mark='d'/> If we knew nothing it would be one in eight; the data have doubled it, no more. Rankings of noisy units, Part 25's league tables, come out of the posterior honestly.",
+   "spoken": "The posterior draws answer any question directly, with no new theory. The probability that coaching helped more at A than at C is point six eight: suggestive, far from certain. The probability that A had the largest effect of all eight is a quarter. If we knew nothing it would be one in eight; the data have doubled it, no more. Rankings of noisy units, Part 25's league tables, come out of the posterior honestly.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/ae45e924ee478d47.wav",
+   "duration": 24.75,
+   "tokens": 75,
+   "peak": 0.40997314453125,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Compare Part 25. Empirical Bayes plugs in an estimate of tau; here the estimate is zero, so every school would be told seven point seven, with intervals that omit uncertainty about the variance estimate. <bookmark mark='b'/> Full Bayes averages over tau's posterior, which still gives real weight to differences of fifteen points, and widens the intervals accordingly. <bookmark mark='c'/> With eight groups the difference is large. <bookmark mark='d'/> With many informative groups and a suitable model, tau can be tightly estimated and the approaches can agree closely. Group count alone is not a guarantee.",
+   "spoken": "Compare Part 25. Empirical Bayes plugs in an estimate of tau; here the estimate is zero, so every school would be told seven point seven, with intervals that omit uncertainty about the variance estimate. Full Bayes averages over tau's posterior, which still gives real weight to differences of fifteen points, and widens the intervals accordingly. With eight groups the difference is large. With many informative groups and a suitable model, tau can be tightly estimated and the approaches can agree closely. Group count alone is not a guarantee.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/5d9eb79410bb97b2.wav",
+   "duration": 34.4,
+   "tokens": 88,
+   "peak": 0.671478271484375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats26/en/Hierarchy_motion/result.json",
+ "input_sha256": "5171018a1dfe2e164bc195d3df2ecc288e9a24ebe204dedd7a2d5aed90f8f81e"
+}
