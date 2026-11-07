@@ -68,9 +68,8 @@ class Pathwise(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> In the two by two table, the space is exactly three-dimensional and we can draw it to scale. <bookmark mark='b'/> The natural estimator of the top-left cell's probability is the fraction of observations in it. Its influence function, the indicator of the cell minus point one eight, is a gradient, <bookmark mark='c'/> because differentiating the cell probability gives the inner product with that centred indicator. Consistency alone would not prove it is a gradient. <bookmark mark='d'/> Project it onto the tangent plane of the independence model: the gold arrow, the efficient influence function. <bookmark mark='e'/> The dashed segment is its interaction component, the part that independence makes irrelevant, and discarding it can only reduce the variance."
         ) as vo:
-            self.play(FadeIn(box), FadeIn(pl), FadeIn(exact_tag(r"exact: \ coordinates in an orthonormal basis of $L_2^0(P)$")))
+            self.play(FadeIn(box), FadeIn(pl), FadeIn(side[0]), FadeIn(exact_tag(r"exact: \ coordinates in an orthonormal basis of $L_2^0(P)$")))
             vo.wait_until("a")
-            self.play(FadeIn(side[0]))
             vo.wait_until("b")
             self.play(GrowArrow(a), FadeIn(side[1]))
             vo.wait_until("c")

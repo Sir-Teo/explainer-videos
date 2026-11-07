@@ -91,7 +91,7 @@ class WorldTest(VoiceoverScene):
 
     def practice(self):
         rows = fit_rows(VGroup(
-            label(r"in practice:", font_size=28, color=GREY_A),
+            label(r"Applying orthogonal estimators in practice", font_size=36, color=GREY_A),
             label(r"1. \ write down $\phi^*$ for your estimand \ (or look it up: \ Kennedy 2022)", font_size=26, color=EFFC),
             label(r"2. \ estimate every nuisance in it, \ as well as you can, \ with cross-fitting", font_size=26, color=GRADC),
             label(r"3. \ one-step or TMLE; \ SE from the empirical variance of $\hat\phi^*$", font_size=26, color=OSC),
