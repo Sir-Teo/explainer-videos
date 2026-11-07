@@ -6,11 +6,6 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs60.common import (BG, DATA, HEAD, KERN, LAM, NO, PART, YES, LogPlot, commas, grid_table, load,
                                    module_box, say_dec, say_int)
 
-_ONES = "zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen " \
-        "seventeen eighteen nineteen".split()
-_TENS = "_ _ twenty thirty forty fifty sixty seventy eighty ninety".split()
-
-
 class Tpu(VoiceoverScene):
     def construct(self):
         self.card()
