@@ -299,7 +299,8 @@ def _forest_prob(g):
 
 
 def _dml_rep(g):
-    X, t, y, ate = _dml_data(g)
+    X, t, y, sample_ate = _dml_data(g)
+    ate = 3.0  # superpopulation ATE, matching the score's influence-function SE
     q = stats.norm.ppf(0.95)
     o = ols_effect(y, t, X)
     ols_hit = abs(o[0] - ate) <= q * o[1]
@@ -322,7 +323,10 @@ def compute_dml():
     o = np.array([r[0][0] for r in res])
     dm = np.array([r[1][0] for r in res])
     nc = np.array([r[2][0] for r in res])
-    return nest({"reps": reps, "ate": ate, "ols": {"bias": float(o.mean() - ate), "cover": float(np.mean([r[0][1] for r in res]))},
+    return nest({"reps": reps, "ate": ate, "target": "superpopulation ATE = 3",
+                 "replicates": [{"ols_est":r[0][0],"ols_hit":r[0][1],"dml_est":r[1][0],"dml_hit":r[1][1],
+                                 "dml_se":r[1][2],"nocf_est":r[2][0],"nocf_hit":r[2][1],"nocf_se":r[2][2]} for r in res],
+                 "ols": {"bias": float(o.mean() - ate), "cover": float(np.mean([r[0][1] for r in res]))},
                  "dml": {"bias": float(dm.mean() - ate), "sd": float(dm.std()), "mean_se": float(np.mean([r[1][2] for r in res])),
                          "cover": float(np.mean([r[1][1] for r in res]))},
                  "nocf": {"bias": float(nc.mean() - ate), "sd": float(nc.std()), "mean_se": float(np.mean([r[2][2] for r in res])),
@@ -336,8 +340,11 @@ def compute_cate():
     z = np.zeros(len(X), bool)
     z[g.choice(len(X), len(X) // 2, replace=False)] = True
     y = np.where(z, t["y1"], t["y0"])
-    # grading set: 2,000 other eligible islanders; truth: the systematic part of their effect
-    k = g.choice(len(t["pool"]), 2000, replace=False)
+    # Hold out all trial participants. The benchmark uses latent true pressure;
+    # learners only observe noisy recorded pressure, so this is a structural
+    # effect benchmark, not exactly the CATE given their recorded covariates.
+    eligible = np.setdiff1d(np.arange(len(t["pool"])), t["pos"])
+    k = g.choice(eligible, 2000, replace=False)
     Xg = np.column_stack([t["base_pool"][k], t["age_pool"][k], t["bmi_pool"][k], t["female_pool"][k].astype(float)])
     truth = -(9 + 0.3 * (t["sbp_pool"][k] - 150) + 0.08 * (t["age_pool"][k] - 60))
     fr = _forest_reg(g)
@@ -349,7 +356,9 @@ def compute_cate():
     b = np.linalg.lstsq(np.column_stack([np.ones(len(D)), D]), y, rcond=None)[0]
     preds["linear, interacted"] = Xg @ b[6:10] + b[5]
     ate = float(np.mean(y[z]) - np.mean(y[~z]))
-    out = {"rmse_const": float(np.sqrt(np.mean((truth - ate) ** 2))), "sd_truth": float(truth.std()), "ate": ate}
+    out = {"rmse_const": float(np.sqrt(np.mean((truth - ate) ** 2))), "sd_truth": float(truth.std()), "ate": ate,
+           "test_training_overlap": int(np.intersect1d(k,t["pos"]).size),
+           "benchmark": "latent systematic effect; learners see noisy recorded pressure"}
     out["learners"] = {}
     for k_, p in preds.items():
         dec = np.quantile(p, np.linspace(0, 1, 11))
@@ -358,6 +367,42 @@ def compute_cate():
                                "dec_pred": [float(p[bins == b_].mean()) for b_ in range(10)],
                                "dec_true": [float(truth[bins == b_].mean()) for b_ in range(10)]}
     return nest(out)
+
+
+def disjoint_ps_pairs(t, ps, caliper_sd=0.2):
+    """Outcome-blind minimum-distance pairing, without reused controls.
+
+    Enforce a logit-score caliper after assignment; unmatched treated units are
+    omitted, so the matched sample, rather than the full ATT, is the target.
+    """
+    from scipy.optimize import linear_sum_assignment
+    t, ps = np.asarray(t, bool), np.clip(np.asarray(ps, float),1e-12,1-1e-12)
+    logit = np.log(ps/(1-ps))
+    treated, control = np.flatnonzero(t), np.flatnonzero(~t)
+    distance = np.abs(logit[treated,None]-logit[control][None,:])
+    i,j=linear_sum_assignment(distance)
+    keep=distance[i,j] <= caliper_sd*logit.std(ddof=1)
+    return treated[i[keep]],control[j[keep]]
+
+
+def signed_rank_bound(d, gamma):
+    """Exact one-sided worst-case signed-rank tail for disjoint pairs.
+
+    At the extremal assignment probabilities all positive-rank signs have
+    probability Gamma/(1+Gamma). Doubled ranks handle average-rank ties.
+    """
+    d=np.asarray(d,float);d=d[d!=0]
+    if not len(d):return 1.0
+    ranks=np.rint(2*stats.rankdata(np.abs(d))).astype(int)
+    observed=int(ranks[d>0].sum())
+    p=gamma/(1+gamma)
+    probabilities=np.array([1.0])
+    for rank in ranks:
+        updated=np.zeros(len(probabilities)+rank)
+        updated[:len(probabilities)]+=(1-p)*probabilities
+        updated[rank:]+=p*probabilities
+        probabilities=updated
+    return float(probabilities[observed:].sum())
 
 
 def compute_sens():
@@ -379,25 +424,26 @@ def compute_sens():
     est_u = ols_effect(s["y"], s["t"], np.column_stack([s["X"], s["u"]]))[0]
     # Rosenbaum on the World's study: treated patients matched to controls on the measured covariates' propensity
     psw = CA.propensity(s["X"], s["t"])
-    mw = CA.ps_match(s["y"], s["t"], psw)
-    dw = -(s["y"][s["t"]] - s["y"][mw["matched_controls"]])  # pressure reduction
+    tw,cw = disjoint_ps_pairs(s["t"], psw)
+    dw = -(s["y"][tw]-s["y"][cw])  # pressure reduction, independent disjoint pairs
     gw = [1.0, 1.5, 2.0, 3.0, 4.0, 5.0, 6.0]
-    rbw = {str(gm): CA.rosenbaum_bound(dw, gm) for gm in gw}
-    gstar = next((gm for gm in np.arange(1.0, 20.0, 0.1) if CA.rosenbaum_bound(dw, gm) > 0.05), None)
+    rbw = {str(gm): signed_rank_bound(dw, gm) for gm in gw}
+    gstar = next((gm for gm in np.arange(1.0, 20.0, 0.1) if signed_rank_bound(dw, gm) > 0.05), None)
     # and on NSW: PSID controls matched to the treated on the propensity score
     d = museum.nsw()
     e_, p_, tr = d["sample"] == "experiment", d["sample"] == "psid", d["treat"] == 1
     m = (e_ & tr) | p_
     Xn = nsw_design(d, m)
     ps = CA.propensity(Xn, tr[m], ridge=1e-3)
-    mt = CA.ps_match(d["re78"][m], tr[m], ps)
-    idx_t = np.flatnonzero(tr[m])
-    diffs = d["re78"][m][idx_t] - d["re78"][m][mt["matched_controls"]]
+    tn,cn = disjoint_ps_pairs(tr[m],ps)
+    diffs = d["re78"][m][tn] - d["re78"][m][cn]
     gam = [1.0, 1.1, 1.2, 1.3, 1.5, 2.0]
-    rb = {str(gm): CA.rosenbaum_bound(diffs, gm) for gm in gam}
+    rb = {str(gm): signed_rank_bound(diffs, gm) for gm in gam}
     return nest({"ate": s["ate"], "est": est, "se": se, "t": tstat, "dof": dof, "rv": rv, "rv_sig": rv_sig,
-                 "r2_tu": r2_tu, "r2_yu": r2_yu, "est_with_u": est_u, "rosen": rb, "match_att": mt["est"],
-                 "rosen_world": rbw, "gamma_star": float(gstar) if gstar else None, "world_match": mw["est"],
+                 "r2_tu": r2_tu, "r2_yu": r2_yu, "est_with_u": est_u, "rosen": rb, "match_att": float(diffs.mean()),
+                 "rosen_world": rbw, "gamma_star": float(gstar) if gstar else None, "world_match": float(-dw.mean()),
+                 "world_pairs": len(tw), "nsw_pairs": len(tn), "reused_controls": 0,
+                 "caliper_logit_sd": 0.2,
                  "pair_mean": float(diffs.mean())})
 
 

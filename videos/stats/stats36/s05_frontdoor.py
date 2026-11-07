@@ -64,6 +64,9 @@ class Frontdoor(VoiceoverScene):
             "about the mediator, which real tar rarely satisfies; the front door is rare in practice, but it showed that "
             "adjustment is not the only route to identification."
         ) as vo:
+            intro=label('Front-door identification depends on the assumed causal graph',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -96,20 +99,25 @@ class Frontdoor(VoiceoverScene):
             cmath(r"\text{rule 1}", r":", r"\text{delete an observation that is d-separated}", font_size=30),
             cmath(r"\text{rule 2}", r":", r"\text{exchange } do(z) \text{ for conditioning on } z", font_size=30),
             cmath(r"\text{rule 3}", r":", r"\text{delete an intervention that has no effect}", font_size=30),
-            cmath(r"\text{complete}", r":", r"\text{if these cannot identify it, \ nothing can}", font_size=30),
+            cmath(r"\text{complete}", r":", r"\text{non-identification within the assumed nonparametric graph model}", font_size=30),
         ]
         rows[3][-1].set_color(TAUC)
         whys = [why(r"in a graph with arrows into $do$-nodes removed"), why(r"when the back doors are blocked"),
                 why(r"when no path carries its effect"), why(r"Shpitser \& Pearl (2006); \ Huang \& Valtorta (2006)")]
         with self.voiceover(
-            "<bookmark mark='a'/> Both the back-door and front-door formulas are special cases of Pearl's do-calculus, three "
-            "rules for rewriting expressions with interventions. The first deletes or adds an observation when the graph "
-            "makes it irrelevant. <bookmark mark='b'/> The second exchanges an intervention for a mere observation when no "
-            "back door is open. <bookmark mark='c'/> The third deletes an intervention that cannot affect the outcome. "
-            "<bookmark mark='d'/> In 2006 Ilya Shpitser and Pearl, and independently Yimin Huang and Marco Valtorta, proved "
-            "the rules complete: if they cannot turn an interventional quantity into an observational one, no method can. "
-            "Identification became a solved algorithmic problem, given the graph."
+            "<bookmark mark='a'/> Both the back-door and front-door formulas are special cases of Pearl's "
+            "do-calculus, three rules for rewriting expressions with interventions. The first deletes or adds an "
+            "observation when the graph makes it irrelevant. <bookmark mark='b'/> The second exchanges an "
+            "intervention for a mere observation when no back door is open. <bookmark mark='c'/> The third deletes an"
+            " intervention that cannot affect the outcome. <bookmark mark='d'/> In 2006 Ilya Shpitser and Pearl, and "
+            "independently Yimin Huang and Marco Valtorta, proved the rules complete for identifying causal "
+            "intervention distributions from an observational distribution in the assumed nonparametric causal graph "
+            "model. If that effect is not identifiable there, new assumptions or data are needed. This does not mean "
+            "every causal question is identified or that the graph itself is known."
         ) as vo:
+            intro=label('The do-calculus identifies intervention distributions within a graph model',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

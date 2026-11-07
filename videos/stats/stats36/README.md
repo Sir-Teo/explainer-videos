@@ -16,7 +16,7 @@ the NSW job-training data (LaLonde 1986; Dehejia & Wahba 1999), from R's Matchin
 packages. Its test bed is an observational version of the World's clinic, in which doctors choose who is treated and
 the World knows both potential outcomes.
 
-It opens with LaLonde's (1986) test. In Dehejia & Wahba's subsample (185 trainees, 260 randomized controls):
+It opens with a teaching comparison following LaLonde's (1986) strategy. The 429 MatchIt comparison men are not the original paper's complete PSID sample or specification; the experimental estimate has its own sampling uncertainty. In Dehejia & Wahba's subsample (185 trainees, 260 randomized controls):
 - the experiment estimates $1,794 (95% CI $479 to $3,109);
 - against 429 PSID men, the raw difference is −$635, and OLS with covariates gives $1,548;
 - the PSID men are older (28.0 vs 25.8), more often married (0.51 vs 0.19), less often black (0.20 vs 0.84), and
@@ -26,7 +26,7 @@ From there the part covers:
 - **Unconfoundedness and overlap.**
   - Strong ignorability (Rosenbaum & Rubin 1983) and the adjustment formula.
   - The World's observational study: 3,000 eligible patients, 47% treated by doctors on baseline pressure, age and
-    BMI. The ATE is −10.02 and the ATT −12.26; the naive estimate is −1.38. The propensity histograms show overlap.
+    BMI. The ATE is −10.02 and the ATT −12.26; the naive estimate is −1.38. The propensity histograms diagnose practical support; finite samples cannot establish positivity everywhere.
 - **Causal diagrams.**
   - Wright (1921); Pearl.
   - Chains, forks and colliders; d-separation (Verma & Pearl; Geiger et al.).
@@ -36,10 +36,10 @@ From there the part covers:
   - Berkson's bias: the correlation of two independent diseases is 0.00 overall and −0.56 among the admitted.
   - M-bias: the truth is 1.00; the unadjusted estimate is 0.99, adjusting for M gives 0.16, and for M and A 1.00.
   - A mediator: the total effect is 2.00; adjusting for the mediator gives the direct 1.01.
-  - The disjunctive cause criterion (VanderWeele & Shpitser 2011).
+  - The disjunctive cause criterion (VanderWeele & Shpitser 2011), assuming some subset of measured pre-treatment variables suffices to control confounding.
 - **The front door and do-calculus.**
   - Fisher's genotype as a graph. Naive 0.235, truth 0.1275, front door 0.129.
-  - The three rules and their completeness (Shpitser & Pearl; Huang & Valtorta 2006); SWIGs (Richardson & Robins
+  - The three rules and their completeness for identifying intervention distributions in the assumed nonparametric causal graph model (Shpitser & Pearl; Huang & Valtorta 2006); SWIGs (Richardson & Robins
     2013).
 - **Simpson resolved.**
   - The World's clinic: +7.7 (mild) and +8.1 (severe) points within strata, −11.2 overall. Back-door adjustment gives
@@ -48,14 +48,14 @@ From there the part covers:
 - **g-computation** (Robins 1986). −10.35 vs truth −10.02; extrapolation where overlap is thin.
 - **Propensity scores.**
   - The balancing property.
-  - Nearest-neighbour matching (ATT −12.43 vs −12.26).
+  - Nearest-neighbour matching with replacement (ATT −12.43 vs −12.26). Reused controls make pair differences dependent; uncertainty must account for reuse.
   - Cochran's (1968) five strata: −8.59, removing 83% of the naive bias.
   - Design trumps analysis (Rubin 2008).
 - **Weighting.**
   - Horvitz–Thompson and Hajek IPW, and the ATT weights.
   - Balance: the baseline-pressure SMD goes from 1.37 to 0.18 and age from 0.85 to 0.08.
   - IPW gives −8.48 [−9.5, −7.5]. The largest weight is 36, and the effective sample sizes are 742 and 662.
-  - Trimming (Crump et al. 2009), truncation, overlap weights (Li, Morgan & Zaslavsky 2018).
+  - Trimming (Crump et al. 2009), truncation, overlap weights (Li, Morgan & Zaslavsky 2018): treated weight 1−e, control weight e, targeting the density tilt e(1−e). Exact included-covariate mean balance requires a converged unpenalized logistic fit.
 - **Double robustness** (Robins, Rotnitzky & Zhao 1994). AIPW gives −9.91 [−10.6, −9.2], with SE 0.44 against IPW's
   0.63. Kang & Schafer (2007), 1,000 samples of 1,000:
 
@@ -67,9 +67,9 @@ From there the part covers:
   | AIPW, outcome right | 0.03 | 2.24 | 90.8% |
   | AIPW, both wrong | −21.5 | 202 | 55.9% |
 
-  The largest single weight is 39,667.
+  The largest single weight is 39,667. These are seeded adaptations of the Kang–Schafer design. Double robustness gives consistency under nuisance-model conditions, not finite-sample unbiasedness or automatically valid confidence intervals when just one nuisance is correct.
 - **Double machine learning** (Chernozhukov et al. 2018).
-  - Neyman orthogonality; the product-rate condition; cross-fitting.
+  - Neyman orthogonality; the product-rate condition; cross-fitting. The efficient influence function is the true AIPW score minus the target. Overlap, moment and nuisance-rate regularity are also required. Cross-fitting removes direct own-outcome reuse, not all finite-sample bias.
   - Nonlinear confounding with n = 1,000 and ATE 3, 150 studies:
 
     | Estimator | Bias | Mean SE | 90% coverage |
@@ -81,33 +81,33 @@ From there the part covers:
   - The partially linear model (Robinson 1988).
 - **Heterogeneous effects.**
   - T-, S-, X- (Künzel et al. 2019) and DR-learners (Kennedy 2023); the causal forest (Wager & Athey 2018; Athey,
-    Tibshirani & Wager 2019) with local centring and honesty.
-  - The World's trial, graded on 2,000 islanders against τ(x) = −(9 + 0.3(sbp − 150) + 0.08(age − 60)). RMSE:
+    Tibshirani & Wager 2019) with local centring and separate splitting/estimation halves. This teaching forest does not certify the full honest-forest inference theorem; shared nuisance fitting can still couple the halves.
+  - The World's trial, graded on 2,000 islanders excluded from training, against the latent systematic effect τ = −(9 + 0.3(true sbp − 150) + 0.08(age − 60)). Learners observe noisy recorded pressure, so this benchmark is not exactly E[τ | recorded X]. RMSE:
 
     | Estimator | RMSE |
     |---|---|
-    | constant ATE | 4.22 |
-    | T-learner | 3.44 |
-    | DR-learner | 4.66 |
-    | X-learner | 2.60 |
-    | causal forest | 2.61 |
-    | linear, interacted | 1.17 |
+    | constant ATE | 4.35 |
+    | T-learner | 3.50 |
+    | DR-learner | 4.57 |
+    | X-learner | 2.62 |
+    | causal forest | 2.76 |
+    | linear, interacted | 1.20 |
 
   - Decile calibration: the forest is too timid, the T-learner too bold.
 - **Sensitivity analysis.** The World with an unmeasured frailty:
   - adjusted −7.25 (SE 0.37), truth −9.93, −9.05 with frailty measured;
-  - Rosenbaum's Γ on matched pairs: significant until Γ ≈ 6.9;
-  - E-values (VanderWeele & Ding 2017);
+  - Rosenbaum's Γ: 288 disjoint propensity-score matched pairs under a 0.2 SD logit-score caliper, with an exact dynamic-programming one-sided signed-rank worst-case tail. Significance persists to Γ ≈ 2.8 on the displayed grid. The selected matched sample differs from the full ATT target; the result does not bound actual hidden bias or prove a causal sign;
+  - E-values (VanderWeele & Ding 2017): an equal-strength threshold. Unequal confounder associations can trade off; both do not have to exceed E;
   - Cinelli & Hazlett (2020): RV = 0.30 (0.28 for significance), against the frailty's actual partial R² of 0.087
-    and 0.085.
+    and 0.085. These values describe a specified regression, not proof that its coefficient has a causal interpretation.
 - **Smoking and lung cancer.**
-  - Doll & Hill (1950): 647 of 649 cases and 622 of 649 controls smoked (OR ≈ 14); the British Doctors Study.
+  - Doll & Hill (1950): 647 of 649 cases and 622 of 649 controls smoked (OR ≈ 14); the British Doctors Study followed 34,439 male doctors for fifty years (1951–2001).
   - Fisher's constitutional hypothesis (1957–58).
-  - Cornfield et al. (1959): RR ≈ 9 needs a confounder 9 times as prevalent (the E-value is 17.5).
+  - Cornfield et al. (1959): under the stated binary-confounder explanation, RR ≈ 9 needs a confounder at least 9 times as prevalent (the equal-strength E-value is 17.5).
   - Hill's nine viewpoints (1965).
 - **Time-varying treatments.**
   - Treatment–confounder feedback with an unmeasured U; the truth is −7. Naive −2.57; adjusted for L₁ −2.10; IPW-MSM
-    −7.04; g-formula −6.99.
+    −7.04; g-formula −6.99. Identification requires sequential exchangeability, consistency and positivity, with appropriate nuisance models; regression within a valid g-formula is possible even though an ordinary treatment coefficient is not the regime effect.
   - Target-trial emulation (Hernán & Robins 2016).
 - **LaLonde revisited.**
   - 67% of PSID men have ê < 0.1, 74% of trainees have ê > 0.5, and 313 of 429 controls lie in range.
@@ -130,8 +130,8 @@ Data:
     subclassification.
   - **Weighting and double robustness:** Horvitz–Thompson/Hajek IPW for the ATE and ATT; AIPW with influence-function
     SEs; cross-fitted DML for the ATE and the partially linear model.
-  - **Heterogeneous effects:** T-, S-, X- and DR-learners; an honest, locally centred causal forest.
-  - **Sensitivity and time:** E-values, robustness values, partial R², Rosenbaum bounds for matched pairs,
+  - **Heterogeneous effects:** T-, S-, X- and DR-learners; a locally centred teaching causal forest with separate split/estimation halves; this does not certify full honest-forest inference.
+  - **Sensitivity and time:** E-values, robustness values, partial R², Rosenbaum normal approximations in the kit; the chapter uses local exact signed-rank dynamic programming for disjoint matched pairs,
     Cornfield's ratio; stabilized MSM weights.
 - **The Museum** gains `nsw()`.
 - **The causal graph** (`CausalGraph` in `explainer/stats/viz.py`).
@@ -175,8 +175,8 @@ python tools/lecture_length.py stats36 --floor 50
 | 8 | Weighting | −8.48; max weight 36 |
 | 9 | Double robustness | −9.91; Kang–Schafer bias −21.5 |
 | 10 | Double machine learning | 86.7% vs 0% |
-| 11 | Heterogeneous effects | RMSE 4.22 → 2.61 (forest), 1.17 (linear) |
-| 12 | Sensitivity analysis | Γ* ≈ 6.9; RV 0.30 |
+| 11 | Heterogeneous effects | latent-effect RMSE 4.35 → 2.76 (forest), 1.20 (linear) |
+| 12 | Sensitivity analysis | Γ* ≈ 2.8; RV 0.30 |
 | 13 | Smoking and lung cancer | 647/649 vs 622/649; E = 17.5 |
 | 14 | Time-varying treatments | −2.57 vs −7.04 (truth −7) |
 | 15 | LaLonde revisited | $428 to $1,648 |
@@ -234,7 +234,7 @@ python tools/lecture_length.py stats36 --floor 50
    μ₁ + e₀(X)(m₁(X) − μ₁(X))/e(X), where m₁ = E[Y(1) | X] and e₀ is the true propensity.
    - If μ₁ = m₁, the correction is zero, so the mean is m₁ for any e.
    - If e = e₀, the result is μ₁ + m₁ − μ₁ = m₁ for any μ₁.
-   - Averaging over X gives E[Y(1)] either way.
+   - Averaging over X gives E[Y(1)] either way for fixed limiting nuisance functions satisfying overlap and integrability. Plug-in estimated nuisances need convergence and inference conditions; this is not a finite-sample unbiasedness proof.
 5. **M-bias.**
    - With Z = {M}, the path T ← A → M ← B → Y has the collider M in Z, so it is open.
    - It begins with an arrow into T, so it is an open back-door path, and the criterion fails.
@@ -243,6 +243,7 @@ python tools/lecture_length.py stats36 --floor 50
    - VanderWeele & Ding's bound: a confounder with risk ratios RR_UT and RR_UY can shift an observed RR by at most
      B = RR_UT RR_UY/(RR_UT + RR_UY − 1).
    - Set both equal to E and require B = RR: E²/(2E − 1) = RR, so E² − 2RR·E + RR = 0, and E = RR + √(RR² − RR).
+   - This is the equal-strength threshold. For RR = 2, E ≈ 3.414, but associations 10 and 3 give B = 2.5: one association may be below E if the other is larger.
 
 ## Glossary
 
@@ -255,9 +256,9 @@ python tools/lecture_length.py stats36 --floor 50
 - **g-computation (g-formula)**: estimating E[Y(t)] by averaging fitted outcome models.
 - **Propensity score**: e(x) = P(T = 1 | X = x); a balancing score.
 - **IPW**: weighting by 1/e or 1/(1 − e); **Hajek** normalizes the weights.
-- **AIPW / doubly robust**: consistent if either the outcome model or the propensity model is right.
+- **AIPW / doubly robust**: consistent if either nuisance model is right, under overlap and regularity; valid efficient inference requires additional conditions.
 - **DML**: cross-fitted machine-learned nuisances in an orthogonal score.
-- **CATE; meta-learners; causal forest**: τ(x); generic recipes; honest, effect-splitting forests.
+- **CATE; meta-learners; causal forest**: E[Y(1)−Y(0) | X]; generic recipes; effect-splitting forests. The latent World benchmark is distinguished from recorded-covariate CATE.
 - **Rosenbaum's Γ; E-value; robustness value**: three scales for how strong hidden confounding must be to change a
   conclusion.
 - **MSM; stabilized weights; target trial**: models for potential outcomes under treatment sequences; their weights;

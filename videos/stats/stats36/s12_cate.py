@@ -28,19 +28,24 @@ class CATE(VoiceoverScene):
             cmath(r"\tau(x)", r"=", r"E[Y(1) - Y(0) \mid X = x]", font_size=34),
             cmath(r"\text{identified}", r":", r"E[Y \mid T = 1, x] - E[Y \mid T = 0, x]", font_size=32),
             cmath(r"\text{not}", r":", r"\tau_i \text{ itself, \ nor who is harmed}", font_size=32),
-            cmath(r"\text{the World}", r":", r"\tau(x) = -\big(9 + 0.3(\text{sbp} - 150) + 0.08(\text{age} - 60)\big)", font_size=26),
+            cmath(r"\text{the World}", r":", r"\tau_{\rm systematic} = -\big(9 + 0.3(\text{true sbp} - 150) + 0.08(\text{age} - 60)\big)", font_size=26),
         ]
         rows[3][-1].set_color(TAUC)
         whys = [why(r"the conditional average effect"), why(r"under unconfoundedness, \ in each $x$"),
                 why(r"Part 35's limit"), why(r"the truth to grade against")]
         with self.voiceover(
-            "<bookmark mark='a'/> An average effect may hide large differences between people. The conditional average "
-            "effect asks for the average effect among patients with covariates x. <bookmark mark='b'/> In a randomized trial, "
-            "or under unconfoundedness, it is the difference of two regression functions. <bookmark mark='c'/> It is still an "
-            "average: individual effects, and the share of people harmed, remain out of reach, as Part 35 showed. <bookmark "
-            "mark='d'/> In the World's trial we know the systematic part of each patient's effect: it grows with their true "
-            "pressure and their age. So we can grade the methods."
+            "<bookmark mark='a'/> An average effect may hide large differences between people. The conditional "
+            "average effect asks for the average effect among patients with covariates x. <bookmark mark='b'/> In a "
+            "randomized trial, or under unconfoundedness, it is the difference of two regression functions. <bookmark"
+            " mark='c'/> It is still an average: individual effects, and the share of people harmed, remain out of "
+            "reach, as Part 35 showed. <bookmark mark='d'/> In the World's trial we know the systematic part of each "
+            "patient's effect: it grows with their true pressure and their age. We grade predictions against that "
+            "latent systematic effect. The learners observe noisy recorded pressure, so this benchmark is not exactly"
+            " the conditional average effect given their recorded covariates."
         ) as vo:
+            intro=label('Conditional effects require identification and adequate support',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -64,6 +69,9 @@ class CATE(VoiceoverScene):
             "colleagues imputes each patient's effect using the other arm's model, then regresses those imputed effects on x. "
             "<bookmark mark='d'/> Edward Kennedy's DR-learner regresses the doubly robust scores of chapter nine on x."
         ) as vo:
+            intro=label('Meta-learners combine prediction problems to estimate effects',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -81,14 +89,21 @@ class CATE(VoiceoverScene):
         whys = [why(r"out-of-bag forests: \ local centring"), why(r"look for effect differences, \ not outcome differences"),
                 why(r"Athey \& Imbens (2016)"), why(r"Wager \& Athey (2018); \ Athey, \ Tibshirani \& Wager (2019)")]
         with self.voiceover(
-            "<bookmark mark='a'/> The causal forest of Stefan Wager and Susan Athey is built for the purpose. First centre "
-            "the outcome and the treatment by their predicted values from ordinary forests. <bookmark mark='b'/> Then grow "
-            "trees that split, not where the outcome changes, but where the effect changes: each split maximizes the "
-            "difference between the children's effect estimates, each a residual-on-residual slope. <bookmark mark='c'/> "
-            "The trees are honest: one half of each subsample chooses the splits and the other half estimates the leaves, "
-            "so a leaf's estimate is not biased by the search that created it. <bookmark mark='d'/> Average many such trees, "
-            "and, as Wager and Athey proved, the estimates are asymptotically normal, with valid confidence intervals."
+            "<bookmark mark='a'/> The causal forest of Stefan Wager and Susan Athey is built for the purpose. First "
+            "centre the outcome and the treatment by their predicted values from ordinary forests. <bookmark "
+            "mark='b'/> Then grow trees that split, not where the outcome changes, but where the effect changes: each"
+            " split maximizes the difference between the children's effect estimates, each a residual-on-residual "
+            "slope. <bookmark mark='c'/> The trees are honest: one half of each subsample chooses the splits and the "
+            "other half estimates the leaves, which separates split selection from leaf estimation in the ideal "
+            "honest design. Our teaching implementation also uses globally fitted out-of-bag centering models, so "
+            "this does not establish the full theoretical honesty conditions. <bookmark mark='d'/> Average many such "
+            "trees, Wager and Athey proved asymptotic normality for forests satisfying their subsampling, regularity "
+            "and honesty conditions. We illustrate point predictions here, rather than certify those "
+            "confidence-interval conditions."
         ) as vo:
+            intro=label('A teaching forest illustrates effect splits without certifying inference',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -99,7 +114,7 @@ class CATE(VoiceoverScene):
         d = load("cate")
         L = d["learners"]
         order = ["T-learner", "DR-learner", "X-learner", "causal forest", "linear, interacted"]
-        A = axes([0, 6], [0, 5], x_length=7.6, y_length=4.2, xlabel=r"", ylabel=r"RMSE vs the truth (mm Hg)",
+        A = axes([0, 6], [0, 5], x_length=7.6, y_length=4.2, xlabel=r"", ylabel=r"RMSE vs latent systematic effect (mm Hg)",
                  xticks=[], yticks=[0, 1, 2, 3, 4, 5], center=[-1.8, 0.4, 0])
         ax = A.ax
         vals = [d["rmse_const"]] + [L[k]["rmse"] for k in order]
@@ -111,18 +126,20 @@ class CATE(VoiceoverScene):
         side = fit_rows(VGroup(
             label(r"the trial's 2,000 patients train; \ 2,000 other islanders grade", font_size=20),
             label(r"forests on baseline, \ age, \ BMI, \ sex", font_size=20, color=GREY_A),
-            label(r"causal forest and X-learner: \ best of the black boxes", font_size=20, color=BANDC),
-            label(r"a linear model in the right variables: \ best of all", font_size=20, color=TAUC),
+            label(r"compare point estimates; \ no interval theorem certified here", font_size=20, color=BANDC),
+            label(r"linear interactions suit this latent structural model", font_size=20, color=TAUC),
         ), 3.8, 0.4, [5.1, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Train each method on the trial's two thousand patients, and grade its predictions on two "
-            "thousand other eligible islanders, against the World's true effect function. <bookmark mark='b'/> Giving "
-            "everyone the trial's average effect has an error of " + say(d["rmse_const"]) + " millimetres, partly because "
-            "the islanders are older than the trial. <bookmark mark='c'/> The T-learner does a little better, and the "
-            "DR-learner, whose pseudo-outcomes are very noisy at this sample size, does worse. <bookmark mark='d'/> The "
-            "X-learner and the causal forest cut the error of the constant by about two fifths. <bookmark mark='e'/> And a linear model "
-            "with treatment interactions does best of all, because here the true effect really is linear in pressure and "
-            "age. Flexible methods pay for their flexibility in variance."
+            "<bookmark mark='a'/> Train each method on the trial's two thousand patients, and grade its predictions "
+            "on two thousand other eligible islanders, against the World's latent systematic effect on patients "
+            "excluded from training. This includes noise from observing recorded rather than true pressure. <bookmark"
+            " mark='b'/> Giving everyone the trial's average effect has an error of " + say(d["rmse_const"]) + " millimetres, partly because the islanders are older than the trial. <bookmark mark='c'/> The T-learner "
+            "does a little better, and the DR-learner, whose pseudo-outcomes are very noisy at this sample size, does"
+            " worse. <bookmark mark='d'/> The X-learner and the causal forest cut the error of the constant by about "
+            "two fifths. <bookmark mark='e'/> And a linear model with treatment interactions does best of all, "
+            "because the latent systematic effect is linear in true pressure and age. Recorded pressure is noisy, so "
+            "this is only an approximate observed-covariate model. Flexible methods pay for their flexibility in "
+            "variance."
         ) as vo:
             self.add(trial_tag())
             self.play(FadeIn(A), FadeIn(labs), FadeIn(side[0]), FadeIn(side[1]))
@@ -139,14 +156,20 @@ class CATE(VoiceoverScene):
     def calib(self):
         d = load("cate")
         L = d["learners"]
-        A = axes([-18, 0], [-18, 0], x_length=4.6, y_length=4.6, xlabel=r"predicted $\hat\tau(x)$, \ by decile", ylabel=r"true $\tau(x)$",
-                 xticks=[-15, -10, -5, 0], yticks=[-15, -10, -5, 0], center=[-3.2, 0.2, 0])
+        displayed = np.concatenate([np.r_[L[k]["dec_pred"], L[k]["dec_true"]]
+                                    for k in ("causal forest", "T-learner", "linear, interacted")])
+        low = min(-18, 5*np.floor(np.nanmin(displayed)/5))
+        high = max(0, 5*np.ceil(np.nanmax(displayed)/5))
+        ticks = list(np.arange(5*np.ceil(low/5), high+1, 5))
+        A = axes([low, high], [low, high], x_length=4.6, y_length=4.6,
+                 xlabel=r"predicted effect, by decile", ylabel=r"latent systematic effect",
+                 xticks=ticks, yticks=ticks, center=[-3.2, 0.2, 0])
         ax = A.ax
-        diag = DashedLine(ax.c2p(-18, -18), ax.c2p(0, 0), color=GREY_B, stroke_width=2)
+        diag = DashedLine(ax.c2p(low, low), ax.c2p(high, high), color=GREY_B, stroke_width=2)
         curves = {}
         for k in ("causal forest", "T-learner", "linear, interacted"):
-            xs = np.clip(L[k]["dec_pred"], -18, 0)
-            ys = np.clip(L[k]["dec_true"], -18, 0)
+            xs = np.asarray(L[k]["dec_pred"])
+            ys = np.asarray(L[k]["dec_true"])
             curves[k] = VGroup(polyline(ax, xs, ys, LC[k], 3), *[Dot(ax.c2p(a, b), radius=0.06, color=LC[k]) for a, b in zip(xs, ys)])
         side = fit_rows(VGroup(
             label(r"sort the islanders by predicted effect; \ ten groups", font_size=22),
@@ -156,12 +179,13 @@ class CATE(VoiceoverScene):
             label(r"forest: \ too timid; \ T-learner: \ too bold", font_size=22, color=MISSC),
         ), 5.0, 0.4, [3.4, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> A more useful check for decisions: sort the islanders into ten groups by predicted effect, "
-            "and compare each group's average prediction with its true average effect. <bookmark mark='b'/> The causal "
-            "forest, <bookmark mark='c'/> the T-learner, <bookmark mark='d'/> and the linear model. <bookmark mark='e'/> All "
-            "of them rank people correctly: those predicted to benefit most really do. But the causal forest is too timid, "
-            "predicting too little benefit for those who gain most, the averaging bias of Part 34; the T-learner is too "
-            "bold, mistaking the noise of two separate fits for heterogeneity; the linear model sits on the diagonal."
+            "<bookmark mark='a'/> A more useful check for decisions: sort the islanders into ten groups by predicted "
+            "effect, and compare each group's average prediction with its true average effect. <bookmark mark='b'/> "
+            "The causal forest, <bookmark mark='c'/> the T-learner, <bookmark mark='d'/> and the linear model. "
+            "<bookmark mark='e'/> Their decile averages show useful ranking in this example. But the causal forest is"
+            " too timid, predicting too little benefit for those who gain most, the averaging bias of Part 34; the "
+            "T-learner is too bold, mistaking the noise of two separate fits for heterogeneity; the linear model "
+            "tracks the diagonal more closely."
         ) as vo:
             self.add(trial_tag())
             self.play(FadeIn(A), Create(diag), FadeIn(side[0]))

@@ -59,6 +59,9 @@ class IPW(VoiceoverScene):
             "more stable. <bookmark mark='d'/> For the effect on the treated, the treated get weight one, and the untreated "
             "are reweighted by the odds e over one minus e, to look like the treated."
         ) as vo:
+            intro=label('Inverse probability weights target a specified treatment effect',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -127,15 +130,16 @@ class IPW(VoiceoverScene):
             label(r"remedies for extreme weights:", font_size=26),
             label(r"trim the sample to overlap \ (Crump et al. 2009): \ a different estimand", font_size=26, color=TAUC),
             label(r"truncate the weights: \ less variance, \ some bias", font_size=26, color=GREY_A),
-            label(r"overlap weights $e(1 - e)$ \ (Li, \ Morgan \& Zaslavsky 2018): \ the effect where both treatments happen", font_size=26, color=BANDC),
+            label(r"overlap: \ treated weight $1-e$, \ control weight $e$ \ (Li, \ Morgan \& Zaslavsky 2018): \ the effect where both treatments happen", font_size=26, color=BANDC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> There are standard remedies for extreme weights. <bookmark mark='b'/> Trim the sample to "
-            "the region of good overlap, as Richard Crump and colleagues proposed in 2009, accepting that the estimate then "
-            "describes that region only. <bookmark mark='c'/> Truncate the largest weights, trading variance for some bias. "
-            "<bookmark mark='d'/> Or use overlap weights, proportional to e times one minus e, which Fan Li, Kari Lock Morgan "
-            "and Alan Zaslavsky showed in 2018 target the effect in the population where both treatments are plausible, and "
-            "balance the covariate means exactly."
+            "<bookmark mark='a'/> There are standard remedies for extreme weights. <bookmark mark='b'/> Trim the "
+            "sample to the region of good overlap, as Richard Crump and colleagues proposed in 2009, accepting that "
+            "the estimate then describes that region only. <bookmark mark='c'/> Truncate the largest weights, trading"
+            " variance for some bias. <bookmark mark='d'/> Or target the overlap population, whose density is tilted "
+            "by e times one minus e. The actual observation weights are one minus e for treated patients and e for "
+            "controls. With a converged unpenalized logistic fit, its score equations give exact balance for the "
+            "included covariate means."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

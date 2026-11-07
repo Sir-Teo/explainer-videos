@@ -26,7 +26,7 @@ class Backdoor(VoiceoverScene):
             cmath(r"\text{the same as}", r":", r"\text{chapter 1's adjustment formula}", font_size=30),
         ]
         rows[2][-1].set_color(TAUC)
-        whys = [why(r"never adjust for consequences of treatment"), why(r"every back-door path"),
+        whys = [why(r"this sufficient criterion excludes descendants"), why(r"every back-door path"),
                 why(r"Pearl (1995): \ the back-door adjustment"), why(r"the graph says when it is valid")]
         with self.voiceover(
             "<bookmark mark='a'/> Pearl's back-door criterion says when a set of covariates Z is enough. First, nothing in Z "
@@ -36,6 +36,9 @@ class Backdoor(VoiceoverScene):
             "distribution of z. <bookmark mark='d'/> That is the adjustment formula of chapter one. The graph tells us when "
             "it is valid, and, as the next three examples show, when adjusting makes things worse."
         ) as vo:
+            intro=label('The back-door criterion is a sufficient adjustment rule',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -109,15 +112,16 @@ class Backdoor(VoiceoverScene):
             label(r"a mediator: \ the drug works partly through $M$", font_size=22),
             label(rf"total effect: \ truth 2.00, \ unadjusted {d['total']:.2f}", font_size=22, color=BANDC),
             label(rf"adjusting for $M$: \ {d['adjusted']:.2f}, \ the direct part only", font_size=22, color=MISSC),
-            label(r"never adjust for consequences of treatment \ (unless you want a direct effect)", font_size=22, color=TAUC),
+            label(r"mediator adjustment needs a specified direct-effect estimand and assumptions", font_size=22, color=TAUC),
         ), 5.0, 0.42, [3.6, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> And a mediator: the treatment works partly through an intermediate variable M, such as a "
-            "lab value that the drug changes. <bookmark mark='b'/> The unadjusted comparison estimates the total effect, "
-            "two. <bookmark mark='c'/> Adjusting for M removes the part that flows through it, leaving one, the direct "
-            "effect. <bookmark mark='d'/> Neither number is wrong, but they answer different questions, and adjusting for "
-            "the consequences of treatment by habit answers the wrong one. Separating direct and indirect effects properly "
-            "is mediation analysis, in Part 62."
+            "<bookmark mark='a'/> And a mediator: the treatment works partly through an intermediate variable M, such"
+            " as a lab value that the drug changes. <bookmark mark='b'/> The unadjusted comparison estimates the "
+            "total effect, two. <bookmark mark='c'/> In this additive toy model with no mediator-outcome confounding,"
+            " adjusting for M leaves one, the direct effect. Such a regression does not generally identify direct "
+            "effects. <bookmark mark='d'/> Neither number is wrong, but they answer different questions, and "
+            "adjusting for the consequences of treatment by habit answers the wrong one. Separating direct and "
+            "indirect effects properly is mediation analysis, in Part 62."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(G))
@@ -130,16 +134,18 @@ class Backdoor(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"adjust for confounders: \ common causes of $T$ and $Y$", font_size=26, color=BANDC),
             label(r"do not adjust for colliders, \ or for mediators and other consequences of $T$", font_size=26, color=MISSC),
-            label(r"VanderWeele \& Shpitser (2011): \ adjust for causes of $T$, \ of $Y$, \ or both", font_size=26, color=GREY_A),
+            label(r"disjunctive cause criterion: \ needs an adequate measured pre-treatment set", font_size=26, color=GREY_A),
             label(r"a data set cannot tell you which is which; \ a graph can", font_size=26, color=TAUC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> So: adjust for confounders, the common causes of treatment and outcome. <bookmark "
-            "mark='b'/> Do not adjust for colliders, nor for mediators or anything else the treatment affects. <bookmark "
-            "mark='c'/> When the full graph is uncertain, Tyler VanderWeele and Ilya Shpitser's disjunctive cause criterion "
-            "is a safe default: adjust for every pre-treatment variable that is a cause of the treatment, the outcome, or "
-            "both. <bookmark mark='d'/> The data alone cannot tell confounders from colliders; they have the same "
-            "correlations. Only knowledge of the causal structure can."
+            "mark='b'/> Do not adjust for colliders, nor for mediators or anything else the treatment affects. "
+            "<bookmark mark='c'/> When the full graph is uncertain, Tyler VanderWeele and Ilya Shpitser's disjunctive"
+            " cause criterion is sufficient when some subset of the measured pre-treatment variables already controls"
+            " confounding. Adjust for every pre-treatment variable that is a cause of the treatment, the outcome, or "
+            "both. <bookmark mark='d'/> Correlations alone do not determine which variables should be adjusted for. "
+            "Conditional-independence evidence can help constrain graphs under further assumptions, but does not "
+            "replace causal knowledge. Only knowledge of the causal structure can."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

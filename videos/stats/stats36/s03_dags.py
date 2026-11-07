@@ -27,12 +27,14 @@ class DAGs(VoiceoverScene):
             label(r"a causal graph is an assumption: \ which variables cause which", font_size=26, color=BANDC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In 1921 the geneticist Sewall Wright drew diagrams of arrows to describe how coat colour "
-            "was inherited in guinea pigs, and showed how to read correlations off them. <bookmark mark='b'/> Statisticians, "
-            "Fisher among them, largely ignored the idea for half a century. <bookmark mark='c'/> In the 1990s the computer "
-            "scientist Judea Pearl rebuilt it as a theory of directed acyclic graphs, with rules for reading off which "
-            "variables are independent, and an operator for interventions. <bookmark mark='d'/> A causal graph is an "
-            "assumption made explicit: which variables directly cause which. Everything else follows from it."
+            "<bookmark mark='a'/> In 1921 the geneticist Sewall Wright drew diagrams of arrows to describe how coat "
+            "colour was inherited in guinea pigs, and showed how to read correlations off them. <bookmark mark='b'/> "
+            "Statisticians, Fisher among them, largely ignored the idea for half a century. <bookmark mark='c'/> In "
+            "the 1990s the computer scientist Judea Pearl rebuilt it as a theory of directed acyclic graphs, with "
+            "rules for reading off which variables are independent, and an operator for interventions. <bookmark "
+            "mark='d'/> A causal graph is an assumption made explicit: which variables directly cause which. Its "
+            "independence implications follow under the causal Markov assumptions; effect sizes still need data or "
+            "further assumptions."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -80,11 +82,12 @@ class DAGs(VoiceoverScene):
                        label(r"closed; \ \emph{opened} by conditioning on $B$", font_size=20, color=MISSC).next_to(coll, DOWN, buff=0.4))
         boxes = VGroup(chain.condition(["B"]), fork.condition(["B"]), coll.condition(["B"], MISSC))
         with self.voiceover(
-            "<bookmark mark='a'/> Every path in a graph is built from three kinds of junction. In a chain, A causes B "
-            "causes C, and B is a mediator. Association flows along the chain, and conditioning on B blocks it. <bookmark "
-            "mark='b'/> In a fork, B causes both A and C: a confounder. Again association flows, and conditioning on B "
-            "blocks it. <bookmark mark='c'/> In a collider, A and C both cause B. Now the path is closed: A and C are "
-            "independent. <bookmark mark='d'/> But conditioning on the collider opens it. That last rule is the surprising "
+            "<bookmark mark='a'/> Every path in a graph is built from three kinds of junction. In a chain, A causes B"
+            " causes C, and B is a mediator. The chain permits association, and conditioning on B blocks this path. "
+            "<bookmark mark='b'/> In a fork, B causes both A and C: a confounder. Again the path permits association,"
+            " and conditioning on B blocks it. <bookmark mark='c'/> In a collider, A and C both cause B. In this "
+            "isolated collider graph the path is closed, so A and C are independent. Other open paths could change "
+            "that. <bookmark mark='d'/> But conditioning on the collider opens it. That last rule is the surprising "
             "one, and the source of some famous paradoxes."
         ) as vo:
             vo.wait_until("a")
@@ -110,13 +113,16 @@ class DAGs(VoiceoverScene):
         whys = [why(r"a chain or fork node we conditioned on"), why(r"a collider we left alone"),
                 why(r"d-separation"), why(r"Verma \& Pearl (1988); \ Geiger et al. (1990)")]
         with self.voiceover(
-            "<bookmark mark='a'/> The rules combine into d-separation. A path is blocked by a set Z if it passes through a "
-            "chain or fork node that is in Z, <bookmark mark='b'/> or through a collider that is not in Z and has no "
-            "descendant in Z. <bookmark mark='c'/> Two variables are d-separated by Z if every path between them is blocked. "
-            "<bookmark mark='d'/> And then, as Thomas Verma, Pearl and others proved, they are independent given Z in every "
-            "probability distribution consistent with the graph. Independence, a statistical property, is read off a "
-            "picture of causes."
+            "<bookmark mark='a'/> The rules combine into d-separation. A path is blocked by a set Z if it passes "
+            "through a chain or fork node that is in Z, <bookmark mark='b'/> or through a collider that is not in Z "
+            "and has no descendant in Z. <bookmark mark='c'/> Two variables are d-separated by Z if every path "
+            "between them is blocked. <bookmark mark='d'/> And then, as Thomas Verma, Pearl and others proved, they "
+            "are independent given Z in every probability distribution satisfying the graph's Markov property. "
+            "Independence, a statistical property, is read off a picture of causes."
         ) as vo:
+            intro=label('Graphical separation implies independence under Markov assumptions',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

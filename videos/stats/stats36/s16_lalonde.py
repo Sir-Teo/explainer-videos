@@ -30,18 +30,18 @@ class LaLonde(VoiceoverScene):
         b1 = hist_bars(ax, e, h1 / h1.sum(), color=Y1C, opacity=0.5)
         b0 = hist_bars(ax, e, h0 / h0.sum(), color=Y0C, opacity=0.5)
         side = fit_rows(VGroup(
-            label(r"trainees vs PSID men: \ Dehejia \& Wahba's propensity model", font_size=22),
+            label(r"trainees vs PSID men: \ propensity model inspired by Dehejia \& Wahba", font_size=22),
             label(rf"{100 * d['share_controls_below_01']:.0f}\% of PSID men: \ $\hat e < 0.1$", font_size=22, color=Y0C),
             label(rf"{100 * d['share_treated_above_05']:.0f}\% of trainees: \ $\hat e > 0.5$", font_size=22, color=Y1C),
             label(rf"only {d['n_kept_controls']} of {d['n_controls']} PSID men inside the trainees' range", font_size=22, color=MISSC),
         ), 4.2, 0.42, [4.6, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Return to LaLonde's trainees and the survey men, with the propensity score model of "
-            "Dehejia and Wahba: age, education and their squares, race, marriage, degree, and earnings in 1974 and 1975 "
-            "with indicators for zero earnings. <bookmark mark='b'/> Two thirds of the survey men have a propensity below a "
-            "tenth: nothing like the trainees. <bookmark mark='c'/> Three quarters of the trainees have a propensity above a "
-            "half. <bookmark mark='d'/> The comparison rests on a minority of the survey men, and, within the overlap, on a few "
-            "who resemble the trainees closely."
+            "<bookmark mark='a'/> Return to LaLonde's trainees and the survey men, with a teaching propensity model "
+            "inspired by Dehejia and Wahba: age, education and their squares, race, marriage, degree, and earnings in"
+            " 1974 and 1975 with indicators for zero earnings. <bookmark mark='b'/> Two thirds of the survey men have"
+            " a propensity below a tenth: nothing like the trainees. <bookmark mark='c'/> Three quarters of the "
+            "trainees have a propensity above a half. <bookmark mark='d'/> The comparison rests on a minority of the "
+            "survey men, and, within the overlap, on a few who resemble the trainees closely."
         ) as vo:
             self.add(nsw_tag())
             self.play(FadeIn(A), FadeIn(side[0]))
@@ -67,13 +67,15 @@ class LaLonde(VoiceoverScene):
         tab = table_rows(rows, font_size=24, col_buff=1.2, row_buff=0.22,
                          colors=[GREY_A, BANDC, MISSC, TAUC, TAUC, PSC, PSC, PSC, PSC]).move_to([0, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The experiment says about eighteen hundred dollars. <bookmark mark='b'/> Against the survey "
-            "men, the raw difference is negative. Regression with the covariates, and regression used to predict what the "
-            "trainees would have earned, give fifteen to sixteen hundred. <bookmark mark='c'/> Propensity-score matching with "
-            "one neighbour gives about four hundred; weighting, about thirteen hundred, or fifteen hundred when restricted to "
-            "the overlap; five strata on the overlap, about five hundred. <bookmark mark='d'/> Every one of these is a "
-            "textbook method, applied as the textbooks say, and they span more than a thousand dollars, roughly the width of "
-            "the experiment's own confidence interval."
+            "<bookmark mark='a'/> The experiment says about eighteen hundred dollars. <bookmark mark='b'/> Against "
+            "the survey men, the raw difference is negative. Regression with the covariates, and regression used to "
+            "predict what the trainees would have earned, give fifteen to sixteen hundred. <bookmark mark='c'/> "
+            "Propensity-score matching with one neighbour gives about four hundred; weighting, about thirteen "
+            "hundred, or fifteen hundred when restricted to the overlap; five strata on the overlap, about five "
+            "hundred. <bookmark mark='d'/> Every one of these is a textbook method, applied as the textbooks say, and"
+            " they span more than a thousand dollars, a substantial fraction of the experimental confidence "
+            "interval's width. The methods also differ in extrapolation and, after trimming, their target "
+            "populations."
         ) as vo:
             self.add(nsw_tag())
             vo.wait_until("a")
@@ -98,10 +100,10 @@ class LaLonde(VoiceoverScene):
         zero = DashedLine(ax.c2p(0, 0), ax.c2p(8, 0), color=GREY_C, stroke_width=1.5)
         foot = label(r"green band: \ the experiment's 95\% interval", font_size=20, color=BANDC).move_to([4.6, 2.9, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> As a picture, with the experiment's ninety-five percent interval as the green band. "
-            "<bookmark mark='b'/> All but one of the adjusted estimates land inside it, which is better than LaLonde's original "
-            "methods managed, and matching falls just below; but they scatter across most of it, and a researcher with only the survey data would have no way of "
-            "knowing which to trust."
+            "<bookmark mark='a'/> As a picture, with the experiment's ninety-five percent interval as the green band."
+            " <bookmark mark='b'/> All but one of the adjusted estimates land inside it, which is better than "
+            "LaLonde's original methods managed, and matching falls just below; but they still differ materially, and"
+            " a researcher with only the survey data would have no way of knowing which to trust."
         ) as vo:
             self.add(nsw_tag())
             self.play(FadeIn(A), FadeIn(band), Create(zero), FadeIn(labs), FadeIn(foot))
@@ -117,16 +119,18 @@ class LaLonde(VoiceoverScene):
             label(r"a placebo test: \ pretend 1975 earnings are the outcome", font_size=26),
             label(r"the programme cannot have affected them: \ the true effect is zero", font_size=26, color=TAUC),
             label(rf"experiment: \ \${d['placebo_exp']:,.0f}; \ PSID, \ matched on 1974 and earlier: \ {'$-$' if d['placebo_psid'] < 0 else ''}\${abs(d['placebo_psid']):,.0f}", font_size=26, color=Y0C),
-            label(r"passing a placebo test is necessary, \ not sufficient", font_size=26, color=MISSC),
+            label(r"a small placebo point contrast is diagnostic; \ no formal interval is computed", font_size=26, color=MISSC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Guido Imbens and Yiqing Xu, revisiting the data in 2024, stressed a check that needs no "
-            "experiment: a placebo test. Treat earnings in 1975, before the programme, as if they were the outcome, using "
-            "only earlier information. <bookmark mark='b'/> The programme cannot have affected them, so a valid method should "
-            "find nothing. <bookmark mark='c'/> In the experiment the difference is a couple of hundred dollars, noise; "
-            "matched against the survey men, minus a hundred and forty. <bookmark mark='d'/> These pass, roughly. But passing "
-            "is necessary, not sufficient: the selection into the programme happened after 1975, when the men chose to "
-            "enrol, and no pre-programme check can see that."
+            "<bookmark mark='a'/> Guido Imbens and Yiqing Xu, revisiting the data in 2024, stressed a check that "
+            "needs no experiment: a placebo test. Treat earnings in 1975, before the programme, as if they were the "
+            "outcome, using only earlier information. <bookmark mark='b'/> The programme cannot have affected them, "
+            "so a valid method should find nothing. <bookmark mark='c'/> In the experiment the difference is a couple"
+            " of hundred dollars, noise; matched against the survey men, minus a hundred and forty. <bookmark "
+            "mark='d'/> These small point contrasts are diagnostic rather than formal pass results; no placebo "
+            "interval has been computed. A reassuring placebo does not establish exchangeability for later earnings: "
+            "the selection into the programme happened after 1975, when the men chose to enrol, and no pre-programme "
+            "check can see that."
         ) as vo:
             self.add(nsw_tag())
             for k, m_ in enumerate("abcd"):
@@ -138,16 +142,18 @@ class LaLonde(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"1. \ overlap first: \ look at the propensity scores before estimating anything", font_size=26, color=PSC),
             label(r"2. \ pre-treatment outcomes are the most important covariates", font_size=26, color=TAUC),
-            label(r"3. \ with good overlap, \ modern methods agree; \ without it, \ no method rescues you", font_size=26, color=BANDC),
+            label(r"3. \ overlap helps; \ it does not remove model error or hidden confounding", font_size=26, color=BANDC),
             label(r"4. \ unconfoundedness is a substantive claim: \ test what can be tested, \ bound the rest", font_size=26, color=MISSC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The lessons that forty years of re-analysis drew. First, check overlap before estimating "
-            "anything: most of the survey men should never have been in the comparison. <bookmark mark='b'/> Second, outcomes "
-            "measured before treatment, here earlier earnings, are the most important covariates of all; without them, the "
-            "methods fail badly. <bookmark mark='c'/> Third, when overlap is good, modern estimators tend to agree with one another; "
-            "when it is poor, no method rescues the analysis. <bookmark mark='d'/> And fourth, unconfoundedness is a claim "
-            "about the world: test what can be tested, with placebos, and bound the rest, with sensitivity analysis."
+            "<bookmark mark='a'/> The lessons that forty years of re-analysis drew. First, check overlap before "
+            "estimating anything: most of the survey men should never have been in the comparison. <bookmark "
+            "mark='b'/> Second, outcomes measured before treatment, here earlier earnings, are the most important "
+            "covariates of all; without them, the methods fail badly. <bookmark mark='c'/> Third, overlap improves "
+            "the basis for comparisons, but does not guarantee estimator agreement or remove hidden confounding. Poor"
+            " overlap makes estimates particularly dependent on extrapolation. <bookmark mark='d'/> And fourth, "
+            "unconfoundedness is a claim about the world: test what can be tested, with placebos, and bound the rest,"
+            " with sensitivity analysis."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

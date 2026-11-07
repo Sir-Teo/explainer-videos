@@ -38,6 +38,9 @@ class Unconfounded(VoiceoverScene):
             "either treatment, so that every kind of treated patient has comparable untreated ones. <bookmark mark='d'/> "
             "Paul Rosenbaum and Donald Rubin called the pair strong ignorability in 1983."
         ) as vo:
+            intro=label('Identification needs both exchangeability and treatment overlap',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -63,6 +66,9 @@ class Unconfounded(VoiceoverScene):
             "mark='d'/> The average effect is the average over X of the difference in conditional means: the adjustment "
             "formula. Every method in this part is a way of estimating it."
         ) as vo:
+            intro=label('Adjustment averages conditional outcome means over a target population',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -109,11 +115,12 @@ class Unconfounded(VoiceoverScene):
             label(r"at the ends, \ few or no comparable patients", font_size=22, color=MISSC),
         ), 4.2, 0.42, [4.6, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Overlap can be checked. Here is each patient's estimated probability of being treated, "
-            "from a logistic regression on the four covariates, for the treated in red and the untreated in blue. <bookmark "
-            "mark='b'/> The treated pile up near one and the untreated near zero, as they should when doctors choose. "
-            "<bookmark mark='c'/> In between both groups are present. <bookmark mark='d'/> At the ends there are few "
-            "comparable patients, and the methods ahead will have to extrapolate, or weight a handful of people very heavily."
+            "<bookmark mark='a'/> Practical overlap can be diagnosed in the observed sample. Here is each patient's "
+            "estimated probability of being treated, from a logistic regression on the four covariates, for the "
+            "treated in red and the untreated in blue. <bookmark mark='b'/> The treated pile up near one and the "
+            "untreated near zero, as they should when doctors choose. <bookmark mark='c'/> In between both groups are"
+            " present. <bookmark mark='d'/> At the ends there are few comparable patients, and the methods ahead will"
+            " have to extrapolate, or weight a handful of people very heavily."
         ) as vo:
             self.add(obs_tag())
             self.play(FadeIn(A))
@@ -126,16 +133,18 @@ class Unconfounded(VoiceoverScene):
 
     def untestable(self):
         rows = fit_rows(VGroup(
-            label(r"overlap can be checked; \ unconfoundedness cannot", font_size=26, color=MISSC),
+            label(r"overlap problems can be diagnosed; \ unconfoundedness needs substantive justification", font_size=26, color=MISSC),
             label(r"it is a claim about what we did \emph{not} measure", font_size=26),
             label(r"so it must be argued from knowledge of how treatment was chosen", font_size=26, color=TAUC),
             label(r"the next three chapters give that argument a language: \ causal diagrams", font_size=26, color=Y0C),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Overlap can be checked in the data. Unconfoundedness cannot. <bookmark mark='b'/> It is a "
-            "claim about what we did not measure, and no amount of data on what we did measure can confirm it. <bookmark "
-            "mark='c'/> It has to be argued from knowledge of how the treatment was actually chosen. <bookmark mark='d'/> The "
-            "next chapters give that argument a precise language: causal diagrams."
+            "<bookmark mark='a'/> Observed covariate support can reveal overlap problems, but finite data cannot "
+            "establish positivity everywhere. Unconfoundedness cannot generally be verified from these observed "
+            "outcomes alone. <bookmark mark='b'/> It is a claim about what we did not measure, and no amount of data "
+            "on what we did measure can confirm it. <bookmark mark='c'/> It has to be argued from knowledge of how "
+            "the treatment was actually chosen. <bookmark mark='d'/> The next chapters give that argument a precise "
+            "language: causal diagrams."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

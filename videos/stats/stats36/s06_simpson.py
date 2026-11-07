@@ -88,6 +88,9 @@ class Simpson(VoiceoverScene):
             "<bookmark mark='d'/> That is what the World built in: the treatment raises everyone's chance of recovery by "
             "seven or eight points. The aggregate comparison mixed the effect of treatment with the effect of being sick."
         ) as vo:
+            intro=label('The causal role of a variable determines whether to adjust',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

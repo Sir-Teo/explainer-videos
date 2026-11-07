@@ -36,6 +36,9 @@ class Propensity(VoiceoverScene):
             "the propensity score alone. <bookmark mark='d'/> Instead of matching patients on many covariates, we can "
             "compare patients with equal propensity: a one-dimensional problem."
         ) as vo:
+            intro=label('The true propensity score balances measured covariates',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -46,20 +49,24 @@ class Propensity(VoiceoverScene):
         rows = [
             cmath(r"\text{for each treated } i", r":", r"\text{the untreated } j \text{ with the closest } \hat e", font_size=30),
             cmath(r"\widehat{\text{ATT}}", r"=", r"\tfrac{1}{n_1} \textstyle\sum_i (Y_i - Y_{j(i)})", font_size=32),
-            cmath(r"\text{with replacement}", r":", r"\text{less bias, \ more variance}", font_size=30),
+            cmath(r"\text{with replacement}", r":", r"\text{closer matches; \ dependent pair differences}", font_size=30),
             cmath(r"\text{caliper}", r":", r"\text{drop treated patients with no close match}", font_size=30),
         ]
         rows[1][-1].set_color(PSC)
         whys = [why(r"nearest-neighbour matching"), why(r"the effect on the treated"), why(r"controls can be reused"),
                 why(r"enforcing overlap, \ changing the estimand")]
         with self.voiceover(
-            "<bookmark mark='a'/> The simplest use is matching. For each treated patient, find the untreated patient whose "
-            "estimated propensity is closest. <bookmark mark='b'/> The average difference between the pairs estimates the "
-            "effect on the treated, because every pair's treated member is one of the treated. <bookmark mark='c'/> "
-            "Allowing untreated patients to be reused gives closer matches and more variance. <bookmark mark='d'/> A caliper "
-            "drops treated patients with no close match, which enforces overlap but quietly changes the population the "
-            "estimate is about."
+            "<bookmark mark='a'/> The simplest use is matching. For each treated patient, find the untreated patient "
+            "whose estimated propensity is closest. <bookmark mark='b'/> The average difference between the pairs "
+            "estimates the effect on the treated, because every pair's treated member is one of the treated. "
+            "<bookmark mark='c'/> Allowing controls to be reused permits closer matches, but creates dependent pair "
+            "differences. Standard errors must account for that reuse. <bookmark mark='d'/> A caliper drops treated "
+            "patients with no close match, which enforces overlap but quietly changes the population the estimate is "
+            "about."
         ) as vo:
+            intro=label('Matching design and reuse determine the target and uncertainty',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -122,10 +129,11 @@ class Propensity(VoiceoverScene):
             label(r"next: \ use the score as a weight", font_size=26, color=PSC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> A real virtue of propensity methods is that the score is built without looking at the "
-            "outcomes. <bookmark mark='b'/> The analyst can refine the score, the matches and the strata until the covariates "
-            "balance, as with rerandomization, and no amount of refinement can fish for a desired answer. <bookmark "
-            "mark='c'/> Rubin put it in a title in 2008: for objective causal inference, design trumps analysis. <bookmark "
+            "<bookmark mark='a'/> A real virtue of propensity methods is that the score is built without looking at "
+            "the outcomes. <bookmark mark='b'/> The analyst can refine the score, the matches and the strata until "
+            "the covariates balance, as with rerandomization, which reduces direct outcome-driven selection. The "
+            "analyst must still document the design choices and account for the final design. <bookmark mark='c'/> "
+            "Rubin put it in a title in 2008: for objective causal inference, design trumps analysis. <bookmark "
             "mark='d'/> Next, using the score as a weight."
         ) as vo:
             for k, m_ in enumerate("abcd"):
