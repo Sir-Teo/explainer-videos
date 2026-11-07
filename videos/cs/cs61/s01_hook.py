@@ -37,9 +37,10 @@ class Hook(VoiceoverScene):
             "four kilobytes. <bookmark mark='b'/> The median time moves by up to "
             f"{100 * b['env_spread']:.0f} percent. In 2009 Todd Mytkowicz and colleagues showed that such changes "
             "shift where the stack begins, and with it the alignment of hot data, and that this alone could swing a "
-            "program's speed by a third. <bookmark mark='c'/> On our shared machine some of the spread is that "
-            "effect and some is other programs running at the same time. Telling the two apart, and not fooling "
-            "yourself, is what this part is about."
+            "program's speed by a third. <bookmark mark='c'/> But is our spread that effect, or only noise? This machine "
+            "randomizes where the stack begins on every run, which smears the effect out, and chapter two will show "
+            "that noise alone could explain what we see. Telling the two apart, and not fooling yourself, is what "
+            "this part is about."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl), FadeIn(foot))
             vo.wait_until("a")
