@@ -40,6 +40,9 @@ class Hotelling(VoiceoverScene):
             "valid, but still ignores how variables combine. <bookmark mark='d'/> Harold Hotelling's 1931 answer is a single "
             "test that uses the inverse covariance."
         ) as vo:
+            intro=label('Testing a mean vector differs from testing each coordinate separately',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -65,6 +68,9 @@ class Hotelling(VoiceoverScene):
             "combination of the variables shows a significant difference, with the threshold chosen to account for the "
             "search."
         ) as vo:
+            intro=label('The largest squared projected t statistic is Hotelling T squared',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -80,7 +86,7 @@ class Hotelling(VoiceoverScene):
         tb = table_rows([hdr] + body, font_size=26, col_buff=1.0, row_buff=0.3, colors=[GREY_A] + [None] * 4 + [PCC])
         tb.move_to([0, 0.8, 0])
         foot = fit_rows(VGroup(
-            label(rf"$T^2 = {d['T2']:.1f}$, \ $F = {d['F']:.1f}$ on ({d['df'][0]}, {d['df'][1]}) df, \ $p = 10^{{{int(np.floor(np.log10(d['p'])))}}}$", font_size=22, color=PCC),
+            label(rf"$T^2 = {d['T2']:.1f}$, \ $F = {d['F']:.1f}$ on ({d['df'][0]}, {d['df'][1]}) df, \ $p = {d['p']:.2g}$", font_size=22, color=PCC),
             label(r"the best combination's $t^2$ is $T^2$ itself: \ far beyond any single measurement", font_size=22, color=PATH),
         ), 12.0, 0.22, [0, -2.3, 0])
         with self.voiceover(
@@ -148,6 +154,9 @@ class Hotelling(VoiceoverScene):
             "<bookmark mark='d'/> With three species and four variables there are two nonzero eigenvalues, and there is no "
             "unique best way to reduce two numbers to one test. Hence four classical statistics."
         ) as vo:
+            intro=label('Between- and within-group scatter define a generalized eigenproblem',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -166,16 +175,16 @@ class Hotelling(VoiceoverScene):
         tb.move_to([0, 0.8, 0])
         foot = fit_rows(VGroup(
             label(rf"eigenvalues {ev[0]:.2f} and {ev[1]:.2f}: \ one direction separates the species", font_size=22),
-            label(rf"Wilks's $F = {d['wilks_F']:.0f}$ on ({d['wilks_df'][0]}, {d['wilks_df'][1]:.0f}) df; \ statkit matches statsmodels to every digit", font_size=22, color=PATH),
-            label(r"Pillai: \ most robust; \ Roy: \ most powerful when one direction dominates", font_size=22, color=GREY_A),
+            label(rf"Wilks's approximate $F = {d['wilks_F']:.0f}$ on ({d['wilks_df'][0]}, {d['wilks_df'][1]:.0f}) df; \ agreement with statsmodels at printed precision", font_size=22, color=PATH),
+            label(r"Pillai: often robust in balanced designs; Roy: targets a dominant root", font_size=22, color=GREY_A),
         ), 12.0, 0.22, [0, -2.1, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The four, on all three iris species. Wilks's lambda, a product; Pillai's trace; the "
-            "Hotelling–Lawley trace; Roy's largest root. The eigenvalues are thirty-two and point two nine: almost all the "
-            "separation lies in one direction. <bookmark mark='b'/> Wilks's lambda is point oh two three, an F of a hundred "
-            "and ninety-nine, and statkit reproduces statsmodels' four statistics to every printed digit. "
-            "<bookmark mark='c'/> As for which to use: Pillai's trace is the most robust to unequal covariances; Roy's "
-            "largest root is the most powerful when, as here, one direction dominates."
+            "<bookmark mark='a'/> The four, on all three iris species. Wilks's lambda, a product; Pillai's trace; the"
+            " Hotelling–Lawley trace; Roy's largest root. The eigenvalues are thirty-two and point two nine: almost "
+            "all the separation lies in one direction. <bookmark mark='b'/> Wilks's lambda is point oh two three, an "
+            "F of a hundred and ninety-nine, and statkit reproduces statsmodels' four statistics to every printed "
+            "digit. <bookmark mark='c'/> As for which to use: Pillai's trace is often recommended for robustness in "
+            "balanced designs, while Roy's root targets one dominant direction; neither is uniformly best."
         ) as vo:
             self.add(iris_tag())
             vo.wait_until("a")
@@ -210,19 +219,22 @@ class Hotelling(VoiceoverScene):
             cmath(r"n (\bar x - \mu)^\top S^{-1} (\bar x - \mu)", r"\le", r"\tfrac{p(n - 1)}{n - p} F_{p, n-p; 0.95}", font_size=28),
             cmath(r"a^\top \mu", r"\in", r"a^\top \bar x \pm \sqrt{c \, a^\top S a / n}", font_size=30),
             cmath(r"P(\text{all } a \text{ at once})", r"=", r"0.95", font_size=32),
-            cmath(r"\text{price}", r":", r"\text{wider than Bonferroni for a few chosen } a", font_size=28),
+            cmath(r"\text{price}", r":", r"\text{often wider than Bonferroni for a few fixed } a", font_size=28),
         ]
         rows[0][-1].set_color(PCC)
         whys = [why(r"a confidence ellipsoid"), why(r"intervals for every combination"), why(r"simultaneous, \ by union--intersection"), why(r"the cost of insuring every question")]
         with self.voiceover(
             "<bookmark mark='a'/> Inverting the test gives a confidence region: an ellipsoid around the sample mean, "
-            "shaped by S. <bookmark mark='b'/> Projecting the ellipsoid onto any direction gives an interval for that "
-            "linear combination of the means. <bookmark mark='c'/> And because the ellipsoid contains the truth with "
-            "probability ninety-five percent, all of these intervals hold simultaneously, for every combination, even "
-            "ones chosen after looking at the data. <bookmark mark='d'/> The price is width. If you only care about a "
-            "few combinations chosen in advance, Bonferroni intervals are narrower; the ellipsoid insures against "
-            "every question you might ask."
+            "shaped by S. <bookmark mark='b'/> Projecting the ellipsoid onto any direction gives an interval for that"
+            " linear combination of the means. <bookmark mark='c'/> And because the ellipsoid contains the truth with"
+            " probability ninety-five percent, all of these intervals hold simultaneously, for every combination, "
+            "even ones chosen after looking at the data. <bookmark mark='d'/> The price is width. If you only care "
+            "about a few combinations chosen in advance, Bonferroni intervals can be narrower; the ellipsoid insures "
+            "against every question you might ask."
         ) as vo:
+            intro=label('A Gaussian confidence ellipsoid protects all linear combinations',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

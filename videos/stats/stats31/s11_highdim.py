@@ -31,16 +31,20 @@ class HighDim(VoiceoverScene):
             cmath(r"p \ge n_1 + n_2 - 1", r":", r"S \text{ is singular: \ } T^2 \text{ does not exist}", font_size=30),
         ]
         rows[2][-1].set_color(RES)
-        whys = [why(r"the textbook large-sample rule"), why(r"normal data, \ any $n > p$"), why(r"chapter two's eigenvalues"),
+        whys = [why(r"the textbook large-sample rule"), why(r"iid Gaussian, common positive covariance, $p<n_1+n_2-1$"), why(r"chapter two's eigenvalues"),
                 why(r"too few observations")]
         with self.voiceover(
             "<bookmark mark='a'/> The two-sample T squared has two calibrations. For fixed p and growing n it is "
-            "approximately chi-squared with p degrees of freedom. <bookmark mark='b'/> For normal data and any sample size "
-            "larger than p, a rescaled version is exactly F. <bookmark mark='c'/> These agree when p is small. When p grows "
-            "in proportion to n, the chi-squared approximation fails: the small eigenvalues of S from chapter two blow up "
-            "S inverse and inflate T squared. <bookmark mark='d'/> And once p reaches the total sample size minus one, S "
-            "is singular and T squared does not exist at all."
+            "approximately chi-squared with p degrees of freedom. <bookmark mark='b'/> For independent Gaussian "
+            "samples with the same positive definite covariance and p below the total sample size minus one, a "
+            "rescaled version is exactly F. <bookmark mark='c'/> These agree when p is small. When p grows in "
+            "proportion to n, the chi-squared approximation fails: the small eigenvalues of S from chapter two blow "
+            "up S inverse and inflate T squared. <bookmark mark='d'/> And once p reaches the total sample size minus "
+            "one, S is singular and T squared does not exist at all."
         ) as vo:
+            intro=label('Growing dimension can invalidate a fixed-dimension chi-square approximation',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -118,12 +122,16 @@ class HighDim(VoiceoverScene):
         whys = [why(r"drop $S^{-1}$"), why(r"unbiased for the squared distance"), why(r"Bai \& Saranadasa (1996)"),
                 why(r"no inverse needed")]
         with self.voiceover(
-            "<bookmark mark='a'/> Zhidong Bai and Hewa Saranadasa's idea of 1996 is to stop inverting S. Use the plain "
-            "squared distance between the mean vectors, minus its expected value under the null. <bookmark mark='b'/> That "
-            "is unbiased for the squared distance between the true means. <bookmark mark='c'/> Standardized by an estimate "
-            "of its standard deviation, it is asymptotically normal as p and n grow together. <bookmark mark='d'/> And it "
-            "exists even when there are more variables than observations."
+            "<bookmark mark='a'/> Zhidong Bai and Hewa Saranadasa's idea of 1996 is to stop inverting S. Use the "
+            "plain squared distance between the mean vectors, minus its expected value under the null. <bookmark "
+            "mark='b'/> That is unbiased for the squared distance between the true means. <bookmark mark='c'/> "
+            "Standardized by an estimate of its standard deviation, it is asymptotically normal as p and n grow "
+            "together. <bookmark mark='d'/> It requires moment and spectral conditions for its asymptotic "
+            "calibration, but no covariance inverse, including when p exceeds n."
         ) as vo:
+            intro=label('A bias-corrected squared mean distance avoids covariance inversion',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -144,15 +152,15 @@ class HighDim(VoiceoverScene):
         foot = fit_rows(VGroup(
             label(r"power when every coordinate's mean shifts by 0.15 SD; \ 500 data sets each", font_size=22),
             label(r"more variables, \ more signal, \ but $T^2$'s power peaks and then collapses", font_size=22, color=HIT),
-            label(r"at $p = 90$, \ $T^2$ has 8 residual degrees of freedom: \ 0.16 against 0.95", font_size=22, color=RES),
+            label(r"at $p = 90$, \ $T^2$ has 9 denominator $F$ degrees of freedom: \ 0.16 against 0.95", font_size=22, color=RES),
         ), 12.0, 0.22, [0, -2.0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Validity is not enough; what about power? Shift every coordinate's mean by point one five "
-            "standard deviations, so more variables means more total signal. <bookmark mark='b'/> Bai–Saranadasa's power "
-            "climbs steadily, from a third to ninety-five percent. The exact T squared's climbs at first, then collapses. "
-            "<bookmark mark='c'/> At ninety variables it has only eight degrees of freedom left for estimating a "
-            "ninety-by-ninety inverse covariance, and its power is sixteen percent against ninety-five. Estimating S inverse "
-            "costs more than it gains."
+            "<bookmark mark='a'/> Validity is not enough; what about power? Shift every coordinate's mean by point "
+            "one five standard deviations, so more variables means more total signal. <bookmark mark='b'/> "
+            "Bai–Saranadasa's power climbs steadily, from a third to ninety-five percent. The exact T squared's "
+            "climbs at first, then collapses. <bookmark mark='c'/> At ninety variables it has nine denominator F "
+            "degrees of freedom, despite estimating a ninety-by-ninety covariance, and its power is sixteen percent "
+            "against ninety-five. Estimating S inverse costs more than it gains."
         ) as vo:
             self.add(seeded_tag())
             vo.wait_until("a")
@@ -189,18 +197,23 @@ class HighDim(VoiceoverScene):
             cmath(r"\hat\Sigma_\alpha", r"=", r"(1 - \alpha) S + \alpha \tfrac{\mathrm{tr} S}{p} I", font_size=32),
             cmath(r"\text{eigenvalues}", r":", r"\text{pulled towards their mean}", font_size=30),
             cmath(r"\alpha^*", r":", r"\text{estimated from the data, \ minimizing } E\|\hat\Sigma_\alpha - \Sigma\|_F^2", font_size=28),
-            cmath(r"\hat\Sigma_\alpha", r":", r"\text{always invertible, \ well-conditioned}", font_size=30),
+            cmath(r"\hat\Sigma_\alpha", r":", r"\text{positive definite if }\alpha>0,\ \mathrm{tr}(S)>0", font_size=30),
         ]
         rows[0][-1].set_color(MAPC)
         whys = [why(r"shrink towards a sphere"), why(r"undoes chapter two's fanning"), why(r"Ledoit \& Wolf (2004)"), why(r"Part 25's idea, for matrices")]
         with self.voiceover(
             "<bookmark mark='a'/> The second cure is to shrink. Mix the sample covariance with a multiple of the "
-            "identity. <bookmark mark='b'/> That pulls the sample eigenvalues back towards their average, undoing the "
-            "fanning-out of chapter two. <bookmark mark='c'/> Olivier Ledoit and Michael Wolf showed in 2004 how to "
-            "estimate the best mixing weight from the data themselves. <bookmark mark='d'/> The result is always "
-            "invertible and well-conditioned, so T squared, LDA and the rest can use it even when p exceeds n. It is "
-            "Part 25's idea of borrowing strength, applied to a matrix."
+            "identity. <bookmark mark='b'/> That pulls the sample eigenvalues back towards their average, undoing the"
+            " fanning-out of chapter two. <bookmark mark='c'/> Olivier Ledoit and Michael Wolf showed in 2004 how to "
+            "estimate the best mixing weight from the data themselves. <bookmark mark='d'/> For a positive mixing "
+            "weight and positive trace the estimate is positive definite; conditioning still depends on the weight "
+            "and spectrum. Such regularization can support prediction when p exceeds n. Substituting it in T squared "
+            "does not preserve the classical exact F law. It is Part 25's idea of borrowing strength, applied to a "
+            "matrix."
         ) as vo:
+            intro=label('Covariance regularization changes both conditioning and test calibration',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

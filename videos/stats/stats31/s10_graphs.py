@@ -51,20 +51,24 @@ class Graphs(VoiceoverScene):
             cmath(r"\mathrm{corr}(x_i, x_j)", r":", r"\text{direct and indirect association together}", font_size=30),
             cmath(r"\rho_{ij \cdot \text{rest}}", r":", r"\text{the correlation left after regressing both on the rest}", font_size=28),
             cmath(r"\Theta", r"=", r"\Sigma^{-1}, \ \ \rho_{ij \cdot \text{rest}} = -\theta_{ij} / \sqrt{\theta_{ii} \theta_{jj}}", font_size=30),
-            cmath(r"\text{the 24 tests}", r":", r"\text{mean correlation } 0.30; \ 60\% \text{ of partials below } 0.1", font_size=28),
+            cmath(r"\text{the 24 tests}", r":", r"\text{mean correlation } 0.30; \ 60\% \text{ of absolute partials below } 0.1", font_size=28),
         ]
         rows[2][-1].set_color(MAPC)
         whys = [why(r"everything correlates"), why(r"partial correlation, \ Part 12"), why(r"read off the precision matrix"),
                 why(r"most links are indirect")]
         with self.voiceover(
-            "<bookmark mark='a'/> In the twenty-four tests every pair is correlated, but a correlation mixes direct and "
-            "indirect association. <bookmark mark='b'/> The partial correlation removes the indirect part: regress both "
-            "variables on all the others and correlate what is left. <bookmark mark='c'/> All of them at once come from the "
-            "inverse covariance, the precision matrix: minus each entry over the root of the two diagonal entries. "
-            "<bookmark mark='d'/> For the tests the average correlation is point three, but sixty percent of the partial "
-            "correlations are below point one. Word classification and word meaning correlate point five three; given the "
-            "other twenty-two tests, their partial correlation is zero to two decimals."
+            "<bookmark mark='a'/> In the twenty-four tests every pair is correlated, but a correlation mixes direct "
+            "and indirect association. <bookmark mark='b'/> Partial correlation measures residual linear association "
+            "after adjustment: regress both variables on all the others and correlate what is left. <bookmark "
+            "mark='c'/> All of them at once come from the inverse covariance, the precision matrix: minus each entry "
+            "over the root of the two diagonal entries. <bookmark mark='d'/> For the tests the average correlation is"
+            " point three, but sixty percent of their absolute values are below point one. Word classification and "
+            "word meaning correlate point five three; given the other twenty-two tests, their partial correlation is "
+            "zero to two decimals."
         ) as vo:
+            intro=label('Partial correlation measures linear association after adjustment',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -89,6 +93,9 @@ class Graphs(VoiceoverScene):
             "are independent given the third. <bookmark mark='d'/> Arthur Dempster in 1972 called the problem of choosing "
             "the zeros covariance selection."
         ) as vo:
+            intro=label('Gaussian precision zeros encode conditional independence',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -123,9 +130,10 @@ class Graphs(VoiceoverScene):
         ), 4.2, 0.42, [4.6, 0.3, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The twenty-four tests as nodes, coloured by the factor each loads on most. "
-            "<bookmark mark='b'/> Draw every estimated partial correlation as an edge, thicker for larger values: two "
-            "hundred and seventy-six edges. <bookmark mark='c'/> A hairball. Estimated partial correlations are never "
-            "exactly zero, so the plain inverse covariance gives a complete graph that says nothing."
+            "<bookmark mark='b'/> Draw every estimated partial correlation as an edge, thicker for larger values: two"
+            " hundred and seventy-six edges. <bookmark mark='c'/> A hairball. Unpenalized estimated partial "
+            "correlations are generally not exactly zero, so the plain inverse covariance gives a complete graph that"
+            " says nothing."
         ) as vo:
             self.add(harman_tag())
             vo.wait_until("a")
@@ -141,19 +149,23 @@ class Graphs(VoiceoverScene):
             cmath(r"\max_{\Theta \succ 0}", r"", r"\log\det\Theta - \mathrm{tr}(S\Theta) - \lambda \textstyle\sum_{i \ne j} |\theta_{ij}|", font_size=30),
             cmath(r"\text{without } \lambda", r":", r"\hat\Theta = S^{-1}", font_size=30),
             cmath(r"\text{each column}", r":", r"\text{a lasso regression on the others}", font_size=30),
-            cmath(r"\lambda", r"\uparrow", r"\text{fewer edges}", font_size=32),
+            cmath(r"\lambda", r"\uparrow", r"\text{typically sparser; edges need not be nested}", font_size=32),
         ]
         rows[0][-1].set_color(MAPC)
         whys = [why(r"the Gaussian log likelihood, \ penalized"), why(r"Part 22's MLE"),
                 why(r"Friedman, \ Hastie \& Tibshirani (2008)"), why(r"sparsity: \ Part 32")]
         with self.voiceover(
-            "<bookmark mark='a'/> The graphical lasso adds a penalty on the absolute values of the off-diagonal entries to the "
-            "normal log likelihood. <bookmark mark='b'/> Without the penalty the maximizer is S inverse, the hairball. "
-            "<bookmark mark='c'/> Jerome Friedman, Trevor Hastie and Robert Tibshirani showed in 2008 that it can be solved "
-            "one column at a time, each column a lasso regression of one variable on the others, by coordinate descent. "
-            "<bookmark mark='d'/> The absolute-value penalty sets entries exactly to zero, and a larger lambda gives fewer "
-            "edges. Why the absolute value produces exact zeros is the subject of Part 32."
+            "<bookmark mark='a'/> The graphical lasso adds a penalty on the absolute values of the off-diagonal "
+            "entries to the normal log likelihood. <bookmark mark='b'/> Without the penalty the maximizer is S "
+            "inverse, the hairball. <bookmark mark='c'/> Jerome Friedman, Trevor Hastie and Robert Tibshirani showed "
+            "in 2008 that it can be solved one column at a time, each column a lasso regression of one variable on "
+            "the others, by coordinate descent. <bookmark mark='d'/> The absolute-value penalty sets entries exactly "
+            "to zero, and larger lambda generally makes a sparser graph, although individual edges need not form a "
+            "nested path. Why the absolute value produces exact zeros is the subject of Part 32."
         ) as vo:
+            intro=label('Graphical lasso penalizes off-diagonal precision entries',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -175,12 +187,13 @@ class Graphs(VoiceoverScene):
             label(r"reasoning tests (20--24) bridge the groups", font_size=22, color=GREY_A),
         ), 4.2, 0.42, [4.6, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The graphical lasso with a large penalty, lambda point five: eighteen edges. "
-            "<bookmark mark='b'/> Lower it to point four: forty-seven. <bookmark mark='c'/> And point three: a hundred and "
-            "seven. <bookmark mark='d'/> The strongest direct links appear within the factor groups, and the verbal tests "
-            "form a tight clique. <bookmark mark='e'/> Edges between groups run mostly through the reasoning tests, like "
-            "deduction and series completion, which draw on several abilities at once. The factor model and the graph are "
-            "two descriptions of the same correlations: one by hidden causes, one by direct links."
+            "<bookmark mark='a'/> The graphical lasso with a large penalty, lambda point five: sixteen edges. "
+            "<bookmark mark='b'/> Lower it to point four: forty-five. <bookmark mark='c'/> And point three: "
+            "ninety-seven. <bookmark mark='d'/> The strongest direct links appear within the factor groups, and the "
+            "verbal tests form a tight clique. <bookmark mark='e'/> Edges between groups run mostly through the "
+            "reasoning tests, like deduction and series completion, which draw on several abilities at once. The "
+            "factor model and the graph are two descriptions of the same correlations: one by latent shared "
+            "variation, one by conditional links."
         ) as vo:
             self.add(harman_tag())
             self.play(FadeIn(nd), FadeIn(lab))
@@ -206,11 +219,12 @@ class Graphs(VoiceoverScene):
             label(r"directed graphs: \ Part 36; \ causal discovery: \ Part 62", font_size=24, color=PATH),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Reading such a graph. An absent edge means conditional independence, if the data are "
-            "normal. <bookmark mark='b'/> A present edge is not a cause: the graph has no arrows. <bookmark mark='c'/> The "
-            "penalty trades edges against reliability, and is chosen by cross-validation, BIC, or by keeping only the edges "
-            "that survive resampling. <bookmark mark='d'/> Graphs with arrows come in Part 36, and what data alone can say about causal "
-            "direction in Part 62."
+            "<bookmark mark='a'/> Reading such a graph. An absent edge represents conditional independence in the "
+            "fitted Gaussian model. Estimation and tuning can miss or add population edges. <bookmark mark='b'/> A "
+            "present edge is not a cause: the graph has no arrows. <bookmark mark='c'/> The penalty trades edges "
+            "against reliability, and is chosen by cross-validation, BIC, or by keeping only the edges that survive "
+            "resampling. <bookmark mark='d'/> Graphs with arrows come in Part 36, and what data alone can say about "
+            "causal direction in Part 62."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -234,6 +248,9 @@ class Graphs(VoiceoverScene):
             "in both. <bookmark mark='d'/> They proved it recovers the right graph with high probability under "
             "conditions that Part 52 makes precise."
         ) as vo:
+            intro=label('Nodewise regression links conditional neighborhoods to precision zeros',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

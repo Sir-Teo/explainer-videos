@@ -27,7 +27,8 @@ import math
 from dataclasses import asdict
 
 import numpy as np
-from scipy import sparse, stats
+from scipy import sparse, stats, optimize
+from scipy.special import logsumexp
 from scipy.sparse.csgraph import shortest_path
 
 from explainer.ai.cache import Cache
@@ -68,21 +69,23 @@ def compute_towns():
     g = rng(1952)
     n = len(xy)
     E = np.sqrt(((xy[:, None] - xy[None]) ** 2).sum(-1))
-    rows, cols, vals = [], [], []
-    for i in range(n):
-        for j in np.argsort(E[i])[1:5]:
-            w = E[i, j] * g.uniform(1.1, 1.3)
-            rows += [i, j]
-            cols += [j, i]
-            vals += [w, w]
-    A = sparse.csr_matrix((vals, (rows, cols)), shape=(n, n))
-    D = shortest_path(A, directed=False)
+    # One physical undirected road per neighbour pair. CSR construction sums
+    # duplicate entries; adding mutual neighbours twice inflated those roads.
+    edges=sorted({(min(i,int(j)),max(i,int(j)))
+                  for i in range(n) for j in np.argsort(E[i])[1:5]})
+    rows,cols,vals=[],[],[]
+    for i,j in edges:
+        distance=E[i,j]*g.uniform(1.1,1.3)
+        rows.extend((i,j));cols.extend((j,i));vals.extend((distance,distance))
+    A=sparse.csr_matrix((vals,(rows,cols)),shape=(n,n))
+    D=shortest_path(A,directed=False)
+    if not np.isfinite(D).all():raise ValueError("the road graph is disconnected")
     mds = M.classical_mds(D)
     pr = M.procrustes(xy, mds["X"])
     mds_e = M.classical_mds(E)
     edges = sorted({(min(i, j), max(i, j)) for i, j in zip(rows, cols)})
     return nest({"xy": xy, "region": W.towns["region"], "weight": W.towns["weight"], "fitted": pr["fitted"], "rmse": pr["rmse"],
-                 "scale": pr["scale"], "eig": mds["eigenvalues"][:10], "explained": mds["explained"],
+                 "road_factors": [float(A[i,j]/E[i,j]) for i,j in edges], "scale": pr["scale"], "eig": mds["eigenvalues"][:10], "explained": mds["explained"],
                  "negative_share": mds["negative_share"], "edges": edges, "detour": float(np.median((D / np.where(E > 0, E, 1))[E > 0])),
                  "exact_rmse": M.procrustes(xy, mds_e["X"])["rmse"], "n": n, "pairs": n * (n - 1) // 2})
 
@@ -115,7 +118,9 @@ def compute_mahal():
     e2 = np.sum((V - V.mean(0)) ** 2, 1)
     two = V[:, [2, 3]]
     return nest({"d2": np.sort(d2), "q": q, "eucl": e2, "maha": d2, "two": two, "mean2": two.mean(0), "cov2": np.cov(two.T),
-                 "far_eucl": int(np.argmax(e2)), "far_maha": int(np.argmax(d2)), "cut": float(stats.chi2.ppf(0.975, 4))})
+                 "far_eucl": int(np.argmax(e2)), "far_maha": int(np.argmax(d2)), "cut": float(stats.chi2.ppf(0.975, 4)),
+                 "cut_fitted": float((len(V)-1)**2/len(V)*stats.beta.ppf(.975,2,(len(V)-5)/2)),
+                 "fitted_reference": "internal Gaussian: ((n-1)^2/n) Beta(p/2,(n-p-1)/2)"})
 
 
 def compute_wishart():
@@ -132,11 +137,12 @@ def compute_wishart():
     p, n = 50, 100
     Z = g.standard_normal((n, p))
     ev = np.linalg.eigvalsh(np.cov(Z.T))
-    gam = p / n
+    gam = p / (n-1)
     a, b = (1 - math.sqrt(gam)) ** 2, (1 + math.sqrt(gam)) ** 2
     xs = np.linspace(a, b, 200)
     mp = np.sqrt((b - xs) * (xs - a)) / (2 * math.pi * gam * xs)
-    return nest({"S": S, "df": df, "mean": mean, "var11": var11, "th11": th11, "var12": var12, "th12": th12, "ev": ev,
+    return nest({"S": S, "df": df, "mean": mean, "draws":len(Ws),
+                 "mean_mcse":np.sqrt((S*S+np.outer(np.diag(S),np.diag(S)))/(df*len(Ws))), "var11": var11, "th11": th11, "var12": var12, "th12": th12, "ev": ev,
                  "mp_x": xs, "mp_y": mp, "mp_ab": [a, b], "p": p, "n": n})
 
 
@@ -160,25 +166,43 @@ def compute_pca():
     qs = M.pca(X, standardize=True)
     return nest({"states": states, "names": names, "scores": p["scores"], "loadings": p["loadings"], "var": p["variances"],
                  "explained": p["explained"], "iris_scores": q["scores"], "iris_explained": q["explained"],
-                 "iris_loadings": q["loadings"], "iris_std_explained": qs["explained"], "y": y})
+                 "iris_loadings": q["loadings"], "iris_std_explained": qs["explained"], "iris_std_loadings":qs["loadings"], "y": y})
+
+
+def factor_ml_checked(R,k,n):
+    """Profile Gaussian factor likelihood with explicit optimizer/boundary diagnostics."""
+    R=np.asarray(R,float);p=len(R)
+    def objective(logpsi):
+        psi=np.exp(logpsi);L=M._fa_loadings(R,psi,k)
+        fitted=L@L.T+np.diag(psi)
+        return np.linalg.slogdet(fitted)[1]+np.trace(np.linalg.solve(fitted,R))-np.linalg.slogdet(R)[1]-p
+    psi0=(1-.5*k/p)/np.diag(np.linalg.inv(R))
+    res=optimize.minimize(objective,np.log(np.clip(psi0,.005,1)),method="L-BFGS-B",
+                          bounds=[(math.log(.005),0.)]*p,options=dict(ftol=1e-12,gtol=1e-7,maxiter=2000))
+    if not res.success:raise RuntimeError(f"factor likelihood failed: {res.message}")
+    psi=np.exp(res.x);L=M._fa_loadings(R,psi,k)
+    df=((p-k)**2-p-k)/2
+    chi=(n-1-(2*p+5)/6-2*k/3)*res.fun
+    return dict(loadings=L,uniqueness=psi,communality=1-psi,objective=float(res.fun),
+                chi2=float(chi),df=float(df),p=float(stats.chi2.sf(chi,df)),
+                heywood=bool(np.any(psi<=.0051)),converged=True,iterations=int(res.nit))
 
 
 def compute_fa():
-    names, R, n = museum.harman74()
-    fits = {}
-    for k in range(1, 6):
-        f = M.factor_ml(R, k, n)
-        fits[k] = {"chi2": f["chi2"], "df": f["df"], "p": f["p"], "heywood": f["heywood"]}
-    f4 = M.factor_ml(R, 4, n)
-    v = M.varimax(f4["loadings"])
-    L = v["loadings"]
-    # orient each factor positively, order as in Harman: verbal, spatial, speed, memory by largest loading
-    L = L * np.sign(L.sum(0))[None, :]
-    ev = np.sort(np.linalg.eigvalsh(R))[::-1]
-    pc = M.pca(np.linalg.cholesky(R).T * math.sqrt(n - 1) + 0)  # not used for data; eigen only
-    del pc
-    return nest({"names": names, "fits": fits, "loadings_raw": f4["loadings"], "loadings": L, "uniqueness": f4["uniqueness"],
-                 "communality": f4["communality"], "eig": ev, "n": n})
+    names,R,n=museum.harman74()
+    allfits={k:factor_ml_checked(R,k,n) for k in range(1,6)}
+    fits={k:{key:f[key] for key in ('chi2','df','p','heywood','converged','iterations')} for k,f in allfits.items()}
+    f4=allfits[4];v=M.varimax(f4['loadings']);L=v['loadings']
+    # Assign factor names by maximal group mean squared loading, rather than
+    # relying on an arbitrary optimizer/SVD column order.
+    groups=[list(range(4,9)),list(range(9,13)),list(range(4)),list(range(13,19))]
+    strength=np.array([np.mean(L[ix]**2,axis=0) for ix in groups])
+    row,col=optimize.linear_sum_assignment(-strength);order=col[np.argsort(row)]
+    L=L[:,order];sign=np.where(L.sum(0)<0,-1.,1.);L=L*sign
+    rotation=v['rotation'][:,order]*sign
+    return nest(dict(names=names,fits=fits,loadings_raw=f4['loadings'],loadings=L,rotation=rotation,
+                     factor_order=order,group_strength=strength[:,order],uniqueness=f4['uniqueness'],
+                     communality=f4['communality'],eig=np.linalg.eigvalsh(R)[::-1],n=n))
 
 
 def compute_cca():
@@ -214,18 +238,52 @@ def compute_lda():
                  "directions": f["directions"]})
 
 
+def gmm_em_checked(X,k,g,n_init=5,max_iter=2000,tol=1e-8):
+    """Seeded full-covariance teaching EM with a 1e-6 diagonal ridge.
+
+    Evaluate likelihood and responsibilities at the returned parameters; check
+    absolute convergence so a negative likelihood change is not itself success.
+    This regularized local fit does not claim an unconstrained global MLE.
+    """
+    X=np.asarray(X,float);n,p=X.shape;best=None
+    for _ in range(n_init):
+        km=M.kmeans(X,k,g,n_init=1);lab=km['labels']
+        weights=np.array([max(np.mean(lab==j),1e-3) for j in range(k)]);weights/=weights.sum()
+        means=km['centres'].copy()
+        covs=np.array([np.cov(X[lab==j].T)+1e-3*np.eye(p) if np.sum(lab==j)>p else np.cov(X.T) for j in range(k)])
+        old=-np.inf;converged=False
+        for it in range(max_iter+1):
+            lp=np.column_stack([np.log(weights[j])+stats.multivariate_normal(means[j],covs[j]).logpdf(X) for j in range(k)])
+            norm=logsumexp(lp,axis=1);ll=float(norm.sum());resp=np.exp(lp-norm[:,None])
+            if np.isfinite(old) and abs(ll-old)<=tol*(1+abs(ll)):
+                converged=True;break
+            if it==max_iter:break
+            nk=resp.sum(0)
+            if np.any(nk<1e-10):break
+            weights=nk/n;means=(resp.T@X)/nk[:,None]
+            covs=np.array([((X-means[j]).T*resp[:,j])@(X-means[j])/nk[j]+1e-6*np.eye(p) for j in range(k)])
+            old=ll
+        npar=k-1+k*p+k*p*(p+1)/2
+        fit=dict(weights=weights,means=means,covs=covs,loglik=ll,resp=resp,labels=resp.argmax(1),
+                 iterations=it,converged=converged,bic=-2*ll+npar*math.log(n),npar=npar,ridge=1e-6)
+        if converged and (best is None or ll>best['loglik']):best=fit
+    if best is None:raise RuntimeError("no converged nonempty Gaussian-mixture start")
+    return best
+
+
 def compute_cluster():
     X, y, names = museum.iris()
     X2 = X[:, [2, 3]]
     g = rng(1967)
     km2 = M.kmeans(X2, 3, rng(5), n_init=1)
     km = M.kmeans(X, 3, g)
-    gm = M.gmm_em(X, 3, g)
-    bic = {k: M.gmm_em(X, k, rng(100 + k))["bic"] for k in range(1, 7)}
+    gm = gmm_em_checked(X, 3, g)
+    bic = {k: gmm_em_checked(X, k, rng(100 + k))["bic"] for k in range(1, 7)}
     wss = {k: M.kmeans(X, k, rng(200 + k))["wss"] for k in range(1, 9)}
     return nest({"X2": X2, "y": y, "path": km2["path"], "labels2": km2["labels"], "ari_km": M.adjusted_rand(km["labels"], y),
                  "ari_gmm": M.adjusted_rand(gm["labels"], y), "bic": bic, "wss": wss, "gmm_labels": gm["labels"],
-                 "km_labels": km["labels"], "gmm_means2": gm["means"][:, [2, 3]], "gmm_covs2": gm["covs"][:, [2, 3]][:, :, [2, 3]]})
+                 "km_labels": km["labels"], "gmm_means2": gm["means"][:, [2, 3]], "gmm_covs2": gm["covs"][:, [2, 3]][:, :, [2, 3]],
+                 "mixture_fit": {key:gm[key] for key in ("weights","means","covs","loglik","bic","npar","iterations","converged","ridge")}})
 
 
 def compute_lloyd():
@@ -247,16 +305,43 @@ def compute_lloyd():
                  "ari": M.adjusted_rand(labs[-1], y)})
 
 
+def graphical_lasso_offdiag(S,lam,max_iter=1000,tol=1e-10):
+    """Block covariance updates with an unpenalized precision diagonal.
+
+    The shared teaching routine starts W=S+lam I and keeps that diagonal,
+    corresponding to diagonal penalization. Here W_ii=S_ii, as required by
+    the off-diagonal objective stated in the chapter.
+    """
+    S=np.asarray(S,float);p=len(S);W=S.copy();B=np.zeros((p,p-1))
+    if lam<0:raise ValueError("nonnegative regularization required")
+    for it in range(max_iter):
+        previous=W.copy()
+        for j in range(p):
+            idx=np.r_[0:j,j+1:p];V=W[np.ix_(idx,idx)]
+            beta=M._lasso_cd(V,S[idx,j],lam,B[j].copy(),iters=3000,tol=1e-12)
+            B[j]=beta;W[idx,j]=V@beta;W[j,idx]=W[idx,j]
+        if np.max(np.abs(W-previous))<tol:break
+    precision=np.linalg.inv(W);precision=(precision+precision.T)/2
+    off=~np.eye(p,dtype=bool);nonzero=off&(np.abs(precision)>1e-7)
+    residual=W-S
+    nonzero_error=np.max(np.abs((residual-lam*np.sign(precision))[nonzero]),initial=0.)
+    zero_error=np.max(np.maximum(np.abs(residual[off&~nonzero])-lam,0.),initial=0.)
+    error=max(nonzero_error,zero_error,float(np.max(np.abs(np.diag(residual)))))
+    if error>2e-7:raise RuntimeError(f"graphical lasso KKT residual {error}")
+    edges=int(np.sum(np.abs(np.triu(precision,1))>1e-6*np.max(np.abs(np.diag(precision)))))
+    return dict(precision=precision,covariance=W,edges=edges,iterations=it+1,kkt_max=error)
+
+
 def compute_glasso():
     names, R, n = museum.harman74()
     lams = [0.05, 0.1, 0.2, 0.3, 0.4, 0.5]
     path = {}
     for lam in lams:
-        gl = M.graphical_lasso(R, lam)
+        gl = graphical_lasso_offdiag(R, lam)
         T = gl["precision"]
         d = np.sqrt(np.diag(T))
         pc = -T / np.outer(d, d)
-        path[f"{lam:g}"] = {"edges": gl["edges"], "pcor": pc}
+        path[f"{lam:g}"] = {"edges": gl["edges"], "pcor": pc, "kkt_max": gl["kkt_max"]}
     pc_full = M.partial_correlations(R)
     iu = np.triu_indices(24, 1)
     return nest({"names": names, "lams": lams, "path": path, "pcor_full": pc_full, "corr_mean": float(np.mean(R[iu])),
@@ -278,7 +363,7 @@ def compute_board():
             r_f += h["p"] < 0.05
             r_bs += M.bai_saranadasa(X, Y)["p"] < 0.05
         res[p] = {"chi2": r_chi / reps, "F": r_f / reps, "bs": r_bs / reps}
-    # power with a spread-out shift: delta = 0.25 in every coordinate, p = 40
+    # power with a spread-out shift: delta = 0.15 in every coordinate
     pw = {}
     for p in (10, 25, 40, 90):
         a_f, a_bs = 0, 0

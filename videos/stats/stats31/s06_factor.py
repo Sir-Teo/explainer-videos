@@ -37,7 +37,7 @@ class Factor(VoiceoverScene):
         self.versus()
 
     def card(self):
-        card = chapter_card(5, r"Factor analysis", r"Hidden causes of shared variation", lit=(1904,), part=PART)
+        card = chapter_card(5, r"Factor analysis", r"Latent shared variation", lit=(1904,), part=PART)
         with self.voiceover("Chapter five. Factor analysis."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
@@ -68,19 +68,23 @@ class Factor(VoiceoverScene):
             cmath(r"x", r"=", r"\mu + L f + \varepsilon, \ \ f \sim N_k(0, I), \ \ \varepsilon \sim N_p(0, \Psi)", font_size=28),
             cmath(r"\Sigma", r"=", r"L L^\top + \Psi, \ \ \Psi \text{ diagonal}", font_size=32),
             cmath(r"\sigma_{jj}", r"=", r"\underbrace{\textstyle\sum_m l_{jm}^2}_{\text{communality}} + \underbrace{\psi_j}_{\text{uniqueness}}", font_size=28),
-            cmath(r"\text{parameters}", r":", r"pk + p \ \ll \ p(p+1)/2", font_size=30),
+            cmath(r"\text{parameters}", r":", r"pk+p-k(k-1)/2 \ \text{vs.}\ p(p+1)/2", font_size=30),
         ]
         rows[1][-1].set_color(FAC)
-        whys = [why(r"$k$ factors, \ $p$ tests"), why(r"all correlation runs through the factors"),
-                why(r"shared and specific variance"), why(r"24 tests, \ 4 factors: \ 120 vs 300")]
+        whys = [why(r"$f$ independent of $\varepsilon$; $\Psi$ positive diagonal"), why(r"all correlation runs through the factors"),
+                why(r"shared and specific variance"), why(r"24 tests, 4 factors: 114 covariance parameters vs 300")]
         with self.voiceover(
-            "<bookmark mark='a'/> The model: each of p observed scores is a mean, plus loadings times k unobserved factors, "
-            "plus an error specific to that score. <bookmark mark='b'/> Then the covariance is L L transpose plus a "
-            "diagonal: every correlation between two tests runs through the common factors. <bookmark mark='c'/> Each "
-            "variance splits into a communality, the part shared with other tests, and a uniqueness. "
-            "<bookmark mark='d'/> The model is economical: with twenty-four tests and four factors, a hundred and twenty "
-            "parameters stand in for three hundred variances and covariances."
+            "<bookmark mark='a'/> The model: each of p observed scores is a mean, plus loadings times k unobserved "
+            "factors, plus an independent error specific to that score. <bookmark mark='b'/> Then the covariance is L"
+            " L transpose plus a diagonal: every correlation between two tests runs through the common factors. "
+            "<bookmark mark='c'/> Each variance splits into a communality, the part shared with other tests, and a "
+            "uniqueness. <bookmark mark='d'/> The model is economical: with twenty-four tests and four factors, there"
+            " are a hundred and twenty coefficients, minus six rotational redundancies: a hundred and fourteen "
+            "covariance parameters versus three hundred."
         ) as vo:
+            intro=label('Independent factors and specific errors split shared and unique variation',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -105,6 +109,9 @@ class Factor(VoiceoverScene):
             "discrepancy between the model and the sample correlations over the uniquenesses. <bookmark mark='d'/> And "
             "Bartlett's corrected likelihood-ratio statistic tests whether k factors suffice."
         ) as vo:
+            intro=label('Orthogonal rotations preserve covariance within a fixed-rank factor model',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -118,18 +125,19 @@ class Factor(VoiceoverScene):
                       VGroup(*[label(rf"{i + 1}.\ {R_names[i]}", font_size=19) for i in range(12, 24)]).arrange(DOWN, aligned_edge=LEFT, buff=0.14))
         cols.arrange(RIGHT, buff=0.8, aligned_edge=UP).move_to([-2.2, -0.1, 0])
         rows = fit_rows(VGroup(
-            label(rf"{d['n']} seventh- and eighth-graders, \ Chicago, \ 1937--38", font_size=22),
+            label(rf"{d['n']} seventh- and eighth-graders, Chicago suburb", font_size=22),
             label(r"24 tests: \ spatial, \ verbal, \ speed, \ memory, \ reasoning", font_size=22, color=FAC),
-            label(r"every correlation positive: \ mean 0.30", font_size=22),
+            label(r"275 of 276 correlations positive; mean 0.30", font_size=22),
             label(rf"first eigenvalue {d['eig'][0]:.1f} of 24: \ Spearman's pattern", font_size=22, color=MAPC),
         ), 4.2, 0.42, [4.6, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The classic data: Karl Holzinger and Frances Swineford gave twenty-four tests to a hundred "
-            "and forty-five schoolchildren in suburban Chicago in 1937 and 1938. <bookmark mark='b'/> Spatial tests like "
-            "cubes and flags; verbal tests like paragraph comprehension; speeded tests like addition and counting dots; "
-            "memory tests like word and number recognition. <bookmark mark='c'/> Every one of the two hundred and seventy-six "
-            "correlations is positive, averaging point three. <bookmark mark='d'/> The first eigenvalue of the correlation "
-            "matrix is eight point one, a third of the total: Spearman's pattern, a strong general factor."
+            "<bookmark mark='a'/> The classic data: Karl Holzinger and Frances Swineford gave twenty-four tests to a "
+            "hundred and forty-five schoolchildren in a Chicago suburb, as documented in Harman's table. <bookmark "
+            "mark='b'/> Spatial tests like cubes and flags; verbal tests like paragraph comprehension; speeded tests "
+            "like addition and counting dots; memory tests like word and number recognition. <bookmark mark='c'/> All"
+            " but one of the two hundred and seventy-six correlations are positive; their average is point three. "
+            "<bookmark mark='d'/> The first eigenvalue of the correlation matrix is eight point one, a third of the "
+            "total: Spearman's pattern, a strong general factor."
         ) as vo:
             self.add(harman_tag())
             vo.wait_until("a")
@@ -157,15 +165,16 @@ class Factor(VoiceoverScene):
         foot = fit_rows(VGroup(
             label(r"one factor is rejected overwhelmingly: \ $g$ alone is not enough", font_size=22, color=RES),
             label(r"four factors pass at 1\%; \ five at 5\%: \ the traditional answer is four", font_size=22, color=FAC),
-            label(r"with large $n$ every model is eventually rejected: \ the test is a guide, \ not a verdict", font_size=22, color=PATH),
+            label(r"fixed misspecification can be detected as $n$ grows; correct models need not be rejected", font_size=22, color=PATH),
         ), 12.0, 0.22, [0, -2.1, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> How many factors? Bartlett's test, for one to five. One factor is rejected with a p-value "
-            "of ten to the minus thirty-three: a general factor alone does not explain these correlations. Two and three "
-            "factors are rejected too. <bookmark mark='b'/> Four factors give a p-value of point oh two, five factors point "
-            "one three. Harman's traditional answer, and Holzinger's, is four. <bookmark mark='c'/> But with a large enough "
-            "sample, any parsimonious model will be rejected; the test is a guide to how much structure the data can "
-            "support, not a verdict on the truth."
+            "<bookmark mark='a'/> How many factors? Bartlett's test, for one to five. One factor is rejected with a "
+            "p-value of ten to the minus thirty-three: a general factor alone does not explain these correlations. "
+            "Two and three factors are rejected too. <bookmark mark='b'/> Four factors give a p-value of point oh two"
+            " two, so even four are rejected at five percent; five factors give point one three. Four are retained "
+            "here for an interpretable illustration, not as a model accepted by the five-percent test. <bookmark "
+            "mark='c'/> But with a large enough sample, a fixed misspecified model can be rejected; the test is a "
+            "guide to how much structure the data can support, not a verdict on the truth."
         ) as vo:
             self.add(harman_tag())
             vo.wait_until("a")
@@ -186,21 +195,23 @@ class Factor(VoiceoverScene):
         heads0 = VGroup(*[label(rf"F{j + 1}", font_size=18, color=GREY_A).next_to(h0[j], UP, buff=0.12) for j in range(4)])
         heads1 = VGroup(*[label(FNAMES[j], font_size=17, color=FAC).next_to(h0[j], UP, buff=0.12) for j in range(4)])
         rows = fit_rows(VGroup(
-            label(r"four-factor ML loadings: \ brighter = larger", font_size=22),
+            label(r"four-factor ML loadings: brighter = larger absolute value; signs omitted", font_size=22),
             label(r"unrotated: \ F1 loads on everything: \ $g$", font_size=22, color=GREY_A),
             label(r"varimax \ (Kaiser 1958): \ each test loads mostly on one factor", font_size=22, color=FAC),
             label(r"verbal 5--9; \ speed 10--13; \ spatial 1--4; \ memory 14--19", font_size=22, color=FAC),
             label(r"same fit, \ same $\Sigma$: \ only the description changed", font_size=22, color=RES),
         ), 4.4, 0.42, [4.4, 0.0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The four-factor loadings, as a heat map: twenty-four tests down, four factors across, "
-            "brighter for a larger loading. <bookmark mark='b'/> As estimated, the first factor loads on every test, "
-            "between a third and three quarters: that is Spearman's g. <bookmark mark='c'/> Now rotate by Henry Kaiser's "
-            "varimax criterion of 1958, the rotation that makes the squared loadings in each column as spread out as "
-            "possible. <bookmark mark='d'/> Each test now loads mostly on one factor, and the factors can be named: verbal, "
-            "speed, spatial, memory. <bookmark mark='e'/> Nothing about the fit changed. The two pictures imply exactly the "
-            "same covariance matrix. Whether these children have one general ability or four special ones is not a "
-            "question these data can answer by themselves."
+            "<bookmark mark='a'/> The four-factor loadings, as a heat map: twenty-four tests down, four factors "
+            "across, brighter for a larger absolute loading; the heat map omits signs. <bookmark mark='b'/> As "
+            "estimated, the first factor loads on every test, between a third and three quarters: that is Spearman's "
+            "g. <bookmark mark='c'/> Now rotate by Henry Kaiser's varimax criterion of 1958, the rotation that makes "
+            "the squared loadings in each column as spread out as possible. <bookmark mark='d'/> Each test now loads "
+            "mostly on one factor, and the factors can be named: verbal, speed, spatial, memory. <bookmark mark='e'/>"
+            " Nothing about the fit changed. The two pictures imply exactly the same covariance matrix. Rotation "
+            "changes the description within the same four-factor model. It cannot turn four factors into one: the "
+            "one-factor model was rejected. These rotations do not uniquely identify named psychological or causal "
+            "entities."
         ) as vo:
             self.add(harman_tag())
             vo.wait_until("a")
@@ -228,12 +239,17 @@ class Factor(VoiceoverScene):
         whys = [why(r"a boundary solution"), why(r"impossible: \ a Heywood case"), why(r"Heywood (1931)"),
                 why(r"the four-factor fit is interior")]
         with self.voiceover(
-            "<bookmark mark='a'/> A warning sign to watch for. Sometimes the likelihood pushes a uniqueness to zero, so that "
-            "one test is explained entirely by the factors. <bookmark mark='b'/> Unconstrained algorithms can even return a "
-            "negative variance. These are Heywood cases, after H. B. Heywood's paper of 1931. <bookmark mark='c'/> They "
-            "signal too many factors, too small a sample, or a wrong model. <bookmark mark='d'/> The four-factor fit here has "
-            "none: every uniqueness lies between a quarter and four fifths."
+            "<bookmark mark='a'/> A warning sign to watch for. Sometimes the likelihood pushes a uniqueness to zero, "
+            "so that one test is explained entirely by the factors. <bookmark mark='b'/> Unconstrained algorithms can"
+            " even return a negative variance. These are Heywood cases, after H. B. Heywood's paper of 1931. "
+            "<bookmark mark='c'/> They signal too many factors, too small a sample, or a wrong model. <bookmark "
+            "mark='d'/> The four-factor fit here has no active lower uniqueness bound: the fitted uniquenesses lie "
+            "between about a quarter and four fifths. This constrained optimizer checks the specified numerical "
+            "floor, not every possible Heywood solution."
         ) as vo:
+            intro=label('A uniqueness boundary is a warning about the fitted factor model',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -246,7 +262,7 @@ class Factor(VoiceoverScene):
                 [r"explains", r"total variance", r"covariance, \ off the diagonal"],
                 [r"specific variance", r"absorbed into components", r"set apart in $\Psi$"],
                 [r"scores", r"exact linear combinations", r"estimated, \ not observed"],
-                [r"units", r"change the answer", r"scale-invariant \ (ML)"]]
+                [r"units", r"change the answer", r"rescaling-equivariant fit (ML)"]]
         tb = table_rows([hdr] + body, font_size=24, col_buff=0.8, row_buff=0.3, colors=[GREY_A] + [None] * 5)
         for r in tb[1:]:
             r[1].set_color(PCC)
@@ -255,12 +271,14 @@ class Factor(VoiceoverScene):
         foot = label(r"they agree when uniquenesses are small and equal; \ they can differ a lot when not", font_size=22,
                      color=PATH).move_to([0, -2.7, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Factor analysis and principal components are often confused. Components are a rotation of "
-            "the data; factors are a model. Components explain total variance; factors explain covariance, the off-diagonal "
-            "part, and set each test's specific variance apart. <bookmark mark='b'/> Component scores are exact linear "
-            "combinations of the data; factor scores must be estimated. And maximum likelihood factor analysis is "
-            "unaffected by rescaling a variable, where components change. <bookmark mark='c'/> When the uniquenesses are "
-            "small and similar the two give much the same answer; when they are not, they can differ a great deal."
+            "<bookmark mark='a'/> Factor analysis and principal components are often confused. Components are a "
+            "rotation of the data; factors are a model. Components explain total variance; factors explain "
+            "covariance, the off-diagonal part, and set each test's specific variance apart. <bookmark mark='b'/> "
+            "Component scores are exact linear combinations of the data; factor scores must be estimated. And maximum"
+            " likelihood factor analysis is equivariant under rescaling with free uniquenesses: fitted covariance and"
+            " loadings rescale, while the fit criterion is preserved; PCA generally changes. <bookmark mark='c'/> "
+            "When the uniquenesses are small and similar the two give much the same answer; when they are not, they "
+            "can differ a great deal."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tb[0]), FadeIn(tb[1:4]))
@@ -274,20 +292,25 @@ class Factor(VoiceoverScene):
         rows = [
             cmath(r"\hat f_{\text{Thomson}}", r"=", r"L^\top \Sigma^{-1} (x - \mu)", font_size=32),
             cmath(r"\hat f_{\text{Bartlett}}", r"=", r"(L^\top \Psi^{-1} L)^{-1} L^\top \Psi^{-1} (x - \mu)", font_size=30),
-            cmath(r"\text{indeterminacy}", r":", r"f \text{ is never recovered exactly from } p \text{ tests}", font_size=28),
+            cmath(r"\text{indeterminacy}", r":", r"\text{positive uniqueness leaves posterior score uncertainty}", font_size=28),
             cmath(r"\text{rotation}", r":", r"\text{oblique (promax, oblimin) lets factors correlate}", font_size=28),
         ]
         rows[1][-1].set_color(FAC)
-        whys = [why(r"regression scores: \ $E(f \mid x)$"), why(r"weighted least squares: \ unbiased"), why(r"factor score indeterminacy"), why(r"Thurstone's `simple structure'")]
+        whys = [why(r"regression scores: \ $E(f \mid x)$"), why(r"conditionally unbiased given $f$; full-rank $L$"), why(r"factor score indeterminacy"), why(r"oblique: $\Sigma=L\Phi L^\top+\Psi$")]
         with self.voiceover(
             "<bookmark mark='a'/> A child's factor scores must be estimated. Godfrey Thomson's regression scores are "
-            "the conditional expectation of the factors given the tests. <bookmark mark='b'/> Bartlett's scores are a "
-            "weighted least-squares fit of the loadings to the child's results, unbiased but noisier. <bookmark "
-            "mark='c'/> Neither recovers the factors exactly; with finitely many tests there is always uncertainty "
-            "left, an old and much argued point. <bookmark mark='d'/> And the rotation need not be orthogonal. Oblique "
-            "rotations such as promax let the factors correlate with each other, which for abilities is usually more "
-            "realistic; a second-order factor analysis of those correlations brings back a general factor."
+            "the conditional expectation of the factors given the tests under the joint Gaussian model. <bookmark "
+            "mark='b'/> Bartlett's scores are a weighted least-squares fit of the loadings to the child's results, "
+            "conditionally unbiased given the factors when the loadings have full rank; regression scores instead "
+            "minimize mean squared error under the model. <bookmark mark='c'/> Neither recovers the factors exactly; "
+            "with finitely many tests and positive uniquenesses there is posterior uncertainty left, an old and much "
+            "argued point. <bookmark mark='d'/> And the rotation need not be orthogonal. Oblique rotations such as "
+            "promax let the factors correlate with each other, which for abilities is usually more realistic; a "
+            "second-order factor analysis of those correlations brings back a general factor."
         ) as vo:
+            intro=label('Factor scores are estimates under a specified latent model',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

@@ -34,16 +34,20 @@ class Cluster(VoiceoverScene):
         ]
         rows[0][-1].set_color(MAPC)
         whys = [why(r"within-cluster sum of squares"), why(r"Lloyd (1957; \ published 1982)"),
-                why(r"a Voronoi partition"), why(r"so it converges, \ to a local minimum")]
+                why(r"a Voronoi partition"), why(r"finite fixed point with consistent tie handling")]
         with self.voiceover(
-            "<bookmark mark='a'/> Discriminant analysis needs the groups to be known. Clustering looks for groups nobody "
-            "labelled. The k-means objective: choose k centres and an assignment of points to them to minimize the total "
-            "squared distance from each point to its centre. <bookmark mark='b'/> Stuart Lloyd's algorithm, written at Bell "
-            "Labs in 1957 and published only in 1982, alternates: with the assignment fixed, the best centres are the "
-            "cluster means; <bookmark mark='c'/> with the centres fixed, the best assignment sends each point to its nearest "
-            "centre. <bookmark mark='d'/> Neither step can increase the objective, so the algorithm stops, but only at a "
-            "local minimum, which is why it is run from many starts."
+            "<bookmark mark='a'/> Discriminant analysis needs the groups to be known. Clustering looks for groups "
+            "nobody labelled. The k-means objective: choose k centres and an assignment of points to them to minimize"
+            " the total squared distance from each point to its centre. <bookmark mark='b'/> Stuart Lloyd's "
+            "algorithm, written at Bell Labs in 1957 and published only in 1982, alternates: with the assignment "
+            "fixed, the best centres are the cluster means; <bookmark mark='c'/> with the centres fixed, the best "
+            "assignment sends each point to its nearest centre. <bookmark mark='d'/> Neither step can increase the "
+            "objective, so the algorithm stops, at a Lloyd fixed point with consistent tie handling, not necessarily "
+            "the global optimum, which is why it is run from many starts."
         ) as vo:
+            intro=label('K-means alternates nearest-center assignment and mean updates',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -109,13 +113,17 @@ class Cluster(VoiceoverScene):
         whys = [why(r"a Gaussian mixture, \ Part 22"), why(r"soft assignments"), why(r"Dempster, Laird \& Rubin (1977)"),
                 why(r"$k$-means is hard EM")]
         with self.voiceover(
-            "<bookmark mark='a'/> A model makes the method clearer. Suppose each flower belongs to one of k unseen groups, "
-            "each normal with its own mean and covariance: Part 22's Gaussian mixture. <bookmark mark='b'/> The E-step "
-            "computes each point's probability of belonging to each group, <bookmark mark='c'/> and the M-step re-estimates "
-            "the means, covariances and proportions with those weights. <bookmark mark='d'/> Force all covariances to be "
-            "the same tiny sphere and the probabilities become zeros and ones: k-means is EM with hard assignments, for a "
-            "mixture of equal round clusters."
+            "<bookmark mark='a'/> A model makes the method clearer. Suppose each flower belongs to one of k unseen "
+            "groups, each normal with its own mean and covariance: Part 22's Gaussian mixture. <bookmark mark='b'/> "
+            "The E-step computes each point's probability of belonging to each group, <bookmark mark='c'/> and the "
+            "M-step re-estimates the means, covariances and proportions with those weights. <bookmark mark='d'/> "
+            "Force all covariances to be the same tiny sphere and the probabilities become zeros and ones: k-means is"
+            " EM with hard assignments, as the zero-variance limit with positive fixed weights away from ties; "
+            "classification EM at a fixed variance also retains assignment and weight terms."
         ) as vo:
+            intro=label('A small-variance Gaussian-mixture limit produces hard assignments',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -142,11 +150,12 @@ class Cluster(VoiceoverScene):
             label(rf"ARI: \ mixture {d['ari_gmm']:.2f}, \ $k$-means {d['ari_km']:.2f}", font_size=22, color=PATH),
         ), 4.2, 0.42, [4.6, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> A three-component normal mixture fitted by EM to all four measurements, shown on the "
-            "petals. <bookmark mark='b'/> The ellipses are each component's two-standard-deviation contour. "
-            "<bookmark mark='c'/> Unlike k-means, the components can lean and stretch, following the shape of each species. "
-            "<bookmark mark='d'/> The adjusted Rand index against the true species, where one means perfect agreement and "
-            "zero means chance, is point nine for the mixture and point seven three for k-means on the same four variables."
+            "<bookmark mark='a'/> A three-component normal mixture fitted by EM to all four measurements, shown on "
+            "the petals. <bookmark mark='b'/> The ellipses are each component's two-standard-deviation contour. "
+            "<bookmark mark='c'/> Unlike k-means, the components can lean and stretch, following the shape of each "
+            "species. <bookmark mark='d'/> The adjusted Rand index against the true species, where one means perfect "
+            "agreement and zero is the expectation under a fixed-margin random-partition reference, is point nine for"
+            " the mixture and point seven three for k-means on the same four variables."
         ) as vo:
             self.add(iris_tag())
             self.play(FadeIn(A))
@@ -171,12 +180,16 @@ class Cluster(VoiceoverScene):
         whys = [why(r"Hubert \& Arabie (1985)"), why(r"cluster 2 needn't be species 2"), why(r"corrected for chance"),
                 why(r"the species were known all along")]
         with self.voiceover(
-            "<bookmark mark='a'/> That index deserves a word. The adjusted Rand index of Lawrence Hubert and Phipps Arabie "
-            "counts pairs of points that two partitions treat alike, corrected for the agreement expected by chance. "
-            "<bookmark mark='b'/> Cluster labels are arbitrary, so it compares partitions, not names. <bookmark mark='c'/> "
-            "One means the same partition, zero means no better than chance. <bookmark mark='d'/> And we could only compute "
-            "it because the species were known. In a real clustering problem there is no answer key."
+            "<bookmark mark='a'/> That index deserves a word. The adjusted Rand index of Lawrence Hubert and Phipps "
+            "Arabie counts pairs of points that two partitions treat alike, corrected for the agreement expected by "
+            "chance. <bookmark mark='b'/> Cluster labels are arbitrary, so it compares partitions, not names. "
+            "<bookmark mark='c'/> One means the same partition, zero is chance-level expectation under that "
+            "fixed-margin reference; negative values are possible. <bookmark mark='d'/> And we could only compute it "
+            "because the species were known. In a real clustering problem there is no answer key."
         ) as vo:
+            intro=label('Adjusted Rand agreement compares partitions under a chance reference',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -199,14 +212,16 @@ class Cluster(VoiceoverScene):
         foot = fit_rows(VGroup(
             label(r"the WSS always falls: \ look for an elbow, \ at 2 or 3", font_size=22, color=MAPC),
             label(rf"BIC prefers $k = 2$ \ ({bic[1]:.0f} vs {bic[2]:.0f}): \ versicolor and virginica merge", font_size=22, color=RES),
-            label(r"three species, \ but the data support two clusters: \ clusters are not kinds", font_size=22, color=GREY_A),
+            label(r"this regularized mixture BIC prefers two components; components are not species", font_size=22, color=GREY_A),
         ), 12.0, 0.22, [0, -2.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> How many clusters? The k-means objective always falls as k grows, so one looks for an "
-            "elbow, here at two or three. <bookmark mark='b'/> The mixture model allows a principled answer: Part 28's BIC. "
-            "It is lowest at two, not three: versicolor and virginica overlap enough that one stretched component describes "
-            "them about as well as two. <bookmark mark='c'/> There are three species, but the four measurements support two "
-            "clusters. A cluster is a region of high density, not a natural kind."
+            "<bookmark mark='a'/> How many clusters? The k-means objective always falls as k grows, so one looks for "
+            "an elbow, here at two or three. <bookmark mark='b'/> The fitted regularized mixture gives Part 28's BIC "
+            "as a useful heuristic; mixture singularities limit its regular-model derivation. It is lowest at two, "
+            "not three: versicolor and virginica overlap enough that one stretched component describes them about as "
+            "well as two. <bookmark mark='c'/> There are three species, but this model and criterion prefer two "
+            "components. That does not establish the true number of density modes or biological groups. A cluster is "
+            "a region of high density, not a natural kind."
         ) as vo:
             self.add(iris_tag())
             self.play(FadeIn(A1), FadeIn(A2))
@@ -226,12 +241,13 @@ class Cluster(VoiceoverScene):
             label(r"is a cluster real? \ check it survives resampling \ (Part 16)", font_size=24, color=PATH),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Cautions. A clustering algorithm always returns clusters, even from data with no structure "
-            "at all. <bookmark mark='b'/> Rescaling a variable changes k-means's answer, because it changes the distances. "
-            "<bookmark mark='c'/> There are other notions of cluster: hierarchical trees that merge points step by step, "
-            "density-based methods that find connected regions, and spectral methods that cut a similarity graph. "
-            "<bookmark mark='d'/> Whether a cluster is real is a statistical question: at the least, check that it survives "
-            "resampling the data, with Part 16's bootstrap."
+            "<bookmark mark='a'/> Cautions. K-means returns the requested partition even from structureless data; "
+            "some density algorithms may instead label points as noise. <bookmark mark='b'/> Rescaling a variable "
+            "changes k-means's answer, because it changes the distances. <bookmark mark='c'/> There are other notions"
+            " of cluster: hierarchical trees that merge points step by step, density-based methods that find "
+            "connected regions, and spectral methods that cut a similarity graph. <bookmark mark='d'/> Whether a "
+            "cluster is real is a statistical question: at the least, check its resampling stability and relevance to"
+            " the task. Stability alone does not prove a natural kind or a unique true partition."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -248,13 +264,18 @@ class Cluster(VoiceoverScene):
         rows[0][-1].set_color(RES)
         whys = [why(r"a component on one point"), why(r"label switching"), why(r"Part 22's EM, \ again"), why(r"regularize")]
         with self.voiceover(
-            "<bookmark mark='a'/> Mixtures have pitfalls of their own. Put one component on a single point and shrink "
-            "its covariance: the likelihood goes to infinity. The maximum likelihood estimate does not exist; EM finds "
-            "a sensible local maximum instead. <bookmark mark='b'/> Relabelling the components gives k factorial "
-            "identical maxima, label switching, which matters for Bayesian mixtures. <bookmark mark='c'/> EM converges "
-            "to a local maximum, so it is run from many starts, as k-means is. <bookmark mark='d'/> In practice the "
-            "covariances' eigenvalues are kept away from zero, or a prior does the same job."
+            "<bookmark mark='a'/> Mixtures have pitfalls of their own. Put one component on a single point and shrink"
+            " its covariance: the likelihood goes to infinity. The unconstrained global maximum does not exist. Our "
+            "finite fits use a declared diagonal covariance ridge of one millionth; they are checked numerical local "
+            "fits. <bookmark mark='b'/> Relabelling the components gives k factorial identical maxima, label "
+            "switching, which matters for Bayesian mixtures. <bookmark mark='c'/> EM can settle at a stationary "
+            "point, saddle or boundary behavior, so it is run from many starts, as k-means is. <bookmark mark='d'/> "
+            "In practice the covariances are regularized or supplied with a suitable prior; the exact objective and "
+            "convergence still need checking."
         ) as vo:
+            intro=label('Unconstrained Gaussian mixture likelihoods can diverge',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

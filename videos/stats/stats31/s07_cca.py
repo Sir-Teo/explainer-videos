@@ -40,6 +40,9 @@ class CCA(VoiceoverScene):
             "variable, this is just the multiple correlation of regression, Part 12's R. <bookmark mark='d'/> After the first "
             "pair comes the best pair uncorrelated with it, and so on, up to the smaller of the two block sizes."
         ) as vo:
+            intro=label('Canonical correlation pairs linear summaries from two variable blocks',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -55,13 +58,18 @@ class CCA(VoiceoverScene):
         ]
         rows[1][-1].set_color(CCC)
         whys = [why(r"whiten each block"), why(r"an SVD again"), why(r"the canonical weights"),
-                why(r"Bartlett: \ are correlations $k+1, \dots$ zero?")]
+                why(r"Gaussian large-sample Bartlett test; nonsingular blocks")]
         with self.voiceover(
-            "<bookmark mark='a'/> The answer is, once more, a singular value decomposition. Whiten each block by its own "
-            "covariance and form the cross-covariance between the whitened blocks. <bookmark mark='b'/> Its singular values "
-            "are the canonical correlations, <bookmark mark='c'/> and its singular vectors, unwhitened, are the canonical "
-            "weights. <bookmark mark='d'/> Bartlett's statistic tests whether all the correlations after the k-th are zero."
+            "<bookmark mark='a'/> The answer is, once more, a singular value decomposition. Whiten each block by its "
+            "own covariance and form the cross-covariance between the whitened blocks. <bookmark mark='b'/> Its "
+            "singular values are the canonical correlations, <bookmark mark='c'/> and its singular vectors, "
+            "unwhitened, are the canonical weights. <bookmark mark='d'/> Under joint Gaussian assumptions and "
+            "nonsingular within-block covariance, Bartlett's large-sample statistic tests whether all correlations "
+            "after the k-th are zero."
         ) as vo:
+            intro=label('Whitened cross-covariance singular values are canonical correlations',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -141,12 +149,13 @@ class CCA(VoiceoverScene):
             label(r"the structure correlations name the variates; \ the raw weights can mislead when variables correlate", font_size=22, color=PATH),
         ), 12.0, 0.22, [0, -2.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> To interpret a canonical variate, correlate it with the original variables. The first "
-            "demographic variate is almost exactly minus the share under fifteen and plus the share over seventy-five. The "
-            "first economic variate is mostly income, with savings contributing. <bookmark mark='b'/> The first canonical "
-            "correlation is overwhelmingly significant. The second, point three seven, contrasting the savings rate with "
-            "income, is borderline, a p-value of point oh four. <bookmark mark='c'/> Use these structure correlations, not the "
-            "raw weights: when the variables in a block are correlated, as under-fifteen and over-seventy-five are, the "
+            "<bookmark mark='a'/> To interpret a canonical variate, correlate it with the original variables. The "
+            "first demographic variate is almost exactly minus the share under fifteen and plus the share over "
+            "seventy-five. The first economic variate is mostly income, with savings contributing. <bookmark "
+            "mark='b'/> The first canonical correlation is overwhelmingly significant. The second, point three seven,"
+            " has an unadjusted approximate p-value of point oh four; interpreting several sequential tests also "
+            "raises multiplicity questions. <bookmark mark='c'/> Use these structure correlations, not the raw "
+            "weights: when the variables in a block are correlated, as under-fifteen and over-seventy-five are, the "
             "weights can have surprising signs."
         ) as vo:
             self.add(savings_tag())
@@ -178,6 +187,9 @@ class CCA(VoiceoverScene):
             "<bookmark mark='d'/> And a caution: when p plus q approaches n, two random subspaces nearly intersect, so the "
             "first canonical correlation approaches one by chance alone."
         ) as vo:
+            intro=label('Canonical correlations are cosines of data-column-space angles',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -209,18 +221,21 @@ class CCA(VoiceoverScene):
             cmath(r"r_1", r"\uparrow", r"\text{as } p + q \to n, \ \text{even with no relation}", font_size=30),
             cmath(r"\text{regularized CCA}", r":", r"S_{xx} + \lambda_x I, \ \ S_{yy} + \lambda_y I", font_size=30),
             cmath(r"\text{sparse CCA}", r":", r"\text{few non-zero weights}", font_size=30),
-            cmath(r"\text{PLS}", r":", r"\max \mathrm{cov}(a^\top x, b^\top y): \ \text{no inverse}", font_size=30),
+            cmath(r"\text{PLS}", r":", r"\max_{\|a\|=\|b\|=1} \mathrm{cov}(a^\top x,b^\top y): \ \text{no inverse}", font_size=30),
         ]
         rows[1][-1].set_color(CCC)
         whys = [why(r"chance correlation"), why(r"Vinod (1976): \ ridge CCA"), why(r"Witten, Tibshirani \& Hastie (2009)"), why(r"Wold's partial least squares")]
         with self.voiceover(
             "<bookmark mark='a'/> With many variables in either block, canonical correlation overfits: the first "
             "correlation creeps towards one even when the blocks are unrelated. <bookmark mark='b'/> The cures echo "
-            "chapter ten. Add a ridge to each block's covariance before inverting it. <bookmark mark='c'/> Or ask for "
-            "sparse weights, with only a few non-zero. <bookmark mark='d'/> Or maximize covariance instead of "
-            "correlation, which needs no inverse at all: Herman Wold's partial least squares, widely used in chemistry "
-            "and genomics."
+            "chapter ten. Add a ridge to each block's covariance before inverting it. <bookmark mark='c'/> Or ask for"
+            " sparse weights, with only a few non-zero. <bookmark mark='d'/> Or maximize covariance with unit-length "
+            "weights instead of correlation, which needs no covariance inverse: Herman Wold's partial least squares, "
+            "widely used in chemistry and genomics."
         ) as vo:
+            intro=label('High-dimensional canonical correlations require regularization',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
