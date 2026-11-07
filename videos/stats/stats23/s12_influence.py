@@ -31,14 +31,19 @@ class Influence(VoiceoverScene):
         rows[0][2].set_color(PATH)
         whys = [why(r"leave one out, \ without refitting: \ Sherman--Morrison"), why(r"in SEs: \ Belsley, \ Kuh \& Welsch (1980)"),
                 why(r"Part 12: \ residual times leverage"), why(r"a size-adjusted rule of thumb")]
+        intro = label('Deletion formulas require a full-rank remaining design', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> How much does one observation matter? Deleting it changes the coefficients by a formula "
-            "that needs no refit: X transpose X inverse times x i, times its residual, divided by one minus its leverage. "
-            "It follows from the Sherman–Morrison identity for updating an inverse. <bookmark mark='b'/> Scaled by the "
-            "coefficient's standard error, that's DFBETAS. <bookmark mark='c'/> Part 12's Cook's distance summarizes the "
-            "change in all the coefficients at once: large residual times large leverage. <bookmark mark='d'/> A common flag "
-            "for DFBETAS is two over root n."
+            "<bookmark mark='a'/> How much does one observation matter? Deleting it changes the coefficients by a "
+            "formula that needs no refit: X transpose X inverse times x i, times its residual, divided by one minus "
+            "its leverage. It follows from Sherman–Morrison, provided the deleted design remains full rank, "
+            "equivalently leverage is below one. <bookmark mark='b'/> DFBETAS scales this by the deleted-fit residual"
+            " standard deviation and the coefficient's full-design inverse-Gram factor. <bookmark mark='c'/> Part "
+            "12's Cook's distance summarizes the change in all the coefficients at once: large residual times large "
+            "leverage. <bookmark mark='d'/> A common flag for DFBETAS is two over root n."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -48,21 +53,26 @@ class Influence(VoiceoverScene):
     def leverage(self):
         rows = [
             cmath(r"h_{ii}", r"=", r"x_i^\top (X^\top X)^{-1} x_i", font_size=30),
-            cmath(r"", r"=", r"\tfrac1n + \tfrac{1}{n - 1}\, D_i^2", font_size=30),
+            cmath(r"", r"=", r"\tfrac1n + \tfrac{1}{n - 1}\, M_i^2", font_size=30),
             cmath(r"\textstyle\sum_i h_{ii}", r"=", r"p, \ \ \text{average } p/n", font_size=30),
             cmath(r"\mathrm{Var}(e_i)", r"=", r"(1 - h_{ii})\sigma^2", font_size=30),
         ]
         rows[1][-1].set_color(PATH)
-        whys = [why(r"the diagonal of the hat matrix"), why(r"$D_i$: \ Mahalanobis distance from the centre of $x$"),
+        whys = [why(r"the diagonal of the hat matrix"), why(r"$M_i$: \ Mahalanobis distance from the centre of $x$"),
                 why(r"the trace of a projection"), why(r"chapter four, \ again")]
+        intro = label('Leverage measures predictor distance; covariance needs mean assumptions', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> First, leverage, the diagonal of the hat matrix. <bookmark mark='b'/> With an intercept it "
-            "is one over n plus the squared Mahalanobis distance of x i from the centre of the predictors, scaled by n minus "
-            "one: leverage is distance in x, measured in the predictors' own covariance. <bookmark mark='c'/> The leverages "
-            "add up to p, the trace of a projection, so their average is p over n. <bookmark mark='d'/> And a residual's "
-            "variance is one minus its leverage times sigma squared, which is why chapter four's small-sample corrections "
-            "divide by it."
+            "<bookmark mark='a'/> First, leverage, the diagonal of the hat matrix. <bookmark mark='b'/> With an "
+            "intercept it is one over n plus the squared Mahalanobis distance of x i from the centre of the "
+            "predictors, scaled by n minus one: leverage is distance in x, measured in the predictors' own "
+            "covariance. <bookmark mark='c'/> The leverages add up to p, the trace of a projection, so their average "
+            "is p over n. <bookmark mark='d'/> Under a correct mean with uncorrelated homoskedastic errors, a "
+            "residual's variance is one minus leverage times sigma squared, which is why chapter four's small-sample "
+            "corrections divide by it."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -161,12 +171,13 @@ class Influence(VoiceoverScene):
             label(rf"Cook's $D$: \ {d['cooks'][-3]:.2f}, {d['cooks'][-2]:.2f}, {d['cooks'][-1]:.2f}; \ all below 1", font_size=22, color=RES),
         ), 3.45, 0.42, [5.1, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Leave-one-out has a blind spot. Twenty ordinary points and three outliers sitting together "
-            "far to the right. <bookmark mark='b'/> With all twenty-three, the slope is flat. <bookmark mark='c'/> Delete "
-            "one outlier and the other two hold the line almost where it was: the slope barely moves. <bookmark mark='d'/> "
-            "Delete all three and it jumps to point four six. <bookmark mark='e'/> Each outlier's Cook's distance is below the "
-            "usual cut-off of one, because each is masked by its neighbours. Groups of points need group diagnostics, or "
-            "robust fits that don't let any group take over."
+            "<bookmark mark='a'/> Leave-one-out has a blind spot. Twenty ordinary points and three outliers sitting "
+            "together far to the right. <bookmark mark='b'/> With all twenty-three, the slope is flat. <bookmark "
+            "mark='c'/> Delete one outlier and the other two hold the line almost where it was: the slope barely "
+            "moves. <bookmark mark='d'/> Delete all three and it jumps to point four six. <bookmark mark='e'/> Each "
+            "outlier's Cook's distance is below the usual cut-off of one, because each is masked by its neighbours. "
+            "Group diagnostics can reveal this masking. Robust methods differ: ordinary residual-based M-estimators "
+            "need not resist high-leverage groups."
         ) as vo:
             self.play(FadeIn(A), FadeIn(dots))
             vo.wait_until("a")
@@ -183,17 +194,19 @@ class Influence(VoiceoverScene):
 
     def advice(self):
         rows = fit_rows(VGroup(
-            label(r"leverage: \ unusual $x$; \ residual: \ unusual $y$; \ influence: \ both", font_size=24, color=PATH),
+            label(r"leverage: \ unusual $x$; \ residual: \ unusual $y$; \ influence: \ combines residual and leverage", font_size=24, color=PATH),
             label(r"check influential points; \ refit without them; \ report both", font_size=24),
             label(r"robust regression downweights them automatically: \ Part 30", font_size=24, color=TEAL),
             label(r"influence functions, \ for any estimator: \ Parts 30 and 49", font_size=24, color=GREY_A),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Leverage is an unusual x; a large residual is an unusual y; influence needs both. "
-            "<bookmark mark='b'/> Look at the influential points, refit without them, and if the conclusion changes, say so. "
-            "<bookmark mark='c'/> Robust regression, in Part 30, downweights such points automatically. <bookmark mark='d'/> "
-            "And the deletion change, scaled up by n, is a first look at the influence function, which Parts 30 and 49 build "
-            "into a theory of every estimator."
+            "<bookmark mark='a'/> Leverage is an unusual x; a large residual is an unusual y; influence combines "
+            "residual size, leverage and coefficient direction; neither component must cross an arbitrary high "
+            "threshold. <bookmark mark='b'/> Look at the influential points, refit without them, and if the "
+            "conclusion changes, say so. <bookmark mark='c'/> Part 30 distinguishes residual-robust fits from methods"
+            " designed to resist leverage contamination. <bookmark mark='d'/> And the deletion change, scaled up by "
+            "n, is a first look at the influence function, which Parts 30 and 49 build into a theory of every "
+            "estimator."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

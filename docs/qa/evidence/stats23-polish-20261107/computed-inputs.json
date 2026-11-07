@@ -1,0 +1,89 @@
+{
+  "items": [
+    {
+      "item": "longley",
+      "path": ".cache/stats23/longley.json",
+      "bytes": 4467,
+      "sha256": "42d6682a4fc1e59344ba62358a96699ea4c801c9b020ddd4988ea66ac12f99d8"
+    },
+    {
+      "item": "glh",
+      "path": ".cache/stats23/glh.json",
+      "bytes": 10179,
+      "sha256": "79bbce389bb56b9b3309b2c47176f0a1d7ecce19ff49727403c912675c016fa7"
+    },
+    {
+      "item": "gls",
+      "path": ".cache/stats23/gls.json",
+      "bytes": 2841,
+      "sha256": "9c9158d73b9296495644fcc1b1183c5e19670d5842fc17d014e993675c90742d"
+    },
+    {
+      "item": "hc",
+      "path": ".cache/stats23/hc.json",
+      "bytes": 3268,
+      "sha256": "ff072efc19d616ac643d515ba4818934129d558d72071a0159f88b29dbe36d93"
+    },
+    {
+      "item": "schools",
+      "path": ".cache/stats23/schools.json",
+      "bytes": 2319,
+      "sha256": "6fb035e4a3883baa0e829ba28597e8b86731409f9a881603fd24b4fb13654347"
+    },
+    {
+      "item": "blp",
+      "path": ".cache/stats23/blp.json",
+      "bytes": 10421,
+      "sha256": "5f8d5d47588b640ebdb40998cc8f8eb6503d2e949298256c7ee89eff7330146f"
+    },
+    {
+      "item": "eiv",
+      "path": ".cache/stats23/eiv.json",
+      "bytes": 15191,
+      "sha256": "5d6fedb0fdee52b976a1a66830667b44469b5219a40155acf70e840d4f71e64c"
+    },
+    {
+      "item": "qreg",
+      "path": ".cache/stats23/qreg.json",
+      "bytes": 12490,
+      "sha256": "142ec617f41c2d9d6d35752e46472a9012e49e13c2e8d364751cfb322010d238"
+    },
+    {
+      "item": "splines",
+      "path": ".cache/stats23/splines.json",
+      "bytes": 107836,
+      "sha256": "dd65fc3ba29541398d83cbbc382681811676932eb1930c087fc4d08087319a62"
+    },
+    {
+      "item": "influence",
+      "path": ".cache/stats23/influence.json",
+      "bytes": 2558,
+      "sha256": "6abd716796db814c65f78be064042d398ad8b17d5fc81bf629648a4fd9cb8892"
+    },
+    {
+      "item": "glh_null",
+      "path": ".cache/stats23/glh_null.json",
+      "bytes": 44988,
+      "sha256": "80f68f826ce9faf30824c8bb5723d4c73e2c037c9ae152908ce6f1bf1896236f"
+    },
+    {
+      "item": "kappa",
+      "path": ".cache/stats23/kappa.json",
+      "bytes": 1818,
+      "sha256": "fd2c1fa1689516141fd395ec4d137756f20dd56d24810222e56c173ba31fa01e"
+    },
+    {
+      "item": "masking",
+      "path": ".cache/stats23/masking.json",
+      "bytes": 2252,
+      "sha256": "3b37429de6d837754aa0b7872eafe04d2301bf45abb4e6716d520cfd7dc1c955"
+    },
+    {
+      "item": "board",
+      "path": ".cache/stats23/board.json",
+      "bytes": 2335,
+      "sha256": "1ab45be4adaa74ef83bd4d22e5543575d801ec9a60092705dfbd997682a93d61"
+    }
+  ],
+  "scene_imports": 13
+}

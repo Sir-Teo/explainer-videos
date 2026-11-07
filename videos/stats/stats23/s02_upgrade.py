@@ -96,12 +96,14 @@ class Upgrade(VoiceoverScene):
             label(r"and the arithmetic: \ chapter ten", font_size=24, color=GREY_A),
         ), 12.4, 0.45, [0, 0, 0])
         with self.voiceover(
-            "The map. <bookmark mark='a'/> If the errors' covariance has a known shape, generalized least squares uses it. "
-            "<bookmark mark='b'/> If each error has its own unknown variance, heteroskedasticity-consistent standard errors "
-            "estimate the middle from the residuals. <bookmark mark='c'/> If errors are correlated within clusters, sum "
-            "within clusters first. <bookmark mark='d'/> If the mean isn't linear at all, least squares still estimates "
-            "something, the best linear predictor. <bookmark mark='e'/> If X itself is noisy, the slope is biased towards "
-            "zero. <bookmark mark='f'/> And the arithmetic needs care too."
+            "The map. <bookmark mark='a'/> If the errors' covariance has a known shape, generalized least squares "
+            "uses it. <bookmark mark='b'/> If each error has its own unknown variance, heteroskedasticity-consistent "
+            "standard errors estimate the middle from the residuals. <bookmark mark='c'/> If errors are correlated "
+            "within clusters, sum within clusters first. <bookmark mark='d'/> With finite second moments and a "
+            "nonsingular predictor moment matrix, least squares can estimate the best linear predictor even when the "
+            "mean is curved. <bookmark mark='e'/> Classical independent error in a single regressor attenuates its "
+            "slope; with several regressors the direction of bias can vary. <bookmark mark='f'/> And the arithmetic "
+            "needs care too."
         ) as vo:
             for k, m_ in enumerate("abcdef"):
                 vo.wait_until(m_)

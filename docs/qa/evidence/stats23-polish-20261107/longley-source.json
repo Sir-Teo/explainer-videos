@@ -1,0 +1,7 @@
+{
+  "url": "https://www.itl.nist.gov/div898/strd/lls/data/LINKS/DATA/Longley.dat",
+  "sha256": "fc4b0c824f8f0b834eb8e7d1c4c7e0b3cebdd7987bcb085e8f5e1007582480ea",
+  "data_rows_exactly_matched": 16,
+  "predictor_columns_exactly_matched": 6,
+  "certified_coefficients_exactly_matched": 7
+}

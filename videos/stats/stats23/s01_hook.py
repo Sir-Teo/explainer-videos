@@ -115,20 +115,21 @@ class Hook(VoiceoverScene):
         rows = [
             cmath(r"\kappa(X)", r"=", rf"\sigma_{{\max}}/\sigma_{{\min}} \approx {d['cond_X'] / 1e9:.1f} \times 10^9", font_size=30),
             cmath(r"\kappa(X^\top X)", r"=", r"\kappa(X)^2 \approx 2.4 \times 10^{19}", font_size=30),
-            cmath(r"\text{digits lost}", r"\approx", r"\log_{10} \kappa: \ \ \text{QR loses } 10, \ \text{the normal equations } 19", font_size=28),
+            cmath(r"\text{sensitivity guide}", r"\approx", r"\log_{10}\kappa;\ \text{not an observed digit count}", font_size=28),
             cmath(r"\text{centre and scale}", r":", rf"\kappa = {d['cond_scaled']:.0f}", font_size=30),
         ]
         rows[1][2].set_color(RES)
         whys = [why(r"the condition number: \ Part 4"), why(r"forming $X^\top X$ squares it"),
                 why(r"single precision has 7; \ double has 16"), why(r"chapter ten: \ numerics")]
         with self.voiceover(
-            "<bookmark mark='a'/> Why? The condition number of the design matrix, the ratio of its largest to smallest "
-            "singular value, is about five billion: some direction in the data is almost not there. <bookmark mark='b'/> "
-            "Forming X transpose X squares it, to about two times ten to the nineteen. <bookmark mark='c'/> A rule of thumb "
-            "says you lose about the log of the condition number in digits. QR works with X itself and loses about ten; the "
-            "normal equations work with its square and lose nineteen, more than double precision even has. "
-            "<bookmark mark='d'/> Centring and scaling the predictors brings the condition number down to about one hundred "
-            "and ten. Chapter ten returns to the numerics."
+            "<bookmark mark='a'/> Why? The condition number of the design matrix, the ratio of its largest to "
+            "smallest singular value, is about five billion: some direction in the data is almost not there. "
+            "<bookmark mark='b'/> Forming X transpose X squares it, to about two times ten to the nineteen. <bookmark"
+            " mark='c'/> A rule of thumb says you lose about the log of the condition number in digits. This is a "
+            "worst-case sensitivity guide, not a prediction of the observed digits. QR avoids squaring the working "
+            "matrix condition number; actual accuracy also depends on the response and residual. <bookmark mark='d'/>"
+            " Centring and scaling the predictors brings the condition number down to about one hundred and ten. "
+            "Chapter ten returns to the numerics."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.82, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -148,11 +149,11 @@ class Hook(VoiceoverScene):
         prereq = note(r"prerequisites: \ Parts 12, \ 21 and 22").to_corner(DL, buff=0.3)
         built = note(r"built: \ \texttt{statkit.ols} II; \ the digits board").to_corner(DR, buff=0.3)
         with self.voiceover(
-            "<bookmark mark='a'/> Part twenty-three: the linear model in depth. <bookmark mark='b'/> We'll derive the general "
-            "linear hypothesis and its F-test; meet generalized least squares; build standard errors that survive uneven "
-            "noise and clustered data, with a wild bootstrap for when the clusters are few; ask what a linear model estimates "
-            "when the truth isn't linear, and what noisy regressors do; fit quantiles and splines; and finish with the "
-            "numerics of least squares and the influence of single points."
+            "<bookmark mark='a'/> Part twenty-three: the linear model in depth. <bookmark mark='b'/> We'll derive the"
+            " general linear hypothesis and its F-test; meet generalized least squares; build standard errors for "
+            "uneven noise and clustered data, and assess a wild bootstrap with few clusters; ask what a linear model "
+            "estimates when the truth isn't linear, and what noisy regressors do; fit quantiles and splines; and "
+            "finish with the numerics of least squares and the influence of single points."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head, shift=UP * 0.2))

@@ -44,12 +44,13 @@ class Numerics(VoiceoverScene):
             label(r"lengths kept, \ so no error is amplified", font_size=22, color=HIT),
         ), 4.6, 0.42, [4.2, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The method behind QR, from Alston Householder in 1958, is a mirror. Take a column of the "
-            "data, here the vector three, four. <bookmark mark='b'/> There is a mirror that reflects it onto the first axis. "
-            "<bookmark mark='c'/> Its image is minus five, zero: the same length, with every component but the first "
-            "zeroed. <bookmark mark='d'/> The reflection is an orthogonal matrix, the identity minus twice the projection "
-            "onto v. <bookmark mark='e'/> Orthogonal matrices preserve lengths, so they never magnify rounding errors. That "
-            "is the whole secret."
+            "<bookmark mark='a'/> The method behind QR, from Alston Householder in 1958, is a mirror. Take a column "
+            "of the data, here the vector three, four. <bookmark mark='b'/> There is a mirror that reflects it onto "
+            "the first axis. <bookmark mark='c'/> Its image is minus five, zero: the same length, with every "
+            "component but the first zeroed. <bookmark mark='d'/> The reflection is an orthogonal matrix, the "
+            "identity minus twice the projection onto v. <bookmark mark='e'/> In exact arithmetic orthogonal "
+            "transformations preserve the norm of an existing error. Floating-point steps add roundoff too, but "
+            "Householder QR controls it through backward stability."
         ) as vo:
             self.play(FadeIn(axes_), GrowArrow(va))
             vo.wait_until("a")
@@ -114,6 +115,9 @@ class Numerics(VoiceoverScene):
         rows[1][2].set_color(OLS_C)
         whys = [why(r"fastest; \ squares the condition number"), why(r"twice the work, \ what \texttt{lm} does"),
                 why(r"the singular values show the near-collinearity"), why(r"Part 4's pseudoinverse; \ Part 59's interpolation")]
+        intro = label('Working matrix conditioning differs across numerical routes', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> Three routes, at three prices. Forming X transpose X and taking its Cholesky factor is the "
             "fastest, but squares the condition number, Longley's disaster. <bookmark mark='b'/> Householder QR costs about "
@@ -123,6 +127,7 @@ class Numerics(VoiceoverScene):
             "gives the minimum-norm least squares solution through the pseudoinverse, which Part 59 will meet again when "
             "there are more parameters than data."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -139,14 +144,19 @@ class Numerics(VoiceoverScene):
         rows[0][2].set_color(OLS_C)
         whys = [why(r"rotate the new row into $R$"), why(r"streaming least squares"), why(r"tall-skinny QR: \ one pass, \ in parallel"),
                 why(r"the deletion formula's numerical twin")]
+        intro = label('QR updates must carry the transformed response too', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> QR also updates well. When a new observation arrives, stack it under R and rotate it in "
-            "with p small Givens rotations, each mixing two rows. <bookmark mark='b'/> That costs order p squared per row, so "
-            "least squares can be updated as data stream in. <bookmark mark='c'/> For data too big for one machine, "
-            "factor each chunk separately, stack the small R factors and factor once more: the answer is the same as one "
-            "huge QR. <bookmark mark='d'/> Removing a row, downdating, is possible but less stable, the numerical cousin of "
-            "chapter eleven's deletion formula."
+            "<bookmark mark='a'/> QR also updates well. When a new observation arrives, stack it under R, carry the "
+            "transformed response alongside it, and rotate with p small Givens rotations, each mixing two rows. "
+            "<bookmark mark='b'/> That costs order p squared per row, so least squares can be updated as data stream "
+            "in. <bookmark mark='c'/> For data too big for one machine, factor each chunk separately, stack the small"
+            " R factors together with each chunk's transformed response, and factor once more. In exact arithmetic "
+            "this gives the same least-squares fit as one huge QR. <bookmark mark='d'/> Removing a row, downdating, "
+            "is possible but less stable, the numerical cousin of chapter eleven's deletion formula."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -159,21 +169,26 @@ class Numerics(VoiceoverScene):
             cmath(r"\text{backward stable}", r":", r"\text{the exact answer to a slightly perturbed problem}", font_size=28),
             cmath(r"\dfrac{\|\hat b - b\|}{\|b\|}", r"\lesssim", r"\kappa\,\varepsilon + \kappa^2 \varepsilon \dfrac{\|e\|}{\|X b\|}", font_size=30),
             cmath(r"\varepsilon", r"=", rf"{d['eps32']:.1e} \ \text{{(single)}}, \ {d['eps64']:.1e} \ \text{{(double)}}".replace("e-07", r"\times 10^{-7}").replace("e-16", r"\times 10^{-16}"), font_size=30),
-            cmath(r"\text{Longley}", r":", r"\text{the fit is very good, \ so the } \kappa \text{ term dominates}", font_size=28),
+            cmath(r"\text{Longley}", r":", r"\text{worst-case bounds can be very pessimistic}", font_size=28),
         ]
         rows[1][2].set_color(OLS_C)
         whys = [why(r"Wilkinson; \ Golub (1965)"), why(r"QR's error bound: \ Golub \& Van Loan"),
                 why(r"machine epsilon"), why(r"$R^2 = 0.995$")]
+        intro = label('Backward stability and forward sensitivity are different properties', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> The theory is James Wilkinson's backward error analysis. Householder QR is backward "
-            "stable: what it computes is the exact least squares solution for data perturbed by a few units of rounding "
-            "error. <bookmark mark='b'/> The forward error is then bounded by the condition number times machine epsilon, "
-            "plus a second term with the condition number squared, multiplied by how large the residuals are compared with "
-            "the fit. <bookmark mark='c'/> Machine epsilon is about ten to the minus seven in single precision and two times "
-            "ten to the minus sixteen in double. <bookmark mark='d'/> Longley's regression fits almost perfectly, so the "
-            "squared term is small and QR's accuracy is governed by kappa alone, which is why it kept five digits where the "
-            "normal equations kept none."
+            "<bookmark mark='a'/> The theory is James Wilkinson's backward error analysis. Householder QR is backward"
+            " stable: what it computes is the exact least squares solution for data perturbed by a few units of "
+            "rounding error. <bookmark mark='b'/> The forward error is then bounded by the condition number times "
+            "machine epsilon, plus a second term with the condition number squared, multiplied by how large the "
+            "residuals are compared with the fit. <bookmark mark='c'/> Machine epsilon is about ten to the minus "
+            "seven in single precision and two times ten to the minus sixteen in double. <bookmark mark='d'/> A good "
+            "fit alone does not make the squared-condition term small: Longley's enormous condition number makes this"
+            " worst-case bound very pessimistic. Observed accuracy depends on directional sensitivity and the actual "
+            "rounding errors, and must be measured against the certified answer."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -193,19 +208,21 @@ class Numerics(VoiceoverScene):
         g2 = DashedLine(ax.c2p(1, 14), ax.c2p(7.5, 1), color=GREY_C, stroke_width=1.5)
         rows = fit_rows(VGroup(
             label(r"designs with a chosen condition number", font_size=22),
-            label(r"blue: \ QR, \ exact fit: \ loses $\log \kappa$", font_size=22, color=OLS_C),
-            label(r"red: \ normal equations: \ loses $2 \log \kappa$", font_size=22, color=RES),
-            label(r"amber: \ QR with residuals: \ the $\kappa^2$ term", font_size=22, color=PATH),
+            label(r"blue: QR, near-exact fit; \ 90-digit reference", font_size=22, color=OLS_C),
+            label(r"red: normal equations; \ failed solves score zero", font_size=22, color=RES),
+            label(r"amber: QR with residuals; \ stronger sensitivity possible", font_size=22, color=PATH),
             label(r"dashed: \ slopes $-1$ and $-2$", font_size=22, color=GREY_C),
         ), 3.45, 0.42, [5.1, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The rule of thumb, tested. Build designs whose condition number we choose, from ten to a "
-            "trillion, and count the correct digits in double precision. <bookmark mark='b'/> When the data fit exactly, QR "
-            "loses one digit for each power of ten in kappa. <bookmark mark='c'/> The normal equations lose two, and run out "
-            "of digits entirely by a condition number of about ten to the eight. <bookmark mark='d'/> When the fit leaves "
-            "residuals, QR's second term, kappa squared times the residual size, takes over, and even QR falls at the "
-            "steeper rate. Badly conditioned problems with poor fits are hard for every method. <bookmark mark='e'/> The "
-            "dashed guides have slopes minus one and minus two."
+            "<bookmark mark='a'/> Sensitivity guides, compared with a seeded experiment. Build designs with condition"
+            " numbers from ten to a trillion. Score each floating-point answer against a ninety-digit least-squares "
+            "solution of the exact rounded inputs, not the original generating coefficients. <bookmark mark='b'/> For"
+            " near-exact fits the QR results roughly follow the one-digit-per-power guide, with variation across "
+            "designs. <bookmark mark='c'/> The normal equations degrade faster and can fail to factor or solve. "
+            "Failed solves receive zero digits and are recorded separately. <bookmark mark='d'/> With nonzero "
+            "residuals, sensitivity can include a squared-condition term, so even backward-stable QR can lose "
+            "accuracy much faster. Badly conditioned problems with poor fits are hard for every method. <bookmark "
+            "mark='e'/> The dashed guides have slopes minus one and minus two."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")

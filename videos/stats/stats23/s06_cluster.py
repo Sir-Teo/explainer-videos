@@ -75,17 +75,22 @@ class Cluster(VoiceoverScene):
         ]
         rows[2][2].set_color(CLUSTER)
         whys = [why(r"Moulton (1986); \ Kish's design effect, \ Part 18"), why(r"pupils per school; \ the programme is constant within a school"),
-                why(r"a small correlation, \ times sixty"), why(r"the formula predicted it")]
+                why(r"a small correlation, \ times sixty"), why(r"a useful approximation, \ not an exact adjustment")]
+        intro = label('The Moulton factor is an approximation for this adjusted unequal-size design', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Brent Moulton gave the size of the problem in 1986. The true variance exceeds the iid "
-            "formula by one plus the average cluster size minus one, times the within-cluster correlation of the "
-            "regressor, times that of the errors. It's Kish's design effect from Part 18. <bookmark mark='b'/> Here there are "
-            "sixty-one pupils per school; the programme is the same for every pupil in a school, so its correlation is "
-            "one; and the residuals' intraclass correlation is only point one one four. <bookmark mark='c'/> But point one "
-            "one four times sixty is about seven: the variance is understated eightfold, the standard error by a factor of "
-            "two point eight. <bookmark mark='d'/> The cluster-robust standard error came out two point seven five times the "
-            "iid one."
+            "<bookmark mark='a'/> Brent Moulton gave the size of the problem in 1986. A simple equal-size "
+            "exchangeable model gives a variance inflation factor of one plus cluster size minus one, times the "
+            "regressor and error intraclass correlations. Using average size with unequal clusters and covariate "
+            "adjustment is a heuristic. It's Kish's design effect from Part 18. <bookmark mark='b'/> Here there are "
+            "sixty-one pupils per school; the programme is the same for every pupil in a school, so its correlation "
+            "is one; and the residuals' intraclass correlation is only point one one four. <bookmark mark='c'/> But "
+            "point one one four times sixty is about seven: the variance is understated eightfold, the standard error"
+            " by a factor of two point eight. <bookmark mark='d'/> The cluster-robust standard error came out two "
+            "point seven five times the iid one."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -102,15 +107,20 @@ class Cluster(VoiceoverScene):
         rows[1][2].set_color(CLUSTER)
         whys = [why(r"independent clusters, \ anything inside"), why(r"sum the scores in a cluster, \ then square"),
                 why(r"Liang \& Zeger (1986); \ Arellano (1987)"), why(r"the number of clusters is the sample size")]
+        intro = label('Cluster inference relies on many independent, non-dominant clusters', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> The fix is chapter one's sandwich again, with clusters independent of each other but "
-            "anything allowed inside. <bookmark mark='b'/> For the meat, add up each cluster's scores, X transpose e, and "
-            "square the sum: correlations within a cluster are captured because the cross-products are kept. "
-            "<bookmark mark='c'/> With a small-sample factor this is CR one, from Kung-Yee Liang and Scott Zeger and from "
-            "Manuel Arellano, and it's compared with a t distribution with G minus one degrees of freedom. "
-            "<bookmark mark='d'/> It is consistent as the number of clusters grows. The effective sample size is the number "
-            "of schools, not of pupils."
+            "<bookmark mark='a'/> The fix is chapter one's sandwich again, with clusters independent of each other "
+            "but anything allowed inside. <bookmark mark='b'/> For the meat, add up each cluster's scores, X "
+            "transpose e, and square the sum: correlations within a cluster are captured because the cross-products "
+            "are kept. <bookmark mark='c'/> With a small-sample factor this is CR one, from Kung-Yee Liang and Scott "
+            "Zeger and from Manuel Arellano, and it's compared with a t distribution with G minus one degrees of "
+            "freedom. <bookmark mark='d'/> It is consistent as the number of clusters grows. Cluster asymptotics need"
+            " many independent schools, finite moments and no dominant cluster. Information also depends on "
+            "within-school predictor variation; there is no universal effective sample size equal to G."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -121,20 +131,24 @@ class Cluster(VoiceoverScene):
         rows = [
             cmath(r"G = 8", r":", r"\text{eight residual sums estimate a } 3 \times 3 \text{ meat}", font_size=30),
             cmath(r"e_g", r"\ne", r"\varepsilon_g: \ \text{residuals are shrunk, \ most in big or unusual clusters}", font_size=28),
-            cmath(r"\text{result}", r":", r"\text{SEs too small, \ tests reject too often}", font_size=30),
+            cmath(r"\text{result}", r":", r"\text{SEs can be too small; tests can over-reject}", font_size=30),
             cmath(r"\text{in the wild}", r":", r"\text{states, \ countries, \ industries: \ often } G < 20", font_size=30),
         ]
         rows[2][2].set_color(RES)
         whys = [why(r"a variance from eight numbers"), why(r"chapter four's leverage problem, \ per cluster"),
                 why(r"Cameron, \ Gelbach \& Miller (2008)"), why(r"difference-in-differences, \ Part 37")]
+        intro = label('Few clusters can make variance estimates unreliable', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> But clusters are often few. With eight schools, the meat is estimated from eight summed "
-            "residual vectors. <bookmark mark='b'/> And as chapter four found for single points, residuals understate errors, "
-            "most for clusters that are large or unusual. <bookmark mark='c'/> So with few clusters, CR one is too small and "
-            "tests reject too often, as Colin Cameron, Jonah Gelbach and Douglas Miller documented in 2008. "
-            "<bookmark mark='d'/> This is everyday reality: policy studies cluster by state or country, and Part 37's "
-            "difference-in-differences studies often have fewer than twenty."
+            "<bookmark mark='a'/> But clusters are often few. With eight schools, the meat is estimated from eight "
+            "summed residual vectors. <bookmark mark='b'/> And as chapter four found for single points, residuals "
+            "understate errors, most for clusters that are large or unusual. <bookmark mark='c'/> With few clusters "
+            "CR one can be too small and tests can reject too often, as Colin Cameron, Jonah Gelbach and Douglas "
+            "Miller documented in 2008. <bookmark mark='d'/> This is everyday reality: policy studies cluster by "
+            "state or country, and Part 37's difference-in-differences studies often have fewer than twenty."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -146,20 +160,26 @@ class Cluster(VoiceoverScene):
             cmath(r"\text{1. fit under } H_0", r":", r"\beta_j = b_0: \ \tilde y_i, \ \tilde e_i", font_size=30),
             cmath(r"\text{2. flip clusters}", r":", r"y_i^* = \tilde y_i + w_{g(i)}\, \tilde e_i, \ \ w_g \in \{\pm 1\} \text{ or Webb's six}", font_size=28),
             cmath(r"\text{3. refit}", r":", r"t^* = (\hat\beta_j^* - b_0)/\mathrm{SE}_{\mathrm{CR1}}^*", font_size=30),
-            cmath(r"\text{4. compare}", r":", r"p = \#\{|t^*| \ge |t|\}/B", font_size=30),
+            cmath(r"\text{4. compare}", r":", r"p_{MC} = (1 + \#\{|t^*|\ge|t|\})/(B+1)", font_size=30),
         ]
         rows[1][2].set_color(CLUSTER)
         whys = [why(r"impose the null: \ the restricted bootstrap"), why(r"each school's residuals keep their pattern"),
                 why(r"bootstrap the $t$, \ not $\hat\beta$: \ Part 16"), why(r"Rademacher: \ only $2^8 = 256$ distinct draws; \ Webb (2014): $6^8$")]
+        intro = label('Resample clusters under the tested null', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> The wild cluster bootstrap. First, fit the model with the null hypothesis imposed, keeping "
-            "fitted values and residuals. <bookmark mark='b'/> Then make new data sets by multiplying all the residuals in a "
-            "cluster by the same random weight, plus or minus one, or one of Matthew Webb's six values. Each school's "
-            "residuals keep their internal pattern, which is what the inference needs to respect. <bookmark mark='c'/> Refit "
-            "and compute the cluster-robust t-statistic each time. <bookmark mark='d'/> The p-value is the share of "
-            "bootstrap t's at least as extreme as the real one. With eight clusters, signs alone give only two hundred and "
-            "fifty-six possible data sets; Webb's weights give one point seven million."
+            "<bookmark mark='a'/> The wild cluster bootstrap. First, fit the model with the null hypothesis imposed, "
+            "keeping fitted values and residuals. <bookmark mark='b'/> Then make new data sets by multiplying all the"
+            " residuals in a cluster by the same random weight, plus or minus one, or one of Matthew Webb's six "
+            "values. Each school's residuals keep their internal pattern, which is what the inference needs to "
+            "respect. <bookmark mark='c'/> Refit and compute the cluster-robust t-statistic each time. <bookmark "
+            "mark='d'/> We use one plus the number of at-least-as-extreme bootstrap statistics, divided by one plus "
+            "the number of draws. This Monte Carlo correction prevents zero p-values; it does not make few-cluster "
+            "inference exact. With eight clusters, signs alone give only two hundred and fifty-six possible data "
+            "sets; Webb's weights give one point seven million."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -171,20 +191,25 @@ class Cluster(VoiceoverScene):
             cmath(r"\text{which level?}", r":", r"\text{pupils, \ schools, \ towns, \ regions}", font_size=30),
             cmath(r"\text{design view}", r":", r"\text{cluster where the treatment was assigned}", font_size=30),
             cmath(r"\text{two-way}", r":", r"V = V_{\text{school}} + V_{\text{year}} - V_{\text{school} \times \text{year}}", font_size=30),
-            cmath(r"\text{too coarse}", r":", r"\text{honest, \ but few clusters: \ wide or unreliable}", font_size=30),
+            cmath(r"\text{too coarse}", r":", r"\text{fewer clusters; not automatically conservative}", font_size=30),
         ]
         rows[1][2].set_color(CLUSTER)
         whys = [why(r"each level nests the one before"), why(r"Abadie, \ Athey, \ Imbens \& Wooldridge (2023)"),
                 why(r"Cameron, \ Gelbach \& Miller (2011)"), why(r"the trade-off of the Board's two rows")]
+        intro = label('Choose clustering from treatment assignment and sampling design', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> At which level should you cluster: pupils, schools, towns, or regions? "
-            "<bookmark mark='b'/> Alberto Abadie, Susan Athey, Guido Imbens and Jeffrey Wooldridge argue from the design: "
-            "cluster at the level where the treatment was assigned, or where the sample was drawn. Here the programme was "
-            "assigned to schools, so schools. <bookmark mark='c'/> When errors are correlated along two dimensions at once, "
-            "say schools and years, two-way clustering adds the two one-way variances and subtracts their intersection. "
-            "<bookmark mark='d'/> Clustering more coarsely than necessary is honest but expensive: fewer clusters, and the "
-            "few-cluster problems of the last two minutes."
+            "<bookmark mark='a'/> At which level should you cluster: pupils, schools, towns, or regions? <bookmark "
+            "mark='b'/> Alberto Abadie, Susan Athey, Guido Imbens and Jeffrey Wooldridge argue from the design: "
+            "cluster at the level where the treatment was assigned, or where the sample was drawn. Here the programme"
+            " was assigned to schools, so schools. <bookmark mark='c'/> When errors are correlated along two "
+            "dimensions at once, say schools and years, two-way clustering adds the two one-way variances and "
+            "subtracts their intersection. <bookmark mark='d'/> Coarser clustering can reduce the available "
+            "independent units and make variance estimates unreliable; it is not automatically conservative. "
+            "Few-cluster two-way estimates can even be indefinite."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -195,20 +220,27 @@ class Cluster(VoiceoverScene):
         rows = [
             cmath(r"y_{gi}", r"=", r"x_{gi}^\top\beta + u_g + \varepsilon_{gi}", font_size=30),
             cmath(r"\Omega_g", r"=", r"\sigma_\varepsilon^2 I + \sigma_u^2 \mathbf{1}\mathbf{1}^\top", font_size=30),
-            cmath(r"\text{GLS with } \Omega_g", r"=", r"\text{the random-intercept model}", font_size=30),
+            cmath(r"\text{GLS with } \Omega_g", r"=", r"\text{fixed effects in a random-intercept model}", font_size=30),
             cmath(r"\text{robust SE}", r":", r"\text{still advised, \ in case } \Omega_g \text{ is wrong}", font_size=30),
         ]
         rows[2][2].set_color(GLS_C)
         whys = [why(r"a school effect shared by its pupils"), why(r"exchangeable: \ one correlation $\rho$"),
                 why(r"chapter three, \ applied per school: \ Part 25"), why(r"Part 24's GEE does the same")]
+        intro = label('A random intercept models a shared school effect', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Clustering can be modelled instead of merely corrected. Give each school an effect u g "
-            "shared by all its pupils. <bookmark mark='b'/> Then each school's errors have an exchangeable covariance: "
-            "equal variances, and one correlation between any two pupils. <bookmark mark='c'/> Generalized least squares "
-            "with that covariance is the random-intercept model of Part 25, more efficient than least squares when the "
-            "model is right. <bookmark mark='d'/> Pairing it with a cluster-robust standard error protects against the "
-            "model being wrong, which is exactly what Part 24's generalized estimating equations do."
+            "<bookmark mark='a'/> Clustering can be modelled instead of merely corrected. Give each school a "
+            "mean-zero effect u g shared by all its pupils, uncorrelated with the predictors and independent of "
+            "individual errors. <bookmark mark='b'/> Then each school's errors have an exchangeable covariance: equal"
+            " variances, and one correlation between any two pupils. <bookmark mark='c'/> Generalized least squares "
+            "with a known covariance gives the fixed-coefficient estimator for the random-intercept model of Part 25,"
+            " more efficient than least squares when the model is right. <bookmark mark='d'/> Pairing it with a "
+            "cluster-robust standard error can protect against covariance misspecification under cluster asymptotics,"
+            " while a biased conditional-mean model still needs attention, which is exactly what Part 24's "
+            "generalized estimating equations do."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
