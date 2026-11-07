@@ -415,7 +415,7 @@ class Forests(VoiceoverScene):
         show_board(self, rows,
                    "<bookmark mark='a'/> On the Board. The infinitesimal jackknife interval of a bootstrap forest, for the "
                    "forest's own expectation: broken, far too narrow. <bookmark mark='b'/> For a subsampled forest: much "
-                   "closer, but with three hundred forests the Board can tell that eighty-three is not ninety. <bookmark mark='c'/> And the same subsampled interval as an interval for the true "
+                   "closer, but coverage remains below nominal in this three-hundred-forest experiment. <bookmark mark='c'/> And the same subsampled interval as an interval for the true "
                    "regression function at a peak: broken, by the bias. Every estimator needs to be told what it is "
                    "estimating, and a forest is no exception.",
                    [("a", [0]), ("b", [1]), ("c", [2])])
