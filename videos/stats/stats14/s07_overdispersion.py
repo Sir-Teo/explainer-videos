@@ -117,6 +117,7 @@ class Overdispersion(VoiceoverScene):
         rows[2][2].set_color(HIT)
         whys = [why(r"assumes variance $= \mu$"), why(r"assumes variance $= \phi\mu$: \ Wedderburn (1974)"),
                 why(r"independent-unit sandwich; large-sample inference"), why(r"mean-model consistency requires assumptions too")]
+        intro = label('The variance model changes the standard errors', font_size=36)
         with self.voiceover(
             "What does it do to the inference? <bookmark mark='a'/> The Poisson standard error of the slope is point zero two "
             "one: it believes each big town is a nearly exact measurement. <bookmark mark='b'/> Robert Wedderburn's "
@@ -125,10 +126,13 @@ class Overdispersion(VoiceoverScene):
             "of Part 12 allows heteroskedasticity under independent towns and a correct mean model, giving point one eight, larger still, because here the variance "
             "isn't proportional to the mean. <bookmark mark='d'/> All three share the same estimate. With a correct conditional mean and independent towns, overdispersion can leave the coefficient consistent and makes its Poisson standard error wrong by a factor of eight."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def remedies(self):
@@ -139,6 +143,7 @@ class Overdispersion(VoiceoverScene):
             label(r"random effects: \ model the towns' differences directly \ (Part 25)", font_size=24, color=S.PRIOR),
             label(r"always check: \ dispersion, \ deviance on its df, \ residuals against fitted means", font_size=24, color=OBS),
         ), 12.4, 0.44, [0, 0, 0])
+        intro = label('Match the variance model to the observed dispersion', font_size=36)
         with self.voiceover(
             "The remedies. <bookmark mark='a'/> Quasi-Poisson, a quick fix when the variance is roughly proportional to the mean. "
             "<bookmark mark='b'/> The negative binomial, a Poisson whose rate is itself gamma-distributed, with variance mu plus "
@@ -147,8 +152,11 @@ class Overdispersion(VoiceoverScene):
             "directly, Part 25. <bookmark mark='e'/> And always check before trusting a Poisson standard error: the dispersion, "
             "the deviance against its degrees of freedom, and the residuals against the fitted means."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()
 

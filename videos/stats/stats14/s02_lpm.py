@@ -104,12 +104,13 @@ class LinearProbability(VoiceoverScene):
             cmath(r"y \mid x", r"\sim", r"\text{Bernoulli}(p(x))", font_size=34),
             cmath(r"\mathrm{Var}(y \mid x)", r"=", r"p(x)\,\big(1 - p(x)\big)", font_size=34),
             cmath(r"\text{residual}", r"\in", r"\{-\hat p(x),\ 1 - \hat p(x)\}", font_size=34),
-            cmath(r"\text{so}", r":", r"\text{generally heteroskedastic; nonnormal; fits can leave }[0,1]", font_size=32),
+            cmath(r"\text{so}", r":", r"\text{heteroskedasticity, nonnormality, extrapolation}", font_size=32),
         ]
         rows[1][2].set_color(OBS)
         rows[3][2].set_color(RES)
         whys = [why(r"a yes/no outcome"), why(r"the variance is tied to the mean"),
                 why(r"only two values at each $x$"), why(r"normal-theory inference and global probability predictions need care")]
+        intro = label('Binary outcomes have mean-dependent variance', font_size=36)
         with self.voiceover(
             "There are deeper problems too. <bookmark mark='a'/> A yes-or-no outcome is a Bernoulli variable, with probability "
             "p of x. <bookmark mark='b'/> Its variance is p times one minus p: tied to the mean, so it changes with x, largest "
@@ -118,10 +119,13 @@ class LinearProbability(VoiceoverScene):
             "standard errors of Part 12 can patch the first problem, and economists still use the linear probability model "
             "for its simple coefficients. But for prediction, and especially for extrapolation, we need a different curve."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def wanted(self):
@@ -164,6 +168,7 @@ class LinearProbability(VoiceoverScene):
         ]
         whys = [why(r"the linear probability model"), why(r"easy to read, \ the same at every $x$"),
                 why(r"the heteroskedasticity is known, \ so fix it"), why(r"a summary, \ not a forecast")]
+        intro = label('A linear probability model needs careful inference', font_size=36)
         with self.voiceover(
             "In fairness to the straight line: <bookmark mark='a'/> economists use the linear probability model all the time. "
             "<bookmark mark='b'/> Its coefficient is a change in the fitted linear probability per unit of x, easy to read and the same "
@@ -172,8 +177,11 @@ class LinearProbability(VoiceoverScene):
             "is often close to the logistic curve's slope there. Its probability forecasts can fail badly at the edges, which "
             "is exactly where Challenger's question lay."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()

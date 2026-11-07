@@ -131,6 +131,7 @@ class Simpson(VoiceoverScene):
         rows[2][2].set_color(RES)
         whys = [why(r"a weighted average of the department rates"), why(r"the same, \ with women's weights"),
                 why(r"the weights are where each sex applied"), why(r"Simpson (1951); \ Yule (1903)")]
+        intro = label('The aggregate rates use different department weights', font_size=36)
         with self.voiceover(
             "The arithmetic is simple. <bookmark mark='a'/> The men's overall admission rate is a weighted average of the "
             "department rates, weighted by where the men applied. <bookmark mark='b'/> The women's is a weighted average of "
@@ -139,10 +140,13 @@ class Simpson(VoiceoverScene):
             "way. Edward Simpson described the reversal in 1951; George Udny Yule had noticed it in 1903. Part 1 met it in the "
             "World's clinic, and Part 12 as omitted-variable bias."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def meaning(self):

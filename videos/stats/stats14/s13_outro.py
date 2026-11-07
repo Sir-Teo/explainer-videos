@@ -60,6 +60,7 @@ class Outro(VoiceoverScene):
             (r"model choice, \ cross-validation", [28]), (r"classification and prediction", [19, 34]),
             (r"causal questions in tables", [35, 36]), (r"missing data and measurement error", [41]),
         ], font_size=22)
+        intro = label('Where counts and categories return', font_size=36)
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> The next part reads probabilities as degrees of belief. Exact and rank "
             "tests and the bootstrap arrive in Part 16. Generalized linear models get their full theory in Part 24, and mixed "
@@ -67,7 +68,9 @@ class Outro(VoiceoverScene):
             "Parts 19, 28 and 34; the causal reading of tables in Parts 35 and 36; and missing data and measurement error, "
             "which haunt every case–control study, in Part 41."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 

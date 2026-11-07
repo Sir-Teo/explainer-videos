@@ -87,6 +87,7 @@ class CaseControl(VoiceoverScene):
         rows[2][2].set_color(OBS)
         whys = [why(r"the truth, \ which a cohort would see"), why(r"sampling that depends only on the outcome"),
                 why(r"Bayes's rule: \ the slope is untouched"), why(r"Prentice \& Pyke (1979)")]
+        intro = label('Outcome-based sampling shifts the logistic intercept', font_size=36)
         with self.voiceover(
             "The same is true with regression. <bookmark mark='a'/> Suppose that in the population, the log-odds of disease are "
             "linear in a risk factor x. <bookmark mark='b'/> Sample the cases at one rate and the controls at another, the rates "
@@ -94,10 +95,13 @@ class CaseControl(VoiceoverScene):
             "still linear in x, with the same slope; only the intercept shifts, by the log of the ratio of sampling rates. "
             "<bookmark mark='d'/> So an ordinary logistic regression on case–control data consistently estimates the population logistic slopes with asymptotically valid model-based standard errors under the stated regularity and sampling assumptions, as Ross Prentice and Ronald Pyke proved in 1979. Without sampling fractions or external prevalence, the baseline risk is not identifiable; matched or exposure-dependent sampling needs a design-appropriate analysis."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def world(self):

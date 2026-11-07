@@ -97,6 +97,7 @@ class ThreeWay(VoiceoverScene):
         rows[3][2].set_color(OBS)
         whys = [why(r"each stratum's expected count, \ given its margins"), why(r"its hypergeometric variance (Part 10)"),
                 why(r"pool the deviations, \ not the tables"), why(r"no evidence of a common directional association")]
+        intro = label('Combine within-stratum deviations from independence', font_size=36)
         with self.voiceover(
             "And a test. <bookmark mark='a'/> In each department, condition on the margins, as in Fisher's exact test: the count "
             "of admitted men then has a known expected value <bookmark mark='b'/> and a hypergeometric variance. "
@@ -104,10 +105,13 @@ class ThreeWay(VoiceoverScene):
             "squaring, so that consistent small effects accumulate and opposite ones cancel. <bookmark mark='d'/> For Berkeley "
             "it's one point five two, p equals point two two: no clear common directional association after stratification. Opposite associations can cancel, so this does not establish independence in every department. The p of ten to the minus twenty-one has evaporated."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def logistic(self):
@@ -185,7 +189,7 @@ class ThreeWay(VoiceoverScene):
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                step(k, transform=False)
                 if k == 0:
                     self.play(FadeOut(intro), run_time=0.25)
-                step(k, transform=False)
         self.clear_scene()
