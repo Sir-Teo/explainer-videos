@@ -28,7 +28,7 @@ class Hook(VoiceoverScene):
         hc = history_card(1935, r"Chester Bliss, \ \emph{Annals of Applied Biology}",
                           r"``The calculation of the dosage-mortality curve'': \ flour beetles exposed for five hours to "
                           r"carbon disulphide gas at eight concentrations. \ How lethal is each dose, \ and what dose kills "
-                          r"half the beetles? \ His answer, \ the probit, \ was the first generalized linear model in all but name",
+                          r"half the beetles? \ His answer, \ the probit, \ was an early binomial generalized linear model in all but name",
                           color=PATH, width=11.0, font_size=23).move_to([0, 1.0, 0])
         rows = fit_rows(VGroup(
             label(r"each beetle: \ dead or alive, \ a yes-or-no outcome", font_size=24),
@@ -83,15 +83,20 @@ class Hook(VoiceoverScene):
         rows[0][2].set_color(PROBIT)
         whys = [why(r"a tolerance distribution: \ each beetle dies above its own threshold"), why(r"the $+5$ avoided negative numbers by hand"),
                 why(r"working probits and weights, \ by hand"), why(r"IRLS, \ 37 years early: \ chapter three")]
+        intro = label('A latent tolerance model gives a probit response curve', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Bliss's idea: each beetle has its own tolerance, normally distributed on the log-dose scale, "
-            "and dies if the dose exceeds it. Then the death rate is the normal distribution function of a straight line in "
-            "the log dose. <bookmark mark='b'/> He called the normal deviate plus five a probit, the five keeping hand "
-            "calculations free of minus signs. <bookmark mark='c'/> He fitted straight lines through the probits, weighted "
-            "them, recalculated, and fitted again. <bookmark mark='d'/> In an appendix to the paper, Ronald Fisher showed "
-            "that the procedure converges to the maximum likelihood estimate. It was iteratively reweighted least squares, "
+            "<bookmark mark='a'/> Bliss's idea: each beetle has its own tolerance, normally distributed on the "
+            "log-dose scale, and dies if the dose exceeds it. Then the death rate is the normal distribution function"
+            " of a straight line in the log dose. <bookmark mark='b'/> He called the normal deviate plus five a "
+            "probit, the five keeping hand calculations free of minus signs. <bookmark mark='c'/> He fitted straight "
+            "lines through the probits, weighted them, recalculated, and fitted again. <bookmark mark='d'/> In an "
+            "appendix to the paper, Ronald Fisher showed that the weighted iterations solve the maximum-likelihood "
+            "score equations under suitable convergence conditions. It was iteratively reweighted least squares, "
             "thirty-seven years before it had that name."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -111,12 +116,14 @@ class Hook(VoiceoverScene):
             label(r"6 degrees of freedom: \ cloglog fits best", font_size=22, color=HIT),
         ), 3.45, 0.42, [5.1, 0.2, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Fit three S-shaped curves by maximum likelihood. <bookmark mark='b'/> The logistic, "
-            "Part 14's model, has deviance eleven point two three. <bookmark mark='c'/> Bliss's probit is barely different, "
-            "ten point one two. <bookmark mark='d'/> The complementary log-log, which is not symmetric, rising slowly and then "
-            "steeply, has deviance three point four five. <bookmark mark='e'/> With six residual degrees of freedom, the "
-            "symmetric curves are marginal and the asymmetric one fits well: the beetles at the top die faster than a "
-            "symmetric curve allows. Chapter four makes the deviance precise."
+            "<bookmark mark='a'/> Fit three S-shaped curves by maximum likelihood. <bookmark mark='b'/> The logistic,"
+            " Part 14's model, has deviance eleven point two three. <bookmark mark='c'/> Bliss's probit is barely "
+            "different, ten point one two. <bookmark mark='d'/> The complementary log-log, which is not symmetric, "
+            "rising slowly and then steeply, has deviance three point four five. <bookmark mark='e'/> With six "
+            "residual degrees of freedom, the symmetric curves have lower goodness-of-fit tail probabilities, though "
+            "neither is rejected at five percent. The asymmetric link has the smallest deviance among these "
+            "candidates: the beetles at the top die faster than a symmetric curve allows. Chapter four makes the "
+            "deviance precise."
         ) as vo:
             self.add(bliss_tag())
             self.play(FadeIn(P))

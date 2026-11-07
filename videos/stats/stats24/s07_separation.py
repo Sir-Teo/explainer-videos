@@ -40,10 +40,11 @@ class Separation(VoiceoverScene):
             label(r"the MLE of the slope: \ $+\infty$", font_size=22, color=RES),
         ), 3.45, 0.42, [5.1, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Twelve observations. Every one with x below zero is a zero, and every one above is a one. "
-            "<bookmark mark='b'/> A vertical line separates the two outcomes perfectly. <bookmark mark='c'/> A logistic curve "
-            "fits better the steeper it gets: each steeper curve gives every point a probability closer to its outcome. "
-            "<bookmark mark='d'/> There is no best curve. The maximum likelihood estimate of the slope is infinite."
+            "<bookmark mark='a'/> Twelve observations. Every one with x below zero is a zero, and every one above is "
+            "a one. <bookmark mark='b'/> A vertical line separates the two outcomes perfectly. <bookmark mark='c'/> A"
+            " logistic curve fits better the steeper it gets: each steeper curve gives every point a probability "
+            "closer to its outcome. <bookmark mark='d'/> There is no best curve. The likelihood supremum is "
+            "approached as the slope diverges; there is no finite maximum-likelihood estimate."
         ) as vo:
             self.play(FadeIn(A), LaggedStart(*[FadeIn(q, scale=0.5) for q in dots], lag_ratio=0.08))
             vo.wait_until("a")
@@ -94,7 +95,7 @@ class Separation(VoiceoverScene):
 
     def why_(self):
         rows = [
-            cmath(r"\text{complete separation}", r":", r"\exists\, b: \ x_i^\top b > 0 \iff y_i = 1", font_size=30),
+            cmath(r"\text{complete separation}", r":", r"\exists b:\ (2y_i-1)x_i^\top b>0\ \forall i", font_size=30),
             cmath(r"\ell(cb)", r"\uparrow", r"0 \ \text{as } c \to \infty", font_size=30),
             cmath(r"\text{quasi-complete}", r":", r"\text{separation with ties on the boundary}", font_size=30),
             cmath(r"\text{when}", r":", r"\text{small } n, \ \text{rare outcomes, \ many predictors, \ sparse categories}", font_size=28),
@@ -102,6 +103,9 @@ class Separation(VoiceoverScene):
         rows[1][2].set_color(RES)
         whys = [why(r"Albert \& Anderson (1984)"), why(r"every probability tends to its outcome"),
                 why(r"some coefficients still run away"), why(r"more common than one might hope")]
+        intro = label('Separation prevents a finite likelihood maximum', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> Adelin Albert and John Anderson characterized it in 1984. Complete separation means some "
             "direction in coefficient space puts every one on one side and every zero on the other. <bookmark mark='b'/> "
@@ -110,6 +114,7 @@ class Separation(VoiceoverScene):
             "coefficients to infinity. <bookmark mark='d'/> It happens far more often than one might hope: small samples, "
             "rare outcomes, many predictors, or a category in which everyone responded."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -122,20 +127,25 @@ class Separation(VoiceoverScene):
             cmath(r"\ell^*(\beta)", r"=", r"\ell(\beta) + \tfrac12 \log\det \mathcal I(\beta)", font_size=30),
             cmath(r"U^*", r"=", r"X^\top\big(y - p + h(\tfrac12 - p)\big)", font_size=30),
             cmath(r"\text{our data}", r":", rf"\hat\beta_1^{{\text{{Firth}}}} = {d['firth'][1]:.2f} \ \ (\mathrm{{SE}} \ {d['firth_se'][1]:.2f})", font_size=30),
-            cmath(r"\text{bonus}", r":", r"O(1/n) \ \text{bias removed}", font_size=30),
+            cmath(r"\text{bonus}", r":", r"\text{leading regular }O(1/n)\text{ bias term removed}", font_size=30),
         ]
         rows[0][2].set_color(HIT)
         whys = [why(r"Firth (1993): \ Jeffreys's prior as a penalty"), why(r"$h$: \ the hat values; \ half an observation each way"),
                 why(r"finite, \ and sensible"), why(r"why it was invented")]
+        intro = label('An information penalty regularizes separated logistic fits', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> David Firth's cure, from 1993, adds half the log determinant of the information to the log "
-            "likelihood. That's the logarithm of Jeffreys's prior from Part 22, used as a penalty. <bookmark mark='b'/> In "
-            "the score equations it amounts to adding, for each observation, a fraction of a pseudo-observation split "
-            "between the two outcomes, so no probability can be pushed all the way to zero or one. "
-            "<bookmark mark='c'/> For our twelve points the slope is now finite, two point five five. "
-            "<bookmark mark='d'/> Firth designed it to remove the leading term of the bias of maximum likelihood, which it "
-            "also does when there is no separation; that it tames separation was a happy bonus."
+            "<bookmark mark='a'/> David Firth's cure, from 1993, adds half the log determinant of the information to "
+            "the log likelihood. That's the logarithm of Jeffreys's prior from Part 22, used as a penalty. <bookmark "
+            "mark='b'/> In the score equations it amounts to adding, for each observation, a fraction of a "
+            "pseudo-observation split between the two outcomes, which penalizes collapse of the information. For "
+            "full-rank logistic designs this yields finite fitted coefficients even under separation. <bookmark "
+            "mark='c'/> For our twelve points the slope is now finite, two point five five. <bookmark mark='d'/> "
+            "Firth designed it to remove the leading term of the bias of maximum likelihood, which it also does when "
+            "there is no separation; that it tames separation was a happy bonus."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -144,22 +154,29 @@ class Separation(VoiceoverScene):
 
     def rare(self):
         rows = [
-            cmath(r"\text{rare events}", r":", r"\text{few 1s: \ MLE biased away from zero}", font_size=30),
-            cmath(r"\text{bias}", r"\approx", r"O(1/(\text{number of events})), \ \text{not } O(1/n)", font_size=30),
+            cmath(r"\text{rare events}", r":", r"\text{few events: substantial finite-sample bias possible}", font_size=30),
+            cmath(r"\text{bias}", r"\approx", r"O(1/n)\ \text{at fixed prevalence; rare-event constants can be large}", font_size=30),
             cmath(r"\text{case--control}", r":", r"\text{sample the 1s heavily; \ slopes still valid}", font_size=30),
-            cmath(r"\text{intercept}", r":", r"\text{shift by } \log\{\text{sampling ratio}\}", font_size=30),
+            cmath(r"\text{intercept}", r":", r"\alpha_{\rm sample}=\alpha_{\rm pop}+\log(s_1/s_0)", font_size=30),
         ]
         rows[1][-1].set_color(RES)
         whys = [why(r"King \& Zeng (2001): \ wars, \ coups"), why(r"events, \ not people, \ set the precision"),
                 why(r"Prentice \& Pyke (1979)"), why(r"only the constant knows the sampling")]
+        intro = label('Rare outcomes can limit information and worsen finite-sample bias', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> A milder relative of separation is rarity. With few ones, maximum likelihood "
-            "overstates effects, as Gary King and Langche Zeng showed for rare political events. <bookmark mark='b'/> The "
-            "bias shrinks with the number of events, not the number of observations: a million people with fifty cases "
-            "is a small sample. Firth's correction helps here too. <bookmark mark='c'/> The flip side: for rare outcomes you "
-            "can sample the cases heavily, a case–control design, and logistic slopes remain valid, as Ross Prentice and "
-            "Ronald Pyke proved. <bookmark mark='d'/> Only the intercept changes, by the log of the sampling ratio."
+            "<bookmark mark='a'/> A milder relative of separation is rarity. With few ones, maximum likelihood can "
+            "have substantial finite-sample bias, as Gary King and Langche Zeng showed for rare political events. "
+            "<bookmark mark='b'/> Information can be limited by the number of events. The usual fixed-prevalence bias"
+            " order is still one over sample size, with constants that can worsen as events become rarer: a million "
+            "people with fifty cases is a small sample. Firth's correction helps here too. <bookmark mark='c'/> The "
+            "flip side: for rare outcomes you can sample the cases heavily, a case–control design, and under a "
+            "correct logistic model with sampling depending only on outcome, logistic slopes remain valid, as "
+            "Prentice and Pyke established. <bookmark mark='d'/> If cases and controls have selection probabilities s"
+            " one and s zero, the sample intercept equals the population intercept plus log of s one over s zero."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -176,12 +193,12 @@ class Separation(VoiceoverScene):
             label(r"never: \ drop the variable because its SE is huge", font_size=24, color=RES),
         ), 12.4, 0.5, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Separation is fragile. Move just two of the twelve points across the line <bookmark mark='b'/> "
-            "and the maximum likelihood estimate exists, a slope of three point four five with a sizeable standard error. "
-            "<bookmark mark='c'/> When it does happen, use Firth's estimate, profile-likelihood intervals, which are "
-            "one-sided but informative, or exact conditional methods. <bookmark mark='d'/> A weakly informative prior, Part "
-            "26, works too. <bookmark mark='e'/> What not to do is drop the variable because its standard error looked huge: "
-            "it is the strongest predictor in the data."
+            "<bookmark mark='a'/> Separation is fragile. Move just two of the twelve points across the line <bookmark"
+            " mark='b'/> and the maximum likelihood estimate exists, a slope of three point four five with a sizeable"
+            " standard error. <bookmark mark='c'/> When it does happen, use Firth's estimate, profile-likelihood "
+            "intervals, which can be unbounded on one side, or exact conditional methods. <bookmark mark='d'/> A "
+            "weakly informative prior, Part 26, works too. <bookmark mark='e'/> What not to do is drop the variable "
+            "because its standard error looked huge: it is the strongest predictor in the data."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

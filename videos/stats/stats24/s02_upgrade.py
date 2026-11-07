@@ -49,6 +49,9 @@ class Upgrade(VoiceoverScene):
         rows[2][2].set_color(MODEL)
         whys = [why(r"normal, \ binomial, \ Poisson, \ gamma, \ ..."), why(r"the linear predictor, \ as in Part 23"),
                 why(r"a monotone map from mean to linear predictor"), why(r"Part 12 and Part 14, \ as special cases")]
+        intro = label('A GLM combines a family, a linear predictor and a link', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "A generalized linear model has three parts. <bookmark mark='a'/> A random part: each outcome comes from a "
             "distribution in the exponential family, with mean mu i. <bookmark mark='b'/> A systematic part: a linear "
@@ -57,6 +60,7 @@ class Upgrade(VoiceoverScene):
             "errors with the identity link is ordinary regression; binomial with the logit is logistic regression; Poisson "
             "with the log is Poisson regression. Bliss's model is binomial with the probit link."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -72,16 +76,21 @@ class Upgrade(VoiceoverScene):
         ]
         rows[3][-1].set_color(MODEL)
         whys = [why(r"still common in economics"), why(r"Bliss's highest doses: \ predictions above 1"), why(r"Part 23's HC SEs patch it"), why(r"the link moves to a scale where they can be")]
+        intro = label('A probability line is useful as an approximation within a restricted range', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Why not just run least squares on the zeros and ones? That's the linear probability model, "
-            "still common in economics, and with Part 23's robust standard errors it estimates a best linear "
-            "approximation honestly. <bookmark mark='b'/> But its fitted probabilities leave zero to one at the edges, as a "
-            "straight line through Bliss's beetles would above the highest doses. <bookmark mark='c'/> Its errors are "
-            "heteroskedastic by construction, since a yes-or-no outcome has variance p times one minus p. "
-            "<bookmark mark='d'/> And an effect cannot be the same size everywhere on a bounded scale: a dose that adds "
-            "thirty points to a ten percent death rate cannot add thirty to ninety. The link moves the model to a scale "
-            "where constant effects make sense."
+            "<bookmark mark='a'/> Why not just run least squares on the zeros and ones? That's the linear probability"
+            " model, still common in economics, and with Part 23's robust standard errors it can support inference "
+            "for a best linear approximation under appropriate sampling, moment and leverage conditions. <bookmark "
+            "mark='b'/> But its fitted probabilities leave zero to one at the edges, as a straight line through "
+            "Bliss's beetles would above the highest doses. <bookmark mark='c'/> Its errors are heteroskedastic by "
+            "construction, since a yes-or-no outcome has variance p times one minus p. <bookmark mark='d'/> And an "
+            "effect cannot be the same size everywhere on a bounded scale: a dose that adds thirty points to a ten "
+            "percent death rate cannot add thirty to ninety. The link moves the model to a scale where constant "
+            "effects make sense."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

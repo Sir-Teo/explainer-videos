@@ -1,0 +1,77 @@
+{
+  "items": [
+    {
+      "item": "bliss",
+      "path": ".cache/stats24/bliss.json",
+      "bytes": 22754,
+      "sha256": "4bdb22086a17c90d2e4bd4140f88b26b3123dffd32a08250a4e9d1cb4f7df013"
+    },
+    {
+      "item": "irls",
+      "path": ".cache/stats24/irls.json",
+      "bytes": 963,
+      "sha256": "8908d366d2587c03027ca6aad1884f53c0e78f7bda6f0c62f4d8f31ee830208f"
+    },
+    {
+      "item": "binary_dev",
+      "path": ".cache/stats24/binary_dev.json",
+      "bytes": 86022,
+      "sha256": "0bc96eb4bb0b63e7136ebc84fefe746c6d9710740a6140bc919ebcdce94aec84"
+    },
+    {
+      "item": "visits",
+      "path": ".cache/stats24/visits.json",
+      "bytes": 92991,
+      "sha256": "e6ecad43fbd7e0c794a59d2619662d96fd9a89a547b37630b5a628356654c66b"
+    },
+    {
+      "item": "devtable",
+      "path": ".cache/stats24/devtable.json",
+      "bytes": 783,
+      "sha256": "b8083d69e08f419fc8dc8a87456e67af61aa1042da70bf8974a2275dd9801560"
+    },
+    {
+      "item": "separation",
+      "path": ".cache/stats24/separation.json",
+      "bytes": 1735,
+      "sha256": "7bd7f665c61741d70a9dafdbc6766d7614174a1649a70a38d23e708b7e98025d"
+    },
+    {
+      "item": "loglinear",
+      "path": ".cache/stats24/loglinear.json",
+      "bytes": 2122,
+      "sha256": "7739755e07e4e01835ee934de16f71c0b6b56a42fed8443a197395a38b95c638"
+    },
+    {
+      "item": "ordinal",
+      "path": ".cache/stats24/ordinal.json",
+      "bytes": 16115,
+      "sha256": "cc2185ef6385f8b7dfcda585edfddaaf2d992811a5aa2a463f4a721b181781fb"
+    },
+    {
+      "item": "gee",
+      "path": ".cache/stats24/gee.json",
+      "bytes": 1134,
+      "sha256": "e7b08826fdfa5205490ea45ca4df8a983e8358879a378bc588f35c77993fc58f"
+    },
+    {
+      "item": "extras",
+      "path": ".cache/stats24/extras.json",
+      "bytes": 2408,
+      "sha256": "7780ea859775fabe089a98ff49cc15c07d2b774f41d0ed7599b1d42a4a366df7"
+    },
+    {
+      "item": "scoring",
+      "path": ".cache/stats24/scoring.json",
+      "bytes": 13177,
+      "sha256": "805e96d4d3396e03b90aa08d0c65c077f2547f37499710f07a2f026d0c4d5c60"
+    },
+    {
+      "item": "board",
+      "path": ".cache/stats24/board.json",
+      "bytes": 1752,
+      "sha256": "12d0a9be414b421948b71e12bb4862e28faf986da60754f60593fd6b67d171a7"
+    }
+  ],
+  "scene_imports": 14
+}

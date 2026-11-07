@@ -27,20 +27,24 @@ class Counts(VoiceoverScene):
             cmath(r"y \mid \lambda", r"\sim", r"\text{Poisson}(\lambda), \ \ \lambda = \mu\,\varepsilon, \ \ \varepsilon \sim \text{Gamma}(k, k)", font_size=28),
             cmath(r"y", r"\sim", r"\text{NB}(\mu, k): \ \mathrm{Var} = \mu + \mu^2/k", font_size=30),
             cmath(r"k \to \infty", r":", r"\text{the Poisson}", font_size=30),
-            cmath(r"\text{fit}", r":", r"\text{IRLS for } \beta \text{ given } k, \ \text{Newton for } k, \ \text{alternate}", font_size=28),
+            cmath(r"\text{fit}", r":", r"\text{IRLS for } \beta \text{ given } k, \ \text{numerically optimize } k, \ \text{alternate}", font_size=28),
         ]
         rows[1][2].set_color(NBC)
         whys = [why(r"each person's own rate, \ gamma-distributed"), why(r"Greenwood \& Yule (1920): \ accident-proneness"),
                 why(r"no heterogeneity left"), why(r"not quite a GLM: \ $k$ is in the variance")]
+        intro = label('Gamma mixing yields the negative-binomial count distribution', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Where does overdispersion come from? Suppose each person has their own rate: the model's "
-            "mean times a gamma-distributed frailty with mean one. Given the rate, the count is Poisson. "
-            "<bookmark mark='b'/> Averaged over the frailty, the count is negative binomial, with variance mu plus mu "
-            "squared over k. Major Greenwood and Udny Yule derived it in 1920 to describe accident-prone factory workers. "
-            "<bookmark mark='c'/> As k grows the frailty disappears and the Poisson returns. <bookmark mark='d'/> With k "
-            "fixed it's a generalized linear model; in practice we alternate IRLS for the coefficients with a Newton step for "
-            "k."
+            "<bookmark mark='a'/> Where does overdispersion come from? Suppose each person has their own rate: the "
+            "model's mean times a gamma-distributed frailty with mean one. Given the rate, the count is Poisson. "
+            "<bookmark mark='b'/> Averaged over the frailty, the count is negative binomial, with variance mu plus mu"
+            " squared over k. Major Greenwood and Udny Yule derived it in 1920 to describe accident-prone factory "
+            "workers. <bookmark mark='c'/> As k grows the frailty disappears and the Poisson returns. <bookmark "
+            "mark='d'/> With k fixed it's a generalized linear model; in practice we alternate IRLS for the "
+            "coefficients with a scalar numerical optimization for k, checking the fitted likelihood."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -56,6 +60,9 @@ class Counts(VoiceoverScene):
         ]
         rows[1][-1].set_color(MODEL)
         whys = [why(r"person-years, \ population, \ road length"), why(r"the log link turns rates into sums"), why(r"Part 14: \ Doll and Hill's doctors"), why(r"per unit of exposure")]
+        intro = label('A known positive exposure enters as a log offset', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> First, an essential tool for any count. Counts usually accumulate over some exposure: "
             "person-years of follow-up, a town's population, kilometres of road. The mean is the exposure times a rate. "
@@ -64,6 +71,7 @@ class Counts(VoiceoverScene):
             "14's study of smoking doctors. <bookmark mark='d'/> Every other coefficient then exponentiates to a rate ratio, "
             "per unit of exposure."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -74,7 +82,7 @@ class Counts(VoiceoverScene):
         d = load("visits")
         ks = np.asarray(d["ks"])[:13]
         obs = np.asarray(d["obs"])[:13]
-        A = axes([-0.6, 12.6], [0, 0.45], x_length=8.0, y_length=4.4, xlabel=r"doctor visits last year",
+        A = axes([-0.6, 12.6], [0, 0.45], x_length=8.0, y_length=4.4, xlabel=r"doctor visits last year (0--12 shown)",
                  ylabel=r"share of adults", xticks=[0, 2, 4, 6, 8, 10, 12], yticks=[0, 0.1, 0.2, 0.3, 0.4], center=[-1.6, 0.3, 0])
         ax = A.ax
         bars = bars_at(ax, ks, obs, 0.7, OBSC, 0.75)
@@ -87,11 +95,12 @@ class Counts(VoiceoverScene):
             label(rf"green: \ NB, \ $\hat k = {d['nb']['k']:.2f}$: \ {100 * d['exp_nb'][0]:.1f}\% zeros", font_size=22, color=NBC),
         ), 3.45, 0.42, [5.1, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The World's two thousand adults: forty percent saw no doctor last year. "
-            "<bookmark mark='b'/> The Poisson regression, with all four covariates, expects only nineteen percent zeros. "
+            "<bookmark mark='a'/> The World's two thousand adults: forty percent saw no doctor last year. <bookmark "
+            "mark='b'/> The Poisson regression, with all four covariates, expects only nineteen percent zeros. "
             "<bookmark mark='c'/> It also expects too many people with one or two visits and almost nobody with ten. "
-            "<bookmark mark='d'/> The negative binomial, with k estimated at point eight two, expects thirty-nine percent "
-            "zeros and matches the whole shape."
+            "<bookmark mark='d'/> The negative binomial, with k estimated at point eight two, expects thirty-nine "
+            "percent zeros and approximates the displayed shape much better. Counts above twelve remain in the fit "
+            "but are outside this viewport."
         ) as vo:
             self.add(simulated_tag())
             self.play(FadeIn(A), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.05))
@@ -115,6 +124,9 @@ class Counts(VoiceoverScene):
         rows[0][2].set_color(ZIPC)
         whys = [why(r"Lambert (1992): \ structural zeros plus Poisson"), why(r"Part 22, \ chapter eight"),
                 why(r"Mullahy (1986)"), why(r"never-goers, \ or not this year")]
+        intro = label('Excess zeros can have different modelling explanations', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> Excess zeros have a second explanation: some people never go. Diane Lambert's "
             "zero-inflated Poisson, from 1992, mixes a share pi of structural zeros with a Poisson for everyone else. "
@@ -123,6 +135,7 @@ class Counts(VoiceoverScene):
             "logistic regression for whether there are any visits, and a zero-truncated Poisson for how many. "
             "<bookmark mark='d'/> Zero inflation says there are two kinds of zero; a hurdle says there's one gate to pass."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -143,11 +156,12 @@ class Counts(VoiceoverScene):
             label(r"the negative binomial wins by 700 in AIC", font_size=22, color=HIT),
         ), 12.0, 0.25, [0, -1.9, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Fit all four to the same visits. <bookmark mark='b'/> The Poisson's log likelihood is minus "
-            "four thousand six hundred and eighty-two. <bookmark mark='c'/> Zero inflation helps a lot, putting thirty-five "
-            "percent of the adults among the never-goers; the hurdle helps a little more. <bookmark mark='d'/> But the "
-            "negative binomial beats them all, by about seven hundred in AIC: inflating the zeros cannot create the long right tail, "
-            "which needs people with high rates."
+            "<bookmark mark='a'/> Fit all four to the same visits. <bookmark mark='b'/> The Poisson's log likelihood "
+            "is minus four thousand six hundred and eighty-two. <bookmark mark='c'/> Zero inflation helps a lot, "
+            "estimating a structural-zero mixture weight of thirty-five percent under that model, not identifying "
+            "which adults can never attend; the hurdle helps a little more. <bookmark mark='d'/> But the negative "
+            "binomial has the best AIC among these four candidates, by about seven hundred in AIC: inflating the "
+            "zeros cannot create the long right tail, which needs people with high rates."
         ) as vo:
             self.add(simulated_tag())
             vo.wait_until("a")
@@ -163,21 +177,28 @@ class Counts(VoiceoverScene):
     def ppml(self):
         rows = [
             cmath(r"\text{Poisson score}", r":", r"\textstyle\sum_i x_i (y_i - e^{x_i^\top\beta}) = 0", font_size=30),
-            cmath(r"\text{consistent if}", r":", r"E(y \mid x) = e^{x^\top\beta}, \ \text{any variance, \ any distribution}", font_size=28),
+            cmath(r"\text{consistent if}", r":", r"E(y \mid x) = e^{x^\top\beta}, \ \text{suitable sampling, moments and design}", font_size=28),
             cmath(r"\text{even for}", r":", r"\text{continuous } y \ge 0: \ \text{trade flows, \ costs}", font_size=30),
             cmath(r"\text{with}", r":", r"\text{the sandwich SE}", font_size=30),
         ]
         rows[1][-1].set_color(HIT)
         whys = [why(r"the canonical-link score"), why(r"Gourieroux, \ Monfort \& Trognon (1984)"),
                 why(r"Santos Silva \& Tenreyro (2006): \ PPML"), why(r"chapter seven's Board row")]
+        intro = label('Poisson estimating equations require a correct conditional mean', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> A reassuring fact behind chapter seven's Board. The Poisson score equations involve only "
-            "the mean. <bookmark mark='b'/> So the Poisson estimates are consistent whenever the log mean is linear, whatever "
-            "the variance and whatever the distribution, as Christian Gourieroux, Alain Monfort and Alain Trognon proved in "
-            "1984. <bookmark mark='c'/> It even works for continuous non-negative outcomes: economists fit international "
-            "trade flows this way, Poisson pseudo-maximum likelihood, avoiding the bias of taking logs of data with zeros. "
-            "<bookmark mark='d'/> Paired with the sandwich, it is one of the most robust tools in this part."
+            "<bookmark mark='a'/> A reassuring fact behind chapter seven's Board. The Poisson score equations involve"
+            " only the mean. <bookmark mark='b'/> So the Poisson estimates are consistent under a correct log-linear "
+            "conditional mean, suitable sampling and finite moments, with identifiable coefficients and a finite "
+            "solution, even when the Poisson variance and distribution are wrong, as Christian Gourieroux, Alain "
+            "Monfort and Alain Trognon proved in 1984. <bookmark mark='c'/> It even works for continuous non-negative"
+            " outcomes: economists fit international trade flows this way, Poisson pseudo-maximum likelihood, keeping"
+            " zeros and targeting the arithmetic conditional mean. Regression on logged positive outcomes answers a "
+            "different question. <bookmark mark='d'/> Paired with the sandwich, it is one of the most robust tools in"
+            " this part."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -195,6 +216,9 @@ class Counts(VoiceoverScene):
         rows[1][2].set_color(HIT)
         whys = [why(r"we built it, \ so we know"), why(r"both stories at once"), why(r"extra heterogeneity, \ to explain the zeros"),
                 why(r"Part 28: \ which model?")]
+        intro = label('A good approximation need not recover the generating mechanism', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> Here's the advantage of a World whose truth we know. It was built with about fifteen percent "
             "never-goers, who stay at zero, and a negative binomial with k equal to one point two for everyone else. "
@@ -204,6 +228,7 @@ class Counts(VoiceoverScene):
             "<bookmark mark='d'/> The model that fits best need not be the mechanism that made the data. Part 28 takes up how "
             "to choose."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

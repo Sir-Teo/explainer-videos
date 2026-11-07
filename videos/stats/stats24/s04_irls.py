@@ -25,23 +25,28 @@ class IRLS(VoiceoverScene):
 
     def derive(self):
         rows = [
-            cmath(r"U(\beta)", r"=", r"\textstyle\sum_i \dfrac{(y_i - \mu_i)}{\phi V(\mu_i)} \dfrac{\partial\mu_i}{\partial\eta_i} x_i = X^\top W (z - \eta)/\phi", font_size=28),
-            cmath(r"\mathcal I(\beta)", r"=", r"X^\top W X/\phi, \ \ W = \mathrm{diag}\Big\{\dfrac{(\partial\mu_i/\partial\eta_i)^2}{V(\mu_i)}\Big\}", font_size=28),
+            cmath(r"U(\beta)", r"=", r"\textstyle\sum_i \dfrac{n_i(y_i-\mu_i)}{\phi V(\mu_i)} \dfrac{\partial\mu_i}{\partial\eta_i} x_i = X^\top W (z - \eta)/\phi", font_size=28),
+            cmath(r"\mathcal I(\beta)", r"=", r"X^\top W X/\phi, \ \ W = \mathrm{diag}\Big\{\dfrac{n_i(\partial\mu_i/\partial\eta_i)^2}{V(\mu_i)}\Big\}", font_size=28),
             cmath(r"\beta^{\text{new}}", r"=", r"\beta + \mathcal I^{-1} U = (X^\top W X)^{-1} X^\top W z", font_size=30),
             cmath(r"z_i", r"=", r"\eta_i + (y_i - \mu_i)\, \partial\eta_i/\partial\mu_i", font_size=30),
         ]
         rows[2][2].set_color(MODEL)
         whys = [why(r"the chain rule through the link"), why(r"the expected information"),
                 why(r"a Fisher scoring step, \ rearranged"), why(r"the working response: \ a linearized $y$")]
+        intro = label('Fisher scoring is weighted least squares on a working response', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> The score of a generalized linear model follows from the chain rule: residuals, divided by "
-            "the variance, times the slope of the inverse link, times the covariates. <bookmark mark='b'/> The expected "
-            "information is X transpose W X over phi, with weights equal to that slope squared over the variance. "
-            "<bookmark mark='c'/> A Fisher scoring step, beta plus the inverse information times the score, rearranges into "
-            "a weighted least squares fit, <bookmark mark='d'/> of a working response z: the current linear predictor plus "
-            "the residual stretched back onto the linear-predictor scale. Every step is Part 23's weighted least squares; "
-            "only the weights and the working response change."
+            "<bookmark mark='a'/> The score of a generalized linear model follows from the chain rule: residuals, "
+            "divided by the variance, times the slope of the inverse link, times the covariates. <bookmark mark='b'/>"
+            " The expected information is X transpose W X over phi, with working weights equal to prior weight times "
+            "that slope squared over the variance function. For grouped proportions the prior weight is the number of"
+            " trials. <bookmark mark='c'/> A Fisher scoring step, beta plus the inverse information times the score, "
+            "rearranges into a weighted least squares fit, <bookmark mark='d'/> of a working response z: the current "
+            "linear predictor plus the residual stretched back onto the linear-predictor scale. Every step is Part "
+            "23's weighted least squares; only the weights and the working response change."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -99,11 +104,12 @@ class IRLS(VoiceoverScene):
             label(rf"converged after {d['iters']} steps", font_size=22, color=HIT),
         ), 3.6, 0.36, [5.1, 0.2, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Recompute the weights and working response at the new fit, and fit again. The first curve "
-            "is far too shallow. <bookmark mark='b'/> The second is closer, the deviance falling from three hundred and six "
-            "to thirteen. <bookmark mark='c'/> By the fourth step the coefficients have three correct digits, and "
-            "<bookmark mark='d'/> after seven the changes are below the computer's precision: Newton's quadratic "
-            "convergence, from Part 21."
+            "<bookmark mark='a'/> Recompute the weights and working response at the new fit, and fit again. The first"
+            " curve is far too shallow. <bookmark mark='b'/> The second is closer, the second brings deviance near "
+            "thirteen, down from the starting three hundred and six; the first update had brought it to about "
+            "thirty-nine. <bookmark mark='c'/> By the fourth step the coefficients have three correct digits, and "
+            "<bookmark mark='d'/> the displayed stopping iteration meets our coefficient-change tolerance. For this "
+            "canonical-link fit, local Newton convergence is quadratic; the tolerance is not machine precision."
         ) as vo:
             self.add(bliss_tag())
             self.play(FadeIn(Pn))
@@ -131,7 +137,7 @@ class IRLS(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(rf"start: \ {dev[0]:.1f}", font_size=22),
             label(rf"minimum: \ {dev[-1]:.2f}", font_size=22, color=TRUE),
-            label(r"step-halving: \ never let it rise", font_size=22, color=GREY_A),
+            label(r"checked step-halving; \ stop on failure", font_size=22, color=GREY_A),
             label(r"the deviance is minus twice the log likelihood, \ shifted", font_size=22, color=MODEL),
         ), 3.45, 0.42, [5.1, 0.3, 0])
         with self.voiceover(
@@ -157,14 +163,19 @@ class IRLS(VoiceoverScene):
         ]
         rows[2][-1].set_color(MODEL)
         whys = [why(r"the logit, \ the log for counts"), why(r"Fisher scoring: \ always positive weights"), why(r"the same maximum, \ by another road"), why(r"they differ slightly away from canonical links")]
+        intro = label('Noncanonical IRLS uses expected information', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> One subtlety. With a canonical link, the weights are both the observed and the expected "
-            "curvature. <bookmark mark='b'/> With the probit or the complementary log-log, IRLS uses the expected "
-            "information: Fisher scoring, whose weights are always positive. <bookmark mark='c'/> Newton's method would use "
-            "the observed curvature, taking different steps to the same maximum. <bookmark mark='d'/> The two give slightly "
-            "different standard errors, the observed against the expected information, Part 22's chapter four; software "
-            "usually reports the expected."
+            "<bookmark mark='a'/> One subtlety. With a canonical link, the weights are both the observed and the "
+            "expected curvature. <bookmark mark='b'/> With the probit or the complementary log-log, IRLS uses the "
+            "expected information: Fisher scoring, whose weights are always positive. <bookmark mark='c'/> Newton's "
+            "method would use the observed curvature, taking different steps, which can reach the same finite maximum"
+            " when both methods converge appropriately. <bookmark mark='d'/> The two give slightly different standard"
+            " errors, the observed against the expected information, Part 22's chapter four; software usually reports"
+            " the expected."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -179,15 +190,20 @@ class IRLS(VoiceoverScene):
             cmath(r"\text{SEs}", r":", r"(X^\top W X)^{-1}\phi \ \text{at the last step}", font_size=30),
         ]
         rows[0][2].set_color(MODEL)
-        whys = [why(r"Part 23's numerics, \ unchanged"), why(r"quadratic convergence"),
+        whys = [why(r"Part 23's numerics, \ unchanged"), why(r"rapid local convergence; not always quadratic"),
                 why(r"start from the data, \ not from zero"), why(r"free: \ the last $W$")]
+        intro = label('Stable weighted least squares drives each iteration', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Each step costs one weighted least squares fit, done by Part 23's QR decomposition. "
-            "<bookmark mark='b'/> Usually four to ten steps suffice. <bookmark mark='c'/> Software starts not from zero but "
-            "from the data, nudged away from zero and one, which saves steps. <bookmark mark='d'/> And the standard errors "
-            "come for free: the inverse of X transpose W X at the last step, times the dispersion. Bliss computed all this "
-            "by hand in 1935; R's glm runs this same loop."
+            "<bookmark mark='a'/> Each step costs one weighted least squares fit, using a stable weighted QR solve as"
+            " in Part 23. <bookmark mark='b'/> Well-behaved examples often need only a few steps. Noncanonical Fisher"
+            " scoring need not have quadratic convergence. <bookmark mark='c'/> Software starts not from zero but "
+            "from the data, nudged away from zero and one, which saves steps. <bookmark mark='d'/> And the standard "
+            "errors use the final information matrix: the inverse of X transpose W X at the last step, times the "
+            "dispersion. Bliss computed all this by hand in 1935; R's glm runs this same loop."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

@@ -57,20 +57,25 @@ class LogLinear(VoiceoverScene):
         rows = [
             cmath(r"n_{sat}", r"\sim", r"\text{Poisson}(\mu_{sat})", font_size=30),
             cmath(r"\log\mu_{sat}", r"=", r"\lambda + \lambda^S_s + \lambda^A_a + \lambda^T_t + \lambda^{SA}_{sa} + \lambda^{AT}_{at} + \cdots", font_size=28),
-            cmath(r"\text{a missing term}", r"=", r"\text{an independence}", font_size=30),
+            cmath(r"\text{a missing term}", r"=", r"\text{a restriction; not always an independence}", font_size=30),
             cmath(r"[SA][AT]", r":", r"T \perp S \mid A", font_size=30),
         ]
         rows[3][2].set_color(PATH)
         whys = [why(r"each cell count, \ a Poisson count"), why(r"main effects and interactions, \ like an ANOVA"),
                 why(r"zeros in the model are statements"), why(r"told and sex independent, \ given age")]
+        intro = label('Log-linear interactions encode restrictions on a table', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Treat each cell count as a Poisson count. <bookmark mark='b'/> Model its log mean with main "
-            "effects and interactions, like an analysis of variance on the log scale: this is a log-linear model, a Poisson "
-            "GLM whose design matrix is built from the table's margins. <bookmark mark='c'/> Interactions left out are "
-            "statements of independence. <bookmark mark='d'/> The model with only the sex-by-age and age-by-told "
-            "interactions, written S A, A T, says that being told is independent of sex once age is known: conditional "
-            "independence."
+            "<bookmark mark='a'/> Treat each cell count as a Poisson count. <bookmark mark='b'/> Model its log mean "
+            "with main effects and interactions, like an analysis of variance on the log scale: this is a log-linear "
+            "model, a Poisson GLM whose design matrix is built from the table's margins. <bookmark mark='c'/> "
+            "Specific collections of absent interactions encode independence. Omitting one higher-order interaction "
+            "need not imply any conditional independence. <bookmark mark='d'/> The model with only the sex-by-age and"
+            " age-by-told interactions, written S A, A T, says that being told is independent of sex once age is "
+            "known: conditional independence."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -119,16 +124,22 @@ class LogLinear(VoiceoverScene):
         ]
         rows[1][2].set_color(PATH)
         whys = [why(r"interactions are log odds ratios"), why(r"a common odds ratio, \ like Part 14's CMH"),
-                why(r"collapse only over a variable that is conditionally independent"),
+                why(r"collapsibility needs specific independence conditions"),
                 why(r"Deming \& Stephan (1940): \ Part 18's raking")]
+        intro = label('A homogeneous odds-ratio fit is a model-based summary', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> The interaction terms are log odds ratios. <bookmark mark='b'/> In the model without a "
-            "three-way term, the sex-by-told term is a common odds ratio across age groups, point six eight: women are less "
-            "often told, at any given age. It's Part 14's Mantel–Haenszel estimate, recast as a model. "
-            "<bookmark mark='c'/> Log-linear models also say when it is safe to collapse a table over a variable, the "
-            "question behind Simpson's paradox. <bookmark mark='d'/> They're fitted by IRLS, or by iterative proportional "
+            "<bookmark mark='a'/> The interaction terms are log odds ratios. <bookmark mark='b'/> In the model "
+            "without a three-way term, the sex-by-told term is a common odds ratio across age groups, point six "
+            "eight: women are less often told, at any given age. It is a homogeneous-association likelihood estimate,"
+            " related to but not generally identical to Mantel–Haenszel's ratio-of-sums estimate. This common-odds "
+            "model was rejected here, so its estimate is only a summary of varying age-group associations. <bookmark "
+            "mark='c'/> Log-linear models also say when it is safe to collapse a table over a variable, the question "
+            "behind Simpson's paradox. <bookmark mark='d'/> They're fitted by IRLS, or by iterative proportional "
             "fitting, which is Part 18's raking applied to model margins."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -137,21 +148,28 @@ class LogLinear(VoiceoverScene):
 
     def graphical(self):
         rows = [
-            cmath(r"\text{graph}", r":", r"\text{a node per variable, \ an edge per kept interaction}", font_size=30),
+            cmath(r"\text{graph}", r":", r"\text{a node per variable; all maximal-clique interactions}", font_size=30),
             cmath(r"\text{separation}", r":", r"A \text{ separates } S \text{ and } T \Rightarrow S \perp T \mid A", font_size=30),
             cmath(r"\text{hierarchical}", r":", r"\text{keep a term } \Rightarrow \text{ keep every sub-term}", font_size=30),
             cmath(r"\text{many variables}", r":", r"\text{a sparse graph \ = \ a few interactions}", font_size=30),
         ]
         rows[1][-1].set_color(PATH)
         whys = [why(r"Darroch, \ Lauritzen \& Speed (1980)"), why(r"read independences off the picture"), why(r"the usual convention"), why(r"Part 31: \ Gaussian graphical models")]
+        intro = label('Graphical models include every maximal-clique interaction', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Log-linear models have pictures. Draw a node for each variable and an edge for each "
-            "interaction kept in the model. <bookmark mark='b'/> If every path between two variables passes through a third, "
-            "they're conditionally independent given it: the model S A, A T is a chain with age in the middle. "
-            "<bookmark mark='c'/> Hierarchical models, which keep every lower-order term of any interaction, correspond to "
-            "such graphs. <bookmark mark='d'/> With many variables, a sparse graph means few interactions, the starting point "
-            "of graphical models, which Part 31 develops for continuous data."
+            "<bookmark mark='a'/> Log-linear models have pictures. For a graphical log-linear model, draw one node "
+            "per variable and include all interactions within each maximal clique. <bookmark mark='b'/> If every path"
+            " between two variables passes through a third, they're conditionally independent given it: the model S "
+            "A, A T is a chain with age in the middle. <bookmark mark='c'/> Graphical models are a subset of "
+            "hierarchical models. The all-pairs, no-three-way model on three variables is hierarchical but not "
+            "graphical: its complete graph would also require the three-way interaction. <bookmark mark='d'/> For "
+            "positive model cell probabilities, graph separation gives conditional independences. Sparse graphs "
+            "restrict clique interactions, the starting point of graphical models, which Part 31 develops for "
+            "continuous data."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -166,11 +184,12 @@ class LogLinear(VoiceoverScene):
             label(r"the Poisson trick: \ fit a multinomial with Poisson software", font_size=24, color=GREY_A),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> When one variable is naturally the response, being told, a log-linear model that includes "
-            "every interaction among the predictors <bookmark mark='b'/> is the same as a logistic regression of the response "
-            "on them. <bookmark mark='c'/> The Poisson likelihood and the multinomial likelihood give identical estimates of "
-            "the parameters that matter. <bookmark mark='d'/> That's the Poisson trick, and it's how the next chapter's "
-            "multinomial models can be fitted with ordinary Poisson software."
+            "<bookmark mark='a'/> When one variable is naturally the response, being told, a log-linear model that "
+            "includes every interaction among the predictors <bookmark mark='b'/> is the same as a logistic "
+            "regression of the response on them. <bookmark mark='c'/> With the required saturated predictor margins "
+            "or stratum-specific nuisance intercepts, Poisson and conditional multinomial likelihoods give the same "
+            "response-association estimates. <bookmark mark='d'/> That's the Poisson trick, and it's how the next "
+            "chapter's multinomial models can be fitted with ordinary Poisson software."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

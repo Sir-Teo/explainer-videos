@@ -28,18 +28,25 @@ class Quasi(VoiceoverScene):
             cmath(r"\text{Poisson}", r":", r"\mathrm{Var}\,y = \mu", font_size=30),
             cmath(r"\text{the visits}", r":", rf"\bar y = {d['mean']:.2f}, \ s^2 = {d['var']:.2f}", font_size=30),
             cmath(r"\text{causes}", r":", r"\text{people differ beyond the covariates; \ contagion; \ clustering}", font_size=28),
-            cmath(r"\text{consequence}", r":", r"\text{estimates fine, \ SEs too small}", font_size=30),
+            cmath(r"\text{consequence}", r":", r"\text{correct mean needed; model SEs can be too small}", font_size=30),
         ]
         rows[1][2].set_color(RES)
         whys = [why(r"one parameter fixes both"), why(r"five times the mean"),
                 why(r"unobserved heterogeneity"), why(r"Part 22's sandwich chapter")]
+        intro = label('Conditional variation must be distinguished from a mixture of means', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> A Poisson model ties the variance to the mean. <bookmark mark='b'/> The World's doctor "
-            "visits have a mean of two point one three and a variance of ten point three, five times as big. "
-            "<bookmark mark='c'/> Counts are usually overdispersed like this: people differ in ways the covariates don't "
-            "capture, one event makes another likelier, events cluster. <bookmark mark='d'/> As Part 22 found, the Poisson "
-            "estimates of the mean structure stay sensible, but its standard errors are too small."
+            "<bookmark mark='a'/> A Poisson model ties the variance to the mean. <bookmark mark='b'/> The World's "
+            "doctor visits have a mean of two point one three and a variance of ten point three, five times as big "
+            "before adjusting for covariates. Variation in conditional means can cause this even with conditionally "
+            "Poisson data; the adjusted Pearson dispersion supplies further evidence here. <bookmark mark='c'/> "
+            "Counts are usually overdispersed like this: people differ in ways the covariates don't capture, one "
+            "event makes another likelier, events cluster. <bookmark mark='d'/> As Part 22 found, with a correct "
+            "conditional log-mean model, Poisson estimates can remain consistent while model-based standard errors "
+            "fail. A wrong mean needs attention too."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -56,6 +63,9 @@ class Quasi(VoiceoverScene):
         rows[1][2].set_color(PATH)
         whys = [why(r"Wedderburn (1974)"), why(r"the quasi-likelihood: \ behaves like a log likelihood"),
                 why(r"the same IRLS, \ the same $\hat\beta$"), why(r"SEs scaled by $\sqrt{\hat\phi}$")]
+        intro = label('Quasi-likelihood specifies a conditional mean and variance', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> Robert Wedderburn's 1974 quasi-likelihood, which Part 22 met briefly, assumes only a mean "
             "model and a variance that is phi times a known function of the mean. <bookmark mark='b'/> The integral of the "
@@ -64,6 +74,7 @@ class Quasi(VoiceoverScene):
             "same IRLS, the same estimates. <bookmark mark='d'/> Only the covariance changes: multiply by the estimated "
             "dispersion."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -115,14 +126,19 @@ class Quasi(VoiceoverScene):
         ]
         rows[1][2].set_color(NBC)
         whys = [why(r"a constant multiple"), why(r"grows faster: \ heterogeneity"),
-                why(r"Ver Hoef \& Boveng (2007)"), why(r"honest for any shape, \ if $n$ is large")]
+                why(r"Ver Hoef \& Boveng (2007)"), why(r"independent sampling, finite score moments, suitable design")]
+        intro = label('Quasi-Poisson and NB impose different variance shapes', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> But quasi-Poisson makes an assumption of its own: the variance is a constant multiple of "
-            "the mean. <bookmark mark='b'/> Heterogeneity between people produces something else, the negative binomial's "
-            "mu plus mu squared over k, which grows faster for large means. <bookmark mark='c'/> The two weight the "
-            "observations differently, the quasi-Poisson giving big counts more weight, as Jay Ver Hoef and Peter Boveng "
-            "pointed out. <bookmark mark='d'/> The sandwich assumes no variance shape at all."
+            "<bookmark mark='a'/> But quasi-Poisson makes an assumption of its own: the variance is a constant "
+            "multiple of the mean. <bookmark mark='b'/> Heterogeneity between people produces something else, the "
+            "negative binomial's mu plus mu squared over k, which grows faster for large means. <bookmark mark='c'/> "
+            "The two weight the observations differently, quasi-Poisson assigning greater working weight to "
+            "observations with large fitted means, as Jay Ver Hoef and Peter Boveng pointed out. <bookmark mark='d'/>"
+            " The sandwich assumes no variance shape at all."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -138,15 +154,20 @@ class Quasi(VoiceoverScene):
         ]
         rows[3][-1].set_color(RES)
         whys = [why(r"litters, \ batches, \ classrooms: \ Williams (1982)"), why(r"apparently overdispersed"), why(r"not at all"), why(r"fix the mean before the variance")]
+        intro = label('Dispersion estimates depend on the fitted mean curve', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Proportions can be overdispersed too. If each batch of beetles had its own death rate, "
-            "drawn from a beta distribution, counts would follow a beta-binomial, with the binomial variance inflated by one "
-            "plus n minus one times an intraclass correlation. <bookmark mark='b'/> Bliss's beetles under the logit link "
-            "give a Pearson dispersion of one point six seven, apparently overdispersed. <bookmark mark='c'/> Under the "
-            "complementary log-log it's point five five. <bookmark mark='d'/> The extra variation was the wrong curve, "
-            "not extra noise. A misspecified mean shows up as overdispersion, so fix the mean before reaching for the "
-            "variance."
+            "<bookmark mark='a'/> Proportions can be overdispersed too. If each batch of beetles had its own death "
+            "rate, drawn from a beta distribution, counts would follow a beta-binomial, with the binomial variance "
+            "inflated by one plus n minus one times an intraclass correlation. <bookmark mark='b'/> Bliss's beetles "
+            "under the logit link give a Pearson dispersion of one point six seven, apparently overdispersed. "
+            "<bookmark mark='c'/> Under the complementary log-log it's point five five. <bookmark mark='d'/> The "
+            "estimated dispersion changes greatly with the fitted mean curve. Eight grouped observations do not "
+            "establish which mechanism produced the discrepancy. A misspecified mean shows up as overdispersion, so "
+            "fix the mean before reaching for the variance."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -158,11 +179,12 @@ class Quasi(VoiceoverScene):
         b = coverage_board(rows, lit_part=24, placeholders=0, font_size=20, row_h=0.62)
         b.scale_to_fit_width(min(b.width, 13.0)).move_to(ORIGIN)
         with self.voiceover(
-            "<bookmark mark='a'/> The Board: a thousand samples of five hundred adults, and the coefficient on a diagnosis of "
-            "high blood pressure. The target is the World's own Poisson fit, the projection of Part 22. Poisson standard "
-            "errors cover it sixty-four percent of the time: broken. <bookmark mark='b'/> Quasi-Poisson: ninety, closer but "
-            "still broken, because a constant multiple is the wrong shape for these data. <bookmark mark='c'/> The sandwich: "
-            "ninety-four, kept."
+            "<bookmark mark='a'/> The Board: a thousand samples of five hundred adults, and the coefficient on a "
+            "diagnosis of high blood pressure. The target is the World's own Poisson fit, the projection of Part 22. "
+            "Poisson standard errors cover it sixty-four percent of the time: broken. <bookmark mark='b'/> "
+            "Quasi-Poisson: ninety, closer but still broken, where a constant-multiple variance model is only an "
+            "approximation and finite-sample effects can also matter. <bookmark mark='c'/> The sandwich: ninety-four,"
+            " kept."
         ) as vo:
             self.play(FadeIn(b.head), FadeIn(b.axis), FadeIn(b.legend))
             for k, m_ in enumerate("abc"):

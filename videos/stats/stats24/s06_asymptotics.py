@@ -29,20 +29,25 @@ class Asymptotics(VoiceoverScene):
         rows = [
             cmath(r"\hat\beta", r"\approx", r"N\big(\beta, \ \phi (X^\top W X)^{-1}\big)", font_size=30),
             cmath(r"\text{Wald}", r":", rf"\hat\beta_1 = {f['coef'][1]:.1f} \pm 1.96 \times {f['se'][1]:.2f}", font_size=30),
-            cmath(r"\text{LR}", r":", r"D_0 - D_1 \sim \chi^2_q", font_size=30),
+            cmath(r"\text{LR}", r":", r"(D_0-D_1)/\phi \ \dot\sim\ \chi^2_q\ \ (\phi\ \text{known})", font_size=30),
             cmath(r"\text{score}", r":", r"\text{needs only the smaller model}", font_size=30),
         ]
         rows[0][2].set_color(MODEL)
         whys = [why(r"Part 22, \ chapter three"), why(r"the beetles' cloglog slope"), why(r"a drop in deviance: \ Wilks"),
                 why(r"Rao: \ add a term without fitting it")]
+        intro = label('Regular GLM inference uses information and likelihood differences', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Everything in Part 22 applies. The estimates are approximately normal, with covariance phi "
-            "times X transpose W X inverse, the last IRLS step's weights. <bookmark mark='b'/> For the beetles' complementary "
-            "log-log slope that's twenty-two plus or minus about three and a half. <bookmark mark='c'/> The likelihood-ratio "
-            "test is a drop in deviance, chi-squared with as many degrees of freedom as terms removed. "
-            "<bookmark mark='d'/> And the score test needs only the smaller model, which makes it the cheap way to screen "
-            "many candidate terms."
+            "<bookmark mark='a'/> Part 22's regular likelihood results apply with identifiability, a finite interior "
+            "estimate, suitable design and moment conditions. The estimates are approximately normal, with covariance"
+            " phi times X transpose W X inverse, the last IRLS step's weights. <bookmark mark='b'/> For the beetles' "
+            "complementary log-log slope that's twenty-two plus or minus about three and a half. <bookmark mark='c'/>"
+            " With dispersion one, the likelihood-ratio statistic is a drop in deviance, chi-squared with as many "
+            "degrees of freedom as terms removed. <bookmark mark='d'/> And the score test needs only the smaller "
+            "model, which makes it the cheap way to screen many candidate terms."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -59,13 +64,19 @@ class Asymptotics(VoiceoverScene):
         rows[0][2].set_color(PATH)
         whys = [why(r"Pearson's moment estimate"), why(r"compare with $F_{q,\, n-p}$"),
                 why(r"like $s^2$ in least squares"), why(r"$\hat\phi \gg 1$: \ overdispersion")]
+        intro = label('Estimating dispersion gives an approximate F reference', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> When the dispersion is unknown, estimate it from the Pearson residuals, like s squared in "
-            "least squares. <bookmark mark='b'/> Then a drop in deviance per term, divided by that estimate, is compared "
-            "with an F distribution, as in the analysis of deviance we just did. <bookmark mark='c'/> For the gamma and the "
-            "normal, the dispersion is always estimated. <bookmark mark='d'/> For the binomial and the Poisson it's assumed "
-            "to be one, and the assumption is worth checking: an estimate well above one means overdispersion."
+            "<bookmark mark='a'/> When the dispersion is unknown, estimate it from the Pearson residuals, like s "
+            "squared in least squares. <bookmark mark='b'/> Then a drop in deviance per term, divided by that "
+            "estimate, is often compared approximately with an F distribution; the ordinary Gaussian linear-model "
+            "case has the exact F reference, as in the analysis of deviance we just did. <bookmark mark='c'/> For the"
+            " gamma and the normal, the dispersion is usually estimated unless supplied externally. <bookmark "
+            "mark='d'/> For the binomial and the Poisson it's assumed to be one, and the assumption is worth "
+            "checking: an estimate well above one means overdispersion."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -84,14 +95,19 @@ class Asymptotics(VoiceoverScene):
         rows[2][-1].set_color(PATH)
         whys = [why(r"a ratio of coefficients"), why(r"symmetric by construction"), why(r"Part 11: \ invert a test of the ratio"),
                 why(r"an honest ``we cannot say''")]
+        intro = label('Ratio confidence sets need care when the dose slope is weak', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Functions of the coefficients need the same care as in Part 11. The LD fifty is a ratio. "
-            "<bookmark mark='b'/> The delta method gives a symmetric interval, the estimate plus or minus about point oh oh "
-            "eight. <bookmark mark='c'/> Fieller's method inverts a test of the ratio directly; for the beetles the two "
-            "agree to the third decimal, because the slope is estimated very precisely. <bookmark mark='d'/> When the slope "
-            "is close to zero they part company: Fieller's set can be a whole line, which is the honest answer when the data "
-            "can't locate the dose at all."
+            "<bookmark mark='a'/> Functions of the coefficients need the same care as in Part 11. The LD fifty is a "
+            "ratio. <bookmark mark='b'/> The delta method gives a symmetric interval, the estimate plus or minus "
+            "about point oh oh eight. <bookmark mark='c'/> Fieller's method inverts a test of the ratio directly; for"
+            " the beetles the two agree to the third decimal, because the slope is estimated very precisely. "
+            "<bookmark mark='d'/> When the slope is close to zero they part company: Fieller's asymptotic confidence "
+            "set can be unbounded, including two disjoint rays or the whole line, which is the honest answer when the"
+            " data can't locate the dose at all."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -102,7 +118,8 @@ class Asymptotics(VoiceoverScene):
         d = load("binary_dev")
         D = np.asarray(d["grouped"])
         edges = np.linspace(0, 25, 51)
-        h, _ = np.histogram(np.clip(D, 0, 25 - 1e-9), edges, density=True)
+        count, _ = np.histogram(D, edges)
+        h = count / (len(D) * np.diff(edges))
         A = axes([0, 25], [0, 0.16], x_length=8.0, y_length=4.2, xlabel=r"deviance of a correct model",
                  ylabel=r"density", xticks=[0, 5, 10, 15, 20, 25], yticks=[0, 0.05, 0.1, 0.15], center=[-1.6, 0.3, 0])
         ax = A.ax
@@ -137,7 +154,8 @@ class Asymptotics(VoiceoverScene):
         D = np.asarray(d["binary"])
         lo, hi = 150, 300
         edges = np.linspace(lo, hi, 51)
-        h, _ = np.histogram(np.clip(D, lo, hi - 1e-9), edges, density=True)
+        count, _ = np.histogram(D, edges)
+        h = count / (len(D) * np.diff(edges))
         A = axes([lo, hi], [0, 0.04], x_length=8.0, y_length=4.2, xlabel=r"deviance of a correct model, \ binary $y$",
                  ylabel=r"density", xticks=[150, 200, 250, 300], yticks=[0, 0.02, 0.04], center=[-1.6, 0.3, 0])
         ax = A.ax
@@ -152,14 +170,16 @@ class Asymptotics(VoiceoverScene):
             label(r"the saturated model grows with $n$", font_size=22, color=GREY_A),
         ), 3.45, 0.42, [5.1, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Now ungrouped data: two hundred people, one yes-or-no outcome each, again from a correct "
-            "logistic model. <bookmark mark='b'/> The textbook would compare the deviance with chi-squared on a hundred and "
-            "ninety-eight degrees of freedom. <bookmark mark='c'/> The actual distribution is centred at two hundred and "
-            "thirty-five with a standard deviation of twelve, much narrower than the chi-squared's twenty, and in the wrong "
-            "place. <bookmark mark='d'/> Used as a test of fit, it would reject this correct model sixty-three percent of "
-            "the time. <bookmark mark='e'/> The reason: the saturated model's number of parameters grows with the sample, "
-            "the Neyman–Scott situation of Part 22. For binary data the deviance compares nested models, never a model with "
-            "the truth; Hosmer and Lemeshow's grouping, or calibration plots, check fit instead."
+            "<bookmark mark='a'/> Now ungrouped data: two hundred people, one yes-or-no outcome each, again from a "
+            "correct logistic model. <bookmark mark='b'/> The textbook would compare the deviance with chi-squared on"
+            " a hundred and ninety-eight degrees of freedom. <bookmark mark='c'/> The actual distribution is centred "
+            "at two hundred and thirty-five with a standard deviation of twelve, much narrower than the chi-squared's"
+            " twenty, and in the wrong place. <bookmark mark='d'/> Used as a test of fit, it would reject this "
+            "correct model sixty-three percent of the time. <bookmark mark='e'/> The reason: the saturated model's "
+            "number of parameters grows with the sample, the Neyman–Scott situation of Part 22. For binary data, "
+            "fixed-dimensional regular nested-model deviance differences can still have a Wilks reference. Comparing "
+            "deviance with a growing saturated model does not give a general chi-squared goodness-of-fit test; Hosmer"
+            " and Lemeshow's grouping, or calibration plots, check fit instead."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
@@ -174,22 +194,28 @@ class Asymptotics(VoiceoverScene):
     def od_test(self):
         rows = [
             cmath(r"H_0", r":", r"\mathrm{Var}\,y = \mu \ \text{vs} \ \mu + \alpha\mu^2", font_size=30),
-            cmath(r"\text{score test}", r":", r"\text{regress } \{(y - \hat\mu)^2 - y\}/\hat\mu \text{ on } \hat\mu", font_size=30),
+            cmath(r"\text{score test}", r":", r"Z=\dfrac{\sum_i\{(y_i-\hat\mu_i)^2-y_i\}}{\sqrt{2\sum_i\hat\mu_i^2}}", font_size=30),
             cmath(r"\text{LR, \ Poisson vs NB}", r":", r"\alpha = 0 \text{ is on the boundary: \ } \tfrac12\chi^2_0 + \tfrac12\chi^2_1", font_size=28),
-            cmath(r"\text{the visits}", r":", r"2 \times (4682 - 3721) = 1924", font_size=30),
+            cmath(r"\text{the visits}", r":", rf"{2*(load('visits')['nb']['ll']-load('visits')['poisson']['ll']):.1f}", font_size=30),
         ]
         rows[2][-1].set_color(PATH)
         whys = [why(r"overdispersion as a hypothesis"), why(r"Cameron \& Trivedi (1990)"), why(r"Part 22, \ chapter nine"),
                 why(r"overwhelming")]
+        intro = label('A boundary overdispersion test has a special null reference', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> Overdispersion can be tested. Under the Poisson the variance equals the mean; the "
-            "alternative adds alpha times mu squared. <bookmark mark='b'/> Colin Cameron and Pravin Trivedi's score test "
-            "needs only the Poisson fit: regress a scaled squared residual on the fitted mean and test the slope. "
-            "<bookmark mark='c'/> The likelihood-ratio test of Poisson against negative binomial puts alpha equal to zero on "
-            "the edge of its range, so, as in Part 22's chapter nine, its null distribution is half a point mass at zero "
-            "and half a chi-squared with one degree of freedom. <bookmark mark='d'/> For the visits the statistic is "
-            "nineteen hundred: overwhelming."
+            "alternative adds alpha times mu squared. <bookmark mark='b'/> Colin Cameron and Pravin Trivedi's score "
+            "test needs only the Poisson fit: the displayed standardized NB2 score sums squared residuals minus "
+            "observed counts, with its Poisson-null information scale. It is a one-sided test for positive "
+            "overdispersion under regularity conditions. <bookmark mark='c'/> The likelihood-ratio test of Poisson "
+            "against negative binomial puts alpha equal to zero on the edge of its range, in this "
+            "single-boundary-parameter setting, regular Poisson-null asymptotics give half a point mass at zero and "
+            "half a chi-squared with one degree of freedom. Other boundary problems can have different limits. "
+            "<bookmark mark='d'/> For the visits the statistic is nineteen hundred: overwhelming."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -198,17 +224,20 @@ class Asymptotics(VoiceoverScene):
 
     def advice(self):
         rows = fit_rows(VGroup(
-            label(r"differences of deviance between nested models: \ $\chi^2$, \ reliably", font_size=24, color=HIT),
+            label(r"regular nested likelihoods: \ scaled deviance differences $\dot\sim\chi^2$", font_size=24, color=HIT),
             label(r"the deviance itself as a fit test: \ only for well-grouped data", font_size=24, color=PATH),
             label(r"intervals: \ profile likelihood beats Wald when $\hat p$ is extreme", font_size=24),
             label(r"small samples: \ exact conditional tests, \ or the parametric bootstrap", font_size=24, color=GREY_A),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> So: differences in deviance between nested models are reliably chi-squared, grouped or "
-            "not. <bookmark mark='b'/> The deviance alone, as a test of fit, works only when the data are well grouped. "
-            "<bookmark mark='c'/> For intervals, Part 22's profile likelihood beats the Wald interval when probabilities are "
-            "near zero or one. <bookmark mark='d'/> And in small samples, exact conditional tests or a parametric bootstrap "
-            "replace the approximations."
+            "<bookmark mark='a'/> So: under regular, correctly specified models with dispersion one, "
+            "fixed-dimensional nested deviance differences are asymptotically chi-squared. Separation, boundary "
+            "parameters and misspecification can invalidate that reference. <bookmark mark='b'/> The deviance alone, "
+            "as a test of fit, can have a useful chi-squared approximation for well-populated groups. Other "
+            "goodness-of-fit methods and parametric bootstrap calibration remain possible. <bookmark mark='c'/> For "
+            "intervals, Part 22's profile likelihood beats the Wald interval when probabilities are near zero or one."
+            " <bookmark mark='d'/> And in small samples, suitable exact conditional methods, where available, or a "
+            "plug-in parametric bootstrap can improve calibration. A parametric bootstrap is itself an approximation."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
