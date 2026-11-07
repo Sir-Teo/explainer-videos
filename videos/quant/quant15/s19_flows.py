@@ -49,14 +49,7 @@ class Flows(VoiceoverScene):
                              r"notes alive", 3.4, 18, GREY_A).to_edge(RIGHT, buff=0.3)
         src = real_data(r"the index path is real (510500.SS); the book is stylized", corner=DL)
         with self.voiceover(
-            "Now add up a whole book. Issue one snowball every month from 2021 to 2023 on the CSI 500, with the "
-            "standard terms, and each day read every live note's vega off chapter eight's table, and sum. "
-            "<bookmark mark='a'/> Run the clock. While the index rallies, notes knock out after a few months, and "
-            "their vega vanishes with them. As the index sinks through 2022 and 2023, notes stop knocking out, they "
-            "pile up, and they drift down through the zone where each one's vega is largest. The book's vega "
-            "climbs. <bookmark mark='b'/> It peaked at "
-            f"{pk['vega']:.3f} per vol point, with {pk['live']} notes alive. Then the barriers broke, in January "
-            "2024, and the vega collapsed: knocked-in notes have almost none."
+            f"Now aggregate issuer vega for one hypothetical note issued monthly in 2021 through 2023, each of notional one. This is a retrospective ETF-path reconstruction under fixed model parameters. <bookmark mark='a'/> Each live note is located in an interpolated spot, age and knock-in table; the original calculation clamps relative spot to that table's endpoints. Issuance, aging, early redemption and market moves all affect the aggregate. <bookmark mark='b'/> The peak shown is {pk['vega']:.3f} per volatility point with {pk['live']} live notes. Later knock-ins change the profile, but do not universally eliminate vega. The curve is a model diagnostic, not measured dealer inventory or a backtested hedge return. Its date and height depend on this book and approximation."
         ) as vo:
             self.play(FadeIn(G), FadeIn(src))
             self.add(l1, l2, l3)
@@ -73,8 +66,8 @@ class Flows(VoiceoverScene):
                   font_size=36, colors={r"\mathcal V_t": VEGA}),
             cmath(r"\text{vega sold}", r"\approx", r"\mathcal V_t\ \text{at maturities of 10 months to 2 years}",
                   font_size=34, colors={r"\text{vega sold}": BAD}),
-            cmath(r"\Delta N_t", r"\approx", r"\Gamma_t S_t\,\Delta S_t,\qquad \text{impact} \propto "
-                  r"\sigma\sqrt{Q/V}", font_size=34, colors={r"\Delta N_t": QC.GAMMA}),
+            cmath(r"Q_t", r"\approx", r"-\Gamma_t^{\text{issuer}} S_t\,\Delta S_t,\qquad \text{impact} \propto "
+                  r"\sigma\sqrt{Q/V}", font_size=34, colors={r"Q_t": QC.GAMMA}),
         ]
         whys = [why(r"linearity over notes: each priced from one table, by its moneyness, its age and its state"),
                 why(r"to stay flat the issuers sell options of about the notes' expected lives (chapter 7: about ten "
@@ -85,14 +78,7 @@ class Flows(VoiceoverScene):
         pp = pause_card(r"When is the dealers' aggregate vega largest: after a rally, or just before the barriers break?",
                         width=6.0).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "The arithmetic behind the picture. The book's vega is a sum over notes, each read from one table by "
-            "its moneyness, its age, and whether it has knocked in. <bookmark mark='p'/> Pause and predict: is it "
-            "largest after a rally, or just before the barriers break? The picture answered: just before. "
-            "<bookmark mark='a'/> A dealer who wants to stay flat must sell that vega, as options at roughly the "
-            "notes' expected lives, ten months to two years. <bookmark mark='b'/> And the gamma becomes a daily "
-            "futures trade, gamma times spot times the move. Whether that trade moves prices depends on its size "
-            "against the market's volume, the square-root law of Part thirty-seven. That ratio is the part the "
-            "record argues about."
+            "Book vega adds across notes in a common convention, but a single total does not reveal all maturity or smile buckets. <bookmark mark='p'/> When does this book peak? Read the plotted history; it is not a universal rule for every issuance schedule. <bookmark mark='a'/> A policy that neutralizes positive issuer vega may sell options in selected maturity buckets. Expected life alone does not specify that hedge's full sensitivity. <bookmark mark='b'/> Holding state and time fixed, cash rebalancing from issuer gamma is approximately minus spot times issuer gamma times the spot change. State transitions and other effects add terms. The square-root impact expression is an empirical schematic for some execution regimes, not an established causal mapping from these modeled positions to the Chinese market fall."
         ) as vo:
             step(0)
             vo.wait_until("p")
@@ -119,16 +105,11 @@ class Flows(VoiceoverScene):
                           for x in (0.8, 1.3, 1.8, 2.3)])
         lab_ = label(r"issuers sell vega", font_size=22, color=BAD).next_to(arrows, UP, buff=0.15)
         tag = label(r"schematic", font_size=20, color=GREY_B).to_corner(UR, buff=0.3)
-        side = wrapped_label(r"the dealers' hedge of a long-vega book is a supply of longer-dated options, which "
+        side = wrapped_label(r"under a policy of neutralizing positive issuer vega, option selling supplies longer-dated options, which "
                              r"weighs on longer-dated implied volatility; when the barriers break, the supply stops and "
-                             r"the dealers must buy back, in a falling market", 4.6, 19, GREY_A).to_edge(RIGHT, buff=0.4)
+                             r"the dealers may reduce their short-option hedge; actual flows depend on the rest of their book", 4.6, 19, GREY_A).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "Where does all that vega go? A schematic, not data. Issuers who are long volatility on their notes sell "
-            "options to stay flat, at the notes' maturities. <bookmark mark='a'/> That steady supply weighs on "
-            "implied volatility at those maturities: the arrows push the term structure down. And when the "
-            "barriers break and the vega collapses, the dealers find themselves over-hedged, short options they no "
-            "longer need, and must buy them back in a falling, volatile market. The supply turns into demand at the "
-            "worst moment."
+            "This schematic illustrates a conditional mechanism. If issuers are long vega and choose to neutralize it by selling longer-dated options, that hedge adds option supply. <bookmark mark='a'/> Under a downward-sloping demand response it can weigh on implied volatility. If the required hedge then shrinks, buying back the short options can reverse that flow. Neither step is compulsory for every desk: other assets, limits, netting and contract states matter. The arrows are not estimated orders or a fitted volatility response. They separate a plausible channel from a measured causal effect."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), Create(l0), FadeIn(side))
             vo.wait_until("a")
@@ -151,13 +132,7 @@ class Flows(VoiceoverScene):
         foot = wrapped_label(r"what is arithmetic: the book's vega and gamma, and the direction of the trades they force. "
                              r"What is disputed: how much those trades moved prices", 11.6, 20, GREY_A).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "The practitioner record says the same, in its own words. Risk.net reported the dealers' vega on "
-            "autocalls growing as the underlying falls, to a peak that a UBS strategist put at typically twenty to "
-            "twenty-five percent below the issue level; past it, they must buy volatility back, and that is where "
-            "hedging costs mount. <bookmark mark='a'/> It also reported desks losing money on autocall hedges after "
-            "the HSCEI's fall in 2015 and 2016. The book's vega and the direction of its trades are arithmetic; how "
-            "much they moved prices is disputed."
-            " Hedging a whole book every day needs prices fast. Next: a neural pricer, trained on screen."
+            "The practitioner record motivates this mechanism but does not turn it into an identity about actual flows. Risk.net reports describe peak-vega regions and difficult autocall hedges; the quoted twenty-to-twenty-five-percent drawdown is a strategist's estimate for particular books. <bookmark mark='a'/> Reports on Korea and Natixis concern their own contracts and market conditions. Our model's aggregate sensitivities are arithmetic conditional on its assumptions. What desks actually traded, and how much those trades moved prices, require separate position and execution evidence. Next, the pricing proxy used in this reconstruction."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")

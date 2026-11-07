@@ -65,7 +65,7 @@ class Crash(VoiceoverScene):
         t0, t1 = t[0], t[-1]
         g1 = axes([t0, t1], [4.3, 5.9], x_length=8.6, y_length=1.9, ylabel=r"CSI 500 ETF", xticks=[], yticks=[4.5, 5.0, 5.5],
                   font_size=14)
-        g2 = axes([t0, t1], [0, 12], x_length=8.6, y_length=1.6, ylabel=r"notes knocked in", xticks=[], yticks=[0, 6, 12],
+        g2 = axes([t0, t1], [0, 12], x_length=8.6, y_length=1.6, ylabel=r"live notes knocked in", xticks=[], yticks=[0, 6, 12],
                   font_size=14)
         g3 = axes([t0, t1], [10, 27], x_length=8.6, y_length=1.9, ylabel=r"dealers' hedge", yticks=[10, 15, 20, 25],
                   xticks=[ymd_to_year([20231201])[0], ymd_to_year([20240102])[0], ymd_to_year([20240201])[0],
@@ -91,14 +91,7 @@ class Crash(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3)
         src = illustration(r"stylized book, one note of notional 1 a month; the index path is real (510500.SS)", corner=DL)
         with self.voiceover(
-            "Rebuild it on the real path: one snowball issued at the start of every month from 2021 to 2023, "
-            "followed day by day through the winter. <bookmark mark='a'/> From the twenty-second of January the notes struck in 2022 and 2023 "
-            f"start to knock in, {b['n_ki_2024']} of them by the fifth of February. Underneath, the issuers' hedge, "
-            "priced every day by the neural surrogate of chapter sixteen. <bookmark mark='b'/> As the index fell "
-            f"toward the barriers, the hedge grew, from {dl[0]:.0f} notes' worth of futures to {dl[i_pk]:.0f}: the "
-            "dealers were buying the dip. Then the knock-ins came, and the hedge collapsed to "
-            f"{dl[i_low]:.0f} on the day of the low. The same desks that had been buying all the way down were "
-            "forced to sell, at the bottom."
+            f"Reconstruct a hypothetical equal-notional book on the ETF closes: one specified note issued monthly during 2021 through 2023. The neural proxy holds the full 2021 to 2023 volatility estimate fixed, so this is a retrospective reconstruction. <bookmark mark='a'/> Eleven 2024 knock-ins in this book occur from January twenty-second through February fifth; these are contract states, not eleven realized losses. The lower line is cash hedge exposure for an issuer short the notes, not the issuer's unhedged position delta. <bookmark mark='b'/> It rises from {dl[0]:.0f} note-notionals to {dl[i_pk]:.0f}, then is {dl[i_low]:.0f} at the ETF low. The proxy has approximation error, and the record contains issue, aging, knock-out and knock-in effects. We have reconstructed positions under a hypothetical policy, not observed dealer trades or a realized hedging profit-and-loss history."
         ) as vo:
             self.play(FadeIn(G), FadeIn(side[0]), FadeIn(src))
             self.add(l1, l2, l3)
@@ -112,11 +105,11 @@ class Crash(VoiceoverScene):
 
     def derive(self):
         rows = [
-            cmath(r"\Delta N_t", r"\approx", r"\Gamma^{\text{book}}_t\,\Delta S_t + \sum_{i \in KI_t}\big(\Delta_i^{+} - "
-                  r"\Delta_i^{-}\big)", font_size=38, colors={r"\Delta N_t": DELTA}),
-            cmath(r"\Gamma^{\text{book}}_t", r"=", r"\sum_i \partial_S \Delta_i(S_t, t;\ \text{not KI})", font_size=38,
-                  colors={r"\Gamma^{\text{book}}_t": QC.GAMMA}),
-            cmath(r"\Delta_i^{+} - \Delta_i^{-}", r"<", r"0\ \text{on a knock-in day}", font_size=38,
+            cmath(r"\Delta h_t", r"\approx", r"-\Gamma^{\text{issuer}}_t\,\Delta S_t + \sum_{i \in KI_t}\big(\Delta_i^{+} - "
+                  r"\Delta_i^{-}\big)", font_size=38, colors={r"\Delta h_t": DELTA}),
+            cmath(r"-\Gamma^{\text{issuer}}_t", r"=", r"\sum_i \partial_S h_i(S_t,t;\text{fixed states})", font_size=38,
+                  colors={r"-\Gamma^{\text{issuer}}_t": QC.GAMMA}),
+            cmath(r"\Delta_i^{+} - \Delta_i^{-}", r"<", r"0\ \text{in the illustrated reduction, not universally}", font_size=38,
                   colors={r"\Delta_i^{+} - \Delta_i^{-}": BAD}),
         ]
         whys = [why(r"the futures the hedgers trade on day $t$: Taylor for the smooth part, plus a jump in each note's "
@@ -129,12 +122,7 @@ class Crash(VoiceoverScene):
         pp = pause_card(r"As the index fell toward the barriers, did the hedgers buy or sell?", width=6.0)
         pp.to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Pause and predict: as the index fell toward the barriers, did the hedgers buy or sell? "
-            "<bookmark mark='a'/> Write the futures they trade each day as two parts. The smooth part is the "
-            "book's gamma times the index's move. Above the barriers, the hedge grows as the index falls, so the "
-            "gamma part buys on the way down. <bookmark mark='b'/> The other part is a jump. On the day a note "
-            "knocks in, its hedge drops from the upper sheet of chapter eight to the lower one, and that difference "
-            "is sold, all at once, on a day when the index has just fallen. They bought, and then they sold."
+            "Under a delta-neutral policy, separate units held from their cash exposure. <bookmark mark='a'/> If h is the positive hedge and issuer position delta is minus h, then the smooth hedge change is minus issuer gamma times the spot move. Time, new issues and redemptions contribute additional terms. <bookmark mark='b'/> A knock-in changes the state and may reduce the hedge, but its sign is model- and state-dependent. The cache's knock-in-day diagnostic compares today's note exposure with yesterday's, so it also contains spot and time changes; it does not isolate a pure state jump. To estimate rebalancing, first convert cash exposure to underlying units, then difference those units. Simply differencing dollar exposure includes mark-to-market changes even when the number of units is fixed."
         ) as vo:
             self.play(FadeIn(pp))
             vo.wait_until("a")
@@ -149,7 +137,8 @@ class Crash(VoiceoverScene):
     def trades(self, b):
         t = ymd_to_year(b["dates"])
         dl = np.asarray(b["dealer_delta"])
-        trade = np.concatenate([[0.0], np.diff(dl)])
+        px = np.asarray(b["close"])
+        trade = np.r_[0.0, px[1:] * np.diff(dl / px)]
         jump = np.asarray(b["ki_jump"])
         gam = np.asarray(b["dealer_gamma"])
         lim = float(np.max(np.abs(trade))) * 1.1 + 1e-9
@@ -159,30 +148,26 @@ class Crash(VoiceoverScene):
                  xfmt=lambda u: {0: r"\text{1 Dec}", 1: r"\text{2 Jan}", 2: r"\text{1 Feb}", 3: r"\text{29 Feb}"}[int(np.argmin(np.abs(
                      ymd_to_year([20231201, 20240102, 20240201, 20240229]) - u)))], font_size=14).to_edge(UP, buff=0.8)
         ax = g.ax
-        w = 0.8 * (ax.c2p(t[1], 0)[0] - ax.c2p(t[0], 0)[0])
+        w = 0.8 * (ax.c2p(t[0] + np.diff(t).min(), 0)[0] - ax.c2p(t[0], 0)[0])
         bars = VGroup()
         for x, v, j in zip(t, trade, jump):
             y0, y1 = ax.c2p(x, 0)[1], ax.c2p(x, v)[1]
-            col = BAD if j < -1e-6 else (GOOD if v > 0 else IV)
+            col = BAD if abs(j) > 1e-6 else (GOOD if v > 0 else IV)
             bars.add(Rectangle(width=w, height=max(abs(y1 - y0), 0.005), stroke_width=0, fill_color=col,
                                fill_opacity=0.85).move_to([ax.c2p(x, 0)[0], (y0 + y1) / 2, 0]))
         buys = float(trade[trade > 0].sum())
         sells = float(-trade[trade < 0].sum())
         jsum = float(-jump.sum())
         gmax = float(np.max(gam))
-        leg = legend([(GOOD, r"bought: the hedge grows as the index falls"), (IV, r"sold on a rally"),
-                      (BAD, r"a day with knock-ins: the hedge jumps down")], font_size=17)
+        leg = legend([(GOOD, r"hypothetical purchases"), (IV, r"hypothetical sales, other days"),
+                      (BAD, r"a recorded knock-in day")], font_size=17)
         leg.arrange(RIGHT, buff=0.5).next_to(g, DOWN, buff=0.25)
         side = wrapped_label(rf"over the three months, the book's hedgers bought {buys:.1f} notes' worth of futures and "
-                             rf"sold {sells:.1f}; the knock-in jumps alone account for {jsum:.1f} of the selling. At its "
-                             rf"largest, a 1\% fall in the index added {gmax:.2f} notes' worth to the hedge", 11.6, 20,
+                             rf"sold {sells:.1f}; orders are current spot times the change in underlying units, after the initial hedge. The cached knock-in-day exposure diagnostic totals {jsum:.1f}; it also includes spot/time effects. The "
+                             rf"stored sensitivity is a separate diagnostic, not used to infer these orders", 11.6, 20,
                              GREY_A).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Here are our stylized hedgers' daily trades. Green bars are purchases, as the hedge grows on falling days. "
-            "<bookmark mark='a'/> Red bars are days with knock-ins, when the hedge jumps down. Over the three months they "
-            f"bought {buys:.1f} notes' worth of futures and sold {sells:.1f}, {jsum:.1f} of it in the knock-in jumps. At its "
-            f"largest, a one percent fall added {gmax:.2f} notes' worth to the hedge. Scale one note to tens of billions, "
-            "and these bars are real orders."
+            f"These are hypothetical cash notionals required to rebalance the proxy hedge after the first plotted day. We divide cash exposure by the observed ETF price to obtain underlying units, difference those units, and multiply by the new price. <bookmark mark='a'/> Red identifies days with a recorded knock-in, not a pure causal knock-in trade. Purchases total {buys:.1f} note-notionals and sales {sells:.1f}. The cached same-note exposure changes on knock-in days total a reduction of {jsum:.1f}; that separate diagnostic includes market moves and aging. These are model-implied sizes, not recorded orders. Scaling the book does not by itself establish liquidity, execution costs or market impact. Surrogate error, contract differences and other dealer positions can all change the result."
         ) as vo:
             self.play(FadeIn(g), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.02, run_time=4),
                       FadeIn(leg[:2]))
@@ -199,15 +184,10 @@ class Crash(VoiceoverScene):
                           r"outstanding notional was modest next to the futures market, and that hedges do not all move one "
                           r"way, so the knock-ins could not by themselves explain the fall.", color=QC.IDEA, width=5.8)
         VGroup(a, b_).arrange(RIGHT, buff=0.4, aligned_edge=UP).move_to(UP * 0.3)
-        foot = wrapped_label(r"how much the hedging moved the market is disputed; that the knock-ins forced hedges to be sold "
-                             r"at the worst moment is arithmetic", 11.0, 20, GREY_A).to_edge(DOWN, buff=0.6)
+        foot = wrapped_label(r"how much the hedging moved the market is disputed; the model-dependent hedge reductions shown here are hypothetical, "
+                             r"and do not identify actual flows or their causal price impact", 11.0, 20, GREY_A).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "Did the hedging cause the fall? Reports in Risk.net described issuers' re-hedging adding to the selling "
-            "in index futures, pushing the indices toward more barriers, a feedback loop like Part twelve's inverse "
-            "volatility notes. <bookmark mark='a'/> Others were sceptical: the notional outstanding was modest next "
-            "to the futures market, and hedges do not all point one way. How much the hedging moved the market is "
-            "disputed. That the knock-ins forced hedges to be sold at the worst moment is arithmetic."
-            " The same story had played out before, in Korea. Next."
+            "Did hedging cause the fall? Risk.net reported concern that re-hedging added futures selling and feedback. <bookmark mark='a'/> Other analysts questioned the scale relative to the market and emphasized different hedge directions. Our specified short-note book demonstrates one possible reduction in hedge demand. It neither observes the whole industry's positions nor identifies how much the trades moved prices. Contract states, model Greeks, execution and causal market impact are distinct questions. Korea provides another public episode, with equally important differences between knock-in and realized loss."
         ) as vo:
             self.play(FadeIn(a, shift=UP * 0.2))
             vo.wait_until("a")

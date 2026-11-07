@@ -43,7 +43,7 @@ class Industry(VoiceoverScene):
         mark = DashedLine(ax.c2p(0.4, cp[1]), ax.c2p(4.6, cp[1]), stroke_color=WHITE, stroke_width=2)
         lo = DashedLine(ax.c2p(0.4, cp.min()), ax.c2p(4.6, cp.min()), stroke_color=BAD, stroke_width=2)
         brace = BraceBetweenPoints(ax.c2p(4.7, cp.min()), ax.c2p(4.7, cp[1]), direction=RIGHT, color=BAD)
-        bl = label(r"model-risk AVA", font_size=19, color=BAD).next_to(brace, RIGHT, buff=0.1)
+        bl = label(r"coupon gap illustration", font_size=19, color=BAD).next_to(brace, RIGHT, buff=0.1)
         side = VGroup(
             definition_card(r"Prudent valuation (EU)", r"Delegated Regulation (EU) 2016/101: banks hold additional "
                             r"valuation adjustments (AVAs) against fair value, among them market price uncertainty, "
@@ -52,13 +52,7 @@ class Industry(VoiceoverScene):
                             width=5.2, font_size=19),
         ).to_edge(RIGHT, buff=0.3)
         with self.voiceover(
-            "Chapters thirteen and fourteen put numbers on model risk. Banks are required to. In the European Union, "
-            "the prudent valuation rules of Delegated Regulation 2016/101 make banks hold additional valuation "
-            "adjustments against their fair values, and one of them is for model risk. Article eleven asks for a "
-            "range of plausible valuations from alternative models, at a ninety percent level of certainty, and "
-            "the adjustment comes out of capital. <bookmark mark='a'/> Chapter fourteen's autocall is the textbook "
-            "case. A desk that sells the note at a coupon set by Heston, while other models fitted to the same "
-            "market would justify paying less, is exposed to that gap, and the adjustment is the cushion for it."
+            "Under the applicable EU prudent-valuation rules, additional valuation adjustments address uncertainty including model risk. Article eleven of Regulation 2016/101 uses plausible alternative valuations and a ninety-percent exit-value certainty target when a range can be formed. Market-input calibration uncertainty is addressed separately. <bookmark mark='a'/> Our coupon bars only illustrate sensitivity. Before calculating an adjustment, compare the same fixed contract's monetary value under justified alternatives; different fair coupons are different contracts, and our approximate calibrations are unequal. A simple highest-minus-lowest coupon gap is not a regulatory AVA or a statistical ninety-percent quantile. The example motivates review; the actual adjustment depends on the applicable methodology and valuation evidence."
         ) as vo:
             self.play(FadeIn(side))
             vo.wait_until("a")
@@ -78,22 +72,16 @@ class Industry(VoiceoverScene):
         a = Line(ax.c2p(0, margin), ax.c2p(2, margin), stroke_color=BAD, stroke_width=3)
         b = curve(ax, t, margin * t / 2, GOOD, stroke_width=3)
         leg = legend([(BAD, r"booked on day one (fair value evidenced by observable inputs)"),
-                      (GOOD, r"deferred and released over the note's life (it is not)")], font_size=16)
+                      (GOOD, r"deferred; illustrative release as valuation factors change")], font_size=16)
         leg.next_to(g, UP, buff=0.15).align_to(g, LEFT)
         side = definition_card(r"Day-one profit (IFRS 9 B5.1.2A)", r"a gain at inception, the price minus the fair "
                                r"value, is recognised at once only if the fair value is evidenced by a quoted price for "
                                r"the same instrument or a valuation that uses only observable market data. Otherwise "
                                r"it is deferred and recognised as the factors market participants would use change. A "
-                               r"snowball's correlation, forward skew and barrier dynamics are not observable",
+                               r"valuation evidence determines whether the observable-input condition is met; the straight release line is schematic",
                                color=GOOD, width=5.6, font_size=19).to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "Second, the margin of chapter one. Sell a snowball three coupon points below its fair coupon and, by "
-            f"chapter seven's line, the bank has made {margin:.3f} per unit of notes. Can it book that on the day? "
-            "<bookmark mark='a'/> Under the accounting standard IFRS 9, only if the fair value is evidenced by a "
-            "quoted price or by a valuation that uses only observable market data. A snowball's fair value rests "
-            "on things no screen shows: forward skew, the dynamics of volatility near a barrier, correlations. So "
-            "the gain is deferred, and released over the note's life as those factors play out. The green line, "
-            "not the red one."
+            f"Reducing the coupon by three percentage points gives an initial model-value difference of {margin:.3f} per note in our calculation, before costs and reserves. It is not guaranteed realized profit. <bookmark mark='a'/> IFRS 9's day-one rule distinguishes fair value evidenced by an active-market quote for an identical instrument, or a valuation using only observable market data, from other valuations. In the latter case the initial difference is deferred and recognized as relevant valuation factors, including time, change. Whether a particular note qualifies depends on its evidence, not simply its snowball label. The green straight line is an illustrative release path, not a prescribed accounting schedule."
         ) as vo:
             self.play(FadeIn(side))
             vo.wait_until("a")
@@ -110,7 +98,7 @@ class Industry(VoiceoverScene):
                             r"expected-shortfall runs by about 90\% with Chebyshev proxies", color=IV, width=6.2,
                             font_size=19),
             definition_card(r"Conduct", r"EU PRIIPs (Regulation 1286/2014): a key information document with risk class "
-                            r"and performance scenarios for every packaged retail product. FINRA Regulatory Notice 12-03: "
+                            r"and performance scenarios for in-scope packaged retail investment and insurance products. FINRA Regulatory Notice 12-03: "
                             r"heightened supervision of complex products. Korea's FSS: compensation in 2024, penalty "
                             r"notices in 2025 (chapter 10)", color=OPT, width=6.2, font_size=19),
             definition_card(r"Model validation", r"the Federal Reserve's model-risk guidance (SR 11-7, 2011, superseded "
@@ -124,15 +112,7 @@ class Industry(VoiceoverScene):
             VGroup(*cards).scale_to_fit_height(7.2)
         pp = pause_card(r"Why can a bank not book a structured note's margin on day one?", width=5.0).to_corner(UR, buff=0.2)
         with self.voiceover(
-            "Third, capital. Basel's market-risk rules add a residual risk charge for what sensitivities cannot "
-            "capture: one percent of gross notional for exotic underlyings, a tenth of a percent for other residual "
-            "risks, path-dependent payoffs among them. A bank on internal models must show its risk model explains "
-            "its autocallables' daily profit and loss, and running those simulations is expensive: Zeron, Wu and "
-            "Ruiz reported cutting that cost by about ninety percent with Chebyshev proxies. <bookmark mark='a'/> "
-            "Fourth, conduct: Europe's key information documents for packaged retail products, FINRA's 2012 notice "
-            "on complex products, and Korea's compensation and penalties. "
-            "<bookmark mark='b'/> And fifth, model validation, the Federal Reserve's guidance, revised this year. "
-            "Natixis is the case study of why: a hedging model can price correctly and still fail to hedge."
+            "Capital rules add another layer. Basel's standardized residual-risk add-on uses one percent of gross notional for exotic underlyings and a tenth of a percent for other in-scope residual risks, subject to its definitions, exemptions and local implementation. Internal-model desks also face attribution requirements; Zeron and co-authors' computational benchmark is one tested approach. <bookmark mark='a'/> Conduct requirements have their own scope: EU PRIIPs information documents, FINRA's dated complex-products guidance, and Korea's compensation and enforcement episodes. <bookmark mark='b'/> Model governance is separate again. The US agencies issued revised guidance in April 2026, SR 26-2, replacing SR 11-7 and emphasizing a tailored risk-based approach. Natixis's public 2018 announcement is a reminder that valuation, hedging and model use each need validation; it does not establish that the original pricing model was correct."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -162,18 +142,10 @@ class Industry(VoiceoverScene):
             tab.scale_to_fit_width(13.0)
         rule = wrapped_label(r"Rule 15: before a note is sold, the desk prices it under at least two models, holds a reserve "
                              r"for the gap, and simulates its hedge through the worst path on record for the underlying, "
-                             r"including what the hedge must trade on the barrier day. Every function above ships with a "
-                             rf"test. The trial counter still reads {env['trials']}.", 12.4, 21, QC.HOUSE).to_edge(DOWN, buff=0.3)
+                             r"including what the hedge must trade on the barrier day. The existing numerical regression suite supplies "
+                             rf"checks. The trial counter still reads {env['trials']}.", 12.4, 21, QC.HOUSE).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "And the House. The volatility desk now has its exotics pricer, and every function in it ships with a "
-            "test, its own validation report. <bookmark mark='a'/> Barriers watched the way the term sheet watches "
-            "them, and hedged statically. Digitals and touches. Averages. The snowball as a linear solve, under any "
-            "model's paths. Correlation, forward volatility, and three ways of pricing what we do not know about "
-            "the model. <bookmark mark='b'/> The fifteenth rule: before a note is sold, the desk prices it under at "
-            "least two models, holds a reserve for the gap, and simulates its hedge through the worst path on "
-            "record, including what the hedge must trade on the day a barrier breaks. No strategy was tested, and "
-            f"the counter still reads {env['trials']}."
-            " Last, the frontier."
+            f"The House now has an exotics library with numerical regression checks, not a complete independent validation report for every function. <bookmark mark='a'/> Its tools cover specified barrier monitoring, digitals, averages, affine coupon solves, dependence and uncertainty. The contract, pricing model and numerical error must accompany each use. <bookmark mark='b'/> Rule fifteen is the project's proposed discipline: compare at least two justified models, state a reserve policy, and simulate the hedge on stressed historical paths, including barrier days. One historical worst path is not a guarantee against future losses. No new market strategy trial or sealed holdout was opened; the cumulative part counter remains {env['trials']}. Next, selected research."
         ) as vo:
             self.play(FadeIn(chart))
             self.play(Indicate(chart.desk["vol"], color=QC.HOUSE, scale_factor=1.05))

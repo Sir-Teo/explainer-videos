@@ -21,8 +21,7 @@ class Hook(VoiceoverScene):
         card = part_title(PART, r"The snowball")
         disc = note(DISCLAIMER, font_size=18, color=GREY_C).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Part fifteen. Exotics and structured products: the options that banks build into notes and sell to "
-            "savers, and what happens when the market finds their barriers."
+            'Part fifteen: exotics and structured products. We will specify, price and hedge the contingent claims inside a note, then inspect what changes when a barrier is reached.'
         ):
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(disc))
         self.play(FadeOut(card), FadeOut(disc))
@@ -93,15 +92,7 @@ class Hook(VoiceoverScene):
         rows.next_to(head, DOWN, buff=0.3)
         strip = timeline(lit=tuple(y for y, _, _ in events), show_labels=False).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "How we got here. In 1973, in the same paper that proves Black and Scholes, Robert Merton priced a call that "
-            "dies at a barrier. In 1979 Goldman, Sosin and Gatto priced the lookback. <bookmark mark='a'/> In 1987, as the "
-            "story is told, Bankers Trust traders in Tokyo priced options on the average price of oil, and called them "
-            "Asian. Kemna and Vorst found their control variate in 1990; Reiner and Rubinstein catalogued the barriers in "
-            "1991. <bookmark mark='b'/> In 1995 Avellaneda, Levy and Parás, and Lyons, priced uncertain volatility itself, "
-            "and in 1997 Broadie, Glasserman and Kou fixed barriers watched at the close. <bookmark mark='c'/> Then the "
-            "products reached savers. In January 2016 Korea's regulators counted thirty-seven trillion won of notes on "
-            "Hong Kong's China index as it fell. In 2018 Natixis took a hit of about two hundred and sixty million euros on "
-            "Asian structured products. And in 2024 China's snowballs melted, while Korea's savers lost again."
+            "A short history. Merton's 1973 option-pricing paper includes a barrier call. Goldman, Sosin and Gatto priced lookbacks in 1979. <bookmark mark='a'/> Average-price options developed into the Asian family; Kemna and Vorst's geometric control appeared in 1990, followed by Reiner and Rubinstein's barrier formulas. <bookmark mark='b'/> The 1995 uncertain-volatility papers and 1997 discrete-barrier correction made model uncertainty and monitoring explicit. <bookmark mark='c'/> Retail issuance later brought these methods into episodes involving Korea, Natixis and Chinese snowballs. Each public episode has its own contracts and evidence; a shared product label does not make their risks or outcomes identical."
         ) as vo:
             self.play(FadeIn(head), FadeIn(strip), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in rows[:2]],
                                                                  lag_ratio=0.6, run_time=3))
@@ -126,10 +117,7 @@ class Hook(VoiceoverScene):
             r"A neural pricer trained on screen; how desks reserve; the frontier",
         ], color=QC.IDEA, font_size=24)
         with self.voiceover(
-            "The plan. A note taken apart into priced pieces, and what its buyers earned. Barriers, digitals and "
-            "averages. The snowball, priced, simulated, and turned into Greeks you can walk around. January 2024 and "
-            "Korea, rebuilt on the real paths. Correlation and cliquets. Then model risk, the hedging flows of a "
-            "whole book, a neural pricer trained on screen, how banks reserve, and the frontier."
+            'We will take a note apart, price barriers, digitals and averages, then solve a snowball coupon and inspect its Greeks. Historical books illustrate conditional hedge demand. Dependence, cliquets, uncertain volatility and model ranges lead to a pricing proxy, governance and current research. The closing derivation separates a robust one-touch hedge from numerical model comparisons.'
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
                                                      lag_ratio=0.5, run_time=12))
@@ -138,8 +126,7 @@ class Hook(VoiceoverScene):
     def house(self):
         chart = house_chart(PART, lit=("vol",))
         with self.voiceover(
-            "In the House, the volatility desk builds its exotics pricer. <bookmark mark='a'/> And it learns what every "
-            "issuer learns: the hard part is not the price, it is the hedge."
+            "The House adds an exotics library to its volatility desk. <bookmark mark='a'/> Prices, hedges and valuation uncertainty will be checked separately."
         ) as vo:
             self.play(FadeIn(chart))
             vo.wait_until("a")

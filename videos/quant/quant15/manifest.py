@@ -17,7 +17,7 @@ SCENES = [
     ("s08_correlation", "Correlation", "11. Worst-of, correlation and the correlation skew"),
     ("s17_cliquet", "Cliquet", "12. Cliquets: the risk vega cannot see"),
     ("s09_uvm", "UVM", "13. Uncertain volatility: the price of not knowing"),
-    ("s18_modelrisk", "ModelRisk", "14. Same vanillas, different exotics"),
+    ("s18_modelrisk", "ModelRisk", "14. One market surface, different exotic prices"),
     ("s19_flows", "Flows", "15. Dealer flows: when the hedges move the market"),
     ("s10_surrogate", "Surrogate", "16. A neural pricer for the book, trained on screen"),
     ("s20_industry", "Industry", "17. Industry: how desks mark, reserve and report"),

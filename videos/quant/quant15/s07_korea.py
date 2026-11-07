@@ -41,14 +41,14 @@ class Korea(VoiceoverScene):
         g = axes([0, 3], [0.4, 1.1], x_length=5.6, y_length=4.2, xlabel=r"years", ylabel=r"index / start",
                  xticks=[0, 0.5, 1, 1.5, 2, 2.5, 3], yticks=[0.5, 0.75, 1.0], font_size=15).to_edge(LEFT, buff=0.7)
         ax = g.ax
-        stair = VGroup(*[Line(ax.c2p(0.5 * i + 0.4, s_), ax.c2p(0.5 * i + 0.6, s_), stroke_color=GOOD, stroke_width=5)
+        stair = VGroup(*[Line(ax.c2p(0.5 * i + 0.4, s_), ax.c2p(min(0.5 * i + 0.6, 3.0), s_), stroke_color=GOOD, stroke_width=5)
                          for i, s_ in enumerate(steps)])
         kil = DashedLine(ax.c2p(0, 0.5), ax.c2p(3, 0.5), stroke_color=BARRIER, stroke_width=2.5)
         rows = [cmath(r"V", r"=", r"\sum_{k=1}^{6} \mathbb E\big[D_k\,\mathbf 1_{\tau = k}\big]\big(1 + 0.03k\big) + "
                       r"\mathbb E\big[D_6\,\mathbf 1_{\text{alive}}\,\text{payoff}\big]", font_size=30,
                       colors={r"V": OPT})]
         side = VGroup(
-            wrapped_label(r"a stylized step-down ELS: three years; every six months, repaid with 3\% per half-year if the "
+            wrapped_label(r"a stylized step-down ELS: three years; every 123 trading days (about six months), repaid with 3\% per half-year if the "
                           r"index is above 90, 90, 85, 85, 80, 75\% of its start; a knock-in at 50\%, watched daily", 4.6,
                           19, GREY_A),
             rows[0],
@@ -60,11 +60,7 @@ class Korea(VoiceoverScene):
             side.scale_to_fit_width(6.0)
         side.to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "Korea's snowball is the step-down equity-linked security, and its favourite underlying was Hong Kong's "
-            "index of Chinese companies, the HSCEI. Every six months the note is repaid with its coupon if the index "
-            "is above a level that steps down, ninety percent of the start, then eighty-five, then eighty. "
-            "<bookmark mark='a'/> And a knock-in at half the start, watched daily. In option terms: six digitals on "
-            "a falling staircase, plus a down-and-in put with its barrier at fifty percent, which pays for them."
+            "Our stylized Korean ELS uses the HSCEI, a three-year horizon and approximately semiannual observations: the code uses blocks of 123 trading days, not exact calendar anniversaries. Redemption thresholds are 90, 90, 85, 85, 80 and 75 percent. A first redemption pays par plus three percent per elapsed half-year. <bookmark mark='a'/> A daily close below half the initial level records knock-in. Survival and terminal thresholds determine whether principal loss occurs; knock-in alone is not a realized loss. The displayed events are first-redemption digitals conditional on survival, not six independent plain digitals. Redemption cancels the later loss exposure. The example illustrates payoff structure, not the full terms of any particular bank's product."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[0]))
             self.play(LaggedStart(*[Create(s_) for s_ in stair], lag_ratio=0.3))
@@ -105,7 +101,7 @@ class Korea(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
         src = real_data(r"Yahoo Finance: Hang Seng China Enterprises Index, daily; stylized terms, not any one bank's note")
         verdict = (f"None of the twelve knocked in. But the note sold in May came within {100 * (nearest - 0.5):.0f} "
-                   "percent of its barrier, and the buyers of most of them waited through the fall for years before "
+                   "percentage points of initial spot above its barrier, and the buyers of most of them waited through the fall for years before "
                    "they were repaid." if n_ki == 0 else
                    f"{n_ki} of the twelve knocked in.")
         with self.voiceover(
@@ -199,15 +195,7 @@ class Korea(VoiceoverScene):
         src = note(r"Korea Times and Korea Economic Daily (January 2024), Korea JoongAng Daily (11 March 2024; 28 November "
                    r"2025), citing the FSS", font_size=17, color=GREY_B).to_corner(DR, buff=0.2)
         with self.voiceover(
-            "The real numbers, as reported from the regulator's figures. About 19.3 trillion won of these notes were "
-            "outstanding in November 2023, 15.9 trillion of it sold through commercial banks, often to savers who had "
-            "walked in for a deposit, and most of it due in 2024. In January and February 2024 alone, maturing "
-            "notes lost 1.2 trillion won. That March, the Financial Supervisory Service laid out a compensation "
-            "scheme, and said it expected most cases to be compensated at between a fifth and three-fifths of the "
-            "loss. <bookmark mark='a'/> In November 2025 it sent five banks preliminary penalty notices totalling "
-            "about two trillion won, an amount that was not yet final. Regulators faulted how the notes were sold, "
-            "not their arithmetic: each was a short put, sold like a deposit with a coupon, to people who could not "
-            "price it."
+            "Published reports citing the regulator put HSCEI-linked ELS outstanding at about 19.3 trillion won in November 2023, with 15.9 trillion sold through banks. They reported 1.2 trillion won lost on maturities in January and February 2024. The March compensation framework expected many cases in a twenty-to-sixty-percent range, with case-specific adjustments. <bookmark mark='a'/> November 2025 reports described preliminary notices to five banks totaling about two trillion won; that was their status at that reported date. Those conduct and compensation findings concern sales practices and individual cases. They do not imply every buyer had the same information, every product had our terms, or every knock-in caused a loss."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(src))
             vo.wait_until("a")

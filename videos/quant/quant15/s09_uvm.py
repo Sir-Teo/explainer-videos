@@ -38,8 +38,8 @@ class UVM(VoiceoverScene):
                     r"equation of Part 8"),
                 why(r"the bracket is linear in $\sigma^2$, so the sup sits at an end of the band: the top where the "
                     r"position is long gamma, the bottom where it is short (the Black--Scholes--Barenblatt equation)"),
-                why(r"the sup of a sum is at most the sum of the sups; equal only if both legs pick the same $\sigma$ "
-                    r"everywhere. The price is non-linear: a book is not the sum of its parts")]
+                why(r"the sup of a sum is at most the sum of the sups; a common worst-case control suffices for equality; the statement does not require attained suprema "
+                    r"in general. This valuation functional is subadditive")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.4, buff=0.8, edge=6.9)
         with self.voiceover(
             "Models fitted to the same vanillas disagree on exotics. What should a desk charge for that? In 1995 Marco "
@@ -146,8 +146,9 @@ class UVM(VoiceoverScene):
         its = bk["iterates"]
         steps = np.arange(len(its))
         best = np.minimum.accumulate([v for _, v in its])
-        w1 = np.array([w[0] for w, _ in its])
-        w2 = np.array([w[1] for w, _ in its])
+        incumbent = [int(np.argmin([v for _, v in its[:k + 1]])) for k in range(len(its))]
+        w1 = np.array([its[k][0][0] for k in incumbent])
+        w2 = np.array([its[k][0][1] for k in incumbent])
         g = axes([0, len(its) - 1], [min(best) - 0.02, best[0] + 0.02], x_length=5.6, y_length=3.6,
                  xlabel=r"optimiser evaluations", ylabel=r"seller's worst-case price, hedged",
                  xticks=[0, len(its) - 1], yticks=[round(float(min(best)), 2), round(float(best[0]), 2)], font_size=14)
@@ -178,15 +179,7 @@ class UVM(VoiceoverScene):
                    f"but only to {bk['hedged_upper']:.2f}: here the vanillas do little for this payoff.")
         pp = pause_card(r"Is the worst-case price of a book the sum of its parts?", width=5.6).to_corner(UR, buff=0.3)
         with self.voiceover(
-            "Pause and predict: is the worst-case price of a book the sum of the worst cases of its parts? "
-            "<bookmark mark='a'/> No. Price the two legs of the call spread separately and their worst cases add "
-            f"up to {bk['legs_sum']:.2f}: each leg alone gets the worst volatility for itself. As one book, "
-            f"{bk['upper']:.2f}, because the short call's gamma offsets the long call's, and the adversary can no "
-            f"longer hurt both. <bookmark mark='b'/> Marco Avellaneda and Antonio Parás took the next step in 1996. "
-            "If some vanillas trade, buy or sell them at their market prices, and let only what is left bear the "
-            "worst case. Search over the amounts. Here the optimiser looks for the best quantities of the 90 and "
-            f"110 calls, and the hedged worst case falls as it goes, {verdict}"
-            " Next: the same vanillas, and how different the exotics can be."
+            f"Is the worst-case price additive across legs? <bookmark mark='a'/> In this finite-grid example the separate call-spread legs sum to {bk['legs_sum']:.2f}, versus {bk['upper']:.2f} priced jointly. The supremum of a sum is at most the sum of suprema; a common worst-case control is sufficient for equality. <bookmark mark='b'/> Adding vanilla trades at the stated Black-Scholes 25-percent prices lets the desk optimize a residual payoff, following Avellaneda and Parás. The displayed optimizer keeps the best observed objective and its matching weights. It uses a finite evaluation budget and an approximate PDE solver; it does not certify the continuous global optimum or a numerical error bound. Market-price constraints can tighten the chosen model-class range without making it model-free."
         ) as vo:
             self.play(FadeIn(pp))
             vo.wait_until("a")
