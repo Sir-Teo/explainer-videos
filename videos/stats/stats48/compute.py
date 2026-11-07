@@ -63,8 +63,64 @@ def nest(obj):
 
 
 def hist(v, edges):
-    h, _ = np.histogram(v, bins=edges, density=True)
-    return h
+    return np.histogram(v, bins=edges)[0] / (len(v) * np.diff(edges))
+
+
+def walk_max_abs_expectation(n):
+    """Exact killed-walk spectral sum; O(n squared), no simulation."""
+    total=0.
+    for a in range(1,n+1):
+        j=np.arange(a);theta=np.pi*(2*j+1)/(2*a)
+        survival=np.sum((-1.)**j/np.tan(theta/2)*np.cos(theta)**n)/a
+        if not -1e-9<=survival<=1+1e-9: raise ArithmeticError(survival)
+        total+=1-np.clip(survival,0,1)
+    return float(total)
+
+
+def chaining_bound(levels=40):
+    """Schauder midpoint corrections, including their positive part.
+
+    M=2**(k-1) links have sd 2**(-(k+1)/2). The max of
+    zero and M links is bounded by sd*sqrt(2 log(2M)).
+    An explicit geometric-polynomial bound includes every omitted level.
+    """
+    terms=[1/math.sqrt(2*math.pi)]
+    terms += [2**(-(k+1)/2)*math.sqrt(2*k*math.log(2)) for k in range(1,levels+1)]
+    a=2**(-.5);K=levels+1
+    tail=math.sqrt(math.log(2))*a**K*(math.sqrt(K)/(1-a)+a/(2*math.sqrt(K)*(1-a)**2))
+    return {"terms":terms,"bound":sum(terms)+tail,"tail_upper":tail,"exact":math.sqrt(2/math.pi)}
+
+
+def bootstrap_ks_quantile(x, generator, B=999, level=.95):
+    """CDF supremum on distinct observed values; ties are indivisible jumps."""
+    x=np.sort(np.asarray(x,float));n=len(x)
+    last=np.r_[np.flatnonzero(np.diff(x)),n-1]
+    idx=np.sort(generator.integers(0,n,size=(B,n)),axis=1)
+    cnt=np.array([np.searchsorted(row,last,side="right") for row in idx])/n
+    values=np.max(np.abs(cnt-(last+1)[None,:]/n),axis=1)
+    return float(np.quantile(values,level))
+
+
+def multiplier_ks_quantile(x,generator,B=999,level=.95):
+    x=np.sort(np.asarray(x,float));n=len(x)
+    last=np.r_[np.flatnonzero(np.diff(x)),n-1]
+    xi=generator.standard_normal((B,n));s=np.cumsum(xi,axis=1)
+    proc=(s[:,last]-(last+1)[None,:]/n*s[:,-1:])/n
+    return float(np.quantile(np.max(np.abs(proc),axis=1),level))
+
+
+def bernoulli_se(hits):
+    return float(np.std(hits,ddof=1)/math.sqrt(len(hits)))
+
+
+def threshold_sup(x,y,t0=.3,flip=.2):
+    """Inspect both sides of every empirical jump, endpoints and risk kink."""
+    x=np.asarray(x);y=np.asarray(y);n=len(x)
+    emp=(np.r_[0,np.cumsum(y)]+np.r_[np.sum(1-y),np.sum(1-y)-np.cumsum(1-y)])/n
+    risk=lambda t:flip+(1-2*flip)*np.abs(t-t0)
+    k=np.searchsorted(x,t0,side="right")
+    return float(max(np.max(np.abs(emp[1:]-risk(x))),np.max(np.abs(emp[:-1]-risk(x))),
+                     abs(emp[0]-risk(0)),abs(emp[-1]-risk(1)),abs(emp[k]-risk(t0))))
 
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -98,7 +154,7 @@ def compute_gc():
     for n in ns:
         reps = 20000 if n <= 200 else 4000
         ed.append(float(EK.ks_stats_uniform(r.random((reps, n))).mean()))
-        rad.append(EK.rademacher_halflines(n))
+        rad.append(walk_max_abs_expectation(n)/n)
     # one sequence: sup |F_n - F| along n = 1 .. 5000, for three seeds
     seqs = {}
     checkpoints = np.unique(np.round(np.logspace(0, np.log10(5000), 120)).astype(int))
@@ -144,13 +200,14 @@ def compute_chain():
     t = np.linspace(0, 1, m + 1)
     w = np.concatenate([[0.0], np.cumsum(r.standard_normal(m) / math.sqrt(m))])
     ks = list(range(0, 11))
-    emax = [EK.bm_sup_on_grid(k, rng(4810 + k), reps=4000, fine=12) for k in ks]
-    c = EK.chaining_bound_bm(40)
+    walks=np.c_[np.zeros(4000),np.cumsum(rng(4810).standard_normal((4000,m))/math.sqrt(m),axis=1)]
+    emax=[float(np.max(walks[:,::m//2**k],axis=1).mean()) for k in ks]
+    c = chaining_bound(40)
     partial = np.cumsum(c["terms"]).tolist()
     union = [math.sqrt(2 * math.log(2 ** k + 1)) for k in ks]
     dud = math.sqrt(2) * math.sqrt(math.pi) / 2  # int_0^1 sqrt(log 1/eps^2) d eps
     return {"t": t[::8], "w": w[::8], "ks": ks, "emax": emax, "exact": c["exact"], "terms": c["terms"], "partial": partial,
-            "bound": c["bound"], "union": union, "dudley": dud}
+            "bound": c["bound"], "tail_upper":c["tail_upper"], "independent_paths":4000, "paired_nets":True, "union": union, "dudley": dud}
 
 
 def compute_donsker():
@@ -209,7 +266,8 @@ def compute_conc():
     m95 = inv(lambda t: math.exp(-2 * t ** 2 / n))
     full = {"sim95": float(np.quantile(Z - ez, 0.95)), "b95": inv(lambda t: EK.bousquet_tail(t, n, 0.25, ez)[0]), "m95": m95}
     return {"n": n, "ez": ez, "ts": ts, "sim": sim, "bous": bous, "mcd": mcd, "dkw": dkw, "q": q, "ezq": ezq,
-            "low": {"sim95": sim95, "b95": b95, "m95": m95}, "full": full}
+            "centering":"40,000-sample estimated expectations; plug-in illustrations, not certified bounds", "reps":40000,
+            "ez_mc_se":float(Z.std(ddof=1)/200),"ezq_mc_se":float(Zq.std(ddof=1)/200),"low": {"sim95": sim95, "b95": b95, "m95": m95}, "full": full}
 
 
 def compute_delta():
@@ -294,7 +352,7 @@ def compute_rates():
         e = np.array(e) * n ** (1 / 3)
         errs[str(n)] = e
         rows.append({"n": n, "sd": float(e.std()), "mean": float(e.mean()), "reps": reps})
-    return {"edges": edges, "z_hist": hist(z, edges), "z_sd": float(z.std()), "z_sd_ref": EK.CHERNOFF_SD, "const": const,
+    return {"edges": edges, "z_hist": hist(z, edges), "z_sd": float(z.std()), "z_sd_ref": EK.CHERNOFF_SD, "simulation":{"draws":6000,"window":[-2.5,2.5],"steps_per_side":3000,"boundary_hits":int(np.sum(np.abs(z)==2.5)),"scope":"finite-window grid approximation, not exact Chernoff draws"}, "const": const,
             "pred_sd": const * EK.CHERNOFF_SD, "rows": rows, "e_edges": np.linspace(-1.2, 1.2, 41),
             "e_hist": hist(errs["1000"], np.linspace(-1.2, 1.2, 41)), "z_scaled_x": (edges[:-1] + edges[1:]) / 2 * const}
 
@@ -323,7 +381,7 @@ def compute_erm():
             k = int(np.argmin(emp))
             e_.append(risk(cand[k]) - flip)
             # the uniform deviation over thresholds, at the candidates and just below each point
-            s_.append(float(np.max(np.abs(emp - risk(cand)))))
+            s_.append(threshold_sup(x,y,t0,flip))
         sup.append(float(np.mean(s_)))
         exc.append(float(np.mean(e_)))
         bound.append(2 * 2 * math.sqrt(2 * math.log(2 * (n + 1)) / n))
@@ -339,9 +397,9 @@ def band_coverage(n, reps, seed):
         d = EK.ks_stat(x, stats.norm.cdf)
         for k in ("kolmogorov", "exact", "dkw"):
             hit[k].append(d <= q[k])
-        hit["bootstrap"].append(d <= EK.bootstrap_ks_quantile(x, r, B=499))
-        hit["multiplier"].append(d <= EK.multiplier_ks_quantile(x, r, B=499))
-    return {k: float(np.mean(v)) for k, v in hit.items()} | {"q": q}
+        hit["bootstrap"].append(d <= bootstrap_ks_quantile(x, r, B=499))
+        hit["multiplier"].append(d <= multiplier_ks_quantile(x, r, B=499))
+    return {k: float(np.mean(v)) for k, v in hit.items()} | {"q": q,"datasets":reps,"resamples":499,"mc_se":{k:bernoulli_se(v) for k,v in hit.items()}}
 
 
 def compute_bands():
@@ -350,7 +408,7 @@ def compute_bands():
     x = np.sort(np.asarray(wait, float))
     r = rng(4814)
     out["faithful"] = {"n": len(x), "kolm": EK.kolmogorov_quantile(0.95) / math.sqrt(len(x)),
-                       "boot": EK.bootstrap_ks_quantile(x, r, B=1999), "mult": EK.multiplier_ks_quantile(x, r, B=1999),
+                       "boot": bootstrap_ks_quantile(x, r, B=1999), "mult": multiplier_ks_quantile(x, r, B=1999),
                        "dkw": EK.ks_band_quantiles(len(x))["dkw"], "exact": EK.ks_band_quantiles(len(x))["exact"]}
     return out
 
@@ -382,11 +440,13 @@ def compute_ksest():
     nc = np.asarray(museum.newcomb(), float)
     full = EK.parametric_bootstrap_ks(nc, rng(4816), B=9999)
     trimmed = EK.parametric_bootstrap_ks(nc[nc > 0], rng(4817), B=9999)
+    for result in (full,trimmed):
+        result.update(resamples=9999,exceedances=int(round(result["p"]*10000))-1,p_rule="(1+exceedances)/(B+1)")
     full["naive_p"] = float(stats.kstwo.sf(full["D"], len(nc)))
     trimmed["naive_p"] = float(stats.kstwo.sf(trimmed["D"], int(np.sum(nc > 0))))
     xe1 = np.linspace(0, 5, 101)
     return {"zg": zg, "var_sim": var_sim, "var_dur": var_dur, "var_bridge": var_bridge, "crit_est": crit_est, "crit_kolm": crit_kolm,
-            "size_norm_naive": size_norm_naive, "size_exp_naive": size_exp_naive, "crit_exp": float(np.quantile(De, 0.95)),
+            "size_reps":40000,"size_mc_se":{"normal":math.sqrt(size_norm_naive*(1-size_norm_naive)/40000),"exponential":math.sqrt(size_exp_naive*(1-size_exp_naive)/40000)}, "newcomb_scope":"continuous iid normal reference ignoring measurement rounding; trimmed subset selected post hoc and not calibrated", "size_norm_naive": size_norm_naive, "size_exp_naive": size_exp_naive, "crit_exp": float(np.quantile(De, 0.95)),
             "crit_kolm50": crit_kolm50, "newcomb": full, "newcomb_trim": trimmed, "nc_n": len(nc), "nc_trim_n": int(np.sum(nc > 0)),
             "xe": xe1, "var_exp": EK.durbin_variance_exponential(xe1), "var_exp_bridge": (1 - np.exp(-xe1)) * np.exp(-xe1)}
 
@@ -397,7 +457,7 @@ def compute_board():
     names = {"kolmogorov": "KS band from Kolmogorov's limit", "exact": "KS band, exact finite-n quantile", "dkw": "DKW band (Massart's constant)",
              "bootstrap": "KS band by the bootstrap", "multiplier": "KS band by the multiplier bootstrap"}
     for k, name in names.items():
-        rows.append(Row(48, name, "N(0, 1) data, n = 20", "coverage", 0.95, b20[k], 2000))
+        rows.append(Row(48, name, "N(0, 1) data, n = 20", "coverage", 0.95, b20[k], 2000,mc_se=b20["mc_se"][k]))
     # size of the KS test of exponentiality with an estimated rate, Kolmogorov's table vs a parametric bootstrap
     r = rng(4821)
     reps, n, B = 2000, 30, 199
@@ -410,10 +470,10 @@ def compute_board():
         xb = r.exponential(scale=x.mean(), size=(B, n))
         db = EK.ks_stats_uniform(1 - np.exp(-xb / xb.mean(axis=1, keepdims=True)))
         rej_pb.append((1 + np.sum(db >= d)) / (B + 1) <= 0.05)
-    rows.append(Row(48, "KS test, estimated rate, Kolmogorov's table", "exponential data, n = 30", "size", 0.05, float(np.mean(rej_naive)), reps))
-    rows.append(Row(48, "KS test, estimated rate, parametric bootstrap", "exponential data, n = 30", "size", 0.05, float(np.mean(rej_pb)), reps))
+    rows.append(Row(48, "KS test, estimated rate, Kolmogorov's table", "exponential data, n = 30", "size", 0.05, float(np.mean(rej_naive)), reps,mc_se=bernoulli_se(rej_naive)))
+    rows.append(Row(48, "KS test, estimated rate, parametric bootstrap", "exponential data, n = 30", "size", 0.05, float(np.mean(rej_pb)), reps,mc_se=bernoulli_se(rej_pb)))
     save_rows(48, rows)
-    return {"rows": [asdict(r) | {"verdict": r.verdict, "se": r.se} for r in rows]}
+    return {"rows": [asdict(r) | {"verdict": r.verdict, "se": r.se} for r in rows],"independent_datasets":reps,"parametric_resamples":B,"band_resamples":499}
 
 
 ITEMS = {
