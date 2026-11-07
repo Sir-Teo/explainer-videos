@@ -32,8 +32,9 @@ Delivery workflow: continue directly on `quantitative-finance`. Commit and push 
 | 11 | Visual pass complete; full production-voice listening pending |
 | 12 | Visual pass complete; full production-voice listening pending |
 | 13 | Visual pass complete; full production-voice listening pending |
-| 14 | In progress: scientific, narration and visual QA |
-| 15–43 | Pending; do not infer approval from historical build notes |
+| 14 | Visual pass complete; full production-voice listening pending |
+| 15 | In progress: scientific, narration and visual QA |
+| 16–43 | Pending; do not infer approval from historical build notes |
 
 ## Part 1: The Fair Game
 
@@ -1043,4 +1044,80 @@ git-ignored artifacts:
   run lasting at least 1.5 seconds; the agenda transition was also inspected at
   half-second steps.
 
-Part 14 is next in the sequential pass.
+Part 14’s completed visual pass is recorded below.
+
+
+## Part 14: Rough and Path-Dependent Volatility — completed visual pass
+
+Finite-maturity skew magnitudes are distinguished from signed asymptotic skew.
+The 102 original dates include one Thursday, negative fitted exponents and sign
+changes; all observations remain visible. Weighted fitting and unweighted reported
+log RMSE are distinguished, and the bounded and power fits have different exponent
+bounds. The 0.01 comparison threshold is descriptive. Fukasawa's theorem carries
+its positivity, continuity, regularity and persistent-sign assumptions; a finite
+grid of absolute skew observations does not verify them.
+
+The roughness plot uses its fitted intercept. Brownian-scale examples remain
+nondifferentiable, and local regularity is separated from mean reversion. The
+rough/HAR race uses expanding coefficient fits but full-era H, so its result is
+retrospective. Rough wins two of six targets and HAR four; test-mean R-squared
+normalization and negative long-horizon scores are disclosed.
+
+Rough Bergomi uses a supplied variance curve. Its Gaussian mean identity and
+fixed-maturity forward-variance martingale differ from a stock true-martingale
+claim. The hybrid illustration's truncated, rescaled convolution and the full-fBm
+Cholesky cost comparison have explicit limits. Rough-Heston profile errors remain
+fully visible, including H=0.05; observed Adams order is relative to a finite
+reference, not a universal theorem. Hawkes branching expectations are separated
+from the displayed finite tree, and the fractional-CIR limit specifies coordinated
+scaling. The positive geometric lift preserves negative Euler excursions while
+retaining the original square-root floor and all-factor totals.
+
+Return-history index tracking includes same-day returns and is not an advance
+forecast. Residuals belong to the chosen proxy. Crisis close observations are
+separated from pre-open quotes and from causal decomposition. PDV well-posedness,
+positive volatility and stock martingale conditions are distinct; the daily
+unconstrained regression does not verify the continuous model's assumptions.
+Quadratic rough Heston is a simulation illustration rather than a joint SPX/VIX
+fit. Discrete, repaired-marginal transport bounds and entropic interior values
+remain distinct. Signature calibration is nonlinear, depth-three universality is
+not asserted, and per-expiry normalization does not prove dynamic martingality.
+
+Speed bars measure individual pricing-map evaluations with differing outputs and
+accuracy, excluding training. Research claims and dates were checked against
+primary papers and exchange publications. The strong-error derivation specifies
+a uniform grid, admissible fixed within-cell rules, fixed exact-cell count and
+0<H<1/2. A driver variance deficit does not establish a price-bias rate, and the
+linear rough Stein–Stein weak-error result is not transferred to rough Bergomi.
+The worked halving calculation gives 1024 and about 5.66 times the steps. Both
+language tracks, exported chapter titles and the ten README solutions agree.
+
+The corrected part-local axis helper now binds in all 21 scenes. Repeated cleanup fades after camera resets are shortened, and the history-to-agenda transition is quicker. Dynamic ticks
+keep the quadratic-model chart and speed plot within their data supports. The
+research derivation scrolls before leaving the frame, its theorem has separate
+space, and its Chinese captions and two advanced exercises are translated.
+All 32 original computations were restored through normal invocations. The
+unchanged speed benchmark also restored Part 17's original fixed synthetic
+dataset and 40-epoch training. All 58 protected compute, House and registry files
+match the base. The part counter remains 312 and the global counter 23,562; no new
+market trial or sealed market holdout was opened. Six existing numerical tests pass.
+
+Validation: 21 English and 21 Mandarin narration-beat checks and 21 English silent
+playback checks pass against the frozen source. All 63 receipts have zero automated warnings.
+Every endpoint and forty-frame motion sheet was reviewed; exact artifact hashes
+bind the judgments. Prior judgments were retained only when a fresh actual render
+was pixel-identical. 26 focused native frames were also checked.
+Chinese narration coverage is 123/123, with a 64.2-minute narration estimate.
+Twelve actual Kokoro reports cover eight English and four Mandarin chapters:
+71 sampled lines pass signal and token-time checks. These do not certify
+pronunciation; full continuous production-voice listening and synchronization
+remain pending.
+
+The [compact evidence record](quant14-polish-evidence.json) binds source, inputs,
+receipts, sheets, speech reports and the reviewed actual opening. The actual opening has no blank or sparse run lasting at least1.5seconds. Local artifacts
+are `renders/quant14_polished_silent.mp4` (73:51, 480p15, 21 embedded chapters
+and English soft subtitles), its companion subtitle/chapter files, and the actual
+166.4-second opening at
+`media/quant14/narrated_qa/videos/s01_hook/480p15/Hook.mp4`.
+
+Part 15 is next in the sequential pass.

@@ -1,0 +1,2203 @@
+{
+  "video": "quant14",
+  "base_commit": "650047a76f23d0f3a67775d83fb8a6f8eb7de4f8",
+  "source_commit": "40b013589f3b86748de805759f9573b9566f90c9",
+  "source_fingerprint": "33be58bb795a470bbc269783a4655a6aa589b89e216c190ccda164b4e9bf4d59",
+  "scope": "Bilingual narration-beat frames, English40-frame silent motion review, selected CPU speech checks and actual narrated opening",
+  "production_listening": "pending",
+  "warning_adjudication": [],
+  "data_inputs": {
+    ".cache/quant14/skew.json": {
+      "path": ".cache/quant14/skew.json",
+      "sha256": "ffaef38dbfc6208a80d15bbdbdb8d286c78835da08a6734daf41161e72d9f4b0",
+      "bytes": 4827
+    },
+    ".cache/quant14/skew.npz": {
+      "exists": false
+    },
+    ".cache/quant14/skew_weekly.json": {
+      "path": ".cache/quant14/skew_weekly.json",
+      "sha256": "36b45069b2aa7cf51cefcad9864e5410d7dee067fb488765fe0bce54b57fe937",
+      "bytes": 99766
+    },
+    ".cache/quant14/skew_weekly.npz": {
+      "exists": false
+    },
+    ".cache/quant14/skew_models.json": {
+      "path": ".cache/quant14/skew_models.json",
+      "sha256": "fad4c5331d76c939a46b9be1b49bf7b430e5903a65b2a622c54ec32b1c219e0d",
+      "bytes": 4601
+    },
+    ".cache/quant14/skew_models.npz": {
+      "exists": false
+    },
+    ".cache/quant14/roughness.json": {
+      "path": ".cache/quant14/roughness.json",
+      "sha256": "cf1f33a4850c7b1266f282f744fc6f067a0648685ee4b6a532f784d2661183c8",
+      "bytes": 56872
+    },
+    ".cache/quant14/roughness.npz": {
+      "exists": false
+    },
+    ".cache/quant14/artefact.json": {
+      "path": ".cache/quant14/artefact.json",
+      "sha256": "1bf220443efb5f923bfe729ff7ad7ea29f9b203a5de86e22df63e3ae7656723f",
+      "bytes": 742
+    },
+    ".cache/quant14/artefact.npz": {
+      "exists": false
+    },
+    ".cache/quant14/roughness_2018.json": {
+      "path": ".cache/quant14/roughness_2018.json",
+      "sha256": "e13301631afbfa4b2986fd91f64528a051c9a7d3c0326b456f2fd1fab7a35375",
+      "bytes": 35379
+    },
+    ".cache/quant14/roughness_2018.npz": {
+      "exists": false
+    },
+    ".cache/quant14/rfsv_forecast.json": {
+      "path": ".cache/quant14/rfsv_forecast.json",
+      "sha256": "012dc2a9236150136ea7b9e6f313a5af5b89b35963d9a939065b51b10b734c8a",
+      "bytes": 81353
+    },
+    ".cache/quant14/rfsv_forecast.npz": {
+      "exists": false
+    },
+    ".cache/quant14/rbergomi.json": {
+      "path": ".cache/quant14/rbergomi.json",
+      "sha256": "dfb861aa968ac5a71d12d370d7799e1915951a0a7c5b0088d40ff7c439aa1683",
+      "bytes": 4815
+    },
+    ".cache/quant14/rbergomi.npz": {
+      "exists": false
+    },
+    ".cache/quant14/rbskew.json": {
+      "path": ".cache/quant14/rbskew.json",
+      "sha256": "1140108fc3280552621607ec6463cf4461d77275e6a4cb6252a232a20081fb1b",
+      "bytes": 706
+    },
+    ".cache/quant14/rbskew.npz": {
+      "exists": false
+    },
+    ".cache/quant14/rb_replay.json": {
+      "path": ".cache/quant14/rb_replay.json",
+      "sha256": "33baff92f7ac24585883d35368fac1c6bf6f6e2bc76188c1301ea671ab385a4a",
+      "bytes": 225316
+    },
+    ".cache/quant14/rb_replay.npz": {
+      "exists": false
+    },
+    ".cache/quant14/hybrid_check.json": {
+      "path": ".cache/quant14/hybrid_check.json",
+      "sha256": "c14b2854d8fd666fd6a73b540d5e4cad9ec530a357ce1909721af8b84aea012b",
+      "bytes": 783
+    },
+    ".cache/quant14/hybrid_check.npz": {
+      "exists": false
+    },
+    ".cache/quant14/rheston.json": {
+      "path": ".cache/quant14/rheston.json",
+      "sha256": "81b597d04299b03cd2e189f1878916fbe9cc852c77a828aa28d47712ff990057",
+      "bytes": 5019
+    },
+    ".cache/quant14/rheston.npz": {
+      "exists": false
+    },
+    ".cache/quant14/rprofile.json": {
+      "path": ".cache/quant14/rprofile.json",
+      "sha256": "428c0700a1fc8d428a562fb65c16a29a89c63e767205f82fcf9ad9f47d570842",
+      "bytes": 3267
+    },
+    ".cache/quant14/rprofile.npz": {
+      "exists": false
+    },
+    ".cache/quant14/lift.json": {
+      "path": ".cache/quant14/lift.json",
+      "sha256": "3b7be51c63d44369987f795df537843faae99160f665a7423ca8cdc71bfa2689",
+      "bytes": 700
+    },
+    ".cache/quant14/lift.npz": {
+      "exists": false
+    },
+    ".cache/quant14/adams_conv.json": {
+      "path": ".cache/quant14/adams_conv.json",
+      "sha256": "bbe6ee2deb18c5ad02f4c63298c050a28ff5703081dfa5a81f603303e583f3b5",
+      "bytes": 76486
+    },
+    ".cache/quant14/adams_conv.npz": {
+      "exists": false
+    },
+    ".cache/quant14/rh_profile9.json": {
+      "path": ".cache/quant14/rh_profile9.json",
+      "sha256": "96e8c43e033972f5ab65920a1c74c5d82260cb204b1d20b2fc2c49021b8bf3b5",
+      "bytes": 4640
+    },
+    ".cache/quant14/rh_profile9.npz": {
+      "exists": false
+    },
+    ".cache/quant14/hawkes.json": {
+      "path": ".cache/quant14/hawkes.json",
+      "sha256": "97e1f5d6c22a335af03d052e3087526bab39e673bd3098057baa2eac34728367",
+      "bytes": 24309
+    },
+    ".cache/quant14/hawkes.npz": {
+      "exists": false
+    },
+    ".cache/quant14/hawkes_sweep.json": {
+      "path": ".cache/quant14/hawkes_sweep.json",
+      "sha256": "2af6a12811611601eb0c042a794b1323c3eb512de07312dc79bc5d7a837fcb8a",
+      "bytes": 146629
+    },
+    ".cache/quant14/hawkes_sweep.npz": {
+      "exists": false
+    },
+    ".cache/quant14/lift_paths.json": {
+      "path": ".cache/quant14/lift_paths.json",
+      "sha256": "822397fe2f5fc4f9168b2f424b229b5d06dd35330c012aa422f084edac0c7dfd",
+      "bytes": 39168
+    },
+    ".cache/quant14/lift_paths.npz": {
+      "exists": false
+    },
+    ".cache/quant14/bias_map.json": {
+      "path": ".cache/quant14/bias_map.json",
+      "sha256": "0554a4eedf2eb4caefd4fb2d6bf2c0b3bd1aafe6552d0688f693d9f6b5745578",
+      "bytes": 6744
+    },
+    ".cache/quant14/bias_map.npz": {
+      "exists": false
+    },
+    ".cache/quant14/bergomi2f.json": {
+      "path": ".cache/quant14/bergomi2f.json",
+      "sha256": "058800eaa4725d37ce182f40e9d6d21e56bcf258eecdb5e77a24a90cdbe2eeb1",
+      "bytes": 13610
+    },
+    ".cache/quant14/bergomi2f.npz": {
+      "exists": false
+    },
+    ".cache/quant14/pdv.json": {
+      "path": ".cache/quant14/pdv.json",
+      "sha256": "13cfcd003726b8310395b790654691c3feb0332daf9557c30b0312293c24ec41",
+      "bytes": 127420
+    },
+    ".cache/quant14/pdv.npz": {
+      "exists": false
+    },
+    ".cache/quant14/pdv_replay.json": {
+      "path": ".cache/quant14/pdv_replay.json",
+      "sha256": "6ef5986f772abb07334fdd832107d3cdcbee017795b6466ec098f3a5b345fab9",
+      "bytes": 46705
+    },
+    ".cache/quant14/pdv_replay.npz": {
+      "exists": false
+    },
+    ".cache/quant14/pdv4.json": {
+      "path": ".cache/quant14/pdv4.json",
+      "sha256": "35da0113b8c2e0753bb78e7bd576b2aa2ef5763fca338fd7bac8f4514f58b579",
+      "bytes": 474
+    },
+    ".cache/quant14/pdv4.npz": {
+      "exists": false
+    },
+    ".cache/quant14/pdv_spx.json": {
+      "path": ".cache/quant14/pdv_spx.json",
+      "sha256": "483f2ca82dc977a206615757c21be315490dd6341d69ebf49fb51df334aa43c5",
+      "bytes": 439070
+    },
+    ".cache/quant14/pdv_spx.npz": {
+      "exists": false
+    },
+    ".cache/quant14/crisis_aug2024.json": {
+      "path": ".cache/quant14/crisis_aug2024.json",
+      "sha256": "ff7b43a91005bcb548e21fa163d5de19adb7a69e2d9679b99962223435841d55",
+      "bytes": 13961
+    },
+    ".cache/quant14/crisis_aug2024.npz": {
+      "exists": false
+    },
+    ".cache/quant14/qrh_sim.json": {
+      "path": ".cache/quant14/qrh_sim.json",
+      "sha256": "830ee4e60990f3623db3a7a750cf71398f8fc65ade346140a31ace65718852ba",
+      "bytes": 41474
+    },
+    ".cache/quant14/qrh_sim.npz": {
+      "exists": false
+    },
+    ".cache/quant14/joint_bounds.json": {
+      "path": ".cache/quant14/joint_bounds.json",
+      "sha256": "1392606a5261227d55e5ba2fc5f8a61b038ed444e62fc1e3d98eef324e889d5c",
+      "bytes": 27029
+    },
+    ".cache/quant14/joint_bounds.npz": {
+      "exists": false
+    },
+    ".cache/quant14/sigvol.json": {
+      "path": ".cache/quant14/sigvol.json",
+      "sha256": "9cded093066c78301cea5ad6515d3b2d450b6f1aa66523cbd622113451f0fd26",
+      "bytes": 647185
+    },
+    ".cache/quant14/sigvol.npz": {
+      "exists": false
+    },
+    ".cache/quant14/envelope.json": {
+      "path": ".cache/quant14/envelope.json",
+      "sha256": "522d26cbef66e7a1095273c2453fc66ad014e5645c772323dfba5b42b78c0ca8",
+      "bytes": 39
+    },
+    ".cache/quant14/envelope.npz": {
+      "exists": false
+    },
+    ".cache/quant14/calib_speed.json": {
+      "path": ".cache/quant14/calib_speed.json",
+      "sha256": "1dde0b84d99b661251f68d67a431b5cd99492859510c0a9a8d356ddb63fa113a",
+      "bytes": 207
+    },
+    ".cache/quant14/calib_speed.npz": {
+      "exists": false
+    },
+    ".cache/quant14/convergence_theory.json": {
+      "path": ".cache/quant14/convergence_theory.json",
+      "sha256": "5a8ad618d550a82f9d6d28af4761472664c8a1c5c2bc9bcf1015123df306e75c",
+      "bytes": 9154
+    },
+    ".cache/quant14/convergence_theory.npz": {
+      "exists": false
+    }
+  },
+  "manual_visual_review": {
+    "endpoint_sheets": 42,
+    "motion_sheets": 21,
+    "focused_native_frames": 26,
+    "binding": "Exact artifact SHA; carry-forward only for pixel-identical sheets after fresh actual current-source rendering"
+  },
+  "audio_note": "Signal and token-time integrity do not certify pronunciation or full continuous listening.",
+  "opening_sample": {
+    "path": "media/quant14/narrated_qa/videos/s01_hook/480p15/Hook.mp4",
+    "sha256": "acd1f7961f9ad1773cdbfc6b273f08f828f354f9c837f6e3f0e1b230d77e4c69",
+    "bytes": 5394753,
+    "seconds": 166.38333333333395,
+    "narration_lines": 5,
+    "narration_matches_current_source": true,
+    "manual_review": {
+      "validated_source_fingerprint": "33be58bb795a470bbc269783a4655a6aa589b89e216c190ccda164b4e9bf4d59",
+      "duration_seconds": 166.38333333333395,
+      "sheet_sha256": "ef9362509b990e4d520168222d700ecdb1780e87829950cbacbc88812a57316a",
+      "sampled_frames": 32,
+      "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 166 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 166 s\n",
+      "review": "Actually inspected all32current narrated opening frames. Settled title, zoom readout, paths, history, agenda and House chart are readable without observed overlap/cropping; shortened history-to-agenda fade preserves content.",
+      "audio_stream": {
+        "codec": "aac",
+        "sample_rate": 48000,
+        "channels": 2
+      },
+      "volume_db": {
+        "mean_volume": -29.1,
+        "max_volume": -7.6
+      },
+      "listening": "Full continuous production-voice listening and pronunciation validation remain pending.",
+      "review_status": "approved",
+      "scan_summary": "The actual opening has no blank or sparse run lasting at least1.5seconds.",
+      "full_continuous_listening": "pending"
+    }
+  },
+  "additional_checks": {
+    "computed_items": 32,
+    "source_entry_coverage": {
+      "covered": 123,
+      "entries": 123
+    },
+    "narration_lines": 115,
+    "narration_minutes_estimate": 64.2,
+    "tests": {
+      "source_commit": "6a94ba8b",
+      "passed": 6,
+      "failed": 0,
+      "scope": "Existing selected rough and Part14 numerical tests; no algorithms changed; one upstream audioop deprecation warning."
+    },
+    "restore": {
+      "items": 32,
+      "normal_restore_invocations": 32,
+      "results": [
+        {
+          "item": "rbergomi",
+          "returncode": 0,
+          "seconds": 16.0,
+          "sha256": "dfb861aa968ac5a71d12d370d7799e1915951a0a7c5b0088d40ff7c439aa1683"
+        },
+        {
+          "item": "roughness",
+          "returncode": 0,
+          "seconds": 25.6,
+          "sha256": "cf1f33a4850c7b1266f282f744fc6f067a0648685ee4b6a532f784d2661183c8"
+        },
+        {
+          "item": "rheston",
+          "returncode": 0,
+          "seconds": 45.0,
+          "sha256": "81b597d04299b03cd2e189f1878916fbe9cc852c77a828aa28d47712ff990057"
+        },
+        {
+          "item": "rb_replay",
+          "returncode": 0,
+          "seconds": 32.5,
+          "sha256": "33baff92f7ac24585883d35368fac1c6bf6f6e2bc76188c1301ea671ab385a4a"
+        },
+        {
+          "item": "bias_map",
+          "returncode": 0,
+          "seconds": 13.4,
+          "sha256": "0554a4eedf2eb4caefd4fb2d6bf2c0b3bd1aafe6552d0688f693d9f6b5745578"
+        },
+        {
+          "item": "pdv",
+          "returncode": 0,
+          "seconds": 7.8,
+          "sha256": "13cfcd003726b8310395b790654691c3feb0332daf9557c30b0312293c24ec41"
+        },
+        {
+          "item": "roughness_2018",
+          "returncode": 0,
+          "seconds": 9.7,
+          "sha256": "e13301631afbfa4b2986fd91f64528a051c9a7d3c0326b456f2fd1fab7a35375"
+        },
+        {
+          "item": "convergence_theory",
+          "returncode": 0,
+          "seconds": 5.5,
+          "sha256": "5a8ad618d550a82f9d6d28af4761472664c8a1c5c2bc9bcf1015123df306e75c"
+        },
+        {
+          "item": "skew",
+          "returncode": 0,
+          "seconds": 1.2,
+          "sha256": "ffaef38dbfc6208a80d15bbdbdb8d286c78835da08a6734daf41161e72d9f4b0"
+        },
+        {
+          "item": "artefact",
+          "returncode": 0,
+          "seconds": 3.2,
+          "sha256": "1bf220443efb5f923bfe729ff7ad7ea29f9b203a5de86e22df63e3ae7656723f"
+        },
+        {
+          "item": "rbskew",
+          "returncode": 0,
+          "seconds": 8.3,
+          "sha256": "1140108fc3280552621607ec6463cf4461d77275e6a4cb6252a232a20081fb1b"
+        },
+        {
+          "item": "hawkes",
+          "returncode": 0,
+          "seconds": 1.5,
+          "sha256": "97e1f5d6c22a335af03d052e3087526bab39e673bd3098057baa2eac34728367"
+        },
+        {
+          "item": "envelope",
+          "returncode": 0,
+          "seconds": 1.4,
+          "sha256": "522d26cbef66e7a1095273c2453fc66ad014e5645c772323dfba5b42b78c0ca8"
+        },
+        {
+          "item": "rfsv_forecast",
+          "returncode": 0,
+          "seconds": 1.2,
+          "sha256": "012dc2a9236150136ea7b9e6f313a5af5b89b35963d9a939065b51b10b734c8a"
+        },
+        {
+          "item": "hybrid_check",
+          "returncode": 0,
+          "seconds": 4.8,
+          "sha256": "c14b2854d8fd666fd6a73b540d5e4cad9ec530a357ce1909721af8b84aea012b"
+        },
+        {
+          "item": "adams_conv",
+          "returncode": 0,
+          "seconds": 1.8,
+          "sha256": "bbe6ee2deb18c5ad02f4c63298c050a28ff5703081dfa5a81f603303e583f3b5"
+        },
+        {
+          "item": "rprofile",
+          "returncode": 0,
+          "seconds": 73.9,
+          "sha256": "428c0700a1fc8d428a562fb65c16a29a89c63e767205f82fcf9ad9f47d570842"
+        },
+        {
+          "item": "lift",
+          "returncode": 0,
+          "seconds": 4.1,
+          "sha256": "3b7be51c63d44369987f795df537843faae99160f665a7423ca8cdc71bfa2689"
+        },
+        {
+          "item": "skew_models",
+          "returncode": 0,
+          "seconds": 2.0,
+          "sha256": "fad4c5331d76c939a46b9be1b49bf7b430e5903a65b2a622c54ec32b1c219e0d"
+        },
+        {
+          "item": "hawkes_sweep",
+          "returncode": 0,
+          "seconds": 10.0,
+          "sha256": "2af6a12811611601eb0c042a794b1323c3eb512de07312dc79bc5d7a837fcb8a"
+        },
+        {
+          "item": "lift_paths",
+          "returncode": 0,
+          "seconds": 1.3,
+          "sha256": "822397fe2f5fc4f9168b2f424b229b5d06dd35330c012aa422f084edac0c7dfd"
+        },
+        {
+          "item": "skew_weekly",
+          "returncode": 0,
+          "seconds": 155.7,
+          "sha256": "36b45069b2aa7cf51cefcad9864e5410d7dee067fb488765fe0bce54b57fe937"
+        },
+        {
+          "item": "bergomi2f",
+          "returncode": 0,
+          "seconds": 48.3,
+          "sha256": "058800eaa4725d37ce182f40e9d6d21e56bcf258eecdb5e77a24a90cdbe2eeb1"
+        },
+        {
+          "item": "pdv_replay",
+          "returncode": 0,
+          "seconds": 6.6,
+          "sha256": "6ef5986f772abb07334fdd832107d3cdcbee017795b6466ec098f3a5b345fab9"
+        },
+        {
+          "item": "pdv_spx",
+          "returncode": 0,
+          "seconds": 1.4,
+          "sha256": "483f2ca82dc977a206615757c21be315490dd6341d69ebf49fb51df334aa43c5"
+        },
+        {
+          "item": "pdv4",
+          "returncode": 0,
+          "seconds": 7.6,
+          "sha256": "35da0113b8c2e0753bb78e7bd576b2aa2ef5763fca338fd7bac8f4514f58b579"
+        },
+        {
+          "item": "crisis_aug2024",
+          "returncode": 0,
+          "seconds": 7.3,
+          "sha256": "ff7b43a91005bcb548e21fa163d5de19adb7a69e2d9679b99962223435841d55"
+        },
+        {
+          "item": "qrh_sim",
+          "returncode": 0,
+          "seconds": 1.8,
+          "sha256": "830ee4e60990f3623db3a7a750cf71398f8fc65ade346140a31ace65718852ba"
+        },
+        {
+          "item": "joint_bounds",
+          "returncode": 0,
+          "seconds": 5.2,
+          "sha256": "1392606a5261227d55e5ba2fc5f8a61b038ed444e62fc1e3d98eef324e889d5c"
+        },
+        {
+          "item": "rh_profile9",
+          "returncode": 0,
+          "seconds": 91.4,
+          "sha256": "96e8c43e033972f5ab65920a1c74c5d82260cb204b1d20b2fc2c49021b8bf3b5"
+        },
+        {
+          "item": "sigvol",
+          "returncode": 0,
+          "seconds": 61.2,
+          "sha256": "9cded093066c78301cea5ad6515d3b2d450b6f1aa66523cbd622113451f0fd26"
+        },
+        {
+          "item": "calib_speed",
+          "returncode": 0,
+          "seconds": 4.4,
+          "sha256": "1dde0b84d99b661251f68d67a431b5cd99492859510c0a9a8d356ddb63fa113a"
+        }
+      ],
+      "part14_cumulative_trials": 312,
+      "global_trials": 23562,
+      "additional_market_trials": 0,
+      "sealed_market_holdouts_opened": 0,
+      "protected_files_unchanged": true,
+      "external_dependency": "Original Part17 calib_data and calib restored separately for the unchanged calib_speed item; original synthetic validation belongs to that existing computation."
+    },
+    "protected_files": {
+      "videos/quant/quant14/compute.py": "6daf96a19b3f9f7718ea22ce5bda9d08bf9bb98060b5145d89ce33a6c11a177d",
+      "videos/quant/quant13/compute.py": "db720bd9a6b3883a40c5bb9c8e93ecdb65af1738c4c310f49ece8836f4a74760",
+      "videos/quant/quant17/compute.py": "27875a2acfb66a701f671bbfb6c7e54398ba95510846554e1ef27adcd3a4784a",
+      "explainer/quant/house/__init__.py": "f613aa7642aab3fb9b1f92e96b9cf0ca6bdacc28d58c1560f375f2d99176fa0e",
+      "explainer/quant/house/agents.py": "6dc4aceceb380a535b1c08261a07770cdb5e5aaa3f8a05dbbee4fd11f37944e2",
+      "explainer/quant/house/alphas.py": "a8d1fb677b96f24de5ac608ac0ec9ed1a6f7e91f0ba684aecbc50efc2120b62a",
+      "explainer/quant/house/arbitrage.py": "64ac4b4e0d1c483ec5fd69402e557a5b7ca4608749ec325c9c9bb07f968314ab",
+      "explainer/quant/house/backtest.py": "f0e53aeb802ab37c1ecc79c818dc2248c91ab4ccfbc7eb8773439b11f21a0b24",
+      "explainer/quant/house/bs.py": "92e5de99161f240d9921b82b4f532e729c87200b6c7d598b3980ade11fcb7c96",
+      "explainer/quant/house/control.py": "de4860f53de185ed3b526e15eaa2f6cc526952a24af93569de3224dfa2f9af87",
+      "explainer/quant/house/credit.py": "1dfd36003061792aa2c788b52bbc71357333f394470c5081617718c2565c6fec",
+      "explainer/quant/house/crisis.py": "6f4ac330052bb53389eb4dc3a616e6119b7c9fd42f35f3a015f0e26388b73dde",
+      "explainer/quant/house/deep.py": "bf7b8ebd06929721cc722397fede0950b252eff03d708ac75164633ddb7cc59d",
+      "explainer/quant/house/defi.py": "0c25adcf0371dff0216dd6da8597bc2c94200ba2c8a2d2ac467a632d162ead52",
+      "explainer/quant/house/econ.py": "12b03beaab6a1d8dadb2850cb0cf369a8bd93a4a7e9f527a1617869e1327d936",
+      "explainer/quant/house/engine.py": "202771b89fb6c628f02223fbc33ba5a0a6aa1eb9c1390c9a2744d3420c5a5fc8",
+      "explainer/quant/house/execution.py": "12c82c2cbfe9efadc985e5c2ac33a62c7b4f219de995f0048603fb4897cd4816",
+      "explainer/quant/house/exotics.py": "9316e9e467e19161642c01c209bf03d0286048fe356a5dd51d83b778f7b86425",
+      "explainer/quant/house/factors.py": "f102bc3a1fd694d3b4f283a71cd40bda36f7e397058e36bfbfd93f2cb53be898",
+      "explainer/quant/house/firm.py": "df051ba932656a2ffeae25e157edf5c593f2e05110a18206fb5540898d183b0b",
+      "explainer/quant/house/fundamentals.py": "b05b5ed3dab0808f020d7f45087c1f00de15ce822f97b545aa8fadbf4704c161",
+      "explainer/quant/house/funding.py": "e1a93ec1560813e27d5cfa268129e324f2233220439befd621f842c2c7e9e575",
+      "explainer/quant/house/hedge.py": "e9fe3308d5d563a90ffb8ba7dcdf690112b52a581ea06f591ff6da7bdee8266c",
+      "explainer/quant/house/lob.py": "0a0a8b9d154cf542fe434314dd785746e87a0ec7decddb3ce7b574a3270c29ec",
+      "explainer/quant/house/macro.py": "190ff119261f591f21f8a39a61a1c5efb3c1bab23b7550f125a55901d9544037",
+      "explainer/quant/house/making.py": "87a7e2ec82220d54bd32b2311577f22168831ab45a20821fe99c1e50c9155557",
+      "explainer/quant/house/martingale.py": "12939d81ca6a6897c943ffa04183f5616003e5c5eb3ec9bc99470bb0f85b67b0",
+      "explainer/quant/house/micro.py": "0b5441ea03e20d51efb4107e547166b261992a2f05dc5bddad05f2f30e7f3a9a",
+      "explainer/quant/house/ml.py": "42ad8b5144015380d6ad8e1af34bcbbd4de58bae768988ff9105d324fe1d6fab",
+      "explainer/quant/house/paths.py": "53f85a7b89e8bb5935f72ecad72c78030966bbf3a66e01f38d841870854232ec",
+      "explainer/quant/house/pit.py": "c9b88c94002dbd6722c2625067d7bfa6a4233c49df596fa8a5ee87addafaf52c",
+      "explainer/quant/house/portfolio.py": "a097f6e001ef3e760141a2ab1a7952adfedd62bacdfb2ff48e81c3c976f3661c",
+      "explainer/quant/house/premia.py": "8a2135c3fe7b3935357c188f63fa09f0d2ffce72e5a221bff15fa9ba3a2870cc",
+      "explainer/quant/house/quoting.py": "c7cfd795bcf0574027fd7bf9b3954d5a0f02f78603846edd908f228ec15b053a",
+      "explainer/quant/house/rates.py": "c0384b79a0a1a8e9b7dafc9885abab746a681135aaeda26fe524527e588cda65",
+      "explainer/quant/house/risk.py": "186c324bb486217f1703b62939eaf1e34c477726968981221f8f6998221d7910",
+      "explainer/quant/house/riskmodel.py": "d805091e7b4ac79d189b9de2458d37669bb14b3089a96a6cc9ed7616d18ce4e9",
+      "explainer/quant/house/rough.py": "ed8eaf650111513566dd7b84c24838f72565ff18a0f28432d6327feaaf455c04",
+      "explainer/quant/house/sim.py": "6d2c15de63d2c2e0991b79b43da2ba5ebf87fae68a719800f56359202dea089c",
+      "explainer/quant/house/skill.py": "868cfe4cdcfbf57b70a802cc3f0738050f968ccf6ebf33102fed6078936fb262",
+      "explainer/quant/house/smile.py": "73f5fbe95c05f8d91846481831efa3dddb60b6a94ecee7499fcffc70a2aa1ecb",
+      "explainer/quant/house/statarb.py": "484b3d32bc25350cf7e3770f92f5d12608435bef4d7c339eb251c3a0607b8a0b",
+      "explainer/quant/house/stats.py": "a3fd82baddf8e2ba92c90b29b050ab71b3f77dbc6e70718bb8679a28b6ada420",
+      "explainer/quant/house/stochvol.py": "de1907fb377ca150acaec78c9703687378d501c373c186b75cc70ed31d4956ae",
+      "explainer/quant/house/surface.py": "b2032dccb0cdd692324eb0f9aaa803332906139817c4ef7f9b395e159358aab4",
+      "explainer/quant/house/systematic.py": "7a77dc8b7c8b89ff36fff258a0afe6561b69f35a133172113b14c8e55876426e",
+      "explainer/quant/house/termstructure.py": "a7ffce262a5e4705d5376f1af2d55b2f935052ad720fed1713483f03ceebec13",
+      "explainer/quant/house/text.py": "88ad1c9921579fc3dbb20b2a07112b273f0cad714489d94b7edc5b9411914abe",
+      "explainer/quant/house/track.py": "5109ff6c00e19fa6b75050c710234a34097934f27ae2f8d9037c70eaa192f00c",
+      "explainer/quant/house/trees.py": "15de88baa6a7da2784d4f84b369ad7afdc80aedca24575901a64f4b0234e5443",
+      "explainer/quant/house/valuation.py": "3ab712f1b3e9ddc5307c1ab1b16869fc5d5c5b44afcd0d6e95ceeed53a6c79d7",
+      "explainer/quant/house/vol.py": "eb36423e83aad5cd820a0caa74499a8d7035ca4926defdb4f618528f110c4b4f",
+      "explainer/quant/house/volsurface.py": "0fcb359a67174fdef4f8df77daa1de56c408fec3f6f21b72c336710a720defb0",
+      "explainer/quant/house/xva.py": "19d84bd53452a2ef9fda04903c982b2026556d501cfd52ee9f6c3530309c9891",
+      "explainer/quant/house/zoo.py": "9bb161322b92e2ba9b5844a8a7bc53a0d7acbe472316b6b2f1c517747d20d284",
+      "videos/quant/data/manifest.json": "0768d4f7e439e0959791af97cf1072ce4cefd8c07dda093a95f286fa2eb6c54a",
+      "videos/quant/data/envelope.json": "f3c87ca3f8b229d817b5d948bebd90480aa392124dc621f27f0472b7353a3a72",
+      "videos/quant/data/track_record.json": "132f7772140a315c6f8a5923d8f79d1f338e935ee8ad6884c4c369db98b8cc7d"
+    },
+    "audit_reports": {
+      "audio_completion_gate.json": {
+        "path": "renders/qa/quant14/audio_completion_gate.json",
+        "sha256": "f7cc8b352dcac12e4514ff37f7be61fe4c842c8976b6c6fde5b837d47ceaf1da",
+        "bytes": 3244
+      },
+      "motion_repair_findings.json": {
+        "path": "renders/qa/quant14/motion_repair_findings.json",
+        "sha256": "b4f73e15f764b4702886d9f27b592d40af1989313e541c35f38374cbc79ce15a",
+        "bytes": 4269
+      },
+      "focused_motion_interval_reviews.json": {
+        "path": "renders/qa/quant14/focused_motion_interval_reviews.json",
+        "sha256": "a050556153132bd399b349674b16018be030e3bd089965233fa12216ec4f1eec",
+        "bytes": 2151
+      },
+      "endpoint_completion_gate.json": {
+        "path": "renders/qa/quant14/endpoint_completion_gate.json",
+        "sha256": "f7b72daa38eb473fd8e6dfd5e64478976412e46b7f513bde19539f447eea4fae",
+        "bytes": 10214
+      },
+      "final_visual_findings.json": {
+        "path": "renders/qa/quant14/final_visual_findings.json",
+        "sha256": "77e2eb403e03b7eae262f50b879e39cb9883b4963bebc2733e9f159ef60d77bd",
+        "bytes": 704
+      },
+      "svg_cache_cleanup.json": {
+        "path": "renders/qa/quant14/svg_cache_cleanup.json",
+        "sha256": "f5190ffa6651a31011488c9d4cda6cad61ac9d04564783bf4756dea3d32a68fc",
+        "bytes": 220
+      },
+      "first_repaired_endpoints_summary.json": {
+        "path": "renders/qa/quant14/first_repaired_endpoints_summary.json",
+        "sha256": "11665757975d37eec9919be2c82afabc04b9223b46e7bb5c5a5133fdac7b8c78",
+        "bytes": 11453
+      },
+      "opening_render_completion.json": {
+        "path": "renders/qa/quant14/opening_render_completion.json",
+        "sha256": "79f1bf6795dd3d432868f65c9a5dc18b9ab1b6ec2b9e6bb2ebcd0ccd64d90e84",
+        "bytes": 481
+      },
+      "restore_summary.json": {
+        "path": "renders/qa/quant14/restore_summary.json",
+        "sha256": "cf1b53e5e15244b130570814e5b3bf3056c5bb617a8b4f909c1af2d03793177b",
+        "bytes": 5821
+      },
+      "dependency_summary.json": {
+        "path": "renders/qa/quant14/dependency_summary.json",
+        "sha256": "8ca3fb7ec276f538aa274c6f17500dafdcf607d75596d33695ec442e684a5afa",
+        "bytes": 507
+      },
+      "weekly_range_audit_initial.json": {
+        "path": "renders/qa/quant14/weekly_range_audit_initial.json",
+        "sha256": "1f504f0e15850875374cb7cf97bae89b17d4ef6fa4aa32fa8da24cd7187ed483",
+        "bytes": 1025
+      },
+      "source_preflight.json": {
+        "path": "renders/qa/quant14/source_preflight.json",
+        "sha256": "f1caed34618f192b78b62f22c7b9a5408406673d940bbf18efe196b26e3c0c41",
+        "bytes": 2947
+      },
+      "cross_mode_narration_audit.json": {
+        "path": "renders/qa/quant14/cross_mode_narration_audit.json",
+        "sha256": "6b86f6c75c1795dd9738652a0e3acfd0341262c58a4ba181de72b69c973a0a98",
+        "bytes": 10399
+      },
+      "chapter_title_audit.json": {
+        "path": "renders/qa/quant14/chapter_title_audit.json",
+        "sha256": "d843866df43de4987ffa894f7c51d6de506f6346c215c7496ed76ffd8815c36b",
+        "bytes": 2789
+      },
+      "helper_api_audit.json": {
+        "path": "renders/qa/quant14/helper_api_audit.json",
+        "sha256": "37ffbfd6e507ce3705d18b60546a2f3aa88aa93ced855cde58a5276f4f63aace",
+        "bytes": 2608
+      },
+      "numerical_ranges_initial.json": {
+        "path": "renders/qa/quant14/numerical_ranges_initial.json",
+        "sha256": "b55b5b4699d28617888210a63032f8bd69b35ce73e12b51a4ea1b6aeea8665ba",
+        "bytes": 184817
+      },
+      "initial_static_findings.json": {
+        "path": "renders/qa/quant14/initial_static_findings.json",
+        "sha256": "be795e92150d2b4b46339d74771bce1294df0facb710892bea6d5c926285d2b0",
+        "bytes": 8164
+      },
+      "endpoint_manual_review.json": {
+        "path": "renders/qa/quant14/endpoint_manual_review.json",
+        "sha256": "e4ce3c7a3e03a82e5293359eb3222992c9343e31e8d7ac7b13316b313002fa68",
+        "bytes": 45537
+      },
+      "warning_adjudication.json": {
+        "path": "renders/qa/quant14/warning_adjudication.json",
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "bytes": 3
+      },
+      "motion_manual_review.json": {
+        "path": "renders/qa/quant14/motion_manual_review.json",
+        "sha256": "ddf30c7dc6c0cffe566ec2e94ecd01f7a0509a32e80d0ef93cbe451cc6d4e127",
+        "bytes": 17269
+      },
+      "focused_manual_review.json": {
+        "path": "renders/qa/quant14/focused_manual_review.json",
+        "sha256": "5fccf27d5371f4514b375045d8a2ee1970c1ea0d768610fb0df12e427d3136a0",
+        "bytes": 28661
+      },
+      "initial_endpoint_reviews.json": {
+        "path": "renders/qa/quant14/initial_endpoint_reviews.json",
+        "sha256": "5da7dc95397fa4ccbfb14a2c4bbd82d53f6dfbb6115fd8e764137e90e3b7230d",
+        "bytes": 22467
+      },
+      "initial_native_reviews.json": {
+        "path": "renders/qa/quant14/initial_native_reviews.json",
+        "sha256": "0730a4e754116758fd1a08945db9f3e42fb9c9f68312b98d7f5ec14b6a0a0d9e",
+        "bytes": 7308
+      },
+      "web1.json": {
+        "path": "renders/qa/quant14/web1.json",
+        "sha256": "d30849f956d5284803f1efd9d19c9a130091afbc6fff8abec38980dc3cc04c48",
+        "bytes": 32558
+      },
+      "web2.json": {
+        "path": "renders/qa/quant14/web2.json",
+        "sha256": "c17e2ac2b797f1a637bc5350aae2f324a3b2000d5affb675b9959011cabfacc4",
+        "bytes": 15109
+      },
+      "web3.json": {
+        "path": "renders/qa/quant14/web3.json",
+        "sha256": "3ed498681bdfa6e36f3cfcf9a56ee11d5f0c12860c03899d0fb065845bea5db7",
+        "bytes": 12079
+      },
+      "web4.json": {
+        "path": "renders/qa/quant14/web4.json",
+        "sha256": "ca3050b603cae2adac62d0e8e26cf1b7f325e5478fed2c9c30e369330062de65",
+        "bytes": 13248
+      },
+      "web5.json": {
+        "path": "renders/qa/quant14/web5.json",
+        "sha256": "99091c3dfd712f32f2a140712fa11b5290069035d26ad9d4a22788db8b936ca3",
+        "bytes": 13915
+      },
+      "web6.json": {
+        "path": "renders/qa/quant14/web6.json",
+        "sha256": "faa86f493f965cd316b832f4bb4c58b996731b7e129c515977117d5e40842421",
+        "bytes": 31491
+      },
+      "web7.json": {
+        "path": "renders/qa/quant14/web7.json",
+        "sha256": "6667024dadc9a38661bd60a5e41fd8093bbf31fc579eeb9717542884e4b9c58f",
+        "bytes": 15863
+      },
+      "web8.json": {
+        "path": "renders/qa/quant14/web8.json",
+        "sha256": "daaffc1d47f1ca3c39d8d66c6477fa76e38214bbeddc6b393dbc72a5fc8be79d",
+        "bytes": 25566
+      },
+      "web9.json": {
+        "path": "renders/qa/quant14/web9.json",
+        "sha256": "67bfecd8b06b6071b2114c61e5ba17ecbc530d91304920bc9173597ee6750247",
+        "bytes": 24289
+      },
+      "web10.json": {
+        "path": "renders/qa/quant14/web10.json",
+        "sha256": "e880d9e040e83f549855cb04caa89ede7fd18e5ded0c0fd30a76dbd8f23f62de",
+        "bytes": 15334
+      },
+      "web11.json": {
+        "path": "renders/qa/quant14/web11.json",
+        "sha256": "b4cc1114d5c3ba0784b8ec1535de2ff841d69d8bdbf6f1e2903bfb456faae0ad",
+        "bytes": 14757
+      }
+    }
+  },
+  "records": {
+    "en_frames": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "duration": 175.92029166666669,
+        "captured_frames": 11,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Hook/result.json",
+          "sha256": "261c9d508cf2c2e079ec6b6528ffb8db53a2d5d7e70c46a909cf3e68bd80481d",
+          "bytes": 61825
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Hook/sheet.png",
+          "sha256": "16d337b6c6ee871d0e7217a66aae764674f3a298986cca093276e911791a88fb",
+          "bytes": 183241
+        },
+        "visual_review": "Current narration-beat frames inspected; readable, no observed overlap or cropping"
+      },
+      {
+        "scene": "Fact",
+        "status": "passed",
+        "duration": 160.73879166666669,
+        "captured_frames": 12,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Fact/result.json",
+          "sha256": "015c1a41c9b1dc2f203747c420d395968fcceb0b5ce3cb091a2316ab29b66def",
+          "bytes": 55964
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Fact/sheet.png",
+          "sha256": "af30ebb73315e6cff977efb190bf041d75c52d87114abde5456ae47439514b41",
+          "bytes": 211205
+        },
+        "visual_review": "Current narration-beat frames inspected; readable, no observed overlap or cropping"
+      },
+      {
+        "scene": "SkewMath",
+        "status": "passed",
+        "duration": 232.20358333333337,
+        "captured_frames": 16,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/SkewMath/result.json",
+          "sha256": "94be36b96ddffffe755db9aa0c32f5410392c27b9d7599b3b11e06865f46cd25",
+          "bytes": 88358
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/SkewMath/sheet.png",
+          "sha256": "6e89793cdae4167a65c6a68ee1ef84ddbd072bb6a57836832e79ad8b7b5c2239",
+          "bytes": 261713
+        },
+        "visual_review": "Current narration-beat frames inspected; readable, no observed overlap or cropping"
+      },
+      {
+        "scene": "Rough",
+        "status": "passed",
+        "duration": 184.25362500000006,
+        "captured_frames": 14,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Rough/result.json",
+          "sha256": "abaac660be55e62ce0cb9bb5cd4b75e8be35b995c680282bf5dcff5363ea9007",
+          "bytes": 70851
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Rough/sheet.png",
+          "sha256": "691d15d4bc1a1365d7faefcd9bd220506542796233de89c05334cbc830c5277c",
+          "bytes": 210032
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "Forecast",
+        "status": "passed",
+        "duration": 194.7295416666667,
+        "captured_frames": 13,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Forecast/result.json",
+          "sha256": "5224c6ca4c3e56cbefc8748a277603e787b8460c8d1b94ee460785ceca0bb5a8",
+          "bytes": 76698
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Forecast/sheet.png",
+          "sha256": "202ac901f7aabd625c7fee6d061ebf4608e39dfe8324f530de5664e563cbe3df",
+          "bytes": 198448
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "RBergomi",
+        "status": "passed",
+        "duration": 220.18875000000006,
+        "captured_frames": 13,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/RBergomi/result.json",
+          "sha256": "0ed3475ff61320bef99f4b7e31c63b1fd5759c454a17b7c624c700ca77a50b86",
+          "bytes": 71795
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/RBergomi/sheet.png",
+          "sha256": "78a3cf1d22849d47a1d09346acc37fc2d58bdc500f2dc9e071cfae6c924d5809",
+          "bytes": 241619
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "Hybrid",
+        "status": "passed",
+        "duration": 227.2665833333334,
+        "captured_frames": 14,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Hybrid/result.json",
+          "sha256": "1099c025074d9f9729ea0277ceb9e0c996ec38a36bc1e7fbbe68425c70154557",
+          "bytes": 79779
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Hybrid/sheet.png",
+          "sha256": "ea6f849b85d722075a423b8b0dd63c2acd31128fd251309609cf0c70c841fa4d",
+          "bytes": 254258
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "RHeston",
+        "status": "passed",
+        "duration": 204.7757916666667,
+        "captured_frames": 15,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/RHeston/result.json",
+          "sha256": "00fc85055b8e3e111ae7db329ee345dd8c966c3cad443225f4ec259648a59cd5",
+          "bytes": 77303
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/RHeston/sheet.png",
+          "sha256": "bd8198d355667f93413f7fdeab66af4de0397c01efe987e78066de336a5bb298",
+          "bytes": 244999
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "Adams",
+        "status": "passed",
+        "duration": 209.45908333333335,
+        "captured_frames": 13,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Adams/result.json",
+          "sha256": "1a91961979741c1b004e5557786df35e53d40c241b71e69239f99b9c31ebfde6",
+          "bytes": 70445
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Adams/sheet.png",
+          "sha256": "ab2a68496740acc2182241567a8a92f3834a0fa5bfa1f6107f31fff4a0d96dc0",
+          "bytes": 293964
+        },
+        "visual_review": "Current narration-beat frames inspected; readable, no observed overlap or cropping"
+      },
+      {
+        "scene": "Hawkes",
+        "status": "passed",
+        "duration": 222.55354166666672,
+        "captured_frames": 14,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Hawkes/result.json",
+          "sha256": "4d116a1827e7b427c7075390c2dbfca3c46f6c4ab66b0962d24a35d145fdeb19",
+          "bytes": 75985
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Hawkes/sheet.png",
+          "sha256": "8c7166adc9a8273ea372cb52a610a6635b547c6fdce3f8eeb60cdcdcc07b6c5b",
+          "bytes": 234129
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "Lift",
+        "status": "passed",
+        "duration": 178.29437500000003,
+        "captured_frames": 10,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Lift/result.json",
+          "sha256": "0dab8b246268f73f3584b1e1881140966e827982e81eb0b675dd15a2a46ce23e",
+          "bytes": 55645
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Lift/sheet.png",
+          "sha256": "b4f3fedcb83f148c20ec4168aa75950308445b4c7355b883b417df91290f8124",
+          "bytes": 178428
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "Debate",
+        "status": "passed",
+        "duration": 246.55170833333335,
+        "captured_frames": 19,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Debate/result.json",
+          "sha256": "58611a7c88bcf3ddc8b65a39bacdb7aa6e585055165fccc00d6eff747d8ba5eb",
+          "bytes": 95920
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Debate/sheet.png",
+          "sha256": "b77e58c631564ae385a6c37ac78f71b9bb720f7c7e9a5894ae05cfafe577fd55",
+          "bytes": 292675
+        },
+        "visual_review": "Current narration-beat frames inspected; readable, no observed overlap or cropping"
+      },
+      {
+        "scene": "Options",
+        "status": "passed",
+        "duration": 193.6276666666667,
+        "captured_frames": 14,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Options/result.json",
+          "sha256": "18c29181895232543c298021be783176dc82db4947839b4415fca3ed64e88fc8",
+          "bytes": 71126
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Options/sheet.png",
+          "sha256": "7497d2a0095673cccd1305a9ee9d610a0a166e1b97066adc4e1a208ae6573856",
+          "bytes": 169742
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "PDV",
+        "status": "passed",
+        "duration": 233.30170833333338,
+        "captured_frames": 14,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/PDV/result.json",
+          "sha256": "9db206e15f7a8c7d6b9816af2cfc1025922ea9e9fe38ed1296446e6207eff203",
+          "bytes": 82389
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/PDV/sheet.png",
+          "sha256": "517a70a767bb759d2d1f5792457a5de93ed9d3e147aa2a532861c39cadbd64f6",
+          "bytes": 264098
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "SPX",
+        "status": "passed",
+        "duration": 256.70179166666674,
+        "captured_frames": 12,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/SPX/result.json",
+          "sha256": "0d55a03a5bff3b4a227152d320d4f2d9b81c31a30885a40ed89a5f8d340944c2",
+          "bytes": 81770
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/SPX/sheet.png",
+          "sha256": "3ab6ee0603db23c37e2d0d201df6b39e16141ea5c5b111cceaa945c477bac12a",
+          "bytes": 192723
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "Joint",
+        "status": "passed",
+        "duration": 253.69987500000005,
+        "captured_frames": 17,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Joint/result.json",
+          "sha256": "92a7c02dded2814b5a877dc49001ea51583b6646853d913136165ee48685090f",
+          "bytes": 93110
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Joint/sheet.png",
+          "sha256": "9e9a307724a843b822a955c0201700101935461ed2ba3db36c90f2f02bf35985",
+          "bytes": 275197
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "Signature",
+        "status": "passed",
+        "duration": 192.55358333333336,
+        "captured_frames": 12,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Signature/result.json",
+          "sha256": "7a75f333500d99292d6fb62418b57200c9ca049a9ba1b95bdf9d4f72f3eb376d",
+          "bytes": 70249
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Signature/sheet.png",
+          "sha256": "af4dffc9faf43a1b34363eb4cb0c0f81cef99d1fb93f3a8111f82b149b6e84e9",
+          "bytes": 203210
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "House",
+        "status": "passed",
+        "duration": 194.10537500000007,
+        "captured_frames": 13,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/House/result.json",
+          "sha256": "5fe3d19deea7d96926b663b2513171001813689c21a22dc3f854900c9338286d",
+          "bytes": 71091
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/House/sheet.png",
+          "sha256": "1c84ca30e9be97cac37a2d4deafd02cdfd0f355e6a11f21e1f9a63b1f861d0c7",
+          "bytes": 195243
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "duration": 139.37033333333335,
+        "captured_frames": 9,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Frontier/result.json",
+          "sha256": "940889a1a5ecc63d5917f2b8f42dd389b5337fe9b3d513aba432ea98e267662a",
+          "bytes": 57991
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Frontier/sheet.png",
+          "sha256": "6f8acd75a4013e92b81fed7c4e6ec5ddb1a772e8c2a219c2e8fc6ee674a0388f",
+          "bytes": 122836
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "duration": 317.15729166666665,
+        "captured_frames": 22,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Research/result.json",
+          "sha256": "6e97a8a096bb646b22c00b5feba120230466a9a5b23e9236aa0470ca94b666ce",
+          "bytes": 110456
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Research/sheet.png",
+          "sha256": "f2fcbcc51dac3ef8cd6f4e53e02ccdd56b888cf9e7e20b8f95db2101f087ea9c",
+          "bytes": 259356
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "duration": 199.5702916666667,
+        "captured_frames": 10,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Outro/result.json",
+          "sha256": "d01d23747189d062b4e85d8e7e5622d6c9d946e0192e4481f4bd51259f7c5290",
+          "bytes": 83298
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Outro/sheet.png",
+          "sha256": "a8f059071ad6ea9d5b7ce9b69778e76aad9eff48bfe852e1882ea0e580594fda",
+          "bytes": 310894
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      }
+    ],
+    "zh_frames": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "duration": 197.53245833333338,
+        "captured_frames": 11,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/zh/Hook/result.json",
+          "sha256": "3881d2df1c3c55bafb8bc8d4543e49660fe512894a4f9aa7057a250419144050",
+          "bytes": 84178
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/zh/Hook/sheet.png",
+          "sha256": "d7f2580b2083bc500988452fac33652f9854e5c0109bfcf822a4b9ea5ce18bcb",
+          "bytes": 182615
+        },
+        "visual_review": "Current narration-beat frames inspected; readable, no observed overlap or cropping"
+      },
+      {
+        "scene": "Fact",
+        "status": "passed",
+        "duration": 159.72204166666668,
+        "captured_frames": 11,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/zh/Fact/result.json",
+          "sha256": "3ba5ad465f88c25592a7fc6fac4afa7957e47612c8dd3d6b7f0cce53243d1fed",
+          "bytes": 69060
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/zh/Fact/sheet.png",
+          "sha256": "2b995a3c36e954e3062f4411fc5a8cde4183e561eae0c82f2c0eadcbf90f2695",
+          "bytes": 204810
+        },
+        "visual_review": "Current narration-beat frames inspected; readable, no observed overlap or cropping"
+      },
+      {
+        "scene": "SkewMath",
+        "status": "passed",
+        "duration": 242.04054166666674,
+        "captured_frames": 16,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/zh/SkewMath/result.json",
+          "sha256": "3e68e75cc3c0f0a569fdb3e7b579a7036753d4bdc9b96c5127ee3608dd6f5257",
+          "bytes": 113940
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/zh/SkewMath/sheet.png",
+          "sha256": "f2d124f48309ad35dc226f93f9d0df6e612597dc13186be51146bb84827a31c9",
+          "bytes": 266198
+        },
+        "visual_review": "Current narration-beat frames inspected; readable, no observed overlap or cropping"
+      },
+      {
+        "scene": "Rough",
+        "status": "passed",
+        "duration": 189.84058333333337,
+        "captured_frames": 14,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/zh/Rough/result.json",
+          "sha256": "192062662c15dc8b6d001928a1e007b95cce6a6768c5f7664850b0facaed0c3c",
+          "bytes": 90403
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/zh/Rough/sheet.png",
+          "sha256": "217859740d0614edb2ba95afa30f491fb634fa4a1bfe96d9030a4561e0a028ed",
+          "bytes": 203081
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "Forecast",
+        "status": "passed",
+        "duration": 199.83825000000002,
+        "captured_frames": 13,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/zh/Forecast/result.json",
+          "sha256": "de4e17ad6f131506d7874c8004f07a76950341fc19b07231451394345bf7026d",
+          "bytes": 95911
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/zh/Forecast/sheet.png",
+          "sha256": "be135c5f7c011b674c4831f158f44ff345b133c3f5734a4ccb19f913f2706257",
+          "bytes": 193569
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "RBergomi",
+        "status": "passed",
+        "duration": 229.86966666666672,
+        "captured_frames": 13,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/zh/RBergomi/result.json",
+          "sha256": "14e4deea068c6b32e4441eff331c7a33fd241ad638d2d69990dde2e42fa25295",
+          "bytes": 95753
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/zh/RBergomi/sheet.png",
+          "sha256": "696a763ced57f8ee8c014e0d2d3cf4a5fc42f45e3b125bce7f0412406b74b4eb",
+          "bytes": 241426
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "Hybrid",
+        "status": "passed",
+        "duration": 228.5767083333334,
+        "captured_frames": 14,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/zh/Hybrid/result.json",
+          "sha256": "4d712556ca157ba456f946472984bc94caa4432ad0c1d1739e19d7e852d5da63",
+          "bytes": 101803
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/zh/Hybrid/sheet.png",
+          "sha256": "fd7d3b7479042bb67fab7600e24d23908ab6ee16c981a67f32aea8fc8ef44e9c",
+          "bytes": 249475
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "RHeston",
+        "status": "passed",
+        "duration": 221.15804166666672,
+        "captured_frames": 15,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/zh/RHeston/result.json",
+          "sha256": "11719b120bf9945ab58fc4463d5a0f3bddf88d73c105cfe3517abdd30f43997b",
+          "bytes": 101938
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/zh/RHeston/sheet.png",
+          "sha256": "435bdf629419f71abd0750fdf9a8d0982ebed0bdb07b583c5c4e988dabb6d32e",
+          "bytes": 243303
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "Adams",
+        "status": "passed",
+        "duration": 205.47895833333334,
+        "captured_frames": 13,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/zh/Adams/result.json",
+          "sha256": "171c5a17d8692ddee7aece377712e52931ab89dc8dfb115e548637a22904d144",
+          "bytes": 89157
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/zh/Adams/sheet.png",
+          "sha256": "f7f5254c758e2bdd87f13dffb6dd2dd0af0509d490dc29c3b5a326d36906ba89",
+          "bytes": 288118
+        },
+        "visual_review": "Current narration-beat frames inspected; readable, no observed overlap or cropping"
+      },
+      {
+        "scene": "Hawkes",
+        "status": "passed",
+        "duration": 231.42545833333338,
+        "captured_frames": 14,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/zh/Hawkes/result.json",
+          "sha256": "0073f4d1d3989abbe0ab216d8cbea5a8544bd317f34eb99086a3ad76185347ea",
+          "bytes": 98880
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/zh/Hawkes/sheet.png",
+          "sha256": "8d34f50c984f55a0f59dc1ae9431bb8eea0efb09ef3ee35b41a018bea45a5e7f",
+          "bytes": 223625
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "Lift",
+        "status": "passed",
+        "duration": 178.05337500000002,
+        "captured_frames": 10,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/zh/Lift/result.json",
+          "sha256": "e669346e3bd56b74dc8a980bb52486f459b5359823d52b3f2e5e2aea3391a5b0",
+          "bytes": 72192
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/zh/Lift/sheet.png",
+          "sha256": "78546af758ad05ae1118c5f4f66694d52edb257aaa066e40911058b59298eba1",
+          "bytes": 176224
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "Debate",
+        "status": "passed",
+        "duration": 268.6708333333333,
+        "captured_frames": 20,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/zh/Debate/result.json",
+          "sha256": "25cf3dc435e850b4caf2bdb86041008cfdffaadb5cb88c750e790c553a7d8413",
+          "bytes": 127938
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/zh/Debate/sheet.png",
+          "sha256": "a552ef5bdb49220440ca08e7db77f1c9e8505f7bc7e8867e963449d0f4503fbe",
+          "bytes": 273240
+        },
+        "visual_review": "Current narration-beat frames inspected; readable, no observed overlap or cropping"
+      },
+      {
+        "scene": "Options",
+        "status": "passed",
+        "duration": 204.93712500000004,
+        "captured_frames": 14,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/zh/Options/result.json",
+          "sha256": "bffe70f73933d0d3f04f0472efd471d8435e6bdb061edcaa120da61e60603725",
+          "bytes": 93539
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/zh/Options/sheet.png",
+          "sha256": "b4bf01e51467ea1a88721d338710845a3465858e3ca484f0dafe6b24e314ab27",
+          "bytes": 167370
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "PDV",
+        "status": "passed",
+        "duration": 236.04870833333337,
+        "captured_frames": 14,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/zh/PDV/result.json",
+          "sha256": "5eaef910803294d4e47b8bca7f16e8cd9ed3e765d34272ac133bc7d2a81f94b5",
+          "bytes": 105185
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/zh/PDV/sheet.png",
+          "sha256": "ac4ab1226916c0bc119859d158b48f4dd35169a722a8b88a0a221824371cad23",
+          "bytes": 257011
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "SPX",
+        "status": "passed",
+        "duration": 256.37316666666675,
+        "captured_frames": 12,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/zh/SPX/result.json",
+          "sha256": "f03407248d5666151dda74452b2baa9ace30994f751f468aac688b8b1b100e34",
+          "bytes": 107528
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/zh/SPX/sheet.png",
+          "sha256": "dd303221ba5d3671bba88b490a52899f70e4e843b0eb02b41ee701ced0089c98",
+          "bytes": 188656
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "Joint",
+        "status": "passed",
+        "duration": 263.16499999999996,
+        "captured_frames": 17,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/zh/Joint/result.json",
+          "sha256": "26b7e67a38308a52e243e498f5b0a32b3e64d9578f674e26e221cdd12bb45fca",
+          "bytes": 120414
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/zh/Joint/sheet.png",
+          "sha256": "89968171e77ad164f50a3c9dc7fb59f59e06555469c26d249c93198b4c0fa116",
+          "bytes": 270518
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "Signature",
+        "status": "passed",
+        "duration": 206.48941666666667,
+        "captured_frames": 12,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/zh/Signature/result.json",
+          "sha256": "3d1f73eab6d142b23e4a41268aa6e8e655ea49b090a81ed894006f9c9ce05777",
+          "bytes": 92729
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/zh/Signature/sheet.png",
+          "sha256": "7c6cfa107915dc0bee605448e516cccca06e8a0471b1cce3a9ccbd6856b122aa",
+          "bytes": 198000
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "House",
+        "status": "passed",
+        "duration": 214.8987083333334,
+        "captured_frames": 13,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/zh/House/result.json",
+          "sha256": "5e51ae4cf197fc9d7b28d759a70b15b26d7e792250affcccf265fc18e3f36d57",
+          "bytes": 94840
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/zh/House/sheet.png",
+          "sha256": "c0023ce3c784272692d9de774995f2b646c29f8981147c102a853db09e7b1844",
+          "bytes": 184996
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "duration": 155.76158333333333,
+        "captured_frames": 9,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/zh/Frontier/result.json",
+          "sha256": "c09a3236c21bd623a2e2e2b5364c3d27050104eef771bd4e2c9821f57c03327d",
+          "bytes": 75243
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/zh/Frontier/sheet.png",
+          "sha256": "cf97cc4537bf34da0083b2dc29c84f8de42af053325393e15f4357795cdc71c1",
+          "bytes": 119783
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "duration": 311.9126666666666,
+        "captured_frames": 22,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/zh/Research/result.json",
+          "sha256": "d93a4551f0dd9aa7031406e78da8afd4c3a4b8d6dd6c0769bbde80386ada9327",
+          "bytes": 137917
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/zh/Research/sheet.png",
+          "sha256": "8a010c622dbdc49db34d14363fe239340c9b4bd4b110ed053d7adc0dcb8e2f23",
+          "bytes": 247524
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "duration": 223.65333333333334,
+        "captured_frames": 10,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/zh/Outro/result.json",
+          "sha256": "314cc2a081b9e492c0341b4c59d17b12fd82023524e170e0124aa535b60860a8",
+          "bytes": 108314
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/zh/Outro/sheet.png",
+          "sha256": "d01e83638350002c0c4403e43b2d0650f67f48dff6a6ad49b39c1d117c83db4f",
+          "bytes": 311154
+        },
+        "visual_review": "Fresh actual current-source render is pixel-identical to the actually inspected initial sheet; visual judgment retained."
+      }
+    ],
+    "en_motion": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "duration": 175.59999999999874,
+        "captured_frames": 11,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Hook_motion/result.json",
+          "sha256": "d8a366c4143ac49e058dc2f926e8ff6dd093e0112a8f09bbf13a4d6c1452af89",
+          "bytes": 62076
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Hook_motion/motion_sheet.png",
+          "sha256": "b5bb9b13be441eaac9b52aeb4f1df75ceba2dcf3812b6c67ed83cea1736802ec",
+          "bytes": 788149
+        },
+        "visual_review": "Forty sampled motion frames inspected; readable settled states, no persistent overlap or cropping observed",
+        "movie": {
+          "path": "renders/qa/series/quant14/en/Hook_motion/media/videos/480p15/Hook.mp4",
+          "sha256": "b7cf9bb35cfd76f23e2185be3ccbe47b387457a7dd44b64b2fb0095f8827c79a",
+          "bytes": 2987748
+        }
+      },
+      {
+        "scene": "Fact",
+        "status": "passed",
+        "duration": 160.59999999999994,
+        "captured_frames": 12,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Fact_motion/result.json",
+          "sha256": "f21a8a82be86eb3a47c6dbfdcb3b411af182c36951bf5cbecc1bcc872fb9ebe4",
+          "bytes": 56205
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Fact_motion/motion_sheet.png",
+          "sha256": "cf48a5d0342ee0761a061cee2d8c001a7435075a4f7d826d4eb573db7f79f489",
+          "bytes": 975383
+        },
+        "visual_review": "Forty sampled motion frames inspected; readable settled states, no persistent overlap or cropping observed",
+        "movie": {
+          "path": "renders/qa/series/quant14/en/Fact_motion/media/videos/480p15/Fact.mp4",
+          "sha256": "86cd24e538eb1cac97ce373a3c4c954a889ca2fdbd848a73ab7a7417033313df",
+          "bytes": 1953374
+        }
+      },
+      {
+        "scene": "SkewMath",
+        "status": "passed",
+        "duration": 231.99999999999923,
+        "captured_frames": 16,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/SkewMath_motion/result.json",
+          "sha256": "475e2a9bed41c0a4c62f30f8314102ac179b90b0780c16720dee2fd031286785",
+          "bytes": 88643
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/SkewMath_motion/motion_sheet.png",
+          "sha256": "f649ff797794c3ae3c1db971c314d32fce96230c1695a084596d5c2e9f821aa3",
+          "bytes": 748808
+        },
+        "visual_review": "Forty sampled motion frames inspected; readable settled states, no persistent overlap or cropping observed",
+        "movie": {
+          "path": "renders/qa/series/quant14/en/SkewMath_motion/media/videos/480p15/SkewMath.mp4",
+          "sha256": "6912cc4c7f6daa5638fab34fadfcdc5e619195e611aefe98ae418fa78b984ebf",
+          "bytes": 1911882
+        }
+      },
+      {
+        "scene": "Rough",
+        "status": "passed",
+        "duration": 183.86666666666568,
+        "captured_frames": 14,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Rough_motion/result.json",
+          "sha256": "4d4f20a192aa69391f7bea07d625290f0cd0403ad432b2e611910313675bed5e",
+          "bytes": 71087
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Rough_motion/motion_sheet.png",
+          "sha256": "7ea296f75a0e97d008a2cb2ea074176405ee47f8b5223a0cb7ff1b4cc4f1aac5",
+          "bytes": 630605
+        },
+        "visual_review": "Fresh actual current-source forty-frame motion sheet is pixel-identical to the previously actually inspected pass; visual judgment retained.",
+        "movie": {
+          "path": "renders/qa/series/quant14/en/Rough_motion/media/videos/480p15/Rough.mp4",
+          "sha256": "dfab332b01b52c423e19fb190b1e1c93fe84addea3defbabec3a8db868ace34a",
+          "bytes": 1502924
+        }
+      },
+      {
+        "scene": "Forecast",
+        "status": "passed",
+        "duration": 194.46666666666582,
+        "captured_frames": 13,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Forecast_motion/result.json",
+          "sha256": "0458b7447ba99cadca87c9aa4ed3dd0b88ee1b0e6e8d001dedf2d1b68b16e519",
+          "bytes": 76947
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Forecast_motion/motion_sheet.png",
+          "sha256": "b73d5c9f6d6f6b920a2123eeb44a832673e005a1ec1e590be38e590db9e5b36d",
+          "bytes": 698411
+        },
+        "visual_review": "Fresh actual current-source forty-frame motion sheet is pixel-identical to the previously actually inspected pass; visual judgment retained.",
+        "movie": {
+          "path": "renders/qa/series/quant14/en/Forecast_motion/media/videos/480p15/Forecast.mp4",
+          "sha256": "53f7f64c95ac1971c138cb7b657db98e0dffcde63430d6bc9f166866e81ee490",
+          "bytes": 1459198
+        }
+      },
+      {
+        "scene": "RBergomi",
+        "status": "passed",
+        "duration": 219.93333333333038,
+        "captured_frames": 13,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/RBergomi_motion/result.json",
+          "sha256": "e28fbd3056db44ffe3eeed84e1f066e295bceb543e3e5256616697c1a5f16225",
+          "bytes": 72074
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/RBergomi_motion/motion_sheet.png",
+          "sha256": "742638ece5b40c01b60d8099264082057016fc9e34e2bd0bb7bf3df5fa518103",
+          "bytes": 703312
+        },
+        "visual_review": "Fresh actual current-source forty-frame motion sheet is pixel-identical to the previously actually inspected pass; visual judgment retained.",
+        "movie": {
+          "path": "renders/qa/series/quant14/en/RBergomi_motion/media/videos/480p15/RBergomi.mp4",
+          "sha256": "2cb5e79300e954c1dc35038acf88d6004f123d789980b9825e0cf6f4298385d7",
+          "bytes": 1665331
+        }
+      },
+      {
+        "scene": "Hybrid",
+        "status": "passed",
+        "duration": 226.9333333333319,
+        "captured_frames": 14,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Hybrid_motion/result.json",
+          "sha256": "2e5aefafb8197f3c423f1d0f890b9b6ccadf3dcf952e69ca7beb21a186ddd272",
+          "bytes": 80034
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Hybrid_motion/motion_sheet.png",
+          "sha256": "37576c374fb9072a0567e02bf623815e9b53db5cf983a388fc0d890c044b0ab2",
+          "bytes": 812547
+        },
+        "visual_review": "Fresh actual current-source forty-frame motion sheet is pixel-identical to the previously actually inspected pass; visual judgment retained.",
+        "movie": {
+          "path": "renders/qa/series/quant14/en/Hybrid_motion/media/videos/480p15/Hybrid.mp4",
+          "sha256": "aea9b3d6b0b98a70da628ed75dff43b564af1de031837fa63cbaf55f45cfc920",
+          "bytes": 1784625
+        }
+      },
+      {
+        "scene": "RHeston",
+        "status": "passed",
+        "duration": 204.4666666666656,
+        "captured_frames": 15,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/RHeston_motion/result.json",
+          "sha256": "f24a6006033c0c4ccc9ecd2ac820fdf2dcf0210378f8376acb703758e149f24b",
+          "bytes": 77554
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/RHeston_motion/motion_sheet.png",
+          "sha256": "07e0dc4f810fa8389cdff3bc12ed93729aed5fc7703e560fccaf5c670d2eda89",
+          "bytes": 713009
+        },
+        "visual_review": "Fresh actual current-source forty-frame motion sheet is pixel-identical to the previously actually inspected pass; visual judgment retained.",
+        "movie": {
+          "path": "renders/qa/series/quant14/en/RHeston_motion/media/videos/480p15/RHeston.mp4",
+          "sha256": "9082217b35a8f175d8b3c905a85ad8583d72a5beaab0c45fe88e70e51a20b6de",
+          "bytes": 1703281
+        }
+      },
+      {
+        "scene": "Adams",
+        "status": "passed",
+        "duration": 209.06666666666328,
+        "captured_frames": 13,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Adams_motion/result.json",
+          "sha256": "0e30883f747eefb6f2ba0f938b1fbf8b1a83df36fd0fee56f61d7e27d5364e8e",
+          "bytes": 70791
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Adams_motion/motion_sheet.png",
+          "sha256": "d111daa019bccdb13cd2ae47f572afb47c72a9e8237e65dc70a8a9e02446d3ca",
+          "bytes": 797667
+        },
+        "visual_review": "Forty sampled motion frames inspected; readable settled states, no persistent overlap or cropping observed",
+        "movie": {
+          "path": "renders/qa/series/quant14/en/Adams_motion/media/videos/480p15/Adams.mp4",
+          "sha256": "b664b21ce3e9c61da750dde829c168f28f5480f1d97f6e2b8cd39822caeb6e98",
+          "bytes": 2172650
+        }
+      },
+      {
+        "scene": "Hawkes",
+        "status": "passed",
+        "duration": 222.199999999999,
+        "captured_frames": 14,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Hawkes_motion/result.json",
+          "sha256": "a0fd5c7eba35194535cf980914dd9e6d3e9ea84e95b83a46b33b58fe4455465c",
+          "bytes": 76209
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Hawkes_motion/motion_sheet.png",
+          "sha256": "7bd3912e5f30782c729375a448cea218b609e2538e37bbe39d721c0076f10e00",
+          "bytes": 616893
+        },
+        "visual_review": "Fresh actual current-source forty-frame motion sheet is pixel-identical to the previously actually inspected pass; visual judgment retained.",
+        "movie": {
+          "path": "renders/qa/series/quant14/en/Hawkes_motion/media/videos/480p15/Hawkes.mp4",
+          "sha256": "06d6c90c800d757610fcd2c9ddf5a1b7e5f9a0d8d38abff83a025ce6edf253a6",
+          "bytes": 1884723
+        }
+      },
+      {
+        "scene": "Lift",
+        "status": "passed",
+        "duration": 177.99999999999883,
+        "captured_frames": 10,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Lift_motion/result.json",
+          "sha256": "f855d1a9b1acf6f2fb62fa7d4b1a36ac9cd4850d0322b88f5ad208d83a8b8edf",
+          "bytes": 55897
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Lift_motion/motion_sheet.png",
+          "sha256": "fd343e55c31a46e89ec87d9ebbe3b7c1bcad8ff9efd0c9723524f6a15d324adc",
+          "bytes": 649070
+        },
+        "visual_review": "Fresh actual current-source forty-frame motion sheet is pixel-identical to the previously actually inspected pass; visual judgment retained.",
+        "movie": {
+          "path": "renders/qa/series/quant14/en/Lift_motion/media/videos/480p15/Lift.mp4",
+          "sha256": "27cb4f14629f6cfefa0b7efe4efd9f69241bf1df3b85474fce84a4afa3a9fc73",
+          "bytes": 1473231
+        }
+      },
+      {
+        "scene": "Debate",
+        "status": "passed",
+        "duration": 246.2666666666651,
+        "captured_frames": 20,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Debate_motion/result.json",
+          "sha256": "7cbee6035a66c2af964966c5995854600990152b9044e3aba2ebcc4106e4f725",
+          "bytes": 98711
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Debate_motion/motion_sheet.png",
+          "sha256": "d78c9186119e1e90ee7e961d32f77fb283a48bb3c9a839ecae5c62cd4571d2dc",
+          "bytes": 885028
+        },
+        "visual_review": "Forty sampled motion frames inspected; readable settled states, no persistent overlap or cropping observed",
+        "movie": {
+          "path": "renders/qa/series/quant14/en/Debate_motion/media/videos/480p15/Debate.mp4",
+          "sha256": "a2feb7d6fe3bc5b04eb0ebfc2caec4120a07a541e5e71cec4f4897be16afe03c",
+          "bytes": 2049603
+        }
+      },
+      {
+        "scene": "Options",
+        "status": "passed",
+        "duration": 193.399999999999,
+        "captured_frames": 14,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Options_motion/result.json",
+          "sha256": "5437811c4d9e4f4f126b3515afad857f1ab4782afec43707f5bc5f3a1a5ea370",
+          "bytes": 71466
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Options_motion/motion_sheet.png",
+          "sha256": "c927059e20dbd27bde5eefeb225df4a4becf80ad55030990c5a0781bb9875897",
+          "bytes": 685224
+        },
+        "visual_review": "Fresh actual current-source forty-frame motion sheet is pixel-identical to the previously actually inspected pass; visual judgment retained.",
+        "movie": {
+          "path": "renders/qa/series/quant14/en/Options_motion/media/videos/480p15/Options.mp4",
+          "sha256": "3566d85e7eeab643f263f0bdfb9ba7143eefe15ea053aa28938e605236127334",
+          "bytes": 1526395
+        }
+      },
+      {
+        "scene": "PDV",
+        "status": "passed",
+        "duration": 232.93333333333155,
+        "captured_frames": 14,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/PDV_motion/result.json",
+          "sha256": "702951d87bf861159c320b9c035639a3d1954686316921408511f7462502834d",
+          "bytes": 82654
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/PDV_motion/motion_sheet.png",
+          "sha256": "34c1032dd9a6208fd1df0115a3843648421ed4007df27d589df9af97a5330e5f",
+          "bytes": 769069
+        },
+        "visual_review": "Fresh actual current-source forty-frame motion sheet is pixel-identical to the previously actually inspected pass; visual judgment retained.",
+        "movie": {
+          "path": "renders/qa/series/quant14/en/PDV_motion/media/videos/480p15/PDV.mp4",
+          "sha256": "dae35eacc79af35cba8f06521391c3dc9bcab143be5e9d3118bb912c6c1a9eaa",
+          "bytes": 2046757
+        }
+      },
+      {
+        "scene": "SPX",
+        "status": "passed",
+        "duration": 256.4666666666667,
+        "captured_frames": 12,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/SPX_motion/result.json",
+          "sha256": "ff42574c584a90952da297dd366d5e18e81ec7a2ca7bb291f75e86969ca27552",
+          "bytes": 82021
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/SPX_motion/motion_sheet.png",
+          "sha256": "b57c96f9d1899f0afc77a6927ec5ddac1821c92042a6293014ed465b87d89ecb",
+          "bytes": 618114
+        },
+        "visual_review": "Fresh actual current-source forty-frame motion sheet is pixel-identical to the previously actually inspected pass; visual judgment retained.",
+        "movie": {
+          "path": "renders/qa/series/quant14/en/SPX_motion/media/videos/480p15/SPX.mp4",
+          "sha256": "e02368d986ebdd59ad7c06ba1d10e67539b983a640e95e675dde1bdab60432e5",
+          "bytes": 1630644
+        }
+      },
+      {
+        "scene": "Joint",
+        "status": "passed",
+        "duration": 253.33333333333036,
+        "captured_frames": 17,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Joint_motion/result.json",
+          "sha256": "a41ef6149efbae23aa8326ce82c14c663c163871dfef0181a720f2c451591476",
+          "bytes": 93260
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Joint_motion/motion_sheet.png",
+          "sha256": "22edc68973523f6e506d7375bccd76dccd5903dcd86d23f2867bac1e80567d40",
+          "bytes": 696251
+        },
+        "visual_review": "Fresh actual current-source forty-frame motion sheet is pixel-identical to the previously actually inspected pass; visual judgment retained.",
+        "movie": {
+          "path": "renders/qa/series/quant14/en/Joint_motion/media/videos/480p15/Joint.mp4",
+          "sha256": "9cd57aa63b9b0921ac2f904b570c9b369cfb72e1faf21db146fe162c7d1622ec",
+          "bytes": 1757393
+        }
+      },
+      {
+        "scene": "Signature",
+        "status": "passed",
+        "duration": 192.19999999999894,
+        "captured_frames": 12,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Signature_motion/result.json",
+          "sha256": "637d836e121039ff4749199edadd673740ee9d5b53cdb7413c1f2d292d88b6c2",
+          "bytes": 70477
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Signature_motion/motion_sheet.png",
+          "sha256": "04ad99413cf6ed39cda3d2b1834ab0b30806cb80e0f2db31db0c3b09aacf9112",
+          "bytes": 653090
+        },
+        "visual_review": "Fresh actual current-source forty-frame motion sheet is pixel-identical to the previously actually inspected pass; visual judgment retained.",
+        "movie": {
+          "path": "renders/qa/series/quant14/en/Signature_motion/media/videos/480p15/Signature.mp4",
+          "sha256": "6f0af12a40ed85e51962643ac2317ac27dace51d0b33ae3751a0ce7807f236c6",
+          "bytes": 1454897
+        }
+      },
+      {
+        "scene": "House",
+        "status": "passed",
+        "duration": 193.86666666666574,
+        "captured_frames": 13,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/House_motion/result.json",
+          "sha256": "868cc7497c9c05b0e5adcc4a0e4f6a13995fc435c722f8db5f0cd627065a443a",
+          "bytes": 71357
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/House_motion/motion_sheet.png",
+          "sha256": "2e50dc2b1e64dcc1da29fff4ec819bf6d3718b842dc8add1222b5587ac134635",
+          "bytes": 623835
+        },
+        "visual_review": "Fresh actual current-source forty-frame motion sheet is pixel-identical to the previously actually inspected pass; visual judgment retained.",
+        "movie": {
+          "path": "renders/qa/series/quant14/en/House_motion/media/videos/480p15/House.mp4",
+          "sha256": "1204eba723cc859016bb3eac967819e9c6dda390fb69aeadf4fdbb185d234dd9",
+          "bytes": 1325296
+        }
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "duration": 139.13333333333313,
+        "captured_frames": 9,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Frontier_motion/result.json",
+          "sha256": "f50423e31a24ca099228ae74870d59ca1463141f31f02310507e86b9e32bfcd0",
+          "bytes": 58273
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Frontier_motion/motion_sheet.png",
+          "sha256": "02977034c20d4e59497ec5d9ed4cc3e7bdeef7c9afae3bfcdfe45cff57d2b2bb",
+          "bytes": 474444
+        },
+        "visual_review": "Fresh actual current-source forty-frame motion sheet is pixel-identical to the previously actually inspected pass; visual judgment retained.",
+        "movie": {
+          "path": "renders/qa/series/quant14/en/Frontier_motion/media/videos/480p15/Frontier.mp4",
+          "sha256": "32902da7d5a835bd236da33af9f0a9f04b82a50d4d080e75393d3f6318cec373",
+          "bytes": 916262
+        }
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "duration": 316.66666666666526,
+        "captured_frames": 22,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Research_motion/result.json",
+          "sha256": "928f3fb1be01e8a072f32588094cc55a55d07a98967fd4410bd3dd4f1743ff89",
+          "bytes": 110779
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Research_motion/motion_sheet.png",
+          "sha256": "7917576cfbaa749f4da802db116df4c347061553c70b22cd9f6e2a14560662f7",
+          "bytes": 499638
+        },
+        "visual_review": "Fresh actual current-source forty-frame motion sheet is pixel-identical to the previously actually inspected pass; visual judgment retained.",
+        "movie": {
+          "path": "renders/qa/series/quant14/en/Research_motion/media/videos/480p15/Research.mp4",
+          "sha256": "a0d4576890694f10e68be66c1083e8d00f29aa38b96855ffbd69fad61a023833",
+          "bytes": 1946776
+        }
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "duration": 199.26666666666574,
+        "captured_frames": 10,
+        "warnings": [],
+        "receipt": {
+          "path": "renders/qa/series/quant14/en/Outro_motion/result.json",
+          "sha256": "4d76076b572012c1e87e426fc5d5616a5a4a179410fbdf3a05f0993f9f24fc50",
+          "bytes": 83559
+        },
+        "sheet": {
+          "path": "renders/qa/series/quant14/en/Outro_motion/motion_sheet.png",
+          "sha256": "ac8871ef23deb39f8718b0c35bba3846885e4ff0c7e949440c6413a72ae8bf9d",
+          "bytes": 1128827
+        },
+        "visual_review": "Fresh actual current-source forty-frame motion sheet is pixel-identical to the previously actually inspected pass; visual judgment retained.",
+        "movie": {
+          "path": "renders/qa/series/quant14/en/Outro_motion/media/videos/480p15/Outro.mp4",
+          "sha256": "9bb83ad816c15a5e34f828afe0c247064e5d6dd73de50e83132bcd30310e8ca4",
+          "bytes": 2063122
+        }
+      }
+    ]
+  },
+  "audio": [
+    {
+      "lang": "en",
+      "scene": "Hook",
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 5,
+      "source_current": true,
+      "issues": [],
+      "report": {
+        "path": "renders/qa/series/quant14/en/Hook/audio_result.json",
+        "sha256": "8cd968334a8da3bdc0a39d965cf15007afee2c0267642dbfd6895da29c1d57b7",
+        "bytes": 6844
+      },
+      "input_record": "renders/qa/series/quant14/en/Hook/result.json",
+      "input_sha256": "261c9d508cf2c2e079ec6b6528ffb8db53a2d5d7e70c46a909cf3e68bd80481d"
+    },
+    {
+      "lang": "en",
+      "scene": "SkewMath",
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 5,
+      "source_current": true,
+      "issues": [],
+      "report": {
+        "path": "renders/qa/series/quant14/en/SkewMath/audio_result.json",
+        "sha256": "64c61b68218273041d7c958ac9879f5971531e73ab22a6f4677eec2f13988b95",
+        "bytes": 8871
+      },
+      "input_record": "renders/qa/series/quant14/en/SkewMath/result.json",
+      "input_sha256": "94be36b96ddffffe755db9aa0c32f5410392c27b9d7599b3b11e06865f46cd25"
+    },
+    {
+      "lang": "en",
+      "scene": "RBergomi",
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 6,
+      "source_current": true,
+      "issues": [],
+      "report": {
+        "path": "renders/qa/series/quant14/en/RBergomi/audio_result.json",
+        "sha256": "1e7d1a3fef1c555a85e18f48ad2fffac6308269d05173dab3840ea9a15109ce8",
+        "bytes": 8416
+      },
+      "input_record": "renders/qa/series/quant14/en/RBergomi/result.json",
+      "input_sha256": "0ed3475ff61320bef99f4b7e31c63b1fd5759c454a17b7c624c700ca77a50b86"
+    },
+    {
+      "lang": "en",
+      "scene": "Hybrid",
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 5,
+      "source_current": true,
+      "issues": [],
+      "report": {
+        "path": "renders/qa/series/quant14/en/Hybrid/audio_result.json",
+        "sha256": "966c3d3bc047c9b9c6c184aff5e3e25c6d22413e421207bca1d87c2cd2b15ede",
+        "bytes": 7961
+      },
+      "input_record": "renders/qa/series/quant14/en/Hybrid/result.json",
+      "input_sha256": "1099c025074d9f9729ea0277ceb9e0c996ec38a36bc1e7fbbe68425c70154557"
+    },
+    {
+      "lang": "en",
+      "scene": "Adams",
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 6,
+      "source_current": true,
+      "issues": [],
+      "report": {
+        "path": "renders/qa/series/quant14/en/Adams/audio_result.json",
+        "sha256": "83d4bef2727abb862256c6c783c901013cec78797fc3569e37059ddc4e47dad4",
+        "bytes": 7878
+      },
+      "input_record": "renders/qa/series/quant14/en/Adams/result.json",
+      "input_sha256": "1a91961979741c1b004e5557786df35e53d40c241b71e69239f99b9c31ebfde6"
+    },
+    {
+      "lang": "en",
+      "scene": "Hawkes",
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 6,
+      "source_current": true,
+      "issues": [],
+      "report": {
+        "path": "renders/qa/series/quant14/en/Hawkes/audio_result.json",
+        "sha256": "f57f2bc2b956457c98655505d5c6d2f10a9b193db8d14641e7cf60b9cb5536be",
+        "bytes": 9280
+      },
+      "input_record": "renders/qa/series/quant14/en/Hawkes/result.json",
+      "input_sha256": "4d116a1827e7b427c7075390c2dbfca3c46f6c4ab66b0962d24a35d145fdeb19"
+    },
+    {
+      "lang": "en",
+      "scene": "Joint",
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 6,
+      "source_current": true,
+      "issues": [],
+      "report": {
+        "path": "renders/qa/series/quant14/en/Joint/audio_result.json",
+        "sha256": "acc784a88a608f5b45aeb61cfc84fdafc234070b6de1f8669451cf3b75d35426",
+        "bytes": 9626
+      },
+      "input_record": "renders/qa/series/quant14/en/Joint/result.json",
+      "input_sha256": "92a7c02dded2814b5a877dc49001ea51583b6646853d913136165ee48685090f"
+    },
+    {
+      "lang": "en",
+      "scene": "Research",
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 8,
+      "source_current": true,
+      "issues": [],
+      "report": {
+        "path": "renders/qa/series/quant14/en/Research/audio_result.json",
+        "sha256": "245da975957be03b09a4ce4d301c1249fc82b782d65a89bcfa3df45f3cf32ae2",
+        "bytes": 12117
+      },
+      "input_record": "renders/qa/series/quant14/en/Research/result.json",
+      "input_sha256": "6e97a8a096bb646b22c00b5feba120230466a9a5b23e9236aa0470ca94b666ce"
+    },
+    {
+      "lang": "zh",
+      "scene": "Hook",
+      "backend": "kokoro",
+      "voice": "zf_001",
+      "lines": 5,
+      "source_current": true,
+      "issues": [],
+      "report": {
+        "path": "renders/qa/series/quant14/zh/Hook/audio_result.json",
+        "sha256": "26a91f7c03adba6e8509913089cd732e1a0bf079194cbc6a771e09cbfe1dbed0",
+        "bytes": 6783
+      },
+      "input_record": "renders/qa/series/quant14/en/Hook/result.json",
+      "input_sha256": "261c9d508cf2c2e079ec6b6528ffb8db53a2d5d7e70c46a909cf3e68bd80481d"
+    },
+    {
+      "lang": "zh",
+      "scene": "SkewMath",
+      "backend": "kokoro",
+      "voice": "zf_001",
+      "lines": 5,
+      "source_current": true,
+      "issues": [],
+      "report": {
+        "path": "renders/qa/series/quant14/zh/SkewMath/audio_result.json",
+        "sha256": "87f73359244b31469ea3ea56a9b68e2d4703065a1f46689b6fabc4d8781fb7e0",
+        "bytes": 8340
+      },
+      "input_record": "renders/qa/series/quant14/en/SkewMath/result.json",
+      "input_sha256": "94be36b96ddffffe755db9aa0c32f5410392c27b9d7599b3b11e06865f46cd25"
+    },
+    {
+      "lang": "zh",
+      "scene": "Joint",
+      "backend": "kokoro",
+      "voice": "zf_001",
+      "lines": 6,
+      "source_current": true,
+      "issues": [],
+      "report": {
+        "path": "renders/qa/series/quant14/zh/Joint/audio_result.json",
+        "sha256": "b39b9bc7ced6300d45549d240d7ab7bc5f0e31569c7d18ad81f45ba33c30c70b",
+        "bytes": 9114
+      },
+      "input_record": "renders/qa/series/quant14/en/Joint/result.json",
+      "input_sha256": "92a7c02dded2814b5a877dc49001ea51583b6646853d913136165ee48685090f"
+    },
+    {
+      "lang": "zh",
+      "scene": "Research",
+      "backend": "kokoro",
+      "voice": "zf_001",
+      "lines": 8,
+      "source_current": true,
+      "issues": [],
+      "report": {
+        "path": "renders/qa/series/quant14/zh/Research/audio_result.json",
+        "sha256": "4444153c6c63f6d0472d3f800c0156d41119f1bbf6d46e551c6b511866a58924",
+        "bytes": 11259
+      },
+      "input_record": "renders/qa/series/quant14/en/Research/result.json",
+      "input_sha256": "6e97a8a096bb646b22c00b5feba120230466a9a5b23e9236aa0470ca94b666ce"
+    }
+  ],
+  "preview": {
+    "path": "renders/quant14_polished_silent.mp4",
+    "sha256": "9250f41af9007bb49d0440b031b6806b917936b858e4215c348b03ab6ab92c72",
+    "bytes": 38027878,
+    "seconds": 4430.691104,
+    "chapters": 21,
+    "narration": "silent timing estimate"
+  }
+}
