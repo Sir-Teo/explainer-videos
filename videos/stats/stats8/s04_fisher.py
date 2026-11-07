@@ -33,6 +33,7 @@ class Fisher(VoiceoverScene):
         whys = [why(r"$n$ independent standard normals: \ the density depends only on the length $\|\mathbf z\|$")]
         cap = label(r"spherically symmetric: \ every rotation of $\mathbf z$ has the same distribution", font_size=26,
                     color=S.ACCENT).to_edge(DOWN, buff=0.8)
+        intro = label('Normal samples and spherical symmetry', font_size=36)
         with self.voiceover(
             "Gosset found the t distribution by inspired guesswork. A young Ronald Fisher proved it, by thinking "
             "geometrically. <bookmark mark='a'/> A sample of n numbers is a single point in n-dimensional space, and a "
@@ -41,7 +42,9 @@ class Fisher(VoiceoverScene):
             "vector: it depends only on the distance from the origin. <bookmark mark='c'/> So the cloud of possible "
             "samples is perfectly round, and rotating it changes nothing. That one fact gives chi-squared, t and F."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(hc, shift=UP * 0.2))
             step = ladder(self, rows, whys, keep=1, top=-0.3, x=-1.0, buff=0.8, edge=6.9)
             vo.wait_until("b")
@@ -96,19 +99,22 @@ class Fisher(VoiceoverScene):
             t = label(title, font_size=26, color=c).next_to(A, UP, buff=0.15)
             r = MathTex(rf"\operatorname{{corr}}(\bar x, s) = {d[key]['corr']:.2f}", font_size=26, color=c).next_to(A, DOWN, buff=0.15)
             panels.add(VGroup(A, pts, t, r))
-        tag = note(r"simulated: 3,000 samples each").to_corner(UR, buff=0.3)
+        tag = note(r"simulated: 1,200 of 3,000 samples shown; off-panel points omitted; correlation uses all").to_corner(UR, buff=0.3)
         foot = label(r"for normal data $\bar x$ and $s$ are independent: \ the property characterizes the normal (Geary 1936)",
                      font_size=22, color=GREY_A).to_edge(DOWN, buff=0.25)
+        intro = label('A normal-theory independence property', font_size=36)
         with self.voiceover(
             "That has a striking consequence. <bookmark mark='a'/> For normal samples, the sample mean and the sample "
-            "standard deviation are independent: here are three thousand samples of three, and the cloud of mean "
+            "standard deviation are independent: here are twelve hundred of three thousand samples of three, and the cloud of mean "
             "against standard deviation has no tilt and no curve. <bookmark mark='b'/> For exponential samples it's "
             "nothing like that: a large mean usually comes with a large spread, correlation point seven five. "
             "<bookmark mark='c'/> Independence of the mean and variance is special to the normal; in 1936 Roy Geary "
             "showed it characterizes the normal distribution. And it's what makes Student's t exact."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tag))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(panels[0]))
             vo.wait_until("b")
             self.play(FadeIn(panels[1]))
@@ -127,6 +133,7 @@ class Fisher(VoiceoverScene):
         for r in rows:
             r[1].set_color(GREY_B)
         cap = label(r"three distributions, \ one rotation", font_size=28, color=S.ACCENT).to_edge(DOWN, buff=0.6)
+        intro = label('Four consequences under IID normal sampling', font_size=36)
         with self.voiceover(
             "Read off the consequences, for a normal sample with any mean and standard deviation. "
             "<bookmark mark='a'/> The mean is normal, with variance sigma squared over n: it's one coordinate. "
@@ -136,8 +143,11 @@ class Fisher(VoiceoverScene):
             "the root of an independent chi-squared over its degrees of freedom: Student's t. <bookmark mark='e'/> "
             "Three distributions, from one rotation."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
             vo.wait_until("e")
             self.play(FadeIn(cap))
@@ -151,9 +161,10 @@ class Fisher(VoiceoverScene):
             label(r"Gosset to Fisher (1922), \ sending tables of $t$: \ ``you are probably the only man who will ever use them''",
                   font_size=24, color=GREY_A),
             label(r"Fisher's 1925 \emph{Statistical Methods for Research Workers} put $t$ in every laboratory", font_size=24),
-            label(r"and renamed Student's $z = (\bar x - \mu)/s$ as $t = \sqrt{n - 1}\,z$, \ the form we use today", font_size=24,
+            label(r"and renamed Student's $z=(\bar x-\mu)/s_n$, $s_n^2=\mathrm{SS}/n$ as $t = \sqrt{n - 1}\,z$, \ the form we use today", font_size=24,
                   color=S.ACCENT),
         ), 12.6, 0.3, [0, -1.4, 0])
+        intro = label("Student's statistic and Fisher's geometry", font_size=36)
         with self.voiceover(
             "The story behind the rotation is worth a minute. <bookmark mark='a'/> In 1912 Fisher, still a Cambridge "
             "undergraduate, wrote to Gosset with a proof of Student's distribution, done in n-dimensional geometry. "
@@ -163,7 +174,9 @@ class Fisher(VoiceoverScene):
             "of 1925 put t in every laboratory in the world, and recast Student's original statistic into the t we "
             "use today."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(hc, shift=UP * 0.2))
             for k, m_ in enumerate("bc"):
                 vo.wait_until(m_)
@@ -180,22 +193,26 @@ class Fisher(VoiceoverScene):
         ]
         rows[2][2].set_color(EXACT)
         whys = [why(r"centre the data at $\mu$; \ split it along and across the diagonal"),
-                why(r"$\theta$: \ the angle between $\mathbf x - \mu\mathbf 1$ and the diagonal"),
+                why(r"$\theta$: \ the acute angle to the diagonal line"),
                 why(r"$t$ measures an \emph{angle}: \ it cannot depend on $\sigma$, \ only on the direction")]
         foot = label(r"for a round cloud every direction is equally likely: \ so the law of $\theta$, \ and of $t$, \ is the same for every $\sigma$",
                      font_size=22, color=S.ACCENT).to_edge(DOWN, buff=0.5)
+        intro = label('The absolute t statistic as an angle', font_size=36)
         with self.voiceover(
             "Fisher's picture also explains why t doesn't depend on sigma. <bookmark mark='a'/> Centre the data at mu, "
             "and split the vector into its part along the diagonal and its part across it. <bookmark mark='b'/> The "
             "ratio of their lengths is the cotangent of the angle theta between the data vector and the diagonal, and "
-            "that ratio is the t statistic, up to the factor root n minus one. <bookmark mark='c'/> So t measures an "
+            "that ratio is the absolute t statistic, up to the factor root n minus one. <bookmark mark='c'/> So t measures an "
             "angle. Scaling the data by sigma stretches the vector but doesn't turn it. And because the normal cloud is "
             "round, every direction is equally likely, so the distribution of the angle, and of t, is the same "
             "whatever sigma is. Student's distribution is the distribution of a random direction."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.5, x=-1.2, buff=1.0, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             self.play(FadeIn(foot))
         self.clear_scene()

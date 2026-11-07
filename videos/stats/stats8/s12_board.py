@@ -28,28 +28,33 @@ class Board(VoiceoverScene):
             label(r"draw 10,000 samples from the World, \ where the truth is known", font_size=26),
             label(r"compute the interval each time; \ count how often it catches the truth", font_size=26),
             MathTex(r"\text{Monte Carlo SE} = \sqrt{0.95 \times 0.05 / 10{,}000} = 0.22\%", font_size=28, color=GREY_A),
-            VGroup(label(r"kept:", font_size=26, color=S.KEPT), label(r"within 3 MC SEs of 95\%", font_size=26)).arrange(RIGHT, buff=0.2),
+            VGroup(label(r"kept:", font_size=26, color=S.KEPT), label(r"within 3 nominal MC SEs of 95\%; screening, not proof", font_size=26)).arrange(RIGHT, buff=0.2),
             VGroup(label(r"broken:", font_size=26, color=S.BROKEN), label(r"covers less", font_size=26),
                    label(r"\quad conservative:", font_size=26, color=S.CONS), label(r"covers more", font_size=26)).arrange(RIGHT, buff=0.2),
         ), 12.6, 0.32, [0, 0.2, 0])
+        intro = label('A prespecified Monte Carlo screening rule', font_size=36)
         with self.voiceover(
             "In Part 1 we set up an empty scoreboard. Now it gets its first rows. <bookmark mark='a'/> Every interval "
             "makes a promise: ninety-five percent of the intervals it produces will catch the truth. "
             "<bookmark mark='b'/> On real data we can never check that, because we don't know the truth. In the World "
             "we do. <bookmark mark='c'/> So for each method, draw ten thousand samples, compute the interval each time, "
             "and count how often it catches the true value. <bookmark mark='d'/> Ten thousand replications pin the "
-            "coverage down to within about a fifth of a percentage point, Chapter 6 of Part 7's Monte Carlo standard "
+            "coverage with a Monte Carlo standard error of about a fifth of a percentage point, Chapter 6 of Part 7's Monte Carlo standard "
             "error. <bookmark mark='e'/> A method whose coverage is within three Monte Carlo standard errors of "
-            "ninety-five percent keeps its promise. <bookmark mark='f'/> Below that, it's broken; above, conservative."
+            "ninety-five percent is labeled kept by this screening rule, not proven exact for every population. <bookmark mark='f'/> Below that, it's broken; above, conservative."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcdef"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()
 
     def board(self):
         rows = rows8()
         b = coverage_board(rows, lit_part=8, placeholders=3, font_size=20)
+        band_note = note(r"shading: $\pm2$ nominal MC SE; verdicts: $3$ SE screening threshold").to_edge(DOWN, buff=0.15)
         with self.voiceover(
             "Here is the board. <bookmark mark='a'/> First, the textbook z-interval when sigma is known, on samples of "
             "five heights: ninety-five point oh five percent. Kept. <bookmark mark='b'/> The same interval with s in "
@@ -61,7 +66,7 @@ class Board(VoiceoverScene):
             "for equal variances, whose false-alarm rate should be five percent: on normal heights, four point nine. "
             "Kept. On log incomes, which are only roughly normal, six point three. Broken."
         ) as vo:
-            self.play(FadeIn(b.head), FadeIn(b.axis), FadeIn(b.legend), *[FadeIn(r) for r in b.body[len(rows):]])
+            self.play(FadeIn(b.head), FadeIn(b.axis), FadeIn(b.legend), FadeIn(band_note), *[FadeIn(r) for r in b.body[len(rows):]])
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 self.play(FadeIn(b.body[k] if k < 3 else VGroup(b.body[3], b.body[4]), shift=RIGHT * 0.2))
@@ -74,15 +79,16 @@ class Board(VoiceoverScene):
         d = load("board")["rows"]
         rows = fit_rows(VGroup(
             label(r"what the first rows say", font_size=30, color=S.ACCENT),
-            label(r"exact theory keeps exact promises: \ $z$ with $\sigma$, \ $t$ for normal data", font_size=26, color=S.KEPT),
+            label(r"exact for IID normal data; \ World results are empirical checks", font_size=26, color=S.KEPT),
             label(r"plugging in $s$ without paying for it breaks them: \ Gosset's point", font_size=26, color=S.BROKEN),
             label(r"approximations fail in the tails: \ skewed incomes, \ even at $n = 500$", font_size=26, color=S.BROKEN),
             label(rf"the widths: \ $z$ with $s$ is narrower ({d[1]['width']:.1f} cm) than $t$ ({d[2]['width']:.1f} cm) \ \textemdash{{}} \ and "
                   r"that is exactly why it fails", font_size=24, color=GREY_A),
             label(r"every later part adds rows; \ Part 65 shows the whole board", font_size=24, color=GREY_A),
         ), 12.6, 0.36, [0, 0.2, 0])
+        intro = label('Interpret results within the tested settings', font_size=36)
         with self.voiceover(
-            "<bookmark mark='a'/> What do the first rows say? <bookmark mark='b'/> Exact theory keeps exact promises. "
+            "<bookmark mark='a'/> What do the first rows say? <bookmark mark='b'/> Exact normal theory has exact coverage under its assumptions. These finite-World checks are evidence about these settings, not proof of those assumptions. "
             "<bookmark mark='c'/> Plugging in an estimate without paying for its uncertainty breaks them. "
             "<bookmark mark='d'/> And large-sample approximations can fail even with large samples, when the data "
             "have heavy tails. <bookmark mark='e'/> Look at the widths, too: the broken interval is narrower than "
@@ -90,8 +96,11 @@ class Board(VoiceoverScene):
             "<bookmark mark='f'/> Every later part will add rows to this board, and Part 65 will show it whole: a public "
             "record of which promises statistics keeps, measured rather than assumed."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcdef"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()
 

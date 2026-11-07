@@ -67,26 +67,30 @@ class Robust(VoiceoverScene):
 
     def why(self):
         rows = [
-            cmath(r"\bar x", r"\approx", r"\text{normal by the CLT, \ whatever the data}", font_size=32),
+            cmath(r"\bar x", r"\approx", r"\text{asymptotically normal for IID data, }0<\sigma^2<\infty", font_size=32),
             cmath(r"\mathrm{Var}(s^2)", r"=", r"\sigma^4\Big(\frac{2}{n - 1} + \frac{\kappa}{n}\Big)", font_size=34),
-            cmath(r"\kappa = 6\ (t_5,\ \text{exponential})", r":\ ", r"\mathrm{Var}(s^2) \text{ is } 4\times \text{ the normal theory value at } n = 10",
+            cmath(r"\kappa = 6\ (t_5,\ \text{exponential})", r":\ ", r"\mathrm{Var}(s^2) \text{ is } 3.7\times \text{ the normal theory value at } n = 10",
                   font_size=28),
         ]
         rows[1][2].set_color(S.RESID)
         whys = [why(r"the $t$ statistic leans on the mean: \ protected by averaging"),
                 why(r"$\kappa$: \ the excess kurtosis; \ normal theory assumes $\kappa = 0$"),
-                why(r"the $F$-test's reference distribution is simply wrong, \ at every $n$")]
+                why(r"finite fourth moment required; nonzero kurtosis changes relative variance even as $n$ grows")]
+        intro = label('Normal-theory sensitivity to higher moments', font_size=36)
         with self.voiceover(
             "Why the difference? <bookmark mark='a'/> The t statistic leans on the sample mean, which the central limit "
-            "theorem makes nearly normal whatever the data. <bookmark mark='b'/> The F-test leans on the variance of "
+            "theorem makes nearly normal asymptotically under independent identical sampling and finite positive variance; it gives no universal small-sample guarantee. <bookmark mark='b'/> The F-test leans on the variance of "
             "the sample variance, and that depends on the data's kurtosis, the heaviness of the tails, through a term "
-            "that never goes away. Normal theory assumes the excess kurtosis is zero. <bookmark mark='c'/> For "
-            "distributions with excess kurtosis six, the sample variance is four times as variable as normal theory "
+            "whose size relative to the normal-theory variance does not vanish. Normal theory assumes the excess kurtosis is zero. <bookmark mark='c'/> For "
+            "distributions with excess kurtosis six, the sample variance is three point seven times as variable as normal theory "
             "says at n equals ten, so the F-test's reference distribution is wrong, and more data doesn't fix it."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.8, buff=1.0, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -126,6 +130,7 @@ class Robust(VoiceoverScene):
             label(r"the errors don't cancel: \ one-sided conclusions can be badly wrong (Part 16's bootstrap-$t$)", font_size=24,
                   color=S.ACCENT),
         ), 12.6, 0.35, [0, 0.2, 0])
+        intro = label('Skewness makes the two tails behave differently', font_size=36)
         with self.voiceover(
             "There's more to the exponential's ten percent than a number. <bookmark mark='a'/> Split it by tail. "
             "<bookmark mark='b'/> The test rejects in the lower tail nine and a half percent of the time, and in the "
@@ -133,9 +138,12 @@ class Robust(VoiceoverScene):
             "<bookmark mark='d'/> In a right-skewed sample, a high mean comes with a high standard deviation, damping "
             "the t statistic, and a low mean with a low one, inflating it. <bookmark mark='e'/> The two errors don't "
             "cancel; they pile up on one side. A one-sided conclusion from skewed data can be badly wrong even when "
-            "the two-sided rate looks tolerable. Part 16's bootstrap-t is built to fix exactly this."
+            "the two-sided rate looks tolerable. Part 16's bootstrap-t is can improve skewness corrections under regularity conditions; it is not a universal repair."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()

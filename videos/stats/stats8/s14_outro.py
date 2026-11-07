@@ -50,9 +50,9 @@ class Outro(VoiceoverScene):
             "dimension: residuals live in a subspace. Fisher's rotation splits a normal sample into its mean and its "
             "deviations, independent of each other, and from it come chi-squared and Cochran's theorem, Student's t, a "
             "normal over an uncertain scale, and F, a ratio of variances. Mean squared error is variance plus squared "
-            "bias, and the best divisor is n plus one. Plug-in estimators are consistent. Laplace estimated France's "
+            "bias, and among constant SS divisors for normal data the best is n plus one. Plug-in estimators are consistent under appropriate continuity and moment conditions. Laplace estimated France's "
             "population with a ratio, and the delta method gives its standard error; the finite-population correction "
-            "handles samples from small lists. The Coverage Board has its first rows. And the t-test is robust, while "
+            "handles samples from small lists. The Coverage Board has its first rows. And the t-test can be more robust in these examples, while "
             "the F-test for variances is not."
         ) as vo:
             self.play(FadeIn(head))
@@ -71,6 +71,7 @@ class Outro(VoiceoverScene):
             (r"the Coverage Board", [10, 11, 12, 65]),
             (r"robustness", [16, 30, 60]),
         ], font_size=22)
+        intro = label('Where these sampling distributions return', font_size=36)
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Sampling distributions and standard errors underlie every "
             "estimator from Part 9 on, and the bootstrap of Part 16 computes them by simulation. The t, chi-squared "
@@ -78,7 +79,9 @@ class Outro(VoiceoverScene):
             "13. The bias–variance trade-off becomes shrinkage, smoothing and the lasso. Ratio estimation and finite "
             "populations return in survey sampling, Part 18. And the Coverage Board grows with every part."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3),
                       run_time=6.0)
         self.clear_scene()
