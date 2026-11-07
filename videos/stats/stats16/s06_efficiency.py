@@ -32,7 +32,7 @@ class Efficiency(VoiceoverScene):
         ]
         rows[3][2].set_color(OBS)
         whys = [why(r"the worry of the 1940s"), why(r"Pitman (1948): \ asymptotic relative efficiency"),
-                why(r"for shift alternatives; \ proved in Part 30"), why(r"lose 4.5\%: \ 100 ranks $\approx$ 95.5 normals")]
+                why(r"regular IID continuous location families; \ finite variance"), why(r"lose 4.5\%: \ 100 ranks $\approx$ 95.5 normals")]
         with self.voiceover(
             "<bookmark mark='a'/> Ranks throw away the sizes of the observations. Surely that costs power, and if the data "
             "really are normal, the t-test should be much better? <bookmark mark='b'/> Edwin Pitman, in Australia, gave the "
@@ -130,7 +130,7 @@ class Efficiency(VoiceoverScene):
             [r"Laplace", r"$1.5$"],
             [r"$t_3$", r"$1.90$"],
             [r"contaminated (10\%, \ $\sigma = 5$)", r"$2.41$"],
-            [r"any distribution", r"$\ge 108/125 = 0.864$"],
+            [r"regular location families", r"$\ge 108/125 = 0.864$"],
         ], font_size=26, colors=[GREY_B, S.TRUTH, None, None, S.ALT, RES, OBS]).move_to([-2.4, 0.3, 0])
         rows = fit_rows(VGroup(
             label(r"Hodges \& Lehmann (1956): \ never below 0.864", font_size=22, color=OBS),
@@ -138,13 +138,12 @@ class Efficiency(VoiceoverScene):
             label(r"a cheap insurance policy", font_size=26, color=RANK),
         ), 5.0, 0.4, [4.4, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Pitman's formula gives the efficiency for any error distribution. At the normal, point nine five "
+            "<bookmark mark='a'/> Pitman's formula applies to regular continuous location families with finite variance and square-integrable density. At the normal, point nine five "
             "five. At the logistic, one point one: the rank test is already better. At the double exponential, one and a half. "
             "At t-three, one point nine: the t-test needs almost twice the sample. At our contaminated normal, two point four. "
-            "<bookmark mark='b'/> In 1956 Joseph Hodges and Erich Lehmann proved the striking result: over every continuous "
-            "distribution, the efficiency is never below a hundred and eight over a hundred and twenty-five, point eight six "
+            "<bookmark mark='b'/> In 1956 Joseph Hodges and Erich Lehmann proved the striking result: over this class of regular continuous distributions, the efficiency is never below a hundred and eight over a hundred and twenty-five, point eight six "
             "four. <bookmark mark='c'/> And it has no upper limit: with heavy enough tails, the t-test can be arbitrarily worse. "
-            "<bookmark mark='d'/> At most a fourteen percent loss, with unlimited gain possible: the rank test is a very cheap "
+            "<bookmark mark='d'/> The bound is a 13.6 percent information loss, or at most about 15.7 percent more observations for equal local power. With unlimited efficiency gain possible, the rank test is a very cheap "
             "insurance policy."
         ) as vo:
             vo.wait_until("a")
@@ -164,9 +163,7 @@ class Efficiency(VoiceoverScene):
         with self.voiceover(
             "What about validity? The Coverage Board's first two rows for this part are about size, not power. With no shift "
             "at all, under contamination, twenty and twenty, ten thousand trials: <bookmark mark='a'/> the t-test rejects "
-            "four point four percent of the time: kept, slightly conservative. The t-test's size is robust; the central limit "
-            "theorem protects it. <bookmark mark='b'/> Wilcoxon–Mann–Whitney: five point two percent, kept, as an exact "
-            "permutation test must be. So the t-test under contamination isn't wrong. It's weak: the price of heavy tails is "
+            "four point four percent of the time: kept, slightly conservative. This particular simulation is mildly conservative; twenty observations do not guarantee a reliable normal approximation for all heavy tails. <bookmark mark='b'/> Wilcoxon–Mann–Whitney: five point two percent, kept here with the asymptotic rank-test calibration. Exact permutation calibration instead controls size by exchangeability. The t-test keeps size in this simulation. It's weak: the price of heavy tails is "
             "paid in power, which the Board doesn't show and the last chart did."
         ) as vo:
             self.play(FadeIn(b.head), FadeIn(b.axis), FadeIn(b.legend))

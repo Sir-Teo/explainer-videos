@@ -2,10 +2,10 @@
 
 Part 16 of a sixty-five-part course in statistics, from a first course to a PhD (see [the series plan](../README.md)
 and [the syllabus](../SYLLABUS.md)), in Stage II, Bachelor's: Methods. Every interval since Part 8 leaned on a model
-for the data. This part asks how far we can get without one.
+for the data. This part asks how far we can get without a parametric shape model. It still requires assumptions: IID sampling and regularity for the ordinary bootstrap, exchangeability for label permutations, and symmetry/continuity for the untied signed-rank law. Exact calibration is distinguished from asymptotic approximation throughout.
 
 It opens with Efron's paper of 1979 and his running example: 15 American law schools, LSAT against GPA, r = 0.776.
-The normal-theory standard error is 0.115; the bootstrap's, with no model, is 0.135.
+The normal-theory standard error is 0.115; the bootstrap's, without a normal shape model, is 0.135.
 
 From there the part covers:
 - **Permutation tests.** Exchangeability under H₀ makes every relabelling equally likely. All 2,704,156 splits of 24
@@ -27,11 +27,11 @@ From there the part covers:
 - **Bootstrap intervals.** Percentile, basic (which passes 1 here), bootstrap-t on skewed incomes, BCa stated with
   z₀ = −0.137 and a = −0.076; five intervals compared; four Board rows.
 - **When it fails.** The uniform maximum: P*(θ̂* = θ̂) = 1 − (1 − 1/n)ⁿ → 1 − 1/e. The percentile interval covers 0%.
-  Fixes: an exact pivot, the parametric bootstrap, m-out-of-n.
+  Fixes: a 95% one-sided pivot interval [M, M/0.05^(1/n)], a parametric pivot bootstrap (not a raw percentile interval), and properly rate-scaled m-out-of-n with m → ∞ and m/n → 0.
 - **Cross-validation.** Polynomials in age for log income; training error vs 10-fold CV (best: degree 3); the
   optimism 2σ²p/n; leave-one-out and PRESS; cautions.
 - **Density estimates.** The histogram's arbitrary bins; the `KernelSum`; bandwidths 1, 4.16 (Silverman) and 10
-  against the World's true density; the bias–variance trade-off and n^(−1/5).
+  against the full-population histogram; the bias–variance trade-off and n^(−1/5).
 
 Every number on screen is computed in [`compute.py`](compute.py) or inline in a scene:
 - the law schools (Efron & Tibshirani 1993, Table 3.1), Darwin's differences (Fisher 1935) and the Challenger
@@ -43,7 +43,7 @@ Every number on screen is computed in [`compute.py`](compute.py) or inline in a 
 - **`statkit.ranks`** ([`explainer/stats/kit/ranks.py`](../../../explainer/stats/kit/ranks.py)), checked against
   SciPy in `tests/test_stats_kit_ranks.py`:
   - the exact signed-rank null by generating function, and the signed-rank test;
-  - the exact Mann–Whitney null by recursion, U, the AUC and the exact p;
+  - the untied Mann–Whitney null by recursion; this part uses a local conditional-midrank recursion for tied temperatures;
   - Kruskal–Wallis, Spearman and Kendall.
 - **`statkit.bootstrap`** ([`explainer/stats/kit/bootstrap.py`](../../../explainer/stats/kit/bootstrap.py)), checked in
   `tests/test_stats_kit_bootstrap.py`:
@@ -84,13 +84,13 @@ python tools/lecture_length.py stats16 --floor 50
 | 0 | Fifteen law schools, 1979 | r = 0.776; SE 0.115 (normal formula), 0.135 (bootstrap) |
 | 1 | Permutation tests | 12 + 12 incomes, difference −20.4; 2,704,156 splits, p = 0.232; Welch 0.237; law schools p ≈ 0.0017 |
 | 2 | Signs and signed ranks | 13 of 15 positive, sign p = 0.0074; Fisher 1,726/32,768 = 0.053; W⁺ = 96, p = 0.041; t p = 0.050; Hodges–Lehmann 25, 95.2% CI [4.0, 41.5] |
-| 3 | Mann–Whitney | rank sum 52.5, U = 87.5 of 112, p ≈ 0.033 (0.038 tie-corrected); AUC 0.781 |
+| 3 | Mann–Whitney | rank sum 52.5, U = 87.5 of 112, conditional exact p = 0.03352 (0.03757 tie-corrected normal approximation); AUC 0.781 |
 | 4 | More rank methods | H = 1.53, p = 0.47 (F = 0.36, p = 0.70); Friedman Q = 10.2; Spearman 0.796, Kendall 0.638 (86 vs 19 pairs); one bad GPA: 0.148, 0.436, 0.390 |
 | 5 | Efficiency | power t / WMW: 0.69 / 0.66 (normal), 0.77 / 0.89 (t₃), 0.35 / 0.52 (contaminated); ARE 0.955, 1.097, 1.5, 1.90, 2.41; bound 0.864 |
 | 6 | The jackknife | bias −0.0065, SE 0.143; without school 1, r = 0.893; LSAT median: 3 distinct values, SE 14.7 vs 18.4 |
 | 7 | The bootstrap principle | SE 0.135; median income: truth 38.9, sample 37.65, SD 6.06 real vs 4.72 bootstrap; 77,558,760 distinct resamples |
 | 8 | Bootstrap intervals | percentile [0.447, 0.962], basic [0.591, 1.106], normal [0.513, 1.040], BCa [0.287, 0.943], Fisher z [0.439, 0.922]; incomes: t [28.0, 56.9], percentile [30.7, 55.5], bootstrap-t [30.2, 61.7], truth 49.5 |
-| 9 | When it fails | P*(spike) 0.625 (theory 0.636, limit 0.632); exact CI [0.966, 1.040] |
+| 9 | When it fails | P*(spike) 0.625 (theory 0.636, limit 0.632); exact one-sided 95% CI [0.966, 1.026] |
 | 10 | Cross-validation | best degree 3, CV 0.3425; optimism: 0.3395 vs CV 0.3425 (degree 3), 0.3493 vs 0.3536 (degree 8) |
 | 11 | Density estimates | Silverman h = 4.16 cm for 60 heights |
 | 12 | Outro | — |
@@ -139,9 +139,9 @@ four pairs, no one-sided test at level 0.05 is possible: the smallest p is 1/16.
 
 **3. The rank sum as a pair count.**
 
-*Solution.* Sort the x's: x₍₁₎ < … < x₍ₘ₎. The rank of x₍ₖ₎ in the pooled sample is k (the x's at or below it) plus
+*Solution.* Assume no ties. Sort the x's: x₍₁₎ < … < x₍ₘ₎. The rank of x₍ₖ₎ in the pooled sample is k (the x's at or below it) plus
 the number of y's below it. Summing over k, R = m(m + 1)/2 + #{(i, j) : xᵢ > yⱼ}. So U = R − m(m + 1)/2 is the pair
-count.
+count. With ties, average ranks give half credit to tied cross-group pairs.
 
 **4. The jackknife and Bessel's correction.**
 
@@ -184,9 +184,9 @@ interval lies below θ and never contains it: coverage 0, as on the Board.
 - **Bias correction z₀; acceleration a**: BCa's adjustments, from the share of replicates below the estimate and the
   jackknife's skewness.
 - **Parametric bootstrap**: resampling from a fitted model rather than from F̂ₙ.
-- **m-out-of-n bootstrap**: resampling fewer points than the sample has, to repair some failures.
+- **m-out-of-n bootstrap**: resampling fewer points than the sample has, to repair some failures with statistic-specific scaling and m → ∞, m/n → 0.
 - **Cross-validation (K-fold, leave-one-out)**: estimating prediction error by predicting held-out data.
-- **Optimism**: how much the training error understates the test error; 2σ²p/n for least squares.
+- **Optimism**: how much the training error understates the test error; 2σ²p/n for a fixed full-rank homoskedastic linear model and fresh responses at the same design.
 - **PRESS**: the leave-one-out prediction sum of squares, Σ(eᵢ/(1 − hᵢᵢ))².
 - **Kernel density estimate; bandwidth**: an average of bumps K((x − xᵢ)/h)/h; h is their width.
 

@@ -7,7 +7,7 @@ import numpy as np
 from explainer.stats import *  # noqa: F403
 from explainer.stats import museum  # noqa: F401
 
-from .compute import load  # noqa: F401
+from .compute import clipped_segments, load  # noqa: F401
 
 PART = 16
 
@@ -21,9 +21,7 @@ OBS = S.ACCENT  # the observed statistic
 
 
 def polyline(ax, xs, ys, color, stroke_width=2.5, opacity=1.0) -> VMobject:
-    m = VMobject(stroke_color=color, stroke_width=stroke_width, stroke_opacity=opacity)
-    m.set_points_as_corners([ax.c2p(a, b) for a, b in zip(xs, ys)])
-    return m
+    return clip_curve(ax, xs, ys, color, stroke_width).set_stroke(opacity=opacity)
 
 
 def fit_rows(rows: VGroup, width: float, buff: float, pos) -> VGroup:
@@ -35,13 +33,22 @@ def fit_rows(rows: VGroup, width: float, buff: float, pos) -> VGroup:
 
 
 def clip_curve(ax, xs, ys, color, stroke_width=3, ymin=None, ymax=None):
-    xs, ys = np.asarray(xs, float), np.asarray(ys, float)
-    keep = np.isfinite(ys)
-    if ymin is not None:
-        keep &= ys >= ymin
-    if ymax is not None:
-        keep &= ys <= ymax
-    return curve(ax, xs[keep], ys[keep], color, stroke_width)
+    xmin, xmax, bottom, top = bounds(ax)
+    rectangle = (xmin, xmax, max(bottom, ymin) if ymin is not None else bottom,
+                 min(top, ymax) if ymax is not None else top)
+    result = VMobject(stroke_color=color, stroke_width=stroke_width)
+    previous = None
+    for start, end in clipped_segments(xs, ys, rectangle):
+        if previous is None or not np.allclose(previous, start, atol=1e-12, rtol=0):
+            result.start_new_path(ax.c2p(*start))
+        result.add_line_to(ax.c2p(*end))
+        previous = end
+    return result
+
+
+
+def curve(ax, xs, ys, color, stroke_width=3):
+    return clip_curve(ax, xs, ys, color, stroke_width)
 
 
 def shade(ax, xs, ys, color, opacity=0.35):
@@ -124,13 +131,33 @@ PRIOR, LIKE, POST = S.PRIOR, S.LIK, S.POST
 
 
 def density(ax, xs, ys, color, stroke_width=3, fill=0.25):
-    """A density curve with its area shaded."""
+    """A geometrically clipped outline and visible area under the density."""
     xs, ys = np.asarray(xs, float), np.asarray(ys, float)
-    c = curve(ax, xs, ys, color, stroke_width)
-    y0 = bounds(ax)[2]
-    pts = [ax.c2p(xs[0], y0)] + [ax.c2p(a, b) for a, b in zip(xs, ys)] + [ax.c2p(xs[-1], y0)]
-    return VGroup(Polygon(*pts, stroke_width=0, fill_color=color, fill_opacity=fill), c)
+    xmin, xmax, ymin, ymax = bounds(ax)
+    keep = np.isfinite(xs) & np.isfinite(ys) & (xs >= xmin) & (xs <= xmax)
+    xs, ys = xs[keep], ys[keep]
+    outline = curve(ax, xs, ys, color, stroke_width)
+    if not len(xs):
+        return VGroup(outline)
+    pts = [ax.c2p(xs[0], ymin)] + [ax.c2p(x, h) for x, h in zip(xs, np.clip(ys, ymin, ymax))] + [ax.c2p(xs[-1], ymin)]
+    return VGroup(Polygon(*pts, stroke_width=0, fill_color=color, fill_opacity=fill), outline)
 
 BOOT = S.EST  # bootstrap replicates
 REAL = S.WORLD  # the real sampling distribution, from the World
 RANK = S.ALT
+
+
+def hist_bars(ax, edges, heights, color=None, opacity=0.75, stroke_width=1.2, stroke_color=None):
+    """Display each bin's intersection with the axes, preserving its height."""
+    xmin, xmax, ymin, ymax = bounds(ax)
+    result = VGroup()
+    for a, b, height in zip(edges[:-1], edges[1:], heights):
+        a, b = max(a, xmin), min(b, xmax)
+        bottom, top = max(0, ymin), min(height, ymax)
+        if b <= a or top <= bottom:
+            continue
+        p, q = ax.c2p(a, bottom), ax.c2p(b, top)
+        result.add(Rectangle(width=q[0]-p[0], height=q[1]-p[1],
+                             stroke_width=stroke_width, stroke_color=stroke_color or "#0E1117",
+                             fill_color=color or BOOT, fill_opacity=opacity).move_to((p+q)/2))
+    return result

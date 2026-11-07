@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import itertools
 from dataclasses import asdict
+from math import comb
 
 import numpy as np
 from scipy import stats
@@ -61,6 +62,29 @@ def nest(obj):
     return obj
 
 
+def clipped_segments(xs, ys, rectangle):
+    """Clip line segments to a rectangle without flattening off-scale values."""
+    xmin, xmax, ymin, ymax = rectangle
+    points = np.column_stack((xs, ys))
+    result = []
+    for start, end in zip(points[:-1], points[1:]):
+        if not np.isfinite([start, end]).all():
+            continue
+        delta = end - start
+        lo, hi = 0.0, 1.0
+        for k, lower, upper in ((0, xmin, xmax), (1, ymin, ymax)):
+            if delta[k] == 0:
+                if not lower <= start[k] <= upper:
+                    hi = -1
+                    break
+            else:
+                a, b = sorted(((lower - start[k]) / delta[k], (upper - start[k]) / delta[k]))
+                lo, hi = max(lo, a), min(hi, b)
+        if lo <= hi:
+            result.append((start + lo * delta, start + hi * delta))
+    return result
+
+
 def corr(a, b):
     return float(np.corrcoef(a, b)[0, 1])
 
@@ -72,11 +96,13 @@ def compute_law():
     reps = np.array([corr(L[i], G[i]) for i in idx])
     j = Bt.jackknife((L, G), corr)
     (blo, bhi), z0, a = Bt.bca_ci(reps, r, j["loo"])
+    zalpha = stats.norm.ppf([0.025, 0.975])
+    adjusted = stats.norm.cdf(z0 + (z0 + zalpha) / (1 - a * (z0 + zalpha)))
     z = np.arctanh(r)
     fz = (np.tanh(z - 1.96 / np.sqrt(12)), np.tanh(z + 1.96 / np.sqrt(12)))
     return nest({"r": r, "reps": reps, "se_boot": reps.std(ddof=1), "se_normal": (1 - r ** 2) / np.sqrt(12), "jack": {k: v for k, v in j.items()},
                  "percentile": Bt.percentile_ci(reps), "basic": Bt.basic_ci(reps, r), "normal": Bt.normal_ci(reps, r), "bca": (blo, bhi),
-                 "z0": z0, "a": a, "fisher_z": fz, "first_idx": idx[:6]})
+                 "z0": z0, "a": a, "bca_levels": adjusted, "fisher_z": fz, "first_idx": idx[:6]})
 
 
 def compute_perm():
@@ -107,18 +133,63 @@ def compute_signrank():
                  "t_p": t.pvalue, "W_max": 120})
 
 
+def conditional_mann_whitney(x, y):
+    """Exact label-randomization law, conditional on the pooled midranks.
+
+    Twice the ranks are integers even with ties. The subset-sum recursion
+    counts labelled observations, so repeated values retain their multiplicity.
+    """
+    x, y = np.asarray(x, float), np.asarray(y, float)
+    m, n = len(x), len(y)
+    ranks2 = np.rint(2 * stats.rankdata(np.r_[x, y])).astype(int)
+    dp = [dict() for _ in range(n + 1)]
+    dp[0][0] = 1
+    for j, rank in enumerate(ranks2):
+        for k in range(min(n, j + 1), 0, -1):
+            for total, count in list(dp[k - 1].items()):
+                dp[k][total + rank] = dp[k].get(total + rank, 0) + count
+    support = sorted(dp[n])
+    us = np.asarray([m * n - (v / 2 - n * (n + 1) / 2) for v in support])
+    pmf = np.asarray([dp[n][v] / comb(m + n, n) for v in support])
+    order = np.argsort(us)
+    us, pmf = us[order], pmf[order]
+    u = float(ranks2[:m].sum() / 2 - m * (m + 1) / 2)
+    p = float(pmf[np.abs(us - m * n / 2) >= abs(u - m * n / 2) - 1e-12].sum())
+    return {"U": u, "auc": u / (m * n), "p": p, "u_grid": us, "pmf": pmf,
+            "m": m, "n": n, "allocations": comb(m + n, n)}
+
+
 def compute_mw():
     t = np.asarray(museum.CHALLENGER_TEMP, float)
     y = np.asarray(museum.CHALLENGER_DISTRESS) > 0
-    r = R.mann_whitney(t[~y], t[y])
-    return nest({"warm": t[~y], "cold": t[y], "U": r["U"], "auc": r["auc"], "p": r["p"], "pmf": r["pmf"], "m": int((~y).sum()), "n": int(y.sum())})
+    r = conditional_mann_whitney(t[~y], t[y])
+    r["asymptotic_p"] = stats.mannwhitneyu(t[~y], t[y], method="asymptotic").pvalue
+    return nest({"warm": t[~y], "cold": t[y], **r})
+
+
+def monte_carlo_p(null, observed):
+    """Two-sided random-permutation p-value including the observed pairing."""
+    null = np.asarray(null, float)
+    return float((1 + np.count_nonzero(np.abs(null) >= abs(observed))) / (len(null) + 1))
+
+
+def compute_association():
+    g = rng(1)
+    r = corr(L, G)
+    null = np.asarray([corr(L, g.permutation(G)) for _ in range(20_000)])
+    return nest({"r": r, "null": null, "p": monte_carlo_p(null, r)})
+
+
+def uniform_max_interval(maximum, n, alpha=0.05):
+    """Exact one-sided 1-alpha interval from M/theta ~ Beta(n, 1)."""
+    return float(maximum), float(maximum / alpha ** (1 / n))
 
 
 def compute_more():
     groups = [W.income[W.sample(10, among=W.adult & (W.region == k), seed=170 + k)] / 1000 for k in (0, 3, 7)]
-    kw = R.kruskal_wallis(*groups)
+    kw = stats.kruskal(*groups)
     f = stats.f_oneway(*groups)
-    return nest({"groups": groups, "H": kw["H"], "kw_p": kw["p"], "F": f.statistic, "f_p": f.pvalue,
+    return nest({"groups": groups, "H": kw.statistic, "kw_p": kw.pvalue, "F": f.statistic, "f_p": f.pvalue,
                  "pearson": corr(L, G), "spearman": R.spearman(L, G), "kendall": R.kendall(L, G)})
 
 
@@ -162,7 +233,7 @@ def compute_maxfail():
     boot = np.array([x[g.integers(0, n, n)].max() for _ in range(4000)])
     real = np.array([g.uniform(0, 1, n).max() for _ in range(4000)])
     return nest({"n": n, "max": m, "boot": boot, "real": real, "p_spike": float(np.mean(boot == m)), "theory": 1 - (1 - 1 / n) ** n,
-                 "limit": 1 - np.exp(-1)})
+                 "limit": 1 - np.exp(-1), "exact_ci": uniform_max_interval(m, n)})
 
 
 def compute_cv():
@@ -184,11 +255,12 @@ def compute_kde():
     h = W.height[idx]
     grid = np.linspace(140, 205, 400)
     pop = W.height[W.adult]
-    dens, edges = np.histogram(pop, bins=130, range=(140, 205), density=True)
+    counts, edges = np.histogram(pop, bins=130, range=(140, 205))
+    dens = counts / (len(pop) * np.diff(edges))
     mids = (edges[:-1] + edges[1:]) / 2
     s = Bt.silverman(h)
     return nest({"x": h, "grid": grid, "silverman": s, "small": Bt.kde(h, grid, 1.0), "mid": Bt.kde(h, grid, s), "big": Bt.kde(h, grid, 10.0),
-                 "true_x": mids, "true_y": dens})
+                 "true_x": mids, "true_y": dens, "visible_mass": float(counts.sum() / len(pop))})
 
 
 def compute_board():
@@ -251,7 +323,7 @@ def compute_board():
 
 
 ITEMS = {
-    "law": compute_law, "perm": compute_perm, "signrank": compute_signrank, "mw": compute_mw, "more": compute_more,
+    "law": compute_law, "association": compute_association, "perm": compute_perm, "signrank": compute_signrank, "mw": compute_mw, "more": compute_more,
     "efficiency": compute_efficiency, "worlds": compute_worlds, "maxfail": compute_maxfail, "cv": compute_cv,
     "kde": compute_kde, "board": compute_board,
 }

@@ -92,11 +92,11 @@ class SignedRank(VoiceoverScene):
         for r in g:
             if r.width > 4.4:
                 r.width = 4.4
-        foot = label(r"uses only the signs: \ assumes nothing about the shape, \ not even symmetry", font_size=22,
+        foot = label(r"independent continuous differences: \ no symmetry needed", font_size=22,
                      color=GREY_A).to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "<bookmark mark='a'/> The oldest test of all is the sign test; John Arbuthnot used it in 1710 on London's christening "
-            "records. If the median difference is zero, each difference is equally likely to be positive or negative. "
+            "records. For independent continuous differences with median zero, each sign is equally likely positive or negative. "
             "<bookmark mark='b'/> So the number of positive signs is Binomial fifteen, one half, whatever the shape of the "
             "distribution. <bookmark mark='c'/> Thirteen or more positives, or two or fewer, has probability point oh oh seven "
             "four. <bookmark mark='d'/> The sign test uses only the signs, so it assumes nothing about the distribution, not "
@@ -136,7 +136,7 @@ class SignedRank(VoiceoverScene):
             hb.add(*hist_bars(bx, [lo, lo + 20], [hh], color=c, opacity=0.85))
         cnt = int(np.sum(np.abs(T) >= z.sum()))
         rows = fit_rows(VGroup(
-            label(r"Fisher (1935): \ if crossing does nothing, \ each pair's sign is a coin", font_size=22),
+            label(r"Fisher (1935): \ independent symmetric differences: \ signs are fair coins", font_size=22),
             label(r"keep the sizes; \ flip the signs: \ $2^{15} = 32{,}768$ patterns", font_size=22),
             MathTex(rf"\textstyle\sum d_i = {z.sum():.0f}", font_size=30, color=OBS),
             MathTex(rf"{cnt:,}\ \text{{patterns as extreme}}", font_size=26),
@@ -146,7 +146,7 @@ class SignedRank(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> Fisher's analysis in The Design of Experiments was one of the first permutation tests in print. If "
             "crossing does nothing, and the two plants in a pair were allotted at random, then which plant is the taller is a "
-            "coin toss: each difference's sign could equally have been the other. <bookmark mark='b'/> So keep the sizes, flip "
+            "coin toss. Alternatively, independent symmetric null differences justify the sign flips. Darwin's historical allocation should not simply be assumed random. <bookmark mark='b'/> So keep the sizes, flip "
             "the signs. Here's one flipped copy, and another, and another. There are two to the fifteen, thirty-two thousand "
             "seven hundred and sixty-eight sign patterns. <bookmark mark='c'/> The observed differences sum to three hundred "
             "and fourteen. <bookmark mark='d'/> Of all the patterns, one thousand seven hundred and twenty-six give a sum at least "
@@ -192,20 +192,23 @@ class SignedRank(VoiceoverScene):
         rows = [
             cmath(r"W^+", r"=", r"\textstyle\sum_{d_i > 0} \text{rank}(|d_i|)", font_size=32),
             cmath(r"\ ", r"=", rf"120 - (10 + 14) = {d['W']:.0f}", font_size=32),
-            cmath(r"H_0", r":", r"d_i \text{ symmetric about } 0", font_size=30),
+            cmath(r"H_0", r":", r"d_i \text{ independent, continuous, symmetric about } 0", font_size=30),
         ]
         rows[1][2].set_color(OBS)
         g = VGroup(*rows).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([0, -1.9, 0])
+        intro = label('Signed ranks combine signs with ordered magnitudes', font_size=36)
         with self.voiceover(
             "In 1945 Frank Wilcoxon, a chemist at American Cyanamid, proposed a compromise between using signs and using sizes. "
             "<bookmark mark='a'/> Sort the absolute differences and replace each by its rank, one to fifteen, keeping its sign. "
             "<bookmark mark='b'/> The two negative differences, sixty-seven and forty-eight, have ranks fourteen and ten. "
             "<bookmark mark='c'/> The signed-rank statistic W-plus is the sum of the ranks of the positive differences: one hundred "
             "and twenty, the total of all fifteen ranks, minus twenty-four, which is ninety-six. <bookmark mark='d'/> The "
-            "assumption is that, under the null, the differences are symmetric about zero, stronger than the sign test's, weaker "
+            "assumptions here are independent continuous differences symmetric about zero, with distinct nonzero absolute values, stronger than the sign test's, weaker "
             "than normality. Ranks keep the ordering of the sizes and discard the rest, so one wild value can't dominate."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(hdr), LaggedStart(*[FadeIn(c_[0]) for c_ in cols], lag_ratio=0.05))
             self.play(LaggedStart(*[FadeIn(c_[1:]) for c_ in cols], lag_ratio=0.05))
             vo.wait_until("b")

@@ -76,7 +76,7 @@ class Failure(VoiceoverScene):
             "The maximum of a resample can only be one of the sample's values, and usually it's the largest. "
             "<bookmark mark='c'/> Sixty-two and a half percent of the resamples have exactly the original maximum. "
             "<bookmark mark='d'/> The bootstrap distribution is a few spikes; the real one has no spike at all. The bootstrap "
-            "world doesn't resemble the real one, so no interval built from it can be trusted."
+            "world doesn't resemble the real one, so the ordinary uncorrected bootstrap intervals can fail."
         ) as vo:
             self.play(FadeIn(A), FadeIn(B), FadeIn(tag))
             vo.wait_until("a")
@@ -106,7 +106,7 @@ class Failure(VoiceoverScene):
             "of them miss with probability that to the n-th power. <bookmark mark='c'/> The chance of a spike is one minus "
             "that: point six three six for fifty, against the simulated point six two five. <bookmark mark='d'/> And as n grows "
             "it tends to one minus one over e, the limit from Part 6. The spike never goes away, however large the sample: "
-            "the bootstrap is inconsistent for the maximum. Bickel and Freedman, in 1981, were among the first to say exactly "
+            "the bootstrap is inconsistent for the n-scaled limiting law of the maximum, although the maximum itself is point-consistent. Bickel and Freedman, in 1981, were among the first to say exactly "
             "when the bootstrap works; the maximum is a standard counterexample."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
@@ -137,10 +137,10 @@ class Failure(VoiceoverScene):
     def fixes(self):
         d = load("maxfail")
         m = d["max"]
-        hi = m / 0.025 ** (1 / 50)
+        hi = d["exact_ci"][1]
         rows = [
             cmath(r"\text{an exact pivot}", r":", r"\hat\theta/\theta \sim \text{Beta}(n, 1)", font_size=30),
-            cmath(r"\text{95\% CI}", r"=", rf"\big[\hat\theta,\ \hat\theta / 0.025^{{1/n}}\big] = [{m:.3f},\ {hi:.3f}]", font_size=30),
+            cmath(r"\text{95\% CI}", r"=", rf"\big[\hat\theta,\ \hat\theta / 0.05^{{1/n}}\big] = [{m:.3f},\ {hi:.3f}]", font_size=30),
             cmath(r"\text{parametric bootstrap}", r":", r"\text{resample from Uniform}(0, \hat\theta)", font_size=30),
             cmath(r"m\text{-out-of-}n", r":", r"\text{resample } m \ll n \text{ points, rescale}", font_size=30),
         ]
@@ -150,10 +150,10 @@ class Failure(VoiceoverScene):
         with self.voiceover(
             "How to fix it. <bookmark mark='a'/> When there's a model, use it, with a pivot in Part 11's sense: the maximum over theta has a "
             "Beta n, one distribution, whatever theta is. <bookmark mark='b'/> That gives an exact interval, from the maximum "
-            "to the maximum over point oh two five to the one over n: point nine six six to one point oh four oh. It covers "
-            "exactly ninety-five percent. <bookmark mark='c'/> Or a parametric bootstrap: resample from the fitted uniform, not "
-            "from the data, so the resamples have no spike. <bookmark mark='d'/> And without a model, resample fewer points "
-            "than you have, m out of n, and rescale. With m small compared with n, the spike shrinks; Peter Bickel, Friedrich "
+            "to the maximum over point oh five to the one over n: about point nine six six to one point oh two six. It covers "
+            "exactly ninety-five percent in this continuous IID uniform model. <bookmark mark='c'/> Or a parametric bootstrap: resample from the fitted uniform, not "
+            "from the data, and invert the quantiles of maximum-star over the fitted maximum. A raw percentile interval still fails. <bookmark mark='d'/> And without a model, resample fewer points "
+            "than you have, m out of n, and rescale. Take m tending to infinity but m over n tending to zero. Use m times the bootstrap maximum gap to approximate n times the true gap; the spike then shrinks; Peter Bickel, Friedrich "
             "Götze and Willem van Zwet showed in 1997 that this repairs many failures, at a cost in efficiency."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)

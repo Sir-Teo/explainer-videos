@@ -1,0 +1,15 @@
+# Part 16 scientific source review
+
+All 13 scenes, the README and solutions, all compute items, local helpers and the rank/bootstrap toolkit were read in manifest order. All 12 compute items were refreshed (including the new cached association permutation example), and all 13 scene imports pass. Eight independent numerical checks plus six existing toolkit checks pass.
+
+Corrections:
+
+- The Challenger Mann–Whitney example retains U = 87.5 and computes its exact conditional distribution from pooled midranks. A subset-sum recursion counts labelled assignments with ties. Independent enumeration of all 245,157 assignments verifies the complete PMF and p = 0.0335213761; the normal approximation is separately labelled (0.0375704683). Identical-distribution calibration is distinguished from the weaker AUC = 1/2 null.
+- The association Monte Carlo p-value includes the observed pairing: 0.001699915. The income example displays the actual finite population difference, about −0.01325 thousand, rather than claiming exact equality.
+- The uniform-maximum interval now uses the correct one-sided 95% pivot: [M, M/0.05^(1/n)] = [0.966068, 1.025719]. The former 0.025 cutoff produced 97.5% coverage. Parametric bootstrap requires pivot inversion; a raw percentile interval still fails. Ordinary maximum-bootstrap inconsistency concerns its scaled law; m-out-of-n needs the correct rate and m → ∞, m/n → 0.
+- Jackknife SE is (n−1) times the SEM of leave-one-out values, not their ordinary SD. Median jackknife failure concerns relative consistency after scaling, not an unscaled SE that fails to shrink. Influence markers now encode absolute pull by area above a fixed baseline.
+- Full-range bootstrap correlation histograms retain negative replicates. Unordered bootstrap multisets receive multinomial weights; they are not equiprobable. BCa levels are computed from the actual bias/acceleration and show the half-tie convention. Higher-order accuracy, transformation equivariance and finite-sample limitations are qualified.
+- Population height histograms retain omitted tail mass (visible mass 0.999915), and are labelled as the finite World population histogram. Shifted sample bins cover the data consistently; displayed bars and polynomial/density outlines are geometrically clipped without flattening values.
+- Narration states IID, exchangeability, symmetry, continuity, smoothness and moment conditions where required. Friedman small-block p-values and the Board's asymptotic rank test are labelled as approximations. ARE information loss is distinguished from the extra sample size needed; the bound permits about 15.7% more observations, not 14%. LOOCV rank/leverage conditions, fixed-design optimism and K-fold trade-offs are explicit.
+
+Six section introductions gain context headings. Visual verification is next; this source receipt is not visual, listening or bilingual approval. Public toolkit tie/degeneracy edge cases remain on the shared-maintenance ledger; this part uses the corrected conditional-midrank calculation locally.

@@ -65,9 +65,9 @@ class Principle(VoiceoverScene):
     def histogram(self):
         d = load("law")
         reps = np.asarray(d["reps"])
-        e = np.linspace(0, 1.0, 41)
+        e = np.linspace(-1, 1.0, 81)
         h = np.histogram(reps, e)[0]
-        A = axes([0, 1], [0, 180], x_length=8.4, y_length=4.2, xlabel=r"$r^*$", ylabel=r"resamples (of 2,000)",
+        A = axes([-1, 1], [0, 180], x_length=8.4, y_length=4.2, xlabel=r"$r^*$", ylabel=r"resamples (of 2,000)",
                  xticks=[0, 0.25, 0.5, 0.75, 1], yticks=[0, 50, 100, 150], center=[-1.4, 0.3, 0])
         ax = A.ax
         bars = hist_bars(ax, e, h, color=BOOT, opacity=0.8)
@@ -117,6 +117,7 @@ class Principle(VoiceoverScene):
             label(r"we can compute the law of $\hat\theta^* - \hat\theta$ under $\hat F_n$, \ by simulation", font_size=24, color=BOOT),
             label(r"the plug-in principle: \ use the second for the first", font_size=26, color=OBS),
         ), 12.4, 0.22, [0, -2.85, 0])
+        intro = label('The empirical distribution substitutes for the population', font_size=36)
         with self.voiceover(
             "Efron's diagram makes the logic plain. <bookmark mark='a'/> In the real world, an unknown distribution F produces "
             "our sample, and the sample produces the estimate. If we could repeat that, we'd see the estimate's sampling "
@@ -128,7 +129,9 @@ class Principle(VoiceoverScene):
             "<bookmark mark='f'/> The bootstrap is the plug-in principle, Part 9's idea, applied to a whole sampling "
             "distribution: use the second as an estimate of the first. Part 30 will show when that's justified."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(head_r), LaggedStart(FadeIn(realrow[0]), GrowArrow(arrs[0]), FadeIn(realrow[1]), GrowArrow(arrs[1]),
                                                   FadeIn(realrow[2]), lag_ratio=0.5), run_time=2.5)
             vo.wait_until("b")
@@ -158,17 +161,17 @@ class Principle(VoiceoverScene):
         tb = label(r"2,000 resamples of one sample of 25", font_size=20, color=BOOT).next_to(B, UP, buff=0.12)
         rows = fit_rows(VGroup(
             MathTex(rf"\text{{real SD}} = {d['sd_real']:.2f}\qquad \text{{bootstrap SD}} = {d['sd_boot']:.2f}", font_size=28),
-            label(r"the bootstrap only sees one sample: \ its spikes are that sample's middle values", font_size=22, color=GREY_A),
+            label(r"the bootstrap only sees one sample: \ its spikes lie on the 25 observed values", font_size=22, color=GREY_A),
         ), 12.4, 0.25, [0, -2.4, 0])
         tag = simulated_tag(r"the World's adults", corner=DR)
         with self.voiceover(
             "Can we check the principle? In the World, yes, because we can draw as many real samples as we like. "
             "<bookmark mark='a'/> The statistic is the median income, from samples of twenty-five. On the left, the real sampling "
             "distribution, two thousand samples from the World, centred on the true median of thirty-nine thousand. "
-            "<bookmark mark='b'/> On the right, the bootstrap from just one of those samples, whose median is thirty-seven point "
+            "<bookmark mark='b'/> On the right, the bootstrap from a separate fixed sample, whose median is thirty-seven point "
             "seven. <bookmark mark='c'/> The real standard deviation is six point oh six; the bootstrap's, four point seven two. "
             "In the right ballpark, from one sample, but low. <bookmark mark='d'/> And the bootstrap histogram is spiky: the "
-            "median of a resample can only be one of the sample's middle values, so it takes only sixteen distinct values. With "
+            "median of a resample can be any of the 25 sample values. These 2,000 replicates happen to visit sixteen of them. With "
             "a median and twenty-five observations, the bootstrap is rough. For smooth statistics like means and correlations "
             "it does much better."
         ) as vo:
@@ -196,10 +199,10 @@ class Principle(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> How many resamples? Fifteen schools can be drawn in fifteen to the fifteenth ordered ways; as "
             "unordered collections, there are seventy-seven million distinct resamples. <bookmark mark='b'/> The ideal bootstrap "
-            "would average over all of them, and give the exact bootstrap distribution. <bookmark mark='c'/> Instead we sample "
+            "would average uniformly over ordered draws, or give unordered multisets their multinomial weights. They are not equally likely. <bookmark mark='c'/> Instead we sample "
             "B of them: Part 7's Monte Carlo, with error shrinking like one over root B. There are now two errors: the "
             "sampling error, from having one sample, which no amount of computing removes; and the Monte Carlo error, from "
-            "finite B, which we can make as small as we like. <bookmark mark='d'/> A thousand resamples give a standard error to "
+            "finite B, which we can make as small as we like. <bookmark mark='d'/> For a regular distribution with finite fourth moments, a thousand resamples can give a standard error to "
             "within a few percent. Interval endpoints sit in the tails, where draws are scarce, and need a few thousand."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.2, buff=0.7, edge=6.9)
