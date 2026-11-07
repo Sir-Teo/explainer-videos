@@ -86,7 +86,7 @@ class MH(VoiceoverScene):
             A = axes([0, 600], [-3.5, 3.5], x_length=11.0, y_length=1.5, xlabel=r"", ylabel=r"", xticks=[], yticks=[],
                      center=[0.3, 2.0 - 2.05 * k, 0])
             c = polyline(A.ax, np.arange(len(v)), v, col, 1.6)
-            nm = label(name, font_size=22, color=col).next_to(A, LEFT, buff=0.2).shift(RIGHT * 0.0)
+            nm = label(name, font_size=22, color=col).next_to(A, UP, buff=0.08).align_to(A, LEFT).shift(RIGHT * 0.0)
             group.add(A)
             curves.append((c, nm))
         with self.voiceover(

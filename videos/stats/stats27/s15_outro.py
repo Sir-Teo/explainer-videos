@@ -62,6 +62,7 @@ class Outro(VoiceoverScene):
             (r"multiple imputation by MCMC", [41]), (r"Markov chains and mixing times", [44]),
             (r"stochastic approximation", [50]), (r"BvM and posterior contraction", [53]),
         ], font_size=22)
+        self.play(FadeIn(card.head))
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part 28 uses Pareto-smoothed importance sampling for leave-one-out "
             "cross-validation. Part 32 fits sparsity priors with NUTS. Part 38 builds the Kalman filter the particles "
@@ -70,7 +71,7 @@ class Outro(VoiceoverScene):
             "behind adaptation. And Part 53 proves Bernstein–von Mises."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):

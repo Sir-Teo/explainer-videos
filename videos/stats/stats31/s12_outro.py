@@ -83,6 +83,7 @@ class Outro(VoiceoverScene):
             (r"Marchenko--Pastur; \ the spiked model", [52]), (r"sparse PCA's computational barrier", [50]),
             (r"proportional asymptotics", [59]), (r"robust covariance in high dimensions", [60]),
         ], font_size=22)
+        self.play(FadeIn(card.head))
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part 32 explains the graphical lasso's penalty, and sparsity in "
             "general. Part 33 tests thousands of correlated hypotheses. Part 36 matches treated and control units by "
@@ -92,7 +93,7 @@ class Outro(VoiceoverScene):
             "covariance estimation robust in high dimensions."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):

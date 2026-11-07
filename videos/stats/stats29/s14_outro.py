@@ -85,6 +85,7 @@ class Outro(VoiceoverScene):
             (r"Gaussian processes, \ kriging", [39]), (r"hazard smoothing", [40]),
             (r"minimax rates", [50]), (r"posterior contraction for curves", [53]),
         ], font_size=22)
+        self.play(FadeIn(card.head))
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part 30 makes smoothers robust. Part 32 fits sparse additive models in "
             "high dimensions. Part 34 wraps any smoother in conformal prediction bands. Part 37 uses local linear regression "
@@ -93,7 +94,7 @@ class Outro(VoiceoverScene):
             "studies how fast posteriors for curves contract."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):
