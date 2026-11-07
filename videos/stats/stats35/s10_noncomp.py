@@ -25,14 +25,14 @@ class Noncompliance(VoiceoverScene):
             label(r"$Z$: \ the coin's assignment; \ $D$: \ the treatment actually taken", font_size=26),
             label(r"some assigned the drug never take it; \ some controls get it elsewhere", font_size=26, color=MISSC),
             label(r"$Z$ is random; \ $D$ is not: \ it is chosen, \ by patients", font_size=26, color=TAUC),
-            label(r"three tempting analyses, \ and one that is right", font_size=26, color=GREY_A),
+            label(r"ITT targets assignment; \ LATE targets compliers under extra assumptions", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In a real trial, the coin's assignment Z and the treatment actually taken, D, can differ. "
-            "<bookmark mark='b'/> Some patients assigned the drug never take it; some assigned to control obtain it "
-            "elsewhere. <bookmark mark='c'/> Z is random; D is not. It is chosen, by the patients, for reasons that may be "
-            "related to their health. <bookmark mark='d'/> There are three tempting ways to analyse such a trial, and one "
-            "that is right."
+            "<bookmark mark='a'/> In a real trial, the coin's assignment Z and the treatment actually taken, D, can "
+            "differ. <bookmark mark='b'/> Some patients assigned the drug never take it; some assigned to control "
+            "obtain it elsewhere. <bookmark mark='c'/> Z is random; D is not. It is chosen, by the patients, for "
+            "reasons that may be related to their health. <bookmark mark='d'/> Different analyses target different "
+            "effects. Intention to treat preserves randomization; a complier effect needs further assumptions."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -57,10 +57,11 @@ class Noncompliance(VoiceoverScene):
             "they would take if assigned to control, and if assigned to the drug. That sorts patients into principal "
             "strata. <bookmark mark='b'/> Compliers take the drug exactly when assigned it: " + f"{100 * sh[0]:.0f}" + " "
             "percent of the World's patients. Never-takers never take it: " + f"{100 * sh[1]:.0f}" + " percent. "
-            "Always-takers get it regardless: " + f"{100 * sh[2]:.0f}" + " percent. Defiers would do the opposite of their "
-            "assignment; we assume there are none. <bookmark mark='c'/> The strata are different people. The never-takers "
-            "tend to feel well, with lower pressure even untreated; the always-takers are the sickest. Nobody's stratum is "
-            "observed directly."
+            "Always-takers get it regardless: " + f"{100 * sh[2]:.0f}" + " percent. Defiers would do the opposite of their assignment; we assume there are none. <bookmark "
+            "mark='c'/> The strata are different people. The never-takers tend to feel well, with lower pressure even"
+            " untreated; the always-takers are the sickest. Individual stratum membership is only partly observed. "
+            "Under monotonicity, a treated control is an always-taker and an untreated assigned patient is a "
+            "never-taker; the other two observed groups mix strata."
         ) as vo:
             self.add(trial_tag())
             vo.wait_until("a")
@@ -76,8 +77,8 @@ class Noncompliance(VoiceoverScene):
         rows = [[r"analysis", r"compares", r"estimate"],
                 [r"intention to treat", r"by $Z$", rf"{d['itt']['est']:.2f}"],
                 [r"as treated", r"by $D$", rf"{d['as_treated']['est']:.2f}"],
-                [r"per protocol", r"compliant patients only", rf"{d['per_protocol']['est']:.2f}"],
-                [r"IV (Wald)", r"ITT / share of compliers", rf"{d['iv']['est']:.2f}"],
+                [r"per protocol", r"observed adherers only", rf"{d['per_protocol']['est']:.2f}"],
+                [r"IV (Wald)", r"ITT / estimated first stage", rf"{d['iv']['est']:.2f}"],
                 [r"truth", r"compliers' average effect", rf"{d['cace']:.2f}"]]
         tab = table_rows(rows, font_size=26, col_buff=0.8, row_buff=0.28, colors=[GREY_A, Y0C, MISSC, MISSC, BANDC, TRUEC]).move_to([0, 0.6, 0])
         with self.voiceover(
@@ -85,9 +86,9 @@ class Noncompliance(VoiceoverScene):
             "analysis compares the arms as randomized: minus " + say(-d["itt"]["est"], 1) + ". It is unbiased, but for the "
             "effect of being assigned the drug, diluted by everyone who did not take it. <bookmark mark='b'/> The "
             "as-treated analysis compares those who took the drug with those who did not: minus " + say(-d["as_treated"]["est"], 1)
-            + ". The per-protocol analysis drops the noncompliers: minus " + say(-d["per_protocol"]["est"], 1) + ". Both "
-            "compare groups formed by the patients' choices, and both are biased. <bookmark mark='c'/> The instrumental "
-            "variable estimate divides the intention-to-treat effect by the share of compliers: minus "
+            + ". The naive per-protocol analysis keeps observed adherers, a mixture of principal strata: minus " + say(-d["per_protocol"]["est"], 1) + ". Both compare groups formed by the patients' choices, and both are biased. <bookmark mark='c'/> The "
+            "instrumental variable estimate divides the intention-to-treat effect by the estimated first-stage "
+            "treatment contrast: minus "
             + say(-d["iv"]["est"], 1) + ", <bookmark mark='d'/> against the compliers' true average effect of minus "
             + say(-d["cace"], 1) + "."
         ) as vo:
@@ -123,6 +124,9 @@ class Noncompliance(VoiceoverScene):
             "mark='d'/> For the World's trial, minus five point six two over point six four nine, which is minus eight "
             "point six six."
         ) as vo:
+            intro=label('Randomization and exclusion isolate the complier contribution',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -158,17 +162,17 @@ class Noncompliance(VoiceoverScene):
 
     def meaning(self):
         rows = fit_rows(VGroup(
-            label(r"the LATE is the effect for compliers, \ who cannot be identified individually", font_size=26),
+            label(r"the LATE is the effect for compliers, \ whose full membership is not observed", font_size=26),
             label(r"intention to treat answers the policy question: \ what happens if we offer the drug?", font_size=26, color=Y0C),
             label(r"the LATE answers a scientific one: \ what does the drug do to those who take it when offered?", font_size=26, color=BANDC),
             label(r"report both; \ never as-treated alone", font_size=26, color=TAUC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The local average treatment effect is the effect for compliers, a group we cannot list, "
-            "because no one's stratum is observed. <bookmark mark='b'/> The intention-to-treat effect answers the policy "
-            "question: what happens if we offer this drug to such patients? <bookmark mark='c'/> The local effect answers a "
-            "scientific one: what does the drug do for those who take it when it is offered? <bookmark mark='d'/> Report "
-            "both; and never report the as-treated comparison alone."
+            "<bookmark mark='a'/> The local average treatment effect is the effect for compliers, a group whose full "
+            "membership we cannot list from one assignment. <bookmark mark='b'/> The intention-to-treat effect "
+            "answers the policy question: what happens if we offer this drug to such patients? <bookmark mark='c'/> "
+            "The local effect answers a scientific one: what does the drug do for those who take it when it is "
+            "offered? <bookmark mark='d'/> Report both; and never report the as-treated comparison alone."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

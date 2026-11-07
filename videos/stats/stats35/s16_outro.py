@@ -27,7 +27,7 @@ class Outro(VoiceoverScene):
             (r"estimands; \ SUTVA", TAUC), (r"selection bias: \ $-2.2$ vs $-7.8$", MISSC),
             (r"Fisher: \ the sharp null, \ exactly", Y0C), (r"Neyman: \ the conservative variance", Y0C),
             (r"blocks and pairs: \ variance $\times 0.6$", BANDC), (r"adjustment: \ Freedman's warning, \ Lin's fix", BANDC),
-            (r"clusters: \ deff 9.6; \ 36\% vs 90\%", MISSC), (r"noncompliance: \ ITT, \ LATE $= -8.7$", TAUC),
+            (r"clusters: \ deff about 11; \ 36\% vs 90\%", MISSC), (r"noncompliance: \ ITT, \ LATE $= -8.7$", TAUC),
             (r"interference; \ subgroups; \ sequential boundaries", SEQC), (r"surrogates (CAST); \ transport", MISSC),
         ]
         rows = VGroup(*[label(rf"{i}.\ \ {t}", font_size=26, color=c) for i, (t, c) in enumerate(items)])
@@ -38,16 +38,17 @@ class Outro(VoiceoverScene):
         head = label(r"Part 35, \ in twelve lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Part thirty-five in twelve lines. <bookmark mark='a'/> The Salk trial ran two designs, and only the randomized "
-            "one measured the vaccine's effect correctly. A causal effect compares potential outcomes, and the science table "
-            "is always half missing. Estimands must be named, and SUTVA rules out interference and hidden versions. When a "
-            "doctor chooses, selection bias swallows most of the effect; a coin removes it. Fisher's sharp null gives exact "
-            "tests; Neyman's conservative variance gives intervals for the average effect. Blocking and pairing cut the "
-            "variance by two fifths. Regression adjustment helps, provided we interact and use sandwich errors, as Lin "
-            "showed against Freedman's warning. Randomizing schools means analysing schools. With noncompliance, intention "
-            "to treat and the local average treatment effect are honest; as-treated is not. Vaccines need two-stage "
-            "designs; subgroups need suspicion; interim looks need boundaries. Surrogates can mislead, and trials must be "
-            "transported to the people who will use them."
+            "Part thirty-five in twelve lines. <bookmark mark='a'/> The Salk trial ran two designs, and the "
+            "randomized comparison avoids the selection bias that threatens the observed-control comparison. A causal"
+            " effect compares potential outcomes, and the science table is always half missing. Estimands must be "
+            "named, and SUTVA rules out interference and hidden versions. When a doctor chooses, selection bias "
+            "swallows most of the effect; a coin removes it. Fisher's sharp null gives exact tests; Neyman's "
+            "conservative variance gives intervals for the average effect. Blocking and pairing cut the variance by "
+            "two fifths. Regression adjustment helps, provided we interact and use sandwich errors, as Lin showed "
+            "against Freedman's warning. Randomizing schools means analysing schools. With noncompliance, intention "
+            "to treat and the local average treatment effect are honest; as-treated is not. Vaccination strategies "
+            "with spillovers can be studied with two-stage designs; subgroups need suspicion; interim looks need "
+            "boundaries. Surrogates can mislead, and trials must be transported to the people who will use them."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -80,6 +81,7 @@ class Outro(VoiceoverScene):
             (r"efficient estimation of the ATE", [49]), (r"anytime-valid sequential tests", [58]),
             (r"heterogeneous effects, \ interference, \ mediation", [62]), (r"fairness and counterfactuals", [63]),
         ], font_size=22)
+        self.add(card.head)
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part 36 estimates causal effects without randomization, framed as "
             "target trials. Part 37 uses natural experiments and instruments, the LATE's home. Part 40 analyses survival "
@@ -88,7 +90,7 @@ class Outro(VoiceoverScene):
             "interference and mediation. And Part 63 asks what counterfactual fairness means."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):

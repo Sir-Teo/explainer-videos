@@ -1,0 +1,344 @@
+{
+  "version": "6.9",
+  "hitCount": 1,
+  "request": {
+    "queryString": "EXT_ID:1900101 AND SRC:MED",
+    "internalQuery": "EXT_ID:1900101 AND SRC:MED",
+    "resultType": "CORE",
+    "cursorMark": "*",
+    "pageSize": 25,
+    "sort": "",
+    "synonym": false
+  },
+  "resultList": {
+    "result": [
+      {
+        "id": "1900101",
+        "source": "MED",
+        "pmid": "1900101",
+        "doi": "10.1056/nejm199103213241201",
+        "title": "Mortality and morbidity in patients receiving encainide, flecainide, or placebo. The Cardiac Arrhythmia Suppression Trial.",
+        "authorString": "Echt DS, Liebson PR, Mitchell LB, Peters RW, Obias-Manno D, Barker AH, Arensberg D, Baker A, Friedman L, Greene HL.",
+        "authorList": {
+          "author": [
+            {
+              "fullName": "Echt DS",
+              "lastName": "Echt",
+              "firstName": "D S",
+              "initials": "DS",
+              "authorAffiliationDetailsList": {
+                "authorAffiliation": [
+                  {
+                    "affiliation": "CAST Coordinating Center, Seattle, WA 98105."
+                  }
+                ]
+              }
+            },
+            {
+              "fullName": "Liebson PR",
+              "lastName": "Liebson",
+              "firstName": "P R",
+              "initials": "PR"
+            },
+            {
+              "fullName": "Mitchell LB",
+              "lastName": "Mitchell",
+              "firstName": "L B",
+              "initials": "LB"
+            },
+            {
+              "fullName": "Peters RW",
+              "lastName": "Peters",
+              "firstName": "R W",
+              "initials": "RW"
+            },
+            {
+              "fullName": "Obias-Manno D",
+              "lastName": "Obias-Manno",
+              "firstName": "D",
+              "initials": "D"
+            },
+            {
+              "fullName": "Barker AH",
+              "lastName": "Barker",
+              "firstName": "A H",
+              "initials": "AH"
+            },
+            {
+              "fullName": "Arensberg D",
+              "lastName": "Arensberg",
+              "firstName": "D",
+              "initials": "D"
+            },
+            {
+              "fullName": "Baker A",
+              "lastName": "Baker",
+              "firstName": "A",
+              "initials": "A"
+            },
+            {
+              "fullName": "Friedman L",
+              "lastName": "Friedman",
+              "firstName": "L",
+              "initials": "L"
+            },
+            {
+              "fullName": "Greene HL",
+              "lastName": "Greene",
+              "firstName": "H L",
+              "initials": "HL"
+            }
+          ]
+        },
+        "authorIdList": {
+          "authorId": [
+            {
+              "type": "ORCID",
+              "value": "0000-0001-9696-4477"
+            }
+          ]
+        },
+        "dataLinksTagsList": {
+          "dataLinkstag": [
+            "altmetrics",
+            "wikipedia"
+          ]
+        },
+        "journalInfo": {
+          "issue": "12",
+          "volume": "324",
+          "journalIssueId": 830989,
+          "dateOfPublication": "1991 Mar",
+          "monthOfPublication": 3,
+          "yearOfPublication": 1991,
+          "journal": {
+            "medlineAbbreviation": "N Engl J Med",
+            "title": "The New England journal of medicine",
+            "essn": "1533-4406",
+            "issn": "0028-4793",
+            "isoabbreviation": "N Engl J Med",
+            "nlmid": "0255562"
+          },
+          "printPublicationDate": "1991-03-01"
+        },
+        "pubYear": "1991",
+        "pageInfo": "781-788",
+        "abstractText": "<h4>Background and methods</h4>In the Cardiac Arrhythmia Suppression Trial, designed to test the hypothesis that suppression of ventricular ectopy after a myocardial infarction reduces the incidence of sudden death, patients in whom ventricular ectopy could be suppressed with encainide, flecainide, or moricizine were randomly assigned to receive either active drug or placebo. The use of encainide and flecainide was discontinued because of excess mortality. We examined the mortality and morbidity after randomization to encainide or flecainide or their respective placebo.<h4>Results</h4>Of 1498 patients, 857 were assigned to receive encainide or its placebo (432 to active drug and 425 to placebo) and 641 were assigned to receive flecainide or its placebo (323 to active drug and 318 to placebo). After a mean follow-up of 10 months, 89 patients had died: 59 of arrhythmia (43 receiving drug vs. 16 receiving placebo; P = 0.0004), 22 of nonarrhythmic cardiac causes (17 receiving drug vs. 5 receiving placebo; P = 0.01), and 8 of noncardiac causes (3 receiving drug vs. 5 receiving placebo). Almost all cardiac deaths not due to arrhythmia were attributed to acute myocardial infarction with shock (11 patients receiving drug and 3 receiving placebo) or to chronic congestive heart failure (4 receiving drug and 2 receiving placebo). There were no differences between the patients receiving active drug and those receiving placebo in the incidence of nonlethal disqualifying ventricular tachycardia, proarrhythmia, syncope, need for a permanent pacemaker, congestive heart failure, recurrent myocardial infarction, angina, or need for coronary-artery bypass grafting or angioplasty.<h4>Conclusions</h4>There was an excess of deaths due to arrhythmia and deaths due to shock after acute recurrent myocardial infarction in patients treated with encainide or flecainide. Nonlethal events, however, were equally distributed between the active-drug and placebo groups. The mechanisms underlying the excess mortality during treatment with encainide or flecainide remain unknown.",
+        "affiliation": "CAST Coordinating Center, Seattle, WA 98105.",
+        "publicationStatus": "ppublish",
+        "language": "eng",
+        "pubModel": "Print",
+        "pubTypeList": {
+          "pubType": [
+            "Comparative Study",
+            "Clinical Trial",
+            "Research Support, U.S. Gov't, P.H.S.",
+            "Multicenter Study",
+            "Randomized Controlled Trial",
+            "Journal Article"
+          ]
+        },
+        "meshHeadingList": {
+          "meshHeading": [
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Humans"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Heart Arrest",
+              "meshQualifierList": {
+                "meshQualifier": [
+                  {
+                    "majorTopic_YN": "N",
+                    "abbreviation": "MO",
+                    "qualifierName": "mortality"
+                  }
+                ]
+              }
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Myocardial Infarction",
+              "meshQualifierList": {
+                "meshQualifier": [
+                  {
+                    "majorTopic_YN": "N",
+                    "abbreviation": "MO",
+                    "qualifierName": "mortality"
+                  }
+                ]
+              }
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Anilides",
+              "meshQualifierList": {
+                "meshQualifier": [
+                  {
+                    "majorTopic_YN": "N",
+                    "abbreviation": "AE",
+                    "qualifierName": "adverse effects"
+                  },
+                  {
+                    "majorTopic_YN": "Y",
+                    "abbreviation": "TU",
+                    "qualifierName": "therapeutic use"
+                  }
+                ]
+              }
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Encainide"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Flecainide",
+              "meshQualifierList": {
+                "meshQualifier": [
+                  {
+                    "majorTopic_YN": "N",
+                    "abbreviation": "AE",
+                    "qualifierName": "adverse effects"
+                  },
+                  {
+                    "majorTopic_YN": "Y",
+                    "abbreviation": "TU",
+                    "qualifierName": "therapeutic use"
+                  }
+                ]
+              }
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Electrocardiography"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Morbidity"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Actuarial Analysis"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Follow-Up Studies"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Patient Compliance"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Arrhythmias, Cardiac",
+              "meshQualifierList": {
+                "meshQualifier": [
+                  {
+                    "majorTopic_YN": "N",
+                    "abbreviation": "DT",
+                    "qualifierName": "drug therapy"
+                  },
+                  {
+                    "majorTopic_YN": "Y",
+                    "abbreviation": "MO",
+                    "qualifierName": "mortality"
+                  }
+                ]
+              }
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Heart Failure",
+              "meshQualifierList": {
+                "meshQualifier": [
+                  {
+                    "majorTopic_YN": "N",
+                    "abbreviation": "MO",
+                    "qualifierName": "mortality"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "chemicalList": {
+          "chemical": [
+            {
+              "name": "Anilides",
+              "registryNumber": "0"
+            },
+            {
+              "name": "Flecainide",
+              "registryNumber": "K94FTS1806"
+            },
+            {
+              "name": "Encainide",
+              "registryNumber": "SY3J0147NB"
+            }
+          ]
+        },
+        "subsetList": {
+          "subset": [
+            {
+              "code": "IM",
+              "name": "Index Medicus"
+            }
+          ]
+        },
+        "fullTextUrlList": {
+          "fullTextUrl": [
+            {
+              "availability": "Subscription required",
+              "availabilityCode": "S",
+              "documentStyle": "doi",
+              "site": "DOI",
+              "url": "https://doi.org/10.1056/NEJM199103213241201"
+            }
+          ]
+        },
+        "commentCorrectionList": {
+          "commentCorrection": [
+            {
+              "source": "MED",
+              "id": "1359413",
+              "reference": "N Engl J Med. 1992 Dec 17;327(25):1818. doi: 10.1056/NEJM199212173272515",
+              "type": "Comment in",
+              "orderIn": 1
+            },
+            {
+              "source": "MED",
+              "id": "1906989",
+              "reference": "N Engl J Med. 1991 Aug 22;325(8):584-5.",
+              "type": "Comment in",
+              "orderIn": 2
+            }
+          ]
+        },
+        "isOpenAccess": "N",
+        "inEPMC": "N",
+        "inPMC": "N",
+        "citedByCount": 2003,
+        "hasReferences": "Y",
+        "hasTextMinedTerms": "Y",
+        "hasDbCrossReferences": "N",
+        "hasPDF": "N",
+        "hasBook": "N",
+        "hasSuppl": "N",
+        "hasLabsLinks": "Y",
+        "hasData": "N",
+        "authMan": "N",
+        "epmcAuthMan": "N",
+        "nihAuthMan": "N",
+        "hasTMAccessionNumbers": "N",
+        "dateOfCompletion": "1991-04-02",
+        "dateOfCreation": "1991-03-21",
+        "dateOfRevision": "2023-08-15",
+        "firstPublicationDate": "1991-03-01",
+        "firstIndexDate": "2010-03-25",
+        "hasEvaluations": "N"
+      }
+    ]
+  }
+}

@@ -61,11 +61,6 @@ def nest(obj):
     return obj
 
 
-def eff_reps(per_rep, nominal=0.9) -> int:
-    v = np.var(np.asarray(per_rep, float), ddof=1) / len(per_rep)
-    return int(round(nominal * (1 - nominal) / max(v, 1e-12)))
-
-
 def complete(n, n1, g):
     z = np.zeros(n, bool)
     z[g.choice(n, n1, replace=False)] = True
@@ -115,7 +110,9 @@ def compute_fisher():
     z[g.choice(12, 6, replace=False)] = True
     y = np.where(z, y1, y0)
     r = CA.fisher_test(y, z)
-    ci = CA.fisher_ci(y, z, np.arange(-30, 15.5, 0.5), reps=2000, rng=g)
+    grid = np.arange(-30, 15.5, 0.5)
+    kept = [float(tau) for tau in grid if CA.fisher_test(y, z, tau0=tau)["p"] > 0.1]
+    ci = {"lo": min(kept), "hi": max(kept)}
     hist, edges = np.histogram(r["dist"], bins=30)
     # all 2,000, Monte Carlo
     Z = complete(len(t["y0"]), 1000, g)
@@ -123,6 +120,9 @@ def compute_fisher():
     big = CA.fisher_test(Y, Z, reps=10000, rng=g)
     return nest({"y": y, "z": z, "obs": r["obs"], "p": r["p"], "n_assign": len(r["dist"]), "hist": hist,
                  "edges": edges, "ci": [ci["lo"], ci["hi"]], "big_obs": big["obs"], "big_p": big["p"],
+                 "ci_grid": grid, "ci_kept": kept, "ci_enumerated": True,
+                 "big_extreme": int(np.sum(np.abs(big["dist"]) >= abs(big["obs"]) - 1e-12)),
+                 "big_reps": 10000,
                  "big_max": float(np.max(np.abs(big["dist"]))), "big_sd": float(np.std(big["dist"]))})
 
 
@@ -256,7 +256,9 @@ def compute_cluster():
         wn.append(r["naive"]["se"])
         wc.append(r["cluster"]["se"])
     sizes = s["size"]
-    icc = w.SCHOOL_SD ** 2 / (w.SCHOOL_SD ** 2 + w.PUPIL_SD ** 2)
+    between = w.SCHOOL_SD ** 2 + ((w.SES_SLOPE + w.SES_CONTEXT) * w.SES_SCHOOL_SD) ** 2
+    within = w.PUPIL_SD ** 2 + (w.SES_SLOPE * 0.9) ** 2
+    icc = between / (between + within)
     return nest({"effect": eff, "k": k, "n": len(sch), "mean_size": float(sizes.mean()), "icc": icc,
                  "deff": CA.design_effect(float(sizes.mean()), icc), "cover_naive": float(np.mean(cn)),
                  "cover_cluster": float(np.mean(cc)), "se_naive": float(np.mean(wn)), "se_cluster": float(np.mean(wc)),
@@ -312,16 +314,15 @@ def compute_interfere():
     psi[g.choice(K, K // 2, replace=False)] = 1
     v, y = run(psi, g)
     est = CA.two_stage(y, v, town, psi)
-    # the truth for this population: average over many within-town assignments with every town on each strategy
+    # Exact strategy-average potential outcomes: town sizes are all 100, so
+    # a fixed 30%/70% allocation fixes the exposure share, even as identities vary.
     truth = {}
     for k in (0, 1):
-        ys1, ys0, ya = [], [], []
-        for _ in range(60):
-            vv, yy = run(np.full(K, k), g)
-            ys1.append(yy[vv].mean())
-            ys0.append(yy[~vv].mean())
-            ya.append(yy.mean())
-        truth[k] = {"y1": float(np.mean(ys1)), "y0": float(np.mean(ys0)), "all": float(np.mean(ya))}
+        exposure = np.full(K, shares[k])
+        yv1 = w.infected(np.ones(len(town)), exposure).mean()
+        yv0 = w.infected(np.zeros(len(town)), exposure).mean()
+        truth[k] = {"y1": float(yv1), "y0": float(yv0),
+                    "all": float(shares[k] * yv1 + (1 - shares[k]) * yv0)}
     tr = {"direct0": truth[0]["y0"] - truth[0]["y1"], "direct1": truth[1]["y0"] - truth[1]["y1"],
           "indirect": truth[0]["y0"] - truth[1]["y0"], "total": truth[0]["y0"] - truth[1]["y1"],
           "overall": truth[0]["all"] - truth[1]["all"]}
@@ -333,6 +334,18 @@ def compute_interfere():
     allv = w.infected(np.ones(len(town)), np.ones(K)).mean()
     return nest({"est": est, "truth": truth, "true_effects": tr, "rct50": float(y50[~v50].mean() - y50[v50].mean()),
                  "none": float(none), "all": float(allv), "rate_mean": float(e["rate"].mean())})
+
+
+def subgroup_interaction_z(deaths0, n0, deaths1, n1):
+    """Each subgroup risk difference versus its disjoint complement's estimate."""
+    deaths0, deaths1, n0, n1 = (np.asarray(a, float) for a in (deaths0, deaths1, n0, n1))
+    p0, p1 = deaths0 / n0, deaths1 / n1
+    rest_n0, rest_n1 = n0.sum() - n0, n1.sum() - n1
+    rest0 = (deaths0.sum() - deaths0) / rest_n0
+    rest1 = (deaths1.sum() - deaths1) / rest_n1
+    var = (p0 * (1 - p0) / n0 + p1 * (1 - p1) / n1
+           + rest0 * (1 - rest0) / rest_n0 + rest1 * (1 - rest1) / rest_n1)
+    return ((p0 - p1) - (rest0 - rest1)) / np.sqrt(var)
 
 
 def compute_subgroups():
@@ -353,8 +366,8 @@ def compute_subgroups():
         diff = r0 - r1
         any_harm += int(np.any(diff <= 0))
         n0, n1 = np.bincount(s0, minlength=12), np.bincount(s1, minlength=12)
-        se = np.sqrt(r0 * (1 - r0) / n0 + r1 * (1 - r1) / n1)
-        zi = (diff - (p0 - p1)) / se
+        zi = subgroup_interaction_z(np.bincount(s0, weights=d0, minlength=12), n0,
+                                    np.bincount(s1, weights=d1, minlength=12), n1)
         any_sig_int += int(np.any(np.abs(zi) > 1.96))
         worst.append(float(diff.min()))
     # one example draw
@@ -369,22 +382,69 @@ def compute_subgroups():
                  "p_sig_interaction_one": 0.05})
 
 
+def crossing_probs(bounds, info=None, drift=0.0, nodes=160):
+    """Brownian first-crossing probabilities by smooth continuation quadrature.
+
+    Integrate on each look's continuation interval rather than rounding a moving
+    boundary to a fixed grid. Infinite boundaries use an eight-SD tail cutoff.
+    """
+    from scipy.special import roots_legendre
+
+    bounds = np.asarray(bounds, float)
+    times = np.arange(1, len(bounds) + 1) / len(bounds) if info is None else np.asarray(info, float)
+    u, weight = roots_legendre(nodes)
+    previous_t, previous_x, mass = 0.0, None, None
+    out = []
+    for boundary, t in zip(bounds, times):
+        dt = t - previous_t
+        sd = math.sqrt(dt)
+        edge = boundary * math.sqrt(t)
+        limit = edge if np.isfinite(edge) else 8 * math.sqrt(t) + abs(drift) * t
+        x, weights = limit * u, limit * weight
+        if mass is None:
+            out.append(float(stats.norm.sf((edge - drift * dt) / sd)
+                             + stats.norm.cdf((-edge - drift * dt) / sd)))
+            density = stats.norm.pdf(x, drift * dt, sd)
+        else:
+            center = previous_x + drift * dt
+            out.append(float(mass @ (stats.norm.sf((edge - center) / sd)
+                                     + stats.norm.cdf((-edge - center) / sd))))
+            density = stats.norm.pdf(x[:, None], center[None, :], sd) @ mass
+        mass = density * weights
+        previous_x, previous_t = x, t
+    return np.asarray(out)
+
+
+def sequential_boundaries(K=5, alpha=0.05, nodes=160):
+    from scipy.optimize import brentq
+
+    times = np.arange(1, K + 1) / K
+    poc = brentq(lambda c: crossing_probs([c] * K, nodes=nodes).sum() - alpha, 1.5, 4, xtol=1e-10)
+    obf_constant = brentq(lambda c: crossing_probs(c / np.sqrt(times), nodes=nodes).sum() - alpha,
+                         1.5, 4, xtol=1e-10)
+    spending = CA.spending(times, alpha)
+    increments = np.diff(np.r_[0.0, spending])
+    ld = []
+    for k in range(K):
+        ld.append(brentq(lambda c: crossing_probs(ld + [c], times[:k + 1], nodes=nodes)[-1] - increments[k],
+                         0.5, 12, xtol=1e-10))
+    return poc, obf_constant / np.sqrt(times), np.asarray(ld)
+
+
 def compute_sequential():
     K = 5
-    poc = CA.pocock(K)
-    obf = CA.obrien_fleming(K)
-    ld = CA.spending_bounds(np.arange(1, K + 1) / K)
+    poc, obf, ld = sequential_boundaries(K)
     g = rng(360)
     peek = {k: CA.peeking_sim(k, 20000, g) for k in (1, 2, 3, 5, 10, 20)}
     # power and expected stopping look under a drift giving 80% power for the fixed design
     theta = stats.norm.ppf(0.975) + stats.norm.ppf(0.8)
     res = {}
     for name, b in (("fixed", [np.inf] * (K - 1) + [1.96]), ("pocock", [poc] * K), ("obf", list(obf))):
-        cp = CA.crossing_probs(b, drift=theta)
+        cp = crossing_probs(b, drift=theta)
         power = float(cp.sum())
         # expected information used: stop at look k with prob cp[k]; else run to K
         e_looks = float(np.sum(cp * np.arange(1, K + 1)) + (1 - power) * K) / K
-        res[name] = {"power": power, "e_info": e_looks, "alpha": float(CA.crossing_probs(b).sum())}
+        res[name] = {"power": power, "e_info": e_looks, "alpha": float(crossing_probs(b).sum())}
     # a z-path for illustration: one simulated trial under the alternative
     x = g.standard_normal(K * 40) + theta / math.sqrt(K * 40)
     zpath = [float(x[: 40 * k].sum() / math.sqrt(40 * k)) for k in range(1, K + 1)]
@@ -430,6 +490,7 @@ def compute_transport():
     h_t = np.histogram(t["age"], bins=ages)[0]
     h_p = np.histogram(t["age_pool"], bins=ages)[0]
     return nest({"trial": trial, "transported": tr["est"], "ess": tr["ess"], "ate_trial": float(t["tau"].mean()),
+                 "ate_target_sample": float(t["tau_pool"][k].mean()), "target_sample_n": len(k),
                  "ate_pool": float(t["tau_pool"].mean()), "ages": ages, "h_trial": h_t / h_t.sum(),
                  "h_pool": h_p / h_p.sum()})
 

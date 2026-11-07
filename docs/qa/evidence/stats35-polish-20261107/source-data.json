@@ -1,0 +1,27 @@
+[
+  {
+    "name": "isis2",
+    "source": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:2899772%20AND%20SRC:MED&format=json&resultType=core",
+    "title": "Randomised trial of intravenous streptokinase, oral aspirin, both, or neither among 17,187 cases of suspected acute myocardial infarction: ISIS-2. ISIS-2 (Second International Study of Infarct Survival) Collaborative Group.",
+    "sha256": "e291f8fdcf48f325bfcf91cd4d887e8b9b3887a18bb25701ee679e4a7b2ef53a",
+    "checked": "804/8587 and 1016/8600 vascular deaths at five weeks"
+  },
+  {
+    "name": "cast",
+    "source": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:1900101%20AND%20SRC:MED&format=json&resultType=core",
+    "title": "Mortality and morbidity in patients receiving encainide, flecainide, or placebo. The Cardiac Arrhythmia Suppression Trial.",
+    "sha256": "96ebc781b585d8cd095040cb85c794e8218624eca1944c6f4b81be98f1778bed",
+    "checked": "43+17+3=63 active-drug deaths; 16+5+5=26 placebo deaths; 1498 participants, mean ten months"
+  },
+  {
+    "name": "FDA guidance",
+    "source": "https://www.fda.gov/media/148910/download",
+    "sha256": "ebbb9ad9cc0ec4ce3f33513ccb7f85a25b25c20f9446a83c0b84a39f2c47f68c",
+    "checked": "Page 4 permits interactions and recommends appropriate variance estimation; it does not require interactions universally."
+  },
+  {
+    "name": "Salk trial",
+    "source": "Freedman, Pisani and Purves, Statistics chapter 1; Museum summary",
+    "checked": "Participant counts explicitly labelled rounded. Exact primary participant counts were not independently reconstructed; cross-area contrast not interpreted as exact selection bias."
+  }
+]

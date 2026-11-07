@@ -1,0 +1,282 @@
+{
+  "version": "6.9",
+  "hitCount": 1,
+  "request": {
+    "queryString": "EXT_ID:2899772 AND SRC:MED",
+    "internalQuery": "EXT_ID:2899772 AND SRC:MED",
+    "resultType": "CORE",
+    "cursorMark": "*",
+    "pageSize": 25,
+    "sort": "",
+    "synonym": false
+  },
+  "resultList": {
+    "result": [
+      {
+        "id": "2899772",
+        "source": "MED",
+        "pmid": "2899772",
+        "title": "Randomised trial of intravenous streptokinase, oral aspirin, both, or neither among 17,187 cases of suspected acute myocardial infarction: ISIS-2. ISIS-2 (Second International Study of Infarct Survival) Collaborative Group.",
+        "dataLinksTagsList": {
+          "dataLinkstag": [
+            "altmetrics",
+            "related_data"
+          ]
+        },
+        "journalInfo": {
+          "issue": "8607",
+          "volume": "2",
+          "journalIssueId": 583666,
+          "dateOfPublication": "1988 Aug",
+          "monthOfPublication": 8,
+          "yearOfPublication": 1988,
+          "journal": {
+            "medlineAbbreviation": "Lancet",
+            "title": "Lancet (London, England)",
+            "essn": "1474-547X",
+            "issn": "0140-6736",
+            "isoabbreviation": "Lancet",
+            "nlmid": "2985213R"
+          },
+          "printPublicationDate": "1988-08-01"
+        },
+        "pubYear": "1988",
+        "pageInfo": "349-360",
+        "abstractText": "17,187 patients entering 417 hospitals up to 24 hours (median 5 hours) after the onset of suspected acute myocardial infarction were randomised, with placebo control, between: (i) a 1-hour intravenous infusion of 1.5 MU of streptokinase; (ii) one month of 160 mg/day enteric-coated aspirin; (iii) both active treatments; or (iv) neither. Streptokinase alone and aspirin alone each produced a highly significant reduction in 5-week vascular mortality: 791/8592 (9.2%) among patients allocated streptokinase infusion vs 1029/8595 (12.0%) among those allocated placebo infusion (odds reduction: 25% SD 4; 2p less than 0.00001); 804/8587 (9.4%) vascular deaths among patients allocated aspirin tablets vs 1016/8600 (11.8%) among those allocated placebo tablets (odds reduction: 23% SD 4; 2p less than 0.00001). The combination of streptokinase and aspirin was significantly (2p less than 0.0001) better than either agent alone. Their separate effects on vascular deaths appeared to be additive: 343/4292 (8.0%) among patients allocated both active agents vs 568/4300 (13.2%) among those allocated neither (odds reduction: 42% SD 5; 95% confidence limits 34-50%). There was evidence of benefit from each agent even for patients treated late after pain onset (odds reductions at 0-4, 5-12, and 13-24 hours: 35% SD 6, 16% SD 7, and 21% SD 12 for streptokinase alone; 25% SD 7, 21% SD 7, and 21% SD 12 for aspirin alone; and 53% SD 8, 32% SD 9, and 38% SD 15 for the combination of streptokinase and aspirin). Streptokinase was associated with an excess of bleeds requiring transfusion (0.5% vs 0.2%) and of confirmed cerebral haemorrhage (0.1% vs 0.0%), but with fewer other strokes (0.6% vs 0.8%). These \"other\" strokes may have included a few undiagnosed cerebral haemorrhages, but still there was no increase in total strokes (0.7% streptokinase vs 0.8% placebo infusion). Aspirin significantly reduced non-fatal reinfarction (1.0% vs 2.0%) and non-fatal stroke (0.3% vs 0.6%), and was not associated with any significant increase in cerebral haemorrhage or in bleeds requiring transfusion. An excess of non-fatal reinfarction was reported when streptokinase was used alone, but this appeared to be entirely avoided by the addition of aspirin. Those allocated the combination of streptokinase and aspirin had significantly fewer reinfarctions (1.8% vs 2.9%), strokes (0.6% vs 1.1%), and deaths (8.0% vs 13.2%) than those allocated neither. The differences in vascular and in all-cause mortality produced by streptokinase and by aspirin remain highly significant (2p less than 0.001 for each) after the median of 15 months of follow-up thus far available.",
+        "publicationStatus": "ppublish",
+        "language": "eng",
+        "pubModel": "Print",
+        "pubTypeList": {
+          "pubType": [
+            "Comparative Study",
+            "Clinical Trial",
+            "Research Support, Non-U.S. Gov't",
+            "Randomized Controlled Trial",
+            "Journal Article"
+          ]
+        },
+        "meshHeadingList": {
+          "meshHeading": [
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Humans"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Cerebral Hemorrhage",
+              "meshQualifierList": {
+                "meshQualifier": [
+                  {
+                    "majorTopic_YN": "N",
+                    "abbreviation": "CI",
+                    "qualifierName": "chemically induced"
+                  }
+                ]
+              }
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Myocardial Infarction",
+              "meshQualifierList": {
+                "meshQualifier": [
+                  {
+                    "majorTopic_YN": "Y",
+                    "abbreviation": "DT",
+                    "qualifierName": "drug therapy"
+                  },
+                  {
+                    "majorTopic_YN": "N",
+                    "abbreviation": "MO",
+                    "qualifierName": "mortality"
+                  },
+                  {
+                    "majorTopic_YN": "N",
+                    "abbreviation": "PP",
+                    "qualifierName": "physiopathology"
+                  }
+                ]
+              }
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Drug Hypersensitivity",
+              "meshQualifierList": {
+                "meshQualifier": [
+                  {
+                    "majorTopic_YN": "N",
+                    "abbreviation": "ET",
+                    "qualifierName": "etiology"
+                  }
+                ]
+              }
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Recurrence"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Aspirin",
+              "meshQualifierList": {
+                "meshQualifier": [
+                  {
+                    "majorTopic_YN": "Y",
+                    "abbreviation": "AD",
+                    "qualifierName": "administration & dosage"
+                  },
+                  {
+                    "majorTopic_YN": "N",
+                    "abbreviation": "AE",
+                    "qualifierName": "adverse effects"
+                  },
+                  {
+                    "majorTopic_YN": "N",
+                    "abbreviation": "TU",
+                    "qualifierName": "therapeutic use"
+                  }
+                ]
+              }
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Streptokinase",
+              "meshQualifierList": {
+                "meshQualifier": [
+                  {
+                    "majorTopic_YN": "Y",
+                    "abbreviation": "AD",
+                    "qualifierName": "administration & dosage"
+                  },
+                  {
+                    "majorTopic_YN": "N",
+                    "abbreviation": "AE",
+                    "qualifierName": "adverse effects"
+                  },
+                  {
+                    "majorTopic_YN": "N",
+                    "abbreviation": "TU",
+                    "qualifierName": "therapeutic use"
+                  }
+                ]
+              }
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Electrocardiography"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Prognosis"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Drug Therapy, Combination"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Administration, Oral"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Infusions, Intravenous"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Cause of Death"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Follow-Up Studies"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Random Allocation"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Drug Evaluation"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Aged"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Aged, 80 and over"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Female"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Male"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Clinical Trials as Topic"
+            }
+          ]
+        },
+        "chemicalList": {
+          "chemical": [
+            {
+              "name": "Streptokinase",
+              "registryNumber": "EC 3.4.-"
+            },
+            {
+              "name": "Aspirin",
+              "registryNumber": "R16CO5Y76E"
+            }
+          ]
+        },
+        "subsetList": {
+          "subset": [
+            {
+              "code": "IM",
+              "name": "Index Medicus"
+            }
+          ]
+        },
+        "commentCorrectionList": {
+          "commentCorrection": [
+            {
+              "source": "MED",
+              "id": "9167479",
+              "reference": "Lancet. 1997 May 24;349(9064):1551. doi: 10.1016/S0140-6736(05)62127-7",
+              "type": "Comment in",
+              "orderIn": 1
+            }
+          ]
+        },
+        "isOpenAccess": "N",
+        "inEPMC": "N",
+        "inPMC": "N",
+        "citedByCount": 733,
+        "hasReferences": "N",
+        "hasTextMinedTerms": "Y",
+        "hasDbCrossReferences": "Y",
+        "dbCrossReferenceList": {
+          "dbName": [
+            "CHEBI"
+          ]
+        },
+        "hasPDF": "N",
+        "hasBook": "N",
+        "hasSuppl": "N",
+        "hasLabsLinks": "Y",
+        "hasData": "Y",
+        "authMan": "N",
+        "epmcAuthMan": "N",
+        "nihAuthMan": "N",
+        "hasTMAccessionNumbers": "N",
+        "dateOfCompletion": "1988-09-08",
+        "dateOfCreation": "1988-08-13",
+        "dateOfRevision": "2022-04-08",
+        "firstPublicationDate": "1988-08-01",
+        "firstIndexDate": "2008-01-29",
+        "hasEvaluations": "N"
+      }
+    ]
+  }
+}

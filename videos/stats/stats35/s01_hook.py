@@ -23,16 +23,17 @@ class Hook(VoiceoverScene):
                           font_size=23).move_to([0, 0.9, 0])
         rows = fit_rows(VGroup(
             label(r"polio struck tens of thousands of children a year; \ 1952: \ over 57,000 cases in the US", font_size=24),
-            label(r"a rare disease with huge swings from year to year: \ no before-and-after comparison could work", font_size=24, color=MISSC),
+            label(r"a rare disease with huge swings from year to year: \ a before-and-after comparison would be confounded by calendar time", font_size=24, color=MISSC),
         ), 12.0, 0.35, [0, -1.7, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In the spring of 1954, the United States ran the largest public-health experiment in its "
-            "history. Jonas Salk had made a killed-virus polio vaccine, and nearly two million schoolchildren, the polio "
-            "pioneers, took part in testing it, under the direction of Thomas Francis at the University of Michigan. "
-            "<bookmark mark='b'/> Polio was terrifying: in 1952 the country had over fifty-seven thousand cases, many of "
-            "them children left paralysed. <bookmark mark='c'/> But it was also rare and erratic, with epidemics that came "
-            "and went from year to year, so a drop in cases after vaccination would prove nothing. The vaccine had to be "
-            "tested against a control group in the same year. The question was how to choose the controls."
+            "<bookmark mark='a'/> In the spring of 1954, the United States ran the largest public-health experiment "
+            "in its history. Jonas Salk had made a killed-virus polio vaccine, and nearly two million schoolchildren,"
+            " the polio pioneers, took part in testing it, under the direction of Thomas Francis at the University of"
+            " Michigan. <bookmark mark='b'/> Polio was terrifying: in 1952 the country had over fifty-seven thousand "
+            "cases, many of them children left paralysed. <bookmark mark='c'/> But it was also rare and erratic, with"
+            " epidemics that came and went from year to year, so a drop in cases after vaccination would not by "
+            "itself identify a vaccine effect. The vaccine had to be tested against a control group in the same year."
+            " The question was how to choose the controls."
         ) as vo:
             self.play(FadeIn(tl))
             vo.wait_until("a")
@@ -74,26 +75,27 @@ class Hook(VoiceoverScene):
         self.clear_scene()
 
     def table(self):
-        rows = [[r"design", r"group", r"children", r"polio per 100,000"]]
+        rows = [[r"design", r"group", r"children", r"paralytic polio per 100,000"]]
         cols = [GREY_A]
         for name, key, c in ((r"randomized", "randomized", BANDC), (r"observed control", "nfip", MISSC)):
             for k, (g, n, r) in enumerate(museum.SALK[key]):
-                rows.append([name if k == 0 else "", g, rf"{n:,}", rf"{r}"])
+                rows.append([name if k == 0 else "", g, rf"$\approx$ {n:,}", rf"{r}"])
                 cols.append(c if k < 2 else GREY_B)
         tab = table_rows(rows, font_size=24, col_buff=0.6, row_buff=0.25, colors=cols).move_to([0, 0.7, 0])
         foot = fit_rows(VGroup(
             label(r"randomized: \ $71 - 28 = 43$ per 100,000", font_size=24, color=BANDC),
-            label(r"observed control: \ $54 - 25 = 29$ per 100,000: \ a third too small", font_size=24, color=MISSC),
+            label(r"observed control: \ $54 - 25 = 29$ per 100,000: \ a third smaller", font_size=24, color=MISSC),
         ), 12.4, 0.3, [0, -2.2, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The results, as Paul Meier summarized them in 1972, in cases of paralytic polio per "
-            "hundred thousand children. <bookmark mark='b'/> In the randomized areas: twenty-eight among the vaccinated, "
-            "seventy-one among the placebo group, and forty-six among the children whose parents refused. In the "
-            "observed-control areas: twenty-five among vaccinated second-graders, fifty-four among the first- and "
-            "third-grade controls, and forty-four among second-graders who did not consent. <bookmark mark='c'/> The "
-            "randomized comparison shows the vaccine preventing forty-three cases per hundred thousand. <bookmark mark='d'/> "
-            "The observed-control comparison shows only twenty-nine. The vaccine worked in both, but one design "
-            "underestimated its effect by a third."
+            "<bookmark mark='a'/> The results, as Paul Meier summarized them in 1972, in cases of paralytic polio per"
+            " hundred thousand children. <bookmark mark='b'/> In the randomized areas: twenty-eight among the "
+            "vaccinated, seventy-one among the placebo group, and forty-six among the children whose parents refused."
+            " In the observed-control areas: twenty-five among vaccinated second-graders, fifty-four among the first-"
+            " and third-grade controls, and forty-four among second-graders who did not consent. <bookmark mark='c'/>"
+            " The randomized comparison estimates forty-three paralytic cases prevented per hundred thousand. The "
+            "textbook sample sizes shown here are rounded. <bookmark mark='d'/> The observed-control comparison shows"
+            " only twenty-nine. The observed-control risk difference is about a third smaller. These were different "
+            "areas, so that gap alone does not identify the exact selection bias."
         ) as vo:
             self.add(historical_tag(r"Francis (1955); \ Meier (1972)"))
             vo.wait_until("a")
@@ -114,14 +116,15 @@ class Hook(VoiceoverScene):
             label(r"in the randomized areas, \ refusers: \ 46, \ not 71", font_size=26, color=BANDC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Why the difference? Consent was not random. The families who volunteered their children "
-            "were, on average, wealthier and better educated. <bookmark mark='b'/> And polio was, paradoxically, a disease "
-            "of hygiene: children from cleaner homes met the virus later in childhood, without their mothers' antibodies, "
-            "and suffered worse infections. <bookmark mark='c'/> So the vaccinated second-graders were drawn from the "
-            "families most at risk, while their controls included everyone. The comparison mixed the vaccine's effect with "
-            "the difference between the kinds of family. <bookmark mark='d'/> The randomized areas show it directly: "
-            "children whose parents refused had forty-six cases per hundred thousand, far fewer than the seventy-one among "
-            "the consenting children who got placebo."
+            "<bookmark mark='a'/> Why the difference? Consent was not random. The families who volunteered their "
+            "children were, on average, wealthier and better educated. <bookmark mark='b'/> And polio was, "
+            "paradoxically, a disease of hygiene: children from cleaner homes met the virus later in childhood, "
+            "without their mothers' antibodies, and suffered worse infections. <bookmark mark='c'/> So the vaccinated"
+            " second-graders were drawn from the families most at risk, while their controls included everyone. The "
+            "comparison mixed the vaccine's effect with the difference between the kinds of family. <bookmark "
+            "mark='d'/> The randomized areas illustrate the selection problem: children whose parents refused had "
+            "forty-six cases per hundred thousand, far fewer than the seventy-one among the consenting children who "
+            "got placebo."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

@@ -27,7 +27,7 @@ class Blocks(VoiceoverScene):
             label(r"Part 13: \ block on the soil gradient; \ here: \ block on the baseline pressure", font_size=26),
             label(rf"baseline predicts $Y(0)$: \ correlation {d['corr_base_y0']:.2f}", font_size=26, color=Y0C),
             label(r"sort the 2,000 by baseline; \ ten blocks of 200; \ randomize 100 and 100 within each", font_size=26),
-            label(r"chance imbalance in baseline is now impossible", font_size=26, color=BANDC),
+            label(r"between-block imbalance is removed; \ within-block imbalance remains", font_size=26, color=BANDC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Part 13 blocked a field trial on the soil gradient. The same idea works for patients. "
@@ -60,6 +60,9 @@ class Blocks(VoiceoverScene):
             "patients against the low, no longer enter at all. <bookmark mark='d'/> Roughly, the variance shrinks by the "
             "share of the outcome's variation that the blocks explain."
         ) as vo:
+            intro=label('Independent block assignments permit weighted estimation',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -85,9 +88,9 @@ class Blocks(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> Fifteen hundred randomizations of each design on the World's patients. <bookmark "
             "mark='b'/> Complete randomization: a standard deviation of " + say(d["complete"]["sd"], 3) + ". Ten blocks: "
-            + say(d["blocked"]["sd"], 3) + ", <bookmark mark='c'/> which is a variance cut by two fifths, as if the trial had "
-            "been sixty percent larger. <bookmark mark='d'/> Pairing the sorted patients two by two gains a little more. "
-            "All three are unbiased; blocking buys precision for free, before any outcome is seen."
+            + say(d["blocked"]["sd"], 3) + ", <bookmark mark='c'/> which is a variance cut by two fifths, as if the trial had been sixty percent "
+            "larger. <bookmark mark='d'/> Pairing the sorted patients two by two gains a little more. All three are "
+            "unbiased; these baseline blocks improve precision in this example before any outcome is seen."
         ) as vo:
             self.add(trial_tag())
             self.play(FadeIn(A), FadeIn(labs), FadeIn(side[0]))
@@ -110,12 +113,16 @@ class Blocks(VoiceoverScene):
         whys = [why(r"Imai (2008)"), why(r"from the spread of the pair differences"),
                 why(r"Neyman again"), why(r"so it cannot be estimated pair by pair")]
         with self.voiceover(
-            "<bookmark mark='a'/> In a matched-pair design, the estimate is the average of the within-pair differences. "
-            "<bookmark mark='b'/> Its variance is estimated from the spread of those differences. <bookmark mark='c'/> As "
-            "Kosuke Imai showed in 2008, this is again conservative, by the variation in the pairs' true average effects. "
-            "<bookmark mark='d'/> With one treated and one control unit per pair, there is no way to estimate the variance "
-            "within a pair, which is why many statisticians prefer small blocks of four or more to strict pairs."
+            "<bookmark mark='a'/> In a matched-pair design, the estimate is the average of the within-pair "
+            "differences. <bookmark mark='b'/> Its variance is estimated from the spread of those differences. "
+            "<bookmark mark='c'/> As Kosuke Imai showed in 2008, this is again conservative, by the variation in the "
+            "pairs' true average effects. <bookmark mark='d'/> With one treated and one control unit per pair, there "
+            "is no way to estimate the variance within a pair, Small blocks of four or more allow separate within-arm"
+            " variance estimates; matched pairs instead use variation across pair differences."
         ) as vo:
+            intro=label('Matched-pair variance is estimated across pairs',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

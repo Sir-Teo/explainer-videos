@@ -1,0 +1,72 @@
+[
+  {
+    "item": "science",
+    "path": ".cache/stats35/science.json",
+    "sha256": "cd78c1c1f9b9b416c3f649b443cde405bd87fd60ba22a0fa66f466ef4eea77dc"
+  },
+  {
+    "item": "selection",
+    "path": ".cache/stats35/selection.json",
+    "sha256": "0ccaf3b5185af3702c009b9f303d01446c763075e7ea35b1609355ba7eb70e44"
+  },
+  {
+    "item": "fisher",
+    "path": ".cache/stats35/fisher.json",
+    "sha256": "f215f45d364b625e36440634ce56095ff111e347d5010f97934f1c30ddde258c"
+  },
+  {
+    "item": "neyman",
+    "path": ".cache/stats35/neyman.json",
+    "sha256": "26e1372f0bee7e3d76d9740e44473f140fdda6b8e436856c7fdbd8c2c31fcce4"
+  },
+  {
+    "item": "blocks",
+    "path": ".cache/stats35/blocks.json",
+    "sha256": "08d471c9b700070f448f428eab31edf24e941a27aa1f21fdadc8e76493bebd51"
+  },
+  {
+    "item": "adjust",
+    "path": ".cache/stats35/adjust.json",
+    "sha256": "191def28d0c67f5a88d0ac4997d830b9381efb789d9f5d55d16bbd5027c434f3"
+  },
+  {
+    "item": "cluster",
+    "path": ".cache/stats35/cluster.json",
+    "sha256": "f32c0f7a244431deae2b87525cbfa86e66ce3d040fe2e6407425a999ab79d600"
+  },
+  {
+    "item": "noncomp",
+    "path": ".cache/stats35/noncomp.json",
+    "sha256": "878a2ae239643c711be65592204ccd4c87ac7cd3d88d4edb33222c3047942d12"
+  },
+  {
+    "item": "interfere",
+    "path": ".cache/stats35/interfere.json",
+    "sha256": "bb2bbece3c9f0fc7a8d54392ff5322c7c90ba3e10fb79ea87abdf3f2c2303ac6"
+  },
+  {
+    "item": "subgroups",
+    "path": ".cache/stats35/subgroups.json",
+    "sha256": "4df1dc9a8cc16a3482a9cdd73f74e7a9bf5473abf3a40fbd277d4d37a35f8bd7"
+  },
+  {
+    "item": "sequential",
+    "path": ".cache/stats35/sequential.json",
+    "sha256": "9e9f25c23d81e39e95c0d43e27e48632f4be4fdfa93f997ac7e0161b9026f451"
+  },
+  {
+    "item": "surrogate",
+    "path": ".cache/stats35/surrogate.json",
+    "sha256": "e916009f621d8f3d8ae7335d4adb114c95c39eed96b68580b3cab279bc9db4f9"
+  },
+  {
+    "item": "transport",
+    "path": ".cache/stats35/transport.json",
+    "sha256": "0800e6490413ee7dc1de4e89786f1cca61d0ae613d2c21d2e8315497c3994dc2"
+  },
+  {
+    "item": "board",
+    "path": ".cache/stats35/board.json",
+    "sha256": "eb8719dc5816e087f6a847d1f2af0d336dfa34d33721c4e9010d86e24a6ac14f"
+  }
+]

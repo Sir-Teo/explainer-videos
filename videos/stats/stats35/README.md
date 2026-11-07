@@ -17,15 +17,15 @@ The part builds:
 
 It opens with the 1954 Salk vaccine trial (Francis 1955; Meier 1972). In cases of paralytic polio per 100,000:
 - the randomized placebo-controlled design: 28 vaccinated vs 71 placebo (and 46 among children whose parents
-  refused), an effect of 43;
-- the observed-control design: 25 vs 54, an effect of only 29. Consenting families were wealthier, and their children
+  refused), an estimated 43 cases prevented per 100,000;
+- the observed-control design: 25 vs 54, an observed difference of 29. These different areas do not by themselves identify the exact bias. Consenting families were wealthier, and their children
   more at risk of polio.
 
 From there the part covers:
 - **Potential outcomes** (Neyman 1923; Rubin 1974; Holland 1986).
   - The science table of eight of the World's patients; the trial's 2,000 individual effects have mean −7.83 mm Hg and
     SD 4.75, and 4.3% would be harmed.
-  - The fundamental problem; no causation without manipulation.
+  - The fundamental problem; well-defined interventions, including the scope of Holland’s manipulation criterion.
 - **Estimands and SUTVA.**
   - SATE, ATT, CATE, PATE. The trial's SATE is −7.83 against −9.93 among the 87,406 eligible islanders: the trial's
     patients average 58 years, the islanders 69.
@@ -36,8 +36,8 @@ From there the part covers:
   - When doctors prescribe by pressure, the treated start at 152.3 against 145.3. The naive estimate is −2.21; the ATT
     is −9.58 and the selection bias +7.37. A coin gives −8.41.
 - **Fisher's sharp null.**
-  - 12 patients, all 924 assignments: the observed +1.7 has p = 0.82, and the inverted 90% set is [−10.0, 13.5].
-  - All 2,000 patients by Monte Carlo: −8.19 against a null maximum of 1.83 (p < 10⁻⁴).
+  - 12 patients, all 924 assignments: the observed +1.7 has p = 0.82, and exact enumeration on a half-point grid gives [−10.0, 13.5]. This targets a common constant effect; it is not a generally valid interval for the heterogeneous SATE.
+  - All 2,000 patients by Monte Carlo: −7.21 against a sampled absolute null maximum of 2.12. Zero extreme draws out of 10,000 gives the plus-one Monte Carlo p-value 1/10,001, rather than a certified bound on the exact p-value.
   - Fisher vs Neyman nulls (Wu & Ding 2021).
 - **Neyman's variance.** S₁²/n₁ + S₀²/n₀ − S_τ²/n.
   - S_τ = 4.75; the true SD is 0.446, the conservative one 0.458, and 4,000 re-randomizations give 0.439.
@@ -59,8 +59,8 @@ From there the part covers:
     | Lin | 0.39 | 0.41 | 90.6% |
     | unadjusted | 1.04 | | |
 
-- **Cluster randomization.** The World's 400 schools (24,157 pupils, ICC 0.145, mean size 60.4) give a design effect of
-  9.6. Over 1,000 re-randomizations of the programme (true effect +20):
+- **Cluster randomization.** The World's 400 schools (24,157 pupils, unadjusted model ICC 0.171, mean size 60.4) give an approximate design effect of
+  11.1. The ICC includes shared school background and independent pupil background; 0.145 is the residual ICC conditional on those covariates. The design-effect formula is exact for equal sizes and an approximation here. Over 1,000 re-randomizations of the programme (true effect +20):
 
   | Analysis | SE | 90% coverage |
   |---|---|---|
@@ -90,18 +90,18 @@ From there the part covers:
 - **Subgroups.**
   - ISIS-2: 804/8,587 (9.4%) vs 1,016/8,600 (11.8%). For Gemini and Libra, a 9% (SD 13) increase; for the other
     signs, a 28% (SD 5) reduction.
-  - Twelve random 'signs' in a trial with one true effect: in 58% of trials some sign shows no benefit, and in 46% some
-    interaction is 'significant'.
+  - Twelve random 'signs' in a trial with one true effect: in 58% of trials some sign shows no benefit, and in 44% some
+    subgroup-versus-complement interaction is 'significant'.
 - **Sequential trials.**
   - Peeking at 1.96 gives false-positive rates of 8.2%, 10.7%, 14.1%, 19.5% and 24.2% for 2, 3, 5, 10 and 20 looks.
-  - Boundaries with K = 5: Pocock 2.415; O'Brien–Fleming 4.562 → 2.040; Lan–DeMets OBF-type spending 4.875 → 2.030.
+  - Boundaries with K = 5: Pocock 2.413; O'Brien–Fleming 4.562 → 2.040; Lan–DeMets OBF-type spending 4.875 → 2.030.
   - Against an effect with 80% fixed-design power, Pocock has 71% power using 71% of the information; O'Brien–Fleming
     has 79% using 80%.
 - **Surrogates.**
   - CAST: 63 vs 26 deaths.
-  - Prentice's criteria, with two drugs that each lower pressure by about 8 points:
-    - drug A: stroke 3.8% vs 5.3%, and criterion 3 holds (t = −0.09);
-    - drug B: stroke 8.4% vs 4.9%, and criterion 3 fails (t = 4.8).
+  - Prentice-inspired linear regression diagnostics, with two drugs that each lower pressure by about 8 points:
+    - drug A: stroke 3.8% vs 5.3%, and the adjusted treatment coefficient is small (t = −0.09);
+    - drug B: stroke 8.4% vs 4.9%, and the adjusted treatment coefficient is large (t = 4.8). A small coefficient does not establish conditional independence or causal surrogacy. The mechanisms are known because the example is simulated.
   - Fleming & DeMets (1996); Buyse et al. (2000).
 - **External validity.**
   - Inverse odds of participation weighting on age, pressure, sex and BMI moves the estimate from −8.05 to −9.07.
@@ -110,7 +110,7 @@ From there the part covers:
 
 Data:
 - the patients, schools and epidemic are the World's;
-- the Salk, ISIS-2 and CAST numbers are the Museum's (as published);
+- the Salk numbers use a rounded textbook summary, rather than exact participant counts; ISIS-2 and CAST totals match the primary reports;
 - the subgroup, Freedman and sequential examples are seeded simulations.
 
 **Built in this part:**
@@ -161,15 +161,15 @@ python tools/lecture_length.py stats35 --floor 50
 | 1 | Potential outcomes | mean τ −7.83, SD 4.75, 4.3% harmed |
 | 2 | Estimands and SUTVA | SATE −7.83 vs PATE −9.93 |
 | 3 | Why randomization works | −2.21 vs −8.41; bias +7.37 |
-| 4 | Fisher's sharp null | p = 0.82 (12); p < 10⁻⁴ (2,000) |
+| 4 | Fisher's sharp null | p = 0.82 (12); MC p = 1/10,001 (2,000) |
 | 5 | Neyman's variance | 0.446 vs 0.458; 91.1% |
 | 6 | Blocking and pairing | SD 0.448 → 0.351 → 0.342 |
 | 7 | Adjustment | ANCOVA 84.8% vs Lin 90.6% |
-| 8 | Cluster randomization | deff 9.6; 35.6% vs 90.3% |
+| 8 | Cluster randomization | approximate deff 11.1; 35.6% vs 90.3% |
 | 9 | Noncompliance | ITT −5.62; IV −8.66; truth −8.13 |
 | 10 | Interference | direct 8.1, indirect 3.3, overall 5.4 |
-| 11 | Subgroups | 58% / 46% |
-| 12 | Sequential trials | 14.1%; Pocock 2.415; OBF 4.56 → 2.04 |
+| 11 | Subgroups | 58% / 44% |
+| 12 | Sequential trials | 14.1%; Pocock 2.413; OBF 4.56 → 2.04 |
 | 13 | Surrogates | CAST 63 vs 26; drug B 8.4% vs 4.9% |
 | 14 | External validity | −8.05 → −9.07 (truth −9.93) |
 | 15 | Outro | — |
@@ -235,7 +235,7 @@ python tools/lecture_length.py stats35 --floor 50
 5. **Two looks.** Z₁ = S_n/√n and Z₂ = S_{2n}/√(2n) are bivariate normal with correlation √(1/2).
    - The false-positive rate is P(|Z₁| > 1.96 or |Z₂| > 1.96) = 1 − P(|Z₁| ≤ 1.96, |Z₂| ≤ 1.96).
    - Numerically this is 0.083, above 0.05 because the two events are not nested (the kit's `crossing_probs` gives
-     0.0832; the simulation 8.2%).
+     about 0.083; the simulation 8.2%).
 6. **Design effect.** For a cluster mean of m units with common variance σ² and pairwise correlation ρ:
    - Var = m⁻²(mσ² + m(m − 1)ρσ²) = (σ²/m)(1 + (m − 1)ρ).
    - Relative to m independent units, the factor is 1 + (m − 1)ρ.
@@ -252,16 +252,15 @@ python tools/lecture_length.py stats35 --floor 50
 - **Sharp null**: Y_i(1) = Y_i(0) for every i (Fisher); the **weak null** is τ̄ = 0 (Neyman).
 - **Randomization distribution**: a statistic's values over all assignments.
 - **Neyman variance**: S₁²/n₁ + S₀²/n₀ − S_τ²/n; the usual estimate drops the last term.
-- **Blocking / pairing / rerandomization**: designs that balance covariates by construction.
+- **Blocking / pairing / rerandomization**: designs that restrict covariate imbalance; blocking still permits within-block imbalance.
 - **Lin estimator**: the treatment-by-centred-covariate interacted regression with HC2 SEs.
-- **Design effect**: 1 + (m − 1)ρ; **ICC** ρ.
+- **Design effect**: 1 + (m − 1)ρ for equal cluster sizes and exchangeable correlations; **ICC** ρ.
 - **Principal strata**: compliers, never-takers, always-takers, defiers.
 - **ITT / LATE (CACE)**: the effect of assignment / of treatment among compliers.
 - **Interference; direct / indirect / total / overall effects**: Hudgens–Halloran's decomposition under two-stage
   randomization.
 - **Group-sequential boundary; alpha spending**: interim thresholds preserving the overall size.
-- **Surrogate endpoint; Prentice criteria**: an early outcome standing in for the one that matters; the conditions
-  under which it does.
+- **Surrogate endpoint; Prentice criteria**: an early outcome standing in for the one that matters; statistical conditions require validation and do not by themselves identify causal mediation.
 - **Transportability**: carrying an effect to a target population; positivity.
 
 ## Where it comes back
@@ -274,3 +273,5 @@ python tools/lecture_length.py stats35 --floor 50
 - **Part 58**: anytime-valid sequential inference.
 - **Part 62**: heterogeneous effects, interference and mediation.
 - **Part 63**: counterfactual fairness.
+
+The sequential teaching calculations use smooth Gauss–Legendre continuation quadrature, checked at 80 and 160 nodes. Canonical normal/Brownian assumptions underlie the boundaries. Alpha spending does not authorize arbitrary outcome-driven analysis times. All Board repetitions are independent trial-level indicators; the plotted Monte Carlo scale uses the nominal reference probability. Transport uses a working participation model and gives a point estimate plus a weight effective sample size, without a transported confidence interval.

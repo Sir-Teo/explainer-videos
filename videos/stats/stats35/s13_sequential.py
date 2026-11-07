@@ -97,9 +97,10 @@ class Sequential(VoiceoverScene):
             "the null, is five percent in total. <bookmark mark='b'/> Stuart Pocock proposed in 1977 a constant bar: with "
             "five looks, a z of " + say(d["pocock"], 2) + " at every one. <bookmark mark='c'/> Peter O'Brien and Thomas Fleming "
             "proposed in 1979 a bar that starts very high, " + say(d["obf"][0], 2) + " at the first look, and falls to "
-            + say(d["obf"][-1], 2) + " at the last, barely above the fixed design's one point nine six. <bookmark mark='d'/> "
-            "Both are computed exactly by integrating the joint distribution of the accumulating z statistics, which form a "
-            "Brownian motion."
+            + say(d["obf"][-1], 2) + " at the last, barely above the fixed design's one point nine six. <bookmark mark='d'/> Both are computed"
+            " by numerical integration of a joint normal reference model. The z statistics are Brownian motion "
+            "divided by the square root of information; the canonical model is exact here and often asymptotic in "
+            "real trials."
         ) as vo:
             self.play(FadeIn(A), Create(fix), FadeIn(side[0]))
             vo.wait_until("b")
@@ -190,17 +191,18 @@ class Sequential(VoiceoverScene):
         g[1].set_color(ESTC)
         if g.width > 5.6:
             g.width = 5.6
-        side = label(r"looks can be unplanned: \ spend $\alpha(t_k) - \alpha(t_{k-1})$ at each", font_size=22, color=GREY_A).move_to([3.9, -1.4, 0])
+        side = label(r"valid information-based timing: \ spend $\alpha(t_k) - \alpha(t_{k-1})$ at each", font_size=22, color=GREY_A).move_to([3.9, -1.4, 0])
         if side.width > 5.6:
             side.width = 5.6
         with self.voiceover(
-            "<bookmark mark='a'/> Real committees cannot always look at exactly planned times. Gordon Lan and David DeMets "
-            "solved that in 1983 with alpha-spending functions: decide in advance how much of the five percent may have been "
-            "spent by each fraction of the information. <bookmark mark='b'/> One spending function mimics O'Brien and "
-            "Fleming, spending almost nothing early; <bookmark mark='c'/> another mimics Pocock. <bookmark mark='d'/> At "
-            "each look, whenever it happens, the boundary is chosen to spend exactly the increment. For five equal looks the "
-            "O'Brien–Fleming-type function gives boundaries of four point eight eight down to two point oh three, close to "
-            "the original."
+            "<bookmark mark='a'/> Real committees cannot always look at exactly planned times. Gordon Lan and David "
+            "DeMets solved that in 1983 with alpha-spending functions: decide in advance how much of the five percent"
+            " may have been spent by each fraction of the information. <bookmark mark='b'/> One spending function "
+            "mimics O'Brien and Fleming, spending almost nothing early; <bookmark mark='c'/> another mimics Pocock. "
+            "<bookmark mark='d'/> At each look, the boundary is chosen to spend the increment under the canonical "
+            "model. Timing must be fixed or depend on information in a way that preserves that null model; "
+            "outcome-driven looks are not automatically licensed. For five equal looks the O'Brien–Fleming-type "
+            "function gives boundaries of four point eight eight down to two point oh three, close to the original."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("b")

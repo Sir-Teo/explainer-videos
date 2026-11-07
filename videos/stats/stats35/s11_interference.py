@@ -62,6 +62,9 @@ class Interference(VoiceoverScene):
             + say(100 * d["none"], 1) + " percent of residents are infected; with everybody, " + say(100 * d["all"], 1) + "."
         ) as vo:
             self.add(epi_tag())
+            intro=label('Own treatment and town coverage both affect infection',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -117,6 +120,9 @@ class Interference(VoiceoverScene):
             "total effect combines the two. <bookmark mark='d'/> And the overall effect compares whole towns under the two "
             "strategies, which is what a health ministry choosing a policy wants to know."
         ) as vo:
+            intro=label('Direct and spillover effects compare different strategies',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

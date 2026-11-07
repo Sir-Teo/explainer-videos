@@ -42,6 +42,9 @@ class Randomization(VoiceoverScene):
             "<bookmark mark='d'/> A coin achieves that independence by construction, because it knows nothing about the "
             "patients. Nothing else is guaranteed to."
         ) as vo:
+            intro=label('An observed comparison combines an effect and selection bias',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -129,6 +132,9 @@ class Randomization(VoiceoverScene):
             "possible assignments, with the science held fixed. <bookmark mark='d'/> It assumes SUTVA, and nothing at all "
             "about how the outcomes are distributed: no normality, no linearity, no model."
         ) as vo:
+            intro=label('Complete randomization is unbiased for the fixed sample average effect',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

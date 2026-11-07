@@ -82,15 +82,20 @@ class Transport(VoiceoverScene):
         whys = [why(r"stack trial and target"), why(r"effect modifiers all measured"),
                 why(r"inverse odds of participation"), why(r"Stuart et al. (2011); \ Dahabreh et al. (2019)")]
         with self.voiceover(
-            "<bookmark mark='a'/> The method stacks the trial patients and a sample of the target population, and models "
-            "the probability of being in the trial given covariates. <bookmark mark='b'/> It assumes that, given those "
-            "covariates, trial membership tells us nothing more about the effect: all the effect modifiers are measured. And "
-            "it needs overlap: every kind of target patient must appear in the trial. <bookmark mark='c'/> Each trial patient "
-            "is weighted by the inverse odds of participation, so that the weighted trial looks like the target. <bookmark "
-            "mark='d'/> The weighted difference in means estimates the target's average effect. Elizabeth Stuart and "
-            "colleagues proposed propensity scores for this in 2011, and Issa Dahabreh and colleagues worked out its theory "
-            "in 2019."
+            "<bookmark mark='a'/> The method stacks the trial patients and a sample of the target population, and "
+            "models the probability of being in the trial given covariates. <bookmark mark='b'/> It assumes that, "
+            "given those covariates, trial membership tells us nothing more about the effect: all the effect "
+            "modifiers are measured. And it needs overlap: every target covariate pattern needs a positive "
+            "probability of trial participation. <bookmark mark='c'/> Each trial patient is weighted by the inverse "
+            "odds of participation, so that the weighted trial looks like the target. <bookmark mark='d'/> With "
+            "constant randomized treatment probabilities and a correctly estimated participation density ratio, the "
+            "weighted difference consistently estimates the target average effect. Elizabeth Stuart and colleagues "
+            "proposed propensity scores for this in 2011, and Issa Dahabreh and colleagues worked out its theory in "
+            "2019."
         ) as vo:
+            intro=label('Transport requires effect exchangeability and participation overlap',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -102,16 +107,17 @@ class Transport(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(rf"the trial, \ analysed as usual: \ ${d['trial']['est']:.2f}$ \ [{d['trial']['lo']:.1f}, \ {d['trial']['hi']:.1f}]", font_size=26, color=ESTC),
             label(r"weights from age, \ baseline pressure, \ sex and BMI, \ against 20,000 islanders", font_size=26),
-            label(rf"transported: \ ${d['transported']:.2f}$ \ (truth for the island: \ ${d['ate_pool']:.2f}$)", font_size=26, color=BANDC),
+            label(rf"transported: \ ${d['transported']:.2f}$; \ target-sample truth ${d['ate_target_sample']:.2f}$; \ island ${d['ate_pool']:.2f}$", font_size=26, color=BANDC),
             label(rf"the price: \ an effective sample of {d['ess']:,.0f} instead of 2,000", font_size=26, color=MISSC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The trial, analysed as usual, estimates minus " + say(-d["trial"]["est"], 1) + ", close to "
             "its own patients' average effect. <bookmark mark='b'/> Now weight it to twenty thousand of the eligible islanders, "
             "using age, baseline pressure, sex and body-mass index. <bookmark mark='c'/> The transported estimate is minus "
-            + say(-d["transported"], 1) + ", most of the way to the island's true minus " + say(-d["ate_pool"], 1) + "; the gap "
-            "is within its uncertainty. <bookmark mark='d'/> The price is precision: the weights are uneven, and the trial's "
-            "two thousand patients count as about a thousand."
+            + say(-d["transported"], 1) + ", most of the way to the island's true minus " + say(-d["ate_pool"], 1) + "; this remaining gap alone does not diagnose bias. We have not computed a transported interval, and "
+            "cannot declare it within uncertainty. <bookmark mark='d'/> The price is precision: the weights are "
+            "uneven, and uneven weights reduce the effective sample size; that number alone is not a confidence "
+            "interval."
         ) as vo:
             self.add(trial_tag())
             for k, m_ in enumerate("abcd"):
@@ -127,11 +133,13 @@ class Transport(VoiceoverScene):
             label(r"design answer: \ enrol the population you will treat \ (pragmatic trials)", font_size=26, color=BANDC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The weakness is overlap. Islanders over eighty are a large share of the target, and almost "
-            "absent from the trial. <bookmark mark='b'/> The few who did enrol carry enormous weights, and if none had, no "
-            "weighting could recover their effect. <bookmark mark='c'/> And if an effect modifier was not measured, the "
-            "method fails without any warning. <bookmark mark='d'/> The design answer is a pragmatic trial, which enrols the "
-            "kinds of patients who will actually be treated, in the places they will be treated."
+            "<bookmark mark='a'/> The weakness is overlap. Islanders over eighty are a large share of the target, and"
+            " almost absent from the trial. <bookmark mark='b'/> The few who did enrol carry enormous weights, and if"
+            " none had, no weighting could recover their effect. <bookmark mark='c'/> An unmeasured effect modifier "
+            "that also predicts participation can break exchangeability without an observed warning. Misspecifying "
+            "the participation model can also bias this estimator. <bookmark mark='d'/> The design answer is a "
+            "pragmatic trial, which enrols the kinds of patients who will actually be treated, in the places they "
+            "will be treated."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
