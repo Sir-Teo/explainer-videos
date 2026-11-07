@@ -1,0 +1,106 @@
+{
+ "video": "stats27",
+ "scene": "Funnel",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 8,
+ "lines": [
+  {
+   "raw": "Chapter seven. Neal's funnel and the eight schools.",
+   "spoken": "Chapter seven. Neal's funnel and the eight schools.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/12cd247371d471c7.wav",
+   "duration": 3.35,
+   "tokens": 8,
+   "peak": 0.386138916015625,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Radford Neal's funnel is the hierarchical model's geometry, distilled. A scale parameter v is normal, <bookmark mark='b'/> and nine further parameters are normal with standard deviation e to the v over two. <bookmark mark='c'/> When v is very negative, the x's are squeezed into a tiny neck; when it is large, they spread across a wide mouth. <bookmark mark='d'/> No single step size suits both, and the curvature in the neck is so extreme that HMC's trajectories diverge before they can enter it.",
+   "spoken": "Radford Neal's funnel is the hierarchical model's geometry, distilled. A scale parameter v is normal, and nine further parameters are normal with standard deviation e to the v over two. When v is very negative, the x's are squeezed into a tiny neck; when it is large, they spread across a wide mouth. No single step size suits both, and the curvature in the neck is so extreme that HMC's trajectories diverge before they can enter it.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/5ad8e1f510f18b5b.wav",
+   "duration": 27.125,
+   "tokens": 77,
+   "peak": 0.85284423828125,
+   "issues": [],
+   "elapsed": 0.04,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Two thousand NUTS draws of v against the first x. The grey lines mark two standard deviations of x at each height. <bookmark mark='b'/> Sampling v and x directly, the centred form, the draws stop at v of about minus two: the neck, below, is never visited. The true five percent point of v is minus four point nine; the sampler's is minus two point one, a badly biased answer with only one divergence to warn of it. <bookmark mark='c'/> Now sample v and standard normals z instead, and set x to e to the v over two times z: the non-centred form. Now the coordinates are independent normals, with v's different scale handled by adaptation, and the draws fill the whole funnel, neck included.",
+   "spoken": "Two thousand NUTS draws of v against the first x. The grey lines mark two standard deviations of x at each height. Sampling v and x directly, the centred form, the draws stop at v of about minus two: the neck, below, is never visited. The true five percent point of v is minus four point nine; the sampler's is minus two point one, a badly biased answer with only one divergence to warn of it. Now sample v and standard normals z instead, and set x to e to the v over two times z: the non-centred form. Now the coordinates are independent normals, with v's different scale handled by adaptation, and the draws fill the whole funnel, neck included.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/a2dd5368df4a54d6.wav",
+   "duration": 42.725,
+   "tokens": 121,
+   "peak": 0.539398193359375,
+   "issues": [],
+   "elapsed": 0.04,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The eight schools are a funnel: log tau controls the width, and the eight effects play x. Sampled directly, as Part 26 wrote the model, <bookmark mark='b'/> against a numerical-grid reference, using a normal prior with SD five on mu and a half-Cauchy prior with scale five on tau. These are proper priors, different from Part 26's opening flat-prior fit, <bookmark mark='c'/> NUTS gives forty-seven divergences in four thousand iterations, <bookmark mark='d'/> all at small tau, where the neck is. <bookmark mark='e'/> The histogram misses the left tail: the five percent point of tau is point nine instead of about point two five. R-hat is one point oh five and the effective sample size sixty: the diagnostics are worried, and right to be.",
+   "spoken": "The eight schools are a funnel: log tau controls the width, and the eight effects play x. Sampled directly, as Part 26 wrote the model, against a numerical-grid reference, using a normal prior with SD five on mu and a half-Cauchy prior with scale five on tau. These are proper priors, different from Part 26's opening flat-prior fit, NUTS gives forty-seven divergences in four thousand iterations, all at small tau, where the neck is. The histogram misses the left tail: the five percent point of tau is point nine instead of about point two five. R-hat is one point oh five and the effective sample size sixty: the diagnostics are worried, and right to be.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/043a282845541b54.wav",
+   "duration": 41.925,
+   "tokens": 115,
+   "peak": 0.545440673828125,
+   "issues": [],
+   "elapsed": 0.06,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Now write each effect as mu plus tau times a standard normal z, and sample the z's. <bookmark mark='b'/> It is the same model: only the coordinates the sampler moves in have changed. <bookmark mark='c'/> No divergences, R-hat of one point oh oh three, and an effective sample size of nineteen hundred. <bookmark mark='d'/> The histogram lies on the exact curve: five percent point point two five, median two point six nine, against the grid's about point two five and two point seven five.",
+   "spoken": "Now write each effect as mu plus tau times a standard normal z, and sample the z's. It is the same model: only the coordinates the sampler moves in have changed. No divergences, R-hat of one point oh oh three, and an effective sample size of nineteen hundred. The histogram lies on the exact curve: five percent point point two five, median two point six nine, against the grid's about point two five and two point seven five.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/dee43684313e4423.wav",
+   "duration": 26.45,
+   "tokens": 78,
+   "peak": 0.494720458984375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> A tempting response to divergences is to force a smaller step size by raising the target acceptance rate. <bookmark mark='b'/> At point nine nine the divergences fall from forty-seven to four, the run costs about three point two times the original gradients, and the five percent point of tau is still point five five, not about point two five: the problem is hidden, not solved. <bookmark mark='c'/> The non-centred run agrees closely with the reference at about half the original gradient count. Reparametrization helps this weak-data example more than just increasing effort.",
+   "spoken": "A tempting response to divergences is to force a smaller step size by raising the target acceptance rate. At point nine nine the divergences fall from forty-seven to four, the run costs about three point two times the original gradients, and the five percent point of tau is still point five five, not about point two five: the problem is hidden, not solved. The non-centred run agrees closely with the reference at about half the original gradient count. Reparametrization helps this weak-data example more than just increasing effort.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/f37c9a56b77d62a4.wav",
+   "duration": 32.125,
+   "tokens": 88,
+   "peak": 0.472686767578125,
+   "issues": [],
+   "elapsed": 0.04,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Non-centring is one of a family of reparametrizations. In regression, factor the design matrix as Q times R and sample the rotated coefficients, which are nearly uncorrelated. <bookmark mark='b'/> Standardize predictors, so that parameters live on similar scales. <bookmark mark='c'/> Sample positive quantities on the log scale, which the transforms already do. <bookmark mark='d'/> The common principle is to find coordinates in which the posterior looks like a standard normal, the shape HMC handles best.",
+   "spoken": "Non-centring is one of a family of reparametrizations. In regression, factor the design matrix as Q times R and sample the rotated coefficients, which are nearly uncorrelated. Standardize predictors, so that parameters live on similar scales. Sample positive quantities on the log scale, which the transforms already do. The common principle is to find coordinates in which the posterior looks like a standard normal, the shape HMC handles best.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/a4caf3c0494fa6df.wav",
+   "duration": 28.225,
+   "tokens": 69,
+   "peak": 0.598724365234375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Which form to use depends on the data. When groups carry little information, as here, non-centre. <bookmark mark='b'/> When each group has lots of data, the likelihood pins each effect down and the centred form is better; the funnel appears in the other coordinates instead. <bookmark mark='c'/> Omiros Papaspiliopoulos, Gareth Roberts and Martin Sköld worked out the theory. <bookmark mark='d'/> Either way, a divergence is information about your model's geometry, not noise to be suppressed.",
+   "spoken": "Which form to use depends on the data. When groups carry little information, as here, non-centre. When each group has lots of data, the likelihood pins each effect down and the centred form is better; the funnel appears in the other coordinates instead. Omiros Papaspiliopoulos, Gareth Roberts and Martin Sköld worked out the theory. Either way, a divergence is information about your model's geometry, not noise to be suppressed.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/28bf6e1270a0e9c5.wav",
+   "duration": 25.9,
+   "tokens": 69,
+   "peak": 0.524566650390625,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats27/en/Funnel_motion/result.json",
+ "input_sha256": "84a6218f481871ac2a2c4a7e556c9c46996d82c4df07f846fd854322f15f3564"
+}

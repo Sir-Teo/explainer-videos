@@ -1,0 +1,23 @@
+{
+  "part": "stats27",
+  "fingerprint": "ea82b914eac6b0c016e90b5fec59a65305a63867af7d5dbab31af81a850ba7c3",
+  "english_endpoints": 15,
+  "native_1080_endpoints": 14,
+  "silent_motion_chapters": 14,
+  "audio_scene": "Funnel",
+  "audio_lines": 8,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats27/en/Funnel/videos/s08_funnel/480p15/Funnel.mp4",
+    "seconds": 236.533008,
+    "narration_sha256": "79f0e57865903fe2942d85e59c3e317b0a324ebd2ba1d66b2d65bef295028290",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 236 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 236 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

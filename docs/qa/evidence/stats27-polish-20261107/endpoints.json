@@ -1,0 +1,171 @@
+{
+  "fingerprint": "ea82b914eac6b0c016e90b5fec59a65305a63867af7d5dbab31af81a850ba7c3",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 49
+      },
+      "input_record": "renders/qa/series/stats27/en/Hook/result.json",
+      "input_sha256": "47b014b627241fd3e66decb27c25e08d814c97ccc27f5ed1631e04375bbbf869"
+    },
+    {
+      "scene": "Importance",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 54
+      },
+      "input_record": "renders/qa/series/stats27/en/Importance/result.json",
+      "input_sha256": "84f3f7e4c95fc43b5d72e467f2f8255b8770e52490d871528a9f007cba905493"
+    },
+    {
+      "scene": "MH",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 55
+      },
+      "input_record": "renders/qa/series/stats27/en/MH/result.json",
+      "input_sha256": "50af593e7c22b277789c02fcbf2c79e01fbb4e2c88ca74d7c246500f967d5797"
+    },
+    {
+      "scene": "Gibbs",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 50
+      },
+      "input_record": "renders/qa/series/stats27/en/Gibbs/result.json",
+      "input_sha256": "8a67d8a3713d75c29fa7061c708e0ebe74e89a44660fc4c1b8344553d6aecb96"
+    },
+    {
+      "scene": "Diagnostics",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 54
+      },
+      "input_record": "renders/qa/series/stats27/en/Diagnostics/result.json",
+      "input_sha256": "08c601891c54e95280bb0dcc910c407c40f704c0ca41789600acd0119e054e83"
+    },
+    {
+      "scene": "HMC",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 60
+      },
+      "input_record": "renders/qa/series/stats27/en/HMC/result.json",
+      "input_sha256": "3335ed8ac2ce8f96108ab415e54528d0f977a5ef1524d22661eb9b40318b5180"
+    },
+    {
+      "scene": "NUTS",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 64
+      },
+      "input_record": "renders/qa/series/stats27/en/NUTS/result.json",
+      "input_sha256": "44a5920a1a4821b5540622fd68914c41c6b570c4f66a0875e15a931d8264aaa4"
+    },
+    {
+      "scene": "Funnel",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 56
+      },
+      "input_record": "renders/qa/series/stats27/en/Funnel/result.json",
+      "input_sha256": "145c515d739f4f9d5f19fc1418d453ad0b6eb84d74aed2a16b3dbe0dfd49b3d0"
+    },
+    {
+      "scene": "PPL",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 48
+      },
+      "input_record": "renders/qa/series/stats27/en/PPL/result.json",
+      "input_sha256": "351eea5f2b5271704b3b445ed76a13aa3a91e0bceb6111640f1059f6bc1044e8"
+    },
+    {
+      "scene": "SMC",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 53
+      },
+      "input_record": "renders/qa/series/stats27/en/SMC/result.json",
+      "input_sha256": "6ac4034818e6cc100bcfb342d1a029a1c97934f88ac44ca0f60ef732a30fb060"
+    },
+    {
+      "scene": "VI",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 50
+      },
+      "input_record": "renders/qa/series/stats27/en/VI/result.json",
+      "input_sha256": "bb5ea5255fc205c4f41b02bf2175a9552b7522da4c083729f9993f88650c3bf4"
+    },
+    {
+      "scene": "Laplace",
+      "status": "needs-review",
+      "frames": 16,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 71
+      },
+      "input_record": "renders/qa/series/stats27/en/Laplace/result.json",
+      "input_sha256": "329cfc4100d9576b1951c7ee5c7b77c80c9e88c210261493603ea26f262f842b"
+    },
+    {
+      "scene": "ABC",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 54
+      },
+      "input_record": "renders/qa/series/stats27/en/ABC/result.json",
+      "input_sha256": "5a629d6fee01d64411824cd4c0444c726bbd3feda387781282d83684241b3c45"
+    },
+    {
+      "scene": "CFTP",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 54
+      },
+      "input_record": "renders/qa/series/stats27/en/CFTP/result.json",
+      "input_sha256": "2318aee55827c967e347222212477b6ed2245339f983986f1e531a87273ef357"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 8,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 62
+      },
+      "input_record": "renders/qa/series/stats27/en/Outro/result.json",
+      "input_sha256": "7f947ebdcb888e427b0c2bbe6b53f7613907291915af15fbf515cee9bd08d496"
+    }
+  ]
+}
