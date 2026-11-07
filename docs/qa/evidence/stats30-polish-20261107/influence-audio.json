@@ -1,0 +1,128 @@
+{
+ "video": "stats30",
+ "scene": "Influence",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 10,
+ "lines": [
+  {
+   "raw": "Chapter three. Gross errors and influence functions.",
+   "spoken": "Chapter three. Gross errors and influence functions.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/d5eac4929f95bf3b.wav",
+   "duration": 3.725,
+   "tokens": 7,
+   "peak": 0.391754150390625,
+   "issues": [],
+   "elapsed": 0.08,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Frank Hampel's framework. Think of an estimator as a functional T of the distribution. Contaminate the distribution by moving a small mass epsilon to a single point z. <bookmark mark='b'/> To first order, the estimate moves by epsilon times a function of z: <bookmark mark='c'/> the influence function, the derivative of the functional in the direction of a point mass at z. <bookmark mark='d'/> Its sample version is Tukey's sensitivity curve: add one observation at z, and record n plus one times the change in the estimate.",
+   "spoken": "Frank Hampel's framework. Think of an estimator as a functional T of the distribution. Contaminate the distribution by moving a small mass epsilon to a single point z. To first order, the estimate moves by epsilon times a function of z: the influence function, the derivative of the functional in the direction of a point mass at z. Its sample version is Tukey's sensitivity curve: add one observation at z, and record n plus one times the change in the estimate.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/ccadbeb88171495e.wav",
+   "duration": 28.425,
+   "tokens": 81,
+   "peak": 0.7362060546875,
+   "issues": [],
+   "elapsed": 0.04,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The estimator rail, this part's instrument: two dozen of Newcomb's measurements on a line, and below, five estimates of their centre. Take the largest observation and drag it to the right. <bookmark mark='b'/> The mean follows it, without limit. <bookmark mark='c'/> In this demonstration the median and Hodges–Lehmann eventually stop responding to the point's distance. Huber's bounded residual score limits its direct effect, though estimating the scale can also matter. <bookmark mark='d'/> The biweight moves and then comes back: once the point is far enough out, it is given weight zero, as if rejected.",
+   "spoken": "The estimator rail, this part's instrument: two dozen of Newcomb's measurements on a line, and below, five estimates of their centre. Take the largest observation and drag it to the right. The mean follows it, without limit. In this demonstration the median and Hodges–Lehmann eventually stop responding to the point's distance. Huber's bounded residual score limits its direct effect, though estimating the scale can also matter. The biweight moves and then comes back: once the point is far enough out, it is given weight zero, as if rejected.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/225f54108a561234.wav",
+   "duration": 33.3,
+   "tokens": 88,
+   "peak": 0.777435302734375,
+   "issues": [],
+   "elapsed": 0.06,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The rail shows the shape near the centre too. Slide the smallest point slowly from the left across the middle of the data. <bookmark mark='b'/> As a single sample point moves, the sample median is continuous and piecewise linear, changing which order statistics define it. Its population influence function has a step, a different limiting statement. <bookmark mark='c'/> Hodges–Lehmann and Huber glide smoothly, like the mean does, for points near the centre. They behave like the mean where the mean is good, and like the median where the mean fails.",
+   "spoken": "The rail shows the shape near the centre too. Slide the smallest point slowly from the left across the middle of the data. As a single sample point moves, the sample median is continuous and piecewise linear, changing which order statistics define it. Its population influence function has a step, a different limiting statement. Hodges–Lehmann and Huber glide smoothly, like the mean does, for points near the centre. They behave like the mean where the mean is good, and like the median where the mean fails.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/e20185d8992cf950.wav",
+   "duration": 28.6,
+   "tokens": 86,
+   "peak": 0.55572509765625,
+   "issues": [],
+   "elapsed": 0.07,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The sensitivity curves, on all sixty-four clean measurements. <bookmark mark='b'/> The mean's is a straight line: one observation can move it anywhere. <bookmark mark='c'/> The median's is a step: it only cares which side of the centre the point is on. <bookmark mark='d'/> Hodges–Lehmann's and Huber's rise and level off. <bookmark mark='e'/> The biweight score returns to zero far out. A finite-sample sensitivity curve with an estimated MAD need not return exactly to zero, because adding a point can change the scale. Estimators with this shape are called redescending.",
+   "spoken": "The sensitivity curves, on all sixty-four clean measurements. The mean's is a straight line: one observation can move it anywhere. The median's is a step: it only cares which side of the centre the point is on. Hodges–Lehmann's and Huber's rise and level off. The biweight score returns to zero far out. A finite-sample sensitivity curve with an estimated MAD need not return exactly to zero, because adding a point can change the scale. Estimators with this shape are called redescending.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/a199d0f7ffd0773f.wav",
+   "duration": 28.95,
+   "tokens": 81,
+   "peak": 0.62774658203125,
+   "issues": [],
+   "elapsed": 0.04,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The worst influence, the supremum of its absolute value, is the gross-error sensitivity. <bookmark mark='b'/> For the mean the influence function is z minus mu: unbounded. <bookmark mark='c'/> For the median it is plus or minus one over twice the density at the median, at the standard normal one point two five, the minimum gross-error sensitivity among regular Fisher-consistent normal location functionals, with the appropriate equivariance and normalization constraints. <bookmark mark='d'/> For an M-estimator, the solution of a sum of psi functions equal to zero, it is psi itself, scaled: so you design the influence function by choosing psi.",
+   "spoken": "The worst influence, the supremum of its absolute value, is the gross-error sensitivity. For the mean the influence function is z minus mu: unbounded. For the median it is plus or minus one over twice the density at the median, at the standard normal one point two five, the minimum gross-error sensitivity among regular Fisher-consistent normal location functionals, with the appropriate equivariance and normalization constraints. For an M-estimator, the solution of a sum of psi functions equal to zero, it is psi itself, scaled: so you design the influence function by choosing psi.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/13765d6b9524ef9e.wav",
+   "duration": 36.625,
+   "tokens": 93,
+   "peak": 0.57269287109375,
+   "issues": [],
+   "elapsed": 0.07,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The hook's duel, seen through influence functions. Treat the standard deviation as a functional of the distribution. <bookmark mark='b'/> At the normal its influence function is half of z squared minus one: quadratic, so a point at ten standard units has influence forty-nine point five; comparison with a typical point depends on which point is chosen. <bookmark mark='c'/> The mean deviation's is the absolute value of z minus a constant: only linear. <bookmark mark='d'/> Both are unbounded, but one grows far faster, which is exactly why Tukey's rare wide errors hurt the standard deviation so much more.",
+   "spoken": "The hook's duel, seen through influence functions. Treat the standard deviation as a functional of the distribution. At the normal its influence function is half of z squared minus one: quadratic, so a point at ten standard units has influence forty-nine point five; comparison with a typical point depends on which point is chosen. The mean deviation's is the absolute value of z minus a constant: only linear. Both are unbounded, but one grows far faster, which is exactly why Tukey's rare wide errors hurt the standard deviation so much more.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/f6806a6e42a09eed.wav",
+   "duration": 34.9,
+   "tokens": 91,
+   "peak": 0.554931640625,
+   "issues": [],
+   "elapsed": 0.06,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The theoretical influence functions at the standard normal. <bookmark mark='b'/> The mean's line. <bookmark mark='c'/> The median's step, at one point two five. <bookmark mark='d'/> The trimmed mean and Huber's estimate are linear in the middle, like the mean, and clipped at about one point six: almost the mean's efficiency, with bounded influence. <bookmark mark='e'/> The biweight is linear near zero, peaks at one point seven seven, and returns to zero beyond four point six nine standard units.",
+   "spoken": "The theoretical influence functions at the standard normal. The mean's line. The median's step, at one point two five. The trimmed mean and Huber's estimate are linear in the middle, like the mean, and clipped at about one point six: almost the mean's efficiency, with bounded influence. The biweight is linear near zero, peaks at one point seven seven, and returns to zero beyond four point six nine standard units.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/052c1c8878a5bb93.wav",
+   "duration": 25.3,
+   "tokens": 70,
+   "peak": 0.661712646484375,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Two facts make the influence function central. It averages to zero over the distribution. <bookmark mark='b'/> Its mean square is the estimator's asymptotic variance, Part 22's sandwich in another form. <bookmark mark='c'/> Because the estimator, to first order, is the average of the influence of each observation, the von Mises expansion. <bookmark mark='d'/> So bounded influence and small variance pull against each other, and the best compromise is chapter five's problem.",
+   "spoken": "Two facts make the influence function central. It averages to zero over the distribution. Its mean square is the estimator's asymptotic variance, Part 22's sandwich in another form. Because the estimator, to first order, is the average of the influence of each observation, the von Mises expansion. So bounded influence and small variance pull against each other, and the best compromise is chapter five's problem.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/905fba9e3448110c.wav",
+   "duration": 26.9,
+   "tokens": 65,
+   "peak": 0.810394287109375,
+   "issues": [],
+   "elapsed": 0.05,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Hampel posed the trade-off as an optimization: minimize the variance at the normal, subject to a bound c on the gross-error sensitivity. <bookmark mark='b'/> The solution is the identity, clipped at plus and minus k: <bookmark mark='c'/> Huber's psi again, reached from a different question, which is part of why it is so widely used. <bookmark mark='d'/> As c falls to its smallest possible value, root pi over two, k shrinks to zero and the solution becomes the median, the least gross-error-sensitive solution within this regular normal-location problem, rather than under every definition of robustness.",
+   "spoken": "Hampel posed the trade-off as an optimization: minimize the variance at the normal, subject to a bound c on the gross-error sensitivity. The solution is the identity, clipped at plus and minus k: Huber's psi again, reached from a different question, which is part of why it is so widely used. As c falls to its smallest possible value, root pi over two, k shrinks to zero and the solution becomes the median, the least gross-error-sensitive solution within this regular normal-location problem, rather than under every definition of robustness.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/8f2ed0c989308424.wav",
+   "duration": 35.525,
+   "tokens": 89,
+   "peak": 0.5321044921875,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats30/en/Influence_motion/result.json",
+ "input_sha256": "dba4a75c1f49035d8d02b24d9f6f25b0ab4142cedb16d1d6463f595ab1abb2d5"
+}

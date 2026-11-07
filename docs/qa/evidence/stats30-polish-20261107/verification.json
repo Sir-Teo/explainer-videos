@@ -1,0 +1,23 @@
+{
+  "part": "stats30",
+  "fingerprint": "7c3f70223feb01a2820105b015877b71ea16d48fc5e1179e9336d96fcd9dbf0f",
+  "english_endpoints": 12,
+  "native_1080_endpoints": 11,
+  "silent_motion_chapters": 11,
+  "audio_scene": "Influence",
+  "audio_lines": 10,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats30/en/Influence/videos/s04_influence/480p15/Influence.mp4",
+    "seconds": 293.265365,
+    "narration_sha256": "66046632141e8b9133db0114046f65613da5fbb5c5af148d29ba8e8aea9fa2cf",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 293 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 293 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

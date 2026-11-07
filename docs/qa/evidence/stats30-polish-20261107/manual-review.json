@@ -1,0 +1,44 @@
+{
+  "baseline": [
+    "Hook",
+    "Pitman",
+    "HodgesLehmann",
+    "Influence",
+    "Breakdown",
+    "Huber",
+    "Scale",
+    "Regression",
+    "Multivariate",
+    "Heavy",
+    "World",
+    "Outro"
+  ],
+  "native": [
+    "Hook",
+    "Pitman",
+    "HodgesLehmann",
+    "Influence",
+    "Breakdown",
+    "Huber",
+    "Scale",
+    "Regression",
+    "Multivariate",
+    "Heavy",
+    "World"
+  ],
+  "motion": [
+    "Hook",
+    "Pitman",
+    "HodgesLehmann",
+    "Influence",
+    "Breakdown",
+    "Huber",
+    "Scale",
+    "Regression",
+    "Multivariate",
+    "Heavy",
+    "World"
+  ],
+  "actual": "Influence",
+  "outro_heading_repair_viewed": true
+}

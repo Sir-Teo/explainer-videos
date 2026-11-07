@@ -1,0 +1,127 @@
+{
+  "fingerprint": "7c3f70223feb01a2820105b015877b71ea16d48fc5e1179e9336d96fcd9dbf0f",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 75
+      },
+      "input_record": "renders/qa/native1080/stats30/en/Hook/result.json",
+      "input_sha256": "874268722496242f98aab5e24631e17d0dd27b1a26d27fc364efbdc7b5e549f4"
+    },
+    {
+      "scene": "Pitman",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 69
+      },
+      "input_record": "renders/qa/native1080/stats30/en/Pitman/result.json",
+      "input_sha256": "ab234658629fce25fece2918a1aa81a64832bcc234a82a1ec8463e26e8f80786"
+    },
+    {
+      "scene": "HodgesLehmann",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 40
+      },
+      "input_record": "renders/qa/native1080/stats30/en/HodgesLehmann/result.json",
+      "input_sha256": "3f011ea0aa5e3c933c8d5f8da7468013617e3fd0eda4efbfdb19ada2b0d952a1"
+    },
+    {
+      "scene": "Influence",
+      "status": "needs-review",
+      "frames": 36,
+      "warnings": {
+        "narration-translation": 10,
+        "untranslated-on-screen": 69
+      },
+      "input_record": "renders/qa/native1080/stats30/en/Influence/result.json",
+      "input_sha256": "691880543a69572243fce0b73a169e1c6c44c4e0f18e00dae4356f8d84bf83e4"
+    },
+    {
+      "scene": "Breakdown",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 64
+      },
+      "input_record": "renders/qa/native1080/stats30/en/Breakdown/result.json",
+      "input_sha256": "f902e7ff52022154c3a8216d361dbeeb17b601ce250dc4e7966f3865d9e2e817"
+    },
+    {
+      "scene": "Huber",
+      "status": "needs-review",
+      "frames": 38,
+      "warnings": {
+        "narration-translation": 11,
+        "untranslated-on-screen": 82
+      },
+      "input_record": "renders/qa/native1080/stats30/en/Huber/result.json",
+      "input_sha256": "aaa8a4b98da0c216e2d12455ef4750e9aa306d3b3fd43fad32921650ec0c3caa"
+    },
+    {
+      "scene": "Scale",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 56
+      },
+      "input_record": "renders/qa/native1080/stats30/en/Scale/result.json",
+      "input_sha256": "456efbab060293579aa52556c1bdc963d766e80a1723573038375be8d1fb6b07"
+    },
+    {
+      "scene": "Regression",
+      "status": "needs-review",
+      "frames": 36,
+      "warnings": {
+        "narration-translation": 11,
+        "untranslated-on-screen": 89
+      },
+      "input_record": "renders/qa/native1080/stats30/en/Regression/result.json",
+      "input_sha256": "7e4c692ef06727e1e9494b06c98172aecde6869a3a83dfa27ce9dd22970d1e49"
+    },
+    {
+      "scene": "Multivariate",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 49
+      },
+      "input_record": "renders/qa/native1080/stats30/en/Multivariate/result.json",
+      "input_sha256": "eabbae2354a2ba42c4dfb5269e2adaf22a08cf1c0798630e65f7c2ee0fb29bfe"
+    },
+    {
+      "scene": "Heavy",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 72
+      },
+      "input_record": "renders/qa/native1080/stats30/en/Heavy/result.json",
+      "input_sha256": "de84cb7b3cb9b2d5319854fe756c78f55ac2cfd3db26b38dd322d2ebc5bddbfa"
+    },
+    {
+      "scene": "World",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 67
+      },
+      "input_record": "renders/qa/native1080/stats30/en/World/result.json",
+      "input_sha256": "bfbda1a237060bd8f03e227c83efd83d490e650ccf0667f56093b8991dfc5ca1"
+    }
+  ]
+}
