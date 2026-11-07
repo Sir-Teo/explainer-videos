@@ -52,9 +52,8 @@ class Hook(VoiceoverScene):
             f"narrows like one point nine six over root n. <bookmark mark='d'/> The sphere, in high dimensions, is a thin "
             f"waist of an object."
         ) as vo:
-            self.play(FadeIn(exact_tag(r"exact: \ $x_1^2 \sim \mathrm{Beta}(\tfrac12, \tfrac{n-1}{2})$")))
+            self.play(FadeIn(exact_tag(r"exact: \ $x_1^2 \sim \mathrm{Beta}(\tfrac12, \tfrac{n-1}{2})$")), FadeIn(foot))
             vo.wait_until("a")
-            self.play(FadeIn(foot))
             vo.wait_until("b")
             self.play(FadeIn(disks[0]), FadeIn(disks[1]))
             vo.wait_until("c")
