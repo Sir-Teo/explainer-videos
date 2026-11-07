@@ -1,7 +1,7 @@
 {
-  "reason": "Shared World school/health programme names separated; this part does not use schools",
-  "previous_fingerprint": "4a08e6a148252b995e58db4d55cb30ea8697a46f0aa090a826302b50e905b2f0",
-  "current_fingerprint": "6a0e30e6704cb1de12b422c45cdf6661127097c7fd1ef413fc3a0020e1e526c0",
+  "reason": "Shared Board preserves optional empirical Monte Carlo errors; legacy-row values are unchanged. Previous World programme correction retained.",
+  "previous_fingerprint": "6a0e30e6704cb1de12b422c45cdf6661127097c7fd1ef413fc3a0020e1e526c0",
+  "current_fingerprint": "99ec3894496b1a02763a230b004b0897ddccc6d0c82989f789d6dc76920183bf",
   "fresh_english_endpoint_scenes": 16,
   "fresh_native_scenes": [
     "Axioms",

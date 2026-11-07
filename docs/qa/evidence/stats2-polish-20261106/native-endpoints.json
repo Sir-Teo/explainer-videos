@@ -1,5 +1,5 @@
 {
-  "fingerprint": "6a0e30e6704cb1de12b422c45cdf6661127097c7fd1ef413fc3a0020e1e526c0",
+  "fingerprint": "99ec3894496b1a02763a230b004b0897ddccc6d0c82989f789d6dc76920183bf",
   "scope": "English render review; listening and bilingual production gates remain open",
   "records": [
     {
@@ -11,7 +11,7 @@
         "untranslated-on-screen": 41
       },
       "input_record": "renders/qa/native1080/stats2/en/Axioms/result.json",
-      "input_sha256": "ae6fa0871186a792ca4aade6a16b824ee4a3fda8457661e9aac5c84671af5eba"
+      "input_sha256": "10f5cfb75782e65bf187a351903ba6ca259682e742c52494bdcb73b66eba129d"
     },
     {
       "scene": "Bayes",
@@ -22,7 +22,7 @@
         "untranslated-on-screen": 44
       },
       "input_record": "renders/qa/native1080/stats2/en/Bayes/result.json",
-      "input_sha256": "101ee09636db8e57ed6a914f4911de55b80c122551d86772328b01be605dc4fa"
+      "input_sha256": "924427cbf0accfbedd19886032b76114fd138aa757b7b76f4024ee2b13af9b64"
     },
     {
       "scene": "Prosecutor",
@@ -33,7 +33,7 @@
         "untranslated-on-screen": 45
       },
       "input_record": "renders/qa/native1080/stats2/en/Prosecutor/result.json",
-      "input_sha256": "87e59746b5f5040aa6eae45b46724685bf9f5bd91653c89351a3c35bed11e888"
+      "input_sha256": "c51df4c32bfd6a5833c4b2850776171acddd5e04a59cb5cb0da70b17c3dc419e"
     },
     {
       "scene": "Monty",
@@ -44,7 +44,7 @@
         "untranslated-on-screen": 35
       },
       "input_record": "renders/qa/native1080/stats2/en/Monty/result.json",
-      "input_sha256": "ad197ef1c8e1e58fcfec0e8499756c117dab7c76761a01470f9af5f4e0eb91c9"
+      "input_sha256": "4f2353db816a6a87a9956a7f8007e3d67d96284984598e9279d18533388056ce"
     },
     {
       "scene": "Variables",
@@ -55,7 +55,7 @@
         "untranslated-on-screen": 36
       },
       "input_record": "renders/qa/native1080/stats2/en/Variables/result.json",
-      "input_sha256": "3f8f65934dcc98ab605b56fedf1aa1379fff818b76460a464d169ca3402efad5"
+      "input_sha256": "7a685bf56925a02440c3126d81845374316a586f03b1df8611789924b286f3bc"
     },
     {
       "scene": "Variance",
@@ -66,7 +66,7 @@
         "untranslated-on-screen": 36
       },
       "input_record": "renders/qa/native1080/stats2/en/Variance/result.json",
-      "input_sha256": "06fce1b745669577f0f23911efcb0dfe8b1331a4cee6834fcabd928ad3e76cdc"
+      "input_sha256": "55cb85aacdf76e93f5315d9e0be4f6ecca55749702b698730304e0ab33e47a7d"
     }
   ]
 }

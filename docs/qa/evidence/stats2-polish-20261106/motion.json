@@ -1,5 +1,5 @@
 {
-  "fingerprint": "6a0e30e6704cb1de12b422c45cdf6661127097c7fd1ef413fc3a0020e1e526c0",
+  "fingerprint": "99ec3894496b1a02763a230b004b0897ddccc6d0c82989f789d6dc76920183bf",
   "scope": "English render review; listening and bilingual production gates remain open",
   "records": [
     {
@@ -10,7 +10,7 @@
         "narration-translation": 7
       },
       "input_record": "renders/qa/series/stats2/en/Axioms_motion/result.json",
-      "input_sha256": "0a94c013919d1770d5e0f753746027b76275951e2ed8e1f241eef1ffa5e0931b",
+      "input_sha256": "46eb1c85658b1ef67fc8e7b93065e1357491bce6ab3d994d75c215ebdb1436f1",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 361 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 361 s\n"
     },
     {
@@ -21,7 +21,7 @@
         "narration-translation": 5
       },
       "input_record": "renders/qa/series/stats2/en/Variables_motion/result.json",
-      "input_sha256": "15b126fb542d4162c753a5132ac80f200815d0c263dd73a91954589874a561ac",
+      "input_sha256": "be3d8e03fcd3631168003f6a51de338f7d1b3165e56d15062a901eddffb2b229",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 244 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 244 s\n"
     }
   ]
