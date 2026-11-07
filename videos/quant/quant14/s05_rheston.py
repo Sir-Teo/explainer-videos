@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 
-from videos.quant.quant14.common import axes, data_range, skew_range
-
 from explainer.quant import *  # noqa: F403
+from videos.quant.quant14.common import axes, data_range, skew_range
 from videos.quant.quant14.common import (BAD, IV, MODEL_COL, OPT, PART, ROUGH, RV, SPOT, VAR, illustration, load, pause,
                                          real_data)
 
@@ -199,18 +198,10 @@ class RHeston(VoiceoverScene):
                       (MODEL_COL["rough Heston"], rf"rough Heston, free: $H = {rh['params']['H']:.2f}$"),
                       (ROUGH, r"rough Heston, $H = 0.1$")], font_size=17)
         leg.next_to(g, RIGHT, buff=0.3).align_to(g, UP)
-        side = wrapped_label(r"rough Bergomi, with its market variance curve, follows the quotes from 4 days to 200 but misses "
-                             r"the 3-day point; both rough Hestons are steep enough for that point and overshoot the days "
-                             r"just after it",
+        side = wrapped_label('One date, different variance-curve inputs and numerical solvers. The comparison includes calibration and discretization error; no curve fits every expiry.',
                              4.0, 19, GREY_A).next_to(leg, DOWN, buff=0.4).align_to(leg, LEFT)
         with self.voiceover(
-            "Now the test that motivated all this: the skew against maturity. Here are the Surface's expiries. "
-            "<bookmark mark='a'/> Rough Bergomi, carrying the market's own variance curve, follows them from four "
-            "days out to two hundred, though it misses the three-day point. <bookmark mark='b'/> Both versions of "
-            "rough Heston are steep enough to reach that point, and overshoot the days just after it. No single model "
-            "here gets every expiry. The rough kernel bends the curve the right way; the market's variance curve does "
-            "much of the rest."
-            " Next: solving its Riccati equation, step by step."
+            """Compare finite-maturity skew magnitudes on this one date. Dots come from market SVI finite differences. <bookmark mark='a'/> Rough Bergomi takes a supplied market-derived forward-variance curve; its plotted skew also contains Monte Carlo and grid error. <bookmark mark='b'/> The two rough-Heston curves use different fitted parameters and a fractional-Adams solver. Their short-end levels and the isolated bump are numerical results of those implementations. No curve matches every expiry, and this comparison cannot isolate the kernel's contribution from variance-curve inputs, calibration choices and numerical error. It does not test an exact zero-maturity asymptotic. Next: the fractional solver."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg[0]), LaggedStart(*[FadeIn(d, scale=0.5) for d in dots], lag_ratio=0.1))
             vo.wait_until("a")

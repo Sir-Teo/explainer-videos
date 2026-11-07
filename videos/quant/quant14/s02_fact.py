@@ -4,9 +4,8 @@ from datetime import date
 
 import numpy as np
 
-from videos.quant.quant14.common import axes, data_range, skew_range
-
 from explainer.quant import *  # noqa: F403
+from videos.quant.quant14.common import axes, data_range, skew_range
 from videos.quant.quant14.common import (BAD, IV, MODEL_COL, OPT, PART, ROUGH, RV, VAR, load, loglog_skew_axes, pause,
                                          real_data)
 
@@ -106,11 +105,8 @@ class Fact(VoiceoverScene, ThreeDScene):
                       (MODEL_COL["shifted"], rf"bounded: $(T + {365 * q['eps']:.0f}\text{{d}})^{{-{q['a']:.2f}}}$")],
                      font_size=17).next_to(g, RIGHT, buff=0.3).align_to(g, UP)
         side = VGroup(
-            wrapped_label(rf"this day: log error {p['rmse_log']:.2f} for the power law, {q['rmse_log']:.2f} for a skew "
-                          rf"that stops growing below about {365 * q['eps']:.0f} days", 4.0, 19, GREY_A),
-            wrapped_label(rf"all {w['n_weeks']} weeks: the bounded form beats the power law by more than 0.01 in "
-                          rf"{100 * w['bounded_share']:.0f}\% of them; median shift "
-                          rf"{w['eps_median_days']:.0f} days", 4.0, 19, GREY_A),
+            wrapped_label('single-date fits summarize observed curvature; a positive shift bounds the fitted form, without observing the zero-maturity limit', 4.0, 19, GREY_A),
+            wrapped_label('weekly comparison: weighted fitting objective, unweighted reported log RMSE; differing exponent bounds; 0.01 is a descriptive threshold', 4.0, 19, GREY_A),
             wrapped_label(r"Guyon and El Amrani (Risk, 2023): on S\&P 500, Euro Stoxx 50 and DAX skews of 2020--21, a "
                           r"two-parameter power law fails once the shortest expiries are included", 4.0, 19, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(leg, DOWN, buff=0.35).align_to(leg, LEFT)

@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 
-from videos.quant.quant14.common import axes, data_range, skew_range
-
 from explainer.quant import *  # noqa: F403
+from videos.quant.quant14.common import axes, data_range, skew_range
 from videos.quant.quant14.common import BAD, IV, OPT, PART, ROUGH, RV, VAR, load, pause, real_data
 
 
@@ -60,7 +59,7 @@ class Debate(VoiceoverScene, ThreeDScene):
         items = [(r"bitcoin", a["btc"], RV), (r"bitcoin, weekdays evened out", a["btc_deseasonalized"], RV)]
         cols = [VAR, IV, BAD]
         for m, c in zip(a["models"], cols):
-            items.append((rf"smooth: {m['name']}", m["H_rv"], c))
+            items.append((rf"Brownian-scale: {m['name']}", m["H_rv"], c))
         g = axes([0, 0.5], [-0.5, len(items) - 0.5], x_length=6.0, y_length=4.0, xlabel=r"estimated $H$",
                  xticks=[0, 0.1, 0.2, 0.3, 0.4, 0.5], yticks=[], font_size=15).to_edge(RIGHT, buff=0.8).shift(DOWN * 0.2)
         ax = g.ax
@@ -191,8 +190,7 @@ class Debate(VoiceoverScene, ThreeDScene):
                          r"A GMM estimator that corrects for the error in realized variance: $H$ still about 0.05.",
                          color=QC.IDEA, width=6.2, font_size=19),
             history_card(2024, r"Cont and Das: ``Rough volatility: fact or artefact?'' (Sankhya B)",
-                         r"Rough volatility via the lens of the estimator: smooth models measured through realized "
-                         r"variance can look rough. The artefact we simulated.", color=BAD, width=6.2, font_size=19),
+                         'Brownian-regular volatility measured through daily realized-variance proxies can produce low finite-lag scaling estimates. These examples are nondifferentiable, despite the informal label smooth.', color=BAD, width=6.2, font_size=19),
             history_card(2024, r"Chong, Hoffmann, Liu, Rosenbaum and Szymanski (Annals of Statistics 52(4))",
                          r"Minimax theory for $H$; a companion paper gives central limit theorems (Annals of Applied "
                          r"Probability 34(3)).", color=QC.IDEA, width=6.2, font_size=19))

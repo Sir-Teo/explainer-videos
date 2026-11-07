@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 
-from videos.quant.quant14.common import axes, data_range, skew_range
-
 from explainer.quant import *  # noqa: F403
+from videos.quant.quant14.common import axes, data_range, skew_range
 from videos.quant.quant14.common import BAD, IV, MODEL_COL, OPT, PART, ROUGH, RV, VAR, load, pause
 
 CARDS = [
@@ -14,10 +13,10 @@ CARDS = [
      r"GMM with the realized-variance error corrected: $H \approx 0.05$ (chapter 11)."),
     (2024, r"Chong, Hoffmann, Liu, Rosenbaum and Szymanski",
      r"Minimax rates and central limit theorems for estimating $H$ (chapter 11)."),
-    (2024, r"Cont and Das", r"The estimator's artefact: smooth volatility can read as rough (chapter 11)."),
+    (2024, r"Cont and Das", 'Brownian-regular variance can give low daily-proxy scaling estimates (chapter 11).'),
     (2024, r"Guyon (Finance and Stochastics 28(1))",
      r"The dispersion-constrained martingale Schr\"odinger problem: an exact joint S\&P 500/VIX fit (chapter 15)."),
-    (2024, r"Nutz and Riveros Valdevenito; Andr\`es and Jourdain",
+    (2024, 'Nutz and Riveros Valdevenito (2024); Andr\\`es and Jourdain (2025)',
      'Well-posedness under stated parameter, kernel and initial-state assumptions; positivity and martingality require separate results.'),
     (2025, r"Abi Jaber and Li (Mathematical Finance 35(4))",
      r"Rough, path-dependent or Markovian? On SPX smiles, rough loses to path-dependent and two-factor Markov models "

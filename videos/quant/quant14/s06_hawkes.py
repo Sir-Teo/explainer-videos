@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 
-from videos.quant.quant14.common import axes, data_range, skew_range
-
 from explainer.quant import *  # noqa: F403
+from videos.quant.quant14.common import axes, data_range, skew_range
 from videos.quant.quant14.common import BAD, IV, OPT, PART, ROUGH, RV, VAR, illustration, load, pause
 
 
@@ -79,13 +78,7 @@ class Hawkes(VoiceoverScene):
                   font_size=21).to_corner(UR, buff=0.3)
         src = illustration(rf"branching simulation, ratio 0.9, Lomax delays with tail $t^{{-1.6}}$; {int(keep.sum())} events")
         with self.voiceover(
-            "Here is the same process as a family tree. Immigrants, the top row, are orders that arrive from outside. "
-            "Each has children, reactions to it, after delays drawn from a heavy-tailed, power-law distribution; "
-            "the children have children of their own. <bookmark mark='a'/> With a branching ratio of nine-tenths, "
-            "a family averages ten members, spread over time scales from seconds to far later. "
-            "<bookmark mark='b'/> Pause and predict: with a branching ratio of 0.99, what share of all trades are "
-            "reactions to earlier trades? <bookmark mark='c'/> Ninety-nine percent. Each immigrant's family has a "
-            "hundred members on average, and the families overlap at every scale."
+            """Now a branching representation with a heavy-tailed Lomax delay kernel, rather than the preceding exponential kernel. Immigrants trigger children, which trigger further generations. <bookmark mark='a'/> At branching ratio nine tenths, a stationary immigrant family has ten members on average before finite-horizon truncation. <bookmark mark='b'/> At ratio point nine nine, what share of stationary events are descendants rather than immigrants? <bookmark mark='c'/> Ninety-nine percent, with one hundred members per family on average. The displayed finite tree retains only the shown generations and horizon; these stationary expectations are not exact counts in its picture."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(layers[0]), FadeIn(lab[0]), FadeIn(src))
             vo.wait_until("a")
@@ -103,20 +96,19 @@ class Hawkes(VoiceoverScene):
                       colors={r"\mathbb{E}\lambda_t": IV}),
                 cmath(r"\mathbb{E}\lambda_t", r"=", r"\mu\Big(1 + \int_0^t \psi\Big),\qquad \psi = \sum_{k \ge 1}\phi^{*k}",
                       font_size=38, colors={r"\mathbb{E}\lambda_t": IV}),
-                cmath(r"\|\phi\|_1 \to 1,\ \phi(t) \sim t^{-(1 + \alpha)}", r"\Rightarrow",
-                      r"\psi \to t^{\alpha - 1}E_{\alpha, \alpha}(-c\,t^\alpha)\ \sim\ t^{\alpha - 1}", font_size=34,
-                      colors={r"\|\phi\|_1 \to 1,\ \phi(t) \sim t^{-(1 + \alpha)}": ROUGH}),
-                cmath(r"\text{scaling limit}", r"=", r"\text{fractional CIR},\quad H = \alpha - \tfrac12", font_size=38,
+                cmath(r"\text{joint scaling},\quad 1/2<\alpha<1", r"\Rightarrow",
+                      r"\psi_{\rm scaled}(t) \to c_1t^{\alpha-1}E_{\alpha,\alpha}(-c_2t^\alpha)", font_size=34,
+                      colors={r"\text{joint scaling},\quad 1/2<\alpha<1": ROUGH}),
+                cmath(r"\text{scaling limit}", r"=", '\\text{integrated fractional CIR},\\quad H=\\alpha-\\tfrac12', font_size=38,
                       colors={r"\text{scaling limit}": ROUGH})]
         whys = [why(r"each event raises the intensity by the kernel $\phi$; $\|\phi\|_1$ is the branching ratio"),
                 why(r"take expectations: $dN_s - \lambda_s ds$ is a martingale"),
                 why(r"solve the renewal equation by its resolvent: $\phi^{*k}$ is generation $k$ of the family tree"),
-                why(r"Laplace transforms: a heavy tail gives $1 - \hat\phi(z) \approx c z^\alpha$; rescaled, the resolvent "
-                    r"is a Mittag-Leffler density, whose small-time behaviour is the fractional kernel"),
+                why('Under the coordinated scaling: a Mittag--Leffler resolvent density; as $t\\downarrow0$ it is proportional to $t^{\\alpha-1}$. Constants depend on the scaling.'),
                 why('Jaisson--Rosenbaum: a coordinated nearly critical heavy-tail scaling gives an integrated fractional-CIR limit, $1/2<\\alpha<1$')]
         step = ladder(self, rows, whys, keep=3, top=2.8, x=-1.2, buff=0.7, edge=6.9)
         with self.voiceover(
-            "Thibault Jaisson and Mathieu Rosenbaum made this precise in 2016. The intensity is a baseline mu plus the kernel phi applied to every past event. <bookmark mark='a'/> Take expectations: the expected intensity satisfies a renewal equation. <bookmark mark='b'/> Its solution is the baseline times one plus the integral of the resolvent psi, the sum of phi convolved with itself k times: generation k of the family tree. <bookmark mark='c'/> Now push the branching ratio to one, with a heavy power-law tail. In Laplace space the tail gives one minus phi hat of z close to a constant times z to the alpha. Rescale time, and the resolvent converges to a Mittag-Leffler density, which near zero behaves like t to the alpha minus one: the fractional kernel of rough Heston. <bookmark mark='d'/> The limit theorem: zoomed out, the intensity becomes a rough Heston variance with H equal to alpha minus a half. More precisely the original theorem is an integrated fractional-CIR limit under coordinated scaling, with alpha strictly between one half and one; adding a price process needs further assumptions."
+            """Start with Hawkes intensity: a baseline plus past events weighted by a kernel. <bookmark mark='a'/> Taking expectations gives a renewal equation. <bookmark mark='b'/> Its resolvent is the sum of convolution powers, one for each generation. <bookmark mark='c'/> Jaisson and Rosenbaum take a heavy-tail parameter alpha between one half and one, with a nearly critical branching sequence and coordinated time, baseline and amplitude scaling. The rescaled resolvent approaches a Mittag--Leffler density, proportional to t to alpha minus one near zero. <bookmark mark='d'/> Their 2016 theorem yields an integrated fractional-CIR limit with H equal to alpha minus one half. A price process and leverage require further modeling assumptions. The preceding finite simulations do not implement this entire limiting sequence."""
         ) as vo:
             step(0)
             vo.wait_until("a")

@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 
-from videos.quant.quant14.common import axes, data_range, skew_range
-
 from explainer.quant import *  # noqa: F403
+from videos.quant.quant14.common import axes, data_range, skew_range
 from videos.quant.quant14.common import BAD, IV, OPT, PART, ROUGH, RV, SPOT, VAR, load
 
 S_COL = {"riemann": BAD, "hybrid1": ROUGH, "hybrid2": RV}
@@ -43,7 +42,7 @@ class Research(VoiceoverScene):
                 why(r"It\^o's isometry, and the substitution $1 - s = x\Delta$: the whole error is $\Delta^{2H}$ times a sum "
                     r"that converges, because the terms fall like $j^{2a - 2}$"),
                 why('Uniform grid, fixed admissible within-cell rules, $0<H<1/2$: RMSE has order $n^{-H}$; this is not a bound for every approximation class.')]
-        step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.3, buff=0.44, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=2.8, x=-0.3, buff=0.44, edge=6.9)
         with self.voiceover(
             """Take the Riemann--Liouville driver at time one with H strictly between zero and one half. <bookmark mark='a'/> The power kernel is square integrable but unbounded at the endpoint. <bookmark mark='b'/> A uniform-grid step approximation uses a fixed rule for each lag cell's evaluation point; the point must stay within its cell. <bookmark mark='c'/> Itô's isometry gives the displayed exact error integral. After scaling, the tail cell errors are summable for these admissible rules and the first-cell error is positive. <bookmark mark='d'/> Thus root mean squared error has order n to minus H. At H of one tenth, an asymptotic halving needs a factor of two to the tenth in grid size. This statement does not cover arbitrary nonuniform meshes or changing approximation classes."""
         ) as vo:
@@ -70,7 +69,7 @@ class Research(VoiceoverScene):
                     r"and step the rest"),
                 why(r"the points that minimize each remaining cell's error (Chapter 6's optimal points)"),
                 why('For fixed $\\kappa$, the first unresolved cell leaves rate $n^{-H}$ with a much smaller constant. Growing $\\kappa$ is a different regime.')]
-        step = ladder(self, rows, whys, keep=3, top=2.7, x=-0.3, buff=0.5, edge=6.9)
+        step = ladder(self, rows, whys, keep=2, top=2.7, x=-0.3, buff=0.5, edge=6.9)
         thm = theorem_card(r"The hybrid scheme's error", wrapped_label(
             'Fixed exact-cell count $\\kappa$ and uniform-grid power kernel: MSE $\\sim J(H,\\kappa,b)n^{-2H}$. The improvement depends on $H$, $\\kappa$ and the remaining evaluation rule.', 10.6, 20, GREY_A),
             who=r"Bennedsen, Lunde and Pakkanen (2017), \textit{Finance and Stochastics} 21", width=11.6,
@@ -201,9 +200,11 @@ class Research(VoiceoverScene):
         with self.voiceover(
             """Three questions for implementation. <bookmark mark='a'/> Which weak-error theorem actually matches the coefficients, payoff and discretization? A result for a linear rough model cannot simply be transferred to rough Bergomi. <bookmark mark='b'/> How much variance reduction does a proposed multilevel coupling deliver at its measured computational cost? A small H can make a naive coupling inefficient, but the rate alone does not settle every construction. <bookmark mark='c'/> Finally, does the target admit an error expansion that justifies grid extrapolation? Our four-grid vanilla experiment does not answer that for path-dependent products or joint SPX and VIX models. These are questions left unverified here, rather than an exhaustive claim about the current literature."""
         ) as vo:
+            self.play(FadeIn(cards[0], shift=UP * 0.2))
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
-                self.play(FadeIn(cards[k], shift=UP * 0.2))
+                if k:
+                    self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
 

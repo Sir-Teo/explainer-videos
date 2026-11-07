@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 
-from videos.quant.quant14.common import axes, data_range, skew_range
-
 from explainer.quant import *  # noqa: F403
+from videos.quant.quant14.common import axes, data_range, skew_range
 from explainer.quant.house import sim
 from videos.quant.quant14.common import BAD, IV, PART, ROUGH, RV, VAR, illustration, load, pause
 
@@ -73,6 +72,7 @@ class Hook(VoiceoverScene):
         lines = VGroup(drawn(0), drawn(1))
         zr = readout(r"\text{zoom}\ \times", lambda: 2 ** (8 * s.get_value()), digits=0, font_size=34,
                      color=YELLOW).to_corner(UR, buff=0.35)
+        zr.add_updater(lambda m: m.to_corner(UR, buff=0.35))
         src = illustration(r"fractional Brownian motion, 8{,}192 steps; each frame rescaled to fill its box")
         q = pause('After rescaling a Brownian segment, must it straighten? (Finite-grid illustration.)', width=6.4, font_size=22).to_corner(UL, buff=0.25)
         with self.voiceover(

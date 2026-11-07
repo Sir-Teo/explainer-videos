@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 
-from videos.quant.quant14.common import axes, data_range, skew_range
-
 from explainer.quant import *  # noqa: F403
+from videos.quant.quant14.common import axes, data_range, skew_range
 from videos.quant.quant14.common import (BAD, IV, MODEL_COL, OPT, PART, ROUGH, RV, VAR, illustration, load,
                                          loglog_skew_axes, pause, real_data, running_min)
 
@@ -49,7 +48,7 @@ class Options(VoiceoverScene):
                                   fill_color=GOLD, fill_opacity=0.85).move_to(h.ax.c2p(e + 75 / 16, c_ / 2))
                         for c_, e in zip(cnt, ed[:-1])])
         side = VGroup(MathTex(rf"{int(sum(better))}\ \text{{of}}\ {len(weeks)}\ \text{{weeks}}", font_size=34, color=GOLD),
-                      label('shifted fit improves reported log RMSE by >0.01 (in sample)', font_size=18, color=GREY_A),
+                      wrapped_label('shifted fit improves reported log RMSE by >0.01 (in sample)', max_width=3.8, font_size=18, color=GREY_A),
                       MathTex(rf"\text{{median shift}}\ {w['eps_median_days']:.0f}\ \text{{days}}", font_size=28, color=GOLD)
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(h, UP, buff=0.4).align_to(h, LEFT)
         src = real_data(r"Deribit, weekly, 2024--2025: each week's fitted term structure", corner=DL)

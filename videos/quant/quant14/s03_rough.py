@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 
-from videos.quant.quant14.common import axes, data_range, skew_range
-
 from explainer.quant import *  # noqa: F403
+from videos.quant.quant14.common import axes, data_range, skew_range
 from videos.quant.quant14.common import BAD, IV, OPT, PART, ROUGH, RV, VAR, illustration, load, pause, real_data
 
 
@@ -136,11 +135,12 @@ class Rough(VoiceoverScene):
                           stroke_width=2))
         leg = legend([(c, rf"$q = {q:g}$") for q, c in zip(qs, cols)], font_size=16)
         leg.arrange(RIGHT, buff=0.3).next_to(g, UP, buff=0.1).align_to(g, LEFT)
-        g2 = axes([0, 3.2], [0, 0.3], x_length=3.4, y_length=2.6, xlabel=r"$q$", ylabel=r"slope $\zeta_q$",
+        intercept = float(np.polyfit(qs, zeta, 1)[1])
+        zrange = data_range(zeta, [intercept, 3.2 * r["H"] + intercept], zero=True)
+        g2 = axes([0, 3.2], list(zrange), x_length=3.4, y_length=2.6, xlabel=r"$q$", ylabel=r"slope $\zeta_q$",
                   xticks=[0, 1, 2, 3], yticks=[0, 0.1, 0.2, 0.3], font_size=14)
         g2.next_to(g, RIGHT, buff=1.0).align_to(g, UP)
         zd = VGroup(*[Dot(g2.ax.c2p(q, z), radius=0.06, color=c) for q, z, c in zip(qs, zeta, cols)])
-        intercept = float(np.polyfit(qs, zeta, 1)[1])
         zl = Line(g2.ax.c2p(0, intercept), g2.ax.c2p(3.2, 3.2 * r["H"] + intercept), stroke_color=WHITE, stroke_width=2)
         Hl = MathTex(rf"H = {r['H']:.2f}", font_size=34, color=ROUGH).next_to(g2, DOWN, buff=0.35)
         q = pause(r"If the $q = 2$ line had slope 1, what would $H$ be?", width=5.0, font_size=22).next_to(Hl, DOWN, buff=0.3)

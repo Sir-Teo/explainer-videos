@@ -4,9 +4,8 @@ from datetime import date, datetime, timezone
 
 import numpy as np
 
-from videos.quant.quant14.common import axes, data_range, skew_range
-
 from explainer.quant import *  # noqa: F403
+from videos.quant.quant14.common import axes, data_range, skew_range
 from videos.quant.quant14.common import (BAD, IV, MODEL_COL, OPT, PART, ROUGH, RV, VAR, load, loglog_curve,
                                          loglog_skew_axes, pause, real_data)
 
@@ -113,8 +112,8 @@ class SPX(VoiceoverScene):
             r"(SEC staff working paper, Li and Askanazi 2025), while VIX futures stay below 35. It closes at "
             + f"{100 * a5['vix']:.2f}" + r", from " + f"{100 * a2['vix']:.2f}" + r" on Friday."),
             stats=[(rf"{100 * a5['vix']:.1f}", r"VIX close, 5 August (FRED)"),
-                   (rf"{100 * a5['pdv']:.1f}", r"PDV, from past returns only"),
-                   (rf"{gap:.0f}", r"points the path does not explain")], width=7.6, font_size=22).to_edge(LEFT, buff=0.4)
+                   (rf"{100 * a5['pdv']:.1f}", 'PDV close proxy, including same-day return'),
+                   (rf"{gap:.0f}", 'points: this proxy\\textquotesingle s close residual')], width=7.6, font_size=22).to_edge(LEFT, buff=0.4)
         cards = VGroup(
             wrapped_label(r"BIS Bulletin 95 (Todorov and Vilkov, 29 October 2024): the VIX's biggest ever one-day spike; "
                           r"because the VIX is computed from quotes, not trades, dealers' quote-setting and the widening of "

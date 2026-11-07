@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 
-from videos.quant.quant14.common import axes, data_range, skew_range
-
 from explainer.quant import *  # noqa: F403
+from videos.quant.quant14.common import axes, data_range, skew_range
 from videos.quant.quant14.common import BAD, IV, MODEL_COL, OPT, PART, ROUGH, RV, VAR, load
 
 DESK = [
@@ -32,7 +31,7 @@ PROBLEMS = [
     r"$\mu / (1 - \|\phi\|_1)$, and explain why $\|\phi\|_1 \to 1$ is called nearly unstable.",
     r"Compute $\int_0^T\!\int_t^T (u - t)^{H - 1/2}\,du\,dt$, and deduce the rough skew's $T^{H - 1/2}$.",
     r"Show that $b_k$ in the hybrid scheme is the point where the kernel equals its own average over cell $k$.",
-    r"Show that each factor of the 4-factor PDV obeys $dR = \lambda(r^2/dt - R)\,dt$, an exponential moving average.",
+    'For a piecewise-held daily input $r_t^p/\\Delta t$, derive $dR=\\lambda(r_t^p/\\Delta t-R)dt$ from the exponential convolution. Use $p=1$ for signed returns and $p=2$ for squared returns, with two EMA factors for each input.',
     r"(qual) For $Y_1 = \sqrt{2H}\int_0^1(1 - s)^{H - 1/2}dW_s$ and a step kernel frozen at $c_j\Delta$ on the cell at lag "
     r"$j$, show $\mathbb E|Y_1 - \hat Y_1|^2 = 2H\Delta^{2H}\sum_j\int_{j-1}^{j}(x^{a} - c_j^{a})^2dx$, that the sum converges, "
     r"and that the optimal $c_j$ on each cell is $b_j$.",
@@ -68,7 +67,7 @@ class Outro(VoiceoverScene):
             ('daily proxy estimates mix local regularity, mean reversion, aggregation and noise', BAD),
             (rf"options: a two-factor Bergomi scores {b2['rmse']:.2f}; the horse races lean against one factor", VAR),
             ('held-out-date implied-index tracking includes same-day returns; residuals are proxy-specific', MODEL_COL["PDV"]),
-            (rf"qRH's feedback makes the Zumbach effect; signatures turn calibration into algebra ({sg['rmse_out']:.2f})",
+            (rf"weak Zumbach asymmetry in this qRH simulation; signatures: nonlinear fit, fresh-seed RMSE {sg['rmse_out']:.2f}",
              QC.DELTA),
         ]
         rows = VGroup()

@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 
-from videos.quant.quant14.common import axes, data_range, skew_range
-
 from explainer.quant import *  # noqa: F403
+from videos.quant.quant14.common import axes, data_range, skew_range
 from videos.quant.quant14.common import BAD, IV, MODEL_COL, OPT, PART, ROUGH, RV, SPOT, VAR, illustration, load, pause, real_data
 
 
@@ -62,7 +61,7 @@ class Joint(VoiceoverScene):
         zs = np.linspace(*zr, 100)
         vr = data_range(V[i], pr["a"] * (zs-pr["b"])**2 + pr["c"], zero=True)
         par = axes(list(zr), list(vr), x_length=4.4, y_length=3.4, xlabel=r"$Z_t$", ylabel=r"$V = a(Z - b)^2 + c$",
-                   xticks=[-0.2, 0, pr["b"], 0.3], yticks=[0, 0.03, 0.06], font_size=14).to_edge(RIGHT, buff=0.5)
+                   xticks=list(np.linspace(*zr, 3)), yticks=list(np.linspace(0, vr[1], 3)), xfmt=lambda v: f"{v:.2f}", yfmt=lambda v: f"{v:.3f}", font_size=14).to_edge(RIGHT, buff=0.5)
         pc = curve(par.ax, zs, pr["a"] * (zs - pr["b"]) ** 2 + pr["c"], VAR, stroke_width=3)
         tr = ValueTracker(0)
         ls = tracing(g1.ax, t, S[i], tr, WHITE, stroke_width=2)

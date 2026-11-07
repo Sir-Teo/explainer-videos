@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 
-from videos.quant.quant14.common import axes, data_range, skew_range
-
 from explainer.quant import *  # noqa: F403
+from videos.quant.quant14.common import axes, data_range, skew_range
 from videos.quant.quant14.common import (BAD, IV, MODEL_COL, OPT, PART, ROUGH, RV, VAR, load, pause, real_data)
 
 
@@ -33,8 +32,8 @@ class House(VoiceoverScene):
                  ("neural (Part 17)", r"neural surrogate (Part 17)", QC.HOUSE)]
         vals = np.array([sp[k] for k, _, _ in items])
         lo, hi = np.floor(np.log10(vals.min())) - .3, np.ceil(np.log10(vals.max())) + .3
-        g = axes([lo, hi], [-0.5, len(items) - 0.5], x_length=7.0, y_length=3.6, xlabel='seconds per recorded pricing-map evaluation (log); outputs and accuracy differ', xticks=[-3, -2, -1, 0, 1, 2],
-                 xfmt=lambda u: {-3: "0.001", -2: "0.01", -1: "0.1", 0: "1", 1: "10", 2: "100"}[int(round(u))], yticks=[],
+        g = axes([lo, hi], [-0.5, len(items) - 0.5], x_length=7.0, y_length=3.6, xlabel='seconds per recorded pricing-map evaluation (log); outputs and accuracy differ', xticks=list(np.arange(np.ceil(lo), np.floor(hi) + 1)),
+                 xfmt=lambda u: f"{10 ** u:g}", yticks=[],
                  font_size=14).to_edge(RIGHT, buff=0.6).shift(DOWN * 0.3)
         ax = g.ax
         t = ValueTracker(0)
