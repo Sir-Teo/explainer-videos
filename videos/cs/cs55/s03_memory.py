@@ -102,10 +102,9 @@ class Memory(VoiceoverScene):
                           font_size=17, color=DATA),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([4.6, 0.0, 0])
         with self.voiceover(
-            "By the late nineties this attack was everywhere, and three defences answered it. We ran our Pebble "
-            "exploit under every combination. <bookmark mark='a'/> A stack canary is a secret word placed just "
-            "before the return address; the function checks on the way out that it has not changed, and a buffer "
-            "overflow that reaches the return address changes it first. <bookmark mark='b'/> W, xor, X means memory "
+            "Three defences answered this attack, and we ran our Pebble overflow under every combination. "
+            "<bookmark mark='a'/> A stack canary is a secret word just before the return address, checked on the "
+            "way out; an overflow reaching the return address changes it first. <bookmark mark='b'/> W, xor, X means memory "
             "is writable or executable but never both, so the stack can hold the attacker's bytes but the processor "
             "refuses to run them. <bookmark mark='c'/> And address-space layout randomisation scatters the "
             "addresses, so the one the attacker wrote usually points nowhere. <bookmark mark='d'/> Look at the "
@@ -153,8 +152,8 @@ class Memory(VoiceoverScene):
             "<bookmark mark='b'/> If the layout is re-randomised on every attempt, the number of tries to the first "
             "hit is a geometric random variable with mean one over p, which is two to the k. "
             "<bookmark mark='c'/> Here are the published entropies for typical layouts: a thirty-two bit system "
-            "gives only sixteen bits on one base, brute-forced in about sixty-five thousand tries, which the first "
-            "ASLR paper did in 2004; a sixty-four bit system gives nearer thirty. <bookmark mark='d'/> And a small "
+            "gives only sixteen bits on one base, brute-forced in about sixty-five thousand tries, which Shacham and "
+            "colleagues did in 2004; a sixty-four bit system gives nearer thirty. <bookmark mark='d'/> And a small "
             "runnable version on Pebble confirms the formula exactly: of sixty-four placements, one matches, a rate "
             "of one in sixty-four."
         ) as vo:
@@ -164,7 +163,7 @@ class Memory(VoiceoverScene):
             vo.wait_until("b")
             self.play(TransformMatchingTex(r1, r2), FadeOut(why1), FadeIn(why2))
             vo.wait_until("c")
-            self.play(FadeOut(r2), FadeOut(why2), FadeIn(g), FadeIn(src))
+            self.play(FadeOut(why2), FadeIn(g), FadeIn(src))
             vo.wait_until("d")
             self.play(FadeIn(exp))
         self.wait(0.4)
@@ -198,16 +197,14 @@ class Memory(VoiceoverScene):
                           r"leak elsewhere", 5.4, font_size=19, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.26).move_to([3.5, -0.1, 0])
         with self.voiceover(
-            "So W, xor, X stops injected code. In 2007 Hovav Shacham showed it does not stop the attacker. "
-            "<bookmark mark='a'/> Instead of supplying new code, reuse the code already there. Scattered through any "
-            "binary are short instruction sequences that end in a return. Call each one a gadget. "
-            "<bookmark mark='b'/> Now the overflow does not write code; it writes a list of return addresses, a train "
-            "of them on the stack. The first return jumps to a gadget; that gadget does a little work and returns, "
-            "which pops the next address and runs the next gadget. <bookmark mark='c'/> Our Pebble binary has eight "
-            "such gadgets, and a chain built only from them makes the program print its word and halt, with W, xor, X "
-            "fully on. No code on the stack ever executed. <bookmark mark='d'/> What does stop it here is the canary, "
-            "which the overwrite trips before any return happens; that is why real chains need an information leak as "
-            "well. The lasting lesson is that control-flow is the asset to defend, not memory alone."
+            "W, xor, X stops injected code. In 2007 Hovav Shacham showed it does not stop the attacker. "
+            "<bookmark mark='a'/> Instead of new code, reuse code already there: short instruction sequences that "
+            "end in a return, called gadgets. <bookmark mark='b'/> The overflow now writes a train of return "
+            "addresses on the stack. Each return jumps to a gadget, which does a little work and returns into the "
+            "next. <bookmark mark='c'/> Our Pebble binary has eight gadgets, and a chain of them makes the program "
+            "print its word and halt with W, xor, X fully on. No stack code ever ran. <bookmark mark='d'/> The "
+            "canary still trips first, which is why real chains also need a leak. The lesson: control flow is the "
+            "asset to defend."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tl))
             vo.wait_until("a")
@@ -244,15 +241,12 @@ class Memory(VoiceoverScene):
                              r"language could rule the bug out instead", 12.6, font_size=21,
                              color=WHITE).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "If the real target is control flow, defend it directly. <bookmark mark='a'/> Control-flow integrity, "
-            "proposed by Martin Abadi and colleagues in 2005, records at compile time which targets each indirect "
-            "jump or return is allowed to reach, and checks at run time that the actual target is one of them; a ROP "
-            "chain jumps to the middle of gadgets, which no legitimate call ever does. <bookmark mark='b'/> A shadow "
-            "stack keeps a second, protected copy of every return address and compares on the way out; recent "
-            "processors do this in hardware. <bookmark mark='c'/> CHERI goes further and makes a pointer a hardware "
-            "capability that carries its own bounds and permissions, so an out-of-bounds or forged pointer cannot "
-            "even be constructed. <bookmark mark='d'/> Each defence raises the cost, and none ends the war. Which "
-            "invites the question of the next chapter: could the language itself make the bug impossible?"
+            "So defend control flow directly. <bookmark mark='a'/> Control-flow integrity, from Martin Abadi and "
+            "colleagues in 2005, checks at each indirect jump or return that the target is one the compiler "
+            "allowed; a chain that lands mid-gadget fails. <bookmark mark='b'/> A shadow stack keeps a protected copy "
+            "of every return address, now in hardware. <bookmark mark='c'/> CHERI makes each pointer a capability "
+            "carrying its bounds, so a forged pointer cannot be built. <bookmark mark='d'/> Each raises the cost; "
+            "none ends the war. Could the language make the bug impossible?"
         ) as vo:
             self.play(FadeIn(head))
             for mk, t in zip("abc", tiles):

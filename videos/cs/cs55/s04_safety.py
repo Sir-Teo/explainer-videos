@@ -13,8 +13,8 @@ class Safety(VoiceoverScene):
         self.proof()
 
     def card(self):
-        card = chapter_card(3, r"Memory safety", r"Can the language rule the bug out?", lit=(2010, 2018),
-                            extra=((2010, r"Rust's ownership"), (2018, r"RustBelt")), part=PART)
+        card = chapter_card(3, r"Memory safety", r"Can the language rule the bug out?", lit=(2015, 2018),
+                            extra=((2015, r"Rust 1.0"), (2018, r"RustBelt")), part=PART)
         with self.voiceover("Chapter three. Memory safety."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
         self.play(FadeOut(card))
@@ -119,7 +119,7 @@ class Safety(VoiceoverScene):
         table, colors = [], []
         for r in rows:
             verdict = (r"accepted", YES) if r["accepted"] else (r"rejected", NO)
-            reason = r["reason"] if r["reason"] else r"well-formed"
+            reason = r["reason"].replace("&", r"\&") if r["reason"] else r"well-formed"
             table.append([r["name"], verdict[0], reason])
             colors.append([WHITE, verdict[1], GREY_A])
         g = grid_table([r"program", r"verdict", r"why"], table, widths=[4.6, 2.0, 6.0], row_h=0.44, font_size=16,
@@ -142,11 +142,13 @@ class Safety(VoiceoverScene):
             "cent into errors the compiler catches before the program ever runs."
         ) as vo:
             self.play(FadeIn(head))
+            self.play(FadeIn(VGroup(*g.cells[0])), FadeIn(g.rule))
             vo.wait_until("a")
-            self.play(FadeIn(g.cells[0][0]), FadeIn(g.cells[0][1]), FadeIn(g.cells[0][2]), FadeIn(g.rule))
-            vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(VGroup(*g.cells[i])) for i in range(1, len(rows) + 1)],
                                   lag_ratio=0.15), run_time=3.5)
+            vo.wait_until("b")
+            self.play(*[Indicate(g.cells[i][1], color=g.cells[i][1].get_color(), scale_factor=1.2)
+                        for i in range(1, len(rows) + 1)])
             vo.wait_until("c")
             self.play(FadeIn(chk))
         self.wait(0.4)
