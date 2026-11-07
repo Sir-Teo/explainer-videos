@@ -1,6 +1,6 @@
 {
-  "fingerprint": "4a08e6a148252b995e58db4d55cb30ea8697a46f0aa090a826302b50e905b2f0",
-  "scope": "English silent checks; no listening or bilingual production approval",
+  "fingerprint": "6a0e30e6704cb1de12b422c45cdf6661127097c7fd1ef413fc3a0020e1e526c0",
+  "scope": "English render review; listening and bilingual production gates remain open",
   "records": [
     {
       "scene": "Hook",
@@ -11,7 +11,7 @@
         "untranslated-on-screen": 41
       },
       "input_record": "renders/qa/series/stats2/en/Hook/result.json",
-      "input_sha256": "1e6336d76ccf0a7629597be419c17d84276c470340106315b318153d40f1b403"
+      "input_sha256": "edc81c903ecff54f50d7fe5f25414a7e1381aa86d0ca5061dcfbca5b2f498c8a"
     },
     {
       "scene": "BeforeAxioms",
@@ -22,7 +22,7 @@
         "untranslated-on-screen": 37
       },
       "input_record": "renders/qa/series/stats2/en/BeforeAxioms/result.json",
-      "input_sha256": "11d43b646a62b66beb94aabaf1af7616ac4c0c39c0c5e22a185bdf8f1468ee78"
+      "input_sha256": "cddd508cece62a04412060734bb57a03c5e940922c30cf36819f6563ad2b8a0d"
     },
     {
       "scene": "Counting",
@@ -33,7 +33,7 @@
         "untranslated-on-screen": 24
       },
       "input_record": "renders/qa/series/stats2/en/Counting/result.json",
-      "input_sha256": "71b0cf7cba7ddde26bf0d903467555dbb3ee86abd7d849d209df61639bff5fc3"
+      "input_sha256": "e5b63bbb52a1d90f07634c3b1738053a4e736a0fa8b76e9bb38fceebf0011fde"
     },
     {
       "scene": "Bertrand",
@@ -44,7 +44,7 @@
         "untranslated-on-screen": 28
       },
       "input_record": "renders/qa/series/stats2/en/Bertrand/result.json",
-      "input_sha256": "d959ff66da4b7bce47bc86c5ade9eba6e9d29299bd403fa87de730543219b825"
+      "input_sha256": "238d03c2793ed2ebc55a5c2643d8be037b9aba6c54836eacadb11efcd8aee18d"
     },
     {
       "scene": "Axioms",
@@ -55,7 +55,7 @@
         "untranslated-on-screen": 41
       },
       "input_record": "renders/qa/series/stats2/en/Axioms/result.json",
-      "input_sha256": "1acc1dc3ea2a15511e2ef6df438bd692bc719c518ea746d71515eb5f1bbc9eb9"
+      "input_sha256": "c7acace194d3c83e39916dfa1185245e8e1f0b7f92973488469bcead6d0dcc83"
     },
     {
       "scene": "Conditioning",
@@ -66,7 +66,7 @@
         "untranslated-on-screen": 37
       },
       "input_record": "renders/qa/series/stats2/en/Conditioning/result.json",
-      "input_sha256": "1075be535fd430a46e3b78de7305636112a0279e1f1863c1a21ceadad4393a68"
+      "input_sha256": "0164e3816c5ad28b5140181dddd7bfbd0f901c131eb8e15873db68e2bf28066a"
     },
     {
       "scene": "Bayes",
@@ -77,7 +77,7 @@
         "untranslated-on-screen": 44
       },
       "input_record": "renders/qa/series/stats2/en/Bayes/result.json",
-      "input_sha256": "879dac5f72e0ff625687060c699cfe216816fdb4c04106dcb3cc6c130e253d41"
+      "input_sha256": "0798ca4e34de8be367173a47722cd4b6517272256b685d88bd5eb8cf80378602"
     },
     {
       "scene": "Prosecutor",
@@ -88,7 +88,7 @@
         "untranslated-on-screen": 45
       },
       "input_record": "renders/qa/series/stats2/en/Prosecutor/result.json",
-      "input_sha256": "c32edea68bd8045d51c92805c90b97b3553de16e3345d91ed3b884a682f21366"
+      "input_sha256": "dfc7ed3105e82ea936eab5cf3dcd74ef124ac634d60f1a75519bd63b89ecb459"
     },
     {
       "scene": "Monty",
@@ -99,7 +99,7 @@
         "untranslated-on-screen": 35
       },
       "input_record": "renders/qa/series/stats2/en/Monty/result.json",
-      "input_sha256": "ebcc0f59b4aa69f8a31c04d948d66ff40f016ebad33cb505e09052801f7db4b1"
+      "input_sha256": "997a732f752aabe21b14fefd228e1bf4a8aa43c195fe3fb989092a0fd0ae98d7"
     },
     {
       "scene": "Independence",
@@ -110,7 +110,7 @@
         "untranslated-on-screen": 33
       },
       "input_record": "renders/qa/series/stats2/en/Independence/result.json",
-      "input_sha256": "48e2374018f980b781cbea83f1e0589c83e72df658cb633ad826b332121e30f1"
+      "input_sha256": "842a94af53804661cd4cc3e9604e63b6d8b8e85be5254286075f075b16adc6ee"
     },
     {
       "scene": "Variables",
@@ -121,7 +121,7 @@
         "untranslated-on-screen": 36
       },
       "input_record": "renders/qa/series/stats2/en/Variables/result.json",
-      "input_sha256": "89c3677438e775a03b20d2fb80a07411f50db11410273bda347383f5c1db392e"
+      "input_sha256": "58e61d4ca270c90f0f4929b3062d6bea0cca751191a515a002c8aa5dcb126c6c"
     },
     {
       "scene": "Expectation",
@@ -132,7 +132,7 @@
         "untranslated-on-screen": 37
       },
       "input_record": "renders/qa/series/stats2/en/Expectation/result.json",
-      "input_sha256": "cf8a80567d8aa9fc79f98d44e3d8062ed516726a2f8bbb7ea4adf6640ebc1687"
+      "input_sha256": "cfe3fc17ede4332f2c6f696cafff5742fcfefa0a3b22a3c4408cf679080dc6ea"
     },
     {
       "scene": "Variance",
@@ -143,7 +143,7 @@
         "untranslated-on-screen": 36
       },
       "input_record": "renders/qa/series/stats2/en/Variance/result.json",
-      "input_sha256": "4aa246a47556bd493886d170738390a30163962f93730f8e1a42f2671d2f3844"
+      "input_sha256": "47ebee73e665866d21fff234b43d78c17f16ef5fa7a2780296b3ebbef98672e1"
     },
     {
       "scene": "Generating",
@@ -154,7 +154,7 @@
         "untranslated-on-screen": 23
       },
       "input_record": "renders/qa/series/stats2/en/Generating/result.json",
-      "input_sha256": "e04e26749c53bcc81b44c923019b346a172963e6abd3ebd215d2ffbd15f9e5d8"
+      "input_sha256": "aad6de58bd16b486d204d21310514acacd6b5ef390fe20f371ad490cfa96fba3"
     },
     {
       "scene": "Meaning",
@@ -165,7 +165,7 @@
         "untranslated-on-screen": 51
       },
       "input_record": "renders/qa/series/stats2/en/Meaning/result.json",
-      "input_sha256": "a7f9fd025db0e7d79c62b64ac383936bab771d1b7618e81f98c458e1414bbb0a"
+      "input_sha256": "d388a06b31e54328e410fd1832926c128490758eac383d23b57a232fc29ca814"
     },
     {
       "scene": "Outro",
@@ -176,7 +176,7 @@
         "untranslated-on-screen": 62
       },
       "input_record": "renders/qa/series/stats2/en/Outro/result.json",
-      "input_sha256": "c2479def56c01745f6f6002a36a1b644a8ac843bbf5517bacf665c4d7ccded07"
+      "input_sha256": "a6be147ca4d89da30f0f76c113a07da32e87a19bd07a8aa000d5529707d248ae"
     }
   ]
 }

@@ -33,3 +33,5 @@ EXPLAINER_TTS=kokoro EXPLAINER_VOICE=af_heart python tools/qa_audio.py stats2 --
 ## Remaining production work
 
 Chinese narration and on-screen translation tables, continuous listening/playback, and final narrated masters remain pending. Translation warnings are retained. See [the progress tracker](../../statistics-built-progress.md) for the remaining parts.
+
+[Shared-source refresh](shared-source-refresh.json): all endpoint/native/motion captures and speech checks rerun after the World programme-name correction; narrated source matching verified.

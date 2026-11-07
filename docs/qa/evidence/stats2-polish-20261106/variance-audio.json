@@ -19,7 +19,7 @@
    "tokens": 8,
    "peak": 0.364105224609375,
    "issues": [],
-   "elapsed": 10.82,
+   "elapsed": 0.03,
    "asr_review_leads": []
   },
   {
@@ -30,7 +30,7 @@
    "tokens": 120,
    "peak": 0.543975830078125,
    "issues": [],
-   "elapsed": 23.86,
+   "elapsed": 0.06,
    "asr_review_leads": []
   },
   {
@@ -41,7 +41,7 @@
    "tokens": 119,
    "peak": 0.56781005859375,
    "issues": [],
-   "elapsed": 26.77,
+   "elapsed": 0.03,
    "asr_review_leads": []
   },
   {
@@ -52,7 +52,7 @@
    "tokens": 140,
    "peak": 0.48016357421875,
    "issues": [],
-   "elapsed": 29.48,
+   "elapsed": 0.06,
    "asr_review_leads": []
   },
   {
@@ -63,7 +63,7 @@
    "tokens": 132,
    "peak": 0.685394287109375,
    "issues": [],
-   "elapsed": 29.98,
+   "elapsed": 0.08,
    "asr_review_leads": []
   },
   {
@@ -74,11 +74,11 @@
    "tokens": 141,
    "peak": 0.851043701171875,
    "issues": [],
-   "elapsed": 33.65,
+   "elapsed": 0.04,
    "asr_review_leads": []
   }
  ],
  "issues": [],
  "input_record": "renders/qa/series/stats2/en/Variance/result.json",
- "input_sha256": "4aa246a47556bd493886d170738390a30163962f93730f8e1a42f2671d2f3844"
+ "input_sha256": "47ebee73e665866d21fff234b43d78c17f16ef5fa7a2780296b3ebbef98672e1"
 }

@@ -1,30 +1,28 @@
 {
-  "fingerprint": "4a08e6a148252b995e58db4d55cb30ea8697a46f0aa090a826302b50e905b2f0",
-  "scope": "English silent checks; no listening or bilingual production approval",
+  "fingerprint": "6a0e30e6704cb1de12b422c45cdf6661127097c7fd1ef413fc3a0020e1e526c0",
+  "scope": "English render review; listening and bilingual production gates remain open",
   "records": [
     {
-      "scene": "Axioms_motion",
+      "scene": "Axioms",
       "status": "needs-review",
       "frames": 30,
       "warnings": {
         "narration-translation": 7
       },
       "input_record": "renders/qa/series/stats2/en/Axioms_motion/result.json",
-      "input_sha256": "a0d30f3e7578154fb805e5fde9f66f8dc77b452fd6e488d219dafca61a54221d",
-      "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 361 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 361 s\n",
-      "movie": "renders/qa/series/stats2/en/Axioms_motion/media/videos/480p15/Axioms.mp4"
+      "input_sha256": "0a94c013919d1770d5e0f753746027b76275951e2ed8e1f241eef1ffa5e0931b",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 361 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 361 s\n"
     },
     {
-      "scene": "Variables_motion",
+      "scene": "Variables",
       "status": "needs-review",
       "frames": 23,
       "warnings": {
         "narration-translation": 5
       },
       "input_record": "renders/qa/series/stats2/en/Variables_motion/result.json",
-      "input_sha256": "b4883a45f221a5f8ce7217e166e3641d9742bef82c65866c922b90b5f184bce3",
-      "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 244 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 244 s\n",
-      "movie": "renders/qa/series/stats2/en/Variables_motion/media/videos/480p15/Variables.mp4"
+      "input_sha256": "15b126fb542d4162c753a5132ac80f200815d0c263dd73a91954589874a561ac",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 244 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 244 s\n"
     }
   ]
 }

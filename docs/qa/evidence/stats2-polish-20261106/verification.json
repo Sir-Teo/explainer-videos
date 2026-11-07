@@ -1,21 +1,15 @@
 {
   "part": "stats2",
-  "fingerprint": "4a08e6a148252b995e58db4d55cb30ea8697a46f0aa090a826302b50e905b2f0",
-  "tests": {
-    "command": "python -m pytest tests/test_stats*.py tests/test_qa*.py -q",
-    "passed": 554,
-    "subtests_passed": 5,
-    "warnings": 15
-  },
+  "fingerprint": "6a0e30e6704cb1de12b422c45cdf6661127097c7fd1ef413fc3a0020e1e526c0",
   "english_endpoints": 16,
   "native_1080_endpoints": 6,
   "silent_motion_chapters": 2,
-  "narrated_variance_seconds": 238.132357,
-  "variance_audio_lines": 6,
-  "variance_audio_issues": 0,
+  "audio_scene": "Variance",
+  "audio_lines": 6,
+  "audio_issues": 0,
   "narrated_preview": {
     "movie": "renders/qa/narrated/stats2/en/Variance/videos/s13_variance/480p15/Variance.mp4",
-    "narration_record": "renders/qa/narrated/stats2/en/Variance/videos/s13_variance/480p15/Variance.narration.json",
+    "seconds": 238.132357,
     "narration_sha256": "2812e57f2f4b34c867760bd51bd593f7eb2dd50b4c5815e2af00961449ec601f",
     "raw_narration_matches_current_endpoints": true,
     "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 238 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 238 s\n"
