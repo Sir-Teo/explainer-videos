@@ -144,14 +144,14 @@ class Job(VoiceoverScene):
             for cell in tab.cells[r]:
                 cell.set_color(col)
         foot = wrapped_label(r"the error budget makes the trade explicit: \ a few percent more traffic buys back "
-                             r"most of a month's allowance of failure", 12.4, font_size=21, color=WHITE).to_edge(
+                             r"a seventh of a month's allowance of failure, \ in one hour", 12.4, font_size=21, color=WHITE).to_edge(
             DOWN, buff=0.7)
         nv = c["runs"]["naive"]
         with self.voiceover(
             "Count the hour against the month's error budget, a tenth of a percent of a month of requests. "
             f"<bookmark mark='a'/> The naive client burned {100 * nv['budget_share']:.0f} percent of the whole "
-            "month's budget in one hour of faults. <bookmark mark='b'/> Retrying used a few hundredths of a "
-            f"percent, at the price of {100 * c['runs']['timeouts and retry']['extra_load']:.0f} percent more "
+            "month's budget in one hour of faults. <bookmark mark='b'/> Retrying used "
+            f"{100 * c['runs']['timeouts and retry']['budget_share']:.2f} percent, at the price of {100 * c['runs']['timeouts and retry']['extra_load']:.0f} percent more "
             "requests, because every timed-out or refused request was sent twice. <bookmark mark='c'/> Ejection "
             "cut the retries, since the broken replica stopped receiving traffic, so the best client was also the "
             f"cheaper of the two: {100 * c['runs']['retry, ejection and hedging']['extra_load']:.1f} percent extra. "
