@@ -42,7 +42,7 @@ class Frontier(VoiceoverScene):
                                                                                                     buff=0.15)
         cb = label(rf"denoised: \ {d['rmse_surfaces_after']:.3f}", font_size=20, color=YES).next_to(b, DOWN,
                                                                                                buff=0.15)
-        cr = label(rf"reference \ (256 paths: \ {c[256]['rmse_surfaces']:.3f})", font_size=20, color=GREY_A).next_to(
+        cr = label(rf"reference, \ 2048 paths \ (256 alone: \ {c[256]['rmse_surfaces']:.3f})", font_size=20, color=GREY_A).next_to(
             r, DOWN, buff=0.15)
         notes = wrapped_label(r"real time adds three ideas: \ ray-tracing hardware that walks the BVH \ (2018); \ "
                               r"reusing samples across pixels and frames \ (ReSTIR, \ Bitterli et al. \ 2020); \ "
@@ -102,7 +102,7 @@ class Frontier(VoiceoverScene):
     def open(self):
         head = label(r"Open", font_size=36).to_edge(UP, buff=0.3)
         items = VGroup(
-            wrapped_label(r"1. \ \textbf{Caustics}: \ light through glass onto a diffuse floor converges slowly for "
+            wrapped_label(r"1. \ \textbf{Caustics}: \ light through glass onto a diffuse floor, \ seen in a mirror, \ converges slowly for "
                           r"every known unbiased method.", 12.4, font_size=24, color=WHITE),
             wrapped_label(r"2. \ \textbf{Denoisers with guarantees}: \ bounds on the bias a filter introduces.", 12.4,
                           font_size=24, color=YES),

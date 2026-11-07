@@ -284,8 +284,8 @@ class Curves(VoiceoverScene):
             "B-splines build the smoothness in. <bookmark mark='a'/> A cubic B-spline makes each piece from four "
             "neighbouring control points, with weights from the recursion that Maurice Cox and Carl de Boor "
             "published in 1972. Here, seven points make four pieces. <bookmark mark='b'/> Our instrument measures "
-            "the joins. At each knot the position, the slope and the curvature agree to rounding error, ten to the "
-            "minus ten or better; only the third derivative jumps. The curve is C two. <bookmark mark='c'/> And "
+            "the joins. At each knot the position, the slope and the curvature agree to rounding error, about ten to the "
+            "minus ten; only the third derivative jumps. The curve is C two. <bookmark mark='c'/> And "
             "control is local: move one point, and only the pieces that use it change. <bookmark mark='d'/> Add "
             "weights and uneven knots, and these become NURBS, the curves of computer-aided design."
         ) as vo:
