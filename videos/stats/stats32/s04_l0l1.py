@@ -101,6 +101,7 @@ class FromL0(VoiceoverScene):
             label(r"$q \to 0$: \ bounded axis segments; the unbounded count constraint is different", font_size=24, color=RES),
             label(r"$q = 1$ is where the corners appear and convexity survives", font_size=24, color=LASSO),
         ), 12.4, 0.2, [0, -2.6, 0])
+        self.add(rows[0])
         with self.voiceover(
             "<bookmark mark='a'/> Look at the unit balls of the q-norms, the sum of absolute values to the power q. "
             "<bookmark mark='b'/> For q equal to two, the circle of ridge regression. As q falls, the ball pinches in"
@@ -111,7 +112,7 @@ class FromL0(VoiceoverScene):
             "ball is still convex."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(axs), FadeIn(rows[0]))
+            self.play(FadeIn(axs))
             self.play(LaggedStart(*[DrawBorderThenFill(s) for s in shapes], lag_ratio=0.3), FadeIn(caps), run_time=3.0)
             vo.wait_until("b")
             self.play(FadeIn(rows[1]))
