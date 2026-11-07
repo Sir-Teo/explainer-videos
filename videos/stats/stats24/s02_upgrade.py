@@ -105,6 +105,9 @@ class Upgrade(VoiceoverScene):
             label(r"if the variance is wrong: \ quasi-likelihood or the sandwich", font_size=24, color=HIT),
             label(r"if units cluster: \ GEE, \ or Part 25's mixed models", font_size=24, color=TEAL),
         ), 12.4, 0.5, [0, 0, 0])
+        intro = label("A GLM recipe connects family, link, fitting and diagnostics", font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "The recipe this part follows. <bookmark mark='a'/> Choose the family from what kind of number the outcome is: "
             "a proportion, a count, a positive amount. <bookmark mark='b'/> Choose the link from the scale on which "
@@ -113,6 +116,7 @@ class Upgrade(VoiceoverScene):
             "quasi-likelihood or the sandwich of Parts 22 and 23. <bookmark mark='e'/> And if units come in clusters, use "
             "generalized estimating equations, or wait for Part 25's mixed models."
         ) as vo:
+            self.add(intro)
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
