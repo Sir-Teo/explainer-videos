@@ -31,17 +31,22 @@ class UMPU(VoiceoverScene):
             cmath(r"\phi^*", r"=", r"1 \text{ outside } [c_1, c_2], \ \gamma_i \text{ at } c_i: \ \text{UMPU}", font_size=34),
         ]
         rows[3][-1].set_color(UMPC)
-        whys = [why(r"never less likely to reject under $H_1$"), why(r"a minimum at $\theta_0$"), why(r"$\beta' = \mathrm{Cov}(T, \phi)$"), why(r"two tails, \ chosen jointly")]
+        whys = [why(r"never less likely to reject under $H_1$"), why(r"a minimum at $\theta_0$"), why(r"$\partial_\eta\beta = \mathrm{Cov}(T, \phi)$"), why(r"two tails, \ chosen jointly")]
         with self.voiceover(
-            "<bookmark mark='a'/> A test is unbiased if it is never less likely to reject under an alternative than under "
-            "the null: its power function is at most alpha on the null and at least alpha on the alternative. <bookmark "
-            "mark='b'/> For a point null against a two-sided alternative, a smooth power function must then have a minimum "
-            "at theta nought: value alpha, slope zero. <bookmark mark='c'/> In an exponential family the slope of the power "
-            "is the covariance of T with the test, so the two conditions become: size alpha, and the test's correlation "
-            "with T matches alpha times the mean of T. <bookmark mark='d'/> The generalized Neyman–Pearson lemma, with these "
-            "two side conditions, gives the uniformly most powerful unbiased test: reject outside an interval, with its two "
-            "endpoints and their randomizations solved for jointly."
+            "<bookmark mark='a'/> A test is unbiased if it is never less likely to reject under an alternative than "
+            "under the null: its power function is at most alpha on the null and at least alpha on the alternative. "
+            "<bookmark mark='b'/> For a point null against a two-sided alternative, a smooth power function must then"
+            " have a minimum at theta nought: value alpha, slope zero. <bookmark mark='c'/> In an exponential family "
+            "differentiation with respect to the natural parameter makes the slope the covariance of T with the test."
+            " The conditions are size alpha and expected T times phi equal to alpha times expected T. A different "
+            "smooth parameterization adds the derivative of the natural parameter. <bookmark mark='d'/> The "
+            "generalized Neyman–Pearson lemma, with these two side conditions, gives the uniformly most powerful "
+            "unbiased test: reject outside an interval, with its two endpoints and their randomizations solved for "
+            "jointly."
         ) as vo:
+            heading=label('Two-sided unbiasedness constrains size and first moment',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -107,6 +112,9 @@ class UMPU(VoiceoverScene):
             f"test solves the programme for every alternative on either side: that is what uniformly most powerful unbiased "
             f"means."
         ) as vo:
+            heading=label('One binomial test solves both constrained power programs',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -123,14 +131,19 @@ class UMPU(VoiceoverScene):
         rows[3][-1].set_color(UMPC)
         whys = [why(r"a statistic for the nuisance"), why(r"exact size, \ whatever $\lambda$"), why(r"exact size given $T$"), why(r"Part 45's completeness")]
         with self.voiceover(
-            "<bookmark mark='a'/> Now add a nuisance parameter, and suppose that on the boundary of the null a statistic T "
-            "is sufficient for it. <bookmark mark='b'/> A test is similar if its size is exactly alpha whatever the "
-            "nuisance parameter is: what Linnik showed impossible for Behrens–Fisher. <bookmark mark='c'/> It has Neyman "
-            "structure if its conditional size given T is alpha, slice by slice. Neyman structure implies similarity, by "
-            "averaging over T. <bookmark mark='d'/> If T is also complete, the converse holds: the conditional size minus "
-            "alpha is a function of T with mean zero for every lambda, hence zero. So similar tests are exactly the tests "
-            "that are level alpha within every slice, and the best of them is the best test in each slice."
+            "<bookmark mark='a'/> Now add a nuisance parameter, and suppose that on the boundary of the null a "
+            "statistic T is sufficient for it. <bookmark mark='b'/> A test is similar if its size is exactly alpha "
+            "whatever the nuisance parameter is: the exact-size property that fails for the familiar Behrens–Fisher "
+            "approximations. <bookmark mark='c'/> It has Neyman structure if its conditional size given T is alpha, "
+            "slice by slice. Neyman structure implies similarity, by averaging over T. <bookmark mark='d'/> If T is "
+            "also complete, the converse holds: the conditional size minus alpha is a function of T with mean zero "
+            "for every lambda, hence zero. So similar tests are exactly the tests with conditional rejection "
+            "probability equal to alpha within almost every slice, and the best of them is the best test in each "
+            "slice."
         ) as vo:
+            heading=label('Completeness turns similarity into conditional equality',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -143,17 +156,11 @@ class UMPU(VoiceoverScene):
         ns = NeymanSlices(sl, width=12.0, height=2.8, color=H0C, reject_color=REJC).move_to([0, 0.3, 0])
         side = fit_rows(VGroup(
             label(rf"$X \sim$ Bin$({d['m']}, p_1)$, \ $Y \sim$ Bin$({d['n']}, p_2)$: \ is $p_1 > p_2$?", font_size=24),
-            label(r"given $T = X + Y = t$, \ $X$ is hypergeometric under $H_0$, \ whatever the common $p$", font_size=24, color=GREY_A),
+            label(r"given $T = X + Y = t$, \ $X$ is hypergeometric on $p_1=p_2$, \ whatever the common $p$", font_size=24, color=GREY_A),
             label(r"red: \ the rejected part of each slice, \ exactly 5\% of it", font_size=24, color=REJC),
         ), 12.4, 0.22, [0, -2.6, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Here is Neyman structure as a picture, the part's instrument. Two binomial samples, of "
-            f"{d['m']} and {d['n']} trials: is the first success probability larger? Under the null the two are equal, to "
-            f"an unknown common value, the nuisance parameter, and the total number of successes is sufficient for it. "
-            f"<bookmark mark='b'/> Given the total, the first count is hypergeometric, whatever the common p. Here are its "
-            f"distributions for totals of four, nine and thirteen. <bookmark mark='c'/> In each slice, the test rejects the "
-            f"top five percent, randomizing at the edge: the red portions. Every slice spends exactly five percent, so the "
-            f"whole test has size five percent at every value of the nuisance parameter."
+            f"<bookmark mark='a'/> Here is Neyman structure as a picture, the part's instrument. Two binomial samples, of {d['m']} and {d['n']} trials: is the first success probability larger? On the boundary of the one-sided null the probabilities are equal, to an unknown common value, the nuisance parameter, and the total number of successes is sufficient for it. <bookmark mark='b'/> Given the total, the first count is hypergeometric, whatever the common p. Here are its distributions for totals of four, nine and thirteen. <bookmark mark='c'/> In each slice, the test rejects the top five percent, randomizing at the edge: the red portions. Every slice spends exactly five percent, so the whole test has size five percent at every value of the nuisance parameter."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(side[0]), *[FadeIn(VGroup(p[0], p[1], p.title)) for p in ns.panels])
@@ -174,7 +181,7 @@ class UMPU(VoiceoverScene):
         cf = polyline(ax, ps, d["size_fisher"], REJC, 4)
         side = fit_rows(VGroup(
             label(r"green: \ randomized: \ 5\% at every $p$", font_size=22, color=UMPC),
-            label(r"red: \ Fisher's exact test: \ at most 1.8\%", font_size=22, color=REJC),
+            label(r"red: \ nonrandomized one-sided conditional test", font_size=22, color=REJC),
             label(r"the green test is UMPU \ (one-sided)", font_size=22, color=S.ACCENT),
             label(r"Fisher's: \ conservative, \ the price of not flipping coins", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
@@ -218,6 +225,9 @@ class UMPU(VoiceoverScene):
             f"seventy."
         ) as vo:
             self.play(FadeIn(museum_tag(r"ISIS-2 \ (\emph{Lancet} 1988); \ Fisher (1935)")))
+            heading=label('Conditional hypergeometric probabilities compare fixed margins',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -234,14 +244,19 @@ class UMPU(VoiceoverScene):
         rows[3][-1].set_color(UMPC)
         whys = [why(r"the boundary of $H_0$"), why(r"Neyman structure"), why(r"a function of $t$ alone"), why(r"Lehmann (1959)")]
         with self.voiceover(
-            "<bookmark mark='a'/> The same argument proves the t test optimal. Test a normal mean equal to zero with sigma "
-            "unknown. On the null, the sum of squares is complete and sufficient for sigma. <bookmark mark='b'/> Given it, "
-            "the data vector divided by its length is uniform on a sphere, whatever sigma is, so a test with Neyman "
-            "structure tests the sum of the observations within each sphere. <bookmark mark='c'/> And the sum over the root "
-            "of the sum of squares is a monotone function of Student's t. <bookmark mark='d'/> So the two-sided t test is "
-            "uniformly most powerful among unbiased tests: Part ten's workhorse, now with a theorem behind it, as Lehmann's "
-            "Testing Statistical Hypotheses set out in 1959."
+            "<bookmark mark='a'/> For independent normal observations and at least two observations, Neyman structure"
+            " also proves the t test optimal. Test a normal mean equal to zero with sigma unknown. On the null, the "
+            "sum of squares is complete and sufficient for sigma. <bookmark mark='b'/> Given it, the data vector "
+            "divided by its length is uniform on a sphere, whatever sigma is, so the conditional nuisance-free family"
+            " can be tested within each sphere. Two-sided unbiasedness adds a zero first-moment constraint; the "
+            "generalized lemma selects symmetric tails of the sum. <bookmark mark='c'/> And the sum over the root of "
+            "the sum of squares is a monotone function of Student's t. <bookmark mark='d'/> So the two-sided t test "
+            "is uniformly most powerful among unbiased tests: Part ten's workhorse, now with a theorem behind it, as "
+            "Lehmann's Testing Statistical Hypotheses set out in 1959."
         ) as vo:
+            heading=label('Conditional symmetric tails yield the two-sided normal t test',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

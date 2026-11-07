@@ -38,6 +38,9 @@ class Invariance(VoiceoverScene):
             "maximal invariant, and its distribution depends on theta only through the parameter's own maximal invariant. "
             "The problem shrinks, often to one dimension, where chapter two's theory may apply."
         ) as vo:
+            heading=label('Invariant tests preserve the hypotheses under a symmetry group',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -48,7 +51,7 @@ class Invariance(VoiceoverScene):
         rows = [
             cmath(r"x_i \sim N(\mu, \sigma^2)", r",", r"\ H_0: \mu \le 0 \ \text{vs} \ \mu > 0", font_size=32),
             cmath(r"G", r"=", r"\{x \mapsto c x, \ c > 0\}: \ \text{change of scale}", font_size=34),
-            cmath(r"\text{maximal invariant}", r":", r"t = \sqrt n\, \bar x / s, \ \ \text{law } t_{n-1}(\delta), \ \delta = \sqrt n\, \mu/\sigma", font_size=30),
+            cmath(r"\text{after sufficient reduction}", r":", r"t = \sqrt n\, \bar x / s, \ \ \text{law } t_{n-1}(\delta), \ \delta = \sqrt n\, \mu/\sigma", font_size=30),
             cmath(r"t_{n-1}(\delta) \text{ has MLR in } t", r"\Rightarrow", r"\text{the one-sided } t \text{ test is UMP invariant}", font_size=30),
         ]
         rows[3][-1].set_color(UMPC)
@@ -61,6 +64,9 @@ class Invariance(VoiceoverScene):
             "a monotone likelihood ratio, so by Karlin and Rubin the one-sided t test is uniformly most powerful among "
             "scale-invariant tests. Unbiasedness and invariance arrive at the same answer."
         ) as vo:
+            heading=label('After sufficient reduction, positive scaling leaves Student t',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -109,18 +115,22 @@ class Invariance(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"why should we restrict to invariant tests at all?", font_size=28),
             label(r"Hunt--Stein (1946): \ if the group is amenable \ (it has invariant means),", font_size=26, color=GREY_A),
-            label(r"the best invariant test is minimax among \emph{all} tests", font_size=28, color=UMPC),
-            label(r"amenable: \ translations, \ scalings, \ the affine group, \ compact groups", font_size=26, color=GREY_A),
-            label(r"not amenable: \ $GL(p)$: \ Stein's example, \ where an invariant test is beaten by a non-invariant one", font_size=24, color=REJC),
+            label(r"with invariant loss and suitable averaging: \ optimizing worst-case power can be reduced to invariant tests", font_size=28, color=UMPC),
+            label(r"amenable: \ translations, \ positive scalings, \ scalar positive affine transformations, \ compact groups", font_size=26, color=GREY_A),
+            label(r"not amenable: \ $GL(p)$ for $p\ge2$: \ Stein's example, \ where an invariant test is beaten by a non-invariant one", font_size=24, color=REJC),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> But why should a statistician restrict attention to invariant tests? <bookmark mark='b'/> "
-            "Gilbert Hunt and Charles Stein answered in 1946, in a famous unpublished paper: if the group is amenable, "
-            "meaning roughly that it admits averages that are themselves invariant, <bookmark mark='c'/> then the best "
-            "invariant test is minimax among all tests, invariant or not. Nothing is lost in the worst case by respecting "
-            "the symmetry. <bookmark mark='d'/> Translations, scalings, the affine group and compact groups are all "
-            "amenable. <bookmark mark='e'/> The general linear group is not, and Stein constructed a covariance testing "
-            "problem in which the best invariant test is beaten by a non-invariant one: symmetry can be a trap."
+            "<bookmark mark='a'/> But why should a statistician restrict attention to invariant tests? <bookmark "
+            "mark='b'/> Gilbert Hunt and Charles Stein answered in 1946, in a famous unpublished paper: if the group "
+            "is amenable, meaning roughly that it admits averages that are themselves invariant, <bookmark mark='c'/>"
+            " then, under the invariant decision problem's averaging and compactness conditions, symmetrization "
+            "preserves level and cannot worsen the relevant worst-case power criterion. An invariant rule that "
+            "optimizes that criterion can therefore be minimax among all tests. Nothing is lost in the worst case by "
+            "respecting the symmetry. <bookmark mark='d'/> Translations, positive scalings, the one-dimensional "
+            "positive affine group, and compact groups are amenable. A general multivariate affine group need not be."
+            " <bookmark mark='e'/> For dimension at least two the general linear group is not amenable, and Stein "
+            "constructed a covariance testing problem in which the best invariant test is beaten by a non-invariant "
+            "one: symmetry can be a trap."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
@@ -129,7 +139,7 @@ class Invariance(VoiceoverScene):
 
     def ftest(self):
         rows = [
-            cmath(r"y = X\beta + \varepsilon", r",", r"\ H_0: \beta_2 = 0, \ \ \sigma \text{ unknown}", font_size=32),
+            cmath(r"y = X\beta + \varepsilon, \ \varepsilon\sim N(0,\sigma^2I)", r",", r"\ H_0: \beta_2 = 0, \ \ \sigma \text{ unknown}", font_size=32),
             cmath(r"G", r":", r"\text{rotations in the error space, \ shifts in } X_1\text{'s span, \ scalings}", font_size=30),
             cmath(r"\text{maximal invariant}", r":", r"F = \tfrac{(\mathrm{RSS}_0 - \mathrm{RSS}_1)/q}{\mathrm{RSS}_1/(n - p)} \sim F_{q, n-p}(\lambda)", font_size=30),
             cmath(r"\Rightarrow", r"\;", r"\text{the } F \text{ test is UMP invariant; \ also most stringent}", font_size=32),
@@ -137,14 +147,18 @@ class Invariance(VoiceoverScene):
         rows[3][-1].set_color(UMPC)
         whys = [why(r"Part 23's linear hypothesis"), why(r"the problem's symmetries"), why(r"noncentral $F$ has MLR in $\lambda$"), why(r"Wald (1942); \ Hsu (1941)")]
         with self.voiceover(
-            "<bookmark mark='a'/> The same idea settles Part twenty-three's general linear hypothesis. Test that a block of "
-            "regression coefficients is zero, with the error variance unknown. <bookmark mark='b'/> The problem is "
-            "unchanged by rotations of the residual space, shifts within the span of the nuisance columns, and changes of "
-            "scale. <bookmark mark='c'/> The maximal invariant is the F statistic, with a noncentral F distribution that "
-            "has a monotone likelihood ratio in its noncentrality. <bookmark mark='d'/> So the F test is uniformly most "
-            "powerful among invariant tests, as P. L. Hsu showed in 1941, and Wald showed it is most stringent: its "
-            "largest shortfall from the best possible power is the smallest."
+            "<bookmark mark='a'/> The same idea settles Part twenty-three's general linear hypothesis. For a fixed "
+            "full-rank design and independent spherical normal errors, test that a block of regression coefficients "
+            "is zero, with positive error variance unknown. <bookmark mark='b'/> The relevant group includes shifts "
+            "in the nuisance-column span, positive scalings, and rotations within the orthogonal tested-effect and "
+            "residual subspaces. <bookmark mark='c'/> The maximal invariant is the F statistic, with a noncentral F "
+            "distribution that has a monotone likelihood ratio in its noncentrality. <bookmark mark='d'/> So the F "
+            "test is uniformly most powerful among invariant tests, as P. L. Hsu showed in 1941, and Wald showed it "
+            "is most stringent: its largest shortfall from the best possible power is the smallest."
         ) as vo:
+            heading=label('Normal linear-model symmetries yield the F statistic',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

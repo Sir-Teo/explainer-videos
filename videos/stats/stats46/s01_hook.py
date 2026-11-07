@@ -22,17 +22,19 @@ class Hook(VoiceoverScene):
             label(r"1929: \ Walter Behrens; \ 1935: \ Fisher's fiducial answer", font_size=26, color=H1C),
             label(r"Neyman and Bartlett: \ its size is not $\alpha$ for every variance ratio", font_size=26, color=REJC),
             label(r"1938, \ 1947: \ Bernard Welch's approximate degrees of freedom", font_size=26, color=UMPC),
-            label(r"1966--68: \ Yuri Linnik: \ no exact test of the natural kind exists", font_size=26, color=S.ACCENT),
+            label(r"1966--68: \ Yuri Linnik: \ impossibility under restrictions on classical rejection regions", font_size=26, color=S.ACCENT),
         ), 12.4, 0.5, [0, -0.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The oldest open sore in testing. Two normal samples, with variances that are unequal and "
-            "unknown: are their means equal? <bookmark mark='b'/> Walter Behrens proposed a test in 1929, and in 1935 Fisher "
-            "derived it again from his fiducial argument. <bookmark mark='c'/> Neyman and Maurice Bartlett objected: the "
-            "test's chance of a false rejection is not exactly alpha for every ratio of the two variances, so it is not a "
-            "test in Neyman's sense. Fisher replied that it did not need to be. <bookmark mark='d'/> Bernard Welch's "
-            "approximation, with estimated degrees of freedom, became the practical answer. <bookmark mark='e'/> And in the "
-            "1960s Yuri Linnik proved that no exact test of the natural kind exists at all. This part is the theory behind "
-            "that quarrel: what an optimal test is, and what an interval can promise."
+            "<bookmark mark='a'/> The oldest open sore in testing. Two normal samples, with variances that are "
+            "unequal and unknown: are their means equal? <bookmark mark='b'/> Walter Behrens proposed a test in 1929,"
+            " and in 1935 Fisher derived it again from his fiducial argument. <bookmark mark='c'/> Neyman and Maurice"
+            " Bartlett objected: the test's chance of a false rejection is not exactly alpha for every ratio of the "
+            "two variances, so it does not have exact frequentist size alpha. Fisher replied that it did not need to "
+            "be. <bookmark mark='d'/> Bernard Welch's approximation, with estimated degrees of freedom, became the "
+            "practical answer. <bookmark mark='e'/> In the 1960s Yuri Linnik established impossibility results for "
+            "classical Behrens–Fisher rejection regions under additional shape and regularity restrictions. These do "
+            "not rule out every exact randomized test. This part is the theory behind that quarrel: what an optimal "
+            "test is, and what an interval can promise."
         ) as vo:
             self.play(FadeIn(tl))
             for k, m_ in enumerate("abcde"):
@@ -50,15 +52,18 @@ class Hook(VoiceoverScene):
         tab = table_rows(rows, font_size=28, col_buff=0.9, row_buff=0.3, colors=[GREY_A, None, None, None, None]).move_to([0, 0.8, 0])
         note_ = fit_rows(VGroup(
             label(r"rejection rates when the means are equal, \ nominal 5\%, \ 20,000 data sets each", font_size=24, color=GREY_A),
-            label(r"pooled: \ 30\% or 0.06\%; \ \ Welch: \ close to 5\%; \ \ Behrens--Fisher: \ at most 5\%, \ here", font_size=24, color=S.ACCENT),
+            label(r"pooled: \ 30\% or 0.06\%; \ \ Welch: \ close to 5\%; \ \ fiducial: \ often conservative; \ all percentages are Monte Carlo estimates", font_size=24, color=S.ACCENT),
         ), 12.4, 0.25, [0, -2.2, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Here is what is at stake, by simulation, at a nominal five percent. <bookmark mark='b'/> "
-            "With equal sizes and equal variances, all three tests are fine. With equal sizes and unequal variances, the "
-            "pooled t test drifts a little. <bookmark mark='c'/> But give the small sample the large variance, and the "
-            "pooled test rejects a true null thirty percent of the time; swap them, and it almost never rejects. <bookmark "
-            "mark='d'/> Welch's test stays near five percent throughout; Behrens and Fisher's test stays at or below it, "
-            "here. Neither is exact: their sizes move with the unknown ratio of the variances."
+            "<bookmark mark='a'/> Here is what is at stake, by simulation, at a nominal five percent. <bookmark "
+            "mark='b'/> With equal sizes and equal variances, the pooled and Welch tests are near five percent, while"
+            " the fiducial test is conservative in this experiment. With equal sizes and unequal variances, the "
+            "pooled t test drifts a little. <bookmark mark='c'/> But give the small sample the large variance, and "
+            "the pooled test rejects a true null thirty percent of the time; swap them, and it almost never rejects. "
+            "<bookmark mark='d'/> Welch's test stays near five percent throughout; the fiducial test is often "
+            "conservative and is also close to five percent in the most unbalanced noisy-small-sample setting. "
+            "Sampling noise is visible at twenty thousand replications. Neither is exact: their sizes move with the "
+            "unknown ratio of the variances."
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(note_[0]), FadeIn(exact_tag(r"simulated: 20,000 data sets per row")))
             vo.wait_until("b")
@@ -83,16 +88,17 @@ class Hook(VoiceoverScene):
             label(r"fiducially: \ $d \sim T_1 \sin\varphi - T_2 \cos\varphi$, \ $T_i \sim t_{n_i - 1}$", font_size=22, color=GREY_A),
             label(r"teal: \ $n = 5, \ 25$: \ from $t_{24}$ (2.06) to $t_4$ (2.78)", font_size=22, color=H1C),
             label(r"green: \ $n = 10, \ 10$", font_size=22, color=UMPC),
-            label(r"the critical value depends on the data's $\varphi$: \ not a fixed-size test", font_size=22, color=S.ACCENT),
+            label(r"this fiducial rule's size varies with the true variance ratio", font_size=22, color=S.ACCENT),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Fisher's statistic divides the difference in means by the natural standard error. "
-            "<bookmark mark='b'/> Fiducially, he treated it as a mixture of two independent t variables, weighted by an "
-            "angle phi that measures how much of the standard error comes from each sample. <bookmark mark='c'/> The "
-            "critical value then depends on phi: with five and twenty-five observations it runs from the t quantile with "
-            "twenty-four degrees of freedom to the one with four. <bookmark mark='d'/> With ten each, the curve is "
-            "symmetric and dips in the middle. <bookmark mark='e'/> Because phi is computed from the data, the rejection "
-            "region is a curved set, and its probability under the null depends on the true variance ratio."
+            "<bookmark mark='b'/> Fiducially, he treated it as a weighted difference of two independent t variables, "
+            "weighted by an angle phi that measures how much of the standard error comes from each sample. <bookmark "
+            "mark='c'/> The critical value then depends on phi: with five and twenty-five observations it runs from "
+            "the t quantile with twenty-four degrees of freedom to the one with four. <bookmark mark='d'/> With ten "
+            "each, the curve is symmetric and dips in the middle. <bookmark mark='e'/> For this particular fiducial "
+            "rejection rule, its null probability depends on the true variance ratio. A data-dependent critical value"
+            " alone does not establish a failure of exactness."
         ) as vo:
             self.play(FadeIn(A), Create(z), FadeIn(exact_tag(r"exact: \ numerical integration")))
             vo.wait_until("a")
@@ -110,23 +116,19 @@ class Hook(VoiceoverScene):
     def faithful(self):
         d = load("bf")["faithful"]
         rows = [
-            cmath(r"\text{Old Faithful, eruption length}", r":", rf"\text{{after waits}} < 70: \ n = {d['n'][0]}, \ \bar x = {d['mean'][0]:.2f}, \ s = {d['sd'][0]:.2f}", font_size=28),
-            cmath(r"\phantom{X}", r":", rf"\text{{after waits}} \ge 70: \ n = {d['n'][1]}, \ \bar x = {d['mean'][1]:.2f}, \ s = {d['sd'][1]:.2f}", font_size=28),
+            cmath(r"\text{Old Faithful, eruption length}", r":", rf"\text{{following wait}} < 70: \ n = {d['n'][0]}, \ \bar x = {d['mean'][0]:.2f}, \ s = {d['sd'][0]:.2f}", font_size=28),
+            cmath(r"\phantom{X}", r":", rf"\text{{following wait}} \ge 70: \ n = {d['n'][1]}, \ \bar x = {d['mean'][1]:.2f}, \ s = {d['sd'][1]:.2f}", font_size=28),
             cmath(r"\text{Welch}", r":", rf"t = {d['welch_t']:.1f}, \ \nu = {d['welch_df']:.0f}; \ \ \text{{pooled}}: t = {d['pooled_t']:.1f}, \ \nu = {d['pooled_df']}", font_size=30),
             cmath(r"95\% \text{ CI}", r":", rf"[{d['welch_ci'][0]:.2f}, \ {d['welch_ci'][1]:.2f}] \text{{ minutes longer}}", font_size=32),
         ]
         rows[3][-1].set_color(UMPC)
         whys = [why(r"103 eruptions"), why(r"169 eruptions"), why(r"no contest here"), why(r"the quarrel matters for small $n$")]
         with self.voiceover(
-            f"<bookmark mark='a'/> Real data rarely make the choice matter as much as the simulation. Old Faithful's "
-            f"eruptions: those that follow a wait of under seventy minutes last {say(d['mean'][0], 2)} minutes on "
-            f"average, <bookmark mark='b'/> those after longer waits {say(d['mean'][1], 2)} minutes. <bookmark mark='c'/> "
-            f"Welch's statistic is about {d['welch_t']:.0f} on {d['welch_df']:.0f} estimated degrees of freedom, and the "
-            f"pooled test agrees: with hundreds of eruptions and similar spreads, there is no contest. <bookmark mark='d'/> "
-            f"Long waits come before eruptions about two minutes longer. The Behrens–Fisher problem bites with small, "
-            f"unbalanced samples, which is exactly where exactness is hardest."
-        ) as vo:
+            f"<bookmark mark='a'/> Real data rarely make the choice matter as much as the simulation. Old Faithful's eruptions: those followed by a recorded wait of under seventy minutes last {say(d['mean'][0], 2)} minutes on average, <bookmark mark='b'/> those followed by longer waits {say(d['mean'][1], 2)} minutes. <bookmark mark='c'/> Welch's statistic is about {d['welch_t']:.0f} on {d['welch_df']:.0f} estimated degrees of freedom, and the pooled test agrees: with hundreds of eruptions and similar spreads, there is no contest. <bookmark mark='d'/> The long-wait group has eruptions about two minutes longer. This is a descriptive association; the usual Welch interval additionally assumes independent normal samples, which a time-ordered geyser series need not provide. The Behrens–Fisher problem bites with small, unbalanced samples, which is exactly where exactness is hardest."       ) as vo:
             self.play(FadeIn(museum_tag(r"Old Faithful \ (H\"ardle 1991; \ R's \texttt{faithful})")))
+            heading=label('Recorded wait predicts a group difference, under model assumptions',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -136,19 +138,21 @@ class Hook(VoiceoverScene):
     def linnik(self):
         rows = fit_rows(VGroup(
             label(r"a \emph{similar} test: \ size exactly $\alpha$ for every $(\sigma_1, \sigma_2)$", font_size=26),
-            label(r"Linnik: \ similar tests that are smooth functions of $(\bar x_1, \bar x_2, s_1, s_2)$ \ do not exist", font_size=26, color=REJC),
-            label(r"exact similar tests do exist, \ but they are ugly: \ randomized, \ or wildly irregular", font_size=26, color=GREY_A),
-            label(r"so: \ approximate (Welch), \ conservative (Behrens--Fisher), \ or Bayesian", font_size=26, color=UMPC),
+            label(r"Linnik: \ negative results restrict the shape and regularity of nonrandomized regions", font_size=26, color=REJC),
+            label(r"counterexample to blanket impossibility: \ $\phi(x)=\alpha$ is smooth and similar, \ but powerless", font_size=26, color=GREY_A),
+            label(r"so: \ Welch approximation; \ fiducial size curve; \ prior-dependent Bayesian analysis", font_size=26, color=UMPC),
             label(r"this part: \ when exact optimal tests exist, \ and what to do when they do not", font_size=26, color=S.ACCENT),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The precise question is whether a similar test exists: one whose size is exactly alpha "
-            "for every pair of variances. <bookmark mark='b'/> Linnik proved that no similar test is a smooth function of the "
-            "sufficient statistics, the two means and the two standard deviations. <bookmark mark='c'/> Similar tests "
-            "do exist, but only grotesque ones, randomized or wildly irregular, that nobody would use. <bookmark mark='d'/> "
-            "So in practice we choose between an approximate test, a conservative one, and a Bayesian posterior. <bookmark "
-            "mark='e'/> This part builds the theory that tells us when exact, optimal tests exist, as for the t test, and "
-            "what can and cannot be promised when they do not."
+            "<bookmark mark='a'/> The precise question is whether a similar test exists: one whose size is exactly "
+            "alpha for every pair of variances. <bookmark mark='b'/> Linnik's negative results concern specified "
+            "classes of nonrandomized rejection regions and their regularity, not every smooth test function. "
+            "<bookmark mark='c'/> For example, rejecting with probability alpha independently of the data is smooth "
+            "and exactly similar, but has no power advantage. Nontrivial exact constructions require attention to "
+            "their own restrictions. <bookmark mark='d'/> Welch offers a practical approximation; the fiducial rule "
+            "has its own frequentist size function; Bayesian analysis specifies priors. None of these labels alone "
+            "supplies an exact similar test. <bookmark mark='e'/> This part builds the theory that tells us when "
+            "exact, optimal tests exist, as for the t test, and what can and cannot be promised when they do not."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

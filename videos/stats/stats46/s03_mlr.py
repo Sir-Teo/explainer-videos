@@ -25,19 +25,23 @@ class MLR(VoiceoverScene):
             cmath(r"\text{MLR in } T", r":", r"\theta_1 > \theta_0 \Rightarrow \tfrac{f_{\theta_1}(x)}{f_{\theta_0}(x)} \text{ is nondecreasing in } T(x)", font_size=30),
             cmath(r"f_\theta(x)", r"=", r"h(x)\, e^{\eta(\theta) T(x) - A(\theta)}, \ \ \eta \uparrow", font_size=34),
             cmath(r"\Rightarrow", r"\;", r"\tfrac{f_{\theta_1}}{f_{\theta_0}} = e^{(\eta(\theta_1) - \eta(\theta_0)) T(x) + \text{const}}: \ \text{MLR}", font_size=32),
-            cmath(r"\text{also}", r":", r"U(0, \theta), \ \text{the noncentral } t, \ \chi^2, \ F, \ \text{the hypergeometric}", font_size=30),
+            cmath(r"\text{also}", r":", r"U(0,\theta); \ \text{fixed-df noncentral }t,\chi^2,F; \ \text{fixed-margin hypergeometric odds}", font_size=30),
         ]
         rows[0][-1].set_color(S.ACCENT)
         rows[2][-1].set_color(UMPC)
         whys = [why(r"a total ordering of the evidence"), why(r"Part 45's families"), why(r"one exponent"), why(r"not only exponential families")]
         with self.voiceover(
-            "<bookmark mark='a'/> A family has a monotone likelihood ratio in a statistic T if, for any larger parameter "
-            "against any smaller one, the likelihood ratio is a nondecreasing function of T. Larger T is always evidence "
-            "for larger theta. <bookmark mark='b'/> One-parameter exponential families with an increasing natural "
-            "parameter, <bookmark mark='c'/> have it automatically, since the ratio is the exponential of a positive "
-            "multiple of T. <bookmark mark='d'/> So do the uniform on zero to theta, the noncentral t, chi-square and F "
-            "families in their noncentrality, and the hypergeometric."
+            "<bookmark mark='a'/> A family has a monotone likelihood ratio in a statistic T if, for any larger "
+            "parameter against any smaller one, the likelihood ratio is a nondecreasing function of T. Larger T is "
+            "always evidence for larger theta. <bookmark mark='b'/> One-parameter exponential families with an "
+            "increasing natural parameter, <bookmark mark='c'/> have it automatically, since the ratio is the "
+            "exponential of a positive multiple of T. <bookmark mark='d'/> Other examples include the uniform "
+            "upper-endpoint model; noncentral t, chi-square and F families with fixed degrees of freedom and ordered "
+            "noncentrality; and the fixed-margin noncentral hypergeometric family ordered by its odds ratio."
         ) as vo:
+            heading=label('MLR orders likelihood evidence by one statistic',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -59,12 +63,7 @@ class MLR(VoiceoverScene):
             label(r"a very large $x$ is no evidence for $\theta = 1$ over $\theta = 0$: \ no MLR", font_size=22, color=S.ACCENT),
         ), 12.4, 0.25, [0, -2.45, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Two pictures. On the left, the binomial's log likelihood ratio for p equal to point five "
-            f"against point three: a straight line in the number of successes, increasing. <bookmark mark='b'/> On the "
-            f"right, the Cauchy location family, theta equal to one against zero. The ratio rises to a peak near x equal to "
-            f"{say(d['cauchy_max'], 1)} and then falls back toward one. <bookmark mark='c'/> A gigantic observation is "
-            f"equally surprising under both values, so it is no evidence for either: heavy tails destroy the monotone "
-            f"ordering."
+            f"<bookmark mark='a'/> Two pictures. On the left, the binomial's log likelihood ratio for p equal to point five against point three: a straight line in the number of successes, increasing. <bookmark mark='b'/> On the right, the Cauchy location family, theta equal to one against zero. The ratio rises to a peak near x equal to {say(d['cauchy_max'], 1)} and then falls back toward one. <bookmark mark='c'/> A gigantic observation is equally surprising under both values, so it is no evidence for either: this location likelihood ratio lacks the monotone ordering. Heavy tails alone are not a general impossibility theorem."
         ) as vo:
             self.play(FadeIn(A), FadeIn(B), Create(one), FadeIn(exact_tag(r"exact densities")))
             vo.wait_until("a")
@@ -94,6 +93,9 @@ class MLR(VoiceoverScene):
             "nondecreasing in theta, so its size over the whole composite null is attained at the boundary: the test is UMP "
             "for the one-sided problem."
         ) as vo:
+            heading=label('A common upper-tail rule solves every one-sided alternative',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -149,16 +151,20 @@ class MLR(VoiceoverScene):
             cmath(r"\Rightarrow", r"\;", r"\text{reject on a bounded interval: \ accept } x = 1000", font_size=32),
         ]
         rows[3][-1].set_color(REJC)
-        whys = [why(r"the ratio is not monotone"), why(r"maximize the power's slope at 0"), why(r"heavy tails"), why(r"optimal, \ and absurd")]
+        whys = [why(r"the ratio is not monotone"), why(r"maximize the power's slope at 0"), why(r"heavy tails"), why(r"local power targets small shifts")]
         with self.voiceover(
-            "<bookmark mark='a'/> The Cauchy family shows what happens without monotonicity. With one observation there is "
-            "no uniformly most powerful test of theta equal to zero against positive theta. <bookmark mark='b'/> The "
-            "locally most powerful test, which maximizes the slope of the power at zero, rejects when the score, two x over "
-            "one plus x squared, is large. <bookmark mark='c'/> But the score peaks at x equal to one and falls to zero for "
-            "large x. <bookmark mark='d'/> So the test rejects on a bounded interval and accepts an observation of a "
-            "thousand. Optimality in a narrow sense can produce absurd procedures; for location families with heavy tails, "
-            "chapter four's invariance and Part forty-seven's asymptotics give better guidance."
+            "<bookmark mark='a'/> The Cauchy family shows what happens without monotonicity. With one observation "
+            "there is no uniformly most powerful test of theta equal to zero against positive theta. <bookmark "
+            "mark='b'/> The locally most powerful test, which maximizes the slope of the power at zero, rejects when "
+            "the score, two x over one plus x squared, is large. <bookmark mark='c'/> But the score peaks at x equal "
+            "to one and falls to zero for large x. <bookmark mark='d'/> At a small level such as five percent the "
+            "score cutoff is positive, so the test rejects on a bounded interval and accepts an observation of a "
+            "thousand. Local optimality targets tiny shifts, not every possible alternative; for location families "
+            "with heavy tails, chapter four's invariance and Part forty-seven's asymptotics give better guidance."
         ) as vo:
+            heading=label('Local power for a Cauchy shift favors moderate positive values',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

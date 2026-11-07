@@ -38,6 +38,9 @@ class Conditional(VoiceoverScene):
             "is certainly right. <bookmark mark='d'/> Reporting fifty percent confidence for a statement known to be true is "
             "absurd. Part forty-five's answer was to condition on the ancillary range."
         ) as vo:
+            heading=label('An ancillary range reveals conditional coverage differences',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -48,7 +51,7 @@ class Conditional(VoiceoverScene):
         rows = [
             cmath(r"B \text{ a relevant subset}", r":", r"P_\theta(\theta \in C \mid X \in B) \ge 1 - \alpha + \varepsilon \ \ \forall \theta", font_size=30),
             cmath(r"\text{or}", r":", r"\le 1 - \alpha - \varepsilon \ \ \forall \theta \ \ \text{(negatively biased)}", font_size=30),
-            cmath(r"\text{the } t \text{ interval}, \ n = 2", r":", r"B = \{|\bar x| / s \le 1 + \sqrt 2\}: \ \text{coverage} > 1 - \alpha \ \text{always}", font_size=28),
+            cmath(r"\text{the } t \text{ interval}, \ n = 2", r":", r"B = \{|\bar x| / s \le 1 + \sqrt 2\}: \ \text{\text{50\% coverage exceeds }1/2\text{ on }B", font_size=28),
             cmath(r"\text{so}", r":", r"\text{someone who sees } B \text{ can bet against the stated level and win}", font_size=30),
         ]
         rows[2][-1].set_color(REJC)
@@ -63,6 +66,9 @@ class Conditional(VoiceoverScene):
             "interval covers more than half the time, whatever the true mean and variance. <bookmark mark='d'/> Someone who "
             "can see the set can bet against the stated confidence, at the stated odds, and expect to win."
         ) as vo:
+            heading=label('Recognizable subsets can have a uniform coverage gap',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -80,10 +86,11 @@ class Conditional(VoiceoverScene):
             tab.width = 13
         note_ = label(r"the 50\% $t$ interval $\bar x \pm s/\sqrt2$, \ $n = 2$; \ $B = \{|\bar x|/s \le 1 + \sqrt 2\}$; \ 200,000 samples each", font_size=24, color=GREY_A).move_to([0, -1.8, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Simulated, at six values of mu over sigma. <bookmark mark='b'/> The overall coverage is "
-            "fifty percent, as advertised, at every one. <bookmark mark='c'/> On the recognizable set it is sixty-one percent "
-            "at worst and eighty-six at best: never fifty. <bookmark mark='d'/> And the set is not rare: it contains most "
-            "samples when the mean is small."
+            "<bookmark mark='a'/> Simulated, at six values of mu over sigma. <bookmark mark='b'/> The overall "
+            "coverage is fifty percent, as advertised, at every one. <bookmark mark='c'/> On the recognizable set, "
+            "the six simulated settings range from about sixty-one to eighty-six percent. Independent quadrature "
+            "checks those conditional probabilities; this finite table does not establish their global extrema. "
+            "<bookmark mark='d'/> And the set is not rare: it contains most samples when the mean is small."
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(note_), FadeIn(exact_tag(r"simulated: 200,000 samples per column")))
             for k, m_ in enumerate("bcd"):
@@ -96,16 +103,19 @@ class Conditional(VoiceoverScene):
             label(r"Buehler's betting game: \ you state $C(x)$ with confidence $1 - \alpha$; \ I may bet against it at those odds", font_size=24),
             label(r"if I can win on average whatever $\theta$ is, \ your confidence is incoherent", font_size=26, color=REJC),
             label(r"Robinson (1979): \ a general theory of relevant and semi-relevant subsets", font_size=24, color=GREY_A),
-            label(r"intervals that are posterior intervals for a proper prior \ have no relevant subsets", font_size=26, color=UMPC),
+            label(r"exact posterior content under a proper prior: \ no uniform gap on a prior-predictively possible event", font_size=26, color=UMPC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Buehler's framing is a betting game. You announce an interval with confidence one minus "
-            "alpha; I may bet against it at the odds you implied. <bookmark mark='b'/> If I have a strategy that wins on "
-            "average whatever theta is, your stated confidence is incoherent for the case in hand. <bookmark mark='c'/> "
-            "Geoffrey Robinson's 1979 theory of relevant and semi-relevant subsets made this systematic; for the t "
-            "interval the bettor's edge is small in large samples. <bookmark mark='d'/> And intervals that are also Bayesian posterior intervals under a proper prior admit "
-            "no relevant subsets at all: Part forty-five's theme, that the good frequentist procedures are Bayes in "
-            "disguise, appears again."
+            "<bookmark mark='a'/> Buehler's framing is a betting game. You announce an interval with confidence one "
+            "minus alpha; I may bet against it at the odds you implied. <bookmark mark='b'/> If I have a strategy "
+            "that wins on average whatever theta is, your stated confidence is incoherent for the case in hand. "
+            "<bookmark mark='c'/> Geoffrey Robinson's 1979 theory of relevant and semi-relevant subsets made this "
+            "systematic; for the t interval the bettor's edge is small in large samples. <bookmark mark='d'/> An "
+            "interval with exactly the advertised posterior content under a proper prior has the same average content"
+            " conditional on any data event of positive prior-predictive probability. That excludes a uniform "
+            "positive gap above or below the advertised level on such an event: Part forty-five's theme, Bayesian "
+            "content can diagnose one form of conditional inconsistency. This does not make every good confidence "
+            "procedure a proper-prior posterior interval."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -115,7 +125,7 @@ class Conditional(VoiceoverScene):
     def resolution(self):
         rows = fit_rows(VGroup(
             label(r"in practice:", font_size=28, color=GREY_A),
-            label(r"condition on ancillaries when they exist: \ Welch, \ Cox, \ the observed information", font_size=26, color=UMPC),
+            label(r"examine ancillary conditioning where justified; \ observed information is not generally ancillary", font_size=26, color=UMPC),
             label(r"otherwise report the procedure's guarantee as what it is: \ an average over repetitions", font_size=26),
             label(r"and prefer procedures whose conditional behaviour is close to their stated level", font_size=26, color=S.ACCENT),
         ), 12.4, 0.6, [0, 0, 0])

@@ -6,7 +6,7 @@ and [the syllabus](../SYLLABUS.md)), and the fourth part of Stage IV, the PhD co
 It opens with the Behrens–Fisher problem: are two normal means equal when the variances are unequal and unknown?
 - Behrens (1929) and Fisher (1935) answered with a fiducial test whose size moves with the variance ratio.
 - Welch (1938, 1947) gave the practical approximation.
-- Linnik (1966–68) proved that no exact test of the natural kind exists.
+- Linnik (1966–68) established impossibility results for restricted classes of classical nonrandomized rejection regions. This does not rule out all exact randomized tests; the constant rule φ(x) = α is a smooth, exactly similar but uninformative counterexample.
 
 The part then builds:
 - the Neyman–Pearson theory in full: most powerful, monotone-likelihood-ratio, unbiased and invariant tests;
@@ -27,7 +27,7 @@ It keeps two promises:
 - **`statkit.testing`** ([`explainer/stats/kit/testing.py`](../../../explainer/stats/kit/testing.py)), tested in
   `tests/test_stats_kit_testing.py`:
   - **Behrens–Fisher:** Welch–Satterthwaite degrees of freedom; Behrens–Fisher fiducial critical values by
-    quadrature; sizes of the pooled t, Welch and fiducial tests.
+    quadrature; sizes of the pooled t, Welch and fiducial tests. Part-local stable convolution quadrature conditions on the larger weighted t scale and is checked against an independent simulation.
   - **Binomial tests:**
     - randomized UMP one-sided tests;
     - the UMPU two-sided test (two side conditions, solved exactly);
@@ -43,7 +43,7 @@ It keeps two promises:
   - **Simultaneous inference:** closed testing with Bonferroni (Holm) or Simes (Hommel) local tests; Scheffé's
     multiplier.
   - **Conditional inference and evidence:** Buehler-style recognizable subsets for the n = 2 t interval; Berger–Sellke
-    bounds and the −e p log p calibration.
+    bounds at specified prior odds and a −e p log p calibration for a uniform-null/beta-mixture-alternative p-value model.
   - **Goodness of fit:** Kolmogorov–Smirnov with estimated parameters (Lilliefors).
 - **The Neyman-structure visualizer** (`NeymanSlices` in `explainer/stats/viz.py`), the part's instrument. For each
   value of a sufficient statistic for the nuisance parameter, it draws the conditional null distribution as bars, with
@@ -51,14 +51,14 @@ It keeps two promises:
 
 **Data.**
 - From the Museum:
-  - Old Faithful's eruptions (split by the preceding wait);
+  - Old Faithful's eruptions (split by the recorded wait **to the next eruption**);
   - ISIS-2's vascular deaths;
   - the lady tasting tea;
   - Bliss's beetles.
-- Feldman and Cousins's published Table II (b = 0) is reproduced as a check.
+- Feldman and Cousins's published **Table IV** (90% intervals, b = 0) is reproduced to grid/rounding precision. The original Table II is for 68.27%. Their published tables also enlarge selected intervals to enforce monotonicity across backgrounds; this part displays the raw likelihood-ratio ordering without that extra correction. Thus at b = 3, n = 0 the plotted endpoint is about 0.95, whereas published Table IV gives 1.08.
 - The rest is exact arithmetic or seeded simulation.
 
-The Coverage Board gains eight rows:
+The Coverage Board gains eight rows. Each uses 20,000 independent datasets and the empirical Bernoulli Monte Carlo SE, rather than a nominal-probability reference SE. The table reports estimates, not exact population probabilities:
 
 | Method | Setting | Nominal | Achieved | Verdict |
 |---|---|---|---|---|
@@ -112,8 +112,8 @@ The rest of the part's numbers, chapter by chapter:
     | 25 (SD 3) vs 5 (SD 1) | 0.06% | 4.6% | 3.1% |
 
   - The fiducial critical value for n = 5, 25 runs from 2.06 (t₂₄) to 2.78 (t₄) as φ goes from 0° to 90°.
-  - Old Faithful: eruptions after waits under 70 minutes last 2.14 minutes (n = 103, SD 0.46); after longer waits,
-    4.31 (n = 169, SD 0.41). The 95% CI for the difference is [2.07, 2.29].
+  - Old Faithful: eruptions followed by waits under 70 minutes last 2.13 minutes (n = 103, SD 0.46); before longer waits,
+    4.31 (n = 169, SD 0.41). The model-based Welch 95% CI for the difference is [2.07, 2.29]. This is a descriptive time-series association; treating the two groups as independent normal samples is an additional assumption.
 - **Chapter 1.**
   - The lemma, its one-line proof and necessity.
   - Randomization: Bin(20), H₀ p = 0.3 vs p = 0.5. The test is c = 9, γ = 0.031.
@@ -125,56 +125,57 @@ The rest of the part's numbers, chapter by chapter:
   - No UMP two-sided test exists.
   - For one Cauchy observation, the locally most powerful test rejects on a bounded interval.
 - **Chapter 3.**
-  - Unbiasedness means β(θ₀) = α and β′(θ₀) = 0. The UMPU binomial test has c₁ = 2, c₂ = 10, γ₁ = 0.693,
+  - Smooth two-sided unbiasedness implies β(θ₀) = α and β′(θ₀) = 0; those side conditions alone do not establish global unbiasedness. Differentiating in the natural parameter gives β′ = Cov(T, φ). The UMPU binomial test has c₁ = 2, c₂ = 10, γ₁ = 0.693,
     γ₂ = 0.192.
   - The LP reproduces its power: 0.3345 at p = 0.15 and 0.4459 at p = 0.5.
-  - Neyman structure: X ~ Bin(8, p₁), Y ~ Bin(10, p₂), sliced at totals 4, 9, 13. The randomized conditional test has
-    size exactly 5% at every common p; Fisher's exact test has size at most 1.8%.
+  - Neyman structure: X ~ Bin(8, p₁), Y ~ Bin(10, p₂), sliced at totals 4, 9, 13. The randomized one-sided conditional test has
+    rejection probability exactly 5% at every common p; Fisher's exact test has size at most 1.8%.
   - ISIS-2: 804 aspirin deaths against 909.3 expected given 1,820, so z = −5.22 and one-sided P ≈ 1.0 × 10⁻⁷.
   - The tea: 1/70 = 0.0143.
   - The t test is UMPU (Lehmann 1959).
 - **Chapter 4.**
   - Maximal invariants. The t test is UMP among scale-invariant tests; its power at μ/σ = 0.5 with n = 10 is 0.427,
     against 0.475 for z (σ known) and 0.336 for the sign test.
-  - Hunt–Stein (1946): with an amenable group, the best invariant test is minimax.
-  - The F test is UMP invariant (Hsu 1941) and most stringent (Wald 1942).
+  - Hunt–Stein (1946): under the invariant testing problem’s averaging/compactness assumptions, amenability permits reduction of the relevant worst-case criterion to invariant tests. Scalar positive affine transformations are amenable; a general multivariate affine group need not be.
+  - For a fixed full-rank design and independent spherical normal errors, the F test is UMP invariant under the specified linear-model symmetry group (Hsu 1941) and most stringent (Wald 1942).
 - **Chapter 5.**
-  - Wilks (1938). Poisson n = 10, λ₀ = 2: quantiles 0.47 / 2.80 / 3.74 / 7.05 vs χ²₁'s 0.45 / 2.71 / 3.84 / 6.63; size
+  - Wilks (1938), for regular fixed-dimensional identifiable models, nonsingular information, consistent maxima and a smooth null submanifold. Its quadratic is the distance between constrained and unrestricted fits in the constrained directions, not the full unrestricted estimation error. Poisson n = 10, λ₀ = 2: quantiles 0.47 / 2.80 / 3.74 / 7.05 vs χ²₁'s 0.45 / 2.71 / 3.84 / 6.63; size
     4.3%.
   - Chernoff (1954): ½χ²₀ + ½χ²₁, with 50.0% exact zeros. Size 2.5% with 3.84, 4.9% with 2.71.
-  - Self & Liang (1987).
-  - Failures: mixtures (Hartigan 1985), change points (Davies 1977), growing dimension (Part 59).
+  - Self & Liang (1987): boundary limits depend on the cone and nuisance geometry. A half-χ² approximation applies to suitable single-variance-component problems, not every boundary problem.
+  - Failures: certain unrestricted mixtures (Hartigan 1985), change points (Davies 1977), growing dimension (Part 59).
 - **Chapter 6.**
   - Neyman's inversion. The Clopper–Pearson belt (n = 20): at p = 0.3 the acceptance region is x = 2, …, 10; at
     x = 6 the interval is [0.119, 0.543].
-  - Coverage: minimum 95.8% for Clopper–Pearson, 9.5% for Wald.
-  - UMA and UMA-unbiased sets. Pratt (1961): expected length = ∫ P(θ′ ∈ C) dθ′.
+  - On the displayed p grid, the minimum is 95.8% for Clopper–Pearson and 9.5% for Wald. Clopper–Pearson is globally at least 95%; Wald coverage has infimum zero as p approaches an endpoint. The grid does not certify global numerical extrema.
+  - Inverting UMP/UMPU tests gives UMA/UMA-unbiased sets within the corresponding class. Discrete nonrandomized Clopper–Pearson bounds are conservative and need not be strictly optimal among randomized bounds. Pratt (1961): expected length = ∫ P(θ′ ∈ C) dθ′.
 - **Chapter 7.**
-  - Fieller's pivot and quadratic.
+  - Fieller's exact pivot assumes jointly normal estimates, known positive definite covariance, and a nonzero true denominator. The quadratic gives bounded sets, two rays, or the whole line, and a half-line on a zero-probability transition. The implementation checks that transition explicitly.
   - a ~ N(1, 1), b ~ N(β, 1), at β = 4 / 2 / 1 / 0.5:
     - Fieller's set is bounded 98% / 51% / 16% / 8% of the time, and covers 95.0% / 95.0% / 95.4% / 95.2%;
     - the delta method covers 97.3% / 96.8% / 93.1% / 78.1%.
-  - Gleser & Hwang (1987).
-  - Bliss: slope z = 11.8. Fieller [1.7639, 1.7792] against delta [1.7642, 1.7793].
+  - Gleser & Hwang (1987): in the normal ratio family, limits toward zero numerator and denominator force unbounded sets for uniformly valid procedures. Interval-valued procedures then have infinite expected length; an arbitrary unbounded sparse set need not have infinite Lebesgue measure.
+  - Bliss: **log₁₀ LD50** = 1.771721, slope z = 11.8. The logistic-model normal approximation and fitted covariance give asymptotic intervals, not exact Fieller coverage. Fieller [1.7639, 1.7792] against delta [1.7642, 1.7793].
   - Weak instruments (Dufour 1997).
 - **Chapter 8.**
   - Poisson signal plus background b = 3. The classical upper limit at n = 0 is −0.70.
-  - Feldman–Cousins (b = 3), n = 0…10:
+  - Raw Feldman–Cousins likelihood ordering (b = 3), n = 0…10, on a 0.01 signal grid:
     - [0, 0.95], [0, 1.87], [0, 3.03], [0, 4.42], [0, 5.59], [0, 6.98];
     - then [0.16, 8.46], [0.90, 9.53], [1.51, 10.99], [1.88, 12.29], [2.64, 13.50].
-  - Flip-flopping switches at n = 9 (b + 3√b). Its exact coverage falls to 85.5% at μ = 2.34; FC never goes below 90%.
+  - Flip-flopping switches at n = 9 (b + 3√b). Its exact coverage falls to 85.5% at μ = 2.34; The raw ordering has Poisson-summed coverage at least 90% on the construction grid. The largest omitted Poisson tail at the displayed signals is 3.36 × 10⁻¹². Grid endpoints approximate the continuous construction; no off-grid numerical guarantee is inferred from the plotted curve. The clipped classical n = 0 upper limit is retained as an empty set, including at μ = 0.
 - **Chapter 9.**
   - Scheffé multipliers (k = 1, 2, 3, 5, 10, 20): 1.96, 2.45, 2.80, 3.33, 4.28, 5.60. Bonferroni: 1.96, 2.24, 2.39,
     2.58, 2.81, 3.02.
   - Closed testing on p = (0.011, 0.018, 0.024, 0.040): Bonferroni and Holm reject H₁ only; Hommel (Simes) rejects
-    all four.
+    all four. Bonferroni/Holm allow arbitrary dependence; Simes local tests require valid intersection-level dependence conditions, such as independence or suitable positive regression dependence.
   - Partitioning; gatekeeping.
 - **Chapter 10.**
   - Welch's uniform example.
   - Buehler (1959). For the n = 2 50% t interval on {|x̄|/s ≤ 1 + √2}, at μ/σ = 0, 0.25, 0.5, 1, 2, 4:
     - coverage 61.1%, 61.4%, 62.6%, 66.0%, 74.4%, 85.9%;
     - share of samples in the set 82%, 81%, 78%, 67%, 42%, 11%.
-  - Robinson (1979).
+  - Independent normal/half-normal quadrature validates the displayed conditional probabilities. The six settings do not establish global extrema; the normal-model recognizable set B is not ancillary.
+  - Robinson (1979). Exact posterior content under a proper prior rules out a uniform conditional-content gap on a data event of positive prior-predictive probability; this is not a statement about every vaguely Bayesian interval. Observed information is not generally ancillary.
 - **Chapter 11.**
   - Berger–Sellke lower bounds on P(H₀ | x), as all g / symmetric unimodal / normal / calibration:
 
@@ -185,6 +186,8 @@ The rest of the part's numbers, chapter by chapter:
     | 0.01 | 0.035 | 0.109 | 0.133 | 0.111 |
     | 0.001 | 0.0044 | 0.018 | 0.024 | 0.018 |
 
+  - The last column converts a Bayes-factor calibration B into B/(1+B), at equal prior odds. The beta-mixture derivation requires a continuous uniform null p-value and a mixture of Beta(ξ, 1), 0 < ξ < 1 alternatives; an arbitrary decreasing p-value density does **not** suffice.
+  - At p = 0.05, optimizing over all normal-model alternative priors permits odds about 6.83:1 against H₀; symmetric unimodal priors permit about 2.45:1. Changing the prior null probability changes posterior odds.
   - Sellke–Bayarri–Berger (2001).
   - Lindley's paradox (Part 15); the ASA (2016); Benjamin et al. (2018).
 - **Chapter 12.**
@@ -192,8 +195,8 @@ The rest of the part's numbers, chapter by chapter:
     15.09; size 4.8%.
   - Fisher (1924); Chernoff & Lehmann (1954).
   - Lilliefors (1967): with the table's critical values 0.294 (n = 20) and 0.134 (n = 100), the size is 0.01–0.02%.
-    The correct values are 0.192 and 0.089.
-  - Durbin (1973).
+    The simulated 95th percentiles are 0.192 and 0.089. The rare naive-test rejection counts are 3/40,000 and 4/20,000, so those percentages have substantial relative Monte Carlo uncertainty.
+  - Durbin (1973): for continuous F the empirical-CDF limit is B(F(x)); the KS limit is a supremum absolute value. Fitting parameters adds an estimator-dependent correction, with a projection interpretation under efficient regular estimation. The grouped/raw-data χ² comparison also requires the stated regular efficient estimates and fixed positive-probability bins.
 
 ## Sources
 
@@ -284,7 +287,7 @@ The rest of the part's numbers, chapter by chapter:
   - Fieller's set; pivot; unbounded confidence set; Gleser–Hwang theorem: impossibility.
   - Physical boundary; flip-flopping; Feldman–Cousins (unified) interval; CLs: bounded parameters.
   - Scheffé's method; familywise error rate; closed testing; Holm, Hommel; partitioning: simultaneous inference.
-  - Relevant (recognizable) subset; semi-relevant subset; conditionality: the case in hand.
+  - Relevant (recognizable) subset; semi-relevant subset; conditionality: the case in hand. Recognizable subsets need not be ancillary.
 - **Evidence and fit.**
   - Bayes factor; Berger–Sellke bounds; calibration −e p log p; Lindley's paradox: evidence.
   - Pearson's χ²; degrees of freedom lost to estimation; Lilliefors test; Durbin's process: goodness of fit.
@@ -293,6 +296,10 @@ The rest of the part's numbers, chapter by chapter:
 
 - **Part 47**: Wilks's theorem proved; the local power of the score, Wald and LR tests; contiguity.
 - **Part 48**: the empirical processes behind Kolmogorov–Smirnov and Durbin's estimated-parameter limit.
-- **Part 56**: selective inference: conditioning on the selection event, as chapter 10 conditions on ancillaries.
+- **Part 56**: selective inference: conditioning on the selection event, while chapter 10 also studies recognizable subsets that need not be ancillary.
 - **Part 57**: exact distribution-free tests: permutation and conformal.
 - **Part 58**: e-values and confidence sequences, valid however long you watch.
+
+## Review scope
+
+All fourteen English chapters, calculations and six worked solutions were audited. Fifteen inputs were regenerated; twenty focused checks passed, including independent quadrature, fresh Monte Carlo draws and direct SciPy comparisons. Three scientific sources were independently retrieved: all 272 Old Faithful pairs plus its variable documentation, ISIS-2 vascular-death counts, and the original Feldman–Cousins paper. Bliss and the tea account were not independently recovered from original historical documents. Part-local numerical and plotting refinements preserve the shared kit; the kit’s legacy Table-II comment is superseded here by the verified Table-IV citation. English visual captures and a representative narrated preview are still in progress. Chinese narration/caption tables, continuous listening, and final bilingual narrated masters remain open.

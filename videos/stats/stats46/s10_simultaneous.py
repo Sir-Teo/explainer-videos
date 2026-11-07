@@ -27,19 +27,24 @@ class Simultaneous(VoiceoverScene):
             cmath(r"\hat\theta \sim N_k(\theta, \Sigma)", r":", r"\text{intervals for every } c^\top\theta \text{ at once}", font_size=32),
             cmath(r"\sup_c \frac{(c^\top(\hat\theta - \theta))^2}{c^\top \Sigma c}", r"=", r"(\hat\theta - \theta)^\top \Sigma^{-1} (\hat\theta - \theta) \sim \chi^2_k", font_size=30),
             cmath(r"c^\top\hat\theta", r"\pm", r"\sqrt{\chi^2_{k, 1-\alpha}}\, \sqrt{c^\top \Sigma c} \ \ \text{for all } c, \ \text{jointly}", font_size=32),
-            cmath(r"\sigma \text{ estimated}", r":", r"\sqrt{k F_{k, \nu}} \ \text{in place of } \sqrt{\chi^2_k}", font_size=32),
+            cmath(r"\text{independent residual }\chi^2_\nu\text{ scale estimate}", r":", r"\sqrt{k F_{k, \nu}} \ \text{in place of } \sqrt{\chi^2_k}", font_size=32),
         ]
         rows[2][-1].set_color(UMPC)
         whys = [why(r"infinitely many contrasts"), why(r"Cauchy--Schwarz"), why(r"Scheff\'e (1953)"), why(r"the ANOVA version")]
         with self.voiceover(
-            "<bookmark mark='a'/> Henry Scheffé asked for intervals for every linear combination of k parameters at once, "
-            "infinitely many, with one joint guarantee. <bookmark mark='b'/> The worst combination, by Cauchy–Schwarz, turns "
-            "the supremum into the quadratic form of the estimation error, which is chi-square with k degrees of freedom. "
-            "<bookmark mark='c'/> So the intervals estimate plus or minus the root of the chi-square quantile times each "
-            "combination's standard error hold simultaneously with probability one minus alpha. <bookmark mark='d'/> With an "
-            "estimated variance, the multiplier is the root of k times an F quantile. The intervals are the projections of "
-            "the confidence ellipsoid for theta onto every direction."
+            "<bookmark mark='a'/> Henry Scheffé asked for intervals for every linear combination of k parameters at "
+            "once, infinitely many, with one joint guarantee. <bookmark mark='b'/> The worst combination, by "
+            "Cauchy–Schwarz, turns the supremum into the quadratic form of the estimation error, which is chi-square "
+            "with k degrees of freedom. <bookmark mark='c'/> So the intervals estimate plus or minus the root of the "
+            "chi-square quantile times each combination's standard error hold simultaneously with probability one "
+            "minus alpha. <bookmark mark='d'/> For the normal linear model with an independent chi-square residual "
+            "estimate of a common variance, the multiplier becomes the root of k times the appropriate F quantile. An"
+            " arbitrary covariance estimate does not give this exact law. The intervals are the projections of the "
+            "confidence ellipsoid for theta onto every direction."
         ) as vo:
+            heading=label('A normal confidence ellipsoid covers all linear contrasts',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -78,19 +83,24 @@ class Simultaneous(VoiceoverScene):
             cmath(r"H_S = \textstyle\bigcap_{i \in S} H_i", r":", r"\text{every intersection, \ with a level-}\alpha \text{ local test}", font_size=30),
             cmath(r"\text{reject } H_i", r"\iff", r"\text{every } H_S \text{ with } i \in S \text{ is rejected locally}", font_size=32),
             cmath(r"\text{FWER}", r"\le", r"\alpha: \ \text{a false rejection needs } H_{T} \text{ rejected, } T = \text{the true nulls}", font_size=30),
-            cmath(r"\text{local Bonferroni}", r"\Rightarrow", r"\text{Holm (1979); \ \ local Simes} \Rightarrow \text{Hommel (1988)}", font_size=30),
+            cmath(r"\text{local Bonferroni}", r"\Rightarrow", r"\text{Holm (1979); \ \ local Simes} \Rightarrow \text{Hommel, with valid intersection dependence}", font_size=30),
         ]
         rows[2][-1].set_color(UMPC)
         whys = [why(r"all $2^m - 1$ of them"), why(r"Marcus, \ Peritz \& Gabriel (1976)"), why(r"one test guards them all"), why(r"Part 33's procedures, \ explained")]
         with self.voiceover(
-            "<bookmark mark='a'/> For a finite family of hypotheses there is a general principle. Form every intersection of "
-            "them, and give each a level-alpha test of its own. <bookmark mark='b'/> Reject an individual hypothesis only if "
-            "every intersection containing it is rejected: the closed testing principle of Ruth Marcus, Eric Peritz and Ruben "
-            "Gabriel, 1976. <bookmark mark='c'/> The proof is one line. A false rejection requires rejecting the intersection "
-            "of the true nulls, and that happens with probability at most alpha. <bookmark mark='d'/> With Bonferroni as the "
-            "local test, closed testing is Holm's procedure; with Simes's test, it is Hommel's. Part thirty-three's step-down "
-            "procedures are shortcuts through the closure."
+            "<bookmark mark='a'/> For a finite family of hypotheses there is a general principle. Form every "
+            "intersection of them, and give each a level-alpha test of its own. <bookmark mark='b'/> Reject an "
+            "individual hypothesis only if every intersection containing it is rejected: the closed testing principle"
+            " of Ruth Marcus, Eric Peritz and Ruben Gabriel, 1976. <bookmark mark='c'/> The proof is one line. A "
+            "false rejection requires rejecting the intersection of the true nulls, and that happens with probability"
+            " at most alpha. <bookmark mark='d'/> With Bonferroni as the local test, closed testing is Holm's "
+            "procedure; with Simes's test, it is Hommel's, provided each intersection satisfies the conditions making"
+            " Simes valid, such as independent null p-values or the required positive regression dependence. Holm is "
+            "step-down; Hommel uses a different shortcut through the closure."
         ) as vo:
+            heading=label('One valid intersection test guards every false rejection',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -124,20 +134,21 @@ class Simultaneous(VoiceoverScene):
         side = fit_rows(VGroup(
             label(r"$p = 0.011, \ 0.018, \ 0.024, \ 0.040$", font_size=22),
             label(r"the 15 intersections of $H_1, \ldots, H_4$", font_size=22, color=GREY_A),
-            label(r"local Bonferroni: \ red = rejected; \ only $H_1$ survives the closure", font_size=22, color=REJC),
+            label(r"local Bonferroni: \ red = rejected; \ only $H_1$ is rejected by closure", font_size=22, color=REJC),
             label(r"local Simes: \ every intersection rejected: \ all four", font_size=22, color=UMPC),
             label(r"Bonferroni alone: \ only $H_1$ \ ($0.011 < 0.0125$)", font_size=22, color=CIC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         bon = lambda: [boxes[S][0].animate.set_fill(REJC, opacity=0.5) for S in boxes if rej(S, "bonferroni")]  # noqa: E731
         sim = lambda: [boxes[S][0].animate.set_fill(UMPC, opacity=0.5) for S in boxes if rej(S, "simes")]  # noqa: E731
         with self.voiceover(
-            "<bookmark mark='a'/> An example with four p-values: point zero one one, point zero one eight, point zero two "
-            "four and point zero four. <bookmark mark='b'/> Here are the fifteen intersections, from all four at the top "
-            "down to the single hypotheses. <bookmark mark='c'/> With Bonferroni locally, the intersections rejected are "
-            "shaded red; only the first hypothesis has every intersection above it rejected. <bookmark mark='d'/> With "
-            "Simes's test locally, every intersection is rejected, because the p-values are all small together, and "
-            "Hommel's procedure rejects all four. <bookmark mark='e'/> Plain Bonferroni would also stop at the first. The "
-            "local tests encode what we expect the p-values to look like together."
+            "<bookmark mark='a'/> An example with four p-values: point zero one one, point zero one eight, point zero"
+            " two four and point zero four. <bookmark mark='b'/> Here are the fifteen intersections, from all four at"
+            " the top down to the single hypotheses. <bookmark mark='c'/> With Bonferroni locally, the intersections "
+            "rejected are shaded red; only the first hypothesis has every intersection above it rejected. <bookmark "
+            "mark='d'/> With Simes's test locally, every intersection is rejected, because the p-values are all small"
+            " together, and Hommel's procedure rejects all four. <bookmark mark='e'/> Plain Bonferroni would also "
+            "stop at the first. Every local test must actually control its level under its intersection null. "
+            "Bonferroni allows arbitrary dependence; the Simes version needs the stated dependence assumptions."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(side[0]))
