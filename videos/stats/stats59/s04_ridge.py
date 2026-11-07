@@ -197,10 +197,10 @@ class Ridge(LectureMixin, VoiceoverScene):
             "nearly as good. <bookmark mark='d'/> And the formulas are exact: the whole curve, peak included, is "
             'determined by gamma, r squared and sigma squared.'
         ),
-            [(r"interpolation:", GREY_A),
+            [('Interpolation and overparameterized prediction', GREY_A),
              (r"fitting the training data exactly can still generalize", SIMC),
              (r"isotropic: \ never beats tuned ridge; \ decaying spectra: \ benign overfitting", PROPC),
-             (r"the whole curve is exact, \ peak included", THEORYC)])
+             (r"the whole curve is exact, \ peak included", THEORYC)], head_size=36)
 
     def ridgeless_worked(self):
         heading = label('Bias and variance beyond interpolation', font_size=30, color=PROPC).move_to([0, 3.35, 0])

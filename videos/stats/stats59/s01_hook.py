@@ -161,11 +161,11 @@ class Hook(LectureMixin, VoiceoverScene):
             'study exact limiting formulas under stated model assumptions, using random matrices, AMP, Gaussian '
             'comparison and replica predictions with rigorous results where available.'
         ),
-            [(r"why fixed-$p$ theory fails:", GREY_A),
+            [('Why fixed-$p$ asymptotics fail in proportional regimes', GREY_A),
              (r"each coordinate's error is $O(1/\sqrt n)$", GREY_A),
              (r"$p$ coordinates: \ total squared error can be of order $p/n$", CLASSC),
              (r"new limits: \ bias, \ inflated variance, \ rescaled statistics", PROPC),
-             (r"the tools: \ random matrices, \ AMP, \ Gordon's comparison, \ the replica method", AMPC)])
+             (r"the tools: \ random matrices, \ AMP, \ Gordon's comparison, \ the replica method", AMPC)], head_size=36)
 
     def upgrade(self):
         cards = [

@@ -153,10 +153,10 @@ class MEstimation(LectureMixin, VoiceoverScene):
             "noise of all p coefficients. <bookmark mark='d'/> And under the stated Gaussian design and loss "
             'conditions, a scalar system characterizes the limiting error, which also says how to choose the loss.'
         ),
-            [(r"chapter 4's lessons:", GREY_A),
+            [('Lessons for proportional-regime M-estimation', GREY_A),
              (r"efficiency rankings can reverse", CLASSC),
              (r"residuals carry the estimation noise of all $p$ coefficients", SIMC),
-             (r"a scalar system under model and loss conditions gives limiting error, \ and the best loss", PROPC)])
+             (r"a scalar system under model and loss conditions gives limiting error, \ and the best loss", PROPC)], head_size=36)
 
     def ols_check(self):
         heading = label('Checking the system on squared loss', font_size=30, color=PROPC).move_to([0, 3.35, 0])

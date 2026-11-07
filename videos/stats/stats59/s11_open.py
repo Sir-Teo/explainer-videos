@@ -27,6 +27,12 @@ class OpenProblems(LectureMixin, VoiceoverScene):
         ]
         cols = [GREY_B, PROPC, SIMC, SIMC, CLASSC, AMPC, AMPC]
         tab = table_rows([hdr] + body, font_size=28, col_buff=0.8, row_buff=0.3, colors=cols).move_to([0, 0.1, 0])
+        if tab.width > 12.6:
+            tab.width = 12.6
+        heading = label("Tools and answers in proportional-regime statistics", font_size=36).move_to([0, 3.3, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             (
             "<bookmark mark='a'/> The part in one table. <bookmark mark='b'/> The logistic MLE and its test, by "

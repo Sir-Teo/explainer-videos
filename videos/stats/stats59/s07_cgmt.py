@@ -138,10 +138,10 @@ class CGMT(LectureMixin, VoiceoverScene):
             'normalizations, their scalar equations agree. Replica methods can suggest formulas beyond those '
             'rigorously covered cases.'
         ),
-            [(r"AMP vs CGMT:", GREY_A),
+            [('Comparing AMP and Gaussian min-max methods', GREY_A),
              (r"AMP: \ an algorithm, \ its trajectory; \ non-convex and Bayesian problems", AMPC),
              (r"CGMT: \ Gaussian convex problems; \ localization and gap conditions", PROPC),
-             (r"where both apply, \ they agree; \ beyond both, \ the replica method", THEORYC)])
+             (r"where both apply, \ they agree; \ beyond both, \ the replica method", THEORYC)], head_size=36)
 
     def ridge_cgmt(self):
         heading = label('Normalize the ridge penalty consistently', font_size=30, color=PROPC).move_to([0, 3.35, 0])
