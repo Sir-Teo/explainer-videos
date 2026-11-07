@@ -1,0 +1,23 @@
+{
+  "part": "stats39",
+  "fingerprint": "657547b43293c7fdf36e142e5935e27cd38cdb8ffa69f343698d145390c53384",
+  "english_endpoints": 16,
+  "native_1080_endpoints": 15,
+  "silent_motion_chapters": 15,
+  "audio_scene": "Kriging",
+  "audio_lines": 7,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats39/en/Kriging/videos/s05_kriging/480p15/Kriging.mp4",
+    "seconds": 191.33333333333198,
+    "narration_sha256": "7089868fbc6193f9366d30e8d63d2f2ee135056d3f1e3dcbc5a7b2fe5536b6ec",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 191 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 191 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

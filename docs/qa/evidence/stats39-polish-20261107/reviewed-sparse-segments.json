@@ -1,0 +1,11 @@
+[
+  {
+    "scene": "Scaling",
+    "fingerprint": "657547b43293c7fdf36e142e5935e27cd38cdb8ffa69f343698d145390c53384",
+    "report_sha256": "0c067c16fcfefdfb04c6d1b8c8084a6af2b279539f1d0081b7fbe907769e8279",
+    "start_seconds": 175.75,
+    "duration_seconds": 2.8,
+    "frame": "scaling-table-header-178s.png",
+    "review": "Manually inspected frames at 176.5 and 177.8 seconds and the full motion contact sheet. A short fade introduces the three table headers while the narration says Other ways to scale, before the method rows appear. Intentional table introduction; zero blank runs. Sparse warning retained in the receipt."
+  }
+]

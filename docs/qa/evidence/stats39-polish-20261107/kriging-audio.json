@@ -1,0 +1,95 @@
+{
+ "video": "stats39",
+ "scene": "Kriging",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 7,
+ "lines": [
+  {
+   "raw": "Chapter four. Kriging.",
+   "spoken": "Chapter four. Kriging.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/7ab4210fbfb23f66.wav",
+   "duration": 2.225,
+   "tokens": 3,
+   "peak": 0.404693603515625,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Kriging predicts the value at a new site as a weighted average of the observations. <bookmark mark='b'/> For the prediction to be unbiased whatever the unknown constant mean, the weights must add to one. <bookmark mark='c'/> Among such weights, choose the ones that minimize the variance of the prediction error. That variance involves K, the covariances among the observations, and k nought, their covariances with the new site. <bookmark mark='d'/> A Lagrange multiplier turns the problem into one linear system. With the specified covariance, its solution often gives nearby sites more weight and discounts samples that cluster together. Weights depend on the full covariance and may be negative; proximity alone does not determine them.",
+   "spoken": "Kriging predicts the value at a new site as a weighted average of the observations. For the prediction to be unbiased whatever the unknown constant mean, the weights must add to one. Among such weights, choose the ones that minimize the variance of the prediction error. That variance involves K, the covariances among the observations, and k nought, their covariances with the new site. A Lagrange multiplier turns the problem into one linear system. With the specified covariance, its solution often gives nearby sites more weight and discounts samples that cluster together. Weights depend on the full covariance and may be negative; proximity alone does not determine them.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/f00583b526ce260e.wav",
+   "duration": 41.65,
+   "tokens": 108,
+   "peak": 0.555877685546875,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Three versions. Simple kriging assumes the mean is known. <bookmark mark='b'/> Ordinary kriging, the one just derived, assumes only that it is constant. <bookmark mark='c'/> Universal kriging allows a trend in covariates, estimated by the generalized least squares of Part twenty-three, and then kriges the residuals. <bookmark mark='d'/> Each comes with a prediction variance: zero at an observed site when there is no nugget, rising to the sill far from all data, plus the uncertainty of the estimated trend.",
+   "spoken": "Three versions. Simple kriging assumes the mean is known. Ordinary kriging, the one just derived, assumes only that it is constant. Universal kriging allows a trend in covariates, estimated by the generalized least squares of Part twenty-three, and then kriges the residuals. Each comes with a prediction variance: zero at an observed site when there is no nugget, rising to the sill far from all data, plus the uncertainty of the estimated trend.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/020d7d83dea6344d.wav",
+   "duration": 27.3,
+   "tokens": 73,
+   "peak": 0.771759033203125,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Universal kriging of log zinc over Meuse's prediction grid, with the square root of the distance to the river as the trend. <bookmark mark='b'/> Zinc falls with distance from the river, as the trend coefficient says, and the kriged residuals add the local detail the trend misses. <bookmark mark='c'/> On the right, the kriging standard error: smallest right beside the samples, in white, largest in the gaps between them and at the edges.",
+   "spoken": "Universal kriging of log zinc over Meuse's prediction grid, with the square root of the distance to the river as the trend. Zinc falls with distance from the river, as the trend coefficient says, and the kriged residuals add the local detail the trend misses. On the right, the kriging standard error: smallest right beside the samples, in white, largest in the gaps between them and at the edges.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/737b6cf3512db483.wav",
+   "duration": 24.0,
+   "tokens": 69,
+   "peak": 0.568206787109375,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> How much does it help? Leave out each sample in turn, fit the variogram and trend using only the other samples, then predict it. Covariance fitting is inside every fold. <bookmark mark='b'/> The overall mean misses by point seven two on the log scale. <bookmark mark='c'/> Inverse-distance weighting, the usual ad hoc interpolator, by point five one. <bookmark mark='d'/> Ordinary kriging by point three nine, <bookmark mark='e'/> and universal kriging with the river's distance by point three eight: almost half the error of the mean.",
+   "spoken": "How much does it help? Leave out each sample in turn, fit the variogram and trend using only the other samples, then predict it. Covariance fitting is inside every fold. The overall mean misses by point seven two on the log scale. Inverse-distance weighting, the usual ad hoc interpolator, by point five one. Ordinary kriging by point three nine, and universal kriging with the river's distance by point three eight: almost half the error of the mean.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/f85249c9a89baae8.wav",
+   "duration": 26.55,
+   "tokens": 77,
+   "peak": 0.5423583984375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The World lets us check against the truth. On the left, the true field; on the right, universal kriging with the traffic index, from the three hundred stations. <bookmark mark='b'/> The darkening marks the kriging standard error: largest in the empty interior and at the coasts. <bookmark mark='c'/> Over the whole island, kriging misses by point five four, against two point six four for the traffic trend alone. <bookmark mark='d'/> Its ninety percent intervals cover 83 percent of the island in this one field. With one realization, coverage over space is itself noisy; chapter fourteen averages over many fields.",
+   "spoken": "The World lets us check against the truth. On the left, the true field; on the right, universal kriging with the traffic index, from the three hundred stations. The darkening marks the kriging standard error: largest in the empty interior and at the coasts. Over the whole island, kriging misses by point five four, against two point six four for the traffic trend alone. Its ninety percent intervals cover 83 percent of the island in this one field. With one realization, coverage over space is itself noisy; chapter fourteen averages over many fields.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/3a44db9e74a2129e.wav",
+   "duration": 32.975,
+   "tokens": 93,
+   "peak": 0.5006103515625,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Kriging has a Bayesian reading. Treat the field as a Gaussian process: a prior over functions. <bookmark mark='b'/> Conditioning on the observations, by Part five's conditional normal, gives a posterior mean <bookmark mark='c'/> and variance <bookmark mark='d'/> that are exactly simple kriging's, and with known covariance, full-rank trend design and a proper resulting posterior, universal kriging is what an improper flat prior on the trend coefficients gives. Statisticians, geologists and machine-learning researchers found the same object three times.",
+   "spoken": "Kriging has a Bayesian reading. Treat the field as a Gaussian process: a prior over functions. Conditioning on the observations, by Part five's conditional normal, gives a posterior mean and variance that are exactly simple kriging's, and with known covariance, full-rank trend design and a proper resulting posterior, universal kriging is what an improper flat prior on the trend coefficients gives. Statisticians, geologists and machine-learning researchers found the same object three times.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/da12654d5f930226.wav",
+   "duration": 28.9,
+   "tokens": 72,
+   "peak": 0.403594970703125,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats39/en/Kriging_motion/result.json",
+ "input_sha256": "50a0e82da37f50a808f37295ad760c7c04afc009cdb1c68e48b949cf94c06646"
+}

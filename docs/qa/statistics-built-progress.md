@@ -65,7 +65,7 @@ No part is signed off for bilingual production. The branch has zero narration_zh
 | 36 | `stats36` | 17 | English source and visual review complete; bilingual/listening/master gates open |
 | 37 | `stats37` | 16 | English scientific source and sampled visual review complete; bilingual/listening/master approval open |
 | 38 | `stats38` | 14 | English source and sampled visual review complete; 19 checks, 14 endpoint / 13 native / 13 motion sheets; bilingual production gates open |
-| 39 | `stats39` | 16 | Scientific source and numerical reconciliation complete; 22 checks pass; visual verification pending |
+| 39 | `stats39` | 16 | English scientific source and sampled visual review complete; bilingual/listening/master approval open |
 | 40 | `stats40` | 17 | English scientific source and sampled visual review complete; bilingual/listening/master approval open |
 | 41 | `stats41` | 11 | English scientific source and sampled visual review complete; bilingual/listening/master approval open |
 | 42 | `stats42` | 12 | English scientific source and sampled visual review complete; bilingual/listening/master approval open |
