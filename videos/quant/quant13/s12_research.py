@@ -177,7 +177,7 @@ class Research(VoiceoverScene):
         leg = legend([(IV, r"$w(k)/|k|$"), (VAR, r"$dw/d|k|$"), (LEE_C, rf"Lee's limit, {w['lee']:.3f}")],
                      font_size=16).to_edge(RIGHT, buff=0.3).shift(UP * 1.4)
         fit_right(leg)
-        side = wrapped_label("Textbook Heston at $T=1$, COS prices through $K=e^{-8}F$. The ratio and derivative need stronger tail asymptotics than Lee\\'s general limsup formula.", 3.3, 14, GREY_A).next_to(
+        side = wrapped_label("Textbook Heston at $T=1$, COS prices through $K=e^{-8}F$. The ratio and derivative need stronger tail asymptotics than Lee's general limsup formula.", 3.3, 14, GREY_A).next_to(
             leg, DOWN, buff=0.3)
         fit_right(side)
         dk = np.asarray(w["dw_dk"])

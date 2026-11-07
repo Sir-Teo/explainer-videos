@@ -39,9 +39,7 @@ class SABRFix(VoiceoverScene, ThreeDScene):
         leg = legend([(RV, r"1 year"), (BAD, r"10 years")], font_size=17).next_to(g, UP, buff=0.15).align_to(g, LEFT)
         side = VGroup(
             wrapped_label('Negative density gives butterfly arbitrage. The finite strike-interval integral excludes boundary mass; it is not a total-probability test.', 4.6, 20, WHITE),
-            wrapped_label(r"the fixes: solve SABR's effective PDE for the density (Hagan, Kumar, Lesniewski and Woodward "
-                          r"2014), or price it exactly near zero (Antonov, Konikov and Spector 2015); the House runs Part "
-                          r"9's checker on every SABR slice it quotes", 4.6, 19, GREY_A),
+            wrapped_label('Effective-density PDE (Hagan et al. 2014) or near-exact boundary-aware methods (Antonov et al. 2015); check the prices produced by each numerical approximation.', 4.6, 19, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
         src = illustration(rf"a rates-like smile: forward {100 * p['F']:.0f}\%, $\beta = \tfrac12$, $\rho = {p['rho']}$, "
                            rf"$\nu = {p['nu']}$; at-the-money vol {100 * p['atm']:.0f}\%")

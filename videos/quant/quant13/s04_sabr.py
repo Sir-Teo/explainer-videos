@@ -192,20 +192,20 @@ class SABR(VoiceoverScene, ThreeDScene):
     def backbone(self, s):
         Fs = np.asarray(s["Fs"])
         g = axes([0.7, 1.3], [0.25, 0.7], x_length=6.2, y_length=4.0, xlabel=r"forward, relative to today",
-                 ylabel=r"at-the-money implied vol", xticks=[0.8, 1.0, 1.2], yticks=[0.3, 0.4, 0.5, 0.6],
+                 ylabel='at-the-money Black implied vol', xticks=[0.8, 1.0, 1.2], yticks=[0.3, 0.4, 0.5, 0.6],
                  yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=16).to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
         ax = g.ax
         cols = {"0.0": BAD, "0.5": IV, "1.0": RV}
         lines = VGroup(*[curve(ax, Fs, np.clip(np.asarray(s["backbone"][b]), 0.25, 0.7), cols[b], stroke_width=3)
                          for b in ("0.0", "0.5", "1.0")])
-        leg = legend([(BAD, r"$\beta = 0$: normal, vol falls as the price rises"), (IV, r"$\beta = \tfrac12$"),
+        leg = legend([(BAD, '$\\beta=0$: Black ATM IV falls as $F$ rises, holding $\\alpha$ fixed'), (IV, r"$\beta = \tfrac12$"),
                       (RV, r"$\beta = 1$: lognormal, the smile moves with the price")], font_size=17).next_to(
             g, UP, buff=0.15).align_to(g, LEFT)
         side = wrapped_label('Backbone holds $\\alpha$ fixed. Black and normal IV are distinct; one surface or a sticky-rule regression does not identify $\\beta$.', 4.6, 20, GREY_A).to_edge(RIGHT, buff=0.4)
         src = illustration(r"SABR with the 51-day slice's $\rho$ and $\nu$, $\alpha$ set to match today's at-the-money vol")
         with self.voiceover(
             (
-            """The backbone concerns Black implied volatility as the forward changes with alpha held fixed. With beta one, the model is scale invariant and its smile shifts in log-moneyness. With beta zero, leading Black ATM volatility is alpha over F, while leading normal volatility is alpha. These are different quoting conventions. A single surface and Part twelve's sticky-rule regression do not identify beta or establish a universal hedge ranking. Hagan's work motivated SABR through smile dynamics and particular hedging evidence. Its approximation can still fail the static-arbitrage checks, which we examine next."""
+            "The backbone concerns Black implied volatility as the forward changes with alpha held fixed. With beta one, the model is scale invariant and its smile shifts in log-moneyness. <bookmark mark='a'/> With beta zero, leading Black ATM volatility is alpha over F, while leading normal volatility is alpha. These are different quoting conventions. A single surface and Part twelve's sticky-rule regression do not identify beta or establish a universal hedge ranking. Hagan's work motivated SABR through smile dynamics and particular hedging evidence. Its approximation can still fail the static-arbitrage checks, which we examine next."
         )
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(lines[2]), FadeIn(leg[2]))

@@ -86,13 +86,13 @@ class Forward(VoiceoverScene):
                       font_size=34, colors={r"\sum_i \min\big(\max(r_i, f), c\big)": OPT})]
         whys = [why(r"the payoff is homogeneous of degree 0 in the price at $T_1$: at $T_1$ it is an ordinary option with "
                     r"spot 1, worth the model's price given its state then", 20),
-                why("Stationary independent increments: this ratio payoff repeats the model\\'s own current $\\tau$-smile at zero rates.", 20),
+                why("Stationary independent increments: this ratio payoff repeats the model's own current $\\tau$-smile at zero rates.", 20),
                 why(r"tower property: average Heston's price over the law of $v_{T_1}$, chapter 5's scaled non-central "
                     r"$\chi^2$; with COS inside, this is the white curve", 20),
                 why(r"a cliquet coupon is floored at $f$ and capped at $c$: each period is a forward-start call spread, so "
                     r"a cliquet is priced off forward smiles, which no vanilla pins down", 20)]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.8, buff=0.6, edge=6.9)
-        pp = pause(r"In which models is a forward-start option worth exactly today's option?", width=4.6).to_corner(DR, buff=0.3)
+        pp = pause('Which model makes a zero-rate ratio forward-start smile repeat its own present smile?', width=4.6).to_corner(DR, buff=0.3)
         with self.voiceover(
             (
             (
@@ -132,7 +132,7 @@ class Forward(VoiceoverScene):
                 clip.add(Rectangle(width=0.5, height=max(abs(ax.c2p(0, c_)[1] - ax.c2p(0, 0)[1]), 1e-3), stroke_width=0,
                                    fill_color=OPT, fill_opacity=0.85).move_to(ax.c2p(x, c_ / 2)))
             tot = float(np.clip(R[:, p], flo, cap).sum())
-            sums.add(MathTex(rf"\text{{payoff}}\ {100 * tot:.1f}\%", font_size=26, color=OPT).next_to(ax.c2p(1 + p * 4.2 + 1.2, -0.25),
+            sums.add(MathTex(rf"\text{{payoff}}\ {100 * tot:.1f}\%", font_size=26, color=OPT).next_to(ax.c2p(1 + p * 4.2 + 1.2, -0.35),
                                                                                                     DOWN, buff=0.15))
         foot = wrapped_label(r"each path: four monthly returns (grey outlines), each floored at 0 and capped at 10\% "
                              r"(pink); the payoff is their sum: big months are cut, bad months are forgiven", 12.0, 19, GREY_A)

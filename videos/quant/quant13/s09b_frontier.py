@@ -90,7 +90,7 @@ class Frontier(VoiceoverScene):
                          'Quintic OU: six effective parameters plus an input forward-variance curve; reported joint fits on selected SPX/VIX data.', color=QC.IDEA,
                          width=4.1),
             history_card(2023, r"Guyon and Mustapha, \textit{Risk}",
-                         "Learned one-factor volatility with path dependence: reported SPX/VIX fits within bid--ask on the authors\\' datasets.", color=QC.IDEA, width=4.1),
+                         "Learned one-factor volatility with path dependence: reported SPX/VIX fits within bid--ask on the authors' datasets.", color=QC.IDEA, width=4.1),
             history_card(2024, r"Choi and Kwok, \textit{EJOR}",
                          r"Heston simulated with Poisson conditioning: exact-type sampling without Bessel draws "
                          r"(chapter 5).", color=QC.IDEA, width=4.1),

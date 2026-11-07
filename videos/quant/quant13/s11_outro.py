@@ -108,7 +108,7 @@ class Outro(VoiceoverScene):
 
     def payoffs(self):
         card = payoff_card([
-            (r"the skew's square-root law, rough volatility, and the joint SPX/VIX fit", [14]),
+            ('observed skew scaling, rough volatility and joint SPX/VIX calibration', [14]),
             (r"cliquets, autocallables and barriers, priced across models", [15]),
             (r"COS, PDEs and Monte Carlo, made fast and checked", [16]),
             ('neural calibrators: benchmark-specific speed and accuracy; deep hedging under SV', [17]),

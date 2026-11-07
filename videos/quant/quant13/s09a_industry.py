@@ -28,7 +28,7 @@ class Industry(VoiceoverScene):
 
     def firms(self):
         f1 = firm_card(r"Soci\'et\'e G\'en\'erale, equity derivatives research",
-                       "Historical equity-derivatives research at Soci\\'et\\'e G\\'en\\'erale: Bergomi\\'s Smile Dynamics; Guyon and Henry-Labord\\`ere\\'s particle method. Risk awards: Henry-Labord\\`ere (2023), Guyon (2025, joint calibration with Mustapha).",
+                       "Historical equity-derivatives research at Soci\\'et\\'e G\\'en\\'erale: Bergomi's Smile Dynamics; Guyon and Henry-Labord\\`ere's particle method. Risk awards: Henry-Labord\\`ere (2023), Guyon (2025, joint calibration with Mustapha).",
                        source=r"risk.net award pages; publishers' author biographies", width=6.4, font_size=21)
         f2 = firm_card(r"Cboe and Deribit: volatility as an asset",
                        r"Cboe listed VIX futures on 26 March 2004 and VIX options on 24 February 2006: volatility "
@@ -64,7 +64,7 @@ class Industry(VoiceoverScene):
                 why(r"in Heston, $\mathbb{E}[dv \mid dS] = \rho\xi\,dS/S$ (chapter 13's regression): the same idea as "
                     r"Bartlett's SABR delta", 20)]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.8, buff=0.6, edge=6.9)
-        pp = pause(r"Volatility rises when prices fall. Long a call: hold more or less underlying than Black--Scholes says?",
+        pp = pause("For a positive-vega call and negative spot--IV beta, is the minimum-variance delta above or below Black's delta?",
                    width=5.0).to_corner(DR, buff=0.3)
         with self.voiceover(
             (

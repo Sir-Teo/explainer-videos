@@ -23,7 +23,7 @@ ERA = [
     (2006, r"Cboe lists VIX options", "firm"),
     (2008, r"Andersen's QE; Gatheral's SPX/VIX talk", "idea"),
     (2012, r"Guyon--Henry-Labord\`ere: the particle method", "idea"),
-    (2020, r"Guyon: the joint SPX/VIX puzzle solved", "idea"),
+    (2020, 'Guyon: a nonparametric joint SPX/VIX construction', "idea"),
     (2022, r"Terra--Luna and FTX", "crisis"),
 ]
 
@@ -161,7 +161,7 @@ class Hook(VoiceoverScene):
             r"SABR: Hagan's expansion, the backbone, the negative density and arbitrage-free SABR",
             r"Jumps (Merton, Kou, Bates) and L\'evy models by time change (VG, NIG, CGMY); the skew's term structure",
             r"Stochastic local volatility: the particle method, its convergence, and the mixing fraction",
-            r"Bergomi's variance curves; forward smiles and cliquets; the SPX/VIX puzzle measured on bitcoin",
+            'Bergomi forward variance; ratio forward-starts and cliquets; a Bitcoin volatility-index illustration',
             r"Calibration as an inverse problem: valleys, the Hessian, regularisation; how desks judge a model; the "
             r"frontier",
         ], color=QC.IDEA, font_size=24)

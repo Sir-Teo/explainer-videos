@@ -172,13 +172,13 @@ class Calibration(VoiceoverScene, ThreeDScene):
                       font_size=36, colors={r"\delta L": VAR}),
                 cmath(r"\operatorname{Cov}(\hat x)", r"\approx", r"\hat\sigma^2\,H^{-1}", font_size=36,
                       colors={r"\operatorname{Cov}(\hat x)": VAR}),
-                cmath(r"\min_x", r"\ ", r"\tfrac12\|r(x)\|^2 + \tfrac{\lambda}{2}\,\big\|W(x - x_{\text{prev}})\big\|^2"
-                      r"\ \Rightarrow\ H \to H + \lambda W^\top W", font_size=34, colors={r"\min_x": OPT})]
+                cmath(r"\min_p", r"\ ", r"\tfrac12\|r(p)\|^2 + \tfrac{N\lambda}{2}\,\big\|W(p - p_{\text{prev}})\big\|^2"
+                      r"\ \Rightarrow\ H_p \to H_p + N\lambda W^\top W", font_size=32, colors={r"\min_p": OPT})]
         whys = [why('Price-over-vega residuals; reported vega-weighted IV RMSE is a different statistic. $J^\\top J$ is a Gauss--Newton approximation.', 20),
                 why(r"near the optimum the loss is a bowl; a small eigenvalue $\lambda_j$ is a flat direction $e_j$: the "
                     r"data pin the combination $e_j^\top\delta x$ only weakly", 20),
                 why('Illustrative standard errors require independent, correctly scaled quote errors and an adequate model; unverified here.', 20),
-                why('Relative Tikhonov penalty adds $\\lambda W^\\top W$; only $W=I$ shifts all eigenvalues uniformly.', 20)]
+                why('Raw residual convention: add $N\\lambda W^\\top W$, with quote count $N$. Normalizing the objective by $N$ gives $\\lambda W^\\top W$. Nonuniform for relative weights.', 20)]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.8, buff=0.6, edge=6.9)  # the eigenvalue readout takes the bottom
         se = np.asarray(hs["se"])
         ev = np.asarray(hs["eig"])
@@ -190,7 +190,7 @@ class Calibration(VoiceoverScene, ThreeDScene):
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             (
-            f"""The optimizer minimizes squared price errors divided by quote vega. This approximates IV errors locally, while the reported vega-weighted IV RMSE is a different statistic. <bookmark mark='a'/> Gauss–Newton curvature identifies locally flat directions in the chosen coordinates. <bookmark mark='b'/> The displayed covariance formula additionally assumes correctly scaled independent errors and an adequate model. Its illustrative kappa standard error is {100 * se[1]:.0f} percent, with condition number {hs['cond']:.0f}; these assumptions are unverified for pooled option marks and a misspecified model. It is not an empirical confidence interval. <bookmark mark='c'/> A relative Tikhonov penalty adds lambda W transpose W. It does not increase every eigenvalue by the same lambda unless W is identity. This imposes stability information; it does not recover missing market information automatically."""
+            f"The optimizer minimizes squared price errors divided by quote vega. This approximates IV errors locally, while the reported vega-weighted IV RMSE is a different statistic. <bookmark mark='a'/> Gauss–Newton curvature identifies locally flat directions in the chosen coordinates. <bookmark mark='b'/> The displayed covariance formula additionally assumes correctly scaled independent errors and an adequate model. Its illustrative kappa standard error is {100 * se[1]:.0f} percent, with condition number {hs['cond']:.0f}; these assumptions are unverified for pooled option marks and a misspecified model. It is not an empirical confidence interval. <bookmark mark='c'/> For the raw residuals used here, the relative penalty adds quote count times lambda W transpose W. Dividing the whole objective by quote count gives the normalized convention. This penalty formula uses raw parameters; the log-coordinate diagnostic above requires transforming its weights. It does not increase every eigenvalue by a uniform amount unless W is identity. This imposes stability information; it does not recover missing market information automatically."
         )
         ) as vo:
             step(0)
