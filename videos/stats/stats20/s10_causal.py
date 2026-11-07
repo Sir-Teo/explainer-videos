@@ -62,6 +62,9 @@ class CausalOrNot(VoiceoverScene):
         rev = VGroup(arrow(n["prior"], n["told"], RES), arrow(n["prior"], n["sbp"], GREY_B), arrow(n["told"], n["usual"], RES), arrow(n["told"], n["meds"], RES),
                      arrow(n["meds"], n["sbp"], RES))
         unm = VGroup(arrow(n["other"], n["sbp"], GREY_B, dashed=True), arrow(n["other"], n["usual"], GREY_B, dashed=True))
+        intro = label('A causal diagram makes the assumed time order explicit', font_size=36).move_to([0, 3.2, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "To see what the survey can and can't say about cause, draw the causal story, as Part 35 will do "
             "formally. <bookmark mark='a'/> The arrow we care about runs from usual sodium to blood pressure. "
@@ -73,6 +76,7 @@ class CausalOrNot(VoiceoverScene):
             "analysis removed the medicated, but not everyone who changed their diet. <bookmark mark='e'/> And things"
             " we didn't measure, such as physical activity, alcohol and income, may affect both diet and pressure."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
             self.play(FadeIn(n["usual"]), FadeIn(n["sbp"]), Create(main), FadeIn(q))
             vo.wait_until("b")

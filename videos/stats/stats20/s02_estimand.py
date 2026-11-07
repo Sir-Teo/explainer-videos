@@ -83,6 +83,9 @@ class Estimand(VoiceoverScene):
         VGroup(left, right).arrange(RIGHT, buff=1.2).move_to([0, 0.2, 0])
         line = Line([0, 2.2, 0], [0, -1.6, 0], color=GREY_D)
         foot = label(r"same words, \ ``depends on'', \ two different estimands", font_size=24, color=OBS).to_edge(DOWN, buff=0.6)
+        intro = label('A descriptive association and a causal effect are different targets', font_size=36).move_to([0, 3.2, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "The phrase depends on hides two different questions. <bookmark mark='a'/> The descriptive one: among "
             "adults alike in age, sex, size and energy intake, how much higher is mean blood pressure in those who "
@@ -92,6 +95,7 @@ class Estimand(VoiceoverScene):
             "mark='c'/> A descriptive slope becomes causal only with adequate confounding control, a well-defined "
             "intervention and a suitable model. We'll estimate the first, and argue about the second in chapter nine."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
             self.play(FadeIn(left, shift=RIGHT * 0.2), Create(line))
             vo.wait_until("b")
@@ -143,6 +147,9 @@ class Estimand(VoiceoverScene):
             r"secondary: \ medicine users in, \ splines, \ two-day means, \ unweighted",
             r"reported whatever it shows; \ deviations from the plan flagged as such",
         ], SALT, width=11.4, font_size=21).move_to([0, 0, 0])
+        intro = label('An illustrative analysis plan defines the target before fitting', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> Before fitting anything, we write down the plan. The sample: adults over twenty, "
             "not pregnant, and not taking blood-pressure medicine, because treatment changes pressure; this exclusion"
@@ -153,6 +160,7 @@ class Estimand(VoiceoverScene):
             "<bookmark mark='b'/> And the last line matters most: the primary result is reported whatever it shows, "
             "and anything we change later is labelled as a change."
         ) as vo:
+            self.add(intro)
             vo.wait_until("a")
             self.play(FadeIn(card[0]), FadeIn(card[1][0]),
                       LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card[1][1][:6]], lag_ratio=0.5), run_time=12.0)
