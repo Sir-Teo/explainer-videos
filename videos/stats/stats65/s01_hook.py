@@ -78,10 +78,10 @@ class Hook(LectureMixin, VoiceoverScene):
             "protocol-guided simulation study, the real-data application, and writing it up for review. <bookmark mark='d'/> "
             "Chapters eight to ten: the full Coverage Board of the whole degree, the completed transcript, and where to go "
             "next.",
-            [(r"the plan:", GREY_A),
+            [(r"The dissertation: question, proof, study and application", WHITE),
              (r"1--4: \ the question, \ the literature, \ a conjecture, \ a theorem", THESISC),
              (r"5--7: \ a protocol-guided study, \ NHANES, \ writing and review", HONC),
-             (r"8--10: \ the full Board, \ the transcript, \ what next", S.ACCENT)])
+             (r"8--10: \ the full Board, \ the transcript, \ what next", S.ACCENT)], head_size=36)
 
     def upgrade(self):
         cards = [

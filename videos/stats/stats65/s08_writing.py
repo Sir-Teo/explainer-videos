@@ -32,7 +32,7 @@ class Writing(LectureMixin, VoiceoverScene):
     def abstract(self):
         self.list_voiceover(
             "<bookmark mark='a'/> An abstract that matches the corrected evidence. <bookmark mark='b'/> Weighted conformal prediction gives at-least-nominal coverage under known covariate shift; we illustrate the effect of independently estimated or misspecified ratios. <bookmark mark='c'/> A short teaching proof gives a lower bound using the distance between the reweighted source and target, conditional on independent weight and model training. No new theorem priority is claimed. <bookmark mark='d'/> A post hoc corrected rerun preserves the original 45-cell design and reports original predictions, Monte Carlo errors, finite-width summaries and infinite intervals. Its estimates are compatible with the proved lower bounds. <bookmark mark='e'/> An independent-resampling NHANES example raises coverage from about seventy-three to about ninety-one percent; it concerns a fixed empirical law rather than national or newly collected patient outcomes.",
-            [(r"Abstract", S.ACCENT),
+            [(r"An abstract that matches the evidence", WHITE),
              (r"weighted conformal needs the true ratio; \ in practice it is estimated", GREY_A),
              (r"with fixed weights, \ coverage falls by at most $\mathrm{TV}(P_{\hat w}, Q)$", THESISC),
              (r"a protocol-guided study: \ the bound held in 45 of 45 cells, \ with wide slack", HONC),

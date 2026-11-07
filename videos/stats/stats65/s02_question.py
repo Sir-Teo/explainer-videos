@@ -39,11 +39,11 @@ class Question(LectureMixin, VoiceoverScene):
             "mark='e'/> And coverage of weighted conformal prediction when the weights are estimated, from Parts "
             "fifty-seven and sixty: important for every deployed model whose population drifts, and small enough to make "
             "progress on.",
-            [(r"candidates:", GREY_A),
+            [(r"Choosing a feasible research question", WHITE),
              (r"learned adjustment sets \ (Part 62): \ important, \ large", GREY_A),
              (r"private inference beyond the mean \ (Part 63): \ a field", GREY_A),
              (r"conditional guarantees \ (Part 64): \ impossible in general", GREY_A),
-             (r"weighted conformal with estimated weights \ (Parts 57, 60): \ chosen", THESISC)])
+             (r"weighted conformal with estimated weights \ (Parts 57, 60): \ chosen", THESISC)], head_size=36)
 
     def chosen(self):
         self.lad_voiceover(
