@@ -1,0 +1,50 @@
+{
+  "fingerprint": "92b8415f2c79c842113e3bd44ff35fb833b7f9351aeeaa82551fca1d59c53bac",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Vectors",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats4/en/Vectors_motion/result.json",
+      "input_sha256": "0203b2e256345323f2aa812bb6ef27dfe9706d3ce3d94f97ef6f7013f8a77b31",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 240 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 240 s\n"
+    },
+    {
+      "scene": "Projection",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats4/en/Projection_motion/result.json",
+      "input_sha256": "084d204c4766d034c9afb02381104f100652728a052196977d41df42e9691d33",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 263 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 263 s\n"
+    },
+    {
+      "scene": "SVD",
+      "status": "needs-review",
+      "frames": 17,
+      "warnings": {
+        "narration-translation": 5
+      },
+      "input_record": "renders/qa/series/stats4/en/SVD_motion/result.json",
+      "input_sha256": "8e83f51be20365b7289156cf8425f4919f27105b0918ea5af17f5cc2f4747c84",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 184 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 184 s\n"
+    },
+    {
+      "scene": "Pinv",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 5
+      },
+      "input_record": "renders/qa/series/stats4/en/Pinv_motion/result.json",
+      "input_sha256": "084dbefed96323c457d0a0fefb6895dacd1e1f0d14b49da4e13a3a07e25fbc42",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 188 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 188 s\n"
+    }
+  ]
+}

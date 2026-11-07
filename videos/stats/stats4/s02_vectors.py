@@ -41,6 +41,7 @@ class Vectors(VoiceoverScene):
                      MathTex(r"\|\mathbf y\| = \sqrt{\langle \mathbf y, \mathbf y\rangle}", font_size=30),
                      MathTex(r"\cos\theta = \frac{\langle \mathbf x, \mathbf y\rangle}{\|\mathbf x\|\,\|\mathbf y\|}",
                              font_size=30)).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.6, -1.9, 0])
+        intro = label("Samples as vectors", font_size=36).to_edge(UP, buff=0.4)
         with self.voiceover(
             "Part 1 had one idea that this whole part builds on. <bookmark mark='a'/> A sample of three heights is "
             "three numbers, and three numbers are one point in three-dimensional space: the first person's height "
@@ -52,8 +53,9 @@ class Vectors(VoiceoverScene):
             "and Part 1 showed that correlation is the cosine of an angle."
         ) as vo:
             self.add(ns)
+            self.play(FadeIn(intro))
             vo.wait_until("a")
-            self.play(FadeIn(coords))
+            self.play(FadeOut(intro), FadeIn(coords))
             vo.wait_until("b")
             self.add(vy)
             self.play(NSpace.reveal(vy), FadeIn(lab), ns.turn(0.5, run_time=3.0))
@@ -79,6 +81,7 @@ class Vectors(VoiceoverScene):
         rows[2][0].set_color(RES)
         whys = [why(r"projection onto the line through $\mathbf 1$"), why(r"as a matrix: \ every entry $1/n$"),
                 why(r"centring: \ subtract the projection")]
+        intro = label("The mean is a projection", font_size=36).to_edge(UP, buff=0.4)
         with self.voiceover(
             "Now the first projection. <bookmark mark='a'/> The diagonal line through the vector of all ones holds "
             "every sample in which everyone is the same height. <bookmark mark='b'/> Drop a perpendicular from the "
@@ -88,7 +91,9 @@ class Vectors(VoiceoverScene):
             "right angles to the diagonal. Centring data is projecting it away from the ones vector."
         ) as vo:
             self.add(ns)
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.add(lab.space, lab.vy)
             self.play(NSpace.reveal(lab.space, lab.vy))
             vo.wait_until("b")
@@ -109,7 +114,7 @@ class Vectors(VoiceoverScene):
     def dof(self):
         d = load("vectors")
         y = np.asarray(d["y"]) - 160
-        ns = NSpace(scale=0.17, center=[-3.0, -1.4, 0], angle=-0.7, tilt=0.4, axis_len=24.0)
+        ns = NSpace(scale=0.15, center=[-3.0, -0.8, 0], angle=-0.7, tilt=0.4, axis_len=24.0)
         u = np.array([1.0, -1.0, 0.0]) / np.sqrt(2)
         w = np.array([1.0, 1.0, -2.0]) / np.sqrt(6)
         pl = ns.plane(u, w, extent=13.0, color=RES, opacity=0.16)

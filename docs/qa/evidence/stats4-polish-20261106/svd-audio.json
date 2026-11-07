@@ -1,0 +1,73 @@
+{
+ "video": "stats4",
+ "scene": "SVD",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 5,
+ "lines": [
+  {
+   "raw": "Chapter six. The singular value decomposition.",
+   "spoken": "Chapter six. The singular value decomposition.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/3fc9f96f7214fb24.wav",
+   "duration": 3.65,
+   "tokens": 6,
+   "peak": 0.335052490234375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "The spectral theorem is for symmetric matrices. The singular value decomposition is its version for every matrix, square or not. <bookmark mark='a'/> Watch what a two by two matrix does to the unit circle. <bookmark mark='b'/> First, an orthogonal matrix V transpose rotates two special perpendicular directions onto the axes. <bookmark mark='c'/> Then a diagonal matrix stretches along the axes, by the singular values. <bookmark mark='d'/> Then another orthogonal matrix, U, rotates the result. The circle has become an ellipse. In general orthogonal maps may also reflect, and rectangular maps can add or remove dimensions; the same decomposition still applies. <bookmark mark='e'/> In symbols, M equals U Sigma V transpose. The singular values are the square roots of the eigenvalues of M transpose M, and the columns of V are its eigenvectors.",
+   "spoken": "The spectral theorem is for symmetric matrices. The singular value decomposition is its version for every matrix, square or not. Watch what a two by two matrix does to the unit circle. First, an orthogonal matrix V transpose rotates two special perpendicular directions onto the axes. Then a diagonal matrix stretches along the axes, by the singular values. Then another orthogonal matrix, U, rotates the result. The circle has become an ellipse. In general orthogonal maps may also reflect, and rectangular maps can add or remove dimensions; the same decomposition still applies. In symbols, M equals U Sigma V transpose. The singular values are the square roots of the eigenvalues of M transpose M, and the columns of V are its eigenvectors.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/89a547b532893607.wav",
+   "duration": 49.95,
+   "tokens": 122,
+   "peak": 0.612945556640625,
+   "issues": [],
+   "elapsed": 0.04,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "The decomposition comes from the spectral theorem. <bookmark mark='a'/> M transpose M is symmetric and positive semidefinite, so it's V times the squared singular values times V transpose. <bookmark mark='b'/> Write M as a sum of rank-one pieces, each a singular value times an outer product, largest first. <bookmark mark='c'/> Keep only the first r pieces. <bookmark mark='d'/> The theorem of Carl Eckart and Gale Young, from 1936, says this truncation is the best possible rank-r approximation to M, and its squared error is the sum of the squared singular values you threw away.",
+   "spoken": "The decomposition comes from the spectral theorem. M transpose M is symmetric and positive semidefinite, so it's V times the squared singular values times V transpose. Write M as a sum of rank-one pieces, each a singular value times an outer product, largest first. Keep only the first r pieces. The theorem of Carl Eckart and Gale Young, from 1936, says this truncation is the best possible rank-r approximation to M, and its squared error is the sum of the squared singular values you threw away.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/ab1d9426de583bd3.wav",
+   "duration": 33.95,
+   "tokens": 86,
+   "peak": 0.477386474609375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Here's what that buys. <bookmark mark='a'/> The World's population density, drawn as a sixty by a hundred matrix: six thousand numbers. <bookmark mark='b'/> Its best rank-one approximation, one column times one row, is a blur. <bookmark mark='c'/> Rank two, five, ten: the island and its regions emerge. <bookmark mark='d'/> At rank twenty-five the picture is all but exact, stored in four thousand numbers instead of six thousand, and every error is exactly the root sum of the discarded squared singular values, as Eckart and Young promised. <bookmark mark='e'/> Most of the matrix's energy sits in a few singular values. That's the idea behind principal components in Part 31, and behind the sparse and low-rank methods of Parts 32 and 52.",
+   "spoken": "Here's what that buys. The World's population density, drawn as a sixty by a hundred matrix: six thousand numbers. Its best rank-one approximation, one column times one row, is a blur. Rank two, five, ten: the island and its regions emerge. At rank twenty-five the picture is all but exact, stored in four thousand numbers instead of six thousand, and every error is exactly the root sum of the discarded squared singular values, as Eckart and Young promised. Most of the matrix's energy sits in a few singular values. That's the idea behind principal components in Part 31, and behind the sparse and low-rank methods of Parts 32 and 52.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/fd0b729726bf99e4.wav",
+   "duration": 41.5,
+   "tokens": 110,
+   "peak": 0.654876708984375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "The SVD and the spectral theorem are two views of the same thing in statistics. <bookmark mark='a'/> Take the SVD of the centred data matrix. <bookmark mark='b'/> Then the sample covariance, X c transpose X c over n minus one, is V times the squared singular values over n minus one times V transpose: its eigenvectors are the right singular vectors, and its eigenvalues the scaled squared singular values. <bookmark mark='c'/> For the families the two computations agree, and the first principal axis carries 81 percent of the total variance. Many implementations compute principal components directly from the SVD of the data for numerical stability. Covariance eigensolvers are also used when their size and conditioning make them suitable.",
+   "spoken": "The SVD and the spectral theorem are two views of the same thing in statistics. Take the SVD of the centred data matrix. Then the sample covariance, X c transpose X c over n minus one, is V times the squared singular values over n minus one times V transpose: its eigenvectors are the right singular vectors, and its eigenvalues the scaled squared singular values. For the families the two computations agree, and the first principal axis carries 81 percent of the total variance. Many implementations compute principal components directly from the SVD of the data for numerical stability. Covariance eigensolvers are also used when their size and conditioning make them suitable.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/551510e4c19b04ba.wav",
+   "duration": 46.2,
+   "tokens": 112,
+   "peak": 0.682952880859375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats4/en/SVD_motion/result.json",
+ "input_sha256": "8e83f51be20365b7289156cf8425f4919f27105b0918ea5af17f5cc2f4747c84"
+}

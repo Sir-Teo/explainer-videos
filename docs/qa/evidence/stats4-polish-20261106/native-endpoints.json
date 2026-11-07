@@ -1,0 +1,72 @@
+{
+  "fingerprint": "92b8415f2c79c842113e3bd44ff35fb833b7f9351aeeaa82551fca1d59c53bac",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Vectors",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 39
+      },
+      "input_record": "renders/qa/native1080/stats4/en/Vectors/result.json",
+      "input_sha256": "7b67bca2ad57584b518292a19933100a394c8c36b1ce55ee3c3a32d2e68d6ea5"
+    },
+    {
+      "scene": "Projection",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 34
+      },
+      "input_record": "renders/qa/native1080/stats4/en/Projection/result.json",
+      "input_sha256": "3bdb5c3891c860ff3d845d987b6edc1782722a1d1d2efde8f768971789d70a09"
+    },
+    {
+      "scene": "Spectral",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 23
+      },
+      "input_record": "renders/qa/native1080/stats4/en/Spectral/result.json",
+      "input_sha256": "0e01144bf34f29427ec3c2393204bfab30d18a9bd497360ee1dbeaf57eaa78a6"
+    },
+    {
+      "scene": "SVD",
+      "status": "needs-review",
+      "frames": 17,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 29
+      },
+      "input_record": "renders/qa/native1080/stats4/en/SVD/result.json",
+      "input_sha256": "da677c77970c9092dd3b43ce543a98bed9502bc991f342c86272cbba97bfffff"
+    },
+    {
+      "scene": "Blocks",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 38
+      },
+      "input_record": "renders/qa/native1080/stats4/en/Blocks/result.json",
+      "input_sha256": "c6a5159ba643e4d9d9552b7103a89c5589ee908ef4662041fe241921ed4f793d"
+    },
+    {
+      "scene": "Numerics",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 41
+      },
+      "input_record": "renders/qa/native1080/stats4/en/Numerics/result.json",
+      "input_sha256": "2ebb315d69a221cd0e04e1cbc4bfe9dfb7d8784d279de64514fd23c87eeb1f2d"
+    }
+  ]
+}
