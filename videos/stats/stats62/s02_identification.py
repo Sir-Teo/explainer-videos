@@ -26,7 +26,7 @@ class Identification(LectureMixin, VoiceoverScene):
             "compatible with the graph. <bookmark mark='d'/> If so, it can be estimated; if not, no amount of data from that "
             "graph will determine it.",
             [(r"\text{back door}", r":", r"P(y \mid do(x)) = \textstyle\sum_z P(y \mid x, z)P(z)", 40),
-             (r"\text{hidden confounder}", r":", r"\text{no blocking set}", 40),
+             (r"\text{hidden confounder}", r":", r"\text{a measured blocking set may not exist}", 40),
              (r"\text{identified}", r":", r"P(y \mid do(x)) = f(P_{\text{obs}}) \ \text{for every compatible model}", 38),
              (r"\text{or not}", r":", r"\text{two models, \ same data, \ different effects}", 40)],
             [r"Part 36", r"the usual failure", r"a functional", r"non-identification"],
@@ -77,12 +77,7 @@ class Identification(LectureMixin, VoiceoverScene):
 
     def docalculus(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Both criteria are special cases of Pearl's do-calculus, three rules for rewriting "
-            "expressions with do. <bookmark mark='b'/> Rule one inserts or deletes observations, rule two exchanges an action "
-            "for an observation, and rule three inserts or deletes actions, each when a d-separation holds in a modified "
-            "graph. <bookmark mark='c'/> An effect is identified if a sequence of rules removes every do. <bookmark "
-            "mark='d'/> The rules are complete: Yimin Huang and Marco Valtorta, and Ilya Shpitser and Pearl, proved in 2006 "
-            "that if the rules cannot do it, nothing can.",
+            "<bookmark mark='a'/> The do-calculus has rules for transforming interventional probability expressions. <bookmark mark='b'/> They insert or remove observations, exchange actions and observations, or insert and remove actions under graphical separation conditions. <bookmark mark='c'/> A derivation that removes the intervention operators expresses the target through observed laws, subject to support conditions. <bookmark mark='d'/> Completeness results concern the specified nonparametric acyclic latent-variable graphical model and available observational distribution. They do not settle every causal question under arbitrary structural restrictions or additional data sources.",
             [(r"\text{rule 1}", r":", r"\text{insert or delete observations}", 40),
              (r"\text{rule 2}", r":", r"\text{exchange an action and an observation}", 40),
              (r"\text{rule 3}", r":", r"\text{insert or delete actions}", 40),
@@ -92,12 +87,7 @@ class Identification(LectureMixin, VoiceoverScene):
 
     def id_algorithm(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The search for a sequence is automated by Jin Tian and Pearl's ID algorithm. <bookmark "
-            "mark='b'/> It decomposes the graph into c-components, sets of variables joined by hidden confounding, and "
-            "identifies each piece's distribution separately. <bookmark mark='c'/> When it fails, it returns a hedge, a "
-            "structure that proves non-identification: two models agreeing on all observed laws but disagreeing on the "
-            "effect. <bookmark mark='d'/> So for any graph with hidden variables, the question 'is this effect identified?' "
-            "has a mechanical, complete answer, and an estimator follows from the formula it returns.",
+            "<bookmark mark='a'/> Identification algorithms automate this graphical problem, building on Tian, Pearl and Shpitser. <bookmark mark='b'/> In a latent-projection graph they decompose bidirected districts, traditionally called c-components. <bookmark mark='c'/> A hedge can certify nonidentification of an intervention distribution in this model class. Such obstructions need not contain a literal two-node bow. <bookmark mark='d'/> An identified functional still needs positivity, estimation assumptions and a suitable statistical procedure; graphical identification alone does not promise an efficient or regular estimator.",
             [(r"\text{ID algorithm}", r":", r"\text{Tian \& Pearl (2002); \ Shpitser \& Pearl (2006)}", 38),
              (r"\text{c-components}", r":", r"\text{groups joined by hidden confounders}", 40),
              (r"\text{failure}", r":", r"\text{a hedge: \ a proof of non-identification}", 40),
@@ -122,11 +112,7 @@ class Identification(LectureMixin, VoiceoverScene):
 
     def bow(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The smallest unidentified graph is the bow: A causes Y, and a hidden U causes both. "
-            "<bookmark mark='b'/> Take two models. In one, A has no effect and U makes A and Y agree; in the other, A has a "
-            "strong effect and U does nothing. <bookmark mark='c'/> They can produce exactly the same joint law of A and Y, "
-            "so no amount of observational data separates them. <bookmark mark='d'/> Every non-identified graph contains a "
-            "structure like this, which is what the ID algorithm's hedge certifies.",
+            "<bookmark mark='a'/> The smallest unidentified graph is the bow: A causes Y, and a hidden U causes both. <bookmark mark='b'/> Take two models. In one, A has no effect and U makes A and Y agree; in the other, A has a strong effect and U does nothing. <bookmark mark='c'/> They can produce exactly the same joint law of A and Y, so no amount of observational data separates them. <bookmark mark='d'/> More general hedge structures can certify nonidentification; a literal bow is only the simplest example.",
             [(r"\text{bow}", r":", r"A \to Y, \ \ A \leftarrow U \to Y", 40),
              (r"\text{model 1}", r":", r"\text{no effect, \ strong confounding}", 40),
              (r"\text{model 2}", r":", r"\text{strong effect, \ no confounding}", 40),

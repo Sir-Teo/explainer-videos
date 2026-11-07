@@ -20,16 +20,11 @@ class Discovery(LectureMixin, VoiceoverScene):
 
     def pc(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Every chapter so far took the graph as given. Peter Spirtes and Clark Glymour's PC "
-            "algorithm, from 1991, learns it from conditional independences. <bookmark mark='b'/> Start with every pair "
-            "joined. Remove an edge between two variables as soon as some set of their neighbours makes them independent. "
-            "<bookmark mark='c'/> Then orient the colliders: if X and Z are not adjacent, both are adjacent to Y, and Y was "
-            "not in the set that separated them, the pattern is X into Y out of Z. <bookmark mark='d'/> Under faithfulness, "
-            "and with correct tests, it recovers what can be recovered.",
+            "<bookmark mark='a'/> Constraint-based causal discovery uses conditional independences under a causal model. <bookmark mark='b'/> Our PC-stable skeleton implementation freezes the adjacency at each conditioning depth and considers neighbor sets from both endpoints. It no longer truncates the search at three variables. Gaussian Fisher-z tests are approximations here. <bookmark mark='c'/> Full PC can orient an unshielded triple as X into Y and Z into Y when Y is absent from the relevant separating set, then apply further orientation rules. This numerical implementation computes only the skeleton, not a CPDAG. <bookmark mark='d'/> Recovery requires an acyclic causally sufficient Markov and faithful model, appropriate testing assumptions and sufficient data. A learned edge is not automatically an established causal arrow.",
             [(r"\text{skeleton}", r":", r"\text{remove } i - j \text{ if } X_i \perp X_j \mid X_S \text{ for some } S", 38),
              (r"\text{tests}", r":", r"\text{Fisher's } z \text{ on partial correlations}", 40),
              (r"\text{colliders}", r":", r"X - Y - Z, \ Y \notin S_{XZ} \Rightarrow X \to Y \leftarrow Z", 40),
-             (r"\text{guarantee}", r":", r"\text{under faithfulness, \ correct tests}", 40)],
+             (r"\text{guarantee}", r":", r"\text{acyclic, sufficient Markov/faithful model + valid CI tests}", 40)],
             [r"Spirtes \& Glymour (1991)", r"Part 31's partial correlations", r"v-structures", r"consistency"],
             colors=[(0, IDC)])
 
@@ -54,7 +49,7 @@ class Discovery(LectureMixin, VoiceoverScene):
             f"coincidences of parameters. <bookmark mark='b'/> A coincidence: X affects Y directly with weight one, and "
             f"through M with weight one times minus one. The paths cancel. <bookmark mark='c'/> In five thousand simulated "
             f"units the correlation of X and Y is {say(d['cancel_corr'], 3)}: PC would remove the edge X to Y. <bookmark "
-            f"mark='d'/> Exact cancellation has probability zero, but Caroline Uhler, Garvesh Raskutti, Peter Bühlmann and "
+            f"mark='d'/> Under generic continuously drawn coefficients exact cancellation has probability zero, but Caroline Uhler, Garvesh Raskutti, Peter Bühlmann and "
             f"Bin Yu showed in 2013 that near-cancellation, which ruins finite-sample tests, is common: strong faithfulness "
             f"fails for a large fraction of graphs.",
             [(r"\text{faithfulness}", r":", r"\text{independences come only from the graph}", 40),
@@ -107,18 +102,11 @@ class Discovery(LectureMixin, VoiceoverScene):
         side = side_groups([
             [(rf"{k} random linear SEMs, \ 10 nodes", WHITE), (r"weights $\pm[0.5, 2]$, \ unit noise", GREY_A)],
             [(rf"red: \ raw data, \ mean {d['vs']:.2f}", NAIVEC), (r"variance grows along the arrows", NAIVEC)],
-            [(rf"green: \ standardized, \ mean {d['vs_std']:.2f}", IDC), (r"the shortcut is gone", IDC)],
+            [(rf"green: \ standardized, \ mean {d['vs_std']:.2f}", IDC), (r"marginal variances tied: \ half credit", IDC)],
             [(rf"PC (Fisher $z$, $\alpha = 0.01$): \ recall {d['recall']:.2f}, \ precision {d['precision']:.2f}", GREY_A)],
         ], width=4.8, pos=(4.1, 0.2, 0))
         with self.voiceover(
-            f"<bookmark mark='a'/> Alexander Reisach, Christof Seiler and Sebastian Weichwald noticed the shortcut in 2021. "
-            f"In simulated linear models, with weights of moderate size and unit noise, each variable's variance tends to "
-            f"grow along the causal order, since it accumulates its ancestors' noise. <bookmark mark='b'/> Here, over "
-            f"{k} random graphs, sorting by variance puts {100 * d['vs']:.0f} percent of ancestral pairs in the right order: "
-            f"a method could find the order by looking at the scale alone. <bookmark mark='c'/> Standardize the data and "
-            f"the fraction drops to {100 * d['vs_std']:.0f} percent, chance, and, they showed, NOTEARS's accuracy collapses with it. <bookmark "
-            f"mark='d'/> The scale-free PC skeleton, for comparison, recovers {100 * d['recall']:.0f} percent of the edges "
-            f"with precision {100 * d['precision']:.0f} percent, either way."
+            "<bookmark mark='a'/> Reisach, Seiler and Weichwald show how simulation scale can reveal causal ordering. Unit-noise linear models with moderately large coefficients often increase variance along causal paths. <bookmark mark='b'/> We now compute the cited implementation's path-based score, aggregating reachable pairs at each path length and giving half credit to equal variances. The raw-data mean is displayed. <bookmark mark='c'/> Standardization makes these marginal variances equal, so this score is exactly one half up to numerical tolerance. A value near point four seven from strict floating-point comparisons was an artifact. Standardization does not remove every possible covariance shortcut. <bookmark mark='d'/> The accompanying precision and recall come from our PC-stable skeletons. We do not run NOTEARS in this simulation; its sensitivity to scale is a separate finding in the cited paper."
         ) as vo:
             self.play(FadeIn(A), Create(half), FadeIn(simulated_tag(r"simulated, \ $n = 2{,}000$ per graph")))
             vo.wait_until("a")
@@ -140,18 +128,13 @@ class Discovery(LectureMixin, VoiceoverScene):
             "mark='e'/> And a learned graph is a hypothesis, to be tested, not a premise for chapter one's formulas.",
             [(r"lessons:", GREY_A),
              (r"identified up to equivalence, \ unless more is assumed", HIDC),
-             (r"benchmarks must be scale-free \ (varsortability)", NAIVEC),
+             (r"benchmarks should diagnose scale and covariance shortcuts", NAIVEC),
              (r"interventions shrink the class", IDC),
              (r"a learned graph is a hypothesis", GOLDC)])
 
     def interventions(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Experiments on the variables themselves break the equivalence. <bookmark mark='b'/> If X "
-            "is set by intervention and Y changes, the arrow runs from X to Y; if Y is set and X does not change, it does "
-            "not run back. <bookmark mark='c'/> Alain Hauser and Peter Bühlmann characterized in 2012 which interventions "
-            "identify which edges, and their greedy search learns from mixed observational and interventional data. "
-            "<bookmark mark='d'/> Modern perturbation screens, which knock down thousands of genes one at a time, supply "
-            "exactly such data, and are now the main testing ground for discovery methods.",
+            "<bookmark mark='a'/> Appropriate interventions can shrink an observational equivalence class. <bookmark mark='b'/> If intervening on X changes Y, it may demonstrate a total causal influence through a path; it does not by itself prove a direct X-to-Y edge. A null change can also reflect cancellation, the chosen intervention or inadequate power. <bookmark mark='c'/> Interventional-equivalence theory specifies what can be oriented under particular intervention targets and structural assumptions. <bookmark mark='d'/> Gene perturbation screens provide useful tests, but intervention specificity, hidden variables and measurement errors remain relevant.",
             [(r"\text{intervene on } X", r":", r"\text{does } Y \text{ change?}", 40),
              (r"\text{orients}", r":", r"\text{edges an observational class cannot}", 40),
              (r"\text{theory}", r":", r"\text{interventional equivalence classes}", 40),

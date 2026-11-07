@@ -20,12 +20,12 @@ class OpenProblems(LectureMixin, VoiceoverScene):
         body = [
             [r"a blocking set exists", r"the do-calculus, \ the front door", r"identification, \ or a hedge"],
             [r"no hidden confounding", r"a sensitivity model", r"bounds as $\Lambda$ grows"],
-            [r"the confounder is measured", r"two proxies", r"proximal identification"],
+            [r"the confounder is measured", r"two proxies + bridge/completeness", r"proximal identification"],
             [r"no interference", r"an exposure mapping", r"direct and spillover effects"],
             [r"one treatment, \ one time", r"Q-learning, \ the g-formula", r"optimal regimes"],
             [r"a known graph", r"discovery, \ with assumptions", r"an equivalence class"],
             [r"the same population", r"selection diagrams", r"transported effects"],
-            [r"a long wait", r"a surrogate index", r"early, \ if surrogacy holds"],
+            [r"a long wait", r"a surrogate index", r"early, \ if surrogacy, comparability and support hold"],
         ]
         cols = [GREY_B, IDC, HIDC, IDC, TRTC, TRTC, HIDC, IDC, GOLDC]
         tab = table_rows([hdr] + body, font_size=24, col_buff=0.7, row_buff=0.25, colors=cols).move_to([0, 0.1, 0])
@@ -63,11 +63,7 @@ class OpenProblems(LectureMixin, VoiceoverScene):
 
     def op_equilibrium(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Problem two: interference at scale. <bookmark mark='b'/> A job-training programme that "
-            "helps its participants may hurt non-participants competing for the same jobs; a price change ripples through a "
-            "market. <bookmark mark='c'/> These general-equilibrium effects are interference with everyone, beyond any "
-            "exposure mapping, and experiments at the level of whole markets are rare. <bookmark mark='d'/> Identifying "
-            "equilibrium effects from partial experiments and observational networks, with guarantees, is open.",
+            "<bookmark mark='a'/> Problem two: interference at scale. <bookmark mark='b'/> A job-training programme that helps its participants may hurt non-participants competing for the same jobs; a price change ripples through a market. <bookmark mark='c'/> These general-equilibrium effects are interference with everyone, beyond simple local exposure mappings, and experiments at the level of whole markets are rare. <bookmark mark='d'/> Identifying equilibrium effects from partial experiments and observational networks, with guarantees, is open.",
             [(r"\text{problem 2}", r":", r"\text{general equilibrium}", 40),
              (r"\text{examples}", r":", r"\text{labour markets, \ prices}", 40),
              (r"\text{beyond}", r":", r"\text{any local exposure mapping}", 40),
@@ -91,11 +87,7 @@ class OpenProblems(LectureMixin, VoiceoverScene):
 
     def op_discovery(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Problem four: discovery with hidden variables, in finite samples. <bookmark mark='b'/> With "
-            "latent confounders the output is a still larger class, from the FCI algorithm, and the tests multiply. "
-            "<bookmark mark='c'/> Uniform consistency, valid confidence statements for an edge, is impossible under plain "
-            "faithfulness, as James Robins and co-authors showed in 2003; strong faithfulness rescues it but is often false. "
-            "<bookmark mark='d'/> Honest uncertainty quantification for learned causal graphs is open.",
+            "<bookmark mark='a'/> Hidden variables and finite samples complicate discovery. <bookmark mark='b'/> FCI describes a broader equivalence class using partial ancestral graphs under its assumptions. <bookmark mark='c'/> Plain faithfulness does not by itself ensure uniformly consistent discovery as models approach near-cancellation. This does not imply that all honest confidence sets are impossible: some can be wide or uninformative, and stronger model classes admit more specific results. <bookmark mark='d'/> Useful, scalable uncertainty statements under plausible model restrictions remain an active area, alongside existing restricted-class methods.",
             [(r"\text{problem 4}", r":", r"\text{discovery with latent variables}", 40),
              (r"\text{FCI}", r":", r"\text{a larger equivalence class}", 40),
              (r"\text{impossibility}", r":", r"\text{no uniform consistency under faithfulness}", 38),
@@ -113,7 +105,7 @@ class OpenProblems(LectureMixin, VoiceoverScene):
             "questions about large models.",
             [(r"\text{problem 5}", r":", r"\text{causal representation learning}", 40),
              (r"\text{question}", r":", r"\text{learn the causal variables themselves}", 40),
-             (r"\text{known}", r":", r"\text{identifiable with interventions}", 40),
+             (r"\text{known}", r":", r"\text{specified intervention/environment models can identify representations}", 40),
              (r"\text{open}", r":", r"\text{when learned variables are causal}", 40)],
             [r"beyond given variables", r"Sch\"olkopf et al. (2021)", r"Part 60's environments", r"Part 64"],
             colors=[(3, NAIVEC)])

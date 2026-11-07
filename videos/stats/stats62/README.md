@@ -1,113 +1,50 @@
 # Statistics, Built — Part 62: Frontiers of Causal Inference
 
-Part 62 of a sixty-five-part course in statistics, from a first course to a PhD (see [the series plan](../README.md)
-and [the syllabus](../SYLLABUS.md)), and the seventh part of Stage V, the research frontier.
+Part 62 of [the 65-part course](../README.md). It studies identification, sensitivity, proximal methods, interference, policies and regimes, discovery, transport and surrogates. Each replaces an assumption with other explicit assumptions.
 
-It opens with the HIV-CAUSAL Collaboration (Cain et al., *Ann. Intern. Med.* 2011). The question was when to start
-combined antiretroviral therapy: as soon as the CD4 count falls below 500, below 350, or below 200? It was answered
-from observational data on 20,971 people.
-- **The emulation.** Against starting at 500, the hazard ratios for death were 1.01 (0.84–1.22) for 350 and 1.20
-  (0.97–1.48) for 200. For AIDS or death they were 1.38 (1.23–1.56) and 1.90 (1.67–2.15).
-- **The trial.** INSIGHT START (*NEJM* 2015) randomized 4,685 people with CD4 > 500 to immediate or deferred therapy.
-  It was stopped early, with HR 0.43 for serious AIDS and non-AIDS events.
+The HIV-CAUSAL hook distinguishes **20,971 eligible adults from 8,392 analyzed after CD4 declined into the 200–499 range**. Its four reported hazard ratios and intervals agree with Cain et al. (2011). Follow-up began below 500, and initiation strategies included a six-month grace period. Death-only intervals containing one do not demonstrate equivalent safety of waiting. START randomized 4,685 adults with CD4>500; its composite of serious AIDS, serious non-AIDS events or all-cause death had HR .43 (.30–.62). Its interim treatment recommendation in 2015 broadly supported earlier therapy, while its population, regimes and endpoints differed from the emulation. Agreement does not validate every observational assumption.
 
-The part asks what can be identified and estimated when the textbook assumptions fail:
-- identification theory:
-  - clone, censor and weight for regimes;
-  - the front door (Pearl 1995) on a simulation, the bow graph's non-identification, and the napkin;
-  - the do-calculus and its completeness (Huang & Valtorta; Shpitser & Pearl 2006), the ID algorithm and hedges;
-  - Balke–Pearl bounds, and efficient front-door estimation (Fulcher et al. 2020);
-- sensitivity and partial identification:
-  - Manski's bounds;
-  - Tan's (2006) marginal sensitivity model with Zhao, Small & Bhattacharya's (2019) sharp bounds, on LaLonde's NSW
-    data against PSID controls, with the bootstrap and benchmarking;
-  - Rosenbaum, E-values, Cinelli–Hazlett, and Dorn & Guo;
-- proximal causal inference (Miao, Geng & Tchetgen Tchetgen 2018; Tchetgen Tchetgen et al. 2020):
-  - the bridge function, proximal 2SLS, and negative controls (Lipsitch et al. 2010);
-  - weak proxies, and doubly robust and nonparametric versions (Cui et al. 2023);
-- interference (Aronow & Samii 2017):
-  - SUTVA's two halves, and exposure mappings on a random geometric network, shown in the new exposure map;
-  - vaccine trials' direct and indirect effects (Halloran & Struchiner);
-  - cluster and saturation designs, and approximate neighbourhood interference (Leung 2022);
-- policy learning (Kitagawa & Tetenov 2018; Athey & Wager 2021):
-  - EWM with AIPW scores, and the winner's curse of the in-sample value, with sample splitting as the fix;
-  - inference on winners (Andrews, Kitagawa & McCloskey 2024), off-policy evaluation, and policy trees;
-- dynamic treatment regimes:
-  - the g-formula (Robins 1986), Q-learning on a two-stage SMART (Murphy 2003), and g- and A-learning;
-  - target-trial emulation (Hernán & Robins);
-- causal discovery:
-  - PC (Spirtes & Glymour 1991), Markov equivalence, faithfulness and its fragility (Uhler et al. 2013);
-  - LiNGAM, additive noise and equal variances, and interventions (Hauser & Bühlmann 2012);
-  - NOTEARS (Zheng et al. 2018) and varsortability (Reisach, Seiler & Weichwald 2021);
-- transportability (Bareinboim & Pearl 2016):
-  - selection diagrams, inverse-odds and doubly robust transport (Dahabreh et al. 2019), and data fusion;
-  - causally interpretable meta-analysis, and Meager's (2019) microcredit sites;
-- surrogates:
-  - the surrogate paradox (VanderWeele 2013) and CAST, and principal surrogates (Frangakis & Rubin 2002);
-  - the surrogate index (Athey, Chetty, Imbens & Kang 2019), valid and with a bypass;
-- five open problems.
+## Audited examples
 
-It keeps two promises:
-- **Part 36** assumed every confounder was measured. Chapters 2–3 bound the effect without that assumption and
-  replace it with proxies.
-- **Part 61** moved distributions without a causal model. Chapter 8 says when an effect itself can be transported.
+[Local checked kernels](checked.py) drive this part. The [shared educational statkit](../../../explainer/stats/kit/frontier.py) remains available; its earlier approximations are not silently presented as the audited implementation. ExposureMap is the visual instrument.
 
-**Built in this part:**
-- **`statkit.frontier`** ([`explainer/stats/kit/frontier.py`](../../../explainer/stats/kit/frontier.py)), tested in
-  `tests/test_stats_kit_frontier.py`:
-  - the front-door formula and criterion (on statkit.causal's `DAG`);
-  - marginal-sensitivity bounds by sorting, checked against brute force;
-  - 2SLS with sandwich errors, proximal 2SLS, and the naive adjusted OLS;
-  - Aronow–Samii exposures, simulated exposure probabilities, and Hájek contrasts;
-  - AIPW scores, threshold EWM, and policy values;
-  - two-stage Q-learning;
-  - the PC skeleton with Fisher-z tests, random linear SEMs, and varsortability;
-  - the surrogate index.
-- **The exposure map** (`ExposureMap` in `explainer/stats/viz.py`), the part's instrument. It draws a network
-  experiment, with units joined by their links and coloured by their four exposure conditions, so spillovers can be
-  seen in the design.
+- **Front door:** verify all four treatment–mediator cells before evaluating the binary formula. Causal interpretation requires the specified graph, positivity and consistency. Completeness of do-calculus and ID is scoped to the relevant acyclic nonparametric latent-variable model, not every causal question. Hedges need not be literal bow graphs.
+- **Sensitivity:** sorting computes exact extrema of the *finite Hajek weight box*. These relaxed bounds omit conditional compatibility constraints and are not the population-sharp Tan identified set. The propensity fit is checked, 8.14% of probabilities are clipped to [.01,.99], and 200 treatment-stratified bootstrap resamples refit scaling and the propensity model. Endpoint intervals are illustrative bootstrap approximations, not a universal causal ATE certificate. Experimental earnings differences are estimated benchmarks, not known truths. No uncomputed strongest-confounder or motivation benchmark is claimed.
+- **Proximal 2SLS:** apply the instrument projection without an n-by-n matrix, check identification and use HC1 sandwich errors. Save first-stage robust F, partial R-squared and projected-design condition numbers. Proxy exclusions, bridge existence/completeness, latent exchangeability and overlap are essential; two correlated proxies alone do not identify an effect.
+- **Interference:** use exact Bernoulli probabilities by degree. Isolated units retain zero probability for neighbor-treated exposures. The spillover contrast uses the 390 nonisolates; direct-alone comparisons use common support among all 400 units. Under the stated any-treated-neighbor model, a unit-specific Horvitz–Thompson estimator **can** estimate global all-treated versus none. Its true mean is 3 minus the isolated fraction, 2.975. Repeated-assignment SDs also include fresh outcome noise and are not IID standard errors.
+- **Policy evaluation:** remove leakage from two-fold nuisance fitting into the learned policy. Each run now has **400 policy observations plus 400 independent nuisance-training outcomes**, with known randomization probability .5. Learn on 200 policy units and evaluate on the other 200 conditional on the independent nuisance fit. Optimize whole tied groups and include constant rules. Coverage includes equality at zero-width intervals for an exactly zero policy gain. The target is the randomly learned rule's population gain, not the oracle's gain. The representative chart optimizes its displayed upper-threshold subfamily; the coverage experiment uses both directions.
+- **Dynamic regimes:** retain full stage-two history, including the first-treatment-by-initial-state reward. A linear first-stage Q remains a working approximation. Evaluate all five policies on 200,000 common fresh simulation states with final outcome noise integrated out; save value and paired-difference Monte Carlo errors conditional on one fitted regime. Randomization supplies sequential exchangeability, while consistency, positivity, model correctness and follow-up still matter.
+- **Discovery:** compute a PC-stable skeleton with frozen adjacency at each depth, neighbor sets from both endpoints and no three-variable cutoff. This does not implement CPDAG orientation. Match the cited varsortability implementation's Boolean reachability-by-path-length aggregation and half-credit ties; standardization gives **0.50**, rather than floating-point artifacts. NOTEARS is not run in this demonstration, and standardization need not remove every covariance shortcut. Interventions can show ancestral influence without proving a direct edge.
+- **Transport:** use known simulated selection odds as an oracle example. The target is each repetition's nonparticipant population; its true average effect is stored per repetition. The previous comparison used a different whole-pool target. A sufficient conditional-effect-invariance set is needed, rather than every conceivable modifier. Selection diagrams and sample-membership indicators play different roles; outcome-level invariance and contrast invariance can differ.
+- **Surrogates:** include index-fit variance from the independent observational sample in a two-sample delta SE. The bypass example violates both surrogacy and cross-sample conditional-mean comparability, rather than isolating one failure. Statistical Prentice conditions are not equivalent to a simplistic all-paths-through-S graph. Principal-stratum average criteria do not assert individual-level causal implications.
 
-**Data.**
-- From the Museum: LaLonde's NSW data (the Dehejia–Wahba treated men, the experimental controls as a benchmark, and
-  the PSID comparison group), and CAST's deaths.
-- The HIV-CAUSAL and START numbers are quoted from the papers.
-- The rest is seeded simulation.
+## Numerical checkpoint
 
-The Coverage Board gains four rows:
+| Example | Revised result |
+|---|---|
+| Relaxed earnings sensitivity | IPW -341.55; exact envelope reaches zero at Lambda 1.08105, experimental benchmark at 1.60662 |
+| Proximal, 600 samples of 1,000 | mean 1.0245, coverage 95.33% (MC SE 0.86 percentage points) |
+| Network, 300 assignment/noise repetitions | direct 2.003, spillover 0.987, global total HT 2.958 versus truth 2.975 |
+| Learned policy, 800 repetitions | in-sample coverage 79.12%; independent split 93.62%; biases +0.07468 and +0.00066 |
+| One learned two-stage regime | value 0.86494 (MC SE 0.00449); oracle 0.88311 |
+| PC-stable skeleton, 30 graphs | recall 0.7613, precision 0.9352; raw path-based variance-order score 0.9762 |
+| Oracle-odds transport, 200 trials | estimate 1.4901; mean nonparticipant truth 1.5239; error -0.0338 (MC SE 0.0147) |
+| Surrogate index | valid 1.6439 (SE 0.1193), truth 1.55; bypass 1.5799 (SE 0.1200), truth .55 |
 
-| Method | Setting | Nominal | Achieved | Verdict |
-|---|---|---|---|---|
-| OLS adjusting for both proxies | hidden confounder, n = 1,000 | 95% | 0.0% | broken |
-| Proximal 2SLS | hidden confounder, n = 1,000 | 95% | 95.3% | kept |
-| Policy value, learned and evaluated in-sample | EWM, AIPW scores, n = 400 | 95% | 80.9% | broken |
-| Policy value, learned on one half, evaluated on the other | EWM, AIPW scores, n = 400 | 95% | 95.3% | kept |
+The transport error is retained rather than described as exact recovery; normalized weights can have finite-sample bias. Policy Wald coverage is a finite Monte Carlo finding and an asymptotic approximation, not distribution-free finite-sample coverage. All four Board rows record empirical Monte Carlo standard errors.
 
-## Build it
+NSW data were independently compared again to the Matching and MatchIt distributions: all covariates agree exactly, stored earnings within half a cent. The comparison group follows MatchIt's documented PSID label; the original historical panel records and full LaLonde specification were not independently reconstructed. CAST counts are quoted from the primary report verified in Part 58, not from patient-level records.
+
+## Build and verification
 
 ```bash
-OMP_NUM_THREADS=1 python -m videos.stats.stats62.compute   # once (under a minute)
-python tools/build.py stats62 -q l                         # fast 480p preview
-python tools/build.py stats62                              # 1080p30 -> renders/stats62.mp4
-python tools/qa_scene.py stats62 Sensitivity
+OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m videos.stats.stats62.compute --force
+pytest -q tests/test_stats62_checked.py tests/test_stats_kit_frontier.py
+python tools/build.py stats62 -q l
 python tools/lecture_length.py stats62 --floor 50
 ```
 
-## Chapters
-
-| # | Chapter | Numbers |
-|---|---|---|
-| 0 | When to start | HIV-CAUSAL: HR (vs 500) 1.01, 1.20 for death; 1.38, 1.90 for AIDS or death; START: HR 0.43 |
-| 1 | Identification | 20,000 units, hidden binary U: naive 2.83, front door 1.01, truth 1 |
-| 2 | Sensitivity | NSW: experiment 1,794; 185 treated vs 429 PSID: raw −635, IPW −342; sharp bounds (−1,302, 643) at Λ = 1.25, (−2,060, 1,474) at 1.5, (−2,679, 2,195) at 1.75; zero reached at Λ ≈ 1.09, the experiment at Λ ≈ 1.61 |
-| 3 | Proximal | 600 samples of 1,000: naive mean 1.81, 95% coverage 0%; proximal mean 1.02 (sd 0.18), coverage 95.3% |
-| 4 | Interference | 400 units, mean degree 4.3, p = 0.3, 300 assignments: direct 1.98 ± 0.30 (truth 2), spillover 1.01 ± 0.19 (truth 1), naive 2.00 ± 0.14 |
-| 5 | Policy | τ(x) = 0.25x − 0.1, n = 400, 800 samples: best gain 0.0225; in-sample bias +0.073, coverage 80.9%; split coverage 95.3%, bias −0.0001 |
-| 6 | Regimes | two-stage SMART, n = 1,000: values never 0.00, always −0.21, stage 2 only 0.35, Q-learning 0.87, true thresholds 0.89 |
-| 7 | Discovery | 30 random 10-node SEMs: PC recall 0.81, precision 0.85; varsortability 0.97 raw, 0.47 standardized; cancelling paths: corr −0.011 |
-| 8 | Transport | 200 trials, mean age 34 vs target 50: trial 0.69 (sd 0.09), transported 1.51 (sd 0.20; ESS ≈ 203 of 743), truth 1.49 |
-| 9 | Surrogates | valid: index 1.64 ± 0.12 vs truth 1.55; bypass: 1.58 ± 0.12 vs truth 0.55 |
-| 10 | Open problems | — |
-| 11 | Outro | — |
+All 10 inputs regenerated; **20 checks pass** (14 audited local and six legacy). All narration/list bookmarks match their rows. Estimated English narration is 51.3 minutes. [QA evidence](../../../docs/qa/evidence/stats62-polish-20261107/README.md). English sampled visual verification is pending. Chinese narration/caption tables, continuous listening/playback and final narrated masters remain open; this checkpoint is not bilingual production approval.
 
 ## Sources
 
@@ -158,50 +95,13 @@ python tools/lecture_length.py stats62 --floor 50
 
 ## Problems and solutions
 
-1. **The front door from two back doors.**
-   - A → M is unconfounded, so P(m | do(a)) = P(m | a).
-   - For M → Y, A blocks the back door M ← A ← U → Y, so P(y | do(m)) = Σ_{a′} P(y | m, a′)P(a′).
-   - Since M intercepts every directed path, P(y | do(a)) = Σ_m P(m | do(a)) P(y | do(m)), which gives the formula.
-2. **The weight box.**
-   - Write the true weight as 1/e(x, u) = 1 + (1 − e(x, u))/e(x, u), that is, one plus the odds against treatment.
-   - The model bounds those odds between Λ⁻¹ and Λ times (1 − e(x))/e(x), so the weight lies in
-     [1 + (1/e − 1)/Λ, 1 + (1/e − 1)Λ].
-3. **Proximal 2SLS.**
-   - With Y = b₀ + b_A A + γU + ε and W = U + η, write Y = b₀ + b_A A + γW + (ε − γη).
-   - The instruments (1, A, Z) are uncorrelated with ε − γη, because Z and A are independent of η given U, and of ε.
-   - They are correlated with W through U. So the moment conditions hold and 2SLS is consistent for (b₀, b_A, γ).
-4. **Naive difference under Bernoulli assignment.**
-   - E[Y | z_i = 1] − E[Y | z_i = 0] = 2 + (P(nb treated | z_i = 1) − P(nb treated | z_i = 0)) × 1.
-   - Under independent assignment the two probabilities are equal, so the naive difference estimates the direct effect
-     2 and is silent about the spillover.
-5. **The winner's curse.**
-   - For every π, V̂(π) ≤ max_{π′} V̂(π′). Take expectations: V(π) = E V̂(π) ≤ E max V̂.
-   - Maximizing over π gives max V ≤ E max V̂. The gap E[V̂(π̂)] − V(π̂) is positive whenever estimation noise
-     affects which π wins.
-6. **Inverse odds.**
-   - With p(x) = P(trial | x), the trial density is f_T(x) ∝ p(x)f(x) and the target density is f_G(x) ∝ (1 − p(x))f(x).
-   - So f_G/f_T ∝ (1 − p)/p, and weighting trial units by the odds reproduces the target's covariate law.
-
-## Glossary
-
-- **Identification.** Identification; back door; front door; do-calculus; completeness; ID algorithm; c-component;
-  hedge; bow graph; napkin.
-- **Bounds and proxies.**
-  - Partial identification; Manski bounds; Balke–Pearl bounds.
-  - Marginal sensitivity model; Λ; benchmarking.
-  - Proximal inference; bridge function; negative control.
-- **Beyond SUTVA.** Interference; exposure mapping; direct and spillover effects; versions of treatment; saturation
-  design.
-- **Decisions.**
-  - Policy; value; regret; EWM; winner's curse; off-policy evaluation.
-  - Dynamic regime; g-formula; Q-learning; g-estimation; SMART; target trial; clone–censor–weight.
-- **Graphs and populations.**
-  - PC algorithm; Markov equivalence; faithfulness; LiNGAM; NOTEARS; varsortability.
-  - Selection diagram; transportability; data fusion.
-  - Surrogate; surrogate paradox; principal surrogate; surrogate index.
+1. **Front door.** Under the specified graph and positivity, identify P(m|do(a))=P(m|a); identify P(y|do(m)) by averaging P(y|m,a') over P(a'); combine through the mediator, which intercepts every directed treatment–outcome path. The formula does not follow from mediation alone without the back-door conditions.
+2. **Weight box.** Inverse propensity is one plus the odds against the observed arm. Bounding the full-versus-measured propensity odds ratio in [1/Lambda,Lambda] yields [1+(1/e-1)/Lambda,1+(1/e-1)Lambda]. These necessary bounds alone omit conditional compatibility constraints; optimizing the box is a relaxation of the population model.
+3. **Linear proximal moments.** If Y=b0+bA A+gamma U+epsilon and W=U+eta, then Y=b0+bA A+gamma W+(epsilon-gamma eta). Under valid proxy noise/exclusion assumptions the instruments (1,A,Z) are orthogonal to that error. A full-rank projected design then yields consistent 2SLS coefficients; the equation and rank condition need to hold, not merely marginal proxy correlation.
+4. **Bernoulli direct effect.** Under the stated exposure model and independent assignments, a unit's neighbors' treatment is independent of its own treatment. Therefore E[Y_i|Z_i=1]-E[Y_i|Z_i=0]=2. Finite arm means have random denominators and possible ratio bias; this identity is not a claim of exact finite-sample Hajek unbiasedness. A spillover contrast requires common positive exposure support.
+5. **Winner's curse.** For a fixed class with unbiased fixed-policy value estimates, Jensen's inequality gives E sup_pi Vhat(pi)>=sup_pi V(pi). Also E V(pihat)<=sup_pi V(pi), so expected selected in-sample optimism is nonnegative. Truly independent evaluation, conditional on independent nuisance training, removes this selection reuse; normal intervals still need distributional/regularity conditions.
+6. **Inverse odds.** Let p(x) be membership in a trial rather than its nonparticipant target in a common population. The two covariate laws are proportional to p(x)f(x) and (1-p(x))f(x); their density ratio is proportional to (1-p)/p. Normalized weighting cancels the constant. Targeting the entire baseline population instead would use inverse selection probabilities, not the same inverse odds. Causal transport additionally needs treatment randomization/exchangeability, consistency, conditional effect invariance and overlap.
 
 ## Where it comes back
 
-- **Part 63**: fair treatment rules and counterfactual fairness.
-- **Part 64**: causal questions about AI systems; learned adjustment sets.
-- **Part 65**: the dissertation's causal chapter.
+Part 63 considers fair decisions and privacy; Part 64 studies causal questions about AI systems; Part 65 revisits research design and causal claims.

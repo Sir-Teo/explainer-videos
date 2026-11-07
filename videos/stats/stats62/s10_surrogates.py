@@ -18,12 +18,7 @@ class Surrogates(LectureMixin, VoiceoverScene):
 
     def problem(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The outcome that matters often takes years: survival, lifetime earnings, a child's "
-            "eventual schooling. Decisions cannot wait. <bookmark mark='b'/> A surrogate is an early measurement standing "
-            "in for the late one: tumour shrinkage for survival, blood pressure for strokes. <bookmark mark='c'/> Part "
-            "thirty-five's Prentice criteria asked that the treatment's whole effect pass through the surrogate. <bookmark "
-            "mark='d'/> That is a strong and untestable condition, and when it fails the result can be not just biased but "
-            "reversed.",
+            "<bookmark mark='a'/> Some important outcomes take years to observe. <bookmark mark='b'/> Early measurements may act as surrogate outcomes, but their predictive association alone does not validate a treatment-effect substitution. <bookmark mark='c'/> Prentice's conditional-independence criterion is a statistical statement about treatment and outcome given the surrogate in a specified setting. It is not simply equivalent to a graph saying all directed causal paths pass through the surrogate; conditioning on a post-treatment variable can change associations. <bookmark mark='d'/> Surrogate validity needs assumptions appropriate to the target treatment, outcome and population, and its failure can cause substantial bias or sign reversal.",
             [(r"\text{goal}", r":", r"\text{the effect on a late outcome } Y", 40),
              (r"\text{surrogate}", r":", r"\text{an early } S \text{ standing in for } Y", 40),
              (r"\text{Prentice}", r":", r"Y \perp T \mid S", 40),
@@ -48,12 +43,7 @@ class Surrogates(LectureMixin, VoiceoverScene):
 
     def index(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Susan Athey, Raj Chetty, Guido Imbens and Hyunseung Kang's surrogate index, from 2019, "
-            "uses many surrogates and two data sets. <bookmark mark='b'/> An observational sample where both the surrogates "
-            "and the long-term outcome are seen: fit the outcome as a function of the surrogates. <bookmark mark='c'/> An "
-            "experiment where only the surrogates are seen: predict the long-term outcome from them, and compare arms. "
-            "<bookmark mark='d'/> Two assumptions: surrogacy, that the treatment works only through the surrogates "
-            "together; and comparability, that the surrogate-to-outcome relation is the same in both samples.",
+            "<bookmark mark='a'/> Susan Athey, Raj Chetty, Guido Imbens and Hyunseung Kang's surrogate index, from 2019, uses many surrogates and two data sets. <bookmark mark='b'/> An observational sample where both the surrogates and the long-term outcome are seen: fit the outcome as a function of the surrogates. <bookmark mark='c'/> An experiment where only the surrogates are seen: predict the long-term outcome from them, and compare arms. <bookmark mark='d'/> Two assumptions: surrogacy, a suitable conditional independence of the long-term outcome and randomized treatment given the surrogates; and comparability, that the surrogate-to-outcome relation is the same in both samples.",
             [(r"\text{observational}", r":", r"\hat g(s) = \hat E[Y \mid S = s]", 40),
              (r"\text{experiment}", r":", r"\hat\tau = \overline{\hat g(S)}_{T = 1} - \overline{\hat g(S)}_{T = 0}", 40),
              (r"\text{surrogacy}", r":", r"Y \perp T \mid S \ \text{(jointly)}", 40),
@@ -82,12 +72,7 @@ class Surrogates(LectureMixin, VoiceoverScene):
             [(rf"bypass: \ {d['bypass']['est']:.2f} vs {d['bypass']['truth']:.2f}", NAIVEC), (r"confidently wrong", NAIVEC)],
         ], width=4.6, pos=(4.1, 0.2, 0))
         with self.voiceover(
-            f"<bookmark mark='a'/> A simulation with two surrogates, the long-term outcome seen only in an observational "
-            f"sample of five thousand, and an experiment of two thousand. <bookmark mark='b'/> The gold bars are the true "
-            f"long-term effects. <bookmark mark='c'/> When surrogacy holds, the index estimates {say(d['valid']['est'], 2)} "
-            f"against a truth of {say(d['valid']['truth'], 2)}. <bookmark mark='d'/> When the treatment also lowers the outcome "
-            f"directly, bypassing the surrogates, the index still says {say(d['bypass']['est'], 2)}, with the same confident "
-            f"interval, while the truth is {say(d['bypass']['truth'], 2)}. Nothing in the data warns of it."
+            "<bookmark mark='a'/> The two-sample simulation observes outcomes and surrogates in five thousand untreated training units and only surrogates in a two-thousand-unit randomized experiment. <bookmark mark='b'/> The gold bars mark the known long-term effects. Standard errors now include both trial variation and fitting the index in the independent training sample, using a linear-model delta approximation. <bookmark mark='c'/> In the valid case the simulated outcome regression is shared across samples and the index estimates the effect reasonably. <bookmark mark='d'/> The bypass case adds a direct treatment effect absent from the untreated training sample. Here both experimental surrogacy and cross-sample conditional-mean comparability fail. The narrow index interval misses the true effect; these observed datasets alone cannot validate the missing long-term response."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated")))
             vo.wait_until("a")
@@ -116,15 +101,10 @@ class Surrogates(LectureMixin, VoiceoverScene):
 
     def principal(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Constantine Frangakis and Donald Rubin's principal surrogates, in 2002, reframe the "
-            "question with potential outcomes. <bookmark mark='b'/> A surrogate is good if, among people whose surrogate "
-            "would be the same under both treatments, the treatment has no effect on the outcome: dissociative effects are "
-            "zero. <bookmark mark='c'/> And among people whose surrogate the treatment changes, the outcome changes too: "
-            "associative effects. <bookmark mark='d'/> These depend on joint potential outcomes, never observed together, so "
-            "principal surrogate evaluation needs extra structure, such as baseline predictors of the surrogate.",
+            "<bookmark mark='a'/> Principal-surrogate approaches define strata by the pair of potential surrogate outcomes. <bookmark mark='b'/> Causal necessity asks about a zero treatment effect, typically a stratum-average effect, among units whose surrogate would not change. <bookmark mark='c'/> Causal sufficiency or associative-effect criteria concern how outcome effects vary with changes in the surrogate; they are not an automatic individual-level implication that every changed surrogate forces a changed outcome. <bookmark mark='d'/> Joint surrogate potential outcomes are not jointly observed, so evaluation needs additional assumptions or information.",
             [(r"\text{principal strata}", r":", r"(S(0), S(1))", 40),
-             (r"\text{dissociative}", r":", r"S(0) = S(1) \Rightarrow \text{no effect on } Y", 40),
-             (r"\text{associative}", r":", r"S(0) \ne S(1) \Rightarrow \text{effect on } Y", 40),
+             (r"\text{dissociative}", r":", r"E[Y(1)-Y(0)\mid S(0)=S(1)]=0\ \text{(a necessity criterion)}", 40),
+             (r"\text{associative}", r":", r"\text{associative strata: \ relate average }Y\text{ effects to }S\text{ changes}", 40),
              (r"\text{but}", r":", r"\text{joint potential outcomes: \ unobserved}", 40)],
             [r"Frangakis \& Rubin (2002)", r"Part 35's strata", r"the good case", r"vaccine correlates"],
             colors=[(1, IDC)])

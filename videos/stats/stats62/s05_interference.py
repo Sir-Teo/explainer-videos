@@ -20,12 +20,7 @@ class Interference(LectureMixin, VoiceoverScene):
 
     def sutva(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Every method so far assumed no interference: a unit's outcome depends only on its own "
-            "treatment, part of Donald Rubin's stable unit treatment value assumption. <bookmark mark='b'/> Vaccines break "
-            "it: my vaccination protects you. So do classrooms, markets, and social networks. <bookmark mark='c'/> With n "
-            "units, each outcome could in principle depend on all two to the n assignments, and nothing is identified. "
-            "<bookmark mark='d'/> Part thirty-five's two-stage design handled groups; networks need a model of which "
-            "neighbours matter.",
+            "<bookmark mark='a'/> Many individual-level analyses assume no interference, although earlier parts already considered group spillovers. <bookmark mark='b'/> Vaccines, classrooms, markets and networks can violate that assumption. <bookmark mark='c'/> With no restriction, one unit has a potential outcome for every assignment vector. A full-support randomized design can identify assignment-specific means in principle, but probabilities may be too small for useful estimation. It is wrong to say that nothing is identified. <bookmark mark='d'/> An exposure model reduces complexity by specifying which features of others' assignments matter.",
             [(r"\text{SUTVA}", r":", r"Y_i(z_1, \dots, z_n) = Y_i(z_i)", 40),
              (r"\text{broken by}", r":", r"\text{vaccines, \ classrooms, \ markets, \ networks}", 40),
              (r"\text{in general}", r":", r"2^n \text{ potential outcomes per unit}", 40),
@@ -35,17 +30,12 @@ class Interference(LectureMixin, VoiceoverScene):
 
     def exposure(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Peter Aronow and Cyrus Samii's exposure mappings, in 2017, supply the model. <bookmark "
-            "mark='b'/> Declare which features of the assignment matter for each unit: here, its own treatment, and whether "
-            "any neighbour is treated. That gives four exposure conditions. <bookmark mark='c'/> Under a known randomized "
-            "design, each unit's probability of each exposure can be computed, by simulating the design. <bookmark "
-            "mark='d'/> Horvitz–Thompson or Hájek weighting by those probabilities, Part eighteen's survey estimators, then "
-            "estimates the mean outcome under each exposure, and contrasts give direct and spillover effects.",
+            "<bookmark mark='a'/> Exposure mappings group assignments assumed to have the same effect on each unit. <bookmark mark='b'/> Here the mapping uses own treatment and whether any neighbor is treated, giving four labels. <bookmark mark='c'/> With independent Bernoulli treatment, probabilities are available exactly from each unit's degree. Isolated units have zero probability of neighbor-treated exposures; pseudocount smoothing cannot create that support. <bookmark mark='d'/> Each contrast must use a common population with positive probabilities for both compared exposures. Our spillover contrast uses nonisolates, while the direct-alone contrast can use all units.",
             [(r"\text{exposure}", r":", r"f(z, i) = (z_i, \ \mathbf 1\{\text{a neighbour treated}\})", 40),
              (r"\text{four conditions}", r":", r"(0, 0), \ (0, 1), \ (1, 0), \ (1, 1)", 40),
              (r"\pi_i(k)", r"=", r"P(f(Z, i) = k) \ \text{under the design}", 40),
              (r"\hat\mu(k)", r"=", r"\textstyle\sum_{i: f = k} Y_i/\pi_i(k) \big/ \sum_{i: f = k} 1/\pi_i(k)", 40)],
-            [r"Aronow \& Samii (2017)", r"a modelling choice", r"by simulation", r"Part 18's H\'ajek"],
+            [r"Aronow \& Samii (2017)", r"a modelling choice", r"exact here; \ simulation for more complex designs", r"Part 18's H\'ajek"],
             colors=[(3, IDC)])
 
     def network(self):
@@ -63,12 +53,7 @@ class Interference(LectureMixin, VoiceoverScene):
                       label(rf"counts: \ {counts[0]}, \ {counts[1]}, \ {counts[2]}, \ {counts[3]}", font_size=22, color=GREY_A))
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.7, 0.1, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The part's instrument, the exposure map. Four hundred units scattered in a square, linked "
-            f"to neighbours within a short distance: about {d['deg']:.0f} each. <bookmark mark='b'/> Each unit is treated "
-            f"with probability three tenths, independently. <bookmark mark='c'/> Colour each unit by its exposure: grey for "
-            f"controls with no treated neighbour, teal for controls with one, orange for treated units alone, gold for "
-            f"treated units with treated neighbours. <bookmark mark='d'/> Every one of the four conditions is well "
-            f"populated, which is what makes the contrasts estimable."
+            "<bookmark mark='a'/> The exposure map shows four hundred units in a geometric network. <bookmark mark='b'/> Treatment is independently assigned with probability three tenths. <bookmark mark='c'/> Colors distinguish the four own-treatment and neighbor-exposure combinations. <bookmark mark='d'/> Observing all four colors somewhere does not establish positivity for every unit. Isolates cannot have a treated neighbor, and the estimand must account for them."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated")))
             vo.wait_until("a")
@@ -87,18 +72,12 @@ class Interference(LectureMixin, VoiceoverScene):
         hdr = [r"estimand", r"truth", r"estimate (mean $\pm$ sd)"]
         rows = [[r"direct: \ treated alone vs control alone", r"2", rf"{m['direct']:.2f} $\pm$ {s['direct']:.2f}"],
                 [r"spillover: \ control with vs without", r"1", rf"{m['spill']:.2f} $\pm$ {s['spill']:.2f}"],
-                [r"total: \ treat everyone vs no one", r"3", r"not from this design"],
+                [r"total HT: \ all treated vs none", rf"{d['truth_total']:.3f}", rf"{m['total']:.2f} $\pm$ {s['total']:.2f}"],
                 [r"naive difference in means", r"?", rf"{m['naive']:.2f} $\pm$ {s['naive']:.2f}"]]
-        tab = table_rows([hdr] + rows, font_size=28, col_buff=0.8, row_buff=0.35, colors=[GREY_B, IDC, IDC, GREY_A, NAIVEC]).move_to([0, 0.5, 0])
+        tab = table_rows([hdr] + rows, font_size=28, col_buff=0.8, row_buff=0.35, colors=[GREY_B, IDC, IDC, IDC, NAIVEC]).move_to([0, 0.5, 0])
         note_ = label(r"$Y_i = Y_i(0) + 2z_i + \mathbf 1\{\text{a neighbour treated}\} + \text{noise}$; \ 300 assignments", font_size=24, color=GREY_A).next_to(tab, DOWN, buff=0.6)
         with self.voiceover(
-            f"<bookmark mark='a'/> Over three hundred random assignments, with a true direct effect of two and a spillover "
-            f"of one. <bookmark mark='b'/> The Hájek direct-effect estimate averages {say(m['direct'], 2)}, <bookmark "
-            f"mark='c'/> and the spillover {say(m['spill'], 2)}. <bookmark mark='d'/> The total effect of treating everyone, "
-            f"three, cannot be estimated from this design: almost no one is untreated with all neighbours treated. "
-            f"<bookmark mark='e'/> The naive difference in means, {say(m['naive'], 2)}, happens to match the direct effect "
-            f"under independent assignment, and says nothing about the spillover: an analysis that ignores interference "
-            f"misses a third of the total effect."
+            "<bookmark mark='a'/> We repeat three hundred randomized assignments and add fresh outcome noise. The table reports means and standard deviations across those repetitions, not independent-observation confidence intervals. <bookmark mark='b'/> The direct-alone Hajek comparison has true effect two on its common support. <bookmark mark='c'/> The spillover comparison has true effect one among nonisolates. <bookmark mark='d'/> The assumed any-treated-neighbor model also permits estimation of the global all-treated-versus-none contrast: use Horvitz-Thompson weights for each unit's corresponding exposure. Its population mean is three minus the isolated fraction, because isolates receive no spillover. A globally all-treated assignment need not be observed. <bookmark mark='e'/> The naive arm difference is near two here under Bernoulli assignment. It does not estimate the spillover or that global total effect."
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(note_), FadeIn(simulated_tag(r"simulated, \ 300 assignments")))
             vo.wait_until("a")
