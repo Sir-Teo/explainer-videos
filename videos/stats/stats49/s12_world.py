@@ -21,21 +21,13 @@ class WorldTest(VoiceoverScene):
     def setup_world(self):
         rows = fit_rows(VGroup(
             label(r"Part 36's observational world: \ 2,000 patients, \ doctors choose who gets the drug", font_size=26),
-            label(r"more often for higher pressure, \ age and BMI: \ confounding \ (propensities 0.2 to 0.98)", font_size=26, color=NUIC),
+            label(r"more often for higher pressure, \ age and BMI: \ confounding \ (pool propensities 0.152 to 0.996)", font_size=26, color=NUIC),
             label(r"the true ATE: \ known, \ from the World's science table", font_size=26, color=TANC),
             label(r"outcomes by 15-nearest neighbours: \ flexible, \ slow, \ biased; \ propensity by logistic regression", font_size=26, color=GRADC),
-            label(r"300 samples; \ nominal 90\% intervals; \ the influence-function SE throughout", font_size=26, color=GREY_A),
+            label(r"300 iid pool samples; \ 90\% reference widths; \ Monte Carlo uncertainty", font_size=26, color=GREY_A),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The final test uses Part thirty-six's observational world: two thousand patients, and "
-            "doctors who decide who gets the blood-pressure drug. <bookmark mark='b'/> They prescribe more often for higher "
-            "pressure, greater age and higher body mass, which also predict the outcome: confounding. Here the doctors are "
-            "a little gentler than in Part thirty-six, so that propensities stay between about point two and point nine "
-            "eight. <bookmark mark='c'/> The World knows every patient's effect, so the true average treatment effect is "
-            "known. <bookmark mark='d'/> The outcome regressions are estimated by fifteen nearest neighbours, a deliberately "
-            "crude learner: flexible, slow and biased, like machine learning in a hurry. The propensity is fitted by logistic "
-            "regression. <bookmark mark='e'/> Three hundred samples, ninety percent intervals, and the influence-function "
-            "standard error for every method."
+            "<bookmark mark='a'/> The final test uses Part thirty-six's observational world: two thousand patients, and doctors who decide who gets the blood-pressure drug. <bookmark mark='b'/> They prescribe more often for higher pressure, greater age and higher body mass, which also predict the outcome: confounding. Here the doctors are a little gentler than in Part thirty-six, so that the actual eligible-pool propensities range from about point one five to point nine nine six. Logistic estimates are numerically clipped at one ten-thousandth and one minus that; the nearest-neighbour estimates use point oh two and point nine eight. <bookmark mark='c'/> The World knows every patient's effect, so the target is the fixed eligible-pool average treatment effect. Each replicate now samples patients independently with replacement from that pool; it no longer silently changes the target to each sample's own average. <bookmark mark='d'/> The outcome regressions are estimated by fifteen nearest neighbours, a deliberately crude learner: flexible, slow and biased, like machine learning in a hurry. The propensity is fitted by logistic regression. <bookmark mark='e'/> Three hundred samples, ninety percent intervals, and influence-function reference widths. The plug-in deliberately reuses the one-step width to isolate centring bias, and the IPW width treats fitted propensities as fixed; neither is a generally valid fitted-model standard error."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
@@ -53,14 +45,7 @@ class WorldTest(VoiceoverScene):
         r = d["rows"]
         b, sd = d["bias"], d["sd"]
         with self.voiceover(
-            f"<bookmark mark='a'/> The results. The plug-in covers {100 * r[0]['achieved']:.0f} percent: the nearest-neighbour "
-            f"regressions are biased, and the plug-in passes their bias straight through, about {say(b['plugin'], 1)} millimetres "
-            f"of mercury, several of its standard errors. Inverse probability weighting with the logistic propensity covers "
-            f"{100 * r[1]['achieved']:.0f} percent: valid, because the propensity model happens to be right, but its interval "
-            f"is the widest. The cross-fitted one-step and targeted estimators cover {100 * r[2]['achieved']:.0f} and "
-            f"{100 * r[3]['achieved']:.0f} percent, with biases of {say(b['os'], 2)} and {say(b['tmle'], 2)}. And when the "
-            f"propensity is also estimated by nearest neighbours, the product of two slow errors is no longer small: the "
-            f"one-step estimator's bias grows to {say(b['os_knn'], 2)} and its coverage falls to {100 * r[4]['achieved']:.0f} percent."
+            f"<bookmark mark='a'/> The results. The plug-in covers {100 * r[0]['achieved']:.0f} percent: the nearest-neighbour regressions are biased, and the plug-in passes their bias straight through, about {say(b['plugin'], 1)} millimetres of mercury, several of its standard errors. Inverse probability weighting with the logistic propensity covers {100 * r[1]['achieved']:.0f} percent: a conservative empirical result here, with a correctly specified logistic prescription model and a reference SE that does not adjust for fitting it, but its interval is the widest. The cross-fitted one-step and targeted estimators cover {100 * r[2]['achieved']:.0f} and {100 * r[3]['achieved']:.0f} percent, with biases of {say(b['os'], 2)} and {say(b['tmle'], 2)}. And when the propensity is also estimated by nearest neighbours, the product of two slow errors is no longer small: the one-step estimator's bias grows to {say(b['os_knn'], 2)} and its coverage falls to {100 * r[4]['achieved']:.0f} percent."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tab), FadeIn(simulated_tag(r"the World: \ 300 samples")))
@@ -70,11 +55,7 @@ class WorldTest(VoiceoverScene):
     def board(self):
         rows = board_rows("doctors choose")
         show_board(self, rows,
-                   "<bookmark mark='a'/> On the Coverage Board. The plug-in, broken by its first-order bias, and inverse "
-                   "probability weighting, which keeps its promise conservatively because its single nuisance is right. "
-                   "<bookmark mark='b'/> The efficient estimators, cross-fitted, which need only the product of two errors to be "
-                   "small, and keep the promise. <bookmark mark='c'/> And the same efficient estimator with both nuisances crude: "
-                   "double robustness cannot rescue two slow errors.",
+                   "<bookmark mark='a'/> On the Coverage Board. The plug-in, broken by its first-order bias, and inverse probability weighting, which keeps its promise conservatively because its single nuisance is right. <bookmark mark='b'/> The efficient estimators, cross-fitted, which need only the product of two errors to be small, with observed coverage and Monte Carlo uncertainty recorded on the Board. Finite simulation performance is not a proof of universal coverage. <bookmark mark='c'/> And the same efficient estimator with both nuisances crude: double robustness cannot rescue two slow errors.",
                    [("a", [0, 1]), ("b", [2, 3]), ("c", [4])])
 
     def why(self):
@@ -90,6 +71,9 @@ class WorldTest(VoiceoverScene):
         rows[2][-1].set_color(TMLEC)
         rows[3][-1].set_color(NUIC)
         whys = [why(r"chapter 6: \ the plug-in's bias"), why(r"chapter 7: \ a product"), why(r"chapter 6: \ targeting"), why(r"chapter 8: \ $a + b < 1/2$")]
+        heading = label('Separate nuisance bias from Monte Carlo coverage uncertainty', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             f"<bookmark mark='a'/> Each result is a chapter of this part. The plug-in's bias, {say(b['plugin'], 2)}, is the "
             f"first-order error of its regressions, chapter six's warning. <bookmark mark='b'/> The one-step estimator's bias, "

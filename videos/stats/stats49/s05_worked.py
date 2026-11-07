@@ -29,14 +29,11 @@ class Worked(VoiceoverScene):
         rows[1][-1].set_color(EFFC)
         rows[2][-1].set_color(EFFC)
         whys = [why(r"the nonparametric path"), why(r"centred: \ $E\,s = 0$ absorbs $\mu$"), why(r"Part 47's influence function"), why(r"Kennedy (2022)'s point-mass trick, \ too")]
+        heading = label('Finite-variance means and regular quantiles have canonical gradients', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Start with the simplest. The mean, in the nonparametric model. Along the path p times one "
-            "plus t s, the mean changes at rate the integral of x s p, which is the covariance of X with the score. "
-            "<bookmark mark='b'/> So the efficient influence function is x minus mu, and the sample mean, whose influence "
-            "function it is, is efficient: no regular estimator of a mean does better without assumptions. <bookmark "
-            "mark='c'/> The same computation for a quantile gives Part forty-seven's influence function, and shows the sample "
-            "quantile is efficient. <bookmark mark='d'/> The trick, always: differentiate psi along the path and read off the "
-            "function that multiplies the score."
+            "<bookmark mark='a'/> Start with the simplest. The mean, in a nonparametric model with finite second moment. Along the path p times one plus t s, the mean changes at rate the integral of x s p, which is the covariance of X with the score. <bookmark mark='b'/> So the efficient influence function is x minus mu, and the sample mean, whose influence function it is, is efficient: no regular estimator of a mean does better without assumptions. <bookmark mark='c'/> The same computation for a quantile gives Part forty-seven's influence function, and shows the sample quantile is efficient when the density is positive and continuous at the unique quantile. <bookmark mark='d'/> The trick, always: differentiate psi along the path and read off the function that multiplies the score."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -49,20 +46,16 @@ class Worked(VoiceoverScene):
             cmath(r"\psi = E[\mu_1(X) - \mu_0(X)]", r",", r"\mu_t(x) = E[Y \mid T = t, X = x], \ e(x) = P(T = 1 \mid x)", font_size=30),
             cmath(r"\phi^*", r"=", r"\mu_1 - \mu_0 - \psi + \tfrac{T}{e}(Y - \mu_1) - \tfrac{1 - T}{1 - e}(Y - \mu_0)", font_size=36),
             cmath(r"E\,\phi^{*2}", r"=", r"\mathrm{Var}\,\tau(X) + E\Big[\frac{\sigma_1^2(X)}{e(X)} + \frac{\sigma_0^2(X)}{1 - e(X)}\Big]", font_size=32),
-            cmath(r"\text{knowing } e(x) \text{ (a trial)}", r":", r"\text{the same bound: \ the propensity is ancillary for } \psi", font_size=30),
+            cmath(r"\text{knowing } e(x) \text{ (a trial)}", r":", r"\text{same bound: EIF orthogonal to propensity directions}", font_size=30),
         ]
         rows[1][-1].set_color(EFFC)
         rows[2][-1].set_color(TANC)
         whys = [why(r"under no unmeasured confounding"), why(r"Hahn (1998); \ Robins et al. (1994)"), why(r"overlap enters as $1/e$"), why(r"Hahn's surprise")]
+        heading = label('The ATE influence function uses outcome and treatment information', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> The main example. The average treatment effect under no unmeasured confounding is the "
-            "mean of the difference between the two outcome regressions. <bookmark mark='b'/> Its efficient influence "
-            "function, found by Jinyong Hahn in 1998 and implicit in Robins and colleagues' 1994 work, is the plug-in's "
-            "term plus two weighted residual corrections: the residuals of the treated, weighted by one over the propensity, "
-            "and of the controls, weighted by one over one minus it. <bookmark mark='c'/> Its variance, the bound, is the "
-            "variance of the conditional effect plus the residual variances inflated by the inverse propensities. Poor "
-            "overlap, propensities near zero or one, makes the bound large: no method can escape it. <bookmark mark='d'/> "
-            "And a surprise of Hahn's: knowing the propensity, as in a randomized trial, does not lower the bound at all."
+            "<bookmark mark='a'/> The main example. The average treatment effect under consistency, conditional exchangeability and positivity is the mean of the difference between the two outcome regressions. <bookmark mark='b'/> Its efficient influence function, found by Jinyong Hahn in 1998 and implicit in Robins and colleagues' 1994 work, is the plug-in's term plus two weighted residual corrections: the residuals of the treated, weighted by one over the propensity, and of the controls, weighted by one over one minus it. <bookmark mark='c'/> Its variance, the bound, is the variance of the conditional effect plus the residual variances inflated by the inverse propensities. Poor overlap, propensities near zero or one, makes the bound large: no method can escape it. <bookmark mark='d'/> And a surprise of Hahn's: knowing the propensity, as in a randomized trial, does not lower the bound at all."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -80,6 +73,9 @@ class Worked(VoiceoverScene):
         rows[1][-1].set_color(EFFC)
         rows[3][-1].set_color(NUIC)
         whys = [why(r"the effect on the treated"), why(r"Hahn (1998)"), why(r"controls weighted by the odds $e/(1-e)$"), why(r"$e$ tells us who the treated are")]
+        heading = label('The ATT has a different gradient and a different target population', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> The effect on the treated, the estimand of the job-training studies, has its own efficient "
             "influence function, also from Hahn's paper. <bookmark mark='b'/> It is the treated's outcomes minus the control "
@@ -105,6 +101,9 @@ class Worked(VoiceoverScene):
         rows[2][-1].set_color(NUIC)
         rows[3][-1].set_color(EFFC)
         whys = [why(r"factor the likelihood"), why(r"nothing assumed"), why(r"the design is known"), why(r"why Hahn's surprise is true")]
+        heading = label('Knowing treatment probabilities removes one score subspace', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> Why does knowing the propensity not help the average treatment effect? Factor the "
             "likelihood into the law of X, the treatment given X, and the outcome given treatment and X. The space of scores "
@@ -124,20 +123,17 @@ class Worked(VoiceoverScene):
         rows = [
             cmath(r"Y = \theta T + g(X) + \varepsilon", r",", r"E[\varepsilon \mid T, X] = 0, \ g \text{ unknown}", font_size=34),
             cmath(r"m(X) = E[T \mid X]", r",", r"\ell(X) = E[Y \mid X] = \theta\, m(X) + g(X)", font_size=34),
-            cmath(r"\text{efficient score (homoskedastic)}", r":", r"(Y - \ell(X) - \theta(T - m(X)))\,(T - m(X))", font_size=30),
+            cmath(r"\text{proportional to efficient score, homoskedastic}", r":", r"(Y - \ell(X) - \theta(T - m(X)))\,(T - m(X))", font_size=30),
             cmath(r"\hat\theta", r"=", r"\frac{\sum (T_i - \hat m)(Y_i - \hat\ell)}{\sum (T_i - \hat m)^2}: \ \text{residual on residual}", font_size=32),
         ]
         rows[2][-1].set_color(EFFC)
         rows[3][-1].set_color(OSC)
         whys = [why(r"Robinson (1988)"), why(r"two nuisance regressions"), why(r"orthogonal to every change in $g$"), why(r"Part 36's DML, \ explained")]
+        heading = label('Residual regression needs appropriate variance weighting for efficiency', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Peter Robinson's partially linear model of 1988: a linear effect of a treatment T plus an "
-            "arbitrary function of the covariates. <bookmark mark='b'/> Write m for the regression of T on X and l for the "
-            "regression of Y on X. <bookmark mark='c'/> With constant error variance, the efficient score is the residual "
-            "of Y minus theta times the residual of T, multiplied by the residual of T. It is orthogonal to every direction "
-            "in which g could move, which is what makes it efficient. <bookmark mark='d'/> Setting its average to zero gives "
-            "the residual-on-residual regression: Part thirty-six's double machine learning estimator for this model, now "
-            "seen as the efficient one."
+            "<bookmark mark='a'/> Peter Robinson's partially linear model of 1988: a linear effect of a treatment T plus an arbitrary function of the covariates. <bookmark mark='b'/> Write m for the regression of T on X and l for the regression of Y on X. <bookmark mark='c'/> In the conditional-mean model with constant error variance, a quantity proportional to the efficient score is the residual of Y minus theta times the residual of T, multiplied by the residual of T. It is orthogonal to every direction in which g could move, The appropriate variance normalization gives the efficient score; orthogonality alone would not prove efficiency. <bookmark mark='d'/> Setting its average to zero gives the residual-on-residual regression: Part thirty-six's double machine learning estimator for this model, now seen as the efficient one."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -154,13 +150,7 @@ class Worked(VoiceoverScene):
             label(r"Efron (1977); \ Begun, \ Hall, \ Huang \& Wellner (1983)", font_size=24, color=GREY_A),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> And one result from Part forty. In Cox's proportional hazards model the baseline hazard is "
-            "an unknown function. <bookmark mark='b'/> Its directions of change form the nuisance tangent space. <bookmark "
-            "mark='c'/> Projecting the full-likelihood score for beta off that space amounts to centring each subject's "
-            "covariates at the weighted mean of the risk set at each event time, <bookmark mark='d'/> which is exactly the "
-            "score of Cox's partial likelihood. So Cox's estimator, proposed in 1972 on intuition, is fully efficient in the "
-            "semiparametric model, <bookmark mark='e'/> as Bradley Efron found in 1977 and Begun, Hall, Huang and Wellner "
-            "proved in general in 1983."
+            "<bookmark mark='a'/> And one result from Part forty. In Cox's proportional hazards model the baseline hazard is an unknown function. <bookmark mark='b'/> Its directions of change form the nuisance tangent space. <bookmark mark='c'/> Projecting the full-likelihood score for beta off that space amounts to centring each subject's covariates at the weighted mean of the risk set at each event time, <bookmark mark='d'/> which is exactly the score of Cox's partial likelihood. Under the proportional-hazards model, conditionally independent censoring and suitable regularity, Cox's partial-likelihood estimator is semiparametrically efficient, <bookmark mark='e'/> as Bradley Efron found in 1977 and Begun, Hall, Huang and Wellner proved in general in 1983."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

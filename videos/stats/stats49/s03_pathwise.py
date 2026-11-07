@@ -31,6 +31,9 @@ class Pathwise(VoiceoverScene):
         rows[3][-1].set_color(EFFC)
         whys = [why(r"Koshevnik \& Levit (1976); \ Pfanzagl (1982)"), why(r"Riesz: \ a derivative as an inner product"),
                 why(r"only $\langle \phi, s \rangle$ on scores matters"), why(r"the unique gradient in the tangent space")]
+        heading = label('An orthogonal projection identifies the efficient part', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> The quantity of interest psi is pathwise differentiable at P if, along every smooth path "
             "through P, its derivative is the inner product of a fixed function phi with the path's score. <bookmark "
@@ -63,13 +66,7 @@ class Pathwise(VoiceoverScene):
             label(r"dashed: \ the interaction part, \ discarded", font_size=22, color=GREY_B),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In the two by two table, the space is exactly three-dimensional and we can draw it to "
-            "scale. <bookmark mark='b'/> The natural estimator of the top-left cell's probability is the fraction of "
-            "observations in it. Its influence function, the indicator of the cell minus point one eight, is a gradient, "
-            "<bookmark mark='c'/> because the cell frequency is consistent in every model, independent or not. <bookmark "
-            "mark='d'/> Project it onto the tangent plane of the independence model: the gold arrow, the efficient influence "
-            "function. <bookmark mark='e'/> The dashed segment is its interaction component, the part that independence "
-            "makes irrelevant, and discarding it can only reduce the variance."
+            "<bookmark mark='a'/> In the two by two table, the space is exactly three-dimensional and we can draw it to scale. <bookmark mark='b'/> The natural estimator of the top-left cell's probability is the fraction of observations in it. Its influence function, the indicator of the cell minus point one eight, is a gradient, <bookmark mark='c'/> because differentiating the cell probability gives the inner product with that centred indicator. Consistency alone would not prove it is a gradient. <bookmark mark='d'/> Project it onto the tangent plane of the independence model: the gold arrow, the efficient influence function. <bookmark mark='e'/> The dashed segment is its interaction component, the part that independence makes irrelevant, and discarding it can only reduce the variance."
         ) as vo:
             self.play(FadeIn(box), FadeIn(pl), FadeIn(exact_tag(r"exact: \ coordinates in an orthonormal basis of $L_2^0(P)$")))
             vo.wait_until("a")
@@ -121,14 +118,11 @@ class Pathwise(VoiceoverScene):
         rows[1][-1].set_color(EFFC)
         rows[3][-1].set_color(GOODC)
         whys = [why(r"the nonparametric bound"), why(r"the efficient bound"), why(r"an efficient estimator"), why(r"simulated")]
+        heading = label('The efficient influence function reduces the asymptotic variance', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            f"<bookmark mark='a'/> In numbers. The cell frequency's influence function has squared length point one eight "
-            f"times point eight two, {say(d['bound_np'], 4)}: that is the best possible variance when nothing is assumed. "
-            f"<bookmark mark='b'/> Its projection has squared length {say(d['bound'], 4)}: the bound under independence, a "
-            f"third smaller. <bookmark mark='c'/> And an estimator attains it: the product of the two marginal frequencies, "
-            f"whose influence function, by the delta method, is exactly the projection. <bookmark mark='d'/> Simulated with "
-            f"four hundred observations, the two estimators have n times variance {say(d['sim_cell'], 4)} and "
-            f"{say(d['sim_prod'], 4)}. Using the model's structure is worth a third of the data here."
+            f"<bookmark mark='a'/> In numbers. The cell frequency's influence function has squared length point one eight times point eight two, {say(d['bound_np'], 4)}: that is the best possible variance when nothing is assumed. <bookmark mark='b'/> Its projection has squared length {say(d['bound'], 4)}: the bound under independence, a third smaller. <bookmark mark='c'/> And an estimator attains it: the product of the two marginal frequencies, whose influence function, by the delta method, is exactly the projection. <bookmark mark='d'/> Simulated with four hundred observations, the two estimators have n times variance {say(d['sim_cell'], 4)} and {say(d['sim_prod'], 4)}. The efficient variance is about one third smaller, equivalent to needing about one third fewer observations for the same asymptotic precision."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):

@@ -32,15 +32,11 @@ class Estimators(VoiceoverScene):
         rows[2][-1].set_color(PLUGC)
         rows[3][-1].set_color(TANC)
         whys = [why(r"the von Mises expansion"), why(r"add and subtract $P_n$"), why(r"what a plug-in leaves behind"), why(r"products of nuisance errors")]
+        heading = label('A controlled von Mises remainder supports bias correction', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Every construction rests on one expansion. Plug an estimate of the distribution into psi. "
-            "The error is minus the true mean of the efficient influence function evaluated at the estimate, plus a "
-            "second-order remainder. <bookmark mark='b'/> Adding and subtracting the empirical mean splits it into three "
-            "parts: minus the empirical mean of the estimated influence function, an empirical-process term, and the "
-            "remainder. <bookmark mark='c'/> The first is the plug-in's bias, and it is first order in the error of the "
-            "nuisance estimates: if they converge slowly, so does the plug-in. <bookmark mark='d'/> The remainder is second "
-            "order, typically a product of two nuisance errors. The middle term is the good part, the root-n fluctuation, "
-            "controlled by Part forty-eight's empirical-process theory."
+            "<bookmark mark='a'/> For the smooth functionals considered here, the constructions use a von Mises expansion with a controlled remainder. Plug an estimate of the distribution into psi. The error is minus the true mean of the efficient influence function evaluated at the estimate, plus a second-order remainder. <bookmark mark='b'/> Adding and subtracting the empirical mean splits it into three parts: minus the empirical mean of the estimated influence function, an empirical-process term, and the remainder. <bookmark mark='c'/> The first is an empirical correction for leading plug-in error, not literally its sampling bias in every dataset, and it is first order in the error of the nuisance estimates: if they converge slowly, so does the plug-in. <bookmark mark='d'/> The remainder can be bounded to second order under functional smoothness and positivity, typically a product of two nuisance errors. The middle term is the good part, the root-n fluctuation, controlled by Part forty-eight's empirical-process theory."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -59,16 +55,11 @@ class Estimators(VoiceoverScene):
         rows[2][-1].set_color(GRADC)
         rows[3][-1].set_color(OSC)
         whys = [why(r"split the middle term"), why(r"the good part"), why(r"Part 48's asymptotic equicontinuity"), why(r"cross-fitting: \ chapter 8")]
+        heading = label('Control the estimated influence function on held-out observations', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> The middle, empirical-process term splits again: the empirical process applied to the true "
-            "efficient influence function, plus the empirical process applied to the difference between the estimated and "
-            "true influence functions. <bookmark mark='b'/> The first piece is a plain average, and the central limit "
-            "theorem gives it the efficient variance. <bookmark mark='c'/> The second is negligible if the estimated "
-            "influence functions lie in a Donsker class and converge to the truth: exactly Part forty-eight's asymptotic "
-            "equicontinuity. <bookmark mark='d'/> If the nuisances come from a learner too flexible for any Donsker class, "
-            "fit them on separate data instead. Then, conditionally on that data, the second piece is an average of "
-            "mean-zero terms with vanishing variance, and no Donsker condition is needed. That is cross-fitting, and chapter "
-            "eight returns to it."
+            "<bookmark mark='a'/> The middle, empirical-process term splits again: the empirical process applied to the true efficient influence function, plus the empirical process applied to the difference between the estimated and true influence functions. <bookmark mark='b'/> The first piece is a plain average, and the central limit theorem gives it the efficient variance. <bookmark mark='c'/> The second is negligible if the estimated influence functions lie in a Donsker class and converge to the truth in L-two: exactly Part forty-eight's asymptotic equicontinuity. <bookmark mark='d'/> If the nuisances come from a learner too flexible for any Donsker class, fit them on separate data instead. Then, within each held-out fold and conditionally on its training data, the second piece is an average of mean-zero terms with vanishing variance, and no Donsker condition is needed. That is cross-fitting, and chapter eight returns to it."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -86,16 +77,11 @@ class Estimators(VoiceoverScene):
         rows[0][-1].set_color(OSC)
         rows[2][-1].set_color(TMLEC)
         whys = [why(r"Pfanzagl; \ Bickel (1982); \ for the ATE: \ AIPW"), why(r"Robins et al.\ (1994)"), why(r"van der Laan \& Rubin (2006)"), why(r"the clever covariate")]
+        heading = label('One-step correction and targeting solve related estimating equations', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Three ways to remove that bias. The one-step estimator adds the empirical mean of the "
-            "estimated influence function to the plug-in. For the average treatment effect, that is exactly augmented inverse "
-            "probability weighting. <bookmark mark='b'/> The estimating-equation approach treats the influence function as "
-            "an equation in psi and solves it. <bookmark mark='c'/> Targeted maximum likelihood, due to Mark van der Laan "
-            "and Daniel Rubin in 2006, instead changes the estimated distribution, moving it along the least favourable "
-            "submodel until the empirical mean of the influence function is zero, and then plugs in. <bookmark mark='d'/> For "
-            "the treatment effect with a continuous outcome, the move adds epsilon times a clever covariate, one over the "
-            "propensity for the treated and minus one over one minus it for the controls, with epsilon fitted by least "
-            "squares. The result is a plug-in, so it respects the parameter's natural range, and it is efficient."
+            "<bookmark mark='a'/> Three ways to remove that bias. The one-step estimator adds the empirical mean of the estimated influence function to the plug-in. For the average treatment effect, that is exactly augmented inverse probability weighting. <bookmark mark='b'/> The estimating-equation approach treats the influence function as an equation in psi and solves it. <bookmark mark='c'/> Targeted maximum likelihood, due to Mark van der Laan and Daniel Rubin in 2006, instead changes the estimated distribution, moving it along the least favourable submodel until the empirical mean of the influence function is zero, and then plugs in. <bookmark mark='d'/> For the treatment effect with a continuous outcome, the move adds epsilon times a clever covariate, one over the propensity for the treated and minus one over one minus it for the controls, with epsilon fitted by least squares. This linear Gaussian fluctuation solves the empirical influence equation for an unbounded continuous outcome. It is not range preserving for binary or bounded outcomes; those need an appropriate constrained fluctuation. Efficiency also requires the stated consistency and remainder conditions."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -132,7 +118,7 @@ class Estimators(VoiceoverScene):
             f"mark='c'/> The one-step's scaled bias shrinks, to {say(r[-1]['rb_os'], 2)}, because what is left is second "
             f"order: a product of two errors of order n to the minus point three. <bookmark mark='d'/> Targeted maximum "
             f"likelihood behaves the same way. <bookmark mark='e'/> Both are within a fraction of a standard error of the "
-            f"truth, whose scaled standard deviation is about {say(r[-1]['sd_os'], 1)}."
+            f"truth; the estimation error has scaled standard deviation about {say(r[-1]['sd_os'], 1)}."
         ) as vo:
             self.play(FadeIn(A), Create(zero), FadeIn(simulated_tag(r"simulated: \ 200--600 samples per $n$")))
             vo.wait_until("a")
@@ -175,21 +161,18 @@ class Estimators(VoiceoverScene):
     def compare(self):
         rows = [
             cmath(r"\text{one-step}", r":", r"\text{may leave the parameter space: \ a probability} > 1", font_size=32),
-            cmath(r"\text{TMLE}", r":", r"\text{a plug-in of a valid law: \ always in range}", font_size=32),
+            cmath(r"\text{TMLE}", r":", r"\text{range preserving with an appropriate constrained fluctuation}", font_size=32),
             cmath(r"\text{binary } Y", r":", r"\text{logistic fluctuation: \ } \operatorname{logit} \hat\mu^*_t = \operatorname{logit}\hat\mu_t + \varepsilon H_t", font_size=30),
             cmath(r"\text{to first order}", r":", r"\text{the same; \ they differ at second order}", font_size=34),
         ]
         rows[1][-1].set_color(TMLEC)
         rows[3][-1].set_color(EFFC)
         whys = [why(r"adding a correction can overshoot"), why(r"the targeting step"), why(r"stays in $(0, 1)$"), why(r"chapter 6's expansion")]
+        heading = label('A constrained targeting model can preserve the parameter range', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Why have two efficient estimators? The one-step estimator adds a correction, and a "
-            "correction can overshoot: a probability above one, an effect larger than any possible, a negative variance. "
-            "<bookmark mark='b'/> The targeted estimator is a plug-in of a genuine distribution, so it always respects the "
-            "parameter's range. <bookmark mark='c'/> For a binary outcome the fluctuation is on the logistic scale, so the "
-            "updated predictions stay between zero and one. <bookmark mark='d'/> To first order they are the same estimator, "
-            "with the same influence function; they differ at second order, and the targeted one tends to behave better "
-            "when overlap is poor or the sample is small."
+            "<bookmark mark='a'/> Why have two efficient estimators? The one-step estimator adds a correction, and a correction can overshoot: a probability above one, an effect larger than any possible, a negative variance. <bookmark mark='b'/> With a suitable constrained fluctuation the targeted estimator is a plug-in of a genuine distribution and respects the parameter range. The linear continuous-outcome implementation here is unbounded. <bookmark mark='c'/> For a binary outcome the fluctuation is on the logistic scale, so the updated predictions stay between zero and one. <bookmark mark='d'/> To first order they are the same estimator, with the same influence function; they differ at second order, and finite-sample behaviour depends on the targeting model, nuisance fits and overlap. Neither method repairs lack of identification or guarantees better small-sample coverage."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -202,24 +185,18 @@ class Estimators(VoiceoverScene):
         ex, ps = d["experiment"], d["psid"]
         rows = [
             cmath(rf"\text{{NSW experiment}}, \ n = {ex['n']}", r":", rf"\text{{difference in means }} {ex['dm']:,.0f} \ ({ex['dm_se']:,.0f})", font_size=30),
-            cmath(r"\text{one-step} = \text{TMLE}, \ \text{linear } \hat\mu_t", r":", rf"{ex['os']:,.0f} \ ({ex['os_se']:,.0f}): \ \text{{a smaller SE}}", font_size=30),
+            cmath(r"\text{one-step} = \text{TMLE}:\ \text{arm-specific OLS residual sums vanish}", r":", rf"{ex['os']:,.0f} \ ({ex['os_se']:,.0f}): \ \text{{a smaller SE}}", font_size=30),
             cmath(rf"\text{{NSW treated vs.\ {ps['n0']} PSID men}}", r":", rf"\text{{naive }} {ps['naive']:,.0f}; \ \text{{regression }} {ps['reg']:,.0f}", font_size=30),
-            cmath(r"\text{ATT, \ efficient one-step}", r":", rf"{ps['att']:,.0f} \ ({ps['att_se']:,.0f}) \ \ \text{{vs.\ the experiment's }} {ps['benchmark']:,.0f}", font_size=30),
+            cmath(r"\text{ATT one-step, refitted-bootstrap SE}", r":", rf"{ps['att']:,.0f} \ ({ps['att_se']:,.0f}) \ \ \text{{vs.\ the experiment's }} {ps['benchmark']:,.0f}", font_size=30),
         ]
         rows[1][-1].set_color(OSC)
         rows[3][-1].set_color(TMLEC)
         whys = [why(r"LaLonde (1986); \ Dehejia \& Wahba"), why(r"adjustment in a trial: \ known $e$"), why(r"the observational problem"), why(r"Part 36's data, \ revisited")]
+        heading = label('Job-training comparisons require overlap and identification assumptions', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            f"<bookmark mark='a'/> Real data: the National Supported Work experiment from Part thirty-six: earnings in 1978, in 1982 "
-            f"dollars. The randomized difference in means is {ex['dm']:,.0f}, with standard error {ex['dm_se']:,.0f}. "
-            f"<bookmark mark='b'/> In a trial the propensity is known, but the efficient influence function still uses the "
-            f"outcome regressions: the one-step estimator with linear regressions gives {ex['os']:,.0f}, with a slightly "
-            f"smaller standard error. With a constant propensity the targeted estimator coincides with it. <bookmark "
-            f"mark='c'/> Replace the experimental controls with {ps['n0']} men from the Panel Study of Income Dynamics, and "
-            f"the naive difference is {ps['naive']:,.0f}: badly confounded. <bookmark mark='d'/> The efficient one-step "
-            f"estimator of the effect on the treated, with a logistic propensity and a linear outcome model, gives "
-            f"{ps['att']:,.0f}, with standard error {ps['att_se']:,.0f}: within a standard error of the experiment, but "
-            f"with much less precision, because so few PSID men resemble the trainees."
+            f"<bookmark mark='a'/> Real data: the National Supported Work experiment from Part thirty-six: earnings in 1978, in 1982 dollars. The randomized difference in means is {ex['dm']:,.0f}, with standard error {ex['dm_se']:,.0f}. <bookmark mark='b'/> In this randomized-sample calculation we use the observed allocation fraction as a constant propensity, but the efficient influence function still uses the outcome regressions: the one-step estimator with linear regressions gives {ex['os']:,.0f}, with a slightly smaller standard error. Here arm-specific OLS residuals sum to zero, so the targeting correction is zero and the two adjusted estimates coincide. Constant propensity alone would not imply equality for arbitrary initial fits. <bookmark mark='c'/> Replace the experimental controls with {ps['n0']} men from the Panel Study of Income Dynamics, and the naive difference is {ps['naive']:,.0f}: badly confounded. <bookmark mark='d'/> The efficient one-step estimator of the effect on the treated, with a logistic propensity and a linear outcome model, gives {ps['att']:,.0f}, with standard error {ps['att_se']:,.0f}: with limited overlap and potentially misspecified nuisance models. The reported observational SE comes from stratified resampling that refits both nuisances. Agreement with a noisy experimental benchmark does not validate the identification assumptions."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):

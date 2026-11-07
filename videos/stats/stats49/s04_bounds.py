@@ -30,15 +30,12 @@ class Bounds(VoiceoverScene):
         ]
         rows[1][-1].set_color(EFFC)
         rows[3][-1].set_color(TANC)
-        whys = [why(r"no superefficiency, \ Part 47"), why(r"Hájek, \ for semiparametric models"), why(r"every reasonable estimator"), why(r"Pythagoras")]
+        whys = [why(r"no superefficiency, \ Part 47"), why(r"Hájek, \ for semiparametric models"), why(r"regular asymptotically linear estimators"), why(r"Pythagoras")]
+        heading = label('Regular local limits contain the efficient Gaussian noise', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Part forty-seven's convolution theorem carries over. Call an estimator regular if its "
-            "limit law is the same along every submodel's local alternatives. <bookmark mark='b'/> Then the limit law is a "
-            "normal with variance the squared length of the efficient influence function, convolved with something else. "
-            "No regular estimator beats the efficient influence function's variance. <bookmark mark='c'/> For the "
-            "estimators met in practice, which are asymptotically linear, the picture is even simpler: the estimator's "
-            "influence function is some gradient. <bookmark mark='d'/> And by Pythagoras its variance is the efficient one "
-            "plus the squared distance from the gradient to its projection. Efficiency means that distance is zero."
+            "<bookmark mark='a'/> Part forty-seven's convolution theorem carries over. Call an estimator regular if its limit law is the same along every submodel's local alternatives. <bookmark mark='b'/> Under regular differentiable submodels and a square-integrable canonical gradient, the limit law is a normal with variance the squared length of the efficient influence function, convolved with something else. This lower-bounds the covariance of the limiting law when that covariance exists. Passing to finite-sample asymptotic risks requires additional moment control. <bookmark mark='c'/> For regular asymptotically linear estimators, the picture is even simpler: the estimator's influence function is some gradient. <bookmark mark='d'/> And by Pythagoras its variance is the efficient one plus the squared distance from the gradient to its projection. Efficiency means that distance is zero."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -49,21 +46,18 @@ class Bounds(VoiceoverScene):
     def leastfav(self):
         rows = [
             cmath(r"\text{a submodel with score } s", r":", r"\text{a parametric problem: \ Cram\'er--Rao bound } \frac{\langle \phi^*, s\rangle^2}{\langle s, s\rangle}", font_size=30),
-            cmath(r"\sup_{s \in \dot{\mathcal P}} \frac{\langle \phi^*, s\rangle^2}{\langle s, s\rangle}", r"=", r"\|\phi^*\|^2, \ \text{attained at } s \propto \phi^*", font_size=32),
+            cmath(r"\sup_{s \in \dot{\mathcal P}} \frac{\langle \phi^*, s\rangle^2}{\langle s, s\rangle}", r"=", r"\|\phi^*\|^2, \ \text{supremum in the closure at }s\propto\phi^*", font_size=32),
             cmath(r"\text{the semiparametric bound}", r"=", r"\text{the bound of the hardest submodel}", font_size=32),
             cmath(r"s^* \propto \phi^*", r":", r"\text{the least favourable submodel}", font_size=34),
         ]
         rows[1][-1].set_color(EFFC)
         rows[3][-1].set_color(NUIC)
         whys = [why(r"one parameter $t$: \ Part 45"), why(r"Cauchy--Schwarz"), why(r"Stein (1956)'s idea"), why(r"TMLE walks along it, \ chapter 6")]
+        heading = label('The hardest smooth submodels approach the canonical gradient', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> There is a second way to see the bound, and it is Stein's original idea. Any one-dimensional "
-            "submodel is a parametric problem, and psi along it has a Cramér–Rao bound: the squared inner product of the "
-            "efficient influence function with the score, over the score's squared length. <bookmark mark='b'/> By "
-            "Cauchy–Schwarz, the largest of these over all submodels is the squared length of the efficient influence "
-            "function, attained when the score points along it. <bookmark mark='c'/> So the semiparametric problem is exactly "
-            "as hard as its hardest one-dimensional sub-problem. <bookmark mark='d'/> That hardest path is called the least "
-            "favourable submodel, and chapter six's targeted estimator moves along it."
+            "<bookmark mark='a'/> There is a second way to see the bound, and it is Stein's original idea. Any one-dimensional submodel is a parametric problem, and psi along it has a Cramér–Rao bound: the squared inner product of the efficient influence function with the score, over the score's squared length. <bookmark mark='b'/> By Cauchy–Schwarz, the largest of these over all submodels is the squared length of the efficient influence function, attained in the closed tangent space when the score points along it. A single actual submodel need not attain that direction; a sequence of smooth submodels can approach the supremum. <bookmark mark='c'/> So the semiparametric problem is exactly as hard as its hardest one-dimensional sub-problem. <bookmark mark='d'/> When such a path exists it is called a least favourable submodel, and chapter six's targeted estimator moves along it."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -73,7 +67,7 @@ class Bounds(VoiceoverScene):
 
     def lam(self):
         rows = [
-            cmath(r"\text{any estimator } T_n", r":", r"\lim_{c \to \infty} \liminf_n \sup_{\text{local submodels}} n\,E(T_n - \psi)^2 \ \ge \ \|\phi^*\|^2", font_size=30),
+            cmath(r"\text{any estimator } T_n", r":", r"\lim_{c \to \infty} \liminf_n \sup_{|h|\le c}nE_{P_{h/\sqrt n}}(T_n-\psi(P_{h/\sqrt n}))^2 \ \ge \ \|\phi^*\|^2", font_size=30),
             cmath(r"\text{regular or not}", r":", r"\text{Part 47's LAM theorem, \ in the hardest submodel}", font_size=32),
             cmath(r"\text{Hodges-type tricks}", r":", r"\text{superefficient at a point, \ never uniformly}", font_size=32),
             cmath(r"\text{so}", r":", r"\|\phi^*\|^2 \ \text{is the honest benchmark for every method}", font_size=34),
@@ -81,13 +75,11 @@ class Bounds(VoiceoverScene):
         rows[0][-1].set_color(EFFC)
         rows[3][-1].set_color(TANC)
         whys = [why(r"local asymptotic minimax"), why(r"one-dimensional reduction"), why(r"Part 47's chapter 9"), why(r"no estimator escapes it")]
+        heading = label('Take the local large-sample limit before expanding the shift range', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> The bound holds for every estimator, not just regular ones, in the local minimax sense of "
-            "Part forty-seven: the worst scaled risk over shrinking neighbourhoods is at least the efficient variance. "
-            "<bookmark mark='b'/> The proof applies Part forty-seven's theorem to the least favourable submodel, which is "
-            "an ordinary one-dimensional parametric model. <bookmark mark='c'/> Hodges-type estimators can beat the bound "
-            "at a point but never uniformly over a neighbourhood. <bookmark mark='d'/> So the efficient variance is an "
-            "honest benchmark: any method, however modern, can be judged against it."
+            "<bookmark mark='a'/> The bound holds for every estimator, not just regular ones, in the local minimax sense of Part forty-seven: first take the large-sample limit over local shifts bounded by c, then let c tend to infinity; the resulting worst scaled risk is at least the efficient variance under the LAN and loss conditions. <bookmark mark='b'/> The proof applies Part forty-seven's theorem to the least favourable submodel, which is an ordinary one-dimensional parametric model. <bookmark mark='c'/> Hodges-type estimators can beat the bound at a point but cannot improve the limiting worst risk as these local shift ranges expand. <bookmark mark='d'/> So the efficient variance is an honest benchmark: any method, however modern, can be judged against it."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -146,13 +138,7 @@ class Bounds(VoiceoverScene):
         foot = label(r"smaller model $\Rightarrow$ smaller tangent space $\Rightarrow$ shorter projection $\Rightarrow$ smaller bound", font_size=24, color=GREY_A).move_to([0, -1.4, 0])
         foot2 = label(r"assumptions buy precision, \ at the price of being wrong when they fail", font_size=24, color=NUIC).move_to([0, -2.2, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The same estimand in three nested models. Assuming nothing, the bound is "
-            f"{say(d['bound_np'], 4)}, and the cell frequency attains it. Assuming independence, the tangent space loses a "
-            f"dimension and the bound falls to {say(d['bound'], 4)}. Knowing one margin as well leaves a single free "
-            f"direction, and the bound falls again, to {say(d['bound_known'], 4)}. <bookmark mark='b'/> Each assumption "
-            f"shrinks the tangent space, shortens the projection, and lowers the bound. But the efficient estimator of a "
-            f"smaller model is biased when its assumption fails, which is the trade-off semiparametric models are designed "
-            f"to manage: assume only what you are willing to defend."
+            f"<bookmark mark='a'/> The same estimand in three nested models. Assuming nothing, the bound is {say(d['bound_np'], 4)}, and the cell frequency attains it. Assuming independence, the tangent space loses a dimension and the bound falls to {say(d['bound'], 4)}. Knowing one margin as well leaves a single free direction, and the bound falls again, to {say(d['bound_known'], 4)}. <bookmark mark='b'/> Each assumption shrinks the tangent space, shortens the projection, and lowers the bound. But the efficient estimator of a smaller model can become biased when its assumption fails, which is the trade-off semiparametric models are designed to manage: assume only what you are willing to defend."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tab), FadeIn(foot), FadeIn(exact_tag(r"exact")))
@@ -172,12 +158,7 @@ class Bounds(VoiceoverScene):
         foot = label(rf"the ATE in a smooth world: \ $e(x) = 0.2 + 0.6x_1$, \ $n = {d['n']}$, \ {d['reps']:,} samples", font_size=24, color=GREY_A).move_to([0, -1.6, 0])
         foot2 = label(r"weighting alone ignores the outcome's predictability: \ the bound uses it", font_size=24, color=EFFC).move_to([0, -2.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> A preview of chapter four's main example, the average treatment effect, in a smooth "
-            f"simulated world with a known propensity. The efficiency bound, computed by quadrature, is {say(d['bound'], 2)} "
-            f"per observation. The one-step estimator with the true nuisance functions reaches it, at {say(d['sim_os'], 2)}. "
-            f"Inverse probability weighting with the true propensity is much worse: {say(d['sim_hajek'], 2)} normalized, "
-            f"and {say(d['sim_ht'], 1)} unnormalized. <bookmark mark='b'/> Weighting alone ignores how predictable the "
-            f"outcome is from the covariates; the efficient influence function uses it."
+            f"<bookmark mark='a'/> A preview of chapter four's main example, the average treatment effect, in a smooth simulated world with a known propensity. The efficiency bound, computed by quadrature, is {say(d['bound'], 2)} per observation. The one-step estimator with the true nuisance functions is close in this finite simulation, at {say(d['sim_os'], 2)}. Inverse probability weighting with the true propensity is much worse: {say(d['sim_hajek'], 2)} normalized, and {say(d['sim_ht'], 1)} unnormalized. <bookmark mark='b'/> Weighting alone ignores how predictable the outcome is from the covariates; the efficient influence function uses it."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tab), FadeIn(foot), FadeIn(simulated_tag(r"simulated; \ bound by quadrature")))

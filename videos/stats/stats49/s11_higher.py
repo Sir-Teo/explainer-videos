@@ -23,21 +23,17 @@ class HigherOrder(VoiceoverScene):
         rows = [
             cmath(r"\psi(f) = \textstyle\int f^2", r":", r"\phi^*(x) = 2(f(x) - \psi), \ \ E\,\phi^{*2} = 4\,\mathrm{Var} f(X)", font_size=32),
             cmath(r"\psi(\hat f) - \psi(f) + \text{correction}", r"=", r"-\textstyle\int (\hat f - f)^2: \ \text{exactly second order}", font_size=32),
-            cmath(r"\|\hat f - f\|^2", r"\asymp", r"h^{2s} + \frac{1}{nh}: \ \text{bias}^2 + \text{variance}", font_size=34),
-            cmath(r"\text{root-}n \text{ needs}", r":", r"\|\hat f - f\|^2 = o(n^{-1/2}): \ \text{possible only if } s > d/4", font_size=32),
+            cmath(r"\|\hat f - f\|^2", r"\asymp", r"h^{2s} + \frac{1}{nh^d}: \ \text{bias}^2 + \text{variance}", font_size=34),
+            cmath(r"\text{root-}n \text{ needs}", r":", r"\|\hat f - f\|^2 = o(n^{-1/2}): \ \text{ordinary density plug-in route needs }s>d/2", font_size=32),
         ]
         rows[1][-1].set_color(EFFC)
         rows[3][-1].set_color(NUIC)
         whys = [why(r"a classic: \ Bickel \& Ritov (1988)"), why(r"the one-step's remainder"), why(r"a kernel estimate, \ smoothness $s$"), why(r"the product rate, \ with one function")]
+        heading = label('First-order and quadratic estimators have different smoothness thresholds', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> A classic test case is the integrated square of a density, which appears in bandwidth "
-            "selection and in the efficiency of rank tests. Its efficient influence function is twice the density at x minus "
-            "twice psi. <bookmark mark='b'/> Plug in a kernel estimate and add the first-order correction, and what remains "
-            "is exactly minus the integrated squared error of the density estimate. <bookmark mark='c'/> That error is a "
-            "squared bias, which shrinks with the bandwidth, plus a variance of order one over n h, which grows as the "
-            "bandwidth shrinks. <bookmark mark='d'/> For root n estimation the squared error must be smaller than one over "
-            "root n, which is possible only when the density is smooth enough relative to the dimension. The first-order "
-            "theory runs out."
+            "<bookmark mark='a'/> A classic test case is the integrated square of a density with finite integral of f cubed, which appears in bandwidth selection and in the efficiency of rank tests. Its efficient influence function is twice the density at x minus twice psi. <bookmark mark='b'/> Plug in a kernel estimate and add the first-order correction, and what remains is exactly minus the integrated squared error of the density estimate. <bookmark mark='c'/> That error is a squared bias, which shrinks with the bandwidth, plus a variance of order one over n h, which grows as the bandwidth shrinks. <bookmark mark='d'/> For root n estimation the squared error must be smaller than one over root n, For an ordinary optimal L-two density estimate with error order n to the minus s over two s plus d, this first-order route needs s greater than d over two. A second-order quadratic estimator can reach root n already above d over four, under the appropriate smoothness and bandwidth conditions."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -50,20 +46,17 @@ class HigherOrder(VoiceoverScene):
             cmath(r"\text{plug-in}", r":", r"\textstyle\int \hat f^2 = \frac{1}{n^2}\sum_{i,j} \bar K_h(X_i - X_j), \ \text{diagonal included}", font_size=30),
             cmath(r"\text{one-step}", r":", r"\textstyle\int \hat f_A^2 + \frac{1}{|B|}\sum_{i \in B} 2(\hat f_A(X_i) - \int \hat f_A^2), \ \text{split sample}", font_size=28),
             cmath(r"\text{second order}", r":", r"\frac{1}{n(n-1)}\textstyle\sum_{i \ne j} \bar K_h(X_i - X_j): \ \text{a U-statistic}", font_size=30),
-            cmath(r"\text{what it removes}", r":", r"\text{the } 1/(nh) \text{ variance term of } \|\hat f - f\|^2", font_size=32),
+            cmath(r"\text{what it removes}", r":", r"\text{diagonal self-pair bias; sampling variance remains}", font_size=32),
         ]
         rows[0][-1].set_color(PLUGC)
         rows[1][-1].set_color(OSC)
         rows[2][-1].set_color(EFFC)
         whys = [why(r"$\bar K_h = K_h * K_h$"), why(r"chapter 6, \ literally"), why(r"Robins, \ Li, \ Tchetgen \& van der Vaart (2008)"), why(r"a quadratic correction")]
+        heading = label('Distinct-pair kernels remove diagonal bias, not sampling variance', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Three estimators. The plug-in, the integral of the squared kernel estimate, is an average "
-            "of a kernel over all pairs of points, including each point paired with itself. <bookmark mark='b'/> The "
-            "one-step estimator of chapter six, with the density fitted on one half of the sample and the correction "
-            "averaged over the other. <bookmark mark='c'/> And a second-order estimator: the same pairwise average, but over "
-            "distinct pairs only, a U-statistic. James Robins, Lingling Li, Eric Tchetgen Tchetgen and Aad van der Vaart "
-            "built the general theory of such higher-order influence functions in 2008. <bookmark mark='d'/> Dropping the "
-            "diagonal removes exactly the variance term of the remainder, leaving only the smoothing bias."
+            "<bookmark mark='a'/> Three estimators. The plug-in, the integral of the squared kernel estimate, is an average of a kernel over all pairs of points, including each point paired with itself. <bookmark mark='b'/> The one-step estimator of chapter six, with the density fitted on one half of the sample and the correction averaged over the other. <bookmark mark='c'/> And a second-order estimator: the same pairwise average, but over distinct pairs only, a U-statistic. James Robins, Lingling Li, Eric Tchetgen Tchetgen and Aad van der Vaart built the general theory of such higher-order influence functions in 2008. <bookmark mark='d'/> For the quadratic kernel functional, distinct pairs remove the diagonal self-pair bias. The U-statistic still has sampling variance, including a degenerate term of order one over n squared h to the d, as well as smoothing bias."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -118,17 +111,12 @@ class HigherOrder(VoiceoverScene):
     def beyond(self):
         rows = fit_rows(VGroup(
             label(r"higher-order influence functions: \ U-statistics of order $m$ that cancel the remainder term by term", font_size=26),
-            label(r"when nuisances are too rough for root-$n$: \ the optimal rate $n^{-4s/(4s+d)}$, \ and how to reach it", font_size=26, color=EFFC),
+            label(r"when nuisances are too rough for root-$n$: \ quadratic-density RMSE $n^{-\min(1/2,4s/(4s+d))}$ under suitable smoothness", font_size=26, color=EFFC),
             label(r"the ATE: \ the same, \ with $\|\hat e - e\|\,\|\hat\mu - \mu\|$ in place of $\|\hat f - f\|^2$", font_size=26, color=TANC),
             label(r"minimax lower bounds say this is the best possible: \ Part 50", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In general, higher-order influence functions are U-statistics of order m, built to cancel "
-            "the expansion's remainder term by term. <bookmark mark='b'/> They matter when the nuisances are too rough for "
-            "root n estimation: then the best possible rate is slower, n to the minus four s over four s plus d, and higher-order "
-            "estimators reach it. <bookmark mark='c'/> For the treatment effect the same story holds, with the product of "
-            "the propensity's and the outcome regression's errors in place of the density's squared error. <bookmark "
-            "mark='d'/> That this rate is the best anyone can do is a minimax statement, which is Part fifty's subject."
+            "<bookmark mark='a'/> Higher-order corrections can be implemented by U-statistics, often using finite-dimensional projection kernels. Exact higher-order influence functions need not exist as square-integrable kernels in an unrestricted continuous model. <bookmark mark='b'/> They matter when the nuisances are too rough for root n estimation: for integrated squared density in suitable smoothness balls, the low-smoothness minimax root-mean-square rate is n to the minus four s over four s plus d, capped at root n. This is a model-specific rate, not a universal rate for all functionals. <bookmark mark='c'/> Higher-order treatment-effect estimators can also reduce product remainders, but their rates depend on several nuisance smoothness levels, covariate dimension and design assumptions, with the product of the propensity's and the outcome regression's errors in place of the density's squared error. <bookmark mark='d'/> That this rate is the best anyone can do is a minimax statement, which is Part fifty's subject."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

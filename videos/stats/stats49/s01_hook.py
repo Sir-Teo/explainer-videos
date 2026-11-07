@@ -20,20 +20,13 @@ class Hook(VoiceoverScene):
         tl = timeline(lit=(1956, 1982)).to_edge(UP, buff=0.35)
         rows = fit_rows(VGroup(
             label(r"the centre $\theta$ of a symmetric law with an \emph{unknown} shape $f$", font_size=28),
-            label(r"if $f$ were known: \ the MLE, \ variance $1/(n I_f)$, \ $I_f = \int (f'/f)^2 f$", font_size=26, color=GRADC),
+            label(r"if $f$ were known: \ regular MLE, \ asymptotic variance $1/(n I_f)$, \ $I_f = \int (f'/f)^2 f$", font_size=26, color=GRADC),
             label(r"1956: \ Stein asks: \ can we do as well \emph{without} knowing $f$?", font_size=26, color=GREY_A),
             label(r"1975: \ Stone: \ yes, \ by estimating the score $-f'/f$ from the data", font_size=26, color=EFFC),
             label(r"1982: \ Bickel: \ when, \ and why: \ knowing nothing can cost nothing", font_size=26, color=TANC),
         ), 12.4, 0.55, [0, -0.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Here is a question that sounds impossible. Data come from a symmetric distribution "
-            "centred at theta, but the shape of the distribution is unknown: it might be normal, or logistic, or heavy "
-            "tailed, or bimodal. <bookmark mark='b'/> If the shape f were known, the maximum likelihood estimator would "
-            "have variance one over n times the Fisher information of f, and nothing regular could do better. <bookmark "
-            "mark='c'/> In 1956 Charles Stein asked whether the same accuracy can be had without knowing f. <bookmark "
-            "mark='d'/> In 1975 Charles Stone showed that it can: estimate the shape's score function from the data "
-            "themselves, and use it. <bookmark mark='e'/> And in 1982 Peter Bickel explained when and why this works. "
-            "Sometimes, knowing nothing about an infinite-dimensional nuisance costs nothing at all."
+            "<bookmark mark='a'/> Here is a question that sounds impossible. Data come from a symmetric distribution centred at theta, but the shape of the distribution is unknown: it might be normal, or logistic, or heavy tailed, or bimodal. <bookmark mark='b'/> If the shape f were known, the maximum likelihood estimator under suitable regularity would have asymptotic variance one over n times the Fisher information of f, and nothing regular could do better. <bookmark mark='c'/> In 1956 Charles Stein asked whether the same accuracy can be had without knowing f. <bookmark mark='d'/> In 1975 Charles Stone showed that it can: estimate the shape's score function from the data themselves, and use it. <bookmark mark='e'/> And in 1982 Peter Bickel explained when and why this works. Sometimes, knowing nothing about an infinite-dimensional nuisance costs nothing at all."
         ) as vo:
             self.play(FadeIn(tl))
             for k, m_ in enumerate("abcde"):
@@ -58,15 +51,7 @@ class Hook(VoiceoverScene):
         foot2 = label(r"one estimator, \ never told the law, \ within about a third of the bound in every row", font_size=24, color=EFFC).move_to([0, -2.5, 0])
         r = {x["law"]: x for x in d["rows"]}
         with self.voiceover(
-            f"<bookmark mark='a'/> Five symmetric laws, four hundred observations each, and n times the variance of four "
-            f"estimators of the centre. The mean is best for normal data but poor for heavy tails: {say(r['t3']['mean'], 2)} "
-            f"for t with three degrees of freedom, against a bound of {say(r['t3']['bound'], 1)}. The median is good for the "
-            f"Laplace and poor for the normal. The Hodges–Lehmann estimator is a strong compromise. <bookmark mark='b'/> The "
-            f"adaptive estimator, which is never told the law, is within about a third of the bound in every row, and it is "
-            f"the only one that is: {say(r['t3']['adaptive'], 2)} for t three, {say(r['laplace']['adaptive'], 2)} for the "
-            f"Laplace against one, and {say(r['mixture']['adaptive'], 2)} for the bimodal mixture, where every other "
-            f"estimator is at least {say(min(r['mixture']['mean'], r['mixture']['median'], r['mixture']['hl']), 1)}. In "
-            f"some rows a fixed estimator does slightly better; none does well in all of them."
+            f"<bookmark mark='a'/> Five symmetric laws, four hundred observations each, and n times the variance of four estimators of the centre. The mean is best for normal data but poor for heavy tails: {say(r['t3']['mean'], 2)} for t with three degrees of freedom, against a bound of {say(r['t3']['bound'], 1)}. The median is good for the Laplace and poor for the normal. The Hodges–Lehmann estimator is a strong compromise. <bookmark mark='b'/> The illustrative density-score estimator, which is never told the law, is within about a third of the bound in every row, and it is the only one that is: {say(r['t3']['adaptive'], 2)} for t three, {say(r['laplace']['adaptive'], 2)} for the Laplace against one, and {say(r['mixture']['adaptive'], 2)} for the bimodal mixture, where every other estimator is at least {say(min(r['mixture']['mean'], r['mixture']['median'], r['mixture']['hl']), 1)}. In some rows a fixed estimator does slightly better; none does well in all of them."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tab), FadeIn(foot), FadeIn(simulated_tag(r"simulated")))
@@ -87,16 +72,11 @@ class Hook(VoiceoverScene):
             label(r"$t_3$ data: \ $1/I_f = 1.5$", font_size=22),
             label(r"gold: \ the adaptive estimator's efficiency", font_size=22, color=EFFC),
             label(rf"{eff[0]:.2f} at 100, \ {eff[1]:.2f} at 400, \ {eff[2]:.2f} at 1,600", font_size=22, color=EFFC),
-            label(r"green: \ the bound, \ reached in the limit", font_size=22, color=TANC),
-            label(r"the price of not knowing $f$: \ a second-order cost", font_size=22, color=GREY_A),
+            label(r"green: \ theoretical adaptive-efficiency benchmark", font_size=22, color=TANC),
+            label(r"illustrative KDE one-step; \ fixed score trimming", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The adaptation is asymptotic. For t three data the bound is one point five. <bookmark "
-            f"mark='b'/> The adaptive estimator's efficiency, the bound divided by its actual variance, <bookmark mark='c'/> "
-            f"is {say(eff[0], 2)} at a hundred observations, {say(eff[1], 2)} at four hundred and {say(eff[2], 2)} at sixteen "
-            f"hundred, <bookmark mark='d'/> climbing toward one. <bookmark mark='e'/> Not knowing the shape costs something "
-            f"in finite samples, but the cost vanishes to first order. Why that is possible, and when it is not, is what this "
-            f"part is about."
+            f"<bookmark mark='a'/> The adaptation is asymptotic. For t three data the bound is one point five. <bookmark mark='b'/> The adaptive estimator's efficiency, the bound divided by its actual variance, <bookmark mark='c'/> is {say(eff[0], 2)} at a hundred observations, {say(eff[1], 2)} at four hundred and {say(eff[2], 2)} at sixteen hundred, <bookmark mark='d'/> improving across these sample sizes. This finite-sample KDE one-step uses fixed tail trimming; the adaptation theorem requires additional tuning and score-consistency conditions, and is not proved by this simulation. <bookmark mark='e'/> Not knowing the shape costs something in finite samples, but the cost vanishes to first order. Why that is possible, and when it is not, is what this part is about."
         ) as vo:
             self.play(FadeIn(A), Create(one), FadeIn(simulated_tag(r"simulated")))
             vo.wait_until("a")
@@ -148,12 +128,7 @@ class Hook(VoiceoverScene):
             c.scale(0.86)
         VGroup(*cards).arrange(DOWN, buff=0.25).move_to(ORIGIN)
         with self.voiceover(
-            "<bookmark mark='a'/> Three promises are due. Part thirty-six used augmented inverse probability weighting and "
-            "double machine learning, and said they were doubly robust and root n consistent even with machine-learned "
-            "nuisances; chapters five to eight prove it and say why. <bookmark mark='b'/> Part forty-seven proved the "
-            "convolution theorem for parametric models; chapters one to three extend it to models with infinite-dimensional "
-            "parts. <bookmark mark='c'/> And Part forty-eight found that a plugged-in nuisance costs its footprint; chapters "
-            "four and five turn that observation into geometry."
+            "<bookmark mark='a'/> Three promises are due. Part thirty-six used augmented inverse probability weighting and double machine learning, and said they were doubly robust and root n consistent with machine-learned nuisances under adequate product rates and regularity; chapters five to eight explain those conditions. <bookmark mark='b'/> Part forty-seven proved the convolution theorem for parametric models; chapters one to three extend it to models with infinite-dimensional parts. <bookmark mark='c'/> And Part forty-eight found that a plugged-in nuisance costs its footprint; chapters four and five turn that observation into geometry."
         ) as vo:
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
