@@ -1,0 +1,161 @@
+{
+ "video": "stats41",
+ "scene": "MultipleImputation",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 13,
+ "lines": [
+  {
+   "raw": "Chapter four. Multiple imputation.",
+   "spoken": "Chapter four. Multiple imputation.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/14c119dffb060eb6.wav",
+   "duration": 3.0,
+   "tokens": 4,
+   "peak": 0.450531005859375,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Rubin invented multiple imputation for public data files, such as the Census Bureau's. <bookmark mark='b'/> The agency that collects the data understands why values are missing; thousands of analysts who later use the file do not, and use ordinary software. <bookmark mark='c'/> So the agency makes several completed copies, each with the holes filled by random draws from a model, <bookmark mark='d'/> and each analyst runs the usual analysis on every copy and combines the results by simple rules.",
+   "spoken": "Rubin invented multiple imputation for public data files, such as the Census Bureau's. The agency that collects the data understands why values are missing; thousands of analysts who later use the file do not, and use ordinary software. So the agency makes several completed copies, each with the holes filled by random draws from a model, and each analyst runs the usual analysis on every copy and combines the results by simple rules.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/a8487a23319a41c9.wav",
+   "duration": 27.6,
+   "tokens": 73,
+   "peak": 0.47613525390625,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The survey grid, with incomes missing at random. <bookmark mark='b'/> Fill each hole with a draw from its predictive distribution given the respondent's age, sex, region and BMI. <bookmark mark='c'/> Do it again, and again: each copy gets different draws. <bookmark mark='d'/> Where the copies disagree, we are uncertain about the missing values, and that uncertainty is what single imputation hides.",
+   "spoken": "The survey grid, with incomes missing at random. Fill each hole with a draw from its predictive distribution given the respondent's age, sex, region and BMI. Do it again, and again: each copy gets different draws. Where the copies disagree, we are uncertain about the missing values, and that uncertainty is what single imputation hides.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/1f495fee97242b59.wav",
+   "duration": 21.475,
+   "tokens": 55,
+   "peak": 0.4576416015625,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Rubin's rules. The combined estimate is the average of the m estimates. <bookmark mark='b'/> W is the average of their squared standard errors, the within-imputation variance; B is the variance of the estimates across copies, the between-imputation variance. <bookmark mark='c'/> The total variance is W plus B inflated by one plus one over m, for using finitely many copies. <bookmark mark='d'/> Intervals use a t distribution whose degrees of freedom grow as B shrinks relative to W, refined for small samples by John Barnard and Rubin in 1999.",
+   "spoken": "Rubin's rules. The combined estimate is the average of the m estimates. W is the average of their squared standard errors, the within-imputation variance; B is the variance of the estimates across copies, the between-imputation variance. The total variance is W plus B inflated by one plus one over m, for using finitely many copies. Intervals use a t distribution whose degrees of freedom grow as B shrinks relative to W, refined for small samples by John Barnard and Rubin in 1999.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/6d05ce24b5e36244.wav",
+   "duration": 34.675,
+   "tokens": 82,
+   "peak": 0.633392333984375,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The rules come from the law of total variance, read in a Bayesian way: the posterior variance of a quantity given the observed data is the average of its variance if the data were complete, plus the variance, across the plausible completions, of its value. <bookmark mark='b'/> W estimates the first, B the second. <bookmark mark='c'/> With finitely many copies the average itself has simulation error, B over m. <bookmark mark='d'/> The share of the total variance due to the holes, is a large-degrees-of-freedom relative variance share. The reported finite-sample FMI also includes a degrees-of-freedom correction; it is often far smaller than the fraction of missing values.",
+   "spoken": "The rules come from the law of total variance, read in a Bayesian way: the posterior variance of a quantity given the observed data is the average of its variance if the data were complete, plus the variance, across the plausible completions, of its value. W estimates the first, B the second. With finitely many copies the average itself has simulation error, B over m. The share of the total variance due to the holes, is a large-degrees-of-freedom relative variance share. The reported finite-sample FMI also includes a degrees-of-freedom correction; it is often far smaller than the fraction of missing values.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/8b1ab6f650f54051.wav",
+   "duration": 38.325,
+   "tokens": 101,
+   "peak": 0.711669921875,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The draws must be proper. Adding noise to the fitted regression treats its coefficients as known, and understates B. <bookmark mark='b'/> A proper imputation first draws the residual variance and the coefficients from their posterior, <bookmark mark='c'/> then draws the missing value from that regression. <bookmark mark='d'/> Predictive mean matching, popularized by Roderick Little, instead borrows an observed value from a donor whose prediction is close, so each imputation stays within the observed donor support. This does not guarantee that a value is plausible for every covariate pattern or that the joint model is correct: no negative incomes, no fractional children.",
+   "spoken": "The draws must be proper. Adding noise to the fitted regression treats its coefficients as known, and understates B. A proper imputation first draws the residual variance and the coefficients from their posterior, then draws the missing value from that regression. Predictive mean matching, popularized by Roderick Little, instead borrows an observed value from a donor whose prediction is close, so each imputation stays within the observed donor support. This does not guarantee that a value is plausible for every covariate pattern or that the joint model is correct: no negative incomes, no fractional children.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/570acdb54eb4edd2.wav",
+   "duration": 37.725,
+   "tokens": 95,
+   "peak": 0.47613525390625,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> With holes in many variables, Stef van Buuren's chained equations are the standard. <bookmark mark='b'/> Impute each variable in turn from all the others, each with a model suited to it, a linear regression, a logistic, or predictive mean matching. <bookmark mark='c'/> Check mixing and convergence across chains rather than assuming a fixed number of sweeps suffices. This demonstration uses ten sweeps, and repeat from scratch for each copy. <bookmark mark='d'/> The conditional models need not fit together into any joint distribution, and incompatible conditionals can create inconsistent results or dependence on update order. Diagnostics and sensitivity to the imputation models matter.",
+   "spoken": "With holes in many variables, Stef van Buuren's chained equations are the standard. Impute each variable in turn from all the others, each with a model suited to it, a linear regression, a logistic, or predictive mean matching. Check mixing and convergence across chains rather than assuming a fixed number of sweeps suffices. This demonstration uses ten sweeps, and repeat from scratch for each copy. The conditional models need not fit together into any joint distribution, and incompatible conditionals can create inconsistent results or dependence on update order. Diagnostics and sensitivity to the imputation models matter.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/334e576948f3127e.wav",
+   "duration": 40.35,
+   "tokens": 96,
+   "peak": 0.54144287109375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> New York's ozone again, now regressing its log on sunlight, wind and temperature. <bookmark mark='b'/> Complete cases use a hundred and eleven days; twenty imputations by chained equations use all hundred and fifty-three. The estimates and standard errors are similar. <bookmark mark='c'/> The fractions of missing information, a fifth to a third, say why: the forty-two partly missing days carry less information than their number suggests, because their missing ozone is exactly the quantity being modelled.",
+   "spoken": "New York's ozone again, now regressing its log on sunlight, wind and temperature. Complete cases use a hundred and eleven days; twenty imputations by chained equations use all hundred and fifty-three. The estimates and standard errors are similar. The fractions of missing information, a fifth to a third, say why: the forty-two partly missing days carry less information than their number suggests, because their missing ozone is exactly the quantity being modelled.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/360567ebe6dc919b.wav",
+   "duration": 28.3,
+   "tokens": 72,
+   "peak": 0.778106689453125,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The twenty estimates of the temperature coefficient, one per completed data set. <bookmark mark='b'/> Their average is the combined estimate. <bookmark mark='c'/> Their scatter, the square root of B, is about two thirds of the typical within-copy standard error, the square root of W; <bookmark mark='d'/> together they give the total standard error and the degrees of freedom of the t interval.",
+   "spoken": "The twenty estimates of the temperature coefficient, one per completed data set. Their average is the combined estimate. Their scatter, the square root of B, is about two thirds of the typical within-copy standard error, the square root of W; together they give the total standard error and the degrees of freedom of the t interval.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/b43612b9e74d7226.wav",
+   "duration": 20.825,
+   "tokens": 56,
+   "peak": 0.7764892578125,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> How many copies? Rubin's answer was that a handful suffice: with five copies and thirty percent missing information, the estimate is ninety-four percent as efficient as with infinitely many. <bookmark mark='b'/> But standard errors and p-values need more copies to stop wobbling from one run to the next. <bookmark mark='c'/> A useful large-sample planning approximation is one plus gamma squared divided by twice the desired squared relative Monte Carlo standard deviation of the reported standard error, <bookmark mark='d'/> and since computing is cheap, twenty to a hundred copies are common starting points; high missing information or precise tail probabilities can require more.",
+   "spoken": "How many copies? Rubin's answer was that a handful suffice: with five copies and thirty percent missing information, the estimate is ninety-four percent as efficient as with infinitely many. But standard errors and p-values need more copies to stop wobbling from one run to the next. A useful large-sample planning approximation is one plus gamma squared divided by twice the desired squared relative Monte Carlo standard deviation of the reported standard error, and since computing is cheap, twenty to a hundred copies are common starting points; high missing information or precise tail probabilities can require more.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/46d56235956987d9.wav",
+   "duration": 40.05,
+   "tokens": 96,
+   "peak": 0.700775146484375,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> One rule matters above all. Xiao-Li Meng called it congeniality: the imputation and analysis procedures must have compatible assumptions. Including the analysis variables is necessary practical advice, but not by itself a full congeniality theorem. <bookmark mark='b'/> Impute a covariate without using the outcome, and the imputed values carry no relation to the outcome, so the estimated association is diluted toward zero. <bookmark mark='c'/> Analyse an interaction the imputer ignored, and it is attenuated in the same way. <bookmark mark='d'/> So impute with every variable the analysis will use, including the outcome, and any others that predict the missing values or the missingness.",
+   "spoken": "One rule matters above all. Xiao-Li Meng called it congeniality: the imputation and analysis procedures must have compatible assumptions. Including the analysis variables is necessary practical advice, but not by itself a full congeniality theorem. Impute a covariate without using the outcome, and the imputed values carry no relation to the outcome, so the estimated association is diluted toward zero. Analyse an interaction the imputer ignored, and it is attenuated in the same way. So impute with every variable the analysis will use, including the outcome, and any others that predict the missing values or the missingness.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/a4ae0cdb9b316169.wav",
+   "duration": 41.775,
+   "tokens": 97,
+   "peak": 0.69451904296875,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Derived variables need thought: a body mass index computed from height and weight, a squared term, an interaction. <bookmark mark='b'/> Imputing the ingredients and then computing the derived value keeps the arithmetic consistent, but can lose the relationships the analysis cares about. <bookmark mark='c'/> Treating a derived term as another imputed variable can help for some analyses, but may break deterministic identities. Passive imputation or substantive-model-compatible chained equations can preserve the required nonlinear and interaction structure. <bookmark mark='d'/> For interactions with a group, impute separately within each group, so that each group keeps its own relationships.",
+   "spoken": "Derived variables need thought: a body mass index computed from height and weight, a squared term, an interaction. Imputing the ingredients and then computing the derived value keeps the arithmetic consistent, but can lose the relationships the analysis cares about. Treating a derived term as another imputed variable can help for some analyses, but may break deterministic identities. Passive imputation or substantive-model-compatible chained equations can preserve the required nonlinear and interaction structure. For interactions with a group, impute separately within each group, so that each group keeps its own relationships.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/bd17f2e3847bb566.wav",
+   "duration": 39.825,
+   "tokens": 90,
+   "peak": 0.543853759765625,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The Board, in the same design as chapter two. Single regression imputation, analysed as if the filled values were real, gives ninety percent intervals that cover only about seventy percent of the time. <bookmark mark='b'/> Multiple imputation with ten proper copies and Rubin's rules keeps its promise.",
+   "spoken": "The Board, in the same design as chapter two. Single regression imputation, analysed as if the filled values were real, gives ninety percent intervals that cover only about seventy percent of the time. Multiple imputation with ten proper copies and Rubin's rules keeps its promise.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/243245b63aaded8f.wav",
+   "duration": 18.475,
+   "tokens": 45,
+   "peak": 0.4755859375,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats41/en/MultipleImputation_motion/result.json",
+ "input_sha256": "8bc1417ec8cd65d77e7c10d06f12c9b4b93174e63862386f18c407ac89e57b80"
+}

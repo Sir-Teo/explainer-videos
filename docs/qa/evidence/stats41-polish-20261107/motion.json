@@ -1,0 +1,116 @@
+{
+  "fingerprint": "926286d03c2696373317fcc8666d4e9badb58b0ef8336f9ccdf55b70f2686979",
+  "scope": "English sampled visual review; continuous playback/listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats41/en/Hook_motion/result.json",
+      "input_sha256": "05eb3fac98ecd3074e7a6de97248bf10f5c4d68469ad737940a4b8400e1da82d",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 223 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 223 s\n"
+    },
+    {
+      "scene": "Mechanisms",
+      "status": "needs-review",
+      "frames": 37,
+      "warnings": {
+        "narration-translation": 10
+      },
+      "input_record": "renders/qa/series/stats41/en/Mechanisms_motion/result.json",
+      "input_sha256": "ebf78bf57ba00530d5151d96c8840f472bdf43a2d19c8d3a46572fb75472e41c",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 324 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 324 s\n"
+    },
+    {
+      "scene": "Sins",
+      "status": "needs-review",
+      "frames": 39,
+      "warnings": {
+        "narration-translation": 12
+      },
+      "input_record": "renders/qa/series/stats41/en/Sins_motion/result.json",
+      "input_sha256": "5273c59813c0dc360ac466803847a1288972442639ed8a7b0f6909c4026c38da",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 382 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 382 s\n"
+    },
+    {
+      "scene": "Likelihood",
+      "status": "needs-review",
+      "frames": 32,
+      "warnings": {
+        "narration-translation": 9
+      },
+      "input_record": "renders/qa/series/stats41/en/Likelihood_motion/result.json",
+      "input_sha256": "1ecf1c4cc8fe27e369a07426e4bf7dcfbdab38d605655c0bf86554b0ca3d6a4f",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 282 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 282 s\n"
+    },
+    {
+      "scene": "MultipleImputation",
+      "status": "needs-review",
+      "frames": 43,
+      "warnings": {
+        "narration-translation": 13
+      },
+      "input_record": "renders/qa/series/stats41/en/MultipleImputation_motion/result.json",
+      "input_sha256": "8bc1417ec8cd65d77e7c10d06f12c9b4b93174e63862386f18c407ac89e57b80",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 409 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 409 s\n"
+    },
+    {
+      "scene": "Weighting",
+      "status": "needs-review",
+      "frames": 33,
+      "warnings": {
+        "narration-translation": 10
+      },
+      "input_record": "renders/qa/series/stats41/en/Weighting_motion/result.json",
+      "input_sha256": "3cfd6dec0193f58375f739a1542ac7e366e37c00f2db2780e89af9e7aca0c6c0",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 320 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 320 s\n"
+    },
+    {
+      "scene": "MNAR",
+      "status": "needs-review",
+      "frames": 37,
+      "warnings": {
+        "narration-translation": 11
+      },
+      "input_record": "renders/qa/series/stats41/en/MNAR_motion/result.json",
+      "input_sha256": "133fb01fca2d67958d64fb17906fe57e3be2671ae99d38bdf184f0371bab972d",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 348 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 348 s\n"
+    },
+    {
+      "scene": "MRP",
+      "status": "needs-review",
+      "frames": 37,
+      "warnings": {
+        "narration-translation": 11
+      },
+      "input_record": "renders/qa/series/stats41/en/MRP_motion/result.json",
+      "input_sha256": "5bd9011051ff423bada2c2689f35e275cb335fe9a06c13c3e370a3abe889f8b6",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 347 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 347 s\n"
+    },
+    {
+      "scene": "Measurement",
+      "status": "needs-review",
+      "frames": 46,
+      "warnings": {
+        "narration-translation": 13
+      },
+      "input_record": "renders/qa/series/stats41/en/Measurement_motion/result.json",
+      "input_sha256": "7daaebaeab3f760144542b5169f05bc1437e6c490968aec05cb45a55f8cdff71",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 436 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 436 s\n"
+    },
+    {
+      "scene": "Misclassification",
+      "status": "needs-review",
+      "frames": 32,
+      "warnings": {
+        "narration-translation": 9
+      },
+      "input_record": "renders/qa/series/stats41/en/Misclassification_motion/result.json",
+      "input_sha256": "680ad92ebc4f45146e530e17c891f0c81b68b82747583896ebaae38d0eb0709e",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 286 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 286 s\n"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "part": "stats41",
+  "fingerprint": "926286d03c2696373317fcc8666d4e9badb58b0ef8336f9ccdf55b70f2686979",
+  "english_endpoints": 11,
+  "native_1080_endpoints": 10,
+  "silent_motion_chapters": 10,
+  "audio_scene": "MultipleImputation",
+  "audio_lines": 13,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats41/en/MultipleImputation/videos/s05_mi/480p15/MultipleImputation.mp4",
+    "seconds": 408.03333333333336,
+    "narration_sha256": "3661f21a74cbe12e62fdd5b6f4435a06e806ec9a6c13c17d26a38bab0eb8584c",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 408 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 408 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}
