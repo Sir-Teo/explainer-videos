@@ -121,7 +121,7 @@ class Bridge(VoiceoverScene, ThreeDScene):
                   colors={r"d_T": GOOD}),
             cmath(r"a^\top W = (a^\top L)\,Z", r"\Rightarrow", r"\text{share}_k = \frac{\sum_{j \le k}(a^\top L)_j^2}"
                   r"{\|a^\top L\|^2}", font_size=32),
-            cmath(r"L_{\text{PCA}}", r"=", r"V\Lambda^{1/2},\qquad \lambda_j \approx \frac{T^2}{(j - \frac12)^2\pi^2}",
+            cmath(r"L_{\text{PCA}}", r"=", r"V\Lambda^{1/2},\qquad \frac{T}{n}\lambda_j^{\rm grid} \approx \frac{T^2}{(j - \frac12)^2\pi^2}",
                   font_size=34, colors={r"L_{\text{PCA}}": METHOD_COL["PCA"]}),
         ]
         whys = [why(r"finite-variance ANOVA under independent product inputs: orthogonal pieces indexed by coordinate subsets"),

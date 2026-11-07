@@ -155,13 +155,7 @@ class Control(VoiceoverScene):
                           r"moment matching imposes sample moments, changing the joint sampling law; nonlinear estimates may be biased", 5.2, 18, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "Stratification, live. Cut the unit interval into sixteen equal pieces and put exactly one uniform in "
-            "each. <bookmark mark='a'/> Price the "
-            "call five hundred times with sixty-four paths each way. The stratified estimates, in green, sit in a "
-            "far narrower pile than the plain ones. <bookmark mark='b'/> With 4,096 paths, sixteen strata divide "
-            f"the variance by {(st['plain_sd'] / st['s16_sd']) ** 2:.0f}, and two hundred and fifty-six strata by "
-            f"{(st['plain_sd'] / st['s256_sd']) ** 2:.0f}. A Latin hypercube stratifies all sixty-four coordinates "
-            f"of the Asian at once, and buys {(lh['mc_sd'] / lh['lhs_sd']) ** 2:.1f}."
+            f"Place one uniform draw in each of sixteen equal strata. <bookmark mark='a'/> The histograms use five hundred repeated sixty-four-path call estimates, with common bins and a common fraction-of-runs scale. They retain the full saved range. <bookmark mark='b'/> In a separate two-hundred-replicate experiment with four thousand and ninety-six paths, the empirical variance ratios are {(st['plain_sd'] / st['s16_sd']) ** 2:.0f} for sixteen strata and {(st['plain_sd'] / st['s256_sd']) ** 2:.0f} for two hundred and fifty-six. The sixty-four-dimensional Asian's Latin-hypercube ratio is {(lh['mc_sd'] / lh['lhs_sd']) ** 2:.1f}, measured over one hundred replicates of one thousand and twenty-four paths. These finite ratios are not universal gains. Moment matching changes the joint sampling law and can bias nonlinear estimates; setup and transform costs also matter."
         ) as vo:
             self.play(Create(line), FadeIn(ticks), FadeIn(lab))
             self.play(LaggedStart(*[FadeIn(d, shift=DOWN * 0.4) for d in drops], lag_ratio=0.15),
@@ -189,12 +183,7 @@ class Control(VoiceoverScene):
             "    y = y - b * (c - S0)",
         ], source="explainer/quant/house/engine.py  mc_call", width=7.4).to_corner(UL, buff=0.4)
         with self.voiceover(
-            "The House's version for a plain call is ten lines: mirror the normals, or subtract the slope times the "
-            "discounted stock's error, since its mean is today's price. <bookmark mark='a'/> Run each twenty times "
-            "with 262,144 paths and measure the root mean square error against Black–Scholes: plain "
-            f"{r['plain']:.4f}, mirrors {r['antithetic']:.4f}, the stock as control {r['control']:.4f}. Modest gains "
-            "on a vanilla. The thousandfold gains belong to products with a twin that has a formula."
-            " Next: the most powerful of these tricks, and the most dangerous: importance sampling."
+            f"The call code mirrors normals or subtracts a fitted slope times the discounted stock's deviation from its known expectation. The zero-dividend case gives that expectation as today's spot. Same-sample slope fitting can introduce finite-sample bias; an independent frozen pilot is one way to avoid it. <bookmark mark='a'/> Twenty seeds with two hundred and sixty-two thousand one hundred and forty-four paths give empirical RMSE {r['plain']:.4f} for plain simulation, {r['antithetic']:.4f} for mirrors and {r['control']:.4f} for the stock control. These estimates have finite-replicate uncertainty and omit setup-time comparisons. Very large variance reductions require a particularly close control and are not promised for every product. Next, importance sampling and proposal risk."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
