@@ -34,8 +34,9 @@ Delivery workflow: continue directly on `quantitative-finance`. Commit and push 
 | 13 | Visual pass complete; full production-voice listening pending |
 | 14 | Visual pass complete; full production-voice listening pending |
 | 15 | Visual pass complete; full production-voice listening pending |
-| 16 | In progress: scientific, narration and visual QA |
-| 17–43 | Pending; do not infer approval from historical build notes |
+| 16 | Visual pass complete; full production-voice listening pending |
+| 17 | In progress: scientific, narration and visual QA |
+| 18–43 | Pending; do not infer approval from historical build notes |
 
 ## Part 1: The Fair Game
 
@@ -1141,3 +1142,23 @@ Validation: 42 actual current English/Mandarin endpoint renders and 21 actual En
 The [compact evidence record](quant15-polish-evidence.json) binds all 63 receipts, data inputs, manual review artifacts, 12 CPU speech reports (71 sampled lines, zero signal/token-timing issues), and the actual narrated opening (169.9 seconds). These checks do not certify pronunciation or full continuous synchronization. Full production-voice listening remains pending.
 
 Local ignored artifacts: `renders/quant15_polished_silent.mp4`, 74:34 including animation/pauses, with 21 embedded chapters and English soft subtitles; adjacent `.srt` and `.chapters.txt`; and `media/quant15/narrated_qa/videos/s01_hook/480p15/Hook.mp4`.
+
+
+## Part 16: Computing Prices
+
+Visual pass complete on `quantitative-finance`:
+
+- Separate sampling error, discretization/truncation bias, numerical-reference error and model assumptions. Preserve full saved plot ranges and disclose path/regression subsets, separately normalized ADI surfaces and the Chebyshev display floor.
+- State fixed versus fitted control coefficients, equal-work antithetics, importance-sampling support and frozen-proposal conditions, finite-grid shift selection, dyadic-net geometry, discrepancy definitions and randomized-QMC interval limitations.
+- Qualify PCA energy capture, bridge coordinate shares and MLMC complexity. Distinguish Bermudan policy expectations from finite evaluations, noisy nested duality from an exact martingale, and evaluation-path reuse from an independent benchmark.
+- Correct digital and likelihood-ratio derivative qualifications, scalar-output adjoint cost, the finite-difference factor-of-two CFL convention, Rannacher damping factors, LCP residual interpretation and conditional ADI accuracy.
+- Use consistent normalized Fourier coordinates, the correct Lewis phase and explicit transform conversion. Distinguish COS density references and same-function zero discrepancies from independent accuracy certificates.
+- Verify dated bank, STAC, OCC, SIMM and Basel claims. Separate toy quantum measurements from financial circuits, and logical qubits, total T-count, T-depth and assumed sequential layer clocks in published resource estimates.
+- Correct interpolation build-time break-even, finite-bit RQMC plateau interpretation, growing-repetition theorem conditions, Gram-diagonal moment scope and the exercise-margin loss upper bound. Reveal the research answer after its pause; provide ten worked bilingual solutions.
+- Curate Mandarin captions and narration, keep tape labels above highlighted cells, release fixed camera objects between 3D and 2D scenes, and reflow dense proof, timing, hardware, research and exercise panels. Render the final finite-difference proof in both languages after its inspected spacing repair.
+
+Validation: 44 actual current bilingual endpoint renders and 22 actual English motion renders passed, with zero unresolved warnings. Endpoint renders have zero automated warnings. The motion scanner raised 6 raw flags; exact artifact-bound review decisions are retained in the evidence. Every final contact sheet was inspected, together with 35 focused current native frames. All 116/116 narration sources have Mandarin coverage; estimated narration is 65.9 minutes. Ten existing numerical tests passed. All 37 original cache items and the referenced Part 17 stopping item were restored normally. The 98 protected files, including all compute drivers, House algorithms and global registries, remain unchanged. No new market trials or sealed holdout access occurred; counters remain 312 for this part and 23,562 for the series.
+
+The [compact evidence record](quant16-polish-evidence.json) binds all 66 receipts, input hashes, manual review artifacts, 13 CPU speech reports (72 sampled lines, zero signal/token-timing issues), and the actual narrated opening (208.7 seconds). Signal and token checks do not certify pronunciation or full continuous synchronization. Full production-voice listening remains pending.
+
+Local ignored artifacts: `renders/quant16_polished_silent.mp4`, 75:30 including animation and pauses, with 22 embedded chapters and English soft subtitles; adjacent `.srt` and `.chapters.txt`; and `media/quant16/narrated_qa/videos/s01_hook/480p15/Hook.mp4`.

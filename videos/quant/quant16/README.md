@@ -136,7 +136,7 @@ These values identify the saved experiment. They are not promises for other prod
 
 Ten existing `test_engine` tests passed during this review. They check selected fixed examples with their own tolerances, including stochastic allowances, covariance, stopping, adjoint, finite-difference, Fourier and toy amplitude/interpolation cases. Passing them does not establish every function's correctness, financial model adequacy or a bank's production controls.
 
-The visual pass is in progress. Final English/Chinese narration-beat receipts, silent-motion review, current-frame inspection and artifact-bound evidence will be recorded in [the sequential QA log](../../../docs/qa/quantitative-finance-polish.md) when complete. Text-only execution is not a rendered visual approval. Full continuous production-voice listening remains a separate pending pass.
+The visual pass is complete: 44 current English/Chinese narration-beat renders and 22 English motion renders were inspected, with zero unresolved warnings. The [sequential QA log](../../../docs/qa/quantitative-finance-polish.md) and [artifact-bound evidence](../../../docs/qa/quant16-polish-evidence.json) record the checks, 13 sampled CPU speech reports and the actual narrated opening. The silent preview runs 75:30, including animation and pauses. Full continuous production-voice listening remains a separate pending pass.
 
 From the repository root, with the Manim environment active and original caches available:
 
