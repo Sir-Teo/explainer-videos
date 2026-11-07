@@ -66,6 +66,9 @@ class Boosting(VoiceoverScene):
             "Because earlier terms are never refitted, this is stagewise rather than stepwise, and that turns out to "
             "matter."
         ) as vo:
+            intro=label('Stagewise fitting adds terms without refitting earlier coefficients',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -90,6 +93,9 @@ class Boosting(VoiceoverScene):
             "by a learning rate nu. Boosting is steepest descent, not in a space of parameters, but in a space of "
             "functions, taking small steps each in the direction of a tree."
         ) as vo:
+            intro=label('Gradient boosting fits trees to loss gradients',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -135,19 +141,23 @@ class Boosting(VoiceoverScene):
         rows = [
             cmath(r"\nu = 1", r":", r"\text{each tree takes a full step}", font_size=32),
             cmath(r"\nu = 0.1", r":", r"\text{ten times as many trees, \ each a tenth}", font_size=32),
-            cmath(r"\text{Friedman (2001)}", r":", r"\text{small } \nu \text{ predicts better, \ always}", font_size=30),
+            cmath(r"\text{Friedman (2001)}", r":", r"\text{small }\nu\text{ often helps; tune both }\nu\text{ and }M", font_size=30),
             cmath(r"M", r":", r"\text{the regularization: \ stop early}", font_size=32),
         ]
         rows[2][-1].set_color(BOOSTC)
         whys = [why(r"greedy"), why(r"cautious"), why(r"an empirical regularity"), why(r"choose $M$ by validation")]
         with self.voiceover(
-            "<bookmark mark='a'/> The learning rate turns out to matter a great deal. With nu equal to one, each tree "
-            "takes its full step towards the residuals. <bookmark mark='b'/> With nu a tenth, each tree takes a tenth of a "
-            "step, and many more trees are needed. <bookmark mark='c'/> Friedman found, and practitioners have confirmed "
-            "ever since, that the small step almost always predicts better in the end. <bookmark mark='d'/> The number of "
-            "trees is then the main regularization: boosting keeps lowering the training error, and is stopped when the "
-            "error on validation data stops falling."
+            "<bookmark mark='a'/> The learning rate turns out to matter a great deal. With nu equal to one, each tree"
+            " takes its full step towards the residuals. <bookmark mark='b'/> With nu a tenth, each tree takes a "
+            "tenth of a step, and many more trees are needed. <bookmark mark='c'/> Friedman found, and practitioners "
+            "have confirmed ever since, that smaller steps often improve generalization when the number of stages is "
+            "tuned appropriately; there is no universal ranking. <bookmark mark='d'/> The number of trees is then the"
+            " main regularization: boosting keeps lowering the training error, and is stopped when the error on "
+            "validation data stops falling."
         ) as vo:
+            intro=label('Learning rate and stage count jointly control regularization',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -182,8 +192,8 @@ class Boosting(VoiceoverScene):
             "fast, bottoms out at " + say(b1["best"], 1) + " after " + str(b1["best_m"]) + " trees, and then climbs, while "
             "the faint training error keeps falling: overfitting. <bookmark mark='c'/> With nu a tenth the error falls "
             "slowly but much further, to " + say(b01["best"], 1) + " after six hundred trees, and is still creeping down. "
-            "<bookmark mark='d'/> For comparison, a random forest reaches " + say(d["rf_mse"], 1) + ", and no method can "
-            "beat the noise variance of one. On this smooth additive surface, slow boosting beats the forest by a wide "
+            "<bookmark mark='d'/> For comparison, a random forest reaches " + say(d["rf_mse"], 1) + ", and the population Bayes risk cannot "
+            "fall below the noise variance of one. These curve minima are test-set oracle diagnostics, not independently validated tuning results. On this smooth additive surface, slow boosting beats the forest by a wide "
             "margin."
         ) as vo:
             self.add(friedman_tag())
@@ -215,6 +225,9 @@ class Boosting(VoiceoverScene):
             "grows linearly rather than exponentially for badly misclassified points, and so is less thrown by mislabelled "
             "cases. They called it LogitBoost."
         ) as vo:
+            intro=label('Expected exponential loss has a half-log-odds minimizer',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -229,14 +242,15 @@ class Boosting(VoiceoverScene):
             label(r"Rosset, \ Zhu \& Hastie (2004): \ the margin-maximizing limit", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Why should small steps help? A clue came from Part 32. Forward stagewise regression on "
-            "the coefficients of a linear model, with infinitesimal steps, traces almost exactly the lasso path. <bookmark "
-            "mark='b'/> Efron, Hastie, Johnstone and Tibshirani made that precise in their 2004 paper on least angle "
-            "regression. <bookmark mark='c'/> Boosting with a small learning rate is forward stagewise regression on a "
-            "dictionary of all possible trees, so it behaves like an L one penalized fit in that enormous space, with the "
-            "number of trees playing the role of the penalty. <bookmark mark='d'/> Saharon Rosset, Ji Zhu and Hastie "
-            "showed that for classification its limit maximizes a margin, which goes a long way to explaining why it "
-            "overfits so slowly."
+            "<bookmark mark='a'/> Why should small steps help? A clue came from Part 32. Forward stagewise regression"
+            " on the coefficients of a linear model, with infinitesimal steps, can follow the lasso path under "
+            "additional design and coefficient-path conditions; the paths differ in general. <bookmark mark='b'/> "
+            "Efron, Hastie, Johnstone and Tibshirani made that precise in their 2004 paper on least angle regression."
+            " <bookmark mark='c'/> Boosting with a small learning rate is forward stagewise regression on a "
+            "dictionary of all possible trees, so it behaves like an L one penalized fit in that enormous space, with"
+            " the number of trees playing the role of the penalty. <bookmark mark='d'/> Saharon Rosset, Ji Zhu and "
+            "Hastie showed that for classification its limit maximizes a margin, which goes a long way to explaining "
+            "why it overfits so slowly."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

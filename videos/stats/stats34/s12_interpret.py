@@ -43,6 +43,9 @@ class Interpret(VoiceoverScene):
             "mark='d'/> Each is a functional of the fitted model and of the population. They are different functionals, "
             "and they answer different questions."
         ) as vo:
+            intro=label('Interpretation methods target distinct model and population functionals',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -108,12 +111,14 @@ class Interpret(VoiceoverScene):
         ), 3.8, 0.38, [5.0, 0.4, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Now give the forest a twin: an eleventh feature that is x one plus a little noise, "
-            "correlated point nine five with it, and carrying no information of its own. <bookmark mark='b'/> Permutation "
-            "importance, <bookmark mark='c'/> computed on fresh test data, credits both: x one with " + say(perm[0], 1) +
-            " and the twin with " + say(perm[10], 1) + ". <bookmark mark='d'/> LOCO, which refits the forest without each "
-            "feature in turn, tells a different story: <bookmark mark='e'/> without x one the twin stands in for it, and "
-            "the loss barely rises, and the same is true the other way round. Each twin is unimportant given the other, "
-            "even though the pair matters a great deal."
+            "correlated point nine five with it, and carrying no additional outcome information once the original "
+            "feature is known. <bookmark mark='b'/> Permutation importance, <bookmark mark='c'/> computed on fresh "
+            "test data, credits both: x one with " + say(perm[0], 1) +
+            " and the twin with " + say(perm[10], 1) + ". <bookmark mark='d'/> LOCO, which refits the forest without each feature in turn, tells a different "
+            "story: <bookmark mark='e'/> without x one the twin stands in for it, and the loss barely rises, and the "
+            "same is true the other way round. These fitted-model loss differences are small. The original still has "
+            "information missing from its noisy twin; finite-model LOCO need not equal the oracle population "
+            "importance."
         ) as vo:
             self.add(friedman_tag())
             self.play(FadeIn(A), FadeIn(labs))
@@ -132,18 +137,19 @@ class Interpret(VoiceoverScene):
     def extrapolate(self):
         rows = fit_rows(VGroup(
             label(r"permuting $x_1$ alone creates cases with $x_1 = 0.9$ and its twin $= 0.1$", font_size=26),
-            label(r"no such case exists; \ the forest was never trained there", font_size=26, color=MISSC),
+            label(r"such mismatched pairs are extremely rare under this design", font_size=26, color=MISSC),
             label(r"permutation importance measures the model's behaviour off the data", font_size=26, color=CALC),
             label(r"Hooker, \ Mentch \& Zhou (2021): \ `permute-and-predict' forces extrapolation", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Why does permutation give the twin so much credit? Scrambling x one alone creates "
-            "artificial cases in which x one is point nine and its twin point one. <bookmark mark='b'/> No such case "
-            "exists in the population, and the forest has never seen one; its predictions there are arbitrary. <bookmark "
-            "mark='c'/> So permutation importance partly measures how the model behaves away from the data, which is a "
-            "property of the model, not of the world. <bookmark mark='d'/> Giles Hooker, Lucas Mentch and Siyu Zhou made "
-            "this argument in 2021 under the heading: please stop permuting features. Partial dependence plots extrapolate "
-            "in exactly the same way when features are correlated."
+            "artificial cases in which x one is point nine and its twin point one. <bookmark mark='b'/> Such cases "
+            "are extremely rare under this noisy-twin distribution, so the forest has little training support there; "
+            "its predictions there are arbitrary. <bookmark mark='c'/> So permutation importance partly measures how "
+            "the model behaves away from the data, which is a property of the model, not of the world. <bookmark "
+            "mark='d'/> Giles Hooker, Lucas Mentch and Siyu Zhou made this argument in 2021 under the heading: please"
+            " stop permuting features. Partial dependence plots extrapolate in exactly the same way when features are"
+            " correlated."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -170,6 +176,9 @@ class Interpret(VoiceoverScene):
             "Gilbert, Noah Simon and Marco Carone showed in 2021 how to do so efficiently, with any machine-learning "
             "method inside."
         ) as vo:
+            intro=label('Oracle LOCO measures additional conditional-mean information',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -187,15 +196,19 @@ class Interpret(VoiceoverScene):
         whys = [why(r"the coalition $S$ fixed at $x$'s values"), why(r"Shapley (1953): \ average marginal contribution"),
                 why(r"efficiency: \ the prediction is shared out"), why(r"Lundberg \& Lee (2017): \ SHAP")]
         with self.voiceover(
-            "<bookmark mark='a'/> For a single prediction, the most popular explanation borrows from game theory. Treat the "
-            "features as players. The value of a coalition S is the average prediction when the features in S are fixed "
-            "at this case's values and the others are drawn from the population. <bookmark mark='b'/> Lloyd Shapley showed "
-            "in 1953 that only one way of sharing out a game's value is symmetric, additive and gives nothing to a player "
-            "who contributes nothing: each player's average marginal contribution over all orders of joining. <bookmark "
-            "mark='c'/> The shares add up exactly to this prediction minus the average prediction. <bookmark mark='d'/> "
-            "With m features there are two to the m coalitions, so in practice they are approximated; Scott Lundberg and "
-            "Su-In Lee's SHAP of 2017 made that fast, especially for trees."
+            "<bookmark mark='a'/> For a single prediction, the most popular explanation borrows from game theory. "
+            "Treat the features as players. The value of a coalition S is the average prediction when the features in"
+            " S are fixed at this case's values and the others are drawn from the population. <bookmark mark='b'/> "
+            "Lloyd Shapley showed in 1953 that only one way of sharing out a game's value is symmetric, additive and "
+            "gives nothing to a player who contributes nothing: with the efficiency axiom as well, each player’s "
+            "average marginal contribution over all orders of joining. <bookmark mark='c'/> The shares add up exactly"
+            " to this prediction minus the average prediction. <bookmark mark='d'/> With m features there are two to "
+            "the m coalitions, so in practice they are approximated; Scott Lundberg and Su-In Lee's SHAP of 2017 made"
+            " that fast, especially for trees."
         ) as vo:
+            intro=label('Shapley efficiency allocates the value of a specified coalition game',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -231,13 +244,13 @@ class Interpret(VoiceoverScene):
             label(r"exact: \ all 32 coalitions of the first five features", font_size=20, color=GREY_A),
         ), 4.2, 0.42, [4.6, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Exact Shapley values for one case, over the five features that matter, computing all "
-            "thirty-two coalitions with the forest. The average prediction over the population is "
+            "<bookmark mark='a'/> Exact Shapley values for one case, over the first five features as players, computing all "
+            "thirty-two coalitions with the forest. The average prediction over the chosen 120-case background is "
             + say(d["v0"], 1) + ". <bookmark mark='b'/> Each feature's share is a step up or down. This case has a large x "
             "four, which pushes the prediction up most, then x two and x one, through the sine of their product; x three, "
-            "near the high end of its parabola, adds a little; x five, at its average, nothing. <bookmark mark='c'/> The "
+            "near the high end of its parabola, adds a little; x five, near its average, a small contribution. <bookmark mark='c'/> The "
             "steps end exactly at the prediction for this case's five values, " + say(d["vall"], 1) + ": the shares account "
-            "for the whole difference. <bookmark mark='d'/> Like partial dependence, the coalition values fill in the missing "
+            "for the whole difference for this five-player game; the other features, including the twin, are averaged over the background rather than fixed at the full case. <bookmark mark='d'/> Like partial dependence, the coalition values fill in the missing "
             "features independently of the ones fixed, so with correlated features they too ask the model about cases that "
             "do not exist."
         ) as vo:

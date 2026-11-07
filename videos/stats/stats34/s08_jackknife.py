@@ -70,6 +70,9 @@ class Jackknife(VoiceoverScene):
             "Emmanuel Candès, Aaditya Ramdas and Ryan Tibshirani showed in 2021 that the jackknife has no coverage "
             "guarantee at all: for some fitting methods its coverage can be driven to zero."
         ) as vo:
+            intro=label('Leave-one-out residuals alone need not validate a full-fit interval',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -80,21 +83,26 @@ class Jackknife(VoiceoverScene):
         rows = [
             cmath(r"\text{lower}", r":", r"\hat q^{-}_{\alpha}\big\{\hat\mu_{-i}(x) - R_i\big\}", font_size=32),
             cmath(r"\text{upper}", r":", r"\hat q^{+}_{\alpha}\big\{\hat\mu_{-i}(x) + R_i\big\}", font_size=32),
-            cmath(r"P\big(Y_{n+1} \in C(X_{n+1})\big)", r"\ge", r"1 - 2\alpha \ \ \text{always}", font_size=30),
+            cmath(r"P\big(Y_{n+1} \in C(X_{n+1})\big)", r"\ge", r"1 - 2\alpha \ \ \text{under exchangeability and symmetric fitting}", font_size=30),
             cmath(r"\text{in practice}", r":", r"\approx 1 - \alpha", font_size=32),
         ]
         rows[2][-1].set_color(BANDC)
         whys = [why(r"the $\lfloor \alpha(n+1) \rfloor$-th smallest"), why(r"the $\lceil (1-\alpha)(n+1) \rceil$-th smallest"),
-                why(r"for any algorithm treating cases symmetrically"), why(r"for stable algorithms, \ exactly")]
+                why(r"for any algorithm treating cases symmetrically"), why(r"stability can improve the bound; finite-sample slack remains")]
         with self.voiceover(
-            "<bookmark mark='a'/> Their fix, the jackknife plus, is small and decisive: use the leave-one-out models for "
-            "the centre too. For each i, the model without case i makes a prediction at the new x, and we shift it down "
-            "by case i's own residual. The lower end is a low quantile of these n numbers. <bookmark mark='b'/> The upper "
-            "end is a high quantile of the predictions shifted up. <bookmark mark='c'/> They proved that this interval "
-            "covers with probability at least one minus two alpha, for any distribution and any fitting algorithm that "
-            "treats the cases symmetrically, however unstable. <bookmark mark='d'/> The factor of two is the price of the "
-            "worst case; in practice, and exactly for stable algorithms, the coverage is close to one minus alpha."
+            "<bookmark mark='a'/> Their fix, the jackknife plus, is small and decisive: use the leave-one-out models "
+            "for the centre too. For each i, the model without case i makes a prediction at the new x, and we shift "
+            "it down by case i's own residual. The lower end is a low quantile of these n numbers. <bookmark "
+            "mark='b'/> The upper end is a high quantile of the predictions shifted up. <bookmark mark='c'/> They "
+            "proved that this interval covers with probability at least one minus two alpha, for any distribution and"
+            " any fitting algorithm that treats the cases symmetrically, however unstable. <bookmark mark='d'/> The "
+            "factor of two is the price of the worst case; in practice, stability conditions can yield stronger "
+            "approximate bounds with finite-sample slack. At alpha point one the general jackknife-plus guarantee is "
+            "eighty percent, not ninety."
         ) as vo:
+            intro=label('Jackknife+ pairs each residual with its own fitted prediction',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -122,15 +130,16 @@ class Jackknife(VoiceoverScene):
             label(rf"jackknife+: \ {100 * r100['jplus']['cover']:.0f}\%; \ split: \ {100 * r100['split']['cover']:.0f}\%", font_size=22, color=BANDC),
         ), 4.2, 0.42, [4.6, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Barber and colleagues' own experiment, repeated. A hundred training points, p Gaussian "
-            "predictors, and least squares, taking the minimum-norm solution once p exceeds n, where the fit interpolates "
-            "the data. Sixty data sets at each p. <bookmark mark='b'/> The in-sample method collapses as p grows: at p "
-            "equal to n the fit passes through every training point, the residuals are all zero, and the interval has no "
-            "width. <bookmark mark='c'/> The jackknife holds up for small p but fails near the interpolation threshold, "
-            "where leaving one point out changes the fit violently. <bookmark mark='d'/> The jackknife plus stays near "
-            "ninety percent everywhere, as its theory promises; at p equal to n it covers ninety-five. Split conformal is "
-            "valid too, though it dips at p equal to fifty, where its own fit, on only half the data, is the one "
-            "interpolating; with sixty data sets per point, some wobble is expected."
+            "<bookmark mark='a'/> Barber and colleagues' own experiment, repeated. A hundred training points, p "
+            "Gaussian predictors, and least squares, taking the minimum-norm solution once p exceeds n, where the fit"
+            " interpolates the data. Sixty data sets at each p. <bookmark mark='b'/> The in-sample method collapses "
+            "as p grows: at p equal to n the fit passes through every training point, the residuals are all zero, and"
+            " the interval has no width. <bookmark mark='c'/> The jackknife holds up for small p but fails near the "
+            "interpolation threshold, where leaving one point out changes the fit violently. <bookmark mark='d'/> The"
+            " jackknife plus stays near ninety percent in this experiment, above its eighty percent general lower "
+            "bound; at p equal to n it covers ninety-five. Split conformal is valid too, though it dips at p equal to"
+            " fifty, where its own fit, on only half the data, is the one interpolating; with sixty data sets per "
+            "point, some wobble is expected."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A), Create(nine), Create(pn), FadeIn(side[0]))
@@ -155,7 +164,7 @@ class Jackknife(VoiceoverScene):
         foot = fit_rows(VGroup(
             label(r"median interval widths; \ the noise alone needs about 3.3", font_size=24),
             label(r"near $p = n$ the honest answer is: \ very uncertain", font_size=24, color=BANDC),
-            label(r"jackknife+ is narrower than split for small $p$: \ it trains on all $n$", font_size=24, color=CALC),
+            label(r"jackknife+ is narrower than split for small $p$: \ it trains on $n-1$", font_size=24, color=CALC),
         ), 12.4, 0.35, [0, -1.8, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The widths tell the rest. The noise alone, with standard deviation one, needs an "
@@ -189,10 +198,13 @@ class Jackknife(VoiceoverScene):
             "<bookmark mark='a'/> Refitting n times is expensive for a forest or a network. CV plus does the same with K "
             "folds: each case's residual comes from the model trained without its fold, and the same model makes that "
             "case's shifted prediction at the new point. <bookmark mark='b'/> Ten folds, ten fits. <bookmark mark='c'/> "
-            "The guarantee loses only a small term that vanishes as n grows. <bookmark mark='d'/> And for bagged models "
+            "Its bound includes a fold-dependent correction under the theorem’s symmetry and fold-size conditions. Nominal ninety percent is not a universal CV-plus guarantee. <bookmark mark='d'/> And for bagged models "
             "there is a free version: Byol Kim, Chen Xu and Barber's jackknife plus after bootstrap uses, for each case, "
             "the trees that never saw it, exactly the out-of-bag idea of chapter two."
         ) as vo:
+            intro=label('CV+ saves fits but has its own finite-sample correction',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -256,6 +268,9 @@ class Jackknife(VoiceoverScene):
             "were too generous, Q hat is negative and the band shrinks. The guarantee is the quantile lemma's, unchanged, "
             "and the width now follows the data."
         ) as vo:
+            intro=label('Conformal quantile scores can adapt a band to input-dependent spread',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

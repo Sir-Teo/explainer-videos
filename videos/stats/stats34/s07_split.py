@@ -61,12 +61,16 @@ class Split(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> Suppose the n calibration cases and the new case are exchangeable: their joint "
             "distribution does not change if we shuffle them. Independent and identically distributed cases are "
-            "exchangeable, but so are many dependent ones. <bookmark mark='b'/> Apply any fixed score function to each "
-            "case, say how far its response is from a model's prediction. The scores are exchangeable too. <bookmark "
-            "mark='c'/> Then by symmetry alone, the new case's score is equally likely to have any of the n plus one "
-            "ranks among them. <bookmark mark='d'/> No model, no distribution, no large sample. It is Part 16's "
+            "exchangeable, but so are many dependent ones. <bookmark mark='b'/> Apply any fixed score function to "
+            "each case, say how far its response is from a model's prediction. The scores are exchangeable too. "
+            "<bookmark mark='c'/> With no ties, symmetry makes its rank uniform. Ties require randomization for "
+            "equality; the unrandomized coverage lower bound still holds. <bookmark mark='d'/> No parametric "
+            "distribution or large-sample approximation, but exchangeability is essential. It is Part 16's "
             "permutation argument, pointed at the future."
         ) as vo:
+            intro=label('Exchangeable continuous scores have uniform marginal ranks',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -87,12 +91,14 @@ class Split(VoiceoverScene):
             label(r"a new score below it: \ 18 of 20 slots", font_size=22, color=BANDC),
         ), 3.8, 0.42, [5.0, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> This part's instrument is a score ladder. Here are nineteen calibration scores, sorted "
-            "from smallest to largest. <bookmark mark='b'/> We want ninety percent coverage, so alpha is a tenth, and we "
-            "take k as the ceiling of twenty times point nine: eighteen. <bookmark mark='c'/> The threshold q is the "
-            "eighteenth smallest score. <bookmark mark='d'/> When a new score arrives, it falls into one of twenty gaps "
-            "between and around the nineteen bars, each equally likely. In eighteen of the twenty it lands at or below "
-            "the threshold. So the chance that a new score is at most q is exactly eighteen in twenty: ninety percent."
+            "<bookmark mark='a'/> This part's instrument is a score ladder. Here are nineteen calibration scores, "
+            "sorted from smallest to largest. <bookmark mark='b'/> We want ninety percent coverage, so alpha is a "
+            "tenth, and we take k as the ceiling of twenty times point nine: eighteen. <bookmark mark='c'/> The "
+            "threshold q is the eighteenth smallest score. <bookmark mark='d'/> Across fresh continuous calibration "
+            "sets and a new score jointly, each of the twenty ranks is equally likely. The gaps in this particular "
+            "displayed, rounded ladder are not conditionally equally likely. In eighteen of the twenty it lands at or"
+            " below the threshold. So the chance that a new score is at most q is exactly eighteen in twenty: ninety "
+            "percent."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(lad), FadeIn(side[0]))
@@ -161,6 +167,9 @@ class Split(VoiceoverScene):
             "This is the quantile lemma. <bookmark mark='d'/> If k exceeds n, there are too few scores for the requested "
             "level, and the honest threshold is infinite."
         ) as vo:
+            intro=label('A finite-sample rank correction gives a coverage lower bound',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -176,15 +185,20 @@ class Split(VoiceoverScene):
         ]
         rows[3][-1].set_color(BANDC)
         whys = [why(r"a forest, \ a network, \ anything"), why(r"the model never saw these"),
-                why(r"$\hat q$ from the quantile lemma"), why(r"finite $n$, \ any distribution, \ any model")]
+                why(r"$\hat q$ from the quantile lemma"), why(r"exchangeable scores; model fitted on separate data")]
         with self.voiceover(
-            "<bookmark mark='a'/> Split conformal prediction turns this into intervals for any model. Train the model, any "
-            "model at all, on one part of the data. <bookmark mark='b'/> On the other part, the calibration set, score "
-            "each case by its absolute residual. Because the model never saw these cases, their scores are exchangeable "
-            "with a new case's. <bookmark mark='c'/> The prediction interval is the model's prediction plus or minus q "
-            "hat. <bookmark mark='d'/> The new response falls inside with probability at least one minus alpha. Finite "
-            "sample, any distribution, any model, however wrong. A bad model gives wide intervals, not dishonest ones."
+            "<bookmark mark='a'/> Split conformal prediction turns this into intervals for any model. Train the "
+            "model, any model at all, on one part of the data. <bookmark mark='b'/> On the other part, the "
+            "calibration set, score each case by its absolute residual. Conditional on the fitted score function, the"
+            " calibration and new cases must be exchangeable. Keeping model fitting separate is necessary but does "
+            "not alone establish this assumption. <bookmark mark='c'/> The prediction interval is the model's "
+            "prediction plus or minus q hat. <bookmark mark='d'/> The new response falls inside with probability at "
+            "least one minus alpha. Finite sample, any distribution, any model, however wrong. A bad model gives wide"
+            " intervals, not dishonest ones."
         ) as vo:
+            intro=label('Split conformal requires exchangeability given the fitted score',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -210,12 +224,12 @@ class Split(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> One subtlety. The ninety percent is an average over calibration sets as well as over "
             "the new case. Given one particular calibration set, the coverage is a random number, the score "
-            "distribution function evaluated at q hat, and Vovk showed that it follows a beta distribution with "
+            "distribution function evaluated at q hat, and, for independent identically distributed continuous scores given the fitted model, it follows a beta distribution with "
             "parameters k and n plus one minus k. <bookmark mark='b'/> With nineteen calibration cases, the coverage you "
             "actually get lies between " + say(bt["19"]["q05"]) + " and " + say(bt["19"]["q95"]) + " in ninety percent of "
             "calibration sets. <bookmark mark='c'/> With ninety-nine, between " + say(bt["99"]["q05"]) + " and "
             + say(bt["99"]["q95"]) + ". <bookmark mark='d'/> With nine hundred and ninety-nine, within about one and a "
-            "half points of ninety. A thousand calibration cases make the guarantee nearly a promise about your own "
+            "half points of ninety. This quantifies variation over calibration sets; it is not input-conditional coverage for your "
             "interval."
         ) as vo:
             self.play(FadeIn(A), Create(nine), FadeIn(side[0]))
@@ -311,7 +325,7 @@ class Split(VoiceoverScene):
     def impossible(self):
         rows = [
             cmath(r"\text{wanted}", r":", r"P\big(Y \in C(X) \mid X = x\big) \ge 1 - \alpha \ \text{for every } x", font_size=28),
-            cmath(r"\text{for all distributions}", r"\Rightarrow", r"C(x) \text{ infinite, \ almost everywhere}", font_size=28),
+            cmath(r"\text{for all distributions}", r"\Rightarrow", r"\text{no finite expected length at non-atomic }x", font_size=28),
             cmath(r"\text{what survives}", r":", r"\text{coverage within groups chosen in advance}", font_size=28),
             cmath(r"\text{or}", r":", r"\text{better scores: \ bands that adapt}", font_size=32),
         ]
@@ -322,11 +336,14 @@ class Split(VoiceoverScene):
             "<bookmark mark='a'/> Could we have coverage at every x, conditional on the inputs, without assumptions? "
             "<bookmark mark='b'/> No. Vovk in 2012, Lei and Wasserman in 2014, and Rina Foygel Barber and colleagues in "
             "2021 proved versions of the same impossibility: any procedure with distribution-free conditional coverage "
-            "must give infinite intervals at almost every point of a continuous distribution. <bookmark mark='c'/> What "
+            "cannot have finite expected interval length at non-atomic input values over an unrestricted response class. <bookmark mark='c'/> What "
             "survives is coverage within a few groups fixed in advance, which chapter nine will build. <bookmark mark='d'/> "
             "Or we can change the score so that the band breathes with the data, which is the next chapter. Part 57 returns "
             "to the impossibility theorems and proves them."
         ) as vo:
+            intro=label('Unrestricted conditional coverage prevents finite expected length',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

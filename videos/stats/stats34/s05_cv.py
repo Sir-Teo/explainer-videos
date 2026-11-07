@@ -42,6 +42,9 @@ class CV(VoiceoverScene):
             "fold in turn, fits on the rest, and averages the held-out losses. <bookmark mark='d'/> We almost always report "
             "it as if it estimated the first: our model's error rate is so much. Does it?"
         ) as vo:
+            intro=label('A fitted model and a learning procedure have different risk targets',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -68,6 +71,9 @@ class CV(VoiceoverScene):
             "one, about one point two five, from the inverse Wishart mean. <bookmark mark='d'/> On each of a thousand data "
             "sets, compute ten-fold cross-validation and the exact conditional error, and compare."
         ) as vo:
+            intro=label('Gaussian least squares gives an independently known risk target',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -90,18 +96,18 @@ class CV(VoiceoverScene):
             label(rf"SD of $\mathrm{{Err}}_{{XY}}$: \ {d['sd_errxy']:.3f}", font_size=22, color=TRUEC),
             label(rf"SD of the CV estimate: \ {d['sd_cv']:.3f}", font_size=22, color=PREDC),
             label(rf"mean CV {d['mean_cv']:.3f} \ vs \ Err {d['Err']:.3f}", font_size=22),
-            label(r"CV estimates Err, \ not $\mathrm{Err}_{XY}$", font_size=22, color=CALC),
+            label(r"CV primarily tracks average error in this Gaussian OLS example", font_size=22, color=CALC),
         ), 4.6, 0.4, [4.3, 0.3, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Here are three hundred of the thousand data sets: the exact conditional error across, "
             "the cross-validation estimate up. If cross-validation estimated the error of the model in hand, the points "
             "would lie along the diagonal. <bookmark mark='b'/> They form a shapeless cloud. The correlation between the "
-            "estimate and the quantity we think it estimates is " + say(d["corr"]) + ": none at all. <bookmark mark='c'/> "
+            "estimate and the quantity we think it estimates is " + say(d["corr"]) + ": very little linear association in this experiment. <bookmark mark='c'/> "
             "The conditional error itself varies little from data set to data set, with a standard deviation of point oh "
             "nine; <bookmark mark='d'/> the estimate varies more than twice as much. Its average, one point two nine, is "
             "close to the average error, one point two five, slightly high because each fold trains on only ninety "
             "points. <bookmark mark='e'/> Bates, Hastie and Tibshirani's conclusion: cross-validation estimates Err, the "
-            "error of the procedure averaged over training sets, and tells us essentially nothing about the error of the "
+            "error of the procedure averaged over training sets, and may be weakly informative about the error of the "
             "particular model we fitted."
         ) as vo:
             self.add(seeded_tag())
@@ -156,10 +162,13 @@ class CV(VoiceoverScene):
             "six four five of those gives a nominal ninety percent interval. <bookmark mark='c'/> Even for its proper "
             "target, the average error, it covers only " + say(100 * d["cover_err"], 1) + " percent of the time. "
             "<bookmark mark='d'/> The real standard deviation of the estimate is " + say(d["se_ratio"]) + " times the "
-            "naive standard error, because the held-out losses are correlated: every fold's model was trained on mostly "
+            "naive standard error, because training-size bias and dependence both matter. The held-out losses are correlated: every fold's model was trained on mostly "
             "the same points. Bates, Hastie and Tibshirani propose estimating the correction with a nested "
             "cross-validation."
         ) as vo:
+            intro=label('Naive cross-validation intervals ignore dependence and training-size bias',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -181,6 +190,8 @@ class CV(VoiceoverScene):
             label(r"tuning and assessing with the same folds: \ optimistic", font_size=24, color=MISSC),
             label(r"Varma \& Simon (2006): \ selection inside CV, \ or the error is biased low", font_size=24, color=GREY_A),
         ), 12.4, 0.35, [0, -2.2, 0])
+        intro=label("Tune inside each assessment split",font_size=34).to_edge(UP,buff=.35)
+        self.add(intro)
         with self.voiceover(
             "<bookmark mark='a'/> Nested cross-validation has a second, older use. If cross-validation chooses a tuning "
             "parameter, such as a forest's m try or boosting's number of trees, then the minimum of the cross-validation "
@@ -213,10 +224,13 @@ class CV(VoiceoverScene):
             "<bookmark mark='a'/> The arithmetic of that optimism is Part 33's again. Choosing the tuning parameter that "
             "minimizes the cross-validation curve, <bookmark mark='b'/> the expected value of the minimum is at most the "
             "minimum of the expected values, because the minimum of noisy curves lands, on average, below every one of "
-            "them. <bookmark mark='c'/> The more candidates we try, the larger the gap: the winner's curse of a selected "
+            "them. <bookmark mark='c'/> More competing noisy choices can increase this optimism; the amount depends on their joint errors: the winner's curse of a selected "
             "estimate. <bookmark mark='d'/> The remedy is to assess the whole procedure, tuning included, on data that "
             "the choice never saw."
         ) as vo:
+            intro=label('Selecting the best noisy validation score creates optimism',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -240,8 +254,8 @@ class CV(VoiceoverScene):
             label(r"next: \ can a predicted probability be taken at its word?", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> So cross-validation is an honest estimate of how well the procedure does on average, "
-            "not of how well this particular model will do. <bookmark mark='b'/> Its usual standard error is too small. "
+            "<bookmark mark='a'/> Cross-validation targets average performance at the fold training size, "
+            "and need not closely track the conditional error of the full-data fit. <bookmark mark='b'/> Its usual standard error is too small. "
             "<bookmark mark='c'/> And any choice it makes must be assessed outside it. <bookmark mark='d'/> Next, a "
             "different kind of honesty: when a model says seventy percent, does it mean seventy percent?"
         ) as vo:

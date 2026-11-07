@@ -45,6 +45,9 @@ class Shift(VoiceoverScene):
             "are in the test population than in calibration. <bookmark mark='d'/> Once w is not constant, a new case is no "
             "longer exchangeable with the old ones, and the quantile lemma no longer applies."
         ) as vo:
+            intro=label('Covariate shift changes input frequencies while preserving response laws',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -114,14 +117,18 @@ class Shift(VoiceoverScene):
         whys = [why(r"the test point's own weight goes at infinity"), why(r"a weighted quantile lemma"),
                 why(r"Tibshirani, \ Barber, \ Cand\`es \& Ramdas (2019)"), why(r"the special case")]
         with self.voiceover(
-            "<bookmark mark='a'/> Ryan Tibshirani, Barber, Candès and Ramdas showed how in 2019. Give each calibration "
-            "score a weight proportional to the likelihood ratio at its x, and give the new point its own weight, "
-            "<bookmark mark='b'/> placed at infinity. Take the one minus alpha quantile of this weighted distribution of "
-            "scores. <bookmark mark='c'/> They proved a weighted version of the quantile lemma: the resulting band covers "
-            "at least one minus alpha under the shift. <bookmark mark='d'/> When all the weights are equal, it is ordinary "
-            "split conformal. The threshold now depends on x, through the new point's weight: a test point from a "
-            "rare region gets a wider interval."
+            "<bookmark mark='a'/> Ryan Tibshirani, Barber, Candès and Ramdas showed how in 2019. Give each "
+            "calibration score a weight proportional to the likelihood ratio at its x, and give the new point its own"
+            " weight, <bookmark mark='b'/> placed at infinity. Take the one minus alpha quantile of this weighted "
+            "distribution of scores. <bookmark mark='c'/> They proved a weighted version of the quantile lemma: the "
+            "resulting band covers at least one minus alpha under the shift. <bookmark mark='d'/> When all the "
+            "weights are equal, it is ordinary split conformal. The threshold now depends on x, through the new "
+            "point's weight: a point with a larger target-to-calibration density ratio can require a higher "
+            "threshold, possibly infinity."
         ) as vo:
+            intro=label('Known density ratios reweight scores and the test-point mass',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -219,13 +226,17 @@ class Shift(VoiceoverScene):
         whys = [why(r"a sliding window"), why(r"did we miss?"), why(r"Gibbs \& Cand\`es (2021)"),
                 why(r"a hit nudges it back up a little")]
         with self.voiceover(
-            "<bookmark mark='a'/> Isaac Gibbs and Candès proposed adaptive conformal inference in 2021. At each time, use the "
-            "one minus alpha t quantile of recent scores, where alpha t is a level we keep adjusting. <bookmark mark='b'/> "
-            "Record whether this step's score exceeded the threshold: a miss. <bookmark mark='c'/> Then update alpha t "
-            "by a small step gamma times alpha minus the miss indicator. <bookmark mark='d'/> A miss lowers alpha t by "
-            "gamma times one minus alpha, so the next band is wider; a hit raises it by gamma alpha, a tenth as much, so "
-            "the band slowly narrows. It is the simplest feedback controller there is."
+            "<bookmark mark='a'/> Isaac Gibbs and Candès proposed adaptive conformal inference in 2021. At each time,"
+            " use the one minus alpha t quantile of recent scores, where alpha t is a level we keep adjusting. "
+            "<bookmark mark='b'/> Record whether this step's score exceeded the threshold: a miss. <bookmark "
+            "mark='c'/> Then update alpha t by a small step gamma times alpha minus the miss indicator. <bookmark "
+            "mark='d'/> A miss lowers alpha t by gamma times one minus alpha, so the next band is wider; a hit raises"
+            " it by gamma alpha, one ninth as much at alpha point one, so the band slowly narrows. It is the simplest"
+            " feedback controller there is."
         ) as vo:
+            intro=label('Adaptive conformal updates the target quantile after each miss',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -273,13 +284,16 @@ class Shift(VoiceoverScene):
                 why(r"the misses could bunch together"), why(r"Part 58 meets this tradeoff again")]
         with self.voiceover(
             "<bookmark mark='a'/> The guarantee is of an unusual kind. Over T steps, the miss rate is within a constant "
-            "over gamma T of alpha, <bookmark mark='b'/> for every possible sequence of data, even one chosen by an "
+            "over gamma T of alpha, <bookmark mark='b'/> with infinite and empty interval conventions, for every finite-score sequence, including one chosen by an "
             "adversary who knows the method. The proof is a few lines: alpha t stays in a bounded interval, and its total "
             "movement is gamma times the sum of alpha minus the misses. <bookmark mark='c'/> The catch is that this is a "
             "long-run frequency, not a probability for any single step; misses can bunch together. <bookmark mark='d'/> "
             "And gamma trades fast adaptation against a jittery band. Part 57 develops these guarantees, and Part 58's "
             "anytime-valid inference shares their spirit."
         ) as vo:
+            intro=label('Bounded level updates control long-run miss frequency',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
