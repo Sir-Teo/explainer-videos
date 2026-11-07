@@ -40,7 +40,7 @@ class Diagnostics(VoiceoverScene):
             "In 1973 Francis Anscombe published four small datasets to make a point. <bookmark mark='a'/> All four have the "
             "same means, the same variances, the same correlation, and the same fitted line: three plus a half x, with R "
             "squared of point six seven. <bookmark mark='b'/> The first is an ordinary noisy line. The second is a smooth curve, "
-            "for which a straight line is the wrong model. The third is a perfect line with one outlier. The fourth has no "
+            "for which a straight line is the wrong model. The third is nearly a line with one outlier. The fourth has no "
             "relationship at all, except for a single point far to the right that decides the entire slope. "
             "<bookmark mark='c'/> Identical numbers, four different stories. Diagnostics are how you tell them apart without "
             "having to look at every plot."
@@ -63,6 +63,7 @@ class Diagnostics(VoiceoverScene):
         rows[0][2].set_color(OBS)
         whys = [why(r"leverage: \ how far $x_i$ is from the others"), why(r"the trace of the hat matrix (ch.~2)"),
                 why(r"high-leverage points pull the line to themselves: \ small residuals"), why(r"put residuals on a common scale")]
+        intro = label('Separate unusual predictors from unusual residuals', font_size=36)
         with self.voiceover(
             "Two quantities do most of the work. <bookmark mark='a'/> The leverage of a point is its diagonal entry in the hat "
             "matrix, and for one predictor it measures how far its x is from the others. <bookmark mark='b'/> Leverages add up "
@@ -71,9 +72,12 @@ class Diagnostics(VoiceoverScene):
             "<bookmark mark='d'/> Dividing by that standard deviation gives the studentized residuals, which are comparable "
             "across points."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.65, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -90,7 +94,7 @@ class Diagnostics(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"Built: \ the influence probe", font_size=26, color=OBS),
             label(r"drag one point; \ the line refits live", font_size=22, color=GREY_A),
-            label(r"far in $y$ only: \ a big residual, \ little effect", font_size=22),
+            label(r"far in $y$ at central $x$: \ big residual, \ limited slope effect", font_size=22),
             label(r"far in $x$ only: \ high leverage, \ on the line", font_size=22),
             label(r"far in both: \ it moves the line", font_size=22, color=S.ACCENT),
         ), 4.6, 0.3, [4.6, -1.6, 0])
@@ -212,13 +216,13 @@ class Diagnostics(VoiceoverScene):
         pts = scatter(ax, q[keep], rs[keep], radius=0.04)
         rows = fit_rows(VGroup(
             label(r"the normal quantile plot (Part 1) of the residuals", font_size=24),
-            label(r"on the line: \ normal errors", font_size=22, color=GREY_A),
+            label(r"near the line: \ compatible with IID homoskedastic normal errors", font_size=22, color=GREY_A),
             label(r"tails bending away: \ heavy tails or outliers", font_size=22, color=RES),
             label(r"here: \ chapter 10's funnel data, \ with tails far heavier than normal", font_size=22, color=OBS),
         ), 5.2, 0.34, [3.9, -0.3, 0])
         with self.voiceover(
             "One more plot belongs in every regression. <bookmark mark='a'/> Part 1's normal quantile plot, applied to the "
-            "studentized residuals. If the errors are normal, the points follow the diagonal. <bookmark mark='b'/> Here they "
+            "studentized residuals. Under IID homoskedastic normal errors, these dependent internally studentized residuals should lie approximately near the diagonal; this is a diagnostic, not a proof. <bookmark mark='b'/> Here they "
             "don't: both tails bend away, far heavier than normal. These are the funnel-shaped data of the next chapter, where "
             "the noisiest points are also the most influential. The plot can't tell you why the tails are heavy, but it tells "
             "you to find out."

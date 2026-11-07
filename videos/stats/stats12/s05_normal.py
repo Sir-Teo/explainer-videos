@@ -33,18 +33,22 @@ class NormalTheory(VoiceoverScene):
         rows[3][2].set_color(OBS)
         whys = [why(r"normal errors: \ $\hat\beta$ is linear in $y$"), why(r"Cochran's theorem (Part 8): \ the residual projection"),
                 why(r"unbiased for $\sigma^2$"), why(r"Student's pivot: \ tests and intervals for each coefficient")]
+        intro = label('Exact inference under the normal linear model', font_size=36)
         with self.voiceover(
-            "Add one more assumption, normal errors, and exact inference follows. <bookmark mark='a'/> Beta-hat is linear in "
+            "For fixed full-column-rank X and independent mean-zero normal errors with common variance, exact inference follows. <bookmark mark='a'/> Beta-hat is linear in "
             "the normal y, so it's normal, centred at beta, with covariance sigma squared X transpose X inverse. "
             "<bookmark mark='b'/> The residual sum of squares over sigma squared is chi-squared with n minus p degrees of "
             "freedom, independent of beta-hat: Part 8's Cochran theorem, with the residual projection. "
             "<bookmark mark='c'/> So s squared, the residual sum of squares over n minus p, estimates sigma squared without "
             "bias. <bookmark mark='d'/> And each coefficient, standardized by its estimated standard error, is Student's t "
-            "with n minus p degrees of freedom. Every coefficient table in every statistics package rests on this line."
+            "with n minus p degrees of freedom. This is the classical normal-model coefficient table; robust and generalized models use other approximations."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.7, x=-0.4, buff=0.55, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -65,7 +69,7 @@ class NormalTheory(VoiceoverScene):
         ), 4.6, 0.36, [4.4, -0.3, 0])
         tag = simulated_tag(r"the World: \ 10,000 samples", corner=DR)
         with self.voiceover(
-            "On the World's families, where the errors are in fact normal: <bookmark mark='a'/> the true slope, over all "
+            "On the World's finite synthetic families, this is an empirical check of the normal approximation: <bookmark mark='a'/> the true slope, over all "
             "fifty thousand families, is point seven oh three. <bookmark mark='b'/> Take ten thousand samples of thirty, "
             "standardize each estimated slope by its own standard error, and the histogram follows Student's t with "
             "twenty-eight degrees of freedom. <bookmark mark='c'/> The ninety-five percent intervals cover ninety-five point "
@@ -93,6 +97,7 @@ class NormalTheory(VoiceoverScene):
         rows[1][2].set_color(OBS)
         whys = [why(r"nested models: \ another right angle"), why(r"the extra fit per extra parameter, \ over the leftover noise"),
                 why(r"100 families, \ heights in cm"), why(r"one added variable: \ the $F$-test is the $t$-test squared")]
+        intro = label('Compare nested linear models', font_size=36)
         with self.voiceover(
             "Pythagoras also gives the F-test, for whether a group of variables matters. <bookmark mark='a'/> Fit a small "
             "model and a full one containing it. The small model's residual sum of squares is the full model's plus the "
@@ -103,9 +108,12 @@ class NormalTheory(VoiceoverScene):
             "<bookmark mark='d'/> R squared rises from point zero three to point two one. With a single added variable, F is "
             "exactly the square of that variable's t statistic."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.2, buff=0.6, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -192,21 +200,24 @@ class NormalTheory(VoiceoverScene):
                   font_size=30),
         ]
         rows[1][2].set_color(HIT)
-        whys = [why(r"a weighted average of the errors: \ the CLT applies (Part 6)"),
+        whys = [why(r"a weighted average of the errors: \ finite error variance, \ non-dominating leverage: \ a CLT can apply"),
                 why(r"6,000 samples each: \ the $t$-interval for the slope still covers")]
-        foot = label(r"normality matters for small samples and for prediction intervals; \ the slope's interval is robust", font_size=24,
+        foot = label(r"normality matters for small samples and for prediction intervals; \ this simulated design behaves well; \ no universal small-sample guarantee", font_size=24,
                      color=OBS).to_edge(DOWN, buff=0.8)
+        intro = label('Check a well-spread design with skewed errors', font_size=36)
         with self.voiceover(
             "How much does the normality assumption matter? <bookmark mark='a'/> The slope's error is a weighted average of the "
-            "errors, so Part 6's central limit theorem applies to it, as it did to the sample mean. <bookmark mark='b'/> With "
+            "errors. With finite variance and no observation dominating, a weighted central limit theorem can apply. <bookmark mark='b'/> With "
             "strongly skewed exponential errors, the ninety-five percent interval for the slope covers ninety-five percent "
             "with ten observations, and with thirty, and with a hundred. <bookmark mark='c'/> Normality matters for very "
-            "small samples and, as Part 11 showed, for prediction intervals, which concern a single error. For the slope "
-            "itself, least squares inference is robust."
+            "small samples and, as Part 11 showed, for prediction intervals, which concern a single error. These results are specific to this well-spread design; skewness, extreme leverage or infinite moments can defeat a small-sample approximation."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=1.8, x=-0.4, buff=1.0, edge=6.9)
             for k, m_ in enumerate("ab"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             vo.wait_until("c")
             self.play(FadeIn(foot))

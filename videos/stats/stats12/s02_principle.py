@@ -67,7 +67,7 @@ class Principle(VoiceoverScene):
         tag = simulated_tag(r"the World: \ families", corner=DR)
         with self.voiceover(
             "Here's the principle in one picture. <bookmark mark='a'/> Thirty of the World's families: across, the "
-            "parents' average height, and up, the adult child's, both in standard units, as in Part 5. "
+            "parents' average height, and up, the adult child's, using sex-standardized parental heights averaged on the horizontal axis and the child's standardized height vertically. The parental average itself need not have variance one. "
             "<bookmark mark='b'/> Draw any line. Each point misses it by a vertical distance, the residual. Draw each "
             "residual as a square: its area is the residual squared. <bookmark mark='c'/> Now turn the line. The squares "
             "grow and shrink, and their total area changes. <bookmark mark='d'/> Least squares chooses the line with the "
@@ -101,6 +101,7 @@ class Principle(VoiceoverScene):
         rows[3][0].set_color(FIT)
         whys = [why(r"a quadratic bowl in $(a, b)$"), why(r"the residuals sum to zero: \ the line passes through $(\bar x, \bar y)$"),
                 why(r"the residuals are uncorrelated with $x$"), why(r"for any number of predictors: \ Legendre's equations")]
+        intro = label('Differentiate the sum of squared residuals', font_size=36)
         with self.voiceover(
             "The algebra. <bookmark mark='a'/> The total squared miss is a quadratic function of the intercept and slope: "
             "a bowl. <bookmark mark='b'/> At the bottom of the bowl both derivatives vanish. The first says the residuals add "
@@ -109,9 +110,12 @@ class Principle(VoiceoverScene):
             "<bookmark mark='d'/> With any number of predictors, written as a matrix X with a column of ones, these are "
             "the normal equations: X transpose X beta-hat equals X transpose y. Legendre wrote them down in 1805."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.7, x=-0.6, buff=0.55, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -120,7 +124,7 @@ class Principle(VoiceoverScene):
         rows = [
             cmath(r"\hat b", r"=", r"\frac{\sum (x_i - \bar x)(y_i - \bar y)}{\sum (x_i - \bar x)^2} = r\,\frac{s_y}{s_x}", font_size=34),
             cmath(r"\hat a", r"=", r"\bar y - \hat b\,\bar x", font_size=34),
-            cmath(r"\hat\beta", r"=", r"(X^\top X)^{-1}X^\top y", r"\quad\text{solved by QR, \ never by inverting (Part 4)}", font_size=32),
+            cmath(r"\hat\beta", r"=", r"(X^\top X)^{-1}X^\top y", r"\quad\text{full column rank; \ solved by QR (Part 4)}", font_size=32),
         ]
         rows[0][2].set_color(FIT)
         whys = [why(r"Part 5's regression slope: \ the correlation, \ rescaled"), why(r"through the point of averages"),
@@ -130,7 +134,7 @@ class Principle(VoiceoverScene):
             "variance of x, which is the correlation times the ratio of standard deviations. <bookmark mark='b'/> The "
             "intercept puts the line through the point of averages. <bookmark mark='c'/> In general, beta-hat is X "
             "transpose X inverse, X transpose y, though, as Part 4 insisted, you compute it with a QR decomposition, never "
-            "by forming the inverse. statkit's ordinary least squares module does exactly that, and its every output is "
+            "by forming the inverse. statkit's ordinary least squares module does exactly that, and reference outputs are "
             "checked against the statsmodels library."
         ) as vo:
             step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.6, buff=0.9, edge=6.9)
@@ -142,7 +146,7 @@ class Principle(VoiceoverScene):
     def why_squares(self):
         rows = fit_rows(VGroup(
             label(r"why squares, \ and not absolute values, \ or the largest miss?", font_size=30, color=OBS),
-            label(r"convenience: \ a smooth bowl, \ linear equations, \ a unique answer (Legendre)", font_size=24),
+            label(r"convenience: \ a smooth bowl, \ linear equations, \ a unique coefficient vector when $X$ has full column rank", font_size=24),
             label(r"probability: \ if errors are normal, \ least squares is maximum likelihood (Gauss, 1809; \ Part 9)", font_size=24),
             label(r"optimality without normality: \ the best linear unbiased estimator (Gauss, 1821; \ ch.~3)", font_size=24),
             label(r"geometry: \ the closest point in a plane, \ in ordinary distance (ch.~2)", font_size=24),
@@ -150,8 +154,8 @@ class Principle(VoiceoverScene):
         ), 12.6, 0.4, [0, 0.0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Why squares, and not absolute values, or the largest miss? There are four good answers. "
-            "<bookmark mark='b'/> Convenience: squares give a smooth bowl, linear equations and a unique answer, which was "
-            "Legendre's argument. <bookmark mark='c'/> Probability: if the errors are normal, least squares is maximum "
+            "<bookmark mark='b'/> Convenience: squares give a smooth bowl, linear equations and, with full column rank, a unique answer, which was "
+            "Legendre's argument. <bookmark mark='c'/> Probability: if errors are independent normal with common variance and zero conditional mean, least squares is maximum "
             "likelihood, which was Gauss's argument in 1809, and Part 9's. <bookmark mark='d'/> Optimality without "
             "normality: Gauss proved in 1821 that it's the best linear unbiased estimator, chapter three. "
             "<bookmark mark='e'/> And geometry: it finds the closest point in a plane in ordinary distance, chapter two. "
@@ -177,16 +181,16 @@ class Principle(VoiceoverScene):
             label(r"Boscovich (1757), \ then Laplace: \ minimize $\sum |e_i|$", font_size=24, color=S.POST),
             MathTex(rf"\text{{least squares: }} {d['ls'][0]:.2f} + {d['ls'][1]:.3f}\,x", font_size=28, color=FIT),
             MathTex(rf"\text{{least absolute: }} {d['lad'][0]:.2f} + {d['lad'][1]:.3f}\,x", font_size=28, color=S.POST),
-            label(r"one point tilts least squares; \ the absolute-error line goes through the other ten", font_size=24, color=GREY_A),
+            label(r"one point tilts least squares; \ the absolute-error line follows the other ten closely", font_size=24, color=GREY_A),
             label(r"older than least squares, \ harder to compute; \ robust regression returns in Part 30", font_size=22, color=GREY_A),
         ), 5.0, 0.32, [4.3, -0.3, 0])
         src = historical_tag(r"Anscombe (1973)", corner=DR)
         with self.voiceover(
             "The alternative is older than least squares. <bookmark mark='a'/> In 1757 Roger Boscovich, studying the shape "
-            "of the Earth, fitted lines by minimizing the sum of absolute misses, and Laplace developed the idea. "
-            "<bookmark mark='b'/> Here's Anscombe's third data set: ten points on a perfect line, and one outlier. "
+            "of the Earth, used an early constrained absolute-error fit, and Laplace developed the idea. "
+            "<bookmark mark='b'/> Here's Anscombe's third data set: ten nearly collinear points, and one outlier. "
             "<bookmark mark='c'/> Least squares tilts toward the outlier: slope point five. <bookmark mark='d'/> The least "
-            "absolute deviations line ignores it and passes exactly through the other ten: slope point three four five. "
+            "absolute deviations line ignores it and follows the other ten closely: slope point three four five. "
             "<bookmark mark='e'/> It's more robust, but harder to compute and to do theory with, which is why least squares "
             "won the nineteenth century. Robust regression returns in Part 30."
         ) as vo:
@@ -213,19 +217,23 @@ class Principle(VoiceoverScene):
         rows[3][2].set_color(FIT)
         whys = [why(r"Gauss (1809): \ assume what everyone already did"), why(r"the likelihood equation for an error law $\phi$"),
                 why(r"for every possible sample: \ the score must be linear"), why(r"and then maximum likelihood is least squares")]
+        intro = label('Which error law makes the average a likelihood estimate?', font_size=36)
         with self.voiceover(
             "Gauss's 1809 argument ran in a surprising direction. <bookmark mark='a'/> He postulated what every astronomer "
             "already did: when a quantity is measured several times, the average is the most probable value. "
             "<bookmark mark='b'/> If errors follow some law phi, the most probable value solves a likelihood equation, and "
             "Gauss demanded that its solution be the average, for every possible set of measurements. "
             "<bookmark mark='c'/> That forces the log-derivative of phi to be linear, <bookmark mark='d'/> so phi must be e to "
-            "the minus k u squared: the normal curve. And under that law, the most probable fit of any linear model is least "
+            "the minus k u squared over two: the normal curve. And under that law, the most probable fit of any linear model is least "
             "squares. The normal distribution entered the world as a justification for least squares, which is why it carries "
             "Gauss's name. Laplace's central limit theorem, a year later, gave the deeper reason it fits."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.6, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 

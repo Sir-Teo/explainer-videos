@@ -38,15 +38,14 @@ class Outro(VoiceoverScene):
         head = label(r"Part 12, \ in thirteen lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Part twelve in thirteen lines. <bookmark mark='a'/> Gauss found Ceres with least squares, and Legendre published it "
-            "first. The method minimizes the squared misses; the normal equations solve it, and for one predictor the slope is "
+            "Part twelve in thirteen lines. <bookmark mark='a'/> Gauss's recovery of Ceres motivates orbit fitting; Legendre published least squares first, followed by Gauss's 1809 account. The method minimizes the squared misses; the normal equations solve it, and for one predictor the slope is "
             "the correlation rescaled. Squares are convenient, are maximum likelihood for normal errors, and are optimal among "
             "linear unbiased estimators, though Boscovich's absolute errors resist outliers. Geometrically the fit is a "
             "projection, with Pythagoras giving R squared and the F-test. Gauss–Markov makes it best linear unbiased, and "
             "normal errors give exact t and F. Frisch–Waugh–Lovell says what controlling for a variable means, and leaving one "
             "out biases the rest by gamma times delta. Dummies, interactions, logs and splines change what coefficients mean. "
             "Confidence bands are for the line, prediction bands for the next point. Collinearity inflates variances; leverage "
-            "and Cook's distance find influential points; uneven noise needs HC3. And regression to the mean is not a cause."
+            "and Cook's distance find influential points; independent uneven noise suggests robust covariance estimates such as HC3. And regression to the mean is not a cause."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -59,13 +58,16 @@ class Outro(VoiceoverScene):
             (r"mixed models, shrinkage", [25]), (r"smoothing, splines", [29]), (r"robust regression", [30]),
             (r"ridge, lasso", [32]), (r"causal regression, IV, DiD", [35, 36, 37]),
         ], font_size=22)
+        intro = label('Where least squares returns', font_size=36)
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Least squares is the trunk from which much of statistics branches: the "
             "analysis of variance in the next part; generalized linear models in Parts 14 and 24; the linear model in full "
             "depth in Part 23; mixed models, smoothing, robust regression, ridge and the lasso; and, in Parts 35 to 37, the "
             "regressions that try to identify causes."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
@@ -104,7 +106,7 @@ class Outro(VoiceoverScene):
     def transcript(self):
         tr = transcript_card(done=12, current=None)
         nxt = VGroup(label(r"Part 13", font_size=30, color=GREY_B), label(r"Experiments by Design", font_size=48),
-                     label(r"Fisher at Rothamsted: \ seventy years of wheat records that cannot answer anything", font_size=28, color=GREY_A))
+                     label(r"Fisher at Rothamsted: \ seventy years of wheat records with difficult causal questions", font_size=28, color=GREY_A))
         nxt.arrange(DOWN, buff=0.25)
         tr.to_edge(UP, buff=0.8)
         nxt.next_to(tr, DOWN, buff=1.0)
@@ -112,7 +114,7 @@ class Outro(VoiceoverScene):
             "Twelve parts of sixty-five, the second of Stage II. <bookmark mark='a'/> We can fit a relationship, measure our uncertainty about it, and "
             "check whether it's being fooled. <bookmark mark='b'/> But a regression on observed data can't tell a cause from a "
             "coincidence. In 1919 the young Fisher arrived at the Rothamsted experimental station and found seventy years of "
-            "carefully kept wheat records that could answer almost nothing. His solution was to design the data. Part 13: "
+            "carefully kept wheat records whose treatment and weather comparisons posed difficult inferential problems. His solution was to design the data. Part 13: "
             "experiments by design."
         ) as vo:
             self.play(FadeIn(tr))

@@ -28,10 +28,11 @@ class Bands(VoiceoverScene):
             cmath(r"\text{the whole line}", r":", r"x_0^\top\hat\beta \pm \sqrt{p\,F_{p,\,n-p}}\ s\,\sqrt{x_0^\top(X^\top X)^{-1}x_0}", font_size=30),
         ]
         rows[3][2].set_color(OBS)
-        whys = [why(r"smallest at $\bar x$, \ growing as $x_0$ moves away"), why(r"pointwise confidence (Part 11)"),
+        whys = [why(r"smallest at $\bar x$, \ growing as $x_0$ moves away"), why(r"pointwise confidence; \ normal homoskedastic model (Part 11)"),
                 why(r"Part 11's prediction interval: \ the noise of one more point"), why(r"Working \& Hotelling (1929): \ every $x_0$ at once")]
+        intro = label('Intervals under the independent normal linear model', font_size=36)
         with self.voiceover(
-            "How uncertain is the fitted line itself? <bookmark mark='a'/> The variance of the fitted value at a point x-nought "
+            "Under the full-rank linear model with independent normal errors of common variance, how uncertain is the fitted line? <bookmark mark='a'/> The variance of the fitted value at a point x-nought "
             "is smallest at the mean of the x's and grows quadratically as x-nought moves away, because a small error in the "
             "slope matters more far from the centre. <bookmark mark='b'/> That gives a pointwise confidence interval for the "
             "mean of y at x-nought. <bookmark mark='c'/> For a new observation, add the noise of one more point: Part 11's "
@@ -39,9 +40,12 @@ class Bands(VoiceoverScene):
             "Harold Hotelling replaced the t multiplier by the square root of p times an F quantile in 1929: Part 11's Scheffé "
             "idea, for regression."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.7, x=-0.6, buff=0.55, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -57,13 +61,13 @@ class Bands(VoiceoverScene):
         fitl = polyline(ax, grid, d["fit"], FIT, 3.5)
         cb = band(ax, grid, np.asarray(d["lo"]), np.asarray(d["hi"]), FIT, 0.35)
         wh = VGroup(polyline(ax, grid, d["wlo"], S.POST, 2), polyline(ax, grid, d["whi"], S.POST, 2))
-        pb = VGroup(DashedVMobject(polyline(ax, grid, np.clip(d["plo"], -3.2, 3.2), S.PRIOR, 2.5), num_dashes=40),
-                    DashedVMobject(polyline(ax, grid, np.clip(d["phi"], -3.2, 3.2), S.PRIOR, 2.5), num_dashes=40))
+        pb = VGroup(DashedVMobject(polyline(ax, grid, d["plo"], S.PRIOR, 2.5), num_dashes=40),
+                    DashedVMobject(polyline(ax, grid, d["phi"], S.PRIOR, 2.5), num_dashes=40))
         leg = legend([(FIT, rf"95\% for the mean, \ pointwise \ ($t = {d['t']:.2f}$)"), (S.POST, rf"Working--Hotelling \ ($\sqrt{{2F}} = {d['wh']:.2f}$)"),
                       (S.PRIOR, r"95\% prediction, \ for a new family")], font_size=20).move_to([4.5, 1.6, 0])
         rows = fit_rows(VGroup(
             label(r"the confidence band is a bow tie: \ narrow at $\bar x$", font_size=22),
-            label(r"the prediction band holds most of the points; \ the confidence band does not, \ and should not", font_size=22, color=GREY_A),
+            label(r"prediction intervals target new observations; \ the confidence band does not, \ and should not", font_size=22, color=GREY_A),
             label(r"more data shrinks the confidence band to the line; \ never the prediction band", font_size=22, color=OBS),
         ), 4.6, 0.3, [4.5, -1.2, 0])
         tag = simulated_tag(r"the World: \ 30 families", corner=DR)
@@ -72,8 +76,7 @@ class Bands(VoiceoverScene):
             "percent confidence band: a bow tie, narrowest at the average parent and widening toward the ends. "
             "<bookmark mark='b'/> The Working–Hotelling band, which covers the whole true line at once, is a little wider. "
             "<bookmark mark='c'/> And the prediction band, for a new family's child, is much wider: it has to contain the "
-            "scatter of individuals, not just the uncertainty about the average. <bookmark mark='d'/> Most of the points lie "
-            "inside the prediction band, and most lie outside the confidence band, as they should. With more data, the "
+            "scatter of individuals, not just the uncertainty about the average. <bookmark mark='d'/> The new-observation prediction guarantee does not assert simultaneous coverage, or a fixed fraction of these training points. With more data, the "
             "confidence band shrinks onto the line; the prediction band never shrinks below the noise."
         ) as vo:
             self.play(FadeIn(A), FadeIn(tag), FadeIn(pts))
@@ -124,6 +127,7 @@ class Bands(VoiceoverScene):
             label(r"400 families pin down the average to within a centimetre; \ one son's height stays uncertain by $\pm 11$ cm", font_size=24,
                   color=OBS),
         ), 12.6, 0.42, [0, 0.0, 0])
+        intro = label('Predict an average height and one individual height', font_size=36)
         with self.voiceover(
             "A concrete prediction. <bookmark mark='a'/> A couple whose average height is a hundred and seventy-five "
             "centimetres are expecting a son. <bookmark mark='b'/> The dummy-variable model predicts a hundred and seventy-nine "
@@ -133,7 +137,10 @@ class Bands(VoiceoverScene):
             "ninety. <bookmark mark='e'/> Parents' heights tell you a lot about sons on average, and much less about any "
             "one of them."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()
