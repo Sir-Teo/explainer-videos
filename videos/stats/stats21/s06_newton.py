@@ -114,6 +114,9 @@ class Newton(VoiceoverScene):
             label(r"Newton: \ the number of correct digits roughly doubles each step: \ quadratic convergence", font_size=22, color=NEWT),
             label(r"gradient: \ the error shrinks by a fixed factor: \ linear, \ slow when the problem is ill-conditioned", font_size=22, color=GRAD),
         ), 12.4, 0.25, [0, -2.8, 0])
+        intro = label("Local Newton convergence can rapidly reduce parameter error", font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> Count the error after each step, the distance to the maximum. Newton starts four "
             "units away; then point four five; then point zero one two; then nine millionths; then five trillionths; "
@@ -124,6 +127,7 @@ class Newton(VoiceoverScene):
             "eight away. The price of Newton is a linear system with the Hessian at each step, which for a few dozen "
             "parameters is nothing."
         ) as vo:
+            self.add(intro)
             vo.wait_until("a")
             self.play(FadeIn(t[0]), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in t[1:]], lag_ratio=0.4), run_time=5.0)
             vo.wait_until("b")

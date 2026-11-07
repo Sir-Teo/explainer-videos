@@ -70,7 +70,9 @@ class Lagrange(VoiceoverScene):
             t = label(rf"{r['k']} of {r['n']}: \ $\hat p = {r['phat']:.1f}$; \ multiplier {r['mult']:.0f}", font_size=22,
                       color=PATH).next_to(A, DOWN, buff=0.35)
             panels.add(VGroup(A, feas, cv, mle, con, t))
-        head = label(r"constraint: \ $p \le 1/2$ \ (green)", font_size=26, color=HIT).to_edge(UP, buff=0.4)
+        head = label(r"Constrained likelihood: \ a maximum may bind or lie inside $p \le 1/2$", font_size=36, color=HIT).move_to([0, 3.3, 0])
+        if head.width > 12.5:
+            head.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> Inequality constraints are subtler. Suppose theory says a probability can't exceed "
             "a half. <bookmark mark='b'/> On the left, thirty successes in fifty trials: the unconstrained estimate, "
