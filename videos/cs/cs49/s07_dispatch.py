@@ -198,7 +198,7 @@ class Dispatch(VoiceoverScene):
         chart.to_edge(DOWN, buff=0.55).set_x(-2.4)
         cap = wrapped_label(rf"{d['riders']} riders and {d['drivers']} drivers at random in a "
                             rf"{d['city_km']:.0f} km city, \ pickup distance as the crow flies, \ averaged over 200 "
-                            r"rounds; \ batched = the assignment problem, \ solved by the Hungarian algorithm \ "
+                            r"rounds; \ batched = the assignment problem, \ solved exactly \ (after Kuhn) \ "
                             r"(Kuhn 1955, \ Part 18)", 4.6, font_size=18, color=WHITE)
         cap.next_to(chart, RIGHT, buff=0.6).align_to(chart, DOWN)
         with self.voiceover(
@@ -206,7 +206,7 @@ class Dispatch(VoiceoverScene):
             "greedy: as each request arrives, give it the nearest free driver. Here rider A arrives first and takes "
             "the only driver near B, so B gets the far one. <bookmark mark='b'/> Collect both requests and match "
             "them together, and the total is smaller. Matching a "
-            "batch is the assignment problem of Part 18, solved exactly by Harold Kuhn's Hungarian algorithm of 1955. "
+            "batch is the assignment problem of Part 18, solved exactly; Harold Kuhn's Hungarian algorithm of 1955 was the first, and our solver reaches the same optimum by a faster modern method. "
             "<bookmark mark='c'/> We simulated it: sixty riders and seventy drivers scattered over a ten-kilometre "
             "city, two hundred times. Greedy's mean pickup was one point one seven kilometres; batched, zero point "
             "nine six. <bookmark mark='d'/> The worst pickup in each round fell much more, from four point eight to "

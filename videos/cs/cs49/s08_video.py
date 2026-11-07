@@ -206,7 +206,7 @@ class Video(VoiceoverScene):
             "the buffer alone: the lowest rung while the buffer is below a reservoir, the highest once it passes a "
             "cushion, and a straight line between. Here is that player: its quality follows its buffer. "
             "<bookmark mark='c'/> Xiaoqi Yin and colleagues, in 2015, used model predictive control: predict the "
-            "bandwidth, plan the next five segments to maximize quality minus penalties for stalls and switches, "
+            "bandwidth, try each bitrate held over the next five segments, choosing the one that maximizes quality minus penalties for stalls and switches, "
             "take the first step, and plan again."
         ) as vo:
             self.play(FadeIn(head), FadeIn(top), FadeIn(bot), FadeIn(cap))

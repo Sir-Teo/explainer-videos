@@ -142,7 +142,7 @@ class Timeline(VoiceoverScene):
             "The newest post is rarely the one a reader most wants. <bookmark mark='a'/> Here are six candidates, "
             "newest first, with made-up numbers. <bookmark mark='b'/> Facebook's EdgeRank, described in 2010, "
             "scored each one as a product: the reader's affinity with the author, a weight for the kind of post, "
-            "and a decay with age. <bookmark mark='c'/> Sorted by score, the order changes completely: a close "
+            "and a decay with age. <bookmark mark='c'/> Sorted by score, the order changes completely: the top is no longer the newest post, and a close "
             "friend's photo from sixteen hours ago outranks a stranger's from an hour ago. <bookmark mark='d'/> "
             "Modern feeds replace the hand-made product with learned models that predict each action a reader "
             "might take, Part 47's learning to rank, in two stages: a cheap one to choose candidates, and an "
