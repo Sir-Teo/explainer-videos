@@ -115,7 +115,7 @@ class ADMM(VoiceoverScene):
         d = load("admm")
         res = np.maximum(np.asarray(d["fits"]["3.0"]["res"]), 1e-12)
         ks = np.arange(1, len(res) + 1)
-        A = axes([0, len(res)], [-4, 1], x_length=8.0, y_length=4.2, xlabel=r"ADMM iteration", ylabel=r"$\|Db - z\|$ (log$_{10}$)",
+        A = axes([0, len(res)], [-4, 1], x_length=8.0, y_length=4.2, xlabel=r"ADMM iteration", ylabel=r"residual norm (log$_{10}$)",
                  xticks=[0, 100, 200, 300, 400], yticks=[-4, -3, -2, -1, 0, 1], center=[-1.6, 0.3, 0])
         ax = A.ax
         ln = polyline(ax, ks, np.log10(res), PATH, 3.5)

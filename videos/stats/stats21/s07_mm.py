@@ -96,13 +96,13 @@ class MM(VoiceoverScene):
 
     def family(self):
         rows = [
-            cmath(r"\text{EM}", r":", r"\text{the expected complete-data log likelihood plus current posterior entropy}", font_size=28),
+            cmath(r"\text{EM}", r":", r"Q(\theta\mid\theta_t)+H(q_t)", font_size=28),
             cmath(r"\text{IRLS for LAD, \ quantiles}", r":", r"\text{the parabola above } |r| \text{ (Hunter \& Lange 2000)}", font_size=28),
             cmath(r"\text{Weiszfeld (1937)}", r":", r"\text{the spatial median}", font_size=28),
             cmath(r"\text{multidimensional scaling}", r":", r"\text{SMACOF (de Leeuw 1977)}", font_size=28),
         ]
         rows[0][2].set_color(PATH)
-        whys = [why(r"Dempster, \ Laird \& Rubin (1977): \ Part 22"), why(r"the median example, \ in regression"),
+        whys = [why(r"$q_t$: current label posterior; \ $H$: entropy (Part 22)"), why(r"the median example, \ in regression"),
                 why(r"the same weights, \ in the plane"), why(r"Part 31")]
         intro = label('Familiar algorithms share a surrogate-optimization principle', font_size=36).move_to([0, 3.35, 0])
         if intro.width > 12.5:

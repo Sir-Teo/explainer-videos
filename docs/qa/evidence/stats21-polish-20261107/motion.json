@@ -1,0 +1,116 @@
+{
+  "fingerprint": "db929bda632aeea16efdb7f62fe7d7c3792e2472676edcf99c803cdeffa72a36",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Convexity",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats21/en/Convexity_motion/result.json",
+      "input_sha256": "0619d2ef3376621526a49e4f021b63ae59849adaf4d269eca2b1b143908418d0",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 296 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 296 s\n"
+    },
+    {
+      "scene": "Lagrange",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats21/en/Lagrange_motion/result.json",
+      "input_sha256": "2fa652489750cfcdc1358135cd2c431187428e5ebdb27f20fa76fc1615be860a",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 255 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 255 s\n"
+    },
+    {
+      "scene": "Duality",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats21/en/Duality_motion/result.json",
+      "input_sha256": "fbd14a4db256f81bfe9ae4615fc421052278d44e68332b7fef69a3350cfc85e2",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 268 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 268 s\n"
+    },
+    {
+      "scene": "LinearProgramming",
+      "status": "needs-review",
+      "frames": 35,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats21/en/LinearProgramming_motion/result.json",
+      "input_sha256": "888c371e9bd6a48ea6500bf331308be082bb6461e0506ebb001926862edc874b",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 325 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 325 s\n"
+    },
+    {
+      "scene": "Newton",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats21/en/Newton_motion/result.json",
+      "input_sha256": "0dfedd3943a92e56488299b17ad26845e6ddc93212a564a7564b47bb6d9d5b94",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 280 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 280 s\n"
+    },
+    {
+      "scene": "MM",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats21/en/MM_motion/result.json",
+      "input_sha256": "61de4ee7e79367339f81251a0a74636ae4225bb6005ada993fdfea8c8f9ff713",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 248 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 248 s\n"
+    },
+    {
+      "scene": "Proximal",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats21/en/Proximal_motion/result.json",
+      "input_sha256": "adb360c7d64d8dcf7f1c265d49c83c838a230ef4f4012de0a446ec5a9e82b256",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 226 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 226 s\n"
+    },
+    {
+      "scene": "ADMM",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats21/en/ADMM_motion/result.json",
+      "input_sha256": "6c8f87ab7b884edd51bdbe62de8e4e89509b1b62285cabdc7f7bfe207cbb7982",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 219 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 219 s\n"
+    },
+    {
+      "scene": "Stochastic",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats21/en/Stochastic_motion/result.json",
+      "input_sha256": "a1d786b90626f2647800806683e62b5ce0dc0f668fc75dcec83039dc01d51c85",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 307 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 307 s\n"
+    },
+    {
+      "scene": "OptimAndInference",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats21/en/OptimAndInference_motion/result.json",
+      "input_sha256": "fe4d7ba0dfe09dea4ed3ee3adeb5e1ea573189ff29014ac686bfdb4ba77bdc31",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 277 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 277 s\n"
+    }
+  ]
+}

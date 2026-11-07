@@ -1,0 +1,149 @@
+{
+  "fingerprint": "db929bda632aeea16efdb7f62fe7d7c3792e2472676edcf99c803cdeffa72a36",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 47
+      },
+      "input_record": "renders/qa/series/stats21/en/Hook/result.json",
+      "input_sha256": "4961f77dca7ec96afb8eac385da4bcbb6f40d3b2ff285e7b063d2ce78cb3dd9a"
+    },
+    {
+      "scene": "Convexity",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 53
+      },
+      "input_record": "renders/qa/series/stats21/en/Convexity/result.json",
+      "input_sha256": "0b9ac906ad817cfb2286ff8d4d5392f816232d4ecccfce3d3ce4c6688dd55d73"
+    },
+    {
+      "scene": "Lagrange",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 40
+      },
+      "input_record": "renders/qa/series/stats21/en/Lagrange/result.json",
+      "input_sha256": "11084b15cf30470e3b15f068c37ed4c7ad520c8e3c9e69ca8ee6b0e1af84b71c"
+    },
+    {
+      "scene": "Duality",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 52
+      },
+      "input_record": "renders/qa/series/stats21/en/Duality/result.json",
+      "input_sha256": "c5e6210bb537a809999bceb42300714e6ba246ef6a1913004c554149619a22ec"
+    },
+    {
+      "scene": "LinearProgramming",
+      "status": "needs-review",
+      "frames": 35,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 62
+      },
+      "input_record": "renders/qa/series/stats21/en/LinearProgramming/result.json",
+      "input_sha256": "5fe16677c5e63448fad6c093b344c893f49a2357370caafe97090e3226cfb7fd"
+    },
+    {
+      "scene": "Newton",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 43
+      },
+      "input_record": "renders/qa/series/stats21/en/Newton/result.json",
+      "input_sha256": "63e77056f1e4d737bedcbd83ec9b0a01d60c25cc4a90a080184b42312a204df9"
+    },
+    {
+      "scene": "MM",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 49
+      },
+      "input_record": "renders/qa/series/stats21/en/MM/result.json",
+      "input_sha256": "ccf078e0413c0341c9b6546d3aed8b312e247e60a7f73860afa939aac68f85dd"
+    },
+    {
+      "scene": "CoordinateDescent",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 32
+      },
+      "input_record": "renders/qa/series/stats21/en/CoordinateDescent/result.json",
+      "input_sha256": "ab47286d7b4617d85797fb69fb99569a97112ac144d99d57a01be610a6a3fa0c"
+    },
+    {
+      "scene": "Proximal",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 44
+      },
+      "input_record": "renders/qa/series/stats21/en/Proximal/result.json",
+      "input_sha256": "c1a6d2bd161f2011869527b96cf82b96ff69653dab12404b5b0714378ec59c44"
+    },
+    {
+      "scene": "ADMM",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 38
+      },
+      "input_record": "renders/qa/series/stats21/en/ADMM/result.json",
+      "input_sha256": "9e47e11da86ba879b97b44fca85b3a2e952a788e5fd288785dd439c4b3e3bab1"
+    },
+    {
+      "scene": "Stochastic",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 57
+      },
+      "input_record": "renders/qa/series/stats21/en/Stochastic/result.json",
+      "input_sha256": "d3538a6c9165bd710772777b6444a428b9a5fc4e679437f78289f8510586ef69"
+    },
+    {
+      "scene": "OptimAndInference",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 47
+      },
+      "input_record": "renders/qa/series/stats21/en/OptimAndInference/result.json",
+      "input_sha256": "56c8785dddc588ee728493ca769f3a4e8289e94556278089a96227d796a60931"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 7,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 63
+      },
+      "input_record": "renders/qa/series/stats21/en/Outro/result.json",
+      "input_sha256": "f45c112e3df91f2f11f670f8a87f201d305bea01c8a8b19cacc4bc7277605320"
+    }
+  ]
+}

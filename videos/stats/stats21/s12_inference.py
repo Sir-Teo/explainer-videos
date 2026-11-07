@@ -175,22 +175,28 @@ class OptimAndInference(VoiceoverScene):
 
     def warnings(self):
         rows = fit_rows(VGroup(
-            label(r"a flat direction: \ a huge SE; \ perhaps a parameter the data cannot identify", font_size=24, color=RES),
+            label(r"weak curvature: \ large regular SE; \ exact nonidentification breaks the formula", font_size=24, color=RES),
             label(r"a long ridge: \ strongly correlated estimates \ (chapter five's intercept and slope)", font_size=24, color=OBS),
-            label(r"the optimizer failing to converge: \ often the model is the problem", font_size=24, color=GRAD),
+            label(r"nonconvergence: \ check the model, \ scaling and algorithm", font_size=24, color=GRAD),
             label(r"separation in logistic regression: \ the maximum is at infinity", font_size=22, color=GREY_A),
             label(r"the optimizer's struggles are diagnostics", font_size=26, color=PATH),
         ), 12.4, 0.5, [0, 0, 0])
+        intro = label('The landscape can reveal identification and numerical problems', font_size=36).move_to([0, 3.25, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> The shape of the problem also warns us. A direction in which the likelihood is flat"
-            " means a huge standard error, and perhaps a parameter the data simply can't identify. <bookmark "
-            "mark='b'/> A long ridge, like chapter five's, means strongly correlated estimates, which appropriate "
-            "centring and scaling can reduce. In logistic regression, information uses fitted-probability weights; "
-            "ordinary mean centring need not remove the correlation completely. <bookmark mark='c'/> An optimizer "
-            "that won't converge is often a sign that the model, not the algorithm, is wrong. <bookmark mark='d'/> In"
-            " logistic regression, if a predictor separates the outcomes perfectly, the maximum is at infinity, and "
-            "the iterations march off forever. <bookmark mark='e'/> The optimizer's struggles are diagnostics."
+            "<bookmark mark='a'/> The shape of the problem also warns us. A weakly curved regular direction can give "
+            "a large standard error. An exactly flat, nonidentified direction instead invalidates the usual "
+            "inverse-information approximation. <bookmark mark='b'/> A long ridge, like chapter five's, means "
+            "strongly correlated estimates, which appropriate centring and scaling can reduce. In logistic "
+            "regression, information uses fitted-probability weights; ordinary mean centring need not remove the "
+            "correlation completely. <bookmark mark='c'/> Failure to converge can indicate nonidentification or a "
+            "boundary, but poor scaling, initialization or an unsuitable algorithm can also cause it. <bookmark "
+            "mark='d'/> In logistic regression, if a predictor separates the outcomes perfectly, the maximum is at "
+            "infinity, and the iterations march off forever. <bookmark mark='e'/> The optimizer's struggles are "
+            "diagnostics."
         ) as vo:
+            self.add(intro)
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
@@ -203,12 +209,16 @@ class OptimAndInference(VoiceoverScene):
             label(r"accuracy needed: \ a fraction of the standard error", font_size=26, color=HIT),
             label(r"problems: \ read in the landscape's shape", font_size=26, color=OBS),
         ), 12.4, 0.6, [0, 0, 0])
+        intro = label('Computation and uncertainty require separate accuracy assessments', font_size=36).move_to([0, 3.25, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> So: the estimate is the optimum; <bookmark mark='b'/> curvature supports "
             "uncertainty calculations under regular likelihood assumptions, with sandwich corrections when needed; "
             "<bookmark mark='c'/> the accuracy worth having is a fraction of that uncertainty; <bookmark mark='d'/> "
             "and the landscape's shape tells us when something is wrong."
         ) as vo:
+            self.add(intro)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))

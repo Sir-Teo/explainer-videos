@@ -1,0 +1,95 @@
+{
+ "video": "stats21",
+ "scene": "OptimAndInference",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 7,
+ "lines": [
+  {
+   "raw": "Chapter eleven. Optimization, and inference.",
+   "spoken": "Chapter eleven. Optimization, and inference.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/ebb8d985522024a9.wav",
+   "duration": 3.375,
+   "tokens": 5,
+   "peak": 0.340667724609375,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "The optimizer doesn't just find the estimate; it measures its uncertainty. <bookmark mark='a'/> At the maximum, the negative Hessian of the log likelihood is the observed information, <bookmark mark='b'/> and under a correctly specified regular likelihood with nonsingular information, its inverse estimates the estimator's covariance: a sharply curved peak means a precise estimate, a flat one an uncertain estimate, as Part 9 showed in one dimension. <bookmark mark='c'/> For the World's vote, the slope's standard error from the curvature is point one eight three; a bootstrap gives point one nine six. <bookmark mark='d'/> And A final Hessian is already closely related to Newton's calculation, though constructing or inverting it still has a cost and its inferential interpretation requires the model assumptions.",
+   "spoken": "The optimizer doesn't just find the estimate; it measures its uncertainty. At the maximum, the negative Hessian of the log likelihood is the observed information, and under a correctly specified regular likelihood with nonsingular information, its inverse estimates the estimator's covariance: a sharply curved peak means a precise estimate, a flat one an uncertain estimate, as Part 9 showed in one dimension. For the World's vote, the slope's standard error from the curvature is point one eight three; a bootstrap gives point one nine six. And A final Hessian is already closely related to Newton's calculation, though constructing or inverting it still has a cost and its inferential interpretation requires the model assumptions.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/fc6580329843c19c.wav",
+   "duration": 46.1,
+   "tokens": 113,
+   "peak": 0.528900146484375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Here's what that means in a picture: a profile logistic log likelihood for the slope, reoptimizing the nuisance intercept at each slope. A fixed-intercept slice would understate uncertainty. <bookmark mark='b'/> In gold, the quadratic Newton fits at the top. <bookmark mark='c'/> Its curvature gives the standard error. <bookmark mark='d'/> The ninety-five percent Wald interval is where the quadratic has fallen by one point nine two, half of three point eight four, the chi-squared critical value. <bookmark mark='e'/> Using the real curve instead of its quadratic gives the likelihood-ratio interval, which can capture asymmetry under regular likelihood assumptions. Disagreement alone does not guarantee that its finite-sample coverage is better. Part 22 goes deeper.",
+   "spoken": "Here's what that means in a picture: a profile logistic log likelihood for the slope, reoptimizing the nuisance intercept at each slope. A fixed-intercept slice would understate uncertainty. In gold, the quadratic Newton fits at the top. Its curvature gives the standard error. The ninety-five percent Wald interval is where the quadratic has fallen by one point nine two, half of three point eight four, the chi-squared critical value. Using the real curve instead of its quadratic gives the likelihood-ratio interval, which can capture asymmetry under regular likelihood assumptions. Disagreement alone does not guarantee that its finite-sample coverage is better. Part 22 goes deeper.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/fdbf955060955409.wav",
+   "duration": 43.075,
+   "tokens": 104,
+   "peak": 0.5191650390625,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> That gives a natural place to stop. Here's gradient ascent's distance from the exact maximum, falling as it runs. <bookmark mark='b'/> In gold, the estimate's standard error: the size of its statistical uncertainty. <bookmark mark='c'/> Once the optimization error is a tenth of that, after about a thousand iterations here, its magnitude is small on the statistical scale in this example. Numerical error need not be independent or mean-zero, so there is no general rule that it adds in quadrature or raises the standard error by half a percent. <bookmark mark='d'/> Going further computes more digits of a number we only know to plus or minus point one eight. <bookmark mark='e'/> Léon Bottou and Olivier Bousquet made this trade-off precise for large data in 2008: under an appropriate error-budget analysis, allocating computation to more data can be preferable to solving a smaller problem far more accurately than inference needs. In practice, the exact optimum is unknown: gradient, decrement or dual-gap criteria supply computable accuracy checks.",
+   "spoken": "That gives a natural place to stop. Here's gradient ascent's distance from the exact maximum, falling as it runs. In gold, the estimate's standard error: the size of its statistical uncertainty. Once the optimization error is a tenth of that, after about a thousand iterations here, its magnitude is small on the statistical scale in this example. Numerical error need not be independent or mean-zero, so there is no general rule that it adds in quadrature or raises the standard error by half a percent. Going further computes more digits of a number we only know to plus or minus point one eight. Léon Bottou and Olivier Bousquet made this trade-off precise for large data in 2008: under an appropriate error-budget analysis, allocating computation to more data can be preferable to solving a smaller problem far more accurately than inference needs. In practice, the exact optimum is unknown: gradient, decrement or dual-gap criteria supply computable accuracy checks.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/89fefdafe2bd6795.wav",
+   "duration": 64.025,
+   "tokens": 157,
+   "peak": 0.747222900390625,
+   "issues": [],
+   "elapsed": 0.04,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "One warning before the next part. <bookmark mark='a'/> The curvature, A, gives the variance only if the model is right. <bookmark mark='b'/> In general we also need B, the spread of each observation's score, its pull on the estimate. <bookmark mark='c'/> For independent observations and regular estimating equations, the sandwich A inverse B A inverse estimates asymptotic covariance under misspecification. The information identity holds in expectation under correct specification, not as an exact equality of finite-sample score sums. <bookmark mark='d'/> For the World's vote, modelled on income alone though age and region matter too, the curvature-based standard error is point zero five zero eight, the sandwich point zero five one three, and the actual spread over four hundred samples point zero four nine seven: here they agree. Part 22 shows a model wrong enough that they don't.",
+   "spoken": "One warning before the next part. The curvature, A, gives the variance only if the model is right. In general we also need B, the spread of each observation's score, its pull on the estimate. For independent observations and regular estimating equations, the sandwich A inverse B A inverse estimates asymptotic covariance under misspecification. The information identity holds in expectation under correct specification, not as an exact equality of finite-sample score sums. For the World's vote, modelled on income alone though age and region matter too, the curvature-based standard error is point zero five zero eight, the sandwich point zero five one three, and the actual spread over four hundred samples point zero four nine seven: here they agree. Part 22 shows a model wrong enough that they don't.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/9efc8fac89ed86ff.wav",
+   "duration": 50.4,
+   "tokens": 129,
+   "peak": 0.682769775390625,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The shape of the problem also warns us. A weakly curved regular direction can give a large standard error. An exactly flat, nonidentified direction instead invalidates the usual inverse-information approximation. <bookmark mark='b'/> A long ridge, like chapter five's, means strongly correlated estimates, which appropriate centring and scaling can reduce. In logistic regression, information uses fitted-probability weights; ordinary mean centring need not remove the correlation completely. <bookmark mark='c'/> Failure to converge can indicate nonidentification or a boundary, but poor scaling, initialization or an unsuitable algorithm can also cause it. <bookmark mark='d'/> In logistic regression, if a predictor separates the outcomes perfectly, the maximum is at infinity, and the iterations march off forever. <bookmark mark='e'/> The optimizer's struggles are diagnostics.",
+   "spoken": "The shape of the problem also warns us. A weakly curved regular direction can give a large standard error. An exactly flat, nonidentified direction instead invalidates the usual inverse-information approximation. A long ridge, like chapter five's, means strongly correlated estimates, which appropriate centring and scaling can reduce. In logistic regression, information uses fitted-probability weights; ordinary mean centring need not remove the correlation completely. Failure to converge can indicate nonidentification or a boundary, but poor scaling, initialization or an unsuitable algorithm can also cause it. In logistic regression, if a predictor separates the outcomes perfectly, the maximum is at infinity, and the iterations march off forever. The optimizer's struggles are diagnostics.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/6894f97fa99759b7.wav",
+   "duration": 51.6,
+   "tokens": 110,
+   "peak": 0.541290283203125,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> So: the estimate is the optimum; <bookmark mark='b'/> curvature supports uncertainty calculations under regular likelihood assumptions, with sandwich corrections when needed; <bookmark mark='c'/> the accuracy worth having is a fraction of that uncertainty; <bookmark mark='d'/> and the landscape's shape tells us when something is wrong.",
+   "spoken": "So: the estimate is the optimum; curvature supports uncertainty calculations under regular likelihood assumptions, with sandwich corrections when needed; the accuracy worth having is a fraction of that uncertainty; and the landscape's shape tells us when something is wrong.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/61f5377dabcbebbf.wav",
+   "duration": 17.3,
+   "tokens": 39,
+   "peak": 0.80780029296875,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats21/en/OptimAndInference_motion/result.json",
+ "input_sha256": "fe4d7ba0dfe09dea4ed3ee3adeb5e1ea573189ff29014ac686bfdb4ba77bdc31"
+}

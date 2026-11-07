@@ -1,0 +1,127 @@
+{
+  "fingerprint": "db929bda632aeea16efdb7f62fe7d7c3792e2472676edcf99c803cdeffa72a36",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Convexity",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 53
+      },
+      "input_record": "renders/qa/native1080/stats21/en/Convexity/result.json",
+      "input_sha256": "84ffe35e95e01931929f48ca05ee489a53135070ce1078aaff904da647b707d0"
+    },
+    {
+      "scene": "Lagrange",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 40
+      },
+      "input_record": "renders/qa/native1080/stats21/en/Lagrange/result.json",
+      "input_sha256": "7742c70dfc09ec015764a0751f1a8d6446a41f51404845a5060df9ccfaeaa02f"
+    },
+    {
+      "scene": "Duality",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 52
+      },
+      "input_record": "renders/qa/native1080/stats21/en/Duality/result.json",
+      "input_sha256": "9d531b521fe442cbfe7321248d8e8617e097d4721a7967562a078429cfb985fa"
+    },
+    {
+      "scene": "LinearProgramming",
+      "status": "needs-review",
+      "frames": 35,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 62
+      },
+      "input_record": "renders/qa/native1080/stats21/en/LinearProgramming/result.json",
+      "input_sha256": "a7461fa8a1ab89aaf5b8bf56740543591bd4da0999db9c5d3efcb3b1f7e77b1e"
+    },
+    {
+      "scene": "Newton",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 43
+      },
+      "input_record": "renders/qa/native1080/stats21/en/Newton/result.json",
+      "input_sha256": "16f5f266e9e284adaf2812bf8ee297dff5909316b5654cca7bd4f3fb4a7bae64"
+    },
+    {
+      "scene": "MM",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 49
+      },
+      "input_record": "renders/qa/native1080/stats21/en/MM/result.json",
+      "input_sha256": "81f2c9a6582265d795ea229c3fad1b03f2e02f4007ca31be815b3b9d58a4efd4"
+    },
+    {
+      "scene": "CoordinateDescent",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 32
+      },
+      "input_record": "renders/qa/native1080/stats21/en/CoordinateDescent/result.json",
+      "input_sha256": "f0099581333a9c9b700acceace657d09f49185daf45207fc1c08ac61b2862a42"
+    },
+    {
+      "scene": "Proximal",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 44
+      },
+      "input_record": "renders/qa/native1080/stats21/en/Proximal/result.json",
+      "input_sha256": "b2ee2e5c5d64c81069c4b97d3efff56ce1236774c9dff5f656fff7954bdd81e0"
+    },
+    {
+      "scene": "ADMM",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 38
+      },
+      "input_record": "renders/qa/native1080/stats21/en/ADMM/result.json",
+      "input_sha256": "9d8793489b7edcdc347e3e9ed38543d9be522c2f5c35a796cb15db2cca12d365"
+    },
+    {
+      "scene": "Stochastic",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 57
+      },
+      "input_record": "renders/qa/native1080/stats21/en/Stochastic/result.json",
+      "input_sha256": "7de7bffa749324007c012f8e48ebe75c7a402ae55d9f8504260935edcaf5ba08"
+    },
+    {
+      "scene": "OptimAndInference",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 47
+      },
+      "input_record": "renders/qa/native1080/stats21/en/OptimAndInference/result.json",
+      "input_sha256": "d024d677e4c58ee732655c9e2e0503e8dce0af88b644781aac1554137dc280e1"
+    }
+  ]
+}

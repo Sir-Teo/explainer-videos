@@ -61,6 +61,7 @@ class Outro(VoiceoverScene):
             (r"the lasso's theory", [32]), (r"empirical risk minimization", [54]),
             (r"optimal transport: \ an LP between distributions", [61]), (r"training neural networks", [64]),
         ], font_size=22)
+        intro = label("Where optimization returns in the course", font_size=36)
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part 22 makes the EM algorithm the centre of likelihood computation. "
             "Part 24 uses iteratively reweighted least squares for every generalized linear model. Part 25 optimizes over "
@@ -68,8 +69,10 @@ class Outro(VoiceoverScene):
             "the truth. Part 54 studies empirical risk minimization. Part 61's optimal transport is a linear program between "
             "distributions. And Part 64 trains neural networks with stochastic gradient."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(FadeOut(intro), FadeIn(card.head), run_time=0.35)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):

@@ -208,6 +208,9 @@ class Stochastic(VoiceoverScene):
             label(r"several passes over the data: \ epochs", font_size=24, color=PATH),
             label(r"the workhorses of deep learning: \ Part 64", font_size=22, color=GREY_A),
         ), 12.4, 0.5, [0, 0, 0])
+        intro = label("Modern stochastic methods add batching, momentum and variance reduction", font_size=36).move_to([0, 3.25, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "Modern practice adds refinements. <bookmark mark='a'/> Minibatches average the gradient over a handful "
             "of observations, cutting its variance and using hardware well. <bookmark mark='b'/> Momentum accumulates"
@@ -218,6 +221,7 @@ class Stochastic(VoiceoverScene):
             "guarantee for deep networks. <bookmark mark='d'/> Training usually makes several passes over the data, "
             "called epochs. <bookmark mark='e'/> These are the workhorses of deep learning, which Part 64 takes up."
         ) as vo:
+            self.add(intro)
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))

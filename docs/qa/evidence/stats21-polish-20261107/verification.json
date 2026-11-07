@@ -1,0 +1,23 @@
+{
+  "part": "stats21",
+  "fingerprint": "db929bda632aeea16efdb7f62fe7d7c3792e2472676edcf99c803cdeffa72a36",
+  "english_endpoints": 13,
+  "native_1080_endpoints": 11,
+  "silent_motion_chapters": 10,
+  "audio_scene": "OptimAndInference",
+  "audio_lines": 7,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats21/en/OptimAndInference/videos/s12_inference/480p15/OptimAndInference.mp4",
+    "seconds": 283.666016,
+    "narration_sha256": "47c7f5a907c09b2819ec050170b29ecb6ad5d5342bea2fef177ef913e7361581",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 284 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 284 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}
