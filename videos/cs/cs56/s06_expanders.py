@@ -390,7 +390,7 @@ class Expanders(VoiceoverScene):
             "the Ramanujan bound. <bookmark mark='c'/> Every measured lambda sits just below it: two point eight two "
             "against two point eight three at degree three, six point four two against six point six three at degree "
             "twelve. Coin flips come close to the best possible; chapter eleven says why. <bookmark mark='d'/> And "
-            "the mixing lemma, on two hundred random pairs of sets: the worst error is between a fifth and a third, "
+            "the mixing lemma, on two hundred random pairs of sets: the worst error is from about a fifth to about a third, "
             "far inside lambda."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl))

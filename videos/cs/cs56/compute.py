@@ -8,7 +8,7 @@ Results are cached in ``.cache/cs56/<name>.json``; scenes call ``load(name)``.  
 
 Items:
     partition   two planted communities: the Fiedler vector against the truth; the sweep cut
-    cheeger     Cheeger's inequality on 60 small random graphs, conductance found by brute force
+    cheeger     Cheeger's inequality on 60 small random graphs (the 53 connected ones), conductance found by brute force
     mixing      lazy random walks on a cycle, a grid, a random 4-regular graph and a barbell: TV against the bound
     series      spectra of Part 18's city grid, Part 36's internet and the novels' word graph
     regular     random d-regular graphs against the Ramanujan bound 2 sqrt(d - 1); the expander mixing lemma

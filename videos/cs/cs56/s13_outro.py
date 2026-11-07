@@ -53,17 +53,15 @@ class Outro(VoiceoverScene):
 
     def payoffs(self):
         card = payoff_card([
-            (r"learning on graphs, \ and generalization", [57]),
             (r"semantics and fixed points", [58]),
-            (r"distributed algorithms on networks", [59]),
-            (r"network topologies in hardware", [60]),
-            (r"doing research on open problems", [61]),
+            (r"algorithms on graphs whose nodes see only their neighbours", [59]),
+            (r"the unique games conjecture on the open-problems map", [61]),
         ], font_size=23)
         with self.voiceover(
-            "Where this comes back. Part 57's learning theory uses the same spectral tools for kernels and graphs. "
-            "Part 58 meets fixed points again, in the meaning of programs. Part 59 runs algorithms on networks whose "
-            "expansion bounds how fast information spreads. Part 60's machines are wired as expander-like networks. "
-            "And Part 61 returns to this part's open problems as research."
+            "Where this comes back. Part 58 meets fixed points again, in the meaning of programs. Part 59 runs "
+            "algorithms on graphs where each node sees only its neighbourhood, and proves how far that sight must "
+            "reach. And Part 61 puts this part's open problem, the unique games conjecture, on the map of what is "
+            "still unknown."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.3), run_time=3.0)

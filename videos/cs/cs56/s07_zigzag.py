@@ -198,7 +198,7 @@ class Zigzag(VoiceoverScene):
             " vertex per edge at a vertex of G: a four-cycle. <bookmark mark='b'/> Replace every vertex of G by a "
             "cloud, a copy of H whose points are the ports where G's edges attach. A vertex of the product is a cloud"
             " and a port. <bookmark mark='c'/> An edge is three moves. Zig: a step of H inside the cloud. <bookmark "
-            "mark='d'/> The big step: leave along G's edge at that port,. <bookmark mark='e'/> Zag: one more step of "
+            "mark='d'/> The big step: leave along G's edge at that port. <bookmark mark='e'/> Zag: one more step of "
             "H, in the new cloud. <bookmark mark='f'/> Two choices for the zig, two for the zag: degree four, "
             "whatever G's degree. <bookmark mark='g'/> Ours is larger: G of degree eight on sixty vertices, H of "
             "degree three on eight, four hundred and eighty vertices of degree nine."

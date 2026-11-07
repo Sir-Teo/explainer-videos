@@ -51,7 +51,7 @@ class Hook(VoiceoverScene):
             "random. <bookmark mark='b'/> In a drawing they look much alike. But one number tells them apart: the "
             "second smallest eigenvalue of a matrix built from the graph. <bookmark mark='c'/> On the left it is "
             "small: the graph is easy to cut in two, and a random walk on it takes a long time to forget where it "
-            "started. On the right it is several times larger: no cut is cheap, and walks mix fast. This part is about "
+            "started. On the right it is almost three times larger: no cut is cheap, and walks mix fast. This part is about "
             "what the eigenvalues of a graph know."
         ) as vo:
             self.play(FadeIn(head))

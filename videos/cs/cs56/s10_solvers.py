@@ -439,7 +439,7 @@ class Solvers(VoiceoverScene):
             "pseudo-inverses, <bookmark mark='c'/> and factor L through the edge-vertex incidence matrix. "
             "<bookmark mark='d'/> Now each resistance is a squared distance between two columns of one matrix. "
             "<bookmark mark='e'/> Distances survive random projection: this is the Johnson–Lindenstrauss lemma "
-            "from *AI, Built* and Part 20's sketches. A random matrix with about log n rows keeps every one of "
+            "from AI, Built and Part 20's sketches. A random matrix with about log n rows keeps every one of "
             "these distances within one plus or minus epsilon. <bookmark mark='f'/> So log n Laplacian solves give "
             "every resistance at once. <bookmark mark='g'/> The circle, sparsifiers needing resistances needing "
             "solvers, was broken by a solver that came first."

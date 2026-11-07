@@ -175,7 +175,7 @@ class Frontier(VoiceoverScene):
             "<bookmark mark='d'/> And the best approximation for the sparsest cut, where the square-root-log bound of "
             "Arora, Rao and Vazirani still stands. <bookmark mark='e'/> This part's research problem is the "
             "small-set expansion hypothesis of Raghavendra and Steurer: that telling whether small sets in a graph "
-            "expand is computationally hard. It would imply the unique games conjecture of Part 23, and nobody knows "
+            "expand is computationally hard. It would imply the unique games conjecture of Part 27, and nobody knows "
             "whether it is true."
         ) as vo:
             self.play(FadeIn(head))
