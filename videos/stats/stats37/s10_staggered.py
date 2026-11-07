@@ -80,9 +80,10 @@ class Staggered(VoiceoverScene):
             "<bookmark mark='a'/> For decades the standard analysis was the regression of chapter seven: town effects, "
             "year effects, and a treatment indicator. <bookmark mark='b'/> On the World's rollout it says minus "
             + say(-tw["beta"], 2) + ", with a clustered standard error of " + say(tw["se"], 2) + ". <bookmark mark='c'/> The "
-            "truth is plus " + say(d["truth"], 2) + ". <bookmark mark='d'/> A programme that raised employment in every town "
-            "and every year it ran is estimated, confidently, to have lowered it. Every town has parallel trends, and no "
-            "assumption of chapter seven is violated. The regression itself is the problem."
+            "truth is plus " + say(d["truth"], 2) + ". <bookmark mark='d'/> A programme that raised employment in every town and every year it ran is "
+            "estimated, confidently, to have lowered it. Every town has parallel trends, untreated outcomes satisfy "
+            "parallel trends and there is no anticipation. The constant-effect regression does not identify the "
+            "simple average ATT when effects evolve across cohorts and time."
         ) as vo:
             self.add(rollout_tag())
             for k, m_ in enumerate("abcd"):
@@ -132,19 +133,23 @@ class Staggered(VoiceoverScene):
             cmath(r"\text{a 2}{\times}\text{2 with already-treated controls}", r":", r"\Delta Y_{\text{late}} - \Delta Y_{\text{early}}", font_size=30),
             cmath(r"\Delta Y_{\text{early}}", r"=", r"\Delta Y(0) + \Delta\tau_{\text{early}}", font_size=30),
             cmath(r"\Rightarrow", r":", r"\tau_{\text{late}} - \Delta\tau_{\text{early}}", font_size=30),
-            cmath(r"\text{fine iff}", r":", r"\text{effects are constant over time}", font_size=30),
+            cmath(r"\text{sufficient for this contamination to vanish}", r":", r"\text{the already-treated controls have stable effects}", font_size=30),
         ]
         rows[2][-1].set_color(MISSC)
         whys = [why(r"the forbidden comparison"), why(r"the controls' effect is still changing"),
                 why(r"can be negative when every effect is positive"), why(r"de Chaisemartin \& D'Haultf\oe uille (2020)")]
         with self.voiceover(
-            "<bookmark mark='a'/> Why the forbidden comparisons mislead: a two-by-two with already-treated towns as the "
-            "control subtracts their change in outcomes. <bookmark mark='b'/> But their change includes the growth in their "
-            "own treatment effect. <bookmark mark='c'/> So the comparison estimates the late towns' effect minus the change "
-            "in the early towns' effect, which can be negative even when every effect is positive. <bookmark mark='d'/> If "
-            "effects were constant over time, the problem would vanish. They rarely are. Clément de Chaisemartin and Xavier "
-            "D'Haultfœuille showed the same thing in 2020: some treated units can even get negative weights."
-        ) as vo:
+            "<bookmark mark='a'/> Why the forbidden comparisons mislead: a two-by-two with already-treated towns as "
+            "the control subtracts their change in outcomes. <bookmark mark='b'/> But their change includes the "
+            "growth in their own treatment effect. <bookmark mark='c'/> So the comparison estimates the late towns' "
+            "effect minus the change in the early towns' effect, which can be negative even when every effect is "
+            "positive. <bookmark mark='d'/> Stable effects in the already-treated comparison group remove this "
+            "changing-control contamination. Cohort weighting can still target a different average from the simple "
+            "ATT. They rarely are. Clément de Chaisemartin and Xavier D'Haultfœuille showed the same thing in 2020: "
+            "some treated units can even get negative weights."        ) as vo:
+            intro=label('Already-treated comparisons mix treatment effects across time',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -166,9 +171,9 @@ class Staggered(VoiceoverScene):
             "adoption cohort and each year, against the never-treated towns, then average them: " + say(cs["att"], 2) + ", "
             "with an interval from " + say(cs["ci"][0], 2) + " to " + say(cs["ci"][1], 2) + ". <bookmark mark='c'/> Kirill "
             "Borusyak, Xavier Jaravel and Jann Spiess fit the town and year effects on untreated town-years only, impute "
-            "what every treated town-year would have been, and average the differences: " + say(d["imputation"], 2) + ". "
-            "<bookmark mark='d'/> Liyang Sun and Sarah Abraham fix the event study by interacting it with cohort. All of "
-            "them land near the truth, " + say(d["truth"], 2) + "."
+            "what every treated town-year would have been, and average the differences: " + say(d["imputation"], 2) + ". <bookmark mark='d'/> Liyang Sun and Sarah Abraham fix the event study by interacting it with cohort. "
+            "The two estimates computed here land near the truth; the Sun-Abraham alternative is described rather "
+            "than fitted. The true average is " + say(d["truth"], 2) + "."
         ) as vo:
             self.add(rollout_tag())
             for k, m_ in enumerate("abcd"):

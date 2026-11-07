@@ -24,17 +24,18 @@ class RDValid(VoiceoverScene):
 
     def remark(self):
         rows = fit_rows(VGroup(
-            label(r"the design fails if people can place themselves on either side of the line", font_size=26, color=MISSC),
+            label(r"precise sorting can undermine continuity of potential outcomes", font_size=26, color=MISSC),
             label(r"in the World's second version, \ teachers re-mark scripts that fell just short", font_size=26),
             label(r"35\% of the scripts scoring 56 to 59.9 are pushed to 60 or just above", font_size=26, color=CUTC),
             label(r"then those just above the line include students who would have been just below", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The design rests on one thing: that nobody can choose which side of the line to be on. If "
-            "people can sort themselves across the cutoff, those just above are no longer like those just below. <bookmark "
-            "mark='b'/> In a second version of the World's scholarship, teachers, knowing what is at stake, re-mark the "
-            "scripts that fell just short. <bookmark mark='c'/> A third of the scripts scoring between fifty-six and sixty "
-            "are found a few extra marks and pushed over the line. <bookmark mark='d'/> Now the students just above the line "
+            "<bookmark mark='a'/> One threat to the design is precise sorting across the cutoff, which can make "
+            "potential-outcome means discontinuous there. Validity also needs consistency and exclusion of other "
+            "discontinuous changes; no single sorting test establishes all of these. <bookmark mark='b'/> In a second"
+            " version of the World's scholarship, teachers, knowing what is at stake, re-mark the scripts that fell "
+            "just short. <bookmark mark='c'/> A third of the scripts scoring between fifty-six and sixty are found a "
+            "few extra marks and pushed over the line. <bookmark mark='d'/> Now the students just above the line "
             "include weaker students who would have been below it."
         ) as vo:
             for k, m_ in enumerate("abcd"):
@@ -59,11 +60,12 @@ class RDValid(VoiceoverScene):
             label(rf"a log jump of {d['rem']['theta']:.2f}: \ {np.exp(d['rem']['theta']):.1f} times as many just above", font_size=22, color=GREY_A),
         ), 3.8, 0.42, [4.9, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Justin McCrary's test of 2008 looks for the fingerprint: a jump in the density of the "
-            "running variable at the cutoff. It fits a smooth density on each side and compares the logs at the line. "
-            "<bookmark mark='b'/> With honest marking the histogram flows smoothly through sixty, and the test finds "
-            "nothing. <bookmark mark='c'/> After re-marking, a gap opens just below the line and a heap appears just above "
-            "it. <bookmark mark='d'/> The estimated log jump is " + say(d["rem"]["theta"], 2) + ": almost three times as many "
+            "<bookmark mark='a'/> Justin McCrary's test of 2008 looks for the fingerprint: a jump in the density of "
+            "the running variable at the cutoff. It fits a smooth density on each side and compares the logs at the "
+            "line. <bookmark mark='b'/> With honest marking this coarse histogram shows no clear jump. Scores are "
+            "rounded to tenths; the continuous-density test here is a teaching approximation. <bookmark mark='c'/> "
+            "After re-marking, a gap opens just below the line and a heap appears just above it. <bookmark mark='d'/>"
+            " The estimated log jump is " + say(d["rem"]["theta"], 2) + ": almost three times as many "
             "scripts just above the line as just below, a z statistic of " + str(round(d["rem"]["z"])) + "."
         ) as vo:
             self.add(schol_tag())
@@ -142,11 +144,14 @@ class RDValid(VoiceoverScene):
             "<bookmark mark='a'/> The fuzzy estimate divides the jump in outcomes by the jump in take-up: a Wald ratio, at "
             "the cutoff. <bookmark mark='b'/> Crossing the line is an instrument for the scholarship, but only right at the "
             "line. <bookmark mark='c'/> In the World the jump in earnings is " + say(f["jump_y"], 2) + ", the jump in take-up "
-            + say(f["jump_d"], 2) + ", and their ratio " + say(f["tau"], 2) + ", against a truth of three. <bookmark "
-            "mark='d'/> It is the effect for compliers at the cutoff: students who take a scholarship if and only if they are "
-            "offered one."
+            + say(f["jump_d"], 2) + ", and their ratio " + say(f["tau"], 2) + ", against a truth of three. <bookmark mark='d'/> With a nonzero first-stage jump, local exclusion, "
+            "monotonicity and continuity assumptions, it identifies the effect for compliers at the cutoff: students "
+            "who take a scholarship if and only if they are offered one."
         ) as vo:
             self.add(schol_tag())
+            intro=label('Fuzzy discontinuity is a local instrumental-variable design',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -180,15 +185,16 @@ class RDValid(VoiceoverScene):
             label(r"2. \ pre-treatment covariates: \ no jumps", font_size=26, color=Y0C),
             label(r"3. \ placebo cutoffs: \ no jumps where nothing happens", font_size=26, color=TAUC),
             label(r"4. \ bandwidths and polynomial orders: \ the answer should not hinge on them", font_size=26, color=BANDC),
-            label(r"5. \ a donut: \ drop the points nearest the line, \ where sorting would show", font_size=26, color=GREY_A),
+            label(r"5. \ donut sensitivity: \ changes extrapolation; does not automatically repair sorting", font_size=26, color=GREY_A),
         ), 12.4, 0.5, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> So every discontinuity should come with checks. The density of the running variable, "
-            "smooth through the cutoff. <bookmark mark='b'/> Covariates fixed before treatment, with no jumps. <bookmark "
-            "mark='c'/> Placebo cutoffs, at scores where nothing happens, with no effects. <bookmark mark='d'/> An answer that "
-            "does not hinge on the bandwidth or the polynomial order, and never a global polynomial of high degree, which "
-            "Andrew Gelman and Guido Imbens warned in 2019 can manufacture jumps. <bookmark mark='e'/> And a donut: drop the "
-            "points closest to the line, where manipulation would concentrate, and see whether the answer survives."
+            "<bookmark mark='a'/> So every discontinuity should come with checks. The density of the running "
+            "variable, smooth through the cutoff. <bookmark mark='b'/> Covariates fixed before treatment, with no "
+            "jumps. <bookmark mark='c'/> Placebo cutoffs, at scores where nothing happens, with no effects. <bookmark"
+            " mark='d'/> An answer that does not hinge on the bandwidth or the polynomial order, and never a global "
+            "polynomial of high degree, which Andrew Gelman and Guido Imbens warned in 2019 can manufacture jumps. "
+            "<bookmark mark='e'/> A donut can be a sensitivity check: dropping the nearest scores changes the "
+            "extrapolation problem and may lose local identification. It does not automatically repair manipulation."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

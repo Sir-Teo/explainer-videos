@@ -77,6 +77,70 @@ def schooling_arrays():
     return S, Z1, Zq, Zm, Xr
 
 
+
+def matrix_free_ar_set(y, d, Z, X=None, grid=None, alpha=0.1):
+    """Exact homoskedastic F-test inversion without an n-by-n projection."""
+    y,d=np.asarray(y,float),np.asarray(d,float)
+    W=Q._add_const(X,len(y));Z=np.asarray(Z,float).reshape(len(y),-1)
+    yz,dz=Q._partial(np.column_stack([y,d]),W).T
+    Zz=Q._partial(Z,W);q=Zz.shape[1];dof=len(y)-W.shape[1]-q
+    if np.linalg.matrix_rank(Zz)!=q or dof<=0:
+        raise ValueError("Excluded instruments must have full residual rank and positive error degrees of freedom")
+    fit=Zz@np.linalg.lstsq(Zz,np.column_stack([yz,dz]),rcond=None)[0]
+    py,pd=fit.T;ry,rd=yz-py,dz-pd
+    critical=stats.f.ppf(1-alpha,q,dof)*q/dof
+    a=pd@pd-critical*(rd@rd)
+    b=-2*(py@pd-critical*(ry@rd));c=py@py-critical*(ry@ry)
+    disc=b*b-4*a*c
+    if a==0:
+        if b==0:kind,lo,hi=("line",-math.inf,math.inf) if c<=0 else ("empty",None,None)
+        else:
+            kind="interval";lo,hi=(-math.inf,-c/b) if b>0 else (-c/b,math.inf)
+    elif disc<0:kind,lo,hi=("line",-math.inf,math.inf) if a<0 else ("empty",None,None)
+    else:
+        lo,hi=sorted(((-b-math.sqrt(disc))/(2*a),(-b+math.sqrt(disc))/(2*a)))
+        kind="interval" if a>0 else "outside"
+    out={"kind":kind,"lo":lo,"hi":hi}
+    if grid is not None:
+        grid=np.asarray(grid,float);F=np.array([((py-v*pd)@(py-v*pd)/q)/((ry-v*rd)@(ry-v*rd)/dof) for v in grid])
+        out.update(grid=grid,p=stats.f.sf(F,q,dof))
+    return out
+
+
+def trend_sensitivity(e, b, covariance, M, alpha=.1):
+    """First-post effect under a bounded departure from the population linear pre-trend.
+
+    Includes the joint covariance of the fitted pre-slope and first post estimate.
+    This one-period teaching restriction differs from the full Delta-SD model.
+    """
+    e,b,covariance=np.asarray(e),np.asarray(b),np.asarray(covariance)
+    pre=e < -1;post=int(np.flatnonzero(e==0)[0]);x=e[pre]+1
+    weights=x/(x@x);contrast=np.zeros(len(e));contrast[post]=1;contrast[pre]=-weights
+    mid=float(contrast@b);se=math.sqrt(max(0,float(contrast@covariance@contrast)))
+    z=stats.norm.ppf(1-alpha/2)
+    return {"set":(mid-M,mid+M),"ci":(mid-M-z*se,mid+M+z*se),"mid":mid,
+            "slope":float(weights@b[pre]),"se":se,
+            "se_slope":math.sqrt(max(0,float(weights@covariance[np.ix_(pre,pre)]@weights)))}
+
+
+def relative_sensitivity(e,b,covariance,Mbar,alpha=.1):
+    """Bonferroni confidence bound accounting for estimated pre-period jumps.
+
+    Half of alpha covers all pre-jumps simultaneously; half covers the first post
+    coefficient. Combining them gives asymptotic coverage under the stated bound.
+    """
+    e,b,V=np.asarray(e),np.asarray(b),np.asarray(covariance)
+    pre=np.flatnonzero(e<0);post=int(np.flatnonzero(e==0)[0]);J=np.diff(np.eye(len(e))[pre],axis=0)
+    jumps=J@b;se=np.sqrt(np.maximum(0,np.diag(J@V@J.T)))
+    z_pre=stats.norm.ppf(1-alpha/(4*len(jumps)));z_post=stats.norm.ppf(1-alpha/4)
+    plug=float(np.max(abs(jumps)));upper=float(np.max(abs(jumps)+z_pre*se))
+    width=z_post*math.sqrt(max(0,float(V[post,post])))+Mbar*upper
+    return {"set":(float(b[post]-Mbar*plug),float(b[post]+Mbar*plug)),
+            "ci":(float(b[post]-width),float(b[post]+width)),"max_pre_jump":plug,
+            "pre_jump_upper":upper,"inference":"Bonferroni simultaneous pre-jump and post bounds"}
+
+
+
 def compute_iv():
     S, Z1, Zq, Zm, Xr = schooling_arrays()
     y, d, q = S["logwage"], S["school"], S["q"]
@@ -88,7 +152,7 @@ def compute_iv():
     full3 = Q.tsls(y, d, Zq)
     k = np.sort(rng(3701).choice(len(y), 5000, replace=False))
     s1 = Q.tsls(y[k], d[k], Z1[k])
-    ar = Q.ar_set(y[k], d[k], Z1[k], grid=np.linspace(-0.3, 0.5, 161))
+    ar = matrix_free_ar_set(y[k], d[k], Z1[k], grid=np.linspace(-0.3, 0.5, 161))
     s3 = Q.tsls(y[k], d[k], Zq[k])
     return nest({"truth": World.RETURN_TO_SCHOOLING, "byq": byq, "dS": dS, "dW": dW, "wald": dW / dS, "n": len(y),
                  "full1": full1, "full3": full3, "sample1": s1, "sample3": s3, "ar": ar,
@@ -131,15 +195,16 @@ def compute_weak():
         k = g.choice(len(y), 5000, replace=False)
         t1 = Q.tsls(y[k], d[k], Z1[k])
         b1.append(t1["beta"]), F1.append(t1["F"]), ols.append(t1["ols"])
-        kinds[Q.ar_set(y[k], d[k], Z1[k])["kind"]] += 1
+        kinds[matrix_free_ar_set(y[k], d[k], Z1[k])["kind"]] += 1
         t30 = Q.tsls(y[k], d[k], Zm[k], Xr[k])
         b30.append(t30["beta"]), F30.append(t30["F"])
         bl.append(Q.liml(y[k], d[k], Zm[k], Xr[k])["beta"])
     b1, b30, bl = np.array(b1), np.array(b30), np.array(bl)
     edges = np.linspace(-0.3, 0.5, 41)
-    hist = lambda v: np.histogram(np.clip(v, edges[0], edges[-1] - 1e-9), edges)[0]
+    hist = lambda v: np.histogram(v, edges)[0]
     return nest({"truth": World.RETURN_TO_SCHOOLING, "reps": reps, "edges": edges,
                  "h1": hist(b1), "h30": hist(b30), "hl": hist(bl),
+                 "outside_view":{k:int(np.sum((v<edges[0]) | (v>edges[-1]))) for k,v in [("one",b1),("thirty",b30),("liml",bl)]},
                  "med1": float(np.median(b1)), "med30": float(np.median(b30)), "medl": float(np.median(bl)),
                  "medF1": float(np.median(F1)), "medF30": float(np.median(F30)), "med_ols": float(np.median(ols)),
                  "share_F_below_10": float(np.mean(np.array(F1) < 10)), "ar_kinds": kinds,
@@ -309,7 +374,7 @@ def compute_didinf():
     resid = Y0 - Y0.mean(1, keepdims=True) - Y0.mean(0, keepdims=True) + Y0.mean()
     ac = float(np.mean([np.corrcoef(resid[:, t], resid[:, t + 1])[0, 1] for t in range(Y0.shape[1] - 1)]))
     return nest({"reps": 1000, "rej_ols": float(ro.mean()), "rej_cl": float(rc.mean()), "sd_beta": float(b.std()),
-                 "autocorr": ac, "betas": np.histogram(np.clip(b, -0.6, 0.5999), np.linspace(-0.6, 0.6, 25))[0],
+                 "autocorr": ac, "betas": np.histogram(b, np.linspace(-0.6, 0.6, 25))[0], "outside_view":int(np.sum(abs(b)>.6)),
                  "se_ols": se_ols, "se_cl": se_cl, "resid_towns": resid[:6]})
 
 
@@ -363,13 +428,20 @@ def compute_honest():
     i0 = int(np.flatnonzero(ev == 0)[0])
     pre = ev < -1
     Ms = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8]
-    sd = {str(M): Q.honest_sd(ev[pre], att[pre], se[pre], att[i0], se[i0], M) for M in Ms}
-    rm = {str(Mb): Q.honest_rm(att[ev < 0], att[i0], se[i0], Mb) for Mb in (0.5, 1.0, 2.0)}
+    # Event-study cells share a reference period; retain their full covariance.
+    base=int(np.flatnonzero(years==2009)[0]);dy=Y-Y[:,[base]]
+    treated=np.isfinite(G);control=~treated
+    covariance=(np.cov(dy[treated],rowvar=False,ddof=1)/treated.sum()
+                + np.cov(dy[control],rowvar=False,ddof=1)/control.sum())
+    se=np.sqrt(np.maximum(0,np.diag(covariance)))
+    sd = {str(M): trend_sensitivity(ev,att,covariance,M) for M in Ms}
+    rm = {str(Mb): relative_sensitivity(ev,att,covariance,Mb) for Mb in (0.5, 1.0, 2.0)}
     breakdown = next((float(M) for M in np.arange(0, 3, 0.01)
-                      if Q.honest_sd(ev[pre], att[pre], se[pre], att[i0], se[i0], M)["ci"][0] <= 0), None)
-    pre_p = float(stats.chi2.sf(np.sum((att[pre] / se[pre]) ** 2), pre.sum()))
+                      if trend_sensitivity(ev,att,covariance,M)["ci"][0] <= 0), None)
+    pre_V=covariance[np.ix_(pre,pre)]
+    pre_p = float(stats.chi2.sf(att[pre]@np.linalg.pinv(pre_V)@att[pre],np.linalg.matrix_rank(pre_V)))
     return nest({"e": ev, "att": att, "se": se, "trend": trend, "truth0": 1.0, "est0": float(att[i0]),
-                 "se0": float(se[i0]), "naive_ci": (att[i0] - 1.645 * se[i0], att[i0] + 1.645 * se[i0]), "sd": sd,
+                 "se0": float(se[i0]), "covariance":covariance, "naive_ci": (att[i0] - 1.645 * se[i0], att[i0] + 1.645 * se[i0]), "sd": sd,
                  "rm": rm, "Ms": Ms, "breakdown": breakdown, "pre_p": pre_p, "truth_path": tau[0] + trend * (years - 2010) - 0.0})
 
 
@@ -398,12 +470,16 @@ def compute_synth():
         plac.append({"state": d["states"][i], "gap": s["gap"], "pre": s["rmspe_pre"], "post": s["rmspe_post"],
                      "ratio": s["ratio"]})
     ratios = np.array([p["ratio"] for p in plac])
-    rank = int(1 + np.sum(ratios > ratios[j]))
+    rank = int(np.sum(ratios >= ratios[j]))
+    # A disclosed descriptive pre-fit filter retains California and comparable fits.
+    filtered=[p for p in plac if p["pre"]<=2*sc["rmspe_pre"]]
+    filtered_rank=sum(p["ratio"]>=sc["ratio"] for p in filtered)
     avg_cal = float(np.nanmean(Y[[k for k in range(Y.shape[0]) if k != j]], 0)[-1])
     return nest({"years": d["years"], "cal": Y[j], "synth": sc["path"], "gap": sc["gap"], "weights": weights,
                  "rmspe_pre": sc["rmspe_pre"], "ratio": sc["ratio"], "gap2000": float(sc["gap"][-1]),
                  "gap_post_mean": float(sc["gap"][T0:].mean()), "placebo": plac, "rank": rank, "n_states": Y.shape[0],
-                 "p": rank / Y.shape[0], "avg_others": np.mean(np.delete(Y, j, 0), 0), "avg_others_2000": avg_cal,
+                 "p": rank / Y.shape[0], "filter_pre_multiplier":2.0, "filtered_n":len(filtered),
+                 "filtered_rank":filtered_rank, "filtered_p":filtered_rank/len(filtered), "avg_others": np.mean(np.delete(Y, j, 0), 0), "avg_others_2000": avg_cal,
                  "cal_1988": float(Y[j, T0 - 1]), "cal_2000": float(Y[j, -1])})
 
 
@@ -461,7 +537,21 @@ def compute_panel():
                              "ah_mean": float(np.mean(ah_r)), "ah_sd": float(np.std(ah_r)),
                              "formula": rho + Q.nickell_bias(rho, T2 - 1),
                              "hist_fe": np.histogram(fe_r, np.linspace(0, 1, 41))[0],
-                             "hist_ah": np.histogram(np.clip(ah_r, 0, 0.999), np.linspace(0, 1, 41))[0]}})
+                             "hist_ah": np.histogram(ah_r, np.linspace(0, 1, 41))[0]}})
+
+
+def fractional_lee_bounds(y,t,selected):
+    """Plug-in Lee bounds with fractional boundary observations, not rounded trimming."""
+    y,t,selected=np.asarray(y,float),np.asarray(t,bool),np.asarray(selected,bool)
+    q1,q0=selected[t].mean(),selected[~t].mean()
+    big,small,sign=(t,~t,1) if q1>=q0 else (~t,t,-1)
+    p=1-min(q1,q0)/max(q1,q0);v=np.sort(y[big & selected]);mass=len(v)*(1-p)
+    def mean_kept(a):
+        whole=int(np.floor(mass));fraction=mass-whole
+        return (a[:whole].sum()+(fraction*a[whole] if whole<len(a) else 0))/mass
+    low,high=mean_kept(v),mean_kept(v[::-1]);other=y[small & selected].mean()
+    lo,hi=(low-other,high-other) if sign==1 else (other-high,other-low)
+    return {"lo":float(lo),"hi":float(hi),"trim":float(p),"naive":float(y[t & selected].mean()-y[~t & selected].mean())}
 
 
 def compute_bounds():
@@ -476,13 +566,13 @@ def compute_bounds():
     w1 = w0 + np.where(always, 1.0, 0.0)
     emp = always | (marginal & t)
     w = np.where(t, w1, w0)
-    lee = Q.lee_bounds(w, t, emp)
+    lee = fractional_lee_bounds(w, t, emp)
     naive = float(w[t & emp].mean() - w[~t & emp].mean())
     # Manski: employment (0/1) with a follow-up survey that misses 20% of the trained and 30% of the others
     resp = np.where(t, g.random(n) < 0.80, g.random(n) < 0.70)
     e = emp.astype(float)
     man = Q.manski(e, t, resp, 0.0, 1.0)
-    truth_emp = float(e[t].mean() - e[~t].mean())
+    truth_emp = float(marginal.mean())
     resp_naive = float(e[t & resp].mean() - e[~t & resp].mean())
     return nest({"lee": lee, "naive": naive, "truth": 1.0, "share_marginal": 0.12, "emp1": float(emp[t].mean()),
                  "emp0": float(emp[~t].mean()), "manski": man, "truth_emp": truth_emp, "resp_naive": resp_naive,

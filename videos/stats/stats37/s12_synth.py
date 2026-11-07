@@ -99,6 +99,9 @@ class Synth(VoiceoverScene):
             "beyond them, and usually only a few states get any weight, so anyone can inspect the comparison. Abadie's "
             "version also matches covariates; ours matches the sales path alone."
         ) as vo:
+            intro=label('Synthetic controls require a credible counterfactual donor mixture',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -170,24 +173,28 @@ class Synth(VoiceoverScene):
         A = axes([1970, 2000], [-40, 40], x_length=7.6, y_length=4.4, xlabel=r"year", ylabel=r"gap (packs)",
                  xticks=[1970, 1980, 1990, 2000], yticks=[-40, -20, 0, 20, 40], xfmt=lambda v: f"{v:.0f}", center=[-1.8, 0.2, 0])
         ax = A.ax
-        others = VGroup(*[clip_curve(ax, yrs, np.clip(p["gap"], -40, 40), GREY_D, 1.5) for p in d["placebo"] if p["state"] != "California"])
+        others = VGroup(*[clip_curve(ax, yrs, p["gap"], GREY_D, 1.5) for p in d["placebo"] if p["state"] != "California"])
         cal = polyline(ax, yrs, d["gap"], Y1C, 4)
         side = fit_rows(VGroup(
             label(r"placebos: \ pretend each other state passed the law", font_size=22),
             label(rf"post/pre RMSPE ratio: \ California ranks {d['rank']} of {d['n_states']} \ ($p$ = {d['p']:.3f})", font_size=22, color=Y1C),
-            label(r"among the 29 states fitted nearly as well before 1989: \ first \ ($p$ = 1/29)", font_size=22, color=BANDC),
-            label(r"inference by permutation, \ not by a standard error", font_size=22, color=GREY_A),
+            label(rf"pre-RMSPE $\le 2\times$ California's: \ rank {d['filtered_rank']}/{d['filtered_n']} ({d['filtered_p']:.3f})", font_size=22, color=BANDC),
+            label(r"placebo rank; \ valid testing needs assignment exchangeability", font_size=22, color=GREY_A),
         ), 3.8, 0.42, [4.9, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> With one treated state, there is no standard error in the usual sense. Abadie's answer is "
-            "a placebo test: pretend, in turn, that each of the other thirty-eight states had passed the law in 1989, build "
-            "its synthetic control, and look at its gap. <bookmark mark='b'/> Ranked by how much the fit worsens after 1989 "
-            "relative to before, California comes " + ["first", "second", "third", "fourth"][d["rank"] - 1] + " of "
-            + str(d["n_states"]) + ", a p-value of " + say(d["p"], 2) + ". Missouri and Virginia, whose synthetic controls "
-            "fitted almost perfectly before 1989, edge ahead of it. <bookmark mark='c'/> Keeping only the twenty-nine states, "
-            "California included, whose pre-1989 paths could be matched about as well as California's, its gap is the largest "
-            "of all. <bookmark mark='d'/> Inference comes from the "
-            "permutation, Part sixteen's idea, applied to places."
+            "<bookmark mark='a'/> With one treated state, there is no standard error in the usual sense. Abadie's "
+            "answer is a placebo test: pretend, in turn, that each of the other thirty-eight states had passed the "
+            "law in 1989, build its synthetic control, and look at its gap. Treating those ranks as a randomization "
+            "p-value requires exchangeability of the treated-state assignment under the null; observational placebos "
+            "alone do not guarantee it. <bookmark mark='b'/> Ranked by how much the fit worsens after 1989 relative "
+            "to before, California comes " + ["first", "second", "third", "fourth"][d["rank"] - 1] + " of "
+            + str(d["n_states"]) + ", a p-value of " + say(d["p"], 2) + ". Missouri and Virginia, whose synthetic controls fitted almost perfectly before 1989, edge ahead of it."
+            " <bookmark mark='c'/> Restricting the reference set to states whose pre-treatment root mean squared "
+            "error is no more than twice California's leaves twenty-nine states, California included. Its post-to-pre"
+            " error ratio is still third, giving three over twenty-nine, about point one zero. This descriptive "
+            "filter changes the reference comparison; it does not turn it into a randomized design. <bookmark "
+            "mark='d'/> The permutation analogy is Part sixteen applied to places, with an assignment or "
+            "exchangeability assumption. Filtering by pre-fit changes the reference set and must be disclosed."
         ) as vo:
             self.add(prop99_tag())
             self.play(FadeIn(A))

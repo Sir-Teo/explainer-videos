@@ -58,6 +58,9 @@ class Credibility(VoiceoverScene):
             "<bookmark mark='d'/> The argument moves from a model of the outcome to the design itself. Snow argued about "
             "how the pipes were laid, not about what made people sick."
         ) as vo:
+            intro=label('Causal interpretation rests on an explicit assignment argument',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -66,7 +69,7 @@ class Credibility(VoiceoverScene):
 
     def designs(self):
         rows = [[r"design", r"the accident", r"the assumption", r"the effect, \ for whom"],
-                [r"instrument", r"a lottery or rule nudges $T$", r"exclusion: \ only through $T$", r"compliers (LATE)"],
+                [r"instrument", r"a lottery or rule nudges $T$", r"exclusion: \ only through $T$", r"binary treatment: \ compliers (LATE)"],
                 [r"discontinuity", r"a cutoff in a score", r"continuity at the cutoff", r"people at the cutoff"],
                 [r"diff.-in-diff.", r"a policy starts here, \ not there", r"parallel trends", r"the treated"],
                 [r"synthetic control", r"one unit treated", r"a weighted mix tracks it", r"that unit"]]
@@ -74,14 +77,15 @@ class Credibility(VoiceoverScene):
         if tab.width > 13:
             tab.width = 13
         with self.voiceover(
-            "<bookmark mark='a'/> This part covers four designs. <bookmark mark='b'/> An instrument: something as good as "
-            "random, such as a draft lottery, that nudges some people into treatment. It assumes the nudge affects the "
-            "outcome only through the treatment, and it identifies the effect for those who were nudged, the compliers of "
-            "Part thirty-five. <bookmark mark='c'/> A discontinuity: a rule gives treatment above a cutoff. It assumes "
+            "<bookmark mark='a'/> This part covers four designs. <bookmark mark='b'/> An instrument: something as "
+            "good as random, such as a draft lottery, that nudges some people into treatment. For a binary treatment,"
+            " relevance, as-if random assignment, exclusion and monotonicity identify the effect for the compliers of"
+            " Part thirty-five. Continuous treatments need a corresponding structural or marginal-effect "
+            "interpretation. <bookmark mark='c'/> A discontinuity: a rule gives treatment above a cutoff. It assumes "
             "nothing else jumps at the cutoff, and identifies the effect for people near it. <bookmark mark='d'/> "
-            "Differences-in-differences: a policy starts in some places and not others. It assumes the places would have "
-            "moved in parallel, and identifies the effect on the treated. <bookmark mark='e'/> And the synthetic control: one "
-            "treated unit, compared with a weighted mix of others that tracked it before."
+            "Differences-in-differences: a policy starts in some places and not others. It assumes the places would "
+            "have moved in parallel, and identifies the effect on the treated. <bookmark mark='e'/> And the synthetic"
+            " control: one treated unit, compared with a weighted mix of others that tracked it before."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tab[0]))

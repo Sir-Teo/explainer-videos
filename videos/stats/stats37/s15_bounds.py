@@ -31,15 +31,19 @@ class Bounds(VoiceoverScene):
         ]
         rows[2][-1].set_color(BANDC)
         whys = [why(r"the law of total probability"), why(r"the data say nothing about the missing"),
-                why(r"Manski (1990): \ no assumptions at all"), why(r"never shrinks with $n$")]
+                why(r"Manski (1990): \ no missingness model; bounded outcomes"), why(r"never shrinks with $n$")]
         with self.voiceover(
             "<bookmark mark='a'/> Charles Manski's starting point, in 1990, was to ask what the data say with no "
-            "assumptions at all. Suppose an outcome is missing for some people. Its mean is a mixture of the mean among those "
-            "observed and among those missing. <bookmark mark='b'/> The data say nothing about the missing, except that a "
-            "yes-or-no outcome lies between zero and one. <bookmark mark='c'/> So the mean lies in an interval: the worst "
-            "case, where every missing person scored zero, and the best, where every one scored one. <bookmark mark='d'/> "
-            "Its width is the share missing. It does not shrink as the sample grows; only assumptions can shrink it."
+            "assumptions at all. Suppose an outcome is missing for some people. Its mean is a mixture of the mean "
+            "among those observed and among those missing. <bookmark mark='b'/> The data say nothing about the "
+            "missing, except that a yes-or-no outcome lies between zero and one. <bookmark mark='c'/> So the mean "
+            "lies in an interval: the worst case, where every missing person scored zero, and the best, where every "
+            "one scored one. <bookmark mark='d'/> Its width is the share missing. It does not shrink as the sample "
+            "grows; a smaller missing share or stronger justified assumptions can narrow it."
         ) as vo:
+            intro=label('Bounded outcomes imply worst-case bounds without a missingness model',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -59,7 +63,7 @@ class Bounds(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"a training experiment, \ 4,000 workers; \ the follow-up survey reaches", font_size=24),
             label(rf"{100 * d['resp1']:.0f}\% of the trained and {100 * d['resp0']:.0f}\% of the others", font_size=24, color=MISSC),
-            label(rf"no assumptions: \ the effect on employment lies in [{m['lo']:.2f}, \ {m['hi']:.2f}]", font_size=24, color=BANDC),
+            label(rf"plug-in bounds under random treatment: \ employment effect in [{m['lo']:.2f}, \ {m['hi']:.2f}]", font_size=24, color=BANDC),
             label(rf"the truth \ (gold): \ {d['truth_emp']:.3f}; \ respondents only \ (red): \ {d['resp_naive']:.3f}", font_size=24, color=GREY_A),
         ), 12.4, 0.3, [0, 1.9, 0])
         with self.voiceover(
@@ -111,17 +115,22 @@ class Bounds(VoiceoverScene):
             cmath(r"\text{bounds}", r":", r"\text{the two trimmed means, \ minus the controls' mean}", font_size=30),
         ]
         rows[1][-1].set_color(TAUC)
-        whys = [why(r"Lee (2009)"), why(r"the share of trained workers who are marginal"),
+        whys = [why(r"Lee (2009); random treatment and monotone selection"), why(r"the share of trained workers who are marginal"),
                 why(r"they are somewhere in there"), why(r"for the always-employed")]
         with self.voiceover(
-            "<bookmark mark='a'/> David Lee's bounds, from 2009, need one assumption: training never stops anyone working. "
-            "Then the employed trained workers are the always-employed plus some marginal workers, and the employed controls "
-            "are the always-employed alone. <bookmark mark='b'/> The share of employed trained workers who are marginal is "
-            "the difference in employment rates, divided by the trained rate. <bookmark mark='c'/> We do not know which ones "
-            "they are. In the worst case they are the highest earners; in the best, the lowest. So trim that share from the "
-            "top, and then from the bottom, of the trained workers' wages. <bookmark mark='d'/> The two trimmed means, minus "
-            "the controls' mean, bound the effect for the always-employed."
+            "<bookmark mark='a'/> In this randomized experiment, David Lee's 2009 bounds additionally assume that "
+            "training never stops anyone working, with consistent treatment and well-defined selection and wage "
+            "outcomes. Then the employed trained workers are the always-employed plus some marginal workers, and the "
+            "employed controls are the always-employed alone. <bookmark mark='b'/> The share of employed trained "
+            "workers who are marginal is the difference in employment rates, divided by the trained rate. <bookmark "
+            "mark='c'/> We do not know which ones they are. In the worst case they are the highest earners; in the "
+            "best, the lowest. So trim that share from the top, and then from the bottom, of the trained workers' "
+            "wages. <bookmark mark='d'/> The two trimmed means, minus the controls' mean, bound the effect for the "
+            "always-employed."
         ) as vo:
+            intro=label('Lee bounds require random assignment and monotone selection',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -140,17 +149,18 @@ class Bounds(VoiceoverScene):
         zero = DashedLine(ax.c2p(0, 0), ax.c2p(0, 1), color=GREY_C, stroke_width=1.5)
         rows = fit_rows(VGroup(
             label(rf"trim {100 * lb['trim']:.1f}\% of the employed trained workers", font_size=24, color=TAUC),
-            label(rf"Lee bounds: \ [{lb['lo']:.2f}, \ {lb['hi']:.2f}]", font_size=24, color=BANDC),
+            label(rf"plug-in Lee bounds: \ [{lb['lo']:.2f}, \ {lb['hi']:.2f}]", font_size=24, color=BANDC),
             label(r"the truth \ (gold) \ inside; \ the naive comparison \ (red) \ inside too, \ but by luck of where it fell", font_size=24, color=GREY_A),
             label(r"add assumptions \ (covariates, \ a ranking of who works) \ to narrow them", font_size=24, color=GREY_A),
         ), 12.4, 0.3, [0, 1.9, 0])
         with self.voiceover(
             "<bookmark mark='a'/> In the example, " + say(100 * lb["trim"], 1) + " percent of the employed trained workers "
             "are marginal. <bookmark mark='b'/> Trimming gives bounds from minus " + say(-lb["lo"], 2) + " to plus "
-            + say(lb["hi"], 2) + " dollars an hour. <bookmark mark='c'/> The truth, one dollar, lies inside. They are wide, "
-            "because the marginal workers are a large share and could be anywhere in the distribution. <bookmark mark='d'/> "
-            "Conditioning on covariates that predict employment narrows them, and so do further assumptions about who is "
-            "marginal; each assumption buys width."
+            + say(lb["hi"], 2) + " dollars an hour. <bookmark mark='c'/> The truth, one dollar, lies inside. They are wide, because the "
+            "marginal workers are a large share and could be anywhere in the distribution. <bookmark mark='d'/> Valid"
+            " covariate-conditional selection restrictions can sharpen population bounds, although finite-sample "
+            "estimated bounds need not always narrow, and so do further assumptions about who is marginal; each "
+            "assumption buys width."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A), Create(zero))

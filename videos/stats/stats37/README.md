@@ -13,13 +13,13 @@ cutoff, a triangular-kernel window, local polynomial fits and the jump between t
 - a staggered rollout of a jobs programme across the 200 towns.
 
 Its real data are:
-- Snow's Table IX;
+- Snow's Table IX, with printed-rate arithmetic disclosed;
 - Card & Krueger's means;
 - the Prop 99 cigarette panel (39 states, 1970–2000), from R's tidysynth package (MIT licence).
 
 It opens with Snow (1855): Southwark & Vauxhall drew water below the sewers, while Lambeth had moved upstream in 1852.
 Their pipes ran down the same streets. The numbers are 315 vs 37 cholera deaths per 10,000 houses, and 59 in the rest
-of London.
+of London as printed. That last rate is an arithmetic error: 1,422/256,423 × 10,000 = 55.46. The table distinguishes printed rates from calculations; the two-company mortality ratio from counts is 8.40 deaths per house, not an individual infection-risk ratio.
 
 From there the part covers:
 - **The credibility revolution.** Leamer (1983); Angrist & Pischke (2010); four designs and what each identifies; the
@@ -32,7 +32,7 @@ From there the part covers:
   - One survey of 5,000: F = 9.0; 2SLS 0.098 (90% CI −0.001 to 0.196); AR set −0.052 to 0.192.
   - Across 1,000 surveys: median F 5.6, and 78% below 10.
   - The size of the 5% t-test: up to 16% at μ² = 1 with ρ = 0.9.
-  - Staiger–Stock; Stock–Yogo; tF (F must exceed 104.7 for 1.96; 3.43 at F = 10).
+  - Staiger–Stock; Stock–Yogo; tF (in the just-identified Gaussian approximation, F must exceed 104.7 for the usual 1.96 cutoff; 3.43 at F = 10).
   - AR sets: an interval 76%, two rays 13%, the whole line 11%.
 - **Many instruments.** Quarter × region gives 30 instruments.
   - 2SLS median 0.147 (OLS 0.162); LIML 0.091.
@@ -41,8 +41,8 @@ From there the part covers:
     0.0045, truth 0.30.
 - **Regression discontinuity.** Thistlethwaite & Campbell (1960). The World's scholarship (40,000 school-leavers):
   - scholars vs the rest +46.5 thousand;
-  - at the IK bandwidth (h = 33.4), local linear 3.59 (0.12) vs truth 3.0, and local quadratic 2.99 (0.16);
-  - a bandwidth sensitivity plot;
+  - at the IK-inspired teaching plug-in bandwidth (h = 33.4), local linear 3.59 (0.12) vs truth 3.0, and local quadratic 2.99 (0.16);
+  - a bandwidth sensitivity plot; this plug-in is not independently certified as the exact IK reference implementation or finite-sample optimum;
   - robust bias correction (Calonico, Cattaneo & Titiunik 2014);
   - one study of 2,000: conventional 2.29–4.00, robust 1.27–3.58.
 - **RD validity.**
@@ -66,13 +66,13 @@ From there the part covers:
 - **Honest parallel trends** (Rambachan & Roth 2023), on a seeded panel with a 0.2 a year pre-trend and a true effect
   of 1.0:
   - naive 1.17 (1.07–1.27);
-  - linear extrapolation 0.97 (0.87–1.07);
-  - breakdown at M = 0.88;
-  - relative magnitudes.
+  - linear extrapolation 0.97 (0.86–1.08), including the full covariance of pre- and post-period estimates;
+  - breakdown at M = 0.87 under this specified linear-extrapolation departure bound;
+  - relative magnitudes with simultaneous pre-jump uncertainty (Bonferroni), rather than treating the estimated pre-trend bound as known. These are explicit one-period teaching restrictions, not a full implementation of Rambachan–Roth Delta-SD inference.
 - **Synthetic control** (Abadie, Diamond & Hainmueller 2010).
   - Weights: Utah 0.39, Montana 0.23, Nevada 0.20, Connecticut 0.11, New Hampshire 0.05; pre-RMSPE 1.66.
   - The gap is −26.6 packs in 2000, and −19.5 on average over 1989–2000.
-  - Placebo ratios rank California 3rd of 39 (p = 0.077), and 1st among the 29 well-fitted states (p = 1/29).
+  - Placebo ratios rank California 3rd of 39 (p = 0.077), and 3rd among the 29 states with pre-RMSPE at most twice California's (descriptive rank fraction 3/29 = 0.103).
 - **Synthetic DiD** (Arkhangelsky et al. 2021). Placebo SEs:
 
   | Estimator | Estimate | SE |
@@ -81,13 +81,13 @@ From there the part covers:
   | SC | −19.5 | 10.9 |
   | SDID | −15.6 | 9.5 |
 
-  These match the paper's Table 1. The time weights fall on 1986–88.
+  Point estimates approximately reproduce the paper's Table 1; these placebo SEs differ from its reported SEs. Inference needs comparability/model assumptions across states. The time weights fall on 1986–88. A range of point estimates such as 15–25 packs is not a confidence interval or an assumption-free causal conclusion.
 - **Panel data.**
   - Pooled 1.93 against FE = LSDV = Mundlak 0.985 (truth 1).
   - Nickell: FE 0.170 vs the formula's 0.169 (ρ = 0.5, T = 5); Anderson–Hsiao 0.499; Arellano–Bond.
 - **Bounds.**
-  - Manski's worst-case bounds with 19% and 30% non-response: [−0.15, 0.34] (truth 0.104).
-  - Lee's trimming bounds for wages with 14.7% marginal workers: [−0.99, 1.40] (truth 1.0, naive 0.22).
+  - Manski's worst-case bounds with 19% and 30% non-response: [−0.15, 0.34] (finite-population causal effect 0.123).
+  - Lee's plug-in trimming bounds for wages, with 14.7% of observed treated workers estimated as marginal: [−0.99, 1.40] (truth 1.0, naive 0.22).
   - The law of decreasing credibility.
 
 Data:
@@ -98,13 +98,13 @@ Data:
 **Built in this part:**
 - **`statkit.quasi`** ([`explainer/stats/kit/quasi.py`](../../../explainer/stats/kit/quasi.py)), checked in
   `tests/test_stats_kit_quasi.py`:
-  - **Instruments:** OLS with HC1 and cluster-robust SEs; 2SLS with first-stage F; Anderson–Rubin tests and exact
+  - **Instruments:** OLS with HC1 and cluster-robust SEs; 2SLS with first-stage F; Anderson–Rubin tests and exact homoskedastic Gaussian linear-IV
     confidence sets; LIML; IVW and MR-Egger.
   - **Regression discontinuity:** one-sided local polynomials with triangular weights; sharp and fuzzy RD;
-    conventional and robust bias-corrected intervals; the IK bandwidth; McCrary's density test.
+    conventional and robust bias-corrected intervals; an IK-inspired teaching bandwidth; McCrary's density test.
   - **Difference-in-differences:** TWFE with clustered SEs; event studies; the Goodman-Bacon decomposition;
-    Callaway–Sant'Anna with influence-function SEs; the imputation estimator; honest DiD (smoothness and relative
-    magnitudes).
+    Callaway–Sant'Anna with influence-function SEs; the imputation estimator; simplified sensitivity illustrations (linear-trend departure and relative
+    magnitudes). The chapter uses local helpers retaining joint event-time covariance and uncertainty in the estimated pre-jump bound.
   - **Synthetic control and panels:** simplex least squares; synthetic control with placebo ratios; synthetic DiD;
     the within estimator; Nickell's bias; Anderson–Hsiao.
   - **Bounds:** Manski; Lee.
@@ -149,7 +149,7 @@ python tools/lecture_length.py stats37 --floor 50
 | 7 | Difference-in-differences | Card–Krueger +2.76 |
 | 8 | DiD inference | placebo laws: 41% vs 5.5% |
 | 9 | Staggered adoption | TWFE −0.49 vs truth 3.96 |
-| 10 | Honest parallel trends | 1.17 → 0.97; breakdown 0.88 |
+| 10 | Honest parallel trends | 1.17 → 0.97; breakdown 0.87 under the teaching bound |
 | 11 | Synthetic control | −26.6 packs in 2000 |
 | 12 | Synthetic DiD | −15.6 / −19.5 / −27.3 |
 | 13 | Panel data | Nickell: 0.170 for 0.5 |
@@ -201,10 +201,10 @@ python tools/lecture_length.py stats37 --floor 50
    Var(Z)(E[V | Z=1] − E[V | Z=0]) for any V.
 2. **AR is robust.** Under H₀, Y − b₀D = Wγ + u with u independent of Z (exclusion and independence).
    - The regression of Y − b₀D on (W, Z) has instrument coefficients exactly zero.
-   - With normal errors, the F statistic is exactly F(q, n − k); the first stage never enters.
+   - With independent homoskedastic Gaussian errors conditional on the valid instruments and exogenous controls, the F statistic is exactly F(q, n − k); the first stage never enters. Mere marginal normality is insufficient. A heteroskedastic model needs robust AR inference.
 3. **The MSE bandwidth.** MSE(h) = B²h⁴ + V/(nh). Setting the derivative 4B²h³ − V/(nh²) to zero gives
    h = (V/(4B²n))^{1/5} ∝ n^{−1/5}.
-   - There, B²h⁴ = V/(4nh), so bias² = variance/4 and bias/SD = ½ for every n.
+   - In this leading-term, nonzero-curvature approximation, B²h⁴ = V/(4nh), so bias² = variance/4 and absolute bias/SD = ½. Absolute bias can tend to zero while remaining material relative to the standard error.
 4. **TWFE in the 2×2.** With two units, or groups, and two periods, the two-way demeaned treatment is ±¼.
    - The regression coefficient is then the double difference of the four means.
 5. **Nickell with two periods.** With observations y₀, y₁, y₂, fixed effects equals first differences: Δy₂ on Δy₁.
@@ -212,7 +212,7 @@ python tools/lecture_length.py stats37 --floor 50
    - This matches `nickell_bias(ρ, 2)`.
 6. **Manski.** Let E[Y(1)] ∈ [r₁ȳ₁, r₁ȳ₁ + 1 − r₁] and E[Y(0)] ∈ [r₀ȳ₀, r₀ȳ₀ + 1 − r₀].
    - The difference lies between the lower end of the first minus the upper end of the second, and the reverse.
-   - The width is (1 − r₁) + (1 − r₀) = 2 − r₁ − r₀.
+   - The width is (1 − r₁) + (1 − r₀) = 2 − r₁ − r₀. Causal interpretation also needs random treatment or other identification of the arm means. These plug-in endpoints are not confidence limits.
 
 ## Glossary
 
@@ -222,9 +222,9 @@ python tools/lecture_length.py stats37 --floor 50
   its general form.
 - **Weak instruments; F; tF; Anderson–Rubin**: instruments that barely move the treatment; the diagnostic; the adjusted
   critical value; the test that needs no strength.
-- **LIML**: a k-class estimator nearly median-unbiased with many instruments.
+- **LIML**: a k-class estimator often less median-biased under standard weak/many-instrument conditions; this is not a universal finite-sample guarantee.
 - **Mendelian randomization; pleiotropy; MR-Egger**: genes as instruments; genes acting through other paths; the
-  intercept that absorbs average pleiotropy.
+  intercept allowing average directional pleiotropy under InSIDE and additional strength/measurement-error conditions.
 - **Regression discontinuity (sharp, fuzzy); running variable; bandwidth**: treatment by a cutoff in a score.
 - **Robust bias correction**: subtracting the estimated smoothing bias, with an SE that includes its noise.
 - **McCrary test; donut**: a jump in the running variable's density; dropping the points nearest the cutoff.
@@ -236,7 +236,7 @@ python tools/lecture_length.py stats37 --floor 50
   already-treated units used as controls; TWFE as a weighted average of 2×2s.
 - **Callaway–Sant'Anna; imputation estimator**: estimators that compare only with untreated cells.
 - **Honest DiD; breakdown value**: inference allowing bounded violations of parallel trends; the violation at which a
-  conclusion changes.
+  conclusion changes under a specified restriction. The teaching linear-extrapolation bound differs from the full Delta-SD framework.
 - **Synthetic control; SDID**: a convex combination of controls matching the treated unit; with intercepts and time
   weights.
 - **Fixed effects; within transformation; Nickell bias; Anderson–Hsiao**: unit intercepts; demeaning; the
@@ -255,3 +255,11 @@ python tools/lecture_length.py stats37 --floor 50
 - **Part 57**: permutation inference.
 - **Part 60**: external validity and distribution shift.
 - **Part 62**: partial identification, sensitivity and surrogates.
+
+## Verification scope
+
+All sixteen chapters, numerical inputs, solutions and helpers were reviewed. The local matrix-free AR inversion agrees with independent F-test inversion without constructing an n-by-n projection. Trend sensitivity retains the covariance induced by the common reference period. Fractional Lee trimming agrees with independent linear programming. World sampling studies use fixed seeded populations; their coverage summaries illustrate these draws and assumptions rather than certify general theorems.
+
+Scores in the scholarship example are recorded in tenths. Continuous-running-variable RD and density references are therefore teaching approximations requiring local smoothness, not an exact fixed-grid identification guarantee. Fuzzy RD additionally needs local exclusion, monotonicity and a nonzero take-up jump. DiD needs no anticipation and an appropriate interference assumption as well as parallel trends. Placebo ranks and single-treated-state standard errors need an assignment or comparable-shocks justification.
+
+Full weak-IV histogram denominators retain all 1,000 studies; observations outside the displayed range are disclosed instead of accumulated into the edge bins. Matching pre-treatment paths does not establish post-treatment counterfactual validity.

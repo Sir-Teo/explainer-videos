@@ -78,22 +78,29 @@ class Honest(VoiceoverScene):
 
     def idea(self):
         rows = [
-            cmath(r"\hat\beta_{e}", r"=", r"\tau_e + \delta_e \quad (\delta: \text{ the violation of parallel trends})", font_size=30),
-            cmath(r"\text{leads}", r":", r"\hat\beta_e = \delta_e \text{ for } e < 0 \ \text{(no effect yet)}", font_size=30),
-            cmath(r"\Delta^{SD}(M)", r":", r"\delta_0 \text{ within } M \text{ of the linear trend in the leads}", font_size=30),
+            cmath(r"\beta_{e}", r"=", r"\tau_e + \delta_e \quad (\delta: \text{ the violation of parallel trends})", font_size=30),
+            cmath(r"\text{leads}", r":", r"\beta_e = \delta_e \text{ for } e < 0 \ \text{(no effect yet)}", font_size=30),
+            cmath(r"\text{teaching linear-trend bound }(M)", r":", r"\delta_0 \text{ within } M \text{ of the linear trend in the leads}", font_size=30),
             cmath(r"\Delta^{RM}(\bar M)", r":", r"|\delta_0 - \delta_{-1}| \le \bar M \max_{e<0} |\delta_e - \delta_{e-1}|", font_size=30),
         ]
         rows[2][-1].set_color(BANDC)
         whys = [why(r"every estimate mixes effect and violation"), why(r"the leads measure the violation"),
                 why(r"smoothness: \ trends may bend, \ a little"), why(r"relative magnitudes")]
         with self.voiceover(
-            "<bookmark mark='a'/> Ashesh Rambachan and Jonathan Roth's framework, published in 2023, writes each event-study "
-            "estimate as the effect plus the violation of parallel trends. <bookmark mark='b'/> Before adoption there is no "
-            "effect, so the leads estimate the violation directly. <bookmark mark='c'/> Then they restrict how the violation "
-            "may continue after adoption. Under smoothness, it may depart from the linear extrapolation of the pre-trend by at "
-            "most M. <bookmark mark='d'/> Under relative magnitudes, the jump after adoption is at most M-bar times the "
-            "largest jump seen before it. Each restriction gives a set of effects, and an interval for the set."
+            "<bookmark mark='a'/> Ashesh Rambachan and Jonathan Roth's framework, published in 2023, writes the "
+            "population event-study coefficient as the effect plus the violation of parallel trends. Estimates add "
+            "sampling error, correlated across event times. <bookmark mark='b'/> Before adoption there is no effect, "
+            "so the leads estimate the violation directly. <bookmark mark='c'/> Then they restrict how the violation "
+            "may continue after adoption. Our simplified first-post-period model bounds departure from a fitted "
+            "population linear pre-trend by M. It illustrates sensitivity but differs from their full "
+            "smoothness-restriction procedure. <bookmark mark='d'/> Under relative magnitudes, the jump after "
+            "adoption is at most M-bar times the largest jump seen before it. We account for the full joint "
+            "covariance in the linear extrapolation, and use simultaneous pre-jump bounds for the relative-magnitude "
+            "interval. These are asymptotic intervals under the stated teaching restrictions."
         ) as vo:
+            intro=label('Sensitivity intervals carry uncertainty in pre-trends into conclusions',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -119,7 +126,7 @@ class Honest(VoiceoverScene):
         side = fit_rows(VGroup(
             label(r"red, \ far left: \ the conventional interval", font_size=22, color=Y1C),
             label(rf"$M = 0$: \ extrapolate the pre-trend: \ {s0['mid']:.2f} \ ({s0['ci'][0]:.2f} to {s0['ci'][1]:.2f})", font_size=22, color=BANDC),
-            label(r"gold: \ the identified set; \ green: \ its 90\% interval", font_size=22, color=TAUC),
+            label(r"gold: plug-in set; \ green: asymptotic 90\% interval", font_size=22, color=TAUC),
             label(rf"breakdown: \ the effect stays positive until $M$ = {d['breakdown']:.2f}", font_size=22, color=GREY_A),
         ), 3.8, 0.42, [4.9, 0.4, 0])
         with self.voiceover(
@@ -128,8 +135,8 @@ class Honest(VoiceoverScene):
             "pre-trend exactly. Subtracting it gives " + say(s0["mid"], 2) + ", with an interval that covers the truth of one. "
             "<bookmark mark='c'/> Allowing the trend to bend by up to M widens the set, in gold, and its interval, in green. "
             "<bookmark mark='d'/> The conclusion that the programme helped survives until M is about " + say(d["breakdown"], 2)
-            + ", a bend of almost nine tenths of a point in a single year, more than four years of the trend itself. That "
-            "breakdown value is what a reader needs in order to judge."
+            + ", a departure from this particular linear extrapolation. Its scale and interpretation depend on the "
+            "restriction being imposed. That breakdown value is what a reader needs in order to judge."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A), Create(zero), Create(truth))
@@ -145,7 +152,7 @@ class Honest(VoiceoverScene):
 
     def rm(self):
         d = load("honest")
-        rows = [[r"$\bar M$", r"identified set", r"90\% interval"]]
+        rows = [[r"$\bar M$", r"plug-in set", r"90\% Bonferroni interval"]]
         for k in ("0.5", "1.0", "2.0"):
             r = d["rm"][k]
             rows.append([k, rf"{r['set'][0]:.2f} to {r['set'][1]:.2f}", rf"{r['ci'][0]:.2f} to {r['ci'][1]:.2f}"])
@@ -158,9 +165,8 @@ class Honest(VoiceoverScene):
             "<bookmark mark='a'/> Under relative magnitudes, the largest year-to-year change in the leads is "
             + say(d["rm"]["1.0"]["max_pre_jump"], 2) + ". <bookmark mark='b'/> If the violation can jump after adoption by "
             "half that, or by as much, the effect is clearly positive. <bookmark mark='c'/> Even if it can jump by twice the "
-            "largest change seen before, the interval stays above zero, from " + say(d["rm"]["2.0"]["ci"][0], 2) + ". Neither "
-            "restriction is testable; the point is to make the assumption explicit, and to let a reader with a different view "
-            "recompute the answer."
+            "largest change seen before, the interval stays above zero, from " + say(d["rm"]["2.0"]["ci"][0], 2) + ". The post-treatment restrictions cannot be verified from pre-treatment outcomes alone; the point is to "
+            "make the assumption explicit, and to let a reader with a different view recompute the answer."
         ) as vo:
             self.add(seeded_tag())
             vo.wait_until("a")

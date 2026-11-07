@@ -90,13 +90,18 @@ class RD(VoiceoverScene):
         whys = [why(r"treatment is decided by the score"), why(r"nothing else jumps at $c$"),
                 why(r"Hahn, \ Todd \& van der Klaauw (2001)"), why(r"so the estimate is a boundary problem")]
         with self.voiceover(
-            "<bookmark mark='a'/> Formally: treatment is decided by the running variable, the score, crossing the cutoff c. "
-            "<bookmark mark='b'/> Assume that the average potential outcomes, with and without the scholarship, change "
-            "smoothly with the score through the cutoff. Nothing else jumps at sixty. <bookmark mark='c'/> Then the effect at "
-            "the cutoff is the difference between the two one-sided limits of the regression of the outcome on the score. "
-            "<bookmark mark='d'/> No one at the cutoff is both treated and untreated: there is no overlap at all, so each "
-            "side must be extrapolated to the line. Estimation is a problem at the boundary of the data."
+            "<bookmark mark='a'/> Formally: treatment is decided by the running variable, the score, crossing the "
+            "cutoff c. <bookmark mark='b'/> Assume that the average potential outcomes, with and without the "
+            "scholarship, have continuous conditional means at the cutoff, with no other discontinuous intervention. "
+            "The World records scores in tenths, so applying continuous-score limit theory here also uses a local "
+            "smoothness approximation. <bookmark mark='c'/> Then the effect at the cutoff is the difference between "
+            "the two one-sided limits of the regression of the outcome on the score. <bookmark mark='d'/> No one at "
+            "the cutoff is both treated and untreated: there is no overlap at all, so each side must be extrapolated "
+            "to the line. Estimation is a problem at the boundary of the data."
         ) as vo:
+            intro=label('A cutoff identifies a local effect under continuity assumptions',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -117,15 +122,16 @@ class RD(VoiceoverScene):
         ql, qr = L.fit(d["robust"]["left"], h, "left", color=BANDC), L.fit(d["robust"]["right"], h, "right", color=BANDC)
         side = fit_rows(VGroup(
             label(r"local linear: \ a line on each side, \ triangular weights", font_size=22),
-            label(rf"IK bandwidth: \ $h$ = {h:.1f} points", font_size=22, color=CUTC),
+            label(rf"IK-inspired teaching plug-in: \ $h$ = {h:.1f} points", font_size=22, color=CUTC),
             label(rf"jump: \ {d['conv']['tau']:.2f} \ (SE {d['conv']['se']:.2f}); \ truth {d['truth']:.1f}", font_size=22, color=MISSC),
             label(rf"local quadratic: \ {d['robust']['tau']:.2f} \ (SE {d['robust']['se']:.2f})", font_size=22, color=BANDC),
         ), 3.6, 0.42, [5.0, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The standard estimator is local linear regression: on each side of the cutoff, fit a "
-            "straight line to the points within a bandwidth h, weighting them by a triangle that peaks at the cutoff. "
-            "<bookmark mark='b'/> Guido Imbens and Karthik Kalyanaraman's rule of 2012 chooses the bandwidth that minimizes "
-            "the mean squared error; here it is " + say(h, 1) + " points. <bookmark mark='c'/> The jump between the two lines "
+            "<bookmark mark='a'/> The standard estimator is local linear regression: on each side of the cutoff, fit "
+            "a straight line to the points within a bandwidth h, weighting them by a triangle that peaks at the "
+            "cutoff. <bookmark mark='b'/> Our teaching plug-in follows the structure of Imbens and Kalyanaraman's "
+            "2012 bandwidth rule. It is not independently validated as their reference implementation or the exact "
+            "finite-sample MSE optimum; here it is " + say(h, 1) + " points. <bookmark mark='c'/> The jump between the two lines "
             "at sixty is " + say(d["conv"]["tau"], 2) + " thousand, with a standard error of " + say(d["conv"]["se"], 2)
             + ". The World's truth is three. The earnings curve bends upward, and a straight line across thirty points cannot "
             "follow it to the edge. <bookmark mark='d'/> A local quadratic, with the same window, follows the bend: "
@@ -157,17 +163,19 @@ class RD(VoiceoverScene):
         side = fit_rows(VGroup(
             label(r"red: \ local linear, \ with 90\% bands", font_size=22, color=MISSC),
             label(r"green: \ local quadratic", font_size=22, color=BANDC),
-            label(r"small $h$: \ unbiased, \ noisy", font_size=22),
+            label(r"small $h$: \ less smoothing bias, \ more noise", font_size=22),
             label(r"large $h$: \ precise, \ biased", font_size=22, color=MISSC),
         ), 3.8, 0.42, [4.9, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The choice of bandwidth is the choice of a bias-variance trade-off, Part twenty-nine's "
-            "smoothing problem at a boundary. Here are the estimates at every bandwidth from three to thirty-five points, on "
-            "all forty thousand school-leavers. <bookmark mark='b'/> With a narrow window the local linear estimate is right "
-            "on average but noisy. As the window widens it becomes precise and drifts away from the truth, and its interval "
-            "drifts with it. <bookmark mark='c'/> The local quadratic stays near three much longer, at the price of width. "
-            "<bookmark mark='d'/> A conventional interval at the mean-squared-error-optimal bandwidth is centred on a biased "
-            "estimate by design: that bandwidth balances squared bias against variance, so the bias never vanishes."
+            "<bookmark mark='a'/> The choice of bandwidth is the choice of a bias-variance trade-off, Part "
+            "twenty-nine's smoothing problem at a boundary. Here are the estimates at every bandwidth from three to "
+            "thirty-five points, on all forty thousand school-leavers. <bookmark mark='b'/> A narrower window reduces"
+            " smoothing bias but increases noise; it is not exactly unbiased. As the window widens it becomes precise"
+            " and drifts away from the truth, and its interval drifts with it. <bookmark mark='c'/> The local "
+            "quadratic stays near three much longer, at the price of width. <bookmark mark='d'/> A conventional "
+            "interval at the mean-squared-error-optimal bandwidth is centred on a biased estimate by design: that "
+            "bandwidth balances squared bias against variance, so bias remains material relative to the standard "
+            "error under the usual leading-term expansion, even though its absolute size can vanish."
         ) as vo:
             self.add(schol_tag())
             self.play(FadeIn(A), Create(truth))
@@ -188,15 +196,19 @@ class RD(VoiceoverScene):
         whys = [why(r"Part 29"), why(r"the conventional CI undercovers"), why(r"Calonico, \ Cattaneo \& Titiunik (2014)"),
                 why(r"with equal bandwidths: \ the local quadratic and its own SE")]
         with self.voiceover(
-            "<bookmark mark='a'/> The arithmetic: the local linear estimate's bias grows like the square of the bandwidth, "
-            "and its noise shrinks like one over the square root of n times h. <bookmark mark='b'/> The optimal bandwidth "
-            "shrinks like n to the minus one fifth, and at it the bias stays half a standard deviation, however large the "
-            "sample. The conventional interval, which ignores it, undercovers forever. <bookmark mark='c'/> Sebastian "
-            "Calonico, Matias Cattaneo and Rocio Titiunik's fix, in 2014, subtracts an estimate of the bias, using a local "
-            "quadratic. <bookmark mark='d'/> And, crucially, widens the standard error to include the noise in that "
-            "estimate. With the same bandwidth for both, the robust interval is exactly the local quadratic's estimate with "
-            "its own standard error."
+            "<bookmark mark='a'/> The arithmetic: the local linear estimate's bias grows like the square of the "
+            "bandwidth, and its noise shrinks like one over the square root of n times h. <bookmark mark='b'/> The "
+            "optimal bandwidth shrinks like n to the minus one fifth, and at it the bias stays half a standard "
+            "deviation, however large the sample. Under this nonzero-curvature leading-term model, ignoring the bias "
+            "gives asymptotic undercoverage. <bookmark mark='c'/> Sebastian Calonico, Matias Cattaneo and Rocio "
+            "Titiunik's fix, in 2014, subtracts an estimate of the bias, using a local quadratic. <bookmark "
+            "mark='d'/> And, crucially, widens the standard error to include the noise in that estimate. With the "
+            "same bandwidth for both, the robust interval is exactly the local quadratic's estimate with its own "
+            "standard error."
         ) as vo:
+            intro=label('Bias correction includes uncertainty in the estimated bias',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -207,7 +219,7 @@ class RD(VoiceoverScene):
         d = load("rd")["study"]
         rows = fit_rows(VGroup(
             label(r"one study: \ 2,000 school-leavers drawn from the World", font_size=26),
-            label(rf"IK bandwidth {d['h']:.1f}; \ conventional: \ {d['conv']['tau']:.2f}, \ 90\% CI {d['conv']['ci'][0]:.2f} to {d['conv']['ci'][1]:.2f}", font_size=26, color=MISSC),
+            label(rf"teaching bandwidth {d['h']:.1f}; \ conventional: \ {d['conv']['tau']:.2f}, \ 90\% CI {d['conv']['ci'][0]:.2f} to {d['conv']['ci'][1]:.2f}", font_size=26, color=MISSC),
             label(rf"robust bias-corrected: \ {d['robust']['tau']:.2f}, \ 90\% CI {d['robust']['ci'][0]:.2f} to {d['robust']['ci'][1]:.2f}", font_size=26, color=BANDC),
             label(r"wider, \ and centred elsewhere: \ the correction is not only a wider interval", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])

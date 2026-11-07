@@ -38,19 +38,21 @@ class Outro(VoiceoverScene):
         head = label(r"Part 37, \ in twelve lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Part thirty-seven in twelve lines. <bookmark mark='a'/> Snow's two water companies ran down the same streets, "
-            "and the dirty water carried eight times the risk. The credibility revolution put the design before the "
-            "regression. An instrument identifies an effect by a Wald ratio, or two-stage least squares, if it reaches the "
-            "outcome only through the treatment. Weak instruments make the usual interval unreliable, and the "
-            "Anderson-Rubin set is valid however weak. Many instruments drag two-stage least squares back to ordinary least "
-            "squares, while limited-information maximum likelihood resists, and genes can serve as instruments if they act "
-            "through one path. Regression discontinuities compare people at a cutoff, with local fits and robust bias "
-            "correction, and must be checked for sorting. Differences-in-differences assume parallel trends, and need "
-            "standard errors clustered by the unit of treatment. With staggered adoption, two-way fixed effects can get the "
-            "sign wrong, and Callaway and Sant'Anna's estimator or imputation do not. Honest parallel trends carry doubt "
-            "about the trends into the interval; synthetic controls and synthetic DiD build the comparison. Fixed effects "
-            "remove what is fixed, and dynamic panels need instruments. And bounds show what the data say before the "
-            "assumptions speak."
+            "Part thirty-seven in twelve lines. <bookmark mark='a'/> Snow's two water companies ran down the same "
+            "streets, and the contaminated-water group had about eight times as many deaths per house. The "
+            "credibility revolution put the design before the regression. An instrument identifies an effect by a "
+            "Wald ratio, or two-stage least squares, if it reaches the outcome only through the treatment. Weak "
+            "instruments make the usual interval unreliable, and the Anderson-Rubin set is valid regardless of "
+            "strength under its stated linear-IV and error-distribution assumptions. Many instruments drag two-stage "
+            "least squares back to ordinary least squares, while limited-information maximum likelihood resists, and "
+            "genes can serve as instruments if they act through one path. Regression discontinuities compare people "
+            "at a cutoff, with local fits and robust bias correction, and must be checked for sorting. "
+            "Differences-in-differences assume parallel trends, and need standard errors clustered by the unit of "
+            "treatment. With staggered adoption, two-way fixed effects can get the sign wrong, and estimators such as"
+            " Callaway and Sant'Anna or imputation target explicit effects under their own identification conditions."
+            " Honest parallel trends carry doubt about the trends into the interval; synthetic controls and synthetic"
+            " DiD build the comparison. Fixed effects remove what is fixed, and dynamic panels need instruments. And "
+            "bounds show what the data say before the assumptions speak."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -83,6 +85,7 @@ class Outro(VoiceoverScene):
             (r"permutation inference, \ distribution-free", [57]), (r"external validity, \ distribution shift", [60]),
             (r"sensitivity, \ partial identification, \ surrogates", [62]),
         ], font_size=22)
+        self.add(card.head)
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part 38 studies the persistence that made placebo laws so dangerous. "
             "Part 39 handles spillovers across space. Part 41 returns to selection, with Heckman's model, and to "
@@ -92,7 +95,7 @@ class Outro(VoiceoverScene):
             "partial identification and sensitivity to the frontier."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):

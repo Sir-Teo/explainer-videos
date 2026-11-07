@@ -62,16 +62,17 @@ class Hook(VoiceoverScene):
                          for i in range(rws) for j in range(cols) if dead[i, j]])
         cap = fit_rows(VGroup(
             label(r"the pipes of both companies ran down the same streets: \ neighbours drew different water", font_size=24),
-            label(r"blue: \ Lambeth; \ red: \ Southwark \& Vauxhall; \ white: \ a death \ (schematic)", font_size=22, color=GREY_A),
+            label(r"blue: \ Lambeth; \ red: \ Southwark \& Vauxhall; \ white: \ a death \ (schematic; frequencies amplified sixfold)", font_size=22, color=GREY_A),
         ), 12.4, 0.3, [0, -2.7, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> What made this a test was that the two companies had competed for customers street by "
-            "street, in the 1840s, and their pipes ran side by side down the same roads. Which company supplied a house was "
-            "decided long before, by a landlord or a previous tenant, and had nothing to do with who now lived there. "
-            "<bookmark mark='b'/> So neighbours, rich and poor, breathing the same air, drew different water. <bookmark "
-            "mark='c'/> Snow went house to house, through the first weeks of the epidemic, asking where the water came from "
-            "in every house where someone had died. When residents did not know, he tested the water's salt content, which "
-            "differed between the two sources."
+            "<bookmark mark='a'/> What made this a test was that the two companies had competed for customers street "
+            "by street, in the 1840s, and their pipes ran side by side down the same roads. Which company supplied a "
+            "house was decided long before, by a landlord or a previous tenant, Snow argued that this left "
+            "neighbouring residents broadly comparable apart from their water supply; it was not an actual randomized"
+            " assignment. <bookmark mark='b'/> So neighbours, rich and poor, breathing the same air, drew different "
+            "water. <bookmark mark='c'/> Snow went house to house, through the first weeks of the epidemic, asking "
+            "where the water came from in every house where someone had died. When residents did not know, he tested "
+            "the water's salt content, which differed between the two sources."
         ) as vo:
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(h) for h in houses], lag_ratio=0.004), run_time=3.0)
@@ -83,21 +84,23 @@ class Hook(VoiceoverScene):
         self.clear_scene()
 
     def table(self):
-        rows = [[r"water supply", r"houses", r"cholera deaths", r"per 10,000 houses"]]
+        rows = [[r"water supply", r"houses", r"cholera deaths", r"per 10,000 houses, \ as printed"]]
         for name, h, d, r in museum.SNOW:
             rows.append([name.replace("&", r"\&"), f"{h:,}", f"{d:,}", f"{r}"])
         tab = table_rows(rows, font_size=28, col_buff=0.9, row_buff=0.32, colors=[GREY_A, Y1C, Y0C, GREY_B]).move_to([0, 0.9, 0])
         foot = fit_rows(VGroup(
             label(r"Snow's Table IX: \ the first seven weeks of the 1854 epidemic", font_size=24, color=GREY_A),
-            label(r"315 against 37: \ eight and a half times the risk", font_size=28, color=TAUC),
+            label(r"from counts: \ 8.4 times as many deaths per house; \ rest of London: 55.5, not printed 59", font_size=28, color=TAUC),
         ), 12.4, 0.35, [0, -1.8, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Here is his Table Nine. <bookmark mark='b'/> In the forty thousand houses supplied by "
-            "Southwark and Vauxhall, twelve hundred and sixty-three cholera deaths in the first seven weeks: three hundred "
-            "and fifteen for every ten thousand houses. <bookmark mark='c'/> In the twenty-six thousand houses supplied by "
-            "Lambeth, ninety-eight deaths: thirty-seven per ten thousand. <bookmark mark='d'/> In the rest of London, "
-            "fifty-nine. <bookmark mark='e'/> Houses on the same streets, with the dirty water, carried eight and a half times "
-            "the risk."
+            "<bookmark mark='a'/> Here is his Table Nine. <bookmark mark='b'/> In the forty thousand houses supplied "
+            "by Southwark and Vauxhall, twelve hundred and sixty-three cholera deaths in the first seven weeks: three"
+            " hundred and fifteen for every ten thousand houses. <bookmark mark='c'/> In the twenty-six thousand "
+            "houses supplied by Lambeth, ninety-eight deaths: thirty-seven per ten thousand. <bookmark mark='d'/> In "
+            "the rest of London, Snow printed fifty-nine. The counts imply about fifty-five and a half; we preserve "
+            "the historical printing and flag its arithmetic error. <bookmark mark='e'/> Houses on the same streets, "
+            "with the dirty water, had about eight point four times as many deaths per house, calculated from the "
+            "counts. These are household-denominated death rates, not individual infection probabilities."
         ) as vo:
             self.add(snow_tag())
             vo.wait_until("a")
@@ -122,18 +125,19 @@ class Hook(VoiceoverScene):
             quote.width = 12.0
         quote.move_to([0, 1.7, 0])
         rows = fit_rows(VGroup(
-            label(r"nobody flipped a coin: \ history assigned the water, \ for reasons unrelated to the people", font_size=26, color=TAUC),
+            label(r"nobody flipped a coin: \ Snow argued that the pipe history made neighbouring groups comparable", font_size=26, color=TAUC),
             label(r"a natural experiment: \ treatment as good as random, \ found rather than made", font_size=26, color=BANDC),
             label(r"it convinced almost no one at the time: \ the sewers were rebuilt for the smell", font_size=26, color=MISSC),
         ), 12.4, 0.5, [0, -1.0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Snow saw what kind of evidence this was. \"No fewer than three hundred thousand people of "
-            "both sexes, of every age and occupation, and of every rank and station, were divided into two groups without "
-            "their choice, and in most cases, without their knowledge.\" He called it a grand experiment. <bookmark "
-            "mark='b'/> Nobody had flipped a coin. History had assigned the water, for reasons that had nothing to do with the "
-            "people drinking it. <bookmark mark='c'/> That is a natural experiment: treatment that is as good as random, "
-            "found rather than made. <bookmark mark='d'/> It convinced almost no one at the time. London did rebuild its "
-            "sewers, after the Great Stink of 1858, but to remove the smell."
+            "<bookmark mark='a'/> Snow saw what kind of evidence this was. \"No fewer than three hundred thousand "
+            "people of both sexes, of every age and occupation, and of every rank and station, were divided into two "
+            "groups without their choice, and in most cases, without their knowledge.\" He called it a grand "
+            "experiment. <bookmark mark='b'/> Nobody had flipped a coin. Snow argued that the history of the pipes "
+            "made the supplied groups comparable; that causal interpretation still needs the design argument. "
+            "<bookmark mark='c'/> That is a natural experiment: treatment that is as good as random, found rather "
+            "than made. <bookmark mark='d'/> It convinced almost no one at the time. London did rebuild its sewers, "
+            "after the Great Stink of 1858, but to remove the smell."
         ) as vo:
             self.add(snow_tag())
             vo.wait_until("a")

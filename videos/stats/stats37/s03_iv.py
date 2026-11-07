@@ -56,11 +56,13 @@ class Instruments(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> As a causal graph: an instrument Z, a treatment D, an outcome Y, and unmeasured "
             "confounders U of the treatment and the outcome. No adjustment can close the back door through U. The "
-            "instrument instead needs three things. <bookmark mark='b'/> Relevance: it moves the treatment, which the data can "
-            "check. <bookmark mark='c'/> Independence: it is as good as randomly assigned. <bookmark mark='d'/> Exclusion: it "
-            "affects the outcome only through the treatment, with no arrow of its own and no path through U. That one cannot "
-            "be checked. <bookmark mark='e'/> With effects that differ between people, Part thirty-five added monotonicity "
-            "and found that the instrument identifies the effect for the compliers, the local average treatment effect."
+            "instrument instead needs three things. <bookmark mark='b'/> Relevance: it moves the treatment, which the"
+            " data can check. <bookmark mark='c'/> Independence: it is as good as randomly assigned. <bookmark "
+            "mark='d'/> Exclusion: it affects the outcome only through the treatment, with no arrow of its own and no"
+            " path through U. That one cannot be checked. <bookmark mark='e'/> With effects that differ between "
+            "people, Part thirty-five added monotonicity for binary treatment and found the complier average effect. "
+            "With years of schooling, a continuous treatment, extra structural or weighted marginal-effect conditions"
+            " are needed; the World uses a constant log-wage effect."
         ) as vo:
             self.play(FadeIn(G))
             for k, m_ in enumerate("bcde"):
@@ -84,13 +86,15 @@ class Instruments(VoiceoverScene):
             label(r"axes zoomed: \ the differences are a tenth of a year and one percent of wages", font_size=20, color=GREY_B),
         ), 12.4, 0.25, [0, -2.7, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In 1991 Angrist and Alan Krueger found an instrument in the calendar. Children start "
-            "school in the year they turn six, but may leave at sixteen, so those born early in the year are older when they "
-            "start and reach the leaving age having done less school. The World's survey of two hundred thousand adults "
-            "has the same rule. <bookmark mark='b'/> People born in the first quarter have about a seventh of a year less "
-            "schooling than the rest. <bookmark mark='c'/> And their wages are about one percent lower. <bookmark mark='d'/> "
-            "Quarter of birth is as good as random, and it is hard to see how it could affect wages except through school. "
-            "Note how small these differences are; we will return to that."
+            "<bookmark mark='a'/> In 1991 Angrist and Alan Krueger found an instrument in the calendar. Children "
+            "start school in the year they turn six, but may leave at sixteen, so those born early in the year are "
+            "older when they start and reach the leaving age having done less school. The World's survey of two "
+            "hundred thousand adults has the same rule. <bookmark mark='b'/> People born in the first quarter have "
+            "about a seventh of a year less schooling than the rest. <bookmark mark='c'/> And their wages are about "
+            "one percent lower. <bookmark mark='d'/> The World constructs quarter of birth independently and makes it"
+            " affect wages only through schooling. In real data, birth season, family background and other channels "
+            "make these assumptions substantive questions. Note how small these differences are; we will return to "
+            "that."
         ) as vo:
             self.add(survey_tag())
             vo.wait_until("a")
@@ -120,11 +124,14 @@ class Instruments(VoiceoverScene):
             "first stage: being born in the first quarter changes schooling by minus " + say(-d["dS"], 3) + " years. "
             "<bookmark mark='b'/> The reduced form: it changes log wages by minus " + say(-d["dW"], 4) + ". <bookmark "
             "mark='c'/> If the instrument acts only through schooling, the wage change per year of schooling is their ratio, "
-            + say(d["wald"], 3) + ", and the World's truth is seven and a half percent per year. <bookmark mark='d'/> Ordinary "
-            "least squares says " + say(d["full1"]["ols"], 2) + ", more than twice as much, because ability raises both "
+            + say(d["wald"], 3) + ", and the World's truth is point zero seven five log points per year, about seven point eight percent. "
+            "<bookmark mark='d'/> Ordinary least squares says " + say(d["full1"]["ols"], 2) + ", more than twice as much, because ability raises both "
             "schooling and wages."
         ) as vo:
             self.add(survey_tag())
+            intro=label('The Wald ratio divides reduced form by first stage',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -141,7 +148,7 @@ class Instruments(VoiceoverScene):
             cmath(r"\text{three quarters}", r":", rf"\hat\beta = {f3['beta']:.3f}\ ({f3['se']:.3f}), \ F = {f3['F']:.0f}", font_size=30),
         ]
         rows[1][-1].set_color(IVC)
-        whys = [why(r"projection onto the instruments"), why(r"Theil (1953), \ Basmann (1957)"),
+        whys = [why(r"include or partial out exogenous controls and a constant"), why(r"Theil (1953), \ Basmann (1957)"),
                 why(r"a classic slip"), why(r"200,000 adults")]
         with self.voiceover(
             "<bookmark mark='a'/> With several instruments, the general recipe is two-stage least squares, two projections. "
@@ -152,6 +159,9 @@ class Instruments(VoiceoverScene):
             + ", with a standard error of " + say(f3["se"], 3) + ", and a first-stage F statistic of " + str(round(f3["F"]))
             + "."
         ) as vo:
+            intro=label('Two-stage least squares projects treatment onto valid instruments',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -162,16 +172,17 @@ class Instruments(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"Angrist (1990): \ the Vietnam draft lottery ranked birthdays at random", font_size=26, color=TAUC),
             label(r"a low number made service more likely: \ an instrument for being a veteran", font_size=26, color=IVC),
-            label(r"white veterans earned about 15\% less in the early 1980s", font_size=26, color=BANDC),
+            label(r"IV estimate for white draft compliers: \ earnings about 15\% lower", font_size=26, color=BANDC),
             label(r"the effect for compliers: \ men who served because their number came up", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Angrist's earlier instrument, from 1990, was a real lottery. In the Vietnam era, birthdays "
-            "were drawn at random to set the order of the draft. <bookmark mark='b'/> A low number made military service "
-            "much more likely, so the lottery number is an instrument for being a veteran. <bookmark mark='c'/> White "
-            "veterans earned about fifteen percent less than comparable non-veterans in the early nineteen-eighties. "
-            "<bookmark mark='d'/> That effect belongs to the compliers, men who served because their number came up and "
-            "otherwise would not have, not to volunteers or to those who avoided service anyway."
+            "<bookmark mark='a'/> Angrist's earlier instrument, from 1990, was a real lottery. In the Vietnam era, "
+            "birthdays were drawn at random to set the order of the draft. <bookmark mark='b'/> A low number made "
+            "military service much more likely, so the lottery number is an instrument for being a veteran. <bookmark"
+            " mark='c'/> The instrumental-variable analysis estimated that white men induced into service earned "
+            "about fifteen percent less in the early nineteen-eighties than they would have without service. "
+            "<bookmark mark='d'/> That effect belongs to the compliers, men who served because their number came up "
+            "and otherwise would not have, not to volunteers or to those who avoided service anyway."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
