@@ -378,7 +378,7 @@ class Ours(VoiceoverScene):
         t1, t2, t3 = taps(1, HEAD), taps(2, YES), taps(4, DATA)
         caps = [label(rf"pass {k + 1}: \ taps {2 ** k} pixel{'s' if k else ''} apart", font_size=19, color=col)
                 .next_to(grid, DOWN, buff=0.2) for k, col in enumerate((HEAD, YES, DATA))]
-        reach = label(r"three passes: \ 75 taps reach a 17 $\times$ 17 square", font_size=19, color=WHITE).next_to(
+        reach = label(r"three passes: \ 75 taps, \ reaching a 29 $\times$ 29 square", font_size=19, color=WHITE).next_to(
             grid, DOWN, buff=0.2)
         r0 = MathTex(r"h", r"=", r"\left(\tfrac{1}{16},\ \tfrac14,\ \tfrac38,\ \tfrac14,\ \tfrac1{16}\right)",
                      font_size=30)
@@ -402,8 +402,8 @@ class Ours(VoiceoverScene):
             "The other way to fight noise is to borrow from the neighbours, with the edge-avoiding à-trous filter of"
             " Holger Dammertz and colleagues, from 2010. <bookmark mark='a'/> A pass blends each pixel with "
             "twenty-five neighbours under a small, smooth kernel. <bookmark mark='b'/> Each pass spreads the taps "
-            "twice as far apart, with holes between them: à trous. <bookmark mark='c'/> Three passes cover a "
-            "seventeen-pixel square with seventy-five taps. <bookmark mark='d'/> To keep edges, each tap is also "
+            "twice as far apart, with holes between them: à trous. <bookmark mark='c'/> Three passes, seventy-five "
+            "taps in all, reach across a square twenty-nine pixels wide. <bookmark mark='d'/> To keep edges, each tap is also "
             "weighted by how alike the two pixels are, in colour, normal, albedo and position. <bookmark mark='e'/> "
             "And only the light is blurred: divide by the albedo, filter, and multiply it back, so the walls' "
             "colours stay sharp."

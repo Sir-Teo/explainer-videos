@@ -388,8 +388,8 @@ class Projection(VoiceoverScene):
             "order decides which one shows. <bookmark mark='a'/> Our module draws two planes a "
             "hundredth of a unit apart at distance fifty. <bookmark mark='b'/> With a sixteen-bit buffer and the "
             "near plane at a hundredth, ninety-nine percent of the pixels show the wrong plane. Twenty-four bits "
-            "cut it to about a third. <bookmark mark='c'/> Moving the near plane out to one does better than eight "
-            "more bits: with both, every pixel is right. <bookmark mark='d'/> Modern engines also store depth "
+            "cut it to about a third. <bookmark mark='c'/> Moving the near plane out to one helps less on "
+            "its own, to about seventy percent; with both, every pixel is right. <bookmark mark='d'/> Modern engines also store depth "
             "reversed, in floating point, so that the dense floats near zero of Part 4 land on the distant "
             "geometry that needs them."
         ) as vo:
