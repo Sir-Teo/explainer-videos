@@ -143,19 +143,23 @@ class Competition(VoiceoverScene):
         ]
         rows[2][2].set_color(HIT)
         whys = [why(r"average two forecasts' errors"), why(r"Part 5: \ the variance of a sum"),
-                why(r"never worse, \ unless the errors are identical"), why(r"Bates \& Granger (1969): \ the combination of forecasts")]
+                why(r"equal-variance unbiased errors; \ equality if correlation is 1"), why(r"Bates \& Granger (1969): \ the combination of forecasts")]
+        intro = label('Averaging can reduce forecast-error variance', font_size=36)
         with self.voiceover(
             "Why does averaging work? <bookmark mark='a'/> Average two forecasts, and you average their errors. "
             "<bookmark mark='b'/> By Part 5, the variance of the average depends on how correlated the errors are. "
-            "<bookmark mark='c'/> If the two methods are equally accurate, the combined variance is sigma squared times one "
+            "<bookmark mark='c'/> For unbiased errors with equal variance, the combined variance is sigma squared times one "
             "plus rho over two, never more than either alone, and less whenever their errors aren't perfectly correlated. "
             "<bookmark mark='d'/> With a correlation of a half, a quarter of the error variance disappears. John Bates and Clive "
             "Granger made the case in 1969. Different methods make different mistakes, and averaging lets them cancel: the "
             "same principle as averaging observations, applied to opinions."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -184,7 +188,7 @@ class Competition(VoiceoverScene):
             "cross-validation, adapted to time. Fit on the data up to some origin and score the forecasts of the next few "
             "values. <bookmark mark='b'/> Then roll the origin forward, refit, and score again, and average the scores. "
             "<bookmark mark='c'/> Every forecast uses only the past, as a real one would. Part 16's random folds would scatter "
-            "future observations into the fitting set and flatter every method. <bookmark mark='d'/> Holding out the end of "
+            "future observations into the fitting set and make evaluation of future forecasting too optimistic. It need not affect every method equally. <bookmark mark='d'/> Holding out the end of "
             "each series is exactly what the competitions did."
         ) as vo:
             self.play(FadeIn(key))

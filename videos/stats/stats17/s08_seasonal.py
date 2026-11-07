@@ -40,7 +40,7 @@ class Seasonal(VoiceoverScene):
         tag = historical_tag(r"Keeling's record, \ as statsmodels ships it", corner=DR)
         with self.voiceover(
             "<bookmark mark='a'/> In 1958 Charles David Keeling began measuring carbon dioxide in the air on Mauna Loa, a "
-            "Hawaiian volcano three thousand four hundred metres up, far from local sources. Here are the monthly averages to "
+            "Hawaiian volcano three thousand four hundred metres up, far from local sources. Here are monthly averages, with historical gaps interpolated, to "
             "the end of 2001. <bookmark mark='b'/> Two things are obvious at once. The level rises, from three hundred and "
             "sixteen parts per million in 1959 to three hundred and seventy-one in 2001. <bookmark mark='c'/> And it waves, up "
             "and down, every year. Neither a trend nor a season is stationary. To model the series, first take it apart."
@@ -197,16 +197,15 @@ class Seasonal(VoiceoverScene):
             MathTex(rf"\hat\rho(1) = {a[1]:.2f}", font_size=28, color=RES),
             label(r"a wave: \ negative at lags 4--7, \ positive at 11--12", font_size=22),
             MathTex(rf"\text{{Ljung--Box}}\ Q(24) = {Q:.0f}", font_size=26),
-            label(r"the season itself changes over the years", font_size=22, color=OBS),
-            label(r"a fixed seasonal figure can't follow it", font_size=22, color=GREY_A),
+            label(r"filtering and evolving seasons can both leave this pattern", font_size=22, color=OBS),
+            label(r"check an evolving-season model with held-out forecasts", font_size=22, color=GREY_A),
         ), 4.2, 0.38, [4.9, 0.3, 0])
         with self.voiceover(
             "Is the remainder really just noise? Chapter five's check says no. <bookmark mark='a'/> Its autocorrelation at lag "
-            "one is point four: a wet month tends to follow a wet month, so to speak. <bookmark mark='b'/> And there's a wave in "
+            "one is point four: successive residuals still have linear dependence. <bookmark mark='b'/> And there's a wave in "
             "the correlogram, negative around lags four to seven and positive again at a year. <bookmark mark='c'/> The "
-            "Ljung–Box statistic is enormous. <bookmark mark='d'/> The yearly wave left over in the remainder says the season "
-            "isn't the same every year: its shape and size drift, partly with the growing level and partly with climate, and "
-            "<bookmark mark='e'/> twelve fixed numbers can't follow that. Methods that let the season evolve, and an ARMA model "
+            "Ljung–Box statistic is enormous. <bookmark mark='d'/> This Q is descriptive: estimating and removing the trend and season itself induces dependence, so its usual white-noise chi-squared calibration does not directly apply. A changing seasonal pattern is another possible explanation, and "
+            "<bookmark mark='e'/> twelve fixed numbers may miss it. Methods that let the season evolve, and an ARMA model "
             "for what's left, do better."
         ) as vo:
             self.play(FadeIn(A), FadeIn(cg.zero), FadeIn(cg.bands))
@@ -225,16 +224,19 @@ class Seasonal(VoiceoverScene):
             label(r"seasonally adjusted series: \ the data minus $\hat S$", font_size=24, color=OBS),
             label(r"decomposition describes; \ forecasting needs a model of how the parts move", font_size=24, color=RES),
         ), 12.4, 0.48, [0, 0, 0])
+        intro = label('Different decompositions make different assumptions', font_size=36)
         with self.voiceover(
-            "Some variations. <bookmark mark='a'/> When the seasonal swing grows with the level, as in retail sales, the parts "
-            "multiply rather than add, and one takes logs first. <bookmark mark='b'/> STL, from Robert Cleveland and colleagues "
+            "Some variations. <bookmark mark='a'/> When the seasonal swing grows with the level, as in retail sales, a multiplicative model may be useful; with positive observations, logarithms turn its components into additive terms. <bookmark mark='b'/> STL, from Robert Cleveland and colleagues "
             "in 1990, replaces the moving averages with local regressions and lets the seasonal pattern change slowly over the "
             "years. <bookmark mark='c'/> Statistical agencies use the X-11 and X-13 programs to seasonally adjust "
             "unemployment and output figures, <bookmark mark='d'/> the series you read in the news, with the estimated "
             "season removed. <bookmark mark='e'/> But a decomposition describes the past. To forecast, we need a model of how "
             "the level, the slope and the season move."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()

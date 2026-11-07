@@ -11,7 +11,7 @@ reach |r| > 0.5 in 39% of pairs, against 0.04% for independent noise. Then Yule'
 From there the part covers:
 - **Stationarity and the ACF.** White noise, an AR(1) and a random walk side by side with their correlograms;
   Bartlett's bands. The variance of an autocorrelated mean: inflation (1 + ρ)/(1 − ρ) = 5.67 at ρ = 0.7, an effective
-  sample size of 17.6 from 100. Newey–West and the moving-block bootstrap; three Board rows.
+  sample size of 17.6 from 100. Newey–West and the basic moving-block bootstrap; three Board rows.
 - **AR, MA, ARMA.** The AR(1) as an MA(∞); a gallery of four models; φ = 0.5, 1 and 1.08 on the same shocks; roots
   outside the unit circle on the `RootPlane`; the AR(2) stationarity triangle and its parabola of complex roots; MA
   invertibility; Wold's theorem.
@@ -27,7 +27,7 @@ From there the part covers:
   memory; STL and X-13.
 - **Exponential smoothing.** Brown and Holt's level; Yule's mortality smoothed; Holt–Winters forecasting CO₂ for
   1998–2001 (MASE 0.78 vs 4.02 for the seasonal naive); the damped trend; Muth and ETS.
-- **Spurious regression.** Two independent walks with t = 14.5; Granger and Newbold's experiment (75% significant);
+- **Spurious regression.** Two independent walks with t = −13.2; Granger and Newbold's experiment (75% significant);
   Phillips's √n; Durbin–Watson and the R² > DW rule; differencing; cointegration; two Board rows.
 - **The M-competitions.** Makridakis and Hibon (1979) to M4 (2018); a 63-series competition of our own, in which the
   combination wins on average; Bates and Granger; rolling-origin evaluation.
@@ -84,7 +84,7 @@ python tools/lecture_length.py stats17 --floor 50
 | 6 | Forecasting | AR(1) φ = 0.8: SE → 1.67σ; MASE over 1925–35: naive 1.69, mean 1.38, AR(2) 1.20, AR(8) 0.58; 87% and 90% of 31 outcomes inside the 95% bands |
 | 7 | Trend and seasonality | 316 → 371 ppm; seasonal May +2.9, October −3.2; trend 0.75 → 1.64 ppm/yr; remainder SD 0.27, ρ̂(1) = 0.40 |
 | 8 | Exponential smoothing | Holt–Winters α = 0.51, β = 0.01, γ = 0.50; MASE 4.53 (flat), 4.02 (seasonal naive), 1.53 (+ drift), 0.78 (Holt–Winters) |
-| 9 | Spurious regression | example t = 14.5, R² = 0.68, DW = 0.47; 75% significant; median R² 0.17, DW 0.15; differences 5.4%; Board 76.7%, 5.0% |
+| 9 | Spurious regression | example t = −13.2, R² = 0.64, DW = 0.29; 75% significant; median R² 0.17, DW 0.15; differences 5.4%; Board 76.7%, 5.0% |
 | 10 | The M-competitions | 63 series, 6 ahead: mean MASE 1.84, 1.84, 1.86, 1.83, combination 1.78; mean rank 2.59 for the combination |
 | 11 | Outro | — |
 
@@ -127,18 +127,17 @@ python tools/lecture_length.py stats17 --floor 50
 **2. An MA(1)'s autocorrelation.**
 
 *Solution.* ρ(1) = θ/(1 + θ²). Since (1 − |θ|)² ≥ 0, 1 + θ² ≥ 2|θ|, so |ρ(1)| ≤ ½, with equality only when
-|θ| = 1. A sample ACF with a single spike well above ½ cannot be an MA(1).
+|θ| = 1. The population lag-one ACF cannot exceed ½ in magnitude under this MA(1) model. A sample ACF can exceed the bound through sampling error, so a single observed spike does not rule out the model.
 
 **3. An effective sample size.**
 
-*Solution.* n_eff = n(1 − ρ)/(1 + ρ) = 200 × 0.5/1.5 ≈ 66.7. The mean's SE is about √3 ≈ 1.73 times the iid formula.
+*Solution.* For large n, n_eff ≈ n(1 − ρ)/(1 + ρ) = 200 × 0.5/1.5 ≈ 66.7. The mean's SE is about √3 ≈ 1.73 times the iid formula.
 
 **4. Is it stationary?**
 
 *Solution.* φ(z) = 1 − 0.5z − 0.3z². Its roots solve 0.3z² + 0.5z − 1 = 0: z = (−0.5 ± √(0.25 + 1.2))/0.6, that is
-z ≈ 1.174 and z ≈ −2.840. Both lie outside the unit circle, so the model is stationary. The triangle agrees:
-φ₁ + φ₂ = 0.8 < 1, φ₂ − φ₁ = −0.2 < 1 and |φ₂| < 1. The roots are real (φ₁² + 4φ₂ = 1.45 > 0), so there is no
-oscillation.
+z ≈ 1.174 and z ≈ −2.840. Both lie outside the unit circle, so the model is causal and stationary with the model innovations. The triangle agrees:
+φ₁ + φ₂ = 0.8 < 1, φ₂ − φ₁ = −0.2 < 1 and |φ₂| < 1. The roots are real (φ₁² + 4φ₂ = 1.45 > 0), so there is no complex-root pseudo-cycle; a negative real root can still contribute alternating signs.
 
 **5. Yule–Walker for an AR(2).**
 
@@ -162,13 +161,13 @@ The second lag adds almost nothing: these autocorrelations are close to an AR(1)
 - **Partial autocorrelation (PACF), α(h)**: the last coefficient of the best AR(h) predictor; the correlation at lag h
   after removing the lags in between.
 - **White noise**: uncorrelated shocks with mean 0 and constant variance.
-- **Correlogram; Bartlett's bands**: a plot of the sample ACF, with ±2/√n marking what chance alone produces.
+- **Correlogram; Bartlett's bands**: a sample ACF plot; ±2/√n are approximate pointwise 95% reference bands under IID noise with suitable moments, not simultaneous limits for arbitrary uncorrelated noise.
 - **Effective sample size**: the number of independent observations carrying the same information about the mean.
 - **HAC (Newey–West) standard error**: an SE built from weighted sample autocovariances.
 - **Moving-block bootstrap**: resampling blocks of consecutive observations to keep their dependence.
 - **AR(p), MA(q), ARMA(p, q)**: autoregressive, moving-average and mixed models built from shocks.
-- **ψ weights; Wold decomposition**: the MA(∞) representation of a stationary series.
-- **Causal (stationary) and invertible**: AR and MA polynomial roots outside the unit circle.
+- **ψ weights; Wold decomposition**: a finite-variance weakly stationary series is a linearly deterministic component plus an MA(∞) of uncorrelated innovations.
+- **Causal stationary and invertible**: AR and MA polynomial roots outside the unit circle.
 - **Unit root; random walk**: φ = 1; shocks never fade and the variance grows without limit.
 - **Pseudo-cycle**: a quasi-periodic swing from complex roots, with varying amplitude and length.
 - **Box–Jenkins cycle**: identify, estimate, check, forecast.
@@ -196,3 +195,11 @@ The second lag adds almost nothing: these autocorrelations are close to an AR(1)
 | monitoring a stream with anytime-valid guarantees | 58 |
 | forecasting with machine learning | 64 |
 | the Coverage Board | every part; 65 |
+
+## Review clarifications
+
+The historical Yule arrays were checked against the archived TSDL files `data-raw/roberts/yule1.dat` and `yule2.dat` at commit `e56a918d210eb637a2683c1cc6f4abb4c1bd8922` of FinYang/tsdl. Their reported units and all 46 values match the Museum. The source describes values read from Yule's graph; they are not original individual observations.
+
+The CO₂ record fills missing historical monthly values by interpolation. No missing-month gap crosses the 1998 forecast split. Classical decomposition is retrospective: its centred filter uses future observations and itself induces residual dependence. The remainder's Ljung–Box Q is descriptive after this fitted filtering; it does not by itself prove an evolving season.
+
+Forecast intervals are pointwise Gaussian innovation intervals with plug-in parameters. The causal root condition, decaying ARMA forecasts, partial versus conditional correlation, finite smoothing initialization, and repeating seasonal index are explicit in the scenes. The spurious-regression example uses fixed seeds 0 and 1 without selecting a striking pair; histograms omit rather than fold off-screen tail mass. Its differenced test uses 97 residual degrees of freedom. The small forecasting competition is an illustrative 63-series experiment, not a general guarantee that averaging improves every loss.

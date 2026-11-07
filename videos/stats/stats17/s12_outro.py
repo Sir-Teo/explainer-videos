@@ -23,7 +23,7 @@ class Outro(VoiceoverScene):
     def recap(self):
         items = [
             (r"Yule: \ nonsense correlations", RES), (r"stationarity; \ the ACF and its bands", SERIES),
-            (r"dependence shrinks $n$: \ HAC, \ blocks", OBS), (r"AR, \ MA, \ ARMA; \ $\psi$ weights", MODEL),
+            (r"dependence changes $n_{\mathrm{eff}}$: \ HAC, \ blocks", OBS), (r"AR, \ MA, \ ARMA; \ $\psi$ weights", MODEL),
             (r"roots outside the unit circle", MODEL), (r"complex roots: \ pseudo-cycles; \ Slutsky", OBS),
             (r"ACF and PACF signatures", SERIES), (r"Box--Jenkins: \ identify, \ estimate, \ check", SERIES),
             (r"Yule--Walker, \ AIC, \ Ljung--Box", MODEL), (r"forecasts revert; \ intervals widen", FC),
@@ -40,13 +40,13 @@ class Outro(VoiceoverScene):
         with self.voiceover(
             "Part seventeen in fourteen lines. <bookmark mark='a'/> Yule showed that series which merely drift correlate by "
             "nonsense. Stationarity makes a series' dependence stable, and the autocorrelation function, with Bartlett's "
-            "bands, measures it. Dependence shrinks the effective sample size; HAC standard errors and block bootstraps "
+            "bands, measures it. Positive autocorrelation usually reduces the effective sample size of a mean; negative correlation can increase it. HAC standard errors and block bootstraps "
             "partly repair the mean's interval. Autoregressions and moving averages build memory out of shocks, and the "
             "roots of a polynomial decide whether that memory fades. Complex roots make pseudo-cycles, and so, Slutsky "
             "showed, does averaging noise. The ACF and PACF are fingerprints; Box and Jenkins turned them into a cycle of "
-            "identifying, estimating and checking, with Yule–Walker, AIC and Ljung–Box as tools. Forecasts return to the mean "
+            "identifying, estimating and checking, with Yule–Walker, AIC and Ljung–Box as tools. Stable causal ARMA forecasts return to the mean "
             "and their intervals widen. Trend and season can be taken apart, and exponential smoothing forecasts them. "
-            "Regressions between wandering series are spurious unless differenced. And when unsure, combine forecasts."
+            "Regressions between wandering series need a dependence model: differencing can help, while cointegration can make a levels relationship meaningful. And when unsure, combine forecasts."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -60,6 +60,7 @@ class Outro(VoiceoverScene):
             (r"martingales and mixing", [44]), (r"anytime-valid monitoring of a stream", [58]),
             (r"forecasting with machine learning", [64]),
         ], font_size=22)
+        intro = label('Where time-series methods return', font_size=36)
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part 19's cross-validation must respect time, with rolling forecast "
             "origins. Part 38 takes time series in depth: the Kalman filter and state-space models, spectra, tests for unit "
@@ -67,7 +68,9 @@ class Outro(VoiceoverScene):
             "the probability of dependent sequences, martingales and mixing. Part 58 monitors a stream of data with "
             "guarantees at every moment. And Part 64 asks what machine learning has changed in forecasting."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
