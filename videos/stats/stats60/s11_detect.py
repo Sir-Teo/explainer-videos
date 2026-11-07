@@ -34,16 +34,11 @@ class Detect(LectureMixin, VoiceoverScene):
 
     def mmd(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Arthur Gretton and co-authors' maximum mean discrepancy, in 2012. A kernel, such as the "
-            "Gaussian, maps each distribution to its mean in a feature space. <bookmark mark='b'/> The squared distance "
-            "between the two means has an unbiased estimate from within-sample and between-sample kernel averages. <bookmark "
-            "mark='c'/> For a characteristic kernel, the distance is zero only if the distributions are equal, so the test "
-            "is consistent against every alternative. <bookmark mark='d'/> Its null distribution comes from permuting the "
-            "pooled sample, so the test is exact at any sample size.",
+            "<bookmark mark='a'/> Maximum mean discrepancy compares kernel mean embeddings. <bookmark mark='b'/> For a fixed kernel, within-sample off-diagonal and between-sample averages give an unbiased squared-MMD U statistic, which can be negative. Our pooled, label-invariant bandwidth selection changes this fixed-kernel unbiasedness interpretation. <bookmark mark='c'/> A characteristic kernel separates distinct population laws; consistency also requires a suitable fixed or controlled kernel sequence. <bookmark mark='d'/> Under independent IID samples and the null, pooled labels are exchangeable. A permutation test with conservative handling of ties is level-valid. With three hundred sampled permutations we use the plus-one p-value, whose minimum is one over three hundred and one.",
             [(r"\mathrm{MMD}^2", r"=", r"\|\mu_P - \mu_Q\|^2_{\mathcal H}", 40),
              (r"\widehat{\mathrm{MMD}}{}^2", r"=", r"\overline{k(x, x')} + \overline{k(y, y')} - 2\,\overline{k(x, y)}", 40),
              (r"\text{characteristic } k", r":", r"\mathrm{MMD} = 0 \iff P = Q", 40),
-             (r"\text{null}", r":", r"\text{permutations: \ exact}", 40)],
+             (r"\text{null}", r":", r"\text{exchangeability + conservative permutation p-values}", 40)],
             [r"Gretton et al. (2012)", r"U-statistics", r"consistent against all", r"Part 16's permutations"],
             colors=[(2, FIXC)])
 
@@ -60,19 +55,14 @@ class Detect(LectureMixin, VoiceoverScene):
         arr = Arrow(ax.c2p(0.0095, 0.22), ax.c2p(0.0125, 0.22), color=NAIVEC, buff=0, stroke_width=4)
         arr_l = label(rf"observed {sh['mmd2']:.3f}, \ off the chart", font_size=20, color=NAIVEC).next_to(arr, UP, buff=0.12).align_to(arr, RIGHT)
         side = side_groups([
-            [(r"300 young-skewed adults", WHITE), (r"vs \ 300 from the population", WHITE)],
+            [(r"300 young-skewed adults", WHITE), (r"vs \ 300 from the empirical extract", WHITE)],
             [(r"age, \ BMI, \ sex; \ Gaussian kernel", GREY_A)],
             [(r"grey: \ 300 permutations", NULLC)],
             [(r"red: \ the shifted sample", NAIVEC), (rf"$p = {sh['p']:.4f}$, \ the smallest possible", NAIVEC)],
-            [(r"dashed: \ two population samples", GREY_A), (rf"$p = {sm['p']:.2f}$", GREY_A)],
+            [(r"dashed: \ two extract samples", GREY_A), (rf"$p = {sm['p']:.2f}$", GREY_A)],
         ])
         with self.voiceover(
-            f"<bookmark mark='a'/> Chapter five's shift, detected. Three hundred adults from the young-skewed sample, against "
-            f"three hundred from the population, compared on age, body-mass index and sex. <bookmark mark='b'/> The grey bars "
-            f"are the permutation null. <bookmark mark='c'/> The observed statistic, {say(sh['mmd2'], 3)}, is ten times "
-            f"larger than any permutation: a p-value of one over three hundred and one, the smallest three hundred "
-            f"permutations can give. <bookmark mark='d'/> Two independent samples from the population give a statistic in the "
-            f"middle of the null, with p equal to {say(sm['p'], 2)}: no shift, correctly."
+            f"<bookmark mark='a'/> Chapter five's shift, detected. Three hundred adults from the young-skewed sample, against three hundred from the empirical extract, compared on age, body-mass index and sex. <bookmark mark='b'/> The grey bars are the permutation null. <bookmark mark='c'/> The observed statistic, {say(sh['mmd2'], 3)}, is larger than the sampled permutation statistics: a p-value of one over three hundred and one, the smallest three hundred permutations can give. <bookmark mark='d'/> Two independent samples from the empirical extract give a statistic in the middle of the null, with p equal to {say(sm['p'], 2)}: the null is not rejected in this one run. Nonrejection does not prove equality."
         ) as vo:
             self.play(FadeIn(A), FadeIn(museum_tag(r"NHANES; \ the selection is simulated")))
             vo.wait_until("a")
@@ -88,29 +78,19 @@ class Detect(LectureMixin, VoiceoverScene):
     def classifier(self):
         d = load("detect")
         self.lad_voiceover(
-            f"<bookmark mark='a'/> The second answer, from David Lopez-Paz and Maxime Oquab in 2017: train a classifier to "
-            f"tell the two samples apart, and test its accuracy on held-out points. <bookmark mark='b'/> Under no shift, the "
-            f"held-out accuracy is a binomial proportion around one half. <bookmark mark='c'/> Here a logistic classifier, "
-            f"trained on half of each sample, is right on {100 * d['acc']:.0f} percent of the other half, a p-value of about "
-            f"one in ten million. <bookmark mark='d'/> The classifier does double duty: its probabilities are chapter five's "
-            f"importance weights. The test that detects the shift also estimates its correction.",
+            "<bookmark mark='a'/> A classifier two-sample test learns to distinguish the groups, then tests independent held-out predictions. <bookmark mark='b'/> With fixed balanced holdout labels, accuracy is not generally an exact binomial proportion. Conditional on the pooled number of positive predictions, the number assigned to the source is hypergeometric under exchangeability. <bookmark mark='c'/> The displayed accuracy and p-value now use that exact conditional randomization law, with the classifier frozen before holdout. <bookmark mark='d'/> Calibrated membership odds, adjusted for the training class proportions and orientation, can also estimate a density ratio. Discrimination accuracy alone does not validate those probabilities.",
             [(r"\text{C2ST}", r":", r"\text{can a classifier tell the samples apart?}", 40),
-             (r"H_0", r":", r"\text{held-out accuracy} \sim \mathrm{Bin}(m, \tfrac12)/m", 40),
-             (r"\text{here}", r":", rf"\text{{accuracy}} = {d['acc']:.2f}, \ \ p \approx 10^{{-7}}", 40),
+             (r"H_0", r":", r"U\mid K \sim \mathrm{Hypergeom}(2n,K,n)", 40),
+             (r"\text{here}", r":", rf"\text{{accuracy}} = {d['acc']:.2f}, \ \ p = {d['p_acc']:.2g}", 40),
              (r"\text{bonus}", r":", r"\frac{c}{1 - c} \text{ is the density ratio}", 40)],
-            [r"Lopez-Paz \& Oquab (2017)", r"a coin's null", r"detected", r"chapter 5's weights"],
+            [r"Lopez-Paz \& Oquab (2017)", r"a conditional randomization null", r"detected", r"chapter 5's weights"],
             colors=[(2, NAIVEC), (3, FIXC)])
 
     def harmful(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> With enough data, every deployment shift is detectable, and most do not matter. <bookmark "
-            "mark='b'/> Stephan Rabanser, Stephan Günnemann and Zachary Lipton's 2019 comparison, Failing Loudly, found "
-            "that testing a model's low-dimensional outputs, such as its predicted class proportions, works better than "
-            "testing raw inputs. <bookmark mark='c'/> Better still, ask the question that matters: has the model's risk "
-            "increased? <bookmark mark='d'/> Aleksandr Podkopaev and Aaditya Ramdas built sequential tests of exactly that, "
-            "for harmful shifts only, with the anytime-valid guarantees of Part fifty-eight.",
-            [(r"\text{any shift}", r":", r"\text{always detectable, \ often harmless}", 40),
-             (r"\text{test outputs}", r":", r"\text{predicted labels beat raw inputs}", 40),
+            "<bookmark mark='a'/> Detectable covariate change need not increase predictive risk, and a fixed classifier or non-characteristic feature map may miss some changes entirely. <bookmark mark='b'/> Failing Loudly compares detection representations and methods; low-dimensional model outputs often helped on its evaluated shifts, not uniformly on every alternative. <bookmark mark='c'/> Risk increase is a separate, task-relevant null. It usually needs outcome feedback or additional assumptions. <bookmark mark='d'/> Sequential risk monitoring can use anytime-valid methods under the stated bounded-loss or conditional assumptions, with uncertainty in the reference risk accounted for.",
+            [(r"\text{any shift}", r":", r"\text{detectability and harmfulness are different}", 40),
+             (r"\text{test outputs}", r":", r"\text{outputs can improve power on some shifts}", 40),
              (r"\text{better}", r":", r"H_0: \ R_{\text{deploy}} \le R_{\text{train}} + \epsilon", 40),
              (r"\text{sequentially}", r":", r"\text{anytime-valid risk monitoring}", 40)],
             [r"significance is not importance", r"Rabanser et al. (2019)", r"the harmful-shift test", r"Podkopaev \& Ramdas (2022)"],
@@ -131,15 +111,10 @@ class Detect(LectureMixin, VoiceoverScene):
 
     def power(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> How many points does detection need? <bookmark mark='b'/> The unbiased MMD estimate "
-            "fluctuates by order one over n under the null, so a shift whose population MMD squared is delta is found once n "
-            "is of order one over delta. <bookmark mark='c'/> Here delta was about a tenth, and three hundred points per "
-            "sample were plenty; a shift a hundred times subtler would need tens of thousands. <bookmark mark='d'/> The "
-            "kernel's bandwidth matters as much as n: choosing it, or learning a deep kernel, on held-out data is how "
-            "modern tests gain power, as Feng Liu and co-authors showed in 2020.",
+            "<bookmark mark='a'/> Detection sample size depends on the alternative, kernel and distribution. <bookmark mark='b'/> For a fixed bounded kernel and balanced samples, the unbiased squared-MMD statistic is order one over n under the null. Its alternative variance and local structure also affect power. <bookmark mark='c'/> Our empirical statistic is large compared with the sampled permutation null. The null scale alone does not justify a universal inverse-effect sample-size law, or extrapolation to a shift a hundred times subtler. <bookmark mark='d'/> Kernel learning can improve power, but it must use independent data or be incorporated into the randomization scheme to preserve validity.",
             [(r"\text{null}", r":", r"\widehat{\mathrm{MMD}}{}^2 = O_p(1/n)", 40),
-             (r"\text{detectable}", r":", r"\mathrm{MMD}^2 \gg 1/n", 40),
-             (r"\text{here}", r":", r"\mathrm{MMD}^2 \approx 0.1, \ \ n = 300", 40),
+             (r"\text{detectable}", r":", r"\text{power also depends on alternative variance}", 40),
+             (r"\text{here}", r":", r"\widehat{\mathrm{MMD}}^2 \text{ large vs permutation null},\ n=300", 40),
              (r"\text{power}", r":", r"\text{choose the kernel on held-out data}", 40)],
             [r"a degenerate U-statistic", r"a sample-size rule", r"easily detected", r"Liu et al. (2020)"],
             colors=[(1, FIXC)])

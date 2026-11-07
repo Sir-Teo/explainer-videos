@@ -1,0 +1,17 @@
+[
+  {
+    "url": "https://cseweb.ucsd.edu/~dakane/LinearHuber.pdf",
+    "sha256": "1b4803a6f1cba866166bbd010f81c8eb2ef64a48562d2fde20e519ef52cef085",
+    "review": "Theorem 1.3 and section 1.3; Huber versus strong contamination"
+  },
+  {
+    "url": "https://luc.devroye.org/Devroye%2BLerasle%2BLugosi%2BOliveira-SubgaussianEstimators-2016.pdf",
+    "sha256": "3147ca3e07962855e61e9d4be625635e91114326186d0d4c47a3c031ed1f4dab",
+    "review": "multiple-delta distinction and section 3.4 near-optimal constants/range"
+  },
+  {
+    "url": "https://cseweb.ucsd.edu/~dakane/RobustGaussianListDecoding.pdf",
+    "sha256": "c254584f1213e9a32c32e2e0651c5e87dd629eca8dac449e9c62435fbdc44b92",
+    "review": "Gaussian versus bounded-covariance list-decodable accuracy"
+  }
+]

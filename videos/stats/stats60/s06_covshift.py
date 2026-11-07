@@ -79,16 +79,16 @@ class CovariateShift(LectureMixin, VoiceoverScene):
         b1 = hist_bars(ax, edges, hp, color=TGTC, opacity=0.35)
         b2 = hist_bars(ax, edges, hs, color=SRCC, opacity=0.55)
         side = side_groups([
-            [(r"gold: \ the population", TGTC), (rf"$N = {d['N']:,}$ adults", TGTC)],
+            [(r"gold: \ the empirical extract", TGTC), (rf"$N = {d['N']:,}$ adults", TGTC)],
             [(rf"blue: \ a sample of {d['n']}", SRCC), (r"drawn $\propto e^{-(\mathrm{age} - 18)/20}$", SRCC)],
             [(rf"mean age \ {d['mean_age_sample']:.0f} \ vs \ {d['mean_age_pop']:.0f}", GREY_A)],
             [(r"few over 70 in the sample:", NAIVEC), (r"their weights will be large", NAIVEC)],
         ])
         with self.voiceover(
-            f"<bookmark mark='a'/> The two age distributions. In gold, the population: {d['N']:,} NHANES adults, from eighteen "
+            f"<bookmark mark='a'/> The two age distributions. In gold, the empirical extract: {d['N']:,} NHANES adults, from eighteen "
             f"to eighty. <bookmark mark='b'/> In blue, one sample of {d['n']}, drawn with selection probability falling "
             f"exponentially with age, as an online panel might be. <bookmark mark='c'/> The sample's mean age is "
-            f"{d['mean_age_sample']:.0f}, the population's {d['mean_age_pop']:.0f}. <bookmark mark='d'/> There are few people over "
+            f"{d['mean_age_sample']:.0f}, the empirical extract's {d['mean_age_pop']:.0f}. <bookmark mark='d'/> There are few people over "
             f"seventy in the sample, but they exist: their weights will be large, and that is where the price is paid."
         ) as vo:
             self.play(FadeIn(A), FadeIn(museum_tag(r"NHANES; \ the selection is simulated")))
@@ -115,20 +115,14 @@ class CovariateShift(LectureMixin, VoiceoverScene):
         cw = curve(ax, xs, yw, FIXC, 3.5)
         tl = DashedLine(ax.c2p(t, 0), ax.c2p(t, 0.68), color=TGTC, stroke_width=2.5)
         side = side_groups([
-            [(rf"gold: \ the population mean, \ {t:.2f}", TGTC)],
-            [(r"red: \ unweighted", NAIVEC), (rf"mean {d['mean_u']:.2f}, \ sd {d['sd_u']:.2f}", NAIVEC)],
+            [(rf"gold: \ the empirical extract mean, \ {t:.2f}", TGTC)],
+            [(r"red: \ unweighted means, Gaussian fit", NAIVEC), (rf"mean {d['mean_u']:.2f}, \ sd {d['sd_u']:.2f}", NAIVEC)],
             [(rf"95\% interval covers {100 * d['cov_u']:.0f}\%", NAIVEC)],
-            [(r"green: \ importance-weighted", FIXC), (rf"mean {d['mean_w']:.2f}, \ sd {d['sd_w']:.2f}", FIXC)],
+            [(r"green: \ weighted means, Gaussian fit", FIXC), (rf"mean {d['mean_w']:.2f}, \ sd {d['sd_w']:.2f}", FIXC)],
             [(rf"95\% interval covers {100 * d['cov_w']:.1f}\%", FIXC)],
         ])
         with self.voiceover(
-            f"<bookmark mark='a'/> Four hundred such samples. The gold line is the population's mean systolic pressure, "
-            f"{say(t, 1)}. <bookmark mark='b'/> The unweighted sample means, in red, centre on {say(d['mean_u'], 1)}: the young "
-            f"have lower pressure, and the sample has too many of them. <bookmark mark='c'/> The usual ninety-five percent "
-            f"interval never covers the truth: zero of four hundred. It is precise about the wrong population. <bookmark "
-            f"mark='d'/> The importance-weighted means, in green, centre on {say(d['mean_w'], 1)}, with twice the spread. "
-            f"<bookmark mark='e'/> With a standard error that accounts for the weights, the interval covers "
-            f"{100 * d['cov_w']:.1f} percent of the time."
+            "<bookmark mark='a'/> We independently resample four hundred source datasets and unlabelled reference datasets from a fixed unweighted NHANES extract. The target is its empirical mean, not a survey-weighted national estimand. <bookmark mark='b'/> The red curve is a Gaussian fit to the simulated unweighted means, which are biased toward younger adults' pressures. <bookmark mark='c'/> Their nominal ninety-five percent intervals cover the extract mean in none of these four hundred runs. <bookmark mark='d'/> The green curve is a Gaussian fit to the importance-weighted means. Source sampling is with replacement and its true log density ratio is linear in age. <bookmark mark='e'/> The displayed coverage uses a joint sandwich standard error that includes fitting the logistic ratio and sampling the unlabelled target reference. It is asymptotic and model-dependent; empirical coverage has Monte Carlo uncertainty."
         ) as vo:
             self.play(FadeIn(A), FadeIn(museum_tag(r"NHANES; \ 400 simulated selections")))
             vo.wait_until("a")
@@ -146,18 +140,12 @@ class CovariateShift(LectureMixin, VoiceoverScene):
     def price(self):
         d = load("covshift")
         self.lad_voiceover(
-            f"<bookmark mark='a'/> The price of reweighting is variance. Leslie Kish's effective sample size measures it: the "
-            f"square of the sum of the weights, over the sum of their squares. <bookmark mark='b'/> Here it averages "
-            f"{d['ess']:.0f} out of {d['n']}: the weighted sample is worth about half as many unweighted observations. "
-            f"<bookmark mark='c'/> The standard deviation of the estimate roughly doubled, from {say(d['sd_u'], 2)} to "
-            f"{say(d['sd_w'], 2)}, as the ratio predicts. <bookmark mark='d'/> When the target has mass where the sample "
-            f"has almost none, the weights' variance is unbounded and the effective sample size collapses: a weak overlap is a "
-            f"small sample, whatever n says.",
+            "<bookmark mark='a'/> Kish's effective sample size is the squared sum of weights divided by their squared sum. It diagnoses weight concentration. <bookmark mark='b'/> The displayed average is smaller than the source sample size. <bookmark mark='c'/> It is not an exact information count for this estimator: outcome heterogeneity, dependence of outcomes on weights, and estimation of the ratio also affect variance. The empirical spreads are shown separately. <bookmark mark='d'/> Weak overlap may make the second moment of the weights enormous or infinite, undermining usual variance and normal approximations.",
             [(r"n_{\text{eff}}", r"=", r"\big(\textstyle\sum w_i\big)^2 \big/ \textstyle\sum w_i^2", 40),
              (r"\text{here}", r":", rf"n_{{\text{{eff}}}} \approx {d['ess']:.0f} \ \text{{of}} \ {d['n']}", 40),
              (r"\text{sd}", r":", rf"{d['sd_u']:.2f} \to {d['sd_w']:.2f}", 40),
              (r"\text{weak overlap}", r":", r"E_P[w^2] = \infty \text{ possible}", 40)],
-            [r"Kish (1965)", r"half the sample", r"$\sqrt{600/291} \approx 1.4$, \ plus the weights' noise", r"the real limit"],
+            [r"Kish (1965)", r"a weight-concentration diagnostic", r"outcome variation and ratio fitting also matter", r"the real limit"],
             colors=[(1, FIXC), (3, NAIVEC)])
 
     def board(self):
@@ -169,12 +157,7 @@ class CovariateShift(LectureMixin, VoiceoverScene):
 
     def variants(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Refinements. Clip or flatten the weights, trading a little bias for much less variance. "
-            "<bookmark mark='b'/> Estimate the ratio directly, by kernel mean matching, from Jiayuan Huang and co-authors in "
-            "2006, or by KLIEP, from Masashi Sugiyama and co-authors in 2008. <bookmark mark='c'/> Add an outcome model, as "
-            "Part forty-one's doubly robust estimator did: consistent if either the weights or the regression is right. "
-            "<bookmark mark='d'/> And for prediction sets, Part fifty-seven's weighted conformal uses exactly these "
-            "estimated weights, with a guarantee that degrades with their error.",
+            "<bookmark mark='a'/> Clipping weights trades bias for variance. <bookmark mark='b'/> Kernel mean matching and KLIEP estimate the ratio through other criteria. <bookmark mark='c'/> A doubly robust target-mean estimator averages an outcome regression on target covariates and adds a weighted source residual correction. Consistency can survive one correctly estimated nuisance; confidence intervals additionally require overlap and suitable error rates. <bookmark mark='d'/> Weighted conformal is exactly valid under its known-ratio and exchangeability conditions. Estimated ratios need a compatible fitting or splitting scheme and an explicit approximation-error bound.",
             [(r"\text{clipping}", r":", r"\min(w, c): \ \text{bias for variance}", 40),
              (r"\text{direct ratio}", r":", r"\text{kernel mean matching; \ KLIEP}", 40),
              (r"\text{doubly robust}", r":", r"\text{weights or outcome model}", 40),

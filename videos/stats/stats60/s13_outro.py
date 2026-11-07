@@ -4,10 +4,10 @@ from videos.stats.stats60.common import *  # noqa: F403
 
 PROBLEMS = [
     r"Contaminate $N(0, 1)$ with $\varepsilon$ of mass at $+\infty$: \ show the median moves to $\Phi^{-1}\big(\tfrac{1}{2(1 - \varepsilon)}\big) \approx 1.25\,\varepsilon$.",
-    r"Show $E_P[w(X) f(X, Y)] = E_Q[f(X, Y)]$ under covariate shift, \ and that $n_{\mathrm{eff}} = (\sum w)^2/\sum w^2$ is the H\'ajek variance's sample size.",
+    r"Show $E_P[w(X) f(X, Y)] = E_Q[f(X, Y)]$ under covariate shift, \ and that $n_{\mathrm{eff}} = (\sum w)^2/\sum w^2$ equals the conditional information count for independent homoskedastic outcomes with a constant mean.",
     r"Derive $E[\hat q_{\mathrm{CC}}] = q\,\mathrm{TPR} + (1 - q)\,\mathrm{FPR}$, \ and show BBSE with two classes is Forman's adjusted count.",
     r"Show the $\chi^2$-ball worst case is $\bar\ell + \sqrt{2\rho\,\widehat{\mathrm{Var}}(\ell)}$ when no weight hits zero.",
-    r"Show anchor regression with $\gamma = 1$ is OLS, \ and tends to the IV estimator as $\gamma \to \infty$.",
+    r"Show anchor regression with $\gamma = 1$ is OLS, \ and tends to unique 2SLS as $\gamma \to \infty$ when the projected design has full column rank.",
     r"Show that a classifier's odds $c/(1 - c)$, \ times $n_0/n_1$, \ equal the density ratio $q(x)/p(x)$.",
 ]
 
@@ -38,14 +38,7 @@ class Outro(LectureMixin, VoiceoverScene):
         head = label(r"Part 60, \ in twelve lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "<bookmark mark='a'/> Part sixty in twelve lines. A rebuilt test set cost every ImageNet model eleven to fourteen "
-            "points. Tukey's depth is robust in any dimension but hard to compute; the spectral filter is robust and "
-            "efficient. List decoding handles a majority of outliers, and median of means needs only two moments. "
-            "Covariate shift is corrected by importance weights, at a price in effective sample size. <bookmark mark='b'/> "
-            "Label shift is corrected through the confusion matrix, or by EM. Distributionally robust optimization "
-            "certifies the risk over a ball of distributions. Invariance turns causal structure into robustness. Transfer "
-            "learning borrows from a source and corrects the difference. Kernel and classifier tests detect a shift. And "
-            "five problems remain open."
+            "<bookmark mark='a'/> Part sixty in twelve lines. The MatchedFrequency rebuilt ImageNet set cost the evaluated models eleven to fourteen percentage points. Tukey's depth is robust in any dimension but hard to compute; certified spectral filters are robust and efficient; our trimming is an illustration. List decoding handles a majority of outliers, and median of means needs only two moments. Covariate shift is corrected by importance weights, at a price in effective sample size. <bookmark mark='b'/> Label shift is corrected through the confusion matrix, or by EM. Distributionally robust optimization certifies the risk over a ball of distributions. Invariance turns causal structure into robustness. Transfer learning borrows from a source and corrects the difference. Kernel and classifier tests detect a shift. And five problems remain open."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -128,9 +121,7 @@ class Outro(LectureMixin, VoiceoverScene):
         tr.to_edge(UP, buff=0.8)
         nxt.next_to(tr, DOWN, buff=1.0)
         with self.voiceover(
-            "Sixty parts of sixty-five. <bookmark mark='a'/> The models on the rebuilt ImageNet kept their ranking but lost "
-            "a decade of progress in accuracy: a guarantee is only as good as its assumption about where the data come "
-            "from. <bookmark mark='b'/> Next, Part sixty-one: optimal transport."
+            "Sixty parts of sixty-five. <bookmark mark='a'/> The models on the rebuilt ImageNet kept their ranking but lost substantial accuracy on the rebuilt collection: a guarantee is only as good as its assumption about where the data come from. <bookmark mark='b'/> Next, Part sixty-one: optimal transport."
         ) as vo:
             self.play(FadeIn(tr))
             vo.wait_until("a")

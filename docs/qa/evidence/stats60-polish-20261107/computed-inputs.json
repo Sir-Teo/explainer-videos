@@ -1,0 +1,57 @@
+[
+  {
+    "file": ".cache/stats60/board.json",
+    "sha256": "ddfbac082c999bac70abd965b650a7e4ed5ed6dce3e1e44e194952b2744bdcf5",
+    "bytes": 1330
+  },
+  {
+    "file": ".cache/stats60/covshift.json",
+    "sha256": "6b3dbabd9a75de80ec827899658e76b29095c31d15fa4311ab1c08a1d66c5bf9",
+    "bytes": 56046
+  },
+  {
+    "file": ".cache/stats60/depth.json",
+    "sha256": "63acec2bd870b06193487b8d615168fee15fe8ecd9be1da9bb98860b55ad2393",
+    "bytes": 340417
+  },
+  {
+    "file": ".cache/stats60/detect.json",
+    "sha256": "50789cf7036c087dc02dcdf11cc5464d23b980cc7e270ab4a3340213e75fabf7",
+    "bytes": 16469
+  },
+  {
+    "file": ".cache/stats60/dro.json",
+    "sha256": "9b1e1b83ac25475c80957ee9b8e3f60f7c957c8e4e90d5dd587963c388a91bef",
+    "bytes": 652530
+  },
+  {
+    "file": ".cache/stats60/heavy.json",
+    "sha256": "d51c41b94fe1c73fd789a23fc834af04615e8ccc2beafd762edf90670d8ac9a6",
+    "bytes": 18680
+  },
+  {
+    "file": ".cache/stats60/invariance.json",
+    "sha256": "d27989ef2ea140469c321e57329f4d134f48359afce47889e9189eae6f141abd",
+    "bytes": 1993
+  },
+  {
+    "file": ".cache/stats60/labshift.json",
+    "sha256": "d6d2308fdd91cfe526027fbca68794ed34d99d359107147464c3198e75df16de",
+    "bytes": 22608
+  },
+  {
+    "file": ".cache/stats60/listdec.json",
+    "sha256": "f63b17fc2302375e66ef8ee7b737df26cae8c19ccd5edc1d2cc414e786a42fa5",
+    "bytes": 16866
+  },
+  {
+    "file": ".cache/stats60/robust.json",
+    "sha256": "1c1ddc1638fe6e849d78cbf2cc5c1010e320f71849f0243d1d3e7c08740620fb",
+    "bytes": 17074
+  },
+  {
+    "file": ".cache/stats60/transfer.json",
+    "sha256": "bb4390eeadea8d136a2bb7b20597aa195739ebbaf0e2ca335a29dff081320283",
+    "bytes": 26500
+  }
+]

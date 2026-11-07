@@ -51,30 +51,20 @@ class Filter(LectureMixin, VoiceoverScene):
 
     def idea(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The filter's idea: outliers that move the mean must also inflate the variance in the "
-            "direction they move it. <bookmark mark='b'/> So compute the sample covariance, and its top eigenvalue. If it is "
-            "close to what clean Gaussian data would give, the sample mean is already good: stop. <bookmark mark='c'/> If "
-            "not, project the data on the top eigenvector, and remove the points with the most extreme projections. "
-            "<bookmark mark='d'/> Repeat. Each round removes more bad points than good ones, so the process ends with the "
-            "adversary disarmed.",
+            "<bookmark mark='a'/> Spectral filtering exploits the relation between a displaced mean and inflated variance, together with stability of the clean sample. <bookmark mark='b'/> The displayed implementation uses a Marchenko-Pastur edge plus heuristic slack as its stopping threshold. This threshold alone is not a robust-estimation certificate. <bookmark mark='c'/> It removes the most extreme five percent of top-eigenvector projections each round. <bookmark mark='d'/> Certified filters instead choose thresholds with a proof that contamination decreases relative to retained clean mass. Our deterministic trimming illustrates the idea on this planted attack; it does not implement that theorem.",
             [(r"\text{key fact}", r":", r"\text{a shifted mean} \Rightarrow \text{an inflated variance in that direction}", 36),
-             (r"\lambda_{\max}(\hat\Sigma)", r"\le", r"(1 + \sqrt{d/n})^2 + C\varepsilon\log\tfrac1\varepsilon: \ \text{stop}", 36),
+             (r"\lambda_{\max}(\hat\Sigma)", r"\le", r"(1 + \sqrt{d/n})^2 + C\varepsilon\log\tfrac1\varepsilon: \ \text{heuristic stop}", 36),
              (r"\text{else}", r":", r"\text{project on the top eigenvector; \ remove the extremes}", 38),
-             (r"\text{repeat}", r":", r"\text{more bad than good removed each round}", 38)],
+             (r"\text{repeat}", r":", r"\text{certified filters prove progress; \ this trimming is heuristic}", 38)],
             [r"a certificate", r"the clean edge plus slack", r"one direction at a time", r"a potential argument"],
             colors=[(1, FIXC)])
 
     def why(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Why does a small top eigenvalue certify the mean? <bookmark mark='b'/> If the outliers moved "
-            "the mean by delta in direction v, they contribute about epsilon times delta squared over epsilon, that is delta "
-            "squared over epsilon, to the variance along v. <bookmark mark='c'/> So a variance close to one along every "
-            "direction forces delta to be of order epsilon, up to a logarithm. <bookmark mark='d'/> The certificate is a "
-            "spectral one, an eigenvalue computation, which is why the algorithm runs in polynomial time where depth could "
-            "not.",
+            "<bookmark mark='a'/> Why can spectral information help? One needs both clean-sample stability and control of the contamination budget. <bookmark mark='b'/> Moving the mean by delta using epsilon mass creates a variance contribution with scale delta squared over epsilon. Deletions and changes in the retained clean mean also need bounds. <bookmark mark='c'/> Under appropriate Gaussian stability conditions, certified filters obtain error of order epsilon root log one over epsilon, plus sampling error, in the strong contamination model. <bookmark mark='d'/> An eigenvalue is part of this certificate. A small top eigenvalue, without the other assumptions, does not certify proximity to any particular clean mean.",
             [(r"\text{if}", r":", r"\text{outliers move the mean by } \delta \text{ along } v", 40),
-             (r"\text{then}", r":", r"\mathrm{Var}_v \gtrsim 1 + \delta^2/\varepsilon", 40),
-             (r"\mathrm{Var}_v \approx 1 \ \forall v", r"\Rightarrow", r"\delta = O\big(\varepsilon\sqrt{\log(1/\varepsilon)}\big)", 40),
+             (r"\text{then}", r":", r"\text{contamination contribution has scale } \delta^2/\varepsilon", 40),
+             (r"\text{Gaussian stability + spectral control}", r"\Rightarrow", r"\delta = O\big(\varepsilon\sqrt{\log(1/\varepsilon)}\big)", 40),
              (r"\text{so}", r":", r"\text{an eigenvalue replaces a minimum over directions}", 38)],
             [r"the adversary's dilemma", r"Chebyshev, \ reversed", r"the certificate", r"polynomial time"],
             colors=[(2, FIXC)])
@@ -95,7 +85,7 @@ class Filter(LectureMixin, VoiceoverScene):
             [(rf"$n = {d['n']:,}$, \ $\varepsilon = {d['eps']}$", WHITE), (r"the $(2, \dots, 2)$ attack", GREY_A)],
             [(r"red: \ the mean", NAIVEC), (r"orange: \ coordinatewise median", BADC)],
             [(r"purple: \ geometric median", DEPTHC)],
-            [(r"green: \ the filter", FIXC), (r"grey band: \ mean of the clean points", GREY_B)],
+            [(r"green: \ heuristic spectral trimming", FIXC), (r"grey band: \ mean of the clean points", GREY_B)],
             [(rf"$d = 100$: \ mean {r100['mean']:.2f}", GREY_A), (rf"medians {r100['coord_median']:.2f}, \ {r100['geo_median']:.2f}", GREY_A),
              (rf"filter {r100['filter']:.2f}", FIXC)],
         ])
@@ -103,11 +93,11 @@ class Filter(LectureMixin, VoiceoverScene):
             f"<bookmark mark='a'/> The four estimators, as the dimension grows, with two thousand points and ten percent "
             f"planted. <bookmark mark='b'/> The mean and the coordinatewise median grow like root d. <bookmark mark='c'/> So does "
             f"the geometric median, more slowly. <bookmark mark='d'/> The filter tracks the grey oracle, the mean of the clean "
-            f"points alone: its error is just the sampling error. <bookmark mark='e'/> At a hundred dimensions, the mean is off "
+            f"points alone: its observed error is close to the clean-sample error in these four seeded repetitions. This is not a worst-case guarantee. <bookmark mark='e'/> At a hundred dimensions, the mean is off "
             f"by {say(r100['mean'], 2)}, the medians by {say(r100['coord_median'], 2)} and {say(r100['geo_median'], 2)}, the "
             f"filter by {say(r100['filter'], 2)}."
         ) as vo:
-            self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated")))
+            self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated, \ four repetitions")))
             vo.wait_until("a")
             self.play(FadeIn(side[0]))
             vo.wait_until("b")
@@ -143,7 +133,7 @@ class Filter(LectureMixin, VoiceoverScene):
             f"It removed {100 * last['removed_bad']:.0f} percent of the planted points, and {100 * last['removed_good']:.0f} percent "
             f"of the clean ones: the price of caution is small."
         ) as vo:
-            self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated")))
+            self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated, \ four repetitions")))
             vo.wait_until("a")
             self.play(FadeIn(side[0]))
             vo.wait_until("b")
@@ -156,15 +146,10 @@ class Filter(LectureMixin, VoiceoverScene):
 
     def sos(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The filter is one of several efficient methods. Others solve a convex program that "
-            "down-weights points so the weighted covariance has a small top eigenvalue. <bookmark mark='b'/> For harder "
-            "problems, such as robust covariance estimation or mixtures, the sum-of-squares hierarchy certifies higher "
-            "moments, at higher polynomial cost. <bookmark mark='c'/> There are also lower bounds: in the statistical query "
-            "model, no efficient algorithm beats an error of epsilon root log of one over epsilon for Gaussians, matching the "
-            "filter. <bookmark mark='d'/> Ilias Diakonikolas and Daniel Kane's 2023 book collects the theory.",
+            "<bookmark mark='a'/> Convex reweighting offers another route to spectral control. <bookmark mark='b'/> Sum-of-squares methods certify higher moments for more demanding robust-estimation problems. <bookmark mark='c'/> Computational limits depend on the corruption model. Statistical-query lower bounds support an epsilon root log one over epsilon barrier for strong or total-variation corruption of isotropic Gaussians. They do not give that barrier for Huber mixtures. <bookmark mark='d'/> In fact, Diakonikolas, Kane, Pensia and Pittas obtained order-epsilon error with near-optimal samples and almost-linear time for the Huber model in 2023. Their algorithm is more elaborate than this demonstration.",
             [(r"\text{other methods}", r":", r"\text{convex reweighting with a spectral constraint}", 38),
              (r"\text{harder problems}", r":", r"\text{sum-of-squares certificates of moments}", 38),
-             (r"\text{lower bound}", r":", r"\text{SQ: \ no efficient method beats } \varepsilon\sqrt{\log(1/\varepsilon)}", 36),
-             (r"\text{the book}", r":", r"\text{Diakonikolas \& Kane (2023)}", 40)],
+             (r"\text{lower bound}", r":", r"\text{strong/TV corruption, SQ barrier: } \varepsilon\sqrt{\log(1/\varepsilon)}", 36),
+             (r"\text{the book}", r":", r"\text{Huber: \ DKPP (2023) achieve } O(\varepsilon)", 40)],
             [r"many routes", r"higher moments", r"statistical-computational limits", r"\emph{Algorithmic High-Dimensional Robust Statistics}"],
             colors=[(2, NAIVEC)])

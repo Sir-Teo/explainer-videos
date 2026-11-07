@@ -1,0 +1,5 @@
+Command: OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 pytest -q tests/test_stats60_checked.py tests/test_stats_kit_shift.py
+24 passed, 1 warning in 32.01s
+Warning: third-party pydub audioop deprecation (Python 3.13 removal).
+All ladder/list narration bookmarks match row counts.
+Estimated English narration 51.7 min.

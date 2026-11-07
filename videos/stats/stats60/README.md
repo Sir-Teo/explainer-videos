@@ -1,109 +1,52 @@
 # Statistics, Built — Part 60: Robustness and Distribution Shift
 
-Part 60 of a sixty-five-part course in statistics, from a first course to a PhD (see [the series plan](../README.md)
-and [the syllabus](../SYLLABUS.md)), and the fifth part of Stage V, the research frontier.
+Part 60 of [the 65-part course](../README.md). The central question is which assumptions let a statistical procedure survive contamination or deployment shift.
 
-It opens with Recht, Roelofs, Schmidt & Shankar (2019). They rebuilt ImageNet's test set from new images, following the
-original collection process as closely as they could, and every model they tested lost between 11 and 14 points of
-top-1 accuracy. The models kept their order, so this was not overfitting to a reused test set. A small, invisible
-change in the distribution had done it. The part covers the two ways the standing assumption, data from the
-distribution of interest, breaks: some of the data are wrong, or all of the data are right but come from elsewhere.
-- Tukey's depth (1975) on Old Faithful: the depth map, the Tukey median, its breakdown point, and Chen, Gao & Ren's
-  (2018) minimax optimality under Huber contamination. Its cost is time exponential in the dimension.
-- Efficient robust means (Diakonikolas, Kamath, Kane, Li, Moitra & Stewart 2016; Lai, Rao & Vempala 2016):
-  - the (2, …, 2) attack, against which the mean and the coordinatewise and geometric medians all err like ε√d;
-  - the spectral filter and why a small top eigenvalue certifies the mean;
-  - sum-of-squares, and the SQ lower bound ε√log(1/ε) (Diakonikolas, Kane & Stewart 2017).
-- List-decodable learning (Charikar, Steinhardt & Valiant 2017): a list of ⌈1/α⌉ candidates when only α of the data
-  are inliers, with its two lower bounds.
-- Heavy tails: median of means (Nemirovski & Yudin; Alon, Matias & Szegedy), the δ-dependence theorem (Devroye,
-  Lerasle, Lugosi & Oliveira 2016), tournaments (Lugosi & Mendelson 2019) and Hopkins's (2020) efficient version, and
-  Catoni.
-- Covariate shift (Shimodaira 2000) on NHANES: importance weights estimated by a classifier, Kish's effective sample
-  size, clipping, KMM and KLIEP, the doubly robust form, and weighted conformal.
-- Label shift on the Wisconsin biopsies: classify and count and its attenuation, Forman's adjusted count, BBSE (Lipton,
-  Wang & Smola 2018), the Saerens–Latinne–Decaestecker EM, and recalibration.
-- Distributionally robust optimization:
-  - φ-divergence, Wasserstein and group uncertainty sets;
-  - χ² DRO as variance regularization (Duchi & Namkoong) and the KL dual;
-  - the square-root lasso as a Wasserstein DRO (Blanchet, Kang & Murthy);
-  - fairness without demographics (Hashimoto et al. 2018) and Hu et al.'s (2018) caveat.
-- Invariance: invariant causal prediction (Peters, Bühlmann & Meinshausen 2016), anchor regression (Rothenhäusler,
-  Meinshausen, Bühlmann & Peters 2021), and IRM with its critiques.
-- Transfer learning:
-  - Ben-David et al.'s (2010) bound, Kpotufe & Martinet's (2021) transfer exponent, and Cai & Wei (2021);
-  - Trans-Lasso (Li, Cai & Li 2022), with negative transfer simulated;
-  - domain-adversarial networks and their failure under label shift.
-- Detecting shift: the MMD (Gretton et al. 2012), classifier two-sample tests (Lopez-Paz & Oquab 2017), Failing Loudly
-  (Rabanser, Günnemann & Lipton 2019), and tests for harmful shift (Podkopaev & Ramdas 2022).
-- Five open problems.
+The ImageNetV2 hook concerns the **MatchedFrequency** collection: evaluated models lost 11–14 percentage points of top-one accuracy. Benchmark gains generally transferred, but preserved rankings do not establish absence of adaptive overfitting. Collection variants have different gaps.
 
-It keeps two promises:
-- **Part 30** built robust estimators of location and scale in one dimension. Chapters 1–4 take robustness into many
-  dimensions, efficiently.
-- **Part 57**'s weighted conformal assumed the shift's weights were known. Chapters 5–6 estimate them and count the
-  price.
+The chapters cover halfspace depth, efficient robust means, list decoding, heavy tails, covariate and label shift, DRO, causal invariance, transfer and shift detection. Their numerical examples have narrower scopes than the referenced theorems:
 
-**Built in this part:**
-- **`statkit.shift`** ([`explainer/stats/kit/shift.py`](../../../explainer/stats/kit/shift.py)), tested in
-  `tests/test_stats_kit_shift.py`:
-  - Tukey depth in the plane and the Tukey median;
-  - the contamination attack, Weiszfeld's geometric median, the spectral filter, and a robust-means harness;
-  - list decoding by clustering, and median of means with the geometric median;
-  - Kish's effective sample size, weighted intervals, and logistic density-ratio estimation;
-  - BBSE and EM for label shift;
-  - χ² and KL distributionally robust risks by duality (the χ² case checked against mean + √(2ρ Var), the KL case
-    against a brute-force tilt);
-  - anchor regression (OLS at γ = 1, IV as γ → ∞, both tested) and ICP;
-  - the two-step Trans-Lasso;
-  - the unbiased MMD with its permutation test.
-- **The depth map** (`DepthMap` in `explainer/stats/viz.py`), the part's instrument. It shades every cell of a grid by
-  its Tukey depth, plots the data, and marks centres such as the Tukey median and the mean, so robust and non-robust
-  centres can be compared as outliers arrive.
+- Angular sweeps calculate planar closed-halfplane depth at each query. The 50-by-50 grid search approximates the depth median; it is not an exact global maximizer or the high-dimensional minimax algorithm.
+- Deterministic spectral trimming removes five percent of extreme projections per iteration. It illustrates one planted-cluster attack and is not a certified adversarial filter. Four replicates and empirical Monte Carlo errors are saved.
+- K-means supplies four candidates in a separated-cluster illustration. General bounded-covariance list decoding has an order-one-over-root-alpha accuracy scale; that is not the Gaussian minimax lower bound.
+- The heavy-tail experiment uses a geometric median of 30 block means, not the covariance-optimal tournament estimator. Its empirical 99th percentiles from 400 runs have order-statistic uncertainty.
+- Huber mixtures and strong sample corruption have different computational guarantees. The strong/TV statistical-query barrier must not be applied to Huber mixtures, which admit order-epsilon algorithms.
 
-**Data.**
-- From the Museum:
-  - Old Faithful (Azzalini & Bowman 1990), with 30 planted points;
-  - NHANES (age, sex, BMI, systolic pressure), with a simulated young-skewed selection;
-  - the Wisconsin breast cancer biopsies (Wolberg, Street & Mangasarian 1995), with a simulated label shift.
-- The rest is seeded simulation.
+## Empirical examples and calibration
 
-The Coverage Board gains four rows:
+NHANES is a **fixed, unweighted complete-case empirical extract** of 5,176 adults, with age top-coded at 80. Pressure averages available SBP readings. It is not a survey-weighted national estimand. Source and unlabelled reference draws are independent, with replacement. Selection probability is proportional to exp(-(age-18)/20); the correctly specified log ratio is linear in age.
 
-| Method | Setting | Nominal | Achieved | Verdict |
-|---|---|---|---|---|
-| Unweighted interval, shifted sample | NHANES pressure, young-skewed n = 600 | 95% | 0.0% | broken |
-| Importance-weighted interval | NHANES pressure, young-skewed n = 600 | 95% | 95.5% | kept |
-| Classify-and-count prevalence interval | biopsies, 37% → 70% malignant | 95% | 85% | broken |
-| BBSE label-shift interval | biopsies, 37% → 70% malignant | 95% | 95% | kept |
+| Procedure | Repetitions | Result | Nominal 95% interval coverage (Monte Carlo SE) |
+|---|---:|---|---|
+| Unweighted source mean, n=600 | 400 | 118.450, SD 0.677; empirical target 126.187 | 0.00% (0.00 percentage points) |
+| Logistic-ratio weighted mean | 400 | 126.242, SD 1.242; mean Kish ESS 267.6 | 95.25% (1.06 points) |
+| Classify-and-count prevalence | 300 | 0.6424; target .70 | 72.00% (2.59 points) |
+| Projected BBSE prevalence | 300 | 0.6993, SD 0.0699 | 92.33% (1.54 points) |
 
-## Build it
+The weighted interval uses a **joint logistic-ratio/Hajek sandwich**, centered separately within fixed source and target strata. It includes ratio fitting and the 2,000-point reference sample. Its normal approximation requires correct specification, overlap and regularity. Kish ESS diagnoses concentration; it is not an exact information count for heterogeneous outcomes and estimated weights. Plotted sampling curves are Gaussian fits.
+
+The biopsy experiment is semi-synthetic. Each classifier trains on 250 biopsies; independent 150-point source calibration and 100-point target samples are drawn from a shared remaining class-conditional reservoir, with replacement. Labels have source prevalence 0.3726 and target probability .70, with fluctuating realized counts. This makes label shift exact conditional on the empirical reservoir. BBSE enforces the simplex and checks identifiability. The 100-resample percentile bootstrap is approximate: its observed undercoverage is retained. EM averages 0.6871; narrower spread does not establish posterior calibration. These are not clinical validation results.
+
+For DRO, young-only training-loss balls cannot certify older-group membership just because a risk curve crosses a group's observed loss. The displayed curves are comparisons. Separate **all-adult empirical** calculations verify membership: for a group of base mass p, D_chi2(P(.|G)||P)=(1/p-1)/2 and D_KL=-log p. Both robust risks are checked against the group's empirical risk. Scalar KKT solves record feasible primal weights, divergences and dual gaps; no future-population guarantee is implied.
+
+ICP uses Gaussian linear coefficient-invariance and residual-variance F tests with multiplicity corrections. Its no-false-parent probability requires valid testing of the true-parent model and an unchanged outcome mechanism. Anchor regression agrees with unique 2SLS in the infinite-penalty limit only when the projected design identifies the coefficients; the plotted example is underidentified for IV. The zero label represents gamma=1e-9.
+
+Transfer shows a simplified one-source pooled-lasso/residual-correction core over 40 repetitions, with paired draws and Monte Carlo errors. Five coordinate shifts of .15 or 1 have total l-one contrast .75 or 5. It does not implement adaptive multi-source aggregation.
+
+Detection uses a pooled label-invariant Gaussian-kernel bandwidth and plus-one permutation p-values. The statistic can be negative. The shifted example has MMD squared 0.1192, p=0.00332; the null comparison p=0.950. Held-out classifier accuracy 0.670, p=9.19e-10, uses the exact conditional **hypergeometric**, rather than binomial, law for balanced labels. Risk monitoring needs labels or additional assumptions.
+
+## Build and verification
 
 ```bash
-OMP_NUM_THREADS=1 python -m videos.stats.stats60.compute   # once (a few minutes)
-python tools/build.py stats60 -q l                         # fast 480p preview
-python tools/build.py stats60                              # 1080p30 -> renders/stats60.mp4
-python tools/qa_scene.py stats60 Depth
+OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m videos.stats.stats60.compute --force
+pytest -q tests/test_stats60_checked.py tests/test_stats_kit_shift.py
+python tools/build.py stats60 -q l
 python tools/lecture_length.py stats60 --floor 50
 ```
 
-## Chapters
+All 11 computed inputs regenerated; **24 tests pass** (17 audited local checks, seven legacy checks). Estimated English narration: 51.7 minutes. [Audited kernels](checked.py) are used by this part; the shared statkit contains the earlier educational implementations. The instrument is DepthMap.
 
-| # | Chapter | Numbers |
-|---|---|---|
-| 0 | Recht et al. | ImageNetV2: every model 11–14 points lower; NHANES (N = 5,176, mean SBP 126.19): samples of 600 with mean age 35 (population 50); unweighted mean 118.8, 0% coverage; weighted 126.2, 95.5% |
-| 1 | Depth | Old Faithful, 272 eruptions, depth over 720 directions: Tukey median (3.81, 7.44), depth 0.41; mean (3.49, 7.09); 30 planted points move the mean 0.45 and the Tukey median 0.10 |
-| 2 | The filter | n = 2,000, ε = 0.1, the (2, …, 2) attack: d = 100 errors mean 2.01, coordinatewise median 1.41, geometric median 1.14, filter 0.22 (oracle 0.21); d = 200: 2.85, 2.02, 1.61, 0.35; at ε = 0.2 (d = 100) filter 0.27, all planted points and 9% of the clean removed |
-| 3 | List decoding | 90 inliers (30%) and three clusters of 70: the mean is 1.90 from (1, 1); the best of four candidates 0.23, as close as the inliers' own mean |
-| 4 | Heavy tails | n = 600, d = 20, t₂.₅, 400 samples: mean error median 0.374, 99th percentile 0.640; geometric median of 30 block means 0.350, 0.496 |
-| 5 | Covariate shift | 400 young-skewed samples of 600: unweighted 118.83 (sd 0.62), 0% coverage; classifier-weighted (age, age², sex, BMI; 2,000 unlabelled adults) 126.19 (sd 1.22), 95.5%; Kish n_eff ≈ 291 |
-| 6 | Label shift | 300 repetitions, train 250 (37% malignant), hold out 150, target 100 at 70%: classify and count 0.647, BBSE 0.700 (sd 0.055), EM 0.691 (sd 0.038); interval coverage 85% vs 95%; a score of 0.40 becomes 0.73 |
-| 7 | DRO | SBP on sex and BMI fit on ages 18–39: MSE (10 mm Hg)² 1.24, 4.55 (40–59), 9.19 (60–80); χ² worst case 2.16, 3.09, 4.17, 5.39 at ρ = 0.05, 0.2, 0.5, 1; KL 2.63, 4.90, 8.51, 13.69; KL certifies 40–59 at ρ ≈ 0.18 and 60–80 at ρ ≈ 0.56 |
-| 8 | Invariance | ICP, three environments: p-values ∅ 5 × 10⁻¹⁷⁹, {X₁} 1.00, {X₂} 1.0 × 10⁻⁸, {X₁, X₂} 2.0 × 10⁻¹⁶, so Ŝ = {X₁}; anchor regression with test shift 3: test MSE 10.52 (γ = 0), 5.13 (OLS), 3.54, 2.54, 2.47 (γ = 10), 2.76 (γ = 50) |
-| 9 | Transfer | p = 200, s = 10, n_S = 1,000: similar source (5 shifts of 0.15), n_T = 50: target-only 2.00, pooled 0.135, Trans-Lasso 0.136; dissimilar (shifts of 1), n_T = 400: pooled 2.06, target 0.325, Trans-Lasso 0.246 |
-| 10 | Detecting shift | 300 vs 300 on age, BMI, sex: MMD² 0.100, p = 1/301; two population samples p = 0.87; classifier accuracy 0.65, p ≈ 1 × 10⁻⁷ |
-| 11 | Open problems | — |
-| 12 | Outro | — |
+[Scientific QA and data/proof receipts](../../../docs/qa/evidence/stats60-polish-20261107/README.md). English sampled visual verification is pending. Chinese narration/caption tables, continuous listening/playback and final masters remain open; this checkpoint is not bilingual production approval.
 
 ## Sources
 
@@ -160,56 +103,17 @@ python tools/lecture_length.py stats60 --floor 50
 - **Data.** A. Azzalini & A. Bowman, *Appl. Stat.* 39 (1990); NHANES (CDC); W. Wolberg, W. Street & O. Mangasarian
   (1995).
 
+
+- **Contamination-model distinction.** Diakonikolas, Kane, Pensia & Pittas, NeurIPS (2023), [arXiv:2312.01547](https://arxiv.org/abs/2312.01547), especially Theorem 1.3 and section 1.3.
 ## Problems and solutions
 
-1. **The contaminated median.** With mass ε at +∞, the median m solves (1 − ε)Φ(m) = ½, so m = Φ⁻¹(1/(2(1 − ε))).
-   Expanding, 1/(2(1 − ε)) ≈ ½ + ε/2, and Φ⁻¹(½ + u) ≈ u/φ(0), so m ≈ ε/(2φ(0)) = ε√(π/2) ≈ 1.25ε. In d coordinates
-   under the (c, …, c) attack, each coordinate moves by about this much, so the coordinatewise median's error is about
-   1.25ε√d.
-2. **Importance weighting.**
-   - Since Q(dx, dy) = q(x)P(dy | x) dx and P(dx, dy) = p(x)P(dy | x) dx, we have E_P[w f] = ∫∫ (q/p) f p P(dy | x) dx
-     = E_Q[f].
-   - The Hájek estimator Σwᵢyᵢ/Σwᵢ with constant outcome variance σ² has variance about σ²Σwᵢ²/(Σwᵢ)². That is
-     σ²/n_eff with n_eff = (Σw)²/Σw².
-3. **Classify and count.**
-   - E[q̂_CC] = P(ŷ = 1) = P(ŷ = 1 | y = 1)q + P(ŷ = 1 | y = 0)(1 − q) = q TPR + (1 − q) FPR. Solving gives
-     q = (q̂_CC − FPR)/(TPR − FPR).
-   - With two classes, BBSE's system C w = μ has C = [[(1 − FPR)(1 − p), (1 − TPR)p], [FPR(1 − p), TPR p]] and
-     μ = (1 − q̂_CC, q̂_CC). Solving and forming q = w₁p gives the same expression.
-4. **The χ² worst case.**
-   - Maximize Σqᵢℓᵢ subject to Σqᵢ = 1 and (n/2)Σ(qᵢ − 1/n)² ≤ ρ.
-   - With qᵢ = 1/n + vᵢ, Σvᵢ = 0, the objective is ℓ̄ + Σvᵢ(ℓᵢ − ℓ̄).
-   - By Cauchy–Schwarz this is at most ℓ̄ + ‖v‖‖ℓ − ℓ̄‖ = ℓ̄ + √(2ρ/n)·√(n Var̂ ℓ) = ℓ̄ + √(2ρ Var̂ ℓ). The bound is
-     attained at v ∝ ℓ − ℓ̄, which is feasible while every qᵢ ≥ 0.
-5. **Anchor regression's limits.**
-   - With W = I − (1 − √γ)P_A, the objective is ‖W(y − Xb)‖². At γ = 1, W = I, which is OLS.
-   - As γ → ∞, the term γ‖P_A(y − Xb)‖² dominates, so the solution minimizes ‖P_A(y − Xb)‖², which is two-stage least
-     squares. Under just identification it is the IV estimator (A′X)⁻¹A′y.
-6. **The classifier's odds.** Pool n₀ source and n₁ target points. Bayes' rule gives c(x) = n₁q(x)/(n₀p(x) + n₁q(x)),
-   so c/(1 − c) = n₁q(x)/(n₀p(x)) and (n₀/n₁)·c/(1 − c) = q(x)/p(x).
-
-## Glossary
-
-- **Robustness.**
-  - Contamination: Huber's model; the strong model; breakdown point.
-  - Depth: halfspace depth; the Tukey median.
-  - Efficient estimators: geometric median; the spectral filter; sum-of-squares; SQ lower bound.
-  - List decoding.
-  - Heavy tails: median of means; tournaments; δ-dependence; Catoni's estimator.
-- **Shift.**
-  - Kinds of shift: covariate shift; label shift; posterior drift; concept shift.
-  - Covariate shift: importance weight; density ratio; overlap; Kish's effective sample size.
-  - Label shift: classify and count; adjusted count; BBSE; the EM correction.
-- **Guarding.**
-  - DRO: uncertainty set; φ-divergence ball; Wasserstein ball; group DRO; variance regularization.
-  - Invariance: invariant causal prediction; anchor regression; IRM.
-  - Transfer: transfer exponent; Trans-Lasso; negative transfer; domain adaptation.
-- **Detection.** MMD; characteristic kernel; classifier two-sample test; harmful shift.
+1. **Contaminated scalar median.** For epsilon<1/2 and added mass at positive infinity, (1-epsilon)Phi(m)=1/2. Hence m=Phi^-1(1/[2(1-epsilon)])=sqrt(pi/2) epsilon+O(epsilon^2). Coordinate biases can accumulate in Euclidean norm under a common-coordinate attack.
+2. **Importance weights and ESS.** If Q_X is absolutely continuous with respect to P_X and the conditional outcome law is unchanged, integration gives E_P[w f]=E_Q[f]. Conditional on fixed covariates, independent outcomes with a constant conditional mean and variance sigma squared give Var(sum(wY)/sum w)=sigma squared sum(w squared)/(sum w) squared. Without constant mean/variance, or with estimated weights, this is not the full Hajek variance.
+3. **Adjusted counts.** E[q_CC]=q TPR+(1-q)FPR. If TPR differs from FPR, q=(E[q_CC]-FPR)/(TPR-FPR). Binary BBSE gives the same moment equation. Estimated rates and projection produce sampling uncertainty and possible finite-sample bias; singular confusion matrices do not identify prevalence.
+4. **Chi-square DRO.** Under (n/2)sum(q_i-1/n)^2<=rho, Cauchy-Schwarz bounds risk by mean(loss)+sqrt(2 rho Var_n(loss)). Equality holds for weights proportional to the centered loss perturbation while all weights remain nonnegative. At larger radii positivity binds; the checked KKT solver handles that regime.
+5. **Anchor limits.** Since P_A is an orthogonal projection, W=I-(1-sqrt(gamma))P_A gives the criterion ||W(y-Xb)|| squared. At gamma=1 this is OLS. As gamma grows, minimization first prioritizes ||P_A(y-Xb)|| squared. A unique limit equals 2SLS if X'P_A X is invertible; otherwise a further criterion can select among projected-loss minimizers and there is no unique IV coefficient vector.
+6. **Classifier odds.** In a pool of n0 source and n1 target draws, Bayes membership c=n1 q/(n0 p+n1 q). Therefore (n0/n1)c/(1-c)=q/p, with the orientation and class proportions specified. Fitted classifier probabilities need to approximate this posterior for the equality to be useful.
 
 ## Where it comes back
 
-- **Part 61**: Wasserstein distances, studied in their own right.
-- **Part 62**: transporting causal effects across populations.
-- **Part 63**: robustness and differential privacy.
-- **Part 64**: large models, out-of-distribution accuracy, and the accuracy line.
-- **Part 65**: the dissertation's robustness checks.
+Part 61 studies optimal transport; Part 62 transports causal effects; Part 63 relates robustness and privacy; Part 64 examines large-model behavior; Part 65 revisits robustness in research.
