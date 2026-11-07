@@ -169,7 +169,7 @@ class Lipschitz(VoiceoverScene):
 
     def talagrand(self):
         rows = fit_rows(VGroup(
-            label(r"beyond Gaussians:", font_size=28, color=GREY_A),
+            label(r"Concentration beyond Gaussian inputs", font_size=36, color=GREY_A),
             label(r"bounded independent coordinates: \ Talagrand's convex-distance inequality (1995)", font_size=26, color=GAUSSC),
             label(r"for \emph{convex} 1-Lipschitz $f$ of independent $X_i \in [0, 1]$: \ $P(|f - Mf| \ge t) \le 4 e^{-t^2/4}$", font_size=26, color=GOODC),
             label(r"convexity is needed: \ without it, \ bounded coordinates can fail to concentrate", font_size=26, color=BADC),

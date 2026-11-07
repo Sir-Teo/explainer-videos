@@ -17,7 +17,7 @@ class StatisticalDimension(VoiceoverScene):
 
     def universal(self):
         rows = fit_rows(VGroup(
-            label(r"is it only Gaussian?", font_size=28, color=GREY_A),
+            label(r"Universality beyond Gaussian measurement matrices", font_size=36, color=GREY_A),
             label(r"Donoho \& Tanner (2009): \ the same curve for Bernoulli, \ Fourier and many other ensembles", font_size=26, color=SPHC),
             label(r"Oymak \& Tropp (2018): \ universality, \ proved for i.i.d. designs with enough moments", font_size=26, color=GOODC),
             label(r"structured matrices (partial Fourier, \ sparse) \ follow it closely in practice", font_size=26, color=MATC),
