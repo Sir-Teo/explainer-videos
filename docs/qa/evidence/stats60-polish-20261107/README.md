@@ -5,3 +5,5 @@ All 13 chapter sources reviewed; 24 checks pass and all 11 inputs regenerated. [
 The course-connection heading now appears before its spoken introduction, eliminating the blank introductory beat. Fresh captures remain pending.
 
 Presentation polish: chapter roadmaps and selected application introductions now use descriptive 36-point headings instead of generic small labels. This is a source-level readability improvement; sampled visual review remains pending.
+
+Additional motion transition review: The density-ratio identity now retains a topic heading while its first expression is written, avoiding a transition displaying only the initial symbol. The flagged frame and scan are retained as before-change evidence; fresh captures remain required.
