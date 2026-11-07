@@ -1,0 +1,85 @@
+[
+  {
+    "dataset": "Mroz87",
+    "rows": 753,
+    "source": "https://raw.githubusercontent.com/cran/sampleSelection/master/data/Mroz87.txt.gz",
+    "sha256": "a964e6b0345bfbd6852850deae53938ec99ba10b39ffcddd16f810f287caa2c3",
+    "errors_by_column": {
+      "lfp": 0.0,
+      "hours": 0.0,
+      "kids5": 0.0,
+      "kids618": 0.0,
+      "age": 0.0,
+      "educ": 0.0,
+      "wage": 0.0,
+      "exper": 0.0,
+      "nwifeinc": 0.0,
+      "city": 0.0,
+      "huswage": 0.0,
+      "faminc": 0.0,
+      "motheduc": 0.0,
+      "fatheduc": 0.0
+    }
+  },
+  {
+    "dataset": "airquality",
+    "rows": 153,
+    "source": "https://vincentarelbundock.github.io/Rdatasets/csv/datasets/airquality.csv",
+    "sha256": "65d2c4afd976c169af9bb0bd97e9e78e1e8a185f1b52e2e3153e30f90c7fb5f8",
+    "errors_by_column": {
+      "ozone": 0.0,
+      "solar": 0.0,
+      "wind": 0.0,
+      "temp": 0.0,
+      "month": 0.0,
+      "day": 0.0
+    }
+  },
+  {
+    "dataset": "NHANES 2017-2018 examined adults",
+    "rows": 5533,
+    "columns": 29,
+    "comparison": "Byte-for-byte reconstruction from six independently downloaded, SHA-256 checked CDC XPTs",
+    "prior_source_provenance": "docs/qa/evidence/stats20-polish-20261107/source-provenance.json",
+    "sources": {
+      "BMX_J.xpt": {
+        "sha256": "8d675e42d8826ac98714b2c3dd4c5138a5e353fb4424f7eff5e6db4a01ce838a",
+        "bytes": 1466000,
+        "url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/BMX_J.xpt"
+      },
+      "BPQ_J.xpt": {
+        "sha256": "63cfe1c331a1e7d3534328ac86312a21ffee3e01aa189bc1f74d06855239e5aa",
+        "bytes": 544560,
+        "url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/BPQ_J.xpt"
+      },
+      "BPX_J.xpt": {
+        "sha256": "f98f1d9a4c18173e715c749b4294f6f1525140d5ad5751316bb17cc038fb3423",
+        "bytes": 1466000,
+        "url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/BPX_J.xpt"
+      },
+      "DEMO_J.xpt": {
+        "sha256": "c0b46e0345ea19404928656277c8b0d10b0cca348a9b2fe4fc3c67e8b7ee73ec",
+        "bytes": 3412720,
+        "url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/DEMO_J.xpt"
+      },
+      "DR1TOT_J.xpt": {
+        "sha256": "390ae5205acfbcb87e0ca3d9aabd1c801b60657d3f2802ac08d5b3ed93f0af6d",
+        "bytes": 11722480,
+        "url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/DR1TOT_J.xpt"
+      },
+      "DR2TOT_J.xpt": {
+        "sha256": "b73be9b0a4787e73eb831d22b356d03657ffae7d41e5713b60aaa49b828d9c1b",
+        "bytes": 5931360,
+        "url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/DR2TOT_J.xpt"
+      },
+      "explainer/stats/data/nhanes_bp.csv": {
+        "sha256": "ae9be14330c2d18a719fca7ef379643b3f8f08f85abdf81ef993e713a4d5d1f5",
+        "bytes": 591643
+      },
+      "videos/stats/stats20/data/nhanes_day2_weights.csv": {
+        "sha256": "9d96506116cc30afd450658a6aaf794c8ea4a6783bf284a9439822e8f3b648be",
+        "bytes": 72856
+      }
+    }
+  }
+]

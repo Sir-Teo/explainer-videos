@@ -30,15 +30,16 @@ class MRP(VoiceoverScene):
             label(r"2012: \ an opt-in poll on Microsoft's Xbox, \ in the 45 days before the US election", font_size=26, color=TAUC),
             label(r"respondents: \ 93\% men, \ 65\% aged 18--29; \ the raw numbers favoured Romney", font_size=26, color=MNC),
             label(r"Wang, \ Rothschild, \ Goel \& Gelman (2015): \ MRP turned it into an accurate forecast", font_size=26, color=MIC),
-            label(r"the most biased sample imaginable, \ fixed by modelling, \ not by sampling", font_size=26, color=GREY_A),
+            label(r"a successful modelling example under assumptions; not a general selection repair", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In 2012, players of Microsoft's Xbox game console could answer a daily poll on the US "
-            "presidential election. <bookmark mark='b'/> The respondents were ninety-three percent men and two thirds aged "
-            "eighteen to twenty-nine, and the raw numbers favoured Romney. <bookmark mark='c'/> Wei Wang, David Rothschild, "
-            "Sharad Goel and Andrew Gelman showed that multilevel regression and poststratification turned this into a "
-            "forecast as accurate as the major polls. <bookmark mark='d'/> About the most biased sample imaginable, repaired "
-            "by modelling rather than sampling."
+            "<bookmark mark='a'/> In 2012, players of Microsoft's Xbox game console could answer a daily poll on the "
+            "US presidential election. <bookmark mark='b'/> The respondents were ninety-three percent men and two "
+            "thirds aged eighteen to twenty-nine, and the raw numbers favoured Romney. <bookmark mark='c'/> Wei Wang,"
+            " David Rothschild, Sharad Goel and Andrew Gelman showed that multilevel regression and "
+            "poststratification turned this into a forecast as accurate as the major polls. <bookmark mark='d'/> A "
+            "highly selected sample whose predictions improved under that modelling strategy; this does not guarantee"
+            " that arbitrary selection can be repaired."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -63,6 +64,9 @@ class MRP(VoiceoverScene):
             "poststratification. <bookmark mark='d'/> The assumption is missing at random given the cells: within a cell, "
             "those who answer are like those who do not."
         ) as vo:
+            heading = label('Poststratification requires suitable cells and population counts', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -84,6 +88,9 @@ class MRP(VoiceoverScene):
             "distribution with its own spread. <bookmark mark='c'/> Small cells borrow strength from similar ones, Part "
             "twenty-five's partial pooling, <bookmark mark='d'/> and the spreads, estimated from the data, decide how much."
         ) as vo:
+            heading = label('Partial pooling depends on model structure and estimated spreads', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -136,8 +143,9 @@ class MRP(VoiceoverScene):
             "<bookmark mark='a'/> Against the truth, in gold. <bookmark mark='b'/> The raw poll is " + say(100 * d["raw"], 1)
             + " percent, with a confident interval that misses. <bookmark mark='c'/> Raking the weights to the population's "
             "age, sex, region and income margins brings it to " + say(100 * d["raked"], 1) + ". <bookmark mark='d'/> MRP, with "
-            "six age groups, two sexes, ten regions and five income groups, gives " + say(100 * d["mrp"], 1) + " percent, "
-            "within half a point of the truth, and its ninety percent interval covers it."
+            "six age groups, two sexes, ten regions and five income groups, gives " + say(100 * d["mrp"], 1) + " percent, about six tenths of a percentage point above the truth, and this approximate ninety percent "
+            "interval contains the target in this run. It uses a normal approximation at the posterior mode, "
+            "conditional on fitted group spreads."
         ) as vo:
             self.add(poll_tag())
             vo.wait_until("a")
@@ -165,16 +173,17 @@ class MRP(VoiceoverScene):
             label(rf"orange: \ raw regional shares \ (RMSE {100 * r1:.1f} points)", font_size=22, color=MNC),
             label(rf"green: \ MRP \ (RMSE {100 * r2:.1f} points)", font_size=22, color=MIC),
             label(rf"region sizes in the poll: \ {min(d['n'])} to {max(d['n'])}", font_size=22, color=GREY_A),
-            label(r"small regions are pulled toward the island: \ only a modest gain", font_size=22, color=TAUC),
+            label(r"partial pooling and composition adjustment; gains depend on the model", font_size=22, color=TAUC),
         ), 5.0, 0.42, [3.6, 0.3, 0])
         with self.voiceover(
             "<bookmark mark='a'/> MRP is also used for small areas. The ten regions, true support against estimate. "
-            "<bookmark mark='b'/> The raw regional shares mostly sit above the diagonal, missing by " + say(100 * r1, 1)
-            + " points on average, because each region's joiners are skewed the same way. <bookmark mark='c'/> MRP removes "
-            "that shared skew, missing by " + say(100 * r2, 1) + ". <bookmark mark='d'/> The gain is modest, because some "
-            "regions had only sixty respondents, and the model pulls them toward the island as a whole, while the World's "
-            "regions differ for reasons no census variable explains. <bookmark mark='e'/> Small-area estimates improve most "
-            "when area-level predictors, such as past votes, explain the differences between areas; with them, MRP has "
+            "<bookmark mark='b'/> The raw regional shares mostly sit above the diagonal, with a root mean squared "
+            "error of " + say(100 * r1, 1)
+            + " percentage points, because each region's joiners are skewed the same way. <bookmark mark='c'/> MRP "
+            "removes that shared skew, with a root mean squared error of " + say(100 * r2, 1) + ". <bookmark mark='d'/> The gain is modest, because some regions had only sixty respondents, and the "
+            "model pools group effects while adjusting for cell composition, while the World's regions differ for "
+            "reasons no census variable explains. <bookmark mark='e'/> Small-area estimates improve most when "
+            "area-level predictors, such as past votes, explain the differences between areas; with them, MRP has "
             "estimated opinion in every US state and British constituency from national polls."
         ) as vo:
             self.add(poll_tag())
@@ -198,11 +207,12 @@ class MRP(VoiceoverScene):
             label(r"and intervals must carry the model's uncertainty, \ including $\tau$", font_size=26, color=TAUC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The limits. MRP corrects only for what defines the cells. <bookmark mark='b'/> If those who "
-            "join an online poll differ from those who do not even within a cell, for example by political interest, "
-            "nothing in the model can see it. <bookmark mark='c'/> It needs population counts for every cell, the joint "
-            "table, which censuses do not always publish. <bookmark mark='d'/> And honest intervals must carry all the "
-            "model's uncertainty, including the spreads of the group effects."
+            "<bookmark mark='a'/> The limits. MRP corrects only for what defines the cells. <bookmark mark='b'/> If "
+            "those who join an online poll differ from those who do not even within a cell, for example by political "
+            "interest, nothing in the model can see it. <bookmark mark='c'/> It needs population counts for every "
+            "cell, the joint table, which censuses do not always publish. <bookmark mark='d'/> And honest intervals "
+            "must carry all the model's uncertainty, including the spreads of the group effects. Our teaching "
+            "intervals fix those spreads at their grid-selected estimates and omit that source of uncertainty."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -212,10 +222,12 @@ class MRP(VoiceoverScene):
     def board(self):
         rows = board_rows("opt-in", "MRP")
         text = (
-            "<bookmark mark='a'/> The Board, over two hundred opt-in polls of fifteen hundred. The raw share's interval "
-            "almost never covers the truth. <bookmark mark='b'/> MRP's covers far more often, but still short of ninety "
-            "percent: its approximate posterior, which fixes the group spreads at their estimates, is too narrow, and some "
-            "selection remains within the cells. A huge improvement, and still not a promise kept."
+            "<bookmark mark='a'/> The Board, over two hundred opt-in polls of fifteen hundred. The raw share's "
+            "interval almost never covers the truth. <bookmark mark='b'/> MRP's covers far more often, but still "
+            "short of ninety percent: its interval fixes group spreads, the normal approximation is imperfect, and "
+            "coarse cells leave residual selection. This simulation does not isolate each contribution to "
+            "undercoverage. The worked poll and Board now use the same factor structure, including age-by-sex "
+            "effects, and the same grid for the group spreads. A huge improvement, and still not a promise kept."
         )
         show_board(self, rows, text, [("a", [0]), ("b", [1])])
 

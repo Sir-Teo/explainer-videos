@@ -60,6 +60,9 @@ class Misclassification(VoiceoverScene):
             "<bookmark mark='d'/> The catch is the same as before: the error rates must come from a validation study, here "
             "perhaps medical records for a subsample."
         ) as vo:
+            heading = label('Misclassification correction requires informative error rates', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -69,7 +72,7 @@ class Misclassification(VoiceoverScene):
     def curve(self):
         d = load("misclass")
         ses = np.asarray(d["ses"], float)
-        A = axes([0.5, 1.0], [1, 2.6], x_length=7.4, y_length=4.2, xlabel=r"sensitivity of recall", ylabel=r"expected observed odds ratio",
+        A = axes([0.5, 1.0], [1, 2.6], x_length=7.4, y_length=4.2, xlabel=r"sensitivity of recall", ylabel=r"OR of expected observed proportions",
                  xticks=[0.5, 0.6, 0.7, 0.8, 0.9, 1.0], yticks=[1, 1.5, 2, 2.5], xfmt=lambda v: f"{v:g}", yfmt=lambda v: f"{v:g}", center=[-2.5, 0.2, 0])
         ax = A.ax
         c1 = polyline(ax, ses, np.asarray(d["exp_or"], float), MNC, 3)
@@ -84,11 +87,14 @@ class Misclassification(VoiceoverScene):
             label(r"false positives hurt more \ if exposure is rare", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> How much is the odds ratio diluted? The truth is two point five. <bookmark mark='b'/> With "
-            "specificity ninety percent, the expected observed odds ratio falls steadily as sensitivity drops, <bookmark "
-            "mark='c'/> and with perfect specificity it falls much more slowly. <bookmark mark='d'/> Nondifferential "
-            "misclassification of a binary exposure always pulls the odds ratio toward one, <bookmark mark='e'/> and when the "
-            "exposure is uncommon, false positives among the many unexposed do more damage than missed exposures."
+            "<bookmark mark='a'/> How much is the odds ratio diluted? The truth is two point five. <bookmark "
+            "mark='b'/> With specificity ninety percent, the odds ratio formed from expected observed cell "
+            "proportions falls steadily as sensitivity drops, <bookmark mark='c'/> and with perfect specificity it "
+            "falls much more slowly. <bookmark mark='d'/> Nondifferential misclassification of a binary exposure "
+            "pulls the population odds ratio toward one in this simple unconfounded setting with common error rates "
+            "and sensitivity plus specificity greater than one. It is not a statement about every finite-sample "
+            "estimate, <bookmark mark='e'/> and when the exposure is uncommon, false positives among the many "
+            "unexposed do more damage than missed exposures."
         ) as vo:
             self.add(seeded_tag())
             vo.wait_until("a")
@@ -111,13 +117,15 @@ class Misclassification(VoiceoverScene):
                 [r"as recalled \ (Se 0.8, \ Sp 0.9)", f"{nd[0]}", f"{nd[2]}", f"{d['nd_or']:.2f}"],
                 [r"corrected by the matrix method", r"", r"", f"{d['corr_or']:.2f}"]]
         tab = table_rows(rows, font_size=28, col_buff=1.0, row_buff=0.36, colors=[GREY_A, TRUEC, MNC, MIC]).move_to([0, 0.8, 0])
-        foot = label(r"the correction recovers the truth up to sampling noise, \ with a wider interval", font_size=24, color=GREY_A).move_to([0, -1.5, 0])
+        foot = label(r"point correction only; propagate sampling and error-rate uncertainty for intervals", font_size=24, color=GREY_A).move_to([0, -1.5, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The study's tables. <bookmark mark='b'/> In truth, " + str(t[0]) + " cases and " + str(t[2])
             + " controls were exposed. <bookmark mark='c'/> As recalled, the counts are blurred, and the odds ratio drops to "
             + say(d["nd_or"], 2) + ". <bookmark mark='d'/> Correcting with the known error rates gives " + say(d["corr_or"], 2)
-            + ", back near the truth, at the price of a wider interval, since we have divided by sensitivity plus "
-            "specificity minus one."
+            + ", back near the truth, as a point correction. We have not computed an interval here; uncertainty must "
+            "propagate sampling variation and any estimated error rates. Incompatible error-rate assumptions can even"
+            " imply corrected proportions outside zero and one, requiring a constrained model rather than blind "
+            "clipping."
         ) as vo:
             self.add(seeded_tag())
             vo.wait_until("a")
@@ -150,18 +158,20 @@ class Misclassification(VoiceoverScene):
 
     def lessons(self):
         rows = fit_rows(VGroup(
-            label(r"``nondifferential error only biases toward the null'': \ true on average for a binary exposure", font_size=26, color=GREY_A),
+            label(r"``nondifferential error only biases toward the null'': \ population-limit result under informative common binary error rates", font_size=26, color=GREY_A),
             label(r"but not for one study, \ not for three or more categories, \ not with confounders also mismeasured", font_size=26, color=MNC),
             label(r"and a small estimate is not evidence of a large truth", font_size=26, color=MNC),
             label(r"probabilistic bias analysis: \ put priors on Se and Sp, \ and simulate \ (Lash et al.\ 2009)", font_size=26, color=TAUC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> A common reassurance says that nondifferential error only biases toward the null. For a "
-            "binary exposure that is true on average. <bookmark mark='b'/> But not necessarily in a single study, not for "
-            "exposures with three or more categories, and not when confounders are mismeasured too, as Sander Greenland and "
-            "others have stressed. <bookmark mark='c'/> And a small estimated effect, explained away as dilution, is not "
-            "evidence that the true effect is large. <bookmark mark='d'/> The modern approach, probabilistic bias analysis, "
-            "puts distributions on the error rates and simulates the range of corrected answers."
+            "<bookmark mark='a'/> A common reassurance says that nondifferential error only biases toward the null. "
+            "For a binary exposure in the simple informative, nondifferential error model, it describes the "
+            "population odds-ratio limit, rather than the exact expectation of a finite-sample ratio. <bookmark "
+            "mark='b'/> But not necessarily in a single study, not for exposures with three or more categories, and "
+            "not when confounders are mismeasured too, as Sander Greenland and others have stressed. <bookmark "
+            "mark='c'/> And a small estimated effect, explained away as dilution, is not evidence that the true "
+            "effect is large. <bookmark mark='d'/> The modern approach, probabilistic bias analysis, puts "
+            "distributions on the error rates and simulates the range of corrected answers."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -172,15 +182,17 @@ class Misclassification(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"misclassified outcomes: \ a disease defined by billing codes, \ a death certificate's cause", font_size=26, color=TAUC),
             label(r"imperfect specificity biases risk ratios toward 1", font_size=26, color=MNC),
-            label(r"perfect specificity with any sensitivity: \ risk ratios unbiased", font_size=26, color=MIC),
+            label(r"perfect specificity and common positive sensitivity preserve population risk ratios", font_size=26, color=MIC),
             label(r"so prefer outcome definitions that are specific, \ even at the cost of missing cases", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Outcomes are misclassified too: a disease defined from billing codes, a cause of death "
-            "from a certificate. <bookmark mark='b'/> If some non-cases are counted as cases, risk ratios are pulled toward "
-            "one. <bookmark mark='c'/> But if the definition is perfectly specific, missing some true cases equally in both "
-            "groups leaves the risk ratio unbiased, because the same fraction of cases is lost from each. <bookmark "
-            "mark='d'/> So in studies of risk, prefer definitions that are specific, even at the cost of missing cases."
+            "<bookmark mark='a'/> Outcomes are misclassified too: a disease defined from billing codes, a cause of "
+            "death from a certificate. <bookmark mark='b'/> If some non-cases are counted as cases, with common "
+            "informative error rates in both groups, population risk ratios are pulled toward one. <bookmark "
+            "mark='c'/> But if the definition is perfectly specific, missing some true cases equally in both groups "
+            "preserves the population risk ratio, because the same fraction of cases is lost from each. <bookmark "
+            "mark='d'/> So in studies of risk, specificity can be especially valuable for a risk-ratio estimand, "
+            "while sensitivity, precision and the study’s purpose still matter."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

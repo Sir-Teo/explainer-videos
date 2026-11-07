@@ -34,13 +34,18 @@ class Weighting(VoiceoverScene):
         rows[2][-1].set_color(IPWC)
         whys = [why(r"the response propensity"), why(r"MAR: $E(R \mid X, Y) = \pi(X)$"), why(r"Hajek's weighted mean"), why(r"Part 18's Horvitz--Thompson")]
         with self.voiceover(
-            "<bookmark mark='a'/> Weighting attacks the problem from the other side. Model the chance of responding given the "
-            "always-observed variables. <bookmark mark='b'/> Under missing at random, weighting each respondent's value by one "
-            "over that chance gives an unbiased estimate of the mean of everyone. <bookmark mark='c'/> The normalized "
-            "version divides by the sum of the weights. <bookmark mark='d'/> Each respondent stands in for one over pi "
-            "people like them: Part eighteen's Horvitz-Thompson estimator, with the response propensity in place of a "
-            "designed inclusion probability."
+            "<bookmark mark='a'/> Weighting attacks the problem from the other side. Model the chance of responding "
+            "given the always-observed variables. <bookmark mark='b'/> Under missing at random, weighting each "
+            "respondent's value by one over that chance with the known true response probability gives an unbiased "
+            "Horvitz-Thompson mean, under positivity and suitable moments. <bookmark mark='c'/> The normalized Hájek "
+            "version divides by the sum of the weights; it and estimators using fitted probabilities generally have "
+            "finite-sample bias but can be consistent. <bookmark mark='d'/> Each respondent stands in for one over pi"
+            " people like them: Part eighteen's Horvitz-Thompson estimator, with the response propensity in place of "
+            "a designed inclusion probability."
         ) as vo:
+            heading = label('Response weighting needs MAR and positive response probabilities', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -81,13 +86,17 @@ class Weighting(VoiceoverScene):
         rows[0][-1].set_color(TAUC)
         whys = [why(r"Robins, \ Rotnitzky \& Zhao (1994)"), why(r"outcome model"), why(r"response model"), why(r"Part 49's efficiency")]
         with self.voiceover(
-            "<bookmark mark='a'/> The augmented estimator of James Robins, Andrea Rotnitzky and Lue Ping Zhao combines both "
-            "approaches: predict everyone's outcome from a regression, then correct the predictions by the weighted residuals "
-            "of the respondents. <bookmark mark='b'/> If the outcome model is right, the correction averages to zero. "
-            "<bookmark mark='c'/> If the response model is right, the correction removes the outcome model's bias. "
-            "<bookmark mark='d'/> Consistent if either is right, double robustness, and when both are right it has the "
-            "smallest variance of its class, a fact Part forty-nine explains."
+            "<bookmark mark='a'/> The augmented estimator of James Robins, Andrea Rotnitzky and Lue Ping Zhao "
+            "combines both approaches: predict everyone's outcome from a regression, then correct the predictions by "
+            "the weighted residuals of the respondents. <bookmark mark='b'/> If the outcome model is right, the "
+            "correction averages to zero. <bookmark mark='c'/> If the response model is right, the correction removes"
+            " the outcome model's bias. <bookmark mark='d'/> Consistent if either is right, double robustness, under "
+            "regularity and suitable nuisance-estimation rates, when both are right it attains the semiparametric "
+            "efficiency bound, a fact Part forty-nine explains."
         ) as vo:
+            heading = label('Double robustness concerns consistency under nuisance conditions', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -110,10 +119,11 @@ class Weighting(VoiceoverScene):
             g.add(row)
         key = label(r"red: \ complete cases; \ green: \ MI; \ purple: \ IPW", font_size=22, color=GREY_A).move_to([0, -2.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> All three methods on the World's three masks. <bookmark mark='b'/> Under the coin, all "
-            "agree with the truth. <bookmark mark='c'/> Under missing at random, multiple imputation and weighting both "
-            "remove the complete cases' bias. <bookmark mark='d'/> Under missing not at random, all three are equally "
-            "wrong. No method that assumes MAR can rescue data that are not."
+            "<bookmark mark='a'/> All three methods on the World's three masks. <bookmark mark='b'/> Under the coin, "
+            "all agree with the truth. <bookmark mark='c'/> Under missing at random, multiple imputation and "
+            "weighting both remove the complete cases' bias. <bookmark mark='d'/> Under missing not at random, all "
+            "three are equally wrong. These implementations do not correct this MNAR mechanism; other identifying "
+            "restrictions or validation information could change what is recoverable."
         ) as vo:
             self.add(missing_tag())
             vo.wait_until("a")
@@ -130,16 +140,17 @@ class Weighting(VoiceoverScene):
                 [r"IPW, \ right response model", f"{d['ipw_right']['est']:.4f}", f"{d['ipw_right']['est'] - d['truth']:+.4f}"],
                 [r"IPW, \ wrong response model", f"{d['ipw_wrong']['est']:.4f}", f"{d['ipw_wrong']['est'] - d['truth']:+.4f}"],
                 [r"AIPW, \ right response, \ wrong outcome", f"{d['aipw_rw']['est']:.4f}", f"{d['aipw_rw']['est'] - d['truth']:+.4f}"],
-                [r"AIPW, \ wrong response, \ right outcome", f"{d['aipw_wr']['est']:.4f}", f"{d['aipw_wr']['est'] - d['truth']:+.4f}"],
+                [r"AIPW, wrong response, rich working outcome", f"{d['aipw_wr']['est']:.4f}", f"{d['aipw_wr']['est'] - d['truth']:+.4f}"],
                 [r"AIPW, \ both wrong", f"{d['aipw_ww']['est']:.4f}", f"{d['aipw_ww']['est'] - d['truth']:+.4f}"]]
         tab = table_rows(rows, font_size=26, col_buff=1.0, row_buff=0.28, colors=[GREY_A, CCC, IPWC, MNC, MIC, MIC, MNC]).move_to([0, 0.6, 0])
-        foot = label(rf"the truth: \ {d['truth']:.4f}; \ either model right is enough", font_size=24, color=TRUEC).move_to([0, -2.3, 0])
+        foot = label(rf"the truth: {d['truth']:.4f}; finite-sample agreement is not proof of nuisance correctness", font_size=24, color=TRUEC).move_to([0, -2.3, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Double robustness in numbers, on the missing-at-random mask. <bookmark mark='b'/> "
             "Weighting with the right response model, which uses age and region, removes the bias; with a wrong one, "
-            "built on BMI, it does not. <bookmark mark='c'/> The augmented estimator is right if either model is: wrong "
-            "outcome with right weights, or right outcome with wrong weights. <bookmark mark='d'/> With both wrong, it "
-            "fails like the rest."
+            "built on BMI, it does not. <bookmark mark='c'/> In this finite example, the rich outcome regression is a"
+            " working approximation, not the simulator’s known exact conditional mean. The double-robustness theorem "
+            "concerns consistency if either nuisance model is correct: wrong outcome with right weights, or right "
+            "outcome with wrong weights. <bookmark mark='d'/> With both wrong, it fails like the rest."
         ) as vo:
             self.add(missing_tag())
             vo.wait_until("a")
@@ -162,11 +173,13 @@ class Weighting(VoiceoverScene):
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Weights cost precision. Here the largest is " + say(d["max_w"], 1) + ", and the "
-            + f"{d['n_obs']:,}" + " respondents are worth about " + f"{d['ess']:,.0f}" + " equally weighted ones. "
-            "<bookmark mark='b'/> With stronger selection, a few respondents can carry enormous weights, and the variance "
-            "explodes. <bookmark mark='c'/> The remedies are those of Part thirty-six: trim or stabilize the weights, check "
-            "overlap, and prefer the augmented estimator. <bookmark mark='d'/> Imputation and weighting assume the same "
-            "thing, missing at random; they differ in which part of the problem they model."
+            + f"{d['n_obs']:,}" + " respondents have a weight-only Kish effective sample size of about " + f"{d['ess']:,.0f}" + " units. This is a diagnostic, not a universal equivalence in outcome precision. <bookmark mark='b'/> "
+            "With stronger selection, a few respondents can carry enormous weights, and the variance explodes. "
+            "<bookmark mark='c'/> The remedies are those of Part thirty-six: check overlap and consider augmentation "
+            "or carefully justified weight modification. Trimming can introduce bias or change the target; "
+            "multiplying all normalized weights by one constant does not fix extreme relative weights. <bookmark "
+            "mark='d'/> Imputation and weighting assume the same thing, missing at random; they differ in which part "
+            "of the problem they model."
         ) as vo:
             self.add(missing_tag())
             for k, m_ in enumerate("abcd"):
@@ -177,10 +190,11 @@ class Weighting(VoiceoverScene):
     def board(self):
         rows = board_rows("AIPW")
         text = (
-            "<bookmark mark='a'/> On the Board, in chapter two's design with three hundred units and strong selection, the "
-            "augmented estimator's interval, from its influence function, covers a little less than promised: the large "
-            "weights make the normal approximation optimistic at this sample size. Unbiased is not the same as well "
-            "calibrated."
+            "<bookmark mark='a'/> On the Board, in chapter two's design with three hundred units and strong "
+            "selection, the augmented estimator's interval, from its influence function, covers a little less than "
+            "promised: the large weights make the normal approximation optimistic at this sample size. Double-robust "
+            "consistency is not a finite-sample unbiasedness or coverage guarantee, and this study does not isolate "
+            "every source of undercoverage."
         )
         show_board(self, rows, text, [("a", [0])])
 
@@ -188,16 +202,18 @@ class Weighting(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"calibration weighting: \ adjust weights so the sample matches known totals", font_size=26, color=IPWC),
             label(r"raking \ (Part 18) \ is one; \ GREG is another", font_size=26, color=None),
-            label(r"it is IPW with a response model implied by the constraints", font_size=26, color=TAUC),
-            label(r"and it is doubly robust in a similar way \ (Deville \& S\"arndal 1992)", font_size=26, color=GREY_A),
+            label(r"suitable calibration equations can imply a response model under stated conditions", font_size=26, color=TAUC),
+            label(r"model-assisted robustness depends on the calibration and response assumptions \ (Deville \& S\"arndal 1992)", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Survey statisticians usually weight differently: they adjust the weights so that the sample "
-            "reproduces known population totals, by age, sex or region. <bookmark mark='b'/> Raking, from Part eighteen, is "
-            "one such calibration, and the generalized regression estimator is another. <bookmark mark='c'/> Calibration is "
-            "inverse probability weighting with a response model implied by the constraints, <bookmark mark='d'/> and Jean-"
-            "Claude Deville and Carl-Erik Särndal showed it enjoys a similar double robustness: right if either the implied "
-            "response model or a linear outcome model holds."
+            "<bookmark mark='a'/> Survey statisticians usually weight differently: they adjust the weights so that "
+            "the sample reproduces known population totals, by age, sex or region. <bookmark mark='b'/> Raking, from "
+            "Part eighteen, is one such calibration, and the generalized regression estimator is another. <bookmark "
+            "mark='c'/> For suitable calibration distances and model classes, calibration equations can be related to"
+            " an implied response model; <bookmark mark='d'/> and Jean-Claude Deville and Carl-Erik Särndal developed"
+            " the calibration framework. Consistency under either an implied response model or a suitable linear "
+            "outcome model needs the relevant design, support and calibration assumptions; arbitrary calibration "
+            "weights are not automatically doubly robust."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -212,12 +228,13 @@ class Weighting(VoiceoverScene):
             label(r"balance on what we see is necessary, \ never sufficient", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Weights should be checked the way Part thirty-six checked propensity scores, by balance. "
-            "<bookmark mark='b'/> After weighting, the respondents should resemble the whole sample on every observed "
-            "variable: age, sex, region. <bookmark mark='c'/> On the World's survey, the weighted respondents' age "
-            "distribution matches the full sample's, while the unweighted one is several years too old. <bookmark "
-            "mark='d'/> Balance on what we see is necessary for the weights to work. It is never sufficient, because the "
-            "assumption that matters is about what we do not see."
+            "<bookmark mark='a'/> Weights should be checked the way Part thirty-six checked propensity scores, by "
+            "balance. <bookmark mark='b'/> After weighting, the respondents should resemble the whole sample on every"
+            " observed variable: age, sex, region. <bookmark mark='c'/> On the World's survey, the weighted "
+            "respondents' age distribution matches the full sample's, while the unweighted one is several years too "
+            "old. <bookmark mark='d'/> Balance is a useful diagnostic; exact finite-sample balance is not necessary "
+            "for every valid estimated-propensity procedure. It is never sufficient, because the assumption that "
+            "matters is about what we do not see."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

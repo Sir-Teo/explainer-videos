@@ -6,7 +6,7 @@ PROBLEMS = [
     r"Show that under MAR with distinct parameters, \ the likelihood factors as $P(R \mid Y_{\text{obs}}, \phi) f(Y_{\text{obs}} \mid \theta)$.",
     r"Bivariate normal, \ $y$ missing when $x > c$: \ show the complete-case slope of $y$ on $x$ is unbiased, \ but the mean of $y$ is not.",
     r"Derive $T = W + (1 + 1/m)B$ from the law of total variance, \ including the $B/m$ term.",
-    r"Show $E[R Y / \pi(X)] = E[Y]$ under MAR, \ and that AIPW is unbiased if either model is right.",
+    r"Show $E[R Y / \pi(X)] = E[Y]$ under MAR, \ and distinguish population unbiasedness with fixed nuisance functions from fitted-estimator consistency.",
     r"Show the OLS slope on $W = X + U$ tends to $\lambda\beta$, \ $\lambda = \sigma_X^2 / (\sigma_X^2 + \sigma_U^2)$.",
     r"With Se + Sp $> 1$, \ show the matrix method recovers the true exposure share exactly in expectation.",
 ]
@@ -38,16 +38,18 @@ class Outro(VoiceoverScene):
         head = label(r"Part 41, \ in twelve lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Part forty-one in twelve lines. <bookmark mark='a'/> Wald armoured the bombers where the survivors had not been "
-            "hit. Rubin's mechanisms decide what can be learned: completely at random, at random, or not at random, and "
-            "under the first two the mechanism can be ignored by likelihood. Complete cases are fine for some questions and "
-            "badly wrong for others. Mean imputation and carrying values forward distort and mislead. EM and full "
-            "information likelihood use everything observed. Multiple imputation draws plausible values, analyses each "
-            "copy, and combines by Rubin's rules, and the imputation model must include the outcome. Weighting by response "
-            "propensities is causal inference, and the augmented estimator is doubly robust. When data are not missing at "
-            "random, model the selection, as Heckman did, or vary the departure and find the tipping point. MRP repairs a "
-            "self-selected poll, given the right cells. Measurement error dilutes slopes, and replicates let us correct "
-            "them. And misclassification, especially when it differs by outcome, can push in either direction."
+            "Part forty-one in twelve lines. <bookmark mark='a'/> Wald armoured the bombers where the survivors had "
+            "not been hit. Rubin's mechanisms decide what can be learned: completely at random, at random, or not at "
+            "random, and under MAR and distinct parameters, likelihood can ignore the mechanism while retaining a "
+            "suitable observed-data model. Complete cases are fine for some questions and badly wrong for others. "
+            "Mean imputation and carrying values forward distort and mislead. EM and full information likelihood use "
+            "everything observed. Multiple imputation draws plausible values, analyses each copy, and combines by "
+            "Rubin's rules, and the imputation model must include the outcome. Weighting by response propensities is "
+            "causal inference, and the augmented estimator is doubly robust. When data are not missing at random, "
+            "model the selection, as Heckman did, or vary the departure and find the tipping point. MRP repairs a "
+            "self-selected poll, given the right cells. Measurement error dilutes slopes, and replicates let us "
+            "correct them. And misclassification, especially when it differs by outcome, can push in either "
+            "direction."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -55,14 +57,15 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def upgrade(self):
-        card = upgrade_card(41, r"IPW and AIPW: \ unbiased under MAR, \ doubly robust",
+        card = upgrade_card(41, r"known-probability HT unbiasedness; fitted AIPW double-robust consistency under conditions",
                             r"that AIPW is the best one can do, \ taken on trust",
                             r"Part 49: \ influence functions and the semiparametric efficiency bound")
         with self.voiceover(
             "<bookmark mark='a'/> A promise for later. This part used weighting and its augmented version. <bookmark "
-            "mark='b'/> We took on trust that the augmented estimator is the most efficient of its kind. <bookmark mark='c'/> "
-            "Part forty-nine proves it, with influence functions and the semiparametric efficiency bound. But first, Part "
-            "forty-two: the comprehensive exam that closes the master's."
+            "mark='b'/> Under regularity and appropriate nuisance fits, we took the augmented estimator’s asymptotic "
+            "efficiency bound on trust. <bookmark mark='c'/> Part forty-nine proves it, with influence functions and "
+            "the semiparametric efficiency bound. But first, Part forty-two: the comprehensive exam that closes the "
+            "master's."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(card[0]), FadeIn(card[1][0]), FadeIn(card[1][1][0]))
@@ -78,6 +81,7 @@ class Outro(VoiceoverScene):
             (r"AIPW's efficiency", [49]), (r"proximal inference: \ unmeasured confounding", [62]),
             (r"privacy noise as measurement error", [63]),
         ], font_size=22)
+        self.add(card.head)
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part forty-two's consulting case begins with missing values. Part "
             "forty-five studies EM's convergence and the information lost to missingness. Part forty-nine proves the "
@@ -85,15 +89,15 @@ class Outro(VoiceoverScene):
             "sixty-three treats the noise added for privacy as deliberate measurement error."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):
         ps = problem_set(PROBLEMS, font_size=20)
         with self.voiceover(
-            "Six problems, with full solutions in the README. <bookmark mark='a'/> Rubin's factorization; complete cases "
-            "selected on x; Rubin's total variance; the unbiasedness of weighting and its double robustness; regression "
-            "dilution; and the matrix method. Pause here if you want to try them."
+            "Six problems, with full solutions in the README. <bookmark mark='a'/> Rubin's factorization; complete "
+            "cases selected on x; Rubin's total variance; the known-probability weighting and double-robust "
+            "consistency; regression dilution; and the matrix method. Pause here if you want to try them."
         ) as vo:
             self.play(FadeIn(ps.head))
             vo.wait_until("a")

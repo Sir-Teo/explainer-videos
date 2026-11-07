@@ -39,6 +39,9 @@ class Mechanisms(VoiceoverScene):
             "treat R itself as random. <bookmark mark='c'/> The missing-data mechanism is the distribution of R given the "
             "data. <bookmark mark='d'/> Everything depends on what R depends on."
         ) as vo:
+            heading = label('The response mask is part of the statistical model', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -55,13 +58,17 @@ class Mechanisms(VoiceoverScene):
         rows[1][-1].set_color(MIC)
         whys = [why(r"completely at random"), why(r"at random, \ given the observed"), why(r"not at random"), why(r"one each")]
         with self.voiceover(
-            "<bookmark mark='a'/> Three answers. Missing completely at random: the mask is a coin, unrelated to anything. "
-            "<bookmark mark='b'/> Missing at random, a misleading name: the chance of being missing may depend on the data, "
-            "but only on parts we observe. <bookmark mark='c'/> Missing not at random: it depends on the missing values "
-            "themselves, so the reason is hidden along with the data. <bookmark mark='d'/> For income on a survey: a form "
-            "lost in the post is completely at random; younger people skipping the question is at random, if age is "
-            "recorded; the well-off refusing to say is not at random."
+            "<bookmark mark='a'/> Three answers. Missing completely at random: the mask is a coin, independent of the"
+            " variables whose missingness is being modelled. <bookmark mark='b'/> Missing at random, a misleading "
+            "name: the chance of being missing may depend on the data, but only on parts we observe. <bookmark "
+            "mark='c'/> Missing not at random: it depends on the missing values themselves, so the reason is hidden "
+            "along with the data. <bookmark mark='d'/> For income on a survey: a form lost in the post is completely "
+            "at random; younger people skipping the question is at random, if age is recorded; the well-off refusing "
+            "to say is not at random."
         ) as vo:
+            heading = label('Missingness mechanisms depend on what is observed', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -137,13 +144,18 @@ class Mechanisms(VoiceoverScene):
         rows[3][-1].set_color(MIC)
         whys = [why(r"the full likelihood"), why(r"it does not involve $Y_{\text{mis}}$"), why(r"it factors"), why(r"Rubin's theorem")]
         with self.voiceover(
-            "<bookmark mark='a'/> Why the distinction matters. The likelihood of what we saw, both the data and the mask, "
-            "integrates over the missing values. <bookmark mark='b'/> Under missing at random, the mechanism depends only "
-            "on observed values, so it comes out of the integral. <bookmark mark='c'/> The likelihood factors into a part "
-            "for the mechanism and the ordinary likelihood of the observed data. <bookmark mark='d'/> If, in addition, the "
-            "two have no parameters in common, we can ignore the mechanism entirely and maximize the observed-data "
-            "likelihood: missingness is ignorable. Under MNAR, the mechanism must be modelled."
+            "<bookmark mark='a'/> Why the distinction matters. The likelihood of what we saw, both the data and the "
+            "mask, integrates over the missing values. <bookmark mark='b'/> Under missing at random, the mechanism "
+            "depends only on observed values, so it comes out of the integral. <bookmark mark='c'/> The likelihood "
+            "factors into a part for the mechanism and the ordinary likelihood of the observed data. <bookmark "
+            "mark='d'/> If, in addition, the their parameters are distinct, with a variation-independent parameter "
+            "space, we can ignore the mechanism entirely and maximize the observed-data likelihood under a correctly "
+            "specified observed-data model. Bayesian ignorability also needs the relevant prior factorization. Under "
+            "MNAR, the mechanism must be modelled."
         ) as vo:
+            heading = label('Likelihood ignorability needs MAR and distinct parameters', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -153,17 +165,19 @@ class Mechanisms(VoiceoverScene):
     def graphs(self):
         rows = fit_rows(VGroup(
             label(r"missingness graphs \ (Mohan \& Pearl 2021): \ draw $R$ as a node in the causal graph", font_size=26, color=TAUC),
-            label(r"MCAR: \ no arrows into $R$; \ MAR: \ arrows only from observed variables", font_size=26),
+            label(r"simple sufficient graph examples; hidden common causes also matter", font_size=26),
             label(r"some MNAR graphs still allow consistent estimates of some quantities", font_size=26, color=MIC),
             label(r"and the graph says which assumption each method needs", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Karthika Mohan and Judea Pearl draw the mechanism as part of a causal graph, with the "
-            "response indicator as a node. <bookmark mark='b'/> Completely at random means no arrows into it; at random, "
-            "arrows only from variables that are always observed. <bookmark mark='c'/> Graphs show that some MNAR "
-            "situations still allow some quantities, such as a regression of y on x, to be estimated consistently, "
-            "<bookmark mark='d'/> and they make explicit which assumption each method rests on: Part thirty-six's "
-            "back-door reasoning applied to the mask."
+            "<bookmark mark='a'/> Karthika Mohan and Judea Pearl draw the mechanism as part of a causal graph, with "
+            "the response indicator as a node. <bookmark mark='b'/> In a simple graph without hidden common causes, "
+            "no data-variable arrows into the response indicator is sufficient for completely at random; arrows only "
+            "from always-observed variables can represent missing at random. General missingness graphs require more "
+            "care than these sufficient examples. <bookmark mark='c'/> Graphs show that some MNAR situations still "
+            "allow some quantities, such as a regression of y on x, to be estimated consistently, <bookmark "
+            "mark='d'/> and they make explicit which assumption each method rests on: Part thirty-six's back-door "
+            "reasoning applied to the mask."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -172,18 +186,19 @@ class Mechanisms(VoiceoverScene):
 
     def untestable(self):
         rows = fit_rows(VGroup(
-            label(r"MCAR is testable: \ compare the missing and the observed on what we see \ (Little 1988)", font_size=26, color=OBSV),
+            label(r"MCAR has testable implications; failure to reject does not prove it (Little 1988)", font_size=26, color=OBSV),
             label(r"MAR versus MNAR is not: \ every MNAR model has a MAR twin that fits the data equally well", font_size=26, color=MNC),
             label(r"so: \ argue MAR from how the data were collected, \ and test how much it matters", font_size=26, color=TAUC),
             label(r"chapter 6: \ sensitivity analysis and tipping points", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Which mechanism holds? Completely at random can be tested: if the missing differ from the "
-            "observed on things we see, as with age here, it is false. Roderick Little gave the standard test in 1988. "
-            "<bookmark mark='b'/> But missing at random against not at random cannot be tested: for every MNAR model there "
-            "is a MAR model that fits the observed data exactly as well, as Geert Molenberghs, Michael Kenward and colleagues proved in 2008. "
-            "<bookmark mark='c'/> So MAR is argued from how the data were collected, and its importance is measured by "
-            "sensitivity analysis, <bookmark mark='d'/> the subject of chapter six."
+            "<bookmark mark='a'/> Which mechanism holds? Completely at random can be tested: systematic differences "
+            "on observed variables can contradict it, allowing for sampling variation and the test’s modelling "
+            "assumptions. Failure to reject does not establish MCAR. Roderick Little gave the standard test in 1988. "
+            "<bookmark mark='b'/> But missing at random against not at random cannot be tested: for every MNAR model "
+            "there is a MAR model that fits the observed data exactly as well, as Geert Molenberghs, Michael Kenward "
+            "and colleagues proved in 2008. <bookmark mark='c'/> So MAR is argued from how the data were collected, "
+            "and its importance is measured by sensitivity analysis, <bookmark mark='d'/> the subject of chapter six."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

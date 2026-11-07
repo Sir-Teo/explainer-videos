@@ -31,19 +31,23 @@ class Measurement(VoiceoverScene):
         rows = [
             cmath(r"W", r"=", r"X + U, \ \ U \perp X, \ \ E\,U = 0", font_size=32),
             cmath(r"\text{reliability}", r":", r"\lambda = \sigma_X^2 / (\sigma_X^2 + \sigma_U^2)", font_size=32),
-            cmath(r"\text{corr}(W_1, W_2)", r"=", r"\lambda \ \ \text{for two replicates}", font_size=32),
+            cmath(r"\text{corr}(W_1, W_2)", r"=", r"\lambda\quad\text{for independent equal-variance classical replicates}", font_size=32),
             cmath(r"r_{XY}", r"=", r"r_{WY} / \sqrt{\lambda}: \ \text{Spearman's correction}", font_size=32),
         ]
         rows[3][-1].set_color(TAUC)
         whys = [why(r"classical error"), why(r"the signal's share"), why(r"measure twice"), why(r"Spearman (1904)")]
         with self.voiceover(
-            "<bookmark mark='a'/> The classical model of measurement error: what we record is the truth plus independent "
-            "noise. <bookmark mark='b'/> The reliability is the share of the recorded variance that is signal. <bookmark "
-            "mark='c'/> Measure the same thing twice, with independent errors, and the correlation between the two "
-            "measurements is the reliability. <bookmark mark='d'/> Charles Spearman, in 1904, used this to correct "
-            "correlations between mental test scores: divide by the square root of the reliability, the correction for "
-            "attenuation."
+            "<bookmark mark='a'/> The classical model of measurement error: what we record is the truth plus "
+            "independent noise. <bookmark mark='b'/> The reliability is the share of the recorded variance that is "
+            "signal. <bookmark mark='c'/> Measure the same thing twice, with mutually independent, mean-zero "
+            "classical errors of equal variance, and their population correlation equals the common reliability. "
+            "Unequal error variances give the geometric mean of the two reliabilities instead. <bookmark mark='d'/> "
+            "Charles Spearman, in 1904, used this to correct correlations between mental test scores: divide by the "
+            "square root of the reliability, the correction for attenuation."
         ) as vo:
+            heading = label('Replicate reliability needs classical-error assumptions', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -58,14 +62,18 @@ class Measurement(VoiceoverScene):
             cmath(r"\text{error in } Y", r":", r"\text{no bias, \ only noise}", font_size=30),
         ]
         rows[1][-1].set_color(MNC)
-        whys = [why(r"the truth"), why(r"regression dilution"), why(r"adjustment makes it worse"), why(r"an asymmetry")]
+        whys = [why(r"the truth"), why(r"regression dilution"), why(r"classical error and error-free adjustment covariates"), why(r"an asymmetry")]
         with self.voiceover(
-            "<bookmark mark='a'/> In a regression on the true exposure, <bookmark mark='b'/> replacing it by an error-prone "
-            "measurement shrinks the slope by the reliability: regression dilution. A reliability of one half halves the "
-            "estimated effect. <bookmark mark='c'/> Adjusting for other covariates makes it worse, because the reliability "
-            "that matters is the error-prone variable's, given the others. <bookmark mark='d'/> Classical error in the "
-            "outcome, by contrast, adds noise but no bias."
+            "<bookmark mark='a'/> In a regression on the true exposure, <bookmark mark='b'/> replacing it by an "
+            "error-prone measurement shrinks the slope by the reliability: regression dilution. A reliability of one "
+            "half halves the estimated effect. <bookmark mark='c'/> With error-free covariates and classical error "
+            "independent of them, the relevant attenuation can be stronger after adjustment, because the reliability "
+            "that matters is the error-prone variable's, given the others. <bookmark mark='d'/> Classical error in "
+            "the outcome, by contrast, adds noise but no bias."
         ) as vo:
+            heading = label('Classical measurement error attenuates a simple linear slope', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -78,12 +86,15 @@ class Measurement(VoiceoverScene):
         x = g.normal(0, 1, n)
         y = 2 * x + g.normal(0, 1, n)
         w = x + g.normal(0, 1, n)
-        A = axes([-4, 4], [-7, 7], x_length=6.4, y_length=4.4, xlabel=r"exposure", ylabel=r"outcome",
+        lower_x = float(np.floor(min(x.min(), w.min())))
+        upper_x = float(np.ceil(max(x.max(), w.max())))
+        lower_y = float(np.floor(min(y.min(), -7.)))
+        upper_y = float(np.ceil(max(y.max(), 7.)))
+        A = axes([lower_x, upper_x], [lower_y, upper_y], x_length=6.4, y_length=4.4, xlabel=r"exposure", ylabel=r"outcome",
                  xticks=[-4, -2, 0, 2, 4], yticks=[-6, -3, 0, 3, 6], xfmt=lambda v: f"{v:g}", yfmt=lambda v: f"{v:g}", center=[-2.6, 0.1, 0])
         ax = A.ax
-        clip = lambda v, a: np.clip(v, -a, a)  # noqa: E731
-        s1 = scatter(ax, clip(x, 3.9), clip(y, 6.9), OBSV, 0.045)
-        s2 = scatter(ax, clip(w, 3.9), clip(y, 6.9), MNC, 0.045)
+        s1 = scatter(ax, x, y, OBSV, 0.045)
+        s2 = scatter(ax, w, y, MNC, 0.045)
         b1 = np.polyfit(x, y, 1)
         b2 = np.polyfit(w, y, 1)
         l1 = Line(ax.c2p(-3.4, np.polyval(b1, -3.4)), ax.c2p(3.4, np.polyval(b1, 3.4)), color=OBSV, stroke_width=4)
@@ -111,18 +122,20 @@ class Measurement(VoiceoverScene):
     def nhanes(self):
         d = load("meas")
         rows = fit_rows(VGroup(
-            label(rf"NHANES 2017--18: \ {d['n']:,} adults off blood-pressure drugs, \ two 24-hour sodium recalls", font_size=26),
-            label(rf"correlation of the two days' sodium: \ {d['rel']:.2f}: \ one recall is mostly day-to-day noise", font_size=26, color=MNC),
+            label(rf"NHANES 2017--18: \ {d['n']:,} adults not recorded as taking prescribed antihypertensives, \ two 24-hour sodium recalls", font_size=26),
+            label(rf"correlation of the two days' sodium: \ {d['rel']:.2f}: \ low repeatability; classical independent errors are a working assumption", font_size=26, color=MNC),
             label(rf"systolic pressure on one day's sodium \ (age, \ sex adjusted): \ {d['naive']['b']:.2f} mm Hg per g \ (SE {d['naive']['se']:.2f})", font_size=26, color=MNC),
             label(rf"on the two-day mean: \ {d['mean2']['b']:.2f} \ (SE {d['mean2']['se']:.2f}): \ larger, \ as dilution predicts", font_size=26, color=OBSV),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Part twenty's real example. NHANES asks about everything eaten in the past twenty-four "
             "hours, twice, on different days. <bookmark mark='b'/> The two days' sodium intakes correlate only "
-            + say(d["rel"], 2) + ": a single recall is mostly day-to-day variation around a person's usual intake, which "
-            "is what matters for blood pressure. <bookmark mark='c'/> Regressing systolic pressure on one day's sodium gives "
-            + say(d["naive"]["b"], 2) + " millimetres of mercury per gram, indistinguishable from zero. <bookmark "
-            "mark='d'/> On the average of two days, the slope roughly doubles, exactly as dilution predicts."
+            + say(d["rel"], 2) + ": low repeatability is consistent with substantial day-to-day variation and reporting error, but does "
+            "not establish an independent classical-error model for usual intake, which is what matters for blood "
+            "pressure. <bookmark mark='c'/> Regressing systolic pressure on one day's sodium gives "
+            + say(d["naive"]["b"], 2) + " millimetres of mercury per gram, indistinguishable from zero. <bookmark mark='d'/> On the average of "
+            "two days, the slope roughly doubles, consistent with less dilution, though these unweighted "
+            "complete-case associations do not identify a causal sodium effect."
         ) as vo:
             self.add(nhanes_tag())
             for k, m_ in enumerate("abcd"):
@@ -136,19 +149,23 @@ class Measurement(VoiceoverScene):
             cmath(r"E[X \mid W_1, Z]", r"=", r"E[W_2 \mid W_1, Z]: \ \text{regress the second recall on the first}", font_size=28),
             cmath(r"\text{then}", r":", r"\text{replace } W_1 \text{ by its prediction, \ and refit}", font_size=30),
             cmath(r"\text{NHANES}", r":", rf"\hat\lambda = {d['rc']['lam']:.2f}, \ \ \hat\beta_{{\text{{RC}}}} = {d['rc']['b']:.2f} \text{{ mm Hg per g}}", font_size=30),
-            cmath(r"\text{SEs}", r":", r"\text{bootstrap both stages together}", font_size=30),
+            cmath(r"\text{SEs}", r":", r"\text{joint bootstrap or analytic two-stage uncertainty}", font_size=30),
         ]
         rows[2][-1].set_color(MIC)
         whys = [why(r"replicates as instruments"), why(r"regression calibration"), why(r"Carroll et al.\ (2006)"), why(r"the calibration is estimated too")]
         with self.voiceover(
-            "<bookmark mark='a'/> Regression calibration replaces the error-prone exposure by its best prediction of the "
-            "truth. With a replicate, that prediction comes from regressing the second recall on the first and the "
-            "covariates, because the second day's error is independent of everything else. <bookmark mark='b'/> Then refit "
-            "with the prediction in place of the raw value. <bookmark mark='c'/> In NHANES the attenuation factor given age "
-            "and sex is " + say(d["rc"]["lam"], 2) + ", and the corrected slope is " + say(d["rc"]["b"], 2) + " millimetres per "
-            "gram, still uncertain but four times the naive one. <bookmark mark='d'/> Its standard error must come from "
-            "bootstrapping both stages, because the calibration is itself estimated."
+            "<bookmark mark='a'/> Regression calibration replaces the error-prone exposure by its best prediction of "
+            "the truth. With a replicate, that prediction comes from regressing the second recall on the first and "
+            "the covariates, under the assumption that the second error has conditional mean zero given the true "
+            "exposure, the first measurement and covariates. Shared reporting bias can violate it. <bookmark "
+            "mark='b'/> Then refit with the prediction in place of the raw value. <bookmark mark='c'/> In NHANES the "
+            "attenuation factor given age and sex is " + say(d["rc"]["lam"], 2) + ", and the corrected slope is " + say(d["rc"]["b"], 2) + " millimetres per gram, still uncertain but four times the naive one. <bookmark mark='d'/> Its "
+            "uncertainty must account for both stages, by a joint bootstrap or an appropriate analytic calculation, "
+            "because the calibration is itself estimated."
         ) as vo:
+            heading = label('Regression calibration needs valid replicate-error assumptions', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -171,6 +188,9 @@ class Measurement(VoiceoverScene):
             "lambda equal minus one, where the total error variance would be zero. <bookmark mark='d'/> It needs the error "
             "variance, again from replicates, and a guess at the curve's shape, usually a quadratic."
         ) as vo:
+            heading = label('SIMEX extrapolates beyond the simulated error levels', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -194,7 +214,7 @@ class Measurement(VoiceoverScene):
             label(rf"orange: \ the slope at each $\lambda$ \ ($\lambda = 0$: \ naive {d['naive']:.2f})", font_size=22, color=MNC),
             label(rf"gold: \ the quadratic, \ extrapolated to $-1$: \ {s['simex']:.2f}", font_size=22, color=TAUC),
             label(rf"regression calibration: \ {d['rc']:.2f}", font_size=22, color=MIC),
-            label(r"SIMEX's quadratic undershoots when $\lambda$ is small", font_size=22, color=GREY_A),
+            label(r"SIMEX's quadratic can undershoot at low reliability", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
             "<bookmark mark='a'/> A seeded check with twenty thousand people, a true slope of two and a reliability of "
@@ -226,12 +246,14 @@ class Measurement(VoiceoverScene):
             label(r"Bayesian measurement-error models: \ the truth as a latent variable \ (Part 26)", font_size=26, color=TAUC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Not all error is classical. In Berkson error, the recorded value is fixed, a dose of "
-            "radiation assigned to a district, and each person's true exposure scatters around it; a linear slope is then "
-            "unbiased. <bookmark mark='b'/> Errors correlated with the truth, or different for cases and controls, can bias "
-            "in either direction. <bookmark mark='c'/> With several mismeasured covariates, a confounder measured badly "
-            "leaves residual confounding, and signs can flip. <bookmark mark='d'/> The general solution treats the true "
-            "values as latent variables in a Bayesian model, Part twenty-six's tools."
+            "<bookmark mark='a'/> Not all error is classical. In Berkson error, the recorded value is fixed, a dose "
+            "of radiation assigned to a district, and each person's true exposure scatters around it; a correctly "
+            "specified exogenous linear slope remains unbiased when the Berkson deviation has conditional mean zero "
+            "given the recorded exposure. <bookmark mark='b'/> Errors correlated with the truth, or different for "
+            "cases and controls, can bias in either direction. <bookmark mark='c'/> With several mismeasured "
+            "covariates, a confounder measured badly leaves residual confounding, and signs can flip. <bookmark "
+            "mark='d'/> A broader modelling approach treats true values as latent variables, but identification still"
+            " needs validation information or defensible restrictions and priors: Part twenty-six's tools."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -246,11 +268,12 @@ class Measurement(VoiceoverScene):
             label(r"a validation study is to measurement error \ what follow-up is to missing data", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The consequence most often forgotten: adjusting for a confounder measured with error "
-            "removes only part of its confounding. <bookmark mark='b'/> Propensity scores built from noisy covariates "
-            "inherit the problem. <bookmark mark='c'/> So measure key exposures and confounders twice, at least on a "
-            "subsample, <bookmark mark='d'/> because a validation study is to measurement error what a follow-up of "
-            "non-respondents is to missing data: the only real information about the mechanism."
+            "<bookmark mark='a'/> The consequence most often forgotten: adjusting for a confounder measured with "
+            "error removes only part of its confounding. <bookmark mark='b'/> Propensity scores built from noisy "
+            "covariates inherit the problem. <bookmark mark='c'/> So measure key exposures and confounders twice, at "
+            "least on a subsample, <bookmark mark='d'/> because a validation study is to measurement error what a "
+            "follow-up of non-respondents is to missing data: a direct source of information about the mechanism, "
+            "alongside replicates and other defensible identifying information."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -271,18 +294,24 @@ class Measurement(VoiceoverScene):
             cmath(r"W_2", r":", r"\text{a second, \ independent measurement of } X", font_size=30),
             cmath(r"\hat\beta_{\text{IV}}", r"=", r"\text{Cov}(W_2, Y) / \text{Cov}(W_2, W_1)", font_size=32),
             cmath(r"\text{why}", r":", r"W_2\text{'s error is independent of } W_1\text{'s and of } Y", font_size=30),
-            cmath(r"\text{same answer}", r":", r"\text{as regression calibration, \ in the linear model}", font_size=30),
+            cmath(r"\text{same population target}", r":", r"\text{under classical linear assumptions; finite-sample estimates differ}", font_size=30),
         ]
         rows[1][-1].set_color(TAUC)
         whys = [why(r"a replicate"), why(r"Part 37's instrument"), why(r"exclusion"), why(r"two views of one idea")]
         with self.voiceover(
-            "<bookmark mark='a'/> A replicate can also serve as an instrument, in the sense of Part thirty-seven. <bookmark "
-            "mark='b'/> The slope of y on the first measurement, instrumented by the second, is the covariance of the second "
-            "with y over its covariance with the first. <bookmark mark='c'/> It works because the second measurement's "
-            "error is independent of the first's and of the outcome, an exclusion restriction that holds by design. "
-            "<bookmark mark='d'/> In the linear model this gives the same answer as regression calibration, two views of one "
-            "idea."
+            "<bookmark mark='a'/> A replicate can also serve as an instrument, in the sense of Part thirty-seven. "
+            "<bookmark mark='b'/> The slope of y on the first measurement, instrumented by the second, is the "
+            "covariance of the second with y over its covariance with the first. <bookmark mark='c'/> It works "
+            "because the second measurement's error is independent of the first's and of the outcome, an exclusion "
+            "assumption that must be justified; routine repeat dietary recalls do not guarantee it. <bookmark "
+            "mark='d'/> In the linear model the two can target the same population slope under classical-error "
+            "assumptions, but they generally differ in finite samples. Calibration uses covariance of W one with Y "
+            "divided by covariance of the replicates, while this IV estimator uses covariance of W two with Y in the "
+            "numerator: two views of one idea."
         ) as vo:
+            heading = label('Replicate IV and calibration can share a population target', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -307,6 +336,9 @@ class Measurement(VoiceoverScene):
             "mark='d'/> Without knowing the ratio, the slope is not identified for normal data at all, as Olav Reiersøl "
             "proved in 1950."
         ) as vo:
+            heading = label('Errors-in-variables identification needs additional information', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

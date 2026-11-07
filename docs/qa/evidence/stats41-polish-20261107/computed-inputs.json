@@ -1,0 +1,62 @@
+[
+  {
+    "item": "wald",
+    "path": ".cache/stats41/wald.json",
+    "sha256": "3540b4d16ea87717997a40fc4b9da0138113c599cc79587dc13fc190c623637a"
+  },
+  {
+    "item": "mech",
+    "path": ".cache/stats41/mech.json",
+    "sha256": "fc92b9a128dc25586a1b2251608c6ec2b8d2127c40e638a4603374b36bd9ac17"
+  },
+  {
+    "item": "sins",
+    "path": ".cache/stats41/sins.json",
+    "sha256": "7a7cc51a9235480978eac1f2bd6228b3f1605fc7d12f44db8642016e9f9b3432"
+  },
+  {
+    "item": "em",
+    "path": ".cache/stats41/em.json",
+    "sha256": "26e8bfd96d3333f934386e39081bdd3a92606b2e48678766c259483911395e42"
+  },
+  {
+    "item": "mice",
+    "path": ".cache/stats41/mice.json",
+    "sha256": "cf038268ca9cf6d1a50a36d65668f83fdc6a2e0236508550894815ec511c8f26"
+  },
+  {
+    "item": "weight",
+    "path": ".cache/stats41/weight.json",
+    "sha256": "966fbc3874b3fb2d100f9111da8da105f863220d17eeba9572bc6012542efe00"
+  },
+  {
+    "item": "heckman",
+    "path": ".cache/stats41/heckman.json",
+    "sha256": "4d340d4397857d9c7616c9e73e18a8a60249448fe5e6953d41f1736482a61f91"
+  },
+  {
+    "item": "tipping",
+    "path": ".cache/stats41/tipping.json",
+    "sha256": "ffac07161a796d8d584dfae2b5585b920e5468df397c0d952b839ea1b48c5366"
+  },
+  {
+    "item": "mrp",
+    "path": ".cache/stats41/mrp.json",
+    "sha256": "9de25f28a98451daea550c3683ad8ca120d45b4e13d530bb56026ef8a59c55be"
+  },
+  {
+    "item": "meas",
+    "path": ".cache/stats41/meas.json",
+    "sha256": "2270731bc01e9c534df4e07dacbeca0df9c73793c9b76e8b4021558559d500cd"
+  },
+  {
+    "item": "misclass",
+    "path": ".cache/stats41/misclass.json",
+    "sha256": "0ed9d305a7e6209c024bfa3c38f1fad57d4104138dd756617c13a96835091c80"
+  },
+  {
+    "item": "board",
+    "path": ".cache/stats41/board.json",
+    "sha256": "a02cda582870e10a7f01f0ff30f51d75fffd7bf8fb2cb5a3cf63ec7bbc2f6fa9"
+  }
+]
