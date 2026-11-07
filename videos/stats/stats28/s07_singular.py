@@ -230,6 +230,7 @@ class Singular(VoiceoverScene):
         tb = table_rows([hdr] + body, font_size=24, col_buff=0.7, row_buff=0.3, colors=[GREY_A, AICC, LOOC, None, None])
         for r in tb[1:]:
             r[3].set_color(LOOC)
+        if tb.width>13.:tb.width=13.
         tb.move_to([0, 0.8, 0])
         foot = fit_rows(VGroup(
             label(r"$\lambda$ depends on the true distribution, \ not only on the model", font_size=22),
