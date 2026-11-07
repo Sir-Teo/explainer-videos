@@ -70,13 +70,14 @@ class Outro(LectureMixin, VoiceoverScene):
             (r"transporting effects across populations", [62]), (r"fair scores by barycenters", [63]),
             (r"generative models and their generalization", [64]), (r"the dissertation's comparisons of distributions", [65]),
         ], font_size=22)
+        self.play(FadeIn(card.head))
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part sixty-two's transport of causal effects across populations. "
             "Part sixty-three's fair scores, by mapping groups onto their barycenter. Part sixty-four's generative models and "
             "the question of whether they generalize. And the dissertation's comparisons of distributions."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):

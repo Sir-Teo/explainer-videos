@@ -74,6 +74,7 @@ class Outro(VoiceoverScene):
             (r"debiased inference in high dimensions", [52]), (r"double robustness under shift", [60]),
             (r"proximal inference, \ policy learning, \ efficient frontiers", [62]),
         ], font_size=22)
+        self.play(FadeIn(card.head))
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part fifty finds minimax rates when root n is impossible. Part "
             "fifty-three asks when Bayesian posteriors for semiparametric models are efficient. Part fifty-two uses the same "
@@ -82,7 +83,7 @@ class Outro(VoiceoverScene):
             "efficient influence functions."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):

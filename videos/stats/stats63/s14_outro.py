@@ -78,13 +78,14 @@ class Outro(LectureMixin, VoiceoverScene):
             (r"membership attacks and benchmark contamination", [64]), (r"labels from models, \ and fairness of judges", [64]),
             (r"the dissertation's ethics and data chapter", [65]),
         ], font_size=22)
+        self.play(FadeIn(card.head))
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part sixty-four's test sets that leak into training data, the same "
             "membership question asked of benchmarks; its labels produced by models, whose errors may differ by group; and "
             "the dissertation's chapter on its data, and who they describe."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=5.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=5.0)
         self.clear_scene()
 
     def problems(self):
