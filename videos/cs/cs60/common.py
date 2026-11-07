@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import math  # noqa: F401
+
 from explainer.cs import *  # noqa: F403
 from videos.cs.cs7.common import mono  # noqa: F401
 from videos.cs.cs8.common import bar_chart, grid_table  # noqa: F401
@@ -109,3 +111,60 @@ class SystolicView(VGroup):
             qa, qb = self._queues(t)
             anims += [Transform(self.qa, qa), Transform(self.qb, qb)]
         return anims
+
+
+# ---- spoken numbers and a log-log plot, shared by the TPU, GPU and memory chapters
+
+def say_int(n: int) -> str:
+    """An integer below a million as a speaker says it (British: 'one hundred and five')."""
+    if n < 20:
+        return _ONES[n]
+    if n < 100:
+        return _TENS[n // 10] + ("" if n % 10 == 0 else "-" + _ONES[n % 10])
+    if n < 1000:
+        rest = n % 100
+        return _ONES[n // 100] + " hundred" + ("" if rest == 0 else " and " + say_int(rest))
+    rest = n % 1000
+    return say_int(n // 1000) + " thousand" + ("" if rest == 0 else (" and " if rest < 100 else " ") + say_int(rest))
+
+
+def say_dec(x: float, digits: int = 1) -> str:
+    """x with ``digits`` decimals, spoken digit by digit after the point."""
+    s = f"{x:.{digits}f}"
+    whole, frac = s.split(".")
+    return say_int(int(whole)) + " point " + " ".join(_ONES[int(c)] for c in frac)
+
+
+FRACTION = {8: "an eighth", 9: "a ninth", 10: "a tenth", 11: "an eleventh", 12: "a twelfth", 16: "a sixteenth",
+            17: "a seventeenth", 18: "an eighteenth", 19: "a nineteenth", 20: "a twentieth"}
+
+
+def commas(n: int) -> str:
+    return f"{n:,}".replace(",", "{,}")
+
+
+class LogPlot(VGroup):
+    """Log-log axes: x from 10^x0 to 10^x1, y from 10^y0 to 10^y1, with power-of-ten tick labels."""
+
+    def __init__(self, x0, x1, y0, y1, xlab, ylab, x_length=6.4, y_length=4.2, yfmt=None):
+        super().__init__()
+        self.x0, self.y0 = x0, y0
+        self.ax = Axes(x_range=[0, x1 - x0, 1], y_range=[0, y1 - y0, 1], x_length=x_length, y_length=y_length,
+                       tips=False, axis_config={"color": GREY_D, "include_ticks": False})
+        lx = VGroup(*[label(rf"$10^{{{p}}}$", font_size=16, color=GREY_B).next_to(self.c2p(p, y0), DOWN, buff=0.12)
+                      for p in range(x0, x1 + 1)])
+        ly = VGroup(*[label(yfmt(p) if yfmt else rf"$10^{{{p}}}$", font_size=16, color=GREY_B).next_to(
+            self.c2p(x0, p), LEFT, buff=0.12) for p in range(y0, y1 + 1)])
+        xl = label(xlab, font_size=18, color=GREY_A).next_to(lx, DOWN, buff=0.12)
+        yl = label(ylab, font_size=18, color=GREY_A).next_to(self.ax, UP, buff=0.12).align_to(self.ax, LEFT)
+        self.add(self.ax, lx, ly, xl, yl)
+
+    def c2p(self, u, v):
+        return self.ax.c2p(u - self.x0, v - self.y0)
+
+    def roof(self, peak, bw, color, width=4):
+        """The roof min(peak, I bw) in log units: peak in ops/s, bw in bytes/s."""
+        x0, x1 = self.x0, self.x0 + self.ax.x_range[1]
+        lr = math.log10(peak / bw)
+        pts = [self.c2p(x0, x0 + math.log10(bw)), self.c2p(lr, math.log10(peak)), self.c2p(x1, math.log10(peak))]
+        return VMobject(color=color, stroke_width=width).set_points_as_corners(pts)
