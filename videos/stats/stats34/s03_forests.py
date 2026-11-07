@@ -324,6 +324,9 @@ class Forests(VoiceoverScene):
 
     def ij_chart(self, d, lo_y, hi_y):
         first = d["first"][:20]
+        lo_y = min(lo_y, min(f["pred"] - 1.645 * f["se"] for f in first) - 0.4)
+        hi_y = max(hi_y, max(f["pred"] + 1.645 * f["se"] for f in first) + 0.4)
+
         A = axes([0, 21], [lo_y, hi_y], x_length=7.4, y_length=4.4, xlabel=r"training set", ylabel=r"$\hat f(x_0)$",
                  xticks=[1, 10, 20], yticks=[lo_y, round(d["Ef"]), round(d["mu0"])], center=[-2.0, 0.2, 0])
         ax = A.ax
@@ -343,7 +346,7 @@ class Forests(VoiceoverScene):
         side = fit_rows(VGroup(
             label(r"a peak of Friedman's surface", font_size=22),
             label(rf"truth $\mu(x_0) = {d['mu0']:.1f}$", font_size=22, color=TRUEC),
-            label(rf"independent pilot mean $\mathrm{{E}}\hat f(x_0) = {d['Ef']:.1f}$", font_size=22, color=TREEC),
+            label(rf"pilot mean {d['Ef']:.1f}; \ MC SE {d['Ef_pilot_se']:.2f}", font_size=22, color=TREEC),
             label(rf"covers pilot mean: \ only {100 * d['cov_E']:.0f}\%", font_size=22, color=MISSC),
             label(rf"mean SE {d['mean_se']:.2f}; \ sampling SD estimate {d['sd_pred']:.2f}", font_size=22, color=CALC),
         ), 4.2, 0.4, [4.6, 0.3, 0])
@@ -380,7 +383,7 @@ class Forests(VoiceoverScene):
             label(rf"each tree: \ {d['s']} of the 250 points, \ no replacement", font_size=22),
             label(rf"{d['B']:,} trees; \ the subsampling IJ", font_size=22, color=TREEC),
             label(rf"covers pilot mean: \ {100 * d['cov_E']:.0f}\%", font_size=22, color=BANDC),
-            label(rf"but $\mathrm{{E}}\hat f = {d['Ef']:.1f}$: \ covers $\mu$ {100 * d['cov_mu']:.0f}\%", font_size=22, color=MISSC),
+            label(rf"pilot mean {d['Ef']:.1f} (MC SE {d['Ef_pilot_se']:.2f}); \ covers $\mu$: {100 * d['cov_mu']:.0f}\%", font_size=22, color=MISSC),
         ), 4.2, 0.42, [4.6, 0.3, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Wager and Athey's remedy is to grow each tree on a small subsample drawn without "

@@ -185,8 +185,8 @@ class Shift(VoiceoverScene):
     def stream(self):
         d = load("aci")
         t = np.asarray(d["scores_t"], float)
-        s = np.minimum(np.asarray(d["scores"], float), 10)
-        A = axes([0, 3000], [0, 10], x_length=11.0, y_length=3.6, xlabel=r"time $t$", ylabel=r"score $|y_t - \hat\mu_t|$",
+        s = np.asarray(d["scores"], float)
+        A = axes([0, 3000], [0, max(10,float(s.max())*1.05)], x_length=11.0, y_length=3.6, xlabel=r"time $t$", ylabel=r"score $|y_t - \hat\mu_t|$",
                  xticks=[0, 1000, 2000, 3000], yticks=[0, 5, 10], center=[0, 0.4, 0])
         ax = A.ax
         dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.015, color=LABC, fill_opacity=0.6) for a, b in zip(t, s)])
@@ -246,12 +246,12 @@ class Shift(VoiceoverScene):
     def aci_chart(self):
         d = load("aci")
         rt = np.asarray(d["roll_t"], float)
-        A = axes([0, 3000], [0.3, 1.0], x_length=11.0, y_length=3.8, xlabel=r"time $t$", ylabel=r"coverage, \ last 100",
+        A = axes([0, 3000], [0, 1.0], x_length=11.0, y_length=3.8, xlabel=r"time $t$", ylabel=r"coverage, \ last 100",
                  xticks=[0, 1000, 2000, 3000], yticks=[0.4, 0.6, 0.8, 0.9, 1.0], yfmt=lambda v: rf"{100 * v:.0f}\%",
                  center=[0, 0.5, 0])
         ax = A.ax
-        st = polyline(ax, rt, np.clip(d["roll_static"], 0.3, 1.0), MISSC, 2.5)
-        ac = polyline(ax, rt, np.clip(d["roll_aci"], 0.3, 1.0), BANDC, 3)
+        st = polyline(ax, rt, d["roll_static"], MISSC, 2.5)
+        ac = polyline(ax, rt, d["roll_aci"], BANDC, 3)
         nine = DashedLine(ax.c2p(0, 0.9), ax.c2p(3000, 0.9), color=CALC, stroke_width=2)
         foot = fit_rows(VGroup(
             label(rf"static: \ {100 * d['static_cover']:.1f}\% overall, \ {100 * d['static_mid']:.0f}\% in the storm", font_size=22, color=MISSC),

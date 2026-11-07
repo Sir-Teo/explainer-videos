@@ -213,7 +213,7 @@ class Split(VoiceoverScene):
                  center=[-2.0, 0.2, 0])
         ax = A.ax
         cols = {"19": MISSC, "99": PREDC, "999": BANDC}
-        cs = {k: clip_curve(ax, v["xs"], np.minimum(v["pdf"], 50), cols[k], 3) for k, v in bt.items()}
+        cs = {k: clip_curve(ax, v["xs"], v["pdf"], cols[k], 3) for k, v in bt.items()}
         nine = DashedLine(ax.c2p(0.9, 0), ax.c2p(0.9, 50), color=CALC, stroke_width=2)
         side = fit_rows(VGroup(
             label(r"$F(\hat q) \sim \mathrm{Beta}(k, \, n + 1 - k)$", font_size=22, color=CALC),
@@ -253,7 +253,7 @@ class Split(VoiceoverScene):
         mean = polyline(ax, ages[ok], m[ok], PREDC, 3.5)
         bd = band(ax, ages[ok], np.maximum(m[ok] - q, 0), np.minimum(m[ok] + q, 250), BANDC, 0.25)
         side = fit_rows(VGroup(
-            label(r"the World's adults: \ income by age", font_size=22),
+            label(r"World incomes; \ display capped at 250; bands cropped", font_size=22),
             label(r"$\hat\mu$: \ a cubic in age, \ with a step at 67", font_size=22, color=PREDC),
             label(rf"$\hat q = {q:.1f}$: \ the band $\hat\mu \pm \hat q$", font_size=22, color=BANDC),
             label(rf"20,000 new adults: \ {100 * d['cover_split']:.1f}\% inside", font_size=22, color=BANDC),

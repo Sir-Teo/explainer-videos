@@ -77,7 +77,7 @@ class Calibration(VoiceoverScene):
             label(r"Gaussian naive Bayes, \ all 30 features", font_size=22),
             label(rf"{100 * (h[0] + h[-1]) / h.sum():.0f}\% of its predictions below 0.1 or above 0.9", font_size=22, color=MISSC),
             label(r"between: \ it says 0.6--0.9, \ observed frequencies in these small bins are near 0.4", font_size=22, color=MISSC),
-            label(rf"accuracy {100 * d['acc']['nb']:.1f}\%; \ ECE {d['ece']['nb']:.3f}", font_size=22, color=CALC),
+            label(rf"accuracy {100 * d['acc']['nb']:.1f}\%; \ mean split ECE {d['ece']['nb']:.3f}", font_size=22, color=CALC),
         ), 4.6, 0.35, [3.0, -1.6, 0])
         self.add(label("Pooled reliability curves; ECE averaged within splits", font_size=30).move_to([0, 3.3, 0]))
         with self.voiceover(
@@ -171,7 +171,7 @@ class Calibration(VoiceoverScene):
         rf = rel_plot(ax, d["rel"]["rf"], TREEC)
         side = fit_rows(VGroup(
             label(r"red: \ naive Bayes, \ raw", font_size=22, color=MISSC),
-            label(rf"green: \ after isotonic, \ ECE {d['ece']['nb']:.3f} $\to$ {d['ece']['nb_iso']:.3f}", font_size=22, color=BANDC),
+            label(rf"green: \ after isotonic, \ mean split ECE {d['ece']['nb']:.3f} $\to$ {d['ece']['nb_iso']:.3f}", font_size=22, color=BANDC),
             label(r"blue: \ a forest's vote share, \ raw", font_size=22, color=TREEC),
             label(r"forests are \emph{under}confident at the extremes", font_size=22, color=TREEC),
         ), 5.4, 0.42, [3.2, 0.3, 0])
@@ -201,7 +201,7 @@ class Calibration(VoiceoverScene):
         e, b, a = d["ece"], d["brier"], d["acc"]
         names = [("nb", r"naive Bayes"), ("nb_platt", r"\ + Platt"), ("nb_temp", r"\ + temperature"), ("nb_iso", r"\ + isotonic"),
                  ("rf", r"forest"), ("rf_iso", r"\ + isotonic")]
-        rows = [[r"model", r"accuracy", r"ECE", r"Brier"]] + [[n, rf"{100 * a[k]:.1f}\%", rf"{e[k]:.3f}", rf"{b[k]:.3f}"] for k, n in names]
+        rows = [[r"model", r"accuracy", r"mean split ECE", r"Brier"]] + [[n, rf"{100 * a[k]:.1f}\%", rf"{e[k]:.3f}", rf"{b[k]:.3f}"] for k, n in names]
         tab = table_rows(rows, font_size=26, col_buff=0.8, row_buff=0.25,
                          colors=[GREY_A, MISSC, CALC, CALC, BANDC, TREEC, BANDC]).move_to([0, 0.8, 0])
         foot = fit_rows(VGroup(

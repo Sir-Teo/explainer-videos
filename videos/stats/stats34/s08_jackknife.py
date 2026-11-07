@@ -293,7 +293,7 @@ class Jackknife(VoiceoverScene):
         sb = band(ax, ages[ok], np.maximum(m[ok] - q, 0), np.minimum(m[ok] + q, 250), PREDC, 0.15)
         cb = band(ax, ages[ok], np.maximum(lo[ok], 0), np.minimum(hi[ok], 250), BANDC, 0.35)
         side = fit_rows(VGroup(
-            label(r"faint blue: \ split conformal, \ fixed width", font_size=22, color=PREDC),
+            label(r"display capped at 250; \ blue: fixed-width split band", font_size=22, color=PREDC),
             label(r"green: \ CQR, \ 5\% and 95\% quantile fits", font_size=22, color=BANDC),
             label(rf"$\hat Q = {d['cqr_q']:.2f}$: \ the fits were nearly right", font_size=22, color=CALC),
             label(rf"coverage {100 * d['cover_cqr']:.1f}\%; \ width {d['width_cqr']:.0f} \ vs \ {d['width_split']:.0f}", font_size=22, color=BANDC),

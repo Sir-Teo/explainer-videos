@@ -61,8 +61,8 @@ class Interpret(VoiceoverScene):
             A = axes([0, 1], [lo, hi], x_length=5.0, y_length=3.8, xlabel=r"value", ylabel=r"average prediction",
                      xticks=[0, 0.5, 1], yticks=[lo, (lo + hi) // 2, hi], center=[-3.4 + 6.4 * k, 0.4, 0])
             t = label(name, font_size=22, color=GREY_A).next_to(A, UP, buff=0.15)
-            tr = polyline(A.ax, g, np.clip(d["true_pdp"][j], lo, hi), TRUEC, 3)
-            fo = polyline(A.ax, g, np.clip(d["pdp"][j], lo, hi), TREEC, 3.5)
+            tr = polyline(A.ax, g, d["true_pdp"][j], TRUEC, 3)
+            fo = polyline(A.ax, g, d["pdp"][j], TREEC, 3.5)
             panels.add(VGroup(A, t))
             curves.append((tr, fo))
         foot = fit_rows(VGroup(
@@ -95,15 +95,15 @@ class Interpret(VoiceoverScene):
         idx = [0, 10, 1, 2, 3, 4, 5]
         names = [r"$x_1$", r"$x_1'$ (twin)", r"$x_2$", r"$x_3$", r"$x_4$", r"$x_5$", r"$x_6$ (noise)"]
         top = max(perm[idx].max(), loco[idx].max())
-        A = axes([0, 7], [0, top * 1.1], x_length=7.6, y_length=4.2, xlabel=r"", ylabel=r"rise in test MSE",
+        A = axes([0, 7], [min(0,float(perm[idx].min()),float(loco[idx].min()))*1.1, top * 1.1], x_length=7.6, y_length=4.2, xlabel=r"", ylabel=r"rise in test MSE",
                  xticks=[], yticks=[0, round(top / 2), round(top)], center=[-1.8, 0.5, 0])
         ax = A.ax
-        bp = bars_at(ax, np.arange(7) + 0.32, np.maximum(perm[idx], 0), 0.34, CALC)
-        bl = bars_at(ax, np.arange(7) + 0.68, np.maximum(loco[idx], 0), 0.34, BOOSTC)
+        bp = bars_at(ax, np.arange(7) + 0.32, perm[idx], 0.34, CALC)
+        bl = bars_at(ax, np.arange(7) + 0.68, loco[idx], 0.34, BOOSTC)
         labs = VGroup(*[label(n, font_size=18, color=MISSC if i == 1 else GREY_A).next_to(ax.c2p(i + 0.5, 0), DOWN, buff=0.2)
                         for i, n in enumerate(names)])
         side = fit_rows(VGroup(
-            label(r"$x_1'$: \ a noisy copy of $x_1$, \ correlation 0.95", font_size=20),
+            label(r"$x_1'$: \ a noisy copy of $x_1$, \ correlation about 0.97", font_size=20),
             label(r"gold: \ permutation importance", font_size=20, color=CALC),
             label(rf"$x_1$: \ {perm[0]:.1f}; \ its twin: \ {perm[10]:.1f}", font_size=20, color=CALC),
             label(r"purple: \ LOCO, \ refitting without each", font_size=20, color=BOOSTC),
@@ -111,7 +111,7 @@ class Interpret(VoiceoverScene):
         ), 3.8, 0.38, [5.0, 0.4, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Now give the forest a twin: an eleventh feature that is x one plus a little noise, "
-            "correlated point nine five with it, and carrying no additional outcome information once the original "
+            "correlated about point nine seven with it, and carrying no additional outcome information once the original "
             "feature is known. <bookmark mark='b'/> Permutation importance, <bookmark mark='c'/> computed on fresh "
             "test data, credits both: x one with " + say(perm[0], 1) +
             " and the twin with " + say(perm[10], 1) + ". <bookmark mark='d'/> LOCO, which refits the forest without each feature in turn, tells a different "
