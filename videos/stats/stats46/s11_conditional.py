@@ -136,6 +136,8 @@ class Conditional(VoiceoverScene):
             "<bookmark mark='d'/> And when choosing among procedures, prefer those whose conditional behaviour stays close to "
             "their stated level."
         ) as vo:
+            heading = label('Conditional inference in practice', font_size=36).move_to([0, 3.1, 0])
+            self.play(FadeIn(heading))
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))

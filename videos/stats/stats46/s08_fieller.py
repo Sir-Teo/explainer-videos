@@ -160,10 +160,9 @@ class Impossibility(VoiceoverScene):
         with self.voiceover(
             f"<bookmark mark='a'/> Real data: Bliss's beetles from Part twenty-four, the logistic dose-response curve. <bookmark mark='b'/> The base-ten logarithm of the dose that kills half the beetles is minus the intercept over the slope, a ratio, and the slope is about {d['z_slope']:.0f} standard errors from zero. <bookmark mark='c'/> The reported intervals are on the log-ten dose scale. Their endpoints agree to three decimals. Here the normal approximation and covariance are estimated from a logistic fit, so both intervals are asymptotic rather than exact. <bookmark mark='d'/> That is the general lesson: when the denominator is strong, the delta method is fine; Fieller inversion can retain unbounded sets when needed, but its validity still depends on the joint distribution and covariance calibration."
         ) as vo:
-            self.play(FadeIn(museum_tag(r"Bliss (1935)")))
             heading=label('Bliss intervals concern log-dose and use fitted covariance',font_size=36).move_to([0,3.3,0])
             if heading.width>12.5: heading.width=12.5
-            self.play(FadeIn(heading))
+            self.play(FadeIn(heading), FadeIn(museum_tag(r"Bliss (1935)")))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

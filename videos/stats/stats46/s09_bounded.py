@@ -95,7 +95,9 @@ class Bounded(VoiceoverScene):
             "construction reproduces the published zero-background table within its grid resolution and rounding."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(tab[0]))
+            heading = label(r'90\% intervals with known background $b=3$', font_size=36).move_to([0, 3.1, 0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading), FadeIn(tab[0]))
             vo.wait_until("b")
             self.play(FadeIn(tab[1]), FadeIn(note_))
             vo.wait_until("c")

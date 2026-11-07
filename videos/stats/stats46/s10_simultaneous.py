@@ -151,9 +151,9 @@ class Simultaneous(VoiceoverScene):
             "Bonferroni allows arbitrary dependence; the Simes version needs the stated dependence assumptions."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(side[0]))
+            self.play(FadeIn(g), FadeIn(side[0]))
             vo.wait_until("b")
-            self.play(FadeIn(g), FadeIn(side[1]))
+            self.play(FadeIn(side[1]))
             vo.wait_until("c")
             self.play(*bon(), FadeIn(side[2]))
             vo.wait_until("d")
