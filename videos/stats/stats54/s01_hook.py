@@ -59,6 +59,10 @@ class Hook(VoiceoverScene):
             label(r"all $2^3 = 8$ labellings are realized", font_size=22, color=GOODC),
             label(r"the class \emph{shatters} the three points", font_size=22, color=GOODC),
         ), 3.4, 0.45, [5.2, 0.3, 0])
+        head = label(r"Half-planes realize all eight labelings of three points", font_size=36).move_to([0, 3.3, 0])
+        if head.width > 12.6:
+            head.width = 12.6
+        self.play(FadeIn(head))
         with self.voiceover(
             "<bookmark mark='a'/> The idea, drawn with this part's instrument, the shatterer. Three points in the plane, and "
             "the class of half-planes: a rule labels a point one if it lies on one side of a line. <bookmark mark='b'/> Gold "
