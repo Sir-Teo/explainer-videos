@@ -31,14 +31,10 @@ class BSDE(VoiceoverScene):
                     r"claim is worth less ($Q$ falls from 20\% to 2\% a year as $u$ rises from 50 to 70), and the holder "
                     r"recovers $\delta = \tfrac23$. The price feeds back on itself: the equation is non-linear"),
                 why(r"a grid of just 10 points per asset has $10^{100}$ nodes; Part 16's finite differences stop at two or "
-                    r"three dimensions, and plain Monte Carlo cannot handle the non-linearity")]
+                    r"three dimensions here. A single discounted terminal-payoff average does not account for nonlinear feedback; other Monte Carlo-based solvers exist")]
         step = ladder(self, rows, whys, keep=2, top=2.6, x=0.6, buff=1.0, edge=6.9)
         with self.voiceover(
-            "Part sixteen's grids stopped at two dimensions. Here is a pricing equation in a hundred. Jiequn Han, Arnulf "
-            "Jentzen and Weinan E took a claim on a hundred assets, paying the worst of them, whose issuer can default. "
-            "Default becomes likelier as the claim loses value, and the holder then recovers two thirds. The price feeds "
-            "back on itself, so the equation is non-linear. <bookmark mark='a'/> A grid with ten points per asset would "
-            "have ten to the hundred nodes. And plain Monte Carlo cannot do it either, because of the non-linear term."
+            "This published benchmark is a recursive valuation model for a claim on one hundred independent geometric-Brownian assets. It pays their minimum at one year, conditional on survival; recovery on default is two thirds of its current value. The specified default intensity depends on that value, producing nonlinear feedback. <bookmark mark='a'/> A full tensor grid with ten points per asset needs ten to the hundred nodes. A single discounted terminal-payoff average does not solve this nonlinear equation. Nested, branching or multilevel Monte Carlo constructions can address particular nonlinear settings; the neural BSDE method is one approach, not the only route beyond a grid."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -57,17 +53,10 @@ class BSDE(VoiceoverScene):
                     r"the generator, the drift and the second-order terms of the equation"),
                 why(r"the pricing equation says exactly what $\partial_t u + \mathcal{L} u$ is: the non-linear default term"),
                 why(r"so the price process solves a stochastic differential equation whose end is known and whose start is "
-                    r"not: a backward SDE. Its noise coefficient $Z$ is the gradient of the price, the hedge")]
+                    r"not: a backward SDE. $Z$ is Brownian exposure; for nonzero diagonal asset volatility, shares are $Z_i/(\bar\sigma X_i)$")]
         step = ladder(self, rows, whys, keep=3, top=2.7, x=-3.3, buff=0.8, edge=6.9)  # long right sides
         with self.voiceover(
-            "The way out starts from Itô's formula. Follow the price along one simulated path of the hundred assets: "
-            "Y at time t is u of t and X t. Itô says how it moves: a drift, which is the time derivative plus the "
-            "generator of the equation, and a noise term, the gradient times the assets' volatility. "
-            "<bookmark mark='a'/> But the equation tells us what that drift is: exactly the non-linear default term. "
-            "<bookmark mark='b'/> So the price along the path solves a stochastic differential equation of its own, "
-            "with the drift a function of the price, and a noise coefficient Z that is the hedge. We know where it "
-            "must end, at the payoff, the worst of the hundred assets. We do not know where it starts: that is the "
-            "price we want. A backward stochastic differential equation."
+            "Assuming a smooth interior pricing function, apply Itô's formula along the model's asset paths. <bookmark mark='a'/> Substitute the PDE into its drift. Our sign convention writes that drift as f of Y, with a plus sign. <bookmark mark='b'/> The result is a backward SDE with a specified terminal payoff. Z is exposure to Brownian noise, not directly a number of shares: in this diagonal diffusion, divide its i-th component by sigma times asset i to obtain the Brownian delta. The nonlinear credit model still carries its own assumptions; this identity does not establish a perfect hedge of issuer default."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -87,25 +76,18 @@ class BSDE(VoiceoverScene):
                       colors={r"\min_{u_0,\, Z_0,\, \theta}": GOOD}),
                 cmath(r"\delta = 1", r"\Rightarrow", r"f = R\,Y,\quad Y_0 = e^{-RT}\,\mathbb{E}\min_i X^i_T", font_size=36,
                       colors={r"\Rightarrow": WHITE})]
-        whys = [why(r"Pardoux and Peng (1990): for a Lipschitz $f$ the backward equation has exactly one solution, and its "
+        whys = [why(r"Pardoux--Peng: Lipschitz generator, square-integrable terminal value and standard adaptedness/integrability assumptions give a unique square-integrable pair; with Markov/PDE regularity its "
                     r"start is the PDE's solution: the non-linear Feynman--Kac formula (Part 5 had the linear one)"),
                 why(rf"E, Han and Jentzen (2017): Euler steps forward from a guessed start $u_0$; the hedge at each of the "
                     rf"{p['N'] - 1} later dates is a small network of the hundred prices"),
                 why(r"shoot: train the guess and the networks together so every path lands on its payoff. Zero loss "
-                    r"means the guess was the price and the networks are the hedge; Han, Jentzen and E (2018, "
+                    r"in the exact continuous-time population problem identifies the solution. A zero finite-batch Euler loss does not; Han, Jentzen and E (2018, "
                     r"\textit{PNAS}) showed it at $d = 100$"),
                 why(r"a check with a known answer: with no default the equation is linear, and the price is plain "
                     r"discounted Monte Carlo. Chapter 9 runs it")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.4, buff=0.62, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.4, buff=0.62, edge=6.9)
         with self.voiceover(
-            "Two facts make this usable. Étienne Pardoux and Shige Peng proved in 1990 that the backward equation has "
-            "exactly one solution, whose start is the pricing equation's solution: the non-linear Feynman–Kac formula. "
-            "<bookmark mark='a'/> And Weinan E, Jiequn Han and Arnulf Jentzen made it a learning problem. Guess today's "
-            "price; step forward with the simulated noise; at each date a small network supplies the hedge. "
-            "<bookmark mark='b'/> Then train the guess and all the networks together so that every "
-            "path lands on its own payoff at expiry. If the loss were zero, the guess would be the price and the "
-            "networks would be the hedge. <bookmark mark='c'/> And there is a built-in check: switch default off, and "
-            "the equation becomes linear, with an answer plain Monte Carlo can give."
+            "Under the usual Lipschitz, square-integrability and adaptedness assumptions, the BSDE has a unique square-integrable solution. Markovian coefficient regularity links it to the PDE. <bookmark mark='a'/> The numerical method instead guesses a starting value and Brownian exposures, then uses forty Euler steps and date-specific networks. <bookmark mark='b'/> Training minimizes sampled terminal mismatch. Zero population mismatch in the exact continuous-time problem would identify its solution; zero empirical loss on a finite Euler grid would not certify the continuous-time price. Generalization, time stepping, approximation and optimization errors remain. <bookmark mark='c'/> Switching off default gives a linear model with a discounted-expectation reference, providing a useful separate check."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -124,7 +106,7 @@ class BSDE(VoiceoverScene):
         tt = np.linspace(0, 1, N + 1)
         allY = np.concatenate([np.asarray(sn[i]["Ypath"]).ravel() for i in its] +
                               [np.asarray(sn[i]["g"])[:32] for i in its])
-        lo, hi = float(np.percentile(allY, 1)) - 2, float(np.percentile(allY, 99)) + 2
+        lo, hi = data_range(allY)
         g = axes([0, 1.08], [lo, hi], x_length=7.6, y_length=4.6, xlabel=r"time (years)", ylabel=r"$Y_t$, the price along "
                  r"the path", xticks=[0, 0.5, 1], yticks=[round(v) for v in np.linspace(lo + 2, hi - 2, 4)],
                  font_size=14).to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
@@ -136,23 +118,23 @@ class BSDE(VoiceoverScene):
             gg = np.asarray(s_["g"])[:32]
             grp = VGroup()
             for y, tgt in zip(Yp, gg):
-                grp.add(curve(ax, tt, np.clip(y, lo, hi), NET, stroke_width=1.2).set_stroke(opacity=0.6))
-                grp.add(Line(ax.c2p(1.02, np.clip(tgt, lo, hi)), ax.c2p(1.06, np.clip(tgt, lo, hi)), stroke_color=WHITE,
+                grp.add(curve(ax, tt, y, NET, stroke_width=1.2).set_stroke(opacity=0.6))
+                grp.add(Line(ax.c2p(1.02, tgt), ax.c2p(1.06, tgt), stroke_color=WHITE,
                              stroke_width=2.5))
-                grp.add(Line(ax.c2p(1.0, np.clip(y[-1], lo, hi)), ax.c2p(1.04, np.clip(tgt, lo, hi)), stroke_color=BAD,
+                grp.add(Line(ax.c2p(1.0, y[-1]), ax.c2p(1.04, tgt), stroke_color=BAD,
                              stroke_width=1.5, stroke_opacity=0.8))
             miss = float(np.sqrt(np.mean((np.asarray(s_["Y"]) - np.asarray(s_["g"])) ** 2)))
-            grp.add(Dot(ax.c2p(0, np.clip(s_["u0"], lo, hi)), radius=0.08, color=GOOD))
+            grp.add(Dot(ax.c2p(0, s_["u0"]), radius=0.08, color=GOOD))
             txt = VGroup(label(rf"training step {its[i]}", font_size=22, color=NET),
                          MathTex(rf"u_0 = {s_['u0']:.2f}", font_size=30, color=GOOD),
-                         label(rf"typical miss at expiry: {miss:.1f}", font_size=20, color=BAD)).arrange(
+                         label(rf"256-path replay RMS miss: {miss:.1f}", font_size=20, color=BAD)).arrange(
                 DOWN, aligned_edge=LEFT, buff=0.15).to_edge(RIGHT, buff=0.6).shift(UP * 0.5)
             return VGroup(grp, txt)
         cur = fan(0)
         leg = legend([(GOOD, r"today's guess $u_0$"), (NET, r"$Y$ stepped forward on 32 of the paths"),
                       (WHITE, r"each path's payoff, $\min_i X^i_T$"), (BAD, r"the miss")], font_size=16)
         leg.next_to(g, UP, buff=0.1).align_to(g, LEFT)
-        src = illustration(r"the 100-asset claim with default; a second run (seed 1), 256 fixed test paths")
+        src = illustration(r"seed 1; first 32 of 256 fixed replay paths; training-mode batch normalization; checkpoints reuse paths")
         with self.voiceover(
             "Here is the shooting, on thirty-two of the paths. The green dot is today's guess. From it, each path's "
             "price is stepped forward with that path's own noise and the networks' hedges, and at expiry it should "
@@ -170,9 +152,7 @@ class BSDE(VoiceoverScene):
                 self.play(Transform(cur, new), run_time=1.6)
         q = ask(r"double the dimension to 200. Does the cost of a training step double, or square?")
         with self.voiceover(
-            "Before the next chapter: double the number of assets to two hundred. Does the work per training step "
-            "double, or square, or explode like the grid?"
-            " It roughly doubles. Each step simulates paths and evaluates small networks whose size grows in proportion to the dimension: no grid, and nothing explodes. That is the whole point. Next: watching it converge."
+            'With fixed time grid, batch and depth, the dense networks have width d plus ten. Their work grows quadratically in d at large dimension; doubling d then approaches four times the network work, while simulating paths is linear in d. This is work per update, not total cost for a fixed accuracy. More training or a finer grid may still be needed. Next: watching the solver converge.'
         ):
             self.play(FadeOut(src), FadeIn(q))  # the banner takes the foot of the frame
         self.wait(0.5)

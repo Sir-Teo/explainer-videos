@@ -34,13 +34,13 @@ class BSDETrain(VoiceoverScene):
         sn = s["seed1"]["snaps"]
         its = ["0", "100", "300", "1000", "2000"]
         allv = np.concatenate([np.r_[np.asarray(sn[i]["Y"]), np.asarray(sn[i]["g"])] for i in its])
-        lo, hi = float(np.percentile(allv, 1)), float(np.percentile(allv, 99))
+        lo, hi = data_range(allv)
 
         def frame(i):
             g = axes([lo, hi], [lo, hi], x_length=3.9, y_length=3.9, xlabel=r"payoff $\min_i X^i_T$",
                      ylabel=r"$Y_N$", xticks=[round(lo), round(hi)], yticks=[round(lo), round(hi)], font_size=13)
             Y, gg = np.asarray(sn[its[i]]["Y"]), np.asarray(sn[its[i]]["g"])
-            dots = VGroup(*[Dot(g.ax.c2p(np.clip(a, lo, hi), np.clip(y, lo, hi)), radius=0.025, color=NET)
+            dots = VGroup(*[Dot(g.ax.c2p(a, y), radius=0.025, color=NET)
                             for a, y in zip(gg, Y)])
             diag = DashedLine(g.ax.c2p(lo, lo), g.ax.c2p(hi, hi), stroke_color=WHITE, stroke_width=1.5)
             return VGroup(g, diag, dots, label(rf"step {its[i]}: where 256 paths land", font_size=17,
@@ -48,7 +48,7 @@ class BSDETrain(VoiceoverScene):
         rp = TrainingReplay(it, L, frame, checkpoints=[0, 100, 300, 1000, 2000], ylabel=r"today's price $u_0$")
         ref = DashedLine(rp.ax.c2p(0, b["reference"]), rp.ax.c2p(2000, b["reference"]), stroke_color=REF,
                          stroke_width=2) if rp.lo < b["reference"] < rp.hi else VGroup()
-        leg = legend([(NET, r"$u_0$: seed 1 (line), seeds 0 and 1 (band)"), (REF, rf"reference {b['reference']:.3f}"),
+        leg = legend([(NET, r"seed 1 line; two-seed min--max, not a confidence band"), (REF, rf"reference {b['reference']:.3f}"),
                       (WHITE, r"left: perfect landing, $Y_N = $ payoff")], font_size=16).arrange(RIGHT, buff=0.35).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Now the training itself, replayed. On the right, today's price, the guess, step by step: the line is a "
@@ -87,7 +87,7 @@ class BSDETrain(VoiceoverScene):
         direction = "above" if rel > 0 else "below"
         side = VGroup(
             MathTex(rf"u_0 = {t0['mean']:.2f} \pm {t0['sd']:.2f}", font_size=38, color=GOOD),
-            label(rf"mean and spread of the last {t0['n']} logged values (steps 3{{,}}000--4{{,}}000)", font_size=18,
+            label(rf"{t0['n']} correlated logged iterates: mean $\pm$ SD, not SE or CI", font_size=18,
                   color=GREY_A),
             label(rf"{rel:+.2f}\% against the reference {ref:.3f}", font_size=20, color=GREY_A),
             label(rf"seed 1, steps 1{{,}}000--2{{,}}000: {t1['mean']:.2f} $\pm$ {t1['sd']:.2f}", font_size=20, color=NET),
@@ -97,12 +97,7 @@ class BSDETrain(VoiceoverScene):
         leg = legend([(NET, r"seed 0, 4{,}000 steps"), (REF, rf"reference {ref:.3f} (multilevel Picard)"),
                       (GOOD, r"the tail: mean $\pm$ one standard deviation")], font_size=16).next_to(g, UP, buff=0.1).align_to(g, LEFT)
         with self.voiceover(
-            "The full four thousand steps of the first run. How should the answer be read off? Not from the last "
-            "step: the guess still jitters with every random batch. <bookmark mark='a'/> Average the last thousand "
-            f"steps instead: {t0['mean']:.2f}, give or take {t0['sd']:.2f}, which is {abs(rel):.2f} percent "
-            f"{direction} the reference of {ref:.1f}, computed by a different method altogether, "
-            f"multilevel Picard iteration. The second run, at half the steps, gives {t1['mean']:.2f}. Han, Jentzen and "
-            "E reported an error of 0.46 percent in their paper."
+            f"The first run has four thousand updates. A descriptive summary of its last {t0['n']} logged starting values is {t0['mean']:.2f}, with standard deviation {t0['sd']:.2f}. <bookmark mark='a'/> These optimizer iterates are correlated and still changing; their spread is neither a standard error nor a confidence interval. The mean is {abs(rel):.2f} percent {direction} the published approximate multilevel-Picard reference, {ref:.3f}. The second seed uses a shorter run and a different averaging window, so it is not an equal-budget training-uncertainty estimate. The original paper reports 0.46 percent reference error in 1,607 seconds for its own implementation and hardware; our shared-CPU runtime is a separate measurement."
         ) as vo:
             self.play(FadeIn(g), Create(r1), FadeIn(leg[1]))
             self.play(Create(line), FadeIn(leg[0]), run_time=2.5)
@@ -128,15 +123,11 @@ class BSDETrain(VoiceoverScene):
                       MathTex(rf"\text{{Monte Carlo}}\ {nd:.2f} \pm {se:.2f}", font_size=32, color=BAD),
                       wrapped_label(rf"the same solver, the same networks, default switched off: it lands "
                                     rf"{abs(gap):.2f} {'above' if gap > 0 else 'below'} plain discounted Monte Carlo on "
-                                    r"400{,}000 paths. And ignoring default would overprice the real claim by "
+                                    r"400{,}000 paths. And ignoring default would increase this model claim's reference price by "
                                     rf"{nd - b['reference']:.1f}", 4.4, 19, GREY_A)).arrange(DOWN, aligned_edge=LEFT,
                                                                                           buff=0.3).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "And the check with a known answer. Switch default off: the equation becomes linear, and the price is just "
-            "the discounted average payoff, which plain Monte Carlo gives on four hundred thousand paths. "
-            f"<bookmark mark='a'/> The same solver, trained from scratch, settles at {tl['mean']:.2f}, against "
-            f"{nd:.2f} by Monte Carlo. It passes. And the difference between the two problems, {nd - b['reference']:.1f}, "
-            "is what the default risk is worth."
+            f"Turn default off and retrain the linear solver. Four hundred thousand terminal simulations give a discounted-payoff estimate with a Monte Carlo standard error. <bookmark mark='a'/> The trained starting-value average is {tl['mean']:.2f}, against {nd:.2f} from Monte Carlo. The two plus-or-minus figures have different meanings: correlated-iterate standard deviation for the network, sampling standard error for Monte Carlo. They do not form a calibrated common interval. Euler bias and optimization error still matter. The reference-price difference between the default and no-default benchmark models is {nd - b['reference']:.1f}; it is model-specific, not an observed market credit spread."
         ) as vo:
             self.play(FadeIn(g), Create(r1), FadeIn(side[1]))
             self.play(Create(line), run_time=2)
@@ -164,12 +155,12 @@ class BSDETrain(VoiceoverScene):
 
     def why_it_scales(self, b):
         p = b["params"]
-        rows = [cmath(r"\text{work per step}", r"=", r"O\big(N\,d\,(d + 10)\,B\big)", font_size=40,
+        rows = [cmath(r"\text{work per step}", r"=", r"O\big(NB(d+10)^2\big)\quad\text{fixed depth}", font_size=40,
                       colors={r"\text{work per step}": GOOD}),
                 cmath(r"\text{grid}", r"=", r"10^{d}\ \text{nodes}", font_size=40, colors={r"\text{grid}": BAD})]
         whys = [why(rf"$N - 1 = {p['N'] - 1}$ small networks of width $d + 10$, a batch of $B = 64$ paths: polynomial in "
                     r"the dimension. Hutzenthaler, Jentzen, Kruse and Nguyen (2020) proved that ReLU networks approximate "
-                    r"semilinear heat equations with a number of parameters polynomial in $d$ and $1/\varepsilon$; "
+                    r"specified semilinear heat-equation classes under dimension-controlled data assumptions with polynomial-size networks; this is an approximation-existence result, not an SGD or arbitrary-PDE guarantee; "
                     r"Jentzen, Kuckuck and von Wurstemberger's book (2023) collects the theory"),
                 why(r"against ten points per axis: the curse of dimensionality")]
         step = ladder(self, rows, whys, keep=2, top=2.6, x=-0.4, buff=1.0, edge=6.9)
@@ -179,20 +170,13 @@ class BSDETrain(VoiceoverScene):
                       font_size=16, kind=r"Method"),
             firm_card(r"Multilevel Picard", r"E, Hutzenthaler, Jentzen and Kruse: a non-learned Monte Carlo method for "
                       r"the same equations; the source of the 57.300 reference", width=4.0, font_size=16, kind=r"Method"),
-            firm_card(r"Part 16's grids", r"finite differences: exact and fast in one to three dimensions, impossible "
+            firm_card(r"Part 16's grids", r"finite differences approximate a PDE on a grid; full tensor grids become expensive in high dimensions; structural sparse or low-rank methods can help "
                       r"beyond", width=4.0, font_size=16, kind=r"Method"),
         ).arrange(RIGHT, buff=0.25).to_edge(DOWN, buff=0.3)
         for c_ in cards:
             c_[0].set_stroke(GREY_C)
         with self.voiceover(
-            "Why does it scale? The work per step grows at most with the square of the dimension, while a grid "
-            "multiplies by ten with every asset; and Hutzenthaler, Jentzen, Kruse and Nguyen proved that networks of "
-            "polynomial size suffice for such equations. <bookmark mark='a'/> Its relatives: the deep Galerkin method "
-            "fits the equation's residual instead, needing second derivatives; multilevel Picard iteration solves it "
-            "without learning, and supplied our reference. <bookmark mark='b'/> And a question: the loss stalls near "
-            "thirty, not zero. Is the network failing? No: the time grid and batch noise put a floor under it. Judge "
-            "the solver by its price."
-            " Next: deciding when to stop, by network."
+            "For fixed depth, batch and time grid, dense-network work per update is polynomial, roughly quadratic in dimension. Achieving a target accuracy also depends on grid size, architecture and optimization iterations. Approximation theorems for specified PDE classes do not prove that this optimizer finds accurate solutions to every high-dimensional problem. <bookmark mark='a'/> Alternatives include PDE-residual training and non-learned multilevel Picard methods. Finite differences remain approximations, with full tensor grids costly at high dimension. <bookmark mark='b'/> A nonzero loss plateau alone does not diagnose failure or success. Time discretization, hedge approximation, optimization and finite-batch noise can all contribute. Check fresh-population loss estimates, refinement and independent references; an accurate starting price alone does not certify the whole learned process. The research chapter separates these claims."
         ) as vo:
             step(0)
             step(1)
