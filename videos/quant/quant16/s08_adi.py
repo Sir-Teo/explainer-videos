@@ -24,7 +24,7 @@ class ADI(VoiceoverScene, ThreeDScene):
 
     def sweeps(self, ag):
         S, v = np.asarray(ag["S"]), np.asarray(ag["v"])
-        ax = ThreeDAxes(x_range=[60, 140, 20], y_range=[0, 0.2, 0.05], z_range=[0, 45, 15], x_length=7.0, y_length=5.0,
+        ax = ThreeDAxes(x_range=[60, 140, 20], y_range=[0, 0.2, 0.05], z_range=[0, 1, 0.5], x_length=7.0, y_length=5.0,
                         z_length=3.0, tips=False, axis_config={"stroke_color": GREY_C, "include_ticks": False,
                                                                "stroke_width": 2})
         ax.shift(DOWN * 0.4)
@@ -32,11 +32,11 @@ class ADI(VoiceoverScene, ThreeDScene):
         def surf(Z, lo, hi, colors):
             f = RegularGridInterpolator((v, S), np.asarray(Z))
             zmin, zmax = float(np.min(Z)), float(np.max(Z))
-            sc = lambda z: lo + (hi - lo) * (z - zmin) / (zmax - zmin + 1e-12)  # noqa: E731
+            sc = lambda z: (z - zmin) / (zmax - zmin) if zmax > zmin else 0.0  # noqa: E731
             sf = Surface(lambda x, y: ax.c2p(x, y, sc(float(f((y, x))))), u_range=[60, 140], v_range=[0, 0.2],
                          resolution=(32, 16), fill_opacity=0.85, stroke_width=0.3, stroke_color="#0E1117",
                          checkerboard_colors=False)
-            sf.set_fill_by_value(axes=ax, colorscale=list(zip(colors, [lo, (lo + hi) / 2, hi])), axis=2)
+            sf.set_fill_by_value(axes=ax, colorscale=list(zip(colors, [0, 0.5, 1])), axis=2)
             return sf
 
         price = surf(ag["u"], 0, 45, [QC.SPOT, QC.OPTION, QC.LOSS])
@@ -49,11 +49,15 @@ class ADI(VoiceoverScene, ThreeDScene):
         cols = VGroup(*[Line(ax.c2p(x, 0, 0), ax.c2p(x, 0.2, 0), stroke_color=GREY_B, stroke_width=1) for x in gS])
         hint = VGroup(label(r"across: spot $S$", font_size=21, color=GREY_A),
                       label(r"back: variance $v$", font_size=21, color=GREY_A),
-                      label(r"up: the Heston call $u(S, v)$", font_size=21, color=GREY_A)).arrange(
+                      label(r"up: shape only; each surface separately scaled to $[0,1]$", font_size=21, color=GREY_A)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.1).to_corner(UL, buff=0.35)
         names = [label(t, font_size=26, color=c).to_corner(UR, buff=0.4) for t, c in
                  ((r"price", OPT), (r"delta $\partial_S u$", DELTA), (r"gamma $\partial_{SS} u$", QC.GAMMA),
-                  (r"vega $\partial_v u$ (to variance)", QC.VEGA))]
+                  (r"variance-state derivative $\partial_v u$", QC.VEGA))]
+        for i, key in enumerate(("u", "delta", "gamma", "vega")):
+            actual = np.asarray(ag[key])
+            names[i] = VGroup(names[i], label(rf"actual range: ${actual.min():.3g}$ to ${actual.max():.3g}$",
+                                             font_size=22, color=GREY_A)).arrange(DOWN, aligned_edge=RIGHT, buff=0.15).to_corner(UR, buff=0.4)
         stage = [label(r"sweep 1: implicit along $S$, one row of the grid at a time", font_size=22, color=QC.THETA),
                  label(r"sweep 2: implicit along $v$, one column at a time", font_size=22, color=GOOD)]
         for st in stage:
@@ -61,14 +65,7 @@ class ADI(VoiceoverScene, ThreeDScene):
         self.set_camera_orientation(phi=0 * DEGREES, theta=-90 * DEGREES, zoom=0.85)
         fixed(self, hint, *names, *stage)
         with self.voiceover(
-            "Stochastic volatility adds a dimension: Heston's price is a function of the spot and of the variance. "
-            "Seen from above, the House's grid is not uniform. The price lines crowd around the strike and the "
-            "variance lines crowd near zero, where the solution bends fastest. <bookmark mark='a'/> Each time step "
-            "is done in two sweeps. First, implicitly along the price, a small tridiagonal system for every row of "
-            "the grid. <bookmark mark='b'/> Then implicitly along the variance, one system per column. "
-            "<bookmark mark='c'/> Tilt the camera and the solution appears: the price surface, rising with spot and "
-            "with variance. <bookmark mark='d'/> And because the grid holds the whole surface, the Greeks come free: "
-            "delta, gamma and the sensitivity to variance, read off by differences."
+            "Heston adds variance as a state variable. The nonuniform grid crowds stock nodes around the strike and variance nodes near zero, where boundary behaviour can require resolution. <bookmark mark='a'/> A directional correction solves a tridiagonal system along each stock row. <bookmark mark='b'/> Another solves along each variance column. <bookmark mark='c'/> The tilted surface shows the computed solution's shape. Height is separately rescaled from zero to one for each surface; the displayed actual minimum and maximum preserve its units and range. These heights must not be compared as if they shared price units. <bookmark mark='d'/> Finite differences on the computed surface estimate delta, gamma and the variance-state derivative. The last is partial u over partial v, not the usual volatility vega. These extra differences are cheap, but their accuracy still depends on the numerical solution and grid."
         ) as vo:
             self.play(FadeIn(hint), Create(rows), Create(cols), run_time=2)
             vo.wait_until("a")
@@ -106,8 +103,8 @@ class ADI(VoiceoverScene, ThreeDScene):
         whys = [why(r"Heston's pricing equation (Part 13): Feynman--Kac on the two-dimensional state"),
                 why(r"split the operator by direction; the correlation's mixed derivative is $A_0$"),
                 why(r"Douglas: explicit predictor, then one implicit correction per direction, each a set of tridiagonal "
-                    r"systems: $O(N)$ work per step, against far more for a sparse two-dimensional solve"),
-                why(r"Craig and Sneyd (1988): correct the explicit mixed term; second order with $\vartheta = \tfrac12$. "
+                    r"systems: $O(N)$ directional work, avoiding a global 2D factorization; some multigrid solvers can also achieve $O(N)$"),
+                why(r"Douglas with a mixed term is generally first order in time; Craig--Sneyd with $\vartheta=\frac12$ is second order under suitable regularity and boundary treatment. "
                     r"In 't Hout and Foulon (2010) compared this with MCS and Hundsdorfer--Verwer"),
                 why(r"spacing $\propto \cosh\xi$, smallest at $K$ (and near $v = 0$); three-point weights on uneven "
                     r"spacing keep second order if the map is smooth")]
@@ -132,7 +129,9 @@ class ADI(VoiceoverScene, ThreeDScene):
 
     def grids(self, a, ag):
         rows = ag["rows"]
-        g = axes([0, 4], [-3, 1], x_length=5.4, y_length=4.0, xlabel=r"grid (price $\times$ variance points)",
+        bar_yr = data_range([np.log10(r["err"]) for r in rows])
+        baseline = bar_yr[0]
+        g = axes([0, 4], bar_yr, x_length=5.4, y_length=4.0, xlabel=r"grid (price $\times$ variance points)",
                  ylabel=r"error against COS ($\log_{10}$)", xticks=[1, 2, 3],
                  xfmt=lambda v: [r"40\times20", r"80\times40", r"160\times80"][int(round(v)) - 1], yticks=[-3, -2, -1, 0, 1],
                  font_size=14).to_edge(LEFT, buff=0.7).shift(DOWN * 0.3)
@@ -142,18 +141,19 @@ class ADI(VoiceoverScene, ThreeDScene):
             for dx, uni, col in ((-0.17, True, BAD), (0.17, False, GOOD)):
                 r = next(x for x in rows if x["nS"] == n and x["uniform"] == uni)
                 y = np.log10(r["err"])
-                bars.add(Rectangle(width=0.3, height=abs(ax.c2p(0, y)[1] - ax.c2p(0, -3)[1]), stroke_width=0,
-                                   fill_color=col, fill_opacity=0.8).move_to(ax.c2p(i + dx, -3), aligned_edge=DOWN))
+                bars.add(Rectangle(width=0.3, height=abs(ax.c2p(0, y)[1] - ax.c2p(0, baseline)[1]), stroke_width=0,
+                                   fill_color=col, fill_opacity=0.8).move_to(ax.c2p(i + dx, baseline), aligned_edge=DOWN))
         leg = legend([(BAD, r"uniform grid"), (GOOD, r"sinh grid (in 't Hout--Foulon)")], font_size=16)
         leg.next_to(g, UP, buff=0.1).align_to(g, LEFT)
         e = {(r["nS"], r["uniform"]): r["err"] for r in rows}
-        h = loglog(np.log10(15), np.log10(220), -4, 0, r"price points", r"error, Douglas and Craig--Sneyd", x_length=4.4,
+        h = loglog(*data_range(np.log10([r["nS"] for r in a["rows"]])),
+                   *data_range(np.log10([r["err"] for r in a["rows"]])), r"price points", r"error, Douglas and Craig--Sneyd", x_length=4.4,
                    y_length=2.8, xt=[2], yt=[-4, -2, 0], font_size=13).to_edge(RIGHT, buff=0.6).shift(UP * 1.25)
         cols = {"do": BAD, "cs": GOOD}
         lines = VGroup()
         for sch in ("do", "cs"):
             rr = [r for r in a["rows"] if r["scheme"] == sch]
-            lines.add(polyline(h.ax, np.log10([r["nS"] for r in rr]), np.clip(np.log10([max(r["err"], 1e-6) for r in rr]), -4, 0),
+            lines.add(polyline(h.ax, np.log10([r["nS"] for r in rr]), np.log10([r["err"] for r in rr]),
                                cols[sch], radius=0.04))
         leg2 = legend([(BAD, r"Douglas"), (GOOD, r"Craig--Sneyd")], font_size=14).next_to(h, DOWN, buff=0.15).align_to(h, LEFT)
         best = min(a["rows"], key=lambda r: r["err"])
@@ -162,16 +162,7 @@ class ADI(VoiceoverScene, ThreeDScene):
         side.align_to(h, LEFT)
         q = predict(r"Why crowd the variance grid near $v = 0$?", width=4.4, font_size=20).to_corner(DR, buff=0.2)
         with self.voiceover(
-            "Does the stretching matter? Measured against the exact Fourier price: on a forty by twenty grid, a "
-            f"uniform grid is off by {e[(40, True)]:.2f}; the stretched grid by {e[(40, False)]:.3f}, "
-            f"{e[(40, True)] / e[(40, False)]:.0f} times better. At a hundred and sixty points the gap is "
-            f"{e[(160, True)] / e[(160, False)]:.0f} times. <bookmark mark='a'/> On the stretched grid both schemes "
-            "converge fast. Here, with Feller's condition broken and strong correlation, Douglas is slightly ahead; in "
-            "'t Hout and Foulon found the ranking depends on the case, which is why desks keep several. The finest "
-            f"grid prices the call to {best['err']:.4f} in {best['time']:.1f} seconds on one core. "
-            "<bookmark mark='b'/> Pause and predict: why crowd the variance near zero? Because the variance spends "
-            "time there when Feller's condition fails, and the solution bends most sharply there."
-            " When the characteristic function is known, there is a faster road still. Next: Fourier."
+            f"The reference is a numerical COS price, rather than an exact oracle. With forty by twenty nodes, the uniform-grid discrepancy is {e[(40, True)]:.2f}, while the stretched-grid discrepancy is {e[(40, False)]:.3f}. At one hundred and sixty stock nodes the ratio is {e[(160, True)] / e[(160, False)]:.0f}. Domain, boundary, time, space and reference errors all enter this comparison. <bookmark mark='a'/> Both directional schemes improve over these saved grids. Their ranking is case-dependent; the best displayed discrepancy is {best['err']:.4f} in {best['time']:.1f} recorded seconds. It is not a general accuracy or timing guarantee. <bookmark mark='b'/> When Feller's condition fails, zero variance is attainable, and near-zero behaviour can make variance-grid resolution important. This does not imply positive time spent exactly at zero or that curvature is always maximal there. Next, characteristic-function pricing."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.2, run_time=2.5))
             vo.wait_until("a")

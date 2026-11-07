@@ -35,36 +35,30 @@ class LCP(VoiceoverScene, ThreeDScene):
         gcn = (1 - 2 * lam * s) / (1 + 2 * lam * s)
         gim = 1 / (1 + 4 * lam * s)
         j = np.arange(21)
-        mode = np.where(np.abs(j - 10) <= 3, (-1.0) ** j, 0.0)
+        mode = (-1.0) ** j
         frames = [mode * gcn ** n for n in range(6)]
         cur = polyline(ta, j, frames[0], BAD, stroke_width=2.5, radius=0.04)
         tag = MathTex(rf"g_{{\text{{CN}}}} = {gcn:.3f}", font_size=28, color=BAD).next_to(top, RIGHT, buff=0.3)
         tag2 = MathTex(rf"g_{{\text{{implicit}}}} = {gim:.4f}", font_size=28, color=GOOD).next_to(tag, DOWN, buff=0.2)
         S = np.asarray(f["gamma_S"])
         ge = np.asarray(f["gamma_exact"])
-        lo, hi = np.percentile(ge, 1) * 1.6, np.percentile(ge, 99) * 1.6
-        g = axes([85, 115], [lo, hi], x_length=6.4, y_length=2.9, xlabel=r"spot", ylabel=r"gamma of a digital, a week to expiry",
+        lo, hi = data_range(ge, *[r["gamma"] for r in f["gamma"].values()])
+        g = axes(data_range(S, *[r["S"] for r in f["gamma"].values()]), [lo, hi], x_length=6.4, y_length=2.9, xlabel=r"spot", ylabel=r"gamma of a digital, a week to expiry",
                  xticks=[90, 100, 110], yticks=[], font_size=14).to_edge(DOWN, buff=0.5).to_edge(LEFT, buff=0.7)
         ax = g.ax
-        cn = curve(ax, np.asarray(f["gamma"]["cn"]["S"]), np.clip(np.asarray(f["gamma"]["cn"]["gamma"]), lo, hi), BAD,
+        cn = curve(ax, np.asarray(f["gamma"]["cn"]["S"]), np.asarray(f["gamma"]["cn"]["gamma"]), BAD,
                    stroke_width=2.5)
         rn = curve(ax, np.asarray(f["gamma"]["cn+rannacher"]["S"]),
-                   np.clip(np.asarray(f["gamma"]["cn+rannacher"]["gamma"]), lo, hi), GOOD, stroke_width=3)
+                   np.asarray(f["gamma"]["cn+rannacher"]["gamma"]), GOOD, stroke_width=3)
         ex = DashedVMobject(curve(ax, S, ge, WHITE, stroke_width=2), num_dashes=50)
         leg = legend([(WHITE, r"exact"), (BAD, r"Crank--Nicolson"), (GOOD, r"with Rannacher's start")], font_size=16)
         leg.next_to(g, RIGHT, buff=0.4).align_to(g, UP)
         side = wrapped_label(r"cash-or-nothing call, 800 price points, 4 time steps ($\lambda \gg 1$): two fully "
-                             r"implicit half-steps first (Rannacher 1984) damp the jump and keep second order. "
+                             r"implicit half-steps first (Rannacher 1984) damp high frequencies; second-order recovery needs appropriate regularity. "
                              r"Exponential fitting (Duffy) is another cure", 4.6, 17, GREY_A).next_to(leg, DOWN, buff=0.3)
         side.align_to(leg, LEFT)
         with self.voiceover(
-            "Chapter twelve ended with Crank–Nicolson's weak spot. With a large time step, its highest frequencies "
-            f"have a growth factor near minus one: here {gcn:.3f}. A spike on the grid does not decay; it flips sign "
-            "every step. <bookmark mark='a'/> A payoff with a jump is full of such spikes. The price looks fine, "
-            "but its gamma, the second derivative, rings around the strike, and gamma is what the desk hedges. "
-            "<bookmark mark='b'/> The fix, from Rolf Rannacher in 1984: take the first steps fully implicit, where the "
-            f"same mode is multiplied by {gim:.4f}, then switch to Crank–Nicolson. The ringing is gone, and the "
-            "scheme stays second order."
+            f"This is a pure alternating Fourier mode, not a windowed spike. With lambda twenty, the Crank–Nicolson factor is {gcn:.3f}: it changes sign and decays slowly. <bookmark mark='a'/> A nonsmooth payoff excites high frequencies. On the full saved stock and gamma ranges, the digital's second derivative shows oscillations. These extreme gamma values are retained, rather than clipped to the analytical curve's percentiles. <bookmark mark='b'/> A fully implicit step of this full length has factor {gim:.4f}. The actual Rannacher start uses two half steps, whose combined factor is one over one plus twice lambda, squared, for this mode. It is a different factor and strongly damps high frequencies. Recovering second-order accuracy depends on the problem's regularity, start treatment and quantity being measured."
         ) as vo:
             self.play(FadeIn(top), FadeIn(cur), FadeIn(tag))
             for n in range(1, 6):
@@ -90,7 +84,7 @@ class LCP(VoiceoverScene, ThreeDScene):
         def surf(Z, colors, op):
             from scipy.interpolate import RegularGridInterpolator
             fn = RegularGridInterpolator((tau, S), Z)
-            sf = Surface(lambda u, v: ax.c2p(u, v, float(np.clip(fn((v, u)), 0, 50))), u_range=[50, 150], v_range=[0, 1],
+            sf = Surface(lambda u, v: ax.c2p(u, v, float(fn((v, u)))), u_range=[50, 150], v_range=[0, 1],
                          resolution=(40, 20), fill_opacity=op, stroke_width=0.3, stroke_color="#0E1117",
                          checkerboard_colors=False)
             sf.set_fill_by_value(axes=ax, colorscale=list(zip(colors, [0, 15, 45])), axis=2)
@@ -156,9 +150,9 @@ class LCP(VoiceoverScene, ThreeDScene):
                 why(r"a linear complementarity problem at each time step (Brennan and Schwartz 1978 first priced the "
                     r"American put this way)"),
                 why(r"projected SOR (Cryer 1971): a Gauss--Seidel sweep, over-relaxed, then clipped up to the payoff; "
-                    r"it converges for an M-matrix and $0 < \omega < 2$"),
+                    r"standard $0<\omega<2$ convergence requires appropriate matrix conditions, such as the SPD LCP case"),
                 why(r"the penalty method (Forsyth and Vetzal 2002): a huge penalty $\rho$ where $x$ falls below the "
-                    r"payoff; Newton on the active set stops in a few iterations")]
+                    r"payoff; finite $\rho$ adds penalty error and affects conditioning; few active-set iterations are empirical")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.4, buff=0.6, edge=6.9)
         q = predict(r"Where on the surface is $\partial_\tau V = \mathcal{L}V$ \emph{not} satisfied?", width=4.8,
                     font_size=20).to_corner(DR, buff=0.3)
@@ -182,7 +176,7 @@ class LCP(VoiceoverScene, ThreeDScene):
 
     def solvers(self, lc):
         res = np.asarray(lc["psor_trace"]["res"])
-        g = axes([0.5, len(res) + 0.5], [-11, 0], x_length=6.0, y_length=3.8, xlabel=r"PSOR sweep (first time step)",
+        g = axes([0.5, len(res) + 0.5], data_range(np.log10(res)), x_length=6.0, y_length=3.8, xlabel=r"PSOR sweep (first time step)",
                  ylabel=r"size of the update ($\log_{10}$)", xticks=[1, 5, 10, 15], yticks=[-10, -5, 0], font_size=15)
         g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.3)
         ax = g.ax
@@ -207,13 +201,7 @@ class LCP(VoiceoverScene, ThreeDScene):
                           r"affords twice the grid. Times: one core, best of three", 4.8, 17, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "Watch PSOR solve one time step. The size of each sweep's update, on a log scale: it falls by a factor of "
-            f"about {fac:.0f} per sweep, and after {len(res)} sweeps the step is solved to round-off. "
-            "<bookmark mark='a'/> Over the whole year: PSOR on a two-hundred-point grid gives "
-            f"{ps['price']:.4f}. The penalty method on a grid twice as fine needs on average {pen['its_mean']:.0f} "
-            f"Newton iterations per step and gives {pen['price']:.4f}, against {tree['price']:.4f} from a two "
-            "thousand step tree. <bookmark mark='b'/> In this Python code the penalty method buys twice the grid "
-            f"for {pen['time'] / ps['time']:.1f} times the time."
+            f"The curve is the update-size diagnostic for one PSOR time step, not a complementarity residual or a true-price error. It falls by an average factor of {fac:.0f} per sweep across {len(res)} sweeps. A tiny update alone does not certify a solution to roundoff. <bookmark mark='a'/> The saved PSOR grid gives {ps['price']:.4f}. The finer penalty grid gives {pen['price']:.4f}, using an average {pen['its_mean']:.1f} active-set iterations per time step. The separate finite tree gives {tree['price']:.4f}. Finite penalty, grid and time errors remain. <bookmark mark='b'/> These implementations and different grid sizes take a time ratio of {pen['time'] / ps['time']:.1f}; this is a case-specific computational comparison, not a convergence theorem or matched-accuracy speed claim."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tr))
             self.play(k.animate.set_value(len(res)), run_time=4, rate_func=linear)
