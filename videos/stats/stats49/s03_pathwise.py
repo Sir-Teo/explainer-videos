@@ -53,7 +53,7 @@ class Pathwise(VoiceoverScene):
         d = load("geometry")
         sc = 5.0
         v = np.asarray(d["c_phi"]) * sc
-        T = TangentSpace(origin=(-2.6, -1.4, 0.0), scale=1.6)
+        T = TangentSpace(origin=(-2.6, -1.4, 0.0), scale=1.15)
         box = T.plane(extent=2.6, color=GREY_D, opacity=0.05)
         pl = T.plane(extent=2.0, color=TANC, opacity=0.2)
         a = T.arrow(v, color=GRADC)

@@ -65,7 +65,7 @@ class Tangent(VoiceoverScene):
         self.clear_scene()
 
     def picture(self):
-        T = TangentSpace(origin=(-1.6, -1.0, 0.0), scale=1.7)
+        T = TangentSpace(origin=(-2.6, -1.0, 0.0), scale=1.15)
         box = T.plane(extent=2.4, color=GREY_D, opacity=0.06)
         pl = T.plane(extent=1.7, color=TANC, opacity=0.2)
         up = T.arrow((0, 0, 1.8), color=GREY_C, stroke_width=3)

@@ -49,7 +49,7 @@ class EfficientScore(VoiceoverScene):
         self.clear_scene()
 
     def picture(self):
-        T = TangentSpace(origin=(-2.4, -1.4, 0.0), scale=1.6)
+        T = TangentSpace(origin=(-2.4, -1.4, 0.0), scale=1.15)
         box = T.plane(extent=2.6, color=GREY_D, opacity=0.05)
         nl = T.line((1.0, 0.6, 0.0), extent=2.6, color=NUIC, stroke_width=5)
         v = np.array([1.6, 0.2, 1.4])
