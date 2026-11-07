@@ -13,8 +13,8 @@ Its build is the p-hacking simulator (`statkit.multiple.phack`). Its instrument 
 sorted p-values against rank, with the Benjamini–Hochberg line sweeping through them, and a grid view of every
 p-value. Its kit is `statkit.multiple`.
 
-It opens with Bennett, Baird, Miller & Wolford's dead salmon (2009/2010), re-run as a fish of 9,141 voxels of
-smoothed pure noise with 15 scans:
+It opens with Bennett, Baird, Miller & Wolford's dead salmon (2009/2010), illustrated with a toy fish of 9,141 voxels of
+spatially smoothed Gaussian noise with 15 independent contrast images (not the original fMRI task design):
 - 446 voxels have p < 0.05 (457 expected);
 - 78 voxels in 27 clusters have p < 0.01;
 - 3 voxels have p < 0.001 (≈ 9 expected);
@@ -87,7 +87,7 @@ From there the part covers:
   - OSC (2015): 97% of originals significant against 36% of replications; mean r from 0.40 to 0.20.
   - Camerer et al. (2016, 2018): 11 of 18 economics experiments and 13 of 21 social-science experiments replicated.
   - Errington et al. (2021).
-- **Publication bias.** 800 simulated studies of a true effect of 0.2; 278 published (every significant one, plus 10%
+- **Publication bias.** 800 simulated studies of a true effect of 0.2; 278 published (every positive-direction significant study, plus 10%
   of the rest).
   - All studies pool to 0.194, the published ones to 0.301.
   - Egger's intercept is 1.00 (p ≈ 10⁻⁵) for the published studies and −0.06 for all.
@@ -127,11 +127,11 @@ The Coverage Board gains six rows (1,000 replications each). The FDR rows are 's
 | Method | Setting | Achieved | Verdict |
 |---|---|---|---|
 | no correction (each p < 0.1), FDR | m = 1,000, 90% null, independent | 0.502 | broken |
-| BH, q = 0.1 | independent | 0.090 | kept |
+| BH, q = 0.1 | independent | 0.090 | conservative |
 | BH, q = 0.1 | equicorrelated ρ = 0.5 | 0.065 | conservative |
 | BY, q = 0.1 | equicorrelated ρ = 0.5 | 0.011 | conservative |
 | unadjusted 90% CIs, BH-selected (FCR) | 100 real effects | 78.5% | broken |
-| FCR-adjusted CIs, BH-selected | 100 real effects | 90.6% | kept |
+| FCR-adjusted CIs, BH-selected | 100 real effects | 90.6% | conservative |
 
 ## Build it
 
@@ -229,20 +229,20 @@ union bound P(min_{i∈I₀} p_i ≤ α/m₀) ≤ m₀·α/m₀ = α.
 
 *Solution.* Let c = Σ_{j≤m} 1/j and Δ = q/(mc), and let i be a true null rejected with R = k. Then p_i ≤ kΔ, so
 p_i ∈ ((j − 1)Δ, jΔ] for some j ≤ k, and then 1/R = 1/k ≤ 1/j. Hence 1{i rejected}/R ≤ Σ_{j=1}^m (1/j)·1{p_i ∈
-((j − 1)Δ, jΔ]}, whatever the dependence. Taking expectations with p_i uniform, the contribution is at most
-Σ_j (1/j)Δ = cΔ = q/m. Summing over m₀ ≤ m nulls gives FDR ≤ q.
+((j − 1)Δ, jΔ]}, whatever the dependence. For exactly uniform nulls, taking expectations, the contribution is at most
+Σ_j (1/j)Δ = cΔ = q/m. Summing over m₀ ≤ m nulls gives FDR ≤ q. For super-uniform nulls, use summation by parts with the nonincreasing step weight and P(p_i≤jΔ)≤jΔ; individual bin probabilities need not be bounded by Δ.
 
-**4. Storey's estimate is conservative.**
+**4. Storey’s uncapped estimate at a fixed λ has conservative expectation.**
 
 *Solution.* E#{p_i > λ} ≥ E#{null p_i > λ} = m₀(1 − λ), because null p-values are uniform. So
-E π̂₀(λ) = E#{p_i > λ}/(m(1 − λ)) ≥ m₀/m = π₀.
+E π̂₀(λ) = E#{p_i > λ}/(m(1 − λ)) ≥ m₀/m = π₀. This refers to the uncapped estimator. Clipping at one can bias it downward (under an all-null uniform model, its expectation is strictly below one). An upward mean alone does not prove finite-sample FDR control for a plug-in adaptive procedure.
 
 **5. The knockoff coin flip.**
 
 *Solution.* Swapping a null variable j with its knockoff leaves the joint law of (X, X̃, y) unchanged: it leaves that
 of (X, X̃) unchanged by exchangeability, and y depends on X only through non-null variables, given which X̃ is
 irrelevant. But the swap maps W_j to −W_j and leaves |W_j| and the other W's unchanged. So (W_j, |W|) and (−W_j, |W|)
-have the same law: given the magnitudes, the sign of a null W_j is a fair coin. The knockoff+ threshold then gives
+have the same law: conditional on all magnitudes and nonnull statistics, the nonzero null signs are independent fair coins. Zero W values are excluded. The joint flip-sign property is essential. The knockoff+ threshold then gives
 FDR ≤ q by a supermartingale (optional stopping) argument over the ordered |W|.
 
 **6. Ioannidis's formula.**
@@ -283,3 +283,43 @@ R < 0.0625, a prior below 0.0625/1.0625 ≈ 5.9%.
 | e-values: FDR at any stopping time | 58 |
 | genome-scale causal discovery | 62 |
 | the Coverage Board | every part; 65 |
+
+
+## Scientific QA — 2026-11-07
+
+All 14 English chapters, calculations, solutions and shared helpers were reviewed.
+FDR is an average across studies; a single realized FDP near q does not verify its theorem.
+Bonferroni/Holm require valid marginal p-values; Simes/Hochberg need suitable joint dependence.
+Westfall–Young needs null exchangeability and, for strong control, subset pivotality; permutation counts use +1.
+The independent BH equality requires uniform nulls and an admissible level. Adaptive plug-in estimates,
+model-based local fdr, and conditional null fits need their own assumptions.
+
+The six Board uncertainties now use sample SD of study-level proportions divided by sqrt(1000),
+including zero-selection families. Its interval rows display **1−FCR**, not pooled coverage of
+individual intervals. An empty family has noncoverage zero. With these correct uncertainties,
+BH under independence and the adjusted intervals are slightly conservative against their nominal
+levels; their mean values have not changed. Rα/m intervals are justified here for simple selection
+rules such as BH with independent estimates; arbitrary selection needs the minimum selection-count
+construction. Conditional selected-model inference additionally requires its stated sampling model.
+
+Knockoff lasso CV now refits centering and scaling in each training fold on a fixed 25-penalty grid.
+The 20-replicate mean FDP is 0.0821 ± 0.0166 (MC SE) for knockoff+ and 0.6251 ± 0.0159 for CV lasso;
+this small simulation illustrates the theorem rather than establishing it. The compiled audit solver
+checks every lasso KKT residual below 2e−7 and retains all study-level FDP/power values.
+The teaching computation retains its original coordinate-descent solver.
+
+The primary `sda::singh2002` R matrix (102×6033, cancer minus healthy pooled t with 100 df) was
+independently transformed to t/z. It agrees with the Museum table within 5.62e−7 for t and 5.87e−7
+for z; small differences slightly exceed half a unit in the table’s sixth decimal. This is a numerical
+agreement check, not a claim of bit-identical rounding. The finite-window local-fdr density agrees
+with an independent converged statsmodels Poisson GLM to 1.4e−15 absolute error.
+
+Full FDP histograms show [0,1] with uncapped bar heights. Knockoff plots include both signs without
+clipping, formula sequences retain context headings, and the recap heading appears before narration.
+The p-hacking simulator is illustrative: its combined A+B+C result differs from the historical table
+by about 2.6 Monte Carlo SE. Funnel asymmetry and p-curve patterns are diagnostics with alternative
+explanations, and PET extrapolation is model-dependent. Registration comparisons are observational.
+
+Source checks, independent numerical tests and reproducible input hashes are archived in
+`docs/qa/evidence/stats33-polish-20261107`. Render, listening and bilingual production approval
+remain pending until their evidence is recorded.

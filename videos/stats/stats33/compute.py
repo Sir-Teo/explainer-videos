@@ -69,7 +69,7 @@ def fish_mask(H: int = 96, W: int = 192) -> np.ndarray:
 def compute_salmon():
     g = rng(2009)
     mask = fish_mask()
-    n_scans = 15  # contrasts: photographs of people in social situations vs rest
+    n_scans = 15  # illustrative independent Gaussian contrast images; not the original fMRI design
     data = np.array([ndimage.gaussian_filter(g.standard_normal(mask.shape), 1.5) for _ in range(n_scans)])
     t = data.mean(0) / (data.std(0, ddof=1) / math.sqrt(n_scans))
     p = 2 * stats.t.sf(np.abs(t), n_scans - 1)
@@ -154,6 +154,26 @@ def compute_prostate():
                  "sd": float(z.std())})
 
 
+def mean_mc_se(values):
+    """Monte Carlo SE across independent simulated studies, including empty lists."""
+    return float(np.std(values, ddof=1) / math.sqrt(len(values)))
+
+
+def fold_scaled_cv(X, y, lams, K=5, rng=None):
+    """Fit every centering/scaling transform using its training fold only."""
+    order = rng.permutation(len(y))
+    folds = np.array_split(order, K)
+    errors = []
+    for test in folds:
+        train = np.setdiff1d(order, test)
+        A, b, xm, scale, ym = SP.standardize(X[train], y[train])
+        path = SP.lasso_path(A, b, lams=lams)
+        prediction = (X[test] - xm) / scale @ path["coefs"].T + ym
+        errors.append(np.mean((y[test, None] - prediction) ** 2, axis=0))
+    means = np.average(errors, axis=0, weights=[len(f) for f in folds])
+    return {"lam_min": float(lams[np.argmin(means)]), "mse": means, "folds": folds}
+
+
 def compute_knock():
     g = rng(2015)
     n, p, k = 400, 150, 20
@@ -179,8 +199,8 @@ def compute_knock():
         stats_["knockoff"].append(np.mean(~true[sel]) if len(sel) else 0.0)
         stats_["pow_k"].append(np.mean(true[sel].sum() / k))
         Xs, ys, *_ = SP.standardize(X, y)
-        lams = SP.lam_max(Xs, ys) * np.logspace(0, -1.5, 15)
-        cv = SP.cv_lasso(Xs, ys, lams, K=5, rng=g)
+        lams = np.geomspace(2.0, 0.01, 25)  # fixed without inspecting validation outcomes
+        cv = fold_scaled_cv(X, y, lams, K=5, rng=g)
         b = SP.lasso_cd(Xs, ys, cv["lam_min"])
         sl = np.flatnonzero(b)
         stats_["lasso_cv"].append(np.mean(~true[sl]) if len(sl) else 0.0)
@@ -190,7 +210,8 @@ def compute_knock():
                     "lasso_sel": len(sl), "lasso_false": int(np.sum(~true[sl]))}
     return nest({"n": n, "p": p, "k": k, "q": q, "fdr_knock": float(np.mean(stats_["knockoff"])),
                  "pow_knock": float(np.mean(stats_["pow_k"])), "fdr_lasso": float(np.mean(stats_["lasso_cv"])),
-                 "pow_lasso": float(np.mean(stats_["pow_l"])), "demo": demo, "reps": 20})
+                 "pow_lasso": float(np.mean(stats_["pow_l"])), "demo": demo, "reps": 20,
+                 "replicates": stats_, "mc_se": {k: mean_mc_se(v) for k, v in stats_.items()}})
 
 
 def compute_phack():
@@ -256,7 +277,7 @@ def _fcr_rep(g, m=1000, m1=100, q=0.1, alpha=0.1):
     R = int(sel.sum())
     zu = stats.norm.ppf(1 - alpha / 2)
     if R == 0:
-        return None
+        return 1.0, 1.0, 0, 0.0  # noncoverage/(R or 1) is zero for an empty family
     unadj = np.abs(x[sel] - mu[sel]) <= zu
     adj = MT.fcr_intervals(x, np.ones(m), sel, alpha)
     adjc = (adj["lo"][sel] <= mu[sel]) & (mu[sel] <= adj["hi"][sel])
@@ -266,9 +287,9 @@ def _fcr_rep(g, m=1000, m1=100, q=0.1, alpha=0.1):
 def compute_fcr():
     g = rng(2005)
     out = [_fcr_rep(g) for _ in range(400)]
-    out = [o for o in out if o]
     return nest({"unadj": float(np.mean([o[0] for o in out])), "adj": float(np.mean([o[1] for o in out])),
-                 "R_mean": float(np.mean([o[2] for o in out])), "z_adj": float(np.mean([o[3] for o in out])),
+                 "R_mean": float(np.mean([o[2] for o in out])), "z_adj": float(np.mean([o[3] for o in out if o[2]])),
+                 "zero_selections": sum(o[2] == 0 for o in out), "replicates": out,
                  "z_unadj": float(stats.norm.ppf(0.95))})
 
 
@@ -289,21 +310,21 @@ def compute_board():
         rej = pv < q
         fdp_none.append(rej[:900].sum() / max(rej.sum(), 1))
     rows.append(Row(33, r"no correction \ (each $p < 0.1$)", r"$m = 1000$, \ 90\% null, \ independent", "size", q,
-                    float(np.mean(fdp_none)), reps, extra="FDR"))
-    rows.append(Row(33, r"Benjamini--Hochberg, \ $q = 0.1$", r"$m = 1000$, \ 90\% null, \ independent", "size", q, r_ind["fdr"], reps, extra="FDR"))
-    rows.append(Row(33, r"Benjamini--Hochberg, \ $q = 0.1$", r"$m = 1000$, \ equicorrelated $\rho = 0.5$", "size", q, r_dep["fdr"], reps, extra="FDR"))
-    rows.append(Row(33, r"Benjamini--Yekutieli, \ $q = 0.1$", r"$m = 1000$, \ equicorrelated $\rho = 0.5$", "size", q, r_by["fdr"], reps, extra="FDR"))
+                    float(np.mean(fdp_none)), reps, extra="FDR", mc_se=mean_mc_se(fdp_none)))
+    rows.append(Row(33, r"Benjamini--Hochberg, \ $q = 0.1$", r"$m = 1000$, \ 90\% null, \ independent", "size", q, r_ind["fdr"], reps, extra="FDR", mc_se=mean_mc_se(r_ind["fdp"])))
+    rows.append(Row(33, r"Benjamini--Hochberg, \ $q = 0.1$", r"$m = 1000$, \ equicorrelated $\rho = 0.5$", "size", q, r_dep["fdr"], reps, extra="FDR", mc_se=mean_mc_se(r_dep["fdp"])))
+    rows.append(Row(33, r"Benjamini--Yekutieli, \ $q = 0.1$", r"$m = 1000$, \ equicorrelated $\rho = 0.5$", "size", q, r_by["fdr"], reps, extra="FDR", mc_se=mean_mc_se(r_by["fdp"])))
     g = rng(5)
     fc = [_fcr_rep(g) for _ in range(reps)]
-    fc = [o for o in fc if o]
     rows.append(Row(33, r"unadjusted 90\% CIs, \ BH-selected", r"$m = 1000$, \ 100 real effects", "coverage", 0.9,
-                    float(np.mean([o[0] for o in fc])), len(fc), extra="FCR"))
+                    float(np.mean([o[0] for o in fc])), len(fc), extra="1-FCR", mc_se=mean_mc_se([o[0] for o in fc])))
     rows.append(Row(33, r"FCR-adjusted CIs, \ BH-selected", r"$m = 1000$, \ 100 real effects", "coverage", 0.9,
-                    float(np.mean([o[1] for o in fc])), len(fc), extra="FCR"))
+                    float(np.mean([o[1] for o in fc])), len(fc), extra="1-FCR", mc_se=mean_mc_se([o[1] for o in fc])))
     save_rows(33, rows)
     return nest({"q": q, "reps": reps, "fdr_ind": r_ind["fdr"], "fdr_dep": r_dep["fdr"], "fdr_by": r_by["fdr"],
                  "fdr_none": float(np.mean(fdp_none)), "pow_ind": r_ind["power"], "pow_dep": r_dep["power"],
-                 "pow_by": r_by["power"], "rows": [asdict(r) | {"verdict": r.verdict, "se": r.se} for r in rows]})
+                 "pow_by": r_by["power"], "fdp_replicates": {"none": fdp_none, "ind": r_ind["fdp"],
+                 "dep": r_dep["fdp"], "by": r_by["fdp"]}, "fcr_replicates": fc, "rows": [asdict(r) | {"verdict": r.verdict, "se": r.se} for r in rows]})
 
 
 ITEMS = {

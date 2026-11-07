@@ -35,13 +35,13 @@ class Hook(VoiceoverScene):
             label(r"the point: \ test thousands of voxels and some will light up by chance", font_size=24, color=SIGC),
         ), 12.0, 0.35, [0, -1.7, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In 2009 the neuroscientist Craig Bennett and his colleagues put a salmon into an MRI "
-            "scanner. It was a mature Atlantic salmon, and, as their poster put it, not alive at the time of scanning. They "
-            "showed it photographs of people in social situations and asked it to judge what emotion each person felt. "
-            "<bookmark mark='b'/> A standard analysis found a small cluster of voxels in the salmon's brain that "
-            "responded to the photographs. <bookmark mark='c'/> The salmon was not thinking. Its brain was tested at "
-            "thousands of locations at once, and at thousands of locations, chance alone will light some up. The poster "
-            "won an Ig Nobel prize, and changed how the field reports its results."
+            "<bookmark mark='a'/> In 2009 the neuroscientist Craig Bennett and his colleagues put a salmon into an "
+            "MRI scanner. It was a mature Atlantic salmon, and, as their poster put it, not alive at the time of "
+            "scanning. They showed it photographs of people in social situations and asked it to judge what emotion "
+            "each person felt. <bookmark mark='b'/> A standard analysis found a small cluster of voxels in the "
+            "salmon's brain that responded to the photographs. <bookmark mark='c'/> The salmon was not thinking. Its "
+            "brain was tested at thousands of locations at once, and at thousands of locations, chance alone will "
+            "light some up. The work became a widely discussed demonstration of multiple testing."
         ) as vo:
             self.play(FadeIn(tl))
             vo.wait_until("a")
@@ -57,15 +57,16 @@ class Hook(VoiceoverScene):
         fm = fish_map(d, None, SIGC)
         rows = fit_rows(VGroup(
             label(rf"our own dead fish: \ {d['n_vox']:,} voxels of pure noise", font_size=22),
-            label(r"15 scans, \ smoothed like real fMRI", font_size=22, color=GREY_A),
-            label(r"a $t$-test at every voxel: \ does it respond?", font_size=22, color=SIGC),
+            label(r"15 independent noise images, \ spatially smoothed", font_size=22, color=GREY_A),
+            label(r"a $t$-test at every voxel: \ is its mean zero?", font_size=22, color=SIGC),
             label(r"by construction, \ no voxel does", font_size=22, color=FALSEC),
         ), 4.2, 0.42, [4.6, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> We can repeat the experiment without a fish. Here is a fish-shaped brain of nine thousand "
-            "one hundred and forty-one voxels, <bookmark mark='b'/> each measured in fifteen scans of pure noise, smoothed "
-            "in space the way real scanner data are. <bookmark mark='c'/> At each voxel, a t-test asks whether its signal "
-            "responds. <bookmark mark='d'/> By construction, none does: every null hypothesis is true."
+            "<bookmark mark='a'/> We can illustrate the statistical problem with a toy simulation. Here is a "
+            "fish-shaped brain of nine thousand one hundred and forty-one voxels, <bookmark mark='b'/> each measured "
+            "in fifteen independent Gaussian noise images, smoothed in space. This is not a reconstruction of the "
+            "original task design. <bookmark mark='c'/> At each voxel, a one-sample t-test asks whether its mean is "
+            "zero. <bookmark mark='d'/> By construction, none does: every null hypothesis is true."
         ) as vo:
             self.add(seeded_tag())
             vo.wait_until("a")
@@ -117,12 +118,13 @@ class Hook(VoiceoverScene):
             label(r"a stricter threshold is not a correction", font_size=24, color=FALSEC),
         ), 4.2, 0.42, [4.6, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The salmon study used a stricter threshold, p below one in a thousand, and required a "
-            "cluster of at least three voxels. <bookmark mark='b'/> In our fish three voxels survive, close to the nine "
-            "expected by chance. <bookmark mark='c'/> In the salmon's real scan, a cluster of three survived. "
-            "<bookmark mark='d'/> A stricter per-voxel threshold reduces false positives, but it is not a correction for "
-            "the number of tests: with a hundred and thirty thousand voxels in a human brain scan, p below a thousandth "
-            "still lights up about a hundred and thirty by chance."
+            "<bookmark mark='a'/> The salmon study used a stricter threshold, p below one in a thousand, and required"
+            " a cluster of at least three voxels. <bookmark mark='b'/> In our fish three voxels survive this "
+            "realization, against an expectation of about nine. Correlation makes the count fluctuate. <bookmark "
+            "mark='c'/> In the salmon's real scan, a cluster of three survived. <bookmark mark='d'/> A stricter "
+            "per-voxel threshold reduces false positives, but it is not a correction for the number of tests: with a "
+            "hundred and thirty thousand voxels in a human brain scan, p below a thousandth still lights up about a "
+            "hundred and thirty by chance."
         ) as vo:
             self.add(seeded_tag())
             self.add(f1)
@@ -146,10 +148,10 @@ class Hook(VoiceoverScene):
             label(r"the dead fish is dead again", font_size=24, color=TRUEC),
         ), 4.2, 0.42, [4.6, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Bennett's real point came next: correct for the number of tests. <bookmark mark='b'/> "
-            "With Bonferroni's correction, chapter two, no voxel survives. <bookmark mark='c'/> With a false discovery rate "
-            "correction, chapter three, none either. <bookmark mark='d'/> The dead fish is dead again. In their survey, "
-            "between a quarter and two fifths of fMRI papers published in 2008 had reported uncorrected results."
+            "<bookmark mark='a'/> Bennett's real point came next: correct for the number of tests. <bookmark "
+            "mark='b'/> With Bonferroni's correction, chapter two, no voxel survives. <bookmark mark='c'/> With a "
+            "false discovery rate correction, chapter three, none either. <bookmark mark='d'/> The dead fish is dead "
+            "again. The example shows why a per-voxel threshold alone cannot support a whole-map claim."
         ) as vo:
             self.add(seeded_tag())
             self.add(f1)
@@ -166,15 +168,20 @@ class Hook(VoiceoverScene):
             cmath(r"m = 20", r":", r"64\%; \ \ m = 100: \ 99.4\%", font_size=32),
         ]
         rows[0][-1].set_color(SIGC)
-        whys = [why(r"$m$ true nulls, \ level $\alpha$ each"), why(r"the fish"), why(r"independent tests"),
+        whys = [why(r"$m$ true nulls, \ exact uniform marginal $p$-values"), why(r"the fish"), why(r"independent tests"),
                 why(r"Part 10's warning, \ multiplied")]
         with self.voiceover(
-            "<bookmark mark='a'/> The arithmetic is simple. Test m true null hypotheses at level alpha each and you expect m "
-            "times alpha false positives. <bookmark mark='b'/> For the fish, four hundred and fifty-seven expected at five "
-            "percent; we saw four hundred and forty-six. <bookmark mark='c'/> The chance of at least one false positive is "
-            "one minus one minus alpha to the m, for independent tests. <bookmark mark='d'/> With twenty tests that is "
-            "already sixty-four percent; with a hundred, ninety-nine point four. Part 10's single test, multiplied."
+            "<bookmark mark='a'/> The arithmetic is simple. With exactly uniform null p-values, testing m true nulls "
+            "at alpha gives m times alpha expected false positives, even under dependence. With super-uniform "
+            "p-values this is an upper bound. <bookmark mark='b'/> For the fish, four hundred and fifty-seven "
+            "expected at five percent; we saw four hundred and forty-six. <bookmark mark='c'/> The chance of at least"
+            " one false positive is one minus one minus alpha to the m, for independent tests. <bookmark mark='d'/> "
+            "With twenty tests that is already sixty-four percent; with a hundred, ninety-nine point four. Part 10's "
+            "single test, multiplied."
         ) as vo:
+            intro=label('Expected false counts and family-wise risk answer different questions',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

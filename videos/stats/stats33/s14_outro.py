@@ -6,7 +6,7 @@ PROBLEMS = [
     r"Show that Holm's procedure controls the FWER at $\alpha$ under any dependence.",
     r"Prove that BH's FDR equals $\pi_0 q$ for independent, \ continuous, \ uniform null $p$-values.",
     r"Show that BH at level $q/\sum_{i=1}^m 1/i$ controls the FDR under arbitrary dependence \ (bound $\mathbf 1\{p \le qk/m\}/k$).",
-    r"Show that Storey's $\hat\pi_0(\lambda)$ has expectation $\ge \pi_0$.",
+    r"Show that Storey's uncapped $\hat\pi_0(\lambda)$ at fixed $\lambda$ has expectation $\ge \pi_0$.",
     r"For a null $j$, \ show $\mathrm{sign}(W_j)$ is a fair coin independent of $|W_j|$ for knockoffs.",
     r"Derive Ioannidis's PPV with bias $u$, \ and find the prior below which $\mathrm{PPV} < 1/2$ for power 0.8.",
 ]
@@ -38,16 +38,17 @@ class Outro(VoiceoverScene):
         head = label(r"Part 33, \ in twelve lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Part thirty-three in twelve lines. <bookmark mark='a'/> A dead salmon responded to photographs because thousands "
-            "of voxels were tested without correction. In the World's five thousand genes, half the uncorrected list was "
-            "noise. Bonferroni, Holm, closed testing and Westfall and Young control the chance of any false discovery, and "
-            "find a fifth of the real genes. Benjamini and Hochberg control the share of false discoveries instead, and "
-            "find three times as many. Storey estimates the share of nulls; Efron estimates the null itself, and the local "
-            "false discovery rate of each gene. The false discovery rate is only an average, and dependence spreads the "
-            "proportion widely. Knockoffs control it for any selection method by a coin-flip argument. Forking paths turn a "
-            "five percent error rate into sixty-one. Replication rates near a third and effects halved are what selection "
-            "predicts. Funnels, Egger's test and p-curves detect a filtered literature. And intervals for selected effects "
-            "must be widened to keep their promise."
+            "Part thirty-three in twelve lines. <bookmark mark='a'/> A dead salmon responded to photographs because "
+            "thousands of voxels were tested without correction. In the World's five thousand genes, half the "
+            "uncorrected list was noise. Bonferroni, Holm, closed testing and Westfall and Young control the chance "
+            "of any false discovery, and find a fifth of the real genes. Benjamini and Hochberg control the share of "
+            "false discoveries instead, and find three times as many. Storey estimates the share of nulls; Efron "
+            "estimates the null itself, and the local false discovery rate of each gene. The false discovery rate is "
+            "only an average, and dependence spreads the proportion widely. With valid knockoffs and flip-sign "
+            "statistics, knockoff+ controls FDR by a coin-flip argument. Forking paths turn a five percent error rate"
+            " into sixty-one. Replication rates near a third and effects halved are what selection predicts. Funnels,"
+            " Egger’s test and p-curves can diagnose patterns consistent with selection; they do not uniquely "
+            "identify publication bias. And intervals for selected effects must be widened to keep their promise."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -79,6 +80,7 @@ class Outro(VoiceoverScene):
             (r"minimax testing; \ higher criticism", [50]), (r"selective inference and PoSI", [56]),
             (r"e-values: \ FDR at any stopping time", [58]), (r"genomics-scale causal discovery", [62]),
         ], font_size=22)
+        self.add(card.head)
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part 34's conformal prediction rests on the exchangeability that made "
             "knockoffs work. Part 35 handles many outcomes in one trial. Part 41 meets multiplicity in imputation. Part 46 "
@@ -87,7 +89,7 @@ class Outro(VoiceoverScene):
             "any stopping time. And Part 62 tests thousands of causal hypotheses at once."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):
@@ -130,10 +132,11 @@ class Outro(VoiceoverScene):
         tr.to_edge(UP, buff=0.8)
         nxt.next_to(tr, DOWN, buff=1.0)
         with self.voiceover(
-            "Thirty-three parts of sixty-five. <bookmark mark='a'/> We can ask thousands of questions and still say how many "
-            "of our answers are likely wrong. <bookmark mark='b'/> Knockoffs controlled errors without trusting any model "
-            "for the outcome, using only exchangeability. Part 34 asks how far that goes: can a black-box predictor, a "
-            "forest or a neural network, come with honest uncertainty? Prediction with guarantees."
+            "Thirty-three parts of sixty-five. <bookmark mark='a'/> We can ask thousands of questions and still say "
+            "how many of our answers are likely wrong. <bookmark mark='b'/> Knockoffs controlled errors without "
+            "trusting any model for the outcome, using valid model-X knockoffs and the flip-sign property. Part 34 "
+            "asks how far that goes: can a black-box predictor, a forest or a neural network, come with honest "
+            "uncertainty? Prediction with guarantees."
         ) as vo:
             self.play(FadeIn(tr))
             vo.wait_until("a")

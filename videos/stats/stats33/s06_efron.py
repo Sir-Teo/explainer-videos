@@ -42,6 +42,9 @@ class Efron(VoiceoverScene):
             "zero f zero over f: the local false discovery rate. <bookmark mark='d'/> The same ratio with tail areas is the "
             "tail-area false discovery rate, which BH estimates."
         ) as vo:
+            intro=label('Bayes rule defines local null probabilities in a two-groups model',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -59,11 +62,15 @@ class Efron(VoiceoverScene):
         whys = [why(r"thousands of cases: \ the density is learnable"), why(r"or conservatively 1"),
                 why(r"empirical Bayes"), why(r"Efron's convention")]
         with self.voiceover(
-            "<bookmark mark='a'/> The point is that with thousands of genes, the mixture density f can be estimated directly "
-            "from the data. <bookmark mark='b'/> The null part is known up to pi zero, which can be taken as one to be safe. "
-            "<bookmark mark='c'/> Their ratio estimates the local false discovery rate of each gene, <bookmark mark='d'/> "
-            "and Efron's convention is to report genes whose local fdr is below point two."
+            "<bookmark mark='a'/> The point is that with thousands of genes, the mixture density f can be estimated "
+            "directly from the data. <bookmark mark='b'/> With a specified null density, setting pi zero to one "
+            "increases the numerator, but density estimation error still prevents a guaranteed bound. <bookmark "
+            "mark='c'/> Their ratio estimates the local false discovery rate of each gene, <bookmark mark='d'/> and "
+            "Efron's convention is to report genes whose local fdr is below point two."
         ) as vo:
+            intro=label('Estimated density ratios depend on the fitted model',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -102,8 +109,8 @@ class Efron(VoiceoverScene):
         nullc = curve(ax, mids, d["N"] * w * np.asarray(d["f0_theo"]), NULLC, 3)
         rows = fit_rows(VGroup(
             label(r"blue: \ the 6{,}033 $z$-values", font_size=22, color=BHC),
-            label(r"grey: \ $N \cdot \phi(z)$, \ the theoretical null", font_size=22, color=NULLC),
-            label(r"heavier tails than the null: \ the signals", font_size=22, color=SIGC),
+            label(r"grey: \ $N\Delta \cdot \phi(z)$, \ the theoretical null", font_size=22, color=NULLC),
+            label(r"tail excess relative to this null reference", font_size=22, color=SIGC),
         ), 3.4, 0.42, [5.3, 0.3, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The histogram of the six thousand z-values. <bookmark mark='b'/> In grey, what six thousand "
@@ -129,13 +136,18 @@ class Efron(VoiceoverScene):
         ]
         rows[1][-1].set_color(BHC)
         whys = [why(r"bin the $z$-values"), why(r"Lindsey's method"), why(r"$\Delta$: \ the bin width"),
-                why(r"fast and stable")]
+                why(r"finite-window fit; independent convergence check")]
         with self.voiceover(
-            "<bookmark mark='a'/> To estimate f, Efron uses Lindsey's method: bin the z-values and treat each bin's count as "
-            "Poisson. <bookmark mark='b'/> Model the log of its mean as a smooth function of the bin centre, here a "
-            "polynomial of degree seven. <bookmark mark='c'/> The fitted means, rescaled, estimate the density. "
-            "<bookmark mark='d'/> It is just a Poisson GLM from Part 24, on ninety counts, so it is fast and stable."
+            "<bookmark mark='a'/> To estimate f, Efron uses Lindsey's method: bin the z-values and treat each bin's "
+            "count as Poisson. <bookmark mark='b'/> Model the log of its mean as a smooth function of the bin centre,"
+            " here a polynomial of degree seven. <bookmark mark='c'/> The fitted means, rescaled, estimate the "
+            "density. <bookmark mark='d'/> It is just a Poisson GLM from Part 24, on ninety counts, so we can check "
+            "its convergence against an independent Poisson GLM fit. The polynomial describes the fitted finite "
+            "histogram window, not an integrable density over the whole real line."
         ) as vo:
+            intro=label('A finite-window Poisson fit smooths histogram counts',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -158,10 +170,10 @@ class Efron(VoiceoverScene):
             label(rf"{d['n_fdr20_t']} genes with fdr $< 0.2$", font_size=22, color=SIGC),
         ), 3.4, 0.42, [5.3, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The estimated local false discovery rate, with the theoretical null. "
-            "<bookmark mark='b'/> pi zero is estimated at point nine five four. <bookmark mark='c'/> In the middle, a gene is "
-            "almost surely null; the curve falls away in both tails. <bookmark mark='d'/> Fifty-one genes "
-            "have local fdr below point two."
+            "<bookmark mark='a'/> The estimated local false discovery rate, with the theoretical null. <bookmark "
+            "mark='b'/> pi zero is estimated at point nine five four. <bookmark mark='c'/> In the middle, the fitted "
+            "model assigns a high null probability; the curve falls away in both tails. <bookmark mark='d'/> "
+            "Fifty-one genes have local fdr below point two."
         ) as vo:
             self.add(prostate_tag())
             self.play(FadeIn(A), Create(thr))
@@ -187,13 +199,17 @@ class Efron(VoiceoverScene):
         whys = [why(r"the theoretical null"), why(r"widen or shift the real null"), why(r"Efron (2004): \ the empirical null"),
                 why(r"4\% wider than $N(0, 1)$")]
         with self.voiceover(
-            "<bookmark mark='a'/> Efron's most important observation is about the null itself. The standard normal is the "
-            "right null only if every null test is exactly calibrated. <bookmark mark='b'/> In real studies, correlation "
-            "between genes, batch effects and unmeasured covariates can widen or shift the distribution of null z-values. "
-            "<bookmark mark='c'/> His remedy is the empirical null: since most genes are null, fit a normal curve to the "
-            "middle of the histogram and use that as f zero. <bookmark mark='d'/> For the prostate data it is centred at "
-            "zero but four percent wider than the standard normal."
+            "<bookmark mark='a'/> Efron's most important observation is about the null itself. The standard normal is"
+            " the right null only if every null test is exactly calibrated. <bookmark mark='b'/> In real studies, "
+            "batch effects and unmeasured covariates can miscalibrate tests. Gene correlation can also shift or "
+            "reshape one study’s histogram without invalidating its marginal null distributions. <bookmark mark='c'/>"
+            " His remedy is the empirical null: assuming the central region is predominantly null and approximately "
+            "Gaussian, fit its shift and width. These modeling assumptions need scrutiny. <bookmark mark='d'/> For "
+            "the prostate data it is centred at zero but four percent wider than the standard normal."
         ) as vo:
+            intro=label('Central matching estimates a null under additional assumptions',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -211,13 +227,14 @@ class Efron(VoiceoverScene):
         tb.move_to([0, 0.9, 0])
         foot = fit_rows(VGroup(
             label(r"a 4\% wider null halves the list", font_size=22, color=SIGC),
-            label(r"the choice of null matters more than the choice of procedure", font_size=22, color=FALSEC),
+            label(r"the null model materially changes this list", font_size=22, color=FALSEC),
         ), 12.0, 0.22, [0, -1.9, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The consequences. Bonferroni finds two genes. BH at ten percent finds fifty-nine. Local fdr "
-            "below point two with the theoretical null finds fifty-one. With the empirical null, only twenty-seven. "
-            "<bookmark mark='b'/> A null just four percent wider halves the list, <bookmark mark='c'/> which is Efron's "
-            "point: in large-scale inference, the choice of null distribution matters more than the choice of procedure."
+            "<bookmark mark='a'/> The consequences. Bonferroni finds two genes. BH at ten percent finds fifty-nine. "
+            "Local fdr below point two with the theoretical null finds fifty-one. With the empirical null, only "
+            "twenty-seven. <bookmark mark='b'/> A null just four percent wider halves the list, <bookmark mark='c'/> "
+            "which is Efron's point: in large-scale inference, the choice of null can materially change the reported "
+            "list."
         ) as vo:
             self.add(prostate_tag())
             vo.wait_until("a")
@@ -230,16 +247,17 @@ class Efron(VoiceoverScene):
 
     def lesson(self):
         rows = fit_rows(VGroup(
-            label(r"with thousands of tests, \ the data estimate their own null", font_size=26, color=BHC),
-            label(r"the local fdr gives each gene its own posterior probability of being null", font_size=26),
-            label(r"BH's tail-area FDR is the average local fdr over the rejected genes", font_size=26, color=SIGC),
+            label(r"estimating a null from the center needs modeling assumptions", font_size=26, color=BHC),
+            label(r"local fdr estimates posterior null probabilities under a two-groups model", font_size=26),
+            label(r"model tail-area null probability averages local fdr in that tail", font_size=26, color=SIGC),
             label(r"Part 25's borrowing of strength, \ for hypothesis testing", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> With thousands of parallel tests, the data can estimate their own null distribution. "
-            "<bookmark mark='b'/> The local fdr gives each gene its own posterior probability of being null, <bookmark mark='c'/> "
-            "and BH's tail-area rate is just the average of the local fdr over the genes it rejects. <bookmark mark='d'/> It "
-            "is Part 25's idea of borrowing strength, applied to testing."
+            "<bookmark mark='a'/> With thousands of parallel tests, the data can estimate their own null "
+            "distribution. <bookmark mark='b'/> Under the two-groups model, local fdr estimates each gene’s posterior"
+            " null probability, <bookmark mark='c'/> and the model’s tail-area null probability is the conditional "
+            "average of its local fdr in that tail. This is related to, but distinct from, finite-family FDR. "
+            "<bookmark mark='d'/> It is Part 25's idea of borrowing strength, applied to testing."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

@@ -23,17 +23,20 @@ class Remedies(VoiceoverScene):
     def prereg(self):
         rows = fit_rows(VGroup(
             label(r"preregistration: \ hypotheses, \ outcomes, \ sample size and analysis, \ fixed in advance", font_size=26, color=BHC),
-            label(r"clinical trials: \ required since 2005 \ (ICMJE; \ ClinicalTrials.gov)", font_size=26),
+            label(r"ICMJE publication policy: prospective registration since 2005 \ (ICMJE; \ ClinicalTrials.gov)", font_size=26),
             label(r"Kaplan \& Irvin (2015): \ NHLBI trials with a positive primary outcome fell from 57\% to 8\% after 2000", font_size=26, color=SIGC),
             label(r"it closes the garden of forking paths; \ exploratory analysis stays allowed, \ labelled", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The first remedy is preregistration: write down the hypotheses, outcomes, sample size and "
-            "analysis plan before collecting the data. <bookmark mark='b'/> Clinical trials have been required to register "
-            "since 2005. <bookmark mark='c'/> Robert Kaplan and Veronica Irvin found that among large trials funded by the US "
-            "heart, lung and blood institute, the share reporting a benefit on the primary outcome fell from fifty-seven "
-            "percent before registration became mandatory in 2000 to eight percent after. <bookmark mark='d'/> Registration "
-            "closes the garden of forking paths; exploratory analysis remains allowed, as long as it is labelled as such."
+            "<bookmark mark='a'/> The first remedy is preregistration: write down the hypotheses, outcomes, sample "
+            "size and analysis plan before collecting the data. <bookmark mark='b'/> Since 2005, ICMJE journals have "
+            "required prospective registration for trial publication; legal requirements depend on jurisdiction and "
+            "trial type. <bookmark mark='c'/> Robert Kaplan and Veronica Irvin found that among large trials funded "
+            "by the US heart, lung and blood institute, the share reporting a benefit on the primary outcome fell "
+            "from fifty-seven percent before registration became mandatory in 2000 to eight percent after. <bookmark "
+            "mark='d'/> That before-and-after comparison does not isolate a causal effect of registration. A "
+            "detailed, adhered-to plan limits undisclosed flexibility; exploratory analysis remains allowed, as long "
+            "as it is labelled as such."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -45,14 +48,16 @@ class Remedies(VoiceoverScene):
             label(r"registered reports \ (Chambers 2013): \ peer review before the results exist", font_size=26, color=BHC),
             label(r"the journal commits to publish whatever the outcome", font_size=26),
             label(r"Scheel et al. (2021): \ 44\% positive results, \ against 96\% in the standard literature", font_size=26, color=SIGC),
-            label(r"publication bias removed by design", font_size=26, color=TRUEC),
+            label(r"reduces publication decisions based on the results", font_size=26, color=TRUEC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Registered reports, championed by Chris Chambers from 2013, go further: the study is peer "
-            "reviewed on its question and methods before any results exist, <bookmark mark='b'/> and the journal commits to "
-            "publishing it whatever the outcome. <bookmark mark='c'/> Anne Scheel and colleagues found that forty-four "
-            "percent of registered reports in psychology supported their first hypothesis, against ninety-six percent of "
-            "comparable standard papers. <bookmark mark='d'/> The file drawer is removed by design."
+            "<bookmark mark='a'/> Registered reports, championed by Chris Chambers from 2013, go further: the study "
+            "is peer reviewed on its question and methods before any results exist, <bookmark mark='b'/> and the "
+            "journal gives in-principle acceptance conditional on an approved protocol and other stated publication "
+            "requirements. <bookmark mark='c'/> Anne Scheel and colleagues found that forty-four percent of "
+            "registered reports in psychology supported their first hypothesis, against ninety-six percent of "
+            "comparable standard papers. <bookmark mark='d'/> Acceptance based on the question and protocol reduces "
+            "results-dependent publication, although attrition and reporting still matter."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -70,14 +75,18 @@ class Remedies(VoiceoverScene):
         whys = [why(r"Benjamin et al. (2018), \ 72 authors"), why(r"Part 26's bounds"), why(r"chapter nine's formula"),
                 why(r"Lakens et al. (2018): \ `justify your alpha'")]
         with self.voiceover(
-            "<bookmark mark='a'/> In 2018 seventy-two researchers, led by Daniel Benjamin, proposed redefining statistical "
-            "significance: call p below point oh oh five significant, and between that and point oh five merely suggestive. "
-            "<bookmark mark='b'/> Their argument: a p-value of point oh five corresponds at best to a Bayes factor of about "
-            "two and a half to three and a half, weak evidence, by the bounds of Part 26. <bookmark mark='c'/> A stricter "
-            "line raises the positive predictive value. <bookmark mark='d'/> Eighty-eight others, led by Daniël Lakens, "
-            "replied: justify your alpha instead. A new line needs larger samples, keeps the false dichotomy, and invites "
-            "hacking just below it."
+            "<bookmark mark='a'/> In 2018 seventy-two researchers, led by Daniel Benjamin, proposed redefining "
+            "statistical significance: call p below point oh oh five significant, and between that and point oh five "
+            "merely suggestive. <bookmark mark='b'/> Their argument: a p-value of point oh five corresponds at best "
+            "to a Bayes factor of about two and a half to three and a half, weak evidence, under the calibration "
+            "classes and assumptions discussed in Part 26; a p-value alone does not determine a Bayes factor. "
+            "<bookmark mark='c'/> A stricter line raises the positive predictive value. <bookmark mark='d'/> "
+            "Eighty-eight others, led by Daniël Lakens, replied: justify your alpha instead. A new line needs larger "
+            "samples, keeps the false dichotomy, and invites hacking just below it."
         ) as vo:
+            intro=label('Changing the significance threshold changes costs and power',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -115,7 +124,7 @@ class Remedies(VoiceoverScene):
         ), 12.4, 0.5, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The American Statistical Association weighed in, for the first time in its history, with a "
-            "statement on p-values in 2016, already met in Part 10. <bookmark mark='b'/> Among its six principles: a "
+            "statement on p-values in 2016, already met in Part 10. <bookmark mark='b'/> Among selected principles: a "
             "p-value is not the probability that the hypothesis is true; <bookmark mark='c'/> conclusions should not rest "
             "only on whether it passes a threshold; <bookmark mark='d'/> proper inference requires full reporting; "
             "<bookmark mark='e'/> the p-value does not measure the size of an effect; <bookmark mark='f'/> and by itself it "
@@ -163,6 +172,9 @@ class Remedies(VoiceoverScene):
             "something a non-significant p-value cannot. <bookmark mark='d'/> But every one of these needs the same "
             "honesty about the forking paths: no statistic is immune to selective reporting."
         ) as vo:
+            intro=label('Alternative summaries still require transparent selection and reporting',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

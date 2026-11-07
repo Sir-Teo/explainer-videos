@@ -29,7 +29,7 @@ class Knockoffs(VoiceoverScene):
             cmath(r"\text{regression}", r":", r"\text{which of } p \text{ variables matter, \ given the others?}", font_size=30),
             cmath(r"\text{lasso}", r":", r"\text{selects, \ but with no error control}", font_size=30),
             cmath(r"p\text{-values}", r":", r"\text{hard to get after selection, \ or when } p > n", font_size=30),
-            cmath(r"\text{goal}", r":", r"\text{FDR control for any selection statistic}", font_size=30),
+            cmath(r"\text{goal}", r":", r"\text{FDR control with valid knockoffs and flip-sign statistics}", font_size=30),
         ]
         rows[3][-1].set_color(BHC)
         whys = [why(r"conditional independence"), why(r"Part 32"), why(r"chapter ten of Part 32"),
@@ -41,6 +41,9 @@ class Knockoffs(VoiceoverScene):
             "classical means when p exceeds n. <bookmark mark='d'/> Rina Foygel Barber and Emmanuel Candès found a way, in "
             "2015, to control the false discovery rate of a selection made by almost any method: knockoffs."
         ) as vo:
+            intro=label('Variable selection asks about conditional association',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -65,6 +68,9 @@ class Knockoffs(VoiceoverScene):
             "given the real variables. <bookmark mark='d'/> Each knockoff is a perfect matched control: it looks like its "
             "original in every way, but is certainly null."
         ) as vo:
+            intro=label('Model-X knockoffs require joint exchangeability and conditional independence',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -89,6 +95,9 @@ class Knockoffs(VoiceoverScene):
             "<bookmark mark='d'/> The larger D, the less each knockoff resembles its original, and the easier it is to tell "
             "a real variable from its fake."
         ) as vo:
+            intro=label('A known Gaussian design law gives a conditional sampling formula',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -106,12 +115,15 @@ class Knockoffs(VoiceoverScene):
         whys = [why(r"fit both at once"), why(r"the coefficient difference"), why(r"evidence for $x_j$"),
                 why(r"the antisymmetry that makes it work")]
         with self.voiceover(
-            "<bookmark mark='a'/> Now fit any model to the real variables and their knockoffs together, for example a lasso "
-            "on two p columns. <bookmark mark='b'/> For each variable, W j is the size of its coefficient minus the size of "
-            "its knockoff's. <bookmark mark='c'/> A large positive W means the real variable clearly beat its fake. "
-            "<bookmark mark='d'/> Any statistic works, as long as swapping a variable with its knockoff flips the sign of "
-            "its W."
+            "<bookmark mark='a'/> Now fit any model to the real variables and their knockoffs together, for example a"
+            " lasso on two p columns. <bookmark mark='b'/> For each variable, W j is the size of its coefficient "
+            "minus the size of its knockoff's. <bookmark mark='c'/> A large positive W means the real variable "
+            "clearly beat its fake. <bookmark mark='d'/> Any statistic works, provided the statistic obeys the joint "
+            "flip-sign property: swapping a subset flips exactly those W signs and leaves the others unchanged."
         ) as vo:
+            intro=label('Joint flip-sign statistics compare each variable with its matched knockoff',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -123,19 +135,24 @@ class Knockoffs(VoiceoverScene):
             cmath(r"j \text{ null}", r"\Rightarrow", r"\mathrm{sign}(W_j) \text{ is a fair coin, \ independent of } |W_j|", font_size=28),
             cmath(r"\#\{\text{nulls with } W_j \ge t\}", r"\approx", r"\#\{j : W_j \le -t\}", font_size=30),
             cmath(r"\widehat{\mathrm{FDP}}(t)", r"=", r"\dfrac{1 + \#\{j : W_j \le -t\}}{\max(1, \#\{j : W_j \ge t\})}", font_size=30),
-            cmath(r"\tau", r"=", r"\min\{t : \widehat{\mathrm{FDP}}(t) \le q\} \ \Rightarrow \ \text{FDR} \le q", font_size=30),
+            cmath(r"\tau", r"=", r"\min\{t\in\{|W_j|:|W_j|>0\} : \widehat{\mathrm{FDP}}(t) \le q\} \ \Rightarrow \ \text{FDR} \le q", font_size=30),
         ]
         rows[3][-1].set_color(BHC)
         whys = [why(r"swap it: \ nothing changes"), why(r"negatives mirror the null positives"),
                 why(r"knockoff+ \ (the $+1$)"), why(r"exactly, \ in finite samples")]
         with self.voiceover(
-            "<bookmark mark='a'/> The proof is a coin flip. For a null variable, swapping it with its knockoff changes "
-            "nothing about the data's distribution but flips the sign of W. So its sign is a fair coin, independent of its "
-            "size. <bookmark mark='b'/> Hence the number of nulls with W above t is mirrored by the number of W's below "
-            "minus t. <bookmark mark='c'/> That count, plus one, over the number selected, estimates the false discovery "
-            "proportion. <bookmark mark='d'/> Choose the smallest threshold where the estimate is below q, and the false "
-            "discovery rate is at most q, exactly, in finite samples, with no p-values, for any n and p."
+            "<bookmark mark='a'/> The proof is a coin flip. For a null variable, swapping it with its knockoff "
+            "changes nothing about the data's distribution but flips the sign of W. Conditional on all magnitudes and"
+            " nonnull statistics, the nonzero null signs are independent fair coins. <bookmark mark='b'/> Hence the "
+            "number of nulls with W above t is mirrored by the number of W's below minus t. <bookmark mark='c'/> That"
+            " count, plus one, over the number selected, estimates the false discovery proportion. <bookmark "
+            "mark='d'/> Choose the smallest nonzero observed absolute W where the estimate is below q, or select none"
+            " if there is no such threshold, and the false discovery rate is at most q, exactly, in finite samples, "
+            "with no p-values, for any n and p."
         ) as vo:
+            intro=label('Nonzero null signs yield the knockoff+ error-control argument',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -148,7 +165,7 @@ class Knockoffs(VoiceoverScene):
         thr = d["demo"]["thr"]
         o = np.argsort(-np.abs(W))[:60]
         Wm = float(np.max(np.abs(W[o])))
-        A = axes([0, 61], [-Wm * 0.5, Wm * 1.1], x_length=8.0, y_length=4.4, xlabel=r"variables, \ by $|W_j|$",
+        A = axes([0, 61], [-Wm * 1.1, Wm * 1.1], x_length=8.0, y_length=4.4, xlabel=r"variables, \ by $|W_j|$",
                  ylabel=r"$W_j$", xticks=[], yticks=[0], center=[-1.9, 0.3, 0])
         ax = A.ax
         bw = ax.c2p(0.8, 0)[0] - ax.c2p(0, 0)[0]
@@ -196,13 +213,14 @@ class Knockoffs(VoiceoverScene):
         tb.move_to([0, 0.9, 0])
         foot = fit_rows(VGroup(
             label(r"the lasso finds every real variable, \ and buries them among false ones", font_size=22, color=FALSEC),
-            label(r"knockoffs keep the false share under $q$ and still find almost all", font_size=22, color=BHC),
+            label(r"20-study mean: 8.2\% $\pm$ 1.7 percentage points (MC SE)", font_size=22, color=BHC),
         ), 12.0, 0.22, [0, -1.8, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Over twenty simulated regressions: the cross-validated lasso finds every real variable, "
-            "but sixty-two percent of what it selects is false, Part 32's lesson again. <bookmark mark='b'/> Knockoffs at "
-            "ten percent hold the false discovery rate to eight percent <bookmark mark='c'/> and still find ninety-seven "
-            "percent of the real variables."
+            "<bookmark mark='a'/> Over twenty simulated regressions: the cross-validated lasso finds every real "
+            "variable, but sixty-two percent of what it selects is false, Part 32's lesson again. <bookmark "
+            "mark='b'/> The estimated knockoff FDR is eight point two percent, with a one point seven "
+            "percentage-point Monte Carlo standard error across only twenty studies <bookmark mark='c'/> and still "
+            "find ninety-seven percent of the real variables."
         ) as vo:
             self.add(seeded_tag())
             vo.wait_until("a")
@@ -216,16 +234,17 @@ class Knockoffs(VoiceoverScene):
     def reach(self):
         rows = fit_rows(VGroup(
             label(r"model-X needs the law of $X$, \ not of $y \mid X$: \ any model for the outcome", font_size=26, color=BHC),
-            label(r"genetics: \ genotypes follow known hidden Markov models \ (Sesia, Sabatti \& Cand\`es 2019)", font_size=26),
+            label(r"genetics: \ genotypes modeled by fitted hidden Markov models \ (Sesia, Sabatti \& Cand\`es 2019)", font_size=26),
             label(r"the price: \ $X$'s distribution must be right", font_size=26, color=FALSEC),
-            label(r"conformal prediction uses the same exchangeability: \ Part 34", font_size=26, color=GREY_A),
+            label(r"conformal prediction uses exchangeable observations: \ Part 34", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The striking feature of model-X knockoffs is where the assumption sits: on the distribution "
-            "of the variables, not on how the outcome depends on them. Any outcome model, any machine-learning method, can "
-            "produce the W's. <bookmark mark='b'/> In genetics, where genotypes along a chromosome follow known hidden Markov "
-            "models, this has been used at genome scale. <bookmark mark='c'/> The price is that the distribution of X must "
-            "be right. <bookmark mark='d'/> The same idea of exchangeability powers conformal prediction, in Part 34."
+            "<bookmark mark='a'/> The striking feature of model-X knockoffs is where the assumption sits: on the "
+            "distribution of the variables, not on how the outcome depends on them. Any outcome model, any "
+            "machine-learning method, can produce the W's. <bookmark mark='b'/> In genetics, where genotypes along a "
+            "chromosome are modeled by fitted hidden Markov models, this has been used at genome scale. <bookmark "
+            "mark='c'/> The price is that the distribution of X must be right. <bookmark mark='d'/> A different "
+            "exchangeability assumption, across observations, powers conformal prediction, in Part 34."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -250,6 +269,9 @@ class Knockoffs(VoiceoverScene):
             "mark='d'/> In practice the distribution of X is estimated, and often only its means and covariances are "
             "matched, an approximation whose robustness is an active research question."
         ) as vo:
+            intro=label('Fixed-X and model-X knockoffs make different assumptions',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

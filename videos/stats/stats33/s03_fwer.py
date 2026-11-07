@@ -31,7 +31,7 @@ class FWER(VoiceoverScene):
             cmath(r"m = 5{,}000", r":", r"\alpha/m = 10^{-5}", font_size=32),
         ]
         rows[1][-1].set_color(FWC)
-        whys = [why(r"Bonferroni (1936); \ Dunn (1961)"), why(r"the union bound: \ no assumptions"),
+        whys = [why(r"Bonferroni (1936); \ Dunn (1961)"), why(r"valid marginal $p$-values; any dependence"),
                 why(r"exact for independent tests"), why(r"barely different: \ $1.03 \times 10^{-5}$")]
         with self.voiceover(
             "<bookmark mark='a'/> The oldest correction is Bonferroni's: test each hypothesis at alpha over m. The chance of "
@@ -40,6 +40,9 @@ class FWER(VoiceoverScene):
             "<bookmark mark='c'/> Zbyněk Šidák's version is exact for independent tests, <bookmark mark='d'/> and barely "
             "different: for five thousand genes both test each gene at about one in a hundred thousand."
         ) as vo:
+            intro=label('The union bound controls any false rejection with valid marginal p-values',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -51,17 +54,21 @@ class FWER(VoiceoverScene):
             cmath(r"p_{(1)} \le \dots \le p_{(m)}", r":", r"\text{sort the } p\text{-values}", font_size=30),
             cmath(r"\text{step } k", r":", r"\text{reject } H_{(k)} \text{ if } p_{(k)} \le \alpha/(m - k + 1)", font_size=30),
             cmath(r"\text{stop}", r":", r"\text{at the first failure; \ keep the rest}", font_size=30),
-            cmath(r"\text{always}", r"\supseteq", r"\text{Bonferroni's rejections, \ same FWER}", font_size=30),
+            cmath(r"\text{always}", r"\supseteq", r"\text{Bonferroni's rejections, \ same FWER bound}", font_size=30),
         ]
         rows[1][-1].set_color(FWC)
         whys = [why(r"Holm (1979)"), why(r"thresholds loosen as you go"), why(r"step-down"), why(r"uniformly more powerful")]
         with self.voiceover(
-            "<bookmark mark='a'/> Sture Holm's step-down procedure of 1979 does strictly better for free. Sort the p-values. "
-            "<bookmark mark='b'/> Compare the smallest with alpha over m, the next with alpha over m minus one, and so on: "
-            "once a hypothesis is rejected, there is one fewer that could be a true null. <bookmark mark='c'/> Stop at the "
-            "first failure. <bookmark mark='d'/> Holm rejects everything Bonferroni does, and sometimes more, with the same "
-            "guarantee and still no assumptions."
+            "<bookmark mark='a'/> Sture Holm’s step-down procedure of 1979 can improve power without weakening the "
+            "guarantee. Sort the p-values. <bookmark mark='b'/> Compare the smallest with alpha over m, the next with"
+            " alpha over m minus one, and so on: the first true null encountered must face a threshold no larger than"
+            " alpha divided by the number of true nulls. <bookmark mark='c'/> Stop at the first failure. <bookmark "
+            "mark='d'/> Holm rejects everything Bonferroni does, and sometimes more, with the same guarantee and "
+            "still no dependence restriction, provided the marginal p-values are valid."
         ) as vo:
+            intro=label('Holm stops at the first failed ordered comparison',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -87,6 +94,9 @@ class FWER(VoiceoverScene):
             "alpha. <bookmark mark='d'/> With Bonferroni tests for every intersection, the closed procedure is exactly "
             "Holm's, a shortcut through two to the m tests."
         ) as vo:
+            intro=label('Closed testing checks every containing intersection',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -143,19 +153,23 @@ class FWER(VoiceoverScene):
         rows = [
             cmath(r"\text{Simes}", r":", r"\text{reject } H_{\{1..m\}} \text{ if } p_{(i)} \le i\alpha/m \text{ for some } i", font_size=28),
             cmath(r"\text{Hochberg}", r":", r"\text{step up: \ largest } k \text{ with } p_{(k)} \le \alpha/(m - k + 1)", font_size=28),
-            cmath(r"\text{needs}", r":", r"\text{independence or positive dependence}", font_size=30),
+            cmath(r"\text{needs}", r":", r"\text{independence or suitable Simes conditions}", font_size=30),
             cmath(r"\text{Westfall--Young}", r":", r"\text{use the actual dependence, \ by permutation}", font_size=30),
         ]
         rows[3][-1].set_color(FWC)
         whys = [why(r"Simes (1986)"), why(r"Hochberg (1988): \ more power than Holm"), why(r"Sarkar (1998)"),
                 why(r"(1993): \ next")]
         with self.voiceover(
-            "<bookmark mark='a'/> Two refinements. R. J. Simes's test of 1986 rejects the global null if any sorted p-value "
-            "falls below i alpha over m. <bookmark mark='b'/> Yosef Hochberg turned it into a step-up procedure: find the "
-            "largest k whose p-value is below alpha over m minus k plus one, and reject all up to it. <bookmark mark='c'/> "
-            "It is more powerful than Holm's but needs independence or positive dependence. <bookmark mark='d'/> And "
-            "Westfall and Young's method uses the actual dependence among the tests, estimated by permutation."
+            "<bookmark mark='a'/> Two refinements. R. J. Simes's test of 1986 rejects the global null if any sorted "
+            "p-value falls below i alpha over m. <bookmark mark='b'/> Yosef Hochberg turned it into a step-up "
+            "procedure: find the largest k whose p-value is below alpha over m minus k plus one, and reject all up to"
+            " it. <bookmark mark='c'/> It is more powerful than Holm's but needs independence or suitable "
+            "positive-dependence conditions for its intersection tests. <bookmark mark='d'/> And Westfall and Young's"
+            " method uses the actual dependence among the tests, estimated by permutation."
         ) as vo:
+            intro=label('Step-up refinements require stronger dependence assumptions',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -164,7 +178,7 @@ class FWER(VoiceoverScene):
 
     def wy(self):
         rows = [
-            cmath(r"\text{permute}", r":", r"\text{shuffle the patient/control labels: \ every null true}", font_size=28),
+            cmath(r"\text{permute}", r":", r"\text{shuffle labels under an exchangeable joint null}", font_size=28),
             cmath(r"M^*", r"=", r"\max_i |t_i^*|: \ \text{the largest statistic by chance}", font_size=30),
             cmath(r"\tilde p_i", r"=", r"P^*(M^* \ge |t_i|) \ \ \text{(step-down over the sorted } t\text{)}", font_size=28),
             cmath(r"\text{correlated tests}", r":", r"\text{fewer effective tests: \ less conservative}", font_size=30),
@@ -173,12 +187,17 @@ class FWER(VoiceoverScene):
         whys = [why(r"keeps the genes' correlation"), why(r"its distribution, \ 1,000 times"),
                 why(r"maxT"), why(r"pathways of 25 correlated genes")]
         with self.voiceover(
-            "<bookmark mark='a'/> Shuffle the patient and control labels: then every null hypothesis is true, but the "
-            "correlation among genes is untouched. <bookmark mark='b'/> Record the largest absolute t statistic over all "
-            "genes, and repeat a thousand times. <bookmark mark='c'/> A gene's adjusted p-value is the share of shuffles "
-            "whose maximum beats its own statistic, refined step by step down the sorted list. <bookmark mark='d'/> When "
-            "tests are correlated, the maximum is smaller than Bonferroni assumes, so the procedure is less conservative."
+            "<bookmark mark='a'/> Under an exchangeable global null, shuffling patient and control labels simulates a"
+            " joint null reference while retaining gene dependence. <bookmark mark='b'/> Record the largest absolute "
+            "t statistic over all genes, and repeat a thousand times. <bookmark mark='c'/> We use a plus-one Monte "
+            "Carlo correction to the share of permutation maxima exceeding each statistic, refined step by step down "
+            "the sorted list. Strong family-wise control also requires subset pivotality. <bookmark mark='d'/> When "
+            "tests are correlated, joint calibration can improve on the union bound. Bonferroni itself makes no "
+            "assumption about the maximum’s distribution."
         ) as vo:
+            intro=label('Permutation maxT requires exchangeability and a joint null reference',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -199,11 +218,12 @@ class FWER(VoiceoverScene):
             label(r"but they miss four fifths of the 250 real ones", font_size=22, color=FALSEC),
         ), 12.0, 0.22, [0, -2.0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The genes. Uncorrected: four hundred and thirty discoveries, half false. Bonferroni: "
-            "forty-nine, none false. Holm adds one, as it happens a false one, still within its guarantee. Westfall and "
-            "Young find fifty-three, using the correlation. <bookmark mark='b'/> All three keep their promise: at most one "
-            "false discovery. <bookmark mark='c'/> But they find only about a fifth of the two hundred and fifty real "
-            "effects."
+            "<bookmark mark='a'/> The genes. Uncorrected: four hundred and thirty discoveries, half false. "
+            "Bonferroni: forty-nine, none false. Holm adds one, as it happens a false one, still within its "
+            "guarantee. Westfall and Young find fifty-three, using the correlation. <bookmark mark='b'/> Each makes "
+            "zero or one false discoveries in this realization. Their promise bounds the chance of any false "
+            "discovery across studies, not the number allowed in one study. <bookmark mark='c'/> But they find only "
+            "about a fifth of the two hundred and fifty real effects."
         ) as vo:
             self.add(genes_tag())
             vo.wait_until("a")
@@ -218,15 +238,16 @@ class FWER(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"FWER: \ right when a single false claim is costly", font_size=26, color=FWC),
             label(r"a drug's primary endpoints; \ a court; \ a confirmatory trial", font_size=26),
-            label(r"wrong for discovery, \ where a list goes on to be checked", font_size=26, color=FALSEC),
-            label(r"a list with a few errors is fine, \ if you know how few", font_size=26, color=BHC),
+            label(r"FDR may suit exploratory lists with independent follow-up", font_size=26, color=FALSEC),
+            label(r"choose the error criterion for the scientific cost", font_size=26, color=BHC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Family-wise control is the right promise when a single false claim is costly: "
-            "<bookmark mark='b'/> a drug's primary endpoints, a legal finding, a confirmatory trial. <bookmark mark='c'/> It "
-            "is the wrong promise for discovery, where a list of candidate genes will go on to be checked in the lab. "
-            "<bookmark mark='d'/> There, a list with a few false entries is perfectly useful, as long as we know roughly how "
-            "few. That is the false discovery rate."
+            "<bookmark mark='b'/> a drug's primary endpoints, a legal finding, a confirmatory trial. <bookmark "
+            "mark='c'/> For exploratory discovery, a less stringent average error criterion may be more useful when "
+            "candidates receive independent follow-up. <bookmark mark='d'/> There, a list with a few false entries is"
+            " perfectly useful, when the chosen average error criterion suits the scientific loss. That is the false "
+            "discovery rate."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
