@@ -2,18 +2,16 @@ from __future__ import annotations
 
 import numpy as np
 
-import json
-
 from explainer.quant import *  # noqa: F403
 from videos.quant.quant17.common import axes, data_range
 from explainer.quant.house import deep as D
-from explainer.tts import REPO_ROOT
-from videos.quant.quant17.common import BAD, GOOD, NET, OPT, PART, REF, ask, house_lab, illustration, load
+from videos.quant.quant16.compute import load as load16
+from videos.quant.quant17.common import BAD, GOOD, NET, OPT, PART, REF, ask, house_lab, illustration, load, flat_camera
 
 
 def _lsm():
     """Part 16's Longstaff-Schwartz on the same five-asset max-call, read from its cache (never recomputed here)."""
-    return json.loads((REPO_ROOT / ".cache" / "quant16" / "maxcall.json").read_text())
+    return load16("maxcall")
 
 
 class Stopping(VoiceoverScene, ThreeDScene):
@@ -45,22 +43,15 @@ class Stopping(VoiceoverScene, ThreeDScene):
         whys = [why(r"the Snell envelope (Parts 8 and 16): at each exercise date, the better of stopping now and the "
                     r"value of waiting"),
                 why(r"Becker, Cheridito and Jentzen (2019): any stopping time is built backwards from yes-or-no decisions, "
-                    r"one per date, each a function of today's state: so learn the decisions, one network per date"),
+                    r"one adapted decision per date. In this Markov model, the state is sufficient for an optimal Markov rule; arbitrary history-dependent stopping rules need not be state-only"),
                 why(r"given today's state the objective is linear in $F$, so it is maximized at $F = 1$ when the payoff beats "
                     r"the value of waiting and $F = 0$ otherwise: bang-bang. Train a sigmoid $F_\theta$ for gradients, "
                     r"then use the hard rule $F_\theta > 1/2$"),
-                why(r"any rule is a real strategy, so its average payoff on fresh paths is a lower bound on the price; "
+                why(r"an admissible fixed policy's expected discounted payoff is a lower bound. Its noisy fresh-path mean need not be; "
                     r"Part 16's dual gives the upper bound")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.4, buff=0.62, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.4, buff=0.62, edge=6.9)
         with self.voiceover(
-            "Part sixteen priced an American option by regressing the value of waiting. Sebastian Becker, Patrick "
-            "Cheridito and Arnulf Jentzen learned the decision itself. The Snell envelope: at each date, the better of "
-            "stopping and waiting. <bookmark mark='a'/> Any stopping time is built backwards from yes-or-no decisions, "
-            "one per date, so learn one network per date, from expiry back. <bookmark mark='b'/> Given today's state the "
-            "reward is linear in the decision, so the best decision is all or nothing: stop exactly when the payoff "
-            "beats waiting. Training softens it into a probability; the final rule is hard. "
-            "<bookmark mark='c'/> And any rule is a real strategy, so its average payoff on fresh paths can only be "
-            "a lower bound on the price."
+            "This is a Bermudan max-call with nine potential exercise dates over three years. Payoffs in the recursion are already discounted. The Snell envelope compares stopping with optimal continuation. <bookmark mark='a'/> In this Markov model an optimal rule can use the current state; arbitrary history-dependent stopping times require adapted decisions, not necessarily state-only functions. <bookmark mark='b'/> With later policies fixed, the conditional objective is linear in today's decision. Its ideal unrestricted maximizer is hard; the finite neural optimizer trains a sigmoid relaxation and then thresholds the logit at zero. That need not recover the ideal rule. <bookmark mark='c'/> A fixed admissible policy's expected discounted payoff is a lower bound on the optimal value. A finite Monte Carlo mean is noisy and need not be a lower bound realization by realization."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -76,7 +67,8 @@ class Stopping(VoiceoverScene, ThreeDScene):
         gr = np.asarray(r["grid"])
         regs = {int(k): np.asarray(v) for k, v in r["regions"].items()}
         dates = sorted(regs)
-        ax = ThreeDAxes(x_range=[gr[0], gr[-1], 40], y_range=[gr[0], gr[-1], 40], z_range=[0, 9, 1], x_length=5.4,
+        edge = 1.5 * (gr[1] - gr[0])
+        ax = ThreeDAxes(x_range=[gr[0]-edge, gr[-1]+edge, 40], y_range=[gr[0]-edge, gr[-1]+edge, 40], z_range=[0, 9, 1], x_length=5.4,
                         y_length=5.4, z_length=3.4, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
         ax.shift(RIGHT * 1.2 + DOWN * 0.9)  # the stack stays in frame and clear of the key
@@ -97,7 +89,7 @@ class Stopping(VoiceoverScene, ThreeDScene):
             layers.add(cells)
         diag = Line(ax.c2p(gr[0], gr[0], 0), ax.c2p(gr[-1], gr[-1], 0), stroke_color=GREY_B, stroke_width=2)
         shares = [float(regs[n].mean()) for n in dates]
-        hint = VGroup(label(r"asset 1, asset 2 (floor); exercise date (up, 1 to 8)", font_size=19, color=GREY_A),
+        hint = VGroup(label(r"two assets; early dates 1--8; every third grid site drawn as a coarse cell", font_size=19, color=GREY_A),
                       legend([(GOOD, r"exercise now, early dates"), (OPT, r"exercise now, late dates")], font_size=17),
                       label(rf"share of the square where it stops: {100 * shares[0]:.0f}\% at date 1, "
                             rf"{100 * shares[-1]:.0f}\% at date 8", font_size=18, color=GREY_A)
@@ -122,6 +114,7 @@ class Stopping(VoiceoverScene, ThreeDScene):
             self.move_camera(phi=40 * DEGREES, theta=-20 * DEGREES, zoom=0.8, run_time=max(vo.remaining(0.3), 2))
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, added_anims=[FadeOut(VGroup(ax, diag, layers)),
                                                                             FadeOut(hint)], run_time=1.2)
+        flat_camera(self)
         self.clear_scene()
 
     def replay(self, r):
@@ -142,7 +135,7 @@ class Stopping(VoiceoverScene, ThreeDScene):
             n = dates[max(i - 1, 0)] if i else dates[0]
             g = axes([gr[0], gr[-1]], [gr[0], gr[-1]], x_length=3.8, y_length=3.8, xlabel=r"asset 1", ylabel=r"asset 2",
                      xticks=[80, 120, 160], yticks=[80, 120, 160], font_size=12)
-            R = regs[n]
+            R = regs[n] if i else np.zeros_like(regs[n])
             st = 2
             d = (gr[1] - gr[0]) * st
             cells = VGroup()
@@ -152,16 +145,12 @@ class Stopping(VoiceoverScene, ThreeDScene):
                         p0, p1 = g.ax.c2p(gr[b_] - d / 2, gr[a] - d / 2), g.ax.c2p(gr[b_] + d / 2, gr[a] + d / 2)
                         cells.add(Rectangle(width=p1[0] - p0[0], height=p1[1] - p0[1], stroke_width=0, fill_color=GOOD,
                                             fill_opacity=0.6).move_to((p0 + p1) / 2))
-            return VGroup(g, cells, label(rf"date {n}: trained" if i else rf"date {n}: training", font_size=18,
+            return VGroup(g, cells, label(rf"date {n}: trained" if i else rf"date {n}: final region revealed after its stage", font_size=18,
                                           color=GOOD).next_to(g, DOWN, buff=0.1))
         rp = TrainingReplay(np.array(steps, float), np.array(vals), frame, checkpoints=[0] + ends,
                             ylabel=r"objective (expected payoff)", xlabel=r"training, date 8 back to date 1")
         with self.voiceover(
-            "Here is the training, as it ran: backwards from the last exercise date to the first, each date's "
-            f"network trained for {per} steps while the later rules are held fixed. On the right, the objective, the "
-            "expected payoff of the rule so far; on the left, each date's region as its network finishes. "
-            "<bookmark mark='a'/> Each date's objective climbs and flattens, and each step back in time adds the "
-            "value of one more chance to exercise early."
+            f"The saved training trace runs backward from date eight to date one, using {per} optimizer updates per date while keeping later policies fixed. The right panel is a noisy sampled soft objective, not a certified expected payoff. The left reveals each date's saved final hard region when that stage ends; it does not reconstruct intermediate boundaries. <bookmark mark='a'/> Stochastic updates and thresholding need not produce monotone improvement. Different dates use different continuation policies, so jumps between stages are not one common loss curve converging to a known optimum."
         ) as vo:
             self.play(FadeIn(rp))
             vo.wait_until("a")
@@ -173,11 +162,12 @@ class Stopping(VoiceoverScene, ThreeDScene):
         d2, d5 = s["2"], s["5"]
         lsm = _lsm()["lsm"]["200000"]
         bcj = d5["reference"]
-        rows_ = [(r"deep stopping (ours)", d5["lower"], d5["se"], NET, r"500 steps a date, CPU"),
+        rows_ = [(r"deep stopping (ours)", d5["lower"], d5["se"], NET, r"500 updates/date; 1 million evaluation paths"),
                  (r"Longstaff--Schwartz (Part 16)", lsm["lower"], lsm["se"], QC.DELTA,
                   rf"{lsm['n_basis']} basis functions, 200{{,}}000 fitting paths")]
-        lo = min(d5["lower"], lsm["lower"]) - 0.12
-        hi = bcj["upper"] + 0.06
+        lo, hi = data_range([d5["lower"]-2*d5["se"], d5["lower"]+2*d5["se"],
+                             lsm["lower"]-2*lsm["se"], lsm["lower"]+2*lsm["se"],
+                             bcj["lower"], bcj["upper"], *bcj["ci"]])
         g = axes([lo, hi], [-0.5, 2.5], x_length=9.6, y_length=3.0, xlabel=r"price of the five-asset Bermudan max-call",
                  xticks=[round(v, 2) for v in np.linspace(lo + 0.02, hi - 0.02, 4)], xfmt=lambda v: f"{v:.2f}",
                  yticks=[], font_size=15).move_to(UP * 0.3)
@@ -189,32 +179,18 @@ class Stopping(VoiceoverScene, ThreeDScene):
                              Dot(ax.c2p(v, y), radius=0.08, color=col),
                              label(rf"{nm}: {v:.3f} $\pm$ {2 * se:.3f}", font_size=19, color=col).next_to(
                                  ax.c2p(lo, y), RIGHT, buff=0.1).shift(UP * 0.28)))
-        bc = VGroup(Rectangle(width=ax.c2p(bcj["upper"], 0)[0] - ax.c2p(bcj["lower"], 0)[0], height=0.3, stroke_width=0,
+        ci = Line(ax.c2p(bcj["ci"][0], 0), ax.c2p(bcj["ci"][1], 0), stroke_color=REF, stroke_width=2)
+        bc = VGroup(ci, Rectangle(width=ax.c2p(bcj["upper"], 0)[0] - ax.c2p(bcj["lower"], 0)[0], height=0.3, stroke_width=0,
                               fill_color=REF, fill_opacity=0.7).move_to(ax.c2p((bcj["lower"] + bcj["upper"]) / 2, 0)),
-                    label(rf"Becker, Cheridito and Jentzen: [{bcj['lower']:.3f}, {bcj['upper']:.3f}]", font_size=19,
+                    label(rf"published lower/upper estimates: {bcj['lower']:.3f}, {bcj['upper']:.3f}", font_size=19,
                           color=REF).next_to(ax.c2p(lo, 0), RIGHT, buff=0.1).shift(UP * 0.3))
         gap = abs(d5["lower"] - lsm["lower"])
-        tie = gap < 2 * np.hypot(d5["se"], lsm["se"])
-        if tie:
-            verdict = "a statistical tie"
-        elif d5["lower"] > lsm["lower"]:
-            verdict = "the network ahead"
-        else:
-            verdict = "Longstaff and Schwartz ahead"
-        foot = wrapped_label(rf"bars: $\pm 2$ standard errors on independent paths. Two assets: ours "
+        foot = wrapped_label(rf"bars: approximate conditional MC $\pm2$ SE, not training uncertainty. Two assets: policy mean "
                              rf"{d2['lower']:.3f}, a binomial tree {d2['reference']['binomial']:.3f}. Their bounds used "
                              r"3{,}000 + $d$ steps of 8{,}192 paths a date on a GPU (their Table 1); ours, 500 steps on a "
-                             r"shared CPU. Both of our estimates are lower bounds", 12.2, 19, GREY_A).to_edge(DOWN, buff=0.35)
+                             r"shared CPU; unequal training/evaluation budgets. Published outer interval: [26.138, 26.174]. Policy expectations, not noisy estimates, are lower bounds", 12.2, 19, GREY_A).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Now the prices, and a fair comparison. With two assets the network's rule earns "
-            f"{d2['lower']:.2f}, against {d2['reference']['binomial']:.2f} from a binomial tree. With five assets, "
-            f"{d5['lower']:.3f}, and Part sixteen's Longstaff–Schwartz, on the same option with fifteen basis "
-            f"functions and two hundred thousand fitting paths, {lsm['lower']:.3f}. <bookmark mark='a'/> At our "
-            f"budget that is {verdict}. <bookmark mark='b'/> Both fall short of Becker, Cheridito and Jentzen's "
-            f"published bounds, {bcj['lower']:.3f} to {bcj['upper']:.3f}, which used six times the steps per date, "
-            "batches of eight thousand paths and a GPU. A lower bound rises with the training budget. The network's "
-            "real advantages are elsewhere: it needs no hand-made basis, and the paper runs it on five hundred assets, "
-            "where no regression basis can follow."
+            f"Compare fixed-policy evaluations, with their limitations. The two-asset policy mean is {d2['lower']:.3f}; its cited tree reference is {d2['reference']['binomial']:.3f}, a numerical benchmark. With five assets, our network gives {d5['lower']:.3f}, and the saved Part sixteen regression policy gives {lsm['lower']:.3f}. <bookmark mark='a'/> Their point estimates differ by {gap:.3f}. The bars show about two conditional Monte Carlo standard errors; they omit training uncertainty, and the evaluation budgets differ. This is not an equal-cost test or a certified statistical tie. <bookmark mark='b'/> The paper reports lower and upper estimates {bcj['lower']:.3f} and {bcj['upper']:.3f}, with a wider statistical interval shown by the thin line. These are not deterministic price bounds. More training need not improve every finite run. The paper's high-dimensional results demonstrate a useful approach, rather than proving that regression methods cannot work there."
         ) as vo:
             self.play(FadeIn(g), FadeIn(marks[0]))
             self.play(FadeIn(marks[1]))
@@ -229,22 +205,27 @@ class Stopping(VoiceoverScene, ThreeDScene):
         card = house_lab(r"one exercise date", D.deep_stopping, "for it in range(steps):", 9)
         card.to_edge(UP, buff=0.4).to_edge(LEFT, buff=0.6)
         d2, d5 = s["2"], s["5"]
-        outs = [f"d=2: lower bound {d2['lower']:.3f} +/- {2 * d2['se']:.3f}   binomial {d2['reference']['binomial']:.3f}",
-                f"d=5: lower bound {d5['lower']:.3f} +/- {2 * d5['se']:.3f}"]
+        outs = [f"d=2: policy mean {d2['lower']:.3f} +/- {2 * d2['se']:.3f}   binomial {d2['reference']['binomial']:.3f}",
+                f"d=5: policy mean {d5['lower']:.3f} +/- {2 * d5['se']:.3f}"]
         with self.voiceover(
-            "The House's training for one date: what the later rules collect if we wait, a stopping probability "
-            "from this date's network, and the expected payoff to maximize. <bookmark mark='a'/> Then the hard rule on "
-            "a million fresh paths."
+            "This excerpt trains one date's soft stopping objective using the already-trained later rules. <bookmark mark='a'/> The final hard policy is evaluated on a million fresh paths. Its reported standard error is conditional on the trained policy and the simulation model; it does not measure variation across training runs or establish that the policy is optimal."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
             lab_run(self, card, outs)
+        import math
+        p = D.MAX_CALL
+        dt = p["T"] / p["N"]
+        cont_lb = 130 * math.exp(-p["div"] * dt) * (1 + math.erf(p["sigma"] * math.sqrt(dt) / 2)) - p["K"] * math.exp(-p["r"] * dt)
         q = ask(r"both assets at 130, one date before expiry. Stop or wait?")
         with self.voiceover(
-            "A question: both assets at a hundred and thirty, one date before expiry. Stop or wait? Look at the "
-            "tunnel's top layer before you answer."
-            " Wait. A hundred and thirty each sits on the diagonal, in the valley, which narrows near expiry but never closes: with the two assets tied, the right to take the better one later is still worth something. Next: the deep hedger."
+            'Pause and predict in this specified two-independent-asset model. Both prices are a hundred and thirty, with one exercise date left before maturity. Is the learned valley alone a proof that waiting is better? Compare the conditional continuation payoff with immediate exercise.'
         ):
             self.play(FadeIn(q))
-        self.wait(0.5)
+        self.wait(2.5)
+        answer = MathTex(rf"\mathbb E[e^{{-r\Delta t}}(\max S_T-K)^+\mid S_1=S_2=130]"
+                         rf"\ge {cont_lb:.2f}>30", font_size=25, color=GOOD).next_to(q, UP, buff=0.3)
+        with self.voiceover(f'Waiting is better here. The positive-part terminal payoff is at least the maximum asset price minus the strike. With these independent lognormal assets and one-third year remaining, the discounted expectation of that simpler payoff is {cont_lb:.2f}, already above the immediate thirty. This analytic comparison proves the decision within the specified model. A qualitative valley or a learned rule alone would not. Dividends, dependence and the time interval matter. Next: the deep hedger.'):
+            self.play(FadeIn(answer))
+        self.wait(3)
         self.clear_scene()
