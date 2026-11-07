@@ -1,5 +1,5 @@
 {
-  "fingerprint": "8cccd8df1badc5383f251b297403fb0935cd8e90a2b92f02ea09855211edbefb",
+  "fingerprint": "691b01b475fae679a27a8b0a0c7193bc5fa0f227eb26985e7b69f82189ff8bd8",
   "scope": "English render review; listening and bilingual production gates remain open",
   "records": [
     {
@@ -10,7 +10,7 @@
         "narration-translation": 8
       },
       "input_record": "renders/qa/series/stats10/en/Exact_motion/result.json",
-      "input_sha256": "5fd8e1ace61f66c7a4f96c937100c60e6ed682760c5f4a2877a4a127e7116aa5",
+      "input_sha256": "a4f59ad91af70c361dead7ed4bdd87932f7afde2b3839aaeb1041f82bbb1986b",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 432 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 432 s\n"
     },
     {
@@ -21,7 +21,7 @@
         "narration-translation": 6
       },
       "input_record": "renders/qa/series/stats10/en/PValues_motion/result.json",
-      "input_sha256": "0347da365fe0522527f61eb3f28b48a13ffaaf41d0469c1d3c6fa1f1af782677",
+      "input_sha256": "01eee270da21e2ebba4b335fadd5dfdc44aed9bf142b9bea7a5b2adc587c153e",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 239 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 239 s\n"
     },
     {
@@ -32,7 +32,7 @@
         "narration-translation": 7
       },
       "input_record": "renders/qa/series/stats10/en/Lemma_motion/result.json",
-      "input_sha256": "3c9be95ac7ad2f1cb76f43796172bcc355c83daeeeee4d80cbad4601e07a5760",
+      "input_sha256": "f3fde9652947e5618f3e5cd80a70b22ada7097f4cc5da831ef52e0e6351dfa67",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 280 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 280 s\n"
     },
     {
@@ -43,7 +43,7 @@
         "narration-translation": 7
       },
       "input_record": "renders/qa/series/stats10/en/LRT_motion/result.json",
-      "input_sha256": "d9b0c21b1aa6737dddc6e578c2bc161f2b530df645038404bcef21c2550bc54a",
+      "input_sha256": "4d9cd57ec697017e83094f7dbd51299b7ffb6af3f440517b3f8cb0d834af2599",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 282 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 282 s\n"
     },
     {
@@ -54,7 +54,7 @@
         "narration-translation": 5
       },
       "input_record": "renders/qa/series/stats10/en/Peeking_motion/result.json",
-      "input_sha256": "713e6aa3e4f740241fd0f23dccdc9d3902fb78f749dfc18b4afb783b86250a4a",
+      "input_sha256": "3c79ffea5422aa43643010aefc52778fffe279f0b55ae16023d3ba8f8d340b9c",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 216 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 216 s\n"
     },
     {
@@ -65,7 +65,7 @@
         "narration-translation": 6
       },
       "input_record": "renders/qa/series/stats10/en/Many_motion/result.json",
-      "input_sha256": "7ae281629eaeb72829fce3591767b3a57462377c2a9aa606f1a2abe85674cfff",
+      "input_sha256": "17e57e62d991600b7140b663b217e98108d1f143d91385fdc37a5e280275775e",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 224 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 224 s\n"
     }
   ]

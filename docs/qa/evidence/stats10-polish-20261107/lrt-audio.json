@@ -19,7 +19,7 @@
    "tokens": 6,
    "peak": 0.4259033203125,
    "issues": [],
-   "elapsed": 0.02,
+   "elapsed": 0.06,
    "asr_review_leads": []
   },
   {
@@ -41,7 +41,7 @@
    "tokens": 109,
    "peak": 0.552093505859375,
    "issues": [],
-   "elapsed": 0.03,
+   "elapsed": 0.04,
    "asr_review_leads": []
   },
   {
@@ -74,7 +74,7 @@
    "tokens": 109,
    "peak": 0.470855712890625,
    "issues": [],
-   "elapsed": 0.02,
+   "elapsed": 0.01,
    "asr_review_leads": []
   },
   {
@@ -91,5 +91,5 @@
  ],
  "issues": [],
  "input_record": "renders/qa/series/stats10/en/LRT_motion/result.json",
- "input_sha256": "d9b0c21b1aa6737dddc6e578c2bc161f2b530df645038404bcef21c2550bc54a"
+ "input_sha256": "4d9cd57ec697017e83094f7dbd51299b7ffb6af3f440517b3f8cb0d834af2599"
 }
