@@ -1,0 +1,77 @@
+[
+  {
+    "file": ".cache/stats64/arena.json",
+    "sha256": "ee2533bd35f339e443d05ee7f647622129ab7e5a9678723c7896152f5cb1bc32",
+    "bytes": 3553
+  },
+  {
+    "file": ".cache/stats64/board.json",
+    "sha256": "ad8626953eea07c0037354d1b53f62b6c52b326e4b64f0b94ded6b677670bfdf",
+    "bytes": 1280
+  },
+  {
+    "file": ".cache/stats64/clustered.json",
+    "sha256": "62fdbb02314c793baa590db10043220e7cdf671c3c6b88f195e4fdc77e85bed6",
+    "bytes": 408
+  },
+  {
+    "file": ".cache/stats64/collapse.json",
+    "sha256": "fa6ed03ed07088953fe6b398cb49c7e303f0d5d60aadc388ea38d76f104e18f6",
+    "bytes": 20107
+  },
+  {
+    "file": ".cache/stats64/diffusion.json",
+    "sha256": "59494d81c1f6663820d53d7c37f0a45498061149555af54938a91952b6407242",
+    "bytes": 56941
+  },
+  {
+    "file": ".cache/stats64/factual.json",
+    "sha256": "d28984a4f1017905cafa151a9fda9fe2b4d9964a6d029edf6cad20c88bbcc158",
+    "bytes": 964
+  },
+  {
+    "file": ".cache/stats64/holdout.json",
+    "sha256": "071dc4dffe52064e73d93f4725742a57ea428edd2bc8ebca17d8f5196746e393",
+    "bytes": 979
+  },
+  {
+    "file": ".cache/stats64/irt.json",
+    "sha256": "3a11106ed9bdf199db4d5fd8bf5c62b2a139967beb22b2305fe2dc9e54baaf84",
+    "bytes": 21959
+  },
+  {
+    "file": ".cache/stats64/judges.json",
+    "sha256": "bcfccc9d1b52b11c460852f1173b30428c94b156dc3ae9fb4b75f0f2a985e366",
+    "bytes": 488
+  },
+  {
+    "file": ".cache/stats64/leaderboard.json",
+    "sha256": "0ab68628303e0bf6bf28b0e03d0c40a19196433d83c1362374f9bff93af2ce66",
+    "bytes": 655
+  },
+  {
+    "file": ".cache/stats64/market.json",
+    "sha256": "dd50a7861a8697df35469a93aecd65a85616dbad5d8eaf636d2c1d05d7446d59",
+    "bytes": 520
+  },
+  {
+    "file": ".cache/stats64/multiple.json",
+    "sha256": "e57f4030115acc2e71437c6538c0c741e86658adca9b5415b8ff198916b647fe",
+    "bytes": 858
+  },
+  {
+    "file": ".cache/stats64/paired.json",
+    "sha256": "5958cc2fd077f84c40e7105118763a94621f57f704a25ecf9f32eb42f94c6ec4",
+    "bytes": 1058
+  },
+  {
+    "file": ".cache/stats64/sbi.json",
+    "sha256": "c7e52631f7776ec1d4e2050c704c96a3855f6c9f88e816569c916283f492e92e",
+    "bytes": 1884
+  },
+  {
+    "file": ".cache/stats64/watermark.json",
+    "sha256": "594cd5ea4771e896ba64d869e4669927b1470be3eb312c4128e1817f368dbfc9",
+    "bytes": 779
+  }
+]

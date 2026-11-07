@@ -34,12 +34,7 @@ class Diffusion(LectureMixin, VoiceoverScene):
 
     def tweedie_(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The link to statistics is Part twenty-five's Tweedie formula. <bookmark mark='b'/> If y "
-            "is x plus normal noise of variance sigma squared, the posterior mean of x given y is y plus sigma squared times "
-            "the score of y's marginal density. <bookmark mark='c'/> So learning the score is learning the Bayes denoiser, "
-            "and the training loss, denoising score matching, is the mean squared error of a denoiser, Part forty-five's "
-            "Bayes risk. <bookmark mark='d'/> Robbins's empirical Bayes estimated the same quantity from data in 1956, for "
-            "batting averages rather than pixels.",
+            "<bookmark mark='a'/> The link to statistics is Part twenty-five's Tweedie formula. <bookmark mark='b'/> If y is x plus normal noise of variance sigma squared, the posterior mean of x given y is y plus sigma squared times the score of y's marginal density. <bookmark mark='c'/> So learning the score is learning the Bayes denoiser, and the training loss, denoising score matching, is the mean squared error of a denoiser, Part forty-five's Bayes risk. <bookmark mark='d'/> Robbins's empirical Bayes estimated the same quantity from data in 1956, in the empirical-Bayes estimation tradition. Robbins's 1956 work was not the later baseball-data example.",
             [(r"y", r"=", r"x + \sigma Z", 40),
              (r"E[x \mid y]", r"=", r"y + \sigma^2 \nabla_y \log p_\sigma(y)", 40),
              (r"\text{training}", r":", r"\min E\|\hat x(y) - x\|^2", 40),
@@ -81,26 +76,17 @@ class Diffusion(LectureMixin, VoiceoverScene):
 
     def sampler(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> To generate, run time backward. <bookmark mark='b'/> Start from wide noise, standard "
-            "deviation eight here. <bookmark mark='c'/> Move each point by the probability-flow equation, dx over d sigma "
-            "equals minus sigma times the score, from large sigma to small: a deterministic transport, Part sixty-one's "
-            "optimal-transport cousin. <bookmark mark='d'/> With the true score, the points arrive distributed exactly as the "
-            "data. With an estimated score, they arrive distributed as whatever density the estimate implies.",
-            [(r"\text{start}", r":", r"x \sim N(0, \sigma_{\max}^2)", 40),
+            "<bookmark mark='a'/> Probability flow uses the score of the noised marginal density. <bookmark mark='b'/> Exact transport requires starting from that same noised law. Here each sampler starts from its exact Gaussian-mixture marginal at sigma eight, using common component uniforms and normal draws, rather than replacing that marginal by a centered wide Gaussian. <bookmark mark='c'/> Integrate dx over d sigma equal to minus sigma times the score down a decreasing grid. The comparison uses Heun integration on four hundred noise levels and checks its change against a two-hundred-level grid. <bookmark mark='d'/> The endpoint is sigma .01, not zero, so even the empirical-score sampler ends near the training points with residual noise. Finite grid error and positive endpoint noise make these approximate samples. Arbitrary estimated scores at different noise levels need not correspond to one internally consistent density family.",
+            [(r"\text{start}", r":", r"x \sim p_{\sigma_{\max}}\ \text{(exact noised mixture)}", 40),
              (r"\frac{dx}{d\sigma}", r"=", r"-\sigma \, s(x, \sigma)", 40),
-             (r"\text{true score}", r":", r"\text{exact samples}", 40),
+             (r"\text{true score}", r":", r"\text{approximate finite-grid, positive-noise samples}", 40),
              (r"\text{estimated score}", r":", r"\text{samples from the estimate}", 40)],
             [r"$\sigma_{\max} = 8$", r"Song et al. (2021)", r"Part 61", r"the crux"],
             colors=[(1, HONC)])
 
     def memorize(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Now the statistical puzzle. <bookmark mark='b'/> With n training points, the score that "
-            "minimizes the training loss exactly is the score of the empirical distribution, noised: a mixture of n tiny "
-            "normals centred on the training points. <bookmark mark='c'/> Sampling with it reproduces the training points. "
-            "The optimal model, on the training data, is a lookup table: memorization. <bookmark mark='d'/> Real diffusion "
-            "models generalize because the network cannot fit that score exactly, and its smoothness acts as a bandwidth, "
-            "Part twenty-nine's kernel smoothing, applied implicitly.",
+            "<bookmark mark='a'/> Now the statistical puzzle. <bookmark mark='b'/> With n training points, the score that minimizes the training loss exactly is the score of the empirical distribution, noised: a mixture of n tiny normals centred on the training points. <bookmark mark='c'/> Sampling with it reproduces the training points. The optimal model, on the training data, is a lookup table: memorization. <bookmark mark='d'/> Architecture, optimization, stopping and data can regularize real diffusion models, while large networks may still memorize. Explicit smoothness in this toy acts as a bandwidth, Part twenty-nine's kernel smoothing, applied implicitly.",
             [(r"\text{training optimum}", r":", r"\text{the empirical score}", 40),
              (r"p_\sigma", r"=", r"\frac1n \sum_i N(x_i, \sigma^2)", 40),
              (r"\text{samples}", r":", r"\text{the training points}", 40),
@@ -111,11 +97,11 @@ class Diffusion(LectureMixin, VoiceoverScene):
     def chart(self):
         d = load("diffusion")
         xs = np.asarray(d["xs"])
-        top = 0.9
+        top = 1.12 * max(max(d[k]) for k in ("density", "kde_emp", "kde_smooth", "kde_true"))
         A = axes([-5, 5], [0, top], x_length=7.4, y_length=4.2, xlabel=r"$x$", ylabel=r"density of 4{,}000 generated samples",
                  xticks=[-4, -2, 0, 2, 4], yticks=[0, 0.25, 0.5, 0.75], center=[-2.3, 0.3, 0])
         ax = A.ax
-        clip = lambda v: np.minimum(np.asarray(v), top)  # noqa: E731
+        clip = lambda v: np.asarray(v)  # noqa: E731
         truth = polyline(ax, xs, d["density"], WHITE, 2.5)
         tr = VGroup(*[Line(ax.c2p(x, 0), ax.c2p(x, 0.05), color=MODB, stroke_width=3) for x in d["train"]])
         emp = polyline(ax, xs, clip(d["kde_emp"]), NAIVEC, 2.5)
@@ -128,13 +114,7 @@ class Diffusion(LectureMixin, VoiceoverScene):
              (rf"true sampler: \ {d['near_true']:.3f}", HONC)],
         ])
         with self.voiceover(
-            f"<bookmark mark='a'/> Twenty training points from the two-cluster density, in white. <bookmark mark='b'/> "
-            f"Samples from the probability flow with the exact empirical score land on the training points: the median "
-            f"distance from a sample to the nearest training point is {d['near_emp']:.3f}. Twenty spikes; nothing new. "
-            f"<bookmark mark='c'/> Smooth the empirical score, here by giving each training point a little spread of its "
-            f"own, and the samples spread out: a median distance of {d['near_smooth']:.3f}, the same as for samples from the "
-            f"true density, {d['near_true']:.3f}. New points that look like the data. Whether a model memorizes is a "
-            f"bias-variance question about its implied bandwidth."
+            f"<bookmark mark='a'/> Twenty training points from the two-cluster density, in white. <bookmark mark='b'/> Samples from the probability flow with the exact empirical score land on the training points: the median distance from a sample to the nearest training point is {d['near_emp']:.3f}. The small positive endpoint noise leaves narrow neighborhoods of training points; this is approximate reproduction rather than exactly identical atoms. <bookmark mark='c'/> Smooth the empirical score, here by giving each training point a little spread of its own, and the samples spread out: a median distance of {d['near_smooth']:.3f}, compared with the true-law sampler's {d['near_true']:.3f}. Similar nearest-point distance is not evidence of correct density or full generalization. The density plot and this diagnostic show only this one-dimensional example."
         ) as vo:
             self.play(FadeIn(A), FadeIn(seeded_tag()))
             vo.wait_until("a")
@@ -148,12 +128,7 @@ class Diffusion(LectureMixin, VoiceoverScene):
 
     def rates(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> What the theory says. <bookmark mark='b'/> Kazusato Oko, Shunta Akiyama and Taiji "
-            "Suzuki proved in 2023 that diffusion models with suitably chosen networks estimate a smooth density at the "
-            "minimax rate of Part fifty, in total variation and Wasserstein distance. <bookmark mark='c'/> Fitted to an "
-            "unrestricted class instead, they memorize, as the red curve showed. <bookmark mark='d'/> So generative modelling "
-            "inherits density estimation's whole theory: the curse of dimensionality, unless the data lie near a "
-            "low-dimensional set; and the bandwidth choice, now hidden inside the network and its training.",
+            "<bookmark mark='a'/> What the theory says. <bookmark mark='b'/> Kazusato Oko, Shunta Akiyama and Taiji Suzuki proved in 2023 that diffusion models with suitably chosen networks estimate a smooth density at nearly minimax rates, up to stated logarithmic factors, in total variation and Wasserstein-one for specified Besov smoothness classes, suitable networks, loss minimization and sampling conditions. This is not a guarantee for arbitrary trained networks or data distributions. <bookmark mark='c'/> Fitted to an unrestricted class instead, they memorize, as the red curve showed. <bookmark mark='d'/> So generative modelling inherits density estimation's whole theory: the curse of dimensionality, unless the data lie near a low-dimensional set; and the bandwidth choice, now hidden inside the network and its training.",
             [(r"\text{suitable networks}", r":", r"\text{minimax-optimal densities}", 40),
              (r"\text{unrestricted}", r":", r"\text{memorization}", 40),
              (r"\text{dimension}", r":", r"\text{the curse, \ unless low-dimensional}", 40),

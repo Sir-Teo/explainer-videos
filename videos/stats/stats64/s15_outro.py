@@ -6,7 +6,7 @@ PROBLEMS = [
     r"Show that with singleton clusters the CR1 standard error equals the iid standard error $s/\sqrt{n}$.",
     r"For two 0/1 score vectors, \ show $\mathrm{Var}(\bar a - \bar b) = (\sigma_a^2 + \sigma_b^2 - 2\sigma_{ab})/n$ and that McNemar's statistic depends only on $n_{10}, n_{01}$.",
     r"Show that the Bradley--Terry log-likelihood is concave in $\theta$, \ and that only differences $\theta_i - \theta_j$ are identified.",
-    r"Show that $E[\hat\sigma_t^2] = ((n - 1)/n)^t$ for the Gaussian refitted to its own samples, \ and that $\hat\sigma_t^2 \to 0$ a.s.",
+    r"Show that $E[\hat\sigma_t^2] = ((n - 1)/n)^t$ for Gaussian recursive refits starting with fitted variance one, \ and that $\hat\sigma_t^2 \to 0$ a.s.",
     r"Show that the prediction-powered mean $\bar f_N + \overline{(y - f)}_n$ is unbiased for any judge $f$, \ and find its variance.",
     r"Derive Tweedie's formula $E[x \mid y] = y + \sigma^2 \nabla \log p_\sigma(y)$ for $y = x + \sigma Z$.",
 ]
@@ -23,9 +23,9 @@ class Outro(LectureMixin, VoiceoverScene):
 
     def recap(self):
         items = [
-            (r"85.2 vs 84.7: \ the order flips a third of the time", MODB), (r"clusters: \ iid 76\% vs clustered 95\%", HONC),
+            (r"85.2 vs 84.7: \ the order flips a third of the time", MODB), (r"clusters: \ iid 76\% vs clustered about 95\%", HONC),
             (r"pairs: \ unpaired 99\%, \ paired 95\%", HONC), (r"arenas: \ Bradley--Terry, \ style control", MODA),
-            (r"IRT: \ 100 anchors, \ a third less error", HONC), (r"holdouts: \ reuse 64\%, \ Thresholdout near 50\%", NAIVEC),
+            (r"IRT: \ 100 anchors; model-based approximation", HONC), (r"holdouts: \ adaptive reuse; noisy-threshold heuristic", NAIVEC),
             (r"judges: \ PPI covers 95\%", HONC), (r"collapse: \ the variance random walk", NAIVEC),
             (r"conformal factuality", HONC), (r"watermarks: \ a binomial test", MODB),
             (r"simulators: \ check coverage", JUDGEC), (r"diffusion: \ the empirical score memorizes", JUDGEC),
@@ -39,14 +39,7 @@ class Outro(LectureMixin, VoiceoverScene):
         head = label(r"Part 64, \ in fourteen lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.45)
         with self.voiceover(
-            "<bookmark mark='a'/> Part sixty-four in fourteen lines. A half-point lead reversed a third of the time on a "
-            "fresh benchmark. Clustered questions need clustered error bars. Models on the same questions need paired "
-            "comparisons, and crowded leaderboards inflate the winner. Arenas are Bradley-Terry regressions, with style as a "
-            "confounder. Item response theory makes small benchmarks informative. A reused holdout reported sixty-four "
-            "percent for a coin flip. <bookmark mark='b'/> A few human labels rectify a biased judge. A model fitted to its "
-            "own output collapses. Conformal filtering guarantees factual answers at a price. Watermarks are binomial tests. "
-            "Simulators' posteriors need their coverage checked. The exact empirical score memorizes. And marketplaces need "
-            "randomized markets, not randomized buyers."
+            "<bookmark mark='a'/> Part sixty-four in fourteen lines. A half-point lead reversed a third of the time on a fresh benchmark. Clustered questions need clustered error bars. Models on the same questions need paired comparisons, and crowded leaderboards inflate the winner. Arenas are Bradley-Terry regressions, with explicit equal-style conditional comparisons. Item response theory makes small benchmarks informative. A reused holdout reported sixty-four percent for a coin flip. <bookmark mark='b'/> A few human labels rectify a biased judge. The fixed-size Gaussian replacement chain collapses; synthetic-data pipelines need their own analysis. Conformal filtering gives marginal all-kept-claims coverage under reliable labels and exchangeable responses, sometimes by keeping no claims. Watermarks are binomial tests. Simulators' posteriors need their coverage checked. The exact empirical score memorizes. And marketplaces need randomized markets, not randomized buyers."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

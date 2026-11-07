@@ -116,12 +116,7 @@ class Paired(LectureMixin, VoiceoverScene):
             [(r"the top of a leaderboard", GREY_A), (r"is biased upward", GREY_A)],
         ])
         with self.voiceover(
-            f"<bookmark mark='a'/> Now many models. Suppose k models are all exactly 85 percent accurate, and all are scored "
-            f"on the same thousand questions, with independent errors. <bookmark mark='b'/> The top score is biased "
-            f"upward: by {100 * r20['bias']:.1f} points with twenty models. <bookmark mark='c'/> The bias is the standard "
-            f"error times the expected maximum of k standard normals, which grows like the square root of two log k. It is "
-            f"Part fifty-six's winner's curse. <bookmark mark='d'/> A model at the top of a crowded leaderboard is likely to "
-            f"score lower on fresh questions, even if nothing about it was tuned to the benchmark."
+            f"<bookmark mark='a'/> Now many models. Suppose k models are all exactly 85 percent accurate, and all are scored on the same thousand questions, with independent errors. <bookmark mark='b'/> The top score is biased upward: by {100 * r20['bias']:.1f} points with twenty models. <bookmark mark='c'/> A normal approximation gives the bias as the standard error times the expected maximum of k standard normals, which grows like the square root of two log k. It is Part fifty-six's winner's curse. <bookmark mark='d'/> A model at the top of a crowded leaderboard is likely to score lower on fresh questions, even if nothing about it was tuned to the benchmark."
         ) as vo:
             self.play(FadeIn(A), FadeIn(seeded_tag()))
             vo.wait_until("a")
@@ -137,13 +132,9 @@ class Paired(LectureMixin, VoiceoverScene):
 
     def multiplicity(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> What to do about it. <bookmark mark='b'/> Compare many models against a baseline with "
-            "Part thirty-three's multiplicity corrections, or report simultaneous intervals. <bookmark mark='c'/> Rank "
-            "honestly: the set of models whose intervals overlap the leader's is the set that might be best, and it is often "
-            "large. <bookmark mark='d'/> And confirm the winner on questions it has never seen, the same remedy as for "
-            "selective inference in Part fifty-six: split, or condition on the selection.",
+            "<bookmark mark='a'/> Comparing many models requires a stated error criterion. <bookmark mark='b'/> Holm controls familywise false rejection for valid individual tests; BH instead controls false discovery rate under its dependence conditions and does not certify a selected best model. <bookmark mark='c'/> A confidence set for the best model can be formed from simultaneous pairwise contrast bounds, retaining every model that no other model demonstrably exceeds. Overlap of ordinary marginal intervals is only a descriptive screen and has no automatic simultaneous rank coverage. <bookmark mark='d'/> Confirm a selected winner on fresh questions or use justified selective inference. The confirmation target, question distribution and stopping rule should be fixed before looking.",
             [(r"\text{many comparisons}", r":", r"\text{Holm, \ BH, \ simultaneous intervals}", 40),
-             (r"\text{honest rank 1}", r":", r"\text{every model that might be best}", 40),
+             (r"\text{simultaneous rank-1 set}", r":", r"\text{every model that might be best}", 40),
              (r"\text{confirm}", r":", r"\text{fresh questions}", 40),
              (r"\text{or}", r":", r"\text{condition on the selection}", 40)],
             [r"Part 33", r"rank sets", r"a holdout", r"Part 56"],

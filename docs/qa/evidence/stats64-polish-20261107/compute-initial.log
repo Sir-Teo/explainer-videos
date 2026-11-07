@@ -1,0 +1,33 @@
+  compute leaderboard ...
+  done    leaderboard in 1s
+  compute clustered ...
+  done    clustered in 0s
+  compute paired ...
+  done    paired in 2s
+  compute multiple ...
+  done    multiple in 0s
+  compute arena ...
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspace/explainer-videos/videos/stats/stats64/compute.py", line 375, in <module>
+    CACHE.main({k: (lambda f=f: nest(f())) for k, f in ITEMS.items()}, __doc__)
+  File "/workspace/explainer-videos/explainer/ai/cache.py", line 137, in main
+    self.save(name, items[name]())
+                    ^^^^^^^^^^^^^
+  File "/workspace/explainer-videos/videos/stats/stats64/compute.py", line 375, in <lambda>
+    CACHE.main({k: (lambda f=f: nest(f())) for k, f in ITEMS.items()}, __doc__)
+                                     ^^^
+  File "/workspace/explainer-videos/videos/stats/stats64/compute.py", line 145, in compute_arena
+    boot = E.bt_bootstrap(s["i"], s["j"], s["y"], K, 300, r)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/explainer-videos/videos/stats/stats64/checked.py", line 53, in bt_bootstrap
+    ix=rng.integers(0,len(y),len(y));out.append(bt_fit(i[ix],j[ix],y[ix],K,ref)['theta'])
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/explainer-videos/videos/stats/stats64/checked.py", line 45, in bt_fit
+    w,V,W,score=logistic_checked(X[:,keep],y);theta=np.zeros(K);theta[keep]=w
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/explainer-videos/videos/stats/stats64/checked.py", line 37, in logistic_checked
+    else:raise RuntimeError('logistic score failed to converge')
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: logistic score failed to converge

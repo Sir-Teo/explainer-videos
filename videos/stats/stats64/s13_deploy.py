@@ -37,7 +37,7 @@ class Deployment(LectureMixin, VoiceoverScene):
             f"<bookmark mark='a'/> Interference in a marketplace, simulated. <bookmark mark='b'/> {d['n']:,} buyers and "
             f"{d['supply']:,} items. Each buyer wants an item with probability {d['base']}; a new recommender raises that by "
             f"half. <bookmark mark='c'/> When more buyers want items than there are items, the items go to wanting buyers "
-            f"at random. Supply binds: the recommender cannot create items, only decide who gets them. <bookmark mark='d'/> "
+            f"by weighted random sampling, proportional to their treatment-specific demand weights. Supply binds: the recommender cannot create items, only decide who gets them. <bookmark mark='d'/> "
             f"Run an ordinary A/B test, half the buyers treated, and compare purchase rates.",
             [(r"\text{buyers}", r":", rf"{d['n']:,}, \ \text{{want w.p. }} {d['base']}".replace(",", "{,}", 1), 40),
              (r"\text{treatment}", r":", rf"\times (1 + {d['lift']}) \ \text{{demand}}", 40),
@@ -51,7 +51,7 @@ class Deployment(LectureMixin, VoiceoverScene):
         vals = [(d["naive"], d["naive_sd"], NAIVEC, r"A/B test,", r"buyers randomized"),
                 (d["global"], d["global_sd"], WHITE, r"the global effect:", r"everyone vs no one"),
                 (d["markets"], d["markets_sd"], HONC, rf"{d['n_markets']} markets", r"randomized whole")]
-        A = axes([-0.6, 2.6], [0, 0.26], x_length=6.4, y_length=4.2, xlabel=r"", ylabel=r"estimated effect on purchase rate",
+        A = axes([-0.6, 2.6], [0, 0.26], x_length=6.4, y_length=4.2, xlabel=r"", ylabel=r"mean effect; bars $\pm1.96$ experiment SD",
                  xticks=None, yticks=[0, 0.05, 0.1, 0.15, 0.2, 0.25], center=[-2.8, 0.3, 0])
         ax = A.ax
         bars = VGroup()
@@ -67,13 +67,7 @@ class Deployment(LectureMixin, VoiceoverScene):
             [(rf"green: \ market-level randomization", HONC), (rf"{d['markets']:.3f}, \ unbiased", HONC)],
         ], pos=(3.5, 0.3, 0))
         with self.voiceover(
-            f"<bookmark mark='a'/> Over three hundred simulated tests, the A/B comparison says the recommender raises "
-            f"purchases by {100 * d['naive']:.1f} points. But treated buyers win items that control buyers would otherwise "
-            f"have bought: the control group is harmed by the treatment group, a spillover. <bookmark mark='b'/> The effect "
-            f"of switching everyone on, against everyone off, is {100 * d['global']:.1f} points: supply caps it. The A/B "
-            f"test overstated it more than fourfold. <bookmark mark='c'/> Randomize whole markets instead, {d['n_markets']} "
-            f"separate ones, half fully treated, and the estimate is {100 * d['markets']:.1f} points, unbiased, with a wider "
-            f"interval because there are only twenty units. Part sixty-two's cluster design, and its price."
+            f"<bookmark mark='a'/> Over three hundred simulated tests, the A/B comparison says the recommender raises purchases by {100 * d['naive']:.1f} points. But treated buyers win items that control buyers would otherwise have bought: the control group is harmed by the treatment group, a spillover. <bookmark mark='b'/> The effect of switching everyone on, against everyone off, is {100 * d['global']:.1f} points: supply caps it. The A/B test overstated it more than fourfold. <bookmark mark='c'/> Randomize whole markets instead, {d['n_markets']} separate ones, half fully treated, and the estimate is {100 * d['markets']:.1f} points, targeting the same global intervention contrast because each of the twenty independent markets has the same buyer count and supply as the original market. The bars show plus or minus 1.96 repeated-experiment standard deviations, not confidence intervals for the Monte Carlo means. Twenty markets here involve eighty thousand buyers, compared with four thousand in the single-market A/B experiment, so their precision is not a fixed-budget design comparison. Valid inference would use its own assignment design and market-level variance. Part sixty-two's cluster design, and its price."
         ) as vo:
             self.play(FadeIn(A), FadeIn(seeded_tag()))
             vo.wait_until("a")
@@ -101,15 +95,10 @@ class Deployment(LectureMixin, VoiceoverScene):
 
     def longterm(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Long horizons. <bookmark mark='b'/> Whether students who use an assistant learn more is "
-            "visible only at the end of a course, or later. <bookmark mark='c'/> Part sixty-two's surrogate index predicts "
-            "the long-term outcome from short-term ones, such as homework scores and engagement, using an older dataset "
-            "where both were observed. <bookmark mark='d'/> Its condition, that the treatment affects the long-term "
-            "outcome only through the surrogates, is exactly what an assistant that writes the homework would violate: "
-            "homework scores rise, and learning may not. The surrogate paradox, in a classroom.",
+            "<bookmark mark='a'/> Long-term effects create another measurement problem. <bookmark mark='b'/> Whether students learn more may be visible only much later; homework scores and engagement are faster but can change meaning when an assistant is introduced. <bookmark mark='c'/> A surrogate index learned from older data needs conditional-mean comparability across samples and an appropriate surrogacy condition, together with the relevant causal design, overlap and estimation assumptions. A graph with no bypass is not a complete substitute for those conditions. <bookmark mark='d'/> An assistant could raise homework scores by writing the answers while learning stays unchanged. That can invalidate the older conditional outcome mapping. Short-term metric gains alone do not identify long-term benefits.",
             [(r"\text{long-term}", r":", r"\text{learning, \ careers, \ health}", 40),
              (r"\text{surrogate index}", r":", r"\text{predict it from short-term outcomes}", 40),
-             (r"\text{condition}", r":", r"\text{no path that bypasses the surrogates}", 40),
+             (r"\text{condition}", r":", r"\text{surrogacy, comparability, overlap and causal design}", 40),
              (r"\text{the risk}", r":", r"\text{homework rises, \ learning does not}", 40)],
             [r"slow outcomes", r"Athey et al. (2019)", r"surrogacy", r"Part 62's paradox"],
             colors=[(3, NAIVEC)])

@@ -1,0 +1,21 @@
+[
+  {
+    "url": "https://arxiv.org/pdf/2402.14992",
+    "sha256": "f652b141ccc7250524585bfc9c9858ade0419f7f7b81e23997dd06032ea86190",
+    "review": "Primary reported empirical MMLU 14K-to-100 and under-two-percentage-point average error; not a per-model guarantee"
+  },
+  {
+    "url": "https://arxiv.org/pdf/2303.01861",
+    "sha256": "6fa5eb8d161cf77183c3166668a8e4257fe146f1e4ddb3073e7e67e6e909fc34",
+    "review": "Specified Besov smoothness classes, compact support and further regularity, appropriate networks, loss minimization; nearly minimax TV and W1 rates with logarithmic qualifications"
+  },
+  {
+    "url": "https://arxiv.org/pdf/2301.10226",
+    "sha256": "7690ccaa0ff7038219c966d8466b63d5d241e30beff9aeb2860e205ab392fc20",
+    "review": "Soft logit bias, entropy dependence, null testing and repeated-n-gram cautions; ideal independent mixture is not all real text"
+  },
+  {
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11499265/",
+    "review": "SynthID-Text: nearly 20 million Gemini responses and user-feedback assessment; statistical nonsignificance not proof of literal equality; non-distortion depends on specified randomness"
+  }
+]

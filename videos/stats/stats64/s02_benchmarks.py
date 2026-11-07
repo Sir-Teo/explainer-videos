@@ -78,16 +78,10 @@ class Benchmarks(LectureMixin, VoiceoverScene):
             [(rf"{d['G']} passages $\times$ {d['m']} questions", WHITE), (r"each passage has its own difficulty", GREY_A)],
             [(rf"red: \ iid SE, \ {100 * d['se_naive']:.2f} points", NAIVEC), (rf"95\% coverage {100 * d['cov_naive']:.1f}\%", NAIVEC)],
             [(rf"green: \ cluster-robust, \ {100 * d['se_cluster']:.2f}", HONC), (rf"95\% coverage {100 * d['cov_cluster']:.1f}\%", HONC)],
-            [(rf"white dashes: \ the true sd, \ {100 * d['sd_mean']:.2f}", WHITE), (rf"over {d['reps']:,} benchmarks".replace(",", "{,}"), WHITE)],
+            [(rf"white dashes: \ the empirical sd, \ {100 * d['sd_mean']:.2f}", WHITE), (rf"over {d['reps']:,} benchmarks".replace(",", "{,}"), WHITE)],
         ], pos=(3.4, 0.3, 0))
         with self.voiceover(
-            f"<bookmark mark='a'/> A simulated benchmark: {d['G']} passages with {d['m']} questions each, and each passage "
-            f"with its own difficulty for the model. <bookmark mark='b'/> The iid standard error says "
-            f"{100 * d['se_naive']:.1f} points, and its ninety-five percent interval covers the true accuracy only "
-            f"{100 * d['cov_naive']:.0f} percent of the time. <bookmark mark='c'/> The cluster-robust standard error is "
-            f"{100 * d['se_cluster']:.1f} points, and covers {100 * d['cov_cluster']:.1f} percent. <bookmark mark='d'/> The "
-            f"true standard deviation of the score across {d['reps']:,} simulated benchmarks is {100 * d['sd_mean']:.1f} "
-            f"points: the clustered error bar was right, and the iid one was too small by forty percent."
+            f"<bookmark mark='a'/> A simulated benchmark: {d['G']} passages with {d['m']} questions each, and each passage with its own difficulty for the model. <bookmark mark='b'/> The iid standard error says {100 * d['se_naive']:.1f} points, and its ninety-five percent interval covers the true accuracy only {100 * d['cov_naive']:.0f} percent of the time. <bookmark mark='c'/> The cluster-robust standard error is {100 * d['se_cluster']:.1f} points, and covers {100 * d['cov_cluster']:.1f} percent. <bookmark mark='d'/> The empirical standard deviation of the score across {d['reps']:,} simulated benchmarks is {100 * d['sd_mean']:.1f} points: the clustered error bar was right, and the iid one was too small by forty percent."
         ) as vo:
             self.play(FadeIn(A), FadeIn(seeded_tag()))
             vo.wait_until("a")
@@ -113,7 +107,7 @@ class Benchmarks(LectureMixin, VoiceoverScene):
         self.lad_voiceover(
             f"<bookmark mark='a'/> How much do clusters cost? Part eighteen's design effect answers it. <bookmark "
             f"mark='b'/> With clusters of size m and intraclass correlation rho, the variance is multiplied by one plus m "
-            f"minus one times rho. <bookmark mark='c'/> Here the ratio of the variances is {d['deff']:.2f}, which implies "
+            f"minus one times rho. <bookmark mark='c'/> Here numerical integration of the logistic-normal design gives a variance ratio of {d['deff']:.2f}, which implies "
             f"an intraclass correlation of {d['icc']:.2f}. <bookmark mark='d'/> So a thousand clustered questions are worth "
             f"about {1000 / d['deff']:.0f} independent ones. Ten questions per passage buys much less than ten passages.",
             [(r"\text{design effect}", r"=", r"1 + (m - 1)\rho", 40),

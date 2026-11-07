@@ -1,0 +1,21 @@
+  compute arena ...
+  done    arena in 2s
+  compute irt ...
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspace/explainer-videos/videos/stats/stats64/compute.py", line 375, in <module>
+    CACHE.main({k: (lambda f=f: nest(f())) for k, f in ITEMS.items()}, __doc__)
+  File "/workspace/explainer-videos/explainer/ai/cache.py", line 137, in main
+    self.save(name, items[name]())
+                    ^^^^^^^^^^^^^
+  File "/workspace/explainer-videos/videos/stats/stats64/compute.py", line 375, in <lambda>
+    CACHE.main({k: (lambda f=f: nest(f())) for k, f in ITEMS.items()}, __doc__)
+                                     ^^^
+  File "/workspace/explainer-videos/videos/stats/stats64/compute.py", line 182, in compute_irt
+    fit = E.fit_2pl(R, iters=25)
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/explainer-videos/videos/stats/stats64/checked.py", line 116, in fit_2pl
+    if not out.success or np.max(abs(projected))>2e-3:raise RuntimeError(f'2PL optimizer: {out.message}, projected score {np.max(abs(projected))}')
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: 2PL optimizer: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH, projected score 0.0024786376928916942

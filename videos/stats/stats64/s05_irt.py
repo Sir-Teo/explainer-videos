@@ -18,16 +18,11 @@ class IRT(LectureMixin, VoiceoverScene):
 
     def model(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Psychometrics met this problem a century ago, with students instead of models. "
-            "<bookmark mark='b'/> Item response theory gives each test-taker an ability theta, and each question a "
-            "difficulty b and a discrimination a. <bookmark mark='c'/> The chance of a right answer is the logistic "
-            "function of a times theta minus b: Allan Birnbaum's two-parameter model, from 1968, a cousin of Part "
-            "twenty-five's hierarchical models and of chapter three's Bradley-Terry, with the question as the opponent. "
-            "<bookmark mark='d'/> Questions everyone gets right, or no one does, carry no information about who is better.",
+            "<bookmark mark='a'/> Psychometrics met this problem a century ago, with students instead of models. <bookmark mark='b'/> Item response theory gives each test-taker an ability theta, and each question a difficulty b and a discrimination a. <bookmark mark='c'/> The chance of a right answer is the logistic function of a times the quantity theta minus b: Allan Birnbaum's two-parameter model, from 1968, a cousin of Part twenty-five's hierarchical models and of chapter three's Bradley-Terry, with the question as the opponent. <bookmark mark='d'/> Questions everyone gets right, or no one does, can have little information near the abilities being compared. Observing everyone correct does not prove the true item response probability is exactly one.",
             [(r"\text{ability}", r":", r"\theta_m \ \text{for model } m", 40),
              (r"\text{item}", r":", r"a_j \ \text{(discrimination)}, \ b_j \ \text{(difficulty)}", 40),
              (r"P(R_{mj} = 1)", r"=", r"\frac{1}{1 + e^{-a_j(\theta_m - b_j)}}", 40),
-             (r"\text{easy or impossible}", r":", r"\text{no information}", 40)],
+             (r"\text{easy or impossible}", r":", r"\text{often little local information}", 40)],
             [r"psychometrics", r"two item parameters", r"Birnbaum (1968)", r"the item's information"],
             colors=[(2, HONC)])
 
@@ -36,13 +31,13 @@ class IRT(LectureMixin, VoiceoverScene):
         self.lad_voiceover(
             f"<bookmark mark='a'/> A simulated benchmark: {d['J']:,} questions and {d['M']} models, with abilities and item "
             f"parameters drawn at random. <bookmark mark='b'/> Fit the model to the {d['M']} by {d['J']:,} table of right "
-            f"and wrong answers, alternating Newton steps for the items and for the models. <bookmark mark='c'/> The "
+            f"and wrong answers, a bounded penalized joint fit, initialized by alternating updates and checked for optimizer convergence. This nonconvex fit is not certified as a global maximum. A final affine normalization preserves all fitted response probabilities. <bookmark mark='c'/> The "
             f"fitted abilities correlate {d['theta_corr']:.3f} with the true ones, and the difficulties {d['corr_b']:.2f}. "
             f"<bookmark mark='d'/> Discriminations are harder, a correlation of {d['corr_a']:.2f}: sixty test-takers say "
             f"little about how sharply each question separates them. Part twenty-two's information again: each item has "
             f"only sixty observations.",
             [(r"\text{data}", r":", rf"{d['M']} \times {d['J']:,} \ \text{{right/wrong}}".replace(",", "{,}"), 40),
-             (r"\text{fit}", r":", r"\text{alternating Newton (joint ML)}", 40),
+             (r"\text{fit}", r":", r"\text{bounded penalized 2PL; checked local optimization}", 40),
              (r"\mathrm{corr}(\hat\theta, \theta)", r"=", rf"{d['theta_corr']:.3f}, \ \ \mathrm{{corr}}(\hat b, b) = {d['corr_b']:.2f}", 40),
              (r"\mathrm{corr}(\hat a, a)", r"=", rf"{d['corr_a']:.2f}", 40)],
             [r"seeded", r"Part 21", r"well determined", r"60 observations per item"],
@@ -65,16 +60,16 @@ class IRT(LectureMixin, VoiceoverScene):
             [(r"300 new models, \ each scored on", WHITE), (r"100 of the 1{,}000 questions", WHITE)],
             [(rf"red: \ the plain mean, \ {100 * d['rmse_raw']:.1f} points", NAIVEC)],
             [(rf"blue: \ IRT on random items, \ {100 * d['rmse_irt']:.1f}", MODA)],
-            [(rf"green: \ IRT on spread anchors, \ {100 * d['rmse_anchor']:.1f}", HONC), (r"a third less error", HONC)],
+            [(rf"green: \ IRT on spread anchors, \ {100 * d['rmse_anchor']:.1f}", HONC), (r"conditional on one fitted item bank", HONC)],
         ], pos=(3.6, 0.3, 0))
         with self.voiceover(
-            f"<bookmark mark='a'/> The use: evaluating a new model cheaply. Score three hundred new models on only a "
+            f"<bookmark mark='a'/> The use: evaluating new simulated models cheaply, conditional on this one fitted item bank. Score three hundred new models on only a "
             f"hundred of the thousand questions, and estimate each one's accuracy on all thousand. <bookmark mark='b'/> "
             f"The plain mean of the hundred misses by {100 * d['rmse_raw']:.1f} points, root mean square. <bookmark "
             f"mark='c'/> Estimating the model's ability from the same random hundred, with the fitted item parameters, and "
             f"predicting its accuracy on all the items, misses by {100 * d['rmse_irt']:.1f}. <bookmark mark='d'/> Choosing "
             f"the hundred to span the difficulties, the most discriminating question in each stratum, misses by "
-            f"{100 * d['rmse_anchor']:.1f}: a third less error than the plain mean, for the same cost."
+            f"{100 * d['rmse_anchor']:.1f}: less error than the plain mean in this run, for the same cost. The target is each new model's realized full thousand-item score, including the sampled anchor responses, not an independent population accuracy or a confidence guarantee."
         ) as vo:
             self.play(FadeIn(A), FadeIn(seeded_tag()))
             vo.wait_until("a")

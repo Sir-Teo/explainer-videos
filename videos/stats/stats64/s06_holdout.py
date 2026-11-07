@@ -35,7 +35,7 @@ class Holdout(LectureMixin, VoiceoverScene):
     def experiment(self):
         d = load("holdout")
         self.lad_voiceover(
-            f"<bookmark mark='a'/> Their experiment, simulated here. <bookmark mark='b'/> {d['d']:,} features and labels "
+            f"<bookmark mark='a'/> An experiment inspired by their adaptive selection example, using Gaussian noise features here. <bookmark mark='b'/> {d['d']:,} features and labels "
             f"of pure noise: no classifier can beat fifty percent on new data. <bookmark mark='c'/> The analyst computes "
             f"each feature's correlation with the label on a training set of {d['n']:,}, asks the holdout set for the same "
             f"correlations, keeps the features where the two agree in sign and are both large, and builds a classifier "
@@ -66,16 +66,10 @@ class Holdout(LectureMixin, VoiceoverScene):
             [(r"grey dashes: \ the truth, \ 50\%", GREY_B)],
             [(rf"red: \ the reused holdout, \ up to {100 * max(d['reuse']['holdout']):.0f}\%", NAIVEC)],
             [(r"white: \ the same classifiers", WHITE), (r"on fresh data", WHITE)],
-            [(rf"green: \ Thresholdout, \ {100 * min(d['thresholdout']['holdout']):.0f}--{100 * max(d['thresholdout']['holdout']):.0f}\%", HONC)],
+            [(rf"green: \ noisy-threshold heuristic, \ {100 * min(d['thresholdout']['holdout']):.0f}--{100 * max(d['thresholdout']['holdout']):.0f}\%", HONC)],
         ])
         with self.voiceover(
-            f"<bookmark mark='a'/> The truth is fifty percent. <bookmark mark='b'/> The reused holdout reports accuracies "
-            f"climbing with k, to {100 * max(d['reuse']['holdout']):.0f} percent: a discovery, apparently. <bookmark "
-            f"mark='c'/> On fresh data the same classifiers score fifty percent, as they must. The holdout had been fitted "
-            f"through the selection. <bookmark mark='d'/> Answer every query through Thresholdout instead, and the reported "
-            f"accuracies stay between {100 * min(d['thresholdout']['holdout']):.0f} and "
-            f"{100 * max(d['thresholdout']['holdout']):.0f} percent: much closer to the truth, at the price of noise in each "
-            f"answer."
+            f"<bookmark mark='a'/> The truth is fifty percent. <bookmark mark='b'/> The reused holdout reports accuracies climbing with k, to {100 * max(d['reuse']['holdout']):.0f} percent: a discovery, apparently. <bookmark mark='c'/> On fresh data the same classifiers score fifty percent, as they must. The holdout had been fitted through the selection. <bookmark mark='d'/> Answer every query through the noisy-threshold heuristic instead, and the reported accuracies stay between {100 * min(d['thresholdout']['holdout']):.0f} and {100 * max(d['thresholdout']['holdout']):.0f} percent: in this small paired simulation. This is a descriptive comparison, not a Thresholdout implementation or a differential-privacy guarantee."
         ) as vo:
             self.play(FadeIn(A), Create(half), FadeIn(seeded_tag()))
             vo.wait_until("a")
@@ -91,17 +85,11 @@ class Holdout(LectureMixin, VoiceoverScene):
 
     def thresholdout_(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Thresholdout works like this. <bookmark mark='b'/> Answer each query with the training "
-            "set's value, unless it differs from the holdout's value by more than a noisy threshold. <bookmark mark='c'/> "
-            "Only then reveal the holdout's value, with Laplace noise added. Most queries reveal nothing about the holdout; "
-            "the rest reveal it privately. <bookmark mark='d'/> Because differential privacy composes and is closed under "
-            "post-processing, the whole adaptive sequence is private, and private analyses cannot overfit: a model chosen "
-            "through private answers generalizes. A holdout of size n can then support roughly n squared adaptive queries, "
-            "instead of about n.",
+            "<bookmark mark='a'/> The formal Thresholdout algorithm uses bounded statistical queries, a persistent noisy threshold, noise in the comparison, noisy holdout answers and a finite budget of exceptional disclosures. <bookmark mark='b'/> Queries agreeing sufficiently with training return the training value; the private comparison itself must be accounted for. <bookmark mark='c'/> When a discrepancy triggers a holdout answer, the algorithm spends budget and refreshes its noisy threshold. When budget is exhausted it stops. Our simplified routine lacks those details and uses unbounded Gaussian correlations, so we label it a noisy-threshold heuristic. <bookmark mark='d'/> Strong enough differential privacy can imply quantitative adaptive generalization under specified sampling assumptions. It does not mean that arbitrary private analyses cannot overfit, or that every holdout automatically supports n squared queries. Query count, accuracy, confidence and exceptional-disclosure budget all enter the theorem.",
             [(r"\text{if}", r":", r"|v_{\text{train}} - v_{\text{hold}}| < T + \text{noise}, \ \text{return } v_{\text{train}}", 38),
              (r"\text{else}", r":", r"\text{return } v_{\text{hold}} + \mathrm{Laplace}", 40),
              (r"\text{privacy}", r":", r"\text{composition and post-processing}", 40),
-             (r"\text{so}", r":", r"\text{privacy implies generalization}", 40)],
+             (r"\text{so}", r":", r"\text{quantitative theorem needs budget and bounded queries}", 40)],
             [r"a threshold", r"Part 63's Laplace", r"Part 63", r"Dwork et al. (2015)"],
             colors=[(3, HONC)])
 
@@ -122,12 +110,7 @@ class Holdout(LectureMixin, VoiceoverScene):
 
     def contamination(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The modern form of reuse is worse. <bookmark mark='b'/> Benchmarks are published on the "
-            "web, and models are trained on the web, so test questions leak into training data. <bookmark mark='c'/> "
-            "Detecting it is Part sixty-three's membership inference, asked of a benchmark: does the model treat these "
-            "questions as familiar, more likely than rephrasings of them? <bookmark mark='d'/> The statistical defences are "
-            "the classical ones: fresh, private test sets, written after the training data were collected, and rotated "
-            "before they leak.",
+            "<bookmark mark='a'/> The modern form of reuse is worse. <bookmark mark='b'/> Benchmarks are published on the web, and models are trained on the web, so test questions leak into training data. <bookmark mark='c'/> Detecting it is Part sixty-three's membership inference, asked of a benchmark: does the model treat these questions as familiar, more likely than rephrasings of them? <bookmark mark='d'/> Likelihood contrasts can also reflect ordinary differences in wording or difficulty; calibrated controls are needed before treating familiarity as proof of membership. Practical defenses include fresh, private test sets, written after the training data were collected, and rotated before they leak.",
             [(r"\text{contamination}", r":", r"\text{test questions in training data}", 40),
              (r"\text{detect}", r":", r"\text{membership inference}", 40),
              (r"\text{signal}", r":", r"\text{originals more likely than rephrasings}", 40),
