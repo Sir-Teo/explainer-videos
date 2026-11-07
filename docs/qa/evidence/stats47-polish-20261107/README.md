@@ -3,3 +3,5 @@
 All fifteen chapters and six solutions were audited; fifteen inputs were regenerated and sixteen focused checks passed. See [source review](source-review.md), [Newcomb comparison](source-data.json), [input hashes](computed-inputs.json) and computation/test logs.
 
 English endpoint/native/motion captures and a representative narrated preview are pending. Chinese narration/caption tables, continuous listening and final masters remain open. This is not production approval.
+
+The initial motion review found a 2.8-second transition displaying only “uses:”. It now introduces the section with “Applications of saddlepoint approximations”; fresh visual captures are required after this change.
