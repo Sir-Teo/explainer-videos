@@ -131,7 +131,7 @@ class Odes(VoiceoverScene):
         code[5].set_color(NO)
         code[10].set_color(YES)
         ct = label(r"our instrument's loop \ (abridged)", font_size=18, color=GREY_A)
-        cg = VGroup(ct, code).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.5, 0.6, 0])
+        cg = VGroup(ct, code).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.3, 0.6, 0])
         foot = wrapped_label(r"the same method is SciPy's default, \ \texttt{RK45}, \ and MATLAB's \texttt{ode45}",
                              6.0, font_size=19, color=WHITE).next_to(cg, DOWN, buff=0.4).align_to(cg, LEFT)
         with self.voiceover(
@@ -398,7 +398,7 @@ class Odes(VoiceoverScene):
         tr = label(rf"RK4: \ {100 * rk[-1]:.2f}\% and falling", font_size=18, color=NO).move_to(
             ax.c2p(980, -3.05), aligned_edge=RIGHT)
         tl = label(rf"leapfrog: \ never beyond {100 * top_lf:.2f}\%", font_size=18, color=YES).move_to(
-            ax.c2p(980, 0.17), aligned_edge=RIGHT)
+            ax.c2p(980, -0.45), aligned_edge=RIGHT)
         cols = {r"\tilde H": YES}
         rows = VGroup(
             cmath(r"\tilde H", r"=", r"H + h^2 H_2 + h^4 H_4 + \cdots", colors=cols, font_size=30),
