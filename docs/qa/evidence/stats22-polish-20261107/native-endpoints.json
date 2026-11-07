@@ -1,0 +1,138 @@
+{
+  "fingerprint": "58d84b2a1a5815ba11a10ee5899c0f6adcd69961583cd3a3b5296361b0e9ecc5",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Consistency",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 30
+      },
+      "input_record": "renders/qa/native1080/stats22/en/Consistency/result.json",
+      "input_sha256": "9971d0b0550eacd258912644bcebad5095f9f9eb3623a2916b4c83c7e00941b4"
+    },
+    {
+      "scene": "Normality",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 39
+      },
+      "input_record": "renders/qa/native1080/stats22/en/Normality/result.json",
+      "input_sha256": "4cee443231298c0266eb36e8020dca7640a7a202549d83dfa8d68fafca087257"
+    },
+    {
+      "scene": "Information",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 36
+      },
+      "input_record": "renders/qa/native1080/stats22/en/Information/result.json",
+      "input_sha256": "2f3f865c1c064b8c8f96c21532ed177d7522fbcb5242c57d9034223ad40c2d19"
+    },
+    {
+      "scene": "Profile",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 30
+      },
+      "input_record": "renders/qa/native1080/stats22/en/Profile/result.json",
+      "input_sha256": "bf750afec9b80fe288605c76ebe6cb9658be93dd8e2211667488187fcd718a6d"
+    },
+    {
+      "scene": "Trinity",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 42
+      },
+      "input_record": "renders/qa/native1080/stats22/en/Trinity/result.json",
+      "input_sha256": "b2a15c86ff09ac002e4efa432ff3729292253e875f741c7ebf5915f06f0b1e27"
+    },
+    {
+      "scene": "NeymanScott",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 53
+      },
+      "input_record": "renders/qa/native1080/stats22/en/NeymanScott/result.json",
+      "input_sha256": "d20d8056c334736ebbf8e6c5ec6cff2902e2d2a9bebf1e29256e06acc4589df0"
+    },
+    {
+      "scene": "EM",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 62
+      },
+      "input_record": "renders/qa/native1080/stats22/en/EM/result.json",
+      "input_sha256": "62e16fc574da53b02e9e44a16a0554d49ad2c0aca5bbc213ab66d33d02655b91"
+    },
+    {
+      "scene": "Misbehave",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 52
+      },
+      "input_record": "renders/qa/native1080/stats22/en/Misbehave/result.json",
+      "input_sha256": "6da64b8505827470bbdb0b5fc6f66fdea049843c885e906f661c52017faa7722"
+    },
+    {
+      "scene": "Misspecification",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 51
+      },
+      "input_record": "renders/qa/native1080/stats22/en/Misspecification/result.json",
+      "input_sha256": "27f88e490cdf30e935f577cfab953eb2c152e8fcfef449da32a41a56583c76e7"
+    },
+    {
+      "scene": "Quasi",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 50
+      },
+      "input_record": "renders/qa/native1080/stats22/en/Quasi/result.json",
+      "input_sha256": "56e8a99c43803efb54ba0ef7740d0bb0999aa315ee281ba6db1a3d1924dc4d55"
+    },
+    {
+      "scene": "Principle",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 57
+      },
+      "input_record": "renders/qa/native1080/stats22/en/Principle/result.json",
+      "input_sha256": "60c754e6dd59ebe40b851023d3a3e968c4a624591cf5d54e5fb19987ecf93275"
+    },
+    {
+      "scene": "Geometry",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 39
+      },
+      "input_record": "renders/qa/native1080/stats22/en/Geometry/result.json",
+      "input_sha256": "803b176b15946b9e878e57aed1f211407024d633e0a8edbbb6f514136a09da99"
+    }
+  ]
+}

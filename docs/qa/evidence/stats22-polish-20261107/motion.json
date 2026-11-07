@@ -1,0 +1,138 @@
+{
+  "fingerprint": "58d84b2a1a5815ba11a10ee5899c0f6adcd69961583cd3a3b5296361b0e9ecc5",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Consistency",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 5
+      },
+      "input_record": "renders/qa/series/stats22/en/Consistency_motion/result.json",
+      "input_sha256": "1d7526db63d5fd3d57b339f8eb1a354e3e160701b7a0397a7a148f5151eaa42e",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 172 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 172 s\n"
+    },
+    {
+      "scene": "Normality",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 5
+      },
+      "input_record": "renders/qa/series/stats22/en/Normality_motion/result.json",
+      "input_sha256": "87361b13caf32ff7ea9ccf8ce112cc6c17d9958c66bb3a6f36e2c71c2b3cb83b",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 169 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 169 s\n"
+    },
+    {
+      "scene": "Information",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 5
+      },
+      "input_record": "renders/qa/series/stats22/en/Information_motion/result.json",
+      "input_sha256": "06dc4977b3b916900d426bc14a4a3c68c6b9ac181f10dc020197a2154b841dae",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 164 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 164 s\n"
+    },
+    {
+      "scene": "Profile",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 5
+      },
+      "input_record": "renders/qa/series/stats22/en/Profile_motion/result.json",
+      "input_sha256": "12bf974a6063a40724486bde08d4b98131476dc8b82afd52cd69dae44ad319ad",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 185 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 185 s\n"
+    },
+    {
+      "scene": "Trinity",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats22/en/Trinity_motion/result.json",
+      "input_sha256": "cb0e471d7dfbdb3e7867000e70992eb4355fffbcd24b679370f0e8285b0475bf",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 236 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 236 s\n"
+    },
+    {
+      "scene": "NeymanScott",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats22/en/NeymanScott_motion/result.json",
+      "input_sha256": "52a77446b6e2c5586b753071821ef4f2bf4406378b47ddc330db8b1d48cbdc5c",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 212 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 212 s\n"
+    },
+    {
+      "scene": "EM",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats22/en/EM_motion/result.json",
+      "input_sha256": "b6e8c76b0ac0bc488ec561d8f7efd0a6f81a5db03d9222adb68eeb7bfa41a379",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 337 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 337 s\n"
+    },
+    {
+      "scene": "Misbehave",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats22/en/Misbehave_motion/result.json",
+      "input_sha256": "aae4a86db6cd8356d9a1489da85a950b39e8a0f4b63fbe9ef7cd0ff2015cdf69",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 268 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 268 s\n"
+    },
+    {
+      "scene": "Misspecification",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats22/en/Misspecification_motion/result.json",
+      "input_sha256": "bfb7e6d52d78b96fc7fab43c7a10313e25b341d8c8f1faf55c78b6c1a9a877ed",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 277 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 277 s\n"
+    },
+    {
+      "scene": "Quasi",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats22/en/Quasi_motion/result.json",
+      "input_sha256": "4436f0d6116510404982b67be1f0370dbb56c362a570736305140573151c4d26",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 267 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 267 s\n"
+    },
+    {
+      "scene": "Principle",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats22/en/Principle_motion/result.json",
+      "input_sha256": "7c437597ea952ce501579f259ef3f327abb4076a6e168f7ae6ad0b6032fb6b8c",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 253 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 253 s\n"
+    },
+    {
+      "scene": "Geometry",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats22/en/Geometry_motion/result.json",
+      "input_sha256": "23f4472a1c486a4b373743531b2b9f1df72ab92c74305ffb65dbf36e30b463d2",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 200 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 200 s\n"
+    }
+  ]
+}

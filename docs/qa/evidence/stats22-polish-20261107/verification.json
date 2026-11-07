@@ -1,0 +1,23 @@
+{
+  "part": "stats22",
+  "fingerprint": "58d84b2a1a5815ba11a10ee5899c0f6adcd69961583cd3a3b5296361b0e9ecc5",
+  "english_endpoints": 15,
+  "native_1080_endpoints": 12,
+  "silent_motion_chapters": 12,
+  "audio_scene": "EM",
+  "audio_lines": 8,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats22/en/EM/videos/s09_em/480p15/EM.mp4",
+    "seconds": 308.065365,
+    "narration_sha256": "d3244107e106d0d67c268324c5b4f287dc3c7fe1844682bec391edda7e7e9061",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 308 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 308 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}
