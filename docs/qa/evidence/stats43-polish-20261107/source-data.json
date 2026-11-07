@@ -1,0 +1,26 @@
+[
+  {
+    "dataset": "EuStockMarkets",
+    "rows": 1860,
+    "columns": 4,
+    "comparison": "All displayed data values agree to 1e-12 absolute or exactly for counts/years",
+    "source": "https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/EuStockMarkets.csv",
+    "sha256": "aa5513f3ca55daf51294accae9a3f946e957ba53f405dc4fafb4e125e5c03818"
+  },
+  {
+    "dataset": "portpirie",
+    "rows": 65,
+    "columns": 2,
+    "comparison": "All displayed data values agree to 1e-12 absolute or exactly for counts/years",
+    "source": "https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/texmex/portpirie.csv",
+    "sha256": "e1c4f94cea47f1291c2e9d99298872e5da804dfe7ae60bdefa9307f7e830f18a"
+  },
+  {
+    "dataset": "HorseKicks",
+    "rows": 5,
+    "columns": 2,
+    "comparison": "All displayed data values agree to 1e-12 absolute or exactly for counts/years",
+    "source": "https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/vcd/HorseKicks.csv",
+    "sha256": "988635d5cc945940dd122faf8e8b54e16e6d0a0fa80ccf04e79839e4f30ce6e5"
+  }
+]

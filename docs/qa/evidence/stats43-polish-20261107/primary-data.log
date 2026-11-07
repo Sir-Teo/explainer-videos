@@ -1,0 +1,4 @@
+EuStockMarkets (1860, 4) ['DAX', 'SMI', 'CAC', 'FTSE']
+portpirie (65, 2) ['Year', 'SeaLevel']
+HorseKicks (5, 2) ['nDeaths', 'Freq']
+All three independent datasets verified.

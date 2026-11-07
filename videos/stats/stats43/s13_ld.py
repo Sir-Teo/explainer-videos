@@ -29,16 +29,21 @@ class LargeDeviations(VoiceoverScene):
             cmath(r"\text{Cram\'er}", r":", r"\tfrac1n \log P(\bar X_n \ge a) \to -I(a)", font_size=34),
         ]
         rows[3][-1].set_color(S.ACCENT)
-        whys = [why(r"the rate: \ a Legendre transform"), why(r"Markov on $e^{t S_n}$"), why(r"optimize $t$"), why(r"Cram\'er (1938): \ the bound is sharp")]
+        whys = [why(r"the rate: \ a Legendre transform"), why(r"Markov on $e^{t S_n}$"), why(r"optimize $t$"), why(r"Cram\'er (1938): \ exponential rate; iid and MGF near zero")]
         with self.voiceover(
-            "<bookmark mark='a'/> The central limit theorem describes deviations of the order of one over root n. A large "
-            "deviation is a fixed distance from the mean, and its probability falls exponentially. The rate is a Legendre "
-            "transform: the supremum over t of t a minus the log moment generating function. <bookmark mark='b'/> The upper "
-            "bound is Markov's inequality applied to e to the t S n, for any positive t. <bookmark mark='c'/> Optimizing t "
-            "gives Chernoff's bound, e to the minus n times the rate. <bookmark mark='d'/> Harald Cramér, an actuary as well as a "
-            "mathematician, proved in 1938, with insurance ruin in mind, that the bound is sharp on the exponential scale: the logarithm "
-            "of the probability, divided by n, tends to minus the rate."
+            "<bookmark mark='a'/> The central limit theorem describes deviations of the order of one over root n. For"
+            " iid summands whose MGF is finite near zero, Cramer's theorem describes fixed deviations from the mean "
+            "on an exponential probability scale. Heavy-tailed laws need not have this behavior. The rate is a "
+            "Legendre transform: the supremum over t of t a minus the log moment generating function. <bookmark "
+            "mark='b'/> The upper bound is Markov's inequality applied to e to the t S n, for any positive t. "
+            "<bookmark mark='c'/> Optimizing t gives Chernoff's bound, e to the minus n times the rate. <bookmark "
+            "mark='d'/> Harald Cramér, an actuary as well as a mathematician, proved in 1938, with insurance ruin in "
+            "mind, that exponential rate; iid and MGF near zero on the exponential scale: the logarithm of the probability, divided by n, "
+            "tends to minus the rate."
         ) as vo:
+            heading=label('Cramer large deviations require a finite MGF near zero',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -85,7 +90,7 @@ class LargeDeviations(VoiceoverScene):
                  xticks=[2, 3, 4], yticks=[-6, -4, -2, 0], log_x=True, xfmt=lambda v: f"10^{{{int(v)}}}", yfmt=lambda v: f"10^{{{int(v)}}}",
                  center=[-2.5, 0.2, 0])
         ax = A.ax
-        lg = lambda v: np.log10(np.maximum(np.asarray(v, float), 1e-6))  # noqa: E731
+        lg = lambda v: np.log10(np.maximum(np.asarray(v, float), np.finfo(float).tiny))  # noqa: E731
         ex = clip_curve(ax, ns, lg(d["exact"]), LAWC, 4, ymin=-6)
         cl = clip_curve(ax, ns, lg(d["clt"]), LIMC, 3, ymin=-6)
         ch = clip_curve(ax, ns, lg(d["chernoff"]), S.PRIOR, 3, ymin=-6)
@@ -93,20 +98,13 @@ class LargeDeviations(VoiceoverScene):
         bern = DashedLine(ax.c2p(math.log10(d["n_bernoulli"]), -6), ax.c2p(math.log10(d["n_bernoulli"]), 0), color=BADC, stroke_width=2.5)
         side = fit_rows(VGroup(
             label(r"Bernoulli's urn: \ 3 white, \ 2 black; \ odds 1000:1", font_size=22),
-            label(rf"exact binomial: \ $n = {d['n_exact']:,}$", font_size=22, color=LAWC),
+            label(rf"exact, safe for all later sizes: \ $n = {d['n_exact']:,}$", font_size=22, color=LAWC),
             label(rf"normal approximation: \ $n = {d['n_clt']:,}$", font_size=22, color=LIMC),
             label(rf"Chernoff's bound: \ $n = {d['n_chernoff']:,}$ \ (guaranteed)", font_size=22, color=S.PRIOR),
             label(rf"Bernoulli's own bound (1713): \ $n = {d['n_bernoulli']:,}$", font_size=22, color=BADC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Part six's oldest example. Jacob Bernoulli asked how many draws from an urn with three white "
-            f"tokens to two black would make it a thousand to one that the observed share lies within one fiftieth of three "
-            f"fifths. <bookmark mark='b'/> The exact binomial answer, from the blue curve meeting the grey line, is "
-            f"{d['n_exact']:,} draws. <bookmark mark='c'/> The normal approximation gets close, at {d['n_clt']:,}: this is a "
-            f"moderate deviation. <bookmark mark='d'/> Chernoff's large-deviation bound, which is a guarantee rather than an "
-            f"approximation, needs {d['n_chernoff']:,}. <bookmark mark='e'/> Bernoulli's own bound, in 1713, demanded "
-            f"{d['n_bernoulli']:,}. The exponential rate he did not have is the difference between a theorem and a "
-            f"useful one."
+            f"<bookmark mark='a'/> Part six's oldest example. Jacob Bernoulli asked how many draws from an urn with three white tokens to two black would make it a thousand to one that the observed share lies within one fiftieth of three fifths. <bookmark mark='b'/> The first admissible exact sample size is 6,481, but lattice oscillations can take later sizes back above the threshold. Checking every size through the Chernoff cutoff gives a sample size safe for every larger n of {d['n_exact']:,} draws. <bookmark mark='c'/> The normal approximation gets close, at {d['n_clt']:,}: this is a moderate deviation. <bookmark mark='d'/> Chernoff's large-deviation bound, which is a guarantee rather than an approximation, needs {d['n_chernoff']:,}. <bookmark mark='e'/> Bernoulli's own bound, in 1713, demanded {d['n_bernoulli']:,}. The exponential rate he did not have is the difference between a theorem and a useful one."
         ) as vo:
             self.play(FadeIn(A), FadeIn(tgt), FadeIn(museum_tag(r"Bernoulli, \ \emph{Ars Conjectandi} (1713), \ IV.5")))
             vo.wait_until("a")
@@ -124,17 +122,20 @@ class LargeDeviations(VoiceoverScene):
     def sanov(self):
         rows = fit_rows(VGroup(
             label(r"Sanov (1957): \ the empirical law $L_n$ of $n$ draws from $P$", font_size=26),
-            label(r"$P(L_n \in A) \approx \exp\big(-n \inf_{Q \in A} \text{KL}(Q \,\|\, P)\big)$", font_size=28, color=LAWC),
+            label(r"$P(L_n \in A)\approx e^{-n\inf_{Q\in A}\mathrm{KL}(Q\|P)}$ for rate-continuity sets", font_size=28, color=LAWC),
             label(r"the most likely way for something unlikely to happen: \ the nearest $Q$ in KL", font_size=24, color=S.ACCENT),
             label(r"testing $P$ against $Q$: \ the best type II error decays like $e^{-n \, \text{KL}(P \| Q)}$ \ (Stein's lemma, \ Part 46)", font_size=24, color=GOODC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Ivan Sanov lifted Cramér's theorem from averages to whole empirical distributions. "
-            "<bookmark mark='b'/> The chance that the empirical law of n draws from P falls in a set A decays like e to the "
-            "minus n times the smallest Kullback–Leibler divergence from P to the laws in A. <bookmark mark='c'/> Conditioned "
-            "on the rare event, the sample looks like that nearest law: the most likely way for something unlikely to happen. "
-            "<bookmark mark='d'/> In testing, the same divergence is the exponent of the best type two error, Chernoff and "
-            "Stein's lemma, which Part forty-six proves."
+            "<bookmark mark='b'/> The chance that the empirical law of n draws from P falls in a set A decays like e "
+            "to the minus n times the infimum of KL of Q relative to P over Q in A, when the interior and closure "
+            "rate bounds agree. In general Sanov gives lower and upper bounds for the interior and closure rather "
+            "than equality for every set. <bookmark mark='c'/> Conditioned on the rare event, under the additional "
+            "regularity and uniqueness conditions for Gibbs conditioning, the sample concentrates near the minimizing"
+            " law: the most likely way for something unlikely to happen. <bookmark mark='d'/> In testing, the same "
+            "divergence is the exponent of the best type two error, Chernoff and Stein's lemma, which Part forty-six "
+            "proves."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

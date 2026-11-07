@@ -30,14 +30,18 @@ class RandomVariables(VoiceoverScene):
         rows[2][-1].set_color(LAWC)
         whys = [why(r"measurable"), why(r"a generating class suffices"), why(r"the distribution"), why(r"change of variables")]
         with self.voiceover(
-            "<bookmark mark='a'/> A random variable is neither random nor a variable. It is a function from outcomes to "
-            "numbers, with one requirement: for every Borel set B, the outcomes it sends into B form an event. That is "
-            "what measurable means. <bookmark mark='b'/> By the pi–lambda theorem it is enough to check the half-lines. "
-            "<bookmark mark='c'/> Its law is the measure it pushes forward onto the line: the probability of B is the "
-            "probability of the outcomes landing in B. <bookmark mark='d'/> And every expectation can be computed either on "
-            "the outcome space or on the line, against the law. This is why statistics can forget about omega: everything "
-            "it needs is in the law."
+            "<bookmark mark='a'/> A random variable is neither random nor a variable. It is a function from outcomes "
+            "to numbers, with one requirement: for every Borel set B, the outcomes it sends into B form an event. "
+            "That is what measurable means. <bookmark mark='b'/> By the pi–lambda theorem it is enough to check the "
+            "half-lines. <bookmark mark='c'/> Its law is the measure it pushes forward onto the line: the probability"
+            " of B is the probability of the outcomes landing in B. <bookmark mark='d'/> And every expectation can be"
+            " computed either on the outcome space or on the line, against the law. This is why statistics can forget"
+            " about omega: expectations of measurable functions of X are determined by its law. Dependence between "
+            "observations requires their joint law, not just their marginal distributions."
         ) as vo:
+            heading=label('A real random variable is a measurable map',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -95,13 +99,15 @@ class RandomVariables(VoiceoverScene):
             label(r"so every limit theorem for i.i.d.\ sequences is a theorem about $([0, 1), \mathcal B, \lambda)$", font_size=26, color=S.ACCENT),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> That makes one uniform number a source of infinitely many coins. <bookmark mark='b'/> Deal "
-            "its digits into infinitely many columns, the first digit to column one, the second to column two, the third "
-            "back to column one, in a diagonal pattern, and each column's digits form a new uniform number, all of them "
-            "independent. <bookmark mark='c'/> Apply the quantile function F inverse to each, and you have an independent "
-            "sequence from any law you like. <bookmark mark='d'/> So the strong law, the central limit theorem and "
-            "everything else in this part are theorems about the unit interval and its length. Infinite sequences of "
-            "independent variables exist; chapter four gives the general reason."
+            "<bookmark mark='a'/> An ideal real uniform number supplies infinitely many fair binary digits, up to the"
+            " null set with ambiguous expansions. A finite-precision computer draw has only finitely many random "
+            "bits. <bookmark mark='b'/> Deal its digits into infinitely many columns, the first digit to column one, "
+            "the second to column two, the third back to column one, in a diagonal pattern, and each column's digits "
+            "form a new uniform number, all of them independent. <bookmark mark='c'/> Apply the quantile function F "
+            "inverse to each, and you have an independent sequence from any law you like. <bookmark mark='d'/> So the"
+            " strong law, the central limit theorem and everything else in this part are theorems about the unit "
+            "interval and its length. Infinite sequences of independent variables exist; chapter four gives the "
+            "general reason."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -163,6 +169,9 @@ class RandomVariables(VoiceoverScene):
             "of the data; sufficiency, in Part forty-five, will be the statement that its sigma-algebra keeps everything "
             "the data say about the parameter."
         ) as vo:
+            heading=label('Generated sigma-algebras record observable information',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

@@ -1,0 +1,98 @@
+[
+  {
+    "item": "cantor",
+    "path": ".cache/stats43/cantor.json",
+    "bytes": 84259,
+    "sha256": "12f3bf000fa9aa44acc77e3b8af7df700de58cbab5e81f74c089674b6d0df34c"
+  },
+  {
+    "item": "digits",
+    "path": ".cache/stats43/digits.json",
+    "bytes": 1666,
+    "sha256": "9d23ea6334bbda5d70ed3ee0674ac32067e87ce75b17addd84890d7a4c79b5cd"
+  },
+  {
+    "item": "integral",
+    "path": ".cache/stats43/integral.json",
+    "bytes": 1383,
+    "sha256": "08599f4457884d89ba422b9964a1bc96321848129e1a8bc5fd4059d4b4442c4f"
+  },
+  {
+    "item": "fubini",
+    "path": ".cache/stats43/fubini.json",
+    "bytes": 433,
+    "sha256": "da1552173ae8340fcc0aa9a958ba62e35759da7fa21ed8079d3fc66ccefb38e3"
+  },
+  {
+    "item": "runs",
+    "path": ".cache/stats43/runs.json",
+    "bytes": 1228,
+    "sha256": "7702fec93d02cf5872e8d160ed95b00981b5b2eaf19faef9448b5f93d1e45546"
+  },
+  {
+    "item": "series",
+    "path": ".cache/stats43/series.json",
+    "bytes": 284400,
+    "sha256": "cc81e9a038d278dd737894b490e179e63132bf8eaa2f5350e9e48a59839dbf87"
+  },
+  {
+    "item": "slln",
+    "path": ".cache/stats43/slln.json",
+    "bytes": 65124,
+    "sha256": "5fb4be1ca7ed78374596bdd0c4c7991fa0a9d3987de345e2a6541824082f7d03"
+  },
+  {
+    "item": "weak",
+    "path": ".cache/stats43/weak.json",
+    "bytes": 26956,
+    "sha256": "5d94e632d9021048557489cc43e2ce96f982fca8d41a4aab1648136f4b256158"
+  },
+  {
+    "item": "horse",
+    "path": ".cache/stats43/horse.json",
+    "bytes": 989,
+    "sha256": "dace3099c2b8ce2f5ff8a9eab0a81816f0b02161a08350a302388573421aad63"
+  },
+  {
+    "item": "cf",
+    "path": ".cache/stats43/cf.json",
+    "bytes": 65712,
+    "sha256": "6a7a646a67f1235302bcdbdfab2c39b3d67be88912c5bb02a3a787921276f94a"
+  },
+  {
+    "item": "lindeberg",
+    "path": ".cache/stats43/lindeberg.json",
+    "bytes": 3765,
+    "sha256": "5fd55117700b51857b0c05eacafa344491b24af951e9635c3c414c1eca16c5dc"
+  },
+  {
+    "item": "rates",
+    "path": ".cache/stats43/rates.json",
+    "bytes": 5079,
+    "sha256": "27403cf132d677f65187cbaf585966964fe2e853a814d46bc0eed29a33ff062a"
+  },
+  {
+    "item": "stable",
+    "path": ".cache/stats43/stable.json",
+    "bytes": 2621,
+    "sha256": "e15d74229c216ef5bc7b8930c68d86f3c7e572a5d6a197c9196a813bb6fd84d9"
+  },
+  {
+    "item": "ld",
+    "path": ".cache/stats43/ld.json",
+    "bytes": 16522,
+    "sha256": "622cf56fc6eafb8b4ced87734e66b2f17fa985617da8fc97348d6e84d0a9f6d3"
+  },
+  {
+    "item": "extremes",
+    "path": ".cache/stats43/extremes.json",
+    "bytes": 43814,
+    "sha256": "3b06d70a575b31a91913f64a17b4f7ed0c47cc8aaf6923d7468e8ebea8ee4801"
+  },
+  {
+    "item": "board",
+    "path": ".cache/stats43/board.json",
+    "bytes": 1924,
+    "sha256": "140f5b65873762d58d2a72a0e8d92c7c37bdbd7886f41f741227e66da24643bf"
+  }
+]

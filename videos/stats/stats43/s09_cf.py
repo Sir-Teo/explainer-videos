@@ -31,15 +31,20 @@ class CharacteristicFunctions(VoiceoverScene):
         rows[0][-1].set_color(LAWC)
         whys = [why(r"bounded: \ always exists"), why(r"sums become products"), why(r"the standard ones"), why(r"moments, \ when they exist")]
         with self.voiceover(
-            "<bookmark mark='a'/> Part three's moment generating function, the expectation of e to the t X, can be infinite "
-            "for every t except zero: the Cauchy law, the lognormal, Pareto tails. Put an i in the exponent and the problem "
-            "vanishes. The characteristic function is the expectation of e to the i t X, a cosine and a sine, bounded by one, "
-            "so it exists for every law and every t. <bookmark mark='b'/> It keeps the MGF's virtues: the characteristic "
-            "function of a sum of independent variables is the product, and affine maps act simply. <bookmark mark='c'/> "
-            "The normal's is e to the minus t squared over two; the Cauchy's, e to the minus absolute t, with a corner at "
-            "zero because it has no mean; a uniform's, sine t over t. <bookmark mark='d'/> When k moments exist, it is k "
-            "times differentiable, and its derivatives at zero give the moments."
+            "<bookmark mark='a'/> Part three's moment generating function, the expectation of e to the t X, can be "
+            "infinite for every nonzero t, as for the Cauchy law. For positive lognormal and Pareto variables it "
+            "diverges to the right of zero, while remaining finite for nonpositive t. Put an i in the exponent and "
+            "the problem vanishes. The characteristic function is the expectation of e to the i t X, a cosine and a "
+            "sine, bounded by one, so it exists for every law and every t. <bookmark mark='b'/> It keeps the MGF's "
+            "virtues: the characteristic function of a sum of independent variables is the product, and affine maps "
+            "act simply. <bookmark mark='c'/> The normal's is e to the minus t squared over two; the Cauchy's, e to "
+            "the minus absolute t, with a corner at zero because it has no mean; a uniform's, sine t over t. "
+            "<bookmark mark='d'/> When k moments exist, it is k times differentiable, and its derivatives at zero "
+            "give the moments."
         ) as vo:
+            heading=label('Characteristic functions exist for every real probability law',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -65,15 +70,7 @@ class CharacteristicFunctions(VoiceoverScene):
             label(rf"recovered: \ the triangle, \ to within {max(abs(a - b) for a, b in zip(d['f'], d['tri'])):.4f}", font_size=22, color=GOODC),
         ), 12.4, 0.28, [0, -2.3, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> A characteristic function determines its law, and the law can be read back off it. The "
-            f"sum of two uniforms on minus one to one has characteristic function sine t over t, squared: the square, "
-            f"because the variables are independent. <bookmark mark='b'/> In blue, the empirical version from four thousand "
-            f"simulated sums, which converges to it. <bookmark mark='c'/> When the characteristic function is integrable, "
-            f"the inversion formula gives the density directly: one over two pi times the integral of e to the minus i t x "
-            f"times phi. <bookmark mark='d'/> Computed numerically, it recovers the triangular density to four decimal "
-            f"places. For any law, a slightly more careful version recovers the probability of every interval whose "
-            f"endpoints carry no atoms, so by pi–lambda, the characteristic function determines the law."
-        ) as vo:
+            f"<bookmark mark='a'/> A characteristic function determines its law, and the law can be read back off it. The sum of two uniforms on minus one to one has characteristic function sine t over t, squared: the square, because the variables are independent. <bookmark mark='b'/> In blue, the empirical version from four thousand simulated sums, which converges to it. <bookmark mark='c'/> When the characteristic function is integrable, the inversion formula gives the density directly: one over two pi times the integral of e to the minus i t x times phi. <bookmark mark='d'/> Computed numerically, its maximum error on the displayed grid is about eight ten-thousandths; truncation and quadrature error remain. For any law, a slightly more careful version recovers the probability of every interval whose endpoints carry no atoms, so by pi–lambda, the characteristic function determines the law."       ) as vo:
             self.play(FadeIn(A), FadeIn(B))
             vo.wait_until("a")
             self.play(Create(phi), FadeIn(side[0]))
@@ -88,7 +85,7 @@ class CharacteristicFunctions(VoiceoverScene):
     def mgf(self):
         rows = [
             cmath(r"M(s) = E e^{sX} < \infty", r"\text{ on }", r"|s| < \delta", font_size=34),
-            cmath(r"\Rightarrow", r"\;", r"\varphi \text{ extends to } E e^{zX}, \text{ analytic on the strip } |\text{Re}\, z| < \delta", font_size=30),
+            cmath(r"\Rightarrow", r"\;", r"M(z)=E e^{zX}\text{ analytic; }\varphi(t)=M(it),\quad |\text{Re}\, z| < \delta", font_size=30),
             cmath(r"\Rightarrow", r"\;", r"\text{equal MGFs near 0} \Rightarrow \text{equal } \varphi \text{ everywhere (identity theorem)}", font_size=30),
             cmath(r"\Rightarrow", r"\;", r"\text{equal laws: \ Part 3's promise, kept}", font_size=32),
         ]
@@ -103,6 +100,9 @@ class CharacteristicFunctions(VoiceoverScene):
             "characteristic functions mean equal laws. So a moment generating function finite near zero does determine its "
             "law. Without that condition, the claim can fail, and so can a stronger-sounding one."
         ) as vo:
+            heading=label('An MGF finite near zero determines the law',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -116,7 +116,7 @@ class CharacteristicFunctions(VoiceoverScene):
                  yticks=[0, 0.5, 1], center=[-2.5, 0.2, 0])
         ax = A.ax
         ln = curve(ax, xs, d["ln"], LIMC, 4)
-        alt = curve(ax, xs, np.minimum(d["alt"], 1.2), LAWC, 3)
+        alt = curve(ax, xs, d["alt"], LAWC, 3)
         tab = table_rows([[r"$r$", r"$E X^r$, \ lognormal", r"$E X^r$, \ wiggled"]] +
                          [[f"{m[0]}", f"{m[1]:.4f}", f"{m[2]:.4f}"] for m in d["moments"]], font_size=22, col_buff=0.35, row_buff=0.14)
         tab.move_to([4.45, 1.0, 0])
@@ -151,23 +151,18 @@ class CharacteristicFunctions(VoiceoverScene):
         tb = d["tail"]
         rows = [
             cmath(r"\text{L\'evy}", r":", r"\varphi_n \to \varphi \text{ pointwise}, \ \varphi \text{ continuous at } 0 \ \Rightarrow \ X_n \Rightarrow X, \ \varphi_X = \varphi", font_size=28),
-            cmath(r"\text{tail}", r":", r"P(|X| > 2/u) \le \frac1u \int_{-u}^{u} \big(1 - \varphi(t)\big) dt", font_size=32),
+            cmath(r"\text{tail}", r":", r"P(|X| > 2/u) \le \frac1u \int_{-u}^{u} \big(1 - \operatorname{Re}\varphi(t)\big) dt", font_size=32),
             cmath(r"\text{so}", r":", r"\varphi \text{ continuous at } 0 \Rightarrow \text{the right side is small for small } u \Rightarrow \text{tight}", font_size=28),
             cmath(r"\text{then}", r":", r"\text{Helly} + \text{uniqueness} \Rightarrow \text{every limit has } \varphi", font_size=32),
         ]
         rows[1][-1].set_color(S.ACCENT)
         whys = [why(r"the continuity theorem"), why(rf"Cauchy, $u = 1$: \ {tb['1.0'][0]:.3f} $\ge$ {tb['1.0'][1]:.3f}"), why(r"no mass escapes"), why(r"chapter 7's tools")]
         with self.voiceover(
-            "<bookmark mark='a'/> Lévy's continuity theorem turns convergence of characteristic functions into weak "
-            "convergence: if they converge pointwise to a function continuous at zero, the laws converge to the law with that "
-            "characteristic function. <bookmark mark='b'/> The key is a tail bound: the chance that X exceeds two over u is at "
-            "most one over u times the integral of one minus phi from minus u to u. For the Cauchy law with u equal to one, "
-            f"the bound is {say(tb['1.0'][0], 3)} against a true value of {say(tb['1.0'][1], 3)}. <bookmark mark='c'/> If the "
-            "limit is continuous at zero, that integral is small for small u, uniformly in n eventually, so the sequence is "
-            "tight. <bookmark mark='d'/> Helly's theorem then supplies a convergent subsequence, its limit must have "
-            "characteristic function phi, and by uniqueness every subsequence has the same limit. The proof uses every tool "
-            "of the last two chapters."
+            f"<bookmark mark='a'/> Lévy's continuity theorem turns convergence of characteristic functions into weak convergence: if they converge pointwise to a function continuous at zero, the laws converge to the law with that characteristic function. <bookmark mark='b'/> The key is a tail bound: the chance that absolute X exceeds two over u is at most one over u times the integral of one minus the real part of phi from minus u to u. For the Cauchy law with u equal to one, the bound is {say(tb['1.0'][0], 3)} against a true value of {say(tb['1.0'][1], 3)}. <bookmark mark='c'/> If the limit is continuous at zero, that integral is small for small u, uniformly in n eventually, so the sequence is tight. <bookmark mark='d'/> Helly's theorem then supplies a convergent subsequence, its limit must have characteristic function phi, and by uniqueness every subsequence has the same limit. The proof uses every tool of the last two chapters."
         ) as vo:
+            heading=label('Continuity at zero prevents mass from escaping',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

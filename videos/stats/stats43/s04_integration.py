@@ -54,12 +54,13 @@ class Integration(VoiceoverScene):
             label(r"(Part 40's RMST is this integral)", font_size=20, color=GREY_B),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Riemann integrates by slicing the horizontal axis into strips. <bookmark mark='b'/> "
-            "Lebesgue slices the values instead: for each height t, measure the set where the function exceeds t, and add "
-            "up those measures over t. <bookmark mark='c'/> It is the layer-cake formula, and it needs only that the sets "
-            "where f exceeds t can be measured, which is exactly what measurability provides. <bookmark mark='d'/> For a "
-            "non-negative random variable it says the expectation is the integral of the tail probability, <bookmark "
-            "mark='e'/> the identity behind Part forty's restricted mean survival time."
+            "<bookmark mark='a'/> Riemann integrates by slicing the horizontal axis into strips. <bookmark mark='b'/>"
+            " Lebesgue slices the values instead: for each height t, measure the set where the function exceeds t, "
+            "and add up those measures over t. <bookmark mark='c'/> For a non-negative measurable function, this is "
+            "the layer-cake formula, including infinite integrals. The sets where f exceeds t can be measured, which "
+            "is exactly what measurability provides. <bookmark mark='d'/> For a non-negative random variable it says "
+            "the expectation is the integral of the tail probability, <bookmark mark='e'/> the identity behind Part "
+            "forty's restricted mean survival time."
         ) as vo:
             self.play(FadeIn(A), Create(cf))
             vo.wait_until("a")
@@ -84,15 +85,19 @@ class Integration(VoiceoverScene):
         rows[2][-1].set_color(GOODC)
         whys = [why(r"monotone convergence"), why(r"mass can only be lost"), why(r"dominated convergence"), why(r"a chain")]
         with self.voiceover(
-            "<bookmark mark='a'/> Three theorems govern limits under the integral. Monotone convergence: if non-negative "
-            "variables increase to a limit, their expectations increase to its expectation. <bookmark mark='b'/> Fatou's "
-            "lemma: for non-negative variables, the expectation of the lower limit is at most the lower limit of the "
-            "expectations. Mass can be lost in the limit, never gained. <bookmark mark='c'/> Dominated convergence: if the "
-            "variables converge almost surely and are all bounded by one integrable variable, their expectations converge. "
-            "<bookmark mark='d'/> Each proves the next: monotone convergence from simple functions, Fatou from monotone "
-            "convergence, and dominated convergence by applying Fatou to Y plus X n and to Y minus X n. Every exchange of a "
-            "limit and an expectation in this course, from the score's mean of zero to the delta method, used one of them."
+            "<bookmark mark='a'/> Three theorems govern limits under the integral. Monotone convergence: if "
+            "non-negative variables increase to a limit, their expectations increase to its expectation. <bookmark "
+            "mark='b'/> Fatou's lemma: for non-negative variables, the expectation of the lower limit is at most the "
+            "lower limit of the expectations. Mass can be lost in the limit, never gained. <bookmark mark='c'/> "
+            "Dominated convergence: if the variables converge almost surely and are all bounded by one integrable "
+            "variable, their expectations converge. <bookmark mark='d'/> Each proves the next: monotone convergence "
+            "from simple functions, Fatou from monotone convergence, and dominated convergence by applying Fatou to Y"
+            " plus X n and to Y minus X n. These are central tools for justified limit interchanges. Differentiating "
+            "a likelihood or passing to moments in asymptotics still needs its own regularity conditions."
         ) as vo:
+            heading=label('Limit interchanges require the stated integrability conditions',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -174,7 +179,7 @@ class Integration(VoiceoverScene):
     def ui(self):
         rows = [
             cmath(r"\text{UI}", r":", r"\lim_{K \to \infty} \sup_n E\big[|X_n|\, 1(|X_n| > K)\big] = 0", font_size=34),
-            cmath(r"\text{Vitali}", r":", r"X_n \to X \text{ in probability and UI} \iff E|X_n - X| \to 0", font_size=32),
+            cmath(r"\text{Vitali}", r":", r"X_n\in L^1,\ X\in L^1:\ X_n \to X \text{ in probability and UI} \iff E|X_n - X| \to 0", font_size=32),
             cmath(r"\text{enough}", r":", r"\sup_n E|X_n|^{1 + \delta} < \infty \ \text{ for some } \delta > 0", font_size=32),
             cmath(r"X_n = n \text{ w.p. } \tfrac1n", r":", r"E[X_n 1(X_n > K)] = 1 \text{ for } n > K: \ \text{not UI}", font_size=30),
         ]
@@ -182,13 +187,17 @@ class Integration(VoiceoverScene):
         rows[3][-1].set_color(BADC)
         whys = [why(r"uniform integrability"), why(r"the exact condition"), why(r"a usable test"), why(r"the bump, as a random variable")]
         with self.voiceover(
-            "<bookmark mark='a'/> The exact condition is uniform integrability: the tails beyond K carry a share of the "
-            "expectation that goes to zero uniformly in n. <bookmark mark='b'/> Vitali's convergence theorem: convergence "
-            "in probability plus uniform integrability is equivalent to convergence in mean. <bookmark mark='c'/> A handy "
-            "sufficient condition is a uniformly bounded moment of order a little above one. <bookmark mark='d'/> The "
-            "bump, written as a random variable that equals n with probability one over n, fails it: beyond any K, its "
-            "tail carries the whole expectation."
+            "<bookmark mark='a'/> The exact condition is uniform integrability: the tails beyond K carry a share of "
+            "the expectation that goes to zero uniformly in n. <bookmark mark='b'/> For a sequence of integrable "
+            "variables, Vitali's theorem equates convergence in probability plus uniform integrability with L-one "
+            "convergence to an integrable limit. <bookmark mark='c'/> A handy sufficient condition is a uniformly "
+            "bounded moment of order a little above one. <bookmark mark='d'/> The bump, written as a random variable "
+            "that equals n with probability one over n, fails it: beyond any K, its tail carries the whole "
+            "expectation."
         ) as vo:
+            heading=label('Uniform integrability controls expectation in the tails',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -197,19 +206,22 @@ class Integration(VoiceoverScene):
 
     def estimator(self):
         rows = fit_rows(VGroup(
-            label(r"Poisson counts, \ $\hat\theta = 1/\bar X$ \ estimates $1/\lambda$", font_size=26),
+            label(r"$\lambda>0$: extended estimate $\hat\theta=1/\bar X$, with $1/0=+\infty$", font_size=26),
             label(r"$\bar X \to \lambda$ almost surely, \ so $\hat\theta \to 1/\lambda$: \ consistent", font_size=26, color=GOODC),
             label(r"but $P(\bar X = 0) = e^{-n\lambda} > 0$, \ so $E\hat\theta = \infty$ \ for every $n$", font_size=26, color=BADC),
-            label(r"consistency is about probability; \ bias and MSE need uniform integrability", font_size=26, color=S.ACCENT),
+            label(r"consistency is about probability; \ moment convergence needs UI; for MSE, UI of squared errors", font_size=26, color=S.ACCENT),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> A statistician meets this every day. Estimate one over a Poisson mean by one over the "
-            "sample mean. <bookmark mark='b'/> By the strong law the sample mean converges, so the estimate converges to the "
-            "truth: it is consistent. <bookmark mark='c'/> But there is always a positive chance that every count is zero, "
-            "and then the estimate is infinite; its expectation is infinite for every sample size, and its bias and mean "
-            "squared error do not even exist. <bookmark mark='d'/> Consistency is a statement about probabilities; "
-            "statements about expectations, like asymptotic bias, need uniform integrability, which is why careful "
-            "asymptotics, from Part forty-seven on, speaks of limiting distributions rather than limiting moments."
+            "<bookmark mark='a'/> A statistician meets this every day. For a positive Poisson mean, define an "
+            "extended-valued estimate as one over the sample mean, taking one over zero to be positive infinity. "
+            "<bookmark mark='b'/> By the strong law the sample mean converges, so the estimate converges to the "
+            "truth: it is consistent. <bookmark mark='c'/> But there is always a positive chance that every count is "
+            "zero, and then the estimate is infinite; its expectation is infinite for every sample size, and its "
+            "expectation and mean squared error are infinite rather than usable finite measures of accuracy. "
+            "<bookmark mark='d'/> Consistency is a statement about probabilities; to infer convergence of "
+            "expectations from convergence in probability, uniform integrability is needed for the relevant sequence."
+            " For mean squared error it is the squared errors that must be uniformly integrable; which is why careful"
+            " asymptotics, from Part forty-seven on, speaks of limiting distributions rather than limiting moments."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
