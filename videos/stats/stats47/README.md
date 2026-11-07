@@ -22,8 +22,8 @@ It keeps three promises:
 - **Part 22** stated that the MLE is asymptotically N(θ, I⁻¹/n). Chapters 1–2 prove it for M-estimators, with the
   sandwich under misspecification.
 - **Part 45** proved Cramér–Rao for unbiased estimators and warned about Hodges. Chapters 7–9 give LAN, contiguity, and
-  the convolution and LAM theorems, which apply to every estimator.
-- **Part 16** used the bootstrap on a first-order argument. Chapter 11 proves consistency and second-order accuracy.
+  the convolution theorem for regular estimators, and the LAM lower bound for arbitrary estimators in a regular LAN model.
+- **Part 16** used the bootstrap on a first-order argument. Chapter 11 outlines sufficient consistency conditions and second-order refinements, with moment, smoothness, nonlattice and resampling requirements.
 
 **Built in this part:**
 - **`statkit.asymptotics`** ([`explainer/stats/kit/asymptotics.py`](../../../explainer/stats/kit/asymptotics.py)),
@@ -42,7 +42,7 @@ It keeps three promises:
 - From the Museum: Newcomb's passage times of light.
 - The rest is exact arithmetic or seeded simulation.
 
-The Coverage Board gains six rows, all nominal 90%:
+The Coverage Board gains six rows, all nominal 90%. Every row uses 2,000 independent original datasets, 999 resamples per dataset, and an empirical Monte Carlo SE. A “kept” verdict is within three MC SEs of nominal, not proof of finite-sample validity:
 
 | Method | Setting | Achieved | Verdict |
 |---|---|---|---|
@@ -50,8 +50,8 @@ The Coverage Board gains six rows, all nominal 90%:
 | percentile bootstrap for a mean | Exp(1) data, n = 20 | 84.6% | broken |
 | bootstrap-t for a mean | Exp(1) data, n = 20 | 88.7% | kept |
 | BCa for a mean | Exp(1) data, n = 20 | 84.2% | broken |
-| bootstrap interval for a uniform maximum | U(0, θ), n = 200 | 79.8% | broken |
-| m-out-of-n bootstrap (m = 40) | U(0, θ), n = 200 | 91.8% | kept |
+| basic shortfall-pivot bootstrap for a uniform maximum | U(0, θ), n = 200 | 80.1% | broken |
+| m-out-of-n bootstrap (m = 40) | U(0, θ), n = 200 | 90.8% | kept |
 
 ## Build it
 
@@ -75,12 +75,12 @@ python tools/lecture_length.py stats47 --floor 50
 | 5 | U-statistics | Gini Var: exact 0.074, first order 0.065, simulated 0.073 (n = 10); degenerate n U: mean −0.004, var 2.04 |
 | 6 | Rank statistics | power at h = 2: normal 0.62 / 0.61, Laplace 0.63 / 0.73, t₃ 0.71 / 0.83 (t / Wilcoxon) |
 | 7 | LAN | Cauchy, h = 1.5: mean −0.562 vs −0.5625, var 1.14 vs 1.125 |
-| 8 | Contiguity | n = 100, h = 2: t 0.64, sign 0.46, on the third lemma's curves |
+| 8 | Contiguity | n = 100, h = 2: exact-level t 0.63, randomized sign 0.48, on the third lemma's curves |
 | 9 | Convolution and LAM | Hodges's sup over \|h\| ≤ 1, 2, 4, 8 → 1, 4, 16, 64 |
 | 10 | Efficiency of tests | sign/t: 0.637 (normal), 2 (Laplace); Wilcoxon ≥ 0.864; normal scores ≥ 1 |
 | 11 | The bootstrap | 90% coverage at n = 10: t 86.5%, percentile 82.7%, BCa 83.5%, bootstrap-t 90.9% |
 | 12 | Saddlepoints | mean of 5 Exp: saddlepoint = exact × 1.017; P(X̄ ≥ 2): 0.0293 exact, 0.0127 normal, 0.0293 LR |
-| 13 | Non-regular models | bootstrap atom 0.633 (1 − 1/e = 0.632); KS 0.63 vs 0.15 for m-out-of-n |
+| 13 | Non-regular models | same n = 2,000 sample: atom 0.627 (exact 0.632); exact conditional KS 0.787 vs 0.122 for m-out-of-n |
 | 14 | Outro | — |
 
 The rest of the part's numbers, chapter by chapter:
@@ -90,7 +90,7 @@ The rest of the part's numbers, chapter by chapter:
     n^{1/4}, and the peak grows like √n.
 - **Chapter 1.**
   - o_P, O_P, tightness and Prokhorov; Slutsky; continuous mapping.
-  - The delta method proved. For √n log x̄ with Exp(1) data:
+  - The first-order delta method follows from differentiability and root-n tightness; the second-order example needs a twice differentiable map. Studentization assumes iid data with finite strictly positive variance, which does not guarantee rapid convergence. For √n log x̄ with Exp(1) data:
 
     | n | Mean | SD | Skewness | KS |
     |---|---|---|---|---|
@@ -106,26 +106,26 @@ The rest of the part's numbers, chapter by chapter:
   - Huber (k = 1.345, n = 50), n·Var:
     - normal errors: sandwich 1.053 vs simulated 1.065, mean 1.012;
     - 0.9 N(0, 1) + 0.1 N(0, 25): 1.374 vs 1.378, mean 3.37.
-  - Newcomb (n = 66, minimum −44): mean 26.21 (SE 1.32), Huber 27.38 (sandwich SE 0.64), median 27.
-  - Misspecification: Huber (1967), White (1982).
+  - Newcomb (n = 66, minimum −44): mean 26.21 (SE 1.32), Huber 27.38 (sandwich SE 0.64), median 27. The Huber/MAD SE is an asymptotic calculation for a symmetric iid location model; it is not distribution-free. Without symmetry, joint location-scale uncertainty can need an additional term, and Huber location and the mean can target different functionals.
+  - Misspecification: Huber (1967), White (1982), under identification, uniform convergence and local differentiability. Vector estimating equations use an integrated Jacobian; nonsmooth quantile scores need stochastic equicontinuity rather than a literal derivative of the sample signs.
 - **Chapter 3.**
   - √n(ξ̂ − ξ) ⇒ N(0, p(1 − p)/f²).
-  - Bahadur (1966) with Kiefer's rate.
+  - Bahadur (1966), with local smoothness near a positive continuous density. The displayed almost-sure logarithmic bound is not identified as the sharpest pointwise Kiefer constant; the fixed-quantile probabilistic remainder rate is a separate result.
   - Remainder RMS by n = 50, 200, 1000, 5000: 0.572, 0.418, 0.275, 0.182. Times n^{1/4}: 1.52, 1.57, 1.55, 1.53.
   - The order-statistic interval: [X₍₆₎, X₍₁₅₎] for the median at n = 20 covers 0.959, for any continuous F.
 - **Chapter 4.**
   - The von Mises expansion; IFs of the mean, median, Huber and 10% trimmed means.
-  - Hadamard differentiability and the functional delta method.
-  - The variance functional: μ₄ − σ⁴.
+  - A continuous linear tangential Hadamard derivative transfers the empirical-process limit. Moment functionals need moment control or weighted topologies. Null KS/supremum maps are generally only directionally differentiable and do not automatically inherit ordinary bootstrap consistency.
+  - The variance functional has limiting scaled variance μ₄−σ⁴. For unbiased s², the exact finite-n expression is μ₄−((n−3)/(n−1))σ⁴: at n=40 it is 2.0513 (normal) and 8.0513 (unit-variance t₅). The t₅ Monte Carlo variance estimate is noisy because eighth moments do not exist.
   - The infinitesimal jackknife.
 - **Chapter 5.**
   - Gini's mean difference: θ = 2/√π, ζ₁ = 0.1628, ζ₂ = 0.7268.
   - Var U at n = 10, 20, 50: exact 0.0740, 0.0347, 0.0133; first-order 0.0651, 0.0326, 0.0130; simulated 0.0728,
     0.0353, 0.0136.
   - Degenerate h = xy: n U ⇒ χ²₁ − 1.
-  - Hájek's projection (1968).
+  - Hájek's projection (1968): variance capture transfers a CLT only if the projection summands themselves satisfy one, for example by Lindeberg. Degenerate limits use a centered square-integrable Hilbert–Schmidt kernel; h=xy gives χ²₁−1 for EX=0, Var X=1.
 - **Chapter 6.**
-  - The signed rank statistic and its projection.
+  - The signed-rank statistic has exact centered projection Σ[1{Xᵢ>0}−1/2+(n−1)(F(Xᵢ)−1/2)] under a continuous symmetric null CDF F. The Walsh identity W=Σᵢ≤ⱼ1{Xᵢ+Xⱼ>0} proves it. Projection variance is n(n²+n+1)/12, versus n(n+1)(2n+1)/24 for W, with ratio tending to one. The previous magnitude-rank expression was not this projection.
   - Power at n = 30, h = 0…3, normal / Laplace / t₃, as t and Wilcoxon:
 
     | Errors | Test | h = 0 | h = 1 | h = 2 | h = 3 |
@@ -137,25 +137,24 @@ The rest of the part's numbers, chapter by chapter:
     | t₃ | t | 0.049 | 0.324 | 0.712 | 0.913 |
     | t₃ | Wilcoxon | 0.053 | 0.387 | 0.832 | 0.983 |
 
-  - ARE 0.955 / 1.5 / 1.90, with a minimum of 108/125.
+  - ARE 0.955 / 1.5 / 1.90, with a minimum of 108/125 under regular symmetric finite-variance location assumptions. A local alternative shifts the asymptotic normal mean.
   - Hodges–Lehmann: breakdown 29%.
   - Chernoff–Savage normal scores.
 - **Chapter 7.**
-  - LAN (Le Cam 1960): the local experiments converge to a Gaussian shift.
+  - LAN (Le Cam 1960): likelihood ratios give weak experiment convergence on finite local parameter sets. Uniform compact-set claims need uniform LAN/tightness; decision transfer requires suitable loss conditions. This is not global equivalence for every h and every decision.
   - Cauchy, h = 1.5 (I = ½):
     - n = 25: mean −0.555, var 1.090;
     - n = 400: mean −0.562, var 1.140;
     - the limit: N(−0.5625, 1.125).
-  - The score test is asymptotically UMP. QMD; the uniform is not QMD.
+  - The scalar one-sided score test attains the local Gaussian power bound. Multivariate χ² optimality is within a specified invariant Gaussian problem. QMD gives iid LAN; inverse-information Gaussian shifts require positive definite information. The uniform endpoint fails QMD because its squared Hellinger change is order |h|, not simply because its support moves.
 - **Chapter 8.**
   - Contiguity; Le Cam's first and third lemmas; fixed alternatives are singular.
-  - Local power at n = 100: the t test 0.051, 0.128, 0.261, 0.441, 0.638, 0.807, 0.909, 0.965, 0.990 at h = 0, 0.5,
-    …, 4; the sign test 0.045, …, 0.927. Both lie on 1 − Φ(1.645 − τ(h)).
-  - The Wald–score–LR trinity.
+  - At n=100, exact-t-calibrated powers for h=0,0.5,…,4 are 0.049, 0.125, 0.257, 0.433, 0.632, 0.802, 0.907, 0.964, 0.990. The randomized sign rule gives 0.050, 0.106, 0.197, 0.327, 0.479, 0.633, 0.766, 0.866, 0.933. Sign dots average conditional rejection probabilities; curves are asymptotic rather than exact finite-sample power.
+  - The Wald–score–LR trinity under regular correct specification: nuisance directions require efficient information/projection of h, not the full unrestricted hᵀIh.
 - **Chapter 9.**
   - Regular estimators and the convolution theorem (Hájek 1970); Anderson's lemma.
   - Hodges is not regular: the limit is δ₋ₕ.
-  - The LAM theorem (Hájek 1972).
+  - The LAM theorem (Hájek 1972) first takes the large-n lower limit, then lets local radius c tend to infinity. Estimator regularity is unnecessary, but the LAN model and nonnegative lower-semicontinuous bowl-shaped loss conditions remain. Squared-risk attainment also needs uniform local moment/risk control; a normal distributional limit is insufficient. Hodges beats risk one at fixed c<1, so no universal fixed-c bound is claimed.
   - Hodges's worst local risk over |h| ≤ 1, 2, 4, 8:
 
     | n | \|h\| ≤ 1 | \|h\| ≤ 2 | \|h\| ≤ 4 | \|h\| ≤ 8 |
@@ -164,19 +163,19 @@ The rest of the part's numbers, chapter by chapter:
     | 10⁴ | 1.00 | 4.00 | 16.0 | 62.7 |
     | 10⁶ and 10⁸ | 1 | 4 | 16 | 64 |
 
-  - Le Cam's measure-zero theorem (1953); Leeb & Pötscher (2005).
+  - Le Cam's measure-zero theorem (1953) under its regular-model conditions; Leeb & Pötscher (2005). Superefficiency of thresholding/lasso-type rules requires suitable tuning, not every lasso.
 - **Chapter 10.**
   - Pitman efficiency as squared efficacies.
   - The table of AREs against t:
-    - sign: 0.637, 0.822, 2.000, 1.62, worst 1/3;
+    - sign: 0.637, 0.822, 2.000, 1.62; worst 1/3 within symmetric unimodal densities, while general symmetric bimodal densities can have ARE approaching zero;
     - Wilcoxon: 0.955, 1.097, 1.500, 1.90, worst 0.864;
     - normal scores: 1.000, 1.047, 1.273, 1.64, worst 1.
   - Sample sizes: a t test with n = 100 against 157 (sign) and 105 (Wilcoxon) for normal data, or 50 and 67 for Laplace
     data.
   - Bahadur slopes: θ² for z, 2 KL for sign. The ratio tends to 2/π as θ → 0 and falls below it further out.
 - **Chapter 11.**
-  - Bootstrap consistency via Hadamard differentiability (Giné & Zinn 1990).
-  - Edgeworth expansions: the bootstrap-t's error is O(n⁻¹) against the normal's O(n^{−1/2}) (Hall 1992).
+  - Bootstrap consistency uses a continuous linear tangential Hadamard derivative and matching conditional empirical-process limit (Giné & Zinn 1990). Point-contamination differentiability alone is insufficient.
+  - With sufficient moments and smoothness/Cramér conditions, the studentized CDF has correction γ(2z²+1)φ(z)/(6√n), and estimating it can improve one-sided error from O(n⁻¹/²) to Oₚ(n⁻¹). Finite resample counts add Monte Carlo error: B=999 fixed does not establish a second-order rate. Tail-error cancellation is not automatic for all two-sided intervals.
   - Two-sided 90% coverage for the mean of Exp(1) data:
 
     | n | Student t | Percentile | Basic | BCa | Bootstrap-t |
@@ -190,12 +189,14 @@ The rest of the part's numbers, chapter by chapter:
 - **Chapter 12.**
   - Daniels (1954) for the mean of 5 Exp(1): the saddlepoint is exactly 1.017 × the gamma density (Stirling).
   - Lugannani & Rice (1980). P(X̄ ≥ 2) = 0.0293 exactly; the normal gives 0.0127; Lugannani–Rice gives 0.0293.
-  - Uses: rank tests, the saddlepoint bootstrap, p*.
+  - Uniform relative-error statements need smooth nonlattice CGFs and an admissible interior saddlepoint range. Rank/permutation uses need lattice/conditional corrections; p* accuracy requires the relevant regular conditional-likelihood structure. The local Lugannani–Rice mean-point limit is 1/2−1/(3√(2πn)), checked against high-precision arithmetic.
 - **Chapter 13.**
   - The uniform maximum: rate n, Exp(1) limit, no LAN.
-  - The bootstrap's atom: 1 − (1 − 1/n)ⁿ = 0.633 at n = 200, against the simulated 0.633 (Bickel & Freedman 1981).
-  - The m-out-of-n bootstrap (m = 40, n = 2000): atom 0.020, KS 0.15 against 0.63 (Bickel, Götze & van Zwet 1997).
-    Subsampling (Politis & Romano 1994).
+  - The conditional-law comparison shares one original n=2,000 sample between ordinary and m=40 resampling, with 20,000 maxima per method. Its scale-free gap is k(M−M*)/M, and the original-sample hash is recorded.
+  - Ordinary bootstrap: simulated atom 0.62725, exact conditional atom 0.63221255; m=40: simulated atom 0.01765, exact 0.01980623.
+  - Exact conditional KS distances, checking both sides of every jump against Exp(1), are 0.78665842 and 0.12213823. These depend on one original dataset. The first histogram bin contains an atom and retains its full mass/width height.
+  - Resampled maxima use the exact conditional rank CDF (j/n)ᵏ, avoiding a B-by-n index matrix. The separate coverage study uses n=200,m=40,B=999 and 2,000 independent datasets; its basic shortfall-pivot intervals are not percentile intervals.
+  - m→∞ and m/n→0 are asymptotic requirements. Subsampling also needs correct rates, negligible recentering at the subsample rate and a continuous limiting CDF, under iid or appropriate weak dependence assumptions.
   - Boundaries (Andrews 2000), unit roots, cube-root asymptotics (Kim & Pollard 1990).
 
 ## Sources
@@ -286,3 +287,7 @@ The rest of the part's numbers, chapter by chapter:
 - **Part 50**: minimax lower bounds beyond the local scale (Le Cam, Assouad, Fano).
 - **Part 53**: Bernstein–von Mises, the Bayesian counterpart of LAN.
 - **Part 59**: what survives when p grows with n.
+
+## Review scope
+
+All fifteen English chapters, calculations and six solutions were audited. Fifteen inputs were forcibly regenerated, then stable tails refined the hook/local-risk inputs. Sixteen checks passed, including high-precision tail references, exact enumeration of resampled maxima, the Walsh identity and projection variance, and analytic efficiency identities. All 66 Newcomb values match an independently retrieved R reference as a multiset; observation order differs and is not used by these location summaries. English endpoint/native/motion captures and a representative narrated preview remain pending. Chinese narration/caption tables, continuous listening and final bilingual masters remain open.

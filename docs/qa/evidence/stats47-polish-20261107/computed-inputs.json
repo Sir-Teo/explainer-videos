@@ -1,0 +1,92 @@
+[
+  {
+    "name": "hook",
+    "path": ".cache/stats47/hook.json",
+    "sha256": "a079efef67200586f5d02e38d92468f046967ed2fc71118062816ec527e889fe",
+    "bytes": 144998
+  },
+  {
+    "name": "delta",
+    "path": ".cache/stats47/delta.json",
+    "sha256": "91641d17565fecdf4fe3970ac5e1379b55b1ead6830041a46c743baf3c3d5cb1",
+    "bytes": 4125
+  },
+  {
+    "name": "mest",
+    "path": ".cache/stats47/mest.json",
+    "sha256": "f964f49bf1e3b8e6c62ed1609b08cccb57efed35aa47cd53c23fe3e2ad18d251",
+    "bytes": 477
+  },
+  {
+    "name": "quantile",
+    "path": ".cache/stats47/quantile.json",
+    "sha256": "39dad3210543f793fc9b31a12357b250f94dbd2400a8e266ad01bc56493deaf4",
+    "bytes": 468
+  },
+  {
+    "name": "influence",
+    "path": ".cache/stats47/influence.json",
+    "sha256": "b46c138769d05f592c377fa0bfa524de031d7a3eaa00bf2699e740454418a5fe",
+    "bytes": 16021
+  },
+  {
+    "name": "ustat",
+    "path": ".cache/stats47/ustat.json",
+    "sha256": "7478d603b9eaed80ce610cf9322c89edd31c56d130ebab98bbc6d04a05a06b99",
+    "bytes": 2348
+  },
+  {
+    "name": "ranks",
+    "path": ".cache/stats47/ranks.json",
+    "sha256": "508e9929c6d258e40e8d74b5828d68a7a46be66495e8596cf41afdb663b400d6",
+    "bytes": 804
+  },
+  {
+    "name": "lan",
+    "path": ".cache/stats47/lan.json",
+    "sha256": "3ff3fd21bb64d72ad589156c00346d9331c4d770dba60daa590b6f942daba69c",
+    "bytes": 3357
+  },
+  {
+    "name": "contig",
+    "path": ".cache/stats47/contig.json",
+    "sha256": "5673e5d79bdd3bd9715662190128f56bf309a030db158a067af2b555639a3903",
+    "bytes": 5212
+  },
+  {
+    "name": "hajek",
+    "path": ".cache/stats47/hajek.json",
+    "sha256": "fa5d348525e3fd37458775ba707425451e69ee7bec61c090bb9b2b440aa03e59",
+    "bytes": 94301
+  },
+  {
+    "name": "bahadur",
+    "path": ".cache/stats47/bahadur.json",
+    "sha256": "129327e25d87c50334f33ec642aa68053dc9a804ba8ed48498d48ec7c487d891",
+    "bytes": 10632
+  },
+  {
+    "name": "bootstrap",
+    "path": ".cache/stats47/bootstrap.json",
+    "sha256": "edb2b282680e2725945799f04ec0cc8768ef6c4293326ea5c8bd25688b855271",
+    "bytes": 2344
+  },
+  {
+    "name": "saddle",
+    "path": ".cache/stats47/saddle.json",
+    "sha256": "8c68f97d591b79fa949cb3fe27b432f8c3f952dadfc1153c9ee1ab917cbfc0ff",
+    "bytes": 35708
+  },
+  {
+    "name": "nonreg",
+    "path": ".cache/stats47/nonreg.json",
+    "sha256": "32f8f94b5e04f3e97ca05782d2c5d60e88a43115c05f6a2a48f5a6ac28dd4ce4",
+    "bytes": 1727
+  },
+  {
+    "name": "board",
+    "path": ".cache/stats47/board.json",
+    "sha256": "3698e936f50433b44a0796149cf1b2d741d36f3c9058bfd78a78ff7d8bbfd261",
+    "bytes": 2016
+  }
+]

@@ -1,0 +1,8 @@
+[
+  {
+    "dataset": "Newcomb",
+    "url": "https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/MASS/newcomb.csv",
+    "sha256": "fa1289ffe98f14d79cc26758999a4b68f63e6821fc1c0b700be193490bbefb9e",
+    "checked": "All 66 light-passage-time deviations match as a multiset; the reference lists them in a different order. Only order-invariant location statistics are used."
+  }
+]

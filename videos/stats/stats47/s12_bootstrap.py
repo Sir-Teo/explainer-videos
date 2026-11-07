@@ -32,15 +32,20 @@ class Bootstrap(VoiceoverScene):
         rows[3][-1].set_color(HODC)
         whys = [why(r"the bootstrap empirical process"), why(r"the functional delta method, \ twice"), why(r"first order"), why(r"where it breaks")]
         with self.voiceover(
-            "<bookmark mark='a'/> Why does the bootstrap work at all? Conditionally on the data, the resampled empirical "
-            "distribution fluctuates around the empirical distribution exactly as the empirical distribution fluctuates "
-            "around the truth: the same Brownian bridge in the limit. <bookmark mark='b'/> So for any Hadamard-differentiable "
-            "functional, chapter four's delta method applies in both worlds, and the bootstrap distribution of the statistic "
-            "has the same limit as its true sampling distribution. <bookmark mark='c'/> That is consistency, proved by Evarist "
-            "Giné and Joel Zinn and set out in van der Vaart and Wellner's book. <bookmark mark='d'/> It fails when the "
-            "functional is not smooth, like the maximum of chapter thirteen, or with infinite variances, or with "
-            "dependence that resampling destroys."
+            "<bookmark mark='a'/> Why does the bootstrap work at all? Conditionally on the data, the resampled "
+            "empirical distribution fluctuates around the empirical distribution exactly as the empirical "
+            "distribution fluctuates around the truth: the same Brownian bridge in the limit. <bookmark mark='b'/> "
+            "For a continuous linear Hadamard derivative tangential to the bootstrap empirical-process limit space, "
+            "chapter four's delta method applies in both worlds, and the bootstrap distribution of the statistic has "
+            "the same limit as its true sampling distribution. <bookmark mark='c'/> That is consistency, proved by "
+            "Evarist Giné and Joel Zinn and set out in van der Vaart and Wellner's book. <bookmark mark='d'/> That "
+            "sufficient argument does not cover every functional. The endpoint maximum fails at its n rate; "
+            "infinite-variance means and dependence destroyed by ordinary iid resampling need different methods. Some"
+            " nonsmooth-looking statistics, such as regular quantiles, still have valid bootstrap limits."
         ) as vo:
+            heading=label('A regular bootstrap delta method matches the process limit',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -49,23 +54,30 @@ class Bootstrap(VoiceoverScene):
 
     def edgeworth(self):
         rows = [
-            cmath(r"P\big(\sqrt n(\bar x - \mu)/\sigma \le z\big)", r"=", r"\Phi(z) - \tfrac{\gamma}{6\sqrt n}(z^2 - 1)\phi(z) + O(n^{-1})", font_size=30),
+            cmath(r"P\big(\sqrt n(\bar x-\mu)/s\le z\big)", r"=", r"\Phi(z)+\tfrac{\gamma}{6\sqrt n}(2z^2+1)\phi(z)+O(n^{-1})", font_size=30),
             cmath(r"\text{bootstrap}", r":", r"\text{the same expansion with } \hat\gamma: \ \hat\gamma - \gamma = O_P(n^{-1/2})", font_size=30),
             cmath(r"\Rightarrow", r"\;", r"\text{the bootstrap error is } O_P(n^{-1}), \ \text{the normal's } O(n^{-1/2})", font_size=30),
-            cmath(r"\text{needs}", r":", r"\text{a \emph{pivot}: \ a statistic whose limit law has no unknowns}", font_size=32),
+            cmath(r"\text{needs}", r":", r"\text{asymptotic pivot, sufficient moments, smoothness and Cramér conditions}", font_size=32),
         ]
         rows[2][-1].set_color(GOODC)
         rows[3][-1].set_color(S.ACCENT)
         whys = [why(r"Edgeworth, \ Part 43"), why(r"it estimates the skewness term"), why(r"second-order accuracy"), why(r"Hall (1992)")]
         with self.voiceover(
-            "<bookmark mark='a'/> The deeper reason is the Edgeworth expansion of Part forty-three. The distribution of a "
-            "standardized mean is the normal, plus a correction of order one over root n driven by the skewness, plus "
-            "smaller terms. <bookmark mark='b'/> The bootstrap distribution has the same expansion with the sample skewness "
-            "in place of the true one, and that estimate is itself off by order one over root n. <bookmark mark='c'/> So the "
-            "bootstrap captures the first correction automatically, and its error is of order one over n, while the normal "
-            "approximation's is one over root n. <bookmark mark='d'/> The condition is that the statistic be a pivot, like "
-            "the studentized mean, whose limit has no unknown parameters: Peter Hall's analysis of 1992."
+            "<bookmark mark='a'/> The deeper reason is the Edgeworth expansion of Part forty-three. For the "
+            "studentized mean under suitable moment, smoothness, and Cramér nonlattice conditions, its CDF has the "
+            "normal term plus skewness times two z squared plus one, times the normal density, divided by six root n,"
+            " plus smaller terms. <bookmark mark='b'/> The bootstrap distribution has the same expansion with the "
+            "sample skewness in place of the true one, and that estimate is itself off by order one over root n. "
+            "<bookmark mark='c'/> So the bootstrap captures the first correction automatically, and its error is of "
+            "order one over n, while the normal approximation's is one over root n. <bookmark mark='d'/> An "
+            "asymptotic pivot is one ingredient, not the whole theorem. Required moments and Edgeworth regularity "
+            "still matter. A finite resample count adds Monte Carlo error, so keeping B equal to 999 fixed does not "
+            "by itself establish an asymptotic one-over-n rate: this is an illustration of Hall's analysis, not a "
+            "full proof."
         ) as vo:
+            heading=label('Studentization can let the bootstrap estimate a skewness correction',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -78,15 +90,16 @@ class Bootstrap(VoiceoverScene):
             label(r"normal-theory and percentile intervals: \ $O(n^{-1/2})$", font_size=26, color=HODC),
             label(r"bootstrap-$t$ \ (resample the studentized statistic): \ $O(n^{-1})$", font_size=26, color=GOODC),
             label(r"BCa \ (bias correction $z_0$, \ acceleration $a$): \ $O(n^{-1})$", font_size=26, color=GOODC),
-            label(r"two-sided intervals: \ errors cancel to $O(n^{-1})$ for all of them, \ by symmetry", font_size=26, color=S.ACCENT),
+            label(r"balanced two-sided errors may cancel; \ tail calibration and finite-$B$ error still matter", font_size=26, color=S.ACCENT),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The theory, for the coverage error of a one-sided interval: <bookmark mark='b'/> the "
-            "normal-theory interval and the percentile bootstrap are wrong by order one over root n; <bookmark mark='c'/> "
-            "the bootstrap-t, which resamples the studentized statistic, by order one over n; <bookmark mark='d'/> and so is "
-            "Efron's BCa interval, which corrects the percentile interval for bias and skewness. <bookmark mark='e'/> For "
-            "two-sided intervals the leading errors cancel by symmetry, so all of them are second-order accurate in "
-            "coverage, though not equally good in practice."
+            "<bookmark mark='a'/> The theory, for the coverage error of a one-sided interval: <bookmark mark='b'/> "
+            "the normal-theory interval and the percentile bootstrap are wrong by order one over root n; <bookmark "
+            "mark='c'/> the bootstrap-t, which resamples the studentized statistic, by order one over n; <bookmark "
+            "mark='d'/> and so is Efron's BCa interval, which corrects the percentile interval for bias and skewness."
+            " <bookmark mark='e'/> In suitable balanced two-sided constructions, leading tail errors can cancel in "
+            "total coverage. This is not automatic for every interval, and good total coverage need not mean that "
+            "each tail is calibrated."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
@@ -140,11 +153,13 @@ class Bootstrap(VoiceoverScene):
             label(r"skewness puts the error in one tail", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Look at one tail at a time. This is the chance that the true mean falls below the lower "
-            "limit, which should be five percent. <bookmark mark='b'/> The Student and percentile intervals miss on this side "
-            "only one to four percent of the time, <bookmark mark='c'/> while BCa is close to five throughout and the bootstrap-t climbs toward it. "
-            "<bookmark mark='d'/> The symmetric intervals are placed wrongly for skewed data: too rarely wrong below, and so "
-            "too often wrong above. <bookmark mark='e'/> The one-sided errors are where the theory's orders show."
+            "<bookmark mark='a'/> Look at one tail at a time. This is the chance that the true mean falls below the "
+            "lower limit, which should be five percent. <bookmark mark='b'/> The Student and percentile intervals "
+            "miss on this side only one to four percent of the time, <bookmark mark='c'/> while BCa is close to five "
+            "throughout and the bootstrap-t climbs toward it. <bookmark mark='d'/> The symmetric intervals are placed"
+            " wrongly for skewed data: too rarely wrong below, and so too often wrong above. <bookmark mark='e'/> The"
+            " tail-specific errors help diagnose what total coverage conceals. Four finite sample sizes and finite "
+            "simulation counts cannot establish an asymptotic order."
         ) as vo:
             self.play(FadeIn(A), Create(nom), FadeIn(exact_tag(r"simulated")))
             vo.wait_until("a")

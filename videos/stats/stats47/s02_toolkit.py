@@ -38,6 +38,9 @@ class Toolkit(VoiceoverScene):
             "subsequence having a weakly convergent subsequence. <bookmark mark='d'/> They combine like their deterministic "
             "cousins: bounded times small is small, small plus bounded is bounded."
         ) as vo:
+            heading=label('Stochastic orders describe bounded and vanishing random terms',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -48,19 +51,24 @@ class Toolkit(VoiceoverScene):
         rows = [
             cmath(r"X_n \Rightarrow X, \ Y_n \to_P c", r"\Rightarrow", r"X_n + Y_n \Rightarrow X + c, \ \ Y_n X_n \Rightarrow c X", font_size=30),
             cmath(r"g \text{ continuous } (P_X\text{-a.e.})", r"\Rightarrow", r"g(X_n) \Rightarrow g(X)", font_size=32),
-            cmath(r"\text{e.g.}", r":", r"\sqrt n (\bar x - \mu)/s \Rightarrow N(0, 1) \ \text{whenever } \sigma^2 < \infty", font_size=32),
+            cmath(r"\text{e.g.}", r":", r"\sqrt n (\bar x - \mu)/s \Rightarrow N(0, 1) \ \text{for i.i.d.\ data, }0<\sigma^2<\infty", font_size=32),
             cmath(r"\text{the } t \text{ statistic}", r":", r"\text{robust to non-normality in large samples, \ by Slutsky}", font_size=30),
         ]
         rows[2][-1].set_color(GOODC)
         whys = [why(r"Slutsky (1925)"), why(r"the continuous mapping theorem"), why(r"$s \to_P \sigma$"), why(r"Part 10's $t$, \ justified")]
         with self.voiceover(
-            "<bookmark mark='a'/> Slutsky's lemma: if X n converges in distribution and Y n converges in probability to a "
-            "constant, their sum and product converge to what you would expect. <bookmark mark='b'/> The continuous "
-            "mapping theorem: continuous functions preserve convergence in distribution. <bookmark mark='c'/> Together they "
-            "give the most used fact in statistics: the t statistic is asymptotically standard normal whenever the variance "
-            "is finite, because s converges in probability to sigma. <bookmark mark='d'/> Part ten's t test is valid in "
-            "large samples whatever the shape of the data."
+            "<bookmark mark='a'/> Slutsky's lemma: if X n converges in distribution and Y n converges in probability "
+            "to a constant, their sum and product converge to what you would expect. <bookmark mark='b'/> The "
+            "continuous mapping theorem: continuous functions preserve convergence in distribution. <bookmark "
+            "mark='c'/> Together they give the most used fact in statistics: the t statistic is asymptotically "
+            "standard normal for independent identically distributed observations with finite, strictly positive "
+            "variance, because s converges in probability to sigma. <bookmark mark='d'/> The usual t calibration is "
+            "asymptotically valid in that setting. Finite variance does not ensure fast convergence, and dependence "
+            "requires an appropriate variance estimate and limit theorem."
         ) as vo:
+            heading=label('Studentization needs an iid CLT and a consistent scale',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -84,6 +92,9 @@ class Toolkit(VoiceoverScene):
             "mark='d'/> and the remainder is small, because the difference is of order one over root n in probability, so "
             "anything small compared with it is little-oh-P of one over root n. Part eleven used this; here is why it holds."
         ) as vo:
+            heading=label('A differentiable map transfers a root-n limit',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -109,12 +120,7 @@ class Toolkit(VoiceoverScene):
             label(r"the remainder is $O_P(n^{-1/2})$: \ visible at small $n$", font_size=22, color=S.ACCENT),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Watch it work: root n times the log of the mean of exponential data, whose limit by the "
-            f"delta method is standard normal. <bookmark mark='b'/> With five observations the distribution is skewed, "
-            f"skewness {say(r[5]['skew'], 2)}, and visibly off. <bookmark mark='c'/> With two hundred, the skewness is "
-            f"{say(r[200]['skew'], 2)} and the histogram sits on the curve. <bookmark mark='d'/> The white curve is the "
-            f"limit. <bookmark mark='e'/> The gap at small n is the remainder term, of order one over root n, the subject of "
-            f"chapter twelve's saddlepoints and Part forty-three's Edgeworth expansions."
+            f"<bookmark mark='a'/> Watch it work: root n times the log of the mean of exponential data, whose limit by the delta method is standard normal. <bookmark mark='b'/> With five observations the distribution is skewed, skewness {say(r[5]['skew'], 2)}, and visibly off. <bookmark mark='c'/> With two hundred, the skewness is {say(r[200]['skew'], 2)} and the histogram sits on the curve. <bookmark mark='d'/> The white curve is the limit. <bookmark mark='e'/> For the twice differentiable log map, the scaled Taylor remainder is of order one over root n. The plotted gap also includes finite-sample error in the central limit approximation, the subject of chapter twelve's saddlepoints and Part forty-three's Edgeworth expansions."
         ) as vo:
             self.play(FadeIn(A), FadeIn(exact_tag(r"simulated: 40,000 samples per $n$")))
             vo.wait_until("a")
@@ -133,7 +139,7 @@ class Toolkit(VoiceoverScene):
         d = load("delta")
         q, c = d["second_q"], d["chi2_q"]
         rows = [
-            cmath(r"g'(\theta) = 0", r":", r"\text{the first-order term vanishes}", font_size=34),
+            cmath(r"g\in C^2 \text{ locally}, \ g'(\theta) = 0", r":", r"\text{the first-order term vanishes}", font_size=34),
             cmath(r"n(g(T_n) - g(\theta))", r"\Rightarrow", r"\tfrac12 g''(\theta)\, T^2", font_size=34),
             cmath(r"g(x) = x^2, \ \mu = 0", r":", r"n \bar x^2 \Rightarrow \sigma^2 \chi^2_1", font_size=34),
             cmath(r"\text{quantiles}, \ n = 50", r":", rf"{q[0]:.2f}, \ {q[1]:.2f}, \ {q[2]:.2f} \ \ \text{{vs}} \ \ {c[0]:.2f}, \ {c[1]:.2f}, \ {c[2]:.2f}", font_size=30),
@@ -141,13 +147,16 @@ class Toolkit(VoiceoverScene):
         rows[2][-1].set_color(GOODC)
         whys = [why(r"a stationary point"), why(r"the next term, \ and a faster rate"), why(r"not normal at all"), why(r"simulated vs $\chi^2_1$")]
         with self.voiceover(
-            "<bookmark mark='a'/> When the derivative is zero, the first-order term vanishes, <bookmark mark='b'/> and the "
-            "second-order term takes over, at the faster rate n, with a limit that is half the second derivative times the "
-            "square of the limiting variable. <bookmark mark='c'/> For the square of the mean of data centred at zero, n "
-            "times x-bar squared tends to sigma squared times a chi-square with one degree of freedom, not a normal. "
-            "<bookmark mark='d'/> The simulated quantiles agree. Non-normal limits at singular points recur in chapter "
-            "thirteen."
+            "<bookmark mark='a'/> If g is twice differentiable near theta and its first derivative is zero, the "
+            "first-order term vanishes, <bookmark mark='b'/> and the second-order term takes over, at the faster rate"
+            " n, with a limit that is half the second derivative times the square of the limiting variable. <bookmark"
+            " mark='c'/> For the square of the mean of data centred at zero, n times x-bar squared tends to sigma "
+            "squared times a chi-square with one degree of freedom, not a normal. <bookmark mark='d'/> The simulated "
+            "quantiles agree. Non-normal limits at singular points recur in chapter thirteen."
         ) as vo:
+            heading=label('A zero first derivative can give a quadratic limit at rate n',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -172,6 +181,9 @@ class Toolkit(VoiceoverScene):
             "moments, it gives a variance of one minus rho squared, squared, over n for normal data; Fisher's z "
             "transformation is the function that makes that variance constant."
         ) as vo:
+            heading=label('Cramer-Wold and a gradient transfer a joint limit',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
