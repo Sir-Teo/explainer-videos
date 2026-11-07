@@ -58,7 +58,7 @@ class Generator(VoiceoverScene):
         def fan(t):
             return VGroup(*[curve(g.ax, np.arange(33), p, NET, stroke_width=1.4).set_stroke(opacity=0.65) for p in paths[t]])
         lines = fan(200)
-        badge = label(r"step 200", font_size=22, color=REF).to_corner(UR, buff=0.3)
+        badge = label(r"step 200", font_size=22, color=REF).next_to(g, UP, buff=0.1).align_to(g, RIGHT)
         with self.voiceover("Here is a reverse process we can justify exactly. Suppose the original window has thirty-two independent standard Gaussian coordinates. Every forward marginal is then standard Gaussian. Gaussian conditioning gives the reverse law shown above, so no fitted denoiser is needed. <bookmark mark='a'/> The twenty-four paths change as we step backward, but their marginal distribution stays Gaussian throughout. The fixed seed makes this illustration reproducible; no path is selected for looking realistic. <bookmark mark='b'/> At step zero these are still independent Gaussian returns. Attractive pictures cannot establish clustering, leverage, crash dependence or useful hedge performance. A generator can produce plausible-looking paths and still miss the features that matter to a particular book.") as vo:
             self.play(FadeIn(title), FadeIn(eq), FadeIn(g), FadeIn(lines), FadeIn(badge), FadeIn(foot))
             vo.wait_until("a")

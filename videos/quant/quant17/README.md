@@ -38,7 +38,7 @@ or `crossgen`: they use BTC daily history through 2025; `crossgen` also evaluate
 history overlapping its fit. The active scenes no longer consume those items or
 present their scores. Chapter 16 instead demonstrates an exact Gaussian conditional
 law with a fixed illustration seed, and chapter 19 explains an explicitly unfinished
-validation design. The sealed investing window remains unopened.
+validation design. This pass accesses no sealed-window returns and performs no envelope opening.
 
 The calibration chapters retain the original descriptive 2024–2025 Deribit quote
 examples. These are surrogate-fit examples, not investing-scoreboard strategy results.
@@ -203,6 +203,9 @@ loss shading omits theorem constants and discretization terms and is explicitly 
   nonbinding, risk-proportionate guidance, principally relevant above $30bn assets; generative/agentic AI excluded.
 - [PRA SS1/23](https://www.bankofengland.co.uk/prudential-regulation/publication/2023/may/model-risk-management-principles-for-banks-ss):
   published May 2023, effective May 2024, revised April 2026; stated institutional scope matters.
+- [SANOS](https://arxiv.org/abs/2601.11209), [DYSANOS](https://arxiv.org/abs/2608.12587) and
+  [GROMM](https://arxiv.org/abs/2610.16732): distinguish a constrained surface construction,
+  a finite numerical arbitrage check and a stated model theorem. Their empirical domains differ.
 - [Mueller et al. (2024)](https://arxiv.org/abs/2410.22568) and
   [Zernikov (2026)](https://arxiv.org/abs/2605.21696): benchmark-specific optimizer steps and regime-dependent empirical hedges.
 
@@ -233,7 +236,7 @@ absence of overfitting on future markets.
 
 本轮恢复32项旧缓存中的29项，使用原始正常固定种子命令。`generator`、`ddpm_reverse`及`crossgen`
 使用截至2025年的比特币历史，且第三项回放与拟合历史重叠，因此有意不运行，也不展示其分数。
-高斯示例不拟合市场数据，验证章不声称经验检验已完成。投资封存窗口未开启。
+高斯示例不拟合市场数据，验证章不声称经验检验已完成。本轮不访问封存窗口收益，也不执行开封。
 保留的2024–2025年Deribit报价仅用于描述性代理拟合示例，不是投资记分板策略结果。
 没有新增登记市场配置；第17部分累计试验数保持312，全局保持23,562。计数器不表示没有任何模型训练。
 复现命令见英文段落；不要用旧版全项目计算命令绕过这三个排除项，也不要使用强制刷新。

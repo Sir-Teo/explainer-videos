@@ -32,15 +32,15 @@ class NSDE(VoiceoverScene, ThreeDScene):
                       colors={r"dX_t": NET}),
                 cmath(r"dV_t", r"=", r"b_\theta(t, V_t)\,dt + \eta_\theta(t, V_t)\,dW^2_t,\quad d\langle W^1, W^2\rangle = "
                       r"\rho\,dt", font_size=34, colors={r"dV_t": NET}),
-                cmath(r"\min_\theta\ /\ \max_\theta", r"\ ", r"\text{exotic}(\theta)\quad \text{subject to every vanilla "
+                cmath(r"\min_\theta\ /\ \max_\theta", r"\ ", r"\text{exotic}(\theta)\quad \text{ideal: every vanilla "
                       r"repriced}", font_size=34, colors={r"\min_\theta\ /\ \max_\theta": GOOD})]
         whys = [why(r"Gierjatowicz, Sabate-Vidales, \v{S}i\v{s}ka, Szpruch and \v{Z}uri\v{c} (2022): a stochastic volatility "
                     r"model whose coefficients are networks, simulated by Euler steps and differentiated end to end"),
                 why(r"a hidden factor $V$ drives the volatility; drift, volatility of volatility and correlation are all "
                     r"learned, so the implemented class has a volatility floor/cap, a clipped latent state and bounded constant correlation; it is not guaranteed to contain every Heston law"),
-                why(r"calibrate to vanilla prices, then push the price of an exotic as low and as high as it will go while "
-                    r"the vanillas stay repriced: a range, not a point. Part 9's robust bounds and Part 15's model reserve, "
-                    r"as a finite penalized-search illustration, without certified exact feasibility or global extrema")]
+                why(r"the ideal exact-constraint problem asks for extrema over laws repricing the vanillas. The saved code "
+                    r"instead performs local penalized searches with aggregate calibration error; its candidate sensitivities "
+                    r"are not certified robust bounds")]
         step = ladder(self, rows, whys, keep=3, top=2.8, x=-0.6, buff=0.75, edge=6.9)
         with self.voiceover(
             "Neural SDEs parameterize coefficients rather than directly mapping inputs to a price. This illustration follows the model-sensitivity literature, including Gierjatowicz and coauthors. <bookmark mark='a'/> Its implemented volatility is floored at 0.02 and capped at three, its latent state is clipped between minus six and six, and its learned constant correlation stays within 0.95 in magnitude. Fifty log-price time steps approximate the dynamics. <bookmark mark='b'/> After calibration, two local penalized searches push a barrier payoff in opposite directions. Their outputs are candidate sensitivities within this restricted numerical construction, not certified robust bounds or a complete measure of model risk."
@@ -101,8 +101,8 @@ class NSDE(VoiceoverScene, ThreeDScene):
                 cmath(r"\text{certified inner range}", r"\Rightarrow", r"\text{feasible laws and controlled numerical error}", font_size=36, colors={r"\subseteq": WHITE})]
         whys = [why(r"calibrate: Monte Carlo prices of the 36 vanillas, differentiated through every Euler step back to "
                     r"the networks' weights"),
-                why(r"push: make the exotic $\Phi$ as cheap (or as dear) as possible, with a penalty that keeps every "
-                    r"vanilla repriced; keep the most extreme state whose vanilla error stays under a ceiling"),
+                why(r"push: a local penalized objective; select an extreme saved training state under an aggregate "
+                    r"mean-squared calibration-error ceiling, without enforcing every vanilla exactly"),
                 why(r"batchwise division by a sample mean makes the marginal sample average equal its forward; "
                     r"a nonlinear ratio estimator; it enforces only this sample mean, can introduce finite-sample bias, and is not an arbitrage certificate"),
                 why(r"only demonstrably feasible candidate laws with controlled pricing errors yield an inner range; a finite penalty search alone does not imply inclusion in "
