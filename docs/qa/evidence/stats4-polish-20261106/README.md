@@ -7,3 +7,5 @@ The final pass repairs the Hook introduction, sparse vector/projection staging, 
 `verification.json`, `endpoints.json`, `native-endpoints.json` and `motion.json` record the source fingerprint and input records. The native sheets and narrated SVD sheet are preserved alongside the audio receipt. Reproduce native checks with `native_endpoints.py` from the repository root.
 
 This is English source/visual approval, not bilingual production approval. Chinese narration and captions are missing; continuous listening/playback and final narrated masters remain open. Translation warnings are preserved.
+
+[Shared-source refresh](shared-source-refresh.json): all endpoint/native/motion captures and speech checks rerun after the World programme-name correction; narrated source matching verified.

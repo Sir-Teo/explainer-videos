@@ -1,5 +1,5 @@
 {
-  "fingerprint": "92b8415f2c79c842113e3bd44ff35fb833b7f9351aeeaa82551fca1d59c53bac",
+  "fingerprint": "c6b39a25274c5e1ec0452ead4dc55faac247eefc3866f78a83c30e5246882091",
   "scope": "English render review; listening and bilingual production gates remain open",
   "records": [
     {
@@ -11,7 +11,7 @@
         "untranslated-on-screen": 39
       },
       "input_record": "renders/qa/native1080/stats4/en/Vectors/result.json",
-      "input_sha256": "7b67bca2ad57584b518292a19933100a394c8c36b1ce55ee3c3a32d2e68d6ea5"
+      "input_sha256": "c30d7e63e3cfb0567a8070bd2e14cfecf3c65befcc0f0d56ce22b612d68de305"
     },
     {
       "scene": "Projection",
@@ -22,7 +22,7 @@
         "untranslated-on-screen": 34
       },
       "input_record": "renders/qa/native1080/stats4/en/Projection/result.json",
-      "input_sha256": "3bdb5c3891c860ff3d845d987b6edc1782722a1d1d2efde8f768971789d70a09"
+      "input_sha256": "a8077eece2fffbc6c685d795ab518067f3434314c59ba172b374ad1b3ae1c01a"
     },
     {
       "scene": "Spectral",
@@ -33,7 +33,7 @@
         "untranslated-on-screen": 23
       },
       "input_record": "renders/qa/native1080/stats4/en/Spectral/result.json",
-      "input_sha256": "0e01144bf34f29427ec3c2393204bfab30d18a9bd497360ee1dbeaf57eaa78a6"
+      "input_sha256": "d519345db70dabac78aa98928b04f1aa6952388f8c6eabf4061bbf2e1c2f86b6"
     },
     {
       "scene": "SVD",
@@ -44,7 +44,7 @@
         "untranslated-on-screen": 29
       },
       "input_record": "renders/qa/native1080/stats4/en/SVD/result.json",
-      "input_sha256": "da677c77970c9092dd3b43ce543a98bed9502bc991f342c86272cbba97bfffff"
+      "input_sha256": "ac7d3efd360920f76f9240163a46e8944a27b6f065c540d8a6bba5a4a152b62d"
     },
     {
       "scene": "Blocks",
@@ -55,7 +55,7 @@
         "untranslated-on-screen": 38
       },
       "input_record": "renders/qa/native1080/stats4/en/Blocks/result.json",
-      "input_sha256": "c6a5159ba643e4d9d9552b7103a89c5589ee908ef4662041fe241921ed4f793d"
+      "input_sha256": "d7677bb353ff6159abbb9cc0e30f5b59843ea156a8aeee4396da993f7160c3e2"
     },
     {
       "scene": "Numerics",
@@ -66,7 +66,7 @@
         "untranslated-on-screen": 41
       },
       "input_record": "renders/qa/native1080/stats4/en/Numerics/result.json",
-      "input_sha256": "2ebb315d69a221cd0e04e1cbc4bfe9dfb7d8784d279de64514fd23c87eeb1f2d"
+      "input_sha256": "becc18ef5b6cee9bb6218da7fbd38ec42e920e07da9c3c962eb858061e6031d1"
     }
   ]
 }

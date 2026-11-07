@@ -1,5 +1,5 @@
 {
-  "fingerprint": "92b8415f2c79c842113e3bd44ff35fb833b7f9351aeeaa82551fca1d59c53bac",
+  "fingerprint": "c6b39a25274c5e1ec0452ead4dc55faac247eefc3866f78a83c30e5246882091",
   "scope": "English render review; listening and bilingual production gates remain open",
   "records": [
     {
@@ -10,7 +10,7 @@
         "narration-translation": 6
       },
       "input_record": "renders/qa/series/stats4/en/Vectors_motion/result.json",
-      "input_sha256": "0203b2e256345323f2aa812bb6ef27dfe9706d3ce3d94f97ef6f7013f8a77b31",
+      "input_sha256": "4c74d0c2184fd902cf77f78f5492a61415ef4d0c03bb45b1d50a86d00ae20d45",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 240 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 240 s\n"
     },
     {
@@ -21,7 +21,7 @@
         "narration-translation": 7
       },
       "input_record": "renders/qa/series/stats4/en/Projection_motion/result.json",
-      "input_sha256": "084d204c4766d034c9afb02381104f100652728a052196977d41df42e9691d33",
+      "input_sha256": "38067a768ff572ff85ce99496d8a6d8f8464c66ae680f4d590da0119e28dc17c",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 263 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 263 s\n"
     },
     {
@@ -32,7 +32,7 @@
         "narration-translation": 5
       },
       "input_record": "renders/qa/series/stats4/en/SVD_motion/result.json",
-      "input_sha256": "8e83f51be20365b7289156cf8425f4919f27105b0918ea5af17f5cc2f4747c84",
+      "input_sha256": "a411e90b67f1c52ec6d3b7be63e7ebe0ba1d886ab28510be59b66699ecebea53",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 184 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 184 s\n"
     },
     {
@@ -43,7 +43,7 @@
         "narration-translation": 5
       },
       "input_record": "renders/qa/series/stats4/en/Pinv_motion/result.json",
-      "input_sha256": "084dbefed96323c457d0a0fefb6895dacd1e1f0d14b49da4e13a3a07e25fbc42",
+      "input_sha256": "62e97de6ee8700763809cf6ed6474c1617dfa78b704ec8c78c18d1d8c31a80f8",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 188 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 188 s\n"
     }
   ]
