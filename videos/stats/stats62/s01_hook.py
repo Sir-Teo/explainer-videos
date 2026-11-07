@@ -23,7 +23,7 @@ class Hook(LectureMixin, VoiceoverScene):
     def story(self):
         tl = timeline(lit=(2011,)).to_edge(UP, buff=0.35)
         hc = history_card(2011, r"The HIV-CAUSAL Collaboration (L. Cain et al.), \ \emph{Annals of Internal Medicine}",
-                          r"20{,}971 people with HIV in Europe and the US, \ never treated: \ when should combined "
+                          r"20{,}971 eligible adults; \ 8{,}392 contributed after CD4 fell below 500: \ when should combined "
                           r"antiretroviral therapy start, \ as soon as the CD4 count falls below 500, \ below 350, \ or "
                           r"below 200? \ No trial had compared them", color=TRTC, width=11.4, font_size=23).move_to([0, 1.0, 0])
         rows = fit_rows(VGroup(
@@ -32,13 +32,7 @@ class Hook(LectureMixin, VoiceoverScene):
             label(r"the answer needed every tool of this part's predecessors, \ and some new ones", font_size=26, color=IDC),
         ), 12.4, 0.35, [0, -1.8, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In 2011 the HIV-CAUSAL Collaboration, led in this analysis by Lauren Cain, asked a "
-            "question no trial had answered: when should people with HIV start combined antiretroviral therapy? As soon "
-            "as their CD4 count falls below 500, below 350, or below 200? They had records of 20,971 untreated people in "
-            "Europe and the United States. <bookmark mark='b'/> The question is about a rule, not a treatment: a dynamic "
-            "regime, whose action depends on a measurement that changes over time. <bookmark mark='c'/> The data are "
-            "observational, and doctors start treatment because the CD4 count falls, which itself predicts death. "
-            "<bookmark mark='d'/> Answering it needed Part thirty-six's tools and more."
+            "<bookmark mark='a'/> In 2011 the HIV-CAUSAL Collaboration compared treatment-initiation strategies indexed by CD4 thresholds. The eligible cohort had twenty thousand nine hundred and seventy-one therapy-naive adults with baseline CD4 at least five hundred and no prior AIDS. Eight thousand three hundred and ninety-two subsequently entered the two-hundred-to-four-hundred-and-ninety-nine range and contributed to the reported analysis. <bookmark mark='b'/> This is a dynamic-regime question: when to start, as clinical measurements evolve. <bookmark mark='c'/> Treatment timing was observational and could be confounded by prognosis. <bookmark mark='d'/> The analysis combined a specified time origin, artificial censoring and weighting under causal assumptions."
         ) as vo:
             self.play(FadeIn(tl))
             vo.wait_until("a")
@@ -62,7 +56,7 @@ class Hook(LectureMixin, VoiceoverScene):
             lab = label(rf"{name}", font_size=22, color=c).next_to(ax.c2p(np.log10(0.7), yy), LEFT, buff=0.3)
             val = label(rf"{hr:.2f} \ ({lo:.2f}--{hi:.2f})", font_size=20, color=c).next_to(ax.c2p(np.log10(hi), yy), RIGHT, buff=0.15)
             rows.add(VGroup(seg, dot, lab, val))
-        side = label(r"waiting is not worse for death alone, \ but is for AIDS or death", font_size=24, color=GREY_A).to_edge(DOWN, buff=0.9)
+        side = label(r"death-only estimates were inconclusive; \ the AIDS-or-death estimates favored earlier treatment", font_size=24, color=GREY_A).to_edge(DOWN, buff=0.9)
         with self.voiceover(
             "<bookmark mark='a'/> Their estimates, as hazard ratios against starting at 500, with ninety-five percent "
             "intervals. <bookmark mark='b'/> For death alone, waiting until 350 gave a ratio of 1.01, and waiting until 200 "
@@ -82,14 +76,9 @@ class Hook(LectureMixin, VoiceoverScene):
 
     def start_trial(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The trial came. INSIGHT START randomized 4,685 people whose CD4 counts were above 500 to "
-            "start at once or to wait until 350. <bookmark mark='b'/> It was stopped early, in 2015: immediate treatment cut "
-            "serious AIDS-related and non-AIDS events, a hazard ratio of 0.43. <bookmark mark='c'/> The observational "
-            "emulation had pointed the same way, years earlier, for a rule that no trial could have tested first. "
-            "<bookmark mark='d'/> The lesson of this part: when the textbook assumptions fail, there is still a lot that "
-            "can be identified and estimated, if one is precise about what is assumed.",
+            "<bookmark mark='a'/> START later randomized four thousand six hundred and eighty-five adults with CD4 above five hundred to immediate therapy or deferral until three hundred and fifty, AIDS, or another clinical indication. <bookmark mark='b'/> Its primary composite included serious AIDS events, serious non-AIDS events and death from any cause. The immediate-versus-deferred hazard ratio was zero point four three, with a ninety-five percent interval from zero point three zero to zero point six two. At the 2015 interim review, the monitoring board recommended offering treatment to the deferred group. <bookmark mark='c'/> This broadly supported earlier treatment, but it was not the identical population, regime or endpoint as the observational emulation. Agreement does not prove that emulation's assumptions. <bookmark mark='d'/> Precise targets and assumptions are what let these complementary designs be interpreted.",
             [(r"\text{START}", r":", r"4{,}685 \text{ with CD4} > 500, \ \text{immediate vs deferred}", 38),
-             (r"\text{result}", r":", r"\mathrm{HR} = 0.43, \ \text{stopped early (2015)}", 40),
+             (r"\text{result}", r":", r"\mathrm{HR}=0.43\ (0.30,0.62);\ \text{interim treatment recommendation, 2015}", 40),
              (r"\text{the emulation}", r":", r"\text{pointed the same way, \ earlier}", 40),
              (r"\text{lesson}", r":", r"\text{precise assumptions, \ honest answers}", 40)],
             [r"\emph{NEJM} 373 (2015)", r"AIDS-related HR 0.28", r"target-trial emulation", r"this part"],
@@ -167,12 +156,7 @@ class Hook(LectureMixin, VoiceoverScene):
 
     def clone(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> How does one compare rules in observational data? <bookmark mark='b'/> At the moment a "
-            "patient's CD4 count first falls below 500, they are compatible with all three rules: start at 500, at 350, or "
-            "at 200. So clone them, one copy per rule. <bookmark mark='c'/> Follow each clone, and censor it the moment the "
-            "real patient deviates from that clone's rule. <bookmark mark='d'/> Censoring depends on the changing CD4 count, "
-            "so weight the uncensored clones by the inverse probability of remaining compatible, Part thirty-six's "
-            "marginal structural model weights. The result compares the rules as a trial would.",
+            "<bookmark mark='a'/> Clone-censor-weight emulation begins by specifying eligibility, a common time zero, initiation rules and any grace periods. In this study follow-up began when CD4 first fell below five hundred; initiation strategies allowed a six-month window after crossing a threshold. <bookmark mark='b'/> A person can initially be compatible with several regimes and contribute a copy to each. <bookmark mark='c'/> Artificially censor a copy when observed treatment departs from its regime. <bookmark mark='d'/> History-dependent inverse-censoring weights can address the selection this creates under sequential exchangeability, positivity, consistency and suitable models. The resulting causal comparison is not guaranteed by cloning alone.",
             [(r"\text{time zero}", r":", r"\text{CD4 first} < 500", 40),
              (r"\text{clone}", r":", r"\text{one copy per rule}", 40),
              (r"\text{censor}", r":", r"\text{when the patient deviates from the rule}", 40),

@@ -29,19 +29,14 @@ class Proximal(LectureMixin, VoiceoverScene):
             "outcome proxy W, unaffected by the treatment.",
             [(r"\text{hidden}", r":", r"U \ \text{(frailty)}", 40),
              (r"\text{naive}", r":", r"\text{adjust for proxies: \ residual bias}", 40),
-             (r"\text{proximal}", r":", r"\text{two proxies identify the effect}", 40),
+             (r"\text{proximal}", r":", r"\text{proxy exclusions + bridge/completeness conditions}", 40),
              (r"Z \perp Y \mid A, U", r";", r"W \perp (A, Z) \mid U", 40)],
             [r"the usual situation", r"Part 41's measurement error", r"Miao, \ Geng \& Tchetgen Tchetgen (2018)", r"the two conditions"],
             colors=[(2, IDC)])
 
     def bridge(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The key object is an outcome bridge function h of w and a. <bookmark mark='b'/> It must "
-            "satisfy one integral equation: the expected outcome given treatment and the treatment proxy equals the "
-            "expected bridge given the same. <bookmark mark='c'/> If such an h exists, averaging h of W and a over the "
-            "population gives the mean potential outcome under a. <bookmark mark='d'/> The proxy Z is an instrument for the "
-            "proxy W: the bridge is found by the same kind of equation as Part thirty-seven's instrumental variables, "
-            "with W in place of the endogenous regressor.",
+            "<bookmark mark='a'/> An outcome bridge solves a conditional moment equation involving the outcome proxy and treatment. <bookmark mark='b'/> Its conditional expectation given treatment and the treatment proxy must equal the conditional outcome mean. <bookmark mark='c'/> Averaging the bridge identifies a potential-outcome mean under latent exchangeability, consistency, positivity, proxy exclusion conditions, bridge existence and the required completeness properties. Two correlated measurements by themselves are not enough. <bookmark mark='d'/> The equation resembles nonparametric instrumental variables, with potentially ill-posed inversion. A linear bridge with a sufficiently strong rank condition gives the simple two-stage example here.",
             [(r"\text{bridge}", r":", r"E[Y \mid A, Z] = E[h(W, A) \mid A, Z]", 40),
              (r"\text{then}", r":", r"E[Y(a)] = E[h(W, a)]", 40),
              (r"\text{requires}", r":", r"Z \text{ informative about } U \ \text{(completeness)}", 40),
@@ -85,12 +80,7 @@ class Proximal(LectureMixin, VoiceoverScene):
             [(rf"green: \ proximal 2SLS: \ mean {d['mean_prox']:.2f}", IDC), (rf"95\% CI covers {100 * d['cov_prox']:.1f}\%", IDC)],
         ])
         with self.voiceover(
-            f"<bookmark mark='a'/> A simulation. A hidden normal confounder U; two noisy copies of it, Z and W; a treatment "
-            f"that depends on U; and an outcome that depends on both, with a true effect of one. <bookmark mark='b'/> Six "
-            f"hundred samples of a thousand units. <bookmark mark='c'/> Ordinary regression adjusting for both proxies, in "
-            f"red, averages {say(d['mean_naive'], 2)}: the proxies remove only part of the confounding. Its interval never "
-            f"covers the truth. <bookmark mark='d'/> Proximal two-stage least squares, in green, averages {say(d['mean_prox'], 2)}, "
-            f"with a wider spread, and its interval covers {100 * d['cov_prox']:.1f} percent of the time."
+            f"<bookmark mark='a'/> A simulation. A hidden normal confounder U; two noisy copies of it, Z and W; a treatment that depends on U; and an outcome that depends on both, with a true effect of one. <bookmark mark='b'/> Six hundred samples of a thousand units. <bookmark mark='c'/> Ordinary regression adjusting for both proxies, in red, averages {say(d['mean_naive'], 2)}: the proxies remove only part of the confounding. Its interval covers none of these simulated truths in the displayed repetitions. <bookmark mark='d'/> Proximal two-stage least squares, in green, averages {say(d['mean_prox'], 2)}, with a wider spread, and its interval covers {100 * d['cov_prox']:.1f} percent of the time."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated, \ 600 samples")))
             vo.wait_until("a")
@@ -126,31 +116,20 @@ class Proximal(LectureMixin, VoiceoverScene):
 
     def negcontrols(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The proxies have an older name in epidemiology: negative controls. <bookmark mark='b'/> A "
-            "negative control outcome is one the treatment cannot affect, such as flu vaccination's effect on injuries; a "
-            "negative control exposure is one that cannot affect the outcome. <bookmark mark='c'/> Marc Lipsitch, Eric "
-            "Tchetgen Tchetgen and Ted Cohen argued in 2010 that an association with a negative control reveals "
-            "confounding. <bookmark mark='d'/> Proximal inference goes further: with one of each, it removes the confounding "
-            "instead of only detecting it.",
+            "<bookmark mark='a'/> Related negative controls are used to diagnose bias. <bookmark mark='b'/> A negative-control outcome should not be affected by treatment; a negative-control exposure should have no causal effect on the outcome in the specified setup. <bookmark mark='c'/> Unexpected associations can signal confounding, selection bias, measurement problems or invalid control assumptions. They do not uniquely identify hidden confounding. <bookmark mark='d'/> Proximal correction additionally needs the appropriate proxy conditional independences, completeness and bridge assumptions; one variable of each name does not automatically remove bias.",
             [(r"\text{negative control outcome}", r":", r"\text{unaffected by } A", 40),
              (r"\text{negative control exposure}", r":", r"\text{does not affect } Y", 40),
-             (r"\text{detect}", r":", r"\text{association} \Rightarrow \text{confounding}", 40),
-             (r"\text{proximal}", r":", r"\text{one of each} \Rightarrow \text{correct}", 40)],
+             (r"\text{detect}", r":", r"\text{unexpected association can reveal several forms of bias}", 40),
+             (r"\text{proximal}", r":", r"\text{valid bridge and identification assumptions required}", 40)],
             [r"the epidemiologists' tool", r"vaccines and injuries", r"Lipsitch et al. (2010)", r"from detection to correction"],
             colors=[(3, IDC)])
 
     def weak(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The price shows in the chart's wider green curve. <bookmark mark='b'/> The proximal "
-            "estimator is an instrumental-variables estimator, so it inherits Part thirty-seven's weak-instrument problem: "
-            "if the treatment proxy Z says little about the outcome proxy W, the first stage is weak and the estimate "
-            "unstable. <bookmark mark='c'/> Here each proxy is the confounder plus noise of equal size; with noisier "
-            "proxies the spread grows quickly, and the usual intervals start to undercover. <bookmark mark='d'/> So report "
-            "the first-stage strength, as for any instrument, and prefer weak-instrument-robust intervals such as "
-            "Anderson and Rubin's when it is low.",
+            "<bookmark mark='a'/> Proxy quality affects the numerical conditioning and precision of the bridge estimate. <bookmark mark='b'/> Weak conditional association of the proxy instrument with the endogenous outcome proxy can make ordinary Wald intervals unreliable. <bookmark mark='c'/> The simulation now records first-stage robust F statistics, partial R squared and projected-design condition numbers. Its coverage result concerns this correctly specified, informative-proxy design. <bookmark mark='d'/> Weak-identification-robust inference can require joint moment tests and projection over nuisance bridge coefficients. An ordinary Anderson-Rubin interval for another IV parameter cannot simply be relabeled as a universally valid proximal-effect interval.",
             [(r"\text{proximal}", r"=", r"\text{IV with } Z \text{ instrumenting } W", 40),
              (r"\text{weak } Z \to W", r":", r"\text{unstable, \ undercovering}", 40),
              (r"\text{here}", r":", r"\text{signal-to-noise one in each proxy}", 40),
-             (r"\text{remedy}", r":", r"\text{report first-stage } F; \ \text{Anderson--Rubin}", 40)],
+             (r"\text{remedy}", r":", r"\text{report strength; \ use parameter-appropriate weak-ID inference}", 40)],
             [r"the variance", r"Part 37", r"a strong design", r"robust intervals"],
             colors=[(1, NAIVEC), (3, IDC)])

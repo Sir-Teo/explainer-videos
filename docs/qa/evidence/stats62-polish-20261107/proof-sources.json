@@ -1,0 +1,33 @@
+[
+  {
+    "url": "https://arxiv.org/pdf/2102.04543",
+    "sha256": "948d04f9345bb2d7a31de979c3ea7f0e6f47bc662ac4a17374dfb99db239c861",
+    "review": "Section 2.1: ZSB relaxation omits data-compatibility constraints; finite box optimization is not sharp population identification"
+  },
+  {
+    "url": "https://arxiv.org/pdf/2102.13647",
+    "sha256": "04aa0fc7d67449cc584c7c89845445f0b7b4fd90a21406594400b27e983c44e5",
+    "review": "Section 3.1 and Appendix implementation: path-length reachability, numerical ties receive half credit; standardization can leave other covariance patterns"
+  },
+  {
+    "url": "https://arxiv.org/pdf/2009.10982",
+    "sha256": "ff931673aa828923e6e66fe007fd758c94a1d96c0bb4ee0da93e1180a331a9b5",
+    "review": "Proxy conditional independences, bridge/completeness identification and linear proximal estimation"
+  },
+  {
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3610527/",
+    "review": "Primary abstract and methods: 20971 eligible, 8392 analyzed; four hazard ratios; follow-up below CD4 500, six-month initiation strategies; residual-confounding limitation"
+  },
+  {
+    "url": "https://pubmed.ncbi.nlm.nih.gov/26192873/",
+    "review": "START primary abstract: 4685, full composite endpoint, HR .43 (.30-.62), interim recommendation to offer ART to deferred group"
+  },
+  {
+    "url": "https://www.tandfonline.com/doi/pdf/10.1080/01621459.2024.2402959",
+    "review": "Published correction located; PDF access returned 403. No corrected sharp-bound theorem/implementation relied upon."
+  },
+  {
+    "url": "https://pubmed.ncbi.nlm.nih.gov/1900101/",
+    "review": "CAST primary report counts checked in Part 58: 63 versus 26 deaths; no patient-level record verification"
+  }
+]

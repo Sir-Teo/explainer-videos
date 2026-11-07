@@ -6,7 +6,7 @@ PROBLEMS = [
     r"Derive the front-door formula from the back-door formula applied twice, \ on $A \to M$ and on $M \to Y$.",
     r"Show that under the marginal sensitivity model each IPW weight lies in $[1 + (1/e - 1)/\Lambda, \ 1 + (1/e - 1)\Lambda]$.",
     r"In the linear proximal model, \ show the 2SLS of $Y$ on $(A, W)$ with instruments $(A, Z)$ is consistent for $b_A$.",
-    r"Show that with Bernoulli($p$) assignment the naive difference in means estimates the direct effect plus no spillover term.",
+    r"Under the stated exposure model and Bernoulli assignment, show $E[Y_i\mid Z_i=1]-E[Y_i\mid Z_i=0]=2$; distinguish this from finite-sample ratio bias.",
     r"Show that the in-sample value of the EWM rule is biased upward: \ $E\max_\pi \hat V(\pi) \ge \max_\pi V(\pi)$.",
     r"Show that inverse-odds weights $(1 - p)/p$ turn the trial's covariate law into the target's.",
 ]
@@ -23,7 +23,7 @@ class Outro(LectureMixin, VoiceoverScene):
 
     def recap(self):
         items = [
-            (r"HIV-CAUSAL emulated; \ START confirmed", TRTC), (r"the front door: \ 1.01 vs naive 2.83", IDC),
+            (r"HIV-CAUSAL and START: \ complementary evidence", TRTC), (r"the front door: \ 1.01 vs naive 2.83", IDC),
             (r"do-calculus is complete", IDC), (r"NSW: \ sensitivity to $\Lambda$", HIDC),
             (r"proximal: \ two proxies, \ 95\% kept", IDC), (r"interference: \ exposure mappings", TRTC),
             (r"EWM: \ the winner's curse", NAIVEC), (r"Q-learning: \ backward induction", TRTC),
@@ -39,11 +39,11 @@ class Outro(LectureMixin, VoiceoverScene):
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
             "<bookmark mark='a'/> Part sixty-two in twelve lines. An observational emulation of when to start HIV treatment, "
-            "later confirmed by a trial. The front door identified an effect through a mediator, where the naive estimate "
+            "followed by a trial with a related but different target and endpoint. The front door identified an effect through a mediator, where the naive estimate "
             "was nearly three times too large. The do-calculus is complete. The National Supported Work data are sensitive "
-            "to modest hidden confounding. Two proxies identify an effect that adjustment for them cannot. <bookmark "
+            "to modest hidden confounding. Appropriate proxies and valid bridge assumptions can identify an effect that naive adjustment misses. <bookmark "
             "mark='b'/> Exposure mappings separate direct effects from spillovers. Learned rules suffer the winner's curse, "
-            "cured by splitting. Q-learning optimizes regimes backward. Discovery is limited by equivalence and can be "
+            "addressed by truly independent evaluation with appropriate nuisance training. Q-learning optimizes regimes backward. Discovery is limited by equivalence and can be "
             "fooled by scale. Selection diagrams say when to transport. Surrogates save time and can mislead silently."
         ) as vo:
             self.play(FadeIn(head))
@@ -123,9 +123,7 @@ class Outro(LectureMixin, VoiceoverScene):
         tr.to_edge(UP, buff=0.8)
         nxt.next_to(tr, DOWN, buff=1.0)
         with self.voiceover(
-            "Sixty-two parts of sixty-five. <bookmark mark='a'/> Observational data pointed to earlier HIV treatment years "
-            "before a randomized trial confirmed it, because the analysts said exactly what they assumed. <bookmark "
-            "mark='b'/> Next, Part sixty-three: privacy and fairness."
+            "Sixty-two parts of sixty-five. <bookmark mark='a'/> The HIV studies illustrate complementary observational and randomized evidence. Explicit assumptions permit interpretation; agreement is not proof that every assumption was correct. <bookmark mark='b'/> Next, Part sixty-three: privacy and fairness."
         ) as vo:
             self.play(FadeIn(tr))
             vo.wait_until("a")

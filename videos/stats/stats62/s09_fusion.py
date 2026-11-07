@@ -34,16 +34,11 @@ class Fusion(LectureMixin, VoiceoverScene):
 
     def selection(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The tool is a selection diagram: the causal graph plus a node S, pointing at whatever "
-            "differs between the populations. <bookmark mark='b'/> If S points only at covariates X, and X blocks every path "
-            "from S to the outcome given treatment, then conditional effects are the same in both populations. <bookmark "
-            "mark='c'/> The target's effect is the trial's conditional effect, averaged over the target's distribution of X. "
-            "<bookmark mark='d'/> If S points at the outcome mechanism itself, no reweighting can help: the populations "
-            "respond differently, and only target data can say how.",
+            "<bookmark mark='a'/> A selection diagram marks mechanisms that may differ across populations; its selection nodes are not automatically the same as a sample-membership indicator. <bookmark mark='b'/> Transport of conditional responses needs an appropriate separation condition in the post-intervention graph, together with support. Selection pointing at covariates alone does not make every conditioning set admissible. <bookmark mark='c'/> If conditional causal effects are invariant given suitable measured covariates, averaging the trial's conditional effect over the target covariates identifies the target effect. <bookmark mark='d'/> An outcome-mechanism difference can invalidate response transport, but an additive baseline shift might still preserve a treatment contrast. The exact target functional and invariances determine the answer.",
             [(r"\text{selection diagram}", r":", r"S \to \text{what differs}", 40),
-             (r"S \to X \text{ only}", r"\Rightarrow", r"\tau_{\text{trial}}(x) = \tau_{\text{target}}(x)", 40),
+             (r"Y\perp S\mid X,do(A)\ \text{and overlap}", r"\Rightarrow", r"\tau_{\text{trial}}(x) = \tau_{\text{target}}(x)", 40),
              (r"\tau_{\text{target}}", r"=", r"\int \tau_{\text{trial}}(x)\,dP_{\text{target}}(x)", 40),
-             (r"S \to Y", r":", r"\text{not transportable}", 40)],
+             (r"S \to Y", r":", r"\text{response transport may fail; \ contrast invariance can differ}", 40)],
             [r"Pearl \& Bareinboim (2011)", r"$S \perp Y \mid X, A$", r"standardization", r"the limit"],
             colors=[(2, IDC), (3, NAIVEC)])
 
@@ -78,18 +73,12 @@ class Fusion(LectureMixin, VoiceoverScene):
         tl = DashedLine(ax.c2p(d["truth"], 0), ax.c2p(d["truth"], top * 0.98), color=GOLDC, stroke_width=2.5)
         side = side_groups([
             [(r"effect $= 0.05(\mathrm{age} - 20)$", WHITE), (rf"trial mean age {d['mean_age_trial']:.0f}, \ target {d['mean_age_target']:.0f}", GREY_A)],
-            [(rf"gold: \ the target's effect, \ {d['truth']:.2f}", GOLDC)],
+            [(rf"gold: \ mean nonparticipant target effect, \ {d['truth']:.2f}", GOLDC)],
             [(rf"red: \ the trial's own estimate, \ {d['trial']:.2f}", NAIVEC)],
-            [(rf"green: \ inverse-odds transported, \ {d['transported']:.2f}", IDC), (rf"sd {d['transported_sd']:.2f}; \ ESS {d['ess']:.0f} of {d['n_trial']}", IDC)],
+            [(rf"green: \ oracle selection-odds weighted, \ {d['transported']:.2f}", IDC), (rf"sd {d['transported_sd']:.2f}; \ ESS {d['ess']:.0f} of {d['n_trial']}", IDC)],
         ])
         with self.voiceover(
-            f"<bookmark mark='a'/> A simulation. The effect grows with age, a twentieth of a unit per year. The trial "
-            f"recruits the young: its mean age is {d['mean_age_trial']:.0f}, the target's {d['mean_age_target']:.0f}. "
-            f"<bookmark mark='b'/> The target's average effect is {say(d['truth'], 2)}. <bookmark mark='c'/> Over two hundred "
-            f"simulated trials, the trial's own estimate averages {say(d['trial'], 2)}: precise, and correct for the trial, "
-            f"but less than half the target's effect. <bookmark mark='d'/> Transported by inverse odds of trial membership, "
-            f"it averages {say(d['transported'], 2)}, with twice the spread: the effective sample size falls to about "
-            f"{d['ess']:.0f} of {d['n_trial']}, because old participants are rare and heavily weighted."
+            "<bookmark mark='a'/> In this simulation the treatment effect increases with age and trial selection favors younger adults. <bookmark mark='b'/> The target is each repetition's nonparticipant population, rather than the entire original pool. The gold line displays its average true effect; the individual target truths are also recorded. <bookmark mark='c'/> The trial's arm difference describes its selected participants and is lower than that target effect. <bookmark mark='d'/> The green estimate uses the known, simulated selection odds, so this is an oracle weighting example rather than a validated fitted membership model. It has greater variability and some observed finite-sample error; normalized weighting is not exactly unbiased. Kish ESS diagnoses concentration but is not a complete variance calculation."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated, \ 200 trials")))
             vo.wait_until("a")
@@ -119,13 +108,9 @@ class Fusion(LectureMixin, VoiceoverScene):
 
     def limits(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The limits are the ones Part sixty met under covariate shift. <bookmark mark='b'/> Overlap: "
-            "if the target contains people unlike anyone in the trial, there is nothing to reweight, only extrapolation. "
-            "<bookmark mark='c'/> The effect modifiers must all be measured in both samples; one missing modifier breaks the "
-            "transport as surely as a hidden confounder breaks adjustment. <bookmark mark='d'/> And sensitivity analysis, as "
-            "in chapter two, can bound how far an unmeasured modifier could move the transported answer.",
+            "<bookmark mark='a'/> Transport requires a clearly specified target and assumptions connecting it to the study. <bookmark mark='b'/> Without target-support coverage in the trial, reweighting cannot identify the missing response surface without extrapolation assumptions. <bookmark mark='c'/> Measured covariates must suffice for the required conditional effect invariance. An unmeasured modifier need not bias transport if its relevant distribution does not differ after conditioning; it is not necessary to measure every conceivable modifier. <bookmark mark='d'/> Sensitivity analyses can study violations within a specified model, rather than making transport assumption-free.",
             [(r"\text{overlap}", r":", r"\text{or extrapolation}", 40),
-             (r"\text{all modifiers}", r":", r"\text{measured in both samples}", 40),
+             (r"\text{sufficient modifiers for population differences}", r":", r"\text{measured in both samples}", 40),
              (r"\text{else}", r":", r"\text{biased, \ like a hidden confounder}", 40),
              (r"\text{remedy}", r":", r"\text{sensitivity bounds}", 40)],
             [r"Part 60", r"the transport assumption", r"untestable", r"chapter 2"],
@@ -148,15 +133,10 @@ class Fusion(LectureMixin, VoiceoverScene):
 
     def sites(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> External validity across real sites. <bookmark mark='b'/> Rachael Meager pooled seven "
-            "randomized evaluations of microcredit, from Bosnia to Mongolia, with a Bayesian hierarchical model in 2019. "
-            "<bookmark mark='c'/> The average effects on household business profit were small and similar across sites once "
-            "sampling noise was accounted for: much of the apparent disagreement among the studies was noise. <bookmark "
-            "mark='d'/> Partial pooling, Part twenty-five's idea, is how one learns how far a result travels: the estimated "
-            "between-site spread is the honest answer to whether it generalizes.",
+            "<bookmark mark='a'/> Meager's analysis pooled seven randomized microcredit evaluations with a Bayesian hierarchical model. <bookmark mark='b'/> It separates sampling noise from estimated between-site effect variation under that model. <bookmark mark='c'/> Limited estimated heterogeneity for some outcomes does not establish equality of effects or describe every new population. Posterior uncertainty and outcome-specific findings matter. <bookmark mark='d'/> Predicting effects in a new site additionally needs a model for how that site relates to the studied sites. Between-site spread alone is not a complete measure of generalizability.",
             [(r"\text{seven sites}", r":", r"\text{microcredit, \ randomized}", 40),
              (r"\text{model}", r":", r"\text{Bayesian hierarchical}", 40),
              (r"\text{finding}", r":", r"\text{small effects, \ little true heterogeneity}", 40),
-             (r"\text{lesson}", r":", r"\text{the between-site spread measures generalizability}", 38)],
+             (r"\text{lesson}", r":", r"\text{new-site prediction needs a model and uncertainty}", 38)],
             [r"Meager (2019)", r"Part 25", r"noise, \ not difference", r"partial pooling"],
             colors=[(3, IDC)])

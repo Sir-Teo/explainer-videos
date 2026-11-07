@@ -3,6 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from videos.stats.stats62.common import *  # noqa: F403
+from videos.stats.stats62.compute import _true_value
 
 
 class Policy(LectureMixin, VoiceoverScene):
@@ -36,13 +37,7 @@ class Policy(LectureMixin, VoiceoverScene):
 
     def ewm(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Toru Kitagawa and Aleksey Tetenov's empirical welfare maximization, in 2018: choose the "
-            "rule in the class that maximizes an estimate of its value. <bookmark mark='b'/> With known propensities, an "
-            "inverse-weighting estimate works, and the regret shrinks like root of the class's VC dimension over n, Part "
-            "fifty-four's rate. <bookmark mark='c'/> Susan Athey and Stefan Wager, in 2021, replaced it by doubly robust "
-            "scores, with cross-fitted nuisance estimates, so the same rate holds in observational data with estimated "
-            "propensities. <bookmark mark='d'/> Maximizing over a class is a weighted classification problem: treat where "
-            "the score is positive, as far as the class allows.",
+            "<bookmark mark='a'/> Empirical welfare maximization selects a rule with high estimated gain within a specified class. <bookmark mark='b'/> Regret bounds involving the square root of VC dimension over sample size require boundedness or suitable tails, overlap and other theorem conditions. <bookmark mark='c'/> Doubly robust, cross-fitted scores extend the approach when nuisance estimates satisfy appropriate rates and the causal assumptions hold. Cross-fitting does not repair hidden confounding or missing action support. <bookmark mark='d'/> Maximizing score-weighted treatment choices can be formulated as weighted classification under the policy constraints.",
             [(r"\text{EWM}", r":", r"\hat\pi = \arg\max_{\pi \in \Pi} \tfrac1n\sum_i \Gamma_i\,\pi(X_i)", 40),
              (r"\text{regret}", r"\lesssim", r"\sqrt{\mathrm{VC}(\Pi)/n}", 40),
              (r"\Gamma_i", r"=", r"\hat\mu_1 - \hat\mu_0 + \frac{A(Y - \hat\mu_1)}{\hat e} - \frac{(1 - A)(Y - \hat\mu_0)}{1 - \hat e}", 34),
@@ -53,14 +48,10 @@ class Policy(LectureMixin, VoiceoverScene):
     def scores(self):
         d = load("policy")
         self.lad_voiceover(
-            f"<bookmark mark='a'/> A simulation where the right answer is known. A covariate x uniform on minus one to one; a "
-            f"randomized treatment; an effect of a quarter of x minus a tenth. <bookmark mark='b'/> The best rule treats "
-            f"only when x exceeds 0.4, and gains {say(d['best'], 4)} over treating no one: a small effect, as real ones often "
-            f"are. <bookmark mark='c'/> With four hundred units, the doubly robust scores are noisy. <bookmark mark='d'/> "
-            f"The class is threshold rules: treat when x is above, or below, some cut.",
+            "<bookmark mark='a'/> In this randomized simulation X is uniform between minus one and one, with treatment effect a quarter X minus a tenth. <bookmark mark='b'/> The optimal upper-threshold rule treats above point four and has exact gain zero point zero two two five relative to treating nobody. <bookmark mark='c'/> Each run uses four hundred policy observations plus an independent auxiliary sample of four hundred outcomes for nuisance fitting. Treatment propensity is known to be one half. This prevents policy learning from seeing evaluation outcomes through nuisance estimates. <bookmark mark='d'/> The coverage comparison optimizes upper and lower threshold rules. The representative chart shows only the upper-threshold subfamily, so its marked cut actually maximizes the curve shown.",
             [(r"\text{model}", r":", r"Y = X + A(0.25X - 0.1) + \varepsilon, \ \ X \sim U(-1, 1)", 38),
              (r"\text{best rule}", r":", rf"\text{{treat iff }} X > 0.4; \ \ \text{{gain}} \ {d['best']:.4f}", 40),
-             (r"n = 400", r":", r"\text{noisy scores}", 40),
+             (r"n = 400", r":", r"\text{policy data + 400 independent nuisance-training outcomes}", 40),
              (r"\Pi", r":", r"\text{threshold rules, \ either direction}", 40)],
             [r"randomized", r"the oracle", r"signal $\ll$ noise", r"a simple class"],
             colors=[(1, GOLDC)])
@@ -71,14 +62,15 @@ class Policy(LectureMixin, VoiceoverScene):
         o = np.argsort(x)
         cs = np.cumsum(G[o][::-1])[::-1] / len(x)  # value of treating x >= x_(k)
         lo_y = float(min(cs.min(), -0.1)) - 0.02
-        A = axes([-1, 1], [lo_y, 0.12], x_length=7.4, y_length=4.4, xlabel=r"cut $c$: \ treat if $x \ge c$", ylabel=r"estimated gain over treating no one",
+        hi_y=float(max(cs.max(),.12))+.02
+        A = axes([-1, 1], [lo_y, hi_y], x_length=7.4, y_length=4.4, xlabel=r"cut $c$: \ treat if $x \ge c$", ylabel=r"estimated gain over treating no one",
                  xticks=[-1, -0.5, 0, 0.5, 1], yticks=[-0.1, -0.05, 0, 0.05, 0.1], center=[-2.5, 0.2, 0])
         ax = A.ax
         est = polyline(ax, x[o], cs, TRTC, 2.5)
         xs = np.linspace(-1, 1, 200)
-        tv = np.array([np.mean((0.25 * np.linspace(-1, 1, 4001) - 0.1) * (np.linspace(-1, 1, 4001) >= c)) for c in xs])
+        tv = np.array([_true_value({"c":c,"s":1}) for c in xs])
         tru = curve(ax, xs, tv, GOLDC, 3.5)
-        cut = DashedLine(ax.c2p(d["rule_c"], lo_y), ax.c2p(d["rule_c"], 0.12), color=TRTC, stroke_width=2)
+        cut = DashedLine(ax.c2p(d["rule_c"], lo_y), ax.c2p(d["rule_c"], hi_y), color=TRTC, stroke_width=2)
         zero = DashedLine(ax.c2p(-1, 0), ax.c2p(1, 0), color=GREY_B, stroke_width=1.2)
         side = side_groups([
             [(r"gold: \ the true value of each cut", GOLDC), (rf"best at 0.4: \ {d['best']:.4f}", GOLDC)],
@@ -104,12 +96,7 @@ class Policy(LectureMixin, VoiceoverScene):
     def curse(self):
         d = load("policy")
         self.lad_voiceover(
-            f"<bookmark mark='a'/> That upward bias is the winner's curse of Part fifty-six, in a new place. <bookmark "
-            f"mark='b'/> Over {d['reps']} samples, the in-sample estimate of the chosen rule's value exceeds its true value "
-            f"by {say(d['gap_naive'], 3)} on average, three times the best possible gain. <bookmark mark='c'/> The fix is the "
-            f"one from Part fifty-six: learn the rule on one half of the data, and evaluate it on the other half, which "
-            f"played no part in choosing it. <bookmark mark='d'/> The honest estimate's average error is "
-            f"{say(d['gap_split'], 4)}.",
+            "<bookmark mark='a'/> Selecting and evaluating the same noisy maximum creates optimism. <bookmark mark='b'/> The displayed Monte Carlo comparison estimates both that optimism and coverage for the randomly learned rule's own population gain. <bookmark mark='c'/> For the split version, learn on half of the policy observations and evaluate on the other half, using nuisances fitted on the independent auxiliary sample. Ordinary two-fold nuisance fitting alone would leak evaluation outcomes into the learning scores in this design. <bookmark mark='d'/> The split estimate's average error is recorded with its Monte Carlo uncertainty. Its Wald interval is an approximation under this simulation, not a universal finite-sample guarantee.",
             [(r"\text{in-sample}", r":", r"\hat V(\hat\pi) \text{ biased upward}", 40),
              (r"\text{bias}", r":", rf"+{d['gap_naive']:.3f} \ \text{{on average}}", 40),
              (r"\text{fix}", r":", r"\text{learn on one half, \ evaluate on the other}", 40),
@@ -127,12 +114,8 @@ class Policy(LectureMixin, VoiceoverScene):
 
     def regret(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Beyond thresholds. <bookmark mark='b'/> Policy trees, of fixed depth, give rules a clinic "
-            "can read: Athey and Wager's method finds the best tree for the doubly robust scores exactly. <bookmark "
-            "mark='c'/> Constraints, such as a budget on how many can be treated, or fairness requirements, change the class "
-            "but not the method. <bookmark mark='d'/> And with adaptive data, from Part fifty-eight's bandits, the scores "
-            "must be reweighted, or the value estimates inherit the adaptivity's bias.",
-            [(r"\text{policy trees}", r":", r"\text{readable, \ exactly optimized}", 40),
+            "<bookmark mark='a'/> More complex policy classes can improve flexibility while increasing optimization and statistical difficulty. <bookmark mark='b'/> Shallow policy trees can be optimized exactly for specified finite search spaces, but general tree optimization is computationally difficult; fixed depth alone does not make every search cheap. <bookmark mark='c'/> Budget and fairness constraints alter the feasible policies and the available algorithms. <bookmark mark='d'/> Adaptive logging requires correct action probabilities, support and inference appropriate to the dependence. Reweighting alone does not guarantee a valid interval.",
+            [(r"\text{policy trees}", r":", r"\text{readable; \ optimization cost depends on the search class}", 40),
              (r"\text{constraints}", r":", r"\text{budgets, \ fairness}", 40),
              (r"\text{same method}", r":", r"\text{a different class}", 40),
              (r"\text{adaptive data}", r":", r"\text{reweighted scores}", 40)],
@@ -144,7 +127,7 @@ class Policy(LectureMixin, VoiceoverScene):
             "<bookmark mark='a'/> Evaluating a policy without deploying it is off-policy evaluation. <bookmark mark='b'/> "
             "The doubly robust scores already do it: the average score of those a new policy would treat estimates its "
             "gain, from data collected under another policy. <bookmark mark='c'/> It needs overlap: the old policy must "
-            "sometimes have done what the new one would do. A deterministic old policy cannot evaluate any other. <bookmark "
+            "sometimes have done what the new one would do. A deterministic logging policy cannot identify a new action where it supplied zero probability; policies agreeing on the observed action support are a different case. <bookmark "
             "mark='d'/> Recommender systems and online platforms evaluate new rules this way, from logs of randomized or "
             "bandit decisions, Part fifty-eight's adaptive experiments.",
             [(r"\text{off-policy}", r":", r"\hat V(\pi) \text{ from data under } \pi_0", 40),

@@ -33,28 +33,17 @@ class Regimes(LectureMixin, VoiceoverScene):
 
     def gformula(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> James Robins's g-formula, from 1986, identifies the value of any regime under sequential "
-            "exchangeability: at each step, treatment is as good as random given the history. <bookmark mark='b'/> It "
-            "integrates the outcome over the distribution of each intermediate measurement, with treatment set by the "
-            "regime at every step. <bookmark mark='c'/> Ordinary regression adjustment for L fails, because it blocks the "
-            "effect that passes through L. <bookmark mark='d'/> Inverse weighting by the probability of following the "
-            "regime, Part thirty-six's marginal structural models, is the other route, and the one the HIV-CAUSAL "
-            "analysis used, with copies of each patient for each regime they were compatible with.",
+            "<bookmark mark='a'/> The longitudinal g-formula identifies a regime value under consistency, sequential exchangeability and positivity for the intervention histories of interest. <bookmark mark='b'/> It integrates conditional outcome and covariate laws with treatments set by the specified regime. <bookmark mark='c'/> Reading a treatment coefficient from a single regression that conditions on an intermediate mediator is generally different from this total-effect calculation. Regression-based sequential g-computation can implement the formula correctly; regression itself is not the problem. <bookmark mark='d'/> Regime-adherence weighting is another route under its own support and nuisance-model conditions.",
             [(r"\text{g-formula}", r":", r"E[Y^d] = \int E[Y \mid \bar l, \bar a = d(\bar l)]\prod_k dP(l_k \mid \bar l_{k-1}, \bar a_{k-1})", 32),
              (r"\text{needs}", r":", r"\text{sequential exchangeability}", 40),
-             (r"\text{adjusting for } L", r":", r"\text{blocks the mediated effect: \ wrong}", 40),
+             (r"\text{adjusting for } L", r":", r"\text{single-coefficient adjustment }\ne\text{ sequential g-computation}", 40),
              (r"\text{or}", r":", r"\text{IPW of regime adherence; \ clone and censor}", 40)],
             [r"Robins (1986)", r"no hidden step-wise confounding", r"Part 36", r"Cain et al. (2011)"],
             colors=[(0, IDC), (2, NAIVEC)])
 
     def qlearning(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> To find the best regime, Susan Murphy, in 2003, and Robins, in 2004, gave backward "
-            "methods. The simplest is Q-learning. <bookmark mark='b'/> At the last stage, regress the outcome on the "
-            "history and the treatment, and choose the treatment with the larger prediction. <bookmark mark='c'/> At the "
-            "stage before, regress the best achievable later outcome, the maximum of the stage-two predictions, on the "
-            "earlier history and treatment. <bookmark mark='d'/> Each stage's rule is optimal given that later stages are "
-            "played optimally: dynamic programming on regressions.",
+            "<bookmark mark='a'/> Q-learning works backward through conditional outcome models. <bookmark mark='b'/> At stage two, model the outcome using the relevant full observed history and each possible final treatment. Our revised simulation includes the first-stage treatment-by-state reward that the old reduced history omitted. <bookmark mark='c'/> Regress the estimated best later outcome on earlier history and treatment to learn a first-stage rule. The linear first-stage regression remains a working approximation in this nonlinear simulation. <bookmark mark='d'/> Backward induction is optimal with correct conditional Q functions and identification assumptions; it does not make misspecified fitted regressions exactly optimal.",
             [(r"\text{stage 2}", r":", r"Q_2(h_2, a_2) = E[Y \mid H_2 = h_2, A_2 = a_2]", 40),
              (r"d_2^*(h_2)", r"=", r"\arg\max_{a_2} Q_2(h_2, a_2)", 40),
              (r"\text{stage 1}", r":", r"Q_1(h_1, a_1) = E[\max_{a_2} Q_2(H_2, a_2) \mid h_1, a_1]", 40),
@@ -82,17 +71,11 @@ class Regimes(LectureMixin, VoiceoverScene):
         zero = Line(ax.c2p(-0.5, 0), ax.c2p(5.5, 0), color=GREY_C, stroke_width=1.5)
         side = side_groups([
             [(r"a two-stage SMART, \ $n = 1{,}000$", WHITE), (r"both treatments randomized", GREY_A)],
-            [(r"values from 200,000 fresh runs", GREY_A), (r"of the true model", GREY_A)],
+            [(r"200,000 common fresh simulation states", GREY_A), (r"conditional-mean outcomes; \ Monte Carlo errors recorded", GREY_A)],
             [(r"oracle rule: \ the true model's", GOLDC), (r"thresholds at both stages", GOLDC)],
         ], width=3.6, pos=(5.2, 1.6, 0))
         with self.voiceover(
-            f"<bookmark mark='a'/> A two-stage simulation in which each stage's treatment helps some patients and harms "
-            f"others, depending on their current state. A thousand patients, with both treatments randomized, as in a "
-            f"sequential trial. <bookmark mark='b'/> Each regime's value is computed from two hundred thousand fresh runs of "
-            f"the true model. <bookmark mark='c'/> Never treating gives {say(v['never treat'], 2)}; always treating, "
-            f"{say(v['always treat'], 2)}, worse; treating only at stage two, when the state is favourable, "
-            f"{say(v['stage 2 only'], 2)}. <bookmark mark='d'/> Q-learning's regime, estimated from the thousand patients, "
-            f"reaches {say(v['Q-learning'], 2)}, close to the {say(v['oracle'], 2)} of the regime that uses the true model's thresholds."
+            f"<bookmark mark='a'/> A two-stage simulation in which each stage's treatment helps some patients and harms others, depending on their current state. A thousand patients, with both treatments randomized, as in a sequential trial. <bookmark mark='b'/> The five policies are evaluated on the same two hundred thousand fresh simulated states, integrating out the final outcome noise. Saved Monte Carlo errors quantify numerical uncertainty conditional on this one training fit. <bookmark mark='c'/> Never treating gives {say(v['never treat'], 2)}; always treating, {say(v['always treat'], 2)}, worse; treating only at stage two, when the state is favourable, {say(v['stage 2 only'], 2)}. <bookmark mark='d'/> Q-learning's regime, estimated from the thousand patients, reaches {say(v['Q-learning'], 2)}, close to the {say(v['oracle'], 2)} of the regime that uses the true model's thresholds."
         ) as vo:
             self.play(FadeIn(A), Create(zero), FadeIn(simulated_tag(r"simulated")))
             vo.wait_until("a")
@@ -107,15 +90,10 @@ class Regimes(LectureMixin, VoiceoverScene):
 
     def smart(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Data for this come best from a sequential multiple assignment randomized trial, a SMART, "
-            "Murphy's design. <bookmark mark='b'/> Patients are randomized at the first decision, and those who do not "
-            "respond are randomized again. <bookmark mark='c'/> Every embedded regime is then compared with randomized "
-            "data, without the sequential exchangeability assumption. <bookmark mark='d'/> SMARTs have been run in "
-            "depression, autism, smoking cessation and substance use; for HIV's question, the regime was too slow to test "
-            "this way, which is why emulation mattered.",
+            "<bookmark mark='a'/> Sequential multiple-assignment randomized trials randomize treatments at specified decision points. <bookmark mark='b'/> Designs may re-randomize nonresponders, responders or other eligible subgroups according to their protocol. <bookmark mark='c'/> Randomization supplies sequential exchangeability for the assigned decisions; consistency, sufficient treatment support and handling of loss to follow-up still matter. <bookmark mark='d'/> Such trials study adaptive interventions in many areas. Observational emulation can complement them when waiting for a trial is impractical, but does not inherit randomization automatically.",
             [(r"\text{SMART}", r":", r"\text{randomize, \ then re-randomize non-responders}", 40),
              (r"\text{embedded regimes}", r":", r"\text{compared on randomized data}", 40),
-             (r"\text{no assumption}", r":", r"\text{exchangeability by design}", 40),
+             (r"\text{exchangeability}", r":", r"\text{exchangeability by design}", 40),
              (r"\text{uses}", r":", r"\text{depression, \ autism, \ smoking, \ addiction}", 40)],
             [r"Murphy (2005)", r"sequential randomization", r"the design does the work", r"applied widely"],
             colors=[(2, IDC)])
@@ -137,12 +115,7 @@ class Regimes(LectureMixin, VoiceoverScene):
 
     def gest(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Q-learning models the whole outcome, which may be hard. <bookmark mark='b'/> Robins's "
-            "g-estimation of structural nested models models only the effect of each decision, the blip, and is consistent "
-            "if either the blip model and a treatment model, or the blip model and an outcome model, are right. <bookmark "
-            "mark='c'/> Murphy's A-learning is closely related: advantage learning, estimating how much better each action "
-            "is than the alternative. <bookmark mark='d'/> When treatment probabilities are known, as in a SMART, these "
-            "methods are robust to misspecifying how the outcome depends on the history.",
+            "<bookmark mark='a'/> Q-learning models conditional outcome levels as well as treatment contrasts. <bookmark mark='b'/> Structural nested models instead parameterize the treatment blip. Specific g-estimation procedures can be robust to some nuisance misspecification when the blip model and the required treatment or outcome nuisance are correct. <bookmark mark='c'/> A-learning similarly focuses on action advantages. <bookmark mark='d'/> Known randomization probabilities help with nuisance robustness, but do not protect a wrong blip model or an incorrectly specified treatment history.",
             [(r"\text{Q-learning}", r":", r"\text{models the outcome}", 40),
              (r"\text{g-estimation}", r":", r"\text{models only the blip } \gamma(h, a)", 40),
              (r"\text{A-learning}", r":", r"\text{the advantage of each action}", 40),

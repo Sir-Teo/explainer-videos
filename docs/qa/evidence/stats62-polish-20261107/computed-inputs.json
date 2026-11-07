@@ -1,0 +1,52 @@
+[
+  {
+    "file": ".cache/stats62/board.json",
+    "sha256": "573caca915a47ad362f5627f2b97952741f1a36065f80cdd75c3617e41d2f5d2",
+    "bytes": 1331
+  },
+  {
+    "file": ".cache/stats62/discovery.json",
+    "sha256": "3cf7aeda17ad71b9db26ba2a995f9ba1e2af889a5506300a4d74931ad9c4988d",
+    "bytes": 3099
+  },
+  {
+    "file": ".cache/stats62/dtr.json",
+    "sha256": "9743f9badf623b7afa0d42278908ee8121b9d5386b032b5123b198ae12d1cea4",
+    "bytes": 1103
+  },
+  {
+    "file": ".cache/stats62/frontdoor.json",
+    "sha256": "cec4b9d5e152be009a0bb179bca8a36c59f7305ec2506390375654ed81b84e67",
+    "bytes": 135
+  },
+  {
+    "file": ".cache/stats62/fusion.json",
+    "sha256": "c93d3a73a13ad55ad1d0d5bd51164faabea914133932b609421b19f54819d189",
+    "bytes": 13803
+  },
+  {
+    "file": ".cache/stats62/interference.json",
+    "sha256": "0543f5a2f98569f846c5bc21d1fbbf97a12e3a56214566b6850a631be9b43722",
+    "bytes": 105644
+  },
+  {
+    "file": ".cache/stats62/msm.json",
+    "sha256": "5e243992190828315562b2118718973e61277ed4b25e8a6ba9b37e9baadc8668",
+    "bytes": 97532
+  },
+  {
+    "file": ".cache/stats62/policy.json",
+    "sha256": "ffbcca95d8b41f2e4b357a81960dd5ddb306e87dd834c897119c466183092fd5",
+    "bytes": 131453
+  },
+  {
+    "file": ".cache/stats62/proximal.json",
+    "sha256": "35f3a705bd38c2ce79867d37d1eaba658cc0f26547d2d4a8deefe12477b4900e",
+    "bytes": 93501
+  },
+  {
+    "file": ".cache/stats62/surrogate.json",
+    "sha256": "af8386147dcb640e0694b19e5b7e2da2a37f4b0e52b6c4384eda138c43faa924",
+    "bytes": 653
+  }
+]
