@@ -27,7 +27,7 @@ class Outro(VoiceoverScene):
             (r"Arbuthnot's coins; \ the lady's tea", DATA),
             (r"Fisher: \ a null, \ a statistic, \ a tail", NULLC),
             (r"exact tests from the randomization", OBS),
-            (r"$p$ is uniform under $H_0$", OBS),
+            (r"continuous-null $p$ is uniform; discrete $p$ is super-uniform", OBS),
             (r"two errors: \ size and power", ALTC),
             (r"the most powerful test: \ a knapsack", ALTC),
             (r"likelihood ratios and Wilks", S.LIK),
@@ -49,7 +49,7 @@ class Outro(VoiceoverScene):
             "Part ten in thirteen lines. <bookmark mark='a'/> Arbuthnot's eighty-two years and the lady's eight cups "
             "share Fisher's logic: a null hypothesis, a statistic, and the probability of something at least as "
             "extreme. When the experimenter randomized, the null distribution is the randomization itself, and the test "
-            "is exact. Under the null, a p-value is a uniform random number. Neyman and Pearson added a second error and "
+            "is exact. Under an exact continuous null distribution, a p-value is uniform; discrete p-values are generally super-uniform. Neyman and Pearson added a second error and "
             "turned testing into optimization: the most powerful test fills a knapsack by likelihood ratio, and the "
             "likelihood ratio, with Wilks' theorem, gives a test for almost anything. The everyday tests are estimates "
             "over standard errors, and Welch's test survives unequal variances where Student's doesn't. Pearson's "
@@ -73,6 +73,7 @@ class Outro(VoiceoverScene):
             (r"multiple testing, FDR", [33, 56]),
             (r"Bayes factors, posterior odds", [15, 26]),
         ], font_size=22)
+        intro = label('Where testing theory returns', font_size=36)
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Every test inverts into a confidence interval, which is Part 11. "
             "Randomization inference returns with experiments and permutation methods in Parts 13, 16 and 35. The "
@@ -81,7 +82,9 @@ class Outro(VoiceoverScene):
             "discovery rate in Part 33; and the Bayesian answer to the question p-values can't answer, how probable is "
             "the hypothesis, in Part 15."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 

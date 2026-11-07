@@ -30,6 +30,7 @@ class Neyman(VoiceoverScene):
                           font_size=22).move_to([3.3, 0.8, 0])
         foot = label(r"Egon was Karl Pearson's son; \ Neyman, \ a Polish mathematician, \ came to his father's lab in 1925", font_size=22,
                      color=GREY_A).to_edge(DOWN, buff=0.7)
+        intro = label('Two kinds of testing error', font_size=36)
         with self.voiceover(
             "Fisher's test has no alternative hypothesis. Two younger statisticians thought that was a mistake. "
             "<bookmark mark='a'/> Jerzy Neyman, a Polish mathematician who had come to Karl Pearson's laboratory in "
@@ -38,7 +39,9 @@ class Neyman(VoiceoverScene):
             "of statistical hypotheses, they built a theory around two kinds of error. It became the textbook theory of "
             "testing, and it made Fisher furious. <bookmark mark='c'/>"
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(h1, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(h2, shift=UP * 0.2))
@@ -115,7 +118,7 @@ class Neyman(VoiceoverScene):
                           MathTex(rf"\text{{power}} = {1 - b:.3f}", font_size=32, color=OBS)).arrange(RIGHT, buff=0.8).move_to([0, -1.9, 0])
 
         nm = always_redraw(nums)
-        foot = label(r"moving the line trades one error for the other; \ only more data shrinks both", font_size=26,
+        foot = label(r"moving the line trades one error for the other; \ more information separates the curves: more data, less noise, better design", font_size=26,
                      color=OBS).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "Here's the picture for the simplest case, testing whether a normal mean is zero, against the alternative "
@@ -126,7 +129,7 @@ class Neyman(VoiceoverScene):
             "With the line at one point six four five, alpha is five percent and the power is eighty. "
             "<bookmark mark='c'/> Move the line right and false alarms drop, but misses rise. <bookmark mark='d'/> Move it "
             "left, and the reverse. <bookmark mark='e'/> For a fixed amount of data, the two errors trade against each "
-            "other. The only way to shrink both is to pull the curves apart, by collecting more data."
+            "other. To reduce both, pull the curves apart: collect more data, reduce measurement noise, or improve the design."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
@@ -160,14 +163,14 @@ class Neyman(VoiceoverScene):
         rows = fit_rows(VGroup(
             MathTex(r"1 - \beta = \Phi\Big(\frac{\delta\sqrt n}{\sigma} - z_{1 - \alpha/2}\Big) + \Phi\Big(-\frac{\delta\sqrt n}{\sigma} - z_{1 - \alpha/2}\Big)",
                     font_size=24),
-            MathTex(r"n = \Big(\frac{(z_{1-\alpha/2} + z_{1-\beta})\,\sigma}{\delta}\Big)^2", font_size=30, color=OBS),
+            MathTex(r"n \approx \Big(\frac{(z_{1-\alpha/2} + z_{1-\beta})\,\sigma}{\delta}\Big)^2", font_size=30, color=OBS),
             MathTex(rf"80\%:\ n = {d['n80']},\qquad 90\%:\ n = {d['n90']}", font_size=30),
             label(r"the two-sided $z$-test; \ chapter 9 does this properly", font_size=22, color=GREY_A),
         ), 5.2, 0.36, [4.3, -0.3, 0])
         with self.voiceover(
             "That gives a way to plan an experiment. <bookmark mark='a'/> For the two-sided z-test, the power has a "
             "formula, and it climbs with the sample size: here, for a true effect of half a standard deviation. "
-            "<bookmark mark='b'/> Solve for n: the sum of two normal quantiles, times sigma over delta, squared. "
+            "<bookmark mark='b'/> Ignoring the far tail gives a standard planning approximation for n: the sum of two normal quantiles, times sigma over delta, squared. "
             "<bookmark mark='c'/> For eighty percent power you need thirty-two observations; for ninety, forty-three. "
             "Choosing the size of a study before running it, from the effect you want to be able to detect, is one of "
             "Neyman and Pearson's most lasting gifts. Chapter nine returns to it."
@@ -199,6 +202,7 @@ class Neyman(VoiceoverScene):
             label(r"today's textbook test is a hybrid: \ Fisher's $p$ compared with Neyman's $\alpha$", font_size=26, color=OBS),
             label(r"they quarrelled for thirty years; \ Gigerenzer (2004) calls the hybrid a ``null ritual''", font_size=24, color=GREY_A),
         ), 12.6, 0.3, [0, -2.3, 0])
+        intro = label('Evidence and repeated decision rules', font_size=36)
         with self.voiceover(
             "The two views are different philosophies. <bookmark mark='a'/> For Fisher, a test measures the evidence "
             "in this particular experiment against a hypothesis. You report the p-value, and its size grades the "
@@ -209,7 +213,9 @@ class Neyman(VoiceoverScene):
             "compare it with Neyman's alpha, and declare significance. The two men quarrelled bitterly for thirty "
             "years, and neither would have endorsed the hybrid."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(left, lag_ratio=0.2), Create(div))
             vo.wait_until("b")
             self.play(FadeIn(right, lag_ratio=0.2))

@@ -51,7 +51,7 @@ class ChiSq(VoiceoverScene):
         rows = [
             cmath(r"X^2", r"=", r"\sum_{j=1}^{k} \frac{(O_j - E_j)^2}{E_j}", font_size=36),
             cmath(r"X^2", r"\to", r"\chi^2_{k - 1}", r"\quad\text{under } H_0", font_size=36),
-            cmath(r"X^2", r"\to", r"\chi^2_{k - 1 - m}", r"\quad m \text{ parameters estimated}", font_size=34),
+            cmath(r"X^2", r"\to", r"\chi^2_{k - 1 - m}", r"\quad m \text{ regular parameters fitted by grouped MLE}", font_size=34),
         ]
         rows[0][2].set_color(OBS)
         whys = [why(r"observed against expected counts, \ each scaled by its own variance"),
@@ -60,9 +60,9 @@ class ChiSq(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> Pearson's statistic compares each observed count with the count the model expects, "
             "squares the difference, and scales it by the expected count, which is roughly the count's variance. "
-            "<bookmark mark='b'/> If the model is right, the sum is approximately chi-squared with k minus one degrees "
+            "<bookmark mark='b'/> For independent multinomial trials with fixed categories and expected counts growing, the sum is approximately chi-squared with k minus one degrees "
             "of freedom: k counts, less one because they must add up to the total. <bookmark mark='c'/> And one more "
-            "degree is lost for every parameter estimated from the data, Fisher's correction. In the language of chapter "
+            "degree is lost per identifiable regular parameter fitted efficiently to the grouped counts, Fisher's correction. Arbitrary estimates or parameters fitted before binning need not yield this reference law. In the language of chapter "
             "six, Pearson's statistic is exactly the score test for a multinomial."
         ) as vo:
             step = ladder(self, rows, whys, keep=3, top=2.4, x=-1.0, buff=0.9, edge=6.9)

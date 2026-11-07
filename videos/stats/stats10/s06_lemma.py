@@ -30,6 +30,7 @@ class Lemma(VoiceoverScene):
             label(r"rank the possible outcomes by how much more likely they are under $H_1$ than under $H_0$", font_size=26),
             label(r"reject for the top of the ranking, \ until the size budget $\alpha$ is spent", font_size=26, color=OBS),
         ), 12.6, 0.34, [0, -1.9, 0])
+        intro = label('Spend a size budget to maximize power', font_size=36)
         with self.voiceover(
             "Which test is the most powerful? For the simplest case, one null distribution against one alternative, "
             "Neyman and Pearson answered completely. <bookmark mark='a'/> Reject when the likelihood ratio, the "
@@ -37,9 +38,11 @@ class Lemma(VoiceoverScene):
             "constant. No test of the same size has more power. <bookmark mark='b'/> In words: rank every possible "
             "outcome by how much more likely it is under the alternative than under the null. <bookmark mark='c'/> "
             "Then reject for outcomes from the top of the ranking down, until you've spent your budget of false-alarm "
-            "probability. It's a knapsack problem, and the likelihood ratio is value per unit weight."
+            "probability. It's a fractional knapsack problem when boundary randomization is allowed, and the likelihood ratio is value per unit weight. A greedy rule need not solve an arbitrary non-randomized knapsack."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(tc, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(rows[0]))
@@ -66,6 +69,7 @@ class Lemma(VoiceoverScene):
             label(r"sums 2 to 6: \ \emph{less} likely under $H_1$;", font_size=24, color=OBS),
             label(r"12: \ twice as likely", font_size=24, color=OBS),
         ), 5.0, 0.34, [4.4, -0.4, 0])
+        intro = label('Fair dice or one loaded die?', font_size=36)
         with self.voiceover(
             "A concrete example. <bookmark mark='a'/> Someone rolls two dice and tells you only the sum. Under the "
             "null, both dice are fair. Under the alternative, the second die is loaded, coming up six a third of the "
@@ -75,7 +79,9 @@ class Lemma(VoiceoverScene):
             "sum as an item you might put in your rejection region. Its weight is its null probability, which spends "
             "your size budget, and its value is its alternative probability, which buys power."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(A), FadeIn(leg), FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(FadeIn(b0, lag_ratio=0.05), FadeIn(b1, lag_ratio=0.05))
@@ -113,6 +119,7 @@ class Lemma(VoiceoverScene):
             label(r"brute force over all $2^{11} = 2{,}048$ possible rejection regions: \ none of size $\le \tfrac16$ does better",
                   font_size=24, color=GREY_A),
         ), 12.6, 0.32, [0, -2.4, 0])
+        intro = label('Choose outcomes by their likelihood ratio', font_size=36)
         with self.voiceover(
             "Now fill the knapsack. <bookmark mark='a'/> The budget is a size of one sixth. <bookmark mark='b'/> The best "
             "value for weight is a sum of twelve, with likelihood ratio two: it costs one thirty-sixth of size and buys "
@@ -123,7 +130,9 @@ class Lemma(VoiceoverScene):
             "size at most one sixth has more power. Notice how weak even the best test is: with a single roll, the "
             "evidence is thin."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(Create(frame), FadeIn(budget_l), Create(pow_frame), FadeIn(pow_l))
             for k, m_ in enumerate("bcd"):
                 vo.wait_until(m_)
@@ -172,7 +181,7 @@ class Lemma(VoiceoverScene):
 
     def proof(self):
         rows = [
-            cmath(r"\phi(x)", r"=", r"\mathbf 1\{p_1(x) > k\,p_0(x)\},\quad \phi' \text{ any test with } E_0\phi' \le E_0\phi", font_size=30),
+            cmath(r"\phi(x)", r"=", r"\mathbf 1\{p_1 > k p_0\} + \gamma\mathbf 1\{p_1 = k p_0\},\quad \phi' \text{ any test with } E_0\phi' \le E_0\phi", font_size=30),
             cmath(r"\big(\phi(x) - \phi'(x)\big)\big(p_1(x) - k\,p_0(x)\big)", r"\ge", r"0 \quad \text{for every } x", font_size=30),
             cmath(r"\sum_x \big(\phi - \phi'\big)\big(p_1 - k\,p_0\big)", r"\ge", r"0", font_size=30),
             cmath(r"E_1\phi - E_1\phi'", r"\ge", r"k\,\big(E_0\phi - E_0\phi'\big) \ge 0", font_size=32),
@@ -181,6 +190,7 @@ class Lemma(VoiceoverScene):
         whys = [why(r"the likelihood-ratio test, \ and any rival of no larger size"),
                 why(r"where $\phi = 1$, \ both factors $\ge 0$; \ where $\phi = 0$, \ both $\le 0$"), why(r"add up over outcomes"),
                 why(r"rearrange: \ more power than any rival")]
+        intro = label('Why a likelihood-ratio rule wins', font_size=36)
         with self.voiceover(
             "The proof is three lines. <bookmark mark='a'/> Let phi be the likelihood ratio test, and phi prime any rival "
             "whose size is no larger. <bookmark mark='b'/> At every outcome, the product of phi minus phi prime and p1 "
@@ -189,9 +199,12 @@ class Lemma(VoiceoverScene):
             "<bookmark mark='d'/> The power difference is at least k times the size difference, which is at least zero. "
             "The likelihood ratio test wins."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -204,23 +217,27 @@ class Lemma(VoiceoverScene):
         whys = [why(r"normal mean, \ $\sigma$ known: \ increasing in $\bar x$"), why(r"the same test for every $\delta > 0$: \ \emph{uniformly} most powerful")]
         foot = fit_rows(VGroup(
             label(r"monotone likelihood ratio gives a UMP one-sided test (Karlin \& Rubin, 1956)", font_size=24),
-            label(r"two-sided: \ no UMP test exists; \ we settle for unbiased tests, \ or the likelihood ratio of ch.~6", font_size=24,
+            label(r"two-sided normal mean: \ no UMP test exists; \ we settle for unbiased tests, \ or the likelihood ratio of ch.~6", font_size=24,
                   color=GREY_A),
             label(r"composite hypotheses in general: \ Part 46", font_size=24, color=GREY_A),
         ), 12.6, 0.3, [0, -2.0, 0])
+        intro = label('A most powerful one-sided normal-mean test', font_size=36)
         with self.voiceover(
             "What does the lemma say about everyday tests? <bookmark mark='a'/> For a normal mean with known sigma, the "
             "likelihood ratio between a positive delta and zero is an increasing function of x-bar. <bookmark mark='b'/> "
             "So the most powerful test rejects for large x-bar, and it's the same test whatever positive delta we had "
             "in mind. It's uniformly most powerful against all one-sided alternatives: the z-test is optimal. "
             "<bookmark mark='c'/> Samuel Karlin and Herman Rubin showed in 1956 that this happens whenever the "
-            "likelihood ratio is monotone in a statistic. <bookmark mark='d'/> For two-sided alternatives no uniformly "
+            "likelihood ratio is monotone in a statistic. <bookmark mark='d'/> For this normal-mean model with two-sided alternatives no uniformly "
             "most powerful test exists, since the best test against positive deltas is the worst against negative ones. "
             "<bookmark mark='e'/> Part 46 develops the general theory."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=2.6, x=-0.4, buff=0.9, edge=6.9)
             for k, m_ in enumerate("ab"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             for k, m_ in enumerate("cde"):
                 vo.wait_until(m_)

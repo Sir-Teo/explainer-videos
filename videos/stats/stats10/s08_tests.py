@@ -97,22 +97,24 @@ class Tests(VoiceoverScene):
 
     def behrens(self):
         h1 = history_card(1929, r"W.-U. Behrens; \ then Fisher (1935)", r"two normal means, \ unequal unknown variances: \ no exact "
-                          r"$t$-like test exists, \ the Behrens--Fisher problem", color=ALTC, width=6.0, font_size=22).move_to([-3.3, 1.0, 0])
+                          r"$t$ reference law free of the variance ratio, \ the Behrens--Fisher problem", color=ALTC, width=6.0, font_size=22).move_to([-3.3, 1.0, 0])
         h2 = history_card(1947, r"B. L. Welch, \ \emph{Biometrika} 34", r"use each group's own variance, \ and approximate the null by $t$ "
                           r"with fractional degrees of freedom", color=ALTC, width=6.0, font_size=22).move_to([3.3, 1.0, 0])
         df = MathTex(r"\nu = \frac{\big(s_1^2/n_1 + s_2^2/n_2\big)^2}{\frac{(s_1^2/n_1)^2}{n_1 - 1} + \frac{(s_2^2/n_2)^2}{n_2 - 1}}",
                      font_size=34, color=OBS).move_to([0, -1.5, 0])
         lab = label(r"the Welch--Satterthwaite degrees of freedom (Satterthwaite, 1946)", font_size=22, color=GREY_A).next_to(df, DOWN, buff=0.25)
+        intro = label('Two normal means with unequal unknown variances', font_size=36)
         with self.voiceover(
             "The pooled two-sample test assumes both groups have the same variance. What if they don't? "
             "<bookmark mark='a'/> That's the Behrens–Fisher problem, posed by Walter-Ulrich Behrens in 1929 and taken "
-            "up by Fisher: for two normal means with unequal, unknown variances, there's no exact test of the t kind "
-            "at all. It's one of the famous unsolved problems of classical statistics. <bookmark mark='b'/> Bernard "
+            "up by Fisher: for two normal means with unequal, unknown variances, the usual statistic has no exact t distribution independent of the unknown variance ratio. This is the classical Behrens–Fisher difficulty, not a claim that no valid exact or conservative procedure exists. <bookmark mark='b'/> Bernard "
             "Welch's practical answer, in 1947: use each group's own variance in the standard error, and approximate "
             "the null distribution by a t with fractional degrees of freedom, <bookmark mark='c'/> given by this "
             "formula, which Franklin Satterthwaite also found."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(h1, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(h2, shift=UP * 0.2))
@@ -131,7 +133,7 @@ class Tests(VoiceoverScene):
             y = 2.15 - 0.5 * i
 
             def col(v):
-                return S.KEPT if abs(v - 0.05) < 0.0066 else (S.BROKEN if v > 0.05 else S.CONS)
+                return S.KEPT if abs(v - 0.05) <= 3 * np.sqrt(0.05 * 0.95 / 20000) else (S.BROKEN if v > 0.05 else S.CONS)
 
             cells.add(VGroup(MathTex(rf"{r['n1']},\ {r['n2']}", font_size=28).move_to([xs[0], y, 0]),
                              MathTex(rf"{r['ratio']:g}", font_size=28).move_to([xs[1], y, 0]),
@@ -139,7 +141,7 @@ class Tests(VoiceoverScene):
                              MathTex(rf"{100 * r['welch']:.1f}\%", font_size=28, color=col(r["welch"])).move_to([xs[3], y, 0])))
         foot = fit_rows(VGroup(
             label(r"the size of a nominal 5\% test, \ normal data, \ 20,000 replications per row", font_size=22, color=GREY_A),
-            label(r"Student fails when the \emph{smaller} group has the \emph{larger} variance; \ Welch holds everywhere here", font_size=24,
+            label(r"Student fails when the \emph{smaller} group has the \emph{larger} variance; \ Welch is close to nominal in these simulated settings", font_size=24,
                   color=OBS),
         ), 12.6, 0.26, [0, -2.65, 0])
         tag = simulated_tag(r"simulated", corner=UR)
@@ -150,8 +152,8 @@ class Tests(VoiceoverScene):
             "<bookmark mark='b'/> But give the first group ten observations and the second forty, and make the first "
             "group twice as spread out: the pooled test rejects eighteen percent of the time; four times as spread, "
             "twenty-nine percent. <bookmark mark='c'/> Reverse it, the large group being the variable one, and the "
-            "pooled test almost never rejects, which means it has hardly any power. <bookmark mark='d'/> Welch's test "
-            "stays at five percent in every row. The pooled variance borrows the wrong group's spread whenever sizes "
+            "pooled test almost never rejects, so the test is conservative here and can lose power against alternatives. <bookmark mark='d'/> Welch's test "
+            "stays close to five percent in these rows. The pooled variance borrows the wrong group's spread whenever sizes "
             "and variances are unbalanced together."
         ) as vo:
             self.play(FadeIn(hdr), FadeIn(tag))

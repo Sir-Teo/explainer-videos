@@ -7,10 +7,10 @@ estimators and their sampling distributions. This part asks when a pattern is to
 It opens with two stories. In 1710 John Arbuthnot found more boys than girls christened in London in each of 82
 years: (1/2)⁸² ≈ 2.1 × 10⁻²⁵. Then there is Fisher's lady tasting tea (1935): with eight cups, a perfect score by
 guessing has probability 1/70. From there the part covers:
-- Fisher's logic, and which null was really rejected (a 51.6% coin makes 82 straight wins a 98% event; Nicolaus
+- Fisher's logic, and which null was really rejected (an illustrative independent equal-year model with male probability 51.6% makes 82 straight wins about a 98% event; Nicolaus
   Bernoulli, 1713);
-- exact tests from randomization: the tea, Fisher's exact test, and Darwin's *Zea mays* sign flips (863 of 32,768);
-- the p-value, uniform under H₀, and its distribution under alternatives;
+- exact randomization or exchangeability calculations: the tea, Fisher's exact test, and Darwin's *Zea mays* sign flips (863 of 32,768);
+- the p-value, uniform for an exact continuous null and super-uniform for discrete nulls, and its distribution under alternatives;
 - Neyman and Pearson's two errors and the Neyman–Pearson lemma, as a knapsack over all 2,048 rejection regions of a
   dice problem;
 - the likelihood ratio test, Wilks' theorem, and the Wald, score and LR trinity;
@@ -31,15 +31,16 @@ Every number on screen is computed in [`compute.py`](compute.py). The Museum sup
 Heights, incomes and the clinic come from the World (seed 1662). Everything else is a seeded simulation or exact.
 
 **Built in this part:**
-- **The permutation machine** (`PermutationMachine` in [`explainer/stats/viz.py`](../../../explainer/stats/viz.py)):
+- **The permutation machine** (`PermutationMachine` in [`explainer/stats/viz.py`](../../../../explainer/stats/viz.py)):
   tokens dealt into two rows, the shuffled statistic stacking into the null distribution.
-- **`statkit.tests`** ([`explainer/stats/kit/tests.py`](../../../explainer/stats/kit/tests.py)): z, t, paired,
+- **`statkit.tests`** ([`explainer/stats/kit/tests.py`](../../../../explainer/stats/kit/tests.py)): z, t, paired,
   Welch, permutation (exact or Monte Carlo), Fisher's sign flips, the sign test, Fisher's exact test, Pearson's χ²,
   the LRT, Bonferroni, power and sample size. Every one is checked against SciPy in
   `tests/test_stats_kit_tests.py`, which also reproduces Fisher's 863/32,768.
 
 The Coverage Board gains five rows. Size rows carry nominal 5%, with R = 10,000 replications; the permutation row has
-2,000.
+2,000. Its Monte Carlo p-values include the observed assignment with the plus-one correction.
+The Darwin sign-flip calculation requires sign exchangeability; a design-based interpretation additionally requires documented random assignment and a sharp null. Equal regional means alone do not establish the two-sample permutation null.
 
 | Method | Setting | Achieved size | Verdict |
 |---|---|---|---|

@@ -35,12 +35,12 @@ class Peeking(VoiceoverScene):
         lines = VGroup()
         stops = VGroup()
         for i in range(len(paths)):
-            t = np.clip(paths[i], -4, 4)
+            t = paths[i]
             lines.add(polyline(ax, n[keep], t[keep], cols[i % len(cols)], 2.0))
             hit = np.flatnonzero(keep & (np.abs(paths[i]) > crit))
             if len(hit):
                 j = hit[0]
-                stops.add(Dot(ax.c2p(n[j], np.clip(paths[i][j], -4, 4)), radius=0.09, color=OBS))
+                stops.add(Dot(ax.c2p(n[j], paths[i][j]), radius=0.09, color=OBS))
         rows = fit_rows(VGroup(
             label(r"$H_0$ is true: \ every crossing is a false alarm", font_size=24, color=GREY_A),
             label(r"stop at the first crossing, \ and report $p < 0.05$", font_size=26, color=OBS),
@@ -118,6 +118,7 @@ class Peeking(VoiceoverScene):
                   font_size=24, color=GREY_A),
             label(r"anytime-valid inference: \ $p$-values you may check every second \ (Part 58)", font_size=24, color=OBS),
         ), 12.6, 0.3, [0, -1.9, 0])
+        intro = label('Sequential tests need sequential error control', font_size=36)
         with self.voiceover(
             "The problem has solutions, and they're old. <bookmark mark='a'/> During the war, Abraham Wald invented the "
             "sequential probability ratio test, designed from the start to be checked after every observation, with "
@@ -128,7 +129,9 @@ class Peeking(VoiceoverScene):
             "<bookmark mark='d'/> And the newest answer, anytime-valid inference, gives p-values and intervals you may "
             "check as often as you like. That's Part 58."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(h1, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(h2, shift=UP * 0.2))
@@ -150,9 +153,8 @@ class Peeking(VoiceoverScene):
             "group of ten is nearly three times as spread out as the group of forty: twenty-three point six percent. "
             "Broken. <bookmark mark='c'/> Welch's test in the same setting: five point one five. Kept. "
             "<bookmark mark='d'/> A t-test peeked at after every observation from ten to a hundred: twenty-nine percent. "
-            "Badly broken, though every single test along the way was exact. <bookmark mark='e'/> And a permutation test "
-            "on samples of eight of the World's skewed incomes: four point eight five percent. Kept, with no assumption "
-            "about the shape of the distribution. Five rows, two of them broken by habits rather than by mathematics."
+            "Badly broken. These World-height tests are approximate individually; the earlier normal-data simulation shows the same failure even when every fixed-sample test is exact. <bookmark mark='e'/> And a permutation test "
+            "on samples of eight of the World's skewed incomes: four point eight five percent. Kept, under exchangeability, with the plus-one Monte Carlo p-value correction and no parametric shape assumption. Five rows, two of them broken by habits rather than by mathematics."
         ) as vo:
             self.play(FadeIn(b.head), FadeIn(b.axis), FadeIn(b.legend), *[FadeIn(b.body[i]) for i in range(len(b.body)) if i not in mine])
             for k, m_ in enumerate("abcde"):
