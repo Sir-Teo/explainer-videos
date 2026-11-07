@@ -11,6 +11,7 @@ Every frame is a dict of numpy arrays with NHANES's column names (see ``tools/nh
 from __future__ import annotations
 
 import numpy as np
+from pathlib import Path
 
 from explainer.stats import museum
 from explainer.stats.kit import capstone as C
@@ -22,14 +23,22 @@ KCAL_RANGE = (500, 5000)
 
 
 def nhanes_frame() -> dict:
-    return museum.nhanes()
+    d = dict(museum.nhanes())
+    # CDC: analyses requiring both recalls use WTDR2D, not WTDRD1.
+    supplement = np.genfromtxt(Path(__file__).with_name("data") / "nhanes_day2_weights.csv",
+                              delimiter=",", names=True)
+    if not np.array_equal(d["seqn"], supplement["seqn"]):
+        raise ValueError("Two-day dietary weights must match the NHANES extract by SEQN")
+    d["wt_diet2"] = supplement["wt_diet2"]
+    return d
 
 
 def world_frame(W, seed: int, towns_per_region: int = 2, per_town: int = 250, old_boost: float = 2.0) -> dict:
     """A survey of the World shaped like NHANES: the 10 regions are strata; in each, ``towns_per_region`` towns (PSUs)
     drawn with replacement, with probability proportional to their adult population; in each drawn town ``per_town``
-    adults by simple random sampling, adults 60+ ``old_boost`` times as likely to be chosen (NHANES oversamples the
-    old too).  Weights are the inverse selection probabilities.  Columns follow NHANES's names and codes."""
+    adults by stratified simple random sampling within age groups, allocating relatively more places to adults 60+.
+    Towns are PPS draws with replacement, with Hansen--Hurwitz draw weights; within-age inclusion probabilities
+    are exact. This is an illustrative design, not NHANES's actual sampling algorithm."""
     g = np.random.Generator(np.random.PCG64(np.random.SeedSequence([20, seed])))
     h, ad = W.health, W.adult
     town, region = W.town, W.towns["region"]
@@ -43,10 +52,17 @@ def world_frame(W, seed: int, towns_per_region: int = 2, per_town: int = 250, ol
         for j, t in enumerate(g.choice(ts, towns_per_region, replace=True, p=p)):
             pool = adults[t_of == t]
             old = W.age[pool] >= 60
-            pr = np.where(old, old_boost, 1.0)
-            pick = g.choice(len(pool), per_town, replace=False, p=pr / pr.sum())
-            # inclusion probability within the town, by the usual approximation per_town * pr_i / sum(pr)
-            pi_in = np.minimum(1.0, per_town * pr[pick] / pr.sum())
+            n_old = int(old.sum())
+            n_young = len(pool) - n_old
+            take_old = int(round(per_town * old_boost * n_old / (old_boost * n_old + n_young)))
+            take_old = min(n_old, max(per_town - n_young, take_old))
+            take_young = per_town - take_old
+            if min(take_old, take_young) == 0 and min(n_old, n_young) > 0:
+                raise ValueError("Sample must represent both age groups")
+            pick = np.concatenate([g.choice(np.flatnonzero(old), take_old, replace=False),
+                                   g.choice(np.flatnonzero(~old), take_young, replace=False)])
+            pi_in = np.concatenate([np.full(take_old, take_old / n_old),
+                                    np.full(take_young, take_young / n_young)])
             pi_town = towns_per_region * p[ts == t][0]
             rows.append(pool[pick])
             wts.append(1.0 / (pi_town * pi_in))
@@ -57,7 +73,8 @@ def world_frame(W, seed: int, towns_per_region: int = 2, per_town: int = 250, ol
     reads = h["sbp_read"][i]
     nan = np.full(len(i), np.nan)
     return {"seqn": i.astype(float), "sex": np.where(W.male[i], 1.0, 2.0), "age": np.minimum(W.age[i], 80).astype(float),
-            "pregnant": nan.copy(), "wt_mec": w, "wt_diet1": w, "strata": np.concatenate(strata).astype(float),
+            "pregnant": nan.copy(), "wt_mec": w, "wt_diet1": w, "wt_diet2": w,
+            "strata": np.concatenate(strata).astype(float),
             "psu": np.concatenate(psus).astype(float), "sbp1": reads[:, 0], "sbp2": reads[:, 1], "sbp3": reads[:, 2],
             "sbp4": nan.copy(), "bmi": h["bmi"][i], "na1": h["na_day1"][i], "kcal1": h["kcal_day1"][i],
             "diet1_ok": np.ones(len(i)), "na2": h["na_day2"][i], "kcal2": h["kcal_day2"][i], "diet2_ok": np.ones(len(i)),
@@ -87,7 +104,7 @@ def clean(d: dict, meds: str = "exclude") -> tuple[np.ndarray, C.DecisionLog]:
     log = C.DecisionLog(n)
     k = np.ones(n, bool)
     k = log.apply(k, d["age"] >= 20, "adults 20+", "the estimand's population")
-    k = log.apply(k, d["pregnant"] != 1, "not pregnant", "pregnancy changes blood pressure")
+    k = log.apply(k, d["pregnant"] != 1, "no positive pregnancy test", "unknown status retained; positive test excluded")
     with np.errstate(invalid="ignore"):
         s = sbp(d)
     k = log.apply(k, np.isfinite(s), "a blood-pressure reading", "the outcome")
@@ -96,7 +113,7 @@ def clean(d: dict, meds: str = "exclude") -> tuple[np.ndarray, C.DecisionLog]:
                   "implausible recalls")
     k = log.apply(k, np.isfinite(d["bmi"]), "BMI measured", "a confounder")
     if meds == "exclude":
-        k = log.apply(k, d["bp_meds"] != 1, "not on BP medicine", "pre-specified: drugs mask diet")
+        k = log.apply(k, d["bp_meds"] != 1, "no recorded current BP medicine", "skipped items treated as no reported current use")
     return k, log
 
 
@@ -137,7 +154,8 @@ def fit(d: dict, spec: dict | None = None, keep=None, xhat=None) -> dict:
         keep = keep & (d["diet2_ok"] == 1)
     X, names = design(d, keep, spec, xhat)
     y = sbp(d, spec["readings"])[keep]
-    w = d["wt_diet1"][keep] if spec["weights"] else np.ones(keep.sum())
+    weight_key = "wt_diet2" if spec["exposure"] in ("mean2", "calib") else "wt_diet1"
+    w = d[weight_key][keep] if spec["weights"] else np.ones(keep.sum())
     r = SV.svy_ols(X, y, w, d["strata"][keep], d["psu"][keep])
     j = names.index("sodium")
     return {"names": names, "b": r["b"], "se": r["se_design"], "se_model": r["se_model"], "se_hc": r["se_hc"],
@@ -151,11 +169,30 @@ def calibrated(d: dict, spec: dict | None = None) -> dict:
     spec = {**SPEC, **(spec or {})}
     keep, _ = clean(d, spec["meds"])
     keep = keep & (d["diet2_ok"] == 1)
-    zc = [d["age"][keep], (d["sex"][keep] == 2).astype(float), d["bmi"][keep]]
-    if spec["energy"]:
-        zc.append(d["kcal1"][keep] / 1000)
-    Z = np.column_stack(zc)  # exactly the outcome model's covariates
-    rc = C.regression_calibration(d["na1"][keep] / 1000, d["na2"][keep] / 1000, Z, d["wt_diet1"][keep])
+    D, _ = design(d, keep, {**spec, "exposure": "day1", "log_na": False})
+    if spec["log_na"]:
+        raise ValueError("This replicate calibration assumes additive error on the gram scale")
+    w = d["wt_diet2"][keep] if spec["weights"] else np.ones(keep.sum())
+    Z = D[:, 2:]  # exactly the outcome model's covariates, including any age spline
+    rc = C.regression_calibration(d["na1"][keep] / 1000, d["na2"][keep] / 1000, Z, w)
     r = fit(d, {**spec, "exposure": "calib"}, keep=keep, xhat=rc["xhat"])
     r["lam"] = rc["lam"]
+    # In a linear model the calibrated slope is the same-sample naive slope / lambda.
+    # Joint delta-method linearization includes estimation of BOTH regressions.
+    naive = SV.svy_ols(D, r["y"], w, d["strata"][keep], d["psu"][keep])
+    second = SV.svy_ols(D, d["na2"][keep] / 1000, w, d["strata"][keep], d["psu"][keep])
+    lam = second["b"][1]
+    derivative = (np.linalg.solve(D.T @ (w[:, None] * D), D.T)[1] * w)
+    influence = derivative * (naive["resid"] / lam - naive["b"][1] * second["resid"] / lam ** 2)
+    strata, psu = d["strata"][keep], d["psu"][keep]
+    variance = 0.0
+    for h in np.unique(strata):
+        totals = np.array([influence[(strata == h) & (psu == j)].sum()
+                           for j in np.unique(psu[strata == h])])
+        if len(totals) < 2:
+            raise ValueError("Calibration variance needs at least two PSUs per stratum")
+        variance += len(totals) / (len(totals) - 1) * np.sum((totals - totals.mean()) ** 2)
+    r["conditional_est_se"] = r["est_se"]
+    r["est_se"] = float(np.sqrt(variance))
+    r["se"][1] = r["est_se"]
     return r

@@ -33,6 +33,9 @@ class Cleaning(VoiceoverScene):
         rows[4][2].set_color(RES)
         whys = [why(r"adults 20+"), why(r"too few foods, \ or the interviewer's doubts"), why(r"refused or missed"),
                 why(r"top-coded, \ for privacy: \ not an age"), why(r"sounds heard to zero: \ not a pressure")]
+        intro = label('Read the codebook before interpreting the measurements', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "Cleaning starts with the codebook, because the numbers in a survey file aren't all measurements. "
             "<bookmark mark='a'/> The variable D R 1 D R S T Z rates each dietary recall: one means reliable, four thousand seven "
@@ -44,10 +47,13 @@ class Cleaning(VoiceoverScene):
             "measurement problem, not a blood pressure. We use only systolic pressure, but it's a warning to read the codebook "
             "first."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=5, top=2.8, x=-0.8, buff=0.62, edge=6.9)
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def readings(self):
@@ -91,24 +97,31 @@ class Cleaning(VoiceoverScene):
             cmath(r"\text{energy} > 5{,}000 \text{ kcal}", r":", rf"\text{{{d['kcal_high']} adults}}", font_size=28),
             cmath(r"\text{sodium} = 0", r":", rf"\text{{{d['na_zero']} adult}}", font_size=28),
             cmath(r"\text{largest sodium}", r":", rf"\text{{{d['na_max']:,.0f} mg in a day}}", font_size=28),
-            cmath(r"\text{the rule}", r":", r"\text{impossible, \ by a rule fixed in advance}", font_size=28),
+            cmath(r"\text{the rule}", r":", r"\text{outside chosen plausibility bounds}", font_size=28),
         ]
         rows[4][2].set_color(OBS)
-        whys = [why(r"less than a day's minimum"), why(r"more than most athletes"), why(r"a day without salt?"),
+        whys = [why(r"below our chosen lower bound"), why(r"above our chosen upper bound"), why(r"a day without salt?"),
                 why(r"about 65 g of salt: \ kept, \ if the day is plausible"), why(r"not: \ surprising, \ or inconvenient")]
+        intro = label('Plausibility bounds are choices, not proof of impossibility', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Some recalls can't be right. Fifty-seven adults report under five hundred kilocalories for "
-            "the whole day, <bookmark mark='b'/> sixty-seven over five thousand. <bookmark mark='c'/> One reports no sodium at "
-            "all, <bookmark mark='d'/> and the largest value is nearly twenty-six thousand milligrams, about sixty-five grams of "
-            "salt in a day. <bookmark mark='e'/> The temptation is to delete whatever looks odd. The rule we use, fixed in "
-            "advance, drops days with energy outside five hundred to five thousand kilocalories as implausible, and keeps "
-            "everything else, however surprising. Deleting values because they're inconvenient is how analyses quietly "
-            "produce the answer someone wanted."
+            "<bookmark mark='a'/> Some recalls fall outside our chosen plausibility bounds; that does not prove they "
+            "are impossible. Fifty-seven adults report under five hundred kilocalories for the whole day, <bookmark "
+            "mark='b'/> sixty-seven over five thousand. <bookmark mark='c'/> One reports no sodium at all, <bookmark "
+            "mark='d'/> and the largest value is nearly twenty-six thousand milligrams, about sixty-five grams of "
+            "salt in a day. <bookmark mark='e'/> The temptation is to delete whatever looks odd. The rule we use, "
+            "fixed in advance, drops days with energy outside five hundred to five thousand kilocalories as "
+            "implausible, and keeps everything else, however surprising. Deleting values because they're inconvenient"
+            " is how analyses quietly produce the answer someone wanted."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=5, top=2.8, x=-0.8, buff=0.62, edge=6.9)
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def funnel(self):
@@ -151,18 +164,21 @@ class Cleaning(VoiceoverScene):
         r = load("reverse")
         rows = fit_rows(VGroup(
             label(rf"on BP medicine: \ {100 * r['meds_share']:.0f}\% of adults", font_size=26, color=BP),
-            label(r"their pressure reflects the drug, \ not the diet", font_size=24),
+            label(r"their pressure reflects treatment as well as diet", font_size=24),
             label(r"so the primary sample excludes them, \ and the estimand changes:", font_size=24, color=OBS),
             label(r"``US adults 20+ \emph{not taking blood-pressure medicine}''", font_size=26, color=SALT),
             label(r"a cleaning step that redefines the question must say so, \ in the report", font_size=22, color=RES),
         ), 12.4, 0.45, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> That last step deserves a pause. Twenty-four percent of American adults take medicine for "
-            "blood pressure. <bookmark mark='b'/> Their pressure reflects the drug far more than their diet, so including them "
-            "would blur the very relationship we're after. <bookmark mark='c'/> But dropping them is not just cleaning: it "
-            "changes the estimand. <bookmark mark='d'/> Our population is now American adults not taking blood-pressure "
-            "medicine, a younger and healthier group. <bookmark mark='e'/> That's a legitimate choice, made in advance, but the "
-            "report has to state it plainly, and chapter eight will show what happens if we choose otherwise."
+            "<bookmark mark='a'/> That last step deserves a pause. Twenty-four percent of American adults take "
+            "medicine for blood pressure. <bookmark mark='b'/> Their pressure may reflect treatment as well as diet, "
+            "so our plan studies adults not currently taking medication. Exclusion does not itself eliminate "
+            "confounding. <bookmark mark='c'/> But dropping them is not just cleaning: it changes the estimand. "
+            "<bookmark mark='d'/> Our population is now American adults not taking blood-pressure medicine, a younger"
+            " and healthier group. <bookmark mark='e'/> Operationally, the rule means no recorded current medication "
+            "use. Skipped medication items are treated as no reported use, and adults with unknown pregnancy status "
+            "are retained unless a positive test is recorded. Those assumptions and the exclusions belong in the "
+            "report; they do not establish every person's true eligibility."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

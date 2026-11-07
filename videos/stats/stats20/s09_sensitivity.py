@@ -38,7 +38,7 @@ class Sensitivity(VoiceoverScene):
         bars, dots = VGroup(), VGroup()
         for i, r in enumerate(runs):
             c = SALT if i == prim else DES
-            bars.add(Line(ax.c2p(i + 1, max(-1, r["est"] - 2 * r["se"])), ax.c2p(i + 1, min(1.4, r["est"] + 2 * r["se"])),
+            bars.add(Line(ax.c2p(i + 1, max(-1, r["est"] - r["critical"] * r["se"])), ax.c2p(i + 1, min(1.4, r["est"] + r["critical"] * r["se"])),
                           color=c, stroke_width=1.6, stroke_opacity=0.7))
             dots.add(Dot(ax.c2p(i + 1, r["est"]), radius=0.045 if i != prim else 0.08, color=c))
         grid = VGroup()
@@ -52,13 +52,14 @@ class Sensitivity(VoiceoverScene):
         foot = label(rf"all {n}: \ from {d['min']:+.2f} to {d['max']:+.2f}; \ none distinguishable from zero", font_size=22,
                      color=OBS).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "The plan promised all sixty-four analyses. Here they are: a specification curve, as Uri Simonsohn "
-            "and colleagues called it. <bookmark mark='a'/> Each dot is one analysis's sodium slope, sorted from smallest to "
-            "largest, with bars of two standard errors. <bookmark mark='b'/> Below, which choices it made: medicine users "
-            "in or out, energy in the model or not, weights or not, a spline for age, which readings, one recall day or the "
-            "mean of two. <bookmark mark='c'/> The pre-specified analysis is in gold, near the middle. <bookmark mark='d'/> The "
-            "sixty-four slopes run from minus point one nine to plus point six two, and not one is distinguishable from zero. "
-            "No choice among these rescues a large effect, or produces a negative one."
+            "The plan promised all sixty-four analyses. Here they are: a specification curve, as Uri Simonsohn and "
+            "colleagues called it. <bookmark mark='a'/> Each dot is one analysis's sodium slope, sorted from smallest"
+            " to largest, with design t intervals using the degrees of freedom of each fit. <bookmark mark='b'/> "
+            "Below, which choices it made: medicine users in or out, energy in the model or not, weights or not, a "
+            "spline for age, which readings, one recall day or the mean of two. <bookmark mark='c'/> The "
+            "pre-specified analysis is in gold, near the middle. <bookmark mark='d'/> The sixty-four slopes run from "
+            "minus point one eight to plus point six four, and not one is distinguishable from zero. The estimates "
+            "include both signs. None of these sixty-four intervals excludes zero."
         ) as vo:
             self.play(FadeIn(A), Create(zero))
             vo.wait_until("a")
@@ -86,12 +87,12 @@ class Sensitivity(VoiceoverScene):
         head = label(r"average slope without $\to$ with each choice", font_size=28).to_edge(UP, buff=0.6)
         foot = label(r"the two that matter: \ who is in the sample, \ and how sodium is measured", font_size=24, color=OBS).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "<bookmark mark='a'/> Which choices move the answer most? Average the slope over the analyses with and without "
-            "each choice. <bookmark mark='b'/> Two stand out. Including people on blood-pressure medicine pulls the slope down, "
-            "from about plus point two one to minus point zero eight. Using the mean of two recall days instead of one pushes "
-            "it up, by about a tenth. <bookmark mark='c'/> Weights, the age spline, energy and the readings rule barely matter. "
-            "<bookmark mark='d'/> The choices that matter are about who is in the sample and how the exposure is measured. "
-            "Both point to the next two problems."
+            "<bookmark mark='a'/> Which choices move the answer most? Average the slope over the analyses with and "
+            "without each choice. <bookmark mark='b'/> Two stand out. Including people on blood-pressure medicine "
+            "pulls the slope down, from about plus point two zero to minus point zero seven. Using the mean of two "
+            "recall days instead of one pushes it up, by about a tenth. <bookmark mark='c'/> Weights, the age spline,"
+            " energy and the readings rule barely matter. <bookmark mark='d'/> The choices that matter are about who "
+            "is in the sample and how the exposure is measured. Both point to the next two problems."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head))
@@ -117,16 +118,17 @@ class Sensitivity(VoiceoverScene):
             label(rf"correlation \ $r = {d['reliability']:.2f}$", font_size=26, color=SALT),
             label(rf"SD of one day: \ {d['sd_day1']:.2f} g; \ of day-to-day change: \ {d['sd_diff']:.2f} g", font_size=22),
             label(r"most of one day's variation is that day, \ not the person", font_size=22, color=RES),
-            label(r"reliability $\lambda = \mathrm{Var}(X) / \mathrm{Var}(W)$: \ about 0.32", font_size=22, color=OBS),
+            label(r"$r$ equals reliability only with independent equal-variance replicate errors", font_size=22, color=OBS),
         ), 5.6, 0.42, [3.5, 0.2, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Now the exposure. Two thousand six hundred and fifty-nine adults in our sample had a second "
-            "reliable recall, three to ten days after the first. Here is each person's day two against their day one. "
-            "<bookmark mark='b'/> If one day measured usual intake well, the points would hug the diagonal. They don't: the "
-            "correlation is point three two. <bookmark mark='c'/> The day-to-day swing within a person is larger than the "
-            "spread between people. <bookmark mark='d'/> So most of the variation in one day's sodium belongs to that "
-            "day. <bookmark mark='e'/> In Part 12's language of errors in x, the reliability, the share of the variance that is "
-            "real differences between people, is about a third."
+            "<bookmark mark='a'/> Two thousand six hundred and fifty-nine adults in our analytic sample supplied two "
+            "reliable recalls, usually several days apart. This unweighted scatter compares their reported sodium. "
+            "<bookmark mark='b'/> The correlation is point three two. <bookmark mark='c'/> The standard deviation of "
+            "a single day is one point seven six grams, and the standard deviation of the day difference divided by "
+            "root two is one point four two. <bookmark mark='d'/> Under independent replicate errors, that difference"
+            " measures within-person variation. <bookmark mark='e'/> Calling the correlation a reliability requires "
+            "equal replicate error variances and no shared reporting error. Two days alone cannot verify those "
+            "assumptions."
         ) as vo:
             self.play(FadeIn(A), Create(diag))
             vo.wait_until("a")
@@ -146,20 +148,27 @@ class Sensitivity(VoiceoverScene):
         ]
         rows[3][2].set_color(RES)
         whys = [why(r"recalled day $=$ usual intake $+$ that day's noise"), why(r"Part 12: \ attenuation, \ given the covariates $Z$"),
-                why(r"a slope shrinks to a quarter"), why(r"energy explains the real part: \ what's left is noise")]
+                why(r"a slope shrinks to a quarter"), why(r"a weak calibration slope; \ noisy energy and correlated errors complicate it")]
+        intro = label('Classical attenuation needs explicit measurement assumptions', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Write one day's sodium, W, as usual intake X plus that day's noise U. <bookmark mark='b'/> "
-            "Part 12 showed that regressing on W instead of X shrinks the slope by the reliability lambda, here computed after "
-            "allowing for the other covariates. <bookmark mark='c'/> Given age, sex and BMI, lambda is about point two four: "
-            "a true slope would show up at a quarter of its size. <bookmark mark='d'/> And given energy as well, lambda is "
-            "point zero six. Energy explains most of the real differences in people's sodium, since people who eat more eat "
-            "more salt, and what's left in one day's sodium, once energy is fixed, is ninety-four percent noise. The "
-            "pre-specified model, by adjusting for energy, made itself almost blind to sodium."
+            "<bookmark mark='a'/> In the classical model, a recalled day W is usual intake X plus independent "
+            "mean-zero noise U. <bookmark mark='b'/> With accurately measured covariates Z and the appropriate linear"
+            " mean model, the sodium coefficient is attenuated by the residual reliability lambda. <bookmark "
+            "mark='c'/> Predicting the second day from the first, age, sex and BMI with the two-day dietary weights "
+            "gives a calibration coefficient near point two four. <bookmark mark='d'/> Adding recall-day energy "
+            "reduces it to point zero six. That is weak calibration, not proof that precisely ninety-four percent of "
+            "the remaining sodium is noise: energy is noisy too, and its reporting error can correlate with sodium's."
+            " The attenuation interpretation needs assumptions these data cannot establish."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.78, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def calibration(self):
@@ -185,18 +194,20 @@ class Sensitivity(VoiceoverScene):
             labs.add(lb.next_to(ax.c2p(-2, y), LEFT, buff=0.15))
         rows = fit_rows(VGroup(
             label(r"regression calibration: \ replace day 1 by $E[\,\text{day 2} \mid \text{day 1}, Z\,]$", font_size=22),
-            label(r"with energy too: \ $+0.60 \pm 9.2$, \ almost no information", font_size=22, color=RES),
-            label(r"corrected, \ the survey agrees with zero \emph{and} with the trials", font_size=24, color=OBS),
+            label(rf"with energy too: \ ${d['calib']:+.2f} \pm {t * d['calib_se']:.1f}$, \ weak calibration", font_size=22, color=RES),
+            label(r"two-stage uncertainty included; \ weak calibration limits the approximation", font_size=24, color=OBS),
         ), 12.4, 0.3, [0, -2.2, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Can we correct for it? Regression calibration, from Raymond Carroll and colleagues, uses the "
-            "second day: since its noise is independent of the first day's, predicting day two from day one and the "
-            "covariates estimates each person's usual intake. Fit the outcome model to that prediction. <bookmark mark='b'/> "
-            "In gold, the plan's estimate; in grey, the same without energy. <bookmark mark='c'/> In blue, calibrated: plus "
-            "point six zero, with an interval from about minus two to plus three. <bookmark mark='d'/> With energy in the model "
-            "the calibrated interval is wider than this whole axis. <bookmark mark='e'/> So once measurement error is faced "
-            "honestly, the survey no longer contradicts the trials. It's consistent with no effect and with the trials' effect "
-            "alike: one day of diet simply can't tell them apart."
+            "<bookmark mark='a'/> Regression calibration replaces the first recall by its linear prediction from a "
+            "second recall and the model covariates. We use the CDC's two-day dietary weights and jointly linearize "
+            "both regressions, so the interval accounts for estimating the calibration equation. <bookmark mark='b'/>"
+            " Gold is the primary recall-day estimate, grey the estimate without energy. <bookmark mark='c'/> Blue is"
+            " calibration without energy: plus point three seven, with an approximate interval from minus one point "
+            "nine to plus two point seven. <bookmark mark='d'/> With energy, the estimate is plus point six five and "
+            "the delta-method margin is about eight point seven, wider than this axis. Such weak calibration makes "
+            "even that approximation fragile. <bookmark mark='e'/> These exploratory corrections are imprecise and "
+            "assumption-dependent. They do not establish agreement or disagreement with a particular trial; they show"
+            " how much uncertainty a single recalled day leaves."
         ) as vo:
             self.play(FadeIn(A), Create(zero), FadeIn(trial))
             vo.wait_until("a")
@@ -213,22 +224,30 @@ class Sensitivity(VoiceoverScene):
 
     def verdict(self):
         rows = fit_rows(VGroup(
-            label(r"64 reasonable analyses: \ all near zero", font_size=24, color=DES),
-            label(r"but one day's sodium is two-thirds noise, \ and 94\% once energy is fixed", font_size=24, color=SALT),
-            label(r"corrected, \ the interval covers both zero and the trials", font_size=24, color=OBS),
+            label(r"64 specified alternatives: \ all compatible with zero", font_size=24, color=DES),
+            label(r"two recalls: \ weak conditional calibration, \ with unverified error assumptions", font_size=24, color=SALT),
+            label(r"exploratory calibration: \ broad approximate intervals, \ weak first stage", font_size=24, color=OBS),
             label(r"a better survey: \ several recall days, \ or 24-hour urine collections", font_size=24, color=HIT),
             label(r"INTERSALT (1988): \ urine in 10,079 people, \ 52 centres", font_size=22, color=GREY_A),
         ), 12.4, 0.5, [0, 0, 0])
+        intro = label('Replicate measurements help only under an adequate error model', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> So: across sixty-four reasonable analyses, the slope stays near zero. <bookmark mark='b'/> But "
-            "the exposure is mostly noise, two-thirds of it, and nearly all of it once energy is held fixed. "
-            "<bookmark mark='c'/> Corrected for that, the survey can't distinguish zero from the trials' effect. "
-            "<bookmark mark='d'/> A study designed for this question would measure usual intake better: many recall days, or "
-            "better, collecting each person's urine for twenty-four hours, since nearly all the sodium we eat leaves that way. "
-            "<bookmark mark='e'/> The INTERSALT study of 1988 did exactly that, for ten thousand people in fifty-two centres "
-            "around the world, and found that pressure rose with age faster where people ate more salt."
+            "<bookmark mark='a'/> The sixty-four specified alternatives all remain compatible with zero. <bookmark "
+            "mark='b'/> The two-recall correlation and the small conditional calibration slope raise serious "
+            "measurement concerns. <bookmark mark='c'/> Correcting under a classical replicate model produces broad, "
+            "approximate intervals; shared reporting error, noisy energy and weak calibration remain limitations. "
+            "<bookmark mark='d'/> Better measurement could include more recall days or repeated twenty-four-hour "
+            "urine collections, with attention to collection completeness. <bookmark mark='e'/> INTERSALT collected "
+            "urine in ten thousand and seventy-nine adults across fifty-two centres. It found an ecological "
+            "association between sodium and the rise of pressure with age; that cross-centre comparison alone does "
+            "not establish an individual causal effect."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()

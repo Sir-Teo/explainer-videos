@@ -21,19 +21,20 @@ class Hook(VoiceoverScene):
         d = load("explore")
         rows = fit_rows(VGroup(
             label(r"the US guideline: \ under 2,300 mg of sodium a day", font_size=26, color=SALT),
-            label(rf"what American adults eat, \ on average: \ {1000 * d['mean_na']:,.0f} mg", font_size=26, color=SALT),
+            label(rf"untreated adults in our analytic sample: \ mean \ {1000 * d['mean_na']:,.0f} mg", font_size=26, color=SALT),
             label(rf"{100 * d['share_over_2300']:.0f}\% of adults are over the guideline on a given day", font_size=24, color=GREY_A),
             label(r"the question: \ how does blood pressure depend on salt?", font_size=30, color=BP),
             label(r"and how much can a survey tell us about it?", font_size=26, color=OBS),
         ), 12.4, 0.45, [0, -0.6, 0])
         with self.voiceover(
-            "This is the last part of the bachelor's degree, and it introduces no new method. Instead we take one question all "
-            "the way through, the way a working statistician would. <bookmark mark='a'/> The question is about salt. American "
-            "dietary guidelines say adults should eat less than two thousand three hundred milligrams of sodium a day. "
-            "<bookmark mark='b'/> American adults actually eat about three and a half thousand. <bookmark mark='c'/> On any "
-            "given day, three in four are over the guideline. <bookmark mark='d'/> The reason for the guideline is blood "
-            "pressure: salt is thought to raise it, and high pressure causes strokes and heart attacks. So, how does blood "
-            "pressure depend on salt? <bookmark mark='e'/> And how much can a national survey tell us about that?"
+            "This is the last part of the bachelor's degree, and it introduces no new method. Instead we take one "
+            "question all the way through, the way a working statistician would. <bookmark mark='a'/> The question is"
+            " about salt. American dietary guidelines say adults should eat less than two thousand three hundred "
+            "milligrams of sodium a day. <bookmark mark='b'/> In our weighted analytic sample, untreated adults "
+            "average about three and a half thousand. <bookmark mark='c'/> On any given day, three in four are over "
+            "the guideline. <bookmark mark='d'/> The reason for the guideline is blood pressure: salt is thought to "
+            "raise it, and high pressure causes strokes and heart attacks. So, how does blood pressure depend on "
+            "salt? <bookmark mark='e'/> And how much can a national survey tell us about that?"
         ) as vo:
             self.play(FadeIn(tl))
             for k, m_ in enumerate("abcde"):
@@ -53,14 +54,15 @@ class Hook(VoiceoverScene):
             label(r"public domain: \ anyone can download it, \ and anyone can check us", font_size=24, color=HIT),
         ), 12.0, 0.35, [0, -1.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Our data come from NHANES, the National Health and Nutrition Examination Survey. Its "
-            "ancestor began in 1959, and since 1971 it has combined a home interview with a physical examination in a mobile "
-            "centre that travels the country. <bookmark mark='b'/> We use the 2017 to 2018 cycle: nine thousand two hundred and "
-            "fifty-four people interviewed, eight thousand seven hundred and four examined. <bookmark mark='c'/> Each had their "
-            "blood pressure read three times by a trained examiner. <bookmark mark='d'/> And each was asked to recall "
-            "everything they had eaten and drunk the day before, from which sodium is computed; most were asked again, by "
-            "telephone, three to ten days later. <bookmark mark='e'/> The files are public: anyone can download them from the CDC, and anyone can "
-            "check every number in this part."
+            "<bookmark mark='a'/> Our data come from NHANES, the National Health and Nutrition Examination Survey. "
+            "Its ancestor began in 1959, and since 1971 it has combined a home interview with a physical examination "
+            "in a mobile centre that travels the country. <bookmark mark='b'/> We use the 2017 to 2018 cycle: nine "
+            "thousand two hundred and fifty-four people interviewed, eight thousand seven hundred and four examined. "
+            "<bookmark mark='c'/> The protocol called for three blood-pressure readings by a trained examiner, though"
+            " some participants have fewer. <bookmark mark='d'/> And each was asked to recall everything they had "
+            "eaten and drunk the day before, from which sodium is computed; most were asked again, by telephone, "
+            "three to ten days later. <bookmark mark='e'/> The files are public: anyone can download them from the "
+            "CDC, and anyone can check every number in this part."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(hc, shift=UP * 0.2))
@@ -120,18 +122,24 @@ class Hook(VoiceoverScene):
         grid = VGroup(top, bot).arrange(DOWN, buff=0.5).move_to([0, 0.8, 0])
         rows = fit_rows(VGroup(
             label(r"every decision made on screen, \ and logged", font_size=24),
-            label(r"the plan written down before the results", font_size=24, color=OBS),
+            label(r"an illustrative plan, \ presented before the results", font_size=24, color=OBS),
             label(r"the same code run on the World, \ where the answer is known", font_size=24, color=WLD),
         ), 12.0, 0.35, [0, -2.2, 0])
+        intro = label('An analysis connects the question to a reproducible report', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> We'll go through every stage an analysis really has, in order: from the question, through "
-            "what exactly we're estimating, the survey's design, cleaning, exploration, a model and its checks, uncertainty and "
-            "sensitivity, the causal question, a check on the World, the report, and reproducibility. <bookmark mark='b'/> "
-            "Every decision will be made on screen and written into a log. <bookmark mark='c'/> The analysis plan is written "
-            "down before we look at the result, as Part 10's forking paths demand. <bookmark mark='d'/> And then the identical "
-            "code will run on the World, where we built the effect of salt ourselves and know the answer."
+            "<bookmark mark='a'/> We'll go through every stage an analysis really has, in order: from the question, "
+            "through what exactly we're estimating, the survey's design, cleaning, exploration, a model and its "
+            "checks, uncertainty and sensitivity, the causal question, a check on the World, the report, and "
+            "reproducibility. <bookmark mark='b'/> Every decision will be made on screen and written into a log. "
+            "<bookmark mark='c'/> We present an illustrative analysis plan before showing the result. This is a "
+            "teaching sequence, not a claim of time-stamped preregistration. <bookmark mark='d'/> And then the "
+            "identical code will run on the World, where we built the effect of salt ourselves and know the answer."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(LaggedStart(*[FadeIn(b, shift=UP * 0.1) for b in boxes], lag_ratio=0.15), run_time=4.0)
             for k, m_ in enumerate("bcd"):
                 vo.wait_until(m_)

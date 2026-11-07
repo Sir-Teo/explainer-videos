@@ -47,6 +47,9 @@ class Estimand(VoiceoverScene):
         whys = [why(r"civilian, \ not in institutions: \ the sampling frame"), why(r"the average of readings 2 and 3"),
                 why(r"not yesterday's: \ chapter eight"), why(r"a slope, \ not a single person's response"),
                 why(r"so that like is compared with like")]
+        intro = label('Define the target before choosing the estimator', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "A question in words isn't yet something a computer can estimate. An estimand pins it down, in five parts. "
             "<bookmark mark='a'/> The population: American adults aged twenty and over, living at home rather than in prisons, "
@@ -57,10 +60,13 @@ class Estimand(VoiceoverScene):
             "<bookmark mark='e'/> And what is held fixed: age, sex, body mass index and total energy intake, so that people "
             "are compared with others like them."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=5, top=2.8, x=-0.8, buff=0.62, edge=6.9)
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def two_questions(self):
@@ -78,13 +84,13 @@ class Estimand(VoiceoverScene):
         line = Line([0, 2.2, 0], [0, -1.6, 0], color=GREY_D)
         foot = label(r"same words, \ ``depends on'', \ two different estimands", font_size=24, color=OBS).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "The phrase depends on hides two different questions. <bookmark mark='a'/> The descriptive one: among adults alike "
-            "in age, sex, size and energy intake, how much higher is mean blood pressure in those who eat a gram more sodium? "
-            "That's a fact about the population as it is, and a good survey can estimate it. <bookmark mark='b'/> The causal "
-            "one: if every adult ate a gram less, how much would mean pressure fall? That's what a guideline needs, and it's "
-            "a question about a world that hasn't happened. <bookmark mark='c'/> They're estimated by the same regression slope "
-            "only if there's nothing else making salt-eaters different, which is a strong assumption. We'll estimate the "
-            "first, and argue about the second in chapter nine."
+            "The phrase depends on hides two different questions. <bookmark mark='a'/> The descriptive one: among "
+            "adults alike in age, sex, size and energy intake, how much higher is mean blood pressure in those who "
+            "eat a gram more sodium? That's a fact about the population as it is, and a good survey can estimate it. "
+            "<bookmark mark='b'/> The causal one: if every adult ate a gram less, how much would mean pressure fall? "
+            "That's what a guideline needs, and it's a question about a world that hasn't happened. <bookmark "
+            "mark='c'/> A descriptive slope becomes causal only with adequate confounding control, a well-defined "
+            "intervention and a suitable model. We'll estimate the first, and argue about the second in chapter nine."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(left, shift=RIGHT * 0.2), Create(line))
@@ -105,22 +111,30 @@ class Estimand(VoiceoverScene):
         rows[3][2].set_color(RES)
         whys = [why(r"what a body responds to"), why(r"a 24-hour recall interview"),
                 why(rf"{d['n2']:,} adults with two reliable recalls"), why(r"Part 12's errors in $x$: \ the slope shrinks")]
+        intro = label('Usual intake and a recalled day are different exposures', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "Notice a gap already. <bookmark mark='a'/> The estimand is about usual intake, a long-run average. "
             "<bookmark mark='b'/> The data record one day, yesterday, reconstructed from memory in an interview. "
-            "<bookmark mark='c'/> People eat very differently from day to day: for the two thousand six hundred and fifty-nine "
-            "adults with two reliable recalls, the correlation between their first and second day is only point three two. "
-            "<bookmark mark='d'/> So the exposure is measured with a great deal of noise, and Part 12 taught us what noise in x "
-            "does to a slope: it shrinks it toward zero. Write that down now; chapter eight measures how much."
+            "<bookmark mark='c'/> People eat very differently from day to day: for the two thousand six hundred and "
+            "fifty-nine adults with two reliable recalls, the correlation between their first and second day is only "
+            "point three two. <bookmark mark='d'/> So the exposure is measured with a great deal of noise, and Part "
+            "12 taught us what noise in x does to a slope: under a classical additive-error model it attenuates the "
+            "slope; correlated recall errors and noisy covariates can behave differently. Write that down now; "
+            "chapter eight measures how much."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.72, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def plan(self):
-        card = doc_card(r"Analysis plan, \ written before the results", [
+        card = doc_card(r"Illustrative analysis plan, \ presented before the results", [
             r"sample: \ adults 20+, \ not pregnant, \ not taking blood-pressure medicine",
             r"outcome: \ mean of systolic readings 2 and 3 (the first if only one)",
             r"exposure: \ day-1 sodium, \ g; \ reliable recalls; \ energy 500--5,000 kcal",
@@ -130,13 +144,14 @@ class Estimand(VoiceoverScene):
             r"reported whatever it shows; \ deviations from the plan flagged as such",
         ], SALT, width=11.4, font_size=21).move_to([0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Before fitting anything, we write down the plan. The sample: adults over twenty, not "
-            "pregnant, and not taking blood-pressure medicine, since a drug breaks the link between diet and pressure. The "
-            "outcome: the mean of the second and third readings. The exposure: sodium on the first recall day, for reliable "
-            "recalls with plausible energy totals. The model: weighted least squares on sodium, age, sex, BMI and energy. The "
+            "<bookmark mark='a'/> Before fitting anything, we write down the plan. The sample: adults over twenty, "
+            "not pregnant, and not taking blood-pressure medicine, because treatment changes pressure; this exclusion"
+            " also changes the target population and can introduce selection bias. The outcome: the mean of the "
+            "second and third readings. The exposure: sodium on the first recall day, for reliable recalls with "
+            "plausible energy totals. The model: weighted least squares on sodium, age, sex, BMI and energy. The "
             "weights and standard errors follow the survey's design. Secondary analyses are listed in advance. "
-            "<bookmark mark='b'/> And the last line matters most: the primary result is reported whatever it shows, and "
-            "anything we change later is labelled as a change."
+            "<bookmark mark='b'/> And the last line matters most: the primary result is reported whatever it shows, "
+            "and anything we change later is labelled as a change."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(card[0]), FadeIn(card[1][0]),
@@ -151,18 +166,20 @@ class Estimand(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"each line of the plan is a fork in the garden of paths (Part 10)", font_size=24),
             label(rf"six reasonable binary choices: \ $2^6 = {len(d['runs'])}$ analyses", font_size=24, color=OBS),
-            label(r"choose after seeing the results, \ and any answer can be found", font_size=24, color=RES),
+            label(r"selection after seeing results can inflate false positives", font_size=24, color=RES),
             label(r"choose first, \ then show all 64: \ chapter eight", font_size=24, color=HIT),
-            label(r"clinical trials must register in advance; \ survey analyses rarely do", font_size=22, color=GREY_A),
+            label(r"many trial journals require prospective registration; \ surveys can register too", font_size=22, color=GREY_A),
         ), 12.4, 0.5, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Why so formal? Because each line is a fork in Part 10's garden of paths. "
-            "<bookmark mark='b'/> Medicine users in or out, energy in the model or not, weights or not, a spline for age, which "
-            "readings, one recall day or two: six reasonable choices, sixty-four analyses. <bookmark mark='c'/> Choose among them "
-            "after seeing the results and you can find almost any answer you like, without ever meaning to. "
-            "<bookmark mark='d'/> So we choose first, and in chapter eight we'll show all sixty-four anyway. "
-            "<bookmark mark='e'/> Since the mid-2000s, clinical trials have had to be registered in advance, with their primary "
-            "outcome stated; analyses of surveys rarely are, which is one reason their findings disagree so often."
+            "<bookmark mark='a'/> Why so formal? Because each line is a fork in Part 10's garden of paths. <bookmark "
+            "mark='b'/> Medicine users in or out, energy in the model or not, weights or not, a spline for age, which"
+            " readings, one recall day or two: six reasonable choices, sixty-four analyses. <bookmark mark='c'/> "
+            "Choosing after seeing results can inflate false positives, even without deliberate cherry-picking. It "
+            "does not guarantee that these sixty-four choices can produce any desired answer. <bookmark mark='d'/> So"
+            " we choose first, and in chapter eight we'll show all sixty-four anyway. <bookmark mark='e'/> "
+            "Prospective registration is required by many trial journals and regulators, with rules depending on the "
+            "trial. A survey analysis can also register its plan. Our displayed teaching plan is not evidence of "
+            "registration."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

@@ -107,13 +107,13 @@ class Exploration(VoiceoverScene):
             label(r"so age pulls the crude slope down: \ a confounder in the opposite direction", font_size=22, color=RES),
         ), 12.4, 0.2, [0, -2.9, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Now relationships. On the left, mean systolic pressure by decade of age, men in blue, women "
-            "in red. It rises steadily with age; men are higher until their fifties, and women overtake them after seventy. "
-            "<bookmark mark='b'/> On the right, mean sodium by age. Men eat more than women, because they eat more of "
-            "everything, and both eat less as they age. <bookmark mark='c'/> Put those together: older people have higher "
-            "pressure and eat less salt. So in the raw data, age alone produces a negative relationship between salt and "
-            "pressure. That's the crude slope of minus point one four from the hook: a confounder pushing in the opposite "
-            "direction from the effect we're looking for."
+            "<bookmark mark='a'/> Now relationships. On the left, mean systolic pressure by decade of age, men in "
+            "blue, women in red. It rises steadily with age; men are higher until their fifties, and women overtake "
+            "them after seventy. <bookmark mark='b'/> On the right, mean sodium by age. Men report more sodium than "
+            "women in this sample, and both eat less as they age. <bookmark mark='c'/> Put those together: older "
+            "people have higher pressure and eat less salt. So in the raw data, age alone produces a negative "
+            "relationship between salt and pressure. That's the crude slope of minus point one four from the hook: a "
+            "confounder pushing in the opposite direction from the effect we're looking for."
         ) as vo:
             self.play(FadeIn(A), FadeIn(B), FadeIn(key))
             vo.wait_until("a")
@@ -173,15 +173,16 @@ class Exploration(VoiceoverScene):
             label(rf"lowest decile: \ {dec[0]['na']:.1f} g, \ {dec[0]['sbp']:.0f} mm Hg", font_size=22),
             label(rf"highest decile: \ {dec[-1]['na']:.1f} g, \ {dec[-1]['sbp']:.0f} mm Hg", font_size=22),
             label(r"a six-fold range of sodium; \ no visible trend", font_size=22, color=OBS),
-            label(r"bars: \ $\pm 2$ SE, \ ignoring the design", font_size=20, color=GREY_B),
+            label(r"bars: \ $\pm 2$ design SE; \ estimated decile cuts treated as fixed", font_size=20, color=GREY_B),
         ), 3.45, 0.4, [5.1, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> And the relationship itself, without assuming a straight line: mean pressure in each tenth of "
-            "the sodium distribution. The lowest tenth averaged one point two grams and a hundred and twenty millimetres. "
-            "<bookmark mark='b'/> The highest averaged seven point three grams and a hundred and twenty-two. <bookmark mark='c'/> "
-            "Across a six-fold range of sodium there is no visible trend, only noise. <bookmark mark='d'/> These are rough "
-            "intervals, ignoring the design, but they make the point: whatever the effect is, it is small compared with the "
-            "spread of pressures and the noise in one day's diet."
+            "<bookmark mark='a'/> And the relationship itself, without assuming a straight line: mean pressure in "
+            "each tenth of the sodium distribution. The lowest tenth averaged one point two grams and a hundred and "
+            "twenty millimetres. <bookmark mark='b'/> The highest averaged seven point three grams and a hundred and "
+            "twenty-two. <bookmark mark='c'/> Across a six-fold range of sodium there is no visible trend, only "
+            "noise. <bookmark mark='d'/> The bars now use design-based standard errors, with the other PSUs retained "
+            "as zero domain contributions. They describe an unadjusted association; they do not bound a causal "
+            "effect."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
@@ -199,6 +200,9 @@ class Exploration(VoiceoverScene):
             label(r"the raw picture is flat: \ the model must hold the others fixed", font_size=24),
             label(r"we looked, \ but we change nothing in the plan because of what we saw", font_size=22, color=RES),
         ), 12.4, 0.5, [0, 0, 0])
+        intro = label('Exploration reveals patterns without identifying their causes', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> What did we learn? Pressure is skewed, rises with age, and differs between men and women. "
             "<bookmark mark='b'/> Sodium is skewed, noisy, falls with age, and tracks energy. <bookmark mark='c'/> The "
@@ -206,7 +210,10 @@ class Exploration(VoiceoverScene):
             "must compare like with like. <bookmark mark='e'/> And one discipline: we looked at everything, but we don't change "
             "the plan because of what we saw. If we did, the plan would no longer protect us."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()
