@@ -1,0 +1,86 @@
+[
+  {
+    "name": "hook",
+    "path": ".cache/stats48/hook.json",
+    "sha256": "be1f827840cd8113c587632bbbe292176d38c7eda5ce2b60f63e43701f88b2f5",
+    "bytes": 55117
+  },
+  {
+    "name": "gc",
+    "path": ".cache/stats48/gc.json",
+    "sha256": "26a660f96fd98f4ccb71a8f46350b10b5de1bfafee5eee2b5cb006e6d53f52be",
+    "bytes": 8315
+  },
+  {
+    "name": "vc",
+    "path": ".cache/stats48/vc.json",
+    "sha256": "bb1403eb9267045a2c6f09bd88161433cc86a10849f1859712e04bb861c3f7da",
+    "bytes": 1696
+  },
+  {
+    "name": "entropy",
+    "path": ".cache/stats48/entropy.json",
+    "sha256": "bfc9e846efc33ed4c39a31ab6728c3c93eefaa01844cd2d6b95c46f950ec9b7d",
+    "bytes": 635
+  },
+  {
+    "name": "chain",
+    "path": ".cache/stats48/chain.json",
+    "sha256": "b0cde2b1edead10cc101430367a870475e072a2bc04e6821a404c739a3d25c26",
+    "bytes": 21654
+  },
+  {
+    "name": "donsker",
+    "path": ".cache/stats48/donsker.json",
+    "sha256": "e86061b0651ee2f7b658985b1d80f8b564d5a770cf67f4ab3dc06837060ebe7c",
+    "bytes": 55794
+  },
+  {
+    "name": "conc",
+    "path": ".cache/stats48/conc.json",
+    "sha256": "06c7551c224f934ad7e192641454397b2002dbc19ddb6f2aa0113d88ea3106a0",
+    "bytes": 7992
+  },
+  {
+    "name": "delta",
+    "path": ".cache/stats48/delta.json",
+    "sha256": "9c704e1d49c9925a806d3fb1c482d681b08ae22d8aaf426898c9628b8da77606",
+    "bytes": 13859
+  },
+  {
+    "name": "zest",
+    "path": ".cache/stats48/zest.json",
+    "sha256": "01b6a3baffee748bd1e373e3930b12974ab97e49d2a9425f28000f6882b0da07",
+    "bytes": 890
+  },
+  {
+    "name": "rates",
+    "path": ".cache/stats48/rates.json",
+    "sha256": "a13c32a8ad738ea31f51d916dbf759881056e6c167f56cc5e707effc38600ef8",
+    "bytes": 4672
+  },
+  {
+    "name": "erm",
+    "path": ".cache/stats48/erm.json",
+    "sha256": "f14818c7979b3947595e6c9104523bfea8108297025e2e9f6336b4c5eacc2a8a",
+    "bytes": 767
+  },
+  {
+    "name": "bands",
+    "path": ".cache/stats48/bands.json",
+    "sha256": "3eba22016586c144319a7af0bbb2c61ef4901b83cac3bbf83e5f09685c7987e6",
+    "bytes": 1166
+  },
+  {
+    "name": "ksest",
+    "path": ".cache/stats48/ksest.json",
+    "sha256": "76d438cac78eb76912a57e1f06a3b8f759af4ef0299c7c9c4ed81d4f959fad87",
+    "bytes": 12213
+  },
+  {
+    "name": "board",
+    "path": ".cache/stats48/board.json",
+    "sha256": "09476a4fa86af5f6ff70e793467b6c3658a324c5f1da893abdb3e2226a6f407e",
+    "bytes": 2341
+  }
+]

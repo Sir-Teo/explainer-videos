@@ -1,0 +1,18 @@
+[
+  {
+    "dataset": "faithful",
+    "url": "https://vincentarelbundock.github.io/Rdatasets/csv/datasets/faithful.csv",
+    "sha256": "5043db1e2c51c8e8fd67e0868c768ae589770cc76ad0ac0c5b7afd1fca31fc57",
+    "records": 272,
+    "verified": "All 272 eruption-duration/wait-to-next-eruption pairs agree exactly in order",
+    "source_role": "independent R dataset distribution; historical original not independently retrieved"
+  },
+  {
+    "dataset": "newcomb",
+    "url": "https://vincentarelbundock.github.io/Rdatasets/csv/MASS/newcomb.csv",
+    "sha256": "fa1289ffe98f14d79cc26758999a4b68f63e6821fc1c0b700be193490bbefb9e",
+    "records": 66,
+    "verified": "All 66 passage times agree as a multiset; row order differs and is not used",
+    "source_role": "independent R dataset distribution; historical original not independently retrieved"
+  }
+]

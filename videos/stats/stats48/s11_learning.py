@@ -94,13 +94,7 @@ class Learning(VoiceoverScene):
             label(r"but deep nets interpolate noise: \ uniform bounds are vacuous there, \ an open problem", font_size=26, color=BADC),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> From here the road leads into machine learning theory. <bookmark mark='b'/> Rademacher "
-            "complexities, computed on the data at hand, give bounds that are often much tighter than the VC bound. "
-            "<bookmark mark='c'/> Margin bounds explain support vector machines and boosting through a scale-sensitive "
-            "dimension, not the number of parameters. <bookmark mark='d'/> Localized complexities, due to Peter Bartlett, "
-            "Olivier Bousquet and Shahar Mendelson, give the fast one-over-n rates we just saw. <bookmark mark='e'/> But "
-            "modern deep networks can fit pure noise perfectly, so any bound that holds uniformly over their whole class is "
-            "vacuous. Explaining why they still generalize is an open problem, and the companion series AI, Built takes up the practice."
+            "<bookmark mark='a'/> From here the road leads into machine learning theory. <bookmark mark='b'/> Rademacher complexities, computed on the data at hand, give bounds that are often much tighter than the VC bound. <bookmark mark='c'/> Margin bounds explain support vector machines and boosting through a scale-sensitive dimension, not the number of parameters. <bookmark mark='d'/> Localized complexities, due to Peter Bartlett, Olivier Bousquet and Shahar Mendelson, can give fast rates under additional margin or low-variance conditions, such as the constant-noise threshold model shown here. <bookmark mark='e'/> But modern deep networks can fit pure noise perfectly, so unrestricted worst-case VC bounds can be vacuous at the available sample size. Norm constraints, margins, data-dependent complexity and algorithmic stability can still yield useful guarantees. Understanding the full range of deep-network generalization remains an active research problem, and the companion series AI, Built takes up the practice."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

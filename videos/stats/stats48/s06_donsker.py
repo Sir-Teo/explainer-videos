@@ -30,15 +30,11 @@ class Donsker(VoiceoverScene):
         rows[2][-1].set_color(GOODC)
         rows[3][-1].set_color(CLASSC)
         whys = [why(r"the empirical process"), why(r"the ordinary multivariate CLT"), why(r"tightness: \ the extra condition"), why(r"the continuous mapping theorem")]
+        heading = label('Finite-dimensional CLTs need tightness to become a process limit', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> The empirical process is a random function on the class. <bookmark mark='b'/> At finitely "
-            "many functions it is asymptotically normal by the ordinary multivariate central limit theorem, with the "
-            "covariances of the functions as its covariance. That part is free. <bookmark mark='c'/> A class is Donsker "
-            "if the whole process converges, as a random element of the space of bounded functions on the class, to a "
-            "tight Gaussian process called the P Brownian bridge. The extra ingredient is tightness: the process must not "
-            "oscillate wildly between nearby functions. <bookmark mark='d'/> Then, by the continuous mapping theorem, its "
-            "supremum converges to the Gaussian supremum, and so does every other continuous functional of it: Doob's "
-            "heuristic made into a theorem."
+            "<bookmark mark='a'/> The empirical process is a random function on the class. <bookmark mark='b'/> At finitely many functions it is asymptotically normal by the ordinary multivariate central limit theorem, with the covariances of the functions as its covariance. That part needs square integrability of the functions. <bookmark mark='c'/> A class is Donsker if the whole process converges, as a random element of the space of bounded functions on the class, to a tight Gaussian process called the P Brownian bridge. The extra ingredient is tightness: the process must not oscillate wildly between nearby functions. <bookmark mark='d'/> Then, by the continuous mapping theorem, its supremum converges to the Gaussian supremum, and so does every other continuous functional of it: Doob's heuristic made into a theorem."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -51,22 +47,17 @@ class Donsker(VoiceoverScene):
             cmath(r"\text{tightness}", r"\Leftarrow", r"\lim_{\delta \to 0} \limsup_n E \sup_{\rho(f, g) < \delta} |\mathbb G_n f - \mathbb G_n g| = 0", font_size=30),
             cmath(r"\int_0^1 \sqrt{\log N_{[\,]}(\varepsilon, \mathcal F, L_2(P))}\, d\varepsilon < \infty", r"\Rightarrow", r"\text{Donsker}", font_size=30),
             cmath(r"\int_0^1 \sup_Q \sqrt{\log N(\varepsilon \|F\|_{Q,2}, \mathcal F, L_2(Q))}\, d\varepsilon < \infty", r"\Rightarrow", r"\text{Donsker}", font_size=28),
-            cmath(r"\text{VC classes}", r":", r"\text{uniform entropy } \asymp V\log(1/\varepsilon): \ \text{Donsker for every } P", font_size=30),
+            cmath(r"\text{VC classes}", r":", r"\text{indicator covering entropy }\lesssim V\log(1/\varepsilon)", font_size=30),
         ]
         rows[1][-1].set_color(GOODC)
         rows[2][-1].set_color(GOODC)
         rows[3][-1].set_color(CLASSC)
-        whys = [why(r"asymptotic equicontinuity"), why(r"Ossiander (1987)"), why(r"Pollard (1982); \ Dudley; \ $F$ an envelope"), why(r"Dudley (1978)")]
+        whys = [why(r"asymptotic equicontinuity"), why(r"Ossiander (1987); \ $L_2$ envelope, measurable class"), why(r"Pollard (1982); \ Dudley; \ $F$ an envelope"), why(r"Dudley (1978)")]
+        heading = label('Entropy integrals control asymptotic equicontinuity', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Tightness comes down to asymptotic equicontinuity: the process's largest increment between "
-            "functions closer than delta must vanish as delta shrinks. And that is exactly what chaining controls. "
-            "<bookmark mark='b'/> With brackets: if the bracketing entropy integral is finite, the class is Donsker, a "
-            "theorem of Mina Ossiander's. <bookmark mark='c'/> Without brackets: if the uniform entropy integral is finite, "
-            "the class is Donsker, with the entropy measured in the worst probability measure, relative to an envelope F. "
-            "That is due to David Pollard, building on Dudley. <bookmark mark='d'/> VC classes have uniform entropy V log "
-            "one over epsilon, whose root is integrable, so every VC class is Donsker for every distribution. The half-lines "
-            "are one, and the Kolmogorov–Smirnov limit follows."
-        ) as vo:
+            "<bookmark mark='a'/> Tightness comes down to asymptotic equicontinuity: the process's largest increment between functions closer than delta must vanish as delta shrinks. And that is exactly what chaining controls. <bookmark mark='b'/> With brackets: with a square-integrable envelope and the usual measurability conditions, a finite bracketing entropy integral makes the class Donsker, a theorem of Mina Ossiander's. <bookmark mark='c'/> Without brackets: if the uniform entropy integral is finite, the class is Donsker, with the entropy measured in the worst probability measure, relative to a square-integrable envelope F, with the required measurability. That is due to David Pollard, building on Dudley. <bookmark mark='d'/> VC classes have uniform entropy V log one over epsilon, whose root is integrable, so measurable indicator VC classes are Donsker for every distribution. VC-subgraph function classes also need a square-integrable envelope. The half-lines are one, and the Kolmogorov–Smirnov limit follows."       ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -115,14 +106,7 @@ class Donsker(VoiceoverScene):
             label(rf"it leaves the band: \ $D$ = {d['d_norm']:.3f} \ (but see chapter 12)", font_size=22, color=CLASSC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> A real example. The waiting times between {d['n']} eruptions of Old Faithful, in Yellowstone, "
-            f"from the Museum. <bookmark mark='b'/> Their empirical distribution function, <bookmark mark='c'/> and around it a "
-            f"ninety-five percent confidence band for the true distribution function: plus or minus Kolmogorov's quantile "
-            f"over root n, {say(d['half'], 3)}. Every continuous distribution function that stays inside the band is "
-            f"consistent with the data. <bookmark mark='d'/> The normal distribution with the sample's mean and standard "
-            f"deviation does not stay inside: <bookmark mark='e'/> its largest distance from the data is {say(d['d_norm'], 3)}, "
-            f"nearly twice the band's half-width, because the waits are bimodal. Strictly, testing a fitted normal needs the "
-            f"correction of chapter twelve, but this one fails by a wide margin."
+            f"<bookmark mark='a'/> A real example. The waiting times between {d['n']} eruptions of Old Faithful, in Yellowstone, from the Museum. <bookmark mark='b'/> Their empirical distribution function, <bookmark mark='c'/> and around it an iid-reference asymptotic ninety-five percent band for a distribution function: plus or minus Kolmogorov's quantile over root n, {say(d['half'], 3)}. These recorded waits are rounded and may be dependent, so the iid band is a descriptive reference rather than guaranteed coverage for the geyser. <bookmark mark='d'/> The normal distribution with the sample's mean and standard deviation does not stay inside: <bookmark mark='e'/> its largest distance from the data is {say(d['d_norm'], 3)}, nearly twice the band's half-width, because the waits are bimodal. Strictly, testing a fitted normal needs the correction of chapter twelve, but this one fails by a wide margin."
         ) as vo:
             self.play(FadeIn(A), FadeIn(museum_tag(r"Old Faithful (Azzalini \& Bowman 1990)")))
             vo.wait_until("a")
@@ -145,13 +129,7 @@ class Donsker(VoiceoverScene):
             label(r"Donsker classes are what make $\sqrt n$-asymptotics of M-estimators, \ bootstraps and bands work", font_size=26, color=GOODC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Being Donsker is a stronger property than being Glivenko–Cantelli: it fixes the rate, "
-            "one over root n, and the limiting law. <bookmark mark='b'/> Some classes are Glivenko–Cantelli without being "
-            "Donsker: smoothness classes whose smoothness is no more than half the dimension, or the convex sets in four or "
-            "more dimensions. <bookmark mark='c'/> For those, the uniform law of large numbers still holds, but the "
-            "supremum shrinks more slowly than root n, which is where chapter nine's rates come from. <bookmark mark='d'/> "
-            "Donsker classes are what make the root n theory of M-estimators, the bootstrap and confidence bands work, and "
-            "the next chapters use them for all three."
+            "<bookmark mark='a'/> Being Donsker is a stronger property than being Glivenko–Cantelli: it fixes the rate, one over root n, and the limiting law. <bookmark mark='b'/> Some classes are Glivenko–Cantelli without being Donsker: smoothness classes whose smoothness is no more than half the dimension, or the convex sets in four or more dimensions. <bookmark mark='c'/> In suitable regular examples uniform consistency holds with slower rates. Failure to be Donsker alone does not determine a rate, which is where chapter nine's rates come from. <bookmark mark='d'/> Donsker classes are what make the root n theory of M-estimators, the bootstrap and confidence bands work, and the next chapters use them for all three."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

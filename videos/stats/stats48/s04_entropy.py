@@ -30,16 +30,11 @@ class Entropy(VoiceoverScene):
         rows[3][-1].set_color(GOODC)
         whys = [why(r"the covering number; \ its log: the entropy"), why(r"bracketing: \ balls with a floor and a ceiling"),
                 why(r"sandwich $f$, \ then use the ordinary LLN"), why(r"Blum (1955), \ DeHardt (1971)")]
+        heading = label('Coverings approximate; brackets bound from both sides', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> VC dimension counts patterns. A finer measure of size asks how many balls of radius "
-            "epsilon it takes to cover the class in some norm. That is the covering number; its logarithm is the metric "
-            "entropy, a name Kolmogorov chose deliberately. <bookmark mark='b'/> A variant uses brackets: pairs of "
-            "functions, a floor l and a ceiling u, at most epsilon apart in L two of P, such that every function in the "
-            "class lies between the floor and the ceiling of some bracket. <bookmark mark='c'/> Brackets turn a uniform "
-            "statement into finitely many ordinary ones: a function sandwiched between l and u has its empirical gap "
-            "sandwiched between theirs, up to epsilon. <bookmark mark='d'/> So finitely many brackets at every epsilon "
-            "already make the class Glivenko–Cantelli, by the ordinary law of large numbers applied to the brackets."
-        ) as vo:
+            "<bookmark mark='a'/> VC dimension counts patterns. A finer measure of size asks how many balls of radius epsilon it takes to cover the class in some norm. That is the covering number; its logarithm is the metric entropy, a name Kolmogorov chose deliberately. <bookmark mark='b'/> A variant uses brackets: pairs of functions, a floor l and a ceiling u, at most epsilon apart in L two of P, such that every function in the class lies between the floor and the ceiling of some bracket. <bookmark mark='c'/> Brackets turn a uniform statement into finitely many ordinary ones: a function sandwiched between l and u has its empirical gap sandwiched between theirs, up to epsilon. <bookmark mark='d'/> With measurable integrable bracket endpoints, finitely many L-one brackets at every epsilon make the class Glivenko–Cantelli, by the ordinary law of large numbers applied to the brackets."       ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -98,22 +93,14 @@ class Entropy(VoiceoverScene):
         u = np.linspace(2.4, 21, 100)
         ref = polyline(ax, u, np.log(u ** 2 / 2), GREY_B, 2)
         side = fit_rows(VGroup(
-            label(r"greedy $\varepsilon$-nets, \ counted", font_size=22),
+            label(r"greedy nets of finite discretized classes", font_size=22),
             label(r"blue: \ half-lines in $L_2$: \ $\log N \approx 2\log(1/\varepsilon)$", font_size=22, color=EMPC),
             label(r"red: \ 20,000 random 1-Lipschitz functions, \ sup norm", font_size=22, color=BADC),
             label(r"red grows like $1/\varepsilon$: \ a much bigger class", font_size=22, color=BADC),
             label(r"VC-like: \ $\log(1/\varepsilon)$; \ smooth: \ $(1/\varepsilon)^{d/\alpha}$", font_size=22, color=GOODC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> We can count nets directly, greedily: pick an uncovered function, remove everything "
-            f"within epsilon of it, and repeat. <bookmark mark='b'/> For the half-lines in L two, the number of balls grows "
-            f"like one over epsilon squared, so the entropy grows only like two log one over epsilon: at epsilon one "
-            f"twentieth, {d['hl'][-1]} balls. <bookmark mark='c'/> For a sample of twenty thousand random one-Lipschitz "
-            f"functions on the unit interval, in the supremum norm, <bookmark mark='d'/> the entropy grows like one over "
-            f"epsilon itself, linearly on this chart: at epsilon point oh eight, {d['lip'][-1]} balls, and the true class "
-            f"needs vastly more. <bookmark mark='e'/> These are the two regimes. VC-type classes have logarithmic entropy; "
-            f"smoothness classes of functions of d variables with alpha derivatives have entropy one over epsilon to the d "
-            f"over alpha."
+            f"<bookmark mark='a'/> We can count nets directly, greedily: pick an uncovered function, remove everything within epsilon of it, and repeat. <bookmark mark='b'/> For the half-lines on our finite 801-point approximation to L two of the uniform distribution, the greedy net size grows roughly like one over epsilon squared, so the entropy grows only like two log one over epsilon: at epsilon one twentieth, {d['hl'][-1]} balls. <bookmark mark='c'/> For a finite sample of twenty thousand random one-Lipschitz functions, observed on a 61-point grid in the maximum norm, <bookmark mark='d'/> the entropy grows like one over epsilon itself, linearly on this chart: at epsilon point oh eight, {d['lip'][-1]} balls. These greedy nets cover only the finite sampled class; they are neither minimal covering numbers nor upper bounds for the full Lipschitz ball. <bookmark mark='e'/> These are the two regimes. VC-type classes have logarithmic entropy; smoothness classes of functions of d variables with alpha derivatives have entropy one over epsilon to the d over alpha."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"counted: \ greedy nets")))
             vo.wait_until("a")
@@ -129,26 +116,19 @@ class Entropy(VoiceoverScene):
         self.clear_scene()
 
     def examples(self):
-        rows = [[r"class", r"$\log N_{[\,]}(\varepsilon, L_2)$", r"Donsker?"],
-                [r"half-lines; \ a VC class of dimension $V$", r"$\asymp V \log(1/\varepsilon)$", r"yes"],
+        rows = [[r"class", r"entropy type and order", r"Donsker?"],
+                [r"half-lines; \ a VC class of dimension $V$", r"covering $\lesssim V \log(1/\varepsilon)$", r"yes"],
                 [r"monotone functions into $[0, 1]$", r"$\asymp 1/\varepsilon$", r"yes"],
-                [r"1-Lipschitz on $[0, 1]$", r"$\asymp 1/\varepsilon$", r"yes"],
-                [r"$\alpha$-smooth on $[0, 1]^d$ \ (Hölder, \ Sobolev)", r"$\asymp (1/\varepsilon)^{d/\alpha}$", r"iff $\alpha > d/2$"],
-                [r"convex sets in $\mathbb R^d$ \ (Bronshtein; \ Dudley)", r"$\asymp (1/\varepsilon)^{d-1}$", r"$d = 2$: yes; \ $d \ge 4$: no"]]
+                [r"bounded 1-Lipschitz on $[0, 1]$", r"$\asymp 1/\varepsilon$", r"yes"],
+                [r"$\alpha$-smooth on $[0, 1]^d$ \ (Hölder, \ Sobolev)", r"$\asymp (1/\varepsilon)^{d/\alpha}$", r"yes if $\alpha > d/2$"],
+                [r"convex sets: bounded regular region, regular $P$", r"$\asymp (1/\varepsilon)^{d-1}$", r"$d = 2$: yes; \ $d \ge 4$: no"]]
         tab = table_rows(rows, font_size=26, col_buff=0.7, row_buff=0.33, colors=[GREY_B, None, None, None, CLASSC, BADC])
         if tab.width > 12.6:
             tab.width = 12.6
         tab.move_to([0, 0.7, 0])
-        foot = label(r"chapter 5's rule: \ Donsker when $\int_0^1 \sqrt{\log N_{[\,]}(\varepsilon)}\,d\varepsilon < \infty$, \ i.e. entropy $\ll 1/\varepsilon^2$", font_size=24, color=S.ACCENT).move_to([0, -2.4, 0])
+        foot = label(r"chapter 5's rule: \ Donsker when $\int_0^1 \sqrt{\log N_{[\,]}(\varepsilon)}\,d\varepsilon < \infty$; \ $L_2$ envelope and measurability required", font_size=24, color=S.ACCENT).move_to([0, -2.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> A small catalogue. VC classes have entropy V log one over epsilon. Monotone functions with "
-            "values in the unit interval, and Lipschitz functions, have entropy of order one over epsilon; for Lipschitz functions "
-            "the result goes back to Kolmogorov and Tikhomirov in 1959. Smooth functions of d variables with alpha derivatives have one over epsilon to "
-            "the d over alpha. And the convex sets in d dimensions, with bracketing in L two, have one over epsilon to the "
-            "d minus one. <bookmark mark='b'/> Chapter five will show that a class is Donsker, satisfying a uniform central "
-            "limit theorem, when the root of the bracketing entropy is integrable at zero: when the entropy grows more slowly "
-            "than one over epsilon squared. That is why smoothness must beat half the dimension, and why, as Dudley showed, "
-            "the convex sets are Donsker in the plane but not in four or more dimensions."
+            "<bookmark mark='a'/> A small catalogue. Indicator VC classes have uniform covering entropy bounded by a constant times V log one over epsilon; this is a covering bound, not a general VC bracketing formula. Monotone functions with values in the unit interval, and Lipschitz functions, have entropy of order one over epsilon; for Lipschitz functions the result goes back to Kolmogorov and Tikhomirov in 1959. Smooth functions of d variables with alpha derivatives have one over epsilon to the d over alpha. For convex sets in a bounded regular region under a regular density, the L-two bracketing entropy has dimension-dependent polynomial growth. <bookmark mark='b'/> Chapter five will show that a class is Donsker, satisfying a uniform central limit theorem, when the root of the bracketing entropy is integrable at zero: when the actual entropy integral is finite and the envelope is square integrable. A strict power exponent below two suffices; little-oh of epsilon to the minus two alone does not. For bounded smoothness balls on compact domains, smoothness above half the dimension is a sufficient condition. The convex-set dimension statements shown require the stated regular geometric and distributional setting."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tab))

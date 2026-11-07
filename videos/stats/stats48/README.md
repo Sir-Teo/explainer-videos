@@ -24,16 +24,16 @@ It then uses the theory on:
 It keeps three promises:
 - **Part 8** used the plug-in principle, F_n → F uniformly, on trust. Chapters 1–3 prove the Glivenko–Cantelli theorem
   three ways: symmetrization, VC counting, brackets.
-- **Part 44** stated Donsker's invariance principle for random walks. Chapters 4–5 prove the empirical-process version
-  with entropy and chaining.
+- **Part 44** stated Donsker's invariance principle for random walks. Chapters 4–5 explain the empirical-process proof strategy
+  and state the entropy theorems with their envelope and measurability conditions.
 - **Part 47** took a uniform law of large numbers and the bootstrap empirical process on trust. Chapters 7, 11 and 12
   supply them.
 
 **Built in this part:**
 - **`statkit.empirical`** ([`explainer/stats/kit/empirical.py`](../../../explainer/stats/kit/empirical.py)), tested in
-  `tests/test_stats_kit_empirical.py`:
+  `tests/test_stats_kit_empirical.py`; local repairs in `compute.py` are tested in `tests/test_stats48_polish.py`:
   - the Kolmogorov distribution (cdf, density, quantile) and KS statistics; Brownian bridges; empirical processes;
-  - the exact Rademacher average of half-lines (the expected maximum of a simple random walk, by absorption);
+  - the exact Rademacher average of half-lines (the expected maximum of a simple random walk, by a local killed-walk spectral sum);
     Massart's finite-class lemma;
   - brute-force growth functions for half-lines, intervals, half-planes and rectangles; Sauer–Shelah;
   - greedy covering numbers; half-line brackets; random Lipschitz classes;
@@ -53,15 +53,17 @@ It keeps three promises:
 
 The Coverage Board gains seven rows:
 
-| Method | Setting | Nominal | Achieved | Verdict |
+| Method | Setting | Nominal | Achieved ± MCSE | Verdict |
 |---|---|---|---|---|
-| KS band from Kolmogorov's limit | N(0, 1) data, n = 20 | 95% | 96.4% | kept |
-| KS band, exact finite-n quantile | N(0, 1) data, n = 20 | 95% | 95.5% | kept |
-| DKW band (Massart's constant) | N(0, 1) data, n = 20 | 95% | 96.4% | kept |
-| KS band by the bootstrap | N(0, 1) data, n = 20 | 95% | 88.7% | broken |
-| KS band by the multiplier bootstrap | N(0, 1) data, n = 20 | 95% | 92.4% | broken |
-| KS test, estimated rate, Kolmogorov's table | exponential data, n = 30 | size 5% | 0.6% | conservative |
-| KS test, estimated rate, parametric bootstrap | exponential data, n = 30 | size 5% | 5.5% | kept |
+| KS band from Kolmogorov's limit | N(0, 1) data, n = 20 | 95% | 96.35% ± 0.42% | conservative |
+| KS band, exact finite-n quantile | N(0, 1) data, n = 20 | 95% | 95.45% ± 0.47% | kept |
+| DKW band (Massart's constant) | N(0, 1) data, n = 20 | 95% | 96.35% ± 0.42% | conservative |
+| KS band by the bootstrap | N(0, 1) data, n = 20 | 95% | 88.65% ± 0.71% | broken |
+| KS band by the multiplier bootstrap | N(0, 1) data, n = 20 | 95% | 92.35% ± 0.59% | broken |
+| KS test, estimated rate, Kolmogorov's table | exponential data, n = 30 | 5% | 0.60% ± 0.17% | conservative |
+| KS test, estimated rate, parametric bootstrap | exponential data, n = 30 | 5% | 5.45% ± 0.51% | kept |
+
+Each row uses 2,000 independent datasets. Band bootstraps use 499 resamples per dataset; the exponential test uses 199 and the finite-Monte-Carlo rank p-value. MCSE describes simulation uncertainty, separately from coverage or test calibration.
 
 ## Build it
 
@@ -81,15 +83,15 @@ python tools/lecture_length.py stats48 --floor 50
 | 1 | Glivenko–Cantelli classes | E D_n = 0.0272 vs 2R_n = 0.0783 at n = 1,000; √n E D_n → √(π/2) log 2 = 0.869 |
 | 2 | VC classes | half-planes: n(n − 1) + 2 (92 at n = 10); 3 points shattered (8), a square not (14 of 16) |
 | 3 | Entropy and bracketing | half-lines: 267 balls at ε = 0.05 (brackets 400); Lipschitz: 320 balls at ε = 0.08 |
-| 4 | Chaining | E max over 2^K + 1 points → 0.790 (K = 10) vs √(2/π) = 0.798; union bound 3.72; chaining sum 3.85 |
+| 4 | Chaining | E max over 2^K + 1 points → 0.788 (K = 10) vs √(2/π) = 0.798; union bound 3.72; chaining sum 3.85 |
 | 5 | Donsker classes | exact 95% point √n D_n: 1.260, 1.315, 1.340 (n = 5, 20, 100); Old Faithful band ±0.082, D(normal) = 0.155 |
 | 6 | Maximal inequalities | n = 100: 95% point of nD_n − E: 4.89 (McDiarmid 12.2, Bousquet 16.9); t ≤ 0.02 class: 1.48 (12.2, 6.5) |
 | 7 | The functional delta method | quantile SDs 0.334 / 0.992 / 2.996 vs 1/3, 1, 3; KM SD at t = 1: 0.558 vs 0.560 |
 | 8 | Nuisance parameters | MAD about the mean (Exp): n·Var 0.459 known, 0.778 estimated (simulated 0.466, 0.787); Newcomb SE 1.13 → 1.29 |
-| 9 | Rates | Chernoff SD 0.524 (exact 0.513); Grenander n^{1/3} SD 0.39–0.41 vs 0.418 |
+| 9 | Rates | Chernoff finite-grid SD 0.524 (reference 0.513); Grenander n^{1/3} SD 0.39–0.41 vs 0.418 |
 | 10 | Learning | thresholds: 2E sup 0.057, excess risk 0.0014 at n = 1,000 (slope −1) |
 | 11 | The bootstrap empirical process | 95% band coverage at n = 20: bootstrap 88%, multiplier 91%; at n = 100: 94% |
-| 12 | KS with estimated parameters | normal n = 20: 0.192 vs Kolmogorov's 0.294, naive size 0.005%; Newcomb without outliers p = 0.21 (naive 0.64) |
+| 12 | KS with estimated parameters | normal n = 20: 0.192 vs Kolmogorov's 0.294, observed naive size 0.005% (2 / 40,000); Newcomb post hoc deletion: reference p = 0.21 (naive 0.64), not a calibrated selected-data test |
 | 13 | Outro | — |
 
 The rest of the part's numbers, chapter by chapter:
@@ -115,18 +117,17 @@ The rest of the part's numbers, chapter by chapter:
 - **Chapter 3.**
   - Half-lines in L₂(uniform): greedy nets 7, 11, 25, 43, 89, 201, 267 at ε = 0.4 … 0.05; brackets ⌈1/ε²⌉ = 7 … 400.
   - 20,000 random 1-Lipschitz functions, sup norm: 5, 8, 14, 30, 64, 132, 320 balls at ε = 0.3 … 0.08 (log N ∝ 1/ε).
-  - Entropy catalogue: VC V log(1/ε); monotone and Lipschitz 1/ε; Hölder (1/ε)^{d/α} (Donsker iff α > d/2); convex sets
-    (1/ε)^{d−1} (Donsker in the plane, not for d ≥ 4).
+  - Entropy catalogue: indicator VC **uniform covering** entropy ≲ V log(1/ε), distinguished from bracketing entropy. Bounded monotone/Lipschitz and smoothness classes require their specified norms, domains and envelopes. For bounded Hölder balls on compact domains α > d/2 suffices; convex-set dimension claims assume a bounded regular region and regular sampling density. The actual square-root entropy integral must converge; little-o of ε⁻² is insufficient.
 - **Chapter 4.**
   - Union bound over 2^K + 1 grid points: 1.18 (K = 0) … 3.72 (K = 10).
-  - Simulated E max over the net: 0.405, 0.478, 0.558, … 0.790 (K = 0 … 10), toward √(2/π) = 0.798.
-  - Chaining sum Σ 2^{−k/2} √(2 log 2^{k−1}) plus 1/√(2π): 3.85, finite. Dudley's integral for BM: √(π/2).
+  - Simulated E max over the net: 0.405, 0.488, 0.564, … 0.788 (K = 0 … 10), toward √(2/π) = 0.798.
+  - Chaining midpoint-correction bound: 1/√(2π) + Σ(k≥1) 2^{−(k+1)/2} √(2k log 2), about 3.85. Each maximum includes zero. Forty levels leave a rigorously bounded tail below 0.00001264. Dudley's integral for BM: √(π/2).
 - **Chapter 5.**
   - Exact 95% points of √n D_n (Marsaglia, Tsang & Wang 2003): 1.260, 1.294, 1.315, 1.332, 1.340, 1.353 at
     n = 5, 10, 20, 50, 100, 1,000. The limit's test has size 2.7%, 3.4%, 3.9%, 4.3%, 4.5%, 4.9%.
   - Old Faithful (n = 272): band ±1.358/√272 = ±0.082; the fitted normal N(70.9, 13.6²) is 0.155 away.
 - **Chapter 6.**
-  - n = 100, 40,000 samples, E nD_n = 8.52. 95% points of the fluctuation: simulated 4.89, McDiarmid 12.24,
+  - n = 100, 40,000 samples, E nD_n = 8.52. The centre E[nD_n] is estimated from these same draws (MCSE is recorded in the input). The plotted theoretical curves evaluated at that estimated centre are plug-in illustrations. 95% points of the fluctuation: simulated 4.89, McDiarmid 12.24,
     Bousquet 16.87 (σ² = 1/4: nothing to exploit).
   - Half-lines with t ≤ 0.02 (σ² = 0.0196): simulated 1.48, McDiarmid 12.24, Bousquet 6.54.
 - **Chapter 7.**
@@ -142,23 +143,27 @@ The rest of the part's numbers, chapter by chapter:
     the median 5.30 ± 1.14.
 - **Chapter 9.**
   - The rate theorem; Kim & Pollard's cube-root limit.
-  - Chernoff's distribution, 6,000 paths: SD 0.524 (Groeneboom & Wellner: 0.5134).
+  - Chernoff's distribution, 6,000 finite-window grid paths on [−2.5, 2.5] with 3,000 steps per side: SD 0.524 (Groeneboom & Wellner reference: 0.5133).
   - Grenander at x₀ = 1, Exp(1): constant 2|ff′/2|^{1/3} = 0.815; predicted SD 0.418; simulated 0.391, 0.406, 0.395 at
     n = 100, 1,000, 10,000.
 - **Chapter 10.**
-  - Thresholds, t₀ = 0.3, 20% label noise: 2E sup|R_n − R| = 0.372, 0.057, 0.042 at n = 20, 1,000, 2,000; ERM excess
+  - Thresholds, t₀ = 0.3, 20% label noise: 2E sup|R_n − R| = 0.398, 0.057, 0.042 at n = 20, 1,000, 2,000; ERM excess
     risk 0.059, 0.0014, 0.0007 (slope −1); VC bound 2.45, 0.49, 0.36.
 - **Chapter 11.**
-  - Giné–Zinn: bootstrap consistency ⇔ Donsker. The multiplier CLT.
+  - Giné–Zinn: bootstrap consistency ⇔ Donsker under envelope-integrability and measurability conditions. Gaussian multiplier CLT. Non-Hadamard differentiability alone does not prove bootstrap failure.
   - 95% band coverage (n = 20 / 100): Kolmogorov 95.2 / 95.9, exact 94.2 / 95.3, DKW 95.2 / 95.9, bootstrap 88.0 / 94.3,
     multiplier 91.0 / 94.2.
-  - Old Faithful half-widths: 0.0823 (limit), 0.0817 (exact), 0.0823 (DKW), 0.0809 (bootstrap), 0.0813 (multiplier).
+  - Old Faithful half-widths: 0.0823 (limit), 0.0817 (continuous-iid exact reference), 0.0823 (DKW), 0.0772 (tie-aware bootstrap), 0.0772 (tie-aware multiplier). These are iid references, not verified coverage for possibly dependent geyser waits.
 - **Chapter 12.**
   - Durbin's variance Φ(1 − Φ) − φ² − (zφ)²/2: 0.0908 at z = 0 against 0.25 known (simulated 0.0909).
-  - 95% points: normal, n = 20: 0.192 (Kolmogorov 0.294, naive size 0.005%); exponential, n = 50: 0.151 (0.188, naive
+  - 95% points: normal, n = 20: 0.192 (Kolmogorov 0.294, observed naive size 0.005% (2 / 40,000)); exponential, n = 50: 0.151 (0.188, naive
     size 0.56%).
-  - Newcomb normality: all 66, D = 0.231, p = 0.0014 naive, < 0.0001 bootstrap; without the two outliers (64), D = 0.090,
-    p = 0.64 naive, 0.21 bootstrap.
+  - Newcomb normality: all 66, D = 0.231, p = 0.0014 naive, 0.0001 bootstrap (zero exceedances in 9,999 resamples); without the two outliers (64), D = 0.090,
+    p = 0.64 naive, 0.21 fitted-normal reference; deletion is post hoc, so this is an influence comparison, not a calibrated test. The continuous-normal references ignore measurement rounding.
+
+## QA checkpoint
+
+All fourteen scenes and six solutions were read. Fourteen numerical inputs were regenerated; eighteen focused checks pass. The [source review](../../../docs/qa/evidence/stats48-polish-20261107/source-review.md) records numerical fixes, assumptions and independent data comparisons. English visual review is pending; Chinese narration/captions, continuous listening and final masters remain open.
 
 ## Sources
 
@@ -205,8 +210,8 @@ The rest of the part's numbers, chapter by chapter:
    - At n = 2 that is 4 = 2²: two points are shattered. At n = 3 it is 7 < 8: the outer two points without the middle
      one cannot be picked out. So the VC dimension is 2.
 3. **Brackets for half-lines.**
-   - Choose −∞ = t₀ < t₁ < … < t_k = ∞ with F(t_j−) − F(t_{j−1}) ≤ ε², which needs k = ⌈1/ε²⌉ (for continuous F).
-   - The brackets [1{x ≤ t_{j−1}}, 1{x < t_j}] have L₂(P) size at most ε and cover every 1{x ≤ t}.
+   - Choose −∞ = t₀ < t₁ < … < t_k = ∞ with F(t_j) − F(t_{j−1}) ≤ ε², which needs k = ⌈1/ε²⌉ (for continuous F).
+   - The brackets [1{x ≤ t_{j−1}}, 1{x ≤ t_j}] have L₂(P) size at most ε and cover every 1{x ≤ t} for t in the corresponding closed interval, using endpoint conventions at ±∞. The continuous-F construction is sufficient here; for a general distribution use brackets allowing its atoms.
    - So sup_t (F_n(t) − F(t)) ≤ max_j (F_n(t_j−) − F(t_j−)) + ε², and similarly below. The maximum of finitely many
      terms goes to 0 a.s. by the strong law; since ε is arbitrary, sup|F_n − F| → 0 a.s.
 4. **Dudley's integral for Brownian motion.**
@@ -215,7 +220,7 @@ The rest of the part's numbers, chapter by chapter:
    - ∫₀¹ √(log(1/ε²)) dε = √2 ∫₀¹ √(log(1/ε)) dε = √2 Γ(3/2) = √(π/2), which is finite: sample paths are continuous
      and E sup B is finite (in fact √(2/π)).
 5. **The mean absolute deviation's footprint.**
-   - θ(c) = E|X − c| has θ′(c) = 2F(c) − 1. With ĉ = x̄, θ̂ − θ ≈ (P_n − P)|X − μ| + θ′(μ)(x̄ − μ), so
+   - For finite E|X| and no atom at c, θ(c) = E|X − c| has θ′(c) = 2F(c) − 1. This is mean absolute deviation, not the robust median absolute deviation. With ĉ = x̄, θ̂ − θ ≈ (P_n − P)|X − μ| + θ′(μ)(x̄ − μ), so
      IF(x) = |x − μ| − θ + (2F(μ) − 1)(x − μ).
    - For Exp(1), μ = 1, θ = 2/e, 2F(1) − 1 = 1 − 2/e. Var|X − 1| = E(X − 1)² − θ² = 1 − 4/e² = 0.459;
      Cov(|X − 1|, X − 1) = 0.472 (by quadrature). So n·Var = 0.459 + 2(0.264)(0.472) + 0.264² = 0.778.

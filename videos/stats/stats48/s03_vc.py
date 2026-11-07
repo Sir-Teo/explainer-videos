@@ -39,6 +39,9 @@ class VC(VoiceoverScene):
         ]
         rows[2][-1].set_color(CLASSC)
         whys = [why(r"the growth function"), why(r"every labelling possible"), why(r"Vapnik \& Chervonenkis (1971)"), why(r"examples")]
+        heading = label('VC dimension counts the largest shattered configuration', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> For a class of sets, count how many different subsets of n points it can pick out, and "
             "take the most over all configurations of the points. That is the growth function. <bookmark mark='b'/> If the "
@@ -91,15 +94,9 @@ class VC(VoiceoverScene):
             tab.width = 12.6
         tab.move_to([0, 0.7, 0])
         foot = label(r"brute-force counts: \ $^*$the most over six random configurations; \ the half-plane count is $n(n-1)+2$", font_size=22, color=GREY_A).move_to([0, -2.3, 0])
-        foot2 = label(r"Sauer--Shelah: \ dimension $V$ $\Rightarrow$ $\Pi(n) \le \sum_{i \le V}\binom ni \le (en/V)^V$: \ polynomial", font_size=24, color=GOODC).next_to(foot, DOWN, buff=0.2)
+        foot2 = label(r"Sauer--Shelah: \ dimension $V$ $\Rightarrow$ $\Pi(n) \le \sum_{i \le V}\binom ni \le (en/V)^V\ (n\ge V)$: \ polynomial", font_size=24, color=GOODC).next_to(foot, DOWN, buff=0.2)
         with self.voiceover(
-            "<bookmark mark='a'/> Counting by brute force on points in the plane: half-lines pick out n plus one subsets, "
-            "intervals n times n plus one over two plus one, and half-planes n times n minus one plus two, Thomas Cover's "
-            "count. Rectangles, on random points, pick out more, but still far fewer than all subsets in the last column. "
-            "<bookmark mark='b'/> The pattern is a theorem, proved independently by Norbert Sauer and Saharon Shelah in 1972: "
-            "once a class fails to shatter some number of points V plus one, its growth function is at most the sum of the "
-            "binomial coefficients up to V, a polynomial of degree V. There is no middle ground between polynomial and "
-            "exponential growth."
+            "<bookmark mark='a'/> Counting by brute force on points in the plane: half-lines pick out n plus one subsets, intervals n times n plus one over two plus one, and half-planes n times n minus one plus two, Thomas Cover's count. Rectangles, on random points, pick out more, but still far fewer than all subsets in the last column. <bookmark mark='b'/> The pattern is a theorem, proved independently by Norbert Sauer and Saharon Shelah in 1972: once no configuration of V plus one points can be shattered, its growth function is at most the sum of the binomial coefficients up to V, a polynomial of degree V. There is no middle ground between polynomial and exponential growth."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tab), FadeIn(foot))
@@ -123,15 +120,11 @@ class VC(VoiceoverScene):
             label(r"red: \ all subsets, \ $n$ bits", font_size=22, color=BADC),
             label(r"blue: \ half-lines, \ $\log_2(n+1)$", font_size=22, color=EMPC),
             label(r"gold: \ half-planes, \ $\approx 2\log_2 n$", font_size=22, color=CLASSC),
-            label(r"teal: \ rectangles, \ $\approx 4\log_2 n$", font_size=22, color=S.ALT),
+            label(r"teal: \ rectangles, \ $\log_2\Pi(n)\le 4\log_2 n+O(1)$", font_size=22, color=S.ALT),
             label(r"a VC class: \ logarithmic in bits, \ forever", font_size=22, color=GOODC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> On a log scale the difference is stark. Measured in bits, the set of all subsets grows "
-            "linearly, one bit per point. <bookmark mark='b'/> Half-lines grow like log n, <bookmark mark='c'/> half-planes "
-            "like two log n, <bookmark mark='d'/> and rectangles like four log n, each hugging the diagonal until its VC "
-            "dimension and peeling away after. <bookmark mark='e'/> Plugged into chapter one's bound, logarithmic growth gives "
-            "a uniform law of large numbers at rate root of V log n over n. The VC dimension is the complexity that counts."
+            "<bookmark mark='a'/> On a log scale the difference is stark. Measured in bits, the set of all subsets grows linearly, one bit per point. <bookmark mark='b'/> Half-lines grow like log n, <bookmark mark='c'/> half-planes like two log n, <bookmark mark='d'/> and rectangles at most four log n plus a constant asymptotically, each hugging the diagonal until its VC dimension and peeling away after. <bookmark mark='e'/> Plugged into chapter one's bound, logarithmic growth gives a uniform law of large numbers at rate root of V log n over n. The VC dimension is the complexity that counts."
         ) as vo:
             self.play(FadeIn(A), FadeIn(exact_tag(r"exact: \ brute-force counts")))
             for k, (m_, c) in enumerate(zip("abcde", [call, chl, chp, crect, None])):
@@ -146,19 +139,12 @@ class VC(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"Haussler (1995): \ a VC class of dimension $V$ has $N(\varepsilon, L_2(Q)) \le K\,(1/\varepsilon)^{2V}$ \ for every $Q$", font_size=26),
             label(r"so: \ VC $\Rightarrow$ Glivenko--Cantelli, \ for every $P$, \ uniformly", font_size=26, color=GOODC),
-            label(r"VC-subgraph functions: \ linear combinations of $d$ functions, \ monotone functions of them", font_size=26, color=CLASSC),
+            label(r"VC-subgraph functions: \ finite-dimensional spaces; \ a fixed monotone transformation", font_size=26, color=CLASSC),
             label(r"but $\{x \mapsto \mathbf 1\{\sin(\omega x) > 0\} : \omega > 0\}$ has infinite VC dimension, \ with one parameter", font_size=26, color=BADC),
             label(r"dimension is not the number of parameters", font_size=26, color=GREY_A),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> VC classes are small in a stronger sense too. David Haussler showed that a class of "
-            "dimension V can be covered by about one over epsilon to the two V balls of radius epsilon in L two of any "
-            "probability measure. <bookmark mark='b'/> So a VC class is Glivenko–Cantelli for every underlying "
-            "distribution at once. <bookmark mark='c'/> The idea extends to functions through their subgraphs: finite "
-            "dimensional vector spaces of functions, and monotone transformations of them, are VC. <bookmark mark='d'/> "
-            "But beware counting parameters. The class of indicators of sine of omega x being positive has one parameter "
-            "and infinite VC dimension: with a high enough frequency it can realise any labelling of suitably placed points. "
-            "<bookmark mark='e'/> Complexity is about what a class can do, not how it is written down."
+            "<bookmark mark='a'/> VC classes are small in a stronger sense too. David Haussler showed that a class of dimension V can be covered by about one over epsilon to the two V balls of radius epsilon in L two of any probability measure. <bookmark mark='b'/> So a VC class is Glivenko–Cantelli for every underlying distribution at once. <bookmark mark='c'/> The idea extends to functions through their subgraphs: finite dimensional vector spaces are VC-subgraph, as are their images under a fixed monotone transformation. Uniform laws for unbounded functions also require an integrable envelope. <bookmark mark='d'/> But beware counting parameters. The class of indicators of sine of omega x being positive has one parameter and infinite VC dimension: with a high enough frequency it can realise any labelling of suitably placed points. <bookmark mark='e'/> Complexity is about what a class can do, not how it is written down."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

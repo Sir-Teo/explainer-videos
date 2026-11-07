@@ -25,20 +25,16 @@ class FunctionalDelta(VoiceoverScene):
             cmath(r"\sqrt n(F_n - F)", r"\Rightarrow", r"\mathbb G_F = B \circ F \ \text{ in } \ell^\infty(\mathbb R)", font_size=36),
             cmath(r"\phi \text{ Hadamard differentiable at } F", r":", r"\sqrt n(\phi(F_n) - \phi(F)) \Rightarrow \phi'_F(\mathbb G_F)", font_size=32),
             cmath(r"\phi(F) = F^{-1}", r":", r"\phi'_F(h) = -\,\frac{h \circ F^{-1}}{f \circ F^{-1}}", font_size=36),
-            cmath(r"\Rightarrow", r"\;", r"\sqrt n(Q_n(p) - Q(p)) \Rightarrow -\,B(p)/f(Q(p)), \ \text{jointly in } p", font_size=32),
+            cmath(r"\Rightarrow", r"\;", r"\sqrt n(Q_n(p) - Q(p)) \Rightarrow -\,B(p)/f(Q(p)), \ \text{jointly on } p\in[a,b]\subset(0,1)", font_size=32),
         ]
         rows[1][-1].set_color(GOODC)
         rows[3][-1].set_color(EMPC)
         whys = [why(r"chapter 5: \ Donsker"), why(r"Part 47's chapter 4, \ now with a process"), why(r"the inverse map"), why(r"a whole quantile process")]
+        heading = label('A tangential linear derivative transfers a process limit', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Donsker's theorem says the empirical process converges to a Brownian bridge run on the scale "
-            "of F. <bookmark mark='b'/> Part forty-seven's functional delta method then applies to any map of the "
-            "distribution function that is Hadamard differentiable: the map's derivative, applied to the bridge, is the "
-            "limit. <bookmark mark='c'/> Inverting a distribution function is such a map, at any F with a positive "
-            "density. Its derivative in the direction h is minus h at the quantile, divided by the density there. <bookmark "
-            "mark='d'/> So the whole quantile process converges: root n times the error of the sample quantile function is "
-            "asymptotically minus a Brownian bridge over the density, jointly over p. Bahadur's representation, from Part "
-            "forty-seven, was a single coordinate of this."
+            "<bookmark mark='a'/> Donsker's theorem says the empirical process converges to a Brownian bridge run on the scale of F. <bookmark mark='b'/> Part forty-seven's functional delta method then applies to any map of the distribution function that is Hadamard differentiable: the map's derivative, applied to the bridge, is the limit. <bookmark mark='c'/> Inverting a distribution function is such a map, at regular F with a positive continuous density, uniformly bounded away from zero on the quantile range in question. Its derivative in the direction h is minus h at the quantile, divided by the density there. <bookmark mark='d'/> So the whole quantile process converges: root n times the error of the sample quantile function is asymptotically minus a Brownian bridge over the density, jointly over a compact interior range of p; an unweighted whole-interval result generally fails at the tails. Bahadur's representation, from Part forty-seven, was a single coordinate of this."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -107,23 +103,18 @@ class FunctionalDelta(VoiceoverScene):
 
     def km(self):
         rows = [
-            cmath(r"(H_n^{\text{event}}, H_n)", r"\Rightarrow", r"\text{a Gaussian process}: \ \text{a Donsker class of indicators}", font_size=30),
+            cmath(r"\sqrt n\big((H_n^{\text{event}}, H_n)-(H^{\text{event}},H)\big)", r"\Rightarrow", r"\text{a Gaussian process}: \ \text{a Donsker class of indicators}", font_size=30),
             cmath(r"\Lambda_n(t)", r"=", r"\int_0^t \frac{dH_n^{\text{event}}}{1 - H_{n-}}: \ \text{Nelson--Aalen, \ a smooth map of } (H^{\text{event}}_n, H_n)", font_size=28),
             cmath(r"\hat S(t)", r"=", r"\textstyle\prod_{s \le t}(1 - d\Lambda_n(s)): \ \text{the product integral, \ Hadamard differentiable}", font_size=28),
             cmath(r"\sqrt n(\hat S - S)", r"\Rightarrow", r"-S \cdot W, \ \ \mathrm{Var}\,W(t) = \int_0^t \frac{d\Lambda}{S\,G}", font_size=34),
         ]
         rows[3][-1].set_color(GOODC)
         whys = [why(r"observed times and events"), why(r"Part 40's hazard"), why(r"Gill \& Johansen (1990)"), why(r"Greenwood's formula, \ as a limit")]
+        heading = label('Centre and scale the joint event and time process', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> The Kaplan–Meier estimator of Part forty yields to the same method. With censored data, the "
-            "empirical distribution of the observed times, and of the times that were events, form a two-dimensional "
-            "empirical process over a Donsker class of indicators. <bookmark mark='b'/> The Nelson–Aalen cumulative hazard is "
-            "an integral of one with respect to the other, a smooth map. <bookmark mark='c'/> The Kaplan–Meier curve is the "
-            "product integral of the hazard, and Richard Gill and Søren Johansen showed in 1990 that the product integral is "
-            "Hadamard differentiable. <bookmark mark='d'/> Chaining the derivatives: root n times the Kaplan–Meier error "
-            "converges to minus S times a Gaussian martingale whose variance at t is the integral of the hazard over S "
-            "times G, where G is the censoring survivor function. Greenwood's formula is the plug-in estimate of exactly "
-            "this."
+            "<bookmark mark='a'/> The Kaplan–Meier estimator of Part forty yields to the same method. For iid subjects with independent right censoring and positive at-risk probability on a fixed finite horizon, the empirical distribution of the observed times, and of the times that were events, form a two-dimensional empirical process over a Donsker class of indicators. <bookmark mark='b'/> The Nelson–Aalen cumulative hazard is an integral of one with respect to the other, a smooth map. <bookmark mark='c'/> The Kaplan–Meier curve is the product integral of the hazard, and Richard Gill and Søren Johansen showed in 1990 that the product integral is Hadamard differentiable. <bookmark mark='d'/> Chaining the derivatives: root n times the Kaplan–Meier error converges to minus S times a Gaussian martingale whose variance at t is the integral of the hazard over S times G, where G is the censoring survivor function. Greenwood's formula estimates this asymptotic variance; it is not an exact finite-sample variance."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):

@@ -30,6 +30,9 @@ class GlivenkoCantelli(VoiceoverScene):
         rows[2][-1].set_color(GOODC)
         rows[3][-1].set_color(BADC)
         whys = [why(r"the sup over the class"), why(r"the definition"), why(r"Glivenko, \ Cantelli (1933)"), why(r"take $A$ = the sample")]
+        heading = label('Uniform convergence is a property of the entire function class', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> Write P n f for the sample average of f and P f for its true mean, and take the largest gap "
             "between them over a class of functions F. <bookmark mark='b'/> The class is called Glivenko–Cantelli if that "
@@ -88,20 +91,16 @@ class GlivenkoCantelli(VoiceoverScene):
             cmath(r"E\|P_n - P\|_{\mathcal F}", r"\le", r"E\|P_n - P_n'\|_{\mathcal F}", font_size=36),
             cmath(r"P_n f - P_n' f", r"=", r"\tfrac1n \textstyle\sum_i (f(X_i) - f(X_i')) \overset{d}{=} \tfrac1n \sum_i \varepsilon_i (f(X_i) - f(X_i'))", font_size=30),
             cmath(r"E\|P_n - P\|_{\mathcal F}", r"\le", r"2\,E \sup_f \big|\tfrac1n \textstyle\sum_i \varepsilon_i f(X_i)\big| = 2\,\mathcal R_n(\mathcal F)", font_size=32),
-            cmath(r"\text{conditionally on the } X_i", r":", r"\text{a sup over the finite set of patterns } (f(X_1), \dots, f(X_n))", font_size=28),
+            cmath(r"\text{conditionally on the } X_i", r":", r"\text{for indicators: finitely many binary patterns } (f(X_1), \dots, f(X_n))", font_size=28),
         ]
         rows[2][-1].set_color(CLASSC)
         rows[3][-1].set_color(GOODC)
         whys = [why(r"a ghost sample $X'$, \ Jensen"), why(r"swapping $X_i \leftrightarrow X_i'$: \ random signs"), why(r"the Rademacher average"), why(r"the key reduction")]
+        heading = label('A ghost sample turns sampling error into random-sign complexity', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> How is such a theorem proved? By symmetrization, an idea that goes back to Vapnik and "
-            "Chervonenkis in 1971. Introduce a ghost sample, an independent copy of the data. By Jensen's inequality "
-            "the expected gap is at most the expected gap between the two empirical measures. <bookmark mark='b'/> Now the "
-            "difference for each i is symmetric: swapping X i with its ghost changes nothing in law. So we may multiply each "
-            "term by an independent random sign. <bookmark mark='c'/> Splitting the two halves, the expected gap is at most "
-            "twice the Rademacher average of the class: the expected largest correlation between the class and pure noise. "
-            "<bookmark mark='d'/> The gain is that, with the data held fixed, the supremum is over the finite set of "
-            "patterns the class can produce on the sample. An infinite class becomes a finite one."
+            "<bookmark mark='a'/> How is such a theorem proved? By symmetrization, an idea that goes back to Vapnik and Chervonenkis in 1971. Introduce a ghost sample, an independent copy of the data. By Jensen's inequality the expected gap is at most the expected gap between the two empirical measures. <bookmark mark='b'/> Now the difference for each i is symmetric: swapping X i with its ghost changes nothing in law. So we may multiply each term by an independent random sign. <bookmark mark='c'/> Splitting the two halves, the expected gap is at most twice the Rademacher average of the class: the expected largest correlation between the class and pure noise. <bookmark mark='d'/> The gain is that, with the data held fixed, the supremum is over the finite set of patterns the class can produce on the sample. For indicator classes there are at most two to the n binary patterns. Real-valued classes can have infinitely many sample vectors and need metric approximations instead."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -126,14 +125,7 @@ class GlivenkoCantelli(VoiceoverScene):
             label(r"$\sqrt n\,E D_n \to \sqrt{\pi/2}\log 2 = 0.869$", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> For half-lines the Rademacher average can be computed exactly. With the data sorted, the "
-            f"patterns are the n plus one prefixes, so the supremum is the largest partial sum of n random signs, a random "
-            f"walk's maximum, which a little dynamic programming gives exactly. <bookmark mark='b'/> In blue, the expected "
-            f"Kolmogorov distance, simulated: at a thousand observations, {say(d['ed'][i], 3)}. <bookmark mark='c'/> In gold, "
-            f"twice the Rademacher average: {say(d['two_rad'][i], 3)}, above it as promised. <bookmark mark='d'/> On log "
-            f"scales both are straight lines of slope minus a half: the uniform law holds at the root n rate. <bookmark "
-            f"mark='e'/> And root n times the expected distance converges to the mean of Kolmogorov's law, root pi over two "
-            f"times log two."
+            f"<bookmark mark='a'/> For half-lines the Rademacher average can be computed exactly. With the data sorted, the patterns are the n plus one prefixes, so the supremum is the largest partial sum of n random signs, a random walk's maximum, which a killed-walk spectral sum evaluates without simulation. <bookmark mark='b'/> In blue, the expected Kolmogorov distance, simulated: at a thousand observations, {say(d['ed'][i], 3)}. <bookmark mark='c'/> In gold, twice the Rademacher average: {say(d['two_rad'][i], 3)}, above it as promised. <bookmark mark='d'/> On log scales both are straight lines of slope minus a half: the uniform law holds at the root n rate. <bookmark mark='e'/> And root n times the expected distance converges to the mean of Kolmogorov's law, root pi over two times log two."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"blue simulated; \ gold exact")))
             vo.wait_until("a")
@@ -151,22 +143,18 @@ class GlivenkoCantelli(VoiceoverScene):
     def finite(self):
         rows = [
             cmath(r"|\mathcal F| = k, \ |f| \le 1", r":", r"\mathcal R_n(\mathcal F) \le \sqrt{2 \log(2k) / n}", font_size=34),
-            cmath(r"\text{at most } \Pi(n) \text{ patterns}", r":", r"\mathcal R_n \le \sqrt{2 \log(2\Pi(n)) / n}", font_size=34),
+            cmath(r"\text{indicator class: at most } \Pi(n) \text{ patterns}", r":", r"\mathcal R_n \le \sqrt{2 \log(2\Pi(n)) / n}", font_size=34),
             cmath(r"\Pi(n) \text{ polynomial}", r"\Rightarrow", r"E\|P_n - P\|_{\mathcal F} \lesssim \sqrt{\log n / n} \to 0", font_size=32),
-            cmath(r"\Pi(n) = 2^n", r"\Rightarrow", r"\text{no bound: \ the class can fit noise}", font_size=34),
+            cmath(r"\Pi(n) = 2^n", r"\Rightarrow", r"\text{this bound need not vanish}", font_size=34),
         ]
         rows[2][-1].set_color(GOODC)
         rows[3][-1].set_color(BADC)
         whys = [why(r"Massart's finite-class lemma"), why(r"conditionally on the sample"), why(r"then a.s., \ by concentration"), why(r"the finite sets")]
+        heading = label('Finite indicator patterns yield a uniform law', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> To bound the Rademacher average of a finite class, Pascal Massart's lemma: for k functions "
-            "bounded by one it is at most the root of two log two k over n. The price of k candidates is only logarithmic. "
-            "<bookmark mark='b'/> Conditionally on the sample, any class behaves like the finite class of patterns it "
-            "produces. If there are at most pi of n patterns on n points, the same bound holds with pi of n in place of k. "
-            "<bookmark mark='c'/> So if the number of patterns grows only polynomially in n, the expected gap is of order "
-            "root log n over n, and the class is Glivenko–Cantelli. <bookmark mark='d'/> If it grows like two to the n, every "
-            "labelling is possible, the class can fit noise, and there is no bound. Counting patterns is the subject of "
-            "chapter two."
+            "<bookmark mark='a'/> To bound the Rademacher average of a finite class, Pascal Massart's lemma: for k functions bounded by one it is at most the root of two log two k over n. The price of k candidates is only logarithmic. <bookmark mark='b'/> Conditionally on the sample, an indicator class has finitely many binary patterns. If there are at most pi of n patterns on n points, the same bound holds with pi of n in place of k. <bookmark mark='c'/> So if the number of patterns grows only polynomially in n, the expected gap is of order root log n over n, and the class is Glivenko–Cantelli. <bookmark mark='d'/> If it grows like two to the n, every labelling is possible, the class can fit noise, and this counting bound need not tend to zero. Infinite VC dimension alone does not imply failure for every fixed distribution. Counting patterns is the subject of chapter two."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
