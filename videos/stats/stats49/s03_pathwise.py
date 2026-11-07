@@ -131,7 +131,7 @@ class Pathwise(VoiceoverScene):
 
     def lesson(self):
         rows = fit_rows(VGroup(
-            label(r"the recipe, \ in any model:", font_size=28, color=GREY_A),
+            label(r"Three steps to the efficient influence function", font_size=36, color=WHITE),
             label(r"1. \ find one gradient \ (often: the nonparametric influence function of a natural estimator)", font_size=26, color=GRADC),
             label(r"2. \ project it on the model's tangent space", font_size=26, color=TANC),
             label(r"3. \ the projection is $\phi^*$; \ its variance is the bound \ (chapter 3)", font_size=26, color=EFFC),
