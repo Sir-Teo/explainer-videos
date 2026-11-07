@@ -1,0 +1,23 @@
+{
+  "part": "stats8",
+  "fingerprint": "f735f8eb00e6903759b005112c5069bc3c0e3eea71c9f71cad30bdd4b2e598f4",
+  "english_endpoints": 14,
+  "native_1080_endpoints": 7,
+  "silent_motion_chapters": 5,
+  "audio_scene": "Laplace",
+  "audio_lines": 6,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats8/en/Laplace/videos/s10_laplace/480p15/Laplace.mp4",
+    "seconds": 204.732682,
+    "narration_sha256": "b479c995cffdb36b8fbb810a80adce8a73c5fb88096dbea5c78d30db45979e0f",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 205 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 205 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

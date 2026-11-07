@@ -1,0 +1,83 @@
+{
+  "fingerprint": "f735f8eb00e6903759b005112c5069bc3c0e3eea71c9f71cad30bdd4b2e598f4",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 35
+      },
+      "input_record": "renders/qa/native1080/stats8/en/Hook/result.json",
+      "input_sha256": "d08aa43cf55b7c82f0c2bd54dcf9cd0211aea3953f88f418e7c55a8ce5006dd0"
+    },
+    {
+      "scene": "Fisher",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 36
+      },
+      "input_record": "renders/qa/native1080/stats8/en/Fisher/result.json",
+      "input_sha256": "1d4f8ba7419ace7e9bc7f68e19e9321d4691989b268780ab13749000114f6de7"
+    },
+    {
+      "scene": "StudentT",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 25
+      },
+      "input_record": "renders/qa/native1080/stats8/en/StudentT/result.json",
+      "input_sha256": "7fd6ae387ae214a0f2b8eeed85a2a24ed826c9448ed0a2c331d0a15c5c10c4c2"
+    },
+    {
+      "scene": "MSE",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 42
+      },
+      "input_record": "renders/qa/native1080/stats8/en/MSE/result.json",
+      "input_sha256": "3e838ae09637a38b5f29651d52c2d45325f678fcebe88b7ca649ac1682b9f45d"
+    },
+    {
+      "scene": "Laplace",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 34
+      },
+      "input_record": "renders/qa/native1080/stats8/en/Laplace/result.json",
+      "input_sha256": "6a10800417e937f57325f1219a0ae154c108ed68a7b105bbb81222ba4d626dc2"
+    },
+    {
+      "scene": "FPC",
+      "status": "needs-review",
+      "frames": 16,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 25
+      },
+      "input_record": "renders/qa/native1080/stats8/en/FPC/result.json",
+      "input_sha256": "9a5cdf158d1ac2df9ae2dcf30e72af62e47b9babf29b504c977dad126b9a889d"
+    },
+    {
+      "scene": "Board",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 41
+      },
+      "input_record": "renders/qa/native1080/stats8/en/Board/result.json",
+      "input_sha256": "f96912dacdbbf467079b574fbc192f782899cb13331b726dbaf4bbe91fe11817"
+    }
+  ]
+}

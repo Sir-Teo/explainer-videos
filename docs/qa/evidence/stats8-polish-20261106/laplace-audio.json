@@ -1,0 +1,84 @@
+{
+ "video": "stats8",
+ "scene": "Laplace",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 6,
+ "lines": [
+  {
+   "raw": "Chapter nine. Standard errors for ratios, and Laplace's census of France.",
+   "spoken": "Chapter nine. Standard errors for ratios, and Laplace's census of France.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/bb6ff2cad01d2922.wav",
+   "duration": 5.3,
+   "tokens": 11,
+   "peak": 0.331878662109375,
+   "issues": [],
+   "elapsed": 18.89,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "In 1802 France had no census, but every parish registered its births. <bookmark mark='a'/> Pierre-Simon Laplace proposed to count the nation from a sample. <bookmark mark='b'/> In communes spread across thirty departments, officials counted the people: two million, thirty-seven thousand, six hundred and fifteen. Those communes had registered two hundred and fifteen thousand, five hundred and ninety-nine births over three years, about seventy-one thousand eight hundred a year. <bookmark mark='c'/> So there were about twenty-eight point three five people for every annual birth. <bookmark mark='d'/> France as a whole registered about a million births a year, so its population was about twenty-eight point three five million. Laplace went further: he gave a measure of the estimate's uncertainty, more than a century before sampling became a profession.",
+   "spoken": "In 1802 France had no census, but every parish registered its births. Pierre-Simon Laplace proposed to count the nation from a sample. In communes spread across thirty departments, officials counted the people: two million, thirty-seven thousand, six hundred and fifteen. Those communes had registered two hundred and fifteen thousand, five hundred and ninety-nine births over three years, about seventy-one thousand eight hundred a year. So there were about twenty-eight point three five people for every annual birth. France as a whole registered about a million births a year, so its population was about twenty-eight point three five million. Laplace went further: he gave a measure of the estimate's uncertainty, more than a century before sampling became a profession.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/6df25a078f07eb26.wav",
+   "duration": 46.05,
+   "tokens": 118,
+   "peak": 0.57366943359375,
+   "issues": [],
+   "elapsed": 66.09,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "In modern terms. <bookmark mark='a'/> The estimate is the known national total of births, times the ratio of two sample means: people per commune over births per commune. This is the ratio estimator, still used by every statistics office. <bookmark mark='b'/> Its uncertainty comes from how both means wobble, and how they wobble together: exactly the job of Part 6's delta method for a function of two means.",
+   "spoken": "In modern terms. The estimate is the known national total of births, times the ratio of two sample means: people per commune over births per commune. This is the ratio estimator, still used by every statistics office. Its uncertainty comes from how both means wobble, and how they wobble together: exactly the job of Part 6's delta method for a function of two means.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/97858f697ec2cbcf.wav",
+   "duration": 24.425,
+   "tokens": 64,
+   "peak": 0.683746337890625,
+   "issues": [],
+   "elapsed": 32.08,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Write the error of the ratio as an average of residuals: each commune's people minus the ratio times its births, divided by the average births. To first order, that's all there is. <bookmark mark='b'/> So the ratio's standard error is the standard error of an average of residuals, over the mean number of births. Communes whose population is far from the ratio's prediction add uncertainty; communes that fit the ratio well add almost none. <bookmark mark='c'/> Multiply by the national births, and you have the standard error of France's population. <bookmark mark='d'/> Survey statisticians use this every day.",
+   "spoken": "Write the error of the ratio as an average of residuals: each commune's people minus the ratio times its births, divided by the average births. To first order, that's all there is. So the ratio's standard error is the standard error of an average of residuals, over the mean number of births. Communes whose population is far from the ratio's prediction add uncertainty; communes that fit the ratio well add almost none. Multiply by the national births, and you have the standard error of France's population. Survey statisticians use this every day.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/89074f575f36b94f.wav",
+   "duration": 35.525,
+   "tokens": 92,
+   "peak": 0.479339599609375,
+   "issues": [],
+   "elapsed": 46.32,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "There's a subtlety in Laplace's survey that took another century to resolve. <bookmark mark='a'/> He didn't pick his communes at random: he chose them for reliable registers and a spread of regions. <bookmark mark='b'/> His error calculation imagined them as a random draw from a larger hypothetical population. <bookmark mark='c'/> The theory of random sampling from an actual finite list came with Arthur Bowley in 1906 and Jerzy Neyman in 1934. <bookmark mark='d'/> Neyman showed that hand-picked samples can fail badly, and that random selection is what makes a standard error trustworthy. <bookmark mark='e'/> The next chapter and Part 18 take this up.",
+   "spoken": "There's a subtlety in Laplace's survey that took another century to resolve. He didn't pick his communes at random: he chose them for reliable registers and a spread of regions. His error calculation imagined them as a random draw from a larger hypothetical population. The theory of random sampling from an actual finite list came with Arthur Bowley in 1906 and Jerzy Neyman in 1934. Neyman showed that hand-picked samples can fail badly, and that random selection is what makes a standard error trustworthy. The next chapter and Part 18 take this up.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/62b20fc4e70761ba.wav",
+   "duration": 35.975,
+   "tokens": 93,
+   "peak": 0.462188720703125,
+   "issues": [],
+   "elapsed": 48.39,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "We can't rerun Laplace's survey, but we can run his method on the World. <bookmark mark='a'/> Each of its two hundred towns has a population and a number of babies born in the past year; people per birth is about sixty-seven, and it varies from town to town. <bookmark mark='b'/> Sample thirty towns, form the ratio, scale up by the island's births, ten thousand times. The estimates centre on the true million, with a standard deviation of about twenty-four thousand. <bookmark mark='c'/> The delta-method standard error, including the finite-population correction, is shown alongside the actual simulation spread. An interval of plus or minus one point nine six standard errors has the coverage shown, below ninety-five. With only thirty towns of very different sizes, the ratio's distribution is still skewed. First-order approximations need checking, which is exactly what the Coverage Board is for.",
+   "spoken": "We can't rerun Laplace's survey, but we can run his method on the World. Each of its two hundred towns has a population and a number of babies born in the past year; people per birth is about sixty-seven, and it varies from town to town. Sample thirty towns, form the ratio, scale up by the island's births, ten thousand times. The estimates centre on the true million, with a standard deviation of about twenty-four thousand. The delta-method standard error, including the finite-population correction, is shown alongside the actual simulation spread. An interval of plus or minus one point nine six standard errors has the coverage shown, below ninety-five. With only thirty towns of very different sizes, the ratio's distribution is still skewed. First-order approximations need checking, which is exactly what the Coverage Board is for.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/ca62ef25120907aa.wav",
+   "duration": 50.875,
+   "tokens": 136,
+   "peak": 0.8360595703125,
+   "issues": [],
+   "elapsed": 51.64,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats8/en/Laplace_motion/result.json",
+ "input_sha256": "173994165f4b34576aa7239ac1fbb232c42c5c486c83154ed9c188a2a74b5f4d"
+}
