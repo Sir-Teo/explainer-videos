@@ -70,7 +70,7 @@ No part is signed off for bilingual production. The branch has zero narration_zh
 | 41 | `stats41` | 11 | English scientific source and sampled visual review complete; bilingual/listening/master approval open |
 | 42 | `stats42` | 12 | English scientific source and sampled visual review complete; bilingual/listening/master approval open |
 | 43 | `stats43` | 15 | English scientific source and sampled visual review complete; bilingual/listening/master approval open |
-| 44 | `stats44` | 15 | Scientific source corrections and 14 checks complete; visual verification in progress |
+| 44 | `stats44` | 15 | English scientific source and sampled visual review complete; bilingual/listening/master approval open |
 | 45 | `stats45` | 15 | English scientific source and sampled visual review complete; bilingual/listening/master approval open |
 | 46 | `stats46` | 14 | Scientific source corrections and 20 checks complete; visual verification in progress |
 | 47 | `stats47` | 15 | Scientific source corrections and 16 checks complete; visual verification in progress |

@@ -1,0 +1,23 @@
+{
+  "part": "stats44",
+  "fingerprint": "b4deab7be8953ba9c39c2d5f88918655dfd5462ad26767b49f9e3cfcc625dcdf",
+  "english_endpoints": 15,
+  "native_1080_endpoints": 14,
+  "silent_motion_chapters": 14,
+  "audio_scene": "ConditionalExpectation",
+  "audio_lines": 7,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats44/en/ConditionalExpectation/videos/s02_condexp/480p15/ConditionalExpectation.mp4",
+    "seconds": 275.20833333333144,
+    "narration_sha256": "be289a88a01fee3a26160111d659fb7a83f3f39a11b8bd80ac0f39ea8566a74a",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 275 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 275 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

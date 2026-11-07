@@ -1,0 +1,160 @@
+{
+  "fingerprint": "b4deab7be8953ba9c39c2d5f88918655dfd5462ad26767b49f9e3cfcc625dcdf",
+  "scope": "English sampled visual review; continuous playback/listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 50
+      },
+      "input_record": "renders/qa/native1080/stats44/en/Hook/result.json",
+      "input_sha256": "23b89a4135acd49d9e31c568ccce0970aab822e725b6b27d5d95e2a73e34711e"
+    },
+    {
+      "scene": "ConditionalExpectation",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 52
+      },
+      "input_record": "renders/qa/native1080/stats44/en/ConditionalExpectation/result.json",
+      "input_sha256": "e3a3d7eff36f1994dca2012131df0c5d829f4a5158f3bd52ea7adeacae83eabc"
+    },
+    {
+      "scene": "Martingales",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 38
+      },
+      "input_record": "renders/qa/native1080/stats44/en/Martingales/result.json",
+      "input_sha256": "921d9fc72333cc3497e16f9b69822f008f7720b097ecd4d3b294b1719f1343a8"
+    },
+    {
+      "scene": "OptionalStopping",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 45
+      },
+      "input_record": "renders/qa/native1080/stats44/en/OptionalStopping/result.json",
+      "input_sha256": "767a6519cdad0305abe668d5c0a1b955b795329c05b3dd2a064ef0848ca2d620"
+    },
+    {
+      "scene": "Maximal",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 48
+      },
+      "input_record": "renders/qa/native1080/stats44/en/Maximal/result.json",
+      "input_sha256": "f174b29edbaaeae293c4a6904c5dfd640845b6b0478e3476d310d1f3fd8c2c6e"
+    },
+    {
+      "scene": "Convergence",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 44
+      },
+      "input_record": "renders/qa/native1080/stats44/en/Convergence/result.json",
+      "input_sha256": "6f1a106dfc9e31af4b4276ac82fb27f5e8604d7fbf37a2c2929e45359885e99d"
+    },
+    {
+      "scene": "Concentration",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 33
+      },
+      "input_record": "renders/qa/native1080/stats44/en/Concentration/result.json",
+      "input_sha256": "6a5b6904af84c3d5acf12a630df61ef9e0737d2a459368e3750f59212492034e"
+    },
+    {
+      "scene": "MartingaleCLT",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 40
+      },
+      "input_record": "renders/qa/native1080/stats44/en/MartingaleCLT/result.json",
+      "input_sha256": "529543012f4ce009487cc1f8badccabd87406f623c28263398b3c1ed2ff37614"
+    },
+    {
+      "scene": "MarkovChains",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 50
+      },
+      "input_record": "renders/qa/native1080/stats44/en/MarkovChains/result.json",
+      "input_sha256": "302a53b2de34d2a708cd481c0f9e6178e7c517d2190dbc3c7846424bfdade5ec"
+    },
+    {
+      "scene": "Mixing",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 38
+      },
+      "input_record": "renders/qa/native1080/stats44/en/Mixing/result.json",
+      "input_sha256": "6a26580261d6801a997fdc579475f2d39e7589b518cd849b232916ad8345fdfa"
+    },
+    {
+      "scene": "Brownian",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 47
+      },
+      "input_record": "renders/qa/native1080/stats44/en/Brownian/result.json",
+      "input_sha256": "589b4eca17477bc7c7728dfc8efb018fc50b94aba5f09e46d784829d02c3ba54"
+    },
+    {
+      "scene": "Donsker",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 36
+      },
+      "input_record": "renders/qa/native1080/stats44/en/Donsker/result.json",
+      "input_sha256": "6704d0e86944da6650632b52262e89f7fcc17456fbc4a73ce60e73528ef0dcc9"
+    },
+    {
+      "scene": "IteratedLogarithm",
+      "status": "needs-review",
+      "frames": 17,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 35
+      },
+      "input_record": "renders/qa/native1080/stats44/en/IteratedLogarithm/result.json",
+      "input_sha256": "a8e0cae80baf7acb6bf3cca2b225d7f4032444cd597cba35a1e738bf0fa0467f"
+    },
+    {
+      "scene": "Counting",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 39
+      },
+      "input_record": "renders/qa/native1080/stats44/en/Counting/result.json",
+      "input_sha256": "e4906bac3232aa2140cee608cbd77b1a67b9d0561db7c753e47889f7b742057c"
+    }
+  ]
+}

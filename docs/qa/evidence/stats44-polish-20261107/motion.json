@@ -1,0 +1,160 @@
+{
+  "fingerprint": "b4deab7be8953ba9c39c2d5f88918655dfd5462ad26767b49f9e3cfcc625dcdf",
+  "scope": "English sampled visual review; continuous playback/listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats44/en/Hook_motion/result.json",
+      "input_sha256": "ab0eaaefe100cc020f03280f11d795fba3335693e323d521a4eb15ad7fc11f51",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 244 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 244 s\n"
+    },
+    {
+      "scene": "ConditionalExpectation",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats44/en/ConditionalExpectation_motion/result.json",
+      "input_sha256": "94029ffd4c9692b2de755e232bfd23af292d34baa36191d519965f035b854080",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 281 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 281 s\n"
+    },
+    {
+      "scene": "Martingales",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 5
+      },
+      "input_record": "renders/qa/series/stats44/en/Martingales_motion/result.json",
+      "input_sha256": "5073dbb3b61c296e1c2393eb449b3d57993b7b9819dd8c4b537378effeee9be8",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 204 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 204 s\n"
+    },
+    {
+      "scene": "OptionalStopping",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats44/en/OptionalStopping_motion/result.json",
+      "input_sha256": "5d4f43393d497775dff9c2806c922ef68d2c820866c064e12ad693997337b057",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 258 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 258 s\n"
+    },
+    {
+      "scene": "Maximal",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats44/en/Maximal_motion/result.json",
+      "input_sha256": "ee21925e7c5e2deeb47574264b6e5099362d6d78a44a36b139be2e4279b19643",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 259 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 259 s\n"
+    },
+    {
+      "scene": "Convergence",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats44/en/Convergence_motion/result.json",
+      "input_sha256": "393534ef803c56b1baa78a6ed0290e6b3e7644e084618ab0aa3d2a7ab5209e56",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 230 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 230 s\n"
+    },
+    {
+      "scene": "Concentration",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats44/en/Concentration_motion/result.json",
+      "input_sha256": "f3e4f7f941bc9e115176c26272d1ff6497f2bf6e28a5275c72d83081205b9451",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 205 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 205 s\n"
+    },
+    {
+      "scene": "MartingaleCLT",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats44/en/MartingaleCLT_motion/result.json",
+      "input_sha256": "0a8b48e46d715dd27a1abae3eedf5f2122add37e500afec791d17bb96df17b79",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 219 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 219 s\n"
+    },
+    {
+      "scene": "MarkovChains",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats44/en/MarkovChains_motion/result.json",
+      "input_sha256": "7c7ae9202ae8cfb0d3a5a9434d198d3a0d509eb61f5b56bc6483996c9ed44b9b",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 226 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 226 s\n"
+    },
+    {
+      "scene": "Mixing",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats44/en/Mixing_motion/result.json",
+      "input_sha256": "737b817e4a981abc409b16246ef92ba943de111763bc7f7e561af88e61d3e419",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 278 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 278 s\n"
+    },
+    {
+      "scene": "Brownian",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats44/en/Brownian_motion/result.json",
+      "input_sha256": "e47933c1fc63d971166e364d61ff3780186a0cc0b5ad8ae1dc4519a8a02fc3af",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 222 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 222 s\n"
+    },
+    {
+      "scene": "Donsker",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats44/en/Donsker_motion/result.json",
+      "input_sha256": "522d5e0abf90737e323a298025f3e756f0560a518a295e420243b212f8452ec7",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 249 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 249 s\n"
+    },
+    {
+      "scene": "IteratedLogarithm",
+      "status": "needs-review",
+      "frames": 17,
+      "warnings": {
+        "narration-translation": 5
+      },
+      "input_record": "renders/qa/series/stats44/en/IteratedLogarithm_motion/result.json",
+      "input_sha256": "5fa5d0f345d47a6af4e0652136c03e9147f3420487fc493c4f5c6f519912dd53",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 210 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 210 s\n"
+    },
+    {
+      "scene": "Counting",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats44/en/Counting_motion/result.json",
+      "input_sha256": "3066b829677e8a60fff23a392929c23fac155b8e3a04cf8d3c507d26f71159bc",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 236 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 236 s\n"
+    }
+  ]
+}
