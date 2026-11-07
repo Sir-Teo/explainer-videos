@@ -1,0 +1,23 @@
+{
+  "part": "stats32",
+  "fingerprint": "cf6c867408e18529788ec73729436eb49d3cebcb2b884542b476ee6833fc6ebd",
+  "english_endpoints": 13,
+  "native_1080_endpoints": 12,
+  "silent_motion_chapters": 12,
+  "audio_scene": "Completion",
+  "audio_lines": 9,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats32/en/Completion/videos/s12_mc/480p15/Completion.mp4",
+    "seconds": 263.532682,
+    "narration_sha256": "89706291b7bed5c9998efbfe836d7e0839f704b4cbb5fedd03be39e41ef2c0cf",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 264 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 264 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

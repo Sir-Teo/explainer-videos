@@ -1,0 +1,149 @@
+{
+  "fingerprint": "cf6c867408e18529788ec73729436eb49d3cebcb2b884542b476ee6833fc6ebd",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 58
+      },
+      "input_record": "renders/qa/series/stats32/en/Hook/result.json",
+      "input_sha256": "b9527bc99fc08cf9241d3e110c542e87e765379a2d04f8c9e602f5e36a2e9765"
+    },
+    {
+      "scene": "Upgrade",
+      "status": "needs-review",
+      "frames": 16,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 31
+      },
+      "input_record": "renders/qa/series/stats32/en/Upgrade/result.json",
+      "input_sha256": "55f614d4f9e7f1cd0bb6e893957496ea20ca7f45049cfdc26ed04156bb373ec7"
+    },
+    {
+      "scene": "Ridge",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 10,
+        "untranslated-on-screen": 61
+      },
+      "input_record": "renders/qa/series/stats32/en/Ridge/result.json",
+      "input_sha256": "3823d4f737985db14f7acd4b288c3e97ab4cd3896bd70042070f6793da2a3635"
+    },
+    {
+      "scene": "FromL0",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 48
+      },
+      "input_record": "renders/qa/series/stats32/en/FromL0/result.json",
+      "input_sha256": "1403b75b89d8c88b57e676c7d4959cb74c666a6f63399ad52d30d7cfb51c0d23"
+    },
+    {
+      "scene": "Lasso",
+      "status": "needs-review",
+      "frames": 33,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 53
+      },
+      "input_record": "renders/qa/series/stats32/en/Lasso/result.json",
+      "input_sha256": "ca44aad814e85d25d5ef6c7be8a8712d24b9ee39ecc7bf527dce04629fb158f3"
+    },
+    {
+      "scene": "Computing",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 76
+      },
+      "input_record": "renders/qa/series/stats32/en/Computing/result.json",
+      "input_sha256": "7ead1a8754bc81640d1566fc042a705796d515007c0ab6188402aaf4923cbe8b"
+    },
+    {
+      "scene": "Zoo",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 10,
+        "untranslated-on-screen": 85
+      },
+      "input_record": "renders/qa/series/stats32/en/Zoo/result.json",
+      "input_sha256": "ed56365744478af12ace4a8485c02383ac89c37c1dccb507900c76ac361fb5da"
+    },
+    {
+      "scene": "Choosing",
+      "status": "needs-review",
+      "frames": 32,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 61
+      },
+      "input_record": "renders/qa/series/stats32/en/Choosing/result.json",
+      "input_sha256": "18f4972f4f33f5bc4a95e374491bc08150d853577f6728a4b2aa65fc0d3f5839"
+    },
+    {
+      "scene": "BayesSparse",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 64
+      },
+      "input_record": "renders/qa/series/stats32/en/BayesSparse/result.json",
+      "input_sha256": "bf77ef3697ab7429ffccbdead3cee1150c755b809fddbe6a7304bdf409305cbd"
+    },
+    {
+      "scene": "Compressed",
+      "status": "needs-review",
+      "frames": 35,
+      "warnings": {
+        "narration-translation": 10,
+        "untranslated-on-screen": 69
+      },
+      "input_record": "renders/qa/series/stats32/en/Compressed/result.json",
+      "input_sha256": "03b7eee5a979fd6e9db9da17fafd8b7894a12552914bd38ac02403980ef6f165"
+    },
+    {
+      "scene": "Inference",
+      "status": "needs-review",
+      "frames": 35,
+      "warnings": {
+        "narration-translation": 11,
+        "untranslated-on-screen": 88
+      },
+      "input_record": "renders/qa/series/stats32/en/Inference/result.json",
+      "input_sha256": "4b1d9e35282bdcd0f4eda93b9d9efd0e2507901decf181688549ad25a7425b01"
+    },
+    {
+      "scene": "Completion",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 56
+      },
+      "input_record": "renders/qa/series/stats32/en/Completion/result.json",
+      "input_sha256": "572cc0b5b4f3d202dd3ff54eb2364ccba2742dd2c10bf3d71b88010d06ebbc57"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 14,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 69
+      },
+      "input_record": "renders/qa/series/stats32/en/Outro/result.json",
+      "input_sha256": "224c87c7f177c6c2f9ee60732f87f13980525923653da22defc666a543bfd08f"
+    }
+  ]
+}

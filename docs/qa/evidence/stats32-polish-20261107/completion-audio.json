@@ -1,0 +1,117 @@
+{
+ "video": "stats32",
+ "scene": "Completion",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 9,
+ "lines": [
+  {
+   "raw": "Chapter eleven. Matrix completion.",
+   "spoken": "Chapter eleven. Matrix completion.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/c28cea730c7a6e64.wav",
+   "duration": 2.9,
+   "tokens": 4,
+   "peak": 0.419830322265625,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> In 2006 Netflix offered a million dollars to anyone who could improve its film recommendations by ten percent. <bookmark mark='b'/> The data were a matrix of four hundred and eighty thousand users by seventeen thousand seven hundred films, with about one percent of the entries known: the ratings users had actually given. <bookmark mark='c'/> The task was to fill in the rest. <bookmark mark='d'/> The prize was won in 2009 by a team whose methods had, at their core, low-rank factor models: the idea that tastes are described by a few hidden dimensions.",
+   "spoken": "In 2006 Netflix offered a million dollars to anyone who could improve its film recommendations by ten percent. The data were a matrix of four hundred and eighty thousand users by seventeen thousand seven hundred films, with about one percent of the entries known: the ratings users had actually given. The task was to fill in the rest. The prize was won in 2009 by a team whose methods had, at their core, low-rank factor models: the idea that tastes are described by a few hidden dimensions.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/d63f81df86a37f4d.wav",
+   "duration": 33.25,
+   "tokens": 87,
+   "peak": 0.451141357421875,
+   "issues": [],
+   "elapsed": 0.04,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Suppose the full matrix has low rank: each user's ratings a combination of a few taste profiles. <bookmark mark='b'/> Then its identifiable rank-r dimension is r times m plus k minus r, removing factorization redundancies, far fewer than its m times k entries, and a fraction of the entries might determine the rest. <bookmark mark='c'/> The direct problem, the matrix of smallest rank that agrees with the known entries, is NP-hard. <bookmark mark='d'/> And look at it this way: the rank is the number of nonzero singular values, the zero norm of the vector of singular values. It is chapter three's problem in disguise.",
+   "spoken": "Suppose the full matrix has low rank: each user's ratings a combination of a few taste profiles. Then its identifiable rank-r dimension is r times m plus k minus r, removing factorization redundancies, far fewer than its m times k entries, and a fraction of the entries might determine the rest. The direct problem, the matrix of smallest rank that agrees with the known entries, is NP-hard. And look at it this way: the rank is the number of nonzero singular values, the zero norm of the vector of singular values. It is chapter three's problem in disguise.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/a067763a0c4163d5.wav",
+   "duration": 36.975,
+   "tokens": 98,
+   "peak": 0.47491455078125,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The same relaxation works. Replace the rank by the nuclear norm, the sum of the singular values, their one norm. <bookmark mark='b'/> Maryam Fazel showed in 2002 that it is the convex envelope of rank on the unit operator-norm ball, paralleling the bounded-box count relaxation. <bookmark mark='c'/> Fit the observed entries with a nuclear-norm penalty: a matrix lasso. <bookmark mark='d'/> Its proximal step is the matrix version of soft thresholding: take the SVD and soft-threshold the singular values.",
+   "spoken": "The same relaxation works. Replace the rank by the nuclear norm, the sum of the singular values, their one norm. Maryam Fazel showed in 2002 that it is the convex envelope of rank on the unit operator-norm ball, paralleling the bounded-box count relaxation. Fit the observed entries with a nuclear-norm penalty: a matrix lasso. Its proximal step is the matrix version of soft thresholding: take the SVD and soft-threshold the singular values.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/d50089484a24f88a.wav",
+   "duration": 28.35,
+   "tokens": 72,
+   "peak": 0.506500244140625,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Rahul Mazumder, Trevor Hastie and Robert Tibshirani's SoftImpute is almost a one-line algorithm. Fill the missing entries with the current guess. <bookmark mark='b'/> Take the singular value decomposition. <bookmark mark='c'/> Soft-threshold the singular values to get the next guess. <bookmark mark='d'/> Repeat. It is like EM from Part 22, with imputation and shrinkage alternating, and like the lasso it is computed along a decreasing sequence of lambdas with warm starts.",
+   "spoken": "Rahul Mazumder, Trevor Hastie and Robert Tibshirani's SoftImpute is almost a one-line algorithm. Fill the missing entries with the current guess. Take the singular value decomposition. Soft-threshold the singular values to get the next guess. Repeat. It is like EM from Part 22, with imputation and shrinkage alternating, and like the lasso it is computed along a decreasing sequence of lambdas with warm starts.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/fa60d0e2c8e7e509.wav",
+   "duration": 26.225,
+   "tokens": 64,
+   "peak": 0.454620361328125,
+   "issues": [],
+   "elapsed": 0.04,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> A simulated example: a hundred and twenty by ninety matrix of rank four, a corner of which is shown with brightness for the value. <bookmark mark='b'/> We observe thirty percent of the entries, each with noise; the hatched cells are missing. Brightness uses a common scale, clipped at plus and minus six. <bookmark mark='c'/> SoftImpute fills them in. The pattern returns, and the relative error against latent truth on untouched test cells is about twenty-seven percent. Lambda was selected by noisy validation-cell error, without using test cells or latent truth for tuning.",
+   "spoken": "A simulated example: a hundred and twenty by ninety matrix of rank four, a corner of which is shown with brightness for the value. We observe thirty percent of the entries, each with noise; the hatched cells are missing. Brightness uses a common scale, clipped at plus and minus six. SoftImpute fills them in. The pattern returns, and the relative error against latent truth on untouched test cells is about twenty-seven percent. Lambda was selected by noisy validation-cell error, without using test cells or latent truth for tuning.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/2d3edc415f9e4fed.wav",
+   "duration": 32.5,
+   "tokens": 88,
+   "peak": 0.46044921875,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The SoftImpute path, from a large lambda on the right, where the answer is the zero matrix, to small. <bookmark mark='b'/> The gold numbers are the rank of each fit. <bookmark mark='c'/> The fitted rank is four at lambda fifteen, with validation mean squared error about one point five eight. <bookmark mark='d'/> The smallest validation error is about point five eight at lambda three, which keeps the four large singular values less shrunk and lets in a few tiny extra ones: the lasso's bias trade-off, again.",
+   "spoken": "The SoftImpute path, from a large lambda on the right, where the answer is the zero matrix, to small. The gold numbers are the rank of each fit. The fitted rank is four at lambda fifteen, with validation mean squared error about one point five eight. The smallest validation error is about point five eight at lambda three, which keeps the four large singular values less shrunk and lets in a few tiny extra ones: the lasso's bias trade-off, again.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/8677771c2a335569.wav",
+   "duration": 26.775,
+   "tokens": 80,
+   "peak": 0.588165283203125,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The singular values tell the story. The four true ones are recovered, each shrunk by fifteen to twenty percent. <bookmark mark='b'/> The extra ones are an order of magnitude smaller, so the fit is nearly rank four. <bookmark mark='c'/> And as with the lasso, refitting or reweighting can reduce shrinkage at a possible variance cost, the matrix versions of chapter six's remedies.",
+   "spoken": "The singular values tell the story. The four true ones are recovered, each shrunk by fifteen to twenty percent. The extra ones are an order of magnitude smaller, so the fit is nearly rank four. And as with the lasso, refitting or reweighting can reduce shrinkage at a possible variance cost, the matrix versions of chapter six's remedies.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/0302302d0204814a.wav",
+   "duration": 21.775,
+   "tokens": 58,
+   "peak": 0.76513671875,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The theory mirrors chapter nine. Emmanuel Candès and Benjamin Recht proved in 2009 that if the number of observed entries is a constant times the rank times the dimensions, up to logarithms, <bookmark mark='b'/> entries are sampled uniformly at random, and the matrix satisfies the theorem's incoherence conditions, with singular vectors spread over rows and columns, <bookmark mark='c'/> then nuclear-norm minimization recovers the matrix exactly with high probability. <bookmark mark='d'/> For uniform recovery from few randomly sampled entries, concentration can obstruct recovery: a matrix that is zero except for one entry cannot be recovered unless that entry is observed. Part 52 returns to low-rank recovery with noise.",
+   "spoken": "The theory mirrors chapter nine. Emmanuel Candès and Benjamin Recht proved in 2009 that if the number of observed entries is a constant times the rank times the dimensions, up to logarithms, entries are sampled uniformly at random, and the matrix satisfies the theorem's incoherence conditions, with singular vectors spread over rows and columns, then nuclear-norm minimization recovers the matrix exactly with high probability. For uniform recovery from few randomly sampled entries, concentration can obstruct recovery: a matrix that is zero except for one entry cannot be recovered unless that entry is observed. Part 52 returns to low-rank recovery with noise.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/8d987c83ce73dc87.wav",
+   "duration": 44.875,
+   "tokens": 101,
+   "peak": 0.516082763671875,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats32/en/Completion_motion/result.json",
+ "input_sha256": "0891b9df6899e09e25820b38bfa9ee3bd3a3a939e86e3e3ec9083659a0a93f3a"
+}

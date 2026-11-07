@@ -1,0 +1,138 @@
+{
+  "fingerprint": "cf6c867408e18529788ec73729436eb49d3cebcb2b884542b476ee6833fc6ebd",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats32/en/Hook_motion/result.json",
+      "input_sha256": "e0174f4969cacfdaf0e3adeb742f7bbb806d0e5169e941366adf78baf9ff677f",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 280 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 280 s\n"
+    },
+    {
+      "scene": "Upgrade",
+      "status": "needs-review",
+      "frames": 16,
+      "warnings": {
+        "narration-translation": 5
+      },
+      "input_record": "renders/qa/series/stats32/en/Upgrade_motion/result.json",
+      "input_sha256": "fdd908ce62229ae73c498b2932750c4988c18c9826e9edad2992f1615ee01235",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 172 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 172 s\n"
+    },
+    {
+      "scene": "Ridge",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 10
+      },
+      "input_record": "renders/qa/series/stats32/en/Ridge_motion/result.json",
+      "input_sha256": "cde5826d7b9c93ea497056f82b0edb3012fdcb42e69621dea46a0b1054e085ed",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 321 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 321 s\n"
+    },
+    {
+      "scene": "FromL0",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats32/en/FromL0_motion/result.json",
+      "input_sha256": "852f06566bd8070d72a5f951945617f52617b368b31a13137b69a32ae4247bb9",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 222 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 222 s\n"
+    },
+    {
+      "scene": "Lasso",
+      "status": "needs-review",
+      "frames": 33,
+      "warnings": {
+        "narration-translation": 9
+      },
+      "input_record": "renders/qa/series/stats32/en/Lasso_motion/result.json",
+      "input_sha256": "8613bde88ea4458317175b65e0312c270e817150871fff5f186bcbca44b2d0e2",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 316 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 316 s\n"
+    },
+    {
+      "scene": "Computing",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats32/en/Computing_motion/result.json",
+      "input_sha256": "e5971d2c9f3b491723be3beed82543274b24e9a4adbb589db380122d58297e6e",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 259 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 259 s\n"
+    },
+    {
+      "scene": "Zoo",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 10
+      },
+      "input_record": "renders/qa/series/stats32/en/Zoo_motion/result.json",
+      "input_sha256": "8ca7113ba6d00129ca6b4329b7af7dd54daa2067b2638dc82b219062472c981b",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 320 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 320 s\n"
+    },
+    {
+      "scene": "Choosing",
+      "status": "needs-review",
+      "frames": 32,
+      "warnings": {
+        "narration-translation": 9
+      },
+      "input_record": "renders/qa/series/stats32/en/Choosing_motion/result.json",
+      "input_sha256": "8cbad8a833555c5172d9c8ffdd7e18319a9324abe895876ee621558117fc3151",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 264 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 264 s\n"
+    },
+    {
+      "scene": "BayesSparse",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 9
+      },
+      "input_record": "renders/qa/series/stats32/en/BayesSparse_motion/result.json",
+      "input_sha256": "0aa3dd8aaf7ac1a0063664a7b5d327faca47f938be2acdbb7439b3a66a1553d9",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 278 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 278 s\n"
+    },
+    {
+      "scene": "Compressed",
+      "status": "needs-review",
+      "frames": 35,
+      "warnings": {
+        "narration-translation": 10
+      },
+      "input_record": "renders/qa/series/stats32/en/Compressed_motion/result.json",
+      "input_sha256": "86201f548938a2f89ce9349b478daaa8dfab36782e7d6fdf82b5c3f4766002d6",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 319 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 319 s\n"
+    },
+    {
+      "scene": "Inference",
+      "status": "needs-review",
+      "frames": 35,
+      "warnings": {
+        "narration-translation": 11
+      },
+      "input_record": "renders/qa/series/stats32/en/Inference_motion/result.json",
+      "input_sha256": "a5ae6b8736bfdbe12e331b16d8c4514ebc13682b99aebbc38e11436aecafc4ac",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 352 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 352 s\n"
+    },
+    {
+      "scene": "Completion",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 9
+      },
+      "input_record": "renders/qa/series/stats32/en/Completion_motion/result.json",
+      "input_sha256": "0891b9df6899e09e25820b38bfa9ee3bd3a3a939e86e3e3ec9083659a0a93f3a",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 276 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 276 s\n"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "baseline": "all 13 inspected",
+  "native": [
+    "Hook",
+    "Upgrade",
+    "Ridge",
+    "FromL0",
+    "Lasso",
+    "Computing",
+    "Zoo",
+    "Choosing",
+    "BayesSparse",
+    "Compressed",
+    "Inference",
+    "Completion"
+  ],
+  "motion": [
+    "Hook",
+    "Upgrade",
+    "Ridge",
+    "FromL0",
+    "Lasso",
+    "Computing",
+    "Zoo",
+    "Choosing",
+    "BayesSparse",
+    "Compressed",
+    "Inference",
+    "Completion"
+  ],
+  "actual": "Completion",
+  "from_l0_fresh_baseline_native_motion": "All three inspected after caption repair; full norm-ball entrance keeps context, zero blank/sparse runs."
+}
