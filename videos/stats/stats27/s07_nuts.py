@@ -24,21 +24,25 @@ class NUTS(VoiceoverScene):
     def uturn(self):
         rows = [
             cmath(r"\text{build}", r":", r"\text{a trajectory forwards and backwards in time, \ doubling}", font_size=28),
-            cmath(r"\text{stop when}", r":", r"(q^+ - q^-)\cdot p^- < 0 \ \text{ or } \ (q^+ - q^-)\cdot p^+ < 0", font_size=30),
+            cmath(r"\text{stop when}", r":", r"(q^+-q^-)^\top M^{-1}p^-<0 \ \text{or } (q^+-q^-)^\top M^{-1}p^+<0", font_size=30),
             cmath(r"\text{choose}", r":", r"\text{a point from the trajectory, \ preserving detailed balance}", font_size=28),
-            cmath(r"\text{cost}", r":", r"\text{as long as the posterior needs, \ no longer}", font_size=30),
+            cmath(r"\text{cost}", r":", r"\text{adaptive path length, \ limited by maximum depth}", font_size=30),
         ]
         rows[1][2].set_color(SAMPLER)
         whys = [why(r"1, 2, 4, 8, \ldots\ leapfrog steps"), why(r"an end starts moving back towards the other"),
                 why(r"Hoffman \& Gelman (2014)"), why(r"$L$ adapts, \ every iteration")]
         with self.voiceover(
-            "<bookmark mark='a'/> Matthew Hoffman and Andrew Gelman's No-U-Turn Sampler removes the number of steps. From the "
-            "current point it builds a trajectory both forwards and backwards in time, doubling its length each round: one "
-            "step, two, four, eight. <bookmark mark='b'/> It stops when the path starts to turn back on itself, when either "
-            "end's momentum points back towards the other end. <bookmark mark='c'/> The next point is then drawn from the "
-            "trajectory in a way that keeps detailed balance, the subtle part of the algorithm. <bookmark mark='d'/> Each "
-            "iteration therefore costs as many gradients as that region of the posterior needs."
+            "<bookmark mark='a'/> Matthew Hoffman and Andrew Gelman's No-U-Turn Sampler removes the number of steps. "
+            "From the current point it builds a trajectory both forwards and backwards in time, doubling its length "
+            "each round: one step, two, four, eight. <bookmark mark='b'/> It stops when the path starts to turn back "
+            "on itself, when either end's momentum points back towards the other end. <bookmark mark='c'/> The next "
+            "point is then drawn from the trajectory in a way that keeps detailed balance, the subtle part of the "
+            "algorithm. <bookmark mark='d'/> The path length responds to local geometry, with a maximum-depth "
+            "safeguard. A U-turn is a stopping rule, not proof that an iteration did all the exploration needed."
         ) as vo:
+            intro = label('NUTS stops when endpoint velocities turn back', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -91,20 +95,25 @@ class NUTS(VoiceoverScene):
         rows = [
             cmath(r"\epsilon", r":", r"\text{dual averaging to a target acceptance, \ 0.8}", font_size=30),
             cmath(r"M^{-1}", r":", r"\text{the variance of the draws, \ in doubling windows}", font_size=30),
-            cmath(r"\text{warmup}", r":", r"\text{75 to tune } \epsilon, \text{ then windows of 25, 50, 100, \ldots, then 50}", font_size=28),
+            cmath(r"\text{warmup}", r":", r"\text{initial buffer, \ expanding windows, \ final step-size buffer}", font_size=28),
             cmath(r"\text{after warmup}", r":", r"\text{freeze them: \ a valid Markov chain}", font_size=30),
         ]
         rows[1][2].set_color(SAMPLER)
         whys = [why(r"Nesterov's dual averaging, \ adapted"), why(r"the posterior's scales"),
-                why(r"Stan's schedule"), why(r"adaptation that never stops breaks the chain")]
+                why(r"simplified Stan-inspired schedule"), why(r"ongoing adaptation needs additional conditions")]
         with self.voiceover(
-            "<bookmark mark='a'/> The step size and mass matrix are learned during warmup. The step size by dual averaging, "
-            "an optimization method that adjusts it until the average acceptance probability is point eight. "
-            "<bookmark mark='b'/> The mass matrix from the variance of the draws, re-estimated in windows that double in "
-            "length as the chain settles. <bookmark mark='c'/> That is Stan's schedule, which statkit's sampler follows. "
-            "<bookmark mark='d'/> Then both are frozen: adaptation that never stopped would break the Markov property, and the "
-            "guarantee with it. Warmup draws are discarded."
+            "<bookmark mark='a'/> The step size and mass matrix are learned during warmup. The step size by dual "
+            "averaging, an optimization method that adjusts it until the average acceptance probability is point "
+            "eight. <bookmark mark='b'/> The inverse mass matrix is estimated from draw variances in expanding "
+            "windows. <bookmark mark='c'/> Statkit uses a simplified schedule inspired by Stan, with initial and "
+            "terminal buffers proportional to warmup length; it is not Stan's exact production implementation. "
+            "<bookmark mark='d'/> Then both are frozen for ordinary Markov-chain sampling. Continuing adaptation "
+            "requires additional adaptive-MCMC conditions; it is not automatically invalid. Warmup draws are "
+            "discarded."
         ) as vo:
+            intro = label('Adapt step size and inverse mass during warmup', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -119,17 +128,17 @@ class NUTS(VoiceoverScene):
         ax = A.ax
         bars = bars_at(ax, list(range(1, 8)), counts[1:8], 0.7, SAMPLER, 0.85)
         rows = fit_rows(VGroup(
-            label(r"the eight schools, \ non-centred: \ 4 chains $\times$ 1,000", font_size=22),
+            label(r"eight schools, \ non-centred; \ $\delta=0.9$, \ 4 chains $\times$ 1,000", font_size=22),
             label(rf"mostly depth 3: \ 7 leapfrog steps; \ mean {d['mean_leapfrog']:.1f}", font_size=22, color=SAMPLER),
             label(rf"adapted step {d['eps_final']:.2f}", font_size=22, color=GREY_A),
             label(rf"$\hat R(\log\tau) = {d['rhat_tau']:.3f}$; \ ESS {d['ess_tau']:,.0f}; \ {d['divergent']} divergences", font_size=22, color=HIT),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> On the eight schools, written in the non-centred form chapter seven explains, four chains "
-            "of a thousand. <bookmark mark='b'/> Most iterations need a tree of depth three, seven leapfrog steps, about eight "
-            "on average. <bookmark mark='c'/> The adapted step size is point five nine. <bookmark mark='d'/> R-hat for log "
-            "tau is one point oo two, the effective sample size about eighteen hundred, and there are no divergences: a "
-            "clean run."
+            "<bookmark mark='a'/> On the eight schools, written in the non-centred form chapter seven explains, four "
+            "chains of a thousand. <bookmark mark='b'/> Most iterations need a tree of depth three, seven leapfrog "
+            "steps, about eight on average. <bookmark mark='c'/> The caption reports the average adapted step size of"
+            " these four chains. <bookmark mark='d'/> R-hat for log tau is one point oo two, the effective sample "
+            "size about eighteen hundred, and there are no divergences: a clean run."
         ) as vo:
             self.add(schools_tag())
             self.play(FadeIn(A))
@@ -145,22 +154,25 @@ class NUTS(VoiceoverScene):
 
     def divergences(self):
         rows = [
-            cmath(r"\text{divergence}", r":", r"H(q, p) - H_0 > 1000 \text{ along the trajectory}", font_size=30),
+            cmath(r"\text{divergence}", r":", r"\text{large energy error; \ original slice NUTS uses a slice threshold}", font_size=30),
             cmath(r"\text{cause}", r":", r"\text{curvature the step size cannot follow}", font_size=30),
-            cmath(r"\text{symptom}", r":", r"\text{that region is under-explored: \ biased answers}", font_size=30),
+            cmath(r"\text{symptom}", r":", r"\text{possible under-exploration and biased finite-run estimates}", font_size=30),
             cmath(r"\text{treat}", r":", r"\text{never ignore; \ reparametrize}", font_size=30),
         ]
         rows[2][2].set_color(DIV)
         whys = [why(r"the energy blows up"), why(r"a funnel's neck, \ a sharp ridge"), why(r"a warning, \ with a location"),
                 why(r"chapter seven")]
         with self.voiceover(
-            "<bookmark mark='a'/> HMC has one more gift: it reports its own failures. If the energy along a trajectory "
-            "suddenly explodes, the trajectory has diverged. <bookmark mark='b'/> That happens where the posterior's curvature "
-            "changes faster than the step size can follow, in a narrow neck or a sharp ridge. <bookmark mark='c'/> The "
-            "sampler then can't enter that region properly, and the answers are biased, often without any other sign. "
-            "<bookmark mark='d'/> So a divergence is never to be ignored. Usually the fix is to change the parametrization, "
-            "as the next chapter shows."
+            "<bookmark mark='a'/> HMC has one more gift: it reports its own failures. If the energy along a "
+            "trajectory suddenly explodes, the trajectory has diverged. <bookmark mark='b'/> That happens where the "
+            "posterior's curvature changes faster than the step size can follow, in a narrow neck or a sharp ridge. "
+            "<bookmark mark='c'/> The sampler then can't enter that region properly, and finite-run estimates may be "
+            "biased, sometimes without another obvious warning. <bookmark mark='d'/> So a divergence is never to be "
+            "ignored. Usually the fix is to change the parametrization, as the next chapter shows."
         ) as vo:
+            intro = label('Large integration errors warn of difficult geometry', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -169,7 +181,7 @@ class NUTS(VoiceoverScene):
 
     def discrete(self):
         rows = [
-            cmath(r"\text{HMC needs}", r":", r"\text{a smooth log density on } \mathbb R^d", font_size=30),
+            cmath(r"\text{HMC needs}", r":", r"\text{differentiable continuous coordinates; \ transform constraints}", font_size=30),
             cmath(r"\text{discrete parameters}", r":", r"\text{a mixture's labels, \ a change point}", font_size=30),
             cmath(r"\text{marginalize}", r":", r"p(y \mid \theta) = \textstyle\sum_k \pi_k\, p(y \mid \theta_k)", font_size=30),
             cmath(r"\text{then}", r":", r"\text{recover the labels afterwards, \ draw by draw}", font_size=30),
@@ -177,12 +189,16 @@ class NUTS(VoiceoverScene):
         rows[2][-1].set_color(HIT)
         whys = [why(r"gradients, \ everywhere"), why(r"no derivative to follow"), why(r"Part 31's mixtures, \ by the sum rule"), why(r"by Bayes's rule, \ per draw")]
         with self.voiceover(
-            "<bookmark mark='a'/> One limitation of all gradient-based samplers: they need a smooth log density on the "
-            "whole real space. <bookmark mark='b'/> Discrete unknowns, like which component of a mixture each observation "
-            "came from, or the time of a change point, have no gradient. <bookmark mark='c'/> The standard remedy is to sum "
-            "them out of the likelihood, which for a mixture gives the familiar weighted sum of densities. "
-            "<bookmark mark='d'/> Their posterior can then be recovered afterwards, one draw at a time."
+            "<bookmark mark='a'/> One limitation of all gradient-based samplers: standard HMC needs differentiable "
+            "continuous coordinates in the region it explores, often after transforming constrained parameters. "
+            "<bookmark mark='b'/> Discrete unknowns, like which component of a mixture each observation came from, or"
+            " the time of a change point, have no gradient. <bookmark mark='c'/> The standard remedy is to sum them "
+            "out of the likelihood, which for a mixture gives the familiar weighted sum of densities. <bookmark "
+            "mark='d'/> Their posterior can then be recovered afterwards, one draw at a time."
         ) as vo:
+            intro = label('Marginalization can remove discrete latent parameters', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

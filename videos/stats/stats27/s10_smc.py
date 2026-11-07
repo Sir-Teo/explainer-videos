@@ -39,6 +39,9 @@ class SMC(VoiceoverScene):
             "copy the heavily weighted particles and drop the light ones, so the cloud doesn't degenerate. This bootstrap "
             "filter is Neil Gordon, David Salmond and Adrian Smith's, from 1993."
         ) as vo:
+            intro = label('Propagate, reweight and resample a particle population', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -69,11 +72,12 @@ class SMC(VoiceoverScene):
             label(r"the particles track the exact answer", font_size=22, color=HIT),
         ), 3.6, 0.42, [5.0, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Sixty noisy observations of a wandering level, <bookmark mark='b'/> whose true path is in "
-            "gold. <bookmark mark='c'/> For this linear Gaussian model the exact answer is Part 38's Kalman filter, in blue "
-            "with its two-standard-deviation band. <bookmark mark='d'/> The particle filter, a thousand particles, dashed "
-            "green, <bookmark mark='e'/> lies on top of it. The particle filter needs no linearity or normality, so it carries "
-            "over unchanged to models where no exact filter exists."
+            "<bookmark mark='a'/> Sixty noisy observations of a wandering level, <bookmark mark='b'/> whose true path"
+            " is in gold. <bookmark mark='c'/> For this linear Gaussian model the exact answer is Part 38's Kalman "
+            "filter, in blue with its two-standard-deviation band. <bookmark mark='d'/> The particle filter, a "
+            "thousand particles, dashed green, <bookmark mark='e'/> lies on top of it. The particle-filter idea "
+            "extends beyond linear Gaussian models when transitions can be simulated and observation weights "
+            "evaluated; the model-specific code must change."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A))
@@ -103,12 +107,14 @@ class SMC(VoiceoverScene):
         ), 12.0, 0.22, [0, -1.9, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The filter also estimates the likelihood of the whole series, as a product of each "
-            "observation's average weight. <bookmark mark='b'/> With fifty particles the estimate's log varies by one point "
-            "two from run to run; with two hundred, by point six six; with a thousand, by point two. <bookmark mark='c'/> The "
-            "estimate itself is unbiased, so its log is slightly low on average, and it converges on the Kalman filter's "
-            "exact value. <bookmark mark='d'/> Christophe Andrieu and Gareth Roberts showed that Metropolis–Hastings run with "
-            "such a noisy but unbiased likelihood still targets the exact posterior: pseudo-marginal MCMC, for models whose "
-            "likelihood can only be simulated."
+            "observation's average weight. <bookmark mark='b'/> With fifty particles the estimate's log varies by one"
+            " point two from run to run; with two hundred, by point six six; with a thousand, by point two. <bookmark"
+            " mark='c'/> The nonnegative likelihood estimate is unbiased for the specified model; Jensen's inequality"
+            " makes its log downward biased in expectation, and it converges on the Kalman filter's exact value. "
+            "<bookmark mark='d'/> Christophe Andrieu and Gareth Roberts showed that Metropolis–Hastings run with a "
+            "nonnegative unbiased likelihood estimate still targets the exact posterior when the auxiliary randomness"
+            " is part of the state and the current estimate is retained on rejection: pseudo-marginal MCMC, for "
+            "models whose likelihood can only be simulated."
         ) as vo:
             self.add(seeded_tag())
             vo.wait_until("a")
@@ -126,7 +132,7 @@ class SMC(VoiceoverScene):
             cmath(r"\pi_\phi(\theta)", r"\propto", r"p(\theta)\, p(y \mid \theta)^\phi, \ \ 0 = \phi_0 < \phi_1 < \dots < \phi_K = 1", font_size=28),
             cmath(r"\text{reweight}", r":", r"w \propto p(y \mid \theta)^{\phi_{k+1} - \phi_k}", font_size=30),
             cmath(r"\text{choose } \phi_{k+1}", r":", r"\text{so the ESS falls to half}", font_size=30),
-            cmath(r"\log p(y)", r"=", r"\textstyle\sum_k \log \overline{w}_k", font_size=32),
+            cmath(r"\widehat{\log p(y)}", r"=", r"\textstyle\sum_k \log \overline{w}_k", font_size=32),
         ]
         rows[3][2].set_color(HIT)
         whys = [why(r"a bridge from prior to posterior"), why(r"importance sampling, \ one rung at a time"),
@@ -139,6 +145,9 @@ class SMC(VoiceoverScene):
             "resampled and moved by a few Metropolis steps. <bookmark mark='d'/> And the average weights along the way "
             "multiply up to the evidence, the hard integral behind Part 26's Bayes factors."
         ) as vo:
+            intro = label('A temperature ladder yields an evidence estimate', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -189,6 +198,9 @@ class SMC(VoiceoverScene):
             "dimensions the number of particles needed grows very quickly: particle filters suit small hidden states, not "
             "large ones."
         ) as vo:
+            intro = label('Resampling reduces weight degeneracy but loses path diversity', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

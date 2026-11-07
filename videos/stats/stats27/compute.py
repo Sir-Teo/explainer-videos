@@ -30,7 +30,7 @@ from __future__ import annotations
 from dataclasses import asdict
 
 import numpy as np
-from scipy import optimize, special, stats
+from scipy import integrate, optimize, special, stats
 
 from explainer.ai.autodiff import Tensor
 from explainer.ai.cache import Cache
@@ -79,9 +79,54 @@ def schools_model(centred: bool, y=Y8, s=S8):
     return P.Model({"mu": (1, "real"), "tau": (1, "positive"), "z": (8, "real")}, logp)
 
 
+class GridHierarchy(B.Hier):
+    """Continuous inverse-CDF draws from a finite numerical tau approximation."""
+    def draws(self, n, rng):
+        cdf=integrate.cumulative_trapezoid(self.post_tau,self.tau,initial=0)
+        tau=np.interp(rng.random(n),cdf/cdf[-1],self.tau)
+        s2=self.sigma[None,:]**2;t2=tau[:,None]**2
+        w=1/(s2+t2);vm=1/(w.sum(1)+1/25)
+        mu=vm*(w*self.y).sum(1)+np.sqrt(vm)*rng.standard_normal(n)
+        own=t2/(s2+t2)
+        theta=own*self.y+(1-own)*mu[:,None]+np.sqrt(s2*own)*rng.standard_normal((n,len(self.y)))
+        return dict(tau=tau,mu=mu,theta=theta)
+
+
 def schools_grid(y=Y8, s=S8):
-    grid = np.linspace(0, 80, 8001)
-    return B.hier_normal(y, s, grid, lambda t: stats.halfcauchy.logpdf(t, scale=5), mu_prior=(0.0, 5.0))
+    """Proper mu~N(0,25), tau~half-Cauchy(5); widen the grid for prior-predictive datasets."""
+    y,s=np.asarray(y,float),np.asarray(s,float)
+    if y.ndim!=1 or y.shape!=s.shape or len(y)<1 or not np.isfinite(y+s).all() or np.any(s<=0):
+        raise ValueError("finite observations and positive known SDs required")
+    upper=max(1000.,20*float(np.max(np.abs(y))))
+    grid=np.r_[np.linspace(0,20,4001),np.geomspace(20.005,upper,5000)]
+    h=B.hier_normal(y,s,grid,lambda t:stats.halfcauchy.logpdf(t,scale=5),mu_prior=(0.,5.))
+    result=GridHierarchy(h.y,h.sigma,h.tau,h.post_tau,h.mu_hat,h.v_mu)
+    result.mu_prior=(0.,5.)
+    return result
+
+
+def grid_quantile(h, probabilities):
+    cdf=integrate.cumulative_trapezoid(h.post_tau,h.tau,initial=0)
+    return np.interp(probabilities,cdf/cdf[-1],h.tau)
+
+
+def schools_reference(y=Y8,s=S8):
+    """Independent Gaussian marginal likelihood and infinite-range tau quadrature."""
+    y,s=np.asarray(y,float),np.asarray(s,float)
+    def kernel(tau):
+        v=s*s+tau*tau;w=1/v;vm=1/(w.sum()+1/25);m=vm*(w*y).sum()
+        # Complete square using residuals, avoiding subtraction of large quadratics.
+        return .5*np.log(vm)-.5*np.log(v).sum()-.5*((w*(y-m)**2).sum()+m*m/25)+stats.halfcauchy.logpdf(tau,scale=5)
+    shift=kernel(3.)
+    f=lambda t:float(np.exp(kernel(t)-shift))
+    z=integrate.quad(f,0,np.inf,epsabs=1e-10,epsrel=1e-9,limit=300)[0]
+    def quantile(q):
+        upper=max(100.,float(np.abs(y).max())*2)
+        fun=lambda t:integrate.quad(f,0,t,epsabs=1e-10,epsrel=1e-9,limit=300)[0]/z-q
+        while fun(upper)<0:upper*=2
+        return optimize.brentq(fun,0,upper,xtol=1e-7)
+    return dict(q05=quantile(.05),median=quantile(.5),q95=quantile(.95),
+                tail_over80=integrate.quad(f,80,np.inf,epsabs=1e-11,limit=300)[0]/z)
 
 
 def compute_disks():
@@ -266,7 +311,7 @@ def compute_hmc():
                  "accept2": float(h["accept"].mean()), "rho": rho, "hmc_accept": float(hm["accept"].mean()),
                  "rwm_accept": float(rw["accept"].mean()), "ess_hmc_per_1000": 1000 * ess_h / evals_h,
                  "ess_rwm_per_1000": 1000 * ess_r / evals_r, "ess_hmc": ess_h, "ess_rwm": ess_r,
-                 "trace_hmc": dr[:200, -1], "trace_rwm": drw[::250][:200, -1]})
+                 "trace_hmc": dr[:200, -1], "trace_rwm": drw[::250][:200, -1], "work_scope": "retained transitions only, excludes warmup; gradients and densities counted separately; displayed traces are not equal-cost"})
 
 
 def compute_nuts():
@@ -291,7 +336,7 @@ def compute_nuts():
     U, info, eps, inv_m, wdiv = P.nuts(m, 1000, 1000, rg)
     fit = P.sample(m, chains=4, iters=1000, warmup=1000, seed=27, delta=0.9)
     depth = np.bincount(fit.depth.ravel().astype(int), minlength=11)
-    return nest({"rho": rho, "trajs": trajs, "eps_final": eps, "inv_metric": inv_m, "depth_counts": depth,
+    return nest({"rho": rho, "trajs": trajs, "eps_final": float(fit.step_size.mean()), "illustration_step": eps, "inv_metric": inv_m, "depth_counts": depth,
                  "mean_leapfrog": float(fit.n_leapfrog.mean()), "divergent": int(fit.divergent.sum()),
                  "rhat_tau": P.rhat(np.log(fit.draws["tau"][..., 0])), "ess_tau": P.ess_bulk(np.log(fit.draws["tau"][..., 0])),
                  "n_grad": fit.n_grad})
@@ -319,7 +364,7 @@ def compute_funnel():
     # eight schools, centred (delta 0.8 and 0.99) and non-centred, against the exact grid
     h = schools_grid()
     grid = h.tau
-    cdf = np.cumsum(h.post_tau * np.gradient(grid))
+    cdf = integrate.cumulative_trapezoid(h.post_tau,grid,initial=0)
     cdf /= cdf[-1]
     exact = {"median": float(np.interp(0.5, cdf, grid)), "q05": float(np.interp(0.05, cdf, grid)), "q95": float(np.interp(0.95, cdf, grid))}
     lt = np.linspace(-6, 4, 200)
@@ -362,7 +407,7 @@ def compute_ppl():
     rows.append(["Poisson rate, \\ Gamma(2, 1) prior, \\ mean", float(a / b), float(d.mean()), float(d.std() / np.sqrt(P.ess_bulk(d)))])
     # 4. eight schools tau median, against the exact grid
     h = schools_grid()
-    cdf = np.cumsum(h.post_tau * np.gradient(h.tau))
+    cdf = integrate.cumulative_trapezoid(h.post_tau,h.tau,initial=0)
     cdf /= cdf[-1]
     f = P.sample(schools_model(False), chains=4, iters=1000, warmup=1000, seed=4, delta=0.9)
     d = f.draws["tau"][..., 0]
@@ -486,7 +531,7 @@ def compute_abc():
             r = P.abc_rejection(lambda rg: rg.gamma(a0, 1 / b0), lambda th, rg: rg.poisson(th, n), summ, s_obs, 1000, eps, g)
             d = r["draws"]
             res[name][f"{eps}"] = {"mean": float(d.mean()), "sd": float(d.std()), "accept": r["accept_rate"],
-                                   "hist": np.histogram(d, np.linspace(0, 7, 36), density=True)[0]}
+                                   "hist": np.histogram(d,np.linspace(0,7,36))[0]/len(d)/.2}
     grid = np.linspace(0, 7, 200)
     return nest({"x": x, "exact_mean": float(exact.mean()), "exact_sd": float(exact.std()), "grid": grid,
                  "exact_pdf": exact.pdf(grid), "edges": np.linspace(0, 7, 36), "res": res})
@@ -500,13 +545,24 @@ def compute_cftp():
     return nest(out)
 
 
-def compute_board():
+def compute_board(reps=100):
     """Simulation-based coverage: draw (mu, tau, theta) from the prior (mu ~ N(0, 5^2), tau ~ half-Cauchy(5)), then
     the eight estimates with the eight schools' standard errors; compute each school's 90% interval four ways."""
     g = rng(2727)
-    R = 100
+    R=int(reps)
+    if R<2:raise ValueError("at least two independent datasets required")
     hits = {"exact": 0, "noncentred": 0, "centred": 0, "advi": 0}
-    for i in range(R):
+    replicate_coverage={key:[] for key in hits}
+    import hashlib
+    from pathlib import Path
+    signature=hashlib.sha256(Path(__file__).read_bytes()+Path(P.__file__).read_bytes()+Path(B.__file__).read_bytes()).hexdigest()
+    progress=CACHE.partial("board",dict(reps=R,seed=2727,source_signature=signature))
+    invalid={key:0 for key in hits};start=0
+    if "latest" in progress:
+        state=progress["latest"]
+        start=state["next_dataset"];hits=state["hits"];replicate_coverage=state["coverage"];invalid=state["invalid_datasets"]
+        g.bit_generator.state=state["rng_state"]
+    for i in range(start,R):
         mu = g.normal(0, 5)
         tau = abs(stats.cauchy.rvs(scale=5, random_state=g))
         theta = mu + tau * g.standard_normal(8)
@@ -514,27 +570,44 @@ def compute_board():
         h = schools_grid(y, S8)
         dr = h.draws(4000, g)["theta"]
         lo, hi = np.quantile(dr, [0.05, 0.95], axis=0)
-        hits["exact"] += int(np.sum((lo <= theta) & (theta <= hi)))
+        valid=np.isfinite(lo)&np.isfinite(hi)&(lo<=hi)
+        invalid["exact"]+=int(not valid.all())
+        hit=valid&(lo<=theta)&(theta<=hi)
+        hits["exact"] += int(hit.sum())
+        replicate_coverage["exact"].append(float(hit.mean()))
         for key, centred in (("noncentred", False), ("centred", True)):
             f = P.sample(schools_model(centred, y, S8), chains=1, iters=400, warmup=400, seed=10_000 + i, delta=0.8)
             th = (f.draws["theta"] if centred else f.draws["mu"][..., :1] + f.draws["tau"][..., :1] * f.draws["z"]).reshape(-1, 8)
             lo, hi = np.quantile(th, [0.05, 0.95], axis=0)
-            hits[key] += int(np.sum((lo <= theta) & (theta <= hi)))
+            valid=np.isfinite(lo)&np.isfinite(hi)&(lo<=hi)
+            invalid[key]+=int(not valid.all())
+            hit=valid&(lo<=theta)&(theta<=hi)
+            hits[key] += int(hit.sum())
+            replicate_coverage[key].append(float(hit.mean()))
         m = schools_model(False, y, S8)
         va = P.advi(m, 1500, g, lr=0.05, samples=4)
         U = va["mean"] + np.exp(va["log_sd"]) * g.standard_normal((4000, m.dim))
         th = U[:, :1] + np.exp(U[:, 1:2]) * U[:, 2:]
         lo, hi = np.quantile(th, [0.05, 0.95], axis=0)
-        hits["advi"] += int(np.sum((lo <= theta) & (theta <= hi)))
+        valid=np.isfinite(lo)&np.isfinite(hi)&(lo<=hi)
+        invalid["advi"]+=int(not valid.all())
+        hit=valid&(lo<=theta)&(theta<=hi)
+        hits["advi"] += int(hit.sum())
+        replicate_coverage["advi"].append(float(hit.mean()))
+        progress["latest"]=dict(next_dataset=i+1,hits=hits,coverage=replicate_coverage,
+                                  invalid_datasets=invalid,rng_state=g.bit_generator.state)
+        print(f"coverage dataset {i+1}/{R}",flush=True)
     N = 8 * R
     rows = [
-        Row(27, r"exact grid draws", r"eight schools, \ truths from the prior", "coverage", 0.90, hits["exact"] / N, N),
-        Row(27, r"NUTS, \ non-centred", r"eight schools, \ truths from the prior", "coverage", 0.90, hits["noncentred"] / N, N),
-        Row(27, r"NUTS, \ centred", r"eight schools, \ truths from the prior", "coverage", 0.90, hits["centred"] / N, N),
-        Row(27, r"mean-field ADVI", r"eight schools, \ truths from the prior", "coverage", 0.90, hits["advi"] / N, N),
+        Row(27, r"numerical grid draws", r"eight schools, \ truths from the prior", "coverage", 0.90, hits["exact"] / N, R, mc_se=float(np.std(replicate_coverage["exact"],ddof=1)/np.sqrt(R))),
+        Row(27, r"NUTS, \ non-centred", r"eight schools, \ truths from the prior", "coverage", 0.90, hits["noncentred"] / N, R, mc_se=float(np.std(replicate_coverage["noncentred"],ddof=1)/np.sqrt(R))),
+        Row(27, r"NUTS, \ centred", r"eight schools, \ truths from the prior", "coverage", 0.90, hits["centred"] / N, R, mc_se=float(np.std(replicate_coverage["centred"],ddof=1)/np.sqrt(R))),
+        Row(27, r"mean-field ADVI", r"eight schools, \ truths from the prior", "coverage", 0.90, hits["advi"] / N, R, mc_se=float(np.std(replicate_coverage["advi"],ddof=1)/np.sqrt(R))),
     ]
     save_rows(27, rows)
-    return {"rows": [asdict(r) | {"verdict": r.verdict, "se": r.se} for r in rows]}
+    return {"rows": [asdict(r) | {"verdict": r.verdict, "se": r.se} for r in rows],
+            "replicate_coverage":replicate_coverage,"intervals":N,"independent_datasets":R,"invalid_interval_datasets":invalid,
+            "failure_policy":"nonfinite or reversed interval endpoints count as noncoverage; failed dataset counts reported separately"}
 
 
 ITEMS = {

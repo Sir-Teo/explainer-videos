@@ -41,6 +41,9 @@ class HMC(VoiceoverScene):
             "conserves energy, preserves volume and runs backwards as well as forwards, exactly the properties a valid "
             "proposal needs, so a puck sent sliding across the landscape lands somewhere far away that is still probable."
         ) as vo:
+            intro = label('Hamiltonian dynamics combine a target landscape and momentum', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -63,6 +66,9 @@ class HMC(VoiceoverScene):
             "change in total energy. The integrator is volume-preserving and reversible, so this correction is exact, and "
             "because its energy error stays small the acceptance rate stays high."
         ) as vo:
+            intro = label('A reversible, volume-preserving step with a Metropolis correction', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -89,12 +95,13 @@ class HMC(VoiceoverScene):
             label(rf"its energy error: \ never above {max(abs(np.asarray(d['H_lf']) - 0.5)):.3f}", font_size=22, color=HIT),
         ), 5.8, 0.42, [3.6, 0.1, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Why leapfrog, and not the obvious method? A spring, whose exact orbits in position and "
-            "momentum are circles. <bookmark mark='b'/> Euler's method, update both from the old values, spirals outwards: "
-            "<bookmark mark='c'/> after sixty steps its energy has grown from a half to eighty-eight. <bookmark mark='d'/> "
-            "Leapfrog stays on a slightly squashed circle for ever, <bookmark mark='e'/> its energy error never exceeding "
-            "about one percent. It is symplectic: it exactly conserves a slightly different energy, which is why HMC "
-            "trajectories can be long without the acceptance rate collapsing."
+            "<bookmark mark='a'/> Why leapfrog, and not the obvious method? A spring, whose exact orbits in position "
+            "and momentum are circles. <bookmark mark='b'/> Euler's method, update both from the old values, spirals "
+            "outwards: <bookmark mark='c'/> after sixty steps its energy has grown from a half to eighty-eight. "
+            "<bookmark mark='d'/> For this stable harmonic oscillator, leapfrog stays on a slightly squashed orbit, "
+            "<bookmark mark='e'/> its absolute energy error staying below about point oh one one over these sixty "
+            "steps. Symplectic methods often keep energy error controlled for long times under suitable stability "
+            "conditions; they do not exactly conserve a nearby energy for every nonlinear model."
         ) as vo:
             self.play(FadeIn(A), Create(circ))
             vo.wait_until("a")
@@ -156,18 +163,21 @@ class HMC(VoiceoverScene):
             group.add(A, label(name, font_size=22, color=col).next_to(A, UP, buff=0.1).align_to(A, LEFT))
         rows = fit_rows(VGroup(
             label(r"100 dimensions, \ scales from 0.01 to 1", font_size=22),
-            label(r"the widest coordinate, \ 200 draws each, \ equal cost", font_size=22, color=GREY_A),
+            label(r"widest coordinate; \ illustrative traces at different subsampling", font_size=22, color=GREY_A),
             label(rf"random walk: \ {d['ess_rwm_per_1000']:.2f} effective draws per 1,000 evaluations", font_size=22, color=RES),
             label(rf"HMC: \ {d['ess_hmc_per_1000']:.1f} per 1,000 gradient evaluations", font_size=22, color=HIT),
-            label(r"about 140 times more efficient", font_size=22, color=HIT),
+            label(r"about 140 times by this retained-run count; \ excludes warmup", font_size=22, color=HIT),
         ), 4.6, 0.42, [4.3, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Radford Neal's demonstration: a hundred-dimensional normal whose coordinates have scales "
-            "from point oh one to one. <bookmark mark='b'/> The traces show the widest coordinate, with the same number of "
-            "density evaluations behind each. <bookmark mark='c'/> The random walk, its step held small by the narrowest "
-            "coordinate, crawls: about point oh five effective draws per thousand evaluations. <bookmark mark='d'/> HMC "
-            "gives six point three. <bookmark mark='e'/> Counting a gradient as one evaluation, that's about a hundred and "
-            "forty times the efficiency, and the gap grows with the dimension."
+            "<bookmark mark='a'/> Radford Neal's demonstration: a hundred-dimensional normal whose coordinates have "
+            "scales from point oh one to one. <bookmark mark='b'/> The traces show the widest coordinate, The "
+            "displayed traces have different subsampling and are illustrative. The efficiency figures below count "
+            "retained-run work, excluding warmup, and distinguish density evaluations from gradients. <bookmark "
+            "mark='c'/> The random walk, its step held small by the narrowest coordinate, crawls: about point oh five"
+            " effective draws per thousand evaluations. <bookmark mark='d'/> HMC gives six point three. <bookmark "
+            "mark='e'/> Counting a gradient as one evaluation, that's about a hundred and forty times the efficiency,"
+            " for this coordinate in these runs. Short-run ESS estimates are uncertain, and the ratio is not a "
+            "universal dimension-dependent speedup."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(group))
@@ -185,18 +195,22 @@ class HMC(VoiceoverScene):
             cmath(r"\epsilon \text{ too large}", r":", r"\text{energy errors, \ rejections}", font_size=30),
             cmath(r"L \text{ too small}", r":", r"\text{a random walk again}", font_size=30),
             cmath(r"L \text{ too large}", r":", r"\text{the puck comes back: \ wasted work}", font_size=30),
-            cmath(r"M", r":", r"\text{the mass matrix, \ ideally the posterior covariance}", font_size=30),
+            cmath(r"M", r":", r"\text{mass matrix: \ } M^{-1}\approx\mathrm{Cov}(\theta\mid y)", font_size=30),
         ]
         rows[2][2].set_color(RES)
-        whys = [why(r"the step size"), why(r"the number of steps"), why(r"orbits are periodic"),
+        whys = [why(r"the step size"), why(r"the number of steps"), why(r"near-return can waste work; \ not every orbit is periodic"),
                 why(r"rescales the landscape to round")]
         with self.voiceover(
-            "<bookmark mark='a'/> The catch is tuning. Too large a step size, and the energy errors cause rejections. "
-            "<bookmark mark='b'/> Too few steps, and HMC degenerates into a random walk. <bookmark mark='c'/> Too many, and the "
-            "puck, on its periodic orbit, comes back to where it started, wasting every gradient in between. "
-            "<bookmark mark='d'/> And the mass matrix should match the posterior's covariance, so that the landscape looks "
-            "round. Choosing all three automatically is what NUTS does."
+            "<bookmark mark='a'/> The catch is tuning. Too large a step size, and the energy errors cause rejections."
+            " <bookmark mark='b'/> Too few steps, and HMC degenerates into a random walk. <bookmark mark='c'/> Too "
+            "many, and the puck, on its periodic orbit, comes back to where it started, wasting every gradient in "
+            "between. <bookmark mark='d'/> With the kinetic-energy convention used here, the inverse mass matrix "
+            "should approximate the posterior covariance, so that Gaussian dynamics have similar frequencies. "
+            "Choosing all three automatically is what NUTS does."
         ) as vo:
+            intro = label('Step size, path length and inverse mass control dynamics', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -219,6 +233,9 @@ class HMC(VoiceoverScene):
             "squared. <bookmark mark='d'/> Mark Girolami and Ben Calderhead's Riemannian HMC lets it vary with position, "
             "adapting to curvature that changes from place to place, as in a funnel, at a higher cost per step."
         ) as vo:
+            intro = label('Inverse mass approximates covariance in this convention', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

@@ -59,15 +59,17 @@ class Hook(VoiceoverScene):
             label(rf"{d['N']} hard disks; \ start on a lattice", font_size=22),
             label(r"pick a disk; \ propose a small random shift", font_size=22, color=SAMPLER),
             label(r"overlap? \ reject, \ and stay put", font_size=22, color=RES),
-            label(r"no overlap? \ accept", font_size=22, color=HIT),
+            label(r"legal position? \ accept", font_size=22, color=HIT),
             label(rf"{100 * d['accept']:.0f}\% of moves accepted; \ 400 sweeps", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.3, 0.2, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Here is their algorithm on forty disks. Start them on a lattice. <bookmark mark='b'/> "
-            "Pick a disk and propose moving it a small random distance. <bookmark mark='c'/> If it would overlap another, "
-            "reject the move: the disk stays where it is, and that position is counted again. <bookmark mark='d'/> "
-            "Otherwise accept it. <bookmark mark='e'/> Sweep after sweep, the lattice melts into a typical arrangement, and "
-            "averages over the walk become averages over all arrangements, each weighted by its probability."
+            "<bookmark mark='a'/> Here is a seeded forty-disk illustration, with hard walls rather than the original "
+            "periodic boundaries. Start them on a lattice. <bookmark mark='b'/> Pick a disk and propose moving it a "
+            "small random distance. <bookmark mark='c'/> If it would overlap another, reject the move: the disk stays"
+            " where it is, and that position is counted again. <bookmark mark='d'/> Otherwise accept it, provided it "
+            "also stays inside the walls. <bookmark mark='e'/> Sweep after sweep, the lattice melts into a typical "
+            "arrangement, and averages over the walk become averages over all arrangements, each weighted by its "
+            "probability."
         ) as vo:
             self.add(seeded_tag())
             self.play(Create(box), FadeIn(g0))
@@ -103,6 +105,9 @@ class Hook(VoiceoverScene):
             "unless they overlap'. <bookmark mark='d'/> And because only ratios appear, the normalizing constant is never "
             "needed, which is exactly what Bayesians lack: the posterior up to a constant, likelihood times prior."
         ) as vo:
+            intro = label('Symmetric proposals need only the target-density ratio', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -125,14 +130,14 @@ class Hook(VoiceoverScene):
             label(r"red: \ start far out", font_size=22, color=RES),
             label(r"blue: \ the walk's first 400 steps", font_size=22, color=SAMPLER),
             label(rf"accepted {100 * d['accept']:.0f}\% of proposals", font_size=22, color=GREY_A),
-            label(r"the cloud of positions is the posterior", font_size=22, color=HIT),
+            label(r"a correlated approximation to the posterior", font_size=22, color=HIT),
         ), 4.4, 0.42, [4.5, 0.2, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The same walk on a curved two-parameter posterior, its contours in gold. "
-            "<bookmark mark='b'/> Start somewhere unlikely. <bookmark mark='c'/> The walk drifts in, then wanders along the "
-            "curved ridge. <bookmark mark='d'/> About half the proposals are accepted. <bookmark mark='e'/> Thousands of "
-            "steps later, the cloud of visited positions is a sample from the posterior, and any average over it is an "
-            "estimate of a posterior expectation."
+            "<bookmark mark='a'/> The same walk on a curved two-parameter posterior, its contours in gold. <bookmark "
+            "mark='b'/> Start somewhere unlikely. <bookmark mark='c'/> The walk drifts in, then wanders along the "
+            "curved ridge. <bookmark mark='d'/> About half the proposals are accepted. <bookmark mark='e'/> Thousands"
+            " of steps later, the cloud of visited positions approximates the posterior with correlated draws, and "
+            "any average over it is an estimate of a posterior expectation."
         ) as vo:
             self.play(FadeIn(A), FadeIn(L.levels))
             vo.wait_until("a")
@@ -151,14 +156,15 @@ class Hook(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"Part 26 integrated on a grid: \ fine in one dimension", font_size=26),
             label(r"100 parameters, \ 10 grid points each: \ $10^{100}$ evaluations", font_size=26, color=RES),
-            label(r"a sampler's cost grows with the dimension, \ not exponentially in it", font_size=26, color=SAMPLER),
+            label(r"good geometry can avoid a grid; \ sampling can still be exponentially hard", font_size=26, color=SAMPLER),
             label(r"but which sampler, \ how to know it worked, \ and what to do when it fails?", font_size=26, color=PATH),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Part 26 integrated over tau on a grid, which works in one dimension. "
-            "<bookmark mark='b'/> With a hundred parameters and only ten grid points each, a grid needs ten to the hundred "
-            "evaluations. <bookmark mark='c'/> A good sampler's cost grows with the dimension, not exponentially in it. "
-            "<bookmark mark='d'/> The questions of this part are which sampler, how to know it worked, and what to do when it "
+            "<bookmark mark='a'/> Part 26 integrated over tau on a grid, which works in one dimension. <bookmark "
+            "mark='b'/> With a hundred parameters and only ten grid points each, a grid needs ten to the hundred "
+            "evaluations. <bookmark mark='c'/> A well-behaved posterior can be explored without an exponential grid, "
+            "but multimodality and poor geometry can still make sampling exponentially difficult. <bookmark "
+            "mark='d'/> The questions of this part are which sampler, how to know it worked, and what to do when it "
             "doesn't."
         ) as vo:
             for k, m_ in enumerate("abcd"):
@@ -202,12 +208,17 @@ class Hook(VoiceoverScene):
         rows[3][-1].set_color(RES)
         whys = [why(r"the ergodic theorem: \ Part 6 for chains"), why(r"a Markov-chain CLT, \ under conditions"), why(r"the integrated autocorrelation time"), why(r"chapter four's ESS")]
         with self.voiceover(
-            "<bookmark mark='a'/> Why averages over a walk work: the ergodic theorem, Part 6's law of large numbers for Markov "
-            "chains, says they converge to expectations under the target. <bookmark mark='b'/> Under further conditions "
-            "there is a central limit theorem too, <bookmark mark='c'/> but with the variance inflated by the integrated "
-            "autocorrelation time, because each draw resembles the last. <bookmark mark='d'/> The price of a random walk is "
-            "that S draws are worth only S over tau independent ones; chapter four turns this into the effective sample size."
+            "<bookmark mark='a'/> Why averages over a walk work: the ergodic theorem, Part 6's law of large numbers "
+            "for Markov chains, says they converge to target expectations when the chain is ergodic and the quantity "
+            "is integrable. <bookmark mark='b'/> Under further conditions there is a central limit theorem too, "
+            "<bookmark mark='c'/> with variance multiplied by the integrated autocorrelation time. Positive "
+            "correlation inflates it; antithetic correlation can reduce it. <bookmark mark='d'/> The price of a "
+            "random walk is that S draws are worth only S over tau independent ones; chapter four turns this into the"
+            " effective sample size."
         ) as vo:
+            intro = label('Ergodic averages require an integrable target and a suitable chain', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

@@ -27,19 +27,24 @@ class Diagnostics(VoiceoverScene):
             cmath(r"\mathrm{Var}(\bar f)", r"\approx", r"\dfrac{\sigma_f^2}{S}\Bigl(1 + 2\textstyle\sum_{t \ge 1} \rho_t\Bigr)", font_size=30),
             cmath(r"\text{ESS}", r"=", r"\dfrac{S}{1 + 2\sum_t \rho_t}", font_size=32),
             cmath(r"\text{MCSE}", r"=", r"\sigma_f/\sqrt{\text{ESS}}", font_size=32),
-            cmath(r"\text{bulk and tail}", r":", r"\text{ESS for the centre; \ for the 5\% and 95\% quantiles}", font_size=28),
+            cmath(r"\text{bulk and tail ESS}", r":", r"\text{ESS for the centre; \ for the 5\% and 95\% quantiles}", font_size=28),
         ]
         rows[1][2].set_color(SAMPLER)
-        whys = [why(r"autocorrelated draws carry less information"), why(r"Geyer's monotone sequence truncates the sum"),
+        whys = [why(r"positive correlation inflates variance; \ antithetic draws can help"), why(r"Geyer's monotone sequence truncates the sum"),
                 why(r"the Monte Carlo standard error"), why(r"rank-normalized, \ Vehtari et al.\ (2021)")]
         with self.voiceover(
-            "<bookmark mark='a'/> Two questions after every run. First: how much information do the draws carry? A chain's "
-            "draws are correlated, which inflates the variance of any average by one plus twice the sum of the "
-            "autocorrelations. <bookmark mark='b'/> Dividing the number of draws by that factor gives the effective sample "
-            "size. <bookmark mark='c'/> The Monte Carlo standard error of a posterior mean is the posterior SD over the root "
-            "of the ESS. <bookmark mark='d'/> Aki Vehtari and colleagues recommend two versions: a bulk ESS computed on "
-            "ranks, for the centre of the distribution, and a tail ESS for the quantiles that make intervals."
+            "<bookmark mark='a'/> Two questions after every run. First: how much information do the draws carry? "
+            "Under a Markov-chain central limit theorem, correlation multiplies an average's variance by one plus "
+            "twice the autocorrelation sum. This factor depends on the reported quantity and can be below one for "
+            "antithetic draws. <bookmark mark='b'/> Dividing the number of draws by that factor gives the effective "
+            "sample size. <bookmark mark='c'/> The Monte Carlo standard error of a posterior mean is the posterior SD"
+            " over the root of the ESS. <bookmark mark='d'/> Aki Vehtari and colleagues recommend two versions: a "
+            "bulk ESS computed on ranks, for the centre of the distribution, and a tail ESS for the quantiles that "
+            "make intervals."
         ) as vo:
+            intro = label('Monte Carlo precision depends on the reported quantity', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -51,19 +56,23 @@ class Diagnostics(VoiceoverScene):
             cmath(r"\text{run}", r":", r"4 \text{ chains from scattered starting points}", font_size=30),
             cmath(r"\hat R", r"=", r"\sqrt{\dfrac{\tfrac{n - 1}{n}W + \tfrac1n B}{W}}", font_size=32),
             cmath(r"\hat R \approx 1", r":", r"\text{the chains agree with each other}", font_size=30),
-            cmath(r"\text{rule}", r":", r"\hat R < 1.01 \text{ on ranks, \ split chains, \ and tails}", font_size=30),
+            cmath(r"\text{rule}", r":", r"\hat R<1.01: \ \text{rank-normalized, \ split and folded}", font_size=30),
         ]
         rows[1][2].set_color(SAMPLER)
         whys = [why(r"disagreement is detectable"), why(r"between-chain against within-chain variance"),
                 why(r"Gelman \& Rubin (1992)"), why(r"Vehtari et al.\ (2021)")]
         with self.voiceover(
-            "<bookmark mark='a'/> The second question: did the chains find the posterior at all? Run several chains from "
-            "deliberately scattered starts. <bookmark mark='b'/> Andrew Gelman and Donald Rubin's R-hat compares the "
-            "variance between the chains' means with the variance within each chain. <bookmark mark='c'/> If every chain "
-            "has explored the same distribution, R-hat is close to one. <bookmark mark='d'/> The modern version splits each "
-            "chain in half, so a chain that drifts disagrees with itself, works on ranks so heavy tails can't hide "
-            "anything, and checks the tails separately; it should be below one point oh one."
+            "<bookmark mark='a'/> The second question: did the chains find the posterior at all? Run several chains "
+            "from deliberately scattered starts. <bookmark mark='b'/> Andrew Gelman and Donald Rubin's R-hat compares"
+            " the variance between the chains' means with the variance within each chain. <bookmark mark='c'/> If "
+            "every chain has explored the same distribution, R-hat is close to one. <bookmark mark='d'/> The modern "
+            "version splits each chain in half, so a chain that drifts disagrees with itself, uses rank normalization"
+            " to improve robustness to heavy tails, and also checks folded deviations for differences in spread; it "
+            "should be below one point oh one."
         ) as vo:
+            intro = label('Rank-normalized split and folded R-hat diagnose disagreements', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -157,10 +166,11 @@ class Diagnostics(VoiceoverScene):
                             color=RES if key == "stuck" else HIT).move_to([0, 2.65 - 2.9 * k, 0]))
         foot = label(r"rank all draws together; \ each chain's ranks should be uniform", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "<bookmark mark='a'/> A rank plot shows the same thing at a glance. Rank all the draws from all the chains "
-            "together, and histogram each chain's ranks. <bookmark mark='b'/> For the stuck chains, three have only low ranks "
-            "and one only high ones. <bookmark mark='c'/> For mixing chains, every histogram is flat: each chain has seen the "
-            "same distribution. Rank plots are more sensitive than trace plots, which can look fine when they are not."
+            "<bookmark mark='a'/> A rank plot shows the same thing at a glance. Rank all the draws from all the "
+            "chains together, and histogram each chain's ranks. <bookmark mark='b'/> For the stuck chains, three have"
+            " only low ranks and one only high ones. <bookmark mark='c'/> For mixing chains, every histogram is flat:"
+            " each chain has seen the same distribution. Rank plots can reveal differences that a dense trace plot "
+            "hides; neither display guarantees convergence."
         ) as vo:
             self.play(FadeIn(group), FadeIn(foot))
             vo.wait_until("a")
@@ -180,12 +190,17 @@ class Diagnostics(VoiceoverScene):
         rows[3][-1].set_color(HIT)
         whys = [why(r"not the same as convergence"), why(r"Link \& Eaton (2012)"), why(r"not accuracy"), why(r"the error of the Monte Carlo itself")]
         with self.voiceover(
-            "<bookmark mark='a'/> Three more habits. Discard the warmup: early draws still remember where the chain began, "
-            "and for NUTS they are also when the tuning happens. <bookmark mark='b'/> Don't thin to improve accuracy: keeping "
-            "every tenth draw throws away information, and the effective sample size of what's left is never larger. "
-            "<bookmark mark='c'/> Thin only to save storage or downstream computation. <bookmark mark='d'/> And report the "
-            "Monte Carlo standard error, so readers know how many digits of a posterior mean are real."
+            "<bookmark mark='a'/> Three more habits. Discard the warmup: early draws still remember where the chain "
+            "began, and for NUTS they are also when the tuning happens. <bookmark mark='b'/> Don't thin to improve "
+            "accuracy: keeping every tenth draw throws away information, and usually reduces precision per generated "
+            "transition. This is a practical recommendation, not a theorem about every possible autocorrelation "
+            "pattern or estimated ESS. <bookmark mark='c'/> Thin only to save storage or downstream computation. "
+            "<bookmark mark='d'/> And report the Monte Carlo standard error, so readers know how many digits of a "
+            "posterior mean are real."
         ) as vo:
+            intro = label('Warmup and storage choices serve different purposes', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

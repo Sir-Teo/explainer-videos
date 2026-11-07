@@ -25,18 +25,21 @@ class Laplace(VoiceoverScene):
             cmath(r"\hat\theta", r"=", r"\arg\max \log p(\theta \mid y)", font_size=32),
             cmath(r"p(\theta \mid y)", r"\approx", r"N\bigl(\hat\theta, \ [-\nabla^2 \log p(\hat\theta \mid y)]^{-1}\bigr)", font_size=30),
             cmath(r"\text{cost}", r":", r"\text{one optimization and one Hessian}", font_size=30),
-            cmath(r"\text{good when}", r":", r"\text{the posterior is nearly normal: \ chapter five's BvM}", font_size=30),
+            cmath(r"\text{good when}", r":", r"\text{the posterior is nearly normal: \ Part 26's regular BvM setting}", font_size=30),
         ]
         rows[1][2].set_color(HIT)
         whys = [why(r"the posterior mode"), why(r"Laplace (1774), \ Part 22"), why(r"no sampling at all"),
                 why(r"bad for skewed, \ bounded or multimodal posteriors")]
         with self.voiceover(
-            "<bookmark mark='a'/> The oldest approximation is Laplace's: find the posterior mode, <bookmark mark='b'/> and "
-            "replace the posterior by a normal there whose covariance is the inverse of the curvature. "
-            "<bookmark mark='c'/> One optimization and one Hessian, with no sampling at all. <bookmark mark='d'/> It is as good "
-            "as the posterior is normal, so Bernstein–von Mises says it improves with data, and it fails for skewed or "
-            "bounded posteriors."
+            "<bookmark mark='a'/> The oldest approximation is Laplace's: find the posterior mode, <bookmark "
+            "mark='b'/> and replace the posterior by a normal there whose covariance is the inverse of the curvature."
+            " <bookmark mark='c'/> One optimization and one Hessian, with no sampling at all. <bookmark mark='d'/> It"
+            " is as good as the posterior is normal, so regular fixed-dimensional asymptotics can justify it with "
+            "growing data. Skewness, boundaries and multiple modes can make it inaccurate."
         ) as vo:
+            intro = label('Laplace fits a Gaussian to local posterior curvature', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -63,11 +66,11 @@ class Laplace(VoiceoverScene):
             label(r"small $n$: \ a skewed posterior, \ the upper tail missed; \ large $n$: \ the same curve", font_size=22, color=GREY_A),
         ), 12.0, 0.2, [0, -2.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> A logistic regression with a normal prior, fitted both ways. <bookmark mark='b'/> With "
-            "twenty observations, the posterior for the slope is skewed: its upper tail stretches to five point five five, "
-            "while Laplace's symmetric normal stops at four point seven seven. <bookmark mark='c'/> With four hundred "
-            "observations the two curves coincide, and Laplace's answer, costing a fraction of a second, is as good as the "
-            "sampler's."
+            "<bookmark mark='a'/> A logistic regression with a normal prior, fitted both ways. <bookmark mark='b'/> "
+            "With twenty observations, the posterior for the slope is skewed: its upper tail stretches to five point "
+            "five five, while Laplace's symmetric normal has a ninety-fifth percentile of four point seven seven. "
+            "<bookmark mark='c'/> With four hundred observations the two curves coincide, and the two methods give "
+            "similar answers in this example."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(group), FadeIn(foot[0]))
@@ -81,23 +84,28 @@ class Laplace(VoiceoverScene):
 
     def inla(self):
         rows = [
-            cmath(r"y \mid x, \theta", r"\sim", r"\text{any family; \ } x \mid \theta \sim N(0, Q(\theta)^{-1})", font_size=28),
+            cmath(r"y \mid x, \theta", r"\sim", r"\text{tractable observation model; \ } x\mid\theta\sim N(0,Q(\theta)^{-1})", font_size=28),
             cmath(r"\tilde p(\theta \mid y)", r"\propto", r"\dfrac{p(y \mid x, \theta)\, p(x \mid \theta)\, p(\theta)}{\tilde p_G(x \mid \theta, y)}\Big|_{x = x^*(\theta)}", font_size=28),
             cmath(r"\text{then}", r":", r"\text{integrate over a few } \theta \text{ points; \ Laplace again for each } x_i", font_size=28),
-            cmath(r"\text{use}", r":", r"\text{spatial and temporal GLMMs in seconds}", font_size=30),
+            cmath(r"\text{use}", r":", r"\text{suitable sparse latent-Gaussian models; \ few hyperparameters}", font_size=30),
         ]
         rows[1][2].set_color(HIT)
         whys = [why(r"latent Gaussian models: \ Part 25's GLMMs"), why(r"a Laplace approximation inside the marginal"),
                 why(r"nested: \ hence INLA"), why(r"Rue, Martino \& Chopin (2009); \ Part 39")]
         with self.voiceover(
-            "<bookmark mark='a'/> Håvard Rue, Sara Martino and Nicolas Chopin's INLA pushes Laplace's idea far. It targets "
-            "latent Gaussian models, Part 25's generalized linear mixed models and their spatial cousins: thousands of "
-            "Gaussian latent effects and a handful of hyperparameters. <bookmark mark='b'/> It approximates the "
-            "hyperparameters' posterior by dividing the joint density by a Gaussian approximation to the latent field, "
-            "evaluated at its mode, <bookmark mark='c'/> integrates over a small grid of hyperparameter values, and applies "
-            "Laplace again for each latent effect: integrated nested Laplace approximation. <bookmark mark='d'/> It fits "
-            "spatial models in seconds that MCMC needs hours for, Part 39's territory."
+            "<bookmark mark='a'/> Håvard Rue, Sara Martino and Nicolas Chopin's INLA pushes Laplace's idea far. It "
+            "targets latent Gaussian models, Part 25's generalized linear mixed models and their spatial cousins: "
+            "thousands of Gaussian latent effects and a handful of hyperparameters. <bookmark mark='b'/> It "
+            "approximates the hyperparameters' posterior by dividing the joint density by a Gaussian approximation to"
+            " the latent field, evaluated at its mode, <bookmark mark='c'/> integrates over a small grid of "
+            "hyperparameter values, and applies Laplace again for each latent effect: integrated nested Laplace "
+            "approximation. <bookmark mark='d'/> For suitable sparse latent-Gaussian models with few hyperparameters,"
+            " it can be much faster than MCMC. Accuracy and speed depend on the model; Part 39 returns to these "
+            "methods."
         ) as vo:
+            intro = label('INLA nests approximations for suitable latent Gaussian models', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -114,12 +122,17 @@ class Laplace(VoiceoverScene):
         rows[0][-1].set_color(HIT)
         whys = [why(r"Laplace's method for the evidence"), why(r"Part 26, \ chapter six"), why(r"lme4's default"), why(r"chapter nine")]
         with self.voiceover(
-            "<bookmark mark='a'/> Laplace's method also approximates the evidence: the joint density at the mode, times the "
-            "volume of the normal fitted there, computed from the determinant of the Hessian. <bookmark mark='b'/> As n grows "
-            "it reduces to BIC, Part 26's approximation. <bookmark mark='c'/> It is also how Part 25 integrated each school's "
-            "random effect in the mixed logistic model. <bookmark mark='d'/> When it isn't accurate enough, adaptive "
-            "quadrature in low dimensions, or chapter nine's tempered SMC, do better."
+            "<bookmark mark='a'/> Laplace's method also approximates the evidence: the joint density at the mode, "
+            "times the volume of the normal fitted there, computed from the determinant of the Hessian. <bookmark "
+            "mark='b'/> Under regular fixed-dimensional assumptions and a suitable fixed prior, retaining the leading"
+            " terms gives BIC. Order-one prior and curvature terms remain in Laplace's expression. <bookmark "
+            "mark='c'/> It is also how Part 25 integrated each school's random effect in the mixed logistic model. "
+            "<bookmark mark='d'/> When it isn't accurate enough, adaptive quadrature in low dimensions, or chapter "
+            "nine's tempered SMC, do better."
         ) as vo:
+            intro = label('Laplace evidence retains prior and curvature constants', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -135,15 +148,17 @@ class Laplace(VoiceoverScene):
                 [r"SMC", r"yes, \ in particles", r"evidences, \ streams", r"degeneracy"],
                 [r"Laplace, \ INLA", r"no", r"latent Gaussian models", r"skewness"],
                 [r"VI", r"no", r"millions of parameters", r"too-narrow posteriors"],
-                [r"ABC", r"no", r"simulators only", r"the summaries"]]
+                [r"ABC", r"yes if sufficient, zero tolerance", r"simulators only", r"the summaries"]]
         tb = table_rows([hdr] + body, font_size=22, col_buff=0.6, row_buff=0.22, colors=[GREY_A, EXACTC, SAMPLER, SAMPLER, HIT, HIT, VIC, VIC, RES])
         tb.move_to([0, 0.2, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The whole toolkit on one page. Grids, importance sampling, Gibbs, NUTS and SMC are exact "
-            "in the limit of more computation; <bookmark mark='b'/> Laplace, INLA, variational inference and ABC are "
-            "approximations however long they run. <bookmark mark='c'/> Each has its domain and its characteristic failure, "
-            "and its own warning sign. Most applied work today starts with NUTS, and reaches for the others when the model "
-            "is too big, too slow or has no likelihood."
+            "<bookmark mark='a'/> The whole toolkit on one page. Grids, importance sampling, Gibbs, NUTS and SMC are "
+            "exact in the limit of more computation; <bookmark mark='b'/> Laplace, INLA and a fixed variational "
+            "family retain approximation error. ABC at fixed summaries and tolerance does too, but sufficient "
+            "summaries and vanishing tolerance can recover the full posterior under regularity conditions. <bookmark "
+            "mark='c'/> Each has its domain and its characteristic failure, and its own warning sign. Most applied "
+            "work today starts with NUTS, and reaches for the others when the model is too big, too slow or has no "
+            "likelihood."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tb[0]), LaggedStart(*[FadeIn(r) for r in tb[1:6]], lag_ratio=0.2))
