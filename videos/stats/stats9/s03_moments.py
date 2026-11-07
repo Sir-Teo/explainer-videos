@@ -28,7 +28,7 @@ class Moments(VoiceoverScene):
                           r"first five moments, \ and solved a polynomial of degree nine", color=S.MUSEUM, width=9.8,
                           font_size=24).move_to([0, 0.9, 0])
         rows = fit_rows(VGroup(
-            label(r"the method needs no density, \ only computable, finite moments: \ no density required", font_size=24,
+            label(r"the method needs computable, finite identifying moments; \ no density required", font_size=24,
                   color=S.ACCENT),
             label(r"Fisher (1912, 1922) would attack it as inefficient, \ and propose maximum likelihood", font_size=24,
                   color=GREY_A),
@@ -132,6 +132,7 @@ class Moments(VoiceoverScene):
         rows[3][2].set_color(S.RESID)
         whys = [why(r"one capture: \ any serial equally likely"), why(r"match the first moment"), why(r"unbiased: \ $E\bar X = (N+1)/2$"),
                 why(r"our factory: \ an estimate the data rule out")]
+        intro = label('Matching the average captured serial', font_size=36)
         with self.voiceover(
             "The tanks, by moments. <bookmark mark='a'/> A single captured tank is equally likely to carry any serial "
             "from one to N, so its average serial is N plus one over two. <bookmark mark='b'/> Set that equal to the "
@@ -141,9 +142,12 @@ class Moments(VoiceoverScene):
             "hundred and fourteen in our hands. The method of moments can produce estimates the data have already "
             "ruled out. It only listens to averages, and here the average is the wrong thing to listen to."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.5, x=-0.6, buff=0.9, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
