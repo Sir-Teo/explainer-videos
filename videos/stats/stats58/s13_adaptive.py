@@ -19,28 +19,44 @@ class Adaptive(LectureMixin, VoiceoverScene):
         self.anytime()
 
     def bias(self):
+        heading = label('Selection bias in adaptive sampling', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> The first surprise: after an adaptive experiment, the sample mean of each arm is biased "
-            "downward. Xinkun Nie, Xiaoying Tian, Jonathan Taylor and James Zou proved it in 2018 for a broad class of "
-            "designs. <bookmark mark='b'/> The reason is that an arm which happens to do badly early is sampled less, so "
-            "its unlucky early outcomes are not diluted by later ones. <bookmark mark='c'/> An arm that does well early is "
-            "sampled more, and its lucky start is diluted. <bookmark mark='d'/> Both effects push the mean down, and the "
-            "naive interval, centred on it, covers less than promised.",
+            (
+            "<bookmark mark='a'/> Adaptive sampling can bias an arm's sample mean. Nie and colleagues prove "
+            'downward bias for a class of optimistic sampling designs under their conditions; it is not a theorem '
+            "for every adaptive rule. <bookmark mark='b'/> A poor early outcome can reduce subsequent sampling, "
+            "leaving that poor start less diluted. <bookmark mark='c'/> A favourable start can attract more "
+            'observations and be averaged away. This explains the direction in our example, while different '
+            "stopping and selection rules can produce other biases. <bookmark mark='d'/> Bias alone does not "
+            'determine coverage. We simulate the actual nominal intervals and report their empirical coverage with '
+            'Monte Carlo uncertainty.'
+        ),
             [(r"\text{Nie et al. (2018)}", r":", r"E[\bar Y_k] \le \mu_k \text{ for optimistic designs}", 38),
              (r"\text{bad start}", r":", r"\text{sampled less: \ the bad luck stays}", 38),
              (r"\text{good start}", r":", r"\text{sampled more: \ the good luck is diluted}", 38),
-             (r"\text{so}", r":", r"\text{downward bias; \ naive intervals undercover}", 38)],
+             (r"\text{so}", r":", r"\text{downward bias for stated designs; \ assess coverage separately}", 38)],
             [r"Nie, \ Tian, \ Taylor \& Zou", r"stuck with it", r"averaged away", r"the Board's next row"],
             colors=[(0, FIXEDC), (3, FIXEDC)])
 
     def why_bias(self):
+        heading = label('Why bias', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> In symbols: the sample mean is a sum of outcomes divided by a random count, and the count "
-            "depends on the outcomes. <bookmark mark='b'/> Each outcome is unbiased given the past, so the numerator's "
-            "expectation is mu times the expected count. <bookmark mark='c'/> But a ratio is not unbiased when its "
-            "denominator is correlated with its numerator, and here the correlation is negative in exactly the harmful "
-            "direction. <bookmark mark='d'/> Inverse-propensity weighting repairs the expectation: dividing each outcome by "
-            "the probability of having been sampled gives an unbiased estimate, whatever the design.",
+            (
+            "<bookmark mark='a'/> An arm's sample mean divides its total reward by a random sample count. The count "
+            "depends on previous rewards. <bookmark mark='b'/> With stationary arm means and predictable "
+            "assignment, expected total reward is mu times expected count. <bookmark mark='c'/> That identity does "
+            'not make the ratio unbiased. The count and reward total are generally dependent; a universal sign '
+            "cannot be read from this equation alone. <bookmark mark='d'/> With known positive conditional "
+            'assignment probabilities and sequential randomization, the average inverse-propensity score is '
+            'unbiased. In our finite-Monte-Carlo policy those probabilities condition on the auxiliary posterior '
+            'draws before action.'
+        ),
             [(r"\bar Y_k", r"=", r"\frac{\sum_t 1\{A_t = k\}Y_t}{N_k}, \ \ N_k \text{ random}", 38),
              (r"E\big[\textstyle\sum_t 1\{A_t = k\}Y_t\big]", r"=", r"\mu_k\,E[N_k]", 38),
              (r"\text{but}", r":", r"N_k \text{ depends on the outcomes: \ a biased ratio}", 38),
@@ -85,28 +101,44 @@ class Adaptive(LectureMixin, VoiceoverScene):
         self.clear_scene()
 
     def clt_fails(self):
+        heading = label('A counterexample for batched bandits', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> Worse than bias, the central limit theorem can fail. Kelly Zhang, Lucas Janson and Susan "
-            "Murphy showed in 2020 that for batched bandits, when the arms are equal, the ordinary estimator is not "
-            "asymptotically normal. <bookmark mark='b'/> The share of samples each arm receives does not settle down: it "
-            "converges to a random limit. <bookmark mark='c'/> So the variance estimate does not stabilize, and the "
-            "studentized statistic has a non-normal limit. <bookmark mark='d'/> Their fix is to studentize batch by batch "
-            "and combine: the batched OLS estimator, normal even when the arms are equal.",
-            [(r"\text{Zhang, \ Janson \& Murphy}", r":", r"\text{no CLT for equal arms}", 38),
-             (r"N_k/T", r"\to", r"\text{a random limit, \ not a constant}", 38),
+            (
+            "<bookmark mark='a'/> Zhang, Janson and Murphy give batched-bandit examples in which the usual "
+            'estimator and t statistic fail to become normal, even asymptotically. Equal arms are the difficult '
+            "case in their model. <bookmark mark='b'/> Allocation probabilities need not concentrate at a "
+            'deterministic limit as batch sizes grow. This is a failure of a stability condition, not a theorem '
+            "that every equal-arm adaptive design has the same random limiting allocation. <bookmark mark='c'/> The "
+            'resulting ordinary studentized statistic can have a nonnormal limit and invalidate nominal intervals. '
+            "Our one-visitor-at-a-time simulation is a separate finite-sample illustration. <bookmark mark='d'/> "
+            'Their batched OLS combines appropriately studentized batch contributions and is asymptotically normal '
+            "under the paper's sampling, moment and clipping conditions."
+        ),
+            [(r"\text{Zhang, \ Janson \& Murphy}", r":", r"\text{a nonnormal equal-arm batched-bandit example}", 38),
+             (r"\text{allocations}", r":", r"\text{need not concentrate at a deterministic limit}", 38),
              (r"\Rightarrow", r"\;", r"\text{the } t\text{-statistic is not asymptotically normal}", 38),
              (r"\text{fix}", r":", r"\text{studentize per batch, \ then combine}", 38)],
             [r"NeurIPS (2020)", r"no stable allocation", r"the naive interval's failure", r"batched OLS"],
             colors=[(2, FIXEDC), (3, CSC)])
 
     def aipw(self):
+        heading = label('Predictable augmented scores', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> Vitor Hadad, David Hirshberg, Ruohan Zhan, Stefan Wager and Susan Athey start from "
-            "augmented inverse-propensity scores. At each time, use the past to predict the arm's mean, m hat. <bookmark "
-            "mark='b'/> If the arm was shown, correct the prediction by the residual divided by the assignment probability. "
-            "<bookmark mark='c'/> Each score is unbiased for the arm's mean given the past, because m hat and the probability "
-            "are fixed before the outcome. <bookmark mark='d'/> So the scores' average is unbiased; but its variance is "
-            "dominated by the times the probability was tiny, and it is still not normal.",
+            (
+            "<bookmark mark='a'/> Start from an augmented inverse-propensity score. Predict each arm's stationary "
+            "mean using past observations. <bookmark mark='b'/> If that arm is selected, add its observed residual "
+            "divided by its known positive conditional assignment probability. <bookmark mark='c'/> The score has "
+            "conditional mean equal to the arm's mean, under sequential randomization and the stationary response "
+            "model. A predictable misspecified prediction still gives an unbiased score. <bookmark mark='d'/> "
+            'Averaging these scores is unbiased, but small propensities can create large variance. Normality needs '
+            'a martingale central limit theorem, not just score unbiasedness.'
+        ),
             [(r"\hat m_{t-1}(k)", r":", r"\text{prediction from the past}", 38),
              (r"\Gamma_t(k)", r"=", r"\hat m_{t-1}(k) + \frac{1\{A_t = k\}}{e_t(k)}\big(Y_t - \hat m_{t-1}(k)\big)", 36),
              (r"E[\Gamma_t(k) \mid \mathcal F_{t-1}]", r"=", r"\mu_k", 40),
@@ -115,15 +147,23 @@ class Adaptive(LectureMixin, VoiceoverScene):
             colors=[(1, WEALTHC), (2, CSC)])
 
     def weights(self):
+        heading = label('A martingale numerator, a self-normalized estimate', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> The fix is to weight the scores. Give score t a weight h t, chosen from the past. <bookmark "
-            "mark='b'/> Variance-stabilizing weights, h t equal to root of e t, make each weighted score's conditional "
-            "variance roughly constant over time. <bookmark mark='c'/> The weighted average is then a martingale whose "
-            "increments have stable variance, and the martingale central limit theorem of Part forty-four applies. <bookmark "
-            "mark='d'/> Studentized by its own weighted spread, it gives intervals that are asymptotically valid under the "
-            "adaptive design.",
+            (
+            "<bookmark mark='a'/> Hadad and colleagues weight the scores predictably, then divide their weighted "
+            'sum by the sum of weights. This self-normalized estimator can retain finite-sample bias. <bookmark '
+            "mark='b'/> Square-root propensity weights help stabilize the variance contribution, though they need "
+            "not make it exactly constant when outcome variance or prediction error changes. <bookmark mark='c'/> "
+            'The centered weighted numerator is a martingale sum. The ratio itself is not a martingale. Asymptotic '
+            'normality requires suitable variance stabilization, effective sample growth and Lindeberg conditions. '
+            "<bookmark mark='d'/> Under those conditions, a consistent studentized spread gives an asymptotically "
+            'valid interval. It is not an exact finite-sample guarantee for every adaptive design.'
+        ),
             [(r"\hat Q_k", r"=", r"\frac{\sum_t h_t\,\Gamma_t(k)}{\sum_t h_t}", 40),
-             (r"h_t", r"=", r"\sqrt{e_t(k)}: \ \text{stabilizes the variance}", 40),
+             (r"h_t", r"=", r"\sqrt{e_t(k)}: \ \text{variance-stabilizing choice under conditions}", 40),
              (r"\text{martingale CLT}", r":", r"\frac{\hat Q_k - \mu_k}{\widehat{\mathrm{se}}} \Rightarrow N(0, 1)", 38),
              (r"\widehat{\mathrm{se}}", r"=", r"\sqrt{\textstyle\sum_t h_t^2(\Gamma_t - \hat Q_k)^2}\,\big/\textstyle\sum_t h_t", 36)],
             [r"predictable weights", r"Hadad et al.", r"Part 44", r"the interval"],
@@ -132,19 +172,19 @@ class Adaptive(LectureMixin, VoiceoverScene):
     def board(self):
         br = load("board")["rows"]
         show_board(self, board_rows("Thompson", "adaptively weighted"),
-                   f"<bookmark mark='a'/> On the Board: after Thompson sampling with two equal arms, the naive ninety-five "
-                   f"percent interval for an arm's rate covers {100 * br[2]['achieved']:.1f} percent of the time: broken. "
-                   f"<bookmark mark='b'/> The adaptively weighted interval covers {100 * br[3]['achieved']:.1f} percent: kept, "
-                   f"though a little short, as an asymptotic method at a thousand visitors may be.", [("a", [0]), ("b", [1])])
+                   f"<bookmark mark='a'/> On the Board: after Thompson sampling with two equal arms, the naive ninety-five percent interval for an arm's rate covers {100 * br[2]['achieved']:.1f} percent of the time: broken. <bookmark mark='b'/> The adaptively weighted interval covers {100 * br[3]['achieved']:.1f} percent. This is an asymptotic interval, and the observed shortfall must be read with simulation uncertainty; the Board's tolerance label is not a proof of nominal coverage.", [("a", [0]), ("b", [1])])
 
     def anytime(self):
         self.list_voiceover(
-            "<bookmark mark='a'/> Two routes to honest inference from adaptive experiments. <bookmark mark='b'/> "
-            "Asymptotic: weighted AIPW and batched estimators, with intervals at the end of the experiment. <bookmark "
-            "mark='c'/> Anytime-valid: inverse-propensity-weighted test martingales, which give confidence sequences for "
-            "the arms' means and their differences under any adaptive design with known propensities. <bookmark mark='d'/> "
-            "Either way, the propensities must be recorded. An adaptive experiment that does not log them cannot be "
-            "analysed honestly afterwards.",
+            (
+            "<bookmark mark='a'/> Two routes support inference from adaptive experiments under explicit response "
+            "and assignment assumptions. <bookmark mark='b'/> Weighted AIPW and batched estimators can give "
+            "asymptotic intervals when their martingale central limit conditions hold. <bookmark mark='c'/> "
+            'Properly constructed inverse-propensity betting processes can instead give confidence sequences, with '
+            "known positive propensities and appropriate outcome bounds or moment assumptions. <bookmark mark='d'/> "
+            'Record the assignment probabilities, including the information used for each randomization. Missing '
+            'logs obstruct these methods, although other design-specific analyses may sometimes remain possible.'
+        ),
             [(r"two routes:", GREY_A),
              (r"asymptotic: \ weighted AIPW, \ batched OLS, \ intervals at the end", CSC),
              (r"anytime-valid: \ IPW test martingales, \ confidence sequences throughout", WEALTHC),

@@ -23,10 +23,10 @@ class Outro(LectureMixin, VoiceoverScene):
 
     def recap(self):
         items = [
-            (r"the SPRT: \ half the shells, \ exactly", SPRTC), (r"Wald--Wolfowitz: \ nothing does better", SPRTC),
+            (r"the SPRT: \ about half the shells on average, \ in this example", SPRTC), (r"Wald--Wolfowitz: \ optimal at two simple hypotheses", SPRTC),
             (r"group-sequential looks, \ and biased early stops", FIXEDC), (r"Ville: \ a test martingale rarely gets rich", WEALTHC),
             (r"e-values: \ calibrate, \ average, \ multiply", WEALTHC), (r"composite nulls: \ split LRT, \ GROW", WEALTHC),
-            (r"confidence sequences, \ by mixtures and bets", CSC), (r"CAST: \ wealth 333 against the drugs", FIXEDC),
+            (r"confidence sequences, \ by mixtures and bets", CSC), (r"CAST totals: \ wealth 333 under a working death-label model", FIXEDC),
             (r"e-BH under any dependence; \ CUSUM on the Nile", CHANGEC), (r"Thompson sampling: \ earn while learning", BANDITC),
             (r"adaptive data: \ biased means, \ weighted AIPW", BANDITC), (r"off-policy values; \ five open problems", S.ACCENT),
         ]
@@ -38,14 +38,18 @@ class Outro(LectureMixin, VoiceoverScene):
         head = label(r"Part 58, \ in twelve lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "<bookmark mark='a'/> Part fifty-eight in twelve lines. Wald's sequential test needs about half the shells of "
-            "the fixed test, and no test does better. Planned looks are handled by spending functions, but early stops "
-            "overstate effects. Ville's inequality makes peeking safe for any test martingale. E-values calibrate p-values, "
-            "average under any dependence and multiply in sequence; composite nulls need a split or a projection. <bookmark "
-            "mark='b'/> Confidence sequences hold at all times, built by mixtures or by betting. CAST's deaths made a "
-            "gambler three hundred times richer. E-BH controls false discoveries under any dependence, and CUSUM caught the "
-            "Nile's drop in two years. Thompson sampling earns while it learns; its data need weighted estimators; and the "
-            "logs can evaluate policies never run."
+            (
+            "<bookmark mark='a'/> Part fifty-eight in twelve lines. The example SPRT uses about half the fixed "
+            "count test's sample size on average; its optimality compares actual errors at two simple IID "
+            'hypotheses. Group-sequential designs calibrate planned or validly timed looks, and stopping can bias '
+            'reported effects. Ville protects nonnegative test supermartingales. E-values average under arbitrary '
+            'dependence, while products require independence or conditional fairness. Composite nulls need a '
+            "construction fair against the whole family. <bookmark mark='b'/> Confidence sequences provide "
+            "simultaneous coverage over time under their assumptions. CAST's aggregate totals illustrate a working "
+            'death-label bet, not its clinical monitoring history. E-BH combines valid null e-values for a '
+            'specified family. CUSUM uses mean run length rather than an ever-alarm probability. Adaptive '
+            'allocation needs appropriate inference, and logged propensities enable off-policy evaluation.'
+        )
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -59,9 +63,13 @@ class Outro(LectureMixin, VoiceoverScene):
         card = upgrade_card(58, r"guarantees under a model with a fixed number of parameters", r"$p$ stays small as $n$ grows",
                             r"Part 59: \ classical statistics when $p$ and $n$ grow together")
         with self.voiceover(
-            "<bookmark mark='a'/> A promise for the next part. Most of this part's models had a fixed, small number of "
-            "parameters. <bookmark mark='b'/> It assumed p stays small while n grows. <bookmark mark='c'/> Part fifty-nine asks "
-            "what happens to likelihood ratios, maximum likelihood and the bootstrap when p and n grow together."
+            (
+            "<bookmark mark='a'/> Many examples here used a fixed, small number of model parameters. <bookmark "
+            "mark='b'/> That is a useful bridge to the next part, but not an assumption required by all the "
+            "nonparametric and betting guarantees just developed. <bookmark mark='c'/> Part fifty-nine studies "
+            'classical likelihood, estimation and bootstrap procedures when the number of fitted parameters grows '
+            'proportionally with sample size.'
+        )
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(card[0]), FadeIn(card[1][0]), FadeIn(card[1][1][0]))
@@ -78,9 +86,12 @@ class Outro(LectureMixin, VoiceoverScene):
             (r"the dissertation's monitoring plan", [65]),
         ], font_size=22)
         with self.voiceover(
-            "Where it comes back. <bookmark mark='a'/> Part sixty's robustness when the future shifts. Part sixty-two's "
-            "adaptive and sequential causal designs. Part sixty-three's privacy budgets, spent over time. Part sixty-four's "
-            "evaluation of AI systems as they are deployed. And the dissertation's monitoring plan."
+            (
+            "Where it comes back. <bookmark mark='a'/> Part sixty's robustness when the future shifts. Part "
+            "sixty-two's adaptive and sequential causal designs. Part sixty-three's privacy budgets, spent over "
+            "time. Part sixty-four's evaluation of AI systems as they are deployed. And the dissertation's "
+            'monitoring plan.'
+        )
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
@@ -89,9 +100,11 @@ class Outro(LectureMixin, VoiceoverScene):
     def problems(self):
         ps = problem_set(PROBLEMS, font_size=20)
         with self.voiceover(
-            "Six problems, with full solutions in the README. <bookmark mark='a'/> Wald's error bound; Wald's identity; Ville's "
-            "inequality; calibrators and merging; Robbins's mixture sequence; and e-BH's guarantee. Pause here if you want to "
-            "try them."
+            (
+            "Six problems, with full solutions in the README. <bookmark mark='a'/> Wald's error bound; Wald's "
+            "identity; Ville's inequality; calibrators and merging; Robbins's mixture sequence; and e-BH's "
+            'guarantee. Pause here if you want to try them.'
+        )
         ) as vo:
             self.play(FadeIn(ps.head))
             vo.wait_until("a")
@@ -109,9 +122,11 @@ class Outro(LectureMixin, VoiceoverScene):
              r"S. Howard et al., \ \emph{Ann. Stat.} (2021); \ I. Waudby-Smith \& A. Ramdas, \ \emph{JRSS B} (2024); \ R. Wang \& A. Ramdas, \ \emph{JRSS B} (2022)",
              r"P. Gr\"unwald et al., \ \emph{JRSS B} (2024); \ V. Hadad et al., \ \emph{PNAS} (2021); \ M. Kasy \& A. Sautmann, \ \emph{Econometrica} (2021)"])
         with self.voiceover(
-            "The books behind this part: Wald's and Siegmund's on sequential analysis; Jennison and Turnbull on group "
-            "sequential methods; Shafer and Vovk's game-theoretic foundations; Ramdas and Wang on e-values; and Lattimore and "
-            "Szepesvári on bandits; with the papers from Ville to the present."
+            (
+            "The books behind this part: Wald's and Siegmund's on sequential analysis; Jennison and Turnbull on "
+            "group sequential methods; Shafer and Vovk's game-theoretic foundations; Ramdas and Wang on e-values; "
+            'and Lattimore and Szepesvári on bandits; with the papers from Ville to the present.'
+        )
         ):
             self.play(FadeIn(card))
         self.wait(2.0)
@@ -125,10 +140,13 @@ class Outro(LectureMixin, VoiceoverScene):
         tr.to_edge(UP, buff=0.8)
         nxt.next_to(tr, DOWN, buff=1.0)
         with self.voiceover(
-            "Fifty-eight parts of sixty-five. <bookmark mark='a'/> Fit a logistic regression with one variable for every five "
-            "observations, and the textbook likelihood-ratio test, the one every software package prints, is badly "
-            "miscalibrated: its p-values are far too small. Pragya Sur and Emmanuel Candès worked out why, and what the "
-            "right answer is. <bookmark mark='b'/> Next, Part fifty-nine: high-dimensional asymptotics."
+            (
+            "Fifty-eight parts of sixty-five. <bookmark mark='a'/> Fit a logistic regression with one variable for "
+            'every five observations, and the textbook likelihood-ratio test, the one every software package '
+            'prints, is badly miscalibrated: its p-values are far too small. Pragya Sur and Emmanuel Candès worked '
+            "out why, and what the right answer is. <bookmark mark='b'/> Next, Part fifty-nine: high-dimensional "
+            'asymptotics.'
+        )
         ) as vo:
             self.play(FadeIn(tr))
             vo.wait_until("a")

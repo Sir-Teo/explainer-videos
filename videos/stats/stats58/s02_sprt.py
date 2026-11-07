@@ -20,6 +20,10 @@ class SPRT(LectureMixin, VoiceoverScene):
 
     def walk(self):
         d = load("hook")
+        heading = label('The Bernoulli likelihood-ratio walk', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
             f"<bookmark mark='a'/> For Bernoulli data the log likelihood ratio is a random walk. Each defective adds the log "
             f"of p one over p nought, here {say(d['a'], 3)}. <bookmark mark='b'/> Each good shell adds the log of one minus "
@@ -27,7 +31,7 @@ class SPRT(LectureMixin, VoiceoverScene):
             f"leaves the band between log B, minus {say(-math.log(d['B']), 2)}, and log A, {say(math.log(d['A']), 2)}. "
             f"<bookmark mark='d'/> Because the steps take only two values, the walk lives on a lattice: after n shells with "
             f"s defectives it sits at s a plus n minus s times b. So the probability of every way to stop can be computed "
-            f"exactly, by pushing the probabilities of the states still inside the band forward one shell at a time.",
+            f"to controlled numerical precision with a bounded remainder, by pushing the probabilities of the states still inside the band forward one shell at a time.",
             [(r"\text{a defective}", r":", rf"+\log\tfrac{{p_1}}{{p_0}} = +{d['a']:.3f}", 38),
              (r"\text{a good shell}", r":", rf"+\log\tfrac{{1 - p_1}}{{1 - p_0}} = -{-d['b']:.3f}", 38),
              (r"\text{stop}", r":", rf"\log\Lambda_n \notin (\log B, \log A) = (-{-math.log(d['B']):.2f}, \ {math.log(d['A']):.2f})", 36),
@@ -39,8 +43,8 @@ class SPRT(LectureMixin, VoiceoverScene):
         d = load("paths")
         lA, lB = d["logA"], d["logB"]
         nmax = max(max(p["n"] for p in d["h0"]), max(p["n"] for p in d["h1"]))
-        nmax = int(min(260, max(120, nmax)))
-        A = axes([0, nmax], [lB - 0.6, lA + 0.6], x_length=8.2, y_length=4.6, xlabel=r"shells tested", ylabel=r"log likelihood ratio",
+        nmax = int(max(120, nmax))
+        A = axes([0, nmax], [lB - 0.3, lA + 0.85], x_length=8.2, y_length=4.6, xlabel=r"shells tested", ylabel=r"log likelihood ratio",
                  xticks=[0, 50, 100, 150, 200, 250][: 1 + nmax // 50], yticks=[round(lB, 2), 0, round(lA, 2)], center=[-2.1, 0.1, 0])
         ax = A.ax
         up = DashedLine(ax.c2p(0, lA), ax.c2p(nmax, lA), color=FIXEDC, stroke_width=3)
@@ -50,7 +54,7 @@ class SPRT(LectureMixin, VoiceoverScene):
             y = np.r_[0.0, np.asarray(p["llr"])]
             x = np.arange(len(y))
             k = x <= nmax
-            return polyline(ax, x[k], np.clip(y[k], lB - 0.6, lA + 0.6), col, 2.2, 0.85)
+            return polyline(ax, x[k], y[k], col, 2.2, 0.85)
         g0 = VGroup(*[path(p, SPRTC) for p in d["h0"]])
         g1 = VGroup(*[path(p, WEALTHC) for p in d["h1"]])
         n0 = np.mean([p["n"] for p in d["h0"]])
@@ -82,30 +86,43 @@ class SPRT(LectureMixin, VoiceoverScene):
         self.clear_scene()
 
     def errors(self):
+        heading = label('Wald thresholds: relaxed error guarantees', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> Why do Wald's thresholds work? Take the event that the test rejects. On it, the likelihood "
-            "ratio at the stopping time is at least A. <bookmark mark='b'/> Change measure: the probability of rejecting "
-            "under the alternative is the null expectation of the likelihood ratio on that event, which is at least A times "
-            "the null probability of rejecting. <bookmark mark='c'/> So the true size is at most one minus beta over A, which "
-            "is alpha, if the walk never overshoots; and in general it is at most alpha over one minus beta. <bookmark "
-            "mark='d'/> The same argument bounds the second error by beta over one minus alpha. Overshoot only makes the "
-            "test more conservative.",
+            (
+            "<bookmark mark='a'/> On the event that the SPRT rejects, its likelihood ratio at stopping is at least "
+            "A. <bookmark mark='b'/> Changing measure shows that the alternative rejection probability is at least "
+            "A times the null rejection probability. <bookmark mark='c'/> Therefore the size is at most one over A, "
+            "or alpha divided by one minus beta for Wald's approximate thresholds. <bookmark mark='d'/> Similarly, "
+            'the other error is at most beta divided by one minus alpha. The stricter nominal targets are not '
+            'automatically guaranteed. For this Bernoulli example we compute the actual errors by lattice '
+            'propagation, including overshoot.'
+        ),
             [(r"\{\text{reject}\}", r":", r"\Lambda_N \ge A \text{ there}", 38),
              (r"P_1(\text{reject})", r"=", r"E_0[\Lambda_N; \text{reject}] \ge A\,P_0(\text{reject})", 36),
              (r"\Rightarrow", r"\;", r"P_0(\text{reject}) \le \frac{1 - \beta'}{A} \le \frac{\alpha}{1 - \beta}", 36),
              (r"\text{likewise}", r":", r"P_1(\text{accept}) \le \frac{\beta}{1 - \alpha}", 38)],
-            [r"by definition of stopping", r"a change of measure", r"Wald's bound", r"overshoot only helps"],
+            [r"by definition of stopping", r"a change of measure", r"Wald's bound", r"nominal targets require calibration"],
             colors=[(2, CSC), (3, CSC)])
 
     def identity(self):
+        heading = label("Wald's identity: IID integrable increments", font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> How long does it take? Wald's identity: if the steps of a random walk have mean mu, and N "
-            "is a stopping time with finite mean, the walk's expected position at N is mu times the expected value of N. "
-            "<bookmark mark='b'/> At the stop, the walk is near log A or near log B, with the probabilities of the two "
-            "decisions. <bookmark mark='c'/> So the expected sample size is roughly the expected final position divided by "
-            "the drift per observation, which is a Kullback–Leibler divergence. <bookmark mark='d'/> Under the null, the "
-            "drift is minus the divergence of the null from the alternative: the more different the hypotheses, the faster "
-            "the test stops, and Part twenty-two's divergence becomes a clock.",
+            (
+            "<bookmark mark='a'/> Wald's identity assumes IID integrable increments and a stopping time with finite "
+            'expected length. Then the expected stopped sum equals the mean increment times expected length. '
+            "<bookmark mark='b'/> At an SPRT stop the sum is near one of the boundaries, with an overshoot. "
+            "<bookmark mark='c'/> Ignoring that overshoot approximates expected length by expected boundary "
+            "position divided by the drift, except at zero drift where a limit is needed. <bookmark mark='d'/> "
+            'Under the two specified hypotheses the drift is respectively a negative and a positive '
+            'Kullback-Leibler divergence. At an intermediate true rate it is simply the expected log likelihood '
+            'increment.'
+        ),
             [(r"\text{Wald's identity}", r":", r"E\Big[\textstyle\sum_{i \le N} Z_i\Big] = E[N]\,E[Z_1]", 38),
              (r"\text{at the stop}", r":", r"S_N \approx \log A \text{ or } \log B", 38),
              (r"\Rightarrow", r"\;", r"E N \approx \frac{P(\text{reject})\log A + P(\text{accept})\log B}{E Z_1}", 36),
@@ -150,28 +167,35 @@ class SPRT(LectureMixin, VoiceoverScene):
 
     def tail(self):
         d = load("hook")
+        heading = label('Truncation requires new calibration', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            f"<bookmark mark='a'/> The saving is on average. The number of shells is random, and sometimes large: <bookmark "
-            f"mark='b'/> at a rate of ten percent, the sequential test runs past the fixed test's {d['fixed']['n']} shells "
-            f"{100 * d['beyond_fixed0']:.0f} percent of the time, and at twenty percent, {100 * d['beyond_fixed1']:.0f} percent. "
-            f"<bookmark mark='c'/> In practice the test is truncated: decide at a maximum sample size if the walk is still "
-            f"inside. <bookmark mark='d'/> Truncation costs a little in the error rates, and buys a guaranteed budget, which "
-            f"is what clinical trials, unlike lots of shells, cannot do without.",
+            f"<bookmark mark='a'/> The saving is on average. The number of shells is random, and sometimes large: <bookmark mark='b'/> at a rate of ten percent, the sequential test runs past the fixed test's {d['fixed']['n']} shells {100 * d['beyond_fixed0']:.0f} percent of the time, and at twenty percent, {100 * d['beyond_fixed1']:.0f} percent. <bookmark mark='c'/> In practice the test is truncated: decide at a maximum sample size if the walk is still inside. <bookmark mark='d'/> A terminal rule must be calibrated jointly with the boundaries: truncating and deciding by sign can change error rates substantially. A guaranteed budget requires a new error calculation.",
             [(r"N", r":", r"\text{random, \ with a long right tail}", 38),
              (r"P(N > {})".format(d["fixed"]["n"]), r":", rf"{100 * d['beyond_fixed0']:.1f}\% \ (p_0), \ \ {100 * d['beyond_fixed1']:.1f}\% \ (p_1)", 38),
              (r"\text{truncate}", r":", r"\text{decide at } n_{\max} \text{ by the sign of } \log\Lambda", 38),
-             (r"\text{the price}", r":", r"\text{slightly larger errors; \ a known budget}", 38)],
+             (r"\text{the price}", r":", r"\text{recalibrate errors for the terminal rule}", 38)],
             [r"saving on average", r"exact", r"the practical SPRT", r"trials need budgets"],
             colors=[(1, FIXEDC), (2, SPRTC)])
 
     def optimal(self):
+        heading = label('Optimality at two simple hypotheses', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> And nothing does better. Abraham Wald and Jacob Wolfowitz proved in 1948 that among all "
-            "tests, sequential or not, whose two error probabilities are no larger than the SPRT's, <bookmark mark='b'/> "
-            "none has a smaller expected sample size under the null, <bookmark mark='c'/> or under the alternative: the SPRT "
-            "minimizes both at once. <bookmark mark='d'/> The proof is Bayesian: the SPRT is the Bayes rule for a prior on "
-            "the two hypotheses and a cost per observation, an argument Part forty-five's decision theory makes natural. "
-            "Between the two hypotheses, though, other tests can do better, which is why later work truncates and adapts.",
+            (
+            "<bookmark mark='a'/> And nothing does better. Abraham Wald and Jacob Wolfowitz proved in 1948 that for "
+            'IID observations from two simple hypotheses, among tests with finite expected lengths, sequential or '
+            "not, whose two error probabilities are no larger than the SPRT's, <bookmark mark='b'/> none has a "
+            "smaller expected sample size under the null, <bookmark mark='c'/> or under the alternative: the SPRT "
+            "minimizes both at once. <bookmark mark='d'/> The proof is Bayesian: the SPRT is the Bayes rule for a "
+            "prior on the two hypotheses and a cost per observation, an argument Part forty-five's decision theory "
+            'makes natural. Between the two hypotheses, though, other tests can do better, which is why later work '
+            'truncates and adapts.'
+        ),
             [(r"\text{among tests with}", r":", r"P_0(\text{reject}) \le \alpha', \ P_1(\text{accept}) \le \beta'", 36),
              (r"\text{the SPRT minimizes}", r":", r"E_0 N", 38),
              (r"\text{and simultaneously}", r":", r"E_1 N", 38),
@@ -181,6 +205,10 @@ class SPRT(LectureMixin, VoiceoverScene):
 
     def overshoot(self):
         d = load("hook")
+        heading = label('Actual errors include overshoot', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
             f"<bookmark mark='a'/> A worked check on overshoot. The target errors were five and ten percent; Wald's bounds "
             f"allow up to {100 * 0.05 / 0.9:.1f} and {100 * 0.1 / 0.95:.1f} percent. <bookmark mark='b'/> The exact errors are "

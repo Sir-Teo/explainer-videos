@@ -1,0 +1,15 @@
+{
+  "nile": {
+    "url": "https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/Nile.csv",
+    "sha256": "d0452bea38c61e796a4eeb950bf91d20fb5c7f13d5822eadf5990fe54f9c8d07",
+    "rows": 100,
+    "comparison": "all 100 years and flows exactly match statsmodels/Museum",
+    "scope": "retrospective; first 28 years estimate scale; no causal attribution from a changepoint"
+  },
+  "cast": {
+    "url": "https://pubmed.ncbi.nlm.nih.gov/1900101/",
+    "doi": "10.1056/NEJM199103213241201",
+    "verification": "Primary abstract: 432+323=755 active, 425+318=743 placebo; 43+17+3=63 and 16+5+5=26 deaths, 1498 patients total. These agree with Museum constants.",
+    "scope": "No death-order or risk-set data in the extract. IID balanced labels are a working illustration, not a justified clinical stopping model."
+  }
+}
