@@ -105,10 +105,10 @@ class Hook(LectureMixin, VoiceoverScene):
             "sensitivity analysis and partial identification, and proximal inference. <bookmark mark='c'/> Chapters four to "
             "six: interference, policy learning, and dynamic treatment regimes. <bookmark mark='d'/> Chapters seven to "
             "nine: causal discovery, data fusion and transportability, and surrogate outcomes.",
-            [(r"the plan:", GREY_A),
+            [('Questions at the frontier of causal inference', GREY_A),
              (r"1--3: \ identification, \ sensitivity, \ proximal inference", IDC),
              (r"4--6: \ interference, \ policy learning, \ dynamic regimes", TRTC),
-             (r"7--9: \ discovery, \ transportability, \ surrogates", HIDC)])
+             (r"7--9: \ discovery, \ transportability, \ surrogates", HIDC)], head_size=36)
 
     def upgrade(self):
         cards = [

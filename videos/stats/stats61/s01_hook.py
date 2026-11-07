@@ -127,11 +127,11 @@ class Hook(LectureMixin, VoiceoverScene):
             "statistics of estimating them, the curse of dimensionality, entropic smoothing, and transport maps. "
             "<bookmark mark='d'/> Chapters six and seven: barycenters, and multivariate ranks with a distribution-free test. "
             "<bookmark mark='e'/> Chapters eight and nine: gradient flows, Langevin sampling and generative models.",
-            [(r"the plan:", GREY_A),
+            [('Questions about statistical optimal transport', GREY_A),
              (r"1--2: \ duality, \ Wasserstein distances, \ geodesics", PLANC),
              (r"3--5: \ empirical rates, \ Sinkhorn, \ transport maps", ENTC),
              (r"6--7: \ barycenters, \ multivariate ranks", TGT),
-             (r"8--9: \ gradient flows, \ generative models", FLOWC)])
+             (r"8--9: \ gradient flows, \ generative models", FLOWC)], head_size=36)
 
     def upgrade(self):
         cards = [

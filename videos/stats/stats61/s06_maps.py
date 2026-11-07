@@ -91,11 +91,11 @@ class Maps(LectureMixin, VoiceoverScene):
             "map the source covariates onto the target's, and train there. <bookmark mark='d'/> Counterfactual and causal "
             "questions, by transporting a treated population onto a control one. <bookmark mark='e'/> And chapter seven: "
             "the map to a reference law is a multivariate rank.",
-            [(r"uses of estimated maps:", GREY_A),
+            [('Statistical applications of estimated transport maps', GREY_A),
              (r"single-cell trajectories \ (Waddington-OT)", PLANC),
              (r"domain adaptation \ (Part 60)", TGT),
              (r"transporting populations \ (Part 62)", FLOWC),
-             (r"ranks and quantiles \ (chapter 7)", ENTC)])
+             (r"ranks and quantiles \ (chapter 7)", ENTC)], head_size=36)
 
     def semidiscrete(self):
         self.lad_voiceover(

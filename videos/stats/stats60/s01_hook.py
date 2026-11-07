@@ -94,11 +94,11 @@ class Hook(LectureMixin, VoiceoverScene):
             "and label shift, each with a correction and its price. <bookmark mark='d'/> Chapters seven to nine: protecting "
             "against shifts one cannot name, by robust optimization, invariance, and transfer. <bookmark mark='e'/> And "
             "chapter ten: detecting that a shift has happened at all.",
-            [(r"the plan:", GREY_A),
+            [('Questions about robustness and distribution shift', GREY_A),
              (r"1--4: \ depth, \ filtering, \ list decoding, \ heavy tails", DEPTHC),
              (r"5--6: \ covariate shift, \ label shift", TGTC),
              (r"7--9: \ DRO, \ invariance, \ transfer", FIXC),
-             (r"10: \ detecting shift", SRCC)])
+             (r"10: \ detecting shift", SRCC)], head_size=36)
 
     def upgrade(self):
         cards = [

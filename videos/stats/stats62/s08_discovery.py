@@ -126,11 +126,11 @@ class Discovery(LectureMixin, VoiceoverScene):
             "or methods can win by reading units. <bookmark mark='d'/> Interventional data, from experiments on some "
             "variables, shrink the equivalence class, the basis of modern discovery from perturbation screens. <bookmark "
             "mark='e'/> And a learned graph is a hypothesis, to be tested, not a premise for chapter one's formulas.",
-            [(r"lessons:", GREY_A),
+            [('Lessons and limits of causal discovery algorithms', GREY_A),
              (r"identified up to equivalence, \ unless more is assumed", HIDC),
              (r"benchmarks should diagnose scale and covariance shortcuts", NAIVEC),
              (r"interventions shrink the class", IDC),
-             (r"a learned graph is a hypothesis", GOLDC)])
+             (r"a learned graph is a hypothesis", GOLDC)], head_size=36)
 
     def interventions(self):
         self.lad_voiceover(

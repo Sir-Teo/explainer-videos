@@ -146,10 +146,10 @@ class Hook(LectureMixin, VoiceoverScene):
             "<bookmark mark='c'/> Chapters five to seven: honest inference on privatized data, the 2020 United States census, "
             "and private machine learning. <bookmark mark='d'/> Chapters eight to eleven: fairness criteria, the theorem "
             "that they cannot all hold, multicalibration, and causal fairness.",
-            [(r"the plan:", GREY_A),
+            [('Questions about privacy, fairness and statistical guarantees', GREY_A),
              (r"1--4: \ definition, \ testing, \ accounting, \ the cost of privacy", PRIVC),
              (r"5--7: \ private inference, \ the 2020 Census, \ DP-SGD", OKC),
-             (r"8--11: \ criteria, \ impossibility, \ multicalibration, \ causal fairness", GRPA)])
+             (r"8--11: \ criteria, \ impossibility, \ multicalibration, \ causal fairness", GRPA)], head_size=36)
 
     def upgrade(self):
         cards = [

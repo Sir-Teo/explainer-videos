@@ -103,11 +103,11 @@ class Detect(LectureMixin, VoiceoverScene):
             "mark='c'/> When the risk rises, test which kind of shift it is: covariates, labels, or the mechanism. <bookmark "
             "mark='d'/> Correct for the kinds that can be corrected, by weights or by label-shift estimation. <bookmark "
             "mark='e'/> And retrain, with transfer from the old data, when the mechanism itself has moved.",
-            [(r"a deployment protocol:", GREY_A),
+            [('A monitoring protocol for deployed prediction models', GREY_A),
              (r"1. \ monitor outputs and risk, \ anytime-valid \ (Part 58)", SRCC),
              (r"2. \ diagnose: \ covariate, \ label, \ or mechanism?", TGTC),
              (r"3. \ correct: \ importance weights, \ BBSE \ (chapters 5--6)", FIXC),
-             (r"4. \ retrain with transfer \ (chapter 9)", DEPTHC)])
+             (r"4. \ retrain with transfer \ (chapter 9)", DEPTHC)], head_size=36)
 
     def power(self):
         self.lad_voiceover(

@@ -84,10 +84,10 @@ class ListDecoding(LectureMixin, VoiceoverScene):
             "minority, and list decoding finds every component's mean. <bookmark mark='c'/> Learning from untrusted sources: a "
             "trusted few verify the list. <bookmark mark='d'/> And robust regression with a majority of corrupted responses, "
             "where a short list of candidate regressions replaces a single fit.",
-            [(r"where it is used:", GREY_A),
+            [('Applications of list-decodable robust estimation', GREY_A),
              (r"mixtures: \ each component is a minority", FIXC),
              (r"untrusted data: \ a trusted few verify the list", TGTC),
-             (r"regression with mostly corrupted responses", DEPTHC)])
+             (r"regression with mostly corrupted responses", DEPTHC)], head_size=36)
 
     def lower(self):
         self.lad_voiceover(
