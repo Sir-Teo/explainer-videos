@@ -33,13 +33,17 @@ class Brown(VoiceoverScene):
         whys = [why(r"prior $\ast$ noise"), why(r"Tweedie's formula"), why(r"the obvious estimator"), why(r"chapter 10, \ with $g = \nabla \log m$")]
         with self.voiceover(
             "<bookmark mark='a'/> Why should the dimension three matter? Lawrence Brown's answer of 1971 starts from "
-            "generalized Bayes rules. A prior, possibly improper, convolved with the normal noise gives the marginal density "
-            "of the data, m. <bookmark mark='b'/> The posterior mean is x plus the gradient of log m: Tweedie's formula, "
-            "which Robbins credited to Maurice Tweedie. <bookmark mark='c'/> The flat prior has constant marginal, so its "
-            "generalized Bayes rule is x itself. <bookmark mark='d'/> And chapter ten's SURE, with g equal to the gradient "
-            "of log m, shows that the risk is p minus an expectation that involves the Laplacian of m: the analysis of "
-            "estimators has become potential theory."
+            "generalized Bayes rules. A prior convolved with normal noise gives m. With an improper prior, m need not"
+            " integrate to one; we require a finite positive convolution and the necessary posterior moments. "
+            "<bookmark mark='b'/> The posterior mean is x plus the gradient of log m: Tweedie's formula, which "
+            "Robbins credited to Maurice Tweedie. <bookmark mark='c'/> The flat prior has constant marginal, so its "
+            "generalized Bayes rule is x itself. <bookmark mark='d'/> And chapter ten's SURE, with g equal to the "
+            "gradient of log m, shows that the risk is p minus an expectation that involves the Laplacian of m: the "
+            "analysis of estimators has become potential theory."
         ) as vo:
+            heading=label('A finite positive normal convolution gives Tweedie shrinkage',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -49,20 +53,21 @@ class Brown(VoiceoverScene):
     def theorem(self):
         rows = fit_rows(VGroup(
             label(r"Brown (1971): \ the generalized Bayes rule $\delta_\pi$ is admissible", font_size=28, color=ADMC),
-            label(r"if and only if \ (essentially) \ the diffusion $dY = \nabla \log m(Y)\, dt + dB$ is recurrent", font_size=26),
+            label(r"under Brown's regularity assumptions, iff \ the diffusion $dY = \tfrac12\nabla\log m(Y)\,dt+dB$ is recurrent", font_size=26),
             label(r"for spherical $m$: \ \ admissible \ $\iff \ \displaystyle\int^\infty \frac{dr}{r^{p - 1}\, m(r)} = \infty$", font_size=28, color=S.ACCENT),
             label(r"flat prior, \ $m \equiv 1$: \ \ $\int^\infty r^{1 - p}\, dr = \infty \iff p \le 2$", font_size=28, color=MMC),
             label(r"$X$ is admissible exactly when Brownian motion is recurrent", font_size=28, color=JSC),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Brown's theorem. The generalized Bayes rule for a prior is admissible <bookmark "
-            "mark='b'/> if and only if, essentially, the diffusion that moves like Brownian motion pushed along the gradient "
-            "of log m is recurrent: it keeps coming back to every ball. <bookmark mark='c'/> When the marginal is "
-            "spherically symmetric, the condition becomes an integral test: the integral of one over r to the p minus one "
-            "times m of r must diverge. <bookmark mark='d'/> For the flat prior, m is constant and the integral of r to the "
-            "one minus p diverges exactly when p is at most two. <bookmark mark='e'/> So X is admissible exactly in the "
-            "dimensions where Brownian motion is recurrent: one and two. Stein's paradox in three dimensions is Pólya's "
-            "transience in three dimensions."
+            "<bookmark mark='a'/> Brown's theorem. Under Brown's recurrence and admissibility regularity conditions, "
+            "the generalized Bayes rule <bookmark mark='b'/> is admissible precisely when the associated diffusion is"
+            " recurrent. With standard Brownian noise its drift is one half the gradient of log m, not the full "
+            "gradient: it keeps coming back to every ball. <bookmark mark='c'/> When the marginal is spherically "
+            "symmetric, the condition becomes an integral test: the integral of one over r to the p minus one times m"
+            " of r must diverge. <bookmark mark='d'/> For the flat prior, m is constant and the integral of r to the "
+            "one minus p diverges exactly when p is at most two. <bookmark mark='e'/> So X is admissible exactly in "
+            "the dimensions where Brownian motion is recurrent: one and two. Stein's paradox in three dimensions is "
+            "Pólya's transience in three dimensions."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
@@ -106,7 +111,7 @@ class Brown(VoiceoverScene):
 
     def hitting(self):
         d = load("brown")
-        R = np.asarray(d["R"])
+        R = np.asarray(d["hit_R"])
         k = R > 2.05
         lr = np.log10(R[k])
         A = axes([0.3, 6], [0, 1.05], x_length=7.4, y_length=4.4, xlabel=r"$\log_{10} R$", ylabel=r"$P(\text{hit the unit ball before radius } R)$",
@@ -150,21 +155,25 @@ class Brown(VoiceoverScene):
             cmath(r"\text{Blyth}", r":", r"\text{improve on } \delta \text{ near 0, \ pay in Bayes risk far away}", font_size=32),
             cmath(r"\text{gap}", r":", r"r(\pi_\tau, \delta) - r(\pi_\tau, \delta_\tau) \to 0", font_size=34),
             cmath(r"\text{cost of escaping}", r":", r"\text{the capacity of a ball in } \mathbb R^p: \ 0 \text{ for } p \le 2, \ > 0 \text{ for } p \ge 3", font_size=30),
-            cmath(r"p \ge 3", r":", r"\text{a rival can push risk out to } \infty \text{ for free: \ shrinkage}", font_size=32),
+            cmath(r"p \ge 3", r":", r"\text{transience permits superharmonic risk-reducing shrinkage}", font_size=32),
         ]
         rows[2][-1].set_color(S.ACCENT)
         rows[3][-1].set_color(JSC)
         whys = [why(r"chapter 3's race"), why(r"wide priors"), why(r"potential theory"), why(r"transience")]
         with self.voiceover(
-            "<bookmark mark='a'/> Why should recurrence be the criterion? Recall chapter three's race. To beat X, a rival "
-            "must improve somewhere and is pinned down by Bayes risks under wider and wider priors. <bookmark mark='b'/> "
-            "The gap between X and the best Bayes rule closes as the priors widen. <bookmark mark='c'/> Whether a rival can "
-            "slip through the gap is measured by a quantity from potential theory, the capacity of a ball: how much "
-            "charge it takes to hold it at unit potential against infinity. It is zero in one and two dimensions, positive "
-            "in three or more. <bookmark mark='d'/> In three or more, a rival can move risk away from the origin and lose it "
-            "at infinity at no cost, and shrinkage toward a point does exactly that. The space is too big for X to be "
-            "admissible."
+            "<bookmark mark='a'/> Why should recurrence be the criterion? Recall chapter three's race. To beat X, a "
+            "rival must improve somewhere and is pinned down by Bayes risks under wider and wider priors. <bookmark "
+            "mark='b'/> The gap between X and the best Bayes rule closes as the priors widen. <bookmark mark='c'/> "
+            "Whether a rival can slip through the gap is measured by a quantity from potential theory, the capacity "
+            "of a ball: how much charge it takes to hold it at unit potential against infinity. It is zero in one and"
+            " two dimensions, positive in three or more. <bookmark mark='d'/> Transience in three or more dimensions "
+            "permits nonconstant superharmonic constructions that reduce risk. James–Stein needs no compensating risk"
+            " increase at other parameter values; this capacity discussion is intuition, not a literal transfer of "
+            "risk to infinity. The space is too big for X to be admissible."
         ) as vo:
+            heading=label('Capacity links recurrence to the admissibility argument',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -174,8 +183,8 @@ class Brown(VoiceoverScene):
     def priors(self):
         rows = [[r"prior $\pi(\theta)$", r"tail of $m(r)$", r"$\int^\infty \frac{dr}{r^{p-1} m(r)}$", r"generalized Bayes rule"],
                 [r"flat", r"$1$", r"$= \infty$ iff $p \le 2$", r"$X$: \ admissible iff $p \le 2$"],
-                [r"$\|\theta\|^{-k}$, \ $k < p$", r"$\sim r^{-k}$", r"$= \infty$ iff $k \ge p - 2$", r"admissible iff $k \ge p - 2$"],
-                [r"$\|\theta\|^{2 - p}$ \ (harmonic)", r"$\sim r^{2 - p}$", r"$= \infty$", r"admissible and minimax \ (Stein 1981)"],
+                [r"$\|\theta\|^{-k}$, $0\le k<p$, $p\ge3$", r"$\sim r^{-k}$", r"$= \infty$ iff $k \ge p - 2$", r"admissible iff $k \ge p - 2$"],
+                [r"$\|\theta\|^{2-p}$ (harmonic), $p\ge3$", r"$\sim r^{2 - p}$", r"$= \infty$", r"admissible and minimax \ (Stein 1981)"],
                 [r"any proper prior", r"integrable", r"$= \infty$", r"admissible \ (unique Bayes)"]]
         tab = table_rows(rows, font_size=24, col_buff=0.6, row_buff=0.32, colors=[GREY_A, INADC, MMC, JSC, ADMC]).move_to([0, 0.5, 0])
         if tab.width > 13:
@@ -183,12 +192,13 @@ class Brown(VoiceoverScene):
         note_ = label(r"the heavier the prior's tails, \ the closer to $X$; \ just light enough, \ and the rule is admissible", font_size=24, color=S.ACCENT).move_to([0, -2.6, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The test sorts priors by their tails. <bookmark mark='b'/> The flat prior gives X, "
-            "admissible only up to two dimensions. <bookmark mark='c'/> A prior falling like the norm of theta to the minus "
-            "k gives a marginal with the same tail, and the integral diverges exactly when k is at least p minus two. "
-            "<bookmark mark='d'/> The borderline case, k equal to p minus two, is the harmonic prior, whose generalized Bayes "
-            "rule Stein showed in 1981 to be both admissible and minimax. <bookmark mark='e'/> And proper priors always pass, "
-            "as chapter three proved directly. <bookmark mark='f'/> The heavier the prior's tails, the closer its rule is to "
-            "X; just light enough, and the rule becomes admissible."
+            "admissible only up to two dimensions. <bookmark mark='c'/> For p at least three and zero at most k below"
+            " p, a prior falling like the norm of theta to the minus k gives a marginal with the same tail, and the "
+            "integral diverges exactly when k is at least p minus two. <bookmark mark='d'/> The borderline case, k "
+            "equal to p minus two, is the harmonic prior, whose generalized Bayes rule Stein showed in 1981 to be "
+            "both admissible and minimax. <bookmark mark='e'/> And proper priors always pass, as chapter three proved"
+            " directly. <bookmark mark='f'/> The heavier the prior's tails, the closer its rule is to X; just light "
+            "enough, and the rule becomes admissible."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tab[0]))

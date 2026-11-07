@@ -52,13 +52,17 @@ class Decision(VoiceoverScene):
         rows[3][-1].set_color(INADC)
         whys = [why(r"e.g.\ $(a - \theta)^2$"), why(r"an estimator, \ or a test"), why(r"one curve per rule"), why(r"dominated")]
         with self.voiceover(
-            "<bookmark mark='a'/> The ingredients. A loss function scores each action against each possible truth; for "
-            "estimation, usually the squared error. <bookmark mark='b'/> A decision rule maps every possible data set to an "
-            "action: an estimator, or a test. <bookmark mark='c'/> Its risk function is the expected loss when the truth is "
-            "theta: a whole curve, one value for each theta, not a single number. <bookmark mark='d'/> A rule is "
-            "inadmissible if another rule's risk is never larger and somewhere smaller. Nobody should use an inadmissible "
-            "rule; Stein's theorem says that the sample means are one."
+            "<bookmark mark='a'/> The ingredients. A loss function scores each action against each possible truth; "
+            "for estimation, usually the squared error. <bookmark mark='b'/> A decision rule maps every possible data"
+            " set to an action: an estimator, or a test. <bookmark mark='c'/> Its risk function is the expected loss "
+            "when the truth is theta: a whole curve, one value for each theta, not a single number. <bookmark "
+            "mark='d'/> A rule is inadmissible if another rule's risk is never larger and somewhere smaller. Under "
+            "the specified model, loss and permitted actions, a dominating rule has no larger risk; Stein's theorem "
+            "says that the sample means are one."
         ) as vo:
+            heading=label('Risk scores a rule under a specified model and loss',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -123,6 +127,9 @@ class Decision(VoiceoverScene):
             f"Laplace's rule does best, as it must: it is the posterior mean under that prior. The flat rule is itself "
             f"Bayes, for a Beta prior with both parameters equal to root n over two."
         ) as vo:
+            heading=label('Minimax and Bayes summarize risk differently',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -142,13 +149,7 @@ class Decision(VoiceoverScene):
             label(r"minimax protects against a worst case \ that may be implausible", font_size=26, color=S.ACCENT),
         ), 12.4, 0.4, [0, -2.0, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> But look at where the minimax rule wins. With sixteen trials, it beats the sample "
-            f"proportion between {say(r['16'][0], 1)} and {say(r['16'][1], 1)}. With a hundred, only between "
-            f"{say(r['100'][0], 2)} and {say(r['100'][1], 2)}; with a thousand, between {say(r['1000'][0], 2)} and "
-            f"{say(r['1000'][1], 2)}. <bookmark mark='b'/> Near zero and one it loses by a ratio that grows without bound, "
-            f"because its risk never falls below its constant. <bookmark mark='c'/> Minimax buys protection against the "
-            f"worst value of p, which may be a value nobody believes. That tension, between guarding the worst case and "
-            f"doing well on average, runs through the whole subject."
+            f"<bookmark mark='a'/> But look at where the minimax rule wins. With sixteen trials, it beats the sample proportion between {say(r['16'][0], 1)} and {say(r['16'][1], 1)}. With a hundred, only between {say(r['100'][0], 2)} and {say(r['100'][1], 2)}; with a thousand, between {say(r['1000'][0], 2)} and {say(r['1000'][1], 2)}. <bookmark mark='b'/> For each fixed sample size, its risk ratio diverges as p tends to zero or one, because its risk never falls below its constant. <bookmark mark='c'/> Minimax buys protection against the worst value of p, which may be a value nobody believes. That tension, between guarding the worst case and doing well on average, runs through the whole subject."
         ) as vo:
             self.play(FadeIn(tab[0]))
             vo.wait_until("a")
@@ -177,6 +178,9 @@ class Decision(VoiceoverScene):
             "and this part takes both: restrict the competition to a natural class, such as unbiased or equivariant rules, "
             "and find the best there; or summarize each risk curve by its maximum or its average."
         ) as vo:
+            heading=label('A uniformly best rule would need perfect identification',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

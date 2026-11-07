@@ -70,7 +70,7 @@ python tools/lecture_length.py stats45 --floor 50
 
 | # | Chapter | Numbers |
 |---|---|---|
-| 0 | Stein's paradox, 1956 | James–Stein's exact risk 2 at θ = 0 in every dimension, below p everywhere |
+| 0 | Stein's paradox, 1956 | James–Stein risk 2 at θ = 0 for every p ≥ 3, below p everywhere |
 | 1 | Decision theory | Bin(16): max risk 0.0156 (X/n) vs 0.0100 (minimax); Bayes risks 0.0104 / 0.0093 / 0.0100 |
 | 2 | Risk sets | 16 rules; minimax 0.404 on the diagonal; least favourable prior 0.672 |
 | 3 | Complete class theorems | Beta(ε, ε) rules → X/n; σ²: 0.222 (unbiased), 0.190 (MLE), 0.182 (n + 1) |
@@ -83,7 +83,7 @@ python tools/lecture_length.py stats45 --floor 50
 | 10 | Stein's lemma, SURE, James–Stein | lemma 0.4636 vs 0.4642 (exact 0.4639); hitters SURE 6.1, loss 5.0 vs 17.6 |
 | 11 | Why three dimensions | ∫ r^{1−p}: R − 1, log R, 1 − 1/R; BM return 1, 1, ½ |
 | 12 | Minimaxity and admissibility | p = 5 at θ = 0: 1.99 (JS), 1.39 (positive part), 0.90 (Strawderman) |
-| 13 | Empirical Bayes theory | Robbins 0.168, 0.363, 0.527, …, 6.0; NPMLE regret 0.26 → 0.165 vs oracle 0.164 |
+| 13 | Empirical Bayes theory | Robbins 0.168, 0.363, 0.527, …, 6.0; NPMLE raw risk 0.26 → 0.165; population oracle risk 0.14852 |
 | 14 | Outro | — |
 
 The rest of the part's numbers, chapter by chapter:
@@ -105,23 +105,22 @@ The rest of the part's numbers, chapter by chapter:
   - The Bayes rules for π = 0.25, 0.5, 0.75 are c = 1, 2, 3.
   - Minimax: R₁ = R₂ = 0.4042, mixing c = 3 (0.255) and c = 2 (0.745). The least favourable prior is 0.672 on fair.
 - **Chapter 3.**
-  - Unique Bayes rules are admissible.
-  - For finite Θ, Wald's complete class theorem: the Bayes rules form a complete class.
-  - In general, admissible rules are limits of Bayes rules (Wald, Le Cam), and generalized Bayes in exponential
-    families (Brown).
-  - X/n is the formal Bayes rule for Haldane's prior.
+  - A finite-Bayes-risk rule unique up to sets null under every model law is admissible. Prior-predictive uniqueness alone needs additional support/continuity conditions in general models.
+  - In the finite-state, finite-outcome, finite-action randomized problem, the compact convex risk polytope gives the minimax and complete-class conclusions. Finite Θ alone is not a substitute for the needed conditions in arbitrary decision problems.
+  - Complete-class limit and generalized Bayes representations require the relevant model, loss, compactness and regularity assumptions. Pointwise limits of Bayes rules alone need not be admissible.
+  - X/n is the limit of proper Beta(ε,ε) rules. Haldane's formal posterior mean applies only at interior counts; at X = 0 or n the improper posterior needs the limiting convention.
   - Blyth's (1951) method shows X is admissible in one dimension.
   - c·Σ(x − x̄)² with n = 10: MSE/σ⁴ is 0.222, 0.190 and 0.182 for c = 1/9, 1/10, 1/11. Stein (1964) showed that even
     the last is inadmissible.
 - **Chapter 4.**
   - A(η) is convex, with A′ = E T and A″ = Var T = I(η). The MLE matches means. Bernoulli: at η = 0.8, μ = 0.690.
   - The conjugate A*(μ) is minus the entropy, with (A*)′ = (A′)⁻¹.
-  - The maximized log-likelihood per observation is A*(T̄). The MLE exists iff T̄ is interior (Barndorff-Nielsen 1978).
+  - The supremum of the parameter-dependent log-likelihood per observation is A*(T̄); retain the base-density constant for the full likelihood. A finite interior MLE requires T̄ in the image of the mean map. Identifying that image with the convex-support interior additionally requires the full minimal steep regular-family conditions.
   - KL is the Bregman divergence of A*. The deviance is 2n·D_{A*}(T̄, μ̂₀).
   - Poisson: X̄ attains the bound; log λ has no unbiased estimator.
-  - Pitman–Koopman–Darmois (1935–36).
+  - Pitman–Koopman–Darmois (1935–36) assumes regular smooth iid models/statistics and common support; arbitrary measurable encodings of the sample into one number are excluded.
 - **Chapter 5.**
-  - Halmos–Savage factorization, via a countable dominating mixture.
+  - Halmos–Savage factorization for a family dominated by a common sigma-finite measure, via a countable dominating mixture.
   - Lehmann–Scheffé's test for minimal sufficiency. A catalogue: complete for the normal, Poisson, binomial and
     U(0, θ); not for U(θ, θ + 1), N(θ, θ²), Cauchy or Laplace.
   - The uniform range has law Beta(n − 1, 2) for every θ.
@@ -134,13 +133,13 @@ The rest of the part's numbers, chapter by chapter:
     1942).
   - (−1)^X is the UMVUE of e^{−2λ}. 1(X even) dominates it, and the MLE e^{−2X} is better still (max MSE 0.30 on λ ≤ 3).
 - **Chapter 7.**
-  - Basu (1955): with σ known, x̄ and s² are independent; the correlation over 800 samples is −0.02, against 0.70 for
+  - Basu (1955): with σ known, x̄ and s² are independent; the correlation over 4,000 samples (800 displayed) is −0.02, against 0.70 for
     exponential data.
   - Cox (1958): the unconditional half-width is 12.82, covering 100% given SD 1 and 80% given SD 10. The conditional
     intervals are ±1.645 and ±16.4.
   - Uniform location, n = 5: the midrange ± 0.184 covers 90% overall, but 42% for small ranges and 100% for large
-    ones. The interval given the range covers 90% throughout.
-  - Birnbaum (1962) and the likelihood principle.
+    ones. The analytic unconditional half-width is (1 − 0.1^(1/n))/2 = 0.1845213, independently checked in simulation (90.0545% overall). Conditional on R, the fixed-parameter midrange error is uniform on [−(1−R)/2,(1−R)/2], giving exact 90% conditional coverage. This differs from calling the parameter random given the observed order statistics.
+  - Birnbaum (1962) uses particular formulations of mixture conditionality and sufficiency. Observed information can approximate conditional precision in regular models; it is not generally ancillary or uniformly preferable to expected information.
 - **Chapter 8.**
   - Multiparameter Cramér–Rao, by a Schur complement. Normal: s² efficiency (n − 1)/n.
   - Bhattacharyya (1946) for θ²: 4θ²/n + 2/n², attained.
@@ -156,27 +155,24 @@ The rest of the part's numbers, chapter by chapter:
     - uniform 0.0166 / 0.0352 / 0.0122;
     - Cauchy ∞ / 1.15 / 0.96.
   - The uniform midrange's exact MSE 1/(2(n + 1)(n + 2)) against the mean's 1/(12n).
-  - Scale: Σ(x − x̄)²/(n + 1), generalized Bayes for 1/σ.
-  - Girshick–Savage (1951): Pitman is minimax. Stein (1959) and Brown (1966): admissible in 1 and 2 dimensions, not
-    in 3.
+  - Normal location-scale model with unknown μ and σ: under relative squared variance loss, the best location-scale-equivariant rule is SSE/(n+1), generalized Bayes under right Haar dμ dσ/σ. Its action is E[σ^(−2)|x]/E[σ^(−4)|x], not E[σ²|x]. With known μ = 0, the pure-scale answer is Σx²/(n+2).
+  - Invariant-minimax and admissibility conclusions need their model conditions. For the identity-covariance normal-mean problem, X is minimax and admissible exactly for p ≤ 2. The proper normal priors N(0,τ²I) have Bayes risk pτ²/(1+τ²) → p, establishing the minimax lower bound.
 - **Chapter 10.**
   - Stein's lemma; SURE = p + 2∇·g + ‖g‖².
   - For James–Stein, SURE = p − (p − 2)²/‖X‖².
   - p = 10: exact risk curve and the simulated positive part.
   - At θ = (1, …, 1): mean SURE 6.25, mean loss 6.40, exact risk 6.21.
-  - Efron–Morris (arcsine scale, shrinking to the mean with p − 3): factor 0.209, SURE 6.13; actual loss 5.00 (JS) vs
-    17.57 (raw).
+  - Efron–Morris (arcsine scale, shrinking to the mean with p − 3): factor 0.209, SURE 6.13; squared validation error 5.00 (JS) vs 17.57 (raw) against noisy remaining-season averages. SURE is an approximate Gaussian-model risk estimate using early data only, not an exact unbiased estimate of finite-binomial validation error or a documented prediction made in 1970.
 - **Chapter 11.**
   - Tweedie's formula, δ_π = x + ∇ log m.
-  - Brown (1971): admissible iff the diffusion dY = ∇ log m dt + dB is recurrent. For spherical m:
+  - Under Brown's recurrence/admissibility regularity conditions, use the diffusion dY = ½∇ log m dt + dB. For the spherical examples,
     ∫^∞ dr/(r^{p−1} m(r)) = ∞.
   - The flat prior is admissible iff p ≤ 2.
   - Brownian motion from radius 2 reaches the unit ball with probability → 1, 1, ½ in 1, 2, 3 dimensions.
   - Capacity.
-  - Priors ‖θ‖^{−k}: admissible iff k ≥ p − 2. The harmonic prior is admissible and minimax (Stein 1981).
+  - For p ≥ 3 and 0 ≤ k < p, priors ‖θ‖^(−k) give the stated radial criterion, admissible when k ≥ p−2. The restriction k < p keeps the prior locally integrable at zero. The harmonic-prior admissible/minimax statement uses p ≥ 3.
 - **Chapter 12.**
-  - Baranchik (1970): SURE = p − (p − 2)²r(2 − r)/s − 4(p − 2)r′. This makes the rule minimax for nondecreasing
-    0 ≤ r ≤ 2.
+  - Baranchik (1970): SURE = p − (p − 2)²r(2 − r)/s − 4(p − 2)r′. For p ≥ 3, locally absolutely continuous nondecreasing 0 ≤ r ≤ 2, and the required integrability, this makes the rule minimax. The plotted capped r is piecewise smooth, not smooth at its knot.
   - Strawderman (1971): a proper prior that is minimax for p ≥ 5.
   - Risks at ‖θ‖² = 0, 4, 10, 20, 40:
 
@@ -192,11 +188,11 @@ The rest of the part's numbers, chapter by chapter:
   - Robbins (1956), E[θ | x] = (x + 1)f(x + 1)/f(x). On the insurance claims: 0.168, 0.363, 0.527, 1.333, 1.429, 6.000,
     1.750.
   - The gamma prior (shape 0.70, scale 0.31) gives a linear rule, log-likelihood −5,348.0.
-  - The NPMLE (Kiefer & Wolfowitz 1956; Lindsay 1983) gives a monotone rule, log-likelihood −5,340.8.
+  - The NPMLE (Kiefer & Wolfowitz 1956; Lindsay 1983) gives a monotone rule, log-likelihood −5,340.703496. The continuous-support directional-score certificate bounds the remaining log-likelihood gap by 0.000505; the mixing measure need not be unique.
   - Sparse normal means (10% at 4), risk per coordinate at n = 50, 200, 1,000, 5,000:
     - James–Stein: 0.60, 0.57, 0.59, 0.59;
     - GMLEB: 0.26, 0.14, 0.16, 0.165;
-    - oracle: 0.13, 0.13, 0.15, 0.164 (Jiang & Zhang 2009).
+    - oracle Monte Carlo risks: 0.13, 0.13, 0.15, 0.164. The population oracle risk is constant at 0.14852383, computed by independent quadrature. Excess risks of the grid estimator are 0.125996, 0.016576, 0.008635 and 0.000785, with 12, 12, 12 and 4 independent runs. The plot shows ±2 Monte Carlo SE bars. This finite-grid, finite-iteration approximation does not itself inherit all Jiang–Zhang asymptotic regret guarantees.
   - f- and g-modeling (Efron 2014).
 
 ## Sources
@@ -261,7 +257,7 @@ The rest of the part's numbers, chapter by chapter:
    - ∏ f(x_i − t) = exp(−Σ x_i + nt) for t < m = min x_i, and 0 otherwise.
    - So θ̂_P = ∫_{−∞}^m t e^{nt} dt / ∫_{−∞}^m e^{nt} dt = m − 1/n. It is unbiased, since E min X_i = θ + 1/n.
 6. **The SURE-optimal shrinkage.**
-   - For g = −c x/‖x‖²: ‖g‖² = c²/‖x‖² and ∇·g = −c(p − 2)/‖x‖².
+   - For p ≥ 3, X ∼ N_p(θ,I) and x ≠ 0, let g = −c x/‖x‖²: ‖g‖² = c²/‖x‖² and ∇·g = −c(p − 2)/‖x‖².
    - So SURE = p + (c² − 2c(p − 2))/‖x‖². This is minimized at c = p − 2 for every x, giving p − (p − 2)²/‖x‖².
    - The expected value of this minimized SURE is James–Stein's risk.
 
@@ -296,3 +292,14 @@ The rest of the part's numbers, chapter by chapter:
 - **Part 50**: minimax rates, by the methods of Le Cam, Assouad and Fano.
 - **Part 52**: shrinkage and empirical Bayes in high dimensions.
 - **Part 53**: the frequentist risk of Bayes rules as the sample grows.
+
+
+## Numerical and QA scope
+
+Pitman estimates use exact normal/uniform formulas and whole-line adaptive quadrature split at observations for Laplace/Cauchy errors. A fixed median-centered integration window can miss the normal likelihood peak on extreme samples. The finite simulation percentages describe the displayed samples, not exact population improvements.
+
+Robbins frequency ratios are plug-in estimates, not unbiased estimators. Posterior mean monotonicity here is a property of the Poisson-mixture model; next-year prediction also assumes stable policy rates, conditional independence and equal exposure. A discrete NPMLE with at most the number of distinct observations exists; the mixing law need not be unique. Poisson optimization has a likelihood-gap certificate, whereas the normal empirical Bayes illustration remains a 221-point, 1,500-iteration EM approximation.
+
+Coverage Board rows retain actual independent sample counts and empirical Monte Carlo uncertainty, including the two instrument-selected subsets. The interval example uses positive-part James–Stein. SURE assumptions, selection optimism, noisy batting validation targets and the distinction between expected risk and realized error are explicit. The SURE scatter shows all 400 replicates, including negative risk estimates.
+
+See the [scientific review and verification receipts](../../../docs/qa/evidence/stats45-polish-20261107/source-review.md). English endpoint, native, motion and narrated-preview review is in progress. Chinese narration/caption tables, continuous listening and final bilingual masters remain open.

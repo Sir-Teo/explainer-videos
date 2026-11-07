@@ -25,21 +25,27 @@ class NormalMeans(VoiceoverScene):
         rows = [
             cmath(r"\delta_r(x)", r"=", r"\Big(1 - r(s)\tfrac{p - 2}{s}\Big) x, \ \ s = \|x\|^2", font_size=34),
             cmath(r"\mathrm{SURE}", r"=", r"p - (p - 2)^2 \tfrac{r(s)(2 - r(s))}{s} - 4(p - 2)\, r'(s)", font_size=32),
-            cmath(r"0 \le r \le 2, \ r \uparrow", r"\Rightarrow", r"\mathrm{SURE} \le p: \ \delta_r \text{ is minimax}", font_size=32),
+            cmath(r"p\ge3;\ r\text{ locally AC},\ 0\le r\le2,\ r\uparrow", r"\Rightarrow", r"\mathrm{SURE} \le p: \ \delta_r \text{ is minimax}", font_size=32),
             cmath(r"r \equiv 1", r":", r"\text{James--Stein; } \ \ r(s) = \min(1, \tfrac{s}{p - 2}): \ \text{the positive part}", font_size=30),
         ]
         rows[1][-1].set_color(S.ACCENT)
         rows[2][-1].set_color(ADMC)
         whys = [why(r"a family of shrinkers"), why(r"chapter 10's identity"), why(r"Baranchik (1970)"), why(r"two members")]
         with self.voiceover(
-            "<bookmark mark='a'/> X is minimax, with constant risk p, so any estimator whose risk never exceeds p is "
-            "minimax too. Alexander Baranchik's family shrinks by r of s times p minus two over s, where s is the squared "
-            "length of x. <bookmark mark='b'/> Chapter ten's SURE, worked out for this correction, is p minus two terms: one "
-            "proportional to r times two minus r, and one to the derivative of r. <bookmark mark='c'/> So if r stays "
-            "between zero and two and never decreases, SURE is at most p for every data set, and every such rule is "
-            "minimax. <bookmark mark='d'/> r equal to one is James–Stein; capping the shrinkage at x itself gives the "
-            "positive part. A whole family of estimators beats X, and they compete among themselves."
+            "<bookmark mark='a'/> To prove X is minimax, take proper normal priors with variance tau squared. Their "
+            "Bayes risks increase to p, while X has constant risk p. This lower bound then makes every estimator with"
+            " risk at most p minimax too. Alexander Baranchik's family shrinks by r of s times p minus two over s, "
+            "where s is the squared length of x. <bookmark mark='b'/> Chapter ten's SURE, worked out for this "
+            "correction, is p minus two terms: one proportional to r times two minus r, and one to the derivative of "
+            "r. <bookmark mark='c'/> For p at least three, locally absolutely continuous r and the required "
+            "integrability, if r stays between zero and two and never decreases, SURE is at most p for every data "
+            "set, and every such rule is minimax. <bookmark mark='d'/> r equal to one is James–Stein; capping the "
+            "shrinkage at x itself gives the positive part. This family has risk no larger than X, and they compete "
+            "among themselves."
         ) as vo:
+            heading=label('A Bayes lower bound establishes the normal minimax value p',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -105,6 +111,9 @@ class NormalMeans(VoiceoverScene):
             f"five and a is one half: an estimator that beats X everywhere and cannot itself be beaten everywhere. His "
             f"construction needs at least five dimensions."
         ) as vo:
+            heading=label('A proper scale-mixture prior can give an admissible minimax rule',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -128,13 +137,7 @@ class NormalMeans(VoiceoverScene):
             label(r"all minimax; \ none best everywhere", font_size=22, color=S.ACCENT),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Their risks in five dimensions, simulated with common random numbers. X has risk five. "
-            f"<bookmark mark='b'/> James–Stein and its positive part are below it everywhere, the positive part most at the "
-            f"origin. <bookmark mark='c'/> A Baranchik rule with a smooth, increasing r sits close to the positive part. "
-            f"<bookmark mark='d'/> Strawderman's proper Bayes rule has risk {say(r['straw'][0], 1)} at the origin, far "
-            f"below the others, and gives some of that back far away, though it stays under five. <bookmark mark='e'/> All "
-            f"are minimax; none is below all the others everywhere. Among minimax rules, the choice is a choice of where to "
-            f"spend the improvement, which is a prior belief in disguise."
+            f"<bookmark mark='a'/> Their risks in five dimensions, simulated with common random numbers. X has risk five. <bookmark mark='b'/> James–Stein and its positive part are below it everywhere, the positive part most at the origin. <bookmark mark='c'/> A Baranchik rule with a continuous, nondecreasing, piecewise-smooth r sits close to the positive part. <bookmark mark='d'/> Strawderman's proper Bayes rule has risk {say(r['straw'][0], 1)} at the origin, far below the others, and gives some of that back far away, though it stays under five. <bookmark mark='e'/> All are minimax; none is below all the others everywhere. Among minimax rules, the choice is a choice of where to spend the improvement, which is a prior belief in disguise."
         ) as vo:
             self.play(FadeIn(A), FadeIn(exact_tag(r"simulated: 40,000 draws per point")))
             vo.wait_until("a")
@@ -176,20 +179,21 @@ class NormalMeans(VoiceoverScene):
 
     def lesson(self):
         rows = fit_rows(VGroup(
-            label(r"shrink toward any point, \ or any subspace: \ the same theorem \ (Lindley 1962)", font_size=26),
+            label(r"fixed subspace of rank $q$: shrink residuals only if $p-q\ge3$", font_size=26),
             label(r"unequal variances, \ unknown $\sigma^2$: \ Berger (1976) and others", font_size=26, color=GREY_A),
             label(r"the guarantee is for the total loss: \ one coordinate can suffer", font_size=26, color=INADC),
             label(r"Efron \& Morris (1972): \ limited translation, \ cap each coordinate's shift", font_size=26, color=MMC),
             label(r"the Coverage Board, \ next: \ what shrinkage does to intervals", font_size=26, color=S.ACCENT),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The theory extends in every direction. One can shrink toward any fixed point, or toward "
-            "the grand mean or a regression fit, as Dennis Lindley suggested in 1962, at the cost of one dimension per "
-            "parameter estimated. <bookmark mark='b'/> Unequal variances and unknown noise levels were handled by James "
-            "Berger and others. <bookmark mark='c'/> But the guarantee is always for the total loss, and a coordinate far "
-            "from the rest can be badly over-shrunk. <bookmark mark='d'/> Efron and Morris's limited-translation rules of "
-            "1972 cap how far any one coordinate may be moved. <bookmark mark='e'/> And what shrinkage does to an interval, "
-            "the Board shows next."
+            "<bookmark mark='a'/> The theory extends in every direction. One can shrink toward any fixed point, or "
+            "toward a fixed linear subspace, including the grand-mean subspace, by leaving its projection untouched "
+            "and shrinking the orthogonal residual. The residual dimension must be at least three. Data-adaptive "
+            "selection of the subspace needs additional analysis. <bookmark mark='b'/> Unequal variances and unknown "
+            "noise levels were handled by James Berger and others. <bookmark mark='c'/> But the guarantee is always "
+            "for the total loss, and a coordinate far from the rest can be badly over-shrunk. <bookmark mark='d'/> "
+            "Efron and Morris's limited-translation rules of 1972 cap how far any one coordinate may be moved. "
+            "<bookmark mark='e'/> And what shrinkage does to an interval, the Board shows next."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
@@ -197,9 +201,9 @@ class NormalMeans(VoiceoverScene):
         self.clear_scene()
         rows = board_rows("James")
         show_board(self, rows,
-                   "<bookmark mark='a'/> Ten means, nine of them zero and one equal to five, with James–Stein-centred intervals "
-                   "of plus or minus one point six four five. For the large mean, shrinkage drags the centre about a unit "
-                   "toward zero, and coverage falls to about two thirds: broken. <bookmark mark='b'/> For a zero mean, the "
-                   "same intervals cover ninety-seven percent of the time: conservative. Good total risk does not make "
-                   "honest intervals for each coordinate; Part forty-six takes this up.",
+                   "<bookmark mark='a'/> Ten means, nine of them zero and one equal to five, with positive-part "
+            "James–Stein-centered intervals of plus or minus one point six four five. For the large mean, shrinkage "
+            "drags the centre about a unit toward zero, and coverage falls to about two thirds: broken. <bookmark "
+            "mark='b'/> For a zero mean, the same intervals cover ninety-seven percent of the time: conservative. "
+            "Good total risk does not make honest intervals for each coordinate; Part forty-six takes this up.",
                    [("a", [0]), ("b", [1])])

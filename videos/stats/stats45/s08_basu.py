@@ -39,6 +39,9 @@ class Ancillarity(VoiceoverScene):
             "completeness forces it to be zero: <bookmark mark='d'/> the conditional law of V given T equals its "
             "unconditional law. T and V are independent, at every theta."
         ) as vo:
+            heading=label('Complete sufficiency is independent of an ancillary statistic',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -57,18 +60,11 @@ class Ancillarity(VoiceoverScene):
             label(rf"$n = {d['n']}$ normal observations, \ $\sigma$ known", font_size=22),
             label(r"$\bar x$: \ complete sufficient for $\mu$", font_size=22, color=MLEC),
             label(r"$s^2$: \ its law does not involve $\mu$: \ ancillary", font_size=22, color=MMC),
-            label(rf"so independent: \ correlation ${d['r']:.2f}$", font_size=22, color=ADMC),
+            label(rf"independent by Basu; 4,000-run correlation ${d['r']:.2f}$", font_size=22, color=ADMC),
             label(rf"exponential data: \ correlation {d['r_exp']:.2f}", font_size=22, color=INADC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The classic application. Take {d['n']} normal observations and, for the moment, treat "
-            f"sigma as known. <bookmark mark='b'/> Then the sample mean is complete and sufficient for the mean. <bookmark "
-            f"mark='c'/> The sample variance is computed from deviations about the mean, so shifting mu leaves its "
-            f"distribution unchanged: it is ancillary. <bookmark mark='d'/> Basu's theorem says they are independent for "
-            f"every mu, and since sigma was arbitrary, for every sigma too. Here are eight hundred simulated pairs: "
-            f"correlation {say(d['r'], 2)}. That is the independence of x-bar and s squared behind Student's t, in three "
-            f"lines. <bookmark mark='e'/> It is special to the normal: for exponential data the two are strongly "
-            f"correlated."
+            f"<bookmark mark='a'/> The classic application. Take {d['n']} normal observations and, for the moment, treat sigma as known. <bookmark mark='b'/> Then the sample mean is complete and sufficient for the mean. <bookmark mark='c'/> The sample variance is computed from deviations about the mean, so shifting mu leaves its distribution unchanged: it is ancillary. <bookmark mark='d'/> Basu's theorem says they are independent for every mu, and since sigma was arbitrary, for every sigma too. Eight hundred pairs are displayed; the reported correlation uses all four thousand simulated samples: {say(d['r'], 2)}. That is the independence of x-bar and s squared behind Student's t, in three lines. <bookmark mark='e'/> It is special to the normal: for exponential data the two are strongly correlated."
         ) as vo:
             self.play(FadeIn(A), FadeIn(exact_tag(r"simulated: 800 samples")))
             vo.wait_until("a")
@@ -93,18 +89,13 @@ class Ancillarity(VoiceoverScene):
         ]
         rows[2][-1].set_color(INADC)
         rows[3][-1].set_color(ADMC)
-        whys = [why(r"the instrument is ancillary"), why(r"the unconditional answer"), why(r"wrong for every actual case"), why(r"Cox (1958)")]
+        whys = [why(r"the instrument is ancillary"), why(r"the unconditional answer"), why(r"conditional coverage differs from nominal"), why(r"Cox (1958)")]
         with self.voiceover(
-            f"<bookmark mark='a'/> But ancillary statistics can matter enormously, as David Cox showed in 1958. A fair coin "
-            f"decides whether a quantity is measured with a precise instrument, standard deviation one, or a rough one, "
-            f"standard deviation ten, and we know which was used. Which instrument is ancillary: its probability does not "
-            f"depend on the quantity. <bookmark mark='b'/> An interval of plus or minus {say(d['c'], 1)} covers the truth "
-            f"ninety percent of the time over repetitions of the whole experiment. <bookmark mark='c'/> But given the "
-            f"instrument, it covers essentially always with the precise one, and only eighty percent of the time with the "
-            f"rough one. It is wrong for every case that actually occurs. <bookmark mark='d'/> The sensible interval "
-            f"conditions on the instrument: plus or minus {say(d['half_precise'], 2)}, or plus or minus "
-            f"{say(d['half_rough'], 1)}, each covering ninety percent of the time."
+            f"<bookmark mark='a'/> But ancillary statistics can matter enormously, as David Cox showed in 1958. A fair coin decides whether a quantity is measured with a precise instrument, standard deviation one, or a rough one, standard deviation ten, and we know which was used. Which instrument is ancillary: its probability does not depend on the quantity. <bookmark mark='b'/> An interval of plus or minus {say(d['c'], 1)} covers the truth ninety percent of the time over repetitions of the whole experiment. <bookmark mark='c'/> But given the instrument, it covers essentially always with the precise one, and only eighty percent of the time with the rough one. Its conditional coverage misses the nominal ninety percent for each instrument, although its unconditional coverage is valid. <bookmark mark='d'/> The sensible interval conditions on the instrument: plus or minus {say(d['half_precise'], 2)}, or plus or minus {say(d['half_rough'], 1)}, each covering ninety percent of the time."
         ) as vo:
+            heading=label('Marginal coverage can conceal conditional miscalibration',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -127,19 +118,11 @@ class Ancillarity(VoiceoverScene):
             label(rf"$n = {d['m']}$ from $U(\theta - \tfrac12, \theta + \tfrac12)$", font_size=22),
             label(rf"red: \ midrange $\pm {d['c_unc']:.3f}$, \ 90\% overall", font_size=22, color=INADC),
             label(r"given a small range: \ 42\%; \ a large one: \ 100\%", font_size=22, color=INADC),
-            label(r"green: \ given $R$, \ $\theta$ lies in $[\max - \tfrac12, \min + \tfrac12]$", font_size=22, color=ADMC),
+            label(r"given $R$: midrange error uniform on $[-(1-R)/2,(1-R)/2]$", font_size=22, color=ADMC),
             label(r"its central 90\%: \ 90\% at every $R$", font_size=22, color=ADMC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The same thing happens without any coin. Take {d['m']} observations uniform on theta "
-            f"minus a half to theta plus a half, and estimate theta by the midrange. <bookmark mark='b'/> The interval "
-            f"midrange plus or minus {say(d['c_unc'], 3)} covers ninety percent of the time overall. <bookmark mark='c'/> "
-            f"But sort the samples by their range, which is ancillary. When the range is small, the sample says little, "
-            f"and the interval covers less than half the time; when it is large, the data pin theta down and the interval "
-            f"always covers. <bookmark mark='d'/> Conditioning on the range, theta must lie between the maximum minus a "
-            f"half and the minimum plus a half, and given the range it is uniform there. <bookmark mark='e'/> The central "
-            f"ninety percent of that interval covers ninety percent of the time at every range: honest for the sample at "
-            f"hand."
+            f"<bookmark mark='a'/> The same thing happens without any coin. Take {d['m']} observations uniform on theta minus a half to theta plus a half, and estimate theta by the midrange. <bookmark mark='b'/> The interval midrange plus or minus {say(d['c_unc'], 3)} covers ninety percent of the time overall. <bookmark mark='c'/> But sort the samples by their range, which is ancillary. When the range is small, the sample says little, and the interval covers less than half the time; when it is large, the data pin theta down and the interval always covers. <bookmark mark='d'/> Conditioning on the range, theta must lie between the maximum minus a half and the minimum plus a half, The frequentist parameter is fixed. Conditional on the range R, the midrange error is uniform between minus and plus one minus R over two. Equivalently, a flat-prior posterior is uniform on the observed compatible interval; that is a separate Bayesian interpretation. <bookmark mark='e'/> The central ninety percent of that interval covers ninety percent of the time at every range: honest for the sample at hand."
         ) as vo:
             self.play(FadeIn(A), Create(nom), FadeIn(exact_tag(r"simulated: 200,000 samples")))
             vo.wait_until("a")
@@ -159,16 +142,18 @@ class Ancillarity(VoiceoverScene):
             label(r"the conditionality principle \ (Cox 1958): \ condition on ancillaries", font_size=28, color=ADMC),
             label(r"Birnbaum (1962): \ conditionality + sufficiency \ $\Rightarrow$ \ the likelihood principle", font_size=26, color=BAYESC),
             label(r"which most frequentist methods violate \ (Part 22's stopping rules)", font_size=26, color=INADC),
-            label(r"in practice: \ condition on the design you actually ran, \ e.g.\ the observed information", font_size=26, color=S.ACCENT),
+            label(r"observed information can approximate conditional precision; it need not be ancillary", font_size=26, color=S.ACCENT),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Cox's conclusion became the conditionality principle: inference should be conditional on "
-            "ancillary features of the experiment that was actually performed. <bookmark mark='b'/> In 1962 Allan Birnbaum "
-            "showed that conditionality, together with sufficiency, implies the likelihood principle, <bookmark mark='c'/> "
-            "which much of frequentist practice violates, as Part twenty-two's stopping-rule example showed; the argument is "
-            "still debated. <bookmark mark='d'/> The practical lesson is uncontroversial: report the precision of the "
-            "experiment you ran, for example by using the observed information rather than the expected, as Efron and "
-            "Hinkley argued in 1978."
+            "<bookmark mark='a'/> Cox's conclusion became the conditionality principle: inference should be "
+            "conditional on ancillary features of the experiment that was actually performed. <bookmark mark='b'/> In"
+            " 1962 Allan Birnbaum derived the likelihood principle from particular formulations of sufficiency and "
+            "mixture conditionality. The exact formulation of conditionality matters; <bookmark mark='c'/> which much"
+            " of frequentist practice violates, as Part twenty-two's stopping-rule example showed; the argument is "
+            "still debated. <bookmark mark='d'/> A useful practical lesson is to report the precision of the "
+            "experiment you ran, Efron and Hinkley studied observed information as an approximation to conditional "
+            "precision in regular models. Observed information is not generally ancillary or uniformly preferable to "
+            "expected information."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -179,7 +164,7 @@ class Ancillarity(VoiceoverScene):
         rows = board_rows("instrument", "uniform location")
         show_board(self, rows,
                    "<bookmark mark='a'/> On the Coverage Board. Cox's unconditional interval, given the precise instrument: "
-                   "always covering, conservative. <bookmark mark='b'/> Given the rough one: eighty percent, broken. "
-                   "<bookmark mark='c'/> The conditional intervals, and the uniform location interval given its range: "
-                   "ninety percent, kept.",
+            "rounding to one hundred percent in this simulation, conservative. <bookmark mark='b'/> Given the rough "
+            "one: eighty percent, broken. <bookmark mark='c'/> The conditional intervals, and the uniform location "
+            "interval given its range: ninety percent, kept.",
                    [("a", [0]), ("b", [1]), ("c", [2, 3])])

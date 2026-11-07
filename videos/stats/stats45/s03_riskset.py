@@ -117,14 +117,14 @@ class RiskSets(VoiceoverScene):
             label(r"Bayes rules: \ likelihood-ratio thresholds", font_size=22, color=ADMC),
         ), 4.4, 0.42, [4.4, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Now put a prior on the states: probability pi that the coin is fair. The Bayes risk of a "
-            "rule is pi times its first risk plus one minus pi times its second. <bookmark mark='b'/> Rules with equal Bayes "
-            "risk lie on a straight line, and changing the Bayes risk slides the line parallel to itself. <bookmark "
-            "mark='c'/> So the Bayes rule is found by sliding the line down until it first touches the risk set: a "
-            "supporting line. <bookmark mark='d'/> With a quarter on fair, it touches the threshold rule c equals one; with "
-            "a half, c equals two; with three quarters, c equals three. <bookmark mark='e'/> Every Bayes rule here is a "
-            "threshold on the number of heads, which is a threshold on the likelihood ratio, as Neyman and Pearson will "
-            "explain in Part forty-six."
+            "<bookmark mark='a'/> Now put a prior on the states: probability pi that the coin is fair. The Bayes risk"
+            " of a rule is pi times its first risk plus one minus pi times its second. <bookmark mark='b'/> Rules "
+            "with equal Bayes risk lie on a straight line, and changing the Bayes risk slides the line parallel to "
+            "itself. <bookmark mark='c'/> So the Bayes rule is found by sliding the line down until it first touches "
+            "the risk set: a supporting line. <bookmark mark='d'/> With a quarter on fair, it touches the threshold "
+            "rule c equals one; with a half, c equals two; with three quarters, c equals three. <bookmark mark='e'/> "
+            "For the three positive priors shown, these Bayes rules are thresholds on the number of heads, which is a"
+            " threshold on the likelihood ratio, as Neyman and Pearson will explain in Part forty-six."
         ) as vo:
             self.play(FadeIn(A), FadeIn(base))
             vo.wait_until("a")
@@ -185,7 +185,7 @@ class RiskSets(VoiceoverScene):
     def theorem(self):
         d = load("decision")
         rows = [
-            cmath(r"\inf_\delta \sup_\theta R(\theta, \delta)", r"=", r"\sup_\pi \inf_\delta r(\pi, \delta)", font_size=34),
+            cmath(r"\text{finite randomized problem: }\inf_\delta \sup_\theta R(\theta, \delta)", r"=", r"\sup_\pi \inf_\delta r(\pi, \delta)", font_size=34),
             cmath(r"\pi^* \text{ least favourable}", r":", r"\text{the prior attaining the sup}", font_size=32),
             cmath(r"\delta \text{ Bayes for } \pi, \ R \text{ constant}", r"\Rightarrow", r"\delta \text{ is minimax}", font_size=32),
             cmath(r"\text{here}", r":", rf"\text{{both sides}} = {d['minimax']:.4f}; \ \text{{the binomial's flat rule, \ the same way}}", font_size=30),
@@ -194,14 +194,18 @@ class RiskSets(VoiceoverScene):
         rows[2][-1].set_color(ADMC)
         whys = [why(r"von Neumann (1928); \ Wald (1950)"), why(r"nature's best strategy"), why(r"the equalizer trick"), why(r"chapter 1, \ proved")]
         with self.voiceover(
-            "<bookmark mark='a'/> What the picture shows is von Neumann's minimax theorem, which Wald extended to statistics: "
-            "the best worst-case risk equals the largest Bayes risk that any prior can force. <bookmark mark='b'/> A prior "
-            "attaining it is least favourable: nature's best strategy in the game. <bookmark mark='c'/> And it gives the "
-            "practical recipe: a Bayes rule whose risk is constant is minimax, because its worst case equals its average, "
-            "and no rule can beat that average everywhere. <bookmark mark='d'/> In our coin problem both sides equal the same "
-            "number, and chapter one's flat binomial rule is minimax for exactly this reason: it is Bayes for a Beta prior "
-            "and its risk is constant."
+            "<bookmark mark='a'/> For this finite-state, finite-outcome and finite-action randomized problem, "
+            "compactness and convexity give the minimax theorem: the best worst-case risk equals the largest Bayes "
+            "risk that any prior can force. <bookmark mark='b'/> A prior attaining it is least favourable: nature's "
+            "best strategy in the game. <bookmark mark='c'/> And it gives the practical recipe: a Bayes rule whose "
+            "risk is constant is minimax, because its worst case equals its average, and no rule can beat that "
+            "average everywhere. <bookmark mark='d'/> In our coin problem both sides equal the same number, and "
+            "chapter one's flat binomial rule is minimax for exactly this reason: it is Bayes for a Beta prior and "
+            "its risk is constant."
         ) as vo:
+            heading=label('Finite randomized decision problems have a minimax dual',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

@@ -29,7 +29,8 @@ import math
 from dataclasses import asdict
 
 import numpy as np
-from scipy import stats
+from scipy import stats, optimize
+from scipy.integrate import quad
 
 from explainer.ai.cache import Cache
 from explainer.stats import museum
@@ -61,11 +62,72 @@ def nest(obj):
     return obj
 
 
-def eff_reps(per_rep, nominal=0.9) -> int:
-    v = np.var(np.asarray(per_rep, float), ddof=1) / len(per_rep)
-    if v == 0:
-        return len(per_rep)
-    return int(round(nominal * (1 - nominal) / max(v, 1e-12)))
+def coverage_row(method,setting,covered):
+    covered=np.asarray(covered,float)
+    return Row(45,method,setting,"coverage",.9,float(covered.mean()),len(covered),
+               mc_se=float(covered.std(ddof=1)/np.sqrt(len(covered))))
+
+
+def uniform_midrange_halfwidth(n,level=.9):
+    """Exact unconditional quantile: P(|midrange-theta|>c)=(1-2c)**n."""
+    return (1-(1-level)**(1/n))/2
+
+
+def poisson_mixture(counts,tolerance=1e-7):
+    """Fit a continuous-support Poisson mixture and certify its likelihood gap.
+
+    The directional score is exp(-theta) times a degree-max(x) polynomial.
+    Its stationary points and endpoints give the global KKT maximum; moving
+    atoms above max(x) down to max(x) increases every observed probability.
+    A normalized score gap bounds the per-observation log-likelihood gap.
+    """
+    f=np.asarray(counts,float);n=f.sum();x=np.arange(len(f));upper=float(x[f>0].max())
+    atoms=np.unique([0.,np.dot(x,f)/n,upper]);weights=np.full(len(atoms),1/len(atoms))
+    last=None
+    for iteration in range(80):
+        k=len(atoms)
+        def objective(z,gradient=False):
+            w,t=z[:k],z[k:];L=stats.poisson.pmf(x[:,None],t[None,:]);m=np.maximum(L@w,1e-300)
+            value=-np.dot(f/n,np.log(m));gw=-((f/n)/m)@L
+            derivative=np.empty_like(L)
+            positive=t>1e-12
+            derivative[:,positive]=L[:,positive]*(x[:,None]/t[None,positive]-1)
+            derivative[:,~positive]=0.
+            derivative[0,~positive]=-1.
+            if len(x)>1:derivative[1,~positive]=1.
+            gt=-(((f/n)/m)@derivative)*w
+            return (value,np.r_[gw,gt])
+        fit=optimize.minimize(objective,np.r_[weights,atoms],jac=True,method="SLSQP",
+            bounds=[(0,1)]*k+[(0,upper)]*k,
+            constraints=[dict(type="eq",fun=lambda z:z[:k].sum()-1,jac=lambda z:np.r_[np.ones(k),np.zeros(k)])],
+            options=dict(ftol=1e-13,maxiter=2000))
+        weights=np.maximum(fit.x[:k],0);weights/=weights.sum();atoms=fit.x[k:]
+        active=weights>1e-9;weights,atoms=weights[active],atoms[active];weights/=weights.sum()
+        L=stats.poisson.pmf(x[:,None],atoms[None,:]);m=L@weights
+        # coefficients of P, with no numerical differentiation of the score.
+        coefficients=(f/n)/m/np.array([math.factorial(int(j)) for j in x])
+        polynomial=np.polynomial.Polynomial(coefficients)
+        roots=(polynomial.deriv()-polynomial).roots()
+        candidates=np.r_[0.,upper,[z.real for z in roots if abs(z.imag)<1e-7 and 0<z.real<upper]]
+        scores=np.exp(-candidates)*polynomial(candidates)
+        best=int(np.argmax(scores));gap=max(0.,float(scores[best]-1))
+        last=dict(grid=atoms,w=weights,post_mean=(L*weights)@atoms/m,
+                  loglik=float(np.dot(f,np.log(m))),kkt_gap_per_observation=gap,
+                  loglik_gap_bound=float(n*gap),iterations=iteration+1,
+                  support_domain=[0.,upper],optimizer_success=bool(fit.success))
+        if gap<tolerance:return last
+        location=float(candidates[best])
+        if np.min(abs(atoms-location))<1e-8:break
+        atoms=np.r_[atoms,location];weights=np.r_[weights*.99,.01]
+    raise RuntimeError(f"Poisson mixture likelihood certificate did not converge: {last}")
+
+
+def oracle_normal_risk(weight=.1,signal=4.):
+    """Population Bayes risk E Var(theta|X) under the stated two-point prior."""
+    def integrand(x):
+        f0=(1-weight)*stats.norm.pdf(x);f1=weight*stats.norm.pdf(x-signal)
+        return signal**2*f0*f1/(f0+f1) if f0+f1>0 else 0.
+    return quad(integrand,-np.inf,np.inf,epsabs=1e-11)[0]
 
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -125,9 +187,8 @@ def compute_binomial():
     region = {}
     for m in (16, 100, 1000):
         am = math.sqrt(m) / 2
-        q = np.linspace(0, 1, 20001)
-        better = DK.binomial_mse(m, q, am, am) < DK.binomial_mse(m, q)
-        region[str(m)] = [float(q[better].min()), float(q[better].max())]
+        radius=.5*math.sqrt(1-m/(1+math.sqrt(m))**2)
+        region[str(m)]=[.5-radius,.5+radius]
     out["region"] = region
     return out
 
@@ -208,7 +269,7 @@ def compute_basu():
     u = g.random((200000, m)) - 0.5
     mid = (u.max(1) + u.min(1)) / 2
     rng_ = u.max(1) - u.min(1)
-    c_unc = float(np.quantile(np.abs(mid), 0.9))
+    c_unc = uniform_midrange_halfwidth(m)
     bins = np.linspace(0, 1, 11)
     idx = np.digitize(rng_, bins) - 1
     cover_unc = [float(np.mean(np.abs(mid[idx == b]) <= c_unc)) for b in range(10)]
@@ -217,6 +278,8 @@ def compute_basu():
     return {"n": n, "xbar": xb[:800], "s2": s2[:800], "r": r, "r_exp": r_exp, "cox": cox, "m": m, "c_unc": c_unc,
             "bins": bins, "cover_unc": cover_unc, "cover_cond": cover_cond, "share": share,
             "overall_unc": float(np.mean(np.abs(mid) <= c_unc)),
+            "correlation_replicates":len(x), "scatter_replicates":800, "interval_calibration":"exact unconditional midrange law",
+            "bin_counts":[int(np.sum(idx==b)) for b in range(10)],
             "overall_cond": float(np.mean(np.abs(mid) <= 0.9 * (1 - rng_) / 2))}
 
 
@@ -231,6 +294,29 @@ def compute_info():
     return {"n": n, "theta": theta, "var_umvue": b["var_umvue"], "cr": b["cr"], "bhatt2": b["bhatt2"], "ns": ns,
             "cr_bound": [c["bound"] for c in cr], "cr_umvue": [c["var_umvue"] for c in cr], "cr_t": [c["t"] for c in cr],
             "eff_s2": eff_s2}
+
+
+def pitman_estimate(sample,family):
+    """Closed forms or whole-line quadrature split at all likelihood knots.
+
+    Avoid a fixed window around the median: even a normal likelihood peak
+    may lie outside it when observations have unequal extreme values.
+    """
+    sample=np.asarray(sample,float)
+    if family=="normal":return float(sample.mean())
+    if family=="uniform":return float((sample.min()+sample.max())/2)
+    logf=(lambda z:-np.abs(z)) if family=="Laplace" else (lambda z:-np.log1p(z*z))
+    center=float(np.median(sample));shifted=sample-center
+    knots=np.unique(shifted)
+    offset=max(float(np.sum(logf(shifted-point))) for point in knots)
+    def likelihood(t):return float(np.exp(np.sum(logf(shifted-t))-offset))
+    intervals=np.r_[-np.inf,knots,np.inf]
+    denominator=numerator=0.
+    for lo,hi in zip(intervals[:-1],intervals[1:]):
+        denominator+=quad(likelihood,lo,hi,epsabs=1e-11,epsrel=1e-9,limit=150)[0]
+        numerator+=quad(lambda t:t*likelihood(t),lo,hi,epsabs=1e-11,epsrel=1e-9,limit=150)[0]
+    if not denominator>0:raise ArithmeticError("Pitman posterior normalizer must be positive")
+    return center+numerator/denominator
 
 
 def compute_pitman():
@@ -249,12 +335,12 @@ def compute_pitman():
         if logf is None:
             pit = (x.max(1) + x.min(1)) / 2
         else:
-            pit = np.array([DK.pitman_location(r, logf, width=40 if name == "Cauchy" else 20, m=2001) for r in x])
+            pit = np.array([pitman_estimate(r,name) for r in x])
         mse = lambda e: float(np.mean(e ** 2))  # noqa: E731
         out[name] = {"mean": mse(mean) if name != "Cauchy" else None, "median": mse(med), "pitman": mse(pit),
                      "mean_med": float(np.median(np.abs(mean))), "rel": mse(pit) / mse(med)}
     out["uniform_exact"] = {"mean": 1 / (12 * n), "pitman": 1 / (2 * (n + 1) * (n + 2))}
-    return {"n": n, "reps": reps, "fams": out}
+    return {"n": n, "reps": reps, "fams": out, "integration":"closed forms for normal/uniform; whole-line adaptive quadrature split at observations for Laplace/Cauchy"}
 
 
 def compute_stein():
@@ -306,7 +392,8 @@ def compute_brown():
     out = {"R": R}
     for p in (1, 2, 3):
         out[f"int{p}"] = DK.brown_integral(p, R) if p != 1 else R - 1
-        out[f"hit{p}"] = DK.bm_hit_ball(p, 2.0, R)
+        out[f"hit{p}"] = DK.bm_hit_ball(p, 2.0, R[R>=2.])
+    out["hit_R"] = R[R>=2.]
     out["hit3_inf"] = 0.5
     out["hit5_inf"] = 2.0 ** -3
     # the flat-prior marginal and Brown's condition for a proper-tailed prior: pi(theta) ~ |theta|^{-k}
@@ -341,11 +428,11 @@ def compute_eb():
     f = np.asarray(museum.INSURANCE_CLAIMS, float)
     rob = DK.robbins(f)
     gp = DK.gamma_poisson(f)
-    npm = DK.poisson_npmle(f, grid=np.linspace(0.001, 8, 800))
+    npm = poisson_mixture(f)
     atoms = [(float(t), float(w)) for t, w in zip(npm["grid"], npm["w"]) if w > 1e-3]
     # normal means: regret of empirical Bayes estimators against the oracle Bayes rule, by n
     g = rng(4506)
-    regret = {"n": [], "js": [], "npmle": [], "oracle": []}
+    regret = {"n": [], "js": [], "npmle": [], "oracle": [], "replicates":[], "mc_se":[], "excess_npmle":[]}
     for n in (50, 200, 1000, 5000):
         js_l, np_l, or_l = [], [], []
         for rep in range(12 if n < 5000 else 4):
@@ -359,12 +446,17 @@ def compute_eb():
             js_l.append(np.mean((js - mu) ** 2))
             np_l.append(np.mean((fit["post_mean"] - mu) ** 2))
             or_l.append(np.mean((orc - mu) ** 2))
+        regret["replicates"].append(len(np_l))
+        regret["mc_se"].append({name:float(np.std(values,ddof=1)/np.sqrt(len(values))) for name,values in [("js",js_l),("npmle",np_l),("oracle",or_l)]})
+        regret["excess_npmle"].append(float(np.mean(np.asarray(np_l)-or_l)))
         regret["n"].append(n)
         regret["js"].append(float(np.mean(js_l)))
         regret["npmle"].append(float(np.mean(np_l)))
         regret["oracle"].append(float(np.mean(or_l)))
     return {"counts": f, "robbins": rob, "gamma": gp["post_mean"], "nu": gp["nu"], "scale": gp["scale"],
             "npmle": npm["post_mean"], "atoms": atoms, "loglik_gamma": gp["loglik"], "loglik_npmle": npm["loglik"],
+            "poisson_fit_certificate":{k:npm[k] for k in ("kkt_gap_per_observation","loglik_gap_bound","iterations","support_domain","optimizer_success")},
+            "oracle_population_risk":oracle_normal_risk(),"normal_fit_scope":"221-point fixed-grid EM approximation; legacy regret key contains raw per-coordinate risks, not oracle-subtracted regret",
             "total": int(f.sum()), "mean": float(np.sum(np.arange(len(f)) * f) / f.sum()), "regret": regret}
 
 
@@ -378,18 +470,14 @@ def compute_board():
     hit_unc = np.abs(x) <= cox["c"]
     hit_cond = np.abs(x) <= cox["z"] * sd
     precise = sd == 1.0
-    rows.append(Row(45, "Cox's instruments, unconditional interval", "given the precise instrument (SD 1)", "coverage", 0.9,
-                    float(hit_unc[precise].mean()), int(precise.sum())))
-    rows.append(Row(45, "Cox's instruments, unconditional interval", "given the rough instrument (SD 10)", "coverage", 0.9,
-                    float(hit_unc[~precise].mean()), int((~precise).sum())))
-    rows.append(Row(45, "Cox's instruments, conditional interval", "given either instrument", "coverage", 0.9,
-                    float(hit_cond.mean()), reps))
+    rows.append(coverage_row("Cox's instruments, unconditional interval","given the precise instrument (SD 1)",hit_unc[precise]))
+    rows.append(coverage_row("Cox's instruments, unconditional interval","given the rough instrument (SD 10)",hit_unc[~precise]))
+    rows.append(coverage_row("Cox's instruments, conditional interval","given either instrument",hit_cond))
     # uniform location, conditional on the range
     m = 5
     u = g.random((reps, m)) - 0.5
     hit = np.array([lo <= 0 <= hi for lo, hi in (DK.uniform_location_interval(r) for r in u)])
-    rows.append(Row(45, "uniform location, interval given the range", "U(theta - 1/2, theta + 1/2), n = 5", "coverage", 0.9,
-                    float(hit.mean()), reps))
+    rows.append(coverage_row("uniform location, interval given the range","U(theta - 1/2, theta + 1/2), n = 5",hit))
     # James-Stein-centred intervals, p = 10, one large mean
     p = 10
     theta = np.zeros(p)
@@ -398,10 +486,8 @@ def compute_board():
     s = np.sum(X ** 2, 1, keepdims=True)
     js = np.maximum(0, 1 - (p - 2) / s) * X
     cov = np.abs(js - theta) <= 1.645
-    rows.append(Row(45, r"James--Stein $\pm 1.645$, the large mean", "p = 10, theta = (0, ..., 0, 5)", "coverage", 0.9,
-                    float(cov[:, -1].mean()), reps))
-    rows.append(Row(45, r"James--Stein $\pm 1.645$, a zero mean", "p = 10, theta = (0, ..., 0, 5)", "coverage", 0.9,
-                    float(cov[:, 0].mean()), reps))
+    rows.append(coverage_row(r"positive-part James--Stein $\pm 1.645$, the large mean","p = 10, theta = (0, ..., 0, 5)",cov[:,-1]))
+    rows.append(coverage_row(r"positive-part James--Stein $\pm 1.645$, a zero mean","p = 10, theta = (0, ..., 0, 5)",cov[:,0]))
     save_rows(45, rows)
     return {"rows": [asdict(r) | {"verdict": r.verdict, "se": r.se} for r in rows]}
 

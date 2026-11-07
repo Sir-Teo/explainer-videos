@@ -32,14 +32,20 @@ class Information(VoiceoverScene):
         rows[2][-1].set_color(MMC)
         whys = [why(r"the score"), why(r"differentiate under the integral"), why(r"a Schur complement"), why(r"chapter 4's dual coordinates")]
         with self.voiceover(
-            "<bookmark mark='a'/> First the general Cramér–Rao bound, for a vector parameter. The score, the gradient of the "
-            "log-likelihood, has mean zero and covariance equal to the Fisher information matrix. <bookmark mark='b'/> If T "
-            "is unbiased for g of theta, differentiating its expectation under the integral shows that the covariance of T "
-            "with the score is the gradient of g. <bookmark mark='c'/> The joint covariance matrix of T and the score is "
-            "positive semidefinite, and its Schur complement gives the bound: the variance of T is at least the gradient of "
-            "g, times the inverse information, times the gradient again. <bookmark mark='d'/> Equality needs T to be an "
-            "affine function of the score, which happens exactly in an exponential family, for its mean-value parameter."
+            "<bookmark mark='a'/> First the general Cramér–Rao bound, for a vector parameter. Assume a regular model "
+            "with justified differentiation of expectations, finite second moments and nonsingular information. The "
+            "score then has mean zero and covariance equal to the Fisher information matrix. <bookmark mark='b'/> If "
+            "T is unbiased for g of theta, differentiating its expectation under the integral shows that the "
+            "covariance of T with the score is the gradient of g. <bookmark mark='c'/> The joint covariance matrix of"
+            " T and the score is positive semidefinite, and its Schur complement gives the bound: the variance of T "
+            "is at least the gradient of g, times the inverse information, times the gradient again. <bookmark "
+            "mark='d'/> Equality needs T to be an affine function of the score, at the parameter value in question. A"
+            " global exponential-family characterization requires additional regularity; being an exponential family "
+            "alone does not make every target efficient."
         ) as vo:
+            heading=label('The regular information bound is a covariance inequality',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -68,6 +74,9 @@ class Information(VoiceoverScene):
             f"is at least one over the information's entry, with equality only when the parameters are orthogonal, as the "
             f"normal's mean and variance are."
         ) as vo:
+            heading=label('A valid lower bound need not be attainable',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -92,6 +101,9 @@ class Information(VoiceoverScene):
             "theta squared over n plus two over n squared, and the UMVUE, x-bar squared minus one over n, attains it "
             "exactly."
         ) as vo:
+            heading=label('Higher score derivatives sharpen an unbiased variance bound',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -115,11 +127,7 @@ class Information(VoiceoverScene):
             label(rf"at $\theta = 0$: \ CR says 0; \ truth $2/n^2 = {2 / n ** 2:.2f}$", font_size=22, color=S.ACCENT),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Drawn for ten observations. <bookmark mark='b'/> In blue the Cramér–Rao bound, four theta "
-            f"squared over n. <bookmark mark='c'/> In green the UMVUE's variance, which coincides with Bhattacharyya's "
-            f"second-order bound. <bookmark mark='d'/> The gap is largest at theta equal to zero, where the first derivative "
-            f"of theta squared vanishes and the Cramér–Rao bound says nothing at all, while the true minimum is two over n "
-            f"squared."
+            f"<bookmark mark='a'/> Drawn for ten observations. <bookmark mark='b'/> In blue the Cramér–Rao bound, four theta squared over n. <bookmark mark='c'/> In green the UMVUE's variance, which coincides with Bhattacharyya's second-order bound. <bookmark mark='d'/> The absolute gap is constant, two over n squared. Its relative size is largest at theta equal to zero, where the first derivative of theta squared vanishes and the Cramér–Rao bound says nothing at all, while the true minimum is two over n squared."
         ) as vo:
             self.play(FadeIn(A), FadeIn(exact_tag(r"exact formulas")))
             vo.wait_until("a")
@@ -137,19 +145,23 @@ class Information(VoiceoverScene):
             cmath(r"E_\theta T = g(\theta)", r",", r"\ E_{\theta'} T = g(\theta')", font_size=34),
             cmath(r"g(\theta') - g(\theta)", r"=", r"\mathrm{Cov}_\theta\big(T, \ p_{\theta'}/p_\theta - 1\big)", font_size=32),
             cmath(r"\mathrm{Var}_\theta T", r"\ge", r"\sup_{\theta'} \frac{(g(\theta') - g(\theta))^2}{E_\theta (p_{\theta'}/p_\theta - 1)^2}", font_size=32),
-            cmath(r"\text{needs}", r":", r"P_{\theta'} \ll P_\theta \ \text{only: \ no derivatives, \ no regularity}", font_size=32),
+            cmath(r"\text{nontrivial bound}", r":", r"P_{\theta'}\ll P_\theta;\ T,\ p_{\theta'}/p_\theta\in L^2(P_\theta)", font_size=32),
         ]
         rows[2][-1].set_color(MMC)
         whys = [why(r"unbiased at two points"), why(r"change of measure"), why(r"Cauchy--Schwarz"), why(r"Chapman \& Robbins (1951)")]
         with self.voiceover(
             "<bookmark mark='a'/> Douglas Chapman and Herbert Robbins removed the regularity altogether in 1951. Use "
-            "unbiasedness at two parameter values, theta and theta prime. <bookmark mark='b'/> The difference of the two "
-            "means is the covariance of T with the likelihood ratio minus one, by a change of measure. <bookmark "
-            "mark='c'/> Cauchy–Schwarz bounds the variance of T below by the squared difference over the ratio's second "
-            "moment, and we may take the supremum over theta prime. <bookmark mark='d'/> All it needs is that each P theta "
-            "prime be absolutely continuous with respect to P theta. Letting theta prime approach theta recovers Cramér–Rao "
-            "when the model is smooth."
+            "unbiasedness at two parameter values, theta and theta prime. <bookmark mark='b'/> The difference of the "
+            "two means is the covariance of T with the likelihood ratio minus one, by a change of measure. <bookmark "
+            "mark='c'/> Cauchy–Schwarz bounds the variance of T below by the squared difference over the ratio's "
+            "second moment, and we may take the supremum over theta prime. <bookmark mark='d'/> Comparison uses those"
+            " theta prime whose model law is absolutely continuous with respect to the law at theta. Finite estimator"
+            " variance and a finite likelihood-ratio second moment give a nontrivial bound; derivatives are not "
+            "required. Letting theta prime approach theta recovers Cramér–Rao when the model is smooth."
         ) as vo:
+            heading=label('Likelihood-ratio comparisons give derivative-free bounds',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -164,15 +176,18 @@ class Information(VoiceoverScene):
             rows.append([f"{n}", f"{b:.2e}", f"{u:.2e}", f"{b / u:.2f}", f"{t:.3f}"])
         tab = table_rows(rows, font_size=26, col_buff=0.7, row_buff=0.18, colors=[GREY_A] + [None] * len(ns)).move_to([0, 0.6, 0])
         note_ = fit_rows(VGroup(
-            label(r"$U(0, \theta)$: \ the support moves, \ so there is no Fisher information", font_size=24),
+            label(r"$U(0,\theta)$: moving support invalidates the regular score identities", font_size=24),
             label(r"both shrink like $1/n^2$, \ not the $1/n$ of regular models", font_size=24, color=MMC),
         ), 12.4, 0.2, [0, -2.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The uniform on zero to theta is the standard non-regular case: the support moves with "
-            "theta, the score does not exist, and Part nine's tanks broke the Cramér–Rao bound. <bookmark mark='b'/> "
-            "Chapman–Robbins still applies, with theta prime below theta. Here is its bound against the UMVUE's variance, "
-            "for two up to a hundred observations. The ratio falls toward point six five, the maximum of s squared over e to the s minus one, and the best theta prime closes in on "
-            "theta. <bookmark mark='c'/> Both shrink like one over n squared, a rate no regular model can reach."
+            "<bookmark mark='a'/> The uniform on zero to theta is the standard non-regular case: the support moves "
+            "with theta, and the interior score does not satisfy the usual zero-mean identity, and Part nine's tanks "
+            "broke the Cramér–Rao bound. <bookmark mark='b'/> Chapman–Robbins still applies, with theta prime below "
+            "theta. Here is its bound against the UMVUE's variance, for two up to a hundred observations. The ratio "
+            "falls toward point six five, the maximum of s squared over e to the s minus one, and the best theta "
+            "prime closes in on theta. <bookmark mark='c'/> Both shrink like one over n squared, faster than the "
+            "usual regular root-n squared-error rate over a neighborhood. A biased estimator can still be "
+            "superefficient at individual parameter values."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(note_[0]), FadeIn(tab[0]))

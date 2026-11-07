@@ -39,14 +39,15 @@ class Outro(VoiceoverScene):
         head = label(r"Part 45, \ in fourteen lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.45)
         with self.voiceover(
-            "<bookmark mark='a'/> Part forty-five in fourteen lines. Stein's paradox. Wald's risk, admissibility, minimax "
-            "and Bayes rules, and the risk set with its least favourable prior. Complete classes, and admissible rules as "
-            "limits of Bayes rules. Exponential families as a convex function and its conjugate. Sufficiency, minimality "
-            "and completeness; Rao–Blackwell and Lehmann–Scheffé, with the absurd minus one to the X. <bookmark mark='b'/> "
-            "Basu's theorem and Cox's two instruments. The information bounds of Cramér and Rao, Bhattacharyya, and Chapman "
-            "and Robbins. Pitman's equivariant estimator. Stein's lemma, SURE and James–Stein; Brown's link between "
-            "admissibility and recurrence; Baranchik's and Strawderman's minimax rules; and Robbins's empirical Bayes, "
-            "with the NPMLE and its vanishing regret."
+            "<bookmark mark='a'/> Part forty-five in fourteen lines. Stein's paradox. Wald's risk, admissibility, "
+            "minimax and Bayes rules, and the risk set with its least favourable prior. Complete classes, and "
+            "admissible rules as limits of Bayes rules. Exponential families as a convex function and its conjugate. "
+            "Sufficiency, minimality and completeness; Rao–Blackwell and Lehmann–Scheffé, with the absurd minus one "
+            "to the X. <bookmark mark='b'/> Basu's theorem and Cox's two instruments. The information bounds of "
+            "Cramér and Rao, Bhattacharyya, and Chapman and Robbins. Pitman's equivariant estimator. Stein's lemma, "
+            "SURE and James–Stein; Brown's link between admissibility and recurrence; Baranchik's and Strawderman's "
+            "minimax rules; and Robbins's empirical Bayes, with a numerical NPMLE approximation and the separate "
+            "asymptotic theory for vanishing regret."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -80,6 +81,7 @@ class Outro(VoiceoverScene):
             (r"Bayes rules and their frequentist risk, \ asymptotically", [53]), (r"minimax rates, \ Le Cam, \ Assouad, \ Fano", [50]),
             (r"shrinkage and empirical Bayes in high dimensions", [52]),
         ], font_size=22)
+        self.add(card.head)
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part forty-six draws risk sets and least favourable priors for "
             "tests. Part forty-seven gives the local asymptotic minimax theorem of Hájek and Le Cam. Part fifty-three "
@@ -88,7 +90,7 @@ class Outro(VoiceoverScene):
             "dimensions."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):
