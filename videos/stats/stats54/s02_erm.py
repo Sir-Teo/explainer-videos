@@ -27,17 +27,16 @@ class ERM(VoiceoverScene):
             cmath(r"(X_i, Y_i) \overset{iid}{\sim} P", r":", r"\text{a loss } \ell(h(x), y), \ \text{a class } \mathcal H", font_size=34),
             cmath(r"R(h) = E\,\ell(h(X), Y)", r",", r"\ R_n(h) = \tfrac1n\textstyle\sum_i \ell(h(X_i), Y_i)", font_size=34),
             cmath(r"\hat h", r"=", r"\arg\min_{h \in \mathcal H} R_n(h): \ \text{empirical risk minimization}", font_size=34),
-            cmath(r"R_n(\hat h)", r"\le", r"R(\hat h) \text{ typically: \ } \hat h \text{ was chosen to look good}", font_size=32),
+            cmath(r"E\,R_n(\hat h)", r"\le", r"E\,R(\hat h) \text{ (in expectation): \ } \hat h \text{ was chosen to look good}", font_size=32),
         ]
         rows[2][-1].set_color(CLASSC)
         rows[3][-1].set_color(BADC)
         whys = [why(r"no model for $P$"), why(r"true and empirical risk"), why(r"ERM"), why(r"optimism")]
+        heading = label('A fixed class and independent bounded losses define the learning problem', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> The setting has no statistical model at all: data drawn independently from an unknown "
-            "distribution, a loss, and a class of rules. <bookmark mark='b'/> Each rule has a true risk, its expected loss, "
-            "and an empirical risk, its average loss on the sample. <bookmark mark='c'/> Empirical risk minimization picks "
-            "the rule with the smallest empirical risk. <bookmark mark='d'/> And that rule's empirical risk is a biased "
-            "estimate of its true risk, usually too small, because it was chosen precisely for looking good on this sample."
+            "<bookmark mark='a'/> Take an independent, identically distributed sample and a fixed measurable class of rules. For the classification bounds here, losses lie between zero and one. <bookmark mark='b'/> True risk is expected loss on a new observation; empirical risk averages the observed losses. <bookmark mark='c'/> Empirical risk minimization chooses a rule with the smallest sample risk. <bookmark mark='d'/> This creates optimism in expectation: the chosen rule tends to look better on its training sample. It is not a pointwise inequality on every dataset."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -55,6 +54,9 @@ class ERM(VoiceoverScene):
         rows[1][-1].set_color(BOUNDC)
         rows[3][-1].set_color(CLASSC)
         whys = [why(r"$R^*$: \ the Bayes risk"), why(r"add and subtract"), why(r"Vapnik's programme"), why(r"Part 19's trade-off")]
+        heading = label('ERM trades approximation error against a uniform estimation error', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> The excess risk over the best possible, the Bayes risk, splits in two: estimation error, how "
             "far the chosen rule is from the best in the class, and approximation error, how far the class's best is from "
@@ -89,21 +91,15 @@ class ERM(VoiceoverScene):
         se = float(np.polyfit(ln, np.log10(g["excess"]), 1)[0])
         side = fit_rows(VGroup(
             label(r"thresholds $1\{x > t\}$ on $[0, 1]$, \ 10\% label noise", font_size=22),
-            label(r"purple: \ the VC bound, \ and the Rademacher bound", font_size=22, color=BOUNDC),
+            label(r"purple: \ 95\% VC bound; \ thinner: expectation bound", font_size=22, color=BOUNDC),
             label(rf"teal: \ $\sup_t |R_n - R|$, \ slope {sd:.2f}", font_size=22, color=TRAINC),
             label(rf"gold: \ ERM's excess risk, \ slope {se:.2f}", font_size=22, color=CLASSC),
-            label(r"the bound is valid, \ loose by a factor of 10", font_size=22, color=GREY_A),
+            label(r"probability bounds and expectations are different guarantees", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The simplest class: thresholds on the unit interval, with ten percent of labels flipped "
-            f"at random, two hundred data sets at each size. <bookmark mark='b'/> The VC bound in purple, and the sharper "
-            f"Rademacher bound below it. <bookmark mark='c'/> The actual uniform deviation, in teal, falls with slope "
-            f"{say(sd, 2)}: one over root n, as the theory says. <bookmark mark='d'/> But ERM's excess risk, in gold, falls "
-            f"with slope {say(se, 2)}, much faster: one over n. The uniform deviation is a worst case over all thresholds, "
-            f"and the chosen one is not the worst; chapter four explains the gap. <bookmark mark='e'/> The VC bound is valid "
-            f"at every n, and about ten times too large."
+            f"<bookmark mark='a'/> The simplest class: thresholds on the unit interval, with ten percent of labels flipped at random, two hundred data sets at each size. <bookmark mark='b'/> The VC bound in purple, and the thinner expectation bound below it. This is not another ninety-five percent confidence bound. <bookmark mark='c'/> The actual uniform deviation, in teal, falls with slope {say(sd, 2)}: one over root n, as the theory says. <bookmark mark='d'/> But ERM's excess risk, in gold, falls with slope {say(se, 2)}, much faster: one over n. The uniform deviation is a worst case over all thresholds, and the chosen one is not the worst; chapter four explains the gap. <bookmark mark='e'/> The VC bound is valid at every n, and about ten times too large."
         ) as vo:
-            self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated; \ bounds exact")))
+            self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated; \ probability and expectation bounds")))
             vo.wait_until("a")
             self.play(FadeIn(side[0]))
             vo.wait_until("b")
@@ -121,19 +117,16 @@ class ERM(VoiceoverScene):
             cmath(r"|\mathcal H| = K", r":", r"P\big(\sup_h |R_n(h) - R(h)| > t\big) \le 2K e^{-2nt^2}", font_size=34),
             cmath(r"\text{so}", r":", r"\sup_h |R_n - R| \le \sqrt{\log(2K/\delta)/(2n)} \ \text{ w.p. } 1 - \delta", font_size=34),
             cmath(r"\log K", r":", r"\text{the class's size enters only through its logarithm}", font_size=34),
-            cmath(r"\text{infinite classes}", r":", r"\text{replace } K \text{ by the number of labellings on the sample}", font_size=32),
+            cmath(r"\text{infinite classes}", r":", r"\text{symmetrize first; then count patterns on a ghost sample}", font_size=32),
         ]
         rows[1][-1].set_color(BOUNDC)
         rows[3][-1].set_color(GOODC)
         whys = [why(r"Hoeffding $+$ union"), why(r"invert"), why(r"Occam's razor"), why(r"the VC idea, \ next")]
+        heading = label('A union bound protects selection from a fixed finite class', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> For a finite class of K rules, Hoeffding's inequality and a union bound give it at once: "
-            "the probability that any rule's empirical risk is more than t from its true risk is at most two K e to the "
-            "minus two n t squared. <bookmark mark='b'/> Inverted: the uniform deviation is at most the root of log two K "
-            "over delta, over two n. <bookmark mark='c'/> The class's size enters only through its logarithm, a "
-            "mathematical Occam's razor. <bookmark mark='d'/> For an infinite class, the trick is to replace K by the number "
-            "of distinct labellings the class can produce on the sample, the growth function of the hook, which is the "
-            "next chapter."
+            "<bookmark mark='a'/> For a class of K rules fixed before the data, bounded losses let Hoeffding control each rule. A union bound makes the failure probability at most two K times e to the minus two n t squared. <bookmark mark='b'/> Inverting gives the displayed simultaneous confidence bound. <bookmark mark='c'/> Only log K enters, a mathematical form of Occam's razor. <bookmark mark='d'/> Infinite classes require a ghost-sample symmetrization argument before counting label patterns. We cannot simply substitute the observed number of patterns into this finite-class formula."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -151,6 +144,9 @@ class ERM(VoiceoverScene):
         rows[1][-1].set_color(GOODC)
         rows[2][-1].set_color(BADC)
         whys = [why(r"no label noise"), why(r"Blumer et al. (1989)"), why(r"noise costs $1/\varepsilon$"), why(r"the PAC framework")]
+        heading = label('Realizable and agnostic learning have different sample complexities', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> The same questions in the language of computer science. In the realizable case, some rule in the class makes no mistakes at all. <bookmark mark='b'/> Then about d over epsilon times log one over epsilon examples suffice for ERM's error to be below epsilon with high probability, as Anselm Blumer and colleagues proved in 1989. <bookmark mark='c'/> With label noise, the agnostic case, the number grows to d over epsilon squared: a whole power of epsilon worse, the slow rate of chapter one. <bookmark mark='d'/> Leslie Valiant's probably-approximately-correct framework of 1984 added the requirement that learning run in polynomial time, which makes it a theory of algorithms as well as of samples."
         ) as vo:
@@ -169,6 +165,9 @@ class ERM(VoiceoverScene):
         ]
         rows[2][-1].set_color(GOODC)
         whys = [why(r"Vapnik's structure"), why(r"structural risk minimization"), why(r"adapts to the best $k$"), why(r"data-driven penalties")]
+        heading = label('Selecting a class requires paying for complexity and the class index', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> When the right class size is unknown, Vapnik's structural risk minimization uses a nested sequence of classes of growing capacity. <bookmark mark='b'/> It minimizes the empirical risk plus a penalty for the class's complexity, of order the root of its VC dimension over n. <bookmark mark='c'/> The result satisfies an oracle inequality: it does almost as well as if the best class had been known in advance, trading approximation against estimation automatically. <bookmark mark='d'/> In practice the penalty is usually replaced by cross-validation, Part twenty-eight's method, which estimates the same trade-off from the data."
         ) as vo:

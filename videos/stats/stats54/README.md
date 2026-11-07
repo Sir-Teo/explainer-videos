@@ -16,7 +16,7 @@ at all, and why modern interpolating models seem to break the answer:
   regression's critical radius;
 - margins: AdaBoost on the breast cancer data, the margin bound, boosting as a statistician reads it, SVMs and sample
   compression;
-- PAC-Bayes: McAllester's and Maurer's bounds for a Gibbs posterior, the Bayesian posterior as the bound's optimizer,
+- PAC-Bayes: McAllester's and Maurer's bounds for a Gibbs posterior, the Gibbs variational identity and its distinction from a bounded-loss guarantee,
   non-vacuous bounds for deep networks;
 - stability: ridge regression, SGD (Hardt, Recht & Singer 2016), differential privacy and the reusable holdout;
 - online learning: Hedge, online-to-batch, bandits (UCB1, EXP3, Lai–Robbins), online convex optimization and mirror
@@ -35,14 +35,14 @@ It keeps three promises:
 **Built in this part:**
 - **`statkit.slt`** ([`explainer/stats/kit/slt.py`](../../../explainer/stats/kit/slt.py)), tested in
   `tests/test_stats_kit_slt.py`:
-  - thresholds: data, exact risk, ERM, the exact uniform deviation; VC, Rademacher and finite-class bounds;
+  - thresholds: data and exact risk; local checked ERM and exact deviation at all grouped jump limits; VC, Rademacher and finite-class bounds;
   - Rademacher complexity of linear and kernel classes by Monte Carlo against their trace bounds;
   - AdaBoost with decision stumps, recording training and test error and normalized margins;
   - PAC-Bayes: binary KL and its inverse, McAllester's and the kl bound, Gibbs posteriors over a finite class;
-  - stability: ridge's replace-one stability by refitting; SGD's parameter divergence on neighbouring samples;
+  - stability: bounded ridge sampled replacement-loss diagnostics; coupled SGD mean divergence with Monte Carlo errors;
   - online learning: Hedge and its bound; Bernoulli bandits with UCB1, EXP3 and ε-greedy; Lai–Robbins's bound;
   - ψ-transforms of the hinge, logistic, exponential and squared losses;
-  - interpolation: the test risk of min-norm least squares (double descent) and a benign-overfitting design.
+  - interpolation: latent excess prediction risk of min-norm fits, finite simulated averages and exact expected risks away from the singular range; verified interpolation in the benign design.
 - **The shatterer** (`Shatterer` in `explainer/stats/viz.py`), the part's instrument: a panel of labelled points with a
   separating half-plane clipped to the frame, or a cross where no half-plane realizes the labelling, so that a whole
   set of dichotomies can be laid out and counted.
@@ -78,12 +78,12 @@ python tools/lecture_length.py stats54 --floor 50
 | 2 | VC bounds | VC bound 1.72 → 0.26, Rademacher bound 1.16 → 0.20 for d = 1; union half-width 0.163 for K = 1,000, n = 200; Board as above |
 | 3 | Rademacher | linear class 0.221 → 0.034 (bound 0.225 → 0.036); Gaussian kernel 0.200 → 0.035 (bound 0.200 → 0.035) for n = 25 → 800 |
 | 4 | Localization | excess risk slopes ≈ −1 against the deviation's −½, for noise 0, 0.1 and 0.4 |
-| 5 | Margins | breast cancer, 340 train / 229 test: zero training error at round 12; test error 0.118 → 0.048 at round 400 (min 0.035); minimum margin −0.32 (round 5), 0.16 (50), 0.21 (400) |
+| 5 | Margins | breast cancer, 340 train / 229 test: tie-safe stumps: zero training error at round 9; test error 0.0742 at round 9 → 0.0437 at round 400; minimum margin −0.178 (5), 0.178 (50), 0.215 (400) |
 | 6 | PAC-Bayes | 101 thresholds, n = 500, noise 0.15: best kl bound 0.211 (λ = 200, true risk 0.155) vs union bound 0.221; McAllester 0.234 |
-| 7 | Stability | ridge, n = 200, p = 50: stability 0.34 → 0.002 and gap 0.140 → 0.011 as λ = 10⁻³ → 0.1 → 3; SGD divergence after 10 epochs 0.16 (η = 0.2; bound 4) and 0.27 (η = 1; bound 20) |
+| 7 | Stability | bounded ridge, n = 200, p = 50: sampled loss changes 0.1316 → 0.000492 and signed gap 0.04695 → −0.002540 over λ = 10⁻³ → 3 (10 datasets); SGD divergence after 10 epochs 0.16 (η = 0.2; bound 4) and 0.27 (η = 1; bound 20) |
 | 8 | Online learning | Hedge, K = 50, T = 5,000: regret 51.7 vs bound 98.9; bandits, T = 50,000: ε-greedy 1,193, EXP3 962, UCB1 269, Lai–Robbins 75 |
 | 9 | Surrogates | ψ(θ) = \|θ\| (hinge), θ² (squared), 1 − √(1 − θ²) (exponential) |
-| 10 | Interpolation | min-norm least squares, n = 100: risk 1.14 (p = 10), 1,392 (p = n), 0.93 (p = 1,000); benign excess 0.191 → 0.013 for n = 50 → 400; short tail 0.246 |
+| 10 | Interpolation | min-norm least squares, n = 100: 12-dataset mean latent excess risk 1.14 (p = 10), 1,392 (p = n), 0.925 (p = 1,000); population mean is infinite at p = n−1, n, n+1; benign excess 0.191 → 0.013 for n = 50 → 400; short tail 0.246 |
 | 11 | Outro | — |
 
 ## Sources
@@ -181,3 +181,25 @@ python tools/lecture_length.py stats54 --floor 50
 - **Part 58**: online learning becomes betting: e-values.
 - **Part 59**: exact risks of interpolators in proportional asymptotics.
 - **Part 64**: the generalization of foundation models.
+
+## QA reconciliation
+
+The scenes use [checked.py](checked.py) for the corrected local algorithms. The shared historical `slt` kit retains its original outputs; its threshold deviation uses a grid and its ridge diagnostic measures prediction changes. The local code uses actual loss changes and exact threshold jumps instead. Twenty-three checks pass (17 local cases and six legacy checks), including independent brute-force tied-stump optimization, narrow-angle LP separability, threshold jump limits, endpoint KL inversion, a counterexample to a pathwise SGD interpretation, inverse-Wishart risk versus independent least-squares simulations, and verified interpolation residuals. All twelve numerical inputs were regenerated. All 17,070 breast-cancer feature values and 569 diagnoses match the primary UCI data in row order.
+
+AdaBoost no longer considers cuts inside an equal-feature block. Such a cut cannot be realized by its saved threshold and previously supplied the wrong weighted error to the coefficient update. Every selected stump's error is now checked directly against its predictions. Zero ensemble scores predict +1. This repair changes the first zero-error round from 12 to 9 and final holdout error from 0.0480 to 0.0437. More rounds need not monotonically improve normalized margins or prevent overfitting; this is one fixed split, not a statistical comparison across training samples.
+
+The ridge example now has feature radius at most one and responses bounded by one. It measures the maximum squared-loss change over twenty sampled replacements and 2,000 validation points, then averages over ten datasets. This is a diagnostic and does not estimate the supremum over all datasets, neighbours and test points. Stored empirical Monte Carlo errors describe the diagnostic and the signed test-minus-training gap separately. A conservative uniform loss bound, 4(1+1/√λ)²/(λn), follows by bounding each half-loss gradient and strong convexity; it can be very loose. The signed asinh chart retains negative gaps instead of dropping them. The high-probability stability formula uses the replacement bounded-difference coefficient 2nβ+M.
+
+Coupled logistic SGD uses the same iid index stream for both datasets, bounded feature norms and step size at most eight. The HRS divergence bound is in expectation over this randomness. It is not pathwise: selecting the changed record on the first step can exceed 2η/n. Every retained path is independently checked against 2η times its actual number of visits to the changed record. Forty paths, sampled index-visit counts and pointwise Monte Carlo errors are retained. Zero mean divergence is a missing log-scale point rather than log(0) or an invented positive value.
+
+The interpolation curve measures latent excess prediction risk, excluding irreducible new-response noise 0.25. The 1,392 peak is a twelve-draw average, not an estimate of a finite population mean. Gaussian inverse-Wishart theory gives infinite mean excess risk at p = n−1, n and n+1. Away from this range the exact mean is retained and drawn as a broken dashed reference, with model-omission variance included. Individual draws and medians are saved; no finite-variance Monte Carlo claim is made at the singularity. The benign experiment verifies every numerical training residual, retains all four per-cell risks and MCSEs, and holds the total tail variance at ten when comparing the long and short tails. Large effective rank alone is not sufficient: small bias and both rank conditions, as well as the design/noise assumptions, matter.
+
+Bounds now state their independent-data, fixed-class, bounded-loss and relevant model conditions. Optimism is in expectation. Probability bounds and expectation bounds are distinguished in the threshold chart. One-sided Rademacher symmetrization is distinguished from absolute deviation, and selecting a margin level requires a simultaneous margin argument. Network bounds depend on depth, activation, input radius and controlled norms. Massart/Tsybakov fast-rate statements require the Bayes rule in the class or an appropriate excess-loss Bernstein condition; regression's squared-distance identity is restricted to the well-specified case. Localization uses the excess-loss star hull and a sub-root upper bound, not an arbitrary function class fixed point.
+
+PAC-Bayes controls Gibbs risk for independent priors and bounded losses, not automatically a deterministic majority vote. Binary KL preserves endpoint support exactly. The Gibbs variational objective and nonlinear bound optimization are distinct. The chart's coefficient of empirical risk differs by n from the later learning-rate convention. Unbounded likelihood loss and model evidence need a separate exponential-moment theorem. Flatness alone does not imply small prior-relative KL. Privacy-based holdout reuse requires a mechanism and a query/privacy budget; one-nearest-neighbour is not generically uniformly stable.
+
+Hedge uses mixture loss; randomized action statements require a non-anticipating adversary. The clipped-uniform simulated expert's expected advantage is 0.095, not 0.1. Bandit paths are mean pseudo-regrets with stored ten-run errors. Lai–Robbins is an asymptotic instance-dependent reference, not a finite-time lower envelope. Online-to-batch uses convex averaging or a randomized mixture. Convex regret rates also need bounded domains/gradients and suitable schedules.
+
+Logistic loss and its calibration transform both use bits. The ψ chart now uses nonnegative excess risks. Calibration includes differentiability at zero for the convex derivative criterion and compares against unrestricted score optima; restricted-model approximation error remains relevant. The noise-assisted exponent is scoped to the displayed quadratic-calibration losses. Proper composite loss identifies a linked population probability, not automatic finite-sample calibration. The final hinge exercise asks for the correct domination inequality, removing an erroneous extra factor of |2η−1|. The Board is a constructed fixed class with independent Bernoulli error coordinates, reports empirical dataset-level MCSE, and distinguishes independent holdout selection from the Wald interval's approximate coverage.
+
+Forty-two persistent theorem headings and local segment clipping prepare the visual pass. English endpoint/native/motion and representative narrated checks remain pending. Chinese narration/captions, continuous listening and final masters remain open.
