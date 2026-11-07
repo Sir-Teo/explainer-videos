@@ -1,0 +1,62 @@
+{
+ "video": "stats5",
+ "scene": "Lines",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 4,
+ "lines": [
+  {
+   "raw": "Chapter eight. Three lines through one ellipse.",
+   "spoken": "Chapter eight. Three lines through one ellipse.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/f7f1a2b573378f0c.wav",
+   "duration": 3.0,
+   "tokens": 7,
+   "peak": 0.3427734375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "There isn't one line through a cloud of points; there are three, and confusing them causes real mistakes. <bookmark mark='a'/> The regression of child on mid-parent, the conditional mean, has slope 0.65. It passes through the points where the ellipse's tangent is vertical: for each x, the middle of the vertical slice. <bookmark mark='b'/> The regression of mid-parent on child, predicting parents from children, is a different line, much steeper when drawn on the same axes. It passes through the horizontal tangent points. <bookmark mark='c'/> And between them lies the major axis of the ellipse, the direction of greatest spread: Part 4's first principal component. Galton noticed in 1889 that regression runs both ways, from parents to children and from children back to parents.",
+   "spoken": "There isn't one line through a cloud of points; there are three, and confusing them causes real mistakes. The regression of child on mid-parent, the conditional mean, has slope 0.65. It passes through the points where the ellipse's tangent is vertical: for each x, the middle of the vertical slice. The regression of mid-parent on child, predicting parents from children, is a different line, much steeper when drawn on the same axes. It passes through the horizontal tangent points. And between them lies the major axis of the ellipse, the direction of greatest spread: Part 4's first principal component. Galton noticed in 1889 that regression runs both ways, from parents to children and from children back to parents.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/f0ff02a918ba15bf.wav",
+   "duration": 44.0,
+   "tokens": 118,
+   "peak": 0.8038330078125,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Why three? Because they answer three questions. <bookmark mark='a'/> The regression of y on x minimizes the squared vertical distances from the points: the best way to predict y from x. <bookmark mark='b'/> The regression of x on y minimizes the squared horizontal ones: the best way to predict x from y. <bookmark mark='c'/> The major axis minimizes squared perpendicular distances, treating the two variables symmetrically. <bookmark mark='d'/> Only for a perfect correlation do the three agree. <bookmark mark='e'/> To predict, use the regression of the variable you're predicting. When both variables are measured with error and you want the underlying relationship, neither regression is right; that's the errors-in-variables problem of Part 23.",
+   "spoken": "Why three? Because they answer three questions. The regression of y on x minimizes the squared vertical distances from the points: the best way to predict y from x. The regression of x on y minimizes the squared horizontal ones: the best way to predict x from y. The major axis minimizes squared perpendicular distances, treating the two variables symmetrically. Only for a perfect correlation do the three agree. To predict, use the regression of the variable you're predicting. When both variables are measured with error and you want the underlying relationship, neither regression is right; that's the errors-in-variables problem of Part 23.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/c90f5da2002c63e5.wav",
+   "duration": 39.25,
+   "tokens": 103,
+   "peak": 0.608001708984375,
+   "issues": [],
+   "elapsed": 0.05,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Here's what goes wrong when x is measured with error. <bookmark mark='a'/> In blue, y against the true x, with slope one. <bookmark mark='b'/> Now we don't see x, only x plus independent noise of the same size. The cloud spreads sideways, and the fitted slope falls to about a half. <bookmark mark='c'/> The reason is one line: noise in x leaves the covariance with y unchanged but inflates the variance of x, so the slope is multiplied by the reliability ratio, the share of x's variance that's real. <bookmark mark='d'/> Here it's a half. This is regression dilution: errors in the predictor bias the slope toward zero, and it's the same arithmetic as regression to the mean. <bookmark mark='e'/> Charles Spearman saw it in 1904 and proposed correcting a correlation for the unreliability of both measurements.",
+   "spoken": "Here's what goes wrong when x is measured with error. In blue, y against the true x, with slope one. Now we don't see x, only x plus independent noise of the same size. The cloud spreads sideways, and the fitted slope falls to about a half. The reason is one line: noise in x leaves the covariance with y unchanged but inflates the variance of x, so the slope is multiplied by the reliability ratio, the share of x's variance that's real. Here it's a half. This is regression dilution: errors in the predictor bias the slope toward zero, and it's the same arithmetic as regression to the mean. Charles Spearman saw it in 1904 and proposed correcting a correlation for the unreliability of both measurements.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/790f6b8b55f56312.wav",
+   "duration": 44.1,
+   "tokens": 127,
+   "peak": 0.644622802734375,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats5/en/Lines_motion/result.json",
+ "input_sha256": "63d679922fb97ef32847c8fc30a7383755b9fb545e61fd9385072e864f8c1961"
+}

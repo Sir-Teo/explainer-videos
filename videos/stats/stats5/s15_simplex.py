@@ -75,7 +75,7 @@ class Simplex(VoiceoverScene):
         sub.next_to(f, DOWN, buff=0.15)
         mean = label(r"$E\,p_i = \alpha_i / \sum_j \alpha_j$; \ fixed mean, larger $\sum\alpha$: more concentrated", font_size=24, color=GREY_A)
         mean.to_edge(DOWN, buff=0.4)
-        tag = note(r"simulated: 900 of 1,500 draws shown").to_corner(DR, buff=0.25)
+        tag = note(r"simulated: 900 of 1,500 draws shown").to_corner(UR, buff=0.25)
         with self.voiceover(
             "To model the proportions themselves as uncertain, we need a distribution on the simplex: the triangle "
             "of all vectors of proportions adding to one. <bookmark mark='a'/> The Dirichlet distribution, named "

@@ -1,0 +1,83 @@
+{
+  "fingerprint": "6a2a823bd30443dc0e79f157d4b681c241f3d8870f45a49fa4c9879d9ca1b8c3",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Joint",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 28
+      },
+      "input_record": "renders/qa/native1080/stats5/en/Joint/result.json",
+      "input_sha256": "4a7646f746ace148ac317d416b53980a015d88672eb3f3ffb7b9af1219dc0370"
+    },
+    {
+      "scene": "MVN",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 25
+      },
+      "input_record": "renders/qa/native1080/stats5/en/MVN/result.json",
+      "input_sha256": "6c7d08d2a75069c403aca8fc8573aaf2d1cd400e5e4378c04849e031b8763512"
+    },
+    {
+      "scene": "Lines",
+      "status": "needs-review",
+      "frames": 17,
+      "warnings": {
+        "narration-translation": 4,
+        "untranslated-on-screen": 26
+      },
+      "input_record": "renders/qa/native1080/stats5/en/Lines/result.json",
+      "input_sha256": "361e9b18bec7e694d2d1f70de270939d11e2104254573b886f5a80c8877e124f"
+    },
+    {
+      "scene": "Jacobian",
+      "status": "needs-review",
+      "frames": 16,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 21
+      },
+      "input_record": "renders/qa/native1080/stats5/en/Jacobian/result.json",
+      "input_sha256": "e7c98d34478f1be0f14d7ba490f8e79fedde24e13c32a80ffad12914cfc66e2f"
+    },
+    {
+      "scene": "Copulas",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 28
+      },
+      "input_record": "renders/qa/native1080/stats5/en/Copulas/result.json",
+      "input_sha256": "1b4b519a16383ecf1241a28fd541ab30305d6910f8c45d16b3fc1bb4d95ae4a3"
+    },
+    {
+      "scene": "Exchange",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 28
+      },
+      "input_record": "renders/qa/native1080/stats5/en/Exchange/result.json",
+      "input_sha256": "fae7c1dab1a4315eefe21daf9d90dc917730d7b92401bcf0d44cef85f2a4199d"
+    },
+    {
+      "scene": "Simplex",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 28
+      },
+      "input_record": "renders/qa/native1080/stats5/en/Simplex/result.json",
+      "input_sha256": "45cddd2aa689ade911c539f888fb4e50f71fa72875e1fe7dccbbb1807bf1207c"
+    }
+  ]
+}

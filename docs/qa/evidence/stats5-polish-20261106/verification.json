@@ -1,0 +1,23 @@
+{
+  "part": "stats5",
+  "fingerprint": "6a2a823bd30443dc0e79f157d4b681c241f3d8870f45a49fa4c9879d9ca1b8c3",
+  "english_endpoints": 16,
+  "native_1080_endpoints": 7,
+  "silent_motion_chapters": 3,
+  "audio_scene": "Lines",
+  "audio_lines": 4,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats5/en/Lines/videos/s09_lines/480p15/Lines.mp4",
+    "seconds": 134.866341,
+    "narration_sha256": "ae9a1cff7f02b1a4b0f1b65992a9dff0328de4f6803acc954e798b27bd5e37ca",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 135 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 135 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

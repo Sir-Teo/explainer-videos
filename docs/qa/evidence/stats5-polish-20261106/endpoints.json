@@ -1,0 +1,182 @@
+{
+  "fingerprint": "6a2a823bd30443dc0e79f157d4b681c241f3d8870f45a49fa4c9879d9ca1b8c3",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 17,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 31
+      },
+      "input_record": "renders/qa/series/stats5/en/Hook/result.json",
+      "input_sha256": "9e4b49680215e0e693e1ac28ce1484e3b2c6b0647528de17ffcc66bf09ece772"
+    },
+    {
+      "scene": "Joint",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 28
+      },
+      "input_record": "renders/qa/series/stats5/en/Joint/result.json",
+      "input_sha256": "a579fe4c59140dd28fc44e17b52f65f32af5861adfe6df1e0d5f63e94c8dd450"
+    },
+    {
+      "scene": "Dependence",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 19
+      },
+      "input_record": "renders/qa/series/stats5/en/Dependence/result.json",
+      "input_sha256": "c307fc80e66cd77edb74af9a7efc57a9f94d2bc9518b48db1c36a4e5ae5549df"
+    },
+    {
+      "scene": "Predictor",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 30
+      },
+      "input_record": "renders/qa/series/stats5/en/Predictor/result.json",
+      "input_sha256": "97412cc98e24848ca4414f1fc385727dc055d656652307ccdf3a60b81aa07a7c"
+    },
+    {
+      "scene": "Eve",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 29
+      },
+      "input_record": "renders/qa/series/stats5/en/Eve/result.json",
+      "input_sha256": "1d68cbe4dd4e5e6c01e5257849caa5f91e0e2963c1cdfce435959fe5e3f90ec8"
+    },
+    {
+      "scene": "MVN",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 25
+      },
+      "input_record": "renders/qa/series/stats5/en/MVN/result.json",
+      "input_sha256": "33e277e8b411607ff2f476958134e543995c251c23fc5a667129c57ffc4f56df"
+    },
+    {
+      "scene": "Condition",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 29
+      },
+      "input_record": "renders/qa/series/stats5/en/Condition/result.json",
+      "input_sha256": "ffdf7809c1359bfd74f340561904d436109166b448ad7e54c0d319f20903eec7"
+    },
+    {
+      "scene": "RegressionToMean",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 41
+      },
+      "input_record": "renders/qa/series/stats5/en/RegressionToMean/result.json",
+      "input_sha256": "010e5889fd1b5fd11b528e469f72b6eb1ce0e73947d85671983efa7f1ab7b84e"
+    },
+    {
+      "scene": "Lines",
+      "status": "needs-review",
+      "frames": 17,
+      "warnings": {
+        "narration-translation": 4,
+        "untranslated-on-screen": 26
+      },
+      "input_record": "renders/qa/series/stats5/en/Lines/result.json",
+      "input_sha256": "75e264dad1c4902a2cf0cf8bf8d04256933268d0719342a1c3c7ff9de8cdb3e1"
+    },
+    {
+      "scene": "Jacobian",
+      "status": "needs-review",
+      "frames": 16,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 21
+      },
+      "input_record": "renders/qa/series/stats5/en/Jacobian/result.json",
+      "input_sha256": "8c4761bd20ddac469a1c76cf5b551564da92a4bb3d48bfca1b47d301574cb5ba"
+    },
+    {
+      "scene": "Latent",
+      "status": "needs-review",
+      "frames": 15,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 30
+      },
+      "input_record": "renders/qa/series/stats5/en/Latent/result.json",
+      "input_sha256": "cf8d35e544422777a55c87285fd1f5a0c9af52eae7249ca4043370a3d1781862"
+    },
+    {
+      "scene": "Copulas",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 28
+      },
+      "input_record": "renders/qa/series/stats5/en/Copulas/result.json",
+      "input_sha256": "5425d384c913737658f7f2039c2e1ba07f3fe996260d07bdc8082e811473f525"
+    },
+    {
+      "scene": "Exchange",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 28
+      },
+      "input_record": "renders/qa/series/stats5/en/Exchange/result.json",
+      "input_sha256": "ae5ebfe26e7710f9a3d3755924bc6dff65c8137afa8ce9c234f17f0eb664078c"
+    },
+    {
+      "scene": "Measures",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 32
+      },
+      "input_record": "renders/qa/series/stats5/en/Measures/result.json",
+      "input_sha256": "c3e3d4ac73642833f3b0134a9261c83fb7095268c7c28d8d852b22d73bd47fa9"
+    },
+    {
+      "scene": "Simplex",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 28
+      },
+      "input_record": "renders/qa/series/stats5/en/Simplex/result.json",
+      "input_sha256": "454eb73836047a54031b2c8753297231b5c465812ab6b0480747b9302e1963f5"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 7,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 65
+      },
+      "input_record": "renders/qa/series/stats5/en/Outro/result.json",
+      "input_sha256": "e3c493df47c968b56123346911e620d10d19a66194e3fe62e75e000373a4190c"
+    }
+  ]
+}

@@ -229,6 +229,7 @@ class Joint(VoiceoverScene):
         rows[3][2].set_color(S.ACCENT)
         whys = [why(r"the row sums: \ $k$ with $k$, \ plus $2(k - 1)$ pairs"), why(r"and $\max + \min = $ the total, $7$ on average"),
                 why(r"exactly, \ with Part 2's engine"), why(r"the zeros above the diagonal are dependence you can see")]
+        intro = label('The joint law of two dice: minimum and maximum', font_size=36)
         with self.voiceover(
             "Here's a joint distribution we can compute exactly. Roll two dice, and record the larger and the "
             "smaller. <bookmark mark='a'/> The table counts the thirty-six equally likely rolls. The diagonal has one "
@@ -241,8 +242,10 @@ class Joint(VoiceoverScene):
             "half. The empty triangle is dependence you can see: knowing the maximum is two rules out most of the "
             "table."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(rl), FadeIn(cl), FadeIn(an), FadeIn(unit))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(LaggedStart(*[FadeIn(c) for c in grid], lag_ratio=0.02), run_time=2.0)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=2.4, buff=0.62, edge=6.9)
             vo.wait_until("b")

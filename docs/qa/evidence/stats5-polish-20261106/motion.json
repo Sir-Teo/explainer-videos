@@ -1,0 +1,39 @@
+{
+  "fingerprint": "6a2a823bd30443dc0e79f157d4b681c241f3d8870f45a49fa4c9879d9ca1b8c3",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Joint",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats5/en/Joint_motion/result.json",
+      "input_sha256": "7f89f498ab01ec9276529864f1aa7ce3b8878baa3b02068aeaf9d01133a77672",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 237 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 237 s\n"
+    },
+    {
+      "scene": "Lines",
+      "status": "needs-review",
+      "frames": 17,
+      "warnings": {
+        "narration-translation": 4
+      },
+      "input_record": "renders/qa/series/stats5/en/Lines_motion/result.json",
+      "input_sha256": "63d679922fb97ef32847c8fc30a7383755b9fb545e61fd9385072e864f8c1961",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 151 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 151 s\n"
+    },
+    {
+      "scene": "Exchange",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats5/en/Exchange_motion/result.json",
+      "input_sha256": "7a7a7b128a85a5bc95190526ce17ac402c93b2ae9a65250bf095dfbb7fbf8584",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 215 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 215 s\n"
+    }
+  ]
+}
