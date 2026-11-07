@@ -21,7 +21,7 @@ class Hook(VoiceoverScene):
             label(r"pick a point uniformly on the sphere in $\mathbb R^n$; \ look at its first coordinate", font_size=28),
             label(r"in 3 dimensions: \ anything from $-1$ to $1$, \ evenly spread", font_size=26, color=GREY_A),
             label(r"in 1,000 dimensions: \ within $\pm 0.062$ of zero with probability 95\%", font_size=26, color=SPHC),
-            label(r"so almost all of the sphere lies near the equator, \ \emph{whichever} equator you pick", font_size=26, color=SPHC),
+            label(r"95\% lies near each equator fixed before sampling the point", font_size=26, color=SPHC),
             label(r"Lévy (1922): \ the first concentration of measure", font_size=26, color=GOODC),
         ), 12.4, 0.55, [0, -0.6, 0])
         with self.voiceover(
