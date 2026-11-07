@@ -23,9 +23,9 @@ GROUPS = [
         r"Godin (2026): deep hedging is Monte Carlo policy search, so it falls within reinforcement learning",
     ]),
     (r"Making it train, and making it real", [13, 14], NET, [
-        r"Mueller, Akkari, Gonon and Wood (2024): a second-order optimizer trains the policy in about a quarter of the "
+        r"Mueller et al.\ (2024) report, for their cliquet benchmark, about a quarter of the optimizer "
         r"steps",
-        r"Arzel and Lehdili (2026): a Whalley--Wilmott prior for band networks converges faster (chapter 14 re-ran it)",
+        r"Arzel and Lehdili (2026): structural Whalley--Wilmott priors and a differentiable soft clamp; chapter 14 uses a different hard clamp",
         r"Fran\c{c}ois, Gauthier, Godin and P\'erez-Mendoza (2025): deep hedging of index option books with the whole "
         r"implied-volatility surface as input, against delta-gamma hedging",
     ]),
@@ -67,21 +67,7 @@ class Frontier(VoiceoverScene):
             grid.scale_to_fit_height(7.4)
         grid.move_to(ORIGIN)
         with self.voiceover(
-            "Where is the field now? Four fronts. First, the simulator: for an options book, the market a hedger trains "
-            "in is a whole surface of options moving without arbitrage. In 2026 Buehler, Horvath and colleagues "
-            "published SANOS, arbitrage-free surfaces calibrated by a linear program; DYSANOS, a generative model of "
-            "those surfaces day by day; and GROMM, free of static and dynamic arbitrage, its starting surface inside "
-            "the bid-ask spread for more than ninety-five percent of the relevant prices. "
-            "<bookmark mark='a'/> Second, a hard question: is the deep hedger hedging? Chapter twelve met the "
-            "François result. In 2026 Kirill Zernikov found that reinforcement-learning hedgers on S&P 500 options "
-            "usually learn a systematic haircut to the delta, one that helps in many years and fails in others. And "
-            "Frédéric Godin argued that deep hedging is reinforcement learning after all: Monte Carlo policy search. "
-            "<bookmark mark='b'/> Third, making it train and making it real: a second-order optimizer that needs about "
-            "a quarter of the steps; the Whalley–Wilmott prior that chapter fourteen re-ran; and deep hedgers that read "
-            "the whole implied-volatility surface and trade options as hedges. <bookmark mark='c'/> Fourth, stopping "
-            "and generators: networks that learn the exercise boundary itself; primal and dual bounds built from "
-            "signatures, and the dual martingale learned directly; and generators trained by signature-kernel scores, "
-            "with no adversary at all."
+            "This map summarizes research claims, not deployment audits. In 2026 SANOS, DYSANOS and GROMM address simulated option surfaces and their arbitrage constraints; any theorem or numerical check applies within the paper's construction. <bookmark mark='a'/> Empirical hedging studies ask what policies actually learn. Zernikov's walk-forward S&P study reports delta haircuts whose results change with regime. A return objective can rationally include an investment overlay; that is different from proving better replication. <bookmark mark='b'/> Mueller and coauthors report roughly one quarter as many optimizer steps on their cliquet benchmark, not a universal fourfold wall-time improvement. Arzel and Lehdili combine a structural Whalley–Wilmott prior with a differentiable soft clamp; our hard-clamped experiment is related, not a paper replication. Other work includes richer option hedges. <bookmark mark='c'/> Learned stopping boundaries, signature-based primal and dual methods, and signature-kernel generators expand the toolkit. Their assumptions, computational costs and validation still have to match the intended application."
         ) as vo:
             self.play(FadeIn(panels[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -97,22 +83,18 @@ class Frontier(VoiceoverScene):
         early = int(runs_d.shape[1] * 0.15)
         a_d, a_w = float(runs_d[:, :early].mean()), float(runs_w[:, :early].mean())
         if a_w < a_d:
-            verdict = "our small re-run agrees: the formula's start is ahead early"
+            verdict = "the hard-clamped structural prior has lower early mean empirical risk in these two seeds"
         else:
-            verdict = "our small re-run does not reproduce it: the formula's start is not ahead early"
-        box = VGroup(label(r"A claim, checked", font_size=30, color=QC.IDEA),
+            verdict = "the hard-clamped structural prior is not ahead by early mean empirical risk in these two seeds"
+        box = VGroup(label(r"A related small experiment, not a replication", font_size=30, color=QC.IDEA),
                      wrapped_label(r"Arzel and Lehdili (2026): a Whalley--Wilmott prior makes band networks converge "
                                    r"faster", 10.0, 24, GREY_A),
                      wrapped_label(rf"chapter 14, two seeds each, 0.5\% costs: average risk over the first "
-                                   rf"{early} steps {a_w:.3f} from the formula's start, {a_d:.3f} from the default",
+                                   rf"{early} steps {a_w:.3f} with the structural prior, {a_d:.3f} with the default",
                                    10.0, 24, NET)).arrange(DOWN, buff=0.4)
         q = ask(r"which is harder to build: a hedger, or the simulator it trains on?")
         with self.voiceover(
-            "One of these claims we could check ourselves. Arzel and Lehdili say the Whalley–Wilmott prior makes band "
-            f"networks converge faster. <bookmark mark='a'/> In chapter fourteen's run, {verdict}. "
-            "<bookmark mark='b'/> And a question to end on: which is harder to build, a hedger, or the simulator it "
-            "trains on?"
-            " The simulator. A hedger only has to be good on the paths it is given; the simulator has to be right about the world, including days it has never seen. Next: the House's rule for that, tested."
+            f"Chapter fourteen compares a related structural prior, with a different clamp and persistent width limits. In its two seeds, {verdict}. This early average mixes training objectives from changing weights; it does not establish convergence speed at matched accuracy or reproduce the paper. <bookmark mark='a'/> The displayed averages use the first {early} saved training points, with identical budgets. <bookmark mark='b'/> Which is harder to build, a hedger or its simulator? There is no universal ranking. A precise question is whether an evaluation stresses errors shared by both. Chapter nineteen sets out that test design."
         ) as vo:
             self.play(FadeIn(box[0]), FadeIn(box[1]))
             vo.wait_until("a")

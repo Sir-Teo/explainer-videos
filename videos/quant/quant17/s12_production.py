@@ -23,36 +23,25 @@ class Production(VoiceoverScene):
 
     def record(self):
         cards = VGroup(
-            firm_card(r"J.P. Morgan", r"Hans Buehler's team has hedged vanilla index option books on the S\&P 500 and "
-                      r"the Euro Stoxx with a data-driven engine since 2018, and later priced a large share of its "
-                      r"Euro Stoxx vanilla book with deep hedging and extended it to cliquets. Buehler was Risk's quant of "
-                      r"the year for 2022, and later moved to XTX Markets.",
-                      source=r"as reported by Risk.net", width=6.1, font_size=20),
+            firm_card(r"J.P. Morgan", r"Risk.net reported on 26 May 2022 that deep hedging for Euro Stoxx "
+                      r"cliquets was live, with an S\&P expansion planned. This public report does not certify "
+                      r"the current scope, performance or controls of the bank's systems.",
+                      source=r"Risk.net, 26 May 2022", width=6.1, font_size=20),
             firm_card(r"Danske Bank", r"Brian Huge and Antoine Savine developed differential machine learning (chapter 4) "
                       r"at the bank, where adjoint differentiation already ran in production: the pathwise derivatives it "
                       r"computed became training labels. Risk.net reported the bank using the method to speed up its XVA "
                       r"calculations.", source=r"Huge and Savine (2020); as reported by Risk.net", width=6.1, font_size=20),
         ).arrange(RIGHT, buff=0.35, aligned_edge=UP).move_to(UP * 0.6)
         sr = history_card(2026, r"SR 26-2, Federal Reserve, OCC and FDIC",
-                          r"US supervisory guidance on model risk, 17 April 2026, superseding SR 11-7 (2011) and SR 21-8. Every model is "
-                          r"challenged by people independent of its builders (``effective challenge''), validated for "
+                          r"Nonbinding US supervisory guidance, 17 April 2026, superseding SR 11-7 and SR 21-8; principally relevant above US\$30bn of assets. Material models receive "
+                          r"objective expert challenge with sufficient independence (``effective challenge''), and proportionate validation for "
                           r"conceptual soundness, monitored, tested on outcomes and kept in an inventory, with effort scaled "
                           r"to the model's materiality. Generative and agentic AI are outside its scope; a pricing or hedging network "
                           r"is a model like any other.",
                           color=QC.HOUSE, width=12.4, font_size=20)
         sr.next_to(cards, DOWN, buff=0.35)
         with self.voiceover(
-            "What has reached real desks? The clearest public case is J.P. Morgan. As Risk.net reported, Hans "
-            "Buehler's team has hedged vanilla index option books on the S&P 500 and the Euro Stoxx with a data-driven "
-            "engine since 2018; the bank later priced a large share of its Euro Stoxx vanilla book with a version of "
-            "deep hedging, and extended the programme to cliquets. <bookmark mark='a'/> At Danske Bank, "
-            "Brian Huge and Antoine Savine turned the derivatives that adjoint differentiation already computed in "
-            "production into training labels; Risk.net reported the method speeding up the bank's valuation "
-            "adjustments. <bookmark mark='b'/> And over all of "
-            "it sits the regulator. On the seventeenth of April 2026 the Federal Reserve, the OCC and the FDIC "
-            "replaced SR 11-7, the model risk guidance of 2011, with SR 26-2: every model challenged by people who did "
-            "not build it, checked for soundness, monitored, tested on outcomes and kept in an inventory. Generative "
-            "and agentic AI are outside its scope; a network that prices or hedges is squarely inside it."
+            "Public deployment evidence has limits. Risk.net reported in May 2022 that J.P. Morgan's deep hedging for Euro Stoxx cliquets was live, with an S&P expansion planned. This is a dated public report, not an audit of today's systems. <bookmark mark='a'/> Huge and Savine developed differential learning at Danske Bank, using adjoint sensitivities as labels; the cited reporting describes valuation-adjustment applications. <bookmark mark='b'/> SR 26-2, issued on April seventeenth 2026, replaces SR 11-7 and SR 21-8. It is nonbinding supervisory guidance, primarily relevant to banks above thirty billion dollars of assets, with controls scaled to risk and materiality. It discusses objective expert challenge, validation, monitoring and inventory. Traditional pricing networks are in scope; generative and agentic AI are explicitly excluded."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -98,17 +87,17 @@ class Production(VoiceoverScene):
         ev = h["nocost"]["eval"]
         bsd = h["nocost"]["bs_eval"]
         rows = [
-            (r"conceptual soundness", r"every method derived before it is trained: indifference prices, BSDEs, the "
+            (r"conceptual soundness", r"check assumptions as well as derivations: cash baselines, BSDEs, the "
              r"bang-bang rule, the band (chapters 8, 10, 11, 13)", GOOD),
             (r"inside the box it learned", rf"the calibrator against fresh simulation: {nz['net_fresh']['rmse']:.2f} vol "
              rf"points on parameter sets it never saw (chapter 3)", GOOD),
-            (r"outside the box, silence", r"a network extrapolates without warning; inputs are checked against the "
-             r"training ranges and anything outside goes to the slow engine (chapters 4 and 5)", BAD),
-            (r"outcomes against known answers", rf"no costs: the deep hedger's price {ev['price']:.2f} against delta "
+            (r"outside the box, silence", r"a network extrapolates without warning; a production design should check inputs against "
+             r"training ranges and route failures to a validated fallback (chapters 4 and 5)", BAD),
+            (r"outcomes against references", rf"no costs: empirical hedger risk {ev['price']:.2f} against delta "
              rf"hedging's {bsd['price']:.2f}; the BSDE's linear check (chapters 9 and 11)", NET),
-            (r"the simulator is the model", r"hedgers tested on other generators and on replayed history (chapter 19); "
-             r"the generator is validated too (chapter 16)", BAD),
-            (r"monitoring and inventory", r"every network re-checked nightly against Part 16's engine; each one listed, "
+            (r"the simulator is the model", r"pre-register disjoint generator and history tests (chapter 19); "
+             r"validate generators too, under appropriate governance (chapter 16)", BAD),
+            (r"monitoring and inventory", r"proposed: periodic checks and an inventory for each intended use, "
              r"with its owner, its box and its materiality", GOOD),
         ]
         tab = VGroup()
@@ -118,7 +107,7 @@ class Production(VoiceoverScene):
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.26)
         for r_ in tab:
             r_[1].set_x(r_[0].get_left()[0] + 4.6 + r_[1].width / 2)
-        head = label(r"SR 26-2's checklist, applied to this part's networks", font_size=32).to_edge(UP, buff=0.4)
+        head = label(r"A proposed control checklist for these demonstrations", font_size=32).to_edge(UP, buff=0.4)
         tab.next_to(head, DOWN, buff=0.35)
         if tab.width > 13.0:
             tab.scale_to_fit_width(13.0)
@@ -126,15 +115,7 @@ class Production(VoiceoverScene):
             tab.scale_to_fit_height(6.3)
         tab.set_x(0)
         with self.voiceover(
-            "Take the guidance's checklist, line by line. Conceptual soundness: every method here was derived before "
-            "it was trained. <bookmark mark='a'/> Performance where it "
-            f"was trained: the calibrator sits {nz['net_fresh']['rmse']:.2f} vol points from fresh simulations of "
-            "parameters it never saw. <bookmark mark='b'/> Outside that region it is not trusted: inputs are checked "
-            "against the training ranges, and anything outside goes to the slow engine. <bookmark mark='c'/> Outcomes against known answers: with no costs, the "
-            "deep hedger must rediscover Black–Scholes, and it does; the BSDE solver must reproduce Monte Carlo when "
-            "default is switched off, and it does. <bookmark mark='d'/> For a hedger, the simulator is part of the "
-            "model, so the hedger is tested on other generators and on history, which is chapter nineteen. And every "
-            "network is monitored, checked each night against the engine of Part sixteen, and kept in the inventory."
+            f"These rows propose controls; this repository does not run a bank monitoring service. First, test assumptions, including cash baselines and integrability, as well as formulas. <bookmark mark='a'/> The calibrator's held-out parameter sets differ from training; its fresh-simulation root mean square gap is {nz['net_fresh']['rmse']:.2f} volatility points, including label error. <bookmark mark='b'/> A production system should detect inputs outside its training region and route them to a validated fallback. That policy is not implemented here. <bookmark mark='c'/> Compare against independent numerical references, with simulation error and budget disclosed; a close empirical objective alone does not recover a continuous-time optimum. <bookmark mark='d'/> Pre-register generator and disjoint-history tests, then monitor for the intended use. Generative models need governance too, but SR 26-2 expressly excludes generative AI; its traditional-model guidance is not a blanket legal requirement for every generator."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab[0]))
             vo.wait_until("a")
@@ -163,7 +144,7 @@ class Production(VoiceoverScene):
             (r"drift hedger, extra shares", rf"{np.mean(devs):.3f}", rf"{d['merton_atm']:.3f}", r"Merton (1969)"),
         ]
         head = VGroup(label(r"network", font_size=21, color=GREY_A), label(r"it says", font_size=21, color=GREY_A),
-                      label(r"known answer", font_size=21, color=GREY_A), label(r"from", font_size=21, color=GREY_A))
+                      label(r"reference", font_size=21, color=GREY_A), label(r"from", font_size=21, color=GREY_A))
         tab = VGroup(head)
         for a, b, c_, e in rows:
             tab.add(VGroup(label(a, font_size=22), MathTex(b, font_size=30, color=NET), MathTex(c_, font_size=30, color=REF),
@@ -172,22 +153,21 @@ class Production(VoiceoverScene):
         for i, row in enumerate(tab):
             for j, cell in enumerate(row):
                 cell.move_to([xs[j], 2.2 - 0.8 * i, 0])
-        ttl = label(r"The part's known-answer scoreboard", font_size=30).to_edge(UP, buff=0.5)
+        ttl = label(r"Numerical cross-checks, with different error sources", font_size=30).to_edge(UP, buff=0.5)
         with self.voiceover(
-            "Here is the part's scoreboard of known answers, all from this part's own runs. The deep BSDE against "
-            "multilevel Picard, and against Monte Carlo without default. Deep stopping against a binomial tree. The "
-            "deep hedger against delta hedging. And the drift-trained hedger's extra shares against Merton's formula. "
-            "<bookmark mark='a'/> Every network here earns its trust the same way: by agreeing with a slower, "
-            "independent engine wherever such an engine exists."
+            "These cross-checks use different diagnostics. The BSDE plus-minus figures describe saved training iterates, not confidence intervals. Picard and Monte Carlo values are numerical references. Stopping is a fitted policy's simulated mean. Hedger entries are finite-sample risk objectives, while Merton is a continuous-time ideal under stronger assumptions. <bookmark mark='a'/> Agreement is useful evidence within a stated scope, not validation of every input or a deployment certificate."
         ) as vo:
             self.play(FadeIn(ttl), FadeIn(tab[0]), LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.5, run_time=6))
             vo.wait_until("a")
-        q = ask(r"under SR 26-2, is the market generator a model?")
+        q = ask(r"does SR 26-2 explicitly cover a generative market model?")
         with self.voiceover(
-            "A question: under the new guidance, is the market generator a model? Think about what the hedger is "
-            "validated on."
-            " Yes. It produces the paths the hedger is validated on, so it is part of the model and must be validated too: its stylized facts, held-out history, and more than one generator. Next: the frontier."
+            'Does SR 26-2 explicitly cover a generative market model? Consider its scope exclusion before answering.'
         ):
             self.play(FadeIn(q))
-        self.wait(0.5)
+        self.wait(2.5)
+        answer = wrapped_label(r"Generative AI is excluded; appropriate governance still matters", 11.8, 26, GOOD)
+        answer.move_to(UP * 0.4)
+        with self.voiceover('No. Its footnote excludes generative and agentic AI. That exclusion does not remove model risk: a bank should still determine appropriate governance and controls. Traditional quantitative generators and generative AI must be classified by their actual use and design.'):
+            self.play(FadeOut(tab), FadeOut(ttl), FadeIn(answer))
+        self.wait(2)
         self.clear_scene()
