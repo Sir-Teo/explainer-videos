@@ -182,23 +182,27 @@ class LRT(VoiceoverScene):
         whys = [why(rf"$p = {stats.chi2.sf(W, 1):.3f}$"), why(rf"$p = {stats.chi2.sf(Wa, 1):.3f}$"), why(rf"$p = {stats.chi2.sf(Sc, 1):.3f}$")]
         foot = fit_rows(VGroup(
             label(r"all three are $\chi^2_1$ in large samples, \ and agree to first order", font_size=26, color=OBS),
-            label(r"in small samples they differ; \ the Wald test is the least reliable, \ and not invariant to reparametrization",
+            label(r"in small samples calibration differs; \ Wald is not invariant to reparametrization",
                   font_size=24, color=GREY_A),
             label(r"Pearson's $\chi^2$ (ch.~8) is a score test; \ Part 14 compares Wald and LR for logistic regression on the Board",
                   font_size=24, color=GREY_A),
         ), 12.6, 0.3, [0, -2.1, 0])
+        intro = label('Likelihood ratio, Wald and score: the numerical comparison', font_size=36)
         with self.voiceover(
             "The numbers. <bookmark mark='a'/> The likelihood ratio statistic is four point five two, a p-value of "
             "point zero three four. <bookmark mark='b'/> Wald's is three point nine seven, point zero four six. "
             "<bookmark mark='c'/> The score statistic is four point eight four, point zero two eight. "
             "<bookmark mark='d'/> In large samples all three are chi-squared with one degree of freedom, and they agree "
             "to first order, as here. In small samples they can disagree, and the Wald test, which depends on how the "
-            "parameter is written, is usually the least reliable. Part 14 tests that on the Coverage Board. And "
+            "parameter is written, can be poorly calibrated. None is uniformly best; Part 14 compares them on the Coverage Board. And "
             "Pearson's chi-squared, the subject of chapter eight, turns out to be a score test."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.7, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             vo.wait_until("d")
             self.play(FadeIn(foot))
