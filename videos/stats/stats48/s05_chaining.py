@@ -73,7 +73,7 @@ class Chaining(VoiceoverScene):
 
     def path(self):
         d = load("chain")
-        A = axes([0, 1], [-1.2, 1.6], x_length=7.4, y_length=4.4, xlabel=r"$t$", ylabel=r"$B_t$",
+        A = axes([0, 1], [-1.8, 1.6], x_length=7.4, y_length=4.4, xlabel=r"$t$", ylabel=r"$B_t$",
                  xticks=[0, 0.25, 0.5, 0.75, 1], yticks=[-1, 0, 1], center=[-2.5, 0.2, 0])
         ax = A.ax
         net = ChainingNet(ax, d["t"], d["w"])
