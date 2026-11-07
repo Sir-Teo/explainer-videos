@@ -35,7 +35,7 @@ class Hook(VoiceoverScene):
         top = axes([2022, 2023.2], [0, 5], x_length=6.2, y_length=2.0, ylabel=r"6-year zero yield, \%",
                    xticks=[2022, 2023], yticks=[0, 2.5, 5], font_size=14)
         bot = axes([2022, 2023.2], [-20, 2], x_length=6.2, y_length=3.0, xlabel=r"date",
-                   ylabel=r"mark of a 6.2-year book of \$91 bn, \$ bn", xticks=[2022, 2023], yticks=[-20, -10, 0],
+                   ylabel=r"fixed-notional duration proxy, \$ bn", xticks=[2022, 2023], yticks=[-20, -10, 0],
                    font_size=14)
         VGroup(top, bot).arrange(DOWN, buff=0.35, aligned_edge=LEFT).to_edge(LEFT, buff=0.7)
         m = t <= 2023.2
@@ -45,23 +45,17 @@ class Hook(VoiceoverScene):
         eqlab = label(rf"minus the bank's equity, \${eq:.1f} bn", font_size=16, color=WHITE).next_to(
             eqline, UP, buff=0.06).align_to(eqline, LEFT)
         side = VGroup(
-            label(r"Silicon Valley Bank, 31 December 2022", font_size=24),
-            wrapped_label(r"held to maturity: Treasuries and agency mortgage bonds, safe from default", 5.0, 20, GREY_A),
+            label(r"SVB Financial Group, 31 December 2022", font_size=24),
+            wrapped_label(r"held to maturity: predominantly agency mortgage bonds; low credit risk still leaves rate, prepayment and liquidity risk", 5.0, 20, GREY_A),
             MathTex(rf"\text{{book value}}\ \ {htm:.1f}\ \ \text{{fair value}}\ \ "
                     rf"{f['HeldToMaturitySecuritiesFairValue']['2022-12-31']:.1f}", font_size=28),
             MathTex(rf"\text{{unrealized loss}}\ \ {loss:.2f}\ \ \text{{vs equity}}\ \ {eq:.2f}", font_size=28,
                     color=BAD),
             label(r"\$ billion, from its 10-K (EDGAR XBRL)", font_size=17, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.45)
-        src = illustration(r"yields: the Fed's fitted Treasury curve (GSW); mark: duration $\times$ yield change")
+        src = wrapped_label(r"GSW yields; fixed 2022 year-end notional and constant 6.2 duration: an illustrative linear proxy, not daily reported marks", 12.4, 17, GREY_B).to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "At the end of 2022, Silicon Valley Bank held ninety-one billion dollars of bonds it meant to keep until "
-            "they matured: Treasuries and government-backed mortgage bonds, with essentially no risk of default. "
-            "<bookmark mark='a'/> Through 2022 the six-year Treasury yield rose by "
-            f"{v['dy6_2022_pct']:.1f} percentage points. "
-            "<bookmark mark='b'/> A book with a duration of six point two years loses about six point two percent of "
-            "its value for every point the yield rises. Here is that mark, day by day. <bookmark mark='c'/> By its own "
-            f"10-K, the loss at year end was {loss:.2f} billion dollars. The bank's equity was {eq:.2f} billion."
+            f"At the end of 2022, Silicon Valley Bank's holding company reported about ninety-one billion dollars of held-to-maturity securities, predominantly agency mortgage-backed bonds. Low credit risk does not remove interest-rate, prepayment or liquidity risk. <bookmark mark='a'/> Through 2022 the fitted six-year Treasury yield rose by {v['dy6_2022_pct']:.1f} percentage points. <bookmark mark='b'/> This line is a rough duration proxy: hold the year-end notional fixed and treat the reported six-point-two-year duration as a constant modified sensitivity. It is not the bank's actual daily valuation and omits convexity, changing holdings and mortgage-specific risk. <bookmark mark='c'/> The separate year-end 10-K figures report an unrealized held-to-maturity loss of {loss:.2f} billion dollars against {eq:.2f} billion of holding-company equity."
         ) as vo:
             self.play(FadeIn(top), FadeIn(bot), FadeIn(side[0]), FadeIn(side[1]), FadeIn(src))
             vo.wait_until("a")
@@ -75,18 +69,13 @@ class Hook(VoiceoverScene):
 
     def question(self, v):
         r = v["review"]
-        q = VGroup(label(r"Nothing defaulted. The bank still failed.", font_size=34),
+        q = VGroup(label(r"Low credit risk. Real rate and liquidity risk.", font_size=34),
                    wrapped_label(rf"8 March 2023: it sold \${r['afs_sold_bn']} bn of bonds at a \${r['afs_loss_bn']} bn "
-                                 rf"loss. 9 March: depositors withdrew over \${r['outflow_mar9_bn']} bn. 10 March: "
+                                 rf"after-tax loss. 9 March: depositors withdrew over \${r['outflow_mar9_bn']} bn. 10 March: "
                                  r"closed (Federal Reserve review, April 2023)", 11.0, 24, GREY_A),
-                   label(r"Pause and predict: how does the safest asset in the world sink a bank?", font_size=28,
-                         color=QC.IDEA)).arrange(DOWN, buff=0.5)
+                   wrapped_label(r"Pause and predict: how can low-credit-risk assets still contribute to a bank failure?", 11.6, 28, QC.IDEA)).arrange(DOWN, buff=0.5)
         with self.voiceover(
-            "Nothing defaulted, and the bank still failed. On the eighth of March 2023 it sold twenty-one billion of "
-            "bonds at a loss of one point eight billion. The next day depositors pulled out over forty billion "
-            "dollars, and on the tenth it was closed. <bookmark mark='a'/> A question to carry through the part: how "
-            "does the safest asset in the world sink a bank? Chapter six gives the arithmetic, and chapter eighteen "
-            "tells the story."
+            "A securities default was not needed for this bank to fail. On March eighth, 2023, it announced the sale of about twenty-one billion dollars of available-for-sale securities and an after-tax loss of about one-point-eight billion. The next day depositors withdrew over forty billion dollars, and on the tenth the bank was closed. <bookmark mark='a'/> A question to carry through the part: how can low-credit-risk assets contribute to a bank's failure? Chapter six gives a sensitivity calculation, and chapter eighteen examines the balance sheet, funding and management failures."
         ) as vo:
             self.play(FadeIn(q[0]), FadeIn(q[1]))
             vo.wait_until("a")
@@ -135,14 +124,11 @@ class Hook(VoiceoverScene):
             r"Fitting the curve (Nelson--Siegel--Svensson) and fifty years of it; level, slope and curvature",
             r"Swaps, Treasury futures, repo and SOFR: the instruments a rates desk trades",
             r"Expectations against the term premium, re-estimated; what FOMC days do to the curve",
-            r"Relative value: a butterfly, pre-registered and tested on a sealed hold-out",
+            r"Relative value: a factor-neutral butterfly and an explicitly unfinished validation design",
             r"Two crises from public records: the gilt spiral of 2022 and Silicon Valley Bank",
         ], color=QC.IDEA)
         with self.voiceover(
-            "The plan, in eight steps: money and the central bank; bonds and the curve built from real quotes; "
-            "duration, convexity and immunization; the curve fitted and its fifty-year history, and the three factors "
-            "that move it; the instruments a rates desk trades; what the curve expects and what it charges for "
-            "waiting; one relative-value trade, tested honestly; and two crises, from the public record."
+            'The plan, in eight steps: money and central-bank operating tools; bonds and a curve built from public quotes; duration, convexity and immunization; fitted curves, their history and principal components; the instruments a rates desk trades; model-dependent expectations and term premia; a relative-value exposure and its required validation design; and two crises from public records. No sealed butterfly return window is opened in this pass, and no completed strategy validation is claimed.'
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
                                                      lag_ratio=0.5, run_time=14))

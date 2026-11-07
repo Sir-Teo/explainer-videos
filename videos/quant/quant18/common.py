@@ -34,9 +34,11 @@ def illustration(text: str = r"illustration", corner=DR):
 def sci(x: float, digits: int = 0) -> str:
     """A number in scientific notation for MathTex: 2\\times 10^{-2}, not 2e-02."""
     import math
+    if x == 0:
+        return "0"
     e = int(math.floor(math.log10(abs(x))))
     m = x / 10 ** e
-    if round(m, digits) >= 10:
+    if abs(round(m, digits)) >= 10:
         m, e = m / 10, e + 1
     return rf"{m:.{digits}f}\times 10^{{{e}}}"
 

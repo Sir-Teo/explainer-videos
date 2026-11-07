@@ -41,19 +41,13 @@ class Money(VoiceoverScene):
         mid = Line(UP * 2.1, DOWN * 1.0, color=GREY_B).shift(RIGHT * 0.25)
         title = label(r"The Federal Reserve's balance sheet", font_size=30).to_edge(UP, buff=0.4)
         notes = VGroup(
-            wrapped_label(r"reserves are money only banks can hold: their accounts at the Fed. Buying a bond from a bank "
+            wrapped_label(r"reserve balances are eligible institutions' settlement balances at the Fed. A purchase from a bank "
                           r"credits its reserves; the Fed creates them by typing", 12.0, 21, GREY_A),
             wrapped_label(r"the policy rate is the price of overnight money between them: the federal funds rate, a "
-                          r"target range set eight times a year by the FOMC", 12.0, 21, POLICY),
+                          r"target range reviewed at eight scheduled FOMC meetings, with unscheduled actions also possible", 12.0, 21, POLICY),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Start with the central bank's own balance sheet. On one side, what it owns: mostly Treasuries and "
-            "government-backed mortgage bonds. On the other, what it owes: the currency in your wallet, and reserves, "
-            "which are the deposits that banks keep at the Fed. <bookmark mark='a'/> When the Fed buys a bond from a "
-            "bank, it pays by crediting that bank's reserve account. It creates the money by typing. "
-            "<bookmark mark='b'/> Banks lend reserves to each other overnight, and the interest rate on those loans "
-            "is the federal funds rate: the policy rate. Eight times a year the Federal Open Market Committee sets a "
-            "target range for it. The question is how a committee makes a market rate obey."
+            "Start with the central bank's balance sheet. Assets include Treasuries, agency mortgage securities and loans. Liabilities include currency, reserve balances, reverse repos and the Treasury's account; capital and other items complete the identity. <bookmark mark='a'/> Buying a bond from a bank credits its reserve account. Buying from a nonbank normally credits a bank's reserves and the seller's bank deposit. These are different balance-sheet entries. <bookmark mark='b'/> Eligible institutions lend unsecured overnight funds in the federal funds market, where Federal Home Loan Banks are important lenders too. The FOMC sets a target range, normally at eight scheduled meetings a year, and can act between meetings. The effective rate is a market statistic, not a number mechanically fixed by the committee."
         ) as vo:
             self.play(FadeIn(title), Create(top), Create(mid))
             self.play(FadeIn(assets), FadeIn(liab))
@@ -82,28 +76,20 @@ class Money(VoiceoverScene):
                                                                                          buff=0.1))
         cols = [interpolate_color(ManimColor(QC.SPOT), ManimColor(QC.OPTION), (tt - t[0]) / (t[-1] - t[0])) for tt in t]
         dots = VGroup(*[Dot(ax.c2p(r_, s_), radius=0.03, color=c_, fill_opacity=0.8)
-                        for r_, s_, c_ in zip(R[::2], s[::2], cols[::2])])
-        rows = [cmath(r"i_{ff} - \text{IORB}", r"=", r"f(R),\quad f' < 0,\quad f(R) \to \text{small for large } R",
+                        for r_, s_, c_ in zip(R, s, cols)])
+        rows = [cmath(r"i_{ff} - \text{IORB}", r"=", r"f(R)\quad\text{(schematic)}",
                       font_size=30, colors={r"i_{ff} - \text{IORB}": MKT}),
-                cmath(r"\text{RRP} \le i_{ff}", r"\lesssim", r"\text{IORB}", font_size=32, colors={r"\text{IORB}": IORB_C})]
+                wrapped_label(r"Administered rates guide market rates; they do not guarantee a strict corridor", 5.4, 21, IORB_C)]
         side = VGroup(
             rows[0], wrapped_label(r"Poole (1968): banks' demand for reserves slopes down. Scarce reserves sit on the "
                                    r"steep part, where a small change in supply moves the rate", 5.4, 18, GREY_A),
             rows[1], wrapped_label(r"since 2008 the Fed pays interest on reserves (IORB since July 2021) and, through "
-                                   r"the overnight reverse repo, lends money-market funds a floor of their own", 5.4, 18,
+                                   r"ON RRP, offers eligible cash investors an overnight investment rate; access and balance-sheet frictions matter", 5.4, 18,
                                    GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         leg = label(r"dots: every week, 2009 (blue) to 2025 (pink)", font_size=16, color=GREY_B).next_to(g, UP, buff=0.05)
         with self.voiceover(
-            "Before 2008 it worked by scarcity. Banks need reserves, and their demand for them slopes down: the scarcer "
-            "reserves are, the more a bank will pay to borrow them overnight. William Poole wrote it down in 1968. "
-            "<bookmark mark='a'/> With reserves scarce, the system sits on the steep part of that curve, and the Fed's "
-            "trading desk hits the target by adding or draining a few billion dollars a day. <bookmark mark='b'/> Then "
-            "the crisis flooded the system with reserves, and the Fed began paying interest on them. Now the system "
-            "sits on the flat part, the floor, and the rate is set by what the Fed pays: interest on reserve balances "
-            "for banks, and the overnight reverse repo rate for money-market funds, which cannot hold reserves. "
-            "<bookmark mark='c'/> Here is every week since 2009: reserves against the gap between the funds rate and "
-            "the rate on reserves. It never strays more than a few basis points from the floor."
+            "Before 2008 the Fed generally implemented policy with scarce reserves. A downward-sloping reserve-demand schedule illustrates why smaller supply changes could move overnight rates; Poole's 1968 analysis explains this operating problem. <bookmark mark='a'/> The drawn demand curve is a schematic, not a fitted estimate. <bookmark mark='b'/> With ample reserves, administered rates became central: interest on reserves began in 2008, and the overnight reverse-repo facility later broadened access to a safe investment rate. IORB is the name used since July 2021. Access restrictions, credit and dealer balance-sheet costs limit arbitrage. <bookmark mark='c'/> These are all saved weekly observations from 2009 through 2025. The funds-minus-reserve-rate spread ranges from minus twenty to plus fifteen basis points. This pooled scatter is descriptive; it neither estimates a stable demand curve nor guarantees a corridor."
         ) as vo:
             self.play(FadeIn(g), Create(dc), FadeIn(side[0]), FadeIn(side[1]))
             vo.wait_until("a")
@@ -134,17 +120,10 @@ class Money(VoiceoverScene):
         leg = legend([(BAND_C, r"target (range since Dec 2008)"), (IORB_C, r"interest on reserves"),
                       (RRP_C, r"overnight reverse repo rate"), (MKT, r"effective fed funds"), (QC.SPOT, r"SOFR (repo)")],
                      font_size=17).to_edge(RIGHT, buff=0.35).shift(UP * 1.0)
-        zoom = wrapped_label(r"2022--23: 525 bp of hikes in sixteen months; the market rate moved with the administered "
-                             r"ones, every meeting, to the basis point", 3.2, 18, GREY_A).next_to(leg, DOWN, buff=0.4,
+        zoom = wrapped_label(r"2022--23: 525 bp of target-range hikes in sixteen months. Administered rates transmitted policy with ample reserves; market rates and repo spreads still varied", 3.2, 18, GREY_A).next_to(leg, DOWN, buff=0.4,
                                                                                          aligned_edge=LEFT)
         with self.voiceover(
-            "And here is the floor at work, every week since 2007. Before December 2008 the target was a single "
-            "number; since then it has been a quarter-point range, shaded in yellow. <bookmark mark='a'/> Interest on "
-            "reserves, in pink, sits inside the range. The overnight reverse repo rate, in teal, sits at its bottom. "
-            "<bookmark mark='b'/> And the market rates, the effective funds rate in white and the repo rate, SOFR, in "
-            "blue, live between them. <bookmark mark='c'/> In 2022 and 2023 the Fed raised rates by five and a quarter "
-            "points in sixteen months, and the market followed, meeting by meeting. It did not need to drain a single "
-            "dollar of reserves to do it."
+            "Here are the saved weekly policy and market rates from 2007 through 2025. Before December 2008 the target was a point; afterward it was generally a quarter-point range. <bookmark mark='a'/> Interest on reserve balances and the ON RRP offering rate provide important incentives, with positions inside or near the target range changing over time. <bookmark mark='b'/> Effective federal funds and SOFR often track them, but they are different markets. SOFR can rise above IORB during repo-market stress, so the picture is not a hard arbitrage corridor. Weekly sampling can miss intraday and daily extremes. <bookmark mark='c'/> From March 2022 to July 2023 the target range rose five-and-a-quarter percentage points. Raising administered rates did not require a return to scarce reserves, although quantitative tightening also reduced the balance sheet during this period."
         ) as vo:
             self.play(FadeIn(g), FadeIn(band), Create(old), FadeIn(leg[0]), run_time=2)
             vo.wait_until("a")
