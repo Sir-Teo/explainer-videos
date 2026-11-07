@@ -31,6 +31,9 @@ class Beyond(VoiceoverScene):
         ]
         rows[3][-1].set_color(COVC)
         whys = [why(r"Part 34's shift"), why(r"a likelihood ratio"), why(r"Tibshirani, \ Barber, \ Cand\`es \& Ramdas (2019)"), why(r"estimated $w$: \ approximately")]
+        head = label('Weighted', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
             "<bookmark mark='a'/> The first step beyond exchangeability was covariate shift, seen in Part thirty-four: test "
             "features come from a different distribution, but the outcome's law given the features is unchanged. <bookmark "
@@ -48,21 +51,18 @@ class Beyond(VoiceoverScene):
     def estimated(self):
         rows = [
             cmath(r"\hat w \text{ estimated}", r":", r"\text{a classifier of test against calibration features}", font_size=34),
-            cmath(r"\text{coverage}", r"\ge", r"1 - \alpha - \tfrac12 E\,|\hat w - w|\text{-type error}", font_size=34),
+            cmath(r"\text{coverage}", r"\ge", r"1 - \alpha - \tfrac12 E_P|\bar w-w|\quad (E_P\bar w=1)", font_size=34),
             cmath(r"\text{counterfactuals}", r":", r"\text{weighted conformal for ITEs}", font_size=36),
-            cmath(r"\text{doubly robust}", r":", r"\text{valid if either the weights or the outcome model is right}", font_size=34),
+            cmath(r"\text{doubly robust}", r":", r"\text{asymptotic validity under the stated nuisance conditions}", font_size=34),
         ]
         rows[2][-1].set_color(WEIGHTC)
         rows[3][-1].set_color(COVC)
         whys = [why(r"the probabilistic-classification trick"), why(r"Lei \& Cand\`es (2021)"), why(r"treated outcomes as a shift; \ Part 62"), why(r"Yang, \ Kuchibhotla \& Tchetgen Tchetgen")]
+        head = label('Estimated', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> In practice the weights are estimated, usually by a classifier trained to tell test "
-            "features from calibration features. <bookmark mark='b'/> The coverage then falls short by an amount "
-            "controlled by the weights' estimation error. <bookmark mark='c'/> Lihua Lei and Candès used exactly this "
-            "for causal inference: the treated group's outcomes are a covariate-shifted version of the population's, "
-            "so weighted conformal gives prediction intervals for individual treatment effects, a subject for Part "
-            "sixty-two. <bookmark mark='d'/> Later work made it doubly robust: valid if either the weights or the "
-            "outcome model is right."
+            "<bookmark mark='a'/> In practice the weights are estimated, usually by a classifier trained to tell test features from calibration features. <bookmark mark='b'/> For independently estimated, nonnegative weights normalized to integrate to one, the coverage loss is bounded by half the reference-law expectation of their absolute density-ratio error. Raw classifier odds need normalization and the correct class-prior factor. <bookmark mark='c'/> Lihua Lei and Candès used exactly this for causal inference: the treated group's outcomes are a covariate-shifted version of the population's, under unconfoundedness and overlap, weighted conformal can predict missing potential outcomes. Intervals for their difference need a further construction; the unobserved joint potential-outcome law is not identified automatically. <bookmark mark='d'/> Double robustness is an asymptotic guarantee under specified nuisance rates and regularity conditions, not automatic finite-sample exactness from a correct mean model alone."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -79,13 +79,11 @@ class Beyond(VoiceoverScene):
         ]
         rows[1][-1].set_color(COVC)
         whys = [why(r"Barber, \ Cand\`es, \ Ramdas \& Tibshirani (2023)"), why(r"no assumption on the data"), why(r"how far from exchangeable"), why(r"graceful degradation")]
+        head = label('A coverage bound under distribution shift', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> For data that are not exchangeable at all, such as a time series that drifts, Barber, "
-            "Candès, Ramdas and Tibshirani fix weights in advance, for example geometrically decaying ones that count recent "
-            "points more. <bookmark mark='b'/> With no assumption on the data, the coverage is at least one minus alpha, minus "
-            "a weighted sum of total-variation distances. <bookmark mark='c'/> Each distance measures how much the data's law "
-            "changes when point i and the test point are swapped. <bookmark mark='d'/> For exchangeable data every distance is "
-            "zero and the old guarantee returns; under drift, putting little weight on old points keeps the loss small."
+            "<bookmark mark='a'/> For data that are not exchangeable at all, such as a time series that drifts, Barber, Candès, Ramdas and Tibshirani fix weights in advance, for example geometrically decaying ones that count recent points more. <bookmark mark='b'/> With no assumption on the data, the coverage is at least one minus alpha, minus a weighted sum of total-variation distances. <bookmark mark='c'/> Each distance measures how much the data's law changes when point i and the test point are swapped. <bookmark mark='d'/> For exchangeable data every distance is zero and the old guarantee returns; under drift, recent weighting helps when the recent points have smaller swap distances. The bound can be vacuous for arbitrary drift."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -101,15 +99,12 @@ class Beyond(VoiceoverScene):
             cmath(r"\text{the common idea}", r":", r"\text{say which past points resemble the future, \ and weight them}", font_size=32),
         ]
         rows[3][-1].set_color(TESTPT)
-        whys = [why(r"the reverse shift"), why(r"Chernozhukov et al.; \ Xu \& Xie"), why(r"Mao, \ Martin \& Reich"), why(r"a modelling choice, \ not an assumption")]
+        whys = [why(r"the reverse shift"), why(r"Chernozhukov et al.; \ Xu \& Xie"), why(r"Mao, \ Martin \& Reich"), why(r"small loss still requires small swap distances")]
+        head = label('Label shift', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> Other departures have their own weights. Under label shift the outcome's "
-            "distribution changes while the features given the outcome do not, and the weights depend on y. <bookmark "
-            "mark='b'/> For time series, methods use blocks of data, mixing conditions, or decaying weights. <bookmark "
-            "mark='c'/> For spatial data, weights by distance to the prediction site. <bookmark mark='d'/> The common "
-            "idea: say which past points resemble the future, and weight them. In the nonexchangeable framework that "
-            "is a modelling choice that affects efficiency and the size of the coverage loss, not an assumption the "
-            "validity rests on."
+            "<bookmark mark='a'/> Other departures have their own weights. Under label shift the outcome's distribution changes while the features given the outcome do not, and the weights depend on y. <bookmark mark='b'/> For time series, methods use blocks of data, mixing conditions, or decaying weights. <bookmark mark='c'/> For spatial data, weights by distance to the prediction site. <bookmark mark='d'/> The common idea: say which past points resemble the future, and weight them. In the nonexchangeable framework that is a modelling choice that affects efficiency and the size of the coverage loss, not a promise of near-nominal coverage without controlling those distances."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -123,8 +118,8 @@ class Beyond(VoiceoverScene):
         A = axes([t[0], t[-1]], [0.5, 1.02], x_length=7.4, y_length=4.4, xlabel=r"time \ (noise SD 1, \ then 2.5 from $t = 1{,}000$)", ylabel=r"coverage, \ rolling 100",
                  xticks=[500, 1000, 1500, 2000], yticks=[0.5, 0.75, 0.9, 1.0], center=[-2.5, 0.2, 0])
         ax = A.ax
-        cs = polyline(ax, t, np.clip(d["split_roll"], 0.5, 1.0), MISSC, 4)
-        cn = polyline(ax, t, np.clip(d["nex_roll"], 0.5, 1.0), COVC, 4)
+        cs = polyline(ax, t, d["split_roll"], MISSC, 4)
+        cn = polyline(ax, t, d["nex_roll"], COVC, 4)
         nom = DashedLine(ax.c2p(t[0], 0.9), ax.c2p(t[-1], 0.9), color=GREY_B, stroke_width=2)
         cp = DashedLine(ax.c2p(1000, 0.5), ax.c2p(1000, 1.02), color=WEIGHTC, stroke_width=2)
         side = fit_rows(VGroup(
@@ -166,6 +161,9 @@ class Beyond(VoiceoverScene):
         rows[2][-1].set_color(MISSC)
         rows[3][-1].set_color(COVC)
         whys = [why(r"most of the window is stale"), why(r"SD 1 vs 2.5, \ as a pair"), why(r"coverage $\ge 47\%$"), why(r"coverage $\ge 60\%$")]
+        head = label('Tv worked', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
             "<bookmark mark='a'/> The bound in numbers. Fifty steps after the jump, two hundred and fifty of the three "
             "hundred past points come from before it. <bookmark mark='b'/> Swapping one of them with the current point "
@@ -184,6 +182,4 @@ class Beyond(VoiceoverScene):
     def board(self):
         br = load("board")["rows"]
         show_board(self, board_rows("changepoint", "nonexchangeable"),
-                   f"<bookmark mark='a'/> On the Board, the three hundred steps after the change: split conformal with equal "
-                   f"weights covers {100 * br[4]['achieved']:.0f} percent. <bookmark mark='b'/> The weighted, nonexchangeable "
-                   f"version covers {100 * br[5]['achieved']:.0f} percent.", [("a", [0]), ("b", [1])])
+                   f"<bookmark mark='a'/> On the Board, average over forty independent simulated paths, using the three hundred steps after the change in each: split conformal with equal weights covers {100 * br[4]['achieved']:.0f} percent. <bookmark mark='b'/> The weighted, nonexchangeable version covers {100 * br[5]['achieved']:.0f} percent.", [("a", [0]), ("b", [1])])

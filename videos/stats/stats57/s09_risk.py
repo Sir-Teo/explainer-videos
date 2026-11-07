@@ -30,13 +30,11 @@ class Risk(VoiceoverScene):
         ]
         rows[3][-1].set_color(COVC)
         whys = [why(r"Angelopoulos, \ Bates, \ Fisch, \ Lei \& Schuster"), why(r"the special case"), why(r"multilabel, \ segmentation"), why(r"conformal risk control (2024)")]
+        head = label('Idea', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> Anastasios Angelopoulos, Stephen Bates, Adam Fisch, Lihua Lei and Tal Schuster generalized "
-            "the lemma from coverage to any bounded loss that shrinks as the prediction set grows. <bookmark mark='b'/> Coverage "
-            "is the special case where the loss is the miss indicator. <bookmark mark='c'/> But the loss could be the fraction of "
-            "an image's tumour pixels missed by a segmentation, or of a document's correct labels missed by a tagger: a false "
-            "negative rate. <bookmark mark='d'/> Choose lambda as the smallest value whose empirical risk, slightly inflated, is "
-            "at most alpha."
+            "<bookmark mark='a'/> Anastasios Angelopoulos, Stephen Bates, Adam Fisch, Lihua Lei and Tal Schuster generalized the lemma from coverage to any bounded loss that shrinks as the prediction set grows. <bookmark mark='b'/> Coverage is the special case where the loss is the miss indicator. <bookmark mark='c'/> But the loss could be the fraction of an image's tumour pixels missed by a segmentation, or of a document's correct labels missed by a tagger: a false negative rate. <bookmark mark='d'/> Choose lambda as the smallest value whose empirical risk, slightly inflated, is at most alpha, on a fixed finite grid with a feasible certified threshold. Otherwise the rule must report that no threshold was certified."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -53,12 +51,11 @@ class Risk(VoiceoverScene):
         ]
         rows[3][-1].set_color(COVC)
         whys = [why(r"exchangeability's trick"), why(r"the worst case for the unseen loss"), why(r"the test loss is a typical one"), why(r"larger $\lambda$, \ smaller loss")]
+        head = label('The guarantee and its assumptions', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> The proof copies the lemma's. Define an oracle lambda prime using all n plus one losses, "
-            "including the test point's. <bookmark mark='b'/> The real lambda hat is at least as large, because its inflation "
-            "assumed the worst value for the unseen loss. <bookmark mark='c'/> The oracle is a symmetric function of the n plus "
-            "one points, so the test point's expected loss at it equals the average loss, at most alpha. <bookmark mark='d'/> "
-            "And since the loss shrinks as lambda grows, the expected loss at lambda hat is no larger."
+            "<bookmark mark='a'/> The proof copies the lemma's. Define an oracle lambda prime using all n plus one losses, including the test point's. <bookmark mark='b'/> The real lambda hat is at least as large, because its inflation assumed the worst value for the unseen loss. <bookmark mark='c'/> The oracle is a symmetric function of the n plus one points, so the test point's expected loss at it equals the average loss, at most alpha, on a fixed finite grid with a feasible certified threshold. Otherwise the rule must report that no threshold was certified. <bookmark mark='d'/> And since the loss shrinks as lambda grows, the expected loss at lambda hat is no larger."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -71,17 +68,15 @@ class Risk(VoiceoverScene):
             cmath(r"n = 100, \ B = 1, \ \alpha = 0.1", r":", r"\text{need } \frac{100\,\hat R_n(\lambda) + 1}{101} \le 0.1", font_size=34),
             cmath(r"\Rightarrow", r"\;", r"\hat R_n(\lambda) \le 0.091", font_size=38),
             cmath(r"\text{the } +B \text{ term}", r":", r"\text{one worst-case point added: \ a finite-sample margin}", font_size=34),
-            cmath(r"\text{as } n \to \infty", r":", r"\hat\lambda \to \text{the level where the risk is exactly } \alpha", font_size=34),
+            cmath(r"\text{as } n \to \infty", r":", r"\text{consistency needs a risk crossing and an adequate threshold grid}", font_size=34),
         ]
         rows[1][-1].set_color(COVC)
         whys = [why(r"the rule"), why(r"9.1\%, \ not 10\%"), why(r"like the $+1$ in the lemma"), why(r"no waste in the limit")]
+        head = label('Crc worked', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> In numbers: with a hundred calibration examples, losses bounded by one, and alpha a "
-            "tenth, the rule needs a hundred times the empirical risk, plus one, over a hundred and one, to be at most "
-            "a tenth. <bookmark mark='b'/> That is an empirical risk of at most nine point one percent, not ten. "
-            "<bookmark mark='c'/> The extra B is a worst-case loss for the unseen test point, exactly as the plus one "
-            "is in the quantile lemma. <bookmark mark='d'/> As n grows the margin vanishes, and the chosen lambda "
-            "tends to the level where the true risk is exactly alpha."
+            "<bookmark mark='a'/> In numbers: with a hundred calibration examples, losses bounded by one, and alpha a tenth, the rule needs a hundred times the empirical risk, plus one, over a hundred and one, to be at most a tenth. <bookmark mark='b'/> That is an empirical risk of at most nine point one percent, not ten. <bookmark mark='c'/> The extra B is a worst-case loss for the unseen test point, exactly as the plus one is in the quantile lemma. <bookmark mark='d'/> As n grows the margin vanishes, and the chosen lambda can approach the first feasible population-risk level under consistency and crossing conditions. Exact equality is not automatic for discrete losses or a fixed grid."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -98,13 +93,11 @@ class Risk(VoiceoverScene):
         ]
         rows[2][-1].set_color(COVC)
         whys = [why(r"e.g. precision"), why(r"Angelopoulos et al. (2021)"), why(r"Part 33's tools"), why(r"more general, \ more conservative")]
+        head = label('Ltt', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> For losses that are not monotone in lambda, such as precision, the proof fails. "
-            "<bookmark mark='b'/> Learn then test, from Angelopoulos and colleagues, turns risk control into multiple "
-            "testing: for each lambda on a grid, test the hypothesis that its risk exceeds alpha. <bookmark mark='c'/> "
-            "Controlling the family-wise error over the grid, with Part thirty-three's tools, guarantees that with "
-            "probability one minus delta, the chosen lambda's risk is at most alpha. <bookmark mark='d'/> It works for "
-            "any loss and any number of tuning parameters, at the price of being more conservative."
+            "<bookmark mark='a'/> For losses that are not monotone in lambda, such as precision, the proof fails. <bookmark mark='b'/> Learn then test, from Angelopoulos and colleagues, turns risk control into multiple testing: for each lambda on a grid, test the hypothesis that its risk exceeds alpha. <bookmark mark='c'/> Controlling the family-wise error over the grid, with Part thirty-three's tools, guarantees that with probability one minus delta, the chosen lambda's risk is at most alpha, on a fixed finite grid with a feasible certified threshold. Otherwise the rule must report that no threshold was certified. <bookmark mark='d'/> It requires valid risk tests, a calibration sample independent of training, and proper family-wise error control. If no candidate passes, abstain or use a separately justified safe fallback."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -114,20 +107,18 @@ class Risk(VoiceoverScene):
 
     def llm(self):
         rows = [
-            cmath(r"\text{language models}", r":", r"\text{keep only the claims whose confidence exceeds } 1 - \lambda", font_size=34),
+            cmath(r"\text{language models}", r":", r"\text{keep only the claims whose confidence exceeds }\lambda", font_size=34),
             cmath(r"\text{loss}", r":", r"1\{\text{any kept claim is false}\}", font_size=36),
             cmath(r"\text{calibrate } \lambda", r":", r"\text{on documents with checked claims}", font_size=36),
             cmath(r"\Rightarrow", r"\;", r"P(\text{the filtered output contains an error}) \le \alpha", font_size=36),
         ]
         rows[3][-1].set_color(COVC)
         whys = [why(r"conformal factuality"), why(r"a monotone loss"), why(r"exchangeable prompts"), why(r"Part 64's subject")]
+        head = label('Prune more claims as the threshold increases', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> The same tool reaches language models. Split a model's answer into claims, and keep "
-            "only those whose confidence exceeds one minus lambda. <bookmark mark='b'/> Let the loss be whether any "
-            "kept claim is false: it shrinks as fewer claims are kept. <bookmark mark='c'/> Calibrate lambda on "
-            "documents whose claims were checked by hand. <bookmark mark='d'/> Then, for an exchangeable new prompt, "
-            "the chance that the filtered answer contains an error is at most alpha: a guarantee about a black box, "
-            "which is Part sixty-four's subject."
+            "<bookmark mark='a'/> The same tool reaches language models. Split a model's answer into claims, and keep only those whose confidence exceeds lambda, so increasing lambda prunes claims. <bookmark mark='b'/> Let the loss be whether any kept claim is false: it is nonincreasing as lambda grows and fewer claims are kept. <bookmark mark='c'/> Calibrate lambda on documents whose claims were checked by hand. <bookmark mark='d'/> Then, for an exchangeable new prompt, the chance that the filtered answer contains an error is at most alpha: a guarantee about a black box, which is Part sixty-four's subject."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -152,12 +143,7 @@ class Risk(VoiceoverScene):
             label(rf"over 200 calibration sets: \ mean FNR {d['mean_fnr']:.3f} $\le 0.1$", font_size=22, color=COVC),
         ), 4.6, 0.4, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> A multilabel screen: twenty candidate labels per unit, about fifteen percent of them true, "
-            f"and a noisy scorer. <bookmark mark='b'/> In teal, the calibration set's false negative rate as lambda grows and "
-            f"the sets include more labels. <bookmark mark='c'/> Lambda hat is {say(d['lam'], 3)}, the first value under a "
-            f"tenth after the inflation. <bookmark mark='d'/> On twenty thousand new units the false negative rate is "
-            f"{say(d['test_fnr'], 3)}, with sets of about {say(d['set_size'], 1)} labels. <bookmark mark='e'/> Averaged over two "
-            f"hundred calibration sets, {say(d['mean_fnr'], 3)}: the guarantee is in expectation, and it holds."
+            f"<bookmark mark='a'/> A multilabel screen: twenty candidate labels per unit, about fifteen percent of them true, and a noisy scorer. <bookmark mark='b'/> In teal, the calibration set's false negative rate as lambda grows and the sets include more labels. <bookmark mark='c'/> Lambda hat is {say(d['lam'], 3)}, the first value under a tenth after the inflation. <bookmark mark='d'/> On twenty thousand new units the false negative rate is {say(d['test_fnr'], 3)}, with sets of about {say(d['set_size'], 1)} labels. <bookmark mark='e'/> Averaged over two hundred calibration sets, {say(d['mean_fnr'], 3)}: the theorem is in expectation over calibration and the future unit. This finite Monte Carlo average is an estimate with sampling uncertainty."
         ) as vo:
             self.play(FadeIn(A), FadeIn(a), FadeIn(simulated_tag(r"simulated")))
             vo.wait_until("a")

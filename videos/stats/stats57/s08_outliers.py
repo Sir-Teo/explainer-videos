@@ -28,12 +28,11 @@ class Outliers(VoiceoverScene):
         ]
         rows[3][-1].set_color(COVC)
         whys = [why(r"novelty detection"), why(r"one-class model, \ distance"), why(r"its rank among the inliers"), why(r"the quantile lemma again")]
+        head = label('Pvalues', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> Outlier detection turns the lemma into a test. There is a clean reference set of inliers. "
-            "<bookmark mark='b'/> A score, trained on separate inliers, is large for unusual points: a distance from the bulk, "
-            "or a one-class classifier's output. <bookmark mark='c'/> A test point's conformal p-value is one plus the number of "
-            "reference points scoring at least as high, over n plus one. <bookmark mark='d'/> If the test point really is an "
-            "inlier, the p-value is valid, by the quantile lemma."
+            "<bookmark mark='a'/> Outlier detection turns the lemma into a test. There is an IID clean reference set of inliers, independent of test units and of the separate score-training sample. <bookmark mark='b'/> A score, trained on separate inliers, is large for unusual points: a distance from the bulk, or a one-class classifier's output. <bookmark mark='c'/> A test point's conformal p-value is one plus the number of reference points scoring at least as high, over n plus one. <bookmark mark='d'/> If the test point really is an inlier, the p-value is valid, by the quantile lemma."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -54,16 +53,11 @@ class Outliers(VoiceoverScene):
         flat = DashedLine(A.ax.c2p(0, 0.1), A.ax.c2p(1, 0.1), color=GREY_B, stroke_width=2)
         small = np.mean(pout <= 0.02)
         foot = fit_rows(VGroup(
-            label(rf"left: \ {len(pin):,} benign tests, \ flat as promised; \ right: \ {len(pout):,} malignant, \ {100 * small:.0f}\% at $p \le 0.02$", font_size=24, color=GREY_A),
+            label(rf"left: \ {len(pin):,} benign tests, \ approximately flat in these splits; \ right: \ {len(pout):,} malignant, \ {100 * small:.0f}\% at $p \le 0.02$", font_size=24, color=GREY_A),
             label(r"20 random splits, \ pooled: \ 150 benign fit the score, \ 157 are the reference set", font_size=22, color=CALC),
         ), 12.4, 0.2, [0, -2.9, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> What the p-values look like, pooled over twenty random splits of the Wisconsin biopsies. <bookmark mark='b'/> "
-            f"For the {len(pin):,} benign test biopsies, the inliers, the histogram is flat, as the theory promises: each tenth "
-            f"of the unit interval holds about a tenth of them. <bookmark mark='c'/> For the {len(pout):,} malignant ones, the outliers, "
-            f"{100 * small:.0f} percent sit at p-values of two hundredths or less, near the smallest value a reference set of a "
-            f"hundred and fifty-seven allows, one in a hundred and fifty-eight. <bookmark mark='d'/> Flat for the null, piled at zero for the alternative: the picture every "
-            f"multiple-testing method of Part thirty-three wants."
+            f"<bookmark mark='a'/> What the p-values look like, pooled over twenty random splits of the Wisconsin biopsies. <bookmark mark='b'/> For the {len(pin):,} benign test biopsies, the inliers, the histogram is approximately flat in this fixed-data resplitting experiment: each tenth of the unit interval holds about a tenth of them. <bookmark mark='c'/> For the {len(pout):,} malignant ones, the outliers, {100 * small:.0f} percent sit at p-values of two hundredths or less, near the smallest value a reference set of a hundred and fifty-seven allows, one in a hundred and fifty-eight. <bookmark mark='d'/> A roughly uniform null reference and alternatives concentrated near the minimum: the picture every multiple-testing method of Part thirty-three wants."
         ) as vo:
             self.play(FadeIn(A), FadeIn(B), FadeIn(museum_tag(r"Wolberg, \ Street \& Mangasarian (1995)")))
             vo.wait_until("a")
@@ -85,6 +79,9 @@ class Outliers(VoiceoverScene):
         ]
         rows[2][-1].set_color(COVC)
         whys = [why(r"Part 56's issue"), why(r"Bates, \ Cand\`es, \ Lei, \ Romano \& Sesia"), why(r"Benjamini \& Yekutieli (2001)"), why(r"given the reference set")]
+        head = label('Prds', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
             "<bookmark mark='a'/> With many test points, the p-values share one reference set and are dependent. <bookmark "
             "mark='b'/> Stephen Bates, Candès, Lihua Lei, Yaniv Romano and Matteo Sesia proved that the inliers' p-values are "
@@ -103,20 +100,17 @@ class Outliers(VoiceoverScene):
         rows = [
             cmath(r"\text{smallest possible } p", r"=", r"1/(n + 1)", font_size=38),
             cmath(r"\text{BH rejects } k", r":", r"\text{needs } p_{(k)} \le qk/m", font_size=38),
-            cmath(r"\Rightarrow", r"\;", r"n + 1 \ge m/(qk) \text{ to find } k \text{ outliers at all}", font_size=36),
-            cmath(r"m = 10{,}000, \ k = 10, \ q = 0.1", r":", r"n \ge 10{,}000 \text{ reference points}", font_size=34),
+            cmath(r"\Rightarrow", r"\;", r"n + 1 \ge m/(qk) \text{ for exactly }k\text{ BH rejections}", font_size=36),
+            cmath(r"m = 10{,}000, \ k = 10, \ q = 0.1", r":", r"n \ge 9{,}999 \text{ reference points}", font_size=34),
         ]
         rows[2][-1].set_color(WEIGHTC)
         rows[3][-1].set_color(MISSC)
         whys = [why(r"the resolution"), why(r"Part 33"), why(r"a design rule"), why(r"rare outliers, \ big screens")]
+        head = label('Bh worked', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> A practical limit. The smallest conformal p-value is one over n plus one. <bookmark "
-            "mark='b'/> Benjamini–Hochberg rejects k hypotheses only if the k-th smallest p-value is at most q k over "
-            "m. <bookmark mark='c'/> So to find k outliers at all, the reference set needs at least m over q k points. "
-            "<bookmark mark='d'/> Screening ten thousand points for ten outliers at q a tenth needs ten thousand "
-            "reference inliers. Our biopsies make the point: with a hundred reference points and a hundred and "
-            "forty-seven tests, at least fifteen outliers had to reach the smallest p-value, and some splits rejected "
-            "nothing; with a hundred and fifty-seven reference points and ninety tests, six suffice."
+            "<bookmark mark='a'/> A practical limit. The smallest conformal p-value is one over n plus one. <bookmark mark='b'/> Benjamini–Hochberg rejects k hypotheses only if the k-th smallest p-value is at most q k over m. <bookmark mark='c'/> For exactly k rejections, the resolution condition is n plus one at least m over q k. BH can still reject a larger set, so this is not a prerequisite for any rejection whatsoever. <bookmark mark='d'/> Screening ten thousand points for ten outliers at q a tenth needs at least nine thousand nine hundred and ninety-nine reference inliers for exactly ten rejections. Our biopsies make the point: with a hundred reference points and a hundred and forty-seven tests, at least fifteen outliers had to reach the smallest p-value, and some splits rejected nothing; with a hundred and fifty-seven reference points and ninety tests, six suffice."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -134,6 +128,9 @@ class Outliers(VoiceoverScene):
         rows[1][-1].set_color(COVC)
         rows[3][-1].set_color(MISSC)
         whys = [why(r"any novelty detector"), why(r"exchangeability again"), why(r"the model's job"), why(r"it breaks the exchangeability")]
+        head = label('Scores', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
             "<bookmark mark='a'/> The score can be any novelty detector: a distance from the bulk, an isolation "
             "forest, the reconstruction error of an autoencoder, or a one-class support vector machine. <bookmark "
@@ -158,14 +155,7 @@ class Outliers(VoiceoverScene):
             label(r"no model of what malignant looks like was used", font_size=26, color=TESTPT),
         ), 12.4, 0.5, [0, 0, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The Wisconsin biopsies again, now as outlier detection: benign tissue is the reference "
-            f"population, malignant the outliers. <bookmark mark='b'/> The score is the distance from the centre of a hundred and "
-            f"fifty benign biopsies, each feature in their standardized units, with a hundred and fifty-seven more as the "
-            f"reference set. <bookmark mark='c'/> The test set holds the other "
-            f"{d['n_test_in']} benign biopsies and forty malignant ones, and Benjamini–Hochberg runs at a tenth. <bookmark "
-            f"mark='d'/> Over fifty splits the false discovery rate is {100 * d['fdr']:.1f} percent and the power "
-            f"{100 * d['power']:.0f} percent. <bookmark mark='e'/> No model of what malignant tissue looks like was used: only "
-            f"what benign tissue looks like."
+            f"<bookmark mark='a'/> The Wisconsin biopsies again, now as outlier detection: benign tissue is the reference population, malignant the outliers. <bookmark mark='b'/> The score is the distance from the centre of a hundred and fifty benign biopsies, each feature in their standardized units, with a hundred and fifty-seven more as the reference set. <bookmark mark='c'/> The test set holds the other {d['n_test_in']} benign biopsies and forty malignant ones, and Benjamini–Hochberg runs at a tenth. <bookmark mark='d'/> Over fifty random splits of this one fixed dataset, the average false discovery proportion is {100 * d['fdr']:.1f} percent and the power {100 * d['power']:.0f} percent. <bookmark mark='e'/> No model of what malignant tissue looks like was used: only what benign tissue looks like."
         ) as vo:
             self.play(FadeIn(museum_tag(r"Wolberg, \ Street \& Mangasarian (1995)")))
             for k, m_ in enumerate("abcde"):

@@ -3,9 +3,9 @@ from __future__ import annotations
 from videos.stats.stats57.common import *  # noqa: F403
 
 PROBLEMS = [
-    r"Show that with $n$ exchangeable continuous scores, \ $P(S_{n+1} \le S_{(k)}) = k/(n+1)$ \ exactly.",
-    r"Show that the coverage of split conformal given the calibration set is Beta$(k, n + 1 - k)$.",
-    r"For the Bahadur--Savage family, \ show the $t$-interval's coverage is at most $1 - (1 - \varepsilon)^n + o(1)$.",
+    r"Show that with $n+1$ exchangeable almost surely distinct scores, \ $P(S_{n+1} \le S_{(k)}) = k/(n+1)$ \ exactly.",
+    r"Show that the coverage of split conformal for IID continuous scores, \ given calibration, \ is Beta$(k, n + 1 - k)$.",
+    r"For the Bahadur--Savage family, \ show the $t$-interval's coverage is at most $1-(1-\varepsilon)^n+(1-\varepsilon)^n c_n$, \ where $c_n$ is the no-atom coverage.",
     r"Show that ACI's average miss rate satisfies $|\bar e_T - \alpha| \le (\max(\alpha_1, 1 - \alpha_1) + \gamma)/(\gamma T)$.",
     r"Show that Mondrian conformal gives coverage $\ge 1 - \alpha$ within every group of a partition.",
     r"Prove conformal risk control: \ $E L_{n+1}(\hat\lambda) \le \alpha$ for losses in $[0, B]$, \ nonincreasing in $\lambda$.",
@@ -25,7 +25,7 @@ class Outro(VoiceoverScene):
         items = [
             (r"Bahadur--Savage: \ no free mean", MISSC), (r"the quantile lemma, \ exact to $1/n$", COVC),
             (r"coverage given the calibration set: \ Beta", CALC), (r"full, \ split, \ jackknife$+$, \ CV$+$", CALC),
-            (r"no conditional coverage without infinite length", MISSC), (r"no distribution-free functionals", MISSC),
+            (r"no conditional coverage without infinite length", MISSC), (r"functional-specific limits; \ quantiles remain possible", MISSC),
             (r"coverage over a function class", COVC), (r"weighted and nonexchangeable conformal", WEIGHTC),
             (r"online: \ ACI for every sequence", WEIGHTC), (r"outliers and risk control", COVC),
             (r"groups on NHANES; \ six open problems", S.ACCENT),
@@ -38,13 +38,7 @@ class Outro(VoiceoverScene):
         head = label(r"Part 57, \ in eleven lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "<bookmark mark='a'/> Part fifty-seven in eleven lines. No confidence interval for a mean exists over all "
-            "distributions. The quantile lemma makes prediction exact to within one over n. Coverage given the calibration set "
-            "is a Beta variable. Full, split, jackknife plus and cross-validation plus trade computation for data. Conditional "
-            "coverage needs infinite intervals, and functionals of the distribution need assumptions. <bookmark mark='b'/> "
-            "Coverage over a chosen function class is possible, and exact. Weights carry the guarantee beyond "
-            "exchangeability. Online, ACI controls the miss rate for every sequence. The same lemma tests for outliers and "
-            "controls risks. And on NHANES, every named group can be covered at once."
+            "<bookmark mark='a'/> Part fifty-seven in eleven lines. No informative finite-width uniformly honest mean interval exists over all finite-mean distributions. The quantile lemma makes prediction exact to within one over n. For IID continuous scores, coverage conditional on the calibration set has a Beta law. Full, split, jackknife plus and cross-validation plus trade computation for data. Conditional coverage needs infinite intervals, while the possibility of parameter confidence intervals depends on the functional; marginal quantiles are possible. <bookmark mark='b'/> Coverage over a chosen function class is possible, and exact. Weights carry the guarantee beyond exchangeability. Online, ACI controls the miss rate for every sequence. The same lemma tests for outliers and controls risks. And on NHANES, every named group can be covered at once."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -58,9 +52,7 @@ class Outro(VoiceoverScene):
         card = upgrade_card(57, r"guarantees for a sample of fixed size", r"you look at the data once, \ at the end",
                             r"Part 58: \ inference that stays valid whenever you look")
         with self.voiceover(
-            "<bookmark mark='a'/> A promise for the next part. Every guarantee here was for a sample of fixed size. <bookmark "
-            "mark='b'/> It assumed you look at the data once, at the end. <bookmark mark='c'/> Part fifty-eight builds "
-            "inference that stays valid however often you look, and lets you stop when you like."
+            "<bookmark mark='a'/> A promise for the next part. The rank-based interval guarantees concern a fixed sample; the ACI chapter separately controls a long-run error frequency. <bookmark mark='b'/> Those confidence statements do not yet provide simultaneous validity over every stopping time. <bookmark mark='c'/> Part fifty-eight builds inference that stays valid however often you look, and lets you stop when you like."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(card[0]), FadeIn(card[1][0]), FadeIn(card[1][1][0]))
