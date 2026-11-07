@@ -1,0 +1,138 @@
+{
+  "fingerprint": "00d248b125c64887ada1ad56669c6fd39ec798f109e9da4a893a3f20f3162827",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 34
+      },
+      "input_record": "renders/qa/native1080/stats28/en/Hook/result.json",
+      "input_sha256": "d65382fa4459b5190689b89f8946d850c434196301683a1ae550de8a5ba9809b"
+    },
+    {
+      "scene": "Optimism",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 51
+      },
+      "input_record": "renders/qa/native1080/stats28/en/Optimism/result.json",
+      "input_sha256": "3c259705d2b6322d460cfe29e8462c7d0cdbaadb32c21d290e549499808e50a1"
+    },
+    {
+      "scene": "AIC",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 66
+      },
+      "input_record": "renders/qa/native1080/stats28/en/AIC/result.json",
+      "input_sha256": "69f1e20027242f05617028d3d87dfcae5bb47245041ef46c7925e44ffbd62d28"
+    },
+    {
+      "scene": "BIC",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 51
+      },
+      "input_record": "renders/qa/native1080/stats28/en/BIC/result.json",
+      "input_sha256": "997e3dcdb21b8c00bba775ff7a26d1d7cca4e0542f15fb77fc9663a6e5155650"
+    },
+    {
+      "scene": "CV",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 62
+      },
+      "input_record": "renders/qa/native1080/stats28/en/CV/result.json",
+      "input_sha256": "506d8143b19e820b96859c3c1576d5fdf408b97a54d47cf92aa7750bbc9fae15"
+    },
+    {
+      "scene": "LOO",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 62
+      },
+      "input_record": "renders/qa/native1080/stats28/en/LOO/result.json",
+      "input_sha256": "025d44f23388406d148f0fa2ed1a2a37b645b2fd1ce672518d87f68e18d17193"
+    },
+    {
+      "scene": "Singular",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 58
+      },
+      "input_record": "renders/qa/native1080/stats28/en/Singular/result.json",
+      "input_sha256": "c748cecd1b8b39f42aacc03f255825bfe24d2f09bc02b7bb532123a255974669"
+    },
+    {
+      "scene": "MDL",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 40
+      },
+      "input_record": "renders/qa/native1080/stats28/en/MDL/result.json",
+      "input_sha256": "24d6d2e003b85cd44dbe93a66c042544f598ad0ec3f42c330c5938b00474ef7c"
+    },
+    {
+      "scene": "Averaging",
+      "status": "needs-review",
+      "frames": 33,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 64
+      },
+      "input_record": "renders/qa/native1080/stats28/en/Averaging/result.json",
+      "input_sha256": "aed8fb85ae80c253bd570c79f84a6087bf919a4edae576b5c891dcf633ebc44a"
+    },
+    {
+      "scene": "Selective",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 61
+      },
+      "input_record": "renders/qa/native1080/stats28/en/Selective/result.json",
+      "input_sha256": "1af3a0e5904ee8e13b43a978223064e8a8b6af7dbf8be0532b2c355b70ac043f"
+    },
+    {
+      "scene": "Subsets",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 57
+      },
+      "input_record": "renders/qa/native1080/stats28/en/Subsets/result.json",
+      "input_sha256": "5664c775b2af112bee65f349c1a3bf8793acf37f2d16dcd2e3e74aed3ea69dd4"
+    },
+    {
+      "scene": "Calibration",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 67
+      },
+      "input_record": "renders/qa/native1080/stats28/en/Calibration/result.json",
+      "input_sha256": "79ff15c448361571d18d3e79190520083f92bdf89665a27734a55c005246401b"
+    }
+  ]
+}

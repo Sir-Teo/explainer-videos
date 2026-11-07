@@ -1,0 +1,23 @@
+{
+  "part": "stats28",
+  "fingerprint": "00d248b125c64887ada1ad56669c6fd39ec798f109e9da4a893a3f20f3162827",
+  "english_endpoints": 13,
+  "native_1080_endpoints": 12,
+  "silent_motion_chapters": 12,
+  "audio_scene": "LOO",
+  "audio_lines": 8,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats28/en/LOO/videos/s06_loo/480p15/LOO.mp4",
+    "seconds": 263.132031,
+    "narration_sha256": "e8a86d3245549db1f9194b81243b344d6368b13a936050965b86759ec9c1c0cf",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 263 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 263 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

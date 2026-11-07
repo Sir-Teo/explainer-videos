@@ -1,0 +1,106 @@
+{
+ "video": "stats28",
+ "scene": "LOO",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 8,
+ "lines": [
+  {
+   "raw": "Chapter five. Bayesian leave-one-out and WAIC.",
+   "spoken": "Chapter five. Bayesian leave-one-out and WAIC.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/2e8e493f5e9a916e.wav",
+   "duration": 3.875,
+   "tokens": 6,
+   "peak": 0.381134033203125,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> For Bayesian models, the natural target is the expected log predictive density of new data: how probable the posterior predictive makes fresh observations. <bookmark mark='b'/> Leave-one-out estimates it by predicting each observation from the posterior fitted without it. <bookmark mark='c'/> Each term is a posterior predictive density, an integral over the leave-one-out posterior. <bookmark mark='d'/> Done literally, that is n separate fits, each an MCMC run. Part 27's importance sampling avoids them.",
+   "spoken": "For Bayesian models, the natural target is the expected log predictive density of new data: how probable the posterior predictive makes fresh observations. Leave-one-out estimates it by predicting each observation from the posterior fitted without it. Each term is a posterior predictive density, an integral over the leave-one-out posterior. Done literally, that is n separate fits, each an MCMC run. Part 27's importance sampling avoids them.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/ea80712d4288c6f9.wav",
+   "duration": 27.9,
+   "tokens": 66,
+   "peak": 0.624420166015625,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The leave-one-out posterior differs from the full posterior only by one likelihood term. <bookmark mark='b'/> So the full posterior's draws can be reweighted by one over that observation's likelihood. <bookmark mark='c'/> The weighted average then estimates the leave-one-out predictive density. <bookmark mark='d'/> These weights can have heavy tails, so Aki Vehtari, Andrew Gelman and Jonah Gabry smooth them with Part 27's Pareto fit, and each estimated k-hat warns about a deletion's weight-tail stability. The warning threshold depends on effective sample size and is capped near point seven.",
+   "spoken": "The leave-one-out posterior differs from the full posterior only by one likelihood term. So the full posterior's draws can be reweighted by one over that observation's likelihood. The weighted average then estimates the leave-one-out predictive density. These weights can have heavy tails, so Aki Vehtari, Andrew Gelman and Jonah Gabry smooth them with Part 27's Pareto fit, and each estimated k-hat warns about a deletion's weight-tail stability. The warning threshold depends on effective sample size and is capped near point seven.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/af0a8da171fc2756.wav",
+   "duration": 33.625,
+   "tokens": 81,
+   "peak": 0.629730224609375,
+   "issues": [],
+   "elapsed": 0.05,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Sumio Watanabe's WAIC takes another route. Start from the log predictive density of the observed data, which is optimistic. <bookmark mark='b'/> Estimate the optimism by the posterior variance of each observation's log likelihood, summed: an effective number of parameters. <bookmark mark='c'/> Subtract. <bookmark mark='d'/> Under suitable analytic and integrability assumptions, Watanabe established asymptotic equivalence to Bayesian leave-one-out for important singular-model settings. This is not a finite-sample guarantee for every model.",
+   "spoken": "Sumio Watanabe's WAIC takes another route. Start from the log predictive density of the observed data, which is optimistic. Estimate the optimism by the posterior variance of each observation's log likelihood, summed: an effective number of parameters. Subtract. Under suitable analytic and integrability assumptions, Watanabe established asymptotic equivalence to Bayesian leave-one-out for important singular-model settings. This is not a finite-sample guarantee for every model.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/a72d1ec2a557a6fa.wav",
+   "duration": 29.65,
+   "tokens": 64,
+   "peak": 0.6058349609375,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Compare predictions of a whole left-out school. Complete pooling uses a flat common-mean prior; the hierarchy uses flat mean and scale priors with a proper posterior. Independent effects now have explicit normal priors with standard deviation one hundred: a flat prior would leave the held-out effect undefined. <bookmark mark='b'/> Complete pooling has PSIS score minus thirty point six zero, versus analytic leave-one-out minus thirty point five six. <bookmark mark='c'/> The hierarchy gives minus thirty-one point one eight, versus the numerical reference minus thirty-one point three four. <bookmark mark='d'/> The independent model's PSIS score is minus thirty-six point four six, but its analytic score is minus forty-four point three three. The failed importance approximation is much too optimistic. The small pooling-versus-hierarchy difference also needs uncertainty, not just a ranking.",
+   "spoken": "Compare predictions of a whole left-out school. Complete pooling uses a flat common-mean prior; the hierarchy uses flat mean and scale priors with a proper posterior. Independent effects now have explicit normal priors with standard deviation one hundred: a flat prior would leave the held-out effect undefined. Complete pooling has PSIS score minus thirty point six zero, versus analytic leave-one-out minus thirty point five six. The hierarchy gives minus thirty-one point one eight, versus the numerical reference minus thirty-one point three four. The independent model's PSIS score is minus thirty-six point four six, but its analytic score is minus forty-four point three three. The failed importance approximation is much too optimistic. The small pooling-versus-hierarchy difference also needs uncertainty, not just a ranking.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/345a11df3f8099e0.wav",
+   "duration": 52.25,
+   "tokens": 122,
+   "peak": 0.475372314453125,
+   "issues": [],
+   "elapsed": 0.06,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The weight-tail diagnostics help explain these approximations. Complete pooling shares information across schools, so each deletion changes relatively little. <bookmark mark='b'/> The hierarchy has more variable deletion weights and needs closer inspection. <bookmark mark='c'/> For independent effects under the diffuse proper prior, deleting a school's only measurement leaves its broad prior; reweighting the much narrower full posterior is difficult. <bookmark mark='d'/> Large k-hats warn against trusting PSIS. Here exact analytic prediction is available; in other cases refit or integrate out local latent effects. A low k-hat alone would not prove accuracy.",
+   "spoken": "The weight-tail diagnostics help explain these approximations. Complete pooling shares information across schools, so each deletion changes relatively little. The hierarchy has more variable deletion weights and needs closer inspection. For independent effects under the diffuse proper prior, deleting a school's only measurement leaves its broad prior; reweighting the much narrower full posterior is difficult. Large k-hats warn against trusting PSIS. Here exact analytic prediction is available; in other cases refit or integrate out local latent effects. A low k-hat alone would not prove accuracy.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/bca4d531c92fdade.wav",
+   "duration": 37.75,
+   "tokens": 85,
+   "peak": 0.54718017578125,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> With the explicit proper independent-effect priors, compare both approximations against the analytic leave-one-school-out score of minus forty-four point three three. <bookmark mark='b'/> PSIS gives about minus thirty-six point five and WAIC about minus thirty-three point nine: both are too optimistic, with high k-hats warning that importance sampling is unstable. Their difference is not itself a measurement of the truth. <bookmark mark='c'/> For the hierarchy, both approximations are much closer to the numerical refit reference. <bookmark mark='d'/> PSIS-LOO is useful because its tail diagnostics help identify difficult deletions, which should then be checked or refitted.",
+   "spoken": "With the explicit proper independent-effect priors, compare both approximations against the analytic leave-one-school-out score of minus forty-four point three three. PSIS gives about minus thirty-six point five and WAIC about minus thirty-three point nine: both are too optimistic, with high k-hats warning that importance sampling is unstable. Their difference is not itself a measurement of the truth. For the hierarchy, both approximations are much closer to the numerical refit reference. PSIS-LOO is useful because its tail diagnostics help identify difficult deletions, which should then be checked or refitted.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/a14ccf47c554bfa7.wav",
+   "duration": 39.975,
+   "tokens": 88,
+   "peak": 0.525299072265625,
+   "issues": [],
+   "elapsed": 0.05,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> When comparing models this way, report the differences in elpd with their standard errors. <bookmark mark='b'/> For these eight schools the pooling-versus-hierarchy lead is small and uncertain. The caption reports a rough paired pointwise standard error; with only eight heterogeneous schools, it needs caution. Four elpd units is a practical heuristic, not a universal decision boundary. <bookmark mark='c'/> These are estimates of predictive accuracy, not tests of which model is true. <bookmark mark='d'/> And rather than choose, it is often better to weight, chapter eight.",
+   "spoken": "When comparing models this way, report the differences in elpd with their standard errors. For these eight schools the pooling-versus-hierarchy lead is small and uncertain. The caption reports a rough paired pointwise standard error; with only eight heterogeneous schools, it needs caution. Four elpd units is a practical heuristic, not a universal decision boundary. These are estimates of predictive accuracy, not tests of which model is true. And rather than choose, it is often better to weight, chapter eight.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/de8a2abbefe135d8.wav",
+   "duration": 29.3,
+   "tokens": 79,
+   "peak": 0.625762939453125,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats28/en/LOO_motion/result.json",
+ "input_sha256": "68c9222447d4794ec5a086e3a61fdec9013ef059ef8567cf0e879c6da17bc198"
+}

@@ -1,0 +1,20 @@
+{
+  "baseline": "all 13 inspected; Singular width repair re-inspected",
+  "native": "all 12 inspected; no remaining geometry issues",
+  "motion": [
+    "Hook",
+    "Optimism",
+    "AIC",
+    "BIC",
+    "CV",
+    "LOO",
+    "Singular",
+    "MDL",
+    "Averaging",
+    "Selective",
+    "Subsets",
+    "Calibration"
+  ],
+  "actual": "LOO sheet inspected",
+  "outro_heading_repair_viewed": true
+}
