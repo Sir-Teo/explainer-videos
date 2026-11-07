@@ -35,11 +35,7 @@ class OpenProblems(VoiceoverScene):
         cols = [GREY_B, COVC, COVC, MISSC, WEIGHTC, WEIGHTC, MISSC]
         tab = table_rows([hdr] + body, font_size=28, col_buff=0.8, row_buff=0.3, colors=cols).move_to([0, 0.1, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The part in one table. <bookmark mark='b'/> A new outcome can be covered marginally and "
-            "exactly, assuming only exchangeability; and within each named group, with the same assumption. Coverage at every "
-            "single x is impossible with finite intervals. Under drift, coverage degrades by a total-variation term, with no "
-            "assumption. Online, the long-run frequency of misses is controlled for any sequence. And a mean, or a conditional "
-            "probability, has no distribution-free interval at all."
+            "<bookmark mark='a'/> The part in one table. <bookmark mark='b'/> A new outcome can be covered marginally and exactly, assuming only exchangeability; and within each named group, with the same assumption. Coverage at every single x is impossible with finite intervals. Under drift, coverage degrades by a total-variation term, with no assumption. Online, the long-run frequency of misses is controlled for any sequence. Unrestricted means and conditional response probabilities have limits on informative confidence intervals. Trivial whole-space intervals remain valid, and marginal medians and quantiles have distribution-free confidence intervals."
         ) as vo:
             self.play(FadeIn(tab[0]))
             vo.wait_until("a")
@@ -57,6 +53,9 @@ class OpenProblems(VoiceoverScene):
         ]
         rows[3][-1].set_color(TESTPT)
         whys = [why(r"chapter 3's boundary"), why(r"chapters 4, \ 5, \ 9"), why(r"chapters 5, \ 6"), why(r"chapter 1's Beta law")]
+        head = label('Checklist', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
             "<bookmark mark='a'/> A checklist for reading a distribution-free claim. What is being covered: an "
             "observable outcome, or a parameter of the distribution? <bookmark mark='b'/> Is the guarantee marginal, "
@@ -80,6 +79,9 @@ class OpenProblems(VoiceoverScene):
         rows[1][-1].set_color(COVC)
         rows[2][-1].set_color(MISSC)
         whys = [why(r"which groups?"), why(r"Gibbs, \ Cherian \& Cand\`es"), why(r"Part 56's problem, \ again"), why(r"a sample split wastes data")]
+        head = label('Op class', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
             "<bookmark mark='a'/> Problem one in more detail. The group-conditional guarantee depends on a class of "
             "functions chosen in advance. Can it be chosen from the data? <bookmark mark='b'/> For penalized infinite "
@@ -104,13 +106,11 @@ class OpenProblems(VoiceoverScene):
         ]
         rows[1][-1].set_color(COVC)
         whys = [why(r"efficiency"), why(r"Lei, \ Robins \& Wasserman (2013)"), why(r"CQR vs residuals"), why(r"beyond asymptotics")]
+        head = label('Op eff', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> Problem two: efficiency. Validity is free; length is not. Which sets are shortest "
-            "among those that keep the guarantee? <bookmark mark='b'/> Asymptotically the answer is known: with a "
-            "consistent estimate of the conditional density or quantiles, conformal sets approach the oracle's, as "
-            "Lei, Robins and Wasserman showed for density level sets. <bookmark mark='c'/> In finite samples the "
-            "choice of score is everything, as Part thirty-four's comparison of residuals and quantile regression "
-            "showed. <bookmark mark='d'/> A finite-sample theory of optimal scores is open."
+            "<bookmark mark='a'/> Problem two: efficiency. Validity is free; length is not. Which sets are shortest among those that keep the guarantee? <bookmark mark='b'/> Asymptotically the answer is known: with appropriate consistency and regularity, density-level or quantile constructions can approach their corresponding oracle sets, as Lei, Robins and Wasserman showed for density level sets. <bookmark mark='c'/> In finite samples the choice of score is everything, as Part thirty-four's comparison of residuals and quantile regression showed. <bookmark mark='d'/> A finite-sample theory of optimal scores is open."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -128,6 +128,9 @@ class OpenProblems(VoiceoverScene):
         rows[1][-1].set_color(COVC)
         rows[2][-1].set_color(MISSC)
         whys = [why(r"no exchangeability"), why(r"chapter 5's theorem"), why(r"the bound is not a number"), why(r"Chernozhukov, \ W\"uthrich \& Zhu")]
+        head = label('Op dep', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
             "<bookmark mark='a'/> Problem three: dependence. Time series, spatial data and networks are not "
             "exchangeable. <bookmark mark='b'/> Chapter five's theorem bounds the loss by weighted total-variation "
@@ -152,6 +155,9 @@ class OpenProblems(VoiceoverScene):
         rows[1][-1].set_color(COVC)
         rows[2][-1].set_color(MISSC)
         whys = [why(r"the deployed model"), why(r"Vovk (2012)"), why(r"Bian \& Barber (2023)"), why(r"stability again")]
+        head = label('Op train', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
             "<bookmark mark='a'/> Problem four: the deployed model. A practitioner has one training set and one "
             "calibration set, and wants coverage given them, not on average over data they never saw. <bookmark "
@@ -176,6 +182,9 @@ class OpenProblems(VoiceoverScene):
         rows[1][-1].set_color(COVC)
         rows[2][-1].set_color(WEIGHTC)
         whys = [why(r"structured outputs"), why(r"Mohri \& Hashimoto (2024)"), why(r"a set of a million texts"), why(r"chapter 5, \ again")]
+        head = label('Op struct', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
             "<bookmark mark='a'/> Problem five: structured outputs. What is a prediction set of graphs, of paragraphs, "
             "of trajectories? <bookmark mark='b'/> Chapter eight's conformal factuality, from Christopher Mohri and "
@@ -192,19 +201,18 @@ class OpenProblems(VoiceoverScene):
     def op_func(self):
         rows = [
             cmath(r"\text{problem 6}", r":", r"\text{which functionals have distribution-free intervals?}", font_size=34),
-            cmath(r"\text{Bahadur \& Savage}", r":", r"\text{the mean: \ none}", font_size=38),
+            cmath(r"\text{Bahadur \& Savage}", r":", r"\text{unrestricted mean: \ no informative uniformly honest interval}", font_size=38),
             cmath(r"\text{Donoho (1988)}", r":", r"\text{one-sided bounds exist for semicontinuous functionals}", font_size=32),
             cmath(r"\text{open}", r":", r"\text{the weakest assumptions that make a functional estimable}", font_size=32),
         ]
         rows[1][-1].set_color(MISSC)
         rows[2][-1].set_color(COVC)
         whys = [why(r"the theme of the part"), why(r"chapter 0"), why(r"e.g. a lower bound on modes"), why(r"between the two")]
+        head = label('Op func', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> Problem six, the part's theme. Which functionals of a distribution admit intervals "
-            "with no assumptions? <bookmark mark='b'/> Bahadur and Savage: not the mean. <bookmark mark='c'/> David "
-            "Donoho showed in 1988 that one-sided bounds exist for functionals that are semicontinuous in the right "
-            "sense, such as a lower bound on the number of modes of a density. <bookmark mark='d'/> Between these, the "
-            "weakest assumptions that make a given functional estimable, and the price of each, remain to be mapped."
+            "<bookmark mark='a'/> Problem six, the part's theme. Which functionals of a distribution admit intervals under IID sampling without a parametric family? <bookmark mark='b'/> Bahadur and Savage: not the mean. <bookmark mark='c'/> David Donoho showed in 1988 that one-sided bounds exist for functionals that are semicontinuous in the right sense, such as a lower bound on the number of modes of a density. <bookmark mark='d'/> Between these, the weakest assumptions that make a given functional estimable, and the price of each, remain to be mapped."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):

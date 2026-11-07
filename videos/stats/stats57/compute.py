@@ -32,7 +32,7 @@ from explainer.ai.cache import Cache
 from explainer.stats import museum
 from explainer.stats.board import Row, save_rows
 from explainer.stats.kit import conformal as CF
-from explainer.stats.kit import dfree as F
+from . import checked as F
 
 CACHE = Cache("stats57")
 load = CACHE.load
@@ -95,14 +95,14 @@ def compute_full():
         x0 = r.standard_normal(p)
         y0 = x0 @ beta + r.standard_normal()
         fc = F.full_conformal_ridge(X, y, x0, 1.0, 0.1, grid=grid)
-        res["full"]["cov"] += fc["lo"] <= y0 <= fc["hi"]
-        res["full"]["len"].append(fc["hi"] - fc["lo"])
+        res["full"]["cov"] += any(lo<=y0<=hi for lo,hi in fc["intervals"])
+        res["full"]["len"].append(fc["length"])
         tr, ca = np.arange(n // 2), np.arange(n // 2, n)
         pred = lambda Z: F.ridge_fit_predict(X[tr], y[tr], Z, 1.0)  # noqa: E731
         sc = CF.split_conformal(pred(X[ca]), y[ca], pred(x0[None, :]), 0.1)
         res["split"]["cov"] += sc["lo"][0] <= y0 <= sc["hi"][0]
-        res["split"]["len"].append(min(sc["hi"][0] - sc["lo"][0], 20.0))
-    return {"n": n, "p": p, "reps": reps, **{k: {"coverage": v["cov"] / reps, "len": float(np.median(v["len"]))} for k, v in res.items()}}
+        res["split"]["len"].append(sc["hi"][0] - sc["lo"][0])
+    return {"n": n, "p": p, "reps": reps, **{k: {"coverage": v["cov"] / reps, "len": float(np.median(v["len"])), "lengths": v["len"], "coverage_mcse": math.sqrt((v["cov"]/reps)*(1-v["cov"]/reps)/reps)} for k, v in res.items()}}
 
 
 def compute_local():
@@ -131,7 +131,9 @@ def compute_local():
 
 def _nhanes_frame():
     d = museum.nhanes()
-    sbp = np.nanmean(np.column_stack([d["sbp1"], d["sbp2"], d["sbp3"]]), axis=1)
+    readings = np.column_stack([d["sbp1"], d["sbp2"], d["sbp3"]])
+    count = np.isfinite(readings).sum(1)
+    sbp = np.divide(np.nansum(readings, axis=1), count, out=np.full(len(count), np.nan), where=count>0)
     ok = np.isfinite(sbp) & np.isfinite(d["bmi"]) & np.isfinite(d["age"]) & np.isfinite(d["sex"]) & np.isfinite(d["race"])
     return {k: d[k][ok] for k in ("age", "sex", "race", "bmi")} | {"sbp": sbp[ok]}
 
@@ -179,7 +181,10 @@ def compute_nhanes():
     summary = {m: {g: float(np.mean(v)) for g, v in out[m].items()} for m in out}
     counts = {g: int(c) for g, c in zip(names, gmask(np.arange(n)).sum(0))}
     return {"n": n, "groups": names, "summary": summary, "overall": {m: float(np.mean(v)) for m, v in marg.items()}, "counts": counts,
-            "q_overall": float(q), "reps": reps}
+            "q_overall": float(q), "reps": reps, "split_coverages": out,
+            "split_mcse": {m:{g:F.mcse(v) for g,v in out[m].items()} for m in out},
+            "basis_columns": 11, "basis_rank": int(np.linalg.matrix_rank(np.column_stack([np.ones(n), gmask(np.arange(n))]))),
+            "scope": "random splits conditional on the complete-case survey extract; ignores population survey weights/clustering; not independent national cohorts"}
 
 
 def _roll(v, w=100):
@@ -214,7 +219,26 @@ def compute_drift():
         return _roll(v, w)
 
     after = tt >= 1000
-    return {"t": tt[::10], "split_roll": roll(sc)[::10], "nex_roll": roll(nc)[::10], "split_thr": np.asarray(split_thr)[::10],
+    paths=[]
+    for rep in range(40):
+        yy=sigma*rng(570600+rep).standard_normal(T)
+        hits_s=[];hits_w=[]
+        for k in range(1000,1300):
+            past=np.abs(yy[k-window:k]);order=np.argsort(past);ordered=past[order]
+            qs=ordered[math.ceil((window+1)*.9)-1]
+            cumulative=np.cumsum((rho**np.arange(window,0,-1))[order])/(np.sum(rho**np.arange(window,0,-1))+1)
+            index=np.searchsorted(cumulative,.9);qw=ordered[index] if index<window else np.inf
+            hits_s.append(abs(yy[k])<=qs);hits_w.append(abs(yy[k])<=qw)
+        paths.append([float(np.mean(hits_s)),float(np.mean(hits_w))])
+    path_array=np.array(paths)
+    board=dict(split=float(path_array[:,0].mean()),weighted=float(path_array[:,1].mean()),reps=40,
+               split_mcse=F.mcse(path_array[:,0]),weighted_mcse=F.mcse(path_array[:,1]),coverage_samples=paths,
+               scope="40 independent paths; coverage averaged over 300 temporally dependent post-change steps per path")
+    pair_tv=4/math.pi*math.atan(2.5)-1
+    weights=rho**np.arange(window,0,-1)
+    tv_bound=dict(pair_tv=pair_tv,equal_stale_weight=250/301,weighted_stale_weight=float(weights[:250].sum()/(weights.sum()+1)),
+                  equal_lower=.9-pair_tv*250/301,weighted_lower=.9-pair_tv*float(weights[:250].sum()/(weights.sum()+1)))
+    return {"board":board, "tv_bound":tv_bound, "t": tt[::10], "split_roll": roll(sc)[::10], "nex_roll": roll(nc)[::10], "split_thr": np.asarray(split_thr)[::10],
             "nex_thr": np.asarray(nex_thr)[::10], "split_after": float(sc[after][:300].mean()), "nex_after": float(nc[after][:300].mean()),
             "split_all": float(sc.mean()), "nex_all": float(nc.mean()), "rho": rho, "window": window}
 
@@ -247,7 +271,8 @@ def compute_outliers():
         fdps.append(float(np.sum(rej & ~is_out) / max(1, rej.sum())))
         pows.append(float(np.sum(rej & is_out) / is_out.sum()))
     return {"fdr": float(np.mean(fdps)), "power": float(np.mean(pows)), "n_test_in": int(len(ben) - 307), "n_test_out": 40,
-            "n_ref": 157, "n_fit": 150, "zero": zero}
+            "n_ref": 157, "n_fit": 150, "zero": zero, "fdp_samples": fdps, "power_samples": pows, "fdr_mcse": F.mcse(fdps), "power_mcse": F.mcse(pows),
+            "scope": "50 random splits conditional on one fixed biopsy dataset"}
 
 
 def compute_risk():
@@ -283,22 +308,24 @@ def compute_risk():
         t3, s3 = draw(2000)
         reps.append(float(np.mean(fnr(t3, s3, l2))))
     return {"lam": lh, "test_fnr": test_fnr, "set_size": size, "mean_fnr": float(np.mean(reps)), "curve_lam": lams[::5],
-            "curve_risk": L.mean(0)[::5]}
+            "curve_risk": L.mean(0)[::5], "risk_samples": reps, "risk_mcse": F.mcse(reps),
+            "test_fnr_mcse": F.mcse(fnr(tt, st, lh)), "calibration_corrected_risk": float((fnr(tc,sc,lh).sum()+1)/(len(tc)+1))}
 
 
 def compute_aci():
-    r = rng(5711)
+    r = rng(5706)
     T = 2000
     t = np.arange(T)
     sigma = np.where(t < 1000, 1.0, 2.5)
     y = sigma * r.standard_normal(T)
     out = {"gammas": [0.0, 0.005, 0.02]}
     for g in out["gammas"]:
-        res = CF.aci(np.abs(y), alpha=0.1, gamma=g, window=300, warm=300)
+        res = F.aci(np.abs(y), alpha=0.1, gamma=g, window=300, warm=300)
         e = res["err"]
         roll = _roll(1 - e, 100)
         out[str(g)] = {"roll": roll[::10], "alpha_t": res["alpha_t"][::10], "miss": float(e.mean()),
-                       "after": float(1 - e[700:1000].mean())}
+                       "after": float(1 - e[700:1000].mean()), "errors": e, "levels": res["alpha_t"],
+                       "alpha_final": res["alpha_final"], "infinite_sets": res["infinite_sets"], "empty_sets": res["empty_sets"]}
     out["t"] = np.arange(300, T)[::10]
     return out
 
@@ -334,12 +361,14 @@ def compute_board():
     rows.append(Row(57, r"split conformal prediction interval", r"Bahadur--Savage mixture, \ $n = 50$", "coverage", 0.95, hits / reps, reps))
     nh = load("nhanes")
     n_te = nh["n"] - nh["n"] // 2 - 1200
-    reps_n = nh["reps"] * round(nh["counts"]["70+"] * n_te / nh["n"])  # test points aged 70+, over the splits
-    rows.append(Row(57, r"marginal split conformal, \ ages 70+", r"NHANES systolic pressure", "coverage", 0.90, nh["summary"]["marginal"]["70+"], reps_n))
-    rows.append(Row(57, r"group-conditional conformal, \ ages 70+", r"NHANES systolic pressure", "coverage", 0.90, nh["summary"]["gcc"]["70+"], reps_n))
+    reps_n = nh["reps"]  # Independent random splits conditional on this fixed extract, not test people.  # test points aged 70+, over the splits
+    rows.append(Row(57, r"marginal split conformal, \ ages 70+", r"NHANES systolic pressure", "coverage", 0.90, nh["summary"]["marginal"]["70+"], reps_n, mc_se=nh["split_mcse"]["marginal"]["70+"]))
+    rows.append(Row(57, r"group-conditional conformal, \ ages 70+", r"NHANES systolic pressure", "coverage", 0.90, nh["summary"]["gcc"]["70+"], reps_n, mc_se=nh["split_mcse"]["gcc"]["70+"]))
     dr = load("drift")
-    rows.append(Row(57, r"split conformal after a changepoint", r"noise SD 1 $\to$ 2.5, \ 300 steps after", "coverage", 0.90, dr["split_after"], 300))
-    rows.append(Row(57, r"weighted (nonexchangeable) conformal", r"noise SD 1 $\to$ 2.5, \ 300 steps after", "coverage", 0.90, dr["nex_after"], 300))
+    rows.append(Row(57, r"split conformal after a changepoint", r"noise SD 1 $\to$ 2.5, \ 300 steps after", "coverage", 0.90, dr["board"]["split"], dr["board"]["reps"], mc_se=dr["board"]["split_mcse"]))
+    rows.append(Row(57, r"weighted (nonexchangeable) conformal", r"noise SD 1 $\to$ 2.5, \ 300 steps after", "coverage", 0.90, dr["board"]["weighted"], dr["board"]["reps"], mc_se=dr["board"]["weighted_mcse"]))
+    for row in rows:
+        if row.mc_se is None: row.mc_se=math.sqrt(row.achieved*(1-row.achieved)/row.reps)
     save_rows(57, rows)
     return {"rows": [asdict(q) | {"verdict": q.verdict, "se": q.se} for q in rows]}
 

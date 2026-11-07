@@ -1,0 +1,36 @@
+{
+  "nhanes": [
+    {
+      "file": "DEMO_J.xpt",
+      "sha256": "c0b46e0345ea19404928656277c8b0d10b0cca348a9b2fe4fc3c67e8b7ee73ec",
+      "bytes": 3412720,
+      "url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/DEMO_J.xpt",
+      "verification": "all relevant variables agree for all 5533 extracted adult SEQN identifiers, including missing values"
+    },
+    {
+      "file": "BPX_J.xpt",
+      "sha256": "f98f1d9a4c18173e715c749b4294f6f1525140d5ad5751316bb17cc038fb3423",
+      "bytes": 1466000,
+      "url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/BPX_J.xpt",
+      "verification": "all relevant variables agree for all 5533 extracted adult SEQN identifiers, including missing values"
+    },
+    {
+      "file": "BMX_J.xpt",
+      "sha256": "8d675e42d8826ac98714b2c3dd4c5138a5e353fb4424f7eff5e6db4a01ce838a",
+      "bytes": 1466000,
+      "url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/BMX_J.xpt",
+      "verification": "all relevant variables agree for all 5533 extracted adult SEQN identifiers, including missing values"
+    }
+  ],
+  "extract_sha256": "ae9be14330c2d18a719fca7ef379643b3f8f08f85abdf81ef993e713a4d5d1f5",
+  "extract_scope": "Examined adults age >=18; complete systolic readings/BMI/age/sex/race for this example; age top-coded at 80. Survey weights and clusters are not used; random-split results concern this fixed extract.",
+  "breast_cancer": {
+    "dataset": "Wisconsin diagnostic breast cancer",
+    "url": "https://archive.ics.uci.edu/static/public/17/breast+cancer+wisconsin+diagnostic.zip",
+    "archive_sha256": "bc154869ef13f753f9e2b5a17e248cfe1ba4b6721db7c4da9f4880e40b05d3af",
+    "data_sha256": "d606af411f3e5be8a317a5a8b652b425aaf0ff38ca683d5327ffff94c3695f4a",
+    "records": 569,
+    "features": 30,
+    "verification": "all 17,070 feature values and all 569 diagnoses agree exactly in row order with UCI wdbc.data"
+  }
+}

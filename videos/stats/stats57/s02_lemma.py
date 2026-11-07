@@ -34,6 +34,9 @@ class Lemma(VoiceoverScene):
         ]
         rows[3][-1].set_color(TESTPT)
         whys = [why(r"the definition"), why(r"weaker than independence"), why(r"Part 43"), why(r"nothing about $P$")]
+        head = label('Exchange', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
             "<bookmark mark='a'/> Exchangeability: the joint law of the n plus one data points is unchanged by any "
             "permutation. <bookmark mark='b'/> Independent and identically distributed data are exchangeable, but so is sampling "
@@ -61,12 +64,7 @@ class Lemma(VoiceoverScene):
             label(rf"coverage $= {rs.k}/{n + 1} = {rs.k / (n + 1):.2f}$, \ whatever the distribution", font_size=26, color=TESTPT),
         ), 12.4, 0.3, [0, -1.9, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> This part's instrument is the rank strip. With nineteen calibration scores and one test "
-            f"score, there are twenty possible ranks for the test score, and by exchangeability each is equally likely. "
-            f"<bookmark mark='b'/> If the threshold is the eighteenth smallest calibration score, the test point is covered "
-            f"whenever its rank is eighteen or less: the green slots. <bookmark mark='c'/> It is missed in the top two: the red. "
-            f"<bookmark mark='d'/> Drop test points at random, and they land uniformly. The coverage is exactly eighteen "
-            f"twentieths, ninety percent, whatever the distribution of the scores."
+            f"<bookmark mark='a'/> This part's instrument is the rank strip. With nineteen calibration scores and one test score, there are twenty possible ranks for the test score, and, assuming almost surely distinct scores, exchangeability makes each rank equally likely. <bookmark mark='b'/> If the threshold is the eighteenth smallest calibration score, the test point is covered whenever its rank is eighteen or less: the green slots. <bookmark mark='c'/> It is missed in the top two: the red. <bookmark mark='d'/> Drop test points at random, and they land uniformly. The coverage is exactly eighteen twentieths, ninety percent, whatever their distribution, provided there are no ties; randomization or conservative ranks handle ties."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rs.slots), FadeIn(rs.lab_lo), FadeIn(rs.lab_hi))
             vo.wait_until("a")
@@ -82,20 +80,17 @@ class Lemma(VoiceoverScene):
     def proof(self):
         rows = [
             cmath(r"S_i = s(Z_i)", r":", r"\text{scores, \ } i \le n + 1: \ \text{exchangeable}", font_size=36),
-            cmath(r"P\big(\mathrm{rank}(S_{n+1}) \le k\big)", r"\ge", r"\frac{k}{n+1} \ \ \text{(equality without ties)}", font_size=34),
+            cmath(r"P\big(\mathrm{rank}_{\min}(S_{n+1}) \le k\big)", r"\ge", r"\frac{k}{n+1} \ \ \text{(equality without ties)}", font_size=34),
             cmath(r"\hat q", r"=", r"S_{(k)} \text{ among } S_1, \dots, S_n, \ \ k = \lceil (n+1)(1 - \alpha)\rceil", font_size=34),
-            cmath(r"S_{n+1} \le \hat q", r"\iff", r"\mathrm{rank}(S_{n+1}) \le k \ \Rightarrow \ P \ge \frac{\lceil (n+1)(1-\alpha)\rceil}{n+1} \ge 1 - \alpha \qquad \blacksquare", font_size=30),
+            cmath(r"S_{n+1} \le \hat q", r"\iff", r"\mathrm{rank}_{\min}(S_{n+1}) \le k \ \Rightarrow \ P \ge \frac{\lceil (n+1)(1-\alpha)\rceil}{n+1} \ge 1 - \alpha \qquad \blacksquare", font_size=30),
         ]
         rows[3][-1].set_color(COVC)
         whys = [why(r"any fixed score, \ fit on separate data"), why(r"uniform ranks"), why(r"the empirical quantile, \ inflated"), why(r"the quantile lemma")]
+        head = label('The guarantee and its assumptions', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> The proof in four lines. Apply any fixed score function, say the absolute residual of a model "
-            "fitted on separate data, to each point: the scores are exchangeable too. <bookmark mark='b'/> So the test score's "
-            "rank among all n plus one is uniform, and the chance it is at most k is at least k over n plus one, with equality "
-            "when there are no ties. <bookmark mark='c'/> Take the threshold to be the k-th smallest calibration score, with k "
-            "the ceiling of n plus one times one minus alpha. <bookmark mark='d'/> The test score is below the threshold "
-            "exactly when its rank is at most k, so the coverage is at least that ceiling over n plus one, which is at least one "
-            "minus alpha."
+            "<bookmark mark='a'/> The proof in four lines. Apply any fixed score function, say the absolute residual of a model fitted on separate data, to each point: the scores are exchangeable too. <bookmark mark='b'/> Use the minimal rank, one plus the number of scores strictly smaller. Its probability of being at most k is at least k over n plus one. With almost surely distinct scores the rank is uniform and equality holds. <bookmark mark='c'/> Take the threshold to be the k-th smallest calibration score, with k the ceiling of n plus one times one minus alpha, or infinity if k exceeds n. <bookmark mark='d'/> The test score is below the threshold exactly when its rank is at most k, so the coverage is at least that ceiling over n plus one, which is at least one minus alpha."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -134,6 +129,9 @@ class Lemma(VoiceoverScene):
         rows[0][-1].set_color(COVC)
         rows[2][-1].set_color(MISSC)
         whys = [why(r"exact"), why(r"a little over"), why(r"too few to say"), why(r"the price of no model")]
+        head = label('Small n', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
             "<bookmark mark='a'/> Some worked numbers. With nineteen calibration scores and alpha a tenth, k is the "
             "ceiling of twenty times point nine, eighteen: the eighteenth smallest score is the threshold, and the "
@@ -158,6 +156,9 @@ class Lemma(VoiceoverScene):
         ]
         rows[3][-1].set_color(COVC)
         whys = [why(r"classification scores"), why(r"Part 46's randomized tests"), why(r"Part 34's function"), why(r"exact, \ any law")]
+        head = label('Ties', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
             "<bookmark mark='a'/> With discrete scores, such as classification probabilities, ties make the coverage "
             "at least k over n plus one rather than equal to it. <bookmark mark='b'/> Breaking ties with an "
@@ -195,13 +196,7 @@ class Lemma(VoiceoverScene):
             label(r"larger $n$ concentrates it: \ variance $\approx \alpha(1-\alpha)/n$", font_size=22, color=GREY_A),
         ), 4.6, 0.4, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The guarantee is on average over the calibration set too. Draw four thousand calibration sets "
-            f"of a hundred. <bookmark mark='b'/> Each gives one interval, and that interval has some coverage of future points. "
-            f"<bookmark mark='c'/> Vladimir Vovk showed that coverage has exactly a Beta distribution, with parameters k and n "
-            f"plus one minus k. <bookmark mark='d'/> Its mean is {say(d['mean'], 3)}, but {100 * d['below85']:.1f} percent of "
-            f"calibration sets give intervals that cover less than eighty-five percent. <bookmark mark='e'/> A larger "
-            f"calibration set concentrates it, with variance about alpha times one minus alpha over n: choose n with that in "
-            f"mind."
+            f"<bookmark mark='a'/> The guarantee is on average over the calibration set too. Draw four thousand calibration sets of a hundred. <bookmark mark='b'/> Each gives one interval, and that interval has some coverage of future points. <bookmark mark='c'/> With independent identically distributed continuous scores, conditional on separately trained models, that coverage has a Beta distribution, with parameters k and n plus one minus k. <bookmark mark='d'/> Its mean is {say(d['mean'], 3)}, but {100 * d['below85']:.1f} percent of calibration sets give intervals that cover less than eighty-five percent. <bookmark mark='e'/> A larger calibration set concentrates it, with variance about alpha times one minus alpha over n: choose n with that in mind."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated; \ Beta law exact")))
             vo.wait_until("a")
@@ -225,16 +220,12 @@ class Lemma(VoiceoverScene):
         ]
         rows[2][-1].set_color(COVC)
         rows[3][-1].set_color(CALC)
-        whys = [why(r"continuous scores"), why(r"the probability integral transform"), why(r"Wilks's fact"), why(r"training-conditional guarantees")]
+        whys = [why(r"IID continuous scores; \ fixed separately trained model"), why(r"the probability integral transform"), why(r"Wilks's fact"), why(r"training-conditional guarantees")]
+        head = label('Beta proof', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> The Beta law is Wilks's fact again. Given the calibration set, the interval's "
-            "coverage of a future point is the score distribution F evaluated at the threshold, the k-th order "
-            "statistic. <bookmark mark='b'/> F of the scores are n independent uniforms, so F of the k-th score is the "
-            "k-th uniform order statistic, <bookmark mark='c'/> which is Beta with parameters k and n plus one minus "
-            "k: mean k over n plus one, variance about alpha times one minus alpha over n. <bookmark mark='d'/> That "
-            "gives a stronger guarantee for free: choose k a little larger, and with probability one minus delta over "
-            "the calibration set, the coverage itself is at least one minus alpha. Vovk calls this "
-            "training-conditional validity."
+            "<bookmark mark='a'/> The Beta law is Wilks's fact for independent identically distributed continuous scores. Mere exchangeability is not enough for the Beta law. Given the calibration set, the interval's coverage of a future point is the score distribution F evaluated at the threshold, the k-th order statistic. <bookmark mark='b'/> F of the scores are n independent uniforms, so F of the k-th score is the k-th uniform order statistic, <bookmark mark='c'/> which is Beta with parameters k and n plus one minus k: mean k over n plus one, variance about alpha times one minus alpha over n. <bookmark mark='d'/> That gives a stronger guarantee with a width cost: choose k a little larger, and with probability one minus delta over the calibration set, the coverage itself is at least one minus alpha. Vovk calls this training-conditional validity."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -252,6 +243,9 @@ class Lemma(VoiceoverScene):
         rows[1][-1].set_color(MISSC)
         rows[2][-1].set_color(COVC)
         whys = [why(r"chapter 1's numbers"), why(r"from the Beta law"), why(r"Vovk's calibration-conditional rule"), why(r"a stricter threshold")]
+        head = label('Pac', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
             "<bookmark mark='a'/> With a hundred calibration points at alpha a tenth, k is ninety-one and the "
             "coverage, given the calibration set, is Beta with parameters ninety-one and ten: mean ninety point one "
@@ -271,18 +265,16 @@ class Lemma(VoiceoverScene):
         rows = [
             cmath(r"\text{split conformal}", r":", r"\text{fit } \hat\mu \text{ on one half; \ scores } |Y_i - \hat\mu(X_i)| \text{ on the other}", font_size=32),
             cmath(r"C(x)", r"=", r"[\hat\mu(x) - \hat q, \ \hat\mu(x) + \hat q]: \ \ P(Y_{n+1} \in C(X_{n+1})) \ge 1 - \alpha", font_size=32),
-            cmath(r"\text{any } \hat\mu", r":", r"\text{a bad model gives wide intervals, \ never invalid ones}", font_size=34),
+            cmath(r"\text{any } \hat\mu", r":", r"\text{a bad model gives wide intervals, \ preserves marginal validity under exchangeability}", font_size=34),
             cmath(r"\text{better scores}", r":", r"\text{CQR, \ normalized residuals \ (Part 34): \ adaptive width}", font_size=32),
         ]
         rows[1][-1].set_color(COVC)
         whys = [why(r"Papadopoulos et al.; \ Lei et al. (2018)"), why(r"the lemma, \ applied"), why(r"validity is free"), why(r"efficiency is not")]
+        head = label('Split rows', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> Split conformal prediction is the lemma applied. Fit any model on one part of the data, and "
-            "compute absolute residuals on the other. <bookmark mark='b'/> The interval is the prediction plus or minus their "
-            "inflated quantile, and it covers a new point with probability at least one minus alpha. <bookmark mark='c'/> Any "
-            "model at all: a bad one gives wide intervals, never invalid ones. <bookmark mark='d'/> Validity is free; efficiency "
-            "is not, and comes from better scores, such as conformalized quantile regression or residuals divided by a fitted "
-            "spread."
+            "<bookmark mark='a'/> Split conformal prediction is the lemma applied. Fit any model on one part of the data, and compute absolute residuals on the other. <bookmark mark='b'/> The interval is the prediction plus or minus their inflated quantile, and it covers a new point with probability at least one minus alpha. <bookmark mark='c'/> Any separately trained model preserves marginal validity under the required exchangeability. A bad score can hurt width and subgroup coverage. <bookmark mark='d'/> Validity is free; efficiency is not, and comes from better scores, such as conformalized quantile regression or residuals divided by a fitted spread."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):

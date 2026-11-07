@@ -1,0 +1,68 @@
+[
+  {
+    "name": "bs",
+    "path": ".cache/stats57/bs.json",
+    "sha256": "226117440ffa87ed4b63a531893067111ed28ee496f7ea5de4d1f5993d923a25",
+    "bytes": 1728
+  },
+  {
+    "name": "lemma",
+    "path": ".cache/stats57/lemma.json",
+    "sha256": "544b419e670c97b448e2fab5a4835f130c8a4227d2637463bcc07984123595f3",
+    "bytes": 88620
+  },
+  {
+    "name": "full",
+    "path": ".cache/stats57/full.json",
+    "sha256": "44f11474e5cca93abab59fac4339bf92133b31d763a7f3550a214884c50613cb",
+    "bytes": 9185
+  },
+  {
+    "name": "local",
+    "path": ".cache/stats57/local.json",
+    "sha256": "cae16971a7c4bb5ddc8f586d9025a6adf55d6b279fd59d34b4b681692df2ca7d",
+    "bytes": 594
+  },
+  {
+    "name": "nhanes",
+    "path": ".cache/stats57/nhanes.json",
+    "sha256": "05bf8f9420bf23917eb65bc7759ff398575b1553f5f32d9924340f8c09131603",
+    "bytes": 9057
+  },
+  {
+    "name": "drift",
+    "path": ".cache/stats57/drift.json",
+    "sha256": "f6c92bb41545218d496cb465faf07de2c2c350f9deab2f5f752466bc6293591d",
+    "bytes": 14083
+  },
+  {
+    "name": "outliers",
+    "path": ".cache/stats57/outliers.json",
+    "sha256": "5dd0a7f82fe243d86c8bb9684e29abcbc221fa6cfbf80717ba342c20e692a2c0",
+    "bytes": 1658
+  },
+  {
+    "name": "risk",
+    "path": ".cache/stats57/risk.json",
+    "sha256": "78c3c2a93ff6378b052136c86c53563fa42b548671b7dadb0dff994c40dfa8c2",
+    "bytes": 6074
+  },
+  {
+    "name": "aci",
+    "path": ".cache/stats57/aci.json",
+    "sha256": "fb0ae227408ca91ec067f86bda6fe75fd93acea13354eb88414048b798f8ed81",
+    "bytes": 140965
+  },
+  {
+    "name": "pvals",
+    "path": ".cache/stats57/pvals.json",
+    "sha256": "ace457769ebf0409787cc9bc24a3841b7412ac7ee287425bea3fa45d49a7edcf",
+    "bytes": 40921
+  },
+  {
+    "name": "board",
+    "path": ".cache/stats57/board.json",
+    "sha256": "0889743e8c807e40ff71c60567ecbb7c294fb5c933eab1e64ccd022601252f08",
+    "bytes": 2030
+  }
+]

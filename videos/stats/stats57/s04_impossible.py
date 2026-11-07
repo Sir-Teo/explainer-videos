@@ -32,12 +32,11 @@ class Impossible(VoiceoverScene):
         rows[1][-1].set_color(TESTPT)
         rows[2][-1].set_color(MISSC)
         whys = [why(r"what the lemma gives"), why(r"what a patient wants"), why(r"the next chart"), why(r"the obvious goal")]
+        head = label('Conditional', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> The lemma's guarantee is marginal: coverage on average over the test point's features. "
-            "<bookmark mark='b'/> What a patient wants is conditional coverage: given my features, the interval covers my "
-            "outcome with probability one minus alpha. <bookmark mark='c'/> The two can be very different: marginal coverage of "
-            "ninety percent can hide a subgroup covered half the time. <bookmark mark='d'/> So the obvious goal is conditional "
-            "coverage, with no assumptions."
+            "<bookmark mark='a'/> The lemma's guarantee is marginal: coverage on average over the test point's features. <bookmark mark='b'/> What a patient wants is conditional coverage: given my features, the interval covers my outcome with probability one minus alpha. <bookmark mark='c'/> The two can be very different: marginal coverage of ninety percent can hide a subgroup covered half the time. <bookmark mark='d'/> So the obvious goal is conditional coverage, uniformly over all sampling distributions, beyond the IID sampling setup."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -92,6 +91,9 @@ class Impossible(VoiceoverScene):
         rows[1][-1].set_color(MISSC)
         rows[3][-1].set_color(MISSC)
         whys = [why(r"distribution-free"), why(r"Vovk (2012); \ Lei \& Wasserman (2014)"), why(r"Bahadur--Savage, \ locally"), why(r"the impossibility")]
+        head = label('Theorem', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
             "<bookmark mark='a'/> And the impossibility. Suppose a procedure has conditional coverage for every distribution, at "
             "every point x that is not an atom. <bookmark mark='b'/> Vladimir Vovk, and Jing Lei and Larry Wasserman, proved "
@@ -108,19 +110,18 @@ class Impossible(VoiceoverScene):
     def bins(self):
         rows = [
             cmath(r"\text{local conformal}", r":", r"\text{calibrate within bins or neighbourhoods of } x", font_size=34),
-            cmath(r"\text{gives}", r":", r"\text{coverage within each bin, \ exactly}", font_size=36),
+            cmath(r"\text{gives}", r":", r"\text{at least nominal coverage for a fixed partition}", font_size=36),
             cmath(r"\text{as bins shrink}", r":", r"\text{fewer calibration points: \ wider, \ eventually infinite}", font_size=34),
             cmath(r"\text{the trade}", r":", r"\text{resolution in } x \text{ against interval length}", font_size=34),
         ]
         rows[1][-1].set_color(COVC)
         rows[2][-1].set_color(MISSC)
         whys = [why(r"Lei \& Wasserman (2014)"), why(r"Mondrian by bins"), why(r"the theorem, \ in practice"), why(r"bias against variance, \ again")]
+        head = label('Bins', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> The practical response is local conformal prediction: calibrate within bins, or "
-            "neighbourhoods, of x. <bookmark mark='b'/> That gives exact coverage within each bin. <bookmark "
-            "mark='c'/> But as the bins shrink, each holds fewer calibration points, the inflated quantile grows, and "
-            "in the limit the intervals become infinite, exactly as the theorem says. <bookmark mark='d'/> Resolution "
-            "in x trades against interval length: the old bias–variance trade-off in a new form."
+            "<bookmark mark='a'/> The practical response is local conformal prediction: calibrate within bins, or neighbourhoods, of x. <bookmark mark='b'/> For a fixed partition chosen separately from calibration labels, Mondrian calibration gives at least nominal coverage within each bin. Arbitrary overlapping neighborhoods are not automatically such a partition. <bookmark mark='c'/> But as the bins shrink, each holds fewer calibration points, the inflated quantile grows, and in the limit the intervals become infinite, exactly as the theorem says. <bookmark mark='d'/> Resolution in x trades against interval length: the old bias–variance trade-off in a new form."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -138,13 +139,11 @@ class Impossible(VoiceoverScene):
         rows[1][-1].set_color(WEIGHTC)
         rows[2][-1].set_color(MISSC)
         whys = [why(r"fine"), why(r"already the extreme"), why(r"infinite intervals"), why(r"about 133 bins here")]
+        head = label('Bins worked', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> In numbers: twelve hundred calibration points in ten bins leave a hundred and twenty "
-            "in each, and the threshold is the hundred-and-ninth of them. <bookmark mark='b'/> With a hundred bins, "
-            "twelve in each, the threshold is already the largest score in the bin. <bookmark mark='c'/> With two "
-            "hundred bins, six in each, k would be seven, and every interval is the whole line. <bookmark mark='d'/> "
-            "So the number of bins can be at most about n alpha over one minus alpha, a hundred and thirty-three here, "
-            "before the intervals become infinite: the impossibility theorem, counted."
+            "<bookmark mark='a'/> In numbers: twelve hundred calibration points in ten bins leave a hundred and twenty in each, and the threshold is the hundred-and-ninth of them. <bookmark mark='b'/> With a hundred bins, twelve in each, the threshold is already the largest score in the bin. <bookmark mark='c'/> With two hundred bins, six in each, k would be seven, and every interval is the whole line. <bookmark mark='d'/> If every bin must have enough calibration observations for a finite threshold, there can be at most about a hundred and thirty-three such bins. Equal occupancy is an idealization; random sparse bins can be infinite sooner."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -161,6 +160,9 @@ class Impossible(VoiceoverScene):
         ]
         rows[2][-1].set_color(COVC)
         whys = [why(r"a weaker target"), why(r"Foygel Barber, \ Cand\`es, \ Ramdas \& Tibshirani"), why(r"Mondrian, \ chapter 9"), why(r"chapter 4")]
+        head = label('Relaxed', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
             "<bookmark mark='a'/> A relaxation asks for coverage over every subset of feature space with probability at least "
             "delta. <bookmark mark='b'/> Barber, Candès, Ramdas and Tibshirani proved lower bounds on the length of any interval "
@@ -177,20 +179,18 @@ class Impossible(VoiceoverScene):
     def functionals(self):
         rows = [
             cmath(r"\text{binary } Y", r":", r"\text{a confidence interval for } P(Y = 1 \mid X = x)", font_size=36),
-            cmath(r"\text{distribution-free}", r"\Rightarrow", r"\text{its length cannot shrink to } 0 \text{ unless } X \text{ has atoms}", font_size=32),
-            cmath(r"\text{in general}", r":", r"\text{regression functions, \ means, \ quantiles of } P: \ \text{need assumptions}", font_size=32),
-            cmath(r"\text{the boundary}", r":", r"\text{predict an observable, \ distribution-free; \ estimate a parameter, \ not}", font_size=30),
+            cmath(r"\text{distribution-free}", r"\Rightarrow", r"\text{no uniform shrinking guarantee over all non-atomic models}", font_size=32),
+            cmath(r"\text{in general}", r":", r"\text{marginal medians and quantiles admit rank-based confidence intervals}", font_size=32),
+            cmath(r"\text{the boundary}", r":", r"\text{the functional and model class determine what is possible}", font_size=30),
         ]
         rows[1][-1].set_color(MISSC)
         rows[3][-1].set_color(TESTPT)
         whys = [why(r"Barber (2020)"), why(r"another impossibility"), why(r"Bahadur--Savage's family"), why(r"the lesson of the part")]
+        head = label('Functionals', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> Functionals of the distribution are worse. For a binary outcome, consider a confidence "
-            "interval for the conditional probability that Y is one, given X equals x. <bookmark mark='b'/> Rina Foygel Barber "
-            "proved in 2020 that without assumptions its length cannot shrink to zero, however much data there is, unless X has "
-            "atoms. <bookmark mark='c'/> Regression functions, means and quantiles of P all need assumptions. <bookmark "
-            "mark='d'/> That is the boundary: distribution-free methods predict observables; parameters of the distribution "
-            "require assumptions."
+            "<bookmark mark='a'/> Functionals of the distribution are worse. For a binary outcome, consider a confidence interval for the conditional probability that Y is one, given X equals x. <bookmark mark='b'/> Rina Foygel Barber proved distribution-free lower bounds for intervals on the conditional response probability at a random feature. There is no uniform shrinking-length guarantee across all non-atomic models; this is not a claim that every particular model has a positive lower bound. <bookmark mark='c'/> An unrestricted mean and a pointwise regression function face these obstacles. Marginal quantiles and medians do have distribution-free order-statistic confidence intervals under IID sampling. <bookmark mark='d'/> The boundary depends on the functional and the model class, not simply on prediction versus parameter estimation."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):

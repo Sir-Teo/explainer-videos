@@ -56,6 +56,9 @@ class Hook(VoiceoverScene):
         rows[1][-1].set_color(TESTPT)
         rows[3][-1].set_color(MISSC)
         whys = [why(r"a normal plus a far-away atom"), why(r"the mean never changes"), why(r"the atom is rarely seen"), why(r"the sample looks like $N(0, 1)$")]
+        head = label('Family', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
             "<bookmark mark='a'/> A concrete family makes the argument visible. Mix a standard normal with a small probability "
             "epsilon of a single value, three over epsilon. <bookmark mark='b'/> Every member of the family has mean exactly "
@@ -79,15 +82,11 @@ class Hook(VoiceoverScene):
         ]
         rows[2][-1].set_color(COVC)
         whys = [why(r"a statistician's oldest tool"), why(r"order statistics"), why(r"the probability integral transform"), why(r"seventy years later")]
+        head = label('History', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> Distribution-free inference for prediction is older than it looks. In 1941 Samuel "
-            "Wilks built tolerance intervals from order statistics: no assumption about the distribution except "
-            "continuity. <bookmark mark='b'/> The interval between two order statistics covers at least a fraction "
-            "beta of the population, with a probability that can be computed exactly. <bookmark mark='c'/> The reason "
-            "is that the distribution function evaluated at the k-th order statistic has a Beta distribution, whatever "
-            "the distribution is: the probability integral transform makes every continuous law uniform. <bookmark "
-            "mark='d'/> The same fact returns in chapter one, seventy years later, as the exact law of conformal "
-            "coverage."
+            "<bookmark mark='a'/> Distribution-free inference for prediction is older than it looks. In 1941 Samuel Wilks built tolerance intervals from order statistics: independent identically distributed observations and continuity, without a parametric family. <bookmark mark='b'/> The interval between two order statistics covers at least a fraction beta of the population, with a probability that can be computed exactly. <bookmark mark='c'/> The reason is that the distribution function evaluated at the k-th order statistic has a Beta distribution, whatever the distribution is: the probability integral transform makes every continuous law uniform. <bookmark mark='d'/> The same fact returns in chapter one, seventy years later, as the exact law of conformal coverage."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -110,15 +109,11 @@ class Hook(VoiceoverScene):
             label(r"every distribution here has mean 3", font_size=22),
             label(rf"red: \ simulated coverage, \ {r3['sim']:.2f} at $\varepsilon = 0.003$", font_size=22, color=MISSC),
             label(r"grey: \ the bound $1 - (1 - \varepsilon)^n(1 - \text{tiny})$", font_size=22, color=GREY_B),
-            label(rf"at $\varepsilon = 0.001$: \ {rows[-1]['sim']:.3f}; \ and $\to 0$", font_size=22, color=MISSC),
+            label(rf"at $\varepsilon = 0.001$: \ {rows[-1]['sim']:.3f}; \ tends to the tiny no-atom term at fixed mean", font_size=22, color=MISSC),
             label(r"no $n$ is large enough for every $P$", font_size=22, color=TESTPT),
         ), 4.6, 0.4, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The t-interval's coverage across the family, with fifty observations. Every distribution has "
-            f"mean three. <bookmark mark='b'/> As epsilon shrinks, the simulated coverage falls: {say(r3['sim'], 2)} at epsilon "
-            f"three in a thousand. <bookmark mark='c'/> It follows the bound set by the chance of seeing no atom at all. "
-            f"<bookmark mark='d'/> At epsilon one in a thousand it is {say(rows[-1]['sim'], 3)}, and it goes to zero. <bookmark "
-            f"mark='e'/> Whatever n you fix, some member of the family defeats it."
+            f"<bookmark mark='a'/> The t-interval's coverage across the family, with fifty observations. Every distribution has mean three. <bookmark mark='b'/> As epsilon shrinks, the simulated coverage falls: {say(r3['sim'], 2)} at epsilon three in a thousand. <bookmark mark='c'/> It follows the bound set by the chance of seeing no atom at all. <bookmark mark='d'/> At epsilon one in a thousand it is {say(rows[-1]['sim'], 3)}, and it approaches the tiny, positive no-atom coverage at this fixed mean and sample size. To make the general impossibility limit zero, the hidden mean shift must also be allowed to grow. <bookmark mark='e'/> Whatever n you fix, some member of the family defeats it."
         ) as vo:
             self.play(FadeIn(A), FadeIn(nom), FadeIn(simulated_tag(r"simulated; \ bound exact")))
             vo.wait_until("a")
@@ -143,6 +138,9 @@ class Hook(VoiceoverScene):
         rows[1][-1].set_color(MISSC)
         rows[2][-1].set_color(MISSC)
         whys = [why(r"almost every sample is normal"), why(r"the simulated 14\%"), why(r"smaller still"), why(r"a far atom carries it")]
+        head = label('Worked bs', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
             "<bookmark mark='a'/> The numbers behind the chart. With fifty observations and epsilon three in a "
             "thousand, the chance that the sample contains no atom is point nine nine seven to the fiftieth, about "
@@ -161,10 +159,7 @@ class Hook(VoiceoverScene):
     def board(self):
         br = load("board")["rows"]
         show_board(self, board_rows("Bahadur"),
-                   f"<bookmark mark='a'/> On the Board: the t-interval for the mean, over the mixture with epsilon three in a "
-                   f"thousand, covers {100 * br[0]['achieved']:.1f} percent of the time: broken. <bookmark mark='b'/> But on the "
-                   f"same family, a split conformal prediction interval for the next observation covers "
-                   f"{100 * br[1]['achieved']:.1f} percent: kept, with no assumption at all.",
+                   f"<bookmark mark='a'/> On the Board: the t-interval for the mean, over the mixture with epsilon three in a thousand, covers {100 * br[0]['achieved']:.1f} percent of the time: broken. <bookmark mark='b'/> But on the same family, a split conformal prediction interval for the next observation covers {100 * br[1]['achieved']:.1f} percent: kept, under independent sampling from this same mixture.",
                    [("a", [0]), ("b", [1])])
 
     def turn(self):
@@ -176,11 +171,7 @@ class Hook(VoiceoverScene):
             label(r"this part: \ what that one fact guarantees, \ and the theorems that say what it cannot", font_size=26, color=TESTPT),
         ), 12.4, 0.5, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> What changed between the two rows? <bookmark mark='b'/> The mean is a functional of the "
-            "distribution that a rare event can move without limit. <bookmark mark='c'/> The next observation is different: it "
-            "is exchangeable with the ones we already have. <bookmark mark='d'/> So its rank among them is uniformly "
-            "distributed, whatever the distribution is. <bookmark mark='e'/> This part is about what that one fact guarantees, "
-            "and about the theorems that say what it cannot."
+            "<bookmark mark='a'/> What changed between the two rows? <bookmark mark='b'/> The mean is a functional of the distribution that a rare event can move without limit. <bookmark mark='c'/> The next observation is different: it is exchangeable with the ones we already have. <bookmark mark='d'/> So its rank is uniform when ties are absent or independently randomized; conservative handling of ties still gives coverage. <bookmark mark='e'/> This part is about what that one fact guarantees, and about the theorems that say what it cannot."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
@@ -197,6 +188,9 @@ class Hook(VoiceoverScene):
         rows[0][-1].set_color(MISSC)
         rows[2][-1].set_color(COVC)
         whys = [why(r"Bahadur \& Savage's second theorem"), why(r"too rich a family"), why(r"Part 16"), why(r"medians are robust")]
+        head = label('Testing', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
             "<bookmark mark='a'/> Bahadur and Savage's paper has a second theorem, about tests. Over the family of all "
             "distributions with a finite mean, every test of a hypothesis about the mean has power no larger than its "
@@ -216,15 +210,12 @@ class Hook(VoiceoverScene):
         cards = [
             upgrade_card(34, r"split conformal covers at least $1 - \alpha$, \ by experiment", r"exchangeability; \ coverage on average",
                          r"chapters 1--3: \ the proofs, \ and what cannot be had"),
-            upgrade_card(56, r"conformal selection needs only exchangeability", r"exchangeable data",
+            upgrade_card(56, r"conformal selection needs the stated sampling assumptions", r"exchangeable data",
                          r"chapters 4--9: \ beyond exchangeability, \ and conditional guarantees"),
         ]
         VGroup(*cards).arrange(DOWN, buff=0.4).move_to(ORIGIN)
         with self.voiceover(
-            "<bookmark mark='a'/> Two promises come due. Part thirty-four showed by experiment that split conformal covers at "
-            "least one minus alpha, assuming exchangeability, on average. Chapters one to three prove it, and prove what "
-            "cannot be had. <bookmark mark='b'/> Part fifty-six's conformal selection needed only exchangeability. Chapters four "
-            "to nine go beyond it, and ask for conditional guarantees."
+            "<bookmark mark='a'/> Two promises come due. Part thirty-four showed by experiment that split conformal covers at least one minus alpha, assuming exchangeability, on average. Chapters one to three prove it, and prove what cannot be had. <bookmark mark='b'/> Part fifty-six's conformal selection used independent sampling or its theorem's specified conditional exchangeability assumptions. Chapters four to nine go beyond it, and ask for conditional guarantees."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(cards[0], shift=UP * 0.2))

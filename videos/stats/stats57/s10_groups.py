@@ -26,18 +26,17 @@ class Groups(VoiceoverScene):
         rows = [
             cmath(r"\text{Mondrian}", r":", r"\text{a separate quantile in each group: \ disjoint groups only}", font_size=34),
             cmath(r"\text{guarantee}", r":", r"P(Y \in C \mid G = g) \ge 1 - \alpha \ \text{ for every } g", font_size=36),
-            cmath(r"\text{overlapping groups}", r":", r"\text{age, \ sex and race at once: \ Mondrian cannot}", font_size=34),
+            cmath(r"\text{overlapping groups}", r":", r"\text{a full intersection partition can be sparse}", font_size=34),
             cmath(r"\text{chapter 4}", r":", r"\mathcal F = \text{span of the indicators: \ exact coverage in every group}", font_size=32),
         ]
         rows[1][-1].set_color(COVC)
         rows[3][-1].set_color(COVC)
         whys = [why(r"Vovk et al. (2005)"), why(r"the lemma within each group"), why(r"partitions only"), why(r"Gibbs, \ Cherian \& Cand\`es")]
+        head = label('Mondrian', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> The oldest answer to subgroup coverage is Vovk's Mondrian conformal prediction: calibrate "
-            "separately within each group. <bookmark mark='b'/> By the lemma applied within each group, every group gets at "
-            "least one minus alpha. <bookmark mark='c'/> But the groups must be disjoint. Asking for coverage within every age "
-            "band, each sex and each race at once is beyond it. <bookmark mark='d'/> Chapter four's method does it, with the "
-            "class spanned by all the group indicators."
+            "<bookmark mark='a'/> The oldest answer to subgroup coverage is Vovk's Mondrian conformal prediction: calibrate separately within each group. <bookmark mark='b'/> By the lemma applied within each group, every group gets at least one minus alpha. <bookmark mark='c'/> A single Mondrian partition is disjoint. Refining to all age-sex-race intersection cells can cover their unions, but may leave sparse cells and infinite thresholds. The class method borrows structure across overlapping groups. <bookmark mark='d'/> Chapter four's method does it, with the class spanned by all the group indicators."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -55,6 +54,9 @@ class Groups(VoiceoverScene):
         rows[2][-1].set_color(COVC)
         rows[3][-1].set_color(MISSC)
         whys = [why(r"the lemma, \ per group"), why(r"the lemma, \ per group"), why(r"Mondrian's promise"), why(r"Beta spreads")]
+        head = label('Mondrian worked', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
             "<bookmark mark='a'/> Two groups, with fifty and five hundred calibration points, at alpha a tenth. In the "
             "small group the threshold is the forty-sixth score, and coverage is forty-six in fifty-one, ninety point "
@@ -85,16 +87,10 @@ class Groups(VoiceoverScene):
         foot = fit_rows(VGroup(
             label(rf"NHANES 2017--18: \ systolic pressure from age, \ sex and BMI by least squares; \ {d['reps']} random splits; \ $\alpha = 0.1$", font_size=22, color=GREY_A),
             label(rf"marginal: \ {100 * d['overall']['marginal']:.1f}\% overall, \ but the old and the young are miscovered", font_size=24, color=MISSC),
-            label(r"group-conditional: \ about 90\% in every row at once, \ ages, \ sexes and races together", font_size=24, color=COVC),
+            label(r"fixed-extract resplitting illustration; \ no national population coverage certification", font_size=24, color=COVC),
         ), 10.0, 0.16, [-1.3, -2.6, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> NHANES, the 2017 to 2018 survey: predict systolic blood pressure from age, sex and body-mass "
-            f"index by least squares, and build ninety percent intervals, over {d['reps']} random splits. <bookmark mark='b'/> "
-            f"Marginal split conformal covers {100 * d['overall']['marginal']:.1f} percent overall, but {100 * S['marginal']['70+']:.0f} "
-            f"percent of people over seventy, whose pressures vary more, and {100 * S['marginal']['18-29']:.0f} percent of those under "
-            f"thirty. <bookmark mark='c'/> Mondrian calibration by age band fixes the age rows, but not the others. <bookmark "
-            f"mark='d'/> The group-conditional method, with the age, sex and race indicators together, holds close to ninety "
-            f"percent in every row at once."
+            f"<bookmark mark='a'/> NHANES, the 2017 to 2018 survey: predict systolic blood pressure from age, sex and body-mass index by least squares, and build ninety percent intervals, over {d['reps']} random splits. <bookmark mark='b'/> Marginal split conformal covers {100 * d['overall']['marginal']:.1f} percent overall, but {100 * S['marginal']['70+']:.0f} percent of people over seventy, whose pressures vary more, and {100 * S['marginal']['18-29']:.0f} percent of those under thirty. <bookmark mark='c'/> Mondrian calibration by age band fixes the age rows, but not the others. <bookmark mark='d'/> The group-conditional method, with the age, sex and race indicators together, is compared across all ten named groups. These are repeated splits of one survey extract, with no population survey weighting or cluster correction. They are not independent national cohorts or a population-wide clinical guarantee."
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(museum_tag(r"NHANES 2017--18, \ CDC/NCHS")))
             vo.wait_until("a")
@@ -111,17 +107,17 @@ class Groups(VoiceoverScene):
         d = load("nhanes")
         S, groups = d["summary"], d["groups"]
         k = len(groups)
-        A = axes([-0.6, k - 0.4], [0.75, 1.0], x_length=11.0, y_length=4.2, ylabel=r"coverage of 90\% intervals",
-                 yticks=[0.75, 0.8, 0.85, 0.9, 0.95, 1.0], center=[0.2, 0.4, 0])
+        A = axes([-0.6, k - 0.4], [0, 1.0], x_length=11.0, y_length=4.2, ylabel=r"coverage of 90\% intervals",
+                 yticks=[0, .5, .75, .9, 1], center=[0.2, 0.4, 0])
         ax = A.ax
 
         def bar(i, v, c):
-            v = min(max(v, 0.75), 1.0)
-            return Rectangle(width=abs(ax.c2p(0.32, 0)[0] - ax.c2p(0, 0)[0]), height=max(0.01, ax.c2p(0, v)[1] - ax.c2p(0, 0.75)[1]),
-                             stroke_width=1, stroke_color=c, fill_color=c, fill_opacity=0.7).move_to(ax.c2p(i, (0.75 + v) / 2))
+            # Values are drawn without clamping; the full probability axis contains every bar.
+            return Rectangle(width=abs(ax.c2p(0.32, 0)[0] - ax.c2p(0, 0)[0]), height=max(0.01, ax.c2p(0, v)[1] - ax.c2p(0, 0)[1]),
+                             stroke_width=1, stroke_color=c, fill_color=c, fill_opacity=0.7).move_to(ax.c2p(i, v / 2))
         bm = VGroup(*[bar(i - 0.18, S["marginal"][g], MISSC) for i, g in enumerate(groups)])
         bg = VGroup(*[bar(i + 0.18, S["gcc"][g], COVC) for i, g in enumerate(groups)])
-        names = VGroup(*[label(g, font_size=20, color=GREY_A).next_to(ax.c2p(i, 0.75), DOWN, buff=0.15) for i, g in enumerate(groups)])
+        names = VGroup(*[label(g, font_size=20, color=GREY_A).next_to(ax.c2p(i, 0), DOWN, buff=0.15) for i, g in enumerate(groups)])
         nom = DashedLine(ax.c2p(-0.6, 0.9), ax.c2p(k - 0.4, 0.9), color=GREY_B, stroke_width=2)
         lo = min(groups, key=lambda g: S["marginal"][g])
         hi = max(groups, key=lambda g: S["marginal"][g])
@@ -154,20 +150,18 @@ class Groups(VoiceoverScene):
 
     def slack(self):
         rows = [
-            cmath(r"\text{groups}", r":", r"\text{5 age bands, \ 2 sexes, \ 3 race groups: \ 11 functions}", font_size=34),
-            cmath(r"\text{calibration}", r":", r"n = 1{,}200: \ \text{slack} \le 11/1{,}201 \approx 0.9\%", font_size=36),
+            cmath(r"\text{groups}", r":", r"\text{11 basis columns, \ two redundancies: \ dimension }9", font_size=34),
+            cmath(r"\text{calibration}", r":", r"n=1{,}200:\quad \text{group upper slack}\le\frac{9}{1{,}201\,P(X\in G)}", font_size=36),
             cmath(r"\text{small groups}", r":", r"\text{coverage within them is noisy, \ though correct on average}", font_size=34),
             cmath(r"\text{so}", r":", r"\text{name groups you can afford to calibrate}", font_size=36),
         ]
         rows[1][-1].set_color(COVC)
         whys = [why(r"with the constant"), why(r"the over-coverage bound"), why(r"Beta-like spread"), why(r"the design question")]
+        head = label('Group slack depends on prevalence', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> How much did it cost? The class had eleven functions: five age bands, two sexes, "
-            "three race groups and the constant. <bookmark mark='b'/> With twelve hundred calibration points, the "
-            "possible over-coverage is at most eleven in twelve hundred and one, under one percent. <bookmark "
-            "mark='c'/> Small groups get correct coverage on average, but their realized coverage is noisy, like "
-            "chapter one's Beta law with a small n. <bookmark mark='d'/> So name groups you can afford to calibrate: "
-            "that is a design decision, made before the data arrive."
+            "<bookmark mark='a'/> How much did it cost? The design has eleven basis columns, but two linear redundancies leave dimension nine: the intercept is the sum of age indicators and also the sum of sex indicators. <bookmark mark='b'/> With twelve hundred calibration points, the marginal continuity-based upper slack is at most dimension over twelve hundred and one. For an individual group divide that bound by its population prevalence; it can be much larger than one percent. <bookmark mark='c'/> Small groups get correct coverage on average, and their observed coverage is noisy. The Beta formula for an ordinary within-group order statistic is not an exact law for this overlapping-group optimizer. <bookmark mark='d'/> So name groups you can afford to calibrate: that is a design decision, made before the data arrive."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
