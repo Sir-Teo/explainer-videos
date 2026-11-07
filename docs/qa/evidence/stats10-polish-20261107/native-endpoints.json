@@ -1,0 +1,94 @@
+{
+  "fingerprint": "8cccd8df1badc5383f251b297403fb0935cd8e90a2b92f02ea09855211edbefb",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Exact",
+      "status": "needs-review",
+      "frames": 34,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 49
+      },
+      "input_record": "renders/qa/native1080/stats10/en/Exact/result.json",
+      "input_sha256": "c6b30917ee9ce8bd5a2966fa33612b14f3669cc206a47d22d5223a86cbf10d9d"
+    },
+    {
+      "scene": "PValues",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 26
+      },
+      "input_record": "renders/qa/native1080/stats10/en/PValues/result.json",
+      "input_sha256": "2ab12616c069cfb8cb7f6506d9212b561848cea7c0830718a6a5ed385148ea50"
+    },
+    {
+      "scene": "Lemma",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 47
+      },
+      "input_record": "renders/qa/native1080/stats10/en/Lemma/result.json",
+      "input_sha256": "eef60001fb8651d33b3f2e64dc1fd20f827665716eb8b33499b10db65042611a"
+    },
+    {
+      "scene": "LRT",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 35
+      },
+      "input_record": "renders/qa/native1080/stats10/en/LRT/result.json",
+      "input_sha256": "e0a9b6d449254291ce4dd35f6ce66be0c65200087671b1cbda94f518e2947882"
+    },
+    {
+      "scene": "Tests",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 36
+      },
+      "input_record": "renders/qa/native1080/stats10/en/Tests/result.json",
+      "input_sha256": "ca7d348a4898737e8be62d66c3d8c72630d4aef74d04079c07504d1587997838"
+    },
+    {
+      "scene": "ChiSq",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 50
+      },
+      "input_record": "renders/qa/native1080/stats10/en/ChiSq/result.json",
+      "input_sha256": "56d49a364fc4e3c1e946e661533f5e425892cf51b029a782a18966cb190ac897"
+    },
+    {
+      "scene": "Misreadings",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 46
+      },
+      "input_record": "renders/qa/native1080/stats10/en/Misreadings/result.json",
+      "input_sha256": "1e2ed5f07cc5d66b849a3ebd850d6a737b26b402e7570def5e2bc2a3fdaf1811"
+    },
+    {
+      "scene": "Many",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 28
+      },
+      "input_record": "renders/qa/native1080/stats10/en/Many/result.json",
+      "input_sha256": "d439dec84eb5fe18d7bf32286cfc70e23f6422d832e0e605e84952d2fc63b23b"
+    }
+  ]
+}

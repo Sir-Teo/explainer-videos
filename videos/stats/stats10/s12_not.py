@@ -174,7 +174,7 @@ class Misreadings(VoiceoverScene):
         est = VGroup()
         for x, m, s_, c, t in specs:
             est.add(VGroup(Line(ax.c2p(x, m - 1.96 * s_), ax.c2p(x, m + 1.96 * s_), color=c, stroke_width=4), Dot(ax.c2p(x, m), radius=0.08, color=c),
-                           label(t, font_size=22, color=c).next_to(ax.c2p(x, m + 1.96 * s_), UP, buff=0.15).shift(RIGHT * (0.6 if x == 0 else 0))))
+                           label(t, font_size=20, color=c).next_to(ax.c2p(x, m + 1.96 * s_), UP, buff=0.15).set_x(-3.8 if x == 0 else -1.2)))
         rows = fit_rows(VGroup(
             label(r"fifth: \ ``significant'' vs ``not significant''", font_size=26, color=OBS),
             label(r"need not be a significant difference", font_size=26, color=OBS),

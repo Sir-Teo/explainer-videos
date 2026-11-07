@@ -1,0 +1,160 @@
+{
+  "fingerprint": "8cccd8df1badc5383f251b297403fb0935cd8e90a2b92f02ea09855211edbefb",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 14,
+      "warnings": {
+        "narration-translation": 4,
+        "untranslated-on-screen": 25
+      },
+      "input_record": "renders/qa/series/stats10/en/Hook/result.json",
+      "input_sha256": "4706f3c3a983178dca199a082a84f1afc475ceb18ca8ce029837752f504ad656"
+    },
+    {
+      "scene": "Logic",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 39
+      },
+      "input_record": "renders/qa/series/stats10/en/Logic/result.json",
+      "input_sha256": "48fca1b2fefec135621c4b69340124857f27dc53f1d395e44db309941bd9f60d"
+    },
+    {
+      "scene": "Exact",
+      "status": "needs-review",
+      "frames": 34,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 49
+      },
+      "input_record": "renders/qa/series/stats10/en/Exact/result.json",
+      "input_sha256": "20d4a931e43c486eb9c546c6bc7c0b71af9be0e1340a678266a5a414ad2639d0"
+    },
+    {
+      "scene": "PValues",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 26
+      },
+      "input_record": "renders/qa/series/stats10/en/PValues/result.json",
+      "input_sha256": "8e82cc3e2fc57012bf0d97fdef2e6f3b2fc30c6c5a70d91225fae4cddb7178f1"
+    },
+    {
+      "scene": "Neyman",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 41
+      },
+      "input_record": "renders/qa/series/stats10/en/Neyman/result.json",
+      "input_sha256": "2f07579b2b05e9457cfe3fc0e77573f604056548ffa7c0fa6e502b3e7aab9411"
+    },
+    {
+      "scene": "Lemma",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 47
+      },
+      "input_record": "renders/qa/series/stats10/en/Lemma/result.json",
+      "input_sha256": "e310605baa86eb499bda6809009f67cb9106ee0adbdb4d71a5db81ca71fa2fae"
+    },
+    {
+      "scene": "LRT",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 35
+      },
+      "input_record": "renders/qa/series/stats10/en/LRT/result.json",
+      "input_sha256": "e8d9ba1b36d93bf4072a684c899ff966d38d22b081bae5243f90747541e39b39"
+    },
+    {
+      "scene": "Tests",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 36
+      },
+      "input_record": "renders/qa/series/stats10/en/Tests/result.json",
+      "input_sha256": "77984ba7ecb87025a184a9d22577f10748b0079c5788bd77d35ee5d8075858f2"
+    },
+    {
+      "scene": "ChiSq",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 50
+      },
+      "input_record": "renders/qa/series/stats10/en/ChiSq/result.json",
+      "input_sha256": "52286041a84338f4431b1842c8e49b76eb2439ae7c4af69d8239823c22123c18"
+    },
+    {
+      "scene": "Power",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 34
+      },
+      "input_record": "renders/qa/series/stats10/en/Power/result.json",
+      "input_sha256": "7a6c3ba2f5c1631313573bf6c5b0fe3482ec1dbb5a7d87669392d0faaa473df6"
+    },
+    {
+      "scene": "Peeking",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 44
+      },
+      "input_record": "renders/qa/series/stats10/en/Peeking/result.json",
+      "input_sha256": "3ab53225339a1dac86024d2203967e4b446b65bc0a60097fa5ccfe79e55f2975"
+    },
+    {
+      "scene": "Misreadings",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 46
+      },
+      "input_record": "renders/qa/series/stats10/en/Misreadings/result.json",
+      "input_sha256": "3091c743be286badd221255edd4e8c50062b8e1eb33ddf06049dc3fdf4400a15"
+    },
+    {
+      "scene": "Many",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 28
+      },
+      "input_record": "renders/qa/series/stats10/en/Many/result.json",
+      "input_sha256": "d060976384733fe7520789ed2b1c644b95d5b8978523fd31d810ee941074da5b"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 7,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 61
+      },
+      "input_record": "renders/qa/series/stats10/en/Outro/result.json",
+      "input_sha256": "fc711cf0e3c78b1f1bd8f686fba44d64b2515beb40cd950f8d85bbb0e611152b"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "part": "stats10",
+  "fingerprint": "8cccd8df1badc5383f251b297403fb0935cd8e90a2b92f02ea09855211edbefb",
+  "english_endpoints": 14,
+  "native_1080_endpoints": 8,
+  "silent_motion_chapters": 6,
+  "audio_scene": "LRT",
+  "audio_lines": 7,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats10/en/LRT/videos/s07_lrt/480p15/LRT.mp4",
+    "seconds": 254.332682,
+    "narration_sha256": "e08dc906d6dc25b2d2c5aada73eedaebcbc4947a8d7e6314c612700ccd75febc",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 254 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 254 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

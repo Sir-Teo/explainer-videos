@@ -132,7 +132,7 @@ class Hook(VoiceoverScene):
         head = VGroup(label(r"Part 10", font_size=34, color=GREY_B), label(r"Significance", font_size=60)).arrange(DOWN, buff=0.25)
         obj = objectives_card([
             r"Fisher's logic: \ a null, \ a statistic, \ a tail probability; \ exact tests that come from the design",
-            r"the $p$-value: \ uniform under the null, \ and what it does under alternatives",
+            r"the $p$-value: \ null calibration, \ and behavior under alternatives",
             r"Neyman and Pearson: \ two errors, \ size and power, \ the most powerful test, \ the likelihood ratio",
             r"the everyday tests: \ $z$, \ $t$, \ Welch, \ permutation, \ Pearson's $\chi^2$",
             r"power and sample size; \ peeking; \ what $p$-values are not; \ many tests at once",

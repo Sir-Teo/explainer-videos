@@ -1,0 +1,95 @@
+{
+ "video": "stats10",
+ "scene": "LRT",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 7,
+ "lines": [
+  {
+   "raw": "Chapter six. The likelihood ratio test.",
+   "spoken": "Chapter six. The likelihood ratio test.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/e03aceed21d9e701.wav",
+   "duration": 3.2,
+   "tokens": 6,
+   "peak": 0.4259033203125,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "The Neyman–Pearson lemma compares two single distributions. Most real hypotheses are composite: a normal mean is zero, but the variance is unknown; a treatment has no effect, whatever the baseline. <bookmark mark='a'/> The natural generalization: compare the best fit the null allows with the best fit overall. Lambda is the ratio of the two maximized likelihoods. It's at most one. <bookmark mark='b'/> Minus twice its log, W, is twice the log-likelihood lost by imposing the null. Large W means the null costs a lot of fit. <bookmark mark='c'/> For a Poisson rate, with Part 9's log-likelihood, W has this closed form. <bookmark mark='d'/> The simple-versus-simple Neyman–Pearson test compares the two likelihoods directly. This generalized full-model ratio follows that idea; in general it's a recipe, not a theorem, but an extraordinarily good one.",
+   "spoken": "The Neyman–Pearson lemma compares two single distributions. Most real hypotheses are composite: a normal mean is zero, but the variance is unknown; a treatment has no effect, whatever the baseline. The natural generalization: compare the best fit the null allows with the best fit overall. Lambda is the ratio of the two maximized likelihoods. It's at most one. Minus twice its log, W, is twice the log-likelihood lost by imposing the null. Large W means the null costs a lot of fit. For a Poisson rate, with Part 9's log-likelihood, W has this closed form. The simple-versus-simple Neyman–Pearson test compares the two likelihoods directly. This generalized full-model ratio follows that idea; in general it's a recipe, not a theorem, but an extraordinarily good one.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/9e114d2305ab441f.wav",
+   "duration": 50.3,
+   "tokens": 124,
+   "peak": 0.465301513671875,
+   "issues": [],
+   "elapsed": 0.06,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "What's the null distribution of W? <bookmark mark='a'/> In 1938 Samuel Wilks proved that, in regular problems, if the null is true, W is approximately chi-squared, with degrees of freedom equal to the number of parameters the null pins down. <bookmark mark='b'/> The reason is Part 9's picture. Near its peak, the log-likelihood is a parabola with curvature n times the information. <bookmark mark='c'/> So twice the drop from the peak to the null value is the squared distance, measured in standard errors. <bookmark mark='d'/> And the MLE is approximately normal around the truth, so W is approximately a squared standard normal: chi-squared with one degree of freedom. One recipe, one reference distribution, for almost every test.",
+   "spoken": "What's the null distribution of W? In 1938 Samuel Wilks proved that, in regular problems, if the null is true, W is approximately chi-squared, with degrees of freedom equal to the number of parameters the null pins down. The reason is Part 9's picture. Near its peak, the log-likelihood is a parabola with curvature n times the information. So twice the drop from the peak to the null value is the squared distance, measured in standard errors. And the MLE is approximately normal around the truth, so W is approximately a squared standard normal: chi-squared with one degree of freedom. One recipe, one reference distribution, for almost every test.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/c0559725e6803675.wav",
+   "duration": 41.975,
+   "tokens": 109,
+   "peak": 0.552093505859375,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Check it by simulation. <bookmark mark='a'/> A hundred thousand Poisson samples of three, with the null true. W takes only a few values, because the total does, and the histogram is lumpy. Rejecting beyond three point eight four, the chi-squared five percent point, happens three point six percent of the time. <bookmark mark='b'/> With thirty observations, the histogram follows the chi-squared curve closely, and the size is five point four percent. <bookmark mark='c'/> Wilks' theorem is a large-sample result, like everything built on Part 9's asymptotics, and Part 22 shows how to correct it in small samples.",
+   "spoken": "Check it by simulation. A hundred thousand Poisson samples of three, with the null true. W takes only a few values, because the total does, and the histogram is lumpy. Rejecting beyond three point eight four, the chi-squared five percent point, happens three point six percent of the time. With thirty observations, the histogram follows the chi-squared curve closely, and the size is five point four percent. Wilks' theorem is a large-sample result, like everything built on Part 9's asymptotics, and Part 22 shows how to correct it in small samples.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/b7d7b1dd5264def8.wav",
+   "duration": 35.25,
+   "tokens": 91,
+   "peak": 0.68048095703125,
+   "issues": [],
+   "elapsed": 0.05,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "There are three classic ways to test with a likelihood, and they're three ways of reading one curve. <bookmark mark='a'/> Here is the horse-kick log-likelihood again, with the null hypothesis that the rate is point five per corps-year. <bookmark mark='b'/> The likelihood ratio test measures the vertical drop from the peak to the null value. <bookmark mark='c'/> Abraham Wald's test, from 1943, measures the horizontal distance from the MLE to the null, in standard errors. <bookmark mark='d'/> And C. R. Rao's score test, from 1948, measures the slope of the log-likelihood at the null value: under the null the score is centred at zero, and the test scales its observed departure by its null variance. The score test never needs the MLE at all, which makes it the cheapest of the three.",
+   "spoken": "There are three classic ways to test with a likelihood, and they're three ways of reading one curve. Here is the horse-kick log-likelihood again, with the null hypothesis that the rate is point five per corps-year. The likelihood ratio test measures the vertical drop from the peak to the null value. Abraham Wald's test, from 1943, measures the horizontal distance from the MLE to the null, in standard errors. And C. R. Rao's score test, from 1948, measures the slope of the log-likelihood at the null value: under the null the score is centred at zero, and the test scales its observed departure by its null variance. The score test never needs the MLE at all, which makes it the cheapest of the three.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/1c4253f6a733c1e0.wav",
+   "duration": 44.475,
+   "tokens": 124,
+   "peak": 0.447479248046875,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "The numbers. <bookmark mark='a'/> The likelihood ratio statistic is four point five two, a p-value of point zero three four. <bookmark mark='b'/> Wald's is three point nine seven, point zero four six. <bookmark mark='c'/> The score statistic is four point eight four, point zero two eight. <bookmark mark='d'/> In large samples all three are chi-squared with one degree of freedom, and they agree to first order, as here. In small samples they can disagree, and the Wald test, which depends on how the parameter is written, can be poorly calibrated. None is uniformly best; Part 14 compares them on the Coverage Board. And Pearson's chi-squared, the subject of chapter eight, turns out to be a score test.",
+   "spoken": "The numbers. The likelihood ratio statistic is four point five two, a p-value of point zero three four. Wald's is three point nine seven, point zero four six. The score statistic is four point eight four, point zero two eight. In large samples all three are chi-squared with one degree of freedom, and they agree to first order, as here. In small samples they can disagree, and the Wald test, which depends on how the parameter is written, can be poorly calibrated. None is uniformly best; Part 14 compares them on the Coverage Board. And Pearson's chi-squared, the subject of chapter eight, turns out to be a score test.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/ae52c4fe8da7fe90.wav",
+   "duration": 37.925,
+   "tokens": 109,
+   "peak": 0.470855712890625,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "A last practical point: one tail or two? <bookmark mark='a'/> A one-sided test puts the whole five percent in one tail, so it rejects more readily in that direction, and never in the other. <bookmark mark='b'/> A two-sided test splits it, two and a half percent in each tail. <bookmark mark='c'/> A one-sided test is legitimate only if the direction was fixed before the data were seen. Picking the tail after looking, whichever way the data went, is really a two-sided test at ten percent. <bookmark mark='d'/> The likelihood ratio statistic is naturally two-sided; its signed square root gives the one-sided version.",
+   "spoken": "A last practical point: one tail or two? A one-sided test puts the whole five percent in one tail, so it rejects more readily in that direction, and never in the other. A two-sided test splits it, two and a half percent in each tail. A one-sided test is legitimate only if the direction was fixed before the data were seen. Picking the tail after looking, whichever way the data went, is really a two-sided test at ten percent. The likelihood ratio statistic is naturally two-sided; its signed square root gives the one-sided version.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/4c6b9cdf5f51b892.wav",
+   "duration": 33.475,
+   "tokens": 94,
+   "peak": 0.482452392578125,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats10/en/LRT_motion/result.json",
+ "input_sha256": "d9b0c21b1aa6737dddc6e578c2bc161f2b530df645038404bcef21c2550bc54a"
+}

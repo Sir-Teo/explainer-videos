@@ -1,0 +1,72 @@
+{
+  "fingerprint": "8cccd8df1badc5383f251b297403fb0935cd8e90a2b92f02ea09855211edbefb",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Exact",
+      "status": "needs-review",
+      "frames": 34,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats10/en/Exact_motion/result.json",
+      "input_sha256": "5fd8e1ace61f66c7a4f96c937100c60e6ed682760c5f4a2877a4a127e7116aa5",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 432 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 432 s\n"
+    },
+    {
+      "scene": "PValues",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats10/en/PValues_motion/result.json",
+      "input_sha256": "0347da365fe0522527f61eb3f28b48a13ffaaf41d0469c1d3c6fa1f1af782677",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 239 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 239 s\n"
+    },
+    {
+      "scene": "Lemma",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats10/en/Lemma_motion/result.json",
+      "input_sha256": "3c9be95ac7ad2f1cb76f43796172bcc355c83daeeeee4d80cbad4601e07a5760",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 280 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 280 s\n"
+    },
+    {
+      "scene": "LRT",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats10/en/LRT_motion/result.json",
+      "input_sha256": "d9b0c21b1aa6737dddc6e578c2bc161f2b530df645038404bcef21c2550bc54a",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 282 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 282 s\n"
+    },
+    {
+      "scene": "Peeking",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 5
+      },
+      "input_record": "renders/qa/series/stats10/en/Peeking_motion/result.json",
+      "input_sha256": "713e6aa3e4f740241fd0f23dccdc9d3902fb78f749dfc18b4afb783b86250a4a",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 216 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 216 s\n"
+    },
+    {
+      "scene": "Many",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats10/en/Many_motion/result.json",
+      "input_sha256": "7ae281629eaeb72829fce3591767b3a57462377c2a9aa606f1a2abe85674cfff",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 224 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 224 s\n"
+    }
+  ]
+}
