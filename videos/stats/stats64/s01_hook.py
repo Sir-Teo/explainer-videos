@@ -119,10 +119,10 @@ class Hook(LectureMixin, VoiceoverScene):
             "eight: labels from models, synthetic data and model collapse, and uncertainty for language models. <bookmark "
             "mark='d'/> Chapters nine to twelve: watermarks as tests, simulation-based inference, generative models as "
             "density estimators, and causal questions about deployments.",
-            [(r"the plan:", GREY_A),
+            [('Questions about inference for modern AI systems', GREY_A),
              (r"1--5: \ benchmarks, \ pairs, \ arenas, \ IRT, \ test-set reuse", MODB),
              (r"6--8: \ model-made labels, \ model collapse, \ LLM uncertainty", JUDGEC),
-             (r"9--12: \ watermarks, \ simulators, \ diffusion, \ deployments", HONC)])
+             (r"9--12: \ watermarks, \ simulators, \ diffusion, \ deployments", HONC)], head_size=36)
 
     def upgrade(self):
         cards = [

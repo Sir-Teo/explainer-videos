@@ -93,11 +93,11 @@ class Barycenters(LectureMixin, VoiceoverScene):
             "mark='d'/> Fair prediction: mapping each group's score distribution onto the barycenter removes the group "
             "difference with the least change to the scores, Part sixty-three's subject. <bookmark mark='e'/> And Victor "
             "Panaretos and Yoav Zemel's book treats distributions themselves as data points, with barycenters as their means.",
-            [(r"uses of barycenters:", GREY_A),
+            [('Statistical applications of Wasserstein barycenters', GREY_A),
              (r"averaging curves and images after alignment", PLANC),
              (r"combining posteriors from shards", ENTC),
              (r"fair scores: \ map each group to the barycenter \ (Part 63)", TGT),
-             (r"distributions as data \ (Panaretos \& Zemel)", FLOWC)])
+             (r"distributions as data \ (Panaretos \& Zemel)", FLOWC)], head_size=36)
 
     def computing(self):
         self.lad_voiceover(

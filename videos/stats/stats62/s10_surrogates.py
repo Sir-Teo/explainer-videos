@@ -93,11 +93,11 @@ class Surrogates(LectureMixin, VoiceoverScene):
             "from short experiments. <bookmark mark='d'/> Drug regulators accept validated surrogates for accelerated "
             "approval, with confirmatory trials afterward. <bookmark mark='e'/> In each, the check against real long-term "
             "outcomes, where available, is what earns the assumption.",
-            [(r"uses:", GREY_A),
+            [('Applications of surrogate outcome models', GREY_A),
              (r"job training: \ long-run earnings from early quarters", IDC),
              (r"online platforms: \ long-term engagement", TRTC),
              (r"accelerated approval: \ validated surrogates", HIDC),
-             (r"always: \ validate against real long-term outcomes", GOLDC)])
+             (r"always: \ validate against real long-term outcomes", GOLDC)], head_size=36)
 
     def principal(self):
         self.lad_voiceover(

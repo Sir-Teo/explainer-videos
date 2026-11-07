@@ -165,8 +165,8 @@ class Wasserstein(LectureMixin, VoiceoverScene):
     def compare(self):
         self.list_voiceover(
             "<bookmark mark='a'/> These discrepancies answer different questions. <bookmark mark='b'/> Total variation and Hellinger reach their maximum for mutually singular probability laws, regardless of geometric separation. They remain finite. <bookmark mark='c'/> KL is infinite when the first law is not absolutely continuous with respect to the second; merely having different supports is not sufficient for infinity in both directions. <bookmark mark='d'/> MMD uses a kernel and has root-n empirical-error bounds for bounded fixed kernels, with kernel-dependent sensitivity. <bookmark mark='e'/> Wasserstein uses the ground distance, with sampling rates depending on dimension, moments, order and regularity.",
-            [(r"compared with earlier distances:", GREY_A),
+            [('Comparing Wasserstein distance with earlier metrics', GREY_A),
              (r"TV, \ Hellinger: \ pointwise, \ blind to distance \ (Part 50)", NAIVEC2),
              (r"KL: \ infinite without the needed absolute continuity \ (Part 22)", NAIVEC2),
              (r"MMD: \ geometry by a kernel, \ $n^{-1/2}$ \ (Part 60)", ENTC),
-             (r"$W_p$: \ geometry by cost; \ rates depend on order, dimension and tails", PLANC)])
+             (r"$W_p$: \ geometry by cost; \ rates depend on order, dimension and tails", PLANC)], head_size=36)

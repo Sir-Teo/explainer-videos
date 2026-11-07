@@ -101,10 +101,10 @@ class Rates(LectureMixin, VoiceoverScene):
     def consequences(self):
         self.list_voiceover(
             "<bookmark mark='a'/> These rates inform method choice. <bookmark mark='b'/> High-dimensional Wasserstein testing can have poor power for some alternatives, but a simple large mean shift can still be easy to detect. <bookmark mark='c'/> An empirical-centered DRO ball needs a radius calibrated for its order, tail assumptions, confidence and effective dimension. For the displayed regular high-dimensional regime, this includes an n-to-minus-one-over-d scale. <bookmark mark='d'/> Smoothing, slicing and projection are useful alternatives. Each changes the estimand or the detectable geometry and requires its own rate statement.",
-            [(r"in practice:", GREY_A),
+            [('Practical consequences of transport estimation rates', GREY_A),
              (r"Wasserstein two-sample tests: \ weak in high dimension", NAIVEC2),
              (r"Wasserstein DRO: \ a radius of order $n^{-1/d}$", TGT),
-             (r"so: \ smooth, \ slice, \ or project \ (chapter 4)", ENTC)])
+             (r"so: \ smooth, \ slice, \ or project \ (chapter 4)", ENTC)], head_size=36)
 
     def sliced(self):
         self.lad_voiceover(

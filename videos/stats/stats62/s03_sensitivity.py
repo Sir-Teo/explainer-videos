@@ -112,11 +112,11 @@ class Sensitivity(LectureMixin, VoiceoverScene):
     def others(self):
         self.list_voiceover(
             "<bookmark mark='a'/> Other sensitivity models, each with its own index. <bookmark mark='b'/> Part thirty-six's Rosenbaum bounds, for matched designs, with Gamma. <bookmark mark='c'/> The E-value of Tyler VanderWeele and Peng Ding: the strength of association a confounder would need. <bookmark mark='d'/> Carlos Cinelli and Chad Hazlett's omitted-variable bounds for regression, in partial R squared. <bookmark mark='e'/> And Lambda, for weighting estimators, with sharp bounds and, as Dorn and Guo showed, population-sharp bounds using quantile balancing under the specified assumptions.",
-            [(r"sensitivity models:", GREY_A),
+            [('Models for sensitivity to unmeasured confounding', GREY_A),
              (r"Rosenbaum's $\Gamma$, \ matched designs \ (Part 36)", HIDC),
              (r"the E-value \ (VanderWeele \& Ding 2017)", HIDC),
              (r"partial $R^2$ bounds \ (Cinelli \& Hazlett 2020)", HIDC),
-             (r"Tan's $\Lambda$, \ weighting \ (Dorn \& Guo 2023: \ sharper)", IDC)])
+             (r"Tan's $\Lambda$, \ weighting \ (Dorn \& Guo 2023: \ sharper)", IDC)], head_size=36)
 
     def inference(self):
         self.lad_voiceover(

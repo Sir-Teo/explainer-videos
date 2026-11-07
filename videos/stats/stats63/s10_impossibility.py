@@ -153,7 +153,7 @@ class Impossibility(LectureMixin, VoiceoverScene):
     def choice(self):
         self.list_voiceover(
             "<bookmark mark='a'/> The algebra clarifies a conflict, rather than certifying either party's entire empirical case. <bookmark mark='b'/> With unequal nondegenerate base rates and a shared positive error factor, equal PPV and false-negative rates force unequal false-positive rates. PPV equal to one is a zero-false-positive exception even when some positives are missed; that is not necessarily perfect prediction. <bookmark mark='c'/> The result does not choose which rates matter. Decisions, costs, labels and uncertainty all enter that judgment. <bookmark mark='d'/> Report the full descriptive table with appropriate uncertainty and distinguish PPV parity of a binary decision from sufficiency of a full score.",
-            [(r"the theorem:", GREY_A),
+            [('Choosing which fairness criterion to prioritize', GREY_A),
              (r"clarifies: \ exact criteria conflict under explicit conditions", S.ACCENT),
              (r"does not settle: \ which criterion, \ for which decision", GREY_A),
-             (r"owed: \ every rate by group, \ with its uncertainty", OKC)])
+             (r"owed: \ every rate by group, \ with its uncertainty", OKC)], head_size=36)

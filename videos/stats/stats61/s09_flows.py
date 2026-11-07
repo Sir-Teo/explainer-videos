@@ -124,10 +124,10 @@ class GradientFlows(LectureMixin, VoiceoverScene):
     def svgd(self):
         self.list_voiceover(
             "<bookmark mark='a'/> Related variational particle methods use different geometries. <bookmark mark='b'/> Stein variational gradient descent uses a kernel-restricted transport direction, including attraction and repulsion; it is not simply the ordinary Wasserstein flow with the Brownian term removed. <bookmark mark='c'/> Product-law variational inference restricts the family of distributions and introduces approximation error. <bookmark mark='d'/> Mean-field limits of suitable wide two-layer networks describe training as a Wasserstein gradient flow over neuron-parameter laws under the model's scaling and assumptions.",
-            [(r"related variational and mean-field methods:", GREY_A),
+            [('Related variational and mean-field methods', GREY_A),
              (r"SVGD: \ kernel repulsion instead of noise \ (Liu \& Wang 2016)", FLOWC),
              (r"mean-field variational inference \ (Part 27)", ENTC),
-             (r"wide two-layer networks \ (Mei et al.; \ Chizat \& Bach 2018)", TGT)])
+             (r"wide two-layer networks \ (Mei et al.; \ Chizat \& Bach 2018)", TGT)], head_size=36)
 
     def others(self):
         self.lad_voiceover(
