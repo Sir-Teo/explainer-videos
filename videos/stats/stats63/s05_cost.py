@@ -21,7 +21,7 @@ class Cost(LectureMixin, VoiceoverScene):
             "<bookmark mark='a'/> Start with the simplest problem: estimate a proportion p from n people's bits. "
             "<bookmark mark='b'/> In the central model a trusted curator holds the data and adds Laplace noise to the count. "
             "<bookmark mark='c'/> The mean squared error is the sampling variance, p times one minus p over n, plus the "
-            "noise's variance, two over n epsilon squared. <bookmark mark='d'/> The privacy term falls like one over n "
+            "noise's variance, two divided by the square of n times epsilon. <bookmark mark='d'/> The privacy term falls like one over n "
             "squared, faster than sampling error. For large samples, central privacy is nearly free.",
             [(r"\text{task}", r":", r"\text{estimate } p \text{ from } n \text{ bits}", 40),
              (r"\text{central}", r":", r"\hat p = (\textstyle\sum x_i + \mathrm{Lap}(1/\varepsilon)) / n", 40),
@@ -32,18 +32,11 @@ class Cost(LectureMixin, VoiceoverScene):
 
     def local(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> In the local model there is no trusted curator: each person randomizes their own bit "
-            "before sending it, by randomized response. Apple and Google have used local privacy for usage statistics. "
-            "<bookmark mark='b'/> The estimator from chapter one has variance about one over n times the factor e to the "
-            "epsilon over e to the epsilon minus one, squared. <bookmark mark='c'/> For small epsilon that is one over n "
-            "epsilon squared: the noise is now order one over n, the same order as sampling error, multiplied by a large "
-            "constant. <bookmark mark='d'/> John Duchi, Michael Jordan and Martin Wainwright proved in 2013 that this is "
-            "unavoidable: under local privacy, the minimax rates of whole families of problems are those of a sample of size "
-            "n epsilon squared.",
+            "<bookmark mark='a'/> In the local model there is no trusted curator: each person randomizes their own bit before sending it, by randomized response. Apple and Google have used local privacy for usage statistics. <bookmark mark='b'/> The estimator from chapter one has variance about one over n times the factor e to the epsilon over e to the epsilon minus one, squared. <bookmark mark='c'/> For small epsilon that is one over n epsilon squared: the noise is now order one over n, the same order as sampling error, multiplied by a large constant. <bookmark mark='d'/> John Duchi, Michael Jordan and Martin Wainwright proved in 2013 that this is unavoidable: under local privacy, for proportion estimation at small epsilon the local minimax squared-error rate is of order the minimum of one and one over n epsilon squared. Other problems can have additional dimension-dependent losses, so n epsilon squared is not a universal effective sample size.",
             [(r"\text{local}", r":", r"\text{each person randomizes}", 40),
              (r"\mathrm{MSE}", r"\approx", r"\frac{1}{n} \cdot \frac{e^{\varepsilon}}{(e^{\varepsilon} - 1)^2}", 40),
              (r"\text{small } \varepsilon", r":", r"\text{about } 1/(n\varepsilon^2)", 40),
-             (r"\text{effective sample}", r":", r"n \ \to \ n\varepsilon^2", 40)],
+             (r"\text{small-$\varepsilon$ proportion rate}", r":", r"n \ \to \ n\varepsilon^2", 40)],
             [r"no trusted curator", r"randomized response", r"same order as sampling", r"Duchi, \ Jordan \& Wainwright (2013)"],
             colors=[(3, BADC)])
 
@@ -70,15 +63,10 @@ class Cost(LectureMixin, VoiceoverScene):
             [(r"green: \ central Laplace", OKC), (rf"exactly {100 * (r0['central_exact'] / r0['sampling'] - 1):.1f}\% above at $n = 100$", OKC),
              (rf"{100 * (r1['central_exact'] / r1['sampling'] - 1):.1f}\% above at $n = 10{{,}}000$", OKC)],
             [(r"red: \ local randomized response", BADC), (rf"about {r1['local'] / r1['central']:.0f} times the central error", BADC),
-             (r"at every $n$", BADC)],
+             (r"approaches a constant ratio as $n$ grows", BADC)],
         ])
         with self.voiceover(
-            f"<bookmark mark='a'/> Simulated, with p of {d['p']} and epsilon of one, twenty thousand runs at each sample size, on "
-            f"log scales. <bookmark mark='b'/> The grey dashed line is the error without privacy. <bookmark mark='c'/> The "
-            f"central Laplace estimator sits just above it, and the gap closes as n grows, because the noise term falls like "
-            f"one over n squared. <bookmark mark='d'/> Local randomized response runs parallel, about "
-            f"{r1['local'] / r1['central']:.0f} times the central error at every sample size. In effect, every five people "
-            f"count as one. A parallel line on a log-log plot is a constant factor that no amount of data removes."
+            f"<bookmark mark='a'/> Simulated, with p of {d['p']} and epsilon of one, twenty thousand runs at each sample size, on log scales. <bookmark mark='b'/> The grey dashed line is the error without privacy. <bookmark mark='c'/> The central Laplace estimator sits just above it, and the gap closes as n grows, because the noise term falls like one over n squared. <bookmark mark='d'/> Local randomized response runs parallel, about {r1['local'] / r1['central']:.0f} times the central error at the largest displayed sample size, approaching a constant factor as n grows. In this proportion example, roughly five private reports give the precision of one unprivatized observation. A parallel line on a log-log plot is a constant factor that no amount of data removes."
         ) as vo:
             self.play(FadeIn(A), FadeIn(seeded_tag()))
             vo.wait_until("a")
@@ -94,16 +82,10 @@ class Cost(LectureMixin, VoiceoverScene):
 
     def dims(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> In more dimensions the price grows. <bookmark mark='b'/> T. Tony Cai, Yichen Wang and "
-            "Linjun Zhang found in 2021 the minimax rate for estimating a d-dimensional mean under central epsilon-delta "
-            "privacy: d over n, the usual rate, plus d squared log one over delta over n squared epsilon squared. <bookmark "
-            "mark='c'/> The privacy term dominates until n exceeds about d times the square root of log one over delta, over "
-            "epsilon. With d of a thousand, epsilon of one and delta of ten to the minus five, that is about 3,400 people. <bookmark mark='d'/> They "
-            "called it the cost of privacy, and found matching rates for linear regression, with the private estimator built "
-            "from noisy, clipped gradient steps, the method of chapter seven.",
+            "<bookmark mark='a'/> In more dimensions, the model class and norm determine the price. <bookmark mark='b'/> Cai, Wang and Zhang study specified bounded and sub-Gaussian mean classes. A representative squared-error rate has sampling term d over n and privacy term d squared log one over delta over n squared epsilon squared, under the stated parameter ranges and scale normalization. Upper bounds for broader tail classes can have additional logarithms. <bookmark mark='c'/> Equating these two displayed terms gives n of order d log one over delta divided by epsilon squared, not d root log divided by epsilon. With d a thousand, epsilon one and delta ten to minus five, that is about eleven thousand five hundred. <bookmark mark='d'/> The exact minimax statement needs its distribution class and privacy regime. Related results for private regression use clipping and noisy optimization, but no universal rate covers every dimension, tail law and loss.",
             [(r"\text{mean in } d \text{ dims}", r":", r"\frac{d}{n} + \frac{d^2 \log(1/\delta)}{n^2\varepsilon^2}", 40),
-             (r"\text{privacy dominates until}", r"\ ", r"n \gtrsim d\sqrt{\log(1/\delta)}/\varepsilon", 40),
-             (r"d = 1000, \ \varepsilon = 1", r":", r"n \approx 3{,}400", 40),
+             (r"\text{privacy dominates until}", r"\ ", r"n \gtrsim d\log(1/\delta)/\varepsilon^2", 40),
+             (r"d = 1000, \ \varepsilon = 1", r":", r"n \approx 11{,}513", 40),
              (r"\text{regression}", r":", r"\text{noisy clipped gradients}", 40)],
             [r"Cai, \ Wang \& Zhang (2021)", r"the crossover", r"$\delta = 10^{-5}$", r"chapter 7"],
             colors=[(0, OKC), (1, BADC)])

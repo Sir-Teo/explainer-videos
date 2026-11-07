@@ -1,131 +1,32 @@
 # Statistics, Built — Part 63: Privacy and Fairness
 
-Part 63 of a sixty-five-part course in statistics, from a first course to a PhD (see [the series plan](../README.md)
-and [the syllabus](../SYLLABUS.md)), and the eighth part of Stage V, the research frontier.
+Part 63 of [the 65-part course](../README.md), on differential privacy, statistical inference after privacy noise, census post-processing, private learning and competing fairness criteria.
 
-It opens with a governor's medical record. In the mid-1990s Massachusetts's Group Insurance Commission released state
-employees' hospital records with names removed. Latanya Sweeney bought Cambridge's voter roll for twenty dollars,
-joined the two on ZIP code, birth date and sex, and found Governor William Weld's records.
-- **The general fact.** Sweeney (2000) estimated that about 87% of Americans in the 1990 census were unique by
-  five-digit ZIP, sex and birth date. Golle (2006) found 63% with the 2000 census.
-- **In the Museum's NHANES extract** (5,176 adults), age and sex single out nobody. Adding BMI to one decimal makes
-  80.6% unique, and adding a blood pressure makes 99.6% unique.
+The historical Weld linkage illustrates how removing names can fail. NHANES uniqueness is **within the unweighted 5,176-adult complete-case extract**, not a demonstrated linkage or population re-identification rate. Age is top-coded at 80 and pressure averages available readings. Successful external linkage additionally requires comparable measurements, inclusion knowledge and an identified source.
 
-The part asks how much protecting individuals costs the statistics, and what fairness can require:
-- differential privacy (Dwork, McSherry, Nissim & Smith 2006):
-  - neighbouring datasets, the Bayesian reading, randomized response (Warner 1965), and the Laplace mechanism;
-  - classic against analytic Gaussian calibration (Balle & Wang 2018);
-  - post-processing, composition and group privacy, the exponential mechanism, and what DP does not promise;
-- DP as hypothesis testing:
-  - Wasserman & Zhou (2010) and Kairouz, Oh & Viswanath (2015);
-  - trade-off functions and Gaussian DP (Dong, Roth & Su 2022), shown on the new trade-off plot with a simulated
-    membership attack;
-  - the privacy central limit theorem;
-- accountants:
-  - the privacy-loss variable and advanced composition (Dwork, Rothblum & Vadhan 2010);
-  - Rényi DP (Mironov 2017) and zCDP (Bun & Steinke 2016);
-  - the census's ρ = 2.63 read as ε and as μ, and amplification by subsampling with the moments accountant;
-- the cost of privacy:
-  - central against local estimation of a proportion;
-  - Duchi, Jordan & Wainwright's (2013) effective sample size nε²;
-  - Cai, Wang & Zhang's (2021) d-dimensional rate, and the strong data-processing inequality;
-- private inference:
-  - noise-aware intervals (Karwa & Vadhan 2018; Ferrando, Wang & Sheldon 2022) on the Board;
-  - clipping bias, private χ² tests (Gaboardi et al. 2016), and UMP private tests (Awan & Slavković 2018);
-  - why published noise beats secret swapping;
-- the 2020 Census (Abowd et al. 2022):
-  - the Bureau's reconstruction of its 2010 tables, TopDown, and invariants;
-  - a toy of the nonnegativity projection and its small-block bias;
-  - the 2023 noisy measurement files, the redistricting debate (Kenny et al. 2021), Alabama's suit, and choosing ε
-    (Abowd & Schmutte 2019);
-- private learning:
-  - DP-SGD (Abadi et al. 2016) on the Wisconsin biopsies, and memorization (Carlini et al. 2021);
-  - membership inference (Shokri et al. 2017; Carlini et al. 2022) as a test;
-  - auditing (Jagielski, Ullman & Oprea 2020; Nasr et al. 2021; Steinke, Nasr & Jagielski 2023), and DP's disparate
-    impact (Bagdasaryan, Poursaeed & Shmatikov 2019);
-- fairness criteria (Barocas, Hardt & Narayanan):
-  - independence, separation (Hardt, Price & Srebro 2016) and sufficiency;
-  - ProPublica's COMPAS data (Angwin et al. 2016): rates and calibration by race;
-  - the pairwise conflicts;
-- impossibility:
-  - Chouldechova's (2017) identity, reproduced exactly on COMPAS;
-  - Kleinberg, Mullainathan & Raghavan (2016);
-  - the decision-theoretic view (Corbett-Davies et al. 2017), and rearrest as a biased label;
-- multicalibration (Hébert-Johnson, Kim, Reingold & Rothblum 2018):
-  - patching on COMPAS, with honest held-out evaluation;
-  - its conformal twin (Gibbs, Cherian & Candès), multiaccuracy, outcome indistinguishability and omniprediction;
-- causal fairness:
-  - counterfactual fairness (Kusner, Loftus, Russell & Silva 2017) on a simulated policing model;
-  - resolving variables and path-specific effects (Kilbertus et al. 2017; Nabi & Shpitser 2018);
-  - the critique (Kohler-Hausmann 2019), fair policy learning, and delayed impact (Liu et al. 2018);
-- five open problems.
+## Audited examples
 
-It keeps two promises:
-- **Part 18** published survey tables as if aggregates revealed nothing about anyone. Chapters 1–6 measure what each
-  release leaks and what hiding it costs.
-- **Part 19** judged a classifier by one error rate. Chapters 8–11 split the errors by group and ask which
-  differences can be removed.
+[Local checked kernels](checked.py) preserve the shared educational kit while repairing this part's computations.
 
-**Built in this part:**
-- **`statkit.privacy`** ([`explainer/stats/kit/privacy.py`](../../../explainer/stats/kit/privacy.py)), tested in
-  `tests/test_stats_kit_privacy.py`:
-  - the Laplace mechanism, classic and analytic Gaussian calibration (with the exact δ), and randomized response
-    with its debiasing;
-  - basic and advanced composition, zCDP and its conversion, and Rényi accounting for Gaussians;
-  - trade-off curves of (ε, δ)-DP, the Laplace mechanism and μ-GDP, and a simulated membership attack;
-  - naive and noise-aware private proportions, and central against local MSE;
-  - the nonnegative fixed-total projection;
-  - noisy clipped gradient descent for logistic regression under zCDP;
-  - group rates, calibration by group, and Chouldechova's identity;
-  - multicalibration by patching, with replay on new data and calibration gaps.
-- **The trade-off plot** (`TradeoffPlot` in `explainer/stats/viz.py`), the part's instrument. It draws privacy as a
-  hypothesis test: type I error across and type II error up, the diagonal of guessing, a mechanism's trade-off curve
-  with the attacker's forbidden zone beneath it, and individual attacks as points.
+- **Definition and accounting:** state add/remove versus fixed-size replace-one adjacency and match sensitivity to it. Delta is additive event slack, not generally a probability of an unprotected operating mode. The pure-DP posterior-odds reading concerns fixed neighboring alternatives, not all correlated secrets under arbitrary whole-database priors. Gaussian GDP curves and independent Gaussian-shift composition can be exact; generic GDP and zCDP guarantees need not attain equality. Privacy CLTs and subsampling amplification have conditions and finite-step errors. For Gaussian RDP, continuous optimization gives exactly the usual zCDP-to-DP expression; a grid artifact no longer separates them.
+- **Cost:** vectorize sufficient-statistic simulations without changing marginal binomial/randomized-response experiments and save Monte Carlo errors. The local effective-size heuristic is scoped to small-epsilon proportion estimation, not every high-dimensional problem. Equating the displayed risks d/n and d² log(1/delta)/(n² epsilon²) gives **n=d log(1/delta)/epsilon²**, about **11,513** at d=1,000, epsilon=1, delta=1e-5. The old 3,400 crossover was algebraically wrong. Tail classes and logarithmic factors matter for minimax claims.
+- **Intervals:** retain the *raw* noisy proportion as center; clip only the plug-in sampling variance. The exact variance decomposition applies before output clipping. The variance-corrected Wald interval remains approximate, particularly when Laplace noise dominates. The Board's 2,000 trials give 85.4% naive versus 95.2% noise-aware coverage; this does not certify every parameter or budget. Publish mechanism and parameters, not the realized noise alongside the answer.
+- **Census:** distinguish rounded continuous Gaussian noise in this toy from the actual discrete Gaussian mechanism. Replace independent rounding with largest-remainder rounding of the nonnegative projection, so all 200 integer releases preserve the exact total (**maximum total error 0**). Tiny-block bias is +0.638 people (MC SE 0.023); total-weighted biases sum to zero. This is a fixed-public-total illustration, not calibrated TopDown. Real invariants are outside ordinary neighboring-record protection and are not free post-processing of confidential totals. Rho=2.63 converts to epsilon≈18.2 at delta=1e-10; a continuous-Gaussian comparison's mu≈2.29 is **not** an exact census GDP guarantee or demonstrated attack power.
+- **Private logistic learning:** remove data-fitted full-sample centering/scaling. Use fixed feature units and pointwise clipping; under fixed-size replace-one adjacency the clipped-gradient sum has sensitivity **2C**. Correct Gaussian noise to 2C sqrt(60/(2rho)). All budgets use the same ten random train/test splits. Each model has its own budget; repeated models and public-data accuracy diagnostics are not one jointly private release. Accuracy at epsilon 0.37 is 0.789, at 1.21 is 0.912; clipped nonprivate baseline 0.944. Descriptive split SDs do not establish performance equivalence. Audit lower bounds account for delta and rate uncertainty; unsuccessful attacks do not prove privacy.
+- **COMPAS:** independently reproduce all **6,172** filtered primary rows, including 5,278 Black/white defendants, exactly for six retained columns. Descriptive error-rate and approximate predictive-parity patterns coexist; neither group PPVs nor every score-cell outcome rate are exactly equal. Distinguish full-score independence/separation/sufficiency from one-threshold versions, and sufficiency from numerical calibration. Decile labels are not probabilities. Algebraic identities are subject to nonzero denominators; PPV=1 with false negatives need not be perfect classification. Unequal base rates alone do not force every chosen threshold to violate equalized odds.
+- **Multicalibration:** empirical stopping concerns eligible cells in a specified class, not all computable subgroups. Patches replay exactly. The reported test gap is a weighted **average** absolute residual, not the worst violation; it falls 0.03843→0.03062, while the white-group gap rises 0.02855→0.03432. Twenty overlapping random halves describe split variability, not independent-population uncertainty. Unsigned gaps cannot establish over- or underprediction. Generalization requires complexity, confidence and cell-mass control; omniprediction is relative to specified losses and comparator classes.
+- **Causal fairness:** ordinary group residuals need not be counterfactually invariant. Replace the rounded/clipped prior count with an explicit continuous additive measurement index and known structural group effect 1.2. Train on 10,000 people; evaluate on **20,000 independent people**, using paired interventions with shared background factors. Subtracting the known structural effect gives maximum paired score change 2.2e-16; the raw index's mean paired change is 0.09307. A small group-average gap alone is not a counterfactual-fairness proof. Held-out AUCs are 0.6424 and 0.6557, conditional on the specified toy.
 
-**Data.**
-- From the Museum:
-  - the NHANES extract;
-  - the Wisconsin biopsies;
-  - ProPublica's COMPAS data, new to the Museum. These are the 6,172 Broward County defendants left after
-    ProPublica's filters, keeping age, sex, race, prior count, decile score and two-year rearrest, with names removed.
-- The census budget and history are quoted from the Bureau and Abowd et al. (2022).
-- The rest is exact arithmetic or seeded simulation.
-
-The Coverage Board gains two rows:
-
-| Method | Setting | Nominal | Achieved | Verdict |
-|---|---|---|---|---|
-| Wald interval on a DP-noised count | Laplace, ε = 0.1, n = 1,000 | 95% | 85.4% | broken |
-| Noise-aware interval | Laplace, ε = 0.1, n = 1,000 | 95% | 95.2% | kept |
-
-## Build it
+## Build and evidence
 
 ```bash
-OMP_NUM_THREADS=1 python -m videos.stats.stats63.compute   # once (a few minutes)
-python tools/build.py stats63 -q l                         # fast 480p preview
-python tools/build.py stats63                              # 1080p30 -> renders/stats63.mp4
-python tools/qa_scene.py stats63 Testing
+OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m videos.stats.stats63.compute --force
+pytest -q tests/test_stats63_checked.py tests/test_stats_kit_privacy.py
+python tools/build.py stats63 -q l
 python tools/lecture_length.py stats63 --floor 50
 ```
 
-## Chapters
-
-| # | Chapter | Numbers |
-|---|---|---|
-| 0 | A governor's record | NHANES, 5,176 adults: unique by age 0%, + sex 0% (126 classes), + BMI 80.6%, + blood pressure 99.6% |
-| 1 | Differential privacy | one count, δ = 10⁻⁵: Laplace sd √2/ε; Gaussian σ at ε = 1, classic 4.84, analytic 3.73 |
-| 2 | DP as testing | 1-GDP: power 0.26 at α = 0.05; a simulated attack (n = 100, σ = 0.01, 40,000 releases) on G₁ |
-| 3 | Accountants | σ = 5, k = 1,000, δ = 10⁻⁵: basic ε 1,047, advanced 2,098, Rényi 50.4, zCDP 50.3; census ρ = 2.63 → ε ≈ 18.2 at δ = 10⁻¹⁰, μ ≈ 2.3 |
-| 4 | The cost of privacy | p = 0.3, ε = 1, 20,000 runs: central MSE 9.5% above sampling at n = 100, 0.1% at 10,000; local ≈ 5× central |
-| 5 | Private inference | p = 0.3, ε = 0.1: naive coverage 53.8% (n = 100), 83.5% (1,000); noise-aware 93.5–96.2%; Board 85.4% vs 95.2% |
-| 6 | The 2020 Census | 400 blocks, noise sd 4, 200 runs: raw 4.9% negative, unbiased; projected: blocks under 5 people +0.70, larger slightly low |
-| 7 | DP-SGD | Wisconsin, 400 train / 169 test: accuracy 0.887 at ε 0.37, 0.921 at 0.69, 0.965 at 1.2, 0.973 at 7.8; non-private 0.979 |
-| 8 | Fairness criteria | COMPAS, 5,278 Black or white: base rates 0.523 vs 0.391; high 0.576 vs 0.331; FPR 0.423 vs 0.220; FNR 0.285 vs 0.496; PPV 0.650 vs 0.595 |
-| 9 | Impossibility | Chouldechova's identity reproduces 0.423 and 0.220 exactly; base-rate odds ratio 1.71; shared PPV 0.62, FNR 0.39 force 0.41 vs 0.24 |
-| 10 | Multicalibration | COMPAS, 4 groups × 5 bins, 15 patches; held-out gap 0.038 → 0.031 (in-sample 0.036 → 0.008); women 0.070 → 0.030, under 25 0.065 → 0.040 |
-| 11 | Causal fairness | 20,000 simulated people: true gap −0.016; score on priors +0.084 (AUC 0.63), on the residual +0.002 (AUC 0.65) |
-| 12 | Open problems | — |
-| 13 | Outro | — |
+All 14 chapters reviewed, all 12 inputs regenerated and **20 checks pass** (14 local, six legacy). Estimated English narration: **69.9 minutes**. [Evidence](../../../docs/qa/evidence/stats63-polish-20261107/README.md). Sampled English visual review is pending; Chinese narration/captions, continuous listening/playback and final masters remain open.
 
 ## Sources
 
@@ -196,7 +97,7 @@ python tools/lecture_length.py stats63 --floor 50
      |s| = |f(D) − f(D′)| ≤ Δ.
    - Testing a larger shift is easier, so the worst case is s = Δ and the curve is G_{Δ/σ}.
    - For two independent mechanisms the pair is N(0, I) against N((μ₁, μ₂), I). The likelihood ratio depends only on
-     the projection onto (μ₁, μ₂)/‖μ‖, which is N(0, 1) against N(‖μ‖, 1). So the composition is G_{√(μ₁² + μ₂²)}.
+     the projection onto (μ₁, μ₂)/‖μ‖, which is N(0, 1) against N(‖μ‖, 1). Thus the independent Gaussian-shift experiment has this exact composed curve. For arbitrary mechanisms merely satisfying the GDP bounds, it is a sharp composition guarantee, not mandatory equality.
 4. **When central privacy becomes cheap.**
    - The privacy term is 2/(nε)² and the sampling term is p(1 − p)/n. The privacy share is a tenth when
      2/(nε)² = p(1 − p)/(9n), that is, n = 18/(ε²p(1 − p)).
@@ -210,30 +111,9 @@ python tools/lecture_length.py stats63 --floor 50
      common factor (1 − PPV)(1 − FNR)/PPV is not zero.
    - The odds differ when the base rates differ, so the FPRs differ.
    - The factor vanishes only if PPV = 1, when both FPRs are zero, or FNR = 1, when the classifier catches no one and
-     the identity degenerates. These are the trivial exceptions.
+     the identity degenerates. PPV=1 does not require perfect prediction: some positives may still be missed. At FNR=1 with no true positives, positive PPV can be undefined or zero, and the displayed division requires separate treatment.
 
-## Glossary
 
-- **Privacy.**
-  - Quasi-identifier; linkage attack; reconstruction attack.
-  - Differential privacy; neighbouring datasets; ε, δ; sensitivity; Laplace and Gaussian mechanisms; analytic
-    Gaussian; randomized response; exponential mechanism.
-  - Post-processing; composition; group privacy.
-- **Testing and accounting.** Trade-off function; f-DP; Gaussian DP (μ); privacy-loss variable; advanced
-  composition; Rényi DP; zCDP (ρ); amplification by subsampling; moments accountant.
-- **Costs and inference.** Central and local models; effective sample size nε²; strong data-processing inequality;
-  noise-aware interval; clipping bias; TopDown; invariants; noisy measurement file.
-- **Learning.** DP-SGD; per-example clipping; memorization; membership inference; LiRA; privacy auditing; canaries.
-- **Fairness.**
-  - Independence (demographic parity); separation (equalized odds); sufficiency (calibration within groups); base
-    rate; FPR, FNR, PPV.
-  - Chouldechova's identity; the Kleinberg–Mullainathan–Raghavan theorem; balance for the positive and negative
-    classes.
-  - Multicalibration; multiaccuracy; outcome indistinguishability; omniprediction.
-  - Counterfactual fairness; resolving variable; path-specific effect; delayed impact.
+## Next
 
-## Where it comes back
-
-- **Part 64**: test-set contamination as membership inference; model-made labels and their group-dependent errors;
-  the reusable holdout, which is differential privacy applied to adaptive data analysis.
-- **Part 65**: the dissertation's chapter on its data and the people they describe.
+Part 64 examines statistics for AI-generated predictions, labels, benchmarks and data.

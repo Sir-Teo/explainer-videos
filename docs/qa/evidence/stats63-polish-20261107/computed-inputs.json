@@ -1,0 +1,62 @@
+[
+  {
+    "file": ".cache/stats63/accounting.json",
+    "sha256": "8146990a7bd16f00bc3387506a0b4cf4d13f8d3df4c6762cd78c8a599113a72e",
+    "bytes": 798
+  },
+  {
+    "file": ".cache/stats63/board.json",
+    "sha256": "64197b6fee0126fcbd13fd4cbba4d021525b5727563b5ca3dffb700df7f4dbc6",
+    "bytes": 662
+  },
+  {
+    "file": ".cache/stats63/census.json",
+    "sha256": "031fd8adbf36c2df9e56305f9e47e21293d7a5e7f44144417c924d4f51f10528",
+    "bytes": 9492
+  },
+  {
+    "file": ".cache/stats63/cfair.json",
+    "sha256": "f16f5739feae821d466a1cf15d0657cd1138052c567ddc2acf50e97872cbd3b2",
+    "bytes": 599
+  },
+  {
+    "file": ".cache/stats63/compas.json",
+    "sha256": "c79468b5f11271f18ce0b4c5abec3ceab39a795339771677bf7a623dda10a018",
+    "bytes": 1215
+  },
+  {
+    "file": ".cache/stats63/cost.json",
+    "sha256": "530518b5e3ee182ff19dfc4f6d19e61c555f5ddf20a7f8f068d86a6fdd214fca",
+    "bytes": 1444
+  },
+  {
+    "file": ".cache/stats63/dpsgd.json",
+    "sha256": "1d23ed6b4ba16d8664fef6f0d62609ca8a01dc01f4f53155c6927e07857c34e5",
+    "bytes": 2945
+  },
+  {
+    "file": ".cache/stats63/inference.json",
+    "sha256": "6797ee83beeab525a17a55e12668d2408f5b5afc4bd3c0aa4d5b7b9ec03b4ced",
+    "bytes": 2152
+  },
+  {
+    "file": ".cache/stats63/mechanisms.json",
+    "sha256": "509e3c27efb4e46ef8b2c441ae2ac1f8c8576963989055efc2fddfc9c2fe6d08",
+    "bytes": 447
+  },
+  {
+    "file": ".cache/stats63/multical.json",
+    "sha256": "5a43461bce5d715e32e6328d8a097efd75e22021db97311d4686042a02ccc310",
+    "bytes": 2252
+  },
+  {
+    "file": ".cache/stats63/tradeoff.json",
+    "sha256": "d3e85c43a96868111b66846058cf293b6b7a9be1330c317e2a1c23bf1b089c7c",
+    "bytes": 21197
+  },
+  {
+    "file": ".cache/stats63/unique.json",
+    "sha256": "5f80a3d1f2532c1de19af8749f8aae7b30bfb283d9811b741292a2f433c39cb8",
+    "bytes": 356
+  }
+]

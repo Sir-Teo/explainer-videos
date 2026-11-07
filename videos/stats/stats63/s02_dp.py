@@ -20,13 +20,7 @@ class Definition(LectureMixin, VoiceoverScene):
 
     def definition(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Cynthia Dwork, Frank McSherry, Kobbi Nissim and Adam Smith proposed the definition in "
-            "2006. Call two datasets neighbours if they differ in one person's record. <bookmark mark='b'/> A randomized "
-            "mechanism M is epsilon-differentially private if, for every pair of neighbours and every set S of possible "
-            "outputs, the probability that M of D lands in S is at most e to the epsilon times the probability that M of D "
-            "prime does. <bookmark mark='c'/> The relaxed version adds a small slack, delta: a probability with which the "
-            "bound may fail. <bookmark mark='d'/> Epsilon is the privacy-loss budget. Near zero, the output's distribution "
-            "barely depends on whether you are in the data.",
+            "<bookmark mark='a'/> Differential privacy compares neighboring datasets under a specified adjacency relation. They may differ by adding or removing one person, or by replacing one record at fixed sample size; sensitivity must match that choice. <bookmark mark='b'/> A mechanism is epsilon-private when, for every neighboring pair and every output event, one output probability is at most e to epsilon times the other. The reverse holds by symmetry. <bookmark mark='c'/> Approximate privacy adds delta to this event inequality. Delta is an additive probability slack, not in general the probability of a data-independent switch into an unprotected mode. <bookmark mark='d'/> Small epsilon and delta limit the additional evidence supplied by a release about the chosen neighboring alternatives. They do not promise secrecy of facts already inferable without this record.",
             [(r"D \sim D'", r":", r"\text{differ in one person}", 40),
              (r"P(M(D) \in S)", r"\le", r"e^{\varepsilon} \, P(M(D') \in S)", 40),
              (r"(\varepsilon, \delta)\text{-DP}", r":", r"P(M(D) \in S) \le e^{\varepsilon} P(M(D') \in S) + \delta", 38),
@@ -36,17 +30,12 @@ class Definition(LectureMixin, VoiceoverScene):
 
     def meaning(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> What does it promise? Take an attacker with any prior belief about you, and any side "
-            "knowledge at all, including every other record. <bookmark mark='b'/> After seeing the output, their odds that "
-            "you were in the data, or that your record says one thing rather than another, change by at most a factor of e to "
-            "the epsilon. <bookmark mark='c'/> So the definition does not need to list what the attacker knows. The governor's "
-            "voter roll is just one more piece of side knowledge. <bookmark mark='d'/> What the definition protects is the "
-            "difference that participation makes. Anything learnable about you without your record remains learnable.",
+            "<bookmark mark='a'/> The Bayesian reading is precise for two fixed neighboring alternatives, with the other records held fixed. <bookmark mark='b'/> Under pure epsilon privacy, the likelihood ratio multiplies prior odds by a factor between e to minus epsilon and e to epsilon. This is not a universal bound on learning every correlated secret under an arbitrary prior over whole databases. <bookmark mark='c'/> The mechanism's guarantee continues to hold in the presence of auxiliary information, including the other records; no list of possible linkage keys is needed. <bookmark mark='d'/> Its object is the incremental effect of this record under the stated adjacency. Population patterns and correlations can remain highly informative.",
             [(r"\text{attacker}", r":", r"\text{any prior, \ any side knowledge}", 40),
              (r"\text{posterior odds}", r"\le", r"e^{\varepsilon} \times \text{prior odds}", 40),
              (r"\text{so}", r":", r"\text{no list of quasi-identifiers}", 40),
              (r"\text{protects}", r":", r"\text{the effect of participating}", 40)],
-            [r"worst case", r"a Bayesian reading", r"the linkage attack defeated", r"not secrecy of facts"],
+            [r"worst case", r"fixed neighboring alternatives; pure DP", r"auxiliary information allowed", r"not secrecy of facts"],
             colors=[(1, PRIVC)])
 
     def response(self):
@@ -73,7 +62,7 @@ class Definition(LectureMixin, VoiceoverScene):
             "with a two-sided exponential density, of scale sensitivity over epsilon. <bookmark mark='c'/> Why it works: the "
             "ratio of the output's densities under two neighbours is e to the minus epsilon times the distance from one "
             "centre, over e to the minus epsilon times the distance from the other. By the triangle inequality the ratio is "
-            "at most e to the epsilon times the sensitivity over the scale, which is e to the epsilon. <bookmark mark='d'/> "
+            "at most the exponential of sensitivity divided by the scale, which is e to epsilon. <bookmark mark='d'/> "
             "For a count at epsilon one the noise has standard deviation about 1.4: invisible in a national total, fatal in "
             "a block of three people.",
             [(r"\Delta f", r"=", r"\max_{D \sim D'} |f(D) - f(D')|", 40),
@@ -118,7 +107,7 @@ class Definition(LectureMixin, VoiceoverScene):
         side = side_groups([
             [(r"one count, \ sensitivity 1", WHITE), (r"$\delta = 10^{-5}$ for the Gaussians", GREY_A)],
             [(r"blue: \ Laplace, \ pure $\varepsilon$-DP", RAWC)],
-            [(rf"red: \ classic Gaussian, \ {d['classic'][i1]:.2f} at $\varepsilon = 1$", BADC), (r"valid only for $\varepsilon < 1$", BADC)],
+            [(rf"red: \ classic Gaussian, \ {d['classic'][i1]:.2f} at $\varepsilon = 1$", BADC), (r"classic small-$\varepsilon$ sufficient calibration", BADC)],
             [(rf"green: \ analytic Gaussian, \ {d['analytic'][i1]:.2f}", OKC), (r"the same guarantee", OKC)],
         ])
         with self.voiceover(

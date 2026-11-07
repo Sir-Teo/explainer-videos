@@ -27,7 +27,7 @@ class Outro(LectureMixin, VoiceoverScene):
             (r"DP is a test: \ trade-off curves, \ GDP", PRIVC), (r"accountants: \ 1{,}047 vs 50", OKC),
             (r"cost: \ central $1/n^2$, \ local $n\varepsilon^2$", PRIVC), (r"noise-aware CIs: \ 95.2\% kept", OKC),
             (r"Census: \ $\rho = 2.63$, \ small-block bias", BADC), (r"DP-SGD and membership audits", PRIVC),
-            (r"criteria: \ independence, \ separation, \ sufficiency", GRPA), (r"impossibility: \ both sides right", S.ACCENT),
+            (r"criteria: \ independence, \ separation, \ sufficiency", GRPA), (r"impossibility: \ exact criteria can conflict", S.ACCENT),
             (r"multicalibration: \ women 0.070 to 0.030", OKC), (r"counterfactual fairness: \ a causal model", GRPB),
             (r"open problems", S.ACCENT),
         ]
@@ -43,9 +43,9 @@ class Outro(LectureMixin, VoiceoverScene):
             "harmless facts, and almost everyone in the NHANES extract is unique by four. Differential privacy is a promise "
             "about the release process, not the data, and it is a statement about every attacker's hypothesis test. Modern "
             "accountants are twenty times tighter than adding epsilons. Central privacy costs a second-order term; local "
-            "privacy shrinks the sample. Intervals that model the noise keep their coverage. The census paid for consistent "
+            "privacy shrinks the sample. Noise-aware intervals improve coverage in the simulated grid; finite-sample validity needs more than a variance correction. The census paid for consistent "
             "tables with bias in small blocks. <bookmark mark='b'/> Private training is audited by attacks. The three "
-            "fairness criteria conflict, and on COMPAS both sides were right. Multicalibration repairs subgroups a model "
+            "fairness criteria conflict, and COMPAS exhibits approximate predictive parity alongside unequal error rates. Multicalibration repairs subgroups a model "
             "missed. And deciding which dependence is unfair needs a causal model."
         ) as vo:
             self.play(FadeIn(head))

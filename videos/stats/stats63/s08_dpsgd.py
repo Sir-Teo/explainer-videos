@@ -19,15 +19,9 @@ class DPSGD(LectureMixin, VoiceoverScene):
 
     def algorithm(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Martin Abadi and colleagues at Google gave the standard recipe in 2016: differentially "
-            "private stochastic gradient descent. <bookmark mark='b'/> At each step, compute every example's gradient "
-            "separately, and clip it to norm at most C. Now one person can move the summed gradient by at most C: bounded "
-            "sensitivity. <bookmark mark='c'/> Add Gaussian noise of standard deviation sigma times C to the sum, then take "
-            "the step. <bookmark mark='d'/> Every step is a Gaussian mechanism; the accountant of chapter three adds them "
-            "up, with amplification from sampling the batch; and the final model, a post-processing of the noisy steps, "
-            "inherits the guarantee.",
+            "<bookmark mark='a'/> Private stochastic gradient descent clips per-example gradients before adding calibrated noise. <bookmark mark='b'/> Each clipped vector has norm at most C. Adding or removing one contribution changes a sum by at most C; replacing one contribution by another can change it by two C. The adjacency and sensitivity must agree. <bookmark mark='c'/> Add Gaussian noise to the sum and divide by a fixed public batch size. Our fixed-size full-batch example uses replacement sensitivity two C, so its noise standard deviation is two C times the square root of steps over two rho. <bookmark mark='d'/> Adaptive Gaussian composition accounts for the steps. Subsampling amplification is absent in this full-batch example. The model inherits the resulting privacy bound, provided preprocessing and hyperparameter selection are also public or privately accounted.",
             [(r"\text{per-example}", r":", r"g_i \ \to \ g_i / \max(1, \|g_i\|/C)", 40),
-             (r"\text{sensitivity}", r":", r"C", 40),
+             (r"\text{sensitivity}", r":", r"C \text{ add/remove}; \ 2C \text{ replace-one}", 40),
              (r"\text{step}", r":", r"w \ \leftarrow \ w - \eta \, (\textstyle\sum_i \bar g_i + N(0, \sigma^2 C^2 I)) / B", 38),
              (r"\text{guarantee}", r":", r"\text{the accountant, \ then post-processing}", 40)],
             [r"Abadi et al. (2016)", r"clipping", r"Gaussian noise", r"chapters 1 and 3"],
@@ -41,10 +35,10 @@ class DPSGD(LectureMixin, VoiceoverScene):
             f"{d['n_train']} biopsies by sixty steps of full-batch gradient descent, each gradient clipped to norm one. "
             f"<bookmark mark='c'/> The noise is set so the whole run is rho-zCDP, for a range of rho, and converted to "
             f"epsilon at delta of one in a hundred thousand. <bookmark mark='d'/> Accuracy is measured on the remaining "
-            f"{d['n_test']}, averaged over ten random splits.",
+            f"{d['n_test']}, averaged over the same ten random splits at each budget, using fixed feature units and pointwise clipping rather than data-fitted scaling. Each model has its own budget; these public-data accuracy diagnostics and repeated models are not one jointly private release.",
             [(r"\text{data}", r":", r"569 \text{ biopsies, \ 30 features}", 40),
              (r"\text{model}", r":", rf"\text{{logistic, \ {d['n_train']} train, \ 60 steps}}", 40),
-             (r"\text{noise}", r":", r"\sigma = C\sqrt{60/2\rho}", 40),
+             (r"\text{noise}", r":", r"\sigma = 2C\sqrt{60/2\rho}", 40),
              (r"\text{measure}", r":", rf"\text{{accuracy on {d['n_test']}, \ 10 splits}}", 40)],
             [r"the Museum", r"clipped gradients", r"zCDP over 60 steps", r"held out"],
             colors=[(2, PRIVC)])
@@ -54,12 +48,13 @@ class DPSGD(LectureMixin, VoiceoverScene):
         rows = [r for r in d["rows"] if r["eps"] is not None]
         npv = next(r for r in d["rows"] if r["eps"] is None)
         lx = np.log10([r["eps"] for r in rows])
-        A = axes([-0.55, 1.0], [0.82, 1.0], x_length=7.2, y_length=4.4, xlabel=r"$\varepsilon$ at $\delta = 10^{-5}$ (log scale)",
+        ymin = min(r["acc"]-r["sd"] for r in rows)-.025
+        A = axes([-0.55, 1.0], [ymin, 1.0], x_length=7.2, y_length=4.4, xlabel=r"$\varepsilon$ at $\delta = 10^{-5}$ (log scale)",
                  ylabel=r"test accuracy, \ mean of 10 splits", xticks=list(np.log10([0.5, 1, 2, 5])), xfmt=lambda v: f"{10 ** v:g}",
                  yticks=[0.85, 0.9, 0.95, 1.0], center=[-2.4, 0.2, 0])
         ax = A.ax
         top = DashedLine(ax.c2p(-0.55, npv["acc"]), ax.c2p(1.0, npv["acc"]), color=RAWC, stroke_width=2.5)
-        errs = VGroup(*[Line(ax.c2p(a, max(0.82, r["acc"] - r["sd"])), ax.c2p(a, min(1.0, r["acc"] + r["sd"])), color=PRIVC,
+        errs = VGroup(*[Line(ax.c2p(a, r["acc"] - r["sd"]), ax.c2p(a, r["acc"] + r["sd"]), color=PRIVC,
                              stroke_width=2, stroke_opacity=0.6) for a, r in zip(lx, rows)])
         pts = VGroup(polyline(ax, lx, [r["acc"] for r in rows], PRIVC, 3.5),
                      *[Dot(ax.c2p(a, r["acc"]), radius=0.08, color=PRIVC) for a, r in zip(lx, rows)])
@@ -67,16 +62,10 @@ class DPSGD(LectureMixin, VoiceoverScene):
             [(rf"blue dashes: \ not private, \ {npv['acc']:.3f}", RAWC)],
             [(r"purple: \ private, \ with $\pm 1$ sd", PRIVC)],
             [(rf"$\varepsilon = {rows[0]['eps']:.2f}$: \ {rows[0]['acc']:.3f}", BADC), (rf"$\varepsilon = {rows[2]['eps']:.1f}$: \ {rows[2]['acc']:.3f}", OKC)],
-            [(r"beyond $\varepsilon \approx 1$: \ within noise", GREY_A), (r"of the non-private model", GREY_A)],
+            [(r"paired public-data comparison; descriptive SD", GREY_A), (r"no performance-equivalence claim", GREY_A)],
         ])
         with self.voiceover(
-            f"<bookmark mark='a'/> The non-private model, in blue, classifies {100 * npv['acc']:.1f} percent of held-out "
-            f"biopsies correctly. <bookmark mark='b'/> The private models, in purple, with one standard deviation across "
-            f"splits. <bookmark mark='c'/> At epsilon of {rows[0]['eps']:.2f}, accuracy falls to {100 * rows[0]['acc']:.1f} "
-            f"percent, and varies a lot from split to split. At epsilon of {rows[2]['eps']:.1f}, it is "
-            f"{100 * rows[2]['acc']:.1f} percent. <bookmark mark='d'/> Beyond epsilon of about one, the private model is "
-            f"within the split-to-split noise of the non-private one. Four hundred examples and thirty-one parameters is a "
-            f"small problem; the noise needed shrinks as the training set grows, as chapter four predicts."
+            f"<bookmark mark='a'/> The non-private model, in blue, classifies {100 * npv['acc']:.1f} percent of held-out biopsies correctly. <bookmark mark='b'/> The private models, in purple, with one standard deviation across splits. <bookmark mark='c'/> At epsilon of {rows[0]['eps']:.2f}, accuracy falls to {100 * rows[0]['acc']:.1f} percent, and varies a lot from split to split. At epsilon of {rows[2]['eps']:.1f}, it is {100 * rows[2]['acc']:.1f} percent. <bookmark mark='d'/> The accuracy loss varies with budget in this small public-data experiment. Overlapping descriptive standard deviations are not an equivalence test or a proof that the models have equal performance. Four hundred examples and thirty-one parameters is a small problem; the noise needed shrinks as the training set grows, as chapter four predicts."
         ) as vo:
             self.play(FadeIn(A), FadeIn(museum_tag(r"Wisconsin biopsies (the Museum)")))
             vo.wait_until("a")
@@ -126,14 +115,8 @@ class DPSGD(LectureMixin, VoiceoverScene):
 
     def audit(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Turn the cap around and it becomes an audit. <bookmark mark='b'/> Run an attack many "
-            "times, estimate its false and true positive rates with confidence intervals, and every attack that achieves "
-            "a ratio r proves that epsilon is at least log r. A statistical lower bound on epsilon. <bookmark mark='c'/> "
-            "Matthew Jagielski, Jonathan Ullman and Alina Oprea, and then Milad Nasr and colleagues, found implementations "
-            "whose claimed epsilon was smaller than what attacks proved: bugs in the code, caught by statistics. <bookmark "
-            "mark='d'/> Auditing used to need thousands of training runs. Thomas Steinke, Nasr and Jagielski showed in 2023 "
-            "how to audit with a single run, by inserting many random canaries and testing them all at once.",
-            [(r"\text{an attack's ratio } r", r":", r"\varepsilon \ge \log r - \text{(slack)}", 40),
+            "<bookmark mark='a'/> An attack can give a lower confidence bound on the privacy budget. <bookmark mark='b'/> For a specified neighboring experiment and fixed delta, the inequality true-positive rate at most e to epsilon times false-positive rate plus delta yields epsilon at least log of true-positive rate minus delta over false-positive rate, when the numerator is positive. Use simultaneous one-sided confidence bounds rather than raw empirical ratios. <bookmark mark='c'/> Audits can expose privacy implementations weaker than their claimed bounds; a failed attack cannot prove the claimed upper bound. <bookmark mark='d'/> Single-run canary methods can improve efficiency under their randomization and testing design. Their multiple tests and dependencies must be included in the statistical analysis.",
+            [(r"\text{an attack's ratio } r", r":", r"\varepsilon \ge \log\!\frac{\mathrm{TPR}-\delta}{\mathrm{FPR}}", 40),
              (r"\text{with CIs}", r":", r"\text{a lower bound on } \varepsilon", 40),
              (r"\text{found}", r":", r"\text{implementations weaker than claimed}", 40),
              (r"\text{one run}", r":", r"\text{many random canaries}", 40)],
@@ -143,7 +126,7 @@ class DPSGD(LectureMixin, VoiceoverScene):
     def disparate(self):
         self.lad_voiceover(
             "<bookmark mark='a'/> A bridge to the second half. <bookmark mark='b'/> Eugene Bagdasaryan, Omid Poursaeed "
-            "and Vitaly Shmatikov showed in 2019 that DP-SGD costs underrepresented groups more accuracy than others. "
+            "and Vitaly Shmatikov documented settings in 2019 where DP-SGD imposed larger accuracy losses on underrepresented groups. This is an empirical risk, not a universal ordering for every dataset or training recipe. "
             "<bookmark mark='c'/> The reason is in the mechanism: rare examples have large, unusual gradients, which are the "
             "ones clipping cuts, and their signal is the one the noise drowns. <bookmark mark='d'/> Privacy for everyone can "
             "be paid for unequally. Which raises the question of the next four chapters: what would it mean for a "

@@ -33,18 +33,12 @@ class Criteria(LectureMixin, VoiceoverScene):
 
     def three(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Independence: the score does not depend on the group. The same share of each group is "
-            "rated high risk. Also called demographic parity. <bookmark mark='b'/> Separation: the score is independent of "
-            "the group given the outcome. Among people who were not rearrested, the same share of each group was rated high "
-            "risk: equal false positive rates, and likewise equal false negative rates. Moritz Hardt, Eric Price and Nathan "
-            "Srebro called it equalized odds, in 2016. <bookmark mark='c'/> Sufficiency: the outcome is independent of the "
-            "group given the score. A score of seven means the same chance of rearrest in every group: calibration within "
-            "groups. <bookmark mark='d'/> Each sounds like fairness. Each is a statement a statistician can test.",
+            "<bookmark mark='a'/> Independence means the entire score distribution is the same across groups. Equal shares above one threshold are only a weaker, binary-decision version of demographic parity. <bookmark mark='b'/> Separation means score independence from group conditional on the outcome. At a chosen binary threshold this gives equal false-positive and false-negative rates; equalized odds for one threshold does not establish separation of the entire score. <bookmark mark='c'/> Sufficiency means the outcome distribution conditional on the score is the same across groups. When scores are probabilities and correctly scaled, calibration additionally requires the outcome rate to equal that numeric score. A decile label is a rank category, not probability divided by ten. <bookmark mark='d'/> These are distinct statistical criteria. Their estimates require uncertainty assessment, and none alone defines fairness for every decision.",
             [(r"\text{independence}", r":", r"R \perp A", 40),
              (r"\text{separation}", r":", r"R \perp A \mid Y", 40),
              (r"\text{sufficiency}", r":", r"Y \perp A \mid R", 40),
              (r"\text{each}", r":", r"\text{testable}", 40)],
-            [r"demographic parity", r"equalized odds: \ Hardt, \ Price \& Srebro (2016)", r"calibration within groups", r"Part 14's tables"],
+            [r"demographic parity", r"equalized odds: \ Hardt, \ Price \& Srebro (2016)", r"conditional predictive parity", r"Part 14's tables"],
             colors=[(0, GRPA), (1, GRPB), (2, S.ACCENT)])
 
     def data(self):
@@ -123,18 +117,12 @@ class Criteria(LectureMixin, VoiceoverScene):
             return VGroup(polyline(ax, xs + dx, ys, color, 3), dots)
         b, w = line("Black", GRPA, -0.08), line("white", GRPB, 0.08)
         side = side_groups([
-            [(r"orange: \ Black defendants", GRPA), (r"teal: \ white defendants", GRPB), (r"dot area: \ defendants per decile", GREY_A)],
-            [(r"the curves nearly coincide:", S.ACCENT), (r"roughly calibrated within groups", S.ACCENT)],
+            [(r"orange: \ Black defendants", GRPA), (r"teal: \ white defendants", GRPB), (r"dot size increases with decile count", GREY_A)],
+            [(r"the curves nearly coincide:", S.ACCENT), (r"broadly similar rates; not exact equality", S.ACCENT)],
             [(r"but the deciles are filled differently:", GREY_A), (rf"decile 10: \ {cal['Black']['n'][-1]} vs {cal['white']['n'][-1]}", GREY_A)],
         ])
         with self.voiceover(
-            f"<bookmark mark='a'/> Sufficiency, decile by decile: the fraction rearrested at each score, for each group, "
-            f"with dots sized by the number of defendants. <bookmark mark='b'/> The two curves nearly coincide: the score "
-            f"is roughly calibrated within groups, as Northpointe said, and as the criminologists Anthony Flores, Kristin "
-            f"Bechtel and Christopher Lowenkamp also found. <bookmark mark='c'/> What differs is how the deciles are filled. "
-            f"{cal['Black']['n'][-1]} Black defendants received a ten, against {cal['white']['n'][-1]} white defendants, "
-            f"and most white defendants are in the lowest deciles. Same meaning of each score; different distributions of "
-            f"scores; and so, as the next chapter proves, different error rates."
+            f"<bookmark mark='a'/> Sufficiency, decile by decile: the fraction rearrested at each score, for each group, with dots sized by the number of defendants. <bookmark mark='b'/> The two curves nearly coincide: the score is broadly similar rates; not exact equality, as Northpointe said, and as the criminologists Anthony Flores, Kristin Bechtel and Christopher Lowenkamp also found. <bookmark mark='c'/> What differs is how the deciles are filled. {cal['Black']['n'][-1]} Black defendants received a ten, against {cal['white']['n'][-1]} white defendants, and most white defendants are in the lowest deciles. Conditional rates are broadly similar but not identical, with finite cell counts. This descriptive plot does not establish exact sufficiency or numeric probability calibration."
         ) as vo:
             self.play(FadeIn(A), FadeIn(museum_tag(r"ProPublica's COMPAS data (the Museum)")))
             vo.wait_until("a")
@@ -148,13 +136,7 @@ class Criteria(LectureMixin, VoiceoverScene):
 
     def pairs(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Before COMPAS, a general fact: the criteria conflict in pairs. <bookmark mark='b'/> "
-            "Independence and sufficiency cannot both hold if the group and the outcome are dependent, because a calibrated "
-            "score must then track the different base rates. <bookmark mark='c'/> Independence and separation cannot both "
-            "hold for a binary score when the base rates differ, unless the score is useless, independent of the outcome. "
-            "<bookmark mark='d'/> And separation and sufficiency cannot both hold when the base rates differ, unless the "
-            "prediction is perfect. That last one is the COMPAS dispute, and the next chapter proves it with one line of "
-            "algebra.",
+            "<bookmark mark='a'/> Before COMPAS, a general fact: the criteria conflict in pairs. <bookmark mark='b'/> Independence and sufficiency cannot both hold if the group and the outcome are dependent, because a calibrated score must then track the different base rates. <bookmark mark='c'/> Independence and separation cannot both hold for a binary score when the base rates differ, unless the score is useless, independent of the outcome. <bookmark mark='d'/> And separation and sufficiency cannot both hold when the base rates differ, unless the outcome is recoverable from the score, including a perfectly inverted binary score. This full sufficiency statement is stronger than equality of positive predictive value alone. That last one is the COMPAS dispute, and the next chapter proves it with one line of algebra.",
             [(r"\text{independence + sufficiency}", r":", r"\text{need } A \perp Y", 40),
              (r"\text{independence + separation}", r":", r"\text{need a useless score}", 40),
              (r"\text{separation + sufficiency}", r":", r"\text{need equal base rates, \ or perfection}", 40),

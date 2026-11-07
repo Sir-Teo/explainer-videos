@@ -1,0 +1,61 @@
+{
+  "compas": {
+    "url": "https://raw.githubusercontent.com/propublica/compas-analysis/master/compas-scores-two-years.csv",
+    "sha256": "c451db85908b2f7fef1d83203bedf6b71ecda0d5af468d82ae62178f91d0cc7d",
+    "rows": 6172,
+    "columns": [
+      "age",
+      "sex",
+      "race",
+      "priors_count",
+      "decile_score",
+      "two_year_recid"
+    ],
+    "verification": "All filtered row multisets match exactly; standard +/-30 day, known recidivism, non-ordinary-traffic and score filters. No names retained.",
+    "extract_sha256": "7156340041f1f40572d7f94f4771f4febbf29467f32c972d34aa5c3763124421"
+  },
+  "prior_primary_verification": {
+    "nhanes": [
+      {
+        "file": "DEMO_J.xpt",
+        "sha256": "c0b46e0345ea19404928656277c8b0d10b0cca348a9b2fe4fc3c67e8b7ee73ec",
+        "bytes": 3412720,
+        "url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/DEMO_J.xpt",
+        "verification": "all relevant variables agree for all 5533 extracted adult SEQN identifiers, including missing values"
+      },
+      {
+        "file": "BPX_J.xpt",
+        "sha256": "f98f1d9a4c18173e715c749b4294f6f1525140d5ad5751316bb17cc038fb3423",
+        "bytes": 1466000,
+        "url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/BPX_J.xpt",
+        "verification": "all relevant variables agree for all 5533 extracted adult SEQN identifiers, including missing values"
+      },
+      {
+        "file": "BMX_J.xpt",
+        "sha256": "8d675e42d8826ac98714b2c3dd4c5138a5e353fb4424f7eff5e6db4a01ce838a",
+        "bytes": 1466000,
+        "url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/BMX_J.xpt",
+        "verification": "all relevant variables agree for all 5533 extracted adult SEQN identifiers, including missing values"
+      }
+    ],
+    "extract_sha256": "ae9be14330c2d18a719fca7ef379643b3f8f08f85abdf81ef993e713a4d5d1f5",
+    "extract_scope": "Fixed unweighted empirical adult NHANES extract, finite BMI/age/sex and at least one finite SBP reading; pressure is the mean of available readings; age top-coded at 80. Survey weights and clusters unused. Complete cases N=5176; target is not the US national mean.",
+    "breast_cancer": {
+      "dataset": "Wisconsin diagnostic breast cancer",
+      "url": "https://archive.ics.uci.edu/static/public/17/breast+cancer+wisconsin+diagnostic.zip",
+      "archive_sha256": "bc154869ef13f753f9e2b5a17e248cfe1ba4b6721db7c4da9f4880e40b05d3af",
+      "data_sha256": "d606af411f3e5be8a317a5a8b652b425aaf0ff38ca683d5327ffff94c3695f4a",
+      "records": 569,
+      "features": 30,
+      "verification": "all 17,070 feature values and all 569 diagnoses agree exactly in row order with UCI wdbc.data"
+    },
+    "faithful": {
+      "dataset": "faithful",
+      "url": "https://vincentarelbundock.github.io/Rdatasets/csv/datasets/faithful.csv",
+      "sha256": "5043db1e2c51c8e8fd67e0868c768ae589770cc76ad0ac0c5b7afd1fca31fc57",
+      "verification": "all 272 eruption-duration/wait-to-next-eruption pairs agree exactly in row order",
+      "scope": "independent package distribution; historical original not independently retrieved"
+    }
+  },
+  "scope": "NHANES unweighted complete cases; unique within sample, not population identification. Wisconsin public-data privacy demonstration, not private publication of its diagnostics."
+}

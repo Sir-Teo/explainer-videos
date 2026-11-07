@@ -1,0 +1,25 @@
+[
+  {
+    "url": "https://arxiv.org/pdf/1902.04495",
+    "sha256": "f24dbe1638ff447a4005b2a8c73062e6291b9c12cd1ad39216cc5df58cfb95d7",
+    "review": "Primary current arXiv text sections 3.1\u20133.2, lower-bound parameter ranges, bounded-coordinate upper bound and extra general-tail clipping logarithm; balance displayed risk terms at d log(1/delta)/epsilon\u00b2. Current text can include revisions beyond the 2021 publication; no unqualified universal minimax statement."
+  },
+  {
+    "url": "https://arxiv.org/pdf/1905.02383",
+    "sha256": "e14c6e526a925687f31d2c0553a7797d150d842fea651ec8028929c0048f39da",
+    "review": "Trade-off lower bounds, exact Gaussian shifts, composition and privacy-CLT assumptions; zCDP alone is not exact GDP."
+  },
+  {
+    "url": "https://arxiv.org/pdf/1703.06856",
+    "sha256": "2d7371209e44943bcb2852f23a889b710e2903b2d8830295ff98ab8f730db5bf",
+    "review": "Structural-model counterfactual predictive distributions; sufficient nondescendant construction; generic regression residuals not automatically invariant."
+  },
+  {
+    "url": "https://hdsr.mitpress.mit.edu/pub/7evz361i/release/1",
+    "review": "TopDown hierarchy, discrete Gaussian measurements, rho 2.63 redistricting budget and invariants published outside enhanced DP protection."
+  },
+  {
+    "url": "https://www2.census.gov/adrm/CED/Papers/CY21/2021-004-AbowdAshmeadCumingsMenonetal.pdf",
+    "review": "Invariant-restricted neighboring universe and distance-two adjacency; do not infer census GDP from rho alone."
+  }
+]

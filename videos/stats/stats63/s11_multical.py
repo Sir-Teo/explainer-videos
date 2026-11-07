@@ -19,19 +19,12 @@ class Multicalibration(LectureMixin, VoiceoverScene):
 
     def idea(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Calibration overall is weak: a score can be right on average and wrong for every "
-            "subgroup, too high for the young and too low for the old. <bookmark mark='b'/> Ursula Hebert-Johnson, Michael "
-            "Kim, Omer Reingold and Guy Rothblum asked, in 2018, for calibration on every group in a large collection C, "
-            "defined by any features, including intersections such as young women. <bookmark mark='c'/> Formally, for every "
-            "group G in C and every score level v, the average outcome among members of G scored near v is within alpha of v. "
-            "<bookmark mark='d'/> The groups need not be named in advance by a protected attribute. Any group that can be "
-            "computed from the features can be protected, which is the point: what one cannot list, as the hook showed, "
-            "should still be covered.",
+            "<bookmark mark='a'/> A model can calibrate overall while missing opposing subgroup errors. <bookmark mark='b'/> Multicalibration asks for small conditional residuals across a specified class of groups and sufficiently large score cells, including chosen intersections. <bookmark mark='c'/> For each protected group-bin cell, average outcome minus prediction should be small. A guarantee must specify the group class, bin resolution, tolerance and minimum cell mass. <bookmark mark='d'/> Rich computable group classes can be handled with an appropriate auditing oracle and sample complexity. No finite sample automatically protects every computable subgroup, including arbitrarily tiny or adaptively chosen cells.",
             [(r"\text{calibration}", r":", r"E[Y \mid R = v] = v", 40),
              (r"\text{multicalibration}", r":", r"|E[Y - R \mid G, R \approx v]| \le \alpha \ \ \forall G \in \mathcal{C}", 40),
              (r"\mathcal{C}", r":", r"\text{many groups, \ intersections}", 40),
-             (r"\text{protects}", r":", r"\text{any computable group}", 40)],
-            [r"too weak", r"H\'ebert-Johnson et al. (2018)", r"a rich class", r"no list needed"],
+             (r"\text{protects}", r":", r"\text{specified auditable class; minimum cell mass}", 40)],
+            [r"too weak", r"H\'ebert-Johnson et al. (2018)", r"a rich class", r"class and complexity matter"],
             colors=[(1, OKC)])
 
     def algorithm(self):
@@ -103,17 +96,10 @@ class Multicalibration(LectureMixin, VoiceoverScene):
             [(r"red: \ the base model", BADC), (r"green: \ after patching", OKC)],
             [(rf"women: \ {per['women']['before']:.3f} to {per['women']['after']:.3f}", OKC),
              (rf"under 25: \ {per['under 25']['before']:.3f} to {per['under 25']['after']:.3f}", OKC)],
-            [(r"race groups: \ already small, \ unchanged", GREY_A)],
+            [(r"white-group gap increases; overall improvement", GREY_A)],
         ])
         with self.voiceover(
-            f"<bookmark mark='a'/> The real test is on the other half, which the patches never saw, repeated over "
-            f"{d['splits']} random splits. The gap is the size-weighted average miscalibration across each group's score "
-            f"bins. <bookmark mark='b'/> In red the base model, in green after the patches. <bookmark mark='c'/> For women "
-            f"the gap falls from {say(per['women']['before'], 3)} to {say(per['women']['after'], 3)}, and for people under "
-            f"twenty-five from {say(per['under 25']['before'], 3)} to {say(per['under 25']['after'], 3)}: a model fitted "
-            f"without sex had been overpredicting women's rearrest, by about five points, and underpredicting the young's. <bookmark mark='d'/> For the two race groups, the gaps "
-            f"were already small, about two to three points, consistent with the last chapter's calibration curves, and "
-            f"patching leaves them within noise."
+            f"<bookmark mark='a'/> The real test is on the other half, which the patches never saw, repeated over {d['splits']} random splits. The gap is the size-weighted average miscalibration across each group's score bins. <bookmark mark='b'/> In red the base model, in green after the patches. <bookmark mark='c'/> For women the gap falls from {say(per['women']['before'], 3)} to {say(per['women']['after'], 3)}, and for people under twenty-five from {say(per['under 25']['before'], 3)} to {say(per['under 25']['after'], 3)}: these absolute gaps describe errors without identifying their sign. Directional bias would need signed residuals, which this chart does not show. <bookmark mark='d'/> For the two race groups, the gaps were already small, about two to three points, consistent with the last chapter's calibration curves, and the white-group average gap increases. The displayed gaps alone do not establish population significance or fairness for every group."
         ) as vo:
             self.play(FadeIn(A), FadeIn(ticks), FadeIn(museum_tag(r"ProPublica's COMPAS data (the Museum)")))
             vo.wait_until("a")
@@ -131,17 +117,11 @@ class Multicalibration(LectureMixin, VoiceoverScene):
     def honest(self):
         d = load("multical")
         self.lad_voiceover(
-            f"<bookmark mark='a'/> Overall, across all four groups, the held-out gap falls from {say(d['before'], 3)} to "
-            f"{say(d['after'], 3)}. <bookmark mark='b'/> On the training half it fell from {say(d['in_before'], 3)} to "
-            f"{say(d['in_after'], 3)}. <bookmark mark='c'/> The difference is overfitting: each patch is estimated from one "
-            f"cell's residuals, and some of what it corrects is that cell's noise. Part fifty-six's winner's curse again, "
-            f"since the worst cell is selected. <bookmark mark='d'/> The theory accounts for this by requiring cells large "
-            f"enough, of order one over alpha squared samples each, so that the sample guarantee transfers to the "
-            f"population. Measure on held-out data, always.",
+            "<bookmark mark='a'/> Held-out calibration is better evidence than training calibration. Our reported gap is a size-weighted mean absolute cell residual across four overlapping groups, not the maximum multicalibration violation. <bookmark mark='b'/> The training average falls more than the test average, because patch selection fits residual noise as well as signal. <bookmark mark='c'/> Twenty random halves reuse the same defendants, so their split-to-split variability describes this resampling exercise; it is not uncertainty for independent new populations. The white-group average gap actually increases, even while the overall gap decreases. <bookmark mark='d'/> Population transfer requires complexity control for the audited class, confidence and cell-mass factors, not just one over alpha squared observations per cell. Our alpha .02 stopping criterion is an empirical eligible-cell condition, not a held-out population certificate.",
             [(r"\text{held out}", r":", rf"{d['before']:.3f} \ \to \ {d['after']:.3f}", 40),
              (r"\text{training}", r":", rf"{d['in_before']:.3f} \ \to \ {d['in_after']:.3f}", 40),
              (r"\text{the gap}", r":", r"\text{patches fit noise}", 40),
-             (r"\text{theory}", r":", r"\text{cells of size} \gtrsim 1/\alpha^2", 40)],
+             (r"\text{theory}", r":", r"\text{class complexity, confidence and cell mass}", 40)],
             [r"real, \ smaller", r"optimistic", r"Part 56's winner's curse", r"generalization"],
             colors=[(0, OKC), (1, BADC)])
 
@@ -157,19 +137,13 @@ class Multicalibration(LectureMixin, VoiceoverScene):
             [(r"\text{split conformal}", r":", r"\text{marginal coverage}", 40),
              (r"\text{Mondrian}", r":", r"\text{coverage in named groups}", 40),
              (r"\text{conditional conformal}", r":", r"\text{coverage over a class}", 40),
-             (r"\text{shared idea}", r":", r"\text{guarantees for every describable group}", 40)],
+             (r"\text{shared idea}", r":", r"\text{guarantees for a specified function class}", 40)],
             [r"Part 57", r"group by group", r"Gibbs, \ Cherian \& Cand\`es", r"multicalibration's twin"],
             colors=[(2, OKC)])
 
     def family(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The family that grew from it. <bookmark mark='b'/> Multiaccuracy, by Michael Kim, Amirata "
-            "Ghorbani and James Zou: unbiased on every group, without the bins. <bookmark mark='c'/> Outcome "
-            "indistinguishability, by Cynthia Dwork and colleagues: no test in a class can tell the model's simulated "
-            "outcomes from the real ones, a hypothesis-testing definition again. <bookmark mark='d'/> And omniprediction, by "
-            "Parikshit Gopalan and colleagues: a multicalibrated score can be post-processed into a near-optimal decision "
-            "for every loss in a class at once. Multicalibration is sufficiency made rich, so, by chapter nine, it cannot "
-            "also deliver separation.",
+            "<bookmark mark='a'/> Several related notions extend this idea. <bookmark mark='b'/> Multiaccuracy controls average residuals over a specified function or group class without requiring score-bin calibration. <bookmark mark='c'/> Outcome indistinguishability restricts which tests can distinguish real outcomes from simulated model outcomes. Its strength depends on what the tests observe and their computational class. <bookmark mark='d'/> Omniprediction results post-process suitably multicalibrated scores into decisions competitive with a specified comparator class for a specified class of losses. This does not mean optimal for every loss or every possible decision. Exact sufficiency retains its conflict with separation under the usual nondegeneracy assumptions; approximate finite-class calibration needs quantitative analysis.",
             [(r"\text{multiaccuracy}", r":", r"E[Y - R \mid G] \approx 0", 40),
              (r"\text{outcome indistinguishability}", r":", r"\text{no test in a class can tell}", 40),
              (r"\text{omniprediction}", r":", r"\text{good for every loss at once}", 40),
