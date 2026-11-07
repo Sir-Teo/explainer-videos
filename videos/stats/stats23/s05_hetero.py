@@ -92,6 +92,9 @@ class Hetero(VoiceoverScene):
         rows[1][2].set_color(OLS_C)
         whys = [why(r"chapter three's weights"), why(r"log the outcome: \ Part 12"), why(r"Part 24's variance functions"),
                 why(r"random slopes: \ Part 25")]
+        intro = label('Uneven conditional noise can arise through several mechanisms', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "Where does uneven noise come from? <bookmark mark='a'/> Averages of unequal groups, as chapter three's "
             "weights assumed. <bookmark mark='b'/> Multiplicative errors, common in money and biology, make the "
@@ -101,6 +104,7 @@ class Hetero(VoiceoverScene):
             "from person to person, an interaction left out of the model, shows up as noise that grows with x: the "
             "random slopes of Part 25."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

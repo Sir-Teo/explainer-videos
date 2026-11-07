@@ -49,6 +49,9 @@ class Upgrade(VoiceoverScene):
         rows[3][2].set_color(OLS_C)
         whys = [why(r"the mean is linear: \ chapter six relaxes it"), why(r"equal, \ uncorrelated: \ chapters three to five"),
                 why(r"the error the estimator inherits"), why(r"the sandwich, \ before any assumption on the middle")]
+        intro = label('A full-rank linear mean and its error covariance determine OLS uncertainty', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> Write the model as y equals X beta plus an error whose mean, given X, is zero. "
             "<bookmark mark='b'/> Part 12 added that the errors are uncorrelated with a common variance. "
@@ -56,6 +59,7 @@ class Upgrade(VoiceoverScene):
             "linear in them. <bookmark mark='d'/> So its variance is a sandwich, with whatever the variance of the errors is "
             "in the middle. Every chapter of this part is about what goes in that middle, and what to do when we don't know."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.82, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -72,6 +76,9 @@ class Upgrade(VoiceoverScene):
         rows[2][2].set_color(OLS_C)
         whys = [why(r"any competitor"), why(r"write it as OLS plus a difference"),
                 why(r"the cross terms vanish because $DX = 0$"), why(r"drop it and OLS can lose: \ chapter three")]
+        intro = label('Gauss--Markov compares linear unbiased estimators under equal variances', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "A reminder of exactly where the assumptions enter. <bookmark mark='a'/> Take any other linear unbiased "
             "estimator, A y, with A X equal to the identity. <bookmark mark='b'/> Write A as least squares' matrix plus a "
@@ -80,6 +87,7 @@ class Upgrade(VoiceoverScene):
             "<bookmark mark='d'/> But that algebra used the error variance being sigma squared times the identity. Change "
             "the middle, and least squares need no longer win, which is where chapter three begins."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.82, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -95,6 +103,9 @@ class Upgrade(VoiceoverScene):
             label(r"an $X$ measured with error: \ attenuation, \ chapter seven", font_size=24, color=NOISY),
             label(r"and the arithmetic: \ chapter ten", font_size=24, color=GREY_A),
         ), 12.4, 0.45, [0, 0, 0])
+        intro = label('Different model departures require different repairs', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "The map. <bookmark mark='a'/> If the errors' covariance has a known shape, generalized least squares "
             "uses it. <bookmark mark='b'/> If each error has its own unknown variance, heteroskedasticity-consistent "
@@ -105,6 +116,7 @@ class Upgrade(VoiceoverScene):
             "slope; with several regressors the direction of bias can vary. <bookmark mark='f'/> And the arithmetic "
             "needs care too."
         ) as vo:
+            self.add(intro)
             for k, m_ in enumerate("abcdef"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
