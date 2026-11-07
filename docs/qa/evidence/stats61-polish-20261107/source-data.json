@@ -1,0 +1,35 @@
+{
+  "nhanes": [
+    {
+      "file": "DEMO_J.xpt",
+      "sha256": "c0b46e0345ea19404928656277c8b0d10b0cca348a9b2fe4fc3c67e8b7ee73ec",
+      "bytes": 3412720,
+      "url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/DEMO_J.xpt",
+      "verification": "all relevant variables agree for all 5533 extracted adult SEQN identifiers, including missing values"
+    },
+    {
+      "file": "BPX_J.xpt",
+      "sha256": "f98f1d9a4c18173e715c749b4294f6f1525140d5ad5751316bb17cc038fb3423",
+      "bytes": 1466000,
+      "url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/BPX_J.xpt",
+      "verification": "all relevant variables agree for all 5533 extracted adult SEQN identifiers, including missing values"
+    },
+    {
+      "file": "BMX_J.xpt",
+      "sha256": "8d675e42d8826ac98714b2c3dd4c5138a5e353fb4424f7eff5e6db4a01ce838a",
+      "bytes": 1466000,
+      "url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/BMX_J.xpt",
+      "verification": "all relevant variables agree for all 5533 extracted adult SEQN identifiers, including missing values"
+    }
+  ],
+  "extract_sha256": "ae9be14330c2d18a719fca7ef379643b3f8f08f85abdf81ef993e713a4d5d1f5",
+  "extract_scope": "Fixed unweighted empirical adult NHANES extract, finite BMI/age/sex and at least one finite SBP reading; pressure is the mean of available readings; age top-coded at 80. Survey weights and clusters unused. Complete cases N=5176; target is not the US national mean.",
+  "faithful": {
+    "dataset": "faithful",
+    "url": "https://vincentarelbundock.github.io/Rdatasets/csv/datasets/faithful.csv",
+    "sha256": "5043db1e2c51c8e8fd67e0868c768ae589770cc76ad0ac0c5b7afd1fca31fc57",
+    "verification": "all 272 eruption-duration/wait-to-next-eruption pairs agree exactly in row order",
+    "scope": "independent package distribution; historical original not independently retrieved"
+  },
+  "verification_scope": "CDC relevant fields and all Faithful pairs reverified in Part 60 in this session; unchanged NHANES extract hash rechecked for Part 61. Same fixed empirical examples; no national survey inference."
+}

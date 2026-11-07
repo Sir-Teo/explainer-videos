@@ -20,12 +20,7 @@ class Sinkhorn(LectureMixin, VoiceoverScene):
 
     def entropic(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The linear program costs about n cubed operations, too many for large samples, and its "
-            "solution is a sparse vertex that jumps as the data move. <bookmark mark='b'/> Marco Cuturi's 2013 idea: add a "
-            "multiple epsilon of the plan's negative entropy to the cost. <bookmark mark='c'/> The problem becomes strictly "
-            "convex, and its solution has a closed form up to two vectors: the plan is a Gibbs kernel, e to the minus C over "
-            "epsilon, scaled on its rows and columns. <bookmark mark='d'/> As epsilon goes to zero it approaches the "
-            "transport plan; as epsilon grows it approaches the independent coupling.",
+            "<bookmark mark='a'/> Entropic regularization smooths the finite transport optimization problem. Dense assignment has a cubic reference complexity, though exact transport has several algorithms. <bookmark mark='b'/> Our solver minimizes transport cost plus epsilon times KL of the plan relative to the product marginals. For fixed marginals this differs from cost minus epsilon entropy only by a constant, so the minimizer is the same. <bookmark mark='c'/> With positive marginals and finite costs the entropic minimizer is unique and is a row-and-column scaling of the Gibbs kernel. <bookmark mark='d'/> As epsilon vanishes it selects an optimal unregularized plan; as epsilon grows the plan tends to the independent coupling. We distinguish its raw transport cost from its regularized objective.",
             [(r"\text{LP}", r":", r"O(n^3), \ \text{a sparse, unstable vertex}", 40),
              (r"\text{entropic}", r":", r"\min_{P \in \Pi(a, b)} \langle P, C\rangle - \varepsilon H(P)", 40),
              (r"P^\varepsilon", r"=", r"\mathrm{diag}(u)\,e^{-C/\varepsilon}\,\mathrm{diag}(v)", 40),
@@ -96,13 +91,13 @@ class Sinkhorn(LectureMixin, VoiceoverScene):
             [(r"60 points to 60 points in the plane", WHITE), (r"stop at error $10^{-9}$", GREY_A)],
             [(rf"$\varepsilon = 1$: \ {r1['iters']} iterations", FLOWC)],
             [(rf"$\varepsilon = 0.1$: \ {r2['iters']} iterations", ENTC)],
-            [(rf"$\varepsilon = 0.03$: \ {r3['iters']:,}", GREY_A), (r"iterations grow like $1/\varepsilon$", GREY_A)],
+            [(rf"$\varepsilon = 0.03$: \ {r3['iters']:,}", GREY_A), (r"small $\varepsilon$ slows convergence; \ no universal inverse law", GREY_A)],
         ])
         with self.voiceover(
             f"<bookmark mark='a'/> How fast does it converge? Sixty points to sixty points, stopping when the marginals are "
             f"right to ten to the minus nine. <bookmark mark='b'/> With epsilon equal to one, the error falls geometrically: "
             f"{r1['iters']} iterations. <bookmark mark='c'/> With a tenth, {r2['iters']}. <bookmark mark='d'/> With three "
-            f"hundredths, {r3['iters']:,}: the contraction rate degrades as epsilon shrinks, roughly like one over epsilon. "
+            f"hundredths, {r3['iters']:,}: the contraction rate degrades as epsilon shrinks, in a way that depends on costs, marginals and the stopping tolerance. "
             f"Sharpness is paid for in iterations."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated")))
@@ -129,13 +124,10 @@ class Sinkhorn(LectureMixin, VoiceoverScene):
         side = side_groups([
             [(rf"green: \ the exact cost, \ {d['exact']:.3f}", PLANC)],
             [(r"purple: \ the entropic plan's cost", ENTC), (rf"{cost[-1]:.3f} at $\varepsilon = 0.03$", ENTC)],
-            [(r"bias $\approx \tfrac{d}{2}\,\varepsilon\log(1/\varepsilon)$", GREY_A), (r"for smooth problems", GREY_A)],
+            [(r"raw plan cost $\ne$ regularized-value bias", GREY_A), (r"finite discrete and continuous expansions differ", GREY_A)],
         ])
         with self.voiceover(
-            f"<bookmark mark='a'/> The price of the blur is bias. The exact transport cost of this problem is "
-            f"{say(d['exact'], 3)}. <bookmark mark='b'/> The entropic plan's cost exceeds it, by a lot at epsilon three and by "
-            f"little at three hundredths, where it is {say(cost[-1], 3)}. <bookmark mark='c'/> For smooth problems the bias "
-            f"is of order epsilon times log one over epsilon, times half the dimension: small, and well understood."
+            "<bookmark mark='a'/> The graph shows the raw transport cost of the entropic plan, rather than the entropy-regularized objective. <bookmark mark='b'/> Its excess over the exact discrete optimum decreases as regularization shrinks, with numerical marginal residuals checked. <bookmark mark='c'/> Continuous small-epsilon expansions of the regularized value can have an epsilon-log-one-over-epsilon leading term. That coefficient is not a formula for this finite discrete raw-cost graph. Discrete gaps and continuous smoothness lead to different bias regimes."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated")))
             vo.wait_until("a")
@@ -160,15 +152,10 @@ class Sinkhorn(LectureMixin, VoiceoverScene):
             [(rf"two samples from $N(0, I_{d['d']})$", WHITE)],
             [(r"red: \ $W_2^2$", NAIVEC2), (rf"slope {d['slope_w2']:.2f}; \ theory $-2/d = -0.4$", NAIVEC2)],
             [(r"purple: \ Sinkhorn divergence, \ $\varepsilon = 1$", ENTC), (rf"slope {d['slope_sd']:.2f}", ENTC)],
-            [(r"free of $d$: \ $n^{-1/2}$, \ up to constants", GREY_A)],
+            [(r"fixed-$\varepsilon$ rate bounds need tail/support conditions", GREY_A)],
         ])
         with self.voiceover(
-            f"<bookmark mark='a'/> The real payoff is statistical. Two samples from the same five-dimensional Gaussian: any "
-            f"distance between them is pure estimation error. <bookmark mark='b'/> The squared W two falls with slope "
-            f"{say(d['slope_w2'], 2)}, near the theory's minus two over d: the curse. <bookmark mark='c'/> The Sinkhorn "
-            f"divergence, with epsilon one, falls with slope {say(d['slope_sd'], 2)}. <bookmark mark='d'/> Aude Genevay and "
-            f"co-authors, and Gonzalo Mena and Jonathan Niles-Weed, proved in 2019 that the entropic cost converges at the "
-            f"parametric rate in any dimension, with a constant that grows as epsilon shrinks."
+            "<bookmark mark='a'/> This graph compares two independent empirical samples from the same five-dimensional Gaussian. The population discrepancy is zero. <bookmark mark='b'/> The finite-sample squared-W-two values show a dimension-dependent matching regime. <bookmark mark='c'/> The fixed-epsilon Sinkhorn divergence decreases more quickly over these five sizes and six replicates. Draws and Monte Carlo standard errors are saved; a fitted slope is not a proved asymptotic exponent. <bookmark mark='d'/> Root-n statistical bounds and central limit results exist for fixed regularization under suitable support or tail assumptions. Their constants depend on dimension, tails and epsilon; a zero-discrepancy null can be degenerate and have a different fluctuation scale."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated, \ 6 repetitions")))
             vo.wait_until("a")
@@ -183,29 +170,19 @@ class Sinkhorn(LectureMixin, VoiceoverScene):
 
     def divergence(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> One fix makes the entropic cost a proper discrepancy. The entropic cost of a law with "
-            "itself is not zero. <bookmark mark='b'/> The Sinkhorn divergence subtracts the two self-terms, so it is zero "
-            "when the laws are equal and positive otherwise. <bookmark mark='c'/> It interpolates between Wasserstein, as "
-            "epsilon goes to zero, and the maximum mean discrepancy with the kernel minus distance, as epsilon grows: "
-            "Feydy and co-authors, 2019. <bookmark mark='d'/> The tuning parameter epsilon now has a meaning: the scale "
-            "below which geometry is ignored.",
+            "<bookmark mark='a'/> The regularized objective need not vanish for a law against itself. <bookmark mark='b'/> Subtracting the two self-objectives gives the Sinkhorn divergence. Its positivity and separation properties require an appropriate cost and kernel, such as the finite-epsilon squared-Euclidean setup here. <bookmark mark='c'/> In our squared-distance convention, the zero-epsilon limit is squared W two. As epsilon grows without bound, the discrepancy tends to squared distance between means, which need not distinguish different laws. With ordinary distance cost the corresponding independent-coupling limit is an energy-distance expression. <bookmark mark='d'/> Thus cost and regularization convention both matter; finite epsilon controls the amount of smoothing.",
             [(r"\mathrm{OT}_\varepsilon(\mu, \mu)", r"\ne", r"0", 40),
              (r"S_\varepsilon(\mu, \nu)", r"=", r"\mathrm{OT}_\varepsilon(\mu, \nu) - \tfrac12\mathrm{OT}_\varepsilon(\mu, \mu) - \tfrac12\mathrm{OT}_\varepsilon(\nu, \nu)", 34),
-             (r"\varepsilon \to 0", r":", r"W; \ \ \varepsilon \to \infty: \ \mathrm{MMD}, \ k = -\|x - y\|", 40),
+             (r"\varepsilon \to 0", r":", r"W_2^2; \ \ \varepsilon \to \infty:\ \|E X-E Y\|^2\quad(c=\|x-y\|^2)", 40),
              (r"\varepsilon", r":", r"\text{the scale below which geometry is ignored}", 38)],
             [r"a bias", r"Genevay et al.; \ Feydy et al.", r"Part 60's MMD", r"a resolution"],
             colors=[(1, ENTC)])
 
     def unbalanced(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> One more relaxation is often needed. <bookmark mark='b'/> Transport demands that all mass "
-            "be moved, so an outlier must be carried, at great cost, wherever it lies; and two measures of different total "
-            "mass cannot be compared at all. <bookmark mark='c'/> Unbalanced transport replaces the hard marginal "
-            "constraints by penalties, a Kullback–Leibler divergence from each marginal, so mass can be created or destroyed "
-            "at a price. <bookmark mark='d'/> Lénaïc Chizat, Gabriel Peyré, Bernhard Schmitzer and François-Xavier "
-            "Vialard showed in 2018 that Sinkhorn's algorithm extends with one change: each scaling is raised to a power.",
+            "<bookmark mark='a'/> Unbalanced transport relaxes mass conservation. <bookmark mark='b'/> Balanced couplings need equal total mass and can pay heavily for distant outliers. <bookmark mark='c'/> Generalized KL penalties for marginal mismatch allow mass creation or destruction, at a price. Adding an entropic plan penalty yields the regularized problem shown. <bookmark mark='d'/> Generalized Sinkhorn updates then raise the marginal rescaling to a power involving both the KL penalty and epsilon. The entropy term is needed for this update; it is not an algorithm for the unregularized expression with epsilon absent.",
             [(r"\text{balanced}", r":", r"\text{all mass moves; \ outliers dominate}", 40),
-             (r"\text{unbalanced}", r":", r"\min_P \langle P, C\rangle + \tau\,\mathrm{KL}(P\mathbf 1\,\|\,a) + \tau\,\mathrm{KL}(P'\mathbf 1\,\|\,b)", 34),
+             (r"\text{unbalanced}", r":", r"\min_{P\ge0} \langle P,C\rangle + \varepsilon\sum_{ij}P_{ij}(\log P_{ij}-1)+\tau\,\mathrm{KL}(P\mathbf 1\,\|\,a) + \tau\,\mathrm{KL}(P'\mathbf 1\,\|\,b)", 34),
              (r"\text{effect}", r":", r"\text{mass created or destroyed, \ at a price}", 40),
              (r"\text{Sinkhorn}", r":", r"u \leftarrow \big(a/Kv\big)^{\tau/(\tau + \varepsilon)}", 40)],
             [r"Part 60's outliers", r"soft marginals", r"robust transport", r"Chizat et al. (2018)"],

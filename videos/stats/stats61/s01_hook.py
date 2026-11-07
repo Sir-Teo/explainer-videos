@@ -23,14 +23,14 @@ class Hook(LectureMixin, VoiceoverScene):
                           r"distance carried is least?", color=TGT, width=11.4, font_size=23).move_to([0, 1.0, 0])
         rows = fit_rows(VGroup(
             label(r"a question about moving mass at least cost", font_size=26, color=GREY_A),
-            label(r"Monge's own answer: \ paths of transport never cross", font_size=26, color=PLANC),
+            label(r"on a line: \ monotone pairing is optimal for convex difference costs", font_size=26, color=PLANC),
             label(r"two centuries later: \ a way to compare probability distributions", font_size=26, color=SRC),
         ), 12.4, 0.35, [0, -1.8, 0])
         with self.voiceover(
             "<bookmark mark='a'/> In 1781 Gaspard Monge presented a memoir to the Paris Academy of Sciences on cuttings and "
             "fillings. Earth dug from one place must fill holes in another: which shovelful should go where, so that the "
             "total distance carried is as small as possible? <bookmark mark='b'/> It is a question about moving mass at "
-            "least cost. <bookmark mark='c'/> Monge observed that in an optimal plan, the paths of transport never cross. "
+            "least cost. <bookmark mark='c'/> Uncrossing motivates transport geometry. On a line, monotone pairing is optimal for a convex cost of displacement, but the optimum need not be unique for plain distance. "
             "<bookmark mark='d'/> Two centuries later, the same question became one of statistics' most useful ways of "
             "comparing probability distributions."
         ) as vo:
@@ -71,7 +71,7 @@ class Hook(LectureMixin, VoiceoverScene):
         with self.voiceover(
             f"<bookmark mark='a'/> Monge's problem on a line. The blue pile of earth, mu, must fill the gold holes, nu, "
             f"drawn below the axis. <bookmark mark='b'/> Cut the earth into forty equal shovelfuls. <bookmark mark='c'/> "
-            f"The monotone plan sends the leftmost shovelful to the leftmost hole, and so on in order: no two paths cross. "
+            f"The monotone plan sends the leftmost shovelful to the leftmost hole, and so on in order: the ordering is preserved. "
             f"With the squared distance as the cost, its root mean cost is {say(d['w2'], 2)}. <bookmark mark='d'/> A crossing "
             f"plan, which sends the leftmost earth to the rightmost hole, costs {say(d['w2_cross'], 2)}. <bookmark mark='e'/> "
             f"With the plain distance as the cost, Monge's own choice, the two cost almost the same, {say(d['w1'], 2)} and "
@@ -114,7 +114,7 @@ class Hook(LectureMixin, VoiceoverScene):
             "<bookmark mark='d'/> And its geometry makes sampling a form of optimization, and generative models a form of "
             "transport.",
             [(r"W_p(\mu, \nu)", r"=", r"\big(\min_\pi \int \|x - y\|^p\,d\pi\big)^{1/p}", 40),
-             (r"\text{geometry}", r":", r"W(\delta_0, \delta_h) = h; \ \ \mathrm{TV} = 1", 40),
+             (r"\text{geometry}", r":", r"W(\delta_0, \delta_h) = |h|; \ \ \mathrm{TV} = 1", 40),
              (r"\text{maps}", r":", r"\text{ranks and quantiles in } \mathbb R^d", 40),
              (r"\text{flows}", r":", r"\text{sampling} = \text{optimization}", 40)],
             [r"a metric on laws", r"Part 43's distances", r"chapter 7", r"chapters 8--9"],

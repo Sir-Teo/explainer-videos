@@ -33,7 +33,7 @@ from scipy import stats
 from explainer.ai.cache import Cache
 from explainer.stats import museum
 from explainer.stats.board import Row, save_rows
-from explainer.stats.kit import ot as O
+from . import checked as O
 
 CACHE = Cache("stats61")
 load = CACHE.load
@@ -62,7 +62,8 @@ def nest(obj):
 
 def _nhanes():
     d = museum.nhanes()
-    sbp = np.nanmean(np.column_stack([d["sbp1"], d["sbp2"], d["sbp3"]]), axis=1)
+    readings=np.column_stack([d["sbp1"],d["sbp2"],d["sbp3"]]);counts=np.isfinite(readings).sum(1)
+    sbp=np.divide(np.nansum(readings,axis=1),counts,out=np.full(len(readings),np.nan),where=counts>0)
     ok = np.isfinite(sbp) & np.isfinite(d["bmi"]) & np.isfinite(d["age"]) & np.isfinite(d["sex"])
     return {k: d[k][ok] for k in ("age", "sex", "bmi")} | {"sbp": sbp[ok]}
 
@@ -109,11 +110,11 @@ def compute_lp():
     sk = {}
     for eps in (2.0, 0.5, 0.1):
         s = O.sinkhorn(a, b, C, eps, 20000, 1e-12)
-        sk[f"{eps:g}"] = {"P": s["P"], "cost": s["cost"], "obj": s["obj"], "iters": s["iters"]}
+        sk[f"{eps:g}"] = {"P": s["P"], "cost": s["cost"], "obj": s["obj"], "iters": s["iters"], "audit":s["audit"]}
     nz = int(np.sum(lp["P"] > 1e-9))
     slack = lp["f"][:, None] + lp["g"][None, :] - C
     return {"X": X, "Y": Y, "a": a, "b": b, "C": C, "P": lp["P"], "cost": lp["cost"], "f": lp["f"], "g": lp["g"],
-            "dual": float(a @ lp["f"] + b @ lp["g"]), "nonzero": nz, "max_slack": float(slack.max()), "sinkhorn": sk}
+            "dual": float(a @ lp["f"] + b @ lp["g"]), "audit":lp["audit"], "nonzero": nz, "max_slack": float(slack.max()), "sinkhorn": sk}
 
 
 def compute_quantile():
@@ -123,16 +124,16 @@ def compute_quantile():
     w2 = O.wasserstein_1d(m, w, 2)
     u = (np.arange(199) + 1) / 200
     qm, qw = np.quantile(m, u), np.quantile(w, u)
-    xs = np.linspace(14, 60, 300)
+    xs = np.linspace(np.floor(min(m.min(),w.min()))-1, np.ceil(max(m.max(),w.max()))+1, 500)
     Fm = np.searchsorted(np.sort(m), xs, side="right") / len(m)
     Fw = np.searchsorted(np.sort(w), xs, side="right") / len(w)
-    # W2^2 = (mean difference)^2 + (sd difference)^2 + 2 sd_m sd_w (1 - corr of the quantile functions)
-    um = (np.arange(4000) + 0.5) / 4000
-    Qm, Qw = np.quantile(m, um), np.quantile(w, um)
-    rho = float(np.corrcoef(Qm, Qw)[0, 1])
-    return {"n_m": len(m), "n_w": len(w), "mean_m": float(m.mean()), "mean_w": float(w.mean()), "sd_m": float(m.std()),
-            "sd_w": float(w.std()), "w1": w1, "w2": w2, "w1_area": O.w1_cdf_area(m, w), "u": u, "qm": qm, "qw": qw, "xs": xs,
-            "Fm": Fm, "Fw": Fw, "rho": rho, "shape_term": float(2 * m.std() * w.std() * (1 - rho))}
+    decomposition=O.quantile_decomposition(m,w)
+    assert abs(decomposition['residual'])<1e-9
+    return {"n_m":len(m),"n_w":len(w),"mean_m":float(m.mean()),"mean_w":float(w.mean()),
+        "sd_m":float(m.std()),"sd_w":float(w.std()),"w1":w1,"w2":w2,"w1_area":O.w1_cdf_area(m,w),
+        "u":u,"qm":qm,"qw":qw,"xs":xs,"Fm":Fm,"Fw":Fw,"rho":decomposition['rho'],
+        "shape_term":decomposition['shape'],"decomposition":decomposition,
+        "scope":"fixed unweighted complete-case empirical extract; not national survey-weighted distributions"}
 
 
 def compute_geodesic():
@@ -151,10 +152,10 @@ def compute_rates():
     r = rng(6103)
     out = {}
     ns1 = [25, 50, 100, 200, 400, 800, 1600]
-    v = []
-    for n in ns1:
-        v.append(float(np.mean([O.wasserstein_1d(r.random(n), r.random(n), 1) for _ in range(40)])))
-    out["d1"] = {"ns": ns1, "W": v, "slope": float(np.polyfit(np.log(ns1), np.log(v), 1)[0])}
+    draws=[[O.wasserstein_1d(r.random(n),r.random(n),1) for _ in range(40)] for n in ns1]
+    v=np.mean(draws,axis=1)
+    out['d1']={"ns":ns1,"W":v,"slope":float(np.polyfit(np.log(ns1),np.log(v),1)[0]),
+               "draws":draws,"mcse":[O.mcse(v) for v in draws],"reps":40}
     ns = [25, 50, 100, 200, 400, 800]
     for d in (2, 3, 5, 10):
         out[f"d{d}"] = O.empirical_rate(d, ns, 8, r, 1)
@@ -173,21 +174,24 @@ def compute_sinkhorn():
     traces = {}
     for eps in (3.0, 1.0, 0.3, 0.1, 0.03):
         s = O.sinkhorn(a, a, C, eps, 50000, 1e-9)
-        rows.append({"eps": eps, "cost": s["cost"], "obj": s["obj"], "iters": s["iters"], "entropy_plan": float(-np.sum(s["P"] * np.log(s["P"] + 1e-300)))})
+        rows.append({"eps": eps, "cost": s["cost"], "obj": s["obj"], "iters": s["iters"], "audit":s["audit"], "entropy_plan": float(-np.sum(s["P"] * np.log(s["P"] + 1e-300)))})
         if eps in (1.0, 0.1):
             traces[f"{eps:g}"] = s["errs"][:4000]
     # sample complexity: two independent samples from N(0, I_5); W2^2 against the Sinkhorn divergence at eps = 1
     d, ns, reps = 5, [25, 50, 100, 200, 400], 6
     w2, sd = [], []
+    draws_w2,draws_sd=[],[]
     for m in ns:
         a1, a2 = [], []
         for _ in range(reps):
             U, V = r.standard_normal((m, d)), r.standard_normal((m, d))
             a1.append(O.assignment(U, V, 2)["cost"])
             a2.append(O.sinkhorn_divergence(U, V, 1.0))
+        draws_w2.append(a1);draws_sd.append(a2)
         w2.append(float(np.mean(a1)))
         sd.append(float(np.mean(a2)))
     return {"n": n, "exact": exact, "rows": rows, "traces": traces, "d": d, "ns": ns, "w2sq": w2, "sdiv": sd,
+            "draws_w2":draws_w2,"draws_sd":draws_sd,"mcse_w2":[O.mcse(a) for a in draws_w2],"mcse_sd":[O.mcse(a) for a in draws_sd],"reps":reps,
             "slope_w2": float(np.polyfit(np.log(ns), np.log(w2), 1)[0]), "slope_sd": float(np.polyfit(np.log(ns), np.log(sd), 1)[0])}
 
 
@@ -199,7 +203,7 @@ def compute_maps():
     ns = [50, 100, 200, 400, 800]
     Z = r.standard_normal((500, 2))
     Ttrue = Z @ A.T
-    out = {"ns": ns, "emp": [], "ent": [], "A": A}
+    out = {"ns": ns, "emp": [], "ent": [], "A": A,"draws_emp":[],"draws_ent":[],"solver_audits":[]}
     for n in ns:
         e1, e2 = [], []
         for _ in range(4):
@@ -210,9 +214,13 @@ def compute_maps():
             nn = np.argmin(O.cost_matrix(Z, X, 2), axis=1)
             e1.append(float(np.mean(np.sum((Y[perm][nn] - Ttrue) ** 2, 1))))
             T = O.entropic_map(X, Y, 0.5 * n ** (-1 / 3))
+            out["solver_audits"].append(T.audit)
             e2.append(float(np.mean(np.sum((T(Z) - Ttrue) ** 2, 1))))
+        out["draws_emp"].append(e1);out["draws_ent"].append(e2)
         out["emp"].append(float(np.mean(e1)))
         out["ent"].append(float(np.mean(e2)))
+    out["mcse_emp"]=[O.mcse(a) for a in out["draws_emp"]];out["mcse_ent"]=[O.mcse(a) for a in out["draws_ent"]]
+    out["scope"]="four training datasets per size; same 500-point Monte Carlo integration sample; epsilon=.5 n^(-1/3), illustrative tuning"
     out["slope_emp"] = float(np.polyfit(np.log(ns), np.log(out["emp"]), 1)[0])
     out["slope_ent"] = float(np.polyfit(np.log(ns), np.log(out["ent"]), 1)[0])
     return out
@@ -229,13 +237,14 @@ def compute_bary():
     mix = sum(w * dd for w, dd in zip(wts, dens))
     q = O.barycenter_1d(samples, wts, 2000)
     bary = _kde(q, xs, 4.0)
+    exact_bary=O.quantile_atoms(samples,wts)
     means = [float(s.mean()) for s in samples]
     sds = [float(s.std()) for s in samples]
     # Gaussian barycenter of two covariances, and its check against the closed form for commuting matrices
     Sb = O.gaussian_barycenter([np.diag([1.0, 4.0]), np.diag([4.0, 1.0])])
     mix_sd = float(math.sqrt(np.sum(wts * (np.array(sds) ** 2 + np.array(means) ** 2)) - np.sum(wts * np.array(means)) ** 2))
     return {"groups": [f"{a}--{c - 1}" for a, c in groups], "ns": [len(s) for s in samples], "xs": xs, "dens": dens, "mix": mix,
-            "bary": bary, "means": means, "sds": sds, "bary_mean": float(q.mean()), "bary_sd": float(q.std()), "mix_sd": mix_sd,
+            "bary": bary, "means": means, "sds": sds, "bary_mean": exact_bary["mean"], "bary_sd":exact_bary["sd"], "exact_atoms":exact_bary["values"],"exact_masses":exact_bary["mass"], "mix_sd": mix_sd,
             "wts": wts, "gauss_bary": Sb}
 
 
@@ -270,18 +279,22 @@ def compute_tests():
     reps, n = 1000, 40
     out = {"reps": reps, "n": n}
     rh = rr = 0
+    null_hot,null_rank=[],[]
     for _ in range(reps):
         X, Y = r.standard_cauchy((n, 2)), r.standard_cauchy((n, 2))
-        rh += O.hotelling_two_sample(X, Y)["p"] < 0.05
-        rr += O.rank_energy_test(X, Y, r, 199)["p"] < 0.05
+        hh=O.hotelling_two_sample(X,Y)["p"]<=.05;rrr=O.rank_energy_test(X,Y,r,199)["p"]<=.05
+        rh+=hh;rr+=rrr;null_hot.append(hh);null_rank.append(rrr)
     out["size_hot"], out["size_rank"] = rh / reps, rr / reps
     ph = pr = 0
+    alt_hot,alt_rank=[],[]
     preps = 300
     for _ in range(preps):
         X, Y = r.standard_cauchy((n, 2)), r.standard_cauchy((n, 2)) + 1.0
-        ph += O.hotelling_two_sample(X, Y)["p"] < 0.05
-        pr += O.rank_energy_test(X, Y, r, 199)["p"] < 0.05
+        hh=O.hotelling_two_sample(X,Y)["p"]<=.05;rrr=O.rank_energy_test(X,Y,r,199)["p"]<=.05
+        ph+=hh;pr+=rrr;alt_hot.append(hh);alt_rank.append(rrr)
     out["preps"], out["pow_hot"], out["pow_rank"] = preps, ph / preps, pr / preps
+    out.update(null_hot=null_hot,null_rank=null_rank,alt_hot=alt_hot,alt_rank=alt_rank,
+        mcse_size_hot=O.mcse(null_hot),mcse_size_rank=O.mcse(null_rank),mcse_power_hot=O.mcse(alt_hot),mcse_power_rank=O.mcse(alt_rank))
     return out
 
 
@@ -298,9 +311,11 @@ def compute_langevin():
     kl_exact = [O.gaussian_kl(m, S, np.zeros(2), Sig) for m, S in exact]
     w2_exact = [O.gaussian_w2(m, S, np.zeros(2), Sig) for m, S in exact]
     kl_emp = [O.gaussian_kl(Z.mean(0), np.cov(Z.T), np.zeros(2), Sig) for Z in snaps]
+    ula=[O.gaussian_ula(m0,S0,np.zeros(2),Sig,h,k*every) for k in range(len(snaps))]
+    kl_ula=[O.gaussian_kl(m,S,np.zeros(2),Sig) for m,S in ula]
     rate = float(1 / np.linalg.eigvalsh(Sig).max())
     return {"snaps": [Z[:300] for Z in snaps], "ts": ts, "kl_exact": kl_exact, "kl_emp": kl_emp, "w2_exact": w2_exact,
-            "h": h, "rate": rate, "Sig": Sig}
+            "h": h, "rate": rate, "Sig": Sig,"kl_ula":kl_ula,"particles_simulated":600,"particles_shown":300}
 
 
 def compute_flow():
@@ -312,11 +327,12 @@ def compute_flow():
     Zs = [r.standard_normal((n, 2)) for _ in range(5)]
     for pair in ("independent", "ot"):
         v = O.flow_matching_fit(X0, Y if pair == "ot" else Y[r.permutation(n)], r, 0.3, 20, pair)
-        res = {}
+        res = {};draws={}
         for steps in (1, 2, 5, 20):
-            res[str(steps)] = float(np.mean([O.assignment(O.integrate_flow(v, Z, steps)[-1], Y, 2)["W"] for Z in Zs]))
+            draws[str(steps)]=[O.assignment(O.integrate_flow(v,Z,steps)[-1],Y,2)["W"] for Z in Zs]
+            res[str(steps)]=float(np.mean(draws[str(steps)]))
         snaps = O.integrate_flow(v, Zs[0], 20)
-        out[pair] = {"W": res, "snaps": [s for s in snaps[::4]] + [snaps[-1]], "one_step": O.integrate_flow(v, Zs[0], 1)[-1]}
+        out[pair] = {"W": res,"draws":draws,"mcse":{k:O.mcse(v) for k,v in draws.items()},"scope":"five fresh-noise draws conditional on one fitted field; distance to training empirical law", "snaps": [s for s in snaps[::4]] + [snaps[-1]], "one_step": O.integrate_flow(v, Zs[0], 1)[-1]}
         # straightness: displacement over path length, averaged over particles
         P = np.array(snaps)
         length = np.sum(np.linalg.norm(np.diff(P, axis=0), axis=2), axis=0)
@@ -329,8 +345,8 @@ def compute_flow():
 
 def compute_board():
     t = load("tests")
-    rows = [Row(61, r"Hotelling's $T^2$, \ two samples", r"bivariate Cauchy, \ $n = m = 40$", "size", 0.05, t["size_hot"], t["reps"]),
-            Row(61, r"rank energy test (OT ranks)", r"bivariate Cauchy, \ $n = m = 40$", "size", 0.05, t["size_rank"], t["reps"])]
+    rows = [Row(61, r"Hotelling's $T^2$, \ two samples", r"bivariate Cauchy, \ $n = m = 40$", "size", 0.05, t["size_hot"], t["reps"],mc_se=t["mcse_size_hot"]),
+            Row(61, r"rank energy test (OT ranks)", r"bivariate Cauchy, \ $n = m = 40$", "size", 0.05, t["size_rank"], t["reps"],mc_se=t["mcse_size_rank"])]
     save_rows(61, rows)
     return {"rows": [asdict(q) | {"verdict": q.verdict, "se": q.se} for q in rows]}
 

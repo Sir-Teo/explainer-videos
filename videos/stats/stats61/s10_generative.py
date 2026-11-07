@@ -41,7 +41,7 @@ class Generative(LectureMixin, VoiceoverScene):
             "and t to predict it, by least squares: flow matching, from Yaron Lipman and co-authors, and rectified flow, "
             "from Xingchao Liu and co-authors, both in 2023. <bookmark mark='d'/> To sample, draw noise and integrate the "
             "learned velocity from time zero to one. The regression's answer, the conditional mean of the velocity, "
-            "provably transports the noise law to the data law.",
+            "transports the interpolation marginals when the conditional-mean field and continuity equation have the required integrability, existence and uniqueness properties. A fitted field and finitely many Euler steps introduce further errors.",
             [(r"\text{paths}", r":", r"x_t = (1 - t)x_0 + t\,x_1", 40),
              (r"\text{loss}", r":", r"E\,\|v(x_t, t) - (x_1 - x_0)\|^2", 40),
              (r"v^*(x, t)", r"=", r"E[x_1 - x_0 \mid x_t = x]", 40),
@@ -51,12 +51,7 @@ class Generative(LectureMixin, VoiceoverScene):
 
     def pairing(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> How should noise and data be paired? <bookmark mark='b'/> At random, independent pairs, the "
-            "paths cross, and the learned velocity averages over crossing paths, so the flow it defines curves. Curved flows "
-            "need many integration steps. <bookmark mark='c'/> Pair them by optimal transport instead, within each minibatch, "
-            "as Alexander Tong and co-authors, and Aram-Alexandre Pooladian and co-authors, proposed in 2023. <bookmark "
-            "mark='d'/> Optimal paths do not cross, Monge's observation from the hook, so the learned flow is nearly straight "
-            "and a single Euler step comes close to the end.",
+            "<bookmark mark='a'/> Pairing affects the regression problem used to learn a flow. <bookmark mark='b'/> Independent endpoint pairs can yield a curved conditional-mean velocity flow, so a one-step Euler approximation can be poor. Neither curvature nor integration difficulty is universal. <bookmark mark='c'/> Minibatch transport pairing often shortens paths and reduces conflicts. Its coupling is not the population optimal map. <bookmark mark='d'/> The ideal population quadratic-optimal coupling gives straight displacement interpolation under regularity. Finite batches, kernel smoothing, network error and numerical integration need not preserve this exactly. The next picture measures one toy implementation.",
             [(r"\text{independent}", r":", r"\text{paths cross} \Rightarrow \text{curved flow}", 40),
              (r"\text{many steps}", r":", r"\text{to integrate a curved flow}", 40),
              (r"\text{OT pairing}", r":", r"\text{minibatch assignment}", 40),
@@ -68,11 +63,14 @@ class Generative(LectureMixin, VoiceoverScene):
         d = load("flow")
         Y = np.asarray(d["Y"])
 
+        shown=np.vstack([Y,np.asarray(d["independent"]["one_step"]),np.asarray(d["ot"]["one_step"])])
+        limit=float(np.ceil(np.max(np.abs(shown))*1.05))
+
         def panel(P, cx, title, col):
-            A = axes([-3.0, 3.0], [-3.0, 3.0], x_length=4.4, y_length=4.4, xlabel=r"", ylabel=r"", center=[cx, 0.05, 0])
+            A = axes([-limit, limit], [-limit, limit], x_length=4.4, y_length=4.4, xlabel=r"", ylabel=r"", center=[cx, 0.05, 0])
             ax = A.ax
             data = VGroup(*[Dot(ax.c2p(*y), radius=0.03, color=TGT, fill_opacity=0.45) for y in Y])
-            gen = VGroup(*[Dot(ax.c2p(*np.clip(p, -2.95, 2.95)), radius=0.035, color=col, fill_opacity=0.85) for p in np.asarray(P)])
+            gen = VGroup(*[Dot(ax.c2p(*p), radius=0.035, color=col, fill_opacity=0.85) for p in np.asarray(P)])
             t = label(title, font_size=24, color=col).next_to(A, UP, buff=0.2)
             return A, data, gen, t
         A1, D1, G1, T1 = panel(d["independent"]["one_step"], -3.4, r"independent pairs: \ one Euler step", NAIVEC2)
@@ -117,12 +115,12 @@ class Generative(LectureMixin, VoiceoverScene):
             [(rf"straightness: \ {d['independent']['straight']:.2f} \ vs \ {d['ot']['straight']:.3f}", GREY_A), (r"(displacement / path length)", GREY_A)],
         ])
         with self.voiceover(
-            f"<bookmark mark='a'/> The same comparison over the number of steps, averaged over five draws of noise. The grey "
+            f"<bookmark mark='a'/> The same comparison over the number of steps, averaged over five fresh-noise draws conditional on one fitted velocity field. The distance is to the training empirical law, not a held-out population distribution; the saved Monte Carlo errors only describe these noise draws. The grey "
             f"line is the noise. <bookmark mark='b'/> The independent flow improves from {say(wi[0], 2)} at one step to "
             f"{say(wi[-1], 2)} at twenty: it needs the steps, because it curves. <bookmark mark='c'/> The transport flow is at "
             f"{say(wo[0], 2)} from the first step and stays there. <bookmark mark='d'/> Measured directly, the ratio of each "
             f"particle's displacement to its path length is {say(d['independent']['straight'], 2)} for the independent flow and "
-            f"{say(d['ot']['straight'], 3)} for the transport flow: nearly straight, as Monge would have predicted."
+            f"{say(d['ot']['straight'], 3)} for the transport flow: nearly straight in this toy fitted field. This is not a population-optimal-transport theorem for arbitrary learned flows."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated, \ 5 noise draws")))
             vo.wait_until("a")
@@ -153,12 +151,7 @@ class Generative(LectureMixin, VoiceoverScene):
 
     def penalty(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Keeping the critic Lipschitz was the practical difficulty. <bookmark mark='b'/> The "
-            "original Wasserstein GAN clipped the critic's weights, crudely. <bookmark mark='c'/> Ishaan Gulrajani and "
-            "co-authors' gradient penalty, also in 2017, uses a fact from duality: the optimal critic has gradient of norm "
-            "exactly one along the lines joining transport partners. So penalize the gradient's norm for departing from one, "
-            "at random points between real and generated samples. <bookmark mark='d'/> Spectral normalization, from Takeru "
-            "Miyato and co-authors, bounds each layer's Lipschitz constant directly.",
+            "<bookmark mark='a'/> Practical WGAN critics approximate a constrained optimization problem. <bookmark mark='b'/> Weight clipping is a crude constraint on network parameters. <bookmark mark='c'/> For a differentiable optimal one-Lipschitz critic, saturated transport segments motivate a unit-gradient condition. Penalizing gradients on random interpolations between arbitrary real and generated points is a heuristic: these are generally not optimal transport partners, and the penalty does not enforce a global Lipschitz bound. <bookmark mark='d'/> Spectral normalization controls layer operator norms; a network bound must also account for activations, architecture and numerical norm estimation.",
             [(r"\text{clipping}", r":", r"|w| \le c: \ \text{crude}", 40),
              (r"\text{the fact}", r":", r"\|\nabla f^*\| = 1 \text{ along transport lines}", 40),
              (r"\text{penalty}", r":", r"\lambda\,E\big(\|\nabla f(\hat x)\| - 1\big)^2", 40),

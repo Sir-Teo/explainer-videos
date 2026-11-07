@@ -1,105 +1,48 @@
 # Statistics, Built — Part 61: Optimal Transport in Statistics
 
-Part 61 of a sixty-five-part course in statistics, from a first course to a PhD (see [the series plan](../README.md)
-and [the syllabus](../SYLLABUS.md)), and the sixth part of Stage V, the research frontier.
+Part 61 of [the 65-part course](../README.md), covering Kantorovich duality, Wasserstein geometry, empirical rates, Sinkhorn, transport maps, barycenters, multivariate ranks, gradient flows and generative models.
 
-It opens with Monge's memoir of 1781 on cuttings and fillings: which shovelful of earth should fill which hole, so that
-the total distance carried is least? On a line, the monotone plan wins: with squared distance as the cost its root
-mean cost is 4.01, against 4.54 for a crossing plan. With Monge's own cost, the distance, the two plans cost almost the
-same (4.00 and 4.03). Kantorovich (1942) turned the problem into a linear program over couplings. The part follows
-optimal transport into statistics:
-- Kantorovich duality:
-  - couplings and the transport polytope, with a 6 × 7 example whose optimal plan has n + m − 1 = 12 nonzero entries;
-  - the dual potentials and complementary slackness, and Caffarelli's shipper;
-  - exact algorithms (Hungarian, auction);
-  - the line's quantile solution, and Brenier's theorem (1991).
-- Wasserstein distances:
-  - the metric, Kantorovich–Rubinstein duality, and a comparison with TV, KL and the MMD;
-  - NHANES BMI for men against women, with W₂² split into location, spread and shape;
-  - the Gaussian (Bures) formula;
-  - McCann's displacement interpolation, shown in the transport flow from a Gaussian cloud to Old Faithful.
-- Empirical rates: n^{−1/d} (Dudley 1969; Fournier & Guillin 2015), simulated for d = 1–10; the intrinsic dimension
-  (Weed & Bach 2019); sliced Wasserstein; one-dimensional limit theorems (del Barrio et al.).
-- Entropic transport (Cuturi 2013):
-  - Sinkhorn's scaling (1964), with sharp and blurred plans, convergence as ε shrinks, and the bias;
-  - the Sinkhorn divergence's dimension-free rate (Genevay et al. 2019; Mena & Niles-Weed 2019);
-  - unbalanced transport (Chizat et al. 2018).
-- Transport maps: Hütter & Rigollet's (2021) minimax rate, semi-discrete transport, Caffarelli's regularity, and the
-  empirical against the entropic estimator (Pooladian & Niles-Weed 2021).
-- Barycenters (Agueh & Carlier 2011):
-  - NHANES systolic pressure by age, the barycenter against the mixture;
-  - the Gaussian fixed point (Álvarez-Esteban et al. 2016);
-  - entropic barycenters, and the statistics of Fréchet means of laws.
-- Multivariate ranks and quantiles (Chernozhukov et al. 2017; Hallin et al. 2021): center-outward contours of Old
-  Faithful against Mahalanobis ellipses, and the rank energy test (Deb & Sen 2023).
-- Gradient flows (Jordan, Kinderlehrer & Otto 1998):
-  - Langevin particles against the exact Fokker–Planck flow, with the log-Sobolev rate;
-  - Otto's calculus, ULA's bias, and SVGD and mean-field networks.
-- Generative models:
-  - WGANs (Arjovsky et al. 2017) and the gradient penalty;
-  - flow matching and rectified flow (Lipman et al.; Liu et al. 2023);
-  - OT pairing (Tong et al.; Pooladian et al. 2023), simulated on Old Faithful.
-- Five open problems.
+Monge's 1781 earthworks motivate the hook. Monotone pairing is optimal for convex displacement costs on a line; plain-distance optima need not be unique. A general no-crossing slogan does not replace cyclic monotonicity or its assumptions. For uniform equal-size discrete laws an optimal permutation plan exists, but other optima may be mixtures.
 
-It keeps two promises:
-- **Part 21** solved linear programs and their duals. Chapter 1 turns the transport LP into a statistic.
-- **Part 60** used Wasserstein balls as uncertainty sets without studying the distance. Chapters 2–5 study it, and ask
-  how well it can be estimated.
+## Checked computation and example scope
 
-**Built in this part:**
-- **`statkit.ot`** ([`explainer/stats/kit/ot.py`](../../../explainer/stats/kit/ot.py)), tested in
-  `tests/test_stats_kit_ot.py`:
-  - one-dimensional W_p exactly, and W₁ as the area between CDFs;
-  - discrete transport: cost matrices, the Hungarian assignment, and the Kantorovich LP with its dual potentials (HiGHS);
-  - Gaussian W₂ (Bures), the linear Brenier map, and McCann's interpolation;
-  - an empirical-rate harness;
-  - log-domain Sinkhorn with its convergence trace, and the Sinkhorn divergence;
-  - the entropic (barycentric-projection) map;
-  - one-dimensional and Gaussian barycenters;
-  - Hallin's spherical grid, center-outward ranks, the energy distance, the rank energy test, and Hotelling's T²;
-  - Langevin particles, the exact Gaussian Fokker–Planck flow, and Gaussian KL;
-  - a toy flow-matching sampler (independent or OT pairing) with Euler integration.
-- **The transport flow** (`TransportFlow` in `explainer/stats/viz.py`), the part's instrument. It draws a source cloud
-  matched to a target cloud by a permutation, moves the cloud along McCann's interpolation, draws the paths, and shows a
-  coupling matrix as a heat grid, so the LP's sparse plan and Sinkhorn's blurred ones can be compared cell by cell.
+[Audited local kernels](checked.py) are used by this part; [statkit.ot](../../../explainer/stats/kit/ot.py) retains its educational implementations. The instrument is TransportFlow.
 
-**Data.**
-- From the Museum: NHANES (BMI by sex; systolic pressure by age group) and Old Faithful (Azzalini & Bowman 1990).
-- The rest is exact arithmetic (LP, assignment, closed forms) or seeded simulation.
+- **LP:** check solver success, both marginals, dual feasibility and gap. The 6-by-7 example has 12 positive entries; a general transport vertex has *at most* n+m-1.
+- **Quantiles:** integrate exact empirical step quantiles for W distances, the location/spread/shape decomposition and barycenter moments. Linear interpolation of sample quantiles is a different empirical law. KDE displays use a finite quantile grid only for illustration.
+- **Sinkhorn:** distinguish raw plan cost from the regularized objective cost + epsilon KL(P || a tensor b). Log scaling checks both marginal residuals and fails on exhaustion. An initial map fit exhausted 50,000 iterations at residual 9.96e-8 rather than the requested 1e-8. Map fitting now uses log scaling plus a line-searched reduced-dual Newton refinement, with marginal tolerance **1e-10**; primal/dual differences are recorded. This is the same entropic optimization problem, not an altered statistical target. Scalar convergence iteration counts in the Sinkhorn chapter still use unaccelerated log scaling.
+- **Sinkhorn divergence:** with squared-Euclidean cost the small-epsilon limit is W2 squared, and the large-epsilon limit is squared distance between means. It need not separate laws in that limit. Ordinary-distance cost yields a different energy-distance limit. Continuous regularized-value expansions are not a bias formula for the finite discrete raw-cost plot.
+- **Rates:** record replicate draws and empirical standard errors. Dimension-independent fixed-epsilon exponents do not imply dimension-independent constants or uniformity as epsilon tends to zero. Tail, order, support and null-versus-alternative assumptions matter.
+- **Maps:** the Gaussian simulation uses one specific nearest-neighbor extension versus the entropic barycentric extension, with heuristic epsilon=.5 n^(-1/3), four training datasets and a shared 500-point Monte Carlo integration sample. It does not validate the compact-support minimax theorem or prove universal dominance. Hutter–Rigollet's stated-model squared-risk rate includes a parametric 1/n floor. Pooladian–Niles-Weed's original entropic bound is generally slower than that minimax rate.
+- **Ranks:** the testing reference is a fixed distinct Halton set; pooled row order is randomized before assignment to keep tie resolution independent of sample labels. Pairwise rank distances are cached. Use plus-one permutation p-values and reject at p<=.05. Population center-outward regions and smoothed finite-data ring polygons are different objects; the polygons are not exact finite-sample confidence regions.
+- **Flows:** record exact continuous Gaussian Langevin and exact discrete Gaussian Euler laws separately. Only 300 of 600 simulated particles are drawn. KL of a fitted Gaussian is not KL of the atomic empirical measure, which is infinite relative to a continuous target. Euler bias and sampling noise both affect comparisons.
+- **Generation:** show every generated point without coordinate clamping. Five fresh-noise draws are conditional on one fitted kernel velocity field; errors are distances to the training empirical law, not held-out generalization estimates. Population endpoint and straight-path theorems need regularity and do not automatically hold for a finite fitted field or one Euler step.
 
-The Coverage Board gains two rows:
+## Fixed empirical datasets and results
 
-| Method | Setting | Nominal | Achieved | Verdict |
-|---|---|---|---|---|
-| Hotelling's T², two samples | bivariate Cauchy, n = m = 40 | 5% | 2.0% | conservative |
-| Rank energy test (OT ranks) | bivariate Cauchy, n = m = 40 | 5% | 4.3% | kept |
+NHANES results concern the same **unweighted empirical complete-case extract** used in Part 60, not a national survey-weighted distribution; age is top-coded at 80. CDC field verification and Old Faithful's independent R-package comparison are retained in the [data receipt](../../../docs/qa/evidence/stats61-polish-20261107/source-data.json). Historical originals of Old Faithful were not separately retrieved.
 
-## Build it
+| Example | Revised result |
+|---|---|
+| NHANES BMI, men versus women | W1=1.25007, W2=1.85902 |
+| Exact W2-squared decomposition | location 0.68185 + spread 2.60262 + shape 0.17148 = 3.45594; residual -3.6e-15 |
+| Empirical age-group SBP barycenter | exact mean 126.18670, SD 17.37092; mixture SD 19.90141 |
+| Gaussian map error at n=800, four fits | empirical 0.12689 (empirical SE 0.01192); entropic 0.07694 (SE 0.01434) |
+| Cauchy null, 1,000 datasets, nominal 5% | Hotelling 1.6% (MC SE 0.40 points); rank energy 6.3% (SE 0.77) |
+| Cauchy location shift (1,1), 300 datasets | Hotelling power 5.3%; rank energy 84.7% |
+
+A barycenter variance is a weighted sum of pairwise covariances of quantile functions. Its SD equals the weighted average group SD only in a common location-scale family; in general it is at most that average. It is not literally the mixture's within-group variance. General Gaussian barycenters solve an implicit matrix fixed point; only special commuting cases have a simple explicit covariance formula.
+
+## Build and verification
 
 ```bash
-OMP_NUM_THREADS=1 python -m videos.stats.stats61.compute   # once (several minutes)
-python tools/build.py stats61 -q l                         # fast 480p preview
-python tools/build.py stats61                              # 1080p30 -> renders/stats61.mp4
-python tools/qa_scene.py stats61 Wasserstein
+OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m videos.stats.stats61.compute --force
+pytest -q tests/test_stats61_checked.py tests/test_stats_kit_ot.py
+python tools/build.py stats61 -q l
 python tools/lecture_length.py stats61 --floor 50
 ```
 
-## Chapters
-
-| # | Chapter | Numbers |
-|---|---|---|
-| 0 | Monge | 40 shovelfuls from N(3, 1) to ½N(6, 0.7²) + ½N(8, 0.5²): monotone W₂ 4.01, crossing 4.54; W₁ 4.00 vs 4.03 |
-| 1 | Duality | 6 sources, 7 targets, squared cost: LP cost 6.210 = dual 6.210, max constraint violation 9 × 10⁻¹⁶, 12 nonzero entries |
-| 2 | Wasserstein | NHANES BMI, 2,512 men and 2,664 women: means 29.25 and 30.07, sds 6.49 and 8.10; W₁ = 1.25, W₂ = 1.86; W₂² = 0.68 (location) + 2.60 (spread) + 0.16 (shape); Old Faithful matching: mean squared move 13.53 vs 15.53 at random |
-| 3 | Rates | E W₁ between two uniform samples, n = 25–1,600: slopes −0.48 (d = 1), −0.44 (2), −0.35 (3), −0.23 (5), −0.13 (10) |
-| 4 | Sinkhorn | 6 × 7 plans: LP 6.21, ε = 0.1, 0.5, 2: 6.22, 6.32, 6.75; 60 × 60: 65, 656 and 10,284 iterations at ε = 1, 0.1, 0.03; cost 4.72 (ε = 3) to 3.065 (0.03) vs exact 3.056; N(0, I₅) samples, n = 25–400: W₂² slope −0.38, Sinkhorn divergence (ε = 1) slope −0.60 |
-| 5 | Maps | N(0, I₂) → N(0, Σ), Σ = [[3, 1], [1, 1]]: empirical map error 0.99 → 0.127 (n = 50 → 800, slope −0.73), entropic 0.70 → 0.077 (slope −0.78) |
-| 6 | Barycenters | NHANES SBP at 18–39, 40–59, 60–80 (n = 1,731, 1,563, 1,882): means 114.8, 126.2, 136.6; barycenter mean 126.2, sd 17.3 vs mixture sd 19.9; Gaussian barycenter of diag(1, 4), diag(4, 1) = 2.25 I |
-| 7 | Ranks | Old Faithful on 6 rings × 45 rays: contours at τ = 1/7, …, 6/7 vs Mahalanobis ellipses; Cauchy, n = m = 40, 1,000 nulls: Hotelling 2.0%, rank energy 4.3%; shift (1, 1), 300 reps: power 8% vs 78% |
-| 8 | Gradient flows | N(0, Σ), ρ = 0.8, from N((4, −3), 0.2I), 600 particles, h = 0.02: KL 62.0 at t = 0 to 0.034 at t = 1.5 (exact); C_LS = λ_max = 1.8 |
-| 9 | Generative | Old Faithful, kernel flow matching, 5 noise draws: W₂ to the data, noise 0.94; independent pairs 1.05 (1 step), 0.63, 0.42, 0.37 (20); OT pairs 0.35 at every step count; straightness 0.76 vs 0.995 |
-| 10 | Open problems | — |
-| 11 | Outro | — |
+All 13 numerical inputs regenerated. Seventeen checks cover audited kernels and legacy behavior. Narration/list bookmarks match their rows; estimated English narration is 52.5 minutes. [Scientific QA evidence](../../../docs/qa/evidence/stats61-polish-20261107/README.md). English sampled visual verification is pending; Chinese narration/caption tables, continuous listening/playback and final narrated masters remain open. This is not bilingual production approval.
 
 ## Sources
 
@@ -179,28 +122,7 @@ python tools/lecture_length.py stats61 --floor 50
    - In Σ's eigenbasis, each coordinate decays like e^{−t/λᵢ} and contributes e^{−2t/λᵢ} times its initial share.
    - Every factor is at most e^{−2t/λ_max}, so KL_t ≤ e^{−2t/λ_max}KL₀.
 
-## Glossary
-
-- **Problems.** Monge's problem; Kantorovich's relaxation; coupling; transport plan; transport polytope; assignment
-  problem.
-- **Duality.**
-  - Dual potentials; complementary slackness; c-concavity.
-  - Brenier map; cyclical monotonicity; Monge–Ampère equation; semi-discrete transport; Laguerre cells.
-- **Distances.**
-  - Wasserstein distance; Kantorovich–Rubinstein duality; Bures metric.
-  - Displacement interpolation; displacement convexity.
-  - Sliced Wasserstein; Sinkhorn divergence; unbalanced transport.
-- **Statistics.**
-  - Empirical rate; curse of dimensionality; intrinsic dimension.
-  - Entropic map; barycenter; Fréchet mean.
-  - Center-outward ranks and quantiles; rank energy test.
-- **Flows.**
-  - JKO scheme; Wasserstein gradient flow; Fokker–Planck equation; log-Sobolev inequality.
-  - ULA; SVGD; WGAN; gradient penalty; flow matching; rectified flow; OT pairing.
 
 ## Where it comes back
 
-- **Part 62**: transporting causal effects across populations.
-- **Part 63**: fair scores by mapping groups onto their barycenter.
-- **Part 64**: generative models, and whether they generalize.
-- **Part 65**: the dissertation's comparisons of distributions.
+Part 62 discusses transporting causal effects, Part 63 barycenter score adjustment, Part 64 generative-model generalization, and Part 65 research comparisons of distributions.

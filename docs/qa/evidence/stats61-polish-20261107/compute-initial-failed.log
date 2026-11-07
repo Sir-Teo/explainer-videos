@@ -1,0 +1,34 @@
+  compute hook ...
+  done    hook in 0s
+  compute lp ...
+  done    lp in 0s
+  compute quantile ...
+  done    quantile in 0s
+  compute geodesic ...
+  done    geodesic in 0s
+  compute rates ...
+  done    rates in 3s
+  compute sinkhorn ...
+  done    sinkhorn in 136s
+  compute maps ...
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspace/explainer-videos/videos/stats/stats61/compute.py", line 362, in <module>
+    CACHE.main({k: (lambda f=f: nest(f())) for k, f in ITEMS.items()}, __doc__)
+  File "/workspace/explainer-videos/explainer/ai/cache.py", line 137, in main
+    self.save(name, items[name]())
+                    ^^^^^^^^^^^^^
+  File "/workspace/explainer-videos/videos/stats/stats61/compute.py", line 362, in <lambda>
+    CACHE.main({k: (lambda f=f: nest(f())) for k, f in ITEMS.items()}, __doc__)
+                                     ^^^
+  File "/workspace/explainer-videos/videos/stats/stats61/compute.py", line 216, in compute_maps
+    T = O.entropic_map(X, Y, 0.5 * n ** (-1 / 3))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/explainer-videos/videos/stats/stats61/checked.py", line 109, in entropic_map
+    s=sinkhorn(np.full(len(X),1/len(X)),np.full(len(Y),1/len(Y)),cost_matrix(X,Y,2)/2,eps,50000,1e-8)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/explainer-videos/videos/stats/stats61/checked.py", line 89, in sinkhorn
+    else:raise RuntimeError(f'Sinkhorn not converged: epsilon={eps}, residual={err}, budget={iters}')
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Sinkhorn not converged: epsilon=0.06786044041487267, residual=9.963551231458034e-08, budget=50000

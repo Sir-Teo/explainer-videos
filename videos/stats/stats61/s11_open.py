@@ -18,13 +18,13 @@ class OpenProblems(LectureMixin, VoiceoverScene):
     def map_(self):
         hdr = [r"object", r"estimator", r"rate or guarantee"]
         body = [
-            [r"$W_p$ between laws", r"plug-in, \ exact assignment", r"$n^{-1/d}$: \ cursed"],
-            [r"entropic cost, \ $S_\varepsilon$", r"Sinkhorn", r"$n^{-1/2}$, \ constant $\propto e^{c/\varepsilon}$"],
-            [r"the Brenier map", r"empirical, \ entropic", r"$n^{-2\alpha/(2\alpha - 2 + d)}$"],
-            [r"barycenters", r"quantile averages; \ fixed points", r"explicit in 1D and for Gaussians"],
+            [r"$W_p$ between laws", r"plug-in, \ exact assignment", r"order, dimension and tail-dependent empirical rates"],
+            [r"entropic cost, \ $S_\varepsilon$", r"Sinkhorn", r"fixed-$\varepsilon$ bounds; \ constants depend on support/tails"],
+            [r"the Brenier map", r"empirical, \ entropic", r"$n^{-1}\vee n^{-2\alpha/(2\alpha-2+d)}$ (stated model)"],
+            [r"barycenters", r"quantile averages; \ fixed points", r"1D quantiles; \ Gaussian matrix fixed point"],
             [r"ranks and quantiles", r"assignment to a grid", r"exactly distribution-free tests"],
             [r"sampling", r"Langevin as a flow of KL", r"$e^{-2t/C_{\mathrm{LS}}}$"],
-            [r"generation", r"flow matching", r"straight with OT pairs"],
+            [r"generation", r"flow matching", r"ideal OT paths straight; \ learned finite-batch flows approximate"],
         ]
         cols = [GREY_B, NAIVEC2, ENTC, PLANC, TGT, PLANC, FLOWC, FLOWC]
         tab = table_rows([hdr] + body, font_size=26, col_buff=0.7, row_buff=0.28, colors=cols).move_to([0, 0.1, 0])
@@ -61,15 +61,10 @@ class OpenProblems(LectureMixin, VoiceoverScene):
 
     def op_inference(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Problem two: inference. <bookmark mark='b'/> On the line, chapter three's limit theorems "
-            "give confidence intervals for the distance. For entropic transport, central limit theorems now hold in any "
-            "dimension, from del Barrio, González-Sanz, Loubes and Niles-Weed among others. <bookmark mark='c'/> For the "
-            "unregularized distance and the map in two or more dimensions, the fluctuations are known only around the "
-            "plug-in's own expectation, and once d is five or more its bias is of a larger order. <bookmark mark='d'/> Honest confidence sets for "
-            "the Wasserstein distance, and confidence bands for transport maps, in several dimensions are open.",
+            "<bookmark mark='a'/> Inference depends on the transport functional and model. <bookmark mark='b'/> One-dimensional and fixed-regularization central limit theorems give intervals under their regularity assumptions. Finite-support transport also has limit theory, sometimes nondifferentiable and nonnormal. <bookmark mark='c'/> For some smooth multidimensional unregularized quadratic-cost problems, a central limit theorem centered at the estimator's expectation does not remove its bias relative to the population cost. Dimension and regularity determine whether bias dominates. This is not a universal dimension-five threshold for every cost and law. <bookmark mark='d'/> Broadly applicable, adaptive confidence sets for distances and maps remain active research questions, alongside existing results for specified classes.",
             [(r"\text{problem 2}", r":", r"\text{confidence statements}", 40),
              (r"\text{known}", r":", r"d = 1; \ \text{entropic, \ any } d", 40),
-             (r"\text{gap}", r":", r"\text{the bias exceeds the fluctuation for } d \ge 5", 40),
+             (r"\text{gap}", r":", r"\text{bias versus fluctuation depends on model and cost}", 40),
              (r"\text{open}", r":", r"\text{intervals for } W_p, \ \text{bands for maps}", 40)],
             [r"beyond estimation", r"del Barrio et al.", r"del Barrio \& Loubes (2019)", r"Part 47's question"],
             colors=[(3, NAIVEC2)])

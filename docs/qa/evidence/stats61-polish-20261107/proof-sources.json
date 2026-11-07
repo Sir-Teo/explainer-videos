@@ -1,0 +1,17 @@
+[
+  {
+    "url": "https://arxiv.org/pdf/1905.05828",
+    "sha256": "a0d1fb101276f2b1b9202bee57761af68a44e638a67f110a5d8d12a4a9b13413",
+    "review": "Theorem 6 and stated support/smoothness class; parametric risk floor"
+  },
+  {
+    "url": "https://arxiv.org/pdf/2109.12004",
+    "sha256": "45214b3dff1d6b4c004e5a51e6d2cba49a7bb5dc866494e5a206f5f1d5baf839",
+    "review": "Theorem 3, A1-A3; inverse-map smoothness and generally sub-minimax original entropic bound"
+  },
+  {
+    "url": "https://arxiv.org/pdf/1810.08278",
+    "sha256": "5098d7b70fc13657fc8cc1a8fd0bf25e7f1d564bf66ba9b1fc647a0832272a81",
+    "review": "Theorem 1, compact metric space and universal Gibbs kernel; convention and limits"
+  }
+]
