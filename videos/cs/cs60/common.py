@@ -115,8 +115,13 @@ class SystolicView(VGroup):
 
 # ---- spoken numbers and a log-log plot, shared by the TPU, GPU and memory chapters
 
+_ONES = "zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen " \
+        "seventeen eighteen nineteen".split()
+_TENS = "_ _ twenty thirty forty fifty sixty seventy eighty ninety".split()
+
+
 def say_int(n: int) -> str:
-    """An integer below a million as a speaker says it (British: 'one hundred and five')."""
+    """A non-negative integer as a speaker says it (British: 'one hundred and five')."""
     if n < 20:
         return _ONES[n]
     if n < 100:
@@ -124,8 +129,10 @@ def say_int(n: int) -> str:
     if n < 1000:
         rest = n % 100
         return _ONES[n // 100] + " hundred" + ("" if rest == 0 else " and " + say_int(rest))
-    rest = n % 1000
-    return say_int(n // 1000) + " thousand" + ("" if rest == 0 else (" and " if rest < 100 else " ") + say_int(rest))
+    for size, name in ((10 ** 9, " billion"), (10 ** 6, " million"), (1000, " thousand")):
+        if n >= size:
+            rest = n % size
+            return say_int(n // size) + name + ("" if rest == 0 else (" and " if rest < 100 else " ") + say_int(rest))
 
 
 def say_dec(x: float, digits: int = 1) -> str:
