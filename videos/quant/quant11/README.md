@@ -11,7 +11,7 @@ models are labelled as illustrations on screen.
 
 *An education in methods, not investment advice. The option-strategy results are historical and on one market. The
 SEBI matter is described as alleged, from the regulator's interim order and statements and the firm's public
-statements; no final finding had been made at the time of writing.*
+statements; the reviewed record through 7 November 2026 contains no final merits finding.*
 
 ## Chapters (about 65 minutes)
 
@@ -20,8 +20,8 @@ statements; no final finding had been made at the time of writing.*
   bar stalling once the crash carried spot away. How we got here: 1973, 1985, 1987, 2018–2020, 2021, 2024.
 * **1. Positions as Greeks, and the P&L explain.** The straddle's value surface in 3D: the gamma bowl against ten days of
   theta, balancing at σ√dt. Derivation: Taylor in (S, t, σ); Δ, Γ, 𝒱 in closed form; Θ = −½σ²S²Γ; the breakeven move
-  (2.6% a day at 50% vol); 𝒱 = στS²Γ. Lab: `book_greeks` on a five-leg book (cash delta 61,224; gamma 21.5 per 1%; vega
-  154 per point; theta −112 a day). The real explain from 10 to 11 December 2025: spot −2.8%, ATM vol 43.7 → 41.7%;
+  (2.6% a day at 50% vol); 𝒱 = στS²Γ. Lab: `book_greeks` on a five-contract, four-position book (cash delta 61,224; gamma 21.5 per 1%; vega
+  154 per point; theta −112 a day). The real explain from 10 to 11 December 2025: forward input −2.8%, ATM vol 43.7 → 41.7%;
   delta −1,839, gamma +178, theta −86, vega −27, vanna +74, volga −10; actual −1,679, unexplained +30 (1.8%).
 * **2. Gamma scalping on a real path.** The hedge trading live on the May 2021 path; the dollar-gamma landscape in 3D
   with the path on it; 2,000 reshuffles of the same 720 hourly returns (identical realized variance): mean +7.8, 90%
@@ -29,11 +29,11 @@ statements; no final finding had been made at the time of writing.*
   identity, the path-dependent weight (El Karoui–Jeanblanc–Shreve), Carr–Madan's log contract. Lab: `delta_hedge`.
 * **3. How often to hedge.** Three hedgers raced on one month; 244 thirty-day straddles at DVOL, 2021–2025: mean
   P&L hourly −2.86 (sd 3.51), 4-hourly −2.69 (3.81), daily −2.59 (4.27), on 2% moves −2.88 (3.75); hourly minus daily
-  −0.27, t = −1.6 (no difference in the mean; frequency buys precision: correlation with RV − IV 0.82 → 0.88). With
+  −0.27, t = −1.6 (mean difference unresolved; sample correlation with RV − IV 0.82 → 0.88). With
   10 bp costs: hourly −4.30, daily −3.07. BTC variance ratio 0.978. Derivation: √Δt error, the variance ratio,
   move-triggered hedging (Zakamouline).
 * **4. Vega, vanna, volga.** The vega surface 𝒱(K, σ) in 3D with the 25Δ flags. Derivation of vanna and volga; d₁d₂ at
-  the money and at 25Δ; RR and BF as prices of vanna and volga. Vanna–volga (Castagna–Mercurio) on the Surface: RR −5.6,
+  the money and at 25Δ; RR and BF as mixed-exposure quote coordinates. Vanna–volga (Castagna–Mercurio) on the Surface: RR −5.6,
   BF +1.75 vol points; the rebuilt smile with RMSE 0.19 points against SSVI between the 10Δ strikes, off by up to 12 in the far
   wings. 100 weekly 30-day RR/BF, 2024–2025: RR negative in only 28% of weeks (BTC's call skew in rallies); BF averaged
   +1.6.
@@ -49,7 +49,7 @@ statements; no final finding had been made at the time of writing.*
 * **7. Forecast diagnostics, and how much to bet.** DVOL vs HAR vs realized, traced; the cached retrospective diagnostic (1.75 vs 0.57,
   ordinary t ≈ 2.4; entry-day variance includes later hours). Goyal–Saretto (2009). Kelly on Part 10's 1,706 monthly P&Ls: mean/variance heuristic = 46, the sample ruin wall 1/|x_min| = 30,
   the empirical optimum against the wall at 29.8; half of it keeps most of the growth.
-* **8. Making a market: the spread.** The die game; Glosten–Milgrom running (beliefs, bid and ask converging);
+* **8. Making a market: the spread.** The die game; Glosten–Milgrom running (the fixed 24-trade sample ends with belief 0.5, bid 0.35 and ask 0.65);
   derivation of ask − bid = μ(V_H − V_L) and the edge/markout split. 524,281 Deribit BTC option trades on 100
   Wednesdays: maker edge against the mark +0.36 vol points (median 0.17); delta-hedged markouts +0.26 / +0.22 / +0.21
   after 5 / 30 / 60 minutes (59% kept after an hour); the largest 5% pay 0.46 and keep 0.17. Lab: `markouts`.
@@ -76,7 +76,7 @@ statements; no final finding had been made at the time of writing.*
   42.0, peak 90.8 (8 December 2011), 90.3 in March 2020, record lows 7.6 (July 2024) and 11.1 (January 2025);
   Driessen–Maenhout–Vilkov. The trade simulated: P&L against ρ_impl − ρ_real, correlation 0.92, right sign in 95%.
 * **14. India's expiry-day boom, and what lottery tickets pay.** SEBI's studies (91% lost; ₹1.8 lakh crore over three
-  years; ₹1.06 lakh crore in FY25) and the October 2024 measures. Deribit tickets: 85,103 taker-bought OTM options
+  years; ₹1.06 lakh crore in FY25) and the October 2024 measures. Deribit tickets: 85,103 eligible taker-bought OTM options
   expiring within two days returned −19% premium-weighted; 84% expired worthless, 12% paid more than they cost. The
   short-dated ratio C(σ_r)/C(σ_i) derived (Mills' ratio), exact against approximate.
 * **15. Case file: SEBI and Jane Street (alleged).** The interim order (3 July 2025; ₹4,843.57 crore impounded as alleged
@@ -87,7 +87,7 @@ statements; no final finding had been made at the time of writing.*
 * **16. Crisis file: when short volatility blows up.** Two illustrative short-put books with near (17.5% OTM) and deep
   (40% OTM) hedges, 2017–2020, VIX plus a fixed skew: before 2020 +10.1 and +10.6 per 100; March 2020 drawdowns −26.6
   and −36.3. LJM (SEC 2021-89) and Allianz Global Investors U.S. Structured Alpha (guilty plea, May 2022; SEC 2022-84).
-* **17. Industry.** OCC volumes (4.98 bn contracts in 2019 to 15.3 bn in 2025); retail options and the wholesalers
+* **17. Industry.** OCC options-and-futures clearing volumes (4.98 bn contracts in 2019 to 15.3 bn in 2025); retail options and the wholesalers
   (Bryzgalova–Pavlova–Sikorskaya 2023), Muravyev–Pearson (2020); SIG, Optiver, IMC, Jane Street; CFTC v. Optiver
   (2008/2012); the desk's loop; venue rules.
 * **18. Frontier.** A logged historical walk-forward ridge and boosted-tree predictor of the hedged straddle's P&L from four
@@ -97,13 +97,12 @@ statements; no final finding had been made at the time of writing.*
 * **For the researcher: demand-based option pricing.** A competitive mean-variance dealer who must hold −d options,
   with hedged residuals ε (payoff less discrete delta-hedge gains), prices p = E[x] + γΣ_ε d (the first-order form of
   Gârleanu, Pedersen and Poteshman 2009): own impact γVar ε_i, cross-impact γCov(ε_i, ε_j), none when Σ_ε = 0.
-  Simulation: a Merton jump-diffusion (σ 45%, 4 jumps a year of mean −8%, spread 10%), 30-day OTM options at strikes
-  80–120, hedged daily at the total volatility 52%, 40,000 paths: residual sd 1.1–2.0 per 100 (no jumps 0.4–0.9,
+  Simulation: a Merton jump-diffusion (σ 45%, 4 jumps a year with log-jump mean −8% and standard deviation 10%), 30-day OTM options at strikes
+  80–120, hedged daily at the total volatility 52%, 40,000 jump paths and 8,000 paths per 52% diffusion comparison: residual sd 1.1–2.0 per 100 (no jumps 0.4–0.9,
   hourly 0.08–0.19). With γ set so that one unit of 85-put demand targets one point locally (about 0.99 on repricing), it moves the
   80 put 1.1 points and the 120 call 0.19 (no jumps, daily: 0.13; hourly: 0.006); demand for every put adds 4.0 points
-  at 80 and 1.0 at 120, demand for calls tilts the smile the other way (1.4 at 80, 2.4 at 120). Exact exponential-
-  utility indifference against the first-order line, the short put's residual skewness 4.6: the marginal premium is
-  9% higher at one unit and 51% at four. Deribit taker flow on the Surface's two days, net share of traded vega: OTM
+  at 80 and 1.0 at 120, demand for calls tilts the smile the other way (1.4 at 80, 2.4 at 120). Finite empirical exponential tilt with a fixed hedge against the first-order line, the short put's residual skewness 4.6: the marginal premium is
+  9% higher at the displayed position near 0.96 units and 51% at four. Deribit taker flow on the Surface's two days, net share of traded vega: OTM
   puts within 30 days −21%, beyond +14%; OTM calls −2% and −23%; near the money about 0. Three open problems; pause:
   in dollars the 90 put rises more (1.08 of the 85's own impact, against 0.72 for the 80 put), in volatility the 80 put
   (1.1 points against 0.8), because the 80 put has less vega.

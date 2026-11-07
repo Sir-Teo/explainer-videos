@@ -30203,7 +30203,8 @@
     "$\\gamma$ set so that local vega calibration targets one vol point at the 85 put (repriced: about 0.99); it then moves the 80 put 1.1 points and the 120 call 0.2": "$\\gamma$按局部Vega校准，使85看跌波动率增加约一点（重定价约0.99点）；80看跌增加1.1点，120看涨增加0.2点",
     "2{,}000 simulated paths per case, 50\\% vol; fans show 60. Full terminal range, common bins; histogram widths scaled to each panel's peak": "每种情形模拟2{,}000条路径，波动率50\\%；路径图展示60条。保留全部终值范围，使用共同分箱；直方图宽度按各面板峰值缩放",
     "sample optimum 29.8, near the sample bankruptcy wall; worst observed window -3.3\\% of notional. Future losses need not respect that wall": "样本最优杠杆29.8，接近样本破产边界；最差历史窗口损失为名义本金3.3\\%。未来损失不必受此边界限制",
-    "one-hour matched-cohort retention 59\\%; later prints available for 78\\% of trades. Mark-based diagnostic; each horizon may use a different cohort.": "一小时匹配样本保留比例59\\%；78\\%的交易存在后续成交价。基于估值的诊断，各期限可能使用不同样本"
+    "one-hour matched-cohort retention 59\\%; later prints available for 78\\% of trades. Mark-based diagnostic; each horizon may use a different cohort.": "一小时匹配样本保留比例59\\%；78\\%的交易存在后续成交价。基于估值的诊断，各期限可能使用不同样本",
+    "between the 10-delta strikes: RMSE 0.19 vol points against the fitted smile; in the far wings, off by up to 12": "10 Delta行权价之间：相对拟合微笑的均方根误差0.19波动率点；远端翼部误差最高12点"
   },
   "phrases": {
     "you owe": "你欠",
