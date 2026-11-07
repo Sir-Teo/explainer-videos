@@ -47,19 +47,24 @@ class EB(VoiceoverScene):
             cmath(r"\theta_i", r"\sim", r"N(\mu, \tau^2), \ \ x_i \mid \theta_i \sim N(\theta_i, 1)", font_size=30),
             cmath(r"E(\theta_i \mid x_i)", r"=", r"\mu + (1 - B)(x_i - \mu), \ \ B = \dfrac{1}{1 + \tau^2}", font_size=30),
             cmath(r"x_i", r"\sim", r"N(\mu, 1 + \tau^2) \ \text{marginally}", font_size=30),
-            cmath(r"E\Big[\dfrac{p - 3}{\sum (x_i - \bar x)^2}\Big]", r"=", r"B", font_size=30),
+            cmath(r"E\Big[\dfrac{p - 3}{\sum (x_i - \bar x)^2}\Big]", r"=", r"B,\ \ p>3 \text{; untruncated ratio}", font_size=30),
         ]
         rows[3][2].set_color(SHRUNK)
         whys = [why(r"a population of abilities"), why(r"Part 15's posterior mean"), why(r"the data reveal $\mu$ and $\tau^2$"),
                 why(r"an unbiased estimate of the shrinkage")]
+        intro = label('Normal empirical Bayes estimates the population shrinkage factor', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Suppose the true abilities come from a normal population with mean mu and variance tau "
-            "squared, and each observation adds unit-variance noise. <bookmark mark='b'/> Bayes' posterior mean is mu plus "
-            "one minus B times the distance from mu, with B equal to one over one plus tau squared. "
-            "<bookmark mark='c'/> We don't know mu or tau squared, but the observations, averaged over the population, are "
-            "normal with mean mu and variance one plus tau squared, so the data reveal both. <bookmark mark='d'/> In "
-            "particular, p minus three over the sum of squared deviations is an unbiased estimate of B."
+            "<bookmark mark='a'/> Suppose the true abilities come from a normal population with mean mu and variance "
+            "tau squared, and each observation adds unit-variance noise. <bookmark mark='b'/> Bayes' posterior mean "
+            "is mu plus one minus B times the distance from mu, with B equal to one over one plus tau squared. "
+            "<bookmark mark='c'/> We don't know mu or tau squared, but the observations, averaged over the "
+            "population, are normal with mean mu and variance one plus tau squared, so the data reveal both. "
+            "<bookmark mark='d'/> For p greater than three, the untruncated ratio p minus three over the centered sum"
+            " of squares is unbiased for B. Truncating it changes that property."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -78,11 +83,11 @@ class EB(VoiceoverScene):
             "<bookmark mark='a'/> Plug that estimate into Bayes' rule <bookmark mark='b'/> and out comes exactly the "
             "James–Stein estimator shrinking towards the grand mean. <bookmark mark='c'/> Efron and Morris made this "
             "connection in 1973: Stein's mysterious estimator is Bayes with a prior estimated from the data. "
-            "<bookmark mark='d'/> When the estimates are much more spread out than noise alone would make them, the prior "
-            "is wide and they are left almost alone; when they spread no more than noise would, they are pulled almost all "
-            "the way in. <bookmark mark='e'/> The eighteen early batting averages spread out only a little more than luck "
-            "alone allows, so James–Stein kept just a fifth of each player's distance from the middle."
-        ) as vo:
+            "<bookmark mark='d'/> When the estimates are much more spread out than noise alone would make them, the "
+            "prior is wide and they are left almost alone; when they spread no more than noise would, they are pulled"
+            " almost all the way in. <bookmark mark='e'/> The eighteen early batting averages spread out only a "
+            "little more than luck alone allows, so James–Stein kept just a fifth of each player's transformed-scale "
+            "distance from the middle."       ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
@@ -98,15 +103,20 @@ class EB(VoiceoverScene):
         rows[1][2].set_color(PATH)
         whys = [why(r"Robbins (1956): \ no normal prior needed"), why(r"Efron (2011): \ ``Tweedie's formula''"),
                 why(r"which the data estimate directly"), why(r"EM on a grid: \ few atoms")]
+        intro = label('Tweedie links a posterior mean to the marginal density derivative', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Herbert Robbins went further in 1956: the prior needn't be normal. With any prior, the "
-            "data have a marginal density, the noise smeared over the prior. <bookmark mark='b'/> A remarkable identity, "
-            "which Efron called Tweedie's formula, says the posterior mean is the observation plus the noise variance times "
-            "the slope of the log marginal density. <bookmark mark='c'/> So it needs only the density of the data, which "
-            "thousands of parallel observations estimate well. <bookmark mark='d'/> Or estimate the prior itself, by Jack "
-            "Kiefer and Jacob Wolfowitz's nonparametric maximum likelihood, an EM algorithm on a grid that typically finds "
-            "a prior with just a few atoms."
+            "<bookmark mark='a'/> Herbert Robbins went further in 1956: the prior needn't be normal. With any prior, "
+            "the data have a marginal density, the noise smeared over the prior. <bookmark mark='b'/> A remarkable "
+            "identity, which Efron called Tweedie's formula, says the posterior mean is the observation plus the "
+            "noise variance times the slope of the log marginal density. <bookmark mark='c'/> So it needs only the "
+            "density of the data, which many parallel observations can help estimate, although derivatives in the "
+            "tails remain difficult. <bookmark mark='d'/> Or estimate the prior itself, by Jack Kiefer and Jacob "
+            "Wolfowitz's nonparametric maximum likelihood, Here we approximate it using finite iterations of EM on a "
+            "fixed grid. This is not a certificate of the unrestricted optimum."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -116,22 +126,24 @@ class EB(VoiceoverScene):
     def prior(self):
         d = load("winners")
         gr, w = np.asarray(d["grid"]), np.asarray(d["w"])
-        A = axes([-7, 7], [0, 0.15], x_length=8.0, y_length=4.2, xlabel=r"$\theta$", ylabel=r"estimated prior mass",
+        A = axes([-7, 7], [0, max(0.15, 1.1 * w.max())], x_length=8.0, y_length=4.2, xlabel=r"$\theta$", ylabel=r"estimated prior mass",
                  xticks=[-6, -4, -2, 0, 2, 4, 6], yticks=[0, 0.05, 0.1, 0.15], center=[-1.6, 0.3, 0])
         ax = A.ax
-        keep = w > 1e-3
-        bars = VGroup(*[Line(ax.c2p(t, 0), ax.c2p(t, min(v, 0.15)), color=PRIOR, stroke_width=5) for t, v in zip(gr[keep], w[keep])])
+        keep = (w > 0) & (gr >= -7) & (gr <= 7)
+        bars = VGroup(*[Line(ax.c2p(t, 0), ax.c2p(t, v), color=PRIOR, stroke_width=5) for t, v in zip(gr[keep], w[keep])])
         rows = fit_rows(VGroup(
             label(r"1,000 $z$-scores: \ 90\% true nulls, \ 10\% real effects", font_size=22),
-            label(r"purple: \ the NPMLE of the prior", font_size=22, color=PRIOR),
+            label(r"purple: \ fixed-grid EM estimate; \ full atom heights", font_size=22, color=PRIOR),
             label(rf"{100 * d['null_share']:.0f}\% of its mass near zero", font_size=22, color=PRIOR),
-            label(r"the rest: \ atoms near $-4$ and $+4.5$", font_size=22, color=GREY_A),
+            VGroup(label(r"generating nonnulls: $N(0,3^2)$", font_size=20, color=GREY_A), label(r"0.11\% fitted mass outside the shown range", font_size=18, color=GREY_B)).arrange(DOWN, buff=0.12),
         ), 3.45, 0.42, [5.1, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> An example in the spirit of genomics: a thousand z-scores, ninety percent from true nulls "
-            "and ten percent from real effects of various sizes. <bookmark mark='b'/> The nonparametric maximum likelihood "
-            "prior, estimated from the z-scores alone, <bookmark mark='c'/> puts eighty-nine percent of its mass near zero, "
-            "<bookmark mark='d'/> and the rest on two clumps, near minus four and plus four and a half: a crude but useful summary of where the real effects lie."
+            "<bookmark mark='a'/> An example in the spirit of genomics: a thousand z-scores, ninety percent from true"
+            " nulls and ten percent from real effects of various sizes. <bookmark mark='b'/> The nonparametric "
+            "maximum likelihood prior, estimated from the z-scores alone, <bookmark mark='c'/> puts eighty-nine "
+            "percent of its mass near zero, <bookmark mark='d'/> and much of the remainder in two fitted clumps. The "
+            "generating nonnull effects were normal with standard deviation three, not concentrated at those two "
+            "points."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")

@@ -8,14 +8,14 @@ incomes are the World's; the rest are seeded simulations.
 
 Items:
     baseball    Efron & Morris: the MLE vs James-Stein vs the rest of the season
-    risk        James-Stein's risk against |theta| for p = 10, with SURE
+    risk        Monte Carlo James-Stein risk against |theta| for p = 10, plus an analytic upper bound
     winners     the winner's curse in 1,000 z-scores; Tweedie's correction with an NPMLE prior
     components  variance components and the ICC for the World's schools; the design effect
     blup        a random-intercept model for 40 schools: BLUPs against school means and the truth
     remlml      ML vs REML for the school variance with few schools
     boundary    the LR test of a zero variance: 50:50 chi-squared mixture
     growth      a longitudinal growth-curve example: random intercepts and slopes
-    nested      pupils in schools in towns: a town variance at the boundary
+    nested      a two-stage school-mean approximation, not a joint three-level fit
     crossed     essays crossed with raters: each essay read by 2 of 8 raters; raw means vs a crossed model
     mundlak     random vs fixed effects when SES has a contextual effect: Hausman and Mundlak
     glmm        a random-intercept logistic model for passing: Laplace, AGQ, and marginal vs conditional
@@ -31,7 +31,7 @@ from __future__ import annotations
 from dataclasses import asdict
 
 import numpy as np
-from scipy import special, stats
+from scipy import integrate, optimize, special, stats
 
 from explainer.ai.cache import Cache
 from explainer.stats import museum
@@ -66,14 +66,32 @@ def nest(obj):
     return obj
 
 
+def cluster_mean_design_effect(sizes, rho):
+    """Variance inflation for the unweighted individual mean with fixed cluster sizes."""
+    sizes = np.asarray(sizes, float)
+    if sizes.ndim != 1 or not len(sizes) or not np.all(np.isfinite(sizes)) or np.any(sizes <= 0):
+        raise ValueError("positive finite cluster sizes required")
+    if not np.isfinite(rho) or not 0 <= rho <= 1:
+        raise ValueError("random-intercept ICC must be between zero and one")
+    return float(1+(sizes@sizes/sizes.sum()-1)*rho)
+
+
+def hausman_scalar(gap, variance_difference):
+    """A nonpositive estimated variance difference does not define this chi-square statistic."""
+    if not np.isfinite(gap) or not np.isfinite(variance_difference):
+        raise ValueError("finite inputs required")
+    return float(gap**2/variance_difference) if variance_difference > 0 else None
+
+
 def compute_baseball():
     names, h, ab, p = museum.efron_morris()
     y = h / 45
-    x = np.sqrt(45) * np.arcsin(2 * y - 1)  # Efron & Morris's variance-stabilizing transform: unit variance
+    x = np.sqrt(45) * np.arcsin(2 * y - 1)  # approximately unit noise variance on the binomial transformed scale
     js = SH.james_stein(x, 1.0)
     est = (np.sin(js["theta"] / np.sqrt(45)) + 1) / 2
     closer = int(np.sum(np.abs(est - p) < np.abs(y - p)))
-    return nest({"names": names, "y": y, "p": p, "ab": ab, "js": est, "B": js["B"], "grand": float(y.mean()),
+    return nest({"names": names, "y": y, "p": p, "ab": ab, "js": est, "B": js["B"], "grand": float(y.mean()), "target": float((np.sin(x.mean() / np.sqrt(45)) + 1) / 2),
+                 "scale": "approximately unit-variance arcsine transform; loss evaluated on held-out rates",
                  "sse_mle": float(np.sum((y - p) ** 2)), "sse_js": float(np.sum((est - p) ** 2)), "closer": closer,
                  "ratio": float(np.sum((y - p) ** 2) / np.sum((est - p) ** 2))})
 
@@ -82,7 +100,7 @@ def compute_risk():
     p = 10
     norms = np.linspace(0, 8, 33)
     g = rng(1961)
-    out = {"norms": norms, "mle": [], "js": [], "js_plus": [], "sure": []}
+    out = {"norms": norms, "mle": [], "js": [], "js_plus": [], "risk_upper_bound": []}
     for r in norms:
         th = np.zeros(p)
         th[0] = r
@@ -90,8 +108,12 @@ def compute_risk():
         out["mle"].append(rr["mle"])
         out["js"].append(rr["js"])
         out["js_plus"].append(rr["js_plus"])
-        out["sure"].append(float(p - (p - 2) ** 2 / (p - 2 + r ** 2)))  # the bound E|X|^2 >= p + |theta|^2, Jensen
+        out["risk_upper_bound"].append(float(p - (p - 2) ** 2 / (p - 2 + r ** 2)))
+        # Noncentral chi-square Poisson mixture: E[1/||X||^2] = E[1/(p+2K-2)]
+        # >= 1/(p-2+||theta||^2). This is a deterministic risk bound, not sample SURE.
     out["p"] = p
+    out["replicates"] = 8000
+    out["risk_estimates"] = "Monte Carlo, not analytic exact risk"
     return nest(out)
 
 
@@ -123,10 +145,14 @@ def compute_components():
     m_bar = len(d["y"]) / W.N_SCHOOLS
     sch, idx = np.unique(d["school"], return_inverse=True)
     means = np.bincount(idx, d["y"]) / np.bincount(idx)
-    eg = np.flatnonzero(idx == 0)
+    sizes = np.bincount(idx)
+    m_star = float(sizes @ sizes / sizes.sum())
+    deff = cluster_mean_design_effect(sizes, f.icc)
     return nest({"means": means, "sizes": np.bincount(idx), "example": d["y"][idx < 6][:400], "example_school": idx[idx < 6][:400],
                  "G": f.G[0, 0], "sigma2": f.sigma2, "icc": f.icc, "n": len(d["y"]), "m_bar": m_bar,
-                 "deff": 1 + (m_bar - 1) * f.icc, "neff": len(d["y"]) / (1 + (m_bar - 1) * f.icc),
+                 "m_star": m_star, "deff": deff, "neff": len(d["y"]) / deff,
+                 "deff_scope": "unweighted pupil mean under the fitted common-ICC model; unequal fixed cluster sizes",
+                 "components_scope": "intercept-only descriptive components, including programme and SES variation",
                  "u_var_true": icc_true, "e_var_true": (100 * W.PUPIL_SD) ** 2})
 
 
@@ -207,13 +233,15 @@ def compute_nested():
     town_of_school = s["town"]
     X = np.ones((len(d["y"]), 1))
     f_s = MX.lmm(d["y"], X, d["school"])
-    # town effect: fit to school means with known sampling variance (a quick two-level-from-means estimate)
+    # Two-stage approximation: unweighted school means, without their unequal sampling variances.
+    # The school-mean residual variance includes pupil-mean noise and is not a pure school component.
     sch, idx = np.unique(d["school"], return_inverse=True)
     means = np.bincount(idx, d["y"]) / np.bincount(idx)
     tf = MX.lmm(means, np.ones((len(means), 1)), town_of_school[sch])
     n_towns = len(np.unique(town_of_school))
     return nest({"school_var": f_s.G[0, 0], "pupil_var": f_s.sigma2, "town_var": tf.G[0, 0], "school_resid_var": tf.sigma2,
-                 "n_towns": n_towns, "n_schools": len(sch)})
+                 "n_towns": n_towns, "n_schools": len(sch),
+                 "scope": "separate two-stage fits, not an additive three-level variance decomposition"})
 
 
 def compute_crossed():
@@ -253,6 +281,8 @@ def compute_league():
     top_sh = np.argsort(-shrunk)[:5]
     out_99 = np.abs(raw - pbar) > 3.09 * np.sqrt(pbar * (1 - pbar) / n)
     return nest({"n": n, "d": d, "raw": raw, "shrunk": shrunk, "truth": p_true, "pbar": pbar, "sigma": f["sigma"],
+                 "rate_estimator": "expit of fitted conditional mode, not posterior mean probability",
+                 "funnel": "normal approximation about the estimated pooled rate; weakest for small counts",
                  "beta0": f["beta"][0], "top_raw": top_raw, "top_shrunk": top_sh,
                  "raw_hits": int(sum(h in worst10 for h in top_raw)), "shrunk_hits": int(sum(h in worst10 for h in top_sh)),
                  "raw_top_n": n[top_raw], "shrunk_top_n": n[top_sh], "n_out_99": int(out_99.sum()),
@@ -272,7 +302,8 @@ def compute_mundlak():
     fe = O.fit(xw[:, None], yw)
     fe_se = float(np.sqrt(fe.rss / (len(yw) - len(sch) - 1) / np.sum(xw ** 2)))
     mk = MX.lmm(d["y"], np.column_stack([X, ses_bar]), d["school"])
-    H = float((fe.coef[0] - re.beta[1]) ** 2 / max(fe_se ** 2 - re.se[1] ** 2, 1e-12))
+    variance_difference = float(fe_se ** 2 - re.se[1] ** 2)
+    H = hausman_scalar(fe.coef[0] - re.beta[1], variance_difference)
     mx = np.bincount(idx, d["ses"]) / np.bincount(idx)
     my = np.bincount(idx, d["y"]) / np.bincount(idx)
     between = np.polyfit(mx, my, 1)
@@ -281,8 +312,38 @@ def compute_mundlak():
     pupils = [{"ses": d["ses"][idx == k], "y": d["y"][idx == k]} for k in show]
     return nest({"school_ses": mx, "school_y": my, "between": between, "show": show, "pupils": pupils,
                  "re": re.beta[1], "re_se": re.se[1], "fe": float(fe.coef[0]), "fe_se": fe_se, "mundlak_within": mk.beta[1],
-                 "mundlak_context": mk.beta[2], "mundlak_se": mk.se, "hausman": H, "p_hausman": float(stats.chi2.sf(H, 1)),
+                 "mundlak_context": mk.beta[2], "mundlak_between": mk.beta[1] + mk.beta[2], "mundlak_se": mk.se,
+                 "hausman_variance_difference": variance_difference, "hausman": H,
+                 "p_hausman": float(stats.chi2.sf(H, 1)) if H is not None else None,
                  "truth_within": 100 * W.SES_SLOPE, "truth_context": 100 * W.SES_CONTEXT})
+
+
+def logistic_normal_integral(eta, y, sigma):
+    """Independent adaptive integration of a group's marginal likelihood and posterior risk.
+
+    Center and rescale at the unique mode to avoid underflow in large groups.
+    The probability returned is E[expit(eta[0]+u)|y], for a constant-intercept group.
+    """
+    eta, y = np.asarray(eta, float), np.asarray(y, float)
+    if eta.shape != y.shape or eta.ndim != 1 or not len(eta) or sigma <= 0 or not np.isfinite(sigma):
+        raise ValueError("one finite predictor per observation and a positive finite SD required")
+    if not np.all(np.isfinite(eta)) or not np.all(np.isin(y, [0, 1])):
+        raise ValueError("finite predictors and binary outcomes required")
+    score = lambda u: float(np.sum(y-special.expit(eta+u))-u/sigma**2)
+    bracket = max(1., sigma**2 * len(y))
+    mode = optimize.brentq(score, -bracket, bracket)
+    prob = special.expit(eta+mode)
+    sd = 1/np.sqrt(np.sum(prob*(1-prob))+1/sigma**2)
+    def logh(u):
+        return float(np.sum(y*(eta+u)-np.logaddexp(0, eta+u))-.5*(u/sigma)**2
+                     -np.log(sigma*np.sqrt(2*np.pi)))
+    peak = logh(mode)
+    weight = lambda t: np.exp(logh(mode+sd*t)-peak)
+    denominator = integrate.quad(weight, -np.inf, np.inf, epsabs=1e-10, epsrel=1e-10)[0]
+    numerator = integrate.quad(lambda t: special.expit(eta[0]+mode+sd*t)*weight(t),
+                               -np.inf, np.inf, epsabs=1e-10, epsrel=1e-10)[0]
+    return {"loglik": peak+np.log(sd*denominator), "mode": mode,
+            "posterior_probability": numerator/denominator}
 
 
 def compute_glmm():
@@ -299,7 +360,12 @@ def compute_glmm():
     marg = Gm.gee_logistic(X, y, sch, "exchangeable")
     ratio = float(agq["beta"][1] / marg["coef"][1])
     approx = float(np.sqrt(1 + 0.346 * agq["sigma"] ** 2))
-    return nest({"laplace": lap, "agq": agq, "gee": marg["coef"], "ratio": ratio, "approx": approx})
+    agq20 = MX.glmm_logit(y, X, sch, nagq=20)
+    agq40 = MX.glmm_logit(y, X, sch, nagq=40)
+    return nest({"laplace": lap, "agq": agq, "gee": marg["coef"], "ratio": ratio, "approx": approx,
+                 "quadrature_check": {"beta20": agq20["beta"], "beta40": agq40["beta"],
+                                      "sigma20": agq20["sigma"], "sigma40": agq40["sigma"],
+                                      "ll20": agq20["loglik"], "ll40": agq40["loglik"]}})
 
 
 def compute_smallarea():
@@ -327,7 +393,8 @@ def compute_smallarea():
     mse = lambda est: float(np.nanmean((est[ok] - truth[ok]) ** 2))  # noqa: E731
     return nest({"truth": truth, "direct": direct, "eblup": eblup, "synthetic": synth, "n_t": n_t, "ok": ok, "A": fh["A"],
                  "gamma": fh["gamma"], "mse_direct": mse(direct), "mse_eblup": mse(eblup), "mse_synth": mse(synth),
-                 "towns_used": int(ok.sum()), "size": size})
+                 "towns_used": int(ok.sum()), "size": size, "sampling_variance": D,
+                 "scope": "working Gaussian model with estimated pooled sampling variance; MSE only for n_t >= 2"})
 
 
 def meta_sample(k, g, tau=0.15, mu=0.3):
@@ -355,7 +422,7 @@ def compute_rasch():
     X = np.column_stack([np.eye(I)[item]])  # one column per item: -difficulty
     fit = MX.glmm_logit(y, X, person, nagq=1)
     return nest({"diff_true": diff, "diff_hat": -np.asarray(fit["beta"]), "se": fit["se"], "sigma": fit["sigma"],
-                 "ability_true": ability, "ability_hat": fit["modes"], "P": P, "I": I,
+                 "ability_true": ability, "ability_hat": fit["modes"], "ability_estimator": "conditional mode", "P": P, "I": I,
                  "raw_score": np.bincount(person, y)})
 
 
@@ -401,3 +468,26 @@ ITEMS = {
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)
+
+
+def clipped_segments(xs, ys, rectangle):
+    """Intersect segments with the viewport, preserving crossings and missing breaks."""
+    xmin, xmax, ymin, ymax = rectangle
+    points = np.column_stack((xs, ys))
+    result = []
+    for start, end in zip(points[:-1], points[1:]):
+        if not np.isfinite([start, end]).all():
+            continue
+        delta = end-start
+        lo, hi = 0., 1.
+        for j, lower, upper in ((0, xmin, xmax), (1, ymin, ymax)):
+            if delta[j] == 0:
+                if not lower <= start[j] <= upper:
+                    hi = -1
+                    break
+            else:
+                a, b = sorted(((lower-start[j])/delta[j], (upper-start[j])/delta[j]))
+                lo, hi = max(lo, a), min(hi, b)
+        if lo <= hi:
+            result.append((start+lo*delta, start+hi*delta))
+    return result

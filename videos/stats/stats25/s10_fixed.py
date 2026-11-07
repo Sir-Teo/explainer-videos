@@ -30,16 +30,21 @@ class Fixed(VoiceoverScene):
         ]
         rows[1][2].set_color(RES)
         whys = [why(r"the within estimator: \ demean each school"), why(r"the assumption that matters"),
-                why(r"immune to anything constant in a school"), why(r"more efficient, \ if the assumption holds")]
+                why(r"additive intercepts removed; \ strict exogeneity still needed"), why(r"more efficient, \ if the assumption holds")]
+        intro = label('Fixed effects control additive group intercepts under exogeneity', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Economists and statisticians argued about this for decades. A fixed-effects model gives "
-            "every school its own intercept, a dummy variable each, which is the same as subtracting each school's mean "
-            "from everything. <bookmark mark='b'/> A random-effects model draws the intercepts from a normal distribution, "
-            "and, crucially, assumes they are independent of the predictors. <bookmark mark='c'/> Fixed effects use only "
-            "variation within schools, so anything constant within a school, measured or not, cannot bias them. "
-            "<bookmark mark='d'/> Random effects use the within and between variation together, weighted, and are more "
-            "efficient, if their assumption holds."
+            "<bookmark mark='a'/> Economists and statisticians argued about this for decades. A fixed-effects model "
+            "gives every school its own intercept, a dummy variable each, which is the same as subtracting each "
+            "school's mean from everything. <bookmark mark='b'/> A random-effects model draws the intercepts from a "
+            "normal distribution, and, crucially, assumes they are independent of the predictors. <bookmark "
+            "mark='c'/> Fixed effects use only variation within schools, so it removes additive, constant school "
+            "intercepts. A common slope and strict conditional mean-zero pupil errors are still needed; causality "
+            "needs further identification. <bookmark mark='d'/> Random effects use the within and between variation "
+            "together, weighted, and are more efficient, if their assumption holds."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -62,17 +67,18 @@ class Fixed(VoiceoverScene):
             within.add(Line(ax.c2p(x0 - 0.35, y0 - 0.35 * w), ax.c2p(x0 + 0.35, y0 + 0.35 * w), color=SHRUNK, stroke_width=4))
         rows = fit_rows(VGroup(
             label(r"grey: \ the World's 400 schools", font_size=22),
-            label(rf"yellow: \ between schools, \ slope {b1:.1f}", font_size=22, color=PATH),
+            label(rf"yellow: \ unweighted between-school slope {b1:.1f}", font_size=22, color=PATH),
             label(rf"green: \ within schools, \ slope {w:.1f}", font_size=22, color=SHRUNK),
             label(r"richer schools are better than their pupils' SES alone predicts", font_size=20, color=GREY_A),
         ), 4.6, 0.42, [4.4, 0.2, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Here is why it matters. Each grey dot is one of the World's schools: its pupils' average "
-            "home background against its average score. <bookmark mark='b'/> Between schools, the slope is about forty "
-            "points per unit of background. <bookmark mark='c'/> Within a school, comparing pupils with each other, the "
-            "slope is twenty-nine. <bookmark mark='d'/> The World built it that way: a school full of advantaged pupils "
-            "does better than their individual backgrounds predict, a contextual effect. So the school effects are "
-            "correlated with SES, and the random-effects assumption fails."
+            "<bookmark mark='a'/> Here is why it matters. Each grey dot is one of the World's schools: its pupils' "
+            "average home background against its average score. <bookmark mark='b'/> The unweighted descriptive "
+            "between-school slope is about forty points per unit of background. <bookmark mark='c'/> Within a school,"
+            " comparing pupils with each other, the slope is twenty-nine. <bookmark mark='d'/> The World built it "
+            "that way: a school full of advantaged pupils does better than their individual backgrounds predict, a "
+            "contextual effect. So the school effects are correlated with SES, and the random-effects assumption "
+            "fails."
         ) as vo:
             self.add(simulated_tag())
             self.play(FadeIn(A))
@@ -91,18 +97,25 @@ class Fixed(VoiceoverScene):
             cmath(r"y_{gi}", r"=", r"\mu + \beta_W x_{gi} + \gamma\,\bar x_g + u_g + \varepsilon_{gi}", font_size=32),
             cmath(r"\hat\beta_W", r"=", r"\text{the fixed-effects estimate, \ exactly}", font_size=30),
             cmath(r"\gamma", r"=", r"\beta_B - \beta_W: \ \text{the contextual effect}", font_size=30),
-            cmath(r"\gamma = 0", r"\iff", r"\text{random effects were fine}", font_size=30),
+            cmath(r"\gamma = 0", r":", r"\text{no linear association with included group means}", font_size=30),
         ]
         rows[0][2].set_color(SHRUNK)
         whys = [why(r"Mundlak (1978): \ add the school mean of $x$"), why(r"the between part is absorbed by $\bar x_g$"),
                 why(r"between minus within"), why(r"a test of the assumption")]
+        intro = label('Group predictor means separate within and between associations', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Yair Mundlak's 1978 resolution: keep the random effects, but add each school's mean of "
-            "the predictor as a further predictor. <bookmark mark='b'/> Then the coefficient on the pupil's own SES is "
-            "exactly the fixed-effects estimate, <bookmark mark='c'/> and the coefficient on the school mean is the "
-            "contextual effect, the between slope minus the within slope. <bookmark mark='d'/> If it's zero, plain random "
-            "effects were fine. One model gives both answers, and keeps random effects' ability to predict for a new school."
+            "<bookmark mark='a'/> Yair Mundlak's 1978 resolution: keep the random effects, but add each school's mean"
+            " of the predictor as a further predictor. <bookmark mark='b'/> Then the coefficient on the pupil's own "
+            "SES is exactly the fixed-effects estimate here, with common within-school variance and the relevant "
+            "group means included, <bookmark mark='c'/> and the coefficient on the school mean is the contextual "
+            "effect, the between slope minus the within slope. <bookmark mark='d'/> Testing it probes a linear "
+            "conditional-mean association with those group means. A zero coefficient cannot establish independence or"
+            " rule out omitted nonlinear context. One model gives both answers, and keeps random effects' ability to "
+            "predict for a new school."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -127,10 +140,11 @@ class Fixed(VoiceoverScene):
             "<bookmark mark='a'/> The numbers. <bookmark mark='b'/> Random effects say twenty-nine point four, "
             "<bookmark mark='c'/> fixed effects twenty-nine point two. Close, because with sixty pupils a school the "
             "shrinkage factor is near one and random effects already lean mostly on the within-school comparison. "
-            "<bookmark mark='d'/> Mundlak's model reproduces the fixed-effects slope exactly, and estimates a contextual "
-            "effect of ten point six with a standard error of four. <bookmark mark='e'/> The World's truth is thirty and "
-            "fifteen. The contextual effect is the noisier number, because it is learned from four hundred schools, not "
-            "twenty-four thousand pupils."
+            "<bookmark mark='d'/> Mundlak's model reproduces the fixed-effects slope exactly, and estimates a "
+            "contextual effect of ten point six with a standard error of four. <bookmark mark='e'/> The World uses "
+            "thirty within school and fifteen for latent school SES. Our estimated contextual regressor is the "
+            "observed sample mean, so the targets are only approximately the same. The contextual effect is the "
+            "noisier number, because it is learned from four hundred schools, not twenty-four thousand pupils."
         ) as vo:
             self.add(simulated_tag())
             vo.wait_until("a")
@@ -155,6 +169,9 @@ class Fixed(VoiceoverScene):
         rows[3][2].set_color(RES)
         whys = [why(r"Hausman (1978)"), why(r"the efficient estimator is uncorrelated with its gap"),
                 why(r"a tiny gap, \ but tinier noise"), why(r"reject: \ the school effects are correlated with SES")]
+        intro = label('Hausman compares estimators under an efficiency null', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> Jerry Hausman's test of 1978 compares the two estimates directly: their squared difference, "
             "over the difference of their variances. <bookmark mark='b'/> That denominator is right because, when random "
@@ -163,6 +180,7 @@ class Fixed(VoiceoverScene):
             "precise and so similar that the gap's own noise is smaller still: H is six point five six. "
             "<bookmark mark='d'/> A p-value of point oh one: reject, the school effects are correlated with SES, as built."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -178,13 +196,14 @@ class Fixed(VoiceoverScene):
             label(r"Part 37: \ fixed effects as a causal design for panels", font_size=24, color=GREY_A),
         ), 12.6, 0.5, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> So the choice is not about whether schools are, philosophically, random. It is about the "
-            "assumption that the school effects are unrelated to the predictors. <bookmark mark='b'/> If you want a "
-            "within-school effect protected from everything constant in a school, use fixed effects, or Mundlak. "
-            "<bookmark mark='c'/> If you want to predict for a new school, or to estimate an effect of something that "
-            "varies only between schools, like the programme, you need random effects; fixed effects absorb it entirely. "
-            "<bookmark mark='d'/> Mundlak's model delivers both. <bookmark mark='e'/> And Part 37 returns to fixed effects as "
-            "a causal design for panel data."
+            "<bookmark mark='a'/> So the choice is not about whether schools are, philosophically, random. It is "
+            "about the assumption that the school effects are unrelated to the predictors. <bookmark mark='b'/> If "
+            "you want a within-school effect controlling additive constant school effects under strict exogeneity, "
+            "use fixed effects, or Mundlak. <bookmark mark='c'/> If you want to predict for a new school, or to "
+            "estimate an effect of something that varies only between schools, like the programme, you need "
+            "additional restrictions or a design for between-school comparisons. Random effects are one option; "
+            "school fixed effects absorb that programme variable. <bookmark mark='d'/> Mundlak's model delivers both."
+            " <bookmark mark='e'/> And Part 37 returns to fixed effects as a causal design for panel data."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

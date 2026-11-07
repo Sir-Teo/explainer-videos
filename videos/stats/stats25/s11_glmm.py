@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import numpy as np
-from scipy import special
+from scipy import optimize, special
 
 from videos.stats.stats25.common import *  # noqa: F403
 
@@ -32,14 +32,19 @@ class GLMM(VoiceoverScene):
         rows[1][2].set_color(SHRUNK)
         whys = [why(r"Part 24's GLM, \ plus a school effect"), why(r"average each school over its $u$"),
                 why(r"the normal integral is gone"), why(r"Breslow \& Clayton (1993); \ Breslow \& Lin (1995)")]
+        intro = label('A working probability model states the assumptions behind shrinkage', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Put a random effect inside Part 24's logistic regression: each school shifts the log odds "
-            "of passing by its own amount. <bookmark mark='b'/> The likelihood averages each school's probability of its "
-            "pupils' results over the distribution of its effect, <bookmark mark='c'/> and unlike the linear case the "
-            "integral has no closed form, one for every school. <bookmark mark='d'/> Norman Breslow and David Clayton's "
-            "penalized quasi-likelihood of 1993 linearizes and iterates, but it shrinks the estimates towards zero for "
-            "binary data with small clusters, so modern software integrates directly."
+            "<bookmark mark='a'/> Put a random effect inside Part 24's logistic regression: each school shifts the "
+            "log odds of passing by its own amount. <bookmark mark='b'/> The likelihood averages each school's "
+            "probability of its pupils' results over the distribution of its effect, <bookmark mark='c'/> and unlike "
+            "the linear case the integral has no closed form, one for every school. <bookmark mark='d'/> Norman "
+            "Breslow and David Clayton's penalized quasi-likelihood of 1993 linearizes and iterates, but it can be "
+            "substantially biased for binary data with small clusters; the direction need not be the same for every "
+            "parameter, so modern software integrates directly."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -54,8 +59,9 @@ class GLMM(VoiceoverScene):
         eta0, n_, k_, s = 0.5, 4, 4, 1.5
         u = np.linspace(-3, 3, 400)
         logh = k_ * (eta0 + u) - n_ * np.logaddexp(0, eta0 + u) - 0.5 * u ** 2 / s ** 2
-        mode = u[np.argmax(logh)]
-        h = np.exp(logh - logh.max())
+        mode = optimize.brentq(lambda a: k_ - n_ * special.expit(eta0+a) - a/s**2, -n_*s**2, n_*s**2)
+        peak = k_*(eta0+mode)-n_*np.logaddexp(0,eta0+mode)-0.5*mode**2/s**2
+        h = np.exp(logh - peak)
         p = special.expit(eta0 + mode)
         curv = n_ * p * (1 - p) + 1 / s ** 2
         lap = np.exp(-0.5 * curv * (u - mode) ** 2)
@@ -63,7 +69,7 @@ class GLMM(VoiceoverScene):
         c_lap = curve(ax, u, lap, SHRUNK, 2.5)
         xs, ws = np.polynomial.hermite.hermgauss(5)
         nodes = mode + np.sqrt(2 / curv) * xs
-        hv = np.exp(k_ * (eta0 + nodes) - n_ * np.logaddexp(0, eta0 + nodes) - 0.5 * nodes ** 2 / s ** 2 - logh.max())
+        hv = np.exp(k_ * (eta0 + nodes) - n_ * np.logaddexp(0, eta0 + nodes) - 0.5 * nodes ** 2 / s ** 2 - peak)
         sticks = VGroup(*[Line(ax.c2p(a, 0), ax.c2p(a, b), color=PATH, stroke_width=4) for a, b in zip(nodes, hv) if -3 <= a <= 3])
         rows = fit_rows(VGroup(
             label(r"gold: \ one school's integrand", font_size=22, color=TRUE),
@@ -72,13 +78,14 @@ class GLMM(VoiceoverScene):
             label(r"a small school: \ 4 pupils, \ all passed", font_size=22, color=GREY_A),
         ), 4.4, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Each school's integrand is a bump in its random effect; here a small school of four pupils "
-            "who all passed, whose bump is lopsided. <bookmark mark='b'/> The Laplace "
-            "approximation of Part 22 replaces it with a normal curve at its peak, matched in curvature, and integrates that "
-            "exactly. <bookmark mark='c'/> Adaptive Gauss–Hermite quadrature, from José Pinheiro and Douglas Bates, places a "
+            "<bookmark mark='a'/> Each school's integrand is a bump in its random effect; here a small school of four"
+            " pupils who all passed, whose bump is lopsided. <bookmark mark='b'/> The Laplace approximation of Part "
+            "22 replaces it with a normal curve at its peak, matched in curvature, and integrates that exactly. "
+            "<bookmark mark='c'/> Adaptive Gauss–Hermite quadrature, from José Pinheiro and Douglas Bates, places a "
             "few nodes around the same peak with the same scale, and adds up the integrand at them with weights. "
-            "<bookmark mark='d'/> With one node it is the Laplace approximation; with ten, for one random effect, it is exact "
-            "for any practical purpose."
+            "<bookmark mark='d'/> With one node it is the Laplace approximation; increasing the node count improves "
+            "the approximation only when numerical checks confirm stability. Ten nodes are not a universal accuracy "
+            "guarantee."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
@@ -147,15 +154,16 @@ class GLMM(VoiceoverScene):
             label(rf"observed: \ {b1:.3f} / {d['gee'][1]:.3f} = {d['ratio']:.3f}", font_size=22, color=HIT),
         ), 4.4, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The mixed model's coefficients are conditional: they describe a pupil's odds within a "
-            "given school. Each grey curve is a school. <bookmark mark='b'/> Green is the typical school. "
-            "<bookmark mark='c'/> Averaging the curves over all schools gives the yellow curve, the population-averaged "
-            "probability that GEE estimates, and an average of steep logistic curves is a flatter one; the picture uses a "
-            "large school spread to make the flattening visible. "
-            "<bookmark mark='d'/> Its slope is smaller by about the square root of one plus point three four six times the "
-            "school variance, a result of Scott Zeger, Kung-Yee Liang and Paul Albert. <bookmark mark='e'/> Predicted one "
-            "point oh eight three; observed one point oh eight two. A parent choosing a school wants the conditional effect; "
-            "a ministry weighing a national policy may want the marginal one."
+            "<bookmark mark='a'/> The mixed model's coefficients are conditional: they describe a pupil's odds within"
+            " a given school. Each grey curve is a school. <bookmark mark='b'/> Green is the typical school. "
+            "<bookmark mark='c'/> Averaging the curves over all schools gives the yellow curve, a population-averaged"
+            " probability. GEE fits a working marginal mean; a logistic-normal mixture need not be exactly logistic, "
+            "and an average of steep logistic curves is a flatter one; the picture uses a large school spread to make"
+            " the flattening visible. <bookmark mark='d'/> Its slope is smaller by about the square root of one plus "
+            "point three four six times the school variance, a result of Scott Zeger, Kung-Yee Liang and Paul Albert."
+            " <bookmark mark='e'/> The predicted and observed ratios happen to be close here. Noncollapsibility, "
+            "mean-model approximation and different working targets all matter; this is not an exact conversion or a "
+            "causal policy effect."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
@@ -189,18 +197,20 @@ class GLMM(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"the World's 60 hospitals: \ deaths after one operation", font_size=22),
             label(rf"gold: \ the average, \ {100 * pbar:.1f}\%", font_size=22, color=TRUE),
-            label(r"grey: \ 95\% and 99.8\% limits for an average hospital", font_size=22, color=GREY_A),
+            label(r"grey: \ approximate normal 95\% and 99.8\% limits", font_size=22, color=GREY_A),
             label(r"red: \ the five `worst' by raw rate", font_size=22, color=RES),
             label(r"the top two: \ 19 operations each, \ 3 and 2 deaths", font_size=22, color=RES),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Shrinkage matters most where rankings carry consequences. The World's sixty hospitals each "
-            "perform an operation between seventeen and nearly nine hundred times a year, and newspapers rank them by "
-            "death rate. <bookmark mark='b'/> The average is four point one percent. <bookmark mark='c'/> David Spiegelhalter's funnel "
-            "plot draws the range an average hospital would show by chance, wide for small hospitals and narrow for large "
-            "ones. <bookmark mark='d'/> The five worst hospitals by raw rate, in red, <bookmark mark='e'/> are led by two "
-            "tiny ones, nineteen operations each, where three deaths make a rate of sixteen percent and two make eleven. "
-            "Both sit inside the outer funnel: chance alone could do it."
+            "<bookmark mark='a'/> Shrinkage matters most where rankings carry consequences. The World's sixty "
+            "hospitals each perform an operation between seventeen and nearly nine hundred times a year, and "
+            "newspapers rank them by death rate. <bookmark mark='b'/> The average is four point one percent. "
+            "<bookmark mark='c'/> David Spiegelhalter's funnel plot draws the range an average hospital would show by"
+            " chance, wide for small hospitals and narrow for large ones. <bookmark mark='d'/> The five worst "
+            "hospitals by raw rate, in red, <bookmark mark='e'/> are led by two tiny ones, nineteen operations each, "
+            "where three deaths make a rate of sixteen percent and two make eleven. Both sit inside the outer funnel:"
+            " the normal reference is compatible with chance. It is only an approximation, especially for such small "
+            "expected counts."
         ) as vo:
             self.add(simulated_tag())
             self.play(FadeIn(A))
@@ -242,14 +252,17 @@ class GLMM(VoiceoverScene):
             label(rf"rank correlation with the truth: \ raw {d['rank_raw']:.2f}, \ shrunk {d['rank_shrunk']:.2f}", font_size=22, color=RES),
         ), 12.0, 0.22, [0, -2.2, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Fit a random-intercept logistic model with no predictors and rank the hospitals by their "
-            "shrunk rates. <bookmark mark='b'/> The raw table's five worst include one hospital truly among the ten worst; "
-            "the shrunk table's include two, and every one of its five has at least two hundred operations, where a high "
-            "rate is evidence. The tiny hospitals drop out: two deaths in nineteen operations is not evidence of a bad "
-            "hospital, only of a small one. <bookmark mark='c'/> Over all sixty, the shrunk rates are seven times closer "
-            "to the truth in mean squared error. <bookmark mark='d'/> But look at the ranks: even shrunk, their correlation "
-            "with the true ranking is only point three eight. With true differences this small, a league table is mostly "
-            "noise, as Harvey Goldstein and David Spiegelhalter warned in 1996; report intervals for ranks, not ranks."
+            "<bookmark mark='a'/> Fit a random-intercept logistic model with no predictors and rank the hospitals by "
+            "their shrunk rates. <bookmark mark='b'/> The raw table's five worst include one hospital truly among the"
+            " ten worst; the shrunk table's include two, and every one of its five has at least two hundred "
+            "operations, where a high rate is evidence. The tiny hospitals drop out: two deaths in nineteen "
+            "operations is not evidence of a bad hospital by itself: small samples are noisy, and these results do "
+            "not rule out a truly high underlying risk. <bookmark mark='c'/> Over all sixty, these rates, obtained by"
+            " transforming conditional modes rather than posterior mean probabilities, are about seven times closer "
+            "to the truth in mean squared error. <bookmark mark='d'/> But look at the ranks: even shrunk, their "
+            "correlation with the true ranking is only point three eight. With true differences this small, a league "
+            "table is mostly noise, as Harvey Goldstein and David Spiegelhalter warned in 1996; report intervals for "
+            "ranks, not ranks."
         ) as vo:
             self.add(simulated_tag())
             vo.wait_until("a")

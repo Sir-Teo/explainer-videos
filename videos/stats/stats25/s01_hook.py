@@ -57,11 +57,12 @@ class Hook(VoiceoverScene):
             label(r"the extremes came back towards the middle", font_size=22, color=GREY_A),
         ), 12.0, 0.22, [0, -2.9, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Here are all eighteen early averages, from Clemente's point four oh oh down to Max Alvis's "
-            "point one five six. <bookmark mark='b'/> And here is what each player actually hit over the rest of the season, "
-            "between seventy and nearly six hundred more at-bats. <bookmark mark='c'/> The truths are bunched far more "
-            "tightly: the hot starts cooled and the cold starts warmed. Forty-five at-bats is a small sample, and the "
-            "spread of the early averages is mostly luck."
+            "<bookmark mark='a'/> Here are all eighteen early averages, from Clemente's point four oh oh down to Max "
+            "Alvis's point one five six. <bookmark mark='b'/> And here is what each player actually hit over the rest"
+            " of the season, between seventy and nearly six hundred more at-bats. <bookmark mark='c'/> The held-out "
+            "season averages, themselves noisy, are bunched more tightly: the hot starts cooled and the cold starts "
+            "warmed. Forty-five at-bats is a small sample, and sampling noise contributes substantially to their "
+            "spread."
         ) as vo:
             self.add(baseball_tag())
             self.play(FadeIn(P.lines[0]), FadeIn(P.names[0]), FadeIn(P.ticks))
@@ -77,18 +78,19 @@ class Hook(VoiceoverScene):
     def shrink(self):
         d = load("baseball")
         P = baseball_plot(d)
-        gl = DashedLine([P.x_of(d["grand"]), 2.2, 0], [P.x_of(d["grand"]), -1.6, 0], color=GREY_B, stroke_width=1.5)
+        gl = DashedLine([P.x_of(d["target"]), 2.2, 0], [P.x_of(d["target"]), -1.6, 0], color=GREY_B, stroke_width=1.5)
         rows = fit_rows(VGroup(
-            label(rf"grand average: \ {d['grand']:.3f}", font_size=22, color=GREY_B),
-            label(rf"James--Stein keeps {100 * (1 - d['B']):.0f}\% of each player's distance from it", font_size=22, color=SHRUNK),
+            label(rf"back-transformed target: \ {d['grand']:.3f}", font_size=22, color=GREY_B),
+            label(rf"James--Stein keeps {100 * (1 - d['B']):.0f}\% of each transformed-scale distance", font_size=22, color=SHRUNK),
             label(r"the amount is learned from the data", font_size=22, color=GREY_A),
         ), 12.0, 0.22, [0, -2.9, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Efron and Morris instead used the James–Stein estimator. Find the grand average of all "
-            "eighteen players, point two six five. <bookmark mark='b'/> Then move every player towards it, keeping only "
-            "about a fifth of his distance from the average. <bookmark mark='c'/> How far to move them is not chosen by "
-            "hand: it is estimated from how spread out the eighteen early averages are, compared with how spread out they "
-            "would be from luck alone."
+            "<bookmark mark='a'/> Our calculation first uses an arcsine transformation, with approximately unit "
+            "sampling variance, and targets its grand mean. The dashed line is that target transformed back to "
+            "batting averages. <bookmark mark='b'/> James–Stein retains about a fifth of each distance on the "
+            "transformed scale, before we transform back. <bookmark mark='c'/> The amount is estimated from the "
+            "spread of these eighteen observations. The normal-theory guarantee is approximate for these binomial "
+            "data; the next plot evaluates held-out prediction directly."
         ) as vo:
             self.add(baseball_tag())
             self.play(FadeIn(P.lines[0]), FadeIn(P.names[0]), FadeIn(P.raw), FadeIn(P.ticks))
@@ -127,20 +129,25 @@ class Hook(VoiceoverScene):
         rows = [
             cmath(r"\text{each } \theta_i", r":", r"\text{its own player, \ its own data}", font_size=30),
             cmath(r"\text{yet}", r":", r"\text{estimate each using all the others}", font_size=30),
-            cmath(r"\text{Stein (1956)}", r":", r"\text{for 3 or more, \ the separate means are inadmissible}", font_size=30),
-            cmath(r"\text{the resolution}", r":", r"\text{they come from one population: \ borrow strength}", font_size=28),
+            cmath(r"\text{Stein (1956)}", r":", r"\text{known equal-variance normal means; \ total risk; \ }p\ge3", font_size=30),
+            cmath(r"\text{the resolution}", r":", r"\text{uniform risk theorem; \ a population interpretation helps}", font_size=28),
         ]
         rows[2][-1].set_color(RES)
         whys = [why(r"Clemente's average is about Clemente"), why(r"Alvis's hits change Clemente's estimate"),
                 why(r"a better estimator exists, \ always"), why(r"Part 26: \ hierarchical models")]
+        intro = label('Joint risk improvement does not require identical underlying means', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> It sounds paradoxical. Each player's true ability is about that player alone, and his own "
-            "hits are the direct evidence. <bookmark mark='b'/> Yet the best estimate of Clemente's ability uses Max Alvis's "
-            "hits too. <bookmark mark='c'/> Charles Stein proved in 1956 that with three or more means to estimate, the "
-            "separate sample means are inadmissible: something always does better in total squared error. "
-            "<bookmark mark='d'/> The resolution is that the players come from one population, and the population tells us "
-            "how much an extreme early average is luck. That is the idea of this part: borrowing strength."
+            "<bookmark mark='a'/> It sounds paradoxical. Each player's true ability is about that player alone, and "
+            "his own hits are the direct evidence. <bookmark mark='b'/> Yet a joint estimate of Clemente's ability "
+            "uses Max Alvis's hits too. <bookmark mark='c'/> For independent normal observations with known equal "
+            "variance and at least three means, Stein proved the separate estimates inadmissible under expected total"
+            " squared error. <bookmark mark='d'/> The theorem holds for every fixed vector of means; it does not "
+            "require a common population. A population model gives a useful interpretation of borrowing strength in "
+            "this baseball example. That is the idea of this part: borrowing strength."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -159,11 +166,12 @@ class Hook(VoiceoverScene):
         prereq = note(r"prerequisites: \ Parts 15, \ 22 and 23").to_corner(DL, buff=0.3)
         built = note(r"built: \ \texttt{statkit.shrink}, \ \texttt{statkit.mixed}; \ the shrinkage plot").to_corner(DR, buff=0.3)
         with self.voiceover(
-            "<bookmark mark='a'/> Part twenty-five: borrowing strength. <bookmark mark='b'/> We'll prove James–Stein's "
-            "advantage and estimate its risk; see it as empirical Bayes; meet random effects and the linear mixed model with "
-            "its best linear unbiased predictors; compare maximum likelihood with REML; do inference, including tests on "
-            "the boundary; model growth curves and nested and crossed designs; decide between fixed and random effects; fit "
-            "mixed models for binary outcomes and rank hospitals fairly; and apply all of it to small areas, meta-analysis and educational testing."
+            "<bookmark mark='a'/> Part twenty-five: borrowing strength. <bookmark mark='b'/> We'll prove "
+            "James–Stein's advantage and estimate its risk; see it as empirical Bayes; meet random effects and the "
+            "linear mixed model with its best linear unbiased predictors; compare maximum likelihood with REML; do "
+            "inference, including tests on the boundary; model growth curves and nested and crossed designs; decide "
+            "between fixed and random effects; fit mixed models for binary outcomes and study noisy hospital "
+            "rankings; and apply all of it to small areas, meta-analysis and educational testing."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head, shift=UP * 0.2))

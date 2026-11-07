@@ -26,7 +26,7 @@ class SmallArea(VoiceoverScene):
         ok = np.asarray(d["ok"], bool)
         rows = fit_rows(VGroup(
             label(r"a survey of 2,000 of the World's adults: \ mean income in each of 200 towns?", font_size=24),
-            label(rf"respondents per town: \ median {np.median(n_t[ok]):.0f}; \ {int(np.sum(n_t == 0))} towns with none, \ "
+            label(rf"eligible towns ($n_t\ge2$): \ median respondents {np.median(n_t[ok]):.0f}; \ {int(np.sum(n_t == 0))} towns with none, \ "
                   rf"{int(np.sum(n_t == 1))} with one", font_size=24, color=RES),
             label(rf"direct estimates range from {np.nanmin(np.asarray(d['direct'], float)):.0f} to "
                   rf"{np.nanmax(np.asarray(d['direct'], float)):.0f} thousand", font_size=24, color=RAW),
@@ -56,17 +56,24 @@ class SmallArea(VoiceoverScene):
             cmath(r"\mathrm{MSE}(\tilde\theta_t)", r"\approx", r"\gamma_t D_t + \text{terms for } \hat\beta, \ \hat A", font_size=28),
         ]
         rows[2][2].set_color(SHRUNK)
-        whys = [why(r"the sampling model: \ a known variance"), why(r"the linking model: \ the town's region"),
+        whys = [why(r"working Gaussian model; \ pooled variance estimated"), why(r"the linking model: \ the town's region"),
                 why(r"the EBLUP: \ direct and synthetic, \ weighted"), why(r"Prasad \& Rao (1990)")]
+        intro = label('A working probability model states the assumptions behind shrinkage', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Fay and Herriot's model works with the town means themselves. Each direct estimate is the "
-            "truth plus sampling error with a variance we can estimate, smaller for towns with more respondents. "
-            "<bookmark mark='b'/> The true means follow a regression on what is known about every town, here its region, "
-            "plus a town effect with variance A. <bookmark mark='c'/> The result is James–Stein once more: each town's "
-            "estimate is a weighted average of its own direct estimate and the regression's synthetic prediction, with "
-            "weight gamma, A over A plus the town's sampling variance. <bookmark mark='d'/> N. G. N. Prasad and J. N. K. Rao "
-            "derived its mean squared error, including the cost of estimating beta and A."
+            "<bookmark mark='a'/> Fay and Herriot's model works with the town means themselves. Each direct estimate "
+            "is the truth plus sampling error with a variance we can estimate, smaller for towns with more "
+            "respondents. <bookmark mark='b'/> The true means follow a regression on what is known about every town, "
+            "here its region, plus a town effect with variance A. <bookmark mark='c'/> The result is James–Stein once"
+            " more: each town's estimate is a weighted average of its own direct estimate and the regression's "
+            "synthetic prediction, with weight gamma, A over A plus the town's sampling variance. <bookmark "
+            "mark='d'/> N. G. N. Prasad and J. N. K. Rao derived an approximate MSE including estimation of beta and "
+            "A, treating the sampling variances as known. Here those variances are estimated from pooled incomes, "
+            "requiring further allowance; normality is also a working approximation for towns with only two "
+            "respondents."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -81,13 +88,15 @@ class SmallArea(VoiceoverScene):
         de = np.asarray(d["direct"], float) - tr
         ee = np.asarray(d["eblup"], float) - tr
         x = np.log2(n_t[ok])
-        A = axes([0.8, 9], [-45, 75], x_length=7.4, y_length=4.6, xlabel=r"respondents in the town \ (log scale)",
+        lo = float(10*np.floor(min(-45., np.nanmin(de[ok]), np.nanmin(ee[ok]))/10))
+        hi = float(10*np.ceil(max(75., np.nanmax(de[ok]), np.nanmax(ee[ok]))/10))
+        A = axes([0.8, 9], [lo, hi], x_length=7.4, y_length=4.6, xlabel=r"respondents in the town \ (log scale)",
                  ylabel=r"error, \ thousands", xticks=[1, 2, 3, 4, 5, 6, 7, 8], yticks=[-40, 0, 40],
                  xfmt=lambda v: f"{2 ** v:.0f}", center=[-2.0, 0.3, 0])
         ax = A.ax
         g = np.random.Generator(np.random.PCG64(11))
         jit = 0.12 * (g.random(ok.sum()) - 0.5)
-        dd = VGroup(*[Dot(ax.c2p(a + j, np.clip(b, -45, 75)), radius=0.045, color=RAW, fill_opacity=0.75) for a, j, b in zip(x, jit, de[ok])])
+        dd = VGroup(*[Dot(ax.c2p(a + j, b), radius=0.045, color=RAW, fill_opacity=0.75) for a, j, b in zip(x, jit, de[ok])])
         ed = VGroup(*[Dot(ax.c2p(a + j, b), radius=0.045, color=SHRUNK, fill_opacity=0.9) for a, j, b in zip(x, jit, ee[ok])])
         zero = DashedLine(ax.c2p(0.8, 0), ax.c2p(9, 0), color=TRUE, stroke_width=2)
         big = int(np.argmax(n_t))
@@ -130,17 +139,18 @@ class SmallArea(VoiceoverScene):
         tb.move_to([0, 0.9, 0])
         foot = fit_rows(VGroup(
             label(r"direct is nearly 20 times worse", font_size=22, color=RES),
-            label(r"here synthetic is as good: \ the regions explain the towns", font_size=22, color=POOLED),
+            label(r"single realization, eligible towns only: \ synthetic and EBLUP MSE close", font_size=22, color=POOLED),
             label(r"the EBLUP is the insurance: \ if a town is unusual and well sampled, \ it says so", font_size=22, color=HIT),
         ), 12.0, 0.22, [0, -1.8, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Against the World's true town means: <bookmark mark='b'/> the direct estimates have a mean "
-            "squared error of three hundred and eighty-three, nearly twenty times the others. <bookmark mark='c'/> The purely "
-            "synthetic regional prediction scores twenty point one, and the Fay–Herriot EBLUP twenty point six, the same "
-            "within noise. Here the regions explain the towns well, so there is little left to learn from a town's own few "
-            "respondents. <bookmark mark='d'/> The EBLUP is insurance: when a town is unusual and well sampled, it follows "
-            "the town's own data, which a synthetic estimate never can. And because it is data-driven, the same formula "
-            "decides how much to trust each town."
+            "<bookmark mark='a'/> Against the World's true town means: <bookmark mark='b'/> the direct estimates have"
+            " a mean squared error of three hundred and eighty-three, nearly twenty times the others. <bookmark "
+            "mark='c'/> The purely synthetic regional prediction scores twenty point one, and the Fay–Herriot EBLUP "
+            "twenty point six, close in this single realization. We have not computed uncertainty for this MSE "
+            "comparison. Here the regions explain the towns well, so there is little left to learn from a town's own "
+            "few respondents. <bookmark mark='d'/> The EBLUP is insurance: when a town is unusual and well sampled, "
+            "it follows the town's own data, which a synthetic estimate never can. And because it is data-driven, the"
+            " same formula decides how much to trust each town."
         ) as vo:
             self.add(simulated_tag())
             vo.wait_until("a")
@@ -155,20 +165,22 @@ class SmallArea(VoiceoverScene):
 
     def practice(self):
         rows = fit_rows(VGroup(
-            label(r"the US Census Bureau's SAIPE: \ income and poverty for every state and county", font_size=24, color=PATH),
+            label(r"SAIPE: \ a family of small-area methods, \ not one identical model", font_size=24, color=PATH),
             label(r"linking covariates: \ tax records, \ benefit counts, \ the last census", font_size=24),
-            label(r"benchmarking: \ make the towns add up to the direct national total", font_size=24),
+            label(r"benchmarking: \ population-weighted means match a national total", font_size=24),
             label(r"unit-level models: \ Battese, Harter \& Fuller (1988), \ individuals, \ not area means", font_size=24),
             label(r"Part 18's surveys, \ plus Part 25's shrinkage", font_size=24, color=HIT),
         ), 12.4, 0.5, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> This is how official statistics are made locally. The US Census Bureau's small-area income "
-            "and poverty estimates for every state and county, which feed the allocation of federal school funding, are "
-            "built on Fay–Herriot models. <bookmark mark='b'/> Their linking covariates are tax records, benefit counts and the last census. "
-            "<bookmark mark='c'/> The estimates are usually benchmarked so that they add up to the reliable national total. "
-            "<bookmark mark='d'/> George Battese, Rachel Harter and Wayne Fuller's unit-level version models individuals "
-            "rather than area means, as this part's mixed models do. <bookmark mark='e'/> It is Part 18's survey sampling, "
-            "joined to this part's shrinkage."
+            "<bookmark mark='a'/> This is how official statistics are made locally. The US Census Bureau's small-area"
+            " income and poverty estimates for every state and county, which feed the allocation of federal school "
+            "funding, use a family of small-area methods related to this framework. State, county and school-district"
+            " estimates do not all use one identical Fay–Herriot model. <bookmark mark='b'/> Their linking covariates"
+            " are tax records, benefit counts and the last census. <bookmark mark='c'/> Benchmarking can constrain "
+            "population-weighted area means to a reliable national total; simply adding unweighted town means would "
+            "not give that total. <bookmark mark='d'/> George Battese, Rachel Harter and Wayne Fuller's unit-level "
+            "version models individuals rather than area means, as this part's mixed models do. <bookmark mark='e'/> "
+            "It is Part 18's survey sampling, joined to this part's shrinkage."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

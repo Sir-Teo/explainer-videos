@@ -7,7 +7,7 @@ import numpy as np
 from explainer.stats import *  # noqa: F403
 from explainer.stats import museum  # noqa: F401
 
-from .compute import load  # noqa: F401
+from .compute import load, clipped_segments  # noqa: F401
 
 PART = 25
 
@@ -20,10 +20,13 @@ REJ = S.RESID  # the rejection region
 OBS = S.ACCENT  # the observed statistic
 
 
-def polyline(ax, xs, ys, color, stroke_width=2.5, opacity=1.0) -> VMobject:
-    m = VMobject(stroke_color=color, stroke_width=stroke_width, stroke_opacity=opacity)
-    m.set_points_as_corners([ax.c2p(a, b) for a, b in zip(xs, ys)])
-    return m
+def polyline(ax, xs, ys, color, stroke_width=2.5, opacity=1.0):
+    return VGroup(*[Line(ax.c2p(*p), ax.c2p(*q), color=color, stroke_width=stroke_width,
+                        stroke_opacity=opacity) for p,q in clipped_segments(xs,ys,bounds(ax))])
+
+
+def curve(ax, xs, ys, color, stroke_width=3):
+    return polyline(ax,xs,ys,color,stroke_width)
 
 
 def fit_rows(rows: VGroup, width: float, buff: float, pos) -> VGroup:
@@ -35,13 +38,11 @@ def fit_rows(rows: VGroup, width: float, buff: float, pos) -> VGroup:
 
 
 def clip_curve(ax, xs, ys, color, stroke_width=3, ymin=None, ymax=None):
-    xs, ys = np.asarray(xs, float), np.asarray(ys, float)
-    keep = np.isfinite(ys)
-    if ymin is not None:
-        keep &= ys >= ymin
-    if ymax is not None:
-        keep &= ys <= ymax
-    return curve(ax, xs[keep], ys[keep], color, stroke_width)
+    rectangle=list(bounds(ax))
+    if ymin is not None: rectangle[2]=max(rectangle[2],ymin)
+    if ymax is not None: rectangle[3]=min(rectangle[3],ymax)
+    return VGroup(*[Line(ax.c2p(*p), ax.c2p(*q), color=color, stroke_width=stroke_width)
+                    for p,q in clipped_segments(xs,ys,rectangle)])
 
 
 def shade(ax, xs, ys, color, opacity=0.35):
@@ -69,11 +70,13 @@ HIT, MISS = S.KEPT, S.BROKEN
 
 
 def scatter(ax, xs, ys, color=None, radius=0.06, opacity=0.9):
-    return VGroup(*[Dot(ax.c2p(a, b), radius=radius, color=color or DATA, fill_opacity=opacity) for a, b in zip(xs, ys)])
+    xmin,xmax,ymin,ymax=bounds(ax)
+    return VGroup(*[Dot(ax.c2p(a,b),radius=radius,color=color or DATA,fill_opacity=opacity)
+                    for a,b in zip(xs,ys) if xmin<=a<=xmax and ymin<=b<=ymax])
 
 
 def fit_line(ax, a, b, x0, x1, color=None, stroke_width=4):
-    return Line(ax.c2p(x0, a + b * x0), ax.c2p(x1, a + b * x1), color=color or FIT, stroke_width=stroke_width)
+    return polyline(ax,[x0,x1],[a+b*x0,a+b*x1],color or FIT,stroke_width)
 
 # treatments: one colour each, in the order of their letters
 TRT = [S.CTRL, S.TREAT, S.ALT, S.PRIOR, S.POST]
@@ -140,10 +143,7 @@ FC = S.EST  # forecasts and their intervals
 
 
 def series_line(ax, t, y, color=None, stroke_width=2.5, opacity=1.0):
-    """A time series as a polyline on ``ax`` (NaNs skipped)."""
-    t, y = np.asarray(t, float), np.asarray(y, float)
-    k = np.isfinite(y)
-    return polyline(ax, t[k], y[k], color or SERIES, stroke_width, opacity)
+    return polyline(ax,t,y,color or SERIES,stroke_width,opacity)
 
 
 def band(ax, t, lo, hi, color, opacity=0.25):

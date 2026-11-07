@@ -1,0 +1,107 @@
+{
+  "items": [
+    {
+      "item": "baseball",
+      "path": ".cache/stats25/baseball.json",
+      "bytes": 1784,
+      "sha256": "6c58367f3f2d72a0e59a3e875ba72ee06b45d7cd45fb8fd077c483817ed581fd"
+    },
+    {
+      "item": "risk",
+      "path": ".cache/stats25/risk.json",
+      "bytes": 3196,
+      "sha256": "f9e1096d83c8bc57c81835c87ef7eb6daf458748ffe9536bf084bcb8d05805e5"
+    },
+    {
+      "item": "winners",
+      "path": ".cache/stats25/winners.json",
+      "bytes": 47665,
+      "sha256": "2c5526ac5a5e21c5ca94dd3c73a3d16449bc999fdaa7dcf868d99c12e34c3791"
+    },
+    {
+      "item": "components",
+      "path": ".cache/stats25/components.json",
+      "bytes": 21262,
+      "sha256": "0d81c189d715a0e37f5e1a1eb7174910e844b91325589a4f4b7f02ee09e1aef6"
+    },
+    {
+      "item": "blup",
+      "path": ".cache/stats25/blup.json",
+      "bytes": 4284,
+      "sha256": "66d77d8de80277e7babcded7e3191fd1baa0716182acf1b04171ceed90f43303"
+    },
+    {
+      "item": "remlml",
+      "path": ".cache/stats25/remlml.json",
+      "bytes": 427,
+      "sha256": "8281cd3e19279021f10bbb2c6518ab841fd8b40765917e7cbd91d414858349d2"
+    },
+    {
+      "item": "boundary",
+      "path": ".cache/stats25/boundary.json",
+      "bytes": 13701,
+      "sha256": "a04b1a1dfd7e6718234bf160a07c1b468085d0e54e17709f5fc4d34c96b61ceb"
+    },
+    {
+      "item": "growth",
+      "path": ".cache/stats25/growth.json",
+      "bytes": 14689,
+      "sha256": "5c415957f01f3e58348e0ea98308eb1477cc50f08b9ec634b62de815f5b0b782"
+    },
+    {
+      "item": "nested",
+      "path": ".cache/stats25/nested.json",
+      "bytes": 266,
+      "sha256": "90a03ec1a01fd4624654c6557480cde40c2210137649e971d07eed7343c79d06"
+    },
+    {
+      "item": "crossed",
+      "path": ".cache/stats25/crossed.json",
+      "bytes": 10171,
+      "sha256": "f22e4aff5139307242276778afd10697581ecb537f96256912fe957cad07dee4"
+    },
+    {
+      "item": "league",
+      "path": ".cache/stats25/league.json",
+      "bytes": 5493,
+      "sha256": "4c2b9ba4ca95c404c79185347d80e7e66feaaa7d7504555f36c19630a3db27f0"
+    },
+    {
+      "item": "mundlak",
+      "path": ".cache/stats25/mundlak.json",
+      "bytes": 38737,
+      "sha256": "13b86617c6a3d146d59fd99b89fb47a124feb835e357c8d8b04cbd78ae58066a"
+    },
+    {
+      "item": "glmm",
+      "path": ".cache/stats25/glmm.json",
+      "bytes": 2932,
+      "sha256": "aa292fbba2e960017715ab82e6bb1522cb86526dfa1d9f98f9b1c30ea0a29048"
+    },
+    {
+      "item": "smallarea",
+      "path": ".cache/stats25/smallarea.json",
+      "bytes": 27635,
+      "sha256": "e5f11057d5122a327fd7abe4b3a28ce846e4c9aab7b9db139cd45faae8ba5a3b"
+    },
+    {
+      "item": "meta",
+      "path": ".cache/stats25/meta.json",
+      "bytes": 667,
+      "sha256": "110072135d20f48a3dd8bc87ff8293b3fdbec32bd8217d436e9270a648b26a81"
+    },
+    {
+      "item": "rasch",
+      "path": ".cache/stats25/rasch.json",
+      "bytes": 11737,
+      "sha256": "be5d6ac8ea167be4458d185d94b45352041ac9f00e921b4220612d209407768a"
+    },
+    {
+      "item": "board",
+      "path": ".cache/stats25/board.json",
+      "bytes": 1163,
+      "sha256": "e2b60be4fc906e7dc285c2efdd3780f6c616f69d8cbacc62b278d2e8111bca9f"
+    }
+  ],
+  "scene_imports": 15
+}

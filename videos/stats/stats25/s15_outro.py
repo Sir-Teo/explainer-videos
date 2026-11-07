@@ -7,8 +7,8 @@ PROBLEMS = [
     r"Show that $E\{(p - 2)/\|X\|^2\} = 1/(1 + \tau^2)$ when $X_i \sim N(0, 1 + \tau^2)$ independently, \ $p \ge 3$.",
     r"Random intercept: \ show that the BLUP is $\hat u_g = \lambda_g(\bar y_g - \bar x_g^\top\hat\beta)$, \ $\lambda_g = \tau^2/(\tau^2 + \sigma^2/n_g)$.",
     r"One sample: \ show that REML gives $\hat\sigma^2 = \sum(y_i - \bar y)^2/(n - 1)$.",
-    r"Show that under $\tau^2 = 0$ the LR statistic is $\tfrac12\chi^2_0 + \tfrac12\chi^2_1$ in large samples; \ what is the 5\% cut-off?",
-    r"Mundlak: \ show that adding $\bar x_g$ makes the coefficient of $x_{gi}$ equal the within estimator.",
+    r"For one variance with regular identifiable nuisance parameters and many groups, show that the limiting LR law at $\tau^2=0$ is $\tfrac12\chi^2_0 + \tfrac12\chi^2_1$ in large samples; \ what is the 5\% cut-off?",
+    r"Mundlak: \ under common within-group variance, show that adding all group predictor means gives the within slope.",
 ]
 
 
@@ -24,7 +24,7 @@ class Outro(VoiceoverScene):
         items = [
             (r"18 hitters: \ shrinking wins 3.5 to 1", PATH), (r"James--Stein dominates; \ SURE", SHRUNK),
             (r"empirical Bayes; \ Tweedie, \ the winner's curse", PRIOR), (r"variance components; \ ICC 0.18", SHRUNK),
-            (r"the LMM: \ GLS and Henderson's BLUPs", SHRUNK), (r"REML: \ unbiased with few groups", HIT),
+            (r"the LMM: \ GLS and Henderson's BLUPs", SHRUNK), (r"REML: \ adjusts for fitted fixed effects", HIT),
             (r"Satterthwaite 94\%; \ boundary mixtures", HIT), (r"growth curves: \ random slopes", SHRUNK),
             (r"nested and crossed: \ raters corrected", PATH), (r"Mundlak and Hausman", RES),
             (r"GLMMs; \ league tables shrunk", POOLED), (r"Fay--Herriot: \ 383 to 21", SHRUNK),
@@ -38,18 +38,20 @@ class Outro(VoiceoverScene):
         head = label(r"Part 25, \ in fourteen lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Part twenty-five in fourteen lines. <bookmark mark='a'/> Shrinking eighteen hitters' averages towards each "
-            "other cut the error three and a half times. James–Stein dominates the obvious estimator whenever there are "
-            "three or more means, and SURE estimates its risk. It is empirical Bayes, and Tweedie's formula corrects the "
-            "winner's curse without assuming a normal prior. Variance components split the World's scores: eighteen percent "
-            "between schools. The linear mixed model is GLS with an estimated covariance, and Henderson's equations give its "
-            "BLUPs. REML removes maximum likelihood's bias when groups are few. Satterthwaite's t restored coverage to "
-            "ninety-four percent, and tests of a zero variance need a fifty-fifty mixture. Random slopes model growth. "
-            "Nested and crossed effects corrected the essays for their raters. Mundlak's model and Hausman's test handle "
-            "school effects correlated with SES. Mixed logistic models give conditional effects, and shrunk league tables "
-            "find the truly bad hospitals. Fay–Herriot cut small-area error from three hundred and eighty-three to twenty-one. "
-            "Hartung–Knapp kept meta-analysis coverage at ninety-four percent. And an exam is a mixed model, Rasch's."
-        ) as vo:
+            "Part twenty-five in fourteen lines. <bookmark mark='a'/> Shrinking eighteen hitters' averages towards "
+            "each other cut the error three and a half times. For known equal-variance normal observations and at "
+            "least three means, James–Stein improves expected total risk, and SURE estimates its risk. It is "
+            "empirical Bayes, and Tweedie's formula corrects the winner's curse without assuming a normal prior. "
+            "Variance components split the World's scores: eighteen percent between schools. The linear mixed model "
+            "is GLS with an estimated covariance, and Henderson's equations give its BLUPs. REML adjusts for "
+            "estimated fixed effects and can reduce variance-component bias; it is not universally unbiased. "
+            "Satterthwaite's t restored coverage to ninety-four percent, and a regular one-component boundary test "
+            "uses a limiting fifty-fifty mixture. Random slopes model growth. Nested and crossed effects corrected "
+            "the essays for their raters. Mundlak's model and Hausman's test handle school effects correlated with "
+            "SES. Mixed logistic models give conditional effects, and shrinkage reduces rate error in this example "
+            "while the hospital rankings remain uncertain. Fay–Herriot cut small-area error from three hundred and "
+            "eighty-three to twenty-one. Hartung–Knapp kept meta-analysis coverage at ninety-four percent. And an "
+            "exam is a mixed model, Rasch's."       ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in rows], lag_ratio=0.5), run_time=40.0)
@@ -69,6 +71,7 @@ class Outro(VoiceoverScene):
             "data. Part 39's spatial models are random effects that vary smoothly over a map. Part 40's frailties are random "
             "effects in survival. And Part 45 proves the theory of admissibility that Stein's paradox began."
         ) as vo:
+            self.add(card.head)
             vo.wait_until("a")
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()

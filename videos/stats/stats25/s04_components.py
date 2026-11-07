@@ -30,6 +30,9 @@ class Components(VoiceoverScene):
         rows[3][2].set_color(SHRUNK)
         whys = [why(r"a school effect and a pupil effect"), why(r"the schools are a sample from a population"),
                 why(r"Fisher (1918): \ variance components"), why(r"the intraclass correlation")]
+        intro = label('A working probability model states the assumptions behind shrinkage', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> The simplest model with a random effect: each pupil's score is an overall mean, plus a "
             "school effect shared by everyone in the school, plus the pupil's own deviation. <bookmark mark='b'/> The school "
@@ -38,6 +41,7 @@ class Components(VoiceoverScene):
             "the inheritance of human traits. <bookmark mark='d'/> Their ratio is the intraclass correlation: the "
             "correlation between two pupils of the same school, Part 23's rho."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -89,15 +93,19 @@ class Components(VoiceoverScene):
         rows[2][2].set_color(SHRUNK)
         whys = [why(rf"all {d['n']:,} pupils in 400 schools, \ REML"), why(r"pupils within schools"),
                 why(r"18\% of the variance lies between schools"), why(r"SES differs between schools too")]
+        intro = label('Intercept-only components include intake and programme variation', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Fit the model to all twenty-four thousand pupils in the World's four hundred schools. The "
-            "variance between schools is about seventeen hundred, a standard deviation of forty-two points. "
-            "<bookmark mark='b'/> The variance within schools is about seventy-nine hundred, a standard deviation of "
-            "eighty-nine. <bookmark mark='c'/> So eighteen percent of the variation in scores lies between schools. "
-            "<bookmark mark='d'/> The World built school effects with a standard deviation of thirty-five; the rest of the "
-            "between-school variance comes from differences in the pupils' home backgrounds, which this model hasn't yet "
-            "accounted for."
+            "<bookmark mark='a'/> Fit the model to all twenty-four thousand pupils in the World's four hundred "
+            "schools. The variance between schools is about seventeen hundred, a standard deviation of forty-two "
+            "points. <bookmark mark='b'/> The variance within schools is about seventy-nine hundred, a standard "
+            "deviation of eighty-nine. <bookmark mark='c'/> So eighteen percent of the variation in scores lies "
+            "between schools. <bookmark mark='d'/> The World built school effects with a standard deviation of "
+            "thirty-five; the intercept-only fitted component also includes differences in intake and programme "
+            "assignment. It is a descriptive component, not an estimate of only the built-in school disturbance."
         ) as vo:
+            self.add(intro)
             self.add(simulated_tag())
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -108,23 +116,27 @@ class Components(VoiceoverScene):
     def deff(self):
         d = load("components")
         rows = [
-            cmath(r"\mathrm{Var}(\bar y)", r"=", r"\dfrac{\sigma^2 + \tau^2}{n}\{1 + (\bar m - 1)\rho\}", font_size=30),
-            cmath(r"\text{design effect}", r"=", rf"1 + ({d['m_bar']:.1f} - 1) \times {d['icc']:.3f} = {d['deff']:.1f}", font_size=30),
+            cmath(r"\mathrm{Var}(\bar y)", r"=", r"\dfrac{\sigma^2 + \tau^2}{n}\{1 + (m_* - 1)\rho\}", font_size=30),
+            cmath(r"\text{design effect}", r"=", rf"1 + ({d['m_star']:.1f} - 1) \times {d['icc']:.3f} = {d['deff']:.1f}", font_size=30),
             cmath(r"n_{\text{eff}}", r"=", rf"{d['n']:,} / {d['deff']:.1f} \approx {d['neff']:,.0f}", font_size=30),
             cmath(r"\text{lesson}", r":", r"\text{the number of schools limits what we learn about schools}", font_size=28),
         ]
         rows[2][2].set_color(RES)
-        whys = [why(r"Part 18's design effect, \ Part 23's Moulton"), why(r"60 pupils a school"),
-                why(r"24,000 pupils are worth about 2,000"), why(r"and a variance from few schools is shaky")]
+        whys = [why(r"Part 18's design effect, \ Part 23's Moulton"), why(r"$m_*=\sum_g m_g^2/\sum_g m_g$"),
+                why(r"information for this mean under this model"), why(r"and a variance from few schools is shaky")]
+        intro = label('Unequal school sizes change information for the overall pupil mean', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> The intraclass correlation also measures what clustering costs. The variance of the "
-            "overall mean is inflated by the design effect of Part 18, Part 23's Moulton factor: one plus the average "
-            "cluster size minus one times rho. <bookmark mark='b'/> With sixty pupils a school and rho of point one eight, "
-            "that's eleven point seven. <bookmark mark='c'/> Twenty-four thousand pupils carry the information of about two "
-            "thousand independent ones. <bookmark mark='d'/> And anything about schools themselves, like tau squared, is "
-            "learned from four hundred schools, not from twenty-four thousand pupils: chapter five shows how badly that "
-            "matters when the schools are few."
+            "<bookmark mark='a'/> For the unweighted pupil mean under a common-ICC model, unequal cluster sizes "
+            "matter. The exact design factor uses m star: the sum of squared school sizes divided by the total number"
+            " of pupils. It reduces to the common size when schools are equal. <bookmark mark='b'/> The display "
+            "substitutes the actual sizes and fitted ICC. <bookmark mark='c'/> The effective sample size shown "
+            "applies to this mean under that covariance model; it is not a universal information count for every "
+            "coefficient. <bookmark mark='d'/> A between-school variance is still learned from the four hundred "
+            "schools, which is why few-school inference needs care."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -141,6 +153,9 @@ class Components(VoiceoverScene):
         rows[2][2].set_color(SHRUNK)
         whys = [why(r"Part 13's one-way ANOVA"), why(r"group means carry both components"),
                 why(r"the method of moments: \ Fisher, \ Tippett, \ Daniels"), why(r"hence likelihood: \ chapters four and five")]
+        intro = label('Balanced random-intercept mean squares identify two variance components', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> The oldest estimates come from Part 13's analysis of variance. The mean square within "
             "groups estimates sigma squared. <bookmark mark='b'/> The mean square between groups estimates sigma squared plus "
@@ -149,6 +164,7 @@ class Components(VoiceoverScene):
             "can come out negative, and when groups have different sizes there are many competing versions. Likelihood "
             "methods, the next two chapters, resolve both."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
