@@ -103,7 +103,7 @@ class Industry(VoiceoverScene):
             (r"\texttt{dupire\_local\_var}, \texttt{derman\_kani}", r"local volatility, as a formula and as a tree (6)"),
             (r"\texttt{strip\_replication}, \texttt{vix}, \texttt{rn\_moments}", r"variance, indices, moments (9--13)"),
             (r"\texttt{vx\_index}, \texttt{inverse\_note}", r"futures indices and the notes built on them (14)"),
-            (r"\texttt{train\_surface\_net}", r"a surface learned without arbitrage (17)"),
+            (r"\texttt{train\_surface\_net}", 'grid-penalized surface fit; residual calendar flags (17)'),
         ]
         names = VGroup(*[label(a, font_size=19, color=QC.HOUSE) for a, _ in rows]).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
         x1 = names.get_right()[0] + 0.4

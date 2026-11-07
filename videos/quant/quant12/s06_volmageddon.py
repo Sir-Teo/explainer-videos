@@ -69,12 +69,10 @@ class Volmageddon(VoiceoverScene):
         line = curve(g.ax, t, xv, IV, stroke_width=2.5)
         snap = c["ts_snap"]
         steps = VGroup(
-            label(r"how a short-volatility note amplifies a shock", font_size=22, color=GREY_A),
+            label('a possible target-reset feedback channel', font_size=22, color=GREY_A),
             wrapped_label(r"1. the VIX jumps in the afternoon; front futures follow", 5.6, 19, GREY_A),
-            wrapped_label(r"2. each inverse or leveraged note must buy futures near the close, in proportion to the "
-                          r"day's move (Chapter 14: $+2rN$)", 5.6, 19, OPT),
-            wrapped_label(r"3. all of them buy the same contracts in the same minutes; the buying lifts the futures "
-                          r"further, which raises tomorrow's required buying", 5.6, 19, BAD),
+            wrapped_label('2. an unhedged daily target can require buying after a rise; for $L=-1$, the model reset is $+2rN_{old}$', 5.6, 19, OPT),
+            wrapped_label('3. concentrated orders meeting limited liquidity can amplify prices; actual trading and causal shares need separate evidence', 5.6, 19, BAD),
             wrapped_label(r"4. VIX futures traded until 4:15 pm New York time, a quarter of an hour after stocks closed: "
                           r"the notes' index moved in a thin market", 5.6, 19, GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.3)
@@ -87,7 +85,7 @@ class Volmageddon(VoiceoverScene):
         with self.voiceover(
             f"""The VIX through that year: calm, then the spike. <bookmark mark='a'/> VIX divided by VIX3M rose from {r1:.3f} on Friday to {r2:.3f} on Monday. <bookmark mark='b'/> Daily inverse and leveraged targets can require buying volatility futures after a rise. If large orders meet limited liquidity, that can amplify a move. The simple reset arithmetic establishes this possible feedback channel; it does not identify the size or causal share of actual hedge demand in February's crash. Issuers could hedge earlier or in other instruments, and their actual execution requires separate evidence."""
         ) as vo:
-            self.play(FadeIn(g), FadeIn(src), Create(line), run_time=2.5)
+            self.play(FadeIn(g), FadeIn(src), Create(line), run_time=1.2)
             vo.wait_until("a")
             self.play(FadeIn(ts), FadeIn(tsl))
             vo.wait_until("b")
@@ -103,9 +101,7 @@ class Volmageddon(VoiceoverScene):
                        r"Credit Suisse, 996 F.3d 64). The bank contested the claims. Allegations, not findings.",
                        source=r"Credit Suisse 6-K, 6 Feb 2018; 2d Cir. opinion, 27 Apr 2021", width=6.3, font_size=20)
         ps = firm_card(r"ProShares: SVXY",
-                       r"The surviving inverse VIX fund. Effective at the close of 27 February 2018 it cut its target from "
-                       r"$-1\times$ to $-0.5\times$ the daily return of the same index (and UVXY from $2\times$ to "
-                       r"$1.5\times$), halving the close-of-day hedge a spike forces.",
+                       'The surviving inverse VIX fund changed its daily target from $-1\\times$ to $-0.5\\times$ effective at the close of 27 February 2018; UVXY changed from $2\\times$ to $1.5\\times$. This reduces target exposure; reset demand follows $L^2-L$, not leverage alone.',
                        source=r"ProShare Capital Management announcement, February 2018", width=6.3, font_size=20)
         gs = firm_card(r"Research: Griffin and Shams (2018)",
                        r"``Manipulation in the VIX?'' (\emph{Review of Financial Studies}): volume spikes in out-of-the-money "

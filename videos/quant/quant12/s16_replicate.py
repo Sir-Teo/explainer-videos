@@ -38,6 +38,7 @@ class Replicate(VoiceoverScene):
         g2 = axes([0, 30], [lo - 0.02, hi + 0.02], x_length=6.2, y_length=2.8, xlabel=r"days since the strip was bought",
                   ylabel=r"variance units (annualized)", xticks=[0, 10, 20, 30], yticks=[0, round(hi, 2)],
                   font_size=15).next_to(g1, DOWN, buff=0.45).align_to(g1, LEFT)
+        history_path = curve(g1.ax, hrs, S, GREY_B, stroke_width=1.5).set_opacity(0.6)
         tr = ValueTracker(1)
 
         def upto(ax, y, col, sw=3):
@@ -48,7 +49,7 @@ class Replicate(VoiceoverScene):
         c2 = always_redraw(lambda: upto(g2.ax, hedge, LV))
         c3 = always_redraw(lambda: upto(g2.ax, strip + hedge, IV, 4))
         c4 = always_redraw(lambda: upto(g2.ax, rv, RV, 2))
-        leg = legend([(OPT, r"the strip, marked at expiry value"), (LV, r"the delta hedge's gains"),
+        leg = legend([(OPT, 'intrinsic strip payoff at current spot'), (LV, r"the delta hedge's gains"),
                       (IV, r"strip $+$ hedge"), (RV, r"realized variance so far")], font_size=16).to_edge(RIGHT, buff=0.4
                                                                                                          ).shift(UP * 1.5)
 
@@ -61,11 +62,11 @@ class Replicate(VoiceoverScene):
                     ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(leg, DOWN, buff=0.5).align_to(leg, LEFT)
         src = real_data(rf"the strip of {R['day']} (SSVI fit), Binance BTCUSDT hourly, hedge rebalanced hourly")
         day = R["day"]
-        kv, rvf, tot = R["kvar"], float(rv[-1]), float((strip + hedge)[-1])
+        kv, rvf, tot = 100 * np.sqrt(R["kvar"]), float(rv[-1]), float((strip + hedge)[-1])
         with self.voiceover(
             f"""Take {day} as a hypothetical pricing reconstruction. The reference time is eight, but its fitted Surface pools marks through noon; no executable eight-o'clock purchase is established. Set rates and costs to zero, use a finite model option strip, and follow Binance's hourly path for thirty days. <bookmark mark='a'/> The purple line is the strip's intrinsic payoff evaluated at the running spot, not its remaining-maturity market value. Together with the hypothetical stock hedge, it approximates the running realized-variance line. <bookmark mark='b'/> The final sum is {tot:.3f}, versus hourly variance {rvf:.3f}, and the initial variance strike is {kv:.1f} percent as volatility. Finite strikes, venue/reference differences and discrete returns leave error; this is not exact self-financing execution on Deribit."""
         ) as vo:
-            self.play(FadeIn(g1), FadeIn(g2), FadeIn(src), FadeIn(leg), FadeIn(VGroup(ro[2], ro[3])))
+            self.play(FadeIn(g1), FadeIn(g2), FadeIn(src), FadeIn(leg), FadeIn(VGroup(ro[2], ro[3])), Create(history_path))
             self.add(pl, c1, c2, c4, c3)
             vo.wait_until("a")
             self.play(FadeIn(ro[0]), FadeIn(ro[1]))
@@ -108,23 +109,22 @@ class Replicate(VoiceoverScene):
         rv = np.asarray(r["rv"])
         rep_h = rv + np.asarray(r["err_h"])
         rep_d = np.asarray(r["rep_d"])
-        hi = float(np.percentile(np.concatenate([rv, rep_d]), 99)) * 1.05
+        hi = float(np.max(np.concatenate([rv, rep_h, rep_d]))) * 1.05
         g = axes([0, hi], [0, hi], x_length=4.8, y_length=4.8, xlabel=r"realized variance, hourly",
                  ylabel=r"strip $+$ hedge", xticks=[0, round(hi / 2, 1)], yticks=[0, round(hi / 2, 1)], font_size=15
                  ).to_edge(LEFT, buff=0.8).shift(DOWN * 0.2)
         diag = DashedLine(g.ax.c2p(0, 0), g.ax.c2p(hi, hi), color=GREY_C)
-        m = (rv < hi) & (rep_h < hi)
+        m = np.isfinite(rv) & np.isfinite(rep_h)
         dh = VGroup(*[Dot(g.ax.c2p(a, b), radius=0.04, color=IV) for a, b in zip(rv[m], rep_h[m])])
-        m2 = (rv < hi) & (rep_d < hi) & (rep_d > 0)
+        m2 = np.isfinite(rv) & np.isfinite(rep_d)
         dd = VGroup(*[Dot(g.ax.c2p(a, b), radius=0.04, color=LV) for a, b in zip(rv[m2], rep_d[m2])])
         leg = legend([(IV, r"hedged every hour"), (LV, r"hedged once a day")], font_size=17).next_to(g, UP, buff=0.1)
         side = VGroup(
-            label(rf"{r['n']} months, one starting every Wednesday, 2021--2025", font_size=20, color=GREY_A),
+            wrapped_label(rf"{r['n']} overlapping 30-day windows, weekly starts, 2021--2025", width=5.8, font_size=19, color=GREY_A),
             MathTex(rf"\text{{hourly: error sd}}\ {r['err_h_sd']:.4f}\ \text{{on a mean of}}\ {r['rv_mean']:.3f}", font_size=26,
                     color=IV),
             MathTex(rf"\text{{daily hedge vs hourly variance: sd}}\ {r['daily_vs_hourly_sd']:.3f}", font_size=26, color=LV),
-            wrapped_label(r"the contract's monitoring frequency is part of the contract: a daily hedge replicates daily "
-                          r"variance, not hourly", 5.2, 19, GREY_A),
+            wrapped_label('sampling clocks matter; even matched discrete clocks retain higher-order and finite-strike errors', 5.2, 19, GREY_A),
             wrapped_label(rf"and a listed grid (strikes every 2.5\%, within $\pm 50\%$) reads {r['listed_gap_volpts']:.1f} vol "
                           r"points below the full strip", 5.2, 19, BAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.4)
@@ -180,7 +180,7 @@ class Replicate(VoiceoverScene):
     def volswap(self, r):
         rv = np.asarray(r["rv"])
         c = r["convexity"]
-        hi = float(np.percentile(rv, 99)) * 1.05
+        hi = float(np.max(rv)) * 1.05
         g = axes([0, hi], [0, np.sqrt(hi) * 1.05], x_length=6.6, y_length=4.2, xlabel=r"realized variance $V$",
                  ylabel=r"realized volatility $\sqrt V$", xticks=[0, round(hi / 2, 1)], yticks=[0, 0.5, 1.0],
                  yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=16).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
@@ -197,9 +197,8 @@ class Replicate(VoiceoverScene):
             MathTex(rf"\mathbb{{E}}\sqrt V = {100 * c['E_sqrt']:.1f}\%", font_size=32, color=LV),
             MathTex(rf"\text{{gap}} = {100 * c['gap']:.1f}\ \text{{vol pts; second order: }} {100 * c['approx_gap']:.1f}",
                     font_size=28, color=BAD),
-            wrapped_label(r"for Bitcoin the variance of variance is so large that the second-order formula overshoots: "
-                          r"the expansion is not small", 4.6, 19, GREY_A),
-            wrapped_label(r"pause and predict: on the same month, which strike is higher as a volatility?", 4.6, 19,
+            wrapped_label('physical sample averages, not fair strikes; the local second-order approximation overshoots in this sample', 4.6, 19, GREY_A),
+            wrapped_label('under one Q measure and matching contracts, which fair strike is higher as volatility?', 4.6, 19,
                           QC.HOUSE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.4)
         src = real_data(rf"{r['n']} realized 30-day variances of bitcoin, 2021--2025")

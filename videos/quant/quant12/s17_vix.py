@@ -110,8 +110,8 @@ class VIX(VoiceoverScene):
                      font_size=17).next_to(g, UP, buff=0.1).align_to(g, LEFT)
         side = VGroup(MathTex(rf"\text{{mean}}\ {100 * v['mean_ours']:.1f}\%\ \text{{vs}}\ {100 * v['mean_dvol']:.1f}\%,\ \ "
                               rf"\text{{corr}}\ {v['corr']:.3f}", font_size=28),
-                      label(rf"gap {v['gap_mean']:+.1f} $\pm$ {v['gap_sd']:.1f} vol points: same recipe, different wings "
-                            r"and quotes", font_size=21, color=GREY_A)).arrange(DOWN, buff=0.2).next_to(g, DOWN, buff=0.4)
+                      wrapped_label(rf"gap {v['gap_mean']:+.1f} $\pm$ {v['gap_sd']:.1f} vol points; quote selection, "
+                            r"liquidity filters, fitting, wings and observation times differ", width=11.8, font_size=19, color=GREY_A)).arrange(DOWN, buff=0.2).next_to(g, DOWN, buff=0.4)
         q = label(r"pause and predict: drop every option beyond $\pm 20\%$. Does the index rise or fall?", font_size=21,
                   color=QC.HOUSE).to_corner(DR, buff=0.3)  # beside the source line, below the stats
         src = real_data(r"weekly Deribit surfaces; DVOL from Deribit", corner=DL)
@@ -142,11 +142,11 @@ class VIX(VoiceoverScene):
             tops.add(dd)
         tt = np.array([_yr(d) for d in v["ts_d"]])
         rr = np.asarray(v["ts_ratio"])
-        g2 = axes([1990, 2026], [0.7, 1.4], x_length=8.6, y_length=2.0, ylabel=r"VIX $/$ VIX3M (above 1: inverted)",
+        g2 = axes([1990, 2026], [0.7, 1.5], x_length=8.6, y_length=2.0, ylabel=r"VIX $/$ VIX3M (above 1: inverted)",
                   xticks=[2008, 2018, 2025], xfmt=lambda u: f"{u:.0f}", yticks=[0.8, 1.0, 1.2], font_size=15
                   ).next_to(g, DOWN, buff=0.45)
         one = DashedLine(g2.ax.c2p(2007.9, 1), g2.ax.c2p(2026, 1), color=GREY_C)
-        rl = curve(g2.ax, tt, np.clip(rr, 0.7, 1.4), LV, stroke_width=1.5)
+        rl = curve(g2.ax, tt, rr, LV, stroke_width=1.5)
         t1, t2, t3 = v["top"][0], v["top"][1], v["top"][2]
         snap = v["ts_snap"]
         side = label(rf"largest one-day rises: {t1[0] // 10000} ({100 * t1[3]:+.0f}\%), {t2[0] // 10000} "
@@ -159,14 +159,7 @@ class VIX(VoiceoverScene):
         cg = 100 * v["contango"]
         j1 = 100 * t1[3]
         with self.voiceover(
-            "And the VIX itself, back to 1990, the start of Cboe's recalculated history. Long calm stretches, and "
-            "spikes: 1998, 2002, the financial crisis, and the highest close on record, "
-            f"{mxv:.2f}, on the sixteenth of March 2020. <bookmark mark='a'/> The largest one-day rise is not any of "
-            f"those: it is the fifth of February 2018, {j1:+.0f} percent, the subject of Chapter fifteen. "
-            "<bookmark mark='b'/> Underneath, the VIX divided by its three-month cousin. Below one, the term "
-            f"structure slopes up: that was true on {cg:.0f} percent of days since December 2007. On the second of "
-            f"February 2018 the ratio was {r1:.3f}; on the fifth, {r2:.3f}."
-            " Next: by how much the VIX overstates the volatility that follows."
+            f"And the VIX itself, back to 1990, the start of Cboe's recalculated history. Long calm stretches, and spikes: 1998, 2002, the financial crisis, and the highest close on record, {mxv:.2f}, on the sixteenth of March 2020. <bookmark mark='a'/> The largest one-day rise is not any of those: it is the fifth of February 2018, {j1:+.0f} percent, the subject of Chapter fifteen. <bookmark mark='b'/> Underneath, the VIX divided by its three-month cousin. Below one, the term structure slopes up: that was true on {cg:.0f} percent of days since December 2007. On the second of February 2018 the ratio was {r1:.3f}; on the fifth, {r2:.3f}. Next: how these variance prices compare with subsequent realized volatility."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(line), run_time=3)
             self.play(FadeIn(mx), FadeIn(mxl))

@@ -28,6 +28,7 @@ class Gamma(VoiceoverScene):
         ax = axes([0, n], [-0.05, 0.05], x_length=8.4, y_length=4.2, xlabel=r"minutes of a trading day",
                   ylabel='cumulative minute return (linear toy)', xticks=[0, 360, 390], yticks=[-0.04, 0, 0.04],
                   yfmt=lambda u: f"{100 * u:+.0f}\\%", font_size=16).to_edge(LEFT, buff=0.5).shift(DOWN * 0.2)
+        news_path = curve(ax.ax, m, e, GREY_C, stroke_width=1.5).set_opacity(0.5)
         tr = ValueTracker(2)
         close = Rectangle(width=ax.ax.c2p(390, 0)[0] - ax.ax.c2p(360, 0)[0], height=ax.ax.c2p(0, 0.05)[1] - ax.ax.c2p(0, -0.05)[1],
                           stroke_width=0, fill_color=QC.HOUSE, fill_opacity=0.12).move_to(ax.ax.c2p(375, 0))
@@ -56,7 +57,7 @@ class Gamma(VoiceoverScene):
             "last half hour, where the dealers finish the hedging they put off during the day, the short-gamma path "
             "keeps going in the direction it was already going."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(src), FadeIn(leg), FadeIn(close), FadeIn(cl), FadeIn(ro))
+            self.play(FadeIn(ax), FadeIn(src), FadeIn(leg), FadeIn(close), FadeIn(cl), FadeIn(ro), Create(news_path))
             self.add(ce, cl_, ch)
             vo.wait_until("a")
             self.play(tr.animate.set_value(360), run_time=10, rate_func=linear)

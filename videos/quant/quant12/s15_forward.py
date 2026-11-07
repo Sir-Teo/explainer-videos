@@ -83,7 +83,7 @@ class Forward(VoiceoverScene):
                 cmath(r"\text{forward start: }\Big(\frac{S_{T_2}}{S_{T_1}} - e^k\Big)^+", r"\to",
                       r"\text{the law of } S_{T_2}/S_{T_1}\text{: simulate}", font_size=32, colors={}),
                 cmath(r"\partial_k\sigma_{\text{loc}}(k, t)", r"\downarrow", r"\text{ as } t \text{ grows} \Rightarrow "
-                      r"\text{forward skews fade}", font_size=34, colors={r"\partial_k\sigma_{\text{loc}}(k, t)": BAD})]
+                      r"\text{fading here (calibration dependent)}", font_size=34, colors={r"\partial_k\sigma_{\text{loc}}(k, t)": BAD})]
         whys = [why(r"BBF to first order: the average of local vol along the line from spot to strike is about its value "
                     r"at the midpoint"),
                 why(r"differentiate in $K$ and in $S$: both pick up half the local slope"),
@@ -91,8 +91,7 @@ class Forward(VoiceoverScene):
                     r"in $S$ lowers every fixed strike's vol"),
                 why(r"a forward-start option struck at the money in the future depends on tomorrow's smile, which no "
                     r"vanilla pins down"),
-                why(r"local vol's skew decays with maturity like the implied skew's term structure, so the smiles it "
-                    r"generates for later dates are flatter")]
+                why('in this calibration the simulated forward smiles flatten; this is not a universal local-volatility theorem')]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.8, buff=0.72, edge=6.9)
         with self.voiceover(
             "Here is why, in three lines. To first order, implied volatility at strike K is local volatility at the "

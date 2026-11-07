@@ -29,8 +29,7 @@ PROBLEMS = [
     r"Derive Gatheral's $g(k)$ from Black's formula written in total variance $w$ and log-moneyness $k$.",
     r"Show that $K_{vol} \approx \sqrt{K_{var}} - \text{Var}(V)/(8K_{var}^{3/2})$ for a volatility swap.",    r"(qual) Show that the butterfly estimate $\hat q_h$ has bias $\frac{h^2}{12}q'' + O(h^4)$ and, with independent price "
     r"errors of variance $s^2$, variance $6s^2/h^4$; find $h^*$ and show $\operatorname{MSE}_{\rm lead}(h^*) = \frac{\sqrt6}{6}|q''|s$.",
-    r"(qual) If every price carries the same error $\eta_0$ plus independent errors, show $\eta_0$ cancels in $\hat q_h$; if "
-    r"instead errors at neighbouring strikes have correlation $\rho$, find the variance of $\hat q_h$.",
+    '(qual) With a common price error $\\eta_0$ plus independent errors, show $\\eta_0$ cancels in $\\hat q_h$. Now let adjacent errors have correlation $\\rho$ and the outer pair be uncorrelated, with $|\\rho|\\le1/\\sqrt2$; derive $\\operatorname{Var}(\\hat q_h)=(6-8\\rho)s^2/h^4$.',
 ]
 
 
@@ -51,16 +50,16 @@ class Outro(VoiceoverScene):
             (rf"the smile gives local distributional clues; bitcoin was call-skewed in {100 * t['call_skew']:.0f}\% of "
              rf"weeks", IV),
             (rf"surfaces move in three shapes: level, skew, term ({100 * sum(d['explained'][:3]):.0f}\% of weekly moves)", SPOT),
-            (r"static arbitrage is $g \ge 0$, $\partial_T w \ge 0$ and Lee's wings: shown happening in Vogt's smile", BAD),
+            ("static-arbitrage checks: density and tail boundary, calendar monotonicity, and Lee's necessary wing bound", BAD),
             (rf"SVI fits a slice in five numbers; SSVI the surface, at {s['rmse']:.2f} vol points", LV),
-            (r"Dupire's local vol is the expected variance given the price (Gy\"ongy), checked by simulation", LV),
+            ('local variance is conditional instantaneous variance (Gy\\"ongy); marginal laws match, joint laws need not', LV),
             (rf"this LV calibration has fading forward skew: {100 * m['fwd_skew']['0']:.1f} now, {100 * m['fwd_skew']['90']:.1f} three "
              rf"months out", BAD),
-            (rf"a variance swap is a strip plus a hedge: replicated on {r['n']} bitcoin months", OPT),
+            (rf"a variance swap is a strip plus a hedge: replicated on {r['n']} overlapping 30-day windows", OPT),
             (r"the VIX is that strip, truncated; ours tracks Deribit's DVOL", IV),
             (rf"the variance premium: positive {100 * p['share_pos']:.0f}\% of weeks, $t = {p['t']:.1f}$; this descriptive fit does not establish "
              rf"return predictability", RV),
-            (rf"short-volatility notes buy at the close: one day cost {abs(100 * x['note_feb5']):.0f}\%", BAD),
+            (rf"'daily inverse targets can require buying after a rise; the model note lost 96 percent in one day'{abs(100 * x['note_feb5']):.0f}\%", BAD),
             (r"dealer gamma damps or amplifies; the 0DTE evidence is mixed", OPT),
             (rf"a grid-penalized network, with remaining calendar flags: {float(np.mean(n['pen_test'])):.2f} vol points held out", LV),
         ]

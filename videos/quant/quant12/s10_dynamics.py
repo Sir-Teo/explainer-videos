@@ -135,13 +135,13 @@ class Dynamics(VoiceoverScene, ThreeDScene):
     def weekly(self, d):
         em, es = np.asarray(d["sticky_m"]), np.asarray(d["sticky_s"])
         n = len(em)
-        g = axes([0, n], [0, 15], x_length=6.3, y_length=3.6, xlabel=r"week", ylabel=r"error predicting next week's "
-                 r"30-day smile (vol points)", xticks=[0, n], yticks=[0, 5, 10, 15], font_size=16
+        g = axes([0, n], [0, 55], x_length=6.3, y_length=3.6, xlabel=r"week", ylabel=r"error predicting next week's "
+                 r"30-day smile (vol points)", xticks=[0, n], yticks=[0, 25, 50], font_size=16
                  ).to_edge(LEFT, buff=0.6).shift(UP * 0.4)
         ax = g.ax
         x = np.arange(n)
-        lm = curve(ax, x, np.clip(em, 0, 15), IV, stroke_width=2)
-        ls = curve(ax, x, np.clip(es, 0, 15), SPOT, stroke_width=2)
+        lm = curve(ax, x, em, IV, stroke_width=2)
+        ls = curve(ax, x, es, SPOT, stroke_width=2)
         leg = legend([(IV, rf"sticky moneyness: mean {d['sticky_m_mean']:.2f}"), (SPOT, rf"sticky strike: mean "
                                                                                       rf"{d['sticky_s_mean']:.2f}")],
                      font_size=17).next_to(g, UP, buff=0.1).align_to(g, LEFT)
@@ -155,7 +155,7 @@ class Dynamics(VoiceoverScene, ThreeDScene):
             p_ = arc.get_arc_center() + 1.7 * np.array([np.cos(ang), np.sin(ang), 0])
             dial.add(Dot(p_, color=col, radius=0.07), label(name, font_size=16, color=col).next_to(p_, UP if v_ == 1 else
                                                                                                    (DOWN if v_ == 0 else RIGHT), buff=0.1))
-        rv = float(np.clip(R["R"], -0.3, 2.3))
+        rv = float(R["R"])
         ang = PI - PI * rv / 2
         needle = Arrow(arc.get_arc_center(), arc.get_arc_center() + 1.5 * np.array([np.cos(ang), np.sin(ang), 0]),
                        buff=0, color=QC.HOUSE, stroke_width=5)
@@ -179,12 +179,7 @@ class Dynamics(VoiceoverScene, ThreeDScene):
                   "zero too, so the ratio of two small, noisy numbers is not identified. In equity indices, where the "
                   "skew is steep and stable, the same regression is informative; here we cannot tell.")
         with self.voiceover(
-            f"Test the rules on {n} pairs of consecutive weeks: predict next week's thirty-day smile from this "
-            f"week's, holding moneyness or holding strikes. Sticky moneyness misses by {mm:.2f} volatility points on "
-            f"average, sticky strike by {ms:.2f}, and sticky strike wins in only {sb:.0f} percent of weeks. "
-            "<bookmark mark='a'/> Now estimate the ratio itself, by regressing the weekly change in at-the-money "
-            f"volatility on the change in log spot and dividing by the average skew. The point estimate is "
-            f"{rhat:.1f}, with a t-statistic of {tstat:.1f}. {branch}"
+            f"""Compare {n} consecutive-week pairs of constant-thirty-day fitted smiles. Sticky moneyness has mean error {mm:.2f} volatility points; sticky strike {ms:.2f}, and wins on {sb:.0f} percent of pairs. This keeps maturity constant, rather than following one contract as it ages. The pooled mark windows also do not establish a time-precise tradable forecast. <bookmark mark='a'/> Regress the ATM-volatility change on the log-spot move, then divide its slope by mean smile skew. The ratio estimate is {rhat:.1f}. The {tstat:.1f} t-statistic tests the regression slope, not that ratio or a difference between the two rules. A small denominator makes the ratio unstable; these are descriptive model diagnostics."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(lm), Create(ls), FadeIn(leg), run_time=2.5)
             self.play(FadeIn(foot))

@@ -77,7 +77,7 @@ class Smile(VoiceoverScene):
         BF1 = np.asarray(gc["bfw_g1"])
         gL = axes([-4, 4], [0, 0.55], x_length=5.4, y_length=3.4, xlabel=r"standardized log return",
                   ylabel=r"risk-neutral density", xticks=[-3, 0, 3], yticks=[0, 0.4], font_size=16)
-        gR = axes([-0.3, 0.3], [0.35, 0.65], x_length=5.4, y_length=3.4, xlabel=r"log-moneyness (30 days)",
+        gR = axes([-0.3, 0.3], [0.25, 0.7], x_length=5.4, y_length=3.4, xlabel=r"log-moneyness (30 days)",
                   ylabel=r"implied volatility", xticks=[-0.2, 0, 0.2], yticks=[0.4, 0.5, 0.6],
                   yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=16)
         VGroup(gL, gR).arrange(RIGHT, buff=1.0).to_edge(UP, buff=0.9)
@@ -95,15 +95,15 @@ class Smile(VoiceoverScene):
             if mode.get_value() < 0.5:
                 return interp(D1, s1.get_value()), interp(IV1, s1.get_value())
             return interp(D2, s2.get_value()), interp(IV2, s2.get_value())
-        normal = curve(a, xs, np.exp(-xs ** 2 / 2) / np.sqrt(2 * np.pi), GREY_C, stroke_width=2)
+        normal = curve(a, xs[np.abs(xs) <= 4], np.exp(-xs[np.abs(xs) <= 4] ** 2 / 2) / np.sqrt(2 * np.pi), GREY_C, stroke_width=2)
         flat = DashedLine(b.c2p(-0.3, 0.5), b.c2p(0.3, 0.5), color=GREY_C)
-        dens = always_redraw(lambda: curve(a, xs, np.clip(cur()[0], 0, 0.55), QC.Q, stroke_width=3))
-        sm = always_redraw(lambda: curve(b, ks, np.clip(cur()[1], 0.35, 0.65), IV, stroke_width=3))
+        dens = always_redraw(lambda: curve(a, xs[np.abs(xs) <= 4], cur()[0][np.abs(xs) <= 4], QC.Q, stroke_width=3))
+        sm = always_redraw(lambda: curve(b, ks, cur()[1], IV, stroke_width=3))
         r1 = always_redraw(lambda: MathTex(
             rf"\gamma_1 = {interp(g1s, s1.get_value()):+.2f},\ \ \gamma_2 = "
             rf"{(interp(g2s, s2.get_value()) if mode.get_value() > 0.5 else 0.0):.2f}",
             font_size=30, color=QC.Q).next_to(gL, DOWN, buff=0.35))
-        bfw = curve(b, ks, np.clip(BF1[0], 0.35, 0.65), GREY_B, stroke_width=2)
+        bfw = curve(b, ks, BF1[0], GREY_B, stroke_width=2)
         bfw_d = DashedVMobject(bfw, num_dashes=40)
         cap = wrapped_label(r"grey dashes: the first-order formula of Backus, Foresi and Wu (2004)", 5.4, 18, GREY_B
                             ).next_to(gR, DOWN, buff=0.35)
@@ -141,8 +141,7 @@ class Smile(VoiceoverScene):
                       r"\Rightarrow \text{both wings up: a smile}", font_size=32),
                 cmath(r"\sigma^2_{\text{fwd}}(T_1, T_2)", r"=", r"\frac{w(0, T_2) - w(0, T_1)}{T_2 - T_1} \;\ge\; 0",
                       font_size=36, colors={r"\sigma^2_{\text{fwd}}(T_1, T_2)": LV})]
-        whys = [why(r"Gram--Charlier: correct the normal density with Hermite polynomials; $\gamma_1$ is the "
-                    r"skewness, $\gamma_2$ the excess kurtosis"),
+        whys = [why("formal Gram--Charlier coefficients: skewness $\\gamma_1$, excess kurtosis $\\gamma_2$; clipping and renormalization alter the illustration's exact moments"),
                 why(r"Backus, Foresi and Wu (2004): price options on the corrected density, invert Black--Scholes, keep "
                     r"first order"),
                 why(r"read the signs off the formula: $d$ is large for low strikes"),
@@ -167,33 +166,33 @@ class Smile(VoiceoverScene):
         A = np.asarray(t["atm"])
         sk = np.asarray(t["skew"])
         t0, t1 = float(np.floor(tt.min())), 2026.0
-        g = axes([t0, t1], [0.2, 1.4], x_length=8.0, y_length=3.0, ylabel=r"at-the-money implied volatility",
+        g = axes([t0, t1], [0, 1.8], x_length=8.0, y_length=3.0, ylabel=r"at-the-money implied volatility",
                  xticks=list(range(int(t0), 2027)), xfmt=lambda u: f"{u:.0f}", yticks=[0.4, 0.8, 1.2],
                  yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=16).to_edge(UP, buff=0.5).to_edge(LEFT, buff=0.7)
         ax = g.ax
         cols = [BAD, IV, OPT, LV]
         idx = [0, 2, 4, 5]
         ten = np.asarray(t["tenors"])
-        lines = VGroup(*[curve(ax, tt, np.clip(A[:, i], 0.2, 1.4), c, stroke_width=2) for i, c in zip(idx, cols)])
+        lines = VGroup(*[curve(ax, tt, A[:, i], c, stroke_width=2) for i, c in zip(idx, cols)])
         leg = legend([(c, f"{ten[i]:.0f} days") for i, c in zip(idx, cols)], font_size=16).next_to(g, RIGHT, buff=0.3)
-        g2 = axes([t0, t1], [-0.12, 0.12], x_length=8.0, y_length=1.8, ylabel=r"30-day skew: $\sigma(k=-0.1) - \sigma(k=0.1)$",
-                  yticks=[-0.1, 0, 0.1], yfmt=lambda u: f"{100 * u:+.0f}", font_size=16).next_to(g, DOWN, buff=0.5).align_to(g, LEFT)
-        bars = VGroup(*[Line(g2.ax.c2p(x, 0), g2.ax.c2p(x, float(np.clip(y, -0.12, 0.12))),
+        g2 = axes([t0, t1], [-0.06, 0.17], x_length=8.0, y_length=1.8, ylabel=r"30-day skew: $\sigma(k=-0.1) - \sigma(k=0.1)$",
+                  yticks=[-0.05, 0, 0.15], yfmt=lambda u: f"{100 * u:+.0f}", font_size=16).next_to(g, DOWN, buff=0.5).align_to(g, LEFT)
+        bars = VGroup(*[Line(g2.ax.c2p(x, 0), g2.ax.c2p(x, float(y)),
                              color=QC.HOUSE if y < 0 else BAD, stroke_width=2) for x, y in zip(tt, sk)])
         m = np.asarray(t["mean_atm"])
         call = t["call_skew"]
         verdict = (r"call-skewed more often than not" if call > 0.5 else r"put-skewed more often than not")
         side = VGroup(
-            label(rf"mean ATM: {100 * m[0]:.0f}\% (7d), {100 * m[2]:.0f}\% (30d), {100 * m[5]:.0f}\% (180d)", font_size=19),
-            label(rf"7 days above 180 days in {100 * t['inv_7_180']:.0f}\% of weeks", font_size=19, color=BAD),
-            label(rf"gold: call skew, {100 * call:.0f}\% of {t['n']} weeks: {verdict}", font_size=19, color=QC.HOUSE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.35)
+            wrapped_label(rf"mean ATM: {100 * m[0]:.0f}\% (7d), {100 * m[2]:.0f}\% (30d), {100 * m[5]:.0f}\% (180d)", width=3.8, font_size=19),
+            wrapped_label(rf"7 days above 180 days in {100 * t['inv_7_180']:.0f}\% of weeks", width=3.8, font_size=19, color=BAD),
+            wrapped_label(rf"gold: call skew, {100 * call:.0f}\% of {t['n']} weeks: {verdict}", width=3.8, font_size=19, color=QC.HOUSE),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(RIGHT, buff=0.4).set_y(-0.9)
         src = real_data(r"weekly surfaces from Deribit trades, April 2021 -- November 2025", corner=UR)
         n = t["n"]
         m7, m180, inv = 100 * m[0], 100 * m[5], 100 * t["inv_7_180"]
         cs = 100 * call
         with self.voiceover(
-            f"Now the same two coordinates through time: {n} Wednesdays of Bitcoin surfaces since April 2021, each rebuilt from that morning's trades. On top, at-the-money volatility at four expiries. <bookmark mark='a'/> On average the term structure slopes up, from {m7:.0f} percent at a week to {m180:.0f} at six months. But in {inv:.0f} percent of weeks it inverts, and the short end jumps above the long: those are the weeks of crashes and squeezes, when fear is about now. <bookmark mark='b'/> Below, the thirty-day skew, red when puts are dearer, gold when calls are. Bitcoin's smile was call-skewed in {cs:.0f} percent of these weeks. The S&P 500 has usually been put-skewed since the 1987 crash; Bitcoin's buyers have often paid more for the upside than for the crash. Pause and predict: in our local log-return illustration, a positive skew parameter tilts the near-money smile which way? Toward the calls. A smile is a snapshot. Next: how the whole surface moves."
+            f"Now the same two coordinates through time: {n} Wednesdays of Bitcoin surfaces since April 2021, each rebuilt from that morning's trades. On top, at-the-money volatility at four expiries. <bookmark mark='a'/> On average the term structure slopes up, from {m7:.0f} percent at a week to {m180:.0f} at six months. But in {inv:.0f} percent of weeks it inverts, and the short end jumps above the long: those are the weeks of crashes and squeezes, when fear is about now. <bookmark mark='b'/> Below, the thirty-day skew, red when puts are dearer, gold when calls are. Bitcoin's smile was call-skewed in {cs:.0f} percent of these weeks. The S&P 500 has usually been put-skewed since the 1987 crash; Bitcoin's buyers have often paid more for the upside than for the crash. Pause and predict: in our local log-return illustration, a positive skew parameter tilts the near-money smile which way? Toward the calls. A smile is a snapshot. Next: how the whole surface moves. These fixed-tenor levels come from fitted models, sometimes outside the observed expiry range; short-tenor extrapolation can be unstable."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.3, run_time=3),
                       FadeIn(leg))

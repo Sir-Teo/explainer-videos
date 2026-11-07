@@ -16,9 +16,9 @@ class Gyongy(VoiceoverScene):
         self.reprice(m)
 
     def card(self):
-        c = chapter_card(7, r"Gy\"ongy: every model has a local twin", r"Why does Dupire's formula work at all?",
+        c = chapter_card(7, 'Gy\\"ongy: a diffusion local twin', r"Why does Dupire's formula work at all?",
                          part=PART)
-        with self.voiceover("Chapter seven. Gyöngy's theorem: every model has a local-volatility twin."):
+        with self.voiceover("""Chapter seven. A diffusion's local-volatility twin, under the mimicking theorem's conditions."""):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -31,8 +31,7 @@ class Gyongy(VoiceoverScene):
                       colors={r"\sigma^2_{\text{loc}}(K, T)": LV}),
                 cmath(r"\text{same } p(\cdot, T)\ \forall T", r"\not\Rightarrow", r"\text{same joint law of } (S_{T_1}, S_{T_2})",
                       font_size=34, colors={r"\text{same } p(\cdot, T)\ \forall T": BAD})]
-        whys = [why(r"now volatility is random (any model); apply Tanaka--Meyer to $(S_T - K)^+$ (Part 5) and take "
-                    r"expectations: the local-time term is the only one left"),
+        whys = [why('a continuous stochastic-volatility diffusion with suitable integrability; Tanaka--Meyer gives the local-time term'),
                 why(r"condition on where the price ends: the spike picks out $S_T = K$"),
                 why(r"compare with Chapter 6: Dupire's function is the expected variance given the price (Gy\"ongy 1986)"),
                 why(r"the twin matches every expiry's distribution one at a time, not how they are joined: "
@@ -59,15 +58,15 @@ class Gyongy(VoiceoverScene):
         tt = np.linspace(0, T, fx.shape[1])
         gL = axes([0, T], [-0.8, 0.8], x_length=4.2, y_length=4.2, xlabel=r"years", ylabel=r"$\ln S_t$",
                   xticks=[0, T], yticks=[-0.5, 0, 0.5], font_size=15).to_edge(LEFT, buff=0.4).shift(DOWN * 0.3)
-        gR = axes([-0.8, 0.8], [0, 1.4], x_length=6.4, y_length=4.2, xlabel=r"$\ln S_T$",
+        gR = axes([-1.2, 0.8], [0, 1.4], x_length=6.4, y_length=4.2, xlabel=r"$\ln S_T$",
                   ylabel=r"volatility: $\sqrt{v_T}$, or local", xticks=[-0.5, 0, 0.5], yticks=[0, 0.5, 1.0],
                   yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=15).next_to(gL, RIGHT, buff=0.7)
         paths = VGroup(*[curve(gL.ax, tt, np.clip(x, -0.8, 0.8), interpolate_color(ManimColor(QC.SPOT), ManimColor(BAD),
                                                                                      float(np.clip(np.sqrt(v[-1]), 0, 1))),
                                stroke_width=1.2) for x, v in zip(fx, fv)])
-        m = np.abs(cx) <= 0.8
+        m = np.isfinite(cx) & np.isfinite(cv) & (cv >= 0)
         dots = VGroup(*[Dot(gR.ax.c2p(a, float(min(np.sqrt(b), 1.4))), radius=0.02, color=GREY_B, fill_opacity=0.6)
-                        for a, b in zip(cx[m][:900], cv[m][:900])])
+                        for a, b in zip(cx[m], cv[m])])
         tr = ValueTracker(-0.55)
         slab = always_redraw(lambda: Rectangle(width=gR.ax.c2p(0.05, 0)[0] - gR.ax.c2p(0, 0)[0],
                                                height=gR.ax.c2p(0, 1.4)[1] - gR.ax.c2p(0, 0)[1], stroke_width=0,
@@ -81,7 +80,7 @@ class Gyongy(VoiceoverScene):
         leg = legend([(QC.HOUSE, r"$\sqrt{\mathbb{E}[v_T \mid \ln S_T]}$, from 100{,}000 paths"),
                       (QC.Q, r"Dupire, from Heston's own option prices (COS)")], font_size=17).next_to(gR, UP, buff=0.1
                                                                                                   ).align_to(gR, LEFT)
-        src = simulated(r"simulated: Heston, Andersen's QE scheme, 90 steps to $T = 0.25$")
+        src = simulated('Heston QE: 100{,}000 paths computed; 20 fans and 1{,}500 terminal points shown')
         gap = g["max_gap"]
         with self.voiceover(
             "Check it by simulation. Take a stochastic volatility model, Heston's, with Bitcoin-like parameters, and "

@@ -72,10 +72,10 @@ class SSVI(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(t2), LaggedStart(*[Create(x) for x in slices], lag_ratio=0.2, run_time=3))
             vo.wait_until("b")
             self.play(FadeIn(sf), run_time=1.5)
-            self.move_camera(theta=-30 * DEGREES, run_time=max(vo.remaining(0.5) - 0.5, 1.0))
+            self.move_camera(theta=-30 * DEGREES, run_time=min(max(vo.remaining(0.5) - 0.5, 1.0), 8.0))
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, floor, thdots, slices, sf)),
                                                                   FadeOut(t1), FadeOut(t2), FadeOut(hint)], run_time=1)
-        self.clear_scene()
+        self.clear()
 
     def lab(self, r):
         card = lab_card(r"fitting SSVI to the Surface", [
@@ -128,7 +128,7 @@ class SSVI(VoiceoverScene, ThreeDScene):
         # the loss panel, fixed in frame: every start as a faint line, the replayed one bright
         Lmax = max(len(x["loss"]) for x in runs)
         lo = np.log10(max(min(min(x["loss"]) for x in runs), 1e-3))
-        hi = np.log10(max(x["loss"][0] for x in runs) * 1.2)
+        hi = np.log10(max(max(x["loss"]) for x in runs) * 1.2)
         g = axes([0, Lmax], [lo, hi], x_length=4.6, y_length=3.2, xlabel=r"residual evaluations",
                  ylabel=r"vega-weighted RMSE (log)", xticks=[0, Lmax], yticks=[round(lo, 1), round(hi, 1)],
                  yfmt=lambda u: f"10^{{{u:.1f}}}", font_size=14).to_corner(UR, buff=0.4).shift(DOWN * 0.3)
@@ -138,7 +138,7 @@ class SSVI(VoiceoverScene, ThreeDScene):
                         QC.Q, stroke_width=3) for a, b in zip(pick, pick[1:])]
         cnt = label(r"one SSVI fit, replayed: the surface after each step of the search", font_size=20,
                     color=GREY_A).to_edge(UP, buff=0.25).shift(LEFT * 2)
-        src = real_data(r"the Surface's 254 quotes (white); five random starts")
+        src = real_data('193 fitted marks; 30--90\\% IV viewport is clipped; full residual traces retained')
         fixed(self, g, faint, *bright, cnt, src)
         finals = r["finals"]
         start = run["loss"][0]
@@ -153,7 +153,7 @@ class SSVI(VoiceoverScene, ThreeDScene):
                 if a == 2:
                     self.move_camera(theta=-35 * DEGREES, run_time=1.2)
             vo.wait_until("b")
-            self.move_camera(theta=-60 * DEGREES, run_time=max(vo.remaining(0.5) - 0.5, 1.0))
+            self.move_camera(theta=-60 * DEGREES, run_time=min(max(vo.remaining(0.5) - 0.5, 1.0), 8.0))
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, dots, cur))], run_time=1)
         self.clear_scene()
 
@@ -210,14 +210,14 @@ class SSVI(VoiceoverScene, ThreeDScene):
     def price(self, r):
         pr = r["per_rmse"]
         n = len(pr)
-        hi = float(min(max(max(x["ssvi"], x["svi"]) for x in pr) * 1.1, 9))
+        hi = float(max(max(x["ssvi"], x["svi"]) for x in pr) * 1.1)
         g = axes([0, n], [0, hi], x_length=8.0, y_length=3.8, ylabel=r"RMSE against the quotes (vol points)",
                  yticks=[0, round(hi / 2), round(hi)], font_size=16).to_edge(LEFT, buff=0.6).shift(DOWN * 0.1)
         ax = g.ax
         bars = VGroup()
         for i, x in enumerate(pr):
             for j, (key, col) in enumerate((("svi", LV), ("ssvi", IV))):
-                h = min(x[key], hi)
+                h = x[key]
                 bars.add(Rectangle(width=0.28, height=max(ax.c2p(0, h)[1] - ax.c2p(0, 0)[1], 0.01), stroke_width=0,
                                    fill_color=col, fill_opacity=0.85).move_to(ax.c2p(i + 0.35 + 0.3 * j, h / 2)))
         ticks = VGroup(*[label(f"{x['days']:.0f}", font_size=15, color=GREY_B).next_to(ax.c2p(i + 0.5, 0), DOWN, buff=0.1)
@@ -226,8 +226,7 @@ class SSVI(VoiceoverScene, ThreeDScene):
         leg = legend([(LV, rf"SVI per expiry: {r['n_par_svi']} parameters"), (IV, rf"SSVI: {r['n_par_ssvi']} parameters")],
                      font_size=17).next_to(g, UP, buff=0.1).align_to(g, LEFT)
         side = VGroup(
-            wrapped_label(r"the price of global consistency is paid at the short end, where one smile shape cannot "
-                          r"match the first few days", 3.8, 19, GREY_A),
+            wrapped_label('different flexibility and training filters: SSVI excludes the shortest expiries; the gap does not isolate a no-arbitrage cost', 3.8, 19, GREY_A),
             wrapped_label(r"eSSVI (Hendriks and Martini 2019; Martini and Mingone 2022) lets $\rho$ vary with maturity and keeps the "
                           r"surface arbitrage-free", 3.8, 19, GREY_B),
             wrapped_label(r"pause and predict: which fits better in sample, and which would you quote from?", 3.8, 19,
@@ -238,14 +237,7 @@ class SSVI(VoiceoverScene, ThreeDScene):
         a1, b1 = pr[-1]["svi"], pr[-1]["ssvi"]
         nsvi = r["n_par_svi"]
         with self.voiceover(
-            "What does consistency cost? Expiry by expiry, the error of SVI fitted to that expiry alone, in gold, "
-            f"against one SSVI for all, in orange. <bookmark mark='a'/> At the first expiry SVI misses by {a0:.1f} "
-            f"points and SSVI by {b0:.1f}; at the last, {a1:.1f} against {b1:.1f}. The {nsvi} free parameters "
-            "always fit better in sample. But they cross each other, as Chapter three showed, and they cannot be "
-            "trusted between expiries. A desk quotes from the surface that cannot be arbitraged, and pays for it in "
-            "the first few days, where one smile shape cannot follow the quotes; beyond a month the gap is a fraction "
-            "of a point. Extensions such as eSSVI let the tilt vary with maturity and close part of the gap."
-            " A fitted surface is a price list. Next: the model hiding inside it, Dupire's local volatility."
+            f"""Compare the separate SVI slices with shared SSVI, but note their different training eligibility. SSVI uses only absolute log-moneyness below point six and maturities longer than two days. The separate slices include the shortest expiries. <bookmark mark='a'/> At the first expiry their errors are {a0:.1f} and {b0:.1f} volatility points; at the last, {a1:.1f} and {b1:.1f}. The {nsvi} separate-slice parameters also give greater flexibility. The short-end gap therefore does not isolate the cost of no-arbitrage constraints. Those separate fits cross, while our SSVI sufficient conditions cover the fitted maturity range. Extensions such as eSSVI allow maturity-dependent tilt under additional consistency conditions. Next: Dupire's local-volatility model."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(leg), FadeIn(ticks), FadeIn(xl))
             self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.05, run_time=3))

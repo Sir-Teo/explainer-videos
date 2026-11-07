@@ -99,7 +99,7 @@ class Arbitrage(VoiceoverScene):
                     r"only through $w$"),
                 why(r"Breeden--Litzenberger (Part 9), then differentiate twice in $k$ using $e^k N'(d_-) = N'(d_+)$; "
                     r"every factor but $g$ is positive"),
-                why(r"so no butterfly arbitrage $\iff g \ge 0$ everywhere (Gatheral)"),
+                why('$g\\ge0$ gives a non-negative density; global butterfly freedom also needs the tail boundary'),
                 why(r"no calendar arbitrage: at fixed moneyness a call is a convex payoff of a martingale, so its value "
                     r"rises with $T$ (Gatheral and Jacquier 2014, Lemma 2.1)"),
                 why(r"Lee (2004): $C/F \to 0$ needs $d_+ \to -\infty$, so the wings grow at most like $2|k|$; the slope "
@@ -182,10 +182,9 @@ class Arbitrage(VoiceoverScene):
         side = VGroup(
             MathTex(rf"\beta_L = {last['beta_L']:.2f},\ \ \beta_R = {last['beta_R']:.2f}\ \ ({last['days']:.0f}\ \text{{days}})",
                     font_size=28),
-            wrapped_label(rf"so $\mathbb{{E}}\,S_T^{{1+p}}$ is finite up to $p \approx {last['p_R']:.1f}$ and "
-                          rf"$\mathbb{{E}}\,S_T^{{-q}}$ up to $q \approx {last['q_L']:.1f}$", 4.6, 20, GREY_A),
-            wrapped_label(r"every expiry's wings are far below 2: no wing arbitrage, and the market prices finite but "
-                          r"fat tails", 4.6, 20, GREY_B),
+            wrapped_label(rf"fitted-tail critical values: $p_* \approx {last['p_R']:.1f}$ and "
+                          rf"$q_* \approx {last['q_L']:.1f}$; endpoint finiteness undetermined", 4.6, 18, GREY_A),
+            wrapped_label('all fitted asymptotic slopes pass the necessary wing bound; unquoted tail behavior remains a model extrapolation', 4.6, 20, GREY_B),
             wrapped_label(r"pause and predict: a wing of slope 2.5. What can you do?", 4.6, 20, QC.HOUSE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
         src = real_data(r"the Surface: wing slopes $b(1 \pm \rho)$ of each expiry's SVI fit")

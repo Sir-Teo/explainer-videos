@@ -50,7 +50,7 @@ class LocalVol(VoiceoverScene, ThreeDScene):
             self.wait(max(vo.remaining(0.5) - 0.5, 0.5))
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, added_anims=[FadeOut(VGroup(ax, si, sl)), FadeOut(t1), FadeOut(t2),
                                                                   FadeOut(src)], run_time=1)
-        self.clear_scene()
+        self.clear()
 
     def dupire(self):
         rows = [cmath(r"dS = \sigma(S, t)\,S\,dW", r"\Rightarrow", r"\partial_T p = \tfrac12\,\partial_{KK}\big(\sigma^2 K^2 p\big)",
@@ -173,13 +173,14 @@ class LocalVol(VoiceoverScene, ThreeDScene):
         nodes = [np.asarray(x) for x in sm["nodes"]]
         lvs = [np.asarray(x) for x in sm["lv"]]
         N = len(nodes) - 1
-        x0, dx = -5.6, 1.35
-        ylog = lambda s: 2.6 * np.log(s) / 0.35  # noqa: E731
+        x0, dx = -5.6, 1.2
+        log_span = max(max(float(np.max(np.abs(np.log(lev)))) for lev in nodes), 0.45 * np.sqrt(0.25 / N) * N)
+        ylog = lambda s: 3.1 * np.log(s) / log_span  # noqa: E731
         lo_lv, hi_lv = 0.3, 0.8
 
         def col(v):
             return interpolate_color(ManimColor(QC.SPOT), ManimColor(BAD), float(np.clip((v - lo_lv) / (hi_lv - lo_lv), 0, 1)))
-        pos = [[np.array([x0 + n * dx, float(np.clip(ylog(s), -3.3, 3.3)), 0]) for s in lev] for n, lev in enumerate(nodes)]
+        pos = [[np.array([x0 + n * dx, float(ylog(s)), 0]) for s in lev] for n, lev in enumerate(nodes)]
         edges, dots = VGroup(), VGroup()
         for n in range(N):
             for i in range(len(nodes[n])):
@@ -193,12 +194,11 @@ class LocalVol(VoiceoverScene, ThreeDScene):
         for n in range(N + 1):
             for j in range(n + 1):
                 u = 0.45 * np.sqrt(0.25 / N)
-                crr.add(Dot([x0 + n * dx, float(np.clip(ylog(np.exp(u * (2 * j - n))), -3.3, 3.3)), 0], radius=0.04,
+                crr.add(Dot([x0 + n * dx, float(ylog(np.exp(u * (2 * j - n)))), 0], radius=0.04,
                             color=GREY_D))
         side = VGroup(
             label(r"Derman and Kani (1994): an implied tree", font_size=22, color=LV),
-            wrapped_label(r"grey: an evenly spaced tree; white: nodes placed level by level so that a call or put struck "
-                          r"at every node of the level before is repriced exactly", 4.0, 18, GREY_A),
+            wrapped_label('grey: evenly spaced comparison; white nodes target selected earlier-level option prices', 4.0, 18, GREY_A),
             wrapped_label(r"edges coloured by the node's local volatility, blue (low) to red (high): highest on the "
                           r"downside", 4.0, 18, GREY_A),
             wrapped_label(rf"40 steps over 91 days: maturity smile within {t['max_err']:.2f} vol points of the Surface "
@@ -208,14 +208,7 @@ class LocalVol(VoiceoverScene, ThreeDScene):
         src = real_data(r"the Surface's SSVI; six steps drawn, forty computed")
         err, gap = t["max_err"], t["lv_gap"]
         with self.voiceover(
-            "The same year, Derman and Kani at Goldman Sachs built local volatility on a tree, and Mark Rubinstein an "
-            "implied tree of his own. In grey, an evenly spaced tree. <bookmark mark='a'/> Now place each new node so "
-            "that the tree reprices a call or put struck at every node of the level before. The nodes stretch, and the "
-            "branches' local volatility, blue to red, is highest on the downside. "
-            f"<bookmark mark='b'/> With forty steps over three months, the tree's own smile at maturity lands within "
-            f"{err:.2f} volatility points of the Surface near the money, and its node volatilities match Dupire's "
-            f"function to {gap:.1f} points. A tree and a formula, built the same year, are the same object."
-            " Why does one function of price and time suffice? Next: Gyöngy's theorem."
+            f"""Derman and Kani's 1994 implied tree offers a discrete version. Grey nodes show an evenly spaced comparison. <bookmark mark='a'/> The implied nodes adjust to reprice calls or puts at selected earlier-level strikes. Their local branch-volatility colors are a display scale. <bookmark mark='b'/> With forty steps over three months, the near-money smile has RMSE {err:.2f} volatility points against the fitted Surface, and the median node-volatility difference from Dupire is {gap:.2f} points. These are finite numerical summaries, not uniform error bounds. The schematic now retains every node instead of collapsing its outer branches at a display boundary."""
         ) as vo:
             self.play(FadeIn(crr), FadeIn(src), FadeIn(side[0]))
             vo.wait_until("a")

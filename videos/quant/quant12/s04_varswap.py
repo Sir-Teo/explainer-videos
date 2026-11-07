@@ -80,8 +80,7 @@ class VarSwap(VoiceoverScene):
                       font_size=34, colors={r"f(S)": OPT}),
                 cmath(r"K_{\text{var}}", r"=", r"\frac{2}{T}\int_0^\infty \frac{\text{OTM}(K)}{K^2}\,dK", font_size=38,
                       colors={r"K_{\text{var}}": IV}),
-                cmath(r"\mathbb{E}^Q\!\int_0^T \Big(\frac{dS}{S}\Big)^2", r"=", r"K_{\text{var}}\,T\quad \text{for any continuous }"
-                      r"S", font_size=32),
+                cmath(r"\mathbb{E}^Q\!\int_0^T \Big(\frac{dS}{S}\Big)^2", r"=", 'K_{\\text{var}}\\,T', font_size=32),
                 cmath(r"2(e^J - 1 - J) - J^2", r"=", r"\tfrac13 J^3 + O(J^4)", font_size=36,
                       colors={r"2(e^J - 1 - J) - J^2": BAD})]
         whys = [why(r"It\^o (Part 5): $d\ln S = dS/S - \tfrac12\sigma^2 dt$; realized variance is a delta-hedging gain "
@@ -90,7 +89,7 @@ class VarSwap(VoiceoverScene):
                     r"forward and a strip of options; $\text{OTM}_K$ is the put $(K - S)^+$ below $F$, the call $(S - K)^+$ above"),
                 why(r"take $f = -\ln$, so $f'' = 1/K^2$, and Q-expectations: the hedge is free (Neuberger 1994; Demeterfi, "
                     r"Derman, Kamal and Zou 1999)"),
-                why(r"model-free implied variance (Britten-Jones and Neuberger 2000): no volatility model was assumed"),
+                why('positive continuous Q-martingale, zero carry, integrable log payoff and continuous costless hedging; finite grids and jumps add errors'),
                 why(r"with a jump $J$ the log contract pays $2(e^J - 1 - J)$, realized variance $J^2$: down-jumps leave the "
                     r"replication short by about $|J|^3/3$")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.6, buff=0.72, edge=6.9)
@@ -141,7 +140,7 @@ class VarSwap(VoiceoverScene):
                                     r"forward", 4.4, 20, BAD),
                       wrapped_label(r"pause and predict: why is the variance strike above at-the-money volatility?", 4.4,
                                     19, QC.HOUSE)).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
-        src = real_data(r"30-day strip from the SSVI fit to the Surface")
+        src = real_data('30-day SSVI model strip; integration $|\\ln(K/F)|\\le1.2$')
         x20 = 100 * float(np.interp(0.2, xs, vs))
         kv, atm, sh = 100 * w["kvar"], 100 * w["atm"], 100 * t["share_beyond_20"]
         with self.voiceover(

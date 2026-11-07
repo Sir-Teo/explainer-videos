@@ -13,7 +13,7 @@ SCENES = [
     ("s12_svi", "SVI", "4. SVI: a smile in five numbers"),
     ("s13_ssvi", "SSVI", "5. SSVI: the whole surface in one formula"),
     ("s03_localvol", "LocalVol", "6. Dupire's local volatility, derived"),
-    ("s14_gyongy", "Gyongy", "7. Gyöngy: every model has a local-volatility twin"),
+    ("s14_gyongy", "Gyongy", "7. Gyöngy: a diffusion's local-volatility twin"),
     ("s15_forward", "Forward", "8. Local volatility's future"),
     ("s04_varswap", "VarSwap", "9. Variance swaps: buying volatility itself"),
     ("s16_replicate", "Replicate", "10. Replicating on real Bitcoin; volatility swaps"),

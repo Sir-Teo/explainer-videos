@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import numpy as np
+from videos.quant.quant10.common import FullRangeReplay as TrainingReplay
 
 from explainer.quant import *  # noqa: F403
 from explainer.quant.house import smile as SM
@@ -162,7 +163,7 @@ class SVI(VoiceoverScene):
 
         def frame(i):
             g = axes([-0.6, 0.6], [0.3, 0.9], x_length=5.2, y_length=3.4, xlabel=r"log-moneyness",
-                     ylabel=r"implied vol", xticks=[-0.5, 0, 0.5], yticks=[0.4, 0.6, 0.8],
+                     ylabel=r"IV: 30--90\% viewport (clipped)", xticks=[-0.5, 0, 0.5], yticks=[0.4, 0.6, 0.8],
                      yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=15)
             m = (iv >= 0.3) & (iv <= 0.9) & (np.abs(k) <= 0.6)
             dots = VGroup(*[Dot(g.ax.c2p(a, b), radius=0.035, color=WHITE) for a, b in zip(k[m], iv[m])])
@@ -172,16 +173,16 @@ class SVI(VoiceoverScene):
                 w = SM.svi_total_variance(kk, *p)
                 curves.add(curve(g.ax, kk, np.clip(np.sqrt(np.maximum(w, 1e-8) / T), 0.3, 0.9), c, stroke_width=2.5))
             return VGroup(g, dots, curves)
-        rp = TrainingReplay(steps, loss, frame, ck, ylabel=r"RMSE (vol points, log scale)", xlabel=r"function evaluation",
+        rp = TrainingReplay(steps, loss, frame, ck, ylabel=r"RMSE (vol points, log scale)", xlabel=r"residual call (includes finite differences)",
                             log_y=True)
         nf = r["nfev"]
         fi, fl = r["first"], r["final"]
-        side = label(rf"six random starts, {min(fi):.0f} to {max(fi):.0f} vol points off; all end at "
-                     rf"{min(fl):.3f} after {min(nf)}--{max(nf)} evaluations", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.4)
+        side = wrapped_label(rf"six random starts, {min(fi):.0f} to {max(fi):.0f} vol points off; all end at "
+                     rf"{min(fl):.3f}; solver nfev {min(nf)}--{max(nf)}; replay includes finite-difference calls", width=12.6, font_size=18, color=GREY_A).to_edge(DOWN, buff=0.4)
         src = real_data(rf"the Surface, expiry {r['expiry']}, unweighted fits", corner=UR)
         lo, hi, n0, n1, best = min(fi), max(fi), min(nf), max(nf), min(fl)
         with self.voiceover(
-            f"Watch the fit happen. Six starts drawn at random, the worst of them {hi:.0f} volatility points off the quotes, the best {lo:.0f}. Each line is one start's current guess; on the right, its error after each evaluation of the residual, on a log scale. <bookmark mark='a'/> Within {n0} to {n1} evaluations every start lands on the same curve, at {best:.3f} volatility points. These six starts reach similar fits in this example; that does not prove a benign optimization landscape for every expiry. The trouble starts when expiries are fitted separately, as Chapter three showed."
+            f"""Watch six fixed random starts. Their starting errors range from {lo:.0f} to {hi:.0f} volatility points. The right plot retains every residual call, including numerical Jacobian evaluations. <bookmark mark='a'/> The solver reports function-evaluation counts from {n0} to {n1}, excluding some finite-difference calls; these counts therefore differ from the replay's call counter. The final errors are near {best:.3f} volatility points. This is evidence about these six starts, not proof that every SVI calibration is benign. Separately fitted maturities can still cross, as Chapter three showed."""
         ) as vo:
             self.play(FadeIn(rp), FadeIn(src))
             rp.play(self, run_time=9)

@@ -110,8 +110,8 @@ class Research(VoiceoverScene):
             RIGHT, buff=0.3).shift(UP * 1.4)
         fit_right(leg)
         side = wrapped_label(rf"a lognormal at {100 * t['sigma']:.0f}\% volatility, 30 days; lines: the formula, dots: "
-                             r"4{,}000 noisy draws per width, stars: $h^*$. Above the dashed line the estimate is "
-                             r"larger than the thing it estimates", 3.3, 14, GREY_A).next_to(leg, DOWN, buff=0.3)
+                             r"4{,}000 noisy draws per width, stars: $h^*$. Above the dashed line the RMSE is "
+                             r"larger than the reference density", 3.3, 14, GREY_A).next_to(leg, DOWN, buff=0.3)
         fit_right(side)
         r1 = a["noise"]["0.01"]
         with self.voiceover(
@@ -123,11 +123,11 @@ class Research(VoiceoverScene):
             f"and the simulation's best is {r1['h_best_sim']:.1f}. Narrower than that, and the estimate is mostly noise: "
             "at the tightest widths, larger than the density it estimates."
         ) as vo:
-            self.play(FadeIn(g), Create(qline), FadeIn(qlab), FadeIn(side))
+            self.play(FadeIn(g), Create(qline), FadeIn(qlab), FadeIn(side), Create(lines[0]), FadeIn(dots[0]), FadeIn(leg[0]))
             for k, mk in enumerate(("a", "b")):
                 vo.wait_until(mk)
                 if k == 0:
-                    self.play(Create(lines[0]), FadeIn(dots[0]), FadeIn(leg[0]), run_time=1.3)
+                    self.wait(0.2)
                 else:
                     self.play(Create(lines[1]), FadeIn(dots[1]), FadeIn(leg[1]), Create(lines[2]), FadeIn(dots[2]),
                               FadeIn(leg[2]), run_time=1.5)
@@ -139,7 +139,7 @@ class Research(VoiceoverScene):
     def rate(self, t):
         hx = [-3.6, -0.6, 1.6, 3.8, 5.8]
         head = VGroup(label(r"price error $s$, per 100", font_size=18, color=GREY_B), label(r"$h^*$, formula", font_size=20),
-                      label(r"$h^*$, simulated", font_size=20), label(r"RMSE at $h^*$", font_size=20),
+                      label(r"$h^*$, simulated", font_size=20), label('local RMSE', font_size=20),
                       label(r"relative", font_size=20))
         a = t["at"]["atm"]
         tab = VGroup()
@@ -205,8 +205,7 @@ class Research(VoiceoverScene):
                           font_size=18),
             desk_question('open: dependent price errors', 'common additive or affine price errors cancel; generic stale or forward-related errors need not',
                           width=12.4, font_size=18),
-            desk_question(r"open: inference on the tails", r"the tails, where crash probabilities live, have few quotes and "
-                          r"wide spreads; confidence bands for tail probabilities from option prices are rarely reported",
+            desk_question(r"open: inference on the tails", 'tail confidence bands depend on sparse quotes, wide spreads and extrapolation assumptions',
                           width=12.4, font_size=18),
         ).arrange(DOWN, buff=0.22)
         with self.voiceover(

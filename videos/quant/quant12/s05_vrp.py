@@ -128,20 +128,20 @@ class VRP(VoiceoverScene):
         pnl, cum, dd = np.asarray(p["pnl"]), np.asarray(p["cum"]), np.asarray(p["dd"])
         g = axes([2021.2, 2026], [-1.2, 1.0], x_length=8.4, y_length=2.4, ylabel=r"short variance swap, P\&L per week "
                  r"(variance units)", xticks=[], yticks=[-1, 0, 1], font_size=15).to_edge(UP, buff=0.5)
-        bars = VGroup(*[Line(g.ax.c2p(a, 0), g.ax.c2p(a, float(np.clip(b, -1.2, 1.0))), color=RV if b > 0 else BAD,
+        bars = VGroup(*[Line(g.ax.c2p(a, 0), g.ax.c2p(a, float(b)), color=RV if b > 0 else BAD,
                              stroke_width=2) for a, b in zip(t, pnl)])
         hi = float(cum.max()) * 1.1
         g2 = axes([2021.2, 2026], [float(min(dd.min(), 0)) - 0.5, hi], x_length=8.4, y_length=2.4,
-                  ylabel=r"cumulative, and its drawdown", xticks=[2022, 2023, 2024, 2025], xfmt=lambda u: f"{u:.0f}",
+                  ylabel='sum of overlapping payoffs, and its drawdown', xticks=[2022, 2023, 2024, 2025], xfmt=lambda u: f"{u:.0f}",
                   yticks=[0, round(hi, 0)], font_size=15).next_to(g, DOWN, buff=0.45)
         cl = curve(g2.ax, t, cum, IV, stroke_width=3)
         ddb = band(g2.ax, t, cum, cum - dd, BAD, 0.3)
         wi = int(np.argmin(pnl))
-        flag = VGroup(glow_dot(g.ax.c2p(t[wi], float(np.clip(pnl[wi], -1.2, 1))), color=BAD, radius=0.08),
+        flag = VGroup(glow_dot(g.ax.c2p(t[wi], float(pnl[wi])), color=BAD, radius=0.08),
                       label(rf"worst: the month from {_nice(p['worst_day'])}", font_size=17, color=BAD).next_to(
                           g.ax.c2p(t[wi], -1.1), RIGHT, buff=0.15))
         side = label(rf"skewness of the weekly P\&L {p['skew']:.2f}; best {p['best']:+.2f}, worst {p['worst']:+.2f}",
-                     font_size=20, color=GREY_A).to_corner(DL, buff=0.3)  # left of the source line
+                     font_size=18, color=GREY_A).to_edge(LEFT, buff=0.5).set_y(-3.15)
         src = real_data('hypothetical short variance: receive fixed strike, pay realized variance; overlapping windows, no execution costs', corner=DR)
         sk, w, b = p["skew"], p["worst"], p["best"]
         assert p["worst_day"] == "2021-05-12", p["worst_day"]  # the narration names this week
@@ -192,12 +192,12 @@ class VRP(VoiceoverScene):
     def spx(self, x):
         t = np.array([_t(d) for d in x["d"]])
         vx, rv = np.asarray(x["vix"]), np.asarray(x["rv"])
-        g = axes([1990, 2026], [0, 0.9], x_length=9.0, y_length=4.2, ylabel=r"S\&P 500: VIX against the next 21 days' realized",
+        g = axes([1990, 2026], [0, 1.0], x_length=9.0, y_length=4.2, ylabel=r"S\&P 500: VIX against the next 21 days' realized",
                  xticks=[1990, 2000, 2010, 2020], xfmt=lambda u: f"{u:.0f}", yticks=[0, 0.4, 0.8],
                  yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=16).to_edge(UP, buff=0.7)
-        lv_ = curve(g.ax, t, np.clip(vx, 0, 0.9), IV, stroke_width=2)
-        lr = curve(g.ax, t, np.clip(rv, 0, 0.9), RV, stroke_width=1.5)
-        riv = band(g.ax, t, np.clip(np.minimum(vx, rv), 0, 0.9), np.clip(vx, 0, 0.9), IV, 0.25)
+        lv_ = curve(g.ax, t, vx, IV, stroke_width=2)
+        lr = curve(g.ax, t, rv, RV, stroke_width=1.5)
+        riv = band(g.ax, t, np.minimum(vx, rv), vx, IV, 0.25)
         leg = legend([(IV, r"the VIX (monthly samples)"), (RV, r"realized over the next 21 trading days")], font_size=17
                      ).next_to(g, UP, buff=0.1).align_to(g, LEFT)
         side = label(rf"{x['start'] // 10000}--{x['end'] // 10000}: VIX {100 * x['vix_mean']:.1f} vs realized "

@@ -105,10 +105,9 @@ class Frontier(VoiceoverScene):
         with self.voiceover(
             f"""Here is a latent-conditioned regression illustration, rather than a replication of the graph neural operator. It takes log-moneyness, square-root maturity, and two codes from the week's entire fitted grid. The final regressor trains on the first eighty percent of weeks and holds out weeks from {first}. But the autoencoder was fitted on all weeks, including those later dates; their full current grids also supply their codes. These are conditional reconstruction checks, not fully unseen-date forecasts. <bookmark mark='a'/> Across three seeds the regressor's error is {mt:.2f} volatility points. The {d:.2f} baseline is a two-component PCA fitted to all weeks, with its reconstructed grid clamped to the supported coordinates. It is not the autoencoder decoder. SSVI's {s_:.2f} error uses fits to each test week's own quotes. These methods condition on different information and are not a fair predictive race."""
         ) as vo:
-            self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]), FadeIn(leg))
+            self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]), FadeIn(leg), FadeIn(bt), FadeIn(bte), Create(dec), Create(ss))
             vo.wait_until("a")
-            self.play(FadeIn(bt), FadeIn(bte), run_time=2)
-            self.play(Create(dec), Create(ss), FadeIn(side[1]), FadeIn(side[2]))
+            self.play(FadeIn(side[1]), FadeIn(side[2]))
         self.wait(0.4)
         self.clear_scene()
 

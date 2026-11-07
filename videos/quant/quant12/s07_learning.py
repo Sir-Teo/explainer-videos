@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import numpy as np
+from videos.quant.quant10.common import FullRangeReplay as TrainingReplay
 
 from explainer.quant import *  # noqa: F403
 from videos.quant.quant12.common import (BAD, IV, LV, OPT, PART, RV, SPOT, axes3, fixed, grid_fn, illustration, load,
@@ -37,14 +38,14 @@ class Learning(VoiceoverScene, ThreeDScene):
         pick = [0, 1, 2, 4, 8, 15, len(steps) - 1]
 
         def frame(i):
-            g = axes([-0.4, 0.4], [0.3, 1.6], x_length=5.0, y_length=3.4, xlabel=r"log-moneyness", ylabel=r"implied vol",
+            g = axes([-0.4, 0.4], [0.3, 1.9], x_length=5.0, y_length=3.4, xlabel=r"log-moneyness", ylabel=r"implied vol",
                      xticks=[-0.4, 0, 0.4], yticks=[0.5, 1.0, 1.5], yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=15)
             rec = ck[pick[i]].reshape(len(TG), len(KG))
             out = VGroup(g)
             for r, c in zip(rows, cols):
-                out.add(VGroup(*[Dot(g.ax.c2p(a, float(np.clip(b, 0.3, 1.6))), radius=0.03, color=c) for a, b in
+                out.add(VGroup(*[Dot(g.ax.c2p(a, float(b)), radius=0.03, color=c) for a, b in
                                  zip(KG, true[r])]))
-                out.add(curve(g.ax, KG, np.clip(rec[r], 0.3, 1.6), c, stroke_width=3))
+                out.add(curve(g.ax, KG, rec[r], c, stroke_width=3))
             return out
         rp = TrainingReplay(steps, L, frame, [int(steps[p]) for p in pick], ylabel=r"reconstruction RMSE (vol points)")
         leg = legend([(BAD, r"7 days"), (IV, r"30 days"), (LV, r"180 days")], font_size=16).to_corner(UL, buff=0.35)
@@ -69,16 +70,16 @@ class Learning(VoiceoverScene, ThreeDScene):
         atm = np.asarray(v["atm"])
         lev = int(np.argmax(np.abs(v["corr_atm"])))
         oth = 1 - lev
-        g = axes([-3, 3], [-3, 3], x_length=4.8, y_length=4.8, xlabel=r"$z_1$", ylabel=r"$z_2$", xticks=[-2, 0, 2],
+        g = axes([-4.5, 3], [-4.5, 3], x_length=4.8, y_length=4.8, xlabel=r"$z_1$", ylabel=r"$z_2$", xticks=[-2, 0, 2],
                  yticks=[-2, 0, 2], font_size=17).to_edge(LEFT, buff=0.8).shift(DOWN * 0.2)
         lo, hi = atm.min(), atm.max()
-        dots = VGroup(*[Dot(g.ax.c2p(*np.clip(p, -3, 3)), radius=0.05,
+        dots = VGroup(*[Dot(g.ax.c2p(*p), radius=0.05,
                             color=interpolate_color(ManimColor(QC.SPOT), ManimColor(BAD), float((a - lo) / (hi - lo))))
                         for p, a in zip(z, atm)])
         cbar = label(rf"colour: 30-day ATM vol, {100 * lo:.0f}\% (blue) to {100 * hi:.0f}\% (red)", font_size=17,
                      color=GREY_B).next_to(g, DOWN, buff=0.15)
         side = VGroup(
-            wrapped_label(r"each dot is one week; the network was never told the at-the-money level or the skew", 4.6,
+            wrapped_label('each dot is one week; full-sample latent fitting uses no separate ATM-level or skew target', 4.6,
                           20, GREY_A),
             MathTex(rf"\text{{corr}}(z_{lev + 1}, \text{{ATM level}}) = {v['corr_atm'][lev]:+.2f}", font_size=30, color=IV),
             MathTex(rf"\text{{corr}}(z_{oth + 1}, \text{{skew}}) = {v['corr_skew'][oth]:+.2f}", font_size=30, color=BAD),
@@ -113,16 +114,11 @@ class Learning(VoiceoverScene, ThreeDScene):
         cur = s(W[2])
         t1 = label(rf"walk $z_{lev + 1}$ from $-2$ to $+2$: the whole surface lifts", font_size=22, color=IV).to_corner(UL, buff=0.35)
         t2 = label(rf"walk $z_{2 - lev}$: the shape changes instead", font_size=22, color=BAD).to_corner(UL, buff=0.35)
-        foot = label(r"surfaces that never happened, but could have: scenarios for risk (Part 40)", font_size=20,
+        foot = label('decoded model scenarios; no-arbitrage and tail plausibility are not certified', font_size=20,
                      color=GREY_A).to_edge(DOWN, buff=0.3)
         fixed(self, t1, t2, foot)
         with self.voiceover(
-            "Now walk through the space the network learned, decoding each point back into a surface. Move the level "
-            "number from minus two to plus two, and the whole surface rises: a calm market becomes a frightened one. "
-            "<bookmark mark='a'/> Move the other number, and the shape changes instead of the height. "
-            "<bookmark mark='b'/> These are surfaces that never happened but could have: scenarios for risk "
-            "management, and a smooth way to fill in missing quotes. One caution: the network knows nothing about "
-            "arbitrage unless it is taught."
+            """Walk through the fitted latent space and decode its coordinates. Moving the level coordinate from minus two to plus two changes the general volatility level. <bookmark mark='a'/> Moving the other coordinate changes more of the shape. <bookmark mark='b'/> These are unconstrained decoded outputs, not certified possible market price sheets. They need arbitrage, tail and plausibility checks before being used as risk scenarios or to fill missing quotes. The latent reconstruction alone does not provide those guarantees."""
         ) as vo:
             self.play(Create(ax), FadeIn(cur), FadeIn(t1))
             for i in (0, 4, 2):
@@ -135,7 +131,7 @@ class Learning(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(foot))
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, cur)), FadeOut(t2), FadeOut(foot)],
                          run_time=1)
-        self.clear_scene()
+        self.clear()
 
     def derive(self):
         rows = [cmath(r"\text{ELBO}", r"=", r"\mathbb{E}_q[\ln p(x \mid z)] - \text{KL}\big(q(z \mid x)\,\|\,N(0, I)\big)",
@@ -151,11 +147,7 @@ class Learning(VoiceoverScene, ThreeDScene):
                     r"grid of points where there are no quotes")]
         step = ladder(self, rows, whys, keep=3, top=2.7, x=-0.6, buff=0.8, edge=6.9)
         with self.voiceover(
-            "The autoencoder maximizes the evidence lower bound: rebuild well, keep the codes near a standard normal. "
-            "<bookmark mark='a'/> Teaching arbitrage is the second idea. Let a small network be the total variance "
-            "itself, its derivatives from automatic differentiation. <bookmark mark='b'/> Then add Chapter three's two "
-            "conditions as penalties on a grid of points with no quotes at all: the recipe of Ackerer, Tagasovska and "
-            "Vatter, from 2020."
+            "The autoencoder minimizes standardized log-grid reconstruction error plus a KL penalty weighted at zero point zero one, keeping codes near a standard normal. <bookmark mark='a'/> Teaching arbitrage is the second idea. Let a small network be the total variance itself, its derivatives from automatic differentiation. <bookmark mark='b'/> Then add Chapter three's two conditions as penalties on a grid of points with no quotes at all: the recipe of Ackerer, Tagasovska and Vatter, from 2020."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -184,13 +176,13 @@ class Learning(VoiceoverScene, ThreeDScene):
 
         def frame(i):
             c = pick[i]
-            g = axes([-0.6, 0.6], [0.3, 0.9], x_length=4.2, y_length=2.4, ylabel=r"implied vol", xticks=[-0.5, 0, 0.5],
+            g = axes([-0.6, 0.6], [0.3, 1.3], x_length=4.2, y_length=2.4, ylabel=r"implied vol", xticks=[-0.5, 0, 0.5],
                      yticks=[0.4, 0.6, 0.8], yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=13)
             out = VGroup(g)
             for m_, j, col in ((m30, j30, IV), (m90, j90, LV)):
-                out.add(VGroup(*[Dot(g.ax.c2p(a, float(np.clip(b, 0.3, 0.9))), radius=0.025, color=col)
+                out.add(VGroup(*[Dot(g.ax.c2p(a, float(b)), radius=0.025, color=col)
                                  for a, b in zip(k[m_], iv[m_]) if abs(a) <= 0.6]))
-                out.add(curve(g.ax, gk, np.clip(surf[c, j], 0.3, 0.9), col, stroke_width=3))
+                out.add(curve(g.ax, gk, surf[c, j], col, stroke_width=3))
             h = axes([-1, 1], [0, 0.8], x_length=4.2, y_length=1.6, xlabel=r"collocation grid: $k$ across, $T$ up",
                      xticks=[], yticks=[], font_size=12)
             bad = flags[c].astype(bool)
@@ -221,9 +213,9 @@ class Learning(VoiceoverScene, ThreeDScene):
         pc, rc = np.asarray(n["pen_cal"]), np.asarray(n["raw_cal"])
         hd = [r"", r"split 1", r"split 2", r"split 3", r"butterfly", r"calendar"]
         body = [(r"penalized network", IV, [f"{x:.2f}" for x in pt] + [rf"{100 * pg.max():.1f}\%", rf"{100 * pc.max():.3f}\%"]),
-                (r"same network, no penalty", BAD, [f"{x:.2f}" for x in rt] + [rf"{100 * rg.mean():.1f}\%",
-                                                                              rf"{100 * rc.mean():.1f}\%"]),
-                (r"SSVI", LV, [f"{x:.2f}" for x in st] + [r"	ext{n/a}", r"	ext{n/a}"])]
+                (r"same network, no penalty", BAD, [f"{x:.2f}" for x in rt] + [rf"{100 * rg.max():.1f}\%",
+                                                                              rf"{100 * rc.max():.1f}\%"]),
+                (r"SSVI", LV, [f"{x:.2f}" for x in st] + [r"\text{n/a}", r"\text{n/a}"])]
         cells = VGroup(*[label(h, font_size=19, color=GREY_B) for h in hd])
         for name, col, vals in body:
             cells.add(label(name, font_size=22, color=col), *[MathTex(v, font_size=28, color=col) for v in vals])
@@ -236,8 +228,7 @@ class Learning(VoiceoverScene, ThreeDScene):
                      label(rf"vega-weighted, network against SSVI: {np.mean(n['pen_test_vw']):.2f} against "
                            rf"{np.mean(n['ssvi_test_vw']):.2f}", font_size=22, color=GREY_A),
                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(UP, buff=0.9)
-        note_ = label(r"violations: share of a $201 \times 60$ grid ($|k| \le 1$, 3 days to 0.8 years) with $g < 0$ or "
-                      r"$\partial_T w < 0$; unweighted RMSE", font_size=17, color=GREY_B).next_to(tab, DOWN, buff=0.3)
+        note_ = wrapped_label('violations: worst share across three runs on a $201\\times60$ grid, $|k|\\le1$, 3 days--0.8 years; SSVI flags not stored. RMSE unweighted.', width=12.0, font_size=17, color=GREY_B).next_to(tab, DOWN, buff=0.3)
         wins = bool(np.mean(pt) < np.mean(st))
         verdict = ('lower unweighted error in these same-date held-out quote splits; finite-grid penalties are not a global guarantee' if wins else 'SSVI has comparable or lower held-out quote error here; analytic conditions still require a stated domain')
         foot = VGroup(wrapped_label(verdict, 11.6, 21, QC.HOUSE),

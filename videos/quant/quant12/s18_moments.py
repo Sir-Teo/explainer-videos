@@ -99,16 +99,16 @@ class Moments(VoiceoverScene):
     def series(self, m):
         t = np.array([_t(d) for d in m["days"]])
         sk, ku = np.asarray(m["skew"]), np.asarray(m["kurt"])
-        g1 = axes([2021.2, 2026], [-2.0, 1.0], x_length=8.4, y_length=2.4, ylabel=r"risk-neutral skewness, 30 days",
+        g1 = axes([2021.2, 2026], [-3.2, 1.0], x_length=8.4, y_length=2.4, ylabel=r"risk-neutral skewness, 30 days",
                   xticks=[], yticks=[-2, -1, 0, 1], font_size=15).to_edge(UP, buff=0.5)
         zero = DashedLine(g1.ax.c2p(2021.2, 0), g1.ax.c2p(2026, 0), color=GREY_C)
-        bars = VGroup(*[Line(g1.ax.c2p(a, 0), g1.ax.c2p(a, float(np.clip(b, -2, 1))), color=QC.HOUSE if b > 0 else BAD,
+        bars = VGroup(*[Line(g1.ax.c2p(a, 0), g1.ax.c2p(a, float(b)), color=QC.HOUSE if b > 0 else BAD,
                              stroke_width=2) for a, b in zip(t, sk)])
-        g2 = axes([2021.2, 2026], [2, 14], x_length=8.4, y_length=2.0, ylabel=r"risk-neutral kurtosis",
-                  xticks=[2022, 2023, 2024, 2025], xfmt=lambda u: f"{u:.0f}", yticks=[3, 8, 13], font_size=15
+        g2 = axes([2021.2, 2026], [2, 24], x_length=8.4, y_length=2.0, ylabel=r"risk-neutral kurtosis",
+                  xticks=[2022, 2023, 2024, 2025], xfmt=lambda u: f"{u:.0f}", yticks=[3, 12, 22], font_size=15
                   ).next_to(g1, DOWN, buff=0.4)
         three = DashedLine(g2.ax.c2p(2021.2, 3), g2.ax.c2p(2026, 3), color=GREY_C)
-        kl = curve(g2.ax, t, np.clip(ku, 2, 14), LV, stroke_width=2)
+        kl = curve(g2.ax, t, ku, LV, stroke_width=2)
         ps = m["share_pos_skew"]
         side = label(rf"skewness positive in {100 * ps:.0f}\% of weeks (mean {m['mean_skew']:.2f}); kurtosis "
                      rf"{m['mean_kurt']:.1f} on average; corr(skew, next 30 days' return) = {m['corr_ret']:.2f}",
@@ -119,13 +119,7 @@ class Moments(VoiceoverScene):
         pp = 100 * ps
         cr = m["corr_ret"]
         with self.voiceover(
-            "Here are both, every Wednesday since 2021. Skewness on top, gold when positive. <bookmark mark='a'/> "
-            f"Chapter one found the smile call-skewed in {cs:.0f} percent of weeks; the full risk-neutral skewness "
-            f"is positive in only {pp:.0f} percent. They measure different things: the risk reversal compares two "
-            "strikes near the money, the skewness weighs the whole distribution, and Bitcoin's far left tail is priced "
-            "dearly even in weeks when near-the-money calls are bid. <bookmark mark='b'/> Kurtosis, below, stays far "
-            "above three. And the correlation between this week's skewness and the next month's return is "
-            f"{cr:.2f}: a description, not a strategy."
+            f"Here are both, every Wednesday since 2021. Skewness on top, gold when positive. <bookmark mark='a'/> Chapter one found the smile call-skewed in {cs:.0f} percent of weeks; the full risk-neutral skewness is positive in only {pp:.0f} percent. They measure different things: the near-money smile proxy compares two strikes, the skewness weighs the whole distribution, and Bitcoin's far left tail is priced dearly even in weeks when near-the-money calls are bid. <bookmark mark='b'/> Kurtosis, below, stays far above three. And the correlation between this week's skewness and the next month's return is {cr:.2f}: a description, not a strategy."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(src), Create(zero), LaggedStart(*[Create(b) for b in bars], lag_ratio=0.004,
                                                                           run_time=3))
@@ -142,12 +136,12 @@ class Moments(VoiceoverScene):
             wrapped_label(r"Martin (2017): for the S\&P 500 the bound averaged about 5\% a year, and rose above 20\% at "
                           r"the height of the 2008 crisis: expected returns are highest when options are dearest", 11.0, 22,
                           GREY_A),
-            wrapped_label(rf"for bitcoin, from the same weekly strips: {100 * m['svix_mean']:.0f}\% a year on average since "
+            wrapped_label(rf"for bitcoin, from the same weekly strips: {100 * m['svix_mean']:.0f}\% annualized 30-day statistic on average since "
                           rf"2021, {100 * m['svix_late']:.0f}\% in 2024--2025", 11.0, 22, IV),
             wrapped_label(r"it holds only if bitcoin's falls coincide with bad times for its marginal holder: an "
                           r"assumption, not a measurement. Martin and Wagner (2019) extend the bound to single stocks", 11.0,
                           22, GREY_B),
-            wrapped_label(r"pause and predict: the bound says at least 30\% a year. Why not simply buy?", 11.0, 22, QC.HOUSE),
+            wrapped_label('pause and predict: does a large conditional, annualized statistic justify buying?', 11.0, 22, QC.HOUSE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(ORIGIN)
         a, b = 100 * m["svix_mean"], 100 * m["svix_late"]
         with self.voiceover(

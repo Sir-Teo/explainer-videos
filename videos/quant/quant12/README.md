@@ -17,7 +17,7 @@ VIX3M, Yahoo Finance's S&P 500 and Cboe's VIX futures settlements.
 
 ## Chapters (about 63 minutes)
 
-* **The shape of fear.** A 3D tour of the Surface (10 December 2025): 254 quotes and an SSVI fit at 0.74 vol points,
+* **The shape of fear.** A 3D tour of the Surface (10 December 2025): 254 reconstructed marks, with 193 filtered observations used for an SSVI fit at 0.74 vol points,
   vega-weighted. How we got here (1973–2024), a flat Black–Scholes plane bending into the Surface, the objectives,
   the House.
 * **1. The smile, read.** Three expiries; the smile as the risk-neutral law's skewness and kurtosis (a live
@@ -35,7 +35,7 @@ VIX3M, Yahoo Finance's S&P 500 and Cboe's VIX futures settlements.
   Per-expiry SVI fits of the Surface cross in 2 of 10 neighbouring pairs (the 2–4 day expiries); Part 9's checker
   finds 0 strike-by-strike violations. Lee's wing slopes reach 0.35 (puts) and 0.20 (calls) at 289 days.
 * **4. SVI.** Five sliders; wings, vertex, Lee's box b(1+|ρ|) ≤ 2; the jump-wings form; Zeliade's reduction.
-  **Lab 1** `fit_svi`. **Replay**: six random starts (12.6–58.7 vol points off) all reach 0.254 in 28–43 evaluations.
+  **Lab 1** `fit_svi`. **Replay**: six random starts (12.6–58.7 vol points off) all reach 0.254. Solver nfev is 28–43; the replay includes finite-difference residual calls.
   The eleven expiries in JW form; smallest g 0.075.
 * **5. SSVI.** θ_T on the wall, smiles hung over it, swept into a surface (3D). **Lab 2** `fit_ssvi`.
   **Replay (3D)**: five starts all end at 0.736 vol points. Gatheral–Jacquier's theorems; the fitted γ = 0.557 > ½,
@@ -52,10 +52,10 @@ VIX3M, Yahoo Finance's S&P 500 and Cboe's VIX futures settlements.
   the derivation of R ≈ 2; forward 30-day skews under LV fade from 6.0 (start now) to 2.7 vol points (start in 90 days)
   against 6.5 today.
 * **9. Variance swaps.** Hockey sticks summing to the log contract; Itô, Carr–Madan, Neuberger, DDKZ,
-  Britten-Jones–Neuberger; the jump term J³/3. The Surface's 30-day strip: √K_var 48.8% against 43.7% ATM; within
+  Britten-Jones–Neuberger; the leading small-jump term J³/3. The Surface's 30-day strip: √K_var 48.8% against 43.7% ATM; within
   ±20% of the forward 45.0%; 15% of the variance lies beyond ±20%. A −20% log jump leaves the hedge 6% short.
 * **10. Replicating on real Bitcoin.** A live ledger (strip, hourly hedge, realized variance) for one month.
-  **Lab 4** `strip_replication`. 243 months: hourly-hedged error sd 0.0046 on a mean variance of 0.325; a daily hedge
+  **Lab 4** `strip_replication`. 243 overlapping 30-day windows: hourly-hedged error sd 0.0046 on a mean variance of 0.325; a daily hedge
   against hourly variance, sd 0.129; a listed strike grid reads 1.1 vol points low. Vol swaps: √E[RV] 57.0% against
   E√RV 54.0%; the second-order formula says 4.1 points (overshoots).
 * **11. The VIX, and our own.** **Lab 5** `vix` on the Surface's two expiries around 30 days: 49.1% and 48.3%,
@@ -68,7 +68,7 @@ VIX3M, Yahoo Finance's S&P 500 and Cboe's VIX futures settlements.
   realized; VIX² above realized variance on 86% of days.
 * **13. What option prices say about the future.** Three strips (log variance, SVIX, cubic); Martin's bound and BKM
   derived. The Surface at 30 days: Q-vol 49.8%, Q-skew −0.97, Q-kurtosis 6.9. Weekly: Q-skew positive in only 27% of
-  weeks (mean −0.40), kurtosis 6.1; SVIX bound 44% a year (31% in 2024–25), valid only under Martin's condition.
+  weeks (mean −0.40), kurtosis 6.1; annualized 30-day SVIX statistic 44% (31% in 2024–25), a bound only under Martin's unverified Bitcoin covariance condition.
 * **14. VIX futures, the roll, short-vol notes.** The VX futures curve June 2017 – March 2018 as a 3D ribbon (contango
   on 86% of days, median slope 7.9%). **Lab 6** `vx_index`/`inverse_note`. The rebuilt short-term index rose 96.1% on
   5 February 2018; a −1× note lost the same, after gaining 64% from June to December 2017; the close-of-day hedge was
@@ -77,27 +77,25 @@ VIX3M, Yahoo Finance's S&P 500 and Cboe's VIX futures settlements.
   1.327; the amplification mechanism; firm files (XIV allegations and the Second Circuit, SVXY to −0.5×, Griffin–Shams,
   TVIX 2012), and a pointer to Part 11 for LJM and Allianz Structured Alpha.
 * **16. Dealer gamma and same-day options.** Long- and short-gamma days simulated live; the fixed-point derivation,
-  GEX and its weak point; five seeds: short gamma (k = −0.5) raises volatility ×1.33 with a closing slope +0.26, long
-  gamma ×0.80 and −0.23. The public record: Baltussen et al. (2021), Cboe's 62.4% 0DTE share (August 2025), VIX1D,
+  GEX and its weak point; five seeds: short gamma (k = −0.5) raises dispersion across days of pre-close returns ×1.33 with a closing slope +0.26, long
+  gamma ×0.80 and −0.23. The public record: Baltussen et al. (2021), Cboe's 62.4% SPX 0DTE share (August 2025), VIX1D,
   Andersen–Fusari–Todorov, Bandi–Fusari–Renò, Dim–Eraker–Vilkov, Beckmeyer et al.
 * **17. Learning surfaces.** A VAE over 243 weekly surfaces, replayed (five seeds): 2.93 vol points against 3.59 for
   two principal components; one latent tracks ATM vol (corr −0.96). Latent walks in 3D. An arbitrage-penalised network
   (Ackerer et al. 2020) on the Surface, replayed with its collocation violations: held-out 1.29/0.93/0.82 vol points
-  (three splits) in the restored CPU run; zero negative-density grid flags, but one calendar flag in one run, against 0.97/0.84/0.88 unpenalised with 1–10% of the grid in violation and SSVI
+  (three splits) in the restored CPU run; zero negative-density grid flags, but one calendar flag in one run, against 0.97/0.85/0.88 unpenalised with 1–10% of the grid in violation and SSVI
   1.96/2.06/2.23. See the saved runs for the distinct vega-weighted metric.
 * **18. Who builds surfaces, and who sells them.** Cboe and Deribit as index makers; dealers' quants (Goldman's DDKZ
   and Derman–Kani, Dupire at Paribas, SVI at Merrill Lynch, Andreasen–Huge at Danske Bank); the House's builder.
 * **19. Frontier, 2023–2026.** Operator deep smoothing (ICLR 2025), VolGAN (2024), surfaces as images (Kelly et al.
-  2023), no-arbitrage SVI and eSSVI (Martini–Mingone 2022); one network for all weeks, trained here (three seeds).
+  2023), no-arbitrage SVI and eSSVI (Martini–Mingone 2022); a latent-conditioned MLP reconstruction illustration (three seeds), with full-sample VAE codes and PCA; only the final regressor holds out the last 49 weeks.
 * **For the researcher: reading the density from noisy prices.** The butterfly q̂_h = [C̃(K−h) − 2C̃(K) + C̃(K+h)]/h²
   with independent price errors of sd s: bias (h²/12)q″ + O(h⁴), variance 6s²/h⁴, leading local-MSE half-width
   h* = (864s²/q″²)^{1/8}, MSE_lead(h*) = (√6/6)|q″|s, so the error falls like s^{1/2}. Simulation (a lognormal at 60%, 30
   days, 4,000 draws per width): at the money, s = 0.002/0.01/0.05 per 100 of the forward gives h* = 5.4/8.1/12.1%
-  (simulated best 5.5/8.0/10.0 on a 0.25% grid) and a relative error at h* of 1.0/2.3/5.2%; the put wing at 85
-  agrees. Deribit BTC options, the Surface's two days, 644 trades of 20–45 days within 15% of spot: trade price
+  (grid minima 5.5/8.0/10.0 over 0.25–10%; the largest formula optimum is outside that grid) and a leading local relative RMSE at h* of 1.0/2.3/5.2%. The high-noise put-wing optimum also exceeds the sampled grid. Deribit BTC options, the Surface's two days, 644 trades of 20–45 days within 15% of spot: trade price
   against mark price, robust sd 0.026 per 100 of the forward; listed strikes 1.08% apart; at the Surface's 46%
-  at-the-money volatility h* = 8.4%, about eight strikes on each side; adjacent strikes would leave noise of ±184% of
-  the density. Three open problems; pause: errors cut 16-fold halve h* (16^{1/4} = 2) and quarter the error.
+  at-the-money volatility h* = 8.4%, about eight strikes on each side under the illustrative noise assumptions; adjacent strikes give a conditional one-standard-deviation scale of ±184% of the reference density. Three open problems; pause: errors cut 16-fold halve h* (16^{1/4} = 2) and quarter the error.
 * **Outro.** Twelve lines, Rule 12 (the trial counter stays at 312), three desk questions, nine problems (two at
   qualifying-exam level), payoffs, references.
 
@@ -384,3 +382,5 @@ compute and House sources, manifest, registry and track record remain unchanged.
 The as-of-Part-12 counter is 312 and the global registry 23,562; this pass adds no
 market trials and opens no sealed holdout. Visual and playback QA are still in
 progress. Full production-voice listening remains pending.
+
+SVXY changed its daily target from −1× to −0.5× effective at the close of 27 February 2018, as stated in [the issuer announcement filed with the SEC](https://www.sec.gov/Archives/edgar/data/1415311/000119312518059052/d503117dex991.htm). The XIV discussion labels the 2021 appeal as a pleading-stage decision, without treating allegations as findings. A February 2025 class-certification order is also retained in the source-check artifacts; it concerns procedure, not a merits determination.

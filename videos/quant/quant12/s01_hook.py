@@ -47,12 +47,12 @@ class Hook(VoiceoverScene, ThreeDScene):
         dots = smile_points3d(ax, k[m], T[m], iv[m], color=WHITE, radius=0.03)
         hint = VGroup(label(r"log-moneyness $\ln K/F$", font_size=24, color=SPOT), label(r"years to expiry", font_size=24,
                                                                                     color=GREY_A),
-                      label(r"implied volatility", font_size=24, color=IV)).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+                      label('IV: 30--80\\% display (clipped)', font_size=24, color=IV)).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         hint.to_corner(UR, buff=0.4)
         ax.x_axis.set_color(SPOT); ax.y_axis.set_color(GREY_A); ax.z_axis.set_color(IV)  # the key reads off the axes
         params = note(rf"dots: {int(m.sum())} quotes; surface: SSVI fit, {s['rmse_ssvi']:.2f} vol points (vega-weighted)",
                       font_size=19).to_corner(DR, buff=0.3)
-        src = real_data(r"the Surface: Deribit BTC options, 10 December 2025, 08:00 UTC", corner=DL)
+        src = real_data('Deribit marks, 10 Dec 2025: 00--12 UTC pool; 08:00 reference', corner=DL)
         self.set_camera_orientation(phi=68 * DEGREES, theta=-62 * DEGREES, zoom=0.9)
         self.add_fixed_in_frame_mobjects(hint, params, src)
         self.remove(hint, params, src)
@@ -63,10 +63,10 @@ class Hook(VoiceoverScene, ThreeDScene):
             vo.wait_until("a")
             self.play(Create(surf), FadeIn(params), run_time=3)
             vo.wait_until("b")
-            self.move_camera(theta=-30 * DEGREES, phi=70 * DEGREES, run_time=max(vo.remaining(1.0) - 1.0, 1.0))
+            self.move_camera(theta=-30 * DEGREES, phi=70 * DEGREES, run_time=min(max(vo.remaining(1.0) - 1.0, 1.0), 8.0))
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, surf, dots)), FadeOut(hint),
                                                                   FadeOut(params), FadeOut(src)], run_time=1.5)
-        self.clear_scene()
+        self.clear()
 
     def history(self, s):
         events = [(1973, r"one $\sigma$: Black--Scholes", QC.IDEA), (1987, r"the crash: the skew is born", QC.CRISIS),
@@ -129,7 +129,7 @@ class Hook(VoiceoverScene, ThreeDScene):
         flat = mk(lambda k, T: atm)
         bent = mk(f)
         t1 = label(rf"Black--Scholes: one volatility, {100 * atm:.0f}\% everywhere", font_size=24, color=GREY_A).to_corner(UL, buff=0.4)
-        t2 = label(r"the market: a different volatility at every strike and expiry", font_size=24, color=IV).to_corner(UL, buff=0.4)
+        t2 = label('the fitted surface: IV display 30--80\\% (clipped)', font_size=24, color=IV).to_corner(UL, buff=0.4)
         q = label(r"pause and predict: which corner is highest, and why?", font_size=22, color=QC.HOUSE).to_corner(DL, buff=0.3)
         fixed(self, t1, t2, q)
         self.set_camera_orientation(phi=68 * DEGREES, theta=-62 * DEGREES, zoom=0.9)
@@ -139,9 +139,9 @@ class Hook(VoiceoverScene, ThreeDScene):
             self.play(Create(ax), FadeIn(flat), FadeIn(t1), FadeIn(q))
             vo.wait_until("a")
             self.play(Transform(flat, bent), FadeOut(t1), FadeIn(t2), FadeOut(q), run_time=4)
-            self.move_camera(theta=-35 * DEGREES, run_time=max(vo.remaining(0.5) - 0.5, 1.0))
+            self.move_camera(theta=-35 * DEGREES, run_time=min(max(vo.remaining(0.5) - 0.5, 1.0), 8.0))
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, flat)), FadeOut(t2)], run_time=1.2)
-        self.clear_scene()
+        self.clear()
 
     def objectives(self):
         card = objectives_card([
@@ -153,7 +153,7 @@ class Hook(VoiceoverScene, ThreeDScene):
             r"Variance swaps replicated on real bitcoin; the VIX rebuilt; our index against DVOL",
             r"The variance risk premium on bitcoin and the S\&P 500; SVIX and risk-neutral moments",
             r"VIX futures, short-volatility notes and Volmageddon; dealer gamma and same-day options",
-            r"Learning surfaces: an autoencoder and an arbitrage-free network; who builds surfaces; the frontier",
+            'Learning surfaces: an autoencoder and a grid-penalized network; who builds surfaces; the frontier',
         ], color=QC.IDEA, font_size=23)
         with self.voiceover(
             "The plan. Reading the smile as a distribution; how surfaces move, and which shapes are impossible. "

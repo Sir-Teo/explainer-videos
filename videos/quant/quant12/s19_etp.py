@@ -33,18 +33,18 @@ class ETP(VoiceoverScene, ThreeDScene):
     def ribbon(self, v):
         t = np.array([_yr(d) for d in v["days"]])
         curves = v["curve"]
-        ax = axes3([2017.4, 2018.25, 0.2], [0, 220, 50], [10, 35, 5], x_length=7.6, y_length=4.4, z_length=3.0)
+        ax = axes3([2017.4, 2018.25, 0.2], [0, 220, 50], [8, 40, 8], x_length=7.6, y_length=4.4, z_length=3.0)
         self.set_camera_orientation(phi=66 * DEGREES, theta=-50 * DEGREES, zoom=0.85)
         lines = VGroup()
         i5 = v["i_feb5"]
         for i in list(range(0, len(t), 3)) + [i5 - 1, i5]:
             c = np.asarray(curves[i])
             col = BAD if i == i5 else (interpolate_color(ManimColor(QC.SPOT), ManimColor(IV), i / len(t)))
-            pts = [ax.c2p(t[i], a, float(np.clip(b, 10, 35))) for a, b in c]
+            pts = [ax.c2p(t[i], a, float(b)) for a, b in c]
             if len(pts) > 1:
                 lines.add(VMobject(color=col, stroke_width=5 if i == i5 else 2).set_points_as_corners(pts))
         vix = [x for x in v["vix"]]
-        spot = VGroup(*[Dot3D(ax.c2p(t[i], 0, float(np.clip(x, 10, 35))), radius=0.03, color=WHITE, resolution=(3, 3))
+        spot = VGroup(*[Dot3D(ax.c2p(t[i], 0, float(x)), radius=0.03, color=WHITE, resolution=(3, 3))
                         for i, x in enumerate(vix) if x is not None and i % 2 == 0])
         hint = VGroup(label(r"across: date (June 2017 -- March 2018)", font_size=18, color=GREY_B),
                       label(r"depth: days to the future's expiry", font_size=18, color=GREY_B),
@@ -64,10 +64,10 @@ class ETP(VoiceoverScene, ThreeDScene):
             self.move_camera(theta=-25 * DEGREES, run_time=2.5)
             vo.wait_until("b")
             self.play(Create(lines[-1]), FadeIn(red))
-            self.move_camera(theta=-70 * DEGREES, run_time=max(vo.remaining(0.5) - 0.5, 1.0))
+            self.move_camera(theta=-70 * DEGREES, run_time=min(max(vo.remaining(0.5) - 0.5, 1.0), 8.0))
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, lines, spot)), FadeOut(hint),
                                                                   FadeOut(red), FadeOut(src)], run_time=1)
-        self.clear_scene()
+        self.clear()
 
     def derive(self):
         rows = [cmath(r"F^{VX}_t(T)", r"=", r"\mathbb{E}^Q_t[\text{VIX}_T] \;\le\; \sqrt{\mathbb{E}^Q_t[\text{VIX}_T^2]}",
