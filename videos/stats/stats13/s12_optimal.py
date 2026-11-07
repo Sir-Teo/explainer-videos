@@ -133,6 +133,7 @@ class Optimal(VoiceoverScene):
             label(r"best: \ the middle point exactly in the middle, \ and a third of the observations at each of $-1, 0, 1$", font_size=24, color=EXACT),
             MathTex(rf"\det M = 4/27 = {4 / 27:.3f}\quad\text{{vs}}\quad\text{{21 evenly spaced points: }} {d['dets']['uniform 21']:.3f}", font_size=28),
         ), 12.6, 0.24, [0, -2.6, 0])
+        intro = label('Choose the support points and their allocation weights', font_size=36)
         with self.voiceover(
             "Search for it. <bookmark mark='a'/> Put the design's points at minus one, at one, and at a middle point m, a third "
             "of the observations each, and slide m. The determinant peaks with m exactly at zero. <bookmark mark='b'/> Now "
@@ -142,7 +143,9 @@ class Optimal(VoiceoverScene):
             "twenty-seven, point one four eight. <bookmark mark='d'/> Twenty-one evenly spaced points give point zero three nine, "
             "less than a third as much: the familiar even spread wastes most of its observations in places that tell us little."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(A), FadeIn(t1), Create(c1), run_time=2.0)
             self.play(Create(m1))
             vo.wait_until("b")

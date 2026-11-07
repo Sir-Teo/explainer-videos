@@ -87,6 +87,7 @@ class Fraction(VoiceoverScene):
             label(r"each cube gets 4 corners, \ never two on the same edge", font_size=24),
             label(r"a $2^{4-1}$ fractional factorial", font_size=26, color=OBS),
         ), 12.0, 0.25, [0, -2.6, 0])
+        intro = label('Choose half the factorial corners using a defining relation', font_size=36)
         with self.voiceover(
             "Take four factors, A, B, C and D. <bookmark mark='a'/> The full factorial is sixteen runs: draw it as two cubes, "
             "one for each level of D. <bookmark mark='b'/> Now run only half: the eight corners where the level of D equals "
@@ -95,8 +96,10 @@ class Fraction(VoiceoverScene):
             "a two to the four minus one fractional factorial, introduced by David Finney at Rothamsted in 1945. What do we "
             "lose?"
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(axl))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(Create(lo[0]), Create(hi[0]), FadeIn(l1), FadeIn(l2), FadeIn(foot[0]))
             vo.wait_until("b")
             self.play(FadeIn(lo[1], scale=1.5), FadeIn(hi[1], scale=1.5), FadeIn(foot[1]))
@@ -130,9 +133,9 @@ class Fraction(VoiceoverScene):
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.8, buff=0.65, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                step(k, transform=False)
                 if k == 0:
                     self.play(FadeOut(intro), run_time=0.25)
-                step(k, transform=False)
         self.clear_scene()
 
     def estimates(self):
@@ -154,6 +157,7 @@ class Fraction(VoiceoverScene):
             label(r"complementary fraction: reverse D alone to split the pairs", font_size=22, color=GREY_A),
         ), 4.2, 0.3, [4.7, 0.0, 0])
         tag = simulated_tag(r"simulated, \ noise SD 1", corner=DR)
+        intro = label('Compare the full design with its half fraction', font_size=36)
         with self.voiceover(
             "Does it matter? <bookmark mark='a'/> Here's a simulated process in four factors: A truly adds four, C two, D "
             "three, and A and B interact, one and a half; everything else is zero. The table shows the full sixteen-run "
@@ -163,8 +167,10 @@ class Fraction(VoiceoverScene):
             "we built it. A real experimenter would need knowledge, or more runs. <bookmark mark='d'/> The standard remedy is "
             "to run the complementary fraction with D changed to minus A B C. Reversing D alone splits these pairs; reversing all four factors would keep the same even-word fraction."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tag))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(tab, lag_ratio=0.05), FadeIn(notes[0]), run_time=2.0)
             for k, m_ in enumerate("bcd"):
                 vo.wait_until(m_)
@@ -181,6 +187,7 @@ class Fraction(VoiceoverScene):
         rows[3][2].set_color(OBS)
         whys = [why(r"screening only"), why(r"the common workhorse"), why(r"nearly as good as the full factorial"),
                 why(r"Box \& Hunter (1961)")]
+        intro = label('Resolution describes which effects share a column', font_size=36)
         with self.voiceover(
             "George Box and Stuart Hunter classified fractions by their resolution. <bookmark mark='a'/> In a resolution three "
             "design, main effects are aliased with two-factor interactions: good only for a first screening. "
@@ -189,10 +196,13 @@ class Fraction(VoiceoverScene):
             "clear of each other. <bookmark mark='d'/> The resolution is the length of the shortest word in the defining "
             "relation. Ours, A B C D, has four letters: resolution four, which is exactly what the table showed."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.2, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def sign_grid(self, M, center, cell=0.42, names=None, font_size=20):
@@ -222,6 +232,7 @@ class Fraction(VoiceoverScene):
             label(r"resolution III: \ a saturated screening design", font_size=24, color=RES),
             label(r"gold = high, \ dark = low", font_size=20, color=GREY_A),
         ), 5.4, 0.34, [3.6, 0.0, 0])
+        intro = label('A saturated design leaves no residual error estimate', font_size=36)
         with self.voiceover(
             "Push it to the limit. <bookmark mark='a'/> Seven factors in eight runs: a two to the seven minus four design. "
             "<bookmark mark='b'/> Start with the full factorial in A, B and C, and give the four extra factors the interaction "
@@ -231,7 +242,9 @@ class Fraction(VoiceoverScene):
             "and every main effect is aliased with interactions. It's a screening design: it tells you which of many factors "
             "deserve a proper experiment."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(grid[1]), FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(b_) for b_ in grid[0]], lag_ratio=0.01), FadeIn(rows[1]), FadeIn(rows[4]), run_time=2.0)

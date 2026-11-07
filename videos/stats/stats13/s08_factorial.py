@@ -258,6 +258,7 @@ class Factorial(VoiceoverScene):
             row.add(label(eff, font_size=22, color=OBS if i else GREY_A).move_to([x0[5], 2.3 - i * 0.6, 0]))
             grid.add(row)
         foot = label(r"each pass: \ sums of pairs on top, \ differences of pairs below", font_size=22, color=GREY_A).move_to([0, -2.9, 0])
+        intro = label('Yates computes all factorial effects by repeated sums and differences', font_size=32)
         with self.voiceover(
             "Frank Yates, Fisher's successor at Rothamsted, gave a way to compute all the effects by hand. <bookmark mark='a'/> "
             "Write the eight yields in standard order. <bookmark mark='b'/> In each pass, write the sums of consecutive pairs, "
@@ -268,9 +269,9 @@ class Factorial(VoiceoverScene):
             "Yates published it in 1937, in The Design and Analysis of Factorial Experiments. It's the Walsh-Hadamard transform "
             "for the group of the cube's corners, later familiar in fast transform algorithms."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(intro))
             vo.wait_until("a")
-            self.play(*[FadeIn(VGroup(r[0], r[1])) for r in grid])
+            self.play(*[FadeIn(VGroup(r[0], r[1])) for r in grid], FadeOut(intro))
             for k, m_ in enumerate("bcd"):
                 vo.wait_until(m_)
                 self.play(LaggedStart(*[FadeIn(r[k + 2], shift=RIGHT * 0.2) for r in grid], lag_ratio=0.08))
@@ -371,6 +372,7 @@ class Factorial(VoiceoverScene):
         rows[1][2].set_color(OBS)
         whys = [why(r"baseline + one change per factor"), why(r"every plot used for every effect"),
                 why(r"Fisher's ``hidden replication''"), why(r"and its conclusions hold over a range of conditions")]
+        intro = label('Each factorial effect uses every experimental run', font_size=36)
         with self.voiceover(
             "So the factorial wins twice. <bookmark mark='a'/> With sixteen plots, one factor at a time would use four "
             "settings, the baseline plus one change per factor, four plots each. Each effect is a difference of two means of "
@@ -380,8 +382,11 @@ class Factorial(VoiceoverScene):
             "only the factorial measures interactions. Fisher added a third advantage: because each effect is averaged over "
             "the other factors' levels, its reported main effects average over the tested factor combinations; interactions still require reporting simple effects. That's the questionnaire."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.0, buff=0.65, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()

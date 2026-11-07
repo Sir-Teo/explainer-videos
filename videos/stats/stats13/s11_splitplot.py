@@ -54,6 +54,7 @@ class SplitPlot(VoiceoverScene):
             label(r"then split each whole plot into 4 subplots, \ and randomize varieties within it", font_size=24),
             label(r"two randomizations, \ at two scales: \ a split-plot design (Yates 1935)", font_size=24, color=OBS),
         ), 12.6, 0.22, [0, -2.65, 0])
+        intro = label('Randomize whole plots, then subplots within them', font_size=36)
         with self.voiceover(
             "Some factors can only be applied to big pieces of land. <bookmark mark='a'/> Irrigation runs along a channel: you "
             "can water a whole strip, not one small plot here and another there. <bookmark mark='b'/> So randomize irrigation "
@@ -62,7 +63,9 @@ class SplitPlot(VoiceoverScene):
             "<bookmark mark='d'/> Two randomizations, at two scales: a split-plot design, which Frank Yates described at "
             "Rothamsted in the 1930s. It's convenient, and very common. And it is very commonly analysed wrongly."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(FadeIn(wps, lag_ratio=0.08), FadeIn(key[:2]), FadeIn(rows[1]))
@@ -117,6 +120,7 @@ class SplitPlot(VoiceoverScene):
             label(r"the right analysis uses the whole-plot error: \ 3 df, \ from 8 whole plots in 4 blocks", font_size=24, color=HIT),
             label(r"only 8 whole plots ever got irrigation or not: \ that is the real sample size", font_size=24, color=OBS),
         ), 12.6, 0.24, [0, -2.2, 0])
+        intro = label('The irrigation effect needs the whole-plot error', font_size=36)
         with self.voiceover(
             "Here's one simulated split plot, with a real irrigation effect of two bushels. <bookmark mark='a'/> The common "
             "mistake: analyse it as if all thirty-two subplots had been randomized independently, a completely randomized "
@@ -128,7 +132,9 @@ class SplitPlot(VoiceoverScene):
             "twenty-four degrees of freedom for a comparison that has three. <bookmark mark='d'/> Only eight whole plots were ever randomized to irrigation "
             "or not. That is the real sample size for irrigation, however many subplots each one holds."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(t1, lag_ratio=0.1), FadeIn(foot[0]))
             vo.wait_until("b")
             self.play(FadeIn(t2, lag_ratio=0.1))
@@ -193,6 +199,7 @@ class SplitPlot(VoiceoverScene):
         rows[3][2].set_color(RES)
         whys = [why(r"each whole plot's mean carries its $w$; \ $\sigma_w = 2$, \ $\sigma = 1$"), why(r"within whole plots, \ $w$ cancels"),
                 why(r"the CRD pools three strata into one error"), why(r"so $F \approx 17/6$ with no effect, \ judged on 24 df")]
+        intro = label('Two error strata produce two different F tests', font_size=36)
         with self.voiceover(
             "Why does it fail? Look at what each mean square estimates. <bookmark mark='a'/> With no real effect, irrigation's "
             "mean square estimates sigma squared plus four sigma w squared, because each whole plot's mean carries its own w. "
@@ -204,10 +211,13 @@ class SplitPlot(VoiceoverScene):
             "against an F distribution with twenty-four denominator degrees of freedom instead of three. Both mistakes push "
             "the same way."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.65, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def industry(self):

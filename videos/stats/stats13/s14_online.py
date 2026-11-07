@@ -60,6 +60,7 @@ class Online(VoiceoverScene):
         rows[3][2].set_color(OBS)
         whys = [why(r"the same user always sees the same arm"), why(r"Bernoulli assignment; realized counts can differ"),
                 why(r"decided before the experiment"), why(r"Welch's comparison, \ Part 10")]
+        intro = label('Specify the unit, assignment and metric before running', font_size=36)
         with self.voiceover(
             "The anatomy of an A/B test. <bookmark mark='a'/> The unit is a user, assigned by an experiment-specific randomized hash of their ID, so the same "
             "person always sees the same version. <bookmark mark='b'/> Two arms, the control and the change, usually split fifty "
@@ -68,10 +69,13 @@ class Online(VoiceoverScene):
             "from Part 10. Everything in this part applies. The one new problem is that the effects are tiny, a fraction of a "
             "percent, and the metrics are noisy. Even with millions of users, precision is precious."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def cuped_scatter(self):
@@ -192,6 +196,7 @@ class Online(VoiceoverScene):
             label(r"bots filtered differently, \ a crash in one arm, \ a redirect that loses users", font_size=24),
             label(r"a flag is evidence, not proof of a bug: \ audit before interpreting metrics", font_size=24, color=OBS),
         ), 12.4, 0.32, [0, -1.2, 0])
+        intro = label('Check the allocation counts before interpreting outcomes', font_size=36)
         with self.voiceover(
             "The most important check in online experiments costs nothing. <bookmark mark='a'/> This experiment was designed as a "
             "fifty-fifty split. The arms received fifty thousand and fifty thousand eight hundred and twenty users. "
@@ -202,7 +207,9 @@ class Online(VoiceoverScene):
             "redirect that loses people. <bookmark mark='e'/> If selection or logging depends on the arm, comparability can fail and "
             "the original randomization guarantee no longer applies to the recorded comparison. Check the split before reading any metric."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(GrowFromEdge(ra, LEFT), GrowFromEdge(rb, LEFT), FadeIn(la), FadeIn(lb), Create(half), FadeIn(rows[0]))
             for k, m_ in enumerate("bcde"):
                 vo.wait_until(m_)
@@ -217,6 +224,7 @@ class Online(VoiceoverScene):
             label(r"many metrics, \ many segments: \ chapter four's multiplicity", font_size=24),
             label(r"A/A tests: \ run the platform against itself, \ and check that 5\% means 5\%", font_size=24, color=OBS),
         ), 12.4, 0.44, [0, 0, 0])
+        intro = label('An online experiment still needs a valid design', font_size=36)
         with self.voiceover(
             "The old pitfalls come back at scale. <bookmark mark='a'/> Watching the p-value every day and stopping when it dips "
             "below five percent breaks the test, as Part 10 showed; Part 58 builds tests that allow it. "
@@ -226,8 +234,11 @@ class Online(VoiceoverScene):
             "chapter four's multiplicity. <bookmark mark='e'/> And A/A tests, where both arms get the same version, check that "
             "the platform's five percent really is five percent."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()
 

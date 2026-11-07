@@ -134,6 +134,7 @@ class Latin(VoiceoverScene):
             label(rf"randomize the layout; in total: \ there are {d['n_squares_5']:,} Latin squares of order 5", font_size=24, color=OBS),
             label(r"row/column/letter shuffles sample one permutation class, \ not all squares uniformly", font_size=22, color=GREY_A),
         ), 12.6, 0.26, [0, -2.5, 0])
+        intro = label('Randomize the layout of the Latin square', font_size=36)
         with self.voiceover(
             "Which Latin square? <bookmark mark='a'/> Norwegian agronomists liked the Knut Vik square, where each letter moves "
             "like a knight in chess, spreading the varieties evenly over the field. <bookmark mark='b'/> Or the cyclic square, "
@@ -144,7 +145,9 @@ class Latin(VoiceoverScene):
             "In practice, take one square and shuffle its rows, its columns and its letters at random, the recipe in Fisher and "
             "Yates's statistical tables. This samples the chosen square's permutation class, not uniformly all Latin squares. The exact F reference also needs the additive Gaussian model."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(g1, lag_ratio=0.04), FadeIn(l1))
             vo.wait_until("b")
             self.play(FadeIn(g2, lag_ratio=0.04), FadeIn(l2))
@@ -166,6 +169,7 @@ class Latin(VoiceoverScene):
             label(r"1959: \ Bose, \ Shrikhande \& Parker build them for 10, 14, \ldots: \ Euler was wrong for every other case", font_size=24, color=OBS),
             label(r"in experiments: \ Graeco-Latin squares block three ways at once", font_size=24, color=GREY_A),
         ), 12.4, 0.3, [0, -1.7, 0])
+        intro = label('Euler and orthogonal Latin squares', font_size=36)
         with self.voiceover(
             "Latin squares are also a famous piece of mathematics. <bookmark mark='a'/> In 1782 Leonhard Euler asked whether "
             "thirty-six officers, from six regiments and of six ranks, could stand in a six-by-six square with every regiment "
@@ -176,7 +180,9 @@ class Latin(VoiceoverScene):
             "constructed them for ten and every larger case. Bose and Shrikhande were statisticians, led to the problem by "
             "the design of experiments. <bookmark mark='d'/> In a field, a Graeco-Latin square blocks three ways at once."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(hc, shift=UP * 0.2))
             for k, m_ in enumerate("bcd"):
                 vo.wait_until(m_)

@@ -127,6 +127,7 @@ class Hook(VoiceoverScene):
             q2.width = 12.6
         q2.move_to([0, -1.4, 0])
         s2 = label(r"R. A. Fisher, \ address to the Indian Statistical Congress \ (1938)", font_size=22, color=GREY_B).next_to(q2, DOWN, buff=0.25)
+        intro = label('Design the data to answer the scientific question', font_size=36)
         with self.voiceover(
             "Fisher's answer was not a cleverer analysis of the old records. It was to design the data. <bookmark mark='a'/> "
             "In 1926 he wrote: No aphorism is more frequently repeated in connection with field trials, than that we must ask "
@@ -136,7 +137,9 @@ class Hook(VoiceoverScene):
             "finished is often merely to ask him to conduct a post mortem examination. He can perhaps say what the experiment "
             "died of. This part is about the questionnaire: how to design an experiment so that its answer is unambiguous."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(q1, lag_ratio=0.1), FadeIn(s1), run_time=3.0)
             vo.wait_until("b")
             self.play(FadeIn(q2), FadeIn(s2))
