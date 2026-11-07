@@ -63,12 +63,13 @@ class DiD(VoiceoverScene):
             label(rf"the difference in differences: \ +{ck['NJ'][1] - ck['NJ'][0] - ck['PA'][1] + ck['PA'][0]:.2f}", font_size=22, color=TAUC),
         ), 4.4, 0.42, [4.2, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Employment per restaurant, in full-time equivalents. In Pennsylvania, without the rise, it "
-            "fell from twenty-three point three to twenty-one point two: a regional slump. <bookmark mark='b'/> In New "
-            "Jersey, with the higher minimum wage, it rose slightly, from twenty point four to twenty-one point zero. "
-            "<bookmark mark='c'/> Had New Jersey followed Pennsylvania's path, it would have ended near eighteen point three. "
-            "<bookmark mark='d'/> The difference between the two changes is plus two point seven five employees per store. "
-            "Far from destroying jobs, the higher minimum wage, if anything, came with more of them."
+            "<bookmark mark='a'/> Employment per restaurant, in full-time equivalents. In Pennsylvania, without the "
+            "rise, it fell from twenty-three point three to twenty-one point two: a regional slump. <bookmark "
+            "mark='b'/> In New Jersey, with the higher minimum wage, it rose slightly, from twenty point four to "
+            "twenty-one point zero. <bookmark mark='c'/> Had New Jersey followed Pennsylvania's path, it would have "
+            "ended near eighteen point three. <bookmark mark='d'/> The difference between the two changes is plus two"
+            " point seven five employees per store. The estimated comparison is positive, conditional on the design "
+            "assumptions; this is not a universal conclusion about every minimum-wage policy."
         ) as vo:
             self.add(ck_tag())
             self.play(FadeIn(A), FadeIn(lab))
@@ -94,14 +95,18 @@ class DiD(VoiceoverScene):
                 why(r"the regression version: \ two-way fixed effects")]
         with self.voiceover(
             "<bookmark mark='a'/> The estimator is the change among the treated minus the change among the controls. "
-            "<bookmark mark='b'/> It assumes parallel trends: without the policy, the treated group's average untreated "
-            "outcome would have changed by as much as the control group's did. <bookmark mark='c'/> Then the difference in "
-            "differences estimates the average effect on the treated. The groups may differ in level, as New Jersey and "
-            "Pennsylvania did; the levels cancel. Only the trends must agree. <bookmark mark='d'/> As a regression: a "
-            "fixed effect for each unit, a fixed effect for each period, and the treatment indicator, which with two groups "
-            "and two periods gives exactly the same number. With more periods and staggered adoption, chapter nine shows it "
-            "does not."
+            "<bookmark mark='b'/> It assumes parallel trends: without the policy, the treated group's average "
+            "untreated outcome would have changed by as much as the control group's did. <bookmark mark='c'/> With "
+            "consistency, no anticipation and no relevant interference as well, the difference in differences "
+            "identifies the average effect on the treated. The groups may differ in level, as New Jersey and "
+            "Pennsylvania did; the levels cancel. Only the trends must agree. <bookmark mark='d'/> As a regression: a"
+            " fixed effect for each unit, a fixed effect for each period, and the treatment indicator, which with two"
+            " groups and two periods gives exactly the same number. With more periods and staggered adoption, chapter"
+            " nine shows it does not."
         ) as vo:
+            intro=label('Parallel trends and no anticipation identify a treated-group effect',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

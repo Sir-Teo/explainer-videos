@@ -78,7 +78,7 @@ class DiDInference(VoiceoverScene):
                  ylabel=r"share of placebo laws", xticks=[-0.5, -0.25, 0, 0.25, 0.5], yticks=[0, 0.05, 0.1, 0.15],
                  xfmt=lambda v: f"{v:g}", yfmt=lambda v: f"{v:g}", center=[-1.8, 0.2, 0])
         ax = A.ax
-        bars = hist_bars(ax, e, h / h.sum(), color=Y0C, opacity=0.6)
+        bars = hist_bars(ax, e, h / d["reps"], color=Y0C, opacity=0.6)
         cO = 1.96 * d["se_ols"]
         cC = 1.96 * d["se_cl"]
         lo = VGroup(*[DashedLine(ax.c2p(s * cO, 0), ax.c2p(s * cO, 0.16), color=MISSC, stroke_width=3) for s in (-1, 1)])
@@ -87,7 +87,7 @@ class DiDInference(VoiceoverScene):
             label(rf"{d['reps']:,} placebo laws in half of the World's towns", font_size=22),
             label(rf"red: \ $\pm 1.96$ OLS SE: \ rejects {100 * d['rej_ols']:.0f}\%", font_size=22, color=MISSC),
             label(rf"green: \ $\pm 1.96$ town-clustered SE: \ rejects {100 * d['rej_cl']:.1f}\%", font_size=22, color=BANDC),
-            label(rf"clustered SE {d['se_cl'] / d['se_ols']:.1f} times as large", font_size=22, color=GREY_A),
+            label(rf"mean clustered SE {d['se_cl'] / d['se_ols']:.1f} times as large", font_size=22, color=GREY_A),
         ), 3.8, 0.42, [4.9, 0.4, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Repeat it in the World. A thousand placebo laws, each passed in a random half of the "
@@ -113,15 +113,18 @@ class DiDInference(VoiceoverScene):
             label(r"cluster by the unit of treatment: \ the town, \ the state \ (Part 23)", font_size=26, color=BANDC),
             label(r"or collapse each unit to one before and one after average", font_size=26, color=Y0C),
             label(r"few treated clusters: \ the wild cluster bootstrap \ (Part 23), \ or randomization inference over placebo laws", font_size=26, color=TAUC),
-            label(r"one treated state: \ no standard error is honest; \ chapter 11's placebo distribution", font_size=26, color=MISSC),
+            label(r"one treated state: \ inference needs additional assumptions; \ chapter 11", font_size=26, color=MISSC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The fixes are the ones Part twenty-three introduced. Cluster the standard errors by the "
-            "unit at which the policy was assigned: the town, or the state. <bookmark mark='b'/> Or collapse each unit's "
-            "data to one average before and one after, removing the serial correlation altogether. <bookmark mark='c'/> With "
-            "few treated clusters, clustered standard errors themselves fail; use the wild cluster bootstrap, or compare the "
-            "estimate with the distribution of placebo laws, as we just did. <bookmark mark='d'/> And with only one treated "
-            "unit, no standard error is honest at all, which is where chapter eleven's synthetic controls begin."
+            "<bookmark mark='a'/> The fixes are the ones Part twenty-three introduced. Cluster the standard errors by"
+            " the unit at which the policy was assigned: the town, or the state. <bookmark mark='b'/> Or collapse "
+            "each unit's data to one average before and one after, forming one change per unit instead of treating "
+            "every year as an independent observation. <bookmark mark='c'/> With few treated clusters, ordinary "
+            "cluster asymptotics can be unreliable. Some wild-bootstrap methods also fail in that setting; valid "
+            "randomization inference needs a justified assignment mechanism, and placebo comparisons need "
+            "exchangeability assumptions. <bookmark mark='d'/> With only one treated unit, inference requires "
+            "additional design or structural assumptions. Chapter eleven uses placebo comparisons, whose validity "
+            "also needs justification."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

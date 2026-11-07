@@ -26,15 +26,15 @@ class Many(VoiceoverScene):
         d = load("many")
         rows = fit_rows(VGroup(
             label(r"Angrist \& Krueger also interacted quarter with year and state of birth: \ up to 180 instruments", font_size=26),
-            label(r"in the World: \ quarter $\times$ region, \ 30 instruments \ (only quarter 1 matters)", font_size=26, color=IVC),
+            label(r"in the World: \ quarter $\times$ region, \ 30 instruments \ (Q1 and Q2 contrasts; \ no regional effect modification)", font_size=26, color=IVC),
             label(rf"full survey: \ 2SLS {d['full30']['beta']:.3f}, \ $F$ = {d['full30']['F']:.1f}; \ LIML {d['full30_liml']['beta']:.3f}", font_size=26, color=TAUC),
             label(r"each extra instrument adds noise to the first stage, \ and the noise is correlated with the confounder", font_size=26, color=MISSC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> To gain precision, Angrist and Krueger also interacted the quarter of birth with year and "
-            "state of birth, up to a hundred and eighty instruments. <bookmark mark='b'/> In the World, interact quarter "
-            "with region: thirty instruments, of which only the first-quarter effect is real. <bookmark mark='c'/> In the full "
-            "survey, two-stage least squares gives " + say(d["full30"]["beta"], 3) + ", with an F statistic of only "
+            "<bookmark mark='a'/> To gain precision, Angrist and Krueger also interacted the quarter of birth with "
+            "year and state of birth, up to a hundred and eighty instruments. <bookmark mark='b'/> In the World, "
+            "interact quarter with region: thirty instruments, with real first- and second-quarter contrasts but no "
+            "region-specific effects. <bookmark mark='c'/> In the full survey, two-stage least squares gives " + say(d["full30"]["beta"], 3) + ", with an F statistic of only "
             + say(d["full30"]["F"], 1) + ", because the F is averaged over thirty instruments, most useless. "
             "<bookmark mark='d'/> The problem is that the first stage fits noise as well as signal, and the fitted noise in "
             "schooling is correlated with ability, the confounder, so it drags the estimate towards ordinary least squares."
@@ -53,8 +53,8 @@ class Many(VoiceoverScene):
                  ylabel=r"share", xticks=[-0.2, 0, 0.075, 0.2, 0.4], yticks=[0, 0.1, 0.2], xfmt=lambda v: f"{v:g}",
                  yfmt=lambda v: f"{v:g}", center=[-1.6, 0.3, 0])
         ax = A.ax
-        b30 = hist_bars(ax, e, h30 / h30.sum(), color=MISSC, opacity=0.55)
-        bl = hist_bars(ax, e, hl / hl.sum(), color=BANDC, opacity=0.45)
+        b30 = hist_bars(ax, e, h30 / d["reps"], color=MISSC, opacity=0.55)
+        bl = hist_bars(ax, e, hl / d["reps"], color=BANDC, opacity=0.45)
         truth = DashedLine(ax.c2p(d["truth"], 0), ax.c2p(d["truth"], 0.25), color=TRUEC, stroke_width=3)
         ols = DashedLine(ax.c2p(d["med_ols"], 0), ax.c2p(d["med_ols"], 0.25), color=GREY_A, stroke_width=3)
         side = fit_rows(VGroup(
@@ -62,14 +62,16 @@ class Many(VoiceoverScene):
             label(rf"grey line: \ OLS, \ {d['med_ols']:.3f}", font_size=22, color=GREY_A),
             label(rf"green: \ LIML, \ median {d['medl']:.3f}", font_size=22, color=BANDC),
             label(r"gold: \ the truth, \ 0.075", font_size=22, color=TRUEC),
+            label(rf"outside view: \ 2SLS {d['outside_view']['thirty']}; \ LIML {d['outside_view']['liml']} / {d['reps']}", font_size=20, color=GREY_A),
         ), 3.8, 0.42, [4.9, 0.4, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Across a thousand surveys of five thousand, with thirty instruments, two-stage least "
-            "squares clusters tightly, around " + say(d["med30"], 2) + ". <bookmark mark='b'/> That is almost exactly where "
-            "ordinary least squares sits. With many weak instruments the method collapses back into the bias it was meant to "
-            "remove, and now it looks precise. <bookmark mark='c'/> Limited-information maximum likelihood, a close relative "
-            "from 1949 that is nearly median-unbiased with many instruments, is centred near the truth, with honest width. "
-            "<bookmark mark='d'/> The truth is seven and a half percent."
+            "squares clusters tightly, around " + say(d["med30"], 2) + ". <bookmark mark='b'/> That is almost exactly where ordinary least squares sits. With many weak "
+            "instruments the method collapses back into the bias it was meant to remove, and now it looks precise. "
+            "<bookmark mark='c'/> Limited-information maximum likelihood, a close relative from 1949, often less "
+            "median-biased under standard IV conditions, is closer to the truth here, with a much wider sampling "
+            "distribution. No confidence interval is being certified by this histogram. <bookmark mark='d'/> The "
+            "truth is point zero seven five log points per school year."
         ) as vo:
             self.add(survey_tag())
             self.play(FadeIn(A))
@@ -80,7 +82,7 @@ class Many(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(bl), FadeIn(side[2]))
             vo.wait_until("d")
-            self.play(Create(truth), FadeIn(side[3]))
+            self.play(Create(truth), FadeIn(side[3]), FadeIn(side[4]))
         self.clear_scene()
 
     def fake(self):
@@ -89,7 +91,7 @@ class Many(VoiceoverScene):
             label(r"Bound, \ Jaeger \& Baker (1995): \ replace the real quarters of birth with random ones", font_size=26, color=TAUC),
             label(r"the instruments are now pure noise: \ they cannot identify anything", font_size=26, color=MISSC),
             label(rf"in the World: \ fake quarters $\times$ region, \ full survey: \ 2SLS {d['fake_full']['beta']:.3f} \ (SE {d['fake_full']['se']:.3f}), \ $F$ = {d['fake_full']['F']:.2f}", font_size=26, color=IVC),
-            label(r"2SLS with useless instruments estimates OLS, \ with a respectable standard error", font_size=26, color=GREY_A),
+            label(r"many irrelevant instruments can pull 2SLS towards OLS", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> In 1995, John Bound, David Jaeger and Regina Baker did something devastating. They replaced "
@@ -97,9 +99,9 @@ class Many(VoiceoverScene):
             "instruments are pure noise and cannot identify anything. <bookmark mark='c'/> Yet two-stage least squares still "
             "returned an estimate close to the original, with a respectable standard error. In the World, fake quarters "
             "interacted with region give " + say(d["fake_full"]["beta"], 2) + ", with a standard error of "
-            + say(d["fake_full"]["se"], 2) + " and an F of " + say(d["fake_full"]["F"], 2) + ". <bookmark mark='d'/> With "
-            "useless instruments, two-stage least squares estimates ordinary least squares, and its standard error does not "
-            "warn you. The first-stage F does."
+            + say(d["fake_full"]["se"], 2) + " and an F of " + say(d["fake_full"]["F"], 2) + ". <bookmark mark='d'/> With many irrelevant instruments, two-stage least squares can be pulled towards "
+            "ordinary least squares. That is a finite-sample tendency, not an identity, and its conventional error "
+            "can look reassuring. The first-stage F does."
         ) as vo:
             self.add(survey_tag())
             for k, m_ in enumerate("abcd"):
@@ -159,17 +161,19 @@ class Many(VoiceoverScene):
             label(r"40 variants; \ 10 with a direct effect (red)", font_size=22),
             label(rf"IVW (through the origin): \ {d['ivw']['beta']:.3f}", font_size=22, color=TAUC),
             label(rf"MR-Egger slope: \ {d['egger']['beta']:.3f} \ ({d['egger']['se']:.3f})", font_size=22, color=BANDC),
-            label(rf"Egger intercept {d['egger']['intercept']:.4f}: \ the pleiotropy", font_size=22, color=BANDC),
+            label(rf"Egger intercept {d['egger']['intercept']:.4f}: \ directional pleiotropy, under InSIDE", font_size=22, color=BANDC),
             label(rf"the truth: \ {d['beta']:.2f}", font_size=22, color=TRUEC),
         ), 3.8, 0.4, [4.9, 0.3, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Forty simulated variants, ten of them with a direct effect on blood pressure, all in the "
             "same direction. <bookmark mark='b'/> The inverse-variance-weighted estimate fits a line through the origin: "
-            + say(d["ivw"]["beta"], 2) + ", pulled up by the pleiotropic variants. <bookmark mark='c'/> MR-Egger, proposed by "
-            "Jack Bowden, Davey Smith and Stephen Burgess in 2015, allows an intercept, which absorbs pleiotropy that is the "
-            "same on average for every variant: slope " + say(d["egger"]["beta"], 2) + ", with a wider interval. <bookmark "
-            "mark='d'/> The intercept itself estimates the average direct effect. <bookmark mark='e'/> The truth is point "
-            "three. Each fix trades one untestable assumption for another, slightly weaker one."
+            + say(d["ivw"]["beta"], 2) + ", pulled up by the pleiotropic variants. <bookmark mark='c'/> MR-Egger, proposed by Jack Bowden, Davey "
+            "Smith and Stephen Burgess in 2015, allows an intercept. Its slope needs the InSIDE condition: direct "
+            "effects independent of instrument strength, as well as adequate strength, summary-data assumptions and "
+            "control of measurement error: slope " + say(d["egger"]["beta"], 2) + ", with a wider interval. <bookmark mark='d'/> Under those assumptions, the intercept estimates an "
+            "average directional direct effect. It is not a test that rules out all pleiotropy. <bookmark mark='e'/> "
+            "The truth is point three. MR-Egger replaces zero pleiotropy with different assumptions; it does not make"
+            " every invalid instrument valid."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A), FadeIn(dots), FadeIn(side[0]))

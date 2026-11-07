@@ -53,14 +53,14 @@ class Weak(VoiceoverScene):
                  ylabel=r"share of surveys", xticks=[-0.2, 0, 0.075, 0.2, 0.4], yticks=[0, 0.05, 0.1],
                  xfmt=lambda v: f"{v:g}", yfmt=lambda v: f"{v:g}", center=[-1.6, 0.3, 0])
         ax = A.ax
-        bars = hist_bars(ax, e, h / h.sum(), color=IVC, opacity=0.6)
+        bars = hist_bars(ax, e, h / d["reps"], color=IVC, opacity=0.6)
         truth = DashedLine(ax.c2p(d["truth"], 0), ax.c2p(d["truth"], 0.12), color=TRUEC, stroke_width=3)
         ols = DashedLine(ax.c2p(d["med_ols"], 0), ax.c2p(d["med_ols"], 0.12), color=MISSC, stroke_width=3)
         side = fit_rows(VGroup(
             label(rf"{d['reps']:,} surveys of 5,000", font_size=22),
             label(rf"median $F$: \ {d['medF1']:.1f}; \ below 10 in {100 * d['share_F_below_10']:.0f}\%", font_size=22, color=IVC),
             label(rf"middle half: \ {d['iqr1'][0]:.3f} to {d['iqr1'][1]:.3f}", font_size=22, color=TAUC),
-            label(r"gold: \ the truth; \ red: \ OLS", font_size=22, color=GREY_A),
+            label(rf"gold: truth; \ red: OLS; \ tails outside view: {d['outside_view']['one']} / {d['reps']}", font_size=22, color=GREY_A),
         ), 3.8, 0.42, [4.9, 0.4, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Draw a thousand such surveys from the World. <bookmark mark='b'/> The median first-stage F "
@@ -113,17 +113,19 @@ class Weak(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"Staiger \& Stock (1997): \ worry if the first-stage $F$ is below 10", font_size=26, color=IVC),
             label(r"Stock \& Yogo (2005): \ critical values for bias and size, \ by the number of instruments", font_size=26),
-            label(r"Lee, \ McCrary, \ Moreira \& Porter (2022): \ for 1.96 to be right, \ $F$ must exceed 104.7", font_size=26, color=MISSC),
+            label(r"Lee, \ McCrary, \ Moreira \& Porter (2022): \ just-identified Gaussian approximation: \ 1.96 needs $F>104.7$", font_size=26, color=MISSC),
             label(r"their $tF$ procedure: \ at $F = 10$, \ reject only if $|t| > 3.43$", font_size=26, color=TAUC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Practice settled on a rule of thumb from Douglas Staiger and James Stock in 1997: worry if "
-            "the first-stage F is below ten. <bookmark mark='b'/> Stock and Motohiro Yogo turned it into critical values "
-            "that limit the bias or the size distortion, depending on the number of instruments. <bookmark mark='c'/> In 2022 "
-            "David Lee, Justin McCrary, Marcelo Moreira and Jack Porter showed that ten is far too lenient for the usual "
-            "interval: for a five percent test with critical value one point nine six to be valid whatever the confounding, "
-            "the F must exceed one hundred and four point seven. <bookmark mark='d'/> Their tF procedure adjusts the critical "
-            "value to the observed F: at an F of ten, the t statistic must exceed three point four three."
+            "<bookmark mark='a'/> Practice settled on a rule of thumb from Douglas Staiger and James Stock in 1997: "
+            "worry if the first-stage F is below ten. <bookmark mark='b'/> Stock and Motohiro Yogo turned it into "
+            "critical values that limit the bias or the size distortion, depending on the number of instruments. "
+            "<bookmark mark='c'/> In 2022 David Lee, Justin McCrary, Marcelo Moreira and Jack Porter showed that ten "
+            "is far too lenient for the usual interval: in their just-identified Gaussian weak-instrument "
+            "approximation, using the usual one point nine six critical value at five percent regardless of "
+            "endogeneity requires the F must exceed one hundred and four point seven. <bookmark mark='d'/> Their tF "
+            "procedure adjusts the critical value to the observed F: at an F of ten, the t statistic must exceed "
+            "three point four three."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -139,15 +141,20 @@ class Weak(VoiceoverScene):
         ]
         rows[3][-1].set_color(BANDC)
         whys = [why(r"each candidate value in turn"), why(r"subtract the hypothesized effect"),
-                why(r"Anderson \& Rubin (1949)"), why(r"invert the test")]
+                why(r"exact Gaussian homoskedastic linear-IV reference"), why(r"invert the test")]
         with self.voiceover(
-            "<bookmark mark='a'/> The cure is older than the problem. In 1949, Theodore Anderson and Herman Rubin proposed "
-            "testing each candidate value of the effect directly. <bookmark mark='b'/> Subtract the hypothesized effect of "
-            "the treatment from the outcome, and regress what is left on the instruments. <bookmark mark='c'/> If the "
-            "hypothesis is true, the instruments' coefficients are exactly zero, by the exclusion restriction, whatever their "
-            "strength. So the F test has the right size even with a useless instrument. <bookmark mark='d'/> The confidence "
-            "set is every value the test does not reject."
+            "<bookmark mark='a'/> The cure is older than the problem. In 1949, Theodore Anderson and Herman Rubin "
+            "proposed testing each candidate value of the effect directly. <bookmark mark='b'/> Subtract the "
+            "hypothesized effect of the treatment from the outcome, and regress what is left on the instruments. "
+            "<bookmark mark='c'/> If the hypothesis is true, the instruments' coefficients are exactly zero, by the "
+            "exclusion restriction, whatever their strength. With a valid constant-effect linear IV model and "
+            "independent homoskedastic Gaussian errors conditional on the instruments and controls, the F test has "
+            "exact size regardless of instrument strength. Heteroskedastic errors need a robust AR procedure. "
+            "<bookmark mark='d'/> The confidence set is every value the test does not reject."
         ) as vo:
+            intro=label('Anderson-Rubin inversion requires a specified linear-IV error model',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

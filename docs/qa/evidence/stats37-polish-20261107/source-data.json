@@ -1,0 +1,15 @@
+{
+  "url": "https://raw.githubusercontent.com/edunford/tidysynth/master/data/smoking.rda",
+  "sha256": "a946d153e8faee62e6deba7a16db6f4c1251d9e56d5b41de7e79a593eb8110d9",
+  "agreement": "CSV values agree within 0.00005; missingness and signed infinities match. Original Stata-style float precision and CSV rounding are retained.",
+  "rows": 1209,
+  "states": 39,
+  "years": 31,
+  "max_abs_errors": {
+    "cigsale": 1.2207031261368684e-05,
+    "lnincome": 4.983367919919601e-05,
+    "beer": 1.5258789076710855e-06,
+    "age15to24": 4.999642372130464e-05,
+    "retprice": 1.2207031261368684e-05
+  }
+}

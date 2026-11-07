@@ -1,0 +1,36 @@
+[
+  {
+    "name": "Snow Table IX",
+    "source": "https://epi-snow.ph.ucla.edu/Stream3_GrandExperiment_d.html",
+    "correction": "Historical rest-of-London printed rate 59 differs from 1422/256423*10000=55.4552. Company death-rate ratio from counts is 8.40194; denominator houses, not individuals."
+  },
+  {
+    "name": "Card and Krueger Table 3",
+    "source": "https://davidcard.berkeley.edu/papers/njmin-aer.pdf",
+    "pdf_sha256": "6f9b9f1b6da9834c2a68bf86fc6078c83acdd7507db0d37b8b4814dfd2b3462e",
+    "page": 780,
+    "inspection": "Primary PDF page 9 visually inspected. PA23.33->21.17; NJ20.44->21.03; printed DiD2.76(SE1.36). Rounded means give2.75; balanced sample is a separate row."
+  },
+  {
+    "name": "SDID Table 1",
+    "source": "https://arxiv.org/pdf/1812.09970",
+    "version": "July 2021",
+    "printed_page": 8,
+    "estimates": [
+      -15.6,
+      -19.6,
+      -27.3
+    ],
+    "standard_errors": [
+      8.4,
+      9.9,
+      17.7
+    ],
+    "inspection": "Primary table text verified; chapter placebo errors are separately computed and differ."
+  },
+  {
+    "name": "Lee et al. tF",
+    "source": "https://arxiv.org/abs/2010.05058",
+    "inspection": "Primary abstract verifies104.7 and3.43 in the single-instrument setting; chapter qualifies its Gaussian approximation. Values are not universal IV thresholds."
+  }
+]

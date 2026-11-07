@@ -32,14 +32,18 @@ class Panel(VoiceoverScene):
         whys = [why(r"$\alpha_i$: \ anything fixed about unit $i$"), why(r"the within transformation"),
                 why(r"Frisch--Waugh--Lovell"), why(r"the bridge to random effects")]
         with self.voiceover(
-            "<bookmark mark='a'/> With repeated observations of the same units, a panel, every unit can carry its own "
-            "intercept alpha i: anything fixed about a firm, a person or a town, measured or not, that affects the outcome. "
-            "<bookmark mark='b'/> Subtracting each unit's own average removes it. Only changes within a unit identify the "
-            "effect. <bookmark mark='c'/> By the Frisch-Waugh-Lovell theorem of Part twelve, this is exactly ordinary least "
-            "squares with a dummy variable for every unit. <bookmark mark='d'/> And Yair Mundlak showed in 1978 that adding "
-            "each unit's average of x as a regressor gives the same slope, which links fixed effects to the random-effects "
-            "models of Part twenty-five."
+            "<bookmark mark='a'/> With repeated observations of the same units, a panel, every unit can carry its own"
+            " intercept alpha i: a time-invariant additive contribution to the outcome. Nonadditive unit "
+            "heterogeneity is not generally removed by one intercept. <bookmark mark='b'/> Subtracting each unit's "
+            "own average removes it. Only changes within a unit identify the effect. <bookmark mark='c'/> By the "
+            "Frisch-Waugh-Lovell theorem of Part twelve, this is exactly ordinary least squares with a dummy variable"
+            " for every unit. <bookmark mark='d'/> And Yair Mundlak showed in 1978 that adding each unit's average of"
+            " x as a regressor gives the same slope, which links fixed effects to the random-effects models of Part "
+            "twenty-five."
         ) as vo:
+            intro=label('Within-unit demeaning removes an additive fixed intercept',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -55,7 +59,7 @@ class Panel(VoiceoverScene):
                 [r"Mundlak: \ add $\bar x_{i\cdot}$", f"{d['mundlak']:.3f}"],
                 [r"truth", f"{d['truth']:.3f}"]]
         tab = table_rows(rows, font_size=28, col_buff=1.2, row_buff=0.3, colors=[GREY_A, MISSC, BANDC, BANDC, BANDC, TRUEC]).move_to([0, 0.7, 0])
-        foot = label(r"300 units, \ 8 periods; \ $x$ correlated with $\alpha_i$ \ (0.8), \ $\alpha_i$ enters $y$ with weight 2", font_size=22, color=GREY_A).move_to([0, -2.0, 0])
+        foot = label(r"300 units, \ 8 periods; \ $x_{it}=0.8\alpha_i+\nu_{it}$, \ $\alpha_i$ enters $y$ with weight 2", font_size=22, color=GREY_A).move_to([0, -2.0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> A seeded panel: three hundred units, eight periods, and an x that is correlated with each "
             "unit's fixed characteristic, which also raises y. <bookmark mark='b'/> Pooled least squares, ignoring the "
@@ -96,7 +100,7 @@ class Panel(VoiceoverScene):
         d = load("panel")["nickell"]
         rows = [
             cmath(r"y_{it}", r"=", r"\rho\, y_{i,t-1} + \alpha_i + \varepsilon_{it}", font_size=32),
-            cmath(r"\ddot y_{i,t-1}", r"=", r"y_{i,t-1} - \bar y_{i\cdot}, \ \text{and } \bar y_{i\cdot} \text{ contains } \varepsilon_{it}", font_size=30),
+            cmath(r"\ddot y_{i,t-1}", r"=", r"y_{i,t-1} - \overline{y_{i,t-1}}, \ \text{whose average} \text{ contains } \varepsilon_{it}", font_size=30),
             cmath(r"\text{plim}\ \hat\rho_{\text{FE}} - \rho", r"\approx", r"-\dfrac{1 + \rho}{T - 1} \quad \text{(fixed } T,\ N \to \infty)", font_size=30),
             cmath(r"\rho = 0.5,\ T = 5", r":", rf"\text{{Nickell's formula gives }} {d['formula']:.3f}", font_size=30),
         ]
@@ -111,6 +115,9 @@ class Panel(VoiceoverScene):
             "minus one. <bookmark mark='d'/> With rho a half and five periods, the formula predicts the fixed-effects "
             "estimate will converge to " + say(d["formula"], 2) + ", not to point five."
         ) as vo:
+            intro=label('Demeaning a dynamic panel correlates regressors and errors',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -154,7 +161,7 @@ class Panel(VoiceoverScene):
     def fix(self):
         rows = [
             cmath(r"\Delta y_{it}", r"=", r"\rho\, \Delta y_{i,t-1} + \Delta\varepsilon_{it}", font_size=32),
-            cmath(r"\text{instrument}", r":", r"y_{i,t-2} \ \text{(uncorrelated with } \Delta\varepsilon_{it})", font_size=30),
+            cmath(r"\text{instrument}", r":", r"y_{i,t-2} \ \text{(requires valid serial-error and initial-condition moments)}", font_size=30),
             cmath(r"\text{Arellano--Bond (1991)}", r":", r"\text{all earlier lags, \ by GMM}", font_size=30),
             cmath(r"\text{caution}", r":", r"\text{many weak instruments again (chapter 4)}", font_size=30),
         ]
@@ -162,13 +169,18 @@ class Panel(VoiceoverScene):
         whys = [why(r"differencing removes $\alpha_i$"), why(r"an instrument from within the panel"),
                 why(r"more instruments, \ more precision"), why(r"Roodman (2009): \ too many instruments")]
         with self.voiceover(
-            "<bookmark mark='a'/> The fix uses an instrument. First-difference the model, which also removes the unit "
-            "effect. <bookmark mark='b'/> The differenced lag is correlated with the differenced error, but the outcome two "
-            "periods back is not, so it can serve as an instrument: Anderson and Hsiao. <bookmark mark='c'/> Manuel Arellano "
-            "and Stephen Bond, in 1991, used all the earlier lags at once, by the generalized method of moments. <bookmark "
-            "mark='d'/> And the number of instruments then grows with the number of periods, which brings back chapter four: "
-            "with too many, the estimate drifts back towards the biased one."
+            "<bookmark mark='a'/> The fix uses an instrument. First-difference the model, which also removes the unit"
+            " effect. <bookmark mark='b'/> The differenced lag is correlated with the differenced error, but with "
+            "serially uncorrelated idiosyncratic errors and the required initial-condition moments, the outcome two "
+            "periods back is uncorrelated with that differenced error, so it can serve as an instrument: Anderson and"
+            " Hsiao. <bookmark mark='c'/> Manuel Arellano and Stephen Bond, in 1991, used all the earlier lags at "
+            "once, by the generalized method of moments. <bookmark mark='d'/> And the number of instruments then "
+            "grows with the number of periods, which brings back chapter four: with too many, the estimate drifts "
+            "back towards the biased one."
         ) as vo:
+            intro=label('Lagged instruments require valid serial-error moment conditions',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

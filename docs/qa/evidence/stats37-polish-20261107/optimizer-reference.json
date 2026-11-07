@@ -1,0 +1,8 @@
+{
+  "method": "Independent scipy SLSQP simplex-constrained least squares",
+  "success": true,
+  "reference_pre_mse": 2.7436622859410336,
+  "chapter_pre_mse": 2.7441079505084383,
+  "absolute_objective_gap": 0.00044566456740469107,
+  "reference_mean_post_gap": -19.513632290946486
+}

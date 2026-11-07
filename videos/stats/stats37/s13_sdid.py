@@ -55,14 +55,19 @@ class SDID(VoiceoverScene):
         whys = [why(r"the intercept: \ match trends, \ not levels"), why(r"years that resemble the post-period"),
                 why(r"a weighted DiD"), why(r"the SD of placebo estimates")]
         with self.voiceover(
-            "<bookmark mark='a'/> The unit weights solve a synthetic-control problem with two changes: an intercept, so that "
-            "the weighted controls need only run parallel to California, not at the same level; and a small ridge penalty, "
-            "which spreads the weight over more states. <bookmark mark='b'/> The time weights do the same across years: "
-            "they find the mix of pre-period years whose outcomes best predict the controls' post-period average. <bookmark "
-            "mark='c'/> The estimate is then a difference-in-differences, weighted both ways. <bookmark mark='d'/> With one "
-            "treated unit, the standard error comes from placebos: pretend each control state was treated, re-estimate, "
-            "and take the spread."
+            "<bookmark mark='a'/> The unit weights solve a synthetic-control problem with two changes: an intercept, "
+            "so that the weighted controls need only run parallel to California, not at the same level; and a small "
+            "ridge penalty, which spreads the weight over more states. <bookmark mark='b'/> The time weights do the "
+            "same across years: they find the mix of pre-period years whose outcomes best predict the controls' "
+            "post-period average. <bookmark mark='c'/> The estimate is then a difference-in-differences, weighted "
+            "both ways. <bookmark mark='d'/> With one treated unit, the standard error comes from placebos: pretend "
+            "each control state was treated, re-estimate, and take the spread. Interpreting this as sampling "
+            "uncertainty requires comparable untreated-state shocks and the relevant model conditions; a single "
+            "treated state does not supply unrestricted cluster asymptotics."
         ) as vo:
+            intro=label('Synthetic DiD weights both units and pre-treatment periods',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -144,16 +149,18 @@ class SDID(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"in the paper's simulations, \ SDID was never far behind the better of the two, \ and often ahead", font_size=26, color=BANDC),
             label(r"but with one treated state, \ every estimate is within two SEs of every other", font_size=26, color=MISSC),
-            label(r"the honest summary: \ the law reduced smoking, \ by something like 15 to 25 packs a year", font_size=26, color=TAUC),
+            label(r"point estimates suggest lower sales; \ 15--25 packs is not a confidence interval", font_size=26, color=TAUC),
             label(r"next: \ panels with many treated units, \ and their fixed effects", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In the paper's simulations, built on real panel data, synthetic DiD was rarely far behind "
-            "the better of the other two and often ahead of both. <bookmark mark='b'/> But with one treated state, every "
-            "estimate lies within two standard errors of every other. <bookmark mark='c'/> The honest summary is that the "
-            "law reduced smoking in California, by something like fifteen to twenty-five packs per person per year, and "
-            "that the exact number depends on assumptions the data cannot settle. <bookmark mark='d'/> Next, panels with "
-            "many units, and what their fixed effects do and do not remove."
+            "<bookmark mark='a'/> In the paper's simulations, built on real panel data, synthetic DiD was rarely far "
+            "behind the better of the other two and often ahead of both. <bookmark mark='b'/> But with one treated "
+            "state, every estimate lies within two standard errors of every other. <bookmark mark='c'/> The point "
+            "estimates suggest lower cigarette sales under the fitted counterfactual models. Fifteen to twenty-five "
+            "packs describes the approximate range of these point estimates, not a confidence interval. Sampling "
+            "uncertainty is much wider, and causal attribution needs assumptions about comparable trends, other "
+            "policies and spillovers. <bookmark mark='d'/> Next, panels with many units, and what their fixed effects"
+            " do and do not remove."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
