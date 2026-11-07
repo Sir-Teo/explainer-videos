@@ -1,0 +1,94 @@
+{
+  "fingerprint": "9f0442a38ed28822bddb1272ba451ea26a0f805f0123331cafde09b3c1fb1569",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "PredictionError",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats19/en/PredictionError_motion/result.json",
+      "input_sha256": "18503aa43e21c97cd8169cd6eb82f1272eda3de18f4ac1d86c9ec95684fd4225",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 329 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 329 s\n"
+    },
+    {
+      "scene": "BiasVariance",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats19/en/BiasVariance_motion/result.json",
+      "input_sha256": "e70e6c20c00d1ee91d91005ed22e8ad3933a4d29074867b8d80f9d90245b7137",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 249 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 249 s\n"
+    },
+    {
+      "scene": "CrossValidation",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats19/en/CrossValidation_motion/result.json",
+      "input_sha256": "a0f77e47de7b225557ac1fe0dfd5ee17f168a579cdc138bb4dbfbc1f37a34912",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 247 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 247 s\n"
+    },
+    {
+      "scene": "Neighbours",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats19/en/Neighbours_motion/result.json",
+      "input_sha256": "1f8cd0246bbb04d8f833fc69f67962c6547473272c7245fef49ea00fb779cf7e",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 282 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 282 s\n"
+    },
+    {
+      "scene": "Trees",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats19/en/Trees_motion/result.json",
+      "input_sha256": "51bf5bb50a6e2bcfaa46fe471bc246513ff3fe707044d9ce6b32d35b04dc80de",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 262 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 262 s\n"
+    },
+    {
+      "scene": "Shrinkage",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats19/en/Shrinkage_motion/result.json",
+      "input_sha256": "ac873ceb864d5dd9d9512550830d303594310bb6da91ad93eccdb55dc96e8730",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 254 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 254 s\n"
+    },
+    {
+      "scene": "Metrics",
+      "status": "needs-review",
+      "frames": 34,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats19/en/Metrics_motion/result.json",
+      "input_sha256": "b409f937ef39926f396572afd68faa7847492f1de2a89e6e57c91b91cb459fae",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 298 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 298 s\n"
+    },
+    {
+      "scene": "Leakage",
+      "status": "needs-review",
+      "frames": 42,
+      "warnings": {
+        "narration-translation": 10
+      },
+      "input_record": "renders/qa/series/stats19/en/Leakage_motion/result.json",
+      "input_sha256": "418a84e2509021d28895f397b2540a7022e3a5e8798c68f7981d9eae5f4940b3",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 497 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 497 s\n"
+    }
+  ]
+}

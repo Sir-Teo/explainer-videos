@@ -1,0 +1,23 @@
+{
+  "part": "stats19",
+  "fingerprint": "9f0442a38ed28822bddb1272ba451ea26a0f805f0123331cafde09b3c1fb1569",
+  "english_endpoints": 12,
+  "native_1080_endpoints": 9,
+  "silent_motion_chapters": 8,
+  "audio_scene": "Shrinkage",
+  "audio_lines": 7,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats19/en/Shrinkage/videos/s08_shrink/480p15/Shrinkage.mp4",
+    "seconds": 243.598698,
+    "narration_sha256": "e990fb123c5844afaad4ff9379cbcbbc0009733d8d7af6895429233547e74014",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 244 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 244 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

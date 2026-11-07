@@ -1,0 +1,138 @@
+{
+  "fingerprint": "9f0442a38ed28822bddb1272ba451ea26a0f805f0123331cafde09b3c1fb1569",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 16,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 42
+      },
+      "input_record": "renders/qa/series/stats19/en/Hook/result.json",
+      "input_sha256": "4b9d53dd27ba7f537e8e86c4e2bcecd6a5408da9af316c969d68fdc867a17df0"
+    },
+    {
+      "scene": "PredictionError",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 58
+      },
+      "input_record": "renders/qa/series/stats19/en/PredictionError/result.json",
+      "input_sha256": "8ed8d9f179b4f7390cb73da5d47c180e114d01d02470ce08b8ecdea94fc895ca"
+    },
+    {
+      "scene": "BiasVariance",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 46
+      },
+      "input_record": "renders/qa/series/stats19/en/BiasVariance/result.json",
+      "input_sha256": "6658e9c8eae23723d63110d7bd1e421323051e5849a7fbd638406dbeff70550e"
+    },
+    {
+      "scene": "CrossValidation",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 57
+      },
+      "input_record": "renders/qa/series/stats19/en/CrossValidation/result.json",
+      "input_sha256": "01026be7e3f347ebbc35067788405c731002e249de28050539d398f9c58d1b30"
+    },
+    {
+      "scene": "Neighbours",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 39
+      },
+      "input_record": "renders/qa/series/stats19/en/Neighbours/result.json",
+      "input_sha256": "ceb5241d02e73c149b8c9bc5eb334c67716ad446857a86b01f291fab72534925"
+    },
+    {
+      "scene": "NaiveBayes",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 64
+      },
+      "input_record": "renders/qa/series/stats19/en/NaiveBayes/result.json",
+      "input_sha256": "9923849ce6d4e71da8a4fec9d809b06e20d50b79c68bd6ee5095cffe571b15d7"
+    },
+    {
+      "scene": "Trees",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 60
+      },
+      "input_record": "renders/qa/series/stats19/en/Trees/result.json",
+      "input_sha256": "80ad54d40839e83aa9198a004aeeec04e2a6500ad355e223f64a93232956b3d1"
+    },
+    {
+      "scene": "Shrinkage",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 49
+      },
+      "input_record": "renders/qa/series/stats19/en/Shrinkage/result.json",
+      "input_sha256": "437c64ec00aa09ae80dd8f71ce51cdff85ef0d7f7010a3d7f08cab00daba163d"
+    },
+    {
+      "scene": "Metrics",
+      "status": "needs-review",
+      "frames": 33,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 49
+      },
+      "input_record": "renders/qa/series/stats19/en/Metrics/result.json",
+      "input_sha256": "3a3a718c95790e1487375e302a5278233dc1a042d3519a0fbe086cedd45eb911"
+    },
+    {
+      "scene": "Decided",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 52
+      },
+      "input_record": "renders/qa/series/stats19/en/Decided/result.json",
+      "input_sha256": "b4d572a45d072f7443c374ef7914beb1e718a5b7edd5afef442c205006b39c6e"
+    },
+    {
+      "scene": "Leakage",
+      "status": "needs-review",
+      "frames": 42,
+      "warnings": {
+        "narration-translation": 10,
+        "untranslated-on-screen": 86
+      },
+      "input_record": "renders/qa/series/stats19/en/Leakage/result.json",
+      "input_sha256": "070c23bfc0219d6096599f18e05198a79b012f956c6a7278117ea85cedccdb00"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 7,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 62
+      },
+      "input_record": "renders/qa/series/stats19/en/Outro/result.json",
+      "input_sha256": "1d8018b8483a5fa6a6cbcbca58b4cb19d84ab8593a45226c3d40a68d433d99fc"
+    }
+  ]
+}

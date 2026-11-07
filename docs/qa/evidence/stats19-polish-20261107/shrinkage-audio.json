@@ -1,0 +1,95 @@
+{
+ "video": "stats19",
+ "scene": "Shrinkage",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 7,
+ "lines": [
+  {
+   "raw": "Chapter seven. Ridge and the lasso, a first look.",
+   "spoken": "Chapter seven. Ridge and the lasso, a first look.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/9e8936bea96d066e.wav",
+   "duration": 3.475,
+   "tokens": 9,
+   "peak": 0.371429443359375,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Linear models have their own dial. <bookmark mark='a'/> Ridge regression, proposed by Arthur Hoerl and Robert Kennard in 1970, uses centred responses and standardized predictors, leaving the intercept unpenalized. In per-observation units it minimizes squared error divided by two n, plus lambda over two times the squared coefficient norm. <bookmark mark='b'/> The solution adds n lambda to the diagonal of X prime X before inverting, so for positive lambda it is invertible even with collinear predictors and least squares falls apart. <bookmark mark='c'/> Lambda zero is Part 12's least squares; as lambda grows, the penalized coefficient vector tends to zero; individual coordinates need not change monotonically. <bookmark mark='d'/> The shrinkage adds bias and removes variance, chapter two's trade, and with many predictors or noisy data the trade is usually favourable.",
+   "spoken": "Linear models have their own dial. Ridge regression, proposed by Arthur Hoerl and Robert Kennard in 1970, uses centred responses and standardized predictors, leaving the intercept unpenalized. In per-observation units it minimizes squared error divided by two n, plus lambda over two times the squared coefficient norm. The solution adds n lambda to the diagonal of X prime X before inverting, so for positive lambda it is invertible even with collinear predictors and least squares falls apart. Lambda zero is Part 12's least squares; as lambda grows, the penalized coefficient vector tends to zero; individual coordinates need not change monotonically. The shrinkage adds bias and removes variance, chapter two's trade, and with many predictors or noisy data the trade is usually favourable.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/3efaa4e7297b2350.wav",
+   "duration": 50.6,
+   "tokens": 122,
+   "peak": 0.539031982421875,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Robert Tibshirani's lasso, of 1996, changes one thing: it penalizes the sum of the absolute values of the coefficients instead of their squares. <bookmark mark='b'/> The one-norm. <bookmark mark='c'/> The consequence is striking: as lambda grows, coefficients don't just shrink, many become exactly zero. <bookmark mark='d'/> So the lasso shrinks and selects variables at the same time, and produces a sparse model that can be read.",
+   "spoken": "Robert Tibshirani's lasso, of 1996, changes one thing: it penalizes the sum of the absolute values of the coefficients instead of their squares. The one-norm. The consequence is striking: as lambda grows, coefficients don't just shrink, many become exactly zero. So the lasso shrinks and selects variables at the same time, and produces a sparse model that can be read.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/9cbc41d90b96650d.wav",
+   "duration": 24.3,
+   "tokens": 60,
+   "peak": 0.5458984375,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Why exact zeros? The picture explains it. <bookmark mark='a'/> In the plane of two coefficients, the least-squares estimate sits at the green dot, and the ellipses around it are contours of equal squared error. <bookmark mark='b'/> The lasso, in its equivalent constrained form, keeps the coefficients inside a diamond; ridge keeps them inside a circle. <bookmark mark='c'/> The solution is where the expanding ellipse first touches the region. <bookmark mark='d'/> For the circle, that's a smooth point where both coefficients are non-zero: shrunk, but both present. For the diamond, it's very often a corner, and at a corner one coefficient is exactly zero. <bookmark mark='e'/> Here the lasso keeps beta one and sets beta two to zero; ridge keeps a little of both. In many dimensions the diamond has many corners and edges, and the lasso lands on them constantly.",
+   "spoken": "Why exact zeros? The picture explains it. In the plane of two coefficients, the least-squares estimate sits at the green dot, and the ellipses around it are contours of equal squared error. The lasso, in its equivalent constrained form, keeps the coefficients inside a diamond; ridge keeps them inside a circle. The solution is where the expanding ellipse first touches the region. For the circle, that's a smooth point where both coefficients are non-zero: shrunk, but both present. For the diamond, it's very often a corner, and at a corner one coefficient is exactly zero. Here the lasso keeps beta one and sets beta two to zero; ridge keeps a little of both. In many dimensions the diamond has many corners and edges, and the lasso lands on them constantly.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/f757773483c11ac0.wav",
+   "duration": 45.65,
+   "tokens": 130,
+   "peak": 0.717498779296875,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> With standardized orthogonal predictors, X prime X equal to n I, and both losses in the per-observation units just stated, the rules act coefficient by coefficient, and their difference fits in one picture. <bookmark mark='b'/> The lasso soft-thresholds: any least-squares coefficient smaller than lambda becomes zero, and larger ones move toward zero by lambda. <bookmark mark='c'/> Ridge simply scales every coefficient by one over one plus lambda. <bookmark mark='d'/> So the lasso kills small effects and keeps large ones, slightly shrunk; <bookmark mark='e'/> ridge keeps everyone, all a little smaller.",
+   "spoken": "With standardized orthogonal predictors, X prime X equal to n I, and both losses in the per-observation units just stated, the rules act coefficient by coefficient, and their difference fits in one picture. The lasso soft-thresholds: any least-squares coefficient smaller than lambda becomes zero, and larger ones move toward zero by lambda. Ridge simply scales every coefficient by one over one plus lambda. So the lasso kills small effects and keeps large ones, slightly shrunk; ridge keeps everyone, all a little smaller.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/238baa795450e69d.wav",
+   "duration": 32.975,
+   "tokens": 82,
+   "peak": 0.72796630859375,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Now a regression with twenty predictors, of which three really matter, in gold, and seventeen are noise, in grey. <bookmark mark='b'/> The lasso path traces every coefficient as lambda decreases from left to right on the negative log lambda axis. At the left, all are zero. As lambda falls, the three real effects enter first, one after another, and only later do the noise variables creep in. <bookmark mark='c'/> The ridge path, for comparison: every coefficient grows smoothly from zero together, with no mechanism that deliberately sets small coefficients exactly to zero.",
+   "spoken": "Now a regression with twenty predictors, of which three really matter, in gold, and seventeen are noise, in grey. The lasso path traces every coefficient as lambda decreases from left to right on the negative log lambda axis. At the left, all are zero. As lambda falls, the three real effects enter first, one after another, and only later do the noise variables creep in. The ridge path, for comparison: every coefficient grows smoothly from zero together, with no mechanism that deliberately sets small coefficients exactly to zero.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/6f4592d6283ca9d6.wav",
+   "duration": 34.775,
+   "tokens": 88,
+   "peak": 0.49798583984375,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Choose lambda by ten-fold cross-validation. The minimum keeps eight variables: the three real ones and five passengers, which give a slightly lower observed CV score but do not thereby establish a real prediction benefit. <bookmark mark='b'/> The one-standard-error rule chooses a larger lambda, and keeps three. <bookmark mark='c'/> Exactly the three real effects. <bookmark mark='d'/> Their estimates are shrunk toward zero, the lasso's bias, A least-squares refit removes the explicit shrinkage penalty, but it does not generally remove bias from data-dependent selection or validate ordinary post-selection intervals. Whether selection like this can be trusted in general, and what inference after it means, are questions for Parts 32 and 56.",
+   "spoken": "Choose lambda by ten-fold cross-validation. The minimum keeps eight variables: the three real ones and five passengers, which give a slightly lower observed CV score but do not thereby establish a real prediction benefit. The one-standard-error rule chooses a larger lambda, and keeps three. Exactly the three real effects. Their estimates are shrunk toward zero, the lasso's bias, A least-squares refit removes the explicit shrinkage penalty, but it does not generally remove bias from data-dependent selection or validate ordinary post-selection intervals. Whether selection like this can be trusted in general, and what inference after it means, are questions for Parts 32 and 56.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/947e0831c153189c.wav",
+   "duration": 44.15,
+   "tokens": 103,
+   "peak": 0.783782958984375,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats19/en/Shrinkage_motion/result.json",
+ "input_sha256": "ac873ceb864d5dd9d9512550830d303594310bb6da91ad93eccdb55dc96e8730"
+}

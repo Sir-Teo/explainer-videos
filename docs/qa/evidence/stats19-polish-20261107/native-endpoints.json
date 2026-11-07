@@ -1,0 +1,105 @@
+{
+  "fingerprint": "9f0442a38ed28822bddb1272ba451ea26a0f805f0123331cafde09b3c1fb1569",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "PredictionError",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 58
+      },
+      "input_record": "renders/qa/native1080/stats19/en/PredictionError/result.json",
+      "input_sha256": "e337505a3adbfa288acdc970d0e9a13c73f4774ba7c75294a2a9efccfc1f0269"
+    },
+    {
+      "scene": "BiasVariance",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 46
+      },
+      "input_record": "renders/qa/native1080/stats19/en/BiasVariance/result.json",
+      "input_sha256": "f42e1ef515aaf5e5263a9b3d603ffe1942e87ded9a8b58d384222a31c76e35b8"
+    },
+    {
+      "scene": "Neighbours",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 39
+      },
+      "input_record": "renders/qa/native1080/stats19/en/Neighbours/result.json",
+      "input_sha256": "3957d05dd8ca2b401d6091282ad8644de4b08807fd506f5cbdda738ab26d49a3"
+    },
+    {
+      "scene": "NaiveBayes",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 64
+      },
+      "input_record": "renders/qa/native1080/stats19/en/NaiveBayes/result.json",
+      "input_sha256": "0ff6ef0757603d2165595e36c514c390bba7faf12216a618c16506bd4d11bde4"
+    },
+    {
+      "scene": "Trees",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 60
+      },
+      "input_record": "renders/qa/native1080/stats19/en/Trees/result.json",
+      "input_sha256": "104a98a73d5d9342e19f98efa06f5810f34187df04f36a051f1150161634a06d"
+    },
+    {
+      "scene": "Shrinkage",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 49
+      },
+      "input_record": "renders/qa/native1080/stats19/en/Shrinkage/result.json",
+      "input_sha256": "c27133334cf5693b941141c09baed32db187224de6274b0d1b43a7cad28264db"
+    },
+    {
+      "scene": "Metrics",
+      "status": "needs-review",
+      "frames": 33,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 49
+      },
+      "input_record": "renders/qa/native1080/stats19/en/Metrics/result.json",
+      "input_sha256": "97c0ade395fd206aff57ac3016a516a0cf5fb0a13c81a6cac659e025e5d3437a"
+    },
+    {
+      "scene": "Decided",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 52
+      },
+      "input_record": "renders/qa/native1080/stats19/en/Decided/result.json",
+      "input_sha256": "b135073c4e5998d8c444ebeb385d5418a7413848a971a50d31f45c7d35ebeca1"
+    },
+    {
+      "scene": "Leakage",
+      "status": "needs-review",
+      "frames": 42,
+      "warnings": {
+        "narration-translation": 10,
+        "untranslated-on-screen": 86
+      },
+      "input_record": "renders/qa/native1080/stats19/en/Leakage/result.json",
+      "input_sha256": "34497cf2a3214c193af5d0a64faabfe02beea3f447f0bb7bc59c914fef073852"
+    }
+  ]
+}
