@@ -71,8 +71,8 @@ class GradientFlows(LectureMixin, VoiceoverScene):
         ts = np.asarray(d["ts"])
         ke, kp = np.asarray(d["kl_exact"]), np.asarray(d["kl_emp"])
         keep = ke > 1e-4
-        A = axes([0, 6.2], [-3.2, 2.0], x_length=7.4, y_length=4.4, xlabel=r"time $t$", ylabel=r"$\mathrm{KL}(\rho_t \,\|\, \pi)$ (log scale)",
-                 xticks=[0, 2, 4, 6], yticks=[2, 0, -2], yfmt=lambda v: rf"10^{{{int(v)}}}", center=[-2.5, 0.2, 0])
+        A = axes([0, 6.2], [-4.2, 2.0], x_length=7.4, y_length=4.4, xlabel=r"time $t$", ylabel=r"$\mathrm{KL}(\rho_t \,\|\, \pi)$ (log scale)",
+                 xticks=[0, 2, 4, 6], yticks=[2, 0, -2, -4], yfmt=lambda v: rf"10^{{{int(v)}}}", center=[-2.5, 0.2, 0])
         ax = A.ax
         le = polyline(ax, ts[keep], np.log10(ke[keep]), FLOWC, 3.5)
         dots = VGroup(*[Dot(ax.c2p(t, np.log10(max(k, 1e-4))), radius=0.06, color=WHITE) for t, k in zip(ts, kp) if k > 6e-4])
