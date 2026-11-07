@@ -64,6 +64,7 @@ class Hook(VoiceoverScene):
             label(r"the pipes of both companies ran down the same streets: \ neighbours drew different water", font_size=24),
             label(r"blue: \ Lambeth; \ red: \ Southwark \& Vauxhall; \ white: \ a death \ (schematic; frequencies amplified sixfold)", font_size=22, color=GREY_A),
         ), 12.4, 0.3, [0, -2.7, 0])
+        self.add(cap[0])
         with self.voiceover(
             "<bookmark mark='a'/> What made this a test was that the two companies had competed for customers street "
             "by street, in the 1840s, and their pipes ran side by side down the same roads. Which company supplied a "
@@ -76,7 +77,7 @@ class Hook(VoiceoverScene):
         ) as vo:
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(h) for h in houses], lag_ratio=0.004), run_time=3.0)
-            self.play(FadeIn(cap[0]))
+            self.wait(0.1)
             vo.wait_until("b")
             self.play(FadeIn(cap[1]))
             vo.wait_until("c")
