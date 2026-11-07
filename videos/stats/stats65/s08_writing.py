@@ -31,19 +31,11 @@ class Writing(LectureMixin, VoiceoverScene):
 
     def abstract(self):
         self.list_voiceover(
-            "<bookmark mark='a'/> The abstract, in four sentences. <bookmark mark='b'/> Weighted conformal prediction "
-            "guarantees coverage under covariate shift when the likelihood ratio is known, but in practice the ratio is "
-            "estimated. <bookmark mark='c'/> We show that with weights fixed in advance, coverage falls by at most the total "
-            "variation distance between the reweighted source and the target. <bookmark mark='d'/> In a preregistered "
-            "simulation the bound held in all forty-five cells, but left at least ten points of slack, most when the scores "
-            "depended weakly on the covariates; and estimated weights over-covered at large shifts, through infinite "
-            "intervals. "
-            "<bookmark mark='e'/> On NHANES data with a designed selection, estimated weights restored ninety-one percent "
-            "coverage where unweighted intervals gave seventy-three.",
+            "<bookmark mark='a'/> An abstract that matches the corrected evidence. <bookmark mark='b'/> Weighted conformal prediction gives at-least-nominal coverage under known covariate shift; we illustrate the effect of independently estimated or misspecified ratios. <bookmark mark='c'/> A short teaching proof gives a lower bound using the distance between the reweighted source and target, conditional on independent weight and model training. No new theorem priority is claimed. <bookmark mark='d'/> A post hoc corrected rerun preserves the original 45-cell design and reports original predictions, Monte Carlo errors, finite-width summaries and infinite intervals. Its estimates are compatible with the proved lower bounds. <bookmark mark='e'/> An independent-resampling NHANES example raises coverage from about seventy-three to about ninety-one percent; it concerns a fixed empirical law rather than national or newly collected patient outcomes.",
             [(r"Abstract", S.ACCENT),
              (r"weighted conformal needs the true ratio; \ in practice it is estimated", GREY_A),
              (r"with fixed weights, \ coverage falls by at most $\mathrm{TV}(P_{\hat w}, Q)$", THESISC),
-             (r"a preregistered study: \ the bound held in 45 of 45 cells, \ with wide slack", HONC),
+             (r"a protocol-guided study: \ the bound held in 45 of 45 cells, \ with wide slack", HONC),
              (r"NHANES: \ estimated weights 91\%, \ unweighted 73\%", ESTC)],
             buff=0.4, font_size=25, head_size=36)
 
@@ -63,17 +55,12 @@ class Writing(LectureMixin, VoiceoverScene):
 
     def repro(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Reproducibility, concretely. <bookmark mark='b'/> The code that produced every number is "
-            "versioned, and every random seed is fixed, so the study reruns to the same digits. <bookmark mark='c'/> The "
-            "functions are tested against known answers, such as the theorem's exact Gaussian formula against a numerical "
-            "integral. <bookmark mark='d'/> And the protocol was committed before the results, so a reader can check that "
-            "the predictions were not written after the fact. The same discipline has run through all sixty-five parts: "
-            "every Coverage Board row was computed, not asserted.",
+            "<bookmark mark='a'/> Reproducibility needs concrete records. <bookmark mark='b'/> Version code and input hashes, record random generators, seeds, sample sizes, tolerances and environment. Fixed seeds alone do not guarantee identical final digits across every numerical library or platform. <bookmark mark='c'/> Check important formulas through independent derivations and numerical reference methods, then preserve checks as regression protection. Failures and numerical refinements belong in the evidence too. <bookmark mark='d'/> Preserve the original protocol and label our QA amendment as post hoc. We can verify the amendment's commit precedes this corrected computation; we cannot infer an independently timestamped historical preregistration merely from a protocol committed alongside results.",
             [(r"\text{code}", r":", r"\text{versioned}", 40),
              (r"\text{seeds}", r":", r"\text{fixed: \ same digits on rerun}", 40),
              (r"\text{tests}", r":", r"\text{against known answers}", 40),
-             (r"\text{protocol}", r":", r"\text{committed before the results}", 40)],
-            [r"git", r"Part 7", r"the test suite", r"preregistration"],
+             (r"\text{protocol}", r":", r"\text{original preserved; post hoc amendment before rerun}", 40)],
+            [r"git", r"Part 7", r"the test suite", r"protocol transparency"],
             colors=[(3, HONC)])
 
     def honesty(self):
@@ -87,7 +74,7 @@ class Writing(LectureMixin, VoiceoverScene):
              (r"\text{do not}", r":", r"\text{change the protocol after the data}", 40),
              (r"\text{forking paths}", r":", r"\text{apply to the researcher}", 40),
              (r"\text{trust}", r":", r"\text{results that show their limits}", 40)],
-            [r"chapter 5's scorecard", r"preregistration", r"Part 56", r"Part 33's lesson"],
+            [r"chapter 5's scorecard", r"protocol transparency", r"Part 56", r"Part 33's lesson"],
             colors=[(0, HONC), (1, NAIVEC)])
 
     def report(self):
@@ -110,12 +97,12 @@ class Writing(LectureMixin, VoiceoverScene):
         self.lad_voiceover(
             "<bookmark mark='a'/> The paper's figures, chosen so each makes one point. <bookmark mark='b'/> Figure one: the "
             "bound against the temper, for three shifts: what the theorem promises. <bookmark mark='c'/> Figure two: coverage "
-            "by method and shift, with each method's bound dashed beneath it: the theorem holds. Figure three: the slack "
+            "by method and shift, with each method's bound dashed beneath it: the numerical estimates are compatible with the bound. Figure three: the slack "
             "against gamma: when it is tight. <bookmark mark='d'/> Figure four: NHANES coverage for the young and the old: "
             "what it means for real people. Four figures, each with its message as its caption, and every number in them "
             "traceable to a seeded line of code.",
             [(r"\text{figure 1}", r":", r"\text{the promise}", 40),
-             (r"\text{figure 2}", r":", r"\text{it holds}", 40),
+             (r"\text{figure 2}", r":", r"\text{numerically compatible, not a proof}", 40),
              (r"\text{figure 3}", r":", r"\text{when it is tight}", 40),
              (r"\text{figure 4}", r":", r"\text{real people}", 40)],
             [r"chapter 3", r"chapter 5", r"chapter 5", r"chapter 6"],

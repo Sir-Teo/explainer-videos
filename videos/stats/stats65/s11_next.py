@@ -57,13 +57,7 @@ class WhereNext(LectureMixin, VoiceoverScene):
 
     def problems_left(self):
         self.list_voiceover(
-            "<bookmark mark='a'/> The open problems the last ten parts left, as a menu for a real dissertation. <bookmark "
-            "mark='b'/> Inference after selection with learned models, and conditional guarantees beyond the marginal. "
-            "<bookmark mark='c'/> Anytime-valid inference for complex models, and adaptive experiments with honest "
-            "intervals. <bookmark mark='d'/> Robustness to shift and contamination at once, and transport with estimated "
-            "maps. <bookmark mark='e'/> Causal inference with learned adjustment sets, interference at scale, privacy beyond "
-            "the mean, and statistics with models in every loop. <bookmark mark='f'/> And this dissertation's own: weights "
-            "estimated on the same data, and a bound that sees the scores.",
+            "<bookmark mark='a'/> The open problems the last ten parts left, as directions within active literatures, not claims that every subproblem lacks existing results. <bookmark mark='b'/> Inference after selection with learned models, and conditional guarantees beyond the marginal. <bookmark mark='c'/> Anytime-valid inference for complex models, and adaptive experiments with honest intervals. <bookmark mark='d'/> Robustness to shift and contamination at once, and transport with estimated maps. <bookmark mark='e'/> Causal inference with learned adjustment sets, interference at scale, privacy beyond the mean, and statistics with models in every loop. <bookmark mark='f'/> And this dissertation's own: extensions beyond this proof for dependent weight fitting, and sharper score-aware analyses. Existing cross-fitting and robustness results should be checked before claiming novelty.",
             [(r"open, \ from Parts 56--65:", GREY_A),
              (r"selection with learned models; \ conditional guarantees", S.EST),
              (r"anytime-valid inference for complex models", S.KEPT),

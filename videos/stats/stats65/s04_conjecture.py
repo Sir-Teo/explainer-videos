@@ -17,13 +17,8 @@ class Conjecture(LectureMixin, VoiceoverScene):
 
     def idea(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The idea came from a change of viewpoint. <bookmark mark='b'/> Any weight function w hat "
-            "is the exact likelihood ratio for some distribution: the source reweighted by w hat, call it P sub w hat. "
-            "<bookmark mark='c'/> So weighted conformal with wrong weights is not a broken method; it is a correct method "
-            "for the wrong target. It covers P sub w hat exactly. <bookmark mark='d'/> The question becomes: how far is the "
-            "wrong target from the right one? That suggests the distance to use: total variation, Part forty-three's "
-            "largest difference in the probability of any event.",
-            [(r"\text{any } \hat w", r":", r"\text{an exact ratio for some law}", 40),
+            "<bookmark mark='a'/> Change the target rather than the algorithm. <bookmark mark='b'/> A fixed positive weight function with finite nonzero source expectation defines a reweighted probability law. An arbitrary nonintegrable weight does not. <bookmark mark='c'/> The weighted conformal construction gives at least nominal marginal coverage for that reweighted covariate law with the common conditional outcome law, provided the score or fitted prediction model is independent of calibration and test data. It need not give exactly nominal coverage. <bookmark mark='d'/> Compare this artificial target with the actual target using total variation, which bounds differences in event probabilities. The distance is analytically computable in our Gaussian examples, while practical estimation of it can be hard.",
+            [(r"\text{positive integrable } \hat w", r":", r"\text{an exact ratio for some law}", 40),
              (r"P_{\hat w}(dx)", r"=", r"\hat w(x) P(dx) / E_P \hat w", 40),
              (r"\text{so}", r":", r"\text{right method, \ wrong target}", 40),
              (r"\text{distance}", r":", r"\mathrm{TV}(P_{\hat w}, Q) = \sup_A |P_{\hat w}(A) - Q(A)|", 40)],
@@ -33,7 +28,7 @@ class Conjecture(LectureMixin, VoiceoverScene):
     def statement(self):
         self.lad_voiceover(
             "<bookmark mark='a'/> The conjecture. <bookmark mark='b'/> Let the weights w hat be fixed, estimated on data "
-            "independent of the calibration set, and let the conditional law of Y given X be the same in source and target. "
+            "independent of both calibration and the evaluated test point, and let the conditional law of Y given X be the same in source and target. "
             "<bookmark mark='c'/> Then the weighted split-conformal interval covers a test point from Q with probability at "
             "least one minus alpha minus the total variation distance between P sub w hat and Q's covariate law. <bookmark "
             "mark='d'/> When w hat is the true ratio, the distance is zero and Part fifty-seven's guarantee returns. A good "
@@ -41,7 +36,7 @@ class Conjecture(LectureMixin, VoiceoverScene):
             [(r"\text{assume}", r":", r"\hat w \perp \text{calibration data}, \ \ P_{Y \mid X} = Q_{Y \mid X}", 40),
              (r"\text{claim}", r":", r"Q(Y \in \hat C(X)) \ \ge \ 1 - \alpha - \mathrm{TV}(P_{\hat w}, Q_X)", 40),
              (r"\hat w = w", r"\Rightarrow", r"\mathrm{TV} = 0: \ \text{Part 57's guarantee}", 40),
-             (r"\text{falsifiable}", r":", r"\text{one cell below the bound refutes it}", 40)],
+             (r"\text{falsifiable}", r":", r"\text{a reproducible discrepancy beyond MC error warrants investigation}", 40)],
             [r"sample splitting", r"the conjecture", r"contains the known case", r"chapter 5 checks"],
             colors=[(1, THESISC)])
 
@@ -80,12 +75,7 @@ class Conjecture(LectureMixin, VoiceoverScene):
             [(r"white: \ $\lambda = 1$, \ the true weights", WHITE), (r"overshooting is penalized too", GREY_A)],
         ])
         with self.voiceover(
-            f"<bookmark mark='a'/> The conjectured bound against the temper lambda, for three shifts. <bookmark mark='b'/> "
-            f"Larger shifts, from green to red, make every error in the weights more costly. <bookmark mark='c'/> With a "
-            f"shift of one standard deviation, using no weights at all, lambda of zero, guarantees only "
-            f"{100 * b0:.0f} percent; half-strength weights guarantee {100 * b05:.0f}. <bookmark mark='d'/> At lambda of one "
-            f"the bound is the full ninety percent, and weights that overshoot are penalized as well. The conjecture makes a "
-            f"sharp, checkable prediction in every cell of a simulation: coverage above these curves."
+            f"<bookmark mark='a'/> The conjectured bound against the temper lambda, for three shifts. <bookmark mark='b'/> Larger shifts, from green to red, make every error in the weights more costly. <bookmark mark='c'/> With a shift of one standard deviation, using no weights at all, lambda of zero, guarantees only {100 * b0:.0f} percent; half-strength weights guarantee {100 * b05:.0f}. <bookmark mark='d'/> At lambda of one the bound is the full ninety percent, and weights that overshoot are penalized as well. It gives a checkable lower bound, not a claim of sharpness. Simulated averages fluctuate; a discrepancy needs Monte Carlo uncertainty and implementation checks before challenging a proof."
         ) as vo:
             self.play(FadeIn(A), Create(nom), FadeIn(exact_tag()))
             vo.wait_until("a")
@@ -101,13 +91,9 @@ class Conjecture(LectureMixin, VoiceoverScene):
 
     def doubts(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> A conjecture should come with its doubts. <bookmark mark='b'/> The bound uses only the "
-            "covariates. If the scores do not depend on x at all, ordinary conformal is already exact under any shift, and "
-            "the bound is wildly pessimistic. <bookmark mark='c'/> So the bound should be tight only when the scores depend "
-            "strongly on x. <bookmark mark='d'/> That is a second, sharper prediction, and the simulation study is designed "
-            "to test it, by varying how strongly the noise depends on x.",
+            "<bookmark mark='a'/> A conjecture should come with its doubts. <bookmark mark='b'/> The bound uses only the covariates. If the conditional score distribution given x is constant, ordinary conformal already gives at least nominal coverage under any covariate shift, and the bound is wildly pessimistic. <bookmark mark='c'/> Strong score dependence may reduce the slack in this design, but does not by itself imply that the TV bound is sharp. <bookmark mark='d'/> That is a second, sharper prediction, and the simulation study is designed to test it, by varying how strongly the noise depends on x.",
             [(r"\text{doubt}", r":", r"\text{the bound ignores the scores}", 40),
-             (r"\text{scores } \perp X", r"\Rightarrow", r"\text{exact anyway; \ bound very loose}", 40),
+             (r"\text{scores } \perp X", r"\Rightarrow", r"\text{unweighted at least nominal; \ bound can be loose}", 40),
              (r"\text{tight when}", r":", r"\text{scores depend strongly on } x", 40),
              (r"\text{test it}", r":", r"\text{vary } \gamma \text{ in the study}", 40)],
             [r"honesty", r"exchangeable scores", r"a refinement", r"chapter 5"],

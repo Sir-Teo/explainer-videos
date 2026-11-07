@@ -14,8 +14,8 @@ def cells():
 
 class Study(LectureMixin, VoiceoverScene):
     def construct(self):
-        self.card_voiceover("Chapter five. The simulation study, written down before it ran.", 5, r"A preregistered study",
-                            r"Protocol first, \ results second")
+        self.card_voiceover("Chapter five. The simulation study, with its original protocol and explicit post hoc QA correction.", 5, r"A protocol-guided study",
+                            r"Original protocol; transparent post hoc QA rerun")
         self.why_pre()
         self.ademp()
         self.mc()
@@ -29,17 +29,12 @@ class Study(LectureMixin, VoiceoverScene):
 
     def why_pre(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Simulation studies are experiments, and they can be run badly in the same ways. "
-            "<bookmark mark='b'/> A method's author chooses the settings, and settings that flatter the method are easy to "
-            "find after the fact: Part fifty-six's selection, applied to a research design. <bookmark mark='c'/> The "
-            "remedy is the clinical trial's: write the protocol down, with the predictions, before running anything. "
-            "<bookmark mark='d'/> This study's protocol, with five predictions, was saved in the repository before the main "
-            "run; only a fifty-replicate pilot, to check the code, had been seen.",
+            "<bookmark mark='a'/> Simulation designs can be selected after seeing flattering results. A written protocol helps expose that selection. <bookmark mark='b'/> Preserve original aims, methods, predictions and their timing evidence; record amendments separately rather than rewriting a prediction after it fails. <bookmark mark='c'/> This repository contains an original protocol stating that it preceded the historical run. Its initial commit also includes results and source, so that commit alone does not independently establish the earlier execution timing. <bookmark mark='d'/> The current QA correction was designed after seeing those published results. A separate QA amendment was committed before this corrected rerun. This is a transparent post hoc revision, not a new preregistered confirmation; the original protocol remains unchanged.",
             [(r"\text{simulations}", r":", r"\text{experiments, \ with the same risks}", 40),
              (r"\text{the risk}", r":", r"\text{flattering settings, \ found afterwards}", 40),
              (r"\text{remedy}", r":", r"\text{protocol and predictions first}", 40),
-             (r"\text{here}", r":", r"\texttt{PROTOCOL.md}, \ \text{before the run}", 40)],
-            [r"Part 7", r"Part 56", r"preregistration", r"in the repository"],
+             (r"\text{here}", r":", r"\text{original protocol + post hoc QA amendment}", 40)],
+            [r"Part 7", r"Part 56", r"historical timing unverified", r"QA amendment committed before rerun"],
             colors=[(2, HONC)])
 
     def ademp(self):
@@ -97,12 +92,7 @@ class Study(LectureMixin, VoiceoverScene):
             [(r"dashes: \ each method's bound;", WHITE), (r"every curve stays above its own", WHITE)],
         ])
         with self.voiceover(
-            f"<bookmark mark='a'/> The results, for the strongest dependence of the noise on x, gamma of one. <bookmark "
-            f"mark='b'/> Without weights, coverage falls as the shift grows, to {100 * n15:.0f} percent at mu of one and a "
-            f"half. <bookmark mark='c'/> With true or estimated weights, coverage is at or above ninety percent everywhere. "
-            f"<bookmark mark='d'/> Tempered and misspecified weights lose part of the coverage. <bookmark mark='e'/> And the "
-            f"dashed lines are each method's bound from the theorem, computed exactly from its own weights. Every curve stays "
-            f"above its own bound, as it must, and well above it."
+            f"<bookmark mark='a'/> The results, for the strongest dependence of the noise on x, gamma of one. <bookmark mark='b'/> Without weights, coverage falls as the shift grows, to {100 * n15:.0f} percent at mu of one and a half. <bookmark mark='c'/> With true or estimated weights, coverage is at or above ninety percent everywhere. <bookmark mark='d'/> Tempered and misspecified weights lose part of the coverage. <bookmark mark='e'/> And the dashed lines are each method's bound from the theorem, computed from closed-form Gaussian or piecewise truncated-normal distances. The observed curves are compatible with the lower bounds after accounting for Monte Carlo error, and well above it."
         ) as vo:
             self.play(FadeIn(A), Create(nom), FadeIn(seeded_tag()))
             vo.wait_until("a")
@@ -176,14 +166,9 @@ class Study(LectureMixin, VoiceoverScene):
         st = cells()
         inf = st[(1.5, 1.0, "estimated")]["inf"]
         self.lad_voiceover(
-            f"<bookmark mark='a'/> Why prediction three failed. <bookmark mark='b'/> At the largest shift, some test points "
-            f"lie where the source has almost no data, and their weight is huge. <bookmark mark='c'/> Then the test point's "
-            f"own weight, placed at infinity, outweighs the whole calibration set, and the interval is infinite: "
-            f"{100 * inf:.1f} percent of intervals, against none without weights. <bookmark mark='d'/> Infinite intervals "
-            f"always cover, so coverage rises above ninety percent. The failure is in the safe direction, but it is a real "
-            f"cost: an interval of infinite width tells a user nothing. That is worth reporting, and it was not predicted.",
+            f"<bookmark mark='a'/> Why prediction three failed. <bookmark mark='b'/> At the largest shift, some test points lie where the source has almost no data, and their weight is huge. <bookmark mark='c'/> Then the normalized test weight exceeds alpha, so the finite calibration mass falls short of one minus alpha, and the interval is infinite: {100 * inf:.1f} percent of intervals, against none without weights. <bookmark mark='d'/> Infinite intervals always cover. Finite intervals also have their own coverage; the saved decomposition reports both contributions. Infinite intervals are a contributor to conservatism, rather than a complete causal attribution for all excess coverage. The failure is in the safe direction, but it is a real cost: an interval of infinite width tells a user nothing. That is worth reporting, and it was not predicted.",
             [(r"\text{large shift}", r":", r"\text{test points where the source is thin}", 40),
-             (r"\text{huge weight}", r":", r"\text{the test point outweighs the calibration set}", 40),
+             (r"\text{huge weight}", r":", r"w_{\rm test}/(\sum w_i+w_{\rm test})>\alpha", 40),
              (r"\text{infinite intervals}", r":", rf"{100 * inf:.1f}\% \ \text{{at }} \mu = 1.5", 40),
              (r"\text{so}", r":", r"\text{over-coverage: \ safe, \ but uninformative}", 40)],
             [r"overlap", r"Part 36's extreme weights", r"the mechanism", r"reported, \ not hidden"],
@@ -191,7 +176,7 @@ class Study(LectureMixin, VoiceoverScene):
 
     def widths(self):
         st = cells()
-        A = axes([0.35, 1.65], [0, 28], x_length=7.0, y_length=4.4, xlabel=r"shift $\mu$", ylabel=r"median interval width, \ $\gamma = 1$",
+        A = axes([0.35, 1.65], [0, 28], x_length=7.0, y_length=4.4, xlabel=r"shift $\mu$", ylabel=r"median of replicate finite-width medians, \ $\gamma = 1$",
                  xticks=MUS, yticks=[0, 5, 10, 15, 20, 25], center=[-2.5, 0.2, 0])
         ax = A.ax
         ls = VGroup()
@@ -206,12 +191,7 @@ class Study(LectureMixin, VoiceoverScene):
             [(r"gold, \ teal: \ in between", WRONGC)],
         ])
         with self.voiceover(
-            f"<bookmark mark='a'/> The price of the coverage, in width. <bookmark mark='b'/> Without weights the interval "
-            f"stays about {n15:.0f} units wide whatever the shift: it is calibrated to the source, where the noise is small. "
-            f"<bookmark mark='c'/> With correct weights it widens to about {o15:.0f} at the largest shift, because the target "
-            f"lives where exp of x makes the noise large. Correct intervals are wide when the truth is uncertain. <bookmark "
-            f"mark='d'/> Wrong weights land in between, in coverage and in width. No method beats the trade: honest coverage "
-            f"costs exactly the width the target's noise requires."
+            f"<bookmark mark='a'/> The price of coverage, using the median across replicates of each replicate's median finite interval width, with infinite fractions reported separately. <bookmark mark='b'/> Without weights the interval stays about {n15:.0f} units wide whatever the shift: it is calibrated to the source, where the noise is small. <bookmark mark='c'/> With correct weights it widens to about {o15:.0f} at the largest shift, because the target lives where exp of x makes the noise large. Correct intervals are wide when the truth is uncertain. <bookmark mark='d'/> Wrong weights land in between, in coverage and in width. No method beats the trade: these particular residual intervals pay substantial width under heteroscedastic shift. This is not an optimal-width theorem; a better score or conditional scale model can change that trade-off."
         ) as vo:
             self.play(FadeIn(A), FadeIn(seeded_tag()))
             vo.wait_until("a")
@@ -233,14 +213,14 @@ class Study(LectureMixin, VoiceoverScene):
             f"<bookmark mark='a'/> The cells with gamma of zero deserve their own look. <bookmark mark='b'/> There the "
             f"noise does not depend on x, so the scores are exchangeable between source and target whatever the shift. "
             f"<bookmark mark='c'/> Unweighted conformal covers {100 * c[0]:.1f}, {100 * c[1]:.1f} and {100 * c[2]:.1f} percent "
-            f"at the three shifts, exactly as Part fifty-seven promises for exchangeable data. <bookmark mark='d'/> But the "
+            f"at the three shifts, compatible with Part fifty-seven's at-least-nominal guarantee within simulation uncertainty. <bookmark mark='d'/> But the "
             f"theorem's bound for it falls to {100 * b[2]:.0f} percent at the largest shift. It is a bound that cannot see the "
             f"scores. A sharper theorem would measure the distance between the score distributions, not the covariates.",
             [(r"\gamma = 0", r":", r"\text{scores } \perp X", 40),
              (r"\text{so}", r":", r"\text{exchangeable under any shift}", 40),
              (r"\text{no weights}", r":", rf"{100 * c[0]:.1f}\%, \ {100 * c[1]:.1f}\%, \ {100 * c[2]:.1f}\%", 40),
              (r"\text{bound}", r":", rf"\text{{down to }} {100 * b[2]:.0f}\%: \ \text{{blind to the scores}}", 40)],
-            [r"a control", r"Part 57", r"exact", r"the next theorem"],
+            [r"a control", r"Part 57", r"Monte Carlo estimates", r"score-aware refinements"],
             colors=[(2, HONC), (3, NAIVEC)])
 
     def limits(self):
