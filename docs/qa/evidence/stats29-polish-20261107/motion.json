@@ -1,0 +1,149 @@
+{
+  "fingerprint": "d2a3f78123efe25cedb66b1fc759fecbdd91fcee20531ac1b084cccf3e17039e",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats29/en/Hook_motion/result.json",
+      "input_sha256": "56ad107db7efbea46ff7f344ffe70c5736644bd993c6ff79789c6ec1b777c46c",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 257 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 257 s\n"
+    },
+    {
+      "scene": "Histogram",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats29/en/Histogram_motion/result.json",
+      "input_sha256": "96383eb0bb068b00007295968313e93e39fcb0318812254e0427f715267ca2dd",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 223 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 223 s\n"
+    },
+    {
+      "scene": "KDE",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 9
+      },
+      "input_record": "renders/qa/series/stats29/en/KDE_motion/result.json",
+      "input_sha256": "4f5296f9e5914cbb53b7d131fe34dee743711e8f2cc860566399f3bb3de62ed3",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 286 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 286 s\n"
+    },
+    {
+      "scene": "Bandwidth",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats29/en/Bandwidth_motion/result.json",
+      "input_sha256": "8d92da12d7c4a90acedef2c7417308b13263ca1675840192f24973d923fcb23d",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 235 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 235 s\n"
+    },
+    {
+      "scene": "Curse",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats29/en/Curse_motion/result.json",
+      "input_sha256": "df0263805e254c64858f484b01a20ddf855a5807e5ed7884a5079d7706a7ae40",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 202 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 202 s\n"
+    },
+    {
+      "scene": "LocalPoly",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats29/en/LocalPoly_motion/result.json",
+      "input_sha256": "33d44b91b7c0cc31fb310267ddca7f2b37d84e877002bf96faedf13f19538cbe",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 243 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 243 s\n"
+    },
+    {
+      "scene": "Splines",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats29/en/Splines_motion/result.json",
+      "input_sha256": "a2c3ac15c502ec928d47b58d62d88a9d0bb098d0625876aab35869e638c65494",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 238 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 238 s\n"
+    },
+    {
+      "scene": "Lambda",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats29/en/Lambda_motion/result.json",
+      "input_sha256": "c42cafabc0d85e546c6983f172c0373a6ca49c34d3e02d376f3a20bf15f2551c",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 236 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 236 s\n"
+    },
+    {
+      "scene": "RKHS",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats29/en/RKHS_motion/result.json",
+      "input_sha256": "7a09b967c998d7a3786261f35e219ed774c2bdeba16ce17a9b1bf7084aede0dc",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 213 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 213 s\n"
+    },
+    {
+      "scene": "Wavelets",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats29/en/Wavelets_motion/result.json",
+      "input_sha256": "93b388293e575c62daa1b308fe50cbf401efc45360b7ebb736f9b6629b385db5",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 240 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 240 s\n"
+    },
+    {
+      "scene": "GAM",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats29/en/GAM_motion/result.json",
+      "input_sha256": "f06f45104ea506443010f604dd81e347d9ed8cf8d9bba18cc3ded77b6cb19e83",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 218 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 218 s\n"
+    },
+    {
+      "scene": "Inference",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats29/en/Inference_motion/result.json",
+      "input_sha256": "d0aa86c11f3a305dd7ff449293188e95ff2936214bea83fc117f7e323618c4e4",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 240 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 240 s\n"
+    },
+    {
+      "scene": "Shape",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats29/en/Shape_motion/result.json",
+      "input_sha256": "b47b914387de048232d7df4291ea5c54612c8d7b968e5291e4b13362d2c5c3fa",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 186 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 186 s\n"
+    }
+  ]
+}

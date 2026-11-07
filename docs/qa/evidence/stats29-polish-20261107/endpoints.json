@@ -1,0 +1,160 @@
+{
+  "fingerprint": "d2a3f78123efe25cedb66b1fc759fecbdd91fcee20531ac1b084cccf3e17039e",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 42
+      },
+      "input_record": "renders/qa/series/stats29/en/Hook/result.json",
+      "input_sha256": "c47198e7fea7303982f85390c5323c021195be6c45ed741eca8701e1bcb81631"
+    },
+    {
+      "scene": "Histogram",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 46
+      },
+      "input_record": "renders/qa/series/stats29/en/Histogram/result.json",
+      "input_sha256": "2e4853d4bf631e3f8cbb69510f33687822c5b5999ef82d48abb7d5ac3985ae47"
+    },
+    {
+      "scene": "KDE",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 58
+      },
+      "input_record": "renders/qa/series/stats29/en/KDE/result.json",
+      "input_sha256": "c881661da2279cafc075bb819548c9ced963f73e27157b9abd35711ed320c8e6"
+    },
+    {
+      "scene": "Bandwidth",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 54
+      },
+      "input_record": "renders/qa/series/stats29/en/Bandwidth/result.json",
+      "input_sha256": "e959968c3258eb18c831c8eec870d9a2ec6018da0e62dcdbeedc4db7bb17dfa1"
+    },
+    {
+      "scene": "Curse",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 37
+      },
+      "input_record": "renders/qa/series/stats29/en/Curse/result.json",
+      "input_sha256": "7229209f0be9bbc1cb753e330aee140507f4ded94ef0a3b1aa4e11b1a2cb782a"
+    },
+    {
+      "scene": "LocalPoly",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 52
+      },
+      "input_record": "renders/qa/series/stats29/en/LocalPoly/result.json",
+      "input_sha256": "832f9a99b970c5af4e21f6586a8df06ad06028390425c08c7a270b443c144423"
+    },
+    {
+      "scene": "Splines",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 49
+      },
+      "input_record": "renders/qa/series/stats29/en/Splines/result.json",
+      "input_sha256": "8eddf5b895e6cae9208624c426b2da07f5c0d3644fd24fff9398c155a213cbf0"
+    },
+    {
+      "scene": "Lambda",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 59
+      },
+      "input_record": "renders/qa/series/stats29/en/Lambda/result.json",
+      "input_sha256": "b36df25a593644fa3792694dc0aa0001b495051ebf87074272556e1448d95c15"
+    },
+    {
+      "scene": "RKHS",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 38
+      },
+      "input_record": "renders/qa/series/stats29/en/RKHS/result.json",
+      "input_sha256": "e0e560d8a9947b936bef1971976b14b80443efa0e16ceca53d4925d9fde3ece5"
+    },
+    {
+      "scene": "Wavelets",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 47
+      },
+      "input_record": "renders/qa/series/stats29/en/Wavelets/result.json",
+      "input_sha256": "50ca572fef7a15e22732b93a94ffe6d5f298393f54b62f3b15dba9e61ecb9a83"
+    },
+    {
+      "scene": "GAM",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 55
+      },
+      "input_record": "renders/qa/series/stats29/en/GAM/result.json",
+      "input_sha256": "e6286735c4276767ac85f612aba9633b361f23697d035eb5bedb5be83774c55d"
+    },
+    {
+      "scene": "Inference",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 53
+      },
+      "input_record": "renders/qa/series/stats29/en/Inference/result.json",
+      "input_sha256": "f22ec690fd0ca90900c2bc0fd94f9a14aec7a7fa09f2ef9eec1eaf732d14568c"
+    },
+    {
+      "scene": "Shape",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 43
+      },
+      "input_record": "renders/qa/series/stats29/en/Shape/result.json",
+      "input_sha256": "bf76dcae59affd0119de4b95ea088571b832ee421ba851ad45b2811efbc53bdc"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 11,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 68
+      },
+      "input_record": "renders/qa/series/stats29/en/Outro/result.json",
+      "input_sha256": "d79f14c87f68bdf4d55a1987d4105152c7997048cc42a74d8ace0fc6f7deb907"
+    }
+  ]
+}

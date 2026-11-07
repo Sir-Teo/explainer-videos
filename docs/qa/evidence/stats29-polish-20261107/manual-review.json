@@ -1,0 +1,21 @@
+{
+  "baseline": "all 14 inspected; no geometry issues",
+  "native": [
+    "Hook",
+    "Histogram",
+    "KDE",
+    "Bandwidth",
+    "Curse",
+    "LocalPoly",
+    "Splines",
+    "Lambda",
+    "RKHS",
+    "Wavelets",
+    "GAM",
+    "Inference",
+    "Shape"
+  ],
+  "motion": "all 13 inspected",
+  "actual": "Splines narrated sheet inspected",
+  "outro_heading_repair_viewed": true
+}

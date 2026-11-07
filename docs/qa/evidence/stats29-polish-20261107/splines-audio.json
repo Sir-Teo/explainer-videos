@@ -1,0 +1,95 @@
+{
+ "video": "stats29",
+ "scene": "Splines",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 7,
+ "lines": [
+  {
+   "raw": "Chapter six. Smoothing splines.",
+   "spoken": "Chapter six. Smoothing splines.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/d1370b5d85f645dc.wav",
+   "duration": 2.7,
+   "tokens": 4,
+   "peak": 0.43609619140625,
+   "issues": [],
+   "elapsed": 0.07,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Instead of a local average, penalize roughness. Among all curves, minimize the residual sum of squares plus lambda times the integrated squared second derivative, the bending energy. <bookmark mark='b'/> As positive lambda tends to zero, distinct observations are interpolated; tied x values are fitted by their averages. <bookmark mark='c'/> As lambda grows, curvature becomes unaffordable and the solution tends to the least-squares line, which has no curvature at all. <bookmark mark='d'/> The search is over functions with square-integrable weak second derivative, an infinite-dimensional space. Remarkably, the answer is finite-dimensional.",
+   "spoken": "Instead of a local average, penalize roughness. Among all curves, minimize the residual sum of squares plus lambda times the integrated squared second derivative, the bending energy. As positive lambda tends to zero, distinct observations are interpolated; tied x values are fitted by their averages. As lambda grows, curvature becomes unaffordable and the solution tends to the least-squares line, which has no curvature at all. The search is over functions with square-integrable weak second derivative, an infinite-dimensional space. Remarkably, the answer is finite-dimensional.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/7f8735c826be5063.wav",
+   "duration": 36.925,
+   "tokens": 83,
+   "peak": 0.53936767578125,
+   "issues": [],
+   "elapsed": 0.06,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Take any candidate g, and let s be the natural cubic spline through g's values at the data points: cubic between them, linear beyond the ends. Then s fits the data exactly as well as g. <bookmark mark='b'/> Integrate s double prime times g double prime minus s double prime by parts: the boundary term vanishes because s double prime is zero at the ends, and the remaining integral vanishes because s triple prime is constant between knots, where g minus s takes equal values at both ends. <bookmark mark='c'/> So the bending energy of g is that of s plus a non-negative remainder, Pythagoras in function space. <bookmark mark='d'/> Every candidate is beaten by a natural cubic spline, so the minimizer is one, with knots at the data: the theorem of Isaac Schoenberg and Christian Reinsch.",
+   "spoken": "Take any candidate g, and let s be the natural cubic spline through g's values at the data points: cubic between them, linear beyond the ends. Then s fits the data exactly as well as g. Integrate s double prime times g double prime minus s double prime by parts: the boundary term vanishes because s double prime is zero at the ends, and the remaining integral vanishes because s triple prime is constant between knots, where g minus s takes equal values at both ends. So the bending energy of g is that of s plus a non-negative remainder, Pythagoras in function space. Every candidate is beaten by a natural cubic spline, so the minimizer is one, with knots at the data: the theorem of Isaac Schoenberg and Christian Reinsch.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/871cf247d1d6ed28.wav",
+   "duration": 45.9,
+   "tokens": 131,
+   "peak": 0.6209716796875,
+   "issues": [],
+   "elapsed": 0.05,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> A natural cubic spline is determined by its values at the knots, and its bending energy is a quadratic form in them, g transpose K g, with K built from two banded matrices, Peter Green and Bernard Silverman's Q and R. <bookmark mark='b'/> The infinite problem becomes a finite penalized least squares, with solution I plus lambda K, inverse, times y. <bookmark mark='c'/> The smoother matrix S; its trace is the degrees of freedom of Part 28. <bookmark mark='d'/> A banded Reinsch implementation can solve a fixed-lambda fit in order n operations after sorting. Our teaching implementation forms dense matrices; tests compare its values with SciPy, rather than claiming linear complexity for this code.",
+   "spoken": "A natural cubic spline is determined by its values at the knots, and its bending energy is a quadratic form in them, g transpose K g, with K built from two banded matrices, Peter Green and Bernard Silverman's Q and R. The infinite problem becomes a finite penalized least squares, with solution I plus lambda K, inverse, times y. The smoother matrix S; its trace is the degrees of freedom of Part 28. A banded Reinsch implementation can solve a fixed-lambda fit in order n operations after sorting. Our teaching implementation forms dense matrices; tests compare its values with SciPy, rather than claiming linear complexity for this code.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/355eaa6b8283f37d.wav",
+   "duration": 42.3,
+   "tokens": 108,
+   "peak": 0.5787353515625,
+   "issues": [],
+   "elapsed": 0.06,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Smoothing splines on the motorcycle data, indexed by their degrees of freedom rather than lambda, which has awkward units. <bookmark mark='b'/> Four degrees of freedom: too stiff to follow the dip. <bookmark mark='c'/> Eight: the dip, but the rebound is flattened. <bookmark mark='d'/> Twelve: dip, rebound and decay. <bookmark mark='e'/> Twenty-five: the curve starts chasing individual readings.",
+   "spoken": "Smoothing splines on the motorcycle data, indexed by their degrees of freedom rather than lambda, which has awkward units. Four degrees of freedom: too stiff to follow the dip. Eight: the dip, but the rebound is flattened. Twelve: dip, rebound and decay. Twenty-five: the curve starts chasing individual readings.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/fbed1e6c0e4b4b1f.wav",
+   "duration": 19.475,
+   "tokens": 49,
+   "peak": 0.407501220703125,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The spline spectrum: this part's instrument. Diagonalize K. Its eigenvectors, the Demmler–Reinsch basis, are oscillating curves on the crash times, ordered from smooth to wiggly, <bookmark mark='b'/> and the smoother keeps each component in proportion one over one plus lambda d j. <bookmark mark='c'/> The first two, a constant and a line, have zero bending energy and pass whole. <bookmark mark='d'/> At eight degrees of freedom the components with more and more oscillations are damped harder and harder. <bookmark mark='e'/> At twenty-five, more of them get through. A smoothing spline is a low-pass filter in this basis, and its degrees of freedom are the sum of the bars.",
+   "spoken": "The spline spectrum: this part's instrument. Diagonalize K. Its eigenvectors, the Demmler–Reinsch basis, are oscillating curves on the crash times, ordered from smooth to wiggly, and the smoother keeps each component in proportion one over one plus lambda d j. The first two, a constant and a line, have zero bending energy and pass whole. At eight degrees of freedom the components with more and more oscillations are damped harder and harder. At twenty-five, more of them get through. A smoothing spline is a low-pass filter in this basis, and its degrees of freedom are the sum of the bars.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/452c70f583fe2267.wav",
+   "duration": 35.0,
+   "tokens": 100,
+   "peak": 0.4659423828125,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> So the fit is: project the data on each basis curve, shrink by its factor, add up. <bookmark mark='b'/> The degrees of freedom are the sum of the factors, between two, for the line, and n, for interpolation. <bookmark mark='c'/> Under regular designs the eigenvalues grow roughly like the fourth power of the oscillation index. Irregular knot spacing changes the spectrum. <bookmark mark='d'/> It is Part 25's ridge regression, which shrinks each principal direction, with the roughness penalty deciding which directions are rough.",
+   "spoken": "So the fit is: project the data on each basis curve, shrink by its factor, add up. The degrees of freedom are the sum of the factors, between two, for the line, and n, for interpolation. Under regular designs the eigenvalues grow roughly like the fourth power of the oscillation index. Irregular knot spacing changes the spectrum. It is Part 25's ridge regression, which shrinks each principal direction, with the roughness penalty deciding which directions are rough.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/520b4bb11c9866db.wav",
+   "duration": 27.95,
+   "tokens": 77,
+   "peak": 0.40423583984375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats29/en/Splines_motion/result.json",
+ "input_sha256": "a2c3ac15c502ec928d47b58d62d88a9d0bb098d0625876aab35869e638c65494"
+}

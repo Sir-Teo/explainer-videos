@@ -1,0 +1,23 @@
+{
+  "part": "stats29",
+  "fingerprint": "d2a3f78123efe25cedb66b1fc759fecbdd91fcee20531ac1b084cccf3e17039e",
+  "english_endpoints": 14,
+  "native_1080_endpoints": 13,
+  "silent_motion_chapters": 13,
+  "audio_scene": "Splines",
+  "audio_lines": 7,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats29/en/Splines/videos/s07_splines/480p15/Splines.mp4",
+    "seconds": 217.998047,
+    "narration_sha256": "c68d98719cd8b7b9e6894b89d2956364b7192262ded0ffd51893282c2018bf60",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 218 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 218 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}
