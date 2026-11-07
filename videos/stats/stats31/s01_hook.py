@@ -56,12 +56,12 @@ class Hook(VoiceoverScene):
             label(rf"a typical route is {d['detour']:.1f} times the straight line", font_size=22, color=RES),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The World has two hundred towns on its island. <bookmark mark='b'/> Roads join each town to "
-            "its four nearest neighbours, and every road winds, ten to thirty percent longer than the straight line. "
-            "<bookmark mark='c'/> The road distance between two towns is the length of the shortest route through the "
-            "network: nineteen thousand nine hundred distances in all. <bookmark mark='d'/> A typical route is almost twice "
-            "the straight-line distance, because it zigzags from town to town. Now throw the map away and keep only the "
-            "table."
+            "<bookmark mark='a'/> The World has two hundred towns on its island. <bookmark mark='b'/> Roads join each"
+            " town to its four nearest neighbours, and every road winds, ten to thirty percent longer than the "
+            "straight line. <bookmark mark='c'/> The road distance between two towns is the length of the shortest "
+            "route through the network: nineteen thousand nine hundred distances in all. <bookmark mark='d'/> A "
+            "typical shortest route is about one point four four times the straight-line distance, because it zigzags"
+            " through the network. Now throw the map away and keep only the table."
         ) as vo:
             self.add(world_tag())
             vo.wait_until("a")
@@ -85,13 +85,18 @@ class Hook(VoiceoverScene):
         whys = [why(r"distances hide inner products"), why(r"double-centring removes the norms"),
                 why(r"a Gram matrix, \ Part 4"), why(r"the best rank-2 Gram matrix")]
         with self.voiceover(
-            "<bookmark mark='a'/> The trick is the cosine rule. A squared distance is two squared lengths minus twice an inner "
-            "product. <bookmark mark='b'/> Subtract the row means and the column means of the squared distances and add back "
-            "the grand mean, double-centring, and halve: the lengths cancel, leaving a matrix of inner products about the "
-            "centroid. <bookmark mark='c'/> If the distances come from real points, that matrix is X times X transpose, Part "
-            "4's Gram matrix. <bookmark mark='d'/> So its top eigenvectors, scaled by root eigenvalue, are the coordinates: "
-            "the best two-dimensional configuration, up to rotation and reflection."
+            "<bookmark mark='a'/> The trick is the cosine rule. A squared distance is two squared lengths minus twice"
+            " an inner product. <bookmark mark='b'/> Subtract the row means and the column means of the squared "
+            "distances and add back the grand mean, double-centring, and multiply by negative one half: the lengths "
+            "cancel, leaving a matrix of inner products about the centroid. <bookmark mark='c'/> If the distances "
+            "come from real points, that matrix is X times X transpose, Part 4's Gram matrix. <bookmark mark='d'/> So"
+            " its top eigenvectors, scaled by root eigenvalue, are the coordinates: the best positive semidefinite "
+            "rank-two Gram approximation in Frobenius norm, up to rotation and reflection. It need not minimize "
+            "distance stress."
         ) as vo:
+            intro=label('Double-centering turns squared Euclidean distances into inner products',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -107,17 +112,17 @@ class Hook(VoiceoverScene):
             label(r"rotated and scaled onto the truth \ (Procrustes)", font_size=22, color=GREY_B),
             label(r"gold rings: \ where the towns really are", font_size=22, color=TRUE),
             label(rf"typical error {d['rmse']:.2f} on an island 10 wide", font_size=22, color=RES),
-            label(rf"two dimensions hold {100 * d['explained']:.0f}\%", font_size=22),
-            label(rf"{100 * d['negative_share']:.0f}\% negative: \ roads aren't straight", font_size=22, color=GREY_A),
+            label(rf"two axes: {100 * d['explained']:.0f}\% of positive eigenvalue mass", font_size=22),
+            label(rf"negative / positive eigenvalue mass: {100 * d['negative_share']:.0f}\%", font_size=22, color=GREY_A),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Here is the map classical scaling builds from the table alone. <bookmark mark='b'/> It comes "
-            "out in an arbitrary orientation, so rotate, reflect and scale it onto the truth, Procrustes's fit. "
-            "<bookmark mark='c'/> The gold rings mark where the towns really are. <bookmark mark='d'/> The shape of the "
-            "island comes back, with a typical error of about two thirds of a unit on an island ten across, largest at the "
-            "coast, where routes are most roundabout. <bookmark mark='e'/> Two dimensions capture eighty-one percent of the "
-            "structure, and some eigenvalues are negative: road distances are not the distances of any flat map, and the "
-            "negative part measures how far from it they are."
+            "<bookmark mark='a'/> Here is the map classical scaling builds from the table alone. <bookmark mark='b'/>"
+            " It comes out in an arbitrary orientation, so rotate, reflect and scale it onto the truth, Procrustes's "
+            "fit. <bookmark mark='c'/> The gold rings mark where the towns really are. <bookmark mark='d'/> The "
+            "island shape comes back, with a root mean squared error of about point five five on an island ten "
+            "across. The residual lines show where road geometry distorts it. <bookmark mark='e'/> Two dimensions "
+            "capture about eighty-five percent of the positive eigenvalue mass. Negative eigenvalues show these road "
+            "distances are not exactly Euclidean; their absolute sum is about fourteen percent of the positive sum."
         ) as vo:
             self.add(world_tag())
             self.play(FadeIn(dm.truth))
@@ -143,15 +148,17 @@ class Hook(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"21 European cities: \ 210 road distances", font_size=22),
             label(r"classical scaling, \ turned so that north is up", font_size=22, color=PCC),
-            label(rf"two dimensions hold {100 * d['explained']:.0f}\%", font_size=22),
+            label(rf"two axes: {100 * d['explained']:.0f}\% of positive eigenvalue mass", font_size=22),
             label(r"Lisbon west, \ Athens south-east, \ Stockholm north", font_size=22, color=MAPC),
         ), 4.0, 0.42, [4.8, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Real data: John Hartigan's table of road distances between twenty-one European cities, two "
-            "hundred and ten numbers. <bookmark mark='b'/> Classical scaling, with the result turned so north is up. "
-            "<bookmark mark='c'/> Two dimensions hold eighty-seven percent of the structure. <bookmark mark='d'/> And the map "
-            "of Europe appears: Lisbon and Gibraltar in the south-west, Stockholm in the north, Athens far to the south-east, "
-            "Paris, Brussels and Cologne clustered in the middle, without a single coordinate given."
+            "<bookmark mark='a'/> Real data: the Cambridge Encyclopaedia road-distance table between twenty-one "
+            "European cities, two hundred and ten numbers. <bookmark mark='b'/> Classical scaling, with signs "
+            "oriented using known Stockholm and Lisbon geography; north is not inferred from distances alone. "
+            "<bookmark mark='c'/> Two dimensions hold eighty-seven percent of the structure. <bookmark mark='d'/> And"
+            " the map of Europe appears: Lisbon and Gibraltar in the south-west, Stockholm in the north, Athens far "
+            "to the south-east, Paris, Brussels and Cologne clustered in the middle, with positions reconstructed "
+            "from distances, and the orientation supplied separately."
         ) as vo:
             self.add(euro_tag())
             vo.wait_until("a")
@@ -172,18 +179,18 @@ class Hook(VoiceoverScene):
         tb = table_rows([hdr] + body, font_size=26, col_buff=0.9, row_buff=0.32, colors=[GREY_A, RES, GREY_B, GREY_B])
         tb.move_to([0, 0.8, 0])
         foot = fit_rows(VGroup(
-            label(r"Cologne--Geneva is about 750 km by road: \ the table's 1,662 is an error in the data", font_size=22, color=RES),
-            label(r"Athens--Rome: \ Athens's other distances run overland, \ so no flat map can honour this short one", font_size=22),
+            label(r"Cologne--Geneva: large residual; verify the source before calling it an error", font_size=22, color=RES),
+            label(r"Athens--Rome: route geometry and a flat-map approximation can disagree", font_size=22),
             label(r"the residuals are a check on the data, \ not just on the method", font_size=22, color=PATH),
         ), 12.0, 0.22, [0, -2.0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The pairs the map fits worst are instructive. Cologne to Geneva: the table says one thousand "
-            "six hundred and sixty-two kilometres, the map seven hundred. The real road distance is about seven hundred and "
-            "fifty: the number in this classic data set is wrong, and the map found it. <bookmark mark='b'/> Athens to Rome: "
-            "eight hundred kilometres in the table, seventeen hundred on the map. Athens's distances to every other city run "
-            "overland, around the Balkans, so the map must put Athens far away, and one short entry, perhaps by sea, cannot "
-            "be honoured in a flat map. <bookmark mark='c'/> A multivariate summary is also a check on "
-            "the data that went into it."
+            "<bookmark mark='a'/> The pairs the map fits worst are instructive. Cologne to Geneva: the table says one"
+            " thousand six hundred and sixty-two kilometres, the map about seven hundred. That is an entry worth "
+            "checking against the source, but a low-dimensional residual alone does not prove a recording error. "
+            "<bookmark mark='b'/> Athens to Rome: eight hundred kilometres in the table, seventeen hundred on the "
+            "map. The table and a two-dimensional Euclidean approximation disagree. Routes, geography and model "
+            "compression can all contribute; no route history is established here. <bookmark mark='c'/> A "
+            "multivariate summary is also a check on the data that went into it."
         ) as vo:
             self.add(euro_tag())
             vo.wait_until("a")
@@ -247,15 +254,19 @@ class Hook(VoiceoverScene):
             cmath(r"\text{use}", r":", r"\text{similarity judgements, \ where numbers are rough}", font_size=28),
         ]
         rows[1][-1].set_color(MAPC)
-        whys = [why(r"Kruskal's badness of fit"), why(r"`fair to good', \ by Kruskal's scale"), why(r"Shepard (1962), \ Kruskal (1964)"), why(r"Torgerson's original purpose")]
+        whys = [why(r"normalized raw distance residual"), why(r"definition-specific: no universal rating cutoffs"), why(r"Shepard (1962), \ Kruskal (1964)"), why(r"Torgerson's original purpose")]
         with self.voiceover(
-            "<bookmark mark='a'/> How good is a map overall? Joseph Kruskal's stress compares the distances on the map "
-            "with the distances in the table, relative to their size. <bookmark mark='b'/> For Europe it is point oh "
-            "nine, somewhere between fair and good on Kruskal's own rough scale. <bookmark mark='c'/> Roger Shepard "
-            "and Kruskal went further, with nonmetric scaling: find a map whose distances are in the same order as the "
+            "<bookmark mark='a'/> How good is a map overall? This normalized raw distance stress compares map "
+            "distances with table distances, dividing by the squared table distances. <bookmark mark='b'/> For Europe"
+            " it is point oh nine, under this definition. Other stress conventions use different denominators, so "
+            "named rating cutoffs do not transfer automatically. <bookmark mark='c'/> Roger Shepard and Kruskal went "
+            "further, with nonmetric scaling: find a map whose distances are in the same order as the "
             "dissimilarities, ignoring their actual values. <bookmark mark='d'/> That is what psychologists needed, "
             "because people can say which two colours seem more alike, but not by how much."
         ) as vo:
+            intro=label('A normalized distance residual summarizes map disagreement',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

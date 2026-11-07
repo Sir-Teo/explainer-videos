@@ -26,8 +26,8 @@ class Outro(VoiceoverScene):
             (r"a map from road distances: \ Torgerson", MAPC), (r"Mahalanobis: \ distance in the data's own units", MAPC),
             (r"Wishart: \ the chi-squared of matrices", PCC), (r"Hotelling: \ the best combination's $t^2$", PCC),
             (r"MANOVA: \ four statistics, \ one eigenproblem", PCC), (r"PCA: \ the SVD; \ units matter", PCC),
-            (r"factors: \ $g$ or four, \ the same $\Sigma$", FAC), (r"CCA: \ age and income, \ $r = 0.82$", CCC),
-            (r"LDA and QDA: \ 2\% of irises wrong", SP[2]), (r"clustering: \ BIC sees two species", MAPC),
+            (r"factors: rotations within four factors preserve $\Sigma$", FAC), (r"CCA: \ age and income, \ $r = 0.82$", CCC),
+            (r"LDA and QDA: \ 2\% of irises wrong", SP[2]), (r"clustering: this mixture BIC prefers two components", MAPC),
             (r"graphs: \ zeros of $\Sigma^{-1}$, \ the graphical lasso", MAPC), (r"$p/n$: \ $\chi^2$ fails, \ drop $S^{-1}$", RES),
         ]
         rows = VGroup(*[label(rf"{i}.\ \ {t}", font_size=26, color=c) for i, (t, c) in enumerate(items)])
@@ -38,17 +38,18 @@ class Outro(VoiceoverScene):
         head = label(r"Part 31, \ in twelve lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Part thirty-one in twelve lines. <bookmark mark='a'/> Classical scaling rebuilt a map from nothing but road "
-            "distances, and found an error in a famous table. Mahalanobis distance measures distance in the data's own "
-            "units. The Wishart distribution is the chi-squared of covariance matrices. Hotelling's T squared is the "
-            "largest t squared over all linear combinations, and MANOVA's four statistics summarize one eigenproblem. "
-            "Principal components are the SVD of the data, and depend on its units. A factor model with one general factor "
-            "and one with four special ones imply the same covariance after rotation. Canonical correlation linked age "
-            "structure to income across fifty countries. Discriminant analysis misclassified two percent of the irises, "
-            "and clustering, without labels, found that the data support two groups rather than three species. Zeros in "
-            "the inverse covariance mean conditional independence, and the graphical lasso finds them. And when the number "
-            "of variables grows with the sample, the chi-squared calibration fails and methods that avoid S inverse take "
-            "over."
+            "Part thirty-one in twelve lines. <bookmark mark='a'/> Classical scaling rebuilt a map from nothing but "
+            "road distances, and identified entries whose residuals warrant source checking. Mahalanobis distance "
+            "measures distance in the data's own units. The Wishart distribution is the chi-squared of covariance "
+            "matrices. Hotelling's T squared is the largest t squared over all linear combinations, and MANOVA's four"
+            " statistics summarize one eigenproblem. Principal components are the SVD of the data, and depend on its "
+            "units. Orthogonal rotations within the same four-factor model preserve its covariance; a one-factor "
+            "model is a different restriction. Canonical correlation linked age structure to income across fifty "
+            "countries. Discriminant analysis misclassified two percent of the irises, and clustering, without "
+            "labels, found two components preferred by this regularized mixture BIC, not two biological species. For "
+            "a Gaussian population, zeros in its inverse covariance mean conditional independence, and the graphical "
+            "lasso finds them. And when the number of variables grows with the sample, the chi-squared calibration "
+            "fails and methods that avoid S inverse take over."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -60,11 +61,12 @@ class Outro(VoiceoverScene):
                             r"$p$ fixed while $n$ grows",
                             r"Part 52: \ random-matrix laws, \ and the threshold below which a component is invisible")
         with self.voiceover(
-            "<bookmark mark='a'/> A promise for later. This part treated the sample covariance as a good estimate of the "
-            "true one, and read structure from its top eigenvectors. <bookmark mark='b'/> That quietly assumed the number "
-            "of variables stays fixed while the sample grows. <bookmark mark='c'/> Part 52 drops the assumption. With "
-            "random-matrix theory it shows exactly where sample eigenvalues fall, and proves that a real component weaker "
-            "than a sharp threshold is invisible to principal components, however carefully you look."
+            "<bookmark mark='a'/> A promise for later. This part treated the sample covariance as a good estimate of "
+            "the true one, and read structure from its top eigenvectors. <bookmark mark='b'/> That quietly assumed "
+            "the number of variables stays fixed while the sample grows. <bookmark mark='c'/> Part 52 drops the "
+            "assumption. With random-matrix theory it shows exactly where sample eigenvalues fall, and proves that a "
+            "real component weaker than a sharp threshold is invisible to principal components, under the specified "
+            "high-dimensional spiked-model asymptotics."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(card[0]), FadeIn(card[1][0]), FadeIn(card[1][1][0]))

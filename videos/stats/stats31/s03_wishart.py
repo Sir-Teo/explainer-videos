@@ -39,6 +39,9 @@ class Wishart(VoiceoverScene):
             "sample mean, the multivariate form of Part 8's theorem. <bookmark mark='d'/> In one dimension it is sigma "
             "squared times a chi-squared: the Wishart is the chi-squared of matrices."
         ) as vo:
+            intro=label('Independent Gaussian outer products define a Wishart matrix',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -62,6 +65,9 @@ class Wishart(VoiceoverScene):
             "and independent standard normals below it. <bookmark mark='d'/> One consequence: the determinant, the "
             "generalized variance, is a product of independent chi-squareds. Statkit draws Wisharts this way."
         ) as vo:
+            intro=label('Independent normal and chi-square terms generate Wishart draws',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -71,10 +77,10 @@ class Wishart(VoiceoverScene):
     def check(self):
         d = load("wishart")
         S, mu = np.asarray(d["S"]), np.asarray(d["mean"])
-        hdr = [r"\textbf{quantity}", r"\textbf{20,000 Bartlett draws}", r"\textbf{theory}"]
-        body = [[r"$E W / m$, \ entry (1,1)", f"{mu[0, 0]:.3f}", f"{S[0, 0]:.3f}"],
-                [r"$E W / m$, \ entry (1,2)", f"{mu[0, 1]:.3f}", f"{S[0, 1]:.3f}"],
-                [r"$E W / m$, \ entry (2,3)", f"{mu[1, 2]:.3f}", f"{S[1, 2]:.3f}"],
+        hdr = [r"\textbf{quantity}", r"\textbf{MC estimate; mean $\pm$ SE}", r"\textbf{theory}"]
+        body = [[r"$E W / m$, \ entry (1,1)", rf"${mu[0, 0]:.3f} \pm {d['mean_mcse'][0][0]:.3f}$", f"{S[0, 0]:.3f}"],
+                [r"$E W / m$, \ entry (1,2)", rf"${mu[0, 1]:.3f} \pm {d['mean_mcse'][0][1]:.3f}$", f"{S[0, 1]:.3f}"],
+                [r"$E W / m$, \ entry (2,3)", rf"${mu[1, 2]:.3f} \pm {d['mean_mcse'][1][2]:.3f}$", f"{S[1, 2]:.3f}"],
                 [r"$\mathrm{Var}\, W_{11}$", f"{d['var11']:.1f}", rf"$2m\sigma_{{11}}^2 = {d['th11']:.1f}$"],
                 [r"$\mathrm{Var}\, W_{12}$", f"{d['var12']:.1f}", rf"$m(\sigma_{{12}}^2 + \sigma_{{11}}\sigma_{{22}}) = {d['th12']:.1f}$"]]
         tb = table_rows([hdr] + body, font_size=26, col_buff=0.9, row_buff=0.3, colors=[GREY_A] + [None] * 5)
@@ -86,11 +92,12 @@ class Wishart(VoiceoverScene):
             label(r"the variance of a covariance depends on the variances too", font_size=22, color=PATH),
         ), 12.0, 0.22, [0, -2.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> A check, with three variables and ten degrees of freedom, twenty thousand draws. The average "
-            "matrix divided by ten matches sigma to the third decimal. <bookmark mark='b'/> The variances of its entries match "
-            "the theory too: two m sigma one one squared for a diagonal entry, and m times sigma one two squared plus sigma "
-            "one one sigma two two for an off-diagonal one. The noise in an estimated covariance depends on the variances as "
-            "well, which is why correlations are easier to compare than covariances."
+            "<bookmark mark='a'/> A check, with three variables and ten degrees of freedom, twenty thousand draws. "
+            "The average matrix divided by ten approximates sigma with Monte Carlo error; the mean entries are "
+            "displayed with their standard errors. <bookmark mark='b'/> The variances of its entries match the theory"
+            " too: two m sigma one one squared for a diagonal entry, and m times sigma one two squared plus sigma one"
+            " one sigma two two for an off-diagonal one. The noise in an estimated covariance depends on the "
+            "variances as well, which is why correlations are easier to compare than covariances."
         ) as vo:
             self.add(seeded_tag())
             vo.wait_until("a")
@@ -117,6 +124,9 @@ class Wishart(VoiceoverScene):
             "of it needs the sample covariance to be invertible, which requires more observations than variables, chapter "
             "ten's warning."
         ) as vo:
+            intro=label('Wishart structure gives exact Gaussian mean-test calibration',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -128,18 +138,23 @@ class Wishart(VoiceoverScene):
             cmath(r"\Sigma = I_p", r":", r"\text{every true eigenvalue is } 1", font_size=30),
             cmath(r"E\, S", r"=", r"I_p \ \text{ but } \ E\, \lambda_{\max}(S) > 1 > E\, \lambda_{\min}(S)", font_size=30),
             cmath(r"\text{spread}", r":", r"\text{the sample eigenvalues fan out}", font_size=30),
-            cmath(r"p/n \to \gamma", r":", r"\text{they fill } [(1 - \sqrt\gamma)^2, (1 + \sqrt\gamma)^2]", font_size=30),
+            cmath(r"p/n \to \gamma,\ 0<\gamma<1", r":", r"\text{they fill } [(1 - \sqrt\gamma)^2, (1 + \sqrt\gamma)^2]", font_size=30),
         ]
         rows[3][2].set_color(RES)
         whys = [why(r"no direction is special"), why(r"unbiased entries, \ biased eigenvalues"),
                 why(r"the largest overstated, \ the smallest understated"), why(r"Marchenko \& Pastur (1967)")]
         with self.voiceover(
             "<bookmark mark='a'/> A warning already visible here. Suppose the true covariance is the identity, all "
-            "eigenvalues one. <bookmark mark='b'/> The sample covariance is unbiased entry by entry, but its eigenvalues are "
-            "not: the largest is too big on average and the smallest too small. <bookmark mark='c'/> The sample eigenvalues "
-            "fan out. <bookmark mark='d'/> When p grows with n, Vladimir Marchenko and Leonid Pastur showed in 1967 that they "
-            "fill a whole interval determined by the ratio gamma, p over n."
+            "eigenvalues one. <bookmark mark='b'/> The sample covariance is unbiased entry by entry, but its "
+            "eigenvalues are not: the largest is too big on average and the smallest too small. <bookmark mark='c'/> "
+            "The sample eigenvalues fan out. <bookmark mark='d'/> When p grows with n, Vladimir Marchenko and Leonid "
+            "Pastur showed in 1967 that they have a limiting density on an interval determined by gamma, p over n, "
+            "for independent standardized noise with suitable moments. When gamma exceeds one there is also an atom "
+            "at zero."
         ) as vo:
+            intro=label('High-dimensional sample eigenvalues spread even under spherical noise',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -166,11 +181,13 @@ class Wishart(VoiceoverScene):
             label(r"a `top component' that is pure noise: \ Part 52", font_size=22, color=RES),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Fifty variables, a hundred observations, true covariance the identity. "
-            "<bookmark mark='b'/> Every true eigenvalue is one. <bookmark mark='c'/> The sample eigenvalues run from point one "
-            "to two point seven six. <bookmark mark='d'/> They follow the Marchenko–Pastur law closely. <bookmark mark='e'/> So "
-            "a principal component analysis of pure noise would report a dominant direction nearly three times the average: "
-            "with many variables, large sample eigenvalues are not evidence of structure. Part 52 returns to this."
+            "<bookmark mark='a'/> Fifty variables, a hundred observations, true covariance the identity. <bookmark "
+            "mark='b'/> Every true eigenvalue is one. <bookmark mark='c'/> The sample eigenvalues run from point one "
+            "to two point seven six. <bookmark mark='d'/> The limiting Marchenko–Pastur curve is a reference for this"
+            " one finite draw, not a guarantee that every eigenvalue stays inside its asymptotic edges. <bookmark "
+            "mark='e'/> So a principal component analysis of pure noise would report a dominant direction nearly "
+            "three times the average: with many variables, large sample eigenvalues are not evidence of structure. "
+            "Part 52 returns to this."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A))
@@ -190,20 +207,24 @@ class Wishart(VoiceoverScene):
         rows = [
             cmath(r"f(W)", r"\propto", r"|W|^{(m - p - 1)/2} \exp\{-\tfrac12 \mathrm{tr}(\Sigma^{-1} W)\}", font_size=28),
             cmath(r"\Sigma", r"\sim", r"\mathrm{IW}(\nu, \Psi) \ \text{a priori}", font_size=30),
-            cmath(r"\Sigma \mid X", r"\sim", r"\mathrm{IW}(\nu + n, \ \Psi + (n - 1)S)", font_size=30),
+            cmath(r"\Sigma \mid X", r"\sim", r"\mathrm{IW}(\nu + n - 1, \ \Psi + (n - 1)S)", font_size=30),
             cmath(r"\text{caution}", r":", r"\text{one } \nu \text{ governs every variance's certainty}", font_size=28),
         ]
         rows[2][-1].set_color(POST)
-        whys = [why(r"for $m \ge p$"), why(r"inverse-Wishart, \ Part 26"), why(r"conjugate: \ add the data's scatter"), why(r"LKJ priors separate scale and correlation")]
+        whys = [why(r"for $m \ge p$"), why(r"inverse-Wishart, \ Part 26"), why(r"flat unknown-mean prior, integrated out"), why(r"LKJ priors separate scale and correlation")]
         with self.voiceover(
-            "<bookmark mark='a'/> The Wishart has an explicit density, a power of the determinant times an exponential "
-            "of a trace. <bookmark mark='b'/> Its inverse is the conjugate prior for a normal covariance matrix, Part "
-            "26's language. <bookmark mark='c'/> The posterior is again inverse-Wishart: add the sample size to the "
-            "degrees of freedom and the data's scatter matrix to the scale. Bayesian updating of a covariance is "
-            "addition. <bookmark mark='d'/> But a single degrees-of-freedom parameter controls how certain the prior "
-            "is about every variance and every correlation at once, which is why modern practice, as in Stan, often "
-            "prefers separate priors on the scales and on the correlation matrix."
+            "<bookmark mark='a'/> The Wishart has an explicit density, a power of the determinant times an "
+            "exponential of a trace. <bookmark mark='b'/> Its inverse is the conjugate prior for a normal covariance "
+            "matrix, Part 26's language. <bookmark mark='c'/> With a flat prior on the unknown mean, independent of "
+            "the covariance prior, integrating the mean gives an inverse-Wishart posterior: add n minus one to the "
+            "degrees of freedom and the centered scatter to the scale matrix. <bookmark mark='d'/> But a single "
+            "degrees-of-freedom parameter controls how certain the prior is about every variance and every "
+            "correlation at once, which is why modern practice, as in Stan, often prefers separate priors on the "
+            "scales and on the correlation matrix."
         ) as vo:
+            intro=label('An inverse-Wishart update depends on how the unknown mean is treated',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

@@ -1,0 +1,68 @@
+{
+  "sources": [
+    {
+      "dataset": "eurodist",
+      "csv_url": "https://vincentarelbundock.github.io/Rdatasets/csv/datasets/eurodist.csv",
+      "documentation_url": "https://vincentarelbundock.github.io/Rdatasets/doc/datasets/eurodist.html",
+      "csv_sha256": "2dff7fcc529b220f3c5be0fbdb920cb324b34751fd78843cb8d3a0a24f09ff7e",
+      "documentation_sha256": "678e954125415f1b094bac0bb6a0902bfb61e63d2f963e165e4dbc12fe711836",
+      "numeric_shape": [
+        210
+      ],
+      "max_abs_difference": 0.0
+    },
+    {
+      "dataset": "iris",
+      "csv_url": "https://vincentarelbundock.github.io/Rdatasets/csv/datasets/iris.csv",
+      "documentation_url": "https://vincentarelbundock.github.io/Rdatasets/doc/datasets/iris.html",
+      "csv_sha256": "398fadb8f48750d386d670e0b15c65944919682373bcaba59650c33eb5474362",
+      "documentation_sha256": "bed05d58cef4c8b3408fb515fbae8e8d995b30a8fef0f69802c13c9910fa00d6",
+      "numeric_shape": [
+        150,
+        4
+      ],
+      "max_abs_difference": 0.0
+    },
+    {
+      "dataset": "Harman74.cor",
+      "csv_url": "https://vincentarelbundock.github.io/Rdatasets/csv/datasets/Harman74.cor.csv",
+      "documentation_url": "https://vincentarelbundock.github.io/Rdatasets/doc/datasets/Harman74.cor.html",
+      "csv_sha256": "d60daf81e5581d4feb86ad171ca746c34bec2627e68e1c0cf250b134bb39f94e",
+      "documentation_sha256": "e14e0bc49f42b5cc46baa2880bc59ca5e1a2fe401fee72b1cba402c48faabb04",
+      "numeric_shape": [
+        24,
+        24
+      ],
+      "max_abs_difference": 0.0
+    },
+    {
+      "dataset": "LifeCycleSavings",
+      "csv_url": "https://vincentarelbundock.github.io/Rdatasets/csv/datasets/LifeCycleSavings.csv",
+      "documentation_url": "https://vincentarelbundock.github.io/Rdatasets/doc/datasets/LifeCycleSavings.html",
+      "csv_sha256": "753e6c00ad8550b03cdaf93057f2e9ad7b0a11b50e465fdbbc1c009fd71fe2ad",
+      "documentation_sha256": "05fa2afc92a3fc3a8fbde36ac04ef655f7a01b5daff4cb8bf297587dc84e5693",
+      "numeric_shape": [
+        50,
+        5
+      ],
+      "max_abs_difference": 0.0
+    },
+    {
+      "dataset": "USArrests",
+      "csv_url": "https://vincentarelbundock.github.io/Rdatasets/csv/datasets/USArrests.csv",
+      "documentation_url": "https://vincentarelbundock.github.io/Rdatasets/doc/datasets/USArrests.html",
+      "csv_sha256": "30e78bf58b16929f71f84435580d0aa67910d56a08360dfb5c7b22e0c65d6eba",
+      "documentation_sha256": "dc86cacaa48adaf72ce5c408a8b3fe06f9970860715d2b63c554d8c8c7d79332",
+      "numeric_shape": [
+        50,
+        4
+      ],
+      "max_abs_difference": 0.0
+    }
+  ],
+  "notes": [
+    "R eurodist documentation attributes this table to the Cambridge Encyclopaedia (1990), not Hartigan (1975).",
+    "Harman has one negative correlation, -0.075, among 276 unique off-diagonal entries. The primary documentation does not establish a 1937\u201338 collection date.",
+    "Table/map disagreements do not independently establish a transcription error or historical route mode."
+  ]
+}

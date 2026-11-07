@@ -39,6 +39,9 @@ class DataMatrix(VoiceoverScene):
             "covariances. <bookmark mark='d'/> Scaling by the standard deviations gives the correlation matrix. Almost "
             "everything in this part is a function of these two summaries."
         ) as vo:
+            intro=label('Centering and covariance summarize the data matrix',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -56,13 +59,17 @@ class DataMatrix(VoiceoverScene):
         whys = [why(r"the multivariate normal, \ Part 5"), why(r"lengths $\propto$ root eigenvalues"),
                 why(r"a sum of $p$ independent squared normals"), why(r"Part 22's likelihood")]
         with self.voiceover(
-            "<bookmark mark='a'/> The reference model is the multivariate normal, whose density depends on x only through a "
-            "quadratic form in the inverse covariance. <bookmark mark='b'/> Its contours are ellipsoids, with axes along the "
-            "eigenvectors of sigma and lengths proportional to the root eigenvalues. <bookmark mark='c'/> The quadratic form "
-            "itself has a chi-squared distribution with p degrees of freedom: in the right coordinates it is a sum of p "
-            "independent squared standard normals. <bookmark mark='d'/> And the sample mean and covariance, with divisor n, "
-            "are the maximum likelihood estimates."
+            "<bookmark mark='a'/> The reference model is the multivariate normal, whose density depends on x only "
+            "through a quadratic form in the inverse covariance. <bookmark mark='b'/> Its contours are ellipsoids, "
+            "with axes along the eigenvectors of sigma and lengths proportional to the root eigenvalues. <bookmark "
+            "mark='c'/> The quadratic form itself has a chi-squared distribution with p degrees of freedom: in the "
+            "right coordinates it is a sum of p independent squared standard normals. <bookmark mark='d'/> And the "
+            "sample mean and covariance, with divisor n, are the Gaussian maximum likelihood estimates when the "
+            "fitted covariance is positive definite."
         ) as vo:
+            intro=label('A positive definite Gaussian covariance defines ellipsoidal geometry',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -72,7 +79,7 @@ class DataMatrix(VoiceoverScene):
     def mahalanobis_def(self):
         rows = [
             cmath(r"\Delta^2(x, \mu)", r"=", r"(x - \mu)^\top \Sigma^{-1} (x - \mu)", font_size=32),
-            cmath(r"\Sigma = I", r":", r"\text{the Euclidean distance}", font_size=30),
+            cmath(r"\Sigma = I", r":", r"\text{the squared Euclidean distance}", font_size=30),
             cmath(r"\text{invariant}", r":", r"x \mapsto Ax + b \ \text{changes nothing}", font_size=30),
             cmath(r"\text{meaning}", r":", r"\text{distance in units of the data's own spread, \ in every direction}", font_size=28),
         ]
@@ -80,12 +87,16 @@ class DataMatrix(VoiceoverScene):
         whys = [why(r"Mahalanobis (1936)"), why(r"uncorrelated, \ unit variance"), why(r"units and rotations don't matter"),
                 why(r"a long ellipse makes some directions cheap")]
         with self.voiceover(
-            "<bookmark mark='a'/> That quadratic form is Prasanta Chandra Mahalanobis's distance of 1936: the distance from x "
-            "to the centre, measured with the inverse covariance. <bookmark mark='b'/> For uncorrelated variables with unit "
-            "variance it is ordinary Euclidean distance. <bookmark mark='c'/> It is unchanged by any change of units or any "
-            "invertible linear transformation of the variables. <bookmark mark='d'/> It measures distance in units of the "
-            "data's own spread in each direction: along the long axis of the cloud, a long way is not far."
+            "<bookmark mark='a'/> That quadratic form is Prasanta Chandra Mahalanobis's distance of 1936: the "
+            "distance from x to the centre, measured with the inverse covariance. <bookmark mark='b'/> For "
+            "uncorrelated variables with unit variance, this squared distance is ordinary Euclidean distance squared."
+            " <bookmark mark='c'/> It is unchanged by any change of units or any invertible linear transformation of "
+            "the variables. <bookmark mark='d'/> It measures distance in units of the data's own spread in each "
+            "direction: along the long axis of the cloud, a long way is not far."
         ) as vo:
+            intro=label('Squared Mahalanobis distance adjusts for spread and dependence',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -104,19 +115,21 @@ class DataMatrix(VoiceoverScene):
         e1 = ellipse(ax, mu, S, 1.0, MAPC, 2.5)
         e2 = ellipse(ax, mu, S, 2.0, MAPC, 2)
         e3 = ellipse(ax, mu, S, np.sqrt(9.21), RES, 2)
-        circ = Circle(radius=(ax.c2p(1, 0)[0] - ax.c2p(0, 0)[0]) * 0.6, stroke_color=GREY_B, stroke_width=2).move_to(ax.c2p(*mu))
+        t = np.linspace(0, 2*np.pi, 160)
+        circ = polyline(ax, mu[0]+.6*np.cos(t), mu[1]+.6*np.sin(t), GREY_B, 2)
         rows = fit_rows(VGroup(
             label(r"50 versicolor irises: \ petal length and width", font_size=22, color=SP[1]),
             label(r"grey circle: \ equal Euclidean distance", font_size=22, color=GREY_B),
-            label(r"gold: \ Mahalanobis 1 and 2; \ red: \ the 99\% contour", font_size=22, color=MAPC),
+            label(r"gold: \ Mahalanobis 1 and 2; \ red: \ fitted 99\% reference", font_size=22, color=MAPC),
             label(r"long and wide petals go together: \ the ellipse leans", font_size=22),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The fifty versicolor irises from Fisher's paper, petal length against petal width. "
-            "<bookmark mark='b'/> A circle of equal Euclidean distance ignores the shape of the cloud. <bookmark mark='c'/> "
-            "The Mahalanobis contours follow it: ellipses at distance one and two, and in red the contour enclosing "
-            "ninety-nine percent of a normal cloud. <bookmark mark='d'/> Long petals tend to be wide, so the ellipse leans: "
-            "a long, wide petal is ordinary, while a long, narrow one, at the same Euclidean distance, is unusual."
+            "<bookmark mark='b'/> A circle of equal Euclidean distance ignores the shape of the cloud. <bookmark "
+            "mark='c'/> The Mahalanobis contours follow it: ellipses at distance one and two, and in red a plug-in "
+            "ninety-nine percent Gaussian reference contour, not an exact fitted coverage statement. <bookmark "
+            "mark='d'/> Long petals tend to be wide, so the ellipse leans: a long, wide petal is ordinary, while a "
+            "long, narrow one, at the same Euclidean distance, is unusual."
         ) as vo:
             self.add(iris_tag())
             self.play(FadeIn(A), FadeIn(pts))
@@ -141,16 +154,18 @@ class DataMatrix(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"all four measurements: \ squared distances from the mean", font_size=22),
             label(r"against $\chi^2_4$ quantiles: \ close to the line", font_size=22, color=SP[1]),
-            label(rf"largest {max(d2):.1f}; \ the 97.5\% cut-off is {d['cut']:.1f}", font_size=22, color=RES),
+            label(rf"largest {max(d2):.1f}; \ fitted Gaussian 97.5\% reference {d['cut_fitted']:.1f}", font_size=22, color=RES),
             label(r"the most outlying by Mahalanobis \ $\neq$ \ the farthest by Euclid", font_size=22, color=MAPC),
         ), 4.6, 0.42, [4.2, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> A multivariate normality check in one picture: the squared Mahalanobis distances of all "
-            "fifty versicolors, using all four measurements. <bookmark mark='b'/> Plotted against chi-squared quantiles with "
-            "four degrees of freedom they follow the line, so a normal model is reasonable. <bookmark mark='c'/> The largest "
-            "is twelve and a half, just beyond the ninety-seven and a half percent cut-off, unremarkable in a sample of "
-            "fifty. <bookmark mark='d'/> And the most outlying flower in this metric is not the one farthest from the mean in "
-            "Euclidean terms: distance depends on direction."
+            "<bookmark mark='a'/> A multivariate normality check in one picture: the squared Mahalanobis distances of"
+            " all fifty versicolors, using all four measurements. <bookmark mark='b'/> Plotted against chi-squared "
+            "quantiles with four degrees of freedom they are roughly near the line. This radial diagnostic alone "
+            "cannot establish joint normality. <bookmark mark='c'/> The largest is twelve and a half. Because mean "
+            "and covariance are fitted to these same fifty flowers, the exact internal Gaussian marginal reference is"
+            " a scaled beta, not chi-squared, and the distances are dependent. <bookmark mark='d'/> And the most "
+            "outlying flower in this metric is not the one farthest from the mean in Euclidean terms: distance "
+            "depends on direction."
         ) as vo:
             self.add(iris_tag())
             self.play(FadeIn(A), Create(diag))
@@ -201,6 +216,9 @@ class DataMatrix(VoiceoverScene):
             "disguise. <bookmark mark='d'/> Whitening is not unique: the symmetric square root, the inverse Cholesky "
             "factor, or either followed by a rotation all work, because rotations do not change lengths."
         ) as vo:
+            intro=label('Whitening turns Mahalanobis length into Euclidean length',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

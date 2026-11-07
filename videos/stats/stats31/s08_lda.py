@@ -72,6 +72,9 @@ class LDA(VoiceoverScene):
             "maximized Hotelling's t. <bookmark mark='d'/> C. R. Rao extended the idea to many groups in 1948: with g groups "
             "there are up to g minus one discriminant directions."
         ) as vo:
+            intro=label('Discriminant directions compare between-group and within-group variation',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -89,13 +92,17 @@ class LDA(VoiceoverScene):
         whys = [why(r"a model for each group"), why(r"LDA: \ Fisher's rule is Bayes's"), why(r"curved boundaries"),
                 why(r"bias against variance, \ Part 19")]
         with self.voiceover(
-            "<bookmark mark='a'/> There is also a probabilistic route. Suppose each group is normal with its own mean and "
-            "covariance. <bookmark mark='b'/> If the covariances are equal, the log odds of one group against another are "
-            "linear in x, and the Bayes classifier draws straight boundaries: linear discriminant analysis, and for two "
-            "groups it is exactly Fisher's rule. <bookmark mark='c'/> Let each group have its own covariance and the "
-            "boundaries become quadratic. <bookmark mark='d'/> QDA estimates g times as many covariance parameters, a "
-            "trade between bias and variance, Part 19's theme."
+            "<bookmark mark='a'/> There is also a probabilistic route. Suppose each group is normal with its own mean"
+            " and covariance. <bookmark mark='b'/> If the covariances are equal, the log odds of one group against "
+            "another are linear in x, and the Bayes classifier draws straight boundaries: linear discriminant "
+            "analysis, and for two groups it uses Fisher's direction, with the threshold also depending on priors and"
+            " losses. <bookmark mark='c'/> Let each group have its own covariance and the boundaries become "
+            "quadratic. <bookmark mark='d'/> QDA estimates g times as many covariance parameters, a trade between "
+            "bias and variance, Part 19's theme."
         ) as vo:
+            intro=label('Gaussian within-group models give linear or quadratic decision rules',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -171,20 +178,21 @@ class LDA(VoiceoverScene):
     def errors(self):
         d = load("lda")
         hdr = [r"\textbf{all four variables}", r"\textbf{training error}", r"\textbf{leave-one-out error}"]
-        body = [[r"LDA \ (15 covariance parameters)", f"{100 * d['train_lda']:.1f}\\%", f"{100 * d['loo_lda']:.1f}\\%"],
-                [r"QDA \ (45 covariance parameters)", f"{100 * d['train_qda']:.1f}\\%", f"{100 * d['loo_qda']:.1f}\\%"]]
+        body = [[r"LDA \ (10 covariance parameters)", f"{100 * d['train_lda']:.1f}\\%", f"{100 * d['loo_lda']:.1f}\\%"],
+                [r"QDA \ (30 covariance parameters)", f"{100 * d['train_qda']:.1f}\\%", f"{100 * d['loo_qda']:.1f}\\%"]]
         tb = table_rows([hdr] + body, font_size=26, col_buff=1.0, row_buff=0.35, colors=[GREY_A, SP[2], MAPC])
         tb.move_to([0, 1.0, 0])
         foot = fit_rows(VGroup(
             label(r"both make 3 mistakes out of 150 on the data they were fitted to", font_size=22),
-            label(r"left out, \ QDA makes one more: \ its extra 30 parameters buy nothing here", font_size=22, color=MAPC),
+            label(r"left out, \ QDA makes one more: \ its extra 20 covariance parameters buy nothing here", font_size=22, color=MAPC),
             label(r"training error flatters every method: \ Part 19's lesson, \ in many dimensions", font_size=22, color=RES),
         ), 12.0, 0.22, [0, -1.8, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> With all four measurements, both rules misclassify three of the hundred and fifty flowers "
-            "they were fitted to. <bookmark mark='b'/> Leaving each flower out, LDA still errs on three, while QDA errs on "
-            "four: its thirty extra covariance parameters buy nothing. <bookmark mark='c'/> The gap between training and "
-            "held-out error is Part 19's lesson, and it grows quickly with the number of variables."
+            "<bookmark mark='a'/> With all four measurements, both rules misclassify three of the hundred and fifty "
+            "flowers they were fitted to. <bookmark mark='b'/> Leaving each flower out, LDA still errs on three, "
+            "while QDA errs on four: its twenty extra covariance parameters do not improve this leave-one-out count. "
+            "One mistake of difference is not evidence of a universal ranking. <bookmark mark='c'/> The gap between "
+            "training and held-out error is Part 19's lesson, and it grows quickly with the number of variables."
         ) as vo:
             self.add(iris_tag())
             vo.wait_until("a")
@@ -220,20 +228,25 @@ class LDA(VoiceoverScene):
         rows = [
             cmath(r"\text{LDA}", r":", r"\text{models } p(x \mid g): \ \text{generative}", font_size=30),
             cmath(r"\text{logistic}", r":", r"\text{models } P(g \mid x) \text{ directly: \ discriminative}", font_size=30),
-            cmath(r"\text{normal truth}", r":", r"\text{LDA more efficient, \ 30--50\% \ (Efron 1975)}", font_size=28),
-            cmath(r"\text{non-normal truth}", r":", r"\text{logistic regression more robust}", font_size=30),
+            cmath(r"\text{normal truth}", r":", r"\text{LDA more efficient, \ model- and separation-dependent efficiency (Efron 1975)}", font_size=28),
+            cmath(r"\text{non-normal truth}", r":", r"\text{correct conditional logit can tolerate nonnormal predictors}", font_size=30),
         ]
         rows[2][-1].set_color(SP[2])
         whys = [why(r"the full joint distribution"), why(r"the same linear log-odds"), why(r"uses more of the model"), why(r"uses less, \ risks less")]
         with self.voiceover(
-            "<bookmark mark='a'/> Linear discriminant analysis and logistic regression both produce log odds that are "
-            "linear in x, but they get there differently. LDA models how the measurements are distributed within each "
-            "group. <bookmark mark='b'/> Logistic regression, Part 24, models the probability of the group given the "
-            "measurements, and nothing else. <bookmark mark='c'/> If the data really are normal with a common "
-            "covariance, Bradley Efron showed in 1975 that LDA is more efficient, needing perhaps a third to a half "
-            "fewer observations for the same accuracy. <bookmark mark='d'/> If they are not, LDA's extra assumptions "
-            "can mislead it, and logistic regression is the safer choice."
+            "<bookmark mark='a'/> Linear discriminant analysis and logistic regression both produce log odds that are"
+            " linear in x, but they get there differently. LDA models how the measurements are distributed within "
+            "each group. <bookmark mark='b'/> Logistic regression, Part 24, models the probability of the group given"
+            " the measurements, and nothing else. <bookmark mark='c'/> If the data really are normal with a common "
+            "covariance, Bradley Efron showed in 1975 that LDA is more efficient, with the relative efficiency "
+            "depending on separation and the precise model, rather than a fixed sample-size saving. <bookmark "
+            "mark='d'/> If they are not, LDA's extra assumptions can mislead it, while logistic regression avoids the"
+            " predictor-distribution model if its conditional logit is correctly specified. Neither method is "
+            "uniformly safer."
         ) as vo:
+            intro=label('Generative and conditional models make different assumptions',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

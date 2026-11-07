@@ -42,6 +42,9 @@ class PCA(VoiceoverScene):
             "<bookmark mark='d'/> The eigenvalues add up to the total variance, so each component's share is its "
             "eigenvalue over the trace."
         ) as vo:
+            intro=label('Principal components maximize retained centered variance',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -66,6 +69,9 @@ class PCA(VoiceoverScene):
             "in squared error. <bookmark mark='d'/> That is why Pearson's and Hotelling's questions agree: by Pythagoras, "
             "the plane that keeps the most variance is the plane closest to the points."
         ) as vo:
+            intro=label('Truncated SVD minimizes squared reconstruction error',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -76,7 +82,7 @@ class PCA(VoiceoverScene):
         d = load("pca")
         Sc, L = np.asarray(d["scores"]), np.asarray(d["loadings"])
         st = list(d["states"])
-        A = axes([-3.5, 3.5], [-3.0, 2.2], x_length=7.6, y_length=5.4, xlabel=r"PC1: \ crime", ylabel=r"PC2: \ urban",
+        A = axes([-3.5, 3.5], [-3.0, 2.2], x_length=7.6, y_length=5.4, xlabel=r"PC1: \ arrests", ylabel=r"PC2: \ urban",
                  xticks=[-3, 0, 3], yticks=[-2, 0, 2], center=[-2.2, 0.0, 0])
         ax = A.ax
         dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.05, color=PCC) for a, b in Sc[:, :2]])
@@ -90,20 +96,22 @@ class PCA(VoiceoverScene):
             arrows.add(label(nm, font_size=20, color=MAPC).next_to(tip, normalize(tip - ax.c2p(0, 0)), buff=0.08))
         rows = fit_rows(VGroup(
             label(r"50 states, \ 4 variables, \ standardized", font_size=22),
-            label(rf"PC1 ({100 * d['explained'][0]:.0f}\%): \ all crimes together", font_size=22, color=PCC),
+            label(rf"PC1 ({100 * d['explained'][0]:.0f}\%): \ arrest rates together", font_size=22, color=PCC),
             label(rf"PC2 ({100 * d['explained'][1]:.0f}\%): \ urban population", font_size=22, color=PCC),
             label(r"gold arrows: \ each variable's loadings", font_size=22, color=MAPC),
-            label(r"California: \ high crime, \ very urban", font_size=22, color=GREY_A),
+            label(r"California: high arrest rates, very urban", font_size=22, color=GREY_A),
             label(r"Mississippi: \ high murder, \ rural", font_size=22, color=GREY_A),
         ), 4.0, 0.42, [4.8, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The US arrests data: rates of murder, assault and rape per hundred thousand in each of the "
-            "fifty states in 1973, with the percentage of the population living in cities, all standardized. "
-            "<bookmark mark='b'/> The first component weights the three crimes almost equally: an overall crime score, "
-            "sixty-two percent of the variance. <bookmark mark='c'/> The second is mostly the urban percentage, another "
-            "quarter. <bookmark mark='d'/> Gabriel's biplot of 1971 draws the variables as arrows on the same picture as the "
-            "units. <bookmark mark='e'/> Now each state can be read: California and Nevada are high-crime and urban, North "
-            "Dakota and Vermont low on both, Mississippi and the Carolinas high in murder for how rural they are."
+            "<bookmark mark='a'/> The US arrests data: rates of murder, assault and rape per hundred thousand in each"
+            " of the fifty states in 1973, with the percentage of the population living in cities, all standardized. "
+            "<bookmark mark='b'/> The first component weights the three crimes almost equally: an overall arrest-rate"
+            " score; arrests are a proxy, not measured crime incidence, sixty-two percent of the variance. <bookmark "
+            "mark='c'/> The second is mostly the urban percentage, another quarter. <bookmark mark='d'/> Gabriel's "
+            "biplot of 1971 draws variable arrows alongside scores. Here arrows are loadings multiplied by two point "
+            "six for display, not unscaled reconstruction coordinates. <bookmark mark='e'/> Now each state can be "
+            "read: California and Nevada are high on arrest rates and urbanization, North Dakota and Vermont low on "
+            "both, Mississippi and the Carolinas high in murder for how rural they are."
         ) as vo:
             self.add(arrests_tag())
             self.play(FadeIn(A))
@@ -157,7 +165,7 @@ class PCA(VoiceoverScene):
         ex, exs = np.asarray(d["iris_explained"]), np.asarray(d["iris_std_explained"])
         hdr = [r"\textbf{irises}", r"\textbf{PC1 share}", r"\textbf{PC2 share}", r"\textbf{PC1 weight on petal length}"]
         body = [[r"raw centimetres", f"{100 * ex[0]:.1f}\\%", f"{100 * ex[1]:.1f}\\%", f"{abs(L[2, 0]):.2f}"],
-                [r"standardized", f"{100 * exs[0]:.1f}\\%", f"{100 * exs[1]:.1f}\\%", "0.58"]]
+                [r"standardized", f"{100 * exs[0]:.1f}\\%", f"{100 * exs[1]:.1f}\\%", f"{d['iris_std_loadings'][2][0]:.2f}"]]
         tb = table_rows([hdr] + body, font_size=26, col_buff=0.8, row_buff=0.35, colors=[GREY_A, PCC, MAPC])
         tb.move_to([0, 0.9, 0])
         foot = fit_rows(VGroup(
@@ -193,13 +201,17 @@ class PCA(VoiceoverScene):
         whys = [why(r"Kaiser (1960): \ crude"), why(r"Cattell (1966): \ subjective"), why(r"Horn (1965)"),
                 why(r"chapter two's Marchenko--Pastur edge")]
         with self.voiceover(
-            "<bookmark mark='a'/> How many components to keep? Henry Kaiser's rule keeps eigenvalues of the correlation matrix "
-            "above one, a crude rule. <bookmark mark='b'/> Cattell's elbow is subjective. <bookmark mark='c'/> John Horn's "
-            "parallel analysis of 1965 is better: compare each eigenvalue with the same eigenvalue from data of the same size "
-            "with no structure at all. <bookmark mark='d'/> And chapter two told us what that comparison looks like: the "
-            "largest eigenvalue of pure noise is near one plus root p over n, squared, not one. Kaiser's rule ignores this, "
-            "and keeps far too many components when p is large."
+            "<bookmark mark='a'/> How many components to keep? Henry Kaiser's rule keeps eigenvalues of the "
+            "correlation matrix above one, a crude rule. <bookmark mark='b'/> Cattell's elbow is subjective. "
+            "<bookmark mark='c'/> John Horn's parallel analysis of 1965 is better: compare each eigenvalue with the "
+            "same eigenvalue from data of the same size with no structure at all. <bookmark mark='d'/> And chapter "
+            "two told us what that comparison looks like: the largest eigenvalue of pure noise is near one plus root "
+            "p over n, squared, not one. Kaiser's rule ignores this sample-noise spread and can overselect in "
+            "high-dimensional noise models."
         ) as vo:
+            intro=label('Choosing component count requires a signal and noise comparison',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -231,18 +243,22 @@ class PCA(VoiceoverScene):
             cmath(r"\text{PCA}", r":", r"\text{eigenvectors of } X_0^\top X_0 \ (p \times p)", font_size=30),
             cmath(r"\text{classical scaling}", r":", r"\text{eigenvectors of } X_0 X_0^\top \ (n \times n)", font_size=30),
             cmath(r"X_0 V", r"=", r"U D: \ \text{the same coordinates}", font_size=32),
-            cmath(r"\text{so}", r":", r"\text{the hook's map was PCA of coordinates never seen}", font_size=28),
+            cmath(r"\text{so}", r":", r"\text{Euclidean distances: PCA scores; roads: approximate Gram embedding}", font_size=28),
         ]
         rows[2][-1].set_color(PCC)
         whys = [why(r"the covariance side"), why(r"the Gram side"), why(r"one SVD, \ two routes"), why(r"Torgerson met Hotelling")]
         with self.voiceover(
             "<bookmark mark='a'/> Principal components come from the eigenvectors of X transpose X, a p by p matrix. "
-            "<bookmark mark='b'/> The hook's classical scaling took the eigenvectors of X X transpose, an n by n Gram "
-            "matrix built from distances. <bookmark mark='c'/> Both are halves of one singular value decomposition, so "
-            "when the distances are Euclidean the scaling coordinates are exactly the principal component scores. "
-            "<bookmark mark='d'/> The map of the towns was a principal component analysis of coordinates we were never "
-            "shown."
+            "<bookmark mark='b'/> The hook's classical scaling took the eigenvectors of X X transpose, an n by n Gram"
+            " matrix built from distances. <bookmark mark='c'/> Both are halves of one singular value decomposition, "
+            "so when the distances are Euclidean the scaling coordinates are exactly the principal component scores. "
+            "<bookmark mark='d'/> For exactly Euclidean distances this reconstructs PCA scores from unseen "
+            "coordinates. Road distances are not exactly Euclidean, so the hook instead uses a positive Gram "
+            "approximation."
         ) as vo:
+            intro=label('Euclidean classical scaling and PCA share one singular value decomposition',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

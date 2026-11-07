@@ -1,0 +1,82 @@
+{
+  "items": [
+    {
+      "item": "towns",
+      "path": ".cache/stats31/towns.json",
+      "bytes": 50462,
+      "sha256": "aaa42959f2630115ed219173a0afb00ff024e49c4d670b4c050e3083ec99f996"
+    },
+    {
+      "item": "euro",
+      "path": ".cache/stats31/euro.json",
+      "bytes": 2227,
+      "sha256": "5819e1ac95484d80721a44da231dc18c3db8cfc4c10b161a33aee7028697c0cb"
+    },
+    {
+      "item": "mahal",
+      "path": ".cache/stats31/mahal.json",
+      "bytes": 5904,
+      "sha256": "2a06d960aa6f6f71475c66080d23b3ab3b7b2f95c053a94bc7c123d755c8c094"
+    },
+    {
+      "item": "wishart",
+      "path": ".cache/stats31/wishart.json",
+      "bytes": 10803,
+      "sha256": "1647ba3f145e3039e1cae931eb87ecf44b98bddc603435a85d68dedd34ec418a"
+    },
+    {
+      "item": "hotelling",
+      "path": ".cache/stats31/hotelling.json",
+      "bytes": 3120,
+      "sha256": "af7601ccdfbb7413f42f32861a3ab20aaee0b40e7d91f0f33c30fe45944443c9"
+    },
+    {
+      "item": "pca",
+      "path": ".cache/stats31/pca.json",
+      "bytes": 24063,
+      "sha256": "9381ace3d9f8c192d3c772977394fd9c6cdfdc7666009cf8dc0045370f24be1f"
+    },
+    {
+      "item": "fa",
+      "path": ".cache/stats31/fa.json",
+      "bytes": 8838,
+      "sha256": "ace2cf567c9712aaf83be8ab2036e68594be3daec7eaa9b452515a43dd3fcaa3"
+    },
+    {
+      "item": "cca",
+      "path": ".cache/stats31/cca.json",
+      "bytes": 8205,
+      "sha256": "0c539c0ad2fa95b981d3009bb718a627bc2a804cbc36b04c89582f3ca89854da"
+    },
+    {
+      "item": "lda",
+      "path": ".cache/stats31/lda.json",
+      "bytes": 119572,
+      "sha256": "bb04601ea0d3a56960e71a7b54205d77761ee604acd37d186e07cab1f550feb5"
+    },
+    {
+      "item": "cluster",
+      "path": ".cache/stats31/cluster.json",
+      "bytes": 10181,
+      "sha256": "1b088a1c0663a005eefcf1fd20659daf2a498b43ff05693215259621c7d97097"
+    },
+    {
+      "item": "lloyd",
+      "path": ".cache/stats31/lloyd.json",
+      "bytes": 14345,
+      "sha256": "83d73a66942628889daa4effd5c6b7c7739853bde977653b3829ea6425a20f89"
+    },
+    {
+      "item": "glasso",
+      "path": ".cache/stats31/glasso.json",
+      "bytes": 102359,
+      "sha256": "79c0548e38e287a0b299105b41189110f42dfabc5762e34c40d6251069d8bdcf"
+    },
+    {
+      "item": "board",
+      "path": ".cache/stats31/board.json",
+      "bytes": 2006,
+      "sha256": "82e256d3f7a10073e2944f016d29e2c5b3522c2d8def09ee3ffc48d3d8d883d9"
+    }
+  ]
+}

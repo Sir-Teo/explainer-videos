@@ -16,15 +16,15 @@ truth with its residuals. Its kit is `statkit.multi`.
 It opens with the World's 200 towns:
 - roads join each town to its four nearest neighbours, each road 10–30% longer than straight, giving 19,900
   shortest-route distances;
-- a typical route is 1.93 times the straight line;
-- classical scaling (Torgerson 1952), Procrustes-rotated onto the truth, rebuilds the island with an RMSE of 0.68 on
+- a typical route is 1.44 times the straight line;
+- classical scaling (Torgerson 1952), Procrustes-rotated onto the truth, rebuilds the island with an RMSE of 0.55 on
   an island 10 units across;
-- two dimensions hold 81% of the structure, and 13.6% of the eigenvalue mass is negative because roads are not
+- two dimensions hold 84.7% of the positive eigenvalue mass; the absolute negative sum is 13.95% of the positive sum because roads are not
   straight;
 - from exact Euclidean distances the error is 10⁻¹⁵.
 
-Then Hartigan's road distances between 21 European cities. Two dimensions hold 86.8%, Kruskal's stress is 0.090, and
-the map comes out with north up. The worst-fitting pairs:
+Then the Cambridge Encyclopaedia road distances between 21 European cities. Two dimensions hold 86.8%, the stated normalized raw distance stress is 0.090.
+The orientation uses known Stockholm/Lisbon geography; north is not learned from distances alone. The worst-fitting pairs:
 
 | Pair | Table (km) | Map (km) |
 |---|---|---|
@@ -32,20 +32,19 @@ the map comes out with north up. The worst-fitting pairs:
 | Athens–Rome | 817 | 1,725 |
 | Lisbon–Lyons | 1,178 | 1,714 |
 
-Cologne–Geneva is about 750 km by road, so the table's entry is an error the map found.
+These are entries worth checking against their sources. A low-rank map residual alone cannot establish a transcription error or historical route mode.
 
 From there the part covers:
 - **The data matrix.**
   - x̄, S, R; the multivariate normal and its ellipsoids; whitening.
-  - Mahalanobis distance (1936) on Fisher's 50 versicolors. The χ²₄ QQ plot is straight; the largest D² is 12.5,
-    against the 97.5% cut of 11.1. The most outlying flower by Mahalanobis distance (index 18) is not the farthest by
+  - Mahalanobis distance (1936) on Fisher's 50 versicolors. The χ²₄ QQ plot is a rough radial diagnostic, not a test that establishes joint normality. The largest D² is 12.5. Because mean and covariance are fitted to the same observations, its exact Gaussian marginal reference is a scaled beta; the distances are dependent. The most outlying flower by Mahalanobis distance (index 18) is not the farthest by
     Euclid (index 48).
 - **Wishart** (1928) and Bartlett's decomposition (1933).
-  - With p = 3 and m = 10, 20,000 Bartlett draws give E W/m to three decimals, Var W₁₁ = 80.4 against 2mσ₁₁² = 80,
+  - With p = 3 and m = 10, 20,000 Bartlett draws give E W/m with displayed Monte Carlo standard errors, Var W₁₁ = 80.4 against 2mσ₁₁² = 80,
     and Var W₁₂ = 26.6 against 26.4.
-  - The inverse-Wishart prior and its conjugate update.
+  - The inverse-Wishart prior and its update after integrating an independently flat unknown-mean prior: IW(ν+n−1, Ψ+(n−1)S).
   - The fanning-out of sample eigenvalues. With p = 50, n = 100 and Σ = I they run from 0.10 to 2.76, inside the
-    Marchenko–Pastur edges [0.086, 2.914].
+    Marchenko–Pastur edges [0.084, 2.926] (p/(n−1) for the centered covariance).
 - **Hotelling's T²** (1931), by Roy's union–intersection principle (1953). Versicolor against virginica:
 
   | Statistic | Value |
@@ -70,19 +69,19 @@ From there the part covers:
 - **Principal components** (Pearson 1901; Hotelling 1933).
   - The SVD and Eckart–Young (1936); classical scaling as PCA.
   - US arrests (1973), standardized: 62.0, 24.7, 8.9 and 4.3% of the variance.
-    - PC1 loadings are (0.54, 0.58, 0.28, 0.54), an overall crime score.
+    - PC1 loadings are (0.54, 0.58, 0.28, 0.54), an overall arrest-rate score; arrests are a proxy, not crime incidence.
     - PC2 loadings are (−0.42, −0.19, 0.87, 0.17), mostly urbanization.
     - Gabriel's biplot.
   - Units matter. On the irises the first component holds 92.5% raw but 73.0% standardized.
   - Choosing the number of components: Kaiser, the scree plot and parallel analysis (Horn 1965).
 - **Factor analysis** (Spearman 1904; Thurstone; Lawley 1940; Jöreskog 1967) on Holzinger and Swineford's 24 tests
   (n = 145).
-  - Every correlation is positive, averaging 0.30. The first eigenvalue is 8.14 of 24 (then 2.10, 1.69, 1.50, 1.03).
+  - 275 of 276 off-diagonal correlations are positive (one is −0.075), averaging 0.30. The first eigenvalue is 8.14 of 24 (then 2.10, 1.69, 1.50, 1.03).
   - Bartlett's LR test p-values for k = 1–5 factors: 2.3 × 10⁻³³, 2.0 × 10⁻¹³, 5.1 × 10⁻⁵, 0.022 and 0.128.
   - The unrotated first factor loads on every test (0.34–0.75).
   - Varimax (Kaiser 1958) gives verbal (tests 5–9), speed (10–13), spatial (1–4) and memory (14–19) factors with the
     same Σ.
-  - Uniquenesses run from 0.24 to 0.78, with no Heywood case.
+  - Uniquenesses run from 0.24 to 0.78, with no active numerical lower-bound flag (the constrained optimizer is checked for convergence).
   - Factor scores (Thomson, Bartlett); oblique rotation; FA against PCA.
 - **Canonical correlation** (Hotelling 1936) on the savings data (50 countries, the 1960s).
   - Demography (pop15, pop75) against the economy (savings rate, income per head, income growth).
@@ -104,8 +103,8 @@ From there the part covers:
 - **Graphical models.**
   - Partial correlations from Σ⁻¹. For the 24 tests, 60% are below 0.1. Word classification and word meaning
     correlate 0.53 but have partial correlation 0.00.
-  - Dempster's covariance selection (1972). The graphical lasso (Friedman, Hastie & Tibshirani 2008) gives 169, 148,
-    144, 107, 47 and 18 edges at λ = 0.05, 0.1, 0.2, 0.3, 0.4 and 0.5. The verbal clique appears first.
+  - Dempster's covariance selection (1972). The graphical lasso (Friedman, Hastie & Tibshirani 2008) gives 164, 135,
+    133, 97, 45 and 16 edges at λ = 0.05, 0.1, 0.2, 0.3, 0.4 and 0.5. The verbal clique appears first.
   - Neighbourhood selection (Meinshausen & Bühlmann 2006).
 - **A high-dimensional warning.**
   - The chi-squared calibration fails as p/n grows; the exact F holds.
@@ -120,7 +119,7 @@ From there the part covers:
     | 90 | 0.16 | 0.95 |
 
 Data:
-- Hartigan's European road distances (1975), Fisher's irises (Anderson 1935; Fisher 1936), Holzinger and Swineford's
+- Cambridge Encyclopaedia European road distances (1990), Fisher's irises (Anderson 1935; Fisher 1936), Holzinger and Swineford's
   24 tests (1939, via Harman 1976), the savings data (Sterling 1977; Belsley, Kuh & Welsch 1980) and US arrests
   (McNeil 1977) are the Museum's;
 - the towns are the World's;
@@ -153,6 +152,14 @@ data sets each:
 
 At p = 10, the χ² calibration rejects 10.4% (not a Board row).
 
+Part-specific numerical corrections: the undirected road graph samples one detour factor per unique physical edge, preventing reciprocal-neighbor CSR entries from being summed. The graphical lasso enforces an unpenalized diagonal as its stated off-diagonal objective requires; the six edge counts above are recomputed from that objective. The local factor optimizer checks convergence, and factor columns are explicitly assigned to the named test groups after varimax. Orthogonal rotation preserves a four-factor covariance; it cannot turn four factors into one. Four factors have p = 0.022 and are rejected at 5%; five give p = 0.128. Four are used for an illustrative interpretation, not accepted by that test.
+
+The Gaussian-mixture implementation evaluates likelihood and responsibilities at the returned parameters and checks convergence in absolute likelihood change. Fits use a declared 1e−6 covariance ridge and multiple starts. Mixture BIC is a regularized local-fit heuristic, not a proof of two biological species or two density modes. K-means' small-variance connection assumes positive fixed mixture weights away from ties; deterministic assignment handling matters for finite termination.
+
+The LDA/QDA four-variable covariance counts are 10 and 30, not 15 and 45. The one-error leave-one-out difference does not establish a general ranking. Shared-covariance Gaussian inference requires independent samples, nonsingular covariance and adequate degrees of freedom. MANOVA's displayed Rao F is an approximation in general. Partial correlation measures adjusted linear association; an estimated Gaussian graph is not verified population independence or a causal graph. PLS requires normalization of its weights. Covariance shrinkage is positive definite with positive weight and positive trace; plugging it into T² does not preserve the classical exact F law. At p = 90 with two samples of 50, the exact F denominator has 9 degrees of freedom, not 8.
+
+Classical scaling minimizes Gram-matrix approximation error rather than distance stress. The Marchenko–Pastur curve is an asymptotic independent-noise reference; gamma above one also has a zero atom. Neither a finite eigenvalue plot nor parallel analysis guarantees recovered structure. The arrest biplot arrows are loadings multiplied by 2.6 for display, not unscaled reconstruction coordinates. Factor scores retain uncertainty with positive uniqueness, and oblique rotation uses LΦLᵀ + Ψ. Maximum-likelihood factor fitting is equivariant under unit changes with free uniquenesses; numerical loadings rescale.
+
 ## Build it
 
 ```bash
@@ -167,16 +174,16 @@ python tools/lecture_length.py stats31 --floor 50
 
 | # | Chapter | Numbers |
 |---|---|---|
-| 0 | A map from distances | towns RMSE 0.68; Europe 87%, Cologne–Geneva 1,662 vs 713 |
+| 0 | A map from distances | towns RMSE 0.55; Europe 87%, Cologne–Geneva 1,662 vs 713 |
 | 1 | The data matrix | max D² 12.5 vs cut 11.1 |
-| 2 | Wishart | Var W₁₁ 80.4 vs 80; MP edges [0.086, 2.914] |
+| 2 | Wishart | Var W₁₁ 80.4 vs 80; MP edges [0.084, 2.926] (p/(n−1) for the centered covariance) |
 | 3 | Hotelling's T² and MANOVA | T² 355.5; Wilks 0.0234 |
 | 4 | Principal components | 62% + 25%; iris 92.5% raw vs 73% standardized |
 | 5 | Factor analysis | k = 4, p = 0.022; varimax: four named factors |
 | 6 | Canonical correlation | r = 0.82, 0.37; 34°, 69° |
 | 7 | Discriminant analysis | 99.1% on LD1; LOO 2.0% vs 2.7% |
 | 8 | Clustering | ARI 0.89 / 0.90 / 0.73; BIC picks 2 |
-| 9 | Graphical models | 276 → 107 → 47 → 18 edges |
+| 9 | Graphical models | 276 → 97 → 45 → 16 edges |
 | 10 | A high-dimensional warning | χ² size 72% at p = 40; power 0.16 vs 0.95 |
 | 11 | Outro | — |
 
@@ -265,7 +272,7 @@ x_i given the rest then does not involve x_j: conditional independence.
 2Σ(c − x_i)), so the update step cannot increase the objective. With the centres fixed, sending each point to its
 nearest centre minimizes each term separately. So the objective is non-increasing. There are finitely many partitions
 of n points into k groups. If ties are broken consistently, a strict decrease is needed to change the partition, so no
-partition repeats and the algorithm stops in finitely many steps, at a fixed point: a local minimum over partitions.
+partition repeats and the algorithm stops in finitely many steps, at a Lloyd fixed point. This is not necessarily a global optimum; tie and empty-cluster handling must be specified.
 
 ## Glossary
 
