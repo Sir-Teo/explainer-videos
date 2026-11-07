@@ -9,7 +9,7 @@ All 65 parts have received English scientific source review and focused numerica
 
 A [shared World programme-name collision](evidence/world-programmes-20261107/README.md) has been corrected. The [Coverage Board now preserves empirical Monte Carlo uncertainty](evidence/board-mc-20261107/README.md) for correlated intervals within one simulation. Legacy-row values are unchanged. Parts 1–22 retain the visual inspections recorded at their commits; their conservative shared-code fingerprints are being refreshed after the Board correction. Parts 1–12 have completed that latest refresh; further parts remain queued. Part 23's final receipts include the corrected shared source.
 
-The earlier broad statistics/QA run passed 645 tests and five subtests. The related Parts 23–27 regression passed 108 tests and five subtests after the latest shared corrections; individual evidence folders retain their focused numerical checks and input hashes. These results do not establish production playback approval.
+The latest [complete statistics/QA regression](evidence/statistics-final-regression-20261107/README.md) passed 1,138 tests and 10 subtests across 145 files. Its 15 warnings remain visible in the log. Individual evidence folders retain focused scientific checks and numerical input hashes. These results do not establish production playback approval.
 
 No part is signed off for bilingual production. The branch has zero narration_zh.json tables and no stats_text_zh.json; full narrated masters and continuous listening/playback remain separate gates. Existing translation warnings remain visible.
 
