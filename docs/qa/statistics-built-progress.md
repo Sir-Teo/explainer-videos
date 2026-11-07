@@ -76,7 +76,7 @@ No part is signed off for bilingual production. The branch has zero narration_zh
 | 47 | `stats47` | 15 | Scientific source corrections and 16 checks complete; visual verification in progress |
 | 48 | `stats48` | 14 | Scientific source corrections and 18 checks complete; visual verification in progress |
 | 49 | `stats49` | 13 | Full source read and scientific corrections; 14 checks pass; numerical regeneration and visual review pending |
-| 50 | `stats50` | 12 | Not yet reviewed chapter by chapter |
+| 50 | `stats50` | 12 | Full scientific source read; [correction checklist](evidence/stats50-polish-20261107/audit-in-progress.md) saved; implementation, numerical and visual checks pending |
 | 51 | `stats51` | 12 | Not yet reviewed chapter by chapter |
 | 52 | `stats52` | 13 | Not yet reviewed chapter by chapter |
 | 53 | `stats53` | 13 | Not yet reviewed chapter by chapter |
