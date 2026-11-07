@@ -64,6 +64,7 @@ class Outro(VoiceoverScene):
             (r"model choice in causal inference", [36]), (r"forecast evaluation", [38]),
             (r"oracle inequalities and minimax rates", [50]), (r"selective inference in depth", [56]),
         ], font_size=22)
+        self.play(FadeIn(card.head))
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part 29 chooses smoothing parameters by GCV and counts their "
             "degrees of freedom. Part 32 studies selection in high dimensions. Part 33 controls the false discovery "
@@ -73,7 +74,7 @@ class Outro(VoiceoverScene):
             "inequalities for model selection. And Part 56 returns to inference after selection, in depth."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):

@@ -81,6 +81,7 @@ class Outro(VoiceoverScene):
             (r"influence functions in semiparametrics", [49]), (r"concentration for heavy tails", [51]),
             (r"Bahadur--Savage: \ no uniform $t$-interval", [57]), (r"robustness in high dimensions", [60]),
         ], font_size=22)
+        self.play(FadeIn(card.head))
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part 31 makes principal components and covariance robust. Part 32 "
             "selects variables with heavy-tailed losses. Part 34 builds conformal prediction on ranks. Part 36's doubly "
@@ -89,7 +90,7 @@ class Outro(VoiceoverScene):
             "can be valid over all distributions. And Part 60 takes robustness to high dimensions."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):
