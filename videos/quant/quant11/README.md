@@ -76,7 +76,7 @@ statements; the reviewed record through 7 November 2026 contains no final merits
   42.0, peak 90.8 (8 December 2011), 90.3 in March 2020, record lows 7.6 (July 2024) and 11.1 (January 2025);
   Driessen–Maenhout–Vilkov. The trade simulated: P&L against ρ_impl − ρ_real, correlation 0.92, right sign in 95%.
 * **14. India's expiry-day boom, and what lottery tickets pay.** SEBI's studies (91% lost; ₹1.8 lakh crore over three
-  years; ₹1.06 lakh crore in FY25) and the October 2024 measures. Deribit tickets: 85,103 eligible taker-bought OTM options
+  years; ₹1.06 lakh crore in FY25) and the October 2024 measures. Deribit tickets: 85,103 eligible taker-buy OTM trade records
   expiring within two days returned −19% premium-weighted; 84% expired worthless, 12% paid more than they cost. The
   short-dated ratio C(σ_r)/C(σ_i) derived (Mills' ratio), exact against approximate.
 * **15. Case file: SEBI and Jane Street (alleged).** The interim order (3 July 2025; ₹4,843.57 crore impounded as alleged
@@ -157,6 +157,11 @@ bounds expiry payoff liability by its strike gap at any hedge distance; net loss
 also subtracts the initial credit. That bound does not remove interim margin or
 liquidity risk. Synthetic rolling hedge options marked at current Black–Scholes
 volatility, even on Heston paths, are not Heston option prices or executed hedges.
+
+The short-dated ticket calculation treats each trade record as one unit, ignoring
+reported amount. Its return is weighted by quoted unit premiums, not actual traded
+cash or contract volume. The return on instruments takers sold is the hypothetical
+buyer's return, not the sellers' own profit; neither identifies investor performance.
 
 The COR3M series before its July 2021 launch is backcast history. The Bitcoin
 pinning check uses a thousand-dollar grid and Binance hourly closes, not the actual

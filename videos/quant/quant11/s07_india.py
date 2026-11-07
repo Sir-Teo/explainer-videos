@@ -79,7 +79,7 @@ class India(VoiceoverScene):
         mults = VGroup(*[MathTex(rf"{pay / prem:.0f}\times" if pay / prem >= 10 else rf"{pay / prem:.1f}\times",
                                  font_size=16).move_to(c) for c, (prem, pay, m, cp) in zip(cells, tk) if pay > 0])
         paid, back = o["paid"], o["back"]  # every ticket over the hundred Wednesdays, as the side text
-        bar_g = axes([0, 2], [0, max(paid, back) * 1.15], x_length=2.6, y_length=1.9, ylabel=r"dollars, all tickets",
+        bar_g = axes([0, 2], [0, max(paid, back) * 1.15], x_length=2.6, y_length=1.9, ylabel=r"dollars, unit-sized model tickets",
                      yticks=[], font_size=15).next_to(cells, DOWN, buff=0.45).align_to(cells, LEFT)
         b1 = Rectangle(width=0.8, height=bar_g.ax.c2p(0, paid)[1] - bar_g.ax.c2p(0, 0)[1], stroke_width=0,
                        fill_color=YELLOW, fill_opacity=0.8).move_to(bar_g.ax.c2p(0.5, 0), aligned_edge=DOWN)
@@ -88,7 +88,7 @@ class India(VoiceoverScene):
         bl = VGroup(label(r"paid", font_size=16, color=YELLOW).next_to(b1, DOWN, buff=0.05),
                     label(r"paid back", font_size=16, color=QC.GAIN).next_to(bar_g.ax.c2p(1.5, 0), DOWN, buff=0.05))
         side = VGroup(
-            label(rf"{o['n_buy']:,} out-of-the-money options bought".replace(",", "{,}"), font_size=21, color=GREY_A),
+            label(rf"{o['n_buy']:,} out-of-the-money option trade records".replace(",", "{,}"), font_size=21, color=GREY_A),
             label(r"by takers, expiring within two days:", font_size=21, color=GREY_A),
             label(rf"{100 * o['worthless']:.0f}\% expired worthless", font_size=22, color=GREY_B),
             label(rf"{100 * o['profitable']:.0f}\% paid more than their price", font_size=22, color=QC.GAIN),
@@ -97,18 +97,10 @@ class India(VoiceoverScene):
                           r"takers are not India's retail, and this compares the instrument, not the people", 4.6, 17,
                           GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).to_edge(RIGHT, buff=0.35)
-        src = real_data(r"Deribit BTC trades, 100 Wednesdays 2024--2025; settled at Binance's 08:00 price (a proxy for "
-                        r"Deribit's 30-minute average); the sixty tickets drawn at random from all of them")
+        src = real_data(r"Deribit BTC trades, 100 Wednesdays 2024--2025; one unit per record, amount ignored; Binance 08:00 expiry-price proxy; "
+                        r"60 records drawn at random")
         with self.voiceover(
-            "What does a short-dated, out-of-the-money option pay its buyer? India's retail data is aggregated, so "
-            "measure the instrument on another market. Here are sixty real tickets: out-of-the-money Bitcoin options "
-            "bought on Deribit, drawn at random from a hundred Wednesday mornings, each expiring within two days. <bookmark mark='a'/> Expiry. Most turn "
-            "grey: worthless. A handful pay back more than they cost. <bookmark mark='b'/> Over a hundred Wednesdays, "
-            f"{o['n_buy']:,} such tickets: {100 * o['worthless']:.0f} percent expired worthless, and "
-            f"{100 * o['profitable']:.0f} percent paid back more than they cost. Weighted by premium, buyers got back "
-            f"{100 * (1 + o['ret_buy']):.0f} cents per dollar. <bookmark mark='c'/> One caution: the takers who sold "
-            "such options did no better as a group, and Deribit's takers are not India's retail. This compares the "
-            "instrument, not the people."
+            f"""What does a short-dated, out-of-the-money option pay its buyer? India's retail data is aggregated, so examine instruments on another market. These sixty tickets are sampled from real Deribit trade records across a hundred Wednesday mornings. Each record is treated as one unit, ignoring reported trade size; settlement uses the Binance price proxy. <bookmark mark='a'/> At expiry most turn grey: worthless. A handful pay back more than their unit premium. <bookmark mark='b'/> Across all {o['n_buy']:,} eligible buy records, {100 * o['worthless']:.0f} percent expired worthless and {100 * o['profitable']:.0f} percent paid more than their premium. Weighting those unit-sized tickets by premium gives {100 * (1 + o['ret_buy']):.0f} cents back per dollar. This is a model payoff calculation, not the actual cash-weighted return of those traders. <bookmark mark='c'/> The instruments takers sold would have returned {100 * o['ret_sell']:+.0f} percent to a hypothetical buyer. That is the return on the instrument they sold, not the sellers' own profit. Deribit's takers are not India's retail; neither comparison identifies investor performance."""
         ) as vo:
             self.play(LaggedStart(*[FadeIn(c) for c in cells], lag_ratio=0.02, run_time=2), FadeIn(src))
             vo.wait_until("a")
