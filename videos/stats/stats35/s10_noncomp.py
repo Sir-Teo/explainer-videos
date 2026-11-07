@@ -164,14 +164,14 @@ class Noncompliance(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"the LATE is the effect for compliers, \ whose full membership is not observed", font_size=26),
             label(r"intention to treat answers the policy question: \ what happens if we offer the drug?", font_size=26, color=Y0C),
-            label(r"the LATE answers a scientific one: \ what does the drug do to those who take it when offered?", font_size=26, color=BANDC),
+            label(r"the LATE answers a scientific one: \ what does the drug do to those who take it only when offered?", font_size=26, color=BANDC),
             label(r"report both; \ never as-treated alone", font_size=26, color=TAUC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The local average treatment effect is the effect for compliers, a group whose full "
             "membership we cannot list from one assignment. <bookmark mark='b'/> The intention-to-treat effect "
             "answers the policy question: what happens if we offer this drug to such patients? <bookmark mark='c'/> "
-            "The local effect answers a scientific one: what does the drug do for those who take it when it is "
+            "The local effect answers a scientific one: what does the drug do for those who take it only when it is "
             "offered? <bookmark mark='d'/> Report both; and never report the as-treated comparison alone."
         ) as vo:
             for k, m_ in enumerate("abcd"):
