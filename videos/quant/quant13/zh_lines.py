@@ -214,8 +214,8 @@ ZH = {
     "Frequent and moderate:":
         "频繁而温和：跳跃起到了额外曲率的作用。",
 
-    'f"The three Bates traces show objective value, jump intensity and dispersion. <b':
-        "三条贝茨轨迹展示目标函数、跳跃强度和离散程度。<bookmark mark='a'/> 主要拟合改善后，跳跃参数仍相互补偿。记录的运行达到允许的强度上界和离散程度下界。有限跳跃模型在某些情形下能近似扩散效应，但这些拟合并不是精确的扩散极限。<bookmark mark='b'/> 按拟合默顿定价强度，三天没有跳跃的概率为{100 * np.exp(-lf['fits']['Merton']['params']['lam'] * 3 / 365):.1f}%。这是Q模型概率，并非对现实股灾概率的估计。短期期权价格也取决于跳幅、扩散以及完整分布。",
+    'f"The three Bates traces show objective value, jump intensity and dispersion. Th':
+        "三条贝茨轨迹展示目标函数、跳跃强度和离散程度。完整评估日志分别有345、383、345次调用，缓存每个起点保留300个点。<bookmark mark='a'/> 主要拟合改善后，跳跃参数仍相互补偿。记录的运行达到允许的强度上界和离散程度下界。有限跳跃模型在某些情形下能近似扩散效应，但这些拟合并不是精确的扩散极限。<bookmark mark='b'/> 按拟合默顿定价强度，三天没有跳跃的概率为{100 * np.exp(-lf['fits']['Merton']['params']['lam'] * 3 / 365):.1f}%。这是Q模型概率，并非对现实股灾概率的估计。短期期权价格也取决于跳幅、扩散以及完整分布。",
 
     "The intensity climbs, all the way":
         "强度一路上升，直到我们允许的每年二十次的上限，跳跃大小缩到下限，而损失几乎不动。",

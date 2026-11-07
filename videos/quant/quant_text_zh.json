@@ -30486,7 +30486,8 @@
     "Effective-density PDE (Hagan et al. 2014) or near-exact boundary-aware methods (Antonov et al. 2015); check the prices produced by each numerical approximation.": "有效密度PDE（Hagan等，2014）或考虑边界的近精确方法（Antonov等，2015）；检查各数值近似产生的价格。",
     "observed skew scaling, rough volatility and joint SPX/VIX calibration": "观测斜率缩放、粗糙波动率与SPX/VIX联合校准",
     "Which model makes a zero-rate ratio forward-start smile repeat its own present smile?": "哪类模型使零利率比率远期起始微笑，重复模型自己的当期微笑？",
-    "Pause and predict: Which model makes a zero-rate ratio forward-start smile repeat its own present smile?": "暂停并预测：哪类模型使零利率比率远期起始微笑，重复模型自己的当期微笑？"
+    "Pause and predict: Which model makes a zero-rate ratio forward-start smile repeat its own present smile?": "暂停并预测：哪类模型使零利率比率远期起始微笑，重复模型自己的当期微笑？",
+    "Saved Bates traces: 300 points/start; full evaluation counts 345, 383, 345": "保存的Bates轨迹：每起点300个点；完整评估次数345、383、345"
   },
   "phrases": {
     "you owe": "你欠",

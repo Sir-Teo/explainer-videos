@@ -131,7 +131,7 @@ The long items (`slv_particles`, `mixing_sweep`, `history_reg`) save their piece
 9. **(qual) Lee's formula inverted.** Write β = 2 − 4(√(q² + q) − q) and u = (2 − β)/4, so √(q² + q) = q + u;
    squaring, q = u² + 2qu, q(1 − 2u) = u², and 1 − 2u = β/2: q = (2 − β)²/(8β). At q = 2, √6 − 2 = 0.449, β = 0.202.
    As q → 0, β → 2 (the steepest wing Lee allows: fat tails). As q → ∞, √(q² + q) − q → ½ − 1/(8q), so β ≈ 1/(2q) → 0:
-   thin tails, flat wings.
+   a vanishing asymptotic total-variance ratio, which does not require a literally flat IV wing.
 
 ## For the researcher
 
@@ -231,7 +231,7 @@ Selected primary sources for the qualifications above: [Reisinger–Tsianni](htt
    * 伽马分布的矩母函数E[e^{sG_t}] = (1 − νs)^{−t/ν}在s = iuθ − σ²u²/2处取值，得φ(u) = (1 − iuθν + ½σ²νu²)^{−t/ν}。
    * 要求1−θν−σ²ν/2>0后，将实数鞅修正ω = (1/ν)ln(1 − θν − ½σ²ν)加到漂移上，使E[e^{X_t + ωt}] = 1。
 8. **（资格考试）爆炸时间。** a, c > 0且4ac − b² = r² > 0时配方：ψ′ = a[(ψ + b/2a)² + r²/4a²]。代入ψ = (r/2a)tan θ − b/2a得θ′ = r/2，θ(t) = rt/2 + θ₀，由ψ(0) = 0得tan θ₀ = b/r。θ = π/2时ψ达到无穷：T* = (2/r)(π/2 − arctan(b/r))。对赫斯顿，a = ξ²/2，b = ρξp − κ，c = (p² − p)/2，所以4ac − b² = −Δ。p > 1阶矩永远有限，恰当二次式有实根（Δ ≥ 0）且b ≤ 0，此时ψ爬到较小的根并停下；ρ < 0时b总为负，κ = 2、ξ = 1、ρ = −0.7时Δ = −0.51p² + 3.8p + 4 ≥ 0直到p = 8.39。
-9. **（资格考试）反解李的公式。** 记β = 2 − 4(√(q² + q) − q)，u = (2 − β)/4，则√(q² + q) = q + u；平方得q(1 − 2u) = u²，而1 − 2u = β/2：q = (2 − β)²/(8β)。q = 2时√6 − 2 = 0.449，β = 0.202。q → 0时β → 2（李允许的最陡的翼：肥尾）。q → ∞时√(q² + q) − q → ½ − 1/(8q)，β ≈ 1/(2q) → 0：薄尾，平翼。
+9. **（资格考试）反解李的公式。** 记β = 2 − 4(√(q² + q) − q)，u = (2 − β)/4，则√(q² + q) = q + u；平方得q(1 − 2u) = u²，而1 − 2u = β/2：q = (2 − β)²/(8β)。q = 2时√6 − 2 = 0.449，β = 0.202。q → 0时β → 2（李允许的最陡的翼：肥尾）。q → ∞时√(q² + q) − q → ½ − 1/(8q)，β ≈ 1/(2q) → 0：渐近总方差比率趋于零，并不要求IV翼部严格水平。
 
 ## 写给研究者
 

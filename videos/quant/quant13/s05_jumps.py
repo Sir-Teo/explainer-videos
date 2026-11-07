@@ -221,13 +221,13 @@ class Jumps(VoiceoverScene):
         fin = [r["x"] for r in runs]
         foot = wrapped_label('Three finite-bound fits approach the intensity ceiling and jump-size floor. Frequent small jumps remain a jump model, not an exact second diffusion.', 12.0, 21, WHITE).next_to(leg, DOWN, buff=0.35)
         at_bound = all(x[5] > 0.99 * hi[5] for x in fin)
-        src = real_data(r"the Surface; Bates calibrated from three starts, every evaluation recorded")
+        src = real_data('Saved Bates traces: 300 points/start; full evaluation counts 345, 383, 345')
         drift = ("The intensity climbs, all the way to the bound of twenty a year that we allowed, and the jump size "
                  "shrinks to its floor, while the loss barely moves." if at_bound else
                  "The intensity and the size trade off against each other while the loss barely moves.")
         with self.voiceover(
             (
-            f"""The three Bates traces show objective value, jump intensity and dispersion. <bookmark mark='a'/> After the main fit improves, the jump parameters continue trading off. The saved runs reach the allowed intensity bound and dispersion floor. Finite jump models can approximate diffusive effects in some regimes, but these fits are not an exact diffusion limit. <bookmark mark='b'/> Under the fitted Merton pricing intensity, the probability of no jump over three days is {100 * np.exp(-lf['fits']['Merton']['params']['lam'] * 3 / 365):.1f} percent. That is a Q-model probability, not an estimated physical chance of a crash. Short-option prices also depend on jump size, diffusion and the full distribution."""
+            f"The three Bates traces show objective value, jump intensity and dispersion. The cache keeps three hundred points per start from full evaluation logs of three hundred forty-five, three hundred eighty-three and three hundred forty-five calls. <bookmark mark='a'/> After the main fit improves, the jump parameters continue trading off. The saved runs reach the allowed intensity bound and dispersion floor. Finite jump models can approximate diffusive effects in some regimes, but these fits are not an exact diffusion limit. <bookmark mark='b'/> Under the fitted Merton pricing intensity, the probability of no jump over three days is {100 * np.exp(-lf['fits']['Merton']['params']['lam'] * 3 / 365):.1f} percent. That is a Q-model probability, not an estimated physical chance of a crash. Short-option prices also depend on jump size, diffusion and the full distribution."
         )
         ) as vo:
             self.play(FadeIn(P), FadeIn(src), Create(bound), FadeIn(bl), Create(floor), FadeIn(leg))
