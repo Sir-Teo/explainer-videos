@@ -29,14 +29,11 @@ class Misspecification(VoiceoverScene):
         ]
         rows[3][-1].set_color(BADC)
         whys = [why(r"the best wrong model"), why(r"Kleijn \& van der Vaart (2012)"), why(r"Huber (1967), \ Part 22"), why(r"overconfident or not")]
+        heading = label('Posterior convergence requires both local and global model conditions', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> When the model is wrong, the truth is outside the family, and the best a model can do is the "
-            "parameter closest to the truth in Kullback–Leibler divergence, as chapter two's boundary showed. <bookmark "
-            "mark='b'/> Bas Kleijn and Aad van der Vaart proved in 2012 that the posterior still concentrates there, and is "
-            "asymptotically normal, with variance the inverse of the model's curvature over n. <bookmark mark='c'/> But the "
-            "maximum likelihood estimator's actual variance is Huber's sandwich from Part twenty-two, which involves the "
-            "variance of the score as well. <bookmark mark='d'/> When the two differ, credible sets have the wrong size: the "
-            "posterior's centre is right and its spread is wrong."
+            "<bookmark mark='a'/> When the model is wrong, the truth is outside the family, and the best a model can do is the parameter closest to the truth in Kullback–Leibler divergence, as chapter two's boundary showed. <bookmark mark='b'/> Bas Kleijn and Aad van der Vaart proved in 2012 that under regularity, a unique interior KL minimizer, local nonsingular curvature and posterior concentration, the posterior is asymptotically normal there, with variance the inverse of the model's curvature over n. <bookmark mark='c'/> But the maximum likelihood estimator's actual variance is Huber's sandwich from Part twenty-two, which involves the variance of the score as well. <bookmark mark='d'/> When the two differ, credible sets have the wrong size: the posterior's centre is right and its spread is wrong."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -54,6 +51,9 @@ class Misspecification(VoiceoverScene):
         ]
         rows[3][-1].set_color(BADC)
         whys = [why(r"overdispersed"), why(r"misspecified"), why(r"$\theta^* = $ the mean"), why(r"4,000 data sets")]
+        heading = label('A Poisson working model understates overdispersed count uncertainty', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             f"<bookmark mark='a'/> An everyday example. Counts with mean eight and variance forty, two hundred of them, like "
             f"the overdispersed counts of Part twenty-four. <bookmark mark='b'/> Fit a Poisson model, which assumes the "
@@ -73,18 +73,16 @@ class Misspecification(VoiceoverScene):
         rows = [
             cmath(r"\pi_\eta(\theta \mid X)", r"\propto", r"\pi(\theta)\, p(X \mid \theta)^\eta: \ \text{a tempered, \ generalized posterior}", font_size=30),
             cmath(r"\eta < 1", r":", r"\text{the likelihood counts for less: \ wider}", font_size=34),
-            cmath(r"\text{calibrate}", r":", r"\eta = \text{mean} / \text{variance}: \ \text{the spread matches the sandwich}", font_size=32),
+            cmath(r"\text{calibrate}", r":", r"\hat\eta=\min(1,\bar y/s_y^2)\text{ in this scalar example}: \ \text{the spread matches the sandwich}", font_size=32),
             cmath(r"\text{here}", r":", rf"\hat\eta \approx {d['eta_true']:.1f}: \ \text{{width}} \ {d['w_tempered']:.2f}, \ \text{{coverage}} \ {100 * d['cov_tempered']:.1f}\%", font_size=32),
         ]
         rows[3][-1].set_color(GOODC)
-        whys = [why(r"Bissiri, \ Holmes \& Walker (2016)"), why(r"a learning rate"), why(r"Lyddon et al.; \ Syring \& Martin"), why(r"honest again")]
+        whys = [why(r"Bissiri, \ Holmes \& Walker (2016)"), why(r"a learning rate"), why(r"Lyddon et al.; \ Syring \& Martin"), why(r"finite experiment, \ not a uniform guarantee")]
+        heading = label('Scalar tempering matches the leading spread in this one-dimensional model', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            f"<bookmark mark='a'/> The repair is a generalized posterior, Pier Giovanni Bissiri, Chris Holmes and Stephen "
-            f"Walker's framework of 2016: raise the likelihood to a power eta. <bookmark mark='b'/> With eta below one, the "
-            f"data count for less and the posterior widens. <bookmark mark='c'/> Choosing eta as the ratio of the mean to the "
-            f"variance makes the posterior's spread match the sandwich. <bookmark mark='d'/> Here the estimated eta is about "
-            f"{say(d['eta_true'], 1)}; the intervals more than double in width, to {say(d['w_tempered'], 2)}, and cover "
-            f"{100 * d['cov_tempered']:.1f} percent."
+            f"<bookmark mark='a'/> The repair is a generalized posterior, Pier Giovanni Bissiri, Chris Holmes and Stephen Walker's framework of 2016: raise the likelihood to a power eta. <bookmark mark='b'/> With eta below one, the data count for less and the posterior widens. <bookmark mark='c'/> For this one-dimensional overdispersed Poisson working model, the plug-in mean-to-variance ratio matches the leading sandwich spread. One scalar learning rate cannot generally match a multivariate sandwich matrix. <bookmark mark='d'/> Here the estimated eta is about {say(d['eta_true'], 1)}; the intervals more than double in width, to {say(d['w_tempered'], 2)}, and cover {100 * d['cov_tempered']:.1f} percent."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -101,8 +99,11 @@ class Misspecification(VoiceoverScene):
         ]
         rows[2][-1].set_color(GOODC)
         whys = [why(r"asymptotic risk"), why(r"\emph{Econometrica}"), why(r"an artificial posterior"), why(r"the honest answer")]
+        heading = label('A sandwich covariance adjustment depends on the decision problem', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Is tempering the right fix? Ulrich Müller asked the decision-theoretic question in 2013: if the model is wrong, which posterior minimizes the asymptotic risk of the decisions made from it? <bookmark mark='b'/> His answer: the one with the posterior's variance replaced by the sandwich. <bookmark mark='c'/> A sandwich posterior, centred like the Bayesian one and sized like Huber's. <bookmark mark='d'/> Or, often better, fix the model: a negative binomial likelihood here would have needed no repair, and would have been the Bayesian's first choice once the overdispersion was noticed."
+            "<bookmark mark='a'/> Is tempering the right fix? Ulrich Müller asked the decision-theoretic question in 2013: if the model is wrong, which posterior minimizes the asymptotic risk of the decisions made from it? <bookmark mark='b'/> His answer: the one with the posterior's variance replaced by the sandwich. <bookmark mark='c'/> A sandwich posterior, centred like the Bayesian one and sized like Huber's. <bookmark mark='d'/> Or, often better, fix the model: a suitable negative-binomial model would address overdispersion, though its own prior and asymptotic calibration still need checking, and would have been the Bayesian's first choice once the overdispersion was noticed."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -120,8 +121,11 @@ class Misspecification(VoiceoverScene):
         rows[1][-1].set_color(PRIORC)
         rows[3][-1].set_color(GOODC)
         whys = [why(r"loss-based inference"), why(r"a Gibbs posterior"), why(r"robust, \ Part 30"), why(r"general posterior calibration")]
+        heading = label('A loss-defined posterior still needs assumptions for calibration', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Sometimes there is no likelihood worth writing down, because the quantity of interest is defined by a loss: a median, a quantile, a classifier's error. <bookmark mark='b'/> A Gibbs posterior replaces the log-likelihood by minus eta times the summed loss. <bookmark mark='c'/> With absolute-error loss it is a posterior for the median that assumes nothing about the data's distribution, the Bayesian analogue of Part thirty's robust estimators. <bookmark mark='d'/> Its learning rate can be calibrated by the bootstrap, as Nicholas Syring and Ryan Martin proposed in 2019, so that its credible intervals have the right frequentist coverage."
+            "<bookmark mark='a'/> Sometimes there is no likelihood worth writing down, because the quantity of interest is defined by a loss: a median, a quantile, a classifier's error. <bookmark mark='b'/> A Gibbs posterior replaces the log-likelihood by minus eta times the summed loss. <bookmark mark='c'/> With absolute-error loss it is a posterior for the median that uses a loss instead of a parametric likelihood. Calibration still needs assumptions such as independent observations, a unique regular median, moments and bootstrap validity, the Bayesian analogue of Part thirty's robust estimators. <bookmark mark='d'/> Its learning rate can be calibrated by the bootstrap, as Nicholas Syring and Ryan Martin proposed in 2019, to target frequentist coverage under the calibration procedure's assumptions. It is not an exact distribution-free guarantee."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):

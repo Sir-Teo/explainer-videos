@@ -22,7 +22,7 @@ class Doob(VoiceoverScene):
 
     def theorem(self):
         rows = [
-            cmath(r"\theta \sim \Pi, \ \ X_1, X_2, \dots \mid \theta \overset{iid}{\sim} P_\theta", r":", r"\theta \mapsto P_\theta \text{ one-to-one, \ measurably}", font_size=30),
+            cmath(r"\theta \sim \Pi, \ \ X_1, X_2, \dots \mid \theta \overset{iid}{\sim} P_\theta", r":", r"\text{identifiable, measurable; suitable standard-Borel spaces}", font_size=30),
             cmath(r"\text{Doob (1949)}", r":", r"\Pi(\cdot \mid X_{1:n}) \Rightarrow \delta_\theta \ \text{ for } \Pi\text{-almost every } \theta", font_size=32),
             cmath(r"\text{no conditions}", r":", r"\text{on smoothness, \ dimension, \ or the prior's shape}", font_size=32),
             cmath(r"\text{the catch}", r":", r"\text{``almost every'' is measured by the prior itself}", font_size=32),
@@ -30,13 +30,11 @@ class Doob(VoiceoverScene):
         rows[1][-1].set_color(GOODC)
         rows[3][-1].set_color(BADC)
         whys = [why(r"identifiable"), why(r"Doob's martingale theorem"), why(r"remarkably general"), why(r"a self-fulfilling guarantee")]
+        heading = label('Posterior convergence requires both local and global model conditions', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Joseph Doob's theorem of 1949 needs almost nothing: a parameter drawn from the prior, "
-            "observations independent given it, and an identifiable model. <bookmark mark='b'/> Then, for almost every value "
-            "of the parameter, the posterior converges to a point mass at that value. <bookmark mark='c'/> No smoothness, no "
-            "restriction on the dimension, no conditions on the prior. <bookmark mark='d'/> The catch is in the words almost "
-            "every. They are measured by the prior itself. The theorem says the Bayesian expects to be consistent, which is "
-            "not the same as being consistent for the truth that actually generated the data."
+            "<bookmark mark='a'/> Joseph Doob's theorem of 1949 requires identifiable i.i.d. sampling, measurable parametrization and suitable standard-Borel parameter and sample spaces: a parameter drawn from the prior, observations independent given it, and an identifiable model. <bookmark mark='b'/> Then, for almost every value of the parameter, the posterior converges to a point mass at that value. <bookmark mark='c'/> Within those measurability and identifiability conditions, no extra smoothness or finite-dimensional restriction is needed. <bookmark mark='d'/> The catch is in the words almost every. They are measured by the prior itself. The theorem says the Bayesian expects to be consistent, which is not the same as being consistent for the truth that actually generated the data."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -49,18 +47,15 @@ class Doob(VoiceoverScene):
             cmath(r"M_n", r"=", r"E[g(\theta) \mid X_{1:n}]: \ \text{a martingale, \ bounded}", font_size=34),
             cmath(r"M_n \to M_\infty", r"=", r"E[g(\theta) \mid X_{1:\infty}] \ \text{ a.s. (Part 44)}", font_size=34),
             cmath(r"\theta \text{ is a function of } X_{1:\infty}", r":", r"\text{the infinite sample identifies } \theta \ \text{(the LLN)}", font_size=30),
-            cmath(r"\text{so}", r":", r"E[g(\theta) \mid X_{1:\infty}] = g(\theta): \ \text{the posterior mean of every } g \to g(\theta)", font_size=30),
+            cmath(r"\text{so}", r":", r"E[g(\theta) \mid X_{1:\infty}] = g(\theta): \ \text{for each fixed bounded measurable }g", font_size=30),
         ]
         rows[3][-1].set_color(GOODC)
         whys = [why(r"a Doob martingale"), why(r"martingale convergence"), why(r"identifiability"), why(r"weak convergence")]
+        heading = label('An identifiable infinite sample and martingale convergence imply consistency', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> The proof is pure Part forty-four. For any bounded function of the parameter, its posterior "
-            "mean is a bounded martingale in n. <bookmark mark='b'/> By the martingale convergence theorem it converges almost "
-            "surely, to the conditional expectation given the whole infinite sample. <bookmark mark='c'/> But the infinite "
-            "sample identifies the parameter: the empirical distribution converges to P theta, which determines theta. "
-            "<bookmark mark='d'/> So that conditional expectation is just the function evaluated at the parameter, and every "
-            "posterior mean converges to its true value. All of this holds under the joint law of the parameter and the data, "
-            "which is why the exceptional set is null under the prior."
+            "<bookmark mark='a'/> The proof is pure Part forty-four. For any bounded function of the parameter, its posterior mean is a bounded martingale in n. <bookmark mark='b'/> By the martingale convergence theorem it converges almost surely, to the conditional expectation given the whole infinite sample. <bookmark mark='c'/> But the infinite sample identifies the parameter: the empirical distribution converges to P theta, which determines theta. <bookmark mark='d'/> So that conditional expectation is just the function evaluated at the parameter, for each fixed bounded measurable function its posterior expectation converges almost surely under the joint law. A countable determining class supplies a common event for weak posterior consistency. All of this holds under the joint law of the parameter and the data, which is why the exceptional set is null under the prior."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -82,15 +77,10 @@ class Doob(VoiceoverScene):
             label(r"24 truths drawn from the prior", font_size=22),
             label(r"blue: \ posterior means, \ Beta(1, 1) prior", font_size=22, color=POSTC),
             label(rf"white: \ the truths; \ mean error at $n = 3{{,}}000$: \ {err:.3f}", font_size=22, color=TRUTHC),
-            label(r"for truths the prior believes in, \ it always works", font_size=22, color=GOODC),
+            label(r"prior-almost-sure consistency; \ a finite simulation is illustrative", font_size=22, color=GOODC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Doob's theorem in a picture. Draw a coin's probability from a uniform prior, then flip it. "
-            f"<bookmark mark='b'/> Twenty-four such truths. <bookmark mark='c'/> The posterior means, under the same uniform "
-            f"prior, wander at first and then settle. <bookmark mark='d'/> Each one settles on its own truth, the white dots "
-            f"on the right: the average error after three thousand flips is {say(err, 3)}. <bookmark mark='e'/> When the truth "
-            f"is drawn from the prior, Bayes is consistent. In one dimension, with a prior that puts mass everywhere, that "
-            f"covers every truth that matters; in infinite dimensions it need not."
+            f"<bookmark mark='a'/> Doob's theorem in a picture. Draw a coin's probability from a uniform prior, then flip it. <bookmark mark='b'/> Twenty-four such truths. <bookmark mark='c'/> The posterior means, under the same uniform prior, wander at first and then settle. <bookmark mark='d'/> Each one settles on its own truth, the white dots on the right: the average error after three thousand flips is {say(err, 3)}. <bookmark mark='e'/> When the truth is drawn from the prior, Bayes is consistent. In one dimension, with a prior that puts mass everywhere, that illustrates regular interior Bernoulli truths; Doob alone still gives only a prior-almost-everywhere assertion; in infinite dimensions it need not."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated")))
             vo.wait_until("a")
@@ -163,12 +153,7 @@ class Doob(VoiceoverScene):
             label(r"we need conditions that say which truths: \ Schwartz", font_size=26, color=GOODC),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> So why is Doob's theorem not the end of the story? <bookmark mark='b'/> Because a set of "
-            "prior probability zero can be most of the parameter space in other senses. <bookmark mark='c'/> David Freedman "
-            "showed in 1963 that for priors on distributions over the integers, the set of truths where the posterior is "
-            "consistent is topologically small: inconsistency is the generic case. <bookmark mark='d'/> And the frequentist's "
-            "truth is fixed by nature, not drawn from anyone's prior. <bookmark mark='e'/> What is needed is a theorem that "
-            "says which truths a given prior can learn. That is Lorraine Schwartz's."
+            "<bookmark mark='a'/> So why is Doob's theorem not the end of the story? <bookmark mark='b'/> Because a set of prior probability zero can be most of the parameter space in other senses. <bookmark mark='c'/> David Freedman showed in 1963 that for priors on distributions over the integers, genericity results can make consistency topologically small in specified spaces of priors and truths. They do not say every prior is inconsistent for most truths under every topology. <bookmark mark='d'/> And the frequentist's truth is fixed by nature, not drawn from anyone's prior. <bookmark mark='e'/> What is needed is a theorem that says which truths a given prior can learn. That is Lorraine Schwartz's."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

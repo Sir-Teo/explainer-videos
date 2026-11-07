@@ -29,6 +29,9 @@ class GaussianProcess(VoiceoverScene):
         ]
         rows[3][-1].set_color(PRIORC)
         whys = [why(r"Part 39's kriging prior"), why(r"Cameron--Martin"), why(r"how probable is a tiny ball?"), why(r"bias $+$ complexity")]
+        heading = label('The Gaussian concentration function combines approximation and small balls', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> A Gaussian process prior, like Part thirty-nine's Matérn kriging prior, puts a random "
             "function in the model. <bookmark mark='b'/> Its reproducing-kernel Hilbert space is the set of shifts h for which "
@@ -54,13 +57,11 @@ class GaussianProcess(VoiceoverScene):
         rows[0][-1].set_color(GOODC)
         rows[3][-1].set_color(GOODC)
         whys = [why(r"van der Vaart \& van Zanten (2008)"), why(r"GGV's conditions, \ verified"), why(r"$d$ dimensions"), why(r"Part 50's rate")]
+        heading = label('Gaussian-process rates depend on the concentration function and model link', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Aad van der Vaart and Harry van Zanten's theorem of 2008: if the concentration function at "
-            "the truth is at most n epsilon squared, <bookmark mark='b'/> the posterior contracts at rate epsilon n, in "
-            "regression, density estimation and classification alike. The concentration function verifies both of "
-            "Ghosal, Ghosh and van der Vaart's conditions at once. <bookmark mark='c'/> For a Matérn prior of smoothness "
-            "alpha and a truth of smoothness beta in d dimensions, the rate is n to the minus the smaller of alpha and beta, "
-            "over two alpha plus d. <bookmark mark='d'/> When alpha equals beta it is Stone's minimax rate from Part fifty."
+            "<bookmark mark='a'/> Aad van der Vaart and Harry van Zanten's theorem of 2008: if the concentration function at the truth is at most n epsilon squared, <bookmark mark='b'/> the posterior contracts at rate epsilon n, in the specified regression, transformed-density or classification model, in its appropriate loss, under the theorem's link, support and design assumptions. The concentration function verifies both of Ghosal, Ghosh and van der Vaart's conditions at once. <bookmark mark='c'/> For a Matérn prior of smoothness alpha and a truth of smoothness beta in d dimensions, the rate is n to the minus the smaller of alpha and beta, over two alpha plus d. <bookmark mark='d'/> When alpha equals beta it is Stone's minimax rate from Part fifty."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -120,27 +121,30 @@ class GaussianProcess(VoiceoverScene):
         x = np.linspace(0, 1, 300)
         Phi = np.sqrt(2) * np.cos(np.pi * np.outer(x, np.arange(1, K + 1)))
         f0 = Phi @ th
+        limits=[]
+        for alpha in (.25,1.,3.):
+            preview=BN.posterior(Y,n,BN.prior_var(K,alpha))
+            pm=Phi@preview["mean"];psd=np.sqrt((Phi**2)@preview["var"])
+            limits.extend([float((pm-1.96*psd).min()),float((pm+1.96*psd).max())])
+        lower=np.floor(min(min(limits),float(f0.min())))-.2
+        upper=np.ceil(max(max(limits),float(f0.max())))+.2
         panels = VGroup()
         for i, (a, col, name) in enumerate(((0.25, FREQC, r"$\alpha = 1/4$: \ too rough"), (1.0, GOODC, r"$\alpha = 1$: \ matched"), (3.0, BADC, r"$\alpha = 3$: \ too smooth"))):
             post = BN.posterior(Y, n, BN.prior_var(K, a))
             m = Phi @ post["mean"]
             sd = np.sqrt((Phi ** 2) @ post["var"])
-            Ax = axes([0, 1], [-4.5, 6.5], x_length=3.9, y_length=3.2, xlabel=r"$x$", ylabel=r"", xticks=[0, 0.5, 1], yticks=[-4, 0, 4],
+            Ax = axes([0, 1], [lower, upper], x_length=3.9, y_length=3.2, xlabel=r"$x$", ylabel=r"", xticks=[0, 0.5, 1], yticks=np.linspace(np.ceil(lower),np.floor(upper),5),
                       center=[-4.4 + 4.4 * i, -0.3, 0])
             ax = Ax.ax
-            band = Polygon(*[ax.c2p(a_, b_) for a_, b_ in zip(x, np.clip(m - 1.96 * sd, -4.5, 6.5))],
-                           *[ax.c2p(a_, b_) for a_, b_ in zip(x[::-1], np.clip((m + 1.96 * sd)[::-1], -4.5, 6.5))], fill_color=col, fill_opacity=0.3, stroke_width=0)
-            g = VGroup(Ax, band, clip_curve(ax, x, f0, TRUTHC, 2.5, ymin=-4.5, ymax=6.5), clip_curve(ax, x, m, col, 3, ymin=-4.5, ymax=6.5),
+            band = Polygon(*[ax.c2p(a_, b_) for a_, b_ in zip(x, m-1.96*sd)],
+                           *[ax.c2p(a_, b_) for a_, b_ in zip(x[::-1], (m+1.96*sd)[::-1])], fill_color=col, fill_opacity=0.3, stroke_width=0)
+            g = VGroup(Ax, band, clip_curve(ax, x, f0, TRUTHC, 2.5, ymin=lower, ymax=upper), clip_curve(ax, x, m, col, 3, ymin=lower, ymax=upper),
                        label(name, font_size=22, color=col).next_to(Ax, UP, buff=0.15))
             panels.add(g)
         foot = label(r"white: \ the truth $f_0 = \sum \theta_k\sqrt2\cos(\pi kx)$; \ colour: \ posterior mean and pointwise 95\% band, \ $n = 1{,}000$", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.5)
+        self.add(label(r"Pointwise posterior bands need not cover the whole true function",font_size=30).to_edge(UP,buff=.4))
         with self.voiceover(
-            "<bookmark mark='a'/> The same posteriors seen as functions: the truth in white, a cosine series of smoothness "
-            "one, and the posterior mean with its pointwise ninety-five percent band, from a thousand observations. <bookmark "
-            "mark='b'/> A rough prior, alpha a quarter, gives a wiggly mean and a wide band: honest, but noisy. <bookmark "
-            "mark='c'/> The matched prior tracks the truth with a moderate band. <bookmark mark='d'/> A smooth prior, alpha "
-            "three, gives a smooth mean and a narrow band that misses the truth's steep drop: confidently "
-            "wrong, Cox's phenomenon of chapter five, now in function space."
+            "<bookmark mark='a'/> The same posteriors seen as functions: the truth in white, a cosine series of smoothness one, and the posterior mean with its pointwise ninety-five percent band, from a thousand observations. <bookmark mark='b'/> A rough prior gives a wiggly mean and a wide pointwise band in this example. A picture does not establish uniform honesty or simultaneous coverage. <bookmark mark='c'/> The matched prior tracks the truth with a moderate band. <bookmark mark='d'/> A smooth prior, alpha three, gives a smooth mean and a narrow band that misses the truth's steep drop: confidently wrong, Cox's phenomenon of chapter five, now in function space."
         ) as vo:
             self.play(FadeIn(foot))
             vo.wait_until("a")
@@ -162,12 +166,7 @@ class GaussianProcess(VoiceoverScene):
             label(r"in practice: \ the length scale is estimated, \ the subject of the next chapter", font_size=26, color=BALLC),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The same theory covers the popular kernels. <bookmark mark='b'/> The squared-exponential "
-            "kernel has analytic sample paths, so with a fixed length scale it contracts only at a logarithmic rate for a "
-            "truth of finite smoothness. <bookmark mark='c'/> Shrinking the length scale with n restores any polynomial rate, "
-            "if you know the truth's smoothness. <bookmark mark='d'/> Van der Vaart and van Zanten showed in 2009 that putting "
-            "a prior on the length scale adapts to every smoothness at once. <bookmark mark='e'/> And in practice the length "
-            "scale is usually estimated from the data, which is the empirical Bayes of the next chapter."
+            "<bookmark mark='a'/> The same theory covers the popular kernels. <bookmark mark='b'/> The squared-exponential kernel has analytic sample paths, so with a fixed length scale its uniform rates over certain finite-smoothness classes can be only logarithmic. Some particular truths are learned faster. <bookmark mark='c'/> Shrinking the length scale with n can restore the appropriate near-minimax polynomial rate, if you know the truth's smoothness. <bookmark mark='d'/> Van der Vaart and van Zanten showed in 2009 that putting a prior on the length scale can adapt over the smoothness range covered by the hyperprior and theorem, typically with logarithmic factors. <bookmark mark='e'/> And in practice the length scale is usually estimated from the data, which is the empirical Bayes of the next chapter."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

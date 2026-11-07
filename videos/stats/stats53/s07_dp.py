@@ -33,6 +33,9 @@ class Dirichlet(VoiceoverScene):
         rows[1][-1].set_color(POSTC)
         rows[3][-1].set_color(BADC)
         whys = [why(r"Ferguson (1973)"), why(r"the posterior is a DP"), why(r"$\alpha$ = prior sample size"), why(r"Sethuraman's sticks (1994)")]
+        heading = label('Dirichlet-process partition masses have conjugate Dirichlet posteriors', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> Thomas Ferguson's Dirichlet process of 1973 is a prior on probability distributions. A "
             "random distribution F has it if, for every partition of the space, the probabilities F gives the pieces are "
@@ -65,17 +68,11 @@ class Dirichlet(VoiceoverScene):
             label(rf"Newcomb's 66 measurements of the speed of light (1882)", font_size=22),
             label(r"grey: \ the empirical CDF, \ two outliers at $-44$ and $-2$", font_size=22, color=GREY_B),
             label(r"blue: \ the DP posterior mean, \ $\alpha = 1$, \ a wide normal $G_0$", font_size=22, color=POSTC),
-            label(r"gold: \ pointwise 95\% credible band, \ Beta marginals", font_size=22, color=BALLC),
+            label(r"gold: \ pointwise conditional 95\% Beta intervals; \ fitted base", font_size=22, color=BALLC),
             label(r"with $\alpha = 1$, \ the data are 98.5\% of the answer", font_size=22, color=GOODC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Real data: Simon Newcomb's sixty-six measurements of the time light took to travel about "
-            "seven kilometres, from 1882, which Part thirty used for robustness. <bookmark mark='b'/> The empirical CDF in grey, "
-            "with its two famous low outliers. <bookmark mark='c'/> The Dirichlet-process posterior mean, with concentration "
-            "one and a wide normal prior guess, is almost exactly the empirical CDF. <bookmark mark='d'/> Its pointwise "
-            "credible band, from the Beta distribution of each F of x, is the Bayesian bootstrap's band, close to the "
-            "frequentist one. <bookmark mark='e'/> With alpha equal to one, the prior counts as a single observation, and the "
-            "data are ninety-eight and a half percent of the answer."
+            "<bookmark mark='a'/> Real data: Simon Newcomb's sixty-six measurements of the time light took to travel about seven kilometres, from 1882, which Part thirty used for robustness. <bookmark mark='b'/> The empirical CDF in grey, with its two famous low outliers. <bookmark mark='c'/> The Dirichlet-process posterior mean, with concentration one and a wide normal prior guess, is almost exactly the empirical CDF. <bookmark mark='d'/> Its pointwise credible band, from the Beta distribution of each F of x, is conditional and pointwise, not a simultaneous band or a frequentist coverage guarantee. The normal base uses the same data's median and MAD, so this is an empirical-Bayes illustration rather than a fixed-prior analysis. <bookmark mark='e'/> With alpha equal to one, the prior counts as a single observation, and the data are ninety-eight and a half percent of the answer."
         ) as vo:
             self.play(FadeIn(A), FadeIn(museum_tag(r"Newcomb (1891); \ Stigler (1977)")))
             vo.wait_until("a")
@@ -98,13 +95,9 @@ class Dirichlet(VoiceoverScene):
         tab = table_rows(rows, font_size=28, col_buff=0.7, row_buff=0.45, colors=[GREY_B, POSTC, POSTC, POSTC])
         tab.move_to([0, 0.9, 0])
         foot = label(r"the Chinese restaurant: \ join a table with probability $\propto$ its size, \ a new one $\propto \alpha$", font_size=24, color=GREY_A).move_to([0, -1.0, 0])
-        foot2 = label(r"the number of distinct values grows like $\alpha\log(1 + n/\alpha)$: \ ties, \ always", font_size=24, color=BADC).move_to([0, -1.8, 0])
+        foot2 = label(r"the number of distinct values grows like $\alpha\log(1 + n/\alpha)$: \ ties likely as $n$ grows; \ not certain at finite $n$", font_size=24, color=BADC).move_to([0, -1.8, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The discreteness, seen through the Blackwell–MacQueen urn of Part twenty-six's Chinese "
-            "restaurant: each new draw repeats an old value with probability proportional to its count, or makes a new one "
-            "with probability proportional to alpha. <bookmark mark='b'/> With alpha one, a thousand draws take only about "
-            f"{d['tables']['1.0'][-1]} distinct values. <bookmark mark='c'/> The number grows only like alpha times the log of "
-            "n: a sample from a Dirichlet-process draw always has ties, which continuous data never do."
+            f"<bookmark mark='a'/> The discreteness, seen through the Blackwell–MacQueen urn of Part twenty-six's Chinese restaurant: each new draw repeats an old value with probability proportional to its count, or makes a new one with probability proportional to alpha. <bookmark mark='b'/> With alpha one, a thousand draws take only about {d['tables']['1.0'][-1]} distinct values. <bookmark mark='c'/> The number grows only like alpha times the log of n: ties become common with a continuous base as the sample grows; a finite sample still has positive probability of all distinct values. Rounded continuous measurements may tie too."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tab), FadeIn(simulated_tag(r"simulated; \ expectations exact")))
@@ -123,8 +116,11 @@ class Dirichlet(VoiceoverScene):
         ]
         rows[1][-1].set_color(GOODC)
         whys = [why(r"the noninformative limit"), why(r"Rubin (1981)"), why(r"Part 16"), why(r"Lo (1987)")]
+        heading = label('The zero-concentration limit gives random Dirichlet data weights', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> In the limit alpha to zero the prior guess disappears, and the posterior is a Dirichlet process on the observed points alone: random weights on the data with a flat Dirichlet distribution. <bookmark mark='b'/> This is Donald Rubin's Bayesian bootstrap of 1981: reweight the observations at random and recompute the statistic. <bookmark mark='c'/> It differs from Efron's bootstrap of Part sixteen only in replacing the multinomial resampling counts with smooth Dirichlet weights. <bookmark mark='d'/> Albert Lo showed in 1987 that the two agree to first order, a Bernstein–von Mises theorem for the bootstrap, and a reason the frequentist bootstrap has a Bayesian reading."
+            "<bookmark mark='a'/> In the limit alpha to zero the prior guess disappears, and the posterior is a Dirichlet process on the observed points alone: random weights on the data with a flat Dirichlet distribution. <bookmark mark='b'/> This is Donald Rubin's Bayesian bootstrap of 1981: reweight the observations at random and recompute the statistic. <bookmark mark='c'/> It differs from Efron's bootstrap of Part sixteen only in replacing the multinomial resampling counts with smooth Dirichlet weights. <bookmark mark='d'/> Albert Lo showed in 1987 that under the appropriate smooth-functional and empirical-process conditions the two agree to first order, a Bernstein–von Mises theorem for the bootstrap, and a reason the frequentist bootstrap has a Bayesian reading."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -141,13 +137,11 @@ class Dirichlet(VoiceoverScene):
         ]
         rows[2][-1].set_color(GOODC)
         whys = [why(r"Lo (1984)"), why(r"a mixture of normals"), why(r"Schwartz's first condition"), why(r"Algorithm 3")]
+        heading = label('Smoothing a random discrete mixing measure gives a density', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> The repair is to smooth the discreteness away. Albert Lo's Dirichlet-process mixture of "
-            "1984 draws a discrete distribution of normal components, and mixes the normal densities over it. <bookmark "
-            "mark='b'/> The result is a random smooth density. <bookmark mark='c'/> It has Kullback–Leibler support at most "
-            "smooth densities, so by Schwartz's theorem the posterior is consistent there. <bookmark mark='d'/> And it is "
-            "computable: Radford Neal's collapsed Gibbs sampler of 2000 reassigns each observation in turn to an existing "
-            "cluster or a new one, with the cluster parameters integrated out."
+            "<bookmark mark='a'/> The repair is to smooth the discreteness away. Albert Lo's Dirichlet-process mixture of 1984 draws a discrete distribution of normal components, and mixes the normal densities over it. <bookmark mark='b'/> The result is a random smooth density. <bookmark mark='c'/> Under the stated base-measure, tail and smoothness conditions it has KL support; tests or sieves are also required for consistency. <bookmark mark='d'/> And it is computable: Radford Neal's collapsed Gibbs sampler of 2000 reassigns each observation in turn to an existing cluster or a new one, with the cluster parameters integrated out."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -167,19 +161,13 @@ class Dirichlet(VoiceoverScene):
         mode = int(np.argmax(kc))
         side = fit_rows(VGroup(
             label(r"272 eruptions; \ a DP mixture of normals, \ $\alpha = 1$", font_size=22),
-            label(r"blue: \ the posterior mean density, \ 500 Gibbs sweeps", font_size=22, color=POSTC),
+            label(r"blue: \ predictive density; \ 3 chains, \ 700 retained each", font_size=22, color=POSTC),
             label(rf"clusters used: \ mean {d['k_mean']:.1f}, \ mode {mode}", font_size=22, color=BALLC),
-            label(r"two humps, \ but five or six clusters: \ the DP overclusters", font_size=22, color=BADC),
+            label(r"occupied clusters are not the same as density modes", font_size=22, color=BADC),
             label(r"the density is consistent; \ the number of clusters is not", font_size=22, color=GOODC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Old Faithful's two hundred and seventy-two eruption lengths, last seen in Part twenty-nine. "
-            f"<bookmark mark='b'/> The posterior mean density from five hundred sweeps of the sampler traces both humps. "
-            f"<bookmark mark='c'/> But the number of clusters it uses averages {say(d['k_mean'], 1)}, most often {mode}. "
-            f"<bookmark mark='d'/> The data have two humps, and the model insists on five or six components, splitting each "
-            f"hump into pieces. <bookmark mark='e'/> This is no accident: Jeffrey Miller and Matthew Harrison proved in 2014 "
-            f"that the Dirichlet-process mixture's posterior on the number of clusters is inconsistent, even though its "
-            f"density estimate is consistent. Use it for densities, not for counting components."
+            f"<bookmark mark='a'/> Old Faithful's two hundred and seventy-two eruption lengths, last seen in Part twenty-nine. <bookmark mark='b'/> The averaged predictive density from three chains, seven hundred retained sweeps each, traces both humps. The normal-inverse-gamma base hyperparameters were estimated from these data. <bookmark mark='c'/> But the number of clusters it uses averages {say(d['k_mean'], 1)}, most often {mode}. <bookmark mark='d'/> Two density modes need not correspond to exactly two Gaussian components. Several occupied clusters can model the shape of a hump; the scalar cluster trace is a mixing diagnostic, not proof of full convergence. <bookmark mark='e'/> This is no accident: Jeffrey Miller and Matthew Harrison proved in 2014 that the Dirichlet-process mixture's posterior on the number of clusters is inconsistent, even though its density estimate is consistent. Use it for densities, not for counting components."
         ) as vo:
             self.play(FadeIn(A), FadeIn(bars), FadeIn(museum_tag(r"Härdle (1991); \ Azzalini \& Bowman (1990)")))
             vo.wait_until("a")
@@ -196,15 +184,18 @@ class Dirichlet(VoiceoverScene):
 
     def pitman(self):
         rows = [
-            cmath(r"\text{Pitman--Yor}", r":", r"\text{a discount } d \in [0, 1): \ \text{new tables} \propto \alpha + d\,K", font_size=34),
-            cmath(r"\text{tables}", r"\asymp", r"n^{d}: \ \text{power laws, \ not logarithms}", font_size=34),
+            cmath(r"\text{Pitman--Yor}", r":", r"\text{a discount } 0<d<1,\ \alpha>-d: \ \text{new tables} \propto \alpha + d\,K", font_size=34),
+            cmath(r"\text{tables}", r"\asymp", r"n^d\ (0<d<1);\ d=0:\ \alpha\log n", font_size=34),
             cmath(r"\text{word frequencies, \ species}", r":", r"\text{Zipf's law, \ heavy-tailed abundances}", font_size=32),
             cmath(r"\text{species sampling}", r":", r"\text{how many unseen species? \ Good--Turing, \ Bayesian}", font_size=32),
         ]
         rows[1][-1].set_color(GOODC)
         whys = [why(r"Pitman \& Yor (1997)"), why(r"vs \ DP's $\alpha\log n$"), why(r"language models' ancestors"), why(r"Lijoi, \ Mena \& Prünster (2007)")]
+        heading = label('Positive Pitman--Yor discount changes logarithmic to power growth', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> The Dirichlet process has a two-parameter generalization, Jim Pitman and Marc Yor's process of 1997, with a discount d that makes new tables more likely the more tables there already are. <bookmark mark='b'/> Its number of distinct values grows like a power of n rather than a logarithm. <bookmark mark='c'/> That matches the power laws of word frequencies and species abundances, which is why it was used for language models before neural networks. <bookmark mark='d'/> And it answers species-sampling questions, how many species have not yet been seen, the Bayesian cousin of Good and Turing's estimator from Bletchley Park."
+            "<bookmark mark='a'/> The Dirichlet process has a two-parameter generalization, Jim Pitman and Marc Yor's process of 1997, with a discount d that makes new tables more likely the more tables there already are. <bookmark mark='b'/> With discount strictly between zero and one and valid concentration parameters, the number grows at a power scale. Discount zero is the Dirichlet-process logarithmic case. <bookmark mark='c'/> That matches the power laws of word frequencies and species abundances, which is why it was used for language models before neural networks. <bookmark mark='d'/> And it answers species-sampling questions, how many species have not yet been seen, the Bayesian cousin of Good and Turing's estimator from Bletchley Park."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):

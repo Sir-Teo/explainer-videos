@@ -49,8 +49,8 @@ The Coverage Board gains six rows:
 
 | Method | Setting | Nominal | Achieved | Verdict |
 |---|---|---|---|---|
-| EB credible ball, polished truth | sequence model, β = 1, n = 10⁴ | 95% | 88.7% | broken |
-| EB credible ball, inconvenient truth | sequence model, β = 1, n = 10⁴ | 95% | 75.7% | broken |
+| EB credible ball, polished truth | sequence model, β = 1, n = 10⁴ | 95% | 84.7% | broken |
+| EB credible ball, growing-gap blocked truth | sequence model, β = 1, n = 10⁴ | 95% | 97.0% | kept |
 | EB credible ball inflated 1.5×, polished truth | sequence model, β = 1, n = 10⁴ | 95% | 100% | conservative |
 | horseshoe interval, intermediate signals | sparse means, θᵢ = 2.5, n = 400 | 95% | 64% | broken |
 | Poisson credible interval, overdispersed counts | NB, mean 8, var 40, n = 200 | 95% | 62.3% | broken |
@@ -76,10 +76,10 @@ python tools/lecture_length.py stats53 --floor 50
 | 3 | Contraction rates | β = 1: fitted slopes −0.249 (α = ½; theory −¼), −0.328 (α = 1; −⅓), −0.218 (α = 2; −⅕) |
 | 4 | Bernstein–von Mises | TV, p = 0.3: 0.084 (n = 10) → 0.0023 (10⁴); p = 0.02: 0.018 at 10⁴; Beta(1, 1) vs Beta(20, 2): 0.87 → 0.11 |
 | 5 | Semiparametric BvM | n = 10⁴, β = 1: credible ball 100% for α ≤ 1, 76% at 1.25, ≈ 0 from 1.5; Σk⁻¹θₖ ≈ 95% to α = 2, 58% at 3; Σk^−0.6 θₖ 20% at 3 |
-| 6 | Dirichlet processes | Newcomb, n = 66; tables at n = 1,000: 12 (α = 1), 27 (5), 89 (25); Old Faithful: 5.4 clusters on average |
+| 6 | Dirichlet processes | Newcomb, n = 66; tables at n = 1,000: 12 (α = 1), 27 (5), 89 (25); Old Faithful: 5.79 occupied clusters on average across three chains; cluster-count R-hat 1.006, ESS 236 |
 | 7 | Gaussian processes | exponents fitted from exact risks match min(α, β)/(1 + 2α); peak 0.330 at α = 1 |
-| 8 | Adaptation | α̂: 1.46 (n = 10²) → 1.09 (10⁶); EB risk / oracle 1.12 → 1.002 |
-| 9 | Credible sets | polished coverage 82–92% across n; inconvenient 59% (n = 300), 88% (1,000), 76% (30,000); Board as above |
+| 8 | Adaptation | α̂: 1.46 (n = 10²) → 1.09 (10⁶); actual selected-estimator risk / fixed-candidate oracle 1.233 ± 0.050 → 0.999 ± 0.007 (MCSE; 200 datasets) |
+| 9 | Credible sets | finite K = 1,500: polished coverage 80–86%; growing-gap blocked truth 52% (n = 300), 92.7% (1,000), 96.7% (30,000); independent radius calibration, not a finite proof of the infinite-dimensional impossibility theorem |
 | 10 | High-dimensional Bayes | coverage of 95% intervals by signal size 0, 1, 2.5, 6: spike-and-slab 100, 32, 67, 91%; horseshoe 100, 49, 64, 91% |
 | 11 | Misspecification | Poisson width 0.78, coverage 62.3%; tempered (η ≈ 0.2) width 1.75, coverage 94.6% |
 | 12 | Outro | — |
@@ -135,8 +135,7 @@ python tools/lecture_length.py stats53 --floor 50
    - So E F(A) = G₀(A), and Var F(A) = G₀(A)(1 − G₀(A))/(α + 1).
 6. **The tempered posterior's variance.**
    - Gamma(a + ηΣy, b + ηn) has variance (a + ηΣy)/(b + ηn)² ≈ ȳ/(ηn).
-   - With η = μ/σ², this is ≈ σ²/n, the variance of ȳ: the sandwich, since the Poisson score is y − μ with variance σ²
-     and the curvature is 1/μ.
+   - With η = μ/σ², this is ≈ σ²/n, the variance of ȳ: the sandwich, since for the mean parameter μ, the Poisson score is y/μ − 1 with variance σ²/μ² and the expected negative Hessian is 1/μ. The resulting sandwich variance is σ²/n. A scalar temperature does not generally match a multivariate sandwich covariance.
 
 ## Glossary
 
@@ -167,3 +166,27 @@ python tools/lecture_length.py stats53 --floor 50
 - **Part 58**: anytime-valid tests from Bayesian mixtures.
 - **Part 62**: Bayesian causal inference with propensity-score priors.
 - **Part 64**: the calibration of Bayesian deep learning.
+
+## QA reconciliation
+
+All thirteen scenes, twelve computations, six solutions, common helpers, the nonparametric-Bayes toolkit and its six tests were read. Twenty-one checks pass: fifteen independent numerical cases plus six toolkit checks. All twelve inputs regenerated. Old Faithful's 272 eruption/waiting pairs match an independent R distribution exactly in order; all 66 Newcomb passage times match as a multiset.
+
+The Gaussian example sin(k)/k^(β+1/2) is a boundary hyperrectangle-regular sequence, not a member of the Sobolev-β ellipsoid: its weighted squared coefficients have a divergent harmonic sum. It belongs to Sobolev orders below β. Gaussian prior paths likewise typically lie below the nominal Sobolev order α. Exact finite-coordinate posterior-mean risk, posterior spread and an infinite-dimensional contraction theorem are distinguished. The GP-rate illustration fits finite-coordinate risk slopes, rather than directly verifying a full posterior contraction theorem.
+
+The old blocked truth at starts 4^j had bounded multiplicative gaps and could satisfy a polished-tail condition with a larger window. It cannot substantiate the claimed counterexample. The replacement is the truncation of an infinite sequence with starts N_j = 2^(j(j+1)), whose gap ratios grow without bound. A test verifies empty fixed-ratio windows followed by positive future energy. The finite K = 1,500 experiment is not itself a proof of asymptotic failure: at n = 10,000 its achieved coverage is 97.0%, whereas the regular oscillating truth's coverage is 84.7%. The point is to report the experiment accurately, not force undercoverage at a predetermined n. The same datasets and radii now underlie the regular truth's original and 1.5-times-inflated Board rows.
+
+Credible-ball radii use independent 12,000-draw Gaussian reference samples across each candidate-α grid, replacing 800 extra radius draws inside every selected dataset. Exact binomial order statistics provide simultaneous 95% uncertainty bounds for the candidate reference quantiles. Those bounds are propagated to coverage ranges. Dataset Monte Carlo errors are reported conditional on the reference calibration; calibration uncertainty is separately retained. Balls concern the stated retained coordinates (K = 3,000 in the semiparametric plot, K = 1,500 on the EB Board). Exact Gaussian functional coverage is distinguished from simulated ball coverage. The projected two-coordinate picture uses an exact Gaussian ellipse, rather than an approximate isotropic disc; inclusion of the truth in one seeded picture is not a coverage theorem.
+
+Empirical-Bayes risk is now the actual squared error of the estimator selected on the same dataset. Averaging a fixed-α risk formula after selecting α ignores selection dependence and is retained only as a separate frozen-α surrogate. An independent analytic Gaussian-tail calculation verifies the difference. Two hundred datasets per n replace twenty, with risk-ratio Monte Carlo errors displayed. Finite risk ratios slightly below one can arise from sampling error or data-dependent adaptation and are not claimed to violate a lower bound.
+
+At zero or all binomial successes, the MLE normal approximation is a point mass and its TV distance from a continuous Beta posterior is exactly one. The local implementation handles this explicitly and uses standardized adaptive quadrature for interior counts, checked against independent dense integration. Rounded counts near np are not an average over repeated binomial samples. Classical BvM needs more than LAN and a positive prior: nonsingular interior information and global posterior localization are explicit. Coverage is pointwise for regular sets, rather than automatic uniform honesty for arbitrary credible sets. Growing dimension alone is not universal failure; known-variance Gaussian regression with a flat prior is conditionally exact Gaussian for full-rank p < n. Strong-norm infinite-dimensional failures do not preclude weak-norm or functional BvM theorems.
+
+The Schwartz proof now controls the test-weighted likelihood numerator, not the raw integral whose expectation need not decay. The rate neighbourhood controls both KL and the second log-likelihood-ratio moment, with testable metrics, sieves, a growing nε² and the appropriate convergence mode. Doob's theorem states its measurable-space and identifiability conditions. Generic inconsistency claims are scoped to their model/prior/topology setting. Posterior inconsistency does not imply every point estimator is inconsistent: a symmetric pair of modes can have its mean at the true centre. Failure of KL support is failure of a sufficient condition, not proof of inconsistency in every topology; a direct DP posterior can be weakly consistent for a continuous truth.
+
+Newcomb's normal base uses fitted median/MAD hyperparameters, so the Beta intervals are conditional pointwise empirical-Bayes intervals. They are neither simultaneous bands nor the exact zero-concentration Bayesian bootstrap. The CDF grid includes observations and their left limits, preserving ties and jumps. DP-mixture NIG base hyperparameters are also fitted from the data. Three independent 1,000-sweep chains retain 700 draws each; occupied-cluster means are 5.929, 5.607 and 5.826, with rank-normalized split R-hat about 1.006 and bulk ESS about 236. These scalar diagnostics do not certify all latent variables or density convergence. The cluster histogram retains every observed count. Density modes, occupied clusters and a true mixture-component count are different quantities.
+
+The horseshoe uses a global scale equal to the known sparse proportion, an oracle simulation choice. Its Gaussian-mixture quadrature is transformed to a bounded integration domain without an arbitrary finite log-scale cutoff; independent adaptive integration verifies posterior means and both interval endpoints. Spike-and-slab mixture quantiles preserve the exact zero atom even when the slab lies far away, fixing a bracket failure outside the displayed regime. Dataset/group coverage fractions and empirical Monte Carlo errors account for the shared spike-and-slab mixing weight. The horseshoe evaluates forty of the zero coordinates rather than all 360; this is disclosed. The Board's intermediate row records sixty independent datasets, not six hundred falsely independent studies. The demonstrated fixed Gaussian slab and Beta mixing prior are distinguished from the slab/model-size conditions in uniform contraction theorems. A fixed Gaussian slab retains 10% shrinkage for arbitrarily large signals; s log(n/s) denotes a squared Euclidean radius.
+
+Misspecified BvM states its interior KL-projection and regularity assumptions. In the scalar overdispersed-Poisson example, the mean/variance temperature estimates the leading sandwich spread, but the 4,000-dataset coverage experiment is not an exact guarantee. The Gamma prior has shape/rate .01/.01. Scalar tempering cannot generally reproduce an entire multivariate sandwich covariance. Loss-based median posteriors and bootstrap calibration still need distributional regularity; SafeBayes predictive tuning is not synonymous with interval calibration. Semiparametric causal prior alignment, hierarchical averaging, adaptive L2 balls and supremum bands retain their distinct conditions and scopes.
+
+Thirty-seven persistent theorem headings and a heading above delayed GP panels prepare the visual pass. A log(1+density) display includes the narrow boundary posterior peak; GP bands share limits derived from their full endpoints; the relative marginal-likelihood window is declared. Local curves preserve crossings and missing breaks. English endpoint/native/motion and representative narrated visual review remain pending. Chinese narration/captions, continuous listening and final masters remain open.

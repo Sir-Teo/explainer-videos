@@ -26,22 +26,18 @@ class Rates(VoiceoverScene):
 
     def theorem(self):
         rows = [
-            cmath(r"\text{prior mass}", r":", r"\Pi\big(B_{KL}(p_0, \varepsilon_n)\big) \ge e^{-c\, n\varepsilon_n^2}", font_size=34),
+            cmath(r"\text{prior mass}", r":", r"\Pi\{p:K(p_0,p)\le\varepsilon_n^2,\ V(p_0,p)\le\varepsilon_n^2\} \ge e^{-c\, n\varepsilon_n^2}", font_size=34),
             cmath(r"\text{entropy}", r":", r"\log N(\varepsilon_n, \mathcal P_n, d) \le n\varepsilon_n^2, \ \ \Pi(\mathcal P_n^c) \le e^{-(c + 4) n\varepsilon_n^2}", font_size=30),
             cmath(r"\text{GGV (2000)}", r":", r"\Pi\big(d(p, p_0) > M\varepsilon_n \mid X_{1:n}\big) \to 0", font_size=34),
             cmath(r"\text{read}", r":", r"n\varepsilon_n^2 \approx \text{the log of the prior's ``search space''}", font_size=32),
         ]
         rows[2][-1].set_color(GOODC)
         whys = [why(r"Schwartz, \ at scale $\varepsilon_n$"), why(r"a sieve, \ with tests (Le Cam, \ Birgé)"), why(r"Ghosal, \ Ghosh \& van der Vaart"), why(r"the balance")]
+        heading = label('Prior mass must control both KL divergence and its second log moment', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Subhashis Ghosal, Jayanta Ghosh and Aad van der Vaart made Schwartz's theorem quantitative in "
-            "2000. The first condition: the prior puts mass at least e to the minus c n epsilon squared on a Kullback–Leibler "
-            "ball of radius epsilon n around the truth. <bookmark mark='b'/> The second: most of the prior's mass sits on a "
-            "sieve whose covering number at scale epsilon n has logarithm at most n epsilon n squared, which guarantees tests "
-            "by Le Cam's and Birgé's constructions. <bookmark mark='c'/> Then the posterior contracts at rate epsilon n: its "
-            "mass outside a ball of radius a constant times epsilon n vanishes. <bookmark mark='d'/> The rate solves a balance: "
-            "n epsilon squared is the logarithm of the size of the space the prior must search, as for the minimax rates of "
-            "Part fifty."
+            "<bookmark mark='a'/> Subhashis Ghosal, Jayanta Ghosh and Aad van der Vaart made Schwartz's theorem quantitative in 2000. The first condition: the prior puts mass at least e to the minus c n epsilon squared on a neighbourhood controlling both KL divergence and the second log-likelihood-ratio moment by epsilon n squared. <bookmark mark='b'/> The second: most of the prior's mass sits on a sieve whose covering number at scale epsilon n has logarithm at most n epsilon n squared, which guarantees tests by Le Cam's and Birgé's constructions. <bookmark mark='c'/> For the theorem's testable metric and sieves, with n epsilon n squared growing, the posterior contracts in probability at rate epsilon n for a sufficiently large constant: its mass outside a ball of radius a constant times epsilon n vanishes. <bookmark mark='d'/> The rate solves a balance: n epsilon squared is the logarithm of the size of the space the prior must search, as for the minimax rates of Part fifty."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -51,7 +47,7 @@ class Rates(VoiceoverScene):
 
     def model(self):
         rows = [
-            cmath(r"Y_k = \theta_k + n^{-1/2} Z_k", r":", r"\text{Part 50's sequence model, \ truth } \theta_0 \in S^\beta", font_size=32),
+            cmath(r"Y_k = \theta_k + n^{-1/2} Z_k", r":", r"\text{Sobolev/hyperrectangle classes; finite-coordinate laboratory}", font_size=32),
             cmath(r"\theta_k \sim N(0, k^{-1 - 2\alpha})", r":", r"\text{a Gaussian prior of smoothness } \alpha", font_size=32),
             cmath(r"\text{posterior}", r":", r"N\Big(\frac{n\lambda_k}{1 + n\lambda_k} Y_k, \ \frac{\lambda_k}{1 + n\lambda_k}\Big): \ \text{exact}", font_size=32),
             cmath(r"\varepsilon_n", r"\asymp", r"n^{-\min(\alpha, \beta)/(1 + 2\alpha)}: \ \text{minimax iff } \alpha = \beta", font_size=34),
@@ -59,14 +55,11 @@ class Rates(VoiceoverScene):
         rows[2][-1].set_color(POSTC)
         rows[3][-1].set_color(GOODC)
         whys = [why(r"regression, \ densities, \ in disguise"), why(r"a Gaussian process prior"), why(r"conjugate"), why(r"Knapik et al. (2011)")]
+        heading = label('Finite Gaussian coordinates illustrate a class-dependent contraction rate', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> A laboratory where everything is exact: Part fifty's Gaussian sequence model, with a truth "
-            "of smoothness beta. <bookmark mark='b'/> Give the coefficients independent normal priors with variances k to the "
-            "minus one minus two alpha: a Gaussian process prior whose sample paths have smoothness alpha. <bookmark "
-            "mark='c'/> The posterior is conjugate, normal, coordinate by coordinate, and its risk can be computed exactly. "
-            "<bookmark mark='d'/> Its contraction rate is n to the minus the smaller of alpha and beta, over one plus two "
-            "alpha, as Bartek Knapik, Aad van der Vaart and Harry van Zanten found in 2011: minimax exactly when the prior's "
-            "smoothness matches the truth's."
+            "<bookmark mark='a'/> A laboratory where everything is exact: Part fifty's Gaussian sequence model, with a truth of smoothness beta. <bookmark mark='b'/> Give the coefficients independent normal priors with variances k to the minus one minus two alpha: a Gaussian sequence prior whose paths lie in Sobolev spaces of every order below alpha, typically not alpha itself. <bookmark mark='c'/> The posterior is conjugate, normal, coordinate by coordinate, and its risk can be computed exactly. <bookmark mark='d'/> Its contraction rate is n to the minus the smaller of alpha and beta, over one plus two alpha, as Bartek Knapik, Aad van der Vaart and Harry van Zanten found in 2011: minimax exactly when the prior's smoothness matches the truth's."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -77,7 +70,7 @@ class Rates(VoiceoverScene):
     def chart(self):
         d = load("rates")
         ln = np.log10(d["ns"])
-        A = axes([1.9, 6.1], [-2.3, -0.5], x_length=7.4, y_length=4.4, xlabel=r"$n$ \ (log scale)", ylabel=r"$\log_{10}$ posterior-mean error",
+        A = axes([1.9, 6.1], [-2.3, -0.5], x_length=7.4, y_length=4.4, xlabel=r"$n$ \ (log scale)", ylabel=r"$\log_{10}$ posterior-mean RMSE (finite coordinates)",
                  xticks=[2, 3, 4, 5, 6], xfmt=lambda v: f"10^{{{int(v)}}}", yticks=[-2, -1.5, -1, -0.5], center=[-2.5, 0.2, 0])
         ax = A.ax
         cols = {"0.5": FREQC, "1.0": GOODC, "2.0": BADC}
@@ -92,13 +85,7 @@ class Rates(VoiceoverScene):
             label(r"matching the smoothness is optimal; \ both errors cost", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The exact errors of the posterior mean, for a truth of smoothness one, from a hundred to a "
-            f"million observations. <bookmark mark='b'/> With a prior of the same smoothness, in green, the slope is "
-            f"{say(s['1.0'], 3)}, the minimax minus a third. <bookmark mark='c'/> A rougher prior, smoothness a half, "
-            f"undersmooths: slope {say(s['0.5'], 3)}, against the theory's minus a quarter. <bookmark mark='d'/> A smoother "
-            f"prior, smoothness two, oversmooths and is slower still, {say(s['2.0'], 3)}, against minus a fifth. <bookmark "
-            f"mark='e'/> Both mistakes cost a polynomial factor in the rate, which is why chapter eight lets the data choose "
-            f"alpha."
+            f"<bookmark mark='a'/> The exact finite-coordinate root mean squared errors of the posterior mean for a boundary hyperrectangle-regular truth of order one, from a hundred to a million observations. <bookmark mark='b'/> With a prior of the same smoothness, in green, the slope is {say(s['1.0'], 3)}, the minimax minus a third. <bookmark mark='c'/> A rougher prior, smoothness a half, undersmooths: slope {say(s['0.5'], 3)}, against the theory's minus a quarter. <bookmark mark='d'/> A smoother prior, smoothness two, oversmooths and is slower still, {say(s['2.0'], 3)}, against minus a fifth. <bookmark mark='e'/> Both mistakes cost a polynomial factor in the rate, which is why chapter eight lets the data choose alpha."
         ) as vo:
             self.play(FadeIn(A), FadeIn(exact_tag(r"exact risk")))
             vo.wait_until("a")
@@ -127,20 +114,17 @@ class Rates(VoiceoverScene):
             Y = th + r.standard_normal(K) / math.sqrt(n)
             post = BN.posterior(Y, n, lam)
             pts = post["mean"][:2] + np.sqrt(post["var"][:2]) * r.standard_normal((150, 2))
-            rad = 2.45 * math.sqrt(float(np.mean(post["var"][:2])))
+            from scipy.stats import chi2
+            radii = np.sqrt(chi2.ppf(.95,2)*post["var"][:2])
             frame = Square(side_length=3.6, stroke_color=GREY_D, stroke_width=1.5).move_to(cb.c)
-            g = VGroup(frame, cb.cloud(pts, color=POSTC), cb.ball(post["mean"][0], post["mean"][1], rad, color=BALLC),
+            g = VGroup(frame, cb.cloud(pts, color=POSTC), Ellipse(width=2*cb.s*radii[0],height=2*cb.s*radii[1],stroke_color=BALLC,stroke_width=3).move_to(cb.to_screen(*post["mean"][:2])),
                        cb.truth(th[0], th[1]))
             panels.add(g)
             texts.add(label(rf"$n = {n:,}$", font_size=26, color=GREY_A).next_to(frame, DOWN, buff=0.25))
         head = label(r"the contraction ball: \ posterior draws of $(\theta_1, \theta_2)$, \ the truth in white", font_size=26).to_edge(UP, buff=0.6)
-        foot = label(r"the ball shrinks like $n^{-1/2}$ in each coordinate; \ the truth stays inside", font_size=24, color=GOODC).to_edge(DOWN, buff=0.7)
+        foot = label(r"the ball shrinks like $n^{-1/2}$ in each coordinate; \ truth inside in this seeded example; \ no general coverage claim", font_size=24, color=GOODC).to_edge(DOWN, buff=0.7)
         with self.voiceover(
-            "<bookmark mark='a'/> What contraction looks like, with this part's instrument, the contraction ball. Two "
-            "coordinates of the parameter, posterior draws in blue, a ninety-five percent credible disc in gold, and the truth "
-            "in white. <bookmark mark='b'/> At a hundred, a thousand and ten thousand observations, the cloud shrinks around "
-            "the truth, and the disc keeps it inside. In the low coordinates the posterior behaves like a parametric one; "
-            "the interesting failures happen in the high ones, where prior and data compete."
+            "<bookmark mark='a'/> What contraction looks like, with this part's instrument, the contraction ball. Two coordinates of the parameter, posterior draws in blue, an exact projected bivariate Gaussian ninety-five percent credible ellipse in gold, and the truth in white. <bookmark mark='b'/> At a hundred, a thousand and ten thousand observations, the cloud shrinks around the truth, and the ellipse contains it in this seeded example. This is not a proof of repeated-sampling coverage. In the low coordinates the posterior behaves like a parametric one; the interesting failures happen in the high ones, where prior and data compete."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -160,6 +144,9 @@ class Rates(VoiceoverScene):
         ]
         rows[3][-1].set_color(BALLC)
         whys = [why(r"the question"), why(r"Ghosal et al. (2000), \ Thm 2.5"), why(r"Le Cam, \ Fano, \ Assouad"), why(r"no free lunch")]
+        heading = label('Uniform contraction cannot evade the relevant minimax lower bound', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> Can a posterior contract faster than the minimax rate? Not uniformly over a model. <bookmark mark='b'/> If a posterior contracts at a rate epsilon n, the centre of the smallest ball holding half its mass is an estimator that converges at the same rate. <bookmark mark='c'/> So epsilon n can be no faster than the minimax rate. <bookmark mark='d'/> Part fifty's lower bounds, by Le Cam, Fano and Assouad, bind Bayesians as much as anyone."
         ) as vo:
@@ -174,13 +161,16 @@ class Rates(VoiceoverScene):
             cmath(r"\text{DP mixtures of normals}", r":", r"\text{smooth densities at } n^{-1/2} \text{ up to logs, \ if supersmooth}", font_size=30),
             cmath(r"\text{location-scale DP mixtures}", r":", r"n^{-\beta/(2\beta+1)}\text{, \ adaptively \ (Shen, \ Tokdar \& Ghosal 2013)}", font_size=30),
             cmath(r"\text{random histograms}", r":", r"\text{a prior on the number of bins: \ adaptive rates}", font_size=32),
-            cmath(r"\text{sparse priors}", r":", r"s\log(p/s)/n: \ \text{chapter 10}", font_size=34),
+            cmath(r"\text{sparse priors}", r":", r"\text{squared }\ell_2\text{ radius }s\log(p/s)/n: \ \text{chapter 10}", font_size=34),
         ]
         rows[0][-1].set_color(POSTC)
         rows[1][-1].set_color(GOODC)
         whys = [why(r"Ghosal \& van der Vaart (2001)"), why(r"near-minimax"), why(r"Scricciolo; \ Rousseau"), why(r"Part 50's sparse rate")]
+        heading = label('Adaptive rates depend on the prior, loss and smoothness class', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> The theorem has been applied to almost every nonparametric prior. Subhashis Ghosal and Aad van der Vaart showed in 2001 that Dirichlet-process mixtures of normals estimate very smooth densities at nearly the parametric rate, one over root n up to logarithms. <bookmark mark='b'/> With a prior on the scale too, Weining Shen, Surya Tokdar and Ghosal showed in 2013 that they attain the minimax rate for every smoothness at once. <bookmark mark='c'/> Random histograms with a prior on the number of bins adapt in the same way. <bookmark mark='d'/> And sparse priors in high dimension contract at Part fifty's rate s log of p over s, over n, as chapter ten will show."
+            "<bookmark mark='a'/> The theorem has been applied to almost every nonparametric prior. Subhashis Ghosal and Aad van der Vaart showed in 2001 that Dirichlet-process mixtures of normals estimate very smooth densities at nearly the parametric rate, one over root n up to logarithms. <bookmark mark='b'/> With a prior on the scale too, Weining Shen, Surya Tokdar and Ghosal showed in 2013 that they attain appropriate near-minimax rates, with logarithmic factors and smoothness, tail and prior restrictions stated in their theorem. <bookmark mark='c'/> Random histograms can adapt over their supported smoothness ranges; ordinary piecewise-constant histograms do not exploit arbitrary high smoothness. <bookmark mark='d'/> And suitable sparse priors attain squared Euclidean contraction radius of order s log of p over s, over n in the normalized regression model, as chapter ten will show."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -198,6 +188,9 @@ class Rates(VoiceoverScene):
         rows[2][-1].set_color(FREQC)
         rows[3][-1].set_color(BADC)
         whys = [why(r"chapter 7's RKHS"), why(r"Part 48's covering numbers"), why(r"variance-like"), why(r"bias-like")]
+        heading = label('Prior approximation and complexity balance at the contraction scale', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> The two conditions are a bias–variance trade-off in disguise. The prior-mass condition asks "
             "how probable a small ball around the truth is under the prior. <bookmark mark='b'/> The entropy condition asks "
