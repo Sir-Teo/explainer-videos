@@ -1,0 +1,64 @@
+[
+  {
+    "source": "Matching",
+    "url": "https://raw.githubusercontent.com/cran/Matching/master/data/lalonde.rda",
+    "sha256": "0a74e4db3639e882c30d381e7c5d412483033db172550ea0bdee1d5e1c29c01a",
+    "rows": 445,
+    "comparison": "row multisets; stored earnings agree within half a cent",
+    "columns": [
+      "treat",
+      "age",
+      "educ",
+      "black",
+      "hisp",
+      "married",
+      "nodegree",
+      "re74",
+      "re75",
+      "re78"
+    ],
+    "maximum_absolute_errors": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.004000000000019099,
+      0.0049999999999954525,
+      0.0049999999999954525
+    ]
+  },
+  {
+    "source": "MatchIt",
+    "url": "https://raw.githubusercontent.com/kosukeimai/MatchIt/master/data/lalonde.tab",
+    "sha256": "bb0d202e75b6c85c7ca051ad06821b9343d320bcca3b7ebe1301ce8461bce86e",
+    "rows": 429,
+    "comparison": "row multisets; stored earnings agree within half a cent",
+    "columns": [
+      "treat",
+      "age",
+      "educ",
+      "black",
+      "hisp",
+      "married",
+      "nodegree",
+      "re74",
+      "re75",
+      "re78"
+    ],
+    "maximum_absolute_errors": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.005000000000109139,
+      0.005000000000109139,
+      0.005000000000109139
+    ]
+  }
+]

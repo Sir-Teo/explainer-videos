@@ -30,6 +30,9 @@ class EfficientScore(VoiceoverScene):
         rows[1][-1].set_color(NUIC)
         rows[2][-1].set_color(EFFC)
         whys = [why(r"a semiparametric model, \ parametrized"), why(r"the nuisance tangent space"), why(r"the part of the score the nuisance cannot mimic"), why(r"the efficient information")]
+        heading = label('An orthogonal projection identifies the efficient part', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> Often the model is written with a finite-dimensional parameter of interest theta and an "
             "infinite-dimensional nuisance eta. <bookmark mark='b'/> Two kinds of direction then matter: the ordinary score "
@@ -63,13 +66,7 @@ class EfficientScore(VoiceoverScene):
             label(r"shorter score $\Rightarrow$ less information $\Rightarrow$ bigger bound", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In the picture: the red line is the nuisance tangent space. <bookmark mark='b'/> The blue "
-            "arrow is the score for theta. If the nuisance were known, its length squared would be the information. "
-            "<bookmark mark='c'/> But part of the score lies along the nuisance directions: a small change in theta looks, "
-            "to the data, partly like a small change in the nuisance, and that part cannot be used. <bookmark mark='d'/> "
-            "What remains, the gold arrow perpendicular to the nuisance space, is the efficient score. <bookmark mark='e'/> "
-            "It is shorter, so the information is smaller and the bound larger: the price of not knowing the nuisance is the "
-            "squared length of the red projection."
+            "<bookmark mark='a'/> In the picture: the red line is the nuisance tangent space. <bookmark mark='b'/> The blue arrow is the score for theta. If the nuisance were known, its length squared would be the information. <bookmark mark='c'/> But part of the score lies along the nuisance directions: a small change in theta looks, to the data, partly like a small change in the nuisance, and that part cannot be used. <bookmark mark='d'/> What remains, the gold arrow perpendicular to the nuisance space, is the efficient score. <bookmark mark='e'/> It is shorter, so the information is smaller and the bound larger: the information lost is the squared length of the red projection. The variance penalty is the difference between inverse informations."
         ) as vo:
             self.play(FadeIn(box), FadeIn(exact_tag(r"a schematic")))
             vo.wait_until("a")
@@ -87,13 +84,16 @@ class EfficientScore(VoiceoverScene):
     def adaptation(self):
         rows = [
             cmath(r"X = \theta + \varepsilon, \ \varepsilon \sim f \text{ symmetric}", r":", r"\dot\ell_\theta(x) = -\frac{f'}{f}(x - \theta): \ \text{an odd function}", font_size=30),
-            cmath(r"\Lambda_f", r"=", r"\{\text{even functions of } x - \theta\}: \ \text{symmetric changes of shape}", font_size=32),
+            cmath(r"\Lambda_f", r"=", r"\{\text{mean-zero even }L_2(f)\text{ functions}\}: \ \text{symmetric changes of shape}", font_size=32),
             cmath(r"\text{odd} \perp \text{even}", r"\Rightarrow", r"\Pi(\dot\ell_\theta \mid \Lambda_f) = 0, \ \ \tilde\ell_\theta = \dot\ell_\theta", font_size=32),
             cmath(r"\Rightarrow", r"\;", r"\tilde I = I_f: \ \text{not knowing } f \text{ costs nothing: \ adaptation}", font_size=34),
         ]
         rows[2][-1].set_color(TANC)
         rows[3][-1].set_color(EFFC)
         whys = [why(r"the hook's model"), why(r"the nuisance tangent space"), why(r"symmetry does the work"), why(r"Stein's necessary condition (1956), \ Bickel (1982)")]
+        heading = label('Odd location scores are orthogonal to symmetric shape changes', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> Now the hook is explained. For a symmetric law, the location score minus f prime over f, at "
             "x minus theta, is an odd function. <bookmark mark='b'/> Changing the shape while keeping it symmetric gives "
@@ -111,22 +111,19 @@ class EfficientScore(VoiceoverScene):
 
     def hetero(self):
         rows = [
-            cmath(r"\text{PLR, \ } \mathrm{Var}(\varepsilon \mid T, X) = \sigma^2(X)", r":", r"\text{the efficient score changes}", font_size=32),
-            cmath(r"\tilde\ell_\theta", r"=", r"\frac{(Y - \theta T - g(X))\,(T - \tilde m(X))}{\sigma^2(X)}, \ \ \tilde m = \frac{E[T/\sigma^2 \mid X]}{E[1/\sigma^2 \mid X]}", font_size=30),
-            cmath(r"\text{Robinson's score}", r":", r"\text{still Neyman-orthogonal, \ still root-}n, \ \text{not efficient}", font_size=32),
+            cmath(r"\text{PLR, \ } \mathrm{Var}(\varepsilon \mid T, X) = \sigma^2(T,X)", r":", r"\text{the efficient score changes}", font_size=32),
+            cmath(r"\tilde\ell_\theta", r"=", r"\frac{(Y - \theta T - g(X))\,(T - \tilde m(X))}{\sigma^2(T,X)}, \ \ \tilde m = \frac{E[T/\sigma^2(T,X) \mid X]}{E[1/\sigma^2(T,X) \mid X]}", font_size=30),
+            cmath(r"\text{Robinson's score}", r":", r"\text{orthogonal; root-}n\text{ with adequate rates; not generally efficient}", font_size=32),
             cmath(r"\text{orthogonal}", r"\ne", r"\text{efficient: \ orthogonality protects, \ efficiency optimizes}", font_size=32),
         ]
         rows[1][-1].set_color(EFFC)
         rows[2][-1].set_color(OSC)
         whys = [why(r"heteroskedastic errors"), why(r"weighted residuals"), why(r"DML's default"), why(r"two different properties")]
+        heading = label('Heteroskedasticity changes the efficient weighting', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> One subtlety. In the partially linear model with an error variance that depends on X, the "
-            "efficient score changes. <bookmark mark='b'/> It weights by one over the variance, and centres T at a weighted "
-            "regression rather than the plain one. <bookmark mark='c'/> Robinson's unweighted score is still orthogonal to "
-            "the nuisance, so it is still root n consistent with machine-learned nuisances, but it is no longer efficient. "
-            "<bookmark mark='d'/> Orthogonality and efficiency are different properties. Orthogonality protects an estimator "
-            "from the nuisance's first-order errors; efficiency makes it the best such estimator. Every efficient score is "
-            "orthogonal, but not every orthogonal score is efficient."
+            "<bookmark mark='a'/> One subtlety. In the partially linear model with an error variance that can depend on both T and X, the efficient score changes. <bookmark mark='b'/> It weights by one over the variance, and centres T at a weighted regression rather than the plain one. <bookmark mark='c'/> Robinson's unweighted score is still orthogonal to the nuisance, and can remain root n consistent when nuisance product rates and the empirical-process conditions hold, but it is no longer efficient. <bookmark mark='d'/> Orthogonality and efficiency are different properties. Orthogonality protects an estimator from the nuisance's first-order errors; efficiency makes it the best such estimator. Efficient scores are orthogonal to nuisance tangent directions, while an arbitrary nuisance-orthogonal estimating function need not attain the efficiency bound."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -136,21 +133,14 @@ class EfficientScore(VoiceoverScene):
 
     def cases(self):
         rows = fit_rows(VGroup(
-            label(r"adaptive: \ symmetric location; \ linear regression with symmetric errors; \ the PLR's $\theta$ when $\varepsilon \perp (T, X)$", font_size=24, color=EFFC),
-            label(r"not adaptive: \ location without symmetry \ (the centre is not even defined)", font_size=24, color=NUIC),
+            label(r"adaptive: \ symmetric location; \ certain regression error-density nuisances under suitable independence conditions", font_size=24, color=EFFC),
+            label(r"without a shape-centering restriction, location + unrestricted shape is unidentified", font_size=24, color=NUIC),
             label(r"not adaptive: \ the ATE: \ unknown regressions add $E[\sigma_1^2/e + \sigma_0^2/(1-e)]$", font_size=24, color=NUIC),
             label(r"in between: \ Cox's $\beta$: \ the risk-set centring is the price of the unknown baseline", font_size=24, color=GREY_A),
             label(r"the efficient score is orthogonal to the nuisance: \ chapter 8's Neyman orthogonality", font_size=24, color=TANC),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Adaptation happens in a few lucky models: symmetric location, linear regression with "
-            "symmetric errors, and the partially linear model when the error is independent of the regressors. <bookmark "
-            "mark='b'/> It fails without symmetry, where the centre is not even well defined. <bookmark mark='c'/> And it "
-            "fails for the average treatment effect, whose bound includes the inverse-propensity-weighted residual "
-            "variances that the unknown outcome regressions bring. <bookmark mark='d'/> Cox's model is in between: centring at the risk set is exactly the price "
-            "of not knowing the baseline. <bookmark mark='e'/> But the efficient score always has one property, by "
-            "construction: it is orthogonal to the nuisance directions. Chapter eight shows why that orthogonality is what "
-            "makes machine-learned nuisances harmless."
+            "<bookmark mark='a'/> Adaptation happens in a few lucky models: symmetric location, linear regression with symmetric errors, and partially linear models with suitable independent error-density nuisance assumptions. Adaptation must specify which nuisance is being treated as unknown. <bookmark mark='b'/> An unrestricted location-plus-unknown-shape decomposition is unidentified without a centring convention. Means and medians can still be defined without symmetry; they then represent different models and targets. <bookmark mark='c'/> And it fails for the average treatment effect, whose bound includes the inverse-propensity-weighted residual variances that the unknown outcome regressions bring. <bookmark mark='d'/> Cox's model is in between: centring at the risk set is exactly the price of not knowing the baseline. <bookmark mark='e'/> But the efficient score always has one property, by construction: it is orthogonal to the nuisance directions. Chapter eight shows why that orthogonality is what makes their first-order errors vanish, subject to sufficient remainder rates and stochastic control."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

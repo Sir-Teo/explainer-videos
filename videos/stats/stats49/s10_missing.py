@@ -28,15 +28,11 @@ class MissingData(VoiceoverScene):
         rows[1][-1].set_color(EFFC)
         rows[2][-1].set_color(TANC)
         whys = [why(r"Part 41's missing at random"), why(r"Robins, \ Rotnitzky \& Zhao (1994)"), why(r"the bound: \ what was lost"), why(r"Tsiatis (2006): \ one theory")]
+        heading = label('Under MAR, augment weighted residuals with a regression prediction', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Part forty-one's problem: estimate the mean of Y when some values are missing at random "
-            "given always-observed covariates X, so that the chance of seeing Y depends only on X. <bookmark mark='b'/> The "
-            "efficient influence function, found by James Robins, Andrea Rotnitzky and Lue Ping Zhao in 1994, is the "
-            "regression prediction plus the inverse-probability-weighted residual of the observed cases. <bookmark "
-            "mark='c'/> Its variance is the bound: the variance of the regression function plus the residual variance "
-            "inflated by one over the response probability. <bookmark mark='d'/> It is the average treatment effect's "
-            "influence function with one arm, and Anastasios Tsiatis's 2006 book develops the whole theory of missing data "
-            "and causal inference this way, as one theory."
+            "<bookmark mark='a'/> Part forty-one's problem: estimate the mean of Y when some values are missing at random given always-observed covariates X, so that the chance of seeing Y depends only on X, with positive response probabilities and finite influence-function variance. <bookmark mark='b'/> The efficient influence function, found by James Robins, Andrea Rotnitzky and Lue Ping Zhao in 1994, is the regression prediction plus the inverse-probability-weighted residual of the observed cases. <bookmark mark='c'/> Its variance is the bound: the variance of the regression function plus the residual variance inflated by one over the response probability. <bookmark mark='d'/> It is the average treatment effect's influence function with one arm, and Anastasios Tsiatis's 2006 book develops the whole theory of missing data and causal inference this way, as one theory."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -58,11 +54,7 @@ class MissingData(VoiceoverScene):
         tab.move_to([0, 0.7, 0])
         foot = label(rf"the World's survey: \ {d['n']:,} adults, \ {d['n_obs']:,} answer; \ the young and two regions answer less", font_size=24, color=GREY_A).move_to([0, -2.2, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The World's survey of Part forty-one: {d['n']:,} adults, of whom {d['n_obs']:,} report "
-            f"their income; the young, and the people of two regions, answer less often, and their incomes differ. Complete "
-            f"cases overstate mean log income by {say(e['cc'] - t, 3)}. Inverse probability weighting, regression imputation "
-            f"and the augmented estimator all remove most of the bias, and the augmented estimator's ninety percent interval "
-            f"covers the true mean, which only the World knows."
+            f"<bookmark mark='a'/> The World's survey of Part forty-one: {d['n']:,} adults, of whom {d['n_obs']:,} report their income; the young, and the people of two regions, answer less often, and their incomes differ. Complete cases overstate mean log income by {say(e['cc'] - t, 3)}. Inverse probability weighting, regression imputation and the augmented estimator all reduce the realized error in this example, and the augmented estimator's ninety percent interval contains the complete survey-sample mean in this draw. Its influence-function SE is an iid superpopulation reference; it is not an exact interval for a fixed finite survey."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tab), FadeIn(foot), FadeIn(simulated_tag(r"the World: \ one draw, \ truth known")))
@@ -81,6 +73,9 @@ class MissingData(VoiceoverScene):
         rows[1][-1].set_color(TANC)
         rows[2][-1].set_color(TANC)
         whys = [why(r"the efficient one"), why(r"the propensity rescues it"), why(r"the regression rescues it"), why(r"with a good outcome model, \ it hardly matters")]
+        heading = label('A single survey draw illustrates working-model sensitivity', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             f"<bookmark mark='a'/> Double robustness on the survey. With both working models fitted, the augmented estimator "
             f"is off by {say(d['est']['aipw'] - t, 4)}. <bookmark mark='b'/> Replace the outcome model with one that uses "
@@ -100,22 +95,19 @@ class MissingData(VoiceoverScene):
 
     def imputation(self):
         rows = [
-            cmath(r"\text{multiple imputation (Part 41)}", r":", r"\text{efficient if the imputation model is right}", font_size=32),
+            cmath(r"\text{multiple imputation (Part 41)}", r":", r"\text{can be efficient with proper congenial imputation}", font_size=32),
             cmath(r"\text{AIPW}", r":", r"\text{efficient if both are right, \ consistent if either is}", font_size=32),
-            cmath(r"\text{IPW}", r":", r"\text{consistent if } \pi \text{ is right, \ never efficient unless } m \text{ is constant}", font_size=30),
+            cmath(r"\text{Hajek IPW}", r":", r"\text{normalized known-}\pi\text{: inefficient unless augmentation vanishes}", font_size=30),
             cmath(r"\mathrm{Var}\,\phi_{\text{HT}} - \mathrm{Var}\,\phi^*", r"=", r"E\Big[\frac{1 - \pi(X)}{\pi(X)}\, m(X)^2\Big]: \ \text{the price of ignoring } m", font_size=30),
         ]
         rows[1][-1].set_color(EFFC)
         rows[2][-1].set_color(NUIC)
         whys = [why(r"a parametric bet"), why(r"two bets, \ hedged"), why(r"one bet, \ wasteful"), why(r"by Pythagoras, \ chapter 3")]
+        heading = label('Compare known-propensity influence functions and augmentation', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> How does this compare with Part forty-one's multiple imputation? Imputation from a correct "
-            "model is efficient, but it is a single bet on that model. <bookmark mark='b'/> The augmented estimator hedges: "
-            "efficient when both working models are right, and still consistent when either one is. <bookmark mark='c'/> "
-            "Weighting alone is consistent when the response model is right, but it ignores what the covariates say about "
-            "the outcome, and is inefficient unless the regression is flat. <bookmark mark='d'/> For the Horvitz–Thompson form the waste is exactly "
-            "the expected value of one minus pi over pi times the squared regression: the squared distance from its "
-            "influence function to the efficient one, chapter three's Pythagoras again."
+            "<bookmark mark='a'/> How does this compare with Part forty-one's multiple imputation? Proper multiple imputation can be efficient under a correct, congenial model and suitable inference, but it is a single bet on that model. <bookmark mark='b'/> The augmented estimator hedges: efficient when both working models are right, and still consistent when either one is. <bookmark mark='c'/> Weighting alone is consistent when the response model is right, but it ignores what the covariates say about the outcome, and is the normalized known-propensity estimator is inefficient unless its augmentation term vanishes. Estimated propensity fitting can change this comparison. <bookmark mark='d'/> For the Horvitz–Thompson form the waste is exactly the expected value of one minus pi over pi times the squared regression: the squared distance from its influence function to the efficient one, chapter three's Pythagoras again."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -126,18 +118,12 @@ class MissingData(VoiceoverScene):
     def general(self):
         rows = fit_rows(VGroup(
             label(r"Robins--Rotnitzky--Zhao: \ every regular estimator under MAR is an IPW estimator plus an augmentation", font_size=26),
-            label(r"the optimal augmentation is $-\big(\tfrac{R}{\pi} - 1\big) m(X)$: \ project on the space of mean-zero functions of $(R, X)$", font_size=26, color=EFFC),
+            label(r"the optimal augmentation is $-\big(\tfrac{R}{\pi} - 1\big) m(X)$: \ augmentation subspace $\{(R/\pi-1)a(X)\}$", font_size=26, color=EFFC),
             label(r"monotone dropout, \ longitudinal data, \ survival with censoring: \ the same recipe", font_size=26, color=TANC),
-            label(r"MNAR: \ $\psi$ is not identified; \ sensitivity analysis \ (Part 41) \ is the honest answer", font_size=26, color=NUIC),
+            label(r"MNAR without extra restrictions: \ generally not identified; \ sensitivity analysis \ (Part 41) \ is the honest answer", font_size=26, color=NUIC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Robins, Rotnitzky and Zhao proved more: under missing at random, every regular estimator is "
-            "an inverse-probability-weighted estimator plus an augmentation term. <bookmark mark='b'/> The best augmentation "
-            "is a projection, onto the functions of the response indicator and the covariates, and it is the regression term "
-            "of the efficient influence function. <bookmark mark='c'/> The same recipe handles monotone dropout, "
-            "longitudinal studies and censored survival data. <bookmark mark='d'/> When data are missing not at random, the "
-            "mean is not identified at all, and no efficiency theory helps: Part forty-one's sensitivity analysis is the "
-            "honest answer."
+            "<bookmark mark='a'/> Robins, Rotnitzky and Zhao proved more: under missing at random, regular asymptotically linear observed-data influence functions have an inverse-probability-weighted plus augmentation representation under suitable MAR conditions. <bookmark mark='b'/> The best augmentation is a projection, onto the functions of the response indicator and the covariates, and it is the regression term of the efficient influence function. <bookmark mark='c'/> The same recipe handles monotone dropout, longitudinal studies and censored survival data. <bookmark mark='d'/> Without additional identifying restrictions, missing-not-at-random data generally do not identify the population mean, and no efficiency theory helps: Part forty-one's sensitivity analysis is the honest answer."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

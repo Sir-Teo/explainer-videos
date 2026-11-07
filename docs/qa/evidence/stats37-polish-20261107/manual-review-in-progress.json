@@ -1,0 +1,12 @@
+{
+  "fingerprint": "17a94a5a07715d6c5b05e42b0bf7088db297dbd7dafd3c67bf21b84691f5289c",
+  "reviews": [
+    {
+      "scene": "Hook",
+      "capture": "English endpoints",
+      "result_sha256": "9ddf38daaf38933f2d91617404e4a5a4a4a6e9e87edd0b354facabd508656be9",
+      "finding": "Inspected full sheet; no visual defects found"
+    }
+  ],
+  "complete": false
+}

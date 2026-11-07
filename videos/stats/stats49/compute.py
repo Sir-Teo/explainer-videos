@@ -64,6 +64,41 @@ def nest(obj):
 LAWS = ["normal", "logistic", "laplace", "t3", "mixture"]
 
 
+def bernoulli_se(values):
+    return float(np.std(values,ddof=1)/math.sqrt(len(values)))
+
+
+def ate_ipw(y,t,e,alpha=.1):
+    """Hajek ratio influence functions with empirical weight denominators.
+
+    This does not account for a fitted propensity's first-order contribution.
+    """
+    y,t,e=map(lambda v:np.asarray(v,float),(y,t,e))
+    w1,w0=t/e,(1-t)/(1-e)
+    m1,m0=w1@y/w1.sum(),w0@y/w0.sum();est=float(m1-m0)
+    phi=w1*(y-m1)/w1.mean()-w0*(y-m0)/w0.mean()
+    se=float(phi.std(ddof=1)/math.sqrt(len(y)));q=stats.norm.ppf(1-alpha/2)
+    return {"est":est,"se":se,"lo":est-q*se,"hi":est+q*se,"se_scope":"ratio linearization; propensity treated as fixed"}
+
+
+def product_bias(n,a,b):
+    """Exact conditional-mean remainder integrated over the rate world's X1."""
+    da,db=n**(-a),n**(-b)
+    def f(x):
+        d=1+math.cos(math.pi*x);e=.2+.6*x;eh=np.clip(e-.1*db*d,.05,.95)
+        return (eh-e)*(2*da*d/eh+da*d/(1-eh))
+    return float(integrate.quad(f,0,1,epsabs=1e-11,points=[.1,.2,.3])[0])
+
+
+def intsq_expectations(n,h):
+    """Finite-n exact expectations for a standard normal density, Gaussian kernel."""
+    u=1/(2*math.sqrt(math.pi)*math.sqrt(1+h*h))
+    diagonal=1/(2*math.sqrt(math.pi)*h)
+    na=n//2
+    one=2/(math.sqrt(2*math.pi)*math.sqrt(2+h*h))-(1-1/na)*u-diagonal/na
+    return {"ustat":u,"plugin":(1-1/n)*u+diagonal/n,"one_step":one}
+
+
 # ---------------------------------------------------------------------------------------------------------------
 def compute_hook():
     r = rng(49011)
@@ -165,7 +200,7 @@ def compute_ate():
     for _ in range(reps):
         w = SP.rate_world(n, r)
         os_.append(SP.ate_one_step(w["y"], w["t"], w["mu0"], w["mu1"], w["e"])["est"])
-        hj.append(SP.ate_ipw(w["y"], w["t"], w["e"])["est"])
+        hj.append(ate_ipw(w["y"], w["t"], w["e"])["est"])
         ip.append(float(np.mean(w["t"] * w["y"] / w["e"] - (1 - w["t"]) * w["y"] / (1 - w["e"]))))
     return {"bound": bound, "ht": ht, "n": n, "reps": reps, "sim_os": n * np.var(os_), "sim_ht": n * np.var(ip), "sim_hajek": n * np.var(hj)}
 
@@ -189,7 +224,7 @@ def compute_onestep():
             ctm.append(b["lo"] <= 1.5 <= b["hi"])
         f = lambda v: math.sqrt(n) * (np.mean(v) - 1.5)  # noqa: E731
         out["rows"].append({"n": n, "reps": reps, "rb_plugin": f(pl), "rb_os": f(os_), "rb_tmle": f(tm),
-                            "sd_os": math.sqrt(n) * np.std(os_), "cov_plugin": np.mean(cpl), "cov_os": np.mean(cos), "cov_tmle": np.mean(ctm)})
+                            "sd_os": math.sqrt(n) * np.std(os_), "cov_plugin": np.mean(cpl), "cov_os": np.mean(cos), "cov_tmle": np.mean(ctm), "mc_se":{"plugin":bernoulli_se(cpl),"one_step":bernoulli_se(cos),"tmle":bernoulli_se(ctm)}})
         if n == 1000:
             out["err_plugin"], out["err_os"] = (np.array(pl) - 1.5).tolist(), (np.array(os_) - 1.5).tolist()
     return out
@@ -227,6 +262,16 @@ def compute_nsw():
     reg = float(np.mean(yo[to == 1] - mu0o[to == 1]))
     out["psid"] = {"n0": int((to == 0).sum()), "n1": int(to.sum()), "naive": naive, "reg": reg, "att": att["est"], "att_se": att["se"],
                    "benchmark": dm["est"]}
+    rb=rng(4919);groups=[np.flatnonzero(to==k) for k in (0,1)];boot=[]
+    for _ in range(399):
+        ix=np.concatenate([rb.choice(g,len(g),replace=True) for g in groups])
+        xx,yy,tt=Xo[ix],yo[ix],to[ix]
+        pp=np.clip(CA.propensity(np.column_stack([xx,xx[:,0]**2,xx[:,6]**2,xx[:,7]**2]),tt.astype(bool)),.01,.99)
+        mm=ols(xx[tt==0],yy[tt==0],xx)
+        boot.append(SP.att_one_step(yy,tt,mm,pp)["est"])
+    out["psid"]["att_if_se"]=out["psid"]["att_se"]
+    out["psid"]["att_se"]=float(np.std(boot,ddof=1))
+    out["psid"].update(bootstrap_resamples=399,se_scope="stratified bootstrap, both nuisance fits repeated; descriptive model/overlap sensitivity remains",propensity_clip=[.01,.99])
     return out
 
 
@@ -248,7 +293,7 @@ def compute_dr():
                 a = SP.ate_one_step(w["y"], w["t"], mu0, mu1, e)
                 b.append(a["est"] - 1.5)
                 pl.append(a["plugin"] - 1.5)
-                ip.append(SP.ate_ipw(w["y"], w["t"], e)["est"] - 1.5)
+                ip.append(ate_ipw(w["y"], w["t"], e)["est"] - 1.5)
             cells[f"{om}_{pm}"] = {"bias": float(np.mean(b)), "se": float(np.std(b) / math.sqrt(reps)), "sd": float(np.std(b)),
                                    "plugin": float(np.mean(pl)), "ipw": float(np.mean(ip))}
     return {"n": n, "reps": reps, "cells": cells}
@@ -290,7 +335,7 @@ def compute_rates():
             res[mode].append((a["est"] - 1.5, a["lo"] <= 1.5 <= a["hi"], a["se"]))
     cf = {m: {"bias": float(np.mean([v[0] for v in res[m]])), "sd": float(np.std([v[0] for v in res[m]])),
               "se": float(np.mean([v[2] for v in res[m]])), "cover": float(np.mean([v[1] for v in res[m]]))} for m in res}
-    return {"ns": ns, "ab": ab, "lines": lines, "cf": cf, "cf_n": n, "cf_reps": reps}
+    return {"ns": ns, "ab": ab, "lines": lines,"theory_lines":{f"{a}_{b}":[math.sqrt(n)*product_bias(n,a,b) for n in ns] for a,b in ab},"boundary_scope":"fixed nonzero n^-a,n^-b errors at a+b=1/2 retain nonzero root-n bias; centered inference needs little-o product", "cf": cf, "cf_n": n, "cf_reps": reps}
 
 
 def compute_mar():
@@ -315,7 +360,7 @@ def compute_mar():
     est_true = SP.mar_mean(li, R, Xr, e_true, m_hat, alpha=0.1)
     wrong_om = SP.mar_mean(li, R, Xr, e_hat, m_wrong, alpha=0.1)
     wrong_ps = SP.mar_mean(li, R, Xr, np.full(len(li), R.mean()), m_hat, alpha=0.1)
-    return {"n": len(li), "n_obs": int(R.sum()), "truth": truth, "est": est, "true_e": est_true, "wrong_om": wrong_om, "wrong_ps": wrong_ps,
+    return {"target_scope":"fixed complete survey-sample mean used as descriptive truth; IF SE uses iid superpopulation MAR reference", "n": len(li), "n_obs": int(R.sum()), "truth": truth, "est": est, "true_e": est_true, "wrong_om": wrong_om, "wrong_ps": wrong_ps,
             "regions": len(regs)}
 
 
@@ -330,7 +375,7 @@ def compute_intsq():
         row = {"h": h}
         for k in ("plugin", "one_step", "ustat"):
             a = np.array([x[k] for x in v])
-            row[k] = {"rbias": math.sqrt(n) * (a.mean() - psi), "sd": math.sqrt(n) * a.std()}
+            row[k] = {"rbias": math.sqrt(n) * (a.mean() - psi), "sd": math.sqrt(n) * a.std(),"bias_mc_se":float(math.sqrt(n)*a.std(ddof=1)/math.sqrt(reps)),"exact_rbias":math.sqrt(n)*(intsq_expectations(n,h)[k]-psi)}
         rows.append(row)
     # the efficient variance: 4 Var f(X) = 4 (int f^3 - (int f^2)^2)
     f3 = 1 / (2 * math.pi * math.sqrt(3))
@@ -343,7 +388,7 @@ def obs_sample(g, n=2000):
     prescribed with log-odds (base - 152)/12 + 0.02 (age - 65) + 0.02 (bmi - 28), so propensities run from about 0.2
     to 0.98 rather than to 0.9997."""
     t = World().trial
-    k = g.choice(len(t["pool"]), n, replace=False)
+    k = g.choice(len(t["pool"]), n, replace=True)
     base, age, bmi, fem = t["base_pool"][k], t["age_pool"][k], t["bmi_pool"][k], t["female_pool"][k].astype(float)
     y0 = t["y0_pool"][k]
     tau = t["tau_pool"][k]
@@ -352,22 +397,23 @@ def obs_sample(g, n=2000):
     z = (g.random(n) < e).astype(float)
     y = np.where(z == 1, y0 + tau, y0)
     X = np.column_stack([base, age, bmi, fem])
-    return {"X": X, "t": z, "y": y, "e": e, "ate": float(tau.mean())}
+    return {"X": X, "t": z, "y": y, "e": e, "ate": float(t["tau_pool"].mean()),"sample_ate":float(tau.mean())}
 
 
 def nuisances(X, t, y, folds, k_out=15, k_ps=40):
     """Cross-fitted k-NN outcome regressions on standardized X, with two propensities: logistic and k-NN."""
     n = len(y)
-    Z = (X - X.mean(axis=0)) / X.std(axis=0)
     mu0, mu1, el, ek = np.zeros(n), np.zeros(n), np.zeros(n), np.zeros(n)
     for kf in np.unique(folds):
         te = folds == kf
         tr = ~te
+        sd=X[tr].std(axis=0);sd=np.where(sd>0,sd,1.)
+        Z=(X-X[tr].mean(axis=0))/sd
         m1, m0 = tr & (t == 1), tr & (t == 0)
         mu1[te] = LK.knn_predict(Z[m1], y[m1], Z[te], k_out)
         mu0[te] = LK.knn_predict(Z[m0], y[m0], Z[te], k_out)
-        w = CA.logit_fit(np.column_stack([np.ones(tr.sum()), Z[tr]]), t[tr])
-        el[te] = np.clip(CA.logit_predict(w, np.column_stack([np.ones(te.sum()), Z[te]])), 0.02, 0.98)
+        w = CA.logit_fit(Z[tr], t[tr])
+        el[te] = np.clip(CA.logit_predict(w, Z[te]), 1e-4, 1-1e-4)
         ek[te] = np.clip(LK.knn_predict(Z[tr], t[tr], Z[te], k_ps), 0.02, 0.98)
     return mu0, mu1, el, ek
 
@@ -385,7 +431,7 @@ def compute_board():
         mu0, mu1, el, ek = nuisances(X, t, y, folds)
         a = SP.ate_one_step(y, t, mu0, mu1, el)
         b = SP.ate_tmle(y, t, mu0, mu1, el)
-        ip = SP.ate_ipw(y, t, el)
+        ip = ate_ipw(y, t, el)
         c = SP.ate_one_step(y, t, mu0, mu1, ek)
         hit["plugin"].append(abs(a["plugin"] - ate) <= q * a["se"])
         hit["ipw"].append(ip["lo"] <= ate <= ip["hi"])
@@ -397,10 +443,10 @@ def compute_board():
     setting = r"World: \ doctors choose, \ $n = 2{,}000$"
     names = {"plugin": r"plug-in, \ $k$-NN outcome models", "ipw": r"IPW, \ logistic propensity", "os": r"one-step, \ $k$-NN $+$ logistic, \ cross-fitted",
              "tmle": r"TMLE, \ $k$-NN $+$ logistic, \ cross-fitted", "os_knn": r"one-step, \ $k$-NN for both"}
-    rows = [Row(49, names[k], setting, "coverage", 0.9, float(np.mean(v)), reps) for k, v in hit.items()]
+    rows = [Row(49, names[k], setting, "coverage", 0.9, float(np.mean(v)), reps,mc_se=bernoulli_se(v)) for k, v in hit.items()]
     save_rows(49, rows)
     return {"rows": [asdict(r) | {"verdict": r.verdict, "se": r.se} for r in rows],
-            "bias": {k: float(np.mean(v)) for k, v in bias.items()}, "sd": {k: float(np.std(v)) for k, v in bias.items()}}
+            "independent_datasets":reps,"target":"ATE over fixed 87,406-person eligible World pool; iid sampling with replacement","plugin_interval":"uses one-step SE as a common comparison width, not a valid plugin influence-function SE","propensity_clips":{"logistic":[1e-4,1-1e-4],"knn":[.02,.98]}, "bias": {k: float(np.mean(v)) for k, v in bias.items()}, "sd": {k: float(np.std(v)) for k, v in bias.items()}}
 
 
 ITEMS = {

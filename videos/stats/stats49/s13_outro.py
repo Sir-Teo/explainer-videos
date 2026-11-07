@@ -27,7 +27,7 @@ class Outro(VoiceoverScene):
             (r"gradients; \ $\phi^*$ as a projection", GRADC), (r"bounds: \ the least favourable submodel", EFFC),
             (r"worked: \ mean, \ ATE, \ PLR, \ Cox", GRADC), (r"the efficient score; \ adaptation explained", NUIC),
             (r"one-step, \ estimating equations, \ TMLE", OSC), (r"double robustness: \ a product", TANC),
-            (r"DML: \ orthogonality, \ cross-fitting, \ $a + b \ge \tfrac12$", OSC), (r"missing data: \ RRZ's augmentation", GRADC),
+            (r"DML: \ orthogonality, \ cross-fitting, \ $\|\hat e-e\|\,\|\hat\mu-\mu\|=o_P(n^{-1/2})$", OSC), (r"missing data: \ RRZ's augmentation", GRADC),
             (r"higher order: \ $\int f^2$ and U-statistics", EFFC), (r"the World test", NUIC),
         ]
         rows = VGroup(*[label(rf"{i}.\ \ {t}", font_size=26, color=c) for i, (t, c) in enumerate(items)])
@@ -55,13 +55,10 @@ class Outro(VoiceoverScene):
 
     def upgrade(self):
         card = upgrade_card(49, r"the best possible root-$n$ estimation of a smooth functional",
-                            r"that root-$n$ is the right scale, \ and regular estimators",
+                            r"root-$n$ local experiments and their regularity conditions",
                             r"Part 50: \ minimax theory: \ Le Cam, \ Assouad, \ Fano, \ Pinsker, \ rates for any method")
         with self.voiceover(
-            "<bookmark mark='a'/> A promise for the next part. This one found the best possible root-n estimation of a "
-            "smooth functional. <bookmark mark='b'/> It assumed that root n was the right scale, and compared only regular "
-            "estimators. <bookmark mark='c'/> Part fifty drops both assumptions: minimax theory, with the lower bounds of Le "
-            "Cam, Assouad and Fano, and Pinsker's theorem, for how well anyone can estimate anything, at any rate."
+            "<bookmark mark='a'/> A promise for the next part. This one found the best possible root-n estimation of a smooth functional. <bookmark mark='b'/> It assumed that root n was the right scale, and used regular-estimator bounds and also a local minimax statement for arbitrary estimators. <bookmark mark='c'/> Part fifty drops both assumptions: minimax theory, with the lower bounds of Le Cam, Assouad and Fano, and Pinsker's theorem, for how well anyone can estimate anything, at any rate."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(card[0]), FadeIn(card[1][0]), FadeIn(card[1][1][0]))
@@ -127,10 +124,7 @@ class Outro(VoiceoverScene):
         tr.to_edge(UP, buff=0.8)
         nxt.next_to(tr, DOWN, buff=1.0)
         with self.voiceover(
-            "Forty-nine parts of sixty-five. <bookmark mark='a'/> To estimate one number well inside an infinite model, find "
-            "its efficient influence function, and remove the plug-in's first-order bias; then estimate the nuisances as well "
-            "as you can, on separate folds, and let the product of their errors take care of itself. <bookmark mark='b'/> Next, Part "
-            "fifty: minimax theory."
+            "Forty-nine parts of sixty-five. <bookmark mark='a'/> To estimate one number well inside an infinite model, find its efficient influence function, and remove the plug-in's first-order bias; then estimate the nuisances as well as you can, on separate folds, and verify that their error product is little-oh of one over root n, together with the other regularity conditions. <bookmark mark='b'/> Next, Part fifty: minimax theory."
         ) as vo:
             self.play(FadeIn(tr))
             vo.wait_until("a")

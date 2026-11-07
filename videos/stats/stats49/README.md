@@ -18,7 +18,7 @@ builds the theory in five steps:
 It then uses the theory on:
 - constructing efficient estimators: one-step, estimating equations, TMLE (with the NSW data);
 - double robustness, as the product structure of the second-order remainder;
-- the theory of double machine learning: Neyman orthogonality, cross-fitting, the product rate a + b ≥ ½;
+- the theory of double machine learning: Neyman orthogonality, cross-fitting, the product rate a + b > ½ for fixed order bounds, or a little-o product at equality;
 - missing data under MAR (Robins, Rotnitzky & Zhao 1994), on the World's survey;
 - higher-order influence functions, with the integrated squared density;
 - the World test: plug-in, IPW, one-step and TMLE on Part 36's observational world (Board).
@@ -80,11 +80,15 @@ python tools/lecture_length.py stats49 --floor 50
 | 5 | The efficient score | adaptation: odd score ⟂ even nuisance scores; heteroskedastic PLR: orthogonal but not efficient |
 | 6 | Efficient estimators | √n·bias at n = 16,000: plug-in 6.94, one-step -0.32, TMLE -0.26; NSW: 1,794 (671) vs 1,622 (656); PSID ATT 1,218 (871) |
 | 7 | Double robustness | one-step bias: +0.004, -0.004, +0.002, +0.198 |
-| 8 | DML theory | √n·bias flat for a + b ≥ ½; ⅛ + ⅛: -6.2 → -16.2; 5-NN: coverage 82.5% reused vs 87.0% cross-fitted |
+| 8 | DML theory | √n·bias flat for a + b > ½ for fixed order bounds, or a little-o product at equality; ⅛ + ⅛: -6.2 → -16.2; 5-NN: coverage 82.5% reused vs 87.0% cross-fitted |
 | 9 | Missing data | survey: complete cases +0.0252, AIPW +0.0050 (SE 0.0182) |
 | 10 | Higher order | √n·bias at h = 0.05: plug-in +0.25, one-step -0.56, U-statistic -0.02 (SD 0.218 vs 0.222) |
 | 11 | The World test | coverage: plug-in 3.3%, IPW 96.3%, one-step 92.3%, TMLE 93.3%, k-NN both 70.7% |
 | 12 | Outro | — |
+
+## QA checkpoint
+
+All thirteen scenes and six solutions have been read; fourteen focused checks pass. Scientific corrections are recorded in the [source review](../../../docs/qa/evidence/stats49-polish-20261107/source-review.md). Full numerical regeneration is running, so the legacy numerical summary above remains provisional until reconciliation. Visual review and bilingual/listening/master gates remain open.
 
 ## Sources
 
