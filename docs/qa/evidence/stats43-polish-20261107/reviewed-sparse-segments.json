@@ -1,0 +1,11 @@
+[
+  {
+    "scene": "RandomVariables",
+    "fingerprint": "a0812721b42eaae8b602b2db4a8f313788a6748eb2775e9637e90f0cee89ddaa",
+    "report_sha256": "bd10bb7b0ed06fa0cbb439a66dee246b177d1c4c5d648077333208c943315e94",
+    "start_seconds": 56.25,
+    "duration_seconds": 1.8,
+    "frame": "randomvariables-first-digit-57s.png",
+    "review": "Viewed 57.2-second frame and full motion sheet. The labelled unit interval introduces a uniform draw before the binary-digit bars appear. Intentional brief diagram setup, no blank run; sparse warning retained."
+  }
+]

@@ -1,0 +1,23 @@
+{
+  "part": "stats43",
+  "fingerprint": "a0812721b42eaae8b602b2db4a8f313788a6748eb2775e9637e90f0cee89ddaa",
+  "english_endpoints": 15,
+  "native_1080_endpoints": 14,
+  "silent_motion_chapters": 14,
+  "audio_scene": "Stein",
+  "audio_lines": 7,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats43/en/Stein/videos/s11_stein/480p15/Stein.mp4",
+    "seconds": 264.6666666666649,
+    "narration_sha256": "b1becd20b7c72f036e702333ba90e664265c9309d22e49e73c4759279435b3c6",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 265 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 265 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

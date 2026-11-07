@@ -1,0 +1,3 @@
+# Numerical regressions found during QA
+
+The initial new Bradley–Terry regression rejected a perfectly separated comparison graph: optimizer convergence alone could return apparently finite coefficients although the unpenalized MLE does not exist. The corrected implementation checks strong connectivity of the directed win graph before fitting. The final regression suite includes this case and passes. The temporary failing test output was overwritten by the final test run; its raw failure log was not retained. Initial solver failures and subsequent refinements are retained in the archived compute logs.

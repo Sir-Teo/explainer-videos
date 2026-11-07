@@ -1,0 +1,171 @@
+{
+  "fingerprint": "a0812721b42eaae8b602b2db4a8f313788a6748eb2775e9637e90f0cee89ddaa",
+  "scope": "English sampled visual review; continuous playback/listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 13,
+      "warnings": {
+        "narration-translation": 4,
+        "untranslated-on-screen": 38
+      },
+      "input_record": "renders/qa/series/stats43/en/Hook/result.json",
+      "input_sha256": "87508b003282c649498a750d8903b4c51b50a8c9a6ddc302810be02fe2125a60"
+    },
+    {
+      "scene": "Measures",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 52
+      },
+      "input_record": "renders/qa/series/stats43/en/Measures/result.json",
+      "input_sha256": "61658e1d85004647efa3344869888fe20048d6420929da276e4705b11cea3c4f"
+    },
+    {
+      "scene": "RandomVariables",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 36
+      },
+      "input_record": "renders/qa/series/stats43/en/RandomVariables/result.json",
+      "input_sha256": "89601cbf378f2e27681d6848511e351cdde9b0e28ebfe7e61a7cf4db3b685e2e"
+    },
+    {
+      "scene": "Integration",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 40
+      },
+      "input_record": "renders/qa/series/stats43/en/Integration/result.json",
+      "input_sha256": "cb1c24dd5330e3fec69b6e7c9f3f26aee774b4b519d4945d22baccb4c1d5662c"
+    },
+    {
+      "scene": "Products",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 38
+      },
+      "input_record": "renders/qa/series/stats43/en/Products/result.json",
+      "input_sha256": "f35430380df4b244392bd5a54f65341526b6153c223dcc273f6eece2598cdc5a"
+    },
+    {
+      "scene": "BorelCantelli",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 39
+      },
+      "input_record": "renders/qa/series/stats43/en/BorelCantelli/result.json",
+      "input_sha256": "c1a1d9dfe78fa73af80d67a2620f829d1b979f1cab842cded37333df431e1142"
+    },
+    {
+      "scene": "StrongLaw",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 43
+      },
+      "input_record": "renders/qa/series/stats43/en/StrongLaw/result.json",
+      "input_sha256": "c40e867a43682bb015163f8efc365e3b6372730448751196e823e29abd485e15"
+    },
+    {
+      "scene": "WeakConvergence",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 42
+      },
+      "input_record": "renders/qa/series/stats43/en/WeakConvergence/result.json",
+      "input_sha256": "65cf4b393097109a870ebc2d87f5839b739aa38094f4ed2828023aec66f9f9cf"
+    },
+    {
+      "scene": "CharacteristicFunctions",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 44
+      },
+      "input_record": "renders/qa/series/stats43/en/CharacteristicFunctions/result.json",
+      "input_sha256": "b3e53bae4ed153db92d12ea1e222922fc40d6a642afba4acb767644a6e1ced78"
+    },
+    {
+      "scene": "Lindeberg",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 31
+      },
+      "input_record": "renders/qa/series/stats43/en/Lindeberg/result.json",
+      "input_sha256": "d27c691d72ffb276a8f5daf738c28fdae1350eafe2e01ee9cd3ac9f2bf6d732a"
+    },
+    {
+      "scene": "Stein",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 49
+      },
+      "input_record": "renders/qa/series/stats43/en/Stein/result.json",
+      "input_sha256": "5432bcff87fffee5533526e35c06ecac5f344919e41a702239829e9aa247fb6c"
+    },
+    {
+      "scene": "Stable",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 59
+      },
+      "input_record": "renders/qa/series/stats43/en/Stable/result.json",
+      "input_sha256": "c1a5de10c4c55b3bf29ef7f835f1efd7a00ccf5316e3c254c586af245c4cd3b5"
+    },
+    {
+      "scene": "LargeDeviations",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 26
+      },
+      "input_record": "renders/qa/series/stats43/en/LargeDeviations/result.json",
+      "input_sha256": "af40e517b06d8e31e4feebe58393e8d82887b16bd1fcec0a4a07a5d5ae2e95ea"
+    },
+    {
+      "scene": "Extremes",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 41
+      },
+      "input_record": "renders/qa/series/stats43/en/Extremes/result.json",
+      "input_sha256": "cc1d297c187a23662cd69e6d17177e3233690eba3f06e963bd2c95bb1514e3f7"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 12,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 61
+      },
+      "input_record": "renders/qa/series/stats43/en/Outro/result.json",
+      "input_sha256": "3efacd980f60e5bc887c67aec347ba9471fecc4be8efaca18c9ceaf3bb45d944"
+    }
+  ]
+}
