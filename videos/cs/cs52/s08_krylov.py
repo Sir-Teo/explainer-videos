@@ -218,7 +218,8 @@ class Krylov(VoiceoverScene):
             "square root of the condition number. <bookmark mark='d'/> Steepest descent has kappa where conjugate "
             "gradients has its square root. <bookmark mark='e'/> Our instrument solves the Poisson problem, "
             "chapter eight's matrix, on three grids; kappa grows with the number of unknowns. Steepest descent "
-            "needs thousands of steps, and on the largest grid had not converged after eight thousand. Conjugate "
+            f"needs {rows_[0]['steepest']} steps on the smallest grid and {rows_[1]['steepest']:,} on the next, and on "
+            "the largest grid had not converged after eight thousand. Conjugate "
             f"gradients needs {rows_[0]['cg']}, {rows_[1]['cg']} and {rows_[2]['cg']}, about half of what the "
             "bound allows."
         ) as vo:
