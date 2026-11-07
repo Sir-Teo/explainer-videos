@@ -62,7 +62,7 @@ class SecondOrder(VoiceoverScene, ThreeDScene):
             "yellow: vega barely changes. Its slope in volatility, volga, is close to zero. <bookmark mark='c'/> In "
             "the wings, in green, vega climbs as volatility rises: volga is positive, and a wing option gets longer "
             "volatility as volatility rises. <bookmark mark='d'/> And across the strikes, the surface tilts one way "
-            "on the put side and the other on the call side: that tilt is vanna, how delta changes when volatility "
+            "on the put side and the other on the put side: that tilt is vanna, how delta changes when volatility "
             "moves."
         ) as vo:
             self.play(Create(ax), FadeIn(hint), run_time=1.2)
@@ -75,9 +75,9 @@ class SecondOrder(VoiceoverScene, ThreeDScene):
             self.play(Create(wing), FadeIn(cap[1]))
             vo.wait_until("d")
             self.play(FadeIn(cap[2]))
-            self.move_camera(theta=-25 * DEGREES, phi=70 * DEGREES, run_time=max(vo.remaining(1.0) - 0.3, 1.0))
+            self.move_camera(theta=-25 * DEGREES, phi=70 * DEGREES, run_time=min(max(vo.remaining(1.0) - 0.3, 1.0), 8.0))
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, added_anims=[FadeOut(VGroup(ax, sf, flags, ridge, wing)),
-                                                                             FadeOut(hint), FadeOut(cap)], run_time=1.5)
+                                                                             FadeOut(hint), FadeOut(cap)], run_time=0.5)
         self.clear_scene()
 
     # ------------------------------------------------------------------
@@ -88,30 +88,20 @@ class SecondOrder(VoiceoverScene, ThreeDScene):
                   r"\text{volga} = \partial_\sigma \mathcal{V} = \mathcal{V}\,\frac{d_1 d_2}{\sigma}", font_size=34,
                   colors={r"\text{vanna} = \partial_\sigma \Delta": ALT}),
             cmath(r"d_1 d_2\big|_{K = F}", r"=", r"-\tfrac14\sigma^2\tau \approx 0;\qquad d_1 = \pm 0.674 "
-                  r"\text{ at } 25\Delta \Rightarrow \text{volga} > 0", font_size=34),
+                  r"\text{ at }25\Delta;\ \text{sign from }d_1d_2", font_size=34),
             cmath(r"RR", r"=", r"\sigma_{25C} - \sigma_{25P},\qquad BF = \tfrac12(\sigma_{25C} + \sigma_{25P}) - "
                   r"\sigma_{\text{ATM}}", font_size=34, colors={r"RR": VEGA}),
         ]
         whys = [why(r"differentiate $d_1 = (\ln F/K + \tfrac12\sigma^2\tau)/(\sigma\sqrt\tau)$ in $\sigma$"),
                 why(r"the chain rule on $\Delta = N(d_1)$ and on $\mathcal{V} = S\varphi(d_1)\sqrt\tau$"),
-                why(r"at the money $d_1$ and $d_2$ straddle zero; at 25 delta both sit on the same side, about two "
-                    r"thirds of a standard deviation out"),
+                why(r"at 25 delta, $d_1=\pm0.674$; positive put-wing volga requires total volatility below 0.674"),
                 why(r"the market's quotes: the risk reversal is the price of vanna (it is long one wing, short the "
                     r"other), the butterfly the price of volga")]
         step = ladder(self, rows, whys, keep=3, top=3.0, x=-0.4, buff=0.55, edge=6.9)  # leaves the corner for the card
         pc = pause(r"Same vega: an at-the-money straddle, or a 25-delta strangle. Which has more volga?", width=5.0,
                    font_size=21)
         with self.voiceover(
-            "The algebra is two lines. Differentiate d one in volatility: minus d two over sigma. "
-            "<bookmark mark='a'/> The chain rule then gives vanna, minus the normal density times d two over sigma, "
-            "and volga, vega times d one d two over sigma. <bookmark mark='b'/> At the money, d one and d two "
-            "straddle zero and their product is tiny, so volga is almost zero, the flat yellow line. At twenty-five "
-            "delta both sit about two thirds of a standard deviation out on the same side, and volga is positive. "
-            "<bookmark mark='c'/> That is why desks quote the smile with two numbers besides the at-the-money "
-            "volatility. The risk reversal, the call wing's volatility minus the put wing's, is long one wing and "
-            "short the other: it is the market's price of vanna. The butterfly, the average wing minus the "
-            "middle, is the price of volga. <bookmark mark='d'/> Pause and predict: for the same vega, which has more "
-            "volga, a straddle or a strangle? The strangle: it is made of wings."
+            "The algebra is two lines. Differentiate d one in volatility: minus d two over sigma. <bookmark mark='a'/> The chain rule then gives vanna, minus the normal density times d two over sigma, and volga, vega times d one d two over sigma. <bookmark mark='b'/> At the money, d one and d two straddle zero and their product is tiny, so volga is almost zero, the flat yellow line. At twenty-five delta both sit about two thirds of a standard deviation out on the same side, and volga is positive. <bookmark mark='c'/> That is why desks quote the smile with two numbers besides the at-the-money volatility. The risk reversal, the call wing's volatility minus the put wing's, is long one wing and short the other: it is the market's price of vanna. The butterfly, the average wing minus the middle, is the price of volga. <bookmark mark='d'/> Pause and predict: for the same vega, which has more volga, a straddle or a strangle? The strangle: it is made of wings. That wing-sign description assumes total volatility below point six seven four on the put side. Risk reversal and butterfly are quote coordinates and exposure proxies, not isolated prices of a single Greek."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -161,7 +151,7 @@ class SecondOrder(VoiceoverScene, ThreeDScene):
         eq2 = MathTex(r"\sum_i x_i\,(\mathcal{V}_i, \text{vanna}_i, \text{volga}_i) = (\mathcal{V}, \text{vanna}, "
                       r"\text{volga})(K)", font_size=26, color=GREY_A).next_to(eq, DOWN, buff=0.15).align_to(eq, LEFT)
         good = so["rmse_in"] < 1.0
-        verdict = (rf"between the 10-delta strikes: within {so['rmse_in']:.2f} vol points of the fitted smile; in the "
+        verdict = (rf"between the 10-delta strikes: RMSE {so['rmse_in']:.2f} vol points of the fitted smile; in the "
                    rf"far wings, off by up to {so['maxerr_wing']:.0f}" if good else
                    rf"between the 10-delta strikes: off by {so['rmse_in']:.1f} vol points")
         side = VGroup(
@@ -172,7 +162,7 @@ class SecondOrder(VoiceoverScene, ThreeDScene):
                      font_size=17)
         leg.move_to(g.ax.c2p(0.4, 0.31), aligned_edge=DR)  # inside the chart, in the empty lower right under the smile
         src = real_data(r"the Surface, 10 December 2025: 25-delta strikes solved on the SSVI smile")
-        vsay = (f"Between the ten-delta strikes the rebuilt smile sits within {so['rmse_in']:.2f} volatility points of "
+        vsay = (f"Between the ten-delta strikes the rebuilt smile has RMSE {so['rmse_in']:.2f} volatility points against "
                 f"the fitted one; out in the far wings it misses by up to {so['maxerr_wing']:.0f}." if good else
                 f"Here it misses by {so['rmse_in']:.1f} volatility points even between the ten-delta strikes.")
         with self.voiceover(

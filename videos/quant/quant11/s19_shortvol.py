@@ -96,13 +96,12 @@ class ShortVol(VoiceoverScene):
             r"A firm running a short-volatility options strategy for its funds. The SEC's complaint of 27 May 2021 "
             r"says that a volatility spike in February 2018 caused losses of more than \$1 billion, over 80\% of the "
             r"funds' value, in two trading days, and alleges that investors and the funds' board were misled about "
-            r"the strategy's risk. Allegations, which the defendants contested.",
+            r"the strategy's risk. The 2021 complaint alleged misconduct; later final judgments and a September 2026 Fair Fund are recorded by the SEC.",
             stats=[(r"> \$1\ \text{bn}", r"lost in two trading days"), (r"> 80\%", r"of the funds")], width=6.3,
             font_size=19)
         c2 = crisis_card(
             r"March 2020", r"Allianz Global Investors U.S.: Structured Alpha",
-            r"Options funds that told investors they held hedges against a crash. They lost more than \$7 billion in "
-            r"February and March 2020. In May 2022 the unit pleaded guilty to securities fraud; with its parent it "
+            r"Options funds that told investors they held hedges against a crash. The funds lost over \$7 billion in market value in March 2020; this is not the principal-loss figure. In May 2022 the unit pleaded guilty to securities fraud; with its parent it "
             r"agreed to pay more than \$6 billion. The SEC said one risk report shrank a crash scenario's loss from "
             r"$-42.15\%$ to $-4.15\%$ by dropping a digit.",
             stats=[(r"> \$7\ \text{bn}", r"lost"), (r"\text{guilty plea}", r"May 2022")], width=6.3, font_size=19)
@@ -112,15 +111,7 @@ class ShortVol(VoiceoverScene):
         src = note(r"SEC press release 2021-89 (LJM); SEC press release 2022-84 and the U.S. Attorney, S.D.N.Y., May "
                    r"2022 (Allianz Global Investors U.S.)", font_size=16, color=GREY_B).to_corner(DR, buff=0.25)
         with self.voiceover(
-            "Two real books. LJM ran short-volatility options strategies for its funds. According to the SEC's "
-            "complaint of May 2021, the volatility spike of February 2018 cost them more than a billion dollars, over "
-            "eighty percent of their value, in two trading days, and the SEC alleged that investors had been misled "
-            "about the risk; the defendants contested it. <bookmark mark='a'/> Allianz Global Investors' Structured "
-            "Alpha funds told investors they were hedged against a crash. In February and March 2020 they lost more "
-            "than seven billion dollars. In May 2022 the American unit pleaded guilty to securities fraud, and with "
-            "its parent agreed to pay more than six billion dollars. Prosecutors said the promised hedges were not "
-            "bought, and the SEC said one risk report had turned a crash scenario's loss of forty-two percent into "
-            "four, by dropping a single digit."
+            """Two historical cases. The SEC's 2021 complaint alleged that LJM misrepresented its risk controls; the February 2018 volatility spike caused losses above a billion dollars, over eighty percent, in two trading days. The record later includes final judgments and a Fair Fund established in September 2026. That later disposition should not be omitted. <bookmark mark='a'/> Allianz Global Investors U.S.'s Structured Alpha funds lost more than seven billion dollars of market value in March 2020; prosecutors distinguish that from principal losses above three point two billion. AGI U.S. pleaded guilty in May 2022. Its integrated resolution included restitution, a fine and forfeiture. The SEC described a risk report changing a forty-two-percent crash loss to four percent by dropping a digit. The lesson concerns concealed risk controls, not the claim that every short-volatility strategy is fraudulent."""
         ) as vo:
             self.play(FadeIn(c1, shift=UP * 0.2), FadeIn(src))
             vo.wait_until("a")
@@ -131,17 +122,16 @@ class ShortVol(VoiceoverScene):
     # ------------------------------------------------------------------
     def derive(self, v):
         rows = [
-            cmath(r"d\Pi_{\text{short put}}", r"\approx", r"-\Delta\,dS - \tfrac12\Gamma\,dS^2 - \mathcal{V}\,d\sigma",
+            cmath(r"d\Pi_{\text{short put}}", r"\approx", r"-\Delta\,dS - \tfrac12\Gamma\,dS^2 - \mathcal{V}\,d\sigma+\Theta_{\rm short}\,dt+\cdots",
                   font_size=36),
             cmath(r"dS < 0,\ d\sigma > 0", r"\Rightarrow", r"\text{all three terms lose at once}", font_size=36),
-            cmath(r"\text{loss}", r"\le", r"K_1 - K_2\quad \text{only if the hedge's strike } K_2 \text{ is near}",
+            cmath(r"\text{loss}", r"\le", r"K_1-K_2\quad(K_1>K_2,\ \text{same expiry and quantity})",
                   font_size=34),
         ]
         whys = [why(r"chapter 1's Taylor series for a short put: long delta, short gamma, short vega"),
                 why(r"in a crash the market falls, the move is large, and implied volatility jumps: every term has the "
                     r"same sign"),
-                why(r"a put spread caps the loss at the strike gap, but a hedge far below lets the whole gap through: "
-                    r"the hedge's moneyness is the risk")]
+                why(r"expiry payoff liability is bounded by the strike gap at any width; subtract the net credit for the maximum net loss")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.4, buff=0.8, edge=6.9)
         pc = pause(rf"At VIX 15, per 100 of stock, a one-month put 20\% out costs {v['q_cost20']:.4f}, one 40\% out "
                    rf"under 0.00001. In a 35\% crash, at expiry, they pay {v['q_pay20']:.0f} and "
@@ -149,8 +139,8 @@ class ShortVol(VoiceoverScene):
         with self.voiceover(
             "Why do short-volatility books fail all at once? Chapter one's series for a short put: it is long delta, "
             "short gamma and short vega. <bookmark mark='a'/> In a crash the market falls, the move is large and "
-            "implied volatility jumps, so all three terms lose together; nothing offsets. <bookmark mark='b'/> A put "
-            "spread caps the loss at the gap between the strikes, but only if the hedge is close enough to matter. "
+            "implied volatility jumps, so these three directional terms lose together; theta and higher-order terms still enter the full explain. <bookmark mark='b'/> A put "
+            "spread bounds the expiry payoff liability by the strike gap at any hedge distance. A farther hedge makes that bound larger; the maximum net loss subtracts the credit received. "
             "Move the hedge from twenty to forty percent out of the money and its price, which was already tiny, "
             "becomes nothing, and so does its payoff in a thirty-five percent crash. The premium of chapter six is "
             "paid for exactly the months the hedge was supposed to cover."

@@ -45,11 +45,7 @@ class Industry(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.5)
         src = real_data(r"OCC press releases and the OCC 2025 annual report (options and futures)")
         with self.voiceover(
-            "First the scale. Every listed American option is cleared by one company, the Options Clearing "
-            "Corporation, which stands between buyer and seller. In 2019 it cleared about five billion contracts. "
-            "<bookmark mark='a'/> Then retail traders arrived, and short-dated options with them: ten billion in "
-            "2021, eleven in 2023, and fifteen point three billion in 2025, by its own annual report. Someone has to "
-            "quote every one of those strikes, all day."
+            "First the scale. Every listed American option is cleared by one company, the Options Clearing Corporation, which stands between buyer and seller. In 2019 it cleared about five billion contracts. <bookmark mark='a'/> Then retail traders arrived, and short-dated options with them: ten billion in 2021, eleven in 2023, and fifteen point three billion in 2025, by its own annual report. Someone has to quote every one of those strikes, all day. These OCC totals include futures as well as options. The clearing claim concerns U.S. listed securities options, not all American futures options."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), GrowFromEdge(bars[0], DOWN), FadeIn(nums[0]), FadeIn(side[0]))
             vo.wait_until("a")

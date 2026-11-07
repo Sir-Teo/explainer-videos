@@ -80,9 +80,9 @@ class Strategies(VoiceoverScene, ThreeDScene):
                 fixed(self, new_lab)
                 self.play(Transform(s0, mk(name, 7)), FadeOut(name_lab), FadeIn(new_lab), run_time=1.8)
                 name_lab = new_lab
-            self.move_camera(theta=-30 * DEGREES, run_time=max(vo.remaining(1.0) - 0.3, 1.0))
+            self.move_camera(theta=-30 * DEGREES, run_time=min(max(vo.remaining(1.0) - 0.3, 1.0), 8.0))
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, added_anims=[FadeOut(VGroup(ax, s0)), FadeOut(hint),
-                                                                             FadeOut(name_lab)], run_time=1.5)
+                                                                             FadeOut(name_lab)], run_time=0.5)
         self.clear_scene()
 
     # ------------------------------------------------------------------

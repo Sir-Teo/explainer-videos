@@ -121,15 +121,15 @@ class Frequency(VoiceoverScene):
         tsig = abs(f["diff_hd_t"]) >= 2
         verdict = (rf"hourly minus daily: {f['diff_hd_mean']:+.2f}, $t = {f['diff_hd_t']:.1f}$: frequency changed the "
                    r"mean" if tsig else rf"hourly minus daily: {f['diff_hd_mean']:+.2f}, $t = {f['diff_hd_t']:.1f}$: "
-                   r"no difference in the mean, only in the spread")
+                   r"mean difference unresolved; sample spreads differ")
         side = VGroup(wrapped_label(verdict, 4.8, 20, GREY_A),
-                      wrapped_label(r"with a 10 bp cost on every trade, the hourly hedger pays for its precision", 4.8,
+                      wrapped_label(r"10 bp proportional costs applied to each option leg separately, including hedge entry and liquidation; no netting", 4.8,
                                     20, THETA)).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(tab, DOWN, buff=0.4)
         side.align_to(tab, LEFT)
         src = real_data(rf"{f['n']} thirty-day straddles at DVOL, started weekly, April 2021--November 2025")
         h, d = st[("hourly", 0.0)], st[("daily", 0.0)]
         hc, dc = st[("hourly", 0.001)], st[("daily", 0.001)]
-        mean_say = ("The means barely differ: hedging more often does not make the trade better on average. "
+        mean_say = ("This sample does not resolve a mean difference; that is not proof of equal expected profits. "
                     if not tsig else "Here the means do differ, by more than their noise. ")
         with self.voiceover(
             f"Now every month. Buy a thirty-day straddle at DVOL every week from April 2021 to November 2025, {f['n']} "
@@ -160,7 +160,7 @@ class Frequency(VoiceoverScene):
             cmath(r"\epsilon_k", r"\approx", r"\tfrac12\Gamma S^2\left(r_k^2 - \sigma^2\Delta t\right),\quad "
                   r"\operatorname{sd}\Big(\sum_k \epsilon_k\Big) \propto \sqrt{\Delta t}", font_size=34),
             cmath(r"\operatorname{Var}\Big(\sum_{j=1}^{24} r_j\Big)", r"=",
-                  r"24\,\sigma_h^2\Big(1 + 2\sum_{j}\big(1 - \tfrac{j}{24}\big)\rho_j\Big)", font_size=34),
+                  r"24\,\sigma_h^2\Big(1 + 2\sum_{j=1}^{23}\big(1 - \tfrac{j}{24}\big)\rho_j\Big)", font_size=34),
             cmath(r"\text{gain from hourly}", r"\approx", r"\tfrac12\Gamma S^2\left(24\,\sigma_h^2 - \sigma_d^2\right)"
                   r"\ \text{per day}", font_size=34),
             cmath(r"\text{trade when } \left|S/S_{\text{last}} - 1\right| > h", r"\Rightarrow",
@@ -180,17 +180,7 @@ class Frequency(VoiceoverScene):
                   "trace of mean reversion inside the day, too small to matter." if 0.95 < vr < 1.05 else
                   f"For Bitcoin from 2021 to 2025 the ratio is {vr:.3f}: the frequency changes what you are paid.")
         with self.voiceover(
-            "Why does frequency buy precision and not profit? Each hedging step leaves an error, gamma times the "
-            "surprise in the squared move; their sum shrinks like the square root of the step, but its mean is "
-            "zero. <bookmark mark='a'/> The mean changes only if returns are correlated in time. The variance of a "
-            "day is twenty-four hourly variances, adjusted by the autocorrelations. <bookmark mark='b'/> If hourly "
-            "returns mean-revert, the hourly hedger is paid more variance than the daily one. "
-            f"{vr_say} <bookmark mark='c'/> And the move-triggered rule trades only when a move of h has happened, "
-            "locking in about one half gamma S squared h squared each time: fewer trades, the same precision. "
-            "<bookmark mark='d'/> Pause and predict: if Bitcoin trended within the day, would hedging more often "
-            "help a long-gamma trader? No: with positive autocorrelation the daily hedger lets the trend run, and "
-            "collects more."
-            " Delta and gamma are the price risks. Next: the volatility risks, vega, vanna and volga."
+            f"""Under a correctly specified continuous diffusion and regular hedging, the leading centered hedge error has standard deviation of order the square root of the step. That does not prove frequency never changes the mean. <bookmark mark='a'/> A local, frozen-gamma comparison isolates autocorrelation: stationary hourly returns imply daily variance equals twenty-four hourly variances plus the weighted autocovariances. <bookmark mark='b'/> Negative autocorrelation makes the hourly quadratic-move sum larger in expectation. Bitcoin's cached daily-to-hourly variance ratio is {vr:.3f}; this is descriptive, not a complete profitability test. <bookmark mark='c'/> A price band targets move size; an hourly grid can overshoot it, and theta still runs between trades. It gives no universal promise of identical precision at fewer trades. <bookmark mark='d'/> With positive autocorrelation, the frozen-gamma comparison favors allowing the move to run. Changing gamma, jumps, drift and costs can change that conclusion. Next: volatility Greeks."""
         ) as vo:
             step(0)
             vo.wait_until("a")

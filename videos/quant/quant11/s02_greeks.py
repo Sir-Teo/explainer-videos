@@ -79,11 +79,11 @@ class Greeks(VoiceoverScene, ThreeDScene):
             self.play(Create(drop_seg), FadeIn(cap[1]))
             vo.wait_until("c")
             self.play(FadeIn(cap[2]))
-            self.move_camera(theta=-35 * DEGREES, phi=72 * DEGREES, run_time=max(vo.remaining(1.0) - 0.5, 1.0))
+            self.move_camera(theta=-35 * DEGREES, phi=72 * DEGREES, run_time=min(max(vo.remaining(1.0) - 0.5, 1.0), 8.0))
         moving.clear_updaters()
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0,
                          added_anims=[FadeOut(VGroup(ax, sf, slice0, tang, moving, bowl_seg, drop_seg)),
-                                      FadeOut(hint), FadeOut(par), FadeOut(cap)], run_time=1.5)
+                                      FadeOut(hint), FadeOut(par), FadeOut(cap)], run_time=0.5)
         self.clear_scene()
 
     # ------------------------------------------------------------------
@@ -94,17 +94,17 @@ class Greeks(VoiceoverScene, ThreeDScene):
                   colors={r"d\Pi": OPT}),
             cmath(r"\Delta = N(d_1),", r"\quad", r"\Gamma = \frac{\varphi(d_1)}{S\sigma\sqrt\tau},\quad "
                   r"\mathcal{V} = S\varphi(d_1)\sqrt\tau", font_size=34, colors={r"\Delta = N(d_1),": QC.DELTA}),
-            cmath(r"\Theta", r"=", r"-\tfrac12\,\sigma^2 S^2\,\Gamma \qquad (r = 0)", font_size=36,
+            cmath(r"\Theta", r"=", r"-\tfrac12\,\sigma^2 S^2\,\Gamma \qquad (r = q = 0)", font_size=36,
                   colors={r"\Theta": THETA}),
             cmath(r"\tfrac12\Gamma\,dS^2 + \Theta\,dt", r"=", r"\tfrac12\Gamma S^2\left[\left(\tfrac{dS}{S}\right)^2 "
                   r"- \sigma^2 dt\right]", font_size=36, colors={r"\tfrac12\Gamma\,dS^2 + \Theta\,dt": GAMMA}),
             cmath(r"\mathcal{V}", r"=", r"\sigma\,\tau\,S^2\,\Gamma", font_size=38, colors={r"\mathcal{V}": VEGA}),
         ]
         whys = [
-            why(r"Taylor's theorem in spot, time and volatility: the book is a sum of legs, so its Greeks are sums too"),
+            why(r"finite-step Taylor approximation in spot, time and volatility; book Greeks sum across legs"),
             why(r"differentiate the Black--Scholes formula; the cross terms cancel because "
                 r"$S\varphi(d_1) = Ke^{-r\tau}\varphi(d_2)$"),
-            why(r"the Black--Scholes equation (Part 10) at zero rates: time decay is the price of gamma"),
+            why(r"Black--Scholes, zero rates and yield, fixed model IV: theta offsets diffusion gamma"),
             why(r"substitute: the day's P\&L is gamma times realized minus implied variance; it is zero when "
                 r"$|dS/S| = \sigma\sqrt{dt}$"),
             why(r"compare $\mathcal{V}$ and $\Gamma$: for plain options long gamma means long vega, and a risk report "
@@ -115,16 +115,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
                    r"even?", width=5.4, font_size=21)
         be = 100 * 0.5 * np.sqrt(1 / 365)
         with self.voiceover(
-            "Now the algebra, step by step. Taylor's theorem in three variables: spot, time and implied volatility. "
-            "The terms a trader names are delta, gamma, theta, vega, and two cross terms, vanna and volga. "
-            "<bookmark mark='a'/> Differentiate the Black-Scholes formula and each has a closed form. <bookmark mark='b'/> Part ten's "
-            "equation, at zero rates, ties theta to gamma: time decay is exactly the price of the bowl. "
-            "<bookmark mark='c'/> Substitute it, and a day's profit is one half gamma S squared times the realized "
-            "squared return minus the implied variance. Pause and predict: at fifty percent volatility, how far must "
-            f"the underlying move in a day to break even? <bookmark mark='d'/> About {be:.1f} percent, fifty percent "
-            "times the square root of one three hundred sixty-fifth. <bookmark mark='e'/> And one more identity: "
-            "vega equals volatility times time times S squared times gamma. For plain options, long gamma and long "
-            "vega come together; a desk that wants one without the other needs two expiries, which chapter ten does."
+            f"""Now the algebra. A finite-step Taylor approximation in spot, time and implied volatility names delta, gamma, theta and vega, the spot-volatility cross derivative vanna, and the second volatility derivative volga. <bookmark mark='a'/> The displayed closed forms are for a vanilla European call at zero rates and yield; book Greeks are sums over its legs. <bookmark mark='b'/> With fixed model volatility, Black-Scholes ties theta to gamma. <bookmark mark='c'/> The leading delta-hedged step is half gamma S squared times the squared return minus model variance times the step length. At fifty percent volatility, the leading daily breakeven move is what? <bookmark mark='d'/> About {be:.1f} percent, using a calendar day. Higher-order moves, changing IV, jumps and costs change this comparison. <bookmark mark='e'/> For each vanilla option, vega equals sigma times remaining time times S squared times gamma. With a common sigma and expiry, long gamma implies long vega. Across expiries or volatility marks, that proportionality does not hold for an entire book."""
         ) as vo:
             step(0)
             vo.wait_until("a")

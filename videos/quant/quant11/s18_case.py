@@ -165,7 +165,7 @@ class Case(VoiceoverScene, ThreeDScene):
         hint = hint3d((r"trading that moves the index, $Q$", SPOT), (r"options exposure, $D$", VEGA),
                       (r"net P\&L (scaled)", OPT), ax=ax)
         eqs = VGroup(MathTex(r"\text{cash} = -\lambda Q^2,\quad \text{options} = D \cdot 2\lambda Q", font_size=28),
-                     MathTex(r"\text{net} > 0 \iff D > Q/2", font_size=32, color=YELLOW),
+                     MathTex(r"\text{net} > 0 \iff D > Q/2\quad(Q>0,\lambda>0)", font_size=32, color=YELLOW),
                      label(r"illustration: invented numbers", font_size=17, color=GREY_B)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.15).to_corner(DL, buff=0.35)
         self.set_camera_orientation(phi=62 * DEGREES, theta=-58 * DEGREES, zoom=0.9)
@@ -186,7 +186,7 @@ class Case(VoiceoverScene, ThreeDScene):
             self.play(Create(sf), FadeIn(eqs[0]), FadeIn(eqs[2]), run_time=2.5)
             vo.wait_until("a")
             self.play(Create(edge), FadeIn(eqs[1]))
-            self.move_camera(theta=-25 * DEGREES, phi=68 * DEGREES, run_time=max(vo.remaining(1.0) - 0.3, 1.0))
+            self.move_camera(theta=-25 * DEGREES, phi=68 * DEGREES, run_time=min(max(vo.remaining(1.0) - 0.3, 1.0), 8.0))
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, added_anims=[FadeOut(VGroup(ax, sf, edge)), FadeOut(hint),
-                                                                             FadeOut(eqs)], run_time=1.5)
+                                                                             FadeOut(eqs)], run_time=0.5)
         self.clear_scene()

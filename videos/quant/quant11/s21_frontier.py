@@ -26,25 +26,18 @@ class Frontier(VoiceoverScene):
     def setup_(self, f):
         feats = VGroup(
             label(r"the target: next four weeks' hedged straddle P\&L (chapter 6)", font_size=24, color=OPT),
-            label(r"four features, known on the day:", font_size=22, color=GREY_A),
+            label(r"four historical features; quote availability at entry is not established:", font_size=22, color=GREY_A),
             label(r"$\cdot$ implied minus the HAR forecast (chapter 7)", font_size=21, color=VEGA),
             label(r"$\cdot$ implied minus the last 30 days' realized", font_size=21, color=VEGA),
             label(r"$\cdot$ the 25-delta risk reversal (chapter 4)", font_size=21, color=ALT),
             label(r"$\cdot$ the term slope, 7-day minus 60-day implied", font_size=21, color=ALT),
             label(r"two models: ridge regression, and boosted depth-2 trees", font_size=22, color=GAMMA),
             label(r"walk-forward: refit every week on the past only, with a four-week gap", font_size=22, color=GAMMA),
-            label(rf"registered before it was run: the trial counter now reads {f['trials']}", font_size=22,
+            label(rf"existing logged specification; as-of-part trial counter {f['trials']}", font_size=22,
                   color=QC.HOUSE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to(ORIGIN)
         with self.voiceover(
-            "Machine learning now reads option markets at scale. Before the papers, try it honestly, on what this "
-            "part has. The target: chapter six's four-week hedged straddle, every Wednesday. The question a "
-            "volatility seller asks: will this one lose? <bookmark mark='a'/> Four features, all known on the day: "
-            "implied volatility minus chapter seven's HAR forecast, implied minus the last month's realized, the "
-            "risk reversal, and the slope of the term structure. <bookmark mark='b'/> Two models: a ridge regression "
-            "and gradient-boosted trees of depth two. Each week, refit on the past only, leaving a four-week gap so "
-            "that no outcome still unknown on the day leaks in. <bookmark mark='c'/> And the test was registered "
-            f"before it was run, so the trial counter now reads {f['trials']}."
+            f"""Try a historical walk-forward replay before discussing the papers. The target is the next four weeks' hypothetical hedged straddle P&L, starting each Wednesday. <bookmark mark='a'/> Four inputs describe IV minus HAR, IV minus trailing realized volatility, the risk reversal and the term slope. The smile is reconstructed from a day's records; availability of all its inputs at the eight a.m. entry is not established. <bookmark mark='b'/> Ridge and depth-two boosted trees refit on earlier labels with a four-week gap. That gap addresses overlapping outcomes; it does not repair quote timing or certify a tradable backtest. <bookmark mark='c'/> The code specification is in the existing registry, with as-of-part counter {f['trials']}; the record does not establish that registration preceded calculation. We preserve the original replay and its limitations."""
         ) as vo:
             self.play(FadeIn(feats[0]))
             vo.wait_until("a")
@@ -62,12 +55,12 @@ class Frontier(VoiceoverScene):
         y = np.asarray(f["y"])
         pr, pb = np.asarray(f["pred ridge"]), np.asarray(f["pred boost"])
         br, bb = np.asarray(f["band ridge"]), np.asarray(f["band boost"])
-        lim = 8.0
+        lim = max(8.0, float(np.ceil(1.1 * max(np.abs(v).max() for v in (y, pr, pb, br, bb)))))
         g1 = axes([w[0], w[-1]], [-lim, lim], x_length=6.2, y_length=3.6, xlabel=r"week",
                   ylabel=r"hedged straddle P\&L, per 100", xticks=[int(w[0]), 60, int(w[-1])], yticks=[-5, 0, 5],
                   font_size=15).to_edge(LEFT, buff=0.5).shift(DOWN * 0.3)
         cm = {k: np.asarray(f[f"cmse {k}"]) for k in ("ridge", "boost", "mean")}
-        top = float(max(v[3:].max() for v in cm.values())) * 1.1
+        top = float(max(v.max() for v in cm.values())) * 1.1
         g2 = axes([w[0], w[-1]], [0, top], x_length=4.6, y_length=3.0, xlabel=r"week",
                   ylabel=r"out-of-sample mean squared error", xticks=[int(w[0]), int(w[-1])], yticks=[0, round(top / 2)],
                   font_size=15).to_edge(RIGHT, buff=0.5).shift(DOWN * 0.3)
@@ -76,8 +69,8 @@ class Frontier(VoiceoverScene):
 
         def bands():
             n = max(int(tr.get_value()), 2)
-            return VGroup(band(g1.ax, w[:n], np.clip(br.min(1)[:n], -lim, lim), np.clip(br.max(1)[:n], -lim, lim), VEGA, 0.25),
-                          band(g1.ax, w[:n], np.clip(bb.min(1)[:n], -lim, lim), np.clip(bb.max(1)[:n], -lim, lim), GAMMA, 0.2))
+            return VGroup(band(g1.ax, w[:n], np.clip(br.min(0)[:n], -lim, lim), np.clip(br.max(0)[:n], -lim, lim), VEGA, 0.25),
+                          band(g1.ax, w[:n], np.clip(bb.min(0)[:n], -lim, lim), np.clip(bb.max(0)[:n], -lim, lim), GAMMA, 0.2))
         B = always_redraw(bands)
         ly = tracing(g1.ax, w, np.clip(y, -lim, lim), tr, WHITE, stroke_width=2)
         lr = tracing(g1.ax, w, np.clip(pr, -lim, lim), tr, VEGA, stroke_width=3)
@@ -90,11 +83,7 @@ class Frontier(VoiceoverScene):
             UR, buff=0.3)
         src = real_data(rf"{f['n_oos']} out-of-sample weeks, 2024--2025; features from Part 12's smiles and Binance")
         with self.voiceover(
-            "Watch it run. Each week, both models are refitted on the past and make one prediction, with a band "
-            "from five bootstrap refits of the training set. The white line is what happened. On the right, the "
-            "running out-of-sample error of each, against the simplest forecast of all: the past average. "
-            "<bookmark mark='a'/> The predictions hug a slightly negative level and barely move, while the outcomes "
-            "swing far on both sides of them."
+            "Watch it run. Each week, both models are refitted on the past and make one prediction, with a band from five bootstrap refits of the training set. The white line is what happened. On the right, the running out-of-sample error of each, against the simplest forecast of all: the past average. <bookmark mark='a'/> The predictions hug a slightly negative level and barely move, while the outcomes swing far on both sides of them. The bands are the minimum and maximum of five ordinary bootstrap refits, not confidence or prediction intervals; overlapping weeks require dependence-aware inference. All recorded outcomes, predictions and running errors remain on their full scales."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2), Create(z), FadeIn(leg), FadeIn(src))
             self.add(B, ly, lr, lb, c1, c2, c3)

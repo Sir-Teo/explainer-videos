@@ -109,9 +109,9 @@ class Scalp(VoiceoverScene, ThreeDScene):
             vo.wait_until("a")
             self.play(Create(path), run_time=vo.until("b"), rate_func=linear)
             self.play(FadeIn(cap))
-            self.move_camera(theta=-20 * DEGREES, phi=70 * DEGREES, run_time=max(vo.remaining(1.0) - 0.3, 1.0))
+            self.move_camera(theta=-20 * DEGREES, phi=70 * DEGREES, run_time=min(max(vo.remaining(1.0) - 0.3, 1.0), 8.0))
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, added_anims=[FadeOut(VGroup(ax, sf, path)),
-                                                                             FadeOut(hint), FadeOut(cap)], run_time=1.5)
+                                                                             FadeOut(hint), FadeOut(cap)], run_time=0.5)
         self.clear_scene()
 
     # ------------------------------------------------------------------
@@ -200,18 +200,16 @@ class Scalp(VoiceoverScene, ThreeDScene):
         rows = [
             cmath(r"P\&L", r"=", r"\sum_k \tfrac12\,\Gamma_k S_k^2\left(r_k^2 - \sigma_i^2\,\Delta t\right) + "
                   r"\varepsilon", font_size=38, colors={r"P\&L": OPT}),
-            cmath(r"\mathbb{E}[P\&L \mid \text{path}]", r"\neq", r"f\Big(\sum_k r_k^2\Big)", font_size=38),
+            cmath(r"P\&L(\text{path})", r"\neq", r"f\Big(\sum_k r_k^2\Big)", font_size=38),
             cmath(r"\text{log contract: }\ \tfrac12\Gamma S^2", r"=", r"\tfrac{1}{\sigma^2 \tau}\cdot\tfrac{\cdot}{\cdot}"
                   r"\ \to\ \text{weight } \tfrac{1}{S^2}\cdot S^2 = 1", font_size=34),
         ]
-        rows[2] = cmath(r"\text{weight}\ \Gamma S^2 \to 1", r"\iff", r"\text{hold } \tfrac{2}{K^2}\,dK \text{ of every "
-                        r"option: a variance swap}", font_size=34)
+        rows[2] = cmath(r"-2\log(S_T/F_0)", r"\Rightarrow", r"\tfrac12\Gamma S^2=1,\quad \text{OTM strip weights }2/K^2", font_size=32)
         whys = [why(r"sum the day's identity of chapter 1 over the hedging steps: each squared return is weighted by "
                     r"the dollar gamma at that moment"),
                 why(r"the weight depends on where spot was when it moved, so the same returns in another order pay "
                     r"differently (El Karoui, Jeanblanc and Shreve 1998)"),
-                why(r"Carr and Madan (1998): a strip of options weighted $1/K^2$ has constant dollar gamma, and collects "
-                    r"$\sum r_k^2$ exactly: Part 12 builds it")]
+                why(r"log-contract strip plus continuous stock hedge collects quadratic variation for continuous paths; discrete sampling and jumps need corrections")]
         step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.4, buff=0.9, edge=6.9)
         card = lab_card(r"the hedger's ledger, step by step", [
             "for i in range(1, n1):",
@@ -223,16 +221,7 @@ class Scalp(VoiceoverScene, ThreeDScene):
             "    the_acc += -w * 0.5 * gam_prev * s_prev**2 * sig_h**2 * dt",
         ], source="explainer/quant/house/hedge.py (delta_hedge, at r = q = 0)", width=7.0)
         with self.voiceover(
-            "In symbols. Sum the day's identity over every hedging step: each squared return is weighted by the "
-            "dollar gamma at that moment. <bookmark mark='a'/> So the expected profit, given the path, is not a "
-            "function of the realized variance alone. Nicole El Karoui and her coauthors made this precise; the "
-            "shuffle measured it. <bookmark mark='b'/> If you want to be paid the variance itself, you need a "
-            "weight that does not depend on where spot is. Peter Carr and Dilip Madan showed that a strip of "
-            "options, weighted one over the strike squared, has exactly that: constant dollar gamma. That is the "
-            "variance swap, which Part twelve builds. <bookmark mark='c'/> And here is the House's ledger that did "
-            "all this accounting: each hour, the mark-to-market of the step, the gamma term and the theta term. "
-            f"Run on the May path, gamma {s['gamma'][-1]:+.1f}, theta {s['theta'][-1]:+.1f}, net {s['pnl']:+.1f}."
-            " Scalping means hedging. Next: how often."
+            f"""In symbols. Sum the leading step identity: squared returns receive the dollar-gamma weight at that moment, with higher-order and jump terms in the remainder. <bookmark mark='a'/> Profit on a given path is determined by the path, not by its realized variance alone. Reordering the moves changes the weights; the shuffle illustrates that dependence. <bookmark mark='b'/> For continuous paths at zero rates and yield, a minus-two-log payoff has half gamma S squared equal to one. Its static out-of-the-money option strip has weight two over strike squared; add the continuous stock hedge to recover continuous quadratic variation. A finite sum of squared returns is a sampled approximation, and jumps require a correction. Part twelve builds the replication. <bookmark mark='c'/> Here is the House's finite-step ledger. On the May path, gamma {s['gamma'][-1]:+.1f}, theta {s['theta'][-1]:+.1f}, net {s['pnl']:+.1f}; the remainder is retained. Scalping means hedging. Next: how often."""
         ) as vo:
             step(0)
             vo.wait_until("a")

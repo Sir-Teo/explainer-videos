@@ -28,8 +28,8 @@ class Early(VoiceoverScene):
             cmath(r"C^{Am}", r"\ge", r"\max(S - K, 0)", font_size=40),
             cmath(r"C^{Eu}", r"\ge", r"S - Ke^{-r\tau} > S - K \qquad (\text{no dividends},\ r > 0)", font_size=36),
             cmath(r"\text{exercise}", r"<", r"\text{sell}:\quad C^{Am} = C^{Eu}", font_size=38),
-            cmath(r"S - K", r"<", r"S - D - Ke^{-r(T - t)} + P(S - D, K, T - t)", font_size=34),
-            cmath(r"\text{exercise}", r"\iff", r"D > K\big(1 - e^{-r(T - t)}\big) + P", font_size=38,
+            cmath(r"S - K", r"\ge", r"S - D - Ke^{-r(T - t)} + P(S - D, K, T - t)", font_size=34),
+            cmath(r"\text{exercise}", r"\iff", r"D \ge K\big(1 - e^{-r(T - t)}\big) + P", font_size=38,
                   colors={r"\text{exercise}": GAMMA}),
         ]
         whys = [why(r"an American call can always be exercised, so it is worth at least its intrinsic value"),
@@ -37,24 +37,13 @@ class Early(VoiceoverScene):
                     r"intrinsic value, which beats exercising now"),
                 why(r"Merton (1973): never exercise an American call on a stock that pays no dividend; sell it, or "
                     r"short the stock against it"),
-                why(r"just before an ex-dividend date: exercise gives $S - K$; holding is worth the ex-dividend "
-                    r"call, which parity writes with the put"),
+                why(r"exercise criterion just before the single known cash dividend; no later dividends; equality means indifference"),
                 why(r"exercise only when the dividend beats the interest on the strike plus the insurance the put "
                     r"provides")]
         step = ladder(self, rows, whys, keep=4, top=3.0, x=-0.6, buff=0.5, edge=6.9)
         pc = pause(r"No dividends, a deep in-the-money call. Exercise to lock in the gain?", width=5.0, font_size=21)
         with self.voiceover(
-            "An American option can be exercised any day. When should it be? Start with a call. Because it can be "
-            "exercised now, it is worth at least its intrinsic value. <bookmark mark='a'/> But a European call is "
-            "worth at least the stock minus the discounted strike, by put-call parity, since the put is worth "
-            "something: that is more than exercising today, which pays the strike now instead of later. "
-            "<bookmark mark='b'/> So, Robert Merton's result of 1973: on a stock that pays no dividend, never "
-            "exercise an American call early. Pause and predict: a deep in-the-money call, no dividends, should you "
-            "exercise to lock in the gain? No: sell it, or short the stock against it. <bookmark mark='c'/> Dividends change this. Just "
-            "before the stock goes ex-dividend, exercise gives S minus K. Holding gives the call on the stock after "
-            "it drops by the dividend, which parity writes as the stock minus the dividend, minus the discounted "
-            "strike, plus a put. <bookmark mark='d'/> So exercise exactly when the dividend is larger than the "
-            "interest on the strike plus the put's value: a deep in-the-money call, a big dividend, little time left."
+            "An American option can be exercised any day. When should it be? Start with a call. Because it can be exercised now, it is worth at least its intrinsic value. <bookmark mark='a'/> But a European call is worth at least the stock minus the discounted strike, by put-call parity, since the put is worth something: that is more than exercising today, which pays the strike now instead of later. <bookmark mark='b'/> So, Robert Merton's result of 1973: on a stock that pays no dividend, never exercise an American call early. Pause and predict: a deep in-the-money call, no dividends, should you exercise to lock in the gain? No: sell it, or short the stock against it. <bookmark mark='c'/> Dividends change this. Just before the stock goes ex-dividend, exercise gives S minus K. Holding gives the call on the stock after it drops by the dividend, which parity writes as the stock minus the dividend, minus the discounted strike, plus a put. <bookmark mark='d'/> Thus exercise is optimal when the dividend is at least the interest on the strike plus the put's value: a deep in-the-money call, a big dividend, little time left. This comparison assumes nonnegative rates, costless borrowing and trading, one known cash dividend and no subsequent dividends. At equality, exercise and continuation tie; the displayed comparison is intrinsic greater than or equal to continuation."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -118,7 +107,7 @@ class Early(VoiceoverScene):
             bars.add(VGroup(r_, label(t + rf" {v:.2f}", font_size=17, color=c).next_to(r_, RIGHT, buff=0.1)))
         bars.to_corner(DR, buff=0.5)
         src = illustration(rf"$S = K = 100$, two months, {100 * e['r']:.0f}\% rates, {100 * e['sigma']:.0f}\% vol, "
-                           r"a dividend of 2 three weeks before expiry; a 10-step tree (prices: 400 steps)", corner=DL)
+                           r"escrowed known cash dividend; 10-step picture, 400-step prices; dividend 2 three weeks before expiry", corner=DL)
         with self.voiceover(
             "See it on a tree. The House's tree for an American call on a stock that pays a dividend of two, three "
             "weeks before a two-month expiry; the dashed line is the ex-dividend date. Shaded nodes are in the money. "

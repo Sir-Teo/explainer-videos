@@ -51,9 +51,9 @@ class Expiry(VoiceoverScene, ThreeDScene):
             self.play(Create(sf), run_time=2.5)
             vo.wait_until("a")
             self.play(FadeIn(cap))
-            self.move_camera(theta=-15 * DEGREES, phi=72 * DEGREES, run_time=max(vo.remaining(1.0) - 0.3, 1.0))
+            self.move_camera(theta=-15 * DEGREES, phi=72 * DEGREES, run_time=min(max(vo.remaining(1.0) - 0.3, 1.0), 8.0))
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, added_anims=[FadeOut(VGroup(ax, sf)), FadeOut(hint),
-                                                                             FadeOut(cap)], run_time=1.5)
+                                                                             FadeOut(cap)], run_time=0.5)
         self.clear_scene()
 
     # ------------------------------------------------------------------
@@ -210,17 +210,7 @@ class Expiry(VoiceoverScene, ThreeDScene):
                    "test would use the thirty-minute average itself." if not strong else
                    f"With a z of {f8['z']:.1f}, that is strong evidence of pinning.")
         with self.voiceover(
-            "Does it happen? Xiaoyan Ni, Neil Pearson and Allen Poteshman found in 2005 that American stocks with "
-            "listed options close near a strike more often on expiration Fridays, most of all where market makers' "
-            "re-hedging should pin them. Joseph Golez and Jens Jackwerth found the same in S&P 500 futures. <bookmark mark='a'/> Try it "
-            "on Bitcoin. Deribit's options expire on Fridays at eight in the morning, UTC, settled on a thirty-minute "
-            "average of its index, and its strikes sit every thousand dollars. Measure how far Bitcoin is from the "
-            "nearest thousand at every hour of five years, and at the Friday expiries. <bookmark mark='b'/> At all "
-            f"hours, {100 * al['share']:.1f} percent of closes fall within a hundred dollars of a strike, as chance "
-            f"predicts. At the Friday expiries, {100 * f8['share']:.1f} percent; at the monthly expiries "
-            f"{100 * mo['share']:.1f}; an hour before expiry, {100 * f7['share']:.1f}, no different from chance. "
-            f"{verdict}"
-            " Some options never reach expiry. Next: early exercise, and the money it leaves behind."
+            f"Does it happen? Xiaoyan Ni, Neil Pearson and Allen Poteshman found in 2005 that American stocks with listed options close near a strike more often on expiration Fridays, most of all where market makers' re-hedging should pin them. Benjamin Golez and Jens Jackwerth found the same in S&P 500 futures. <bookmark mark='a'/> Try it on Bitcoin. Deribit's options expire on Fridays at eight in the morning, UTC, settled on a thirty-minute average of its index, and its strikes sit every thousand dollars. Measure how far Bitcoin is from the nearest thousand at every hour of five years, and at the Friday expiries. <bookmark mark='b'/> At all hours, {100 * al['share']:.1f} percent of closes fall within a hundred dollars of a strike, as chance predicts. At the Friday expiries, {100 * f8['share']:.1f} percent; at the monthly expiries {100 * mo['share']:.1f}; an hour before expiry, {100 * f7['share']:.1f}, no different from chance. {verdict} Some options never reach expiry. Next: early exercise, and the money it leaves behind. The thousand-dollar lattice is a proxy, not a reconstruction of the actual listed strike set. Binance closes are not Deribit settlement averages. The binomial z ignores dependence and baseline estimation; it does not identify hedging as the cause. Deribit has daily expiries too, and its cash settlement differs from physical-assignment pin risk."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

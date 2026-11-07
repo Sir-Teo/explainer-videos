@@ -27,11 +27,11 @@ PROBLEMS = [
     r"as $(\lambda S \Gamma^2/\gamma)^{1/3}$.",
     r"Derive vanna $= -\varphi(d_1)d_2/\sigma$ and volga $= \mathcal{V}d_1d_2/\sigma$, and show volga $\approx 0$ at the "
     r"money.",
-    r"Show that the P\&L of a vega-matched dispersion trade has the sign of $\rho_{\text{impl}} - \rho_{\text{real}}$.",
+    r"In the local matched-exposure toy, derive the correlation-gap contribution to dispersion P\&L; explain why matching vega alone does not fix the total sign.",
     r"From the HJB of chapter 9, show that the optimal quotes move down when inventory is long.",    r"(qual) A competitive mean-variance dealer must hold $-d$ options with hedged residuals $\varepsilon$. Derive "
     r"$p = \mathbb E x + \gamma\Sigma_\varepsilon d$, show the cross-effects $\partial p_i/\partial d_j$ are symmetric, and "
     r"that demand has no effect when $\Sigma_\varepsilon = 0$.",
-    r"(qual) For an exponential-utility dealer short $q$ units, show the indifference premium is "
+    r"(qual) For centered residuals with a finite exponential moment near zero and fixed hedges, show the indifference premium is "
     r"$\frac{1}{\gamma q}\log\mathbb E\,e^{\gamma q\varepsilon} = \frac{\gamma q}{2}\kappa_2 + \frac{\gamma^2q^2}{6}\kappa_3 + \dots$ "
     r"in the cumulants of $\varepsilon$; what does a crash-skewed residual do to large positions?",
 ]
@@ -72,13 +72,7 @@ class Outro(VoiceoverScene):
                              rf"its strike without a plan for the pin.  The trial counter reads {f['trials']}.", 12.4, 21,
                              QC.HOUSE).to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "The volatility desk now has its quoting engine. <bookmark mark='a'/> Greeks and the daily explain, "
-            "the scalper's ledger, smiles from three quotes, markouts and leaning quotes, the inventory game, Greek "
-            "hedges and bands, pinning, early exercise and implied correlation. <bookmark mark='b'/> The eleventh rule: every quote leans against "
-            "inventory and stays within a limit in each Greek; every hedge is judged net of costs; every day's profit "
-            "is explained; and nothing is held into expiry near its strike without a plan for the pin. This part "
-            f"registered two tests, the forecaster's edge and the learned predictor, and the trial counter reads "
-            f"{f['trials']}."
+            f"""The House now has Greek reports, hedge ledgers and quoting tools. <bookmark mark='a'/> The table links each method to its implementation. <bookmark mark='b'/> Rule eleven: set Greek limits, account for costs, explain P&L and plan for expiry. Two existing specifications are recorded in this part; the as-of-part trial counter reads {f['trials']}. Their registry entries alone do not establish prospective validation."""
         ) as vo:
             self.play(FadeIn(chart))
             self.play(Indicate(chart.desk["vol"], color=QC.HOUSE, scale_factor=1.05))
@@ -94,20 +88,19 @@ class Outro(VoiceoverScene):
             (rf"a book is one Taylor series; a real day explained to within {100 * e['share']:.0f}\%", OPT),
             (rf"May 2021: realized {100 * s['rv']:.0f}\% against {100 * s['iv']:.0f}\% implied, yet a straddle earned "
              rf"{s['pnl']:.1f}: gamma is where the strike is, and the order of moves matters", GAMMA),
-            (r"hedging more often buys precision, not profit; vanna and volga are priced by the risk reversal and "
-             r"the butterfly", VEGA),
+            (r"frequency changes hedge errors and costs; RR/BF describe smile coordinates and mixed Greek exposures", VEGA),
             (rf"hedged straddles lost {-p['mean']:.2f} per 100 per four weeks ($t = {p['t']:.1f}$): the volatility premium; size "
              r"it below Kelly", THETA),
             (rf"the spread is the price of informed flow: the maker keeps {100 * fl['kept_1h']:.0f}\% of its edge after an "
              rf"hour", ALT),
             (rf"inventory leans the quotes; a learner reached {100 * min(m['pct_final']):.0f}--"
              rf"{100 * max(m['pct_final']):.0f}\% of the exact optimum", ALT),
-            (rf"gamma explodes at expiry; bitcoin pins weakly ($z = {pb['groups']['Fridays 08:00']['z']:.1f}$); exercise "
+            (rf"ATM gamma spikes near expiry; bitcoin grid diagnostic ($z = {pb['groups']['Fridays 08:00']['z']:.1f}$); exercise "
              r"a call early only for a dividend", GAMMA),
             (rf"implied correlation prices index risk; dispersion is short a crash", VEGA),
             (rf"short-dated OTM buyers got back {100 * (1 + sd['otm']['ret_buy']):.0f} cents per dollar; the SEBI case is "
              r"alleged and contested", THETA),
-            (r"short volatility blows up when the hedge is too far away (LJM, Structured Alpha)", QC.CRISIS),
+            (r"crash losses test hedge width, leverage, liquidity and honest risk disclosure", QC.CRISIS),
         ]
         rows = VGroup()
         for i, (t, col) in enumerate(items, 1):
@@ -120,15 +113,7 @@ class Outro(VoiceoverScene):
         if rows.height > 6.4:
             rows.scale_to_fit_height(6.4)
         with self.voiceover(
-            "Part eleven in ten lines. A book is one Taylor series, and a real day can be explained term by term. "
-            "Gamma lives at the strike, and the order of the moves matters, not just their size. Hedging more often "
-            "buys precision, not profit, and vanna and volga have market prices. Buying volatility and hedging it "
-            "lost money on average: the volatility premium, which should be sized well below Kelly. The spread is the "
-            "price of informed flow; inventory leans the quotes, and a simple learner finds most of the optimum. "
-            "Gamma explodes at expiry, hedgers can pin a price, and a call is exercised early only for a dividend. "
-            "Implied correlation prices an index's risk. Short-dated options magnify the premium against their "
-            "buyers, and the case against Jane Street remains an allegation. And short volatility blows up when the "
-            "hedge is too far away."
+            """The recap. Greek explains are local approximations. Gamma weights the path. Frequency changes error and costs; this sample does not resolve its mean effect. Volatility quote coordinates describe several exposures. Historical model losses do not guarantee seller profits. Marks are proxies for fair value. Inventory control is model-dependent. Expiry gamma concentrates near the strike. Correlation trades require exposure matching. And crash losses test hedge width, liquidity, leverage and honest disclosure. Keep the assumptions beside every result."""
         ):
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.6,
                                                  run_time=18))
@@ -160,7 +145,7 @@ class Outro(VoiceoverScene):
             "And ten problems: the gamma-theta integral, gamma at expiry, implied correlation for two assets, the "
             "die game with an informed counterparty, the scaling of the hedging band, vanna and volga, the sign of "
             "the dispersion trade, and the direction of the optimal quotes. Two are qualifying-exam problems: the "
-            "dealer's demand pressure, and its exact form under exponential utility. Solutions, in English and "
+            "dealer's demand pressure, and the local cumulant expansion under stated moment conditions. Solutions, in English and "
             "Chinese, are in the notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))

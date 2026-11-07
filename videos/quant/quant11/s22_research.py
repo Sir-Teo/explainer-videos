@@ -19,7 +19,7 @@ class Research(VoiceoverScene):
         self.exact(t)
         self.flow(t)
         self.open_problems()
-        self.question()
+        self.question(t)
 
     def card(self):
         c = research_card(r"Demand-based option pricing", r"If a dealer cannot hedge perfectly, how does demand move "
@@ -31,33 +31,22 @@ class Research(VoiceoverScene):
         self.play(FadeOut(c))
 
     def dealer(self):
-        rows = [cmath(r"\varepsilon_i", r"=", r"x_i - \textstyle\sum_k \delta_{i,k}\,\Delta S_k - \mathbb E[x_i]", font_size=32,
+        rows = [cmath(r"\varepsilon_i", r"=", r"(x_i-H_i)-\mathbb E^Q[x_i-H_i],\quad H_i=\sum_k\delta_{i,k}\Delta S_k", font_size=32,
                       colors={r"\varepsilon_i": THETA}),
-                cmath(r"W", r"=", r"d^{\top}(p - \mathbb E x) - d^{\top}\varepsilon", font_size=32, colors={r"W": OPT}),
-                cmath(r"\max_q\ q^{\top}(p - \mathbb E x) - \tfrac{\gamma}{2}\,q^{\top}\Sigma_\varepsilon q", r"\Rightarrow",
-                      r"p = \mathbb E x + \gamma\,\Sigma_\varepsilon\,d", font_size=30,
-                      colors={r"p = \mathbb E x + \gamma\,\Sigma_\varepsilon\,d": VEGA})]
-        whys = [why(r"the residual of option $i$ after the dealer's discrete delta hedge: what the stock cannot replicate "
-                    r"(jumps, the gaps between rebalances), measured against the risk-neutral value"),
-                why(r"end users want $d$ options; dealers must hold the other side, and keep the residual risk"),
-                why(r"a competitive dealer with risk aversion $\gamma$ takes positions until the marginal price covers the "
-                    r"marginal risk: at $q = d$, the price exceeds its risk-neutral value by $\gamma\Sigma_\varepsilon d$")]
+                cmath(r"W", r"=", r"q^{\top}(p-m)-q^{\top}\varepsilon,\quad m=\mathbb E^Q x", font_size=32, colors={r"W": OPT}),
+                cmath(r"\max_q\ q^{\top}(p-m) - \tfrac{\gamma}{2}\,q^{\top}\Sigma_\varepsilon q", r"\Rightarrow",
+                      r"p = m + \gamma\,\Sigma_\varepsilon\,d", font_size=30,
+                      colors={r"p = m + \gamma\,\Sigma_\varepsilon\,d": VEGA})]
+        whys = [why(r"illustration under a fixed martingale measure $Q$, zero rates and yield; center each fixed-hedge residual by its own mean"),
+                why(r"$q$ denotes dealer shorts, so option holdings are $-q$; market clearing sets $q=d$"),
+                why(r"mean--variance first-order illustration with fixed hedges; the covariance and demand fix the marginal premium")]
         step = ladder(self, rows, whys, keep=3, top=2.7, x=-0.3, buff=0.5, edge=6.9)
         thm = theorem_card(r"Demand pressure", wrapped_label(
-            r"in a market where dealers cannot hedge perfectly, end-user demand for an option raises its price, and "
-            r"those of other options, by the dealers' risk aversion times the covariance of the unhedgeable parts; with "
-            r"perfect hedging demand has no effect", 10.6, 20, GREY_A),
+            r"first-order illustration: own impact follows residual variance; cross-impact has the sign of residual covariance; perfect replication removes the residual-demand term", 10.6, 20, GREY_A),
             who=r"G\^arleanu, Pedersen and Poteshman (2009), \textit{RFS} 22; the first-order form shown here",
             width=11.6, font_size=22).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "The dealer's problem. <bookmark mark='a'/> Delta-hedge option i in steps. What the stock cannot replicate, "
-            "jumps and the gaps between rebalances, is the residual epsilon. <bookmark mark='b'/> End users want d "
-            "options. Dealers must hold the other side, and keep that residual risk. <bookmark mark='c'/> A "
-            "competitive dealer with risk aversion gamma takes on positions until the marginal price covers the "
-            "marginal risk. The price is the risk-neutral value plus gamma times the residual covariance matrix times "
-            "the demand. <bookmark mark='d'/> Nicolae Gârleanu, Lasse Pedersen and Allen Poteshman proved the general "
-            "version in 2009, and found that end users' net demand helps explain why index options are expensive and "
-            "the index skew is steep."
+            """A simplified dealer problem, under a fixed martingale measure Q and zero rates and yield. <bookmark mark='a'/> Hedge each option at discrete times, then center its payoff-minus-hedge residual by its own expectation. <bookmark mark='b'/> Let q denote how many options the dealer is short; holdings are minus q, and market clearing sets q equal to customer demand d. <bookmark mark='c'/> In this mean-variance illustration, the first-order condition adds gamma times the residual covariance matrix times demand to the model baseline. Cross-impact has the sign of the covariance. <bookmark mark='d'/> Gârleanu, Pedersen and Poteshman developed a richer dynamic demand-based theory in 2009. This one-period calculation illustrates its mechanism; it does not reproduce their full equilibrium or identify a market risk premium."""
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -123,10 +112,7 @@ class Research(VoiceoverScene):
                              r"paths", 3.3, 14, GREY_A).next_to(leg, DOWN, buff=0.3)
         fit_right(side)
         with self.voiceover(
-            "How large is the residual? Simulate a jump-diffusion like Bitcoin's, and delta-hedge one-month options "
-            "daily. <bookmark mark='a'/> With jumps the residual is one to two percent of the underlying, largest at "
-            "the money. <bookmark mark='b'/> Remove the jumps and it falls by half or more. <bookmark mark='c'/> Hedge hourly as well, "
-            "and it nearly disappears. The more complete the market, the less room demand has to move prices."
+            "How large is the residual? Simulate a jump-diffusion like Bitcoin's, and delta-hedge one-month options daily. <bookmark mark='a'/> With jumps the residual is one to two percent of the underlying, largest at the money. <bookmark mark='b'/> Remove the jumps and it falls by half or more. <bookmark mark='c'/> Hedge hourly as well, and it nearly disappears. The more complete the market, the less room demand has to move prices. This is an illustrative zero-drift model, not a fitted Bitcoin law. The jump mean and spread quoted are log-jump parameters. The jump case uses forty thousand paths; each diffusion comparison uses eight thousand."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side))
             for k, mk in enumerate(("a", "b", "c")):
@@ -142,7 +128,7 @@ class Research(VoiceoverScene):
                  ylabel=r"implied volatility, \%", xticks=[80, 90, 100, 110, 120], yticks=[48, 52, 56, 60],
                  font_size=15).move_to(LEFT * 1.4 + DOWN * 0.2)
         ax = g.ax
-        sets = [(None, FAIR, r"risk-neutral value, no demand"), ("put85", ONE, r"demand: one 85 put"),
+        sets = [(None, FAIR, r"model baseline under the selected $Q$"), ("put85", ONE, r"demand: one 85 put"),
                 ("puts", PUTS, r"demand: one of each put"), ("calls", CALLS, r"demand: one of each call")]
         lines = VGroup()
         for key, col, _ in sets:
@@ -181,23 +167,19 @@ class Research(VoiceoverScene):
         ax = g.ax
         ex = curve(ax, q, i["exact_marg"], VEGA, stroke_width=3)
         mv = curve(ax, q, i["mv_marg"], GREY_B, stroke_width=3)
-        leg = legend([(VEGA, r"exact: $\mathbb E[\varepsilon e^{\gamma q\varepsilon}]/\mathbb E[e^{\gamma q\varepsilon}]$"),
+        leg = legend([(VEGA, r"empirical tilt: $\overline{\varepsilon e^{\gamma q\varepsilon}}/\overline{e^{\gamma q\varepsilon}}$"),
                       (GREY_B, r"first order: $\gamma q\operatorname{Var}\varepsilon$")], font_size=16).to_edge(
             RIGHT, buff=0.3).shift(UP * 1.4)
         fit_right(leg)
         j1, j4 = 9, len(q) - 1
         r1 = i["exact_marg"][j1] / i["mv_marg"][j1] - 1
         r4 = i["exact_marg"][j4] / i["mv_marg"][j4] - 1
-        side = wrapped_label(rf"exponential utility, the same 40{{,}}000 residuals; the short put's residual has skewness "
+        side = wrapped_label(rf"finite empirical exponential tilt, fixed hedge; option-liability residual skewness "
                              rf"{i['skew_eps']:.1f}: crashes are what the dealer cannot hedge", 3.3, 14, GREY_A).next_to(
             leg, DOWN, buff=0.3)
         fit_right(side)
         with self.voiceover(
-            "The formula is first order. Check it against the exact answer for a dealer with exponential utility. "
-            "<bookmark mark='a'/> For small positions the two agree. <bookmark mark='b'/> But the residual of a short "
-            f"put is strongly skewed, a skewness of {i['skew_eps']:.1f}, because the losses come in crashes. So the exact "
-            f"premium grows faster than linearly: {100 * r1:.0f} percent above the first-order line at one unit, "
-            f"{100 * r4:.0f} percent at four. Large demand for crash protection is priced more than proportionally."
+            f"""Compare the first-order line with exponential tilting of these forty thousand centered residuals, keeping the delta hedge fixed. This is a finite empirical calculation, not an optimized-hedge utility price or a proof that the population exponential moment exists. <bookmark mark='a'/> At small positions they nearly agree. <bookmark mark='b'/> The option residual, a liability to the short dealer, has positive skewness {i['skew_eps']:.1f}. The empirical marginal premium is {100 * r1:.0f} percent above the line at {q[j1]:.2f} units and {100 * r4:.0f} percent at four. Nonlinearity and sample-tail sensitivity matter; those percentages are properties of this finite simulation."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(side))
             vo.wait_until("a")
@@ -225,20 +207,12 @@ class Research(VoiceoverScene):
                 cell.move_to([hx[i], 2.0 - 0.6 * j, 0])
             row[0].align_to(np.array([hx[0] - 2.9, 0, 0]), LEFT)
             tab.add(row)
-        foot = wrapped_label(r"every BTC option trade on the Surface's two days, 10 and 11 December 2025; the taker is the "
-                             r"side that crossed the spread, a proxy for end users; OTM: strike below 95\% (puts) or above "
+        foot = wrapped_label(r"eligible BTC trades on 10 and 11 December 2025, with reported IV and maturity over one day; taker direction is a rough flow proxy; OTM: strike below 95\% (puts) or above "
                              r"105\% (calls) of the index; net buying = (bought $-$ sold) vega over traded vega. Two days "
                              r"describe the flow; testing the theory takes years of it (G\^arleanu et al.\ used 1996--2001 "
                              r"CBOE data by investor type)", 11.8, 15, GREY_A).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "What does demand look like? On the Surface's two days of Deribit trades, count the side that crossed the "
-            "spread, a rough proxy for end users. <bookmark mark='a'/> Near the money, buying and selling balance; "
-            f"within a month, takers were net sellers of out-of-the-money puts, {100 * f['otm_put_short']['net_share']:+.0f} "
-            "percent. "
-            f"<bookmark mark='b'/> Beyond a month, takers were net buyers of out-of-the-money puts, "
-            f"{100 * f['otm_put_long']['net_share']:+.0f} percent of their vega, and net sellers of out-of-the-money "
-            f"calls, {100 * f['otm_call_long']['net_share']:+.0f}: protection bought, upside sold, a collar. The theory "
-            "says such flow should steepen the long-dated skew. Two days describe it; a test needs years."
+            f"What does demand look like? On the Surface's two days of Deribit trades, count the side that crossed the spread, a rough proxy for end users. <bookmark mark='a'/> Near the money, buying and selling balance; within a month, takers were net sellers of out-of-the-money puts, {100 * f['otm_put_short']['net_share']:+.0f} percent. <bookmark mark='b'/> Beyond a month, takers were net buyers of out-of-the-money puts, {100 * f['otm_put_long']['net_share']:+.0f} percent of their vega, and net sellers of out-of-the-money calls, {100 * f['otm_call_long']['net_share']:+.0f}: protection bought, upside sold, a collar. The theory says such flow should steepen the long-dated skew. Two days describe it; a test needs years. Only eligible trades with reported IV and more than one day to expiry enter these bins. Takers need not be end users; aggregate put buying and call selling do not identify the same investors or prove a collar or a causal demand effect."
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(foot))
             vo.wait_until("a")
@@ -257,16 +231,14 @@ class Research(VoiceoverScene):
             desk_question(r"open: demand and the volatility premium", r"how much of the variance risk premium of Chapter 6 is "
                           r"compensation for priced risk, and how much is the price of absorbing hedging demand, is "
                           r"debated", width=12.4, font_size=18),
-            desk_question(r"open: equilibrium with many dealers and learning", r"with heterogeneous dealers, inventories "
-                          r"carried over time, and the quote dynamics of Chapter 9, a full dynamic equilibrium is "
-                          r"incomplete", width=12.4, font_size=18),
+            desk_question(r"open: equilibrium with many dealers and learning", r"research direction: specify dealer heterogeneity, capital constraints and learning, then compare equilibrium prices and quote dynamics", width=12.4, font_size=18),
         ).arrange(DOWN, buff=0.22)
         with self.voiceover(
             "Three open questions. <bookmark mark='a'/> Dealers' risk aversion is not observed. It moves with their "
             "capital and their losses, so separating demand effects from changing risk is hard. <bookmark mark='b'/> How "
             "much of Chapter 6's volatility premium is compensation for priced risk, and how much is the price of absorbing "
             "hedging demand, is debated. <bookmark mark='c'/> And with many dealers, inventories carried through time, "
-            "and the quote dynamics of Chapter 9, a full dynamic equilibrium is incomplete."
+            "and the quote dynamics of Chapter 9, choose a specific model and compare its equilibrium prices and quote dynamics."
         ) as vo:
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
@@ -274,13 +246,25 @@ class Research(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def question(self):
+    def question(self, t):
         q = pause_card(r"demand arrives for the 85 put. In dollars, which rises more, the 90 put or the 80 put? In "
                        r"implied volatility? Why can the answers differ?")
+        q.move_to(UP * 0.8)
         with self.voiceover(
             "Pause and predict. Demand arrives for the eighty-five put. In dollars, which rises more, the ninety put or "
             "the eighty put? And in implied volatility? Why can the two answers differ?"
         ):
             self.play(FadeIn(q))
         self.wait(0.5)
+        dollars = np.asarray(t["cross_85"])
+        iv = np.asarray(t["scen"]["put85"]["d_iv_pts"])
+        answer = VGroup(
+            label(rf"dollar impact / 85-put impact: 90 put {dollars[2]:.2f}; 80 put {dollars[0]:.2f}", font_size=24, color=VEGA),
+            label(rf"IV impact: 80 put {iv[0]:.2f} points; 90 put {iv[2]:.2f} points", font_size=24, color=GAMMA),
+            wrapped_label(r"the 80 put has less vega: a smaller dollar move can imply a larger volatility move", 10.8, 22, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(q, DOWN, buff=0.5)
+        if answer.width > 12.0:
+            answer.scale_to_fit_width(12.0)
+        with self.voiceover("The ninety put rises more in dollars; the eighty put rises more in implied volatility because it has less vega. Dollar impact and volatility impact rank different things."):
+            self.play(FadeIn(answer))
         self.clear_scene()

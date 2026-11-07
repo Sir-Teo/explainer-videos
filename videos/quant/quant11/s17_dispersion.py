@@ -110,9 +110,9 @@ class Dispersion(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(plane), Create(cut), run_time=1.5)
             vo.wait_until("b")
             self.play(FadeIn(mark, scale=2), FadeIn(cap))
-            self.move_camera(theta=-25 * DEGREES, run_time=max(vo.remaining(1.0) - 0.3, 1.0))
+            self.move_camera(theta=-25 * DEGREES, run_time=min(max(vo.remaining(1.0) - 0.3, 1.0), 8.0))
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, added_anims=[FadeOut(VGroup(ax, sf, plane, cut, mark)),
-                                                                             FadeOut(hint), FadeOut(cap)], run_time=1.5)
+                                                                             FadeOut(hint), FadeOut(cap)], run_time=0.5)
         self.clear_scene()
 
     # ------------------------------------------------------------------
@@ -128,8 +128,7 @@ class Dispersion(VoiceoverScene, ThreeDScene):
         whys = [why(r"the variance of a weighted sum"),
                 why(r"set every $\rho_{ij}$ to one number and solve: Cboe's implied correlation indices do this with "
                     r"the 50 largest S\&P 500 members"),
-                why(r"the members' own variances shrink like $1/N$: implied correlation is the squared ratio of index "
-                    r"to average member volatility")]
+                why(r"large-$N$ approximation requires diversified weights, with no dominant name; vanilla-IV inputs form a correlation proxy")]
         step = ladder(self, rows, whys, keep=3, top=3.0, x=-0.6, buff=0.6, edge=6.9)
         card = lab_card(r"implied correlation", [
             "def implied_correlation(index_vol, weights, vols) -> float:",
@@ -189,15 +188,7 @@ class Dispersion(VoiceoverScene, ThreeDScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(RIGHT, buff=0.35)
         src = real_data(rf"Cboe COR3M daily, {c3['n']:,} days, 2006--2025".replace(",", "{,}"))
         with self.voiceover(
-            "Here is the real thing: Cboe's three-month implied correlation index, every day since 2006. "
-            "<bookmark mark='a'/> It spikes in crises, when everything falls together: "
-            f"{c3['max']:.0f} in December 2011, during the euro crisis, and {Y['2020']['max']:.0f} in March 2020. "
-            f"<bookmark mark='b'/> And look at the end: record lows, {Y['2024']['min']:.1f} in July 2024 and "
-            f"{Y['2025']['min']:.1f} in January 2025, while a few giant technology stocks drove the index and the rest "
-            "went their own ways: the conditions in which a dispersion trade, short index volatility and long the "
-            "members', pays. Implied correlation tends to sit above the correlation later "
-            "realized, Joost Driessen, Pascal Maenhout and Grigory Vilkov showed in 2009: the correlation risk premium, "
-            "the reason index options are dear."
+            f"Here is the real thing: Cboe's three-month implied correlation index, every day since 2006. <bookmark mark='a'/> It spikes in crises, when everything falls together: {c3['max']:.0f} in December 2011, during the euro crisis, and {Y['2020']['max']:.0f} in March 2020. <bookmark mark='b'/> And look at the end: record lows, {Y['2024']['min']:.1f} in July 2024 and {Y['2025']['min']:.1f} in January 2025, while a few giant technology stocks drove the index and the rest went their own ways: the conditions in which a dispersion trade, short index volatility and long the members', pays. Implied correlation tends to sit above the correlation later realized, Joost Driessen, Pascal Maenhout and Grigory Vilkov showed in 2009: the correlation risk premium, the reason index options are dear. COR3M launched in July 2021; the earlier observations shown are backcast history. Low implied correlation alone does not establish profitable dispersion: realized correlation, component volatility, hedge weights and costs also matter."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]))
             self.add(line)
@@ -219,7 +210,7 @@ class Dispersion(VoiceoverScene, ThreeDScene):
                         for a, b in zip(x, y)])
         rows = [cmath(r"P\&L", r"\approx", r"\sum_i w_i\,\tfrac12\Gamma_i S_i^2\big(\sigma_{r,i}^2 - \sigma_{i,i}^2\big) - "
                       r"\tfrac12\Gamma_I S_I^2\big(\sigma_{r,I}^2 - \sigma_{i,I}^2\big)", font_size=24),
-                cmath(r"\text{sign}", r"\approx", r"\text{sign}\big(\rho_{\text{impl}} - \rho_{\text{real}}\big)",
+                cmath(r"\text{sign}", r"\approx", r"\text{sign}\big(\rho_{\text{impl}} - \rho_{\text{real}}\big)\quad\text{(matched exposures, locally)}",
                       font_size=28)]
         eqs = VGroup(*rows).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35).shift(UP * 1.8)
         side = VGroup(

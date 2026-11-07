@@ -51,21 +51,22 @@ class Premium(VoiceoverScene):
                                  fill_opacity=0.35 + 0.5 * prog).move_to(cell.get_left() + RIGHT * (ww / 2 + 0.03)))
             return gr
         f = always_redraw(fills)
-        g = axes([0, n], [-4, 2], x_length=4.6, y_length=3.0, xlabel=r"weeks completed", ylabel=r"running mean, per 100",
-                 xticks=[0, 48, 96], yticks=[-4, -2, 0, 2], font_size=15).to_corner(UR, buff=0.5).shift(DOWN * 0.3)
-        ax = g.ax
         k = np.arange(1, n + 1)
         rm = np.cumsum(pnl) / k
         sd = np.array([pnl[:i].std(ddof=1) if i > 1 else 0 for i in k])
         se = 2 * sd / np.sqrt(k) * np.sqrt(4)      # four-week windows overlap: about four times the variance
-        lo, hi = np.clip(rm - se, -4, 2), np.clip(rm + se, -4, 2)
+        lo, hi = rm - se, rm + se
+        ylo, yhi = min(-4.0, float(np.floor(lo.min()))), max(2.0, float(np.ceil(hi.max())))
+        g = axes([0, n], [ylo, yhi], x_length=4.6, y_length=3.0, xlabel=r"weeks completed", ylabel=r"running mean, per 100",
+                 xticks=[0, 48, 96], yticks=[-4, -2, 0, 2], font_size=15).to_corner(UR, buff=0.5).shift(DOWN * 0.3)
+        ax = g.ax
         zl = DashedLine(ax.c2p(0, 0), ax.c2p(n, 0), color=GREY_C, stroke_width=1.5)
 
         def runner():
             m = int(np.clip(w.get_value() - 4, 0, n))
             if m < 3:
                 return VGroup()
-            return VGroup(band(ax, k[2:m], lo[2:m], hi[2:m], VEGA, 0.25), curve(ax, k[:m], np.clip(rm[:m], -4, 2), VEGA))
+            return VGroup(band(ax, k[2:m], lo[2:m], hi[2:m], VEGA, 0.25), curve(ax, k[:m], rm[:m], VEGA))
         rl = always_redraw(runner)
         side = VGroup(
             MathTex(rf"\text{{mean }} {p['mean']:+.2f},\ \ t_{{NW}} = {p['t']:.1f}", font_size=30, color=VEGA),
@@ -73,19 +74,12 @@ class Premium(VoiceoverScene):
             wrapped_label(rf"realized below the 28-day ATM implied in {100 * p['share_rv_below']:.0f}\% of the windows",
                           4.6, 20, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(g, DOWN, buff=0.45).align_to(g, LEFT)
-        src = real_data(r"a straddle bought at the 28-day ATM implied of each Wednesday's Deribit smile, hedged hourly "
-                        r"on Binance, 2024--2025")
+        src = real_data(r"hypothetical 28-day ATM straddle, fitted Wednesday smile; hourly spot hedges; shading is heuristic, $t$ uses NW(4)")
         tsay = (f"The mean is {p['mean']:.2f} per hundred of Bitcoin, with a Newey-West t-statistic of {p['t']:.1f}: "
                 "buying volatility and hedging it lost money, reliably." if p["t"] < -2 else
                 f"The mean is {p['mean']:.2f}, with a t-statistic of only {p['t']:.1f}: too noisy to call.")
         with self.voiceover(
-            "Chapter five's straddles were not hedged. Now hedge them. Every Wednesday, buy a four-week straddle at "
-            "the market's own at-the-money implied volatility, and hedge it every hour. Each cell is one trade's "
-            "ledger, filling in green or red as its four weeks pass. <bookmark mark='a'/> Two years go by. Most "
-            "cells end red. <bookmark mark='b'/> On the right, the running average of the finished trades with a "
-            f"two-standard-error band, settling below zero. {tsay} <bookmark mark='c'/> This is measured at the "
-            "market's own smile, not at the volatility index, so it complements Part twelve's variance-swap premium: "
-            "the same premium, seen through an option a trader can actually buy."
+            f"""Now hedge the weekly hypothetical four-week straddles. Prices come from fitted daily smiles, not executable bid or ask quotes; hedges use hourly Binance closes. Each cell tracks a window, and the windows overlap. <bookmark mark='a'/> Most end red. <bookmark mark='b'/> The average is {p['mean']:.2f} per hundred of Bitcoin, with a Newey-West t-statistic of {p['t']:.1f} using four lags. Shading is a different, heuristic band: twice the ordinary standard error, inflated by the square root of four. It is not a calibrated confidence interval. <bookmark mark='c'/> This cached historical model omits executable spreads, fees and contract conventions. Its negative mean is evidence about this sample, not guaranteed seller profit or a unique explanation of a variance-risk premium."""
         ) as vo:
             self.play(FadeIn(grid), FadeIn(g), Create(zl), FadeIn(src))
             self.add(f, rl)
@@ -143,33 +137,22 @@ class Premium(VoiceoverScene):
     # ------------------------------------------------------------------
     def derive(self, p):
         rows = [
-            cmath(r"\Pi_T", r"=", r"\int_0^T \tfrac12\,\Gamma_t S_t^2\left(\sigma_{r,t}^2 - \sigma_i^2\right)dt + "
-                  r"\varepsilon", font_size=36, colors={r"\Pi_T": OPT}),
+            cmath(r"\Pi_T", r"=", r"\int_0^T \tfrac12\,\Gamma_t S_t^2\left(\sigma_{r,t}^2 - \sigma_i^2\right)dt", font_size=36, colors={r"\Pi_T": OPT}),
             cmath(r"\mathbb{E}^P[\Pi_T] < 0", r"\iff", r"\sigma_i^2 > \mathbb{E}^P_{\Gamma}\big[\sigma_r^2\big]",
                   font_size=36, colors={r"\mathbb{E}^P[\Pi_T] < 0": QC.P}),
             cmath(r"\mathbb{E}^Q[\Pi_T]", r"=", r"0", font_size=38, colors={r"\mathbb{E}^Q[\Pi_T]": QC.Q}),
-            cmath(r"\mathbb{E}^P[\Pi_T] - \mathbb{E}^Q[\Pi_T]", r"=", r"\text{the price of variance risk} < 0",
+            cmath(r"\mathbb{E}^P[\Pi_T] - \mathbb{E}^Q[\Pi_T]", r"=", r"\text{hedged-option risk premium (sign is empirical)}",
                   font_size=36),
         ]
-        whys = [why(r"Part 10's hedger's identity: the hedged option collects gamma-weighted realized minus implied "
-                    r"variance"),
+        whys = [why(r"continuous diffusion, continuous costless hedge, zero rates and yield, fixed model IV; no jump or discretization remainder here"),
                 why(r"so it loses on average exactly when implied exceeds the gamma-weighted expected realized variance"),
                 why(r"under the pricing measure a self-financing hedged position is a martingale started at zero"),
                 why(r"the gap between the two measures is a risk premium: sellers are paid to carry variance risk, which "
                     r"rises in crashes, when money is worth most")]
         step = ladder(self, rows, whys, keep=3, top=3.0, x=-0.4, buff=0.55, edge=6.9)  # leaves the corner for the card
-        pc = pause(r"If the premium is so reliable, why doesn't everyone sell straddles?", width=5.2, font_size=22)
+        pc = pause(r"A negative buyer mean in this sample: what risks can still bankrupt a seller?", width=5.2, font_size=22)
         with self.voiceover(
-            "Why is it a premium and not a mistake? Start from Part ten's identity: the hedged option collects "
-            "gamma-weighted realized variance minus implied variance. <bookmark mark='a'/> So it loses on average "
-            "exactly when implied variance is above the realized variance one expects, weighted by gamma. "
-            "<bookmark mark='b'/> Under the pricing measure, Q, a hedged, self-financing position is a martingale "
-            "that starts at zero: its expectation is zero. <bookmark mark='c'/> The negative average under the real "
-            "world measure, P, is therefore the difference between the two measures: a risk premium. Sellers of "
-            "volatility are paid for bearing variance risk, which explodes in crashes, exactly when money is worth "
-            "most. <bookmark mark='d'/> Pause and predict: if it is so reliable, why doesn't everyone sell straddles? "
-            "Chapter sixteen answers with two funds that did."
-            " First, what an edge is worth, and how much to bet on it. Next."
+            """Interpret the identity under its assumptions: continuous diffusion paths, continuous costless hedging, zero rates and yield, and a fixed model IV. <bookmark mark='a'/> A long convex option loses in expectation when its implied variance exceeds expected realized variance under the normalized gamma-times-spot-squared weighting. <bookmark mark='b'/> If the initial premium is the correct Q value and the hedge is admissible and integrable, the zero-cost hedged terminal gain has Q expectation zero. <bookmark mark='c'/> Its P expectation is a hedged-option risk premium. A negative empirical estimate is consistent with priced volatility risk; it does not prove a unique mechanism, and jumps, trading costs and finite-step errors matter in data. <bookmark mark='d'/> Why can selling still fail? Chapter sixteen examines crash exposure. First, what a forecast comparison can establish."""
         ) as vo:
             step(0)
             vo.wait_until("a")

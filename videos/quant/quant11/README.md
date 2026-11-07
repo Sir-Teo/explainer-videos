@@ -1,7 +1,7 @@
 # Quant, Built — Part 11: Trading Options
 
 Part 11 of a forty-three-part series on quantitative finance (see [the series plan](../README.md) and
-[the syllabus](../SYLLABUS.md)), the practitioner's part of Act III: a hook, eighteen chapters and an outro, about 58
+[the syllabus](../SYLLABUS.md)), the practitioner's part of Act III: a hook, eighteen chapters and an outro, about 65
 minutes. Every number is computed by the series' own code ([`compute.py`](compute.py); the House's
 [`quoting`](../../../explainer/quant/house/quoting.py), [`hedge`](../../../explainer/quant/house/hedge.py),
 [`sim`](../../../explainer/quant/house/sim.py) and [`trees`](../../../explainer/quant/house/trees.py), tested in
@@ -13,7 +13,7 @@ models are labelled as illustrations on screen.
 SEBI matter is described as alleged, from the regulator's interim order and statements and the firm's public
 statements; no final finding had been made at the time of writing.*
 
-## Chapters (about 64 minutes)
+## Chapters (about 65 minutes)
 
 * **Gamma against theta (hook).** The desk question (a hedged straddle in a quiet week). May 2021 run live: a 30-day ATM
   BTC straddle bought at DVOL's 74%, hedged hourly, realized 127%, earned +1.7 on a premium of 16.9, the ledger's gamma
@@ -34,7 +34,7 @@ statements; no final finding had been made at the time of writing.*
   move-triggered hedging (Zakamouline).
 * **4. Vega, vanna, volga.** The vega surface 𝒱(K, σ) in 3D with the 25Δ flags. Derivation of vanna and volga; d₁d₂ at
   the money and at 25Δ; RR and BF as prices of vanna and volga. Vanna–volga (Castagna–Mercurio) on the Surface: RR −5.6,
-  BF +1.75 vol points; the rebuilt smile within 0.19 points of SSVI between the 10Δ strikes, off by up to 12 in the far
+  BF +1.75 vol points; the rebuilt smile with RMSE 0.19 points against SSVI between the 10Δ strikes, off by up to 12 in the far
   wings. 100 weekly 30-day RR/BF, 2024–2025: RR negative in only 28% of weeks (BTC's call skew in rallies); BF averaged
   +1.6.
 * **5. Strategies.** One 3D P&L surface over (spot move, vol move) morphing through straddle, strangle, risk reversal,
@@ -46,8 +46,8 @@ statements; no final finding had been made at the time of writing.*
   ledgers filling: mean −1.22 per 100, positive in 26% of weeks, NW t = −3.6. Coval–Shumway (2001: about −3% a week)
   and Bakshi–Kapadia (2003). Unhedged on BTC: −4% of premium on average (t −0.2), median −29%. Derivation: P-mean
   versus the Q-martingale; the premium as the gap.
-* **7. A forecaster's edge, and how much to bet.** DVOL vs HAR vs realized, traced; the registered test (1.75 vs 0.57,
-  t ≈ 2.4). Goyal–Saretto (2009). Kelly on Part 10's 1,706 monthly P&Ls: Gaussian f* = 46, the ruin wall 1/|x_min| = 30,
+* **7. A forecaster's edge, and how much to bet.** DVOL vs HAR vs realized, traced; the cached retrospective diagnostic (1.75 vs 0.57,
+  ordinary t ≈ 2.4; entry-day variance includes later hours). Goyal–Saretto (2009). Kelly on Part 10's 1,706 monthly P&Ls: mean/variance heuristic = 46, the sample ruin wall 1/|x_min| = 30,
   the empirical optimum against the wall at 29.8; half of it keeps most of the growth.
 * **8. Making a market: the spread.** The die game; Glosten–Milgrom running (beliefs, bid and ask converging);
   derivation of ask − bid = μ(V_H − V_L) and the edge/markout split. 524,281 Deribit BTC option trades on 100
@@ -61,7 +61,7 @@ statements; no final finding had been made at the time of writing.*
 * **10. Hedging the book.** Greek space: a short straddle carried back to the origin by 0.55 of a 7-day and 1.23 of a
   60-day option, then shares. Derivation: the 2×2 system, 𝒱/Γ = στS². Simulated (10,000 paths): GBM sd 0.91 → 0.13 with
   the gamma hedge; Heston 2.14 → 1.39 → 0.54 with gamma and then vega. Vega buckets under a steepening (Taleb). The
-  Whalley–Wilmott band (lab `ww_band`); the deep hedger replayed (3 cost weights × 3 seeds) on the cost–risk chart
+  Whalley–Wilmott band (lab `ww_band`); the deep hedger replayed (3 cost weights, with 3 replay seeds only at κ = 1) on the cost–risk chart
   (Part 17 goes further).
 * **11. Expiry and pin risk.** The gamma spike in 3D (0.15 a day and 5.8 a minute before expiry); delta as a
   step; pin risk. Avellaneda–Lipkin derived and simulated: ending within 0.5 of the strike 10% with no hedgers, 33%
@@ -90,7 +90,7 @@ statements; no final finding had been made at the time of writing.*
 * **17. Industry.** OCC volumes (4.98 bn contracts in 2019 to 15.3 bn in 2025); retail options and the wholesalers
   (Bryzgalova–Pavlova–Sikorskaya 2023), Muravyev–Pearson (2020); SIG, Optiver, IMC, Jane Street; CFTC v. Optiver
   (2008/2012); the desk's loop; venue rules.
-* **18. Frontier.** A registered walk-forward ridge and boosted-tree predictor of the hedged straddle's P&L from four
+* **18. Frontier.** A logged historical walk-forward ridge and boosted-tree predictor of the hedged straddle's P&L from four
   features (66 out-of-sample weeks): correlations with the outcome about zero; both learn only "sell", earning what
   always selling earns (+0.86 a week, t 2.6) against +0.32 for chapter 7's single signal. Bali–Beckmeyer–Mörke–Weigert
   (2023), Cao et al. (2023), Baldacci–Bergault–Guéant (2021), Fang–Xu (2023).
@@ -107,8 +107,67 @@ statements; no final finding had been made at the time of writing.*
   puts within 30 days −21%, beyond +14%; OTM calls −2% and −23%; near the money about 0. Three open problems; pause:
   in dollars the 90 put rises more (1.08 of the 85's own impact, against 0.72 for the 80 put), in volatility the 80 put
   (1.1 points against 0.8), because the 80 put has less vega.
-* **The quoting engine, recap, desk questions, ten problems (two at qualifying-exam level) (outro).** The House's new functions; Rule 11; the trial
-  counter (310 when chapter 18 registered).
+* **The quoting engine, recap, desk questions, ten problems (two at qualifying-exam level) (outro).** The House's new functions; Rule 11; the as-of-Part-11 trial
+  counter (312; the chapter-7 count is 311).
+
+## Interpretation and validation limits
+
+The Bitcoin examples are historical model diagnostics. DVOL is an index proxy for
+hypothetical dollar options, not an executable straddle or call quote. The weekly
+smiles reconstruct IV from mark prices and pool records from 00:00 to 12:00 UTC,
+including observations after the nominal 08:00 entry. Their reference index also
+uses a window around that hour. Availability of the reconstructed inputs at entry
+is not established. Pricing with a spot input, interpolated smiles and hourly
+Binance hedges does not reproduce inverse-contract cash flows, executable spreads,
+fees, liquidity or funding.
+
+The chapter-7 HAR coefficients use earlier days, but its next-day input includes
+the full entry calendar day's realized variance, including hours after entry; that
+next-day prediction is reused as a monthly proxy. The 1.75 versus 0.57 split cannot
+establish a tradable forecasting edge. Disjoint windows need not be independent.
+The existing registry preserves code specifications and counts; it has no timestamp
+that establishes registration before calculation. The chapter-18 four-week label
+gap does not resolve quote-input timing. Its five ordinary bootstrap refits form
+a descriptive range, not a confidence or prediction interval. R-squared uses the
+fixed initial-sample mean; the running-error panel also shows an expanding-mean
+benchmark. None of these replays is newly evaluated in this polish pass.
+
+Greek P&L explains are finite-step approximations. The log-contract variance
+replication is exact for continuous quadratic variation under its stated
+continuous-hedging assumptions, with corrections for jumps and discrete sampling.
+The displayed straddle shading inflates ordinary standard errors heuristically;
+the reported Newey-West statistic separately uses four lags. An insignificant
+frequency difference is not evidence of equivalent means. The Kelly curve is an
+in-sample average over overlapping windows: its bankruptcy wall uses the worst
+observed loss, not a bound on future losses. The second-order log expansion uses
+E[X²]; mean/variance is only a heuristic.
+
+The demand calculation fixes a martingale measure, zero rates and yield, and
+preselected delta hedges. The dealer variable denotes shorts. Covariance impact is
+a mean-variance illustration of the richer Gârleanu–Pedersen–Poteshman theory.
+The exponential-tilt comparison is a finite empirical calculation on fixed hedge
+residuals; it neither optimizes all hedge strategies nor certifies existence of a
+population exponential moment. The displayed jump parameters are log-jump
+parameters. Forty thousand jump paths are compared with eight thousand paths in
+each diffusion case. Two days of filtered taker flow do not identify customer
+identity, a common collar or a causal pricing effect.
+
+The American cash-dividend tree uses an escrowed-dividend model. Exercise and
+continuation tie at equality in the dividend criterion. A same-expiry put spread
+bounds expiry payoff liability by its strike gap at any hedge distance; net loss
+also subtracts the initial credit. That bound does not remove interim margin or
+liquidity risk. Synthetic rolling hedge options marked at current Black–Scholes
+volatility, even on Heston paths, are not Heston option prices or executed hedges.
+
+The COR3M series before its July 2021 launch is backcast history. The Bitcoin
+pinning check uses a thousand-dollar grid and Binance hourly closes, not the actual
+listed strike set or Deribit settlement averages; its binomial z omits dependence
+and baseline uncertainty. OCC contract totals include futures. Case records were
+reviewed as of 7 November 2026: the Jane Street matter is described as alleged,
+with the latest verified October 2026 document-dispute report attributed to the
+legal press. The LJM record includes subsequent final judgments and a September
+2026 Fair Fund; the Allianz seven-billion figure is lost market value, distinct
+from principal losses.
 
 ## Textbook audit
 

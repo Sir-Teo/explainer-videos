@@ -117,23 +117,20 @@ class MarketMaker(VoiceoverScene):
             cmath(r"\text{ask}", r"=", r"\mathbb{E}[V \mid \text{buy}] = \frac{\pi\,\big(\mu + \tfrac{1-\mu}{2}\big)\,V_H + "
                   r"(1-\pi)\,\tfrac{1-\mu}{2}\,V_L}{\Pr(\text{buy})}", font_size=32, colors={r"\text{ask}": QC.LOSS}),
             cmath(r"\text{ask} - \text{bid}", r"=", r"\mu\,(V_H - V_L)\qquad (\pi = \tfrac12)", font_size=36),
-            cmath(r"\text{edge}", r"=", r"s\,(p - m_t),\qquad \text{markout}_h = s\,(p - m_{t+h}) + \Delta\,(I_{t+h} - "
-                  r"I_t)", font_size=32),
-            cmath(r"\text{adverse selection}", r"=", r"\text{edge} - \text{markout}", font_size=36),
+            VGroup(
+                MathTex(r"\text{edge}=s(P_t-M_t)/v_t", font_size=30),
+                MathTex(r"\text{markout}_h=s[P_t-M_{t+h}+\Delta_t(I_{t+h}-I_t)]/v_t", font_size=28),
+            ).arrange(DOWN, aligned_edge=LEFT, buff=0.12),
+            cmath(r"\text{markout change}", r"=", r"\text{edge} - \text{markout}", font_size=36),
         ]
         whys = [why(r"Bayes: a buy comes from every informed trader when the value is high, and from half the others"),
                 why(r"substitute $\pi = \tfrac12$: the spread is the informed share times the uncertainty"),
                 why(r"in the data: the maker's edge against the mark at the trade, and what is left $h$ later, the "
                     r"option marked again and the delta hedge counted"),
-                why(r"what the informed took back (Huang and Stoll's decomposition of the spread)")]
+                why(r"the edge-to-markout change includes information, price discovery and mark-model error; it does not identify a pure causal component")]
         step = ladder(self, rows, whys, keep=4, top=3.0, x=-0.6, buff=0.5, edge=6.9)
         with self.voiceover(
-            "The algebra of it. The ask is the expected value given a buy, by Bayes' rule: buys come from all the "
-            "informed traders when the value is high, and from half of the others either way. "
-            "<bookmark mark='a'/> At even odds: the spread is the informed share times the uncertainty. <bookmark mark='b'/> To measure it on real "
-            "trades, split it. The maker's edge is what it charged against fair value at the moment of the trade. "
-            "The markout is what is left some time later, once the option is marked again and the delta hedge is "
-            "counted. <bookmark mark='c'/> The difference is adverse selection."
+            "The algebra of it. The ask is the expected value given a buy, by Bayes' rule: buys come from all the informed traders when the value is high, and from half of the others either way. <bookmark mark='a'/> At even odds: the spread is the informed share times the uncertainty. <bookmark mark='b'/> To measure it on real trades, split it. The maker's edge is what it charged against fair value at the moment of the trade. The markout is what is left some time later, once the option is marked again and the delta hedge is counted. <bookmark mark='c'/> That difference is an adverse-selection proxy, mixed with other effects. Here s is the taker direction, delta is the long-option delta, P and M are dollar-converted option prices, and v is vega per volatility point. The taker sign multiplies the whole hedged gain. Marks are valuation proxies. The edge-minus-markout change also contains price discovery and mark-model error; it is not an identified pure adverse-selection component. The later mark is the first print at or after the requested horizon, not necessarily exactly at that time; fees and execution are absent."
         ) as vo:
             step(0)
             vo.wait_until("a")

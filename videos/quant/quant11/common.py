@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from explainer.quant import *  # noqa: F403
+from explainer.ai.lecture import pause_card as _boxed_pause_card
 
 from .compute import load  # noqa: F401
 
@@ -33,7 +34,7 @@ def tbar(ax, x, t, color, width=0.5, lo=0.0):
 
 def pause(question: str, width: float = 5.6, font_size=22, corner=DR):
     """A pause-and-predict card, in a corner."""
-    return pause_card(question, width=width, font_size=font_size).to_corner(corner, buff=0.3)
+    return _boxed_pause_card(question, width=width, font_size=font_size, color=QC.IDEA).to_corner(corner, buff=0.3)
 
 
 def axes3d(x_range, y_range, z_range, x_length=7.4, y_length=5.0, z_length=3.4, shift=DOWN * 0.6):

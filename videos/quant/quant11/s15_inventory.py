@@ -75,8 +75,10 @@ class Inventory(VoiceoverScene):
             cmath(r"0", r"=", r"\partial_t\theta + \max_{\delta^{\pm}} \sum_{\pm} \lambda^{\pm}(\delta^{\pm})\big[\delta^{\pm} "
                   r"+ \theta(q \mp 1) - \theta(q)\big] - \phi q^2", font_size=30),
             cmath(r"\delta^{\pm *}", r"=", r"\tfrac1k + \theta(q) - \theta(q \mp 1)", font_size=34),
-            cmath(r"\delta^{b,a}", r"\approx", r"\tfrac1k \pm \big(q \pm \tfrac12\big)\sqrt{\tfrac{\phi\,e}{A k}}",
-                  font_size=34),
+            VGroup(
+                MathTex(r"\delta^b\approx\tfrac1k+(q+\tfrac12)c,\quad\delta^a\approx\tfrac1k-(q-\tfrac12)c", font_size=30),
+                MathTex(r"c=\sqrt{\phi e/(Ak)}", font_size=26),
+            ).arrange(DOWN, buff=0.12),
         ]
         whys = [why(r"fills fall exponentially in the distance from fair value; profit, minus a running penalty on "
                     r"inventory (Avellaneda and Stoikov 2008; Cartea and Jaimungal's form)"),
@@ -97,7 +99,7 @@ class Inventory(VoiceoverScene):
             "Dynamic programming gives a Hamilton-Jacobi-Bellman equation for the value of holding q. "
             "<bookmark mark='b'/> Its first-order condition: each quote sits one over k from fair value, plus the "
             "change in that value from one more unit of inventory. <bookmark mark='c'/> Olivier Guéant, "
-            "Charles-Albert Lehalle and Joaquin Fernandez-Tapia solved it in closed form: long inventory moves both "
+            "Charles-Albert Lehalle and Joaquin Fernandez-Tapia derived a long-horizon approximation: long inventory moves both "
             "quotes down, in proportion to q. <bookmark mark='d'/> For options, q is vega, and Sasha Stoikov and "
             "Mehmet Sağlam did exactly this in 2009. And because market makers cannot hedge perfectly, client demand "
             "itself moves option prices, as Gârleanu, Pedersen and Poteshman showed. Pause and "

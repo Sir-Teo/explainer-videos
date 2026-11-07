@@ -144,12 +144,7 @@ class Hedging(VoiceoverScene):
                 "gamma hedge left." if cut_h > 0.3 else
                 f"Even with volatility moving, the vega hedge removes only {100 * cut_h:.0f} percent more.")
         with self.voiceover(
-            "Does it work? Simulate a short straddle on ten thousand paths, hedged three ways: delta only; adding "
-            "gamma with a seven-day option; adding vega with a sixty-day option. <bookmark mark='a'/> When volatility is constant, the delta hedge alone leaves a "
-            f"standard deviation of {G['delta']['sd']:.2f}, the discrete-hedging error of Part ten. The gamma hedge "
-            f"removes {100 * cut_g:.0f} percent of it, and vega has nothing to add. <bookmark mark='b'/> Now let "
-            "volatility itself wander, as in Heston's model. Delta alone leaves "
-            f"{H['delta']['sd']:.2f}, the gamma hedge {H['delta-gamma']['sd']:.2f}. {hsay}"
+            f"Does it work? Simulate a short straddle on ten thousand paths, hedged three ways: delta only; adding gamma with a seven-day option; adding vega with a sixty-day option. <bookmark mark='a'/> When volatility is constant, the delta hedge alone leaves a standard deviation of {G['delta']['sd']:.2f}, the discrete-hedging error of Part ten. The gamma hedge removes {100 * cut_g:.0f} percent of it, and vega has nothing to add. <bookmark mark='b'/> Now let volatility itself wander, as in Heston's model. Delta alone leaves {H['delta']['sd']:.2f}, the gamma hedge {H['delta-gamma']['sd']:.2f}. {hsay} These are synthetic rolling hedge options marked with current spot volatility in Black-Scholes, including in the Heston simulation; they are not Heston option prices. Option spreads, funding and execution constraints are omitted."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(src))
             vo.wait_until("a")
@@ -237,12 +232,7 @@ class Hedging(VoiceoverScene):
                      color=VEGA).to_edge(UP, buff=0.4).to_edge(LEFT, buff=0.8)
         src = illustration(r"a 15-day call, 60\% vol, 10 bp cost, $\gamma = 1$")
         with self.voiceover(
-            "Hedging costs money. Vlad Whalley and Paul Wilmott found the answer in 1997: a band around delta. Inside it, do nothing; when "
-            "the hedge drifts out, trade only back to the band's edge. <bookmark mark='a'/> Its half-width is the cube "
-            "root of the cost times gamma squared over the risk aversion, the House's ww band. Run it fifteen days "
-            f"from expiry: {hw[90.0]:.3f} at ninety, {hw[100.0]:.3f} at the strike, {hw[110.0]:.3f} at a hundred and ten. "
-            "<bookmark mark='b'/> Widest at the strike, where delta moves fastest and chasing it would cost the most. "
-            ""
+            f"""Whalley and Wilmott derived a small-cost asymptotic no-trade band in 1997. Within the band, do nothing; outside it, trade back to the edge. <bookmark mark='a'/> In this model its half-width is a cube root of proportional cost times spot times gamma squared, divided by the risk-aversion parameter, with the displayed constants and discount factor. Fifteen days from expiry, the widths are {hw[90.0]:.3f} at ninety, {hw[100.0]:.3f} at the strike and {hw[110.0]:.3f} at a hundred and ten. <bookmark mark='b'/> It is widest here near the strike. This asymptotic rule depends on its objective and model; it is not a universally optimal trading band."""
         ) as vo:
             self.play(FadeIn(g), Create(mid), FadeIn(src), FadeIn(eq), FadeIn(card))
             vo.wait_until("a")
@@ -285,7 +275,11 @@ class Hedging(VoiceoverScene):
 
     def cost_risk(self, h, hr):
         rows = h["rows"]
-        g = axes([0.15, 0.5], [0.5, 1.5], x_length=6.6, y_length=4.4, xlabel=r"average trading cost (per 100)",
+        all_points = [(r["cost"], r["sd"]) for r in rows if np.isfinite(r["cost"]) and np.isfinite(r["sd"])]
+        all_points += [(r["cost"], r["sd"]) for r in hr["runs"].values()]
+        xmax = max(0.5, 1.1 * max(p[0] for p in all_points))
+        ymax = max(1.5, 1.1 * max(p[1] for p in all_points))
+        g = axes([0, xmax], [0, ymax], x_length=6.6, y_length=4.4, xlabel=r"average trading cost (per 100)",
                  ylabel=r"spread of hedged P\&L (s.d.)", xticks=[0.2, 0.3, 0.4, 0.5], yticks=[0.5, 0.75, 1.0, 1.25, 1.5],
                  font_size=17).to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
         ax = g.ax
@@ -295,7 +289,6 @@ class Hedging(VoiceoverScene):
             pts = sorted([(r_["cost"], r_["sd"]) for r_ in rows if r_["rule"] == name and np.isfinite(r_["sd"])])
             if name == "fixed band":
                 pts = sorted(pts + [(r_["cost"], r_["sd"]) for r_ in rows if r_["rule"] == "every step"])
-            pts = [p for p in pts if 0.15 <= p[0] <= 0.5 and p[1] <= 1.5]
             dots.add(VGroup(*[Dot(ax.c2p(*p), radius=0.07, color=col) for p in pts]))
             lines.add(VMobject(stroke_color=col, stroke_width=2.5).set_points_as_corners([ax.c2p(*p) for p in pts])
                       if len(pts) > 1 else VGroup())
@@ -303,7 +296,7 @@ class Hedging(VoiceoverScene):
         pts = [(r_["cost"], r_["sd"]) for r_ in rows if r_["rule"] == "deep hedge"]
         pts += [(r_["cost"], r_["sd"]) for r_ in hr["runs"].values()]
         for c_, s_ in pts:
-            if 0.15 <= c_ <= 0.5 and s_ <= 1.5:
+            if np.isfinite(c_) and np.isfinite(s_):
                 deep.add(Dot(ax.c2p(c_, s_), radius=0.06, color=GAMMA))
         leg = legend([(GREY_B, r"rehedge every 6 hours"), (ALT, r"fixed bands"), (VEGA, r"Whalley--Wilmott bands"),
                       (GAMMA, r"deep hedger: 3 cost weights, and 3 seeds at $\kappa = 1$")], font_size=17)
@@ -314,11 +307,11 @@ class Hedging(VoiceoverScene):
             wrapped_label(r"the simple Whalley--Wilmott band is hard to beat; the learner lands close to its curve "
                           r"without being told the shape of the answer. Part 17 takes it further", 4.2, 19, GAMMA),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
-        src = illustration(r"geometric Brownian motion at 60\%; 120 rebalancing points")
+        src = illustration(r"GBM at 60\%; 120 rebalancing points; all finite recorded points shown; only $\kappa=1$ has three replay seeds")
         with self.voiceover(
             "The scoreboard: risk against cost on the same paths, lower left is better. Rehedging every six hours "
             "is safest and dearest; the Whalley-Wilmott bands trace the better curve. <bookmark mark='a'/> The deep hedger, at three cost weights, "
-            "with three seeds at the first, lands close to that curve, without being told what a band is. The classical answer was "
+            "with three seeds only at kappa equal to one, lands close to that curve, without being told what a band is. The classical answer was "
             "already very good; the learner's value is that it scales to books with no formula, Part seventeen."
             " Every option eventually expires. Next: what happens on that day."
         ) as vo:

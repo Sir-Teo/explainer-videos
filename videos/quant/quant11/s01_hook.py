@@ -20,9 +20,7 @@ class Hook(VoiceoverScene):
         card = part_title(PART, r"Gamma against theta")
         disc = note(DISCLAIMER, font_size=18, color=GREY_C).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Part eleven. Trading options. Part ten priced an option by hedging it. This is the practitioner's part: "
-            "how an options trader thinks, what each position is a bet on, and how the desks that make these markets "
-            "earn their living, and sometimes get into trouble."
+            """Part eleven. Trading options: Greek exposures, hedging, quotes, inventory and expiry. The historical replays teach accounting and model limitations; they are not executable strategy returns."""
         ):
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(disc))
         self.play(FadeOut(card), FadeOut(disc))
@@ -36,13 +34,7 @@ class Hook(VoiceoverScene):
                     r"day whether it moves or not; vega marks the book when implied volatility itself moves")]
         step = ladder(self, rows, whys, keep=1, top=1.0, x=-0.4, buff=0.9, edge=6.9)
         with self.voiceover(
-            "An interview question from an options desk. You are long a straddle, a call and a put at the same "
-            "strike, and you hedge its delta. The stock does not move all week. How do you lose money, and when do "
-            "you make it? <bookmark mark='a'/> Part ten's accounting gives the answer in one line. Each day a "
-            "hedged option earns one half gamma times the squared move, and pays theta, the implied variance, "
-            "whether the stock moves or not. A quiet week bleeds theta. And if implied volatility falls, the "
-            "straddle loses its vega too. You make money when the stock moves more than the implied volatility "
-            "said it would."
+            """A desk question. Long a straddle, delta-hedged, in a quiet week: how do you lose money? <bookmark mark='a'/> At zero rates and yield, the leading local explain combines gamma on squared moves, theta's model-variance charge and vega on changing implied volatility. Quiet spot loses theta; falling implied volatility also hurts a long-vega straddle. Profit depends on gamma-weighted moves, changing marks, higher-order terms and costs, not just whether a single realized-volatility number exceeds implied."""
         ) as vo:
             self.play(FadeIn(q, shift=UP * 0.2))
             vo.wait_until("a")
@@ -66,7 +58,7 @@ class Hook(VoiceoverScene):
         led = HedgeLedger(gam, the, book, tr, scale=8.0, half_width=2.0, font_size=20)
         led.move_to(DOWN * 2.2 + RIGHT * 0.3)
         side = VGroup(
-            label(rf"bought at DVOL: {100 * s['iv']:.0f}\% implied", font_size=24, color=VEGA),
+            label(rf"model input: DVOL proxy {100 * s['iv']:.0f}\% implied", font_size=24, color=VEGA),
             label(rf"realized over the month: {100 * s['rv']:.0f}\%", font_size=24, color=GAMMA),
             MathTex(rf"\text{{P\&L: }} {s['pnl']:+.1f}\ \text{{on a premium of }} {s['premium']:.1f}", font_size=28,
                     color=OPT),
@@ -75,18 +67,9 @@ class Hook(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_corner(UR, buff=0.45)
         pc = pause(r"Realized volatility was nearly twice what you paid for. Did the straddle double its money?",
                    width=4.6, font_size=21).next_to(side[1], DOWN, buff=0.3).align_to(side, LEFT)
-        src = real_data(r"Binance BTCUSDT hourly; Deribit DVOL; hedged every hour, no costs")
+        src = real_data(r"hypothetical dollar straddle at DVOL; hourly Binance hedges; no costs, spreads or contract execution")
         with self.voiceover(
-            "Here is the trade, on a real month. On the first of May 2021 you buy a thirty-day at-the-money Bitcoin "
-            f"straddle at the market's implied volatility of {100 * s['iv']:.0f} percent, and hedge it every hour. "
-            "Watch the ledger fill: gamma's earnings, theta's bill, and the book. "
-            "<bookmark mark='a'/> On the nineteenth, Bitcoin crashed: at its low it had lost almost half its value. "
-            f"Over the month it moved at a realized volatility of {100 * s['rv']:.0f} percent, nearly twice what you "
-            "paid for. Pause, and predict: did the straddle double its money? <bookmark mark='b'/> It made only "
-            f"{s['pnl']:.1f} on a premium of {s['premium']:.1f}. Look at the gamma bar: it grew while Bitcoin wandered "
-            "near the strike, and almost stopped once the crash had carried it far away, where gamma is small. "
-            "Being right about volatility is not enough; where the volatility happens matters. That is the kind of "
-            "thing this part is about."
+            f"""A hypothetical dollar straddle on the real May 2021 spot path. The model prices a thirty-day at-the-money straddle at DVOL's {100 * s['iv']:.0f} percent and hedges hourly, with no costs. DVOL is an index proxy, not a traded straddle quote. <bookmark mark='a'/> During the May nineteenth crash, spot moved far below the strike. Realized volatility over the month was {100 * s['rv']:.0f} percent. Did the straddle double its money? <bookmark mark='b'/> Its model P&L was {s['pnl']:.1f} on a premium of {s['premium']:.1f}. The gamma bar grew near the strike and slowed as spot left it. The order and location of the moves matter. Hourly closing inputs, interpolation and inverse-contract conventions limit a trading interpretation."""
         ) as vo:
             self.play(FadeIn(g1), Create(k), FadeIn(kl), FadeIn(side[0]), FadeIn(src), FadeIn(led))
             self.add(path, head, day)
