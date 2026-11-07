@@ -44,7 +44,7 @@ python tools/build.py stats62 -q l
 python tools/lecture_length.py stats62 --floor 50
 ```
 
-All 10 inputs regenerated; **20 checks pass** (14 audited local and six legacy). All narration/list bookmarks match their rows. Estimated English narration is 51.3 minutes. [QA evidence](../../../docs/qa/evidence/stats62-polish-20261107/README.md). English sampled visual verification is pending. Chinese narration/caption tables, continuous listening/playback and final narrated masters remain open; this checkpoint is not bilingual production approval.
+All 10 inputs regenerated; **20 checks pass** (14 audited local and six legacy). All narration/list bookmarks match their rows. Estimated English narration is 51.3 minutes. [QA evidence](../../../docs/qa/evidence/stats62-polish-20261107/README.md). The recorded English sampled visual checkpoint is complete. Chinese narration/caption tables, continuous listening/playback and final narrated masters remain open; this checkpoint is not bilingual production approval.
 
 ## Sources
 
