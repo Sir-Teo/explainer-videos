@@ -35,11 +35,14 @@ class Kalman(VoiceoverScene):
             "<bookmark mark='a'/> A state-space model has two equations. The state, which we cannot see, evolves linearly "
             "with Gaussian noise: a position and velocity, a river's underlying level, an economy's trend. <bookmark "
             "mark='b'/> We observe a linear function of it, plus noise. <bookmark mark='c'/> Before each observation, our "
-            "belief about the state and the observation we expect are jointly Gaussian. <bookmark mark='d'/> So after "
+            "belief about the state and the observation we expect are jointly Gaussian, assuming a Gaussian initial state and independent process and measurement noises. <bookmark mark='d'/> So after "
             "observing, the state's conditional distribution is Gaussian too, by the conditional-normal formula of Part "
             "five. The mean moves toward the observation by the gain K times the surprise, and the variance shrinks. That "
             "is the whole of the Kalman filter."
         ) as vo:
+            intro=label('Linear Gaussian conditioning updates a hidden-state distribution',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -102,14 +105,18 @@ class Kalman(VoiceoverScene):
         ]
         rows[2][-1].set_color(STATEC)
         whys = [why(r"carry the ellipse forward"), why(r"the surprise and its variance"), why(r"Kalman (1960)"),
-                why(r"gaps are free")]
+                why(r"ignorable missingness: skip measurement update")]
         with self.voiceover(
-            "<bookmark mark='a'/> In equations: predict the mean and covariance forward through the dynamics. <bookmark "
-            "mark='b'/> Compare the observation with its prediction: the innovation, with its variance. <bookmark mark='c'/> "
-            "Update by the gain. Rudolf Kálmán published the recursion in 1960; it needs only the last mean and covariance, "
-            "not the whole history, which made it practical on the computers of the day. <bookmark mark='d'/> And a missing "
-            "observation costs nothing: skip the update and predict again."
+            "<bookmark mark='a'/> In equations: predict the mean and covariance forward through the dynamics. "
+            "<bookmark mark='b'/> Compare the observation with its prediction: the innovation, with its variance. "
+            "<bookmark mark='c'/> Update by the gain. Rudolf Kálmán published the recursion in 1960; it needs only "
+            "the last mean and covariance, not the whole history, which made it practical on the computers of the "
+            "day. <bookmark mark='d'/> And an ignorable missing observation needs no measurement update: predict "
+            "again, with greater uncertainty. Informative missingness requires modelling the observation process."
         ) as vo:
+            intro=label('Predict through dynamics, then update with the measurement',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -133,13 +140,14 @@ class Kalman(VoiceoverScene):
             label(rf"signal-to-noise {d['signal_noise']:.3f}: \ the level moves slowly", font_size=22, color=TAUC),
         ), 3.8, 0.42, [4.9, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The Nile again, now its annual flow at Aswan from 1871 to 1970, the standard example of "
-            "James Durbin and Siem Jan Koopman's textbook. The simplest state-space model, the local level, says the "
-            "river has an underlying level that drifts as a random walk, and each year's flow is that level plus noise. "
-            "<bookmark mark='b'/> Maximizing the likelihood gives a level variance of about fifteen hundred and a noise "
-            "variance of about fifteen thousand: <bookmark mark='c'/> the values in Durbin and Koopman's book, to the digit. "
-            "<bookmark mark='d'/> The filtered level, in blue with its ninety percent band, follows the flows only slowly, "
-            "discounting each year's surprise by the gain."
+            "<bookmark mark='a'/> The Nile again, now its annual flow at Aswan from 1871 to 1970, the standard "
+            "example of James Durbin and Siem Jan Koopman's textbook. The simplest state-space model, the local "
+            "level, says the river has an underlying level that drifts as a random walk, and each year's flow is that"
+            " level plus noise. <bookmark mark='b'/> Maximizing the likelihood gives a level variance of about "
+            "fifteen hundred and a noise variance of about fifteen thousand: <bookmark mark='c'/> approximately the "
+            "values in Durbin and Koopman's book, with a finite diffuse-prior approximation. <bookmark mark='d'/> The"
+            " filtered level, in blue with its ninety percent band, follows the flows only slowly, discounting each "
+            "year's surprise by the gain."
         ) as vo:
             self.add(nile_tag())
             self.play(FadeIn(A), FadeIn(dots), FadeIn(side[0]))
@@ -164,15 +172,17 @@ class Kalman(VoiceoverScene):
         side = fit_rows(VGroup(
             label(r"green: \ the smoothed level \ (chapter 8)", font_size=22, color=BANDC),
             label(rf"its largest one-year fall: \ into {d['biggest_drop_year']}", font_size=22, color=MISSC),
-            label(rf"a level shift in 1899: \ {d['shift']:.0f}, \ LR = {d['lr_shift']:.1f}", font_size=22, color=TAUC),
+            label(rf"a level shift in 1899: \ {d['shift']:.0f}, \ $2\Delta\log L$ = {d['lr_shift']:.1f}, \ variances fixed", font_size=22, color=TAUC),
             label(r"the first Aswan dam begun in 1898; \ a drier climate", font_size=22, color=GREY_A),
         ), 3.8, 0.42, [4.9, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Using all the data, past and future, gives the smoothed level, in green, the subject of "
-            "chapter eight. <bookmark mark='b'/> Its biggest one-year fall comes into 1899. <bookmark mark='c'/> Adding a "
-            "permanent shift at 1899 to the model, the likelihood picks a fall of about three hundred, and the likelihood "
-            "ratio of " + say(d["lr_shift"], 1) + " is decisive. <bookmark mark='d'/> Work on the first dam at Aswan began "
-            "in 1898, and the climate of the basin became drier around the same time. The level does more than wander: it "
+            "<bookmark mark='a'/> Using all the data, past and future, gives the smoothed level, in green, the "
+            "subject of chapter eight. <bookmark mark='b'/> Its biggest one-year fall comes into 1899. <bookmark "
+            "mark='c'/> Adding a permanent shift at 1899 to the model, the likelihood picks a fall of about three "
+            "hundred, and the likelihood improvement statistic of " + say(d["lr_shift"], 1) + " is descriptive. The variances are held at their no-shift estimates, and the date was inspected in this "
+            "same record, so this is not a calibrated likelihood-ratio test. <bookmark mark='d'/> Work on the first "
+            "dam at Aswan began in 1898, and the climate of the basin became drier around the same time. This is "
+            "evidence to investigate a level change, not causal attribution to the dam or a proof that the process "
             "broke."
         ) as vo:
             self.add(nile_tag())
@@ -202,14 +212,18 @@ class Kalman(VoiceoverScene):
         whys = [why(r"the gain for a random-walk level"), why(r"the gain settles quickly"),
                 why(r"Part 17's exponential smoothing! \ (Muth 1960)"), why(r"$\alpha = K$: \ chosen by the likelihood")]
         with self.voiceover(
-            "<bookmark mark='a'/> For the local level the gain is the predicted variance over the predicted variance plus "
-            "the noise variance. <bookmark mark='b'/> After a few steps it settles to a steady state, a fixed number "
-            "determined by the ratio of the two variances. <bookmark mark='c'/> And then the filter's update is a weighted "
-            "average of the new observation and the old level: Part seventeen's simple exponential smoothing, exactly. John "
-            "Muth noticed this in 1960. <bookmark mark='d'/> For the Nile the signal-to-noise ratio of " + say(q / r, 3)
+            "<bookmark mark='a'/> For the local level the gain is the predicted variance over the predicted variance "
+            "plus the noise variance. <bookmark mark='b'/> After a few steps it settles to a steady state, a fixed "
+            "number determined by the ratio of the two variances. <bookmark mark='c'/> And then the "
+            "filter's update is a weighted average of the new observation and the old level: Part seventeen's simple "
+            "exponential smoothing, exactly. John Muth noticed this in 1960. <bookmark mark='d'/> For the Nile the "
+            "signal-to-noise ratio of " + say(q / r, 3)
             + " gives a gain of " + say(K, 2) + ". The state space explains why exponential smoothing works, and lets the "
             "likelihood choose its smoothing constant."
         ) as vo:
+            intro=label('The local-level steady-state gain yields exponential smoothing',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

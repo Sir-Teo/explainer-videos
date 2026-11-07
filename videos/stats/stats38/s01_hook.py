@@ -27,13 +27,13 @@ class Hook(VoiceoverScene):
             label(r"the Nile, \ and hundreds of other records: \ like $n^{0.7}$ and more", font_size=24, color=LMC),
         ), 12.0, 0.35, [0, -1.7, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Harold Edwin Hurst went to Egypt in 1906 and spent most of the next sixty years measuring "
-            "the Nile. His question was practical: how big must a reservoir be to carry Egypt through a run of dry years, "
-            "releasing the average flow every year? The answer depends on the range of the river's cumulative surplus "
-            "and deficit. <bookmark mark='b'/> If the years were independent, that range would grow like the square root "
-            "of the number of years. <bookmark mark='c'/> In 1951 Hurst reported that for the Nile, and for hundreds of other "
-            "records of rivers, rainfall, tree rings and lake sediments, it grew faster, like the number of years to a "
-            "power of about seven tenths or more."
+            "<bookmark mark='a'/> Harold Edwin Hurst went to Egypt in 1906 and spent most of the next sixty years "
+            "measuring the Nile. His question was practical: how big must a reservoir be to carry Egypt through a run"
+            " of dry years, releasing the average flow every year? The answer depends on the range of the river's "
+            "cumulative surplus and deficit. <bookmark mark='b'/> For independent finite-variance yearly increments, "
+            "the typical range grows like the square root of the number of years. <bookmark mark='c'/> In 1951 Hurst "
+            "reported that for the Nile, and for hundreds of other records of rivers, rainfall, tree rings and lake "
+            "sediments, it grew faster, like the number of years to a power of about seven tenths or more."
         ) as vo:
             self.play(FadeIn(tl))
             vo.wait_until("a")
@@ -52,7 +52,7 @@ class Hook(VoiceoverScene):
         ax = A.ax
         line = series_line(ax, yrs, m, LMC, 1.8)
         mean = DashedLine(ax.c2p(620, d["mean"]), ax.c2p(1290, d["mean"]), color=GREY_B, stroke_width=1.5)
-        foot = label(r"long stretches above the mean, \ and long stretches below: \ not white noise, \ not an AR(1)",
+        foot = label(r"long stretches above the mean, \ and long stretches below: \ compare with white-noise and fitted AR(1) references",
                      font_size=24, color=GREY_A).move_to([0, -2.6, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Here is one of his records, from the Roda gauge on an island in Cairo: the yearly minimum "
@@ -79,14 +79,15 @@ class Hook(VoiceoverScene):
         line = series_line(ax, yrs, z, TAUC, 2.2)
         i, j = int(np.argmax(z)), int(np.argmin(z))
         rng_ = DoubleArrow(ax.c2p(1270, z.min()), ax.c2p(1270, z.max()), buff=0, color=MISSC, stroke_width=3, tip_length=0.15)
-        foot = label(rf"the range $R$ = {d['range']:,.0f}: \ what a reservoir releasing the mean must hold", font_size=24,
+        foot = label(rf"the range $R$ = {d['range']:,.0f}: \ cumulative level anomaly, not reservoir volume", font_size=24,
                      color=MISSC).move_to([0, -2.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Hurst's reservoir. Add up each year's departure from the long-run mean: the cumulative "
-            "surplus a dam would store, or the deficit it would have to cover, if it released exactly the average flow. "
-            "<bookmark mark='b'/> The range of that curve, from its lowest point to its highest, is the capacity the "
-            "reservoir needs. Divide it by the standard deviation to make it comparable across rivers: the rescaled range, "
-            "R over S."
+            "<bookmark mark='a'/> Here we illustrate Hurst's construction using minimum water levels, not flow "
+            "volumes. Add up each year's departure from the long-run mean: a cumulative level anomaly. For a "
+            "flow-volume record, the analogous curve describes idealized storage while releasing the mean flow. "
+            "<bookmark mark='b'/> The range of that curve summarizes cumulative deviations; for flow volumes under "
+            "idealized operation it measures storage the reservoir needs. Divide it by the standard deviation to make"
+            " it comparable across rivers: the rescaled range, R over S."
         ) as vo:
             self.add(minima_tag())
             self.play(FadeIn(A))
@@ -119,7 +120,7 @@ class Hook(VoiceoverScene):
             + ". <bookmark mark='c'/> White noise of the same length gives about " + say(d["H_iid_mean"], 2) + ", a "
             "little above one half in samples this short. <bookmark mark='d'/> Even an autoregression fitted to the "
             "Nile, with the same correlation between neighbouring years, gives only about " + say(d["H_ar_mean"], 2)
-            + ". The river remembers more than one year back."
+            + ". These summaries suggest persistent dependence; they do not by themselves prove a fractional model."
         ) as vo:
             self.add(minima_tag())
             self.play(FadeIn(A), Create(half), FadeIn(side[3]))
@@ -138,7 +139,7 @@ class Hook(VoiceoverScene):
             label(r"Mandelbrot \& Wallis (1968): \ the Joseph effect", font_size=26, color=LMC),
             label(r"``seven years of great plenty \ldots \ and seven years of famine'' \ (Genesis 41)", font_size=26, color=GREY_A),
             label(r"persistence at every scale: \ long memory", font_size=26, color=TAUC),
-            label(r"Hurst's numbers sized the Aswan High Dam, \ built in the 1960s", font_size=26, color=Y0C),
+            label(r"Hurst's storage work informed Nile dam planning, \ built in the 1960s", font_size=26, color=Y0C),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Benoit Mandelbrot and James Wallis named it the Joseph effect in 1968, <bookmark "

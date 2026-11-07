@@ -41,6 +41,9 @@ class Spectra(VoiceoverScene):
             "variance is shared among frequencies. It holds the same information as the autocorrelations, arranged by "
             "frequency rather than by lag."
         ) as vo:
+            intro=label('A stationary covariance has a spectral measure',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -73,12 +76,13 @@ class Spectra(VoiceoverScene):
 
     def inconsistent(self):
         d = load("spectra")["wn"]
-        A = axes([0, 0.5], [0, 6], x_length=5.4, y_length=3.4, xlabel=r"frequency", ylabel=r"periodogram",
+        ymax = float(np.ceil(max(max(d["I_small"]), max(d["I_big"]))))
+        A = axes([0, 0.5], [0, ymax], x_length=5.4, y_length=3.4, xlabel=r"frequency", ylabel=r"periodogram",
                  xticks=[0, 0.25, 0.5], yticks=[0, 2, 4, 6], xfmt=lambda v: f"{v:g}", center=[-3.6, 0.2, 0])
-        B = axes([0, 0.5], [0, 6], x_length=5.4, y_length=3.4, xlabel=r"frequency", ylabel=r"",
+        B = axes([0, 0.5], [0, ymax], x_length=5.4, y_length=3.4, xlabel=r"frequency", ylabel=r"",
                  xticks=[0, 0.25, 0.5], yticks=[0, 2, 4, 6], xfmt=lambda v: f"{v:g}", center=[2.8, 0.2, 0])
-        f1, I1 = np.asarray(d["f_small"], float), np.clip(np.asarray(d["I_small"], float), 0, 6)
-        f2, I2 = np.asarray(d["f_big"], float), np.clip(np.asarray(d["I_big"], float), 0, 6)
+        f1, I1 = np.asarray(d["f_small"], float), np.asarray(d["I_small"], float)
+        f2, I2 = np.asarray(d["f_big"], float), np.asarray(d["I_big"], float)
         d1 = VGroup(*[Dot(A.ax.c2p(a, b), radius=0.035, color=SPECC) for a, b in zip(f1, I1)])
         d2 = VGroup(*[Dot(B.ax.c2p(a, b), radius=0.02, color=SPECC, fill_opacity=0.6) for a, b in zip(f2, I2)])
         t1 = DashedLine(A.ax.c2p(0, 1), A.ax.c2p(0.5, 1), color=TRUEC, stroke_width=2.5)
@@ -91,14 +95,16 @@ class Spectra(VoiceoverScene):
             label(rf"Welch: \ average {d['k']} tapered segments: \ spread {d['sd_w']:.2f} \ (green)", font_size=22, color=BANDC),
         ), 12.4, 0.25, [0, -2.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The natural estimate of the spectrum is the periodogram: the squared size of the series' "
-            "Fourier coefficient at each frequency. For white noise, the true spectrum is flat, at one. <bookmark mark='b'/> "
-            "With a hundred and twenty-eight observations, the periodogram scatters wildly around it. <bookmark mark='c'/> "
-            "With sixteen times as many, it scatters just as wildly; there are just more points. Each ordinate is "
-            "asymptotically the true spectrum times an exponential variable, with a standard deviation equal to its mean, "
-            "however long the series. The periodogram is unbiased and inconsistent. <bookmark mark='d'/> The cure is to "
-            "average. Peter Welch, in 1967, cut the series into overlapping segments, tapered each to reduce leakage, and "
-            "averaged their periodograms: the spread falls to " + say(d["sd_w"], 2) + "."
+            "<bookmark mark='a'/> The natural estimate of the spectrum is the periodogram: the squared size of the "
+            "series' Fourier coefficient at each frequency. For white noise, the true spectrum is flat, at one. "
+            "<bookmark mark='b'/> With a hundred and twenty-eight observations, the periodogram scatters wildly "
+            "around it. <bookmark mark='c'/> With sixteen times as many, it scatters just as wildly; there are just "
+            "more points. Each interior positive-frequency ordinate is asymptotically the true spectrum times an exponential variable, with a "
+            "standard deviation equal to its mean, however long the series. For white noise it is exactly unbiased; "
+            "more generally it is asymptotically unbiased under regularity conditions, but inconsistent without "
+            "smoothing. <bookmark mark='d'/> The cure is to average. Peter Welch, in 1967, cut the series into "
+            "overlapping segments, tapered each to reduce leakage, and averaged their periodograms: the spread falls "
+            "to " + say(d["sd_w"], 2) + "."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A), FadeIn(B), FadeIn(lab), Create(t1), Create(t2))
@@ -112,7 +118,7 @@ class Spectra(VoiceoverScene):
 
     def welch_mt(self):
         rows = [
-            cmath(r"I(f_j)", r"\approx", r"s(f_j)\, \tfrac{1}{2}\chi^2_2 \quad \text{(independent over } j)", font_size=30),
+            cmath(r"I(f_j)", r"\approx", r"s(f_j)\, \tfrac{1}{2}\chi^2_2 \quad \text{(asymptotically, interior frequencies)}", font_size=30),
             cmath(r"\text{Welch}", r":", r"\text{average segments: \ less variance, \ coarser frequencies}", font_size=30),
             cmath(r"\text{multitaper}", r":", r"\text{average over } K \text{ orthogonal Slepian tapers of the whole series}", font_size=30),
             cmath(r"\text{the trade}", r":", r"\text{bias (resolution) against variance, \ as in Part 29}", font_size=30),
@@ -120,14 +126,18 @@ class Spectra(VoiceoverScene):
         rows[2][-1].set_color(BANDC)
         whys = [why(r"why it never settles"), why(r"Welch (1967)"), why(r"Thomson (1982)"), why(r"a smoothing problem")]
         with self.voiceover(
-            "<bookmark mark='a'/> The arithmetic: each periodogram ordinate is the true spectrum times a chi-square on two "
-            "degrees of freedom, halved, and different Fourier frequencies are nearly independent. <bookmark mark='b'/> "
-            "Welch's averages reduce the variance, at the cost of resolution, because each segment is shorter. <bookmark "
-            "mark='c'/> David Thomson's multitaper method of 1982 instead multiplies the whole series by several orthogonal "
-            "tapers, the Slepian sequences that concentrate their energy best in a narrow band, and averages those "
-            "periodograms. <bookmark mark='d'/> Either way it is Part twenty-nine's trade between bias and variance: "
-            "spectral estimation is a smoothing problem."
+            "<bookmark mark='a'/> The arithmetic: at distinct interior frequencies of a regular short-memory process,"
+            " a periodogram ordinate is asymptotically the true spectrum times a chi-square on two degrees of "
+            "freedom, halved, and different Fourier frequencies are nearly independent. <bookmark mark='b'/> Welch's "
+            "averages reduce the variance, at the cost of resolution, because each segment is shorter. <bookmark "
+            "mark='c'/> David Thomson's multitaper method of 1982 instead multiplies the whole series by several "
+            "orthogonal tapers, the Slepian sequences that concentrate their energy best in a narrow band, and "
+            "averages those periodograms. <bookmark mark='d'/> Either way it is Part twenty-nine's trade between bias"
+            " and variance: spectral estimation is a smoothing problem."
         ) as vo:
+            intro=label('Spectral smoothing trades frequency resolution against variance',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -140,8 +150,10 @@ class Spectra(VoiceoverScene):
         fw, Sw = np.asarray(d["f_w"], float), np.asarray(d["S_w"], float)
         fm, Sm = np.asarray(d["f_mt"], float), np.asarray(d["S_mt"], float)
         ar = np.asarray(d["ar2_spec"], float)
-        lg = lambda v: np.clip(np.log10(np.maximum(v, 1.0)), 0, 5.5)
-        A = axes([0, 0.5], [0, 5.5], x_length=8.0, y_length=4.2, xlabel=r"frequency (cycles per year)", ylabel=r"spectrum (log scale)",
+        lg = lambda v: np.log10(np.asarray(v, float))
+        all_log = np.concatenate([lg(v) for v in (I, Sw, Sm, ar)])
+        log_bounds = [float(np.floor(all_log.min())), float(np.ceil(all_log.max()))]
+        A = axes([0, 0.5], log_bounds, x_length=8.0, y_length=4.2, xlabel=r"frequency (cycles per year)", ylabel=r"spectrum (log scale)",
                  xticks=[0, 0.09, 0.25, 0.5], yticks=[1, 3, 5], xfmt=lambda v: f"{v:g}", yfmt=lambda v: rf"10^{int(v)}",
                  center=[-1.6, 0.2, 0])
         ax = A.ax
@@ -157,9 +169,9 @@ class Spectra(VoiceoverScene):
         ), 3.8, 0.42, [4.9, 0.4, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The sunspot spectrum, on a log scale. The raw periodogram, in grey, has its highest point at "
-            + say(d["peak_I"], 1) + " years, surrounded by noise. <bookmark mark='b'/> Welch's estimate smooths it into a "
-            "single clear peak near frequency nought point nine, about eleven years. <bookmark mark='c'/> The multitaper "
-            "estimate agrees, with finer detail. <bookmark mark='d'/> And the two-parameter autoregression's spectrum puts a "
+            + say(d["peak_I"], 1) + " years, surrounded by noise. <bookmark mark='b'/> Welch's estimate smooths it into a single clear peak "
+            "near frequency zero point zero nine, about eleven years. <bookmark mark='c'/> The multitaper estimate "
+            "agrees, with finer detail. <bookmark mark='d'/> And the two-parameter autoregression's spectrum puts a "
             "smooth peak in the same place: Yule's model is a smoothed spectrum."
         ) as vo:
             self.add(sun_tag())
@@ -178,15 +190,16 @@ class Spectra(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"the spectrum and the ACF are one object in two bases", font_size=26, color=SPECC),
             label(r"periodograms need smoothing; \ peaks need a null to be judged against", font_size=26, color=MISSC),
-            label(r"a unit root puts infinite power at frequency zero; \ long memory, \ a pole there", font_size=26, color=LMC),
+            label(r"a random walk has no stationary spectrum; fractional long memory has an integrable pole", font_size=26, color=LMC),
             label(r"next: \ the series with no mean to return to", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The spectrum and the autocorrelation function are one object, written in two bases. "
-            "<bookmark mark='b'/> Periodograms need smoothing, and an apparent peak needs a null spectrum to be judged "
-            "against, or every noisy series seems to cycle. <bookmark mark='c'/> And the frequency view shows the next two "
-            "departures at a glance: a random walk puts infinite power at frequency zero, and long memory a pole there that "
-            "can still be integrated. <bookmark mark='d'/> Next, the series with no mean to return to."
+            "<bookmark mark='a'/> The spectrum and the autocorrelation function are one object, written in two bases."
+            " <bookmark mark='b'/> Periodograms need smoothing, and an apparent peak needs a null spectrum to be "
+            "judged against, or every noisy series seems to cycle. <bookmark mark='c'/> And the frequency view shows "
+            "the next two departures at a glance: a random walk has no ordinary stationary spectrum; its formal "
+            "frequency response diverges at zero. Stationary fractional long memory has a pole there that can still "
+            "be integrated. <bookmark mark='d'/> Next, the series with no mean to return to."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

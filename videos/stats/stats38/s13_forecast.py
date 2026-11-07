@@ -29,12 +29,13 @@ class Forecast(VoiceoverScene):
             label(r"the lesson: \ learning across many series pays; \ combinations beat single models", font_size=26, color=Y0C),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Part seventeen told the story of Spyros Makridakis's competitions, in which simple methods "
-            "proved hard to beat. <bookmark mark='b'/> The fourth competition, in 2018, with a hundred thousand series, was "
-            "won by Slawek Smyl's hybrid of exponential smoothing and a recurrent neural network. <bookmark mark='c'/> The "
-            "fifth, in 2020, on Walmart's sales, was dominated by gradient-boosted trees, Part thirty-four's machinery, "
-            "trained across thousands of related series at once. <bookmark mark='d'/> The lesson was that learning across "
-            "many series pays, and that combinations of forecasts beat single models."
+            "<bookmark mark='a'/> Part seventeen told the story of Spyros Makridakis's competitions, in which simple "
+            "methods proved hard to beat. <bookmark mark='b'/> The fourth competition, in 2018, with a hundred "
+            "thousand series, was won by Slawek Smyl's hybrid of exponential smoothing and a recurrent neural "
+            "network. <bookmark mark='c'/> The fifth, in 2020, on Walmart's sales, was dominated by gradient-boosted "
+            "trees, Part thirty-four's machinery, trained across thousands of related series at once. <bookmark "
+            "mark='d'/> The lesson was that learning across many series pays, and that combinations often perform "
+            "well; no method wins universally."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -49,12 +50,13 @@ class Forecast(VoiceoverScene):
             label(r"benchmarks: \ often competitive, \ sometimes beaten by seasonal naive; \ check current results", font_size=26, color=MISSC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The next step borrows from language models: train one large model on a huge corpus of time "
-            "series, then use it on new series without fitting anything. <bookmark mark='b'/> Nixtla's TimeGPT, Lag-Llama, "
-            "Google's TimesFM, Amazon's Chronos and Salesforce's Moirai appeared in 2023 and 2024, and successors keep "
-            "coming. <bookmark mark='c'/> Given a history, they return a forecast distribution, zero-shot. <bookmark "
-            "mark='d'/> On public benchmarks they are often competitive with tuned statistical methods, and sometimes "
-            "beaten by a seasonal naive forecast. The rankings change quickly; what does not change is how to evaluate them."
+            "<bookmark mark='a'/> The next step borrows from language models: train one large model on a huge corpus "
+            "of time series, then use it on new series without fitting anything. <bookmark mark='b'/> Nixtla's "
+            "TimeGPT, Lag-Llama, Google's TimesFM, Amazon's Chronos and Salesforce's Moirai appeared in 2023 and "
+            "2024, and successors keep coming. <bookmark mark='c'/> Given a history, different models return point, "
+            "quantile or distributional forecasts, without task-specific fitting. <bookmark mark='d'/> On public "
+            "benchmarks they are often competitive with tuned statistical methods, and sometimes beaten by a seasonal"
+            " naive forecast. The rankings change quickly; what does not change is how to evaluate them."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -80,6 +82,9 @@ class Forecast(VoiceoverScene):
             "the test period may touch training or tuning. For pretrained models that is hard to guarantee, because their "
             "training corpora may already contain the benchmark series."
         ) as vo:
+            intro=label('Rolling-origin evaluation respects the time ordering',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -121,14 +126,15 @@ class Forecast(VoiceoverScene):
             label(r"leakage in miniature: \ make 50 small tweaks of the Holt--Winters forecast", font_size=26),
             label(r"and keep the one that scores best on the test period itself", font_size=26, color=MISSC),
             label(rf"its MASE: \ {d['leak_best']:.2f}, \ against the honest {d['leak_honest']:.2f}", font_size=26, color=MISSC),
-            label(r"a better score, \ and a worse method: \ Part 28's optimism, \ in time", font_size=26, color=TAUC),
+            label(r"a selected test score is optimistic; future performance has not been evaluated", font_size=26, color=TAUC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Leakage in miniature. Take the Holt-Winters forecast at the last origin and make fifty "
             "small random adjustments to it. <bookmark mark='b'/> Keep whichever scores best on the test period itself. "
             "<bookmark mark='c'/> Its error is " + say(d["leak_best"], 2) + ", against the honest " + say(d["leak_honest"], 2)
-            + ". <bookmark mark='d'/> The score improved and the method did not: the adjustments are noise, and the next "
-            "period will not reward them. It is Part twenty-eight's optimism of the training error, in time."
+            + ". <bookmark mark='d'/> This selected score is optimistic evidence: the adjustments were chosen using the"
+            " test outcomes. Whether they improve a future period requires fresh data, which this example does not "
+            "provide. It is Part twenty-eight's optimism of the training error, in time."
         ) as vo:
             self.add(co2_tag())
             for k, m_ in enumerate("abcd"):

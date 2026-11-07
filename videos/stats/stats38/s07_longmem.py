@@ -40,6 +40,9 @@ class LongMemory(VoiceoverScene):
             "For d below a half the series is stationary, but its autocorrelations sum to infinity, and Hurst's exponent is d "
             "plus a half. Combined with autoregressive and moving-average terms it is called ARFIMA."
         ) as vo:
+            intro=label('Fractional differencing produces power-law dependence',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -57,16 +60,16 @@ class LongMemory(VoiceoverScene):
         ca = polyline(ax, lags, d["acf_ar"], Y0C, 3.5)
         side = fit_rows(VGroup(
             label(r"grey: \ the Nile minima's sample ACF", font_size=22, color=GREY_B),
-            label(r"blue: \ an AR(1) with the same lag-one value", font_size=22, color=Y0C),
+            label(r"blue: \ an AR(1) matching the fractional reference at lag one", font_size=22, color=Y0C),
             label(r"gold: \ ARFIMA, \ $d = 0.4$", font_size=22, color=LMC),
             label(r"at lag 60: \ the AR(1) has forgotten; \ ARFIMA has not", font_size=22, color=GREY_A),
         ), 3.8, 0.42, [4.9, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The Nile minima's sample autocorrelations, in grey, for lags up to sixty years. They start "
-            "near point six and stay positive for decades. <bookmark mark='b'/> An autoregression with the same first "
-            "autocorrelation, in blue, has forgotten within ten years. <bookmark mark='c'/> A fractionally integrated "
-            "series with d equal to point four, in gold, decays like a power, and still remembers at lag sixty. <bookmark "
-            "mark='d'/> The river looks like the gold curve."
+            "<bookmark mark='a'/> The Nile minima's sample autocorrelations, in grey, for lags up to sixty years. "
+            "They start near point six and stay positive for decades. <bookmark mark='b'/> An autoregression with the"
+            " same lag-one correlation as the fractional reference, in blue, has forgotten within ten years. "
+            "<bookmark mark='c'/> A fractionally integrated series with d equal to point four, in gold, decays like a"
+            " power, and still remembers at lag sixty. <bookmark mark='d'/> The river looks like the gold curve."
         ) as vo:
             self.add(minima_tag())
             self.play(FadeIn(A))
@@ -114,18 +117,21 @@ class LongMemory(VoiceoverScene):
             cmath(r"\text{effective } n", r"=", rf"{d['neff']:.1f} \ \text{{of }} {d['n']} \text{{ years}}", font_size=30),
         ]
         rows[3][-1].set_color(MISSC)
-        whys = [why(r"slower than $1/n$"), why(r"what Part 8 would report"), why(r"if the ARFIMA model holds"),
+        whys = [why(r"slower than $1/n$"), why(r"what Part 8 would report"), why(r"ARFIMA plug-in approximation; parameter uncertainty omitted"),
                 why(r"six centuries, \ a handful of observations")]
         with self.voiceover(
             "<bookmark mark='a'/> The consequence is stark. With long memory, the variance of a sample mean shrinks like n "
             "to the power two d minus one, not like one over n. <bookmark mark='b'/> For the six hundred and sixty-three "
             "years of minima, the textbook standard error of the mean level is " + say(d["se_naive"], 1) + ". <bookmark "
-            "mark='c'/> If the fractional model with d of " + say(d["d"], 2) + " holds, the honest standard error is about "
+            "mark='c'/> If the fractional model with d of " + say(d["d"], 2) + " holds with the plug-in marginal variance, the model-based standard error is about "
             + str(round(d["se_lm"])) + ", " + str(round(d["se_lm"] / d["se_naive"])) + " times larger. <bookmark mark='d'/> "
             "Six centuries of measurements carry about as much information about the long-run mean as "
             + str(round(d["neff"])) + " independent years. That is what Hurst's reservoir was telling him."
         ) as vo:
             self.add(minima_tag())
+            intro=label('Long-memory mean uncertainty is model-dependent',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -140,12 +146,12 @@ class LongMemory(VoiceoverScene):
             label(r"either way: \ the mean is far less certain than $s/\sqrt{n}$ says", font_size=26, color=BANDC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> A caveat. Occasional shifts in the mean, or regimes that change slowly, produce the same "
-            "statistics. <bookmark mark='b'/> Francis Diebold and Atsushi Inoue showed in 2001 that switching models generate "
-            "Hurst-like behaviour. <bookmark mark='c'/> With a single series, a fractional process and a stationary series "
-            "with occasional breaks are hard to tell apart; the Nile itself fell abruptly around 1899, as chapter seven will "
-            "show. <bookmark mark='d'/> Either way, the practical lesson stands: the long-run mean is far less certain than "
-            "the textbook standard error claims."
+            "<bookmark mark='a'/> A caveat. Occasional shifts in the mean, or regimes that change slowly, produce the"
+            " same statistics. <bookmark mark='b'/> Francis Diebold and Atsushi Inoue showed in 2001 that switching "
+            "models generate Hurst-like behaviour. <bookmark mark='c'/> With a single series, a fractional process "
+            "and a stationary series with occasional breaks are hard to tell apart; the separate Aswan flow record "
+            "fell abruptly around 1899, as chapter seven will show. <bookmark mark='d'/> Either way, the practical "
+            "lesson stands: the long-run mean is far less certain than the textbook standard error claims."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -155,18 +161,19 @@ class LongMemory(VoiceoverScene):
     def elsewhere(self):
         rows = fit_rows(VGroup(
             label(r"internet traffic \ (Leland, \ Taqqu, \ Willinger \& Wilson 1994): \ bursty at every time scale", font_size=26, color=LMC),
-            label(r"the absolute returns of chapter 5: \ their autocorrelations decay like a power", font_size=26, color=VOLC),
+            label(r"financial absolute returns can show slower decay than short-memory GARCH", font_size=26, color=VOLC),
             label(r"temperature records, \ river flows, \ inflation rates", font_size=26, color=Y0C),
             label(r"in each, \ the variance of averages shrinks more slowly than $1/n$", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Long memory turned up far from the Nile. Will Leland, Murad Taqqu, Walter Willinger and "
-            "Daniel Wilson found in 1994 that Ethernet traffic is bursty at every time scale, from milliseconds to hours, "
-            "which changed how networks were designed. <bookmark mark='b'/> The absolute returns of chapter five have "
-            "autocorrelations that decay like a power rather than geometrically, which is why GARCH's persistence comes out "
-            "so close to one. <bookmark mark='c'/> Temperature records, river flows and inflation rates show it too. "
-            "<bookmark mark='d'/> In each case, averages are less precise than independent-data formulas say, and "
-            "averaging over longer periods helps less than one would hope."
+            "<bookmark mark='a'/> Long memory turned up far from the Nile. Will Leland, Murad Taqqu, Walter Willinger"
+            " and Daniel Wilson found in 1994 that Ethernet traffic is bursty at every time scale, from milliseconds "
+            "to hours, which changed how networks were designed. <bookmark mark='b'/> Financial absolute returns have"
+            " sometimes been found to have autocorrelations that decay more slowly than a short GARCH model predicts."
+            " That can motivate alternatives when estimated persistence is so close to one. <bookmark mark='c'/> "
+            "Temperature records, river flows and inflation rates show it too. <bookmark mark='d'/> In each case, "
+            "averages are less precise than independent-data formulas say, and averaging over longer periods helps "
+            "less than one would hope."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

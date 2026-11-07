@@ -38,6 +38,9 @@ class Smoothing(VoiceoverScene):
             "backward, correcting each filtered mean by what the next smoothed value turned out to be. <bookmark mark='d'/> "
             "The smoothed variances are never larger than the filtered ones, because more data never hurts a Gaussian."
         ) as vo:
+            intro=label('Smoothing conditions on the full observation record',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -58,17 +61,19 @@ class Smoothing(VoiceoverScene):
         b = band(ax, yrs, s - 1.645 * ss, s + 1.645 * ss, BANDC, 0.2)
         c = polyline(ax, yrs, s, BANDC, 3)
         side = fit_rows(VGroup(
-            label(r"delete 1891--1910 and 1931--1950", font_size=22, color=GREY_A),
+            label(r"hide 1891--1910 and 1931--1950; variances fitted to full record", font_size=22, color=GREY_A),
             label(r"the smoother interpolates the level across the gaps", font_size=22, color=BANDC),
             label(r"and its band widens in the middle of each gap", font_size=22, color=TAUC),
             label(r"grey: \ the deleted flows", font_size=22, color=GREY_D),
         ), 3.8, 0.42, [4.9, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Durbin and Koopman's demonstration: delete two twenty-year stretches of the Nile's record. "
-            "<bookmark mark='b'/> The filter simply predicts through them, and the smoother then interpolates the level "
-            "across each gap, using the years on both sides. <bookmark mark='c'/> Its band widens towards the middle of each "
-            "gap, where the nearest data are furthest away, and narrows again at the edges. <bookmark mark='d'/> The deleted "
-            "flows, in grey, scatter around the interpolated level as the noise variance says they should."
+            "<bookmark mark='a'/> Durbin and Koopman's demonstration: hide two twenty-year stretches of the Nile's "
+            "record. This illustration holds the noise variances at estimates from the complete record, so it is not "
+            "an honest missing-data forecasting benchmark. <bookmark mark='b'/> The filter simply predicts through "
+            "them, and the smoother then interpolates the level across each gap, using the years on both sides. "
+            "<bookmark mark='c'/> Its band widens towards the middle of each gap, where the nearest data are furthest"
+            " away, and narrows again at the edges. <bookmark mark='d'/> The deleted flows, in grey, scatter around "
+            "the interpolated level as the noise variance says they should."
         ) as vo:
             self.add(nile_tag())
             self.play(FadeIn(A), FadeIn(dots), FadeIn(side[0]))
@@ -98,6 +103,9 @@ class Smoothing(VoiceoverScene):
             "twenty-two. <bookmark mark='d'/> Or, as Robert Shumway and David Stoffer showed in 1982, treat the states as "
             "missing data and use the EM algorithm: smooth, then update the variances in closed form."
         ) as vo:
+            intro=label('One-step innovations factor the state-space likelihood',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -120,11 +128,12 @@ class Smoothing(VoiceoverScene):
             label(rf"the direct MLE: \ {d['q_mle']:,.0f} and {d['r_mle']:,.0f} \ (gold)", font_size=22, color=TRUEC),
         ), 3.8, 0.42, [4.9, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> EM on the Nile, from a poor start. <bookmark mark='b'/> The likelihood rises with every "
-            "iteration, as Part twenty-two proved it must: quickly at first, then slowly, EM's usual pace. <bookmark "
-            "mark='c'/> After three hundred iterations it has reached the same variances as direct maximization. <bookmark "
-            "mark='d'/> EM is slow but sure, and it extends naturally to models with many parameters, where a direct search "
-            "would struggle."
+            "<bookmark mark='a'/> EM on the Nile, from a poor start. <bookmark mark='b'/> The likelihood rises with "
+            "every iteration, as Part twenty-two proved it must: quickly at first, then slowly, EM's usual pace. "
+            "<bookmark mark='c'/> After three hundred iterations it has reached the same variances as direct "
+            "maximization. <bookmark mark='d'/> This run approaches the direct solution; EM in general can converge "
+            "slowly or reach a local stationary point. It extends naturally to models with many parameters, where a "
+            "direct search would struggle."
         ) as vo:
             self.add(nile_tag())
             self.play(FadeIn(A), Create(top), FadeIn(side[0]))

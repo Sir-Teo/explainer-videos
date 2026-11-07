@@ -55,13 +55,17 @@ class VAR(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> A vector autoregression regresses each series on lags of all the series. <bookmark "
             "mark='b'/> Christopher Sims proposed it in 1980, in a paper called Macroeconomics and Reality, as an "
-            "alternative to large models with what he called incredible restrictions. It is fitted by least squares, one "
-            "equation at a time. <bookmark mark='c'/> Clive Granger's definition of 1969: x Granger-causes y if past x helps "
-            "forecast y, given past y; in a VAR, an F test on x's lags in y's equation. <bookmark mark='d'/> Impulse responses "
-            "trace how a shock to one variable moves all of them over time. Since the shocks are correlated, isolating one "
-            "needs a decision: the Cholesky factorization assumes an ordering, in which later variables react to earlier ones "
-            "within the quarter but not the reverse."
+            "alternative to large models with what he called incredible restrictions. It is fitted by least squares, "
+            "one equation at a time. <bookmark mark='c'/> Clive Granger's definition of 1969: x Granger-causes y if "
+            "past x helps forecast y, given past y and the other included series; in a correctly specified linear "
+            "VAR, an F test on x's lags in y's equation. <bookmark mark='d'/> Impulse responses trace how a shock to "
+            "one variable moves all of them over time. Since the shocks are correlated, isolating one needs a "
+            "decision: the Cholesky factorization assumes an ordering, in which later variables react to earlier ones"
+            " within the quarter but not the reverse."
         ) as vo:
+            intro=label('VAR restrictions concern prediction; causal shocks need identification',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -80,7 +84,7 @@ class VAR(VoiceoverScene):
             rows.append([a, b, f"{G[k]['F']:.2f}", f"{G[k]['p']:.3f}"])
             cols.append(BANDC if G[k]["p"] < 0.05 else GREY_B)
         tab = table_rows(rows, font_size=24, col_buff=0.8, row_buff=0.28, colors=cols).move_to([0, 0.6, 0])
-        foot = label(r"a VAR(4); \ green: \ $p < 0.05$. \ Granger causality is about forecasting, \ not causation",
+        foot = label(r"VAR(4), conventional model-based F tests; green $p<0.05$ is unadjusted; persistence may affect validity",
                      font_size=22, color=GREY_A).move_to([0, -2.4, 0])
         with self.voiceover(
             "<bookmark mark='a'/> A VAR with four lags, a year of quarters. <bookmark mark='b'/> Inflation helps forecast "
@@ -110,10 +114,12 @@ class VAR(VoiceoverScene):
         titles = [r"inflation", r"unemployment", r"T-bill rate"]
         rng_ = [(-0.6, 1.0), (-0.3, 0.4), (-0.4, 1.2)]
         for k in range(3):
-            A = axes([0, H], list(rng_[k]), x_length=3.6, y_length=2.8, xlabel=r"quarters", ylabel=r"",
+            low = min(float(lo[:, k, 2].min()), 0) - .05
+            high = max(float(hi[:, k, 2].max()), 0) + .05
+            A = axes([0, H], [low, high], x_length=3.6, y_length=2.8, xlabel=r"quarters", ylabel=r"",
                      xticks=[0, 10, 20], yticks=[0], center=[-4.4 + 4.4 * k, 0.4, 0])
             b = band(A.ax, h, lo[:, k, 2], hi[:, k, 2], COLS[k], 0.2)
-            c = polyline(A.ax, h, np.clip(I[:, k, 2], *rng_[k]), COLS[k], 3)
+            c = polyline(A.ax, h, I[:, k, 2], COLS[k], 3)
             z = DashedLine(A.ax.c2p(0, 0), A.ax.c2p(H, 0), color=GREY_C, stroke_width=1.5)
             t = label(titles[k], font_size=22, color=COLS[k]).next_to(A, UP, buff=0.1)
             panels.add(VGroup(A, z, b, c, t))
@@ -122,13 +128,15 @@ class VAR(VoiceoverScene):
             label(r"inflation rises at first: \ the price puzzle \ (Sims 1992)", font_size=22, color=MISSC),
         ), 12.4, 0.25, [0, -2.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The responses to a surprise rise in the T-bill rate, a monetary tightening, with the rate "
-            "ordered last so that it can react to inflation and unemployment within the quarter. <bookmark mark='b'/> "
-            "Unemployment rises, slowly, over two to three years, as textbooks say it should. <bookmark mark='c'/> But "
-            "inflation rises too, at first. Sims noticed this price puzzle in 1992. The usual explanation is that the "
-            "Federal Reserve raises rates when it sees inflation coming, from information the VAR does not have, so the "
-            "'shock' is partly a forecast. Adding commodity prices to the VAR largely removes it. The identifying "
-            "assumptions decide what an impulse response means."
+            "<bookmark mark='a'/> The responses to a surprise rise in the T-bill rate, interpreted as monetary "
+            "tightening only under the recursive identifying assumptions, with the rate ordered last so that it can "
+            "react to inflation and unemployment within the quarter. <bookmark mark='b'/> Unemployment rises, slowly,"
+            " over two to three years, as textbooks say it should. <bookmark mark='c'/> But inflation rises too, at "
+            "first. Sims noticed this price puzzle in 1992. The usual explanation is that the Federal Reserve raises "
+            "rates when it sees inflation coming, from information the VAR does not have, so the 'shock' is partly a "
+            "forecast. Adding information variables such as commodity prices has reduced the puzzle in some "
+            "specifications; no such augmented fit is computed here. The identifying assumptions decide what an "
+            "impulse response means."
         ) as vo:
             self.add(macro_tag())
             vo.wait_until("a")
@@ -163,16 +171,17 @@ class VAR(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"forecast-error variance decomposition: \ which shocks explain each variable's uncertainty, \ by horizon", font_size=26, color=TAUC),
             label(r"local projections \ (Jordà 2005): \ regress $y_{t+h}$ on today's shock, \ one $h$ at a time", font_size=26, color=BANDC),
-            label(r"VAR and local-projection responses agree in large samples; \ they trade bias against variance", font_size=26, color=GREY_A),
+            label(r"compatible identification and sufficient lag controls are needed for a common response target", font_size=26, color=GREY_A),
             label(r"both need the same thing: \ a credible shock", font_size=26, color=MISSC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Two more tools. The forecast-error variance decomposition says what share of each variable's "
-            "forecast uncertainty, at each horizon, comes from each identified shock. <bookmark mark='b'/> Òscar Jordà's "
-            "local projections of 2005 estimate impulse responses directly, regressing the outcome h periods ahead on "
-            "today's shock, one horizon at a time, without iterating a VAR. <bookmark mark='c'/> The two estimate the same "
-            "responses in large samples, and trade bias against variance in small ones. <bookmark mark='d'/> Both need the "
-            "same thing to mean anything causal: a credible shock."
+            "<bookmark mark='a'/> Two more tools. The forecast-error variance decomposition says what share of each "
+            "variable's forecast uncertainty, at each horizon, comes from each identified shock. <bookmark mark='b'/>"
+            " Òscar Jordà's local projections of 2005 estimate impulse responses directly, regressing the outcome h "
+            "periods ahead on today's shock, one horizon at a time, without iterating a VAR. <bookmark mark='c'/> "
+            "With adequate lag controls, compatible identifying assumptions and suitable regularity, the two can "
+            "target the same responses asymptotically. A fixed misspecified finite VAR need not agree with local "
+            "projections. <bookmark mark='d'/> Both need the same thing to mean anything causal: a credible shock."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

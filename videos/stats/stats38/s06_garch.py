@@ -66,17 +66,17 @@ class Volatility(VoiceoverScene):
         band = Rectangle(width=ax.c2p(31, 0)[0] - ax.c2p(0, 0)[0], height=ax.c2p(0, ci)[1] - ax.c2p(0, -ci)[1], stroke_width=0,
                          fill_color=GREY_C, fill_opacity=0.25).move_to(ax.c2p(15.5, 0))
         side = fit_rows(VGroup(
-            label(r"grey: \ ACF of the returns: \ nothing", font_size=22, color=GREY_A),
+            label(r"grey: \ ACF of returns: little linear dependence", font_size=22, color=GREY_A),
             label(r"red: \ ACF of $|r_t|$: \ positive for weeks", font_size=22, color=VOLC),
             label(rf"kurtosis {d['kurt']:.1f} \ (normal: 3): \ heavy tails", font_size=22, color=TAUC),
             label(rf"Engle's ARCH test: \ LM = {d['lm']['LM']:.0f}, \ $p \approx 10^{{-13}}$", font_size=22, color=MISSC),
             label(r"Mandelbrot (1963): \ cotton prices, \ the same facts", font_size=22, color=GREY_A),
         ), 3.8, 0.38, [4.9, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The autocorrelations of the returns, in grey, are inside the band of noise: yesterday's "
-            "return does not predict today's. <bookmark mark='b'/> But the autocorrelations of their absolute sizes, in red, "
-            "are positive for weeks: a big move, of either sign, predicts more big moves. <bookmark mark='c'/> The returns' "
-            "kurtosis is " + say(d["kurt"], 1) + ", three times the normal's: extreme days are far more common than a "
+            "<bookmark mark='a'/> The autocorrelations of the returns, in grey, are inside the band of noise: this "
+            "plot shows little linear predictability in returns; it does not rule out every form of predictability. "
+            "<bookmark mark='b'/> But the autocorrelations of their absolute sizes, in red, are positive for weeks: a"
+            " big move, of either sign, predicts more big moves. <bookmark mark='c'/> The returns' kurtosis is " + say(d["kurt"], 1) + ", three times the normal's: extreme days are far more common than a "
             "normal distribution allows. <bookmark mark='d'/> Robert Engle's test for this clustering, regressing squared "
             "returns on their own lags, rejects decisively. <bookmark mark='e'/> Benoit Mandelbrot had described the same "
             "facts in cotton prices in 1963: these are the stylized facts of financial returns."
@@ -103,14 +103,19 @@ class Volatility(VoiceoverScene):
         whys = [why(r"signs unpredictable, \ sizes not"), why(r"Engle (1982): \ UK inflation"), why(r"Bollerslev (1986)"),
                 why(r"persistence")]
         with self.voiceover(
-            "<bookmark mark='a'/> The model writes each return as a mean plus a standard deviation that changes over time, "
-            "times an independent shock. <bookmark mark='b'/> Engle's autoregressive conditional heteroskedasticity, ARCH, "
-            "of 1982, made today's variance a weighted sum of recent squared shocks. He applied it to inflation in the United "
-            "Kingdom. <bookmark mark='c'/> His student Tim Bollerslev's generalization of 1986, GARCH, adds yesterday's "
-            "variance itself, so that one extra parameter gives a long, geometrically decaying memory. <bookmark mark='d'/> "
-            "If alpha plus beta is below one, the variance is stationary with a known long-run level, and a shock to the "
-            "variance dies away at rate alpha plus beta per day."
+            "<bookmark mark='a'/> The model writes each return as a mean plus a standard deviation that changes over "
+            "time, times an independent shock. <bookmark mark='b'/> Engle's autoregressive conditional "
+            "heteroskedasticity, ARCH, of 1982, made today's variance a weighted sum of recent squared shocks. He "
+            "applied it to inflation in the United Kingdom. <bookmark mark='c'/> His student Tim Bollerslev's "
+            "generalization of 1986, GARCH, adds yesterday's variance itself, so that one extra parameter gives a "
+            "long, geometrically decaying memory. <bookmark mark='d'/> With positive omega, nonnegative coefficients "
+            "and alpha plus beta below one, the stationary return process has a finite unconditional second moment. "
+            "Its conditional variance forecasts revert at rate alpha plus beta per day; stationarity of the variance "
+            "process in a stronger moment sense can require more."
         ) as vo:
+            intro=label('GARCH predicts conditional scale with persistent variance dynamics',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -154,17 +159,20 @@ class Volatility(VoiceoverScene):
                 [r"GARCH variance, \ normal", f"{100 * d['exc_garch']:.2f}\\%", f"{100 * d['exc_garch_lo']:.2f}\\%", f"{100 * d['exc_garch_hi']:.2f}\\%"]]
         tab = table_rows(rows, font_size=28, col_buff=0.9, row_buff=0.36, colors=[GREY_A, MISSC, BANDC]).move_to([0, 0.8, 0])
         foot = fit_rows(VGroup(
-            label(r"a 1\% rule should be breached on 1\% of days, \ and evenly through time", font_size=24, color=GREY_A),
-            label(r"GARCH fixes the clustering; \ the excess over 1\% is the normal's thin tails", font_size=24, color=TAUC),
+            label(r"in-sample fitted diagnostic; a valid conditional 1\% rule has 1\% conditional breach risk", font_size=24, color=GREY_A),
+            label(r"closer group rates do not establish calibrated or independent violations", font_size=24, color=TAUC),
         ), 12.4, 0.3, [0, -1.8, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> What it buys. A bank's one-day value at risk at one percent is the loss it should exceed "
-            "on one day in a hundred. <bookmark mark='b'/> With a constant variance and a normal distribution, the DAX "
-            "breaches it on " + say(100 * d["exc_const"], 1) + " percent of days overall, but on fewer than one in a "
-            "hundred calm days and about three in a hundred turbulent ones: the breaches cluster, exactly when they hurt. "
-            "<bookmark mark='c'/> With the GARCH variance, the breaches are spread evenly through calm and storm. <bookmark "
-            "mark='d'/> Both still exceed one percent overall, because the standardized shocks have heavier tails than the "
-            "normal; a Student t distribution for the shocks, or the robust methods of Part thirty, would correct that."
+            "<bookmark mark='a'/> Here is a retrospective diagnostic using parameters fitted to the whole record, not"
+            " an out-of-sample backtest. A bank's one-day value at risk at one percent is the loss it should exceed "
+            "on one day in a hundred. <bookmark mark='b'/> With a constant variance and a normal distribution, the "
+            "DAX breaches it on " + say(100 * d["exc_const"], 1) + " percent of days overall, but on fewer than one in a hundred calm days and about three in a hundred "
+            "turbulent ones: the breaches cluster, exactly when they hurt. <bookmark mark='c'/> With the fitted GARCH"
+            " variance, the breach rates in these two volatility groups are closer. Equal group rates alone do not "
+            "establish independent violations. <bookmark mark='d'/> Both still exceed one percent overall, consistent"
+            " with heavier standardized tails and possible model misspecification relative to the normal. Student t "
+            "innovations or empirical residual quantiles may help, but need fresh validation; robust location methods"
+            " alone do not guarantee accurate tail risk."
         ) as vo:
             self.add(dax_tag())
             vo.wait_until("a")
@@ -202,7 +210,7 @@ class Volatility(VoiceoverScene):
         rows = [
             cmath(r"\bar\sigma^2", r"=", rf"\omega / (1 - \alpha - \beta) = {d['uncond_sd'] ** 2:.2f} \ \text{{(sd {d['uncond_sd']:.2f}\%)}}", font_size=30),
             cmath(r"E_t\, \sigma_{t+h}^2", r"=", r"\bar\sigma^2 + (\alpha + \beta)^{h-1} (\sigma_{t+1}^2 - \bar\sigma^2)", font_size=30),
-            cmath(r"\text{a month ahead}", r":", rf"(\alpha + \beta)^{{21}} = {d['persistence'] ** 21:.2f} \ \text{{of today's excess remains}}", font_size=30),
+            cmath(r"\text{a month ahead}", r":", rf"(\alpha + \beta)^{{20}} = {d['persistence'] ** 20:.2f} \ \text{{of the one-day forecast excess remains}}", font_size=30),
             cmath(r"\text{so}", r":", r"\text{volatility forecasts revert to the long-run level, \ geometrically}", font_size=30),
         ]
         rows[1][-1].set_color(VOLC)
@@ -212,10 +220,13 @@ class Volatility(VoiceoverScene):
             "<bookmark mark='a'/> GARCH also forecasts. The long-run variance is omega over one minus alpha minus beta: for "
             "the DAX, a daily standard deviation of about " + say(d["uncond_sd"], 2) + " percent. <bookmark mark='b'/> The "
             "forecast of the variance h days ahead is the long-run level plus the current excess, shrunk by alpha plus beta "
-            "for every day. <bookmark mark='c'/> A month of trading days ahead, " + say(d["persistence"] ** 21, 2) + " of "
-            "today's excess volatility is still expected. <bookmark mark='d'/> So volatility forecasts revert, geometrically, "
+            "for every day. <bookmark mark='c'/> A month of trading days ahead, " + say(d["persistence"] ** 20, 2) + " of "
+            "the one-day variance forecast's excess over the long-run level remains at horizon twenty-one. <bookmark mark='d'/> So volatility forecasts revert, geometrically, "
             "to the long-run level: the term structure of volatility that option prices and risk limits are built on."
         ) as vo:
+            intro=label('Variance forecasts revert toward a model-based long-run level',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

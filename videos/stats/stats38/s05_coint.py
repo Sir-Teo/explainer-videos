@@ -56,11 +56,11 @@ class Coint(VoiceoverScene):
                  ylabel=r"share", xticks=[-20, -10, -1.96, 1.96, 10, 20], yticks=[0, 0.04, 0.08], xfmt=lambda v: f"{v:g}",
                  yfmt=lambda v: f"{v:g}", center=[-1.6, 0.2, 0])
         ax = A.ax
-        bars = hist_bars(ax, e, h / h.sum(), color=MISSC, opacity=0.6)
+        bars = hist_bars(ax, e, h / d["hist_n"], color=MISSC, opacity=0.6)
         bands = Rectangle(width=ax.c2p(1.96, 0)[0] - ax.c2p(-1.96, 0)[0], height=ax.c2p(0, 0.08)[1] - ax.c2p(0, 0)[1],
                           stroke_width=0, fill_color=BANDC, fill_opacity=0.15).move_to(ax.c2p(0, 0.04))
         side = fit_rows(VGroup(
-            label(r"5,000 pairs", font_size=22),
+            label(rf"5,000 pairs; {d['hist_outside']} outside view", font_size=22),
             label(rf"$|t| > 1.96$: \ {100 * d['reject']:.0f}\% of the time", font_size=22, color=MISSC),
             label(rf"median $R^2$ = {d['median_r2']:.2f}; \ above 0.5 in {100 * d['share_r2_05']:.0f}\%", font_size=22, color=TAUC),
             label(r"Granger \& Newbold (1974): \ 76\%", font_size=22, color=GREY_A),
@@ -105,6 +105,9 @@ class Coint(VoiceoverScene):
             "stricter than Dickey and Fuller's: minus three point three seven for two series and a hundred observations. "
             "Engle and Granger shared the 2003 Nobel prize, Engle for chapter five."
         ) as vo:
+            intro=label('Cointegration is stationarity of a combination of integrated series',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -124,12 +127,13 @@ class Coint(VoiceoverScene):
         cr = series_line(B.ax, t, res, TAUC, 2)
         foot = fit_rows(VGroup(
             label(r"blue: \ log real consumption; \ red: \ log real disposable income", font_size=22, color=GREY_A),
-            label(rf"each has a unit root \ (ADF with trend: \ {d['adf_lc']:.2f}, \ {d['adf_ly']:.2f}); \ slope $\hat\beta$ = {d['eg']['beta']:.3f}", font_size=22),
+            label(rf"individual ADF with trend, nonrejections: \ {d['adf_lc']:.2f}, \ {d['adf_ly']:.2f}; \ slope $\hat\beta$ = {d['eg']['beta']:.3f}", font_size=22),
         ), 12.4, 0.25, [0, -2.5, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Friedman's permanent-income theory suggests consumption and income should be tied: "
-            "people spend a stable share of what they expect to earn. US log consumption and log disposable income, 1959 to "
-            "2009. <bookmark mark='b'/> Each, on its own, has a unit root. The regression of one on the other has a slope of "
+            "people spend a stable share of what they expect to earn. US log consumption and log disposable income, "
+            "1959 to 2009. <bookmark mark='b'/> Neither individual ADF test rejects a unit root under the displayed "
+            "trend specification. The regression of one on the other has a slope of "
             + say(d["eg"]["beta"], 2) + ": one for one. <bookmark mark='c'/> The residual, the gap between consumption and "
             "income, wanders less, but it wanders."
         ) as vo:
@@ -149,7 +153,7 @@ class Coint(VoiceoverScene):
             label(rf"Engle--Granger: \ residual $\tau$ = {d['eg']['t']:.2f} \ against $-3.37$: \ cannot reject no cointegration", font_size=26, color=MISSC),
             label(r"Johansen (1988): \ a VAR in levels, \ the rank of its long-run matrix by canonical correlations", font_size=26, color=TAUC),
             label(rf"consumption, \ income, \ investment: \ trace {jo[0]:.1f} vs {jc[0]:.1f} \ (rank 0 rejected); \ {jo[1]:.1f} vs {jc[1]:.1f}", font_size=26, color=BANDC),
-            label(r"one long-run relation, \ barely: \ cointegration tests are weak in 200 quarters", font_size=26, color=GREY_A),
+            label(r"rank one selected, barely, under this specification: \ cointegration tests are weak in 200 quarters", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The Engle-Granger test on the residual gives minus " + say(-d["eg"]["t"], 2) + ", short of "
@@ -157,9 +161,10 @@ class Coint(VoiceoverScene):
             "mark='b'/> Søren Johansen's method of 1988 works with all the series at once, in a vector autoregression in "
             "levels, and estimates how many independent stationary combinations there are, from canonical correlations "
             "between changes and lagged levels. <bookmark mark='c'/> With consumption, income and investment, the trace "
-            "test rejects zero relations, " + say(jo[0], 1) + " against a critical value of " + say(jc[0], 1) + ", and does "
-            "not reject one. <bookmark mark='d'/> One long-run relation, barely. With two hundred quarters, cointegration "
-            "tests, like unit-root tests, have little power, and the economics has to carry part of the argument."
+            "test rejects zero relations, " + say(jo[0], 1) + " against a critical value of " + say(jc[0], 1) + ", and does not reject one. <bookmark mark='d'/> The sequential test selects one relation, barely; that "
+            "is evidence under the chosen lag and deterministic specification, not proof of the rank. With two "
+            "hundred quarters, cointegration tests, like unit-root tests, have little power, and the economics has to"
+            " carry part of the argument."
         ) as vo:
             self.add(macro_tag())
             for k, m_ in enumerate("abcd"):
@@ -179,17 +184,18 @@ class Coint(VoiceoverScene):
     def superconsistent(self):
         rows = fit_rows(VGroup(
             label(r"if they are cointegrated, \ $\hat\beta$ converges at rate $T$, \ not $\sqrt{T}$: \ super-consistent", font_size=26, color=BANDC),
-            label(r"Stock (1987): \ but its distribution is not normal, \ so the OLS $t$-test is still wrong", font_size=26, color=MISSC),
+            label(r"Stock (1987): \ ordinary OLS standard errors need not support valid inference", font_size=26, color=MISSC),
             label(r"FM-OLS \ (Phillips \& Hansen 1990), \ DOLS \ (Stock \& Watson 1993): \ valid $t$-tests for $\beta$", font_size=26, color=TAUC),
             label(r"the error-correction speed $\alpha$: \ how fast a gap closes", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> When series are cointegrated, the regression has a surprising property. The slope converges "
-            "to the truth at rate T rather than the square root of T, because any wrong slope leaves a residual that "
-            "wanders off as a random walk, which least squares punishes heavily. James Stock called it super-consistency in "
-            "1987. <bookmark mark='b'/> But its distribution is not normal, and correlated with the shocks, so the usual t "
-            "test on the slope is still wrong. <bookmark mark='c'/> Fully modified least squares, of Peter Phillips and Bruce "
-            "Hansen, and dynamic least squares, of Stock and Mark Watson, correct it. <bookmark mark='d'/> And the "
+            "<bookmark mark='a'/> When series are cointegrated, the regression has a surprising property. The slope "
+            "converges to the truth at rate T rather than the square root of T, because any wrong slope leaves a "
+            "residual that wanders off as a random walk, which least squares punishes heavily. James Stock called it "
+            "super-consistency in 1987. <bookmark mark='b'/> Its limiting distribution can be mixed or nonstandard "
+            "and nuisance-dependent, so ordinary least-squares standard errors and the usual t test on the slope is "
+            "still wrong. <bookmark mark='c'/> Fully modified least squares, of Peter Phillips and Bruce Hansen, and "
+            "dynamic least squares, of Stock and Mark Watson, correct it. <bookmark mark='d'/> And the "
             "error-correction coefficient says how quickly a gap between the series closes."
         ) as vo:
             for k, m_ in enumerate("abcd"):

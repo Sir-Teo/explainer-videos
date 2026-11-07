@@ -117,10 +117,21 @@ def df_sim(T_, reps, g, trend="c"):
     return out
 
 
+def paired_persistence(n, phi, g):
+    """Random-walk and stationary AR paths driven by the same future innovations."""
+    innovations = g.standard_normal(n)
+    last = g.normal(scale=1 / math.sqrt(1 - phi ** 2))
+    stationary = np.empty(n)
+    for t, shock in enumerate(innovations):
+        last = phi * last + shock
+        stationary[t] = last
+    return np.cumsum(innovations), stationary, innovations
+
+
 def compute_unitroot():
     g = rng(3803)
     n = 200
-    rw, st = np.cumsum(g.standard_normal(n)), ar1(n, 0.9, g)
+    rw, st, innovations = paired_persistence(n, 0.9, g)
     taus = df_sim(100, 20000, g)
     edges = np.linspace(-5, 3, 81)
     tn = df_sim(100, 20000, g, "n")
@@ -132,7 +143,7 @@ def compute_unitroot():
         a = T.adf(x, 4, tr)
         k = T.kpss(x, tr)
         tests[name] = {"adf": a["t"], "crit": df_critical_safe(a["T"], tr), "kpss": k["eta"], "kcrit": k["crit"][0.05]}
-    return nest({"rw": rw, "st": st, "hist": np.histogram(np.clip(taus, -5, 2.999), edges)[0], "edges": edges,
+    return nest({"rw": rw, "st": st, "hist": np.histogram(taus, edges)[0], "edges": edges, "hist_n": len(taus), "hist_outside": int(np.sum((taus < edges[0]) | (taus > edges[-1]))), "innovations": innovations,
                  "q05": float(np.percentile(taus, 5)), "crit": T.df_critical(100, 0.05, "c"),
                  "size_normal": float(np.mean(taus < -1.645)), "size_normal2": float(np.mean(np.abs(taus) > 1.96)),
                  "mean_tau": float(taus.mean()), "q05_n": float(np.percentile(tn, 5)), "tests": tests})
@@ -161,8 +172,8 @@ def compute_coint():
     eg_rev = T.engle_granger(ly, lc, lags=2)
     jo = T.johansen_trace(np.column_stack([lc, ly, li]), k=2)
     jo_crit = [29.80, 15.49, 3.84]  # 5% trace critical values (Osterwald-Lenum), constant in the ECM, p = 3
-    return nest({"t_hist": np.histogram(np.clip(tstat, -20, 19.99), np.linspace(-20, 20, 41))[0],
-                 "reject": float(np.mean(np.abs(tstat) > 1.96)), "median_r2": float(np.median(r2)),
+    return nest({"t_hist": np.histogram(tstat, np.linspace(-20, 20, 41))[0],
+                 "hist_n": reps, "hist_outside": int(np.sum(np.abs(tstat) > 20)), "reject": float(np.mean(np.abs(tstat) > 1.96)), "median_r2": float(np.median(r2)),
                  "share_r2_05": float(np.mean(r2 > 0.5)), "example": ex,
                  "t": u["t"], "lc": lc, "ly": ly, "eg": {k: eg[k] for k in ("beta", "t", "crit5")}, "eg_resid": eg["resid"],
                  "adf_lc": T.adf(lc, 2, "ct")["t"], "adf_ly": T.adf(ly, 2, "ct")["t"],
@@ -251,7 +262,7 @@ def compute_kalman():
                  "pred_sd": np.sqrt(kf["Pp"][:, 0, 0] + f["r"]), "smooth": lvl, "smooth_sd": np.sqrt(sm["Ps"][:, 0, 0]),
                  "miss_y": ym, "miss_smooth": smm["ms"][:, 0], "miss_sd": np.sqrt(smm["Ps"][:, 0, 0]),
                  "biggest_drop_year": int(yrs[j + 1]), "biggest_drop": float(jumps[j]), "shift": dhat,
-                 "lr_shift": float(2 * (lls.max() - ll_shift(0.0))),
+                 "lr_shift": float(2 * (lls.max() - ll_shift(0.0))), "shift_variances_fixed": True, "shift_date_selected_from_same_record": True,
                  "track": {"x": np.array(xs), "y": np.array(ys), "mp": track["mp"], "Pp": track["Pp"], "mf": track["mf"],
                            "Pf": track["Pf"]}})
 
