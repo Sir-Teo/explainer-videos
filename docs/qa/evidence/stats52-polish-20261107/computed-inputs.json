@@ -1,0 +1,80 @@
+[
+  {
+    "name": "hook",
+    "path": ".cache/stats52/hook.json",
+    "sha256": "1a60b971c215a057f09df95fc49c61c752f9c127c66d5baa14c53f63101c38d0",
+    "bytes": 19541
+  },
+  {
+    "name": "oracle",
+    "path": ".cache/stats52/oracle.json",
+    "sha256": "a03f690247281328873faf3874905780d5f61e8be292fbb14bb0f77378c07d27",
+    "bytes": 1441
+  },
+  {
+    "name": "support",
+    "path": ".cache/stats52/support.json",
+    "sha256": "f5ae834b9726b23022f4e5680d575e06259d116d13cafde501043161d3ff92cf",
+    "bytes": 975
+  },
+  {
+    "name": "complete",
+    "path": ".cache/stats52/complete.json",
+    "sha256": "e5551b78043b0b4912070eea56aa1d0716696e0eb581032199c7ca6e41e8221e",
+    "bytes": 2109
+  },
+  {
+    "name": "cov",
+    "path": ".cache/stats52/cov.json",
+    "sha256": "567fb998ac91c36b4dc39b74aef43aec1e9ee82f1f1ebf192f70e4c80a4a1665",
+    "bytes": 907
+  },
+  {
+    "name": "dk",
+    "path": ".cache/stats52/dk.json",
+    "sha256": "4e12c0d22015160aa5b7dd4fe8eb8063d8c30725e2bbac87f4c96e71fe4f23d6",
+    "bytes": 627
+  },
+  {
+    "name": "laws",
+    "path": ".cache/stats52/laws.json",
+    "sha256": "bfeba5f20a2deea2f528af9ad25f3a3e1a8fdc764e4325b5059efed037630f1e",
+    "bytes": 75297
+  },
+  {
+    "name": "bbp",
+    "path": ".cache/stats52/bbp.json",
+    "sha256": "e2283e135bfc04cb39afc8d82acc505f97d8045417a4f16d2a8e88e84f6f2d00",
+    "bytes": 17505
+  },
+  {
+    "name": "tw",
+    "path": ".cache/stats52/tw.json",
+    "sha256": "4476fc1ace9964454e6e22aa81c15f9142424e83c848d525dff8d4bc4aad786d",
+    "bytes": 15912
+  },
+  {
+    "name": "spca",
+    "path": ".cache/stats52/spca.json",
+    "sha256": "323c9e8abfa370a5a50b543315b9d3a333322362a13398ce25ced99acdf9df4a",
+    "bytes": 1050
+  },
+  {
+    "name": "harman",
+    "path": ".cache/stats52/harman.json",
+    "sha256": "6e83ec02ecd9f6c09f62793b5246a73141f923b6b97bff9db1e9d09f4dd61e39",
+    "bytes": 1870
+  },
+  {
+    "name": "diabetes",
+    "path": ".cache/stats52/diabetes.json",
+    "sha256": "ce8e70e75d780fb05617683675403f2fbc394103e8e6b26ec4e60e7431945305",
+    "bytes": 3983
+  },
+  {
+    "name": "board",
+    "path": ".cache/stats52/board.json",
+    "sha256": "5b759f30f2b296a81239a2dcf6b04695d45bdec4508006520537847023b864b9",
+    "bytes": 1418
+  }
+]

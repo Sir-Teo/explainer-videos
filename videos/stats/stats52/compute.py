@@ -26,6 +26,7 @@ from __future__ import annotations
 
 import math
 from dataclasses import asdict
+from scipy import linalg, stats
 
 import numpy as np
 
@@ -60,6 +61,71 @@ def nest(obj):
     return obj
 
 
+def lasso_lambda(X, sigma=1., delta=.05):
+    """Conditional Gaussian union-bound penalty: lambda >=2||X'eps/n||inf with prob >=1-delta."""
+    X = np.asarray(X, float)
+    n,p = X.shape
+    return 2*sigma*np.max(np.linalg.norm(X,axis=0))/n*math.sqrt(2*math.log(2*p/delta))
+
+
+def checked_lasso(X,y,lam):
+    b = SPK.lasso_cd(X,y,lam)
+    grad = X.T@(y-X@b)/len(y)
+    active = abs(b)>1e-9
+    violation = max(np.max(abs(grad[active]-lam*np.sign(b[active])),initial=0),
+                    np.max(np.maximum(abs(grad[~active])-lam,0),initial=0))
+    if violation>1e-6*max(1.,lam):
+        raise ArithmeticError(f"Lasso KKT residual {violation:g}")
+    return b
+
+
+def full_model_ols(X,y):
+    """SVD covariance avoids squaring an already severe condition number."""
+    U,d,Vh = np.linalg.svd(X,full_matrices=False)
+    tol = np.finfo(float).eps*max(X.shape)*d[0]
+    if d[-1]<=tol:
+        raise ArithmeticError("Full model is rank deficient; unique coefficient intervals do not exist")
+    b = Vh.T@((U.T@y)/d)
+    residual = y-X@b
+    sigma2 = residual@residual/(len(y)-X.shape[1]-1)  # fitted intercept
+    cov = (Vh.T*(sigma2/d**2))@Vh
+    return b,cov,float(d[0]/d[-1])
+
+
+def nodewise_diagnostics(X,j,lam_node):
+    others=np.delete(np.arange(X.shape[1]),j)
+    g=SPK.lasso_cd(X[:,others],X[:,j],lam_node)
+    residual=X[:,j]-X[:,others]@g
+    tau2=residual@residual/len(X)+lam_node*abs(g).sum()
+    theta=np.zeros(X.shape[1]);theta[j]=1;theta[others]=-g;theta/=tau2
+    target=np.eye(X.shape[1])[j]
+    return {"inverse_residual_inf":float(abs(theta@(X.T@X/len(X))-target).max()),
+            "tau2":float(tau2),"node_selected":int(np.count_nonzero(g))}
+
+
+def soft_impute_checked(M, observed, lam, Z0=None, max_iter=10000, tol=2e-7):
+    """Accelerated proximal gradient for the stated masked nuclear-norm objective."""
+    M=np.asarray(M,float);observed=np.asarray(observed,bool)
+    Z=np.zeros_like(M) if Z0 is None else np.asarray(Z0,float).copy()
+    Y=Z.copy();t=1.
+    def prox(A):
+        U,d,Vh=np.linalg.svd(A,full_matrices=False)
+        return (U*np.maximum(d-lam,0))@Vh
+    for iteration in range(1,max_iter+1):
+        Zn=prox(np.where(observed,M,Y))
+        tn=(1+math.sqrt(1+4*t*t))/2
+        Yn=Zn+(t-1)/tn*(Zn-Z)
+        # Restart on a direction that opposes the current gradient mapping.
+        if np.sum((Y-Zn)*(Zn-Z))>0:
+            tn=1.;Yn=Zn.copy()
+        Z,Y,t=Zn,Yn,tn
+        if iteration%10==0:
+            residual=float(np.linalg.norm(Z-prox(np.where(observed,M,Z)))/max(1,np.linalg.norm(Z)))
+            if residual<tol:
+                return {"Z":Z,"iterations":iteration,"fixed_point_residual":residual}
+    raise ArithmeticError(f"SoftImpute did not converge: residual={residual:g}")
+
+
 def compute_hook():
     r = rng(5201)
     n, p = 1000, 500
@@ -67,7 +133,8 @@ def compute_hook():
     ev = np.sort(np.linalg.eigvalsh(X.T @ X / n))[::-1]
     g = p / n
     edges = np.linspace(0, 3.2, 65)
-    h, _ = np.histogram(ev, bins=edges, density=True)
+    counts, _ = np.histogram(ev, bins=edges)
+    h = counts/(len(ev)*np.diff(edges))
     x = np.linspace(0.01, 3.2, 400)
     return {"n": n, "p": p, "gamma": g, "ev_max": ev[0], "ev_min": ev[-1], "mp": HS.mp_edges(g), "edges": edges, "hist": h,
             "x": x, "pdf": HS.mp_pdf(x, g), "top5": ev[:5], "share_top": ev[0] / ev.sum(), "share_true": 1 / p}
@@ -85,7 +152,7 @@ def compute_oracle():
             beta = np.zeros(p)
             beta[:s] = r.choice([-1.0, 1.0], s)
             y = X @ beta + r.standard_normal(n)
-            b = SPK.lasso_cd(X, y, HS.lasso_lambda(n, p))
+            b = checked_lasso(X, y, lasso_lambda(X))
             errs.append(np.linalg.norm(b - beta))
             sizes.append(int(np.sum(b != 0)))
         rows.append({"n": n, "err": float(np.mean(errs)), "rate": HS.oracle_rate(n, p, s), "size": float(np.mean(sizes))})
@@ -99,11 +166,11 @@ def compute_oracle():
             beta = np.zeros(p)
             beta[:s] = r.choice([-1.0, 1.0], s)
             y = X @ beta + r.standard_normal(n)
-            b = SPK.lasso_cd(X, y, c * HS.lasso_lambda(n, p))
+            b = checked_lasso(X, y, c * lasso_lambda(X))
             errs.append(np.linalg.norm(b - beta))
             sizes.append(int(np.sum(b != 0)))
         lam_rows.append({"mult": c, "err": float(np.mean(errs)), "size": float(np.mean(sizes))})
-    return {"p": p, "s": s, "rows": rows, "lam_n": n, "lam_rows": lam_rows}
+    return {"p": p, "s": s, "rows": rows, "lam_n": n, "lam_rows": lam_rows, "penalty_delta": .05, "penalty": "2 sigma max_j ||X_j|| sqrt(2 log(2p/delta))/n"}
 
 
 def compute_support():
@@ -149,7 +216,7 @@ def compute_support():
             else:
                 bad += hit
                 irr_bad.append(v)
-    return {"s": s, "thetas": thetas, "curves": curves, "irr": {"n": n, "p": p, "good": good / 30, "bad": bad / 30,
+    return {"s": s, "thetas": thetas, "curves": curves, "reps_per_point": 30, "mcse": {key:[math.sqrt(v*(1-v)/29) for v in values] for key,values in curves.items()}, "irr": {"n": n, "p": p, "good": good / 30, "bad": bad / 30,
                                                                "irr_good": float(np.mean(irr_good)), "irr_bad": float(np.mean(irr_bad))}}
 
 
@@ -160,16 +227,17 @@ def compute_complete():
     fracs = [0.04, 0.06, 0.08, 0.1, 0.15, 0.2, 0.3, 0.5]
     rows = []
     for f in fracs:
-        errs = []
+        errs, residuals, iterations = [], [], []
         for _ in range(4):
-            M = HS.low_rank(n1, n2, rk, r)
-            obs = r.random((n1, n2)) < f
-            Z = None
-            for lam in (5.0, 2.0, 1.0, 0.5, 0.2, 0.05):
-                out = SPK.soft_impute(M, obs, lam, iters=300, Z0=Z)
-                Z = out["Z"]
-            errs.append(np.linalg.norm(Z - M) / np.linalg.norm(M))
-        rows.append({"frac": f, "err": float(np.median(errs))})
+            M = HS.low_rank(n1,n2,rk,r)
+            obs = r.random((n1,n2))<f
+            Z=None
+            for lam in (5.,2.,1.,.5,.2,.05):
+                out=soft_impute_checked(M,obs,lam,Z0=Z);Z=out["Z"]
+                residuals.append(out["fixed_point_residual"]);iterations.append(out["iterations"])
+            errs.append(float(np.linalg.norm(Z-M)/np.linalg.norm(M)))
+        rows.append({"frac":f,"err":float(np.median(errs)),"errors":errs,
+                     "max_fixed_point_residual":max(residuals),"max_iterations":max(iterations)})
     dof = rk * (n1 + n2 - rk)
     return {"n": n1, "r": rk, "rows": rows, "dof": dof, "dof_frac": dof / (n1 * n2)}
 
@@ -190,7 +258,7 @@ def compute_cov():
             acc["thresh"].append(min(HS.op_norm(HS.threshold(S, t) - Sig) for t in (0.05, 0.1, 0.15, 0.2, 0.3, 0.4)))
             acc["lw"].append(HS.op_norm(HS.ledoit_wolf(X)[0] - Sig))
         rows.append({"n": n, **{k: float(np.mean(v)) for k, v in acc.items()}})
-    return {"p": p, "rho": rho, "rows": rows, "sig_norm": HS.op_norm(Sig)}
+    return {"p": p, "rho": rho, "rows": rows, "sig_norm": HS.op_norm(Sig), "tuning": "band and threshold levels minimize true operator error: oracle benchmark, unavailable on real data"}
 
 
 def compute_dk():
@@ -220,7 +288,8 @@ def compute_laws():
     r = rng(5207)
     ev = HS.wigner(1000, r)
     edges = np.linspace(-2.4, 2.4, 49)
-    h, _ = np.histogram(ev, bins=edges, density=True)
+    counts, _ = np.histogram(ev, bins=edges)
+    h = counts/(len(ev)*np.diff(edges))
     xs = np.linspace(-2.4, 2.4, 400)
     return {"gamma": g, "edges_mp": [a, b], "x": x, "stieltjes": st, "mp": HS.mp_pdf(x, g), "w_edges": edges, "w_hist": h,
             "w_x": xs, "semi": HS.semicircle_pdf(xs), "w_max": float(ev.max()), "w_min": float(ev.min())}
@@ -257,12 +326,13 @@ def compute_tw():
         z.append((np.linalg.eigvalsh(X.T @ X)[-1] - mu) / sig)
     z = np.asarray(z)
     edges = np.linspace(-5, 4, 46)
-    h, _ = np.histogram(z, bins=edges, density=True)
+    counts, _ = np.histogram(z, bins=edges)
+    h = counts/(len(z)*np.diff(edges))
     s = np.linspace(-5, 4, 200)
     q95 = HS.tracy_widom_quantile(0.95, 1)
     m1 = HS.tracy_widom_moments(1)
     return {"n": n, "p": p, "mu": mu, "sigma": sig, "edges": edges, "hist": h, "s": s, "pdf1": HS.tracy_widom_pdf(s, 1),
-            "pdf2": HS.tracy_widom_pdf(s, 2), "q95": q95, "size": float(np.mean(z > q95)), "z_mean": float(z.mean()), "z_sd": float(z.std()),
+            "pdf2": HS.tracy_widom_pdf(s, 2), "q95": q95, "size": float(np.mean(z > q95)), "outside_plot": int(np.sum((z<edges[0])|(z>edges[-1]))), "z_mean": float(z.mean()), "z_sd": float(z.std()),
             "tw_mean": m1["mean"], "tw_sd": m1["sd"]}
 
 
@@ -303,7 +373,7 @@ def compute_harman():
     R = np.asarray(R, float)
     p = R.shape[0]
     ev = np.sort(np.linalg.eigvalsh(R))[::-1]
-    g = p / n
+    g = p / (n-1)  # centered-Gaussian reference for a correlation matrix
     a, b = HS.mp_edges(g)
     above = int(np.sum(ev > b))
     spikes = [1 + HS.spike_invert(float(l), g) for l in ev[:above]]
@@ -334,18 +404,15 @@ def compute_diabetes():
     lam = float(cv["lam_1se"]) if "lam_1se" in cv else float(cv["lam_min"])
     b = SPK.lasso_cd(X, yc, lam)
     deb, ols = [], []
-    beta_ols, *_ = np.linalg.lstsq(X, yc, rcond=None)
-    resid = yc - X @ beta_ols
-    s2 = float(resid @ resid) / (n - p)
-    cov_ols = s2 * np.linalg.inv(X.T @ X)
+    beta_ols, cov_ols, condition = full_model_ols(X,yc)
     lam_node = math.sqrt(2 * math.log(p) / n)  # the nodewise regressions are on standardized columns
     for j in range(10):
         d = SPK.debiased_lasso(X, yc, j, lam, lam_node=lam_node)
-        deb.append({"name": labels[j], "b": d["b"], "lo": d["lo"], "hi": d["hi"], "lasso": float(b[j])})
+        deb.append({"name": labels[j], "b": d["b"], "lo": d["lo"], "hi": d["hi"], "lasso": float(b[j]), **nodewise_diagnostics(X,j,lam_node)})
         se = math.sqrt(cov_ols[j, j])
         ols.append({"name": labels[j], "b": float(beta_ols[j]), "lo": float(beta_ols[j] - 1.96 * se), "hi": float(beta_ols[j] + 1.96 * se)})
     return {"n": n, "p": p, "lam": lam, "lam_node": lam_node, "selected": int(np.sum(b != 0)), "selected_names": [labels[j] for j in np.flatnonzero(b)],
-            "deb": deb, "ols": ols, "cv_keys": sorted(cv.keys())}
+            "deb": deb, "ols": ols, "cv_keys": sorted(cv.keys()), "design_condition": condition, "sparsity_scale": math.sqrt(n)/math.log(p), "target": "original full linear-interaction-model coefficient; no finite-sample coverage guarantee is established"}
 
 
 def compute_board():
@@ -374,10 +441,10 @@ def compute_board():
         naive += top / n > 1 + 1.645 * math.sqrt(2 / n)
         roy += (top - mu) / sig > q95
     rows = [
-        Row(52, r"Anderson's interval for the top eigenvalue", r"spike $1 + \ell = 4$, \ $n = 200$, \ $p = 100$", "coverage", 0.95, a_cov / reps, reps),
-        Row(52, r"BBP-corrected interval for the spike", r"spike $1 + \ell = 4$, \ $n = 200$, \ $p = 100$", "coverage", 0.95, s_cov / reps, reps),
-        Row(52, r"normal test for a spike (size)", r"null $\Sigma = I$, \ $n = 200$, \ $p = 100$", "size", 0.05, naive / reps, reps),
-        Row(52, r"Roy's test, Tracy--Widom calibration (size)", r"null $\Sigma = I$, \ $n = 200$, \ $p = 100$", "size", 0.05, roy / reps, reps),
+        Row(52, r"Anderson's interval for the top eigenvalue", r"spike $1 + \ell = 4$, \ $n = 200$, \ $p = 100$", "coverage", 0.95, a_cov / reps, reps, mc_se=math.sqrt((a_cov/reps)*(1-a_cov/reps)/(reps-1))),
+        Row(52, r"BBP-corrected interval for the spike", r"spike $1 + \ell = 4$, \ $n = 200$, \ $p = 100$", "coverage", 0.95, s_cov / reps, reps, mc_se=math.sqrt((s_cov/reps)*(1-s_cov/reps)/(reps-1))),
+        Row(52, r"normal test for a spike (size)", r"null $\Sigma = I$, \ $n = 200$, \ $p = 100$", "size", 0.05, naive / reps, reps, mc_se=math.sqrt((naive/reps)*(1-naive/reps)/(reps-1))),
+        Row(52, r"Roy's test, Tracy--Widom calibration (size)", r"null $\Sigma = I$, \ $n = 200$, \ $p = 100$", "size", 0.05, roy / reps, reps, mc_se=math.sqrt((roy/reps)*(1-roy/reps)/(reps-1))),
     ]
     save_rows(52, rows)
     return {"rows": [asdict(q) | {"verdict": q.verdict, "se": q.se} for q in rows], "q95": q95, "psi": float(HS.spike_eigenvalue(ell, g))}

@@ -25,14 +25,7 @@ class Hook(VoiceoverScene):
             label(r"both are artefacts of $p/n = 1/2$", font_size=26, color=BULKC),
         ), 12.4, 0.55, [0, -0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Take a thousand people and measure five hundred things about each, but make every "
-            "measurement pure noise. <bookmark mark='b'/> Every variable is independent of every other, with variance one: "
-            "there is no structure at all. <bookmark mark='c'/> Now run principal components. The top component has a variance "
-            "of two point nine two, nearly three times what any direction truly has, and the bottom one a variance of point "
-            "zero nine. <bookmark mark='d'/> A naive reading finds a strong first factor and a set of nearly collinear "
-            "directions. <bookmark mark='e'/> Both are artefacts of having half as many variables as observations, and the "
-            "Marchenko–Pastur law of Part fifty-one predicts them exactly."
-        ) as vo:
+            "<bookmark mark='a'/> Take a thousand people and measure five hundred things about each, but make every measurement pure noise. <bookmark mark='b'/> Every variable is independent of every other, with variance one: there is no structure at all. <bookmark mark='c'/> Now run principal components. The top component has a variance of two point nine two, nearly three times what any direction truly has, and the bottom one a variance of point zero nine. <bookmark mark='d'/> A naive reading finds a strong first factor and a set of nearly collinear directions. <bookmark mark='e'/> Both are artefacts of having half as many variables as observations, and the Marchenko–Pastur law of Part fifty-one predicts their limiting scale; the finite-sample extremes fluctuate."       ) as vo:
             self.play(FadeIn(tl))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
@@ -58,12 +51,7 @@ class Hook(VoiceoverScene):
             label(r"the bulk is predicted, \ edge to edge", font_size=22, color=GOODC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The spectrum, drawn with this part's random-matrix lab, the SpectrumBulk. <bookmark "
-            f"mark='b'/> The truth: all five hundred eigenvalues are exactly one. <bookmark mark='c'/> The sample's "
-            f"five hundred eigenvalues spread from {say(d['ev_min'], 3)} to {say(d['ev_max'], 2)}. <bookmark mark='d'/> The "
-            f"Marchenko–Pastur density, with edges at one minus root a half, squared, and one plus root a half, squared, "
-            f"traces the histogram and predicts both extremes to two decimal places. <bookmark mark='e'/> Any analysis in high "
-            f"dimension has to begin by knowing what noise alone does to a spectrum."
+            f"<bookmark mark='a'/> The spectrum, drawn with this part's random-matrix lab, the SpectrumBulk. <bookmark mark='b'/> The truth: all five hundred eigenvalues are exactly one. <bookmark mark='c'/> The sample's five hundred eigenvalues spread from {say(d['ev_min'], 3)} to {say(d['ev_max'], 2)}. <bookmark mark='d'/> The Marchenko–Pastur density, with edges at one minus root a half, squared, and one plus root a half, squared, closely traces this histogram. Its edges are asymptotic limits, not exact finite-sample extrema. <bookmark mark='e'/> Any analysis in high dimension has to begin by knowing what noise alone does to a spectrum."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated; \ the law exact")))
             vo.wait_until("a")
@@ -128,12 +116,7 @@ class Hook(VoiceoverScene):
             label(r"a uniformly random direction: \ nothing to interpret", font_size=22, color=GOODC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> And the loadings: the top eigenvector's entries for the first forty of the five hundred "
-            f"variables. <bookmark mark='b'/> The white lines mark plus and minus two over root p, the spread of a uniformly "
-            f"random unit vector's coordinates. <bookmark mark='c'/> The loadings scatter inside them, with {big} of the five "
-            f"hundred above point oh nine. <bookmark mark='d'/> A report might say the first factor is driven by variables "
-            f"{top[0]}, {top[1]} and {top[2]}. <bookmark mark='e'/> But this direction is uniformly random: by symmetry, "
-            f"pure noise has no preferred direction, so the leading eigenvector is drawn from the whole sphere."
+            f"<bookmark mark='a'/> And the loadings: the top eigenvector's entries for the first forty of the five hundred variables. <bookmark mark='b'/> The white lines mark plus and minus two over root p, the spread of a uniformly random unit vector's coordinates. <bookmark mark='c'/> The loadings scatter inside them, with {big} of the five hundred above point oh nine. <bookmark mark='d'/> A report might say the first factor is driven by variables {top[0]}, {top[1]} and {top[2]}. <bookmark mark='e'/> But this direction is uniformly random: by symmetry, pure noise has no preferred direction, so the unoriented leading eigenvector spans a uniformly random line. Choosing its sign orients it to a hemisphere; it does not create a preferred line."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated")))
             vo.wait_until("a")
@@ -181,11 +164,7 @@ class Hook(VoiceoverScene):
             c.scale(0.86)
         stack = VGroup(*cards).arrange(DOWN, buff=0.3).move_to(ORIGIN)
         with self.voiceover(
-            "<bookmark mark='a'/> Three promises come due. Part thirty-two showed the lasso finding sparse signals, but only "
-            "by experiment; chapters one to three prove when and how fast it works. <bookmark mark='b'/> Part thirty-one's "
-            "principal components assumed few variables and many observations; chapters six to ten study spectra when the "
-            "ratio is fixed, and find a sharp threshold below which a signal is invisible. <bookmark mark='c'/> And Part "
-            "fifty-one built the probability; here it becomes the proofs."
+            "<bookmark mark='a'/> Three promises come due. Part thirty-two showed the lasso finding sparse signals, but only by experiment; chapters one to three prove when and how fast it works. <bookmark mark='b'/> Part thirty-one's principal components assumed few variables and many observations; chapters six to ten study spectra when the ratio is fixed, and find a threshold below which ordinary PCA has vanishing directional overlap in the proportional limit. <bookmark mark='c'/> And Part fifty-one built the probability; here it becomes the proofs."
         ) as vo:
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)

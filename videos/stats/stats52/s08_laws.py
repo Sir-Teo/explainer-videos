@@ -30,15 +30,11 @@ class Laws(VoiceoverScene):
         rows[1][-1].set_color(BULKC)
         rows[2][-1].set_color(GOODC)
         whys = [why(r"one point mass per eigenvalue"), why(r"the resolvent's trace"), why(r"Stieltjes (1894)"), why(r"Marchenko \& Pastur (1967)")]
+        heading = label('A spectral measure can be studied through its resolvent trace', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> How are such laws found? Put a point mass at each eigenvalue: the empirical spectral "
-            "distribution. <bookmark mark='b'/> Its Stieltjes transform, a function of a complex variable z above the real "
-            "axis, is the average of one over lambda minus z, which is a normalized trace of the resolvent matrix, S minus z "
-            "times the identity, inverted. <bookmark mark='c'/> The density comes back as the limit of the transform's "
-            "imaginary part over pi as z approaches the real axis, a formula of Thomas Stieltjes from 1894. <bookmark "
-            "mark='d'/> The point is that the resolvent's trace satisfies an equation that can be solved in the limit, where "
-            "the moments of the spectrum would need endless combinatorics. That was Vladimir Marchenko and Leonid Pastur's "
-            "method in 1967."
+            "<bookmark mark='a'/> How are such laws found? Put a point mass at each eigenvalue: the empirical spectral distribution. <bookmark mark='b'/> Its Stieltjes transform, a function of a complex variable z above the real axis, is the average of one over lambda minus z, which is a normalized trace of the resolvent matrix, S minus z times the identity, inverted. <bookmark mark='c'/> At continuity points of an absolutely continuous limiting density, it comes back as the limit of the transform's imaginary part over pi as z approaches the real axis, a formula of Thomas Stieltjes from 1894. <bookmark mark='d'/> The point is that the resolvent's trace satisfies an equation that can be solved in the limit, where the moments of the spectrum would need endless combinatorics. That was Vladimir Marchenko and Leonid Pastur's method in 1967."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -51,19 +47,16 @@ class Laws(VoiceoverScene):
             cmath(r"(S - zI)^{-1}_{kk}", r"=", r"\frac{1}{s_{kk} - z - s_k^\top (S_{(k)} - zI)^{-1} s_k}", font_size=32),
             cmath(r"s_k^\top (S_{(k)} - zI)^{-1} s_k", r"\approx", r"\text{its expectation: \ a quadratic form concentrates}", font_size=30),
             cmath(r"\gamma z\, m^2 + (z + \gamma - 1)\, m + 1", r"=", r"0", font_size=36),
-            cmath(r"\text{solve, \ invert}", r":", r"f(x) = \frac{\sqrt{(b - x)(x - a)}}{2\pi\gamma x}, \ \ a, b = (1 \mp \sqrt\gamma)^2", font_size=32),
+            cmath(r"\text{solve, \ invert}", r":", r"f(x)=\frac{\sqrt{(b-x)(x-a)}}{2\pi\gamma x}1_{(a,b)}(x),\quad0<\gamma<1, \ \ a, b = (1 \mp \sqrt\gamma)^2", font_size=32),
         ]
         rows[2][-1].set_color(BULKC)
         rows[3][-1].set_color(GOODC)
         whys = [why(r"Schur complement"), why(r"Part 51's concentration"), why(r"a quadratic for $m$"), why(r"the law of the hook")]
+        heading = label('A leave-one-out resolvent argument yields a limiting quadratic', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> The derivation in outline. Each diagonal entry of the resolvent is, by the Schur complement, "
-            "one over a diagonal entry of S, minus z, minus a quadratic form in the rest of the matrix. <bookmark mark='b'/> "
-            "That quadratic form is a sum of many weakly dependent terms, and concentrates around its expectation, which is "
-            "itself expressed through the Stieltjes transform. <bookmark mark='c'/> So the transform satisfies a quadratic "
-            "equation: gamma z m squared, plus z plus gamma minus one times m, plus one, equals zero. <bookmark mark='d'/> "
-            "Solving it and inverting gives the Marchenko–Pastur density, with its edges at one plus or minus root gamma, "
-            "squared: the law of this part's hook."
+            "<bookmark mark='a'/> The derivation in outline. Each diagonal entry of the resolvent is, by the Schur complement, one over a diagonal entry of S, minus z, minus a quadratic form in the rest of the matrix. <bookmark mark='b'/> A rigorous derivation uses a leave-one-out or companion-resolvent identity to isolate independent data before applying quadratic-form concentration. The schematic quadratic form then concentrates around its appropriate conditional expectation, which is itself expressed through the Stieltjes transform. <bookmark mark='c'/> So the transform satisfies a quadratic equation: gamma z m squared, plus z plus gamma minus one times m, plus one, equals zero. <bookmark mark='d'/> Solving it and inverting gives the Marchenko–Pastur density, with its edges at one plus or minus root gamma, squared: the law of this part's hook."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -149,20 +142,13 @@ class Laws(VoiceoverScene):
     def universality(self):
         rows = fit_rows(VGroup(
             label(r"the laws are universal:", font_size=28, color=GREY_A),
-            label(r"any i.i.d. entries with mean 0 and variance 1: \ the same semicircle, \ the same MP law", font_size=26, color=BULKC),
+            label(r"i.i.d. standardized covariance entries; \ independent Wigner upper triangle: \ the same semicircle, \ the same MP law", font_size=26, color=BULKC),
             label(r"general $\Sigma$: \ the Marchenko--Pastur equation for $m$, \ solved numerically (Silverstein 1995)", font_size=26, color=BULKC),
             label(r"but heavy tails change the edges: \ with infinite fourth moments, \ outliers escape", font_size=26, color=BADC),
-            label(r"and only the bulk is universal: \ the largest eigenvalue is chapter 9's question", font_size=26, color=SPIKEC),
+            label(r"edge universality needs additional assumptions: \ the largest eigenvalue is chapter 9's question", font_size=26, color=SPIKEC),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> These laws are universal. <bookmark mark='b'/> Any independent entries with mean zero and "
-            "variance one give the same semicircle and the same Marchenko–Pastur law in the limit, like a central limit "
-            "theorem for spectra. <bookmark mark='c'/> For a general population covariance, Jack Silverstein's equation of "
-            "1995 gives the limiting spectrum, solved numerically, which is how nonlinear shrinkage inverts it. <bookmark "
-            "mark='d'/> Heavy tails change things at the edges: with infinite fourth moments, the largest eigenvalues escape "
-            "the bulk. <bookmark mark='e'/> And the law describes only the bulk. The behaviour of the largest eigenvalue, "
-            "which decides whether a spike can be detected, is chapter nine's question."
-        ) as vo:
+            "<bookmark mark='a'/> These laws are universal. <bookmark mark='b'/> For sample covariance with i.i.d. standardized entries and Wigner matrices with independent standardized upper-triangle entries under the appropriate Lindeberg conditions, we obtain the same semicircle and the same Marchenko–Pastur law in the limit, like a central limit theorem for spectra. <bookmark mark='c'/> For a general population covariance, Jack Silverstein's equation of 1995 gives the limiting spectrum, solved numerically, which is how nonlinear shrinkage inverts it. <bookmark mark='d'/> Heavy tails change things at the edges: with infinite fourth moments, the largest eigenvalues escape the bulk. <bookmark mark='e'/> The limiting empirical law describes the bulk. Edge convergence and fluctuations require stronger assumptions. The behaviour of the largest eigenvalue, which decides whether a spike can be detected, is chapter nine's question."       ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))

@@ -1,0 +1,30 @@
+{
+  "sources": [
+    {
+      "dataset": "Harman74.cor",
+      "url": "https://vincentarelbundock.github.io/Rdatasets/csv/datasets/Harman74.cor.csv",
+      "sha256": "d60daf81e5581d4feb86ad171ca746c34bec2627e68e1c0cf250b134bb39f94e",
+      "verification": "all 24 by 24 correlation entries and n.obs=145 match the independent R datasets distribution exactly",
+      "scope": "package distribution, not independently retrieved original child-level records"
+    },
+    {
+      "dataset": "diabetes features",
+      "url": "https://raw.githubusercontent.com/scikit-learn/scikit-learn/main/sklearn/datasets/data/diabetes_data_raw.csv.gz",
+      "sha256": "7fc0ded571454b1982210d3bb43f0aca44eae01a0b8654a3b24022bdb6b38009",
+      "shape": [
+        442,
+        10
+      ],
+      "verification": "all values agree exactly with the official scikit-learn distribution"
+    },
+    {
+      "dataset": "diabetes outcomes",
+      "url": "https://raw.githubusercontent.com/scikit-learn/scikit-learn/main/sklearn/datasets/data/diabetes_target.csv.gz",
+      "sha256": "8e53f65eb811df43c206f3534bb3af0e5fed213bc37ed6ba36310157d6023803",
+      "shape": [
+        442
+      ],
+      "verification": "all values agree exactly with the official scikit-learn distribution"
+    }
+  ]
+}

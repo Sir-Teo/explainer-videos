@@ -31,15 +31,11 @@ class TracyWidom(VoiceoverScene):
         rows[1][-1].set_color(SPIKEC)
         rows[3][-1].set_color(TRUEC)
         whys = [why(r"the null: \ no spike"), why(r"Tracy \& Widom (1994, 1996)"), why(r"Johnstone (2001)"), why(r"Ferrari--Spohn; \ Bornemann (2010)")]
+        heading = label('The top covariance eigenvalue has Tracy--Widom edge fluctuations', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Under the null of no spike, where does the largest eigenvalue fall, beyond its limit? "
-            "<bookmark mark='b'/> Craig Tracy and Harold Widom found in 1994 and 1996, for physicists' random matrices, that "
-            "the centred and scaled largest eigenvalue converges to a new law, not a normal one, and on a scale of n to the "
-            "one third rather than the root of n. <bookmark mark='c'/> Iain Johnstone proved in 2001 that the same law governs "
-            "the largest eigenvalue of a sample covariance, with these explicit centring and scaling constants, accurate even "
-            "for small n and p. <bookmark mark='d'/> The distribution function is a Fredholm determinant of a kernel built "
-            "from the Airy function, which Folkmar Bornemann showed in 2010 can be computed to machine precision by simple "
-            "quadrature. That is what statkit does."
+            "<bookmark mark='a'/> Under the null of no spike, where does the largest eigenvalue fall, beyond its limit? <bookmark mark='b'/> Craig Tracy and Harold Widom found in 1994 and 1996, for physicists' random matrices, that the centred and scaled largest eigenvalue converges to a new law, not a normal one, and on a scale of n to the one third rather than the root of n. <bookmark mark='c'/> Iain Johnstone proved in 2001 that the same law governs the largest eigenvalue of a sample covariance, with these explicit centring and scaling constants, useful at moderate n and p, with finite-sample approximation error. <bookmark mark='d'/> The distribution function is a Fredholm determinant of a kernel built from the Airy function, which Folkmar Bornemann showed in 2010 can be computed accurately by converged quadrature. This implementation uses a finite cutoff and quadrature order, so convergence checks are needed before claiming numerical precision."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -97,7 +93,10 @@ class TracyWidom(VoiceoverScene):
         ]
         rows[2][-1].set_color(GOODC)
         rows[3][-1].set_color(BADC)
-        whys = [why(r"sphericity, \ one direction"), why(r"Johnstone's calibration"), why(r"$n = 400$, \ $p = 200$"), why(r"Onatski, \ Moreira \& Hallin (2013)")]
+        whys = [why(r"known identity covariance; \ unknown scale needs another calibration"), why(r"Johnstone's calibration"), why(r"$n = 400$, \ $p = 200$"), why(r"Onatski, \ Moreira \& Hallin (2013)")]
+        heading = label('A known-identity null admits an asymptotic largest-root calibration', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             f"<bookmark mark='a'/> The use: testing whether there is any spike at all. <bookmark mark='b'/> Samarendra Roy's "
             f"largest-root test of 1953 rejects when the largest eigenvalue is too big, and Johnstone's result calibrates it: "
@@ -118,16 +117,15 @@ class TracyWidom(VoiceoverScene):
             cmath(r"\text{how many factors?}", r":", r"\text{test } H_0^{(k)}: k \text{ spikes, \ for } k = 0, 1, 2, \dots", font_size=32),
             cmath(r"\text{step } k", r":", r"\text{compare } \hat\lambda_{k+1} \text{ with the edge, \ on the Tracy--Widom scale}", font_size=32),
             cmath(r"\text{stop}", r":", r"\text{at the first } k \text{ not rejected}", font_size=34),
-            cmath(r"\text{Harman's tests}", r":", r"\text{the third eigenvalue, \ 1.69, \ is below the edge 1.98: \ two}", font_size=30),
+            cmath(r"\text{Harman caveat}", r":", r"\text{edge counting alone is not a calibrated sequential factor test}", font_size=30),
         ]
         rows[3][-1].set_color(SPIKEC)
         whys = [why(r"Kritchman \& Nadler (2008)"), why(r"the remaining spectrum"), why(r"a sequential test"), why(r"chapter 8's data")]
+        heading = label('Sequential factor tests require a noise model and error calibration', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Choosing the number of factors becomes a sequence of tests, as Shira Kritchman and Boaz "
-            "Nadler proposed in 2008: test zero spikes, then one, then two. <bookmark mark='b'/> At step k, compare the next "
-            "eigenvalue with the bulk's edge, on the Tracy–Widom scale. <bookmark mark='c'/> Stop at the first k that is not "
-            "rejected. <bookmark mark='d'/> For Harman's tests, the third eigenvalue, one point six nine, lies below the edge "
-            "of one point nine eight, so the procedure keeps two factors, where Kaiser's rule kept five."
+            "<bookmark mark='a'/> Choosing the number of factors becomes a sequence of tests, as Shira Kritchman and Boaz Nadler proposed in 2008: test zero spikes, then one, then two. <bookmark mark='b'/> At step k, compare the next eigenvalue with the bulk's edge, on the Tracy–Widom scale. <bookmark mark='c'/> Stop at the first k that is not rejected. <bookmark mark='d'/> For Harman's tests, simply counting two eigenvalues above an isotropic MP reference is not an implemented calibrated sequential procedure. A factor-count test needs an appropriate fitted noise model, finite-sample centering, thresholds and sequential error control."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -140,11 +138,7 @@ class TracyWidom(VoiceoverScene):
         d = load("board")
         a = [x["achieved"] for x in d["rows"]]
         show_board(self, rows,
-                   f"<bookmark mark='a'/> On the Board, with two hundred observations of a hundred variables. A normal "
-                   f"approximation built for fixed p, rejecting when the top eigenvalue exceeds one by more than one point six "
-                   f"four five times root two over n, rejects pure noise {100 * a[2]:.0f} percent of the time: under the null "
-                   f"the top eigenvalue sits near two point nine, not one. <bookmark mark='b'/> Roy's test with the "
-                   f"Tracy–Widom calibration has size {100 * a[3]:.1f} percent.",
+                   f"<bookmark mark='a'/> On the Board, with two hundred observations of a hundred variables. A naive single-variance normal cutoff, incorrectly applied to a maximum eigenvalue, rejecting when the top eigenvalue exceeds one by more than one point six four five times root two over n, rejects pure noise {100 * a[2]:.0f} percent of the time: under the null the top eigenvalue sits near two point nine, not one. <bookmark mark='b'/> Roy's test with the Tracy–Widom calibration has size {100 * a[3]:.1f} percent.",
                    [("a", [0]), ("b", [1])])
 
     def beyond(self):

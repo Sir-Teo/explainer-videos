@@ -32,6 +32,9 @@ class Perturbation(VoiceoverScene):
         rows[1][-1].set_color(GOODC)
         rows[3][-1].set_color(BADC)
         whys = [why(r"estimation error"), why(r"eigenvalues are stable"), why(r"the gap is everything"), why(r"when $\|E\| \approx \delta$")]
+        heading = label('Eigenvalues are stable while small gaps make eigenvectors sensitive', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> Every spectral method estimates the eigenvectors of a matrix from a noisy version of it: the "
             "truth plus a perturbation. <bookmark mark='b'/> Eigenvalues are stable. Hermann Weyl's inequality of 1912 says each "
@@ -55,6 +58,9 @@ class Perturbation(VoiceoverScene):
         rows[1][-1].set_color(GOODC)
         rows[3][-1].set_color(BNDC2)
         whys = [why(r"two eigenvalues, \ gap $\delta$"), why(r"a $2 \times 2$ rotation"), why(r"the gap decides"), why(r"problem 4")]
+        heading = label('A two-dimensional rotation shows why the eigengap matters', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> A two by two example shows why. Take eigenvalues one plus delta and one, and perturb the "
             "off-diagonal entries by epsilon. <bookmark mark='b'/> The new leading eigenvector is rotated by an angle theta "
@@ -74,11 +80,14 @@ class Perturbation(VoiceoverScene):
         rows = [
             cmath(r"\text{gap } \delta", r"=", r"\lambda_1(\Sigma) - \lambda_2(\Sigma)", font_size=36),
             cmath(r"\sin\angle(\hat v_1, v_1)", r"\le", r"\frac{2\|E\|_{op}}{\delta}: \ \text{Davis--Kahan}", font_size=36),
-            cmath(r"\text{in statistics}", r":", r"\|E\| \asymp \|\Sigma\|\sqrt{p/n} \ \Rightarrow \ \sin\angle \lesssim \tfrac{\|\Sigma\|}{\delta}\sqrt{p/n}", font_size=30),
+            cmath(r"\text{bounded-spectrum Gaussian/sub-Gaussian model}", r":", r"\|E\| \asymp \|\Sigma\|(\sqrt{p/n}+p/n) \ \Rightarrow \ \sin\angle \lesssim \tfrac{\|\Sigma\|}{\delta}\sqrt{p/n}", font_size=30),
             cmath(r"\text{all of spectral clustering}", r":", r"\text{bound } \|E\|, \ \text{then Davis--Kahan}", font_size=32),
         ]
         rows[1][-1].set_color(BNDC2)
         whys = [why(r"the eigengap"), why(r"Davis \& Kahan (1970); \ Yu, \ Wang \& Samworth (2015)"), why(r"Part 51's rate"), why(r"a two-line recipe")]
+        heading = label('Davis--Kahan controls an angle by perturbation divided by gap', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> The right measure is the eigengap, the distance from the leading eigenvalue to the next. "
             "<bookmark mark='b'/> Chandler Davis and William Kahan's sin theta theorem of 1970, in the convenient form of Yu, "
@@ -114,18 +123,10 @@ class Perturbation(VoiceoverScene):
             label(rf"purple: \ Davis--Kahan, \ vacuous until $\ell = 4$", font_size=22, color=BNDC2),
             label(rf"blue: \ simulated: \ {r[2.0]['sin']:.2f} at $\ell = 2$, \ {r[8.0]['sin']:.2f} at 8", font_size=22, color=LASSOC),
             label(r"white: \ the exact limit, \ from chapter 8's BBP overlap", font_size=22, color=TRUEC),
-            label(rf"gold: \ below $\ell = \sqrt{{p/n}} = {math.sqrt(g):.2f}$, \ no information", font_size=22, color=SPIKEC),
+            label(rf"gold: \ below $\ell = \sqrt{{p/n}} = {math.sqrt(g):.2f}$, \ ordinary PCA overlap $\to0$ under the model", font_size=22, color=SPIKEC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> A test: an identity covariance with one spike of size ell, so the gap is ell. <bookmark "
-            f"mark='b'/> Davis–Kahan's bound, in purple, is valid but crude: it says nothing until the spike reaches four. "
-            f"<bookmark mark='c'/> The simulated sine of the angle, in blue, is {say(r[2.0]['sin'], 2)} at a spike of two and "
-            f"{say(r[8.0]['sin'], 2)} at eight. <bookmark mark='d'/> The white curve is the exact limit from the spiked-model "
-            f"theory of chapter eight, and it runs straight through the simulation. <bookmark mark='e'/> And below a spike of "
-            f"the root of p over n, {say(math.sqrt(g), 2)}, the estimated eigenvector is orthogonal to the truth: the sample "
-            f"contains no information about its direction at all. Davis–Kahan cannot see that threshold; the random-matrix "
-            f"theory can."
-        ) as vo:
+            f"<bookmark mark='a'/> A test: an identity covariance with one spike of size ell, so the gap is ell. <bookmark mark='b'/> Davis–Kahan's bound, in purple, is valid but crude: it says nothing until the spike reaches four. <bookmark mark='c'/> The simulated sine of the angle, in blue, is {say(r[2.0]['sin'], 2)} at a spike of two and {say(r[8.0]['sin'], 2)} at eight. <bookmark mark='d'/> The white curve is the exact limit from the spiked-model theory of chapter eight, and it runs straight through the simulation. <bookmark mark='e'/> And below a spike of the root of p over n, {say(math.sqrt(g), 2)}, the estimated eigenvector becomes asymptotically orthogonal to the truth: its directional overlap tends to zero in the proportional isotropic-spike model. The full sample can retain information, especially with known structure or a known direction. Davis–Kahan cannot see that threshold; the random-matrix theory can."     ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated; \ curves exact")))
             vo.wait_until("a")
             self.play(FadeIn(side[0]))
@@ -142,20 +143,13 @@ class Perturbation(VoiceoverScene):
     def wedin(self):
         rows = fit_rows(VGroup(
             label(r"the same for singular vectors, \ and for subspaces:", font_size=28, color=GREY_A),
-            label(r"Wedin (1972): \ $\sin\angle(\hat U, U) \le \sqrt2\,\|E\| / \delta$ \ for rectangular matrices", font_size=26, color=BNDC2),
+            label(r"Wedin (1972): \ $\sin\angle(\hat U, U) \le \sqrt2\,\|E\| / \delta_{\rm sep}$ \ with sample--population singular-value separation", font_size=26, color=BNDC2),
             label(r"spectral clustering: \ the adjacency matrix's top eigenvectors reveal the communities", font_size=26, color=BULKC),
             label(r"matrix completion's initialization; \ PCA's subspace; \ ranking from comparisons", font_size=26, color=BULKC),
-            label(r"entrywise versions ($\ell_\infty$ perturbation) \ came only in the late 2010s", font_size=26, color=SPIKEC),
+            label(r"entrywise versions ($\ell_\infty$ perturbation) \ were substantially sharpened in the late 2010s", font_size=26, color=SPIKEC),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The same theory covers singular vectors and whole subspaces. <bookmark mark='b'/> Per-Åke "
-            "Wedin's theorem of 1972 bounds the angle between singular subspaces of a rectangular matrix by root two times the "
-            "perturbation over the singular-value gap. <bookmark mark='c'/> It underlies spectral clustering, where a network's "
-            "adjacency matrix is its expected value plus noise and the top eigenvectors reveal the communities. <bookmark "
-            "mark='d'/> It starts matrix completion algorithms, bounds PCA's estimated subspace, and ranks items from pairwise "
-            "comparisons. <bookmark mark='e'/> Bounds on individual coordinates of eigenvectors, which say which node belongs to "
-            "which community, came only in the late twenty-tens."
-        ) as vo:
+            "<bookmark mark='a'/> The same theory covers singular vectors and whole subspaces. <bookmark mark='b'/> Per-Åke Wedin's theorem of 1972 bounds the angle between singular subspaces of a rectangular matrix by a perturbation-to-separation ratio. Wedin's separation involves the relevant sample and population singular values; a population-gap-only bound needs additional small-perturbation conditions. <bookmark mark='c'/> It underlies spectral clustering, where a network's adjacency matrix is its expected value plus noise and the top eigenvectors reveal the communities. <bookmark mark='d'/> It starts matrix completion algorithms, bounds PCA's estimated subspace, and ranks items from pairwise comparisons. <bookmark mark='e'/> Bounds on individual coordinates of eigenvectors, which say which node belongs to which community, were substantially sharpened in work from the late twenty-tens."        ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
