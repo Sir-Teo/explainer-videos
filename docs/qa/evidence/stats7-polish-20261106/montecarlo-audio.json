@@ -1,0 +1,95 @@
+{
+ "video": "stats7",
+ "scene": "MonteCarlo",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 7,
+ "lines": [
+  {
+   "raw": "Chapter five. Monte Carlo integration.",
+   "spoken": "Chapter five. Monte Carlo integration.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/1306a9fa77c4caec.wav",
+   "duration": 3.225,
+   "tokens": 5,
+   "peak": 0.362762451171875,
+   "issues": [],
+   "elapsed": 13.05,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Every expectation is an integral, and every integral is an expectation. That's the whole idea of Monte Carlo, the name Stanislaw Ulam, John von Neumann and Nicholas Metropolis used at Los Alamos, after the casino. <bookmark mark='a'/> Pi is four times the chance that a uniform point in the unit square lands inside the quarter circle. <bookmark mark='b'/> So throw darts and count. <bookmark mark='c'/> The running estimate wanders around pi. The two-standard-error funnel is pointwise, not a guarantee for the whole path. After four thousand darts the estimate is shown. Reducing the root mean square error tenfold takes a hundred times as many.",
+   "spoken": "Every expectation is an integral, and every integral is an expectation. That's the whole idea of Monte Carlo, the name Stanislaw Ulam, John von Neumann and Nicholas Metropolis used at Los Alamos, after the casino. Pi is four times the chance that a uniform point in the unit square lands inside the quarter circle. So throw darts and count. The running estimate wanders around pi. The two-standard-error funnel is pointwise, not a guarantee for the whole path. After four thousand darts the estimate is shown. Reducing the root mean square error tenfold takes a hundred times as many.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/aac39dca2f055ede.wav",
+   "duration": 36.275,
+   "tokens": 98,
+   "peak": 0.635498046875,
+   "issues": [],
+   "elapsed": 47.93,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "In general: <bookmark mark='a'/> an integral of g against a density f is the expectation of g of X, with X drawn from f. <bookmark mark='b'/> Estimate it by averaging g over n draws; Part 6's weak law makes the average converge. <bookmark mark='c'/> For independent identically distributed draws with finite variance, the standard error is sigma over root n, where sigma, estimated from the same draws, is the spread of g. Look at what's missing from that formula: the dimension. The error falls like one over root n whether x has one coordinate or a thousand, but sigma itself can increase sharply with dimension.",
+   "spoken": "In general: an integral of g against a density f is the expectation of g of X, with X drawn from f. Estimate it by averaging g over n draws; Part 6's weak law makes the average converge. For independent identically distributed draws with finite variance, the standard error is sigma over root n, where sigma, estimated from the same draws, is the spread of g. Look at what's missing from that formula: the dimension. The error falls like one over root n whether x has one coordinate or a thousand, but sigma itself can increase sharply with dimension.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/04caaf8189deb522.wav",
+   "duration": 35.875,
+   "tokens": 99,
+   "peak": 0.847900390625,
+   "issues": [],
+   "elapsed": 60.0,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Here's why that matters. <bookmark mark='a'/> Estimate the volume of a ball in d dimensions with a budget near a million points, rounded to a whole number per side. Each random estimate uses exactly the matching grid budget. A grid in d dimensions has only the d-th root of a million points per side: a thousand in two dimensions, but ten in six and four in ten. Its error explodes. <bookmark mark='b'/> The blue curve is the exact standard error of a random estimate, not a realized error. It grows with dimension because the ball becomes a smaller and smaller target inside the cube, but the rate stays one over root N. <bookmark mark='c'/> In one dimension both methods are exact. In ten, the grid error here is much larger than the Monte Carlo standard error. That's why high-dimensional integrals, in Bayesian statistics, physics and finance, are done by simulation.",
+   "spoken": "Here's why that matters. Estimate the volume of a ball in d dimensions with a budget near a million points, rounded to a whole number per side. Each random estimate uses exactly the matching grid budget. A grid in d dimensions has only the d-th root of a million points per side: a thousand in two dimensions, but ten in six and four in ten. Its error explodes. The blue curve is the exact standard error of a random estimate, not a realized error. It grows with dimension because the ball becomes a smaller and smaller target inside the cube, but the rate stays one over root N. In one dimension both methods are exact. In ten, the grid error here is much larger than the Monte Carlo standard error. That's why high-dimensional integrals, in Bayesian statistics, physics and finance, are done by simulation.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/d82db2b0609a0836.wav",
+   "duration": 50.65,
+   "tokens": 144,
+   "peak": 0.50665283203125,
+   "issues": [],
+   "elapsed": 57.56,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Random points have a flaw for integration: by chance, they clump and leave gaps. <bookmark mark='a'/> Here are four hundred random points in the square. <bookmark mark='b'/> And four hundred points of the Halton sequence, which writes the index in base two and in base three and reverses the digits: they fill the square deliberately evenly. <bookmark mark='c'/> Integrating with such low-discrepancy points, quasi-Monte Carlo, can make the error fall almost like one over n instead of one over root n, for smooth integrands in moderate dimension. The price is that the error bar must be recovered by randomizing the points, as finance practitioners do every day.",
+   "spoken": "Random points have a flaw for integration: by chance, they clump and leave gaps. Here are four hundred random points in the square. And four hundred points of the Halton sequence, which writes the index in base two and in base three and reverses the digits: they fill the square deliberately evenly. Integrating with such low-discrepancy points, quasi-Monte Carlo, can make the error fall almost like one over n instead of one over root n, for smooth integrands in moderate dimension. The price is that the error bar must be recovered by randomizing the points, as finance practitioners do every day.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/d82c6af1b4c55607.wav",
+   "duration": 35.1,
+   "tokens": 101,
+   "peak": 0.5130615234375,
+   "issues": [],
+   "elapsed": 32.59,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "The oldest Monte Carlo experiment is two centuries older than the name. <bookmark mark='a'/> In 1777 Georges-Louis Leclerc, Comte de Buffon, asked: drop a needle on a floor of parallel boards; how often does it cross a line? <bookmark mark='b'/> If the needle is no longer than the spacing, the chance is two times its length over pi times the spacing. Pi appears because the needle's angle is uniform. <bookmark mark='c'/> So counting crossings estimates pi. In the nineteenth century, people actually did it, by hand, thousands of times.",
+   "spoken": "The oldest Monte Carlo experiment is two centuries older than the name. In 1777 Georges-Louis Leclerc, Comte de Buffon, asked: drop a needle on a floor of parallel boards; how often does it cross a line? If the needle is no longer than the spacing, the chance is two times its length over pi times the spacing. Pi appears because the needle's angle is uniform. So counting crossings estimates pi. In the nineteenth century, people actually did it, by hand, thousands of times.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/7066f2614853d00e.wav",
+   "duration": 28.3,
+   "tokens": 83,
+   "peak": 0.626678466796875,
+   "issues": [],
+   "elapsed": 36.76,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "And one of them is a cautionary tale. <bookmark mark='a'/> In 1901 the Italian mathematician Mario Lazzarini reported three thousand four hundred and eight throws of a needle five sixths as long as the spacing, with one thousand eight hundred and eight crossings. <bookmark mark='b'/> That gives three hundred and fifty-five over a hundred and thirteen: pi correct to six decimal places. <bookmark mark='c'/> Too correct. The standard error of an experiment that size is about point oh five: you'd expect the second decimal place to be wrong. <bookmark mark='d'/> Three fifty-five over one thirteen is a famous fraction for pi, and with that needle it can only come out when the number of throws is a multiple of two hundred and thirteen. Three thousand four hundred and eight is sixteen times two hundred and thirteen. Historians suspect he stopped, or chose his count, when the answer looked best. <bookmark mark='e'/> The lesson for every simulation in this course: report the error bar, and decide in advance when to stop.",
+   "spoken": "And one of them is a cautionary tale. In 1901 the Italian mathematician Mario Lazzarini reported three thousand four hundred and eight throws of a needle five sixths as long as the spacing, with one thousand eight hundred and eight crossings. That gives three hundred and fifty-five over a hundred and thirteen: pi correct to six decimal places. Too correct. The standard error of an experiment that size is about point oh five: you'd expect the second decimal place to be wrong. Three fifty-five over one thirteen is a famous fraction for pi, and with that needle it can only come out when the number of throws is a multiple of two hundred and thirteen. Three thousand four hundred and eight is sixteen times two hundred and thirteen. Historians suspect he stopped, or chose his count, when the answer looked best. The lesson for every simulation in this course: report the error bar, and decide in advance when to stop.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/908b34b0967e20c0.wav",
+   "duration": 53.45,
+   "tokens": 160,
+   "peak": 0.478973388671875,
+   "issues": [],
+   "elapsed": 81.58,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats7/en/MonteCarlo_motion/result.json",
+ "input_sha256": "4c46ef78138432c1ed5737da34fa5669a28fd72a0fadf5e503960b0a53ccffd7"
+}

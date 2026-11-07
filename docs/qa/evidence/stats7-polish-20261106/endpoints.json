@@ -1,0 +1,149 @@
+{
+  "fingerprint": "0eca94f1c783f7ce67bc973359515605866d843608e72609d3b9e0b267818e18",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 14,
+      "warnings": {
+        "narration-translation": 4,
+        "untranslated-on-screen": 22
+      },
+      "input_record": "renders/qa/series/stats7/en/Hook/result.json",
+      "input_sha256": "97538e879a7d566162e55835520b2345b83c188c1f932036baa9cd01802a308d"
+    },
+    {
+      "scene": "Generators",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 36
+      },
+      "input_record": "renders/qa/series/stats7/en/Generators/result.json",
+      "input_sha256": "94c4741bdea543f95c2ce31ee9ebf1205ea340163ba8feea6510d6f6b1bb56c2"
+    },
+    {
+      "scene": "Inverse",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 26
+      },
+      "input_record": "renders/qa/series/stats7/en/Inverse/result.json",
+      "input_sha256": "5e86bfc65bf27915cb3b5acaf666086d34a77a89ce20d0466a0fd9fc992b46b9"
+    },
+    {
+      "scene": "Rejection",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 34
+      },
+      "input_record": "renders/qa/series/stats7/en/Rejection/result.json",
+      "input_sha256": "f4b525aec713520921105131377f8c27408435e69426516ef0447f4bf040edb0"
+    },
+    {
+      "scene": "Special",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 24
+      },
+      "input_record": "renders/qa/series/stats7/en/Special/result.json",
+      "input_sha256": "693d475c04e15b3dd37720113bd402b163d258f276f7eec5fd0da1ffd7e532a8"
+    },
+    {
+      "scene": "MonteCarlo",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 38
+      },
+      "input_record": "renders/qa/series/stats7/en/MonteCarlo/result.json",
+      "input_sha256": "4bd9678c03c21c669c0e2278cee5335e9590ff09e3d16a688c94a4794e2c9b67"
+    },
+    {
+      "scene": "Studies",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 38
+      },
+      "input_record": "renders/qa/series/stats7/en/Studies/result.json",
+      "input_sha256": "5859e4d2b19da3353c14f2e1b7ad78750a9ab302755085eda8d53f643eb27747"
+    },
+    {
+      "scene": "VarRed",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 38
+      },
+      "input_record": "renders/qa/series/stats7/en/VarRed/result.json",
+      "input_sha256": "70ebab88004b8c5a36fcc32fe6be235c15189939d9a374ac82543b87415c3073"
+    },
+    {
+      "scene": "Chains",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 41
+      },
+      "input_record": "renders/qa/series/stats7/en/Chains/result.json",
+      "input_sha256": "791fb3a5f9745b9951c87df2b12ab4f1265597f1e8d4c9cbaab1cc0996ac099d"
+    },
+    {
+      "scene": "Stationary",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 31
+      },
+      "input_record": "renders/qa/series/stats7/en/Stationary/result.json",
+      "input_sha256": "d8d7bd6f99bb20af3b99b531088d3a2bb09bf5c094d7e526f4eb02b029f9b082"
+    },
+    {
+      "scene": "Mixing",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 29
+      },
+      "input_record": "renders/qa/series/stats7/en/Mixing/result.json",
+      "input_sha256": "a99d732860deef614528fdcc499ecf260d6b47448f92ffe2785e7f42dfe0ea56"
+    },
+    {
+      "scene": "Metropolis",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 35
+      },
+      "input_record": "renders/qa/series/stats7/en/Metropolis/result.json",
+      "input_sha256": "b3faca335c80435a147c50f1bb763ec6250c7523e60226d216f4a264b43b1b16"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 7,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 60
+      },
+      "input_record": "renders/qa/series/stats7/en/Outro/result.json",
+      "input_sha256": "ed769c451d2be477bc6296c1e9f4ba0e911ee5a1016712e8767df114e10a0c33"
+    }
+  ]
+}

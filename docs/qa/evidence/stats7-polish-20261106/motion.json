@@ -1,0 +1,61 @@
+{
+  "fingerprint": "0eca94f1c783f7ce67bc973359515605866d843608e72609d3b9e0b267818e18",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 14,
+      "warnings": {
+        "narration-translation": 4
+      },
+      "input_record": "renders/qa/series/stats7/en/Hook_motion/result.json",
+      "input_sha256": "8f9694a4a46bf18c10bf38375dadf22e1bf7dbf8ccc588e3880c68a4ea56bf84",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 184 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 184 s\n"
+    },
+    {
+      "scene": "Special",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats7/en/Special_motion/result.json",
+      "input_sha256": "0b9d3ed970f7c8522a3d6ef5fa7993bc4f674ae50251e8ce5e144aab1660c28a",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 212 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 212 s\n"
+    },
+    {
+      "scene": "MonteCarlo",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats7/en/MonteCarlo_motion/result.json",
+      "input_sha256": "4c46ef78138432c1ed5737da34fa5669a28fd72a0fadf5e503960b0a53ccffd7",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 289 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 289 s\n"
+    },
+    {
+      "scene": "Stationary",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats7/en/Stationary_motion/result.json",
+      "input_sha256": "72d4e71e1a21dfaf7fb1b0796d4ec2eb998a129765a1adbaae7d422da8950053",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 224 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 224 s\n"
+    },
+    {
+      "scene": "Metropolis",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats7/en/Metropolis_motion/result.json",
+      "input_sha256": "ab662f6e556b4030abe98fef62d02971188c83f7d5d3b9c860a271354a7fa19e",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 311 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 311 s\n"
+    }
+  ]
+}

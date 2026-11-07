@@ -1,0 +1,83 @@
+{
+  "fingerprint": "0eca94f1c783f7ce67bc973359515605866d843608e72609d3b9e0b267818e18",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 14,
+      "warnings": {
+        "narration-translation": 4,
+        "untranslated-on-screen": 22
+      },
+      "input_record": "renders/qa/native1080/stats7/en/Hook/result.json",
+      "input_sha256": "b0a7e40c99302009edf6509b4e1805a10ae389cee8ab367a9842ea4abfea6a51"
+    },
+    {
+      "scene": "Generators",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 36
+      },
+      "input_record": "renders/qa/native1080/stats7/en/Generators/result.json",
+      "input_sha256": "543d5cf708dc18a27dd5f3d980e1c4ce61e861f56e20e07d3419519e36a0ebca"
+    },
+    {
+      "scene": "Rejection",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 34
+      },
+      "input_record": "renders/qa/native1080/stats7/en/Rejection/result.json",
+      "input_sha256": "b16a2af24ed08600769293956a65e40d4b665ade131d0a904fcd3f7598866272"
+    },
+    {
+      "scene": "Special",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 24
+      },
+      "input_record": "renders/qa/native1080/stats7/en/Special/result.json",
+      "input_sha256": "8f35ae071ef8d6b66de976642d25e588387812632a903938b28ff64c422a4ebc"
+    },
+    {
+      "scene": "MonteCarlo",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 38
+      },
+      "input_record": "renders/qa/native1080/stats7/en/MonteCarlo/result.json",
+      "input_sha256": "320ed38223cdd485dcc3149779a4149cdade937c3904e550537c456c092e90d1"
+    },
+    {
+      "scene": "Stationary",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 31
+      },
+      "input_record": "renders/qa/native1080/stats7/en/Stationary/result.json",
+      "input_sha256": "6f518dfe07b7615639e2bbcdf8707b369f2b1d97370b98cfafd7a86929cfbf19"
+    },
+    {
+      "scene": "Metropolis",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 35
+      },
+      "input_record": "renders/qa/native1080/stats7/en/Metropolis/result.json",
+      "input_sha256": "56a42a970ea3af94b8ebdc1475bf199c3ec06ab10c088c13c2737b4bf23b3d8e"
+    }
+  ]
+}
