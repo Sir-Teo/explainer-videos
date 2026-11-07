@@ -122,7 +122,7 @@ class Concentration(VoiceoverScene):
 
     def uses(self):
         rows = fit_rows(VGroup(
-            label(r"what concentration buys:", font_size=28, color=GREY_A),
+            label(r"Uses of empirical-process concentration inequalities", font_size=36, color=WHITE),
             label(r"bounded measurable class: mean GC + concentration gives a.s. GC", font_size=26, color=GOODC),
             label(r"finite-sample bands: \ DKW gives $\pm\sqrt{\log(2/\alpha)/(2n)}$ for every $n$ \ (chapter 11)", font_size=26, color=EMPC),
             label(r"oracle inequalities for ERM and the lasso: \ risk $\le$ best in class $+$ complexity", font_size=26, color=CLASSC),
