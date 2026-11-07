@@ -85,7 +85,7 @@ class FD(VoiceoverScene, ThreeDScene):
             cmath(r"\partial_{SS}V", r"\approx", r"\frac{V_{j+1} - 2V_j + V_{j-1}}{\Delta S^2} + O(\Delta S^2)", font_size=34),
             cmath(r"\frac{V^{n+1} - V^n}{\Delta\tau}", r"=", r"\theta\,L_hV^{n+1} + (1 - \theta)\,L_hV^n", font_size=34),
             cmath(r"V_j^n = g^n e^{ikj\Delta x}", r"\Rightarrow", r"g_{\text{exp}} = 1 - 4\lambda s,\ \ g_{\text{imp}} = "
-                  r"\frac{1}{1 + 4\lambda s},\ \ g_{\text{CN}} = \frac{1 - 2\lambda s}{1 + 2\lambda s}", font_size=30,
+                  r"\frac{1}{1 + 4\lambda s},\ \ g_{\text{CN}} = \frac{1 - 2\lambda s}{1 + 2\lambda s}", font_size=26,
                   colors={r"\Rightarrow": BAD}),
             cmath(r"\text{consistent} + \text{stable}", r"\Leftrightarrow", r"\text{convergent}", font_size=34,
                   colors={r"\Leftrightarrow": GOOD}),
@@ -100,7 +100,7 @@ class FD(VoiceoverScene, ThreeDScene):
                     r"substitute one Fourier mode; explicit is stable iff $\lambda \le \tfrac12$"),
                 why(r"Lax's equivalence theorem (Lax and Richtmyer 1956), for consistent approximations to well-posed linear initial-value problems"),
                 why(r"diffusion-only CFL estimate using $a=\frac12\sigma^2S^2$; drift/reaction, boundaries and monotonicity are additional conditions")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.8, buff=0.55, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=3.0, x=0.0, align_index=None, buff=0.45, edge=6.6)
         with self.voiceover(
             f"The Black–Scholes operator contains diffusion, drift and discounting. <bookmark mark='a'/> Central space differences have second-order consistency for a sufficiently smooth solution. <bookmark mark='b'/> The theta scheme is explicit at zero, implicit at one, and Crank–Nicolson at one half. Its familiar global time orders require regularity and stability. <bookmark mark='c'/> For constant-coefficient heat diffusion, Fourier analysis uses lambda equal to diffusion coefficient times time step over space step squared. Explicit stability requires lambda at most one half. Implicit and Crank–Nicolson factors stay between minus one and one; Crank–Nicolson can be negative. <bookmark mark='d'/> Lax equivalence connects stability and convergence for consistent approximations to a well-posed linear initial-value problem. <bookmark mark='e'/> In Black–Scholes the diffusion coefficient is one half sigma squared S squared. This gives the displayed diffusion-only estimate of {f['explicit_nt_min']:.0f} steps. It does not alone certify the complete drift, reaction and boundary discretization."
         ) as vo:
