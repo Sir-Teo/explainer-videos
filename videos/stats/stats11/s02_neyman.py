@@ -29,7 +29,7 @@ class Neyman(VoiceoverScene):
                           r"true parameter", color=OBS, width=9.4, font_size=24).move_to([0, 1.2, 0])
         rows = fit_rows(VGroup(
             label(r"Laplace and Gauss had used $\pm$ probable errors for a century, \ informally", font_size=24, color=GREY_A),
-            label(r"Fisher's rival idea, \ the \emph{fiducial} interval (1930), \ was never made coherent", font_size=24, color=GREY_A),
+            label(r"Fisher's rival idea, \ the \emph{fiducial} interval (1930), \ has disputed interpretations and nonuniqueness", font_size=24, color=GREY_A),
             label(r"Neyman made the interval itself the random object", font_size=28, color=OBS),
         ), 12.6, 0.32, [0, -1.6, 0])
         with self.voiceover(
@@ -37,8 +37,8 @@ class Neyman(VoiceoverScene):
             "with a modest title: an outline of a theory of statistical estimation based on the classical theory of "
             "probability. <bookmark mark='b'/> Laplace and Gauss had attached plus-or-minus errors to their estimates for a "
             "century, but informally. <bookmark mark='c'/> Fisher had proposed his own idea, the fiducial interval, which "
-            "treated the parameter as if it had a distribution after the data; it led to paradoxes that were never "
-            "resolved. <bookmark mark='d'/> Neyman's move was to make the interval itself the random object, and to ask "
+            "treated the parameter as if it had a distribution after the data; its general interpretation and uniqueness remained "
+            "controversial. <bookmark mark='d'/> Neyman's move was to make the interval itself the random object, and to ask "
             "how often it would succeed."
         ) as vo:
             vo.wait_until("a")
@@ -85,7 +85,7 @@ class Neyman(VoiceoverScene):
         r = IntervalRain(ax, d["mu"], y_top=100, dy=1.0, stroke_width=2.2, font_size=28, tally_pos=[4.6, 1.8, 0])
         rows = fit_rows(VGroup(
             MathTex(rf"\mu = {d['mu']:.1f}\ \text{{cm}}", font_size=30, color=EXACT),
-            label(r"each line: \ one sample of 10, \ its 95\% interval", font_size=24, color=GREY_A),
+            label(r"each line: \ one sample of 10, \ its nominal 95\% $t$-interval", font_size=24, color=GREY_A),
             label(rf"over 10,000 samples: \ {100 * d['cov10k']:.1f}\%", font_size=26, color=OBS),
             label(rf"average width {d['width']:.1f} cm", font_size=24, color=GREY_A),
         ), 4.8, 0.34, [4.6, -0.6, 0])
@@ -96,7 +96,7 @@ class Neyman(VoiceoverScene):
             "draw it as a line. Green if it catches the truth, red if it misses. Another sample, another line. "
             "<bookmark mark='c'/> Let it rain: a hundred samples. Each interval is different, centred where its sample "
             "happened to fall. Most catch the truth; a few miss. <bookmark mark='d'/> Ninety-three out of this hundred. "
-            "Over ten thousand samples, ninety-four point nine percent. That's what ninety-five percent confidence means: "
+            "Over ten thousand samples, ninety-four point nine percent. For this nearly normal population the t interval is approximate; exact coverage requires independent normal draws. Confidence refers to "
             "a long-run rate of success for the procedure."
         ) as vo:
             self.play(FadeIn(A), FadeIn(r), FadeIn(tag))
@@ -152,14 +152,14 @@ class Neyman(VoiceoverScene):
                              label(rf"{int(lev * 100)}\%: \ $\pm {h:.1f}$", font_size=24, color=c).next_to(ax.c2p(m + h, y), RIGHT, buff=0.2)))
         foot = fit_rows(VGroup(
             label(r"more confidence costs width: \ the same data, \ three promises", font_size=26, color=OBS),
-            label(r"a 100\% interval for a mean is the whole line: \ certain, \ and useless", font_size=24, color=GREY_A),
-            label(r"the only way to buy both is more data: \ width $\propto 1/\sqrt n$", font_size=24, color=GREY_A),
+            label(r"for an unrestricted normal mean: \ 100\% requires the whole line, almost surely", font_size=24, color=GREY_A),
+            label(r"more information buys precision: \ with fixed noise, width $\propto 1/\sqrt n$", font_size=24, color=GREY_A),
         ), 12.6, 0.3, [0, -2.2, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The level is a choice, and it costs width. Here is one sample of ten men, with its "
             "eighty, ninety-five and ninety-nine percent intervals. <bookmark mark='b'/> More confidence, wider interval. "
-            "<bookmark mark='c'/> A hundred percent interval for a mean would be the whole real line: certain to be right, "
-            "and useless. <bookmark mark='d'/> To be both confident and precise, you need more data: width shrinks like "
+            "<bookmark mark='c'/> For an unrestricted normal mean, a hundred percent interval must almost surely be the whole real line: certain to be right, "
+            "and useless. <bookmark mark='d'/> To be both confident and precise, gather more information, through more data or a less noisy design: width shrinks like "
             "one over root n, as Part 8 showed."
         ) as vo:
             self.play(FadeIn(A))
@@ -173,7 +173,7 @@ class Neyman(VoiceoverScene):
     def planning(self):
         rows = [
             cmath(r"\text{margin}", r"=", r"1.96\sqrt{\frac{p(1 - p)}{n}} \le 1.96\sqrt{\frac{1}{4n}}", font_size=34),
-            cmath(r"1.96\sqrt{\frac{1}{4n}} = 0.03", r"\Rightarrow", r"n = \Big(\frac{1.96}{2 \times 0.03}\Big)^2 \approx 1{,}067", font_size=32),
+            cmath(r"1.96\sqrt{\frac{1}{4n}} = 0.03", r"\Rightarrow", r"n \ge \Big(\frac{1.96}{2 \times 0.03}\Big)^2 \Rightarrow n = 1{,}068", font_size=32),
             cmath(r"\text{halve the margin}", r"\Rightarrow", r"4\times \text{ the sample}", font_size=34),
         ]
         rows[1][2].set_color(OBS)
@@ -184,10 +184,10 @@ class Neyman(VoiceoverScene):
         with self.voiceover(
             "Intervals also plan studies. <bookmark mark='a'/> A poll's margin of error is half the width of a ninety-five "
             "percent interval for a proportion, and it's largest when p is a half. <bookmark mark='b'/> Set it to three "
-            "points and solve: about a thousand and sixty-seven respondents, the famous poll of about a thousand that Part "
+            "points and solve: round up to a thousand and sixty-eight respondents under this simple random-sampling approximation, the famous poll of about a thousand that Part "
             "8 met. <bookmark mark='c'/> Halving the margin to a point and a half needs four times the sample, over four "
             "thousand. <bookmark mark='d'/> And a common slip: the margin applies to one candidate's share. The gap "
-            "between two candidates is uncertain by nearly twice as much."
+            "between two exhaustive choices has exactly twice the standard error of one share; with other choices, the covariance determines the gap's error."
         ) as vo:
             step = ladder(self, rows, whys, keep=3, top=2.4, x=0.0, buff=0.8, edge=6.9)
             for k, m_ in enumerate("abc"):
@@ -210,7 +210,7 @@ class Neyman(VoiceoverScene):
             "Sometimes only one side matters. <bookmark mark='a'/> A regulator wants an upper bound on a side-effect rate; "
             "an engineer wants a lower bound on a beam's strength. A one-sided confidence bound promises that the "
             "parameter is below it, or above it, with probability at least ninety-five percent. <bookmark mark='b'/> For a "
-            "mean, that's x-bar plus t point nine five standard errors, with all five percent in one tail, so the bound is "
+            "mean from independent normal data, that's x-bar plus t point nine five standard errors, with all five percent in one tail, so the bound is "
             "tighter than the end of the two-sided interval. <bookmark mark='c'/> Like a one-sided test, the side has to "
             "be chosen before looking at the data. It's the duality again: one-sided bounds invert one-sided tests."
         ) as vo:

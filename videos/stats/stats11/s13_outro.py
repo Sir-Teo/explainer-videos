@@ -49,12 +49,12 @@ class Outro(VoiceoverScene):
             "Part eleven in thirteen lines. <bookmark mark='a'/> The textbook interval for a proportion fails in a "
             "sawtooth, ninety-four and a half percent at one sample size, seventy-nine at the next. Neyman's promise is "
             "coverage of at least one minus alpha for every parameter value, and the ninety-five percent belongs to the "
-            "procedure, not to the interval in hand. Pivots give exact intervals; inverting tests gives intervals for "
+            "procedure, not to the interval in hand. Pivots give exact intervals; inverting tests gives confidence sets for "
             "almost anything, through Neyman's belt. For proportions, use Wilson, Agresti–Coull, Clopper–Pearson or "
             "Jeffreys; likelihood intervals follow the likelihood's shape, and after zero events the rule of three "
             "applies. Discrete data force a choice between a guarantee and an average. Fieller's ratio sets can be the "
             "whole line, and must be. Several promises at once need Bonferroni, Scheffé or the DKW band. Prediction is not "
-            "confidence. Credible and confidence intervals agree in large samples and part company in Welch's example. "
+            "confidence. Credible and confidence intervals agree under regular large-sample conditions and part company in Welch's example. "
             "And the Coverage Board's protocol is now written down."
         ) as vo:
             self.play(FadeIn(head))

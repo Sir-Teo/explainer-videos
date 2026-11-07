@@ -98,20 +98,24 @@ class Likelihood(VoiceoverScene):
             cmath(r"\text{Wald on the log-odds scale}", r"\ne", r"\text{Wald on the } p \text{ scale}", font_size=30),
         ]
         rows[1][2].set_color(OBS)
-        whys = [why(r"the scale of logistic regression (Part 14)"), why(r"invariant: \ a parameter's interval maps to any function's"),
+        whys = [why(r"the scale of logistic regression (Part 14)"), why(r"invariant under a one-to-one coordinate change"),
                 why(r"Wald intervals depend on the coordinates; \ likelihood intervals do not")]
+        intro = label('One-to-one coordinate changes preserve likelihood sets', font_size=36)
         with self.voiceover(
             "Likelihood intervals have the invariance of Part 9's maximum likelihood estimates. <bookmark mark='a'/> Change "
             "coordinates to the log-odds, the scale logistic regression uses. <bookmark mark='b'/> The likelihood "
             "interval for the log-odds is exactly the log-odds of the interval for p: the cut at one point nine two "
             "doesn't care how the parameter is labelled. <bookmark mark='c'/> The Wald interval does care. A Wald "
             "interval on the log-odds scale, transformed back, is a different interval from Wald on the p scale, and "
-            "usually a better one. That's why software reports intervals for odds ratios on the log scale, a point Part "
+            "often a better interior approximation. It is undefined at zero or all successes without an additional convention. That's why software reports intervals for odds ratios on the log scale, a point Part "
             "14 returns to on the Coverage Board."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.2, buff=0.9, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -123,23 +127,27 @@ class Likelihood(VoiceoverScene):
             cmath(r"1 - 0.05^{1/n}", r"\approx", r"\frac{-\log 0.05}{n} = \frac{3.00}{n}", font_size=34),
         ]
         rows[2][2].set_color(OBS)
-        whys = [why(r"no events in $n$ trials"), why(r"the largest $p$ still giving 0 events 5\% of the time"), why(r"$-\log 0.05 = 2.996$")]
+        whys = [why(r"no events in $n$ trials"), why(r"an exact one-sided 95\% upper bound"), why(r"$-\log 0.05 = 2.996$")]
         tab = VGroup(*[MathTex(rf"n = {n}:\ \ {v['exact']:.4f}\ \text{{vs}}\ 3/n = {v['rule']:.4f}", font_size=26) for n, v in d.items()])
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([0, -2.2, 0])
         foot = label(r"Hanley \& Lippman-Hand (1983): \ ``If nothing goes wrong, \ is everything all right?''", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.15)
+        intro = label('Zero events still leave uncertainty about the rate', font_size=36)
         with self.voiceover(
             "And the edge case where the Wald interval is most absurd: zero events. A new drug is given to a hundred "
             "patients and nobody has a serious side effect. The Wald interval is zero to zero. <bookmark mark='a'/> But "
-            "the chance of zero events in n trials is one minus p to the n. <bookmark mark='b'/> Set that to five percent "
+            "the chance of zero events in n trials is one minus p to the n. <bookmark mark='b'/> For an exact one-sided ninety-five percent upper bound, set that to five percent "
             "and solve: the largest rate still consistent with seeing nothing. <bookmark mark='c'/> Since minus log point "
-            "zero five is almost exactly three, the upper limit is about three over n. That's the rule of three: after a "
+            "zero five is almost exactly three, the upper limit is about three over n. This differs from the two-sided Wilks likelihood cutoff. That's the rule of three: after a "
             "hundred clean patients, the side-effect rate could still be as high as three percent. "
             "<bookmark mark='d'/> James Hanley and Abby Lippman-Hand popularized it in 1983, in a paper titled 'If nothing "
             "goes wrong, is everything all right?'"
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.4, buff=0.6, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
                 if k == 2:
                     self.play(FadeIn(tab))
@@ -161,18 +169,22 @@ class Likelihood(VoiceoverScene):
             MathTex(rf"\text{{Wald: }}[{wald[0]:.3f},\ {wald[1]:.3f}]", font_size=30, color=METHOD_COL["wald"]),
             MathTex(rf"\text{{likelihood ratio: }}[{lr[0]:.3f},\ {lr[1]:.3f}]", font_size=30, color=METHOD_COL["lr"]),
             MathTex(rf"\text{{Garwood (exact): }}[{garw[0]:.3f},\ {garw[1]:.3f}]", font_size=30, color=METHOD_COL["clopper_pearson"]),
-            label(r"with 122 events the likelihood is nearly a parabola, \ and all three agree", font_size=24, color=OBS),
+            label(r"with 122 events the likelihood is nearly a parabola, \ and all three are close", font_size=24, color=OBS),
             label(r"the methods differ where it matters: \ few events, \ rates near a boundary", font_size=24, color=GREY_A),
         ), 12.6, 0.36, [0, 0.0, 0])
+        intro = label('Compare three interval methods with 122 events', font_size=36)
         with self.voiceover(
             "When does the choice of method stop mattering? <bookmark mark='a'/> Take Part 9's horse kicks: a hundred and "
             "twenty-two deaths in two hundred corps-years. <bookmark mark='b'/> The Wald interval for the rate, "
             "<bookmark mark='c'/> the likelihood ratio interval, <bookmark mark='d'/> and Garwood's exact interval agree to "
             "within about a hundredth. <bookmark mark='e'/> With a hundred and twenty-two events the log-likelihood is "
-            "almost exactly a parabola, which is the condition under which Wald, likelihood and exact methods coincide. "
+            "almost exactly a parabola, which is the condition under which Wald, likelihood and exact methods agree to first order. "
             "<bookmark mark='f'/> They differ where it matters: few events, or a parameter near the edge of its range."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcdef"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()

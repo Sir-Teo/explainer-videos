@@ -30,18 +30,22 @@ class Credible(VoiceoverScene):
         rows[2][2].set_color(OBS)
         whys = [why(r"Bayes' rule (Part 2), \ with a prior on $p$"), why(r"Jeffreys' prior: \ the posterior is a beta (Part 15)"),
                 why(r"a probability about $p$, \ given these data")]
+        intro = label('Give the parameter a prior distribution', font_size=36)
         with self.voiceover(
             "The interpretation that chapter one forbade has a home: Bayesian inference. <bookmark mark='a'/> Give the "
             "parameter a prior distribution, and Bayes' rule turns the likelihood into a posterior distribution for p "
             "given the data. <bookmark mark='b'/> With Jeffreys' prior, the posterior for a proportion is a beta "
-            "distribution, and its middle ninety-five percent is the Jeffreys interval of chapter four. "
+            "distribution, and its middle ninety-five percent gives an equal-tailed credible interval. Chapter four's recommended Jeffreys interval modifies the endpoints at zero and all successes; those modified boundary intervals are not exactly equal-tailed posterior intervals. "
             "<bookmark mark='c'/> For that interval, the statement there's a ninety-five percent probability that p lies "
             "in it is correct, as a statement about the posterior. Part 15 builds this properly. The question here is "
             "how the two kinds of interval relate."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.4, x=0.4, buff=0.9, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -52,12 +56,12 @@ class Credible(VoiceoverScene):
                  xticks=[0, 0.25, 0.5, 0.75, 1], yticks=[0.85, 0.9, 0.95, 1], yfmt=lambda v: f"{v:.2f}", center=[-1.8, -0.3, 0])
         ax = A.ax
         nom = DashedLine(ax.c2p(0, 0.95), ax.c2p(1, 0.95), color=EXACT, stroke_width=2)
-        cj = polyline(ax, ps, np.clip(d["jeffreys"], 0.85, 1), METHOD_COL["jeffreys"], 2.2)
-        cf = polyline(ax, ps, np.clip(d["flat"], 0.85, 1), S.POST, 2.2)
-        leg = legend([(METHOD_COL["jeffreys"], rf"Jeffreys prior: \ mean {100 * d['j_mean']:.1f}\%"),
-                      (S.POST, rf"flat prior: \ mean {100 * d['f_mean']:.1f}\%")], font_size=22).to_edge(UP, buff=0.35)
+        cj = polyline(ax, ps, d["jeffreys"], METHOD_COL["jeffreys"], 2.2)
+        cf = polyline(ax, ps, d["flat"], S.POST, 2.2)
+        leg = legend([(METHOD_COL["jeffreys"], rf"Jeffreys prior: \ grid mean {100 * d['j_mean']:.1f}\%"),
+                      (S.POST, rf"flat prior: \ grid mean {100 * d['f_mean']:.1f}\%")], font_size=22).to_edge(UP, buff=0.35)
         rows = fit_rows(VGroup(
-            label(r"close to 95\% on average: \ for large $n$ they coincide", font_size=24),
+            label(r"close to 95\% on average: \ regular interior asymptotics can make them agree", font_size=24),
             label(r"Bernstein--von Mises (Part 53): \ the posterior becomes $N(\hat\theta, 1/nI)$", font_size=22, color=GREY_A),
             MathTex(rf"p = 0.01:\ \text{{flat}}\ {100 * d['f_small']:.1f}\%,\ \text{{Jeffreys}}\ {100 * d['j_small']:.1f}\%", font_size=24),
             label(r"at the edges the prior matters", font_size=22, color=GREY_A),
@@ -65,9 +69,9 @@ class Credible(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> Judge Bayesian intervals by Neyman's standard: fix the true p and ask how often the "
             "ninety-five percent credible interval contains it. The Jeffreys interval: ninety-five point oh percent on "
-            "average. <bookmark mark='b'/> With a flat prior instead, ninety-five point two. <bookmark mark='c'/> On "
+            "average over the displayed grid. <bookmark mark='b'/> With a flat prior instead, ninety-five point two. <bookmark mark='c'/> On "
             "average they behave like good confidence intervals, and for large samples the two theories agree almost "
-            "exactly: the Bernstein–von Mises theorem of Part 53 says the posterior becomes the same normal curve that "
+            "exactly: under regularity, identifiability and a suitable positive prior, the Bernstein–von Mises theorem of Part 53 says the posterior becomes the same normal curve that "
             "Part 9's asymptotics give the estimator. <bookmark mark='d'/> At the edges, though, the prior matters. At p "
             "equals point zero one, the flat-prior interval covers ninety-one percent of the time, Jeffreys' "
             "ninety-nine."
@@ -94,18 +98,20 @@ class Credible(VoiceoverScene):
         w = VGroup(Line(nl1.n2p(-0.4), nl1.n2p(0.35), color=HIT, stroke_width=8), Dot(nl1.n2p(-0.4), color=DATA), Dot(nl1.n2p(0.35), color=DATA))
         nrw = VGroup(Line(nl2.n2p(0.05), nl2.n2p(0.2), color=MISS, stroke_width=8), Dot(nl2.n2p(0.05), color=DATA), Dot(nl2.n2p(0.2), color=DATA))
         l1 = label(r"far apart ($\ge \tfrac12$): \ $\theta$ \emph{must} be between them", font_size=24, color=HIT).next_to(nl1, DOWN, buff=0.25)
-        l2 = label(r"close together: \ only a 1 in 3 chance", font_size=24, color=MISS).next_to(nl2, DOWN, buff=0.25)
+        l2 = label(r"range $< 1/2$: \ conditional coverage $1/3$", font_size=24, color=MISS).next_to(nl2, DOWN, buff=0.25)
+        intro = label('Conditional coverage can differ from the overall level', font_size=36)
         with self.voiceover(
             "But the two ideas can part company sharply, and Bernard Welch gave the classic example in 1939. "
             "<bookmark mark='a'/> Take two draws from a uniform distribution of width one, centred on an unknown theta. "
             "The interval between them contains theta exactly when the two draws fall on opposite sides of it, which "
             "happens half the time. So it's a fifty percent confidence interval. <bookmark mark='b'/> Now suppose the two "
             "draws are more than a half apart. Each is within a half of theta, so theta must be between them. In this "
-            "case we know, with certainty, that this fifty percent interval is right. <bookmark mark='c'/> And if they're "
-            "very close together, the interval is right only about a third of the time. The confidence level is the "
+            "case we know, with certainty, that this fifty percent interval is right. <bookmark mark='c'/> And conditional on their range being less than a half, the interval is right one third of the time. This averages over that subset, rather than giving a probability for a particular observed pair. The confidence level is the "
             "same, fifty percent, in both cases."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(Create(nl1), FadeIn(th1), FadeIn(w), FadeIn(l1))

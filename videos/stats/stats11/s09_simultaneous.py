@@ -29,15 +29,19 @@ class Simultaneous(VoiceoverScene):
         ]
         rows[1][2].set_color(MISS)
         whys = [why(r"Part 10's family-wise error, \ for intervals"), why(r"ten 95\% intervals: \ all right only 60\% of the time")]
+        intro = label('Several individual promises versus one joint promise', font_size=36)
         with self.voiceover(
             "Part 10's multiple-testing problem has an interval version. <bookmark mark='a'/> If you report k intervals, "
             "each at ninety-five percent, the chance that all of them cover their targets is ninety-five percent to the "
             "k, if they're independent. <bookmark mark='b'/> With ten, sixty percent. If a conclusion depends on all the "
             "intervals being right at once, the individual promises aren't enough."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=1.6, x=-0.4, buff=1.0, edge=6.9)
             for k, m_ in enumerate("ab"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -64,7 +68,7 @@ class Simultaneous(VoiceoverScene):
 
     def scheffe(self):
         hc = history_card(1953, r"Henry Scheff\'e, \ \emph{Biometrika} 40", r"intervals for \emph{every} contrast among $k$ means at once, \ "
-                          r"including ones chosen after looking at the data", color=OBS, width=8.4, font_size=24).move_to([0, 1.6, 0])
+                          r"including ones chosen after looking at the data; \ independent normal errors, common variance", color=OBS, width=8.4, font_size=24).move_to([0, 1.6, 0])
         rows = fit_rows(VGroup(
             MathTex(r"\sum_j c_j\bar x_j \pm \sqrt{(k - 1)\,F_{k-1,\,\nu,\,0.95}}\ \ \widehat{\mathrm{SE}}\Big(\sum_j c_j\bar x_j\Big),\qquad \sum_j c_j = 0",
                     font_size=30),
@@ -73,7 +77,7 @@ class Simultaneous(VoiceoverScene):
                   color=GREY_A),
         ), 12.6, 0.36, [0, -1.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Henry Scheffé went further in 1953. His intervals cover every contrast among k group "
+            "<bookmark mark='a'/> In the independent normal common-variance model, Henry Scheffé went further in 1953. His intervals cover every contrast among k group "
             "means simultaneously, infinitely many of them, including contrasts you only thought of after looking at "
             "the data. <bookmark mark='b'/> The multiplier comes from the F distribution, square root of k minus one times "
             "an F quantile. <bookmark mark='c'/> It's the price of fishing, paid in advance: wider intervals, but a "
@@ -96,22 +100,20 @@ class Simultaneous(VoiceoverScene):
                  xticks=[160, 170, 176, 180, 190], yticks=[0, 0.5, 1], center=[-1.8, -0.3, 0])
         ax = A.ax
 
-        def steps(xs, ys, color, sw):
-            pts = [ax.c2p(155, ys[0] if ys[0] < 1e-9 else 0)]
-            prev = 0.0
-            out = VMobject(stroke_color=color, stroke_width=sw)
-            pts = [ax.c2p(155, prev)]
-            for a, b in zip(xs, ys):
-                a = float(np.clip(a, 155, 197))
-                pts += [ax.c2p(a, prev), ax.c2p(a, b)]
-                prev = b
-            pts.append(ax.c2p(197, prev))
-            out.set_points_as_corners(pts)
-            return out
+        def steps(xs, ys, color, sw, initial=0.0):
+            # Include the pre-first-observation band and geometrically clip the viewport.
+            pts = [(min(155.0, float(xs[0])), initial)]
+            previous = initial
+            for value, height in zip(xs, ys):
+                pts.extend([(float(value), previous), (float(value), float(height))])
+                previous = float(height)
+            pts.append((max(197.0, float(xs[-1])), previous))
+            coordinates = np.asarray(pts)
+            return polyline(ax, coordinates[:, 0], coordinates[:, 1], color, sw)
 
         f = np.arange(1, len(x) + 1) / len(x)
         ec = steps(x, f, DATA, 3)
-        band = VGroup(steps(x, hi, OBS, 1.8), steps(x, lo, OBS, 1.8))
+        band = VGroup(steps(x, hi, OBS, 1.8, initial=d["eps"]), steps(x, lo, OBS, 1.8))
         true = polyline(ax, grid, Ft, EXACT, 2.5)
         rows = fit_rows(VGroup(
             MathTex(r"P\Big(\sup_t |\hat F_n(t) - F(t)| > \varepsilon\Big) \le 2e^{-2n\varepsilon^2}", font_size=28),
@@ -147,7 +149,7 @@ class Simultaneous(VoiceoverScene):
     def band_vs_points(self):
         d = load("simultaneous")
         bars = VGroup()
-        specs = [(r"DKW band", d["band_cov"], OBS), (r"pointwise 95\% intervals, \ all at once", d["point_cov"], MISS)]
+        specs = [(r"DKW band", d["band_cov"], OBS), (r"nominal Wald intervals: \ all 200 grid points", d["point_cov"], MISS)]
         for i, (t, v, c) in enumerate(specs):
             y = 1.0 - 1.4 * i
             bars.add(VGroup(label(t, font_size=26, color=c).move_to([-3.8, y, 0]),
@@ -157,16 +159,15 @@ class Simultaneous(VoiceoverScene):
             if b[0].width > 4.4:
                 b[0].width = 4.4
             b[0].align_to([-0.4, 0, 0], RIGHT)
-        head = label(r"how often the whole true curve lies inside, \ 2,000 samples of 100", font_size=26).to_edge(UP, buff=0.8)
-        foot = label(r"200 pointwise intervals almost never hold together; \ the band was built to", font_size=26, color=OBS).to_edge(DOWN, buff=1.0)
+        head = label(r"joint coverage in 2,000 IID samples of 100", font_size=26).to_edge(UP, buff=0.8)
+        foot = label(r"Wald intervals also fail individually near the tails; \ DKW controls the whole CDF", font_size=26, color=OBS).to_edge(DOWN, buff=1.0)
         tag = simulated_tag(r"simulated: \ the World", corner=DR)
         with self.voiceover(
             "How much does the simultaneity matter? <bookmark mark='a'/> Over two thousand samples of a hundred men, the "
             "band contains the whole true curve ninety-six point eight percent of the time: kept, a little conservatively. "
-            "<bookmark mark='b'/> Now try the naive alternative: a separate ninety-five percent interval for the "
+            "<bookmark mark='b'/> Now try the naive alternative: a separate nominal ninety-five percent Wald interval for the "
             "distribution function at each of two hundred points, and ask how often all of them hold together. Less "
-            "than one percent of the time. <bookmark mark='c'/> Individually each interval keeps its promise; jointly, "
-            "they almost never do. The band was built for the joint promise, and Part 48 shows where its shape comes "
+            "than one percent of the time. <bookmark mark='c'/> These Wald intervals also undercover individually near the tails, so this comparison combines poor marginal calibration with multiplicity. It does not isolate simultaneity alone. The band was built for the joint promise, and Part 48 shows where its shape comes "
             "from."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tag))

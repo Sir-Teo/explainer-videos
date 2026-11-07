@@ -62,8 +62,8 @@ class Board(VoiceoverScene):
             "truth. <bookmark mark='b'/> It's a proportion, so its Monte Carlo standard error, evaluated at the nominal "
             "level, is root point nine five times point zero five over R: with ten thousand replications, a fifth of a "
             "percentage point. <bookmark mark='c'/> The verdict: kept if within three Monte Carlo standard errors of the "
-            "promise; broken if further below; conservative if further above. With three standard errors, a method that "
-            "truly keeps its promise is falsely called broken about once in seven hundred rows."
+            "promise; broken if further below; conservative if further above. With three standard errors, a method whose "
+            "coverage equals the nominal level is falsely called broken about once in seven hundred rows."
         ) as vo:
             step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.6, buff=0.8, edge=6.9)
             for k, m_ in enumerate("abc"):
@@ -98,7 +98,7 @@ class Board(VoiceoverScene):
     def lessons(self):
         rows = fit_rows(VGroup(
             label(r"what the Board has taught so far", font_size=32, color=OBS),
-            label(r"exact theory keeps exact promises \ ($z$ with $\sigma$, \ $t$ on normal data, \ Welch, \ permutation)", font_size=24),
+            label(r"exact theory keeps exact promises \ ($z$, $t$: normal model; \ permutation: exchangeability)", font_size=24),
             label(r"plugging in an estimate without paying for it breaks them \ (Wald, \ $z$ with $s$)", font_size=24, color=MISS),
             label(r"assumptions about shape break them in the tails \ (skewed incomes: \ $t$, \ $F$, \ prediction)", font_size=24, color=MISS),
             label(r"habits break them \ (peeking)", font_size=24, color=MISS),
@@ -106,7 +106,7 @@ class Board(VoiceoverScene):
         ), 12.6, 0.4, [0, 0.0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Four parts in, the board has a pattern. <bookmark mark='b'/> Exact theory keeps exact "
-            "promises: z with known sigma, t on normal data, Welch, the permutation test. <bookmark mark='c'/> Plugging in "
+            "promises: z and t in their normal models, and permutation tests under exchangeability. Welch's t approximation is not exact under unequal variances. <bookmark mark='c'/> Plugging in "
             "an estimate without paying for its uncertainty breaks them: Wald, and z with s. <bookmark mark='d'/> "
             "Assumptions about shape break them in the tails, as skewed incomes did to t, to F and to prediction. "
             "<bookmark mark='e'/> And habits break them, like peeking. <bookmark mark='f'/> Every part from here on adds "
@@ -124,13 +124,13 @@ class Board(VoiceoverScene):
             cmath(r"\text{seeds}", r"=", r"\text{fixed and published}", r"\quad\text{every row is reproducible}", font_size=30),
         ]
         rows[1][2].set_color(OBS)
-        whys = [why(r"choose the precision first, \ then $R$ (Part 7)"), why(r"the board can tell 95.0 from 94.3, \ not from 94.9"),
+        whys = [why(r"choose the precision first, \ then $R$ (Part 7)"), why(r"a 3-SE threshold is resolution, \ not guaranteed detection power"),
                 why(r"\texttt{python -m videos.stats.statsN.compute --force board}")]
         with self.voiceover(
             "How many replications does a row need? <bookmark mark='a'/> Choose the precision first. The Monte Carlo "
             "standard error is root point nine five times point zero five over R, so R is that product over the squared "
             "standard error you want. <bookmark mark='b'/> With ten thousand, the standard error is a fifth of a point, and "
-            "the board can reliably tell ninety-five from ninety-four point three, but not from ninety-four point nine. "
+            "the three-standard-error cutoff is about point six five percentage points. A true coverage just below that cutoff can still escape detection; resolution is not guaranteed power. "
             "That's the resolution of every verdict on it. <bookmark mark='c'/> And every row uses fixed, published seeds, "
             "so anyone can regenerate the board exactly with one command."
         ) as vo:
