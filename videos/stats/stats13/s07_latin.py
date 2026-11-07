@@ -85,12 +85,12 @@ class Latin(VoiceoverScene):
             foot.width = 12.6
         with self.voiceover(
             "<bookmark mark='a'/> The analysis of variance now has a row for rows, a row for columns, and a row for varieties. "
-            "Rows and columns take two hundred of the sum of squares, leaving a residual of just six point three on twelve "
+            "Assuming an additive model with independent normal equal-variance errors, rows and columns take two hundred of the sum of squares, leaving a residual of just six point three on twelve "
             "degrees of freedom. The varieties' F is seventeen point eight. <bookmark mark='b'/> Ignore the square, and analyse "
             "the same twenty-five numbers one way: F is point eight eight, p point four nine. <bookmark mark='c'/> Over four "
             "thousand repetitions, the Latin square detects the varieties ninety-six percent of the time, the completely "
             "randomized design twenty percent. <bookmark mark='d'/> The price is degrees of freedom: twelve for error instead "
-            "of twenty, which matters only for very small squares. <bookmark mark='e'/> And underneath, Pythagoras once more: "
+            "of twenty, which is especially costly for very small squares. <bookmark mark='e'/> And underneath, Pythagoras once more: "
             "four perpendicular pieces."
         ) as vo:
             vo.wait_until("a")
@@ -131,18 +131,18 @@ class Latin(VoiceoverScene):
         l3 = label(r"rows, \ columns, \ letters shuffled", font_size=22, color=OBS).next_to(g3, DOWN, buff=0.25)
         rows = fit_rows(VGroup(
             label(r"a systematic square can line up with a pattern in the soil, \ like a diagonal drainage ditch", font_size=24, color=RES),
-            label(rf"Fisher: \ choose the square at random; \ there are {d['n_squares_5']:,} Latin squares of order 5", font_size=24, color=OBS),
-            label(r"shuffling rows, \ columns and letters of one square is the practical recipe (Fisher \& Yates 1938)", font_size=22, color=GREY_A),
+            label(rf"randomize the layout; in total: \ there are {d['n_squares_5']:,} Latin squares of order 5", font_size=24, color=OBS),
+            label(r"row/column/letter shuffles sample one permutation class, \ not all squares uniformly", font_size=22, color=GREY_A),
         ), 12.6, 0.26, [0, -2.5, 0])
         with self.voiceover(
             "Which Latin square? <bookmark mark='a'/> Norwegian agronomists liked the Knut Vik square, where each letter moves "
             "like a knight in chess, spreading the varieties evenly over the field. <bookmark mark='b'/> Or the cyclic square, "
             "each row the previous one shifted by one place. <bookmark mark='c'/> Fisher objected to both. A systematic square "
             "can line up with a systematic pattern in the soil, a diagonal ditch, say, and then the error estimate is wrong, "
-            "too large or too small, with no way to tell. <bookmark mark='d'/> Choose the square at random from all of them: "
+            "too large or too small, with no way to tell. <bookmark mark='d'/> Randomize the layout. In total, "
             "there are a hundred and sixty-one thousand, two hundred and eighty Latin squares of order five. <bookmark mark='e'/> "
             "In practice, take one square and shuffle its rows, its columns and its letters at random, the recipe in Fisher and "
-            "Yates's statistical tables. Randomization again justifies the analysis."
+            "Yates's statistical tables. This samples the chosen square's permutation class, not uniformly all Latin squares. The exact F reference also needs the additive Gaussian model."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(g1, lag_ratio=0.04), FadeIn(l1))

@@ -40,23 +40,27 @@ class Contrasts(VoiceoverScene):
         ]
         rows[5][2].set_color(OBS)
         whys = [why(r"a contrast: \ weights summing to zero"), why(r"its own sum of squares"),
-                why(r"the question that matters most"), why(r"does adding P help?"), why(r"does adding K help?"),
+                why(r"the question that matters most"), why(r"N versus the average of P and NPK"), why(r"P versus NPK: both N and K change"),
                 why(r"orthogonal contrasts split SSB exactly")]
+        intro = label('Choose contrasts from the scientific questions', font_size=36)
         with self.voiceover(
             "The F-test says the four fertilizers differ somehow. It doesn't say how. <bookmark mark='a'/> For that, ask "
             "sharper questions: contrasts, weighted sums of the group means whose weights add to zero. <bookmark mark='b'/> "
-            "Each contrast has its own sum of squares, with one degree of freedom. <bookmark mark='c'/> First: do fertilizers "
+            "Each contrast has its own sum of squares, with one degree of freedom; its t and F references assume independent Gaussian, equal-variance errors. <bookmark mark='c'/> First: do fertilizers "
             "help at all? Weights minus three, one, one, one compare the control with the average of the rest. The "
             "estimate is eight point six, in units of the sum, and F is twelve, p point zero zero two. <bookmark mark='d'/> "
             "Second: among the fertilized, is nitrogen alone different from the two with phosphate? Barely: F is point three "
-            "four. <bookmark mark='e'/> Third: does adding potash to phosphate help? F two point seven six, not clear. "
+            "four. <bookmark mark='e'/> Third: compare phosphate alone with NPK, which changes both nitrogen and potash. F two point seven six, not clear. "
             "<bookmark mark='f'/> These three contrasts are orthogonal, their weight vectors are perpendicular, so their "
             "sums of squares add up exactly to the between-groups sum of squares. Pythagoras again: three perpendicular "
-            "questions, chosen before the data, split the treatment variation into three independent pieces."
+            "questions, chosen before the data, split the treatment variation into orthogonal pieces; under Gaussian errors their numerator sums of squares are independent."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.6, buff=0.55, edge=6.9)
             for k, m_ in enumerate("abcdef"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -125,7 +129,7 @@ class Contrasts(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"a control and four new fertilizers, \ six plots each", font_size=24),
             label(r"which ones differ from which? \ $\binom52 = 10$ pairs", font_size=24, color=OBS),
-            label(r"C vs D: \ $t$-test $p = 0.040$, \ ``significant''", font_size=24, color=RES),
+            label(r"C vs D: \ pooled-ANOVA $t$-test $p = 0.009$, \ ``significant''", font_size=24, color=RES),
             label(r"but C vs D is the gap we noticed because it looked big", font_size=24),
             label(r"ten chances to find something", font_size=24, color=RES),
         ), 5.0, 0.34, [4.3, 0.2, 0])
@@ -133,9 +137,9 @@ class Contrasts(VoiceoverScene):
         with self.voiceover(
             "Now the common situation. <bookmark mark='a'/> A control and four new fertilizers, A to D, six plots each. "
             "<bookmark mark='b'/> The experimenter wants to know which differ from which: ten pairs. <bookmark mark='c'/> Run "
-            "a t-test on the pair that stands out, C against D, and you get p equals point zero four: significant! "
+            "the t-test using the common ANOVA error on a pair noticed after looking, C against D, and you get p about point zero zero nine: significant! "
             "<bookmark mark='d'/> But C against D was chosen because it looked big. <bookmark mark='e'/> With ten pairs to "
-            "look at, something will usually look big. How often, if nothing is going on at all?"
+            "look at, something may look big. How often, if nothing is going on at all?"
         ) as vo:
             self.play(FadeIn(A), FadeIn(names), FadeIn(tag), LaggedStart(*[FadeIn(d_, scale=1.5) for d_ in dots], lag_ratio=0.02),
                       run_time=2.0)
@@ -159,7 +163,7 @@ class Contrasts(VoiceoverScene):
         ]
         rows[2][2].set_color(RES)
         rows[3][2].set_color(HIT)
-        whys = [why(r"the family-wise error rate"), why(r"an upper guide: \ the pairs share data"),
+        whys = [why(r"the family-wise error rate"), why(r"an independence benchmark; \ the pairs share data"),
                 why(r"a 5\% test that rejects 27\% of the time"), why(r"the promise kept for the whole family")]
         with self.voiceover(
             "<bookmark mark='a'/> The relevant error rate is the family-wise error rate: the chance of at least one false "
@@ -168,7 +172,7 @@ class Contrasts(VoiceoverScene):
             "<bookmark mark='c'/> but simulating ten thousand experiments with no real differences, five groups of six, at "
             "least one unadjusted t-test comes out significant twenty-six and a half percent of the time. Promise five percent, "
             "deliver twenty-seven. <bookmark mark='d'/> Tukey's method, which we'll build next, holds the whole family to four "
-            "point nine five percent. Both rows go on the Coverage Board."
+            "point nine five percent. Both rows use independent normal, equal-variance groups and the common pooled error on the Coverage Board."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.4, x=0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -197,7 +201,7 @@ class Contrasts(VoiceoverScene):
             label(r"25 error df; \ Dunnett's multiplier by simulation", font_size=20, color=GREY_A),
         ), 12.4, 0.2, [0, -2.9, 0])
         with self.voiceover(
-            "Every honest method works the same way: it widens the yardstick. An interval for a difference of two means is "
+            "In these Gaussian, equal-variance comparisons, simultaneous protection widens the yardstick. An interval for a difference of two means is "
             "the difference plus or minus a multiplier times its standard error. <bookmark mark='a'/> For one pair chosen in "
             "advance, the multiplier is Student's t, two point oh six. <bookmark mark='b'/> To compare each of four "
             "fertilizers with the control, Charles Dunnett's 1955 method uses about two point six. <bookmark mark='c'/> To "
@@ -292,7 +296,7 @@ class Contrasts(VoiceoverScene):
 
     def advice(self):
         rows = [
-            cmath(r"\text{a few planned contrasts}", r":", r"\text{each at } \alpha\text{, or Bonferroni}", font_size=30),
+            cmath(r"\text{a few planned contrasts}", r":", r"\text{individual }\alpha\text{; family: Bonferroni/Holm}", font_size=30),
             cmath(r"\text{all pairs}", r":", r"\text{Tukey's HSD}", font_size=32),
             cmath(r"\text{each vs a control}", r":", r"\text{Dunnett}", font_size=32),
             cmath(r"\text{anything, chosen after looking}", r":", r"\text{Scheff\'e}", font_size=30),
@@ -301,8 +305,8 @@ class Contrasts(VoiceoverScene):
         whys = [why(r"the experiment's own questions"), why(r"the studentized range"), why(r"the smaller family"),
                 why(r"the price of snooping"), why(r"a different promise: \ Benjamini \& Hochberg (1995)")]
         with self.voiceover(
-            "So, a short guide. <bookmark mark='a'/> For a few contrasts planned in advance, test each at the usual level, or "
-            "use Bonferroni if there are several. <bookmark mark='b'/> For all pairs, Tukey. <bookmark mark='c'/> For each "
+            "So, a short guide. <bookmark mark='a'/> For a few contrasts planned in advance, each usual-level test gives an individual guarantee; "
+            "use Bonferroni or Holm for a family guarantee. <bookmark mark='b'/> For all pairs, Tukey. <bookmark mark='c'/> For each "
             "treatment against a control, Dunnett. <bookmark mark='d'/> For anything at all, including contrasts suggested by "
             "the data, Scheffé, and pay for it. <bookmark mark='e'/> And when there are thousands of tests, as in genomics, "
             "controlling the chance of even one false rejection is too strict. Benjamini and Hochberg's false discovery rate "

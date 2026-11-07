@@ -62,6 +62,7 @@ class Outro(VoiceoverScene):
             (r"thousands of tests, \ the FDR", [33]), (r"potential outcomes, \ interference", [35, 62]),
             (r"sequential and adaptive experiments", [58]),
         ], font_size=22)
+        intro = label('Where experimental design returns', font_size=36)
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Outcomes that are counts and yes-or-no answers, in the next part; rank "
             "and resampling tests in Part 16; the design of surveys, a cousin of experimental design, in Part 18; the linear "
@@ -69,7 +70,9 @@ class Outro(VoiceoverScene):
             "false discovery rate in Part 33; potential outcomes and interference in Parts 35 and 62; and experiments that "
             "adapt as they run in Part 58."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
@@ -114,8 +117,8 @@ class Outro(VoiceoverScene):
         nxt.next_to(tr, DOWN, buff=1.0)
         with self.voiceover(
             "Thirteen parts of sixty-five, the third of Stage II. <bookmark mark='a'/> We can now design an experiment whose "
-            "answer is unambiguous, and analyse it the way it was run. <bookmark mark='b'/> But every outcome so far has been "
-            "a measurement, roughly normal. Many of the questions that matter most have yes-or-no answers, or counts. On the "
+            "answer has a defensible uncertainty assessment, and analyse it the way it was run. <bookmark mark='b'/> Many examples so far have used "
+            "measurements. Many of the questions that matter most have yes-or-no answers, or counts. On the "
             "evening of the twenty-seventh of January, 1986, engineers and managers discussed whether cold weather would make "
             "a rocket's seals fail, using a chart that left out the flights that had no damage. Part 14: counts and categories."
         ) as vo:

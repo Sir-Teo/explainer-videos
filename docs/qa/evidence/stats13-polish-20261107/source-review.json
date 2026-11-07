@@ -1,0 +1,25 @@
+{
+  "part": "stats13",
+  "fingerprint": "83d6bad8a03fe27b48604435a8c0e340562ad241acfa417189ff495f381fc690",
+  "scenes_reviewed": 15,
+  "compute_items": [
+    "field",
+    "balance",
+    "randinf",
+    "anova",
+    "contrasts",
+    "blocking",
+    "latin",
+    "factorial",
+    "fraction",
+    "rsm",
+    "splitplot",
+    "doptimal",
+    "power",
+    "online",
+    "board"
+  ],
+  "focused_tests": 15,
+  "english_visual_review_complete": false,
+  "bilingual_production_approval": false
+}

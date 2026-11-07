@@ -40,7 +40,7 @@ class Power(VoiceoverScene):
             label(r"power: \ P(significant $\mid$ real)", font_size=24),
             label(rf"CRD, \ $\sigma = 4$: \ {crd['n80']} plots each", font_size=24, color=RES),
             label(rf"blocked, \ $\sigma = 2$: \ {blk['n80']} plots each", font_size=24, color=OBS),
-            label(r"half the $\sigma$, \ a quarter the plots", font_size=24, color=OBS),
+            label(r"half the $\sigma$, \ about a quarter the plots", font_size=24, color=OBS),
         ), 4.6, 0.36, [4.6, 0.2, 0])
         with self.voiceover(
             "Every design decision in this part was really about one question: will the experiment see the effect if it's "
@@ -49,7 +49,7 @@ class Power(VoiceoverScene):
             "it really exists. <bookmark mark='c'/> On a completely randomized field with a plot standard deviation of four "
             "bushels, the power climbs slowly with the number of plots: forty-two plots of each variety for eighty percent. "
             "<bookmark mark='d'/> If blocking halves the standard deviation to two, twelve plots each are enough. "
-            "<bookmark mark='e'/> Halving the noise cuts the plots needed by a factor of four, because the number needed "
+            "<bookmark mark='e'/> Halving the noise cuts the plots needed by about a factor of four; the exact small-sample t calculation differs, because the number needed "
             "grows like sigma squared. Good design is cheaper than more data."
         ) as vo:
             self.play(FadeIn(A), Create(line80))
@@ -104,14 +104,14 @@ class Power(VoiceoverScene):
         d80 = Dot(ax.c2p(80, d["mde_80"]), radius=0.09, color=S.ALT)
         rows = fit_rows(VGroup(
             label(r"the smallest gain seen 80\% of the time", font_size=24),
-            MathTex(r"\text{MDE} = (z_{1-\alpha/2} + z_{0.8})\,\sigma\sqrt{2/n}", font_size=28),
+            MathTex(r"\text{MDE} \approx (z_{1-\alpha/2} + z_{0.8})\,\sigma\sqrt{2/n}", font_size=28),
             MathTex(rf"n = 20:\ {d['mde_20']:.2f};\qquad n = 80:\ {d['mde_80']:.2f}", font_size=28, color=S.ALT),
             label(r"4$\times$ the plots, \ half the MDE", font_size=24, color=OBS),
             label(r"the square-root law", font_size=22, color=GREY_A),
         ), 4.6, 0.36, [4.6, 0.2, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Or turn it around. Given the plots we can afford, what's the smallest gain we'd detect "
-            "eighty percent of the time? <bookmark mark='b'/> That's the minimum detectable effect: the sum of the two quantiles "
+            "eighty percent of the time? <bookmark mark='b'/> That's the normal-approximation minimum detectable effect: the sum of the two quantiles "
             "times the standard error. <bookmark mark='c'/> With twenty plots per variety and sigma four, it's three and a half "
             "bushels, seven percent. With eighty plots, one point seven seven. <bookmark mark='d'/> Four times the plots buys "
             "half the detectable effect. <bookmark mark='e'/> The square-root law, again: precision is expensive, which is "
@@ -131,7 +131,7 @@ class Power(VoiceoverScene):
         hc = history_card(1962, r"Jacob Cohen, \ ``The statistical power of abnormal-social psychological research''",
                           r"a year of a leading psychology journal: \ for effects of medium size, \ the typical study had less "
                           r"than an even chance of detecting them", color=S.PRIOR, width=10.4, font_size=22).move_to([0, 1.8, 0])
-        tab = table_rows([[r"effect", r"$d$", r"$n$ per group for 80\%"],
+        tab = table_rows([[r"effect", r"$d$", r"normal-approx. $n$ per group for 80\%"],
                           [r"small", r"0.2", rf"{nc['small']}"],
                           [r"medium", r"0.5", rf"{nc['medium']}"],
                           [r"large", r"0.8", rf"{nc['large']}"]], font_size=26, col_buff=1.0, row_buff=0.25,
@@ -142,7 +142,7 @@ class Power(VoiceoverScene):
             "<bookmark mark='a'/> In 1962 the psychologist Jacob Cohen surveyed a year of a leading journal and found that, for "
             "effects of medium size, the typical study had less than an even chance of detecting them, even if they were "
             "real. <bookmark mark='b'/> To make the problem concrete, he offered conventions: a small effect is a fifth of a "
-            "standard deviation, needing nearly four hundred subjects per group for eighty percent power; a medium effect, "
+            "standard deviation, needing about four hundred subjects per group by the normal approximation for eighty percent power; a medium effect, "
             "half a standard deviation, sixty-three; a large one, twenty-five. <bookmark mark='c'/> They're conventions, "
             "not laws. The effect worth detecting depends on the problem: a two percent yield gain is enormous on a national "
             "scale."
@@ -171,14 +171,14 @@ class Power(VoiceoverScene):
             label(r"300 underpowered experiments: \ 10 plots each, \ power 27\%", font_size=24),
             label(r"gold: \ the ones that came out ``significant''", font_size=24, color=OBS),
             MathTex(rf"\text{{mean significant estimate}} = {est[sig].mean():.2f}\ \ \text{{vs truth}}\ 2.5", font_size=30, color=RES),
-            label(r"only the lucky overestimates clear the bar: \ the winner's curse", font_size=24, color=RES),
+            label(r"selection favours large magnitudes: \ the winner's curse", font_size=24, color=RES),
         ), 12.4, 0.3, [0, -1.9, 0])
         with self.voiceover(
             "Low power does a second kind of damage, less obvious than missing real effects. <bookmark mark='a'/> Here are three "
             "hundred simulated experiments with ten plots per variety, where the true gain is two and a half bushels. Their "
             "power is twenty-seven percent. <bookmark mark='b'/> The gold ones are the experiments that came out significant. "
             "<bookmark mark='c'/> Their average estimate is four point five, nearly twice the truth. <bookmark mark='d'/> With "
-            "so much noise, only the experiments that happened to overestimate the gain could clear the significance bar. If "
+            "so much noise, significance selects large magnitudes: mostly positive overestimates here, with some possible wrong-sign results. If "
             "only significant results are published, the published effects are exaggerated. That's the winner's curse."
         ) as vo:
             self.play(FadeIn(A), Create(tl), FadeIn(tlab))
@@ -203,16 +203,16 @@ class Power(VoiceoverScene):
             label(r"exaggeration: \ mean $|$estimate$|$", font_size=24),
             label(r"of significant results, \ over the truth", font_size=24),
             label(r"Gelman \& Carlin (2014): \ type M, \ type S", font_size=24, color=OBS),
-            label(r"power makes estimates honest", font_size=24, color=OBS),
+            label(r"higher power reduces selection exaggeration", font_size=24, color=OBS),
         ), 4.4, 0.34, [4.7, 0.2, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Across sample sizes: with five plots per variety, the power is fourteen percent, and a "
             "significant result exaggerates the true gain two point four times; one significant result in seventy-five even "
             "has the wrong sign. <bookmark mark='b'/> With twenty plots, power is half and the exaggeration one point four. "
-            "<bookmark mark='c'/> At forty-two, our planned eighty percent, the exaggeration is twelve percent; by eighty plots "
-            "it's gone. Andrew Gelman and John Carlin called these type M errors, of magnitude, and type S errors, of sign. "
+            "<bookmark mark='c'/> At forty-two, our planned eighty percent, the exaggeration is twelve percent; by eighty plots it is small, not mathematically zero. "
+            " Andrew Gelman and John Carlin called these type M errors, of magnitude, and type S errors, of sign. "
             "<bookmark mark='d'/> An adequately powered experiment isn't only more likely to find a real effect. When it does, "
-            "its estimate can be believed."
+            "selection exaggeration is reduced; power alone cannot repair bias, confounding or a misspecified analysis."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tab[0]), FadeIn(tab[1]), FadeIn(rows[0]), FadeIn(rows[1]), FadeIn(rows[2]))

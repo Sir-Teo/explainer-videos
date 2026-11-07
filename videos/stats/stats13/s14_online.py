@@ -52,18 +52,18 @@ class Online(VoiceoverScene):
 
     def anatomy(self):
         rows = [
-            cmath(r"\text{unit}", r":", r"\text{a user, \ randomized by a hash of their ID}", font_size=30),
+            cmath(r"\text{unit}", r":", r"\text{a user, \ assigned by an experiment-specific salted hash}", font_size=30),
             cmath(r"\text{arms}", r":", r"\text{A (control) and B (the change), \ usually 50/50}", font_size=30),
             cmath(r"\text{metric}", r":", r"\text{revenue, \ clicks, \ time, \ \ldots\ per user}", font_size=30),
             cmath(r"\hat\tau", r"=", r"\bar y_B - \bar y_A,\qquad \mathrm{SE} = \sqrt{s_A^2/n_A + s_B^2/n_B}", font_size=30),
         ]
         rows[3][2].set_color(OBS)
-        whys = [why(r"the same user always sees the same arm"), why(r"a completely randomized design"),
+        whys = [why(r"the same user always sees the same arm"), why(r"Bernoulli assignment; realized counts can differ"),
                 why(r"decided before the experiment"), why(r"Welch's comparison, \ Part 10")]
         with self.voiceover(
-            "The anatomy of an A/B test. <bookmark mark='a'/> The unit is a user, assigned by hashing their ID, so the same "
+            "The anatomy of an A/B test. <bookmark mark='a'/> The unit is a user, assigned by an experiment-specific randomized hash of their ID, so the same "
             "person always sees the same version. <bookmark mark='b'/> Two arms, the control and the change, usually split fifty "
-            "fifty: a completely randomized design with millions of plots. <bookmark mark='c'/> A metric chosen in advance, like "
+            "fifty: a Bernoulli-randomized design with millions of plots. <bookmark mark='c'/> A metric chosen in advance, like "
             "revenue per user. <bookmark mark='d'/> And the estimate is the difference in means, with Welch's standard error "
             "from Part 10. Everything in this part applies. The one new problem is that the effects are tiny, a fraction of a "
             "percent, and the metrics are noisy. Even with millions of users, precision is precious."
@@ -89,7 +89,7 @@ class Online(VoiceoverScene):
             label(r"but most of the variation in $y$ was there before the experiment", font_size=24),
             MathTex(rf"\mathrm{{corr}}(x, y) = {d['rho']:.2f}", font_size=30),
             label(r"subtract the part of $y$ that $x$ predicts", font_size=24, color=FIT),
-            label(r"$x$ was measured before randomization: \ it cannot be affected by B", font_size=22, color=OBS),
+            label(r"$x$ was measured before randomization: \ it cannot be affected by B; inference must account for fitting", font_size=22, color=OBS),
         ), 4.8, 0.34, [4.4, 0.2, 0])
         tag = simulated_tag(r"simulated A/B test", corner=DR)
         with self.voiceover(
@@ -98,8 +98,8 @@ class Online(VoiceoverScene):
             "against their spend last month, before the experiment began. Most of the variation in this month's spend was "
             "already there: big spenders stay big spenders. <bookmark mark='c'/> The correlation is point eight. "
             "<bookmark mark='d'/> So subtract the part of each user's spend that last month predicts, and compare what's left. "
-            "<bookmark mark='e'/> This is safe because last month's spend was fixed before randomization, so the change can't "
-            "have affected it. It's blocking on a continuous variable, after the fact."
+            "<bookmark mark='e'/> Using a pre-treatment covariate avoids adjusting away treatment effects, because the change cannot "
+            "have affected last month. This is regression adjustment using a baseline covariate, rather than design-stage blocking; fitted adjustment can have small finite-sample bias."
         ) as vo:
             self.play(FadeIn(A), FadeIn(tag))
             vo.wait_until("a")
@@ -118,7 +118,7 @@ class Online(VoiceoverScene):
         d = load("online")
         rows = [
             cmath(r"\tilde y_i", r"=", r"y_i - \theta\,(x_i - \bar x),\qquad \theta = \frac{\mathrm{cov}(x, y)}{\mathrm{var}(x)}", font_size=30),
-            cmath(r"\mathrm{Var}(\tilde y)", r"=", rf"(1 - \rho^2)\,\mathrm{{Var}}(y) = {1 - d['rho'] ** 2:.2f}\,\mathrm{{Var}}(y)", font_size=30),
+            cmath(r"\mathrm{Var}(Y-\theta X)", r"=", rf"(1 - \rho^2)\,\mathrm{{Var}}(y) = {1 - d['rho'] ** 2:.2f}\,\mathrm{{Var}}(y)", font_size=30),
             cmath(r"\text{plain}", r":", rf"\hat\tau = {d['plain']:.3f},\ \ \mathrm{{SE}}\ {d['se_plain']:.3f},\ \ p = {d['p_plain']:.3f}", font_size=30),
             cmath(r"\text{CUPED}", r":", rf"\hat\tau = {d['cuped']:.3f},\ \ \mathrm{{SE}}\ {d['se_cuped']:.3f},\ \ p = 3.9\times10^{{-5}}", font_size=30),
         ]
@@ -129,12 +129,12 @@ class Online(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> In 2013 Alex Deng, Ya Xu, Ron Kohavi and Toby Walker named it CUPED: replace each user's "
             "metric by the metric minus theta times their centred pre-experiment value, with theta the regression slope of y on "
-            "x. <bookmark mark='b'/> The adjusted metric has variance one minus rho squared times the original: here, thirty-six "
+            "x. <bookmark mark='b'/> For a fixed population-optimal coefficient, the residual variance is one minus rho squared times the original: here, about thirty-six "
             "percent of it. <bookmark mark='c'/> The plain comparison estimates point one oh four, with a standard error of "
             "point zero five six: p point zero six five, not significant. <bookmark mark='d'/> CUPED, on the same users, "
             "estimates point one four, with a standard error of point zero three four: p of four in a hundred thousand. Cutting "
             "the variance to thirty-six percent is worth two point eight times as many users. Statisticians will recognize "
-            "Fisher's analysis of covariance from 1932, rediscovered at scale."
+            "Fisher's analysis of covariance from 1932, adapted at scale. The fitted-coefficient standard error and z-test here are large-sample approximations."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -145,7 +145,7 @@ class Online(VoiceoverScene):
     def cuped_reps(self):
         d = load("online")
         r = np.asarray(d["reps"])
-        A = axes([-0.05, 0.35], [0, 110], x_length=9.0, y_length=3.6, xlabel=r"estimated effect, \ 600 repeated experiments", ylabel=r"",
+        A = axes([-0.05, 0.35], [0, 110], x_length=9.0, y_length=3.6, xlabel=r"estimated effect, \ 600 of 2,000 experiments shown", ylabel=r"",
                  xticks=[0, 0.1, 0.15, 0.2, 0.3], yticks=[0, 50, 100], center=[0, 0.6, 0])
         ax = A.ax
         e = np.linspace(-0.05, 0.35, 61)
@@ -154,16 +154,16 @@ class Online(VoiceoverScene):
         tl = DashedLine(ax.c2p(0.15, 0), ax.c2p(0.15, 105), color=EXACT, stroke_width=3)
         rows = fit_rows(VGroup(
             MathTex(rf"\text{{SD of the estimate: plain}}\ {d['sd_plain']:.3f}\ \to\ \text{{CUPED}}\ {d['sd_cuped']:.3f}", font_size=30),
-            label(r"both centred on the truth, \ 0.15: \ the adjustment adds no bias, \ only precision", font_size=24, color=OBS),
+            label(r"SDs use all 2,000 runs; fitted adjustment can have small finite-sample bias", font_size=24, color=OBS),
             label(r"Freedman (2008), \ Lin (2013): \ regression adjustment is safe in randomized experiments, \ with care", font_size=22, color=GREY_A),
         ), 12.4, 0.3, [0, -2.3, 0])
         with self.voiceover(
-            "Is that one experiment typical? <bookmark mark='a'/> Repeat the whole experiment six hundred times. The plain "
+            "Is that one experiment typical? <bookmark mark='a'/> Repeat the whole experiment two thousand times; the histogram shows the first six hundred. The plain "
             "estimates, in red, spread widely around the truth; the CUPED estimates, in gold, cluster tightly: their standard "
             "deviation falls from point zero five seven to point zero three three. <bookmark mark='b'/> Both are centred on the "
-            "true point one five. The adjustment adds precision and no bias, because the covariate was measured before the coin "
+            "true point one five. The estimates show little bias in this large simulation. Fitting theta on these same data can introduce small finite-sample bias, even with a pre-treatment covariate. The covariate was measured before the coin "
             "was tossed. <bookmark mark='c'/> David Freedman worried in 2008 that regression adjustment could mislead in "
-            "experiments; Winston Lin showed in 2013 that with an interaction and robust standard errors, it's always at least "
+            "experiments; Winston Lin showed in 2013 that with an interaction and robust standard errors, under regularity conditions it is at least "
             "as precise, asymptotically. It's now routine."
         ) as vo:
             self.play(FadeIn(A), Create(tl))
@@ -186,21 +186,21 @@ class Online(VoiceoverScene):
         la = label(rf"A: \ {d['a']:,}", font_size=26, color=S.CTRL).next_to(ra, UP, buff=0.2)
         lb = label(rf"B: \ {d['b']:,}", font_size=26, color=S.TREAT).next_to(rb, UP, buff=0.2)
         rows = fit_rows(VGroup(
-            label(r"designed as 50/50; \ the counts are off by 1.6\%", font_size=26),
+            label(r"designed as 50/50; \ B has 1.6\% more recorded users than A", font_size=26),
             MathTex(rf"\chi^2_1\ \text{{test of the split:}}\ p = {d['p']:.4f}", font_size=32, color=RES),
-            label(r"a sample-ratio mismatch: \ something other than the coin decided who was counted", font_size=24, color=RES),
+            label(r"a sample-ratio mismatch flag: \ investigate assignment and logging", font_size=24, color=RES),
             label(r"bots filtered differently, \ a crash in one arm, \ a redirect that loses users", font_size=24),
-            label(r"the comparison is no longer randomized: \ check the split before reading any metric", font_size=24, color=OBS),
+            label(r"a flag is evidence, not proof of a bug: \ audit before interpreting metrics", font_size=24, color=OBS),
         ), 12.4, 0.32, [0, -1.2, 0])
         with self.voiceover(
             "The most important check in online experiments costs nothing. <bookmark mark='a'/> This experiment was designed as a "
             "fifty-fifty split. The arms received fifty thousand and fifty thousand eight hundred and twenty users. "
             "<bookmark mark='b'/> A chi-squared test of the split, Part 10's goodness of fit, gives p equals point zero zero "
             "nine eight. A fair coin rarely misses by this much. <bookmark mark='c'/> That's a sample-ratio mismatch, and it "
-            "means something other than the coin decided who got counted. <bookmark mark='d'/> Bots filtered differently in "
+            "is evidence of an assignment or logging problem, although a valid randomized test can occasionally flag by chance. <bookmark mark='d'/> Bots filtered differently in "
             "the two arms; a bug that crashes the new version for some browsers, so their users vanish from the logs; a "
-            "redirect that loses people. <bookmark mark='e'/> Whatever the cause, the arms are no longer comparable, and "
-            "randomization's guarantee is gone. Check the split before reading any metric."
+            "redirect that loses people. <bookmark mark='e'/> If selection or logging depends on the arm, comparability can fail and "
+            "the original randomization guarantee no longer applies to the recorded comparison. Check the split before reading any metric."
         ) as vo:
             vo.wait_until("a")
             self.play(GrowFromEdge(ra, LEFT), GrowFromEdge(rb, LEFT), FadeIn(la), FadeIn(lb), Create(half), FadeIn(rows[0]))

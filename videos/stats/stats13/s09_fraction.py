@@ -116,6 +116,7 @@ class Fraction(VoiceoverScene):
         rows[3][2].set_color(RES)
         whys = [why(r"the defining relation: \ the column $ABCD$ is all $+$"), why(r"letters multiply; \ squares vanish ($x^2 = 1$)"),
                 why(r"aliases: \ the same column, \ so the same estimate"), why(r"two-factor interactions alias each other")]
+        intro = label('A fractional design estimates aliased combinations', font_size=36)
         with self.voiceover(
             "What we lose is aliasing. <bookmark mark='a'/> In the eight runs we kept, the column for D equals the column for "
             "A times B times C. Multiply both sides by D: the column A B C D is plus one in every run. That's the defining "
@@ -125,9 +126,12 @@ class Fraction(VoiceoverScene):
             "their sum. They're aliases. <bookmark mark='d'/> The two-factor interactions pair up too: A B with C D, A C with "
             "B D, A D with B C. The half fraction can't tell the members of a pair apart. It can only tell us their sum."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.8, buff=0.65, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -147,7 +151,7 @@ class Fraction(VoiceoverScene):
             label(r"truth: \ A 4, \ C 2, \ D 3, \ AB 1.5, \ all else 0", font_size=22, color=EXACT),
             label(r"with sparsity, \ the 8 runs find the same factors", font_size=22, color=OBS),
             label(r"but AB = 1.68 could be AB or CD: \ the data cannot say", font_size=22, color=RES),
-            label(r"a second half-fraction (the fold-over) would split them", font_size=22, color=GREY_A),
+            label(r"complementary fraction: reverse D alone to split the pairs", font_size=22, color=GREY_A),
         ), 4.2, 0.3, [4.7, 0.0, 0])
         tag = simulated_tag(r"simulated, \ noise SD 1", corner=DR)
         with self.voiceover(
@@ -157,7 +161,7 @@ class Fraction(VoiceoverScene):
             "factors, A, C and D, with estimates close to the full design's, at half the cost. <bookmark mark='c'/> But its A "
             "B row, one point six eight, is really A B plus C D, and the eight runs can't say which. Here it's A B, because "
             "we built it. A real experimenter would need knowledge, or more runs. <bookmark mark='d'/> The standard remedy is "
-            "to run the other half fraction later, the fold-over, which splits the aliased pairs."
+            "to run the complementary fraction with D changed to minus A B C. Reversing D alone splits these pairs; reversing all four factors would keep the same even-word fraction."
         ) as vo:
             self.play(FadeIn(tag))
             vo.wait_until("a")
@@ -222,7 +226,7 @@ class Fraction(VoiceoverScene):
             "Push it to the limit. <bookmark mark='a'/> Seven factors in eight runs: a two to the seven minus four design. "
             "<bookmark mark='b'/> Start with the full factorial in A, B and C, and give the four extra factors the interaction "
             "columns: D is A B, E is A C, F is B C, and G is A B C. <bookmark mark='c'/> Every column is balanced, four high and "
-            "four low, and every pair of columns is orthogonal, so the seven main effects are estimated independently, each "
+            "four low, and every pair of columns is orthogonal, so the seven column contrasts are uncorrelated under equal-variance uncorrelated errors, and independent under Gaussian errors, each "
             "from all eight runs. <bookmark mark='d'/> It's resolution three, saturated: no degrees of freedom left for error, "
             "and every main effect is aliased with interactions. It's a screening design: it tells you which of many factors "
             "deserve a proper experiment."
@@ -242,7 +246,7 @@ class Fraction(VoiceoverScene):
         grid = self.sign_grid(pb, [-3.0, -0.2, 0], cell=0.36, names=[str(k + 1) for k in range(11)], font_size=16)
         hc = history_card(1946, r"Robin Plackett \ and \ J. Peter Burman, \ \emph{Biometrika}",
                           r"``The design of optimum multifactorial experiments'': \ wartime work for the Ministry of Supply; \ "
-                          r"up to $N - 1$ factors in $N$ runs, \ for any $N$ a multiple of 4", color=S.ALT, width=5.6, font_size=20).move_to([3.7, 1.2, 0])
+                          r"up to $N - 1$ factors in $N$ runs, \ for many $N$ divisible by 4", color=S.ALT, width=5.6, font_size=20).move_to([3.7, 1.2, 0])
         rows = fit_rows(VGroup(
             MathTex(r"X^\top X = 12\,I_{11}", font_size=32, color=OBS),
             label(r"11 factors, \ 12 runs: \ each row a shift of the first", font_size=22),
@@ -250,7 +254,7 @@ class Fraction(VoiceoverScene):
         ), 5.4, 0.3, [3.7, -1.6, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Fractional factorials have two to the p runs. In 1946 Robin Plackett and Peter Burman, working "
-            "on wartime problems for Britain's Ministry of Supply, found orthogonal designs for any number of runs divisible by "
+            "on wartime problems for Britain's Ministry of Supply, tabulated orthogonal designs for many run counts divisible by "
             "four. Here's their twelve-run design for up to eleven factors: each row is the first row shifted by one place, "
             "plus a final row of all lows. <bookmark mark='b'/> Its columns are exactly orthogonal: X transpose X is twelve "
             "times the identity, so every main effect is estimated with the full precision of all twelve runs. "
