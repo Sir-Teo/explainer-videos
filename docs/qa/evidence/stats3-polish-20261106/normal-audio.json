@@ -19,7 +19,7 @@
    "tokens": 6,
    "peak": 0.363525390625,
    "issues": [],
-   "elapsed": 0.08,
+   "elapsed": 0.03,
    "asr_review_leads": []
   },
   {
@@ -30,7 +30,7 @@
    "tokens": 118,
    "peak": 0.582611083984375,
    "issues": [],
-   "elapsed": 0.05,
+   "elapsed": 0.01,
    "asr_review_leads": []
   },
   {
@@ -41,7 +41,7 @@
    "tokens": 127,
    "peak": 0.55865478515625,
    "issues": [],
-   "elapsed": 0.06,
+   "elapsed": 0.02,
    "asr_review_leads": []
   },
   {
@@ -52,7 +52,7 @@
    "tokens": 137,
    "peak": 0.7716064453125,
    "issues": [],
-   "elapsed": 0.06,
+   "elapsed": 0.02,
    "asr_review_leads": []
   },
   {
@@ -74,7 +74,7 @@
    "tokens": 90,
    "peak": 0.5478515625,
    "issues": [],
-   "elapsed": 0.05,
+   "elapsed": 0.01,
    "asr_review_leads": []
   },
   {
@@ -85,11 +85,11 @@
    "tokens": 28,
    "peak": 0.533966064453125,
    "issues": [],
-   "elapsed": 0.01,
+   "elapsed": 0.0,
    "asr_review_leads": []
   }
  ],
  "issues": [],
  "input_record": "renders/qa/series/stats3/en/Normal/result.json",
- "input_sha256": "2c05cf4f55afe7eacbd43307825a3f917496aca25f71a7c763e6d932249c11f1"
+ "input_sha256": "9e2a6f82e85cf9c805e3fc86fbb6e27bbeb3528d4b4a6c1e734976a8fb25a87c"
 }

@@ -1,5 +1,5 @@
 {
-  "fingerprint": "bb7ec7fc1f4f196727fb0863c22210e1b0e891436989cab39094501740deb5da",
+  "fingerprint": "730f67339d9349490b31380135ceba8224d67a462d82788c9e30809ed996c52c",
   "scope": "English render review; listening and bilingual production gates remain open",
   "records": [
     {
@@ -11,7 +11,7 @@
         "untranslated-on-screen": 56
       },
       "input_record": "renders/qa/series/stats3/en/Hook/result.json",
-      "input_sha256": "39c495629ef512ff9041c02625a89407cb590a79c476c6e961d5be5fc75cb541"
+      "input_sha256": "12a5a7ed09d360ffcc41490a1a09d14e6a1939f7856a2aa43f18bd5c947999f4"
     },
     {
       "scene": "Binomial",
@@ -22,7 +22,7 @@
         "untranslated-on-screen": 53
       },
       "input_record": "renders/qa/series/stats3/en/Binomial/result.json",
-      "input_sha256": "609316064f3d5ee30be4c6c19b03f611203fa876eef75da35abe8dc091d7d580"
+      "input_sha256": "bf1953ee5d2b23f5ddc65ebc77ac94ee335bd685579657df8ebfd7957ae0ee18"
     },
     {
       "scene": "Rare",
@@ -33,7 +33,7 @@
         "untranslated-on-screen": 64
       },
       "input_record": "renders/qa/series/stats3/en/Rare/result.json",
-      "input_sha256": "50806deec3697aca177aa6dbaa107b9dff9b0afc7716ff68d82fa21f5b51e698"
+      "input_sha256": "1b74e52b3569b086a242701ead7fd3004655f76c4590aedaf4b30828595ab7b6"
     },
     {
       "scene": "Waiting",
@@ -44,7 +44,7 @@
         "untranslated-on-screen": 52
       },
       "input_record": "renders/qa/series/stats3/en/Waiting/result.json",
-      "input_sha256": "b734de37fc880ebf9d7eccc435796b683ad86d6670bb76dbb10133e72bde1c70"
+      "input_sha256": "2aa1fe45638560decb77a69d0911477fef24534a0f337f3ef10481d4fb204767"
     },
     {
       "scene": "Capture",
@@ -55,7 +55,7 @@
         "untranslated-on-screen": 53
       },
       "input_record": "renders/qa/series/stats3/en/Capture/result.json",
-      "input_sha256": "1478a41af632f4d700bdf2d4844b0bd557cfc0f5dec9e18687a751d52f921a88"
+      "input_sha256": "21b6564b793b62b20ff726ba5ea27333319fdcf010524b59f8192414de3990e1"
     },
     {
       "scene": "Process",
@@ -66,7 +66,7 @@
         "untranslated-on-screen": 62
       },
       "input_record": "renders/qa/series/stats3/en/Process/result.json",
-      "input_sha256": "bd70ee726b6d31d05e44d8e422e70b3d6d2f247dddaa8f9692675ca75ee625e5"
+      "input_sha256": "0af69bc07fbdebee01ebf449b5c53237a8a5474b376a00e304eb7494089cb2d1"
     },
     {
       "scene": "Normal",
@@ -77,7 +77,7 @@
         "untranslated-on-screen": 66
       },
       "input_record": "renders/qa/series/stats3/en/Normal/result.json",
-      "input_sha256": "2c05cf4f55afe7eacbd43307825a3f917496aca25f71a7c763e6d932249c11f1"
+      "input_sha256": "9e2a6f82e85cf9c805e3fc86fbb6e27bbeb3528d4b4a6c1e734976a8fb25a87c"
     },
     {
       "scene": "Transforms",
@@ -88,7 +88,7 @@
         "untranslated-on-screen": 53
       },
       "input_record": "renders/qa/series/stats3/en/Transforms/result.json",
-      "input_sha256": "be03fb7f2a79e34a120d6594c46cf59747e876046ac4e555a9161a2e4263115e"
+      "input_sha256": "0ee63b4aa9b145ecca9676226c6de3fb3c68de8558f1594d8dae9c0739915575"
     },
     {
       "scene": "Sampling",
@@ -99,7 +99,7 @@
         "untranslated-on-screen": 59
       },
       "input_record": "renders/qa/series/stats3/en/Sampling/result.json",
-      "input_sha256": "3f22fd9478194e263d2538fb3c2ede9267252ce976ecace6ec2c1e5a3b08c291"
+      "input_sha256": "dc3204d033b60cebdae49649a6d11272b052702c3e917c656916e437ca4a4b5a"
     },
     {
       "scene": "Order",
@@ -110,7 +110,7 @@
         "untranslated-on-screen": 54
       },
       "input_record": "renders/qa/series/stats3/en/Order/result.json",
-      "input_sha256": "8a427a5c7d0be47e9bb23e9b3618e3d0f70af381cd9d1a959c220d44da7eb1ec"
+      "input_sha256": "327a1ffc51e9e86e1289a33f304c7dbd2eb2ae5b78f462318c5c3d079b72b852"
     },
     {
       "scene": "Tails",
@@ -121,7 +121,7 @@
         "untranslated-on-screen": 32
       },
       "input_record": "renders/qa/series/stats3/en/Tails/result.json",
-      "input_sha256": "a27a703e0adc5b262e79f74811a4ebece609312bb25b5d23489f0073d8240067"
+      "input_sha256": "537fd1e68059f309bab18cf3ad7ac0f5375bb52d073b376b134ec3f6a06b1179"
     },
     {
       "scene": "MGF",
@@ -132,7 +132,7 @@
         "untranslated-on-screen": 37
       },
       "input_record": "renders/qa/series/stats3/en/MGF/result.json",
-      "input_sha256": "2ecda477fb00890511bb1df32d5808c880319a46043b2a2c7727c08e2f29a502"
+      "input_sha256": "d069a38b4b68afc1139e123c6a2e8963b6b209edd8d987799b6d68f1bfe19eac"
     },
     {
       "scene": "Mixtures",
@@ -143,7 +143,7 @@
         "untranslated-on-screen": 56
       },
       "input_record": "renders/qa/series/stats3/en/Mixtures/result.json",
-      "input_sha256": "9156791dffeb9713d52169b5c4fb677ad56b7adf8cdcc6a9b31239416dd9a914"
+      "input_sha256": "eb9a393762f4fedfd3484fd3d40fa70a4af1447133474913fd55aedb518ff4e0"
     },
     {
       "scene": "ExpFam",
@@ -154,7 +154,7 @@
         "untranslated-on-screen": 27
       },
       "input_record": "renders/qa/series/stats3/en/ExpFam/result.json",
-      "input_sha256": "bc582f0c44c0b59f144c7e942c3a6b52bd0c9e3460ac933b270fa69fdad73b21"
+      "input_sha256": "62c4fd8386825b0425a8e5d0673c9cdc1e4df88a2d0b8c38851de1cef02d7c97"
     },
     {
       "scene": "Tree",
@@ -165,7 +165,7 @@
         "untranslated-on-screen": 36
       },
       "input_record": "renders/qa/series/stats3/en/Tree/result.json",
-      "input_sha256": "15d36126118328cbb2eff866f4cc961bc3b992efe299c03daf7f320b28426cc8"
+      "input_sha256": "adb63de82abe07aec3dcb3e59b14232f691436d39ef03a11b58e458a706b2f44"
     },
     {
       "scene": "Outro",
@@ -176,7 +176,7 @@
         "untranslated-on-screen": 62
       },
       "input_record": "renders/qa/series/stats3/en/Outro/result.json",
-      "input_sha256": "e6682c9e5ce5b98ffdf73b3c608a7aa8974b29515311678a142a9dfd068d1667"
+      "input_sha256": "fd3fb10e6a9b2ce41871f1bc85f03424ff091480e687790b89227f83c245a4c3"
     }
   ]
 }
