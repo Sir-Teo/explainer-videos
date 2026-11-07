@@ -61,6 +61,7 @@ class Tables(VoiceoverScene):
         rows[2][2].set_color(RES)
         whys = [why(r"the counts expected if sex and admission were independent"), why(r"Pearson (1900), \ Part 10"),
                 why(r"$(r - 1)(c - 1) = 1$ degree of freedom"), why(r"conditioning on the margins (Part 10)")]
+        intro = label('Compare observed counts with independence expectations', font_size=36)
         with self.voiceover(
             "Is admission independent of sex? <bookmark mark='a'/> If it were, each cell's expected count would be its row "
             "total times its column total, over the grand total. <bookmark mark='b'/> Pearson's chi-squared statistic, from Part "
@@ -69,10 +70,13 @@ class Tables(VoiceoverScene):
             "twenty-one. <bookmark mark='d'/> Fisher's exact test, conditioning on the table's margins, agrees. Whatever is "
             "going on, these counts strongly disagree with the aggregate independence model. The question is what it is."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.8, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def measures(self):
@@ -99,9 +103,9 @@ class Tables(VoiceoverScene):
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                step(k, transform=False)
                 if k == 0:
                     self.play(FadeOut(intro), run_time=0.25)
-                step(k, transform=False)
         self.clear_scene()
 
     def or_vs_rr(self):
@@ -174,6 +178,7 @@ class Tables(VoiceoverScene):
         rows[3][2].set_color(OBS)
         whys = [why(r"asymptotic reference; sufficient expected counts"), why(r"departments admit at very different rates"),
                 why(r"men and women applied to different departments"), why(r"the ingredients of the next chapter")]
+        intro = label('Larger tables use the same independence comparison', font_size=36)
         with self.voiceover(
             "The chi-squared test isn't limited to two-by-two tables. <bookmark mark='a'/> For a table with r rows and c "
             "columns, the same sum has r minus one times c minus one degrees of freedom. <bookmark mark='b'/> Cross the six "
@@ -182,8 +187,11 @@ class Tables(VoiceoverScene):
             "Men and women applied to very different departments. <bookmark mark='d'/> A variable tied strongly both to the "
             "outcome and to the group being compared: those are the ingredients of the next chapter."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.2, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()

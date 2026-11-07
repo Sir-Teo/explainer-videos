@@ -1,0 +1,149 @@
+{
+  "fingerprint": "17af4952abd85c9b1d3d10b07d09cbbc6c03ba7fca2a466f8194d2200614fb8f",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 33
+      },
+      "input_record": "renders/qa/series/stats14/en/Hook/result.json",
+      "input_sha256": "bf28c5f0c1f83fb386fb737a9e9001b5d63b2c8933e1816c06197c1f747fcd5d"
+    },
+    {
+      "scene": "LinearProbability",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 31
+      },
+      "input_record": "renders/qa/series/stats14/en/LinearProbability/result.json",
+      "input_sha256": "13148f915ebdef89e738aa93bd294a037e34e756fe911eb03ba699c4ec9d1c7a"
+    },
+    {
+      "scene": "Logistic",
+      "status": "needs-review",
+      "frames": 32,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 47
+      },
+      "input_record": "renders/qa/series/stats14/en/Logistic/result.json",
+      "input_sha256": "0cec26e821dad15020c83773877a15b4e8250b67f0ad4d059d0469922bd404a5"
+    },
+    {
+      "scene": "Fitting",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 28
+      },
+      "input_record": "renders/qa/series/stats14/en/Fitting/result.json",
+      "input_sha256": "0b5f58bcd9b179d3286f2cf2c84c1f74d81883b8849e6fee824d16869d52fe4d"
+    },
+    {
+      "scene": "ChallengerFit",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 39
+      },
+      "input_record": "renders/qa/series/stats14/en/ChallengerFit/result.json",
+      "input_sha256": "cd408eaf262aaee9bdb23a4eb020b597fb52e4173ccf86d15e1e0e041509cd2c"
+    },
+    {
+      "scene": "Poisson",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 60
+      },
+      "input_record": "renders/qa/series/stats14/en/Poisson/result.json",
+      "input_sha256": "73c242a5032f300caf8c86f69e5e9327361945a885a3bee4703cac12987f2614"
+    },
+    {
+      "scene": "Overdispersion",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 47
+      },
+      "input_record": "renders/qa/series/stats14/en/Overdispersion/result.json",
+      "input_sha256": "9c2dca715ce627cd9f1dbf460fce5c286959a80eb77fcdefda3b3914e3733658"
+    },
+    {
+      "scene": "Tables",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 57
+      },
+      "input_record": "renders/qa/series/stats14/en/Tables/result.json",
+      "input_sha256": "700c6e94b65006b3304d743ae45ff00321b07e3b3af50ec931860247f1bc8616"
+    },
+    {
+      "scene": "Simpson",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 39
+      },
+      "input_record": "renders/qa/series/stats14/en/Simpson/result.json",
+      "input_sha256": "e943955abb9f135822be38f6120a69b8e699aa4f727403570afb7d2906309c14"
+    },
+    {
+      "scene": "ThreeWay",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 47
+      },
+      "input_record": "renders/qa/series/stats14/en/ThreeWay/result.json",
+      "input_sha256": "64e1c2b5b38513d472210ea8c48470604b8424ca290ea4022e614ccfa7bda30b"
+    },
+    {
+      "scene": "CaseControl",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 56
+      },
+      "input_record": "renders/qa/series/stats14/en/CaseControl/result.json",
+      "input_sha256": "ae599d9f0cc01b9a6ff65c76345575ad21044accd080a0f36cb332bd84ba70cf"
+    },
+    {
+      "scene": "Scoring",
+      "status": "needs-review",
+      "frames": 34,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 62
+      },
+      "input_record": "renders/qa/series/stats14/en/Scoring/result.json",
+      "input_sha256": "5a762aa75ceb7ccec062611ef87aaf26e5923b2c0f8c20b10aa7f7080c823534"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 7,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 62
+      },
+      "input_record": "renders/qa/series/stats14/en/Outro/result.json",
+      "input_sha256": "09672bcba49df831e16a43d70968ed736170a3fe7cbd2d398124419718997d22"
+    }
+  ]
+}

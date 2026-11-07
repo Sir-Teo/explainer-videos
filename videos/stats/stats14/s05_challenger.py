@@ -75,6 +75,7 @@ class ChallengerFit(VoiceoverScene):
         rows[3][2].set_color(RES)
         whys = [why(r"log-odds of distress at 31$^\circ$F: \ odds of 2,500 to 1"), why(r"Part 12's prediction SE, \ weighted"),
                 why(r"a Wald interval on the log-odds scale"), why(r"mapped back: \ ``somewhere between a coin flip and certain''")]
+        intro = label('Quantify extrapolation uncertainty on the log-odds scale', font_size=36)
         with self.voiceover(
             "<bookmark mark='a'/> On the log-odds scale, the fitted value at thirty-one degrees is seven point eight five, "
             "odds of about two thousand five hundred to one. <bookmark mark='b'/> Its standard error comes from the inverse "
@@ -85,10 +86,13 @@ class ChallengerFit(VoiceoverScene):
             "flip and certainty. But the Wald interval trusts a quadratic approximation to the log-likelihood, far from where "
             "it was fitted."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.2, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def profile(self):
@@ -215,6 +219,7 @@ class ChallengerFit(VoiceoverScene):
         rows[2][2].set_color(OBS)
         whys = [why(r"selecting on the outcome hid the effect"), why(r"one curve, \ bounded in $[0, 1]$"),
                 why(r"invariant under one-to-one changes; calibration still needs checking"), why(r"a model's tail is an assumption")]
+        intro = label('Separate the evidence, model and extrapolation', font_size=36)
         with self.voiceover(
             "So, the Challenger analysis in four lines. <bookmark mark='a'/> Use all the evidence, including the flights where "
             "nothing happened: selecting on the outcome hid the effect. <bookmark mark='b'/> Model the probability with a "
@@ -223,8 +228,11 @@ class ChallengerFit(VoiceoverScene):
             "prediction far outside the data rests on the model's assumptions, a point Michael Lavine made about exactly this "
             "example in 1991."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()

@@ -103,6 +103,7 @@ class Poisson(VoiceoverScene):
         rows[1][2][:5].set_color(OBS)
         whys = [why(r"rare events among many: \ Part 3's law of small numbers"), why(r"$\log N_i$: \ the offset, \ a term with coefficient fixed at 1"),
                 why(r"so each $e^{\beta}$ multiplies the rate: \ a rate ratio"), why(r"the same algorithm, \ the Poisson variance")]
+        intro = label('Model counts using exposure and a log-linear rate', font_size=36)
         with self.voiceover(
             "<bookmark mark='a'/> We approximate each band's binomial count by Poisson: rare events among many people, Part 3's law of small numbers, "
             "the horse kicks again. <bookmark mark='b'/> Its mean is the band's population times a rate, and the log of the rate "
@@ -112,10 +113,13 @@ class Poisson(VoiceoverScene):
             "iteratively reweighted least squares, with weights equal to the fitted means, because a Poisson variance equals "
             "its mean."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.0, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def fit_plot(self):
@@ -169,6 +173,7 @@ class Poisson(VoiceoverScene):
         rows[1][2].set_color(OBS)
         whys = [why(r"the baseline rate (age coded as decades from 50)"), why(r"each decade multiplies the rate by 1.55"),
                 why(r"the interval contains 1"), why(r"no detected association; not proof of equality")]
+        intro = label('Read exponentiated coefficients as rate ratios', font_size=36)
         with self.voiceover(
             "Reading the coefficients. <bookmark mark='a'/> With age coded in decades from fifty, the intercept gives the "
             "baseline: seven point seven cases per thousand women aged fifty. <bookmark mark='b'/> Each extra decade multiplies "
@@ -177,10 +182,13 @@ class Poisson(VoiceoverScene):
             "interval from point nine four to one point oh three, which contains one. <bookmark mark='d'/> And in the World, "
             "the condition truly ignores sex. The fitted age trend is clear; the interval is compatible with no sex association, which is consistent with this simulator's construction."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def check(self):
@@ -194,6 +202,7 @@ class Poisson(VoiceoverScene):
         rows[2][2].set_color(OBS)
         whys = [why(r"the deviance against a perfect fit"), why(r"about its degrees of freedom: \ an adequate fit"),
                 why(r"Pearson's dispersion estimate"), why(r"next: \ when $\hat\phi$ is far above 1")]
+        intro = label('Check fit and dispersion before trusting intervals', font_size=36)
         with self.voiceover(
             "Does the model fit? <bookmark mark='a'/> The deviance compares it with a perfect fit, one parameter per band. "
             "<bookmark mark='b'/> It's thirty-one on twenty-five degrees of freedom: about what chance alone would give. "
@@ -202,10 +211,13 @@ class Poisson(VoiceoverScene):
             "is expected to be near one under a suitable Poisson mean model; it is not a proof of fit, because a Poisson variance equals its mean. When it's far above one, the Poisson standard "
             "errors are wrong, which is the next chapter."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def rare_link(self):
@@ -220,6 +232,7 @@ class Poisson(VoiceoverScene):
         rows[2][2].set_color(OBS)
         whys = [why(r"Part 3's law of small numbers"), why(r"since $\log\frac{p}{1-p} = \log p - \log(1 - p)$"),
                 why(r"the rate ratio's log"), why(r"the odds ratio's log: \ nearly the same")]
+        intro = label('Rare outcomes connect Poisson and logistic models', font_size=36)
         with self.voiceover(
             "One more connection. <bookmark mark='a'/> When the chance per person is small, a binomial count is nearly Poisson, "
             "Part 3's law of small numbers. <bookmark mark='b'/> And for a small probability, the log and the logit nearly "
@@ -228,8 +241,11 @@ class Poisson(VoiceoverScene):
             "four five. For rare outcomes the two models tell the same story, and the appropriate choice also depends on the sampling unit and mean model: Poisson handles exposure and person-time through the offset, logistic handles individual yes-or-no "
             "records."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()

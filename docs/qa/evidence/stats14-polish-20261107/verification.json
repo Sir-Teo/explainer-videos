@@ -1,0 +1,23 @@
+{
+  "part": "stats14",
+  "fingerprint": "17af4952abd85c9b1d3d10b07d09cbbc6c03ba7fca2a466f8194d2200614fb8f",
+  "english_endpoints": 13,
+  "native_1080_endpoints": 8,
+  "silent_motion_chapters": 7,
+  "audio_scene": "Scoring",
+  "audio_lines": 8,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats14/en/Scoring/videos/s12_scoring/480p15/Scoring.mp4",
+    "seconds": 305.798698,
+    "narration_sha256": "1ecd64bae8944d592940e8031be847f9f7379d4f6f6fb061b46a290618089722",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 306 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 306 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

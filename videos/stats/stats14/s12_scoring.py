@@ -94,6 +94,7 @@ class Scoring(VoiceoverScene):
         rows[3][2].set_color(RES)
         whys = [why(r"a pure ranking measure"), why(r"Hanley \& McNeil (1982)"), why(r"older people rank higher"),
                 why(r"same ranking, \ same AUC: \ it cannot see calibration")]
+        intro = label('AUC measures ranking, including half-credit for ties', font_size=36)
         with self.voiceover(
             "<bookmark mark='a'/> The area under the curve has a lovely meaning: pick one person with the condition and one "
             "without, at random; the AUC is the probability that the model gives the case a higher score, plus half the probability of a tie. <bookmark mark='b'/> "
@@ -102,10 +103,13 @@ class Scoring(VoiceoverScene):
             "model, with every risk's odds quadrupled, has exactly the same AUC, because multiplying the odds doesn't change "
             "anyone's rank. The AUC can't tell whether the probabilities mean what they say."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.2, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def calibration(self):
@@ -187,6 +191,7 @@ class Scoring(VoiceoverScene):
         rows[1][2].set_color(OBS)
         whys = [why(r"forecast $q$ when the true chance is $p$"), why(r"a proper scoring rule: \ honesty is optimal"),
                 why(r"Murphy (1973): \ calibration, \ information, \ base rate"), why(r"Good (1952)")]
+        intro = label('Proper scores reward honest probability forecasts', font_size=36)
         with self.voiceover(
             "Why squares? <bookmark mark='a'/> If the true chance is p and you forecast q, your expected Brier score is q minus p "
             "squared, plus a term you can't control. <bookmark mark='b'/> It's smallest when q equals p: the score rewards "
@@ -196,10 +201,13 @@ class Scoring(VoiceoverScene):
             "score, minus the log of the probability given to what happened, is also proper, as I. J. Good noted in 1952. For individual Bernoulli outcomes, summing it gives half the deviance, so maximum likelihood is fitting by the log score. Part 34 returns to "
             "prediction with guarantees."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.0, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def threshold(self):
@@ -227,8 +235,8 @@ class Scoring(VoiceoverScene):
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                step(k, transform=False)
                 if k == 0:
                     self.play(FadeOut(intro), run_time=0.25)
-                step(k, transform=False)
         del d
         self.clear_scene()

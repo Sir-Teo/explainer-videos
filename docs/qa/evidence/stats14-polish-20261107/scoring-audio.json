@@ -1,0 +1,106 @@
+{
+ "video": "stats14",
+ "scene": "Scoring",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 8,
+ "lines": [
+  {
+   "raw": "Chapter eleven. Scoring predictions.",
+   "spoken": "Chapter eleven. Scoring predictions.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/0cfbbbca71e4ad12.wav",
+   "duration": 2.8,
+   "tokens": 4,
+   "peak": 0.341064453125,
+   "issues": [],
+   "elapsed": 0.06,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Logistic regression produces probabilities. How do you judge a probability forecast? <bookmark mark='a'/> Fit risk models for the World's silent condition on fifty thousand adults, and judge them on fifty thousand others. <bookmark mark='b'/> Model one uses age alone. <bookmark mark='c'/> Model two adds the results of Part 2's two screening tests. <bookmark mark='d'/> And a third, deliberately bad, model takes model one's forecasts and multiplies every risk's odds by four. <bookmark mark='e'/> The condition affects one adult in a hundred. Which forecasts are good, and in what sense?",
+   "spoken": "Logistic regression produces probabilities. How do you judge a probability forecast? Fit risk models for the World's silent condition on fifty thousand adults, and judge them on fifty thousand others. Model one uses age alone. Model two adds the results of Part 2's two screening tests. And a third, deliberately bad, model takes model one's forecasts and multiplies every risk's odds by four. The condition affects one adult in a hundred. Which forecasts are good, and in what sense?",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/3c751cc0048719c1.wav",
+   "duration": 28.95,
+   "tokens": 79,
+   "peak": 0.554412841796875,
+   "issues": [],
+   "elapsed": 0.04,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "The first question is ranking: does the model give higher risks to the people who have the condition? <bookmark mark='a'/> Choose a threshold, and call everyone above it positive. <bookmark mark='b'/> Record the fraction of cases caught, the true-positive rate, against the fraction of healthy people wrongly flagged, the false-positive rate, and slide the threshold from top to bottom. That traces the receiver operating characteristic curve, a name from radar in the Second World War. <bookmark mark='c'/> Age alone gives a curve bowed modestly above the diagonal: an area under the curve of point seven two five. <bookmark mark='d'/> With the two tests the curve hugs the top-left corner: point nine nine two. <bookmark mark='e'/> A coin would give the diagonal, an area of a half.",
+   "spoken": "The first question is ranking: does the model give higher risks to the people who have the condition? Choose a threshold, and call everyone above it positive. Record the fraction of cases caught, the true-positive rate, against the fraction of healthy people wrongly flagged, the false-positive rate, and slide the threshold from top to bottom. That traces the receiver operating characteristic curve, a name from radar in the Second World War. Age alone gives a curve bowed modestly above the diagonal: an area under the curve of point seven two five. With the two tests the curve hugs the top-left corner: point nine nine two. A coin would give the diagonal, an area of a half.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/afe12edfc8e6b1f4.wav",
+   "duration": 41.9,
+   "tokens": 116,
+   "peak": 0.45562744140625,
+   "issues": [],
+   "elapsed": 0.07,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The area under the curve has a lovely meaning: pick one person with the condition and one without, at random; the AUC is the probability that the model gives the case a higher score, plus half the probability of a tie. <bookmark mark='b'/> It's the Mann–Whitney statistic of Part 16, scaled. <bookmark mark='c'/> For age alone, point seven two five: its ranking credit is about three quarters, counting an age tie as half. <bookmark mark='d'/> But the deliberately bad model, with every risk's odds quadrupled, has exactly the same AUC, because multiplying the odds doesn't change anyone's rank. The AUC can't tell whether the probabilities mean what they say.",
+   "spoken": "The area under the curve has a lovely meaning: pick one person with the condition and one without, at random; the AUC is the probability that the model gives the case a higher score, plus half the probability of a tie. It's the Mann–Whitney statistic of Part 16, scaled. For age alone, point seven two five: its ranking credit is about three quarters, counting an age tie as half. But the deliberately bad model, with every risk's odds quadrupled, has exactly the same AUC, because multiplying the odds doesn't change anyone's rank. The AUC can't tell whether the probabilities mean what they say.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/fcdc11b96ca4ede6.wav",
+   "duration": 38.45,
+   "tokens": 103,
+   "peak": 0.68914794921875,
+   "issues": [],
+   "elapsed": 0.08,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "The second question is calibration: do the probabilities mean what they say? <bookmark mark='a'/> Sort the test set into ten groups by forecast risk, and plot each group's average forecast against the fraction who actually had the condition. <bookmark mark='b'/> Model one's points lie along the diagonal: when it says two percent, about two percent have the condition. This binned check is compatible with calibration, subject to sampling error; it does not prove calibration at every forecast value. <bookmark mark='c'/> The odds-quadrupled model's points lie far to the right: it forecasts too high everywhere, by up to four times. <bookmark mark='d'/> A forecast of ten percent should come true one time in ten. A doctor, an insurer or a launch director acting on these numbers needs that, and the AUC doesn't check it.",
+   "spoken": "The second question is calibration: do the probabilities mean what they say? Sort the test set into ten groups by forecast risk, and plot each group's average forecast against the fraction who actually had the condition. Model one's points lie along the diagonal: when it says two percent, about two percent have the condition. This binned check is compatible with calibration, subject to sampling error; it does not prove calibration at every forecast value. The odds-quadrupled model's points lie far to the right: it forecasts too high everywhere, by up to four times. A forecast of ten percent should come true one time in ten. A doctor, an insurer or a launch director acting on these numbers needs that, and the AUC doesn't check it.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/a24e1a6fcca0dcf1.wav",
+   "duration": 45.225,
+   "tokens": 125,
+   "peak": 0.612335205078125,
+   "issues": [],
+   "elapsed": 0.1,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> One number can judge both at once. Glenn Brier's 1950 score for weather forecasts is the average squared difference between the forecast probability and what happened, one or zero. Lower is better. <bookmark mark='b'/> A forecaster who always says the training prevalence, point nine percent, scores point zero zero nine nine. <bookmark mark='c'/> Age alone improves on that only slightly: age is a weak predictor of a rare condition. <bookmark mark='d'/> The odds-quadrupled model scores worse than the constant training-prevalence forecast, though it ranks people exactly as well as model one: its miscalibration costs more than its ranking gains. <bookmark mark='e'/> With correctly encoded screening tests, the score falls to about point zero zero three four five, roughly a third of the baseline.",
+   "spoken": "One number can judge both at once. Glenn Brier's 1950 score for weather forecasts is the average squared difference between the forecast probability and what happened, one or zero. Lower is better. A forecaster who always says the training prevalence, point nine percent, scores point zero zero nine nine. Age alone improves on that only slightly: age is a weak predictor of a rare condition. The odds-quadrupled model scores worse than the constant training-prevalence forecast, though it ranks people exactly as well as model one: its miscalibration costs more than its ranking gains. With correctly encoded screening tests, the score falls to about point zero zero three four five, roughly a third of the baseline.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/082f97c779504168.wav",
+   "duration": 44.65,
+   "tokens": 115,
+   "peak": 0.575347900390625,
+   "issues": [],
+   "elapsed": 0.08,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Why squares? <bookmark mark='a'/> If the true chance is p and you forecast q, your expected Brier score is q minus p squared, plus a term you can't control. <bookmark mark='b'/> It's smallest when q equals p: the score rewards forecasting exactly what you believe. That makes it a proper scoring rule. <bookmark mark='c'/> Allan Murphy showed in 1973 that the population Brier score splits into three parts, conditioning on the forecast: reliability, which is calibration; resolution, how much the forecasts vary with the outcome; and the uncertainty of the base rate itself. <bookmark mark='d'/> The logarithmic score, minus the log of the probability given to what happened, is also proper, as I. J. Good noted in 1952. For individual Bernoulli outcomes, summing it gives half the deviance, so maximum likelihood is fitting by the log score. Part 34 returns to prediction with guarantees.",
+   "spoken": "Why squares? If the true chance is p and you forecast q, your expected Brier score is q minus p squared, plus a term you can't control. It's smallest when q equals p: the score rewards forecasting exactly what you believe. That makes it a proper scoring rule. Allan Murphy showed in 1973 that the population Brier score splits into three parts, conditioning on the forecast: reliability, which is calibration; resolution, how much the forecasts vary with the outcome; and the uncertainty of the base rate itself. The logarithmic score, minus the log of the probability given to what happened, is also proper, as I. J. Good noted in 1952. For individual Bernoulli outcomes, summing it gives half the deviance, so maximum likelihood is fitting by the log score. Part 34 returns to prediction with guarantees.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/e6f00b17587414d2.wav",
+   "duration": 54.225,
+   "tokens": 136,
+   "peak": 0.54656982421875,
+   "issues": [],
+   "elapsed": 0.09,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Finally, a forecast becomes an action through a threshold. <bookmark mark='a'/> Flag everyone whose risk exceeds t, trading missed cases against false alarms; each point on the ROC curve is one threshold. <bookmark mark='b'/> If a false alarm costs one unit and a missed case costs another, the best threshold is the ratio of the false alarm's cost to the sum of both. <bookmark mark='c'/> If missing a case is ninety-nine times worse than a false alarm, flag anyone whose risk exceeds one percent. <bookmark mark='d'/> The threshold is a decision about costs, not a property of the data, and the rule only works if the probabilities are calibrated. A model with a fine AUC but inflated risks would flag far too many people.",
+   "spoken": "Finally, a forecast becomes an action through a threshold. Flag everyone whose risk exceeds t, trading missed cases against false alarms; each point on the ROC curve is one threshold. If a false alarm costs one unit and a missed case costs another, the best threshold is the ratio of the false alarm's cost to the sum of both. If missing a case is ninety-nine times worse than a false alarm, flag anyone whose risk exceeds one percent. The threshold is a decision about costs, not a property of the data, and the rule only works if the probabilities are calibrated. A model with a fine AUC but inflated risks would flag far too many people.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/29fb62dbdf2440a1.wav",
+   "duration": 40.8,
+   "tokens": 116,
+   "peak": 0.581085205078125,
+   "issues": [],
+   "elapsed": 0.05,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats14/en/Scoring_motion/result.json",
+ "input_sha256": "76f7b565c04c78dd846c78c4e28a232753f728a41517ceb7e2d4b4549c95b9c9"
+}

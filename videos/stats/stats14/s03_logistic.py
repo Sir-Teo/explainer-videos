@@ -117,6 +117,7 @@ class Logistic(VoiceoverScene):
         rows[2][2].set_color(OBS)
         whys = [why(r"the slope: \ change in log-odds per degree"), why(r"so $e^{\beta_1}$ is an odds ratio, \ the same at every $x$"),
                 why(r"the odds of distress multiply by ten"), why(r"23 flights: \ wide, \ and lopsided")]
+        intro = label('Exponentiating a coefficient gives an odds ratio', font_size=36)
         with self.voiceover(
             "How do you read the coefficient? <bookmark mark='a'/> The slope is the change in log-odds for each degree. "
             "<bookmark mark='b'/> So e to the slope is an odds ratio: the factor by which the odds change per degree, the same "
@@ -125,10 +126,13 @@ class Logistic(VoiceoverScene):
             "large: the profile-likelihood interval, which we'll build in chapter four, runs from about two to about a hundred "
             "and seventy. Under the fitted model it excludes one: lower temperature is associated with more distress."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def latent(self):
@@ -230,6 +234,7 @@ class Logistic(VoiceoverScene):
         rows[1][2].set_color(OBS)
         whys = [why(r"the Bernoulli as an exponential family (Part 3)"), why(r"its natural parameter is the logit"),
                 why(r"the natural parameter is the log"), why(r"Nelder \& Wedderburn (1972); \ theory in Part 24")]
+        intro = label('The canonical link simplifies the score equations', font_size=36)
         with self.voiceover(
             "Why the logit, of all transformations? <bookmark mark='a'/> Write the Bernoulli distribution in Part 3's "
             "exponential-family form. <bookmark mark='b'/> The quantity multiplying y, its natural parameter, is exactly the "
@@ -238,8 +243,11 @@ class Logistic(VoiceoverScene):
             "predictor is called using the canonical link, and it makes the score equations take the simple form X transpose "
             "times y minus the mean. This is the unifying idea of generalized linear models, which Part 24 develops."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()

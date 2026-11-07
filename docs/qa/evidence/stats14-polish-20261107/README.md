@@ -1,9 +1,13 @@
-# Part 14: Counts and Categories — scientific source review
+# Part 14 English source and visual review
 
-Reviewed all 13 chapters, the README and problem solutions, eight compute items and the local plotting helpers. All scene modules import; every compute item has been refreshed. Seven new independent numerical checks and six existing GLM checks pass **13 tests**.
+All 13 chapters received source review and endpoint inspection. The scientific corrections are documented in [scientific-review.md](scientific-review.md). Final captures are keyed to fingerprint `17af4952abd85c9b1d3d10b07d09cbbc6c03ba7fca2a466f8194d2200614fb8f`.
 
-The screening model now counts both positive tests consistently in training and prediction. Its corrected Brier score is 0.003448; the baseline forecasts the training prevalence, avoiding test-outcome leakage. Complete and quasi-separation are classified from the temperature design: mixed outcomes at a tied threshold retain their nonzero log-likelihood limit. Finite fits must pass a score convergence check. Stable constrained likelihoods agree with independent optimization.
+- All 13 English endpoint captures pass runtime, bounds and blank-beat checks; translation warnings remain visible.
+- Eight native 1080p cases cover LinearProbability, Logistic, Fitting, ChallengerFit, Poisson, Overdispersion, ThreeWay and Scoring.
+- Seven silent motion checks cover LinearProbability, Logistic, ChallengerFit, Poisson, Overdispersion, Simpson and Scoring. All pass the blank/sparse-frame scanner. Motion inspection prompted additional context headings and kept them visible until the first derivation row was drawn.
+- The actual narrated Scoring preview is 305.799 seconds. All eight speech lines have clean signal/alignment checks, its recorded narration matches current source, and its blank/sparse-frame scan is clean. The narrated contact sheet is retained.
+- All 13 focused scientific/toolkit regressions pass after the visual repairs.
 
-Scientific edits distinguish O-ring distress from catastrophic failure risk, unique finite likelihood maxima from existence, asymptotic Wald and LR calibration from guarantees, pointwise bands from simultaneous coverage, nonsignificance from equality, robust variance assumptions from mean-model repair, common CMH association from heterogeneous effects, and statistical conditioning from causal conclusions. The Doll–Hill aggregate odds ratio is labelled crude; inference for its matched sampling design requires matched-stratum data. AUC includes half credit for ties; calibration plots and scoring identities state their scope. Local drawing helpers clip geometric paths without flattening off-scale values, and introductory headings support narration before equations appear.
+Receipts: [verification](verification.json), [endpoints](endpoints.json), [native cases](native-endpoints.json), [motion](motion.json), [speech](scoring-audio.json), [tests](tests-final.txt).
 
-English visual verification is in progress. Chinese translation tables, continuous narrated listening/playback and final bilingual masters remain open.
+This completes the English source/visual pass. Chinese narration/caption tables, continuous listening and narrated playback, and final masters in both languages remain open. It is not bilingual production approval.

@@ -1,0 +1,94 @@
+{
+  "fingerprint": "17af4952abd85c9b1d3d10b07d09cbbc6c03ba7fca2a466f8194d2200614fb8f",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "LinearProbability",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 31
+      },
+      "input_record": "renders/qa/native1080/stats14/en/LinearProbability/result.json",
+      "input_sha256": "a50dca2d6a7194584336bfe010493efb31cf991dcbd5fa9a96446fe2c70fd80e"
+    },
+    {
+      "scene": "Logistic",
+      "status": "needs-review",
+      "frames": 32,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 47
+      },
+      "input_record": "renders/qa/native1080/stats14/en/Logistic/result.json",
+      "input_sha256": "5a90fd950c8a13772959d6327c4d79ba144f01b0157345a8523af45a2b7c12aa"
+    },
+    {
+      "scene": "Fitting",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 28
+      },
+      "input_record": "renders/qa/native1080/stats14/en/Fitting/result.json",
+      "input_sha256": "099556cf634064656c529a11129ef18a46c0eaeb720f7ddb66f3c66acdb8f1be"
+    },
+    {
+      "scene": "ChallengerFit",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 39
+      },
+      "input_record": "renders/qa/native1080/stats14/en/ChallengerFit/result.json",
+      "input_sha256": "355d867c325c953787201da2deafb3df832dbb0ba1c8290150c4c46410a39054"
+    },
+    {
+      "scene": "Poisson",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 60
+      },
+      "input_record": "renders/qa/native1080/stats14/en/Poisson/result.json",
+      "input_sha256": "ff47f543a91c75023175e820e0842de74c18b0708619da4bb758b774f83ba795"
+    },
+    {
+      "scene": "Overdispersion",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 47
+      },
+      "input_record": "renders/qa/native1080/stats14/en/Overdispersion/result.json",
+      "input_sha256": "3c94e5e219c5fa2f4f3e205412b6b6952479f82e0c2ad0f0a9ab1b4e3db06da2"
+    },
+    {
+      "scene": "ThreeWay",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 47
+      },
+      "input_record": "renders/qa/native1080/stats14/en/ThreeWay/result.json",
+      "input_sha256": "5e0f2065531f6b43a6398e476a60d90a5590af67266665b16b6737c2666e2027"
+    },
+    {
+      "scene": "Scoring",
+      "status": "needs-review",
+      "frames": 34,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 62
+      },
+      "input_record": "renders/qa/native1080/stats14/en/Scoring/result.json",
+      "input_sha256": "92db64f0e21ed5e0f1e4f7a67dcbbb470921405a71ea1ebf76f2779b902267db"
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "fingerprint": "17af4952abd85c9b1d3d10b07d09cbbc6c03ba7fca2a466f8194d2200614fb8f",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "LinearProbability",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats14/en/LinearProbability_motion/result.json",
+      "input_sha256": "bedddefae0a5a2331dd5d8d98c9c48eb956f5506f1cbc8afe0951c677db9543f",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 183 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 183 s\n"
+    },
+    {
+      "scene": "Logistic",
+      "status": "needs-review",
+      "frames": 32,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats14/en/Logistic_motion/result.json",
+      "input_sha256": "26f1ba83236eec663be9142e51cd355845cfaa08fa9786364224ead65af8a9f7",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 278 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 278 s\n"
+    },
+    {
+      "scene": "ChallengerFit",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats14/en/ChallengerFit_motion/result.json",
+      "input_sha256": "3ba0199478935c9ebc01c043d04dc1c2f501907b8cf814a1271a0389af63b6f6",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 291 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 291 s\n"
+    },
+    {
+      "scene": "Poisson",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats14/en/Poisson_motion/result.json",
+      "input_sha256": "50b3f81bbc56eb647cbfa0223ee15ea67776ccefdcb55a1be3623947f9cffa19",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 274 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 274 s\n"
+    },
+    {
+      "scene": "Overdispersion",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats14/en/Overdispersion_motion/result.json",
+      "input_sha256": "df0ff9f8de6600f0e12c465d92480d28ff0ade434a50fc8917ad38900fa1d6e2",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 287 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 287 s\n"
+    },
+    {
+      "scene": "Simpson",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats14/en/Simpson_motion/result.json",
+      "input_sha256": "76fc3fe587dd4485b38bbafe41d4bdb5ccdba58372c881e3aaebd4b4220501d0",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 190 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 190 s\n"
+    },
+    {
+      "scene": "Scoring",
+      "status": "needs-review",
+      "frames": 34,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats14/en/Scoring_motion/result.json",
+      "input_sha256": "76f7b565c04c78dd846c78c4e28a232753f728a41517ceb7e2d4b4549c95b9c9",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 336 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 336 s\n"
+    }
+  ]
+}
