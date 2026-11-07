@@ -1,4 +1,4 @@
-# Part 49 scientific source review, numerical regeneration pending
+# Part 49 scientific source and numerical review
 
 Read the complete README including six solutions, thirteen scenes, common helpers, eleven computations, the entire semiparametric toolkit and its six tests. Fourteen checks pass: eight local independent checks and six toolkit tests. Independently retrieved Matching and MatchIt distributions verify all 445 experimental rows and 429 comparison rows; all discrete/covariate fields agree and earnings differ by at most half a cent. These are package-maintainer teaching samples, not a claim to reproduce every original LaLonde specification.
 
@@ -16,4 +16,4 @@ Efficient PLR scores are normalized by conditional variance. The heteroskedastic
 
 Double robustness is a conditional population identity for fixed or independently trained nuisance functions, not exact finite-sample unbiasedness after arbitrary data reuse. Consistency under one correct working model does not alone validate the efficient-IF SE. Cross-fitting controls each held-out fold conditional on its own training set; it does not make all folds jointly independent. Propensity clipping changes an estimator and can bias the original target; trimming observations changes the target population. MAR survey-sample truth is distinguished from its iid-superpopulation variance reference, and proper congenial multiple imputation from blanket efficiency claims.
 
-Thirty persistent theorem headings and local segment clipping prepare the visual pass. Full eleven-item regeneration, final README numerical reconciliation, and visual verification remain pending. Chinese narration/captions, continuous listening and final masters remain open.
+Thirty persistent theorem headings and local segment clipping prepare the visual pass. All eleven computations have now regenerated successfully and the README has been reconciled. The fixed-target World coverage rates are 3.33%, 96.33%, 91.00%, 90.33% and 71.33%, with independent-dataset Monte Carlo errors preserved. The observational NSW refitted-bootstrap SE is 888.61 versus the old fixed-nuisance IF SE 870.69. Exact Gaussian quadratic-functional expectations and theoretical product-bias curves are recorded in the inputs. English visual verification remains pending. Chinese narration/captions, continuous listening and final masters remain open.

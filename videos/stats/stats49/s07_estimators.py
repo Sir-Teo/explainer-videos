@@ -144,7 +144,7 @@ class Estimators(VoiceoverScene):
             tab[i][1].set_color(PLUGC)
             tab[i][2].set_color(OSC)
             tab[i][3].set_color(TMLEC)
-        foot = label(r"coverage of nominal 90\% intervals, \ $\pm 1.645 \times$ the influence-function SE", font_size=24, color=GREY_A).move_to([0, -1.6, 0])
+        foot = label(r"90\% reference intervals; \ plug-in uses one-step width; \ Monte Carlo errors recorded", font_size=24, color=GREY_A).move_to([0, -1.6, 0])
         foot2 = label(r"the plug-in's interval is centred in the wrong place, \ and more wrongly as $n$ grows", font_size=24, color=PLUGC).move_to([0, -2.4, 0])
         with self.voiceover(
             f"<bookmark mark='a'/> Coverage of ninety percent intervals tells the same story. The one-step and targeted "

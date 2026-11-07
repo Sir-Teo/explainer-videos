@@ -1,0 +1,68 @@
+[
+  {
+    "name": "hook",
+    "path": ".cache/stats49/hook.json",
+    "sha256": "308c2984d112c0cc80c399e4cefc1ef7c41578f80b40a6d5b14cba786213434e",
+    "bytes": 1205
+  },
+  {
+    "name": "geometry",
+    "path": ".cache/stats49/geometry.json",
+    "sha256": "84e52db2bbd392852375f699ea53fcb359712bb445b177d17b42746a93ea3522",
+    "bytes": 1021
+  },
+  {
+    "name": "bounds",
+    "path": ".cache/stats49/bounds.json",
+    "sha256": "aaa0404e85f01cd1ab90884005aa53fad5cf5eb451a3c2865884bd5a3c77efc5",
+    "bytes": 8266
+  },
+  {
+    "name": "ate",
+    "path": ".cache/stats49/ate.json",
+    "sha256": "7cb56de5ce91a16681a91c7ac3e8d6932b41990760e1e4f78fc6e7554c99095a",
+    "bytes": 179
+  },
+  {
+    "name": "onestep",
+    "path": ".cache/stats49/onestep.json",
+    "sha256": "5b2f0c43fa13e2d5288f5f71cb3c6159805220717984dc6b54797019b555546e",
+    "bytes": 29582
+  },
+  {
+    "name": "nsw",
+    "path": ".cache/stats49/nsw.json",
+    "sha256": "8ac996c7ba978c8354b65d2d69db605748380eb55bba0d9608d39785c08d0b50",
+    "bytes": 642
+  },
+  {
+    "name": "dr",
+    "path": ".cache/stats49/dr.json",
+    "sha256": "c0c629bd8923fa446f09ad4c1c4f2e8b1d9f97325cf9b5d06cf4c008a43ba4b5",
+    "bytes": 782
+  },
+  {
+    "name": "rates",
+    "path": ".cache/stats49/rates.json",
+    "sha256": "f96b3508b631431c17b2acf0026a0063d62273d2a4298de368ec749317090872",
+    "bytes": 1819
+  },
+  {
+    "name": "mar",
+    "path": ".cache/stats49/mar.json",
+    "sha256": "13eb2ac1dbe08d59cbdf63a29134ac9f781235c1c3174e56a52b6f8a19781fe4",
+    "bytes": 1127
+  },
+  {
+    "name": "intsq",
+    "path": ".cache/stats49/intsq.json",
+    "sha256": "84d8405a0da5a2b928c2706e0aeb0229cd429c3b4952b03b6f569532599ef9b3",
+    "bytes": 3219
+  },
+  {
+    "name": "board",
+    "path": ".cache/stats49/board.json",
+    "sha256": "2475a78cf4cdd349b4ddb35a1e34665fc2701a892aa27137a8e4b1fddcb7b38a",
+    "bytes": 2435
+  }
+]

@@ -5,7 +5,7 @@ and [the syllabus](../SYLLABUS.md)), and the seventh part of Stage IV, the PhD c
 
 It opens with Stein's question of 1956: can the centre of a symmetric distribution be estimated as well without knowing
 its shape? Stone (1975) and Bickel (1982) answered yes, and a simulation shows an adaptive estimator, never told the
-law, near the bound 1/I_f under five laws. The part asks how well a finite-dimensional quantity can be estimated when
+law, near the bound 1/I_f under five laws. This fixed-trim KDE one-step is an illustration inspired by adaptive score estimation, not a proof of the exact asymptotic adaptation theorem. The part asks how well a finite-dimensional quantity can be estimated when
 the rest of the model is infinite dimensional, and answers with one function, the efficient influence function. It
 builds the theory in five steps:
 - tangent spaces as the directions a model can move (drawn to scale for a 2 × 2 table under independence);
@@ -50,13 +50,15 @@ It keeps three promises:
 
 The Coverage Board gains five rows, all nominal 90%, on the World (doctors choose, n = 2,000):
 
-| Method | Achieved | Verdict |
+| Method | Achieved ± MCSE | Verdict |
 |---|---|---|
-| plug-in, k-NN outcome models | 3.3% | broken |
-| IPW, logistic propensity | 96.3% | conservative |
-| one-step, k-NN + logistic, cross-fitted | 92.3% | kept |
-| TMLE, k-NN + logistic, cross-fitted | 93.3% | kept |
-| one-step, k-NN for both | 70.7% | broken |
+| plug-in, \ $k$-NN outcome models | 3.33% ± 1.04% | broken |
+| IPW, \ logistic propensity | 96.33% ± 1.09% | conservative |
+| one-step, \ $k$-NN $+$ logistic, \ cross-fitted | 91.00% ± 1.66% | kept |
+| TMLE, \ $k$-NN $+$ logistic, \ cross-fitted | 90.33% ± 1.71% | kept |
+| one-step, \ $k$-NN for both | 71.33% ± 2.62% | broken |
+
+Each row uses 300 independent samples drawn with replacement from the fixed eligible World pool. The target is the pool ATE, −9.9303, rather than each sample's own effect. Preprocessing is fitted within training folds. The plug-in shares a one-step reference width to isolate bias; the IPW SE treats fitted weights as fixed and is not a general fitted-model interval guarantee.
 
 ## Build it
 
@@ -78,17 +80,17 @@ python tools/lecture_length.py stats49 --floor 50
 | 3 | Bounds | least favourable direction 28°; known margin: 0.0756; ATE bound 4.70, one-step 4.53, Hajek 6.81, HT 13.75 |
 | 4 | Worked influence functions | the mean, quantiles, the ATE and ATT (Hahn 1998), the PLR (Robinson 1988), Cox |
 | 5 | The efficient score | adaptation: odd score ⟂ even nuisance scores; heteroskedastic PLR: orthogonal but not efficient |
-| 6 | Efficient estimators | √n·bias at n = 16,000: plug-in 6.94, one-step -0.32, TMLE -0.26; NSW: 1,794 (671) vs 1,622 (656); PSID ATT 1,218 (871) |
+| 6 | Efficient estimators | √n·bias at n = 16,000: plug-in 6.94, one-step -0.32, TMLE -0.26; NSW: 1,794 (671) vs 1,622 (656); PSID ATT 1,218 (889; refitted bootstrap) |
 | 7 | Double robustness | one-step bias: +0.004, -0.004, +0.002, +0.198 |
-| 8 | DML theory | √n·bias flat for a + b > ½ for fixed order bounds, or a little-o product at equality; ⅛ + ⅛: -6.2 → -16.2; 5-NN: coverage 82.5% reused vs 87.0% cross-fitted |
+| 8 | DML theory | nonzero limiting √n·bias at a + b = ½; centred inference needs a little-o product; ⅛ + ⅛: -6.2 → -16.2; 5-NN: coverage 82.5% reused vs 87.0% cross-fitted |
 | 9 | Missing data | survey: complete cases +0.0252, AIPW +0.0050 (SE 0.0182) |
 | 10 | Higher order | √n·bias at h = 0.05: plug-in +0.25, one-step -0.56, U-statistic -0.02 (SD 0.218 vs 0.222) |
-| 11 | The World test | coverage: plug-in 3.3%, IPW 96.3%, one-step 92.3%, TMLE 93.3%, k-NN both 70.7% |
+| 11 | The World test | coverage: plug-in 3.3%, IPW 96.3%, one-step 91.0%, TMLE 90.3%, k-NN both 71.3% |
 | 12 | Outro | — |
 
 ## QA checkpoint
 
-All thirteen scenes and six solutions have been read; fourteen focused checks pass. Scientific corrections are recorded in the [source review](../../../docs/qa/evidence/stats49-polish-20261107/source-review.md). Full numerical regeneration is running, so the legacy numerical summary above remains provisional until reconciliation. Visual review and bilingual/listening/master gates remain open.
+All thirteen scenes and six solutions have been read; fourteen focused checks pass. Scientific corrections are recorded in the [source review](../../../docs/qa/evidence/stats49-polish-20261107/source-review.md). All eleven inputs have now been regenerated and the numerical summary reconciled. The NSW observational ATT SE is 888.61 from 399 stratified resamples refitting both nuisances (the naive IF SE was 870.69). Exact Gaussian-kernel expectations and quadrature product remainders are retained alongside their simulations. Visual review and bilingual/listening/master gates remain open.
 
 ## Sources
 

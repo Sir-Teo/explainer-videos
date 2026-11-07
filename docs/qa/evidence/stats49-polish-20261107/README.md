@@ -2,4 +2,4 @@
 
 All thirteen scenes, eleven computations and six solutions were audited. Fourteen checks pass. [Source review](source-review.md) records the repairs; [data comparisons](source-data.json) verify NSW and comparison records against independent package distributions.
 
-Full numerical regeneration is running; final displayed-number and visual reconciliation remain pending. This is not production approval.
+All eleven inputs were regenerated and final displayed-number reconciliation is complete; English visual verification remains pending. See [input hashes](computed-inputs.json) and [computation log](compute-full.log). This is not production approval.
