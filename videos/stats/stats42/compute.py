@@ -35,6 +35,8 @@ from dataclasses import asdict
 
 import numpy as np
 from scipy import stats
+from scipy.integrate import quad
+from scipy.optimize import brentq
 
 from explainer.ai.cache import Cache
 from explainer.stats import museum
@@ -69,11 +71,11 @@ def nest(obj):
     return obj
 
 
-def eff_reps(per_rep, nominal=0.9) -> int:
-    v = np.var(np.asarray(per_rep, float), ddof=1) / len(per_rep)
-    if v == 0:
-        return len(per_rep)
-    return int(round(nominal * (1 - nominal) / max(v, 1e-12)))
+def coverage_row(method, setting, covered):
+    """Actual independent dataset count and empirical Monte Carlo standard error."""
+    covered = np.asarray(covered, float)
+    return Row(42, method, setting, "coverage", 0.9, float(covered.mean()), len(covered),
+               mc_se=float(covered.std(ddof=1) / np.sqrt(len(covered))))
 
 
 # ===================================================================================================== Case 1
@@ -149,7 +151,8 @@ def compute_size():
         tc = stats.t.ppf(0.975, df)
         pw.append(float(stats.nct.sf(tc, df, delta / se) + stats.nct.cdf(-tc, df, delta / se)))
     # ignoring clustering: the power one would claim
-    pw_naive = [float(stats.norm.sf(1.96 - delta / math.sqrt(2 * sigma ** 2 / (k * M_TRIAL)))) for k in ks]
+    pw_naive = [float(stats.norm.sf(stats.norm.ppf(0.975) - delta / math.sqrt(2 * sigma ** 2 / (k * M_TRIAL)))
+                      + stats.norm.cdf(-stats.norm.ppf(0.975) - delta / math.sqrt(2 * sigma ** 2 / (k * M_TRIAL)))) for k in ks]
     return {"icc": icc, "sigma": sigma, "delta": delta, "n_ind": n_ind, "rows": rows, "ms": ms, "k_curve": k_curve,
             "k_inf": k_inf, "ks": ks, "power": pw, "power_naive": pw_naive, "pilot_icc": p["icc"],
             "de50": 1 + 49 * icc}
@@ -236,13 +239,13 @@ def _design(M, cols, data=None):
     return np.column_stack([np.ones(len(M["sbp"]))] + [np.asarray(d[c], float) for c in cols])
 
 
-def ols(y, X):
+def ols(y, X, *, classical=False):
     b, *_ = np.linalg.lstsq(X, y, rcond=None)
     e = y - X @ b
     n, p = X.shape
     XtXi = np.linalg.inv(X.T @ X)
     meat = X.T @ (X * (e ** 2)[:, None])
-    V = XtXi @ meat @ XtXi * n / (n - p)
+    V = (e @ e / (n - p) * XtXi) if classical else XtXi @ meat @ XtXi * n / (n - p)
     return b, np.sqrt(np.diag(V)), e, n - p
 
 
@@ -323,16 +326,16 @@ def compute_obs():
         v = np.asarray(M1[c], float)
         table.append((nm, float(v[t].mean()), float(v[~t].mean())))
     # the regression's t for the robustness value, and told_high as a benchmark (partial R^2 with T and Y)
-    b, se, e, dof = ols(y, np.column_stack([X, t]))
+    b, se, e, dof = ols(y, np.column_stack([X, t]), classical=True)
     t_stat = b[-1] / se[-1]
     rv = CA.robustness_value(t_stat, dof)
     rv_a = CA.robustness_value(t_stat, dof, alpha=0.05)
     # benchmark: told_high's partial R^2 with the outcome (given the rest) and with uptake (given the rest)
     others = [c for c in COVS if c != "told_high"]
     Xo = _design(M, others, M1)
-    bt, set_, _, doft = ols(y, np.column_stack([Xo, t, M["told_high"]]))
+    bt, set_, _, doft = ols(y, np.column_stack([Xo, t, M["told_high"]]), classical=True)
     r2y = CA.partial_r2(bt[-1] / set_[-1], doft)
-    btt, sett, _, doftt = ols(t.astype(float), np.column_stack([Xo, M["told_high"]]))
+    btt, sett, _, doftt = ols(t.astype(float), np.column_stack([Xo, M["told_high"]]), classical=True)
     r2d = CA.partial_r2(btt[-1] / sett[-1], doftt)
     # the true-income analysis, the World's privilege
     rt, _ = aipw_fit(y, t, _design(M, COVS))
@@ -415,32 +418,44 @@ def compute_p_reml():
             "reml_hist": np.histogram(r / (n - p), bins=40, range=(0, 3 * s2_reml)), "y_name": "employment"}
 
 
-def compute_p_hier():
-    from explainer.stats.kit import bayes as BA
+def eight_schools_posterior(y, s):
+    """Flat mu and tau>=0 priors, integrated over the full positive half-line."""
+    y, s = np.asarray(y, float), np.asarray(s, float)
+    def moments(t):
+        w = 1 / (s*s + t*t)
+        mu = np.sum(w*y) / w.sum()
+        log_kernel = -0.5*np.log(w.sum()) + 0.5*np.log(w).sum() - 0.5*np.sum(w*(y-mu)**2)
+        return mu, log_kernel
+    shift = moments(0.)[1]
+    kernel = lambda t: math.exp(moments(t)[1] - shift)
+    norm = quad(kernel, 0, np.inf, epsabs=1e-10, epsrel=1e-10)[0]
+    def expectation(fun):
+        return quad(lambda t: kernel(t)*fun(t), 0, np.inf, epsabs=1e-9, epsrel=1e-9)[0] / norm
+    def quantile(q):
+        hi = 30.
+        while quad(kernel, 0, hi)[0] / norm < q:
+            hi *= 2
+        return brentq(lambda t: quad(kernel, 0, t)[0]/norm-q, 0, hi)
+    theta = [expectation(lambda t, j=j: (t*t*y[j] + s[j]**2*moments(t)[0])/(s[j]**2+t*t)) for j in range(len(y))]
+    return dict(theta=theta, mu_post=expectation(lambda t: moments(t)[0]), tau_mean=expectation(lambda t: t),
+                tau_median=quantile(.5), tau_q90=quantile(.9), mass_above_30=quad(kernel, 30, np.inf)[0]/norm,
+                integration="adaptive quadrature over tau in [0, infinity), flat priors on mu and tau", kernel=kernel, norm=norm,
+                moments=moments)
 
+
+def compute_p_hier():
     names, y, s = museum.eight_schools()
-    tau = np.linspace(0.0, 30.0, 601)
-    h = BA.hier_normal(y, s, tau)
-    dens = np.asarray(h.post_tau)
-    w = dens / dens.sum()
-    mu_hat, v_mu = np.asarray(h.mu_hat), np.asarray(h.v_mu)
-    # E[theta_j | y] = sum_tau p(tau|y) E[theta_j | tau, y]; E[theta_j | tau, y] uses E[mu | tau, y] = mu_hat(tau)
-    th = np.zeros(len(y))
-    for i in range(len(y)):
-        with np.errstate(divide="ignore", invalid="ignore"):
-            prec = 1 / s[i] ** 2 + np.where(tau > 0, 1 / tau ** 2, np.inf)
-            m = np.where(tau > 0, (y[i] / s[i] ** 2 + mu_hat / np.maximum(tau, 1e-12) ** 2) / prec, mu_hat)
-        th[i] = float((w * m).sum())
+    posterior = eight_schools_posterior(y, s)
+    kernel, norm, moments = [posterior.pop(k) for k in ("kernel", "norm", "moments")]
+    tau = np.linspace(0., 30., 601)
     shrink_at = {}
-    for t0 in [5.0, 10.0]:
-        j = int(np.argmin(np.abs(tau - t0)))
-        B = s ** 2 / (s ** 2 + t0 ** 2)
-        shrink_at[str(t0)] = {"B": B, "mu": float(mu_hat[j]), "theta": (1 - B) * y + B * mu_hat[j]}
-    cdf = np.cumsum(w)
-    return {"names": names, "y": y, "s": s, "tau": tau, "dens": dens, "theta": th, "mu_post": float((w * mu_hat).sum()),
-            "tau_mean": float((w * tau).sum()), "tau_median": float(tau[np.searchsorted(cdf, 0.5)]),
-            "tau_q90": float(tau[np.searchsorted(cdf, 0.9)]), "shrink": shrink_at,
-            "pooled": float(np.sum(y / s ** 2) / np.sum(1 / s ** 2)), "pooled_se": float(1 / math.sqrt(np.sum(1 / s ** 2)))}
+    for t0 in [5., 10.]:
+        B = s*s / (s*s + t0*t0)
+        mu = moments(t0)[0]
+        shrink_at[str(t0)] = dict(B=B, mu=mu, theta=(1-B)*y+B*mu)
+    return dict(names=names, y=y, s=s, tau=tau, dens=[kernel(t)/norm for t in tau], **posterior,
+                shrink=shrink_at, pooled=float(np.sum(y/s**2)/np.sum(1/s**2)),
+                pooled_se=float(1/np.sqrt(np.sum(1/s**2))))
 
 
 def compute_p_mcmc():
@@ -638,12 +653,9 @@ def compute_board():
         a = analyse_trial(*trial_draw(g))
         for k in cov:
             cov[k].append(a[k][2] <= TAU1 <= a[k][3])
-    rows.append(Row(42, "individual-level t, cluster trial", "42 towns x 50 adults, ICC 0.054", "coverage", 0.9,
-                    float(np.mean(cov["naive"])), eff_reps(cov["naive"])))
-    rows.append(Row(42, "cluster-level t", "42 towns x 50 adults, ICC 0.054", "coverage", 0.9,
-                    float(np.mean(cov["t"])), eff_reps(cov["t"])))
-    rows.append(Row(42, "cluster-level ANCOVA on the pilot", "42 towns x 50 adults, ICC 0.054", "coverage", 0.9,
-                    float(np.mean(cov["ancova"])), eff_reps(cov["ancova"])))
+    rows.append(coverage_row("individual-level t, cluster trial", "42 towns x 50 adults, ICC 0.054", cov["naive"]))
+    rows.append(coverage_row("cluster-level t", "42 towns x 50 adults, ICC 0.054", cov["t"]))
+    rows.append(coverage_row("cluster-level ANCOVA on the pilot", "42 towns x 50 adults, ICC 0.054", cov["ancova"]))
 
     # Case 2: the survey from the law of the World's adults
     W = World()
@@ -675,10 +687,10 @@ def compute_board():
         q = stats.t.ppf(1 - ALPHA / 2, dof)
         cb.append(b[-2] - q * se[-2] <= tau <= b[-2] + q * se[-2])
     st = "3,000 adults, income MAR for over a third"
-    rows.append(Row(42, "naive difference in means", st, "coverage", 0.9, float(np.mean(cn)), eff_reps(cn)))
-    rows.append(Row(42, "regression adjusting for a collider", st, "coverage", 0.9, float(np.mean(cb)), eff_reps(cb)))
-    rows.append(Row(42, "AIPW on complete cases", st, "coverage", 0.9, float(np.mean(cc)), eff_reps(cc)))
-    rows.append(Row(42, "AIPW with multiple imputation", st, "coverage", 0.9, float(np.mean(cm)), eff_reps(cm)))
+    rows.append(coverage_row("naive difference in means", st, cn))
+    rows.append(coverage_row("regression adjusting for a collider", st, cb))
+    rows.append(coverage_row("AIPW on complete cases", st, cc))
+    rows.append(coverage_row("AIPW with multiple imputation", st, cm))
 
     # Problem 1: the mean visits, model-based Poisson SE vs the sandwich, n = 200 from the World
     v = W.visits["visits"]
@@ -695,10 +707,8 @@ def compute_board():
         ss = math.sqrt(((yy - lam) ** 2).sum()) / 500
         cmod.append(abs(lam - mu) <= z * sm)
         csand.append(abs(lam - mu) <= z * ss)
-    rows.append(Row(42, "Poisson MLE, model-based SE", "the World's doctor visits, n = 500", "coverage", 0.9,
-                    float(np.mean(cmod)), eff_reps(cmod)))
-    rows.append(Row(42, "Poisson MLE, sandwich SE", "the World's doctor visits, n = 500", "coverage", 0.9,
-                    float(np.mean(csand)), eff_reps(csand)))
+    rows.append(coverage_row("Poisson MLE, model-based SE", "the World's doctor visits, n = 500", cmod))
+    rows.append(coverage_row("Poisson MLE, sandwich SE", "the World's doctor visits, n = 500", csand))
 
     # Problem 11: split conformal for the World's pressure from age and BMI
     ad = np.flatnonzero(W.adult)
@@ -714,8 +724,7 @@ def compute_board():
         r = np.abs(sbp[cal] - D(cal) @ b)
         q = np.sort(r)[math.ceil(100 * 0.9) - 1]
         cv.append(bool(abs(sbp[te][0] - (D(te) @ b)[0]) <= q))
-    rows.append(Row(42, "split conformal, 99 calibration points", "the World's pressure from age and BMI", "coverage", 0.9,
-                    float(np.mean(cv)), eff_reps(cv)))
+    rows.append(coverage_row("split conformal, 99 calibration points", "the World's pressure from age and BMI", cv))
     save_rows(42, rows)
     return {"rows": [asdict(r) | {"verdict": r.verdict, "se": r.se} for r in rows]}
 

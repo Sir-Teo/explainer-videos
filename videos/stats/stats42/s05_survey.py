@@ -36,7 +36,7 @@ class SurveyGraph(VoiceoverScene):
     def naive(self):
         o = load("obs")
         r = o["res"]["naive"]
-        A = axes([80, 180], [0, 0.03], x_length=7.4, y_length=4.4, xlabel=r"systolic pressure, \ mm Hg", ylabel=r"density",
+        A = axes([80, 180], [0, 0.05], x_length=7.4, y_length=4.4, xlabel=r"systolic pressure, \ mm Hg", ylabel=r"density",
                  xticks=[80, 100, 120, 140, 160, 180], yticks=[0, 0.01, 0.02, 0.03], center=[-2.5, 0.2, 0])
         ax = A.ax
         M = World().ministry
@@ -45,8 +45,8 @@ class SurveyGraph(VoiceoverScene):
         c, w = (bins[:-1] + bins[1:]) / 2, bins[1] - bins[0]
         hu, _ = np.histogram(y[t], bins=bins, density=True)
         hn, _ = np.histogram(y[~t], bins=bins, density=True)
-        cn = bars_at(ax, c, np.minimum(hn, 0.03), w, GREY_B, opacity=0.45)
-        cu = bars_at(ax, c, np.minimum(hu, 0.03), w, USERC, opacity=0.55)
+        cn = bars_at(ax, c, hn, w, GREY_B, opacity=0.45)
+        cu = bars_at(ax, c, hu, w, USERC, opacity=0.55)
         mu = DashedLine(ax.c2p(o["y_mean_users"], 0), ax.c2p(o["y_mean_users"], 0.027), color=USERC, stroke_width=2.5)
         mn = DashedLine(ax.c2p(o["y_mean_non"], 0), ax.c2p(o["y_mean_non"], 0.027), color=GREY_B, stroke_width=2.5)
         side = fit_rows(VGroup(
@@ -89,13 +89,7 @@ class SurveyGraph(VoiceoverScene):
             label(r"confounding by indication: \ the people at risk are the ones who switched", font_size=26, color=S.ACCENT),
         ), 12.4, 0.3, [0, -2.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Who are the users? Compare them with everyone else. They are older, by about "
-            f"{o['table'][0][1] - o['table'][0][2]:.0f} years; heavier; slightly richer; <bookmark mark='b'/> and "
-            f"{100 * o['table'][4][1]:.0f} percent of them had been told by a doctor that their pressure was high, against "
-            f"{100 * o['table'][4][2]:.0f} percent of non-users. The standardized differences in the last column are far "
-            f"beyond the tenth that Part thirty-six called balanced. <bookmark mark='c'/> This is confounding by indication: "
-            f"the substitute was taken up by exactly the people whose pressure was already high, often on their doctor's "
-            f"advice. The raw comparison mixes the substitute's effect with the reason for using it."
+            f"<bookmark mark='a'/> Who are the users? Compare them with everyone else. They are older, by about {o['table'][0][1] - o['table'][0][2]:.0f} years; heavier; slightly richer; <bookmark mark='b'/> and {100 * o['table'][4][1]:.0f} percent of them had been told by a doctor that their pressure was high, against {100 * o['table'][4][2]:.0f} percent of non-users. The standardized differences in the last column are large on several measured covariates. A standardized difference of a tenth is a descriptive convention, not a test of exchangeability. <bookmark mark='c'/> This is confounding by indication: the substitute was taken up by exactly the people whose pressure was already high, often on their doctor's advice. The raw comparison mixes the substitute's effect with the reason for using it."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tab))
@@ -216,13 +210,7 @@ class SurveyGraph(VoiceoverScene):
                                label(r"regressions on 40 imputed data sets, \ 90\% intervals", font_size=20, color=GREY_B)),
                         4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Here are the four answers, each with a ninety percent interval. Adjusting for nothing, plus "
-            f"{say(r['naive'][0], 1)}. <bookmark mark='b'/> Adjusting for the back-door set, minus {say(-r['regress'][0], 1)}: "
-            f"the sign has flipped. <bookmark mark='c'/> Adding potassium, the mediator, the effect disappears: "
-            f"{'plus' if r['mediator'][0] > 0 else 'minus'} {say(abs(r['mediator'][0]), 2)}. <bookmark mark='d'/> Adding the "
-            f"clinic visit, the collider, it is exaggerated to minus {say(-r['collider'][0], 1)}. Three analyses of the same "
-            f"survey, three different stories, and only the graph says which to believe. Income, meanwhile, is missing for "
-            f"more than a third of the sample; these regressions used imputed values, which is the next chapter."
+            f"<bookmark mark='a'/> Here are the four answers, each with a ninety percent interval. Adjusting for nothing, plus {say(r['naive'][0], 1)}. <bookmark mark='b'/> Adjusting for the back-door set, minus {say(-r['regress'][0], 1)}: the sign has flipped. <bookmark mark='c'/> Adding potassium, the mediator, the effect disappears: {('plus' if r['mediator'][0] > 0 else 'minus')} {say(abs(r['mediator'][0]), 2)}. <bookmark mark='d'/> Adding the clinic visit, the collider, it is exaggerated to minus {say(-r['collider'][0], 1)}. Three analyses of the same survey, three different stories, and the graph states the causal assumptions needed to interpret them. A graph and a fitted regression cannot verify those assumptions. Income, meanwhile, is missing for more than a third of the sample; these regressions used imputed values, which is the next chapter."
         ) as vo:
             self.play(FadeIn(A), FadeIn(zero), FadeIn(survey_tag()))
             for k, m_ in enumerate("abcd"):

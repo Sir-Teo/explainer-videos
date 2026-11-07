@@ -87,15 +87,11 @@ class SurveyEstimate(VoiceoverScene):
         rows[0][-1].set_color(S.ACCENT)
         whys = [why(r"include the outcome and treatment"), why(r"proper imputation"), why(r"analyse each"), why(r"combine")]
         with self.voiceover(
-            f"<bookmark mark='a'/> So impute. The imputation model predicts log income from everything else, including the "
-            f"treatment and the outcome, and their product, so that it is congenial with the analysis to come. Leaving the "
-            f"outcome out would pull every imputed income's association with pressure towards zero. <bookmark mark='b'/> Each "
-            f"imputation is proper: draw the regression's parameters from their posterior, then each missing value. "
-            f"<bookmark mark='c'/> Forty completed data sets, each analysed by the estimator we are about to build. "
-            f"<bookmark mark='d'/> Rubin's rules combine them. The fraction of missing information is "
-            f"{say(o['res']['fmi'], 2)}: although more than a third of incomes are missing, they cost only about an eighth of the "
-            f"information about the effect, because income is only one confounder and the others predict it."
+            f"<bookmark mark='a'/> So impute. The imputation model predicts log income from everything else, including the treatment and the outcome, and their product, to retain associations relevant to the analysis. This product does not by itself establish congeniality with AIPW; the normal imputation model remains a working assumption. Leaving the outcome out would pull every imputed income's association with pressure towards zero. <bookmark mark='b'/> Each imputation is proper: draw the regression's parameters from their posterior, then each missing value. <bookmark mark='c'/> Forty completed data sets, each analysed by the estimator we are about to build. <bookmark mark='d'/> Rubin's rules combine them. The fraction of missing information is {say(o['res']['fmi'], 2)}: although more than a third of incomes are missing, they cost only about an eighth of the information about the effect, because income is only one confounder and the others predict it."
         ) as vo:
+            heading = label('Working-model imputation does not guarantee congeniality with AIPW', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -113,24 +109,20 @@ class SurveyEstimate(VoiceoverScene):
         hn, _ = np.histogram(ps[~t], bins=bins, density=True)
         c = (bins[:-1] + bins[1:]) / 2
         w = bins[1] - bins[0]
-        up = VGroup(*[Rectangle(width=ax.c2p(w, 0)[0] - ax.c2p(0, 0)[0], height=max(1e-3, ax.c2p(0, min(h, 6))[1] - ax.c2p(0, 0)[1]),
+        up = VGroup(*[Rectangle(width=ax.c2p(w, 0)[0] - ax.c2p(0, 0)[0], height=max(1e-3, ax.c2p(0, h)[1] - ax.c2p(0, 0)[1]),
                                 stroke_width=0, fill_color=USERC, fill_opacity=0.8).move_to(ax.c2p(x, 0), aligned_edge=DOWN) for x, h in zip(c, hu)])
-        dn = VGroup(*[Rectangle(width=ax.c2p(w, 0)[0] - ax.c2p(0, 0)[0], height=max(1e-3, ax.c2p(0, 0)[1] - ax.c2p(0, -min(h, 6))[1]),
+        dn = VGroup(*[Rectangle(width=ax.c2p(w, 0)[0] - ax.c2p(0, 0)[0], height=max(1e-3, ax.c2p(0, 0)[1] - ax.c2p(0, -h)[1]),
                                 stroke_width=0, fill_color=GREY_B, fill_opacity=0.7).move_to(ax.c2p(x, 0), aligned_edge=UP) for x, h in zip(c, hn)])
         axis0 = Line(ax.c2p(0, 0), ax.c2p(1, 0), color=GREY_C, stroke_width=2)
         side = fit_rows(VGroup(
             label(r"a logistic propensity model in $\{A, B, I, D\}$", font_size=24, color=PSC),
             label(r"users, \ up", font_size=24, color=USERC),
             label(r"non-users, \ down", font_size=24, color=GREY_A),
-            label(rf"range {ps.min():.2f} to {ps.max():.2f}: \ overlap everywhere", font_size=24, color=GOODC),
-            label(r"no one certain to switch, \ or certain not to", font_size=22, color=GREY_A),
+            label(rf"range {ps.min():.2f} to {ps.max():.2f}: \ observed overlap; a diagnostic", font_size=24, color=GOODC),
+            label(r"fitted propensities clipped to $[0.01,0.99]$", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> In each completed data set, fit a logistic model for switching given the four confounders. "
-            f"Here are the fitted propensities from one of them: <bookmark mark='b'/> users above the line, <bookmark "
-            f"mark='c'/> non-users below. <bookmark mark='d'/> Users sit further right, as they should, but the two "
-            f"distributions overlap across the whole range, from {say(ps.min(), 2)} to {say(ps.max(), 2)}. <bookmark mark='e'/> "
-            f"No type of person is certain to switch or certain not to, so positivity holds, and no weight will explode."
+            f"<bookmark mark='a'/> In each completed data set, fit a logistic model for switching given the four confounders. Here are the fitted propensities from one of them: <bookmark mark='b'/> users above the line, <bookmark mark='c'/> non-users below. <bookmark mark='d'/> Users sit further right, as they should, but the two distributions show observed overlap across much of the range, from {say(ps.min(), 2)} to {say(ps.max(), 2)}. <bookmark mark='e'/> These fitted probabilities diagnose practical overlap in this completed sample; they do not prove population positivity. We clip fitted propensities to point zero one and point nine nine, which bounds weights but can add bias."
         ) as vo:
             self.play(FadeIn(A), FadeIn(axis0))
             vo.wait_until("a")
@@ -148,7 +140,7 @@ class SurveyEstimate(VoiceoverScene):
     def balance(self):
         o = load("obs")
         names = o["names"]
-        A = axes([-0.1, 0.9], [0, 5.5], x_length=7.4, y_length=4.4, xlabel=r"standardized mean difference, \ users minus non-users",
+        A = axes([-0.1, 0.9], [0, 5.5], x_length=7.4, y_length=4.4, xlabel=r"absolute standardized mean difference",
                  xticks=[0, 0.2, 0.4, 0.6, 0.8], yticks=[], center=[-2.0, 0.2, 0])
         ax = A.ax
         band_ = Rectangle(width=ax.c2p(0.1, 0)[0] - ax.c2p(-0.1, 0)[0], height=ax.c2p(0, 5.5)[1] - ax.c2p(0, 0)[1], stroke_width=0,
@@ -162,15 +154,10 @@ class SurveyEstimate(VoiceoverScene):
             label(r"raw: \ users differ", font_size=24, color=NAIVEC),
             label(r"weighted by $1/\hat e$ and $1/(1 - \hat e)$", font_size=24, color=GOODC),
             label(rf"largest after weighting: \ {max(abs(v) for v in o['smd_w']):.2f}", font_size=24, color=GOODC),
-            label(r"the model has done its job", font_size=24, color=GREY_A),
+            label(r"mean balance does not establish exchangeability", font_size=24, color=GREY_A),
         ), 3.6, 0.42, [5.0, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The check of Part thirty-six: standardized differences before weighting, in red. Age "
-            f"differs by {say(o['smd_raw'][0], 2)} standard deviations, diagnosis by {say(o['smd_raw'][4], 2)}. <bookmark "
-            f"mark='b'/> Weight each user by one over their propensity and each non-user by one over its complement, and "
-            f"recompute. <bookmark mark='c'/> Every difference falls inside the shaded band; the largest is "
-            f"{say(max(abs(v) for v in o['smd_w']), 2)}. <bookmark mark='d'/> The weighted users and non-users look alike on "
-            f"everything the graph says matters."
+            f"<bookmark mark='a'/> The check of Part thirty-six: standardized differences before weighting, in red. Age differs by {say(o['smd_raw'][0], 2)} standard deviations, diagnosis by {say(o['smd_raw'][4], 2)}. <bookmark mark='b'/> Weight each user by one over their propensity and each non-user by one over its complement, and recompute. <bookmark mark='c'/> Every difference falls inside the shaded band; the largest is {say(max((abs(v) for v in o['smd_w'])), 2)}. <bookmark mark='d'/> The weighted users and non-users look alike on the displayed covariate means. This does not establish balance of every distribution or remove hidden confounding."
         ) as vo:
             self.play(FadeIn(A), FadeIn(band_), FadeIn(names_g))
             vo.wait_until("a")
@@ -195,14 +182,11 @@ class SurveyEstimate(VoiceoverScene):
         rows[3][-1].set_color(GOODC)
         whys = [why(r"Part 36"), why(r"influence-function SE"), why(r"double robustness"), why(r"40 imputations, \ Rubin's rules")]
         with self.voiceover(
-            f"<bookmark mark='a'/> The estimator is the augmented inverse probability weighted estimator of Part thirty-six. "
-            f"For each person, the outcome models' predicted difference, corrected by each arm's weighted residual. <bookmark "
-            f"mark='b'/> The estimate is the average, and its standard error comes from the spread of the individual terms, "
-            f"the influence function. <bookmark mark='c'/> It is consistent if either the outcome regressions or the "
-            f"propensity model is right, and here the propensity model has the true form. <bookmark mark='d'/> Pooled over "
-            f"the forty imputations: {say(r[0], 2)} millimetres, standard error {say(r[1], 2)}, ninety percent interval from "
-            f"{say(r[2], 2)} to {say(r[3], 2)}. The substitute lowers pressure, by about two millimetres."
+            f"<bookmark mark='a'/> The estimator is the augmented inverse probability weighted estimator of Part thirty-six. For each person, the outcome models' predicted difference, corrected by each arm's weighted residual. <bookmark mark='b'/> The estimate is the average, and its standard error comes from the spread of the individual terms, the influence function. <bookmark mark='c'/> It is consistent if either the outcome regressions or the propensity model is right, under the causal identification and overlap assumptions. Before missingness, the uptake law is logistic in these covariates; estimated and clipped propensities after working-model imputation need not equal that true law. Consistency does not alone guarantee this influence-function standard error under arbitrary misspecification. <bookmark mark='d'/> Pooled over the forty imputations: {say(r[0], 2)} millimetres, standard error {say(r[1], 2)}, ninety percent interval from {say(r[2], 2)} to {say(r[3], 2)}. Under the stated causal and missing-data assumptions, the estimated reduction is about two millimetres. Rubin pooling here is a working inference procedure whose calibration is examined on the Board, not an automatic doubly robust missing-data guarantee."
         ) as vo:
+            heading = label('Causal, overlap and nuisance conditions support AIPW inference', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

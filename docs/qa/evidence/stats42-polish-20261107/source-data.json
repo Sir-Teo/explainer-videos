@@ -1,0 +1,68 @@
+{
+  "independent_datasets": [
+    {
+      "dataset": "faithful",
+      "rows": 272,
+      "exact": true,
+      "source": "https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/faithful.csv",
+      "sha256": "5043db1e2c51c8e8fd67e0868c768ae589770cc76ad0ac0c5b7afd1fca31fc57"
+    },
+    {
+      "dataset": "airquality",
+      "rows": 153,
+      "columns": 6,
+      "exact": true,
+      "analysis_scope": "111 joint complete cases, not all 116 ozone-observed days",
+      "source": "https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/airquality.csv",
+      "sha256": "65d2c4afd976c169af9bb0bd97e9e78e1e8a185f1b52e2e3153e30f90c7fb5f8"
+    },
+    {
+      "dataset": "Newcomb",
+      "rows": 66,
+      "comparison": "Identical multiset, different Museum ordering",
+      "source": "https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/MASS/newcomb.csv",
+      "sha256": "fa1289ffe98f14d79cc26758999a4b68f63e6821fc1c0b700be193490bbefb9e"
+    },
+    {
+      "dataset": "Longley",
+      "rows": 16,
+      "comparison": "Equivalent units to 1e-8 absolute; R columns multiplied by [1,1000,10,10,1000,1], employment by 1000",
+      "source": "https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/longley.csv",
+      "sha256": "1283706d84cb7697111b42a6aed3aca222df1cda2ed1c3d4913b713b94a5e516"
+    },
+    {
+      "dataset": "Gehan",
+      "rows": 42,
+      "exact_triples": true,
+      "scope": "ordinary log-rank ignores original matching; no primary age claim",
+      "source": "https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/MASS/gehan.csv",
+      "sha256": "b6dc0c39f7eeec171950104432525393af3950d3f2d802439f63195c2147d8a2"
+    },
+    {
+      "dataset": "Stamey prostate",
+      "rows": 97,
+      "max_allowed_rounding_error": 5.1e-08,
+      "source": "https://hastie.su.domains/ElemStatLearn/datasets/prostate.data",
+      "sha256": "65e3c8581c1a140aa4ad27d857df18e024d3ea7560f6a653417740e783daad71"
+    },
+    {
+      "dataset": "eight schools",
+      "rows": 8,
+      "exact": true,
+      "source": "https://raw.githubusercontent.com/stan-dev/example-models/master/misc/eight_schools/eight_schools.data.R",
+      "sha256": "fccd1624bd240b0c26a8b668f4d2181f0653000e4b169d393b3dc815a0b46952"
+    },
+    {
+      "dataset": "Singh prostate microarray",
+      "samples": 102,
+      "genes": 6033,
+      "t_max_error": 5.61836931589621e-07,
+      "z_max_error": 5.868517525819961e-07,
+      "source": "https://raw.githubusercontent.com/cran/sda/master/data/singh2002.rda",
+      "sha256": "b9d09321644e79973bb0e0fbac519c55f5eca1356d1fa2c68d9e2116a48912e2"
+    }
+  ],
+  "not_independently_retrieved": [
+    "Bliss beetle observations: Museum and cited 1935 source; IRLS separately checked numerically"
+  ]
+}

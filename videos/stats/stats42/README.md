@@ -92,9 +92,9 @@ python tools/lecture_length.py stats42 --floor 50
 | 3 | Case 1: the analysis plan | type I error 30% vs 5.3%; power 82% → 95%; trial −3.13 [−5.99, −0.27] |
 | 4 | Case 2: the survey and its graph | +6.7 raw; −2.33 adjusted; +0.09 with the mediator; −4.18 with the collider |
 | 5 | Case 2: imputation and AIPW | 37% missing, FMI 0.13; AIPW −2.22 [−3.42, −1.01] |
-| 6 | Case 2: sensitivity and the report | RV 0.076; benchmark (0.032, 0.028); the trial's −3.3 |
+| 6 | Case 2: sensitivity and the report | RV 0.074; benchmark (0.040, 0.033); the trial's −3.3 |
 | 7 | Exam I: likelihood | SEs 0.527 vs 1.036; β = (−60.72, 34.27); σ² 52,277 vs 92,936 |
-| 8 | Exam II: Bayes and model choice | A: 28 → 11.3; R̂ 1.45 → 1.01; AIC 4 vs BIC 2 |
+| 8 | Exam II: Bayes and model choice | A: 28 → 11.4; R̂ 1.45 → 1.01; AIC 4 vs BIC 2 |
 | 9 | Exam III: smoothing, robustness, sparsity | h 3.99 vs 2.65; IF 4,816; KKT 0.182 off |
 | 10 | Exam IV: discoveries, guarantees, survival | BH 8 vs 4, genes 59 vs 7; 10 ± 4.4; Ŝ(13) = 0.690 ± 0.107 |
 | 11 | Outro | the MSc |
@@ -141,8 +141,8 @@ paying for) and none.
 - **AIPW with Rubin's rules.** −2.22 (SE 0.73), 90% CI [−3.42, −1.01]. With every income known it would be −2.26; the
   truth is −3.0.
 - **Sensitivity.**
-  - The adjusted OLS gives t = −4.35 on 2,993 df, so RV = 0.076 and RV₀.₀₅ = 0.043.
-  - The benchmark, "told: high pressure", has partial R² 0.032 with uptake and 0.028 with pressure. A confounder twice
+  - The adjusted OLS gives t = −4.23 on 2,993 df, so RV = 0.074 and approximate RV₀.₀₅ = 0.041.
+  - The benchmark, "told: high pressure", has classical-OLS partial R² 0.040 with uptake and 0.033 with pressure. A confounder twice
     as strong would not erase the effect; three times as strong would.
 - **The real trial.** The Salt Substitute and Stroke Study (Neal et al. 2021) randomized 600 Chinese villages (20,995
   adults): systolic pressure −3.34 mm Hg, stroke rate ratio 0.86 (0.77–0.96).
@@ -201,7 +201,7 @@ paying for) and none.
    - With a flat prior on μ, p(τ | y) ∝ V_μ^{1/2} Πⱼ (σⱼ² + τ²)^{−1/2} exp(−(yⱼ − μ̂_τ)²/(2(σⱼ² + τ²))), where
      μ̂_τ = Σwⱼyⱼ/Σwⱼ, wⱼ = 1/(σⱼ² + τ²) and V_μ = 1/Σwⱼ.
    - E[θⱼ | τ, y] = (1 − Bⱼ)yⱼ + Bⱼμ̂_τ, with Bⱼ = σⱼ²/(σⱼ² + τ²).
-   - On a grid τ ∈ [0, 30]: the median of τ is 5.2 and its 90th percentile 13.5. School A goes from 28 to 11.3. The
+   - Adaptive quadrature over τ ∈ [0, ∞), with flat priors on μ and τ ≥ 0, gives median τ = 5.24 and 90th percentile 13.73. School A goes from 28 to 11.40. The plot shows [0, 30], excluding 0.501% of posterior mass from its display only. The
      pooled mean is 7.7 (SE 4.1).
 5. **MCMC diagnostics** (Part 27). Split R̂ = √(((n − 1)/n W + B/n)/W), rank-normalized (Vehtari et al. 2021).
    - Badly tuned: 1.45 ≫ 1.01 says the chains disagree. A bulk ESS of 8 says 4,000 draws carry the information of
@@ -225,8 +225,8 @@ paying for) and none.
    - BIC's penalty log n → ∞ drives that probability to zero (0.99 at n = 2,560).
 7. **Silverman's rule** (Part 29).
    - h = 0.9 min(s, IQR/1.349) n^(−1/5) = 0.9 × min(13.59, 17.79) × 272^(−0.2) = 0.9 × 13.59 × 0.3259 = 3.99.
-   - LSCV(h) = ∫f̂² − (2/n)Σf̂₋ᵢ(xᵢ) is unbiased for ISE − ∫f². It chooses 2.65.
-   - The rule is optimal for a normal; a bimodal density has more curvature (larger ∫f''²) and needs less smoothing.
+   - LSCV(h) = ∫f̂² − (2/n)Σf̂₋ᵢ(xᵢ) has expectation E[ISE] − ∫f² under iid sampling at fixed h. It chooses 2.65.
+   - The 0.9 constant is a robust rule of thumb, whereas the Gaussian normal-reference AMISE constant is about 1.06; a bimodal density has more curvature (larger ∫f''²) and needs less smoothing.
      Use LSCV or Sheather–Jones, and show both.
 8. **The variance's influence function** (Part 30).
    - Contaminate: F_ε = (1 − ε)F + εδₓ, so μ_ε = μ + ε(x − μ).
@@ -243,11 +243,10 @@ paying for) and none.
    - Coordinate descent at λ = 0.1 has support {lcavol, lweight, lbph, svi, pgg45} with gⱼ = 0.1 exactly. Off the
      support, max |gⱼ| = 0.056.
 10. **BH by hand** (Part 33). Compare p₍ᵢ₎ with i/120.
-    - p₍₈₎ = 0.0458 ≤ 0.0667, while p₍₉₎ = 0.172 > 0.075, so reject 8 (including p₍₆₎ and p₍₇₎, each above its own
-      line).
+    - p₍₈₎ = 0.0458 ≤ 0.0667, while p₍₉₎ = 0.172 > 0.075, so reject 8 (all eight happen to be below their own lines in this example).
     - Bonferroni (0.1/12 = 0.0083) allows 4. The BH-adjusted p-values are 0.0024, 0.0066, 0.0156, 0.0246, 0.0295,
       0.0434, 0.0687, 0.0687, 0.229, 0.361, 0.714, 0.882.
-    - The promise: E[V/max(R, 1)] ≤ q for independent or PRDS p-values. It is an average over uses, not a statement
+    - The promise: E[V/max(R, 1)] ≤ q for valid null p-values under independence or the specific PRDS condition. It is an average over uses, not a statement
       about this list.
     - On the 6,033 genes: BH finds 59, Bonferroni 7.
 11. **Split conformal** (Part 34).
@@ -268,8 +267,8 @@ paying for) and none.
     - The difference of two arm means of k such terms has variance 2σ²[1 + (m − 1)ρ]/(km).
     - Setting that equal to δ²/(z + z)² and letting m → ∞ gives k ≥ 2(z + z)²ρσ²/δ².
 14. **A collider's bias.**
-    - Take T and Y independent, and V = 1 with probability g(αT + βY), with α and β nonzero and g increasing.
-    - Then P(T = 1 | V = 1, Y = y) = P(T = 1) E[g(α + βy)] / E[g(αT + βy)], which depends on y. So T and Y are
+    - Take T and Y independent, and V = 1 with probability g(αT + βY), with α = β = 1 and g the logistic function, and T and Y independent Bernoulli(1/2).
+    - Then P(T = 1 | V = 1, Y = y) = P(T = 1) E[g(α + βy)] / E[g(αT + βy)], which is about 0.594 at y = 0 and 0.546 at y = 1. So T and Y are
       dependent given V, though independent unconditionally ("explaining away").
 15. **The information identity.**
     - If the model is correct, E[U U'] = −E[∂U/∂θ'], that is B = A, by differentiating ∫f = 1 twice.
@@ -284,9 +283,8 @@ paying for) and none.
     - Each term is minimized by the soft threshold sign(β̂ⱼ^OLS)(|β̂ⱼ^OLS| − λ)₊.
 18. **BH controls the FDR.**
     - For a true null i with independent p-values, write the FDR as Σ over nulls i and k of (1/k) P(pᵢ ≤ qk/m, R = k).
-    - Conditioning on the other p-values (the leave-one-out argument of Benjamini & Yekutieli 2001), each null
-      contributes q/m.
-    - Summing over the m₀ nulls gives FDR = q m₀/m ≤ q.
+    - Conditioning on the other p-values (the leave-one-out argument of Benjamini & Yekutieli 2001), each true null contributes at most q/m for super-uniform null p-values (equality for continuous uniform nulls).
+    - Summing over the m₀ nulls gives FDR ≤ q m₀/m ≤ q; equality holds for independent continuous uniform null p-values.
 
 ## Glossary
 
@@ -311,3 +309,14 @@ paying for) and none.
 - **Part 49**: AIPW attains the semiparametric efficiency bound.
 - **Part 55**: the qualifying exam, the PhD's version of this part.
 - **Part 58**: anytime-valid inference and adaptive designs revisit trial design.
+
+
+## Scientific conditions and QA scope
+
+The trial calculations assume independent Gaussian towns with equal measured cluster sizes and negligible between-town interference. The floor on town counts is for the unadjusted equal-size approximation. Randomization alone does not guarantee exactly unbiased arbitrary ANCOVA adjustment in finite samples. The sensitivity display uses one seeded completed dataset and classical OLS geometry; it is separate from pooled MI-AIPW inference. Its updated RV is 0.0744, approximate significance RV 0.0407, with benchmark coordinates (0.0398, 0.0331).
+
+The worked survey uses 40 imputations; the 400-survey Board uses 10 per survey. Normal income imputation, fitted/clipped propensities and Rubin pooling are working procedures, with calibration checked empirically. Mean balance and observed overlap do not prove causal exchangeability or population positivity. The Board now records actual independent replications and empirical MCSEs. Zero observed coverage does not establish that the underlying coverage probability is exactly zero.
+
+The full eight-schools posterior integrates tau over [0, infinity); the [0,30] plot excludes 0.501% of mass from display only. School A's full posterior mean is 11.40. The ozone exercises use 111 jointly complete air-quality days. Seasonal/serial exchangeability is unverified, so their conformal intervals illustrate the procedure without certifying a future-day time-series guarantee. Gehan's ordinary log-rank calculation ignores the original matching; its confidence bands are approximate pointwise bands under independent censoring.
+
+[Scientific review and verification evidence](../../../docs/qa/evidence/stats42-polish-20261107/source-review.md) records numerical checks and source-data scope. English visual review is in progress. Chinese narration/captions, continuous listening/playback and final masters remain open. The MSc milestone denotes this course's level, not an accredited qualification.

@@ -37,17 +37,12 @@ class ExamNonparametric(ExamMixin, VoiceoverScene):
             cmath(r"h", r"=", r"0.9 \, \min\big(s, \ \text{IQR}/1.349\big)\, n^{-1/5}", font_size=34),
             cmath(r"\phantom{h}", r"=", rf"0.9 \times \min({d['s']:.2f}, \ {d['iqr'] / 1.349:.2f}) \times {d['n']}^{{-1/5}}", font_size=32),
             cmath(r"\phantom{h}", r"=", rf"0.9 \times {d['a']:.2f} \times {d['n_fifth']:.4f} = {d['h_s']:.2f} \text{{ min}}", font_size=32),
-            cmath(r"\text{LSCV}(h)", r"=", r"\textstyle\int \hat f_h^2 - \tfrac2n \sum_i \hat f_{h,-i}(x_i) \ \ \text{(unbiased for ISE} - \int f^2)", font_size=28),
+            cmath(r"\text{LSCV}(h)", r"=", r"\textstyle\int \hat f_h^2 - \tfrac2n \sum_i \hat f_{h,-i}(x_i) \ \ \text{(expectation: expected ISE} - \int f^2)", font_size=28),
         ]
         rows[2][-1].set_color(S.ALT)
         whys = [why(r"Silverman (1986)"), why(r"robust scale"), why(r"the rule's answer"), why(r"Rudemo, \ Bowman")]
         with self.voiceover(
-            f"<bookmark mark='a'/> Silverman's rule is nought point nine times the smaller of the standard deviation and the "
-            f"interquartile range over one point three four nine, times n to the minus a fifth. <bookmark mark='b'/> The "
-            f"interquartile range over one point three four nine is {say(d['iqr'] / 1.349, 2)}, so the standard deviation "
-            f"is the smaller. <bookmark mark='c'/> The rule gives {say(d['h_s'], 2)} minutes. <bookmark mark='d'/> "
-            f"Cross-validation instead minimizes an unbiased estimate of the integrated squared error, computed by leaving "
-            f"each point out, and it picks {say(d['h_cv'], 2)}: a third less smoothing."
+            f"<bookmark mark='a'/> Silverman's rule is nought point nine times the smaller of the standard deviation and the interquartile range over one point three four nine, times n to the minus a fifth. <bookmark mark='b'/> The interquartile range over one point three four nine is {say(d['iqr'] / 1.349, 2)}, so the standard deviation is the smaller. <bookmark mark='c'/> The rule gives {say(d['h_s'], 2)} minutes. <bookmark mark='d'/> Cross-validation instead minimizes an estimate whose expectation is expected integrated squared error minus the fixed integral of the true density squared, computed by leaving each point out, and it picks {say(d['h_cv'], 2)}: a third less smoothing."
         ) as vo:
             step = ladder(self, rows, whys, keep=3, top=LTOP, x=-0.9, buff=0.8, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -68,17 +63,18 @@ class ExamNonparametric(ExamMixin, VoiceoverScene):
             label(rf"Silverman: \ $h = {d['h_s']:.2f}$", font_size=24, color=S.ALT),
             label(rf"LSCV: \ $h = {d['h_cv']:.2f}$", font_size=24, color=S.ACCENT),
             label(rf"$3\times$ the rule: \ one mode lost", font_size=24, color=GREY_A),
-            label(r"the rule is optimal for a normal; \ a bimodal density needs less", font_size=22, color=GREY_A),
+            label(r"$0.9$: robust rule; normal-reference constant $1.06$", font_size=22, color=GREY_A),
             label(r"use LSCV, \ or Sheather--Jones; \ show both", font_size=24, color=GOODC),
         ), 4.6, 0.36, [4.45, -1.0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> On the histogram, the rule's estimate in teal and cross-validation's in gold. <bookmark "
-            "mark='b'/> Both find two modes, near fifty-five and eighty minutes, and cross-validation's are sharper. "
-            "<bookmark mark='c'/> Triple the bandwidth and the shape is wrong. <bookmark mark='d'/> They differ because "
-            "Silverman's rule is the optimal bandwidth for a normal density, and a density with two well-separated modes "
-            "has far more curvature than a normal with the same spread, so it needs less smoothing. <bookmark mark='e'/> "
-            "Use cross-validation, or the Sheather–Jones plug-in of Part twenty-nine, and when the choice matters, show the "
-            "reader both."
+            "<bookmark mark='a'/> On the histogram, the rule's estimate in teal and cross-validation's in gold. "
+            "<bookmark mark='b'/> Both find two modes, near fifty-five and eighty minutes, and cross-validation's are"
+            " sharper. <bookmark mark='c'/> Triple the bandwidth and the shape is wrong. <bookmark mark='d'/> They "
+            "differ because the point nine rule is a robust rule of thumb; the Gaussian normal-reference AMISE "
+            "constant is about one point zero six. For these two well-separated modes, and a density with two "
+            "well-separated modes has far more curvature than a normal with the same spread, so it needs less "
+            "smoothing. <bookmark mark='e'/> Use cross-validation, or the Sheather–Jones plug-in of Part twenty-nine,"
+            " and when the choice matters, show the reader both."
         ) as vo:
             self.play(FadeIn(A), FadeIn(bars), FadeIn(museum_tag(r"Old Faithful, \ August 1978--79")))
             vo.wait_until("a")
@@ -142,19 +138,11 @@ class ExamNonparametric(ExamMixin, VoiceoverScene):
             label(rf"variance: \ {d['var']:.1f} with it, \ {d['var_clean']:.1f} without", font_size=22, color=S.RESID),
             label(rf"mean {d['mean']:.2f}: \ its curve is a line", font_size=22, color=S.RESID),
             label(rf"median {d['median']:.1f}: \ bounded, \ a step", font_size=22, color=S.CTRL),
-            label(rf"Huber {d['huber']:.2f}: \ bounded, \ smooth", font_size=22, color=GOODC),
+            label(rf"Huber {d['huber']:.2f}: \ bounded, \ piecewise smooth", font_size=22, color=GOODC),
             label(r"the modern value: \ 33.0", font_size=22, color=EXACT),
         ), 4.6, 0.32, [4.45, -1.0, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> At Newcomb's minus forty-four, the variance's influence function is about "
-            f"{d['if_var_at_out'][0]:,.0f}. <bookmark mark='b'/> Divided by sixty-six, that one point should add about "
-            f"seventy-three to the variance, and it does: {say(d['var'], 1)} with it, {say(d['var_clean'], 1)} without. "
-            f"<bookmark mark='c'/> For the centre, here are the sensitivity curves: the effect of adding one more timing "
-            f"anywhere. The mean's is a straight line, unbounded, <bookmark mark='d'/> the median's a bounded step, "
-            f"<bookmark mark='e'/> and Huber's estimate is bounded and smooth, close to the median's robustness with nearly "
-            f"the mean's efficiency. The mean is {say(d['mean'], 2)}, Huber's estimate {say(d['huber'], 2)}. <bookmark "
-            f"mark='f'/> The modern value of the speed of light corresponds to thirty-three: the bias in Newcomb's data was "
-            f"systematic, and no estimator could remove it."
+            f"<bookmark mark='a'/> At Newcomb's minus forty-four, the variance's influence function is about {d['if_var_at_out'][0]:,.0f}. <bookmark mark='b'/> Divided by sixty-six, its first-order influence predicts roughly seventy-three variance units. The exact deletion effect differs because the mean and denominator also change: {say(d['var'], 1)} with it, {say(d['var_clean'], 1)} without. <bookmark mark='c'/> For the centre, here are the sensitivity curves: the effect of adding one more timing anywhere. The mean's is a straight line, unbounded, <bookmark mark='d'/> the median's a bounded step, <bookmark mark='e'/> and Huber's estimate is bounded and piecewise smooth. Its efficiency depends on the tuning, scale and population model. The mean is {say(d['mean'], 2)}, Huber's estimate {say(d['huber'], 2)}. <bookmark mark='f'/> The modern value of the speed of light corresponds to thirty-three: the bias in Newcomb's data was systematic, and robustness to extreme points alone cannot identify or correct a shared systematic offset."
         ) as vo:
             self.play(FadeIn(A), FadeIn(museum_tag(r"Newcomb (1882), \ Stigler (1977)")))
             vo.wait_until("a")
@@ -209,13 +197,14 @@ class ExamNonparametric(ExamMixin, VoiceoverScene):
                 step(k, transform=False)
         self.play(*[FadeOut(m) for m in self.mobjects if m is not card])
         names = d["names"]
-        A = axes([0, 8], [0, 0.2], x_length=6.6, y_length=3.2, ylabel=r"$|g_j|$", xticks=[], yticks=[0, 0.1, 0.2], center=[-2.6, -0.9, 0])
+        gmax = max(0.2, float(np.ceil(np.max(np.abs(d["grad_w"]))*10)/10))
+        A = axes([0, 8], [0, gmax], x_length=6.6, y_length=3.2, ylabel=r"$|g_j|$", xticks=[], yticks=[0, 0.1, 0.2], center=[-2.6, -0.9, 0])
         ax = A.ax
         lam = DashedLine(ax.c2p(0, 0.1), ax.c2p(8, 0.1), color=S.ACCENT, stroke_width=2.5)
         laml = label(r"$\lambda$", font_size=24, color=S.ACCENT).next_to(ax.c2p(8, 0.1), RIGHT, buff=0.1)
         gw, gc = np.abs(np.asarray(d["grad_w"])), np.abs(np.asarray(d["grad"]))
-        b_w = bars_at(ax, np.arange(8) + 0.3, np.minimum(gw, 0.2), 0.36, S.RESID, opacity=0.8)
-        b_c = bars_at(ax, np.arange(8) + 0.7, np.minimum(gc, 0.2), 0.36, GOODC, opacity=0.85)
+        b_w = bars_at(ax, np.arange(8) + 0.3, gw, 0.36, S.RESID, opacity=0.8)
+        b_c = bars_at(ax, np.arange(8) + 0.7, gc, 0.36, GOODC, opacity=0.85)
         on = np.asarray(d["b"]) != 0
         nm = VGroup(*[label(n, font_size=16, color=GREY_A if not on[j] else WHITE).rotate(0.6).next_to(ax.c2p(j + 0.5, 0), DOWN, buff=0.25)
                       for j, n in enumerate(names)])
@@ -225,15 +214,10 @@ class ExamNonparametric(ExamMixin, VoiceoverScene):
             label(r"green: \ coordinate descent's", font_size=22, color=GOODC),
             label(rf"in the model ($|g_j| = \lambda$): \ {sel}", font_size=20, color=GOODC),
             label(rf"out of it: \ max $|g_j| = {d['off_max']:.3f} < 0.1$", font_size=22, color=GOODC),
-            label(r"a KKT check proves optimality: \ the problem is convex", font_size=22, color=GREY_A),
+            label(r"signed KKT conditions certify numerical optimality to tolerance", font_size=22, color=GREY_A),
         ), 4.6, 0.36, [4.45, -1.0, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> In red, the colleague's g values against the line at lambda: some nonzero coefficients sit "
-            f"above it, some below, and none exactly on it. <bookmark mark='b'/> In green, coordinate descent's answer. "
-            f"<bookmark mark='c'/> Every predictor in its model touches the line exactly: {sel}. <bookmark mark='d'/> Every "
-            f"predictor left out sits below it, the largest at {say(d['off_max'], 3)}. <bookmark mark='e'/> Because the "
-            f"lasso is convex, these conditions are not just necessary but sufficient: passing them proves the answer is "
-            f"the minimum. A KKT check is the cheapest proof in statistics, and an examiner's favourite."
+            f"<bookmark mark='a'/> In red, the colleague's g values against the line at lambda: some nonzero coefficients sit above it, some below, and none exactly on it. <bookmark mark='b'/> In green, coordinate descent's answer. <bookmark mark='c'/> Every predictor in its model satisfies the signed KKT equality to numerical tolerance: {sel}. <bookmark mark='d'/> Every predictor left out sits below it, the largest at {say(d['off_max'], 3)}. <bookmark mark='e'/> Because the lasso is convex, these conditions are not just necessary but sufficient: passing their signed conditions to solver tolerance certifies numerical optimality to that tolerance. A KKT check is the cheapest proof in statistics, and an examiner's favourite."
         ) as vo:
             self.play(FadeIn(A), FadeIn(lam), FadeIn(laml), FadeIn(nm), FadeIn(museum_tag(r"Stamey et al. (1989): \ prostate cancer")))
             vo.wait_until("a")

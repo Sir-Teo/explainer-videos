@@ -42,33 +42,25 @@ class ExamModern(ExamMixin, VoiceoverScene):
         rows[2][-1].set_color(S.PRIOR)
         whys = [why(r"the step-up rule"), why(r"the last crossing"), why(r"twice the discoveries"), why(r"a rate, \ on average")]
         with self.voiceover(
-            f"<bookmark mark='a'/> Compare the i-th smallest p-value with i over twelve times point one, i over a hundred and "
-            f"twenty, and find the largest i where it falls below. <bookmark mark='b'/> The eighth, {say(p[7], 4)}, is below "
-            f"eight over a hundred and twenty, about point oh six seven; the ninth, {say(p[8], 3)}, is above its line, and "
-            f"so are all the rest. <bookmark mark='c'/> So BH rejects the eight smallest, including the sixth and seventh, "
-            f"which were each above their own lines: the procedure steps up from the last crossing. Bonferroni's threshold, "
-            f"point one over twelve, allows only {d['bonf']}. <bookmark mark='d'/> The promise is about an average: over "
-            f"repeated use, the expected share of false discoveries among the discoveries is at most ten percent, for "
-            f"independent or positively dependent p-values. It says nothing about which of the eight are false, and nothing "
-            f"about this particular list."
+            f"<bookmark mark='a'/> Compare the i-th smallest p-value with i over twelve times point one, i over a hundred and twenty, and find the largest i where it falls below. <bookmark mark='b'/> The eighth, {say(p[7], 4)}, is below eight over a hundred and twenty, about point oh six seven; the ninth, {say(p[8], 3)}, is above its line, and so are all the rest. <bookmark mark='c'/> So BH rejects the eight smallest, here all eight are also below their own lines. In other examples the step-up rule can include earlier p-values that exceed their individual lines: the procedure steps up from the last crossing. Bonferroni's threshold, point one over twelve, allows only {d['bonf']}. <bookmark mark='d'/> The promise is about an average: over repeated use, the expected share of false discoveries among the discoveries is at most ten percent, for valid null p-values under independence or the specific PRDS positive-dependence condition. Arbitrary positive correlations are not enough. It says nothing about which of the eight are false, and nothing about this particular list."
         ) as vo:
             step = ladder(self, rows, whys, keep=3, top=LTOP, x=-0.9, buff=0.8, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
         self.play(*[FadeOut(m) for m in self.mobjects if m is not card])
-        A = axes([0, 13], [0, 0.12], x_length=5.0, y_length=3.0, xlabel=r"rank $i$", ylabel=r"$p_{(i)}$", xticks=[1, 4, 8, 12],
-                 yticks=[0, 0.05, 0.1], center=[-4.0, -1.1, 0])
+        A = axes([0, 13], [0, 1.0], x_length=5.0, y_length=3.0, xlabel=r"rank $i$", ylabel=r"$p_{(i)}$", xticks=[1, 4, 8, 12],
+                 yticks=[0, 0.1, 0.5, 1.0], center=[-4.0, -1.1, 0])
         ax = A.ax
         line = Line(ax.c2p(0, 0), ax.c2p(13, 13 * 0.1 / 12), color=S.PRIOR, stroke_width=3)
-        dots = VGroup(*[Dot(ax.c2p(i + 1, min(v, 0.12)), radius=0.07, color=S.PRIOR if i < d["k"] else GREY_B) for i, v in enumerate(p)])
+        dots = VGroup(*[Dot(ax.c2p(i + 1, v), radius=0.07, color=S.PRIOR if i < d["k"] else GREY_B) for i, v in enumerate(p)])
         gs = np.asarray(d["genes_sorted"])
         m = d["genes"]
-        B = axes([0, 400], [0, 0.008], x_length=4.6, y_length=3.0, xlabel=r"rank, \ 6,033 genes", xticks=[0, 200, 400],
+        B = axes([0, 400], [0, max(.008, float(np.ceil(gs.max()*1000)/1000))], x_length=4.6, y_length=3.0, xlabel=r"rank, \ 6,033 genes", xticks=[0, 200, 400],
                  yticks=[0, 0.004, 0.008], center=[1.6, -1.1, 0])
         bx = B.ax
         gl = Line(bx.c2p(0, 0), bx.c2p(400, 400 * 0.1 / m), color=S.PRIOR, stroke_width=3)
-        gd = VGroup(*[Dot(bx.c2p(i + 1, min(v, 0.008)), radius=0.025, color=S.PRIOR if i < d["genes_k"] else GREY_C) for i, v in enumerate(gs)])
+        gd = VGroup(*[Dot(bx.c2p(i + 1, v), radius=0.025, color=S.PRIOR if i < d["genes_k"] else GREY_C) for i, v in enumerate(gs)])
         side = fit_rows(VGroup(
             label(rf"genes: \ BH finds {d['genes_k']}", font_size=22, color=S.PRIOR),
             label(rf"Bonferroni: \ {d['genes_bonf']}", font_size=22, color=GREY_A),
@@ -117,14 +109,7 @@ class ExamModern(ExamMixin, VoiceoverScene):
         rows[2][-1].set_color(S.KEPT)
         whys = [why(r"the quantile lemma"), why(r"sort, \ count"), why(r"symmetric"), why(r"exchangeability")]
         with self.voiceover(
-            f"<bookmark mark='a'/> With n equal to nine and alpha point two, take k as the ceiling of ten times point eight: "
-            f"{d['kt']}. <bookmark mark='b'/> Sort the residuals; the {d['kt']}th smallest is {say(d['qt'], 1)}. <bookmark "
-            f"mark='c'/> The interval is ten plus or minus {say(d['qt'], 1)}: from {say(10 - d['qt'], 1)} to "
-            f"{say(10 + d['qt'], 1)}. <bookmark mark='d'/> The proof: if the new point and the calibration points are "
-            f"exchangeable, the new residual's rank among all ten is equally likely to be any of one to ten, so it is at or "
-            f"below the {d['kt']}th with probability at least {d['kt']} over ten. The guarantee assumes only "
-            f"exchangeability, not a correct model; but it is marginal, an average over new points, not a promise for "
-            f"each kind of point."
+            f"<bookmark mark='a'/> With n equal to nine and alpha point two, take k as the ceiling of ten times point eight: {d['kt']}. <bookmark mark='b'/> Sort the residuals; the {d['kt']}th smallest is {say(d['qt'], 1)}. <bookmark mark='c'/> The interval is ten plus or minus {say(d['qt'], 1)}: from {say(10 - d['qt'], 1)} to {say(10 + d['qt'], 1)}. <bookmark mark='d'/> The proof: if the new point and the calibration points are exchangeable, conditional on the separate training sample, its rank is uniform when scores are distinct or ties are randomly broken; ties only make the usual nonrandomized bound conservative, so it is at or below the {d['kt']}th with probability at least {d['kt']} over ten. The guarantee assumes only exchangeability, not a correct model; but it is marginal, an average over new points, not a promise for each kind of point."
         ) as vo:
             step = ladder(self, rows, whys, keep=3, top=LTOP, x=-0.9, buff=0.8, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -147,17 +132,10 @@ class ExamModern(ExamMixin, VoiceoverScene):
             label(rf"$k = \lceil 38 \times 0.9 \rceil = {d['k']}$: \ $q = {q:.1f}$ ppb", font_size=22, color=S.KEPT),
             label(rf"at 85$^\circ$F: \ {d['pred0']:.0f} $\pm$ {q:.0f}", font_size=22, color=S.KEPT),
             label(rf"test coverage: \ {100 * d['cover']:.0f}\% of 37", font_size=22, color=S.KEPT),
-            label(r"too wide when cool, \ too narrow when hot: \ CQR adapts", font_size=20, color=GREY_A),
+            label(r"constant width; CQR adapts; day exchangeability is unverified", font_size=20, color=GREY_A),
         ), 4.6, 0.36, [4.45, -1.0, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The same recipe on New York's ozone: a line in temperature fitted to thirty-seven days, "
-            f"residuals on {d['n_cal']} others, and k equal to the ceiling of thirty-eight times point nine, {d['k']}. "
-            f"<bookmark mark='b'/> The band is the line plus or minus {say(q, 1)} parts per billion; at eighty-five degrees, "
-            f"about {d['pred0']:.0f} plus or minus {q:.0f}. <bookmark mark='c'/> On the thirty-seven held-out days it "
-            f"covered every one. <bookmark mark='d'/> But a constant width is a poor fit to ozone, whose spread grows with "
-            f"temperature: too wide on cool days and close to failing on hot ones, so its coverage is far from even across "
-            f"temperatures. Conformalized quantile regression, from Part thirty-four, lets the width follow the spread "
-            f"while keeping the guarantee."
+            f"<bookmark mark='a'/> The same recipe on New York's ozone: a line in temperature fitted to thirty-seven days, residuals on {d['n_cal']} others, and k equal to the ceiling of thirty-eight times point nine, {d['k']}. <bookmark mark='b'/> The band is the line plus or minus {say(q, 1)} parts per billion; at eighty-five degrees, about {d['pred0']:.0f} plus or minus {q:.0f}. <bookmark mark='c'/> On the thirty-seven held-out days it covered every one. <bookmark mark='d'/> But a constant width is a poor fit to ozone, whose spread grows with temperature: too wide on cool days and close to failing on hot ones, so its coverage is far from even across temperatures. Conformalized quantile regression lets width follow the spread. Both rank guarantees still require exchangeable calibration and future scores conditional on separate training. Seasonal and serial dependence in these air-quality days makes this an illustration, not a verified time-series guarantee."
         ) as vo:
             self.play(FadeIn(A), FadeIn(dots), FadeIn(museum_tag(r"New York air quality, \ 1973")))
             vo.wait_until("a")
@@ -172,23 +150,24 @@ class ExamModern(ExamMixin, VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
         show_board(self, board_rows("conformal"),
-                   "<bookmark mark='a'/> And the Board, over four thousand draws from the World: a split-conformal "
-                   "interval with ninety-nine calibration points, for a new adult's pressure from age and BMI, covers "
-                   "ninety percent, exactly as the lemma says it must.",
+                   "<bookmark mark='a'/> And the Board, over four thousand draws from the World: a split-conformal interval "
+            "with ninety-nine calibration points, for a new adult's pressure from age and BMI, covers ninety percent,"
+            " within simulation error of the marginal lower bound. The lemma does not require every finite simulation"
+            " to produce exactly ninety percent.",
                    [("a", [0])])
 
     # ------------------------------------------------------------------------------------------ Problem 12
     def p12(self):
         d = load("p_km")
         card = ExamCard(12, r"Kaplan--Meier with Greenwood's variance", r"Part 40", [
-            r"Freireich's 6-MP arm, \ 21 children, \ weeks in remission \ ($+$ censored): \ 6, 6, 6, 6+, 7, 9+, 10, 10+, 11+, 13,",
+            r"Freireich's 6-MP arm, \ 21 patients, \ weeks in remission \ ($+$ censored): \ 6, 6, 6, 6+, 7, 9+, 10, 10+, 11+, 13,",
             r"16, 17+, 19+, 20+, 22, 23, 25+, 32+, 32+, 34+, 35+. \ \ Compute $\hat S(t)$ to week 13,",
             r"its Greenwood standard error at week 13, \ and a log-log 95\% interval."], marks=12, color=S.EST)
         self.pose_voiceover(
-            "Problem twelve. The six-MP arm of Freireich's 1963 leukaemia trial: twenty-one children, with their weeks in "
-            "remission, a plus marking those still in remission when last seen. Compute the Kaplan–Meier estimate up to week "
-            "thirteen, its Greenwood standard error at week thirteen, and a log-log ninety-five percent interval. Pause and "
-            "try it.", card)
+            "Problem twelve. The six-MP arm of Freireich's 1963 leukaemia trial: twenty-one patients, with their "
+            "weeks in remission, a plus marking those still in remission when last seen. Compute the Kaplan–Meier "
+            "estimate up to week thirteen, its Greenwood standard error at week thirteen, and a log-log ninety-five "
+            "percent interval. Pause and try it.", card)
         r = d["rows"][:4]
         tab = table_rows([[r"$t$", r"$n_t$", r"$d_t$", r"$1 - d_t/n_t$", r"$\hat S(t)$", r"$\frac{d_t}{n_t(n_t - d_t)}$"]] +
                          [[f"{x['t']:.0f}", f"{x['n']:.0f}", f"{x['d']:.0f}", rf"{x['n'] - x['d']:.0f}/{x['n']:.0f}", f"{x['s']:.3f}",
@@ -200,14 +179,7 @@ class ExamModern(ExamMixin, VoiceoverScene):
             label(rf"log-log: \ $\hat S^{{\exp(\pm 1.96\, s)}}$, \ $s = \sqrt{{\sum}} / |\log \hat S| = {np.sqrt(gw) / abs(np.log(r[3]['s'])):.3f}$: \ \ [{r[3]['lo']:.3f}, \ {r[3]['hi']:.3f}]", font_size=26, color=S.EST),
         ), 12.4, 0.35, [0, -2.2, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Only the times with a relapse change the curve. At week six, twenty-one are at risk and "
-            f"three relapse: the curve falls to eighteen over twenty-one, {say(r[0]['s'], 3)}. <bookmark mark='b'/> The "
-            f"child censored at six leaves the risk set without a step, so at week seven seventeen are at risk, and one "
-            f"relapses. <bookmark mark='c'/> At ten, fifteen at risk; at thirteen, twelve, after the censorings at nine, ten "
-            f"and eleven. The estimate at thirteen is {say(r[3]['s'], 3)}. <bookmark mark='d'/> Greenwood's formula: the "
-            f"square of the estimate times the sum of d over n times n minus d, which gives a standard error of "
-            f"{say(r[3]['se'], 3)}. <bookmark mark='e'/> The log-log interval transforms, builds a symmetric interval, and "
-            f"transforms back, so it stays inside zero and one: from {say(r[3]['lo'], 2)} to {say(r[3]['hi'], 2)}."
+            f"<bookmark mark='a'/> Only the times with a relapse change the curve. At week six, twenty-one are at risk and three relapse: the curve falls to eighteen over twenty-one, {say(r[0]['s'], 3)}. <bookmark mark='b'/> The patient censored at six leaves the risk set without a step, so at week seven seventeen are at risk, and one relapses. <bookmark mark='c'/> At ten, fifteen at risk; at thirteen, twelve, after the censorings at nine, ten and eleven. The estimate at thirteen is {say(r[3]['s'], 3)}. <bookmark mark='d'/> Greenwood's formula: the square of the estimate times the sum of d over n times n minus d, which gives a standard error of {say(r[3]['se'], 3)}. <bookmark mark='e'/> The log-log interval transforms, builds a symmetric interval, and transforms back, so it stays inside zero and one: from {say(r[3]['lo'], 2)} to {say(r[3]['hi'], 2)}."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tab[0]), FadeIn(tab[1]))
@@ -229,17 +201,12 @@ class ExamModern(ExamMixin, VoiceoverScene):
         bd = k1.band(km["loglog"][0], km["loglog"][1], color=S.EST, opacity=0.22)
         side = fit_rows(VGroup(
             label(r"6-MP, \ with its log-log band", font_size=22, color=S.EST),
-            label(r"placebo: \ 21 children, \ none censored", font_size=22, color=GREY_A),
+            label(r"placebo: \ 21 patients, \ none censored", font_size=22, color=GREY_A),
             label(rf"medians: \ {d['median1']:.0f} weeks vs {d['median0']:.0f}", font_size=22),
-            label(rf"log-rank $\chi^2_1 = {d['logrank']['chi2']:.1f}$, \ $p < 0.0001$", font_size=22, color=S.EST),
+            label(rf"unstratified log-rank $\chi^2_1 = {d['logrank']['chi2']:.1f}$, \ $p < 0.0001$", font_size=22, color=S.EST),
         ), 4.6, 0.36, [4.45, -1.0, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Here is the whole curve, with its pointwise band, and censored children marked by ticks. "
-            f"<bookmark mark='b'/> Beside it, the placebo arm, in which every child relapsed, most within a few weeks. "
-            f"<bookmark mark='c'/> The median remission is {d['median1']:.0f} weeks on six-MP against {d['median0']:.0f} on "
-            f"placebo, <bookmark mark='d'/> and the log-rank statistic of Part forty is {say(d['logrank']['chi2'], 1)} on one "
-            f"degree of freedom. This was one of the first randomized trials in childhood leukaemia, and its curves are "
-            f"still the textbook example: the reason survival analysis needed Kaplan, Meier and Greenwood."
+            f"<bookmark mark='a'/> Here is the whole curve, with its pointwise band, and censored patients marked by ticks. Independent censoring is required; these are pointwise approximate intervals. <bookmark mark='b'/> Beside it, the placebo arm, in which every patient had an observed relapse, most within a few weeks. <bookmark mark='c'/> The median remission is {d['median1']:.0f} weeks on six-MP against {d['median0']:.0f} on placebo, <bookmark mark='d'/> and the ordinary unstratified log-rank statistic of Part forty is {say(d['logrank']['chi2'], 1)} on one degree of freedom. This was an early randomized matched-pair leukaemia trial, and its curves are still the textbook example: the reason survival analysis needed Kaplan, Meier and Greenwood."
         ) as vo:
             self.play(FadeIn(A), FadeIn(museum_tag(r"Freireich et al. (1963), \ via Gehan (1965)")))
             vo.wait_until("a")

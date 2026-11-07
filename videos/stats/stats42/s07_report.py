@@ -29,20 +29,16 @@ class SurveyReport(VoiceoverScene):
             cmath(r"\hat\tau_{\text{OLS}}", r"=", rf"{b:.2f}, \ \ \text{{SE}} = {se:.2f}, \ \ t = {o['t_stat']:.2f} \ \text{{on {o['dof']:,} df}}", font_size=32),
             cmath(r"f", r"=", rf"|t| / \sqrt{{\text{{df}}}} = {abs(o['t_stat']) / math.sqrt(o['dof']):.4f}", font_size=32),
             cmath(r"\text{RV}", r"=", rf"\tfrac12\big(\sqrt{{f^4 + 4f^2}} - f^2\big) = {o['rv']:.3f}", font_size=34),
-            cmath(r"\text{RV}_{0.05}", r"=", rf"{o['rv_a']:.3f}: \ \text{{enough to make it insignificant}}", font_size=32),
+            cmath(r"\text{RV}_{0.05}", r"=", rf"{o['rv_a']:.3f}: \ \text{{approximate classical-OLS significance threshold}}", font_size=32),
         ]
         rows[2][-1].set_color(S.ACCENT)
-        whys = [why(r"the adjusted regression"), why(r"the partial Cohen's $f$"), why(r"Cinelli \& Hazlett (2020)"), why(r"a weaker bar")]
+        whys = [why(r"one completed dataset; classical OLS sensitivity"), why(r"the partial Cohen's $f$"), why(r"Cinelli \& Hazlett (2020)"), why(r"a weaker bar")]
         with self.voiceover(
-            f"<bookmark mark='a'/> The estimate rests on one assumption the data cannot check: that the graph has every common "
-            f"cause of switching and pressure. Part thirty-six's robustness value asks how strong a missing one would have to "
-            f"be. Start from the adjusted regression: {say(b, 2)}, with a t statistic of {say(o['t_stat'], 2)} on almost three "
-            f"thousand degrees of freedom. <bookmark mark='b'/> Divide the t by the root of the degrees of freedom. <bookmark "
-            f"mark='c'/> Carlos Cinelli and Chad Hazlett's robustness value is then {say(o['rv'], 3)}: a hidden confounder "
-            f"explaining {100 * o['rv']:.1f} percent of the residual variance of both switching and pressure would erase the "
-            f"effect. <bookmark mark='d'/> One explaining {100 * o['rv_a']:.1f} percent of each would make it no longer "
-            f"significant at five percent."
+            f"<bookmark mark='a'/> The estimate rests on one assumption the data cannot check: that the graph has every common cause of switching and pressure. Part thirty-six's robustness value asks how strong a missing one would have to be. Start from one seeded completed dataset and its adjusted regression, using classical OLS standard errors for the partial-variance identities. This is a sensitivity illustration for that OLS coefficient, not pooled MI-AIPW inference: {say(b, 2)}, with a t statistic of {say(o['t_stat'], 2)} on almost three thousand degrees of freedom. <bookmark mark='b'/> Divide the t by the root of the degrees of freedom. <bookmark mark='c'/> Carlos Cinelli and Chad Hazlett's robustness value is then {say(o['rv'], 3)}: a hidden confounder explaining {100 * o['rv']:.1f} percent of the residual variance of both switching and pressure would erase the effect. <bookmark mark='d'/> One explaining {100 * o['rv_a']:.1f} percent of each would make it no longer significant at five percent."
         ) as vo:
+            heading = label('Classical OLS sensitivity on one completed dataset', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -110,13 +106,15 @@ class SurveyReport(VoiceoverScene):
             label(r"a cluster-randomized trial: \ Case 1's design, \ answering Case 2's question", font_size=24, color=S.ACCENT),
         ), 12.4, 0.4, [0, -1.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Observational evidence is strongest when it agrees with experiments, and here there is a "
-            "real one. Bruce Neal and colleagues' Salt Substitute and Stroke Study, published in 2021, randomized six hundred "
-            "villages in rural China, with about twenty-one thousand adults at high risk, to a salt substitute of three "
-            "quarters sodium chloride and one quarter potassium chloride, or to ordinary salt, for about five years. <bookmark "
-            "mark='b'/> Pressure fell by about three point three millimetres in the substitute villages, <bookmark mark='c'/> "
-            "and strokes by fourteen percent, with fewer deaths. <bookmark mark='d'/> It is a cluster-randomized trial, Case "
-            "one's design, and it answers Case two's question, in the same direction as our survey."
+            "<bookmark mark='a'/> Observational evidence is strongest when it agrees with experiments, and here there"
+            " is a real one. Bruce Neal and colleagues' Salt Substitute and Stroke Study, published in 2021, "
+            "randomized six hundred villages in rural China, with about twenty-one thousand adults at high risk, to a"
+            " salt substitute of three quarters sodium chloride and one quarter potassium chloride, or to ordinary "
+            "salt, for about five years. <bookmark mark='b'/> Pressure fell by about three point three millimetres in"
+            " the substitute villages, <bookmark mark='c'/> and strokes by fourteen percent, with fewer deaths. "
+            "<bookmark mark='d'/> It is a cluster-randomized trial, Case one's design, and it supports the same "
+            "direction of effect in its own high-risk rural Chinese population. Transporting its magnitude to the "
+            "island requires further assumptions."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(hc, shift=UP * 0.2))
@@ -129,29 +127,22 @@ class SurveyReport(VoiceoverScene):
         o = load("obs")
         r = o["res"]["mi_aipw"]
         lines = [
-            (rf"Finding: \ among comparable adults, \ using the substitute lowered systolic pressure", WHITE),
+            (rf"Finding: \ under the stated assumptions, \ the estimated pressure reduction is", WHITE),
             (rf"by about {-r[0]:.1f} mm Hg \ (90\% interval {-r[3]:.1f} to {-r[2]:.1f}).", WHITE),
             (r"Why the newspapers saw the opposite: \ people already told their pressure was high", GREY_A),
             (r"were three times as likely to switch.", GREY_A),
             (r"Assumptions: \ every common cause of switching and pressure was measured;", GREY_A),
             (r"income missing at random, \ given what was seen.", GREY_A),
-            (r"Robustness: \ a hidden factor would need more than twice the strength", GREY_A),
+            (r"OLS sensitivity illustration: \ a hidden factor needs more than twice the strength", GREY_A),
             (r"of a diagnosis of high pressure to erase the effect.", GREY_A),
             (r"Agreement: \ a randomized trial in 600 villages found 3.3 mm Hg, \ and 14\% fewer strokes.", GREY_A),
             (r"Advice: \ keep it on sale; \ promote it through Case 1's health workers;", S.ACCENT),
-            (r"warn people with kidney disease, \ for whom extra potassium is dangerous.", S.ACCENT),
+            (r"obtain clinical advice for kidney disease or potassium-raising medicines.", S.ACCENT),
         ]
         m = memo(lines, r"To the Minister \ \textbullet\ \ the salt substitute \ \textbullet\ \ one page", width=12.8, font_size=24).move_to([0, 0, 0])
         groups = [[2, 3], [4, 5], [6, 7], [8], [9, 10]]
         with self.voiceover(
-            f"<bookmark mark='a'/> And then the page the minister will actually read. It leads with the finding, in the "
-            f"minister's units: among comparable adults, using the substitute lowered pressure by about "
-            f"{say(-r[0], 1)} millimetres, with an interval from {say(-r[3], 1)} to {say(-r[2], 1)}. <bookmark mark='b'/> "
-            f"It explains, in one sentence, why the newspapers saw the opposite. <bookmark mark='c'/> It states the "
-            f"assumptions in plain words, <bookmark mark='d'/> and how far they could fail before the conclusion changed. "
-            f"<bookmark mark='e'/> It says what independent evidence agrees. <bookmark mark='f'/> And it ends with advice the "
-            f"data support: keep the substitute on sale, promote it, and warn people with kidney disease, for whom extra "
-            f"potassium is dangerous. No p-values, no Greek; every number in it traceable to the analysis."
+            f"<bookmark mark='a'/> And then the page the minister will actually read. It leads with the finding, in the minister's units: among comparable adults, using the substitute lowered pressure by about {say(-r[0], 1)} millimetres, with an interval from {say(-r[3], 1)} to {say(-r[2], 1)}. <bookmark mark='b'/> It explains, in one sentence, why the newspapers saw the opposite. <bookmark mark='c'/> It states the assumptions in plain words, <bookmark mark='d'/> and a separate OLS sensitivity illustration. It does not quantify sensitivity to the missing-at-random assumption or directly bound the pooled AIPW effect. <bookmark mark='e'/> It says what independent evidence agrees. <bookmark mark='f'/> And it ends with advice the data support: keep the substitute on sale, promote it, and recommend clinical review for kidney disease or potassium-raising medicines because extra potassium can cause hyperkalaemia. No p-values, no Greek; every number in it traceable to the analysis."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(m[0]), FadeIn(m[1]), FadeIn(m[2][0]), FadeIn(m[2][1]))
@@ -167,16 +158,11 @@ class SurveyReport(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(rf"the World's truth: \ the substitute lowers pressure by {-o['tau']:.1f} mm Hg, \ for everyone", font_size=26, color=EXACT),
             label(rf"our estimate: \ ${r['mi_aipw'][0]:.2f}$, \ interval [{r['mi_aipw'][2]:.2f}, \ {r['mi_aipw'][3]:.2f}]: \ it covers", font_size=26, color=GOODC),
-            label(rf"with every income known: \ ${o['true_aipw'][0]:.2f}$: \ the rest is this survey's luck", font_size=24, color=GREY_A),
+            label(rf"with every income known: \ ${o['true_aipw'][0]:.2f}$: \ sampling variation and fitted-model approximation remain", font_size=24, color=GREY_A),
             label(rf"the headline's estimate: \ $+{r['naive'][0]:.1f}$: \ the wrong sign, \ with great confidence", font_size=26, color=NAIVEC),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The World can tell us what no real consultant ever learns. The substitute lowers everyone's "
-            f"pressure by exactly three millimetres. <bookmark mark='b'/> Our estimate, {say(r['mi_aipw'][0], 2)}, has an "
-            f"interval that covers it. <bookmark mark='c'/> Had every income been known, the same estimator would have given "
-            f"{say(o['true_aipw'][0], 2)}; the remaining gap from three is this one survey's sampling luck, which the "
-            f"interval was built to allow for. <bookmark mark='d'/> The headline's comparison had the wrong sign, and a "
-            f"narrow interval around it."
+            f"<bookmark mark='a'/> The World can tell us what no real consultant ever learns. The substitute lowers everyone's pressure by exactly three millimetres. <bookmark mark='b'/> Our estimate, {say(r['mi_aipw'][0], 2)}, has an interval that covers it. <bookmark mark='c'/> Had every income been known, the same estimator would have given {say(o['true_aipw'][0], 2)}; the remaining gap can reflect sampling variation and fitted-model approximation, which the interval was built to allow for. <bookmark mark='d'/> The headline's comparison had the wrong sign, and a narrow interval around it."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
