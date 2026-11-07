@@ -48,7 +48,7 @@ class FDR(VoiceoverScene):
             cmath(r"p_{(1)} \le \dots \le p_{(m)}", r":", r"\text{sort}", font_size=32),
             cmath(r"k", r"=", r"\max\{i : p_{(i)} \le q\, i/m\}", font_size=34),
             cmath(r"\text{reject}", r":", r"H_{(1)}, \dots, H_{(k)}", font_size=32),
-            cmath(r"\text{FDR\vee1}", r"\le", r"\pi_0 q \ \ \text{(independent tests)}", font_size=32),
+            cmath(r"\text{FDR}", r"\le", r"\pi_0 q \ \ \text{(independent tests)}", font_size=32),
         ]
         rows[1][-1].set_color(BHC)
         whys = [why(r"as for Holm"), why(r"the last crossing of a line"), why(r"step up"), why(r"the theorem")]
@@ -132,7 +132,7 @@ class FDR(VoiceoverScene):
 
     def proof_setup(self):
         rows = [
-            cmath(r"V/(R\vee1)", r"=", r"\textstyle\sum_{i \in H_0} \mathbf 1\{H_i \text{ rejected}\}/R", font_size=30),
+            cmath(r"V/(R\vee1)", r"=", r"\textstyle\sum_{i \in H_0} \mathbf 1\{H_i \text{ rejected}\}/(R\vee1)", font_size=30),
             cmath(r"H_i \text{ rejected}, \ R = k", r"\iff", r"p_i \le qk/m \text{ and } R^{(i)} = k", font_size=30),
             cmath(r"R^{(i)}", r":", r"\text{BH's count with } p_i \text{ set to } 0", font_size=30),
             cmath(r"p_i", r"\perp", r"R^{(i)} \ \ \text{(independence)}", font_size=32),
@@ -161,7 +161,7 @@ class FDR(VoiceoverScene):
             cmath(r"E\big[\tfrac{\mathbf 1\{i \text{ rej.}\}}{R\vee1}\big]", r"=", r"\textstyle\sum_k \tfrac1k P(p_i \le \tfrac{qk}{m})\, P(R^{(i)} = k)", font_size=28),
             cmath(r"", r"=", r"\textstyle\sum_k \tfrac1k \cdot \tfrac{qk}{m} \cdot P(R^{(i)} = k)", font_size=30),
             cmath(r"", r"=", r"\tfrac{q}{m} \textstyle\sum_k P(R^{(i)} = k) = \tfrac{q}{m}", font_size=30),
-            cmath(r"\text{FDR\vee1}", r"=", r"m_0 \cdot \tfrac{q}{m} = \pi_0 q", font_size=34),
+            cmath(r"\text{FDR}", r"=", r"m_0 \cdot \tfrac{q}{m} = \pi_0 q", font_size=34),
         ]
         rows[3][-1].set_color(BHC)
         whys = [why(r"independence"), why(r"$p_i$ uniform"), why(r"the $k$'s cancel"), why(r"exactly, \ for independent nulls")]
@@ -235,8 +235,8 @@ class FDR(VoiceoverScene):
         rows = [
             cmath(r"R(t)", r"=", r"\#\{p_i \le t\}", font_size=32),
             cmath(r"E\,V(t)", r"\approx", r"m_0 t \le m t", font_size=32),
-            cmath(r"\widehat{\mathrm{FDR\vee1}}(t)", r"=", r"m t / R(t)", font_size=32),
-            cmath(r"\text{BH}", r"=", r"\text{the largest } t \text{ with } \widehat{\mathrm{FDR\vee1}}(t) \le q", font_size=30),
+            cmath(r"\widehat{\mathrm{FDR}}(t)", r"=", r"m t / (R(t)\vee1)", font_size=32),
+            cmath(r"\text{BH}", r"=", r"\text{the largest } t \text{ with } \widehat{\mathrm{FDR}}(t) \le q", font_size=30),
         ]
         rows[2][-1].set_color(BHC)
         whys = [why(r"discoveries at threshold $t$"), why(r"nulls are uniform"), why(r"a plug-in estimate"), why(r"Storey's reading of BH")]
