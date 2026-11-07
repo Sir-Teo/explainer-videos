@@ -25,19 +25,16 @@ class PACBayes(VoiceoverScene):
         rows = [
             cmath(r"\pi", r":", r"\text{a prior over rules, \ fixed before seeing the data}", font_size=34),
             cmath(r"\rho", r":", r"\text{any posterior, \ chosen after; \ } R(\rho) = E_{h \sim \rho} R(h)", font_size=34),
-            cmath(r"\text{w.p. } 1 - \delta, \ \forall\rho", r":", r"\mathrm{kl}\big(R_n(\rho)\,\|\,R(\rho)\big) \le \frac{\mathrm{KL}(\rho\|\pi) + \log(2\sqrt n/\delta)}{n}", font_size=32),
+            cmath(r"0\le\ell\le1,\ \text{w.p. }1-\delta,\ \forall\rho", r":", r"\mathrm{kl}\big(R_n(\rho)\,\|\,R(\rho)\big) \le \frac{\mathrm{KL}(\rho\|\pi) + \log(2\sqrt n/\delta)}{n}", font_size=32),
             cmath(r"\text{weaker, \ simpler}", r":", r"R(\rho) \le R_n(\rho) + \sqrt{\frac{\mathrm{KL}(\rho\|\pi) + \log(2\sqrt n/\delta)}{2n}}", font_size=32),
         ]
         rows[2][-1].set_color(BOUNDC)
         whys = [why(r"no need to be true"), why(r"a Gibbs classifier"), why(r"Seeger; \ Maurer (2004)"), why(r"McAllester (1999)")]
+        heading = label('Independent prior and bounded losses protect the Gibbs risk', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> PAC-Bayes, from David McAllester in 1999, mixes the two worlds. Fix a prior over rules "
-            "before seeing the data; it need not be true, it is just a reference. <bookmark mark='b'/> After seeing the data, "
-            "choose any posterior over rules, and consider its average risk. <bookmark mark='c'/> Then, with probability one "
-            "minus delta, for every posterior simultaneously, the binary Kullback–Leibler divergence between its empirical and "
-            "true average risk is at most the KL divergence from the posterior to the prior, plus a log term, over n. "
-            "<bookmark mark='d'/> A weaker but simpler form: the true risk is at most the empirical risk plus the root of the "
-            "same quantity over two n."
+            "<bookmark mark='a'/> Take independent data, losses in zero to one, and a prior fixed independently of this sample. <bookmark mark='b'/> After seeing it, choose a posterior. The risk here is the Gibbs risk: average loss when a classifier is drawn from that posterior. It is not automatically the risk of a deterministic majority vote. <bookmark mark='c'/> With probability one minus delta, the binary KL bound holds simultaneously for all posteriors. <bookmark mark='d'/> Pinsker's inequality gives the simpler square-root version. These statements permit posterior and temperature selection on the same sample, because the event is already simultaneous."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -53,6 +50,9 @@ class PACBayes(VoiceoverScene):
             cmath(r"\text{Jensen}", r":", r"\mathrm{kl} \text{ convex: \ } \mathrm{kl}(R_n(\rho)\|R(\rho)) \le E_\rho\,\mathrm{kl}", font_size=32),
         ]
         whys = [why(r"variational formula"), why(r"for one $h$"), why(r"the prior is fixed"), why(r"for the average")]
+        heading = label('A fixed prior and an exponential moment yield a simultaneous bound', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> The proof is four lines. The Donsker–Varadhan variational formula bounds any posterior "
             "expectation by the KL divergence plus the log of the prior expectation of an exponential. <bookmark mark='b'/> "
@@ -140,13 +140,16 @@ class PACBayes(VoiceoverScene):
             cmath(r"\rho_\lambda \propto \pi\, e^{-\lambda n R_n}", r":", r"\text{minimizes } \lambda n R_n(\rho) + \mathrm{KL}(\rho\|\pi)", font_size=32),
             cmath(r"\text{log loss}, \ \lambda = 1", r":", r"\rho = \text{the Bayesian posterior}", font_size=34),
             cmath(r"\text{the bound}", r"\leftrightarrow", r"-\log(\text{marginal likelihood}): \ \text{Germain et al. (2016)}", font_size=32),
-            cmath(r"\text{so}", r":", r"\text{Bayesian model evidence is a PAC-Bayes certificate}", font_size=34),
+            cmath(r"\text{so}", r":", r"\text{unbounded log loss needs a separate moment theorem}", font_size=34),
         ]
         rows[1][-1].set_color(GOODC)
         rows[3][-1].set_color(BOUNDC)
-        whys = [why(r"the bound's optimizer"), why(r"Part 53's posterior"), why(r"the same objective"), why(r"two theories meet")]
+        whys = [why(r"the variational objective"), why(r"Part 53's posterior"), why(r"the same objective"), why(r"two theories meet")]
+        heading = label('The Gibbs variational identity is distinct from a generalization theorem', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> The Gibbs posterior is not an arbitrary choice: it is exactly the posterior that minimizes the PAC-Bayes objective, lambda n times the empirical risk plus the KL divergence from the prior. <bookmark mark='b'/> With the log loss and lambda equal to one, it is the ordinary Bayesian posterior. <bookmark mark='c'/> Pascal Germain and colleagues showed in 2016 that the minimized bound is then essentially minus the log marginal likelihood. <bookmark mark='d'/> So the Bayesian model evidence of Part twenty-eight is a PAC-Bayes certificate: two theories that grew up apart meet in one formula."
+            "<bookmark mark='a'/> A Gibbs posterior exactly minimizes a linear empirical-risk-plus-KL objective. It need not minimize the displayed nonlinear KL bound at a fixed temperature. Here lambda multiplies n times empirical risk; the preceding chart used lambda times empirical risk, so its temperature parameter is n times this one. <bookmark mark='b'/> Natural-log likelihood loss at lambda one yields the ordinary Bayesian posterior. <bookmark mark='c'/> The optimum variational objective equals minus log marginal likelihood. <bookmark mark='d'/> But log loss can be unbounded: applying a PAC-Bayes generalization theorem to evidence requires its own exponential-moment or model assumptions. Evidence alone is not a certificate from the bounded-loss theorem."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -158,18 +161,12 @@ class PACBayes(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"why PAC-Bayes matters now:", font_size=28, color=GREY_A),
             label(r"the prior may be anything chosen before the data, \ even learned on other data", font_size=26, color=CLASSC),
-            label(r"flat minima: \ a posterior spread around the weights, \ with small KL", font_size=26, color=TESTC),
+            label(r"flatness can preserve low loss; \ KL also depends on the prior", font_size=26, color=TESTC),
             label(r"Dziugaite \& Roy (2017): \ the first non-vacuous bounds for deep networks", font_size=26, color=GOODC),
             label(r"Catoni (2007): \ PAC-Bayes as a general theory of Gibbs estimators", font_size=26, color=BOUNDC),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Why PAC-Bayes matters now. <bookmark mark='b'/> The prior can be anything fixed before the "
-            "data are seen, even one learned on separate data, which makes the bounds remarkably flexible. <bookmark "
-            "mark='c'/> For neural networks, a posterior spread around the trained weights has small KL if the training "
-            "found a flat minimum, where perturbing the weights barely changes the loss. <bookmark mark='d'/> Gintare Karolina "
-            "Dziugaite and Daniel Roy used this in 2017 to give the first non-vacuous generalization bounds for deep networks "
-            "trained on real data. <bookmark mark='e'/> And Olivier Catoni's monograph of 2007 developed PAC-Bayes into a "
-            "general theory of Gibbs estimators."
+            "<bookmark mark='a'/> PAC-Bayes is flexible because the reference prior need only be independent of the evaluated sample. <bookmark mark='b'/> A prior learned from separate data is allowed. Data-dependent choices on the same sample require a different bound or an explicit cost. <bookmark mark='c'/> Flatness helps find a spread-out posterior with low empirical loss, but does not by itself imply small KL: the reference prior and parameter scaling matter. <bookmark mark='d'/> Dziugaite and Roy constructed non-vacuous neural-network bounds by controlling both terms. <bookmark mark='e'/> Catoni developed related Gibbs estimators and bounds under explicit loss assumptions."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

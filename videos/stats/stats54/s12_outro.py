@@ -8,7 +8,7 @@ PROBLEMS = [
     r"Show $\hat{\mathfrak R}_n\{x \mapsto \langle w, x\rangle: \|w\| \le B\} \le B\sqrt{\sum\|x_i\|^2}/n$.",
     r"For realizable thresholds, \ show ERM's risk exceeds $\varepsilon$ with probability at most $2(1 - \varepsilon)^n$.",
     r"Prove Hedge's regret bound $\log K/\eta + \eta T/8$ \ with the potential $\Phi_t = \log\sum_k e^{-\eta L_{t,k}}$.",
-    r"Find $\psi$ for the hinge loss: \ show the conditional excess hinge risk at $\eta(x)$ is $|2\eta(x) - 1|$ \ times the 0--1 excess.",
+    r"Find $\psi$ for the hinge loss: \ show conditional excess hinge risk dominates conditional 0--1 excess.",
 ]
 
 
@@ -124,10 +124,7 @@ class Outro(VoiceoverScene):
         tr.to_edge(UP, buff=0.8)
         nxt.next_to(tr, DOWN, buff=1.0)
         with self.voiceover(
-            "Fifty-four parts of sixty-five, and the courses of the PhD core are complete. <bookmark mark='a'/> Learning from a sample is "
-            "possible because the class of rules you search, or the algorithm that searches it, is limited in what it can "
-            "fit. When either is too flexible, the sample stops telling the truth about the population, and only fresh "
-            "data can. <bookmark mark='b'/> Next, Part fifty-five: the qualifying exam."
+            "Fifty-four parts of sixty-five, and the courses of the PhD core are complete. <bookmark mark='a'/> Generalization depends on the learning rule, the data distribution and the capacity it effectively uses. Uniform bounds are one route; margins, stability, PAC-Bayes and the geometry of interpolation give others. Independent evaluation remains essential when choosing among models. <bookmark mark='b'/> Next, Part fifty-five: the qualifying exam."
         ) as vo:
             self.play(FadeIn(tr))
             vo.wait_until("a")

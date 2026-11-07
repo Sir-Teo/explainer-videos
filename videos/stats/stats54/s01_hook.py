@@ -8,20 +8,7 @@ import numpy as np
 from videos.stats.stats54.common import *  # noqa: F403
 
 
-def separator(pts, labels):
-    """A half-plane w.x > b realizing the labelling, by search over directions; None if there is none."""
-    pts = np.asarray(pts, float)
-    lab = np.asarray(labels, bool)
-    for th in np.linspace(0, 2 * math.pi, 720, endpoint=False):
-        w = np.array([math.cos(th), math.sin(th)])
-        s = pts @ w
-        if lab.all():
-            return w, float(s.min() - 0.5)
-        if not lab.any():
-            return w, float(s.max() + 0.5)
-        if s[lab].min() > s[~lab].max():
-            return w, float((s[lab].min() + s[~lab].max()) / 2)
-    return None, 0.0
+from videos.stats.stats54.checked import separator
 
 
 class Hook(VoiceoverScene):

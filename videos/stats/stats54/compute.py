@@ -12,7 +12,7 @@ Items:
     rademacher Rademacher complexity of linear and kernel classes against their trace bounds
     boosting  AdaBoost with stumps on the breast cancer data: training and test error, margins by round
     pacbayes  a Gibbs posterior over 101 thresholds: empirical and true risk, KL, McAllester and kl bounds by temperature
-    stability ridge regression: uniform stability and the generalization gap by lambda
+    stability bounded ridge: sampled replacement loss changes and signed generalization gaps by lambda
     sgd       SGD on logistic regression: parameter divergence on neighbouring samples against Hardt-Recht-Singer
     bandits   UCB1, EXP3 and epsilon-greedy on five Bernoulli arms against Lai-Robbins
     online    Hedge over 50 experts: regret against sqrt(T log K / 2); online-to-batch
@@ -33,6 +33,7 @@ from explainer.stats import museum
 from explainer.stats.board import Row, save_rows
 from explainer.stats.kit import empirical as EK
 from explainer.stats.kit import slt as SL
+from . import checked as CK
 
 CACHE = Cache("stats54")
 load = CACHE.load
@@ -74,32 +75,37 @@ def compute_erm():
     ns = [25, 50, 100, 200, 400, 800, 1600]
     out = {}
     for eta in (0.0, 0.1, 0.4):
-        ex, dev = [], []
+        ex, dev, ex_se, dev_se = [], [], [], []
         for n in ns:
             e, d = [], []
             for _ in range(200):
                 x, y = SL.threshold_data(n, r, eta=eta)
-                t = SL.erm_threshold(x, y)
+                t = CK.erm_threshold(x, y)
                 e.append(float(SL.threshold_risk(t, eta=eta) - eta))
-                d.append(SL.uniform_deviation_threshold(x, y, eta=eta))
+                d.append(CK.uniform_deviation_threshold(x, y, eta=eta))
             ex.append(float(np.mean(e)))
             dev.append(float(np.mean(d)))
-        out[str(eta)] = {"excess": ex, "dev": dev}
+            ex_se.append(CK.mcse(e)); dev_se.append(CK.mcse(d))
+        out[str(eta)] = {"excess": ex, "dev": dev, "excess_mcse": ex_se, "dev_mcse": dev_se}
     return {"ns": ns, "by_eta": out, "vc": [SL.vc_bound(n, 1) for n in ns], "rad": [SL.rademacher_vc_bound(n, 1) for n in ns]}
 
 
 def compute_rademacher():
     r = rng(5403)
     ns = [25, 50, 100, 200, 400, 800]
-    lin, linb, ker, kerb = [], [], [], []
+    lin, linb, ker, kerb, lse, kse = [], [], [], [], [], []
     for n in ns:
         X = r.standard_normal((n, 10)) / math.sqrt(10)
-        lin.append(SL.rademacher_linear(X, 1.0, r))
+        signs = r.choice([-1., 1.], size=(2000, n))
+        vals = np.linalg.norm(signs @ X, axis=1) / n
+        lin.append(float(vals.mean())); lse.append(CK.mcse(vals))
         linb.append(SL.rademacher_linear_bound(X, 1.0))
         K = SL.gaussian_kernel(X, 0.5)
-        ker.append(SL.rademacher_kernel(K, 1.0, r))
+        signs = r.choice([-1., 1.], size=(2000, n))
+        vals = np.sqrt(np.maximum(np.einsum("ri,ij,rj->r", signs, K, signs), 0)) / n
+        ker.append(float(vals.mean())); kse.append(CK.mcse(vals))
         kerb.append(math.sqrt(np.trace(K)) / n)
-    return {"ns": ns, "linear": lin, "linear_bound": linb, "kernel": ker, "kernel_bound": kerb}
+    return {"ns": ns, "linear": lin, "linear_bound": linb, "kernel": ker, "kernel_bound": kerb, "linear_mcse": lse, "kernel_mcse": kse, "sign_draws": 2000}
 
 
 def compute_boosting():
@@ -111,9 +117,11 @@ def compute_boosting():
     tr, te = idx[:340], idx[340:]
     mu, sd = X[tr].mean(0), X[tr].std(0)
     Z = (X - mu) / sd
-    out = SL.adaboost(Z[tr], y[tr], 400, Z[te], y[te])
+    out = CK.adaboost(Z[tr], y[tr], 400, Z[te], y[te])
     marg = {k: np.sort(v) for k, v in out["margins"].items()}
     return {"n_train": len(tr), "n_test": len(te), "train": out["train"], "test": out["test"], "margins": marg,
+            "weighted_errors": out["weighted_errors"], "alphas": out["alphas"],
+            "tie_rule": "zero ensemble score predicts +1; cuts never split equal features",
             "zero_round": int(next((i + 1 for i, e in enumerate(out["train"]) if e == 0), -1))}
 
 
@@ -131,6 +139,7 @@ def compute_pacbayes():
         kl = SL.kl_discrete(rho, np.full(101, 1 / 101))
         er = float(rho @ emp)
         b = SL.pac_bayes_bounds(er, kl, n)
+        b["kl"] = CK.kl_inverse(er, (kl + math.log(2 * math.sqrt(n) / .05)) / n)
         rows.append({"lam": lam, "emp": er, "true": float(rho @ true), "kl": kl, "mcallester": b["mcallester"], "kl_bound": b["kl"]})
     best = int(np.argmin(emp))
     return {"n": n, "eta": eta, "rows": rows, "erm_emp": float(emp[best]), "erm_true": float(true[best]),
@@ -138,23 +147,41 @@ def compute_pacbayes():
 
 
 def compute_stability():
+    """Bounded design: sampled replacement LOSS changes, not the uniform supremum."""
     r = rng(5406)
-    n, p = 200, 50
-    lams = [0.001, 0.01, 0.03, 0.1, 0.3, 1.0, 3.0]
-    beta = r.standard_normal(p) / math.sqrt(p)
+    n, p, reps = 200, 50, 10
+    lams = [.001, .01, .03, .1, .3, 1., 3.]
+    beta = np.ones(p) / math.sqrt(p)
+    def data(m):
+        X = r.standard_normal((m, p))
+        X /= np.maximum(1., np.linalg.norm(X, axis=1))[:, None]
+        y = .5 * (X @ beta) + .5 * r.uniform(-1, 1, m)
+        return X, y
     rows = []
     for lam in lams:
-        st, gap = [], []
-        for _ in range(10):
-            X = r.standard_normal((n, p)) / math.sqrt(p)
-            y = X @ beta + 0.5 * r.standard_normal(n)
+        probes, gaps = [], []
+        for _ in range(reps):
+            X, y = data(n)
+            Xt, yt = data(2000)
             w = SL.ridge_fit(X, y, lam)
-            Xt = r.standard_normal((2000, p)) / math.sqrt(p)
-            yt = Xt @ beta + 0.5 * r.standard_normal(2000)
-            gap.append(float(np.mean((yt - Xt @ w) ** 2) - np.mean((y - X @ w) ** 2)))
-            st.append(SL.ridge_stability(X, y, lam)["stability"])
-        rows.append({"lam": lam, "stability": float(np.mean(st)), "gap": float(np.mean(gap))})
-    return {"n": n, "p": p, "rows": rows}
+            loss = (yt - Xt @ w)**2
+            gaps.append(float(loss.mean() - np.mean((y - X @ w)**2)))
+            diffs = []
+            for i in range(0, n, n // 20):
+                Xi, yi = X.copy(), y.copy()
+                xr, yr = data(1)
+                Xi[i], yi[i] = xr[0], yr[0]
+                wi = SL.ridge_fit(Xi, yi, lam)
+                diffs.append(float(np.max(np.abs(loss - (yt - Xt @ wi)**2))))
+            probes.append(max(diffs))
+        # Half-squared loss gradient <= 1+1/sqrt(lambda), ||w||<=1/sqrt(lambda).
+        # For full squared loss the conservative replacement bound is 4L_half^2/(lambda*n).
+        uniform_bound = 4 * (1 + 1 / math.sqrt(lam))**2 / (lam * n)
+        rows.append(dict(lam=lam, stability=float(np.mean(probes)), gap=float(np.mean(gaps)),
+                         stability_mcse=CK.mcse(probes), gap_mcse=CK.mcse(gaps),
+                         sampled_loss_changes=probes, gaps=gaps, uniform_bound=uniform_bound))
+    return dict(n=n, p=p, reps=reps, rows=rows, x_radius=1., y_bound=1.,
+                scope="20 sampled neighbours and 2000 validation points per dataset; diagnostic, not uniform stability")
 
 
 def compute_sgd():
@@ -165,8 +192,10 @@ def compute_sgd():
     y = np.sign(X @ (np.ones(p) / math.sqrt(p)) + 0.3 * r.standard_normal(n))
     out = {"n": n, "p": p, "steps": steps}
     for lr in (0.2, 1.0):
-        d = SL.sgd_divergence(X, y, steps, lr, r, reps=40)
-        out[str(lr)] = {"div": d["divergence"][9::10], "bound": d["bound"][9::10]}
+        d = CK.sgd_divergence(X, y, steps, lr, r, reps=40)
+        out[str(lr)] = {"div": d["divergence"][9::10], "bound": d["bound"][9::10],
+                        "mcse": d["mcse"][9::10], "paths": d["paths"][:, 9::10],
+                        "changed_visits": d["changed_visits"][:, 9::10]}
     out["t"] = list(range(10, steps + 1, 10))
     return out
 
@@ -177,7 +206,10 @@ def compute_bandits():
     ts = np.unique(np.round(np.geomspace(10, T, 80)).astype(int))
     out = {"mu": mu, "T": T, "ts": ts}
     for a in ("ucb", "exp3", "greedy"):
-        out[a] = np.mean([SL.bandit(mu, T, a, r)[ts - 1] for _ in range(reps)], axis=0)
+        paths = np.array([SL.bandit(mu, T, a, r)[ts - 1] for _ in range(reps)])
+        out[a] = paths.mean(0)
+        out[a + "_mcse"] = paths.std(0, ddof=1) / math.sqrt(reps)
+        out[a + "_paths"] = paths
     out["lai"] = SL.lai_robbins(mu, ts)
     return out
 
@@ -192,11 +224,13 @@ def compute_online():
     ts = np.unique(np.round(np.geomspace(10, T, 60)).astype(int))
     reg = h["regret"][ts - 1]
     bound = [math.log(K) / eta + eta * int(t) / 8 for t in ts]  # the fixed-eta bound; it equals sqrt(T log K / 2) at T
-    return {"T": T, "K": K, "ts": ts, "regret": reg, "bound": bound, "final": float(h["regret"][-1]), "final_bound": SL.hedge_bound(T, K)}
+    return {"T": T, "K": K, "ts": ts, "regret": reg, "bound": bound, "final": float(h["regret"][-1]), "final_bound": SL.hedge_bound(T, K),
+            "scope": "deterministic mixture loss, not realized random expert losses",
+            "expected_advantage": .095}
 
 
 def compute_surrogate():
-    th = np.linspace(-1, 1, 201)
+    th = np.linspace(0, 1, 101)
     return {"theta": th, **{k: SL.psi_transform(th, k) for k in ("hinge", "logistic", "exponential", "squared")}}
 
 
@@ -204,10 +238,15 @@ def compute_interp():
     r = rng(5408)
     n = 100
     ps = [10, 25, 50, 70, 85, 92, 97, 100, 103, 110, 130, 160, 200, 300, 500, 1000]
-    risk = [SL.min_norm_risk(n, p, r, reps=12, p_total=1000) for p in ps]
-    benign = [{"n": m, **SL.benign_risk(m, r, reps=4)} for m in (50, 100, 200, 400)]
-    short = SL.benign_risk(200, r, p_tail=400, tail_var=0.025, reps=4)
-    return {"n": n, "ps": ps, "risk": risk, "benign": benign, "short_tail": short}
+    samples = [[SL.min_norm_risk(n, p, r, reps=1, p_total=1000) for _ in range(12)] for p in ps]
+    risk = np.mean(samples, axis=1)
+    analytic = [CK.expected_min_norm_risk(n, p) for p in ps]
+    benign = [{"n": m, **CK.benign_risk(m, r, reps=4)} for m in (50, 100, 200, 400)]
+    short = CK.benign_risk(200, r, p_tail=400, tail_var=0.025, reps=4)
+    return {"n": n, "ps": ps, "risk": risk, "samples": samples, "median": np.median(samples, axis=1),
+            "expected_excess": analytic, "infinite_expected_at": [n-1, n, n+1],
+            "risk_scope": "latent excess prediction risk; excludes new-response noise .25; 12 finite draws",
+            "benign": benign, "short_tail": short}
 
 
 def compute_board():
@@ -236,6 +275,8 @@ def compute_board():
         Row(54, r"Hoeffding $+$ union bound over the class", st, "coverage", 0.95, cov["union"] / reps, reps),
         Row(54, r"Wald interval on a fresh holdout", st, "coverage", 0.95, cov["holdout"] / reps, reps),
     ]
+    for row in rows:
+        row.mc_se = math.sqrt(row.achieved * (1 - row.achieved) / reps)
     save_rows(54, rows)
     return {"rows": [asdict(q) | {"verdict": q.verdict, "se": q.se} for q in rows], "union_half": SL.finite_class_bound(n, K)}
 

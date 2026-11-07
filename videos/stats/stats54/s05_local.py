@@ -30,6 +30,9 @@ class Localization(VoiceoverScene):
         ]
         rows[3][-1].set_color(GOODC)
         whys = [why(r"chapter 1's teal line"), why(r"look locally"), why(r"variance $\lesssim$ mean"), why(r"Bartlett, \ Bousquet \& Mendelson (2005)")]
+        heading = label('Small excess-loss variance can support faster estimation rates', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> Chapter one's puzzle: the uniform deviation falls like one over root n, but the excess risk "
             "of the chosen rule fell like one over n. <bookmark mark='b'/> The reason is that the chosen rule lies near the "
@@ -66,13 +69,7 @@ class Localization(VoiceoverScene):
             label(r"bounded noise ($\eta < 1/2$): \ fast rates; \ $1/(1 - 2\eta)$ in the constant", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The excess risk of ERM over thresholds at three noise levels. <bookmark mark='b'/> With "
-            f"no noise, the realizable case, the slope is {say(sl['0.0'], 2)}: one over n. <bookmark mark='c'/> With ten "
-            f"percent of labels flipped, {say(sl['0.1'], 2)}: still one over n. <bookmark mark='d'/> With forty percent "
-            f"flipped, the curve sits higher, with a slope of {say(sl['0.4'], 2)} over this range, and tends to the same "
-            f"rate. <bookmark mark='e'/> As long as the noise is bounded away from a half, Massart's noise condition, the "
-            f"Bernstein condition holds and the rate is fast; only the constant, one over one minus two eta, grows as the "
-            f"labels become nearly random."
+            f"<bookmark mark='a'/> The excess risk of ERM over thresholds at three noise levels. <bookmark mark='b'/> With no noise, the realizable case, the slope is {say(sl['0.0'], 2)}: one over n. <bookmark mark='c'/> With ten percent of labels flipped, {say(sl['0.1'], 2)}: still one over n. <bookmark mark='d'/> With forty percent flipped, the curve sits higher, with a slope of {say(sl['0.4'], 2)} over this range, and tends to the same rate. <bookmark mark='e'/> Here the Bayes threshold belongs to the class. With noise bounded away from a half, the Bernstein condition holds and the rate is fast; only the constant, one over one minus two eta, grows as the labels become nearly random."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated")))
             vo.wait_until("a")
@@ -96,13 +93,11 @@ class Localization(VoiceoverScene):
         ]
         rows[1][-1].set_color(CLASSC)
         whys = [why(r"Massart \& Nédélec (2006)"), why(r"Mammen \& Tsybakov (1999)"), why(r"noise at the boundary"), why(r"a clean margin")]
+        heading = label('Noise assumptions give fast rates when the Bayes rule is in the class', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> The general picture is governed by how much the label noise approaches a coin flip near "
-            "the decision boundary. Pascal Massart and Élodie Nédélec's condition, the noise bounded away from a half, gives "
-            "the fast rate. <bookmark mark='b'/> Enno Mammen and Alexandre Tsybakov's condition interpolates: if the "
-            "probability that the noise is within t of a half is at most a constant times t to the kappa, the rate is n to "
-            "the minus one plus kappa over two plus kappa. <bookmark mark='c'/> Kappa zero is the slow, worst-case rate, "
-            "<bookmark mark='d'/> and kappa to infinity recovers Massart's one over n."
+            "<bookmark mark='a'/> Massart noise bounds the conditional label probability away from a half. If the Bayes classifier belongs to the VC class, this gives the displayed fast rate, with confidence and complexity terms understood. <bookmark mark='b'/> Tsybakov's condition limits the mass near the decision boundary. For suitable classes containing the Bayes rule, it gives the displayed exponent, with class-dependent factors. <bookmark mark='c'/> Kappa zero yields the worst-case square-root rate. <bookmark mark='d'/> A fixed positive noise gap yields the Massart regime. Under misspecification the same conclusion needs an appropriate Bernstein condition around the best rule in the class."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -115,12 +110,15 @@ class Localization(VoiceoverScene):
             cmath(r"\text{Bernstein condition}", r":", r"E\big[(\ell_f - \ell_{f^*})^2\big] \le B\,\big(E[\ell_f - \ell_{f^*}]\big)^{\beta}", font_size=34),
             cmath(r"\text{variance} \lesssim \text{mean}", r"\Rightarrow", r"\text{Bernstein's inequality is } 1/n, \ \text{not } 1/\sqrt n, \text{ near } f^*", font_size=32),
             cmath(r"\text{rate}", r":", r"\big(d\log n/n\big)^{1/(2-\beta)}: \ \beta = 1 \text{ fast}, \ \beta = 0 \text{ slow}", font_size=34),
-            cmath(r"\text{examples}", r":", r"\text{squared loss on convex classes, \ Massart noise, \ log loss}", font_size=34),
+            cmath(r"\text{examples}", r":", r"\text{bounded regression; Bayes-in-class Massart; bounded log loss}", font_size=34),
         ]
         rows[2][-1].set_color(GOODC)
         whys = [why(r"Bartlett \& Mendelson (2006)"), why(r"Part 51's inequality"), why(r"interpolates the rates"), why(r"when fast rates hold")]
+        heading = label('Second-moment control and local complexity jointly determine the rate', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> All these fast-rate conditions share one shape, the Bernstein condition: the variance of the excess loss of a rule is bounded by a power beta of its mean. <bookmark mark='b'/> When the variance is at most the mean, Bernstein's inequality from Part fifty-one gives deviations of order one over n, not one over root n, for rules near the best one. <bookmark mark='c'/> The excess risk then falls like d log n over n to the power one over two minus beta, interpolating between the fast rate at beta one and the slow rate at beta zero. <bookmark mark='d'/> It holds for the squared loss over convex classes, under Massart's noise, and for the log loss: the common reasons a learning problem is easier than the worst case."
+            "<bookmark mark='a'/> This second-moment Bernstein condition, with beta between zero and one, controls excess losses by their mean. It is stronger than merely bounding the variance. <bookmark mark='b'/> At beta one, Bernstein concentration and localization can yield fast rates. The concentration inequality alone does not supply the class's local complexity. <bookmark mark='c'/> With VC-type entropy, the schematic rate interpolates between fast and slow as beta varies. <bookmark mark='d'/> Examples include bounded squared-loss regression under suitable convexity and noise assumptions, classification with a Bayes rule in the class and Massart noise, and suitably bounded log loss. None holds without regularity conditions."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -130,15 +128,18 @@ class Localization(VoiceoverScene):
 
     def regression(self):
         rows = [
-            cmath(r"\text{least squares over } \mathcal F", r":", r"\text{the excess risk is } \|\hat f - f^*\|_{L_2}^2", font_size=34),
+            cmath(r"\text{least squares over } \mathcal F", r":", r"f^*=E[Y\mid X]\in\mathcal F:\quad \text{excess}=\|\hat f-f^*\|_2^2", font_size=34),
             cmath(r"\text{the critical radius}", r":", r"\delta_n: \ \mathfrak R_n(\mathcal F^*, \delta) \le \delta^2/(2\sigma)", font_size=32),
             cmath(r"\|\hat f - f^*\|^2", r"\lesssim", r"\delta_n^2", font_size=38),
             cmath(r"\text{Sobolev balls}", r":", r"\delta_n^2 \asymp n^{-2s/(2s+1)}: \ \text{Part 50's minimax rate}", font_size=34),
         ]
         rows[2][-1].set_color(GOODC)
         whys = [why(r"nonparametric regression"), why(r"Wainwright (2019), \ ch. 13"), why(r"localized"), why(r"rates recovered")]
+        heading = label('Well-specified squared-loss excess equals squared prediction distance', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Localization also gives the rates of nonparametric regression. For least squares over a function class, the excess risk is the squared L-two distance to the best function. <bookmark mark='b'/> Define the critical radius as the smallest delta at which the local Rademacher complexity of the class, around the truth, falls below delta squared over two sigma. <bookmark mark='c'/> Then the squared error is of order the critical radius squared. <bookmark mark='d'/> For Sobolev balls that is n to the minus two s over two s plus one: Part fifty's minimax rate, derived from learning theory's machinery."
+            "<bookmark mark='a'/> In well-specified squared-loss regression, with the regression function in the class, excess risk equals squared L-two distance to that function. For a misspecified convex projection there is an additional nonnegative cross term. <bookmark mark='b'/> Under bounded or sub-Gaussian design and noise assumptions, suitable localized and multiplier-process bounds define a critical radius. <bookmark mark='c'/> The squared error is then controlled by a constant times the radius squared. <bookmark mark='d'/> For a one-dimensional Sobolev ball this recovers n to the minus two s over two s plus one. In input dimension d, the denominator becomes two s plus d."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -148,19 +149,18 @@ class Localization(VoiceoverScene):
 
     def fixed_point(self):
         rows = [
-            cmath(r"\psi(r)", r"=", r"\mathfrak R_n\{f \in \mathcal F: E f^2 \le r\}: \ \text{local complexity}", font_size=34),
+            cmath(r"\psi(r)", r"=", r"\text{sub-root upper bound for localized excess-loss star hull}", font_size=34),
             cmath(r"r^*", r":", r"\text{the fixed point } \psi(r^*) = r^*", font_size=36),
             cmath(r"R(\hat h) - R(h^*)", r"\lesssim", r"r^* + \log(1/\delta)/n", font_size=36),
-            cmath(r"\text{VC class}", r":", r"r^* \asymp d\log(n/d)/n", font_size=36),
+            cmath(r"\text{VC class}", r":", r"r^* \lesssim d\log(en/d)/n\quad(d\le n)", font_size=36),
         ]
         rows[2][-1].set_color(GOODC)
         whys = [why(r"a sub-root function"), why(r"self-consistency"), why(r"BBM (2005)"), why(r"the fast rate")]
+        heading = label('A localized excess-loss upper bound defines the critical scale', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> The machinery in one line. The local Rademacher complexity is the complexity of the part of "
-            "the class with small second moment, as a function of the radius r. <bookmark mark='b'/> Its fixed point r star, "
-            "where the complexity equals the radius, is the scale at which noise and signal balance. <bookmark mark='c'/> "
-            "The excess risk is at most of order r star, plus a confidence term of order one over n. <bookmark mark='d'/> "
-            "For a VC class, r star is d log of n over d, over n: the fast rate, derived rather than observed."
+            "<bookmark mark='a'/> Apply local complexity to the star hull of excess losses around the optimal rule. A sub-root upper bound absorbs the Bernstein constants. <bookmark mark='b'/> Its positive fixed point identifies the relevant scale. This is not an arbitrary raw class with an arbitrary fixed point. <bookmark mark='c'/> Under the boundedness, Bernstein and empirical-process assumptions, an excess-risk bound is of order that radius plus the confidence term. <bookmark mark='d'/> A VC-type entropy upper bound gives a fast-rate radius of order d times a logarithm over n, capped in the appropriate regime; some classes admit sharper rates."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):

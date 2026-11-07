@@ -88,7 +88,7 @@ def test_sgd_stability_and_bandits():
     X /= np.maximum(1, np.linalg.norm(X, axis=1))[:, None]
     y = np.sign(X[:, 0] + 0.3 * r.standard_normal(n))
     d = L.sgd_divergence(X, y, 500, 0.5, r, reps=10)
-    assert np.all(d["divergence"] <= d["bound"] + 1e-9)  # Hardt-Recht-Singer, pathwise for convex smooth losses
+    assert np.all(d["divergence"] <= d["bound"] + 1e-9)  # Seeded mean diagnostic; the HRS theorem is in expectation, not pathwise.
     assert d["divergence"][-1] > d["divergence"][50]
     mu = [0.5, 0.4, 0.3]
     ucb = np.mean([L.bandit(mu, 20000, "ucb", r)[-1] for _ in range(3)])

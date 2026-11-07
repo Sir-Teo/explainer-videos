@@ -1,0 +1,74 @@
+[
+  {
+    "name": "shatter",
+    "path": ".cache/stats54/shatter.json",
+    "sha256": "3b1436c9912772183fae37eb20d0106d45fbfb8bd03cebca5b2d77152305bc1a",
+    "bytes": 607
+  },
+  {
+    "name": "erm",
+    "path": ".cache/stats54/erm.json",
+    "sha256": "c3af2797869adb735943303180b45ed80f2677682ebba48cbda139cb4f24fab8",
+    "bytes": 2908
+  },
+  {
+    "name": "rademacher",
+    "path": ".cache/stats54/rademacher.json",
+    "sha256": "eb7219e31d31501b95e9f67880f4f6101ec003329b412cc33ce681ef69fd3184",
+    "bytes": 1018
+  },
+  {
+    "name": "boosting",
+    "path": ".cache/stats54/boosting.json",
+    "sha256": "0ab114cbc1e96d8a27760230c48da8482d926c198ccaa2f00d42f11d1d8b1896",
+    "bytes": 51487
+  },
+  {
+    "name": "pacbayes",
+    "path": ".cache/stats54/pacbayes.json",
+    "sha256": "3372d9625c257ddf18181974790b11ac8b6fcce5b8c930df699affd2342b0599",
+    "bytes": 1793
+  },
+  {
+    "name": "stability",
+    "path": ".cache/stats54/stability.json",
+    "sha256": "9bcb7fa64ad95915e10cf8141c1f1e8881458f31193adac676a85b4ac42f0582",
+    "bytes": 5674
+  },
+  {
+    "name": "sgd",
+    "path": ".cache/stats54/sgd.json",
+    "sha256": "962425e7c9dfcc2c7fb99577ec71608652af194209b2daad534df4292e03af33",
+    "bytes": 514485
+  },
+  {
+    "name": "bandits",
+    "path": ".cache/stats54/bandits.json",
+    "sha256": "57c687b26d8f6b0df59a7ca602921f48847d754be6fdbdb9c56cc793cfada26e",
+    "bytes": 63586
+  },
+  {
+    "name": "online",
+    "path": ".cache/stats54/online.json",
+    "sha256": "efb1f1fc9aa77128d836da441af66d88502905cd787670bf8f4d7f07329b214a",
+    "bytes": 3193
+  },
+  {
+    "name": "surrogate",
+    "path": ".cache/stats54/surrogate.json",
+    "sha256": "da039ef216a8cbf238974dd133947e2361ccde10013f68f7ec263a86fd473fbd",
+    "bytes": 8091
+  },
+  {
+    "name": "interp",
+    "path": ".cache/stats54/interp.json",
+    "sha256": "ea6eedee95afa14e8d82eabc333a9dadbea4c655524d155b8dea81478fd8083d",
+    "bytes": 7915
+  },
+  {
+    "name": "board",
+    "path": ".cache/stats54/board.json",
+    "sha256": "244009d55ad50efb1d708c8e422fbfe5f08b589f5d4dc42226a0b330472e06ba",
+    "bytes": 1034
+  }
+]

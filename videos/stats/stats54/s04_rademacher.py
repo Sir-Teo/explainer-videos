@@ -32,12 +32,11 @@ class Rademacher(VoiceoverScene):
         rows[1][-1].set_color(BOUNDC)
         rows[3][-1].set_color(GOODC)
         whys = [why(r"Rademacher variables"), why(r"Koltchinskii; \ Bartlett \& Mendelson (2002)"), why(r"fitting noise"), why(r"Part 48")]
+        heading = label('Noise fitting controls a one-sided deviation through symmetrization', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> A finer measure of a class's capacity. Draw random signs, pure noise as labels. <bookmark "
-            "mark='b'/> The empirical Rademacher complexity is the expected best correlation between a function in the class "
-            "and those signs, on the observed points. <bookmark mark='c'/> It measures how well the class can fit pure "
-            "noise, on these data. <bookmark mark='d'/> By symmetrization, the expected uniform deviation is at most twice "
-            "the Rademacher complexity, so a class that cannot fit noise cannot overfit."
+            "<bookmark mark='a'/> Draw independent random signs. <bookmark mark='b'/> Empirical Rademacher complexity is the expected largest signed correlation that the class can achieve on the observed points. <bookmark mark='c'/> It measures the ability to fit noise on these data. <bookmark mark='d'/> Symmetrization controls the expected one-sided supremum of population minus sample risk by twice the expected complexity. For an absolute supremum one must use the appropriate absolute or enlarged loss class. The distinction matters even for a singleton class, whose one-sided Rademacher complexity is zero."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -47,7 +46,7 @@ class Rademacher(VoiceoverScene):
 
     def theorem(self):
         rows = [
-            cmath(r"\text{for all } f \in \mathcal F, \ \text{w.p. } 1 - \delta", r":", r"R(f) \le R_n(f) + 2\hat{\mathfrak R}_n(\ell \circ \mathcal F) + 3\sqrt{\log(2/\delta)/(2n)}", font_size=28),
+            cmath(r"0\le\ell\le1,\ \forall f,\ \text{w.p. }1-\delta", r":", r"R(f) \le R_n(f) + 2\hat{\mathfrak R}_n(\ell \circ \mathcal F) + 3\sqrt{\log(2/\delta)/(2n)}", font_size=28),
             cmath(r"\text{finite class}", r":", r"\mathfrak R_n \le \sqrt{2\log K/n}: \ \text{Massart's lemma}", font_size=34),
             cmath(r"\text{VC class}", r":", r"\mathfrak R_n \lesssim \sqrt{d/n}: \ \text{via chaining}", font_size=34),
             cmath(r"\text{data-dependent}", r":", r"\hat{\mathfrak R}_n \text{ computed on the sample you have}", font_size=34),
@@ -55,13 +54,11 @@ class Rademacher(VoiceoverScene):
         rows[0][-1].set_color(BOUNDC)
         rows[3][-1].set_color(GOODC)
         whys = [why(r"McDiarmid's inequality"), why(r"Part 48"), why(r"Dudley"), why(r"often much smaller")]
+        heading = label('A simultaneous bounded-loss guarantee includes concentration', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> The theorem: with probability one minus delta, every function's true risk is at most its "
-            "empirical risk plus twice the empirical Rademacher complexity of the loss class, plus a term from McDiarmid's "
-            "inequality. <bookmark mark='b'/> For a finite class, Massart's lemma bounds the complexity by the root of two "
-            "log K over n. <bookmark mark='c'/> For a VC class, chaining gives the root of d over n. <bookmark mark='d'/> "
-            "But the empirical version can be computed, or bounded, on the sample in hand, and is often much smaller than "
-            "the worst case."
+            "<bookmark mark='a'/> For a fixed measurable class with losses in zero to one, this bound holds simultaneously for all rules with probability one minus delta. It adds empirical loss, twice the empirical complexity of the loss class, and a concentration term. <bookmark mark='b'/> A finite bounded class has complexity at most root two log K over n. <bookmark mark='c'/> For binary VC classes, chaining removes the elementary counting bound's logarithm. <bookmark mark='d'/> The empirical complexity adapts to the sample's geometry, but the probability guarantee still needs the concentration term."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -79,6 +76,9 @@ class Rademacher(VoiceoverScene):
         rows[0][-1].set_color(GOODC)
         rows[3][-1].set_color(CLASSC)
         whys = [why(r"Ledoux--Talagrand"), why(r"Cauchy--Schwarz, \ Jensen"), why(r"the same, \ in feature space"), why(r"infinite dimensions allowed")]
+        heading = label('Lipschitz losses transfer linear and kernel norm bounds', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> The contraction lemma of Michel Ledoux and Michel Talagrand makes this practical: composing "
             "with an L-Lipschitz loss multiplies the Rademacher complexity by at most L, so the loss can be peeled off. "
@@ -103,8 +103,11 @@ class Rademacher(VoiceoverScene):
         ]
         rows[2][-1].set_color(GOODC)
         whys = [why(r"Massart (2000)"), why(r"Hoeffding's lemma"), why(r"Sauer--Shelah"), why(r"chapter 2 meets chapter 3")]
+        heading = label('A finite set of bounded vectors has a logarithmic maximum penalty', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> The link to chapter two is Pascal Massart's finite-class lemma: for a finite set of vectors of norm at most r, the expected maximum correlation with random signs is at most r times the root of two log the set's size, over n. <bookmark mark='b'/> Each correlation is sub-Gaussian by Part fifty-one, and the maximum of finitely many sub-Gaussians is controlled by the log of their number. <bookmark mark='c'/> For a VC class, the vectors are the class's labellings of the sample, at most e n over d to the d of them, which gives a Rademacher complexity of the root of two d log of e n over d, over n. <bookmark mark='d'/> Counting labellings and fitting noise are the same idea."
+            "<bookmark mark='a'/> The link to chapter two is Pascal Massart's finite-class lemma: for a finite set of vectors of norm at most r, the expected maximum correlation with random signs is at most r times the root of two log the set's size, over n. <bookmark mark='b'/> Each correlation is sub-Gaussian by Part fifty-one, and the maximum of finitely many sub-Gaussians is controlled by the log of their number. <bookmark mark='c'/> For a binary VC class with one at most d at most n, the vectors are the class's labellings of the sample, at most e n over d to the d of them, which gives a Rademacher complexity of the root of two d log of e n over d, over n. <bookmark mark='d'/> Counting labellings and fitting noise are the same idea."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -152,15 +155,18 @@ class Rademacher(VoiceoverScene):
     def networks(self):
         rows = [
             cmath(r"\text{deep networks}", r":", r"f(x) = W_L\sigma(W_{L-1}\cdots\sigma(W_1 x))", font_size=34),
-            cmath(r"\text{norm-based}", r":", r"\mathfrak R_n \lesssim \frac{\prod_\ell \|W_\ell\|_{op}}{\gamma\sqrt n}\cdot(\text{layer terms})", font_size=32),
-            cmath(r"\text{size-independent}", r":", r"\text{bounds that do not grow with the width}", font_size=34),
+            cmath(r"\text{norm-based}", r":", r"\text{margin term}\lesssim \frac{\prod_\ell \|W_\ell\|_{op}}{\gamma\sqrt n}\cdot(\text{layer terms})", font_size=32),
+            cmath(r"\text{size-independent}", r":", r"\text{no explicit width factor if the specified norms stay bounded}", font_size=34),
             cmath(r"\text{still}", r":", r"\text{numerically loose for real networks}", font_size=34),
         ]
         rows[2][-1].set_color(GOODC)
         rows[3][-1].set_color(BADC)
         whys = [why(r"composition, \ layer by layer"), why(r"Bartlett, \ Foster \& Telgarsky (2017)"), why(r"Golowich, \ Rakhlin \& Shamir (2018)"), why(r"chapter 10's puzzle")]
+        heading = label('Network margin bounds depend on norms, depth and input scale', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Rademacher complexity can be pushed through a deep network, layer by layer. <bookmark mark='b'/> Peter Bartlett, Dylan Foster and Matus Telgarsky's bound of 2017 scales with the product of the layers' operator norms, divided by the margin and root n, times correction terms for each layer. <bookmark mark='c'/> Noah Golowich, Alexander Rakhlin and Ohad Shamir gave versions that do not grow with the width of the network at all. <bookmark mark='d'/> They are real progress, but for networks trained on real data they remain numerically loose, which is part of chapter ten's puzzle."
+            "<bookmark mark='a'/> Norm bounds propagate through a network under assumptions on the input radius and the activation's Lipschitz constant. <bookmark mark='b'/> Bartlett, Foster and Telgarsky give a margin bound involving the product of operator norms, divided by the margin and root n, and additional layer terms. This is a margin generalization term, not the unscaled function complexity. <bookmark mark='c'/> Other bounds avoid an explicit width factor when specified norms stay controlled. The norms themselves can grow with width. <bookmark mark='d'/> These are useful structural results, but their numerical values can remain vacuous for trained networks."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
