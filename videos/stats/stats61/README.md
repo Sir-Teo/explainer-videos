@@ -42,7 +42,7 @@ python tools/build.py stats61 -q l
 python tools/lecture_length.py stats61 --floor 50
 ```
 
-All 13 numerical inputs regenerated. Seventeen checks cover audited kernels and legacy behavior. Narration/list bookmarks match their rows; estimated English narration is 52.5 minutes. [Scientific QA evidence](../../../docs/qa/evidence/stats61-polish-20261107/README.md). English sampled visual verification is pending; Chinese narration/caption tables, continuous listening/playback and final narrated masters remain open. This is not bilingual production approval.
+All 13 numerical inputs regenerated. Seventeen checks cover audited kernels and legacy behavior. Narration/list bookmarks match their rows; estimated English narration is 52.5 minutes. [Scientific QA evidence](../../../docs/qa/evidence/stats61-polish-20261107/README.md). The recorded English sampled visual checkpoint is complete; Chinese narration/caption tables, continuous listening/playback and final narrated masters remain open. This is not bilingual production approval.
 
 ## Sources
 

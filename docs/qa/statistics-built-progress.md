@@ -5,7 +5,7 @@ The branch contains **65 parts and 888 chapters**. All manifests resolve to exis
 
 ## Current checkpoint
 
-All 65 parts have received English scientific source review and focused numerical checks. Parts 1–55, 58–60 and 62 have completed their recorded sampled visual passes. The remaining visual checks are running, including fresh source-matched renders after the layout repairs. Part 65's six computation items are reconciled, including the complete 319-row historical Board from all 57 contributing parts.
+All 65 parts have received English scientific source review and focused numerical checks. Parts 1–55 and 58–62 have completed their recorded sampled visual passes. The remaining visual checks are running, including fresh source-matched renders after the layout repairs. Part 65's six computation items are reconciled, including the complete 319-row historical Board from all 57 contributing parts.
 
 A [shared World programme-name collision](evidence/world-programmes-20261107/README.md) has been corrected. The [Coverage Board now preserves empirical Monte Carlo uncertainty](evidence/board-mc-20261107/README.md) for correlated intervals within one simulation. Legacy-row values are unchanged. Parts 1–22 retain the visual inspections recorded at their commits; their conservative shared-code fingerprints are being refreshed after the Board correction. Parts 1–13 have completed that latest refresh; further parts remain queued. Part 23's final receipts include the corrected shared source.
 
@@ -89,7 +89,7 @@ No part is signed off for bilingual production. The branch has zero narration_zh
 | 58 | `stats58` | 16 | English scientific source and sampled visual review complete; bilingual/listening/master approval open |
 | 59 | `stats59` | 12 | English scientific source and sampled visual review complete; bilingual/listening/master approval open |
 | 60 | `stats60` | 13 | English scientific source and sampled visual review complete; bilingual/listening/master approval open |
-| 61 | `stats61` | 12 | English scientific source reviewed; sampled visual review pending; bilingual/listening/master approval open |
+| 61 | `stats61` | 12 | English scientific source and sampled visual review complete; bilingual/listening/master approval open |
 | 62 | `stats62` | 12 | English scientific source and sampled visual review complete; bilingual/listening/master approval open |
 | 63 | `stats63` | 14 | English scientific source reviewed; 20 checks pass; sampled visual review pending; bilingual/listening/master approval open |
 | 64 | `stats64` | 15 | English scientific source reviewed; 23 checks pass; sampled visual review pending; bilingual/listening/master approval open |
