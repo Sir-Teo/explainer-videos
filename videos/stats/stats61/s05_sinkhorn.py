@@ -169,6 +169,10 @@ class Sinkhorn(LectureMixin, VoiceoverScene):
         self.clear_scene()
 
     def divergence(self):
+        heading = label(r"Debiasing the regularized transport objective", font_size=36).move_to([0, 3.3, 0])
+        if heading.width > 12.6:
+            heading.width = 12.6
+        self.add(heading)
         self.lad_voiceover(
             "<bookmark mark='a'/> The regularized objective need not vanish for a law against itself. <bookmark mark='b'/> Subtracting the two self-objectives gives the Sinkhorn divergence. Its positivity and separation properties require an appropriate cost and kernel, such as the finite-epsilon squared-Euclidean setup here. <bookmark mark='c'/> In our squared-distance convention, the zero-epsilon limit is squared W two. As epsilon grows without bound, the discrepancy tends to squared distance between means, which need not distinguish different laws. With ordinary distance cost the corresponding independent-coupling limit is an energy-distance expression. <bookmark mark='d'/> Thus cost and regularization convention both matter; finite epsilon controls the amount of smoothing.",
             [(r"\mathrm{OT}_\varepsilon(\mu, \mu)", r"\ne", r"0", 40),
