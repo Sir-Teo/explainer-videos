@@ -27,6 +27,9 @@ class SDID(VoiceoverScene):
                 [r"synthetic DiD", r"chosen weights", r"chosen weights", r"trends, \ locally"]]
         tab = table_rows(rows, font_size=26, col_buff=0.7, row_buff=0.36, colors=[GREY_A, Y0C, Y1C, BANDC]).move_to([0, 0.6, 0])
         foot = label(r"Arkhangelsky, \ Athey, \ Hirshberg, \ Imbens \& Wager (2021)", font_size=24, color=GREY_A).move_to([0, -1.8, 0])
+        heading=label("Synthetic DiD combines weighting over units and time",font_size=36).move_to([0,3.3,0])
+        if heading.width>12.5: heading.width=12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> Differences-in-differences and the synthetic control look like rivals, but they are two "
             "corners of one idea. <bookmark mark='b'/> DiD weights all control units equally and all pre-periods equally, "
