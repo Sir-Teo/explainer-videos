@@ -1,0 +1,23 @@
+{
+  "part": "stats38",
+  "fingerprint": "939fc61ad3654ddbeb372255e2c97b3340eaaa5414ccf8098ffc6ba4e30ecffe",
+  "english_endpoints": 14,
+  "native_1080_endpoints": 13,
+  "silent_motion_chapters": 13,
+  "audio_scene": "Kalman",
+  "audio_lines": 7,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats38/en/Kalman/videos/s08_kalman/480p15/Kalman.mp4",
+    "seconds": 263.732357,
+    "narration_sha256": "342c6d3b373e75b8d369c0ae930a2d2f23220ee89fd56a0814ddc2a0691cdbef",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 264 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 264 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

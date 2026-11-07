@@ -1,0 +1,50 @@
+{
+  "baseline": [
+    "Hook",
+    "Upgrade",
+    "Spectra",
+    "UnitRoot",
+    "Coint",
+    "Volatility",
+    "LongMemory",
+    "Kalman",
+    "Smoothing",
+    "Nonlinear",
+    "VAR",
+    "BlockBootstrap",
+    "Forecast",
+    "Outro"
+  ],
+  "native": [
+    "Hook",
+    "Upgrade",
+    "Spectra",
+    "UnitRoot",
+    "Coint",
+    "Volatility",
+    "LongMemory",
+    "Kalman",
+    "Smoothing",
+    "Nonlinear",
+    "VAR",
+    "BlockBootstrap",
+    "Forecast"
+  ],
+  "motion": [
+    "Hook",
+    "Upgrade",
+    "Spectra",
+    "UnitRoot",
+    "Coint",
+    "Volatility",
+    "LongMemory",
+    "Kalman",
+    "Smoothing",
+    "Nonlinear",
+    "VAR",
+    "BlockBootstrap",
+    "Forecast"
+  ],
+  "actual": "Kalman; full fresh Kokoro sheet inspected, no cropped content, zero blank/sparse runs",
+  "findings": "All chapter, native 1080p and sampled motion sheets inspected. Kalman ellipses remain inside expanded axes; statistical captions and forecasting comparison tables are readable. No unresolved sampled visual defects."
+}

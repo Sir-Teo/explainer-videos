@@ -1,5 +1,5 @@
-# Part 38 scientific source and numerical checkpoint
+# Part 38 English source and visual review
 
-All fourteen chapters and supporting calculations were reviewed, fourteen inputs regenerated, and nineteen focused checks passed. [The source review](source-review.md) records numerical corrections, independent reference tests, historical-data comparisons and the limits of each inferential claim.
+All fourteen chapter endpoint sheets, thirteen native 1080p captures and thirteen motion sheets were inspected. The expanded Kalman axes contain the complete uncertainty ellipses; the dependent-data and forecasting examples retain their model and evaluation qualifications. Current runtime, bounds and blank/sparse scans have no outstanding issues apart from missing translation tables. The 264-second narrated Kalman preview was inspected, its seven speech lines pass signal/timing checks, and its narration matches current source.
 
-English endpoint/native/motion captures and an actual Kalman narrated preview are running. Chinese material, continuous listening and final narrated masters remain pending. This is not production approval.
+See [source corrections](source-review.md), [verification](verification.json), [manual review](manual-review.json), [numerical input hashes](computed-inputs.json), [historical data checks](source-data.json) and capture receipts. All fourteen numerical inputs were regenerated and nineteen focused checks passed. This closes the English source and sampled visual pass. Chinese narration/caption tables, continuous listening/full narrated playback and final bilingual narrated masters remain open.
