@@ -49,6 +49,9 @@ class Upgrade(VoiceoverScene):
         rows[0][2].set_color(SHRUNK)
         whys = [why(r"Part 5's exchangeability"), why(r"before seeing the data, \ schools are alike"),
                 why(r"that is how they borrow strength"), why(r"the converse is de Finetti's theorem")]
+        intro = label('Sharing information requires a stated exchangeability judgement', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> What justifies a prior that ties the schools together? Part 5's exchangeability: our "
             "beliefs about the eight true effects don't change if we shuffle the schools' labels. <bookmark mark='b'/> "
@@ -57,6 +60,7 @@ class Upgrade(VoiceoverScene):
             "at B too, and that is exactly how the schools borrow strength. <bookmark mark='d'/> Effects drawn "
             "independently from a common distribution are exchangeable."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -68,18 +72,24 @@ class Upgrade(VoiceoverScene):
             cmath(r"\text{de Finetti}", r":", r"\text{infinitely exchangeable } \Rightarrow \ p(\theta_{1:J}) = \int \prod_j p(\theta_j \mid \phi)\, p(\phi)\, d\phi", font_size=26),
             cmath(r"\phi", r"=", r"(\mu, \tau): \ \text{the hyperparameters}", font_size=30),
             cmath(r"p(\phi)", r":", r"\text{the hyperprior}", font_size=30),
-            cmath(r"\text{so}", r":", r"\text{the hierarchy is not an extra assumption, \ it is exchangeability}", font_size=28),
+            cmath(r"\text{so}", r":", r"\text{normal population and hyperprior are additional choices}", font_size=28),
         ]
         rows[0][2].set_color(SHRUNK)
         whys = [why(r"de Finetti (1931), \ Hewitt \& Savage (1955)"), why(r"the population the schools come from"),
                 why(r"uncertainty about that population"), why(r"Part 5, \ now put to work")]
+        intro = label('Infinite exchangeability motivates a mixture; normality is an extra choice', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Bruno de Finetti's theorem gives the converse: if a sequence is exchangeable however long "
-            "it gets, then it behaves as if each term were drawn independently given some unknown parameter phi, with phi "
-            "drawn from a prior. <bookmark mark='b'/> Here phi is the mean and spread of the population of coaching effects, "
-            "<bookmark mark='c'/> and its prior is called the hyperprior. <bookmark mark='d'/> So the hierarchical model isn't "
-            "an extra assumption bolted on; it is what exchangeability means."
+            "<bookmark mark='a'/> An infinitely exchangeable sequence can be represented as draws that are "
+            "independent and identically distributed given a random population distribution. Eight exchangeable "
+            "effects alone do not guarantee this infinite extension. <bookmark mark='b'/> We additionally choose a "
+            "normal population described by mu and tau. Normality is a modelling assumption, not de Finetti's "
+            "conclusion. <bookmark mark='c'/> A hyperprior describes uncertainty about these population parameters. "
+            "<bookmark mark='d'/> Exchangeability motivates sharing information; the population family and hyperprior"
+            " still require justification."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

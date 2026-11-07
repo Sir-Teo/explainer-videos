@@ -32,6 +32,9 @@ class Hierarchy(VoiceoverScene):
         rows[3][2].set_color(SHRUNK)
         whys = [why(r"each school's experiment"), why(r"the population of coaching effects"),
                 why(r"flat hyperprior: \ chapter three asks if that is wise"), why(r"ten unknowns, \ one posterior")]
+        intro = label('A probability model separates observations, effects and population uncertainty', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> The model has three levels. Each school's estimate is its true effect plus noise of known "
             "size. <bookmark mark='b'/> The true effects come from a normal population with mean mu and spread tau. "
@@ -39,6 +42,7 @@ class Hierarchy(VoiceoverScene):
             "<bookmark mark='d'/> Bayes's rule then gives one joint posterior for all ten unknowns: eight effects, a mean "
             "and a spread."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -48,21 +52,27 @@ class Hierarchy(VoiceoverScene):
     def marginal(self):
         rows = [
             cmath(r"p(\theta, \mu, \tau \mid y)", r"=", r"p(\tau \mid y)\, p(\mu \mid \tau, y)\, p(\theta \mid \mu, \tau, y)", font_size=28),
-            cmath(r"p(\tau \mid y)", r"\propto", r"p(\tau)\, V_\mu^{1/2} \textstyle\prod_j (\sigma_j^2 + \tau^2)^{-1/2} e^{-(y_j - \hat\mu)^2/2(\sigma_j^2 + \tau^2)}", font_size=26),
+            cmath(r"p(\tau \mid y)", r"\propto", r"p(\tau)\, V_\mu^{1/2} \textstyle\prod_j (\sigma_j^2 + \tau^2)^{-1/2} \exp\{-\tfrac{(y_j-\hat\mu)^2}{2(\sigma_j^2+\tau^2)}\}", font_size=26),
             cmath(r"\mu \mid \tau, y", r"\sim", r"N(\hat\mu_\tau, V_\mu), \ \ \hat\mu_\tau = \tfrac{\sum y_j/(\sigma_j^2 + \tau^2)}{\sum 1/(\sigma_j^2 + \tau^2)}", font_size=26),
             cmath(r"\theta_j \mid \mu, \tau, y", r"\sim", r"N\Bigl(\tfrac{y_j/\sigma_j^2 + \mu/\tau^2}{1/\sigma_j^2 + 1/\tau^2}, \ \tfrac{1}{1/\sigma_j^2 + 1/\tau^2}\Bigr)", font_size=26),
         ]
         rows[1][2].set_color(POST)
         whys = [why(r"factor the posterior"), why(r"one dimension: \ a grid"), why(r"normal, \ given $\tau$"),
                 why(r"Part 15's normal update, \ school by school")]
+        intro = label('Conditional normal calculations leave one numerical integral over tau', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Ten dimensions sound hard, but the posterior factors. <bookmark mark='b'/> Integrating out "
-            "the effects and the mean leaves a one-dimensional posterior for tau, which a grid of four thousand points "
-            "computes exactly. <bookmark mark='c'/> Given tau, the mean is normal, centred at a precision-weighted average "
-            "of the schools. <bookmark mark='d'/> Given both, each school's effect is Part 15's normal update: a weighted "
-            "average of its own estimate and the population mean. Draw tau, then mu, then the effects, and we have exact "
-            "draws from the full posterior, no Markov chain needed."
+            "<bookmark mark='a'/> Ten dimensions sound hard, but the posterior factors. <bookmark mark='b'/> "
+            "Integrating out the effects and the mean leaves a one-dimensional posterior for tau, which a wide "
+            "nonuniform grid approximates, checked against adaptive integration to infinity. <bookmark mark='c'/> "
+            "Given tau, the mean is normal, centred at a precision-weighted average of the schools. <bookmark "
+            "mark='d'/> Given both, each school's effect is Part 15's normal update: a weighted average of its own "
+            "estimate and the population mean. Draw tau, then mu, then the effects, and the conditional normal steps "
+            "are exact, while tau uses a checked numerical approximation. These independent draws need no Markov "
+            "chain."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -132,7 +142,7 @@ class Hierarchy(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> The result, school by school. In blue, each school's own estimate. "
             "<bookmark mark='b'/> In green, its posterior median and ninety-five percent interval. <bookmark mark='c'/> "
-            "School A's twenty-eight becomes ten, with an interval from minus two to thirty-one: probably a positive effect, "
+            "School A's twenty-eight becomes ten, with an interval from minus two to about thirty-two: probably a positive effect, "
             "probably much smaller than its own experiment suggested. <bookmark mark='d'/> C's minus three becomes six and a "
             "half. <bookmark mark='e'/> All are pulled towards the population mean of about eight: further than no pooling "
             "allows, not as far as complete pooling forces."
@@ -192,15 +202,16 @@ class Hierarchy(VoiceoverScene):
             label(r"empirical Bayes: \ plug in $\hat\tau$; \ here $\hat\tau = 0$, \ so complete pooling", font_size=24, color=POOLED),
             label(r"full Bayes: \ average over $p(\tau \mid y)$, \ which leaves room for $\tau = 15$", font_size=24, color=SHRUNK),
             label(r"the difference matters when the groups are few", font_size=24, color=RES),
-            label(r"with 400 schools, \ $p(\tau \mid y)$ is narrow and the two agree", font_size=24, color=GREY_A),
+            label(r"many informative groups can make the approaches agree closely", font_size=24, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Compare Part 25. Empirical Bayes plugs in an estimate of tau; here the estimate is zero, "
-            "so every school would be told seven point seven, with intervals far too narrow. <bookmark mark='b'/> Full "
-            "Bayes averages over tau's posterior, which still gives real weight to differences of fifteen points, and "
-            "widens the intervals accordingly. <bookmark mark='c'/> With eight groups the difference is large. "
-            "<bookmark mark='d'/> With Part 25's four hundred schools, tau's posterior is narrow and the two approaches "
-            "agree."
+            "<bookmark mark='a'/> Compare Part 25. Empirical Bayes plugs in an estimate of tau; here the estimate is "
+            "zero, so every school would be told seven point seven, with intervals that omit uncertainty about the "
+            "variance estimate. <bookmark mark='b'/> Full Bayes averages over tau's posterior, which still gives real"
+            " weight to differences of fifteen points, and widens the intervals accordingly. <bookmark mark='c'/> "
+            "With eight groups the difference is large. <bookmark mark='d'/> With many informative groups and a "
+            "suitable model, tau can be tightly estimated and the approaches can agree closely. Group count alone is "
+            "not a guarantee."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -219,19 +230,20 @@ class Hierarchy(VoiceoverScene):
         for i in list(order[:6]) + list(order[-6:]):
             col = interpolate_color(ManimColor(POOLED), ManimColor(RAW), min(tau[i] / 15, 1))
             lines.add(VGroup(polyline(ax, np.arange(8), th[i], col, 1.8, 0.85),
-                             *[Dot(ax.c2p(j, v), radius=0.04, color=col) for j, v in enumerate(th[i])]))
+                             *[Dot(ax.c2p(j, v), radius=0.04, color=col) for j, v in enumerate(th[i]) if -25 <= v <= 50]))
         rows = fit_rows(VGroup(
-            label(r"twelve exact draws of all eight effects", font_size=22),
+            label(r"twelve independent draws; \ tau numerically approximated", font_size=22),
             label(r"teal: \ draws with small $\tau$: \ nearly flat", font_size=22, color=POOLED),
             label(r"blue: \ large $\tau$: \ the schools differ", font_size=22, color=RAW),
             label(r"the posterior is all of them at once", font_size=22, color=SHRUNK),
         ), 3.3, 0.42, [5.2, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> What does a draw from this posterior look like? Each line is one exact draw of all eight "
-            "effects together, coloured by its value of tau. <bookmark mark='b'/> Draws with small tau are nearly flat: in "
-            "those worlds the schools barely differ. <bookmark mark='c'/> Draws with large tau zigzag: in those worlds "
-            "coaching worked very differently from school to school. <bookmark mark='d'/> The posterior is the whole "
-            "collection, and every summary that follows is a summary of draws like these."
+            "<bookmark mark='a'/> What does a draw from this posterior look like? Each line is one independent "
+            "numerical draw of all eight effects together, coloured by its value of tau. <bookmark mark='b'/> Draws "
+            "with small tau are nearly flat: in those worlds the schools barely differ. <bookmark mark='c'/> Draws "
+            "with large tau zigzag: in those worlds coaching worked very differently from school to school. <bookmark"
+            " mark='d'/> The posterior is the whole collection, and every summary that follows is a summary of draws "
+            "like these."
         ) as vo:
             self.add(schools_tag())
             self.play(FadeIn(A), FadeIn(names))

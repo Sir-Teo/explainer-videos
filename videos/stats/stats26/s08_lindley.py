@@ -52,7 +52,7 @@ class Lindley(VoiceoverScene):
         d = load("lindley")
         rows = [
             cmath(r"z", r"=", rf"\frac{{s - n/2}}{{\sqrt{{n/4}}}} = {d['z']:.2f}", font_size=32),
-            cmath(r"p", r"=", rf"{d['p']:.4f}: \ \text{{reject chance, \ emphatically}}", font_size=30),
+            cmath(r"p", r"=", rf"{d['p']:.4f}: \ \text{{small iid-binomial null tail area}}", font_size=30),
             cmath(r"BF_{01}", r"=", rf"\frac{{\binom{{n}}{{s}} 2^{{-n}}}}{{1/(n + 1)}} = {d['bf01']:.1f}", font_size=30),
             cmath(r"P(H_0 \mid y)", r"=", rf"{d['post_h0']:.2f} \ \text{{from even prior odds}}", font_size=30),
         ]
@@ -60,15 +60,19 @@ class Lindley(VoiceoverScene):
         rows[3][2].set_color(SHRUNK)
         whys = [why(r"the binomial's normal approximation"), why(r"two-sided"),
                 why(r"Jefferys (1990): \ uniform prior on $p$ under $H_1$"), why(r"the same data favour the null 12 to 1")]
+        intro = label('The same data can give a small tail area and favor a specified null', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> The significance test. The excess of ones is three point six one standard errors above "
-            "chance. <bookmark mark='b'/> A two-sided p-value of point oh oh oh three: reject chance, emphatically. "
-            "<bookmark mark='c'/> The Bayesian test, as William Jefferys computed it in 1990: under the alternative, let the "
-            "machine's true proportion be anything between zero and one, uniformly. The Bayes factor is twelve, in favour of "
-            "the null. <bookmark mark='d'/> Starting from even odds, the probability that the operators did nothing is "
-            "point nine two. The same data, overwhelming evidence against the null by one reckoning, twelve to one for it by "
-            "another."
+            "<bookmark mark='a'/> Treating the recorded binary events as independent Bernoulli trials with a fixed "
+            "probability, the excess is three point six one null standard errors. <bookmark mark='b'/> Its two-sided "
+            "normal-approximation p-value is about point oh oh oh three. This tail area is not posterior odds or a "
+            "causal test of intention. <bookmark mark='c'/> Compare the point null p equals a half with the specified"
+            " uniform alternative. The data favor this null over that alternative by about twelve to one. <bookmark "
+            "mark='d'/> Equal prior model odds then give a null posterior probability of point nine two, conditional "
+            "on those models and sampling assumptions."
         ) as vo:
+            self.add(intro)
             self.add(pear_tag())
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -91,7 +95,7 @@ class Lindley(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"green: \ the likelihood, \ SE 0.00005", font_size=22, color=LIKE),
             label(r"gold: \ $H_0$ puts all its mass at 0.5", font_size=22, color=TRUE),
-            label(r"purple: \ $H_1$ spreads its mass over $[0, 1]$", font_size=22, color=PRIOR),
+            label(r"purple, schematic height: \ uniform prior on $[0,1]$", font_size=22, color=PRIOR),
             label(r"only about 2 parts in 10{,}000 of it land under the likelihood", font_size=22, color=RES),
             label(r"$H_0$ predicted the data better than $H_1$ did", font_size=22, color=SHRUNK),
         ), 3.8, 0.42, [5.0, 0.3, 0])
@@ -160,17 +164,17 @@ class Lindley(VoiceoverScene):
             r[2].set_color(RES)
         tb.move_to([0, 0.8, 0])
         foot = fit_rows(VGroup(
-            label(r"Sellke, Bayarri \& Berger (2001): \ $BF_{01} \ge -e\,p\log p$ \ over a wide class of alternatives", font_size=22),
-            label(r"even the most favourable prior leaves $p = 0.05$ with a 29\% chance the null is true", font_size=22, color=RES),
+            label(r"Sellke, Bayarri \& Berger (2001): \ $BF_{01} \ge -e\,p\log p$ \ for the stated Beta-mixture p-value alternatives", font_size=22),
+            label(r"$p=0.05$: \ bound 29\% within this class, \ with equal prior model odds", font_size=22, color=RES),
         ), 12.0, 0.22, [0, -1.9, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Could a cleverer prior rescue the p-value? Thomas Sellke, Susie Bayarri and James Berger "
-            "found a bound over a wide class of alternatives: the Bayes factor for the null is at least minus e times p times "
-            "log p. <bookmark mark='b'/> A p-value of point oh five gives a Bayes factor of at least point four one, so from "
-            "even odds the null keeps at least a twenty-nine percent chance. Point oh one leaves at least eleven percent; "
-            "point oh oh one, about two percent. <bookmark mark='c'/> 'Significant at five percent' is much weaker evidence "
-            "than the words suggest; this is one reason behind the 2016 statement of the American Statistical Association "
-            "that Part 10 described."
+            "<bookmark mark='a'/> A useful Sellke–Bayarri–Berger calibration has explicit conditions: a continuous "
+            "uniform null p-value and alternatives whose p-value densities are mixtures of Beta distributions with "
+            "shape xi and one, where xi lies between zero and one. In that class the null Bayes factor is at least "
+            "minus e p log p for p below one over e. <bookmark mark='b'/> At point oh five that lower bound is point "
+            "four one; equal prior model odds give a null posterior probability of at least twenty-nine percent. "
+            "<bookmark mark='c'/> This is a calibration within a specified alternative class, not a universal "
+            "conversion of any p-value into a probability that the null is true."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(foot[0]), FadeIn(tb[0]))

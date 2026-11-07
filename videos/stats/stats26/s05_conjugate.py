@@ -29,14 +29,19 @@ class Conjugate(VoiceoverScene):
         rows[3][2].set_color(SHRUNK)
         whys = [why(r"Part 22's exponential family"), why(r"the conjugate prior: \ the same shape in $\theta$"),
                 why(r"multiply: \ the shape survives"), why(r"the update is bookkeeping")]
+        intro = label('Natural-parameter conjugacy updates sufficient-statistic bookkeeping', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Part 15's conjugate pairs all come from one source. Write the model as an exponential "
-            "family, with natural parameter theta, sufficient statistic T and cumulant function A. <bookmark mark='b'/> Now "
-            "choose a prior with the same shape in theta, governed by two numbers, chi and nu. <bookmark mark='c'/> "
-            "Multiplying by the likelihood keeps that shape. <bookmark mark='d'/> So updating is bookkeeping: add the data's "
-            "sufficient statistics to chi and the sample size to nu. The prior acts exactly like nu earlier observations "
-            "whose statistics summed to chi."
+            "<bookmark mark='a'/> Part 15's conjugate pairs all come from one source. Write the model as an "
+            "exponential family, with natural parameter theta, sufficient statistic T and cumulant function A. "
+            "<bookmark mark='b'/> Now choose a prior with the same shape in theta, governed by two numbers, chi and "
+            "nu. <bookmark mark='c'/> Multiplying by the likelihood keeps that shape. <bookmark mark='d'/> So "
+            "updating is bookkeeping: add the data's sufficient statistics to chi and the sample size to nu. The "
+            "natural-parameter prior has a pseudo-data interpretation through chi and nu, provided the parameters "
+            "define a proper prior."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -53,13 +58,18 @@ class Conjugate(VoiceoverScene):
         rows[1][-1].set_color(SHRUNK)
         whys = [why(r"Diaconis \& Ylvisaker (1979)"), why(r"prior mean and data mean, \ weighted"),
                 why(r"conjugacy is characterized by linearity"), why(r"the prior is worth $\nu$ observations")]
+        intro = label('Linear posterior mean characterizations require regularity conditions', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Persi Diaconis and Donald Ylvisaker proved in 1979 that the posterior mean of the "
-            "quantity T estimates is then a simple fraction. <bookmark mark='b'/> It's a weighted average of the prior's "
-            "mean, chi over nu, and the data's mean, with weights nu and n: the same shrinkage as the eight schools, with the "
-            "prior playing the population. <bookmark mark='c'/> And conversely, linear posterior means happen only with "
-            "these priors. <bookmark mark='d'/> As n grows, the weight on the data tends to one."
+            "<bookmark mark='a'/> For a regular natural exponential family with a proper conjugate prior and suitable"
+            " boundary conditions, Diaconis and Ylvisaker obtain a linear posterior mean of the mean parameter. "
+            "<bookmark mark='b'/> The displayed fraction weights the prior mean and the observed sufficient-statistic"
+            " mean. <bookmark mark='c'/> Under their characterization conditions, linearity for all sample sizes "
+            "identifies this conjugate family. This is not a converse for every imaginable model. <bookmark "
+            "mark='d'/> The weight n over nu plus n tends to one as the sample grows."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -71,9 +81,9 @@ class Conjugate(VoiceoverScene):
         body = [[r"binomial $p$", r"Beta$(a, b)$", r"$a + s, \ b + f$", r"$a + b$ trials"],
                 [r"Poisson rate $\lambda$", r"Gamma$(a, b)$", r"$a + \sum x, \ b + n$", r"$b$ periods"],
                 [r"normal mean, \ $\sigma$ known", r"$N(m, \sigma^2/\nu)$", r"$\tfrac{\nu m + n\bar x}{\nu + n}$", r"$\nu$ observations"],
-                [r"normal variance", r"inv-gamma$(a, b)$", r"$a + \tfrac n2, \ b + \tfrac12\sum (x - \mu)^2$", r"$2a$ observations"],
+                [r"normal variance, \ $\mu$ known", r"inv-gamma$(a, b)$", r"$a + \tfrac n2, \ b + \tfrac12\sum (x - \mu)^2$", r"shape increment $n/2$"],
                 [r"multinomial $\pi$", r"Dirichlet$(\alpha)$", r"$\alpha_k + n_k$", r"$\sum \alpha_k$ draws"],
-                [r"exponential rate", r"Gamma$(a, b)$", r"$a + n, \ b + \sum x$", r"$a$ lifetimes"]]
+                [r"exponential rate", r"Gamma$(a, b)$", r"$a + n, \ b + \sum x$", r"$a-1$ pseudo events; \ exposure $b$"]]
         tb = table_rows([hdr] + body, font_size=24, col_buff=0.6, row_buff=0.28, colors=[GREY_A] + [None] * 6)
         for r in tb[1:]:
             r[1].set_color(PRIOR)
@@ -105,17 +115,18 @@ class Conjugate(VoiceoverScene):
         foot = fit_rows(VGroup(
             label(rf"prior: \ Gamma({d['a0']:.0f}, {d['b0']:.0f}), \ a mean of 4 visits, \ worth one adult", font_size=22, color=PRIOR),
             label(rf"the World's true mean: \ {d['truth']:.2f} visits a year", font_size=22, color=TRUE),
-            label(r"at 100 adults the interval misses: \ the Poisson model is wrong \ (chapter ten)", font_size=22, color=RES),
+            label(r"one missed interval is not a diagnosis; \ chapter ten checks overdispersion", font_size=22, color=RES),
         ), 12.0, 0.22, [0, -1.9, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> An example: the mean number of doctor visits a year in the World, with a Poisson model and "
-            "a gamma prior whose mean is four visits, worth a single adult. <bookmark mark='b'/> With one adult, the "
-            "posterior mean is halfway between the prior's four and the adult's three. With five, the data get five-sixths "
-            "of the weight; with a thousand, almost all of it, and the posterior mean is two point one five against the "
-            "World's two point two four. <bookmark mark='c'/> But look at the sample of a hundred: its interval, two and a "
-            "half to three point two, misses the truth. The Poisson model assumes the variance equals the mean, and doctor "
-            "visits are far more variable, so its intervals are too narrow. Conjugacy makes the arithmetic easy; it doesn't "
-            "make the model right. Chapter ten catches this."
+            "<bookmark mark='a'/> An example: the mean number of doctor visits a year in the World, with a Poisson "
+            "model and a gamma prior whose mean is four visits, worth a single adult. <bookmark mark='b'/> With one "
+            "adult, the posterior mean is halfway between the prior's four and the adult's three. With five, the data"
+            " get five-sixths of the weight; with a thousand, almost all of it, and the posterior mean is two point "
+            "one five against the World's two point two four. <bookmark mark='c'/> But look at the sample of a "
+            "hundred: its interval, two and a half to three point two, misses the truth. One missed "
+            "ninety-five-percent interval does not diagnose a model. We also know the World's visits are "
+            "overdispersed, which motivates the predictive checks in chapter ten. Conjugacy makes the arithmetic "
+            "easy; it doesn't make the model right. Chapter ten catches this."
         ) as vo:
             self.add(simulated_tag())
             vo.wait_until("a")
@@ -128,17 +139,19 @@ class Conjugate(VoiceoverScene):
 
     def beyond(self):
         rows = fit_rows(VGroup(
-            label(r"mixtures of conjugate priors approximate any prior \ (Dalal \& Hall 1983)", font_size=24),
+            label(r"mixtures approximate many priors under suitable conditions \ (Dalal \& Hall 1983)", font_size=24),
             label(r"conjugate pieces inside bigger models: \ Gibbs sampling, \ Part 27", font_size=24, color=SHRUNK),
-            label(r"logistic regression, \ hierarchies: \ no conjugate prior; \ grids, \ Laplace, \ MCMC", font_size=24, color=RES),
+            label(r"logistic normal priors and most hierarchies need numerical methods", font_size=24, color=RES),
             label(r"convenience is not a reason to believe a prior", font_size=24, color=PATH),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Conjugacy goes further than it seems. Mixtures of conjugate priors can approximate any "
-            "prior, and still update in closed form. <bookmark mark='b'/> Inside bigger models, conjugate pieces make "
-            "Gibbs sampling possible, as Part 27 shows. <bookmark mark='c'/> But logistic regression and most hierarchies "
-            "have no conjugate prior, and need grids, approximations or simulation. <bookmark mark='d'/> And a prior's "
-            "convenience is never a reason to believe it."
+            "<bookmark mark='a'/> Conjugacy goes further than it seems. Under suitable approximation conditions, "
+            "mixtures of conjugate priors can represent many useful prior shapes, retaining tractable component "
+            "updates. <bookmark mark='b'/> Inside bigger models, conjugate pieces make Gibbs sampling possible, as "
+            "Part 27 shows. <bookmark mark='c'/> Normal priors for logistic coefficients are not conjugate. Formal "
+            "conjugate families can exist, but their normalizers and summaries can still require numerical "
+            "integration. Most useful hierarchies need approximation or simulation. <bookmark mark='d'/> And a "
+            "prior's convenience is never a reason to believe it."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -155,15 +168,20 @@ class Conjugate(VoiceoverScene):
         rows[2][-1].set_color(SHRUNK)
         whys = [why(r"a new adult, \ given the sample"), why(r"average the model over the posterior"),
                 why(r"Part 24's gamma mixture, \ again"), why(r"but not wide enough for the World's visits")]
+        intro = label('Parameter uncertainty and observation heterogeneity are different', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Conjugacy also gives the predictive distribution for a new observation in closed form. "
-            "A new adult's visits are Poisson given the rate, and the rate has its gamma posterior. <bookmark mark='b'/> "
-            "Average the Poisson over that posterior, <bookmark mark='c'/> and the result is a negative binomial, Part 24's "
-            "gamma mixture of Poissons arising for a new reason. <bookmark mark='d'/> The predictive is wider than any single "
-            "Poisson because it carries the uncertainty about the rate. But with a thousand adults that uncertainty is tiny, "
-            "and the predictive is still far narrower than the World's real spread of visits: parameter uncertainty is not "
-            "a substitute for the right model."
+            "<bookmark mark='a'/> Conjugacy also gives the predictive distribution for a new observation in closed "
+            "form. A new adult's visits are Poisson given the rate, and the rate has its gamma posterior. <bookmark "
+            "mark='b'/> Average the Poisson over that posterior, <bookmark mark='c'/> and the result is a negative "
+            "binomial, Part 24's gamma mixture of Poissons arising for a new reason. <bookmark mark='d'/> The "
+            "predictive has greater variance than a Poisson with the same predictive mean because it carries the "
+            "uncertainty about the rate. But with a thousand adults that uncertainty is tiny, and the predictive is "
+            "still far narrower than the World's real spread of visits: parameter uncertainty is not a substitute for"
+            " the right model."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

@@ -25,20 +25,25 @@ class DP(VoiceoverScene):
             cmath(r"G", r"\sim", r"\text{DP}(\alpha, G_0): \ \text{a random probability distribution}", font_size=30),
             cmath(r"(G(A_1), \dots, G(A_k))", r"\sim", r"\text{Dirichlet}(\alpha G_0(A_1), \dots, \alpha G_0(A_k))", font_size=28),
             cmath(r"E\,G", r"=", r"G_0; \ \ \alpha: \ \text{how tightly } G \text{ hugs } G_0", font_size=30),
-            cmath(r"G \mid x_{1:n}", r"\sim", r"\text{DP}\bigl(\alpha + n, \ \tfrac{\alpha G_0 + \sum \delta_{x_i}}{\alpha + n}\bigr)", font_size=28),
+            cmath(r"G \mid x_{1:n}", r"\sim", r"\text{DP}\bigl(\alpha+n,\tfrac{\alpha G_0+\sum\delta_{x_i}}{\alpha+n}\bigr)\quad(x_i\mid G\ \mathrm{iid}\ G)", font_size=28),
         ]
         rows[3][2].set_color(SHRUNK)
         whys = [why(r"Ferguson (1973)"), why(r"for every partition of the space"), why(r"a centre and a concentration"),
                 why(r"conjugate: \ prior guess and data, \ weighted")]
+        intro = label('A prior predictive distribution supplies a model comparison', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> What if we don't want to assume the population of effects is normal, or any other shape? "
-            "Thomas Ferguson's 1973 Dirichlet process is a prior on distributions themselves. <bookmark mark='b'/> A random "
-            "distribution G is a Dirichlet process if, for every way of cutting the space into pieces, the probabilities G "
-            "gives the pieces have a Dirichlet distribution. <bookmark mark='c'/> On average G is the base guess G nought, "
-            "and alpha says how closely it follows that guess. <bookmark mark='d'/> And it is conjugate: after data, the "
-            "posterior is another Dirichlet process, centred on a weighted average of the guess and the data's empirical "
+            "<bookmark mark='a'/> What if we don't want to assume the population of effects is normal, or any other "
+            "shape? Thomas Ferguson's 1973 Dirichlet process is a prior on distributions themselves. <bookmark "
+            "mark='b'/> A random distribution G is a Dirichlet process if, for every way of cutting the space into "
+            "pieces, the probabilities G gives the pieces have a Dirichlet distribution. <bookmark mark='c'/> On "
+            "average G is the base guess G nought, and alpha says how closely it follows that guess. <bookmark "
+            "mark='d'/> For direct independent draws x from G it is conjugate: after those data, the posterior is "
+            "another Dirichlet process, centred on a weighted average of the guess and the data's empirical "
             "distribution, chapter four's pseudo-data again, with alpha as the prior's sample size."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -56,17 +61,21 @@ class DP(VoiceoverScene):
             x = -total / 2
             segs = VGroup()
             for j, wj in enumerate(w):
-                seg = Rectangle(width=max(total * wj, 0.004), height=0.7, stroke_width=0.6, stroke_color=BLACK,
+                seg = Rectangle(width=max(total * wj, 1e-9), height=0.7, stroke_width=0.6, stroke_color=BLACK,
                                 fill_color=SCHOOL[j % 8], fill_opacity=0.85)
                 seg.move_to([x + total * wj / 2, y, 0])
                 segs.add(seg)
                 x += total * wj
+            remainder=max(0.,1-w.sum())
+            if remainder>0:
+                segs.add(Rectangle(width=total*remainder,height=.7,stroke_width=.6,stroke_color=BLACK,
+                                   fill_color=GREY_C,fill_opacity=.6).move_to([x+total*remainder/2,y,0]))
             name = label(rf"$\alpha = {float(a):g}$", font_size=24).next_to(segs, LEFT, buff=0.3)
             group.add(name)
             anims.append(segs)
         rows = fit_rows(VGroup(
             label(r"break a stick of length 1: \ keep a Beta(1, $\alpha$) fraction, \ break the rest again", font_size=22),
-            label(r"each piece is the weight of one atom of $G$", font_size=22, color=GREY_A),
+            label(r"first 30 atoms shown; \ grey is the remaining probability mass", font_size=22, color=GREY_A),
             label(r"small $\alpha$: \ a few big pieces; \ large $\alpha$: \ many small ones", font_size=22, color=PATH),
             label(r"so $G$ is discrete, \ with probability one", font_size=22, color=RES),
         ), 12.0, 0.22, [0, -2.6, 0])
@@ -182,12 +191,14 @@ class DP(VoiceoverScene):
             label(r"posterior consistency can fail: \ Diaconis \& Freedman; \ Part 53", font_size=24, color=RES),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In practice the Dirichlet process sits inside mixture models, where each table is a "
-            "cluster with its own parameters, and the data choose how many clusters there are. <bookmark mark='b'/> Put one "
-            "in place of the eight schools' normal population, and the effects could fall into groups instead. "
-            "<bookmark mark='c'/> Gaussian processes, priors on whole functions, are the other workhorse, in Part 39. "
-            "<bookmark mark='d'/> But in infinite dimensions, Bernstein–von Mises no longer protects us, and the prior can "
-            "matter for ever; Part 53 takes up the theory."
+            "<bookmark mark='a'/> In practice the Dirichlet process sits inside mixture models, where each table is a"
+            " cluster with its own parameters, with posterior uncertainty about the number of occupied components. "
+            "The result also depends on alpha, the base distribution and the mixture kernel. <bookmark mark='b'/> Put"
+            " one in place of the eight schools' normal population, and the effects could fall into groups instead. "
+            "<bookmark mark='c'/> Gaussian processes, priors on whole functions, are the other workhorse, in Part 39."
+            " <bookmark mark='d'/> But in infinite dimensions, the basic finite-dimensional Bernstein–von Mises "
+            "theorem need not apply. Consistency and functional limits require additional conditions; Part 53 takes "
+            "up the theory."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

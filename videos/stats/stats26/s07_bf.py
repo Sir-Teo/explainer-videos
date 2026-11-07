@@ -32,6 +32,9 @@ class BayesFactors(VoiceoverScene):
         rows[1][2].set_color(SHRUNK)
         whys = [why(r"posterior odds = Bayes factor $\times$ prior odds"), why(r"Jeffreys (1939), \ Part 15's first look"),
                 why(r"the marginal likelihood, \ or evidence"), why(r"averaged over each hypothesis's prior")]
+        intro = label('A prior predictive distribution supplies a model comparison', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> Bayes's rule for two hypotheses says the posterior odds are the prior odds times a factor "
             "the data supply. <bookmark mark='b'/> That factor, the Bayes factor, is the ratio of how probable the data were "
@@ -40,6 +43,7 @@ class BayesFactors(VoiceoverScene):
             "factor compares predictions. A hypothesis that spreads its bets thinly over many possible results is penalized "
             "when the result is one it barely predicted."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -77,6 +81,9 @@ class BayesFactors(VoiceoverScene):
         rows[2][2].set_color(SHRUNK)
         whys = [why(r"a point null against a normal alternative"), why(r"both are just normal predictions"),
                 why(r"two normal densities, \ divided"), why(r"a `significant' result: \ odds of 3 to 1 for $H_1$")]
+        intro = label('The normal-mean Bayes factor compares two specified predictions', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> The workhorse case: is a normal mean zero, or drawn from a normal of spread tau? "
             "<bookmark mark='b'/> Under each hypothesis the sample mean is simply normal, with a larger variance under the "
@@ -86,6 +93,7 @@ class BayesFactors(VoiceoverScene):
             "the data favour the alternative by three to one. Positive evidence, on Kass and Raftery's scale, but far weaker "
             "than 'p below point oh five' sounds."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -104,17 +112,19 @@ class BayesFactors(VoiceoverScene):
         mn = Dot(ax.c2p(np.log10(d["tau_min"]), np.log10(d["bf_min"])), radius=0.08, color=HIT)
         rows = fit_rows(VGroup(
             label(r"the same data: \ $z = 2.5$, \ $n = 50$", font_size=22),
-            label(rf"best case for $H_1$: \ $BF_{{01}} = {d['bf_min']:.2f}$ at $\tau = {d['tau_min']:.2f}$", font_size=22, color=HIT),
+            label(rf"best within centered normal-prior family: \ $BF_{{01}} = {d['bf_min']:.2f}$ at $\tau = {d['tau_min']:.2f}$", font_size=22, color=HIT),
             label(rf"$\tau = 1000$: \ $BF_{{01}} = {d['bf01'][-1]:.0f}$, \ the null wins", font_size=22, color=RES),
             label(r"Bartlett (1957): \ a vague prior is not harmless here", font_size=22, color=PATH),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> But that number depends on tau, the alternative's prior spread, and not weakly. Here is the "
-            "Bayes factor for the same data as tau ranges over five orders of magnitude. <bookmark mark='b'/> The most the "
-            "alternative can ever do is a factor of point one eight, at a tau of a third. <bookmark mark='c'/> Make the prior "
-            "vague, tau of a thousand, and the Bayes factor is three hundred in favour of the null, from data with a p-value "
-            "of point oh one. <bookmark mark='d'/> Maurice Bartlett pointed this out in 1957. In estimation a vague prior "
-            "washes out; in testing it never does, because it decides how thinly the alternative spreads its predictions."
+            "<bookmark mark='a'/> But that number depends on tau, the alternative's prior spread, and not weakly. "
+            "Here is the Bayes factor for the same data as tau ranges over five orders of magnitude. <bookmark "
+            "mark='b'/> Within this zero-centered normal-prior family, the smallest null Bayes factor is point one "
+            "eight, at a tau of a third. <bookmark mark='c'/> Make the prior vague, tau of a thousand, and the Bayes "
+            "factor is three hundred in favour of the null, from data with a p-value of point oh one. <bookmark "
+            "mark='d'/> Maurice Bartlett pointed this out in 1957. For these fixed data, making this alternative "
+            "arbitrarily vague increasingly favors the null, because it decides how thinly the alternative spreads "
+            "its predictions."
         ) as vo:
             self.play(FadeIn(A), Create(one))
             vo.wait_until("a")
@@ -138,14 +148,18 @@ class BayesFactors(VoiceoverScene):
         rows[1][2].set_color(SHRUNK)
         whys = [why(r"Laplace's method on the evidence"), why(r"Schwarz (1978)"), why(r"one extra parameter"),
                 why(r"Kass \& Wasserman (1995): \ BIC's implicit prior")]
+        intro = label('BIC drops prior-dependent terms from a regular evidence approximation', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> A rough but prior-free version comes from Laplace's approximation to the evidence: the "
-            "maximized log likelihood minus half the number of parameters times log n. <bookmark mark='b'/> Twice its "
-            "negative is Gideon Schwarz's Bayesian information criterion. <bookmark mark='c'/> For our example it gives a "
-            "Bayes factor of point three one. <bookmark mark='d'/> Robert Kass and Larry Wasserman showed that BIC "
-            "approximates the exact Bayes factor for a unit-information prior, a normal prior worth one observation, "
-            "which gives point three three. Part 28 compares BIC with AIC."
+            "<bookmark mark='a'/> In regular fixed-dimensional models, Laplace approximation gives maximized log "
+            "likelihood minus half k log n, plus terms of order one that depend on the prior and model. BIC omits "
+            "those terms; it is not an exact prior-free Bayes factor. <bookmark mark='b'/> Negative twice the leading"
+            " expression is Schwarz's criterion. <bookmark mark='c'/> In this normal example its Bayes-factor "
+            "approximation is point three one. <bookmark mark='d'/> The specified zero-centered normal prior with one"
+            " observation's information gives point three three. The close agreement is example-specific."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -180,14 +194,20 @@ class BayesFactors(VoiceoverScene):
         ]
         rows[1][2].set_color(SHRUNK)
         whys = [why(r"posterior model probabilities"), why(r"Bayesian model averaging"),
-                why(r"Hoeting, Madigan, Raftery \& Volinsky (1999)"), why(r"Part 28's stacking avoids it")]
+                why(r"Hoeting, Madigan, Raftery \& Volinsky (1999)"), why(r"stacking changes the weighting criterion, not every prior dependence")]
+        intro = label('Model averaging propagates uncertainty within a specified model list', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> With several models, Bayes factors give each a posterior probability. <bookmark mark='b'/> "
-            "Then any quantity of interest can be averaged across models, weighted by those probabilities: Bayesian model "
-            "averaging. <bookmark mark='c'/> It answers a real weakness of choosing one model and reporting it as if it had "
-            "been known all along, a problem Part 28 takes up as inference after selection. <bookmark mark='d'/> But the weights inherit "
-            "every Bayes factor's sensitivity to priors; Part 28's stacking weights models by predictive performance instead."
+            "<bookmark mark='a'/> With several models, Bayes factors give each a posterior probability. <bookmark "
+            "mark='b'/> Then any quantity of interest can be averaged across models, weighted by those probabilities:"
+            " Bayesian model averaging. <bookmark mark='c'/> It answers a real weakness of choosing one model and "
+            "reporting it as if it had been known all along, a problem Part 28 takes up as inference after selection."
+            " <bookmark mark='d'/> But the weights inherit every Bayes factor's sensitivity to priors; Part 28's "
+            "stacking chooses weights using predictive performance. Its component predictions can still depend on "
+            "their priors."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
