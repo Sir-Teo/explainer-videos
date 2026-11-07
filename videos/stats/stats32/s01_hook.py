@@ -24,15 +24,17 @@ class Hook(VoiceoverScene):
                           r"Justin Romberg and Terence Tao (2006)", color=SPIKE, width=11.0, font_size=23).move_to([0, 0.9, 0])
         rows = fit_rows(VGroup(
             label(r"16{,}384 unknown pixels; \ about 3{,}400 measurements", font_size=24),
-            label(r"far too few equations: \ yet the answer was exact", font_size=24, color=SPIKE),
+            label(r"few sampled Fourier coefficients: this example recovers to numerical tolerance", font_size=24, color=SPIKE),
         ), 12.0, 0.35, [0, -1.7, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In 2004 Emmanuel Candès was experimenting with a standard test image from medical imaging. "
-            "He threw away most of its Fourier coefficients and asked a computer to rebuild the image from the few that were "
-            "left, with a particular convex optimization. The error came back zero: not small, zero. He assumed there was a "
-            "bug. <bookmark mark='b'/> There was none. With Justin Romberg and Terence Tao he proved that it had to work, "
-            "and the field of compressed sensing was born. <bookmark mark='c'/> Sixteen thousand unknowns, about three "
-            "thousand four hundred equations, and an exact answer. This part explains how that is possible."
+            "<bookmark mark='a'/> In 2004 Emmanuel Candès was experimenting with a standard test image from medical "
+            "imaging. He threw away most of its Fourier coefficients and asked a computer to rebuild the image from "
+            "the few that were left, with a particular convex optimization. The error came back zero: not small, "
+            "zero. He assumed there was a bug. <bookmark mark='b'/> There was none. With Justin Romberg and Terence "
+            "Tao he developed recovery theory under specified measurement and sparsity conditions. This deterministic"
+            " radial-mask example is a numerical demonstration, not a universal corollary of a random-measurement "
+            "theorem. <bookmark mark='c'/> Sixteen thousand unknowns, about three thousand four hundred equations, "
+            "and an exact answer. This part explains how that is possible."
         ) as vo:
             self.play(FadeIn(tl))
             vo.wait_until("a")
@@ -115,15 +117,16 @@ class Hook(VoiceoverScene):
                           center=[2.0, 0.6, 0], caption_color=LASSO)
         it = label(r"start", font_size=24, color=GREY_A).move_to([2.0, -1.75, 0])
         er = label(rf"error {100 * d['err_me']:.0f}\%", font_size=24, color=RES).move_to([2.0, -2.3, 0])
-        foot = label(r"among all images that fit the 22 lines, \ the one whose edges have the least total length",
+        foot = label(r"among all images that fit the 22 lines, \ minimum sum of local gradient magnitudes; grayscale display clipped to [0,1]",
                      font_size=22, color=GREY_A).move_to([0, -3.1, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Candès's reconstruction asks a different question. Among all images that agree with the "
-            "measured coefficients, find the one with the smallest total variation: the sum, over pixels, of the size of the "
-            "jump to their neighbours. Roughly, the image whose edges have the least total length. "
-            "<bookmark mark='b'/> Solving that convex problem iteratively, the streaks fade and the error falls: nineteen "
-            "percent, four, two tenths of a percent, then one part in a hundred thousand, <bookmark mark='c'/> and finally "
-            "one part in ten billion: the phantom, exactly."
+            "<bookmark mark='a'/> Candès's reconstruction asks a different question. Among all images that agree with"
+            " the measured coefficients, find the one with the smallest total variation: the sum, over pixels, of the"
+            " size of the jump to their neighbours. This measures contrast-weighted local jumps, not just unweighted "
+            "edge length. <bookmark mark='b'/> Solving that convex problem iteratively, the streaks fade and the "
+            "error falls: nineteen percent, four, two tenths of a percent, then one part in a hundred thousand, "
+            "<bookmark mark='c'/> and finally about one part in ten billion in this numerical run. This is accuracy "
+            "to numerical tolerance, not a proof of literal zero error."
         ) as vo:
             self.add(phantom_tag())
             self.play(FadeIn(p1), FadeIn(p2), FadeIn(it), FadeIn(er))
@@ -144,14 +147,14 @@ class Hook(VoiceoverScene):
                 cur = new
             vo.wait_until("c")
             self.play(Transform(it, label(r"iteration 4,000", font_size=24, color=GREY_A).move_to(it)),
-                      Transform(er, label(r"error $1.6 \times 10^{-10}$: \ exact", font_size=24, color=HIT).move_to(er)))
+                      Transform(er, label(r"error $1.6 \times 10^{-10}$: numerical recovery", font_size=24, color=HIT).move_to(er)))
         self.clear_scene()
 
     def why(self):
         d = load("phantom")
         rows = [
-            cmath(r"\text{pixels}", r":", r"\text{16,384 unknowns, \ most of them nonzero}", font_size=30),
-            cmath(r"\text{jumps}", r":", rf"\text{{only about {100 * d['nonzero_grad']:.0f}\% of neighbouring pixels differ}}", font_size=30),
+            cmath(r"\text{pixels}", r":", r"\text{16,384 unknowns, \ many of them nonzero}", font_size=30),
+            cmath(r"\text{jumps}", r":", rf"\text{{only about {100 * d['nonzero_grad']:.0f}\% of horizontal neighbours differ}}", font_size=30),
             cmath(r"\text{Fourier samples}", r":", r"\text{each one sees the whole image}", font_size=30),
             cmath(r"\text{sparse} + \text{incoherent}", r"\Rightarrow", r"\text{few measurements suffice}", font_size=30),
         ]
@@ -159,13 +162,16 @@ class Hook(VoiceoverScene):
         whys = [why(r"far too many for 3,400 equations"), why(r"sparse in the right basis"),
                 why(r"spread out: \ no measurement is wasted"), why(r"chapter nine")]
         with self.voiceover(
-            "<bookmark mark='a'/> Why can it work? The image has sixteen thousand pixels, most of them nonzero: far more "
-            "unknowns than equations. <bookmark mark='b'/> But the image is simple in another sense. Only about five "
-            "percent of neighbouring pixels differ: it is sparse in its jumps. <bookmark mark='c'/> And each Fourier "
-            "coefficient is a weighted sum over the whole image, so every measurement carries information about every "
-            "jump. <bookmark mark='d'/> Sparsity in one basis, measurements spread out in another: that combination is what "
-            "lets a few equations determine many unknowns. Chapter nine makes it precise."
+            "<bookmark mark='a'/> Why can it work? The image has sixteen thousand pixels, many of them nonzero: far "
+            "more unknowns than equations. <bookmark mark='b'/> But the image is simple in another sense. Only about "
+            "five percent of horizontal neighbours differ: it is sparse in its jumps. <bookmark mark='c'/> And each "
+            "Fourier coefficient is a weighted sum over the whole image, so every measurement carries information "
+            "about every jump. <bookmark mark='d'/> Sparsity in one basis, measurements spread out in another: that "
+            "combination is what lets a few equations determine many unknowns. Chapter nine makes it precise."
         ) as vo:
+            intro=label('Gradient sparsity can support accurate recovery from incomplete Fourier data',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -180,11 +186,13 @@ class Hook(VoiceoverScene):
             label(r"the bet on sparsity: \ assume few coefficients matter, \ and find them", font_size=26, color=SPIKE),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Statistics meets the same problem constantly. <bookmark mark='b'/> In a gene-expression "
-            "study there may be twenty thousand genes measured on a hundred patients. <bookmark mark='c'/> A regression of "
-            "an outcome on all of them has infinitely many exact fits, each meaningless. <bookmark mark='d'/> The way out is "
-            "what Hastie, Tibshirani and Friedman call the bet on sparsity: assume that only a few coefficients matter, and "
-            "use a method that finds them. If the bet is wrong, no method could have done well anyway."
+            "<bookmark mark='a'/> Statistics meets the same problem constantly. <bookmark mark='b'/> In a "
+            "gene-expression study there may be twenty thousand genes measured on a hundred patients. <bookmark "
+            "mark='c'/> A regression of an outcome on all of them has infinitely many exact fits, each meaningless. "
+            "<bookmark mark='d'/> The way out is what Hastie, Tibshirani and Friedman call the bet on sparsity: "
+            "assume that only a few coefficients matter, and use a method that finds them. Other structures, such as "
+            "smoothness, low rank or many small effects, can support different methods; the sparse assumption must be"
+            " assessed."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -203,11 +211,12 @@ class Hook(VoiceoverScene):
         prereq = note(r"prerequisites: \ Parts 19, \ 21 and 23").to_corner(DL, buff=0.3)
         built = note(r"built: \ \texttt{statkit.sparse}; \ the phantom").to_corner(DR, buff=0.3)
         with self.voiceover(
-            "<bookmark mark='a'/> Part thirty-two: sparsity. <bookmark mark='b'/> We start with ridge regression and see why "
-            "it never sets a coefficient to zero; move from the hopeless count of best subsets to the convex absolute-value "
-            "penalty; derive the lasso's optimality conditions and its geometry; compute its whole path and choose its "
-            "tuning parameter; survey its relatives and its Bayesian counterparts; prove what we can about compressed "
-            "sensing; repair inference after selection; and finish with matrices that are sparse in their singular values."
+            "<bookmark mark='a'/> Part thirty-two: sparsity. <bookmark mark='b'/> We start with ridge regression and "
+            "see why it does not generally select variables; move from the hopeless count of best subsets to the "
+            "convex absolute-value penalty; derive the lasso's optimality conditions and its geometry; compute its "
+            "whole path and choose its tuning parameter; survey its relatives and its Bayesian counterparts; prove "
+            "what we can about compressed sensing; repair inference after selection; and finish with matrices that "
+            "are sparse in their singular values."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head, shift=UP * 0.2))

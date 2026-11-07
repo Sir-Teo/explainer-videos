@@ -1,0 +1,70 @@
+{
+  "items": [
+    {
+      "item": "phantom",
+      "path": ".cache/stats32/phantom.json",
+      "bytes": 3316239,
+      "sha256": "91adcdcbafe23c5415e2dc6cea8ad1cd783e0154195b451dc691331626916e1e"
+    },
+    {
+      "item": "lines",
+      "path": ".cache/stats32/lines.json",
+      "bytes": 869164,
+      "sha256": "b669066da58ca47bb14db5382d4c3d29a6a3093edf547e2c141f43b7f3b13d19"
+    },
+    {
+      "item": "ridge",
+      "path": ".cache/stats32/ridge.json",
+      "bytes": 35115,
+      "sha256": "3ecc519cd1137ad207f14d4a7084137fe041ee37e38f54bd108312bebb325f53"
+    },
+    {
+      "item": "lars",
+      "path": ".cache/stats32/lars.json",
+      "bytes": 6303,
+      "sha256": "7360945ebdb5760c980b4a43933a0429b5eab5314431ec61617808bfe3164133"
+    },
+    {
+      "item": "zoo",
+      "path": ".cache/stats32/zoo.json",
+      "bytes": 27428,
+      "sha256": "515e6d4dfb06e611ec31051ee1c4f8cb135372dd90c884ef4c8d2997118ea4df"
+    },
+    {
+      "item": "cv",
+      "path": ".cache/stats32/cv.json",
+      "bytes": 22450,
+      "sha256": "f3e9e776c30188b4d7a8c5f2a1dd687a194eb011f2d7e30330a8092890e87ddd"
+    },
+    {
+      "item": "bayes",
+      "path": ".cache/stats32/bayes.json",
+      "bytes": 49188,
+      "sha256": "60921b243fe711e4e5923393410e0994c7c96e9edfaef6e03a67dfea743c4c36"
+    },
+    {
+      "item": "cs",
+      "path": ".cache/stats32/cs.json",
+      "bytes": 13049,
+      "sha256": "3b4a4ae441a4ce691e29f52f1898602a1688d204359f6a62b4a8dc50b7feea83"
+    },
+    {
+      "item": "infer",
+      "path": ".cache/stats32/infer.json",
+      "bytes": 17026,
+      "sha256": "4c95c4bb082f2838c1de385e670f7a58e95a6a654ac119b294c1e5c80c982b6f"
+    },
+    {
+      "item": "mc",
+      "path": ".cache/stats32/mc.json",
+      "bytes": 29049,
+      "sha256": "0c84288291a4f72c02d0997ac92bf3c4da65375e70f57cd305daf01dd07c8489"
+    },
+    {
+      "item": "board",
+      "path": ".cache/stats32/board.json",
+      "bytes": 63832,
+      "sha256": "718cbeea8972a52d459c19fa190a86246fe14300663c992adc9f0b314b2051df"
+    }
+  ]
+}

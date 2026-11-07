@@ -1,0 +1,22 @@
+{
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/scikit-learn/scikit-learn/main/sklearn/datasets/data/diabetes_data_raw.csv.gz",
+      "sha256": "7fc0ded571454b1982210d3bb43f0aca44eae01a0b8654a3b24022bdb6b38009",
+      "shape": [
+        442,
+        10
+      ],
+      "max_abs_difference": 0
+    },
+    {
+      "url": "https://raw.githubusercontent.com/scikit-learn/scikit-learn/main/sklearn/datasets/data/diabetes_target.csv.gz",
+      "sha256": "8e53f65eb811df43c206f3534bb3af0e5fed213bc37ed6ba36310157d6023803",
+      "shape": [
+        442
+      ],
+      "max_abs_difference": 0
+    }
+  ],
+  "scope": "All diabetes raw features and outcomes match the official scikit-learn distribution exactly."
+}

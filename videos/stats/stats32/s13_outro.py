@@ -28,7 +28,7 @@ class Outro(VoiceoverScene):
             (r"ridge: \ shrinks, \ never selects", RIDGE), (r"$\ell_1$: \ the convex envelope of $\ell_0$", LASSO),
             (r"the lasso: \ KKT, \ soft thresholds, \ corners", LASSO), (r"LARS: \ the exact path; \ HDL drops out", LASSO),
             (r"elastic net, \ group, \ fused, \ MCP", ENET), (r"CV predicts; \ stability selects", LASSO),
-            (r"Laplace is not sparse; \ the horseshoe is", S.KEPT), (r"null space property, \ RIP, \ phase transitions", SPIKE),
+            (r"Laplace and horseshoe: continuous shrinkage, no exact-zero posterior mass", S.KEPT), (r"null space property, \ RIP, \ phase transitions", SPIKE),
             (r"naive CIs 75\%; \ debiased 95.6\%", RES), (r"matrix completion: \ $\ell_1$ of singular values", LASSO),
         ]
         rows = VGroup(*[label(rf"{i}.\ \ {t}", font_size=26, color=c) for i, (t, c) in enumerate(items)])
@@ -39,16 +39,18 @@ class Outro(VoiceoverScene):
         head = label(r"Part 32, \ in twelve lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Part thirty-two in twelve lines. <bookmark mark='a'/> The phantom came back exactly from a fifth of its Fourier "
-            "coefficients. With more unknowns than equations we must bet on sparsity. Ridge stabilizes but never selects. "
-            "The one norm is the convex envelope of counting. The lasso's optimality conditions pin active correlations at "
-            "lambda, and its zeros come from corners. Least angle regression computes the exact path, on which HDL drops out "
-            "and returns. The elastic net shares among correlated variables, the group lasso selects groups, the fused lasso "
-            "finds jumps, and MCP removes the bias on large effects. Cross-validation predicts well; stability selection "
-            "selects well. The Laplace prior is not sparse, and the horseshoe is. The null space property and the restricted "
-            "isometry property explain compressed sensing, with its sharp phase transition. Naive intervals after the lasso "
-            "cover seventy-five percent; debiased ones cover ninety-five. And matrix completion is the lasso of singular "
-            "values."
+            "Part thirty-two in twelve lines. <bookmark mark='a'/> The phantom came back exactly from a fifth of its "
+            "Fourier coefficients. With more unknowns than equations we need structure; sparsity is one useful "
+            "choice. Ridge stabilizes but never selects. On a unit coordinate box, the one norm is the convex "
+            "envelope of counting. The lasso's optimality conditions pin active correlations at lambda, and its zeros"
+            " come from corners. Least angle regression computes the exact path, on which HDL drops out and returns. "
+            "The elastic net shares among correlated variables, the group lasso selects groups, the fused lasso finds"
+            " jumps, and MCP removes the bias on large effects. Cross-validation predicts well; stability selection "
+            "selects well. Both Laplace and horseshoe are continuous priors; the horseshoe provides stronger "
+            "near-zero shrinkage, not exact posterior zeros. The null space property and the restricted isometry "
+            "property explain compressed sensing, with its sharp phase transition. Naive intervals after the lasso "
+            "cover seventy-five percent; debiased ones cover ninety-five. And matrix completion is the lasso of "
+            "singular values."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -97,6 +99,7 @@ class Outro(VoiceoverScene):
             (r"Fano: \ $s\log(p/s)$ is optimal", [50]), (r"concentration for RIP", [51]),
             (r"oracle inequalities; \ low-rank recovery", [52]), (r"selective inference and PoSI", [56]),
         ], font_size=22)
+        self.play(FadeIn(card.head))
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part 33 handles the thousands of tests that screening creates. Part 34 "
             "wraps lasso predictions in conformal intervals with guarantees. Part 36's double machine learning extends double "
@@ -105,16 +108,16 @@ class Outro(VoiceoverScene):
             "oracle inequalities and returns to low-rank recovery. And Part 56 develops inference after selection in full."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):
         ps = problem_set(PROBLEMS, font_size=20)
         with self.voiceover(
-            "Six problems, with full solutions in the README. <bookmark mark='a'/> Ridge through the SVD; soft thresholding "
-            "from the subgradient; where the lasso path begins; the null space property's sufficiency; why the Laplace "
-            "posterior mean is never zero; and singular value thresholding as the nuclear norm's proximal map. Pause here if "
-            "you want to try them."
+            "Six problems, with full solutions in the README. <bookmark mark='a'/> Ridge through the SVD; soft "
+            "thresholding from the subgradient; where the lasso path begins; the null space property's sufficiency; "
+            "why the independent normal-means Laplace posterior mean is nonzero for nonzero observations; and "
+            "singular value thresholding as the nuclear norm's proximal map. Pause here if you want to try them."
         ) as vo:
             self.play(FadeIn(ps.head))
             vo.wait_until("a")

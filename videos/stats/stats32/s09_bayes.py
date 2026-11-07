@@ -44,6 +44,9 @@ class BayesSparse(VoiceoverScene):
             "Bayesian lasso of 2008 writes the Laplace distribution as a scale mixture of normals and samples the whole "
             "posterior by Gibbs sampling."
         ) as vo:
+            intro=label('A Laplace coefficient prior gives the lasso posterior mode',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -61,12 +64,18 @@ class BayesSparse(VoiceoverScene):
         whys = [why(r"zero has probability zero"), why(r"the posterior mean shrinks, \ never kills"),
                 why(r"Laplace draws are all nonzero"), why(r"sparsity came from the optimizer")]
         with self.voiceover(
-            "<bookmark mark='a'/> But the Laplace prior is not a sparse prior. It is continuous, so the posterior probability "
-            "that any coefficient is exactly zero is zero. <bookmark mark='b'/> The posterior mean shrinks every coefficient "
-            "but never sets one to zero. <bookmark mark='c'/> And vectors drawn from the prior have every coordinate nonzero. "
-            "<bookmark mark='d'/> The lasso's zeros come from taking a mode of a distribution with a sharp peak, not from "
-            "any belief that most effects are zero. A Bayesian who wants sparsity needs a different prior."
+            "<bookmark mark='a'/> But the Laplace prior is not a sparse prior. It is continuous, so the posterior "
+            "probability that any coefficient is exactly zero is zero. <bookmark mark='b'/> In the independent "
+            "normal-means problem, the posterior mean has the sign of a nonzero observation and is zero at a zero "
+            "observation. A general correlated regression needs a separate statement. <bookmark mark='c'/> And "
+            "vectors drawn from the prior have every coordinate nonzero. <bookmark mark='d'/> The lasso's zeros come "
+            "from taking a mode of a distribution with a sharp peak, not from any belief that most effects are zero. "
+            "Exact posterior zeros need a point mass. Continuous shrinkage priors can instead concentrate strongly "
+            "near zero."
         ) as vo:
+            intro=label('Continuous shrinkage does not assign posterior mass to exact zeros',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -87,7 +96,7 @@ class BayesSparse(VoiceoverScene):
             label(r"one observation, \ one parameter", font_size=22),
             label(r"blue: \ Laplace posterior mode = soft threshold", font_size=22, color=LASSO),
             label(r"orange: \ Laplace posterior mean", font_size=22, color=BL),
-            label(r"smooth, \ never zero, \ biased by 1", font_size=22, color=BL),
+            label(r"smooth; zero at $y=0$; large-$|y|$ shift approaches 1", font_size=22, color=BL),
             label(r"green: \ horseshoe mean \ ($\tau = 0.1$)", font_size=22, color=HS),
             label(r"crushes small $y$, \ leaves large $y$", font_size=22, color=HS),
         ), 4.4, 0.42, [4.4, 0.3, 0])
@@ -120,12 +129,16 @@ class BayesSparse(VoiceoverScene):
         whys = [why(r"a scale mixture of normals"), why(r"half-Cauchy: \ Carvalho, Polson \& Scott (2010)"),
                 why(r"adapts to the overall sparsity"), why(r"one scale per coefficient")]
         with self.voiceover(
-            "<bookmark mark='a'/> The horseshoe of Carlos Carvalho, Nicholas Polson and James Scott is also a scale mixture of "
-            "normals, <bookmark mark='b'/> but with half-Cauchy distributions on both a local scale for each coefficient and "
-            "a global scale shared by all. <bookmark mark='c'/> The global scale, learned from the data, pulls everything "
-            "towards zero when most effects are null. <bookmark mark='d'/> The local scales have tails so heavy that a "
-            "coefficient with real signal can escape the global pull completely."
+            "<bookmark mark='a'/> The horseshoe of Carlos Carvalho, Nicholas Polson and James Scott is also a scale "
+            "mixture of normals, <bookmark mark='b'/> but with half-Cauchy distributions on both a local scale for "
+            "each coefficient and a global scale shared by all. <bookmark mark='c'/> The global scale, learned from "
+            "the data, pulls everything towards zero when most effects are null. <bookmark mark='d'/> The local "
+            "scales have tails so heavy that a coefficient with real signal can resist the global pull; negligible "
+            "tail shrinkage is an asymptotic property, not guaranteed finite-signal detection."
         ) as vo:
+            intro=label('Local and global half-Cauchy scales produce strong continuous shrinkage',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -216,10 +229,11 @@ class BayesSparse(VoiceoverScene):
             label(rf"the horseshoe learns $\tau \approx {d['tau_mean']:.2f}$ and adapts to the sparsity", font_size=22, color=HS),
         ), 12.0, 0.22, [0, -2.0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Total squared error. The raw observations make an error of about two hundred, one for each "
-            "mean. Soft thresholding at Donoho and Johnstone's universal threshold, root two log p, removes the nulls but "
-            "shrinks every signal by three and a quarter. The Bayesian lasso does better, <bookmark mark='b'/> and the "
-            "horseshoe best of all, having learned a small global scale from the data."
+            "<bookmark mark='a'/> Total squared error. The raw observations make an error of about two hundred, one "
+            "for each mean. Soft thresholding at Donoho and Johnstone's universal threshold, root two log p, removes "
+            "the nulls but shrinks every signal by three and a quarter. The Bayesian lasso does better, <bookmark "
+            "mark='b'/> and the horseshoe has the smallest error in this one seeded experiment, having learned a "
+            "small global scale from the data."
         ) as vo:
             self.add(seeded_tag())
             vo.wait_until("a")
@@ -230,18 +244,19 @@ class BayesSparse(VoiceoverScene):
 
     def spike_slab(self):
         rows = fit_rows(VGroup(
-            label(r"the honest sparse prior: \ spike-and-slab, \ $\beta_j \sim (1 - w)\,\delta_0 + w\, N(0, \tau^2)$", font_size=24),
+            label(r"a point-mass sparse prior: \ spike-and-slab, \ $\beta_j \sim (1 - w)\,\delta_0 + w\, N(0, \tau^2)$", font_size=24),
             label(r"Mitchell \& Beauchamp (1988); \ George \& McCulloch's SSVS (1993)", font_size=24, color=GREY_A),
-            label(r"exact zeros, \ posterior inclusion probabilities, \ but $2^p$ models to average", font_size=24, color=RES),
+            label(r"exact zeros, \ posterior inclusion probabilities, \ $2^p$ possible models; search need not enumerate all", font_size=24, color=RES),
             label(r"the horseshoe is its continuous stand-in; \ Part 53 proves when these posteriors contract", font_size=24, color=HS),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The most honest sparse prior puts a point mass at zero: a spike for the null effects and a "
-            "slab for the real ones. <bookmark mark='b'/> Toby Mitchell and John Beauchamp proposed it in 1988, and Edward "
-            "George and Robert McCulloch's stochastic search made it computable in 1993. <bookmark mark='c'/> It gives exact "
-            "zeros and a posterior probability that each variable is included, at the cost of averaging over two to the p "
-            "models. <bookmark mark='d'/> The horseshoe is its continuous stand-in, far easier to sample. Part 53 proves when "
-            "such posteriors concentrate on the truth."
+            "<bookmark mark='a'/> The most honest sparse prior puts a point mass at zero: a spike for the null "
+            "effects and a slab for the real ones. <bookmark mark='b'/> Toby Mitchell and John Beauchamp proposed it "
+            "in 1988, and Edward George and Robert McCulloch's stochastic search made it computable in 1993. "
+            "<bookmark mark='c'/> It gives exact zeros and a posterior probability that each variable is included, at"
+            " the cost of averaging over two to the p models. <bookmark mark='d'/> The horseshoe is a continuous "
+            "shrinkage alternative, with no point mass at zero. Neither posterior inference nor computation has a "
+            "universal winner. Part 53 proves when such posteriors concentrate on the truth."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

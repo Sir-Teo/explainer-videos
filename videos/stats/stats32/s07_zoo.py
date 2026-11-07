@@ -42,6 +42,9 @@ class Zoo(VoiceoverScene):
             "<bookmark mark='d'/> And unlike the lasso, the elastic net can select more variables than there are "
             "observations, which matters for genes that act in correlated pathways."
         ) as vo:
+            intro=label('Elastic net adds a strictly convex grouping penalty',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -67,10 +70,10 @@ class Zoo(VoiceoverScene):
         ), 12.0, 0.2, [0, -2.6, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Three near-copies of one signal, correlated point nine six, and three pure noise "
-            "variables. <bookmark mark='b'/> Along the lasso path, one copy enters first and takes most of the effect, a "
-            "second follows, and the third stays at zero for most of the path. <bookmark mark='c'/> Along the elastic-net "
-            "path all three enter together and share the effect almost equally, which is what a scientist interpreting them "
-            "would want."
+            "variables. <bookmark mark='b'/> Along the lasso path, one copy enters first and takes most of the "
+            "effect, a second follows, and the third stays at zero for most of the path. <bookmark mark='c'/> Along "
+            "the elastic-net path all three enter together and share the effect almost equally, a more evenly shared "
+            "association. It does not identify separate causal effects of near-duplicate predictors."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A1), FadeIn(A2))
@@ -90,16 +93,20 @@ class Zoo(VoiceoverScene):
             cmath(r"\text{sparse group lasso}", r":", r"\text{groups, \ and sparsity within them}", font_size=30),
         ]
         rows[1][-1].set_color(LASSO)
-        whys = [why(r"Yuan \& Lin (2006): \ the group lasso"), why(r"block soft thresholding"),
+        whys = [why(r"Yuan \& Lin (2006): \ the group lasso"), why(r"orthonormalized within-group coordinates"),
                 why(r"all in or all out"), why(r"Simon et al. (2013)")]
         with self.voiceover(
-            "<bookmark mark='a'/> Second problem: some variables only make sense together, like the dummy variables of one "
-            "categorical factor or the basis functions of one spline. Ming Yuan and Yi Lin's group lasso penalizes the "
-            "Euclidean length of each group's coefficient vector, without squaring it. <bookmark mark='b'/> The coordinate "
-            "update becomes a block soft threshold: shrink the whole group's vector towards zero, and set it exactly to zero "
-            "if it is short enough. <bookmark mark='c'/> So whole groups enter or leave together. <bookmark mark='d'/> Add an "
-            "ordinary lasso term and you also get sparsity within the selected groups."
+            "<bookmark mark='a'/> Second problem: some variables only make sense together, like the dummy variables "
+            "of one categorical factor or the basis functions of one spline. Ming Yuan and Yi Lin's group lasso "
+            "penalizes the Euclidean length of each group's coefficient vector, without squaring it. <bookmark "
+            "mark='b'/> In coordinates with each group orthonormalized, the block update is a soft threshold: shrink "
+            "the whole group's vector towards zero, and set it exactly to zero if it is short enough. <bookmark "
+            "mark='c'/> So whole groups enter or leave together. <bookmark mark='d'/> Add an ordinary lasso term and "
+            "you also get sparsity within the selected groups."
         ) as vo:
+            intro=label('Group thresholding uses orthonormalized within-group coordinates',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -117,12 +124,17 @@ class Zoo(VoiceoverScene):
         whys = [why(r"Tibshirani et al. (2005): \ the fused lasso"), why(r"jumps are rare"),
                 why(r"Rudin, \ Osher \& Fatemi (1992)"), why(r"Johnson (2013)")]
         with self.voiceover(
-            "<bookmark mark='a'/> Third: sparsity need not be in the coefficients themselves. The fused lasso penalizes the "
-            "absolute differences between neighbouring values. <bookmark mark='b'/> The solution is piecewise constant, "
-            "with only a few jumps. <bookmark mark='c'/> In two dimensions the same penalty is total variation, the one that "
-            "recovered the phantom in the hook, introduced for image denoising by Rudin, Osher and Fatemi in 1992. "
-            "<bookmark mark='d'/> It is computed by Part 21's ADMM, or exactly, in one dimension, by dynamic programming."
+            "<bookmark mark='a'/> Third: sparsity need not be in the coefficients themselves. The fused lasso "
+            "penalizes the absolute differences between neighbouring values. <bookmark mark='b'/> The solution is "
+            "piecewise constant, with only a few jumps. <bookmark mark='c'/> Two-dimensional total variation is the "
+            "analogous gradient penalty. The hook uses the isotropic sum of gradient magnitudes, rather than a "
+            "separate absolute penalty for each directional difference, introduced for image denoising by Rudin, "
+            "Osher and Fatemi in 1992. <bookmark mark='d'/> It is computed by Part 21's ADMM, or exactly, in one "
+            "dimension, by dynamic programming."
         ) as vo:
+            intro=label('Difference penalties encourage piecewise-constant fitting',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -181,6 +193,9 @@ class Zoo(VoiceoverScene):
             "selects exactly the true variables and estimates them as efficiently as if the true model were known. The "
             "asymptotics hide a lot, as chapter ten will show."
         ) as vo:
+            intro=label('Adaptive weights separate initial screening from later shrinkage',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -191,20 +206,24 @@ class Zoo(VoiceoverScene):
         rows = [
             cmath(r"\text{SCAD}", r":", r"\lambda|\beta| \text{ near } 0, \ \text{a quadratic bend, \ flat beyond } a\lambda", font_size=28),
             cmath(r"\text{MCP}", r":", r"\lambda|\beta| - \beta^2/(2\gamma) \text{ up to } \gamma\lambda, \ \text{then flat}", font_size=28),
-            cmath(r"\text{both}", r":", r"\text{unbiased for large effects, \ continuous, \ sparse}", font_size=30),
+            cmath(r"\text{both}", r":", r"\text{zero large-signal penalty derivative; continuous scalar rules}", font_size=30),
             cmath(r"\text{price}", r":", r"\text{not convex: \ local minima, \ but CD works well}", font_size=30),
         ]
         rows[2][-1].set_color(NCV)
         whys = [why(r"Fan \& Li (2001)"), why(r"Zhang (2010)"), why(r"Fan and Li's three desiderata"), why(r"Breheny \& Huang (2011)")]
         with self.voiceover(
-            "<bookmark mark='a'/> Or bend the penalty itself. Jianqing Fan and Runze Li's SCAD of 2001 behaves like the lasso "
-            "near zero, bends quadratically, and becomes flat beyond a times lambda. <bookmark mark='b'/> Cun-Hui Zhang's "
-            "minimax concave penalty, MCP, does the same more simply. <bookmark mark='c'/> Flat means no penalty on large "
-            "coefficients, so large effects are estimated without bias, while small ones are still set to zero, and the "
-            "thresholding rule stays continuous: Fan and Li's three requirements. <bookmark mark='d'/> The price is "
-            "convexity: there can be local minima. In practice coordinate descent from the lasso solution works well, as "
-            "Patrick Breheny and Jian Huang showed."
+            "<bookmark mark='a'/> Or bend the penalty itself. Jianqing Fan and Runze Li's SCAD of 2001 behaves like "
+            "the lasso near zero, bends quadratically, and becomes flat beyond a times lambda. <bookmark mark='b'/> "
+            "Cun-Hui Zhang's minimax concave penalty, MCP, does the same more simply. <bookmark mark='c'/> Flat means"
+            " zero penalty derivative beyond the threshold, reducing shrinkage of large estimates. This is not a "
+            "guarantee of finite-sample unbiasedness after selection, while small ones are still set to zero, and the"
+            " thresholding rule stays continuous: Fan and Li's three requirements. <bookmark mark='d'/> The price is "
+            "convexity: there can be local minima. In practice coordinate descent from the lasso solution works well,"
+            " as Patrick Breheny and Jian Huang showed."
         ) as vo:
+            intro=label('Flat penalty derivatives can reduce large-estimate shrinkage',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -259,12 +278,14 @@ class Zoo(VoiceoverScene):
             label(r"the lasso keeps nearly three false variables to protect its shrunken true ones", font_size=22, color=LASSO),
         ), 12.0, 0.22, [0, -1.9, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> A comparison: two hundred data sets, a hundred observations, two hundred correlated "
-            "predictors, eight true effects between a half and one, every method at the same lambda. "
-            "<bookmark mark='b'/> All four find about seven of the eight true variables. The lasso also includes nearly three "
-            "false ones, and gets the support exactly right three percent of the time. The adaptive lasso cuts the "
-            "estimation error by three quarters. <bookmark mark='c'/> MCP includes fewer than half a false variable on "
-            "average and is exactly right a third of the time. Bending the penalty separates selection from shrinkage."
+            "<bookmark mark='a'/> A comparison: two hundred data sets, a hundred observations, two hundred correlated"
+            " predictors, eight true effects between a half and one, with a common base lambda for lasso, SCAD and "
+            "MCP; the adaptive lasso uses a separately rescaled weighted penalty. This is an illustrative tuning "
+            "comparison, not an optimally matched contest. <bookmark mark='b'/> All four find about seven of the "
+            "eight true variables. The lasso also includes nearly three false ones, and gets the support exactly "
+            "right three percent of the time. The adaptive lasso cuts the estimation error by three quarters. "
+            "<bookmark mark='c'/> MCP includes fewer than half a false variable on average and is exactly right a "
+            "third of the time. Bending the penalty separates selection from shrinkage."
         ) as vo:
             self.add(seeded_tag())
             vo.wait_until("a")

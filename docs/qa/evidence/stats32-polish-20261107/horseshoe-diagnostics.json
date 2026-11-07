@@ -1,0 +1,15 @@
+{
+  "chains": 4,
+  "retained_per_chain": 25000,
+  "tau_rhat": 1.0017005810004258,
+  "tau_bulk_ess": 1618.2946550661634,
+  "tau_tail_ess": 2987.9680081039896,
+  "tau_mean_by_chain": [
+    0.21100583598698697,
+    0.21636800330649078,
+    0.21615738121131348,
+    0.21355710871330727
+  ],
+  "max_coordinate_mean_range": 0.04256165121825051,
+  "scope": "global-scale mixing and between-chain mean stability, not all latent-scale convergence"
+}

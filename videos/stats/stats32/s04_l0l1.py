@@ -42,13 +42,17 @@ class FromL0(VoiceoverScene):
         whys = [why(r"best subset selection"), why(r"the `$\ell_0$ norm': \ a count, \ not a norm"),
                 why(r"easy when the columns are orthogonal"), why(r"hard in general")]
         with self.voiceover(
-            "<bookmark mark='a'/> The most natural sparse method is best subset selection: among all models with at most k "
-            "variables, take the one with the smallest residual sum of squares. <bookmark mark='b'/> Its constraint counts "
-            "nonzero coefficients, written as the zero norm, though it is not really a norm. <bookmark mark='c'/> When the "
-            "columns are orthonormal it is easy: keep the k largest least-squares coefficients and zero the rest, hard "
-            "thresholding. <bookmark mark='d'/> In general, the columns interact, and there is nothing to do but search the "
-            "subsets."
+            "<bookmark mark='a'/> The most natural sparse method is best subset selection: among all models with at "
+            "most k variables, take the one with the smallest residual sum of squares. <bookmark mark='b'/> Its "
+            "constraint counts nonzero coefficients, written as the zero norm, though it is not really a norm. "
+            "<bookmark mark='c'/> When the columns are orthonormal it is easy: keep the k largest least-squares "
+            "coefficients and zero the rest, hard thresholding. <bookmark mark='d'/> In general, the columns "
+            "interact, and the worst-case search is combinatorial, although bounds, pruning and mixed-integer methods"
+            " can avoid enumerating every subset."
         ) as vo:
+            intro=label('Best-subset fitting constrains the number of nonzero coefficients',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -94,16 +98,17 @@ class FromL0(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"the unit balls $\{\beta : \sum_j |\beta_j|^q \le 1\}$", font_size=24),
             label(r"$q \ge 1$: \ convex; \ $q < 1$: \ not convex", font_size=24, color=GREY_A),
-            label(r"$q \to 0$: \ the axes alone, \ the $\ell_0$ `ball' of sparse vectors", font_size=24, color=RES),
+            label(r"$q \to 0$: \ bounded axis segments; the unbounded count constraint is different", font_size=24, color=RES),
             label(r"$q = 1$ is where the corners appear and convexity survives", font_size=24, color=LASSO),
         ), 12.4, 0.2, [0, -2.6, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Look at the unit balls of the q-norms, the sum of absolute values to the power q. "
-            "<bookmark mark='b'/> For q equal to two, the circle of ridge regression. As q falls, the ball pinches in towards "
-            "the axes. For q at least one, the balls are convex; below one, they are not. <bookmark mark='c'/> As q goes to "
-            "zero, the ball collapses onto the axes themselves: the vectors with one nonzero coordinate, best subset's "
-            "constraint. <bookmark mark='d'/> And q equal to one is the boundary case: the first q where corners appear on "
-            "the axes, and the last where the ball is still convex."
+            "<bookmark mark='b'/> For q equal to two, the circle of ridge regression. As q falls, the ball pinches in"
+            " towards the axes. For q at least one, the balls are convex; below one, they are not. <bookmark "
+            "mark='c'/> As q goes to zero, these bounded unit balls approach the axis segments with amplitude at most"
+            " one. The unbounded zero-count constraint alone would include whole axes. <bookmark mark='d'/> And q "
+            "equal to one is the boundary case: the first q where corners appear on the axes, and the last where the "
+            "ball is still convex."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(axs), FadeIn(rows[0]))
@@ -132,6 +137,9 @@ class FromL0(VoiceoverScene):
             "proposed by Robert Tibshirani in 1996, and at the same time, as basis pursuit, by Scott Chen, David Donoho and "
             "Michael Saunders for signal processing."
         ) as vo:
+            intro=label('The absolute-value penalty is a convex alternative to counting',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -168,15 +176,14 @@ class FromL0(VoiceoverScene):
             label(r"$\|\beta\|_1 \le 1$ in three dimensions: \ an octahedron", font_size=22),
             label(r"6 vertices: \ one nonzero coordinate", font_size=22, color=SPIKE),
             label(r"12 edges: \ two nonzero; \ 8 faces: \ three", font_size=22, color=LASSO),
-            label(r"in $p$ dimensions the low-dimensional faces dominate what an ellipsoid touches first", font_size=22, color=GREY_A),
+            label(r"the first face touched depends on design, data and budget", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.2, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In three dimensions the one-norm ball is an octahedron. <bookmark mark='b'/> Its six "
-            "vertices lie on the axes: each has a single nonzero coordinate. <bookmark mark='c'/> Its twelve edges have two "
-            "nonzero coordinates, and only its eight faces have three. <bookmark mark='d'/> A growing ellipsoid of residual "
-            "sum of squares, centred somewhere outside, is far more likely to touch first at a vertex or an edge than in the "
-            "middle of a face, and in high dimensions the effect is overwhelming: the lasso's solution sits on a "
-            "low-dimensional face, with most coordinates exactly zero."
+            "<bookmark mark='a'/> In three dimensions the one-norm ball is an octahedron. <bookmark mark='b'/> Its "
+            "six vertices lie on the axes: each has a single nonzero coordinate. <bookmark mark='c'/> Its twelve "
+            "edges have two nonzero coordinates, and only its eight faces have three. <bookmark mark='d'/> An "
+            "expanding loss contour can first touch a low-dimensional face, producing zeros. Which face is reached "
+            "depends on the data, design and budget; geometry alone does not guarantee that most coordinates vanish."
         ) as vo:
             self.add(oct_)
             vo.wait_until("a")
@@ -192,7 +199,7 @@ class FromL0(VoiceoverScene):
 
     def hull(self):
         rows = [
-            cmath(r"\{\beta : \|\beta\|_0 \le 1, \ \|\beta\|_\infty \le 1\}", r":", r"\text{the signed unit vectors}", font_size=28),
+            cmath(r"\{\beta : \|\beta\|_0 \le 1, \ \|\beta\|_\infty \le 1\}", r":", r"\text{axis segments, with vertices }\pm e_j", font_size=28),
             cmath(r"\mathrm{conv}\{\pm e_1, \dots, \pm e_p\}", r"=", r"\{\beta : \|\beta\|_1 \le 1\}", font_size=30),
             cmath(r"|\beta_j| \le 1", r"\Rightarrow", r"|\beta_j| \le |\beta_j|^q \to \mathbf 1\{\beta_j \ne 0\}", font_size=28),
             cmath(r"\text{so}", r":", r"\ell_1 \text{ is the largest convex function below } \ell_0 \text{ on the box}", font_size=28),
@@ -201,13 +208,17 @@ class FromL0(VoiceoverScene):
         whys = [why(r"the sparsest nonzero points"), why(r"their convex hull is the $\ell_1$ ball"),
                 why(r"$\ell_1$ sits below the count"), why(r"the convex envelope")]
         with self.voiceover(
-            "<bookmark mark='a'/> There is a precise sense in which one is the right choice. Take the sparsest nonzero "
-            "vectors, the signed unit vectors. <bookmark mark='b'/> Their convex hull is exactly the one-norm ball. "
-            "<bookmark mark='c'/> And on the box where every coordinate is at most one in size, the absolute value lies "
-            "below the indicator of being nonzero. <bookmark mark='d'/> In fact, on that box, the one norm is the largest "
-            "convex function that never exceeds the count: its convex envelope. The lasso is the tightest convex relaxation "
-            "of best subset selection."
+            "<bookmark mark='a'/> There is a precise sense in which one is the right choice. Take the axis segments "
+            "of the bounded one-coordinate set, whose extreme points are the signed unit vectors. <bookmark "
+            "mark='b'/> Their convex hull is exactly the one-norm ball. <bookmark mark='c'/> And on the box where "
+            "every coordinate is at most one in size, the absolute value lies below the indicator of being nonzero. "
+            "<bookmark mark='d'/> In fact, on that box, the one norm is the largest convex function that never "
+            "exceeds the count: its convex envelope. This convex-envelope statement applies on the specified unit "
+            "box; rescaling or removing that bound changes the comparison."
         ) as vo:
+            intro=label('The convex-envelope comparison needs a bounded coordinate box',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
