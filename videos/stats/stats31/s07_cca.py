@@ -204,6 +204,7 @@ class CCA(VoiceoverScene):
             label(r"discriminant analysis: \ CCA of $x$ with group indicators \ (next chapter)", font_size=24, color=SP[2]),
             label(r"correspondence analysis: \ the SVD of a contingency table's residuals", font_size=24, color=MAPC),
         ), 12.4, 0.55, [0, 0, 0])
+        self.add(label("Singular value decomposition connects four multivariate methods",font_size=36).move_to([0,3.3,0]))
         with self.voiceover(
             "<bookmark mark='a'/> Step back and a family appears. <bookmark mark='b'/> Principal components are the SVD of "
             "the data. <bookmark mark='c'/> Canonical correlation is the SVD of the whitened cross-covariance. "
