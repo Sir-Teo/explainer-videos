@@ -192,6 +192,7 @@ class Chains(VoiceoverScene):
             label(r"his point: \ the law of large numbers does not need independence", font_size=24, color=S.ACCENT),
         ), 12.6, 0.3, [0, -1.9, 0])
         tag = historical_tag(r"Markov (1913), \ as reported by B. Hayes, \ \emph{American Scientist} (2013)", corner=DR)
+        intro = label('A stationary-share consistency check', font_size=36)
         with self.voiceover(
             "Markov's own numbers make a perfect first example. <bookmark mark='a'/> After a vowel, the next letter of "
             "Onegin was a vowel only about thirteen percent of the time; after a consonant, sixty-six percent. "
@@ -201,9 +202,11 @@ class Chains(VoiceoverScene):
             "His real point was philosophical: the law of large numbers, which Nekrasov had claimed required "
             "independence, holds for dependent sequences too."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tag))
             step = ladder(self, rows, whys, keep=2, top=2.4, x=-1.0, buff=1.1, edge=6.9)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1, transform=False)
@@ -238,6 +241,7 @@ class Chains(VoiceoverScene):
             label(r"why one long MCMC run can stand in", font_size=22, color=GREY_A),
             label(r"for independent draws, with autocorrelation accounted for", font_size=22, color=GREY_A),
         ), 5.0, 0.24, [4.5, -0.4, 0])
+        intro = label('One trajectory and stationary time averages', font_size=36)
         with self.voiceover(
             "There's a second way to see the stationary law. <bookmark mark='a'/> Instead of evolving the whole "
             "distribution, simulate one long run of the chain: here are its first sixty-four days. "
@@ -246,7 +250,9 @@ class Chains(VoiceoverScene):
             "Markov chains: for a finite irreducible chain the time average converges almost surely to the stationary expectation as the run grows. It's "
             "why one long run of a Markov chain, in chapter eleven, can estimate stationary expectations, with Monte Carlo uncertainty that accounts for autocorrelation."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(LaggedStart(*[FadeIn(s_) for s_ in strip], lag_ratio=0.03), FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(FadeIn(A), Create(dash), Create(lines), FadeIn(rows[1]), run_time=3.0)

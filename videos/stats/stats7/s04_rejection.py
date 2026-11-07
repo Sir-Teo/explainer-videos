@@ -76,6 +76,7 @@ class Rejection(VoiceoverScene):
         rows[3][2].set_color(S.ACCENT)
         whys = [why(r"$X$ uniform, \ then keep with chance $f(X)/M$"), why(r"the same, \ only for $X \le t$"),
                 why(r"Part 2's conditional probability: \ exactly the target"), why(r"a tight box is a cheap box")]
+        intro = label('Condition on acceptance to recover the target', font_size=36)
         with self.voiceover(
             "Why does it work? <bookmark mark='a'/> A dart at x is kept with chance f of x over M; averaging over the "
             "uniform x, the chance of keeping a dart is one over M. <bookmark mark='b'/> The chance that it's kept "
@@ -84,9 +85,12 @@ class Rejection(VoiceoverScene):
             "<bookmark mark='d'/> The number of darts needed for one draw is geometric, with mean M. A loose box "
             "wastes darts; the whole art of rejection sampling is a tight envelope."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.6, buff=0.62, edge=6.9)
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 

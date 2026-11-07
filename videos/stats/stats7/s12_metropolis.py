@@ -151,7 +151,7 @@ class Metropolis(VoiceoverScene):
         d = load("metropolis")
         ed = np.asarray(d["edges"])
         g, tgt = np.asarray(d["grid"]), np.asarray(d["target"])
-        A = axes([-5, 6], [0, 0.42], x_length=7.4, y_length=4.2, xlabel=r"$x$", xticks=[-4, -2, 0, 2, 4, 6], yticks=[0, 0.2, 0.4],
+        A = axes([-5, 6], [0, 0.5], x_length=7.4, y_length=4.2, xlabel=r"$x$", xticks=[-4, -2, 0, 2, 4, 6], yticks=[0, 0.2, 0.4],
                  center=[-2.0, -0.4, 0])
         h = hist_bars(A.ax, ed, np.asarray(d["1.5"]["hist"]), color=GOOD, opacity=0.7)
         cv = curve(A.ax, g, tgt, EXACT, 3)
@@ -186,6 +186,7 @@ class Metropolis(VoiceoverScene):
             label(r"in high dimensions, \ random-walk steps often shrink in common high-dimensional models: \ Hamiltonian Monte Carlo (Part 27)", font_size=26),
             label(r"the same machine samples Part 15's posteriors, \ when conjugacy runs out", font_size=26, color=S.ACCENT),
         ), 12.6, 0.38, [0, 0.2, 0])
+        intro = label('Checking whether a Markov chain has explored its target', font_size=36)
         with self.voiceover(
             "This was a first look; Part 27 does it in full. <bookmark mark='a'/> The draws are dependent, so a chain "
             "of six thousand steps usually carries less information for a given estimand than six thousand independent draws; negative autocorrelation can improve efficiency. <bookmark mark='b'/> "
@@ -196,8 +197,11 @@ class Metropolis(VoiceoverScene):
             "is the machine that samples posterior distributions in Bayesian statistics, once the conjugate formulas "
             "of Part 15 run out."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m in enumerate("abcde"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()
 

@@ -31,6 +31,7 @@ class Hook(VoiceoverScene):
                     r"million", font_size=22, color=GREY_A).next_to(hc, DOWN, buff=0.5)
         if ctx.width > 12.6:
             ctx.width = 12.6
+        intro = label('Where simulation randomness comes from', font_size=36)
         with self.voiceover(
             "Every simulation in this series so far, millions of coin tosses, normals, Cauchys and Paretos, ran on a "
             "machine that can only follow instructions. Where did the randomness come from? <bookmark mark='a'/> In "
@@ -40,8 +41,10 @@ class Hook(VoiceoverScene):
             "state of sin. A deterministic generator with a fixed seed has a determined output. We use "
             "a sequence that behaves like random draws, while checking how it might fail."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tl))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(ctx))
             vo.wait_until("b")
             self.play(FadeIn(hc, shift=UP * 0.2))

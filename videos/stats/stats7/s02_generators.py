@@ -148,6 +148,7 @@ class Generators(VoiceoverScene):
         hc = note(r"M. E. O'Neill, \ ``PCG: a family of simple fast space-efficient statistically good algorithms'' (2014)")
         hc.to_edge(DOWN, buff=0.3)
         built = label(r"Built: \ \texttt{statkit.random.PCG32}", font_size=24, color=S.ACCENT).to_corner(UR, buff=0.4)
+        intro = label('Mix and rotate the bits of an LCG state', font_size=36)
         with self.voiceover(
             "Modern generators keep the speed and hide the structure. <bookmark mark='a'/> Here is PCG32, designed "
             "by Melissa O'Neill in 2014, in four lines. Its state is a sixty-four-bit linear congruential generator, "
@@ -158,8 +159,10 @@ class Generators(VoiceoverScene):
             "but this does not guarantee independent or nonoverlapping output sequences. It's what we've built into statkit, and NumPy's default "
             "generator is its sixty-four-bit sibling."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(built), FadeIn(hc))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(code, shift=UP * 0.2), FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(FadeIn(rows[1]))
