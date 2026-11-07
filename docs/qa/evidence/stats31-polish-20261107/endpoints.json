@@ -1,0 +1,138 @@
+{
+  "fingerprint": "cd175810074fe4a5f04114c23e93b89c74353bf93b9ecf85ce96d4e0700fc02e",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 90
+      },
+      "input_record": "renders/qa/series/stats31/en/Hook/result.json",
+      "input_sha256": "46a0b4c3a2d345a1595c89dc5d90c49f5362107c5165d5ccc4b9381181b86b8e"
+    },
+    {
+      "scene": "DataMatrix",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 50
+      },
+      "input_record": "renders/qa/series/stats31/en/DataMatrix/result.json",
+      "input_sha256": "c8bc429e6c52b2d73a204f35505e2deef1db978f6d6ee3f876b9c3e4c8529e14"
+    },
+    {
+      "scene": "Wishart",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 57
+      },
+      "input_record": "renders/qa/series/stats31/en/Wishart/result.json",
+      "input_sha256": "45f4b58830f637e93d4a0b25e80b6e84c338ba0dc94758ffb2614a0f43da6803"
+    },
+    {
+      "scene": "Hotelling",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 66
+      },
+      "input_record": "renders/qa/series/stats31/en/Hotelling/result.json",
+      "input_sha256": "d873df018fecae382e5387997d1a4924303f18aef297b68012a92e7b17332c7a"
+    },
+    {
+      "scene": "PCA",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 89
+      },
+      "input_record": "renders/qa/series/stats31/en/PCA/result.json",
+      "input_sha256": "852d3bed969e425f4019054d923520d16133c99b13ac9b04260dd9e8bd308b71"
+    },
+    {
+      "scene": "Factor",
+      "status": "needs-review",
+      "frames": 36,
+      "warnings": {
+        "narration-translation": 10,
+        "untranslated-on-screen": 135
+      },
+      "input_record": "renders/qa/series/stats31/en/Factor/result.json",
+      "input_sha256": "84ab6b5b5207e0e8d421f98aef4b19b9d3abf5905b06e54be12406b4ca41d93a"
+    },
+    {
+      "scene": "CCA",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 70
+      },
+      "input_record": "renders/qa/series/stats31/en/CCA/result.json",
+      "input_sha256": "d933b16931dbf2c41df09ff2803fd454dadcf6dbb36755d9708a5c1c99f044c2"
+    },
+    {
+      "scene": "LDA",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 59
+      },
+      "input_record": "renders/qa/series/stats31/en/LDA/result.json",
+      "input_sha256": "73f6c929e5619f7b44c5f36c17cbee2f15aebc6bf23ac46d9ed43a6eb14da2e4"
+    },
+    {
+      "scene": "Cluster",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 92
+      },
+      "input_record": "renders/qa/series/stats31/en/Cluster/result.json",
+      "input_sha256": "0c49ad1b9946b0fcc0d96f1641410d4bcb1ec5507e3a9c4a2b1bbc2770a4ecb4"
+    },
+    {
+      "scene": "Graphs",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 62
+      },
+      "input_record": "renders/qa/series/stats31/en/Graphs/result.json",
+      "input_sha256": "ebe88f6fb9fef939b0b757e605287ba58247f76a62f1374e04ded990301c23b9"
+    },
+    {
+      "scene": "HighDim",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 59
+      },
+      "input_record": "renders/qa/series/stats31/en/HighDim/result.json",
+      "input_sha256": "2db33741b3f9620fc88acc361c4100956b64467792592a13fb1352d4369a2136"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 11,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 67
+      },
+      "input_record": "renders/qa/series/stats31/en/Outro/result.json",
+      "input_sha256": "f4304bde3d1ad3dbdcdda742ba99cd033ed03563a79448b19dd852683ca6bf83"
+    }
+  ]
+}

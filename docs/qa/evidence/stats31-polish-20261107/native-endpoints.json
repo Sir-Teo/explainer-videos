@@ -1,0 +1,127 @@
+{
+  "fingerprint": "cd175810074fe4a5f04114c23e93b89c74353bf93b9ecf85ce96d4e0700fc02e",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 90
+      },
+      "input_record": "renders/qa/native1080/stats31/en/Hook/result.json",
+      "input_sha256": "79ab29d7333dcb5229787cce30a98d3a897c184113c542be8f57847317e8f7c8"
+    },
+    {
+      "scene": "DataMatrix",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 50
+      },
+      "input_record": "renders/qa/native1080/stats31/en/DataMatrix/result.json",
+      "input_sha256": "7a067313fb0df2d85c3ff609ed8ff764e948f9068e67dc59e4182f0fbd345eca"
+    },
+    {
+      "scene": "Wishart",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 57
+      },
+      "input_record": "renders/qa/native1080/stats31/en/Wishart/result.json",
+      "input_sha256": "801e42cf11e1d23d1de11c2d83810fbd71129c6f6472b56e938263f81d511bba"
+    },
+    {
+      "scene": "Hotelling",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 66
+      },
+      "input_record": "renders/qa/native1080/stats31/en/Hotelling/result.json",
+      "input_sha256": "70f1fa6b57d28ec7f5ea1069cd0bf9993fd35406907f054f8e375793d5b6e594"
+    },
+    {
+      "scene": "PCA",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 89
+      },
+      "input_record": "renders/qa/native1080/stats31/en/PCA/result.json",
+      "input_sha256": "bb86f0d30f0233abb5a2b7fa597df9b4fa4b176f7196b1a2c92a45b78d425908"
+    },
+    {
+      "scene": "Factor",
+      "status": "needs-review",
+      "frames": 36,
+      "warnings": {
+        "narration-translation": 10,
+        "untranslated-on-screen": 135
+      },
+      "input_record": "renders/qa/native1080/stats31/en/Factor/result.json",
+      "input_sha256": "2c23ac983d2f041f49a2da6d96594bfb1fb3d9372ccdaeab1217b904a5d71e9c"
+    },
+    {
+      "scene": "CCA",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 70
+      },
+      "input_record": "renders/qa/native1080/stats31/en/CCA/result.json",
+      "input_sha256": "b8792b2d08f992ba2610ad6ddd872d3b0a8ae1042677ca5f35f6b58d6506453c"
+    },
+    {
+      "scene": "LDA",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 59
+      },
+      "input_record": "renders/qa/native1080/stats31/en/LDA/result.json",
+      "input_sha256": "3e98f42f6c5dda412f97589f075ef580da7fc301e2a92db6431f6d68546237b9"
+    },
+    {
+      "scene": "Cluster",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 92
+      },
+      "input_record": "renders/qa/native1080/stats31/en/Cluster/result.json",
+      "input_sha256": "a25977e089c2c8163714e57aff44ece5133ab980e90beeee3e783d1bfbef114e"
+    },
+    {
+      "scene": "Graphs",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 62
+      },
+      "input_record": "renders/qa/native1080/stats31/en/Graphs/result.json",
+      "input_sha256": "2ae074073845da59389ddedd794987ce1a138fe5dca36c6e943d37d9c706e507"
+    },
+    {
+      "scene": "HighDim",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 59
+      },
+      "input_record": "renders/qa/native1080/stats31/en/HighDim/result.json",
+      "input_sha256": "1bf0ef5b8cc2487d2abd4b61516ce094b81790f492f63d920441c8c3ef4f7f29"
+    }
+  ]
+}

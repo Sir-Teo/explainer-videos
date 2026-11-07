@@ -1,0 +1,106 @@
+{
+ "video": "stats31",
+ "scene": "Graphs",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 8,
+ "lines": [
+  {
+   "raw": "Chapter nine. Graphical models.",
+   "spoken": "Chapter nine. Graphical models.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/4cd6a14e1d97d514.wav",
+   "duration": 2.7,
+   "tokens": 4,
+   "peak": 0.453521728515625,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> In the twenty-four tests every pair is correlated, but a correlation mixes direct and indirect association. <bookmark mark='b'/> Partial correlation measures residual linear association after adjustment: regress both variables on all the others and correlate what is left. <bookmark mark='c'/> All of them at once come from the inverse covariance, the precision matrix: minus each entry over the root of the two diagonal entries. <bookmark mark='d'/> For the tests the average correlation is point three, but sixty percent of their absolute values are below point one. Word classification and word meaning correlate point five three; given the other twenty-two tests, their partial correlation is zero to two decimals.",
+   "spoken": "In the twenty-four tests every pair is correlated, but a correlation mixes direct and indirect association. Partial correlation measures residual linear association after adjustment: regress both variables on all the others and correlate what is left. All of them at once come from the inverse covariance, the precision matrix: minus each entry over the root of the two diagonal entries. For the tests the average correlation is point three, but sixty percent of their absolute values are below point one. Word classification and word meaning correlate point five three; given the other twenty-two tests, their partial correlation is zero to two decimals.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/0707dc1245fd7b2d.wav",
+   "duration": 41.85,
+   "tokens": 102,
+   "peak": 0.59588623046875,
+   "issues": [],
+   "elapsed": 0.06,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> For normal data, a zero in the precision matrix means more than a zero partial correlation: it means the two variables are independent given all the others. <bookmark mark='b'/> Draw an edge between every pair whose entry is non-zero and you have a Gaussian graphical model. <bookmark mark='c'/> The graph can be read: if every path from one set of variables to another passes through a third set, the first two are independent given the third. <bookmark mark='d'/> Arthur Dempster in 1972 called the problem of choosing the zeros covariance selection.",
+   "spoken": "For normal data, a zero in the precision matrix means more than a zero partial correlation: it means the two variables are independent given all the others. Draw an edge between every pair whose entry is non-zero and you have a Gaussian graphical model. The graph can be read: if every path from one set of variables to another passes through a third set, the first two are independent given the third. Arthur Dempster in 1972 called the problem of choosing the zeros covariance selection.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/4513eac5ffffa663.wav",
+   "duration": 28.975,
+   "tokens": 85,
+   "peak": 0.647796630859375,
+   "issues": [],
+   "elapsed": 0.04,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The twenty-four tests as nodes, coloured by the factor each loads on most. <bookmark mark='b'/> Draw every estimated partial correlation as an edge, thicker for larger values: two hundred and seventy-six edges. <bookmark mark='c'/> A hairball. Unpenalized estimated partial correlations are generally not exactly zero, so the plain inverse covariance gives a complete graph that says nothing.",
+   "spoken": "The twenty-four tests as nodes, coloured by the factor each loads on most. Draw every estimated partial correlation as an edge, thicker for larger values: two hundred and seventy-six edges. A hairball. Unpenalized estimated partial correlations are generally not exactly zero, so the plain inverse covariance gives a complete graph that says nothing.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/cb18b0321882f006.wav",
+   "duration": 23.25,
+   "tokens": 53,
+   "peak": 0.61895751953125,
+   "issues": [],
+   "elapsed": 0.05,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The graphical lasso adds a penalty on the absolute values of the off-diagonal entries to the normal log likelihood. <bookmark mark='b'/> Without the penalty the maximizer is S inverse, the hairball. <bookmark mark='c'/> Jerome Friedman, Trevor Hastie and Robert Tibshirani showed in 2008 that it can be solved one column at a time, each column a lasso regression of one variable on the others, by coordinate descent. <bookmark mark='d'/> The absolute-value penalty sets entries exactly to zero, and larger lambda generally makes a sparser graph, although individual edges need not form a nested path. Why the absolute value produces exact zeros is the subject of Part 32.",
+   "spoken": "The graphical lasso adds a penalty on the absolute values of the off-diagonal entries to the normal log likelihood. Without the penalty the maximizer is S inverse, the hairball. Jerome Friedman, Trevor Hastie and Robert Tibshirani showed in 2008 that it can be solved one column at a time, each column a lasso regression of one variable on the others, by coordinate descent. The absolute-value penalty sets entries exactly to zero, and larger lambda generally makes a sparser graph, although individual edges need not form a nested path. Why the absolute value produces exact zeros is the subject of Part 32.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/42082004e93e3696.wav",
+   "duration": 40.9,
+   "tokens": 101,
+   "peak": 0.62481689453125,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> A simpler route to the same graph. Regress each variable on all the others. <bookmark mark='b'/> The regression coefficients are proportional to the precision matrix's entries, so a zero coefficient is a missing edge. <bookmark mark='c'/> Nicolai Meinshausen and Peter Bühlmann ran a separate lasso for each variable and drew an edge when the coefficient was non-zero, in one regression or in both. <bookmark mark='d'/> They proved it recovers the right graph with high probability under conditions that Part 52 makes precise.",
+   "spoken": "A simpler route to the same graph. Regress each variable on all the others. The regression coefficients are proportional to the precision matrix's entries, so a zero coefficient is a missing edge. Nicolai Meinshausen and Peter Bühlmann ran a separate lasso for each variable and drew an edge when the coefficient was non-zero, in one regression or in both. They proved it recovers the right graph with high probability under conditions that Part 52 makes precise.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/19db16ae8dc804d7.wav",
+   "duration": 27.725,
+   "tokens": 76,
+   "peak": 0.4532470703125,
+   "issues": [],
+   "elapsed": 0.04,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The graphical lasso with a large penalty, lambda point five: sixteen edges. <bookmark mark='b'/> Lower it to point four: forty-five. <bookmark mark='c'/> And point three: ninety-seven. <bookmark mark='d'/> The strongest direct links appear within the factor groups, and the verbal tests form a tight clique. <bookmark mark='e'/> Edges between groups run mostly through the reasoning tests, like deduction and series completion, which draw on several abilities at once. The factor model and the graph are two descriptions of the same correlations: one by latent shared variation, one by conditional links.",
+   "spoken": "The graphical lasso with a large penalty, lambda point five: sixteen edges. Lower it to point four: forty-five. And point three: ninety-seven. The strongest direct links appear within the factor groups, and the verbal tests form a tight clique. Edges between groups run mostly through the reasoning tests, like deduction and series completion, which draw on several abilities at once. The factor model and the graph are two descriptions of the same correlations: one by latent shared variation, one by conditional links.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/92b639cd8c82dd88.wav",
+   "duration": 32.7,
+   "tokens": 82,
+   "peak": 0.486175537109375,
+   "issues": [],
+   "elapsed": 0.06,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Reading such a graph. An absent edge represents conditional independence in the fitted Gaussian model. Estimation and tuning can miss or add population edges. <bookmark mark='b'/> A present edge is not a cause: the graph has no arrows. <bookmark mark='c'/> The penalty trades edges against reliability, and is chosen by cross-validation, BIC, or by keeping only the edges that survive resampling. <bookmark mark='d'/> Graphs with arrows come in Part 36, and what data alone can say about causal direction in Part 62.",
+   "spoken": "Reading such a graph. An absent edge represents conditional independence in the fitted Gaussian model. Estimation and tuning can miss or add population edges. A present edge is not a cause: the graph has no arrows. The penalty trades edges against reliability, and is chosen by cross-validation, BIC, or by keeping only the edges that survive resampling. Graphs with arrows come in Part 36, and what data alone can say about causal direction in Part 62.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/ea8e1e9ef16f6734.wav",
+   "duration": 29.65,
+   "tokens": 76,
+   "peak": 0.5521240234375,
+   "issues": [],
+   "elapsed": 0.04,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats31/en/Graphs_motion/result.json",
+ "input_sha256": "aaae8a83c7957771b30eba12ba34034e16246dd2315ef7208526a16eb2570dd2"
+}

@@ -1,0 +1,35 @@
+{
+  "baseline": [
+    "Hook",
+    "DataMatrix",
+    "Wishart",
+    "Hotelling",
+    "PCA",
+    "Factor",
+    "CCA",
+    "LDA",
+    "Cluster",
+    "Graphs",
+    "HighDim",
+    "Outro"
+  ],
+  "native": "all 11 inspected",
+  "motion": [
+    "Hook",
+    "DataMatrix",
+    "Wishart",
+    "Hotelling",
+    "PCA",
+    "Factor",
+    "CCA",
+    "LDA",
+    "Cluster",
+    "Graphs",
+    "HighDim"
+  ],
+  "actual": "Graphs",
+  "outro_heading_repair_viewed": true,
+  "cca_family_context_heading": "Fresh baseline, native 1080p and complete motion sheet inspected after the heading repair; no blank or sparse runs.",
+  "cca_fresh_native_viewed": true,
+  "fresh_source_current_receipts": "All 12 baseline, 11 native and 11 motion receipts current; only translation warnings remain."
+}
