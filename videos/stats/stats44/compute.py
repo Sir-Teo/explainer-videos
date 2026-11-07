@@ -8,12 +8,12 @@ Museum's; everything else is exact arithmetic or a seeded simulation.
 
 Items:
     onegin      Markov's chain fitted to 20,000 letters; block counts against independence and against the chain
-    borel       Borel's paradox: conditioning on a meridian vs on the equator, by simulation
+    borel       Borel's paradox: different neighborhoods of the same half-meridian
     lr          likelihood-ratio paths under the null and the alternative; Ville's bound
     ruin        gambler's ruin exactly; the doubling strategy with a bounded bankroll
     urn         Polya's urn: share paths and the uniform limit
     azuma       empty bins: McDiarmid's bound against simulation
-    mclt        the AR(1) least-squares estimate: the martingale CLT at phi = 0.5 and its failure near a unit root
+    mclt        the AR(1) least-squares estimate: the martingale CLT at phi = 0.5 and poor finite-sample accuracy at phi = 0.98
     mcmc        a random-walk Metropolis chain: autocorrelation, batch means, the iid SE's error
     mixing      the lab: d(t) for the lazy cycle and hypercube, spectral gaps, coupling times, 52 riffled cards
     polya       random walks returning to the origin in one, two and three dimensions
@@ -61,11 +61,38 @@ def nest(obj):
     return obj
 
 
-def eff_reps(per_rep, nominal=0.9) -> int:
-    v = np.var(np.asarray(per_rep, float), ddof=1) / len(per_rep)
-    if v == 0:
-        return len(per_rep)
-    return int(round(nominal * (1 - nominal) / max(v, 1e-12)))
+def histogram_density(values, bins, range):
+    values=np.asarray(values,float)
+    counts,edges=np.histogram(values,bins=bins,range=range)
+    return counts/(len(values)*np.diff(edges)),edges
+
+
+def coverage_row(method, setting, covered, kind="coverage", nominal=.9):
+    covered=np.asarray(covered,float)
+    return Row(44,method,setting,kind,nominal,float(covered.mean()),len(covered),
+               mc_se=float(covered.std(ddof=1)/np.sqrt(len(covered))))
+
+
+def sphere_conditioning(z, longitude, epsilon):
+    """Two shrinking neighborhoods of the SAME half-meridian {y=0,x>0}."""
+    z,longitude=np.asarray(z,float),np.asarray(longitude,float)
+    radius=np.sqrt(np.maximum(0.,1-z*z))
+    x,y=radius*np.cos(longitude),radius*np.sin(longitude)
+    angle=np.arctan2(z,x)
+    wedge=np.abs(longitude)<epsilon
+    band=(np.abs(y)<epsilon)&(x>0)
+    return dict(angle=angle,wedge=wedge,band=band,x=x,y=y,z=z)
+
+
+def uniform_lattice_ks(counts):
+    """Exact CDF supremum when both laws share a finite, equally spaced support."""
+    counts=np.asarray(counts,float)
+    return float(np.max(np.abs(np.cumsum(counts)/counts.sum()-np.arange(1,len(counts)+1)/len(counts))))
+
+
+def walk_maximum(partial_sums):
+    """The running maximum on [0,1] includes the walk's zero starting point."""
+    return np.maximum(0.,np.max(np.asarray(partial_sums),axis=-1))
 
 
 def compute_onegin():
@@ -83,18 +110,18 @@ def compute_onegin():
 
 
 def compute_borel():
-    g = rng(4401)
-    n = 2_000_000
-    z = g.uniform(-1, 1, n)  # uniform on the sphere: z = sin(latitude) uniform, longitude uniform
-    lon = g.uniform(-math.pi, math.pi, n)
-    lat = np.arcsin(z)
-    eps = 0.01
-    near_meridian = np.abs(lon) < eps  # a thin wedge: points near a great circle through the poles
-    near_equator = np.abs(lat) < eps
-    hm, e = np.histogram(lat[near_meridian], bins=36, range=(-math.pi / 2, math.pi / 2), density=True)
-    he, e2 = np.histogram(lon[near_equator], bins=36, range=(-math.pi, math.pi), density=True)
-    return {"meridian_hist": hm, "meridian_edges": e, "equator_hist": he, "equator_edges": e2,
-            "n_meridian": int(near_meridian.sum()), "n_equator": int(near_equator.sum())}
+    g=rng(4401);n=2_000_000;epsilon=.01
+    z=g.uniform(-1.,1.,n);longitude=g.uniform(-math.pi,math.pi,n)
+    conditioned=sphere_conditioning(z,longitude,epsilon)
+    angle=conditioned['angle']
+    wedge,band=conditioned['wedge'],conditioned['band']
+    hm,edges=np.histogram(angle[wedge],bins=36,range=(-math.pi/2,math.pi/2),density=True)
+    hb,_=np.histogram(angle[band],bins=36,range=(-math.pi/2,math.pi/2),density=True)
+    return dict(meridian_hist=hm,meridian_edges=edges,equator_hist=hb,equator_edges=edges,
+                n_meridian=int(wedge.sum()),n_equator=int(band.sum()),epsilon=epsilon,
+                null_event='same half-meridian: y=0 and x>0',
+                conditioning='longitude wedge |lon|<eps versus geodesic band |y|<eps, x>0',
+                limiting_densities='cos(angle)/2 versus 1/pi on (-pi/2,pi/2)')
 
 
 def compute_lr():
@@ -110,7 +137,7 @@ def compute_lr():
     idx = np.unique(np.round(np.geomspace(1, n, 200)).astype(int)) - 1
     return {"n": n, "reps": reps, "log0": np.log(L0[:40, idx]), "log1": np.log(L1[:20, idx]), "idx": idx + 1,
             "cross10": cross, "final_below_1": float(np.mean(L0[:, -1] < 1)), "kl_null": kl01, "kl_alt": kl10,
-            "median_final0": float(np.median(L0[:, -1])), "mean_final0_20": float(L0[:, 19].mean())}
+            "median_final0": float(np.median(L0[:, -1])), "mean_final0_20": float(L0[:, 19].mean()), "mean_check_tosses": 20}
 
 
 def compute_ruin():
@@ -130,16 +157,27 @@ def compute_ruin():
     need = 2.0 ** first - 1
     return {"rows": rows, "k": k, "bank": 2 ** k - 1, "lose_all_roulette": lose_all, "lose_all_fair": 0.5 ** k,
             "ev_fair": ev_fair, "ev_roulette": ev_roul, "mean_need": float(need.mean()), "median_need": float(np.median(need)),
-            "max_need": float(need.max())}
+            "max_need": float(need.max()), "credit_reps": len(first), "credit_definition": "total funding including the winning bet: 2**T-1"}
 
 
 def compute_urn():
     g = rng(4404)
     paths = CH.polya_urn(2000, 24, g)
-    limits = CH.polya_urn(600, 2000, g)[:, -1]
-    h, e = np.histogram(limits, bins=20, range=(0, 1), density=True)
-    return {"paths": paths[:, ::5], "steps": np.arange(1, 2001)[::5], "hist": h, "edges": e,
-            "ks_p": float(stats.kstest(limits, "uniform").pvalue)}
+    steps,replicates=600,2000
+    terminal=CH.polya_urn(steps,replicates,g)[:,-1]
+    counts=np.bincount(np.rint(terminal*(steps+2)-1).astype(int),minlength=steps+1)
+    distance=uniform_lattice_ks(counts)
+    g_null=rng(4415);bootstrap=9999;exceed=0
+    for start in range(0,bootstrap,500):
+        draws=g_null.multinomial(replicates,np.full(steps+1,1/(steps+1)),size=min(500,bootstrap-start))
+        reference=np.max(np.abs(np.cumsum(draws,axis=1)/replicates-np.arange(1,steps+2)/(steps+1)),axis=1)
+        exceed+=np.count_nonzero(reference>=distance-1e-14)
+    p_value=(1+exceed)/(1+bootstrap)
+    h,e=np.histogram(terminal,bins=20,range=(0,1),density=True)
+    return dict(paths=paths[:,::5],steps=np.arange(1,2001)[::5],hist=h,edges=e,
+                ks_p=p_value,ks_d=distance,ks_reference='finite 600-draw urn law: uniform on 601 share values',
+                ks_null_simulations=bootstrap,ks_mc_se=float(np.sqrt(p_value*(1-p_value)/bootstrap)),
+                terminal_steps=steps,terminal_replicates=replicates)
 
 
 def compute_azuma():
@@ -182,7 +220,7 @@ def compute_mclt():
         y = ar1_paths(phi, n, 20_000, g)
         ph, se = ar1_fit_many(y)
         z = np.sqrt(n) * (ph - phi) / math.sqrt(1 - phi ** 2)
-        h, e = np.histogram(z, bins=50, range=(-5, 3), density=True)
+        h, e = histogram_density(z, bins=50, range=(-5, 3))
         out[str(phi)] = {"n": n, "hist": h, "edges": e, "mean": float(ph.mean()), "skew": float(stats.skew(z)),
                          "cover": float(np.mean(np.abs(ph - phi) <= 1.645 * se))}
     return out
@@ -256,14 +294,14 @@ def compute_donsker():
     n, reps = 1000, 20_000
     steps = g.choice((-1, 1), size=(reps, n)).astype(np.int8)
     S = np.cumsum(steps, axis=1, dtype=np.int32)
-    mx = S.max(axis=1) / math.sqrt(n)
+    mx = walk_maximum(S) / math.sqrt(n)
     xs = np.linspace(0, 3, 61)
     emp = [float(np.mean(mx >= v)) for v in xs]
     refl = [float(2 * stats.norm.sf(v)) for v in xs]
     df = CH.dickey_fuller(250, 20_000, g)
     df_big = CH.dickey_fuller(2000, 4000, g)
     return {"walks": walks, "xs": xs, "max_emp": emp, "max_refl": refl,
-            "df_t_hist": np.histogram(df["t"], bins=50, range=(-4.5, 3), density=True)[0],
+            "df_t_hist": histogram_density(df["t"], bins=50, range=(-4.5, 3))[0],
             "df_t_q05": float(np.quantile(df["t"], 0.05)), "df_t_q05_big": float(np.quantile(df_big["t"], 0.05)),
             "df_rho_q05": float(np.quantile(df["n_rho"], 0.05)), "df_t_mean": float(df["t"].mean()),
             "df_t_frac_neg": float(np.mean(df["t"] < 0))}
@@ -307,7 +345,7 @@ def compute_counting():
         na.append(h)
         var.append(v)
     return {"grid": grid, "N": N, "Lam": Lam, "M": M, "events": int(event.sum()), "n": n, "na_t": ut, "na": na,
-            "na_se": np.sqrt(var)}
+            "na_se": np.sqrt(var), "observed_time": time, "observed_event": event}
 
 
 def compute_board():
@@ -317,7 +355,7 @@ def compute_board():
         y = ar1_paths(phi, n, 20_000, g)
         ph, se = ar1_fit_many(y)
         cov = np.abs(ph - phi) <= 1.645 * se
-        rows.append(Row(44, "AR(1) least squares (with intercept)", st, "coverage", 0.9, float(cov.mean()), eff_reps(cov)))
+        rows.append(coverage_row("AR(1) least squares (with intercept)",st,cov))
     # MCMC: the mean of N(0, 1) from 20,000 RWM steps, batch means against the iid formula
     reps = 600
     c_bm, c_iid = [], []
@@ -326,8 +364,8 @@ def compute_board():
         m = x.mean()
         c_bm.append(abs(m) <= 1.645 * CH.batch_means_se(x, 30))
         c_iid.append(abs(m) <= 1.645 * x.std() / math.sqrt(len(x)))
-    rows.append(Row(44, "MCMC mean, batch-means SE", "RWM on N(0, 1), 20,000 steps", "coverage", 0.9, float(np.mean(c_bm)), eff_reps(c_bm)))
-    rows.append(Row(44, "MCMC mean, i.i.d. SE", "RWM on N(0, 1), 20,000 steps", "coverage", 0.9, float(np.mean(c_iid)), eff_reps(c_iid)))
+    rows.append(coverage_row("MCMC mean, batch-means SE","RWM on N(0, 1), 20,000 steps",c_bm))
+    rows.append(coverage_row("MCMC mean, i.i.d. SE","RWM on N(0, 1), 20,000 steps",c_iid))
     # testing a fair coin while watching: betting (Ville) against peeking at a z test, up to 1,000 tosses
     reps, n = 4000, 1000
     x = (g.random((reps, n)) < 0.5).astype(int)
@@ -339,10 +377,8 @@ def compute_board():
     zstat = (np.cumsum(x, axis=1) - 0.5 * k) / np.sqrt(0.25 * k)
     looks = np.arange(9, n, 10)  # look every 10 tosses
     ok_peek = ~(np.abs(zstat[:, looks]) >= 1.645).any(axis=1)
-    rows.append(Row(44, "betting test, reject at wealth 10", "a fair coin watched for 1,000 tosses", "size", 0.1,
-                    float(1 - ok_bet.mean()), len(ok_bet)))
-    rows.append(Row(44, "z test at every 10th toss", "a fair coin watched for 1,000 tosses", "size", 0.1,
-                    float(1 - ok_peek.mean()), len(ok_peek)))
+    rows.append(coverage_row("betting test, reject at wealth 10","a fair coin watched for 1,000 tosses",~ok_bet,kind="size",nominal=.1))
+    rows.append(coverage_row("z test at every 10th toss","a fair coin watched for 1,000 tosses",~ok_peek,kind="size",nominal=.1))
     save_rows(44, rows)
     return {"rows": [asdict(r) | {"verdict": r.verdict, "se": r.se} for r in rows]}
 

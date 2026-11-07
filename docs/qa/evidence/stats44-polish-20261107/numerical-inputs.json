@@ -1,0 +1,62 @@
+[
+  {
+    "path": ".cache/stats44/azuma.json",
+    "sha256": "9d3c82246d76c94663314095d754e5993fcbf4926ae03fc85fe449ce9044844b"
+  },
+  {
+    "path": ".cache/stats44/bm.json",
+    "sha256": "17f3f9f812de0d15975087e1c95289df10220706b5fde9021b29e9678ddcdfcf"
+  },
+  {
+    "path": ".cache/stats44/board.json",
+    "sha256": "b25a0e3d74a82af035eeb32bc32612e2d73bb865ea58cc5c7c2c188fea8ffa6a"
+  },
+  {
+    "path": ".cache/stats44/borel.json",
+    "sha256": "e41640d09733a174a4fbde59950248e5f415b3b2817e982cd422951be370b355"
+  },
+  {
+    "path": ".cache/stats44/counting.json",
+    "sha256": "b68f8aceabd0c84647b1d41d01e33dbcb74982849b33c24160585cac53e2fd9e"
+  },
+  {
+    "path": ".cache/stats44/donsker.json",
+    "sha256": "9377aef09f0fb42669a004b98c2176e1f6ec5074065df70a402d92594c125f2d"
+  },
+  {
+    "path": ".cache/stats44/lil.json",
+    "sha256": "62bcd8fdc3b3f3d0115374608bdf9a4ee1cf0bf6cfb62fc2108a418de31eacca"
+  },
+  {
+    "path": ".cache/stats44/lr.json",
+    "sha256": "34ca1ee87ff38a2f813a9255b43f648ae218eb204aeb7e5782b5d7b3badcca9d"
+  },
+  {
+    "path": ".cache/stats44/mclt.json",
+    "sha256": "04a45824ad587d641bcf1dc2f34f3b7bc0e2df7a95eed860db4bf6b89c5c6c18"
+  },
+  {
+    "path": ".cache/stats44/mcmc.json",
+    "sha256": "959e1c0249d53643d2ad37f6590794e9b638bea0c5279fd5d79a056094c9d046"
+  },
+  {
+    "path": ".cache/stats44/mixing.json",
+    "sha256": "c97f6a5bdb12493e5aa02015610faa3491995ca7b4d481b8c31c4a852dae5ff5"
+  },
+  {
+    "path": ".cache/stats44/onegin.json",
+    "sha256": "acc0eb8e869bed11f77a6543695e9eecefbdd391fe99fd7669a585f60636dc12"
+  },
+  {
+    "path": ".cache/stats44/polya.json",
+    "sha256": "0977d11c9cafa72ea7e2ee7da948a5a38771aeafb6c80ccf0ca7b09895a58ddb"
+  },
+  {
+    "path": ".cache/stats44/ruin.json",
+    "sha256": "fe36d91626a14f7bec0290eb4e9488c7c170abd83eb16116c3e10712dc077afe"
+  },
+  {
+    "path": ".cache/stats44/urn.json",
+    "sha256": "bfbaf165fbe90388535108636706bb58d6bec669417e2626676bd7c5e8d98a39"
+  }
+]

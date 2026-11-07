@@ -30,13 +30,16 @@ class Concentration(VoiceoverScene):
         rows[3][-1].set_color(MARTC)
         whys = [why(r"bounded differences"), why(r"a bounded, \ mean-zero step"), why(r"the tower property"), why(r"Azuma--Hoeffding (1967, 1963)")]
         with self.voiceover(
-            "<bookmark mark='a'/> Part six's Hoeffding inequality needed independence. Martingales do without it. Suppose "
-            "each step is bounded by c k. <bookmark mark='b'/> Hoeffding's lemma, applied conditionally, bounds the "
-            "conditional moment generating function of each step. <bookmark mark='c'/> The tower property peels the steps "
-            "off one at a time, from the last to the first. <bookmark mark='d'/> Chernoff's method then gives the "
-            "Azuma–Hoeffding inequality: a Gaussian tail with variance proxy the sum of the squared bounds, for any "
-            "martingale at all."
+            "<bookmark mark='a'/> Part six's Hoeffding inequality needed independence. Martingales do without it. "
+            "Suppose each step has absolute value bounded by a deterministic c k. <bookmark mark='b'/> Hoeffding's "
+            "lemma, applied conditionally, bounds the conditional moment generating function of each step. <bookmark "
+            "mark='c'/> The tower property peels the steps off one at a time, from the last to the first. <bookmark "
+            "mark='d'/> Chernoff's method then gives the Azuma–Hoeffding inequality: a Gaussian tail with variance "
+            "proxy the sum of the squared bounds, for any martingale at all."
         ) as vo:
+            heading=label('Conditional increment bounds replace independence',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -60,6 +63,9 @@ class Concentration(VoiceoverScene):
             "analyse directly: the number of empty bins, the longest increasing subsequence of a random permutation, the "
             "chromatic number of a random graph, or the risk of a learned predictor in Part fifty-four."
         ) as vo:
+            heading=label('Independent inputs give bounded-difference concentration',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -72,7 +78,7 @@ class Concentration(VoiceoverScene):
         A = axes([0, 62], [-5, 0], x_length=7.4, y_length=4.4, xlabel=r"$t$", ylabel=r"$\log_{10} P(|Z - EZ| \ge t)$",
                  xticks=[0, 20, 40, 60], yticks=[-5, -4, -3, -2, -1, 0], center=[-2.5, 0.2, 0])
         ax = A.ax
-        lg = lambda v: np.log10(np.maximum(np.asarray(v, float), 1e-5))  # noqa: E731
+        lg = lambda v: np.log10(np.maximum(np.asarray(v, float), np.finfo(float).tiny))  # noqa: E731
         emp_ok = np.asarray(d["emp"]) > 0
         emp = VGroup(polyline(ax, ts[emp_ok], lg(np.asarray(d["emp"])[emp_ok]), CHAINC, 3),
                      *[Dot(ax.c2p(a, b), radius=0.06, color=CHAINC) for a, b in zip(ts[emp_ok], lg(np.asarray(d["emp"])[emp_ok]))])
@@ -85,13 +91,7 @@ class Concentration(VoiceoverScene):
             label(r"valid, \ the right shape, \ loose: \ it cannot know the variance", font_size=22, color=S.ACCENT),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> A test. Throw a thousand balls into a thousand bins at random and count the empty bins. "
-            f"<bookmark mark='b'/> Its mean is n times one minus one over n to the n, about {d['mean_theory']:.0f}, and "
-            f"simulation gives a standard deviation of about ten. <bookmark mark='c'/> Moving one ball changes the count by at "
-            f"most one, so McDiarmid applies with every c equal to one. <bookmark mark='d'/> In blue, the simulated tail "
-            f"probabilities on a log scale; in gold, the bound. <bookmark mark='e'/> The bound always holds and has the right "
-            f"Gaussian shape, but it is loose: it uses only the worst-case change of one ball, and implies a standard "
-            f"deviation near sixteen. Inequalities that use the variance do better."
+            f"<bookmark mark='a'/> A test. Throw a thousand balls into a thousand bins at random and count the empty bins. <bookmark mark='b'/> Its mean is n times one minus one over n to the n, about {d['mean_theory']:.0f}, and simulation gives a standard deviation of about ten. <bookmark mark='c'/> Moving one ball changes the count by at most one, so McDiarmid applies with every c equal to one. <bookmark mark='d'/> In blue, the simulated tail probabilities on a log scale; in gold, the bound. <bookmark mark='e'/> The bound always holds and has the right Gaussian shape, but it is loose: it uses only the worst-case change of one ball, Its sub-Gaussian variance proxy corresponds to a scale near sixteen, rather than the actual standard deviation near ten. A finite Monte Carlo curve also has sampling error. Inequalities that use the variance do better."
         ) as vo:
             self.play(FadeIn(A), FadeIn(exact_tag(r"simulated: 20,000 throws of 1,000 balls")))
             vo.wait_until("a")
@@ -114,11 +114,12 @@ class Concentration(VoiceoverScene):
             label(r"the workhorse of bandit and sequential-testing proofs \ (Part 58)", font_size=24, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> David Freedman's inequality of 1975 uses the variance. If the steps are bounded by c and "
-            "the predictable variation is at most v, <bookmark mark='b'/> the tail is bounded by e to the minus t squared over "
-            "twice v plus c t over three. <bookmark mark='c'/> It is Bernstein's inequality for martingales: when the steps "
-            "are usually small, the variance rather than the range sets the scale. <bookmark mark='d'/> It is the workhorse "
-            "of the proofs for bandits and sequential tests in Part fifty-eight."
+            "<bookmark mark='a'/> David Freedman's inequality of 1975 uses the variance. If the steps are bounded by "
+            "c and the predictable variation is at most v, <bookmark mark='b'/> the tail is bounded by the "
+            "exponential of minus t squared divided by two times the quantity v plus c t over three. <bookmark "
+            "mark='c'/> It is Bernstein's inequality for martingales: when the steps are usually small, the variance "
+            "rather than the range sets the scale. <bookmark mark='d'/> It is the workhorse of the proofs for bandits"
+            " and sequential tests in Part fifty-eight."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -142,6 +143,9 @@ class Concentration(VoiceoverScene):
             "sharper exponent, lambda squared c squared over eight. <bookmark mark='d'/> Multiplying through the steps and "
             "optimizing lambda yields e to the minus two t squared over the sum of the c k squared."
         ) as vo:
+            heading=label('A known interval length sharpens the exponential bound',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

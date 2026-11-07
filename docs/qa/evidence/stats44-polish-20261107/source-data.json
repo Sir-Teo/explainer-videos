@@ -1,0 +1,16 @@
+[
+  {
+    "dataset": "Gehan",
+    "rows": 42,
+    "comparison": "Exact event time, censoring and treatment triples; no age claim",
+    "source": "https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/MASS/gehan.csv",
+    "sha256": "b6dc0c39f7eeec171950104432525393af3950d3f2d802439f63195c2147d8a2"
+  },
+  {
+    "dataset": "Onegin vowel/consonant sequence",
+    "rows": 20000,
+    "comparison": "All first 20,000 bits agree after Cyrillic-only extraction, excluding hard/soft signs and counting short i as a vowel",
+    "source": "https://lib.ru/LITRA/PUSHKIN/p4.txt",
+    "sha256": "5fa504dcd892c3e8bb268451319140b1455828e963215930280ed8ed484bd63a"
+  }
+]

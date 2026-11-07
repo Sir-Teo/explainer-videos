@@ -30,14 +30,18 @@ class Mixing(VoiceoverScene):
         rows[2][-1].set_color(MARTC)
         whys = [why(r"distance and mixing time"), why(r"two copies, \ one law each"), why(r"the coupling inequality"), why(r"Doeblin (1938)")]
         with self.voiceover(
-            "<bookmark mark='a'/> For finite chains we can measure exactly how far a chain is from stationarity after t "
-            "steps: the total variation distance from the worst start. The mixing time is when it first falls below a "
-            "quarter. <bookmark mark='b'/> Wolfgang Doeblin's device for bounding it is coupling: run two copies, one from x "
-            "and one from the stationary law, on a shared source of randomness, so that once they meet they move together. "
-            "<bookmark mark='c'/> The distance at time t is at most the chance they have not yet met. <bookmark mark='d'/> "
-            "And if, after m steps, every start has at least an epsilon chance of being drawn from the stationary law, the "
-            "distance decays geometrically. This part's lab computes all of these exactly."
+            "<bookmark mark='a'/> For finite chains we can measure exactly how far a chain is from stationarity after"
+            " t steps: the total variation distance from the worst start. The mixing time is when it first falls "
+            "below a quarter. <bookmark mark='b'/> Wolfgang Doeblin's device for bounding it is coupling: run two "
+            "copies, one from x and one from the stationary law, on a shared source of randomness, so that once they "
+            "meet they move together. <bookmark mark='c'/> The distance at time t is at most the chance they have not"
+            " yet met. <bookmark mark='d'/> And if, after m steps, every start has at least an epsilon chance of "
+            "being drawn from the stationary law, the distance decays geometrically. The lab computes finite-chain "
+            "distances exactly up to floating-point error and estimates coupling tails by Monte Carlo."
         ) as vo:
+            heading=label('A stationary coupling bounds total variation by its meeting time',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -61,14 +65,7 @@ class Mixing(VoiceoverScene):
             label(r"both scale like $n^2$: \ diffusion", font_size=22, color=S.ACCENT),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The lazy random walk on a cycle of twenty sites: at each step stay put with probability one "
-            f"half, else move to a neighbour. <bookmark mark='b'/> In blue, its exact distance from the uniform law, from a "
-            f"fixed start; it falls below a quarter after {d['tmix_cycle']} steps. <bookmark mark='c'/> In gold, the chance "
-            f"that the classical coupling has not yet joined: two walkers, a coin deciding which one moves, so their gap does "
-            f"a random walk until it closes, on average after n squared over four, a hundred steps. It bounds the distance "
-            f"from above, as it must. <bookmark mark='d'/> The spectral gap, one minus the second eigenvalue, gives the "
-            f"relaxation time, {say(d['relax_cycle'], 1)}. <bookmark mark='e'/> All of them grow like n squared: on a cycle, "
-            f"mixing is diffusion."
+            f"<bookmark mark='a'/> The lazy random walk on a cycle of twenty sites: at each step stay put with probability one half, else move to a neighbour. <bookmark mark='b'/> In blue, its exact distance from the uniform law, from a fixed start; it falls below a quarter after {d['tmix_cycle']} steps. <bookmark mark='c'/> In gold, the chance that the classical coupling has not yet joined: two walkers, a coin deciding which one moves, so their gap does a random walk until it closes, on average after n squared over four, a hundred steps. The opposite-start gap is the worst separation for this coupling. Its survival probability dominates other initial gaps; averaging the second start over stationarity therefore bounds total variation. The plotted four-thousand-run estimate has Monte Carlo error. <bookmark mark='d'/> The spectral gap, one minus the second eigenvalue, gives the relaxation time, {say(d['relax_cycle'], 1)}. <bookmark mark='e'/> All of them grow like n squared: on a cycle, mixing is diffusion."
         ) as vo:
             self.play(FadeIn(A), FadeIn(q), FadeIn(exact_tag(r"exact: matrix powers; \ coupling simulated")))
             vo.wait_until("a")
@@ -104,12 +101,7 @@ class Mixing(VoiceoverScene):
             label(r"exact: \ lump states by their number of 1s", font_size=22, color=GREY_B),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> A walk on the corners of a d-dimensional cube: at each step pick a coordinate and reset "
-            f"it with a fair coin. <bookmark mark='b'/> With ten dimensions it mixes in {h10['tmix']} steps; <bookmark "
-            f"mark='c'/> with forty, in {h40['tmix']}: <bookmark mark='d'/> of order d log d, not d squared, and, plotted "
-            f"against steps per dimension, the drop sharpens as d grows: the distance stays near one, then falls almost at "
-            f"once. Persi Diaconis named it the cutoff phenomenon. <bookmark mark='e'/> The cube has two to the forty corners, "
-            f"but from the all-zeros start only the number of ones matters, so the exact computation needs forty-one states."
+            f"<bookmark mark='a'/> A walk on the corners of a d-dimensional cube: at each step pick a coordinate and reset it with a fair coin. <bookmark mark='b'/> With ten dimensions it mixes in {h10['tmix']} steps; <bookmark mark='c'/> with forty, in {h40['tmix']}: <bookmark mark='d'/> of order d log d, not d squared, and, plotted against steps per dimension, the drop sharpens as d grows: the distance stays near one, then falls almost at once. Persi Diaconis named it the cutoff phenomenon. Two plotted dimensions illustrate sharpening; cutoff is an asymptotic statement about a family of chains. <bookmark mark='e'/> The cube has two to the forty corners, but from the all-zeros start only the number of ones matters, so the exact computation needs forty-one states."
         ) as vo:
             self.play(FadeIn(A), FadeIn(q))
             vo.wait_until("a")
@@ -139,15 +131,7 @@ class Mixing(VoiceoverScene):
             label(r"Bayer \& Diaconis (1992): \ ``seven shuffles suffice''", font_size=22, color=S.ACCENT),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The most famous mixing time is a card trick. Model a riffle shuffle as Gilbert, Shannon "
-            f"and Reeds did: cut the deck binomially and drop cards from the two halves in proportion to their sizes. "
-            f"<bookmark mark='b'/> Dave Bayer and Persi Diaconis found, in 1992, that after k shuffles the probability of an "
-            f"order depends only on its number of rising sequences, through a single binomial coefficient. <bookmark "
-            f"mark='c'/> That makes the distance from a uniform deck computable exactly over all fifty-two factorial orders. "
-            f"The lab does it: the distance stays at one for four shuffles, falls to {say(r[5], 2)} at six, and "
-            f"{say(r[6], 2)} at seven, the first time it is below a half. <bookmark mark='d'/> Hence the headline: seven "
-            f"shuffles suffice. A casino that shuffles three times deals a deck that is still, in total variation, almost "
-            f"perfectly predictable."
+            f"<bookmark mark='a'/> The most famous mixing time is a card trick. Model a riffle shuffle as Gilbert, Shannon and Reeds did: cut the deck binomially and drop cards from the two halves in proportion to their sizes. <bookmark mark='b'/> Dave Bayer and Persi Diaconis found, in 1992, that after k shuffles the probability of an order depends only on its number of rising sequences, through a single binomial coefficient. <bookmark mark='c'/> That makes the distance from a uniform deck computable exactly over all fifty-two factorial orders. The lab does it: the distance stays at one for four shuffles, falls to {say(r[5], 2)} at six, and {say(r[6], 2)} at seven, the first time it is below a half. <bookmark mark='d'/> Hence the headline: seven shuffles suffice. A casino that shuffles three times deals a deck that is still, in total variation, highly distinguishable from a uniform deck by some events. Total variation near one does not mean each card or the complete order can be perfectly predicted."
         ) as vo:
             self.play(FadeIn(A), FadeIn(exact_tag(r"exact: Eulerian numbers, \ big integers")))
             vo.wait_until("a")

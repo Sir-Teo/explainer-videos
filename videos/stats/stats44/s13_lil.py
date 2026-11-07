@@ -24,19 +24,23 @@ class IteratedLogarithm(VoiceoverScene):
             cmath(r"\text{CLT}", r":", r"S_n / \sqrt n \Rightarrow N(0, 1): \ \text{at each } n, \ \text{a few } \sqrt n", font_size=32),
             cmath(r"\text{LIL}", r":", r"\limsup_n \frac{S_n}{\sqrt{2 n \log\log n}} = 1 \ \ \text{almost surely}", font_size=34),
             cmath(r"\text{and}", r":", r"\liminf = -1; \ \text{every point of } [-1, 1] \text{ is a limit point}", font_size=32),
-            cmath(r"\text{for}", r":", r"\text{i.i.d.\ steps with variance } 1: \ \text{Hartman \& Wintner (1941)}", font_size=30),
+            cmath(r"\text{for}", r":", r"\text{i.i.d.\ steps, mean }0,\ \text{variance }1: \ \text{Hartman \& Wintner (1941)}", font_size=30),
         ]
         rows[1][-1].set_color(MARTC)
         whys = [why(r"one time at a time"), why(r"Khinchin (1924), \ coins"), why(r"Strassen (1964)"), why(r"necessary and sufficient")]
         with self.voiceover(
-            "<bookmark mark='a'/> The central limit theorem describes S n over root n at one time at a time. But a path is "
-            "checked at every time, and at some times it will be unusually far out. <bookmark mark='b'/> Aleksandr "
-            "Khinchin's law of the iterated logarithm, for coin tosses in 1924, says exactly how far: the upper limit of S n "
-            "over the root of two n log log n is one, almost surely. <bookmark mark='c'/> The lower limit is minus one, and, "
-            "as Volker Strassen showed, the path visits every point in between infinitely often. <bookmark mark='d'/> Philip "
-            "Hartman and Aurel Wintner extended it in 1941 to any independent identically distributed steps with finite "
-            "variance."
+            "<bookmark mark='a'/> The central limit theorem describes S n over root n at one time at a time. But a "
+            "path is checked at every time, and at some times it will be unusually far out. <bookmark mark='b'/> "
+            "Aleksandr Khinchin's law of the iterated logarithm, for coin tosses in 1924, says exactly how far: the "
+            "upper limit of S n over the root of two n log log n is one, almost surely. <bookmark mark='c'/> The "
+            "lower limit is minus one, and, as Volker Strassen showed, every point in that interval is a "
+            "subsequential limit: the ratios get arbitrarily close, not necessarily exactly equal, infinitely often. "
+            "<bookmark mark='d'/> Philip Hartman and Aurel Wintner extended it in 1941 to independent identically "
+            "distributed mean-zero steps with finite variance, after division by their positive standard deviation."
         ) as vo:
+            heading=label('Centered variance-one iid sums have iterated-logarithm excursions',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -53,7 +57,7 @@ class IteratedLogarithm(VoiceoverScene):
         ax = A.ax
         scale = np.sqrt(np.asarray(d["idx"], float))
         cols = [CHAINC, MARTC, S.ALT, S.PRIOR, S.KEPT, S.RESID]
-        ps = VGroup(*[polyline(ax, n, np.clip(np.asarray(p) / scale, -3, 3), cols[i], 1.6, 0.85) for i, p in enumerate(d["paths"])])
+        ps = VGroup(*[polyline(ax, n, np.asarray(p) / scale, cols[i], 1.6, 0.85) for i, p in enumerate(d["paths"])])
         e_up = polyline(ax, n, env / scale, LIMC, 3)
         e_dn = polyline(ax, n, -env / scale, LIMC, 3)
         c_up = DashedLine(ax.c2p(0.5, 1.645), ax.c2p(6, 1.645), color=GREY_B, stroke_width=2)
@@ -66,13 +70,7 @@ class IteratedLogarithm(VoiceoverScene):
             label(r"the envelope grows, \ but only like $\sqrt{\log\log n}$", font_size=22, color=S.ACCENT),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Six random walks of a million steps, divided by root n. <bookmark mark='b'/> At any fixed n, "
-            f"the central limit theorem puts ninety percent of walks inside the grey lines. <bookmark mark='c'/> But each path, "
-            f"followed over time, keeps escaping them, out to the gold envelope, the root of two log log n, which grows "
-            f"without bound. <bookmark mark='d'/> The largest excursion of each path relative to the envelope, after the first "
-            f"thousand steps, is between {say(min(d['ratios']), 2)} and {say(max(d['ratios']), 2)}: the theorem's limit of one "
-            f"is approached from both sides. <bookmark mark='e'/> Log log n grows so slowly that, for a million steps, the "
-            f"envelope is only about two point three standard deviations."
+            f"<bookmark mark='a'/> Six random walks of a million steps, divided by root n. <bookmark mark='b'/> For a sufficiently large fixed n, the central limit theorem approximately puts ninety percent of walks inside the grey lines. <bookmark mark='c'/> But each path, followed over time, keeps escaping them, out to the gold envelope, the root of two log log n, which grows without bound. <bookmark mark='d'/> The largest excursion of each path relative to the envelope, after the first thousand steps, is between {say(min(d['ratios']), 2)} and {say(max(d['ratios']), 2)}: these are descriptive finite-window maxima. Taking a maximum from a fixed starting time can preserve an early overshoot forever, so these numbers do not estimate a sequence converging to one. <bookmark mark='e'/> Log log n grows so slowly that, for a million steps, the envelope is only about two point three standard deviations."
         ) as vo:
             self.play(FadeIn(A), FadeIn(exact_tag(r"simulated: six walks, $10^6$ steps")))
             vo.wait_until("a")
@@ -95,12 +93,13 @@ class IteratedLogarithm(VoiceoverScene):
             label(r"confidence sequences, \ built from Ville's inequality: \ Part 58", font_size=26, color=GOODC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The statistical lesson is the one chapter four drew from Ville. An interval valid at one "
-            "sample size is not valid at every sample size simultaneously. <bookmark mark='b'/> Watch a fixed-sample interval "
-            "forever and, by the iterated logarithm, it will eventually exclude the truth, almost surely. <bookmark "
-            "mark='c'/> An interval that holds at all times at once must be wider, by roughly the root of log log n, the "
-            "smallest possible price. <bookmark mark='d'/> Such intervals, confidence sequences, are built from Ville's "
-            "inequality in Part fifty-eight."
+            "<bookmark mark='a'/> The statistical lesson is the one chapter four drew from Ville. An interval valid "
+            "at one sample size is not valid at every sample size simultaneously. <bookmark mark='b'/> Watch a "
+            "fixed-sample interval forever and, by the iterated logarithm, it will eventually exclude the truth, "
+            "almost surely. <bookmark mark='c'/> For intervals centered at an efficient sample mean, an asymptotic "
+            "boundary of order one over root n must acquire a root log log n factor for all-time coverage. This is "
+            "not a universal width theorem for every possible test or interval construction. <bookmark mark='d'/> "
+            "Such intervals, confidence sequences, are built from Ville's inequality in Part fifty-eight."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -110,21 +109,25 @@ class IteratedLogarithm(VoiceoverScene):
     def proof(self):
         rows = [
             cmath(r"n_k", r"=", r"\lfloor \theta^k \rfloor, \ \theta > 1: \ \text{check only at geometric times}", font_size=32),
-            cmath(r"P\big(\max_{n \le n_{k+1}} S_n \ge c\, h(n_k)\big)", r"\le", r"e^{-c^2 h(n_k)^2 / 2 n_{k+1}} \ \ \text{(L\'evy's maximal inequality)}", font_size=28),
-            cmath(r"\phantom{P}", r"=", r"(k \log\theta)^{-c^2/\theta}: \ \text{summable when } c^2 > \theta", font_size=30),
+            cmath(r"P\big(\max_{n \le n_{k+1}} S_n \ge c\, h(n_k)\big)", r"\le", r"e^{-c^2 h(n_k)^2 / 2 n_{k+1}} \ \ \text{(exponential maximal bound, fair coins)}", font_size=28),
+            cmath(r"\phantom{P}", r"=", r"k^{-c^2/\theta+o(1)}: \ \text{summable when } c^2 > \theta", font_size=30),
             cmath(r"\text{BC I}", r":", r"\limsup S_n / h(n) \le c, \ \text{then let } c \downarrow 1, \ \theta \downarrow 1", font_size=32),
         ]
         rows[3][-1].set_color(GOODC)
         whys = [why(r"the Etemadi trick again"), why(r"$h(n) = \sqrt{2n\log\log n}$"), why(r"the iterated log appears here"), why(r"the upper half")]
         with self.voiceover(
-            "<bookmark mark='a'/> The upper half of the proof is the strong law's trick again. Check the walk only at "
-            "geometric times, theta to the k. <bookmark mark='b'/> Between two such times, a maximal inequality bounds the "
-            "chance of ever exceeding c times the envelope by a Gaussian tail. <bookmark mark='c'/> Because the envelope "
-            "contains log log n, that tail is a power of k: k log theta to the minus c squared over theta, which is "
-            "summable exactly when c squared exceeds theta. That is where the iterated logarithm comes from. <bookmark "
-            "mark='d'/> Borel–Cantelli then bounds the upper limit by c, and letting c and theta shrink to one gives one. "
-            "The lower half uses the second Borel–Cantelli lemma on nearly independent blocks."
-        ) as vo:
+            "<bookmark mark='a'/> For bounded fair-coin steps, the upper half of the proof is the strong law's trick "
+            "again. Check the walk only at geometric times, theta to the k. <bookmark mark='b'/> Between two such "
+            "times, a maximal inequality bounds the chance of ever exceeding c times the envelope by a Gaussian tail."
+            " <bookmark mark='c'/> Because the envelope contains log log n, that tail is a power of k: k log theta to"
+            " the minus c squared over theta, which is summable exactly when c squared exceeds theta. That is where "
+            "the iterated logarithm comes from. <bookmark mark='d'/> Borel–Cantelli then bounds the upper limit by c,"
+            " and letting c and theta shrink to one gives one. The lower half uses the second Borel–Cantelli lemma on"
+            " independent separated blocks. Extending this argument to general finite-variance steps also requires "
+            "truncation."       ) as vo:
+            heading=label('For fair coins, exponential maximal bounds control geometric blocks',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

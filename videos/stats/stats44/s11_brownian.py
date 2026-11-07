@@ -36,6 +36,9 @@ class Brownian(VoiceoverScene):
             "sigma-algebra cannot even ask whether a path is continuous. <bookmark mark='d'/> Norbert Wiener built the "
             "measure on continuous paths directly in 1923. The simplest construction is Lévy's, refined by Ciesielski."
         ) as vo:
+            heading=label('Gaussian increments and continuity define Brownian motion',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -49,7 +52,7 @@ class Brownian(VoiceoverScene):
                  yticks=[-2, -1, 0, 1, 2], center=[-2.5, 0.2, 0])
         ax = A.ax
         cols = {"0": GREY_C, "1": GREY_B, "2": GREY_A, "3": CHAINC, "5": S.ALT, "10": MARTC}
-        lines = {k: polyline(ax, t, np.clip(d["levels"][k], -2.5, 2.5), c, 2.5 if k != "10" else 2.0) for k, c in cols.items()}
+        lines = {k: polyline(ax, t, d["levels"][k], c, 2.5 if k != "10" else 2.0) for k, c in cols.items()}
         side = fit_rows(VGroup(
             label(r"level 0: \ $Z_0\, t$, \ the right value at $t = 1$", font_size=22, color=GREY_B),
             label(r"each level adds tents $Z_{n,k} S_{n,k}(t)$ at midpoints", font_size=22, color=CHAINC),
@@ -82,7 +85,7 @@ class Brownian(VoiceoverScene):
     def properties(self):
         rows = [
             cmath(r"\text{scaling}", r":", r"(c^{-1/2} B_{ct})_t \overset{d}{=} (B_t)_t", font_size=34),
-            cmath(r"\text{nowhere differentiable}", r":", r"\frac{B_{t+h} - B_t}{h} \sim N(0, 1/h) \ \text{explodes as } h \to 0", font_size=30),
+            cmath(r"\text{roughness heuristic}", r":", r"\frac{B_{t+h} - B_t}{h} \sim N(0, 1/h) \ \text{explodes as } h \to 0", font_size=30),
             cmath(r"\text{Paley--Wiener--Zygmund}", r":", r"\text{almost surely, \ no } t \text{ at which } B \text{ is differentiable}", font_size=28),
             cmath(r"\text{Markov and martingale}", r":", r"B_t, \ \ B_t^2 - t, \ \ e^{\lambda B_t - \lambda^2 t/2}", font_size=32),
         ]
@@ -90,14 +93,18 @@ class Brownian(VoiceoverScene):
         rows[3][-1].set_color(MARTC)
         whys = [why(r"self-similar"), why(r"heuristically"), why(r"(1933), \ for all $t$ at once"), why(r"three martingales")]
         with self.voiceover(
-            "<bookmark mark='a'/> Brownian motion is self-similar: speed up time by c and shrink space by root c, and the "
-            "process is unchanged in law. <bookmark mark='b'/> Its difference quotients over a step h are normal with "
-            "variance one over h, which explodes as h shrinks: the path cannot have a derivative. <bookmark mark='c'/> "
-            "Paley, Wiener and Zygmund proved in 1933 that, almost surely, there is no time at all at which it is "
-            "differentiable: a continuous, nowhere differentiable function, chosen at random. <bookmark mark='d'/> It is a "
-            "Markov process, and three martingales come with it: B itself, B squared minus t, and the exponential "
-            "martingale, the continuous-time likelihood ratio."
+            "<bookmark mark='a'/> Brownian motion is self-similar: speed up time by c and shrink space by root c, and"
+            " the process is unchanged in law. <bookmark mark='b'/> Its difference quotients over a step h are normal"
+            " with variance one over h, which explodes as h shrinks: this suggests roughness at a fixed time, but it "
+            "does not by itself prove nowhere differentiability. <bookmark mark='c'/> Paley, Wiener and Zygmund "
+            "proved in 1933 that, almost surely, there is no time at all at which it is differentiable: a continuous,"
+            " nowhere differentiable function, chosen at random. <bookmark mark='d'/> It is a Markov process, and "
+            "three martingales come with it: B itself, B squared minus t, and the exponential martingale, the "
+            "continuous-time likelihood ratio."
         ) as vo:
+            heading=label('Scaling and martingales describe Brownian paths',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -117,12 +124,14 @@ class Brownian(VoiceoverScene):
             label(r"see \emph{Stochastic Calculus, Visualized}", font_size=20, color=GREY_B),
         ), 4.6, 0.45, [4.45, 0.2, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> One more property makes Brownian motion unlike any smooth path. Cut the unit interval into N "
-            "pieces and add up the squared increments: <bookmark mark='b'/> as N grows the sum converges to one, the length "
-            "of the interval. That is the quadratic variation. <bookmark mark='c'/> The absolute increments, by contrast, add "
-            "up to something growing like root N: the path has infinite length. <bookmark mark='d'/> In shorthand, dB "
-            "squared equals dt, the rule from which Itô's stochastic calculus grows, <bookmark mark='e'/> and the subject of "
-            "this channel's series Stochastic Calculus, Visualized."
+            "<bookmark mark='a'/> One more property makes Brownian motion unlike any smooth path. Cut the unit "
+            "interval into N pieces and add up the squared increments: <bookmark mark='b'/> along deterministic "
+            "partitions whose mesh tends to zero the sum converges in probability to one; along nested dyadic "
+            "partitions it converges almost surely. The displayed quadratic-variation calculation uses a separate "
+            "simulated fine path. That is the quadratic variation. <bookmark mark='c'/> The absolute increments, by "
+            "contrast, add up to something growing like root N: the path has infinite length. <bookmark mark='d'/> In"
+            " shorthand, dB squared equals dt, the rule from which Itô's stochastic calculus grows, <bookmark "
+            "mark='e'/> and the subject of this channel's series Stochastic Calculus, Visualized."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tab[0]), FadeIn(side[0]))
@@ -146,13 +155,18 @@ class Brownian(VoiceoverScene):
         rows[3][-1].set_color(GOODC)
         whys = [why(r"an exit time"), why(r"optional stopping, \ bounded path"), why(r"the second martingale"), why(r"Donsker, \ in advance")]
         with self.voiceover(
-            "<bookmark mark='a'/> The martingales give exit problems at once. Let tau be the first time Brownian motion "
-            "leaves the interval from minus b to a. <bookmark mark='b'/> The stopped path is bounded, so optional stopping "
-            "applies: the expected exit position is zero, and the chance of leaving at the top is b over a plus b. <bookmark "
-            "mark='c'/> Applied to B squared minus t, it gives the expected exit time, a times b. <bookmark mark='d'/> These "
-            "are exactly chapter three's gambler's-ruin answers, for a game whose steps have shrunk to nothing: a preview of "
-            "the next chapter."
+            "<bookmark mark='a'/> The martingales give exit problems at once. Let tau be the first time Brownian "
+            "motion leaves the interval from minus b to a. <bookmark mark='b'/> The stopped path is bounded, so "
+            "optional stopping applies: the expected exit position is zero, and the chance of leaving at the top is b"
+            " over a plus b. <bookmark mark='c'/> For B squared minus t, first stop at tau or n, whichever comes "
+            "first. The bounded exit interval bounds the expected stopped time; monotone convergence gives an "
+            "integrable exit time, and dominated convergence then gives the expected exit time, a times b. <bookmark "
+            "mark='d'/> These are exactly chapter three's gambler's-ruin answers, for a game whose steps have shrunk "
+            "to nothing: a preview of the next chapter."
         ) as vo:
+            heading=label('Bounded-time stopping first justifies the Brownian exit identities',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

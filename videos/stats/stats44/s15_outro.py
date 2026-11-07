@@ -8,7 +8,7 @@ PROBLEMS = [
     r"Show that $(q/p)^{S_n}$ is a martingale for a $p$-coin walk, \ and derive the probability of reaching $b$.",
     r"For a two-state chain with $P(1 \mid 1) = a$, $P(1 \mid 0) = b$, \ find $\pi_1$ and the lag-$k$ autocorrelation $(a - b)^k$.",
     r"Use McDiarmid to show that the empty-bin count $Z$ satisfies $P(|Z - EZ| \ge t) \le 2e^{-2t^2/n}$.",
-    r"Show that the Nelson--Aalen variance $\sum d_j / Y_j^2$ is the predictable variation of $\int dM / Y$.",
+    r"Derive the Nelson--Aalen bracket and its estimator $\sum d_j/Y_j^2$; distinguish them.",
 ]
 
 
@@ -38,17 +38,20 @@ class Outro(VoiceoverScene):
         head = label(r"Part 44, \ in twelve lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Part forty-four in twelve lines. <bookmark mark='a'/> Markov counted Onegin's letters to show that the law of "
-            "large numbers survives dependence. Conditional expectation is a Radon–Nikodym derivative and a projection. "
-            "Martingales are fair games: likelihood ratios under the null, Pólya's urn. Optional stopping cannot beat a fair "
-            "game, unless its conditions fail, as the doubling strategy does. Ville's inequality bounds a nonnegative "
-            "martingale's chance of ever growing large, which makes betting a valid test at any time. Upcrossings make "
-            "martingales converge, and reverse martingales prove the strong law and de Finetti. Azuma, McDiarmid and Freedman "
-            "give concentration without independence, and the martingale central limit theorem gives normal limits, until a "
-            "unit root breaks it. Drift and minorization make MCMC averages obey a central limit theorem. Coupling measures "
-            "mixing, seven riffles shuffle a deck, and random walks return in two dimensions but not three. Brownian motion "
-            "is the limit of every walk, which explains Dickey and Fuller. And the iterated logarithm and counting processes "
-            "close the part."
+            "Part forty-four in twelve lines. <bookmark mark='a'/> Markov counted Onegin's letters to show that the "
+            "law of large numbers survives dependence. Conditional expectation is a Radon–Nikodym derivative and, for"
+            " square-integrable variables, a projection. Martingales are fair games: likelihood ratios under the "
+            "null, Pólya's urn. Optional stopping cannot beat a fair game, unless its conditions fail, as the "
+            "doubling strategy does. Ville's inequality bounds a nonnegative martingale's chance of ever growing "
+            "large, which makes betting a valid test at any time. Upcrossings make martingales converge, and reverse "
+            "martingales prove the strong law and outline de Finetti through conditional factorization. Azuma and "
+            "Freedman control adapted increments; McDiarmid controls functions of independent inputs. and the "
+            "martingale central limit theorem gives normal limits, until a unit root breaks it. Drift, minorization, "
+            "irreducibility, aperiodicity and suitable moments give the stated MCMC central limit theorem. Coupling "
+            "measures mixing, seven Gilbert–Shannon–Reeds riffles bring total variation below one half, and random "
+            "walks return in two dimensions but not three. Brownian motion is the standardized limit of centered "
+            "independent finite-variance walks, which explains Dickey and Fuller. And the iterated logarithm and "
+            "counting processes close the part."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -79,6 +82,7 @@ class Outro(VoiceoverScene):
             (r"Donsker for empirical processes", [48]), (r"posterior consistency, \ beyond Doob's theorem", [53]),
             (r"Ville's inequality: \ e-values and confidence sequences", [58]),
         ], font_size=22)
+        self.add(card.head)
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part forty-five's Rao–Blackwell theorem is a conditional expectation. "
             "Part forty-seven treats the score as a martingale. Part forty-eight extends Donsker's theorem to empirical "
@@ -86,16 +90,16 @@ class Outro(VoiceoverScene):
             "confidence sequences from Ville's inequality."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):
         ps = problem_set(PROBLEMS, font_size=20)
         with self.voiceover(
-            "Six problems, with full solutions in the README. <bookmark mark='a'/> Conditional expectation as the best "
-            "predictor; the expected length of a fair game; de Moivre's martingale; a two-state chain's stationary law and "
-            "autocorrelations; McDiarmid for empty bins; and the Nelson–Aalen variance as a predictable variation. Pause here "
-            "if you want to try them."
+            "Six problems, with full solutions in the README. <bookmark mark='a'/> Conditional expectation as the "
+            "best predictor; the expected length of a fair game; de Moivre's martingale; a two-state chain's "
+            "stationary law and autocorrelations; McDiarmid for empty bins; and the Nelson–Aalen bracket and its "
+            "observed-event variance estimator. Pause here if you want to try them."
         ) as vo:
             self.play(FadeIn(ps.head))
             vo.wait_until("a")
@@ -130,9 +134,9 @@ class Outro(VoiceoverScene):
         tr.to_edge(UP, buff=0.8)
         nxt.next_to(tr, DOWN, buff=1.0)
         with self.voiceover(
-            "Forty-four parts of sixty-five. <bookmark mark='a'/> Randomness that unfolds in time has its own theorems: fair "
-            "games, chains that forget, and the Brownian limit of them all. <bookmark mark='b'/> Next, Part forty-five: the "
-            "theory of estimation."
+            "Forty-four parts of sixty-five. <bookmark mark='a'/> Randomness that unfolds in time has its own "
+            "theorems: fair games, chains that forget, and the Brownian limit under finite-variance invariance "
+            "conditions. <bookmark mark='b'/> Next, Part forty-five: the theory of estimation."
         ) as vo:
             self.play(FadeIn(tr))
             vo.wait_until("a")
