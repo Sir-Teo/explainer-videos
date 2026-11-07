@@ -59,9 +59,8 @@ class Assouad(VoiceoverScene):
             "with probability about half of one minus the total variation between neighbours. The losses add up, so the "
             "bound grows with m."
         ) as vo:
-            self.play(FadeIn(exact_tag(r"the lower-bound workbench")))
             vo.wait_until("a")
-            self.play(FadeIn(c3[1]), FadeIn(side[0]))
+            self.play(FadeIn(c3[1]), FadeIn(side[0]), FadeIn(exact_tag(r"the lower-bound workbench")))
             vo.wait_until("b")
             self.play(Create(c3[0]), FadeIn(side[1]), run_time=2)
             vo.wait_until("c")

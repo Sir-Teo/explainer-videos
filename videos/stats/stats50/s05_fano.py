@@ -98,9 +98,8 @@ class Fano(VoiceoverScene):
             "contains about R over delta to the d well-separated points, so log M grows linearly with the dimension, which is "
             "why Fano's method gives dimension-dependent rates."
         ) as vo:
-            self.play(FadeIn(exact_tag(r"the lower-bound workbench")))
             vo.wait_until("a")
-            self.play(FadeIn(pts), FadeIn(side[0]))
+            self.play(FadeIn(pts), FadeIn(side[0]), FadeIn(exact_tag(r"the lower-bound workbench")))
             vo.wait_until("b")
             self.play(FadeIn(disc), FadeIn(side[1]))
             vo.wait_until("c")
