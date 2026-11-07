@@ -256,13 +256,17 @@ python tools/make.py quant11 --cpu-voice -q m            # English and Chinese, 
 6. **Vanna and volga.** d₁ = (ln F/K + ½σ²τ)/(σ√τ), so ∂d₁/∂σ = √τ − d₁/σ = −d₂/σ (using d₂ = d₁ − σ√τ). Then
    vanna = ∂Δ/∂σ = φ(d₁)∂d₁/∂σ = −φ(d₁)d₂/σ, and since 𝒱 = Sφ(d₁)√τ and φ′(x) = −xφ(x),
    volga = ∂𝒱/∂σ = −Sd₁φ(d₁)√τ·∂d₁/∂σ = 𝒱d₁d₂/σ. At the forward, d₁ = ½σ√τ and d₂ = −½σ√τ, so d₁d₂ = −σ²τ/4,
-   tiny for short-dated options: volga ≈ 0 at the money, and positive in both wings, where d₁ and d₂ share a sign.
-7. **The dispersion trade's sign.** With vega-matched, delta-hedged straddles, each leg earns ½ΓS²(σ²_r − σ²_i)
-   integrated over time, and at the money ½ΓS² is the same multiple c of variance for every leg. The P&L is then
-   c[Σwᵢ(σ²_{r,i} − σ²_{i,i}) − (σ²_{r,I} − σ²_{i,I})]. Substitute σ_I² = Σwᵢ²σᵢ² + ρΣ_{i≠j}wᵢwⱼσᵢσⱼ for the realized
-   and the implied index variance. If the members' realized vols equal their implied ones, everything cancels except
-   c(ρ_impl − ρ_real)Σ_{i≠j}wᵢwⱼσᵢσⱼ, whose sign is that of ρ_impl − ρ_real (chapter 13's simulation: correlation
-   0.92 between the gap and the P&L, right sign in 95% of scenarios).
+   small and negative for short-dated options at the forward; volga is positive where d₁ and d₂ share a sign.
+   At unadjusted 25-delta the call wing is positive, while the put wing needs σ√τ < 0.674.
+7. **The dispersion trade's sign.** Each locally frozen, delta-hedged leg earns
+   ½ΓS²(σ²_r − σ²_i) integrated over time, with its position quantity included in Γ.
+   Vega matching alone does not equate these variance weights when leg volatilities differ.
+   If member and index quantities instead give local variance weights cwᵢ and c, the P&L is
+   c[Σwᵢ(σ²_{r,i} − σ²_{i,i}) − (σ²_{r,I} − σ²_{i,I})]. With members' realized vols equal to their
+   implied ones, substitute σ_I² = Σwᵢ²σᵢ² + ρΣ_{i≠j}wᵢwⱼσᵢσⱼ to get
+   c(ρ_impl − ρ_real)Σ_{i≠j}wᵢwⱼσᵢσⱼ. Its sign follows the correlation gap under those local
+   matching assumptions. The simulation uses an approximate ATM vega scale and evolving Greeks;
+   its 0.92 correlation and 95% sign agreement are numerical diagnostics, not an exact payoff identity.
 8. **The direction of the optimal quotes.** From the first-order condition δ^{b*} = 1/k + θ(q) − θ(q+1) and
    δ^{a*} = 1/k + θ(q) − θ(q−1). The value θ is concave in q (the penalty −φq² makes extra inventory costlier the
    larger it is), so θ(q) − θ(q+1) increases in q and θ(q) − θ(q−1) decreases in q: when q grows the bid moves away
@@ -276,7 +280,8 @@ python tools/make.py quant11 --cpu-voice -q m            # English and Chinese, 
    q(p − E x − ε). Indifference: E[−e^{−γq(p − Ex − ε)}] = −1, so p − E x = (1/(γq))log E e^{γqε}. With the cumulant
    expansion log E e^{tε} = κ₂t²/2 + κ₃t³/6 + …, t = γq: p − E x = γqκ₂/2 + γ²q²κ₃/6 + … The first term is the
    mean-variance (average) premium; a positive third cumulant, a residual that loses big in crashes, adds a term
-   growing like q², so large positions in crash protection are priced more than proportionally.
+   growing like q² per unit within the local cumulant expansion. This correction increases total compensation
+   faster than linearly, but a moment finite only near zero does not establish finite prices for arbitrary q.
 ## For the researcher
 
 * **The theorems.** Gârleanu, Pedersen and Poteshman (2009), "Demand-Based Option Pricing," *RFS* 22(10); Bollen and
