@@ -48,18 +48,18 @@ class Hook(VoiceoverScene):
         rows = h["band"]["rows"]
         r5 = next(r for r in rows if abs(r["cost"] - 0.005) < 1e-9)
         side = VGroup(
-            label(r"a network learns where not to trade", font_size=24),
+            wrapped_label(r"a delta-centred network learns band widths", 4.6, 22),
             label(r"when every trade costs 0.5\%", font_size=22, color=GREY_A),
             legend([(NET, r"the band it learned: inside, do nothing"), (WHITE, r"the band theory derived in 1997")],
                    font_size=18),
-            MathTex(rf"\text{{entropic cash, }}\gamma=1:\ {r5['deep']['price']:.2f}\ \ \text{{vs}}\ \ {r5['delta']['price']:.2f}"
+            MathTex(rf"\text{{empirical }}\rho,\ \gamma=1:\ {r5['deep']['price']:.2f}\ \ \text{{vs}}\ \ {r5['delta']['price']:.2f}"
                     rf"\ \text{{hedging daily}}", font_size=26, color=NET),
             firm_card(r"J.P. Morgan", r"Euro Stoxx cliquet rollout reported live in May 2022; "
                       r"S\&P expansion described as planned", source=r"Risk.net, 2022", width=4.6, font_size=18),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.5)
         src = illustration(r"the deep hedger of chapters 11--14; a 30-day at-the-money call, 20\% volatility")
         with self.voiceover(
-            f"This network hedges a simulated thirty-day call with a half-percent proportional fee on each traded share. It learns a corridor: inside, keep the holding; outside, trade to an edge. <bookmark mark='a'/> Whalley and Wilmott derived a small-cost asymptotic corridor in 1997. These full, unclipped curves need not coincide. With risk aversion one, the saved test estimates an entropic cash requirement of {r5['deep']['price']:.2f}, against {r5['delta']['price']:.2f} for daily delta. These are simulated risk measures, not market quotes or exact optimal prices. <bookmark mark='b'/> A dated industry example: Risk.net reported a live Euro Stoxx cliquet deep-hedging rollout in May 2022, with S&P expansion still planned."
+            f"A delta-centred band architecture learns widths for a simulated thirty-day call, with a half-percent proportional fee per traded share. Inside the band, keep the holding; outside, trade to an edge. <bookmark mark='a'/> Whalley and Wilmott derived a small-cost asymptotic corridor in 1997. The full curves need not coincide. With risk aversion one, the saved test gives empirical exponential-loss objectives {r5['deep']['price']:.2f} and {r5['delta']['price']:.2f} for the band and daily delta. Finite-path estimates do not certify finite population exponential risk under lognormal tails, or an optimal market price. <bookmark mark='b'/> Risk.net reported a live Euro Stoxx cliquet deep-hedging rollout in May 2022, with S&P expansion still planned."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]), FadeIn(side[1]))
             self.play(FadeIn(fill), Create(top), Create(bot), FadeIn(side[2][0]), run_time=2)
