@@ -34,15 +34,20 @@ class EIV(VoiceoverScene):
         rows[1][2].set_color(NOISY)
         whys = [why(r"$u$: \ measurement error, \ independent of everything"), why(r"the noise adds to $\mathrm{Var}(w)$, \ not to the covariance"),
                 why(r"attenuation: \ always towards zero"), why(r"a noisy confounder leaves confounding behind")]
+        intro = label('Classical independent error in one regressor attenuates its slope', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Part 12 assumed the predictors are measured exactly. Suppose instead we see w, the true x "
-            "plus independent measurement error. <bookmark mark='b'/> The least squares slope converges to the covariance "
-            "of w and y over the variance of w. The error adds to the variance but not to the covariance, so the slope is "
-            "beta times a fraction, <bookmark mark='c'/> the reliability lambda, the share of w's variance that is real. "
-            "The slope is attenuated, always towards zero, however large the sample. <bookmark mark='d'/> With several "
-            "predictors the bias spreads: a confounder measured with error is only partly controlled for, and some of its "
-            "effect is credited to the others, as Part 20 found with sodium."
+            "<bookmark mark='a'/> Part 12 assumed the predictors are measured exactly. Suppose instead we see w, the "
+            "true x plus independent measurement error. <bookmark mark='b'/> The least squares slope converges to the"
+            " covariance of w and y over the variance of w. The error adds to the variance but not to the covariance,"
+            " so the slope is beta times a fraction, <bookmark mark='c'/> the reliability lambda, the share of w's "
+            "variance that is real. In this simple classical-error model the slope is attenuated towards zero however"
+            " large the sample. This direction need not hold for every coefficient in a multiple regression. "
+            "<bookmark mark='d'/> With several predictors the bias spreads: a confounder measured with error is only "
+            "partly controlled for, and some of its effect is credited to the others, as Part 20 found with sodium."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -58,8 +63,8 @@ class EIV(VoiceoverScene):
         exact = VGroup(*[Dot(ax.c2p(a, b), radius=0.035, color=OLS_C, fill_opacity=0.7) for a, b in zip(zf, zc) if abs(a) < 3.5])
         noisy = VGroup(*[Dot(ax.c2p(a, b), radius=0.035, color=NOISY, fill_opacity=0.7) for a, b in zip(wf, zc) if abs(a) < 3.5])
         s1, s2 = d["slope_exact"], d["slope_noisy"]
-        l1 = Line(ax.c2p(-3.5, -3.5 * s1), ax.c2p(3.5, 3.5 * s1), color=OLS_C, stroke_width=4)
-        l2 = Line(ax.c2p(-3.5, -3.5 * s2), ax.c2p(3.5, 3.5 * s2), color=NOISY, stroke_width=4)
+        l1 = fit_line(ax, *d["coef_exact"], -3.5, 3.5, OLS_C)
+        l2 = fit_line(ax, *d["coef_noisy"], -3.5, 3.5, NOISY)
         rows = fit_rows(VGroup(
             label(r"500 of the World's families", font_size=22),
             label(rf"blue: \ exact heights, \ slope {s1:.3f}", font_size=22, color=OLS_C),
@@ -68,13 +73,13 @@ class EIV(VoiceoverScene):
             label(rf"predicted: \ ${d['reliability']} \times {d['true_slope']:.3f} = {d['predicted']:.3f}$", font_size=22, color=GREY_A),
         ), 3.9, 0.42, [4.8, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Five hundred of the World's families: the child's height against the father's, both "
-            "standardized. <bookmark mark='b'/> With exact heights the slope is point three six five; the whole World's is "
-            "point three nine one. <bookmark mark='c'/> Now record each father's height with an error big enough that only "
-            "sixty percent of the recorded variance is real, a fair description of self-reported heights or of a "
-            "single blood pressure reading. The cloud spreads sideways. <bookmark mark='d'/> The slope falls to point two "
-            "one seven. <bookmark mark='e'/> The formula predicted point six times point three nine one, point two three "
-            "five."
+            "<bookmark mark='a'/> Five hundred of the World's families: the child's height against the father's, both"
+            " standardized. <bookmark mark='b'/> With exact heights the slope is point three six five; the whole "
+            "World's is point three nine one. <bookmark mark='c'/> Now record each father's height with an error big "
+            "enough that only sixty percent of the recorded variance is real, an illustrative reliability assumption,"
+            " not a validated error model for actual self-reports or blood-pressure readings. The cloud spreads "
+            "sideways. <bookmark mark='d'/> The slope falls to point two one six. <bookmark mark='e'/> The formula "
+            "predicted point six times point three nine one, point two three five."
         ) as vo:
             self.add(simulated_tag())
             self.play(FadeIn(A))
@@ -115,7 +120,7 @@ class EIV(VoiceoverScene):
         dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.07, color=GREY_A) for a, b in zip(dist, vel)])
 
         def line(a, b, col):
-            return Line(ax.c2p(0, a), ax.c2p(2.2, a + 2.2 * b), color=col, stroke_width=3.5)
+            return fit_line(ax, a, b, 0, 2.2, col, 3.5)
 
         ols = line(*d["ols"], OLS_C)
         rv = line(*d["reverse_line"], RES)
@@ -128,14 +133,16 @@ class EIV(VoiceoverScene):
             label(r"km/s per megaparsec", font_size=20, color=GREY_B),
         ), 3.45, 0.42, [5.1, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The most famous regression with a noisy x. In 1929 Edwin Hubble plotted the recession "
-            "velocities of twenty-four nebulae against their distances, and found that the farther a galaxy, the faster it "
-            "recedes: the expanding universe. His distances were far noisier than his velocities. <bookmark mark='b'/> "
-            "Regress velocity on distance: four hundred and fifty-four kilometres per second per megaparsec, attenuated by "
-            "the noisy distances. <bookmark mark='c'/> Regress distance on velocity instead and invert: seven hundred and "
-            "twenty-nine. The truth, if the errors were all in distance, would be nearer this one. <bookmark mark='d'/> "
-            "Deming regression, which needs the ratio of the two error variances, here velocities good to a hundred "
-            "kilometres per second and distances to twenty percent, lands between, at five hundred and eighty-two."
+            "<bookmark mark='a'/> The most famous regression with a noisy x. In 1929 Edwin Hubble plotted the "
+            "recession velocities of twenty-four nebulae against their distances, and found that the farther a "
+            "galaxy, the faster it recedes: the expanding universe. His distances were far noisier than his "
+            "velocities. <bookmark mark='b'/> Regress velocity on distance: four hundred and fifty-four kilometres "
+            "per second per megaparsec, attenuated by the noisy distances. <bookmark mark='c'/> Regress distance on "
+            "velocity instead and invert: seven hundred and twenty-nine. The truth, if the errors were all in "
+            "distance, would be nearer this one. <bookmark mark='d'/> Deming regression, which needs the ratio of the"
+            " two error variances, using an illustrative constant error ratio based on velocity SD one hundred "
+            "kilometres per second and distance SD twenty percent of mean distance, not a validated historical "
+            "calibration, lands between, at five hundred and eighty-two."
         ) as vo:
             self.add(hubble_tag())
             self.play(FadeIn(A), LaggedStart(*[FadeIn(x, scale=0.5) for x in dots], lag_ratio=0.05))
@@ -159,18 +166,24 @@ class EIV(VoiceoverScene):
         ]
         rows[3][2].set_color(RES)
         whys = [why(r"$\delta$: \ the ratio of the error variances"), why(r"the smallest singular vector of $[X\ y]$; \ not scale-free"),
-                why(r"the two naive lines bracket the truth"), why(r"a calibration error: \ no regression fixes it")]
+                why(r"bracketing truth requires a classical-error model"), why(r"a calibration error: \ no regression fixes it")]
+        intro = label('Errors in both variables require external information', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Deming regression minimizes errors in both directions, with delta, the ratio of the error "
-            "variances, deciding how to trade them. <bookmark mark='b'/> With delta equal to one it's orthogonal regression, "
-            "or total least squares, computed from the smallest singular vector of the data matrix; but here velocity and "
-            "distance have different units, so one is an arbitrary choice and the answer is seven hundred and twenty-nine. "
-            "<bookmark mark='c'/> The two naive slopes differ by a factor of r squared, and between them they bracket every "
-            "answer the error ratio could give. <bookmark mark='d'/> And a humbling footnote. Hubble's distances weren't "
-            "just noisy, they were systematically too small, by a factor of about seven, because of a mistaken calibration "
-            "of the stars he used as yardsticks. Today's value is about seventy. No regression method corrects an error "
-            "that every observation shares."
+            "<bookmark mark='a'/> Deming regression minimizes errors in both directions, with delta, the ratio of the"
+            " error variances, deciding how to trade them. <bookmark mark='b'/> With delta equal to one it's "
+            "orthogonal regression, or total least squares, computed from the smallest singular vector of the data "
+            "matrix; but here velocity and distance have different units, so one is an arbitrary choice and the "
+            "answer is seven hundred and twenty-nine. <bookmark mark='c'/> The two naive slopes differ by a factor of"
+            " r squared, and the positive Deming slopes lie between these two fitted slopes as the assumed variance "
+            "ratio varies. Bracketing a true slope requires a valid classical-error model, not just this historical "
+            "scatter. <bookmark mark='d'/> And a humbling footnote. Hubble's distances weren't just noisy, they were "
+            "systematically too small, by a factor of about seven, because of a mistaken calibration of the stars he "
+            "used as yardsticks. Today's value is about seventy. No regression method corrects an error that every "
+            "observation shares."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -198,13 +211,15 @@ class EIV(VoiceoverScene):
             label(rf"gold: \ the World's {d['true_slope']:.3f}", font_size=22, color=TRUE),
         ), 3.45, 0.42, [5.1, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> SIMEX, simulation-extrapolation, from John Cook and Leonard Stefanski in 1994, needs only the "
-            "error variance. Take the noisy fathers and deliberately add more error, half as much again, then the same "
-            "again, twice as much. <bookmark mark='b'/> Average the slope over two hundred simulations at each step: it falls "
-            "steadily. <bookmark mark='c'/> Fit a curve through those slopes and extrapolate back to minus one, the "
-            "imaginary point where the original error is removed too. <bookmark mark='d'/> The estimate is point three one "
-            "three, from a naive point two one seven. <bookmark mark='e'/> The World's slope is point three nine one: SIMEX "
-            "recovers most of the loss, and with a quadratic it typically under-corrects."
+            "<bookmark mark='a'/> SIMEX, simulation-extrapolation, from John Cook and Leonard Stefanski in 1994, "
+            "needs only the error variance. Take the noisy fathers and deliberately add more error, half as much "
+            "again, then the same again, twice as much. <bookmark mark='b'/> Average the slope over two hundred "
+            "simulations at each step: it falls steadily. <bookmark mark='c'/> Fit a curve through those slopes and "
+            "extrapolate back to minus one, the imaginary point where the original error is removed too. <bookmark "
+            "mark='d'/> The estimate is point three one two, from a naive point two one six. <bookmark mark='e'/> The"
+            " World's slope is point three nine one: Here the chosen quadratic recovers part of the loss. "
+            "Extrapolation bias and uncertainty depend on the curve and on the assumed measurement-error distribution"
+            " and variance."
         ) as vo:
             self.add(simulated_tag())
             self.play(FadeIn(A), Create(tru), Create(zero))
@@ -225,18 +240,23 @@ class EIV(VoiceoverScene):
             cmath(r"y^{\text{obs}}", r"=", r"y + v", font_size=30),
             cmath(r"\hat\beta", r"\to", r"\beta: \ \text{no bias}", font_size=30),
             cmath(r"\text{but}", r":", r"\text{larger SEs, \ lower power}", font_size=30),
-            cmath(r"\text{unless}", r":", r"v \text{ depends on } x \text{ (differential error)}", font_size=30),
+            cmath(r"\text{unless}", r":", r"E(v\mid x) \text{ varies with } x", font_size=30),
         ]
         rows[1][2].set_color(HIT)
         whys = [why(r"error in the outcome"), why(r"it joins $\varepsilon$"), why(r"the price of a noisy outcome"),
                 why(r"e.g. self-reports that vary by group")]
+        intro = label('Mean-zero outcome recording error need not bias slopes', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Error in the outcome is a different matter. If what we record is y plus independent noise, "
-            "<bookmark mark='b'/> the noise simply joins the regression error, and the slope stays unbiased. "
-            "<bookmark mark='c'/> The cost is precision: larger standard errors and less power. <bookmark mark='d'/> The "
-            "exception is differential error, noise whose size or direction depends on the predictors, like self-reported "
-            "weight that is understated more by some groups than by others; that biases everything."
+            "<bookmark mark='a'/> Error in the outcome is a different matter. If what we record is y plus independent"
+            " noise, <bookmark mark='b'/> the noise simply joins the regression error, and the slope stays unbiased. "
+            "<bookmark mark='c'/> The cost is precision: larger standard errors and less power. <bookmark mark='d'/> "
+            "The exception is differential error, a systematic conditional mean of recording error that depends on "
+            "the predictors, such as under-reporting that differs by group. A variance that depends on x alone need "
+            "not bias the slope when conditional mean error is zero."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -247,17 +267,18 @@ class EIV(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"know the reliability: \ regression calibration, \ Part 20", font_size=24, color=GLS_C),
             label(r"know the error ratio: \ Deming", font_size=24, color=GLS_C),
-            label(r"an instrument correlated with $x$, \ not with $u$: \ IV, \ Part 37", font_size=24, color=OLS_C),
+            label(r"IV: relevant $x$, \ uncorrelated with $u$ and $\varepsilon$, \ exclusion", font_size=24, color=OLS_C),
             label(r"simulate more error and extrapolate back: \ SIMEX (Cook \& Stefanski 1994)", font_size=24, color=TEAL),
             label(r"and the whole subject: \ Part 41", font_size=24, color=GREY_A),
         ), 12.4, 0.5, [0, 0, 0])
         with self.voiceover(
-            "Every cure needs information from outside the regression itself. <bookmark mark='a'/> If repeated measurements "
-            "give the reliability, divide by it: Part 20's regression calibration. <bookmark mark='b'/> If you know the ratio "
-            "of error variances, use Deming. <bookmark mark='c'/> If you have an instrument, something correlated with the "
-            "true x but not with the measurement error, use instrumental variables, Part 37. <bookmark mark='d'/> SIMEX adds "
-            "extra simulated error in steps, watches the slope shrink, and extrapolates back to no error at all. "
-            "<bookmark mark='e'/> Part 41 treats measurement error in full."
+            "Every cure needs information from outside the regression itself. <bookmark mark='a'/> If repeated "
+            "measurements give the reliability, divide by it: Part 20's regression calibration. <bookmark mark='b'/> "
+            "If you know the ratio of error variances, use Deming. <bookmark mark='c'/> If you have an instrument, "
+            "something correlated with the true x but uncorrelated with both measurement error and the structural "
+            "regression error, and satisfying exclusion, use instrumental variables, Part 37. <bookmark mark='d'/> "
+            "SIMEX adds extra simulated error in steps, watches the slope shrink, and extrapolates back to no error "
+            "at all. <bookmark mark='e'/> Part 41 treats measurement error in full."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

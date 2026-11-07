@@ -34,15 +34,21 @@ class Splines(VoiceoverScene):
         rows[2][2].set_color(PATH)
         whys = [why(r"linear in $\beta$, \ whatever the $b_j$"), why(r"a cubic that may bend at each knot"),
                 why(r"de Boor (1972)"), why(r"chapter ten: \ the basis matters to the computer")]
+        intro = label('A linear model can use nonlinear functions of its predictors', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> A linear model only has to be linear in its coefficients. Replace x by any set of basis "
-            "functions of x, and least squares, its F-tests and its sandwiches all still apply. <bookmark mark='b'/> A cubic "
-            "spline is a cubic polynomial allowed to change at chosen knots, staying smooth. The obvious basis adds a "
-            "truncated cube at each knot. <bookmark mark='c'/> B-splines, from Carl de Boor's recursion, span exactly the "
-            "same functions, but each is a local bump, and together they sum to one. <bookmark mark='d'/> They're far "
-            "better for the computer: with three knots on ages, the truncated-power design has condition number thirty "
-            "million; the B-spline design, under six."
+            "<bookmark mark='a'/> A linear model only has to be linear in its coefficients. Replace x by any set of "
+            "basis functions of x, and least-squares algebra still applies. Exact F-tests need the Gaussian "
+            "homoskedastic model and fixed basis choice; robust inference needs its own sampling and moment "
+            "conditions. Selecting bases using y adds selection uncertainty. <bookmark mark='b'/> A cubic spline is a"
+            " cubic polynomial allowed to change at chosen knots, staying smooth. The obvious basis adds a truncated "
+            "cube at each knot. <bookmark mark='c'/> B-splines, from Carl de Boor's recursion, span exactly the same "
+            "functions, but each is a local bump, and together they sum to one. <bookmark mark='d'/> They're far "
+            "better for the computer: with three knots on ages, the truncated-power design has condition number "
+            "thirty million; the B-spline design, under six."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -67,10 +73,12 @@ class Splines(VoiceoverScene):
             label(r"so $X^\top X$ is banded: \ cheap and stable", font_size=22, color=HIT),
         ), 3.45, 0.42, [5.1, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Here are the seven cubic B-splines for knots at ages thirty-three, forty-four and sixty-one, "
-            "the quartiles of a sample. <bookmark mark='b'/> Each is non-zero over at most four neighbouring intervals. "
-            "<bookmark mark='c'/> At every age they add up to exactly one. <bookmark mark='d'/> Because each column of the "
-            "design touches only nearby observations, X transpose X is banded, cheap to factor and well conditioned."
+            "<bookmark mark='a'/> Here are the seven cubic B-splines for knots at ages thirty-three, forty-four and "
+            "sixty-one, the quartiles of a sample. <bookmark mark='b'/> Each is non-zero over at most four "
+            "neighbouring intervals. <bookmark mark='c'/> At every age they add up to exactly one. <bookmark "
+            "mark='d'/> Only neighbouring B-spline basis functions overlap in predictor space, so their Gram matrix "
+            "is banded. This design is well conditioned, but poorly spaced knots or rank deficiency can still cause "
+            "numerical trouble."
         ) as vo:
             self.play(FadeIn(A), Create(knots))
             vo.wait_until("a")
@@ -94,7 +102,7 @@ class Splines(VoiceoverScene):
         dots = VGroup(*[Dot(ax.c2p(a + 0.3 * np.sin(7 * b), b), radius=0.025, color=GREY_C, fill_opacity=0.5)
                         for a, b in zip(age[keep], inc[keep])])
         truth = polyline(ax, d["ages"], d["truth"], TRUE, 3)
-        cvs = {k: curve(ax, gr, np.clip(v["curve"], 9, 12.5), KCOL[k], 3) for k, v in d["fits"].items()}
+        cvs = {k: curve(ax, gr, v["curve"], KCOL[k], 3) for k, v in d["fits"].items()}
         rows = fit_rows(VGroup(
             label(r"800 of the World's adults, \ log income", font_size=22),
             label(r"gold: \ the true mean at each age", font_size=22, color=TRUE),
@@ -129,7 +137,7 @@ class Splines(VoiceoverScene):
         K = np.arange(len(cv))
         lo, hi = float(cv.min()) - 0.002, float(cv.max()) + 0.002
         A = axes([0, 25], [lo, hi], x_length=8.0, y_length=4.2, xlabel=r"number of interior knots",
-                 ylabel=r"10-fold CV error", xticks=[0, 5, 10, 15, 20, 25], yticks=[0.395, 0.4], center=[-1.6, 0.3, 0],
+                 ylabel=r"10-fold CV error", xticks=[0, 5, 10, 15, 20, 25], yticks=np.linspace(lo, hi, 4), center=[-1.6, 0.3, 0],
                  yfmt=lambda v: f"{v:.3f}")
         ax = A.ax
         pl = VGroup(polyline(ax, K, cv, PATH, 3), *[Dot(ax.c2p(k, c), radius=0.05, color=PATH) for k, c in zip(K, cv)])
@@ -138,17 +146,19 @@ class Splines(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"choosing the knots by cross-validation", font_size=22),
             label(rf"minimum at {b} knots", font_size=22, color=HIT),
-            label(r"but the curve is flat: \ 0 to 20 within noise", font_size=22, color=GREY_A),
-            label(r"the noise (SD 0.55) dwarfs the curve", font_size=22),
+            label(r"nearby errors need not identify a unique best shape", font_size=22, color=GREY_A),
+            label(rf"one-SE rule: {d['oneSE_K']} knots (fold-SE heuristic)", font_size=22),
             label(r"Part 29: \ penalize instead of choosing", font_size=22, color=TEAL),
         ), 3.45, 0.42, [5.1, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> How many knots? Part 19's answer: cross-validate. Ten-fold prediction error for zero to "
-            "twenty-five knots. <bookmark mark='b'/> The minimum happens to fall at eight. <bookmark mark='c'/> But look at the "
-            "scale: everything up to twenty knots is within a fraction of a percent. <bookmark mark='d'/> Individual incomes "
-            "vary so much around the curve that its fine shape hardly changes the prediction error; the one-standard-error "
-            "rule would take the simplest. <bookmark mark='e'/> Choosing knots is awkward and unstable. Part 29 instead "
-            "uses many knots and penalizes roughness, choosing one smoothing parameter."
+            "<bookmark mark='a'/> How many knots? Part 19's answer: cross-validate. Ten-fold prediction error for "
+            "zero to twenty-five knots. <bookmark mark='b'/> The displayed minimum is the computed value for this "
+            "split; every fold learns its knots from training predictors alone. <bookmark mark='c'/> But look at the "
+            "scale: many choices have very similar prediction errors. <bookmark mark='d'/> Individual incomes vary so"
+            " much around the curve that its fine shape hardly changes the prediction error; we compute the "
+            "one-standard-error choice shown here. The standard error across ten correlated fold losses is a "
+            "heuristic, not an exact confidence interval. <bookmark mark='e'/> Choosing knots is awkward and "
+            "unstable. Part 29 instead uses many knots and penalizes roughness, choosing one smoothing parameter."
         ) as vo:
             self.add(simulated_tag())
             self.play(FadeIn(A))
@@ -171,6 +181,9 @@ class Splines(VoiceoverScene):
         rows[1][2].set_color(OLS_C)
         whys = [why(r"a separate age curve for women"), why(r"one $F$-test: \ do the curves differ?"),
                 why(r"surfaces in two variables"), why(r"the curse of dimensionality: \ Part 29")]
+        intro = label('Interactions between bases build curves and surfaces', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> Bases compose. Multiply the age basis by an indicator for women and the model has two "
             "age curves, one for each sex. <bookmark mark='b'/> Whether the curves differ is a single general linear "
@@ -178,6 +191,7 @@ class Splines(VoiceoverScene):
             "two bases make surfaces in two variables. <bookmark mark='d'/> The catch is the count: K columns for a curve, "
             "K squared for a surface, K cubed for three variables. Part 29 meets this curse of dimensionality."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -187,20 +201,27 @@ class Splines(VoiceoverScene):
     def natural(self):
         rows = [
             cmath(r"\text{natural cubic spline}", r":", r"\text{linear beyond the boundary knots}", font_size=30),
-            cmath(r"\text{degrees of freedom}", r":", r"K \ \text{knots} \Rightarrow K \ \text{columns (with intercept)}", font_size=30),
+            cmath(r"\text{degrees of freedom}", r":", r"J\ \text{interior knots}\Rightarrow J+2\ \text{columns incl. intercept}", font_size=30),
             cmath(r"\text{tests}", r":", r"\text{is the curve linear? \ an } F\text{-test, \ chapter two}", font_size=30),
             cmath(r"\text{Part 20}", r":", r"\text{restricted cubic splines for age}", font_size=30),
         ]
         rows[0][2].set_color(PATH)
-        whys = [why(r"tames the wild ends of a cubic"), why(r"two constraints at each end"),
+        whys = [why(r"tames the wild ends of a cubic"), why(r"zero second derivative at each boundary"),
                 why(r"nonlinear columns $= 0$"), why(r"the same object, \ Harrell's name")]
+        intro = label('Natural cubic splines impose two boundary curvature constraints', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Cubic splines misbehave at the ends, where data are thin. A natural cubic spline is forced "
-            "to be a straight line beyond the outer knots. <bookmark mark='b'/> That saves four degrees of freedom: K knots "
-            "give K columns. <bookmark mark='c'/> Whether the curve is needed at all is then a general linear hypothesis: "
-            "test that the nonlinear columns' coefficients are all zero, with chapter two's F. <bookmark mark='d'/> These are "
-            "the restricted cubic splines Part 20 used for age in its blood-pressure model."
+            "<bookmark mark='a'/> Cubic splines misbehave at the ends, where data are thin. A natural cubic spline is"
+            " forced to be a straight line beyond the outer knots. <bookmark mark='b'/> With J distinct interior "
+            "knots and two fixed boundary knots, imposing zero second derivative at the boundaries removes two "
+            "degrees of freedom from the unrestricted cubic spline. The natural basis has J plus two columns, "
+            "including the intercept. <bookmark mark='c'/> Whether the curve is needed at all is then a general "
+            "linear hypothesis: test that the nonlinear columns' coefficients are all zero, with chapter two's F. "
+            "<bookmark mark='d'/> These are the restricted cubic splines Part 20 used for age in its blood-pressure "
+            "model."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

@@ -38,17 +38,19 @@ class Outro(VoiceoverScene):
         head = label(r"Part 23, \ in fourteen lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Part twenty-three in fourteen lines. <bookmark mark='a'/> Longley's data defeated the normal equations: no "
-            "correct digits in single precision, against twelve for QR in double. Part 12's guarantees rested on a true "
-            "linear mean, equal independent errors, exact predictors and exact arithmetic. Every linear question is C beta "
-            "equals d, with one F-test. Generalized least squares whitens and then fits. With autocorrelated errors, the "
-            "naive standard error covered forty-eight percent. HC zero to HC three repair uneven noise, and the wild "
-            "bootstrap does better still in small samples. Clustered pupils inflated the variance eightfold, as Moulton's "
-            "factor predicted, and with only eight schools the wild cluster bootstrap kept the promise. A wrong line "
-            "still estimates the best linear predictor, whose value depends on who is sampled. Noisy regressors flatten "
-            "slopes, and Hubble's data give three different answers. Quantile regression shows the whole fan of a "
-            "distribution; B-splines make curves into linear models. Householder's mirrors avoid ever forming X transpose "
-            "X. And the deletion formula measures influence and gives the jackknife for free."
+            "Part twenty-three in fourteen lines. <bookmark mark='a'/> Longley's data defeated the normal equations: "
+            "no correct digits in single precision, against twelve for QR in double. Part 12's guarantees rested on a"
+            " true linear mean, equal independent errors, exact predictors and exact arithmetic. Every linear "
+            "question is C beta equals d, with one F-test. Generalized least squares whitens and then fits. With "
+            "autocorrelated errors, the naive standard error covered forty-eight percent. HC estimators address "
+            "uneven noise under regularity conditions; the wild bootstrap performed better in our small-sample "
+            "experiment. Clustering greatly inflated uncertainty, approximately as the Moulton heuristic suggested. "
+            "The Board assesses eight-school bootstrap inference conditionally on observing both treatment arms. A "
+            "wrong line still estimates the best linear predictor, whose value depends on who is sampled. Classical "
+            "error in a single regressor attenuates its slope, and Hubble's data give three different answers. "
+            "Quantile regression shows the whole fan of a distribution; B-splines make curves into linear models. "
+            "Householder's mirrors avoid ever forming X transpose X. And the deletion formula measures influence and "
+            "gives the jackknife for free."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -70,6 +72,7 @@ class Outro(VoiceoverScene):
             "clusters. Part 41 treats measurement error in full. And Part 59 returns to the minimum-norm solution, when "
             "least squares interpolates."
         ) as vo:
+            self.add(card.head)
             vo.wait_until("a")
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
@@ -115,10 +118,11 @@ class Outro(VoiceoverScene):
         tr.to_edge(UP, buff=0.8)
         nxt.next_to(tr, DOWN, buff=1.0)
         with self.voiceover(
-            "Twenty-three parts of sixty-five. <bookmark mark='a'/> The linear model now has standard errors that survive "
-            "uneven noise, clustering and its own wrongness. <bookmark mark='b'/> Next, outcomes that are not normal at "
-            "all: counts, proportions, yes-or-no answers. In 1972 John Nelder and Robert Wedderburn showed that one "
-            "algorithm fits them all. Part 24: generalized linear models."
+            "Twenty-three parts of sixty-five. <bookmark mark='a'/> The linear model now has uncertainty methods for "
+            "uneven noise, clustering and approximation error, with explicit conditions and finite-sample checks. "
+            "<bookmark mark='b'/> Next, outcomes that are not normal at all: counts, proportions, yes-or-no answers. "
+            "In 1972 John Nelder and Robert Wedderburn showed that one algorithm fits them all. Part 24: generalized "
+            "linear models."
         ) as vo:
             self.play(FadeIn(tr))
             self.play(*[tr.cells[i].animate.set_fill(S.ACCENT, opacity=0.9) for i in range(23)])

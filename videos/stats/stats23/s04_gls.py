@@ -32,14 +32,19 @@ class GLS(VoiceoverScene):
         rows[2][2].set_color(GLS_C)
         whys = [why(r"correlated or unequal errors, \ of known shape"), why(r"whiten: \ Cholesky (Part 4)"),
                 why(r"OLS on the whitened data"), why(r"Gauss--Markov, \ in the whitened world")]
+        intro = label('Whitening uses a known positive-definite covariance shape', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Suppose the errors' covariance is sigma squared times a known matrix omega, with Cholesky "
-            "factor L. <bookmark mark='b'/> Multiply the whole model by L inverse: the new errors have covariance sigma "
-            "squared times the identity, so they satisfy Part 12's assumptions. <bookmark mark='c'/> Least squares on the "
-            "whitened data is generalized least squares, which weights the data by omega inverse. <bookmark mark='d'/> "
-            "Alexander Aitken proved in 1935 that it is the best linear unbiased estimator: Gauss–Markov, applied after "
-            "whitening. Weighted least squares, from Part 12, is the special case of a diagonal omega."
+            "<bookmark mark='a'/> Suppose the errors' covariance is sigma squared times a known positive-definite "
+            "matrix omega, with Cholesky factor L, and a full-rank design. <bookmark mark='b'/> Multiply the whole "
+            "model by L inverse: the new errors have covariance sigma squared times the identity, so they satisfy "
+            "Part 12's assumptions. <bookmark mark='c'/> Least squares on the whitened data is generalized least "
+            "squares, which weights the data by omega inverse. <bookmark mark='d'/> Alexander Aitken proved in 1935 "
+            "that it is the best linear unbiased estimator: Gauss–Markov, applied after whitening. Weighted least "
+            "squares, from Part 12, is the special case of a diagonal omega."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -51,19 +56,25 @@ class GLS(VoiceoverScene):
             cmath(r"\Omega", r"=", r"\mathrm{diag}(1/m_1, \dots, 1/m_G)", font_size=30),
             cmath(r"\hat\beta_{\mathrm{WLS}}", r"=", r"\arg\min \textstyle\sum_g m_g (\bar y_g - x_g^\top b)^2", font_size=30),
             cmath(r"\text{equal to}", r":", r"\text{OLS on the individual data, \ if } x \text{ is constant within groups}", font_size=28),
-            cmath(r"\text{wrong weights}", r":", r"\text{still unbiased; \ less efficient; \ SE wrong}", font_size=30),
+            cmath(r"\text{wrong weights}", r":", r"\text{exogenous weights, correct mean: unbiased; SE can be wrong}", font_size=30),
         ]
         rows[1][2].set_color(GLS_C)
         whys = [why(r"group means of $m_g$ observations"), why(r"weighted least squares: \ Part 12"),
                 why(r"averaging first loses nothing"), why(r"the theme of the next two chapters")]
+        intro = label('Weights can reproduce the coefficients from individual data', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> The simplest case is a diagonal omega. Suppose the data are group averages, the g-th of m "
-            "g observations, so its variance is sigma squared over m g. <bookmark mark='b'/> GLS then weights each average "
-            "by its group size: weighted least squares. <bookmark mark='c'/> If the predictors are the same within each "
-            "group, this gives exactly the least squares fit to the individual data: averaging first loses nothing. "
-            "<bookmark mark='d'/> With the wrong weights the estimate stays unbiased, merely less efficient, but the standard "
-            "error printed from the wrong weights is wrong. Remember that pattern."
+            "<bookmark mark='a'/> The simplest case is a diagonal omega. Suppose the data are group averages, the "
+            "g-th of m g observations, so its variance is sigma squared over m g. <bookmark mark='b'/> GLS then "
+            "weights each average by its group size: weighted least squares. <bookmark mark='c'/> If the predictors "
+            "are the same within each group, this gives exactly the least squares fit to the individual data: "
+            "averaging gives the same coefficient estimate. The within-group residual variation still matters for "
+            "estimating uncertainty. <bookmark mark='d'/> With fixed weights, or exogenous weights determined by X, a"
+            " correctly specified conditional mean keeps the estimate unbiased; it may be less efficient, but the "
+            "standard error printed from the wrong weights is wrong. Remember that pattern."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -88,11 +99,11 @@ class GLS(VoiceoverScene):
             label(r"long runs above, \ then below: \ correlated errors", font_size=22, color=GREY_A),
         ), 3.45, 0.42, [5.1, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> A common case: a trend measured over time, sixty points, with errors that follow an "
-            "autoregression, each one point eight times the previous plus fresh noise. <bookmark mark='b'/> The true trend "
-            "has slope two. <bookmark mark='c'/> This particular series' least squares line has slope one point four "
-            "eight. <bookmark mark='d'/> The errors wander in long runs above and below the trend, so sixty points carry much "
-            "less information than sixty independent ones."
+            "<bookmark mark='a'/> A common case: a trend measured over time, sixty points, with errors that follow an"
+            " autoregression, each equal to point eight times the previous plus fresh noise. <bookmark mark='b'/> The"
+            " true trend has slope two. <bookmark mark='c'/> This particular series' least squares line has slope one"
+            " point four eight. <bookmark mark='d'/> The errors wander in long runs above and below the trend, so "
+            "sixty points carry much less information than sixty independent ones."
         ) as vo:
             self.play(FadeIn(A), Create(pts), FadeIn(dots))
             vo.wait_until("a")
@@ -120,13 +131,14 @@ class GLS(VoiceoverScene):
             label(r"but OLS's formula SE is three times too small", font_size=24, color=RES),
         ), 12.0, 0.3, [0, -2.0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Two thousand such series. The least squares slope varies with a standard deviation of about "
-            "two. <bookmark mark='b'/> Generalized least squares, using the true correlation, does a little better, one "
-            "point eight seven. <bookmark mark='c'/> Prais and Winsten's feasible version, which estimates the correlation "
-            "first, is almost as good. <bookmark mark='d'/> For estimating a trend, least squares is nearly efficient, as "
-            "Ulf Grenander and Murray Rosenblatt showed in 1957. <bookmark mark='e'/> The real damage is elsewhere: the "
-            "standard error least squares reports, which assumes independent errors, averages point six five, a third of the "
-            "truth."
+            "<bookmark mark='a'/> Two thousand such series. The least squares slope varies with a standard deviation "
+            "of about two. <bookmark mark='b'/> Generalized least squares, using the true correlation, does a little "
+            "better, one point eight seven. <bookmark mark='c'/> Prais and Winsten's feasible version, which "
+            "estimates the correlation first, is almost as good. <bookmark mark='d'/> For trends under suitable "
+            "short-memory stationary errors, Grenander and Rosenblatt established asymptotic efficiency results; "
+            "these do not apply to every time-series regression. <bookmark mark='e'/> The real damage is elsewhere: "
+            "the standard error least squares reports, which assumes independent errors, averages point six five, a "
+            "third of the truth."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(t[0]), FadeIn(t[1]), FadeIn(foot[0]))
@@ -156,12 +168,13 @@ class GLS(VoiceoverScene):
             labs.add(VGroup(label(name, font_size=22, color=col).next_to(ax.c2p(0.4, y), LEFT, buff=0.25),
                             label(rf"{100 * v:.1f}\%", font_size=22, color=col).next_to(ax.c2p(v, y), RIGHT, buff=0.15)))
         with self.voiceover(
-            "<bookmark mark='a'/> Coverage of nominal ninety-five percent intervals for the slope. <bookmark mark='b'/> With "
-            "the naive standard error: forty-eight percent. <bookmark mark='c'/> Newey and West's autocorrelation-consistent "
-            "standard error, from Part 17, helps but reaches only sixty-eight with sixty strongly correlated points. "
-            "<bookmark mark='d'/> Feasible GLS reaches eighty-four. <bookmark mark='e'/> Only GLS with the true correlation "
-            "is honest. Strong dependence and short series are a hard combination; there's no free lunch in estimating the "
-            "error structure."
+            "<bookmark mark='a'/> Coverage of nominal ninety-five percent intervals for the slope. <bookmark "
+            "mark='b'/> With the naive standard error: forty-eight percent. <bookmark mark='c'/> Newey and West's "
+            "autocorrelation-consistent standard error, from Part 17, helps but reaches only sixty-eight with sixty "
+            "strongly correlated points. <bookmark mark='d'/> Feasible GLS reaches eighty-four. <bookmark mark='e'/> "
+            "In this experiment, only the interval using the true correlation reaches nominal coverage. Strong "
+            "dependence and short series are a hard combination; there's no free lunch in estimating the error "
+            "structure."
         ) as vo:
             self.play(FadeIn(A), Create(nom))
             vo.wait_until("a")
@@ -175,21 +188,26 @@ class GLS(VoiceoverScene):
         rows = [
             cmath(r"DW", r"=", r"\dfrac{\sum_t (e_t - e_{t-1})^2}{\sum_t e_t^2} \approx 2(1 - \hat\rho)", font_size=30),
             cmath(r"\hat\rho", r"=", r"\textstyle\sum e_t e_{t-1} / \sum e_{t-1}^2", font_size=30),
-            cmath(r"\text{our series}", r":", rf"\hat\rho = {d['rho_hat_example']:.2f}, \ DW \approx {2 * (1 - d['rho_hat_example']):.2f}", font_size=30),
+            cmath(r"\text{our series}", r":", rf"\hat\rho = {d['rho_hat_example']:.2f}, \ DW = {d['dw_example']:.2f}", font_size=30),
             cmath(r"\text{Cochrane--Orcutt}", r":", r"\text{difference out } \hat\rho, \ \text{refit, \ repeat}", font_size=30),
         ]
         rows[2][2].set_color(RES)
         whys = [why(r"Durbin \& Watson (1950)"), why(r"the residuals' lag-one correlation"),
                 why(r"2 means no correlation; \ near 0, \ strong"), why(r"1949; \ Prais--Winsten keeps the first point")]
+        intro = label('Durbin--Watson uses the original OLS residuals', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> How would we have known? James Durbin and Geoffrey Watson's 1950 statistic compares "
-            "successive residuals; it is about two times one minus the residuals' lag-one correlation. "
-            "<bookmark mark='b'/> That correlation is estimated directly from the residuals. <bookmark mark='c'/> For our "
-            "example series it is point eight two, so the Durbin–Watson statistic is about point three six, far below the "
-            "value of two that independent errors would give. <bookmark mark='d'/> Donald Cochrane and Guy Orcutt's 1949 "
-            "recipe then differences out the estimated correlation and refits, repeating until it settles; Prais and "
-            "Winsten's version keeps the first observation instead of dropping it."
+            "<bookmark mark='a'/> How would we have known? James Durbin and Geoffrey Watson's 1950 statistic compares"
+            " successive residuals; it is about two times one minus the residuals' lag-one correlation. <bookmark "
+            "mark='b'/> That correlation is estimated directly from the residuals. <bookmark mark='c'/> For our "
+            "example series it is about point eight one, and the actual Durbin–Watson statistic is point three eight;"
+            " endpoint terms explain the difference from two times one minus rho, far below the value of two that "
+            "independent errors would give. <bookmark mark='d'/> Donald Cochrane and Guy Orcutt's 1949 recipe then "
+            "differences out the estimated correlation and refits, repeating until it settles; Prais and Winsten's "
+            "version keeps the first observation instead of dropping it."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -206,14 +224,19 @@ class GLS(VoiceoverScene):
         rows[3][2].set_color(HIT)
         whys = [why(r"e.g. Cochrane--Orcutt, \ Prais--Winsten (1954)"), why(r"if $\hat\theta$ is consistent"),
                 why(r"in case $\Omega$'s shape is wrong"), why(r"the rest of this part")]
+        intro = label('Feasible GLS estimates a covariance model', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> In practice omega is unknown, so feasible GLS estimates its parameters first, here the "
-            "autocorrelation, and then whitens with the estimate. <bookmark mark='b'/> In large samples that's as good as "
-            "knowing omega. <bookmark mark='c'/> Since the assumed shape may itself be wrong, the modern habit is to pair "
-            "either estimator with a standard error that doesn't trust the shape. <bookmark mark='d'/> The lesson carries "
-            "through the whole part: getting a nearly efficient estimate is easy; getting an honest standard error is the "
-            "hard part."
+            "<bookmark mark='a'/> In practice omega is unknown, so feasible GLS estimates its parameters first, here "
+            "the autocorrelation, and then whitens with the estimate. <bookmark mark='b'/> With a consistently "
+            "estimated covariance model and suitable regularity, feasible GLS can have the same first-order "
+            "efficiency as GLS. <bookmark mark='c'/> Since the assumed shape may itself be wrong, the modern habit is"
+            " to pair either estimator with a standard error that doesn't trust the shape. <bookmark mark='d'/> The "
+            "lesson carries through the whole part: getting a nearly efficient estimate is easy; getting an honest "
+            "standard error is the hard part."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
