@@ -28,8 +28,9 @@ Delivery workflow: continue directly on `quantitative-finance`. Commit and push 
 | 7 | Visual pass complete; full production-voice listening pending |
 | 8 | Visual pass complete; full production-voice listening pending |
 | 9 | Visual pass complete; full production-voice listening pending |
-| 10 | Scientific corrections pushed; bilingual frame QA in progress |
-| 11–43 | Pending; do not infer approval from historical build notes |
+| 10 | Visual pass complete; full production-voice listening pending |
+| 11 | In progress: scientific, narration and visual QA |
+| 12–43 | Pending; do not infer approval from historical build notes |
 
 ## Part 1: The Fair Game
 
@@ -711,4 +712,74 @@ and speech reports. Local git-ignored review artifacts are:
   opening, 107.4 seconds, matching the final narration
   and accompanied by its reviewed contact sheet and dead-air scan.
 
-Part 10 is next in the sequential pass.
+Part 10’s completed visual pass is recorded below.
+
+
+## Part 10: Black–Scholes–Merton — completed visual pass
+
+The derivation, examples, Mandarin narration and captions now distinguish model
+assumptions from empirical observations. The Bitcoin experiment is a hypothetical
+dollar call priced with a DVOL proxy, with retrospective window selection,
+overlapping windows and timing limitations. The plots align forward realized
+volatility to the window start. Their bootstrap envelope is pointwise, and the
+ordinary standard errors do not establish independence or executable returns.
+
+The hedge argument uses self-financing gains, rather than the differential of an
+option-minus-stock position without its cash account. Robust hedging states its
+continuous-diffusion, volatility-bound and admissibility assumptions. Discrete
+errors are leading martingale differences; the jump expression separates the exact
+nonlinear remainder from its quadratic approximation. The dashed jump-risk proxy
+is not a proved variance floor for the simulated Merton model. Tree consistency,
+heat-kernel display scaling, cost conventions and American-exercise assumptions
+are explicit.
+
+Quote inversion uses a Surface IV reconstructed from a mark price and then
+repriced: numerical round-trip precision is distinct from market accuracy. Coin
+premiums, forward Black values, spot-dollar present values and discount conventions
+are separated. The Surface score is weighted RMSE and its calendar check is sampled.
+All recorded solver and neural overshoots remain visible; invalid Newton display
+points and diagnostic sentinels are disclosed. The neural replay retains five seeds
+and is a teaching example, with no claimed replication or runtime benchmark of the
+2026 preprints. Primary-source checks support the attributed paper and industry
+claims.
+
+Histograms preserve their full recorded ranges and use common count scales. The
+3D comparison bars stay fixed in screen space, and the dense lattice settles into
+a steady view after a short orbit. Comparison axes and baseline table rows appear
+during their explanations, with references separated from long labels. The 1987
+replay matches pre-return states, stock weights and the October-end date to cached
+observations, and holds its event states at the corresponding narration cues. The
+research chapter states its asymptotic conditions, discloses hindsight volatility
+and pooled band tuning, and shows the worked answer after its pause. Missing
+Mandarin captions and a decimal-template ambiguity are repaired.
+
+All 26 compute items were restored normally. The compute source, pricing algorithms,
+data manifest, trial registry and track record are unchanged from the Part 9
+completion commit. Thirteen existing tests pass, with one dependency deprecation
+warning. The as-of-Part-10 counter remains 310; this pass added no market trials and opened no
+sealed holdout.
+
+Validation: all 66 receipts match the final source and input signatures, with zero
+automated warnings: 22 English endpoint checks, 22 Mandarin checks and 22 English
+silent playback checks. All endpoint sheets and all forty-frame motion sheets were
+visually reviewed, with native-frame checks of repaired formulas and transitions.
+Chinese coverage is 131/131 source lines and spliced sentences. The narration
+estimate is 61.3 minutes.
+
+Actual Kokoro samples cover Hook, WrongVol, Research and Frontier in English and
+Hook and Frontier in Mandarin: 33 lines pass signal and token-time checks.
+Technical-line warnings remain a listening lead. These checks do not certify
+pronunciation; Mandarin character times are estimates. Full production-voice
+listening and synchronization remain pending.
+
+The [compact evidence record](quant10-polish-evidence.json) retains source, input
+and review hashes, receipts, derivation and primary-source checks, tests and speech
+reports. Local git-ignored review artifacts are:
+
+- `renders/quant10_polished_silent.mp4`: 70:56, 480p15, with 22 embedded chapters,
+  English soft subtitles and companion subtitle and chapter files.
+- `media/quant10/narrated_qa/videos/s01_hook/480p15/Hook.mp4`: the actual English
+  opening, 146.7 seconds, matching the final narration,
+  with its reviewed contact sheet and dead-air scan.
+
+Part 11 is next in the sequential pass.

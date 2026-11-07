@@ -1,0 +1,1196 @@
+{
+  "video": "quant10",
+  "base_commit": "2e757c55",
+  "source_commit": "1edc1774fc7a39383b4c48cb565ef0e912ac777b",
+  "source_fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+  "scope": "English and Chinese narration-beat frames; English silent 480p15 playback; CPU speech samples",
+  "production_listening": "pending",
+  "data_inputs": {
+    ".cache/quant10/american_more.json": {
+      "sha256": "ecbdb519b2ed726b1766dfed613f3219b2ab536a62335a24f8321594c54f6b4d",
+      "bytes": 489
+    },
+    ".cache/quant10/american_more.npz": {
+      "sha256": "040038ab74f8ec57a0c54ae7448da9e92a6c8a96740b842e55eca458f9435b3f",
+      "bytes": 26412
+    },
+    ".cache/quant10/btc.json": {
+      "sha256": "7193997b8065b3923307e56605fb42120d55329c59f0ee1eb5d5628ca759aba1",
+      "bytes": 725
+    },
+    ".cache/quant10/btc.npz": {
+      "sha256": "3842ed3f56e4a695d9763cde87bbef5ec6216e765c896d8670e1728e409b537d",
+      "bytes": 176344
+    },
+    ".cache/quant10/btc_replay.json": {
+      "sha256": "378fedee155bcbc9a3e5215c62eb911bd6a39e3a59db429f8c9277abe991daca",
+      "bytes": 111
+    },
+    ".cache/quant10/btc_replay.npz": {
+      "sha256": "87dd9a42713487a521512952cee1121196a295171570c447ccb346cd339abe23",
+      "bytes": 8730
+    },
+    ".cache/quant10/carry.json": {
+      "sha256": "336335c3c0950235fdb30c5ae6ad1906de9ff9858f4ed1f22fa82df70ede3459",
+      "bytes": 1291
+    },
+    ".cache/quant10/carry.npz": {
+      "sha256": "a4de3f7cf27030cc587152165e4404c8eeb385b452b4e639c298d22cf2c76fe9",
+      "bytes": 7473
+    },
+    ".cache/quant10/crash87.json": {
+      "sha256": "959d79e552a052d93f14a9f183fdf5eecdbb3669ca714c99a33a60c0d4cf68b3",
+      "bytes": 494
+    },
+    ".cache/quant10/crash87.npz": {
+      "sha256": "cde09469cd6104d12d429b522dd412b047952d9f5c7b6e40c036db538d0ff9c9",
+      "bytes": 797
+    },
+    ".cache/quant10/dgamma3d.json": {
+      "sha256": "7c462039670f1fc05aa044752f08894c0838b4a57c8448213d49954d48181267",
+      "bytes": 43
+    },
+    ".cache/quant10/dgamma3d.npz": {
+      "sha256": "e687a3d1e2887252ea9d57a3c76f23413dd9aabc6e6d78343cdb9724ab89dd4d",
+      "bytes": 20438
+    },
+    ".cache/quant10/discrete.json": {
+      "sha256": "3b25916f327ed869a7de0f47462e05495835d87e3b1dad52ee421597190afe69",
+      "bytes": 624
+    },
+    ".cache/quant10/discrete.npz": {
+      "sha256": "55abd677071f03375faf0e1cf32479ea3df12c986096cc488a38a5d9a8451506",
+      "bytes": 604677
+    },
+    ".cache/quant10/discrete_seeds.json": {
+      "sha256": "7b1286cc5ddbdd8a5a959b51ffd9b80d22f09e6bea147ce7b68a602447924a4d",
+      "bytes": 300
+    },
+    ".cache/quant10/discrete_seeds.npz": {
+      "sha256": "6f1c0bf618a69e94eb9e8cdd4a7d74124c9b131201c24cf6623fbde7a3f27f4c",
+      "bytes": 302311
+    },
+    ".cache/quant10/heat.json": {
+      "sha256": "e44ee3c427906a39ed1abab869428186c18d20db7ba9d193fd8277700b8f726a",
+      "bytes": 12207
+    },
+    ".cache/quant10/heat.npz": {
+      "sha256": "d4ce9dbae5f8b7ef3ea3d9030b684a903a8e13bc549cbe98bcd2fa69ef12cdef",
+      "bytes": 19933
+    },
+    ".cache/quant10/hedge_choice.json": {
+      "sha256": "dfcb8e75c8aa8bd87cc2864b014d7625b9ad42e9a2a964e48606b1d710ae991b",
+      "bytes": 503
+    },
+    ".cache/quant10/hedge_choice.npz": {
+      "sha256": "379b68ace5db220d23610310a9c6ec27ce64b865a2caa0163bc1d2b9c0945059",
+      "bytes": 612078
+    },
+    ".cache/quant10/hedgetime_theory.json": {
+      "sha256": "3fd8b76726d7de2dd66e08ed7a85f2587184b66d0415283e648d74fc8bba9259",
+      "bytes": 3480
+    },
+    ".cache/quant10/hedgetime_theory.npz": {
+      "exists": false,
+      "note": "Optional cache-array companion absent; receipt input signature is None."
+    },
+    ".cache/quant10/implied.json": {
+      "sha256": "af239b5de6c873203162b3790f916ecb267d11cce8353ef727292468d2cd176b",
+      "bytes": 47150
+    },
+    ".cache/quant10/implied.npz": {
+      "sha256": "9e7b8bd05fac8baa817c50688ad31888cacb28b30563b5bab2513781fd353000",
+      "bytes": 1013
+    },
+    ".cache/quant10/industry.json": {
+      "sha256": "40b6ae1eb818e10d3488d6bf38d8f5a59afe1ad00cdde51beaf6cf4c95d69fad",
+      "bytes": 70
+    },
+    ".cache/quant10/industry.npz": {
+      "sha256": "473f675baa923c1c42ad7f205aa6deb6ddd4d1636ffbeb81bc2be97449e80042",
+      "bytes": 1363
+    },
+    ".cache/quant10/insurance87.json": {
+      "sha256": "23c1139fad06d5d563bf2eee5a4a643353579a4029a12295f4caf4d1c140bcdc",
+      "bytes": 804
+    },
+    ".cache/quant10/insurance87.npz": {
+      "sha256": "d53ac5199b23cae6d6965e794907fd501087c613dd65f475f787ef2286eacb70",
+      "bytes": 4008
+    },
+    ".cache/quant10/jump_floor.json": {
+      "sha256": "23bd21948c4b9f9b87f778a1fa50c88382ab8ee612196a6b656f16073a155858",
+      "bytes": 174
+    },
+    ".cache/quant10/jump_floor.npz": {
+      "sha256": "7389e7b01a81c59b5a7d71c49d60fde1900d9c99dbe819922dd7a3d25fbac33a",
+      "bytes": 933
+    },
+    ".cache/quant10/kabanov.json": {
+      "sha256": "b379376cf05b80b65e1a02ad9d17459ade3afd27c4a7af08e23ac6efe0c44ff3",
+      "bytes": 1094
+    },
+    ".cache/quant10/kabanov.npz": {
+      "exists": false,
+      "note": "Optional cache-array companion absent; receipt input signature is None."
+    },
+    ".cache/quant10/ledger.json": {
+      "sha256": "a4b2761c20935616d10bcfe48f849407d4a9605e5357ce6801e3eafe12f4c8fd",
+      "bytes": 647
+    },
+    ".cache/quant10/ledger.npz": {
+      "sha256": "7d296419c3cbca29b14ba1fd95213d9680b3e6888201f4ffee9fd1b424821a79",
+      "bytes": 488867
+    },
+    ".cache/quant10/leland_grid.json": {
+      "sha256": "91bd7d467e8e780f7dd7c28abcee8dcee232a8b71f0d732a19c3068c3007b545",
+      "bytes": 134
+    },
+    ".cache/quant10/leland_grid.npz": {
+      "sha256": "03c32813771607ebe65cdf5b81654425949c35881e42a7b211fa8c08c9ce9b52",
+      "bytes": 1901
+    },
+    ".cache/quant10/ltcm98.json": {
+      "sha256": "86b6d16a4d19363a925c7a6bb747f5574d5616335f1c6500fb0e6729be413df9",
+      "bytes": 96
+    },
+    ".cache/quant10/ltcm98.npz": {
+      "sha256": "9aaedfab52425580d40fc22d6d244969ca5ac6d6884fb69487ed7e108b4e5877",
+      "bytes": 2775
+    },
+    ".cache/quant10/mc_seeds.json": {
+      "sha256": "0b957e54740cfca466f1771c2201c2ed099176d560c925be8b2da4bbfe74e573",
+      "bytes": 287
+    },
+    ".cache/quant10/mc_seeds.npz": {
+      "sha256": "fe474e08114db1895b64176f8269730f29219aef31cc3dce32624f2b0b8e9b20",
+      "bytes": 5458
+    },
+    ".cache/quant10/neural_iv.json": {
+      "sha256": "8e4c85316ee2a2f3fd0a962a3946984f1f27ede467f57f35af0def001ac9c887",
+      "bytes": 36384
+    },
+    ".cache/quant10/neural_iv.npz": {
+      "sha256": "06e77bb3ff620fad8fd315aa637fe1c3d472ff553298e690201167c6b9fc27d6",
+      "bytes": 5869
+    },
+    ".cache/quant10/riskneutral.json": {
+      "sha256": "6dd096953ecb6f63bc81c5434c62d5bc7251737cfce8990df016a79f6e157f3b",
+      "bytes": 433
+    },
+    ".cache/quant10/riskneutral.npz": {
+      "sha256": "59340b2c064f101b20d05c6bac573be5c0f09b6278568268c408c3da92e2d80f",
+      "bytes": 973036
+    },
+    ".cache/quant10/solver_race.json": {
+      "sha256": "685da71dba74900ef135622e79fa120844ca888ac67ca726d6a58e9332199715",
+      "bytes": 404
+    },
+    ".cache/quant10/solver_race.npz": {
+      "sha256": "25ffc4cce3c9e658d6ab81ca5d382edcf372ffc5e0a83fcd27b952933fdfc700",
+      "bytes": 41261
+    },
+    ".cache/quant10/tree.json": {
+      "sha256": "70dd26aa4dc6a0dbafca9c19b3d526b887d2076a1afdaca0cc63a66f4e4251b1",
+      "bytes": 1224
+    },
+    ".cache/quant10/tree.npz": {
+      "sha256": "4b79ecfe53d9605ee2c5b9f404a508da0a7d22f36c02fbb9caf21ab27078f006",
+      "bytes": 13781
+    },
+    ".cache/quant10/tree3d.json": {
+      "sha256": "c5ec4fb8d9b12c025d1a73c87f10a0384a6db5edb90680a29a7cb002c486ab3c",
+      "bytes": 465
+    },
+    ".cache/quant10/tree3d.npz": {
+      "sha256": "0b3f77581952bdd8e01dcfded74af77d5b3c2cca185fcb3185dd4c8f2da43611",
+      "bytes": 124669
+    },
+    ".cache/quant10/wrong_vol.json": {
+      "sha256": "a1ed4224baf57ad0dbab82f172321eca932fb94323308a864ca4d283a077d7cb",
+      "bytes": 412
+    },
+    ".cache/quant10/wrong_vol.npz": {
+      "sha256": "3dcd534bb93ba29bdd3be141a341fdac67d0a9320027e1fbc9481a1e16ddbf68",
+      "bytes": 97135
+    }
+  },
+  "manual_visual_review": {
+    "english_endpoint_chapters": 22,
+    "chinese_endpoint_chapters": 22,
+    "english_playback_contact_sheets": 22,
+    "method": "All current endpoint sheets and forty sampled motion frames per chapter inspected, with native-frame checks of repaired formulas, replay dates and transitions. Reviewed sheet hashes must match the final artifacts.",
+    "focused_repairs": [
+      "Hypothetical dollar-call experiment priced with a DVOL proxy; retrospective window selection, overlapping observations, timing and execution limitations",
+      "Self-financing hedge gains, continuous robust-hedging assumptions and dependent leading martingale differences",
+      "Local consistency versus convergence; finite-window and vertically rescaled heat-kernel illustration",
+      "Exact jump remainder versus quadratic approximation; lognormal jump-risk proxy is not a Merton variance-floor theorem",
+      "Round-trip versus one-way cost convention and bounded call prices at diverging Leland volatility",
+      "Surface IV reconstructed from mark prices; numerical round trip, strict price bounds and low-vega conditioning",
+      "Coin premium, undiscounted forward value and spot-dollar present value; carry and discount conventions",
+      "American weak lower bound at zero rates, 600-step curves versus displayed 2000-step price, BAW approximation",
+      "Full recorded solver and neural overshoots, all five neural seeds, omitted invalid Newton dots and sentinel diagnostics",
+      "Full histogram ranges and common count scales; fixed screen-space bars under the 3D camera",
+      "1987 pre-return states, held stock weights and the October-end date matched to cached observations and narration cues",
+      "Comparison axes and baseline table rows appear during their explanation; caption columns fit; dense lattice holds steady after a short orbit",
+      "Brownian exit-time assumptions, Fukasawa admissibility and expected quadratic variation, retrospective band tuning and visible worked answer",
+      "2026 preprint claims and historical industry figures checked against primary sources",
+      "Missing Mandarin captions and decimal-template ambiguity repaired; deterministic-coefficient exercise distinguished from stochastic theorem"
+    ]
+  },
+  "audio_note": "Signal and token-time checks do not certify pronunciation or continuous listening. Kokoro technical-line warnings remain a listening lead; Mandarin within-sentence character times are estimated.",
+  "opening_sample": {
+    "path": "media/quant10/narrated_qa/videos/s01_hook/480p15/Hook.mp4",
+    "seconds": 146.66666666666688,
+    "narration_lines": 5,
+    "backend": "kokoro",
+    "voice": "af_heart",
+    "narration_matches_current_source": true,
+    "manual_review": {
+      "sheet_sha256": "e6220789e2cd9b22f75093a5809ef412e7a5ea281e62ff750b68c52aad969246",
+      "frames_reviewed": 32,
+      "result": "Visually reviewed actual narrated opening; all layouts fit, replay and hedge readouts remain visible, objectives and House rows appear during narration; no observed overlap or cropping.",
+      "duration_seconds": 146.666341,
+      "audio": {
+        "codec": "aac",
+        "sample_rate": 48000,
+        "channels": 2,
+        "mean_volume_db": -29.0,
+        "peak_volume_db": -8.3
+      },
+      "dead_air": "zero blank or sparse runs at least1.5s",
+      "listening_scope": "Visual sampling and signal checks only; continuous pronunciation/listening remains pending."
+    },
+    "sha256": "976152e27db2baf4864eb50aa654c36f7d78a6ac02a816fa6684b8b659e10254",
+    "bytes": 3493829,
+    "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 147 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 147 s\n"
+  },
+  "additional_checks": {
+    "computed_items": 26,
+    "zh_source_coverage": "131/131 source lines and spliced sentences",
+    "narration_minutes_estimate": 61.3,
+    "silent_speech_allocation_minutes": 68.2,
+    "tests": {
+      "passed": 13,
+      "scope": "Existing Black-Scholes, Greeks, IV, CRR, hedge accounting, Leland, heat kernel, BAW and exercise-premium tests",
+      "log": "renders/qa/quant10/tests.log",
+      "log_sha256": "67f089b9dd26d4d5d5d211dd6b8316ee29163ba0c141737a0fe9a27b0c45adea",
+      "note": "One dependency pydub/audioop deprecation warning; no new tests or algorithm changes"
+    },
+    "audit_reports": {
+      "derivation_checks.json": {
+        "path": "renders/qa/quant10/derivation_checks.json",
+        "sha256": "6d55d0de4c46e2d8efbeefabbd4843ab63648788e1445406b8a2607670223e5c",
+        "bytes": 4954
+      },
+      "primary_papers.json": {
+        "path": "renders/qa/quant10/primary_papers.json",
+        "sha256": "900564c428264f68c7fa1ae1966000b5bc4ae4c430252b46621122d8a84fea61",
+        "bytes": 10193
+      },
+      "industry_web_sources.json": {
+        "path": "renders/qa/quant10/industry_web_sources.json",
+        "sha256": "60eee23d13252fc9a63125999c156a432814799061a1e531549257b72203c8d2",
+        "bytes": 16500
+      },
+      "methods_web_sources.json": {
+        "path": "renders/qa/quant10/methods_web_sources.json",
+        "sha256": "7e08b37070a6acea945e1fd16cb538c51c0100ee2518199119ff86ced4da204a",
+        "bytes": 16013
+      },
+      "tests_report.json": {
+        "path": "renders/qa/quant10/tests_report.json",
+        "sha256": "64a1077983eef0b693cb81329169adec199bf0559215ce9dbd367e24769d6df4",
+        "bytes": 366
+      },
+      "restore_summary.json": {
+        "path": "renders/qa/quant10/restore_summary.json",
+        "sha256": "9f70a4f9832b11654314d257d51bcaf5910b4699512381110a45ef5b31ff00ec",
+        "bytes": 716
+      },
+      "source_preflight.json": {
+        "path": "renders/qa/quant10/source_preflight.json",
+        "sha256": "67a6bb3ab6a60c5206e7d0fec19e3740902d684d1db69fbb57e4d8bec049a66e",
+        "bytes": 513
+      },
+      "numerical_display_audit.json": {
+        "path": "renders/qa/quant10/numerical_display_audit.json",
+        "sha256": "4c36a25a0a0101e4a2c4dfb846018b9af2e528c7758bd8a9b8f428daaab4f15f",
+        "bytes": 9949
+      },
+      "initial_visual_findings.json": {
+        "path": "renders/qa/quant10/initial_visual_findings.json",
+        "sha256": "22cc1f298cce7c01d6a7b90c0da5f1c29e5fe843d5b58e4a32bf9da4e92e4529",
+        "bytes": 4186
+      },
+      "frontier_runtime_translation.json": {
+        "path": "renders/qa/quant10/frontier_runtime_translation.json",
+        "sha256": "998772336b3905dfed97165763b59b52ddb3625bb2876318966713be6f93ce31",
+        "bytes": 1879
+      },
+      "motion_issue_queue.json": {
+        "path": "renders/qa/quant10/motion_issue_queue.json",
+        "sha256": "193c4b1f24b0843e204c8ffc10eca13ba5d7f8e562d18f912de713ef007bed9f",
+        "bytes": 4645
+      },
+      "focused_motion/frames.json": {
+        "path": "renders/qa/quant10/focused_motion/frames.json",
+        "sha256": "c32637abb57d9fc85db9e78966f80e8bbe257a6998d642b5595a4ba62b861497",
+        "bytes": 1554
+      },
+      "focused_motion/manual_review.json": {
+        "path": "renders/qa/quant10/focused_motion/manual_review.json",
+        "sha256": "d062f8cb9ecc085e7e33f31f16b30717f9c4f3c22a24831106e6872525777add",
+        "bytes": 3611
+      }
+    },
+    "protocol": {
+      "unchanged_since_base": [
+        "videos/quant/quant10/compute.py",
+        "videos/quant/data/manifest.json",
+        "videos/quant/data/envelope.json",
+        "videos/quant/data/track_record.json",
+        "explainer/quant/house/bs.py",
+        "explainer/quant/house/hedge.py",
+        "explainer/quant/house/trees.py"
+      ],
+      "part10_cumulative_trials": 310,
+      "global_registry_trials": 23562,
+      "additional_trials": 0,
+      "holdouts_opened": 0,
+      "pricing_data": "Existing public observational pricing examples; not sealed forecasting evaluations"
+    }
+  },
+  "records": {
+    "en_frames": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 152.85733333333334,
+        "frames": 9,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Hook/result.json",
+        "receipt_sha256": "8ac994acc7318159fb93106171d712ec87910a395c4b61316c8ed6c2ce876bf1",
+        "sheet_sha256": "02166511861120b3de6e9e662c81e9542f4da42f0b1ba68fa90d4ce29d5fd2a8"
+      },
+      {
+        "scene": "History",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 216.8091666666667,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/History/result.json",
+        "receipt_sha256": "5693ce3c0949c0ba0d6733e498b4d9e21bfe1212e87276984766bd92cab8e52c",
+        "sheet_sha256": "3a32a66c55369e4d17c55c0912363323d042df802625fcb81d9a69a7f1bf09f9"
+      },
+      {
+        "scene": "Replication",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 180.49620833333336,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Replication/result.json",
+        "receipt_sha256": "786755f4bd4691ebb0ba8d609effe81980537ddc3ea176afd1a8084fd1a0ddb7",
+        "sheet_sha256": "143a559b8303eeb770c7d9c4bbe4e6da9d4e80fc6ffdc9a781c9a76c9fbf79fd"
+      },
+      {
+        "scene": "Heat",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 206.2295416666667,
+        "frames": 11,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Heat/result.json",
+        "receipt_sha256": "2f8a42a557b4f6dfc67be1481120152ccb5baeba2a56abef45df388fea8252ce",
+        "sheet_sha256": "a97932828b72616c9b08b5aecc369e6f6d595dafcfd31f184775060d4557eb4b"
+      },
+      {
+        "scene": "RiskNeutral",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 254.8684166666667,
+        "frames": 15,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/RiskNeutral/result.json",
+        "receipt_sha256": "3134d878684f53c49e5ae16d20f93a0357a0ab7c2aa312f17b69fc4fcf93ecec",
+        "sheet_sha256": "1a49351a8ad9b916671677354d29ed6368e560f7015e9c9b17509015533a3f0e"
+      },
+      {
+        "scene": "Tree",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 229.49433333333337,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Tree/result.json",
+        "receipt_sha256": "096af950412319029fa7fd24677ead6d12f9cb29d4540e590bda8403937c0584",
+        "sheet_sha256": "3d9043e8607a0eff470f6662bea384f63558b9737e3fe3cee76acf98ac959d0e"
+      },
+      {
+        "scene": "Greeks",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 209.13687500000003,
+        "frames": 15,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Greeks/result.json",
+        "receipt_sha256": "9060d757fb0fedafa2ec563677c4684be40d73986589daea9bc6080a34309c02",
+        "sheet_sha256": "e7d00e07ea8cfb600bbe516ce6a90c4a0bae25b43e5fa714fca948130fd00e79"
+      },
+      {
+        "scene": "Ledger",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 191.85918981481484,
+        "frames": 13,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Ledger/result.json",
+        "receipt_sha256": "21d4e11b3478221f8e593b38288cc865885b223b7f8f9fcd4385a36dbdb68c05",
+        "sheet_sha256": "e8ddb26f637562c440ba5a107a35c3dd3bfbc129dea53896104522eda459f7e2"
+      },
+      {
+        "scene": "WrongVol",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 167.08137500000004,
+        "frames": 11,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/WrongVol/result.json",
+        "receipt_sha256": "170c3006dcd72ee631a638c6bfb7af7b6d47170f4bb401c3c6960ce8cdd0fe1e",
+        "sheet_sha256": "b4e7456dd298538eb5c0078a78b63be07e2acfe871dc526b4ee75fe7c2d3d514"
+      },
+      {
+        "scene": "Discrete",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 177.34987500000005,
+        "frames": 9,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Discrete/result.json",
+        "receipt_sha256": "929feb3155d9a5ec30e9737ba78fd63b87ea61a6f3423f859bccfd5f572ba04c",
+        "sheet_sha256": "b5c5d431503db310c29ca3abc8c46717aa7506a85dfecfa498060792a8d77ca6"
+      },
+      {
+        "scene": "Leland",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 184.61470833333337,
+        "frames": 13,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Leland/result.json",
+        "receipt_sha256": "2410a2eb576af3615cf6808f320074d261dd151e25b7f8e2c11211d80cc88a85",
+        "sheet_sha256": "f61e62962995a30e285e4d0683b3b8e14ebabd3433ac6d7801e5bab0af46cce2"
+      },
+      {
+        "scene": "Solver",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 189.29245833333334,
+        "frames": 11,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Solver/result.json",
+        "receipt_sha256": "d3c458b9c0505e103386fdc1c86b72b2d9ba86e7c85a6e9efa951853bc4a1fbf",
+        "sheet_sha256": "029b1d88c3ebd5c55535b60ff548cd558e3e9c2e8fd94d43ea9175db6824dd94"
+      },
+      {
+        "scene": "Implied",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 119.70175,
+        "frames": 7,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Implied/result.json",
+        "receipt_sha256": "b07de7976b817c4fc162554028db7b666506a5e3400c2bca665964d3b7b218a2",
+        "sheet_sha256": "ec2173c203824f3f5b440e51be0ff04b7d6505d24c2713868f9ae94fc92b32ae"
+      },
+      {
+        "scene": "Carry",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 185.6480416666667,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Carry/result.json",
+        "receipt_sha256": "0e761ca5e5d2ff73c318dcb90e8ca2113d97a47b51787bf836cd15f569e97246",
+        "sheet_sha256": "433d3155c0bb78626c53a66c7c0bfd774f33adf7cfed849ef358f0d6c2d552ac"
+      },
+      {
+        "scene": "American",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 211.0776666666667,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/American/result.json",
+        "receipt_sha256": "4f3d63569299c6986b7f9d286b73211b6b73443a2966828120b94b12f9dffff2",
+        "sheet_sha256": "991638f04cbb58e5321e24a940fe4f32d2b9f49dc7f77aa0e2c82c6b75298ffe"
+      },
+      {
+        "scene": "BTC",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 195.70545833333335,
+        "frames": 10,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/BTC/result.json",
+        "receipt_sha256": "89c3fe0e5a3392823afd31f000ce124c1db76acd50af36043f7cc880e29e6293",
+        "sheet_sha256": "1d015edd6950139a2f05db152b38b3c5a7ce434fa754a27306ab837a9032a614"
+      },
+      {
+        "scene": "Crash",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 195.07583333333338,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Crash/result.json",
+        "receipt_sha256": "fa7207cc160843fa0054659632bd9bb1aaef2ea1d3ebfd0bc6c9064c72c7d663",
+        "sheet_sha256": "1968d4b6ba5440f5e28a1b2b282403d27c64a6888b5d889c3bcaf2161bf903b7"
+      },
+      {
+        "scene": "LTCM",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 162.79070833333336,
+        "frames": 6,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/LTCM/result.json",
+        "receipt_sha256": "4db0e8aa1871044ee4b5e0d16f5f63d7e0409c8c3a14516889dd1e9679125a12",
+        "sheet_sha256": "9c937f821a0bb1334d3e5dc80ba214d2590c916dedeb7a8f5cb099027863d957"
+      },
+      {
+        "scene": "Industry",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 176.5721666666667,
+        "frames": 10,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Industry/result.json",
+        "receipt_sha256": "77a2c6dc3f999b9253f9b4cadcc752a87cd6bbcfb5c7d6604926e9d6584b9273",
+        "sheet_sha256": "c253ed7ab1a403bdbd5f6e2ac4e131835b12d824b47f8d37db6fff7b2f141be0"
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 166.1036666666667,
+        "frames": 7,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Frontier/result.json",
+        "receipt_sha256": "604a97cdf7b66c7f632c5598fd0a3023574a549ad3c2bc48a63aa37266015871",
+        "sheet_sha256": "f2cf8e32947a5ec3bd418e626fcad1e40048fcd375798aaa44a569d89cc41c26"
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 313.3683333333333,
+        "frames": 26,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Research/result.json",
+        "receipt_sha256": "8c8efdb90206c83ab2cbafd8dcf841c471733585cb94a867912822eddd4c4be5",
+        "sheet_sha256": "a507615b5411322428b253ee7f07dcde89eca0dd27afc1cf29605407201d7b04"
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 176.1165416666667,
+        "frames": 9,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Outro/result.json",
+        "receipt_sha256": "d4156559584ffcdb5c30884476ff323142bae81da9dd4205c651a9292b545f9a",
+        "sheet_sha256": "e1cc10b454429836a7cda8abdfd188da94e5326c570fa3a08bd6b8ce7e98f3fe"
+      }
+    ],
+    "zh_frames": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 161.44408333333334,
+        "frames": 9,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/zh/Hook/result.json",
+        "receipt_sha256": "9c0c798f7d8371db85de9b1b9336852d5e428ef1922ac73d142274338ea8fc9f",
+        "sheet_sha256": "1371b5c86d616595a44fb2e493d80a45b32d8491420ef9dd16ef5da3ea655b48"
+      },
+      {
+        "scene": "History",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 245.61387500000004,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/zh/History/result.json",
+        "receipt_sha256": "8fab4a50b27235828f271234cc026085ac23cbc5707a5bfdeb797d5cafa69764",
+        "sheet_sha256": "63267174e3574b04b0bd043ec90439468083839e192b2daf99e7f409433fcc3c"
+      },
+      {
+        "scene": "Replication",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 180.1185,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/zh/Replication/result.json",
+        "receipt_sha256": "f1b0af7b388c96559694ae93bf6324483e5f4af82a62202c015699123764523e",
+        "sheet_sha256": "4f038114ebeca6a7780885217e5e1e8bff1d7193a86daad83c6fe88f77972ea6"
+      },
+      {
+        "scene": "Heat",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 207.11733333333336,
+        "frames": 11,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/zh/Heat/result.json",
+        "receipt_sha256": "ccd589be0b82aa1bb84bcff89aae4c98933cd62273ba79076da29dc77f0fab7b",
+        "sheet_sha256": "05c359c31164cb02aee5380e7568425407b0d02f9cbbc9a7ef4cc2564714db3d"
+      },
+      {
+        "scene": "RiskNeutral",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 237.7859166666667,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/zh/RiskNeutral/result.json",
+        "receipt_sha256": "61cc65c31f7f5cdf2e8485319e8b90536b6a944affc82c37506192385f9d58c9",
+        "sheet_sha256": "0487fc8e497c430f4bd129cd57a80f9d15f945032383acca8e905240473f47b1"
+      },
+      {
+        "scene": "Tree",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 220.49170833333338,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/zh/Tree/result.json",
+        "receipt_sha256": "d12d26653e599990c837ff3191779debe7a22cb0855429b0e2da85486fc92329",
+        "sheet_sha256": "af3c47a4654c485574f335a6d7bedd424473715fa642ec5d18c44cf8def35154"
+      },
+      {
+        "scene": "Greeks",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 212.41962500000005,
+        "frames": 15,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/zh/Greeks/result.json",
+        "receipt_sha256": "1b1a050c48f40a3464ad8f559469c9ebff4dd334c16defdc785a6f165d484928",
+        "sheet_sha256": "b21a59e20de4e402162e3b47717279a0ea5793d25ba8e59ce79787ce0c8bffd8"
+      },
+      {
+        "scene": "Ledger",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 200.79737403100782,
+        "frames": 13,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/zh/Ledger/result.json",
+        "receipt_sha256": "74ee68830cbed8c85de377088fc87554fe5efc1b834572f87a19229915a336de",
+        "sheet_sha256": "26fbd3edbd95d9c1afb95c7218e7ee6b30523ae544cf078017694009e2e87f4e"
+      },
+      {
+        "scene": "WrongVol",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 165.24525,
+        "frames": 11,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/zh/WrongVol/result.json",
+        "receipt_sha256": "3120a7eceaf46949271ddd945ba77e5198cfa79d0cbb2704ae7adf9ed566335c",
+        "sheet_sha256": "3befeb77d546644a529f8b6d6a22229fbf074512537659fc79d4be1b0c09f4e4"
+      },
+      {
+        "scene": "Discrete",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 169.85570833333338,
+        "frames": 9,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/zh/Discrete/result.json",
+        "receipt_sha256": "ace84ca61259a7e6cea8b3d96f32520d64230ddcaa95a45fb5ca24d6c07cf752",
+        "sheet_sha256": "f33f6d43ff3e2f849bddd34c89d31206c1e1d39c7ee87df345efded8313c7b3d"
+      },
+      {
+        "scene": "Leland",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 189.06733333333335,
+        "frames": 13,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/zh/Leland/result.json",
+        "receipt_sha256": "3d4dcc22ae0a95277e1ba4a43143661b52bdc335eceb04bbbc4186818c9d78ec",
+        "sheet_sha256": "7c6c19f49dac36ca6a606e9be2c3ea4c62e1149aa55eb474d27205e49907f18e"
+      },
+      {
+        "scene": "Solver",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 201.20570833333335,
+        "frames": 11,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/zh/Solver/result.json",
+        "receipt_sha256": "82e5c6357785ee316963eb86723f6e19ddac950300b2727a567ecc422d27e16c",
+        "sheet_sha256": "e2218f98092775076bdb3ee71533ecd7893a3c8cea74e8de663d8c19b40e7fbb"
+      },
+      {
+        "scene": "Implied",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 128.79758333333334,
+        "frames": 7,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/zh/Implied/result.json",
+        "receipt_sha256": "6ccc07fa75930bfff2809636ff0c101f114d578e8d98491eb37926c0b05b57c1",
+        "sheet_sha256": "dd985ee7e507fc3b5b656fec2008879debb3ebb1491cbe4523dff6cb563612b0"
+      },
+      {
+        "scene": "Carry",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 185.94170833333337,
+        "frames": 11,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/zh/Carry/result.json",
+        "receipt_sha256": "8c9c804af21a4ad585b2ca0c7bb906ee64e7cffbd7a68e16a732480d6bf57dcf",
+        "sheet_sha256": "659d5ffd6f803c4aaf04448605da8383f2b521965dd3f9d10a17b19619099abd"
+      },
+      {
+        "scene": "American",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 211.1545416666667,
+        "frames": 15,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/zh/American/result.json",
+        "receipt_sha256": "d1e5abfac902f84487ed7df39cea5735ba0d9179ad286046dd4f57e595b8cca6",
+        "sheet_sha256": "c87bd7ccbb98d088179e446e9bb506e276f7114927320da9ead25a3d0e886b66"
+      },
+      {
+        "scene": "BTC",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 200.51033333333334,
+        "frames": 10,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/zh/BTC/result.json",
+        "receipt_sha256": "0afffcb3e54fbcc0e8682043f4ea1c2113734b11c8d103ef2fc2eeb57642eb00",
+        "sheet_sha256": "eac87a5fba73fe190d6e46eab998afea68f918722c6128cb880c140455d456c5"
+      },
+      {
+        "scene": "Crash",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 207.23712500000005,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/zh/Crash/result.json",
+        "receipt_sha256": "56993b2ec93d59fa4e787d4c54d6187318676e01018a8a5fbe1e6862c76877f9",
+        "sheet_sha256": "551fd03ecd40f19f2bd99054381e248d31f13712fb6ff341b5aa0f5a94465233"
+      },
+      {
+        "scene": "LTCM",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 160.9917916666667,
+        "frames": 6,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/zh/LTCM/result.json",
+        "receipt_sha256": "1d98fb88d774d7194e9f05d8aea4afa369240f47fae187abc05e00bb8bbc59db",
+        "sheet_sha256": "f566be668138e7a63ea724509cb2857d45cc6170a047bd975935330fd0970db0"
+      },
+      {
+        "scene": "Industry",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 188.17545833333338,
+        "frames": 10,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/zh/Industry/result.json",
+        "receipt_sha256": "6fb7666b7bd31bdad8eb4d81082ec36c3de4e52872d56b3762b115a1967b38e0",
+        "sheet_sha256": "011521c8d10d66a97179343c6c0b6ba9dd8bb81e329ed6ceb08dfca26759b833"
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 178.16158333333337,
+        "frames": 7,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/zh/Frontier/result.json",
+        "receipt_sha256": "408a2e341ff40e89adfba0b8264c80e3a8ee0d19ebc44bc8bccec2efc1aeda32",
+        "sheet_sha256": "142aef3767225000b83e4da2c5a0d51e11375797e47fc661be56db2276c9dab8"
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 319.53004166666665,
+        "frames": 26,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/zh/Research/result.json",
+        "receipt_sha256": "6775441043705e4ac94a35a262963d13b02c8a9b9ac37920e24ebe961c3f6df3",
+        "sheet_sha256": "08cc1bc41d87f91e803dc4b132477635baad89597aaaf74e66ef2da9cc777524"
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 192.06033333333338,
+        "frames": 9,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/zh/Outro/result.json",
+        "receipt_sha256": "ffb7590ea53d0d405e820f742259c3a206cb35f4ccee28d13873c768fc2d4cbd",
+        "sheet_sha256": "78f95566f719ca5d88b82b304a6ca75e9d81c8706beaaa8a2eef090a1668082b"
+      }
+    ],
+    "en_motion": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 152.5333333333335,
+        "frames": 9,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Hook_motion/result.json",
+        "receipt_sha256": "5e8cb3091c61e33d4a008d63e9e5602f098cea474b0d034c1278a6ae546f164a",
+        "sheet_sha256": "6b846f61eb671bd7aedaa7456f19dde6b63aa130402334dbc8e051d032f422af",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 152 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 152 s\n"
+      },
+      {
+        "scene": "History",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 216.46666666666607,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/History_motion/result.json",
+        "receipt_sha256": "2a75eea086afff3af4cd1261f38f8c62d055a616c4721c110e0b06347db8c7b1",
+        "sheet_sha256": "66528a5df5d0bfce93cee751f1ebbe27657e1121c7d2762e515c94682ee6e796",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 216 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 216 s\n"
+      },
+      {
+        "scene": "Replication",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 180.19999999999894,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Replication_motion/result.json",
+        "receipt_sha256": "dd48c02f70a0f6315a8c2de5bd6871fa7cf011d3f2cc8f9d48bc1500e7d35ce9",
+        "sheet_sha256": "8489d28286d46a854f9a1507d44cdc0a81aec5809f71c6c44b74b3d715a1f3f4",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 180 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 180 s\n"
+      },
+      {
+        "scene": "Heat",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 206.06666666666592,
+        "frames": 11,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Heat_motion/result.json",
+        "receipt_sha256": "7df2ac941c9014eaec2c39e35811f6b4c6f122a0a07964b3329b1cb7739b50e2",
+        "sheet_sha256": "9a11558f42a6f681b52c51b49aa5de46073c3374f7fc5fb789207593a350d712",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 206 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 206 s\n"
+      },
+      {
+        "scene": "RiskNeutral",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 254.5333333333311,
+        "frames": 15,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/RiskNeutral_motion/result.json",
+        "receipt_sha256": "dcac2acea8d3baa070801655d8944b683ff50c05510a9334f5b0ca4fe1452b75",
+        "sheet_sha256": "bc036e1627097da334308efb8a6903e4740d826af67174485bc76c878f5224c1",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 254 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 254 s\n"
+      },
+      {
+        "scene": "Tree",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 229.13333333333114,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Tree_motion/result.json",
+        "receipt_sha256": "4a6524becc6725bebaa79925e36f98ad58947b04bf34e0b73d861a2a70ec4546",
+        "sheet_sha256": "95bcff5e1d91ccefba58322e040c377320ec4a4be689c901b086d1d66c081a6a",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 229 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 229 s\n"
+      },
+      {
+        "scene": "Greeks",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 208.86666666666534,
+        "frames": 15,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Greeks_motion/result.json",
+        "receipt_sha256": "646fdddf990786cbf8d55427019c1abbea107bc2776234d2236a326f27838f27",
+        "sheet_sha256": "66a7f55b484eacaa0102673305d182148c316f184cba612f342da23974071a48",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 209 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 209 s\n"
+      },
+      {
+        "scene": "Ledger",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 191.5333333333314,
+        "frames": 13,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Ledger_motion/result.json",
+        "receipt_sha256": "6cb239e0c75abc0bc022d80fa4b4acea05c1b2f881f6f9a620ef5cb37e4a229e",
+        "sheet_sha256": "dc4e116afffbfda6c2da3b8e91cdcfde4f52cc139226f3386b42e82cb7ab1866",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 192 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 192 s\n"
+      },
+      {
+        "scene": "WrongVol",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 166.93333333333211,
+        "frames": 11,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/WrongVol_motion/result.json",
+        "receipt_sha256": "646acd6c4e971cc303e0d9db55d40f081452ff1bcb0c7b10f473b5d26484642a",
+        "sheet_sha256": "ef95c1ec76a1abeb946a196dafc51dafc433fae5d9508b65b4e752251489d99b",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 167 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 167 s\n"
+      },
+      {
+        "scene": "Discrete",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 177.13333333333296,
+        "frames": 9,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Discrete_motion/result.json",
+        "receipt_sha256": "fa77352553c2e7066dc99a7763c871c28371633ae2fa67ad2f8c12776939f006",
+        "sheet_sha256": "6e8f121a517cd8ed5ec693b35f2bb53eb614075b6023887e653657fef01aaaed",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 177 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 177 s\n"
+      },
+      {
+        "scene": "Leland",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 184.39999999999955,
+        "frames": 13,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Leland_motion/result.json",
+        "receipt_sha256": "978067a2c96324d1e554ae090d3e861164f317db36a6e72ffd946840a5645e2d",
+        "sheet_sha256": "be040c22171de308dd71a061bfe541eecb8cdbb2305dd185d28a1ea13ea39755",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 184 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 184 s\n"
+      },
+      {
+        "scene": "Solver",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 189.0666666666653,
+        "frames": 11,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Solver_motion/result.json",
+        "receipt_sha256": "5c28cbaaecf4fbf341143c163dfb3cf9ae2a99b41685c78217fc59d7b07e507a",
+        "sheet_sha256": "5979b45411bba420ef8ca5cdc9116c9a5ecd63c3fd038027600e2a12f849075e",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 189 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 189 s\n"
+      },
+      {
+        "scene": "Implied",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 119.53333333333323,
+        "frames": 7,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Implied_motion/result.json",
+        "receipt_sha256": "0147ec2317befeff39b4b4582d0b353f8539f987f88865bd5eef327d298c1fb3",
+        "sheet_sha256": "be667f1c6ce6efa187582c38aee96867fc1f27b5d90b6d70377f988eb079cacb",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 120 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 120 s\n"
+      },
+      {
+        "scene": "Carry",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 185.39999999999898,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Carry_motion/result.json",
+        "receipt_sha256": "0a8e3fe201df68e08b1e9299aeff69e46622db07b0797ea393b8f987586f5e2b",
+        "sheet_sha256": "87245f22fb3f7c680d7435354578bce59b35fe405c25a7e9ff162b36d070976f",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 186 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 186 s\n"
+      },
+      {
+        "scene": "American",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 210.79999999999748,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/American_motion/result.json",
+        "receipt_sha256": "27ef0cebecb20fd36ffec1800385cf3429e2d5fbab4eb71018f2a390617c60b9",
+        "sheet_sha256": "f14b54ddd60c611c5fbac62346130eed2f78b7425400da78d65cddefbe9b0c3b",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 211 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 211 s\n"
+      },
+      {
+        "scene": "BTC",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 195.266666666665,
+        "frames": 10,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/BTC_motion/result.json",
+        "receipt_sha256": "8e5cfc89dfd70ab47c95ddea7219c847c5f7afbd4170f5915da9b6af49e31085",
+        "sheet_sha256": "0e9cc6233f803fbeb994024ba31d56f1a1d4ae40b1787f17b472ea5aa281df89",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 195 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 195 s\n"
+      },
+      {
+        "scene": "Crash",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 194.66666666666677,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Crash_motion/result.json",
+        "receipt_sha256": "474b9fc9b180e829ff400dbbf4c08edf69ed0949b473fd11299cd94d50c88aa2",
+        "sheet_sha256": "aea8ef58281ce4812674335d528058cf75b701f16afdca441e8acfd0d7b56037",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 195 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 195 s\n"
+      },
+      {
+        "scene": "LTCM",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 162.5999999999985,
+        "frames": 6,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/LTCM_motion/result.json",
+        "receipt_sha256": "acc014c019bc6bfa81c25cdfd4166e0427d772478d2451abdc280eb327ac95e6",
+        "sheet_sha256": "173e49be5a306491c5267dd98f2719fb9014eb572a21800d500d5dd0e1edd302",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 162 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 162 s\n"
+      },
+      {
+        "scene": "Industry",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 176.33333333333246,
+        "frames": 10,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Industry_motion/result.json",
+        "receipt_sha256": "99299bf39d993b86559d64216ab43e2fdb07fb3eb0564f7ac3d7f47e2f06a82a",
+        "sheet_sha256": "138421ba0acae4f21133e433385b08b53025a1e2d9a3cfff53683cf7a4ffec40",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 176 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 176 s\n"
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 165.86666666666534,
+        "frames": 7,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Frontier_motion/result.json",
+        "receipt_sha256": "8f17bbca7ee806e3a7f9a8f220e783b5b8251f6a4eca618af9f62e22193ff2c3",
+        "sheet_sha256": "c08e695d9e6647ad67084bd4b5d6be2f6f4adffe52b3071d75c2f03bb6fa8efe",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 166 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 166 s\n"
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 312.7333333333314,
+        "frames": 26,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Research_motion/result.json",
+        "receipt_sha256": "6f34046665bee79bf479b8bea9fccf0e96746bc12dad546e20b3fdd3fcb1fb29",
+        "sheet_sha256": "c1ab51aa279d40ff8c5eb85971afbd3673989c700b29b134855acc2e9999b739",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 313 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 313 s\n"
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "fingerprint": "90322f32d4e89394dcf5afd8602499a0e7e8b9dfbc5f62b2eafe5e02199ce886",
+        "duration": 175.7333333333325,
+        "frames": 9,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant10/en/Outro_motion/result.json",
+        "receipt_sha256": "4f6659562648f831429dae840841c62d80b28ff7f9412ef99319f3f254dadb7d",
+        "sheet_sha256": "d75778bc7ddb2ed4d18d2be02c00f84f4169751e4ab7e06543dd9036f23febfd",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 176 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 176 s\n"
+      }
+    ]
+  },
+  "audio": [
+    {
+      "scene": "Hook",
+      "lang": "en",
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 5,
+      "issues": [],
+      "source_current": true,
+      "report": "renders/qa/series/quant10/en/Hook/audio_result.json",
+      "report_sha256": "699ecd6e60891b0662866251e3da6e637a4fbf63b8ba48c8cce37d08af981374"
+    },
+    {
+      "scene": "WrongVol",
+      "lang": "en",
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 5,
+      "issues": [],
+      "source_current": true,
+      "report": "renders/qa/series/quant10/en/WrongVol/audio_result.json",
+      "report_sha256": "0d51364e87b56f9677deb8bdcb581bb4a9fda612ebd381447d69f2a77c0d6823"
+    },
+    {
+      "scene": "Research",
+      "lang": "en",
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 10,
+      "issues": [],
+      "source_current": true,
+      "report": "renders/qa/series/quant10/en/Research/audio_result.json",
+      "report_sha256": "aaa65bd58450be68d641f67545a9167ef573ff9de8bbad54c18f75ab749eb1f6"
+    },
+    {
+      "scene": "Frontier",
+      "lang": "en",
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 4,
+      "issues": [],
+      "source_current": true,
+      "report": "renders/qa/series/quant10/en/Frontier/audio_result.json",
+      "report_sha256": "d00a5a01235c442f679d528f66c412e87360f62ebe4349e735cd31c017df5c71"
+    },
+    {
+      "scene": "Hook",
+      "lang": "zh",
+      "backend": "kokoro",
+      "voice": "zf_001",
+      "lines": 5,
+      "issues": [],
+      "source_current": true,
+      "report": "renders/qa/series/quant10/zh/Hook/audio_result.json",
+      "report_sha256": "c573aa2677337dd90bb1a1185594cffb0975e527c27b7a1cc41ad4eb8daa0f8d"
+    },
+    {
+      "scene": "Frontier",
+      "lang": "zh",
+      "backend": "kokoro",
+      "voice": "zf_001",
+      "lines": 4,
+      "issues": [],
+      "source_current": true,
+      "report": "renders/qa/series/quant10/zh/Frontier/audio_result.json",
+      "report_sha256": "cb6ed4859339e6c7c35ab7ae3e2f82ce9e05a9fa028ba9b70dcb8b720a85a1aa"
+    }
+  ],
+  "preview": {
+    "path": "renders/quant10_polished_silent.mp4",
+    "seconds": 4255.828771,
+    "chapters": 22,
+    "sha256": "60e3c83bc2aa975c1742ed52ec9301ee556ce6adf28508973e755c12409f06d8",
+    "bytes": 34675929,
+    "narration": "silent timing estimate"
+  }
+}
