@@ -92,11 +92,12 @@ class Outro(VoiceoverScene):
                             r"exchangeability (or a known shift); \ marginal, \ not conditional, \ coverage",
                             r"Part 57: \ what can be guaranteed with no assumptions at all, \ what cannot (Bahadur--Savage), \ and conditional guarantees over function classes")
         with self.voiceover(
-            "<bookmark mark='a'/> A promise for later. This part gave every model a finite-sample coverage guarantee. "
-            "<bookmark mark='b'/> It assumed exchangeability, or a shift we know, and it delivered marginal coverage, an "
-            "average over the population. <bookmark mark='c'/> Part 57 asks what can be guaranteed with no assumptions at "
-            "all, proves that some things cannot, starting with Bahadur and Savage's theorem that no honest interval for a "
-            "mean exists, and finds the conditional guarantees that are possible."
+            "<bookmark mark='a'/> A promise for later. This part gave every model a finite-sample coverage guarantee."
+            " <bookmark mark='b'/> It assumed exchangeability, or a shift we know, and it delivered marginal "
+            "coverage, an average over the population. <bookmark mark='c'/> Part 57 asks what can be guaranteed with "
+            "no assumptions at all, proves that some things cannot, starting with Bahadur and Savage's obstruction to"
+            " nontrivial honest mean intervals over an unrestricted finite-mean distribution class, and finds the "
+            "conditional guarantees that are possible."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(card[0]), FadeIn(card[1][0]), FadeIn(card[1][1][0]))

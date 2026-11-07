@@ -248,16 +248,18 @@ class CV(VoiceoverScene):
 
     def lesson(self):
         rows = fit_rows(VGroup(
-            label(r"cross-validation estimates the error of the \emph{procedure}, \ not of \emph{this} model", font_size=26, color=CALC),
-            label(r"its naive standard error is too small", font_size=26, color=MISSC),
+            label(r"cross-validation targets fold-training performance; \ full-fit conditional error is a different target", font_size=26, color=CALC),
+            label(r"naive independent-loss errors can understate uncertainty", font_size=26, color=MISSC),
             label(r"tune inside, \ assess outside", font_size=26, color=TREEC),
             label(r"next: \ can a predicted probability be taken at its word?", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Cross-validation targets average performance at the fold training size, "
-            "and need not closely track the conditional error of the full-data fit. <bookmark mark='b'/> Its usual standard error is too small. "
-            "<bookmark mark='c'/> And any choice it makes must be assessed outside it. <bookmark mark='d'/> Next, a "
-            "different kind of honesty: when a model says seventy percent, does it mean seventy percent?"
+            "<bookmark mark='a'/> Cross-validation targets average performance at the fold training size, and need "
+            "not closely track the conditional error of the full-data fit. <bookmark mark='b'/> The naive "
+            "independent-loss standard error undercovers in this example; cross-validation uncertainty depends on the"
+            " learning problem. <bookmark mark='c'/> And any choice it makes must be assessed outside it. <bookmark "
+            "mark='d'/> Next, a different kind of honesty: when a model says seventy percent, does it mean seventy "
+            "percent?"
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

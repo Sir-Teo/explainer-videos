@@ -79,6 +79,7 @@ class Calibration(VoiceoverScene):
             label(r"between: \ it says 0.6--0.9, \ observed frequencies in these small bins are near 0.4", font_size=22, color=MISSC),
             label(rf"accuracy {100 * d['acc']['nb']:.1f}\%; \ ECE {d['ece']['nb']:.3f}", font_size=22, color=CALC),
         ), 4.6, 0.35, [3.0, -1.6, 0])
+        self.add(label("Pooled reliability curves; ECE averaged within splits", font_size=30).move_to([0, 3.3, 0]))
         with self.voiceover(
             "<bookmark mark='a'/> Here is a famously overconfident classifier on the biopsies: Gaussian naive Bayes, which "
             "models each of the thirty features as normal within each class and independent of the others. Forty random "
@@ -174,6 +175,7 @@ class Calibration(VoiceoverScene):
             label(r"blue: \ a forest's vote share, \ raw", font_size=22, color=TREEC),
             label(r"forests are \emph{under}confident at the extremes", font_size=22, color=TREEC),
         ), 5.4, 0.42, [3.2, 0.3, 0])
+        self.add(label("Pooled reliability curves; ECE averaged within splits", font_size=30).move_to([0, 3.3, 0]))
         with self.voiceover(
             "<bookmark mark='a'/> After isotonic calibration, naive Bayes's points move towards the diagonal, and its"
             " expected calibration error falls from point oh six two to point oh three eight. <bookmark mark='b'/> A "

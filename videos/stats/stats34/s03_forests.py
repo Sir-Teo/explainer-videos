@@ -351,9 +351,11 @@ class Forests(VoiceoverScene):
             "<bookmark mark='a'/> Try it at a point x nought near a peak of Friedman's surface. Three hundred training sets "
             "of two hundred and fifty points, a forest of five hundred trees on each, and an infinitesimal jackknife "
             "interval from each forest. Here are the first twenty. <bookmark mark='b'/> The true value of the regression "
-            "function there is " + say(d["mu0"], 1) + ". <bookmark mark='c'/> The forests, averaged over training sets, "
-            "reach only " + say(d["Ef"], 1) + ": averaging over leaves pulls peaks down and valleys up. <bookmark "
-            "mark='d'/> Worse, the intervals do not even cover the forests' own average at the promised rate: only "
+            "function there is " + say(d["mu0"], 1) + ". <bookmark mark='c'/> The forests, averaged over training sets, reach an independently estimated pilot "
+            "mean of " + say(d["Ef"], 1) + ": averaging over leaves pulls peaks down and valleys up. The independent pilot has Monte Carlo "
+            "uncertainty, shown on screen; the reported coverage conditions on this estimated reference, rather than "
+            "knowing the exact expectation. <bookmark mark='d'/> Worse, the intervals do not even cover the forests' "
+            "own average at the promised rate: only "
             + f"{100 * d['cov_E']:.0f}" + " percent. <bookmark mark='e'/> Their standard errors average " + say(d["mean_se"])
             + ", but the forests' predictions really vary with a standard deviation of " + say(d["sd_pred"]) + ". The "
             "infinitesimal jackknife captures only the linear part of an estimator's variability, and a deep tree grown "
@@ -390,9 +392,10 @@ class Forests(VoiceoverScene):
             + f"{100 * d['cov_E']:.0f}" + " percent of the time: far better, though still short of ninety, because the "
             "standard errors remain about a tenth too small on average, and are themselves noisy. <bookmark mark='d'/> But trees on fifty points are "
             "coarser, so the forests are more biased, averaging " + say(d["Ef"], 1) + " against the true "
-            + say(d["mu0"], 1) + ", and the intervals almost never cover the truth. Honest variance, dishonest centre: the "
-            "infinitesimal jackknife measures variance, not bias. Wager and Athey's asymptotic theory makes the bias "
-            "negligible under conditions on honest tree construction, regularity and the subsampling rate. These ordinary CART trees are not an implementation of their honest forest theorem."
+            + say(d["mu0"], 1) + ", and the intervals almost never cover the truth. A closer variance approximation still leaves a biased "
+            "centre: the infinitesimal jackknife measures variance, not bias. Wager and Athey's asymptotic theory "
+            "makes the bias negligible under conditions on honest tree construction, regularity and the subsampling "
+            "rate. These ordinary CART trees are not an implementation of their honest forest theorem."
         ) as vo:
             self.add(friedman_tag())
             self.play(FadeIn(A), FadeIn(side[0]))
