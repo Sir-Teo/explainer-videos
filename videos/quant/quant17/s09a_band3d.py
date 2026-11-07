@@ -3,6 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
+from videos.quant.quant17.common import axes, data_range
 from explainer.quant.house import deep as D
 from explainer.quant.house import quoting
 from videos.quant.quant17.common import (BAD, DELTA, GOOD, NET, OPT, PART, REF, ask, grid_fn, house_lab, illustration,

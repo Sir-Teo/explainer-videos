@@ -5,6 +5,7 @@ import numpy as np
 import json
 
 from explainer.quant import *  # noqa: F403
+from videos.quant.quant17.common import axes, data_range
 from explainer.quant.house import deep as D
 from explainer.tts import REPO_ROOT
 from videos.quant.quant17.common import BAD, GOOD, NET, OPT, PART, REF, ask, house_lab, illustration, load

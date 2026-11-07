@@ -1,5 +1,7 @@
 # Quant, Built — Part 17: Deep Pricing and Hedging
 
+The scientific and bilingual visual polish is in progress. Historical build notes below do not certify current-source renders. Final artifact-bound checks will be recorded in the [sequential QA log](../../../docs/qa/quantitative-finance-polish.md); full continuous production-voice listening remains a separate pending pass.
+
 Part 17 of a forty-three-part series on quantitative finance (see [the series plan](../README.md) and
 [the syllabus](../SYLLABUS.md)), the frontier of Act III, Derivatives. It covers:
 

@@ -3,9 +3,10 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
+from videos.quant.quant17.common import axes, data_range
 from explainer.quant.house import deep as D
 from videos.quant.quant17.common import (BAD, DELTA, GOOD, NET, OPT, PART, REF, ask, grid_fn, house_lab, illustration,
-                                         load, surf3d_axes)
+                                         load, surf3d_axes, flat_camera)
 
 CK = ["0", "20", "40", "80", "120", "200"]
 
@@ -38,27 +39,17 @@ class HLP(VoiceoverScene, ThreeDScene):
                 cmath(r"e", r"=", r"\hat C_0 + \textstyle\sum_k \hat\Delta_k\,(S_{k+1} - S_k) - (S_T - K)^+", font_size=36,
                       colors={r"e": BAD})]
         whys = [why(r"Hutchinson, Lo and Poggio (1994): geometric Brownian motion scales, so multiplying the price and the "
-                    r"strike by $\lambda$ multiplies the call by $\lambda$ (Merton's homogeneity): two inputs, not three"),
+                    r"strike by $\lambda$ multiplies the call by $\lambda$ (Merton's homogeneity): fixed volatility, rates and dividends here; positive strike; two varying inputs"),
                 why(r"the universal approximation theorem (Cybenko 1989; Hornik 1991): one hidden layer, wide enough, "
-                    r"approximates any continuous function on a compact set $\mathcal{K}$, for any non-polynomial "
-                    r"activation. It says a network exists, not that training finds it, nor how many prices it needs"),
-                why(r"the hedge comes free: differentiate the network by the chain rule (autograd), no formula needed"),
+                    r"approximates any continuous function on a compact set $\mathcal{K}$, under the usual continuity and non-polynomial-activation conditions. It says a network exists, not that training finds it, nor how many prices it needs"),
+                why(r"autograd differentiates the fitted function; accurate values alone do not guarantee accurate Greeks"),
                 why(r"and the test is the hedge, not the fit: the tracking error of a daily rebalanced hedge, which even "
                     r"the true delta cannot drive to zero (Part 10: its spread falls like one over the square root of "
                     r"the number of rebalances)")]
-        step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.6, buff=0.42, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=3.2, x=-0.6, buff=0.42, edge=6.9)
         n = h["n_train"]
         with self.voiceover(
-            "In 1994 James Hutchinson, Andrew Lo and Tomaso Poggio asked: could a network discover an option pricing "
-            "formula from prices alone? First, a reduction. Doubling the price and the strike doubles the call, so the "
-            "price per unit of strike depends only on moneyness and time: two inputs, not three. "
-            "<bookmark mark='a'/> Second, a guarantee. The universal approximation theorem says a network with one wide "
-            "enough hidden layer can approximate any continuous function on a bounded region, as closely as you like. "
-            "It promises that the network exists; it does not promise that training finds it. "
-            "<bookmark mark='b'/> Third, the hedge comes free: differentiate the network with respect to the price. "
-            "<bookmark mark='c'/> And the test is that hedge. Rebalance it daily to expiry and measure what is left: "
-            "even the true delta leaves something, because it trades once a day. We redo their simulated experiment "
-            f"with {n:,} prices and a small modern network."
+            f"Hutchinson, Lo and Poggio asked whether a network could learn an option price. In this modern illustration volatility, rates and dividends are fixed. For positive strike, homogeneity reduces the varying inputs to moneyness and maturity. <bookmark mark='a'/> A universal approximation theorem gives existence on a compact set under activation conditions. It does not guarantee successful optimization, finite sample accuracy, or accurate derivatives. <bookmark mark='b'/> Differentiate the fitted network to obtain a candidate delta; that operation still costs work. <bookmark mark='c'/> Then test it. Even the true delta leaves discrete hedging error. The saved training set contains {n:,} Black–Scholes-labelled prices from ten simulated two-year paths, with overlapping options; these are not independent market observations or a literal replication of the original paper."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -77,20 +68,22 @@ class HLP(VoiceoverScene, ThreeDScene):
         xs = np.asarray(r["xs"])
         bsl = np.asarray(r["bs_slice"])
 
+        yr = data_range(bsl, *[seeds[0]["snaps"][k] for k in CK], zero=True)
+
         def frame(i):
-            g = axes([0.8, 1.2], [0, 0.22], x_length=5.0, y_length=3.6, xlabel=r"moneyness $S/K$",
+            g = axes([0.8, 1.2], yr, x_length=5.0, y_length=3.6, xlabel=r"moneyness $S/K$",
                      ylabel=r"$C/K$, six weeks to expiry", xticks=[0.8, 1.0, 1.2], yticks=[0, 0.1, 0.2], font_size=14)
-            y = np.clip(np.asarray(seeds[0]["snaps"][CK[i]]), -0.02, 0.22)
+            y = np.asarray(seeds[0]["snaps"][CK[i]])
             err = float(np.max(np.abs(np.asarray(seeds[0]["snaps"][CK[i]]) - bsl))) * 100
             return VGroup(g, DashedVMobject(curve(g.ax, xs, bsl, REF, stroke_width=2.5), num_dashes=36),
-                          curve(g.ax, xs, np.clip(y, 0, 0.22), NET, stroke_width=4),
+                          curve(g.ax, xs, y, NET, stroke_width=4),
                           label(rf"epoch {CK[i]}: largest error {err:.2f}\% of the strike", font_size=18,
                                 color=NET).next_to(g, DOWN, buff=0.15))
         rp = TrainingReplay(ep, L, frame, checkpoints=[1, 20, 40, 80, 120, 200], ylabel=r"squared error, $(\%K)^2$",
                             xlabel=r"epoch", log_y=True)
         fin = [float(np.sqrt(s["curve"][-1][1]) * 10) for s in seeds]
         leg = legend([(REF, r"Black--Scholes, never shown to the network"), (NET, r"the network (seed 0)"),
-                      (QC.Q, r"band: three seeds")], font_size=16).to_edge(UP, buff=0.3)
+                      (QC.Q, r"min--max of three seeds, not a confidence interval")], font_size=16).to_edge(UP, buff=0.3)
         with self.voiceover(
             "Here is the training. On the right, the error over the sixty-six thousand prices, epoch by epoch, for "
             "three networks started from different random weights: the band is their spread. On the left, what the "
@@ -110,7 +103,7 @@ class HLP(VoiceoverScene, ThreeDScene):
         gx, gT = np.asarray(r["grid_x"]), np.asarray(r["grid_T"])
         Z, E = np.asarray(s0["surf"]), np.asarray(s0["surf_err"]) * 100
         f, fe = grid_fn(gx, gT, Z), grid_fn(gx, gT, E)
-        ax = surf3d_axes([0.8, 1.2, 0.1], [0, 0.25, 0.05], [0, 0.22, 0.05]).shift(DOWN * 0.6 + RIGHT * 1.2)  # clear of the key
+        ax = surf3d_axes([0.8, 1.2, 0.1], [0, 0.25, 0.05], [*data_range(Z, zero=True), 0.05]).shift(DOWN * 0.6 + RIGHT * 1.2)  # clear of the key
         surf = Surface(lambda u, v: ax.c2p(u, v, f(u, v)), u_range=(0.8, 1.2), v_range=(gT[0], 0.25),
                        resolution=(30, 20), fill_opacity=0.9, stroke_width=0.3, stroke_color="#0E1117",
                        checkerboard_colors=False)
@@ -124,7 +117,7 @@ class HLP(VoiceoverScene, ThreeDScene):
         big = float(np.mean(np.abs(E) > thr)) * 100
         worst = float(np.abs(E).max())
         hint = VGroup(label(r"moneyness $S/K$ (across), time to expiry (back), $C/K$ (up)", font_size=20),
-                      legend([("#6366F1", r"error below 0.1\% of the strike"), (BAD, r"error above 0.1\%")],
+                      legend([("#6366F1", r"error below 0.1\% of the strike"), (BAD, r"colour saturates at 0.1\%")],
                              font_size=17),
                       label(rf"{big:.0f}\% of the grid above 0.1\%; worst {worst:.2f}\%", font_size=20, color=GREY_A)
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(UL, buff=0.35)
@@ -146,6 +139,7 @@ class HLP(VoiceoverScene, ThreeDScene):
             self.move_camera(theta=-30 * DEGREES, phi=60 * DEGREES, run_time=max(vo.remaining(0.5), 2))
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, added_anims=[FadeOut(VGroup(ax, surf, payoff)), FadeOut(hint)],
                          run_time=1.2)
+        flat_camera(self)
         self.clear_scene()
 
     def lab(self, r):
@@ -157,9 +151,7 @@ class HLP(VoiceoverScene, ThreeDScene):
             outs.append(f"seed {s}: training rms {10 * np.sqrt(q['curve'][-1][1]):.3f}% of K   at the money "
                         f"{q['slice_err_atm']:.3f}% of K")
         with self.voiceover(
-            "The House's training loop, all of it: shuffle, take a batch, measure the squared error, step, and lower "
-            "the learning rate each epoch. <bookmark mark='a'/> Three random starts: three different sets of weights, "
-            "the same function."
+            "An excerpt from the House's training loop: shuffle, batch, measure squared error and step the optimizer. The scheduler lowers the learning rate. <bookmark mark='a'/> Three fixed random starts give three fitted sets of weights; they do not establish a sampling distribution or prove successful optimization."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -191,9 +183,9 @@ class HLP(VoiceoverScene, ThreeDScene):
         rms = [r["seeds"][s]["tracking"] for s in ("0", "1", "2")]
         net_r = [x["net"] for x in rms]
         bs_r = rms[0]["bs"]
-        inside = min(net_r) <= bs_r * 1.05 and max(net_r) >= bs_r * 0.95
+        inside = min(net_r) <= bs_r <= max(net_r)
         if inside:
-            verdict = "the true delta's error sits inside the networks' spread, no difference this test can see"
+            verdict = "the reference RMS lies inside this three-seed range"
         elif min(net_r) > bs_r:
             verdict = "the networks' errors sit consistently above the true delta's"
         else:
@@ -205,13 +197,7 @@ class HLP(VoiceoverScene, ThreeDScene):
             wrapped_label(verdict, 4.6, 19, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.45)
         with self.voiceover(
-            "The real test. Two hundred fresh options, struck at the money, held for three months and rebalanced "
-            "daily, once with the true Black–Scholes delta and once with the network's own derivative. Here is one of "
-            "them, day by day: the option's value, and the two hedge portfolios chasing it. <bookmark mark='a'/> They "
-            "track each other so closely they are hard to tell apart. <bookmark mark='b'/> Over all two hundred, the "
-            f"true delta leaves a root-mean-square error of {bs_r:.3f}; the three networks leave {min(net_r):.3f} to "
-            f"{max(net_r):.3f}: {verdict}. Hutchinson, Lo and Poggio found the same, and on real S&P 500 futures "
-            "options from 1987 to 1991 their networks often beat Black–Scholes."
+            f"Here is a separate evaluation on two hundred fresh simulated options, struck at the money and hedged daily for sixty-three trading days. The plot selects the first saved option; each network and the true delta use the same evaluation paths. <bookmark mark='a'/> Their portfolio values track closely in this example. <bookmark mark='b'/> The true delta has RMS tracking error {bs_r:.3f}; the three training seeds give {min(net_r):.3f} to {max(net_r):.3f}: {verdict}. This range measures three training outcomes on reused paths, not a confidence interval or a significance test. It compares discrete hedges within a fixed Black–Scholes model; it does not establish performance on other models or real markets."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg))
             self.add(*lines)

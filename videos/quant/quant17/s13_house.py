@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from explainer.quant import *  # noqa: F403
+from videos.quant.quant17.common import axes, data_range
 import numpy as np
 
 from videos.quant.quant17.common import BAD, GOOD, NET, PART, REF, load

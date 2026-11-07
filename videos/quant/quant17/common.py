@@ -31,9 +31,11 @@ def illustration(text: str = r"illustration", corner=DR):
 def sci(x: float, digits: int = 0) -> str:
     """A number in scientific notation for MathTex: 2\\times 10^{-2}, not 2e-02."""
     import math
+    if x == 0:
+        return "0"
     e = int(math.floor(math.log10(abs(x))))
     m = x / 10 ** e
-    if round(m, digits) >= 10:
+    if abs(round(m, digits)) >= 10:
         m, e = m / 10, e + 1
     return rf"{m:.{digits}f}\times 10^{{{e}}}"
 
@@ -126,3 +128,33 @@ def house_lab(title, obj, first, count, extra=(), width=6.6):
         lines += [""] + src_lines(o, f, c)
     src = inspect.getsourcefile(obj).split("explainer-videos/")[-1]
     return lab_card(title, lines, source=f"{src}: {obj.__qualname__}", width=width)
+
+
+def data_range(*arrays, pad=0.06, zero=False):
+    """Display all finite observations without clipping them to plot edges."""
+    values = np.concatenate([np.asarray(a, float).ravel() for a in arrays])
+    values = values[np.isfinite(values)]
+    if zero:
+        values = np.r_[values, 0.0]
+    if not len(values):
+        raise ValueError("No finite observations")
+    lo, hi = float(values.min()), float(values.max())
+    margin = max(hi - lo, abs(lo) * 0.05, 1e-8) * pad
+    return lo - margin, hi + margin
+
+
+_base_axes = axes
+
+
+def axes(x_range, y_range, **kwargs):
+    """Keep selected ticks inside the displayed support."""
+    for name, support in (("xticks", x_range), ("yticks", y_range)):
+        if kwargs.get(name) is not None:
+            kwargs[name] = [x for x in kwargs[name] if support[0] <= x <= support[1]]
+    return _base_axes(x_range, y_range, **kwargs)
+
+
+def flat_camera(scene):
+    """Release fixed labels before returning from a surface to a 2D panel."""
+    scene.remove_fixed_in_frame_mobjects(*list(scene.camera.fixed_in_frame_mobjects))
+    scene.set_camera_orientation(phi=0, theta=-90 * DEGREES, gamma=0, zoom=1.0, frame_center=ORIGIN)

@@ -3,6 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
+from videos.quant.quant17.common import axes, data_range
 from videos.quant.quant17.common import BAD, DELTA, GOOD, NET, PART, REF, era_strip, illustration, load, step_xy
 
 
@@ -33,18 +34,17 @@ class Hook(VoiceoverScene):
         k = int(np.argmin(np.abs(tau - 0.5)))
         lo, hi = np.asarray(sf["lo"])[k], np.asarray(sf["hi"])[k]
         wl, wh = np.asarray(sf["ww_lo"])[k], np.asarray(sf["ww_hi"])[k]
-        dl = (lo + hi) / 2
-        g = axes([S[0], S[-1]], [0, 1], x_length=6.4, y_length=4.4, xlabel=r"price, 15 days before expiry",
+        g = axes([S[0], S[-1]], data_range(lo, hi, wl, wh, [0, 1]), x_length=6.4, y_length=4.4, xlabel=r"price, 15 days before expiry",
                  ylabel=r"shares held against one short call", xticks=[90, 100, 110], yticks=[0, 0.5, 1],
                  font_size=15).to_edge(LEFT, buff=0.8).shift(DOWN * 0.2)
         ax = g.ax
-        top = ax.plot_line_graph(S, np.clip(hi, 0, 1), add_vertex_dots=False, line_color=NET, stroke_width=3)
-        bot = ax.plot_line_graph(S, np.clip(lo, 0, 1), add_vertex_dots=False, line_color=NET, stroke_width=3)
-        fill = Polygon(*[ax.c2p(a, b) for a, b in zip(S, np.clip(hi, 0, 1))],
-                       *[ax.c2p(a, b) for a, b in zip(S[::-1], np.clip(lo, 0, 1)[::-1])], stroke_width=0,
+        top = ax.plot_line_graph(S, hi, add_vertex_dots=False, line_color=NET, stroke_width=3)
+        bot = ax.plot_line_graph(S, lo, add_vertex_dots=False, line_color=NET, stroke_width=3)
+        fill = Polygon(*[ax.c2p(a, b) for a, b in zip(S, hi)],
+                       *[ax.c2p(a, b) for a, b in zip(S[::-1], lo[::-1])], stroke_width=0,
                        fill_color=NET, fill_opacity=0.25)
-        ww = VGroup(DashedVMobject(curve(ax, S, np.clip(wl, 0, 1), WHITE, stroke_width=2), num_dashes=30),
-                    DashedVMobject(curve(ax, S, np.clip(wh, 0, 1), WHITE, stroke_width=2), num_dashes=30))
+        ww = VGroup(DashedVMobject(curve(ax, S, wl, WHITE, stroke_width=2), num_dashes=30),
+                    DashedVMobject(curve(ax, S, wh, WHITE, stroke_width=2), num_dashes=30))
         rows = h["band"]["rows"]
         r5 = next(r for r in rows if abs(r["cost"] - 0.005) < 1e-9)
         side = VGroup(
@@ -52,20 +52,14 @@ class Hook(VoiceoverScene):
             label(r"when every trade costs 0.5\%", font_size=22, color=GREY_A),
             legend([(NET, r"the band it learned: inside, do nothing"), (WHITE, r"the band theory derived in 1997")],
                    font_size=18),
-            MathTex(rf"\text{{price to charge: }}{r5['deep']['price']:.2f}\ \ \text{{vs}}\ \ {r5['delta']['price']:.2f}"
+            MathTex(rf"\text{{entropic cash, }}\gamma=1:\ {r5['deep']['price']:.2f}\ \ \text{{vs}}\ \ {r5['delta']['price']:.2f}"
                     rf"\ \text{{hedging daily}}", font_size=26, color=NET),
-            firm_card(r"J.P. Morgan", r"vanilla index option books on the S\&P 500 and Euro Stoxx hedged by a "
-                      r"data-driven engine since 2018, as reported", source=r"Risk.net, 2022", width=4.6, font_size=18),
+            firm_card(r"J.P. Morgan", r"Euro Stoxx cliquet rollout reported live in May 2022; "
+                      r"S\&P expansion described as planned", source=r"Risk.net, 2022", width=4.6, font_size=18),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.5)
         src = illustration(r"the deep hedger of chapters 11--14; a 30-day at-the-money call, 20\% volatility")
         with self.voiceover(
-            "This is a neural network learning to hedge an option when every trade costs half a percent. It learns "
-            "a corridor around the hedge: inside it, do nothing; outside it, trade back to the nearest edge. "
-            "<bookmark mark='a'/> Theory derived such a corridor in 1997, for small costs. The network's is "
-            "narrower, and on the same simulated paths it needs a lower price: "
-            f"{r5['deep']['price']:.2f} against {r5['delta']['price']:.2f} for hedging every day. "
-            "<bookmark mark='b'/> Machines like this already hedge real books: since 2018, Risk.net reported, J.P. "
-            "Morgan has hedged vanilla index option books on the S&P 500 and the Euro Stoxx with a data-driven engine."
+            f"This network hedges a simulated thirty-day call with a half-percent proportional fee on each traded share. It learns a corridor: inside, keep the holding; outside, trade to an edge. <bookmark mark='a'/> Whalley and Wilmott derived a small-cost asymptotic corridor in 1997. These full, unclipped curves need not coincide. With risk aversion one, the saved test estimates an entropic cash requirement of {r5['deep']['price']:.2f}, against {r5['delta']['price']:.2f} for daily delta. These are simulated risk measures, not market quotes or exact optimal prices. <bookmark mark='b'/> A dated industry example: Risk.net reported a live Euro Stoxx cliquet deep-hedging rollout in May 2022, with S&P expansion still planned."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]), FadeIn(side[1]))
             self.play(FadeIn(fill), Create(top), Create(bot), FadeIn(side[2][0]), run_time=2)
@@ -83,7 +77,7 @@ class Hook(VoiceoverScene):
         hb, hd, lo, hi = (np.asarray(L[k]) for k in ("band", "delta", "lo", "hi"))
         top = axes([0, n], [S.min() - 1, S.max() + 1], x_length=6.6, y_length=1.6, ylabel=r"price",
                    xticks=[], yticks=[round(S.min()), round(S.max())], font_size=13)
-        bot = axes([0, n], [0, 1], x_length=6.6, y_length=3.6, xlabel=r"trading day", ylabel=r"shares held",
+        bot = axes([0, n], data_range(hb, hd, lo, hi, [0, 1]), x_length=6.6, y_length=3.6, xlabel=r"trading day", ylabel=r"shares held",
                    xticks=[0, 10, 20, 30], yticks=[0, 0.5, 1], font_size=13)
         VGroup(top, bot).arrange(DOWN, buff=0.25, aligned_edge=LEFT).to_edge(LEFT, buff=0.7)
         tr = ValueTracker(0.0)
@@ -101,8 +95,8 @@ class Hook(VoiceoverScene):
 
         def make_band():
             k = int(min(tr.get_value(), n - 1))
-            pts = [bot.ax.c2p(j, np.clip(hi[j], 0, 1)) for j in range(k + 1)] + \
-                  [bot.ax.c2p(j, np.clip(lo[j], 0, 1)) for j in range(k, -1, -1)]
+            pts = [bot.ax.c2p(j, hi[j]) for j in range(k + 1)] + \
+                  [bot.ax.c2p(j, lo[j]) for j in range(k, -1, -1)]
             if k < 1:
                 return VMobject()
             return Polygon(*pts, stroke_width=0, fill_color=NET, fill_opacity=0.22)
