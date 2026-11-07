@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 
+from videos.quant.quant14.common import axes, data_range, skew_range
+
 from explainer.quant import *  # noqa: F403
 from videos.quant.quant14.common import BAD, IV, OPT, PART, ROUGH, RV, VAR, illustration, load, pause
 
@@ -51,20 +53,12 @@ class Lift(VoiceoverScene):
 
         P = always_redraw(parts)
         Nr = readout(r"N =", lambda: round(N.get_value()), digits=0, font_size=34, color=YELLOW).to_corner(UR, buff=0.5)
-        leg = legend([(ROUGH, r"the rough kernel"), (VAR, r"one exponential per factor"), (YELLOW, r"their sum")],
+        leg = legend([(ROUGH, r"the rough kernel"), (VAR, 'factor contributions above 0.1 shown; sum includes all factors'), (YELLOW, r"their sum")],
                      font_size=17).next_to(Nr, DOWN, buff=0.3).align_to(Nr, RIGHT)
         q = pause(r"One exponential per decade of time: how many to cover lags from one minute to one year?", width=5.0,
                   font_size=20).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "A rough model has no Markovian state: today's volatility depends on the whole past, which makes "
-            "simulation slow and hedging awkward. Eduardo Abi Jaber and Omar El Euch found a way back: the rough "
-            "kernel is a mixture of exponentials. Watch the sum build. One exponential matches the kernel at one "
-            "lag only. Add them "
-            "one at a time, on geometrically spaced rates. Each new exponential is a thin curve, and the yellow sum "
-            "crawls up the power law decade by decade. <bookmark mark='a'/> Pause and predict: if each decade of "
-            "time needs about one exponential, how many cover lags from a minute to a year? "
-            "<bookmark mark='b'/> A year is about half a million minutes: between five and six decades, so about "
-            "six. The power law is scale invariance, and scale invariance costs one factor per decade."
+            """The fractional kernel admits an exact continuum mixture of exponentials. A finite sum can approximate it over a chosen lag range and restores a finite Markov state. Here the House uses positive geometric-quantization weights. Increasing the factor count changes both the rates and the weights. <bookmark mark='a'/> Suppose, only as a planning heuristic, that one factor covered one decade of lags. How many decades separate a minute and a year? <bookmark mark='b'/> About five point seven. That suggests six as a first guess, not an accuracy guarantee. The required number also depends on H, the lag interval, the quadrature and the error tolerance. A finite sum stays bounded at zero and cannot reproduce the singularity exactly."""
         ) as vo:
             self.play(FadeIn(g), Create(exact), FadeIn(P), FadeIn(Nr), FadeIn(leg))
             self.play(N.animate.set_value(50), run_time=max(vo.remaining(0.0) * 0.5, 5), rate_func=rate_functions.ease_in_quad)
@@ -116,26 +110,23 @@ class Lift(VoiceoverScene):
         t = np.asarray(lp["t"]) * 365
         P = lp["paths"]
         ex = np.asarray(P["exact"])
-        hi = float(np.percentile(np.abs(ex), 99.5)) * 1.2
-        g = axes([0, t[-1]], [-0.2, hi], x_length=10.0, y_length=4.2, xlabel=r"days", ylabel=r"variance $V_t$",
+        lo, hi = data_range(*P.values(), zero=True)
+        g = axes([0, t[-1]], [lo, hi], x_length=10.0, y_length=4.2, xlabel=r"days", ylabel=r"variance $V_t$",
                  xticks=[0, 30, 60, 90], yticks=[0, round(hi / 2, 1)], font_size=15).move_to(DOWN * 0.3)
         ax = g.ax
-        ref = curve(ax, t, np.clip(ex, -0.2, hi), WHITE, stroke_width=2.4)
+        ref = curve(ax, t, ex, WHITE, stroke_width=2.4)
         cols = {"1": BAD, "5": VAR, "20": IV, "50": OPT, "200": RV}
-        cur = curve(ax, t, np.clip(np.asarray(P["1"]), -0.2, hi), cols["1"], stroke_width=2)
+        cur = curve(ax, t, np.asarray(P["1"]), cols["1"], stroke_width=2)
         tag = label(r"lift, $N = 1$", font_size=24, color=cols["1"]).to_corner(UR, buff=0.4)
-        leg = legend([(WHITE, r"exact kernel (fine Volterra scheme), the same shocks")], font_size=17).to_corner(UL, buff=0.4)
+        leg = legend([(WHITE, 'cell-averaged Volterra Euler reference, same shocks')], font_size=17).to_corner(UL, buff=0.4)
         src = illustration(r"rough Heston, $H = 0.1$ (chapter 7's fit); one path of 200", corner=DR)
         with self.voiceover(
-            "Now a path. The white line is one rough Heston variance path from a fine scheme with the exact kernel. "
-            "Drive the lift with the very same shocks, first with one factor: it is a Heston path, too smooth. "
-            "<bookmark mark='a'/> Five factors, twenty, fifty, two hundred: the lifted path creeps toward the "
-            "exact one, catching more of its fine wiggles with each new fast factor."
+            """The white curve is a numerical Volterra Euler reference with cell-averaged fractional-kernel weights and five hundred time steps, not an exact continuous rough-Heston path. Negative numerical variance values are retained on the plot, although the simulation floors variance inside square roots. Compare lifts driven by the same Brownian increments. <bookmark mark='a'/> One, five, twenty, fifty and two hundred factors approach this reference at different rates. Both the reference and the lifts have discretization error. This coupled path comparison isolates neither a pure kernel error nor a continuous-time convergence rate."""
         ) as vo:
             self.play(FadeIn(g), Create(ref), FadeIn(leg), FadeIn(src), Create(cur), FadeIn(tag))
             vo.wait_until("a")
             for k in ("5", "20", "50", "200"):
-                self.play(Transform(cur, curve(ax, t, np.clip(np.asarray(P[k]), -0.2, hi), cols[k], stroke_width=2)),
+                self.play(Transform(cur, curve(ax, t, np.asarray(P[k]), cols[k], stroke_width=2)),
                           Transform(tag, label(rf"lift, $N = {k}$", font_size=24, color=cols[k]).to_corner(UR, buff=0.4)),
                           run_time=1.5)
                 self.wait(0.5)
@@ -158,20 +149,11 @@ class Lift(VoiceoverScene):
             row[1].set_x(tab[0][1].get_x())
         tab[1:].next_to(tab[0], DOWN, buff=0.35)
         tab.move_to(LEFT * 2.2)
-        side = wrapped_label(r"against rough Heston with $H = 0.1$, fitted to the Surface in chapter 7, solved exactly by the fractional "
-                             r"Adams scheme; the lift (Abi Jaber and El Euch 2019) is a Heston model with $N$ variance factors and no fractional calculus",
+        side = wrapped_label('Numerical reference: fractional Adams + COS; lifts: finite Riccati systems + COS. Same parameters, different approximations; no exact pricing claim.',
                              4.6, 20, GREY_A).to_edge(RIGHT, buff=0.6)
         src = illustration(r"13 strikes, $\pm 30\%$; the House's \texttt{lifted\_heston\_cf}")
         with self.voiceover(
-            "How many factors are enough? Price the thirty-day smile of a rough Heston model with H of a tenth, fitted "
-            "to the Surface in chapter seven, exactly, and with lifts of growing size. <bookmark mark='a'/> One factor "
-            f"is a Heston model with the wrong memory, and misses by {rows[0]['iv_err']:.1f} volatility points. Ten "
-            f"factors cut that to {rows[3]['iv_err']:.1f}, twenty to {rows[4]['iv_err']:.1f}, fifty to "
-            f"{rows[5]['iv_err']:.2f}. In law, the lift converges fast. Path by path it converges slowly: the distance "
-            f"between lifted and exact paths is still {lp['rows'][3]['dist']:.2f} standard deviations at fifty factors, "
-            "because the kernel's spike lives below the fastest factor's time scale. The roughness was never magic: it is many time scales at once, and a model with enough of "
-            "them prices the same."
-            " If a few factors price like roughness, is volatility really rough? Next: the debate."
+            f"""Compare the thirty-day smile to the fractional-Adams numerical reference at H of one tenth. <bookmark mark='a'/> One factor misses by {rows[0]['iv_err']:.1f} volatility points, ten by {rows[3]['iv_err']:.1f}, twenty by {rows[4]['iv_err']:.1f}, and fifty by {rows[5]['iv_err']:.2f}. These are finite-grid price differences over thirteen strikes, not an error theorem. The path experiment uses two hundred coupled paths: at fifty factors the root mean squared distance to its Euler reference is {lp['rows'][3]['dist']:.2f} reference standard deviations. Marginal option prices can be close while coupled paths remain visibly different. That distinction matters for path-dependent products and hedging."""
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(side), FadeIn(src))
             vo.wait_until("a")

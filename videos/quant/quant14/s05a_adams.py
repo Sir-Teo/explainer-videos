@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import numpy as np
+
+from videos.quant.quant14.common import axes, data_range, skew_range
 from scipy.interpolate import RegularGridInterpolator
 
 from explainer.quant import *  # noqa: F403
@@ -135,11 +137,7 @@ class Adams(VoiceoverScene, ThreeDScene):
         q = pause(r"Double the number of Adams steps. By how much does the error shrink?", width=4.6,
                   font_size=20).to_corner(UR, buff=0.3)
         with self.voiceover(
-            "The House's code: the predictor weights, the corrector weights, and the update, a few lines for all "
-            "frequencies at once. <bookmark mark='a'/> Pause and predict: double the number of steps. By how much "
-            "does the error shrink? <bookmark mark='b'/> Run it against a solution with sixteen hundred steps. The "
-            f"error falls by about three each time the steps double: an observed order of {a['order']:.1f}. And "
-            f"with H set to one half, the scheme matches Heston's closed-form characteristic function {match}."
+            f"The House's code: the predictor weights, the corrector weights, and the update, a few lines for all frequencies at once. <bookmark mark='a'/> Pause and predict: double the number of steps. By how much does the error shrink? <bookmark mark='b'/> Run it against a solution with sixteen hundred steps. The error falls by about three each time the steps double: an observed order of {a['order']:.1f}. And with H set to one half, the scheme matches Heston's closed-form characteristic function {match}. The fitted order is specific to this parameter set, frequency grid and sixteen-hundred-step reference; it is not a universal Adams convergence theorem."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -175,12 +173,7 @@ class Adams(VoiceoverScene, ThreeDScene):
         self.add_fixed_in_frame_mobjects(hint, tag)
         self.remove(hint, tag)
         with self.voiceover(
-            "What does the solution look like? Here is the size of the characteristic function over frequency and "
-            "maturity, first for Heston. At short maturities it stays near one out to high frequencies: the "
-            "distribution of returns is narrow. <bookmark mark='a'/> Now make the kernel rough, H a tenth, with the "
-            "same other numbers. The short-maturity ridge collapses faster in u: over a few days, a rough "
-            "variance can already have moved a lot, the short-dated distribution is wider and more skewed, and that "
-            "is the steep short skew again, seen in Fourier space."
+            """Here is the modulus of the computed characteristic function over frequency and maturity, first at the Heston limit. At zero frequency a normalized characteristic function equals one. <bookmark mark='a'/> Now change H to one tenth while holding the other parameters fixed. The numerical modulus changes. It describes attenuation in Fourier space, but it cannot identify the sign of skewness: reflecting a distribution leaves this modulus unchanged. Nor does a lower ridge alone prove a wider distribution in every sense. The complex characteristic function, and then actual option prices, contain the smile information."""
         ) as vo:
             self.play(FadeIn(hint), FadeIn(tag), Create(ax), FadeIn(s5), run_time=2)
             self.move_camera(theta=-80 * DEGREES, run_time=3)
@@ -198,29 +191,31 @@ class Adams(VoiceoverScene, ThreeDScene):
         Hs = np.array([r["H"] for r in rows])
         E = np.array([r["rmse"] for r in rows])
         free = p["free"]
-        g = axes([0, 0.52], [1.0, 2.4], x_length=6.0, y_length=4.0, xlabel=r"$H$, held fixed (other five refitted)",
+        er = data_range(E, [free["rmse"]])
+        g = axes([0, 0.52], list(er), x_length=6.0, y_length=4.0, xlabel=r"$H$, held fixed (other five refitted)",
                  ylabel=r"error on the Surface (vol points)", xticks=[0, 0.1, 0.2, 0.3, 0.4, 0.5],
-                 yticks=[1.0, 1.5, 2.0], font_size=15).to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
+                 yticks=[1, 2, 3, 4], font_size=15).to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
         ax = g.ax
         t = ValueTracker(0)
-        dots = always_redraw(lambda: VGroup(*[Dot(ax.c2p(h, min(e, 2.4)), radius=0.07, color=MODEL_COL["rough Heston"])
+        dots = always_redraw(lambda: VGroup(*[Dot(ax.c2p(h, e), radius=0.07, color=MODEL_COL["rough Heston"])
                                               for h, e in zip(Hs[: int(t.get_value()) + 1], E[: int(t.get_value()) + 1])]))
-        line = curve(ax, Hs, np.clip(E, 1.0, 2.4), MODEL_COL["rough Heston"], stroke_width=2.5)
+        line = curve(ax, Hs, E, MODEL_COL["rough Heston"], stroke_width=2.5)
         star = Star(n=5, outer_radius=0.14, color=YELLOW, fill_opacity=1).move_to(ax.c2p(free["H"], free["rmse"]))
         ts = Rectangle(width=ax.c2p(0.12, 0)[0] - ax.c2p(0.08, 0)[0], height=4.0, stroke_width=0, fill_color=RV,
-                       fill_opacity=0.25).move_to(ax.c2p(0.10, 1.7))
+                       fill_opacity=0.25).move_to(ax.c2p(0.10, sum(er) / 2))
         tsl = label(r"time series: $H \approx 0.08$--$0.12$", font_size=16, color=RV).next_to(ts, UP, buff=0.05)
         # error by expiry at three H values
         days = sorted(int(d) for d in rows[0]["by_expiry"])
         pick = [r for r in rows if abs(r["H"] - 0.05) < 1e-9 or abs(r["H"] - 0.2) < 1e-9 or abs(r["H"] - 0.5) < 1e-9]
-        g2 = axes([-0.5, len(days) - 0.5], [0, 6], x_length=5.0, y_length=3.2, xlabel=r"expiry (days)",
+        expiry_top = 1.08 * max(v for r in pick for v in r["by_expiry"].values())
+        g2 = axes([-0.5, len(days) - 0.5], [0, expiry_top], x_length=5.0, y_length=3.2, xlabel=r"expiry (days)",
                   ylabel=r"error by expiry", xticks=list(range(len(days))), xfmt=lambda u: f"{days[int(round(u))]}",
-                  yticks=[0, 2, 4, 6], font_size=13).to_edge(RIGHT, buff=0.5).shift(DOWN * 0.3)
+                  yticks=[0, 5, 10], font_size=13).to_edge(RIGHT, buff=0.5).shift(DOWN * 0.3)
         cols = [ROUGH, IV, VAR]
         bars = VGroup()
         for j, (r, c) in enumerate(zip(pick, cols)):
             for i, d in enumerate(days):
-                v = min(r["by_expiry"][str(d)], 6.0)
+                v = r["by_expiry"][str(d)]
                 bars.add(Rectangle(width=0.18, height=max(g2.ax.c2p(0, v)[1] - g2.ax.c2p(0, 0)[1], 0.01), stroke_width=0,
                                    fill_color=c, fill_opacity=0.85).move_to(g2.ax.c2p(i - 0.2 + 0.2 * j, v / 2)))
         leg2 = legend([(c, rf"$H = {r['H']:g}$") for r, c in zip(pick, cols)], font_size=15).arrange(RIGHT, buff=0.25).next_to(
@@ -229,16 +224,7 @@ class Adams(VoiceoverScene, ThreeDScene):
         e01 = next(r for r in rows if abs(r["H"] - 0.1) < 1e-9)
         src = real_data(r"the Surface, 10 December 2025; 9 fits of rough Heston, Adams + COS", corner=DL)
         with self.voiceover(
-            "Now the question chapter seven left open: how much does the Surface care about roughness? Hold H "
-            "fixed at nine values from 0.05 to a half, refit the other five numbers each time, and record the "
-            "error. The points appear one fit at a time. <bookmark mark='a'/> The curve falls almost all the way. "
-            f"At H of 0.05 the error is {e05['rmse']:.2f}, at a tenth {e01['rmse']:.2f}, and the free fit, the star, "
-            f"settles at H of {free['H']:.2f} with {free['rmse']:.2f}. The green band is where the time series put "
-            "H. <bookmark mark='b'/> Where is roughness paid for? Split the error by expiry. The roughest fit pays "
-            "almost everywhere, most of all at three days, a smile no fit here gets right. From a tenth upward the "
-            "differences are small, and with vega weighting the long expiries dominate. On one day of bitcoin "
-            "options, rough Heston prefers to be smooth."
-            " Where does roughness come from? Next."
+            f"""Fix H at nine values and refit the other five parameters. <bookmark mark='a'/> Error is {e05['rmse']:.2f} at H of point zero five, {e01['rmse']:.2f} at one tenth, and {free['rmse']:.2f} at the free fit's H of {free['H']:.2f}. The green range describes time-series proxy estimates, not a confidence interval for risk-neutral H. <bookmark mark='b'/> Expiry bars preserve all errors, including the largest short-date mismatch. These local numerical fits on one date favor larger H under this objective and budget; they do not identify a universal market H. Next: a possible order-flow mechanism."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(ts), FadeIn(tsl), FadeIn(dots))
             self.play(t.animate.set_value(len(Hs) - 1), run_time=5, rate_func=linear)

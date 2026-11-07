@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 
+from videos.quant.quant14.common import axes, data_range, skew_range
+
 from explainer.quant import *  # noqa: F403
 from explainer.quant.house import rough as R
 from videos.quant.quant14.common import BAD, IV, MODEL_COL, OPT, PART, ROUGH, RV, VAR, illustration, load, pause
@@ -130,7 +132,7 @@ class Hybrid(VoiceoverScene):
         w = np.r_[1.0, (k[1:] ** a)]
         g1 = axes([0, n], [-3, 3], x_length=11.0, y_length=1.6, ylabel=r"shocks $\Delta W$", xticks=[], yticks=[],
                   font_size=14)
-        g2 = axes([0, n], [-4, 4], x_length=11.0, y_length=2.2, xlabel=r"time step", ylabel=r"rough driver $Y$",
+        g2 = axes([0, n], [-4, 4], x_length=11.0, y_length=2.2, xlabel=r"time step", ylabel='illustrative filtered shocks (scaled)',
                   xticks=[0, 40, 80, 120], yticks=[], font_size=14)
         VGroup(g1, g2).arrange(DOWN, buff=0.5).move_to(DOWN * 0.2)
         bars = VGroup(*[Line(g1.ax.c2p(i + 0.5, 0), g1.ax.c2p(i + 0.5, np.clip(z, -3, 3)), stroke_color=GREY_B,
@@ -144,11 +146,9 @@ class Hybrid(VoiceoverScene):
         out = tracing(g2.ax, np.arange(n) + 0.5, np.clip(Y, -4, 4), t, ROUGH, stroke_width=2.5)
         cap = label(r"the kernel's weights slide along the shocks; each position gives one value of the rough driver",
                     font_size=19, color=GREY_A).to_edge(UP, buff=0.35)
-        src = illustration(r"24 weights shown; the FFT does every position at once")
+        src = illustration('illustrative truncated far-end weights, output standardized; not the full hybrid simulator')
         with self.voiceover(
-            "Here is that convolution, done slowly. The grey bars are the shocks. The rough kernel's weights, "
-            "tallest on the newest shock, slide along them; at each position, the weighted sum is one value of the "
-            "rough driver, drawn below. The fast Fourier transform computes every position at once."
+            "Here is that convolution, done slowly. The grey bars are the shocks. The rough kernel's weights, tallest on the newest shock, slide along them; at each position, the weighted sum is one value of the rough driver, drawn below. The fast Fourier transform computes every position at once. This animation uses twenty-four truncated far-end weights and standardizes the output. The preceding equations and the lab describe the actual hybrid scheme."
         ):
             self.play(FadeIn(g1), FadeIn(g2), FadeIn(bars), FadeIn(cap), FadeIn(src), FadeIn(win), FadeIn(out))
             self.play(t.animate.set_value(n - 1), run_time=9, rate_func=linear)
@@ -183,16 +183,7 @@ class Hybrid(VoiceoverScene):
                                   "machine: the hybrid scheme's real advantage is accuracy on any grid, at a cost that "
                                   "grows gently")
         with self.voiceover(
-            "The House's version, abridged to its essentials: the covariance of the first cell and its Cholesky "
-            "factor, the optimal points, the convolution by FFT, and the variance. <bookmark mark='a'/> Run the "
-            "check that matters: the variance of the rough driver at time one is exactly one. With H of 0.05, "
-            f"the hybrid scheme gives {r05['hybrid']:.2f}; the naive sum gives {r05['riemann']:.2f}, losing more than "
-            "half the variance in the spike. As H rises to three-tenths, the naive error shrinks, just as the "
-            "picture said. <bookmark mark='b'/> In prices, the damage is enormous: rough Bergomi's thirty-day "
-            f"at-the-money volatility is {100 * at['hybrid']:.0f} percent with the hybrid scheme and "
-            f"{100 * at['riemann']:.0f} with the naive one. <bookmark mark='c'/> On speed, the hybrid scheme scales "
-            f"like n log n, {verdict}."
-            " Simulation is slow. Next: a rough model with a near-closed form, rough Heston."
+            f"The House's version, abridged to its essentials: the covariance of the first cell and its Cholesky factor, the optimal points, the convolution by FFT, and the variance. <bookmark mark='a'/> Run the check that matters: the variance of the rough driver at time one is exactly one. With H of 0.05, the hybrid scheme gives {r05['hybrid']:.2f}; the naive sum gives {r05['riemann']:.2f}, losing more than half the variance in the spike. As H rises to three-tenths, the naive error shrinks, just as the picture said. <bookmark mark='b'/> In prices, the damage is enormous: rough Bergomi's thirty-day at-the-money volatility is {100 * at['hybrid']:.0f} percent with the hybrid scheme and {100 * at['riemann']:.0f} with the naive one. <bookmark mark='c'/> On speed, the hybrid scheme scales like n log n, {verdict}. Simulation is slow. Next: a rough model with a near-closed form, rough Heston. These are finite-grid estimates, with simulation error. The Cholesky timing uses a fractional Brownian covariance, while the hybrid timing uses the Volterra driver; this is a cost illustration, not identical-law accuracy benchmarking."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")

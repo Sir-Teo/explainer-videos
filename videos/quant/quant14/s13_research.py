@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 
+from videos.quant.quant14.common import axes, data_range, skew_range
+
 from explainer.quant import *  # noqa: F403
 from videos.quant.quant14.common import BAD, IV, OPT, PART, ROUGH, RV, SPOT, VAR, load
 
@@ -24,10 +26,7 @@ class Research(VoiceoverScene):
     def card(self):
         c = research_card(r"How fast a rough simulation converges", r"Why does refining the grid barely help, and what "
                           r"does help?", part=PART)
-        with self.voiceover("For the researcher: Chapter 6 introduced the hybrid scheme as the right way to simulate a "
-                            "rough path. Here is the theorem behind it: the error of any step-function kernel falls like "
-                            "n to the minus H, which for H of a tenth is almost not at all, and the hybrid scheme cannot "
-                            "change that rate. What it changes, and why the price may still converge, is the story."):
+        with self.voiceover("""For the researcher: uniform-grid rough-driver error. For the power kernel with H between zero and one half, admissible fixed within-cell evaluation rules have root mean squared error of order n to minus H. A hybrid scheme with a fixed number of exact cells can sharply reduce the constant without changing that rate. This is not a lower bound for every possible mesh, approximation class or growing exact-cell count. We will compare exact deterministic error integrals with the original simulations."""):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -40,20 +39,13 @@ class Research(VoiceoverScene):
                       r"c_j^{a}\big)^2 dx", font_size=30, colors={r"\mathbb E\big|Y_1 - \hat Y_1\big|^2": BAD}),
                 cmath(r"\operatorname{RMSE}", r"\sim", r"\sqrt{C}\;n^{-H}", font_size=34, colors={r"\operatorname{RMSE}": BAD})]
         whys = [why(r"the Riemann--Liouville process of Chapter 5, at $t = 1$; the kernel is infinite at $s = 1$"),
-                why(r"any step-function approximation: on the cell at lag $j$ the kernel is frozen at $c_j\Delta$ (the left "
-                    r"end, $c_j = j$, is the naive choice)"),
+                why('uniform grid and a fixed admissible within-cell rule ($0<H<1/2$)'),
                 why(r"It\^o's isometry, and the substitution $1 - s = x\Delta$: the whole error is $\Delta^{2H}$ times a sum "
                     r"that converges, because the terms fall like $j^{2a - 2}$"),
-                why(r"so the strong rate is $n^{-H}$ for every choice of the points: at $H = 0.1$, halving the error needs "
-                    r"$2^{10} \approx 1{,}000$ times the steps")]
+                why('Uniform grid, fixed admissible within-cell rules, $0<H<1/2$: RMSE has order $n^{-H}$; this is not a bound for every approximation class.')]
         step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.3, buff=0.44, edge=6.9)
         with self.voiceover(
-            "Take the rough driver at time one. <bookmark mark='a'/> Its kernel is infinite at the end of the "
-            "integral. <bookmark mark='b'/> Any step-function scheme freezes the kernel on each cell, at some point c "
-            "j times delta; the naive choice is the cell's end. <bookmark mark='c'/> By Itô's isometry the squared "
-            "error is a deterministic integral, and substituting one minus s equals x delta pulls out delta to the two "
-            "H, times a sum that converges. <bookmark mark='d'/> So the error falls like n to the minus H, whatever "
-            "points you choose. At H of a tenth, halving the error takes a thousand times as many steps."
+            """Take the Riemann--Liouville driver at time one with H strictly between zero and one half. <bookmark mark='a'/> The power kernel is square integrable but unbounded at the endpoint. <bookmark mark='b'/> A uniform-grid step approximation uses a fixed rule for each lag cell's evaluation point; the point must stay within its cell. <bookmark mark='c'/> Itô's isometry gives the displayed exact error integral. After scaling, the tail cell errors are summable for these admissible rules and the first-cell error is positive. <bookmark mark='d'/> Thus root mean squared error has order n to minus H. At H of one tenth, an asymptotic halving needs a factor of two to the tenth in grid size. This statement does not cover arbitrary nonuniform meshes or changing approximation classes."""
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -77,22 +69,14 @@ class Research(VoiceoverScene):
         whys = [why(r"simulate the first $\kappa$ cells' Wiener integrals exactly, jointly Gaussian with the increments, "
                     r"and step the rest"),
                 why(r"the points that minimize each remaining cell's error (Chapter 6's optimal points)"),
-                why(r"the sum now starts after the singularity: the rate is still $n^{-H}$, but the constant collapses, "
-                    r"because almost all of it sat in the first cell")]
+                why('For fixed $\\kappa$, the first unresolved cell leaves rate $n^{-H}$ with a much smaller constant. Growing $\\kappa$ is a different regime.')]
         step = ladder(self, rows, whys, keep=3, top=2.7, x=-0.3, buff=0.5, edge=6.9)
         thm = theorem_card(r"The hybrid scheme's error", wrapped_label(
-            r"the mean squared error of the hybrid scheme is asymptotically $J(H, \kappa, b)\,n^{-2H}$, with an explicit "
-            r"constant; for rough kernels, moving from the Riemann sum to $\kappa = 1$ cuts the root mean squared error by "
-            r"nearly 100\%", 10.6, 20, GREY_A),
+            'Fixed exact-cell count $\\kappa$ and uniform-grid power kernel: MSE $\\sim J(H,\\kappa,b)n^{-2H}$. The improvement depends on $H$, $\\kappa$ and the remaining evaluation rule.', 10.6, 20, GREY_A),
             who=r"Bennedsen, Lunde and Pakkanen (2017), \textit{Finance and Stochastics} 21", width=11.6,
             font_size=22).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "The hybrid scheme attacks the constant. <bookmark mark='a'/> Simulate the first kappa cells' integrals "
-            "exactly, as Gaussians jointly drawn with the increments, and step the rest. <bookmark mark='b'/> Use the "
-            "optimal evaluation points of Chapter 6. <bookmark mark='c'/> The error is the same sum, but it now starts "
-            "after the singularity. The rate is still n to the minus H. The constant collapses, because almost all of "
-            "it sat in the first cell. <bookmark mark='d'/> Mikkel Bennedsen, Asger Lunde and Mikko Pakkanen gave the "
-            "exact asymptotic constant in 2017."
+            "The hybrid scheme attacks the constant. <bookmark mark='a'/> Simulate the first kappa cells' integrals exactly, as Gaussians jointly drawn with the increments, and step the rest. <bookmark mark='b'/> Use the optimal evaluation points of Chapter 6. <bookmark mark='c'/> The error is the same sum, but it now starts after the singularity. The rate is still n to the minus H. The constant collapses, because almost all of it sat in the first cell. <bookmark mark='d'/> Mikkel Bennedsen, Asger Lunde and Mikko Pakkanen gave the exact asymptotic constant in 2017. Here kappa is fixed as the grid is refined. Growing kappa or changing the approximation class can change the rate."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -197,17 +181,7 @@ class Research(VoiceoverScene):
         fit_right(side)
         p8, p64 = P[0], P[-1]
         with self.voiceover(
-            "Prices are what desks need, and there the story changes. A one-year at-the-money call in rough Bergomi, "
-            "with every scheme sharing the same price step. <bookmark mark='a'/> In white, the exact rough path on the "
-            "grid. <bookmark mark='b'/> The naive Riemann sum, exponentiated with the true variance t to the two H, is "
-            f"about {100 * (p8['exact_iv'] - p8['riemann_iv']):.0f} vol points too low at every grid: its path has too "
-            "little variance, so the mean of the variance process is biased down, and that bias shrinks like n to "
-            "the minus two H. <bookmark mark='c'/> Use the scheme's own variance in the exponent instead, and the "
-            f"price converges: {100 * (p8['riemann_wick_iv'] - p8['exact_iv']):.1f} points off at eight steps, "
-            f"{100 * (p64['riemann_wick_iv'] - p64['exact_iv']):.1f} at sixty-four, roughly n to the minus two "
-            "thirds, close to the rate H plus a half that Christian Bayer, Eric Hall and Raúl Tempone prove for a "
-            "linear rough model. "
-            "<bookmark mark='d'/> The hybrid scheme is within a hundredth of a point at every grid."
+            f"""Now the original finite-grid price experiment: one-year at-the-money rough-Bergomi calls, with the same stock Euler step in every scheme. <bookmark mark='a'/> White uses the exact joint Gaussian driver on the grid, with covariance evaluated numerically. It still has stock time-discretization and Monte Carlo error. <bookmark mark='b'/> At eight steps, the naive scheme with the theoretical compensator is lower by {100 * (p8['exact_iv'] - p8['riemann_iv']):.0f} volatility points. Its driver variance is too small for that compensator; the driver variance deficit has order n to minus two H. That does not automatically prove the same price-bias rate. <bookmark mark='c'/> Using the scheme's own variance leaves differences of {100 * (p8['riemann_wick_iv'] - p8['exact_iv']):.1f} points at eight steps and {100 * (p64['riemann_wick_iv'] - p64['exact_iv']):.1f} at sixty-four. Four coupled grids do not establish an asymptotic weak rate. Bayer, Hall and Tempone's H plus one half theorem concerns a linear rough Stein--Stein model under payoff assumptions, not this nonlinear exponential model. <bookmark mark='d'/> The hybrid curve is close to the grid reference in this experiment; proximity to a shared-grid reference is not continuous-time pricing certification."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(side))
             for k, mk in enumerate(("a", "b", "c", "d")):
@@ -218,23 +192,14 @@ class Research(VoiceoverScene):
 
     def open_problems(self):
         cards = VGroup(
-            desk_question(r"open: the weak rate of rough Bergomi", r"sharp weak rates are proved for linear rough models "
-                          r"(Bayer, Hall and Tempone 2022) and special payoffs (Gassiat 2022); for the exponential, "
-                          r"nonlinear rough Bergomi with general payoffs the rate is open", width=12.4, font_size=18),
-            desk_question(r"open: multilevel Monte Carlo when the strong rate is $H$", r"multilevel methods need a good "
+            desk_question('question: which weak-rate theorem matches the implemented model and payoff?', 'Check coefficient, payoff and scheme assumptions before transferring a rate. The cited linear-model result does not establish a rate for this exponential model.', width=12.4, font_size=18),
+            desk_question('question: how effective is the chosen multilevel coupling?', r"multilevel methods need a good "
                           r"strong rate to couple levels cheaply; with rate $H$ their gain shrinks, and the best "
                           r"couplings for rough models are an active topic", width=12.4, font_size=18),
-            desk_question(r"open: rough and path-dependent at once", r"for path-dependent payoffs and for the joint "
-                          r"SPX/VIX models of Chapter 15, error expansions that would justify extrapolation in $n$ are "
-                          r"not available", width=12.4, font_size=18),
+            desk_question('question: is grid extrapolation justified for this target?', 'Path-dependent and joint-model targets need their own discretization analysis. These four vanilla-price grids do not justify extrapolation for them.', width=12.4, font_size=18),
         ).arrange(DOWN, buff=0.22)
         with self.voiceover(
-            "Three open questions. <bookmark mark='a'/> Sharp weak rates are proved for linear rough models and for "
-            "special payoffs; for the exponential rough Bergomi with a general payoff, the rate is open. "
-            "<bookmark mark='b'/> Multilevel Monte Carlo couples coarse and fine grids cheaply only when the strong "
-            "rate is good; with a rate of H its gain shrinks, and the best couplings are an active topic. "
-            "<bookmark mark='c'/> And for path-dependent payoffs, or the joint models of Chapter 15, there are no "
-            "error expansions that would justify extrapolating in the number of steps."
+            """Three questions for implementation. <bookmark mark='a'/> Which weak-error theorem actually matches the coefficients, payoff and discretization? A result for a linear rough model cannot simply be transferred to rough Bergomi. <bookmark mark='b'/> How much variance reduction does a proposed multilevel coupling deliver at its measured computational cost? A small H can make a naive coupling inefficient, but the rate alone does not settle every construction. <bookmark mark='c'/> Finally, does the target admit an error expansion that justifies grid extrapolation? Our four-grid vanilla experiment does not answer that for path-dependent products or joint SPX and VIX models. These are questions left unverified here, rather than an exhaustive claim about the current literature."""
         ) as vo:
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
@@ -243,11 +208,9 @@ class Research(VoiceoverScene):
         self.clear_scene()
 
     def question(self):
-        q = pause_card(r"at $H = 0.1$, a Riemann scheme with 64 steps has error 0.48. How many steps would cut it to 0.24? "
-                       r"And at $H = 0.4$?")
+        q = pause_card('Assume RMSE $\\sim Cn^{-H}$. Halving needs $2^{1/H}$ times the steps: $1024$ at $H=0.1$, $5.66$ at $H=0.4$. Starting at $n=64$: about $65{,}536$ or $362$.')
         with self.voiceover(
-            "Pause and predict. At H of a tenth, a Riemann scheme with sixty-four steps has an error of point four "
-            "eight. How many steps would halve it? And at H of point four?"
+            """Assume the asymptotic root mean squared error is C times n to minus H. What grid-size multiplier halves it? Two to the power one over H: one thousand twenty-four for H of one tenth, and about five point seven for H of four tenths. Starting from sixty-four steps, those are roughly sixty-five thousand five hundred thirty-six and three hundred sixty-two steps. These are asymptotic planning calculations, not exact finite-grid predictions."""
         ):
             self.play(FadeIn(q))
         self.wait(0.5)

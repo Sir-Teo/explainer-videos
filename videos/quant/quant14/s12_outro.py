@@ -2,23 +2,23 @@ from __future__ import annotations
 
 import numpy as np
 
+from videos.quant.quant14.common import axes, data_range, skew_range
+
 from explainer.quant import *  # noqa: F403
 from videos.quant.quant14.common import BAD, IV, MODEL_COL, OPT, PART, ROUGH, RV, VAR, load
 
 DESK = [
     (r"Volatility has $H \approx 0.1$. What does that mean for a one-day option against a one-month one?",
-     r"the at-the-money skew grows like $T^{H - 1/2}$: a one-day option's skew is about $30^{0.4} \approx 4$ times the "
-     r"one-month's; over a day, volatility itself can move a lot, so short-dated options carry most of the vol-of-vol risk"),
+     'Conditional on the stated power approximation, the skew ratio is $30^{0.4}\\approx3.9$. Total vol-of-vol exposure also depends on Greeks, notional and the payoff.'),
     (r"A colleague says rough volatility is just fast mean reversion. How would you test it?",
      r"use several measurements: the scaling of intraday realized variance at sub-daily lags (after removing seasonality "
      r"and noise), the skew's term structure at the shortest expiries, and out-of-sample forecasts and hedges of rough "
      r"against multi-factor models"),
-    (r"Rough Bergomi takes half a minute to calibrate; the desk needs milliseconds. What are your options?",
+    ('Rough-model calibration is too slow for a desk\\textquotesingle s task. Which numerical alternatives should be benchmarked?',
      r"a neural surrogate trained once on the model's prices (Horvath, Muguruza and Tomas 2021), a Markovian lift with "
      r"few factors, or rough Heston's semi-closed form with fast Fourier pricing"),
-    (r"Why can't a one-factor Markov stochastic volatility model fit a 1-week skew?",
-     r"its skew is flat below its mean-reversion time $1/\kappa$ (chapter 2); to be steep at one week, $\kappa$ must be about 50 "
-     r"a year, and then the skew collapses like $1/(\kappa T)$ at longer expiries"),
+    ('What limits a regular one-factor model\\textquotesingle s asymptotic short skew?',
+     'With positive nondegenerate variance and regular coefficients, local short-maturity skew is bounded. Finite-window fit depends on parameters, leverage and the initial curve; one week is not a zero-maturity limit.'),
 ]
 
 PROBLEMS = [
@@ -56,19 +56,18 @@ class Outro(VoiceoverScene):
         hy, hs, sg, q = load("hybrid_check"), load("hawkes_sweep"), load("sigvol"), load("qrh_sim")
         items = [
             (rf"the skew's power law, median exponent {w['a_median']:.2f} over {w['n_weeks']} weeks; a bounded rival", IV),
-            (r"a kernel's shape makes the skew: exponentials go flat, power laws explode (Fukasawa: rough or arbitrage)", IV),
-            (rf"bitcoin is rough in two eras: $H = {load('roughness_2018')['H']:.2f}$ and ${r['H']:.2f}$", RV),
-            (rf"the rough forecast explains why HAR works; head to head it wins {f['rough_wins']} of 6", RV),
+            ('kernel asymptotics shape the leading signed skew; finite-window magnitudes do not verify a theorem', IV),
+            ('low finite-lag scaling estimates in two bitcoin realized-variance proxies', RV),
+            ('retrospective rough/HAR race; full-era H prevents fully real-time interpretation', RV),
             (rf"rough Bergomi fits the Surface to {rb['rmse']:.2f} vol points with three numbers and the variance curve",
              MODEL_COL["rBergomi"]),
             (rf"the hybrid scheme keeps the spike; the naive sum loses it (variance {hy['var'][0]['riemann']:.2f} for 1)", ROUGH),
-            (rf"rough Heston: a fractional Riccati, Adams of order {load('adams_conv')['order']:.1f}; left free, $H = {rh['params']['H']:.2f}$",
+            ('rough Heston: fractional Riccati; observed finite-grid Adams order, not a universal theorem',
              MODEL_COL["rough Heston"]),
-            (r"nearly unstable order flow turns rough; lifts make rough models Markovian", VAR),
-            (r"the estimator can be fooled: a smooth one-day half-life reads like bitcoin", BAD),
+            ('coordinated Hawkes limits can be rough; finite lifts recover a Markov approximation', VAR),
+            ('daily proxy estimates mix local regularity, mean reversion, aggregation and noise', BAD),
             (rf"options: a two-factor Bergomi scores {b2['rmse']:.2f}; the horse races lean against one factor", VAR),
-            (rf"the past explains {100 * p['r2_test']:.0f}\% of DVOL and {100 * ps['r2_test']:.0f}\% of the VIX out of sample; "
-             r"not 5 August's quotes", MODEL_COL["PDV"]),
+            ('held-out-date implied-index tracking includes same-day returns; residuals are proxy-specific', MODEL_COL["PDV"]),
             (rf"qRH's feedback makes the Zumbach effect; signatures turn calibration into algebra ({sg['rmse_out']:.2f})",
              QC.DELTA),
         ]
@@ -83,15 +82,7 @@ class Outro(VoiceoverScene):
         if rows.height > 6.6:
             rows.scale_to_fit_height(6.6)
         with self.voiceover(
-            "Part fourteen in twelve lines. The skew explodes as expiry nears, close to a power law, week after "
-            "week. The kernel's shape decides the skew, and a true power law forces roughness. Bitcoin's "
-            "volatility is rough in two eras, and the rough forecast explains why HAR works without reliably beating "
-            "it. Rough Bergomi fits the Surface with three numbers and the market's "
-            "variance curve, simulated by a hybrid scheme that keeps the kernel's spike. Rough Heston keeps a "
-            "characteristic function through a fractional Riccati equation, solved by Adams. Nearly unstable order "
-            "flow looks rough from far away, and lifts make rough models Markovian. The estimator can be fooled, "
-            "and the options lean toward several time scales. The past explains most of implied volatility, but "
-            "not the quotes of the fifth of August. And feedback, transport and signatures are the frontier."
+            """Part fourteen: finite-maturity skew magnitudes and finite-lag variance exponents are descriptive evidence, with signs, sampling and estimator effects to preserve. Rough-kernel asymptotics need their model assumptions. The retrospective forecast comparison does not establish a live advantage over HAR. Rough Bergomi matches an input expected-variance curve and gives one same-date option fit; rough Heston keeps a fractional Riccati representation. Hybrid schemes and lifts improve computation under specific approximation regimes. Nearly critical Hawkes limits require coordinated scaling. Return-history proxies track held-out implied-index dates using same-day returns; their residuals do not identify every unobserved cause. Transport and signatures expand the modeling choices, with their own numerical and martingale questions. Model adoption still needs validation on the target task."""
         ):
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.6,
                                                  run_time=24))
@@ -103,14 +94,7 @@ class Outro(VoiceoverScene):
         if cards.height > 7.4:
             cards.scale_to_fit_height(7.4)
         with self.voiceover(
-            "Four desk questions. With H near a tenth, a one-day option's skew is about four times a one-month "
-            "option's, and short-dated options carry most of the risk of volatility moving. <bookmark mark='a'/> To "
-            "test roughness against fast mean reversion, use several measurements, cleaned of seasonality and noise: "
-            "the bias map, sub-daily lags, the options, and out-of-sample forecasts and hedges. "
-            "<bookmark mark='b'/> To calibrate in milliseconds, train a surrogate, lift the model, or use rough "
-            "Heston's Fourier form. <bookmark mark='c'/> And why can't a one-factor Markov model fit a one-week "
-            "skew? Its skew is flat below its mean-reversion time; to be steep at a week, kappa must be about fifty "
-            "a year, and then the long end collapses like one over kappa T. Full solutions are in the notes."
+            """Four desk questions. Under an assumed H of one tenth and applicable power-law scaling, the one-day to one-month skew ratio is about three point nine. Position risk still depends on exposure and Greeks. <bookmark mark='a'/> Compare roughness with fast mean reversion using multiple noise-aware measurements and truly prospective target-task validation. <bookmark mark='b'/> For speed, benchmark a surrogate, a lift or Fourier methods at matched accuracy; one evaluation is not a calibration. <bookmark mark='c'/> A regular one-factor model has bounded local short-maturity skew under standard conditions, yet can fit a finite one-week observation. A single exponential's flat-to-inverse-maturity transition does not rule out every finite-window fit. Full solutions and assumptions are in the notes."""
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -170,9 +154,7 @@ class Outro(VoiceoverScene):
              r"Guyon (2020, 2024); Rosenbaum and Zhang (2022); Cuchiero, Gazzani and Svaluto-Ferro (2023)",
              r"BIS Bulletins 90 and 95 (2024); Li and Askanazi, SEC DERA working paper (2025)"])
         with self.voiceover(
-            "The book and chapters this part covers, and the papers it draws on. The data are the Surface and two "
-            "years of weekly Deribit option trades, Bitcoin's one-minute, five-minute and daily prices from Binance, "
-            "Deribit's DVOL, the VIX and the Nikkei from FRED, and Ken French's daily market return."
+            "The book and chapters this part covers, and the papers it draws on. The data are the Surface and two years of weekly Deribit option trades, Bitcoin's one-minute, five-minute and daily prices from Binance, Deribit's DVOL, the VIX and the Nikkei from FRED, and Ken French's daily market return. Option-mark pooling, finite-difference stencils, date schedules and numerical limitations are documented in the notes."
         ):
             self.play(FadeIn(card))
             self.wait(3)

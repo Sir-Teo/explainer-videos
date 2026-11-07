@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 
+from videos.quant.quant14.common import axes, data_range, skew_range
+
 from explainer.quant import *  # noqa: F403
 from videos.quant.quant14.common import (BAD, IV, MODEL_COL, OPT, PART, ROUGH, RV, VAR, illustration, load, pause,
                                          real_data, running_min)
@@ -97,17 +99,10 @@ class Signature(VoiceoverScene):
                     r"Financial Math. 2023)"),
                 why(r"$\sigma$ is linear in $\ell$: the stochastic integral is linear, the quadratic variation quadratic"),
                 why(r"$Z = \rho W + \sqrt{1 - \rho^2}W^\perp$: store both integrals per path, and $\rho$ is free too"),
-                why(r"universality (Stone--Weierstrass, Part 5): as depth grows, any reasonable path-dependent "
-                    r"volatility is reachable")]
+                why('increasing depth, suitable compact path sets and topology; fixed depth 3 has no universality guarantee')]
         step = ladder(self, rows, whys, keep=3, top=2.8, x=-0.8, buff=0.75, edge=6.9)
         with self.voiceover(
-            "Here is why this is clever. Volatility is the inner product of a parameter vector ell with the "
-            "signature. <bookmark mark='a'/> The log price is the stochastic integral of sigma minus half its "
-            "quadratic variation. Because sigma is linear in ell, the first term is linear in ell and the second "
-            "quadratic: ell transpose A minus a half ell transpose B ell. <bookmark mark='b'/> A and B depend only "
-            "on the simulated paths. Store them once, for both the Brownian motion and its independent partner, "
-            "and the correlation rho is free too. <bookmark mark='c'/> And linear functionals of signatures can "
-            "approximate any continuous function of the path, so the family is as rich as we like."
+            "Here is why this is clever. Volatility is the inner product of a parameter vector ell with the signature. <bookmark mark='a'/> The log price is the stochastic integral of sigma minus half its quadratic variation. Because sigma is linear in ell, the first term is linear in ell and the second quadratic: ell transpose A minus a half ell transpose B ell. <bookmark mark='b'/> A and B depend only on the simulated paths. Store them once, for both the Brownian motion and its independent partner, and the correlation rho is free too. <bookmark mark='c'/> And linear functionals of signatures can approximate any continuous function of the path, so the family is as rich as we like. Universality concerns increasing signature depth on suitable compact sets of time-augmented geometric paths; the fixed depth-three model is a small subclass. Option calibration remains nonlinear in the parameters."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -132,10 +127,7 @@ class Signature(VoiceoverScene):
         outs = [f"{s['paths']:,} paths, features built once; one parameter vector prices all {load('rbergomi')['n']} quotes",
                 f"fit on seed 1: {s['rmse_in']:.2f} vol points;  re-priced on fresh paths: {s['rmse_out']:.2f}"]
         with self.voiceover(
-            "In the House, pricing a new parameter vector is three lines of linear algebra on stored arrays: no "
-            "new simulation. Each call prices every path at every expiry at once. <bookmark mark='a'/> Fitted to "
-            f"the Surface on one set of ten thousand paths, the error is {s['rmse_in']:.2f} volatility points; on a "
-            f"fresh set, {s['rmse_out']:.2f}."
+            f"In the House, pricing a new parameter vector is three lines of linear algebra on stored arrays: no new simulation. Each call prices every path at every expiry at once. <bookmark mark='a'/> Fitted to the Surface on one set of ten thousand paths, the error is {s['rmse_in']:.2f} volatility points; on a fresh set, {s['rmse_out']:.2f}. The code normalizes each expiry's simulated terminal prices by their sample mean. That numerical correction does not prove a single dynamically consistent true-martingale model. The linear signature loading can be signed, and fresh paths still use the same market marks."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -154,19 +146,21 @@ class Signature(VoiceoverScene):
         Td = np.round(T * 365).astype(int)
         cols = [ROUGH, IV, OPT]
 
+        xr = data_range(k)
+        yr = data_range(iv, *[b["iv"] for b in best])
         def frame(j):
             biv = np.asarray(best[idx[j]]["iv"], float)
-            g = axes([-0.45, 0.45], [0.3, 1.0], x_length=5.0, y_length=3.4, xlabel=r"log-moneyness $k$",
+            g = axes(list(xr), list(yr), x_length=5.0, y_length=3.4, xlabel=r"log-moneyness $k$",
                      ylabel=r"implied volatility", xticks=[-0.4, 0, 0.4], yticks=[0.4, 0.6, 0.8, 1.0],
                      yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=13)
             grp = VGroup(g)
             for dd, c in zip((4, 16, 79), cols):
                 m = Td == dd
                 o = np.argsort(k[m])
-                grp.add(VGroup(*[Dot(g.ax.c2p(a, min(max(y, 0.3), 1.0)), radius=0.04, color=c) for a, y in zip(k[m], iv[m])]))
+                grp.add(VGroup(*[Dot(g.ax.c2p(a, y), radius=0.04, color=c) for a, y in zip(k[m], iv[m])]))
                 ok = np.isfinite(biv[m][o])
                 if ok.sum() > 1:
-                    grp.add(curve(g.ax, k[m][o][ok], np.clip(biv[m][o][ok], 0.3, 1.0), c, stroke_width=2.5))
+                    grp.add(curve(g.ax, k[m][o][ok], biv[m][o][ok], c, stroke_width=2.5))
             return grp
 
         rp = TrainingReplay(steps, cv, frame, ck, ylabel=r"fit error (vol points)", xlabel=r"model evaluation", color=SIG)

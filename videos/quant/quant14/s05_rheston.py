@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 
+from videos.quant.quant14.common import axes, data_range, skew_range
+
 from explainer.quant import *  # noqa: F403
 from videos.quant.quant14.common import (BAD, IV, MODEL_COL, OPT, PART, ROUGH, RV, SPOT, VAR, illustration, load, pause,
                                          real_data)
@@ -42,7 +44,7 @@ class RHeston(VoiceoverScene):
         V[0.5] = vh
         for H in (0.3, 0.1):
             V[H] = R.lifted_heston_paths(v0, lam, theta, nu, H, 20, T, n, dW)[0]
-        lo, hi = 0.0, 1.0
+        lo, hi = data_range(*V.values(), zero=True)
         g = axes([0, 1], [0, 3.0], x_length=4.6, y_length=3.2, xlabel=r"lag $\tau$ (years)", ylabel=r"memory kernel $K(\tau)$",
                  xticks=[0, 0.5, 1], yticks=[0, 1, 2, 3], font_size=14).to_corner(UL, buff=0.5).shift(DOWN * 0.4)
         g2 = axes([0, 0.5], [lo, hi], x_length=7.0, y_length=3.2, xlabel=r"years", ylabel=r"variance $V_t$",
@@ -54,11 +56,11 @@ class RHeston(VoiceoverScene):
             return curve(g.ax, tau, np.clip(tau ** (a - 1) / G(a), 0, 3.0), ROUGH if H < 0.5 else VAR, stroke_width=3)
 
         k_ = kern(0.5)
-        p_ = curve(g2.ax, t, np.clip(V[0.5], lo, hi), VAR, stroke_width=1.8)
+        p_ = curve(g2.ax, t, V[0.5], VAR, stroke_width=1.8)
         lab_ = MathTex(r"H = \tfrac12\ \text{(Heston)}", font_size=30, color=VAR).next_to(g, DOWN, buff=0.4)
         eq = MathTex(r"V_t = V_0 + \int_0^t K(t - s)\big[\lambda(\theta - V_s)\,ds + \nu\sqrt{V_s}\,dW_s\big]",
                      font_size=34).to_edge(DOWN, buff=0.5)
-        src = illustration(r"one path, the same shocks for every kernel; rough kernels by the lift of chapter 10 ($N = 20$)",
+        src = illustration('one coupled path; numerical variance may be negative; square roots use a floor; kernel height capped at 3',
                            corner=DR).shift(UP * 0.0)
         with self.voiceover(
             "Rough Bergomi has no closed form. Omar El Euch and Mathieu Rosenbaum found a rough model that keeps "
@@ -74,7 +76,7 @@ class RHeston(VoiceoverScene):
             self.play(Indicate(k_, color=YELLOW))
             vo.wait_until("b")
             for H in (0.3, 0.1):
-                self.play(Transform(k_, kern(H)), Transform(p_, curve(g2.ax, t, np.clip(V[H], lo, hi), ROUGH, stroke_width=1.8)),
+                self.play(Transform(k_, kern(H)), Transform(p_, curve(g2.ax, t, V[H], ROUGH, stroke_width=1.8)),
                           Transform(lab_, MathTex(rf"H = {H:g}", font_size=30, color=ROUGH).next_to(g, DOWN, buff=0.4)),
                           run_time=2)
                 self.wait(0.6)
@@ -156,20 +158,10 @@ class RHeston(VoiceoverScene):
             row[1].set_x(hdr[1].get_x())
             row[2].set_x(hdr[2].get_x())
         grid.move_to(UP * 0.5)
-        note_ = wrapped_label(r"left free, the model drifts back toward Heston and buys its fit with Heston's absurd numbers; "
-                              r"held rough, it fits almost as well with a sensible vol of vol and mean reversion. On this "
-                              r"day's quotes the data cannot tell the two apart: vega weighting favours the long expiries, "
-                              r"where roughness matters least", 11.5, 20, GREY_A).to_edge(DOWN, buff=0.6)
+        note_ = wrapped_label('Local numerical fits on one date, different parameter combinations. Numerical error and weighting matter; no statistical identification or equivalence test.', 11.5, 20, GREY_A).to_edge(DOWN, buff=0.6)
         src = real_data(r"the Surface, 10 December 2025; fractional Adams (80 steps) and COS, least squares")
         with self.voiceover(
-            "Fit it to the Surface with all six numbers free, and something unexpected happens. The roughness comes "
-            f"out at {p['H']:.2f}, barely rough, with a vol of vol of {p['nu']:.1f} and mean reversion of "
-            f"{p['lambda']:.0f}: Heston's absurd numbers again. The error is {rh['rmse']:.2f} volatility points. "
-            "<bookmark mark='a'/> Now hold H at a tenth, as the time series suggested, and refit the rest. The error "
-            f"rises only to {r1['rmse']:.2f}, and the other parameters become sensible: a vol of vol of {x1[3]:.1f} "
-            f"and mean reversion of {x1[1]:.0f}. <bookmark mark='b'/> On this day's quotes the data cannot tell the "
-            "two apart: vega weighting favours the long expiries, where roughness matters least. The next chapter measures how much the "
-            "Surface cares about H, and chapter eleven takes up the debate."
+            f"""With all six parameters free, the original local numerical fit gives H of {p['H']:.2f}, vol of vol {p['nu']:.1f}, mean reversion {p['lambda']:.0f}, and error {rh['rmse']:.2f} volatility points. <bookmark mark='a'/> Fix H at one tenth and refit: error is {r1['rmse']:.2f}, with vol of vol {x1[3]:.1f} and mean reversion {x1[1]:.0f}. <bookmark mark='b'/> Different parameter combinations fit this date reasonably closely. This is not a statistical equivalence test or evidence that physical and risk-neutral H must agree. Eighty-step fractional Adams and COS error, local optimization, bounds and quote weighting all affect the comparison. The next chapter displays a fuller numerical profile."""
         ) as vo:
             self.play(FadeIn(hdr[1]), FadeIn(src), FadeIn(VGroup(*[VGroup(r_[0], r_[1]) for r_ in tab])))
             vo.wait_until("a")
@@ -182,15 +174,17 @@ class RHeston(VoiceoverScene):
     def skews(self, rh, rs, pr, s):
         T = np.asarray(s["T"])
         y = np.asarray(s["skew"])
-        g = axes([np.log10(2 / 365), 0], [-1.6, 0.6], x_length=7.0, y_length=4.4, xlabel=r"years to expiry (log scale)",
+        yr = skew_range(y, rs["skew"], rh["skew"],
+                        next(r for r in pr["rows"] if abs(r["H"]-.1)<1e-9)["skew"])
+        g = axes([np.log10(2 / 365), 0], list(yr), x_length=7.0, y_length=4.4, xlabel=r"years to expiry (log scale)",
                  ylabel=r"at-the-money skew $|\partial_k\sigma|$ (log scale)",
                  xticks=[np.log10(x) for x in (3 / 365, 10 / 365, 30 / 365, 0.25, 1.0)],
                  xfmt=lambda u: {0: "1y"}.get(round(u, 3), f"{365 * 10 ** u:.0f}d"), log_x=True, font_size=15)
         g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
         ax = g.ax
-        for v in (0.05, 0.1, 0.3, 1, 3):
+        for v in 10.0 ** np.arange(np.ceil(yr[0]), np.floor(yr[1]) + 1):
             g.add(label(f"{v:g}", font_size=15, color=GREY_B).next_to(ax.c2p(np.log10(2 / 365), np.log10(v)), LEFT, buff=0.12))
-        dots = VGroup(*[Dot(ax.c2p(np.log10(a), np.log10(b)), radius=0.07, color=WHITE) for a, b in zip(T, y) if b > 0.02])
+        dots = VGroup(*[Dot(ax.c2p(np.log10(a), np.log10(abs(b))), radius=0.07, color=WHITE) for a, b in zip(T, y) if np.isfinite(b) and abs(b) > 0])
         r1 = next(r for r in pr["rows"] if abs(r["H"] - 0.1) < 1e-9)
         series = (("rBergomi", rs["skew_T"], rs["skew"], MODEL_COL["rBergomi"]),
                   ("free", rh["skew_T"], rh["skew"], MODEL_COL["rough Heston"]),
@@ -198,8 +192,8 @@ class RHeston(VoiceoverScene):
         curves = VGroup()
         for _, tt, sk, col in series:
             tt, sk = np.asarray(tt), np.abs(np.asarray(sk))
-            ok = sk > 1e-3
-            curves.add(curve(ax, np.log10(tt[ok]), np.clip(np.log10(sk[ok]), -1.6, 0.6), col, stroke_width=3))
+            ok = np.isfinite(sk) & (sk > 0)
+            curves.add(curve(ax, np.log10(tt[ok]), np.log10(sk[ok]), col, stroke_width=3))
         leg = legend([(WHITE, r"the Surface"),
                       (MODEL_COL["rBergomi"], rf"rough Bergomi, $H = {load('rbergomi')['params']['H']:.2f}$"),
                       (MODEL_COL["rough Heston"], rf"rough Heston, free: $H = {rh['params']['H']:.2f}$"),

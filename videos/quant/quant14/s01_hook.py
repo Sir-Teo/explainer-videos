@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 
+from videos.quant.quant14.common import axes, data_range, skew_range
+
 from explainer.quant import *  # noqa: F403
 from explainer.quant.house import sim
 from videos.quant.quant14.common import BAD, IV, PART, ROUGH, RV, VAR, illustration, load, pause
@@ -9,7 +11,7 @@ from videos.quant.quant14.common import BAD, IV, PART, ROUGH, RV, VAR, illustrat
 HISTORY = [
     (1968, r"Mandelbrot and Van Ness: fractional Brownian motion", QC.IDEA),
     (1987, r"the crash: the skew is born (Part 13)", QC.CRISIS),
-    (1993, r"Heston: a smooth stochastic volatility", QC.IDEA),
+    (1993, 'Heston: Brownian-scale stochastic variance', QC.IDEA),
     (1998, r"Comte and Renault: long memory in volatility", QC.IDEA),
     (2004, r"Bergomi: forward variance models", QC.IDEA),
     (2007, r"Al\`os, Le\'on and Vives: a rough kernel makes a power-law skew", QC.IDEA),
@@ -72,18 +74,9 @@ class Hook(VoiceoverScene):
         zr = readout(r"\text{zoom}\ \times", lambda: 2 ** (8 * s.get_value()), digits=0, font_size=34,
                      color=YELLOW).to_corner(UR, buff=0.35)
         src = illustration(r"fractional Brownian motion, 8{,}192 steps; each frame rescaled to fill its box")
-        q = pause(r"Zoom into a Brownian path 256 times and rescale it to fill the box. Does it look smoother, or "
-                  r"rougher?", width=6.4, font_size=22).to_corner(UL, buff=0.25)
+        q = pause('After rescaling a Brownian segment, must it straighten? (Finite-grid illustration.)', width=6.4, font_size=22).to_corner(UL, buff=0.25)
         with self.voiceover(
-            "Two random paths. A question first: zoom into the top one, a Brownian path, two hundred and fifty-six "
-            "times, rescaling it to fill its box. Does it look smoother or rougher? "
-            "<bookmark mark='a'/> Watch. The Brownian path straightens: over a short interval it moves by the "
-            "square root of the interval, and stretched to fit the box, those moves look like a gentle line. "
-            "<bookmark mark='b'/> The lower path does not straighten. Its moves scale like the interval to the power "
-            "of one tenth, so at every zoom it looks the same: jagged. Its Hurst exponent is a tenth. "
-            "<bookmark mark='c'/> In 2014, Jim Gatheral, Thibault Jaisson and Mathieu Rosenbaum found that volatility "
-            "itself, measured in the market, looks like the lower path, not the upper one. This part is about what "
-            "that means, how to price with it, and whether it is true."
+            """Two random paths. Zoom into the Brownian path two hundred and fifty-six times, rescaling every segment to fill its box. Should Brownian motion become a straight line? <bookmark mark='a'/> No. Brownian motion and fractional Brownian motion are both self-similar. Under their own theoretical time and amplitude scaling, neither becomes differentiable. This picture instead normalizes each finite segment by its observed range. <bookmark mark='b'/> The lower path has H of one tenth: its increments shrink more slowly with the time interval than Brownian increments do. The final zoom contains only a few dozen simulated steps, so its line segments are a plotting limit, not evidence of smoothness. <bookmark mark='c'/> Gatheral, Jaisson and Rosenbaum's 2014 preprint, published in 2018, found low scaling exponents in realized-volatility proxies. We will measure that pattern, price with rough models, and examine competing explanations."""
         ) as vo:
             self.play(FadeIn(boxes), FadeIn(lines), FadeIn(src), FadeIn(q))
             vo.wait_until("a")
@@ -118,16 +111,7 @@ class Hook(VoiceoverScene):
             events.add(VGroup(d, ld, t))
         head = label(r"How we got here", font_size=30).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "How we got here. In 1968 Benoit Mandelbrot and John Van Ness defined fractional Brownian motion, the "
-            "process with a Hurst exponent. <bookmark mark='a'/> After the 1987 crash the skew appeared, and the "
-            "models of the nineties, Heston's above all, made volatility a smooth random process. In 1998 Fabienne "
-            "Comte and Eric Renault gave volatility long memory: H above one half. "
-            "<bookmark mark='b'/> Lorenzo Bergomi modelled the forward variance curve, and in 2007 Elisa Alòs, "
-            "Jorge León and Josep Vives showed that a rough kernel makes the skew a power law. "
-            "<bookmark mark='c'/> In 2014 came the paper that named the field: volatility is rough. Rough Bergomi "
-            "followed, then rough Heston, then quadratic rough Heston, and Risk's Quants of the Year for 2021. "
-            "<bookmark mark='d'/> In 2023, a rival view: path-dependent volatility. And on the fifth of August "
-            "2024, the VIX printed above sixty-five before the open."
+            "How we got here. In 1968 Benoit Mandelbrot and John Van Ness defined fractional Brownian motion, the process with a Hurst exponent. <bookmark mark='a'/> After the 1987 crash the skew appeared, and the models of the nineties, Heston's above all, gave variance Brownian local regularity, still nondifferentiable away from degeneracy. In 1998 Fabienne Comte and Eric Renault gave volatility long memory: H above one half. <bookmark mark='b'/> Lorenzo Bergomi modelled the forward variance curve, and in 2007 Elisa Alòs, Jorge León and Josep Vives showed that a rough kernel makes the skew a power law. <bookmark mark='c'/> In 2014 came the paper that named the field: volatility is rough. Rough Bergomi followed, then rough Heston, then quadratic rough Heston, and Risk's Quants of the Year for 2021. <bookmark mark='d'/> In 2023, a rival view: path-dependent volatility. And on the fifth of August 2024, the VIX printed above sixty-five before the open."
         ) as vo:
             self.play(FadeIn(head), Create(axis), FadeIn(ticks))
             self.play(FadeIn(events[0]))
@@ -144,14 +128,14 @@ class Hook(VoiceoverScene):
 
     def objectives(self):
         card = objectives_card([
-            r"The fact: the at-the-money skew grows like $T^{H - 1/2}$, on two years of weekly surfaces; why kernels make it",
-            r"Volatility is rough: the estimator, two eras of bitcoin, and the rough forecast against HAR",
+            'Finite-maturity skew magnitudes on the original 102 dates; how kernel asymptotics differ',
+            'Measuring roughness: the estimator, two bitcoin eras, and a retrospective forecast comparison',
             r"Rough Bergomi, calibrated and replayed; the hybrid scheme that simulates it",
             r"Rough Heston: the fractional Riccati equation, solved by Adams; how much the Surface cares about $H$",
             r"Where roughness comes from (nearly unstable order flow); Markovian lifts",
             r"The debate: the estimator's bias map, and what the options say",
             r"Path-dependent volatility on bitcoin and on the VIX; 5 August 2024",
-            r"Joint SPX/VIX; signature volatility; what desks use; the 2023--2026 frontier",
+            'Joint SPX/VIX; signature volatility; numerical speed; selected 2023--2025 research',
         ], color=QC.IDEA, font_size=23)
         with self.voiceover(
             "The plan. The fact that started it, measured week by week, and why a rough kernel makes it. The "

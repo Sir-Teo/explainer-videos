@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 
+from videos.quant.quant14.common import axes, data_range, skew_range
+
 from explainer.quant import *  # noqa: F403
 from videos.quant.quant14.common import BAD, IV, MODEL_COL, OPT, PART, ROUGH, RV, SPOT, VAR, illustration, load, pause, real_data
 
@@ -33,14 +35,9 @@ class Joint(VoiceoverScene):
                                      r"against the market's", 5.0, 21, GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
         grid = VGroup(left, right).arrange(RIGHT, buff=1.2, aligned_edge=UP).move_to(UP * 1.2)
         arrow = Arrow(left.get_bottom() + DOWN * 0.1, right.get_bottom() + DOWN * 0.1, path_arc=0.8, color=BAD)
-        cite = wrapped_label(r"Guyon (2020, Risk): continuous-path models fitted to the S\&P skew overprice VIX volatility; "
-                             r"the joint fit is the puzzle. Part 13 measures it on bitcoin; this chapter shows the attempted "
-                             r"solutions", 11.0, 20, WHITE).to_edge(DOWN, buff=0.8)
+        cite = wrapped_label('A model-dependent SPX/VIX calibration tension. Part 13 used a Bitcoin volatility-index illustration, without a joint SPX/VIX market calibration.', 11.0, 20, WHITE).to_edge(DOWN, buff=0.8)
         with self.voiceover(
-            "Part thirteen measured a puzzle. To fit the steep short-dated S&P skew, a continuous model needs a large "
-            "vol of vol. <bookmark mark='a'/> With so large a vol of vol, its VIX implied volatilities come out too "
-            "high against the market's: Julien Guyon's point. <bookmark mark='b'/> Two answers follow: a rough model "
-            "with feedback, and an exact construction from optimal transport."
+            """Joint SPX and VIX calibration asks one risk-neutral model to fit both markets. Some continuous one-factor models that steepen the SPX short smile then produce too much VIX-option volatility. That is a model-dependent tension, not a theorem about every continuous model. <bookmark mark='a'/> Part thirteen illustrated a related mechanism on Bitcoin; it did not calibrate SPX and VIX jointly. <bookmark mark='b'/> Here we introduce quadratic rough Heston and Guyon's constrained-entropy construction, then run a simpler two-marginal numerical transport illustration."""
         ) as vo:
             self.play(FadeIn(left))
             vo.wait_until("a")
@@ -61,15 +58,17 @@ class Joint(VoiceoverScene):
                   ylabel=r"volatility $\sqrt{V_t}$", xticks=[0, 0.5, 1], yticks=[0, 0.1, 0.2],
                   yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=14)
         VGroup(g1, g2).arrange(DOWN, buff=0.5).to_edge(LEFT, buff=0.5)
-        zs = np.linspace(-0.25, 0.35, 100)
-        par = axes([-0.25, 0.35], [0, 0.07], x_length=4.4, y_length=3.4, xlabel=r"$Z_t$", ylabel=r"$V = a(Z - b)^2 + c$",
+        zr = data_range(Z[i], [pr["b"]])
+        zs = np.linspace(*zr, 100)
+        vr = data_range(V[i], pr["a"] * (zs-pr["b"])**2 + pr["c"], zero=True)
+        par = axes(list(zr), list(vr), x_length=4.4, y_length=3.4, xlabel=r"$Z_t$", ylabel=r"$V = a(Z - b)^2 + c$",
                    xticks=[-0.2, 0, pr["b"], 0.3], yticks=[0, 0.03, 0.06], font_size=14).to_edge(RIGHT, buff=0.5)
         pc = curve(par.ax, zs, pr["a"] * (zs - pr["b"]) ** 2 + pr["c"], VAR, stroke_width=3)
         tr = ValueTracker(0)
         ls = tracing(g1.ax, t, S[i], tr, WHITE, stroke_width=2)
         lv = tracing(g2.ax, t, np.sqrt(V[i]), tr, ROUGH, stroke_width=2)
-        dot = always_redraw(lambda: Dot(par.ax.c2p(np.clip(np.interp(tr.get_value(), np.arange(len(t)), Z[i]), -0.25, 0.35),
-                                                   min(np.interp(tr.get_value(), np.arange(len(t)), V[i]), 0.07)),
+        dot = always_redraw(lambda: Dot(par.ax.c2p(np.interp(tr.get_value(), np.arange(len(t)), Z[i]),
+                                                   np.interp(tr.get_value(), np.arange(len(t)), V[i])),
                                         radius=0.09, color=YELLOW))
         q_ = pause(r"In quadratic rough Heston, does a sharp rally raise or lower volatility?", width=4.6,
                    font_size=20).next_to(par, UP, buff=0.3)
@@ -121,13 +120,7 @@ class Joint(VoiceoverScene):
                    "the asymmetry does not show in both the model and the market")
         src = real_data(r"20-day windows; 10{,}000 simulated paths per model; Ken French daily market", corner=DR)
         with self.voiceover(
-            "That feedback has a signature in the time series, the Zumbach effect: markets are not time-reversible. "
-            "A big move over the past month predicts high realized volatility over the next one better than high "
-            "past volatility predicts a big move. <bookmark mark='a'/> Measure it, with twenty-day windows. In the "
-            f"quadratic rough Heston paths the forward correlation is {z['qRH'][0]:.2f}, the backward "
-            f"{z['qRH'][1]:.2f}. In the US market since 1990, {z['market'][0]:.2f} against {z['market'][1]:.2f}: "
-            f"{verdict}. <bookmark mark='b'/> Rough Bergomi, with no feedback from price to volatility, is close "
-            f"to symmetric: {z['rBergomi'][0]:.2f} against {z['rBergomi'][1]:.2f}."
+            f"That feedback has a signature in the time series, the Zumbach effect: markets are not time-reversible. A big move over the past month predicts high realized volatility over the next one better than high past volatility predicts a big move. <bookmark mark='a'/> Measure it, with twenty-day windows. In the quadratic rough Heston paths the forward correlation is {z['qRH'][0]:.2f}, the backward {z['qRH'][1]:.2f}. In the US market since 1990, {z['market'][0]:.2f} against {z['market'][1]:.2f}: {verdict}. <bookmark mark='b'/> Rough Bergomi, with no feedback from price to volatility, is close to symmetric: {z['rBergomi'][0]:.2f} against {z['rBergomi'][1]:.2f}. The simulated correlations use risk-neutral illustrative dynamics; the historical correlations use physical market data and overlapping windows. This qualitative comparison is not a statistical test. Weak Zumbach asymmetry can also occur in leverage models without explicit return feedback."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(side), FadeIn(src))
             vo.wait_until("a")
@@ -201,13 +194,14 @@ class Joint(VoiceoverScene):
         k = 1
         ce = VGroup(curve(g.ax, it[k:], np.clip(err_u[k:], -10, 1), BAD, stroke_width=2.5),
                     curve(g.ax, it[k:], np.clip(err_l[k:], -10, 1), RV, stroke_width=2.5))
-        b = axes([0.03, 0.22], [0, 1], x_length=5.4, y_length=1.0, xlabel=r"price of the claim", xticks=[0.05, 0.1, 0.15, 0.2],
+        price_range = data_range(tu[1:, 1], tl[1:, 1], [jb["rbergomi"]])
+        b = axes(list(price_range), [0, 1], x_length=5.4, y_length=1.0, xlabel=r"price of the claim", xticks=[0.05, 0.1, 0.15, 0.2],
                  yticks=[], font_size=13).next_to(g, DOWN, buff=0.8)
         tv = ValueTracker(0)
 
         def bounds():
             i = int(np.clip(tv.get_value(), 1, len(tu) - 1))
-            vu, vl = float(np.clip(tu[i, 1], 0.03, 0.22)), float(np.clip(tl[i, 1], 0.03, 0.22))
+            vu, vl = float(tu[i, 1]), float(tl[i, 1])
             return VGroup(Line(b.ax.c2p(vl, 0.5), b.ax.c2p(vu, 0.5), stroke_color=YELLOW, stroke_width=6),
                           Dot(b.ax.c2p(vl, 0.5), color=RV), Dot(b.ax.c2p(vu, 0.5), color=BAD))
 
@@ -215,20 +209,12 @@ class Joint(VoiceoverScene):
         rbd = Triangle(color=MODEL_COL["rBergomi"], fill_opacity=1).scale(0.1).rotate(PI).move_to(
             b.ax.c2p(jb["rbergomi"], 0.95))
         rbl = label(r"rough Bergomi", font_size=14, color=MODEL_COL["rBergomi"]).next_to(rbd, UP, buff=0.05)
-        warn = label(r"an illustration of the principle with two S\&P-like marginals, not Guyon's three-marginal algorithm",
+        warn = label('finite SVI-derived BTC marginals, convex-order adjusted; entropic objectives are interior values, LP gives grid extrema; no VIX marginal',
                      font_size=16, color=GREY_B).to_edge(DOWN, buff=0.25)
         inside = lp.get("lower", -1) <= jb["rbergomi"] <= lp.get("upper", 2)
         verdict = "inside the interval, as any model that fits both smiles must be" if inside else "outside the interval: a sign of Monte Carlo error"
         with self.voiceover(
-            "We can run the principle on our own data. Take the Surface's smiles at "
-            f"{jb['T1'] * 365:.0f} and {jb['T2'] * 365:.0f} days. Among all martingales that match both, what are the "
-            "lowest and highest prices of the absolute log return between the two dates? Part nine's House code "
-            "answers it. <bookmark mark='a'/> Run it, both ways. On the right, the constraint errors "
-            "fall to ten to the minus nine; below, the interval of possible prices closes onto its final width. "
-            f"<bookmark mark='b'/> Any model that fits both smiles must price the claim between {lo['value']:.3f} and "
-            f"{up['value']:.3f}. Rough Bergomi says {jb['rbergomi']:.3f}: {verdict}. Guyon's construction adds "
-            "the VIX smile as a third constraint, and so finds a model that fits all three exactly."
-            " Next: a model class flexible enough to fit both, signature volatility."
+            f"""An illustration using Bitcoin smiles near {jb['T1'] * 365:.0f} and {jb['T2'] * 365:.0f} days. SVI-derived densities are truncated and discretized, and the second support is adjusted to satisfy convex order. We optimize the absolute log return between these dates on that finite martingale grid. <bookmark mark='a'/> The constraint residuals decrease; the upper run finishes around one billionth. Entropic regularization leaves interior objective values {lo['value']:.3f} and {up['value']:.3f}. The unregularized linear program gives the displayed wider grid interval. <bookmark mark='b'/> Rough Bergomi's separate Monte Carlo value is {jb['rbergomi']:.3f}. Its placement is a comparison, not certification that its marginals equal the adjusted grid marginals. These are not rigorous bounds for the full original market smiles. Guyon's three-marginal construction additionally imposes a VIX law and conditional log-contract consistency; this two-marginal solver does neither. Next: signature volatility."""
         ) as vo:
             self.play(FadeIn(card), FadeIn(warn))
             vo.wait_until("a")

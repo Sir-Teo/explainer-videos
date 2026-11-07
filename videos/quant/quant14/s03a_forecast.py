@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 
+from videos.quant.quant14.common import axes, data_range, skew_range
+
 from explainer.quant import *  # noqa: F403
 from explainer.quant.house import rough as R
 from videos.quant.quant14.common import BAD, IV, OPT, PART, ROUGH, RV, VAR, illustration, load, pause, real_data
@@ -26,8 +28,8 @@ class Forecast(VoiceoverScene):
     def weights(self, f, r):
         H = float(r["H"])
         L = 40
-        g = axes([0.5, L + 0.5], [0, 0.5], x_length=9.0, y_length=3.2, xlabel=r"days into the past",
-                 ylabel=r"weight on that day's log variance", xticks=[1, 10, 20, 30, 40], yticks=[0, 0.25, 0.5],
+        g = axes([0.5, L + 0.5], [0, 0.5], x_length=9.0, y_length=3.2, xlabel='observation index $j$ (1 = today)',
+                 ylabel='normalized daily weight', xticks=[1, 10, 20, 30, 40], yticks=[0, 0.25, 0.5],
                  font_size=15).to_edge(DOWN, buff=0.7).to_edge(LEFT, buff=0.8)
         D = ValueTracker(1.0)
 
@@ -35,8 +37,8 @@ class Forecast(VoiceoverScene):
             w = R.rfsv_weights(H, D.get_value(), 250)[:L]
             unit = g.ax.c2p(0, 1)[1] - g.ax.c2p(0, 0)[1]
             return VGroup(*[Rectangle(width=0.16, height=max(v * unit, 0.002), stroke_width=0, fill_color=ROUGH,
-                                      fill_opacity=0.85).move_to(g.ax.c2p(j + 1, min(v, 0.5) / 2))
-                            for j, v in enumerate(np.minimum(w, 0.5))])
+                                      fill_opacity=0.85).move_to(g.ax.c2p(j + 1, v / 2))
+                            for j, v in enumerate(w)])
         b = always_redraw(bars)
         Dr = readout(r"\text{horizon}\ \Delta =", lambda: D.get_value(), digits=0, font_size=32, color=YELLOW,
                      unit=r"\ \text{d}").next_to(g, UP, buff=0.25).align_to(g, RIGHT)
@@ -44,22 +46,14 @@ class Forecast(VoiceoverScene):
         hw = np.array([har[0] * (j == 0) + har[1] / 5 * (j < 5) + har[2] / 22 * (j < 22) for j in range(L)])
         stair = VMobject(stroke_color=VAR, stroke_width=3).set_points_as_corners(
             [g.ax.c2p(j + 0.5 + s, hw[j]) for j in range(L) for s in (0, 1)])
-        hl = legend([(ROUGH, r"rough forecast: weights $\propto 1/\big((j + \Delta)\,j^{H + 1/2}\big)$"),
+        hl = legend([(ROUGH, 'finite-window rough predictor: $w_j\\propto 1/((j+\\Delta)j^{H+1/2})$'),
                      (VAR, r"HAR's staircase: yesterday, last week, last month (Corsi 2009; Part 7)")],
                     font_size=17).to_corner(UL, buff=0.4)
         q = pause(r"$H = 0.1$. As the horizon grows, does the weight on yesterday rise or fall?", width=5.6,
                   font_size=21).to_corner(UR, buff=0.3)
         src = illustration(rf"$H = {H:.2f}$, bitcoin's measured roughness; HAR coefficients illustrative")
         with self.voiceover(
-            "Gatheral, Jaisson and Rosenbaum's paper had a practical second half: if log volatility is a "
-            "fractional Brownian motion, the best forecast of it is known exactly. It is a weighted average of the "
-            "past, and here are the weights, day by day into the past, for a forecast one day ahead. Most weight "
-            "on the last few days, then a long, slowly decaying tail. <bookmark mark='a'/> Pause and predict: as "
-            "the horizon grows, does the weight on yesterday rise or fall? <bookmark mark='b'/> It falls. Slide the "
-            "horizon out to twenty days, and the weights spread into the distant past: the further you forecast, "
-            "the more the long memory matters. <bookmark mark='c'/> Compare HAR, the workhorse of Part seven: "
-            "yesterday, the last week, the last month, as a three-step staircase. It is a crude copy of the same "
-            "slowly decaying shape. That is the real reason HAR works so well."
+            """The fractional Brownian benchmark also gives a conditional-mean predictor from its whole past. Here we discretize and normalize its weights over a finite two hundred fifty-day window. Most mass is on recent observations, followed by a decaying tail. <bookmark mark='a'/> As the forecast horizon grows, does the most recent observation gain or lose weight? <bookmark mark='b'/> It loses weight: the predictor spreads further into the past. <bookmark mark='c'/> The illustrative HAR staircase combines today's value, the five-day mean and the twenty-two-day mean. It can approximate a distributed-lag shape. This comparison motivates HAR; it does not prove why HAR performs well in every market."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(b), FadeIn(Dr), FadeIn(hl[0]), FadeIn(src))
             vo.wait_until("a")
@@ -121,14 +115,14 @@ class Forecast(VoiceoverScene):
         n = len(s["y"])
         x = np.arange(n)
         y, pr, ph = (np.asarray(s[k]) for k in ("y", "rough", "HAR"))
-        lo, hi = np.percentile(y, 1), np.percentile(y, 99)
+        lo, hi = data_range(y, pr, ph)
         g = axes([0, n], [lo, hi], x_length=6.4, y_length=2.6, ylabel=r"log realized variance, 5 days ahead",
                  xticks=[], yticks=[], font_size=14).to_corner(UL, buff=0.4).shift(DOWN * 0.2)
         tr = ValueTracker(0)
-        ly = tracing(g.ax, x, np.clip(y, lo, hi), tr, GREY_B, stroke_width=1.2)
-        lr = tracing(g.ax, x, np.clip(pr, lo, hi), tr, ROUGH, stroke_width=2)
-        lh = tracing(g.ax, x, np.clip(ph, lo, hi), tr, VAR, stroke_width=1.6)
-        leg = legend([(GREY_B, r"realized (2018--2020, out of sample)"), (ROUGH, r"rough forecast"), (VAR, r"HAR")],
+        ly = tracing(g.ax, x, y, tr, GREY_B, stroke_width=1.2)
+        lr = tracing(g.ax, x, pr, tr, ROUGH, stroke_width=2)
+        lh = tracing(g.ax, x, ph, tr, VAR, stroke_width=1.6)
+        leg = legend([(GREY_B, 'realized (2018--2020 test dates)'), (ROUGH, r"rough forecast"), (VAR, r"HAR")],
                      font_size=15).next_to(g, DOWN, buff=0.15).align_to(g, LEFT)
         head = VGroup(label(r"", font_size=18), *[label(m_, font_size=17, color=cols[m_]) for m_ in models])
         rows = [head]
@@ -140,7 +134,7 @@ class Forecast(VoiceoverScene):
                                      color=YELLOW if m_ == best else WHITE) for m_ in models])
         grid = VGroup(*[c for r_ in rows for c in r_]).arrange_in_grid(rows=len(rows), cols=5, buff=(0.32, 0.16),
                                                                          col_alignments="lcccc")
-        cap = label(r"out-of-sample $R^2$ (expanding window, refitted every 20 days); best in yellow", font_size=16,
+        cap = label('retrospective $R^2$; coefficients refit every 20 days; full-era $H$; test-mean denominator', font_size=16,
                     color=GREY_A)
         tab = VGroup(cap, grid).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(RIGHT, buff=0.35).shift(DOWN * 0.2)
         if tab.width > 6.4:
@@ -148,19 +142,12 @@ class Forecast(VoiceoverScene):
         # four out-of-sample blocks, each model's R^2: the spread of the race
         bg = axes([0.5, 4.5], [-0.6, 0.8], x_length=5.6, y_length=2.2, xlabel=r"test block (2018--2020, 5 days ahead)",
                   xticks=[1, 2, 3, 4], yticks=[-0.5, 0, 0.5], font_size=13).to_corner(DL, buff=0.45)
-        blines = VGroup(*[curve(bg.ax, np.arange(1, 5), np.clip(e18["5"]["blocks"][m_], -0.6, 0.8), cols[m_],
+        blines = VGroup(*[curve(bg.ax, np.arange(1, 5), e18["5"]["blocks"][m_], cols[m_],
                                 stroke_width=2.5) for m_ in models])
-        src = real_data(r"Binance BTCUSDT 5-minute realized variance; models refitted on all data known at each date",
+        src = real_data('BTCUSDT realized variance; coefficients use known targets, but $H$ uses each full era',
                         corner=DR)
         with self.voiceover(
-            "Does it work? A fair race. Two eras of Bitcoin, forecasts one, five and twenty days ahead, every model "
-            "refitted every twenty days on the data known at the time, scored only on unseen days. The rivals: HAR, "
-            "an autoregression and the last value. <bookmark mark='a'/> Here is five days ahead in the older era, forecast "
-            f"against outcome. <bookmark mark='b'/> And the scoreboard. Head to head with HAR, over six races, the rough "
-            f"forecast wins {f['rough_wins']} and HAR {6 - f['rough_wins']}, by small margins. At twenty days, no model "
-            "beats the test period's own average. <bookmark mark='c'/> The four test blocks below show how much the "
-            "ranking moves from one stretch of history to the next. Honest summary: roughness explains why HAR "
-            "works; it does not reliably beat it."
+            f"""A retrospective comparison across two Bitcoin eras, at one, five and twenty days ahead. Regression coefficients are refitted every twenty days using targets already observed. But the rough predictor's H is estimated from the entire era, including its test dates. This is not a fully real-time forecast test. <bookmark mark='a'/> The plot shows the five-day comparison in the older era, with all observed values and predictions preserved. <bookmark mark='b'/> Across six horizon-era pairs, the rough version beats HAR in {f['rough_wins']} and HAR in {6 - f['rough_wins']}. Scores divide squared errors by variation around the test period's own mean, an unavailable future benchmark at prediction time. At twenty days all four scores are negative. <bookmark mark='c'/> The four chronological blocks show unstable rankings. These data support a comparison of fitted predictor shapes, without a demonstrated deployable advantage or a statistical superiority test."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(ly), FadeIn(lr), FadeIn(lh), FadeIn(src))
             vo.wait_until("a")
@@ -176,24 +163,15 @@ class Forecast(VoiceoverScene):
 
     def memory(self):
         a = history_card(1998, r"Comte and Renault: long memory in continuous-time stochastic volatility",
-                         r"Volatility as a fractionally integrated process with $H > \tfrac12$: smooth paths, and "
-                         r"autocorrelations that decay slowly over months. The motivation was long-range dependence.",
+                         '$H>1/2$: persistent fractional increments and long-range dependence; paths remain nondifferentiable.',
                          color=VAR, width=6.2, font_size=21)
         b = history_card(2018, r"Gatheral, Jaisson and Rosenbaum: volatility is rough",
-                         r"$H \approx 0.1 < \tfrac12$: paths rougher than Brownian motion at short scales. The slowly "
-                         r"decaying kernel still gives a long, slowly fading memory, without $H > \tfrac12$.",
+                         '$H<1/2$: rough local paths and antipersistent fBm increments; a predictor can still use distant past levels.',
                          color=ROUGH, width=6.2, font_size=21)
         grid = VGroup(a, b).arrange(RIGHT, buff=0.4, aligned_edge=UP).move_to(UP * 0.4)
-        note_ = wrapped_label(r"the same Hurst exponent, opposite ends of the dial: long memory is $H$ above one half, "
-                              r"roughness is $H$ below", 11.0, 22, GREY_A).next_to(grid, DOWN, buff=0.45)
+        note_ = wrapped_label('Local regularity, long-range dependence and predictive memory require distinct assumptions.', 11.0, 22, GREY_A).next_to(grid, DOWN, buff=0.45)
         with self.voiceover(
-            "One distinction before we leave the time series. In 1998 Fabienne Comte and Eric Renault also put a "
-            "fractional process into volatility, but with H above one half: smooth paths and long memory, "
-            "autocorrelations fading over months. <bookmark mark='a'/> The roughness paper sits at the other end "
-            "of the same dial: H below one half, paths rougher than Brownian motion. Its kernel still decays "
-            "slowly, so it keeps a long memory too, without needing H above a half. Same exponent, opposite "
-            "claims."
-            " Next: the first rough model for option prices, rough Bergomi."
+            """A distinction about memory. Comte and Renault used fractional volatility with H above one half to represent long-range dependence. Such fractional Brownian paths remain nondifferentiable. <bookmark mark='a'/> H below one half instead describes rougher paths and negatively correlated fractional Brownian increments. The predictor still uses a tail of past levels. That tail is not the conventional long-range dependence of positively correlated increments with H above one half. Local roughness, stationary long memory and forecast persistence are separate properties. Next: rough Bergomi for option prices."""
         ) as vo:
             self.play(FadeIn(a, shift=UP * 0.2))
             vo.wait_until("a")

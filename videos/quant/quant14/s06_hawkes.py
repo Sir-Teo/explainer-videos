@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 
+from videos.quant.quant14.common import axes, data_range, skew_range
+
 from explainer.quant import *  # noqa: F403
 from videos.quant.quant14.common import BAD, IV, OPT, PART, ROUGH, RV, VAR, illustration, load, pause
 
@@ -33,23 +35,17 @@ class Hawkes(VoiceoverScene):
         for k, c in zip(keys, cols):
             y = np.asarray(h[k]["counts"], float)
             y = y / y.mean()
-            g = axes([0, grid[-1]], [0, 12], x_length=10.4, y_length=1.5, xticks=[], yticks=[0, 6, 12], font_size=13)
+            g = axes([0, grid[-1]], [0, max(12, float(y.max()) * 1.05)], x_length=10.4, y_length=1.5, xticks=[], yticks=[0, 6, 12], font_size=13)
             t = label(rf"branching ratio {k}: each trade triggers {float(k):g} more on average"
                       + (r" (nearly unstable)" if k == "0.99" else ""), font_size=19, color=c).next_to(g, UP, buff=0.05).align_to(g, LEFT)
             panels.add(VGroup(g, t))
-            lines.add(tracing(g.ax, mid, np.minimum(y, 12), tr, c, stroke_width=1.6))
+            lines.add(tracing(g.ax, mid, y, tr, c, stroke_width=1.6))
         panels.arrange(DOWN, buff=0.35).move_to(UP * 0.2)
         foot = label(r"trading activity in equal time bins, relative to its average; every process has the same mean rate",
                      font_size=18, color=GREY_A).to_edge(DOWN, buff=0.7)
         src = illustration(r"Hawkes processes with exponential kernels (Part 5's simulator)")
         with self.voiceover(
-            "Why would volatility be rough? Look at where it comes from: orders. Part five modelled order arrivals as "
-            "a Hawkes process, in which every trade raises the chance of another. Here are three with the same "
-            "average rate. When each trade triggers half a trade on "
-            "average, activity is steady. <bookmark mark='a'/> At nine-tenths, it starts to cluster. "
-            "<bookmark mark='b'/> At ninety-nine hundredths, the edge of instability, almost all activity is "
-            "triggered by other activity: clusters inside clusters. Fitted to order flow, the branching ratio comes "
-            "out close to one: most orders react to other orders."
+            """Hawkes models illustrate reactive order arrivals. Each event temporarily raises the conditional arrival intensity. The three exponential-kernel examples set baselines for the same stationary mean rate, then normalize each finite sample by its own mean. <bookmark mark='a'/> A branching ratio of nine tenths produces stronger clustering than one half in these examples. <bookmark mark='b'/> Near one, families can become large. This is a synthetic activity illustration, not a fitted empirical branching estimate or proof of rough volatility. Heavy-tailed kernels and a carefully coordinated nearly critical limit enter next."""
         ) as vo:
             self.play(FadeIn(panels), FadeIn(src), FadeIn(foot), FadeIn(lines))
             self.play(tr.animate.set_value(len(mid) - 1), run_time=max(vo.remaining(0.0) - 1, 5), rate_func=linear)
@@ -110,25 +106,17 @@ class Hawkes(VoiceoverScene):
                 cmath(r"\|\phi\|_1 \to 1,\ \phi(t) \sim t^{-(1 + \alpha)}", r"\Rightarrow",
                       r"\psi \to t^{\alpha - 1}E_{\alpha, \alpha}(-c\,t^\alpha)\ \sim\ t^{\alpha - 1}", font_size=34,
                       colors={r"\|\phi\|_1 \to 1,\ \phi(t) \sim t^{-(1 + \alpha)}": ROUGH}),
-                cmath(r"\text{scaling limit}", r"=", r"\text{rough Heston},\quad H = \alpha - \tfrac12", font_size=38,
+                cmath(r"\text{scaling limit}", r"=", r"\text{fractional CIR},\quad H = \alpha - \tfrac12", font_size=38,
                       colors={r"\text{scaling limit}": ROUGH})]
         whys = [why(r"each event raises the intensity by the kernel $\phi$; $\|\phi\|_1$ is the branching ratio"),
                 why(r"take expectations: $dN_s - \lambda_s ds$ is a martingale"),
                 why(r"solve the renewal equation by its resolvent: $\phi^{*k}$ is generation $k$ of the family tree"),
                 why(r"Laplace transforms: a heavy tail gives $1 - \hat\phi(z) \approx c z^\alpha$; rescaled, the resolvent "
                     r"is a Mittag-Leffler density, whose small-time behaviour is the fractional kernel"),
-                why(r"Jaisson and Rosenbaum (2016): the rescaled intensity solves rough Heston's Volterra equation")]
+                why('Jaisson--Rosenbaum: a coordinated nearly critical heavy-tail scaling gives an integrated fractional-CIR limit, $1/2<\\alpha<1$')]
         step = ladder(self, rows, whys, keep=3, top=2.8, x=-1.2, buff=0.7, edge=6.9)
         with self.voiceover(
-            "Thibault Jaisson and Mathieu Rosenbaum made this precise in 2016. The intensity is a baseline mu plus "
-            "the kernel phi applied to every past event. <bookmark mark='a'/> Take expectations: the expected "
-            "intensity satisfies a renewal equation. <bookmark mark='b'/> Its solution is the baseline times one "
-            "plus the integral of the resolvent psi, the sum of phi convolved with itself k times: generation k of "
-            "the family tree. <bookmark mark='c'/> Now push the branching ratio to one, with a heavy power-law "
-            "tail. In Laplace space the tail gives one minus phi hat of z close to a constant times z to the alpha. "
-            "Rescale time, and the resolvent converges to a Mittag-Leffler density, which near zero behaves like t "
-            "to the alpha minus one: the fractional kernel of rough Heston. <bookmark mark='d'/> The limit theorem: "
-            "zoomed out, the intensity becomes a rough Heston variance with H equal to alpha minus a half."
+            "Thibault Jaisson and Mathieu Rosenbaum made this precise in 2016. The intensity is a baseline mu plus the kernel phi applied to every past event. <bookmark mark='a'/> Take expectations: the expected intensity satisfies a renewal equation. <bookmark mark='b'/> Its solution is the baseline times one plus the integral of the resolvent psi, the sum of phi convolved with itself k times: generation k of the family tree. <bookmark mark='c'/> Now push the branching ratio to one, with a heavy power-law tail. In Laplace space the tail gives one minus phi hat of z close to a constant times z to the alpha. Rescale time, and the resolvent converges to a Mittag-Leffler density, which near zero behaves like t to the alpha minus one: the fractional kernel of rough Heston. <bookmark mark='d'/> The limit theorem: zoomed out, the intensity becomes a rough Heston variance with H equal to alpha minus a half. More precisely the original theorem is an integrated fractional-CIR limit under coordinated scaling, with alpha strictly between one half and one; adding a price process needs further assumptions."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -164,10 +152,7 @@ class Hawkes(VoiceoverScene):
                     font_size=20, color=GREY_A).next_to(frame, UP, buff=0.2)
         src = illustration(r"power-law kernel, simulated by branching: 4 million time units, bins of 200")
         with self.voiceover(
-            "Watch the limit happen. This is the log of trading activity in a Hawkes process with a branching "
-            "ratio of 0.9999, first over two hundred bins. Zoom out to twenty thousand bins, rescaling as we go. "
-            "The curve does not smooth into a line: it stays jagged at every scale, like the rough path of the "
-            "hook."
+            """A finite-scale illustration, not a limit theorem in motion. We show log binned counts from one Hawkes simulation with branching ratio point nine nine nine nine. Zero counts are floored at one before taking logs. As the displayed horizon grows from two hundred to twenty thousand bins, each segment is independently range-normalized and downsampled. The remaining irregularity is a visual feature of this one realization. The theorem requires a jointly rescaled sequence of processes, baselines and horizons; this animation does not implement that sequence."""
         ):
             self.play(FadeIn(frame), FadeIn(cap), FadeIn(line), FadeIn(src))
             self.play(s.animate.set_value(1.0), run_time=7, rate_func=linear)
@@ -207,17 +192,7 @@ class Hawkes(VoiceoverScene):
         src = illustration(r"the House's \texttt{hawkes\_branching\_powerlaw}; the roughness estimator on log activity in "
                            r"bins of 200", corner=DL)
         with self.voiceover(
-            "Can we measure it? Simulate order flow by branching and run chapter three's estimator on log activity, "
-            "three seeds per ratio. <bookmark mark='a'/> At a ratio of "
-            f"one half, activity is not rough at all: H of {lo:.2f}, essentially noise. As the ratio approaches one, "
-            f"roughness emerges: close to one the estimate reaches about {hi:.2f}. <bookmark mark='b'/> But the theory says "
-            "more: H should equal the tail exponent minus a half. Change the tail, and the finite simulation does "
-            "not follow; every tail reads about a tenth. The limit theorem needs the branching ratio to reach one "
-            "and the horizon to grow together, and a finite sample shows the emergence of roughness, not its "
-            "exact value. <bookmark mark='c'/> Omar El Euch, Masaaki Fukasawa and Rosenbaum showed no-arbitrage also "
-            "forces the leverage effect, and Paul Jusselin and Rosenbaum tied rough volatility to power-law market "
-            "impact. Roughness, on this account, is reactive order flow seen from a distance."
-            " Many time scales at once can also be built directly. Next: Markovian lifts."
+            f"""Apply the same finite-lag estimator to log binned activity, with three fixed seeds per branching ratio. <bookmark mark='a'/> At ratio one half the estimate averages {lo:.2f}, close to lag-independent count noise. The largest mean in this sweep is {hi:.2f}. A higher H here means a steeper finite-lag moment slope, not greater local roughness. <bookmark mark='b'/> The tail sweep does not track the limiting formula: all three tails read near one tenth. Jaisson and Rosenbaum's theorem requires tail parameter alpha between one half and one, a nearly critical branching sequence, and coordinated time, baseline and amplitude scaling. It yields an integrated fractional-CIR limit with H equal to alpha minus one half. These fixed finite simulations do not test all those hypotheses. <bookmark mark='c'/> Multivariate extensions connect suitable buy-sell asymmetry and no-arbitrage assumptions to leverage; further market-impact models link reactive flow to rough limits. These are model-based mechanisms, not a universal inference from observed clustering. Next: Markovian lifts."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             vo.wait_until("a")

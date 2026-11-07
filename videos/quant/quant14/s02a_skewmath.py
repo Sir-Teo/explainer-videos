@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 
+from videos.quant.quant14.common import axes, data_range, skew_range
+
 from explainer.quant import *  # noqa: F403
 from videos.quant.quant14.common import (BAD, IV, MODEL_COL, OPT, PART, ROUGH, RV, VAR, illustration, load,
                                          loglog_curve, loglog_skew_axes, pause, real_data)
@@ -82,17 +84,7 @@ class SkewMath(VoiceoverScene, ThreeDScene):
         cam = self.renderer.camera
         Tr[1].add_updater(lambda m: cam.add_fixed_in_frame_mobjects(m))  # the number rebuilds itself: pin it again
         with self.voiceover(
-            "Why should the skew be a power law at all? Here is the picture behind the answer. On the floor, a "
-            "triangle: all pairs of times, t before u, up to the expiry T. Above each pair, the kernel: how much a "
-            "shock to volatility at time t still moves the variance expected at the later time u. "
-            "<bookmark mark='a'/> To first order in the vol of vol, the skew is the volume under this roof, divided "
-            "by T squared. Start with a classical kernel, an exponential, as in Heston or Bergomi: the roof is almost "
-            "flat. Shrink the expiry. The volume shrinks like T squared, so the ratio stays put: the skew of a "
-            "one-factor Markov model is flat at short expiries. <bookmark mark='b'/> Now the rough kernel: the roof "
-            "becomes a ridge shooting up along the diagonal. Shrink the expiry, and the volume falls more slowly "
-            "than T squared, because the ridge never flattens. "
-            "<bookmark mark='c'/> The ratio grows like T to the power H minus a half: the power law, straight "
-            "out of the shape of the kernel."
+            """Why can a rough kernel produce a power-law skew? The floor contains all pairs t before u before expiry T. The height illustrates a forward-variance response to a shock. <bookmark mark='a'/> For flat initial forward variance and small volatility of volatility, the leading signed skew is proportional to the kernel integral over this triangle, divided by T squared. An exponential kernel is locally bounded: at maturities far below its decay time, that ratio approaches a constant. <bookmark mark='b'/> The ideal power kernel has an integrable diagonal singularity. Its uncapped integral scales as T to H plus three halves. The displayed roof is divided by two point five and capped for visibility; it is not the literal volume used by the curve on the right. <bookmark mark='c'/> Dividing the analytical integral by T squared gives T to H minus a half. These are leading-order model statements, with amplitudes and validity depending on the model."""
         ) as vo:
             self.play(Create(ax), FadeIn(sf), FadeIn(floor), FadeIn(hint), FadeIn(src))
             vo.wait_until("a")
@@ -116,16 +108,16 @@ class SkewMath(VoiceoverScene, ThreeDScene):
         rows = [
             cmath(r"d\langle \ln S, \xi^u\rangle_t", r"=", r"\rho\,\sigma_t\,\xi_t(u)\,K(u - t)\,dt", font_size=36,
                   colors={r"d\langle \ln S, \xi^u\rangle_t": OPT}),
-            cmath(r"\psi(T)", r"\approx", r"\frac{\rho}{2\sigma_0^3 T^2}\int_0^T\!\!\int_t^T \sigma_0\,\xi_0(u)\,K(u - t)"
-                  r"\,du\,dt", font_size=36, colors={r"\psi(T)": IV}),
+            cmath(r"s(T)", r"\approx", r"\frac{\rho}{2\sigma_0^3 T^2}\int_0^T\!\!\int_t^T \sigma_0\,\xi_0(u)\,K(u - t)"
+                  r"\,du\,dt", font_size=36, colors={r"s(T)": IV}),
             cmath(r"\int_0^T\!\!\int_t^T e^{-\kappa(u - t)}", r"=", r"\frac{T}{\kappa} - \frac{1 - e^{-\kappa T}}{\kappa^2}",
                   font_size=36, colors={r"\int_0^T\!\!\int_t^T e^{-\kappa(u - t)}": VAR}),
             cmath(r"\int_0^T\!\!\int_t^T (u - t)^{H - \frac12}", r"=", r"\frac{T^{H + 3/2}}{(H + \frac12)(H + \frac32)}",
                   font_size=36, colors={r"\int_0^T\!\!\int_t^T (u - t)^{H - \frac12}": ROUGH}),
-            cmath(r"\psi_{\rm rBergomi}(T)", r"\approx", r"\frac{\rho\,\eta\sqrt{2H}}{2(H + \frac12)(H + \frac32)}\,"
-                  r"T^{H - 1/2}", font_size=36, colors={r"\psi_{\rm rBergomi}(T)": ROUGH}),
+            cmath(r"s_{\rm rBergomi}(T)", r"\approx", r"\frac{\rho\,\eta\sqrt{2H}}{2(H + \frac12)(H + \frac32)}\,"
+                  r"T^{H - 1/2}", font_size=36, colors={r"s_{\rm rBergomi}(T)": ROUGH}),
         ]
-        whys = [why(r"a forward variance model: $\xi_t(u)$ is the variance expected at $u$; Itô's covariance with the spot"),
+        whys = [why('signed skew $s=\\partial_k\\sigma_{\\rm imp}(0,T)$; plotted magnitude $\\psi=|s|$'),
                 why(r"to first order in vol of vol, the skew is the integrated spot--variance covariance (Bergomi and "
                     r"Guyon 2012); check: lognormal vol of vol $\nu$ gives SABR's short skew $\rho\nu/2$"),
                 why(r"$\approx T^2/2$ for $T \ll 1/\kappa$: a flat skew; $\approx T/\kappa$ for $T \gg 1/\kappa$: a skew "
@@ -157,18 +149,12 @@ class SkewMath(VoiceoverScene, ThreeDScene):
         self.wait(0.4)
         self.clear_scene()
         card = history_card(2021, r"Fukasawa: ``Volatility has to be rough'' (Quantitative Finance 21(1))",
-                            r"Given a power law of the at-the-money skew in an option market, a continuous price with "
-                            r"non-rough volatility admits an arbitrage. Non-rough models are inconsistent with a power-law "
-                            r"skew; if the power law is real, volatility must be rough.", color=QC.IDEA, width=8.6,
+                            'For a positive continuous It\\^o price with positive $H_0$-H\\"older instantaneous variance, a persistent-sign near-ATM $H$-power law as expiry tends to a fixed date gives arbitrage when $0<H<H_0$ and $H<1/2$, under the paper\\textquotesingle s frictionless option-market assumptions. Finite-window magnitude fits do not verify these hypotheses.', color=QC.IDEA, width=8.6,
                             font_size=24).move_to(UP * 0.6)
         sev = wrapped_label(r"and several exponentials, at time scales spread over decades, imitate a power law over the "
                             r"range they span: chapters 10 and 12", 9.0, 22, GREY_A).next_to(card, DOWN, buff=0.5)
         with self.voiceover(
-            "Masaaki Fukasawa turned this into a theorem in 2021, with a title that says it all: volatility has to "
-            "be rough. If the skew really follows a power law as expiry goes to zero, then a continuous price whose "
-            "volatility is not rough admits an arbitrage. <bookmark mark='a'/> The escape hatch is the word "
-            "really. Several exponentials at time scales spread over decades imitate a power law over the range they "
-            "span. Chapters ten and twelve walk through that hatch."
+            """Fukasawa's 2021 theorem concerns a precise limiting market. Prices are positive continuous Itô processes, instantaneous variance is positive and locally Hölder regular, and frictionless options are available near a fixed expiry. A persistent-sign near-at-the-money power law with exponent H below one half conflicts with variance regularity strictly above H. <bookmark mark='a'/> Our finite-maturity magnitude fits, including sign changes, do not verify those assumptions. Regularized kernels and several exponentials can imitate a power law over a finite interval. The theorem distinguishes limiting behavior, not the winner of this finite-data comparison."""
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -177,24 +163,25 @@ class SkewMath(VoiceoverScene, ThreeDScene):
         self.clear_scene()
 
     def models(self, m):
-        g = loglog_skew_axes(x_length=6.6, y_length=4.4, t_lo=2 / 365, y_range=(-2.0, 0.6)).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
+        yr = skew_range(*[v["skew"] for v in m.values() if isinstance(v, dict) and "skew" in v])
+        g = loglog_skew_axes(x_length=6.6, y_length=4.4, t_lo=2 / 365, y_range=yr).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
         ax = g.ax
         mk = m["market"]
         dots = VGroup(*[Dot(ax.c2p(np.log10(a), np.log10(abs(b))), radius=0.07, color=WHITE)
-                        for a, b in zip(mk["T"], mk["skew"]) if abs(b) > 0.01 and a >= 2 / 365])
+                        for a, b in zip(mk["T"], mk["skew"]) if np.isfinite(b) and abs(b) > 0 and a >= 2 / 365])
         cols = {"Heston": MODEL_COL["Heston"], "jumps": BAD, "Bates": QC.DELTA, "rBergomi": MODEL_COL["rBergomi"],
                 "rough Heston": MODEL_COL["rough Heston"]}
-        names = {"Heston": r"Heston (Part 13's fit)", "jumps": r"jumps only (Bates' jumps)", "Bates": r"Bates: Heston + jumps",
+        names = {"Heston": r"Heston (Part 13's fit)", "jumps": 'constant vol + Bates jump parameters', "Bates": r"Bates: Heston + jumps",
                  "rBergomi": r"rough Bergomi (chapter 5)", "rough Heston": r"rough Heston, $H = 0.1$"}
         curves = VGroup()
         for k in ("Heston", "jumps", "Bates", "rBergomi", "rough Heston"):
             T = m[k]["T"] if "T" in m[k] else m["T"]
-            curves.add(loglog_curve(ax, T, m[k]["skew"], cols[k], y_range=(-2.0, 0.6)))
+            curves.add(loglog_curve(ax, T, m[k]["skew"], cols[k], y_range=yr))
         fm = m["formula"]
-        form = DashedVMobject(loglog_curve(ax, fm["T"], fm["skew"], MODEL_COL["rBergomi"], y_range=(-2.0, 0.6),
+        form = DashedVMobject(loglog_curve(ax, fm["T"], fm["skew"], MODEL_COL["rBergomi"], y_range=yr,
                                            stroke_width=2), num_dashes=40)
-        hdr = VGroup(label(r"", font_size=17), label(r"2--14 days", font_size=17, color=GREY_A),
-                     label(r"2 months and longer", font_size=17, color=GREY_A))
+        hdr = VGroup(label(r"", font_size=17), label('short window*', font_size=17, color=GREY_A),
+                     label('long window*', font_size=17, color=GREY_A))
         tab = VGroup()
         for k in ("market", "Heston", "jumps", "Bates", "rBergomi", "rough Heston"):
             c = WHITE if k == "market" else cols[k]
@@ -210,23 +197,12 @@ class SkewMath(VoiceoverScene, ThreeDScene):
         if side.get_right()[0] > 6.9:
             side.scale_to_fit_width(6.9 - side.get_left()[0])
         hs, js = m["Heston"], m["jumps"]
-        fnote = wrapped_label(rf"dashed: the first-order formula for rough Bergomi at its fitted $\eta = 2$: the right slope, "
-                              rf"{m['ratio_formula_mc']:.1f} times too high, since a vol of vol that large is far from "
-                              r"first order", 6.0, 17, GREY_A).next_to(side, DOWN, buff=0.3).align_to(side, LEFT)
+        fnote = wrapped_label('dashed: leading flat-curve/small-$\\eta$ formula; finite-grid Monte Carlo need not match its slope or level. *Windows and skew stencils differ; see notes.', 6.0, 17, GREY_A).next_to(side, DOWN, buff=0.3).align_to(side, LEFT)
         q = pause(r"Heston's mean reversion is $\kappa = 2$ a year. Over which expiries is its skew flat?", width=6.4,
                   font_size=22).to_corner(UR, buff=0.3)
         src = real_data(r"models priced by COS (Part 13) or Monte Carlo; the Surface, 10 December 2025", corner=DL)
         with self.voiceover(
-            "Now the models themselves, priced exactly. Pause and predict: a Heston model whose mean reversion is two a year. Over which "
-            "expiries is its skew flat? <bookmark mark='a'/> Over everything well under six months. Part thirteen's "
-            f"Heston fit has a local exponent of {hs['short']:.2f} between two days and two weeks: flat. "
-            "<bookmark mark='b'/> Jumps alone go the other way: their skew falls like one over maturity, an "
-            f"exponent of {js['short']:.2f}, too steep. Heston with jumps sits in between, by mixing the two. "
-            "<bookmark mark='c'/> The rough models make the power law from the kernel itself; the dashed first-order "
-            "formula has rough Bergomi's slope but not its level, since the fitted vol of vol is far from small. <bookmark mark='d'/> The market's own short-end exponent is "
-            f"{m['market']['short']:.2f}. One factor with one time scale cannot make a power law; a kernel with all "
-            "time scales can."
-            " A kernel with all time scales means rough volatility. Next: is volatility rough? Measured again."
+            f"""Now finite-grid numerical prices. First consider the illustrative exponential decay rate of two per year. Its leading-order skew is approximately flat only well below six months, with other model scales also relevant. <bookmark mark='a'/> The plotted Heston curve instead uses Part thirteen's fitted decay rate, about fourteen point eight. Its fitted short-window exponent is {hs['short']:.2f}. <bookmark mark='b'/> The red curve combines constant diffusion with Bates' fitted jump parameters. Its finite-difference exponent is {js['short']:.2f}; this is not a universal jump-model asymptotic. Bates mixes diffusion variance dynamics and jumps. <bookmark mark='c'/> Rough-model curves and the dashed leading formula also differ on these grids. Small-volatility-of-volatility theory is not an exact finite-grid prediction. <bookmark mark='d'/> The market's short-window exponent is {m['market']['short']:.2f}. Model fits mostly use two to fourteen and sixty to three hundred sixty-five days; the market and rough Bergomi use different windows. Skew stencils differ too. These scores describe the recorded calculations; they do not establish that one kernel class is necessary. Next: measuring roughness."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(dots), FadeIn(src), FadeIn(q))
             vo.wait_until("a")

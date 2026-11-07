@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 
+from videos.quant.quant14.common import axes, data_range, skew_range
+
 from explainer.quant import *  # noqa: F403
 from videos.quant.quant14.common import BAD, IV, OPT, PART, ROUGH, RV, VAR, illustration, load, pause, real_data
 
@@ -19,9 +21,9 @@ class Rough(VoiceoverScene):
         self.eras(r, a, r18)
 
     def card(self):
-        c = chapter_card(3, r"Volatility is rough, re-measured", r"How jagged is volatility, measured?", lit=(2018,),
+        c = chapter_card(3, 'Measuring roughness in realized variance', r"How jagged is volatility, measured?", lit=(2018,),
                          part=PART)
-        with self.voiceover("Chapter three. Volatility is rough, re-measured."):
+        with self.voiceover("""Chapter three. Measuring roughness in realized variance."""):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -34,7 +36,7 @@ class Rough(VoiceoverScene):
         rows = [(lv, RV, r"bitcoin: log of daily realized variance (5-minute returns)"),
                 (np.asarray(ps[keys[0]]), ROUGH, rf"fractional Brownian motion, $H = {float(keys[0]):.2f}$"),
                 (np.asarray(ps[keys[1]]), VAR, r"Brownian motion, $H = 0.5$ (the same day-to-day variability)")]
-        lo, hi = min(np.percentile(z, 0.5) for z, _, _ in rows), max(np.percentile(z, 99.5) for z, _, _ in rows)
+        lo, hi = data_range(*[z for z, _, _ in rows])
         panels = VGroup()
         tr = ValueTracker(0.0)
         lines = VGroup()
@@ -42,17 +44,11 @@ class Rough(VoiceoverScene):
             g = axes([0, n], [lo, hi], x_length=10.6, y_length=1.55, xticks=[], yticks=[], font_size=14)
             t = label(txt, font_size=19, color=col).next_to(g, UP, buff=0.05).align_to(g, LEFT)
             panels.add(VGroup(g, t))
-            lines.add(tracing(g.ax, x, np.clip(z, lo, hi), tr, col, stroke_width=1.6))
+            lines.add(tracing(g.ax, x, z, tr, col, stroke_width=1.6))
         panels.arrange(DOWN, buff=0.35).move_to(DOWN * 0.1)
         src = real_data(rf"Binance BTCUSDT, 5-minute returns, {n} complete days, January 2024 -- November 2025")
         with self.voiceover(
-            "In 2014, Jim Gatheral, Thibault Jaisson and Mathieu Rosenbaum looked at volatility itself, measured every "
-            "day from high-frequency returns, and found it rough. Here is Bitcoin's, for two years: the logarithm of "
-            "each day's realized variance, from five-minute returns, drawn day by day. <bookmark mark='a'/> Below "
-            f"it, a fractional Brownian motion with H of {float(keys[0]):.2f}, and a Brownian motion, H one half, "
-            "scaled to the same day-to-day variability. <bookmark mark='b'/> The Brownian path wanders in long slow "
-            "swings. Bitcoin's volatility, like the rough path, is jagged at every scale and keeps returning to its "
-            "level."
+            f"""Gatheral, Jaisson and Rosenbaum studied realized-volatility proxies computed from high-frequency returns. Here is the logarithm of Bitcoin's daily realized variance, measured from five-minute returns. <bookmark mark='a'/> Below it are a simulated fractional Brownian path with H of {float(keys[0]):.2f}, and a Brownian path, scaled to comparable daily variability. <bookmark mark='b'/> The low-H benchmark has negatively correlated increments. It is not a stationary mean-reverting process, and visual resemblance does not identify the latent variance law. Aggregation and measurement error will matter in the later debate."""
         ) as vo:
             self.play(FadeIn(panels), FadeIn(src), FadeIn(lines))
             self.play(tr.animate.set_value(n - 1), run_time=max(vo.remaining(0.0) - 1.0, 4), rate_func=linear)
@@ -111,13 +107,7 @@ class Rough(VoiceoverScene):
                 f"bitcoin 2024-25:   H = {r['H']:.2f}   (weekdays evened out: {a['btc_deseasonalized']:.2f})",
                 f"bitcoin 2018-20:   H = {r18['H']:.2f}   (weekdays evened out: {r18['H_deseasonalized']:.2f})"]
         with self.voiceover(
-            "Here is the House's estimator, all of it. For each power q, average the absolute change in log "
-            "variance over each lag, raised to q, and fit a line on log scales: that is zeta of q. Then regress the "
-            "zetas on q: the slope is H. <bookmark mark='a'/> Run it. First on fractional Brownian motions whose H "
-            f"we chose: it reads a tenth as {chk[1]['est']:.2f}, three-tenths as {chk[2]['est']:.2f}, a half as "
-            f"{chk[3]['est']:.2f}, but the very roughest, 0.05, as {chk[0]['est']:.2f}: biased low at the extreme. "
-            f"Then on Bitcoin: {r['H']:.2f} for 2024 and 2025, and {r18['H']:.2f} for 2018 to 2020, from one-minute "
-            "bars resampled to five minutes. Two eras, two very different markets, both rough."
+            f"""The estimator fits a log-moment slope for each q, then regresses those slopes on q with a free intercept. The resulting slope is the reported H estimate. <bookmark mark='a'/> On one fixed simulated path per chosen H, it returns {chk[1]['est']:.2f}, {chk[2]['est']:.2f} and {chk[3]['est']:.2f} for H of one tenth, three tenths and one half. For H of point zero five it returns {chk[0]['est']:.2f}. One path per value diagnoses a possible problem; it cannot establish statistical bias. Bitcoin's two era estimates are {r['H']:.2f} and {r18['H']:.2f}. They summarize finite-lag realized-variance proxies, not a direct observation of instantaneous variance or an option-pricing H."""
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -150,15 +140,12 @@ class Rough(VoiceoverScene):
                   xticks=[0, 1, 2, 3], yticks=[0, 0.1, 0.2, 0.3], font_size=14)
         g2.next_to(g, RIGHT, buff=1.0).align_to(g, UP)
         zd = VGroup(*[Dot(g2.ax.c2p(q, z), radius=0.06, color=c) for q, z, c in zip(qs, zeta, cols)])
-        zl = Line(g2.ax.c2p(0, 0), g2.ax.c2p(3.2, 3.2 * r["H"]), stroke_color=WHITE, stroke_width=2)
+        intercept = float(np.polyfit(qs, zeta, 1)[1])
+        zl = Line(g2.ax.c2p(0, intercept), g2.ax.c2p(3.2, 3.2 * r["H"] + intercept), stroke_color=WHITE, stroke_width=2)
         Hl = MathTex(rf"H = {r['H']:.2f}", font_size=34, color=ROUGH).next_to(g2, DOWN, buff=0.35)
         q = pause(r"If the $q = 2$ line had slope 1, what would $H$ be?", width=5.0, font_size=22).next_to(Hl, DOWN, buff=0.3)
         with self.voiceover(
-            "Watch the measurement build on Bitcoin. For each lag, from one day to fifty, and each power q, one "
-            "point. <bookmark mark='a'/> Fit a line through each colour. They are straight, to the eye at least: "
-            "a scaling law. <bookmark mark='b'/> Now plot the slopes against q. They line up through the origin, "
-            f"and the slope of that line is H: {r['H']:.2f}. <bookmark mark='c'/> Pause and predict: if the q equals "
-            "two line had slope one, what would H be? <bookmark mark='d'/> One half: Brownian motion."
+            f"""For each lag from one to fifty days and each q, plot an empirical moment. <bookmark mark='a'/> Fit a log-log line to each color; deviations from a line remain part of the evidence. <bookmark mark='b'/> Regress the resulting slopes on q. The actual free-intercept line is shown, with slope {r['H']:.2f}. The ideal fractional Brownian benchmark instead has exactly zeta q equal to q H. <bookmark mark='c'/> Under that benchmark, if the q equals two slope were one, what would H be? <bookmark mark='d'/> One half. That one moment exponent alone does not establish Brownian motion."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg))
             self.play(LaggedStart(*[LaggedStart(*[FadeIn(d, scale=0.5) for d in row], lag_ratio=0.15) for row in dots],
@@ -172,7 +159,8 @@ class Rough(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(q, shift=UP * 0.2))
             vo.wait_until("d")
-            self.play(Indicate(fits[3], color=YELLOW))
+            answer = MathTex(r"H=\zeta_2/2=1/2", font_size=30, color=YELLOW).next_to(q, DOWN, buff=.18)
+            self.play(Indicate(fits[3], color=YELLOW), Write(answer))
         self.wait(0.4)
         self.clear_scene()
 
@@ -188,19 +176,12 @@ class Rough(VoiceoverScene):
                                    fill_color=c, fill_opacity=0.85).move_to(g.ax.c2p(i - 0.13 + 0.26 * j, v / 2)))
         leg = legend([(RV, r"as measured"), (ROUGH, r"weekday pattern removed")], font_size=17).next_to(g, UP, buff=0.15)
         side = VGroup(
-            wrapped_label(r"Gatheral, Jaisson and Rosenbaum (2018) found $H$ of order 0.1 for the S\&P 500 and other "
-                          r"indices, from realized variance; bitcoin, in two eras, agrees", 5.4, 20, GREY_A),
+            wrapped_label('Low finite-lag exponents appear in both bitcoin eras and in the cited equity-index studies; this agreement does not identify latent volatility regularity.', 5.4, 20, GREY_A),
             wrapped_label(r"\textit{Rough Volatility} (SIAM 2023), chapter 1 is their paper; the estimator, its scaling "
                           r"law and the forecast of chapter 4 are all there", 5.4, 20, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.5)
         with self.voiceover(
-            "Two eras side by side: in 2018 to 2020, H is "
-            f"{r18['H']:.2f}; in 2024 and 2025, {r['H']:.2f}. Remove each weekday's average, and they read "
-            f"{r18['H_deseasonalized']:.2f} "
-            f"and {a['btc_deseasonalized']:.2f}. <bookmark mark='a'/> Gatheral, Jaisson and Rosenbaum found H of "
-            "order a tenth for the S&P 500 and other equity indices. Bitcoin agrees. Whether the estimator can be "
-            "trusted is another matter, and chapter eleven will try hard to fool it."
-            " Before the debate, what roughness buys a forecaster. Next."
+            f"""Two era estimates: {r18['H']:.2f} and {r['H']:.2f}; after removing each full sample's weekday means, {r18['H_deseasonalized']:.2f} and {a['btc_deseasonalized']:.2f}. <bookmark mark='a'/> Low finite-lag exponents also appear in the cited equity-index studies. Agreement between proxies does not identify instantaneous variance regularity. Later chapters compare sampling, noise and mean-reversion explanations. Next: the rough predictor."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.25))
             vo.wait_until("a")

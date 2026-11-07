@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 
+from videos.quant.quant14.common import axes, data_range, skew_range
+
 from explainer.quant import *  # noqa: F403
 from videos.quant.quant14.common import BAD, IV, OPT, PART, ROUGH, RV, VAR, load, pause, real_data
 
@@ -70,19 +72,12 @@ class Debate(VoiceoverScene, ThreeDScene):
             labs.add(VGroup(label(t, font_size=18, color=c), MathTex(f"{v:.2f}", font_size=22))
                      .arrange(RIGHT, buff=0.2).next_to(ax.c2p(0, y), LEFT, buff=0.2))
         half = DashedLine(ax.c2p(0.5, -0.5), ax.c2p(0.5, len(items) - 0.5), stroke_color=GREY_C, stroke_width=1.5)
-        side = wrapped_label(r"three smooth volatilities ($H = \tfrac12$), as variable as bitcoin's and measured the same "
-                             r"way, through 5-minute realized variance: slow ones read 0.4; one that mean-reverts within "
-                             r"hours reads almost 0. At a daily resolution, fast mean reversion and roughness look alike "
-                             r"(Cont and Das 2024; Guyon and El Amrani 2023)", 5.6, 19, GREY_A).to_corner(UL, buff=0.5)
+        side = wrapped_label('Three Brownian-regular variance simulations with different mean reversion; daily proxy estimates need not equal local $H$.', 5.6, 19, GREY_A).to_corner(UL, buff=0.5)
         verdict = wrapped_label(r"the case for roughness rests on several measurements agreeing: time series, the skew's "
                                 r"term structure, and a microstructure story. Each alone has a smooth explanation", 12.0, 20,
                                 ROUGH).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "The deeper objection, made by Rama Cont and Purba Das, is that the estimator can be fooled. Simulate "
-            "three perfectly smooth volatilities, as variable as Bitcoin's, and measure them the same way. "
-            "<bookmark mark='a'/> The slow ones read about four-tenths. <bookmark mark='b'/> The one that "
-            "mean-reverts within hours reads almost zero: at a daily resolution, fast and rough look alike. "
-            "<bookmark mark='c'/> To see how far the estimator can be fooled, map it."
+            """Cont and Das study how measurement can affect apparent roughness. These three simulated variance processes have Brownian local regularity, with different mean-reversion speeds. <bookmark mark='a'/> The slower examples read around four tenths through daily realized variance. <bookmark mark='b'/> The fast example reads near zero: a small daily-lag slope need not indicate a small local H. These are fixed synthetic examples, not a universal estimator-bias theorem. <bookmark mark='c'/> Next, the four-seed parameter map."""
         ) as vo:
             self.play(FadeIn(g), Create(half), FadeIn(bars[:2]), FadeIn(labs[:2]), FadeIn(side))
             vo.wait_until("a")
@@ -129,7 +124,7 @@ class Debate(VoiceoverScene, ThreeDScene):
                        MathTex(rf"H = 0.5,\ \text{{half-life 1 day}}:\ \hat H = {M[i05, j1]:.2f}", font_size=26),
                        MathTex(rf"H = 0.05,\ \text{{no mean reversion}}:\ \hat H = {M[i005, 0]:.2f}", font_size=26)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.12).to_corner(DR, buff=0.35)
-        q = pause(r"A perfectly smooth volatility with a one-day half-life: what $H$ does the estimator report?",
+        q = pause('Brownian-regular log volatility with a one-day half-life: what does the daily proxy estimator report?',
                   width=5.4, font_size=20).to_corner(UR, buff=0.3)
         src = real_data(r"simulated: 64 cells, 4 seeds each; the House's \texttt{fou\_paths}", corner=DL)
         self.set_camera_orientation(phi=64 * DEGREES, theta=-125 * DEGREES, zoom=0.85)
@@ -138,18 +133,7 @@ class Debate(VoiceoverScene, ThreeDScene):
         self.remove(*ylabs)
         self.remove(hint, src, q, note_)
         with self.voiceover(
-            "Here is the estimator's bias map, the centrepiece of the debate. On the floor, two dials of a simulated "
-            "log-volatility: its true H, from very rough to Brownian, and how fast it mean-reverts, from not at all "
-            "to a half-life of five hours, each simulated for seven hundred days and measured exactly as Bitcoin "
-            "was. The height is the H the estimator reports. "
-            "<bookmark mark='a'/> Pause and predict: a perfectly smooth volatility, H one half, with a one-day "
-            "half-life. What does the estimator report? <bookmark mark='b'/> About a tenth: "
-            f"{M[i05, j1]:.2f}. Bitcoin's number. <bookmark mark='c'/> Now slice the map at Bitcoin's reading, "
-            f"{lvl:.2f}. The gold curve is every pair of true roughness and mean reversion that reads exactly like "
-            "Bitcoin: from very rough with slow mean reversion, to perfectly smooth with a half-life of about a "
-            "day. One number cannot choose between them. <bookmark mark='d'/> Notice too that at the back left, "
-            f"with no mean reversion, a true H of 0.05 reads {M[i005, 0]:.2f}: averaging over a day smooths the "
-            "path and pushes the estimate up, while mean reversion and noise pull it down."
+            f"Here is the estimator's bias map, the centrepiece of the debate. On the floor, two dials of a simulated log-volatility: its true H, from very rough to Brownian, and how fast it mean-reverts, from not at all to a half-life of five hours, each simulated for seven hundred days and measured exactly as Bitcoin was. The height is the H the estimator reports. <bookmark mark='a'/> Pause and predict: a Brownian-regular volatility, H one half, with a one-day half-life. What does the estimator report? <bookmark mark='b'/> About a tenth: {M[i05, j1]:.2f}. Bitcoin's number. <bookmark mark='c'/> Now slice the map at Bitcoin's reading, {lvl:.2f}. The gold curve is every pair of true roughness and mean reversion that reads exactly like Bitcoin: from very rough with slow mean reversion, to Brownian-regular with a half-life of about a day. One number cannot choose between them. <bookmark mark='d'/> Notice too that at the back left, with no mean reversion, a true H of 0.05 reads {M[i005, 0]:.2f}: averaging over a day smooths the path and pushes the estimate up, while mean reversion and noise pull it down. The surface averages four fixed seeds per cell and interpolates between sixty-four parameter cells. Its contour is a descriptive mean-estimate match, not a confidence set or proof of equal data-generating laws."
         ) as vo:
             self.play(FadeIn(hint), FadeIn(src), Create(ax), FadeIn(surf), FadeIn(ylabs), run_time=2)
             self.move_camera(theta=-70 * DEGREES, run_time=3)
@@ -171,8 +155,8 @@ class Debate(VoiceoverScene, ThreeDScene):
     def derive(self):
         rows = [cmath(r"\widehat{RV}_t", r"=", r"\int_t^{t + 1}\sigma^2_s\,ds + \varepsilon_t", font_size=38,
                       colors={r"\widehat{RV}_t": RV}),
-                cmath(r"\mathbb{E}\big|\Delta_\ell\log\widehat{RV}\big|^q", r"\approx", r"c\,\ell^{qH} + \text{floor}",
-                      font_size=38, colors={r"\mathbb{E}\big|\Delta_\ell\log\widehat{RV}\big|^q": IV}),
+                cmath(r"\mathbb{E}\big|\Delta_\ell\log\widehat{RV}\big|^2", r"\approx", r"c\,\ell^{2H} + 2\sigma_\varepsilon^2",
+                      font_size=38, colors={r"\mathbb{E}\big|\Delta_\ell\log\widehat{RV}\big|^2": IV}),
                 cmath(r"\mathrm{Var}(X_{t + \Delta} - X_t)", r"\approx", r"\begin{cases}\nu^2\Delta^{2H} & \Delta \ll 1/\kappa\\ "
                       r"2\,\mathrm{Var}\,X & \Delta \gg 1/\kappa\end{cases}", font_size=36,
                       colors={r"\mathrm{Var}(X_{t + \Delta} - X_t)": VAR}),
@@ -182,19 +166,10 @@ class Debate(VoiceoverScene, ThreeDScene):
                 why(r"an i.i.d. error adds the same amount at every lag: a flat term lowers the fitted slope, and so $\hat H$"),
                 why(r"a fractional OU with rate $\kappa$: rough at lags below $1/\kappa$, flat (stationary) above; if $1/\kappa$ "
                     r"is under a day, every daily lag sits on the flat part and $\hat H \approx 0$"),
-                why(r"the best possible rate from $n$ observations (Chong, Hoffmann, Liu, Rosenbaum and Szymanski 2024): "
-                    r"slow, slower the rougher")]
+                why('Parametric latent rough-volatility model, high-frequency price observations: minimax rate; smaller $H$ gives a faster exponent.')]
         step = ladder(self, rows, whys, keep=3, top=2.8, x=-0.6, buff=0.7, edge=6.9)
         with self.voiceover(
-            "Why does the map look like this? Three effects. First, what we observe is the variance integrated over "
-            "a day, plus measurement error. <bookmark mark='a'/> An independent error adds the same amount at every "
-            "lag: a floor under the scaling law that flattens its slope and lowers the estimate. "
-            "<bookmark mark='b'/> Second, a mean-reverting process is rough only at lags shorter than its "
-            "mean-reversion time; beyond that its increments stop growing. If that time is under a day, every daily "
-            "lag sits on the flat part, and the estimator reads roughness that is really stationarity. "
-            "<bookmark mark='c'/> Third, even with perfect data, H is hard to estimate: Carsten Chong and "
-            "co-authors proved in 2024 that the best possible error shrinks only like n to the minus one over four "
-            "H plus two."
+            """Why can a low fitted exponent be ambiguous? First, daily realized variance integrates latent variance and contains measurement error. <bookmark mark='a'/> In a simplified additive, independent log-proxy noise model, the second increment moment acquires a lag-independent floor. Its fitted slope can fall; this is not a general additive formula for every q or every noise model. <bookmark mark='b'/> Second, stationary mean reversion makes increment variance saturate beyond its characteristic time. Daily lags may then report a near-zero slope without identifying local path regularity. <bookmark mark='c'/> Third, Chong and co-authors' 2024 minimax theory concerns a specified parametric rough-volatility model observed through high-frequency prices. Its H-estimation rate is n to minus one over four H plus two. Smaller H gives a faster exponent in that result, approaching a square-root-n rate. It does not certify our simple daily estimator or provide a confidence interval for these fitted surfaces."""
         ) as vo:
             step(0)
             vo.wait_until("a")
