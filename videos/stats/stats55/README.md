@@ -4,8 +4,8 @@ Part 55 of a sixty-five-part course in statistics, from a first course to a PhD 
 and [the syllabus](../SYLLABUS.md)), and the last part of Stage IV, the PhD core. Like Part 42, it adds no new method.
 
 It opens with Hilbert's twenty-three problems (Paris, 1900): "as long as a branch of science offers an abundance of
-problems, so long is it alive". Then the letter on the desk the night before the qualifying exam: twelve problems, one
-from each part of the core, and "a correct answer without its proof earns nothing". The problems are set in six
+problems, so long is it alive". Then the letter on the desk the night before the qualifying exam: twelve problems, drawing
+on the core, and "a correct answer without its proof earns nothing". The problems are set in six
 sittings, each posed on an exam card, paused, proved on screen, and drawn as a proof map:
 
 1. **Borel–Cantelli** (43): M_n / log n → 1 a.s. for exponential maxima.
@@ -40,7 +40,7 @@ It keeps two promises:
     model, theory and simulation;
   - half-line brackets and the bracketing integral; the median's influence function and a Wald interval with a kernel
     plug-in;
-  - Fano's bound for sparse means with the sparse Varshamov–Gilbert packing, soft thresholding's risk;
+  - Fano's bound with a nontrivial disjoint-support fallback packing; exact Gaussian soft-thresholding risk;
   - matrix Bernstein for a bounded covariance (mean bound, confidence radius, simulation); the lasso by coordinate
     descent against its oracle inequality; exact posterior contraction in the sequence model.
 - **The PhD problem bank:** the twelve exam problems and six more, each with a full solution, below.
@@ -78,10 +78,10 @@ python tools/lecture_length.py stats55 --floor 50
 | 0 | Hilbert, and the night before | — |
 | 1 | Probability | exceedances of c log n in 10⁶ draws: 0 (c = 2), 4, the last at n = 82,878 (1.2), 13 (1), 69 (0.8); M_n/log n 2.83 → 1.013; P(T ≤ 4,001) = 0.987, E[T ∧ 4,001] = 99.9; ruin with a = 3, b = 7: 0.3, E T = 21 |
 | 2 | Estimation | n = 10, λ = 2: UMVUE variance 0.00406, CR bound 0.00366, MLE MSE 0.00460; Blyth's ratio at τ = 300: 0.0084 (d = 1), → 4π (d = 2) |
-| 3 | Testing and asymptotics | Snow: t = 1,361, expected 824, observed 1,263, z = 24.4, P ≈ 10⁻¹⁶³, rate ratio 8.40 (6.84, 10.43); unrandomized size 0.0004 (λ = 1), 0.022 (5), 0.040 (50); local power at h = 3: 0.535, 0.504, 0.442 (simulated 0.526, 0.505, 0.434) |
-| 4 | Empirical processes and efficiency | bracketing integral 1.37; Newcomb: median 27 (25.5, 28.5), SE 0.77; mean 26.21 (23.6, 28.8), SE 1.32; without outliers 27.75; modern value 33 |
-| 5 | Minimax and HDP | s = 10, n = 100: rate 0.33 → 1.02, soft thresholding 0.58 → 1.96, Fano 0.0003 → 0.0029 for d = 10² → 10⁵; d = 50, n = 400: mean error 0.76, 95th percentile 0.84, MP edge 0.83, Bernstein mean bound 1.25, radius 1.72 |
-| 6 | The lasso and the posterior | p = 500, s = 5, n = 200: prediction error 2.00 (bound 35.7), ℓ₁ error 3.19 (bound 76); contraction slopes −0.500, −0.663, −0.423 against −1/2, −2/3, −2/5 |
+| 3 | Testing and asymptotics | Snow: t = 1,361, expected 824, observed 1,263, z = 24.4, one-sided exact upper-tail P ≈ 10⁻¹⁶³, rate ratio 8.40 (6.84, 10.43); unrandomized size 0.0004 (λ = 1), 0.022 (5), 0.040 (50); local power at h = 3: 0.535, 0.504, 0.442 (simulated 0.526, 0.505, 0.434) |
+| 4 | Empirical processes and efficiency | ceiling-entropy upper integral 1.37; Newcomb: median 27 (25.5, 28.5), SE 0.77; mean 26.21 (23.6, 28.8), SE 1.32; without outliers 27.75; modern value 33 |
+| 5 | Minimax and HDP | s = 10, n = 100: rate 0.33 → 1.02, exact soft-thresholding risk, largest of four signal sizes, 0.567 → 1.944, Fano 0.000352 → 0.002908 for d = 10² → 10⁵; d = 50, n = 400: mean error 0.76, 95th percentile 0.84, MP edge 0.83, Bernstein mean bound 1.25, radius 1.72 |
+| 6 | The lasso and the posterior | p = 500, s = 5, n = 200: normalized columns: prediction error 1.978 (conditional reference 35.7), ℓ₁ error 3.146 (conditional reference 76); compatibility φ² ≥ 1/2 is not verified; contraction slopes −0.4995, −0.6628, −0.4227 against −1/2, −2/3, −2/5 |
 | 7 | Outro | — |
 
 ## Sources
@@ -130,15 +130,14 @@ python tools/lecture_length.py stats55 --floor 50
    - For Bin(n, p), E g(X) is a polynomial of degree ≤ n in p, and 1/p is not: no unbiased estimator exists.
 4. **Blyth's method.**
    - If δ′ dominated X, then R(θ, δ′) ≤ 1 − ε on an interval I, by continuity of risk.
-   - Under π_τ ∝ e^{−θ²/2τ²}, δ_τ = τ²X/(1 + τ²) is Bayes, and (r(π_τ, X) − r(π_τ, δ_τ)) × √(2π)τ = √(2π)τ/(1 + τ²).
-   - Then ε∫_I π_τ ≤ r(π_τ, X) − r(π_τ, δ′) ≤ r(π_τ, X) − r(π_τ, δ_τ): the left side tends to ε|I|, the right to 0.
+   - Use the **unnormalized** density q_τ(θ) = e^{−θ²/(2τ²)} and integrated risk r(q,δ) = ∫R(θ,δ)q(θ)dθ. The Bayes rule is δ_τ = τ²X/(1+τ²); its integrated-risk advantage is √(2π)τ/(1+τ²).
+   - Then ε∫_I q_τ ≤ r(q_τ,X)−r(q_τ,δ′) ≤ r(q_τ,X)−r(q_τ,δ_τ): the left side tends to ε|I|, the right to 0.
    - In d = 2 the product tends to 4π; X is still admissible there (Stein; Brown, with flatter priors), and
      inadmissible for d ≥ 3.
 5. **Snow's Table IX.**
    - p(x, y) ∝ exp(x log(λ₁/λ₂) + (x + y) log λ₂): given T = t, X ~ Bin(t, ρe₁/(ρe₁ + e₂)).
-   - Under H₀, T is complete for λ₂, so similar tests are level α in each slice (Neyman structure), and the UMPU test
-     is the two-sided UMPU binomial test of p = e₁/(e₁ + e₂) = 0.605 in the slice.
-   - Snow: 1,263 of 1,361 against 824 expected: z = 24.4. Inverting Clopper–Pearson and mapping p ↦ ρ = (p/(1 − p))
+   - Under H₀, T is complete for the nuisance rate, so similarity implies E₀(φ | T=t)=α. Unbiasedness also gives E₀[(X−tp₀)φ | T=t]=0. The UMPU rule rejects outside two boundaries with randomization chosen to satisfy both constraints, at p₀=e₁/(e₁+e₂). For Snow these boundaries are 788 and 859, with rejection probabilities 0.91136 and 0.40046; the observed X=1263 is rejected with probability one.
+   - Snow: 1,263 of 1,361 against 824 expected: z = 24.4. The reported upper-tail probability is one-sided. Separately, inverting equal-tailed **unrandomized** binomial tests gives Clopper–Pearson; this is not inversion of the randomized UMPU rule. Mapping p ↦ ρ = (p/(1 − p))
      e₂/e₁ gives 8.40 (6.84, 10.43).
 6. **Local power.**
    - ℓ̇ = tanh(x/2) = 2F − 1, I = ∫₀¹(2u − 1)² du = 1/3; the model is DQM, hence LAN.
@@ -148,18 +147,18 @@ python tools/lecture_length.py stats55 --floor 50
 7. **Half-lines.**
    - Brackets [1{x ≤ t_{j−1}}, 1{x ≤ t_j}] at quantiles with P-mass ≤ ε² have L₂(P) size ≤ ε; there are ⌈1/ε²⌉.
    - ∫₀¹ √(log N_[](ε)) dε < ∞, so the class is Donsker (Ossiander).
-   - Hölder-α on [0, 1]^d has log N_[] ≍ ε^{−d/α}: the integral is finite iff α > d/2.
+   - Hölder-α on [0, 1]^d has log N_[] ≍ ε^{−d/α}: the sufficient entropy integral is finite when α>d/2 under a regular reference law such as uniform measure. Divergence of this test alone is not a converse Donsker theorem.
 8. **The median.**
    - Along dP_t = (1 + tg) dP, F_t(m_t) = 1/2. Differentiating: E[1{X ≤ m} g] + f(m) ṁ = 0, so ṁ = E[ψ̃ g] with
-     ψ̃ = (1/2 − 1{x ≤ m})/f(m). The nonparametric tangent space is all of L₂⁰(P), so ψ̃ is efficient; Var ψ̃ =
+     ψ̃ = (1/2 − 1{x ≤ m})/f(m). For a unique median with a continuous positive density, bounded mean-zero scores define valid local paths, and their closure gives the tangent space L₂⁰(P), so ψ̃ is efficient; Var ψ̃ =
      1/(4f(m)²).
    - Newcomb: median 27, f̂ = 0.080, SE 0.77, 95% (25.5, 28.5); the mean 26.21, SE 1.32.
 9. **Fano for sparse means.**
-   - A packing ω₁, …, ω_M with |ω_j| = s, Hamming ≥ s/2, log M ≥ (s/8) log(1 + d/2s). With θ_j = δω_j: separation² ≥
+   - A packing ω₁, …, ω_M with |ω_j| = s, Hamming ≥ s/2, log M ≥ (s/8) log(1+d/(2s)). Disjoint supports alternatively give M≥⌊d/s⌋; use the larger log-cardinality lower bound to ensure log M>log 2 even for small s, for 1≤s≤d/8. With θ_j = δω_j: separation² ≥
      sδ²/2, KL ≤ nsδ²/σ².
    - Fano: risk ≥ (sδ²/8)(1 − (nsδ²/σ² + log 2)/log M); with δ² = σ²(log M − log 2)/(2ns), risk ≥ σ²(log M −
      log 2)²/(32 n log M).
-   - Soft thresholding at σ√(2 log d/n) has risk ≤ (2 log d + 1)(s + 1)σ²/n: the rates meet.
+   - Soft thresholding at σ√(2 log d/n) has risk ≤ (2 log d + 1)(s + 1)σ²/n: this log d upper bound is not uniformly equivalent to log(d/s) over every sparsity regime. A threshold tuned to known s through log(d/s) gives the sparse rate; the sharp constant two requires an appropriate sparse asymptotic regime.
 10. **Matrix Bernstein.**
     - Σ̂ − I = ΣZ_i, Z_i = (x_ix_iᵀ − I)/n, ‖Z_i‖ ≤ d/n; (xxᵀ)² = d xxᵀ gives ΣE Z_i² = ((d − 1)/n) I.
     - P(‖ΣZ_i‖ ≥ t) ≤ 2d exp(−(t²/2)/(v + Lt/3)); E‖ΣZ_i‖ ≤ √(2v log 2d) + L log(2d)/3.
@@ -172,8 +171,8 @@ python tools/lecture_length.py stats55 --floor 50
     - P(max_j |X_jᵀε/n| > λ/2) ≤ 2p e^{−nλ²/8σ²} = δ for λ = 2σ√(2 log(2p/δ)/n).
 12. **Contraction.**
     - θ_k | Y ~ N(w_kY_k, λ_k/(1 + nλ_k)); E Π(‖θ − θ₀‖² | Y) = Σ(1 − w_k)²θ₀k² + Σw_k²/n + Σλ_k/(1 + nλ_k).
-    - Split at N = n^{1/(1+2α)}: variance + spread ≍ N/n; bias² ≲ B N^{−2 min(α, β)}. Both ≍ ε_n².
-    - Markov: Π(‖θ − θ₀‖ > M_nε_n | Y) ≤ E Π(‖θ − θ₀‖² | Y)/(M_n²ε_n²) → 0.
+    - Split at N = n^{1/(1+2α)}: variance + spread ≍ N/n; bias² ≲ B N^{−2 min(α, β)}. Both are O(ε_n²); the variance can be smaller when the prior oversmooths.
+    - Posterior Markov and then data expectation give E_θ₀Π(‖θ−θ₀‖>M_nε_n | Y) ≤ E_θ₀∫‖θ−θ₀‖²dΠ/(M_n²ε_n²) ≲ M_n⁻² → 0. An unconditional second moment does not provide this bound for each conditional dataset.
 
 ## The problem bank: six more
 
@@ -211,3 +210,23 @@ python tools/lecture_length.py stats55 --floor 50
 - **Part 58**: optional stopping made safe, with test martingales and e-values.
 - **Part 59**: the lasso and the posterior when p and n grow together.
 - **Part 65**: the dissertation.
+
+## QA reconciliation
+
+Twenty-one checks pass (17 local cases and four legacy tests). All thirteen numerical inputs were regenerated. Independent checks compare soft-thresholding risk with Gaussian quadrature, UMPU power with constrained linear programs, first-passage quantities with enumerated paths, sequence tails with a longer evaluation, and lasso fits with KKT residuals and the cone inequality. Snow's nine Table IX entries agree with the original 1855 text transcription on Project Gutenberg; all 66 Newcomb values agree as a multiset with the independent MASS distribution.
+
+The binomial UMPU computation uses stable tail probabilities and centered first moments rather than dividing by tiny or zero endpoint masses across every boundary pair. Its saved size and unbiasedness constraints are verified directly, including Snow's n=1361 slice and degenerate n=0,1 cases. The displayed one-sided exact tail, the randomized UMPU decision, and the conservative Clopper–Pearson interval have distinct definitions. Similarity alone is not enough for UMPU optimality: the centered first-moment constraint is explicit. Snow's rate ratio is interpreted under the stipulated Poisson/exposure model.
+
+The lasso design now actually has squared column norms n, matching the Gaussian noise-event proof. All 180 fits have KKT residual below 1.2e−12. Prediction and l1 errors at n=200 are 1.9783 and 3.1459, with stored dataset Monte Carlo errors; the noise event occurs in 29 of 30 replications there. The dashed curves still use a reference compatibility squared of one half. This condition is not certified for the random designs, so these are explicitly conditional benchmarks, not validated confidence bounds for every fit. Prediction scales as 1/n, while the l1 benchmark scales as 1/√n. Support-recovery discussion distinguishes uniform/asymptotic conditions from pointwise necessity; beta-min depends on the active Gram inverse, penalty and noise, plus off-support dual control.
+
+Sparse Fano uses either the sparse combinatorial packing or a disjoint-support packing, whichever gives the larger valid lower bound. This avoids a vacuous log-cardinality constant for small sparsity. The table uses the sparsity-dependent threshold, not the universal log d threshold. Gaussian truncated moments now evaluate its risk exactly, avoiding simulation noise in a maximum over four signal amplitudes. That grid maximum is not a supremum over the entire sparse class. Universal-threshold oracle bounds, known-sparsity rates and sharp sparse-asymptotic equivalents are stated separately.
+
+The posterior proof puts data expectation outside both sides of Markov's inequality. Variance and spread are bounded by the claimed squared rate; they need not be of that exact order when bias dominates. The numerical truth k^(-3/2) is a boundary hyperrectangle sequence, in Sobolev classes strictly below one, and is not the Sobolev-one truth in the theorem. Numerical sums over 100,000 coordinates are augmented by certified upper/lower remainder bounds for all three nonnegative series. The plotted midpoint differs by at most half the saved interval width; the maximum relative full interval width is below 4.7e−7. Corrected fitted slopes are −0.4995, −0.6628 and −0.4227. The GGV sufficient conditions include KL and second log-likelihood moment control, model-specific tests in the chosen metric, compatible constants and nε² tending to infinity.
+
+Finite exceedance counts do not identify an eventual last exceedance. Raw points and running maxima are retained rather than clamped to a plotting edge. The bounded stopping-time argument derives integrability of ruin time by monotone and bounded convergence rather than assuming it in a circular invocation of Wald's identity. Blyth's normalized versus unnormalized risk convention is consistent. Strict UMVUE/CR comparisons are scoped to positive lambda. The half-line ceiling-entropy integral is distinguished from a relaxed analytic upper bound, and finite covers alone are not called a proof of Donsker convergence. Hölder entropy rates are scoped to regular reference measures; failure of a sufficient entropy test does not itself prove a CLT failure.
+
+The median's bounded influence gives a first-order contamination calculation, not a finite-sample one-point displacement bound. Replacing a point can have twice the one-contamination effect. Its efficient tangent space is mean-zero L2, obtained by closure of bounded scores. KDE intervals on rounded Newcomb observations assume an underlying continuous measurement law; they do not account for apparatus bias or automatically target a physical constant. The t3 coverage experiment does not establish a unique smoothing explanation or universal conservatism. Board rows use empirical dataset-level Monte Carlo errors; zero empirical error after no observed failures does not establish population coverage one.
+
+LAN power envelopes are scoped to positive local alternatives and asymptotic null level. Normal-critical-value finite-sample t/sign simulations need not have exact nominal size, and their Monte Carlo errors are saved. The matrix expected-norm constant is justified through the exponential-moment argument, rather than simple integration of a tail at the same constants. Its reference ball uses this model's variance/norm bounds, not an arbitrary covariance. Matrix Bernstein explicitly depends on dimension; the net bound includes d/n as well as √(d/n); Marchenko–Pastur supplies a proportional-asymptotic edge, not a finite-sample quantile guarantee.
+
+The exam retains persistent lifted problem cards and proof maps. Local clipping preserves viewport crossings and missing breaks. English endpoint/native/motion and representative narrated review remain pending. Chinese narration/captions, continuous listening and final masters remain open.

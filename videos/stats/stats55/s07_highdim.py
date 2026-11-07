@@ -26,12 +26,7 @@ class ExamHighDim(ExamMixin, VoiceoverScene):
             r"$\|X(\hat\beta - \beta^*)\|^2/n \le 9s\lambda^2/\phi^2$ and $\|\hat\beta - \beta^*\|_1 \le 12s\lambda/\phi^2$; \ choose $\lambda$ so the event has probability $1 - \delta$."],
             marks=10, color=BAYC)
         self.pose_voiceover(
-            "Problem eleven. A linear model with Gaussian noise, columns of the design scaled to have squared norm n, and a "
-            "true coefficient vector with s nonzero entries, on a set S where the design satisfies the compatibility "
-            "condition with constant phi. Prove that on the event that every column's correlation with the noise is at "
-            "most lambda over two, the lasso's prediction error is at most nine s lambda squared over phi squared, and its "
-            "l one error at most twelve s lambda over phi squared. Then choose lambda so that the event has probability one "
-            "minus delta. Pause and try it.", card)
+            "Problem eleven. A linear model with Gaussian noise, columns of the design scaled to have squared norm n, and a true coefficient vector with s nonzero entries, on a set S where the design satisfies the compatibility condition with constant phi. Prove that on the event that every column's correlation with the noise is at most lambda over two, the lasso's prediction error is at most nine s lambda squared over phi squared, and its l one error at most twelve s lambda over phi squared. Then choose lambda so that the event has probability at least one minus delta. Pause and try it.", card)
         rows = [
             cmath(r"\tfrac{1}{2n}\|X\Delta\|^2", r"\le", r"\tfrac1n\varepsilon^\top X\Delta + \lambda\big(\|\beta^*\|_1 - \|\hat\beta\|_1\big), \ \ \Delta = \hat\beta - \beta^*", font_size=30),
             cmath(r"\text{on the event}", r":", r"\tfrac{1}{2n}\|X\Delta\|^2 + \tfrac\lambda2\|\Delta_{S^c}\|_1 \le \tfrac{3\lambda}{2}\|\Delta_S\|_1 \ \Rightarrow \ \|\Delta_{S^c}\|_1 \le 3\|\Delta_S\|_1", font_size=28),
@@ -79,22 +74,15 @@ class ExamHighDim(ExamMixin, VoiceoverScene):
     def p11_support(self, card):
         rows = [
             cmath(r"\text{compatibility}", r":", r"\text{enough for prediction and } \ell_1: \ \text{weaker than RIP}", font_size=34),
-            cmath(r"\text{support recovery}", r":", r"\text{needs irrepresentability: \ } \|X_{S^c}^\top X_S(X_S^\top X_S)^{-1}\mathrm{sign}(\beta_S)\|_\infty < 1", font_size=32),
-            cmath(r"\text{and a beta-min condition}", r":", r"\min_{j \in S}|\beta_j| \gtrsim \lambda\sqrt s / \phi^2", font_size=32),
+            cmath(r"\text{support recovery}", r":", r"\text{standard sufficient regime: \ } \|X_{S^c}^\top X_S(X_S^\top X_S)^{-1}\mathrm{sign}(\beta_S)\|_\infty < 1", font_size=32),
+            cmath(r"\text{and a beta-min condition}", r":", r"\min_{j\in S}|\beta_j|>\|G_{SS}^{-1}(X_S^\top\varepsilon/n-\lambda\,\mathrm{sign}(\beta_S))\|_\infty", font_size=32),
             cmath(r"\text{so}", r":", r"\text{predicting well is easier than choosing the right variables}", font_size=32),
         ]
         rows[1][-1].set_color(BAYC)
         rows[3][-1].set_color(PROOFC)
-        whys = [why(r"van de Geer \& B\"uhlmann (2009)"), why(r"Zhao \& Yu; \ Wainwright (Part 52)"), why(r"signals above the noise"), why(r"Part 56's problem")]
+        whys = [why(r"van de Geer \& B\"uhlmann (2009)"), why(r"Zhao \& Yu; \ Wainwright (Part 52)"), why(r"$G_{SS}=X_S^\top X_S/n$; \ plus off-support dual control"), why(r"Part 56's problem")]
         self.steps_voiceover(
-            "<bookmark mark='a'/> What the theorem does not say. Compatibility, a condition on the design restricted "
-            "to the cone, is enough for prediction and l one error; it is weaker than the restricted isometry property "
-            "of compressed sensing. <bookmark mark='b'/> Recovering the exact set of variables needs much more: the "
-            "irrepresentable condition of Zhao, Yu and Wainwright from Part fifty-two, which says the irrelevant "
-            "variables are not too correlated with the relevant ones. <bookmark mark='c'/> And every true coefficient "
-            "must be large compared with the noise. <bookmark mark='d'/> Predicting well is easier than choosing the "
-            "right variables, which is why inference about the variables a lasso selects is the subject of Part "
-            "fifty-six.",
+            "<bookmark mark='a'/> What the theorem does not say. Compatibility, a condition on the design restricted to the cone, is enough for prediction and l one error; it is weaker than the restricted isometry property of compressed sensing. <bookmark mark='b'/> Standard uniform or asymptotic sign-recovery results require stronger conditions, commonly an irrepresentability margin and control of the active Gram inverse and score noise. This is not a claim that every finite sample violating irrepresentability fails support recovery. <bookmark mark='c'/> A beta-min condition must dominate the actual inverse-Gram-transformed active noise and penalty. Compatibility alone does not supply that sign-recovery requirement. <bookmark mark='d'/> Predicting well is easier than choosing the right variables, which is why inference about the variables a lasso selects is the subject of Part fifty-six.",
             rows, whys)
         self.clear_but(card)
 
@@ -114,21 +102,16 @@ class ExamHighDim(ExamMixin, VoiceoverScene):
         r2 = [r for r in rows if r["n"] == 200][0]
         ev = min(r["event"] for r in rows)
         side = fit_rows(VGroup(
-            label(r"Gaussian designs, \ 30 replications per $n$; \ $\phi^2 = 1/2$ assumed", font_size=22),
+            label(r"Gaussian designs, \ 30 replications per $n$; \ $\phi^2\ge1/2$ not verified", font_size=22),
             label(rf"orange: \ prediction error, \ {r2['pred']:.2f} at $n = 200$ \ (bound {r2['pred_bound']:.1f})", font_size=22, color=BAYC),
             label(rf"blue: \ $\ell_1$ error, \ {r2['l1']:.2f} \ (bound {r2['l1_bound']:.0f})", font_size=22, color=S.EST),
             label(rf"the event held in at least {100 * ev:.0f}\% of runs", font_size=22, color=GREY_A),
-            label(r"valid, \ loose by about 20, \ and the right slope", font_size=22, color=PROOFC),
+            label(r"conditional reference; \ compatibility not certified", font_size=22, color=PROOFC),
         ), 4.6, 0.36, SIDE)
         with self.voiceover(
-            f"<bookmark mark='a'/> The theorem against simulation: five hundred candidate variables, five of them real, and "
-            f"Gaussian designs, with the compatibility constant squared taken as a half. <bookmark mark='b'/> The prediction "
-            f"error, solid, is {say(r2['pred'], 2)} at two hundred observations; the bound, dashed, is {say(r2['pred_bound'], 1)}. "
-            f"<bookmark mark='c'/> The l one error is {say(r2['l1'], 2)}, against a bound of {say(r2['l1_bound'], 0)}. "
-            f"<bookmark mark='d'/> The noise event held in at least {100 * ev:.0f} percent of the runs. <bookmark mark='e'/> "
-            f"The bounds are valid, loose by a factor of about twenty, and fall at the right rate, one over n."
+            f"<bookmark mark='a'/> The theorem against simulation: five hundred candidate variables, five of them real, and Gaussian designs, with columns normalized to the stated length. The dashed curves are conditional benchmarks for compatibility squared at least a half; that assumption has not been verified for these random designs. <bookmark mark='b'/> The prediction error, solid, is {say(r2['pred'], 2)} at two hundred observations; the bound, dashed, is {say(r2['pred_bound'], 1)}. <bookmark mark='c'/> The l one error is {say(r2['l1'], 2)}, against a bound of {say(r2['l1_bound'], 0)}. <bookmark mark='d'/> The noise event held in at least {100 * ev:.0f} percent of the runs. <bookmark mark='e'/> The simulation errors lie below these conditional reference curves, but that does not certify their compatibility assumption. The prediction benchmark scales as one over n; the l one benchmark scales as one over root n. Numerical KKT residuals verify each computed lasso solution."
         ) as vo:
-            self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated; \ bounds exact")))
+            self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated; \ compatibility benchmarks conditional")))
             vo.wait_until("a")
             self.play(FadeIn(side[0]))
             vo.wait_until("b")
@@ -145,7 +128,7 @@ class ExamHighDim(ExamMixin, VoiceoverScene):
     def p12(self):
         d = load("contract")
         card = ExamCard(12, r"a posterior contraction rate", r"Part 53", [
-            r"$Y_k = \theta_k + Z_k/\sqrt n$, \ $k \ge 1$, \ with the prior $\theta_k \sim N(0, k^{-1-2\alpha})$ independently,",
+            r"$Y_k = \theta_k + Z_k/\sqrt n$, \ $k \ge 1$, \ with $\alpha,\beta>0$ and prior $\theta_k\sim N(0,k^{-1-2\alpha})$ independently,",
             r"and a truth $\theta_0$ in the Sobolev ball $\sum k^{2\beta}\theta_{0k}^2 \le B$. \ Show the posterior contracts at",
             r"$\varepsilon_n = n^{-\min(\alpha, \beta)/(1 + 2\alpha)}$: \ $E_{\theta_0}\Pi(\|\theta - \theta_0\| > M_n\varepsilon_n \mid Y) \to 0$ for every $M_n \to \infty$."],
             marks=10, color=BAYC)
@@ -157,21 +140,13 @@ class ExamHighDim(ExamMixin, VoiceoverScene):
         rows = [
             cmath(r"\theta_k \mid Y", r"\sim", r"N\Big(w_k Y_k, \ \frac{\lambda_k}{1 + n\lambda_k}\Big), \ \ \lambda_k = k^{-1-2\alpha}, \ \ w_k = \frac{n\lambda_k}{1 + n\lambda_k}", font_size=30),
             cmath(r"E_{\theta_0}\Pi(\|\theta - \theta_0\|^2 \mid Y)", r"=", r"\textstyle\sum(1 - w_k)^2\theta_{0k}^2 + \sum w_k^2/n + \sum\frac{\lambda_k}{1 + n\lambda_k}", font_size=30),
-            cmath(r"N = n^{1/(1 + 2\alpha)}", r":", r"\text{variance} + \text{spread} \asymp \frac Nn = n^{-\frac{2\alpha}{1 + 2\alpha}}, \ \ \text{bias}^2 \lesssim B\,N^{-2\min(\alpha,\beta)}", font_size=30),
-            cmath(r"\text{Markov}", r":", r"\Pi(\|\theta - \theta_0\| > M_n\varepsilon_n \mid Y) \le \frac{E\Pi(\|\theta - \theta_0\|^2 \mid Y)}{M_n^2\varepsilon_n^2} \lesssim M_n^{-2} \to 0", font_size=30),
+            cmath(r"N = n^{1/(1 + 2\alpha)}", r":", r"\text{variance} + \text{spread} \asymp \frac Nn = n^{-\frac{2\alpha}{1 + 2\alpha}}, \ \ \text{bias}^2\lesssim B N^{-2\min(\alpha,\beta)}", font_size=30),
+            cmath(r"\text{Markov}", r":", r"E_{\theta_0}\Pi(\|\theta-\theta_0\|>M_n\varepsilon_n\mid Y)\le\frac{E_{\theta_0}\int\|\theta-\theta_0\|^2\,d\Pi(\theta\mid Y)}{M_n^2\varepsilon_n^2} \lesssim M_n^{-2} \to 0", font_size=30),
         ]
         rows[1][-1].set_color(BAYC)
         rows[3][-1].set_color(PROOFC)
         whys = [why(r"conjugate, \ coordinate by coordinate"), why(r"bias$^2$ $+$ variance $+$ posterior spread"), why(r"where $n\lambda_k \approx 1$"), why(r"in expectation, \ then in probability")]
-        self.steps_voiceover("<bookmark mark='a'/> The model is conjugate, coordinate by coordinate: the posterior for theta k is normal, "
-                   "centred at w k times Y k, with w k equal to n lambda k over one plus n lambda k. <bookmark mark='b'/> So the "
-                   "posterior's expected squared distance from the truth splits into three sums: the squared bias of the "
-                   "posterior mean, its variance, and the posterior's own spread. <bookmark mark='c'/> Split the coordinates "
-                   "where n lambda k is about one, at N equal to n to the one over one plus two alpha. The variance and the "
-                   "spread are each of order N over n, n to the minus two alpha over one plus two alpha; the bias is at most "
-                   "the Sobolev radius times N to the minus two times the smaller of alpha and beta. Both are the square of "
-                   "the claimed rate. <bookmark mark='d'/> Markov's inequality, applied to the posterior, finishes it: the "
-                   "posterior mass outside a ball of radius M n epsilon n is at most a constant over M n squared.", rows, whys)
+        self.steps_voiceover("<bookmark mark='a'/> The model is conjugate, coordinate by coordinate: the posterior for theta k is normal, centred at w k times Y k, with w k equal to n lambda k over one plus n lambda k. <bookmark mark='b'/> So the posterior's expected squared distance from the truth splits into three sums: the squared bias of the posterior mean, its variance, and the posterior's own spread. <bookmark mark='c'/> Split the coordinates where n lambda k is about one, at N equal to n to the one over one plus two alpha. The variance and the spread are each of order N over n, n to the minus two alpha over one plus two alpha; the bias is at most the Sobolev radius times N to the minus two times the smaller of alpha and beta. Both are bounded by a constant times the squared claimed rate. Under oversmoothing, the variance can decay faster than that bound. <bookmark mark='d'/> Posterior Markov followed by expectation over the data finishes it: expected posterior mass outside the ball is at most a constant over M n squared. An unconditional second moment cannot bound the conditional posterior probability on every dataset.", rows, whys)
         self.clear_but(card)
         self.p12_chart(d, card)
         self.p12_ggv(card)
@@ -186,23 +161,16 @@ class ExamHighDim(ExamMixin, VoiceoverScene):
 
     def p12_ggv(self, card):
         rows = [
-            cmath(r"\text{prior mass}", r":", r"\Pi\big(\mathrm{KL}\text{-ball of radius } \varepsilon_n^2\big) \ge e^{-Cn\varepsilon_n^2}", font_size=32),
+            cmath(r"\text{prior mass}", r":", r"\Pi\big(\mathrm{KL}\le\varepsilon_n^2,\quad V\le\varepsilon_n^2\big) \ge e^{-Cn\varepsilon_n^2}", font_size=32),
             cmath(r"\text{a sieve}", r":", r"\Pi(\Theta_n^c) \le e^{-(C + 4)n\varepsilon_n^2}, \ \ \log N(\varepsilon_n, \Theta_n) \le n\varepsilon_n^2", font_size=32),
             cmath(r"\text{tests}", r":", r"\text{errors } e^{-cn\varepsilon_n^2} \text{ against } \|\theta - \theta_0\| > M\varepsilon_n", font_size=34),
             cmath(r"\Rightarrow", r"\;", r"\Pi(\|\theta - \theta_0\| > M\varepsilon_n \mid Y) \to 0: \ \text{the general theorem, \ no conjugacy}", font_size=32),
         ]
         rows[0][-1].set_color(BAYC)
         rows[3][-1].set_color(PROOFC)
-        whys = [why(r"small balls (Part 53)"), why(r"most of the prior's mass is simple"), why(r"Le Cam--Birg\'e tests (Part 50)"), why(r"Ghosal, \ Ghosh \& van der Vaart (2000)")]
+        whys = [why(r"KL and second log moment (Part 53)"), why(r"most of the prior's mass is simple"), why(r"Le Cam--Birg\'e tests (Part 50)"), why(r"Ghosal, \ Ghosh \& van der Vaart (2000)")]
         self.steps_voiceover(
-            "<bookmark mark='a'/> Without conjugacy, the general theorem of Ghosal, Ghosh and van der Vaart gives the "
-            "same answer from three conditions. The prior must put mass at least e to the minus C n epsilon squared on "
-            "a small Kullback–Leibler ball around the truth. <bookmark mark='b'/> Outside a sieve whose metric entropy "
-            "is at most n epsilon squared, it must put exponentially less mass. <bookmark mark='c'/> The entropy bound "
-            "yields tests that separate the truth from everything farther than M epsilon away, with exponentially "
-            "small errors, as in Le Cam and Birgé's construction from Part fifty. <bookmark mark='d'/> Together, they "
-            "force the posterior to contract at rate epsilon n. For the Gaussian prior, the small-ball probability "
-            "gives exactly the rate computed here by hand.",
+            "<bookmark mark='a'/> Without conjugacy, the general theorem of Ghosal, Ghosh and van der Vaart gives the same answer from three conditions. The prior must put mass at least e to the minus C n epsilon squared on a neighbourhood controlling both KL divergence and the second log-likelihood-ratio moment. <bookmark mark='b'/> Outside a sieve whose metric entropy is at most n epsilon squared, it must put exponentially less mass. <bookmark mark='c'/> In a model with suitable tests for the chosen metric, the entropy bound combines local tests to separate the truth from everything farther than M epsilon away, with exponentially small errors, as in Le Cam and Birgé's construction from Part fifty. <bookmark mark='d'/> With compatible constants, n epsilon squared tending to infinity, and a sufficiently large multiplier, these conditions give contraction in probability or in expected posterior mass. For the Gaussian prior, the small-ball probability gives exactly the rate computed here by hand.",
             rows, whys)
         self.clear_but(card)
 
@@ -214,20 +182,14 @@ class ExamHighDim(ExamMixin, VoiceoverScene):
         cols = {"0.5": S.EST, "1.0": PROOFC, "2.0": S.RESID}
         cs = {a: polyline(ax, ln, np.log10(d[a]["total"]), c, 4) for a, c in cols.items()}
         side = fit_rows(VGroup(
-            label(r"exact, \ truth $\theta_{0k} = k^{-3/2}$ \ (smoothness just below 1)", font_size=22),
+            label(r"infinite series with tail bounds; \ boundary truth $\theta_{0k} = k^{-3/2}$ \ (smoothness just below 1)", font_size=22),
             label(rf"blue: \ $\alpha = 1/2$: \ slope {d['0.5']['slope']:.3f} \ (theory {d['0.5']['theory']:.3f})", font_size=22, color=S.EST),
-            label(rf"green: \ $\alpha = 1 = \beta$: \ {d['1.0']['slope']:.3f} \ ({d['1.0']['theory']:.3f}), \ the minimax rate", font_size=22, color=PROOFC),
+            label(rf"green: \ $\alpha = 1$; \ boundary exponent $\beta=1$: \ {d['1.0']['slope']:.3f} \ ({d['1.0']['theory']:.3f}), \ reference exponent", font_size=22, color=PROOFC),
             label(rf"red: \ $\alpha = 2$: \ {d['2.0']['slope']:.3f} \ ({d['2.0']['theory']:.3f}): \ too smooth a prior", font_size=22, color=S.RESID),
             label(r"the prior's smoothness must match the truth's", font_size=22, color=GREY_A),
         ), 4.6, 0.36, SIDE)
         with self.voiceover(
-            f"<bookmark mark='a'/> The posterior's expected squared distance from the truth, computed exactly, for a truth of "
-            f"smoothness one and three priors. <bookmark mark='b'/> A rough prior, alpha one half: the fitted slope is "
-            f"{say(d['0.5']['slope'], 3)}, against the theory's minus one half. <bookmark mark='c'/> A matched prior, alpha "
-            f"one: {say(d['1.0']['slope'], 3)}, against minus two thirds, the minimax rate of Part fifty. <bookmark mark='d'/> "
-            f"A prior smoother than the truth, alpha two: {say(d['2.0']['slope'], 3)}, against minus two fifths: the posterior "
-            f"is too sure the function is smooth, and contracts too slowly to the right answer. <bookmark mark='e'/> The "
-            f"prior's smoothness must match the truth's, or be learned from the data, as Part fifty-three's adaptation did."
+            f"<bookmark mark='a'/> The posterior's expected squared distance from the truth, evaluated as an infinite-series quantity with certified remainder bounds. The plotted truth is a boundary hyperrectangle sequence of exponent one, in Sobolev classes strictly below one; it is not a member of the Sobolev-one ball in the theorem. <bookmark mark='b'/> A rough prior, alpha one half: the fitted slope is {say(d['0.5']['slope'], 3)}, against the theory's minus one half. <bookmark mark='c'/> A matched prior, alpha one: {say(d['1.0']['slope'], 3)}, against the reference exponent minus two thirds. The boundary truth is an illustration, not a verification of a uniform Sobolev-ball minimax theorem. <bookmark mark='d'/> A prior smoother than the truth, alpha two: {say(d['2.0']['slope'], 3)}, against minus two fifths: the posterior is too sure the function is smooth, and contracts too slowly to the right answer. <bookmark mark='e'/> The prior's smoothness must match the truth's, or be learned from the data, as Part fifty-three's adaptation did."
         ) as vo:
             self.play(FadeIn(A), FadeIn(exact_tag(r"exact")))
             vo.wait_until("a")

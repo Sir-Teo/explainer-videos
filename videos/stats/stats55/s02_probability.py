@@ -46,19 +46,13 @@ class ExamProbability(ExamMixin, VoiceoverScene):
         self.clear_but(card)
         rows = [
             cmath(r"P(M_n \le c\log n)", r"=", r"(1 - n^{-c})^n \le \exp(-n^{1-c})", font_size=34),
-            cmath(r"c < 1", r":", r"\textstyle\sum_n \exp(-n^{1-c}) < \infty \ \Rightarrow \ M_n > c\log n \text{ eventually}", font_size=32),
+            cmath(r"0<c<1", r":", r"\textstyle\sum_n \exp(-n^{1-c}) < \infty \ \Rightarrow \ M_n > c\log n \text{ eventually}", font_size=32),
             cmath(r"\text{so}", r":", r"\liminf_n M_n/\log n \ge 1 \text{ a.s.}, \ \ \text{and } M_n/\log n \to 1", font_size=32),
             cmath(r"\text{note}", r":", r"\text{no independence needed for the upper side; \ the lower side uses it}", font_size=30),
         ]
         rows[2][-1].set_color(PROOFC)
         whys = [why(r"independence: \ $1 - x \le e^{-x}$"), why(r"Borel--Cantelli again"), why(r"$c = 1 - 1/k$"), why(r"which hypothesis is used where")]
-        self.steps_voiceover("<bookmark mark='a'/> The lower side. The maximum is at most c log n only if every one of the n variables "
-                   "is, and by independence that has probability one minus n to the minus c, to the n: at most e to the minus "
-                   "n to the one minus c. <bookmark mark='b'/> For c below one, these are summable too, so the first lemma "
-                   "applies again: eventually the maximum exceeds c log n. <bookmark mark='c'/> Letting c rise to one along a "
-                   "sequence, the limit inferior is at least one, and the two sides meet. <bookmark mark='d'/> Notice where "
-                   "independence was used: not at all for the upper bound, which holds for any exponential variables, "
-                   "dependent or not, but essentially for the lower one.", rows, whys)
+        self.steps_voiceover("<bookmark mark='a'/> The lower side. The maximum is at most c log n only if every one of the n variables is, and by independence that has probability one minus n to the minus c, to the n: at most e to the minus n to the one minus c. <bookmark mark='b'/> For c strictly between zero and one, these are summable too, so the first lemma applies again: eventually the maximum exceeds c log n. <bookmark mark='c'/> Letting c rise to one along a sequence, the limit inferior is at least one, and the two sides meet. <bookmark mark='d'/> Notice where independence was used: not at all for the upper bound, which holds for any exponential variables, dependent or not, but essentially for the lower one.", rows, whys)
         self.clear_but(card)
         self.p1_chart(d, card)
         self.p1_bc2(d, card)
@@ -73,28 +67,23 @@ class ExamProbability(ExamMixin, VoiceoverScene):
     def p1_chart(self, d, card):
         n = np.asarray(d["scatter_n"])
         r = np.asarray(d["scatter_r"])
-        A = axes([0, 10000], [0, 2.6], x_length=6.8, y_length=3.4, xlabel=r"$n$", ylabel=r"$X_n / \log n$",
+        ymax = max(2.6, float(np.ceil(np.max(r)*10)/10+.1))
+        A = axes([0, 10000], [0, ymax], x_length=6.8, y_length=3.4, xlabel=r"$n$", ylabel=r"$X_n / \log n$",
                  xticks=[0, 5000, 10000], yticks=[0, 1, 2], center=CHART)
         ax = A.ax
-        dots = VGroup(*[Dot(ax.c2p(a, min(b, 2.6)), radius=0.025, color=PROBC, fill_opacity=0.7) for a, b in zip(n, r)])
+        dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.025, color=PROBC, fill_opacity=0.7) for a, b in zip(n, r)])
         l12 = DashedLine(ax.c2p(0, 1.2), ax.c2p(10000, 1.2), color=S.RESID, stroke_width=2)
         l1 = Line(ax.c2p(0, 1.0), ax.c2p(10000, 1.0), color=WHITE, stroke_width=2)
         e = {c: d[f"exc_{c}"] for c in ("2.0", "1.2", "1.0", "0.8")}
         side = fit_rows(VGroup(
             label(r"$X_n/\log n$ for $n \le 10^4$ \ (every 7th point)", font_size=22),
             label(rf"exceedances of $c\log n$ up to $n = 10^6$:", font_size=22, color=GREY_A),
-            label(rf"$c = 2$: \ {e['2.0']['count']}; \ \ $c = 1.2$: \ {e['1.2']['count']}, \ the last at $n = {e['1.2']['last']:,}$", font_size=22, color=S.RESID),
+            label(rf"$c = 2$: \ {e['2.0']['count']}; \ \ $c = 1.2$: \ {e['1.2']['count']}, \ last observed at $n = {e['1.2']['last']:,}$", font_size=22, color=S.RESID),
             label(rf"$c = 1$: \ {e['1.0']['count']}; \ \ $c = 0.8$: \ {e['0.8']['count']} \ (and counting)", font_size=22, color=PROBC),
             label(r"summable: \ finitely many; \ not summable: \ infinitely many", font_size=22, color=PROOFC),
         ), 4.6, 0.36, SIDE)
         with self.voiceover(
-            f"<bookmark mark='a'/> Here are the ratios X n over log n for the first ten thousand draws. <bookmark mark='b'/> "
-            f"Counting exceedances over a million draws: above two log n, none at all. <bookmark mark='c'/> Above one point "
-            f"two log n, {e['1.2']['count']}, the last at n equal to {e['1.2']['last']:,}: finitely many, as the first lemma "
-            f"says. <bookmark mark='d'/> Above log n itself, {e['1.0']['count']}, and above zero point eight log n, "
-            f"{e['0.8']['count']}, still arriving: for c at most one the sum diverges, and by the second Borel–Cantelli "
-            f"lemma, which needs independence, there are infinitely many. <bookmark mark='e'/> The boundary between "
-            f"finitely and infinitely many is exactly where the series stops converging."
+            f"<bookmark mark='a'/> Here are the ratios X n over log n for the first ten thousand draws. <bookmark mark='b'/> Counting exceedances over a million draws: above two log n, none at all. <bookmark mark='c'/> Above one point two log n, {e['1.2']['count']}, the last at n equal to {e['1.2']['last']:,}: the last observed by this finite horizon. The first lemma does not identify the eventual last exceedance from this simulation. <bookmark mark='d'/> Above log n itself, {e['1.0']['count']}, and above zero point eight log n, {e['0.8']['count']}, still arriving: for c at most one the sum diverges, and by the second Borel–Cantelli lemma, which needs independence, there are infinitely many. <bookmark mark='e'/> The boundary between finitely and infinitely many is exactly where the series stops converging."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated, \ seeded")))
             vo.wait_until("a")
@@ -111,10 +100,11 @@ class ExamProbability(ExamMixin, VoiceoverScene):
 
     def p1_bc2(self, d, card):
         ns = np.log10(np.asarray(d["ns"], float))
-        A = axes([0.3, 6], [0.8, 3.0], x_length=6.8, y_length=3.4, xlabel=r"$n$ \ (log scale)", ylabel=r"$M_n / \log n$",
+        ymax = max(3., float(np.ceil(np.max(d["ratio"])*10)/10+.1))
+        A = axes([0.3, 6], [min(.8, min(d["ratio"])-.05), ymax], x_length=6.8, y_length=3.4, xlabel=r"$n$ \ (log scale)", ylabel=r"$M_n / \log n$",
                  xticks=[1, 2, 3, 4, 5, 6], xfmt=lambda v: f"10^{{{int(v)}}}", yticks=[1, 2, 3], center=CHART)
         ax = A.ax
-        c = polyline(ax, ns, np.minimum(d["ratio"], 3.0), PROBC, 4)
+        c = polyline(ax, ns, d["ratio"], PROBC, 4)
         one = DashedLine(ax.c2p(0.3, 1), ax.c2p(6, 1), color=WHITE, stroke_width=2)
         side = fit_rows(VGroup(
             label(r"the running maximum, \ divided by $\log n$", font_size=22),
@@ -180,13 +170,7 @@ class ExamProbability(ExamMixin, VoiceoverScene):
         rows[1][-1].set_color(PROOFC)
         rows[2][-1].set_color(PROOFC)
         whys = [why(r"now the theorem applies"), why(r"gambler's ruin"), why(r"Wald's second identity"), why(r"and as $a \to \infty$: \ $p \to 1$, \ $E T \to \infty$")]
-        self.steps_voiceover("<bookmark mark='a'/> Now stop at minus a or b instead. The stopped walk never leaves the interval, so it is "
-                   "bounded and uniformly integrable, and optional stopping applies. <bookmark mark='b'/> Zero equals the mean "
-                   "at T: b times p minus a times one minus p, so the chance of reaching b first is a over a plus b. <bookmark "
-                   "mark='c'/> S squared minus n is also a martingale, so the expected time equals the mean of S T squared, "
-                   "which works out to a times b. <bookmark mark='d'/> With a equal to three and b to seven: a chance of "
-                   "three tenths, and twenty-one steps on average. Let a grow, and p tends to one while the expected time "
-                   "blows up: the first problem's walk is the limit, and that is exactly where the theorem stops applying.", rows, whys)
+        self.steps_voiceover("<bookmark mark='a'/> Now stop at minus a or b instead. The stopped walk never leaves the interval, so it is bounded and uniformly integrable, and optional stopping applies. <bookmark mark='b'/> Zero equals the mean at T: b times p minus a times one minus p, so the chance of reaching b first is a over a plus b. <bookmark mark='c'/> At each bounded time, the squared stopped walk has expectation equal to the truncated stopping time. Bounded convergence on the squared position and monotone convergence on the time then give expected T equal to a times b, without assuming integrability in advance. <bookmark mark='d'/> With a equal to three and b to seven: a chance of three tenths, and twenty-one steps on average. Let a grow, and p tends to one while the expected time blows up: the first problem's walk is the limit, and that is exactly where the theorem stops applying.", rows, whys)
         self.solved(card)
         self.wait(0.5)
         self.clear_scene()
@@ -211,15 +195,12 @@ class ExamProbability(ExamMixin, VoiceoverScene):
             label(r"five walks that took a while \ (half stop at step 1)", font_size=22),
             label(rf"steps to reach 1: \ {', '.join(ends[:3])}", font_size=22, color=GREY_A),
             label(rf"{', '.join(ends[3:])}", font_size=22, color=GREY_A),
-            label(r"every walk gets there; \ some go very far down first", font_size=22, color=S.RESID),
+            label(r"almost-sure hitting; \ rare long negative excursions", font_size=22, color=S.RESID),
         ), 4.6, 0.4, SIDE)
         hit = sorted(len(p) - 1 for p in paths if p[-1] == 1)
         miss = sum(1 for p in paths if p[-1] != 1)
         with self.voiceover(
-            f"<bookmark mark='a'/> Five walks, chosen among those that did not reach one quickly; half of all walks "
-            f"stop at the first step. <bookmark mark='b'/> These took {', '.join(str(h) for h in hit[:-1])} and {hit[-1]} "
-            f"steps, and {miss} had not arrived after four hundred. <bookmark mark='c'/> Every walk gets there eventually, "
-            f"but some go very far down first, and those rare, deep excursions carry exactly the missing mean."
+            f"<bookmark mark='a'/> Five walks, chosen among those that did not reach one quickly; half of all walks stop at the first step. <bookmark mark='b'/> These took {', '.join((str(h) for h in hit[:-1]))} and {hit[-1]} steps, and {miss} had not arrived after four hundred. <bookmark mark='c'/> The hitting time is finite almost surely, but some go very far down first, and those rare, deep excursions carry exactly the missing mean."
         ) as vo:
             self.play(FadeIn(A), FadeIn(one), FadeIn(simulated_tag(r"simulated, \ seeded")))
             vo.wait_until("a")

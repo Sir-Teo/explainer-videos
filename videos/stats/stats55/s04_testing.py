@@ -36,37 +36,23 @@ class ExamTesting(ExamMixin, VoiceoverScene):
             cmath(r"p(x, y)", r"\propto", r"\exp\big(x \log\tfrac{\lambda_1}{\lambda_2} + (x + y)\log\lambda_2\big): \ \psi = \log\tfrac{\lambda_1}{\lambda_2}, \ T = X + Y", font_size=30),
             cmath(r"X \mid T = t", r"\sim", r"\mathrm{Bin}(t, p), \ \ p = \frac{\rho e_1}{\rho e_1 + e_2}: \ \text{free of the nuisance } \lambda_2", font_size=32),
             cmath(r"\text{Neyman structure}", r":", r"T \text{ complete under } H_0 \Rightarrow \text{similar tests are level } \alpha \text{ in every slice}", font_size=30),
-            cmath(r"\text{UMPU}", r"=", r"\text{the two-sided UMPU binomial test of } p = p_0 = \tfrac{e_1}{e_1 + e_2}, \text{ given } t", font_size=30),
+            cmath(r"\text{UMPU}", r"=", r"E_0\phi=\alpha,\quad E_0[(X-tp_0)\phi]=0:\ \text{two-tail randomization}", font_size=30),
         ]
         rows[1][-1].set_color(TESTC5)
         rows[3][-1].set_color(PROOFC)
         whys = [why(r"an exponential family"), why(r"condition on the nuisance's statistic"), why(r"Lehmann--Scheff\'e, \ for tests"), why(r"randomized at its two boundaries")]
-        self.steps_voiceover("<bookmark mark='a'/> Write the joint probability as an exponential family. The parameter of interest is psi, "
-                   "the log of the rate ratio, attached to X, and the nuisance rate attaches to the total, T. <bookmark "
-                   "mark='b'/> Given the total, X is binomial, with a success probability that depends only on the ratio rho, "
-                   "not on the nuisance. <bookmark mark='c'/> Under the null, T is sufficient and complete for the nuisance, so "
-                   "every similar test has level alpha within every slice of T: that is Neyman structure. <bookmark mark='d'/> "
-                   "So the optimal unbiased test is, slice by slice, the two-sided UMPU binomial test of p equal to the share "
-                   "of houses, p zero.", rows, whys)
+        self.steps_voiceover("<bookmark mark='a'/> Write the joint probability as an exponential family. The parameter of interest is psi, the log of the rate ratio, attached to X, and the nuisance rate attaches to the total, T. <bookmark mark='b'/> Given the total, X is binomial, with a success probability that depends only on the ratio rho, not on the nuisance. <bookmark mark='c'/> Under the null, T is sufficient and complete for the nuisance, so every similar test has level alpha within every slice of T: that is Neyman structure. <bookmark mark='d'/> The UMPU construction also imposes zero derivative of power at the null: each slice has rejection probability alpha and centered first moment zero. These two constraints determine the boundary randomizations of the two-tailed binomial rule.", rows, whys)
         self.clear_but(card)
         rows = [
             cmath(r"t = 1{,}361", r":", rf"p_0 = {d['p0']:.3f}: \ E X = {d['t'] * d['p0']:.0f}, \ \text{{observed}} \ {d['x']:,} \ (\hat p = {d['phat']:.3f})", font_size=32),
-            cmath(r"z", r"=", rf"{d['z']:.1f}: \ \ P\text{{-value}} \approx 10^{{{d['log10p']:.0f}}}", font_size=36),
+            cmath(r"z", r"=", rf"{d['z']:.1f}: \ \ P_\text{{upper}} \approx 10^{{{d['log10p']:.0f}}}", font_size=36),
             cmath(r"\text{interval}", r":", r"\text{invert Clopper--Pearson for } p, \ \text{map } \rho = \frac{p}{1 - p}\cdot\frac{e_2}{e_1}", font_size=32),
             cmath(r"\hat\rho", r"=", rf"{d['ratio']:.2f}, \ \ 95\%: \ ({d['ci'][0]:.2f}, \ {d['ci'][1]:.2f})", font_size=36),
         ]
         rows[1][-1].set_color(S.RESID)
         rows[3][-1].set_color(PROOFC)
-        whys = [why(r"the slice Snow observed"), why(r"the normal approximation, \ for scale"), why(r"monotone in $\rho$"), why(r"eight times the death rate")]
-        self.steps_voiceover(f"<bookmark mark='a'/> Snow's slice has {d['t']:,} deaths in all. Southwark and Vauxhall supplied "
-                   f"{100 * d['p0']:.1f} percent of the houses, so under equal rates about {d['t'] * d['p0']:.0f} of the deaths "
-                   f"should be theirs. They had {d['x']:,}, ninety-three percent. <bookmark mark='b'/> That is "
-                   f"{say(d['z'], 1)} standard errors out: the P-value is about ten to the minus {abs(d['log10p']):.0f}. "
-                   f"<bookmark mark='c'/> For the interval, invert the exact binomial test: take the Clopper–Pearson interval "
-                   f"for p and map it to the rate ratio, which is increasing in p. <bookmark mark='d'/> The death rate in "
-                   f"houses on the polluted supply was {say(d['ratio'], 2)} times Lambeth's, with an exact interval from "
-                   f"{say(d['ci'][0], 2)} to {say(d['ci'][1], 2)}. Snow called it his grand experiment, because the two "
-                   f"companies' pipes ran down the same streets.", rows, whys)
+        whys = [why(r"the slice Snow observed"), why(r"exact binomial upper tail; \ z gives scale"), why(r"monotone in $\rho$"), why(r"eight times the death rate")]
+        self.steps_voiceover(f"<bookmark mark='a'/> Snow's slice has {d['t']:,} deaths in all. Southwark and Vauxhall supplied {100 * d['p0']:.1f} percent of the houses, so under equal rates about {d['t'] * d['p0']:.0f} of the deaths should be theirs. They had {d['x']:,}, ninety-three percent. <bookmark mark='b'/> That is {say(d['z'], 1)} standard errors out: the exact one-sided upper-tail P-value is about ten to the minus {abs(d['log10p']):.0f}. <bookmark mark='c'/> The UMPU test rejects this observation with probability one. For a separate conservative interval, invert equal-tailed unrandomized tests: take the Clopper–Pearson interval for p and map it to the rate ratio, which is increasing in p. <bookmark mark='d'/> The death rate in houses on the polluted supply was {say(d['ratio'], 2)} times Lambeth's, with a conditional interval of at least nominal coverage from {say(d['ci'][0], 2)} to {say(d['ci'][1], 2)}. Snow called it his grand experiment, because the two companies' pipes ran down the same streets.", rows, whys)
         self.clear_but(card)
         self.p5_sizes(d, card)
         self.solved(card)
@@ -79,10 +65,7 @@ class ExamTesting(ExamMixin, VoiceoverScene):
                    f"conservative, as the size chart said. <bookmark mark='b'/> The randomized UMPU test rejects "
                    f"{100 * br[1]['achieved']:.1f} percent, within simulation error of five: kept, as Neyman structure promises.",
                    [("a", [0]), ("b", [1])])
-        self.map_voiceover("<bookmark mark='a'/> The proof, mapped. Write the family with the parameter of interest separated, "
-                       "<bookmark mark='b'/> condition on the nuisance's sufficient statistic, <bookmark mark='c'/> use "
-                       "completeness, from Part forty-five, to show conditioning loses nothing, <bookmark mark='d'/> and "
-                       "invert the test for an interval.", [(r"exponential family; \ $\psi$ and $T$", 46), (r"condition on $T$: \ binomial", 46),
+        self.map_voiceover("<bookmark mark='a'/> The proof, mapped. Write the family with the parameter of interest separated, <bookmark mark='b'/> condition on the nuisance's sufficient statistic, <bookmark mark='c'/> use completeness for similarity and the first-moment constraint for unbiasedness, <bookmark mark='d'/> and distinguish the UMPU test from the equal-tailed tests used for the reported interval.", [(r"exponential family; \ $\psi$ and $T$", 46), (r"condition on $T$: \ binomial", 46),
                         (r"completeness: \ Neyman structure", 45), (r"invert: \ an exact interval", 46)], "abcd", color=TESTC5)
 
     def p5_sizes(self, d, card):
@@ -138,10 +121,10 @@ class ExamTesting(ExamMixin, VoiceoverScene):
             cmath(r"\dot\ell(x)", r"=", r"\partial_\theta \log f(x - \theta)\big|_0 = 2F(x) - 1 = \tanh(x/2)", font_size=34),
             cmath(r"I", r"=", r"E\tanh^2(X/2) = \textstyle\int_0^1 (2u - 1)^2\,du = 1/3", font_size=34),
             cmath(r"\log\frac{dP^n_{h/\sqrt n}}{dP^n_0}", r"=", r"h\Delta_n - \tfrac{h^2}{6} + o_P(1), \ \ \Delta_n = \tfrac{1}{\sqrt n}\textstyle\sum\dot\ell(X_i) \rightsquigarrow N(0, \tfrac13)", font_size=30),
-            cmath(r"\text{third lemma}", r":", r"T_n \text{ with } \mathrm{Cov}(T_n, \Delta_n) \to c \ \Rightarrow \ T_n \rightsquigarrow N(hc, \cdot) \text{ under } h/\sqrt n", font_size=30),
+            cmath(r"\text{third lemma}", r":", r"T_n \text{ with } (T_n,\Delta_n)\text{ jointly normal},\ \mathrm{Cov}\to c \ \Rightarrow \ T_n \rightsquigarrow N(hc, \cdot) \text{ under } h/\sqrt n", font_size=30),
         ]
         rows[2][-1].set_color(TESTC5)
-        whys = [why(r"$f'/f = 2F - 1$"), why(r"$F(X) \sim U(0, 1)$"), why(r"a smooth (DQM) model is LAN"), why(r"Le Cam (1960)")]
+        whys = [why(r"$-f'/f = 2F - 1$"), why(r"$F(X) \sim U(0, 1)$"), why(r"a smooth (DQM) model is LAN"), why(r"Le Cam (1960)")]
         self.steps_voiceover("<bookmark mark='a'/> The score of the logistic location model at zero is two F of x minus one, which is the "
                    "hyperbolic tangent of x over two. <bookmark mark='b'/> Its variance is the Fisher information: since F of "
                    "X is uniform, it is the integral of two u minus one squared, one third. <bookmark mark='c'/> The model is "
@@ -158,14 +141,8 @@ class ExamTesting(ExamMixin, VoiceoverScene):
         ]
         rows[0][-1].set_color(PROOFC)
         rows[3][-1].set_color(TESTC5)
-        whys = [why(r"efficient: \ the envelope"), why(r"the mean's variance"), why(r"the median's density"), why(r"ratios of squared slopes (Pitman)")]
-        self.steps_voiceover("<bookmark mark='a'/> For the score test itself, standardized by the root of I, the covariance is the root of "
-                   "I, so its local power is one minus Phi of z alpha minus h over root three. That is the asymptotic power "
-                   "envelope: no test does better. <bookmark mark='b'/> The t-test is based on the mean, whose variance for "
-                   "the logistic is pi squared over three, so its slope is root three over pi. <bookmark mark='c'/> The sign "
-                   "test is based on the median, whose slope is two times the density at zero, one half. <bookmark mark='d'/> "
-                   "The asymptotic relative efficiencies, ratios of squared slopes, are nine over pi squared, ninety-one "
-                   "percent, for the t-test, and three quarters for the sign test.", rows, whys)
+        whys = [why(r"$h>0$; \ $z_\alpha=\Phi^{-1}(1-\alpha)$"), why(r"the mean's variance"), why(r"the median's density"), why(r"ratios of squared slopes (Pitman)")]
+        self.steps_voiceover("<bookmark mark='a'/> For the score test itself, standardized by the root of I, the covariance is the root of I, so its local power is one minus Phi of z alpha minus h over root three. For positive local alternatives, that is the asymptotic power envelope among tests with asymptotic null level at most alpha. <bookmark mark='b'/> The t-test is based on the mean, whose variance for the logistic is pi squared over three, so its slope is root three over pi. <bookmark mark='c'/> The sign test is based on the median, whose slope is two times the density at zero, one half. <bookmark mark='d'/> The asymptotic relative efficiencies, ratios of squared slopes, are nine over pi squared, ninety-one percent, for the t-test, and three quarters for the sign test.", rows, whys)
         self.clear_but(card)
         self.p6_chart(d, card)
         self.p6_envelope(card)
@@ -180,7 +157,7 @@ class ExamTesting(ExamMixin, VoiceoverScene):
 
     def p6_envelope(self, card):
         rows = [
-            cmath(r"\text{any test } \phi_n", r":", r"\limsup E_{h/\sqrt n}\phi_n \le 1 - \Phi(z_\alpha - h\sqrt I) \ \text{ if } \limsup E_0\phi_n \le \alpha", font_size=30),
+            cmath(r"h>0,\ \text{any test }\phi_n", r":", r"\limsup E_{h/\sqrt n}\phi_n \le 1 - \Phi(z_\alpha - h\sqrt I) \ \text{ if } \limsup E_0\phi_n \le \alpha", font_size=30),
             cmath(r"\text{proof}", r":", r"\text{the limit experiment } N(h, I^{-1}) \text{: \ Neyman--Pearson there}", font_size=32),
             cmath(r"\text{estimators}", r":", r"\text{H\'ajek: \ regular } \sqrt n(T_n - \theta) \rightsquigarrow N(0, I^{-1}) * M", font_size=32),
             cmath(r"\text{so}", r":", r"\text{the score test, \ and the MLE, \ are locally optimal}", font_size=32),
@@ -189,13 +166,7 @@ class ExamTesting(ExamMixin, VoiceoverScene):
         rows[3][-1].set_color(PROOFC)
         whys = [why(r"the power envelope"), why(r"Le Cam's limits of experiments"), why(r"the convolution theorem (1970)"), why(r"both sides of Part 47")]
         self.steps_voiceover(
-            "<bookmark mark='a'/> Why is the score test the best possible? For any sequence of tests with asymptotic "
-            "level alpha, the limiting power at h over root n is at most one minus Phi of z alpha minus h root I. "
-            "<bookmark mark='b'/> The proof passes to the limit experiment, a single normal observation with mean h "
-            "and variance one over I, where the Neyman–Pearson lemma decides everything. <bookmark mark='c'/> The same "
-            "limit gives Hájek's convolution theorem for estimators: any regular estimator's limit law is the "
-            "efficient normal convolved with extra noise. <bookmark mark='d'/> So the score test, and the maximum "
-            "likelihood estimator, are locally optimal, which is the whole of Part forty-seven in one sentence.",
+            "<bookmark mark='a'/> Why is the score test the best possible? For a fixed positive h and any sequence of tests with asymptotic null level at most alpha, the upper limiting power at h over root n is at most one minus Phi of z alpha minus h root I. <bookmark mark='b'/> The proof passes to the limit experiment, a single normal observation with mean h and variance one over I, where the Neyman–Pearson lemma decides everything. <bookmark mark='c'/> The same limit gives Hájek's convolution theorem for estimators: any regular estimator's limit law is the efficient normal convolved with extra noise. <bookmark mark='d'/> So the score test, and the maximum likelihood estimator, are locally optimal, which is the whole of Part forty-seven in one sentence.",
             rows, whys)
         self.clear_but(card)
 
@@ -213,7 +184,7 @@ class ExamTesting(ExamMixin, VoiceoverScene):
             label(rf"green: \ score test: \ {d['score'][30]:.3f} at $h = 3$ \ (simulated {d['sim']['score'][i]:.3f})", font_size=22, color=PROOFC),
             label(rf"blue: \ $t$-test: \ {d['t'][30]:.3f} \ ({d['sim']['t'][i]:.3f})", font_size=22, color=S.EST),
             label(rf"red: \ sign test: \ {d['sign'][30]:.3f} \ ({d['sim']['sign'][i]:.3f})", font_size=22, color=S.RESID),
-            label(r"the third lemma predicts finite-sample power", font_size=22, color=GREY_A),
+            label(r"LAN limits approximate finite-sample power", font_size=22, color=GREY_A),
         ), 4.6, 0.36, SIDE)
         with self.voiceover(
             f"<bookmark mark='a'/> The three local power curves, with simulations at n equal to four hundred. <bookmark "

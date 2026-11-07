@@ -40,16 +40,7 @@ class Outro(VoiceoverScene):
         head = label(r"The exam, \ in twelve lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "<bookmark mark='a'/> The exam in twelve lines. The maximum of exponentials over log n tends to one, by "
-            "Borel–Cantelli on each side. The walk stopped at one has mean one, because the stopped walk is not uniformly "
-            "integrable. The UMVUE of a Poisson zero is one minus one over n to the total, strictly above the Cramér–Rao "
-            "bound. X is admissible in one dimension, because the Bayes-risk gap times the prior mass vanishes. Snow's "
-            "rate ratio is eight point four, with a P-value near ten to the minus one hundred and sixty-three. The t and "
-            "sign tests have relative efficiencies of ninety-one and seventy-five percent in the logistic model. <bookmark "
-            "mark='b'/> Half-line indicators have finite bracketing entropy and are Donsker. The median's influence "
-            "function is a bounded step. Fano gives the sparse rate. Matrix Bernstein gives a confidence ball for a "
-            "covariance. The lasso's prediction error is at most nine s lambda squared over phi squared. And a Gaussian "
-            "prior contracts at a rate set by the smaller of its smoothness and the truth's."
+            "<bookmark mark='a'/> The exam in twelve lines. The maximum of exponentials over log n tends to one, by Borel–Cantelli on each side. The walk stopped at one has mean one, because the stopped walk is not uniformly integrable. The UMVUE of a Poisson zero is one minus one over n to the total, strictly above the Cramér–Rao bound. X is admissible in one dimension, because the Bayes-risk gap times the prior mass vanishes. Snow's rate ratio is eight point four, with a one-sided exact upper-tail P-value near ten to the minus one hundred and sixty-three. The t and sign tests have relative efficiencies of ninety-one and seventy-five percent in the logistic model. <bookmark mark='b'/> Half-line indicators have a finite bracketing entropy integral and are Donsker. The median's influence function is a bounded step. Fano gives the sparse rate. Matrix Bernstein gives a confidence ball for a covariance. On the noise event and under compatibility, the lasso prediction error has the displayed bound. And a Gaussian prior contracts at a rate set by the smaller of its smoothness and the truth's."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -183,10 +174,7 @@ class Outro(VoiceoverScene):
         tr.to_edge(UP, buff=0.8)
         nxt.next_to(tr, DOWN, buff=1.0)
         with self.voiceover(
-            "Fifty-five parts of sixty-five, and the third milestone. <bookmark mark='a'/> Candidacy. <bookmark mark='b'/> "
-            "The research stage begins with a question every working scientist meets: published effects shrink when they "
-            "are replicated, because the questions were chosen after looking at the data. How do you give honest "
-            "uncertainty about a question chosen that way? Part fifty-six: inference after selection."
+            "Fifty-five parts of sixty-five, and the third milestone. <bookmark mark='a'/> Candidacy. <bookmark mark='b'/> The research stage begins with a question every working scientist meets: selection can make published effects shrink on replication, alongside other sources of bias and variation. How do you give honest uncertainty about a question chosen that way? Part fifty-six: inference after selection."
         ) as vo:
             self.play(FadeIn(tr))
             vo.wait_until("a")

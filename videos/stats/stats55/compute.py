@@ -34,6 +34,7 @@ from explainer.ai.cache import Cache
 from explainer.stats import museum
 from explainer.stats.board import Row, save_rows
 from explainer.stats.kit import qual as Q
+from . import checked as CK
 
 CACHE = Cache("stats55")
 load = CACHE.load
@@ -130,10 +131,14 @@ def compute_snow():
     lo = stats.beta.ppf(0.025, x, t - x + 1)
     hi = stats.beta.ppf(0.975, x + 1, t - x)
     rho = lambda p: p / (1 - p) * e2 / e1  # noqa: E731
+    umpu = CK.umpu_binomial(t,p0)
     sizes = {lam: (Q.poisson_conditional_size(lam), Q.poisson_conditional_size(lam, randomized=True)) for lam in (1, 2, 5, 10, 20, 50)}
     # a toy for the card: X = 12, Y = 4
     toy = Q.poisson_conditional_test(12, 4)
     return {"e1": e1, "x": x, "e2": e2, "y": y, "t": t, "p0": p0, "phat": x / t, "z": z, "log10p": logp / math.log(10),
+            "umpu": {k:v for k,v in umpu.items() if k!="phi"},
+            "umpu_rejection_probability": float(umpu["phi"][x]),
+            "pvalue_scope": "one-sided exact upper tail; CP interval inverts equal-tailed unrandomized tests, not randomized UMPU",
             "ratio": (x / e1) / (y / e2), "ci": [rho(lo), rho(hi)], "rate1": 1e4 * x / e1, "rate2": 1e4 * y / e2,
             "sizes": {str(k): v for k, v in sizes.items()},
             "toy": {"p": toy["p"], "t": toy["t"], "c1": toy["umpu"]["c1"], "c2": toy["umpu"]["c2"], "g1": toy["umpu"]["g1"],
@@ -147,6 +152,8 @@ def compute_lan():
     sim_h = [0.0, 1.5, 3.0, 4.5, 6.0]
     sim = [Q.logistic_local_power_sim(h, 400, r, reps=4000) for h in sim_h]
     return {"hs": hs, **{k: th[k] for k in th}, "sim_h": sim_h, "sim": {k: [s[k] for s in sim] for k in ("score", "t", "sign")},
+            "mcse": {k: [math.sqrt(v*(1-v)/4000) for v in [s[k] for s in sim]] for k in ("score","t","sign")},
+            "scope": "normal-critical-value tests; finite-n size and power need not equal LAN limits",
             "info": Q.LOGISTIC_INFO, "are_t": 9 / math.pi ** 2, "are_sign": 0.75}
 
 
@@ -192,10 +199,11 @@ def compute_fano():
     ds = [100, 200, 500, 1000, 2000, 5000, 10000, 100000]
     rows = []
     for d in ds:
-        f = Q.sparse_fano(d, s, n)
-        st = max(Q.soft_threshold_risk(d, s, n, a, r, reps=200) for a in (0.3, 0.6, 1.0, 3.0))
-        rows.append({"d": d, "lower": f["lower"], "rate": f["rate"], "logM": f["logM"], "soft": st})
-    return {"s": s, "n": n, "rows": rows, "example": Q.sparse_fano(1000, s, n)}
+        f = CK.sparse_fano(d, s, n)
+        st = max(CK.soft_threshold_risk(d, s, n, a) for a in (0.3, 0.6, 1.0, 3.0))
+        rows.append({"d": d, "lower": f["lower"], "rate": f["rate"], "logM": f["logM"], "soft": st, "soft_by_signal": {str(a): CK.soft_threshold_risk(d,s,n,a) for a in (.3,.6,1.,3.)},
+                     "scope": "exact normal risk; maximum of four signal sizes, not supremum over sparse vectors"})
+    return {"s": s, "n": n, "rows": rows, "example": CK.sparse_fano(1000, s, n)}
 
 
 def compute_bernstein():
@@ -206,7 +214,8 @@ def compute_bernstein():
     for n in ns:
         b = Q.bounded_covariance_error(n, d, r, reps=200)
         rows.append({"n": n, "mean": b["mean"], "mean_bound": b["mean_bound"], "t": b["t"], "coverage": b["coverage"], "q95": b["q95"],
-                     "mp": (1 + math.sqrt(d / n)) ** 2 - 1})
+                     "mp": (1 + math.sqrt(d / n)) ** 2 - 1, "vals": b["vals"],
+                     "mean_mcse": CK.mcse(b["vals"]), "coverage_mcse": math.sqrt(b["coverage"]*(1-b["coverage"])/200)})
     return {"d": d, "rows": rows}
 
 
@@ -216,18 +225,20 @@ def compute_lasso():
     ns = [100, 150, 200, 300, 500, 800]
     rows = []
     for n in ns:
-        o = Q.lasso_oracle(n, p, s, r, reps=30)
-        rows.append({"n": n, **{k: o[k] for k in ("lam", "pred", "pred_bound", "l1", "l1_bound", "event")}})
+        o = CK.lasso_oracle(n, p, s, r, reps=30)
+        rows.append({"n": n, **{k: o[k] for k in o.keys()}})
     return {"p": p, "s": s, "rows": rows}
 
 
 def compute_contract():
     ns = np.unique(np.round(np.geomspace(10, 1e6, 40)).astype(int))
-    out = {"ns": ns, "beta": 1.0}
+    out = {"ns": ns, "beta": 1.0, "K": 100000, "truth_scope": "boundary hyperrectangle beta=1; Sobolev smoothness strictly below one; not in Sobolev-1 ball"}
     for a in (0.5, 1.0, 2.0):
-        rs = [Q.sequence_contraction(int(n), a, 1.0) for n in ns]
+        rs = [CK.sequence_contraction(int(n), a, 1.0) for n in ns]
         tot = np.array([x["total"] for x in rs])
         out[str(a)] = {"total": tot, "rate2": [x["rate2"] for x in rs], "bias2": [x["bias2"] for x in rs],
+                       "tail_lower": [x["tail_lower"] for x in rs], "tail_upper": [x["tail_upper"] for x in rs],
+                       "total_lower": [x["total_lower"] for x in rs], "total_upper": [x["total_upper"] for x in rs],
                        "var": [x["var"] for x in rs], "spread": [x["spread"] for x in rs],
                        "slope": float(np.polyfit(np.log(ns[20:]), np.log(tot[20:]), 1)[0]),
                        "theory": -2 * min(a, 1.0) / (1 + 2 * a)}
@@ -268,6 +279,8 @@ def compute_board():
         Row(55, r"median $\pm$ 1.96 IF-based SE \ (KDE plug-in)", r"$t_3$ data, \ $n = 66$", "coverage", 0.95, cov_med / m_reps, m_reps),
         Row(55, r"matrix-Bernstein ball for $\Sigma$", r"Rademacher vectors, \ $d = 50$, \ $n = 400$", "coverage", 0.95, b["coverage"], 2000),
     ]
+    for row in rows:
+        row.mc_se=math.sqrt(row.achieved*(1-row.achieved)/row.reps)
     save_rows(55, rows)
     return {"rows": [asdict(q) | {"verdict": q.verdict, "se": q.se} for q in rows]}
 

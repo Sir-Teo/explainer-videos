@@ -40,15 +40,8 @@ class ExamEstimation(ExamMixin, VoiceoverScene):
         ]
         rows[2][-1].set_color(ESTC5)
         rows[3][-1].set_color(PROOFC)
-        whys = [why(r"Part 45"), why(r"Rao--Blackwell a crude unbiased start"), why(r"unique, \ by completeness"), why(r"the Poisson pgf; \ the CR bound")]
-        self.steps_voiceover("<bookmark mark='a'/> The total count T is sufficient, and complete, because the Poisson is a full-rank "
-                   "exponential family. <bookmark mark='b'/> Start from the crudest unbiased estimator, the indicator that the "
-                   "first count is zero, and Rao–Blackwellize it. Given T, the first count is binomial with T trials and "
-                   "chance one over n, so the conditional probability of a zero is one minus one over n, to the T. <bookmark "
-                   "mark='c'/> By Lehmann and Scheffé, an unbiased function of a complete sufficient statistic is the UMVUE. "
-                   "<bookmark mark='d'/> Its variance, from the Poisson generating function, is e to the minus two lambda "
-                   "times e to the lambda over n, minus one: strictly above the Cramér–Rao bound, lambda e to the minus two "
-                   "lambda over n, because the bound is attained only by linear functions of T.", rows, whys, keep=3)
+        whys = [why(r"Part 45"), why(r"Rao--Blackwell a crude unbiased start"), why(r"unique, \ by completeness"), why(r"Poisson pgf; \ strict gap for $\lambda>0$")]
+        self.steps_voiceover("<bookmark mark='a'/> The total count T is sufficient, and complete, because the Poisson is a full-rank exponential family. <bookmark mark='b'/> Start from the crudest unbiased estimator, the indicator that the first count is zero, and Rao–Blackwellize it. Given T, the first count is binomial with T trials and chance one over n, so the conditional probability of a zero is one minus one over n, to the T. <bookmark mark='c'/> By Lehmann and Scheffé, an unbiased function of a complete sufficient statistic is the UMVUE. <bookmark mark='d'/> Its variance, from the Poisson generating function, is e to the minus two lambda times e to the lambda over n, minus one: strictly above the Cramér–Rao bound, lambda e to the minus two lambda over n, for positive lambda. Equality would require an affine function of the score; this exponential function of T does not have that form.", rows, whys, keep=3)
         self.clear_but(card)
         self.p3_chart(d, card)
         rows = [
@@ -136,15 +129,7 @@ class ExamEstimation(ExamMixin, VoiceoverScene):
         rows[1][-1].set_color(ESTC5)
         rows[3][-1].set_color(PROOFC)
         whys = [why(r"risks are continuous in $\theta$"), why(r"the Bayes rule and its gap, \ times the prior's mass"), why(r"$\delta_\tau$ is Bayes"), why(r"so no such $\delta'$")]
-        self.steps_voiceover("<bookmark mark='a'/> Suppose some estimator delta prime dominates X. X has risk one everywhere, so delta "
-                   "prime's risk is at most one, and since risks of estimators in this family are continuous, it is below one "
-                   "minus epsilon on some interval. <bookmark mark='b'/> Under the prior with scale tau, the Bayes rule shrinks "
-                   "X by tau squared over one plus tau squared, and the gap between X's Bayes risk and the Bayes rule's, "
-                   "multiplied by the prior's total mass, is the root of two pi times tau over one plus tau squared. "
-                   "<bookmark mark='c'/> Delta prime's advantage over X, integrated against the prior, is at least epsilon times "
-                   "the prior's mass on the interval, and it can be no larger than the Bayes rule's advantage. <bookmark "
-                   "mark='d'/> As tau grows, the left side tends to epsilon times the interval's length, while the right "
-                   "side goes to zero. That is impossible, so X is admissible.", rows, whys)
+        self.steps_voiceover("<bookmark mark='a'/> Suppose some estimator delta prime dominates X. X has risk one everywhere, so delta prime's risk is at most one, and since a dominating estimator has bounded finite risk here, and its normal-location risk is continuous, it is below one minus epsilon on some interval. <bookmark mark='b'/> Under the prior with scale tau, the Bayes rule shrinks X by tau squared over one plus tau squared, and the gap between X's Bayes risk and the Bayes rule's, multiplied by the prior's total mass, is the root of two pi times tau over one plus tau squared. <bookmark mark='c'/> Delta prime's advantage over X, integrated against the prior, is at least epsilon times the prior's mass on the interval, and it can be no larger than the Bayes rule's advantage. <bookmark mark='d'/> As tau grows, the left side tends to epsilon times the interval's length, while the right side goes to zero. That is impossible, so X is admissible.", rows, whys)
         self.clear_but(card)
         self.p4_chart(d, card)
         rows = [
@@ -155,14 +140,7 @@ class ExamEstimation(ExamMixin, VoiceoverScene):
         ]
         rows[2][-1].set_color(S.RESID)
         whys = [why(r"the gap $d/(1 + \tau^2)$, \ the mass $(2\pi\tau^2)^{d/2}$"), why(r"recurrence of Brownian motion"), why(r"transience"), why(r"a method, \ not a theorem")]
-        self.steps_voiceover("<bookmark mark='a'/> In two dimensions the same priors give a gap of two over one plus tau squared, but the "
-                   "prior's mass grows like two pi tau squared, so the product tends to four pi, not zero, and there is no "
-                   "contradiction. <bookmark mark='b'/> X is nevertheless admissible in the plane, as Charles Stein showed, and "
-                   "Lawrence Brown's 1971 theory explains why, with priors that are flatter than normal. <bookmark mark='c'/> "
-                   "In three or more dimensions it is inadmissible: the James–Stein estimator dominates it. Brown linked the "
-                   "boundary to the recurrence of Brownian motion in one and two dimensions and its transience in three. "
-                   "<bookmark mark='d'/> So Blyth's method is a method, not a theorem: it works when you can find priors whose "
-                   "Bayes-risk gap vanishes faster than their mass grows.", rows, whys)
+        self.steps_voiceover("<bookmark mark='a'/> In two dimensions the same priors give a gap of two over one plus tau squared, but the prior's mass grows like two pi tau squared, so the product tends to four pi, not zero, and there is no contradiction. <bookmark mark='b'/> X is nevertheless admissible in the plane, as Charles Stein showed, and Lawrence Brown's 1971 theory explains why, with priors that are flatter than normal. <bookmark mark='c'/> In three or more dimensions it is inadmissible: the James–Stein estimator dominates it. Brown linked the boundary to the recurrence of Brownian motion in one and two dimensions and its transience in three. <bookmark mark='d'/> This Gaussian prior sequence gives a sufficient admissibility argument in one dimension, not a converse criterion: it works when you can find priors whose Bayes-risk gap vanishes faster than their mass grows.", rows, whys)
         self.solved(card)
         self.wait(0.5)
         self.clear_scene()
