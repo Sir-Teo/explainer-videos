@@ -19,7 +19,7 @@
    "tokens": 11,
    "peak": 0.331878662109375,
    "issues": [],
-   "elapsed": 18.89,
+   "elapsed": 0.01,
    "asr_review_leads": []
   },
   {
@@ -30,7 +30,7 @@
    "tokens": 118,
    "peak": 0.57366943359375,
    "issues": [],
-   "elapsed": 66.09,
+   "elapsed": 0.02,
    "asr_review_leads": []
   },
   {
@@ -41,7 +41,7 @@
    "tokens": 64,
    "peak": 0.683746337890625,
    "issues": [],
-   "elapsed": 32.08,
+   "elapsed": 0.03,
    "asr_review_leads": []
   },
   {
@@ -52,7 +52,7 @@
    "tokens": 92,
    "peak": 0.479339599609375,
    "issues": [],
-   "elapsed": 46.32,
+   "elapsed": 0.02,
    "asr_review_leads": []
   },
   {
@@ -63,7 +63,7 @@
    "tokens": 93,
    "peak": 0.462188720703125,
    "issues": [],
-   "elapsed": 48.39,
+   "elapsed": 0.01,
    "asr_review_leads": []
   },
   {
@@ -74,11 +74,11 @@
    "tokens": 136,
    "peak": 0.8360595703125,
    "issues": [],
-   "elapsed": 51.64,
+   "elapsed": 0.02,
    "asr_review_leads": []
   }
  ],
  "issues": [],
  "input_record": "renders/qa/series/stats8/en/Laplace_motion/result.json",
- "input_sha256": "173994165f4b34576aa7239ac1fbb232c42c5c486c83154ed9c188a2a74b5f4d"
+ "input_sha256": "141162ba974c52dc75fa3254e6b5a4d615c43ba4ba6d4a5fd43300b315311015"
 }

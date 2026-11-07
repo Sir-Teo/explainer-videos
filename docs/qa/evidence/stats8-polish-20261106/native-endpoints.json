@@ -1,5 +1,5 @@
 {
-  "fingerprint": "f735f8eb00e6903759b005112c5069bc3c0e3eea71c9f71cad30bdd4b2e598f4",
+  "fingerprint": "bbd9faf2edb361e03eb50fbfba60d2e92c22a14de40f5c3f0a68cf12bdb937fa",
   "scope": "English render review; listening and bilingual production gates remain open",
   "records": [
     {
@@ -11,7 +11,7 @@
         "untranslated-on-screen": 35
       },
       "input_record": "renders/qa/native1080/stats8/en/Hook/result.json",
-      "input_sha256": "d08aa43cf55b7c82f0c2bd54dcf9cd0211aea3953f88f418e7c55a8ce5006dd0"
+      "input_sha256": "9019b92732f0a9af53d9a77fd0fd79165e2e4df0ddc49a4cac944370d7d31408"
     },
     {
       "scene": "Fisher",
@@ -22,7 +22,7 @@
         "untranslated-on-screen": 36
       },
       "input_record": "renders/qa/native1080/stats8/en/Fisher/result.json",
-      "input_sha256": "1d4f8ba7419ace7e9bc7f68e19e9321d4691989b268780ab13749000114f6de7"
+      "input_sha256": "a1f2c4bd62e874d5a9e1e8eb4d7d90e70417c6fb98dc6a3f86a4b6ffc2a5389e"
     },
     {
       "scene": "StudentT",
@@ -33,7 +33,7 @@
         "untranslated-on-screen": 25
       },
       "input_record": "renders/qa/native1080/stats8/en/StudentT/result.json",
-      "input_sha256": "7fd6ae387ae214a0f2b8eeed85a2a24ed826c9448ed0a2c331d0a15c5c10c4c2"
+      "input_sha256": "5be766561039bda549ddddf4d06d097f94e416b88285a78a08ab990da030e2cb"
     },
     {
       "scene": "MSE",
@@ -44,7 +44,7 @@
         "untranslated-on-screen": 42
       },
       "input_record": "renders/qa/native1080/stats8/en/MSE/result.json",
-      "input_sha256": "3e838ae09637a38b5f29651d52c2d45325f678fcebe88b7ca649ac1682b9f45d"
+      "input_sha256": "8248fe85df1236a4c52382e4512f71b6fb9b08334ee729d38420c8856922abbe"
     },
     {
       "scene": "Laplace",
@@ -55,7 +55,7 @@
         "untranslated-on-screen": 34
       },
       "input_record": "renders/qa/native1080/stats8/en/Laplace/result.json",
-      "input_sha256": "6a10800417e937f57325f1219a0ae154c108ed68a7b105bbb81222ba4d626dc2"
+      "input_sha256": "b5e39000b2ca03d77ce6c27e0db4688b92eba0d6a0c59e852d03a01d3cd02aae"
     },
     {
       "scene": "FPC",
@@ -66,7 +66,7 @@
         "untranslated-on-screen": 25
       },
       "input_record": "renders/qa/native1080/stats8/en/FPC/result.json",
-      "input_sha256": "9a5cdf158d1ac2df9ae2dcf30e72af62e47b9babf29b504c977dad126b9a889d"
+      "input_sha256": "a4e178c94ee9736fbd79d7d0d19e6fbac715429353cab8c4ee67aea2aa9ed233"
     },
     {
       "scene": "Board",
@@ -77,7 +77,7 @@
         "untranslated-on-screen": 41
       },
       "input_record": "renders/qa/native1080/stats8/en/Board/result.json",
-      "input_sha256": "f96912dacdbbf467079b574fbc192f782899cb13331b726dbaf4bbe91fe11817"
+      "input_sha256": "48f2777997016b59a47be53e8c22602a7d76e304da59a528d7e9db32c8bcfdfa"
     }
   ]
 }

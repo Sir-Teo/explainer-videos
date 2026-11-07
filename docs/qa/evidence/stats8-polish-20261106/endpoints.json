@@ -1,5 +1,5 @@
 {
-  "fingerprint": "f735f8eb00e6903759b005112c5069bc3c0e3eea71c9f71cad30bdd4b2e598f4",
+  "fingerprint": "bbd9faf2edb361e03eb50fbfba60d2e92c22a14de40f5c3f0a68cf12bdb937fa",
   "scope": "English render review; listening and bilingual production gates remain open",
   "records": [
     {
@@ -11,7 +11,7 @@
         "untranslated-on-screen": 35
       },
       "input_record": "renders/qa/series/stats8/en/Hook/result.json",
-      "input_sha256": "b1e29fed5d4dfffb5b15eca3edb5346ac7fe8695ffbfed3f43bc9206841346a5"
+      "input_sha256": "9336a88d239de8b5243b2bbb539fda87e5700bcb526467508484553ca50ce3aa"
     },
     {
       "scene": "Machine",
@@ -22,7 +22,7 @@
         "untranslated-on-screen": 41
       },
       "input_record": "renders/qa/series/stats8/en/Machine/result.json",
-      "input_sha256": "4f6ae653b22f2a79eec147bbc2bd9a31d5c94fa80b4e83dbf4fd60bbe20953a3"
+      "input_sha256": "ee7a3d1a0f120d839cf2bea95234b1da7bc57235ca448adae48c5f9b5acced06"
     },
     {
       "scene": "NMinus1",
@@ -33,7 +33,7 @@
         "untranslated-on-screen": 28
       },
       "input_record": "renders/qa/series/stats8/en/NMinus1/result.json",
-      "input_sha256": "0a014cf7b0ea0a517e70d79bf23be24f83135daa593399e194ee52a346273fd5"
+      "input_sha256": "6c50e17efae18a3d3ba112b14b1cec05c261d612ee3738fb3064fd932b5b58ea"
     },
     {
       "scene": "Fisher",
@@ -44,7 +44,7 @@
         "untranslated-on-screen": 36
       },
       "input_record": "renders/qa/series/stats8/en/Fisher/result.json",
-      "input_sha256": "2021c1144e7d025100fb3a564c351bc767659badd0dfb2d3eac151a821f30563"
+      "input_sha256": "8aabab24f1330514588b0fb2ecd4e3e82cb420d19181412b47c153bc19ac1e46"
     },
     {
       "scene": "ChiSq",
@@ -55,7 +55,7 @@
         "untranslated-on-screen": 34
       },
       "input_record": "renders/qa/series/stats8/en/ChiSq/result.json",
-      "input_sha256": "81762d46a6993dd1972f3f79d6718e489407b12cdd68fc881033a6d7c82856ac"
+      "input_sha256": "c8c1ccfbfcccd40d222cdc06050c5bc5c54f37e60a164d9ff3886ec83c9b0332"
     },
     {
       "scene": "StudentT",
@@ -66,7 +66,7 @@
         "untranslated-on-screen": 25
       },
       "input_record": "renders/qa/series/stats8/en/StudentT/result.json",
-      "input_sha256": "68263f9d13a8f94d1b0e53aefff8fc15d618b0f84d590f74a4b5f92311261099"
+      "input_sha256": "8ae151b43a310078a4bc57d1d402e65eda335530f57d22230c102c11118f0df9"
     },
     {
       "scene": "FDist",
@@ -77,7 +77,7 @@
         "untranslated-on-screen": 26
       },
       "input_record": "renders/qa/series/stats8/en/FDist/result.json",
-      "input_sha256": "bc2fe3950f70b81645fc4d0fc5bfa73bb30698b5a53fbe83ae8e03eb10ef7bb2"
+      "input_sha256": "6f4c0d770f493e3052a6c189b87820a0062f99d4e9f0d9ec22022bce24600468"
     },
     {
       "scene": "MSE",
@@ -88,7 +88,7 @@
         "untranslated-on-screen": 42
       },
       "input_record": "renders/qa/series/stats8/en/MSE/result.json",
-      "input_sha256": "47c636bdc64380f656bd1ede6f58886992c0f80b5daa28ec87e09c4be7e393a6"
+      "input_sha256": "c665bc0adee35a844443e9c2d86247c375d50c7cf6e22197e8631a525b8ea0b1"
     },
     {
       "scene": "PlugIn",
@@ -99,7 +99,7 @@
         "untranslated-on-screen": 44
       },
       "input_record": "renders/qa/series/stats8/en/PlugIn/result.json",
-      "input_sha256": "c8eda42143fe5b373e9f662358dcf22a3d8069b7058dfa5f1d6d27b24fd57d0a"
+      "input_sha256": "2e9c3a556f56d14061fa5d5b3420c61add96bc788a9155b0ac10cd9519dcd904"
     },
     {
       "scene": "Laplace",
@@ -110,7 +110,7 @@
         "untranslated-on-screen": 34
       },
       "input_record": "renders/qa/series/stats8/en/Laplace/result.json",
-      "input_sha256": "7d02ced39af54980721c772f24416bb6d999ad7b57174d477ddc3b7a632d5efd"
+      "input_sha256": "d37159871fc16b8018f838769b3d3f01237a0cbdb3bd9a5ba4ea9c356471a3a1"
     },
     {
       "scene": "FPC",
@@ -121,7 +121,7 @@
         "untranslated-on-screen": 25
       },
       "input_record": "renders/qa/series/stats8/en/FPC/result.json",
-      "input_sha256": "5618b4b3b30e09a0d909e62f51c44f6ac12f39f95ac32315ef9c6a1e0a3f8343"
+      "input_sha256": "dabb642194fbc7c8c1cb878693a405de507e4925d50346cde36a5817d4e3be4e"
     },
     {
       "scene": "Board",
@@ -132,7 +132,7 @@
         "untranslated-on-screen": 41
       },
       "input_record": "renders/qa/series/stats8/en/Board/result.json",
-      "input_sha256": "465e918639f7ba1b6fc5ab99d8030557f3e3e7259574d02e02e61d6d63556ddc"
+      "input_sha256": "9b06344bd4a2b3e8ff76b94e8da2bb250de54aa3fde49472b46b634909012c1e"
     },
     {
       "scene": "Robust",
@@ -143,7 +143,7 @@
         "untranslated-on-screen": 31
       },
       "input_record": "renders/qa/series/stats8/en/Robust/result.json",
-      "input_sha256": "05b25cd2cbe55af27eb455a8ea166af78bb7bdc13531eeb1b46af28d567e2a39"
+      "input_sha256": "8c4277f03f195c0355714a6015d4997a89d835b925c36648f4e9f934a7589244"
     },
     {
       "scene": "Outro",
@@ -154,7 +154,7 @@
         "untranslated-on-screen": 62
       },
       "input_record": "renders/qa/series/stats8/en/Outro/result.json",
-      "input_sha256": "6caa4499fe2f33669cedae9eaba12abb2c6d47046945ae0eaa34ff3e645ea01c"
+      "input_sha256": "f8be8db073fdc52ed51bfa131c3690f16d7ad0720b60052c5f8ba51f18e22ee3"
     }
   ]
 }
