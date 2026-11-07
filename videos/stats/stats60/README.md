@@ -46,7 +46,7 @@ python tools/lecture_length.py stats60 --floor 50
 
 All 11 computed inputs regenerated; **24 tests pass** (17 audited local checks, seven legacy checks). Estimated English narration: 51.7 minutes. [Audited kernels](checked.py) are used by this part; the shared statkit contains the earlier educational implementations. The instrument is DepthMap.
 
-[Scientific QA and data/proof receipts](../../../docs/qa/evidence/stats60-polish-20261107/README.md). English sampled visual verification is pending. Chinese narration/caption tables, continuous listening/playback and final masters remain open; this checkpoint is not bilingual production approval.
+[Scientific QA and data/proof receipts](../../../docs/qa/evidence/stats60-polish-20261107/README.md). The recorded English sampled visual checkpoint is complete. Chinese narration/caption tables, continuous listening/playback and final masters remain open; this checkpoint is not bilingual production approval.
 
 ## Sources
 
