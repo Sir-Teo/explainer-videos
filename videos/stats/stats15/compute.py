@@ -57,6 +57,36 @@ def nest(obj):
     return obj
 
 
+def clipped_segments(xs, ys, rectangle):
+    """Clip line segments to a rectangle without flattening off-scale values."""
+    xmin, xmax, ymin, ymax = rectangle
+    points = np.column_stack((xs, ys))
+    result = []
+    for start, end in zip(points[:-1], points[1:]):
+        if not np.isfinite([start, end]).all():
+            continue
+        delta = end - start
+        lo, hi = 0.0, 1.0
+        for k, lower, upper in ((0, xmin, xmax), (1, ymin, ymax)):
+            if delta[k] == 0:
+                if not lower <= start[k] <= upper:
+                    hi = -1
+                    break
+            else:
+                a, b = sorted(((lower - start[k]) / delta[k], (upper - start[k]) / delta[k]))
+                lo, hi = max(lo, a), min(hi, b)
+        if lo <= hi:
+            result.append((start + lo * delta, start + hi * delta))
+    return result
+
+
+def histogram_density(values, edges):
+    """Density per full sample; observations outside the viewport retain their mass."""
+    counts, _ = np.histogram(values, edges)
+    return counts / (len(values) * np.diff(edges))
+
+
+
 def compute_billiard():
     g = rng(1788)  # a representative draw: the posterior mean lands near the hidden ball
     u0 = float(g.uniform(0.2, 0.8))
@@ -75,13 +105,13 @@ def compute_laplace():
     pb = museum.PARIS_BIRTHS
     a, b = pb["boys"] + 1, pb["girls"] + 1
     d = stats.beta(a, b)
-    # P(p <= 1/2) via the normal approximation on the log scale (the exact tail underflows double precision's cdf)
+    # The exact beta tail is representable in double precision; retain the normal approximation separately.
     m, sd = d.mean(), d.std()
     z = (0.5 - m) / sd
     logp = stats.norm.logcdf(z)
     exact = float(special.betainc(a, b, 0.5))
     days = 1_826_213
-    return nest({"a": a, "b": b, "mean": m, "sd": sd, "ci": B.credible(d), "z": z, "log10_p": logp / np.log(10), "exact": exact,
+    return nest({"a": a, "b": b, "mean": m, "sd": sd, "ci": B.credible(d), "z": z, "log10_p": float(np.log10(exact)), "normal_log10_p": logp / np.log(10), "exact": exact,
                  "share_boys": pb["boys"] / (pb["boys"] + pb["girls"]), "days": days, "sunrise": B.rule_of_succession(days, days)})
 
 
@@ -110,9 +140,10 @@ def compute_predictive():
     a, b = 9, 5
     k = np.arange(11)
     pred = B.beta_binomial_pmf(k, 10, a, b)
-    plug = stats.binom.pmf(k, 10, 7 / 10)
+    mu = a / (a+b)
+    plug = stats.binom.pmf(k, 10, mu)
     return nest({"k": k, "pred": pred, "plug": plug, "pred_sd": float(np.sqrt(np.sum(pred * k ** 2) - np.sum(pred * k) ** 2)),
-                 "plug_sd": float(np.sqrt(10 * 0.7 * 0.3))})
+                 "plug_sd": float(np.sqrt(10 * mu * (1-mu))), "mean_p": mu})
 
 
 def compute_priors():
@@ -123,6 +154,15 @@ def compute_priors():
     # a flat prior on p, pushed to the odds p/(1-p): density 1/(1+o)^2
     o = np.linspace(0, 10, 400)
     return nest({"priors": priors, "post": out, "odds": o, "odds_density": 1 / (1 + o) ** 2})
+
+
+def compute_mixture():
+    prior_weights = np.array([.5, .5])
+    a, b = np.array([50., 1.]), np.array([50., 1.])
+    log_weights = np.log(prior_weights)+special.betaln(a+7, b+3)-special.betaln(a, b)
+    weights = special.softmax(log_weights)
+    near = weights @ (stats.beta.cdf(.6, a+7, b+3)-stats.beta.cdf(.4, a+7, b+3))
+    return nest(dict(weights=weights, post_a=a+7, post_b=b+3, p_near=float(near)))
 
 
 def compute_normalt():
@@ -143,22 +183,36 @@ def challenger_logpost(b0, b1):
     return np.sum(Y * eta - np.logaddexp(0.0, eta), axis=-1)
 
 
+def trapezoid_weights(grid):
+    """Quadrature weights, including half-width boundary cells."""
+    grid = np.asarray(grid, float)
+    return np.r_[np.diff(grid)[0]/2, (grid[2:]-grid[:-2])/2, np.diff(grid)[-1]/2]
+
+
+def weighted_quantile(values, weights, q):
+    order = np.argsort(values)
+    values, weights = np.asarray(values)[order], np.asarray(weights)[order]
+    return float(np.interp(q, np.cumsum(weights)/weights.sum(), values))
+
+
 def compute_grid():
-    gx = np.linspace(-5, 45, 251)
-    gy = np.linspace(-0.7, 0.1, 241)
+    # This is numerical truncation of the same flat-prior posterior as MCMC,
+    # not an undeclared bounded prior. Wider/finer grids check the remaining error.
+    gx = np.linspace(-20, 100, 601)
+    gy = np.linspace(-1.5, 0.3, 541)
     dens, mx, my = B.grid_posterior_2d(gx, gy, challenger_logpost)
-    # the posterior of p(31): sample grid cells by weight
-    g = rng(31)
-    w = dens.ravel() / dens.sum()
-    pick = g.choice(len(w), 20_000, p=w)
     X, Yg = np.meshgrid(gx, gy)
-    b0s = X.ravel()[pick] + g.uniform(-0.1, 0.1, 20_000)
-    b1s = Yg.ravel()[pick] + g.uniform(-0.0017, 0.0017, 20_000)
-    p31 = special.expit(b0s + 31 * b1s)
+    weights = dens * trapezoid_weights(gy)[:, None] * trapezoid_weights(gx)[None, :]
+    weights /= weights.sum()
+    p31 = special.expit(X + 31*Yg)
+    # Include the interpolated boundary if floating-point grid arithmetic misses zero.
+    yy = np.r_[gy[gy < 0], 0.0]
+    negative_probability = np.trapezoid(np.interp(yy, gy, my), yy)
     return nest({"gx": gx, "gy": gy, "dens": dens[::4, ::4], "gx4": gx[::4], "gy4": gy[::4], "mx": mx, "my": my,
-                 "b1_mean": float(np.trapezoid(my * gy, gy)), "p31_median": float(np.median(p31)), "p31_lo": float(np.quantile(p31, 0.025)),
-                 "p_gt_09": float(np.mean(p31 > 0.9)), "p_b1_neg": float(np.trapezoid(my[gy < 0], gy[gy < 0])),
-                 "p31_hist": np.histogram(p31, bins=40, range=(0, 1))[0], "cells": int(dens.size)})
+                 "b1_mean": float(np.trapezoid(my * gy, gy)), "p31_median": weighted_quantile(p31.ravel(), weights.ravel(), .5),
+                 "p31_lo": weighted_quantile(p31.ravel(), weights.ravel(), .025),
+                 "p_gt_09": float(weights[p31 > .9].sum()), "p_b1_neg": float(negative_probability),
+                 "p31_hist": np.histogram(p31, bins=40, range=(0, 1), weights=weights)[0], "cells": int(dens.size)})
 
 
 def challenger_logpost_c(a, b):
@@ -179,11 +233,13 @@ def compute_mcmc():
     full = B.metropolis(lpc, [0.0, 0.0], (1.0, 0.1), 20_000, rng(1954))
     b = full.draws[2000:]
     p31 = special.expit(b[:, 0] + (31 - 70) * b[:, 1])
+    odds = np.exp(-10*b[:, 1])
     return nest({"chains": {k: {"b1": v["b1"][:1500], "acc": v["acc"], "ess": v["ess"]} for k, v in out.items()},
                  "raw": {"b1": rawg.draws[:1500, 1], "acc": rawg.acceptance, "ess": B.ess(rawg.draws[1000:, 1]),
                          "acc_same_step": raw.acceptance},
-                 "start0_trace": full.draws[:600, 1], "full_mean": float(b[:, 1].mean()), "full_sd": float(b[:, 1].std()),
+                 "start0_trace": full.draws[:600, 1], "full_mean": float(b[:, 1].mean()), "full_sd": float(b[:, 1].std()), "mean_mcse": float(b[:, 1].std()/np.sqrt(B.ess(b[:, 1]))),
                  "p31_median": float(np.median(p31)), "p31_lo": float(np.quantile(p31, 0.025)), "p_gt_09": float(np.mean(p31 > 0.9)),
+                 "or_median": float(np.median(odds)), "or_ci": np.quantile(odds, [.025, .975]), "p_or_gt5": float(np.mean(odds > 5)),
                  "acc": full.acceptance, "ess": B.ess(b[:, 1]), "n": len(b), "b1_draws": b[::20, 1], "a_draws": b[::20, 0]})
 
 
@@ -238,7 +294,7 @@ def compute_board():
 
 ITEMS = {
     "billiard": compute_billiard, "laplace": compute_laplace, "conjugate": compute_conjugate, "summaries": compute_summaries,
-    "predictive": compute_predictive, "priors": compute_priors, "normalt": compute_normalt, "grid": compute_grid,
+    "predictive": compute_predictive, "priors": compute_priors, "mixture": compute_mixture, "normalt": compute_normalt, "grid": compute_grid,
     "mcmc": compute_mcmc, "bf": compute_bf, "board": compute_board,
 }
 

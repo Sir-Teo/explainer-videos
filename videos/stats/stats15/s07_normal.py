@@ -39,7 +39,7 @@ class NormalModel(VoiceoverScene):
             "<bookmark mark='a'/> Eight of the World's adults, their heights in centimetres. In chapter two the standard "
             "deviation was known. Usually it isn't. <bookmark mark='b'/> Model the heights as normal with unknown mean and "
             "variance. <bookmark mark='c'/> For the prior, take the standard reference choice: flat in mu, and flat in the log "
-            "of sigma, which is one over sigma squared. It's improper, but with two or more observations the posterior is fine."
+            "of sigma, which is one over sigma squared. It's improper, but with at least two nonidentical observations, the posterior is proper. The displayed density is with respect to mu and sigma squared; in mu and sigma coordinates it is proportional to one over sigma."
         ) as vo:
             self.play(FadeIn(A), FadeIn(tag))
             vo.wait_until("a")
@@ -92,7 +92,7 @@ class NormalModel(VoiceoverScene):
         rows = fit_rows(VGroup(
             MathTex(rf"\bar x = {r['loc']:.2f},\ \ s/\sqrt n = {r['scale']:.2f}", font_size=26),
             label(r"orange: \ the $t_7$ posterior", font_size=22, color=POST),
-            label(r"dashed: \ pretending $\sigma$ were known", font_size=22, color=GREY_B),
+            label(r"dashed: \ plug-in normal comparison, $\sigma=s$", font_size=22, color=GREY_B),
             MathTex(rf"95\%\ \text{{credible:}}\ [{lo:.2f},\ {hi:.2f}]", font_size=26, color=POST),
             MathTex(rf"\text{{Part 8's }}t\text{{-interval:}}\ [{tl:.2f},\ {th:.2f}]", font_size=26, color=S.ALT),
             label(rf"the truth: \ {d['truth']:.1f}", font_size=22, color=S.TRUTH),
@@ -100,7 +100,7 @@ class NormalModel(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> For the eight heights: a sample mean of a hundred and seventy point five, a standard error of "
             "two point two nine. <bookmark mark='b'/> Here's the t posterior for mu, <bookmark mark='c'/> with the normal "
-            "curve we'd get if sigma were known, for comparison: the t has heavier tails, paying for the unknown variance. "
+            "plug-in normal curve obtained by setting sigma equal to s, for comparison: the t has heavier tails, paying for the unknown variance. "
             "<bookmark mark='d'/> The ninety-five percent credible interval runs from a hundred and sixty-five point oh six to a "
             "hundred and seventy-five point eight nine. <bookmark mark='e'/> Part 8's t-interval, from the same data: exactly the "
             "same numbers. <bookmark mark='f'/> The World's true mean, a hundred and sixty-nine point five, is inside both."
@@ -179,7 +179,7 @@ class NormalModel(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> How much does not knowing sigma cost? With sigma known, the interval is plus or minus one point "
             "nine six standard errors. <bookmark mark='b'/> With eight observations and sigma unknown, integrating sigma out "
-            "gives the t multiplier, two point three six: twenty percent wider. <bookmark mark='c'/> With thirty observations, "
+            "gives the t multiplier, two point three six: a twenty percent larger multiplier at the same standard error; the actual known-sigma and estimated-sigma widths need not have that ratio. <bookmark mark='c'/> With thirty observations, "
             "two point oh five. <bookmark mark='d'/> The price of the unknown variance fades as the data grow, Gosset's point in "
             "Part 8, arrived at from the Bayesian side: the extra width is the posterior's honest uncertainty about sigma."
         ) as vo:

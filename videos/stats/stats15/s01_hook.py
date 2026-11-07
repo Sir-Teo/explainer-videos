@@ -54,15 +54,14 @@ class Hook(VoiceoverScene):
         left = np.asarray(d["left"], bool)
         rolls = [t.roll(u, v, color=S.LIK if l_ else GREY_B) for (u, v), l_ in zip(balls, left)]
         rows = fit_rows(VGroup(
-            label(r"roll W: \ it stops anywhere, \ uniformly", font_size=26, color=S.TRUTH),
+            label(r"uniform prior on W; \ one illustrative hidden position", font_size=26, color=S.TRUTH),
             label(r"its position $p$ is hidden", font_size=26),
             label(r"12 more balls: \ left or right of W?", font_size=26),
             label(rf"left of W: \ {int(left.sum())} of 12", font_size=26, color=S.LIK),
             label(r"where is W?", font_size=26, color=POST),
         ), 4.8, 0.36, [4.4, 0.2, 0])
         with self.voiceover(
-            "Bayes made the problem concrete with a table. <bookmark mark='a'/> Roll a ball, W, across a level table, so that it "
-            "is equally likely to stop anywhere. <bookmark mark='b'/> Its position from the left edge, as a fraction of the "
+            "Bayes made the problem concrete with a table. <bookmark mark='a'/> Model a ball W as equally likely to stop anywhere on the table. The drawing uses one fixed illustrative hidden position. <bookmark mark='b'/> Its position from the left edge, as a fraction of the "
             "table's width, is p, and we aren't allowed to see it. <bookmark mark='c'/> Now roll twelve more balls, and for each "
             "one we're told only whether it stopped to the left or the right of W. Each ball lands left with probability p. "
             "<bookmark mark='d'/> Eight of the twelve land to the left. <bookmark mark='e'/> What should we believe about where "
@@ -110,7 +109,7 @@ class Hook(VoiceoverScene):
             "minus p to the fourth: the chance of exactly what we saw, if W were at p. <bookmark mark='c'/> Normalized, it's a "
             "beta distribution, Part 3's, with parameters nine and five, centred near point six four. <bookmark mark='d'/> It "
             "puts ninety-five percent of its weight between point three nine and point eight six. <bookmark mark='e'/> The "
-            "hidden ball was at point six two. That curve is the first posterior distribution in history."
+            "hidden ball was at point six two. That curve illustrates Bayes's early posterior calculation."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
@@ -168,12 +167,12 @@ class Hook(VoiceoverScene):
                 why(r"odds of 1,826,214 to 1"), why(r"the prior matters when it encodes real knowledge")]
         with self.voiceover(
             "<bookmark mark='a'/> Laplace also asked how likely the next trial is to succeed, after s successes in n. Average "
-            "the chance p over the posterior, and the answer is s plus one over n plus two: the rule of succession. "
+            "the chance p over the posterior, and the answer is s plus one over n plus two: the rule of succession, under a uniform prior and conditionally independent Bernoulli trials with a common probability. "
             "<bookmark mark='b'/> His notorious example is the sunrise. Suppose the sun has risen every day for five thousand "
             "years, one million, eight hundred and twenty-six thousand, two hundred and thirteen days. <bookmark mark='c'/> "
             "The rule gives odds of one million, eight hundred and twenty-six thousand, two hundred and fourteen to one that it "
             "rises tomorrow. <bookmark mark='d'/> Laplace added at once that the probability is far greater for anyone who "
-            "understands what makes the sun rise. A uniform prior is a statement of ignorance, and real knowledge belongs in "
+            "understands what makes the sun rise. A uniform prior is a specific assumption on this scale. The rule also assumes conditionally independent trials with one stable probability; physical knowledge belongs in "
             "the prior. That tension runs through this whole part."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)

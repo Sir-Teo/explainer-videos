@@ -31,6 +31,7 @@ class Hypotheses(VoiceoverScene):
         rows[1][2].set_color(POST)
         whys = [why(r"Part 2's odds form of Bayes's rule"), why(r"the Bayes factor: \ how much the data shift the odds"),
                 why(r"the marginal likelihood: \ averaged over $H_1$'s prior"), why(r"Jeffreys (1939)")]
+        intro = label('Update model odds using marginal likelihoods', font_size=36)
         with self.voiceover(
             "Can a Bayesian test a hypothesis? <bookmark mark='a'/> Use Part 2's odds form of Bayes's rule, with two hypotheses "
             "instead of two diseases: the posterior odds of H one against H zero equal the ratio of how well each predicted the "
@@ -39,9 +40,12 @@ class Hypotheses(VoiceoverScene):
             "predicted the data means its likelihood averaged over its own prior: the marginal likelihood. "
             "<bookmark mark='d'/> Harold Jeffreys built a whole theory of testing on this, in 1939."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -109,23 +113,26 @@ class Hypotheses(VoiceoverScene):
             cmath(r"\text{BF}_{01}", r"\ge", r"-e\,p\log p\quad (p < 1/e)", font_size=34),
             cmath(r"p = 0.05", r":", rf"\text{{BF}}_{{01}} \ge {b:.2f}", font_size=34),
             cmath(r"P(H_0 \mid y)", r"\ge", rf"\frac{{{b:.2f}}}{{1 + {b:.2f}}} = {b / (1 + b):.2f}", font_size=34),
-            cmath(r"\text{so}", r":", r"p = 0.05 \text{ is weak evidence, \ however } H_1 \text{ is set up}", font_size=30),
+            cmath(r"\text{so}", r":", r"\text{a bound within the stated continuous }p\text{-model class}", font_size=30),
         ]
         rows[3][2].set_color(OBS)
-        whys = [why(r"Sellke, \ Bayarri \& Berger (2001): \ a bound over all reasonable priors"), why(r"the most $H_1$ can gain"),
+        whys = [why(r"Sellke, \ Bayarri \& Berger (2001): \ null-uniform $p$; alternative mixtures of Beta$(a,1)$, $0<a\le1$"), why(r"the most $H_1$ can gain"),
                 why(r"with even prior odds"), why(r"Part 10's warning, \ quantified")]
+        intro = label('A continuous p-value calibration under stated alternatives', font_size=36)
         with self.voiceover(
             "Is that just the uniform prior's fault? <bookmark mark='a'/> Thomas Sellke, Maria Bayarri and James Berger showed in "
-            "2001 that, over a wide class of reasonable alternatives, the Bayes factor in favour of the null can't fall below "
+            "2001 that, for a continuous p-value uniform under the null, with alternative p-value densities that are mixtures of Beta a one for zero less than a at most one, the Bayes factor in favour of the null can't fall below "
             "minus e times p times the log of p. <bookmark mark='b'/> At p equals point oh five, that's point four one: the "
             "data can make the alternative at most two and a half times more likely relative to the null. "
             "<bookmark mark='c'/> Starting from even odds, the null keeps a posterior probability of at least twenty-nine percent. "
-            "<bookmark mark='d'/> A p-value of point oh five is much weaker evidence than it sounds, however the alternative is "
-            "chosen. That's the quantitative version of Part 10's warnings."
+            "<bookmark mark='d'/> A p-value of point oh five is much weaker evidence than it sounds, within that model class. This is not a universal bound over all alternatives or a direct exact calibration for discrete binomial p-values. That's the quantitative version of Part 10's warnings."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -164,7 +171,7 @@ class Hypotheses(VoiceoverScene):
             cmath(r"H_0: p = \tfrac12", r",", r"H_1: p \sim U(0, 1)", font_size=32),
             cmath(r"\text{Paris births}", r":", r"251{,}527 \text{ boys of } 493{,}472", font_size=30),
             cmath(r"\log_{10}\text{BF}_{10}", r"\approx", r"38", font_size=34),
-            cmath(r"\text{so}", r":", r"\text{decisive, \ by any prior odds anyone would hold}", font_size=30),
+            cmath(r"\text{so}", r":", r"\text{overwhelming for ordinary prior odds, \ within this binomial model}", font_size=30),
         ]
         rows[2][2].set_color(POST)
         whys = [why(r"boys and girls equally likely, \ or not"), why(r"the hook's data"), why(r"far beyond Jeffreys's ``decisive'' 100"),
@@ -172,8 +179,7 @@ class Hypotheses(VoiceoverScene):
         with self.voiceover(
             "The other extreme. <bookmark mark='a'/> Test Laplace's question as a pair of hypotheses: boys and girls exactly "
             "equally likely, or a chance of a boy that could be anything. <bookmark mark='b'/> With the Paris births, "
-            "<bookmark mark='c'/> the Bayes factor is about ten to the thirty-eight. <bookmark mark='d'/> No prior odds anyone would "
-            "actually hold survive that. When the data are overwhelming, the p-value, the posterior and the Bayes factor all say "
+            "<bookmark mark='c'/> the Bayes factor is about ten to the thirty-eight. <bookmark mark='d'/> It overwhelms ordinary prior odds within this IID binomial model; arbitrary prior odds or a different sampling model can change the conclusion. When the data are overwhelming, the p-value, the posterior and the Bayes factor all say "
             "the same thing; it's in the borderline cases, like sixty heads in a hundred, that they part company, and that's "
             "where the care is needed."
         ) as vo:

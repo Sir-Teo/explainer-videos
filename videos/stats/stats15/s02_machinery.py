@@ -70,6 +70,7 @@ class Machinery(VoiceoverScene):
             label(r"multiply pointwise, \ rescale: \ the posterior sits between them, \ nearer the data", font_size=24, color=POST),
             MathTex(r"p^{1}(1 - p)^{1} \times p^{7}(1 - p)^{3} = p^{8}(1 - p)^{4}", font_size=30),
         ), 12.4, 0.28, [0, -2.4, 0])
+        intro = label('Multiply the prior and likelihood point by point', font_size=36)
         with self.voiceover(
             "Here's the machinery at work. <bookmark mark='a'/> A prior: Beta two two, a mild belief that a probability p is "
             "somewhere near a half. <bookmark mark='b'/> The likelihood of seven successes in ten trials, drawn as a curve in p, "
@@ -78,7 +79,9 @@ class Machinery(VoiceoverScene):
             "<bookmark mark='d'/> In symbols, the powers just add: p to the one times p to the seven gives p to the eight, and "
             "the posterior is Beta nine five."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(f1), FadeIn(c1), FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(FadeIn(times), FadeIn(f2), FadeIn(c2), FadeIn(rows[1]))
@@ -132,11 +135,11 @@ class Machinery(VoiceoverScene):
         ]
         rows[3][2].set_color(POST)
         whys = [why(r"update on the first data"), why(r"then on the second, \ with the first posterior as prior"),
-                why(r"the same as all at once, \ when $y_1, y_2$ are independent given $\theta$"), why(r"learning is coherent")]
+                why(r"conditional independence here; otherwise use $p(y_2\mid y_1,\theta)$"), why(r"learning is coherent")]
         with self.voiceover(
             "<bookmark mark='a'/> Updating on the first piece of data gives a posterior. <bookmark mark='b'/> Use it as the "
             "prior for the second piece. <bookmark mark='c'/> The result is the same as updating on both at once, whenever the "
-            "pieces are independent given theta, because their likelihoods multiply. <bookmark mark='d'/> So it doesn't "
+            "pieces are independent given theta, because their likelihoods multiply. With dependent data, use the conditional likelihood of the next piece given the earlier data; coherent sequential updating still works. <bookmark mark='d'/> So it doesn't "
             "matter whether you learn from data one observation at a time, in batches, or all together, or in what order: "
             "you end in the same place. That's one sense in which Bayesian learning is coherent."
         ) as vo:
@@ -153,7 +156,7 @@ class Machinery(VoiceoverScene):
             label(r"Bayesian: \ $\theta$ is unknown, \ so it gets a probability distribution", font_size=26, color=POST),
             label(r"a 95\% credible interval: \ given these data, \ $P(\theta \in \text{interval}) = 0.95$", font_size=24, color=POST),
             label(r"the price: \ a prior; \ the reward: \ direct statements about $\theta$", font_size=24, color=OBS),
-            label(r"de Finetti (Part 5): \ exchangeable data behave as if a parameter had a prior", font_size=22, color=GREY_A),
+            label(r"de Finetti (Part 5): \ infinitely exchangeable Bernoulli data are a mixture of IID laws", font_size=22, color=GREY_A),
         ), 12.4, 0.4, [0, 0, 0])
         with self.voiceover(
             "What has changed? <bookmark mark='a'/> Since Part 8, the parameter has been a fixed number and the data random. "
@@ -162,8 +165,7 @@ class Machinery(VoiceoverScene):
             "distribution that expresses what we know about it. <bookmark mark='d'/> A ninety-five percent credible interval "
             "then says, of these data, that theta lies inside with probability point nine five: the statement people usually "
             "think a confidence interval makes. <bookmark mark='e'/> The price is a prior; the reward is a direct answer. "
-            "<bookmark mark='f'/> And de Finetti's theorem from Part 5 says the prior isn't arbitrary decoration: anyone who "
-            "regards the data as exchangeable behaves as if there were a parameter with a prior."
+            "<bookmark mark='f'/> And de Finetti's theorem from Part 5 says the prior isn't arbitrary decoration: an infinitely extendible exchangeable Bernoulli sequence has an IID mixture representation. Finite exchangeability alone does not guarantee it."
         ) as vo:
             for k, m_ in enumerate("abcdef"):
                 vo.wait_until(m_)
@@ -185,8 +187,7 @@ class Machinery(VoiceoverScene):
             "should ignorance be uniform? <bookmark mark='c'/> Fisher, in 1922, built likelihood as an alternative and declared "
             "that the theory of inverse probability must be wholly rejected. <bookmark mark='d'/> Frank Ramsey, Bruno de "
             "Finetti and Leonard Savage rebuilt the foundations, with probability as the coherent degree of belief of a person "
-            "who acts on it. <bookmark mark='e'/> And from about 1990, Markov chain Monte Carlo, brought into statistics by Alan "
-            "Gelfand and Adrian Smith, made Bayesian answers computable for real models. Part 26 picks up the modern story."
+            "who acts on it. <bookmark mark='e'/> And from about 1990, Markov chain Monte Carlo, popularized in applied Bayesian statistics by Alan Gelfand and Adrian Smith, made a wider range of models practical. Earlier MCMC methods and applications predate their paper. Part 26 picks up the modern story."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

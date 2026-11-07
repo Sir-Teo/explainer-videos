@@ -57,15 +57,14 @@ class Prediction(VoiceoverScene):
                                 fill_opacity=0.85).move_to(ax.c2p(kk + 0.2, 0), aligned_edge=DOWN) for kk, v in zip(k, d["pred"])])
         rows = fit_rows(VGroup(
             label(r"after 7 of 10, \ Beta(9, 5)", font_size=24),
-            label(r"grey: \ plug in $\hat p = 0.7$", font_size=24, color=GREY_B),
+            label(r"grey: \ plug in $\bar p = 9/14$", font_size=24, color=GREY_B),
             label(r"orange: \ the posterior predictive", font_size=24, color=POST),
             MathTex(rf"\text{{SD}}\ {d['plug_sd']:.2f}\ \text{{vs}}\ {d['pred_sd']:.2f}", font_size=28),
             label(r"the predictive is wider, \ and honest", font_size=24, color=OBS),
         ), 4.0, 0.36, [5.0, 0.2, 0])
         with self.voiceover(
             "<bookmark mark='a'/> After seven successes in ten, with the Beta two two prior, how many successes will the next "
-            "ten trials bring? <bookmark mark='b'/> Plugging in the estimate point seven gives a binomial distribution, in grey, "
-            "with a standard deviation of one point four five. <bookmark mark='c'/> The posterior predictive, in orange, is "
+            "ten trials bring? <bookmark mark='b'/> Plugging in the posterior mean, nine fourteenths, gives a binomial distribution in grey, with standard deviation one point five two. Both forecasts now have the same mean. <bookmark mark='c'/> The posterior predictive, in orange, is "
             "wider, with standard deviation one point nine two, and its peak is lower. <bookmark mark='d'/> <bookmark mark='e'/> "
             "The plug-in forecast pretends we know p exactly. The predictive admits we don't."
         ) as vo:
@@ -84,17 +83,17 @@ class Prediction(VoiceoverScene):
         rows = [
             cmath(r"\mathrm{Var}(\tilde k \mid y)", r"=", r"\mathbb E[\mathrm{Var}(\tilde k \mid p) \mid y] + \mathrm{Var}(\mathbb E[\tilde k \mid p] \mid y)", font_size=30),
             cmath(r"\ ", r"=", r"\mathbb E[m p(1 - p) \mid y] + m^2\,\mathrm{Var}(p \mid y)", font_size=32),
-            cmath(r"\text{plug-in}", r":", r"m\hat p(1 - \hat p)\ \text{only}", font_size=32),
+            cmath(r"\text{plug-in}", r":", r"m\bar p(1-\bar p);\quad\text{predictive adds }m(m-1)\mathrm{Var}(p\mid y)", font_size=32),
             cmath(r"\text{so}", r":", r"\text{sampling noise} + \text{parameter uncertainty}", font_size=32),
         ]
         rows[3][2].set_color(POST)
         whys = [why(r"Part 5's law of total variance"), why(r"binomial noise, \ plus the spread of $p$"),
-                why(r"the second term is dropped"), why(r"it vanishes only as $n \to \infty$")]
+                why(r"at equal mean: extra variance is $m(m-1)\mathrm{Var}(p\mid y)$"), why(r"it vanishes only as $n \to \infty$")]
         with self.voiceover(
             "<bookmark mark='a'/> Why wider? Part 5's law of total variance: the predictive variance is the average sampling "
             "variance, plus the variance of the mean across the posterior. <bookmark mark='b'/> For the binomial, that's the "
             "familiar m p one minus p, averaged, plus m squared times the posterior variance of p. <bookmark mark='c'/> The "
-            "plug-in forecast keeps only the first term. <bookmark mark='d'/> A forecast must carry both the noise of the next "
+            "plug-in variance at the posterior mean exceeds the first term by m times the posterior variance of p; the predictive adds m times m minus one times that variance beyond the plug-in. For one new Bernoulli trial the predictive and plug-in coincide. <bookmark mark='d'/> A forecast must carry both the noise of the next "
             "data and our uncertainty about the parameter. The second shrinks as the data grow, but with ten trials it's "
             "large: it multiplies by m squared."
         ) as vo:
@@ -158,6 +157,7 @@ class Prediction(VoiceoverScene):
         rows[1][2].set_color(POST)
         whys = [why(r"a gamma-mixed Poisson, \ Part 14's overdispersion"), why(r"next year, \ one corps: \ no deaths"),
                 why(r"almost identical"), why(r"the predictive matters most when data are few")]
+        intro = label('Predict the next count by averaging over the rate', font_size=36)
         with self.voiceover(
             "Contrast the horse kicks of chapter two. <bookmark mark='a'/> A gamma posterior for a Poisson rate makes the "
             "predictive distribution of next year's count a negative binomial, the gamma-mixed Poisson of Part 14. "
@@ -165,10 +165,13 @@ class Prediction(VoiceoverScene):
             "over two hundred and two, to the power one hundred and twenty-three: point five four three. <bookmark mark='c'/> "
             "Plugging in the estimated rate gives e to the minus point six one, also point five four three. "
             "<bookmark mark='d'/> With two hundred corps-years of data, the uncertainty about the rate is negligible next to the "
-            "Poisson noise. The predictive differs from the plug-in exactly when the data are few, which is when it matters."
+            "Poisson noise. The difference is small for this one-year prediction, though it can matter for longer prediction horizons even with substantial data."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()

@@ -31,6 +31,7 @@ class Grids(VoiceoverScene):
         rows[2][2].set_color(POST)
         whys = [why(r"cover the plausible range"), why(r"likelihood $\times$ prior at each point (on the log scale, to avoid underflow)"),
                 why(r"normalize numerically"), why(r"any summary is a weighted sum")]
+        intro = label('Numerical integration requires range and resolution checks', font_size=36)
         with self.voiceover(
             "Conjugacy is a lucky accident. For most models, the posterior has no formula. With one or two parameters there's "
             "a simple remedy. <bookmark mark='a'/> Lay a fine grid over the plausible values. <bookmark mark='b'/> At each "
@@ -38,9 +39,12 @@ class Grids(VoiceoverScene):
             "<bookmark mark='c'/> Divide by the sum to normalize. <bookmark mark='d'/> Any summary, a mean, a probability, a "
             "quantile, is then a weighted sum over the grid. No conjugacy, no algebra: just arithmetic."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -49,7 +53,7 @@ class Grids(VoiceoverScene):
         gx, gy = np.asarray(d["gx4"]), np.asarray(d["gy4"])
         dens = np.asarray(d["dens"])
         A = axes([gx[0], gx[-1]], [gy[0], gy[-1]], x_length=6.4, y_length=4.6, xlabel=r"$\beta_0$", ylabel=r"$\beta_1$",
-                 xticks=[0, 10, 20, 30, 40], yticks=[-0.6, -0.4, -0.2, 0], center=[-2.6, 0.0, 0])
+                 xticks=[0, 20, 40, 60, 80, 100], yticks=[-1.2, -0.8, -0.4, 0], center=[-2.6, 0.0, 0])
         ax = A.ax
         dx, dy = gx[1] - gx[0], gy[1] - gy[0]
         top = dens.max()
@@ -71,9 +75,9 @@ class Grids(VoiceoverScene):
         ), 4.6, 0.36, [4.5, 0.2, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Bring back Part 14's Challenger model: logistic regression of O-ring distress on temperature, "
-            "now with a flat prior on the two coefficients. <bookmark mark='b'/> The posterior is the likelihood, normalized. "
-            "There's no conjugate prior for logistic regression, so no formula. <bookmark mark='c'/> Evaluate it on a grid of "
-            "sixty thousand points. <bookmark mark='d'/> The picture is Part 14's long diagonal ridge, <bookmark mark='e'/> but "
+            "now with an improper flat prior on both coefficients. For these nonseparated data the posterior is proper; the finite grid is a numerical approximation to it. <bookmark mark='b'/> The posterior is the likelihood, normalized. "
+            "Natural conjugate forms exist for exponential families, but logistic posterior normalization is generally not available in a convenient closed form. <bookmark mark='c'/> Evaluate it on a grid of "
+            "over three hundred thousand points, with wider and finer grids checking truncation and discretization. <bookmark mark='d'/> The picture is Part 14's long diagonal ridge, <bookmark mark='e'/> but "
             "now it's a probability distribution over the coefficients, and we can ask it questions directly."
         ) as vo:
             self.play(FadeIn(A))
@@ -91,8 +95,8 @@ class Grids(VoiceoverScene):
     def marginal(self):
         d = load("grid")
         gy, my = np.asarray(d["gy"]), np.asarray(d["my"])
-        A = axes([-0.7, 0.1], [0, 3.6], x_length=7.0, y_length=4.2, xlabel=r"$\beta_1$, \ log-odds per $^\circ$F", ylabel=r"posterior density",
-                 xticks=[-0.6, -0.4, -0.2, 0], yticks=[0, 1, 2, 3], center=[-2.4, 0.2, 0])
+        A = axes([-1.5, 0.3], [0, 3.6], x_length=7.0, y_length=4.2, xlabel=r"$\beta_1$, \ log-odds per $^\circ$F", ylabel=r"posterior density",
+                 xticks=[-1.2, -.8, -.4, 0], yticks=[0, 1, 2, 3], center=[-2.4, 0.2, 0])
         ax = A.ax
         cv = density(ax, gy, my, POST)
         neg = gy < 0
@@ -107,9 +111,9 @@ class Grids(VoiceoverScene):
         ), 4.6, 0.36, [4.5, 0.2, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Add up the grid over the intercept, and you have the posterior for the slope alone. "
-            "<bookmark mark='b'/> Its mean is minus point two eight seven, a little more negative than the maximum-likelihood "
+            "<bookmark mark='b'/> Its mean is minus point two nine one, a little more negative than the maximum-likelihood "
             "minus point two three two, because the posterior is skewed. <bookmark mark='c'/> The probability that the slope is "
-            "negative, the red sliver being the rest, is point nine nine eight seven. <bookmark mark='d'/> In words: given the "
+            "negative, the red sliver being the rest, is point nine nine eight nine. <bookmark mark='d'/> In words: given the "
             "twenty-three flights and a flat prior, colder launches are worse with probability about ninety-nine point nine "
             "percent. <bookmark mark='e'/> Part 14's likelihood-ratio test could only say that data like these would be rare "
             "if temperature didn't matter."
@@ -148,7 +152,7 @@ class Grids(VoiceoverScene):
             "<bookmark mark='a'/> Each point of the grid implies a probability of distress at thirty-one degrees, so the "
             "posterior for the coefficients becomes a posterior for that probability. <bookmark mark='b'/> Its median is point "
             "nine nine nine nine. <bookmark mark='c'/> The posterior probability that the chance of distress exceeded ninety "
-            "percent is point nine seven. <bookmark mark='d'/> Its lower two and a half percent point is point eight nine, "
+            "percent is point nine seven. <bookmark mark='d'/> Its lower two and a half percent point is about point nine oh, "
             "<bookmark mark='e'/> a little above Part 14's profile-likelihood interval, which started at point eight oh. "
             "<bookmark mark='f'/> And the caveat is exactly the same: all of this rests on the logistic curve's shape below "
             "fifty-three degrees, where there are no data. A posterior doesn't cure an extrapolation."
@@ -202,9 +206,9 @@ class Grids(VoiceoverScene):
         A = axes([0, 1], [0, 8], x_length=7.4, y_length=4.2, xlabel=r"$p$", ylabel=r"density", xticks=[0, 0.25, 0.5, 0.75, 1], yticks=[0, 4, 8],
                  center=[-2.2, 0.2, 0])
         ax = A.ax
-        cpr = density(ax, xs, np.minimum(prior_n, 7.8), PRIOR, fill=0.15)
-        cpo = density(ax, xs, np.minimum(post, 7.8), POST)
-        p_near = float(np.trapezoid(post[(xs > 0.4) & (xs < 0.6)], xs[(xs > 0.4) & (xs < 0.6)]))
+        cpr = density(ax, xs, prior_n, PRIOR, fill=0.15)
+        cpo = density(ax, xs, post, POST)
+        p_near = load("mixture")["p_near"]
         rows = fit_rows(VGroup(
             label(r"half ``probably fair'', \ half ``no idea''", font_size=26, color=PRIOR),
             MathTex(r"\pi(p) = \tfrac12\,\text{Beta}(50, 50) + \tfrac12\,\text{Uniform}", font_size=26, color=PRIOR),
@@ -215,8 +219,8 @@ class Grids(VoiceoverScene):
         with self.voiceover(
             "Grids free the prior too. <bookmark mark='a'/> Suppose you believe a coin is probably fair, but you're not sure: "
             "half your belief is a tight bump at one half, Beta fifty fifty, and half is complete ignorance, uniform. "
-            "<bookmark mark='b'/> No conjugate table lists that mixture. <bookmark mark='c'/> On a grid of a thousand points, "
-            "seven heads in ten is no harder than before. <bookmark mark='d'/> The posterior has two humps: one at a half, from "
+            "<bookmark mark='b'/> This finite mixture updates analytically too: update each component and its marginal-likelihood weight. A grid provides a convenient cross-check. <bookmark mark='c'/> On a grid of a thousand points, "
+            "seven heads in ten is no harder than before. <bookmark mark='d'/> The posterior has two humps: one near point five two, from "
             "the \"fair\" component, and a broad one near point seven, from the \"no idea\" part. <bookmark mark='e'/> The "
             "posterior probability that p is between point four and point six is still about two thirds. The data have shifted belief toward an "
             "unfair coin without abandoning the fair one; ten tosses can't do more."
