@@ -24,7 +24,7 @@ class SABR(VoiceoverScene, ThreeDScene):
                          lit=(2002,), part=PART)
         with self.voiceover("Chapter six. SABR: Hagan's formula, and the backbone."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.35)
 
     def model(self, c):
         rows = [cmath(r"dF_t", r"=", r"\alpha_t F_t^{\beta}\,dW^1_t,\qquad d\alpha_t = \nu\,\alpha_t\,dW^2_t,\quad "
@@ -44,14 +44,7 @@ class SABR(VoiceoverScene, ThreeDScene):
         with self.voiceover(
             (
             (
-            "Rates and FX desks wanted a smile they could fit one expiry at a time, in a few numbers. In 2002 Hagan, "
-            "Kumar, Lesniewski and Woodward gave them SABR: the forward moves with volatility alpha raised to a "
-            "backbone power beta, and alpha is itself lognormal, with vol of vol nu and correlation rho. With nu zero "
-            "it is the constant-elasticity model; with beta zero as well, Bachelier. In practice beta is fixed by "
-            "convention, often one half for rates and one for FX and crypto, and the other three are fitted. "
-            "<bookmark mark='a'/> Singular perturbation theory gives the implied volatility directly: roughly the "
-            "volatility along the most likely path to the strike, corrected in time. <bookmark mark='b'/> All the "
-            "bending lives in z over x of z."
+            """SABR describes a forward with diffusion coefficient alpha times the forward raised to beta; alpha itself is lognormal, with coefficient nu and correlation rho. With nu zero it reduces to a CEV diffusion, and with beta zero as well to Bachelier. Beta is commonly fixed as a convention; this Bitcoin illustration uses beta one. The remaining parameters are fitted per expiry. <bookmark mark='a'/> Hagan and co-authors derived an asymptotic implied-volatility expansion. The formula shown here specializes it to beta one. <bookmark mark='b'/> The ratio z over x of z supplies its leading strike curvature, while the time correction is also approximate. It is a pricing approximation to the model, rather than the model's exact distribution."""
         )
         )
         ) as vo:
@@ -61,7 +54,7 @@ class SABR(VoiceoverScene, ThreeDScene):
             vo.wait_until("b")
             step(2)
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def derive(self, r):
         sl = next(z for z in r["slices"] if z["days"] == 51)
@@ -85,12 +78,7 @@ class SABR(VoiceoverScene, ThreeDScene):
                     rf"{sl['skew_num']:.3f}", font_size=28, color=IV)).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.45)
         with self.voiceover(
             (
-            "Term by term: expand x of z at zero, and z over x of z is one, minus rho z over two, plus a quadratic. "
-            "<bookmark mark='a'/> Since z is minus nu k over alpha, the at-the-money slope is rho nu over two: skew is "
-            "correlation times vol of vol. <bookmark mark='b'/> The curvature is proportional to nu squared over "
-            "alpha. <bookmark mark='c'/> And at the money, alpha times F to the beta minus one: the backbone. "
-            f"<bookmark mark='d'/> On the 51-day slice, the formula's slope is {sl['skew_formula']:.3f}. Four "
-            "readable numbers: that is why traders speak SABR."
+            f"""For beta one, expand x of z around zero. The ratio is one minus rho z over two, plus a quadratic term. <bookmark mark='a'/> With z equal to minus nu k over alpha, the leading short-time ATM log-strike slope is rho nu over two. General beta also contributes a backbone term. <bookmark mark='b'/> The leading curvature scales with nu squared over alpha and depends on rho. <bookmark mark='c'/> For general beta, leading ATM Black volatility is alpha times F to the beta minus one, holding alpha fixed. <bookmark mark='d'/> On this 51-day slice the displayed approximation gives slope {sl['skew_formula']:.3f}. The finite-maturity correction and the chosen beta matter when interpreting these sensitivities."""
         )
         ) as vo:
             step(0)
@@ -103,7 +91,7 @@ class SABR(VoiceoverScene, ThreeDScene):
             vo.wait_until("d")
             self.play(FadeIn(res))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def replay(self, r, c):
         S = r["slices"]
@@ -130,12 +118,7 @@ class SABR(VoiceoverScene, ThreeDScene):
         nu_dots = VGroup()
         with self.voiceover(
             (
-            "Fit it slice by slice and watch: each expiry's smile moves from its starting guess onto the quotes, and "
-            "its three numbers land on the right. <bookmark mark='a'/> Alpha barely moves; rho stays near minus a "
-            f"third. <bookmark mark='b'/> But nu falls steadily, along a line on log scales: like T to the "
-            f"{c['sabr_nu_power']:.2f}. Fitted per slice, SABR misses by only {c['sabr_rmse']:.2f} points, with "
-            f"{3 * len(c['sabr'])} numbers. One global nu would underfit the short skew, the same diagnosis as "
-            "Heston's; the square-root law is Part fourteen's clue."
+            f"""Fit each expiry separately. <bookmark mark='a'/> Alpha and rho vary across slices. <bookmark mark='b'/> The fitted nu has a log-log slope of {c['sabr_nu_power']:.2f} against maturity on this grid. Its vega-weighted error is {c['sabr_rmse']:.2f} points using {3 * len(c['sabr'])} parameters. That flexibility differs from a five-parameter global Heston fit. The finite-grid power estimate is a descriptive clue for Part fourteen, not proof of a structural square-root law. Independent slice fits also provide no automatic calendar-arbitrage guarantee."""
         )
         ) as vo:
             self.play(FadeIn(main), FadeIn(M), FadeIn(src))
@@ -163,7 +146,7 @@ class SABR(VoiceoverScene, ThreeDScene):
                 nu_dots.add(d3)
                 self.play(FadeIn(d3, scale=1.5), FadeOut(dts), FadeOut(tag), run_time=per * 0.3)
         self.wait(0.3)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def ribbon(self, c):
         sab = c["sabr"]
@@ -203,8 +186,8 @@ class SABR(VoiceoverScene, ThreeDScene):
             self.play(Create(surf), run_time=1.5)
             self.move_camera(theta=-60 * DEGREES, phi=68 * DEGREES, run_time=max(vo.remaining(1.0) - 0.3, 1.5))
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, surf, lines)), FadeOut(hint)],
-                         run_time=1.5)
-        self.clear_scene()
+                         run_time=0.8)
+        self.clear_scene(run_time=0.35)
 
     def backbone(self, s):
         Fs = np.asarray(s["Fs"])
@@ -218,22 +201,15 @@ class SABR(VoiceoverScene, ThreeDScene):
         leg = legend([(BAD, r"$\beta = 0$: normal, vol falls as the price rises"), (IV, r"$\beta = \tfrac12$"),
                       (RV, r"$\beta = 1$: lognormal, the smile moves with the price")], font_size=17).next_to(
             g, UP, buff=0.15).align_to(g, LEFT)
-        side = wrapped_label(r"$\beta$ barely changes today's fit (vol of vol and $\rho$ can mimic it), but it decides how "
-                             r"the smile moves when the price moves, and so the delta. Part 12's sticky test found that "
-                             r"bitcoin's smile moved with the price: $\beta$ near 1", 4.6, 20, GREY_A).to_edge(RIGHT, buff=0.4)
+        side = wrapped_label('Backbone holds $\\alpha$ fixed. Black and normal IV are distinct; one surface or a sticky-rule regression does not identify $\\beta$.', 4.6, 20, GREY_A).to_edge(RIGHT, buff=0.4)
         src = illustration(r"SABR with the 51-day slice's $\rho$ and $\nu$, $\alpha$ set to match today's at-the-money vol")
         with self.voiceover(
             (
-            "Beta is the backbone: how at-the-money volatility moves with the forward. With beta one the smile slides "
-            "with the price. <bookmark mark='a'/> With beta zero, volatility falls as the price rises, which suits "
-            "rates. Today's fit barely sees beta; the hedge does. Bitcoin's smile moved with the price in Part "
-            "twelve's test: beta near one. And it is why Hagan wrote the paper: local volatility predicts the smile "
-            "moves the wrong way, and its deltas were worse than Black–Scholes's."
-            " But Hagan's formula has a flaw. Next."
+            """The backbone concerns Black implied volatility as the forward changes with alpha held fixed. With beta one, the model is scale invariant and its smile shifts in log-moneyness. With beta zero, leading Black ATM volatility is alpha over F, while leading normal volatility is alpha. These are different quoting conventions. A single surface and Part twelve's sticky-rule regression do not identify beta or establish a universal hedge ranking. Hagan's work motivated SABR through smile dynamics and particular hedging evidence. Its approximation can still fail the static-arbitrage checks, which we examine next."""
         )
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(lines[2]), FadeIn(leg[2]))
             vo.wait_until("a")
             self.play(Create(lines[0]), Create(lines[1]), FadeIn(leg[0]), FadeIn(leg[1]), FadeIn(side), run_time=2)
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)

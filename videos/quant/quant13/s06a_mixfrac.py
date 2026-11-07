@@ -16,10 +16,10 @@ class MixFrac(VoiceoverScene):
         self.desks()
 
     def card(self):
-        c = chapter_card(12, r"The mixing fraction", r"One dial moves every exotic. Which vanilla can see it?", part=PART)
+        c = chapter_card(12, r"The mixing fraction", 'Which payoffs can distinguish joint dynamics at fixed marginals?', part=PART)
         with self.voiceover("Chapter twelve. The mixing fraction: one dial between two worlds."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.35)
 
     def dial(self, ms, e):
         runs = [r for r in ms["runs"] if r["seed"] == 7]
@@ -30,8 +30,8 @@ class MixFrac(VoiceoverScene):
         today = np.asarray(e["today"])
         cl_all = [r["cliquet"] for r in ms["runs"]]
         lo_c, hi_c = min(cl_all) * 0.97, max(cl_all) * 1.02
-        gL = axes([-0.5, 0.5], [0.3, 2.4], x_length=3.8, y_length=2.8, xlabel=r"log-moneyness", ylabel=r"leverage at 60 days",
-                  xticks=[-0.4, 0, 0.4], yticks=[0.5, 1, 1.5, 2], font_size=13)
+        gL = axes([-0.5, 0.5], [0, 5.5], x_length=3.8, y_length=2.8, xlabel=r"log-moneyness", ylabel=r"leverage at 60 days",
+                  xticks=[-0.4, 0, 0.4], yticks=[0, 2, 4], font_size=13)
         gF = axes([-0.25, 0.25], [0.35, 0.7], x_length=3.8, y_length=2.8, xlabel=r"log-moneyness, 30 days",
                   ylabel=r"forward smile in 60 days", xticks=[-0.2, 0, 0.2], yticks=[0.4, 0.5, 0.6],
                   yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=13)
@@ -42,7 +42,7 @@ class MixFrac(VoiceoverScene):
         m = np.abs(grid) <= 0.5
 
         def frame(r):
-            L = curve(gL.ax, grid[m], np.clip(np.asarray(r["L60"])[m], 0.3, 2.4), MODEL_COL["SLV"], stroke_width=3)
+            L = curve(gL.ax, grid[m], np.asarray(r["L60"])[m], MODEL_COL["SLV"], stroke_width=3)
             F = curve(gF.ax, k, np.clip(np.asarray(r["fwd_iv"]), 0.35, 0.7), IV, stroke_width=3)
             hgt = abs(gC.ax.c2p(0, r["cliquet"])[1] - gC.ax.c2p(0, lo_c)[1])
             B = Rectangle(width=0.6, height=max(hgt, 1e-3), stroke_width=0, fill_color=OPT, fill_opacity=0.85).move_to(
@@ -81,16 +81,7 @@ class MixFrac(VoiceoverScene):
         leg = label(r"$\eta = 0$: all the volatility from the leverage (local vol); $\eta = 1$: Heston's full vol of vol",
                     font_size=19, color=GREY_B).to_edge(DOWN, buff=0.75)  # above the footnote line
         with self.voiceover(
-            "The mixing fraction, eta, is the share of Heston's vol of vol the model keeps. At eta zero the variance "
-            "is deterministic and the leverage does everything: that is local volatility, run through particles. At "
-            "eta one it is Heston's full vol of vol, with a leverage that only corrects it. Run the particle method at "
-            "five settings, forty thousand particles each, and watch three things: the leverage at sixty days, the "
-            "thirty-day smile sixty days from now, and the price of the cliquet from the start of this part. "
-            "<bookmark mark='a'/> Turn the dial up. The leverage flattens toward one, because more of the "
-            "volatility now comes from the random variance. The forward smile steepens away from local "
-            f"volatility's flat one: its skew goes from {100 * sks[0]:.1f} points to {100 * sks[-1]:.1f}. {v1} "
-            f"<bookmark mark='b'/> And look at the vanilla repricing error, below. {v0} "
-            f"<bookmark mark='c'/> {v2}"
+            f"""Eta scales Heston's variance diffusion. At zero, deterministic variance and the ideal leverage identity reduce to local volatility. At one, the full Heston vol of vol remains, with a recalibrated leverage. We run five settings, forty thousand particles each. <bookmark mark='a'/> Watch leverage, the forward-start smile, and the cliquet. Forward skew goes from {100 * sks[0]:.1f} to {100 * sks[-1]:.1f} points. Endpoint cliquet values are {100 * cls[0]:.2f} and {100 * cls[-1]:.2f} percent; the intermediate values need not move monotonically. <bookmark mark='b'/> Mean vanilla repricing error reaches {worst:.1f} points. Exact vanilla invariance belongs to the ideal model, and is not achieved by these particle runs. <bookmark mark='c'/> Three seeds at eta one half have a cliquet standard deviation of {10000 * sd_c:.1f} basis points, compared with an endpoint-grid range of {10000 * span:.0f}. That descriptive spread is not a confidence interval or a proof of a ranking. Fitting and discretization errors also enter this comparison."""
         ) as vo:
             self.play(FadeIn(P), Create(todayl), FadeIn(cur), FadeIn(leg), FadeIn(foot))
             vo.wait_until("a")
@@ -103,33 +94,23 @@ class MixFrac(VoiceoverScene):
             dots = VGroup(*[Dot(gC.ax.c2p(0.4, c_), radius=0.05, color=WHITE) for c_ in seeds_c])
             self.play(Transform(cur, frame(next(r for r in runs if r["eta"] == 0.5))), FadeIn(dots))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def derive(self, ms):
         rows = [cmath(r"\xi_\eta", r"=", r"\eta\,\xi,\qquad L_\eta^2(S, t)\ \mathbb{E}_\eta\big[v_t \mid S_t = S\big] = "
                       r"\sigma^2_{\text{loc}}(S, t)\ \ \text{for every}\ \eta", font_size=32, colors={r"\xi_\eta": VAR}),
                 cmath(r"\eta = 0", r"\Rightarrow", r"L = \sigma_{\text{loc}}/\sqrt{\bar v(t)}:\ \text{local volatility}",
                       font_size=34, colors={r"\eta = 0": MODEL_COL["LV"]}),
-                cmath(r"\text{forward skew}", r"\propto", r"\operatorname{Cov}\big(d\ln S,\ d\sigma\big)\ \text{at}\ T_1\ "
-                      r"\propto\ \rho\,\eta\,\xi", font_size=32, colors={r"\text{forward skew}": IV}),
-                cmath(r"\text{cliquet}(\eta)", r"\approx", r"\text{cliquet}(0) + \eta\,\partial_\eta\text{cliquet}",
+                cmath(r"d(L\sqrt v)_{\rm diff}", r"=", r"SLvL_S\,dW^1 + \tfrac12 L\eta\xi\,dW^2", font_size=32, colors={r"\text{forward skew}": IV}),
+                cmath(r"\text{cliquet}(\eta)", r"\not\Rightarrow", r"\text{a monotone function of }\eta",
                       font_size=34, colors={r"\text{cliquet}(\eta)": OPT})]
-        whys = [why(r"Gy\"ongy's condition holds at every $\eta$: each setting reprices every vanilla", 20),
+        whys = [why('Ideal marginal identity for each $\\eta$; finite particle runs have repricing error.', 20),
                 why(r"no vol of vol: a deterministic variance, so the leverage is all there is", 20),
-                why(r"the smile at a future date is tilted by the spot--vol covariance then, which scales with the vol of "
-                    r"vol the model keeps (chapter 2's tilt)", 20),
-                why(r"so to first order an exotic that bets on the forward smile is monotone in $\eta$: checked above", 20)]
+                why('It\\^o includes the spatial leverage derivative; recalibration also changes $L_\\eta$.', 20),
+                why('No general monotonicity in $\\eta$; the saved cliquet grid is nonmonotone.', 20)]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.0, buff=0.6, edge=6.9)
         with self.voiceover(
-            "Why does a dial that vanillas cannot see move exotics? For every value of eta, the leverage is "
-            "recomputed so that Gyöngy's condition holds: each setting is a different model with the same "
-            "marginals. <bookmark mark='a'/> At eta zero there is no vol of vol, and the model is local volatility. "
-            "<bookmark mark='b'/> A future smile's skew comes from the covariance between price and volatility at "
-            "that future date, which, by chapter two's argument, scales with the vol of vol the model keeps. "
-            "<bookmark mark='c'/> So to first order, anything that bets on future smiles, a forward start, a cliquet, "
-            "moves monotonically with eta. Pause and predict: which is most sensitive to eta, a one-year European "
-            "option, a forward-start, or a cliquet? The European, not at all: it is a vanilla. The forward-start "
-            "and the cliquet, both."
+            """In the ideal construction, each eta has its own leverage and its own conditional variance, chosen to preserve one-date marginals. <bookmark mark='a'/> At eta zero the model reduces to local volatility. <bookmark mark='b'/> But the instantaneous diffusion of total volatility, L times root v, contains both a spatial leverage derivative and the variance shock. Recalibrating eta changes L as well. Keeping only rho eta xi omits that dependence. <bookmark mark='c'/> There is no general monotonicity theorem for the forward-start or cliquet price as eta changes. Our saved cliquet grid is a numerical counterexample to the claimed monotone rule. Pause: which payoff can detect dynamics beyond one-date marginals? A European cannot in the exact construction; a ratio forward-start or cliquet generally can. Their relative sensitivity must be calculated, with numerical errors assessed."""
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -139,7 +120,7 @@ class MixFrac(VoiceoverScene):
             vo.wait_until("c")
             step(3)
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def desks(self):
         c1 = history_card(2011, r"Clark, \textit{Foreign Exchange Option Pricing}",
@@ -163,4 +144,4 @@ class MixFrac(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(c2, shift=UP * 0.2))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)

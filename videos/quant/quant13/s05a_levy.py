@@ -37,7 +37,7 @@ class Levy(VoiceoverScene):
                          lit=(2002, 2004), part=PART)
         with self.voiceover("Chapter nine. Lévy models, and changing the clock."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.35)
 
     def clock(self, v):
         ck = v["clock"]
@@ -70,13 +70,7 @@ class Levy(VoiceoverScene):
         nu_fit = v["params"][1]
         with self.voiceover(
             (
-            "Another way to make a smile: keep the Brownian motion, change the clock. Top, a Brownian path in "
-            "business time. <bookmark mark='a'/> Below, a gamma clock turning calendar time into business time: it "
-            "lurches forward, fast in busy markets, flat when the market sleeps. <bookmark mark='b'/> Replot the same "
-            "path against calendar time. Business time that passed in an instant becomes a jump; quiet stretches "
-            "flatten. No diffusion at all, only jumps, mostly tiny: Madan and Seneta's variance gamma, priced for "
-            "options by Madan, Carr and Chang. <bookmark mark='c'/> The clock's randomness is nu. On the Surface the "
-            f"fitted nu is only {nu_fit:.3f}: a nearly regular clock, with the skew coming from the drift."
+            f"""A random clock can also produce a smile. The top path is drawn in business time. <bookmark mark='a'/> The lower path is an illustrative gamma clock, not measured market activity. A gamma subordinator has infinitely many jumps and is strictly increasing; the flat stretches here come from finite plotting resolution. <bookmark mark='b'/> Running Brownian motion on that clock produces variance gamma, with no Brownian component in calendar time, plus its drift correction. <bookmark mark='c'/> The fitted clock variance rate is {nu_fit:.3f}, smaller than in this illustration. Its fluctuations still depend on the horizon. This parameter does not make the fitted clock deterministic."""
         )
         ) as vo:
             self.play(FadeIn(top), FadeIn(src), FadeIn(tag))
@@ -88,7 +82,7 @@ class Levy(VoiceoverScene):
         p.clear_updaters()
         tag.clear_updaters()
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def derive(self):
         rows = [cmath(r"X_t", r"=", r"\theta\,G_t + \sigma\,W_{G_t},\qquad G_t \sim \Gamma\big(\text{shape } t/\nu,\ "
@@ -116,14 +110,7 @@ class Levy(VoiceoverScene):
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.0, buff=0.8, edge=6.9)
         with self.voiceover(
             (
-            "The characteristic function in three lines. The log price is a drift and a Brownian motion, both run on "
-            "the gamma clock. <bookmark mark='a'/> Given the clock, it is Gaussian. <bookmark mark='b'/> Average over "
-            "the clock: the gamma law's moment generating function at a complex argument. <bookmark mark='c'/> A drift "
-            "correction keeps the forward fair. <bookmark mark='d'/> CGMY generalised the jump density and integrated "
-            "it in closed form. Its Y is the fine structure: below zero, finitely many jumps; up to one, infinitely "
-            "many but summable; above one, infinite variation, diffusion-like. <bookmark mark='e'/> And Carr and Wu "
-            "ran Lévy processes on a CIR clock: the result is Heston's affine formula again. Stochastic volatility "
-            "is a random clock."
+            """Conditioning on the gamma clock gives a Gaussian log increment. <bookmark mark='a'/> Its conditional transform is exponential in clock time. <bookmark mark='b'/> Averaging uses the gamma transform. <bookmark mark='c'/> A real drift correction requires the stock's exponential moment to exist; for variance gamma, one minus theta nu minus half sigma squared nu must be positive. <bookmark mark='d'/> CGMY generalizes the jump density: Y below zero gives finite activity; zero through values below one gives infinite activity with finite variation; from one up to two gives infinite variation. These are activity and variation classifications, not a universal implied-skew exponent. <bookmark mark='e'/> An independent integrated-CIR clock applied to Brownian log returns gives the uncorrelated Heston case. General Lévy clocks remain affine in suitable constructions, while correlated Heston needs the appropriate dependence, rather than an arbitrary independent time change."""
         )
         ) as vo:
             step(0)
@@ -138,15 +125,15 @@ class Levy(VoiceoverScene):
             vo.wait_until("e")
             step(5)
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def fine(self, v):
         cg = v["cgmy"]
         Ys = ["-0.5", "0.5", "1.5"]
         cols = {"-0.5": BAD, "0.5": OPT, "1.5": RV}
         xs = np.linspace(0.02, 0.6, 120)
-        dens = axes([0, 0.6], [0, 4], x_length=4.2, y_length=3.0, xlabel=r"jump size $|x|$",
-                    ylabel=r"L\'evy density (log scale)", xticks=[0, 0.3, 0.6], yticks=[0, 2, 4],
+        dens = axes([0, 0.6], [-2, 4], x_length=4.2, y_length=3.0, xlabel=r"jump size $|x|$",
+                    ylabel=r"L\'evy density (log scale)", xticks=[0, 0.3, 0.6], yticks=[-2, 0, 2, 4],
                     yfmt=lambda u: f"10^{{{u:.0f}}}", font_size=14)
         paths = VGroup()
         for Y in Ys:
@@ -158,7 +145,7 @@ class Levy(VoiceoverScene):
             paths.add(VGroup(a, ln, t_))
         paths.arrange(DOWN, buff=0.25).to_edge(RIGHT, buff=0.4)
         dens.to_edge(LEFT, buff=0.6).shift(UP * 0.3)
-        lines = VGroup(*[curve(dens.ax, xs, np.clip(np.log10(cg[Y]["C"] * np.exp(-5 * xs) / xs ** (1 + float(Y))), 0, 4),
+        lines = VGroup(*[curve(dens.ax, xs, np.log10(cg[Y]["C"] * np.exp(-5 * xs) / xs ** (1 + float(Y))),
                                cols[Y], stroke_width=3) for Y in Ys])
         cap = wrapped_label(r"$C e^{-5|x|}/|x|^{1+Y}$, with $C$ set so every process has the same yearly variance; "
                             r"right: one year of each, simulated (small jumps as their Gaussian limit)", 4.6, 18, GREY_B)
@@ -166,11 +153,7 @@ class Levy(VoiceoverScene):
         src = illustration(r"CGMY with $G = M = 5$, annual variance 0.25")
         with self.voiceover(
             (
-            "The fine structure, drawn: jump densities for three values of Y, scaled to equal variance, and a year of "
-            f"each. <bookmark mark='a'/> Y minus one half: a handful of jumps, about {cg['-0.5']['lam_eps']:.0f}. "
-            f"<bookmark mark='b'/> Y one half: a swarm, {cg['0.5']['lam_eps']:.0f} above a tenth of a percent. "
-            f"<bookmark mark='c'/> Y one and a half: {cg['1.5']['lam_eps']:.0f}, and the path looks like a diffusion. "
-            "Pause: can a process with no Brownian part look continuous? On a chart, yes."
+            f"""Compare three CGMY laws normalized to equal variance. The simulated paths use a cutoff of one tenth of a percent; the smallest jumps are approximated numerically. <bookmark mark='a'/> For Y minus one half, the expected number above that cutoff is about {cg['-0.5']['lam_eps']:.0f}. <bookmark mark='b'/> At Y one half it is {cg['0.5']['lam_eps']:.0f}. <bookmark mark='c'/> At Y one and a half it is {cg['1.5']['lam_eps']:.0f}, so this finite-resolution path can look diffusion-like. Visual smoothness does not establish a Brownian component, and these cutoff counts are not total activity counts for infinite-activity laws."""
         )
         ) as vo:
             self.play(FadeIn(dens), FadeIn(src), FadeIn(cap), Create(lines[0]), FadeIn(paths[0][0]), FadeIn(paths[0][2]),
@@ -180,7 +163,7 @@ class Levy(VoiceoverScene):
             vo.wait_until("c")
             self.play(Create(lines[2]), FadeIn(paths[2][0]), FadeIn(paths[2][2]), Create(paths[2][1]), run_time=2.5)
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def lab(self, v):
         card = lab_card(r"variance gamma, two ways", LAB_VG, source="explainer/quant/house/stochvol.py", width=8.8)
@@ -204,19 +187,19 @@ class Levy(VoiceoverScene):
             vo.wait_until("a")
             lab_run(self, card, outs, run_time=3)
         self.wait(0.6)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def race(self, lf):
         F = lf["fits"]
         tags = ("VG", "NIG", "CGMY", "CGMY_inf")
         cols = {"VG": MODEL_COL["VG"], "NIG": MODEL_COL["NIG"], "CGMY": GREY_A, "CGMY_inf": MODEL_COL["CGMY"]}
         n_max = max(F[t]["trace"]["eval"][-1] for t in tags)
-        g = axes([0, n_max], [0, 8], x_length=6.4, y_length=4.0, xlabel=r"evaluations", ylabel=r"calibrator loss, best so far",
-                 xticks=[0, n_max], yticks=[0, 2, 4, 6, 8], font_size=15).to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
+        g = axes([0, n_max], [0, 20], x_length=6.4, y_length=4.0, xlabel=r"evaluations", ylabel=r"calibrator loss, best so far",
+                 xticks=[0, n_max], yticks=[0, 5, 10, 15, 20], font_size=15).to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
         tr = ValueTracker(0)
 
         def series(tg):
-            ev, b = np.asarray(F[tg]["trace"]["eval"]), np.clip(np.asarray(F[tg]["trace"]["best"]), 0, 8)
+            ev, b = np.asarray(F[tg]["trace"]["eval"]), np.asarray(F[tg]["trace"]["best"])
 
             def mk():
                 k = max(int(np.searchsorted(ev, tr.get_value(), side="right")), 2)
@@ -246,11 +229,7 @@ class Levy(VoiceoverScene):
         src = real_data(r"the Surface; the House's calibrator, every evaluation recorded")
         with self.voiceover(
             (
-            "Race the pure-jump models on the Surface: variance gamma, NIG, Barndorff-Nielsen's Brownian motion on an "
-            "inverse-Gaussian clock, and CGMY with Y confined below one and above one. <bookmark mark='a'/> All stall "
-            f"well above Heston's {hes:.1f}. {v1} <bookmark mark='v'/> {v2} <bookmark mark='b'/> Why none can match "
-            "stochastic volatility is the next chapter's picture."
-            " Next: how the skew decays with maturity, model by model."
+            f"""Fit variance gamma, NIG and two CGMY parameter domains to the same pooled marks. The loss panel retains the full saved trajectory, including the initial CGMY loss above eighteen. <bookmark mark='a'/> Their reported IV errors exceed Heston's {hes:.1f} points in these fits. <bookmark mark='v'/> The above-one CGMY fit has Y equal to {c2['Y']:.2f}; the different domains give different approximation errors. A better finite-sample fit does not establish that the true process has infinite variation, or exclude every other pure-jump specification. <bookmark mark='b'/> Next we examine these particular models' finite-grid skew patterns, keeping asymptotic theorems separate from fitted power estimates."""
         )
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(src))
@@ -262,4 +241,4 @@ class Levy(VoiceoverScene):
         for l_ in lines:
             l_.clear_updaters()
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)

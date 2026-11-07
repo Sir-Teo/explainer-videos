@@ -18,11 +18,11 @@ class Puzzle(VoiceoverScene):
         self.smile(vp)
 
     def card(self):
-        c = chapter_card(15, r"The SPX/VIX puzzle, measured on bitcoin", r"Can one model price options and options on volatility?",
+        c = chapter_card(15, 'A volatility-index challenge: Bitcoin illustration', r"Can one model price options and options on volatility?",
                          lit=(2008, 2020), part=PART)
-        with self.voiceover("Chapter fifteen. The S&P–VIX puzzle, measured on Bitcoin."):
+        with self.voiceover("""Chapter fifteen. A Bitcoin illustration of a volatility-index calibration challenge."""):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.35)
 
     def history(self):
         h0 = history_card(2004, r"Cboe Futures Exchange", r"VIX futures list on 26 March 2004; VIX options on 24 February "
@@ -30,10 +30,7 @@ class Puzzle(VoiceoverScene):
         h1 = history_card(2008, r"Gatheral, Bachelier Congress",
                           r"A model fitted to S\&P options also predicts VIX options. A diffusion with two variance factors "
                           r"fits both, but only approximately.", color=QC.IDEA, width=4.1)
-        h2 = history_card(2020, r"Guyon, \textit{Risk}", r"``The joint S\&P 500/VIX smile calibration puzzle solved'': for "
-                          r"continuous models, fitting the steep short S\&P skew needs a large vol of vol, which makes the "
-                          r"model's at-the-money VIX implied vols too high. Solved by a non-parametric discrete-time model "
-                          r"(Part 14).", color=QC.IDEA, width=4.1)
+        h2 = history_card(2020, r"Guyon, \textit{Risk}", 'Guyon (2020): a specific nonparametric discrete-time joint-calibration construction. Common continuous models exhibit a skew/index-volatility tension.', color=QC.IDEA, width=4.1)
         G = VGroup(h0, h1, h2).arrange(RIGHT, buff=0.3, aligned_edge=UP)
         if G.width > 13.2:
             G.scale_to_fit_width(13.2)
@@ -41,13 +38,7 @@ class Puzzle(VoiceoverScene):
                    font_size=20, color=GREY_B).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             (
-            "A harder test. In 2004 Cboe listed futures on the VIX, the S&P 500's thirty-day volatility index, and in "
-            "2006 options on it: volatility got a smile of its own, and a model fitted to S&P options predicts it. "
-            "<bookmark mark='a'/> Gatheral showed in 2008 that two variance factors fit both only approximately. "
-            "<bookmark mark='b'/> In 2020 Guyon stated the puzzle sharply: in continuous models, the steep short S&P "
-            "skew needs a large vol of vol, which makes the model's at-the-money VIX implied vols too high. Cont and "
-            "Kokholm had decoupled the two with jumps; Guyon solved it non-parametrically; Part fourteen takes up the "
-            "solutions. Here we measure the puzzle in Bitcoin."
+            """VIX futures began trading in 2004 and VIX options in 2006. A model for S&P prices must also predict the distribution of its future volatility index. <bookmark mark='a'/> Gatheral examined joint fitting with two variance factors in 2008. <bookmark mark='b'/> Guyon's 2020 work describes the tension in common continuous models between steep short SPX skew and high implied volatility of VIX options, and supplies a particular nonparametric discrete-time construction. Jumps and other richer dynamics offer further approaches. The Bitcoin exercise here compares a fitted model index with historical DVOL. We do not have a Bitcoin volatility-option surface in this calculation, so this is an illustration, not a measured joint-calibration test."""
         )
         ) as vo:
             self.play(FadeIn(h0, shift=UP * 0.2))
@@ -56,7 +47,7 @@ class Puzzle(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(h2, shift=UP * 0.2), FadeIn(c4))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def rivers(self, vp, f):
         h = vp["models"]["Heston"]
@@ -94,12 +85,7 @@ class Puzzle(VoiceoverScene):
         r_ = vp["ratio"]
         with self.voiceover(
             (
-            "The fitted Heston has its own thirty-day index: the root of expected variance over the next month. "
-            "Simulate four years of it beside the real DVOL. <bookmark mark='a'/> The model's river is far wilder, "
-            "dropping to a floor whenever variance touches zero. <bookmark mark='b'/> Its daily changes are about "
-            f"{r_:.1f} times as wide: a vol of vol of {100 * h['volvol_median']:.0f} percent against DVOL's "
-            f"{100 * vp['dvol_volvol']:.0f}. The tilt is right, a correlation of {h['corr_median']:+.2f} against "
-            f"{vp['dvol_corr']:+.2f}; the size is not. Guyon's puzzle, in Bitcoin."
+            f"""The fitted Heston implies a thirty-day index from expected future variance. Compare a four-year pricing-measure simulation with observed DVOL. <bookmark mark='a'/> Its floor and variability depend on this calibration. These are independent paths aligned for illustration, not historical path predictions. <bookmark mark='b'/> The simulated median log-index vol of vol is {100 * h['volvol_median']:.0f} percent, versus {100 * vp['dvol_volvol']:.0f} historically, a ratio of {r_:.1f}. Correlations are {h['corr_median']:+.2f} and {vp['dvol_corr']:+.2f}. The two hundred simulated paths describe sampling dispersion under Q. Differences from P history also involve drift, state occupancy and index construction; they cannot by themselves establish a failure to price Bitcoin volatility options."""
         )
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(leg[0]), Create(ld), run_time=2.5)
@@ -109,7 +95,7 @@ class Puzzle(VoiceoverScene):
             self.play(FadeIn(hg), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in hd], lag_ratio=0.02),
                       LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in hm], lag_ratio=0.02), FadeIn(nums), run_time=2.5)
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def derive(self):
         rows = [cmath(r"\mathrm{VIX}^2_T", r"=", r"\mathbb{E}_T\Big[\tfrac1\tau\!\int_T^{T+\tau}\! v_s\,ds\Big] = \theta + (v_T - "
@@ -119,23 +105,16 @@ class Puzzle(VoiceoverScene):
                 cmath(r"\sqrt{\mathbb{E}\big[\mathrm{VIX}^2_T\big]} - \mathbb{E}\big[\mathrm{VIX}_T\big]", r"\approx",
                       r"\frac{\operatorname{Var}\big(\mathrm{VIX}_T\big)}{2\,\mathbb{E}\big[\mathrm{VIX}_T\big]}", font_size=34,
                       colors={r"\sqrt{\mathbb{E}\big[\mathrm{VIX}^2_T\big]} - \mathbb{E}\big[\mathrm{VIX}_T\big]": BAD}),
-                cmath(r"dQ/dP", r":", r"\text{drifts change, diffusion coefficients do not}\ \Rightarrow\ \xi^Q = \xi^P",
+                cmath(r"dQ/dP", r":", r"d\langle X\rangle_t = a(X_t,t)\,dt\quad (P\text{ and }Q)",
                       font_size=34, colors={r"dQ/dP": VAR})]
         whys = [why(r"Heston is affine: integrate its forward variance curve (chapter 13) over the next $\tau$ = 30 days", 20),
-                why(r"Jensen: the square root is concave. The right side is the forward variance-swap vol, which the "
-                    r"vanilla smile fixes; the future cannot exceed it", 20),
+                why('Jensen under the same $Q$, index definition, reset date and forward variance window.', 20),
                 why(r"the gap is the variance of the index: VIX futures and options price the vol of vol directly", 20),
-                why(r"Girsanov (Part 5): an equivalent change of measure moves drifts only. The vol of vol a model fits "
-                    r"under $Q$ is its vol of vol under $P$ too, so it can be checked against history", 20)]
+                why('Girsanov preserves conditional instantaneous diffusion at a state, not unconditional daily or stationary statistics.', 20)]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.8, buff=0.6, edge=6.9)
         with self.voiceover(
             (
-            "Why it is the same puzzle. Heston's squared index is the forward variance curve averaged over thirty "
-            "days: affine in the variance. <bookmark mark='a'/> The square root is concave, so by Jensen the VIX "
-            "future is at most the forward variance-swap vol, which the vanilla smile fixes. <bookmark mark='b'/> The "
-            "gap is about the index's variance over twice its mean: VIX futures and options price the vol of vol. "
-            "<bookmark mark='c'/> And by Girsanov a change of measure moves drifts, not diffusion coefficients, so "
-            "the vol of vol fitted under the pricing measure can be checked against history."
+            """Heston's squared model index is its thirty-day forward variance averaged over the index window. <bookmark mark='a'/> Jensen bounds the Q expectation of the index by the square root of the Q expectation of its square, using the same date, window and index definition. This is a matched forward-variance comparison, not any spot-start variance swap. <bookmark mark='b'/> For small dispersion, the gap is approximately index variance over twice its mean. <bookmark mark='c'/> An equivalent Girsanov measure change preserves conditional instantaneous quadratic variation at the same state; it changes drifts. It need not preserve unconditional daily return variance, the stationary state distribution, or statistics of a filtered index. A historical check therefore needs a specified P model and comparable observations."""
         )
         ) as vo:
             step(0)
@@ -146,7 +125,7 @@ class Puzzle(VoiceoverScene):
             vo.wait_until("c")
             step(3)
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def jensen(self, vp):
         h = vp["models"]["Heston"]
@@ -174,10 +153,7 @@ class Puzzle(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.5)
         with self.voiceover(
             (
-            "Jensen's gap, drawn: the square root, and where the squared index might be in thirty days. "
-            f"<bookmark mark='a'/> The variance-swap vol is {100 * vs:.1f} percent; the fair future, lower, "
-            f"{100 * fut:.1f}. <bookmark mark='b'/> And a floor: with variance at zero, the index cannot fall below "
-            f"{100 * h['floor']:.0f} percent. Pause: can a VIX future trade above the variance-swap vol? Never."
+            f"""Draw the square root against the model's squared index in thirty days. <bookmark mark='a'/> For the matching Q distribution, root mean square is {100 * vs:.1f} percent and the index future is {100 * fut:.1f}. <bookmark mark='b'/> This Heston fit also has an index floor near {100 * h['floor']:.0f} percent. The Jensen upper bound applies to the matching forward window and index definition. Comparing a differently timed swap, a different index, or market quotes with frictions is a different question."""
         )
         ) as vo:
             self.play(FadeIn(g), Create(sq), LaggedStart(*[FadeIn(r_) for r_ in rug], lag_ratio=0.02), run_time=2.5)
@@ -186,7 +162,7 @@ class Puzzle(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(side[2]))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def smile(self, vp):
         H, B = vp["models"]["Heston"], vp["models"]["Bates"]
@@ -210,9 +186,7 @@ class Puzzle(VoiceoverScene):
             MathTex(rf"\text{{Bates:}}\ {100 * B['volvol_median']:.0f}\%\ \text{{vol of vol}}", font_size=28,
                     color=MODEL_COL["Bates"]),
             MathTex(rf"\text{{DVOL realized:}}\ {100 * vp['dvol_volvol']:.0f}\%", font_size=28, color=WHITE),
-            wrapped_label(r"an upward-sloping smile: calls on volatility dear, as on the VIX; a caveat: the model's vol "
-                          r"of vol under $Q$ is compared with DVOL's history under $P$, legitimate within the model "
-                          r"(Girsanov) but not a measured volatility risk premium", 4.4, 17, GREY_B),
+            wrapped_label('Model-index predictions under $Q$; no observed Bitcoin index-option quotes or joint calibration test here.', 4.4, 17, GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.4)
         verdict = (f"Bates, with its jumps, does no better: its index has a vol of vol of {100 * B['volvol_median']:.0f} "
                    "percent, because its diffusion part had to fit the same skew." if B["volvol_median"] > 1.5 * vp["dvol_volvol"]
@@ -221,12 +195,7 @@ class Puzzle(VoiceoverScene):
         src = simulated(r"options on the fitted Heston's 30-day index, priced by quadrature over the law of $v_T$")
         with self.voiceover(
             (
-            f"Price options on the model's index: at the money, {100 * a30:.0f} percent implied volatility at thirty "
-            f"days and {100 * a90:.0f} at ninety, with an upward smile, as VIX options have. <bookmark mark='a'/> "
-            f"{verdict} <bookmark mark='b'/> One caveat: a vol of vol fitted under the pricing measure, against DVOL's "
-            "history. Legitimate within the model; in the world the gap also holds a volatility risk premium. Either "
-            "way the direction is Guyon's."
-            " Every result here depends on calibration. Next: its valleys and instabilities."
+            f"""Model-index option ATM implied volatility is {100 * a30:.0f} percent at thirty days and {100 * a90:.0f} at ninety, with an upward smile on this grid. <bookmark mark='a'/> Bates's simulated index vol of vol is {100 * B['volvol_median']:.0f} percent under this fit. These are calibration-specific predictions. <bookmark mark='b'/> There are no observed Bitcoin index-option prices here to compare them with. Nor does Girsanov make these Q simulations directly comparable to unconditional P statistics. The exercise motivates a joint market test and explicit P dynamics; it does not estimate a volatility risk premium. Next, calibration stability."""
         )
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(leg[0]), Create(h30[0]), FadeIn(h30[1:]), FadeIn(side[0]))
@@ -236,4 +205,4 @@ class Puzzle(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(side[4]))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)

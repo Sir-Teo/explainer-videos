@@ -7,23 +7,18 @@ from videos.quant.quant13.common import BAD, IV, MODEL_COL, OPT, PART, RV, SPOT,
 
 DESK = [
     (r"In Heston, what sets the skew? And the smile's curvature?",
-     r"the correlation $\rho$ sets the skew, scaled by the vol of vol: at short maturity the at-the-money slope is about "
-     r"$\rho\xi/(4\sqrt{v_0})$; the curvature comes from $\xi^2$; mean reversion $\kappa$ flattens both as maturity grows"),
+     'As $T\\to0$ with $v_0>0$, regular Heston ATM skew tends to $\\rho\\xi/(4\\sqrt{v_0})$; finite-date shape depends on all parameters.'),
     (r"Local vol and a stochastic vol model both fit today's surface. You must price a cliquet. Which do you use?",
-     r"not local vol alone: a cliquet is a bet on future smiles, and local vol flattens them; use a stochastic or "
-     r"stochastic-local model with a chosen mixing fraction, and report the spread across models as model risk"),
-    (r"Why can a VIX future never trade above the 30-day variance-swap volatility?",
-     r"Jensen: the future is $\mathbb{E}[\mathrm{VIX}_T]$, the variance-swap vol is $\sqrt{\mathbb{E}[\mathrm{VIX}^2_T]}$, "
-     r"and the square root is concave; the gap is about $\operatorname{Var}(\mathrm{VIX})/(2\mathbb{E}\mathrm{VIX})$, so "
-     r"VIX futures and options price the vol of vol"),
+     'Compare plausible joint dynamics; reconcile vanilla fit and numerical errors before interpreting the exotic-price range.'),
+    ('Which matched-window Jensen bound applies to a model index future?',
+     'Under the same $Q$, date, window and index definition: $\\mathbb E[I_T]\\le\\sqrt{\\mathbb E[I_T^2]}$. The small-dispersion gap is approximately $\\operatorname{Var}(I_T)/(2\\mathbb E[I_T])$.'),
 ]
 
 PROBLEMS = [
     r"Guess $\mathbb{E}[e^{iu\ln S_T}] = e^{C(\tau) + D(\tau)v + iu\ln S}$ in Heston's model and derive the Riccati "
     r"equations for $C$ and $D$ from the pricing PDE.",
     r"Show that in Heston's model the short-maturity at-the-money skew is $\partial_k\sigma \approx \rho\xi/(4\sqrt{v_0})$.",
-    r"Show that in any exponential L\'evy model the forward smile (a $\tau$-maturity option starting at $t$) equals "
-    r"today's smile at maturity $\tau$.",
+    "At zero rates, show that the fixed-notional ratio forward-start smile in an exponential L\\'evy model equals its own current $\\tau$-smile.",
     r"For the CIR variance $dv = \kappa(\theta - v)dt + \xi\sqrt{v}\,dW$, use the scale function to show that $0$ is "
     r"reached with positive probability if and only if $2\kappa\theta < \xi^2$.",
     r"From the forward (Fokker--Planck) equation, show that $dS/S = L(S, t)\sqrt{v}\,dW$ has the marginals of local "
@@ -55,23 +50,16 @@ class Outro(VoiceoverScene):
         cl = np.array([v["cliquet"] for v in e["models"].values()])
         fr = hr["frontier"]
         items = [
-            (rf"volatility moves: bitcoin's ranged {100 * f['rv_min']:.0f}--{100 * f['rv_max']:.0f}\%; random volatility "
-             r"makes a smile, correlation tilts it (mixing, derived)", RV),
-            (rf"Heston: a Riccati characteristic function; the little trap; a fit of {c['fits']['Heston']['rmse']:.2f} vol "
-             rf"points with a vol of vol of {100 * c['fits']['Heston']['params']['xi']:.0f}\%", MODEL_COL["Heston"]),
-            (rf"QE matches the variance's moments: {100 * abs(q2['rel']):.0f}\% off with two steps where Euler is "
-             rf"{100 * e2['rel']:.0f}\%", OPT),
-            (rf"SABR: skew $\rho\nu/2$, curvature $\propto\nu^2$; arbitrage-free SABR keeps mass 1 and "
-             rf"{100 * sp['QL']:.0f}\% absorbed at zero", MODEL_COL["SABR"]),
-            (rf"jumps and L\'evy: Merton's series; CGMY wants $Y = {lf['fits']['CGMY_inf']['params']['Y']:.2f}$; Bates's jumps "
-             r"became a second diffusion", MODEL_COL["VG"]),
-            (rf"skew term structure: market $T^{{{s['power']:.2f}}}$; diffusions flat, pure jumps $1/T$", IV),
-            (r"SLV by particles fits today; the mixing fraction moves exotics, not vanillas", MODEL_COL["SLV"]),
-            (rf"same vanillas, cliquets {100 * (cl.max() - cl.min()) / cl.mean():.0f}\% apart; forward smiles and Bergomi's "
-             r"curves are the reason", BAD),
-            (rf"the model's vol index moves {vp['ratio']:.1f} times as much as DVOL: the SPX/VIX puzzle in bitcoin", VAR),
-            (rf"calibration is ill-posed: regularising cut weekly parameter moves from {100 * fr[0]['median_change_all']:.0f}"
-             rf"\% to {100 * fr[-1]['median_change_all']:.0f}\%", GREY_A),
+            ('Random variance can curve an IV smile; correlation can tilt it.', RV),
+            ('Heston: affine characteristic function; interacting parameters and branch conventions.', MODEL_COL["Heston"]),
+            ('QE: conditional moment matching; discretization and martingale conditions remain.', OPT),
+            ('SABR: asymptotic IV approximation and effective density PDE are distinct.', MODEL_COL["SABR"]),
+            ('Jumps: risk-neutral fits depend on bounds; no physical crash-probability inference.', MODEL_COL["VG"]),
+            ('Skew powers on a finite grid do not establish universal short-time laws.', IV),
+            ('SLV: ideal marginal identity; numerical errors and no general monotonicity in $\\eta$.', MODEL_COL["SLV"]),
+            ('Ratio forward-starts and cliquets: dynamics, unequal fits and numerical errors.', BAD),
+            ('Bitcoin model-index illustration; no volatility-option surface for a joint test.', VAR),
+            ('Calibration fit, parameter stability and hedge performance require separate evidence.', GREY_A),
         ]
         rows = VGroup()
         for i, (t, col) in enumerate(items, 1):
@@ -84,31 +72,19 @@ class Outro(VoiceoverScene):
         if rows.height > 6.4:
             rows.scale_to_fit_height(6.4)
         with self.voiceover(
-            "Part thirteen in ten lines. Volatility moves, and random volatility makes a smile, which correlation "
-            "tilts. Heston's second river has a closed-form characteristic function, if you mind the branch cut, and "
-            "fits the Surface only with a violent vol of vol. Andersen's scheme simulates it by matching moments. "
-            "SABR reads the smile in four numbers, and arbitrage-free SABR fixes its density. Jumps and Lévy "
-            "processes are clocks; their skews blow up like one over maturity while diffusions stay flat, and the "
-            "market sits between. Stochastic local volatility fits today exactly and chooses tomorrow with a dial. "
-            "Models that agree on every vanilla disagree on exotics, because they disagree on future smiles. The "
-            "smile asks for more vol of vol than volatility has. And calibration is an inverse problem: regularise, "
-            "and judge the model by its hedge."
+            """Part thirteen in ten lines. Random variance can curve a smile, and correlation can tilt it. Heston has an affine characteristic function, with careful branch handling and interacting parameters. QE matches conditional variance moments, subject to numerical and martingale conditions. SABR's asymptotic formula differs from its model and from the effective density PDE. Jump parameters depend on fit bounds and do not directly measure physical crash probabilities. Finite-grid skew powers are descriptive, not universal family laws. Ideal SLV preserves marginals; particles retain fitting and discretization errors, and eta gives no general monotone exotic-price rule. Forward-start and cliquet comparisons reflect dynamics together with unequal fits. The Bitcoin volatility-index exercise lacks index-option quotes for a joint test. Calibration stability, price fit and hedging performance each need their own evidence."""
         ):
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.6,
                                                  run_time=20))
         self.wait(0.5)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def desk(self):
         cards = VGroup(*[desk_question(q, a, width=12.4, font_size=24) for q, a in DESK]).arrange(DOWN, buff=0.3)
         if cards.height > 7.4:
             cards.scale_to_fit_height(7.4)
         with self.voiceover(
-            "Three desk questions. In Heston, the correlation sets the skew and the vol of vol sets the curvature. "
-            "<bookmark mark='a'/> To price a cliquet, never trust local volatility alone: it flattens the future "
-            "smile the cliquet is betting on. <bookmark mark='b'/> And a VIX future can never trade above the "
-            "variance-swap volatility: the square root is concave, and the gap is the price of the vol of vol. "
-            "Full solutions are in the notes."
+            """Three desk questions. Regular short-time Heston ATM skew depends on rho xi over four root v; finite-maturity curvature and skew involve interacting parameters. <bookmark mark='a'/> For a cliquet, compare plausible joint dynamics and quantify unequal fitting and numerical errors before attributing a price spread to model risk. Local volatility's forward flattening in our example is not universal. <bookmark mark='b'/> Jensen compares an index future with root expected squared index under the same Q, date, window and definition. It does not order arbitrary quoted futures and spot-start variance swaps. The notes give the contract definitions and assumptions."""
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -116,7 +92,7 @@ class Outro(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(cards[2], shift=UP * 0.2))
         self.wait(0.5)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def problems(self):
         ps = problem_set(PROBLEMS, font_size=18)
@@ -128,27 +104,24 @@ class Outro(VoiceoverScene):
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=4))
             self.wait(4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def payoffs(self):
         card = payoff_card([
             (r"the skew's square-root law, rough volatility, and the joint SPX/VIX fit", [14]),
             (r"cliquets, autocallables and barriers, priced across models", [15]),
             (r"COS, PDEs and Monte Carlo, made fast and checked", [16]),
-            (r"neural calibrators that fit in microseconds; deep hedging under SV", [17]),
+            ('neural calibrators: benchmark-specific speed and accuracy; deep hedging under SV', [17]),
             (r"stochastic rates: the same ideas for the yield curve", [19]),
             (r"jump to default: credit inside the equity smile", [20]),
             (r"FX desks: SLV, barriers and the mixing fraction in practice", [22]),
         ])
         with self.voiceover(
-            "Where this comes back. The square-root law is Part fourteen's starting point. Part fifteen prices "
-            "structured products across these models. Part sixteen makes the pricing fast, and Part seventeen trains "
-            "networks to calibrate in microseconds. The same ideas return for interest rates, a jump to zero becomes "
-            "credit, and FX desks run stochastic local volatility every day."
+            """Part fourteen examines observed skew scaling, rough and path-dependent volatility, and joint calibration. Part fifteen compares structured products across models. Part sixteen studies pricing methods, and Part seventeen neural calibration and hedging, with benchmark-specific latency and accuracy checks. Related ideas return in interest rates, credit and FX. The remaining parts build on these methods and their assumptions."""
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r_) for r_ in card.rows], lag_ratio=0.4, run_time=4))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def references(self):
         card = reference_card(
@@ -170,34 +143,23 @@ class Outro(VoiceoverScene):
         if card.height > 7.4:
             card.scale_to_fit_height(7.4)
         with self.voiceover(
-            "The textbook chapters this part covers, and the papers it draws on, from Merton's jumps to this year's "
-            "neural operators. The data are the Surface and a hundred weekly surfaces from Deribit's trades, "
-            "Binance's Bitcoin prices, Deribit's DVOL, and the S&P 500 of 1987."
+            """The references span Merton's jumps, affine models, kernel particles and recent neural operators. Data include pooled Deribit option marks, one hundred weekly surfaces, Binance Bitcoin prices, Deribit DVOL and the 1987 S&P history. Pooled marks are not simultaneous executable trades. Research results and historical illustrations carry their stated model and numerical assumptions."""
         ):
             self.play(FadeIn(card))
             self.wait(4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def house(self):
         chart = house_chart(PART, lit=("vol",))
         env = load("envelope")
-        rule = wrapped_label(r"Rule 13: every model the desk uses is fitted by the calibrator, which logs its error and "
-                             r"how far its parameters moved since last week; every exotic is priced under at least two "
-                             r"models fitted to the same surface, and the spread is reported as model risk.  "
-                             rf"The trial counter still reads {env['trials']}.", 12.4, 22, QC.HOUSE).to_edge(DOWN, buff=0.3)
+        rule = wrapped_label('Rule 13: log fit error, parameter changes and numerical checks; compare plausible models and reconcile unequal fits before interpreting exotic-price spreads. Trial counter: 312.', 12.4, 22, QC.HOUSE).to_edge(DOWN, buff=0.3)
         smap = series_map(current=PART + 1, done=PART)
         nxt = label(r"Next: Part 14, Rough and Path-Dependent Volatility", font_size=32, color=QC.IDEA).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "The volatility desk can now fit, simulate and compare models of moving volatility, and it adds a rule. "
-            "Rule thirteen: every model the desk uses is fitted by the calibrator, which logs its error and how far "
-            "its parameters moved since last week. Every exotic is priced under at least two models fitted to the "
-            "same surface, and the spread is reported as model risk. No strategy was tested in this part, so the "
-            f"trial counter still reads {env['trials']}. <bookmark mark='a'/> "
-            "Next, Part fourteen: rough and path-dependent volatility. Why the skew follows a square-root law, what "
-            "it means for volatility to be rough, and the debate over whether it is."
+            f"""The volatility desk can fit, simulate and compare models. Rule thirteen: record calibration errors, numerical checks and parameter changes; price exotics under more than one plausible calibrated model, and reconcile fitting and numerical errors before interpreting the spread. No new strategy trials were run, so the counter remains {env['trials']}. <bookmark mark='a'/> Next, Part fourteen: rough and path-dependent volatility, the empirical skew scaling, and what evidence can distinguish competing dynamics."""
         ) as vo:
             self.play(FadeIn(chart.scale(0.85).to_edge(UP, buff=0.3)), FadeIn(rule))
             vo.wait_until("a")
             self.play(FadeOut(chart), FadeOut(rule), FadeIn(smap), FadeIn(nxt))
         self.wait(1.0)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)

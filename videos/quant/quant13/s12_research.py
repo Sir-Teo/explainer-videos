@@ -28,7 +28,7 @@ class Research(VoiceoverScene):
                             "moment of the price can become infinite at a finite time. Here is when exactly, why it "
                             "matters for simulation, and the theorem that turns it into the slope of the smile's wings."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.35)
 
     def riccati(self):
         rows = [cmath(r"\mathbb E\,e^{pX_T}", r"=", r"\exp\big(\phi(T) + \psi(T)\,v_0\big),\qquad X = \log S/F", font_size=30,
@@ -68,31 +68,29 @@ class Research(VoiceoverScene):
             vo.wait_until("d")
             self.play(FadeIn(thm))
         self.wait(0.5)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def tstar_plot(self, t):
-        g = axes([-10, 16], [0, 10], x_length=8.4, y_length=4.2, xlabel=r"moment $p$ of the price, $\mathbb E[S_T^p]$",
-                 ylabel=r"explosion time $T^*(p)$, years", xticks=[-10, -5, 0, 1, 5, 10, 15], yticks=[0, 2, 4, 6, 8, 10],
+        g = axes([-10, 16], [0, 12], x_length=8.4, y_length=4.2, xlabel=r"moment $p$ of the price, $\mathbb E[S_T^p]$",
+                 ylabel=r"explosion time $T^*(p)$, years", xticks=[-10, -5, 0, 1, 5, 10, 15], yticks=[0, 3, 6, 9, 12],
                  font_size=15).move_to(LEFT * 1.4 + DOWN * 0.2)
         ax = g.ax
         pn, tn = np.asarray(t["p_neg"]), np.asarray(t["tstar_neg"], float)
-        ok = np.isfinite(tn) & (tn <= 10)
+        ok = np.isfinite(tn)
         left = curve(ax, pn[ok], tn[ok], LEFT_C, stroke_width=3)
         pp, tp = np.asarray(t["p_pos"]), np.asarray(t["tstar_pos"], float)
-        okp = np.isfinite(tp) & (tp <= 10)
+        okp = np.isfinite(tp)
         right = curve(ax, pp[okp], tp[okp], RIGHT_C, stroke_width=3) if okp.sum() > 2 else VGroup()
         dots = VGroup(*[Dot(ax.c2p(c["p"], c["ode"]), radius=0.07, color=WHITE) for c in t["ode_check"]
-                        if c["ode"] and c["ode"] <= 10])
-        band = Rectangle(width=ax.c2p(1, 0)[0] - ax.c2p(0, 0)[0], height=ax.c2p(0, 10)[1] - ax.c2p(0, 0)[1],
-                         stroke_width=0, fill_color=GREY_D, fill_opacity=0.5).move_to(ax.c2p(0.5, 5))
+                        if c["ode"] and c["ode"] <= 12])
+        band = Rectangle(width=ax.c2p(1, 0)[0] - ax.c2p(0, 0)[0], height=ax.c2p(0, 12)[1] - ax.c2p(0, 0)[1],
+                         stroke_width=0, fill_color=GREY_D, fill_opacity=0.5).move_to(ax.c2p(0.5, 6))
         blab = label(r"$0 \le p \le 1$: always finite", font_size=14, color=GREY_B).next_to(band, UP, buff=0.05)
         tb = t["textbook"]
         leg = legend([(LEFT_C, r"negative moments: the crash side"), (RIGHT_C, r"$p > 1$: the upper tail"),
                       (WHITE, r"an ODE solver's blow-up time")], font_size=16).to_edge(RIGHT, buff=0.3).shift(UP * 1.4)
         fit_right(leg)
-        side = wrapped_label(rf"a textbook Heston: $\kappa = {tb['kappa']:g}$, $\theta = {tb['theta']:g}$, "
-                             rf"$\xi = {tb['xi']:g}$, $\rho = {tb['rho']:g}$. With $\rho < 0$, $\rho\xi p - \kappa < 0$, and the "
-                             r"roots stay real up to $p \approx 8.4$: those moments are finite for ever", 3.3, 14,
+        side = wrapped_label('Textbook Heston: $\\kappa=2$, $\\theta=0.04$, $\\xi=1$, $\\rho=-0.7$. For positive $p>1$, moments up to about 8.4 remain finite at all times. All finite saved explosion times are shown; other regions have $T^*=\\infty$.', 3.3, 14,
                              GREY_A).next_to(leg, DOWN, buff=0.3)
         fit_right(side)
         c3 = [c for c in t["ode_check"] if c["p"] == -3.0][0]
@@ -112,43 +110,36 @@ class Research(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(leg[1]), FadeIn(right))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def sample(self, t):
         sm = t["sample_moment"]
-        g = axes([2, 5.4], [0, 10], x_length=8.2, y_length=4.0, xlabel=r"number of simulated paths",
-                 ylabel=r"running sample mean of $S_T^{-3}$", xticks=[2, 3, 4, 5], yticks=[0, 2, 4, 6, 8, 10],
+        g = axes([2, 5.4], [0, 40], x_length=8.2, y_length=4.0, xlabel=r"number of simulated paths",
+                 ylabel=r"running sample mean of $S_T^{-3}$", xticks=[2, 3, 4, 5], yticks=[0, 10, 20, 30, 40],
                  xfmt=lambda v: f"10^{{{int(v)}}}", font_size=15, log_x=True).move_to(LEFT * 1.4 + DOWN * 0.2)
         ax = g.ax
         cols = {"before": RIGHT_C, "after": LEFT_C}
         lines = VGroup()
         for k in ("before", "after"):
             r = sm["runs"][k]
-            y = np.clip(np.asarray(r["running_mean"]), 0, 10)
+            y = np.asarray(r["running_mean"])
             lines.add(curve(ax, np.log10(r["n"]), y, cols[k], stroke_width=3))
         b, a = sm["runs"]["before"], sm["runs"]["after"]
         leg = legend([(cols["before"], rf"$T = {b['T']:.2f}$, before $T^*$"), (cols["after"], rf"$T = {a['T']:.2f}$, after")],
                      font_size=16).to_edge(RIGHT, buff=0.3).shift(UP * 1.4)
         fit_right(leg)
-        side = wrapped_label(rf"Andersen's QE scheme (Chapter 5), 200{{,}}000 paths; $T^*(-3) = {sm['tstar']:.2f}$. After "
-                             rf"it, the single largest path is {100 * a['max_share']:.0f}\% of the whole sum; before it, "
-                             rf"{100 * b['max_share']:.1f}\%", 3.3, 14, GREY_A).next_to(leg, DOWN, buff=0.3)
+        side = wrapped_label('Finite QE experiment, 200{,}000 paths. Curves use $0.5T^*$ and $1.6T^*$. Analytic continuous-model integrability is not determined by this sample.', 3.3, 14, GREY_A).next_to(leg, DOWN, buff=0.3)
         fit_right(side)
         with self.voiceover(
-            "Why it matters for simulation. Estimate the minus third moment by Monte Carlo. <bookmark mark='a'/> At "
-            "half the explosion time the running mean settles, as the law of large numbers promises. "
-            "<bookmark mark='b'/> At one and a half times it, it never settles: it jumps whenever a path hits a deep "
-            f"crash, and the single largest path is {100 * a['max_share']:.0f} percent of the whole sum. The estimator "
-            "is not slow; its target is infinite. Any payoff that grows like an inverse power of the price, such as a "
-            "variance swap in a crash or a put struck far out, inherits this."
+            f"""Consider the inverse-cube payoff, S to the minus three. Its continuous-time Heston expectation is finite before the analytic explosion time and infinite afterwards. <bookmark mark='a'/> The first saved running mean uses half that time. <bookmark mark='b'/> The second uses one point six times it, with large jumps and a largest-path share of {100 * a['max_share']:.0f} percent. These are finite, time-discretized QE samples; an unstable-looking sample is not a proof of an infinite expectation, nor does apparent stability prove finiteness. The analytic moment result supplies the conclusion about the continuous model. A bounded far-out put does not inherit an inverse-power explosion. Nor may a variance swap or log payoff be classified as an inverse power without a separate integrability argument."""
         ) as vo:
-            self.play(FadeIn(g), FadeIn(side))
+            self.play(FadeIn(g), FadeIn(side), Create(lines[0]), FadeIn(leg[0]), run_time=1.5)
             vo.wait_until("a")
-            self.play(Create(lines[0]), FadeIn(leg[0]), run_time=1.5)
+            self.play(Indicate(lines[0]))
             vo.wait_until("b")
             self.play(Create(lines[1]), FadeIn(leg[1]), run_time=2)
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def lee(self):
         rows = [cmath(r"\tilde q", r"=", r"\sup\{q : \mathbb E[S_T^{-q}] < \infty\}", font_size=32, colors={r"\tilde q": LEFT_C}),
@@ -157,20 +148,11 @@ class Research(VoiceoverScene):
                 cmath(r"\tilde q = -p^*(T)", r"\Rightarrow", r"\text{the wings follow from } T^*(p)", font_size=30,
                       colors={r"\tilde q = -p^*(T)": BAD})]
         whys = [why(r"the left critical moment: how many inverse powers of the price have a finite mean"),
-                why(r"Lee (2004): the total implied variance grows at most linearly in log-moneyness (Part 12), and its "
-                    r"slope is fixed by the critical moment; fat tails, $\tilde q \to 0$, give the maximum slope 2; thin "
-                    r"tails, $\tilde q \to \infty$, a flat wing"),
-                why(r"at maturity $T$ the critical moment is where $T^*(p) = T$; for Heston the lim sup is a limit (Benaim "
-                    r"and Friz 2008), so the explosion times are the wings' slopes")]
+                why('Lee (2004): a limsup ratio $w(k)/|k|$, not a general local-derivative limit. Critical exponents alone do not settle boundary integrability.'),
+                why('Heston critical moments follow its Riccati boundary; regular tail asymptotics justify an actual ratio limit and derivative behavior.')]
         step = ladder(self, rows, whys, keep=3, top=2.7, x=-0.3, buff=0.5, edge=6.9)
         with self.voiceover(
-            "Now connect the moments to the smile. <bookmark mark='a'/> Define the left critical moment: how many "
-            "inverse powers of the price still have a finite mean. <bookmark mark='b'/> Roger Lee's moment formula of "
-            "2004, which Part 12 used as a no-arbitrage bound, is sharper than a bound: the slope of the total implied "
-            "variance in the far wing is fixed by the critical moment. Fat tails give the maximum slope, two; thin tails "
-            "a flat wing. <bookmark mark='c'/> At maturity T the critical moment is where the explosion time equals T. "
-            "Shalom Benaim and Peter Friz showed that for Heston the limit exists. So the explosion times are the "
-            "slopes of the wings, in closed form."
+            """Connect integrability to an asymptotic wing. <bookmark mark='a'/> The critical inverse moment is the supremum of q for which the inverse-power expectation is finite; it does not alone settle finiteness at the boundary. <bookmark mark='b'/> Lee's formula gives the limsup of total implied variance divided by absolute log strike. It is not, in general, a statement that a local derivative converges. As the critical moment approaches zero this ratio bound approaches two; as it tends to infinity it approaches zero. <bookmark mark='c'/> Heston's Riccati explosion boundary identifies the critical exponent. Stronger Heston tail asymptotics justify a true ratio limit and the corresponding derivative behavior. Those extra conclusions should not be transferred to arbitrary models."""
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -180,7 +162,7 @@ class Research(VoiceoverScene):
             vo.wait_until("c")
             step(2)
         self.wait(0.5)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def wing(self, t):
         w = t["wing"]
@@ -195,9 +177,7 @@ class Research(VoiceoverScene):
         leg = legend([(IV, r"$w(k)/|k|$"), (VAR, r"$dw/d|k|$"), (LEE_C, rf"Lee's limit, {w['lee']:.3f}")],
                      font_size=16).to_edge(RIGHT, buff=0.3).shift(UP * 1.4)
         fit_right(leg)
-        side = wrapped_label(rf"the textbook Heston at $T = {w['T']:g}$, priced by COS out to $K = e^{{-8}}F$; "
-                             rf"$p^*(1) = {w['p_crit']:.2f}$. The approach is slow, like $|k|^{{-1/2}}$ (Gulisashvili and "
-                             r"Stein 2010; Friz, Gerhold, Gulisashvili and Sturm 2011)", 3.3, 14, GREY_A).next_to(
+        side = wrapped_label("Textbook Heston at $T=1$, COS prices through $K=e^{-8}F$. The ratio and derivative need stronger tail asymptotics than Lee\\'s general limsup formula.", 3.3, 14, GREY_A).next_to(
             leg, DOWN, buff=0.3)
         fit_right(side)
         dk = np.asarray(w["dw_dk"])
@@ -208,20 +188,20 @@ class Research(VoiceoverScene):
             "The convergence is slow, like one over the square root of the distance, which is why a smile observed "
             "out to a few strikes says less about the true tail than it seems."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(side))
+            self.play(FadeIn(g), FadeIn(side), Create(lee), FadeIn(leg[2]))
             vo.wait_until("a")
-            self.play(Create(lee), FadeIn(leg[2]))
+            self.play(Indicate(lee))
             vo.wait_until("b")
             self.play(Create(a2), FadeIn(leg[1]), Create(a1), FadeIn(leg[0]), run_time=2)
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def btc(self, t):
         rows = t["btc"]["rows"]
         hx = [-4.8, -2.6, -0.4, 1.8, 4.0, 5.9]
         head = VGroup(label(r"expiry", font_size=18, color=GREY_B), label(r"$T$", font_size=20),
                       label(r"observed slope", font_size=18, color=IV), label(r"Lee, Heston fit", font_size=18, color=LEE_C),
-                      label(r"fit's $p^*$", font_size=18, color=BAD), label(r"implied $\tilde q$", font_size=18, color=SPOT))
+                      label(r"fit's $p^*$", font_size=18, color=BAD), label('extrapolated $q$ proxy', font_size=18, color=SPOT))
         tab = VGroup()
         for j, row in enumerate([head] + [VGroup(label(r_["expiry"], font_size=18),
                                                  MathTex(rf"{r_['T']:.2f}", font_size=24),
@@ -233,19 +213,11 @@ class Research(VoiceoverScene):
                 cell.move_to([hx[i], 2.0 - 0.62 * j, 0])
             tab.add(row)
         fit = t["btc"]["fit"]
-        foot = wrapped_label(rf"the Surface, 10 December 2025, left wing: the slope of total variance on the outer quarter of "
-                             rf"each expiry's put strikes; the Heston fit of Chapter 3 ($\xi = {fit['xi']:.1f}$, $\rho = "
-                             rf"{fit['rho']:.2f}$) saw these quotes, so agreement is consistency, not a test. Implied "
-                             r"$\tilde q$: Lee's formula inverted, $\tilde q = (2 - \beta)^2/(8\beta)$", 11.8, 15,
+        foot = wrapped_label('Outer-quarter finite-strike slopes from pooled marks, 10 December 2025. Inverting Lee requires extrapolating them as asymptotic slopes: $q=(2-\\beta)^2/(8\\beta)$. These are proxies, not identified market moments.', 11.8, 15,
                              GREY_A).to_edge(DOWN, buff=0.4)
         last = rows[-1]
         with self.voiceover(
-            "And Bitcoin. Take the Heston fit of Chapter 3, with its huge volatility of volatility, and compute its "
-            "critical moments at each listed expiry. <bookmark mark='a'/> Lee's slopes from those moments sit close "
-            "to the slopes of the Surface's outer put wings. That is consistency, not a test: the fit saw these "
-            "quotes. <bookmark mark='b'/> But read the other way, Lee's formula inverted turns a wing into a tail: the "
-            "market prices Bitcoin as if the inverse moments of its price were finite only up to about "
-            f"{rows[0]['implied_q_left']:.0f} at six weeks and about {last['implied_q_left']:.0f} at nine months."
+            f"""Compare finite quoted wings with a fitted model's asymptotic prediction. <bookmark mark='a'/> Heston saw these input marks, so proximity is an in-sample consistency observation. More fundamentally, the observed outer-quarter slope is at finite strikes, while Lee's relation concerns infinite log-strike distance. <bookmark mark='b'/> Inverting that finite slope gives proxy q values of {rows[0]['implied_q_left']:.0f} and {last['implied_q_left']:.0f} at the short and long displayed expiries, only if one extrapolates it as an asymptotic slope. Many tails can agree on the observed interval. These proxies do not identify the market's true critical moments or establish which inverse-power payoffs have finite expectations."""
         ) as vo:
             self.play(FadeIn(VGroup(*[r_[:5] for r_ in tab])), FadeIn(foot))
             vo.wait_until("a")
@@ -253,33 +225,26 @@ class Research(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(VGroup(*[r_[5] for r_ in tab])))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def open_problems(self):
         cards = VGroup(
-            desk_question(r"open: explosions beyond affine models", r"for rough volatility (Part 14) and for stochastic "
-                          r"local volatility, critical moments have no Riccati equation; bounds exist (Gerhold, Gerstenecker "
-                          r"and Pinter 2019 for rough Heston) but exact wings are mostly open", width=12.4, font_size=18),
+            desk_question(r"open: explosions beyond affine models", 'Rough Heston has a fractional/Volterra Riccati equation; sharp tail results for broader rough and SLV models remain difficult.', width=12.4, font_size=18),
             desk_question(r"open: the rate of convergence in practice", r"the second-order terms that make $w(k)/|k|$ "
                           r"approach Lee's slope slowly are known for Heston; using them to extrapolate a market smile "
                           r"robustly from a few strikes is unsettled", width=12.4, font_size=18),
-            desk_question(r"open: tails under P and under Q", r"the risk-neutral tail implied by the wings and the "
-                          r"real-world tail of returns (Part 1's cubic law) need not match; their gap is a price of crash "
-                          r"risk that is hard to measure", width=12.4, font_size=18),
+            desk_question(r"open: tails under P and under Q", '$Q$ and $P$ tails can differ; observed differences do not isolate a crash-risk premium without further assumptions.', width=12.4, font_size=18),
         ).arrange(DOWN, buff=0.22)
         with self.voiceover(
-            "Three open questions. <bookmark mark='a'/> Beyond affine models, for rough volatility or stochastic local "
-            "volatility, there is no Riccati equation; bounds exist, but exact wings are mostly open. "
-            "<bookmark mark='b'/> The second-order terms that make the convergence slow are known for Heston; using "
-            "them to extrapolate a market smile from a few strikes is unsettled. <bookmark mark='c'/> And the "
-            "risk-neutral tail implied by the wings need not match the real-world tail of returns, Part 1's cubic law. "
-            "The gap between them is a price of crash risk, and it is hard to measure."
+            """Three further questions. <bookmark mark='a'/> Rough Heston has a fractional, or Volterra, Riccati equation. Extending sharp critical-moment and wing results to broader rough and stochastic-local models remains difficult. <bookmark mark='b'/> Heston's second-order tail corrections are known, but robustly extrapolating a sparse market smile still needs assumptions and uncertainty analysis. <bookmark mark='c'/> Pricing-measure and physical tails need not match. Their difference can reflect risk compensation, changing states and model error; a single fitted wing and a historical tail estimate do not isolate a crash-risk premium."""
         ) as vo:
+            self.play(FadeIn(cards[0], shift=UP * 0.2))
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
-                self.play(FadeIn(cards[k], shift=UP * 0.2))
+                if k:
+                    self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def question(self):
         q = pause_card(r"with Lee's formula, what wing slope does a critical moment $\tilde q = 2$ give? What happens as "
@@ -289,5 +254,10 @@ class Research(VoiceoverScene):
             "happens as it goes to zero, and to infinity?"
         ):
             self.play(FadeIn(q))
+        self.wait(3.0)
+        answer = MathTex(r"\beta(2)=2-4(\sqrt6-2)\approx0.202,\quad \beta(0^+)=2,\quad \beta(\infty)=0", font_size=32, color=LEE_C)
+        answer.to_edge(DOWN, buff=1.2)
+        with self.voiceover('For q equal to two, the slope is two minus four times root six minus two, about zero point two zero two. As q decreases to zero the ratio tends to two; as q grows without bound it tends to zero. These are asymptotic total-variance ratios.'):
+            self.play(FadeIn(answer))
         self.wait(0.5)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)

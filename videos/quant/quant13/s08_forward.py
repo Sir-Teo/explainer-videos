@@ -21,10 +21,10 @@ class Forward(VoiceoverScene):
         self.exotics(e)
 
     def card(self):
-        c = chapter_card(14, r"Forward smiles and cliquets", r"Same vanillas, same exotic price?", part=PART)
+        c = chapter_card(14, r"Forward smiles and cliquets", 'Do similar vanilla fits determine a ratio exotic?', part=PART)
         with self.voiceover("Chapter fourteen. Forward smiles, and cliquets."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.35)
 
     def accumulate(self, fs):
         k = np.asarray(fs["k"])
@@ -47,8 +47,7 @@ class Forward(VoiceoverScene):
         dev = float(np.max(np.abs(mc.mean(0) - np.asarray(fs["semi_iv"]))) * 100)
         spread = float(np.max(mc.max(0) - mc.min(0)) * 100)
         side = VGroup(
-            wrapped_label(r"white: the forward smile by a one-dimensional integral over the law of $v$ at 60 days, Heston's "
-                          r"price inside (exact up to quadrature)", 4.4, 18, GREY_A),
+            wrapped_label('White: ratio-payoff price integrated over ordinary $Q$ variance at reset; numerical COS pricing and quadrature.', 4.4, 18, GREY_A),
             wrapped_label(r"dots: Monte Carlo, as paths accumulate; band: three seeds of 40{,}000 paths", 4.4, 18,
                           MODEL_COL["Heston"]),
             MathTex(rf"\max |\text{{MC mean}} - \text{{integral}}| = {dev:.2f}\ \text{{pts}}", font_size=26, color=WHITE),
@@ -59,11 +58,7 @@ class Forward(VoiceoverScene):
                    f"{spread:.1f}: a discretisation bias in the simulation.")
         with self.voiceover(
             (
-            "A forward smile is the smile a model predicts for a future date: here, the thirty-day smile sixty days "
-            "out. No market quotes it; forward starts and cliquets pay on it. For Heston it can be computed two ways. "
-            "White: a one-dimensional integral, derived shortly. <bookmark mark='a'/> Dots: Monte Carlo, the last "
-            "month's return of ninety-day paths. With five hundred paths they scatter; as paths accumulate they "
-            f"settle. <bookmark mark='b'/> {verdict}"
+            f"""Here a forward smile means today's risk-neutral prices of fixed-notional ratio payoffs, converted to Black implied volatility. The option pays the positive part of the final price divided by the reset price, minus strike: thirty days starting sixty days ahead. It is not a physical forecast or an average of future implied volatilities. White is a Heston integral, with numerical COS pricing and quadrature. <bookmark mark='a'/> Dots are simulated ratio-payoff prices as paths accumulate. <bookmark mark='b'/> Their three-seed mean differs by at most {dev:.1f} vol points; the maximum seed range is {spread:.1f}. These are descriptive checks. Agreement within a seed spread does not prove unbiased simulation, and a discrepancy alone does not uniquely identify its cause."""
         )
         ) as vo:
             self.play(FadeIn(g), Create(semi), FadeIn(side[0]))
@@ -77,7 +72,7 @@ class Forward(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(bandm), FadeIn(side[2]))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def derive(self, fs):
         rows = [cmath(r"\Big(\frac{S_{T_2}}{S_{T_1}} - e^k\Big)^+", r"\Rightarrow", r"V_{T_1} = C\big(1,\ e^k,\ \tau;\ "
@@ -91,8 +86,7 @@ class Forward(VoiceoverScene):
                       font_size=34, colors={r"\sum_i \min\big(\max(r_i, f), c\big)": OPT})]
         whys = [why(r"the payoff is homogeneous of degree 0 in the price at $T_1$: at $T_1$ it is an ordinary option with "
                     r"spot 1, worth the model's price given its state then", 20),
-                why(r"independent stationary increments: the state is irrelevant, so the forward smile is today's "
-                    r"$\tau$-smile (README problem 3)", 20),
+                why("Stationary independent increments: this ratio payoff repeats the model\\'s own current $\\tau$-smile at zero rates.", 20),
                 why(r"tower property: average Heston's price over the law of $v_{T_1}$, chapter 5's scaled non-central "
                     r"$\chi^2$; with COS inside, this is the white curve", 20),
                 why(r"a cliquet coupon is floored at $f$ and capped at $c$: each period is a forward-start call spread, so "
@@ -102,14 +96,7 @@ class Forward(VoiceoverScene):
         with self.voiceover(
             (
             (
-            "Why. A forward-start payoff ignores the price level at the first date, so then it is an ordinary option "
-            "on a spot of one, worth the model's price given its state. <bookmark mark='a'/> In a Lévy model the "
-            "state is irrelevant: the forward smile is today's. <bookmark mark='b'/> In Heston the state is the "
-            "variance: average Heston's price over its chi-squared law at the first date, the white curve. A high "
-            "variance then means a high and flatter forward smile, a low one a low and steeper smile; the average "
-            "over that spread is why Heston's forward smile keeps its curvature. <bookmark mark='c'/> A cliquet is a "
-            "strip of these: each coupon is a floor plus a forward-start call spread. <bookmark mark='d'/> Pause: "
-            "where is a forward start worth exactly today's option? In every exponential Lévy model."
+            """For this ratio payoff, condition at the reset date and normalize spot to one. We use zero rates in the illustration. <bookmark mark='a'/> Stationary independent increments make an exponential Lévy model repeat its own current thirty-day smile. <bookmark mark='b'/> Heston requires averaging its conditional normalized price over the ordinary risk-neutral CIR variance law at reset. A spot-weighted forward-start contract would instead introduce asset weighting and a different measure. <bookmark mark='c'/> Each locally floored and capped coupon is a floor plus a ratio call spread, and linearity prices their sum from these forward-start prices. An additional active global floor would require joint coupon information. Our zero coupon floors make a zero global floor redundant. <bookmark mark='d'/> Thus Lévy stationarity gives equality for this contract and the model's own present option; it does not force agreement with the dashed SSVI target."""
         )        )        ) as vo:
             step(0)
             vo.wait_until("a")
@@ -121,12 +108,12 @@ class Forward(VoiceoverScene):
             vo.wait_until("d")
             self.play(FadeIn(pp))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def coupons(self, fs):
         R = np.asarray(fs["monthly"])  # (4 months, 3 paths)
         cap, flo = 0.10, 0.0
-        g = axes([0.3, 12.7], [-0.25, 0.3], x_length=10.0, y_length=4.0, ylabel=r"monthly return, three simulated paths",
+        g = axes([0.3, 12.7], [-0.35, 0.3], x_length=10.0, y_length=4.0, ylabel=r"monthly return, three simulated paths",
                  xticks=[], yticks=[-0.2, -0.1, 0, 0.1, 0.2], yfmt=lambda u: f"{100 * u:+.0f}\\%" if u else "0",
                  font_size=15).to_edge(UP, buff=0.8)
         ax = g.ax
@@ -140,8 +127,8 @@ class Forward(VoiceoverScene):
                 x = 1 + p * 4.2 + m * 0.8
                 r = float(R[m, p])
                 c_ = min(max(r, flo), cap)
-                raw.add(Rectangle(width=0.5, height=max(abs(ax.c2p(0, np.clip(r, -0.25, 0.3))[1] - ax.c2p(0, 0)[1]), 1e-3),
-                                  stroke_color=GREY_B, stroke_width=1.5, fill_opacity=0).move_to(ax.c2p(x, np.clip(r, -0.25, 0.3) / 2)))
+                raw.add(Rectangle(width=0.5, height=max(abs(ax.c2p(0, r)[1] - ax.c2p(0, 0)[1]), 1e-3),
+                                  stroke_color=GREY_B, stroke_width=1.5, fill_opacity=0).move_to(ax.c2p(x, r / 2)))
                 clip.add(Rectangle(width=0.5, height=max(abs(ax.c2p(0, c_)[1] - ax.c2p(0, 0)[1]), 1e-3), stroke_width=0,
                                    fill_color=OPT, fill_opacity=0.85).move_to(ax.c2p(x, c_ / 2)))
             tot = float(np.clip(R[:, p], flo, cap).sum())
@@ -166,7 +153,7 @@ class Forward(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(sums), FadeIn(foot))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def smiles(self, e):
         k = np.asarray(e["k"])
@@ -189,14 +176,7 @@ class Forward(VoiceoverScene):
         with self.voiceover(
             (
             (
-            "Ask every fitted model the same question. <bookmark mark='a'/> Local volatility, as Part twelve showed, "
-            f"flattens the forward smile: a skew of {100 * lv['fwd_skew']:.1f} points against "
-            f"{100 * e['today_skew']:.1f} today. Its local volatility at the future date is a function of the price "
-            "alone, and the far-out local skew is flat. <bookmark mark='b'/> Heston keeps "
-            f"{100 * he['fwd_skew']:.1f} points and Bates {100 * e['models']['Bates']['fwd_skew']:.1f}: their variance "
-            "is random whenever you start. Variance gamma repeats today's smile, "
-            f"{100 * vg['fwd_skew']:.1f}, and SLV sits where its dial puts it, "
-            f"{100 * e['models']['SLV']['fwd_skew']:.1f}. One set of vanillas, five futures."
+            f"""Ask five implementations for the same ratio forward-start prices. They use the same surface input but have different vanilla fit and numerical errors. <bookmark mark='a'/> On this calibration, local volatility gives a forward skew of {100 * lv['fwd_skew']:.1f} points, against {100 * e['today_skew']:.1f} on the current SSVI target. That flattening is a result of this fitted local-volatility surface, not a theorem for every local-volatility model. <bookmark mark='b'/> Heston gives {100 * he['fwd_skew']:.1f}, Bates {100 * e['models']['Bates']['fwd_skew']:.1f}, variance gamma {100 * vg['fwd_skew']:.1f}, and SLV {100 * e['models']['SLV']['fwd_skew']:.1f}. Variance gamma repeats its own current smile, which differs from the target. The comparison illustrates dynamics together with unequal fit errors."""
         )
         )
         ) as vo:
@@ -206,7 +186,7 @@ class Forward(VoiceoverScene):
             vo.wait_until("b")
             self.play(*[Create(lines[m]) for m in ORDER[1:]], FadeIn(leg[2:]), FadeIn(sk[3:]), run_time=2.5)
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def exotics(self, e):
         cl = {m: e["models"][m]["cliquet"] for m in ORDER}
@@ -230,19 +210,11 @@ class Forward(VoiceoverScene):
         p2 = bars(fs, r"a forward-start at-the-money call: 30 days, starting in 60",
                   lambda u: f"{100 * u:.1f}\\%", 0.045, 0.057, [0.045, 0.05, 0.055])
         VGroup(p1, p2).arrange(RIGHT, buff=1.0).to_edge(UP, buff=0.8)
-        foot = wrapped_label(r"prices per unit of notional; the vanilla options all models were fitted to are the same. "
-                             r"Model risk is this spread, and a desk reports it: the House prices every exotic under at "
-                             r"least two models fitted to the same surface", 11.5, 20, GREY_A).to_edge(DOWN, buff=0.4)
+        foot = wrapped_label('Same surface input, unequal vanilla fits and numerical errors: this price range is not a confidence interval or an isolated dynamics-risk estimate.', 11.5, 20, GREY_A).to_edge(DOWN, buff=0.4)
         v1, v2 = np.array(list(cl.values())), np.array(list(fs.values()))
         with self.voiceover(
             (
-            "Price two such exotics. The cliquet costs between "
-            f"{100 * v1.min():.1f} and {100 * v1.max():.1f} percent of notional across the five models: "
-            f"{100 * (v1.max() - v1.min()) / v1.mean():.0f} percent apart. <bookmark mark='a'/> A forward-start "
-            f"option, struck at the money in sixty days: {100 * (v2.max() - v2.min()) / v2.mean():.0f} percent apart, "
-            "local volatility dearest. <bookmark mark='b'/> No vanilla can settle this. The spread is model risk, and "
-            "an honest desk reports it."
-            " Next: the hardest joint test, the SPX/VIX puzzle, measured on Bitcoin."
+            f"""The four-coupon cliquet costs {100 * v1.min():.1f} to {100 * v1.max():.1f} percent of notional across these implementations, a {100 * (v1.max() - v1.min()) / v1.mean():.0f} percent range relative to their mean. <bookmark mark='a'/> The ATM ratio forward-start price range is {100 * (v2.max() - v2.min()) / v2.mean():.0f} percent, with local volatility highest here. <bookmark mark='b'/> One-date marginals cannot identify the full joint law. This observed spread, however, also contains unequal vanilla fits and numerical errors; it is not an isolated estimate of dynamics risk or a statistical confidence interval. A desk should reconcile those errors before using it as a valuation reserve. Next we illustrate a related volatility-index challenge using Bitcoin inputs."""
         )
         ) as vo:
             self.play(FadeIn(p1[:2]), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in p1[2]], lag_ratio=0.15), FadeIn(p1[3]))
@@ -251,4 +223,4 @@ class Forward(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(foot))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)

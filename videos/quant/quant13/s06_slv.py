@@ -37,7 +37,7 @@ class SLV(VoiceoverScene, ThreeDScene):
                          r"Can one model fit today's smile and keep tomorrow's?", part=PART)
         with self.voiceover("Chapter eleven. Stochastic local volatility, and the particle method."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.35)
 
     def model(self):
         rows = [cmath(r"\frac{dS}{S}", r"=", r"L(S, t)\,\sqrt{v_t}\,dW^1_t,\qquad dv_t = \kappa(\theta - v_t)\,dt + "
@@ -53,8 +53,7 @@ class SLV(VoiceoverScene, ThreeDScene):
                       colors={r"\text{error}": BAD})]
         whys = [why(r"Heston's variance, its vol of vol scaled by the mixing fraction $\eta$, times a leverage function "
                     r"$L$ of the price and the date", 20),
-                why(r"Gy\"ongy's theorem (Part 12): the model has local vol's marginals, so it reprices every vanilla "
-                    r"exactly, when this holds", 20),
+                why('Ideal marginal projection under existence and regularity assumptions; finite particles do not reprice exactly.', 20),
                 why(r"so $L$ depends on the joint law of the model it drives: a McKean--Vlasov SDE, nonlinear in the "
                     r"sense of McKean", 20),
                 why(r"Guyon and Henry-Labord\`ere (2012): estimate the conditional expectation across the simulated "
@@ -64,15 +63,7 @@ class SLV(VoiceoverScene, ThreeDScene):
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.0, buff=0.8, edge=6.9)
         with self.voiceover(
             (
-            "Local volatility fits today exactly and predicts the wrong future; stochastic volatility the reverse. "
-            "Desks multiply them: Heston's variance, vol of vol scaled by a mixing fraction eta, times a leverage "
-            "function. <bookmark mark='a'/> By Gyöngy, it reprices every vanilla when leverage squared times the "
-            "expected variance given the price equals Dupire's local variance. <bookmark mark='b'/> But that "
-            "expectation is under the model's own law, which depends on the leverage: a McKean–Vlasov equation. "
-            "<bookmark mark='c'/> Guyon and Henry-Labordère's 2012 cut: simulate particles together, and at each "
-            "step estimate the expectation across them by kernel regression. <bookmark mark='d'/> The window trades "
-            "bias against noise, which suggests an error falling like N to the minus two fifths: a heuristic, "
-            "measured below."
+            """Local volatility targets today's marginals; stochastic volatility supplies another source of smile dynamics. SLV combines them: Heston variance, with vol of vol scaled by eta, and a leverage function. <bookmark mark='a'/> Under suitable existence and regularity conditions, matching leverage squared times conditional variance to Dupire variance gives the same one-date marginals and vanilla prices. This is an ideal identity. <bookmark mark='b'/> The conditional expectation uses the model's own law, which depends on leverage: a McKean–Vlasov equation. <bookmark mark='c'/> Guyon and Henry-Labordère's particle method estimates it across simulated particles by kernel regression. <bookmark mark='d'/> The displayed bias–noise balance is an independent-sample kernel heuristic. Interacting particles, time stepping, boundaries and sparse wings add errors; this is not a convergence theorem for our implementation."""
         )
         ) as vo:
             step(0)
@@ -85,42 +76,36 @@ class SLV(VoiceoverScene, ThreeDScene):
             vo.wait_until("d")
             step(4)
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def particles(self, sp):
         snaps = sp["snaps"]
         grid = np.asarray(sp["grid"])
-        g = axes([-0.6, 0.6], [0, 1.6], x_length=7.0, y_length=4.2, xlabel=r"log-moneyness $x = \ln S/S_0$",
-                 ylabel=r"variance $v$", xticks=[-0.5, -0.25, 0, 0.25, 0.5], yticks=[0, 0.4, 0.8, 1.2, 1.6], font_size=15)
+        g = axes([-1.5, 0.75], [-0.05, 1.8], x_length=7.0, y_length=4.2, xlabel=r"log-moneyness $x = \ln S/S_0$",
+                 ylabel=r"variance $v$", xticks=[-1.5, -0.75, 0, 0.75], yticks=[0, 0.6, 1.2, 1.8], font_size=15)
         g.to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
-        gl = axes([-0.6, 0.6], [0, 2.5], x_length=4.2, y_length=2.4, xlabel=r"$x$", ylabel=r"leverage $L(x, t)$",
-                  xticks=[-0.5, 0, 0.5], yticks=[0, 1, 2], font_size=13).to_edge(RIGHT, buff=0.5).shift(UP * 1.2)
+        gl = axes([-0.6, 0.6], [-0.2, 3.5], x_length=4.2, y_length=2.4, xlabel=r"$x$", ylabel=r"leverage $L(x,t)$, log scale",
+                  xticks=[-0.5, 0, 0.5], yticks=[0, 1, 2, 3], yfmt=lambda u: f"10^{{{u:.0f}}}", font_size=13).to_edge(RIGHT, buff=0.5).shift(UP * 1.2)
 
         def frame(k):
             z = snaps[k]
             x, v = np.asarray(z["x"]), np.asarray(z["v"])
-            ok = (np.abs(x) < 0.6) & (v < 1.6)
+            ok = np.isfinite(x) & np.isfinite(v)
             cloud = VGroup(*[Dot(g.ax.c2p(a, b), radius=0.022, color=VAR, fill_opacity=0.55) for a, b in zip(x[ok], v[ok])])
-            ev = curve(g.ax, grid, np.clip(np.asarray(z["Ev"]), 0, 1.6), IV, stroke_width=4)
-            L = curve(gl.ax, grid, np.clip(np.asarray(z["L"]), 0, 2.5), MODEL_COL["SLV"], stroke_width=3)
+            ev = curve(g.ax, grid, np.asarray(z["Ev"]), IV, stroke_width=4)
+            L = curve(gl.ax, grid, np.log10(np.asarray(z["L"])), MODEL_COL["SLV"], stroke_width=3)
             day = MathTex(rf"\text{{day}}\ {z['day']}", font_size=30, color=WHITE).next_to(g, UP, buff=0.05).align_to(g, RIGHT)
             return VGroup(cloud, ev, L, day)
 
         cur = frame(0)
         leg = legend([(VAR, r"particles (900 of 8{,}000)"), (IV, r"$\mathbb{E}[v \mid x]$, kernel estimate")],
                      font_size=17).next_to(g, UP, buff=0.12).align_to(g, LEFT)
-        note_ = wrapped_label(r"each step: estimate $\mathbb{E}[v \mid x]$ across the cloud, set $L = \sigma_{\text{loc}}/"
-                              r"\sqrt{\mathbb{E}[v \mid x]}$, move every particle with that $L$", 4.2, 18, GREY_A)
+        note_ = wrapped_label('Raw kernel estimates; variance floor $10^{-6}$. Sparse wings can give very large $L$. No leverage cap in the original algorithm.', 4.2, 18, GREY_A)
         note_.next_to(gl, DOWN, buff=0.4).align_to(gl, LEFT)
         src = illustration(r"the House's particle method on the Surface's SSVI local vol; Heston from chapter 4, $\eta = \tfrac12$")
         with self.voiceover(
             (
-            "Here it runs. Each dot is a particle, a log price and a variance, all starting together. "
-            "<bookmark mark='a'/> At each step the gold curve is the kernel estimate of the expected variance given "
-            "the price; right, the leverage it implies; then every particle steps with the leverage at its own price. "
-            "<bookmark mark='b'/> The cloud fans out and tilts: with negative correlation, particles that fell carry "
-            "high variance. Where the cloud is too wild for the market's local volatility the leverage dips below "
-            "one; too calm, it lifts. The model calibrates while it simulates."
+            """Each dot is a saved log-price and Euler variance particle. This view includes all saved particles, including small negative Euler variances; the spot step uses their positive parts. <bookmark mark='a'/> Gold is the raw kernel estimate. On the right, leverage is shown on a base-ten logarithmic scale, retaining its large early wing estimates. <bookmark mark='b'/> Initially the particles occupy almost one point. In unsupported grid wings the kernel denominator can underflow, and the conditional-variance floor can produce leverage above a thousand. Those values are numerical estimates, not evidence for an economic leverage spike. The original algorithm interpolates this grid without a leverage cap. More central and later estimates are much smaller. The particle calculation calibrates as it simulates, with measurable repricing error."""
         )
         ) as vo:
             self.play(FadeIn(g), FadeIn(gl), FadeIn(leg), FadeIn(src), FadeIn(cur))
@@ -130,16 +115,16 @@ class SLV(VoiceoverScene, ThreeDScene):
             for k in range(1, len(snaps)):
                 self.play(Transform(cur, frame(k)), run_time=per, rate_func=linear)
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def surface3d(self, s):
         grid = np.asarray(s["grid"])
         Ls = s["L"]
         ts = np.array([z["t"] * 365 for z in Ls])
-        m = np.abs(grid) <= 0.5
+        m = np.ones_like(grid, dtype=bool)
         xg = grid[m]
-        Z = np.clip(np.array([np.asarray(z["L"])[m] for z in Ls]), 0.3, 2.2)
-        ax = ThreeDAxes(x_range=[-0.5, 0.5, 0.25], y_range=[ts[0], ts[-1], 30], z_range=[0.3, 2.2, 0.5], x_length=6.4,
+        Z = np.log10(np.array([np.asarray(z["L"])[m] for z in Ls]))
+        ax = ThreeDAxes(x_range=[-1, 1, 0.5], y_range=[ts[0], ts[-1], 30], z_range=[-0.2, 3.2, 1], x_length=6.4,
                         y_length=5.4, z_length=3.0, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
         ax.shift(DOWN * 0.3)
@@ -151,19 +136,16 @@ class SLV(VoiceoverScene, ThreeDScene):
             w = (y - ts[j]) / (ts[j + 1] - ts[j])
             return float(np.interp(x, xg, (1 - w) * Z[j] + w * Z[j + 1]))
 
-        surf = price_surface(ax, f, [-0.5, 0.5], [ts[0], ts[-1]], resolution=(20, 12), z_lo=0.5, z_hi=1.8, opacity=0.6)
-        one = Polygon(ax.c2p(-0.5, ts[0], 1), ax.c2p(0.5, ts[0], 1), ax.c2p(0.5, ts[-1], 1), ax.c2p(-0.5, ts[-1], 1),
+        surf = price_surface(ax, f, [-1, 1], [ts[0], ts[-1]], resolution=(20, 12), z_lo=-0.2, z_hi=3.2, opacity=0.6)
+        one = Polygon(ax.c2p(-1, ts[0], 0), ax.c2p(1, ts[0], 0), ax.c2p(1, ts[-1], 0), ax.c2p(-1, ts[-1], 0),
                       stroke_width=0, fill_color=GREY_C, fill_opacity=0.2)
-        hint = label(r"the leverage function $L(x, t)$ the particles found, over log-moneyness and 10 to 120 days; "
-                     r"grey plane: $L = 1$", font_size=20, color=GREY_A).to_corner(UL, buff=0.35)
+        hint = label('Raw leverage grids, 10--120 days: height $log_{10} L$; grey plane $L=1$. Sparse wings are numerically sensitive.', font_size=20, color=GREY_A).to_corner(UL, buff=0.35)
         self.set_camera_orientation(phi=64 * DEGREES, theta=-120 * DEGREES, zoom=0.85)
         self.add_fixed_in_frame_mobjects(hint)
         self.remove(hint)
         with self.voiceover(
             (
-            "Stack the leverage every ten days into a surface over price and time. <bookmark mark='a'/> Below one "
-            "near the money, rising in the wings, steepest at short dates, and flattening toward one as the random "
-            "variance carries more of the load."
+            """Stack the saved leverage grids from ten to a hundred and twenty days. The height is log ten of leverage; the grey plane is leverage one. <bookmark mark='a'/> This preserves the raw wing estimates instead of flattening them at a display cap. Early unsupported wings and the variance floor can dominate the height. Around the money, leverage is near one or below it in this fit. These grids illustrate the numerical particle method; they are not a smooth, uniquely identified market leverage surface."""
         )
         ) as vo:
             self.play(Create(ax), FadeIn(one), FadeIn(hint), run_time=1.2)
@@ -172,8 +154,8 @@ class SLV(VoiceoverScene, ThreeDScene):
             self.play(Create(surf), run_time=1.5)
             self.move_camera(theta=-55 * DEGREES, phi=70 * DEGREES, run_time=max(vo.remaining(1.0) - 0.3, 1.5))
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, surf, slices, one)), FadeOut(hint)],
-                         run_time=1.5)
-        self.clear_scene()
+                         run_time=0.8)
+        self.clear_scene(run_time=0.35)
 
     def lab(self, s):
         card = lab_card(r"the particle step", LAB_SLV, source="explainer/quant/house/stochvol.py: slv_paths", width=9.4)
@@ -184,11 +166,7 @@ class SLV(VoiceoverScene, ThreeDScene):
         with self.voiceover(
             (
             (
-            "The step itself, eleven lines: a subsample, Silverman's bandwidth, kernel weights, one matrix product "
-            "for the conditional variance, the leverage, and an Euler step for every particle. "
-            "<bookmark mark='a'/> Forty thousand particles, a hundred and twenty days: the model reprices the "
-            f"Surface's smile to {rep[0]['err']:.2f} vol points at thirty days and {rep[-1]['err']:.2f} at a hundred "
-            "and twenty, the remainder being Monte Carlo noise and the finite differences in local volatility."
+            f"""The code uses a subsample, Silverman's bandwidth, kernel weights, and a matrix product for conditional variance, then interpolates leverage and takes Euler steps. The implementation protects the weight denominator and floors the estimated variance. <bookmark mark='a'/> With forty thousand particles over a hundred and twenty days, repricing error is {rep[0]['err']:.2f} vol points at thirty days and {rep[-1]['err']:.2f} at a hundred and twenty. This includes simulation error, time stepping, kernel bias, subsampling, interpolation, floors and the local-volatility approximation. It cannot all be assigned to Monte Carlo noise."""
         )
         )
         ) as vo:
@@ -196,7 +174,7 @@ class SLV(VoiceoverScene, ThreeDScene):
             vo.wait_until("a")
             lab_run(self, card, outs, run_time=3)
         self.wait(0.6)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def convergence(self, sp):
         E = sp["err"]
@@ -247,7 +225,7 @@ class SLV(VoiceoverScene, ThreeDScene):
             vo.wait_until("c")
             self.play(FadeIn(side[2]))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def cards(self):
         c1 = history_card(2007, r"Ren, Madan and Qian; Lipton (2002)",
@@ -255,16 +233,12 @@ class SLV(VoiceoverScene, ThreeDScene):
                           r"grid, and read $\mathbb{E}[v \mid S]$ off it. Accurate in one factor, hard in more.",
                           color=QC.IDEA, width=5.6)
         c2 = history_card(2025, r"Reisinger and Tsianni (arXiv 2504.14343)",
-                          r"For the calibrated Heston-type SLV particle system: well-posedness, propagation of chaos, and a "
-                          r"strong convergence rate of one half.", color=QC.IDEA, width=5.6)
+                          'Fixed-bandwidth regularized SLV: particle convergence and Euler time convergence require distinct Feller and regularity conditions.', color=QC.IDEA, width=5.6)
         G = VGroup(c1, c2).arrange(RIGHT, buff=0.4, aligned_edge=UP)
         pp = pause(r"Set the vol of vol to zero. What is $L$?", width=4.4).to_corner(DR, buff=0.3)
         with self.voiceover(
             (
-            "The rival is the PDE route of Ren, Madan and Qian, and Lipton: solve for the joint density on a grid. "
-            "<bookmark mark='a'/> The theory is recent: Reisinger and Tsianni proved in 2025 that this particle "
-            "system converges, at rate one half. <bookmark mark='b'/> Pause: set the vol of vol to zero. The leverage "
-            "is local vol over the deterministic root variance: local volatility. The next chapter turns that dial."
+            """The PDE route solves for the joint density on a grid. <bookmark mark='a'/> Reisinger and Tsianni's 2025 work studies a regularized, fixed-bandwidth Heston-type particle system. Its propagation-of-chaos result uses a Feller ratio at least one and a critical-time restriction. A separate Euler time-discretization result approaches order one half, up to logarithms, under the stronger Feller condition above two plus root three. These are different limits. Our default eta of one half raises the effective Feller ratio to about one point four eight: above one but below that time-step threshold. The remaining regularity and algorithm conditions have not been verified here. <bookmark mark='b'/> Set vol of vol to zero: leverage is local volatility divided by deterministic root variance. This gives the local-volatility diffusion, in the ideal identity."""
         )
         ) as vo:
             self.play(FadeIn(c1, shift=UP * 0.2))
@@ -273,4 +247,4 @@ class SLV(VoiceoverScene, ThreeDScene):
             vo.wait_until("b")
             self.play(FadeIn(pp))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)

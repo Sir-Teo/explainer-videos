@@ -23,7 +23,7 @@ class Mixing(VoiceoverScene):
                          lit=(1987,), part=PART)
         with self.voiceover("Chapter two. Random volatility makes a smile."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.35)
 
     def _panels(self, m, key):
         cr = m["crowd"][key]
@@ -63,8 +63,7 @@ class Mixing(VoiceoverScene):
         dial.to_edge(RIGHT, buff=0.7).shift(UP * 1.2)
         arrow = Arrow(LEFT * 0.6, ORIGIN, color=WHITE, stroke_width=4, max_tip_length_to_length_ratio=0.35)
         arrow.next_to(dial[1], LEFT, buff=0.15)
-        note_ = wrapped_label(r"thin curves: $\ln S_T$ given one simulated variance path, each a Gaussian; orange: their "
-                              r"average, the model's density; below, the smile it prices", 3.9, 19, GREY_A)
+        note_ = wrapped_label('Thin Gaussians: 40 conditional-path illustration, peaks above 3.4 outside viewport. Orange: their finite average. Below: separately computed COS IV.', 3.9, 19, GREY_A)
         note_.next_to(dial, DOWN, buff=0.5).to_edge(RIGHT, buff=0.3)
         atm, wing = m["atm"], m["wing"]
         pp = pause(r"Double the vol of vol, with $\rho = 0$. Which moves more: the at-the-money vol or the wings?",
@@ -73,17 +72,7 @@ class Mixing(VoiceoverScene):
         cur = P[0]
         with self.voiceover(
             (
-            "Why does moving volatility make a smile? Take the fitted Heston and switch off the correlation. With no "
-            "vol of vol, the log price in three months is one Gaussian, and the smile is flat. <bookmark mark='a'/> "
-            "Let the variance move. Each thin curve is the law of the log price given one variance path: Gaussian "
-            "again, with that path's variance. The model's density is the crowd's average, in orange. "
-            "<bookmark mark='b'/> Turn the vol of vol up: calm paths narrow, wild ones wide, and the average gets a "
-            "sharp peak and fat tails. The smile lifts at both ends. <bookmark mark='p'/> Double it again: which "
-            "moves more, the at-the-money vol or the wings? <bookmark mark='c'/> The wings rise, from "
-            f"{100 * wing['1']:.0f} to {100 * wing['2']:.0f} percent; at the money it falls, from {100 * atm['1']:.1f} "
-            f"to {100 * atm['2']:.1f}. Symmetric, as it must be. <bookmark mark='d'/> Restore the correlation, minus "
-            f"{abs(m['params'][4]):.2f}: high-variance paths come with falls, the wide Gaussians slide left, and the "
-            "smile tilts into a skew."
+            f"""Set Heston's correlation to zero. Without variance randomness, the three-month log return is Gaussian and its implied-volatility smile is flat. <bookmark mark='a'/> With random variance, each conditional Gaussian has its own integrated variance. The forty thin curves and their average illustrate this mixture; the lower smile comes from transform pricing, not from those forty paths. <bookmark mark='b'/> Increasing vol of vol in this parameter sweep makes the mixture more peaked and raises its option-price wings. <bookmark mark='p'/> Double it again: what happens at the money? <bookmark mark='c'/> The wing volatility rises from {100 * wing['1']:.0f} to {100 * wing['2']:.0f} percent, while ATM falls from {100 * atm['1']:.1f} to {100 * atm['2']:.1f}. The zero-correlation mixture gives a symmetric implied-volatility smile. <bookmark mark='d'/> Restore the fitted correlation, minus {abs(m['params'][4]):.2f}. Variance and price shocks now co-move, and this example tilts towards the put wing."""
         )
         ) as vo:
             self.play(FadeIn(cur), FadeIn(dial[:2]), GrowArrow(arrow), FadeIn(src))
@@ -100,7 +89,7 @@ class Mixing(VoiceoverScene):
             vo.wait_until("d")
             self.play(Transform(cur, P[4]), FadeIn(dial[5]), arrow.animate.next_to(dial[5], LEFT, buff=0.15), run_time=2.5)
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def derive(self):
         rows = [cmath(r"\ln S_T \,\big|\, \{v_s\}", r"\sim", r"\mathcal{N}\Big(\!-\tfrac12 \int_0^T\! v\,ds,\ "
@@ -108,10 +97,10 @@ class Mixing(VoiceoverScene):
                 cmath(r"C", r"=", r"\mathbb{E}\Big[C_{\text{BS}}\big(S_0, K, T, \bar\sigma^2_T\big)\Big],\quad "
                       r"\bar\sigma^2_T = \tfrac1T\!\int_0^T\! v\,ds", font_size=32, colors={r"C": OPT}),
                 cmath(r"C", r"\approx", r"C_{\text{BS}}\big(\mathbb{E}\bar\sigma^2\big) + \tfrac12\,"
-                      r"\partial^2_{\sigma^2} C_{\text{BS}}\ \operatorname{Var}\big(\bar\sigma^2\big)", font_size=32,
+                      r"\partial^2_w C_{\text{BS}}\ \operatorname{Var}\big(\bar\sigma^2\big)", font_size=32,
                       colors={r"C": OPT}),
-                cmath(r"\partial^2_{\sigma} C_{\text{BS}}", r"=", r"\text{vega}\cdot\frac{d_1 d_2}{\sigma}", font_size=34,
-                      colors={r"\partial^2_{\sigma} C_{\text{BS}}": VAR}),
+                cmath(r"\partial^2_w C_{\text{BS}}", r"=", r"\frac{\text{vega}}{4\sigma^3}(d_1d_2-1),\quad w=\sigma^2", font_size=30,
+                      colors={r"\partial^2_w C_{\text{BS}}": VAR}),
                 cmath(r"W^1", r"=", r"\rho\,W^2 + \sqrt{1-\rho^2}\,W^\perp", font_size=34, colors={r"W^1": SPOT}),
                 cmath(r"C", r"=", r"\mathbb{E}\Big[C_{\text{BS}}\big(S_0\,\xi_T,\ K,\ T,\ (1-\rho^2)\,\bar\sigma^2_T\big)"
                       r"\Big],\ \ \xi_T = e^{\rho\int\!\sqrt v\,dW^2 - \frac{\rho^2}{2}\int v\,ds}", font_size=30,
@@ -119,28 +108,17 @@ class Mixing(VoiceoverScene):
         whys = [why(r"$W^1$ is independent of the variance path: given the path, the log price is a sum of independent "
                     r"Gaussian increments", 20),
                 why(r"the tower property: average Black--Scholes over the realized variance (Hull and White 1987)", 20),
-                why(r"Taylor to second order in the vol of vol; the first-order term vanishes on average", 20),
-                why(r"differentiate vega $= S\sqrt T\varphi(d_1)$: positive where $|d_1 d_2|$ is large (the wings), "
-                    r"negative at the money: the wings rise, the centre falls, symmetrically (Renault and Touzi 1996)", 20),
+                why('Taylor in average variance $w=\\bar\\sigma_T^2$ about its mean; the centered first-order term averages to zero', 20),
+                why('$\\partial_w=(2\\sigma)^{-1}\\partial_\\sigma$: variance curvature is $\\mathrm{vega}(d_1d_2-1)/(4\\sigma^3)$; leading correction negative at ATM, positive sufficiently far into the wings', 20),
                 why(r"split the price's noise into the part along the variance's noise and the part orthogonal to it", 20),
-                why(r"condition on $W^2$: the price is lognormal again, with its spot moved by $\xi_T$; when $\rho < 0$ "
-                    r"high-variance paths have small $\xi_T$: the skew (Romano and Touzi 1997)", 20)]
+                why('condition on the variance driver: log returns remain Gaussian with shifted spot $S_0\\xi_T$ and residual variance $(1-\\rho^2)\\int v\\,ds$ (Romano and Touzi 1997)', 20)]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.4, buff=0.75, edge=6.9)
         hist = label(r"Hull and White; Scott; Wiggins (1987) \textperiodcentered\ Stein and Stein (1991) "
                      r"\textperiodcentered\ Renault and Touzi (1996) \textperiodcentered\ Romano and Touzi (1997)",
                      font_size=18, color=GREY_B).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             (
-            "Now the proof. With no correlation, the price's Brownian motion is independent of the variance path, so "
-            "given the path the log price is Gaussian with the integrated variance. <bookmark mark='a'/> By the tower "
-            "property the price is Black–Scholes averaged over realized variance: Hull and White's theorem of 1987. "
-            "<bookmark mark='b'/> Expand to second order in the vol of vol: the correction is half Black–Scholes's "
-            "curvature in variance times the variance of the realized variance. <bookmark mark='c'/> That curvature "
-            "is vega times d-one d-two over sigma: negative at the money, positive in the wings. So the wings rise "
-            "and the centre falls, symmetrically: Renault and Touzi. <bookmark mark='d'/> With correlation, split "
-            "the price's noise along and across the variance's noise. <bookmark mark='e'/> Condition on the "
-            "variance's noise: the price is lognormal again, with less variance and a spot shifted by xi T. When rho "
-            "is negative, high-variance paths have small xi T. That is Romano and Touzi's formula: the skew."
+            """Use zero carry and an initial spot of one. At zero correlation, the price noise is independent of the variance path, so the conditional log return is Gaussian with integrated variance. <bookmark mark='a'/> The tower property averages Black–Scholes prices over the average variance: the Hull–White identity. <bookmark mark='b'/> A second-order Taylor expansion in that variance gives half its variance times the price's second derivative with respect to variance. <bookmark mark='c'/> Write w equals sigma squared. That derivative is vega times d-one d-two minus one, divided by four sigma cubed. Its leading correction is negative at the money and positive sufficiently far into the wings. Volatility curvature alone would be a different derivative. <bookmark mark='d'/> For nonzero correlation, split the price shock into correlated and orthogonal parts. <bookmark mark='e'/> In Heston, conditioning on the variance path still gives a Gaussian log return: its spot is shifted by the factor xi T and its residual variance is multiplied by one minus rho squared. This is the Romano–Touzi pricing identity."""
         )
         ) as vo:
             step(0)
@@ -156,7 +134,7 @@ class Mixing(VoiceoverScene):
             vo.wait_until("e")
             step(5)
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def check(self, m):
         r = m["rows"]
@@ -181,7 +159,7 @@ class Mixing(VoiceoverScene):
 
         plain = bars(r["plain_iv"], r["plain_se"], r["plain"], GREY_B, -0.012)
         cond = bars(r["cond_iv"], r["cond_se"], r["cond"], IV, 0.012)
-        leg = legend([(WHITE, r"COS, exact"), (GREY_B, r"plain Monte Carlo, $\pm 2$ s.e."),
+        leg = legend([(WHITE, 'COS numerical benchmark'), (GREY_B, r"plain Monte Carlo, $\pm 2$ s.e."),
                       (IV, r"Romano--Touzi conditional, $\pm 2$ s.e.")], font_size=17).next_to(g, UP, buff=0.12).align_to(g, LEFT)
         ratio = float(np.median(r["se_ratio"]))
         zmax = float(np.max(np.abs(r["z"])))
@@ -202,14 +180,7 @@ class Mixing(VoiceoverScene):
         with self.voiceover(
             (
             (
-            f"The theorem is also an algorithm. Simulate {m['N']:,} variance paths of the fitted model. Plain Monte "
-            "Carlo also simulates the price: grey error bars. <bookmark mark='a'/> The conditional estimator plugs "
-            f"each path's shifted spot and reduced variance into Black–Scholes: bars about {ratio:.0f} times "
-            "narrower, because the price's own noise, given the path, has been integrated out exactly. At the money "
-            f"the exact implied volatility is {100 * r['cos_iv'][6]:.2f} percent and the conditional estimate "
-            f"{100 * r['cond_iv'][6]:.2f}. <bookmark mark='b'/> Across all thirteen strikes: {verdict} Desks use this "
-            "conditional Monte Carlo whenever a model is Gaussian given its volatility path."
-            " Next: the model desks use most, Heston, starting from its characteristic function."
+            f"""The identity suggests a numerical estimator. We use {m['N']:,} simulated variance paths with ninety-one QE time steps and trapezoidal integrated variance. Plain Monte Carlo also simulates the price. <bookmark mark='a'/> The conditional estimator averages Black prices instead. Its sampling-error bars are about {ratio:.0f} times narrower here, but those bars exclude discretization bias. At the money the COS benchmark gives {100 * r['cos_iv'][6]:.2f} percent and the conditional estimate {100 * r['cond_iv'][6]:.2f}. <bookmark mark='b'/> Across the thirteen strikes, {verdict} This is a numerical comparison of approximations; the continuous-model conditional identity is exact, while the sampled paths, integration and transform pricing have numerical error."""
         )
         )
         ) as vo:
@@ -221,4 +192,4 @@ class Mixing(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(side[3]))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)

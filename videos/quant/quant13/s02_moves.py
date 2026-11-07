@@ -25,19 +25,19 @@ class Moves(VoiceoverScene):
                          part=PART)
         with self.voiceover("Chapter one. Why volatility must move."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.35)
 
     def series(self, f):
         t = _yr(f["t"])
         rv = np.asarray(f["rv30"])
         td = _yr(f["dvol_t"])
         dv = np.asarray(f["dvol"])
-        g = axes([2021.25, 2026], [0, 1.4], x_length=8.2, y_length=4.2, ylabel=r"bitcoin volatility, annualized",
+        g = axes([2021.25, 2026], [0, 1.65], x_length=8.2, y_length=4.2, ylabel=r"bitcoin volatility, annualized",
                  xticks=[2022, 2023, 2024, 2025], yticks=[0, 0.4, 0.8, 1.2], yfmt=lambda u: f"{100 * u:.0f}\\%",
                  font_size=17).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
         ax = g.ax
-        lr = curve(ax, t, np.clip(rv, 0, 1.4), RV, stroke_width=2.2)
-        ld = curve(ax, td, np.clip(dv, 0, 1.4), IV, stroke_width=2.2)
+        lr = curve(ax, t, rv, RV, stroke_width=2.2)
+        ld = curve(ax, td, dv, IV, stroke_width=2.2)
         leg = legend([(RV, r"realized over the past 30 days"), (IV, r"DVOL: implied, 30 days ahead")],
                      font_size=18).next_to(g, UP, buff=0.1).align_to(g, LEFT)
         side = VGroup(
@@ -65,7 +65,7 @@ class Moves(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(leg[1]), Create(ld), FadeIn(side[2]), FadeIn(side[3]), run_time=2.5)
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def scatter(self, f, vf):
         P = np.asarray(vf["pairs"])
@@ -99,17 +99,7 @@ class Moves(VoiceoverScene):
         with self.voiceover(
             (
             (
-            "The two rivers are tied together. Each dot is a day: across, Bitcoin's return; up, the change in DVOL; "
-            f"the white line, the best fit so far. On days Bitcoin fell more than five percent, DVOL rose "
-            f"{f['dvol_change_down5']:.0f} percent on average; on big up days it barely moved. Fischer Black called "
-            "this the leverage effect. <bookmark mark='a'/> In 2022 the correlation was "
-            f"{by['2022']:+.2f}. <bookmark mark='b'/> Then 2023's rally tilts the cloud the other way, "
-            f"{by['2023']:+.2f}, as calls were bid. Over all {f['n']} days: {f['leverage_corr']:+.2f}. So returns "
-            f"explain only about {100 * f['leverage_corr'] ** 2:.0f} percent of DVOL's daily variance; the other "
-            f"{100 * (1 - f['leverage_corr'] ** 2):.0f} percent is volatility's own noise. That is the difference "
-            "between GARCH, where tomorrow's variance is a function of today's return, and stochastic volatility, "
-            "where volatility has a Brownian motion of its own. A model needs both the noise and the correlation, "
-            "and the correlation had better be allowed to change."
+            f"""The scatter pairs each day's Bitcoin return with its log-DVOL change. Its line is a descriptive regression. On days Bitcoin fell more than five percent, the mean log-DVOL change, multiplied by one hundred, was {f['dvol_change_down5']:.0f}. <bookmark mark='a'/> The 2022 correlation was {by['2022']:+.2f}. <bookmark mark='b'/> In 2023 it was {by['2023']:+.2f}; that sign change does not identify a cause. Across {f['n']} paired days it was {f['leverage_corr']:+.2f}, so the same-day linear fit accounts for about {100 * f['leverage_corr'] ** 2:.0f} percent of log-DVOL-change variance. The remainder is not proof of independent volatility noise. Nor does this regression test GARCH, whose state depends on the full return history. Stochastic-volatility models add a separate shock as a modelling choice."""
         )
         )
         ) as vo:
@@ -128,7 +118,7 @@ class Moves(VoiceoverScene):
         ln.clear_updaters()
         cnt.clear_updaters()
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def clustering(self, vf):
         acf_a, acf_r = np.asarray(vf["acf_abs"]), np.asarray(vf["acf_ret"])
@@ -147,7 +137,7 @@ class Moves(VoiceoverScene):
         br, ba = bars(acf_r, GREY_B, -0.23), bars(acf_a, VAR, 0.23)
         band_ = Rectangle(width=abs(ax.c2p(61, 0)[0] - ax.c2p(0, 0)[0]), height=abs(ax.c2p(0, 0.096)[1] - ax.c2p(0, 0)[1]),
                           stroke_width=0, fill_color=GREY_D, fill_opacity=0.35).move_to(ax.c2p(30.5, 0))
-        leg = legend([(GREY_B, r"returns $r_t$: no memory"), (VAR, r"sizes $|r_t|$: long memory")], font_size=18).next_to(
+        leg = legend([(GREY_B, 'returns $r_t$: small linear autocorrelations'), (VAR, 'sizes $|r_t|$: volatility clustering')], font_size=18).next_to(
             g, UP, buff=0.12).align_to(g, LEFT)
         hl = vf["dvol_halflife_days"]
         rows = [cmath(r"\widehat{\text{vol of vol}}", r"=", r"\operatorname{sd}\big(\Delta\log\text{DVOL}\big)\sqrt{365}",
@@ -163,12 +153,7 @@ class Moves(VoiceoverScene):
         src = real_data(r"Binance BTCUSDT daily and Deribit DVOL daily, April 2021 -- November 2025")
         with self.voiceover(
             (
-            "Two more facts. Returns themselves have no memory: their autocorrelations sit in the grey band. "
-            f"<bookmark mark='a'/> Their sizes do: {acf_a[0]:.2f} at lag one, still positive two months later. "
-            "Storms cluster, as Part seven's GARCH found. <bookmark mark='b'/> And volatility mean-reverts. Measure "
-            "the vol of vol like a price's volatility, <bookmark mark='c'/> then regress tomorrow's log DVOL on "
-            f"today's: slope {vf['ar1_phi']:.3f}. <bookmark mark='d'/> That is Part five's Ornstein–Uhlenbeck "
-            f"process: a shock decays by half in about {hl:.0f} days, back toward {100 * vf['dvol_mean']:.0f} percent."
+            f"""Two descriptive patterns. Return autocorrelations are small against this pointwise noise guide; that does not establish independence or no memory. <bookmark mark='a'/> Absolute returns cluster: lag-one autocorrelation is {acf_a[0]:.2f}, with positive dependence still visible at longer lags. <bookmark mark='b'/> Log DVOL also shows persistence. <bookmark mark='c'/> Regress tomorrow's log level on today's: the fitted daily AR-one slope is {vf['ar1_phi']:.3f}. <bookmark mark='d'/> An OU-style interpretation gives a half-life of {hl:.0f} days. Exponentiating the fitted long-run log level gives {100 * vf['dvol_mean']:.0f} percent; that is not the arithmetic mean of DVOL. These are sample summaries, not fixed laws of the market."""
         )
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(band_), FadeIn(leg[0]),
@@ -184,7 +169,7 @@ class Moves(VoiceoverScene):
             vo.wait_until("d")
             step(2)
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def crash(self, vf):
         c = vf["crash1987"]
@@ -202,14 +187,7 @@ class Moves(VoiceoverScene):
         src = real_data(r"S\&P 500 daily closes, 1986--1987 (Yahoo Finance)", corner=DL)
         with self.voiceover(
             (
-            "Equity markets learned this the hard way. On 19 October 1987 the S&P 500 fell from "
-            f"{c['close_before']:.0f} to {c['close']:.0f}, a log return of {100 * c['ret']:.1f} percent. "
-            f"<bookmark mark='a'/> Against the prior year's volatility that is {abs(c['z']):.0f} standard deviations, "
-            f"with a normal probability of about ten to the minus {abs(c['log10p']):.0f}. Ever since, "
-            "out-of-the-money index puts have been dear: Rubinstein's skew, and Bates's priced crash fears. "
-            "<bookmark mark='b'/> Pause and predict: Bitcoin rose ten percent today. Does implied volatility rise or "
-            "fall? Both have happened."
-            " If volatility moves, what does that do to option prices? Next: random volatility makes a smile."
+            f"""On 19 October 1987 the S&P 500 fell from {c['close_before']:.0f} to {c['close']:.0f}, a log return of {100 * c['ret']:.1f} percent. <bookmark mark='a'/> Against the preceding 250 trading days' standard deviation, that is {abs(c['z']):.0f} standard deviations. A fixed-volatility Gaussian benchmark assigns a one-sided probability of roughly ten to the minus {abs(c['log10p']):.0f}. This is conditional on that deliberately restrictive benchmark, not an estimated real-world crash probability. Post-crash index downside skew became especially prominent. <bookmark mark='b'/> Pause: Bitcoin rises ten percent. Must implied volatility rise or fall? The sample shows both signs of association; it gives no deterministic answer. Next, what random volatility does to prices."""
         )
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(src))
@@ -218,4 +196,4 @@ class Moves(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(pp))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)

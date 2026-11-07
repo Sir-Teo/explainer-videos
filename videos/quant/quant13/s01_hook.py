@@ -91,7 +91,7 @@ class Hook(VoiceoverScene):
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(t_, shift=UP * 0.1) for t_ in tags], lag_ratio=0.6, run_time=3))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def question(self, e):
         names = {"LV": r"local vol", "Heston": r"Heston", "Bates": r"Bates", "VG": r"variance gamma", "SLV": r"SLV"}
@@ -104,18 +104,13 @@ class Hook(VoiceoverScene):
         head = label(r"five models, fitted to the same options, price one cliquet", font_size=28).to_edge(UP, buff=0.8)
         rows.next_to(head, DOWN, buff=0.5)
         v = np.array(list(cl.values()))
-        q = label(rf"they disagree by {100 * (v.max() - v.min()) / v.mean():.0f}\%, and no option price can settle it",
+        q = label('Observed price range: dynamics plus unequal vanilla fits and numerical errors.',
                   font_size=26, color=BAD).next_to(rows, DOWN, buff=0.5)
         pp = pause(r"Five models agree on every vanilla option on the Surface. Can they disagree about anything?",
                    width=5.4).to_corner(DR, buff=0.3)
         with self.voiceover(
             (
-            "This part builds models that let volatility move: a second random river, jumps, and Lévy processes. A "
-            "puzzle to carry through it: fit five of them to the same Bitcoin options, so all five agree on every "
-            "vanilla. <bookmark mark='p'/> Can they disagree about anything? <bookmark mark='a'/> Price a cliquet, "
-            "which pays capped monthly returns and so bets on future volatility. They disagree by "
-            f"{100 * (v.max() - v.min()) / v.mean():.0f} percent, and no option on the screen can settle it. "
-            "Understanding why is this part's job."
+            f"""This part gives volatility its own state, and adds jumps and random clocks. Here is the question: fit or project five models to the same pooled Bitcoin marks. Their vanilla errors differ, so they do not agree on every option. <bookmark mark='p'/> Even exact agreement on vanilla prices would leave the joint law across dates undetermined. <bookmark mark='a'/> Our capped monthly-return cliquet differs by {100 * (v.max() - v.min()) / v.mean():.0f} percent across these models. That displayed spread combines dynamics, unequal vanilla fits and numerical error. We will separate those ideas as we go."""
         )
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.3,
@@ -125,7 +120,7 @@ class Hook(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeOut(pp), FadeIn(q))
         self.wait(0.5)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def history(self):
         x0, x1, W = 1970, 2025, 12.4
@@ -148,18 +143,7 @@ class Hook(VoiceoverScene):
         marks = ["m%d" % i for i in range(len(ERA))]
         with self.voiceover(
             (
-            "How we got here. 1973: Black, Scholes and Merton, one constant volatility; 1976: Merton's jumps. "
-            "<bookmark mark='m2'/> Then October 1987, the day that world ended. <bookmark mark='m3'/> Hull and White, "
-            "Scott and Wiggins made volatility random; <bookmark mark='m4'/> Stein and Stein gave it an "
-            "Ornstein–Uhlenbeck process; <bookmark mark='m5'/> Heston found a closed form. <bookmark mark='m6'/> "
-            "Dupire, Derman–Kani and Rubinstein fitted the smile exactly. <bookmark mark='m7'/> Bates added jumps, "
-            "<bookmark mark='m8'/> Madan, Carr and Chang priced variance gamma, <bookmark mark='m9'/> and 2002 "
-            "brought SABR, Kou and CGMY. <bookmark mark='m10'/> Carr and Wu changed the clock as Cboe listed VIX "
-            "futures; <bookmark mark='m11'/> Bergomi made the variance curve the state; <bookmark mark='m12'/> VIX "
-            "options listed; <bookmark mark='m13'/> Andersen simulated Heston and Gatheral posed the S&P–VIX "
-            "problem. <bookmark mark='m14'/> Guyon and Henry-Labordère calibrated with particles, "
-            "<bookmark mark='m15'/> Guyon solved the joint puzzle, <bookmark mark='m16'/> and Terra and FTX flooded "
-            "Bitcoin's volatility river."
+            """The history. 1973: Black, Scholes and Merton's constant-volatility benchmark; 1976: Merton's jumps. <bookmark mark='m2'/> October 1987 made downside index skew especially prominent. <bookmark mark='m3'/> Hull and White, Scott and Wiggins modelled random volatility; <bookmark mark='m4'/> Stein and Stein used an Ornstein–Uhlenbeck factor; <bookmark mark='m5'/> Heston obtained an affine characteristic function. <bookmark mark='m6'/> Dupire, Derman–Kani and Rubinstein developed local-volatility and implied-tree approaches. <bookmark mark='m7'/> Bates combined volatility and jumps; <bookmark mark='m8'/> Madan, Carr and Chang priced variance gamma. <bookmark mark='m9'/> Then SABR, Kou and CGMY; <bookmark mark='m10'/> Carr and Wu's clocks and Cboe's VIX futures; <bookmark mark='m11'/> Bergomi's variance curves; <bookmark mark='m12'/> VIX options; <bookmark mark='m13'/> Andersen's simulation and Gatheral's joint-smile challenge; <bookmark mark='m14'/> Guyon and Henry-Labordère's particles; <bookmark mark='m15'/> Guyon's nonparametric joint-calibration construction; <bookmark mark='m16'/> and Bitcoin's Terra and FTX episodes."""
         )       ) as vo:
             self.play(FadeIn(head), Create(line), FadeIn(ticks), FadeIn(dots[0]), FadeIn(rows[0]), FadeIn(dots[1]),
                       FadeIn(rows[1]))
@@ -168,7 +152,7 @@ class Hook(VoiceoverScene):
                 self.play(FadeIn(dots[i], scale=1.6), FadeIn(rows[i], shift=RIGHT * 0.15),
                           Flash(dots[i], color=dots[i].get_color(), flash_radius=0.2), run_time=0.8)
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def objectives(self):
         card = objectives_card([
@@ -203,4 +187,4 @@ class Hook(VoiceoverScene):
             vo.wait_until("a")
             self.play(Indicate(chart.desk["vol"], color=QC.HOUSE, scale_factor=1.05))
         self.wait(0.3)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)

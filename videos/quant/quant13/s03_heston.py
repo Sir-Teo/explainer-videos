@@ -37,7 +37,7 @@ class Heston(VoiceoverScene, ThreeDScene):
                          lit=(1993,), part=PART)
         with self.voiceover("Chapter three. Heston's model, and its characteristic function, derived."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.35)
 
     def model(self):
         rows = [cmath(r"\frac{dS}{S}", r"=", r"\sqrt{v_t}\,dW^1_t", font_size=36, colors={r"\frac{dS}{S}": SPOT}),
@@ -58,7 +58,7 @@ class Heston(VoiceoverScene, ThreeDScene):
             vo.wait_until("a")
             step(1)
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def derive(self):
         rows = [cmath(r"f_\tau", r"=", r"\tfrac12 v\,(f_{xx} - f_x) + \rho\xi v\,f_{xv} + \tfrac12\xi^2 v\,f_{vv} + "
@@ -114,7 +114,7 @@ class Heston(VoiceoverScene, ThreeDScene):
             vo.wait_until("f")
             step(6)
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def helix(self, t):
         h30, h91 = t["helix"]["30"], t["helix"]["91"]
@@ -131,17 +131,13 @@ class Heston(VoiceoverScene, ThreeDScene):
                             r"\mathrm{Im}\,\varphi)$", font_size=22, color=GREY_A),
                       legend([(IV, r"30 days"), (VAR, r"3 months")], font_size=20)).arrange(DOWN, aligned_edge=LEFT,
                                                                                            buff=0.15).to_corner(UL, buff=0.4)
-        txt = wrapped_label(r"it starts at 1 ($u = 0$), turns at the rate of the drift, and decays like the Gaussian part "
-                            r"of the law: slow decay means fat tails", 5.0, 20, GREY_A).to_corner(DR, buff=0.4)
+        txt = wrapped_label('$\\varphi(0)=1$; phase and amplitude encode the law. High-frequency decay concerns regularity, not a universal measure of tail thickness.', 5.0, 20, GREY_A).to_corner(DR, buff=0.4)
         self.set_camera_orientation(phi=70 * DEGREES, theta=-60 * DEGREES, zoom=0.9)
         self.add_fixed_in_frame_mobjects(hint, txt)
         self.remove(hint, txt)
         with self.voiceover(
             (
-            "Look at the object. The characteristic function maps a frequency to a complex number, so draw it in "
-            "three dimensions. <bookmark mark='a'/> It starts at one, spirals at the drift's rate, and shrinks; slow "
-            "decay means fat tails. <bookmark mark='b'/> The three-month curve collapses faster: a wider law, a "
-            "narrower transform."
+            """The characteristic function maps frequency to a complex number, which we can draw in three dimensions. <bookmark mark='a'/> It starts at one. Its phase and amplitude encode the distribution, but slow high-frequency decay is not a general test for fat tails. <bookmark mark='b'/> In this fitted example the three-month transform decays faster than the thirty-day one. A Gaussian also illustrates the width trade-off: a wider distribution has a narrower transform. We should not turn that example into a universal tail diagnostic."""
         )
         ) as vo:
             self.play(Create(ax), FadeIn(hint), run_time=1.5)
@@ -151,8 +147,8 @@ class Heston(VoiceoverScene, ThreeDScene):
             vo.wait_until("b")
             self.play(Create(c91), FadeIn(txt), run_time=2.5)
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, c30, c91)), FadeOut(hint),
-                                                                  FadeOut(txt)], run_time=1.5)
-        self.clear_scene()
+                                                                  FadeOut(txt)], run_time=0.8)
+        self.clear_scene(run_time=0.35)
 
     def trap(self, t):
         w = t["winding"]
@@ -224,7 +220,7 @@ class Heston(VoiceoverScene, ThreeDScene):
         po.clear_updaters()
         dot.clear_updaters()
         self.wait(0.3)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def lab(self, t):
         card = lab_card(r"Heston's characteristic function", LAB_CF, source="explainer/quant/house/stochvol.py",
@@ -235,14 +231,10 @@ class Heston(VoiceoverScene, ThreeDScene):
                 f"published 5.785155435, error {b['err']:.1e}",
                 f"original form, our fit, T=1: wrong from u = {fw['fit_1']['u']:.2f}",
                 f"original form, our fit, T=3: wrong from u = {fw['fit_3']['u']:.2f}"]
-        pp = pause(r"Is $\ln S_T$ normal given the variance path?", width=4.4).to_corner(DR, buff=0.3)
+        pp = pause('Given the full Heston variance path, what changes in the Gaussian log-return law when $\\rho\\ne0$?', width=4.4).to_corner(DR, buff=0.3)
         with self.voiceover(
             (
-            "The House's implementation: eleven lines, with the root chosen the right way up. "
-            "<bookmark mark='a'/> It reproduces Fang and Oosterlee's benchmark to "
-            f"{-np.floor(np.log10(b['err'])):.0f} decimal places, and finds where the original form breaks. "
-            "<bookmark mark='b'/> Pause: is the log price normal given the variance path? Only if rho is zero."
-            " Next: what each parameter does to the smile."
+            f"""The implementation uses the decaying-root form and a consistent logarithm. <bookmark mark='a'/> In Fang and Oosterlee's numerical benchmark its absolute error is of order ten to the minus {-np.floor(np.log10(b['err'])):.0f}; the comparison also exposes failure of the naive original form on this fit. <bookmark mark='b'/> Pause: with nonzero correlation, is the log return still Gaussian conditional on the complete Heston variance path? Yes, for the nondegenerate model: chapter two gives the shifted conditional mean and residual variance. Independence at zero correlation is the simpler special case. Next, the parameter effects."""
         )
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
@@ -251,4 +243,4 @@ class Heston(VoiceoverScene, ThreeDScene):
             vo.wait_until("b")
             self.play(FadeIn(pp))
         self.wait(0.6)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)

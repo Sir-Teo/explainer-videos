@@ -25,7 +25,7 @@ class Jumps(VoiceoverScene):
                          part=PART)
         with self.voiceover("Chapter eight. Jumps: Merton, Kou, and Bates."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.35)
 
     def cake(self):
         sig, mj, sj, T = 0.3, -0.12, 0.08, 0.25
@@ -88,7 +88,7 @@ class Jumps(VoiceoverScene):
             vo.wait_until("c")
             self.play(Transform(cur, draw(0.3)), run_time=2.5)
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def derive(self):
         rows = [cmath(r"\frac{dS}{S_-}", r"=", r"-\lambda\bar k\,dt + \sigma\,dW + (e^J - 1)\,dN,\quad "
@@ -109,13 +109,7 @@ class Jumps(VoiceoverScene):
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.6, buff=0.8, edge=6.9)
         with self.voiceover(
             (
-            "In symbols: the price diffuses, and jumps by e to the J when a Poisson clock rings; the drift minus "
-            "lambda k bar keeps it a fair game. <bookmark mark='a'/> Given n jumps, the log price is a sum of "
-            "independent Gaussians. <bookmark mark='b'/> Condition on n, price by Black–Scholes, weight by Poisson: "
-            "Merton's series, which the House matches to Fourier pricing at eight decimals. <bookmark mark='c'/> "
-            "Independent factors multiply, so Bates's 1996 model is Heston times Merton's jump factor. Kou's 2002 "
-            "jumps are double exponential, and their memoryless overshoot prices barriers in closed form, as Kou and "
-            "Wang showed."
+            """Under the pricing measure, assume independent Poisson jumps, Gaussian jump marks and a Brownian diffusion. The compensator minus lambda k-bar preserves the zero-carry forward. <bookmark mark='a'/> Conditional on n jumps, the log price is Gaussian. <bookmark mark='b'/> Averaging the corresponding Black prices with Poisson weights gives Merton's series; the numerical House benchmark agrees with COS to eight decimals. <bookmark mark='c'/> Bates multiplies the Heston transform by an independent Merton jump factor. Kou uses double-exponential jump sizes, whose memoryless overshoot makes first-passage transforms tractable. Finite-horizon barrier pricing can still require transform inversion. These formulas concern model prices, not physical jump frequencies."""
         )
         ) as vo:
             step(0)
@@ -126,7 +120,7 @@ class Jumps(VoiceoverScene):
             vo.wait_until("c")
             step(3)
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def scores(self, c, lf):
         F = lf["fits"]
@@ -164,8 +158,7 @@ class Jumps(VoiceoverScene):
                     font_size=24, color=MODEL_COL["Kou"]),
             MathTex(rf"\text{{Bates:}}\ \lambda = {b['lam']:.0f},\ \mu_J = {100 * b['mj']:.1f}\%,\ \sigma_J = {100 * b['sj']:.0f}\%",
                     font_size=24, color=MODEL_COL["Bates"]),
-            wrapped_label(r"without stochastic volatility the jumps become crash insurance; with it, the optimizer spends "
-                          r"them on the body of the smile" if rare else
+            wrapped_label('Jump parameters depend on model and bounds. These risk-neutral fits neither identify physical crash risk nor prove its absence.' if rare else
                           r"the jumps are spent on the body of the smile, with or without stochastic volatility", 4.6, 19,
                           WHITE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(LEFT, buff=0.5)
@@ -176,14 +169,7 @@ class Jumps(VoiceoverScene):
         d0 = sorted(mv, key=lambda z: int(z))[0]
         with self.voiceover(
             (
-            f"Now fit every model in the part to the same {c['n']} quotes. One Black–Scholes vol misses by "
-            f"{c['fits']['BS']['rmse']:.1f} points. <bookmark mark='a'/> Merton reaches {F['Merton']['rmse_iv']:.1f}, "
-            f"with jumps {m['lam']:.2f} a year, each about {100 * abs(m['mj']):.0f} percent down. {shape} Its "
-            f"{d0}-day expiry is still off by {mv[d0]:.1f}. Kou: {F['Kou']['rmse_iv']:.1f}. <bookmark mark='b'/> "
-            f"Heston: {c['fits']['Heston']['rmse']:.2f}. Bates: {c['fits']['Bates']['rmse']:.2f}, with "
-            f"{b['lam']:.0f} jumps a year of {100 * abs(b['mj']):.0f} percent. <bookmark mark='c'/> The same jumps "
-            "mean opposite things: without stochastic volatility, a crash; with it, a second diffusion. On this calm "
-            "day the Surface priced no crash that stochastic volatility could not explain."
+            f"""Compare fits to the same {c['n']} filtered marks. Black's single volatility misses by {c['fits']['BS']['rmse']:.1f} points. <bookmark mark='a'/> Merton reaches {F['Merton']['rmse_iv']:.1f}, with pricing-measure intensity {m['lam']:.2f} per year, mean log jump {m['mj']:.2f}, and log-jump standard deviation {m['sj']:.2f}. A mean log jump is not a simple percentage fall; the mean proportional jump is exponential of mu plus half its variance, minus one. The {d0}-day fit still misses by {mv[d0]:.1f}. Kou misses by {F['Kou']['rmse_iv']:.1f}. <bookmark mark='b'/> Heston gives {c['fits']['Heston']['rmse']:.2f}, and Bates {c['fits']['Bates']['rmse']:.2f}. Bates's intensity is {b['lam']:.0f}, at its allowed bound, with mean log jump {b['mj']:.3f} and dispersion {b['sj']:.2f}. <bookmark mark='c'/> The small fit gain and constrained optimum reveal weak identification. They do not establish that the market prices no crash risk."""
         )
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]), GrowFromEdge(bars[0], LEFT), FadeIn(labs[0]))
@@ -195,7 +181,7 @@ class Jumps(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(side[4]))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def replay(self, br, lf):
         runs = br["runs"]
@@ -233,9 +219,7 @@ class Jumps(VoiceoverScene):
         leg = legend([(c_, rf"start {i + 1}") for i, c_ in enumerate(cols)], font_size=17).arrange(RIGHT, buff=0.4)
         leg.next_to(P, DOWN, buff=0.35)
         fin = [r["x"] for r in runs]
-        foot = wrapped_label(rf"all three starts end with $\lambda$ at its bound of {hi[5]:.0f} and $\sigma_J$ at its floor of "
-                             rf"{100 * br['lo'][7]:.0f}\%; the loss ends at {min(r['rmse'] for r in runs):.3f}: frequent "
-                             r"tiny jumps, a second diffusion", 12.0, 21, WHITE).next_to(leg, DOWN, buff=0.35)
+        foot = wrapped_label('Three finite-bound fits approach the intensity ceiling and jump-size floor. Frequent small jumps remain a jump model, not an exact second diffusion.', 12.0, 21, WHITE).next_to(leg, DOWN, buff=0.35)
         at_bound = all(x[5] > 0.99 * hi[5] for x in fin)
         src = real_data(r"the Surface; Bates calibrated from three starts, every evaluation recorded")
         drift = ("The intensity climbs, all the way to the bound of twenty a year that we allowed, and the jump size "
@@ -243,11 +227,7 @@ class Jumps(VoiceoverScene):
                  "The intensity and the size trade off against each other while the loss barely moves.")
         with self.voiceover(
             (
-            f"Watch the Bates fit from three starts: loss, jump intensity, jump size. <bookmark mark='a'/> The loss "
-            f"drops as the Heston part settles; then the jumps drift. {drift} <bookmark mark='b'/> Many small jumps "
-            "look exactly like more diffusion. Pause: with Merton's intensity, what is the chance of no jump before "
-            f"a three-day option expires? About {100 * np.exp(-lf['fits']['Merton']['params']['lam'] * 3 / 365):.1f} "
-            "percent. Short options price the possibility, not the frequency."
+            f"""The three Bates traces show objective value, jump intensity and dispersion. <bookmark mark='a'/> After the main fit improves, the jump parameters continue trading off. The saved runs reach the allowed intensity bound and dispersion floor. Finite jump models can approximate diffusive effects in some regimes, but these fits are not an exact diffusion limit. <bookmark mark='b'/> Under the fitted Merton pricing intensity, the probability of no jump over three days is {100 * np.exp(-lf['fits']['Merton']['params']['lam'] * 3 / 365):.1f} percent. That is a Q-model probability, not an estimated physical chance of a crash. Short-option prices also depend on jump size, diffusion and the full distribution."""
         )
         ) as vo:
             self.play(FadeIn(P), FadeIn(src), Create(bound), FadeIn(bl), Create(floor), FadeIn(leg))
@@ -258,7 +238,7 @@ class Jumps(VoiceoverScene):
         for l_ in lines:
             l_.clear_updaters()
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def cards(self):
         c1 = history_card(2000, r"Duffie, Pan and Singleton; Eraker, Johannes and Polson (2003)",
@@ -290,4 +270,4 @@ class Jumps(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(c3, shift=UP * 0.2))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)

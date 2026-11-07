@@ -22,25 +22,23 @@ class SABRFix(VoiceoverScene, ThreeDScene):
                          lit=(2002,), part=PART)
         with self.voiceover("Chapter seven. Where SABR's formula breaks, and how desks repaired it."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.35)
 
     def density(self, s):
         d10 = s["density"]["10"]
         d1 = s["density"]["1"]
         p = s["density_params"]
         K = np.asarray(d10["K"])
-        g = axes([0, 0.09], [-40, 40], x_length=7.0, y_length=4.0, xlabel=r"strike (rate)", ylabel=r"implied density",
-                 xticks=[0, 0.03, 0.06, 0.09], xfmt=lambda u: f"{100 * u:.0f}\\%", yticks=[-40, -20, 0, 20, 40],
+        g = axes([0, 0.09], [-140, 80], x_length=7.0, y_length=4.0, xlabel=r"strike (rate)", ylabel=r"implied density",
+                 xticks=[0, 0.03, 0.06, 0.09], xfmt=lambda u: f"{100 * u:.0f}\\%", yticks=[-140, -70, 0, 70],
                  font_size=16).to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
         ax = g.ax
-        l1 = curve(ax, K, np.clip(np.asarray(d1["pdf"]), -40, 40), RV, stroke_width=2.5)
-        l10 = curve(ax, K, np.clip(np.asarray(d10["pdf"]), -40, 40), BAD, stroke_width=3)
+        l1 = curve(ax, K, np.asarray(d1["pdf"]), RV, stroke_width=2.5)
+        l10 = curve(ax, K, np.asarray(d10["pdf"]), BAD, stroke_width=3)
         zero = DashedLine(ax.c2p(0, 0), ax.c2p(0.09, 0), stroke_color=GREY_C, stroke_width=1.5)
         leg = legend([(RV, r"1 year"), (BAD, r"10 years")], font_size=17).next_to(g, UP, buff=0.15).align_to(g, LEFT)
         side = VGroup(
-            wrapped_label(rf"below a strike of {100 * d10['neg_below']:.1f}\% the 10-year density is negative, and it "
-                          rf"integrates to {d10['mass']:.2f}, not 1: Hagan's formula is an expansion in $\nu^2 T$, and at "
-                          r"long expiries and low rates it prices a butterfly below zero", 4.6, 20, WHITE),
+            wrapped_label('Negative density gives butterfly arbitrage. The finite strike-interval integral excludes boundary mass; it is not a total-probability test.', 4.6, 20, WHITE),
             wrapped_label(r"the fixes: solve SABR's effective PDE for the density (Hagan, Kumar, Lesniewski and Woodward "
                           r"2014), or price it exactly near zero (Antonov, Konikov and Spector 2015); the House runs Part "
                           r"9's checker on every SABR slice it quotes", 4.6, 19, GREY_A),
@@ -49,11 +47,7 @@ class SABRFix(VoiceoverScene, ThreeDScene):
                            rf"$\nu = {p['nu']}$; at-the-money vol {100 * p['atm']:.0f}\%")
         with self.voiceover(
             (
-            "SABR's formula is an expansion, and expansions break. A rates-like smile: three percent forward, beta "
-            "one half. At one year the implied density is fine. <bookmark mark='a'/> At ten years it is negative at "
-            f"low strikes and integrates to {d10['mass']:.2f}: a butterfly with a negative price, made by the formula. "
-            "With rates near zero in the 2010s, this was daily trouble. <bookmark mark='b'/> The House checks every "
-            "slice for arbitrage; the real fix solves for the density itself."
+            f"""Take a rates-like example with a three-percent forward and beta one half. The one-year implied density is positive on this plotted grid. <bookmark mark='a'/> At ten years, differentiating Hagan prices gives negative density at low strikes: a direct butterfly-arbitrage failure. Its integral over the finite displayed strike interval is {d10['mass']:.2f}; that interval integral excludes boundary mass and is not, by itself, a total-probability test. <bookmark mark='b'/> A repair models a nonnegative probability law with appropriate boundaries, instead of trusting the asymptotic implied-volatility formula far outside its reliable regime."""
         )
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(zero), Create(l1), FadeIn(leg[0]))
@@ -62,7 +56,7 @@ class SABRFix(VoiceoverScene, ThreeDScene):
             vo.wait_until("b")
             self.play(FadeIn(side[1]))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def pde_eq(self, p):
         rows = [cmath(r"\partial_T Q", r"=", r"\tfrac12\,\partial_F^2\big(D^2(F)\,E(T, F)\,Q\big),\qquad 0 < F < F_{\max}",
@@ -78,16 +72,11 @@ class SABRFix(VoiceoverScene, ThreeDScene):
                     r"$Q$ of $F$ alone", 20),
                 why(r"the effective local volatility of the forward: the 2002 expansion's ingredients", 20),
                 why(r"a slowly varying time factor from the correlation", 20),
-                why(r"absorbing boundaries: probability flowing out at $F = 0$ is kept as a mass $Q_L$ (and at $F_{\max}$ as "
-                    r"$Q_R$), so the total is exactly 1; the density solved this way can never go negative", 20)]
+                why('Finite-domain effective PDE: retain both boundary masses. Nonnegative grid probabilities and mass conservation here do not imply the exact two-dimensional SABR law.', 20)]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.0, buff=0.6, edge=6.9)
         with self.voiceover(
             (
-            "In 2014 the same authors published arbitrage-free SABR: integrate the volatility out of SABR's forward "
-            "equation, to the old formula's order, and keep an equation for the forward's density. "
-            "<bookmark mark='a'/> A one-dimensional diffusion with an effective local volatility D, "
-            "<bookmark mark='b'/> times a slow factor E from the correlation. <bookmark mark='c'/> Mass reaching zero "
-            "is absorbed and kept, so the books balance; a diffusion's density cannot go negative."
+            """Hagan and co-authors' 2014 arbitrage-free SABR approach derives an effective one-dimensional forward PDE to the expansion's order. It approximates the two-dimensional SABR dynamics. <bookmark mark='a'/> Its effective diffusion is D, <bookmark mark='b'/> with a time factor E that incorporates correlation. <bookmark mark='c'/> Probability absorbed at zero is retained as boundary mass. Our finite-domain implementation also keeps the upper-boundary mass. Nonnegative, mass-conserving discretization provides a coherent numerical distribution; that does not make it the exact full SABR law."""
         )
         ) as vo:
             step(0)
@@ -98,7 +87,7 @@ class SABRFix(VoiceoverScene, ThreeDScene):
             vo.wait_until("c")
             step(3)
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def sheet(self, p):
         F = np.asarray(p["F"])
@@ -108,21 +97,22 @@ class SABRFix(VoiceoverScene, ThreeDScene):
         F = F[m]
         Qs = np.array([np.asarray(z["Q"])[m] for z in sh])
         Hs = np.array([np.asarray(z["hagan"])[m] for z in sh])
-        top = 70.0
-        ax = ThreeDAxes(x_range=[0, 0.1, 0.02], y_range=[0, 10, 2], z_range=[-40, top, 20], x_length=6.6, y_length=5.6,
+        bottom = 20 * np.floor(float(np.nanmin(Hs)) / 20)
+        top = 20 * np.ceil(max(float(np.nanmax(Qs)), max(z["QL"] * 300 for z in sh)) / 20)
+        ax = ThreeDAxes(x_range=[0, 0.1, 0.02], y_range=[0, 10, 2], z_range=[bottom, top, 50], x_length=6.6, y_length=5.6,
                         z_length=3.6, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
         ax.shift(DOWN * 0.4)
 
         def line(vals, T, col, sw=3):
             return VMobject(stroke_color=col, stroke_width=sw).set_points_as_corners(
-                [ax.c2p(x, T, float(np.clip(z, -40, top))) for x, z in zip(F, vals)])
+                [ax.c2p(x, T, float(z)) for x, z in zip(F, vals)])
 
         pde = VGroup(*[line(q, T, RV) for q, T in zip(Qs, Ts)])
         hag = VGroup(*[line(h, T, BAD, 2.5) for h, T in zip(Hs, Ts)])
         zero = Polygon(ax.c2p(0, 0, 0), ax.c2p(0.1, 0, 0), ax.c2p(0.1, 10, 0), ax.c2p(0, 10, 0), stroke_width=0,
                        fill_color=GREY_D, fill_opacity=0.25)
-        bars = VGroup(*[Line(ax.c2p(0, T, 0), ax.c2p(0, T, min(z["QL"] * 300, top)), color=VAR, stroke_width=8)
+        bars = VGroup(*[Line(ax.c2p(0, T, 0), ax.c2p(0, T, z["QL"] * 300), color=VAR, stroke_width=8)
                         for z, T in zip(sh, Ts)])
         hint = VGroup(label(r"the density of a 3\% forward rate, over (rate 0 to 10\%, maturity 0 to 10 years)",
                             font_size=20, color=GREY_A),
@@ -144,14 +134,7 @@ class SABRFix(VoiceoverScene, ThreeDScene):
         with self.voiceover(
             (
             (
-            f"Solve it forward in time, on {p['n']} cells. Each green slice is the density at one maturity, out to ten "
-            "years. <bookmark mark='a'/> The hump spreads and sinks, and the purple bar at zero grows: "
-            f"{100 * p['QL']:.0f} percent absorbed by ten years. <bookmark mark='b'/> Hagan's formula, in red, agrees "
-            f"for a few years, then plunges: minus {abs(hmin[-1]):.0f} at ten. <bookmark mark='c'/> The PDE keeps "
-            f"total mass one to ten decimals, and stays positive. Price options off it: at the money "
-            f"{100 * p['atm_pde']:.1f} percent volatility against Hagan's {100 * p['atm_hagan']:.1f}, close; but at a "
-            f"half-percent strike, {100 * p['pde_iv'][lo]:.0f} percent against Hagan's {100 * p['hagan_iv'][lo]:.0f}. "
-            "Those too-dear low strikes are the negative density's mirror image. An expansion is not a distribution."
+            f"""Solve the effective PDE on {p['n']} cells through ten years. <bookmark mark='a'/> Boundary probability at zero reaches {100 * p['QL']:.0f} percent. <bookmark mark='b'/> Hagan's differentiated formula becomes negative, reaching minus {abs(hmin[-1]):.0f} on this grid. <bookmark mark='c'/> The PDE calculation preserves total mass to ten decimal places and has nonnegative grid probabilities here. Its ATM Black volatility is {100 * p['atm_pde']:.1f} percent, versus {100 * p['atm_hagan']:.1f} from Hagan. At a half-percent strike the values are {100 * p['pde_iv'][lo]:.0f} and {100 * p['hagan_iv'][lo]:.0f}. This comparison exposes unreliable tail prices; the differences also include effective-model and numerical approximation error."""
         )
         )
         ) as vo:
@@ -165,8 +148,8 @@ class SABRFix(VoiceoverScene, ThreeDScene):
             vo.wait_until("c")
             self.play(FadeIn(txt))
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, zero, pde, hag, bars)), FadeOut(hint),
-                                                                  FadeOut(txt)], run_time=1.5)
-        self.clear_scene()
+                                                                  FadeOut(txt)], run_time=0.8)
+        self.clear_scene(run_time=0.35)
 
     def fixes(self):
         c1 = history_card(2008, r"Ob\l\'oj, ``Fine-tune your smile''",
@@ -183,9 +166,7 @@ class SABRFix(VoiceoverScene, ThreeDScene):
             G.scale_to_fit_width(13.2)
         with self.voiceover(
             (
-            "Other repairs: Obłój corrected the leading term in 2008. <bookmark mark='a'/> When euro rates went "
-            "negative, Antonov, Konikov and Spector let the rate cross zero with free-boundary SABR. "
-            "<bookmark mark='b'/> On the desk, the everyday fix was a shift, or normal volatilities."
+            """Other developments include Obłój's corrected leading term in 2008. <bookmark mark='a'/> Antonov, Konikov and Spector extended SABR to permit negative rates through a free-boundary specification. <bookmark mark='b'/> Shifted models and normal-volatility quotes are also widely used. Their domain and boundaries must be specified: changing the quoting convention or adding a shift does not, on its own, repair every arbitrage defect of an asymptotic formula."""
         )
         ) as vo:
             self.play(FadeIn(c1, shift=UP * 0.2))
@@ -194,7 +175,7 @@ class SABRFix(VoiceoverScene, ThreeDScene):
             vo.wait_until("b")
             self.play(FadeIn(c3, shift=UP * 0.2))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def bartlett(self):
         rows = [cmath(r"V", r"=", r"C_{\text{BS}}\big(F, K, T, \sigma_B(F, \alpha)\big)", font_size=36, colors={r"V": OPT}),
@@ -214,11 +195,7 @@ class SABRFix(VoiceoverScene, ThreeDScene):
         step = ladder(self, rows, whys, keep=4, top=2.8, x=-1.0, buff=0.6, edge=6.9)
         with self.voiceover(
             (
-            "And the hedge. The price is Black's formula at SABR's vol. <bookmark mark='a'/> Hagan's delta moves the "
-            "forward with alpha fixed. <bookmark mark='b'/> But alpha moves with the forward: its expected move is "
-            "rho nu over F to the beta. <bookmark mark='c'/> Add it, and you have Bartlett's 2006 delta: smaller for a "
-            "call when rho is negative. Chapter seventeen tests the idea on Bitcoin."
-            " Diffusions move continuously. Next: prices that jump."
+            """For the hedge, differentiate Black's price composed with the approximate SABR volatility. <bookmark mark='a'/> Holding alpha fixed gives one delta. <bookmark mark='b'/> The instantaneous linear regression of d-alpha on d-F contributes rho nu over F to the beta. This is a local covariance projection, not a forecast of a future alpha path. <bookmark mark='c'/> Adding its alpha sensitivity gives Bartlett's adjustment, which lowers the call delta in this example. Chapter seventeen examines the related minimum-variance principle using a synthetic Bitcoin option proxy; it is not a direct empirical test of SABR's Bartlett delta. Next, jumps."""
         )
         ) as vo:
             step(0)
@@ -229,4 +206,4 @@ class SABRFix(VoiceoverScene, ThreeDScene):
             vo.wait_until("c")
             step(3)
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)

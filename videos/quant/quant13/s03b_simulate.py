@@ -35,7 +35,7 @@ class Simulate(VoiceoverScene):
                          lit=(2008,), part=PART)
         with self.voiceover("Chapter five. Feller's condition, and simulating Heston honestly."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.35)
 
     def _panel(self, h, key, title, col, top=0.12):
         e = np.asarray(h["edges"])
@@ -84,14 +84,7 @@ class Simulate(VoiceoverScene):
         ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.5)
         with self.voiceover(
             (
-            "Desks price exotics by simulation. So take one week-long step of the fitted variance from a low level, "
-            "zero point zero five, a hundred thousand times. White: the exact law, piled against zero. "
-            f"<bookmark mark='a'/> Euler adds a Gaussian shock: {100 * a['neg']:.0f} percent of draws go negative. Floor "
-            f"them at zero and the mean is {a['mean_euler']:.3f} instead of {a['mean_exact']:.3f}, a bias that "
-            "compounds. <bookmark mark='b'/> Andersen's quadratic-exponential scheme puts a point mass at zero, here "
-            f"{a['zero_qe']:.2f}, with an exponential tail, sized to match the mean and variance exactly: "
-            f"{a['mean_qe']:.3f}. <bookmark mark='c'/> Started high, QE switches to a scaled Gaussian squared, which "
-            "matches almost perfectly."
+            f"""Compare one week-long variance step, started at zero point zero five. White is the exact CIR law; with positive theta it has no atom at zero. <bookmark mark='a'/> Euler's Gaussian proposal is negative in {100 * a['neg']:.0f} percent of draws. Flooring changes its mean: {a['mean_euler']:.3f} versus the exact {a['mean_exact']:.3f}. <bookmark mark='b'/> The QE approximation instead has an artificial zero atom, here {a['zero_qe']:.2f}, and an exponential positive branch. Its population mean and variance match the CIR moments by construction; the sampled mean is {a['mean_qe']:.3f}. The atom belongs to the numerical scheme, not the positive-time CIR distribution. <bookmark mark='c'/> At higher starting variance, QE uses a scaled squared Gaussian. Both branches remain approximations to the transition law."""
         )
         ) as vo:
             self.play(FadeIn(p1[0]), FadeIn(p1[1]), FadeIn(p1[4]), Create(p1[3]), FadeIn(foot[0]))
@@ -105,7 +98,7 @@ class Simulate(VoiceoverScene):
             self.play(FadeIn(p3[0]), FadeIn(p3[1]), FadeIn(p3[4]), Create(p3[3]),
                       LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in p3[2]], lag_ratio=0.02), run_time=2)
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def feller(self, qd):
         v0, kappa, theta, xi, rho = qd["params"]
@@ -116,8 +109,7 @@ class Simulate(VoiceoverScene):
                                color=RV if z['w1_qe'] < z['w1_euler'] else BAD) for z in rows_])
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         row = cmath(r"\frac{2\kappa\theta}{\xi^2}", r"=", rf"{fel:.2f} < 1", font_size=40, colors={r"\frac{2\kappa\theta}{\xi^2}": BAD})
-        w = why(r"Feller's test (Part 5): below one, the variance reaches zero with positive probability; the exact law "
-                r"then piles up a spike at zero, the hardest case for any scheme", 22)
+        w = why('Feller ratio below one: zero is attainable. With $\\theta>0$, the exact CIR law has no atom there; QE uses an artificial zero atom to approximate that difficult boundary.', 22)
         top = VGroup(row, w).arrange(DOWN, buff=0.25).to_edge(UP, buff=0.5)
         tab.next_to(top, DOWN, buff=0.45)
         ratio = float(np.median([z["w1_euler"] / z["w1_qe"] for z in rows_]))
@@ -126,10 +118,7 @@ class Simulate(VoiceoverScene):
                              r"of the same mass; the transport distance does not.)", 12.0, 19, GREY_B).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             (
-            f"Why is this hard? Feller's ratio is {fel:.2f} on our fit, below one, so by Part five's boundary test the "
-            "variance reaches zero and its law spikes there. <bookmark mark='a'/> Score each scheme by the transport "
-            "distance to the exact law, over three start values and three step sizes. <bookmark mark='b'/> QE wins "
-            f"all nine, by a median factor of {ratio:.0f}. Its advantage is largest exactly when Feller fails."
+            f"""Feller's ratio is {fel:.2f}, below one, so this CIR variance can reach zero and has substantial density nearby. That makes discretization demanding, without making Heston an invalid model. <bookmark mark='a'/> Compare transport distance to the exact transition law at three starting values and three time steps. <bookmark mark='b'/> QE has smaller distance in all nine recorded cases, by a median factor of {ratio:.0f}. This numerical experiment supports that comparison; it is not a universal accuracy guarantee or a proof of a convergence rate."""
         )
         ) as vo:
             self.play(FadeIn(top))
@@ -138,7 +127,7 @@ class Simulate(VoiceoverScene):
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(t_, shift=RIGHT * 0.1) for t_ in tab], lag_ratio=0.15, run_time=3))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def derive(self):
         rows = [cmath(r"m", r"=", r"\theta + (v - \theta)\,e^{-\kappa\Delta}", font_size=34, colors={r"m": VAR}),
@@ -160,21 +149,12 @@ class Simulate(VoiceoverScene):
                     r"and $s^2$", 20),
                 why(r"large $\psi$: a mass at zero plus an exponential, matching $m$ and $s^2$ (two equations, two unknowns)",
                     20),
-                why(r"solve the variance equation for $\int\sqrt v\,dW^2$ and substitute; integrals by the trapezoid; "
-                    r"a constant $K_0^*$ keeps $S$ a martingale exactly (Andersen 2008)", 20)]
+                why('trapezoidal variance integral; branch-specific $K^*$ enforces the discrete martingale condition when the required exponential moments exist (QE-M)', 20)]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-3.2, buff=0.7, edge=6.9)  # room for the long rows
         with self.voiceover(
             (
             (
-            "QE, derived. Over one step, the variance's conditional mean and variance are known exactly: Part five's "
-            "CIR moments. <bookmark mark='a'/> Their ratio psi measures relative width. <bookmark mark='b'/> Small "
-            "psi: a constant times a shifted Gaussian squared. Its mean is a times one plus b squared, its variance "
-            "two a squared times one plus two b squared; set them equal to m and s squared and solve: these b and a. "
-            "<bookmark mark='c'/> Large psi: zero with probability p, else an exponential with rate beta. The mean "
-            "is one minus p over beta and the second moment twice that over beta; matching gives p and beta. "
-            "Andersen switches at one and a half, where both are valid. <bookmark mark='d'/> For the price, solve the "
-            "variance equation for its stochastic integral and substitute; only the orthogonal part needs a fresh "
-            "Gaussian, and one constant makes the price an exact martingale."
+            "QE, derived. Over one step, the variance's conditional mean and variance are known exactly: Part five's CIR moments. <bookmark mark='a'/> Their ratio psi measures relative width. <bookmark mark='b'/> Small psi: a constant times a shifted Gaussian squared. Its mean is a times one plus b squared, its variance two a squared times one plus two b squared; set them equal to m and s squared and solve: these b and a. <bookmark mark='c'/> Large psi: zero with probability p, else an exponential with rate beta. The mean is one minus p over beta and the second moment twice that over beta; matching gives p and beta. Andersen switches at one and a half, where both are valid. <bookmark mark='d'/> For the price, solve the variance equation for its stochastic integral and substitute; only the orthogonal part needs a fresh Gaussian, and a branch-specific exponential-moment correction enforces the discrete martingale condition when those moments exist. It does not make the whole transition exact."
         )
         )
         ) as vo:
@@ -189,7 +169,7 @@ class Simulate(VoiceoverScene):
             vo.wait_until("d")
             step(5)
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def lab(self, q, qd):
         card = lab_card(r"Andersen's QE step", LAB_QE, source="explainer/quant/house/stochvol.py: heston_qe",
@@ -216,7 +196,7 @@ class Simulate(VoiceoverScene):
             vo.wait_until("a")
             lab_run(self, card, outs, run_time=3)
         self.wait(0.8)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def cards(self):
         c1 = history_card(2006, r"Broadie and Kaya, \textit{Operations Research}",
@@ -247,4 +227,4 @@ class Simulate(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(c3, shift=UP * 0.2))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)

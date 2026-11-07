@@ -4,6 +4,7 @@ import numpy as np
 from scipy.interpolate import RegularGridInterpolator
 
 from explainer.quant import *  # noqa: F403
+from videos.quant.quant10.common import FullRangeReplay
 from videos.quant.quant13.common import BAD, IV, MODEL_COL, OPT, PART, RV, SPOT, VAR, load, pause, real_data
 
 PNAME = {"v0": r"v_0", "kappa": r"\kappa", "theta": r"\theta", "xi": r"\xi", "rho": r"\rho"}
@@ -25,18 +26,18 @@ class HestonFit(VoiceoverScene, ThreeDScene):
                          lit=(1993,), part=PART)
         with self.voiceover("Chapter four. What each of Heston's parameters does, and the fit."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.35)
 
     def sliders(self, sl, rp):
         k = np.asarray(sl["k"])
         lT = np.log10(np.asarray(sl["T"]) * 365)
-        ax = ThreeDAxes(x_range=[-0.4, 0.4, 0.2], y_range=[lT[0], lT[-1], 0.5], z_range=[0.2, 1.3, 0.2], x_length=6.4,
+        ax = ThreeDAxes(x_range=[-0.4, 0.4, 0.2], y_range=[lT[0], lT[-1], 0.5], z_range=[0.1, 1.3, 0.2], x_length=6.4,
                         y_length=5.0, z_length=3.2, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
         ax.shift(DOWN * 0.4)
 
         def surf(grid):
-            G = np.clip(np.asarray(grid, float), 0.2, 1.3)
+            G = np.asarray(grid, float)
             f = RegularGridInterpolator((lT, k), G)
             return price_surface(ax, lambda x, y: float(f((y, x))), [-0.4, 0.4], [lT[0], lT[-1]], resolution=(18, 12),
                                  z_lo=0.3, z_hi=1.1, opacity=0.75)
@@ -62,12 +63,7 @@ class HestonFit(VoiceoverScene, ThreeDScene):
         marks = {n: n for n in names}
         with self.voiceover(
             (
-            "Five numbers bend a whole surface. Here is the fitted Heston's implied volatility over strike and expiry, "
-            "with the Surface's quotes in white. Move one parameter at a time. <bookmark mark='v0'/> Today's variance "
-            "lifts the short end. <bookmark mark='theta'/> The long-run level lifts the long end. "
-            "<bookmark mark='kappa'/> Mean reversion sets how fast one becomes the other. <bookmark mark='rho'/> The "
-            "correlation rotates every smile, toward puts or calls. <bookmark mark='xi'/> And the vol of vol bends "
-            "every smile, most at the short end. Five dials, one job each; the calibrator sets all five at once."
+            """Five interacting parameters shape this fitted surface. The white points are reconstructed option marks pooled from midnight through noon on 10 December 2025, with an eight-o'clock reference. They are not a simultaneous executable quote set. Move one parameter while holding the others fixed. <bookmark mark='v0'/> Initial variance mainly affects the short end. <bookmark mark='theta'/> The long-run level affects long maturities. <bookmark mark='kappa'/> Mean reversion changes the transition. <bookmark mark='rho'/> Correlation changes skew. <bookmark mark='xi'/> The variance diffusion coefficient changes curvature and skew together. These sensitivities overlap; the calibrator must choose the parameters jointly."""
         )
         ) as vo:
             self.play(Create(ax), FadeIn(hint), run_time=1.5)
@@ -80,8 +76,8 @@ class HestonFit(VoiceoverScene, ThreeDScene):
                 self.play(FadeOut(tags[n]), run_time=0.3)
             self.move_camera(theta=-70 * DEGREES, run_time=2)
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, cur, dots)), FadeOut(hint)],
-                         run_time=1.5)
-        self.clear_scene()
+                         run_time=0.8)
+        self.clear_scene(run_time=0.35)
 
     def replay(self, rp):
         runs = rp["runs"]
@@ -92,7 +88,7 @@ class HestonFit(VoiceoverScene, ThreeDScene):
         qk, qT, qv = np.asarray(Q["k"]), np.asarray(Q["T"]), np.asarray(Q["iv"])
         n_max = max(int(r["trace"]["eval"][-1]) for r in runs)
         steps = np.arange(0, n_max + 1)
-        L = np.array([np.interp(steps, r["trace"]["eval"], np.minimum(r["trace"]["best"], 8.0)) for r in runs])
+        L = np.array([np.interp(steps, r["trace"]["eval"], r["trace"]["best"]) for r in runs])
         L = np.array([np.where(steps <= r["trace"]["eval"][-1], l_, l_[np.searchsorted(steps, r["trace"]["eval"][-1])])
                       for l_, r in zip(L, runs)])
         pick = [int(np.argmin(np.abs(Ts * 365 - d))) for d in (9, 51, 198)]
@@ -105,12 +101,12 @@ class HestonFit(VoiceoverScene, ThreeDScene):
             G = np.asarray(f["grid"])
             panels = VGroup()
             for j in pick:
-                a = axes([-0.4, 0.4], [0.3, 0.9], x_length=1.9, y_length=2.6, xticks=[-0.3, 0.3], yticks=[0.4, 0.6, 0.8],
+                a = axes([-0.4, 0.4], [0.15, 0.9], x_length=1.9, y_length=2.6, xticks=[-0.3, 0.3], yticks=[0.4, 0.6, 0.8],
                          yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=12)
                 mq = (qT == Ts[j]) & (np.abs(qk) <= 0.4)
                 d_ = VGroup(*[Dot(a.ax.c2p(x_, np.clip(y_, 0.3, 0.9)), radius=0.035, color=WHITE)
                               for x_, y_ in zip(qk[mq], qv[mq])])
-                c_ = curve(a.ax, k, np.clip(G[j], 0.3, 0.9), MODEL_COL["Heston"], stroke_width=3)
+                c_ = curve(a.ax, k, G[j], MODEL_COL["Heston"], stroke_width=3)
                 t_ = label(rf"{round(Ts[j] * 365)} days", font_size=16, color=GREY_A).next_to(a, UP, buff=0.05)
                 panels.add(VGroup(a, d_, c_, t_))
             panels.arrange(RIGHT, buff=0.25)
@@ -119,7 +115,7 @@ class HestonFit(VoiceoverScene, ThreeDScene):
             err = MathTex(rf"\text{{implied-vol error}}\ {f['iv_rmse']:.2f}", font_size=24, color=MODEL_COL["Heston"])
             return VGroup(panels, par, err).arrange(DOWN, buff=0.2)
 
-        rpl = TrainingReplay(steps, L, frame, checkpoints=cks, ylabel=r"calibrator loss, best so far",
+        rpl = FullRangeReplay(steps, L, frame, checkpoints=cks, ylabel=r"calibrator loss, best so far",
                              xlabel=r"model evaluations", color=MODEL_COL["Heston"], left=LEFT * 3.2 + DOWN * 0.2,
                              right=RIGHT * 3.6 + DOWN * 0.2, x_length=4.8, y_length=3.4)
         r0, r1, r2 = runs
@@ -143,7 +139,7 @@ class HestonFit(VoiceoverScene, ThreeDScene):
             rpl.play(self, run_time=max(vo.until("c") - 0.5, 4))
             vo.wait_until("c")
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def fit(self, c):
         h = c["fits"]["Heston"]
@@ -151,15 +147,15 @@ class HestonFit(VoiceoverScene, ThreeDScene):
         days = sorted(int(d) for d in h["by_expiry"])
         bsx = [c["fits"]["BS"]["by_expiry"][str(d)] for d in days]
         hsx = [h["by_expiry"][str(d)] for d in days]
-        g = axes([-0.6, len(days) - 0.4], [0, 8], x_length=6.6, y_length=3.6, xlabel=r"expiry (days)",
+        g = axes([-0.6, len(days) - 0.4], [0, 10], x_length=6.6, y_length=3.6, xlabel=r"expiry (days)",
                  ylabel=r"fit error (vol points)", xticks=list(range(len(days))), xfmt=lambda u: str(days[int(round(u))]),
                  yticks=[0, 2, 4, 6, 8], font_size=16).to_edge(LEFT, buff=0.7).shift(DOWN * 0.4)
         ax = g.ax
         w = 0.32
 
         def bar(i, v, dx, col):
-            return Rectangle(width=w, height=max(abs(ax.c2p(0, min(v, 8))[1] - ax.c2p(0, 0)[1]), 1e-3), stroke_width=0,
-                             fill_color=col, fill_opacity=0.85).move_to(ax.c2p(i + dx, min(v, 8) / 2))
+            return Rectangle(width=w, height=max(abs(ax.c2p(0, v)[1] - ax.c2p(0, 0)[1]), 1e-3), stroke_width=0,
+                             fill_color=col, fill_opacity=0.85).move_to(ax.c2p(i + dx, v / 2))
 
         b1 = VGroup(*[bar(i, v, -0.18, MODEL_COL["BS"]) for i, v in enumerate(bsx)])
         b2 = VGroup(*[bar(i, v, 0.18, MODEL_COL["Heston"]) for i, v in enumerate(hsx)])
@@ -179,10 +175,7 @@ class HestonFit(VoiceoverScene, ThreeDScene):
         d3 = h["by_expiry"][str(days[0])]
         with self.voiceover(
             (
-            f"Expiry by expiry: one Black–Scholes volatility misses by {c['fits']['BS']['rmse']:.1f} points. "
-            f"<bookmark mark='a'/> Heston by {h['rmse']:.1f}. <bookmark mark='b'/> At a price: a half-life of "
-            f"{365 * np.log(2) / p['kappa']:.0f} days, a vol of vol of {100 * p['xi']:.0f} percent, Feller's ratio "
-            f"{c['feller']:.2f}, and the {days[0]}-day expiry still missed by {d3:.1f} points."
+            f"""The direct implied-volatility comparison is vega-weighted. A single Black volatility misses by {c['fits']['BS']['rmse']:.1f} points. <bookmark mark='a'/> Heston misses by {h['rmse']:.1f}. <bookmark mark='b'/> Its pricing-measure variance half-life is {365 * np.log(2) / p['kappa']:.0f} days, with diffusion coefficient xi equal to {p['xi']:.2f}. Feller's ratio is {c['feller']:.2f}; being below one allows the variance boundary to be reached, rather than invalidating the model. The {days[0]}-day expiry still misses by {d3:.1f} points. These are retrospective model-fit diagnostics."""
         )
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(leg[0]), LaggedStart(*[GrowFromEdge(b, DOWN) for b in b1],
@@ -192,7 +185,7 @@ class HestonFit(VoiceoverScene, ThreeDScene):
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(r_) for r_ in tab], lag_ratio=0.4, run_time=2.5), FadeIn(note_))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def skew(self, sl):
         rows = [cmath(r"\sigma^2_{\text{imp}}(k)", r"\approx", r"\Big(\int_0^1 \frac{ds}{\sigma_{\text{loc}}(sk)}\Big)^{-2}"
@@ -217,16 +210,7 @@ class HestonFit(VoiceoverScene, ThreeDScene):
         pp = pause(r"Make $\rho$ positive. What happens to the 3-day skew?", width=4.4).to_corner(DR, buff=0.3)
         with self.voiceover(
             (
-            "Why that limit? Derive the short-maturity skew. As expiry goes to zero, implied variance at log-strike k "
-            "is the average local variance along the line to k: Berestycki, Busca and Florent. "
-            "<bookmark mark='a'/> By Gyöngy, local variance is the expected variance given the price; over a short "
-            "time both are Gaussian, and the regression slope is rho xi. <bookmark mark='b'/> Averaging the line "
-            "halves the slope. <bookmark mark='c'/> Differentiate the square root: the skew is rho xi over four root "
-            "v nought, a constant. <bookmark mark='d'/> On our fit, the formula gives "
-            f"{sl['skew_formula']:.3f}, the model at two days {sl['skew_2d']:.3f}. To match a steep three-day skew, "
-            "xi must be enormous; the curvature grows with xi squared. <bookmark mark='e'/> Pause: make rho positive. "
-            "The short skew flips to calls, as in 2023's rally."
-            " Prices come from the formula; hedges and exotics need paths. Next: simulating Heston honestly."
+            f"""Derive the leading short-maturity ATM skew. The BBF relation uses a harmonic mean of local volatility along the line to log-strike k. Near the money, its first-order expansion can be written as an average of the linearized local variance. <bookmark mark='a'/> Gyöngy's identity and a short-time Gaussian linearization give local variance approximately v nought plus rho xi k. <bookmark mark='b'/> Averaging that straight line halves its slope. <bookmark mark='c'/> Taking the square root gives rho xi over four root v nought, as maturity tends to zero with positive initial variance. <bookmark mark='d'/> Here that limit is {sl['skew_formula']:.3f}; the numerical two-day value is {sl['skew_2d']:.3f}. This explains a constraint of this calibration, not a theorem about every diffusion or every strike. <bookmark mark='e'/> Make rho positive and this leading ATM skew changes sign. Next, simulation."""
         )
         ) as vo:
             step(0)
@@ -241,4 +225,4 @@ class HestonFit(VoiceoverScene, ThreeDScene):
             vo.wait_until("e")
             self.play(FadeIn(pp))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)

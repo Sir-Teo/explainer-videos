@@ -17,7 +17,7 @@ class Frontier(VoiceoverScene):
         c = chapter_card(18, r"Frontier, 2023--2026", r"Where is stochastic volatility research now?", part=PART)
         with self.voiceover("Chapter eighteen. The frontier, 2023 to 2026."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.35)
 
     def reversionary(self, rv):
         runs = rv["runs"]
@@ -71,13 +71,7 @@ class Frontier(VoiceoverScene):
         pp.to_corner(DR, buff=0.3)
         src = real_data(r"the Surface; the House's calibrator with $\kappa$ fixed (zero-width bounds)", corner=DL)
         with self.voiceover(
-            "Start with one computed tie-in. Eduardo Abi Jaber and Nathan De Carvalho showed in 2023 that Heston, "
-            "with mean reversion sped up toward infinity and vol of vol scaled up with it, converges to jump "
-            "processes of the normal inverse Gaussian type, or to rough-like limits: the reversionary Heston model. "
-            "So hold kappa at fifteen, thirty, sixty and a hundred and twenty, and refit the other four to the "
-            "Surface. <bookmark mark='p'/> Pause and predict: what must xi do to keep the short skew? "
-            f"<bookmark mark='a'/> {v1} <bookmark mark='b'/> {v2} Our fitted Heston, at kappa fifteen, was already "
-            "partway down this road: a diffusion straining to imitate jumps."
+            f"""Abi Jaber and De Carvalho's reversionary Heston work studies specific fast-reversion and vol-of-vol scalings. The normal-inverse-Gaussian limit belongs to its H at or below minus one-half regime; it is not a limit of every faster-reverting Heston fit. Here we only refit four finite kappa settings to the same input marks. <bookmark mark='p'/> What happens to fitted xi? <bookmark mark='a'/> Xi over root kappa goes from {r0['xi_over_sqrt_kappa']:.2f} to {rN['xi_over_sqrt_kappa']:.2f}. <bookmark mark='b'/> Three-day error goes from {r0['by_expiry']['3']:.1f} to {rN['by_expiry']['3']:.1f} points, while overall error goes from {r0['rmse_iv']:.2f} to {rN['rmse_iv']:.2f}. This finite sweep illustrates a calibration trade-off. It neither establishes the paper's asymptotic scaling nor proves that the market needs jumps or rough volatility."""
         ) as vo:
             self.play(FadeIn(P), FadeIn(cap), FadeIn(src), FadeIn(cur))
             vo.wait_until("p")
@@ -88,27 +82,22 @@ class Frontier(VoiceoverScene):
             for i in range(1, len(runs)):
                 self.play(Transform(cur, curves(i)), run_time=per)
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
 
     def papers(self):
         cards = [
             history_card(2023, r"Abi Jaber, Illand and Li, \textit{Risk}",
-                         r"The quintic Ornstein--Uhlenbeck model: volatility a degree-5 polynomial of one fast OU factor; "
-                         r"joint SPX and VIX smiles with six effective parameters, Markovian and not rough.", color=QC.IDEA,
+                         'Quintic OU: six effective parameters plus an input forward-variance curve; reported joint fits on selected SPX/VIX data.', color=QC.IDEA,
                          width=4.1),
             history_card(2023, r"Guyon and Mustapha, \textit{Risk}",
-                         r"Neural joint S\&P 500/VIX calibration: a one-factor SLV with neural drift and diffusion fits SPX "
-                         r"smiles, VIX futures and VIX smiles within bid--ask.", color=QC.IDEA, width=4.1),
+                         "Learned one-factor volatility with path dependence: reported SPX/VIX fits within bid--ask on the authors\\' datasets.", color=QC.IDEA, width=4.1),
             history_card(2024, r"Choi and Kwok, \textit{EJOR}",
                          r"Heston simulated with Poisson conditioning: exact-type sampling without Bessel draws "
                          r"(chapter 5).", color=QC.IDEA, width=4.1),
             history_card(2025, r"Reisinger and Tsianni, arXiv",
-                         r"The calibrated particle SLV system: well-posed, propagation of chaos, strong rate one half "
-                         r"(chapter 11).", color=QC.IDEA, width=4.1),
+                         'Regularized fixed-bandwidth SLV: particle and Euler-time convergence have distinct Feller and regularity conditions.', color=QC.IDEA, width=4.1),
             history_card(2026, r"Wang, Despr\'es, Dureau and Buet-Golfouse, arXiv",
-                         r"A neural operator returns the surface, Dupire's local vol, the leverage and the conditional "
-                         r"moment at once: LSV calibration from 98.5 to 0.6 ms, exotics within a few tenths of a point of "
-                         r"the particle method (synthetic tests, as reported).", color=QC.IDEA, width=4.1),
+                         'Synthetic benchmark: 98.5 vs 0.6 ms including 0.53 ms Dupire input; excludes ingestion and training. Exotic point errors have no reported confidence intervals.', color=QC.IDEA, width=4.1),
         ]
         top = VGroup(*cards[:3]).arrange(RIGHT, buff=0.3, aligned_edge=UP)
         bot = VGroup(*cards[3:]).arrange(RIGHT, buff=0.3, aligned_edge=UP)
@@ -119,19 +108,7 @@ class Frontier(VoiceoverScene):
             G.scale_to_fit_width(13.2)
         with self.voiceover(
             (
-            "Five papers from the last three years. Abi Jaber, Illand and Li's quintic Ornstein–Uhlenbeck model makes "
-            "volatility a fifth-degree polynomial of one fast factor. The squared VIX is then a polynomial in a "
-            "Gaussian, so VIX options are cheap to price, and S&P and VIX smiles fit together with six effective "
-            "parameters, with no roughness: a Markovian answer to chapter fifteen. <bookmark mark='a'/> Guyon and "
-            "Mustapha fit both markets within bid–ask with a one-factor stochastic local volatility model whose drift "
-            "and diffusion are neural networks, trained through the simulation itself. <bookmark mark='b'/> Choi and "
-            "Kwok made exact Heston simulation fast by conditioning on a Poisson variable, which removes the slow "
-            "Bessel draws of Broadie and Kaya. <bookmark mark='c'/> Reisinger and Tsianni gave chapter eleven's "
-            "particle method its convergence theory. <bookmark mark='d'/> And this year Wang and co-authors reported "
-            "a neural operator that returns the whole local-stochastic calibration at once, from about a hundred "
-            "milliseconds to under one, with exotic prices close to the particle method's, on synthetic tests. Part "
-            "fourteen takes up rough volatility and the joint calibration; Part seventeen, neural calibrators and "
-            "deep hedging."
+            """Recent papers offer several approaches. The quintic OU model uses six effective parameters plus an input forward-variance curve; its reported joint fits use selected SPX and VIX data. <bookmark mark='a'/> Guyon and Mustapha report joint fits within bid–ask on their datasets using a learned volatility factor and path-dependent structure. This is a reported calibration result, not a universal fit guarantee. <bookmark mark='b'/> Choi and Kwok's 2024 Poisson-conditioning work includes an exact Heston scheme and approximate variants. <bookmark mark='c'/> Reisinger and Tsianni analyze regularized fixed-bandwidth particles; their particle and Euler-time results have distinct conditions, as chapter eleven explained. <bookmark mark='d'/> Wang and co-authors' 2026 synthetic benchmark reports about ninety-eight point five milliseconds for particles versus point six for neural inference, including point five three milliseconds of Dupire input work. It excludes quote ingestion and training. Reported exotic point errors lack confidence intervals, so closeness is not established statistical equivalence. These papers motivate further tests; they do not certify this implementation."""
         )
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
@@ -144,4 +121,4 @@ class Frontier(VoiceoverScene):
             vo.wait_until("d")
             self.play(FadeIn(cards[4], shift=UP * 0.2))
         self.wait(0.4)
-        self.clear_scene()
+        self.clear_scene(run_time=0.35)
