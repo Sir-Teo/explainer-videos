@@ -1,0 +1,95 @@
+{
+ "video": "stats37",
+ "scene": "Honest",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 7,
+ "lines": [
+  {
+   "raw": "Chapter ten. Honest parallel trends.",
+   "spoken": "Chapter ten. Honest parallel trends.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/14c8c07ba6cec68d.wav",
+   "duration": 3.125,
+   "tokens": 5,
+   "peak": 0.332489013671875,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Common practice treats the leads of an event study as a test: if none is significantly different from zero, assume parallel trends and move on. <bookmark mark='b'/> Jonathan Roth showed in 2022 that these pre-tests often have little power against violations large enough to matter. <bookmark mark='c'/> Worse, reporting only the studies that pass them distorts what gets reported, Part thirty-three's selection again. <bookmark mark='d'/> The better approach is to say how far from parallel the trends might plausibly be, and carry that uncertainty into the conclusion.",
+   "spoken": "Common practice treats the leads of an event study as a test: if none is significantly different from zero, assume parallel trends and move on. Jonathan Roth showed in 2022 that these pre-tests often have little power against violations large enough to matter. Worse, reporting only the studies that pass them distorts what gets reported, Part thirty-three's selection again. The better approach is to say how far from parallel the trends might plausibly be, and carry that uncertainty into the conclusion.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/00eb1e1973f65322.wav",
+   "duration": 32.05,
+   "tokens": 81,
+   "peak": 0.41949462890625,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> A seeded example, with a hundred and fifty towns that adopt a programme in 2010, chosen because they were already improving, and a hundred and fifty that never adopt. <bookmark mark='b'/> Their untreated employment rises two tenths of a point a year faster. The leads show it: a steady climb towards zero. <bookmark mark='c'/> The programme adds exactly one point from adoption on. <bookmark mark='d'/> But the first-year estimate is one point one seven, and the lags keep climbing, because the pre-existing trend is read as effect. The conventional interval excludes the truth.",
+   "spoken": "A seeded example, with a hundred and fifty towns that adopt a programme in 2010, chosen because they were already improving, and a hundred and fifty that never adopt. Their untreated employment rises two tenths of a point a year faster. The leads show it: a steady climb towards zero. The programme adds exactly one point from adoption on. But the first-year estimate is one point one seven, and the lags keep climbing, because the pre-existing trend is read as effect. The conventional interval excludes the truth.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/fbd4f58a466a3960.wav",
+   "duration": 30.525,
+   "tokens": 87,
+   "peak": 0.451446533203125,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Ashesh Rambachan and Jonathan Roth's framework, published in 2023, writes the population event-study coefficient as the effect plus the violation of parallel trends. Estimates add sampling error, correlated across event times. <bookmark mark='b'/> Before adoption there is no effect, so the leads estimate the violation directly. <bookmark mark='c'/> Then they restrict how the violation may continue after adoption. Our simplified first-post-period model bounds departure from a fitted population linear pre-trend by M. It illustrates sensitivity but differs from their full smoothness-restriction procedure. <bookmark mark='d'/> Under relative magnitudes, the jump after adoption is at most M-bar times the largest jump seen before it. We account for the full joint covariance in the linear extrapolation, and use simultaneous pre-jump bounds for the relative-magnitude interval. These are asymptotic intervals under the stated teaching restrictions.",
+   "spoken": "Ashesh Rambachan and Jonathan Roth's framework, published in 2023, writes the population event-study coefficient as the effect plus the violation of parallel trends. Estimates add sampling error, correlated across event times. Before adoption there is no effect, so the leads estimate the violation directly. Then they restrict how the violation may continue after adoption. Our simplified first-post-period model bounds departure from a fitted population linear pre-trend by M. It illustrates sensitivity but differs from their full smoothness-restriction procedure. Under relative magnitudes, the jump after adoption is at most M-bar times the largest jump seen before it. We account for the full joint covariance in the linear extrapolation, and use simultaneous pre-jump bounds for the relative-magnitude interval. These are asymptotic intervals under the stated teaching restrictions.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/605f0dcec8537c08.wav",
+   "duration": 56.425,
+   "tokens": 125,
+   "peak": 0.707855224609375,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> For the first year after adoption. On the left, in red, the conventional interval, which misses the truth. <bookmark mark='b'/> With M equal to zero, the violation is assumed to continue the linear pre-trend exactly. Subtracting it gives point nine seven, with an interval that covers the truth of one. <bookmark mark='c'/> Allowing the trend to bend by up to M widens the set, in gold, and its interval, in green. <bookmark mark='d'/> The conclusion that the programme helped survives until M is about point eight seven, a departure from this particular linear extrapolation. Its scale and interpretation depend on the restriction being imposed. That breakdown value is what a reader needs in order to judge.",
+   "spoken": "For the first year after adoption. On the left, in red, the conventional interval, which misses the truth. With M equal to zero, the violation is assumed to continue the linear pre-trend exactly. Subtracting it gives point nine seven, with an interval that covers the truth of one. Allowing the trend to bend by up to M widens the set, in gold, and its interval, in green. The conclusion that the programme helped survives until M is about point eight seven, a departure from this particular linear extrapolation. Its scale and interpretation depend on the restriction being imposed. That breakdown value is what a reader needs in order to judge.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/655363c6ce191f6b.wav",
+   "duration": 41.175,
+   "tokens": 110,
+   "peak": 0.506011962890625,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Under relative magnitudes, the largest year-to-year change in the leads is point three zero. <bookmark mark='b'/> If the violation can jump after adoption by half that, or by as much, the effect is clearly positive. <bookmark mark='c'/> Even if it can jump by twice the largest change seen before, the interval stays above zero, from point one one. The post-treatment restrictions cannot be verified from pre-treatment outcomes alone; the point is to make the assumption explicit, and to let a reader with a different view recompute the answer.",
+   "spoken": "Under relative magnitudes, the largest year-to-year change in the leads is point three zero. If the violation can jump after adoption by half that, or by as much, the effect is clearly positive. Even if it can jump by twice the largest change seen before, the interval stays above zero, from point one one. The post-treatment restrictions cannot be verified from pre-treatment outcomes alone; the point is to make the assumption explicit, and to let a reader with a different view recompute the answer.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/d2a145cacae7360d.wav",
+   "duration": 28.25,
+   "tokens": 84,
+   "peak": 0.533966064453125,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Parallel trends is an assumption about what would have happened. The leads inform it; they cannot prove it. <bookmark mark='b'/> So report the event study, the sensitivity sets, and the breakdown value, the departure at which the conclusion changes. <bookmark mark='c'/> It is the same spirit as the E-values and robustness values of Part thirty-six. <bookmark mark='d'/> Next: what to do when only one unit was treated, and there are many possible controls.",
+   "spoken": "Parallel trends is an assumption about what would have happened. The leads inform it; they cannot prove it. So report the event study, the sensitivity sets, and the breakdown value, the departure at which the conclusion changes. It is the same spirit as the E-values and robustness values of Part thirty-six. Next: what to do when only one unit was treated, and there are many possible controls.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/3e0b854902e3ee55.wav",
+   "duration": 24.0,
+   "tokens": 67,
+   "peak": 0.46514892578125,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats37/en/Honest_motion/result.json",
+ "input_sha256": "eb09157c7f8a0777633918659fb96ce671c6d30530a3d7d684b933416f802043"
+}

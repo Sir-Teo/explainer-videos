@@ -1,0 +1,428 @@
+{
+  "scope": "Native endpoint sheets for all non-Outro chapters, Outro baseline sheet, all silent motion contact sheets, and one fresh narrated contact sheet manually inspected. Baseline non-Outro sheets not separately manually reviewed.",
+  "records": [
+    {
+      "part": "stats37",
+      "scene": "Instruments",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/Instruments/sheet.png",
+      "sha256": "72c358f1d06d24e88173e4f75fb418b378c7fa826c0b4e8df1d76bae6bdde62c",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T14:56:51.751016+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Hook",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/Hook/sheet.png",
+      "sha256": "ce1995280c5ac2ef98456442d1ecbe553e6fa7a3f51a66265600e68682e21b74",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T14:57:59.126308+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Credibility",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/Credibility/sheet.png",
+      "sha256": "354c3f04b2acb2df3296e14d8af19e10601632bb6258f412cb170e0d42eb3ce0",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T14:57:59.152103+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Weak",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/Weak/sheet.png",
+      "sha256": "5faefc99a997997fe95c48ee37254063f2c4fedf03876e4ba7cae1fd6777828c",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T14:57:59.178114+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Many",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/Many/sheet.png",
+      "sha256": "0fe435de7deee0c11eee69e70ab0912726ad76c540d55a84abb7bf50cddf15a8",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T14:57:59.204427+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "RD",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/RD/sheet.png",
+      "sha256": "a1f36f40f5041ebeee86a44af318433eba07c12efa85afa378e2b3ef1a34c9c8",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T14:57:59.231539+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "RDValid",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/RDValid/sheet.png",
+      "sha256": "4de1b6cd0d2c6634f98e268a1671b3eda3bb4e35ea49e1d9d100aa185af92e6f",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T14:57:59.260141+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "DiD",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/DiD/sheet.png",
+      "sha256": "14eaa4500960ad9580a183df002770458edf913b02a726af8b2c8c1341e057f1",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T14:57:59.290090+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "DiDInference",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/DiDInference/sheet.png",
+      "sha256": "509742b06c7490b5fc7753dc59e0e6f18783ed7a290f5045376ec2e1e755769f",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T14:57:59.320251+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Staggered",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/Staggered/sheet.png",
+      "sha256": "5510905b65cfe4d5042e352f9ce61286a6407b8286b0c365f11092dc01f3e2bf",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T14:57:59.351164+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Honest",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/Honest/sheet.png",
+      "sha256": "1be7b52a27359523d6dee565171eea7aa9ca096fd2f96983876cce4501e978b2",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T14:57:59.379826+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "SDID",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/SDID/sheet.png",
+      "sha256": "8397f8fb9dfd4668cf500f402430cdd7014c90b60c3771c27792b41cf44269c3",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T15:08:19.793296+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Panel",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/Panel/sheet.png",
+      "sha256": "69f302c16271a13cabc793f440258395ce4eca7d0aba4d42bbd4e0154419584f",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T15:08:19.828909+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Bounds",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/Bounds/sheet.png",
+      "sha256": "5825f6260dc77e586886eb78a88d39c4157140c8b02147ad2775d66ed35cf47a",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T15:08:19.875089+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Outro",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats37/en/Outro/sheet.png",
+      "sha256": "5d7bdb57b1ebf423aaa66f7847841b960fa9584ced2850112c1a3253b821fe75",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T15:08:19.907400+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Hook",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/Hook/sheet.png",
+      "sha256": "ce1995280c5ac2ef98456442d1ecbe553e6fa7a3f51a66265600e68682e21b74",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:56.979225+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Hook_motion",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats37/en/Hook_motion/motion_sheet.png",
+      "sha256": "176fa94cfcb934f40340e1716cddc0bd6232f5e9a25d3e31579024ae70099415",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:57.035183+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Credibility",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/Credibility/sheet.png",
+      "sha256": "354c3f04b2acb2df3296e14d8af19e10601632bb6258f412cb170e0d42eb3ce0",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:57.099958+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Credibility_motion",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats37/en/Credibility_motion/motion_sheet.png",
+      "sha256": "542be5fed0f30173f067466954ca1ef18f0172967de81c7738601555ace43097",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:57.142130+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Instruments",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/Instruments/sheet.png",
+      "sha256": "72c358f1d06d24e88173e4f75fb418b378c7fa826c0b4e8df1d76bae6bdde62c",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:57.201533+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Instruments_motion",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats37/en/Instruments_motion/motion_sheet.png",
+      "sha256": "5889962643fce21d7e169441eaa3ff64a8985d4543f6c01250095d95088059a8",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:57.240233+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Weak",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/Weak/sheet.png",
+      "sha256": "5faefc99a997997fe95c48ee37254063f2c4fedf03876e4ba7cae1fd6777828c",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:57.290287+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Weak_motion",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats37/en/Weak_motion/motion_sheet.png",
+      "sha256": "feb2374980499f37b719bfaff37862f12791e792bc9ae3a38ddf09ed96f64fcd",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:57.333219+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Many",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/Many/sheet.png",
+      "sha256": "0fe435de7deee0c11eee69e70ab0912726ad76c540d55a84abb7bf50cddf15a8",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:57.377481+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Many_motion",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats37/en/Many_motion/motion_sheet.png",
+      "sha256": "8039e9772b7113c7c80bf7b899105bba01c7903aaa34c55925f4c2480a11097e",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:57.404039+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "RD",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/RD/sheet.png",
+      "sha256": "a1f36f40f5041ebeee86a44af318433eba07c12efa85afa378e2b3ef1a34c9c8",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:57.431122+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "RD_motion",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats37/en/RD_motion/motion_sheet.png",
+      "sha256": "c11c72f4f9a8f4c9fa211a42c37808d16cab776fc387b798c4cd64e174ab4365",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:57.475854+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "RDValid",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/RDValid/sheet.png",
+      "sha256": "4de1b6cd0d2c6634f98e268a1671b3eda3bb4e35ea49e1d9d100aa185af92e6f",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:57.513222+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "RDValid_motion",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats37/en/RDValid_motion/motion_sheet.png",
+      "sha256": "3fc894d8fe4680dead1fce27526cd28eff90866a40d2ee8fe282bf50fd9a9e00",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:57.581828+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "DiD",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/DiD/sheet.png",
+      "sha256": "14eaa4500960ad9580a183df002770458edf913b02a726af8b2c8c1341e057f1",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:57.626713+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "DiD_motion",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats37/en/DiD_motion/motion_sheet.png",
+      "sha256": "33b2bdd286df2a2781cc1714bc8bb92f00ae814b0254283633570bdfc9f0ddd7",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:57.670884+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "DiDInference",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/DiDInference/sheet.png",
+      "sha256": "509742b06c7490b5fc7753dc59e0e6f18783ed7a290f5045376ec2e1e755769f",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:57.699616+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "DiDInference_motion",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats37/en/DiDInference_motion/motion_sheet.png",
+      "sha256": "61e29777315d57c586e3ecf5bde31bac3afcac95538d20b5cb41f633dd540e33",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:57.728409+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Staggered",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/Staggered/sheet.png",
+      "sha256": "5510905b65cfe4d5042e352f9ce61286a6407b8286b0c365f11092dc01f3e2bf",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:57.784699+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Staggered_motion",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats37/en/Staggered_motion/motion_sheet.png",
+      "sha256": "4844f2c5fb3752a6b36319d4e1b8f50b8a5f1722efe1cbe63b16480e32dc0240",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:57.825675+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Honest",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/Honest/sheet.png",
+      "sha256": "1be7b52a27359523d6dee565171eea7aa9ca096fd2f96983876cce4501e978b2",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:57.881329+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Honest_motion",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats37/en/Honest_motion/motion_sheet.png",
+      "sha256": "1adbf3138950aaa7052ac309ae266fa2a51d45f760f9a08dc234f4112a8ef01b",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:57.920243+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Synth",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/Synth/sheet.png",
+      "sha256": "85336d039e17ea11fe3f0b2bbe98b4bd4962b3f1e8647039b619ca7b7fd93269",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:57.975774+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Synth_motion",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats37/en/Synth_motion/motion_sheet.png",
+      "sha256": "74d79b994b4228d4719095a1c9d0874c03cdfc108c300a99905381c95ce296cd",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:58.014578+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "SDID",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/SDID/sheet.png",
+      "sha256": "8397f8fb9dfd4668cf500f402430cdd7014c90b60c3771c27792b41cf44269c3",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:58.072742+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "SDID_motion",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats37/en/SDID_motion/motion_sheet.png",
+      "sha256": "4c13c71eb1693e74f2f00de09feaee27f5f2d18b419d02bec1b081328bb20811",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:58.127204+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Panel",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/Panel/sheet.png",
+      "sha256": "69f302c16271a13cabc793f440258395ce4eca7d0aba4d42bbd4e0154419584f",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:58.174452+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Panel_motion",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats37/en/Panel_motion/motion_sheet.png",
+      "sha256": "e0e1e168675622883ae49da3c513eab8a19c2ecd63a092e6a30c41f9e9510ce9",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:58.224529+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Bounds",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats37/en/Bounds/sheet.png",
+      "sha256": "5825f6260dc77e586886eb78a88d39c4157140c8b02147ad2775d66ed35cf47a",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:58.267782+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Bounds_motion",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats37/en/Bounds_motion/motion_sheet.png",
+      "sha256": "7b82d4dfb7197b03cd442e042d1936f938d4d5d91fdcbeb4a435af33dfe533b1",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:58.310942+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Outro",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats37/en/Outro/sheet.png",
+      "sha256": "5d7bdb57b1ebf423aaa66f7847841b960fa9584ced2850112c1a3253b821fe75",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:58.372338+00:00"
+    },
+    {
+      "part": "stats37",
+      "scene": "Honest",
+      "kind": "narrated",
+      "sheet": "renders/qa/narrated/stats37/en/Honest/narrated-sheet.png",
+      "sha256": "680d2ebd452b11cff930982c30a70346051660288753f7bc59db6de1521b8376",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T19:00:58.414463+00:00"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "part": "stats37",
+  "fingerprint": "5c1a4fe2150fa47203aa7b5da7dc4ef98f137a82e55d302dc55419a85fb2911c",
+  "english_endpoints": 16,
+  "native_1080_endpoints": 15,
+  "silent_motion_chapters": 15,
+  "audio_scene": "Honest",
+  "audio_lines": 7,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats37/en/Honest/videos/s11_honest/480p15/Honest.mp4",
+    "seconds": 223.3833333333333,
+    "narration_sha256": "74cd678f5debcdf3fbd0512400539b892812c823735e184ae7e4d17cb94dbefd",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 223 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 223 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}
