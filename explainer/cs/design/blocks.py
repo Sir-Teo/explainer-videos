@@ -203,8 +203,9 @@ def cache_experiment(sizes=(100, 300, 1000, 3000, 10000), n=200_000, items=100_0
 
 
 def scan_resistance(size=1000, n=100_000, items=50_000, seed=2):
-    """Zipf traffic interrupted by a one-off scan of 20,000 cold items (a batch job reading everything): LRU flushes
-    its hot set; TinyLFU refuses to admit the scan."""
+    """Zipf traffic interrupted by a one-off scan of 20,000 cold items (a batch job reading everything).  The textbook
+    story is that LRU flushes its hot set and TinyLFU refuses the scan; with this trace and cache size the drops
+    are almost entirely the scan's own misses, for both policies, which the Caching scene says."""
     trace, _ = zipf_trace(n, items, 0.9, seed)
     tr = trace.tolist()
     scan = list(range(items, items + 20_000))

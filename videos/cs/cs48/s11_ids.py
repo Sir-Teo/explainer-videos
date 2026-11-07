@@ -161,7 +161,7 @@ class Ids(VoiceoverScene):
         derived = label(rf"$2^{{41}}$ ms $\approx$ {years:.1f} years; \ $2^{{12}} = {2 ** 12:,}$ IDs per "
                         rf"millisecond per machine; \ $2^{{10}} = {2 ** 10:,}$ machines", font_size=20,
                         color=WHITE).next_to(bins, DOWN, buff=0.3)
-        sf = label(r"Snowflake \ (Twitter, \ 2010): \ three IDs, \ one millisecond apart, \ machine 7",
+        sf = label(r"Snowflake \ (Twitter, \ 2010): \ three IDs on machine 7: \ two in one millisecond, \ one in the next",
                    font_size=18, color=GREY_A).next_to(derived, DOWN, buff=0.2)
         u7 = VGroup(*[coloured(s, [(0, 8, DATA), (9, 13, DATA), (14, 15, HEAD)], size=20) for s in ids["uuid7"]])
         u7.arrange(DOWN, buff=0.15, aligned_edge=LEFT).move_to([-3.2, -1.95, 0])
@@ -178,7 +178,8 @@ class Ids(VoiceoverScene):
             "Random IDs scatter; often we want them to sort by time. <bookmark mark='a'/> Twitter's Snowflake, "
             "from 2010, packs sixty-four bits: forty-one bits of milliseconds since a chosen epoch, ten bits "
             "naming the machine, and twelve bits counting within the millisecond. <bookmark mark='b'/> Here are "
-            "three, made one millisecond apart on machine seven: the time field ticks, and the sequence counts. "
+            "three from machine seven: two in the same millisecond, where the sequence counts up, and one in the "
+            "next, where the time field ticks and the sequence starts again at zero. "
             "<bookmark mark='c'/> Forty-one bits of milliseconds last about seventy years, and each machine can "
             "mint four thousand and ninety-six IDs a millisecond, with no coordination beyond handing out machine "
             "numbers. <bookmark mark='d'/> UUID version seven, standardised in RFC 9562 in 2024, does the same "

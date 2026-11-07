@@ -32,7 +32,7 @@ class Outro(VoiceoverScene):
             tile(label(r"users $\to$ QPS $\to$ TB", font_size=40, color=HEAD), r"the napkin", HEAD),
             tile(label(r"two choices", font_size=44, color=DATA), r"load balancing", DATA),
             tile(MathTex(r"\textstyle\sum_i p_i(1-e^{-p_i T})", font_size=40, color=YES), r"Che's approximation", YES),
-            tile(MathTex(r"\delta \beta \ln U", font_size=56, color=NO), r"early expiration", NO),
+            tile(MathTex(r"\Delta \beta \ln U", font_size=56, color=NO), r"early expiration", NO),
             tile(MathTex(r"\sigma + \rho t", font_size=60, color=LAM), r"token buckets", LAM),
             tile(label(r"Hilbert $>$ Z-order", font_size=40, color=KERN), r"maps as keys", KERN),
         ).arrange_in_grid(rows=2, cols=3, buff=(0.35, 0.35)).move_to(DOWN * 0.2)

@@ -30,7 +30,7 @@ def uuid7(ts_ms: int, rng: random.Random):
 
 def btree_inserts(n=200_000, page=100, seed=0, ordered=False):
     """Insert keys into a B+ tree's leaf level (sorted pages of `page` keys, split in half when full): random keys
-    split pages all over the tree and leave them half full; time-ordered keys only touch the rightmost page."""
+    split pages all over the tree and leave them partly full (about 69% here, near the ln 2 of theory); time-ordered keys only touch the rightmost page."""
     import bisect
     rng = random.Random(seed)
     firsts = [0]               # first key of each page
@@ -64,7 +64,7 @@ def btree_inserts(n=200_000, page=100, seed=0, ordered=False):
 def id_examples():
     rng = random.Random(1)
     ts = 1_793_000_000_000
-    sf = [snowflake(ts + k, 7, k % 4096) for k in range(3)]
+    sf = [snowflake(ts, 7, 0), snowflake(ts, 7, 1), snowflake(ts + 1, 7, 0)]   # two in one ms, one in the next
     u7 = [str(uuid7(ts + k, rng)) for k in range(3)]
     u4 = [str(uuid.UUID(int=rng.getrandbits(128), version=4)) for _ in range(3)]
     return {"snowflake": sf, "snowflake_bin": [format(x, "064b") for x in sf], "uuid7": u7, "uuid4": u4,
