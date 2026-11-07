@@ -1,0 +1,95 @@
+{
+ "video": "stats6",
+ "scene": "Floods",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 7,
+ "lines": [
+  {
+   "raw": "Chapter thirteen. Floods and return levels.",
+   "spoken": "Chapter thirteen. Floods and return levels.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/eed87ca104044352.wav",
+   "duration": 3.3,
+   "tokens": 6,
+   "peak": 0.40838623046875,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "On the night of the thirty-first of January 1953, a storm surge driven down the North Sea arrived with a spring tide. <bookmark mark='a'/> The dikes of the south-west Netherlands broke in dozens of places. Eighteen hundred and thirty-six people died in the Netherlands, and more than three hundred in England. <bookmark mark='b'/> The Dutch government set up the Delta Committee to decide how high the defences must be. <bookmark mark='c'/> Its mathematician, David van Dantzig, treated it as a problem of statistics and economics together. <bookmark mark='d'/> The standard that emerged for the heart of Holland: the design water level should have annual exceedance probability one in ten thousand. Exceeding that level and failure of the defences are different engineering events. To set a height for that, you must estimate a sea level that no one has ever seen.",
+   "spoken": "On the night of the thirty-first of January 1953, a storm surge driven down the North Sea arrived with a spring tide. The dikes of the south-west Netherlands broke in dozens of places. Eighteen hundred and thirty-six people died in the Netherlands, and more than three hundred in England. The Dutch government set up the Delta Committee to decide how high the defences must be. Its mathematician, David van Dantzig, treated it as a problem of statistics and economics together. The standard that emerged for the heart of Holland: the design water level should have annual exceedance probability one in ten thousand. Exceeding that level and failure of the defences are different engineering events. To set a height for that, you must estimate a sea level that no one has ever seen.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/766dcf7de8adab92.wav",
+   "duration": 46.625,
+   "tokens": 132,
+   "peak": 0.788970947265625,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "We'll use a record that statisticians have studied for decades. <bookmark mark='a'/> Port Pirie, a harbour town in South Australia: the highest sea level of each year from 1923 to 1987, sixty-five values. These are maxima, each the largest of a whole year of tides, so a generalized extreme value law is a natural approximate model, rather than an automatic consequence for a finite, possibly changing record. We assume a stationary annual-maxima model here. <bookmark mark='b'/> The highest in the record, four point six nine metres, came in 1934.",
+   "spoken": "We'll use a record that statisticians have studied for decades. Port Pirie, a harbour town in South Australia: the highest sea level of each year from 1923 to 1987, sixty-five values. These are maxima, each the largest of a whole year of tides, so a generalized extreme value law is a natural approximate model, rather than an automatic consequence for a finite, possibly changing record. We assume a stationary annual-maxima model here. The highest in the record, four point six nine metres, came in 1934.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/809524fc5538224e.wav",
+   "duration": 33.125,
+   "tokens": 85,
+   "peak": 0.511322021484375,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Fit the three parameters, location, scale and shape, by maximum likelihood: find the values that make the observed maxima most probable. Part 9 builds that method; here a computer simply searches. <bookmark mark='b'/> The estimates: a location of three point eight seven metres, a scale of about twenty centimetres, and a shape of minus point oh five, slightly negative, so very close to the Gumbel. These match the published analysis in Stuart Coles's textbook. <bookmark mark='c'/> The fitted density, in gold, over the histogram of the sixty-five maxima.",
+   "spoken": "Fit the three parameters, location, scale and shape, by maximum likelihood: find the values that make the observed maxima most probable. Part 9 builds that method; here a computer simply searches. The estimates: a location of three point eight seven metres, a scale of about twenty centimetres, and a shape of minus point oh five, slightly negative, so very close to the Gumbel. These match the published analysis in Stuart Coles's textbook. The fitted density, in gold, over the histogram of the sixty-five maxima.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/d17f7d6dcf604cc6.wav",
+   "duration": 31.75,
+   "tokens": 84,
+   "peak": 0.686767578125,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Engineers speak of return levels. <bookmark mark='a'/> The T-year return level is the height exceeded in any one year with probability one over T. <bookmark mark='b'/> Inverting the fitted distribution gives a formula. <bookmark mark='c'/> Plotted against the return period on a log scale, it's a gently bending curve; the white dots are the sixty-five observed maxima at their empirical return periods. <bookmark mark='d'/> The hundred-year level: four point six nine metres, the height of the 1934 record. <bookmark mark='e'/> The ten-thousand-year level: five point three four. Note what a hundred-year level does not mean: assuming independent years with the same exceedance probability, the chance of at least one exceedance in thirty years is twenty-six percent. A changing climate can invalidate that stationarity assumption.",
+   "spoken": "Engineers speak of return levels. The T-year return level is the height exceeded in any one year with probability one over T. Inverting the fitted distribution gives a formula. Plotted against the return period on a log scale, it's a gently bending curve; the white dots are the sixty-five observed maxima at their empirical return periods. The hundred-year level: four point six nine metres, the height of the 1934 record. The ten-thousand-year level: five point three four. Note what a hundred-year level does not mean: assuming independent years with the same exceedance probability, the chance of at least one exceedance in thirty years is twenty-six percent. A changing climate can invalidate that stationarity assumption.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/35e7e738dde530ae.wav",
+   "duration": 43.7,
+   "tokens": 114,
+   "peak": 0.47503662109375,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "How sure can we be? <bookmark mark='a'/> For each candidate hundred-year level, refit the other two parameters as well as possible and record the best log-likelihood: the profile likelihood, which Part 22 develops. <bookmark mark='b'/> Levels where it falls less than about two units below its peak are plausible. <bookmark mark='c'/> The approximate likelihood-ratio cutoff gives a model-based interval from about four point four nine to five point two six metres: lopsided, because the data rule out low values more firmly than high ones. <bookmark mark='d'/> Sixty-five years of data asked about a hundred is already a stretch. The Delta Committee needed ten thousand. Extrapolation is where extreme-value statistics earns its keep, and where assumptions about stationarity, dependence and tail shape matter most. This interval does not cover all that model uncertainty.",
+   "spoken": "How sure can we be? For each candidate hundred-year level, refit the other two parameters as well as possible and record the best log-likelihood: the profile likelihood, which Part 22 develops. Levels where it falls less than about two units below its peak are plausible. The approximate likelihood-ratio cutoff gives a model-based interval from about four point four nine to five point two six metres: lopsided, because the data rule out low values more firmly than high ones. Sixty-five years of data asked about a hundred is already a stretch. The Delta Committee needed ten thousand. Extrapolation is where extreme-value statistics earns its keep, and where assumptions about stationarity, dependence and tail shape matter most. This interval does not cover all that model uncertainty.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/36901db078d6715f.wav",
+   "duration": 48.125,
+   "tokens": 124,
+   "peak": 0.631927490234375,
+   "issues": [],
+   "elapsed": 0.05,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Van Dantzig's own contribution was to turn the question into a decision. <bookmark mark='a'/> Above the current dike height, the chance that the sea goes over falls roughly exponentially with each extra metre: a Gumbel tail. <bookmark mark='b'/> The total cost of a height h is the cost of building, which grows with h, plus the expected flood losses for ever after, discounted, which fall with h. <bookmark mark='c'/> Set the derivative to zero, and the best height has a closed form: worth raising until the next metre costs more than the flood damage it prevents. The ten-thousand-year standard came out of reasoning like this, which is statistics as decision-making, the subject of Part 45.",
+   "spoken": "Van Dantzig's own contribution was to turn the question into a decision. Above the current dike height, the chance that the sea goes over falls roughly exponentially with each extra metre: a Gumbel tail. The total cost of a height h is the cost of building, which grows with h, plus the expected flood losses for ever after, discounted, which fall with h. Set the derivative to zero, and the best height has a closed form: worth raising until the next metre costs more than the flood damage it prevents. The ten-thousand-year standard came out of reasoning like this, which is statistics as decision-making, the subject of Part 45.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/f8a3c054a12708cf.wav",
+   "duration": 37.475,
+   "tokens": 109,
+   "peak": 0.580352783203125,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats6/en/Floods_motion/result.json",
+ "input_sha256": "4c2035e0d401e02c8e46ac18e6a61e5f90e39656d1336dc75fd68ae006e43320"
+}

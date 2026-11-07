@@ -1,0 +1,23 @@
+{
+  "part": "stats6",
+  "fingerprint": "f225e7026593a97d0d4c61d14513b9536ac9dc89828b764bc918e8efd65c5c2f",
+  "english_endpoints": 15,
+  "native_1080_endpoints": 7,
+  "silent_motion_chapters": 6,
+  "audio_scene": "Floods",
+  "audio_lines": 7,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats6/en/Floods/videos/s14_floods/480p15/Floods.mp4",
+    "seconds": 251.799023,
+    "narration_sha256": "5d7acab3a6e4476d77da8c5256966fe81c1bab491f923ba3422fd279915254ad",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 252 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 252 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

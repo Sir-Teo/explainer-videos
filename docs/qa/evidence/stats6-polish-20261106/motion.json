@@ -1,0 +1,72 @@
+{
+  "fingerprint": "f225e7026593a97d0d4c61d14513b9536ac9dc89828b764bc918e8efd65c5c2f",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 15,
+      "warnings": {
+        "narration-translation": 4
+      },
+      "input_record": "renders/qa/series/stats6/en/Hook_motion/result.json",
+      "input_sha256": "21254094c48b05a50ae1db5010e5b2c10d41e08b3e49aa0a2a05fc10c2507dc7",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 184 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 184 s\n"
+    },
+    {
+      "scene": "WeakLaw",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats6/en/WeakLaw_motion/result.json",
+      "input_sha256": "9ef5e9cb1ef6f7b91c613650b79cdfcbacc86998ecd404fd3901aed86fe83feb",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 234 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 234 s\n"
+    },
+    {
+      "scene": "Convergence",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats6/en/Convergence_motion/result.json",
+      "input_sha256": "d887788dda552b539582018de498bedd7788a389a9805e50359299f023567ae8",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 244 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 244 s\n"
+    },
+    {
+      "scene": "Delta",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats6/en/Delta_motion/result.json",
+      "input_sha256": "2c5701f3738c0e301272e281a4c79cc307db8c5ab37ed314c0cd068bc643416f",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 271 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 271 s\n"
+    },
+    {
+      "scene": "Fail",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 5
+      },
+      "input_record": "renders/qa/series/stats6/en/Fail_motion/result.json",
+      "input_sha256": "9135598c5a1df8a33a0587d4b51acb7a09d4eeb27724e466e092ecb0906ac629",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 216 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 216 s\n"
+    },
+    {
+      "scene": "Floods",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats6/en/Floods_motion/result.json",
+      "input_sha256": "4c2035e0d401e02c8e46ac18e6a61e5f90e39656d1336dc75fd68ae006e43320",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 276 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 276 s\n"
+    }
+  ]
+}

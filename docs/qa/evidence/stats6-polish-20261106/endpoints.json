@@ -1,0 +1,171 @@
+{
+  "fingerprint": "f225e7026593a97d0d4c61d14513b9536ac9dc89828b764bc918e8efd65c5c2f",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 14,
+      "warnings": {
+        "narration-translation": 4,
+        "untranslated-on-screen": 33
+      },
+      "input_record": "renders/qa/series/stats6/en/Hook/result.json",
+      "input_sha256": "46b146fbdfa98d9e9fdac9d051f28235bad9224da23fa47ebf26039314dcba86"
+    },
+    {
+      "scene": "Inequalities",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 30
+      },
+      "input_record": "renders/qa/series/stats6/en/Inequalities/result.json",
+      "input_sha256": "950401e63dab5d248d22c5ea78194933e2292a9e845887447dd2526c27f65f50"
+    },
+    {
+      "scene": "WeakLaw",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 37
+      },
+      "input_record": "renders/qa/series/stats6/en/WeakLaw/result.json",
+      "input_sha256": "25dfcd2e3e0ec48d7ecba0e99b4205f5e75729c1968bf48f4b7b3df7a27bd77f"
+    },
+    {
+      "scene": "Convergence",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 42
+      },
+      "input_record": "renders/qa/series/stats6/en/Convergence/result.json",
+      "input_sha256": "dd27b2d7d661d31886c86908f7ebf7b5e0870c5384b110c9e4931931afcabd80"
+    },
+    {
+      "scene": "CLTSeen",
+      "status": "needs-review",
+      "frames": 17,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 29
+      },
+      "input_record": "renders/qa/series/stats6/en/CLTSeen/result.json",
+      "input_sha256": "c32b7ad1353286358416d36933be1f94576f18cbd1cd23237f6169845cd5cf44"
+    },
+    {
+      "scene": "CLTProof",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 27
+      },
+      "input_record": "renders/qa/series/stats6/en/CLTProof/result.json",
+      "input_sha256": "fff9f28eb269b1428e994ae7c783e5ec265eefa027d95c8454488b572b3f4c26"
+    },
+    {
+      "scene": "Using",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 22
+      },
+      "input_record": "renders/qa/series/stats6/en/Using/result.json",
+      "input_sha256": "22d35963e4e103ee2b852fc864c7bcec771a6a0ad4c222d73a1eca0822ffce8c"
+    },
+    {
+      "scene": "Thirty",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 37
+      },
+      "input_record": "renders/qa/series/stats6/en/Thirty/result.json",
+      "input_sha256": "d81f6de04a0aaf9be0716bc9112f0de6e88800dacf769720805181c618a6ea96"
+    },
+    {
+      "scene": "Delta",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 29
+      },
+      "input_record": "renders/qa/series/stats6/en/Delta/result.json",
+      "input_sha256": "7c2532b14b884637a4cb6760bd093344f78d7e444ffe23cdf0c73747b4fbad97"
+    },
+    {
+      "scene": "Slutsky",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 33
+      },
+      "input_record": "renders/qa/series/stats6/en/Slutsky/result.json",
+      "input_sha256": "ce6c7773a8b84c2a54de01efac2c33ba9a2b26f5cb51701f155de7ec9ee653fc"
+    },
+    {
+      "scene": "Fail",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 33
+      },
+      "input_record": "renders/qa/series/stats6/en/Fail/result.json",
+      "input_sha256": "878c8df8bf7ae81361467d2e2e3d94e648fc95108f814bd1dddcaccabd9e43f9"
+    },
+    {
+      "scene": "Concentration",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 37
+      },
+      "input_record": "renders/qa/series/stats6/en/Concentration/result.json",
+      "input_sha256": "ad27f8566973901beda00881b2fbe43aad5fa8d50c20bbf94e974a31860e85bd"
+    },
+    {
+      "scene": "Maxima",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 33
+      },
+      "input_record": "renders/qa/series/stats6/en/Maxima/result.json",
+      "input_sha256": "d810f8e89d26dc3b9a796eaba743d7522188cae3020fa11fee5cfb8c5ad6d2a7"
+    },
+    {
+      "scene": "Floods",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 38
+      },
+      "input_record": "renders/qa/series/stats6/en/Floods/result.json",
+      "input_sha256": "541b2d224787134ee87a5d91d215e78bc5001e75d3418eb08a170f281d415c77"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 7,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 63
+      },
+      "input_record": "renders/qa/series/stats6/en/Outro/result.json",
+      "input_sha256": "38130f3bf1b15382c9caaeccade658be20378e532e0f3bd38bd152919dc9c53c"
+    }
+  ]
+}

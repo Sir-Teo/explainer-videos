@@ -59,7 +59,7 @@ class WeakLaw(VoiceoverScene):
         steps, means = np.asarray(d["steps"], float), np.asarray(d["means"])
         A = axes([0, np.log10(4000)], [0, 1], x_length=8.6, y_length=4.6, xlabel=r"number of tosses, $n$ (log scale)",
                  ylabel=r"share of heads", xticks=[0, 1, 2, 3], yticks=[0, 0.25, 0.5, 0.75, 1],
-                 xfmt=lambda v: f"10^{{{int(v)}}}", center=[-1.4, -0.4, 0])
+                 xfmt=lambda v: f"10^{{{int(v)}}}", center=[-2.2, -0.4, 0])
         ax = A.ax
         lx = np.log10(steps)
         lines = VGroup(*[polyline(ax, lx, m, SIM, 1.4, 0.55) for m in means])
@@ -91,9 +91,9 @@ class WeakLaw(VoiceoverScene):
         d = load("paths")
         steps, means = np.asarray(d["steps"], float), np.asarray(d["means"])
         excess = (means - 0.5) * steps
-        A = axes([0, 4000], [-80, 80], x_length=8.6, y_length=4.4, xlabel=r"number of tosses, $n$",
+        A = axes([0, 4000], [-80, 80], x_length=7.4, y_length=4.4, xlabel=r"number of tosses, $n$",
                  ylabel=r"heads minus $n/2$", xticks=[0, 1000, 2000, 3000, 4000], yticks=[-80, -40, 0, 40, 80],
-                 center=[-1.4, -0.4, 0])
+                 center=[-2.2, -0.4, 0])
         ax = A.ax
         lines = VGroup(*[polyline(ax, steps, e, SIM, 1.4, 0.55) for e in excess[:20]])
         nn = np.linspace(1, 4000, 200)
@@ -141,6 +141,7 @@ class WeakLaw(VoiceoverScene):
             label(r"within $1/50$ of $3/5$, \ with odds of $1000$ to $1$", font_size=26),
             MathTex(r"n = 25{,}550 \text{ draws}", font_size=36, color=S.MUSEUM),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([1.0, -1.8, 0])
+        intro = label("Bernoulli's original sample-size question", font_size=36)
         with self.voiceover(
             "The first proof of a law of large numbers is far older than Chebyshev's. <bookmark mark='a'/> Jacob "
             "Bernoulli worked on it for twenty years, and it was published in 1713, eight years after his death, in "
@@ -150,8 +151,10 @@ class WeakLaw(VoiceoverScene):
             "fifths? <bookmark mark='c'/> His answer: twenty-five thousand five hundred and fifty. It was an "
             "enormous number for the time; historians have wondered whether it is why he left the book unfinished."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tl))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(urn), FadeIn(rows[:2]))

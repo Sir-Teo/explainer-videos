@@ -29,6 +29,7 @@ class Using(VoiceoverScene):
                             font_size=24, color=GREY_A),
                       label(r"with James Stirling's $\sqrt{2\pi}$, \ the first appearance of the normal curve", font_size=24,
                             color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(hc, DOWN, buff=0.5)
+        intro = label('The first normal approximation', font_size=36)
         with self.voiceover(
             "The first central limit theorem was a theorem about coins. <bookmark mark='a'/> In November 1733 Abraham "
             "de Moivre, a French Protestant refugee living in London, printed a seven-page pamphlet in Latin for his "
@@ -38,8 +39,10 @@ class Using(VoiceoverScene):
             "Stirling supplied, he found that the binomial terms fall away from the middle like e to the minus two x "
             "squared over n: the first appearance of the normal curve."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tl))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(rows[0]))

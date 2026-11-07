@@ -1,0 +1,83 @@
+{
+  "fingerprint": "f225e7026593a97d0d4c61d14513b9536ac9dc89828b764bc918e8efd65c5c2f",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "WeakLaw",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 37
+      },
+      "input_record": "renders/qa/native1080/stats6/en/WeakLaw/result.json",
+      "input_sha256": "7df5cc930b879be6e57407942dbfbf14d55e84d094839c1bdba687baee8c0c17"
+    },
+    {
+      "scene": "Convergence",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 42
+      },
+      "input_record": "renders/qa/native1080/stats6/en/Convergence/result.json",
+      "input_sha256": "ed20a04972f32f2ec6cb01625838497a96bbebd959038381ae6cee7d56dc92f1"
+    },
+    {
+      "scene": "CLTSeen",
+      "status": "needs-review",
+      "frames": 17,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 29
+      },
+      "input_record": "renders/qa/native1080/stats6/en/CLTSeen/result.json",
+      "input_sha256": "d5c18a36493d8d16b90f02bfba2def983bfff0941ee74664b4eea1e9e7892ff5"
+    },
+    {
+      "scene": "Thirty",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 37
+      },
+      "input_record": "renders/qa/native1080/stats6/en/Thirty/result.json",
+      "input_sha256": "f5c770bda2ce1a45d3c0b5fe512205e751ebc2893b7a8085098f69862469df78"
+    },
+    {
+      "scene": "Delta",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 29
+      },
+      "input_record": "renders/qa/native1080/stats6/en/Delta/result.json",
+      "input_sha256": "857124b124299ab3e8de36b60c300332d7cf84b70d0442d126f793c90711d91c"
+    },
+    {
+      "scene": "Fail",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 33
+      },
+      "input_record": "renders/qa/native1080/stats6/en/Fail/result.json",
+      "input_sha256": "7f715bb65ae3379cde72ee92d50dbf799c95844f39edacd0040e5ab823f71fe5"
+    },
+    {
+      "scene": "Floods",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 38
+      },
+      "input_record": "renders/qa/native1080/stats6/en/Floods/result.json",
+      "input_sha256": "6da6b7f80f79e6628dd146ca5ca9349e6b2f63196cc2e8527e6c712e1c02ce36"
+    }
+  ]
+}

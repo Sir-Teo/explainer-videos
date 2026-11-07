@@ -25,6 +25,7 @@ class Hook(VoiceoverScene):
         tickets = VGroup(*[Rectangle(width=0.32, height=0.2, stroke_color=GREY_B, stroke_width=1, fill_color="#1b2130",
                                      fill_opacity=1).move_to([3.2 + 0.36 * (k % 7), -1.4 - 0.26 * (k // 7), 0]).rotate(0.15 * ((k * 7) % 5 - 2))
                            for k in range(28)])
+        intro = label("How reliable is a crowd's judgment?", font_size=36)
         with self.voiceover(
             "In 1906, at a livestock fair in Plymouth, a fat ox stood on display, and for sixpence "
             "you could guess its weight once it had been slaughtered and dressed. <bookmark mark='a'/> Eight hundred "
@@ -34,8 +35,10 @@ class Hook(VoiceoverScene):
             "expecting much. <bookmark mark='c'/> He published what he found in Nature in March 1907, under the "
             "title Vox Populi: the voice of the people."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tl))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(hc, shift=RIGHT * 0.2), FadeIn(ox), LaggedStart(*[FadeIn(t) for t in tickets], lag_ratio=0.05))
             vo.wait_until("b")
             self.play(FadeIn(ask))

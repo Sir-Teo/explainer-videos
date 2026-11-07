@@ -101,9 +101,9 @@ class Delta(VoiceoverScene):
     def poisson(self):
         d = load("delta")
         lams = np.asarray(d["lams"])
-        A = axes([-0.4, 1.9], [-0.7, 1.9], x_length=6.0, y_length=4.4, xlabel=r"$\lambda$ (log scale)", ylabel=r"variance (log scale)",
+        A = axes([-0.4, 1.9], [-0.7, 1.9], x_length=6.0, y_length=3.2, xlabel=r"$\lambda$ (log scale)", ylabel=r"variance (log scale)",
                  xticks=[0, 1], yticks=[-0.5, 0, 1], xfmt=lambda v: f"10^{{{int(v)}}}",
-                 yfmt=lambda v: {-0.5: r"0.32", 0: r"1", 1: r"10"}[v], center=[-3.0, -0.5, 0])
+                 yfmt=lambda v: {-0.5: r"0.32", 0: r"1", 1: r"10"}[v], center=[-3.0, -1.2, 0])
         ax = A.ax
         lx = np.log10(lams)
         raw = VGroup(polyline(ax, lx, np.log10(d["var_raw"]), SIM, 3), *[Dot(ax.c2p(a, np.log10(b)), radius=0.06, color=SIM)
@@ -118,8 +118,7 @@ class Delta(VoiceoverScene):
         ]
         rows[0][2].set_color(SIM)
         rows[1][4].set_color(S.POST)
-        whys = [why(r"Poisson counts: \ the spread grows with the mean"), why(r"delta method, \ $g = \sqrt{\ }$: \ the spread no longer "
-                                                                          r"depends on $\lambda$")]
+        whys = [why(r"Poisson counts: \ the spread grows with the mean"), why(r"first-order approximation for large $\lambda$")]
         tag = note(r"exact: \ sums over the Poisson probabilities").to_corner(DR, buff=0.3)
         intro = label('A square root stabilizes large Poisson counts', font_size=36)
         with self.voiceover(
@@ -134,8 +133,8 @@ class Delta(VoiceoverScene):
             self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=2.7, x=3.0, buff=0.9, edge=6.9)
             vo.wait_until("a")
-            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
+            self.play(FadeOut(intro), run_time=0.25)
             vo.wait_until("b")
             step(1, transform=False)
             vo.wait_until("c")
