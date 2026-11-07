@@ -183,9 +183,9 @@ class Smile(VoiceoverScene):
         call = t["call_skew"]
         verdict = (r"call-skewed more often than not" if call > 0.5 else r"put-skewed more often than not")
         side = VGroup(
-            wrapped_label(rf"mean ATM: {100 * m[0]:.0f}\% (7d), {100 * m[2]:.0f}\% (30d), {100 * m[5]:.0f}\% (180d)", width=3.8, font_size=19),
-            wrapped_label(rf"7 days above 180 days in {100 * t['inv_7_180']:.0f}\% of weeks", width=3.8, font_size=19, color=BAD),
-            wrapped_label(rf"gold: call skew, {100 * call:.0f}\% of {t['n']} weeks: {verdict}", width=3.8, font_size=19, color=QC.HOUSE),
+            wrapped_label(rf"mean ATM: {100 * m[0]:.0f}\% (7d), {100 * m[2]:.0f}\% (30d), {100 * m[5]:.0f}\% (180d)", max_width=3.8, font_size=19),
+            wrapped_label(rf"7 days above 180 days in {100 * t['inv_7_180']:.0f}\% of weeks", max_width=3.8, font_size=19, color=BAD),
+            wrapped_label(rf"gold: call skew, {100 * call:.0f}\% of {t['n']} weeks: {verdict}", max_width=3.8, font_size=19, color=QC.HOUSE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(RIGHT, buff=0.4).set_y(-0.9)
         src = real_data(r"weekly surfaces from Deribit trades, April 2021 -- November 2025", corner=UR)
         n = t["n"]

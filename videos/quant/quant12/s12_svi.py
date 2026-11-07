@@ -178,7 +178,7 @@ class SVI(VoiceoverScene):
         nf = r["nfev"]
         fi, fl = r["first"], r["final"]
         side = wrapped_label(rf"six random starts, {min(fi):.0f} to {max(fi):.0f} vol points off; all end at "
-                     rf"{min(fl):.3f}; solver nfev {min(nf)}--{max(nf)}; replay includes finite-difference calls", width=12.6, font_size=18, color=GREY_A).to_edge(DOWN, buff=0.4)
+                     rf"{min(fl):.3f}; solver nfev {min(nf)}--{max(nf)}; replay includes finite-difference calls", max_width=12.6, font_size=18, color=GREY_A).to_edge(DOWN, buff=0.4)
         src = real_data(rf"the Surface, expiry {r['expiry']}, unweighted fits", corner=UR)
         lo, hi, n0, n1, best = min(fi), max(fi), min(nf), max(nf), min(fl)
         with self.voiceover(

@@ -228,7 +228,7 @@ class Learning(VoiceoverScene, ThreeDScene):
                      label(rf"vega-weighted, network against SSVI: {np.mean(n['pen_test_vw']):.2f} against "
                            rf"{np.mean(n['ssvi_test_vw']):.2f}", font_size=22, color=GREY_A),
                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(UP, buff=0.9)
-        note_ = wrapped_label('violations: worst share across three runs on a $201\\times60$ grid, $|k|\\le1$, 3 days--0.8 years; SSVI flags not stored. RMSE unweighted.', width=12.0, font_size=17, color=GREY_B).next_to(tab, DOWN, buff=0.3)
+        note_ = wrapped_label('violations: worst share across three runs on a $201\\times60$ grid, $|k|\\le1$, 3 days--0.8 years; SSVI flags not stored. RMSE unweighted.', max_width=12.0, font_size=17, color=GREY_B).next_to(tab, DOWN, buff=0.3)
         wins = bool(np.mean(pt) < np.mean(st))
         verdict = ('lower unweighted error in these same-date held-out quote splits; finite-grid penalties are not a global guarantee' if wins else 'SSVI has comparable or lower held-out quote error here; analytic conditions still require a stated domain')
         foot = VGroup(wrapped_label(verdict, 11.6, 21, QC.HOUSE),

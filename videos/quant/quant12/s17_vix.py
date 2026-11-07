@@ -111,7 +111,7 @@ class VIX(VoiceoverScene):
         side = VGroup(MathTex(rf"\text{{mean}}\ {100 * v['mean_ours']:.1f}\%\ \text{{vs}}\ {100 * v['mean_dvol']:.1f}\%,\ \ "
                               rf"\text{{corr}}\ {v['corr']:.3f}", font_size=28),
                       wrapped_label(rf"gap {v['gap_mean']:+.1f} $\pm$ {v['gap_sd']:.1f} vol points; quote selection, "
-                            r"liquidity filters, fitting, wings and observation times differ", width=11.8, font_size=19, color=GREY_A)).arrange(DOWN, buff=0.2).next_to(g, DOWN, buff=0.4)
+                            r"liquidity filters, fitting, wings and observation times differ", max_width=11.8, font_size=19, color=GREY_A)).arrange(DOWN, buff=0.2).next_to(g, DOWN, buff=0.4)
         q = label(r"pause and predict: drop every option beyond $\pm 20\%$. Does the index rise or fall?", font_size=21,
                   color=QC.HOUSE).to_corner(DR, buff=0.3)  # beside the source line, below the stats
         src = real_data(r"weekly Deribit surfaces; DVOL from Deribit", corner=DL)

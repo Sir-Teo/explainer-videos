@@ -120,7 +120,7 @@ class Replicate(VoiceoverScene):
         dd = VGroup(*[Dot(g.ax.c2p(a, b), radius=0.04, color=LV) for a, b in zip(rv[m2], rep_d[m2])])
         leg = legend([(IV, r"hedged every hour"), (LV, r"hedged once a day")], font_size=17).next_to(g, UP, buff=0.1)
         side = VGroup(
-            wrapped_label(rf"{r['n']} overlapping 30-day windows, weekly starts, 2021--2025", width=5.8, font_size=19, color=GREY_A),
+            wrapped_label(rf"{r['n']} overlapping 30-day windows, weekly starts, 2021--2025", max_width=5.8, font_size=19, color=GREY_A),
             MathTex(rf"\text{{hourly: error sd}}\ {r['err_h_sd']:.4f}\ \text{{on a mean of}}\ {r['rv_mean']:.3f}", font_size=26,
                     color=IV),
             MathTex(rf"\text{{daily hedge vs hourly variance: sd}}\ {r['daily_vs_hourly_sd']:.3f}", font_size=26, color=LV),
