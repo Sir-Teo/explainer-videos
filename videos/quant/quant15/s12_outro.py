@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant15.common import BAD, BARRIER, DELTA, GOOD, IV, OPT, PART, SPOT, VEGA, load, axes, data_range
+from videos.quant.quant15.common import BAD, BARRIER, DELTA, GOOD, IV, OPT, PART, SPOT, VEGA, load, axes, data_range, pause_card
 
 DESK = [
     (r"Price a digital with a call spread. What width, and what happens to the hedge near expiry?",

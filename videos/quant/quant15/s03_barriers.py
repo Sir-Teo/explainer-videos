@@ -5,7 +5,7 @@ from scipy.interpolate import RegularGridInterpolator
 
 from explainer.quant import *  # noqa: F403
 from explainer.quant.house import exotics as X
-from videos.quant.quant15.common import BAD, BARRIER, DELTA, GOOD, OPT, PART, SPOT, illustration, load, axes, data_range
+from videos.quant.quant15.common import BAD, BARRIER, DELTA, GOOD, OPT, PART, SPOT, illustration, load, axes, data_range, pause_card
 
 
 class Barriers(VoiceoverScene, ThreeDScene):

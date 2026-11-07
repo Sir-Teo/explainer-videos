@@ -61,3 +61,8 @@ def axes(x_range, y_range, **kwargs):
         if kwargs.get(name) is not None:
             kwargs[name] = [x for x in kwargs[name] if support[0] <= x <= support[1]]
     return _base_axes(x_range, y_range, **kwargs)
+
+
+def pause_card(text, width=12.4, font_size=25):
+    """Part-local prediction card retaining this lecture's width argument."""
+    return wrapped_label(text, max_width=width, font_size=font_size, color=QC.IDEA).to_edge(DOWN, buff=0.3)
