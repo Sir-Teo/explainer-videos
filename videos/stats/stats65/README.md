@@ -165,3 +165,5 @@ require separate arguments and checking existing literature before asserting nov
 - van der Vaart, *Asymptotic Statistics*; Wainwright, *High-Dimensional Statistics*; Gelman et al., *Bayesian Data Analysis*;
   Hastie, Tibshirani & Friedman, *The Elements of Statistical Learning*; Hernán & Robins, *Causal Inference: What If*;
   Imbens & Rubin, *Causal Inference for Statistics, Social, and Biomedical Sciences*.
+
+The cached full Board checks its historical input set, contributors and SHA-256 values on load. After changing earlier numerical inputs, explicitly regenerate it with `python -m videos.stats.stats65.compute --force fullboard`; rendering rejects stale or legacy aggregates.

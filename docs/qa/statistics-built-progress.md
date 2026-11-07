@@ -9,7 +9,7 @@ All 65 parts have received English scientific source review and focused numerica
 
 A [shared World programme-name collision](evidence/world-programmes-20261107/README.md) has been corrected. The [Coverage Board now preserves empirical Monte Carlo uncertainty](evidence/board-mc-20261107/README.md) for correlated intervals within one simulation. Legacy-row values are unchanged. Parts 1–22 retain the visual inspections recorded at their commits; their conservative shared-code fingerprints are being refreshed after the Board correction. Parts 1–12 have completed that latest refresh; further parts remain queued. Part 23's final receipts include the corrected shared source.
 
-The latest [complete statistics/QA regression](evidence/statistics-final-regression-20261107/README.md) passed 1,138 tests and 10 subtests across 145 files. Its 15 warnings remain visible in the log. Individual evidence folders retain focused scientific checks and numerical input hashes. These results do not establish production playback approval.
+The latest [complete statistics/QA regression](evidence/statistics-final-regression-20261107/README.md) passed 1,138 tests and 10 subtests across 145 files. Its 15 warnings remain visible in the log. Individual evidence folders retain focused scientific checks and numerical input hashes. A subsequent Part 65 cache-load guard passes its 25-check focused regression, including six new dependency-change cases; numerical outputs are unchanged. These results do not establish production playback approval.
 
 No part is signed off for bilingual production. The branch has zero narration_zh.json tables and no stats_text_zh.json; full narrated masters and continuous listening/playback remain separate gates. Existing translation warnings remain visible.
 
@@ -91,4 +91,4 @@ No part is signed off for bilingual production. The branch has zero narration_zh
 | 62 | `stats62` | 12 | English scientific source reviewed; 20 checks pass; sampled visual review pending; bilingual/listening/master approval open |
 | 63 | `stats63` | 14 | English scientific source reviewed; 20 checks pass; sampled visual review pending; bilingual/listening/master approval open |
 | 64 | `stats64` | 15 | English scientific source reviewed; 23 checks pass; sampled visual review pending; bilingual/listening/master approval open |
-| 65 | `stats65` | 12 | English scientific source and all numerics reviewed; 19 checks pass; 319 historical Board rows reconciled; sampled visual review pending |
+| 65 | `stats65` | 12 | English scientific source and all numerics reviewed; 25 checks pass; 319 historical Board rows reconciled; sampled visual review pending |

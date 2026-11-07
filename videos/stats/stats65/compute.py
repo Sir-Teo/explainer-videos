@@ -32,7 +32,31 @@ from pathlib import Path
 import hashlib
 
 CACHE = Cache("stats65")
-load = CACHE.load
+
+
+def _board_parts():
+    return {n for n in range(1, 66)
+            if 'save_rows(' in Path(f'videos/stats/stats{n}/compute.py').read_text()}
+
+
+def _historical_inputs():
+    return [p for p in sorted(Path(".cache").glob("stats*/board.json"))
+            if int(p.parent.name[5:]) <= 65] + [Path(".cache/stats64/holdout.json")]
+
+
+def load(name):
+    data = CACHE.load(name)
+    if name == "fullboard":
+        records = data.get("input_hashes", [])
+        stale = not records or {r["file"] for r in records} != {str(p) for p in _historical_inputs()}
+        stale |= bool(_board_parts() - {r["part"] for r in data.get("rows", [])})
+        for record in records:
+            path = Path(record["file"])
+            stale |= not path.exists() or hashlib.sha256(path.read_bytes()).hexdigest() != record["sha256"]
+        if stale:
+            raise RuntimeError("Cached full Board is stale or incomplete; run "
+                               "python -m videos.stats.stats65.compute --force fullboard")
+    return data
 
 MUS = [0.5, 1.0, 1.5]
 GAMMAS = [0.0, 0.5, 1.0]
@@ -115,14 +139,12 @@ def compute_nhanes():
 
 
 def compute_fullboard():
-    expected={n for n in range(1,66) if 'save_rows(' in Path(f'videos/stats/stats{n}/compute.py').read_text()}
+    expected = _board_parts()
     rows = load_all(upto=65)
     missing=expected-{r.part for r in rows}
     if missing:raise RuntimeError(f'Cannot publish full Board: missing parts {sorted(missing)}')
     stage = lambda p: 1 if p <= 10 else 2 if p <= 20 else 3 if p <= 42 else 4 if p <= 55 else 5  # noqa: E731
-    historical_inputs = [p for p in sorted(Path(".cache").glob("stats*/board.json"))
-                         if int(p.parent.name[5:]) <= 65]
-    historical_inputs.append(Path(".cache/stats64/holdout.json"))
+    historical_inputs = _historical_inputs()
     out = {"n": len(rows), "parts": len({r.part for r in rows}), "verdict": Counter(r.verdict for r in rows),
            "kind": Counter(r.kind for r in rows),
            "holdout_reuse_accuracy": Cache("stats64").load("holdout")["reuse"]["holdout"][-1],

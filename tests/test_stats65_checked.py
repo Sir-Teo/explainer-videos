@@ -103,3 +103,34 @@ def test_full_board_refuses_to_publish_partial_course(monkeypatch):
     monkeypatch.setattr(C,'load_all',lambda **kwargs:[])
     with pytest.raises(RuntimeError,match='missing parts'):
         C.compute_fullboard()
+
+
+@pytest.mark.parametrize("change", ["none", "modified", "missing", "added", "contributor", "legacy"])
+def test_cached_full_board_validates_historical_inputs(tmp_path, monkeypatch, change):
+    from types import SimpleNamespace
+    import hashlib
+    source = tmp_path / "board.json"
+    source.write_text("original historical rows")
+    data = {"rows": [{"part": 1}], "input_hashes": [
+        {"file": str(source), "sha256": hashlib.sha256(source.read_bytes()).hexdigest()}]}
+    paths = [source]
+    monkeypatch.setattr(C, "CACHE", SimpleNamespace(load=lambda name: data))
+    monkeypatch.setattr(C, "_board_parts", lambda: {1, 2} if change == "contributor" else {1})
+    monkeypatch.setattr(C, "_historical_inputs", lambda: paths)
+    if change == "modified":
+        source.write_text("updated historical rows")
+    elif change == "missing":
+        source.unlink()
+    elif change == "added":
+        extra = tmp_path / "new-board.json"
+        extra.write_text("new contributor")
+        paths.append(extra)
+    elif change == "legacy":
+        del data["input_hashes"]
+    if change == "none":
+        assert C.load("fullboard") is data
+    else:
+        with pytest.raises(RuntimeError, match="stale or incomplete"):
+            C.load("fullboard")
+    # Other computation items do not inherit full-course dependencies.
+    assert C.load("study") is data
