@@ -179,4 +179,4 @@ All five historical sources were checked against their distribution files. Stame
 
 Persistent section headings keep theorem assumptions identifiable. Local segment clipping preserves crossings and missing-data breaks; the selection-window density uses log masses and does not flatten peaks at the viewport edge. Bayesian density-derivative shrinkage is distinguished from an individual confidence guarantee. Replications retain sampling error. The Gaussian maxima exercise establishes an upper rate bound, not a matching lower bound. Bahadur–Savage excludes informative finite-width uniformly honest intervals over unrestricted finite-mean laws, not the trivial whole-real-line interval. Distribution-free inference still has sampling assumptions.
 
-English native/motion and representative narrated visual review remain pending. Chinese narration/captions, continuous listening, full narrated playback and final masters remain open.
+The recorded English sampled visual checkpoint is complete. Chinese narration/captions, continuous listening, full narrated playback and final masters remain open.
