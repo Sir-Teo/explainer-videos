@@ -27,12 +27,12 @@ class Geometry(VoiceoverScene):
         X = np.column_stack([np.ones(3), x])
         b = np.linalg.lstsq(X, y, rcond=None)[0]
         yh = X @ b
-        ns = NSpace(scale=0.55, center=[-2.4, -0.6, 0], angle=-0.65, tilt=0.35, axis_len=6.5,
+        ns = NSpace(scale=0.48, center=[-2.6, 0.0, 0], angle=-0.65, tilt=0.35, axis_len=6.5,
                     axis_labels=[r"obs 1", r"obs 2", r"obs 3"])
         u1 = np.ones(3) / np.sqrt(3)
         xc = x - x.mean()
         u2 = xc / np.linalg.norm(xc)
-        pl = ns.plane(u1, u2, extent=5.5, color=FIT, opacity=0.14)
+        pl = ns.plane(u1, u2, extent=5.0, color=FIT, opacity=0.14)
         vy = ns.vector(y, color=DATA)
         vh = ns.vector(yh, color=FIT)
         res = ns.segment(yh, y, color=RES, stroke_width=4)
@@ -45,6 +45,7 @@ class Geometry(VoiceoverScene):
             MathTex(r"X^\top(y - X\hat\beta) = 0", font_size=30, color=OBS),
             label(r"the normal equations say exactly this: \ ``normal'' means perpendicular", font_size=22, color=GREY_A),
         ), 5.0, 0.3, [4.3, 0.2, 0])
+        heading = label(r"Least squares projects the response onto the model space", font_size=36).move_to([0, 3.3, 0])
         with self.voiceover(
             "Now the picture that explains everything, from Part 4. <bookmark mark='a'/> Take a dataset of just three "
             "observations. The three responses are one point, one vector, in three-dimensional space. "
@@ -57,10 +58,11 @@ class Geometry(VoiceoverScene):
             "Turn the picture to see the right angle."
         ) as vo:
             self.add(ns)
-            self.play(FadeIn(ns.axes3))
+            self.play(FadeIn(ns.axes3), FadeIn(heading))
             vo.wait_until("a")
             self.add(vy)
             self.play(NSpace.reveal(vy), FadeIn(rows[0]))
+            self.play(FadeOut(heading), run_time=0.25)
             vo.wait_until("b")
             self.add(pl)
             self.play(NSpace.reveal(pl), FadeIn(rows[1]))
@@ -189,9 +191,9 @@ class Geometry(VoiceoverScene):
             step = ladder(self, rows, whys, keep=3, top=2.2, x=-0.4, buff=0.9, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
+                step(k, transform=False)
                 if k == 0:
                     self.play(FadeOut(intro), run_time=0.25)
-                step(k, transform=False)
             vo.wait_until("d")
             self.play(FadeIn(foot))
         self.clear_scene()

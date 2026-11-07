@@ -192,6 +192,7 @@ class FWL(VoiceoverScene):
         whys = [why(r"20,000 of the World's patients: \ a linear probability model"), why(r"control for severity: \ the sign flips (Part 5's Simpson)"),
                 why(r"severity hurts, \ and the treated are sicker ($\delta$ = share severe, treated minus untreated)"),
                 why(r"the omitted-variable formula holds exactly, \ in-sample")]
+        intro = label('The omitted-variable identity explains a Simpson reversal', font_size=36)
         with self.voiceover(
             "Part 5's Simpson's paradox is the same formula. <bookmark mark='a'/> Regress recovery on treatment, across all "
             "twenty thousand of the World's clinic patients: treatment seems to lower the chance of recovery by eleven points. "
@@ -200,8 +201,11 @@ class FWL(VoiceoverScene):
             "times how much more often the treated are severe, about minus nineteen points. <bookmark mark='d'/> And the short "
             "coefficient is exactly the long one plus that bias. The paradox was omitted-variable bias all along."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.2, buff=0.65, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
