@@ -23,9 +23,9 @@ class Outro(VoiceoverScene):
 
     def recap(self):
         items = [
-            (r"Old Faithful: \ two humps, \ not three", PATH), (r"histograms: \ $h \propto n^{-1/3}$, \ $n^{-2/3}$", HISTC),
+            (r"Old Faithful: \ two broad humps; no compelling third", PATH), (r"histograms: \ $h \propto n^{-1/3}$, \ $n^{-2/3}$", HISTC),
             (r"kernels: \ $h \propto n^{-1/5}$, \ $n^{-4/5}$; \ Epanechnikov", KDEC), (r"bandwidths: \ Sheather--Jones, \ LSCV", KDEC),
-            (r"the curse: \ 842,000 points in 10-D", RES), (r"local linear: \ no boundary bias", KDEC),
+            (r"the curse: \ 842,000 points in 10-D", RES), (r"local linear: \ boundary bias $O(h^2)$", KDEC),
             (r"splines: \ Reinsch--Schoenberg; \ the spectrum", SPLC), (r"$\lambda$: \ GCV, \ REML (steadier)", SPLC),
             (r"RKHS: \ the representer theorem; \ GPs", KDEC), (r"wavelets: \ sparse, \ SureShrink", WAVC),
             (r"additive models for ozone", SPLC), (r"honest intervals: \ RBC 95\%, \ naive 91\%", HIT),
@@ -39,16 +39,20 @@ class Outro(VoiceoverScene):
         head = label(r"Part 29, \ in thirteen lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Part twenty-nine in thirteen lines. <bookmark mark='a'/> Old Faithful's eruptions have two humps, by Silverman's "
-            "test, not three. The histogram's best bin shrinks like n to the minus a third, and its error like n to the minus "
-            "two thirds. Kernel estimates do better, n to the minus four fifths, and the kernel's shape hardly matters. "
-            "Plug-in bandwidths beat rules of thumb and are steadier than cross-validation. In ten dimensions the same "
-            "accuracy needs eight hundred and forty-two thousand points. Local linear regression removes boundary and design "
-            "bias. Smoothing splines are natural cubic splines, low-pass filters in the Demmler–Reinsch basis, and REML "
-            "chooses their smoothness more steadily than GCV. The representer theorem makes infinite-dimensional problems "
-            "finite, and the same fits are Gaussian-process posterior means. Wavelets exploit sparsity and adapt to jumps. "
-            "Additive models escape the curse, as for New York's ozone. Intervals at the optimal bandwidth undercover, and "
-            "robust bias correction repairs them. And shape constraints smooth without any tuning at all."
+            "Part twenty-nine in thirteen lines. <bookmark mark='a'/> Old Faithful has two broad modes, without "
+            "compelling evidence of a third in our approximate bootstrap calculation. The histogram's best bin "
+            "shrinks like n to the minus a third, and its error like n to the minus two thirds. Kernel estimates do "
+            "better, n to the minus four fifths, and the kernel's shape hardly matters. Plug-in bandwidths outperform"
+            " the normal-reference rules in our bimodal example and are less variable than LSCV there. In ten "
+            "dimensions the same accuracy needs eight hundred and forty-two thousand points. Local linear fitting "
+            "removes the leading slope and design-density bias, retaining curvature bias at the boundary. Smoothing "
+            "splines are natural cubic splines, low-pass filters in the Demmler–Reinsch basis, and REML chooses their"
+            " smoothness more steadily than GCV in our experiment. The representer theorem makes infinite-dimensional"
+            " problems finite, and the same fits are Gaussian-process posterior means. Wavelets exploit sparsity and "
+            "adapt to jumps. Fixed-dimensional additive structure can recover one-dimensional component rates under "
+            "design conditions. Intervals at the optimal bandwidth undercover, and robust bias correction improves "
+            "coverage under its regularity and bandwidth conditions. And shape constraints smooth without any tuning "
+            "at all."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -56,14 +60,15 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def upgrade(self):
-        card = upgrade_card(29, r"smoothing has rates: \ $n^{-4/5}$ for twice-differentiable densities, \ $n^{-1/3}$ for monotone ones",
+        card = upgrade_card(29, r"smoothing has rates: \ $n^{-4/5}$ for twice-differentiable densities, \ $n^{-1/3}$ pointwise error for strictly decreasing interior densities",
                             r"that no other method could do better",
                             r"Part 50 proves the rates minimax: \ Le Cam, \ Assouad and Fano lower bounds match them")
         with self.voiceover(
-            "<bookmark mark='a'/> A promise for later. This part derived rates: n to the minus four fifths for densities with "
-            "two derivatives, n to the minus a third for monotone ones. <bookmark mark='b'/> It did not show that nothing "
-            "can do better. <bookmark mark='c'/> Part 50 proves it, with the lower-bound methods of Lucien Le Cam, Patrice "
-            "Assouad and Robert Fano: the rates are minimax."
+            "<bookmark mark='a'/> A promise for later. This part derived rates: n to the minus four fifths for "
+            "densities with two derivatives, a cube-root pointwise estimation-error scale at a strictly decreasing "
+            "interior density; this differs from a squared-error risk rate. <bookmark mark='b'/> It did not show that"
+            " nothing can do better. <bookmark mark='c'/> Part 50 proves it, with the lower-bound methods of Lucien "
+            "Le Cam, Patrice Assouad and Robert Fano: the rates are minimax."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(card[0]), FadeIn(card[1][0]), FadeIn(card[1][1][0]))
@@ -132,10 +137,11 @@ class Outro(VoiceoverScene):
         tr.to_edge(UP, buff=0.8)
         nxt.next_to(tr, DOWN, buff=1.0)
         with self.voiceover(
-            "Twenty-nine parts of sixty-five. <bookmark mark='a'/> We can estimate whole curves, and say how fast and how "
-            "honestly. <bookmark mark='b'/> But every method today trusted every observation. In 1960 John Tukey showed that "
-            "a few percent of contamination is enough to make the sample standard deviation worse than a crude alternative. "
-            "When a few points are wrong, everything can be wrong. Part 30: robust statistics."
+            "Twenty-nine parts of sixty-five. <bookmark mark='a'/> We can estimate whole curves, and say how fast and"
+            " how honestly. <bookmark mark='b'/> Robust LOESS already downweighted large residuals, but most examples"
+            " still trusted every observation. In 1960 John Tukey showed that a few percent of contamination is "
+            "enough to make the sample standard deviation worse than a crude alternative. When a few points are "
+            "wrong, everything can be wrong. Part 30: robust statistics."
         ) as vo:
             self.play(FadeIn(tr))
             self.play(*[tr.cells[i].animate.set_fill(S.ACCENT, opacity=0.9) for i in range(29)])

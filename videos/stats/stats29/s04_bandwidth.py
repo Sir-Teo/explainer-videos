@@ -26,19 +26,23 @@ class Bandwidth(VoiceoverScene):
         rows = [
             cmath(r"h^*", r"=", r"\bigl(R(K) / (\mu_2^2 R(f'') n)\bigr)^{1/5}", font_size=30),
             cmath(r"f = N(\mu, \sigma^2)", r":", r"R(f'') = \tfrac{3}{8\sqrt\pi \sigma^5}: \ \ h = 1.06\, \hat\sigma\, n^{-1/5}", font_size=28),
-            cmath(r"\text{Silverman}", r":", r"h = 0.9 \min(\hat\sigma, \mathrm{IQR}/1.34)\, n^{-1/5}", font_size=28),
+            cmath(r"\text{Silverman}", r":", r"h = 0.9 \min(\hat\sigma, \mathrm{IQR}/1.349)\, n^{-1/5}", font_size=28),
             cmath(r"\text{two humps}", r":", r"\hat\sigma \text{ is inflated by the gap: \ oversmooths}", font_size=28),
         ]
         rows[3][2].set_color(RES)
         whys = [why(r"depends on the unknown curvature"), why(r"pretend $f$ is normal"),
                 why(r"Silverman (1986): \ a robust compromise"), why(r"Part 16 used this rule")]
         with self.voiceover(
-            "<bookmark mark='a'/> The best bandwidth depends on the unknown curvature of f, the very thing we're estimating. "
-            "<bookmark mark='b'/> The simplest escape: pretend f is normal. Then R of f double prime is known, and h is one "
-            "point oh six sigma n to the minus a fifth. <bookmark mark='c'/> Silverman's rule of thumb, Part 16's choice, "
-            "shrinks the constant and uses a robust spread. <bookmark mark='d'/> Both work for unimodal densities. For two "
-            "humps the standard deviation is inflated by the gap between them, and both rules oversmooth."
+            "<bookmark mark='a'/> The best bandwidth depends on the unknown curvature of f, the very thing we're "
+            "estimating. <bookmark mark='b'/> The simplest escape: pretend f is normal. Then R of f double prime is "
+            "known, and h is one point oh six sigma n to the minus a fifth. <bookmark mark='c'/> Silverman's rule of "
+            "thumb, Part 16's choice, shrinks the constant and uses a robust spread. <bookmark mark='d'/> These are "
+            "normal-reference rules, not guarantees for arbitrary unimodal densities. For two humps the standard "
+            "deviation is inflated by the gap between them, and both rules oversmooth."
         ) as vo:
+            intro=label('Normal-reference rules replace unknown curvature by a model',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -62,6 +66,9 @@ class Bandwidth(VoiceoverScene):
             "least-squares cross-validation criterion of Mats Rudemo and Adrian Bowman estimates ISE up to a constant. "
             "<bookmark mark='d'/> With normal kernels both terms are sums of normal densities at the pairwise gaps."
         ) as vo:
+            intro=label('Leave-one-out removes the self-prediction contribution',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -87,10 +94,11 @@ class Bandwidth(VoiceoverScene):
             label(r"a shallow, \ wiggly criterion", font_size=22, color=GREY_A),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> On Old Faithful the criterion falls steeply from tiny bandwidths, <bookmark mark='b'/> "
-            "reaches its minimum at h of point one oh, <bookmark mark='c'/> where the estimate has three modes, "
-            "<bookmark mark='d'/> and rises slowly. The minimum is shallow, so small changes in the data move it a lot: "
-            "cross-validation is nearly unbiased for the best bandwidth, but highly variable."
+            "<bookmark mark='a'/> On Old Faithful the criterion falls steeply from tiny bandwidths, <bookmark "
+            "mark='b'/> reaches its minimum at h of point one oh, <bookmark mark='c'/> where the estimate has three "
+            "modes, <bookmark mark='d'/> and rises slowly. The minimum is shallow, so small changes in the data move "
+            "it a lot: the cross-validation criterion is unbiased for the relevant expected error up to constants, "
+            "but its minimizing bandwidth can be biased and variable."
         ) as vo:
             self.add(faithful_tag())
             self.play(FadeIn(A))
@@ -122,6 +130,9 @@ class Bandwidth(VoiceoverScene):
             "reference finally stops the regress. <bookmark mark='d'/> Simon Sheather and Chris Jones's plug-in bandwidth "
             "puts the estimate into the formula."
         ) as vo:
+            intro=label('Direct plug-in bandwidths estimate a sequence of curvature functionals',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -162,16 +173,17 @@ class Bandwidth(VoiceoverScene):
         tb.move_to([0, 0.8, 0])
         foot = fit_rows(VGroup(
             label(rf"{d['R']} samples of $n = {d['n']}$ from the two-humped stand-in; \ best possible MISE {d['mise_opt']:.4f}", font_size=22),
-            label(r"LSCV: \ right on average, \ widely scattered; \ \ SJ: \ a little large, \ tightly", font_size=22, color=PATH),
+            label(r"LSCV: \ median near the reference optimum, \ widely scattered; \ \ SJ: \ a little large, \ tightly", font_size=22, color=PATH),
         ), 12.0, 0.22, [0, -1.9, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> A race: three hundred samples of two hundred from the two-humped density, each bandwidth "
-            "measured against the one minimizing the true MISE. <bookmark mark='b'/> The normal reference bandwidth is "
-            "almost three times too wide, Silverman's two and a third: they never see the two humps, and their errors are "
-            "four and five times the best possible. <bookmark mark='c'/> Cross-validation is right on average, but its "
-            "middle eighty percent runs from point seven two to one point two. <bookmark mark='d'/> Sheather–Jones is a "
-            "fifth too wide, but consistently, and has the lowest average error, which is why it is many statisticians' "
-            "default. Steve Marron and colleagues ran this race at scale in the 1990s, with the same verdict."
+            "<bookmark mark='a'/> A race: three hundred samples of two hundred from the two-humped density, each "
+            "bandwidth measured against the one minimizing the true MISE. <bookmark mark='b'/> The normal reference "
+            "bandwidth is almost three times too wide, Silverman's two and a third: in this experiment they smooth "
+            "too much, with average errors about three and a half and five times the best fixed-bandwidth MISE. "
+            "<bookmark mark='c'/> Cross-validation has median bandwidth close to the reference optimum, but its "
+            "middle eighty percent runs from point seven two to one point two. <bookmark mark='d'/> Sheather–Jones is"
+            " a fifth too wide, but consistently, and has the lowest average error, in this seeded comparison. "
+            "Broader comparisons depend on the density, sample size and selector; no selector wins universally."
         ) as vo:
             self.add(seeded_tag())
             vo.wait_until("a")
@@ -186,17 +198,18 @@ class Bandwidth(VoiceoverScene):
 
     def advice(self):
         rows = fit_rows(VGroup(
-            label(r"look at several bandwidths: \ structure that survives is real", font_size=24),
+            label(r"look at several bandwidths: \ persistence is evidence, not proof", font_size=24),
             label(r"default: \ a plug-in (Sheather--Jones); \ check with CV", font_size=24, color=KDEC),
-            label(r"rules of thumb oversmooth anything far from normal", font_size=24, color=RES),
+            label(r"normal-reference rules can blur modes and sharp structure", font_size=24, color=RES),
             label(r"Chaudhuri \& Marron's SiZer: \ every bandwidth at once, \ with significance", font_size=24, color=PATH),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> In practice, look at several bandwidths; structure that persists across a range is "
             "probably real. <bookmark mark='b'/> A plug-in is a good default, cross-validation a useful check. "
-            "<bookmark mark='c'/> Rules of thumb oversmooth anything that isn't roughly normal. <bookmark mark='d'/> And "
-            "Probal Chaudhuri and Steve Marron's SiZer map turned the advice into a method: at every bandwidth and location, "
-            "is the estimated slope significantly up or down?"
+            "<bookmark mark='c'/> Normal-reference rules can oversmooth separated modes and other sharp structure, "
+            "though not every departure from normality causes oversmoothing. <bookmark mark='d'/> And Probal "
+            "Chaudhuri and Steve Marron's SiZer map turned the advice into a method: at every bandwidth and location,"
+            " is the estimated slope significantly up or down?"
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

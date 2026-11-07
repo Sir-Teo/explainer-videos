@@ -39,6 +39,9 @@ class LocalPoly(VoiceoverScene):
             "<bookmark mark='d'/> Fitting a weighted line instead and keeping its intercept gives local linear regression, "
             "and in general a local polynomial, the approach Jianqing Fan and Irène Gijbels systematized."
         ) as vo:
+            intro=label('Local regression fits a weighted polynomial around each target point',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -54,15 +57,20 @@ class LocalPoly(VoiceoverScene):
         ]
         rows[2][2].set_color(KDEC)
         whys = [why(r"a linear smoother: \ the equivalent kernel $\ell(x)$"), why(r"a design-bias term: \ slope times $f'/f$"),
-                why(r"gone, \ and the same at the boundary"), why(r"Fan (1992): \ same variance, \ less bias")]
+                why(r"interior formula; \ boundary order $h^2$, different constant"), why(r"same leading interior variance; \ boundary adaptation")]
         with self.voiceover(
-            "<bookmark mark='a'/> Both are linear smoothers: the fit is a weighted sum of the responses, with weights l of x "
-            "called the equivalent kernel. <bookmark mark='b'/> Nadaraya–Watson's bias has a curvature term and a second "
-            "term, slope times f prime over f, which appears wherever the design density changes. "
-            "<bookmark mark='c'/> Local linear's bias is the curvature term alone, the same at the boundary as in the "
-            "interior. <bookmark mark='d'/> And their variances are the same to first order, so Jianqing Fan showed in 1992 "
-            "that local linear is the better choice, with minimax efficiency among linear smoothers."
+            "<bookmark mark='a'/> Both are linear smoothers: the fit is a weighted sum of the responses, with weights"
+            " l of x called the equivalent kernel. <bookmark mark='b'/> Nadaraya–Watson's bias has a curvature term "
+            "and a second term, slope times f prime over f, which appears wherever the design density changes. "
+            "<bookmark mark='c'/> In the interior the extra design-density term vanishes. At a boundary local linear "
+            "retains order h squared bias, but its coefficient and variance differ from the interior formulas. "
+            "<bookmark mark='d'/> Their leading variances agree at regular interior points. Boundary adaptation is a "
+            "major advantage of local linear fitting; this is not uniform dominance over every regression function or"
+            " design."
         ) as vo:
+            intro=label('Local linear fitting removes the leading interior design-density bias',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -84,11 +92,12 @@ class LocalPoly(VoiceoverScene):
             label(r"blue: \ local linear at $x = 0$: \ negative far weights", font_size=22, color=KDEC),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The equivalent kernels for a hundred and one equally spaced points and h of point one. "
-            "<bookmark mark='b'/> At the centre, both methods give the same symmetric bump. <bookmark mark='c'/> At the left "
-            "boundary, Nadaraya–Watson can only average points to the right, so its weights are half a bump, centred away "
-            "from zero. <bookmark mark='d'/> Local linear's weights reach further and turn negative: it extrapolates the "
-            "local trend back to the edge, which removes the bias."
+            "<bookmark mark='a'/> The equivalent kernels for a hundred and one equally spaced points and h of point "
+            "one. <bookmark mark='b'/> At the centre, both methods give the same symmetric bump. <bookmark mark='c'/>"
+            " At the left boundary, Nadaraya–Watson can only average points to the right, so its weights are half a "
+            "bump, centred away from zero. <bookmark mark='d'/> Local linear's weights reach further and turn "
+            "negative: it extrapolates the local trend back to the edge, which removes the first-order slope bias; "
+            "curvature bias remains."
         ) as vo:
             self.play(FadeIn(A), Create(zero))
             vo.wait_until("a")
@@ -146,11 +155,12 @@ class LocalPoly(VoiceoverScene):
             label(r"two clusters, \ a gap between: \ the line is nearly right", font_size=22, color=PATH),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> A real regression: each Old Faithful eruption's length against the wait that followed it, "
-            "the basis of the rangers' predictions. <bookmark mark='b'/> The local linear fit with h of point three. "
-            "<bookmark mark='c'/> It is close to the least-squares line, thirty-three plus eleven minutes per minute of "
-            "eruption, <bookmark mark='d'/> with a flattening among the long eruptions. Through the gap between the two "
-            "clusters, where there are almost no data, the local fit simply interpolates."
+            "<bookmark mark='a'/> A real regression: each Old Faithful eruption's length against the wait that "
+            "followed it, a descriptive relationship used to motivate waiting-time prediction. <bookmark mark='b'/> "
+            "The local linear fit with h of point three. <bookmark mark='c'/> It is close to the least-squares line, "
+            "thirty-three plus eleven minutes per minute of eruption, <bookmark mark='d'/> with a flattening among "
+            "the long eruptions. Through the gap between the two clusters, where there are almost no data, the local "
+            "fit simply interpolates."
         ) as vo:
             self.add(faithful_tag())
             self.play(FadeIn(A), FadeIn(pts))
@@ -180,13 +190,12 @@ class LocalPoly(VoiceoverScene):
             label(r"they part at the ends, \ and where the slope is steep", font_size=22, color=GREY_A),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The classic test bed: a helmeted cadaver in a simulated motorcycle crash, and the "
-            "acceleration of its head over the first sixty milliseconds, a hundred and thirty-three readings at irregular "
-            "times. Flat, then a sharp dip to minus a hundred and thirty g, a rebound, and a ringing decay. "
-            "<bookmark mark='b'/> Nadaraya–Watson with a two-millisecond bandwidth. <bookmark mark='c'/> Local linear with "
-            "the same bandwidth. <bookmark mark='d'/> They agree where the curve is flat and part where the slope is steep and "
-            "the times are unevenly spaced: there the design bias of Nadaraya–Watson shows."
-        ) as vo:
+            "<bookmark mark='a'/> The classic test bed: recorded head accelerations in a simulated motorcycle crash, "
+            "and the acceleration of its head over the first sixty milliseconds, a hundred and thirty-three readings "
+            "at irregular times. Flat, then a sharp dip to minus a hundred and thirty g, a rebound, and a ringing "
+            "decay. <bookmark mark='b'/> Nadaraya–Watson with a two-millisecond bandwidth. <bookmark mark='c'/> Local"
+            " linear with the same bandwidth. <bookmark mark='d'/> They agree where the curve is flat and part where "
+            "the slope is steep and the times are unevenly spaced: there the design bias of Nadaraya–Watson shows."       ) as vo:
             self.add(mcycle_tag())
             self.play(FadeIn(A), FadeIn(pts))
             vo.wait_until("a")
@@ -202,21 +211,26 @@ class LocalPoly(VoiceoverScene):
     def loess_robust(self):
         rows = [
             cmath(r"\text{LOESS}", r":", r"\text{local linear (or quadratic), \ the nearest } \alpha n \text{ points}", font_size=28),
-            cmath(r"K", r"=", r"\tfrac{70}{81}(1 - |u|^3)^3: \ \text{tricube}", font_size=30),
+            cmath(r"K", r"=", r"\tfrac{70}{81}(1 - |u|^3)^3_+: \ \text{tricube}", font_size=30),
             cmath(r"\text{robustness}", r":", r"\text{reweight by } (1 - (r_i/6\,\mathrm{MAD})^2)^2_+, \ \text{refit}", font_size=28),
             cmath(r"\text{span}", r":", r"\text{a bandwidth that adapts to the design}", font_size=30),
         ]
         rows[2][2].set_color(KDEC)
-        whys = [why(r"Cleveland (1979)"), why(r"smooth, \ compact"), why(r"bisquare weights: \ outliers fade out"),
+        whys = [why(r"Cleveland (1979)"), why(r"smooth, \ compact"), why(r"bisquare weights: \ large residuals downweighted"),
                 why(r"wide where data are sparse")]
         with self.voiceover(
-            "<bookmark mark='a'/> William Cleveland's LOESS, the most used smoother in practice, is local linear or quadratic "
-            "regression on the nearest fraction alpha of the points. <bookmark mark='b'/> With the tricube kernel. "
-            "<bookmark mark='c'/> And with robustness iterations: residuals far from zero, measured against six median "
-            "absolute residuals, get small bisquare weights, and the fit is redone, so a few wild points can't drag it. "
-            "<bookmark mark='d'/> Using a fixed number of neighbours rather than a fixed width makes the bandwidth wide where "
-            "data are sparse and narrow where they are dense, a natural defence against the curse."
+            "<bookmark mark='a'/> William Cleveland's widely used LOESS is local linear or quadratic regression on "
+            "the nearest fraction alpha of the points. <bookmark mark='b'/> With the tricube kernel. <bookmark "
+            "mark='c'/> And with robustness iterations: residuals far from zero, measured against six median absolute"
+            " residuals, get small bisquare weights, and the fit is redone, reducing sensitivity to isolated response"
+            " outliers, without immunity to leverage or substantial contamination. <bookmark mark='d'/> Using a fixed"
+            " number of neighbours rather than a fixed width makes the bandwidth wide where data are sparse and "
+            "narrow where they are dense, a useful adaptation to uneven design density; it does not remove "
+            "high-dimensional rates."
         ) as vo:
+            intro=label('Nearest-neighbour spans and residual weights adapt the local fit',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

@@ -1,0 +1,23 @@
+[
+  {
+    "dataset": "faithful",
+    "rows": 272,
+    "all_values_match_exactly": true,
+    "url": "https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/faithful.csv",
+    "sha256": "5043db1e2c51c8e8fd67e0868c768ae589770cc76ad0ac0c5b7afd1fca31fc57"
+  },
+  {
+    "dataset": "mcycle",
+    "rows": 133,
+    "all_values_match_exactly": true,
+    "url": "https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/MASS/mcycle.csv",
+    "sha256": "b89a1e4eb0391a982b32be3e378df00e8593ff9971e9425e9c5d7929b74f9801"
+  },
+  {
+    "dataset": "airquality",
+    "rows": 111,
+    "all_values_match_exactly": true,
+    "url": "https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/airquality.csv",
+    "sha256": "65d2c4afd976c169af9bb0bd97e9e78e1e8a185f1b52e2e3153e30f90c7fb5f8"
+  }
+]

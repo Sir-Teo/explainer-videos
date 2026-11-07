@@ -56,6 +56,9 @@ class Histogram(VoiceoverScene):
             "into integrated variance plus integrated squared bias. <bookmark mark='d'/> For a histogram it can even be "
             "computed exactly, from the bins' probabilities: each count is binomial."
         ) as vo:
+            intro=label('Integrated squared error separates variance and squared bias',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -80,6 +83,9 @@ class Histogram(VoiceoverScene):
             "twelve times the integral of f prime squared, written R of f prime. <bookmark mark='d'/> The asymptotic MISE: "
             "one over n h, falling with h, plus a bias term growing like h squared."
         ) as vo:
+            intro=label('Flat bins create first-order local approximation error',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -91,7 +97,7 @@ class Histogram(VoiceoverScene):
             cmath(r"\dfrac{d}{dh}\,\text{AMISE}", r"=", r"-\dfrac{1}{nh^2} + \dfrac{h}{6} R(f') = 0", font_size=30),
             cmath(r"h^*", r"=", r"\Bigl(\dfrac{6}{n R(f')}\Bigr)^{1/3}", font_size=32),
             cmath(r"\text{normal}", r":", r"R(f') = \tfrac{1}{4\sqrt\pi \sigma^3}: \ \ h^* = 3.49\,\sigma\, n^{-1/3}", font_size=28),
-            cmath(r"\text{AMISE}(h^*)", r"=", r"\tfrac{3}{4}\,(36 R(f'))^{1/3}\, n^{-2/3}", font_size=30),
+            cmath(r"\text{AMISE}(h^*)", r"=", r"\tfrac{3}{2}\,(R(f')/6)^{1/3}\, n^{-2/3}", font_size=30),
         ]
         rows[1][2].set_color(HISTC)
         whys = [why(r"balance the two terms"), why(r"the cube-root bin"), why(r"Scott (1979): \ Part 1's rule, \ derived"),
@@ -103,6 +109,9 @@ class Histogram(VoiceoverScene):
             "Scott's, derived. <bookmark mark='d'/> Plugged back in, the best achievable error falls like n to the minus two "
             "thirds. A parametric estimate's error falls like one over n; estimating a whole curve is slower."
         ) as vo:
+            intro=label('Balancing variance and squared bias gives a cube-root bin width',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -132,12 +141,13 @@ class Histogram(VoiceoverScene):
             label(r"left: \ variance; \ \ right: \ bias", font_size=22, color=GREY_A),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Exactly computed curves of MISE against bin width, for a two-humped density shaped like Old "
-            "Faithful's. <bookmark mark='b'/> With a hundred observations the best bin is a third of a minute wide, and the "
-            "formula says the same. <bookmark mark='c'/> With a thousand, point one five. <bookmark mark='d'/> With ten "
-            "thousand, point oh seven: ten times the data, bins narrower by the cube root of ten. <bookmark mark='e'/> Each "
-            "curve rises steeply on the left, where variance dominates, and more gently on the right, where bias does; too "
-            "narrow is worse than too wide."
+            "<bookmark mark='a'/> Exactly computed curves of MISE against bin width, for a two-humped density shaped "
+            "like Old Faithful's. <bookmark mark='b'/> With a hundred observations the best bin is a third of a "
+            "minute wide, and the formula says the same. <bookmark mark='c'/> With a thousand, point one five. "
+            "<bookmark mark='d'/> With ten thousand, point oh seven: ten times the data, bins narrower by the cube "
+            "root of ten. <bookmark mark='e'/> Each curve rises steeply on the left, where variance dominates, and "
+            "more gently on the right, where bias does; both extremes are costly; the relative loss depends on the "
+            "density and the range considered."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A))
@@ -166,11 +176,12 @@ class Histogram(VoiceoverScene):
             label(r"the histogram's flat tops cost it a whole order: \ next, \ smooth bumps", font_size=22, color=PATH),
         ), 12.0, 0.22, [0, -1.9, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The rates, from the exact errors. The histogram's best MISE falls with slope minus point six "
-            "five in log n, close to the theory's minus two thirds. <bookmark mark='b'/> The kernel estimate of the next "
-            "chapter falls faster, slope minus point seven six on its way to minus four fifths: two and a half times better "
-            "at a hundred points and four times better at ten thousand. The histogram's flat tops make its bias of order h; "
-            "smooth bumps make it h squared."
+            "<bookmark mark='a'/> The rates, from the exact errors. The histogram's best MISE falls with slope minus "
+            "point six five in log n, close to the theory's minus two thirds. <bookmark mark='b'/> The kernel "
+            "estimate of the next chapter falls faster, slope minus point seven six on its way to minus four fifths: "
+            "two and a half times better at a hundred points and four times better at ten thousand. For smooth "
+            "densities away from boundaries, flat histogram bins have bias of order h, whereas symmetric second-order"
+            " kernels have bias of order h squared."
         ) as vo:
             self.add(seeded_tag())
             vo.wait_until("a")

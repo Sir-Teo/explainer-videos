@@ -10,21 +10,23 @@ be done:
   additive models;
 - honest intervals for curves (robust bias correction) and estimation under shape constraints.
 
+The rate statements assume the specified smoothness classes and regular designs; n⁻¹/³ for Grenander is a pointwise estimation-error scale, whereas n⁻⁴/⁵ for KDE is a squared-error rate. Local linear boundary bias remains order h² with a different coefficient from the interior. Fixed-dimensional additive rates require an identifiable design, and Bayesian pointwise bands condition on smoothing hyperparameters; their average frequentist coverage requires additional conditions.
+
 Its instrument is the spline spectrum (`SplineSpectrum`): the Demmler–Reinsch basis of a smoothing spline with the
 shrinkage factor 1/(1 + λdⱼ) on each component. Its kit is `statkit.smooth`.
 
-It opens with Old Faithful: 272 eruptions logged in August 1978 and 1979, 36% of them under three minutes. Shifted or
+It opens with Old Faithful: 272 observations in R’s `datasets::faithful`, 36% of them under three minutes. Shifted or
 halved histogram bins change the picture. Kernel estimates have 12, 3, 2 and 1 modes at h = 0.05, 0.1, 0.25 and 1.
 Silverman's critical bandwidths are h₁ = 0.831, h₂ = 0.127 and h₃ = 0.086. His smoothed-bootstrap test (500
 resamples):
 
 | H₀ | Critical h | p-value | Verdict |
 |---|---|---|---|
-| at most 1 mode | 0.831 | 0.00 | rejected |
+| at most 1 mode | 0.831 | 0.002 (0/500 exceedances) | rejected by raw bootstrap |
 | at most 2 modes | 0.127 | 0.50 | not rejected |
 | at most 3 modes | 0.086 | 0.93 | not rejected |
 
-Two humps, short and long eruptions; the third is noise.
+Two broad humps, short and long eruptions, without compelling evidence for a third. Non-rejection does not establish the exact mode count. These are finite-grid, raw Silverman smoothed-bootstrap calculations with a +1 Monte Carlo correction; they are not a calibrated finite-sample level guarantee.
 
 From there the part covers:
 - **Histograms.**
@@ -71,14 +73,13 @@ From there the part covers:
   - The motorcycle crash (133 readings): NW and local linear differ by up to 14 g on the steep descent.
   - LOESS and its robustness iterations (Cleveland 1979).
 - **Smoothing splines.**
-  - The Reinsch–Schoenberg theorem, proved; the Reinsch form (I + λK)⁻¹y. Statkit agrees with SciPy's
-    `make_smoothing_spline` to 10⁻¹⁰.
+  - The Reinsch–Schoenberg theorem for square-integrable weak second derivatives, proved; the Reinsch form (I + λK)⁻¹y. The dense teaching implementation is checked against SciPy’s `make_smoothing_spline`; an efficient banded Reinsch implementation has linear fixed-penalty solve cost.
   - Motorcycle fits at 4, 8, 12 and 25 df.
   - The Demmler–Reinsch spectrum (eigenvalues growing roughly like the fourth power of the index); ridge regression
     in that basis.
 - **Choosing λ.**
   - GCV (Craven & Wahba 1979); splines as mixed models; REML (Wahba 1985); Wahba's Bayesian bands (Nychka 1988).
-  - Motorcycle: GCV chooses df 12.4, REML df 14.4 (on the 94 distinct times); residual SD 22.6 g.
+  - Motorcycle: GCV chooses df 12.4, REML df 14.1 (all 133 observations, including within-time replicate contrasts); residual SD 22.6 g.
   - 300 simulated data sets (n = 100, noise SD 0.3):
 
     | Criterion | Chosen df: 10% / median / 90% | Mean error | Worst 5% |
@@ -94,7 +95,7 @@ From there the part covers:
     0.65 ms with small λ.
   - The Gaussian-process reading: the posterior mean equals the kernel ridge fit.
 - **Wavelets.**
-  - Haar and Daubechies-4 by Mallat's pyramid; the MAD noise estimate; VisuShrink σ√(2 log n); SureShrink.
+  - Haar and Daubechies-4 by Mallat's pyramid; the MAD noise estimate assuming sparse signal at the finest scale; VisuShrink σ√(2 log n); SureShrink.
   - The maximum of n normals against √(2 log n): medians 1.83 / 2.66 / 3.40 / 3.99 / 4.52 for n = 10 … 100,000.
   - Donoho–Johnstone signals, n = 1,024, SNR 7, MSE per point:
 
@@ -108,8 +109,7 @@ From there the part covers:
 - **Additive models.**
   - Backfitting (Friedman & Stuetzle 1981; Buja, Hastie & Tibshirani 1989); concurvity.
   - New York's ozone in 1973 (cube root, 111 days), with 4 df each for temperature, wind and solar radiation. The fit
-    converges in 17 sweeps and gives R² 0.759 against 0.681 for the linear model. 10-fold CV error is 0.241 vs 0.270,
-    11% lower.
+    converges in 17 sweeps and gives R² 0.759 against 0.681 for the linear model. 10-fold CV error is 0.243 vs 0.270, about 10% lower in this split. Four-df smoothing choices are recomputed on each training fold, and prediction evaluates the natural splines, including linear extrapolation. The paired case-loss difference is −0.0269 ± 0.0191 SE; this does not include variation from rerunning the whole CV procedure.
 - **Inference for curves.**
   - Bias/SE does not vanish at h* ∝ n^{−1/5}. At the stand-in's long-eruption mode (x = 4.3, n = 300, pointwise
     MSE-optimal h = 0.137), the estimates average 0.587 against the truth 0.617. That bias of −0.031 (theory −0.033)
@@ -155,6 +155,8 @@ The Coverage Board gains three rows. Pointwise 95% intervals for f(4.3), at the 
 | undersmoothed, h·n^{−1/10} | 2,000 | 95.1% | 0.309 | kept |
 | robust bias-corrected | 2,000 | 95.4% | 0.298 | kept |
 
+Numerical QA includes independent full Gaussian REML projection with replicated, unequally weighted measurements; exact AMISE scalar optimization; SciPy natural-spline prediction including boundary extrapolation; Gaussian corrected-kernel moments; and finite-bootstrap uncertainty checks. The three historical datasets match independent R dataset CSVs exactly. English render verification follows; Chinese narration and caption tables remain missing.
+
 ## Build it
 
 ```bash
@@ -169,17 +171,17 @@ python tools/lecture_length.py stats29 --floor 50
 
 | # | Chapter | Numbers |
 |---|---|---|
-| 0 | Old Faithful | h₁ 0.83, h₂ 0.13; p = 0.00 / 0.50 / 0.93 |
+| 0 | Old Faithful | h₁ 0.83, h₂ 0.13; raw bootstrap p = 0.002 / 0.501 / 0.930 |
 | 1 | Histograms as estimators | h* 0.34 / 0.15 / 0.07; slope −0.65 |
 | 2 | Kernel density estimates | slope −0.76; Gaussian efficiency 0.951 |
 | 3 | Choosing the bandwidth | SJ 0.166, LSCV 0.103; NR 2.8× too wide |
 | 4 | The curse of dimensionality | 4 → 841,616 points from 1-D to 10-D |
 | 5 | Local polynomials | NW 0.15 at the boundary; 14 g apart on the crash |
 | 6 | Smoothing splines | df 4 / 8 / 12 / 25; the spectrum |
-| 7 | Choosing λ | GCV df 12.4, REML 14.4; REML's worst 5% 0.0187 vs 0.0220 |
+| 7 | Choosing λ | GCV df 12.4, REML 14.1; REML's worst 5% 0.0187 vs 0.0220 |
 | 8 | Kernels and the representer theorem | df 7 / 18 / 56; GP band |
 | 9 | Wavelets | SureShrink 0.40 vs spline 0.71 on blocks |
-| 10 | Additive models | R² 0.76 vs 0.68; CV −11% |
+| 10 | Additive models | R² 0.76 vs 0.68; CV −10% (one split) |
 | 11 | Inference for curves | 91.0% vs 95.4% (RBC) |
 | 12 | Shape constraints | SD·n^{1/3} ≈ 0.39 vs Chernoff 0.42 |
 | 13 | Outro | — |
@@ -276,7 +278,7 @@ has f⊥ = 0 and f = Σα_j k(x_j, ·). Substituting gives ‖y − Kα‖² + �
 
 *Solution.* Let M = max|Z_i|. For t > 0, Jensen gives e^{tEM} ≤ E e^{tM} ≤ Σ E e^{t|Z_i|} ≤ 2n e^{t²/2}. So
 EM ≤ log(2n)/t + t/2, and t = √(2 log 2n) gives EM ≤ √(2 log(2n)). A matching lower bound shows
-EM ~ √(2 log n), which is why the universal threshold σ√(2 log n) kills pure noise with probability → 1.
+EM ~ √(2 log n), with Gaussian tail bounds giving P(max|Zᵢ| > √(2 log n)) → 0 for known noise scale. This is convergence in probability, not a zero finite-sample error probability or an almost-sure guarantee.
 
 ## Glossary
 

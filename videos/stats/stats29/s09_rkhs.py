@@ -23,7 +23,7 @@ class RKHS(VoiceoverScene):
 
     def space(self):
         rows = [
-            cmath(r"k(x, x')", r":", r"\text{symmetric, \ positive definite}", font_size=30),
+            cmath(r"k(x, x')", r":", r"\text{symmetric, \ positive semidefinite}", font_size=30),
             cmath(r"\mathcal H", r"=", r"\overline{\mathrm{span}}\{k(x, \cdot)\}, \ \ \langle k(x, \cdot), k(x', \cdot)\rangle = k(x, x')", font_size=28),
             cmath(r"f(x)", r"=", r"\langle f, k(x, \cdot) \rangle", font_size=32),
             cmath(r"\|f\|_{\mathcal H}", r":", r"\text{a roughness measure set by } k", font_size=30),
@@ -32,13 +32,16 @@ class RKHS(VoiceoverScene):
         whys = [why(r"e.g.\ $e^{-(x - x')^2 / 2\ell^2}$"), why(r"Aronszajn (1950)"), why(r"the reproducing property"),
                 why(r"smooth $k$: \ smooth functions are cheap")]
         with self.voiceover(
-            "<bookmark mark='a'/> The general idea behind the spline. Start with a kernel, now a function of two points: "
-            "symmetric and positive definite, like a Gaussian bump in their distance. <bookmark mark='b'/> It generates a "
-            "Hilbert space of functions, sums of kernel sections, with the inner product of two sections defined as the "
-            "kernel itself, Nachman Aronszajn's construction. <bookmark mark='c'/> Then evaluating a function at x is an "
-            "inner product with the section at x: the reproducing property. <bookmark mark='d'/> And the space's norm is a "
-            "measure of roughness, decided by the kernel."
+            "<bookmark mark='a'/> The general idea behind the spline. Start with a symmetric positive semidefinite "
+            "kernel, now a function of two points, like a Gaussian bump in their distance. <bookmark mark='b'/> It "
+            "generates a Hilbert space of functions, sums of kernel sections, with the inner product of two sections "
+            "defined as the kernel itself, Nachman Aronszajn's construction. <bookmark mark='c'/> Then evaluating a "
+            "function at x is an inner product with the section at x: the reproducing property. <bookmark mark='d'/> "
+            "And the space's norm is a measure of roughness, decided by the kernel."
         ) as vo:
+            intro=label('A positive semidefinite kernel defines a space with bounded evaluation',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -53,16 +56,19 @@ class RKHS(VoiceoverScene):
             cmath(r"\hat f", r"=", r"\textstyle\sum_i \alpha_i k(x_i, \cdot)", font_size=34),
         ]
         rows[3][2].set_color(KDEC)
-        whys = [why(r"any loss, \ any RKHS"), why(r"split off the part orthogonal to the data's sections"),
+        whys = [why(r"$\lambda>0$, \ a minimizer exists"), why(r"split off the part orthogonal to the data's sections"),
                 why(r"$f_\perp$ is invisible to the data, \ and only adds norm"), why(r"Kimeldorf \& Wahba (1970)")]
         with self.voiceover(
-            "<bookmark mark='a'/> Now minimize any loss on the data plus lambda times the squared norm. "
-            "<bookmark mark='b'/> Split any candidate into its projection on the n kernel sections at the data points, and "
-            "the rest. <bookmark mark='c'/> By the reproducing property, the rest is zero at every data point: the data "
-            "cannot see it, and it only adds to the norm. <bookmark mark='d'/> So the minimizer is a combination of n kernel "
-            "sections: George Kimeldorf and Grace Wahba's representer theorem of 1970. An infinite-dimensional problem with "
-            "an n-dimensional answer."
+            "<bookmark mark='a'/> For positive lambda and a loss admitting a minimizer, minimize data loss plus "
+            "lambda times the squared norm. <bookmark mark='b'/> Split any candidate into its projection on the n "
+            "kernel sections at the data points, and the rest. <bookmark mark='c'/> By the reproducing property, the "
+            "rest is zero at every data point: the data cannot see it, and it only adds to the norm. <bookmark "
+            "mark='d'/> So the minimizer is a combination of n kernel sections: George Kimeldorf and Grace Wahba's "
+            "representer theorem of 1970. An infinite-dimensional problem with an n-dimensional answer."
         ) as vo:
+            intro=label('Orthogonal components invisible to the data only add penalty',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -74,18 +80,22 @@ class RKHS(VoiceoverScene):
             cmath(r"\text{squared loss}", r":", r"\hat\alpha = (K + \lambda I)^{-1} y", font_size=30),
             cmath(r"\hat f(x)", r"=", r"k(x)^\top (K + \lambda I)^{-1} y", font_size=30),
             cmath(r"\|f\|^2 = \textstyle\int f''^2", r":", r"\text{the cubic smoothing spline}", font_size=28),
-            cmath(r"\text{SVMs, \ kernel PCA, \ GPs}", r":", r"\text{the same theorem}", font_size=28),
+            cmath(r"\text{SVM representers; \ related kernel PCA and GP conditioning}", r":", r"\text{related Gram-matrix methods}", font_size=28),
         ]
         rows[0][2].set_color(KDEC)
         whys = [why(r"kernel ridge regression"), why(r"$k(x)$: \ the kernel to each data point"),
                 why(r"with lines unpenalized: \ chapter six's theorem"), why(r"machine learning's kernel trick")]
         with self.voiceover(
             "<bookmark mark='a'/> With squared loss the coefficients solve a linear system: kernel ridge regression. "
-            "<bookmark mark='b'/> The fit at a new point is the vector of kernels to the data times that system's solution. "
-            "<bookmark mark='c'/> Chapter six was a special case: the space whose squared norm is the integrated squared "
-            "second derivative, with lines left unpenalized, gives the cubic smoothing spline. <bookmark mark='d'/> Support "
-            "vector machines, kernel principal components and Gaussian processes all rest on the same theorem."
+            "<bookmark mark='b'/> The fit at a new point is the vector of kernels to the data times that system's "
+            "solution. <bookmark mark='c'/> The cubic spline uses a roughness seminorm with a two-dimensional linear "
+            "null space: the representer argument must retain those unpenalized lines. <bookmark mark='d'/> Support "
+            "vector machines use a representer theorem too. Kernel PCA uses related Gram-matrix geometry, and "
+            "Gaussian-process conditioning gives a matching posterior mean under Gaussian noise."
         ) as vo:
+            intro=label('Gram matrices connect regularization and Gaussian conditioning',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -141,12 +151,15 @@ class RKHS(VoiceoverScene):
             label(rf"$\hat\sigma = {d['sigma']:.1f}$ $g$, \ one value for the whole curve", font_size=22, color=RES),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The same fit has a Bayesian reading. Put a Gaussian-process prior on the curve, with "
-            "covariance tau squared times the kernel, and normal noise. <bookmark mark='b'/> The posterior mean is exactly the "
-            "kernel ridge fit, with lambda the ratio of noise to signal variance, as for the spline's mixed model. "
-            "<bookmark mark='c'/> And the posterior gives a band. <bookmark mark='d'/> Its width assumes one noise level, "
-            "twenty-three g, everywhere: too wide in the quiet first milliseconds, too narrow later. Part 39 builds Gaussian "
-            "processes properly, with estimated kernels."
+            "<bookmark mark='a'/> The same fit has a Bayesian reading. Put a Gaussian-process prior on the curve, "
+            "with covariance tau squared times the kernel, and normal noise. <bookmark mark='b'/> The posterior mean "
+            "is exactly the kernel ridge fit, with lambda the ratio of noise to signal variance, as for the spline's "
+            "mixed model. <bookmark mark='c'/> At fixed hyperparameters the posterior gives pointwise uncertainty for"
+            " the latent curve, not a simultaneous band or a predictive interval for a new noisy observation. "
+            "<bookmark mark='d'/> Its width assumes one noise level, twenty-three g, everywhere: a potentially "
+            "inadequate assumption given the changing residual spread. Plugging in an estimated noise level also "
+            "leaves hyperparameter uncertainty out. Part 39 builds Gaussian processes properly, with estimated "
+            "kernels."
         ) as vo:
             self.add(mcycle_tag())
             self.play(FadeIn(A), FadeIn(pts))
@@ -165,14 +178,15 @@ class RKHS(VoiceoverScene):
             label(r"penalized least squares in an RKHS \ $=$ \ a Gaussian-process posterior mean", font_size=24, color=KDEC),
             label(r"the penalty \ $=$ \ the prior; \ \ $\lambda$ \ $=$ \ noise over signal", font_size=24),
             label(r"kernel width and $\lambda$ \ $=$ \ hyperparameters: \ choose by CV or marginal likelihood", font_size=24, color=PATH),
-            label(r"cost: \ $O(n^3)$, \ the price of infinite flexibility", font_size=24, color=RES),
+            label(r"general dense solve: \ $O(n^3)$; structure or approximations can reduce it", font_size=24, color=RES),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The dictionary: penalized least squares in a reproducing kernel space is a Gaussian-process "
-            "posterior mean. <bookmark mark='b'/> The penalty is the prior, and lambda the noise-to-signal ratio. "
-            "<bookmark mark='c'/> The kernel's width and lambda are hyperparameters, chosen by cross-validation or by the "
-            "marginal likelihood, REML's cousin. <bookmark mark='d'/> The price is an n by n linear system, cubic in n, "
-            "where the spline's banded structure cost only n."
+            "<bookmark mark='a'/> The dictionary: penalized least squares in a reproducing kernel space is a "
+            "Gaussian-process posterior mean. <bookmark mark='b'/> The penalty is the prior, and lambda the "
+            "noise-to-signal ratio. <bookmark mark='c'/> The kernel's width and lambda are hyperparameters, chosen by"
+            " cross-validation or by the marginal likelihood, REML's cousin. <bookmark mark='d'/> A general dense "
+            "solve costs order n cubed; specialized banded spline solvers and approximate kernel methods can cost "
+            "less."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

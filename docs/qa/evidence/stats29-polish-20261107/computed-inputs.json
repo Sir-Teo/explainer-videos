@@ -1,0 +1,82 @@
+{
+  "items": [
+    {
+      "item": "faithful",
+      "path": ".cache/stats29/faithful.json",
+      "bytes": 107072,
+      "sha256": "8e1efd5443c7d96b0f3881ab832ced4b3288a0c1c5e5dd47885939f825cd20ed"
+    },
+    {
+      "item": "histmise",
+      "path": ".cache/stats29/histmise.json",
+      "bytes": 11597,
+      "sha256": "12bcab1f4cdcf245893c80aba0ff1fe9283988934f0d2c1263d29e667d4e4260"
+    },
+    {
+      "item": "kdemise",
+      "path": ".cache/stats29/kdemise.json",
+      "bytes": 90543,
+      "sha256": "51427cc94331349814734fd71bd69073eb2d06dc529172412318623f58228480"
+    },
+    {
+      "item": "selectors",
+      "path": ".cache/stats29/selectors.json",
+      "bytes": 57581,
+      "sha256": "6f9f3f591529eab83529a564c7a5ce7fc63a8c2e6c19881eb050929a82fdaa81"
+    },
+    {
+      "item": "curse",
+      "path": ".cache/stats29/curse.json",
+      "bytes": 1705,
+      "sha256": "0611f433176671297e8d7cbd6018963fce6ea63016b6145f66656c60f4179f5a"
+    },
+    {
+      "item": "locpoly",
+      "path": ".cache/stats29/locpoly.json",
+      "bytes": 64178,
+      "sha256": "2e34fab6fe1a2d0fa8c2dd7f336922ebe341438b58e043ec190a697b53372bc5"
+    },
+    {
+      "item": "spline",
+      "path": ".cache/stats29/spline.json",
+      "bytes": 106948,
+      "sha256": "0cf044453430c3b44f4c574bc2717a547361d3a0188083b22e8fbe0623a91117"
+    },
+    {
+      "item": "lamsim",
+      "path": ".cache/stats29/lamsim.json",
+      "bytes": 41671,
+      "sha256": "cd1cbb1af1df625c67101d05c3eb2a3ef0da00076169407d2ca4db89f3fb30f0"
+    },
+    {
+      "item": "rkhs",
+      "path": ".cache/stats29/rkhs.json",
+      "bytes": 65254,
+      "sha256": "3dcfdfad98130a69decf6fa1cf461e728a3872fe3ac0409d150a6a2c19aed8ca"
+    },
+    {
+      "item": "wavelets",
+      "path": ".cache/stats29/wavelets.json",
+      "bytes": 699234,
+      "sha256": "aede62d06876f2a314b9d52c86a7c89cf935f5af59857aec900ad242ca4a84ee"
+    },
+    {
+      "item": "gam",
+      "path": ".cache/stats29/gam.json",
+      "bytes": 34143,
+      "sha256": "82c57c72877e02280f00e266ce1b922663c97503afd71a8812d774c269f70fd5"
+    },
+    {
+      "item": "rbc",
+      "path": ".cache/stats29/rbc.json",
+      "bytes": 1316,
+      "sha256": "9946dcf087410451338a62bd01e64abe21d71d20e2ea4d33e852f259e4e052ad"
+    },
+    {
+      "item": "shape",
+      "path": ".cache/stats29/shape.json",
+      "bytes": 29243,
+      "sha256": "f2b0eb5cef01d46b7925091d14e52b81c009775d218b626e7ded6db2e54b036f"
+    }
+  ]
+}

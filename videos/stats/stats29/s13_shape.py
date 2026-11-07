@@ -24,7 +24,7 @@ class Shape(VoiceoverScene):
     def isotonic(self):
         rows = [
             cmath(r"\min_{m_1 \le \dots \le m_n}", r"\ ", r"\textstyle\sum_i (y_i - m_i)^2", font_size=32),
-            cmath(r"\text{PAVA}", r":", r"\text{pool adjacent violators into their mean}", font_size=30),
+            cmath(r"\text{PAVA}", r":", r"\text{pool adjacent blocks using count-weighted means}", font_size=30),
             cmath(r"\text{no tuning}", r":", r"\text{the constraint does the smoothing}", font_size=30),
             cmath(r"\text{solution}", r":", r"\text{the slopes of the greatest convex minorant of the cumulative sums}", font_size=26),
         ]
@@ -32,13 +32,16 @@ class Shape(VoiceoverScene):
         whys = [why(r"isotonic regression"), why(r"Ayer et al.\ (1955); \ Part 21's PAVA"), why(r"a step function, \ data-driven steps"),
                 why(r"Barlow, \ Bartholomew, \ Bremner \& Brunk (1972)")]
         with self.voiceover(
-            "<bookmark mark='a'/> Sometimes all we know is the shape: a dose-response curve rises, a hazard falls. Then fit "
-            "the best monotone sequence: isotonic regression. <bookmark mark='b'/> Part 21's pool-adjacent-violators "
-            "algorithm solves it exactly: whenever neighbours are out of order, replace them by their average. "
-            "<bookmark mark='c'/> There is no bandwidth and no lambda: the constraint alone does the smoothing. "
-            "<bookmark mark='d'/> Geometrically, the solution is the slope of the greatest convex minorant of the cumulative "
-            "sums, the picture behind its theory."
+            "<bookmark mark='a'/> Sometimes all we know is the shape: a dose-response curve rises, a hazard falls. "
+            "Then fit the best monotone sequence: isotonic regression. <bookmark mark='b'/> Part 21's "
+            "pool-adjacent-violators algorithm solves it exactly: whenever adjacent fitted blocks violate the order, "
+            "pool them using their sample-count weighted average. <bookmark mark='c'/> There is no bandwidth and no "
+            "lambda: the constraint alone does the smoothing. <bookmark mark='d'/> Geometrically, the solution is the"
+            " slope of the greatest convex minorant of the cumulative sums, the picture behind its theory."
         ) as vo:
+            intro=label('An order constraint pools adjacent incompatible fitted blocks',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -92,15 +95,19 @@ class Shape(VoiceoverScene):
         ]
         rows[3][2].set_color(SPLC)
         whys = [why(r"waiting times, \ survival, \ sizes"), why(r"Grenander (1956)"), why(r"no bandwidth: \ the constraint regularizes"),
-                why(r"Prakasa Rao (1969); \ $\mathbb Z$: \ Chernoff's distribution")]
+                why(r"interior $x$, $f(x)>0$, $f'(x)<0$; \ Chernoff limit")]
         with self.voiceover(
             "<bookmark mark='a'/> For densities: suppose only that f is non-increasing, as for many waiting times. "
-            "<bookmark mark='b'/> Ulf Grenander's estimator of 1956 is the slope of the least concave majorant of the "
-            "empirical distribution function: the tightest concave curve lying above it. <bookmark mark='c'/> It is also "
-            "the maximum likelihood estimate among all decreasing densities, and needs no bandwidth. "
-            "<bookmark mark='d'/> Its error shrinks like n to the minus a third, with a limit found by B. L. S. Prakasa Rao: a "
-            "scaled Chernoff distribution, the location of the maximum of Brownian motion minus a parabola."
+            "<bookmark mark='b'/> Ulf Grenander's estimator of 1956 is the slope of the least concave majorant of the"
+            " empirical distribution function: the tightest concave curve lying above it. <bookmark mark='c'/> It is "
+            "also the maximum likelihood estimate among all decreasing densities, and needs no bandwidth. <bookmark "
+            "mark='d'/> At a positive interior density with strictly negative derivative and suitable regularity, its"
+            " error has cube-root rate and a limit found by B. L. S. Prakasa Rao: a scaled Chernoff distribution, the"
+            " location of the maximum of Brownian motion minus a parabola."
         ) as vo:
+            intro=label('A concave CDF majorant yields the decreasing-density likelihood fit',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -114,12 +121,12 @@ class Shape(VoiceoverScene):
                  yticks=[0, 0.5, 1, 1.5], center=[-2.0, 0.3, 0])
         ax = A.ax
         truth = curve(ax, t, np.exp(-t), TRUE, 3)
-        gs = VMobject(stroke_color=SPLC, stroke_width=3.5)
-        gs.set_points_as_corners([ax.c2p(a, min(b, 1.6)) for a, b in zip(t, g)])
+        knots=np.asarray(d["gren_knots"]); heights=np.asarray(d["gren_density"])
+        gs=clip_curve(ax,np.repeat(knots,2)[1:-1],np.repeat(heights,2),SPLC,3.5)
         rows = fit_rows(VGroup(
             label(r"200 draws from an exponential", font_size=22),
             label(r"gold: \ $e^{-x}$", font_size=22, color=TRUE),
-            label(r"green: \ Grenander's estimate", font_size=22, color=SPLC),
+            label(r"green: \ Grenander estimate; view cropped above 1.6", font_size=22, color=SPLC),
             label(r"a decreasing staircase; \ too high at 0", font_size=22, color=GREY_A),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
@@ -178,11 +185,13 @@ class Shape(VoiceoverScene):
             label(r"constraints adapt: \ near-parametric rates when the truth is simple", font_size=24, color=HIT),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The idea has grown: log-concave densities, which include the normal, gamma and many more, "
-            "have a tuning-free maximum likelihood estimate in any dimension. <bookmark mark='b'/> Convex regression and "
-            "unimodal densities work similarly. <bookmark mark='c'/> Monotone hazards return in survival analysis, Part 40. "
-            "<bookmark mark='d'/> And shape-constrained estimators adapt: when the truth is simple, a few pieces, they "
-            "converge almost as fast as a parametric model."
+            "<bookmark mark='a'/> The idea has grown: Log-concave densities include normals and gamma laws with shape"
+            " at least one. Their MLE exists under a full-dimensional convex-hull condition, with sample size "
+            "sufficient for the dimension. <bookmark mark='b'/> Convex regression and unimodal density estimation are"
+            " other shape problems, but constraints do not by themselves guarantee that an unrestricted likelihood "
+            "maximizer exists. <bookmark mark='c'/> Monotone hazards return in survival analysis, Part 40. <bookmark "
+            "mark='d'/> And shape-constrained estimators adapt: some procedures attain near-parametric risk bounds "
+            "for suitable simple piecewise truths, with the dimension, loss and model class specified."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
