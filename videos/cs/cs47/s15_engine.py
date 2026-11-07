@@ -35,7 +35,7 @@ class Engine(VoiceoverScene):
         steps = [(rf"``{q['query']}''", WHITE), (r"tokens, \ stop words dropped, \ stems: \ "
                                                    + r", \ ".join(rf"\texttt{{{t}}}" for t in q["terms"]), HEAD),
                  (rf"postings of each stem, \ from {ix['postings']:,}", DATA),
-                 (r"BM25 for every candidate \ (WAND skips most)", YES),
+                 (r"BM25 for every candidate \ (WAND would skip most, \ same answer)", YES),
                  (r"the top ten, \ each with a snippet", LAM)]
         boxes = VGroup()
         for t, c in steps:
@@ -121,7 +121,7 @@ class Engine(VoiceoverScene):
         with self.voiceover(
             "How big is it? <bookmark mark='a'/> Our index holds "
             f"{n / 1e6:.1f} million postings. Stored as plain thirty-two-bit integers, the document ids alone take "
-            f"about {32 * n / 8 / 1e6:.0f} megabytes. <bookmark mark='b'/> As gaps in Golomb–Rice code, about "
+            f"about {32 * n / 8 / 1e6:.1f} megabytes. <bookmark mark='b'/> As gaps in Golomb–Rice code, about "
             f"{c['bits_per_posting']['rice'] * n / 8 / 1e6:.1f}, five bits a posting. <bookmark mark='c'/> And no "
             "code can do much better: choosing which f of N documents contain a term carries log of N choose f "
             f"bits of information, which comes to {bnd['bound_bits_per_posting']:.2f} bits a posting here. Golomb–"

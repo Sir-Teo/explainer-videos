@@ -164,7 +164,7 @@ def compute_bound() -> dict:
 
 
 def compute_engine() -> dict:
-    """Three queries answered end to end: BM25 over the index, phrase boost, and a snippet around the best window."""
+    """Four queries answered end to end: plain BM25 over the index (every candidate scored) and a snippet around the best window."""
     from explainer.cs.search import rank as R, text as T
     docs, post, lengths = _index()
     out = []

@@ -55,7 +55,7 @@ class Text(VoiceoverScene):
         boxes = [tag_box(w, color=DATA, size=22, h=0.58) for w in SENTENCE]
         toks = flow(boxes, 12.4, hbuff=0.14, vbuff=0.24).next_to(src, DOWN, buff=0.75).set_x(0)
         notes = VGroup(
-            wrapped_label(r"\textbf{tokens}: \ runs of letters and digits, \ lower-cased; \ case folding makes "
+            wrapped_label(r"\textbf{tokens}: \ runs of letters and digits \ (an inner apostrophe kept), \ lower-cased; \ case folding makes "
                           r"\textit{Whale} and \textit{whale} one term, \ but also \textit{US} and \textit{us}", 12.4,
                           font_size=20, color=WHITE),
             wrapped_label(r"\textbf{stop words}: \ 48 short, \ common words; \ here 12 of the 23 tokens; \ our index "
