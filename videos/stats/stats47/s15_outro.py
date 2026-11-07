@@ -6,7 +6,7 @@ PROBLEMS = [
     r"Show that Hodges's estimator satisfies $n\,E_0 T_n^2 \to 0$, \ and $n\,E_{\theta}(T_n - \theta)^2 \to 1$ for fixed $\theta \ne 0$.",
     r"For $\psi(x, \theta) = \mathrm{sign}(x - \theta)$, \ compute the sandwich $V^{-1}BV^{-1}$ \ and recover the median's variance.",
     r"Find the influence function of $T(F) = F^{-1}(p)$, \ and check that $E\,\mathrm{IF}^2 = p(1-p)/f(\xi_p)^2$.",
-    r"For Gini's kernel $|x - y|$ with $N(0, 1)$ data, \ show that $h_1(x) = 2\phi(x) + x(2\Phi(x) - 1)$.",
+    r"For Gini's kernel $|x - y|$ with $N(0, 1)$ data, \ show that $h_1(x)=2\phi(x)+x(2\Phi(x)-1)-2/\sqrt\pi$.",
     r"Use Le Cam's third lemma to find the local power of the sign test, \ and its Pitman ARE $2/\pi$ against $t$.",
     r"Show that $P^*(M^* = M) = 1 - (1 - 1/n)^n$ \ for the bootstrap of a sample maximum.",
 ]
@@ -79,6 +79,7 @@ class Outro(VoiceoverScene):
             (r"minimax lower bounds beyond the local scale", [50]), (r"Bernstein--von Mises: \ the Bayesian LAN", [53]),
             (r"high-dimensional asymptotics, \ where $p$ grows with $n$", [59]),
         ], font_size=22)
+        self.add(card.head)
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part forty-eight proves the uniform laws and the Donsker theorems this "
             "part used. Part forty-nine finds efficient influence functions in semiparametric models. Part fifty extends "
@@ -86,7 +87,7 @@ class Outro(VoiceoverScene):
             "theorem. And Part fifty-nine asks what survives when the number of parameters grows with n."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):
@@ -128,9 +129,9 @@ class Outro(VoiceoverScene):
         tr.to_edge(UP, buff=0.8)
         nxt.next_to(tr, DOWN, buff=1.0)
         with self.voiceover(
-            "Forty-seven parts of sixty-five. <bookmark mark='a'/> Best, in large samples, means best over a shrinking "
-            "neighbourhood, and every regular model there is a single normal observation. <bookmark mark='b'/> Next, Part "
-            "forty-eight: empirical processes."
+            "Forty-seven parts of sixty-five. <bookmark mark='a'/> The local minimax bound takes sample size to "
+            "infinity before allowing the radius of a shrinking neighborhood to grow, and every regular model there "
+            "is a single normal observation. <bookmark mark='b'/> Next, Part forty-eight: empirical processes."
         ) as vo:
             self.play(FadeIn(tr))
             vo.wait_until("a")

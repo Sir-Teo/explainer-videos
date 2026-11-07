@@ -30,7 +30,7 @@ import math
 from dataclasses import asdict
 
 import numpy as np
-from scipy import stats
+from scipy import stats, integrate
 
 from explainer.ai.cache import Cache
 from explainer.stats import museum
@@ -63,21 +63,101 @@ def nest(obj):
     return obj
 
 
+def hodges_risk(theta,n):
+    """Normal-integral risk with stable tails even at theta=0 and large n."""
+    theta=np.asarray(theta,float);a=n**(-.25)
+    lo,hi=np.sqrt(n)*(-a-theta),np.sqrt(n)*(a-theta)
+    inside=np.where(lo>=0,stats.norm.sf(lo)-stats.norm.sf(hi),
+                    stats.norm.cdf(hi)-stats.norm.cdf(lo))
+    outside=stats.norm.cdf(lo)-lo*stats.norm.pdf(lo)+stats.norm.sf(hi)+hi*stats.norm.pdf(hi)
+    return outside+n*theta**2*inside
+
+
+def hodges_local(h,n):
+    return hodges_risk(np.asarray(h,float)/np.sqrt(n),n)
+
+
+def bernoulli_se(hits):
+    values=np.asarray(hits,float)
+    return float(values.std(ddof=1)/np.sqrt(len(values)))
+
+
+def histogram(values, edges):
+    """Displayed probability per bin width, retaining mass outside the panel."""
+    return np.histogram(values,bins=edges)[0]/(len(values)*np.diff(edges))
+
+
+def signed_rank_projection(x, cdf=stats.norm.cdf):
+    """Exact first-order Hoeffding/Hajek projection under continuous symmetry."""
+    x=np.asarray(x,float);n=x.shape[-1];expectation=n*(n+1)/4
+    return expectation+np.sum((x>0)-.5+(n-1)*(cdf(x)-.5),axis=-1)
+
+
+def normal_scores_are(law):
+    """Integrate normal rank score times the regular location score."""
+    if law=="normal": variance=1.;score=lambda z:z
+    elif law=="logistic": variance=math.pi**2/3;score=lambda z:2*stats.norm.cdf(z)-1
+    elif law=="Laplace": variance=2.;score=lambda z:1.
+    elif law=="t3":
+        variance=3.
+        def score(z):
+            q=stats.t.isf(stats.norm.sf(z),3)
+            return 4*q/(3+q*q)
+    else: raise ValueError(law)
+    efficacy=2*integrate.quad(lambda z:z*score(z)*stats.norm.pdf(z),0,10,epsabs=1e-11)[0]
+    return variance*efficacy**2
+
+
+def uniform_max_bootstrap(n, B, generator, m=None, sample=None):
+    """Exact conditional max-rank law, with no B by n resample matrix.
+
+    A shared original sample permits a controlled n-out-of-n / m-out-of-n
+    comparison. Gaps are divided by M to give a scale-free limiting pivot.
+    Exact conditional KS distances inspect both sides of each CDF jump.
+    """
+    x=np.sort(generator.random(n) if sample is None else np.asarray(sample,float))
+    if len(x)!=n or x[0]<0 or x[-1]<=0: raise ValueError("Invalid positive-endpoint sample")
+    M=x[-1];k=n if m is None else m
+    rank=np.clip(np.ceil(n*np.exp(np.log(generator.random(B))/k)).astype(int)-1,0,n-1)
+    stat=k*(M-x[rank])/M
+    gaps=k*(M-x)/M;j=np.arange(1,n+1,dtype=float)
+    right=-np.expm1(k*np.log((j-1)/n,where=j>1,out=np.full(n,-np.inf)))
+    left=-np.expm1(k*np.log(j/n))
+    truth=stats.expon.cdf(gaps)
+    ks=float(np.max(np.maximum(np.abs(right-truth),np.abs(left-truth))))
+    return {"stat":stat,"atom0":float(np.mean(stat==0)),"theory_atom":float(-np.expm1(k*np.log1p(-1/n))),
+            "ks_exp":ks,"n":n,"m":k,"resamples":B}
+
+
+def lugannani_rice(xbar,n):
+    """Exponential-mean tail with the removable mean-point singularity filled."""
+    x=np.asarray(xbar,float)
+    if np.any(x<=0): raise ValueError("Positive means required")
+    d=x-1;near=np.abs(d)<1e-3
+    w=np.empty_like(d);correction=np.empty_like(d)
+    w[near]=np.sqrt(n)*d[near]*(1-d[near]/3+7*d[near]**2/36-73*d[near]**3/540)
+    correction[near]=(-1/3+d[near]/12-23*d[near]**2/540)/np.sqrt(n)
+    w[~near]=np.sign(d[~near])*np.sqrt(2*n*(d[~near]-np.log1p(d[~near])))
+    correction[~near]=1/(np.sqrt(n)*d[~near])-1/w[~near]
+    return {"exact":stats.gamma.sf(x,n,scale=1/n),"normal":stats.norm.sf(d*np.sqrt(n)),
+            "lr":stats.norm.sf(w)+stats.norm.pdf(w)*correction}
+
+
 # ---------------------------------------------------------------------------------------------------------------
 def compute_hook():
     th = np.linspace(-0.6, 0.6, 481)
     out = {"theta": th}
     for n in (25, 100, 1000, 10000):
-        out[f"r{n}"] = AK.hodges_risk(th, n)
+        out[f"r{n}"] = hodges_risk(th, n)
     h = np.linspace(0, 45, 1801)
     peaks = {}
     for n in (100, 10 ** 4, 10 ** 6):
-        r = AK.hodges_local(h, n)
+        r = hodges_local(h, n)
         out[f"h{n}"] = r
         peaks[str(n)] = {"max": float(r.max()), "at": float(h[np.argmax(r)]), "n14": n ** 0.25}
     out["h"] = h
     out["peaks"] = peaks
-    out["at0"] = {str(n): float(AK.hodges_risk(0.0, n)) for n in (25, 100, 1000, 10000)}
+    out["at0"] = {str(n): float(hodges_risk(0.0, n)) for n in (25, 100, 1000, 10000)}
     return out
 
 
@@ -93,7 +173,7 @@ def compute_delta():
         z = math.sqrt(n) * np.log(x)
         rows.append({"n": n, "mean": float(z.mean()), "sd": float(z.std()), "skew": float(stats.skew(z)),
                      "ks": float(stats.kstest(z, "norm").statistic)})
-        hists[str(n)] = np.histogram(z, bins=edges, density=True)[0]
+        hists[str(n)] = histogram(z,edges)
     y = g.normal(0, 1, (40000, 50)).mean(1)
     q = 50 * y ** 2
     return {"rows": rows, "edges": edges, "hists": hists, "second_q": np.quantile(q, [0.5, 0.9, 0.95]),
@@ -146,7 +226,7 @@ def compute_influence():
     for name, draw, mu4 in (("normal", lambda s: g.normal(0, 1, s), 3.0), ("t5", lambda s: g.standard_t(5, s) / math.sqrt(5 / 3), 9.0)):
         x = draw((20000, n))
         s2 = x.var(1, ddof=1)
-        out[f"var_{name}"] = {"sim": float(n * s2.var()), "delta": mu4 - 1}
+        out[f"var_{name}"] = {"sim": float(n * s2.var()), "delta": mu4 - 1, "finite_n":mu4-(n-3)/(n-1),"reps":len(x)}
     return out
 
 
@@ -165,7 +245,7 @@ def compute_ustat():
     U = (s1 ** 2 - s2) / (n * (n - 1))
     nU = n * U
     edges = np.linspace(-1.5, 6, 46)
-    hist = np.histogram(nU, bins=edges, density=True)[0]
+    hist = histogram(nU,edges)
     return {"rows": rows, "zeta1": AK.gini_variance(20)["zeta1"], "zeta2": AK.gini_variance(20)["zeta2"],
             "deg_edges": edges, "deg_hist": hist, "deg_mean": float(nU.mean()), "deg_var": float(nU.var())}
 
@@ -191,6 +271,8 @@ def compute_ranks():
     out["are"] = {"normal": AK.pitman_are("wilcoxon_normal"), "Laplace": AK.pitman_are("wilcoxon_laplace"),
                   "t3": RK.wilcoxon_are(lambda u: stats.t.pdf(u * math.sqrt(3), 3) * math.sqrt(3), 1.0),
                   "min": AK.pitman_are("wilcoxon_min")}
+    out["normal_scores_are"]={law:normal_scores_are(law) for law in ("normal","logistic","Laplace","t3")}
+    out["reps"]=reps
     return out
 
 
@@ -199,7 +281,7 @@ def compute_lan():
     out = {}
     for n in (25, 400):
         r = AK.cauchy_local_llr(n, 1.5, 20000, g)
-        out[str(n)] = {"mean": r["mean"], "var": r["var"], "hist": np.histogram(r["llr"], bins=50, range=(-5, 3), density=True)[0]}
+        out[str(n)] = {"mean": r["mean"], "var": r["var"], "hist": histogram(r["llr"],np.linspace(-5,3,51))}
     out["lan_mean"], out["lan_var"] = -1.5 ** 2 * 0.5 / 2, 1.5 ** 2 * 0.5
     out["edges"] = np.linspace(-5, 3, 51)
     return out
@@ -210,14 +292,16 @@ def compute_contig():
     n, reps = 100, 20000
     hs = np.linspace(0, 4, 9)
     sim_t, sim_s = [], []
+    from explainer.stats.kit import testing as TK
+    sign_rule=TK.ump_binomial(n,.5,.05)["phi"]
     for h in hs:
         x = g.normal(h / math.sqrt(n), 1, (reps, n))
         t = x.mean(1) / (x.std(1, ddof=1) / math.sqrt(n))
-        sim_t.append(float(np.mean(t > stats.norm.ppf(0.95))))
+        sim_t.append(float(np.mean(t > stats.t.ppf(0.95,n-1))))
         k = (x > 0).sum(1)
-        sim_s.append(float(np.mean((k - n / 2) / math.sqrt(n / 4) > stats.norm.ppf(0.95))))
+        sim_s.append(float(np.mean(sign_rule[k])))
     hh = np.linspace(0, 4, 81)
-    return {"n": n, "hs": hs, "sim_t": sim_t, "sim_sign": sim_s, "hh": hh, "lp_t": AK.local_power(hh, 1.0),
+    return {"n": n, "reps":reps, "sign_calibration":"exact randomized binomial boundary; expected rejection probability", "hs": hs, "sim_t": sim_t, "sim_sign": sim_s, "hh": hh, "lp_t": AK.local_power(hh, 1.0),
             "lp_sign": AK.local_power(hh, 2 / math.pi)}
 
 
@@ -225,7 +309,7 @@ def compute_hajek():
     h = np.linspace(-12, 12, 961)
     out = {"h": h}
     for n in (10 ** 2, 10 ** 4, 10 ** 6, 10 ** 8):
-        out[f"n{n}"] = AK.hodges_local(np.abs(h), n)
+        out[f"n{n}"] = hodges_local(np.abs(h), n)
     cs = [1, 2, 4, 8]
     sup = {}
     for n in (10 ** 2, 10 ** 4, 10 ** 6, 10 ** 8):
@@ -271,8 +355,8 @@ def compute_bootstrap():
     g = rng(4708)
     rows = []
     for n in (10, 20, 40, 80):
-        cov, low, _ = _coverage(lambda m: g.exponential(1.0, m), 1.0, n, 1500, 999, g)
-        rows.append({"n": n, "cov": cov, "low": low})
+        cov, low, hits = _coverage(lambda m: g.exponential(1.0, m), 1.0, n, 1500, 999, g)
+        rows.append({"n": n, "cov": cov, "low": low, "datasets":1500,"resamples":999,"mc_se":{k:bernoulli_se(v) for k,v in hits.items()}})
     return {"rows": rows}
 
 
@@ -281,7 +365,7 @@ def compute_saddle():
     x = np.linspace(0.1, 3.0, 291)
     d = AK.mean_exp_density(x, n)
     xt = np.linspace(1.05, 3.0, 40)
-    t = AK.lugannani_rice(xt, n)
+    t = lugannani_rice(xt, n)
     rel = {k: (np.abs(np.asarray(v) / t["exact"] - 1)).tolist() for k, v in t.items() if k != "exact"}
     return {"n": n, "x": x, "exact": d["exact"], "normal": d["normal"], "edgeworth": d["edgeworth"], "saddle": d["saddle"],
             "saddle_ratio": float((d["saddle"] / d["exact"])[0]), "xt": xt, "tail_exact": t["exact"], "tail_normal": t["normal"],
@@ -290,13 +374,17 @@ def compute_saddle():
 
 
 def compute_nonreg():
-    g = rng(4709)
-    a = AK.uniform_max_bootstrap(200, 20000, g)
-    b = AK.uniform_max_bootstrap(2000, 20000, g, m=40)
-    edges = np.linspace(0, 5, 26)
-    return {"n": 200, "atom": a["atom0"], "theory_atom": a["theory_atom"], "limit_atom": 1 - math.exp(-1),
-            "hist_boot": np.histogram(a["stat"], bins=edges, density=True)[0], "hist_m": np.histogram(b["stat"], bins=edges, density=True)[0],
-            "edges": edges, "ks_boot": a["ks_exp"], "ks_m": b["ks_exp"], "atom_m": b["atom0"]}
+    g=rng(4709);n=2000;B=20000
+    original=g.random(n)
+    a=uniform_max_bootstrap(n,B,g,sample=original)
+    b=uniform_max_bootstrap(n,B,g,m=40,sample=original)
+    edges=np.linspace(0,5,26)
+    return {"n":n,"m":40,"resamples":B,"original_datasets":1,"shared_original_sample":True,
+            "atom":a["atom0"],"theory_atom":a["theory_atom"],"limit_atom":1-math.exp(-1),
+            "hist_boot":histogram(a["stat"],edges),"hist_m":histogram(b["stat"],edges),
+            "edges":edges,"ks_boot":a["ks_exp"],"ks_m":b["ks_exp"],"atom_m":b["atom0"],
+            "theory_atom_m":b["theory_atom"],"ks_scope":"exact conditional discrete CDF versus Exp(1), both sides of every jump",
+            "pivot":"k(M-M*)/M","original_sha256":__import__("hashlib").sha256(original.tobytes()).hexdigest()}
 
 
 def compute_board():
@@ -304,25 +392,25 @@ def compute_board():
     rows = []
     cov, low, hits = _coverage(lambda m: g.exponential(1.0, m), 1.0, 20, 2000, 999, g)
     for k, name in (("normal", "Student $t$ interval"), ("percentile", "percentile bootstrap"), ("t", "bootstrap-$t$"), ("bca", "BCa")):
-        rows.append(Row(47, name + " for a mean", "Exp(1) data, n = 20", "coverage", 0.9, cov[k], len(hits[k])))
-    # the uniform maximum: a percentile interval for theta from the ordinary bootstrap, and from m-out-of-n
+        rows.append(Row(47, name + " for a mean", "Exp(1) data, n = 20", "coverage", 0.9, cov[k], len(hits[k]),mc_se=bernoulli_se(hits[k])))
+    # Uniform maximum: a basic interval from estimated shortfall-pivot quantiles, not a percentile interval.
     reps, n, B = 2000, 200, 999
     hit_b, hit_m = [], []
     for _ in range(reps):
         x = g.random(n)
         M = x.max()
-        sb = n * (M - x[g.integers(0, n, (B, n))].max(1))
+        sb = uniform_max_bootstrap(n,B,g,sample=x)["stat"]
         m = 40
-        sm = m * (M - x[g.integers(0, n, (B, m))].max(1))
+        sm = uniform_max_bootstrap(n,B,g,m=m,sample=x)["stat"]
         # interval for theta = 1 from the pivot n(theta - M) ~ law of sb: theta in [M + q05/n, M + q95/n]
         qb = np.quantile(sb, [0.05, 0.95])
         qm = np.quantile(sm, [0.05, 0.95])
-        hit_b.append(M + qb[0] / n <= 1 <= M + qb[1] / n)
-        hit_m.append(M + qm[0] / n <= 1 <= M + qm[1] / n)
-    rows.append(Row(47, "bootstrap interval for a uniform maximum", "U(0, theta), n = 200", "coverage", 0.9, float(np.mean(hit_b)), reps))
-    rows.append(Row(47, "m-out-of-n bootstrap (m = 40)", "U(0, theta), n = 200", "coverage", 0.9, float(np.mean(hit_m)), reps))
+        hit_b.append(M + M*qb[0] / n <= 1 <= M + M*qb[1] / n)
+        hit_m.append(M + M*qm[0] / n <= 1 <= M + M*qm[1] / n)
+    rows.append(Row(47, "bootstrap interval for a uniform maximum", "U(0, theta), n = 200", "coverage", 0.9, float(np.mean(hit_b)), reps,mc_se=bernoulli_se(hit_b)))
+    rows.append(Row(47, "m-out-of-n bootstrap (m = 40)", "U(0, theta), n = 200", "coverage", 0.9, float(np.mean(hit_m)), reps,mc_se=bernoulli_se(hit_m)))
     save_rows(47, rows)
-    return {"rows": [asdict(r) | {"verdict": r.verdict, "se": r.se} for r in rows]}
+    return {"rows": [asdict(r) | {"verdict": r.verdict, "se": r.se} for r in rows], "bootstrap_resamples":B,"independent_datasets":reps,"uniform_interval":"basic scale-free shortfall-pivot inversion, not percentile"}
 
 
 ITEMS = {

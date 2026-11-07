@@ -32,12 +32,17 @@ class MEstimators(VoiceoverScene):
         rows[3][-1].set_color(GOODC)
         whys = [why(r"M for maximum"), why(r"Z for zero"), why(r"one theory for all"), why(r"Huber (1964), \ Part 30")]
         with self.voiceover(
-            "<bookmark mark='a'/> Most estimators maximize an average of some criterion over the data: M-estimators, as "
-            "Peter Huber named them. <bookmark mark='b'/> Or they solve an average estimating equation: Z-estimators. "
-            "<bookmark mark='c'/> The MLE maximizes the average log-likelihood; the mean solves the average of x minus theta "
-            "equal to zero; the median the average of the signs. <bookmark mark='d'/> Huber's estimator from Part thirty "
-            "uses a psi that is linear near the centre and flat in the tails. One theory covers them all."
+            "<bookmark mark='a'/> Most estimators maximize an average of some criterion over the data: M-estimators, "
+            "as Peter Huber named them. <bookmark mark='b'/> Or they solve an average estimating equation: "
+            "Z-estimators. <bookmark mark='c'/> The MLE maximizes the average log-likelihood; the mean solves the "
+            "average of x minus theta equal to zero; a median minimizes absolute deviations and satisfies a sign "
+            "subgradient condition. For a discrete sample, an exact ordinary zero of the sign average need not exist."
+            " <bookmark mark='d'/> Huber's estimator from Part thirty uses a psi that is linear near the centre and "
+            "flat in the tails. One theory covers them all."
         ) as vo:
+            heading=label('M-estimators optimize; Z-estimators solve estimating equations',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -62,6 +67,9 @@ class MEstimators(VoiceoverScene):
             "Uniform convergence prevents a spurious maximum far away from sneaking in, the failure that Wald's 1949 proof "
             "for the MLE guarded against."
         ) as vo:
+            heading=label('Uniform convergence and separation force consistency',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -70,23 +78,30 @@ class MEstimators(VoiceoverScene):
 
     def normality(self):
         rows = [
-            cmath(r"0 = \Psi_n(\hat\theta)", r"=", r"\Psi_n(\theta_0) + \dot\Psi_n(\tilde\theta)(\hat\theta - \theta_0)", font_size=32),
+            cmath(r"0 = \Psi_n(\hat\theta)", r"=", r"\Psi_n(\theta_0) + A_n(\hat\theta-\theta_0), \ \ A_n=\int_0^1\dot\Psi_n(\theta_0+t(\hat\theta-\theta_0))\,dt", font_size=32),
             cmath(r"\sqrt n(\hat\theta - \theta_0)", r"=", r"-V^{-1} \tfrac{1}{\sqrt n}\textstyle\sum \psi_{\theta_0}(X_i) + o_P(1)", font_size=32),
             cmath(r"\phantom{X}", r"\Rightarrow", r"N(0, \ V^{-1} B V^{-\top}), \ \ V = E\dot\psi_{\theta_0}, \ B = E\psi\psi^\top", font_size=30),
             cmath(r"\text{MLE}", r":", r"V = -I, \ B = I \ \Rightarrow \ I^{-1}", font_size=34),
         ]
         rows[2][-1].set_color(GOODC)
         rows[3][-1].set_color(MLEC)
-        whys = [why(r"Taylor, \ between $\hat\theta$ and $\theta_0$"), why(r"an average of influence terms"), why(r"the sandwich"), why(r"Part 22, \ proved")]
+        whys = [why(r"consistent root; \ integrated Jacobian $A_n\to_P V$"), why(r"an average of influence terms"), why(r"the sandwich"), why(r"Part 22, \ proved")]
         with self.voiceover(
-            "<bookmark mark='a'/> Asymptotic normality follows from a Taylor expansion of the estimating equation around "
-            "the truth. <bookmark mark='b'/> Solving it, root n times the error is minus the inverse of the derivative "
-            "matrix V, times a normalized sum of independent terms, plus something negligible. <bookmark mark='c'/> By the "
-            "central limit theorem and Slutsky, the limit is normal with the sandwich covariance: V inverse, B, V inverse, "
-            "where B is the variance of psi. <bookmark mark='d'/> For the MLE, V is minus the information and B is the "
-            "information, so the sandwich collapses to the inverse information: Part twenty-two's statement, now proved, "
-            "with the conditions visible."
+            "<bookmark mark='a'/> For a consistent solution, a differentiable estimating equation with a uniformly "
+            "convergent Jacobian, nonsingular limiting derivative, and a finite-variance score CLT yields an "
+            "asymptotic linear expansion. For a vector equation use an integrated Jacobian; there need not be one "
+            "intermediate point that works for every coordinate. <bookmark mark='b'/> Solving it, root n times the "
+            "error is minus the inverse of the derivative matrix V, times a normalized sum of independent terms, plus"
+            " something negligible. <bookmark mark='c'/> By the central limit theorem and Slutsky, the limit is "
+            "normal with the sandwich covariance: V inverse, B, V inverse, where B is the variance of psi. <bookmark "
+            "mark='d'/> For the MLE, V is minus the information and B is the information, so the sandwich collapses "
+            "to the inverse information: Part twenty-two's statement, now proved, under those conditions. Nonsmooth "
+            "quantile scores need a separate stochastic-equicontinuity argument, rather than a literal derivative of "
+            "the sample signs."
         ) as vo:
+            heading=label('A regular consistent root has a sandwich limit',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -131,20 +146,18 @@ class MEstimators(VoiceoverScene):
         rows = [
             cmath(r"\text{Newcomb (1882)}", r":", rf"{d['n']} \ \text{{passage times of light}}; \ \text{{one at}} \ {d['min']:.0f}", font_size=32),
             cmath(r"\text{mean}", r":", rf"{d['mean']:.2f}, \ \ \text{{SE}} \ {d['se_mean']:.2f}", font_size=34),
-            cmath(r"\text{Huber}", r":", rf"{d['huber']:.2f}, \ \ \text{{sandwich SE}} \ {d['se_huber']:.2f}", font_size=34),
+            cmath(r"\text{Huber}", r":", rf"{d['huber']:.2f}, \ \ \text{{symmetry-model sandwich SE}} \ {d['se_huber']:.2f}", font_size=34),
             cmath(r"\text{median}", r":", rf"{d['median']:.1f}", font_size=34),
         ]
         rows[2][-1].set_color(GOODC)
         whys = [why(r"Part 30's data"), why(r"pulled down by the outliers"), why(r"half the standard error"), why(r"for comparison")]
         with self.voiceover(
-            f"<bookmark mark='a'/> Real data: Simon Newcomb's sixty-six measurements of the passage time of light, one of "
-            f"them a wild {d['min']:.0f}. <bookmark mark='b'/> The mean is {say(d['mean'], 1)}, with a standard error of "
-            f"{say(d['se_mean'], 2)}, dragged down by the outliers. <bookmark mark='c'/> Huber's estimate is "
-            f"{say(d['huber'], 1)}, and its sandwich standard error is {say(d['se_huber'], 2)}, half the mean's. <bookmark "
-            f"mark='d'/> The median, {d['median']:.0f}, agrees with Huber. The sandwich standard error is computed from the "
-            f"data's own psi values, so it is valid whatever the error distribution."
+            f"<bookmark mark='a'/> Real data: Simon Newcomb's sixty-six measurements of the passage time of light, one of them a wild {d['min']:.0f}. <bookmark mark='b'/> The mean is {say(d['mean'], 1)}, with a standard error of {say(d['se_mean'], 2)}, dragged down by the outliers. <bookmark mark='c'/> Huber's estimate is {say(d['huber'], 1)}, and its sandwich standard error is {say(d['se_huber'], 2)}, half the mean's. <bookmark mark='d'/> The median, {d['median']:.0f}, agrees with Huber. The sandwich standard error is computed from the data's own psi values, so it is a plug-in asymptotic calculation, not a distribution-free guarantee. Here the scale is estimated by the MAD; symmetry makes its first-order effect on location orthogonal. Without symmetry, joint location-scale uncertainty needs a fuller sandwich. The mean and Huber location can also target different functionals outside a symmetric model."
         ) as vo:
             self.play(FadeIn(museum_tag(r"Newcomb (1882), \ via Stigler (1977)")))
+            heading=label('Newcomb contrasts two location targets under model assumptions',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -153,18 +166,20 @@ class MEstimators(VoiceoverScene):
 
     def misspec(self):
         rows = fit_rows(VGroup(
-            label(r"if the model is wrong, \ the MLE still converges: \ to the KL projection $\theta^*$ of the truth", font_size=26),
-            label(r"its variance is the sandwich $V^{-1} B V^{-1}$, \ not $I^{-1}$ \ (Huber 1967; \ White 1982)", font_size=26, color=GOODC),
-            label(r"the information equality $V = -B$ fails: \ the gap is a test of misspecification", font_size=26, color=S.ACCENT),
+            label(r"with identification and uniform convergence: \ a misspecified MLE can converge to a KL projection", font_size=26),
+            label(r"its variance is the sandwich $V^{-1} B V^{-\top}$, \ not $I^{-1}$ \ (Huber 1967; \ White 1982)", font_size=26, color=GOODC),
+            label(r"a calibrated information-matrix test can detect some failures of $V=-B$", font_size=26, color=S.ACCENT),
             label(r"Part 23's robust standard errors \ are this theorem, \ applied", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The theory does not need the model to be right. If it is wrong, the MLE converges to the "
-            "parameter that minimizes the Kullback–Leibler divergence from the truth. <bookmark mark='b'/> Its variance is "
-            "the sandwich, not the inverse information: Huber's result of 1967, made central to econometrics by Halbert White "
-            "in 1982. <bookmark mark='c'/> When the model is right, V equals minus B, the information equality; when it "
-            "is wrong they differ, and the difference is a test of the model. <bookmark mark='d'/> Part twenty-three's "
-            "robust standard errors are this theorem, applied to least squares."
+            "<bookmark mark='a'/> The theory does not need the model to be right. Under suitable identification, "
+            "uniform convergence, and a well-separated finite maximizer, a misspecified likelihood can converge to "
+            "its pseudo-true KL projection. <bookmark mark='b'/> Its variance is the sandwich, not the inverse "
+            "information: Huber's result of 1967, made central to econometrics by Halbert White in 1982. <bookmark "
+            "mark='c'/> When the model is right, V equals minus B, the information equality; misspecification can "
+            "break that equality, although some wrong models still satisfy it. An information-matrix test also needs "
+            "its own estimated null distribution. <bookmark mark='d'/> Part twenty-three's robust standard errors are"
+            " this theorem, applied to least squares."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

@@ -23,14 +23,15 @@ class Hook(VoiceoverScene):
             label(r"Le Cam (1953): \ such points form a set of measure zero; \ Hájek (1970, 1972): \ the right theorem", font_size=26, color=S.ACCENT),
         ), 12.4, 0.55, [0, -0.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Fisher had claimed that no estimator can have a smaller asymptotic variance than the "
-            "maximum likelihood estimate's, one over n times the information. <bookmark mark='b'/> In 1951 Joseph Hodges "
-            "produced a counterexample. For normal data, use the sample mean, unless it is within n to the minus one "
-            "quarter of zero, in which case report zero. <bookmark mark='c'/> At theta equal to zero this estimator's "
-            "scaled risk goes to zero, beating the bound; at every other theta its limit is the same as the mean's. "
-            "<bookmark mark='d'/> Lucien Le Cam showed in 1953 that such superefficiency can happen only on a set of measure "
-            "zero, and Jaroslav Hájek found the theorem that says exactly in what sense the MLE is best. This part builds "
-            "the toolkit for that theorem and then proves it."
+            "<bookmark mark='a'/> Fisher had claimed that no estimator can have a smaller asymptotic variance than "
+            "the maximum likelihood estimate's, one over n times the information. <bookmark mark='b'/> In 1951 Joseph"
+            " Hodges produced a counterexample. For normal data, use the sample mean, unless it is within n to the "
+            "minus one quarter of zero, in which case report zero. <bookmark mark='c'/> At theta equal to zero this "
+            "estimator's scaled risk goes to zero, beating the bound; at every other theta its limit is the same as "
+            "the mean's. <bookmark mark='d'/> Lucien Le Cam showed in 1953 that such superefficiency can happen only "
+            "on a set of measure zero, and Jaroslav Hájek found the theorem that says exactly in what sense the MLE "
+            "is best. This part builds the toolkit and proof outlines for the regular-model convolution and local "
+            "asymptotic minimax theorems."
         ) as vo:
             self.play(FadeIn(tl))
             for k, m_ in enumerate("abcd"):
@@ -51,16 +52,11 @@ class Hook(VoiceoverScene):
             label(r"blue dashed: \ $\bar x$, \ scaled risk 1 \ at every $\theta$", font_size=22, color=MLEC),
             label(r"Hodges: \ purple 25, \ teal 100, \ gold $10^3$, \ red $10^4$", font_size=22, color=HODC),
             label(rf"at $\theta = 0$: \ {d['at0']['25']:.2f}, \ {d['at0']['100']:.3f}, \ $\to 0$", font_size=22, color=GOODC),
-            label(r"but a bump beside it, \ taller and narrower as $n$ grows", font_size=22, color=HODC),
+            label(r"peaks above 6 continue beyond this panel; \ taller and narrower as $n$ grows", font_size=22, color=HODC),
             label(r"pointwise, \ the bump moves in and vanishes", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Here are the exact risks, scaled by n so that the sample mean's is one everywhere. "
-            f"<bookmark mark='b'/> Hodges's estimator, for twenty-five, a hundred, a thousand and ten thousand observations. "
-            f"<bookmark mark='c'/> At zero its scaled risk is {say(d['at0']['25'], 2)}, then {say(d['at0']['100'], 2)}, and "
-            f"heads to zero. <bookmark mark='d'/> But just beside zero there is a bump, where the estimator says zero when "
-            f"the truth is not, and the bump grows taller and narrower with n. <bookmark mark='e'/> At any fixed theta the "
-            f"bump eventually passes by, which is why the pointwise limit looks so good."
+            f"<bookmark mark='a'/> Here are the exact risks, scaled by n so that the sample mean's is one everywhere. <bookmark mark='b'/> Hodges's estimator, for twenty-five, a hundred, a thousand and ten thousand observations. <bookmark mark='c'/> At zero its scaled risk is {say(d['at0']['25'], 2)}, then {say(d['at0']['100'], 2)}, and heads to zero. <bookmark mark='d'/> But just beside zero there is a bump, where the estimator says zero when the truth is not, and the bump grows taller and narrower with n. <bookmark mark='e'/> At a fixed nonzero theta the bump eventually passes by, which is why the pointwise limit looks so good."
         ) as vo:
             self.play(FadeIn(A), FadeIn(exact_tag(r"exact: \ normal integrals")))
             vo.wait_until("a")
@@ -90,7 +86,7 @@ class Hook(VoiceoverScene):
             label(r"$\theta = h/\sqrt n$: \ teal $10^2$, \ gold $10^4$, \ red $10^6$", font_size=22),
             label(rf"peaks: \ {pk['100']['max']:.1f}, \ {pk['10000']['max']:.0f}, \ {pk['1000000']['max']:.0f}", font_size=22, color=HODC),
             label(rf"at $h \approx n^{{1/4}}$: \ {pk['100']['at']:.1f}, \ {pk['10000']['at']:.1f}, \ {pk['1000000']['at']:.1f}", font_size=22, color=S.ACCENT),
-            label(r"the worst local risk grows like $\sqrt n$", font_size=22, color=HODC),
+            label(r"the unrestricted local-coordinate peak grows like $\sqrt n$", font_size=22, color=HODC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
             f"<bookmark mark='a'/> Zoom in at the natural scale, theta equal to h over root n, and plot the scaled risk "
@@ -114,17 +110,19 @@ class Hook(VoiceoverScene):
     def price(self):
         rows = fit_rows(VGroup(
             label(r"the question: \ in what sense is the MLE best, \ if not pointwise?", font_size=28),
-            label(r"answer \ (chapter 9): \ \emph{locally} and \emph{uniformly}: \ over $\theta \in \theta_0 \pm c/\sqrt n$", font_size=26, color=GOODC),
+            label(r"answer \ (chapter 9): \ local minimax: \ first $n\to\infty$, \ then $c\to\infty$ over $|h|\le c$", font_size=26, color=GOODC),
             label(r"the tools: \ $o_P$, \ $O_P$, \ M-estimators, \ influence functions, \ U-statistics, \ LAN, \ contiguity", font_size=26, color=GREY_A),
             label(r"and their uses: \ efficient tests, \ the bootstrap's accuracy, \ saddlepoints, \ non-regular models", font_size=26, color=S.ACCENT),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> So the question of this part: if not at each point separately, in what sense is the "
-            "maximum likelihood estimate best? <bookmark mark='b'/> The answer, in chapter nine, is local and uniform: over "
-            "every shrinking neighbourhood of a parameter value, of size a constant over root n, no estimator can beat it in "
-            "the worst case. <bookmark mark='c'/> Getting there needs the modern toolkit of large-sample theory, <bookmark "
-            "mark='d'/> which also explains why tests have the power they have, why the bootstrap is accurate, and what to "
-            "do when the regularity fails."
+            "<bookmark mark='a'/> So the question of this part: if not at each point separately, in what sense is the"
+            " maximum likelihood estimate best? <bookmark mark='b'/> The answer, in chapter nine, is local and "
+            "uniform: in a regular LAN model, first let sample size grow over local alternatives of radius c over "
+            "root n, then let c grow without bound. The Gaussian experiment gives a minimax lower bound in that "
+            "order. At a fixed small c an estimator such as Hodges can beat the mean in worst-case risk. <bookmark "
+            "mark='c'/> Getting there needs the modern toolkit of large-sample theory, <bookmark mark='d'/> which "
+            "also explains why tests have the power they have, why the bootstrap is accurate, and what to do when the"
+            " regularity fails."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -144,12 +142,14 @@ class Hook(VoiceoverScene):
             c.scale(0.86)
         VGroup(*cards).arrange(DOWN, buff=0.25).move_to(ORIGIN)
         with self.voiceover(
-            "<bookmark mark='a'/> Three promises are due. Part twenty-two stated that the MLE is asymptotically normal with "
-            "the inverse information as its variance; chapters one and two prove it for M-estimators in general. "
-            "<bookmark mark='b'/> Part forty-five proved the Cramér–Rao bound for unbiased estimators and warned about "
-            "Hodges; chapters seven to nine give the bound that applies to every estimator. <bookmark mark='c'/> And Part "
-            "sixteen used the bootstrap on a first-order argument; chapter eleven shows why it is more accurate than the "
-            "normal approximation."
+            "<bookmark mark='a'/> Three promises are due. Part twenty-two stated that the MLE is asymptotically "
+            "normal with the inverse information as its variance; chapters one and two prove it for M-estimators in "
+            "general. <bookmark mark='b'/> Part forty-five proved the Cramér–Rao bound for unbiased estimators and "
+            "warned about Hodges; chapters seven to nine distinguish the convolution theorem for regular estimators "
+            "from the local asymptotic minimax lower bound for arbitrary estimators in a regular model. <bookmark "
+            "mark='c'/> And Part sixteen used the bootstrap on a first-order argument; chapter eleven explains how "
+            "studentization and additional smoothness, moment and nonlattice conditions can improve bootstrap "
+            "accuracy."
         ) as vo:
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
@@ -168,12 +168,12 @@ class Hook(VoiceoverScene):
         prereq = note(r"prerequisites: \ Parts 22, \ 43, \ 45, \ 46").to_corner(DL, buff=0.3)
         built = note(r"built: \ \texttt{statkit.asymptotics}, \ the risk-bump explorer").to_corner(DR, buff=0.3)
         with self.voiceover(
-            "<bookmark mark='a'/> Part forty-seven: asymptotic statistics. <bookmark mark='b'/> We'll set up stochastic "
-            "orders and prove the asymptotics of M-estimators and sample quantiles; differentiate statistical functionals "
-            "with influence functions; analyse U-statistics and rank statistics by Hájek's projection; build Le Cam's theory "
-            "of local asymptotic normality and contiguity, and prove Hájek's convolution and local asymptotic minimax "
-            "theorems, with a risk-bump explorer for Hodges's estimator; and then turn the theory on tests, the bootstrap, "
-            "saddlepoints and non-regular models."
+            "<bookmark mark='a'/> Part forty-seven: asymptotic statistics. <bookmark mark='b'/> We'll set up "
+            "stochastic orders and prove the asymptotics of M-estimators and sample quantiles; differentiate "
+            "statistical functionals with influence functions; analyse U-statistics and rank statistics by Hájek's "
+            "projection; build Le Cam's theory of local asymptotic normality and contiguity, and outline Hájek's "
+            "convolution and local asymptotic minimax theorems, with a risk-bump explorer for Hodges's estimator; and"
+            " then turn the theory on tests, the bootstrap, saddlepoints and non-regular models."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head, shift=UP * 0.2))

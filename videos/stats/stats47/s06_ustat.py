@@ -31,12 +31,16 @@ class UStatistics(VoiceoverScene):
         rows[0][-1].set_color(S.ACCENT)
         whys = [why(r"Hoeffding (1948)"), why(r"the sample variance"), why(r"a robust spread"), why(r"rank statistics")]
         with self.voiceover(
-            "<bookmark mark='a'/> A U-statistic averages a symmetric kernel h over all pairs of observations; it is unbiased "
-            "for the kernel's expectation, and Wassily Hoeffding developed their theory in 1948. <bookmark mark='b'/> With h "
-            "equal to half the squared difference, U is the sample variance. <bookmark mark='c'/> With the absolute "
-            "difference, Gini's mean difference. <bookmark mark='d'/> And with indicators of signs or sums, the Wilcoxon "
-            "statistic, Kendall's tau and the Mann–Whitney statistic: much of nonparametric statistics is U-statistics."
-        ) as vo:
+            "<bookmark mark='a'/> For independent identically distributed observations, a U-statistic averages a "
+            "symmetric integrable kernel h over all pairs of observations; it is unbiased for the kernel's "
+            "expectation, and Wassily Hoeffding developed their theory in 1948. <bookmark mark='b'/> With h equal to "
+            "half the squared difference, U is the sample variance. <bookmark mark='c'/> With the absolute "
+            "difference, Gini's mean difference. <bookmark mark='d'/> And with indicators of signs or sums, the "
+            "Wilcoxon statistic, Kendall's tau and the Mann–Whitney statistic: much of nonparametric statistics is "
+            "U-statistics."       ) as vo:
+            heading=label('An integrable pair kernel defines an unbiased U-statistic',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -54,13 +58,17 @@ class UStatistics(VoiceoverScene):
         rows[3][-1].set_color(GOODC)
         whys = [why(r"average out one argument"), why(r"a sum of independent terms"), why(r"exact, \ any $n$"), why(r"$U_n - \hat U_n = O_P(1/n)$")]
         with self.voiceover(
-            "<bookmark mark='a'/> Hoeffding's idea: average the kernel over its second argument, giving a function of one "
-            "observation, h one, with variance zeta one. <bookmark mark='b'/> The projection of U onto sums of functions of "
-            "single observations is theta plus two over n times the sum of h one: a plain average. <bookmark mark='c'/> The "
-            "exact variance of U combines zeta one and the kernel's own variance, zeta two. <bookmark mark='d'/> The "
-            "difference between U and its projection is of order one over n, so when zeta one is positive, root n times U "
-            "minus theta is asymptotically normal with variance four zeta one."
+            "<bookmark mark='a'/> Hoeffding's idea: average the kernel over its second argument, giving a function of"
+            " one observation, h one, with variance zeta one. <bookmark mark='b'/> The projection of U onto sums of "
+            "functions of single observations is theta plus two over n times the sum of h one: a plain average. "
+            "<bookmark mark='c'/> The exact variance of U combines zeta one and the kernel's own variance, zeta two. "
+            "<bookmark mark='d'/> With a finite second moment of the kernel, the difference between U and its "
+            "projection is of order one over n in probability, so when zeta one is positive, root n times U minus "
+            "theta is asymptotically normal with variance four zeta one."
         ) as vo:
+            heading=label('A finite-variance kernel splits into projection and remainder',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -93,20 +101,24 @@ class UStatistics(VoiceoverScene):
     def degenerate(self):
         rows = [
             cmath(r"\zeta_1 = 0", r":", r"\text{the projection vanishes: \ a degenerate kernel}", font_size=32),
-            cmath(r"h(x, y)", r"=", r"\textstyle\sum_k \lambda_k \phi_k(x)\phi_k(y) \ \ (\text{an eigen-expansion})", font_size=32),
-            cmath(r"n\, U_n", r"\Rightarrow", r"\textstyle\sum_k \lambda_k (Z_k^2 - 1), \ \ Z_k \text{ i.i.d. } N(0, 1)", font_size=32),
-            cmath(r"h = xy, \ EX = 0", r":", r"n U_n \Rightarrow \chi^2_1 - 1", font_size=34),
+            cmath(r"h(x, y)", r"=", r"\theta+\textstyle\sum_k \lambda_k \phi_k(x)\phi_k(y) \ \ (\text{an eigen-expansion})", font_size=32),
+            cmath(r"n(U_n-\theta)", r"\Rightarrow", r"\textstyle\sum_k \lambda_k (Z_k^2 - 1), \ \ Z_k \text{ i.i.d. } N(0, 1)", font_size=32),
+            cmath(r"h = xy, \ EX=0,\ \mathrm{Var}(X)=1", r":", r"n U_n \Rightarrow \chi^2_1 - 1", font_size=34),
         ]
         rows[2][-1].set_color(S.ACCENT)
-        whys = [why(r"e.g.\ under a null"), why(r"Mercer"), why(r"a weighted $\chi^2$, \ rate $n$"), why(r"one eigenvalue")]
+        whys = [why(r"e.g.\ under a null"), why(r"centered square-integrable kernel"), why(r"a weighted $\chi^2$, \ rate $n$"), why(r"one eigenvalue")]
         with self.voiceover(
-            "<bookmark mark='a'/> When zeta one is zero, the projection vanishes and the kernel is called degenerate; this "
-            "is typical for test statistics under the null. <bookmark mark='b'/> Expand the kernel in its eigenfunctions. "
-            "<bookmark mark='c'/> Then n times U, at the faster rate n, converges to a weighted sum of centred chi-squares, "
-            "not to a normal. <bookmark mark='d'/> The simplest case, the kernel x times y for data with mean zero, has one "
-            "eigenvalue, and n U converges to a chi-square with one degree of freedom, minus one. Energy distances and "
-            "kernel two-sample tests are built on this."
+            "<bookmark mark='a'/> When zeta one is zero, the projection vanishes and the kernel is called degenerate;"
+            " this is typical for test statistics under the null. <bookmark mark='b'/> For a centered degenerate "
+            "square-integrable kernel, use the spectral expansion of its self-adjoint Hilbert–Schmidt operator. "
+            "<bookmark mark='c'/> Then n times U, at the faster rate n, converges to a weighted sum of centred "
+            "chi-squares, not to a normal. <bookmark mark='d'/> The simplest case, the kernel x times y for data with"
+            " mean zero and variance one, has one nonzero eigenvalue equal to one, and n U converges to a chi-square "
+            "with one degree of freedom, minus one. Energy distances and kernel two-sample tests are built on this."
         ) as vo:
+            heading=label('Degeneracy removes the linear term and changes the limit',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -116,17 +128,18 @@ class UStatistics(VoiceoverScene):
     def chart(self):
         d = load("ustat")
         e = np.asarray(d["deg_edges"])
-        A = axes([-1.5, 6], [0, 1.2], x_length=7.4, y_length=4.4, xlabel=r"$n\, U_n$, \ $h = xy$, \ $n = 200$", ylabel=r"density",
+        hist_top=max(1.2,float(np.max(d["deg_hist"]))+.1)
+        A = axes([-1.5, 6], [0, hist_top], x_length=7.4, y_length=4.4, xlabel=r"$n\, U_n$, \ $h = xy$, \ $n = 200$", ylabel=r"density",
                  xticks=[-1, 0, 2, 4, 6], yticks=[0, 0.5, 1], center=[-2.5, 0.2, 0])
         ax = A.ax
-        hb = hist_bars(ax, e, np.minimum(np.asarray(d["deg_hist"]), 1.2), color=MLEC, opacity=0.7)
+        hb = hist_bars(ax, e, np.asarray(d["deg_hist"]), color=MLEC, opacity=0.7)
         u = np.linspace(-0.97, 6, 300)
         ch = clip_curve(ax, u, stats_chi1(u + 1), LIMC, 4, ymax=1.2)
         side = fit_rows(VGroup(
             label(r"blue: \ 20,000 values of $n U_n$", font_size=22, color=MLEC),
             label(r"white: \ the density of $\chi^2_1 - 1$", font_size=22, color=LIMC),
             label(rf"mean {d['deg_mean']:.3f} \ (0), \ variance {d['deg_var']:.2f} \ (2)", font_size=22, color=S.ACCENT),
-            label(r"skewed, \ bounded below by $-1$: \ not normal", font_size=22, color=HODC),
+            label(r"limiting law: \ skewed, \ bounded below by $-1$", font_size=22, color=HODC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
             f"<bookmark mark='a'/> Simulated: twenty thousand values of n U with two hundred observations. <bookmark "
@@ -149,16 +162,17 @@ class UStatistics(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"Hájek's projection (1968): \ for any statistic $T$ of independent $X_i$,", font_size=26),
             label(r"$\hat T = \sum_i E[T \mid X_i] - (n - 1) E T$ \ is its best approximation by a sum", font_size=26, color=GOODC),
-            label(r"if $\mathrm{Var}\,\hat T / \mathrm{Var}\,T \to 1$, \ then $T$ is asymptotically normal, \ like $\hat T$", font_size=26, color=S.ACCENT),
+            label(r"if the projection obeys a CLT and $\mathrm{Var}\,\hat T/\mathrm{Var}\,T\to1$, \ standardized $T$ inherits it", font_size=26, color=S.ACCENT),
             label(r"next: \ rank statistics, \ where no kernel is in sight", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Jaroslav Hájek generalized the idea in 1968. For any statistic of independent "
-            "observations, <bookmark mark='b'/> the sum of its conditional expectations given each observation, suitably "
-            "centred, is the best approximation by a sum of functions of one observation each: an orthogonal projection, "
-            "in Part forty-four's sense. <bookmark mark='c'/> If the projection captures almost all of the variance, the "
-            "statistic inherits the projection's normal limit. <bookmark mark='d'/> Next, this is applied where no obvious "
-            "kernel is in sight: statistics built from ranks."
+            "observations, <bookmark mark='b'/> the sum of its conditional expectations given each observation, "
+            "suitably centred, is the best approximation by a sum of functions of one observation each: an orthogonal"
+            " projection, in Part forty-four's sense. <bookmark mark='c'/> If the projection captures almost all "
+            "variance and its independent summands satisfy a central limit theorem, for example by Lindeberg, the "
+            "standardized statistic inherits that normal limit. Variance capture alone is insufficient. <bookmark "
+            "mark='d'/> Next, this is applied where no obvious kernel is in sight: statistics built from ranks."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

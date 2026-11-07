@@ -30,14 +30,18 @@ class Quantiles(VoiceoverScene):
         rows[3][-1].set_color(GOODC)
         whys = [why(r"a sample quantile"), why(r"a binomial count"), why(r"the de Moivre--Laplace CLT"), why(r"the median: \ $\pi\sigma^2/2$ at the normal")]
         with self.voiceover(
-            "<bookmark mark='a'/> The p-th sample quantile estimates the p-th population quantile, at a point where the "
-            "density is positive. <bookmark mark='b'/> The event that it lies below the truth plus t over root n is the "
-            "event that enough observations fall below that point: a binomial count. <bookmark mark='c'/> The binomial's "
-            "normal limit, with the density converting the shift in the argument into a shift in probability, <bookmark "
-            "mark='d'/> gives asymptotic normality with variance p times one minus p over the density squared. For the "
-            "median of normal data that is pi over two times sigma squared: an efficiency of sixty-four percent against "
-            "the mean, as Part thirty found."
+            "<bookmark mark='a'/> The p-th sample quantile estimates the p-th population quantile, for independent "
+            "observations, at a unique quantile with p strictly between zero and one and a continuous positive "
+            "density. <bookmark mark='b'/> The event that it lies below the truth plus t over root n is the event "
+            "that enough observations fall below that point: a binomial count. <bookmark mark='c'/> The binomial's "
+            "normal limit, with the density converting the shift in the argument into a shift in probability, "
+            "<bookmark mark='d'/> gives asymptotic normality with variance p times one minus p over the density "
+            "squared. For the median of normal data that is pi over two times sigma squared: an efficiency of "
+            "sixty-four percent against the mean, as Part thirty found."
         ) as vo:
+            heading=label('A positive continuous density converts binomial counts to quantiles',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -53,16 +57,23 @@ class Quantiles(VoiceoverScene):
         ]
         rows[1][-1].set_color(GOODC)
         rows[3][-1].set_color(S.ACCENT)
-        whys = [why(r"Bahadur (1966)"), why(r"influence terms"), why(r"Kiefer (1967): \ the exact rate"), why(r"compare $n^{-1/2}$ for smooth M-estimators")]
+        whys = [why(r"Bahadur (1966)"), why(r"influence terms"), why(r"positive $C^1$ density near the fixed quantile"), why(r"fixed-quantile $O_P$ bound is a separate result")]
         with self.voiceover(
-            "<bookmark mark='a'/> Raghu Raj Bahadur showed in 1966 that the sample quantile is, to first order, an average. "
-            "It equals the true quantile, plus p minus the empirical distribution function at the true quantile, over the "
-            "density, plus a remainder. <bookmark mark='b'/> The middle term is an average of independent bounded terms, one "
-            "per observation: their influence. <bookmark mark='c'/> The remainder is of order n to the minus three quarters, "
-            "up to logarithms, as Jack Kiefer later pinned down exactly. <bookmark mark='d'/> So after multiplying by root n "
-            "it vanishes, but only like n to the minus one quarter, much more slowly than for smooth M-estimators, because "
-            "the indicator function is not differentiable."
+            "<bookmark mark='a'/> Raghu Raj Bahadur showed in 1966 that the sample quantile is, to first order, an "
+            "average. It equals the true quantile, plus p minus the empirical distribution function at the true "
+            "quantile, over the density, plus a remainder. <bookmark mark='b'/> The middle term is an average of "
+            "independent bounded terms, one per observation: their influence. <bookmark mark='c'/> The remainder is "
+            "of order n to the minus three quarters, up to logarithms, under additional local smoothness of the "
+            "density. The displayed almost-sure logarithmic bound is a useful bound; we are not deriving the sharpest"
+            " pointwise Kiefer constant. <bookmark mark='d'/> A separate fixed-quantile probabilistic remainder bound"
+            " gives root-n-scaled remainder of order n to the minus one quarter in probability, under the stated "
+            "density regularity; that statement does not follow by simply discarding logarithms from the almost-sure "
+            "bound. much more slowly than for smooth M-estimators, because the indicator function is not "
+            "differentiable."
         ) as vo:
+            heading=label('A fixed quantile has an asymptotically linear representation',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -80,10 +91,11 @@ class Quantiles(VoiceoverScene):
             label(r"the remainder shrinks like $n^{-1/4}$: \ the last column is roughly constant", font_size=26, color=S.ACCENT),
         ), 12.4, 0.25, [0, -2.1, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Simulated, for the median of normal samples. <bookmark mark='b'/> The standard deviation of "
-            "root n times the error matches the theory, root of pi over two, at every sample size. <bookmark mark='c'/> The "
-            "root-mean-square of the scaled remainder falls from point five seven to point one eight as n grows a hundredfold, "
-            "<bookmark mark='d'/> and multiplied by n to the one quarter it stays roughly constant: the slow rate, confirmed."
+            "<bookmark mark='a'/> Simulated, for the median of normal samples. <bookmark mark='b'/> The standard "
+            "deviation of root n times the error matches the theory, root of pi over two, at every sample size. "
+            "<bookmark mark='c'/> The root-mean-square of the scaled remainder falls from point five seven to point "
+            "one eight as n grows a hundredfold, <bookmark mark='d'/> and multiplied by n to the one quarter it stays"
+            " roughly constant: numerical support for that fixed-quantile rate, rather than a proof of it."
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(note_[0]), FadeIn(exact_tag(r"simulated")))
             vo.wait_until("b")
@@ -103,12 +115,14 @@ class Quantiles(VoiceoverScene):
             label(r"but it needs $f(\xi_p)$: \ hard to estimate; \ hence bootstrap and order-statistic intervals", font_size=26, color=HODC),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> What does the representation buy? <bookmark mark='b'/> Joint limits of several quantiles at "
-            "once, and of statistics built from them: the interquartile range, L-estimators, trimmed means. <bookmark "
-            "mark='c'/> The same linearization drives quantile regression and median survival times from earlier parts. "
-            "<bookmark mark='d'/> It identifies the quantile's influence function, which is bounded: a quantile is robust. "
-            "<bookmark mark='e'/> But the variance involves the density at the quantile, which is hard to estimate, which is "
-            "why intervals for quantiles usually come from order statistics or the bootstrap instead."
+            "<bookmark mark='a'/> What does the representation buy? <bookmark mark='b'/> Joint limits of several "
+            "quantiles at once, and of statistics built from them: the interquartile range, L-estimators, trimmed "
+            "means. <bookmark mark='c'/> The same linearization drives quantile regression and median survival times "
+            "from earlier parts. <bookmark mark='d'/> It identifies the quantile's influence function, which is "
+            "bounded for fixed positive density at the target. That is a local contamination sensitivity statement, "
+            "rather than a guarantee under arbitrary large contamination. <bookmark mark='e'/> But the variance "
+            "involves the density at the quantile, which is hard to estimate, which is why intervals for quantiles "
+            "usually come from order statistics or the bootstrap instead."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
@@ -132,6 +146,9 @@ class Quantiles(VoiceoverScene):
             "deviation. <bookmark mark='d'/> For the median of twenty observations, the sixth and fifteenth order "
             "statistics cover with probability point nine five nine, whatever the distribution."
         ) as vo:
+            heading=label('Binomial counts calibrate exact order-statistic intervals',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

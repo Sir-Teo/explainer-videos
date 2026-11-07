@@ -38,6 +38,9 @@ class TestEfficiency(VoiceoverScene):
             "sign test against the t test at the normal, two over pi: point six four. That number, and Wilcoxon's point "
             "nine five five, are Pitman efficiencies."
         ) as vo:
+            heading=label('Pitman efficiency compares local sample-size requirements',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -46,7 +49,7 @@ class TestEfficiency(VoiceoverScene):
 
     def table(self):
         rows = [[r"test vs $t$", r"normal", r"logistic", r"Laplace", r"$t_3$", r"worst case"],
-                [r"sign", r"0.637", r"0.822", r"2.000", r"1.62", r"1/3 \ (uniform-like)"],
+                [r"sign", r"0.637", r"0.822", r"2.000", r"1.62", r"1/3 \ (symmetric unimodal); \ 0 \ (general symmetric)"],
                 [r"Wilcoxon", r"0.955", r"1.097", r"1.500", r"1.90", r"0.864"],
                 [r"normal scores", r"1.000", r"1.047", r"1.273", r"1.64", r"1 \ (Chernoff--Savage)"]]
         tab = table_rows(rows, font_size=28, col_buff=0.7, row_buff=0.35, colors=[GREY_A, HODC, GOODC, S.ACCENT]).move_to([0, 0.7, 0])
@@ -54,10 +57,13 @@ class TestEfficiency(VoiceoverScene):
         if note_.width > 12.6:
             note_.width = 12.6
         with self.voiceover(
-            "<bookmark mark='a'/> The classic table. <bookmark mark='b'/> The sign test loses badly at the normal, but beats "
-            "the t test at the Laplace by a factor of two. <bookmark mark='c'/> Wilcoxon's test is never below point eight "
-            "six four and beats t for every heavy-tailed law shown. <bookmark mark='d'/> And the normal-scores test is never "
-            "below one: a rank test that costs nothing at the normal and gains elsewhere."
+            "<bookmark mark='a'/> The classic table. <bookmark mark='b'/> The sign test loses efficiency at the "
+            "normal, but has twice the local efficiency at the Laplace. Its often quoted one-third lower bound needs "
+            "symmetric unimodal densities; over arbitrary symmetric bimodal densities, central density can vanish and"
+            " sign efficiency can approach zero. <bookmark mark='c'/> Wilcoxon's test is never below point eight six "
+            "four and beats t for every heavy-tailed law shown. <bookmark mark='d'/> And under the continuous "
+            "finite-variance regularity conditions of Chernoff–Savage, the normal-scores ARE is at least one: a rank "
+            "test that costs nothing at the normal and gains elsewhere."
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(note_))
             for k, m_ in enumerate("bcd"):
@@ -81,6 +87,9 @@ class TestEfficiency(VoiceoverScene):
             "coins, from Part forty-three's large deviations. <bookmark mark='d'/> The ratio of slopes is the Bahadur "
             "efficiency, and as the alternative approaches the null it usually tends to the Pitman efficiency."
         ) as vo:
+            heading=label('Bahadur slopes describe fixed-alternative p-value decay',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -148,12 +157,16 @@ class TestEfficiency(VoiceoverScene):
         rows[3][-1].set_color(GOODC)
         whys = [why(r"a planned study"), why(r"57\% more patients"), why(r"5\% more"), why(r"efficiencies 1.5 and 2")]
         with self.voiceover(
-            "<bookmark mark='a'/> Efficiencies are sample sizes. Suppose a t test with a hundred observations has eighty "
-            "percent power against a small shift. <bookmark mark='b'/> The sign test needs about a hundred and fifty-seven "
-            "for the same power, if the data are normal. <bookmark mark='c'/> Wilcoxon's test needs about a hundred and "
-            "five. <bookmark mark='d'/> But if the errors are Laplace, Wilcoxon needs only sixty-seven and the sign test "
-            "fifty. In a clinical trial, these are patients."
+            "<bookmark mark='a'/> Pitman efficiencies approximate sample-size ratios in the local large-sample "
+            "regime; they are not exact finite-sample power calculations. Suppose a t test with a hundred "
+            "observations has eighty percent power against a small shift. <bookmark mark='b'/> The sign test needs "
+            "about a hundred and fifty-seven for the same power, if the data are normal. <bookmark mark='c'/> "
+            "Wilcoxon's test needs about a hundred and five. <bookmark mark='d'/> But if the errors are Laplace, "
+            "Wilcoxon needs only sixty-seven and the sign test fifty. In a clinical trial, these are patients."
         ) as vo:
+            heading=label('Asymptotic efficiencies approximate design sample-size ratios',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

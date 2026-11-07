@@ -32,13 +32,19 @@ class Influence(VoiceoverScene):
         whys = [why(r"von Mises (1947)"), why(r"Hampel (1974): \ add a point mass"), why(r"a first-order expansion"), why(r"chapters 2--3, \ unified")]
         with self.voiceover(
             "<bookmark mark='a'/> Richard von Mises's view of 1947: a statistic is a functional T of the empirical "
-            "distribution, estimating the same functional of the true distribution. <bookmark mark='b'/> Frank Hampel's "
-            "influence function, of 1974, is its derivative in the direction of a point mass: how much the functional moves "
-            "when a little probability is added at x. <bookmark mark='c'/> To first order, the estimation error is the "
-            "average of the influence function over the data, which has mean zero. <bookmark mark='d'/> If the remainder is "
-            "small, the estimator is asymptotically normal with variance the expected squared influence. Chapter two's "
-            "M-estimators and chapter three's quantiles are special cases."
+            "distribution, estimating the same functional of the true distribution. <bookmark mark='b'/> Frank "
+            "Hampel's influence function, of 1974, is its derivative in the direction of a point mass: how much the "
+            "functional moves when a little probability is added at x. <bookmark mark='c'/> For an asymptotically "
+            "linear functional, the estimation error has an expansion as the average of centered influence terms plus"
+            " a small remainder. Existence of a point-contamination derivative alone does not establish this "
+            "expansion. <bookmark mark='d'/> For independent observations, if the influence function has finite "
+            "second moment and the remainder is little-oh of one over root n, the estimator is asymptotically normal "
+            "with variance the expected squared influence. Chapter two's M-estimators and chapter three's quantiles "
+            "are special cases."
         ) as vo:
+            heading=label('An influence expansion needs more than a pointwise derivative',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -60,15 +66,17 @@ class Influence(VoiceoverScene):
             label(r"red: \ the median, \ $\mathrm{sign}(x)/2f(0)$: \ a step", font_size=22, color=HODC),
             label(r"green: \ Huber, \ $\psi_k(x)/E\psi_k'$: \ clipped", font_size=22, color=GOODC),
             label(r"purple, dashed: \ the 10\% trimmed mean", font_size=22, color=S.PRIOR),
-            label(r"bounded $\Rightarrow$ one bad point does bounded harm", font_size=22, color=S.ACCENT),
+            label(r"bounded IF: \ bounded first-order local contamination sensitivity", font_size=22, color=S.ACCENT),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The influence functions of four location estimators at the normal. The mean's is x minus "
-            "mu: a straight line, unbounded, so one wild observation can move it arbitrarily far. <bookmark mark='b'/> The "
-            "median's is a step: only the side of the median matters. <bookmark mark='c'/> Huber's is linear in the middle "
-            "and flat beyond k. <bookmark mark='d'/> The trimmed mean's is similar, flat beyond the trimming points. "
-            "<bookmark mark='e'/> A bounded influence function means a single contaminating point can do only bounded harm: "
-            "Part thirty's robustness, as a derivative."
+            "<bookmark mark='a'/> The influence functions of four location estimators at the normal. The mean's is x "
+            "minus mu: a straight line, unbounded, so one wild observation can move it arbitrarily far. <bookmark "
+            "mark='b'/> The median's is a step: only the side of the median matters. <bookmark mark='c'/> Huber's is "
+            "linear in the middle and flat beyond k. <bookmark mark='d'/> The trimmed mean's is similar, flat beyond "
+            "the trimming points. <bookmark mark='e'/> A bounded influence function means the first derivative with "
+            "respect to a small contamination fraction is uniformly bounded in its location. This local statement "
+            "does not by itself establish finite-sample breakdown protection: Part thirty's robustness, as a "
+            "derivative."
         ) as vo:
             self.play(FadeIn(A), FadeIn(exact_tag(r"exact formulas")))
             for k, (m_, c) in enumerate(zip("abcd", (cm, cmed, ch, ct))):
@@ -80,23 +88,30 @@ class Influence(VoiceoverScene):
 
     def hadamard(self):
         rows = [
-            cmath(r"\sqrt n(F_n - F)", r"\Rightarrow", r"\mathbb G_F, \ \text{a Brownian bridge in } \ell^\infty \ \ (\text{Part 48})", font_size=30),
-            cmath(r"T \text{ Hadamard differentiable}", r":", r"\frac{T(F + t h_t) - T(F)}{t} \to T'_F(h) \ \ \text{whenever } h_t \to h", font_size=28),
+            cmath(r"\sqrt n(F_n - F)", r"\Rightarrow", r"\mathbb G_F(x)=B(F(x)), \ \text{CDF indicator class in }\ell^\infty \ \ (\text{Part 48})", font_size=30),
+            cmath(r"T \text{ Hadamard differentiable}", r":", r"\frac{T(F + t h_t) - T(F)}{t} \to T'_F(h) \ \ \text{for admissible }h_t\to h,\ \ T'_F\text{ continuous linear}", font_size=28),
             cmath(r"\Rightarrow", r"\;", r"\sqrt n(T(F_n) - T(F)) \Rightarrow T'_F(\mathbb G_F)", font_size=34),
-            cmath(r"\text{quantiles}, \ \text{M-functionals}", r":", r"\text{Hadamard differentiable; \ the sup and KS, \ too (with care)}", font_size=28),
+            cmath(r"\text{quantiles}, \ \text{M-functionals}", r":", r"\text{regular Hadamard derivatives; \ null KS/sup generally only directional}", font_size=28),
         ]
         rows[2][-1].set_color(GOODC)
         whys = [why(r"Donsker, \ for distribution functions"), why(r"uniformly along converging paths"), why(r"the functional delta method"), why(r"what makes the bootstrap work, \ chapter 11")]
         with self.voiceover(
-            "<bookmark mark='a'/> To make the remainder rigorous, think of the whole empirical distribution function as the "
-            "random object. Root n times F n minus F converges to a Brownian bridge in the space of bounded functions: "
-            "Donsker's theorem, the subject of Part forty-eight. <bookmark mark='b'/> If T is Hadamard differentiable, "
-            "meaning that its difference quotients converge along every converging sequence of directions, <bookmark "
-            "mark='c'/> then the functional delta method gives the limit of root n times T of F n minus T of F: the "
-            "derivative applied to the Brownian bridge, a normal variable. <bookmark mark='d'/> Quantiles and M-functionals "
-            "are Hadamard differentiable, and so, with care, are many others. Chapter eleven uses exactly this property to "
-            "prove that the bootstrap works."
+            "<bookmark mark='a'/> To make the remainder rigorous, think of the whole empirical distribution function "
+            "as the random object. For the class of CDF indicators, the empirical process converges to a Brownian "
+            "bridge composed with F in the appropriate bounded-function space: Donsker's theorem, the subject of Part"
+            " forty-eight. <bookmark mark='b'/> If T is Hadamard differentiable, tangentially to the "
+            "empirical-process limit space, with a continuous linear derivative, meaning its difference quotients "
+            "converge along admissible converging directions, <bookmark mark='c'/> then the functional delta method "
+            "gives the limit of root n times T of F n minus T of F: the derivative applied to the Brownian bridge, a "
+            "normal variable. <bookmark mark='d'/> Quantiles with positive continuous density and regular "
+            "M-functionals qualify in suitable spaces. Moment functionals require moment control or weighted "
+            "topologies. Supremum and KS maps at a null are generally only directionally differentiable, with "
+            "nonlinear limits; ordinary differentiability and bootstrap conclusions do not automatically extend to "
+            "them. Chapter eleven uses exactly this property to prove that the bootstrap works."
         ) as vo:
+            heading=label('A continuous linear tangential derivative transfers process limits',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -108,21 +123,18 @@ class Influence(VoiceoverScene):
         rows = [
             cmath(r"T(F) = \mathrm{Var}_F(X)", r":", r"\mathrm{IF}(x) = (x - \mu)^2 - \sigma^2", font_size=34),
             cmath(r"n\,\mathrm{Var}(s^2)", r"\to", r"E\,\mathrm{IF}^2 = \mu_4 - \sigma^4", font_size=34),
-            cmath(r"\text{normal}, \ n = 40", r":", rf"\text{{simulated}} \ {d['var_normal']['sim']:.2f} \ \text{{vs}} \ {d['var_normal']['delta']:.0f}", font_size=32),
-            cmath(r"t_5 \text{ (scaled)}, \ n = 40", r":", rf"\text{{simulated}} \ {d['var_t5']['sim']:.2f} \ \text{{vs}} \ {d['var_t5']['delta']:.0f}", font_size=32),
+            cmath(r"\text{normal}, \ n = 40", r":", rf"\text{{MC}} \ {d['var_normal']['sim']:.2f}; \ \text{{finite-}}n: {d['var_normal']['finite_n']:.3f}; \ \text{{limit}}: {d['var_normal']['delta']:.0f}", font_size=32),
+            cmath(r"t_5 \text{ (scaled)}, \ n = 40", r":", rf"\text{{MC}} \ {d['var_t5']['sim']:.2f}; \ \text{{finite-}}n: {d['var_t5']['finite_n']:.3f}; \ \text{{limit}}: {d['var_t5']['delta']:.0f}", font_size=32),
         ]
         rows[1][-1].set_color(GOODC)
         rows[3][-1].set_color(HODC)
         whys = [why(r"differentiate the variance"), why(r"the fourth moment matters"), why(r"$\mu_4 = 3$"), why(r"$\mu_4 = 9$: \ four times worse")]
         with self.voiceover(
-            f"<bookmark mark='a'/> An example. The variance functional's influence function is the squared deviation minus "
-            f"the variance. <bookmark mark='b'/> So n times the variance of the sample variance tends to the fourth central "
-            f"moment minus sigma to the fourth: it depends on the tails. <bookmark mark='c'/> For normal data that is two, "
-            f"and forty observations give {say(d['var_normal']['sim'], 2)} by simulation. <bookmark mark='d'/> For a t "
-            f"distribution with five degrees of freedom, scaled to unit variance, it is eight, four times larger, and the "
-            f"simulation gives {say(d['var_t5']['sim'], 2)}. This is why tests about variances are so sensitive to "
-            f"non-normality, while tests about means are not."
+            f"<bookmark mark='a'/> An example. The variance functional's influence function is the squared deviation minus the variance. <bookmark mark='b'/> So n times the variance of the sample variance tends to the fourth central moment minus sigma to the fourth: it depends on the tails. <bookmark mark='c'/> For normal data that is two, and forty observations give {say(d['var_normal']['sim'], 2)} by simulation. <bookmark mark='d'/> For a t distribution with five degrees of freedom, scaled to unit variance, it is eight, four times larger, and the simulation gives {say(d['var_t5']['sim'], 2)}. For the unbiased sample variance at n equal to forty, the exact finite-sample values of n times its variance are about two point zero five and eight point zero five. The t-five Monte Carlo risk estimate is noisy because eighth moments do not exist. Mean tests also need suitable moments and can converge slowly under heavy tails."
         ) as vo:
+            heading=label('Variance estimation requires fourth-moment control',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

@@ -38,6 +38,9 @@ class Contiguity(VoiceoverScene):
             "practical consequence: anything negligible under the null, like the remainders in chapters two to five, is "
             "also negligible under local alternatives. We can do our expansions once, under the null."
         ) as vo:
+            heading=label('Contiguity transfers vanishing-probability events',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -55,13 +58,18 @@ class Contiguity(VoiceoverScene):
         rows[3][-1].set_color(GOODC)
         whys = [why(r"joint normality under the null"), why(r"Le Cam's third lemma"), why(r"a linear statistic"), why(r"the shift is a covariance")]
         with self.voiceover(
-            "<bookmark mark='a'/> Le Cam's third lemma does the real work. Suppose a statistic and the log-likelihood ratio "
-            "are jointly normal in the limit under the null, with covariance tau. <bookmark mark='b'/> Then under the local "
-            "alternative the statistic is still normal with the same variance, but its mean has shifted by exactly tau. "
-            "<bookmark mark='c'/> For a standardized linear statistic, tau is h times the covariance of its psi with the "
-            "score, over psi's standard deviation. <bookmark mark='d'/> So the local power of the test that rejects for large "
-            "T is one minus Phi of z alpha minus tau. The power of any test is a covariance with the score."
+            "<bookmark mark='a'/> Le Cam's third lemma does the real work. Suppose a statistic and the log-likelihood"
+            " ratio are jointly normal in the limit under the null, with covariance tau. <bookmark mark='b'/> Then "
+            "under the local alternative the statistic is still normal with the same variance, but its mean has "
+            "shifted by exactly tau. <bookmark mark='c'/> For a standardized linear statistic, tau is h times the "
+            "covariance of its psi with the score, over psi's standard deviation. <bookmark mark='d'/> So the local "
+            "power of the test that rejects for large T is one minus Phi of z alpha minus tau. For asymptotically "
+            "linear statistics with the stated joint Gaussian limit, this covariance determines the local mean shift."
+            " Arbitrary tests need not have such a representation."
         ) as vo:
+            heading=label('A Gaussian likelihood tilt shifts a statistic by its covariance',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -86,14 +94,16 @@ class Contiguity(VoiceoverScene):
             label(r"power at $h$ for the sign test \ = \ power at $0.80h$ for $t$", font_size=22, color=S.ACCENT),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Normal data, a hundred observations, a mean of h over root n. <bookmark mark='b'/> For the "
-            "t test, tau is h itself: the blue curve. <bookmark mark='c'/> For the sign test, the covariance of the sign with "
-            "the score is the root of two over pi, about point eight: the red curve. <bookmark mark='d'/> The dots are "
-            "simulated powers, and they sit on the third lemma's curves. <bookmark mark='e'/> The sign test at h has the "
-            "power the t test has at point eight h: it needs one over two over pi, about fifty-seven percent more data, for "
-            "the same power."
+            "<bookmark mark='a'/> Normal data, a hundred observations, a mean of h over root n. <bookmark mark='b'/> "
+            "For the t test, tau is h itself: the blue curve. <bookmark mark='c'/> For the sign test, the covariance "
+            "of the sign with the score is the root of two over pi, about point eight: the red curve. <bookmark "
+            "mark='d'/> The dots are simulated powers, and they are close to the third lemma's asymptotic curves. The"
+            " finite-sample t test uses its exact t quantile; the sign test randomizes at its binomial boundary for "
+            "exact five percent null size. The plotted sign dots average its conditional rejection probability. "
+            "<bookmark mark='e'/> The sign test at h has the power the t test has at point eight h: it needs one over"
+            " two over pi, about fifty-seven percent more data, for the same power."
         ) as vo:
-            self.play(FadeIn(A), FadeIn(exact_tag(r"curves exact; \ dots: \ 20,000 samples")))
+            self.play(FadeIn(A), FadeIn(exact_tag(r"asymptotic curves; \ dots: \ 20,000 samples; exact-level $t$ and randomized sign rules")))
             vo.wait_until("a")
             self.play(FadeIn(side[0]))
             vo.wait_until("b")
@@ -110,17 +120,19 @@ class Contiguity(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"the Wald, \ score and likelihood ratio tests:", font_size=28, color=GREY_A),
             label(r"all asymptotically $\chi^2_q$ under $H_0$, \ by Wilks and Slutsky", font_size=26),
-            label(r"all with the same local power: \ noncentral $\chi^2_q(h^\top I h)$, \ by the third lemma", font_size=26, color=GOODC),
+            label(r"regular model: \ same projected local noncentrality; \ use efficient information with nuisance", font_size=26, color=GOODC),
             label(r"equivalent to first order; \ they differ only at second order, \ and under misspecification", font_size=26, color=S.ACCENT),
             label(r"Part 22's trinity, \ explained", font_size=26, color=GREY_A),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The third lemma settles Part twenty-two's trinity of tests. <bookmark mark='b'/> The "
-            "Wald, score and likelihood ratio statistics are all asymptotically chi-square under the null. <bookmark "
-            "mark='c'/> Under local alternatives, all three converge to the same noncentral chi-square, with noncentrality "
-            "h transposed I h. <bookmark mark='d'/> So they are equivalent to first order, and differ only at second order, "
-            "or when the model is misspecified. <bookmark mark='e'/> Which is why, in practice, their disagreement is a "
-            "warning sign about the sample size or the model."
+            "<bookmark mark='a'/> The third lemma settles Part twenty-two's trinity of tests. <bookmark mark='b'/> "
+            "The Wald, score and likelihood ratio statistics are all asymptotically chi-square under the null. "
+            "<bookmark mark='c'/> Under local alternatives, all three converge to the same noncentral chi-square, "
+            "with noncentrality the information-weighted squared component of the local shift normal to the null. For"
+            " a point null without nuisance directions this is h transposed I h; with nuisance parameters it uses "
+            "efficient information or the corresponding projection. <bookmark mark='d'/> So they are equivalent to "
+            "first order, and differ only at second order, or when the model is misspecified. <bookmark mark='e'/> "
+            "Which is why, in practice, their disagreement is a warning sign about the sample size or the model."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
@@ -138,14 +150,19 @@ class Contiguity(VoiceoverScene):
         rows[3][-1].set_color(GOODC)
         whys = [why(r"Part 43's KL rate"), why(r"not contiguous"), why(r"degenerate comparisons"), why(r"why $1/\sqrt n$")]
         with self.voiceover(
-            "<bookmark mark='a'/> For contrast, a fixed alternative. Under the null, the log-likelihood ratio per observation "
-            "converges to minus the Kullback–Leibler divergence between the two distributions, <bookmark mark='b'/> so the "
-            "log-likelihood ratio itself runs off to minus infinity: the null and the alternative become perfectly "
-            "distinguishable, singular rather than contiguous. <bookmark mark='c'/> Every sensible test then has power "
-            "tending to one, and there is nothing left to compare. <bookmark mark='d'/> That is why local alternatives, at "
-            "distance one over root n, are the right scale: the only scale at which power stays strictly between alpha and "
-            "one, and tests can be told apart."
+            "<bookmark mark='a'/> For contrast, consider independent observations and a distinct identifiable fixed "
+            "alternative with finite positive KL divergence. Under the null, the log-likelihood ratio per observation"
+            " converges to minus the Kullback–Leibler divergence between the two distributions, <bookmark mark='b'/> "
+            "so the log-likelihood ratio itself runs off to minus infinity: the null and the alternative become "
+            "perfectly distinguishable, singular rather than contiguous. <bookmark mark='c'/> Tests consistent "
+            "against that alternative then have power tending to one, and there is nothing left to compare. <bookmark"
+            " mark='d'/> That is why local alternatives, at distance one over root n, are the right scale: the "
+            "regular LAN scale at which nontrivial local power can be compared. Nonregular models can have different "
+            "rates, and tests can be told apart."
         ) as vo:
+            heading=label('Identifiable fixed alternatives separate as information grows',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
