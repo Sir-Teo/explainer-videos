@@ -82,9 +82,10 @@ class Problem(VoiceoverScene):
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The naive analysis declares every gene with p below five percent a discovery. "
-            "<bookmark mark='b'/> That gives four hundred and thirty discoveries. <bookmark mark='c'/> Two hundred and sixteen "
-            "are real, and two hundred and fourteen are false. <bookmark mark='d'/> Half the list is noise, as it must be: "
-            "five percent of four thousand seven hundred and fifty null genes is about two hundred and thirty-eight."
+            "<bookmark mark='b'/> That gives four hundred and thirty discoveries. <bookmark mark='c'/> Two hundred "
+            "and sixteen are real, and two hundred and fourteen are false. <bookmark mark='d'/> Half this particular "
+            "list is noise. Across repeated studies, five percent of four thousand seven hundred and fifty null genes"
+            " is about two hundred and thirty-eight."
         ) as vo:
             self.add(genes_tag())
             for k, m_ in enumerate("abcd"):
@@ -100,19 +101,20 @@ class Problem(VoiceoverScene):
         A = axes([0, 1], [0, 5.2], x_length=7.4, y_length=4.4, xlabel=r"$p$-value", ylabel=r"density",
                  xticks=[0, 0.25, 0.5, 0.75, 1], yticks=[0, 1, 2, 4], center=[-2.0, 0.3, 0])
         ax = A.ax
-        bars = hist_bars(ax, edges, np.minimum(dens, 5.2), color=BHC, opacity=0.7)
+        bars = hist_bars(ax, edges, dens, color=BHC, opacity=0.7)
         flat = DashedLine(ax.c2p(0, d["pi0"]), ax.c2p(1, d["pi0"]), color=NULLC, stroke_width=3)
         rows = fit_rows(VGroup(
             label(r"null $p$-values are uniform", font_size=22),
             label(r"real effects pile up near 0", font_size=22, color=TRUEC),
             label(rf"the flat floor's height: \ $\pi_0 \approx {d['pi0']:.3f}$", font_size=22, color=NULLC),
-            label(r"the share of nulls, \ readable from the picture", font_size=22, color=GREY_A),
+            label(r"requires few alternative $p$-values near 1", font_size=22, color=GREY_A),
         ), 4.2, 0.42, [4.6, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The histogram of all five thousand p-values tells the story. Under a true null, a p-value "
-            "is uniformly distributed, so null genes fill a flat floor. <bookmark mark='b'/> Real effects pile up near "
-            "zero. <bookmark mark='c'/> The height of the floor estimates the share of nulls, pi zero, about point nine six "
-            "here, against a truth of point nine five. <bookmark mark='d'/> Chapter four uses exactly this idea."
+            "<bookmark mark='a'/> The histogram of all five thousand p-values tells the story. Under a true null, a "
+            "p-value is uniformly distributed, so null genes fill a flat floor. <bookmark mark='b'/> Real effects "
+            "pile up near zero. <bookmark mark='c'/> If alternatives rarely produce large p-values, the upper "
+            "histogram estimates the null share, about point nine six here, against a truth of point nine five. "
+            "<bookmark mark='d'/> Chapter four uses exactly this idea."
         ) as vo:
             self.add(genes_tag())
             self.play(FadeIn(A))
@@ -172,6 +174,9 @@ class Problem(VoiceoverScene):
             "<bookmark mark='d'/> That proportion itself, the FDP, is random; the FDR is only its average, a distinction "
             "chapter six takes seriously."
         ) as vo:
+            intro=label('Error rates differ in their denominator and averaging',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -180,22 +185,26 @@ class Problem(VoiceoverScene):
 
     def uniform(self):
         rows = [
-            cmath(r"P(p \le u)", r"=", r"P(F_0(T) \le u) = u", font_size=32),
+            cmath(r"P(p \le u)", r"=", r"P(1-F_0(T) \le u) = u", font_size=32),
             cmath(r"\text{so}", r":", r"p \sim U(0, 1) \ \text{under } H_0", font_size=32),
-            cmath(r"\text{alternative}", r":", r"p \text{ stochastically smaller: \ density falling}", font_size=30),
+            cmath(r"\text{alternative}", r":", r"\text{well-powered signals often yield small }p", font_size=30),
             cmath(r"\text{discrete tests}", r":", r"p \text{ is super-uniform: \ } P(p \le u) \le u", font_size=30),
         ]
         rows[1][-1].set_color(BHC)
         whys = [why(r"the probability integral transform"), why(r"for a continuous test statistic"), why(r"the spike near 0"), why(r"conservative, \ never anti-conservative")]
         with self.voiceover(
             "<bookmark mark='a'/> Why is a null p-value uniform? For a one-sided test, the p-value is one minus the "
-            "null distribution function at the observed statistic, and the chance that this is at most u is exactly u, "
-            "the probability integral transform of Part 7. <bookmark mark='b'/> So under the null, p-values are "
-            "uniform on zero to one. <bookmark mark='c'/> Under an alternative they are stochastically smaller, which "
-            "gives the spike at zero. <bookmark mark='d'/> For discrete tests, like Fisher's exact test, the p-value "
-            "is super-uniform: the chance it is below u is at most u, which keeps every procedure in this part valid, "
-            "if conservative."
+            "null distribution function at the observed statistic, and the chance that this is at most u is exactly "
+            "u, the probability integral transform of Part 7. <bookmark mark='b'/> So under the null, p-values are "
+            "uniform on zero to one. <bookmark mark='c'/> For these well-powered alternatives, small p-values are "
+            "more common. A decreasing density is not a universal property of alternatives. <bookmark mark='d'/> For "
+            "discrete tests, like Fisher's exact test, the p-value is super-uniform: the chance it is below u is at "
+            "most u, This supports p-value error bounds when each procedure’s other assumptions, including dependence"
+            " conditions, hold."
         ) as vo:
+            intro=label('Valid null p-values need a specified sampling distribution',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

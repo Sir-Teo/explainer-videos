@@ -1,0 +1,15 @@
+{
+  "source": "https://raw.githubusercontent.com/cran/sda/master/data/singh2002.rda",
+  "documentation": "https://raw.githubusercontent.com/cran/sda/master/man/singh2002.Rd",
+  "sha256": "b9d09321644e79973bb0e0fbac519c55f5eca1356d1fa2c68d9e2116a48912e2",
+  "samples": 102,
+  "genes": 6033,
+  "cancer": 52,
+  "healthy": 50,
+  "derivation": "cancer minus healthy pooled two-sample t, df100; z=Phi^-1(F_100(t))",
+  "t_max_absolute_error": 5.61836931589621e-07,
+  "z_max_absolute_error": 5.868517525819961e-07,
+  "t_six_decimal_rounding_differences": 131,
+  "z_six_decimal_rounding_differences": 115,
+  "localfdr_reference": "statsmodels GLM Poisson, degree7 standardized histogram midpoints, convergence=True; max absolute density difference 1.4e-15"
+}

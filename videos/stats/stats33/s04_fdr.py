@@ -48,7 +48,7 @@ class FDR(VoiceoverScene):
             cmath(r"p_{(1)} \le \dots \le p_{(m)}", r":", r"\text{sort}", font_size=32),
             cmath(r"k", r"=", r"\max\{i : p_{(i)} \le q\, i/m\}", font_size=34),
             cmath(r"\text{reject}", r":", r"H_{(1)}, \dots, H_{(k)}", font_size=32),
-            cmath(r"\text{FDR}", r"\le", r"\pi_0 q \ \ \text{(independent tests)}", font_size=32),
+            cmath(r"\text{FDR\vee1}", r"\le", r"\pi_0 q \ \ \text{(independent tests)}", font_size=32),
         ]
         rows[1][-1].set_color(BHC)
         whys = [why(r"as for Holm"), why(r"the last crossing of a line"), why(r"step up"), why(r"the theorem")]
@@ -59,6 +59,9 @@ class FDR(VoiceoverScene):
             "p-values sit above the line. <bookmark mark='d'/> For independent tests, the false discovery rate is then at "
             "most pi zero times q."
         ) as vo:
+            intro=label('BH rejects through the last ordered crossing',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -109,13 +112,14 @@ class FDR(VoiceoverScene):
         tb.move_to([0, 0.9, 0])
         foot = fit_rows(VGroup(
             label(r"BH finds three to four times as many real genes", font_size=22, color=BHC),
-            label(r"and the false share is close to $q$: \ the promise, \ kept on this data set", font_size=22, color=SIGC),
+            label(r"and the false share is close to $q$: \ one realized FDP; FDR concerns repeated studies", font_size=22, color=SIGC),
         ), 12.0, 0.22, [0, -1.9, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Against Holm's fifty discoveries, BH at five percent makes a hundred and fifty-five, with "
-            "six false; at ten percent, a hundred and eighty-four, with nineteen false, a false discovery proportion of ten "
-            "point three percent. <bookmark mark='b'/> Three to four times as many real genes found, <bookmark mark='c'/> "
-            "and the share of false ones close to the promised q."
+            "<bookmark mark='a'/> Against Holm's fifty discoveries, BH at five percent makes a hundred and "
+            "fifty-five, with six false; at ten percent, a hundred and eighty-four, with nineteen false, a false "
+            "discovery proportion of ten point three percent. <bookmark mark='b'/> Three to four times as many real "
+            "genes found, <bookmark mark='c'/> and a realized false share near q. This does not establish FDR control"
+            " from one dataset."
         ) as vo:
             self.add(genes_tag())
             vo.wait_until("a")
@@ -128,14 +132,14 @@ class FDR(VoiceoverScene):
 
     def proof_setup(self):
         rows = [
-            cmath(r"V/R", r"=", r"\textstyle\sum_{i \in H_0} \mathbf 1\{H_i \text{ rejected}\}/R", font_size=30),
+            cmath(r"V/(R\vee1)", r"=", r"\textstyle\sum_{i \in H_0} \mathbf 1\{H_i \text{ rejected}\}/R", font_size=30),
             cmath(r"H_i \text{ rejected}, \ R = k", r"\iff", r"p_i \le qk/m \text{ and } R^{(i)} = k", font_size=30),
             cmath(r"R^{(i)}", r":", r"\text{BH's count with } p_i \text{ set to } 0", font_size=30),
             cmath(r"p_i", r"\perp", r"R^{(i)} \ \ \text{(independence)}", font_size=32),
         ]
         rows[1][-1].set_color(BHC)
         whys = [why(r"split by hypothesis"), why(r"the key observation"), why(r"depends only on the other $p$-values"),
-                why(r"the only assumption")]
+                why(r"also requires valid null $p$-values")]
         with self.voiceover(
             "<bookmark mark='a'/> The proof under independence is short. Write V over R as a sum over the true nulls of the "
             "indicator that each is rejected, divided by R. <bookmark mark='b'/> A null H i is rejected with exactly k "
@@ -143,6 +147,9 @@ class FDR(VoiceoverScene):
             "reject k. <bookmark mark='c'/> That second count depends only on the other p-values. <bookmark mark='d'/> So "
             "under independence it is independent of p i, which is uniform."
         ) as vo:
+            intro=label('Replacing one null p-value by zero isolates its contribution',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -151,10 +158,10 @@ class FDR(VoiceoverScene):
 
     def proof(self):
         rows = [
-            cmath(r"E\big[\tfrac{\mathbf 1\{i \text{ rej.}\}}{R}\big]", r"=", r"\textstyle\sum_k \tfrac1k P(p_i \le \tfrac{qk}{m})\, P(R^{(i)} = k)", font_size=28),
+            cmath(r"E\big[\tfrac{\mathbf 1\{i \text{ rej.}\}}{R\vee1}\big]", r"=", r"\textstyle\sum_k \tfrac1k P(p_i \le \tfrac{qk}{m})\, P(R^{(i)} = k)", font_size=28),
             cmath(r"", r"=", r"\textstyle\sum_k \tfrac1k \cdot \tfrac{qk}{m} \cdot P(R^{(i)} = k)", font_size=30),
             cmath(r"", r"=", r"\tfrac{q}{m} \textstyle\sum_k P(R^{(i)} = k) = \tfrac{q}{m}", font_size=30),
-            cmath(r"\text{FDR}", r"=", r"m_0 \cdot \tfrac{q}{m} = \pi_0 q", font_size=34),
+            cmath(r"\text{FDR\vee1}", r"=", r"m_0 \cdot \tfrac{q}{m} = \pi_0 q", font_size=34),
         ]
         rows[3][-1].set_color(BHC)
         whys = [why(r"independence"), why(r"$p_i$ uniform"), why(r"the $k$'s cancel"), why(r"exactly, \ for independent nulls")]
@@ -166,6 +173,9 @@ class FDR(VoiceoverScene):
             "true nulls, the false discovery rate is exactly pi zero times q. Not a bound: an equality, for independent "
             "continuous p-values."
         ) as vo:
+            intro=label('Independent uniform nulls each contribute q divided by m',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -184,12 +194,16 @@ class FDR(VoiceoverScene):
                 why(r"chapter six measures it")]
         with self.voiceover(
             "<bookmark mark='a'/> What about dependence? Benjamini and Daniel Yekutieli proved in 2001 that BH still "
-            "controls the false discovery rate under positive regression dependence, which covers positively correlated "
-            "one-sided tests like co-expressed genes. <bookmark mark='b'/> For arbitrary dependence, dividing q by the "
-            "harmonic sum restores the guarantee: the BY procedure. <bookmark mark='c'/> For five thousand tests that "
-            "factor is about nine. <bookmark mark='d'/> In practice BH is remarkably robust to dependence, and BY is very "
+            "controls the false discovery rate under positive regression dependence on the true nulls. One-sided "
+            "jointly Gaussian tests with suitable nonnegative correlations are an example; positive correlation alone"
+            " is not a general certificate. <bookmark mark='b'/> For arbitrary dependence, dividing q by the harmonic"
+            " sum restores the guarantee: the BY procedure. <bookmark mark='c'/> For five thousand tests that factor "
+            "is about nine. <bookmark mark='d'/> In practice BH is remarkably robust to dependence, and BY is very "
             "conservative."
         ) as vo:
+            intro=label('PRDS and arbitrary dependence need different corrections',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -221,20 +235,23 @@ class FDR(VoiceoverScene):
         rows = [
             cmath(r"R(t)", r"=", r"\#\{p_i \le t\}", font_size=32),
             cmath(r"E\,V(t)", r"\approx", r"m_0 t \le m t", font_size=32),
-            cmath(r"\widehat{\mathrm{FDR}}(t)", r"=", r"m t / R(t)", font_size=32),
-            cmath(r"\text{BH}", r"=", r"\text{the largest } t \text{ with } \widehat{\mathrm{FDR}}(t) \le q", font_size=30),
+            cmath(r"\widehat{\mathrm{FDR\vee1}}(t)", r"=", r"m t / R(t)", font_size=32),
+            cmath(r"\text{BH}", r"=", r"\text{the largest } t \text{ with } \widehat{\mathrm{FDR\vee1}}(t) \le q", font_size=30),
         ]
         rows[2][-1].set_color(BHC)
         whys = [why(r"discoveries at threshold $t$"), why(r"nulls are uniform"), why(r"a plug-in estimate"), why(r"Storey's reading of BH")]
         with self.voiceover(
-            "<bookmark mark='a'/> There is a second way to see BH. Reject every p-value below a threshold t, and count "
-            "the rejections. <bookmark mark='b'/> Since null p-values are uniform, the expected number of false "
-            "rejections is m zero times t, at most m times t. <bookmark mark='c'/> So m t over the number of "
-            "rejections is a conservative estimate of the false discovery proportion. <bookmark mark='d'/> BH chooses "
-            "the largest threshold for which that estimate is below q: at the i-th sorted p-value it is exactly m p "
-            "over i. This is Storey's reading of the procedure, and the reason replacing m by an estimate of m zero "
-            "gives chapter four's adaptive version."
+            "<bookmark mark='a'/> There is a second way to see BH. Reject every p-value below a threshold t, and "
+            "count the rejections. <bookmark mark='b'/> Since null p-values are uniform, the expected number of false"
+            " rejections is m zero times t, at most m times t. <bookmark mark='c'/> So m t over the number of "
+            "rejections is a plug-in estimate of the false share; it is not an upper confidence bound for this "
+            "realized list. <bookmark mark='d'/> BH chooses the largest threshold for which that estimate is below q:"
+            " at the i-th sorted p-value it is exactly m p over i. This is Storey's reading of the procedure, and the"
+            " reason replacing m by an estimate of m zero gives chapter four's adaptive version."
         ) as vo:
+            intro=label('A plug-in false-share estimate motivates the BH line',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

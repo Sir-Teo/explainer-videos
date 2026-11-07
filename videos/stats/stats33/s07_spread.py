@@ -25,7 +25,7 @@ class Spread(VoiceoverScene):
 
     def setup_(self):
         rows = [
-            cmath(r"m = 1{,}000", r":", r"900 \text{ nulls}, \ 100 \text{ effects at } z = 2.5", font_size=30),
+            cmath(r"m = 1{,}000", r":", r"900 \text{ nulls}, \ 100 \text{ effects with mean } 2.5", font_size=30),
             cmath(r"\text{independent}", r":", r"\rho = 0", font_size=32),
             cmath(r"\text{equicorrelated}", r":", r"z_i = \sqrt{\rho}\, W + \sqrt{1 - \rho}\, \varepsilon_i, \ \rho = 0.5", font_size=30),
             cmath(r"\text{BH at } q = 0.1", r":", r"\text{2,000 studies each}", font_size=30),
@@ -40,6 +40,9 @@ class Spread(VoiceoverScene):
             "measurement in a study together. <bookmark mark='d'/> BH at ten percent, two thousand studies each way, "
             "recording the false discovery proportion of each study."
         ) as vo:
+            intro=label('A shared Gaussian factor induces dependence among tests',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -49,16 +52,18 @@ class Spread(VoiceoverScene):
     def hists(self):
         d = load("fdp")
         f0, f5 = np.asarray(d["0.0"]["fdp"]), np.asarray(d["0.5"]["fdp"])
-        edges = np.linspace(0, 0.6, 31)
+        edges = np.linspace(0, 1, 51)
+        heights = [np.histogram(v, edges)[0] / (len(v) * (edges[1]-edges[0])) for v in (f0,f5)]
+        ymax=max(float(v.max()) for v in heights)*1.1
         w = edges[1] - edges[0]
-        A1 = axes([0, 0.6], [0, 13], x_length=5.4, y_length=3.8, xlabel=r"FDP", ylabel=r"independent",
-                  xticks=[0, 0.1, 0.2, 0.4, 0.6], yticks=[0, 5, 10], center=[-3.3, 0.6, 0])
-        A2 = axes([0, 0.6], [0, 13], x_length=5.4, y_length=3.8, xlabel=r"FDP", ylabel=r"correlated, \ $\rho = 0.5$",
-                  xticks=[0, 0.1, 0.2, 0.4, 0.6], yticks=[0, 5, 10], center=[3.3, 0.6, 0])
-        h1 = hist_bars(A1.ax, edges, np.minimum(np.histogram(f0, edges)[0] / (len(f0) * w), 13), color=BHC, opacity=0.7)
-        h2 = hist_bars(A2.ax, edges, np.minimum(np.histogram(f5, edges)[0] / (len(f5) * w), 13), color=BYC, opacity=0.7)
-        q1 = DashedLine(A1.ax.c2p(0.1, 0), A1.ax.c2p(0.1, 12.5), color=SIGC, stroke_width=2)
-        q2 = DashedLine(A2.ax.c2p(0.1, 0), A2.ax.c2p(0.1, 12.5), color=SIGC, stroke_width=2)
+        A1 = axes([0, 1], [0, ymax], x_length=5.4, y_length=3.8, xlabel=r"FDP", ylabel=r"independent",
+                  xticks=[0, 0.1, 0.5, 1], yticks=[0, ymax/2, ymax], center=[-3.3, 0.6, 0])
+        A2 = axes([0, 1], [0, ymax], x_length=5.4, y_length=3.8, xlabel=r"FDP", ylabel=r"correlated, \ $\rho = 0.5$",
+                  xticks=[0, 0.1, 0.5, 1], yticks=[0, ymax/2, ymax], center=[3.3, 0.6, 0])
+        h1 = hist_bars(A1.ax, edges, heights[0], color=BHC, opacity=0.7)
+        h2 = hist_bars(A2.ax, edges, heights[1], color=BYC, opacity=0.7)
+        q1 = DashedLine(A1.ax.c2p(0.1, 0), A1.ax.c2p(0.1, ymax), color=SIGC, stroke_width=2)
+        q2 = DashedLine(A2.ax.c2p(0.1, 0), A2.ax.c2p(0.1, ymax), color=SIGC, stroke_width=2)
         foot = fit_rows(VGroup(
             label(rf"independent: \ mean {d['0.0']['fdr']:.3f}, \ tightly around $\pi_0 q = 0.09$", font_size=22, color=BHC),
             label(rf"correlated: \ mean {d['0.5']['fdr']:.3f}, \ but a spike at 0 and a long tail", font_size=22, color=BYC),
@@ -119,15 +124,19 @@ class Spread(VoiceoverScene):
             cmath(r"\text{the average hides}", r":", r"\text{a mixture of very good and very bad studies}", font_size=30),
         ]
         rows[3][-1].set_color(FALSEC)
-        whys = [why(r"an unlucky batch"), why(r"a lucky batch"), why(r"the promise is about the average"),
+        whys = [why(r"an unlucky batch"), why(r"fewer false positives, but less power"), why(r"the promise is about the average"),
                 why(r"Efron (2007): \ correlation and large-scale testing")]
         with self.voiceover(
-            "<bookmark mark='a'/> Why? When the shared factor is large, every z-value is pushed up and many nulls cross the "
-            "line together. <bookmark mark='b'/> When it is small, everything is pushed down and even the real effects are "
-            "missed. <bookmark mark='c'/> The false discovery rate averages over the shared factor, so its promise survives. "
-            "<bookmark mark='d'/> But the average hides a mixture of very good and very bad studies, as Efron emphasized in "
-            "2007. The empirical null of chapter five is one remedy: it estimates the shift that this study's factor caused."
+            "<bookmark mark='a'/> Why? When the shared factor is large, every z-value is pushed up and many nulls "
+            "cross the line together. <bookmark mark='b'/> When it is small, everything is pushed down and even the "
+            "real effects are missed. <bookmark mark='c'/> The false discovery rate averages over the shared factor, "
+            "so its promise survives. <bookmark mark='d'/> But the average hides a mixture of very good and very bad "
+            "studies, as Efron emphasized in 2007. A central-null fit may estimate the shared shift under additional "
+            "assumptions; it does not automatically control this study’s realized false share."
         ) as vo:
+            intro=label('Averages over a shared factor can hide large study-to-study variation',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -139,10 +148,13 @@ class Spread(VoiceoverScene):
         b = coverage_board(rows, lit_part=33, placeholders=0, font_size=20, row_h=0.62)
         b.scale_to_fit_width(min(b.width, 13.0)).move_to(ORIGIN)
         with self.voiceover(
-            "<bookmark mark='a'/> On the Board, as error rates, with a thousand studies each. No correction, every p below "
-            "ten percent: a false discovery rate of fifty percent, broken. <bookmark mark='b'/> BH with independent tests: "
-            "kept, at point oh nine. With correlated tests: conservative, point oh six five. <bookmark mark='c'/> BY: very "
-            "conservative, one percent. The Board judges averages; the histograms remind us what an average hides."
+            "<bookmark mark='a'/> On the Board, as error rates, with a thousand independent simulated studies each. "
+            "Monte Carlo uncertainty uses the variability of study-level false proportions, not a binomial "
+            "approximation. No correction, every p below ten percent: a false discovery rate of fifty percent, "
+            "broken. <bookmark mark='b'/> BH with independent tests: conservative relative to the nominal ten "
+            "percent, at point oh nine. With correlated tests: conservative, point oh six five. <bookmark mark='c'/> "
+            "BY: very conservative, one percent. The Board judges averages; the histograms remind us what an average "
+            "hides."
         ) as vo:
             self.play(FadeIn(b.head), FadeIn(b.axis), FadeIn(b.legend))
             vo.wait_until("a")
@@ -178,19 +190,23 @@ class Spread(VoiceoverScene):
         rows = [
             cmath(r"z_i \mid W", r"\sim", r"N(\sqrt\rho W, 1 - \rho)", font_size=32),
             cmath(r"\text{one study}", r":", r"\text{the nulls' histogram is } N(\sqrt\rho W, 1 - \rho)", font_size=30),
-            cmath(r"\text{the theoretical null}", r":", r"N(0, 1): \ \text{wrong in every single study}", font_size=30),
+            cmath(r"\text{the theoretical null}", r":", r"N(0,1):\ \text{valid marginally, different conditionally}", font_size=30),
             cmath(r"\text{the empirical null}", r":", r"\text{estimates } (\sqrt\rho W, \sqrt{1 - \rho}) \text{ from the middle}", font_size=28),
         ]
         rows[3][-1].set_color(BHC)
-        whys = [why(r"conditional on the batch"), why(r"shifted and narrowed"), why(r"right only on average"), why(r"chapter five's remedy")]
+        whys = [why(r"conditional on the batch"), why(r"shifted and narrowed"), why(r"right only on average"), why(r"central-fit model; no automatic conditional guarantee")]
         with self.voiceover(
             "<bookmark mark='a'/> Seen from inside one study, given the shared factor, each null z-value is normal "
-            "with mean root rho times W and variance one minus rho. <bookmark mark='b'/> So the histogram of the nulls "
-            "in this study is shifted by the batch and narrower than the standard normal. <bookmark mark='c'/> The "
-            "theoretical null is therefore wrong in every individual study, and right only on average over studies. "
-            "<bookmark mark='d'/> The empirical null of chapter five estimates the shift and the width from the middle "
-            "of this study's own histogram, which is why Efron recommends it whenever correlation is suspected."
+            "with mean root rho times W and variance one minus rho. <bookmark mark='b'/> So the histogram of the "
+            "nulls in this study is shifted by the batch and narrower than the standard normal. <bookmark mark='c'/> "
+            "The conditional null differs from the marginal standard normal. The original tests remain marginally "
+            "valid, which is the conditioning used by the FDR theorem. <bookmark mark='d'/> The empirical null of "
+            "chapter five estimates the shift and the width from the middle of this study's own histogram, under a "
+            "central-null model. Correlation alone does not guarantee this fit repairs conditional error rates."
         ) as vo:
+            intro=label('Conditional and marginal null distributions answer different questions',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

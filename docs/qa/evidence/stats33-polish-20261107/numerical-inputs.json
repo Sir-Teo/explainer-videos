@@ -1,0 +1,57 @@
+[
+  {
+    "name": "salmon",
+    "sha256": "eac327caf8ed08016840b6715094ded66c8189ae79724ea31a03be8e5ed77d68",
+    "bytes": 334313
+  },
+  {
+    "name": "genes",
+    "sha256": "d27861ce0583b4df3580d5af2f6c85a9beafb57cb04af9a62eb637e8b114b772",
+    "bytes": 238992
+  },
+  {
+    "name": "fdp",
+    "sha256": "a9404fa0d65ebe856370a32f18d96e667ca6a91875178c607bcd94c7dbe16749",
+    "bytes": 98911
+  },
+  {
+    "name": "prostate",
+    "sha256": "ae3425788e621ed54050e5ee4e2d5267a5aa41c12b45822276ab4ffa7a5a1de1",
+    "bytes": 13145
+  },
+  {
+    "name": "knock",
+    "sha256": "f3c5c5ef89a6cdeb8ead04ff7e34db9da90584e4c62a66d04badef235b5b8d93",
+    "bytes": 4872
+  },
+  {
+    "name": "phack",
+    "sha256": "0fd2a13c2dc22dda1eb47c19271bfbe96ca5e5b11fed8d93489dc67ea79236d8",
+    "bytes": 107
+  },
+  {
+    "name": "stopping",
+    "sha256": "ee5e9f7d0b81ea845e6051095ffc56f72084d37db53c21d88f67fc6636ecc507",
+    "bytes": 352
+  },
+  {
+    "name": "pub",
+    "sha256": "fa10bf39317166f7ac1d2e650be19c9e0cb76a2ed6eca8dda23a9217e877b218",
+    "bytes": 43593
+  },
+  {
+    "name": "pcurve",
+    "sha256": "3d65555019b5c27205a5a636c32f961d43c34b6327d1baf821890ba41a3f03d0",
+    "bytes": 8555
+  },
+  {
+    "name": "fcr",
+    "sha256": "c2b855e06f22848bf4685492b9ae50faa2bf7cbf116e822530dbf3ba6fd242e9",
+    "bytes": 31501
+  },
+  {
+    "name": "board",
+    "sha256": "0266c34b49d02ab9b78db4e6831911581b69dafa2e018045a43f019e1892bda1",
+    "bytes": 148848
+  }
+]

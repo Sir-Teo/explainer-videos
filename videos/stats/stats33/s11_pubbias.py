@@ -58,18 +58,19 @@ class PubBias(VoiceoverScene):
         sig = polyline(ax, 1.96 * ss, 0.48 - ss, FALSEC, 2)
         rows = fit_rows(VGroup(
             label(rf"{d['k']} studies of a true effect 0.2 \ (green)", font_size=22, color=TRUEC),
-            label(r"every significant one published; \ 10\% of the rest", font_size=22),
+            label(r"every positive significant study; \ 10\% of all others", font_size=22),
             label(rf"gold: \ the {d['n_pub']} published", font_size=22, color=SIGC),
-            label(r"red: \ where $p = 0.05$; \ small studies must land right of it", font_size=22, color=FALSEC),
+            label(r"red: \ where $p = 0.05$; \ positive-significance boundary", font_size=22, color=FALSEC),
         ), 4.2, 0.42, [4.6, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> A simulated literature: eight hundred studies of an effect whose true size is point two, "
-            "with sample sizes from ten to two hundred per group, so standard errors from point one to point four five. The "
-            "funnel plot shows each study's estimate against its standard error, precise studies at the top. "
-            "<bookmark mark='b'/> Every significant study is published, and only one in ten of the rest. "
-            "<bookmark mark='c'/> The two hundred and seventy-eight published studies, in gold. <bookmark mark='d'/> The red "
-            "line marks p equal to point oh five: small, imprecise studies are published only when they land to the right "
-            "of it, with large estimates. The funnel is hollowed out on the left at the bottom."
+            "<bookmark mark='a'/> A simulated literature: eight hundred studies of an effect whose true size is point"
+            " two, with sample sizes from ten to two hundred per group, so standard errors from point one to point "
+            "four five. The funnel plot shows each study's estimate against its standard error, precise studies at "
+            "the top. <bookmark mark='b'/> Every study significant in the positive direction is published, along with"
+            " one in ten of all others. <bookmark mark='c'/> The two hundred and seventy-eight published studies, in "
+            "gold. <bookmark mark='d'/> The red line marks p equal to point oh five: small, imprecise studies are "
+            "preferentially published to its right, with large estimates; ten percent of the other studies are still "
+            "published. The funnel is hollowed out on the left at the bottom."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A), FadeIn(fun), Create(tline))
@@ -97,16 +98,19 @@ class PubBias(VoiceoverScene):
         ]
         rows[0].move_to([0, -1.3, 0])
         foot = fit_rows(VGroup(
-            label(r"Egger et al. (1997): \ no bias $\Rightarrow b_0 = 0$; \ PET (Stanley \& Doucouliagos): \ $b_1$ estimates the effect", font_size=22),
+            label(r"Egger et al. (1997): \ common effect, no selection: $b_0=0$; asymmetry has other causes; \ PET (Stanley \& Doucouliagos): \ $b_1$ estimates the effect", font_size=22),
             label(r"the published record overstates the effect by half; \ PET recovers most of the truth", font_size=22, color=BHC),
         ), 12.0, 0.2, [0, -2.5, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The consequences. Pooling all eight hundred studies recovers point one nine four, close to "
-            "the truth. Pooling only the published ones gives point three oh one, half as large again. "
-            "<bookmark mark='b'/> Matthias Egger's regression test of 1997 detects the asymmetry: regress each study's z "
-            "statistic on its precision; without bias the intercept is zero. For the published studies it is one, with a "
-            "p-value of ten to the minus five. <bookmark mark='c'/> And the slope of that regression, the PET estimate, "
-            "extrapolates to a perfectly precise study: point one seven six, most of the way back to the truth."
+            "<bookmark mark='a'/> The consequences. Pooling all eight hundred studies recovers point one nine four, "
+            "close to the truth. Pooling only the published ones gives point three oh one, half as large again. "
+            "<bookmark mark='b'/> Matthias Egger's regression test of 1997 detects the asymmetry: regress each "
+            "study's z statistic on its precision; in this common-effect simulation without selection the intercept "
+            "is zero. Heterogeneity and other small-study effects can also cause asymmetry. For the published studies"
+            " it is one, with a p-value of ten to the minus five. <bookmark mark='c'/> And the slope of that "
+            "regression, the PET estimate, extrapolates to a perfectly precise study: point one seven six, closer to "
+            "the truth here. This extrapolation depends on the regression model and does not generally remove "
+            "publication bias."
         ) as vo:
             self.add(seeded_tag())
             vo.wait_until("a")
@@ -122,19 +126,22 @@ class PubBias(VoiceoverScene):
             cmath(r"\text{look only at}", r":", r"\text{significant results, \ } p < 0.05", font_size=30),
             cmath(r"\text{no effect}", r":", r"p \text{ uniform on } (0, 0.05): \ \text{flat}", font_size=30),
             cmath(r"\text{real effect}", r":", r"\text{more very small } p\text{'s: \ right-skewed}", font_size=30),
-            cmath(r"p\text{-hacking}", r":", r"\text{a bump just below } 0.05", font_size=30),
+            cmath(r"p\text{-hacking}", r":", r"\text{may create excess near }0.05;\ \text{not diagnostic alone}", font_size=30),
         ]
         rows[2][-1].set_color(SIGC)
         whys = [why(r"Simonsohn, \ Nelson \& Simmons (2014)"), why(r"chapter one's histogram, \ zoomed"),
                 why(r"the evidential value"), why(r"forking paths stop at the first success")]
         with self.voiceover(
-            "<bookmark mark='a'/> A different diagnostic uses only the significant results, which is all the published "
-            "record may contain: the p-curve of Simonsohn, Nelson and Simmons. <bookmark mark='b'/> If there is no effect, "
-            "significant p-values are uniform between zero and point oh five: the curve is flat. <bookmark mark='c'/> If the "
-            "effect is real, very small p-values are more common: the curve is skewed to the right. "
-            "<bookmark mark='d'/> And p-hacking, which stops as soon as p dips below point oh five, leaves a bump just below "
-            "the threshold."
+            "<bookmark mark='a'/> A different diagnostic uses only the significant results, which is all the "
+            "published record may contain: the p-curve of Simonsohn, Nelson and Simmons. <bookmark mark='b'/> If "
+            "there is no effect, significant p-values are uniform between zero and point oh five: the curve is flat. "
+            "<bookmark mark='c'/> If the effect is real, very small p-values are more common: the curve is skewed to "
+            "the right. <bookmark mark='d'/> Some forms of p-hacking can produce excess mass near the threshold; "
+            "neither a bump nor right skew uniquely identifies the mechanism."
         ) as vo:
+            intro=label('A significant-result histogram is conditional on passing a threshold',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -154,17 +161,18 @@ class PubBias(VoiceoverScene):
             xs = np.array([0.005, 0.015, 0.025, 0.035, 0.045])
             lines[k] = VGroup(polyline(ax, xs, pr, c, 3), *[Dot(ax.c2p(a, b), radius=0.07, color=c) for a, b in zip(xs, pr)])
         rows = fit_rows(VGroup(
-            label(r"two groups of 30, \ bins of 0.01, \ exact", font_size=22),
+            label(r"two-sided $z$-tests, known variance; 30 per group", font_size=22),
             label(r"grey: \ no effect: \ 20\% in every bin", font_size=22, color=NULLC),
             label(rf"blue: \ $d = 0.3$, \ power {100 * cs['0.3']['power']:.0f}\%: \ {100 * cs['0.3']['probs'][0]:.0f}\% below 0.01", font_size=22, color=BHC),
             label(rf"gold: \ $d = 0.7$, \ power {100 * cs['0.7']['power']:.0f}\%: \ {100 * cs['0.7']['probs'][0]:.0f}\% below 0.01", font_size=22, color=SIGC),
         ), 4.2, 0.42, [4.6, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Exact p-curves for studies with thirty subjects per group. <bookmark mark='b'/> No effect: "
-            "twenty percent of significant p-values in each bin of width point oh one. <bookmark mark='c'/> A modest effect, "
-            "with only twenty-one percent power: already thirty-seven percent of significant results fall below point oh "
-            "one. <bookmark mark='d'/> A large effect: seventy-two percent. A literature whose significant p-values pile up "
-            "near point oh five, rather than near zero, deserves suspicion."
+            "<bookmark mark='a'/> Exact p-curves under two-sided z-tests with known variance and thirty subjects per "
+            "group. <bookmark mark='b'/> No effect: twenty percent of significant p-values in each bin of width point"
+            " oh one. <bookmark mark='c'/> A modest effect, with only twenty-one percent power: already thirty-seven "
+            "percent of significant results fall below point oh one. <bookmark mark='d'/> A large effect: seventy-two"
+            " percent. A literature whose significant p-values pile up near point oh five, rather than near zero, "
+            "deserves suspicion."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")

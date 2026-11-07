@@ -25,14 +25,15 @@ class Replication(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"2005: \ John Ioannidis, \ `Why most published research findings are false'", font_size=26),
             label(r"a calculation, \ not a measurement", font_size=26, color=GREY_A),
-            label(r"the most downloaded paper in the history of \emph{PLoS Medicine}", font_size=26, color=SIGC),
+            label(r"an influential analysis of priors, power and bias", font_size=26, color=SIGC),
             label(r"its logic is Bayes's rule \ and this part's multiple comparisons", font_size=26, color=BHC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> In 2005 the physician and epidemiologist John Ioannidis published an essay with a "
-            "provocative title: Why Most Published Research Findings Are False. <bookmark mark='b'/> It was a calculation, "
-            "not a measurement. <bookmark mark='c'/> It became the most downloaded paper in the history of its journal. "
-            "<bookmark mark='d'/> Its logic is Bayes's rule, Part 15, applied to the stream of hypotheses a field tests."
+            "provocative title: Why Most Published Research Findings Are False. <bookmark mark='b'/> It was a "
+            "calculation, not a measurement. <bookmark mark='c'/> It became an influential discussion of how prior "
+            "plausibility and power affect positive findings. <bookmark mark='d'/> Its logic is Bayes's rule, Part "
+            "15, applied to the stream of hypotheses a field tests."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -44,7 +45,7 @@ class Replication(VoiceoverScene):
             cmath(r"R", r"=", r"\text{pre-study odds that a tested effect is real}", font_size=30),
             cmath(r"P(\text{true positive})", r"\propto", r"(1 - \beta) R, \ \ P(\text{false positive}) \propto \alpha", font_size=30),
             cmath(r"\text{PPV}", r"=", r"\dfrac{(1 - \beta) R}{(1 - \beta) R + \alpha}", font_size=34),
-            cmath(r"\text{with bias } u", r":", r"\text{a share } u \text{ of null analyses turned `positive'}", font_size=30),
+            cmath(r"\text{with bias } u", r":", r"\text{a share } u \text{ of initially negative analyses made positive}}", font_size=30),
         ]
         rows[2][-1].set_color(BHC)
         whys = [why(r"the field's prior"), why(r"power $1 - \beta$, \ level $\alpha$"),
@@ -57,6 +58,9 @@ class Replication(VoiceoverScene):
             "test in Part 3. <bookmark mark='d'/> Ioannidis added bias: a share u of analyses that should have been "
             "negative are turned positive by the forking paths of chapter eight."
         ) as vo:
+            intro=label('Prior plausibility and power determine positive predictive value',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -123,12 +127,13 @@ class Replication(VoiceoverScene):
             label(r"cancer biology \ (Errington et al. 2021): \ 50 experiments, \ median effect 85\% smaller", font_size=24, color=FALSEC),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Other fields followed. Colin Camerer and colleagues replicated twenty-one social-science "
-            "experiments published in Nature and Science between 2010 and 2015; thirteen replicated, <bookmark mark='b'/> "
-            "with effects about half their original size. <bookmark mark='c'/> In experimental economics, eleven of "
-            "eighteen. <bookmark mark='d'/> Strikingly, prediction markets among researchers forecast which studies would "
-            "replicate rather well: the field knew which results were fragile. <bookmark mark='e'/> In preclinical cancer "
-            "biology, the median replication effect across fifty experiments was eighty-five percent smaller."
+            "<bookmark mark='a'/> Other fields followed. Colin Camerer and colleagues replicated twenty-one "
+            "social-science experiments published in Nature and Science between 2010 and 2015; thirteen replicated, "
+            "<bookmark mark='b'/> with effects about half their original size. <bookmark mark='c'/> In experimental "
+            "economics, eleven of eighteen. <bookmark mark='d'/> Strikingly, prediction markets among researchers "
+            "forecast which studies would replicate rather well: researchers’ forecasts contained useful predictive "
+            "information. <bookmark mark='e'/> In preclinical cancer biology, the median replication effect across "
+            "fifty experiments was eighty-five percent smaller."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
@@ -157,7 +162,7 @@ class Replication(VoiceoverScene):
     def power(self):
         rows = [
             cmath(r"\text{neuroscience}", r":", r"\text{median power} \approx 21\%", font_size=32),
-            cmath(r"\text{power } 20\%", r":", r"\text{a significant estimate overstates the effect, \ typically} \times 2", font_size=28),
+            cmath(r"\text{power } 20\%", r":", r"\text{Gaussian two-sided example: selected magnitudes often exceed }2\times", font_size=28),
             cmath(r"\text{type S}", r":", r"\text{the wrong sign, \ when power is very low}", font_size=30),
             cmath(r"\text{fix}", r":", r"\text{larger studies, \ planned for the effect you expect}", font_size=30),
         ]
@@ -166,11 +171,15 @@ class Replication(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> How low is power in practice? Katherine Button and colleagues estimated the median "
             "statistical power of studies in neuroscience meta-analyses at about twenty-one percent. <bookmark "
-            "mark='b'/> At power that low, an estimate that reaches significance typically overstates the true effect "
-            "about twofold: a type M error. <bookmark mark='c'/> When power is very low, a significant estimate can "
-            "even have the wrong sign, a type S error. <bookmark mark='d'/> The fix is simply larger studies, planned "
-            "with Part 10's power analysis for the effect one realistically expects."
+            "mark='b'/> For a two-sided Gaussian test near twenty percent power, selected absolute estimates can "
+            "average more than twice the true effect: a type M error. <bookmark mark='c'/> When power is very low, a "
+            "significant estimate can even have the wrong sign, a type S error. <bookmark mark='d'/> A central remedy"
+            " is larger, well-designed studies, planned with Part 10's power analysis for the effect one "
+            "realistically expects."
         ) as vo:
+            intro=label('Low power can exaggerate selected effect estimates',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

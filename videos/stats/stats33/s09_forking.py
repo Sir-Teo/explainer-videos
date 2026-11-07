@@ -26,15 +26,15 @@ class Forking(VoiceoverScene):
             label(r"2011: \ Joseph Simmons, \ Leif Nelson \& Uri Simonsohn, \ `False-positive psychology'", font_size=24),
             label(r"a real experiment: \ students listened to the Beatles' `When I'm Sixty-Four'", font_size=24),
             label(r"result: \ they became 1.5 years younger, \ $p = 0.04$", font_size=24, color=FALSEC),
-            label(r"obtained by flexible, \ entirely common analysis choices, \ reported as if planned", font_size=24, color=SIGC),
+            label(r"a deliberate demonstration using flexible analysis choices", font_size=24, color=SIGC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In 2011 the psychologists Joseph Simmons, Leif Nelson and Uri Simonsohn published a paper "
-            "called False-Positive Psychology. <bookmark mark='b'/> In a real experiment, students listened either to the "
-            "Beatles' When I'm Sixty-Four or to a control song. <bookmark mark='c'/> Afterwards, those who heard the Beatles "
-            "were, by their reported birth dates, a year and a half younger, with a p-value of point oh four. "
-            "<bookmark mark='d'/> An impossible result, obtained honestly, by a handful of entirely common choices in the "
-            "analysis, each reported as though it had been planned."
+            "<bookmark mark='a'/> In 2011 the psychologists Joseph Simmons, Leif Nelson and Uri Simonsohn published a"
+            " paper called False-Positive Psychology. <bookmark mark='b'/> In a real experiment, students listened "
+            "either to the Beatles' When I'm Sixty-Four or to a control song. <bookmark mark='c'/> Afterwards, those "
+            "who heard the Beatles were, by their reported birth dates, a year and a half younger, with a p-value of "
+            "point oh four. <bookmark mark='d'/> An impossible result, constructed deliberately as a demonstration, "
+            "by a handful of entirely common choices in the analysis, each reported as though it had been planned."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -59,6 +59,9 @@ class Forking(VoiceoverScene):
             "<bookmark mark='d'/> Andrew Gelman and Eric Loken called this the garden of forking paths, to stress that it "
             "needs no deliberate fishing: a single analysis, chosen in light of the data, has the same problem."
         ) as vo:
+            intro=label('Data-dependent analytical choices create hidden multiplicity',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -73,19 +76,21 @@ class Forking(VoiceoverScene):
         ax = A.ax
         line05 = DashedLine(ax.c2p(0, 0.05), ax.c2p(105, 0.05), color=FALSEC, stroke_width=2.5)
         path = VGroup(polyline(ax, looks, tr, BHC, 3), *[Dot(ax.c2p(a, b), radius=0.07, color=BHC) for a, b in zip(looks, tr)])
-        hit = Circle(radius=0.2, color=SIGC, stroke_width=3).move_to(ax.c2p(looks[-1], tr[-1]))
+        first=int(np.flatnonzero(tr<0.05)[0])
+        hit = Circle(radius=0.2, color=SIGC, stroke_width=3).move_to(ax.c2p(looks[first], tr[first]))
         rows = fit_rows(VGroup(
             label(r"no effect at all; \ test after every 10 per group", font_size=22),
             label(r"stop at the first $p < 0.05$", font_size=22, color=FALSEC),
-            label(r"this study `succeeds' at 100", font_size=22, color=SIGC),
+            label(rf"first crossing in this example: {looks[first]} per group", font_size=22, color=SIGC),
             label(rf"chance of ever succeeding: \ {100 * d['p_ever']:.0f}\%, \ not 5\%", font_size=22, color=FALSEC),
         ), 4.2, 0.42, [4.6, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> One fork is when to stop. A study with no effect at all, tested after every ten subjects "
-            "per group. <bookmark mark='b'/> The rule: stop as soon as p is below five percent. <bookmark mark='c'/> This "
-            "study's p-value wanders, and dips below point oh five at the last look: a publishable result. "
-            "<bookmark mark='d'/> With ten looks, the chance of ever succeeding is nineteen percent, almost four times the "
-            "nominal five. Part 58 builds tests that can be checked at every look, honestly."
+            "<bookmark mark='a'/> One fork is when to stop. A study with no effect at all, tested after every ten "
+            "subjects per group. <bookmark mark='b'/> The rule: stop as soon as p is below five percent. <bookmark "
+            "mark='c'/> This selected illustrative trajectory first crosses the threshold at the highlighted look. "
+            "The reported nineteen percent rate uses all four thousand simulated studies. <bookmark mark='d'/> With "
+            "ten looks, the chance of ever succeeding is nineteen percent, almost four times the nominal five. Part "
+            "58 builds tests that can be checked at every look, honestly."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A), Create(line05))
@@ -116,6 +121,9 @@ class Forking(VoiceoverScene):
             "<bookmark mark='c'/> C: adjusting for gender, or its interaction with the condition, or not. "
             "<bookmark mark='d'/> D: three conditions, reporting any two or the linear trend."
         ) as vo:
+            intro=label('Four analysis freedoms are combined in the simulator',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -141,11 +149,13 @@ class Forking(VoiceoverScene):
             label(rf"all four: \ {100 * d['ABCD']:.0f}\% \ (paper: 60.7\%)", font_size=22, color=FALSEC),
         ), 3.4, 0.42, [5.3, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Five thousand simulated studies with no effect. <bookmark mark='b'/> Gold bars from our "
-            "simulator, white marks from the 2011 paper's table; they agree within simulation error. "
-            "<bookmark mark='c'/> Each flexibility alone roughly doubles the false-positive rate, to between eight and "
-            "thirteen percent. <bookmark mark='d'/> All four together give sixty-one percent. A researcher with these "
-            "four ordinary freedoms will find a significant result in a null world more often than not."
+            "<bookmark mark='a'/> Five thousand simulated studies with no effect. <bookmark mark='b'/> Gold bars from"
+            " our simulator, white marks from the 2011 paper's table; they are broadly similar; the combined A, B and"
+            " C strategy differs by about two and a half Monte Carlo standard errors. This is an illustrative "
+            "simulator, not a bit-for-bit reproduction. <bookmark mark='c'/> Each flexibility alone roughly doubles "
+            "the false-positive rate, to between eight and thirteen percent. <bookmark mark='d'/> All four together "
+            "give sixty-one percent. A researcher with these four ordinary freedoms will find a significant result in"
+            " a null world more often than not."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A), FadeIn(labs), Create(five))
