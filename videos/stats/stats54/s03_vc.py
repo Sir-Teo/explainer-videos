@@ -161,7 +161,7 @@ class VC(VoiceoverScene):
 
     def lesson(self):
         rows = fit_rows(VGroup(
-            label(r"what the Board says:", font_size=28, color=GREY_A),
+            label(r"Selection bias, uniform guarantees and independent validation", font_size=36, color=WHITE),
             label(r"an error estimated on the data used to choose is biased, \ often badly", font_size=26, color=BADC),
             label(r"uniform bounds pay for the whole class, \ and are honest", font_size=26, color=BOUNDC),
             label(r"independent holdout removes selection; \ Wald coverage is approximate", font_size=26, color=GOODC),

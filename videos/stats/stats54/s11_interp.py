@@ -173,7 +173,7 @@ class Interpolation(VoiceoverScene):
 
     def lesson(self):
         rows = fit_rows(VGroup(
-            label(r"where learning theory stands:", font_size=28, color=GREY_A),
+            label(r"Generalization depends on algorithms, geometry and capacity", font_size=36, color=WHITE),
             label(r"for classical regimes: \ VC, \ Rademacher, \ margins, \ PAC-Bayes and stability are sharp and useful", font_size=26, color=GOODC),
             label(r"overparameterized models: \ algorithm, geometry and effective capacity", font_size=26, color=CLASSC),
             label(r"the open problem: \ a theory of deep learning's generalization as clean as Vapnik's", font_size=26, color=BADC),

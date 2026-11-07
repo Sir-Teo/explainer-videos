@@ -159,7 +159,7 @@ class PACBayes(VoiceoverScene):
 
     def deep(self):
         rows = fit_rows(VGroup(
-            label(r"why PAC-Bayes matters now:", font_size=28, color=GREY_A),
+            label(r"PAC-Bayes bounds connect priors, flatness and generalization", font_size=36, color=WHITE),
             label(r"the prior may be anything chosen before the data, \ even learned on other data", font_size=26, color=CLASSC),
             label(r"flatness can preserve low loss; \ KL also depends on the prior", font_size=26, color=TESTC),
             label(r"Dziugaite \& Roy (2017): \ the first non-vacuous bounds for deep networks", font_size=26, color=GOODC),

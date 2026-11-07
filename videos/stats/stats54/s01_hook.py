@@ -138,7 +138,7 @@ class Hook(VoiceoverScene):
 
     def question(self):
         rows = fit_rows(VGroup(
-            label(r"this part's questions:", font_size=28, color=GREY_A),
+            label(r"Questions about generalization and learning algorithms", font_size=36, color=WHITE),
             label(r"how far can the sample error be from the true error, \ uniformly over a class?", font_size=26, color=TRAINC),
             label(r"when is the rate $1/n$ \ instead of $1/\sqrt n$?", font_size=26, color=TESTC),
             label(r"why do boosting and wide margins, \ and averaging posteriors, \ generalize?", font_size=26, color=CLASSC),

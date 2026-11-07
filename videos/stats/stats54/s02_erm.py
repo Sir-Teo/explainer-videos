@@ -179,7 +179,7 @@ class ERM(VoiceoverScene):
 
     def nfl(self):
         rows = fit_rows(VGroup(
-            label(r"and without a class, \ nothing:", font_size=28, color=GREY_A),
+            label(r"Uniform learnability requires restrictions on the hypothesis class", font_size=36, color=WHITE),
             label(r"no free lunch: \ for every learner, \ some distribution defeats it (Wolpert 1996)", font_size=26, color=BADC),
             label(r"a class of infinite VC dimension cannot be learned uniformly at any rate", font_size=26, color=BADC),
             label(r"the class is the prior of learning theory: \ what you are willing to assume", font_size=26, color=CLASSC),

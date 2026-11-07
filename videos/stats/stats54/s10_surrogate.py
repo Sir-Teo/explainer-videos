@@ -153,7 +153,7 @@ class Surrogates(VoiceoverScene):
 
     def multiclass(self):
         rows = fit_rows(VGroup(
-            label(r"beyond two classes:", font_size=28, color=GREY_A),
+            label(r"Calibrated losses for multiclass prediction", font_size=36, color=WHITE),
             label(r"multiclass hinge losses can be inconsistent \ (Tewari \& Bartlett 2007)", font_size=26, color=BADC),
             label(r"the multinomial logistic loss, \ cross-entropy, \ is calibrated", font_size=26, color=GOODC),
             label(r"and it estimates probabilities, \ not just labels: \ Part 34's calibration", font_size=26, color=TESTC),
