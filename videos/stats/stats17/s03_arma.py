@@ -33,6 +33,9 @@ class Arma(VoiceoverScene):
         rows[3][2].set_color(OBS)
         whys = [why(r"an autoregression of order 1"), why(r"substitute again and again: \ an MA($\infty$)"),
                 why(r"a geometric series; \ the memory fades geometrically"), why(r"or the old shocks never fade")]
+        intro = label('Autoregression carries past shocks into the present', font_size=36).move_to([0, 3.2, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> The autoregression of order one: this period's value is phi times the last, plus a fresh "
             "shock. <bookmark mark='b'/> Substitute for the last value, and again, and again: the series is a weighted sum of "
@@ -41,6 +44,7 @@ class Arma(VoiceoverScene):
             "the autocorrelation at lag h is phi to the h: memory decays geometrically. <bookmark mark='d'/> All of this needs "
             "phi between minus one and one, so that old shocks fade. Otherwise the sum doesn't converge."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -223,9 +227,9 @@ class Arma(VoiceoverScene):
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                step(k, transform=False)
                 if k == 0:
                     self.play(FadeOut(intro), run_time=0.25)
-                step(k, transform=False)
         self.clear_scene()
 
     def wold(self):

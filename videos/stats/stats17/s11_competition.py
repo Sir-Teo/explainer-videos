@@ -158,9 +158,9 @@ class Competition(VoiceoverScene):
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                step(k, transform=False)
                 if k == 0:
                     self.play(FadeOut(intro), run_time=0.25)
-                step(k, transform=False)
         self.clear_scene()
 
     def rolling(self):
@@ -183,6 +183,9 @@ class Competition(VoiceoverScene):
             label(r"Part 16's random folds would let the future leak into the fit", font_size=22, color=RES),
             label(r"the competitions' own method: \ hold out the end", font_size=22, color=OBS),
         ), 12.4, 0.25, [0, -1.9, 0])
+        intro = label('Rolling-origin evaluation forecasts using only earlier data', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "How should a method be chosen for a single series, without a competition? <bookmark mark='a'/> With "
             "cross-validation, adapted to time. Fit on the data up to some origin and score the forecasts of the next few "
@@ -191,6 +194,7 @@ class Competition(VoiceoverScene):
             "future observations into the fitting set and make evaluation of future forecasting too optimistic. It need not affect every method equally. <bookmark mark='d'/> Holding out the end of "
             "each series is exactly what the competitions did."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(key))
             vo.wait_until("a")
             self.play(FadeIn(rows_[0]))

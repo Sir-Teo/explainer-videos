@@ -1,0 +1,106 @@
+{
+ "video": "stats17",
+ "scene": "Spurious",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 8,
+ "lines": [
+  {
+   "raw": "Chapter nine. Spurious regression, a first look.",
+   "spoken": "Chapter nine. Spurious regression, a first look.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/d148b6dbf755222f.wav",
+   "duration": 3.6,
+   "tokens": 7,
+   "peak": 0.387542724609375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Yule's nonsense correlations have a modern name: spurious regression. <bookmark mark='a'/> Here are two random walks of a hundred steps, generated completely independently. <bookmark mark='b'/> Regress one on the other by Part 12's least squares. <bookmark mark='c'/> The slope's t statistic is minus thirteen point two. <bookmark mark='d'/> R squared is point six four, <bookmark mark='e'/> and the nominal p-value is about two times ten to the minus twenty-three. <bookmark mark='f'/> And the two series have nothing to do with each other.",
+   "spoken": "Yule's nonsense correlations have a modern name: spurious regression. Here are two random walks of a hundred steps, generated completely independently. Regress one on the other by Part 12's least squares. The slope's t statistic is minus thirteen point two. R squared is point six four, and the nominal p-value is about two times ten to the minus twenty-three. And the two series have nothing to do with each other.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/84c729c502055512.wav",
+   "duration": 25.575,
+   "tokens": 70,
+   "peak": 0.537445068359375,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Was that a fluke? <bookmark mark='a'/> If the regression assumptions held, the t statistic would follow Student's t distribution, in grey, and exceed one point nine eight only five percent of the time. <bookmark mark='b'/> Here are five thousand pairs of independent random walks. The t statistics are spread over a range ten times wider. <bookmark mark='c'/> Seventy-five percent of them are significant at the five percent level. <bookmark mark='d'/> Half exceed four point four. Clive Granger and Paul Newbold ran this experiment in 1974 and warned econometricians that many published regressions between trending economic series were nonsense.",
+   "spoken": "Was that a fluke? If the regression assumptions held, the t statistic would follow Student's t distribution, in grey, and exceed one point nine eight only five percent of the time. Here are five thousand pairs of independent random walks. The t statistics are spread over a range ten times wider. Seventy-five percent of them are significant at the five percent level. Half exceed four point four. Clive Granger and Paul Newbold ran this experiment in 1974 and warned econometricians that many published regressions between trending economic series were nonsense.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/28c16f514c71c479.wav",
+   "duration": 36.35,
+   "tokens": 90,
+   "peak": 0.46099853515625,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Why does it happen? <bookmark mark='a'/> The true slope is zero, so the regression's error term is just the second walk itself, minus a constant. <bookmark mark='b'/> That error is a random walk: not independent, not even stationary. <bookmark mark='c'/> The usual standard error assumes independent errors, and with errors this persistent it's far too small, the problem of chapter one, in its most extreme form. <bookmark mark='d'/> Peter Phillips proved in 1986 that the t statistic doesn't settle down to any distribution: it grows like the square root of n. More data makes the nonsense more significant, not less.",
+   "spoken": "Why does it happen? The true slope is zero, so the regression's error term is just the second walk itself, minus a constant. That error is a random walk: not independent, not even stationary. The usual standard error assumes independent errors, and with errors this persistent it's far too small, the problem of chapter one, in its most extreme form. Peter Phillips proved in 1986 that the t statistic doesn't settle down to any distribution: it grows like the square root of n. More data makes the nonsense more significant, not less.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/ea8fc2a6c0a0ce8d.wav",
+   "duration": 35.075,
+   "tokens": 92,
+   "peak": 0.482208251953125,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "There's a warning light. <bookmark mark='a'/> James Durbin and Geoffrey Watson's statistic of 1950 compares the squared changes in the residuals with their squares: roughly two times one minus their lag-one autocorrelation. <bookmark mark='b'/> Independent residuals give a value near two. <bookmark mark='c'/> In the random-walk regressions, the median is point one five: the residuals hardly change from one step to the next. <bookmark mark='d'/> Granger and Newbold's rule of thumb: when R squared exceeds the Durbin–Watson statistic, suspect a spurious regression. In our example, R squared point six four, Durbin–Watson point two nine.",
+   "spoken": "There's a warning light. James Durbin and Geoffrey Watson's statistic of 1950 compares the squared changes in the residuals with their squares: roughly two times one minus their lag-one autocorrelation. Independent residuals give a value near two. In the random-walk regressions, the median is point one five: the residuals hardly change from one step to the next. Granger and Newbold's rule of thumb: when R squared exceeds the Durbin–Watson statistic, suspect a spurious regression. In our example, R squared point six four, Durbin–Watson point two nine.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/71672cfe63395813.wav",
+   "duration": 33.75,
+   "tokens": 86,
+   "peak": 0.472747802734375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The cure is the one Box and Jenkins used: difference. Regress the changes in one series on the changes in the other. <bookmark mark='b'/> For random walks, the differences are white noise, and the regression assumptions hold. <bookmark mark='c'/> The t statistics now follow Student's t, and five point four percent exceed the critical value, as they should. <bookmark mark='d'/> There's one important exception. Sometimes two wandering series really are tied together, so that a combination of them is stationary, like a drunk and her dog on a lead. Robert Engle and Granger developed the theory of this cointegration in 1987; it was the work for which Granger shared the 2003 Nobel prize in economics. Part 38 tests for it.",
+   "spoken": "The cure is the one Box and Jenkins used: difference. Regress the changes in one series on the changes in the other. For random walks, the differences are white noise, and the regression assumptions hold. The t statistics now follow Student's t, and five point four percent exceed the critical value, as they should. There's one important exception. Sometimes two wandering series really are tied together, so that a combination of them is stationary, like a drunk and her dog on a lead. Robert Engle and Granger developed the theory of this cointegration in 1987; it was the work for which Granger shared the 2003 Nobel prize in economics. Part 38 tests for it.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/faa9ee6b9f1d1d40.wav",
+   "duration": 41.275,
+   "tokens": 114,
+   "peak": 0.456878662109375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "The Coverage Board, ten thousand pairs of walks of a hundred. <bookmark mark='a'/> The slope's t-test in levels has a size of seventy-seven percent where five was promised: the worst row the Board has seen since the bootstrap of a maximum. <bookmark mark='b'/> In differences, five point oh percent: kept.",
+   "spoken": "The Coverage Board, ten thousand pairs of walks of a hundred. The slope's t-test in levels has a size of seventy-seven percent where five was promised: the worst row the Board has seen since the bootstrap of a maximum. In differences, five point oh percent: kept.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/78d19c478268d6a8.wav",
+   "duration": 16.575,
+   "tokens": 46,
+   "peak": 0.439697265625,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> So: regressing one trending series on another proves nothing by itself. <bookmark mark='b'/> Look at the residuals; a Durbin–Watson statistic far below two is a red flag. <bookmark mark='c'/> Difference, or model the dependence, before believing a test. <bookmark mark='d'/> Yule's marriages and deaths showed it in 1926: point nine five in levels, point oh two in changes. <bookmark mark='e'/> The trap is everywhere. Common trends can create misleading association between unrelated series: in a famous joke, global temperatures with the falling number of pirates.",
+   "spoken": "So: regressing one trending series on another proves nothing by itself. Look at the residuals; a Durbin–Watson statistic far below two is a red flag. Difference, or model the dependence, before believing a test. Yule's marriages and deaths showed it in 1926: point nine five in levels, point oh two in changes. The trap is everywhere. Common trends can create misleading association between unrelated series: in a famous joke, global temperatures with the falling number of pirates.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/768f302d28249ff1.wav",
+   "duration": 29.85,
+   "tokens": 77,
+   "peak": 0.551513671875,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats17/en/Spurious_motion/result.json",
+ "input_sha256": "2e605f7952e3e1e20792fc19f1982efc3ea318c077092d1b0b3c8c6cf480bf3d"
+}

@@ -1,0 +1,23 @@
+{
+  "part": "stats17",
+  "fingerprint": "159d6db4ac3d37c22217de9f3fa4432cf5e7ad0d0ae33158813e91fcd866db2b",
+  "english_endpoints": 12,
+  "native_1080_endpoints": 9,
+  "silent_motion_chapters": 8,
+  "audio_scene": "Spurious",
+  "audio_lines": 8,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats17/en/Spurious/videos/s10_spurious/480p15/Spurious.mp4",
+    "seconds": 231.932682,
+    "narration_sha256": "a5bda577933ec952934c825a0ffa31657795ba357f2eb6cc312992051f5af1c8",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 232 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 232 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

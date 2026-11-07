@@ -1,0 +1,138 @@
+{
+  "fingerprint": "159d6db4ac3d37c22217de9f3fa4432cf5e7ad0d0ae33158813e91fcd866db2b",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 41
+      },
+      "input_record": "renders/qa/series/stats17/en/Hook/result.json",
+      "input_sha256": "1b774e3db7fddb672b3ef298e00bfc3d0fd47a038c49f80fffda435c4e3fc49d"
+    },
+    {
+      "scene": "Stationarity",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 49
+      },
+      "input_record": "renders/qa/series/stats17/en/Stationarity/result.json",
+      "input_sha256": "0ee502d0b31f9d8d642fb51b8ea07f3c0101e58178f9dd194191acb7a6d5cc9c"
+    },
+    {
+      "scene": "Arma",
+      "status": "needs-review",
+      "frames": 34,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 45
+      },
+      "input_record": "renders/qa/series/stats17/en/Arma/result.json",
+      "input_sha256": "bb8e70ea402634d5ee35a5d7c3101fa2ce52f781e8ee494cae40f70951d5d8e4"
+    },
+    {
+      "scene": "Cycles",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 39
+      },
+      "input_record": "renders/qa/series/stats17/en/Cycles/result.json",
+      "input_sha256": "221781452b85bfe23933eb5b828547c07237edd9d89bc9d118e5306215f5e349"
+    },
+    {
+      "scene": "Identify",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 58
+      },
+      "input_record": "renders/qa/series/stats17/en/Identify/result.json",
+      "input_sha256": "952632a4fe15e822cdf11a30b567c9a95aabe8b83ac5105ee4fca0956067c713"
+    },
+    {
+      "scene": "Estimate",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 42
+      },
+      "input_record": "renders/qa/series/stats17/en/Estimate/result.json",
+      "input_sha256": "7c968d08b3501053af372cd3a7e0088620d217095dce5ea9799a58a1fa3db547"
+    },
+    {
+      "scene": "Forecast",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 42
+      },
+      "input_record": "renders/qa/series/stats17/en/Forecast/result.json",
+      "input_sha256": "26ebb981cb5c7843d102852b8aba523ae80639965ea6de4da95eae181aac1379"
+    },
+    {
+      "scene": "Seasonal",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 41
+      },
+      "input_record": "renders/qa/series/stats17/en/Seasonal/result.json",
+      "input_sha256": "5d8075f5e7e75046f6774e38738b80b1ae0c295aef5b0b68553a3ec1618cfd10"
+    },
+    {
+      "scene": "Smoothing",
+      "status": "needs-review",
+      "frames": 32,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 47
+      },
+      "input_record": "renders/qa/series/stats17/en/Smoothing/result.json",
+      "input_sha256": "414840a64b681729ab964b24e1b0553e4043d6ae4074ff047e68077855910d56"
+    },
+    {
+      "scene": "Spurious",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 52
+      },
+      "input_record": "renders/qa/series/stats17/en/Spurious/result.json",
+      "input_sha256": "1e2d546d8b6457e7d29a958d6b39b810d0c8ed7c149b4daf62bae70416bb4335"
+    },
+    {
+      "scene": "Competition",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 45
+      },
+      "input_record": "renders/qa/series/stats17/en/Competition/result.json",
+      "input_sha256": "8f8dcb91fad839817a5206fcd4a3b33ffb9bd39718436b9dda50f590d2e742bc"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 7,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 60
+      },
+      "input_record": "renders/qa/series/stats17/en/Outro/result.json",
+      "input_sha256": "454bb8d7430614cd10ca64b8a3d1926db66dc2df85687cdf3eab188cf9c9b6ce"
+    }
+  ]
+}

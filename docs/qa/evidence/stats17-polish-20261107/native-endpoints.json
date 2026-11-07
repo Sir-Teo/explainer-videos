@@ -1,0 +1,105 @@
+{
+  "fingerprint": "159d6db4ac3d37c22217de9f3fa4432cf5e7ad0d0ae33158813e91fcd866db2b",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 41
+      },
+      "input_record": "renders/qa/native1080/stats17/en/Hook/result.json",
+      "input_sha256": "81686be9f9362a7ba79ce7ecdc220fc4272b7ea5e6d39bc2b6d4362af4e3c299"
+    },
+    {
+      "scene": "Stationarity",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 49
+      },
+      "input_record": "renders/qa/native1080/stats17/en/Stationarity/result.json",
+      "input_sha256": "29d03ad1a6cbb2e6ee46b1be7b517f198d9df60feb30d0c9ad784de2312e0300"
+    },
+    {
+      "scene": "Arma",
+      "status": "needs-review",
+      "frames": 34,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 45
+      },
+      "input_record": "renders/qa/native1080/stats17/en/Arma/result.json",
+      "input_sha256": "f34f249726dcffedfc6859dd38a467300d2deedf42eb1b8292b5cf0118aaa349"
+    },
+    {
+      "scene": "Identify",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 58
+      },
+      "input_record": "renders/qa/native1080/stats17/en/Identify/result.json",
+      "input_sha256": "5e8daffc4b35f45e92aa9befdb89a514d5e02596326feadf99f44757fb2d8f21"
+    },
+    {
+      "scene": "Forecast",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 42
+      },
+      "input_record": "renders/qa/native1080/stats17/en/Forecast/result.json",
+      "input_sha256": "02b59c4508adca621f96bc1129f6d664dacb1e8b0ab1ef9ec102a8b541035965"
+    },
+    {
+      "scene": "Seasonal",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 41
+      },
+      "input_record": "renders/qa/native1080/stats17/en/Seasonal/result.json",
+      "input_sha256": "06d7c4cc1d68ebb5e86980179d9849263bb8b6a3a7fcfcfaab77758c01da7ea6"
+    },
+    {
+      "scene": "Smoothing",
+      "status": "needs-review",
+      "frames": 32,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 47
+      },
+      "input_record": "renders/qa/native1080/stats17/en/Smoothing/result.json",
+      "input_sha256": "374113c0f5b899746dcd9384fe6af39efc3db24a7a6fafb1ed79943f65cac88f"
+    },
+    {
+      "scene": "Spurious",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 52
+      },
+      "input_record": "renders/qa/native1080/stats17/en/Spurious/result.json",
+      "input_sha256": "5d56ebd7d0e74dcb60e4500b178409327c2134bea36068c7dd6fa52e68df380b"
+    },
+    {
+      "scene": "Competition",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 45
+      },
+      "input_record": "renders/qa/native1080/stats17/en/Competition/result.json",
+      "input_sha256": "ed9d61a31e9bb95d9801f0992a230c6161152fa619de2fcdea3e418533449d2c"
+    }
+  ]
+}

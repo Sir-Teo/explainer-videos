@@ -52,9 +52,9 @@ class Identify(VoiceoverScene):
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                step(k, transform=False)
                 if k == 0:
                     self.play(FadeOut(intro), run_time=0.25)
-                step(k, transform=False)
         self.clear_scene()
 
     def signatures(self):
@@ -67,6 +67,9 @@ class Identify(VoiceoverScene):
         ], font_size=30, colors=[GREY_B, SERIES, RES, OBS, GREY_A]).move_to([0, 0.6, 0])
         foot = label(r"a duality: \ an AR is an MA($\infty$), \ an invertible MA is an AR($\infty$)", font_size=24,
                      color=GREY_A).to_edge(DOWN, buff=0.9)
+        intro = label('Minimal causal and invertible models have distinct signatures', font_size=36).move_to([0, 3.2, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "For minimal causal, invertible ARMA models with no cancelling factors, this gives theoretical fingerprints. <bookmark mark='a'/> An autoregression of order p: its autocorrelations "
             "tail off gradually, and its partial autocorrelations cut off sharply after lag p. <bookmark mark='b'/> A moving "
@@ -75,6 +78,7 @@ class Identify(VoiceoverScene):
             "<bookmark mark='d'/> White noise: both are zero. <bookmark mark='e'/> The symmetry isn't an accident. An "
             "autoregression is an infinite moving average, and an invertible moving average is an infinite autoregression."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tab[0]))
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -110,7 +114,7 @@ class Identify(VoiceoverScene):
             self.add(tag)
             for m_, p in zip("abcd", (p1, p2, p3, p4)):
                 vo.wait_until(m_)
-                if m_ == 0:
+                if m_ == "a":
                     self.play(FadeOut(intro), run_time=0.25)
                 self.play(show(p))
         self.clear_scene()
@@ -202,7 +206,7 @@ class Identify(VoiceoverScene):
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                step(k, transform=False)
                 if k == 0:
                     self.play(FadeOut(intro), run_time=0.25)
-                step(k, transform=False)
         self.clear_scene()

@@ -1,0 +1,94 @@
+{
+  "fingerprint": "159d6db4ac3d37c22217de9f3fa4432cf5e7ad0d0ae33158813e91fcd866db2b",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats17/en/Hook_motion/result.json",
+      "input_sha256": "07431cb7ef56ba44df838342085a060416ef8469ce1f4cf6ed8e3e37934f457e",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 249 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 249 s\n"
+    },
+    {
+      "scene": "Stationarity",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats17/en/Stationarity_motion/result.json",
+      "input_sha256": "de9046be840b1fe75ff23c24e4ee739366ee839ac92015f5dfcae578883600b3",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 312 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 312 s\n"
+    },
+    {
+      "scene": "Arma",
+      "status": "needs-review",
+      "frames": 34,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats17/en/Arma_motion/result.json",
+      "input_sha256": "a0e98f647fd04a4036585e79d63c1c66ce558cd95b55dec88e8f1fdfba79d5e5",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 321 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 321 s\n"
+    },
+    {
+      "scene": "Identify",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats17/en/Identify_motion/result.json",
+      "input_sha256": "fef8ecf88bdaa6da217bb70e0aadc74c44e6866661fc266c4a69f183a2589080",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 246 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 246 s\n"
+    },
+    {
+      "scene": "Forecast",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats17/en/Forecast_motion/result.json",
+      "input_sha256": "9f7c01e818d6e1a98b1cc5acd6136c76f9410d18dde0ce14e2e46e29fd9c320d",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 302 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 302 s\n"
+    },
+    {
+      "scene": "Smoothing",
+      "status": "needs-review",
+      "frames": 32,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats17/en/Smoothing_motion/result.json",
+      "input_sha256": "fd22404b1e14f64feb513fbc0fee7a9b37c4f97fd06b1dd4500579ee58981e43",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 275 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 275 s\n"
+    },
+    {
+      "scene": "Spurious",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats17/en/Spurious_motion/result.json",
+      "input_sha256": "2e605f7952e3e1e20792fc19f1982efc3ea318c077092d1b0b3c8c6cf480bf3d",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 252 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 252 s\n"
+    },
+    {
+      "scene": "Competition",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats17/en/Competition_motion/result.json",
+      "input_sha256": "dbad7c6d65fc4e6020fd00fffcc4475fb6873411a6c04242f3dbaf0f08011237",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 264 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 264 s\n"
+    }
+  ]
+}
