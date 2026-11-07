@@ -77,7 +77,7 @@ class Hook(VoiceoverScene):
 
     def lesson(self):
         rows = fit_rows(VGroup(
-            label(r"the questions:", font_size=28, color=GREY_A),
+            label(r"Questions about posterior contraction and uncertainty", font_size=36, color=GREY_A),
             label(r"when does a posterior concentrate at the truth? \ (Doob, \ Schwartz)", font_size=26, color=POSTC),
             label(r"how fast? \ (Ghosal, \ Ghosh \& van der Vaart)", font_size=26, color=POSTC),
             label(r"when does it look like a normal centred at an efficient estimator? \ (Bernstein--von Mises)", font_size=26, color=FREQC),
