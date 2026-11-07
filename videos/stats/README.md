@@ -1,6 +1,6 @@
 # Statistics, Built (统计学，从零搭建)
 
-**Status: complete.** All sixty-five parts, Parts 1–65, are written in English (10–16 chapters each):
+**English sources written:** all sixty-five parts, Parts 1–65, contain 888 chapters. Scientific and sampled visual QA is tracked in the [part-by-part review](../../docs/qa/statistics-built-progress.md); Chinese production, continuous listening/playback and final narrated masters remain open.
 - *The Shape of Data*, about an hour;
 - *Chance, Counted*, about 74 minutes, with the exact probability engine `explainer/stats/prob.py`;
 - *The Family of Distributions*, about 55 minutes, with the family-tree instrument `FamilyTree`;
@@ -65,7 +65,7 @@
 - *Frontiers of Causal Inference*, about 50.7 minutes, with `statkit.frontier`, the exposure map (`ExposureMap`) and the NSW data;
 - *Privacy and Fairness*, about 66.4 minutes, with `statkit.privacy`, the trade-off plot (`TradeoffPlot`) and ProPublica's COMPAS data;
 - *Statistics in the Age of AI*, about 57.5 minutes, with `statkit.evals` and the leaderboard (`Leaderboard`);
-- *The Dissertation*, about 50.3 minutes, with the thesis (`statkit.thesis`, its preregistered protocol and a short paper) and the board mosaic (`BoardMosaic`).
+- *The Dissertation*, about 54.7 minutes, with the thesis (`statkit.thesis`, its protocol-guided study, explicit post hoc QA amendment and short paper) and the board mosaic (`BoardMosaic`).
 
 Their instruments are in `explainer/stats/`; narration and the Chinese edition follow. The chapter-by-chapter plan and the production standard are in [`SYLLABUS.md`](SYLLABUS.md).
 
@@ -74,7 +74,7 @@ sixty-five parts in five stages, in English and Chinese, and assumes calculus at
 research frontier: selective and anytime-valid inference, high-dimensional asymptotics, optimal transport, causal
 machine learning, privacy, and the statistics of AI.
 
-Each part is a **50–60 minute lecture**, about 60 hours in all. Each one derives its mathematics on screen, every step
+The lectures generally run around an hour; individual lengths vary. Each one derives its mathematics on screen, every step
 with its reason. It tells the history of the ideas, builds a working tool or toy, and checks every claim with a real
 computation. The rigour rises with the stage: calculus-level proofs in the bachelor's stages, measure-theoretic
 theorem–proof in the PhD core, research papers in the last stage. The videos are named `stats1` … `stats65`, in

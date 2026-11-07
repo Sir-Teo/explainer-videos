@@ -56,7 +56,7 @@ class Outro(LectureMixin, VoiceoverScene):
             "<bookmark mark='a'/> A promise for the last part. Every part so far applied methods to questions and data "
             "that someone else had posed and collected. <bookmark mark='b'/> It assumed the question, the data and even the "
             "answer's form were given. <bookmark mark='c'/> Part sixty-five asks how new statistical knowledge is made: a "
-            "question chosen, a conjecture, a proof, a preregistered simulation, a real application, and an honest report."
+            "question chosen, a conjecture, a proof, a protocol-guided simulation, a real application, and an honest report."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(card[0]), FadeIn(card[1][0]), FadeIn(card[1][1][0]))
@@ -68,7 +68,7 @@ class Outro(LectureMixin, VoiceoverScene):
 
     def payoffs(self):
         card = payoff_card([
-            (r"a preregistered simulation study, \ reported whatever it shows", [65]),
+            (r"a protocol-guided simulation study, \ reported whatever it shows", [65]),
             (r"the full Coverage Board, \ every promise of the degree", [65]),
             (r"the dissertation's open problem", [65]),
         ], font_size=22)
