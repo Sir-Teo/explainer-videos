@@ -33,11 +33,7 @@ class Production(VoiceoverScene):
                       r"calculations.", source=r"Huge and Savine (2020); as reported by Risk.net", width=6.1, font_size=20),
         ).arrange(RIGHT, buff=0.35, aligned_edge=UP).move_to(UP * 0.6)
         sr = history_card(2026, r"SR 26-2, Federal Reserve, OCC and FDIC",
-                          r"Nonbinding US supervisory guidance, 17 April 2026, superseding SR 11-7 and SR 21-8; principally relevant above US\$30bn of assets. Material models receive "
-                          r"objective expert challenge with sufficient independence (``effective challenge''), and proportionate validation for "
-                          r"conceptual soundness, monitored, tested on outcomes and kept in an inventory, with effort scaled "
-                          r"to the model's materiality. Generative and agentic AI are outside its scope; a pricing or hedging network "
-                          r"is a model like any other.",
+                          'Nonbinding US supervisory guidance, 17 April 2026, replacing SR 11-7 and SR 21-8; principally relevant above US\\$30bn in assets. It describes objective expert challenge with sufficient independence, validation for conceptual soundness, proportionate monitoring, outcome testing and model inventories. Controls scale with risk and materiality. Generative and agentic AI are excluded; traditional pricing and hedging networks are in scope.',
                           color=QC.HOUSE, width=12.4, font_size=20)
         sr.next_to(cards, DOWN, buff=0.35)
         with self.voiceover(

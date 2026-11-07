@@ -57,7 +57,7 @@ class Outro(VoiceoverScene):
             (rf"the neural calibrator: {nz['net_fresh']['rmse']:.2f} vol points from fresh simulation; the Surface in "
              rf"{c['surface']['seconds']:.0f} s", IV),
             (rf"$H$ week by week: near the box's floor ($H<0.021$) in {100 * floor:.0f}\% of weeks; descriptive constrained fits, not identification", IV),
-            (r"derivative labels and a Gaussian working model with finite features", GOOD),
+            (r"derivative labels and a Gaussian working model with gradient observations", GOOD),
             (rf"100 dimensions: the deep BSDE gives {t0['mean']:.2f} $\pm$ {t0['sd']:.2f} against {b['reference']:.1f}", NET),
             (rf"deep stopping: {st['5']['lower']:.2f}, a simulated policy mean; published results have different budgets", NET),
             (rf"finite-sample hedger risk; under drift, average extra holdings {devs:.3f} shares", DELTA),

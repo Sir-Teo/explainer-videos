@@ -31271,7 +31271,9 @@
     "push: a local penalized objective; select an extreme saved training state under an aggregate mean-squared calibration-error ceiling, without enforcing every vanilla exactly": "推动：局部惩罚目标；在汇总均方校准误差上限内选择保存的极端训练状态，并未强制每个香草报价精确匹配",
     "Neural calibration: surrogate timings and descriptive weekly 2024--2025 fits": "神经校准：代理计算时间与描述性2024至2025年周度拟合",
     "Neural SDEs: penalized candidates and model sensitivity": "神经随机微分方程：惩罚候选与模型敏感性",
-    "Generators: a Gaussian illustration and a cross-generator validation plan": "生成器：高斯示例与跨生成器验证方案"
+    "Generators: a Gaussian illustration and a cross-generator validation plan": "生成器：高斯示例与跨生成器验证方案",
+    "derivative labels and a Gaussian working model with gradient observations": "导数标签与带梯度观测的高斯工作模型",
+    "Nonbinding US supervisory guidance, 17 April 2026, replacing SR 11-7 and SR 21-8; principally relevant above US\\$30bn in assets. It describes objective expert challenge with sufficient independence, validation for conceptual soundness, proportionate monitoring, outcome testing and model inventories. Controls scale with risk and materiality. Generative and agentic AI are excluded; traditional pricing and hedging networks are in scope.": "2026年四月十七日美国非约束性监管指导，取代SR 11-7及SR 21-8；主要相关于资产超过300亿美元的银行。它讨论具有足够独立性的客观专家质询、概念合理性验证、按风险调整的监测、结果检验与模型清单。控制力度随风险及重要性变化。生成式与代理式人工智能不在范围内；传统定价及对冲网络适用其模型原则。"
   },
   "phrases": {
     "you owe": "你欠",
