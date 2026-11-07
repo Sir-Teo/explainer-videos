@@ -7,7 +7,7 @@ from videos.stats.stats15.common import *  # noqa: F403
 
 def trace(ax, ys, color, n=None):
     ys = np.asarray(ys)[:n]
-    return VMobject(stroke_color=color, stroke_width=1.6).set_points_as_corners([ax.c2p(i, y) for i, y in enumerate(ys)])
+    return polyline(ax, np.arange(len(ys)), ys, color, stroke_width=1.6)
 
 
 class Metropolis(VoiceoverScene):
@@ -37,6 +37,7 @@ class Metropolis(VoiceoverScene):
         rows[1][2].set_color(POST)
         whys = [why(r"a random step from where we are"), why(r"the normalizing constant cancels!"),
                 why(r"uphill always; \ downhill sometimes"), why(r"Metropolis et al.\ (1953), \ Part 7")]
+        intro = label('A random walk targets the posterior distribution', font_size=36)
         with self.voiceover(
             "Part 7 built a Markov chain whose long-run distribution is any target we like. Here's the target: the posterior. "
             "<bookmark mark='a'/> From the current point, propose a random step. <bookmark mark='b'/> Compute the ratio of the "
@@ -45,9 +46,12 @@ class Metropolis(VoiceoverScene):
             "if it's less probable, move there only with probability equal to the ratio. <bookmark mark='d'/> Record where you "
             "are, even if you stayed. That's the Metropolis algorithm of 1953, invented to simulate molecules at Los Alamos."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.8, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -65,7 +69,7 @@ class Metropolis(VoiceoverScene):
             "Why does it work? <bookmark mark='a'/> With a symmetric proposal, the probability flow from theta to theta prime, "
             "in equilibrium, is the smaller of the two posterior values times the proposal density. <bookmark mark='b'/> That's "
             "symmetric, so it equals the flow back. <bookmark mark='c'/> Detailed balance, from Part 7: the posterior is the "
-            "chain's stationary distribution. <bookmark mark='d'/> So averages along the chain converge to posterior "
+            "chain's stationary distribution. <bookmark mark='d'/> With irreducibility, appropriate recurrence and integrability, averages along the chain converge to posterior "
             "expectations, though successive draws are correlated, which is the price."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
@@ -91,12 +95,10 @@ class Metropolis(VoiceoverScene):
         with self.voiceover(
             "The step size matters, and trace plots show why. These are three chains on the Challenger posterior, each "
             "fifteen hundred steps of the slope. <bookmark mark='a'/> With tiny steps, nearly every proposal is accepted, but "
-            "the chain creeps, wandering slowly: its five thousand draws are worth only about twelve independent ones, its "
-            "effective sample size. <bookmark mark='b'/> With good steps, about forty-five percent are accepted and the trace "
+            "the chain creeps, wandering slowly: the five thousand retained draws, beyond the burn-in and longer than this displayed trace, have an estimated slope effective sample size of about twelve. <bookmark mark='b'/> With good steps, about forty-five percent are accepted and the trace "
             "looks like noise, the fuzzy caterpillar you want: an effective sample size of over two hundred. "
             "<bookmark mark='c'/> With huge steps, nearly every proposal lands somewhere improbable and is rejected; the chain "
-            "sits still for long stretches. The theory of Roberts, Gelman and Gilks suggests aiming for acceptance of a quarter "
-            "to a half."
+            "sits still for long stretches. The theory of Roberts, Gelman and Gilks gives about 0.234 in a particular high-dimensional random-walk limit, not a universal target. In low dimensions, tune for function-specific Monte Carlo efficiency rather than acceptance alone."
         ) as vo:
             self.play(FadeIn(head))
             for k, m_ in enumerate("abc"):
@@ -114,18 +116,21 @@ class Metropolis(VoiceoverScene):
                     label(rf"ESS {d['raw']['ess']:.0f}", font_size=20, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(A1, RIGHT, buff=0.4)
         l2 = VGroup(label(r"centred: \ $\alpha + \beta_1(T - 70)$", font_size=22, color=S.LIK),
                     label(rf"ESS {d['chains']['good']['ess']:.0f}", font_size=20, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(A2, RIGHT, buff=0.4)
-        foot = label(r"the same posterior, \ rotated: \ the long diagonal ridge becomes a round hill", font_size=24, color=OBS).move_to([0, -2.8, 0])
+        foot = label(r"the same posterior, \ sheared: \ the long diagonal ridge becomes a round hill", font_size=24, color=OBS).move_to([0, -2.8, 0])
+        intro = label('Less correlated coordinates improve the random walk', font_size=36)
         with self.voiceover(
             "The Challenger posterior hides a second trap. <bookmark mark='a'/> In the original coordinates, intercept and "
             "slope, it's the long diagonal ridge of Part 14. A random walk with independent steps in each coordinate can't follow "
-            "a ridge: steps along it are rare, and steps across it are rejected. The best this chain manages is an effective "
+            "a ridge: steps along it are rare, and steps across it are rejected. This selected proposal gives an effective "
             "sample size of twelve. <bookmark mark='b'/> Centre the temperature at seventy degrees, so the intercept becomes the "
-            "log-odds at seventy, and the ridge becomes a round hill. The same algorithm, the same step budget, the same "
+            "log-odds at seventy, and the ridge becomes a less correlated hill, through a shear rather than a rotation. The same algorithm, the same step budget, the same "
             "posterior: an effective sample size of over two hundred. <bookmark mark='c'/> Choosing coordinates in which the "
             "posterior is roughly round is the single most useful trick in practical MCMC, and Part 27 goes much further, with "
             "Hamiltonian Monte Carlo."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(A1), Create(t1), FadeIn(l1), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(A2), Create(t2), FadeIn(l2), run_time=2.0)
@@ -181,10 +186,10 @@ class Metropolis(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> Run a longer chain: twenty thousand steps, the first two thousand discarded. Here are its draws "
             "of the two coefficients, a round cloud in the centred coordinates. <bookmark mark='b'/> Compare with the grid. The "
-            "posterior mean of the slope: minus point two eight seven both ways. The median probability of distress at "
+            "posterior mean of the slope: close estimates within Monte Carlo error; the grid is about minus point two nine one. The median probability of distress at "
             "thirty-one degrees: point nine nine nine nine both ways. The probability it exceeds ninety percent: point nine "
             "seven, both ways. <bookmark mark='c'/> The chain's eighteen thousand correlated draws are worth about five hundred "
-            "independent ones, enough for these summaries. <bookmark mark='d'/> The walk reproduces the grid, and unlike the grid "
+            "independent ones, for the slope mean. Other summaries need their own effective sample sizes and Monte Carlo errors. <bookmark mark='d'/> The walk reproduces the grid, and unlike the grid "
             "it scales: in Part 27 the same idea handles models with thousands of parameters."
         ) as vo:
             self.play(FadeIn(A))
@@ -200,29 +205,30 @@ class Metropolis(VoiceoverScene):
 
     def functions(self):
         d = load("mcmc")
-        b = np.asarray(d["b1_draws"])
-        o = np.exp(-10 * b)
-        lo, hi = np.quantile(o, [0.025, 0.975])
+        lo, hi = d["or_ci"]
         rows = [
             cmath(r"\text{draws}", r":", r"(\alpha_\ell, \beta_\ell),\ \ \ell = 1, \ldots, L", font_size=32),
             cmath(r"\text{any } g(\theta)", r":", r"g(\theta_\ell) \text{ are draws from its posterior}", font_size=32),
-            cmath(r"\text{OR per } 10^\circ\text{F colder}", r"=", rf"e^{{-10\beta_1}}:\ \text{{median}}\ {np.median(o):.1f},\ 95\%\ [{lo:.1f},\ {hi:.0f}]", font_size=28),
-            cmath(r"P(\text{OR} > 5 \mid y)", r"=", rf"{np.mean(o > 5):.2f}", font_size=32),
+            cmath(r"\text{OR per } 10^\circ\text{F colder}", r"=", rf"e^{{-10\beta_1}}:\ \text{{median}}\ {d['or_median']:.1f},\ 95\%\ [{lo:.1f},\ {hi:.0f}]", font_size=28),
+            cmath(r"P(\text{OR} > 5 \mid y)", r"=", rf"{d['p_or_gt5']:.2f}", font_size=32),
         ]
         rows[2][2].set_color(POST)
         whys = [why(r"the chain's output"), why(r"no delta method, \ no new algebra"),
                 why(r"Part 14's profile interval: \ [1.8, 173]"), why(r"a direct probability for a practical question")]
+        intro = label('Transform every retained posterior draw', font_size=36)
         with self.voiceover(
             "One more reason to like posterior draws. <bookmark mark='a'/> The chain gives a list of parameter values. "
             "<bookmark mark='b'/> Apply any function to each draw, and you have draws from that function's posterior: no delta "
             "method, no new derivation. <bookmark mark='c'/> The odds ratio for ten degrees colder is e to the minus ten beta "
-            "one: its posterior median is about fourteen, with a ninety-five percent interval from about two to about three "
-            "hundred and fifty, wider at the top than Part 14's profile interval, because a flat prior leaves the steep slopes "
+            "one: its posterior median is about fifteen, with a ninety-five percent interval from about two to about three hundred and thirty, wider at the top than Part 14's profile interval, because a flat prior leaves the steep slopes "
             "plausible. <bookmark mark='d'/> And practical questions get direct "
             "answers: the posterior probability that ten degrees of cold multiplies the odds of distress by more than five."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()

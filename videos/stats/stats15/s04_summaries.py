@@ -74,17 +74,21 @@ class Summaries(VoiceoverScene):
         rows[1][2].set_color(OBS)
         whys = [why(r"decision theory: \ the posterior expected loss"), why(r"Part 9's MSE, \ averaged over belief"),
                 why(r"the same argument as for the sample median (Part 1)"), why(r"``maximum a posteriori'' (MAP)")]
+        intro = label('Choose the estimate using posterior expected loss', font_size=36)
         with self.voiceover(
             "The answer depends on what an error costs. <bookmark mark='a'/> Choose the estimate that minimizes the expected "
             "loss under the posterior. <bookmark mark='b'/> If the loss is the squared error, as in Part 9's mean squared error, "
             "the best estimate is the posterior mean. <bookmark mark='c'/> If it's the absolute error, the posterior median, by "
             "the same argument that made the median minimize absolute deviations in Part 1. <bookmark mark='d'/> And if you only "
-            "care about being exactly right, the mode, called the maximum a posteriori estimate. The posterior is shared; the "
+            "care about being within a shrinking symmetric tolerance, a regular posterior mode is the limiting choice. Exact zero-one loss is uninformative for a continuous posterior, since every single point has probability zero. That limiting choice is the maximum a posteriori estimate. The posterior is shared; the "
             "summary is a decision."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=0.2, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -147,7 +151,7 @@ class Summaries(VoiceoverScene):
             "<bookmark mark='b'/> Here, odds from point oh four nine to point seven four nine. <bookmark mark='c'/> The HPD "
             "interval doesn't transform that way: densities pick up a Jacobian, Part 5's, so the most plausible region for the "
             "odds isn't the image of the most plausible region for p. <bookmark mark='d'/> Equal-tailed intervals are the "
-            "usual default for reporting; HPD intervals are best for a strongly skewed posterior on the scale you care about. "
+            "usual default for reporting; HPD intervals minimize length for this unimodal posterior on the scale you care about. "
             "Either way, say which."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
@@ -162,7 +166,7 @@ class Summaries(VoiceoverScene):
             label(r"a statement about $p$, \ conditional on what was actually observed", font_size=24),
             label(r"a confidence interval's 95\% is a statement about the procedure", font_size=24, color=S.ALT),
             label(r"they often nearly agree: \ chapter nine checks when", font_size=24, color=OBS),
-            label(r"the posterior SD shrinks like $1/\sqrt n$, \ as Part 6 promised", font_size=22, color=GREY_A),
+            label(r"regular identifiable models: posterior SD often shrinks like $1/\sqrt n$", font_size=22, color=GREY_A),
         ), 12.4, 0.44, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> A credible interval reads the way people want an interval to read: given these data and this "
@@ -170,8 +174,7 @@ class Summaries(VoiceoverScene):
             "<bookmark mark='b'/> It's conditional on what was actually observed, not on imagined repetitions. "
             "<bookmark mark='c'/> A confidence interval's ninety-five percent describes the procedure that made it. "
             "<bookmark mark='d'/> They're different promises, and yet they often nearly agree, numerically; chapter nine checks "
-            "when, on the Coverage Board. <bookmark mark='e'/> And as the data grow, the posterior narrows like one over root n, "
-            "the law of averages again."
+            "when, on the Coverage Board. <bookmark mark='e'/> Under regular finite-dimensional identifiable models with a prior positive near the truth, posterior width typically shrinks like one over root n. Boundaries, nonidentification and other irregular cases can differ."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
@@ -188,17 +191,20 @@ class Summaries(VoiceoverScene):
         rows[1][2].set_color(POST)
         whys = [why(r"a quadratic at the mode: \ Laplace (1774)"), why(r"$J$: \ the curvature, \ Part 9's observed information"),
                 why(r"close here, \ though it misses the skew"), why(r"Bernstein--von Mises (Part 53)")]
+        intro = label('Approximate the log posterior near its mode', font_size=36)
         with self.voiceover(
             "One more summary, Laplace's own. <bookmark mark='a'/> Expand the log posterior to second order around its peak: a "
             "quadratic, with curvature J. <bookmark mark='b'/> Then the posterior is approximately normal, centred at the mode, "
             "with variance one over the curvature: Part 9's observed information, now as a posterior variance. "
             "<bookmark mark='c'/> For Beta three twelve the approximating normal has standard deviation point one oh, matching "
-            "the exact posterior's, though it misses the skew and puts some mass below zero. <bookmark mark='d'/> With lots of "
-            "data, every regular posterior looks like this: a normal centred near the maximum-likelihood estimate, with the "
+            "the exact posterior's, though it misses the skew and puts some mass below zero. <bookmark mark='d'/> Under Bernstein-von Mises regularity, including local identifiability and a suitable prior near the truth, the posterior approaches a normal centred near the maximum-likelihood estimate, with the "
             "inverse information as its variance. That's why Bayesian and likelihood intervals agree in large samples."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()

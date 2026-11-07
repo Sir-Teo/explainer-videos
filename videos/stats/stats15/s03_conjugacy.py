@@ -32,6 +32,7 @@ class Conjugacy(VoiceoverScene):
         rows[3][2].set_color(POST)
         whys = [why(r"a Beta$(a, b)$ prior"), why(r"the binomial likelihood"), why(r"the exponents add"),
                 why(r"the same family: \ conjugate")]
+        intro = label('Beta and binomial exponents add', font_size=36)
         with self.voiceover(
             "Why did the posterior come out as a beta distribution? <bookmark mark='a'/> A Beta a b prior is proportional to p "
             "to the a minus one times one minus p to the b minus one. <bookmark mark='b'/> The binomial likelihood has the same "
@@ -40,9 +41,12 @@ class Conjugacy(VoiceoverScene):
             "the posterior stays in the prior's family, the prior is called conjugate, a term from Howard Raiffa and Robert "
             "Schlaifer's 1961 book. Updating becomes bookkeeping."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -55,11 +59,11 @@ class Conjugacy(VoiceoverScene):
         ]
         rows[1][2].set_color(POST)
         whys = [why(r"the posterior mean"), why(r"a weighted average of the prior mean and $\hat p$"),
-                why(r"the prior acts like $a$ successes and $b$ failures, \ already seen"), why(r"between 0.5 and 0.7, \ nearer the data")]
+                why(r"mean-weight interpretation; density exponents are $a-1$ and $b-1$"), why(r"between 0.5 and 0.7, \ nearer the data")]
         with self.voiceover(
             "<bookmark mark='a'/> The posterior mean is a plus s over a plus b plus n. <bookmark mark='b'/> Rearranged, it's a "
             "weighted average of the prior mean and the sample proportion, with weights a plus b and n. <bookmark mark='c'/> "
-            "So the prior behaves exactly like a plus b observations seen before the experiment: a successes and b failures. "
+            "For this posterior-mean weighting, the prior acts like a plus b trials with a successes and b failures. This is not a unique literal data history: relative to a uniform baseline, the density exponents correspond instead to a minus one and b minus one. "
             "A Beta two two prior is worth four imaginary trials. <bookmark mark='d'/> With seven successes in ten, the "
             "posterior mean is nine over fourteen, point six four three: between the prior's half and the data's point seven, "
             "much nearer the data. As n grows, the data's weight goes to one, and the prior is forgotten."
@@ -90,9 +94,9 @@ class Conjugacy(VoiceoverScene):
         ), 4.8, 0.32, [4.4, 0.2, 0])
         with self.voiceover(
             "Other likelihoods have conjugate priors too. <bookmark mark='a'/> For Poisson counts, the gamma distribution: a "
-            "gamma alpha beta prior on the rate, <bookmark mark='b'/> updated to alpha plus the total count, and beta plus the "
+            "gamma alpha beta prior on the rate, with beta a rate rather than a scale, <bookmark mark='b'/> updated to alpha plus the total count, and beta plus the "
             "number of observations. <bookmark mark='c'/> Part 3's horse kicks: a hundred and twenty-two deaths in two hundred "
-            "corps-years of the Prussian army. <bookmark mark='d'/> Start from a gamma one one prior, a vague belief, and the "
+            "corps-years of the Prussian army. <bookmark mark='d'/> Start from a gamma one one prior, an exponential rate prior with mean one, and the "
             "posterior is gamma one hundred and twenty-three, two hundred and one, with mean point six one two deaths per corps "
             "per year, <bookmark mark='e'/> and a ninety-five percent credible interval from point five one to point seven two. "
             "<bookmark mark='f'/> The prior counts as one corps-year with one death, against two hundred real ones, so it hardly "
@@ -123,6 +127,7 @@ class Conjugacy(VoiceoverScene):
         rows[3][2].set_color(POST)
         whys = [why(r"a normal prior on a mean"), why(r"normal data, \ $\sigma$ known"),
                 why(r"complete the square: \ precisions add"), why(r"the posterior mean: \ a precision-weighted average")]
+        intro = label('Normal updating adds precision', font_size=36)
         with self.voiceover(
             "The third classic case is a normal mean. <bookmark mark='a'/> Put a normal prior on mu, centred at m zero with "
             "standard deviation s zero. <bookmark mark='b'/> With n normal observations of known standard deviation sigma, the "
@@ -132,9 +137,12 @@ class Conjugacy(VoiceoverScene):
             "Its mean is the average of the prior mean and the sample mean, weighted by their precisions. Information adds, "
             "and the more precise source pulls harder."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -164,7 +172,7 @@ class Conjugacy(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> On the World: someone guesses that the mean adult height is about a hundred and seventy "
             "centimetres, give or take ten. <bookmark mark='b'/> Ten adults are measured, with a mean of a hundred and sixty-nine "
-            "point two; with sigma nine, the data's standard error is two point eight five. <bookmark mark='c'/> The posterior "
+            "point two; assuming the Gaussian model with known sigma nine, the data's standard error is two point eight five. <bookmark mark='c'/> The posterior "
             "is normal, centred at a hundred and sixty-nine point three, with standard deviation two point seven four, a little "
             "narrower than the data alone. <bookmark mark='d'/> The data's precision is ten over eighty-one, the prior's one "
             "over a hundred, so the data get ninety-two and a half percent of the weight. <bookmark mark='e'/> The World's true mean is a "
@@ -200,8 +208,8 @@ class Conjugacy(VoiceoverScene):
             "<bookmark mark='a'/> The conjugate pairs in one table. Binomial data with a beta prior; Poisson counts with a "
             "gamma prior; a normal mean with a normal prior; and multinomial counts with a Dirichlet prior, the beta's "
             "many-category cousin. In each case the prior is worth a definite number of imaginary observations. "
-            "<bookmark mark='b'/> Every exponential family from Part 3 has a conjugate prior. They were once the only "
-            "posteriors anyone could compute; now they're building blocks for the larger models of Part 26."
+            "<bookmark mark='b'/> Regular exponential families admit natural conjugate families with suitable hyperparameters. Closed-form normalizing constants are not always available. These were once among the few "
+            "posteriors readily computed by hand; now they're building blocks for the larger models of Part 26."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tab, lag_ratio=0.08))

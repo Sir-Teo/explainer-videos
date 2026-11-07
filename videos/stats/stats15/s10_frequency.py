@@ -33,6 +33,7 @@ class Frequency(VoiceoverScene):
         rows[2][2].set_color(OBS)
         whys = [why(r"a frequentist experiment"), why(r"ten thousand times, \ each with its own posterior"),
                 why(r"the Coverage Board's question"), why(r"a different promise: \ coverage is not guaranteed")]
+        intro = label('Conditional credibility and fixed-truth coverage differ', font_size=36)
         with self.voiceover(
             "Credible intervals make a promise about belief. The Coverage Board asks a frequentist question of them anyway. "
             "<bookmark mark='a'/> Fix the truth: a probability of five percent, fifty trials. <bookmark mark='b'/> Repeat the "
@@ -42,9 +43,12 @@ class Frequency(VoiceoverScene):
             "possible outcome; the frequentist one averages over outcomes, for a fixed truth. It's a fair question whether they "
             "coincide."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -53,14 +57,14 @@ class Frequency(VoiceoverScene):
                  center=[-2.2, 0.2, 0])
         ax = A.ax
         xs = np.linspace(0.002, 0.998, 400)
-        pr = density(ax, xs, np.minimum(stats.beta(18, 2).pdf(xs), 7.8), PRIOR)
-        po = density(ax, xs, np.minimum(stats.beta(18 + 2.5, 2 + 47.5).pdf(xs), 7.8), POST)
-        lo, hi = stats.beta(20.5, 49.5).ppf([0.025, 0.975])
+        pr = density(ax, xs, stats.beta(18, 2).pdf(xs), PRIOR)
+        po = density(ax, xs, stats.beta(20, 50).pdf(xs), POST)
+        lo, hi = stats.beta(20, 50).ppf([0.025, 0.975])
         br = Line(ax.c2p(lo, 0.3), ax.c2p(hi, 0.3), color=POST, stroke_width=8)
         tr = DashedLine(ax.c2p(0.05, 0), ax.c2p(0.05, 7.6), color=S.TRUTH, stroke_width=3)
         rows = fit_rows(VGroup(
             label(r"a confident, \ wrong prior: \ Beta(18, 2), \ ``about 0.9''", font_size=24, color=PRIOR),
-            label(r"the truth is 0.05; \ typical data: \ 2 or 3 successes in 50", font_size=24, color=S.TRUTH),
+            label(r"the truth is 0.05; \ illustration: \ 2 successes in 50", font_size=24, color=S.TRUTH),
             label(r"the posterior is dragged between them", font_size=24, color=POST),
             MathTex(rf"\text{{interval}} \approx [{lo:.2f},\ {hi:.2f}]", font_size=28, color=POST),
             label(r"it misses the truth \ every time", font_size=24, color=RES),
@@ -96,6 +100,7 @@ class Frequency(VoiceoverScene):
         rows[3][2].set_color(OBS)
         whys = [why(r"the world really works the way the prior says"), why(r"condition on the data first"),
                 why(r"every posterior gives 95\%"), why(r"simulation-based calibration (Cook, Gelman \& Rubin 2006)")]
+        intro = label('Average coverage over the prior predictive model', font_size=36)
         with self.voiceover(
             "But there's a theorem in the other direction. <bookmark mark='a'/> Suppose the truth itself is drawn from the prior: "
             "the world really works the way the prior says. <bookmark mark='b'/> Then the coverage, averaged over truths and "
@@ -105,9 +110,12 @@ class Frequency(VoiceoverScene):
             "is, as long as it's the right one. That fact is the basis of simulation-based calibration, a standard check on "
             "Bayesian software."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.2, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -118,10 +126,9 @@ class Frequency(VoiceoverScene):
         with self.voiceover(
             "The Coverage Board's six new rows. <bookmark mark='a'/> At p equals point oh five with fifty trials, the Jeffreys "
             "credible interval covers eighty-nine percent: broken, the same shortfall Part 11 found for the Jeffreys interval, "
-            "because near the boundary the posterior's lower tail is too thin. The uniform prior covers ninety-six percent: "
+            "because the discrete sampling distribution produces undercoverage at this fixed probability. The uniform prior covers ninety-six percent: "
             "conservative. <bookmark mark='b'/> The confident, wrong prior: zero. <bookmark mark='c'/> The same prior when the "
-            "truth is point nine, where it's right: ninety-eight and a half percent, conservative, because a correct prior adds "
-            "real information. <bookmark mark='d'/> The same prior when the truth is drawn from it: ninety-four point six, "
+            "truth is point nine, near the prior mean: ninety-eight and a half percent here. A fixed truth near a prior mean does not guarantee conservative coverage in general. <bookmark mark='d'/> The same prior when the truth is drawn from it: ninety-four point six, "
             "kept, as the theorem says. <bookmark mark='e'/> And the reference-prior interval for the World's mean height, "
             "which is Part 8's t-interval: ninety-four point eight, kept."
         ) as vo:
@@ -142,15 +149,14 @@ class Frequency(VoiceoverScene):
     def lessons(self):
         rows = fit_rows(VGroup(
             label(r"vague priors: \ credible $\approx$ confidence, \ with similar coverage, \ and similar weak spots", font_size=24),
-            label(r"a correct informative prior: \ shorter intervals, \ and coverage to spare", font_size=24, color=HIT),
+            label(r"informative priors can shorten intervals; \ pointwise coverage still varies", font_size=24, color=HIT),
             label(r"a wrong informative prior: \ confident and wrong, \ until the data outweigh it", font_size=24, color=RES),
             label(r"averaged over a true prior: \ exactly calibrated", font_size=24, color=OBS),
             label(r"so: \ a prior is a strong assumption; \ check it, \ and check sensitivity", font_size=26, color=POST),
         ), 12.4, 0.46, [0, 0, 0])
         with self.voiceover(
             "So: <bookmark mark='a'/> with vague priors, credible and confidence intervals nearly coincide, with similar coverage "
-            "and the same weak spots near boundaries. <bookmark mark='b'/> A correct informative prior gives shorter intervals and "
-            "coverage to spare. <bookmark mark='c'/> A wrong one is confident and wrong, until enough data outweigh it. "
+            "and the same weak spots near boundaries. <bookmark mark='b'/> An informative prior can shorten intervals, but pointwise coverage can be high or low even when the truth is plausible under it. <bookmark mark='c'/> A wrong one is confident and wrong, until enough data outweigh it. "
             "<bookmark mark='d'/> Averaged over a prior that really describes the world, credible intervals are exactly "
             "calibrated. <bookmark mark='e'/> The prior is a strong assumption, as strong as any model. Treat it like one: "
             "justify it, check it against the data, and report how much the answer depends on it."
@@ -163,23 +169,27 @@ class Frequency(VoiceoverScene):
     def sbc(self):
         rows = [
             cmath(r"\theta^\star \sim \pi,\ \ y \sim p(y \mid \theta^\star)", r":", r"\text{simulate a truth and data}", font_size=30),
-            cmath(r"\theta_1, \ldots, \theta_L \sim \pi(\theta \mid y)", r":", r"\text{draw from the computed posterior}", font_size=30),
+            cmath(r"\theta_1, \ldots, \theta_L \sim \pi(\theta \mid y)", r":", r"\text{independent posterior draws; randomize ranks for ties}", font_size=30),
             cmath(r"r", r"=", r"\#\{\ell : \theta_\ell < \theta^\star\}", font_size=32),
             cmath(r"\text{if correct}", r":", r"r \text{ is uniform on } 0, \ldots, L", font_size=32),
         ]
         rows[3][2].set_color(OBS)
         whys = [why(r"the prior as the data-generating process"), why(r"by grid, \ by MCMC, \ by anything"),
-                why(r"the truth's rank among the draws"), why(r"Talts et al.\ (2018): \ a bug shows up as a non-flat histogram")]
+                why(r"the truth's rank among the draws"), why(r"Talts et al.\ (2018): \ a diagnostic: non-flatness merits investigation; flatness is not proof")]
+        intro = label('Check computation using simulated truths and data', font_size=36)
         with self.voiceover(
             "The averaging theorem gives a powerful check on Bayesian software. <bookmark mark='a'/> Simulate a truth from the "
             "prior and data from the model. <bookmark mark='b'/> Compute the posterior however you like, grid or Markov chain, "
-            "and draw from it. <bookmark mark='c'/> Record the rank of the truth among the draws. <bookmark mark='d'/> If the "
+            "and obtain effectively independent posterior draws. Correlated MCMC draws need suitable handling; for discrete parameters randomize ties. <bookmark mark='c'/> Record the rank of the truth among the draws. <bookmark mark='d'/> If the "
             "computation is right, the truth is just another draw from the posterior, so its rank is uniform. Repeat a few "
-            "hundred times; a histogram of ranks that isn't flat exposes a bug, or a sampler that hasn't converged. Sean Talts "
+            "hundred times; systematic nonuniformity can reveal a computational problem, after allowing for simulation noise and dependence. A flat histogram alone cannot prove correctness; even ignoring the data can pass some rank checks. Sean Talts "
             "and colleagues systematized this simulation-based calibration in 2018."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.2, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()

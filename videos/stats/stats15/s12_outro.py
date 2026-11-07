@@ -42,8 +42,7 @@ class Outro(VoiceoverScene):
             "used one to make the excess of boys a near certainty. The posterior is proportional to likelihood times prior, and "
             "updating step by step gives the same answer as updating at once. Conjugate priors make it bookkeeping, and the "
             "prior acts like imaginary data. The posterior's mean, median and mode answer different loss functions, and its "
-            "intervals can be equal-tailed or highest-density. Predictions average over the posterior, so they're wider than "
-            "plug-ins. Priors matter with little data, so check sensitivity; Jeffreys's prior is invariant. The normal model's "
+            "intervals can be equal-tailed or highest-density. Predictions average over parameter uncertainty; in the binomial example with more than one future trial, they are wider than plug-ins at the same mean. Priors matter with little data, so check sensitivity; Jeffreys's prior is invariant. The normal model's "
             "reference posterior is Student's t. Grids compute any small posterior, and a Metropolis walk handles larger "
             "ones, if the steps and coordinates are right. Credible intervals are exactly calibrated on average over a true "
             "prior, but not at every fixed truth. And Bayes factors, unlike p-values, can favour the null."
@@ -60,6 +59,7 @@ class Outro(VoiceoverScene):
             (r"model choice", [28]), (r"Bernstein--von Mises; \ nonparametric Bayes", [53]),
             (r"decision theory and admissibility", [45]), (r"e-values and betting", [58]),
         ], font_size=22)
+        intro = label('Where Bayesian inference returns', font_size=36)
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part 16's bootstrap gives a frequentist cousin of a posterior. Bayesian "
             "computation returns in Parts 21 and 27, with EM, Hamiltonian Monte Carlo and variational inference. Hierarchical "
@@ -67,7 +67,9 @@ class Outro(VoiceoverScene):
             "Model choice is Part 28; the Bernstein–von Mises theorem and nonparametric Bayes, Part 53; decision theory, Part "
             "45; and betting and e-values, a different bridge between belief and evidence, Part 58."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
@@ -106,15 +108,15 @@ class Outro(VoiceoverScene):
     def transcript(self):
         tr = transcript_card(done=15, current=None)
         nxt = VGroup(label(r"Part 16", font_size=30, color=GREY_B), label(r"Without Assumptions", font_size=48),
-                     label(r"pulling yourself up by your bootstraps, \ and tests that need no model at all", font_size=28, color=GREY_A))
+                     label(r"pulling yourself up by your bootstraps, \ and rank tests with explicit sampling assumptions", font_size=28, color=GREY_A))
         nxt.arrange(DOWN, buff=0.25)
         tr.to_edge(UP, buff=0.8)
         nxt.next_to(tr, DOWN, buff=1.0)
         with self.voiceover(
             "Fifteen parts of sixty-five, the fifth of Stage II. <bookmark mark='a'/> We can now say what to believe after "
             "seeing data, and compute it. <bookmark mark='b'/> But every method so far, Bayesian or not, has leaned on a model "
-            "for the data: normal, binomial, Poisson. What if we assume nothing about the distribution at all? In 1979 Bradley "
-            "Efron showed how to resample the data themselves, and ranks had long offered tests that need no model. Part 16: "
+            "for the data: normal, binomial, Poisson. What can we learn under weaker distributional assumptions? In 1979 Bradley "
+            "Efron showed how to resample the data themselves, and rank tests had long reduced dependence on parametric distributional models while retaining sampling assumptions. Part 16: "
             "without assumptions."
         ) as vo:
             self.play(FadeIn(tr))

@@ -31,7 +31,7 @@ class Priors(VoiceoverScene):
                  yticks=[0, 2, 4], center=[-2.2, 0.2, 0])
         ax = A.ax
         xs = np.linspace(0.003, 0.997, 300)
-        curves = VGroup(*[curve(ax, xs, np.minimum(stats.beta(a, b).pdf(xs), 5.4), PCOL[k], 3) for k, (a, b) in d["priors"].items()])
+        curves = VGroup(*[curve(ax, xs, stats.beta(a, b).pdf(xs), PCOL[k], 3) for k, (a, b) in d["priors"].items()])
         rows = fit_rows(VGroup(
             label(r"uniform: \ Beta(1, 1)", font_size=24, color=PRIOR),
             label(r"Jeffreys: \ Beta($\frac12$, $\frac12$)", font_size=24, color=S.ALT),
@@ -56,7 +56,7 @@ class Priors(VoiceoverScene):
         A = axes([0, 1], [0, 10], x_length=6.0, y_length=3.6, xlabel=r"$p$", ylabel=r"", xticks=[0, 0.5, 1], yticks=[], center=center)
         ax = A.ax
         xs = np.linspace(0.002, 0.998, 300)
-        cs = VGroup(*[curve(ax, xs, np.minimum(stats.beta(a + s, b + n - s).pdf(xs), 9.8), PCOL[k], 3) for k, (a, b) in d["priors"].items()])
+        cs = VGroup(*[curve(ax, xs, stats.beta(a + s, b + n - s).pdf(xs), PCOL[k], 3) for k, (a, b) in d["priors"].items()])
         return A, cs
 
     def small_n(self):
@@ -92,8 +92,7 @@ class Priors(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> Now seventy successes in a hundred. The uniform and Jeffreys posteriors are indistinguishable, "
             "at point seven. Even the sceptic and the pessimist have moved most of the way, to point six four and point six "
-            "five, and all four intervals overlap heavily. <bookmark mark='b'/> As the data grow, the likelihood overwhelms any "
-            "prior that doesn't rule the truth out completely. That's the Bernstein–von Mises theorem, which Part 53 proves: "
+            "five, and all four intervals overlap heavily. <bookmark mark='b'/> In regular identifiable finite-dimensional models, with a suitable prior positive near the truth, the likelihood eventually dominates locally. That is the Bernstein-von Mises setting, which Part 53 proves: "
             "with enough data, Bayesian and likelihood answers converge."
         ) as vo:
             self.play(FadeIn(A), FadeIn(hd))
@@ -146,6 +145,7 @@ class Priors(VoiceoverScene):
         rows[0][2].set_color(S.ALT)
         whys = [why(r"Jeffreys (1946): \ Part 9's Fisher information"), why(r"it transforms exactly like a density"),
                 why(r"the same answer on every scale"), why(r"invariant is not the same as well-calibrated: \ chapter nine")]
+        intro = label('Fisher information defines an invariant prior rule', font_size=36)
         with self.voiceover(
             "Harold Jeffreys found a way out in 1946. <bookmark mark='a'/> Make the prior proportional to the square root of "
             "Part 9's Fisher information. <bookmark mark='b'/> Under a change of parameter, the information changes by the square "
@@ -155,9 +155,12 @@ class Priors(VoiceoverScene):
             "<bookmark mark='d'/> It's the prior behind Part 11's Jeffreys interval. Invariance is an attractive property, but "
             "it isn't a guarantee of coverage, and chapter nine will find this prior falling short near the edge."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -165,22 +168,26 @@ class Priors(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"informative: \ real earlier evidence, \ stated and defended", font_size=26, color=S.CTRL),
             label(r"weakly informative: \ rule out the absurd, \ e.g. \ Cauchy(0, 2.5) on scaled log-odds slopes \ (Gelman et al. 2008)", font_size=24, color=S.LIK),
-            label(r"reference and Jeffreys priors: \ let the data speak, \ invariantly", font_size=24, color=S.ALT),
+            label(r"reference and Jeffreys priors: \ specified reference rules; \ not automatic coverage guarantees", font_size=24, color=S.ALT),
             label(r"improper priors: \ fine if the posterior integrates, \ fatal if it does not", font_size=24, color=RES),
             label(r"always: \ a sensitivity analysis, \ several priors side by side", font_size=26, color=OBS),
         ), 12.4, 0.46, [0, 0, 0])
+        intro = label('State the prior and check sensitivity', font_size=36)
         with self.voiceover(
             "In practice there are several kinds of prior. <bookmark mark='a'/> Informative priors encode real earlier evidence, "
             "a previous trial or a physical law, and should be stated and defended like any other assumption. "
             "<bookmark mark='b'/> Weakly informative priors rule out the absurd without claiming more, for instance a Cauchy "
             "prior with scale two and a half on standardized logistic coefficients, which makes enormous effects unlikely, as "
             "Andrew Gelman and colleagues recommended in 2008. <bookmark mark='c'/> Reference priors, Jeffreys's among them, try to let the data speak. "
-            "<bookmark mark='d'/> Improper priors, which don't integrate to one, are acceptable only if the posterior does; "
+            "<bookmark mark='d'/> Improper priors, which don't integrate to one, require a proper posterior for parameter inference; ordinary Bayes factors also require proper within-model priors or special treatment; "
             "with separated logistic data, as in Part 14, a flat prior gives an improper posterior. <bookmark mark='e'/> And "
             "always do what we just did: a sensitivity analysis, reporting how the conclusion moves across reasonable priors."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()
 
@@ -189,22 +196,25 @@ class Priors(VoiceoverScene):
             cmath(r"\theta \sim \pi,\ \ \tilde y \sim p(y \mid \theta)", r":", r"\text{what the prior expects to see}", font_size=30),
             cmath(r"\text{Beta}(2, 8),\ n = 10", r":", r"P(\tilde s \ge 7) = 0.015", font_size=32),
             cmath(r"\text{observed}", r":", r"s = 7", font_size=32),
-            cmath(r"\text{so}", r":", r"\text{the pessimist's prior was surprised: \ reconsider it}", font_size=30),
+            cmath(r"\text{so}", r":", r"\text{a prior-data conflict: \ investigate model and prior sensitivity}", font_size=30),
         ]
         rows[3][2].set_color(OBS)
         whys = [why(r"the prior predictive distribution"), why(r"the beta-binomial with the prior's parameters"),
                 why(r"the data we actually saw"), why(r"Box (1980): \ prior predictive checks")]
+        intro = label('Check what data the prior model predicts', font_size=36)
         with self.voiceover(
             "How can a prior be checked? <bookmark mark='a'/> Simulate data from it: draw a parameter from the prior, then data "
             "from the model. That's the prior predictive distribution, what the prior expects to see. <bookmark mark='b'/> The "
             "pessimist's Beta two eight, with ten trials, expects seven or more successes only about one and a half percent of the time. "
-            "<bookmark mark='c'/> We saw seven. <bookmark mark='d'/> The pessimist should be surprised, and should ask whether "
-            "the prior was reasonable, before trusting the posterior. George Box proposed prior predictive checks in 1980, and "
+            "<bookmark mark='c'/> We saw seven. <bookmark mark='d'/> The pessimist should be surprised. Investigate the prior and sampling model, and report sensitivity; replacing a prior after seeing the data and presenting it as pre-data information would reuse the evidence. George Box proposed prior predictive checks in 1980, and "
             "they're now a routine first step: if a prior predicts data that are absurd, like adult heights of five metres, "
             "fix the prior before seeing any data."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()

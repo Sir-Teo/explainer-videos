@@ -1,0 +1,22 @@
+{
+  "part": "stats15",
+  "fingerprint": "c4d2c12883c1ca33152ad26510ed5489d949cd81c701d2bbab8f797e77f822a2",
+  "scenes_reviewed": 12,
+  "compute_items": [
+    "billiard",
+    "laplace",
+    "conjugate",
+    "summaries",
+    "predictive",
+    "priors",
+    "mixture",
+    "normalt",
+    "grid",
+    "mcmc",
+    "bf",
+    "board"
+  ],
+  "focused_tests": 12,
+  "english_visual_review_complete": false,
+  "bilingual_production_approval": false
+}

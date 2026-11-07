@@ -21,7 +21,7 @@ From there the part covers:
 - **Priors.** Four priors at n = 10 and n = 100. A flat prior is not flat on the odds. Jeffreys's invariant prior,
   prior predictive checks, and the kinds of prior.
 - **The normal model.** The reference prior gives Part 8's t and χ² intervals exactly.
-- **Grids.** The Challenger posterior on 60,000 points: P(β₁ < 0) and the posterior of p(31 °F). A mixture prior,
+- **Grids.** The Challenger posterior on 325,141 points: P(β₁ < 0) and the posterior of p(31 °F). A mixture prior,
   and the curse of dimension.
 - **Metropolis.** Detailed balance; step sizes on trace plots; the ridge and the cure of centring; burn-in;
   agreement with the grid; functions of the draws.
@@ -36,7 +36,7 @@ Every number on screen is computed in [`compute.py`](compute.py) or inline in a 
 - the billiard table is a seeded simulation.
 
 **Built in this part:**
-- **`statkit.bayes` (I)** ([`explainer/stats/kit/bayes.py`](../../../explainer/stats/kit/bayes.py)), checked in
+- **`statkit.bayes` (I)** ([`explainer/stats/kit/bayes.py`](../../../../explainer/stats/kit/bayes.py)), checked in
   `tests/test_stats_kit_bayes.py`:
   - conjugate updates (beta, gamma, normal, and the normal model with unknown variance);
   - equal-tailed and HPD intervals;
@@ -58,6 +58,8 @@ The Coverage Board gains six rows, all 95% credible intervals, R = 10,000.
 | credible, Beta(18, 2) prior | binomial, n = 50, p drawn from the prior | 94.55% | kept |
 | credible, reference prior | the World's heights, n = 10 | 94.81% | kept |
 
+The Challenger grid approximates the proper posterior under an improper flat coefficient prior; its finite rectangle is numerical truncation, checked against wider and finer grids. Grid probabilities use trapezoidal weights, and transformed summaries integrate those weights rather than adding independent coordinate jitter. The predictive comparison uses the posterior mean in both forecasts. Normal reference results assume IID Gaussian data and positive sample variance; the World height sample is an illustration of that model. The Sellke calibration is not universal over all alternatives or an exact bound for arbitrary discrete p-values. SBC rank uniformity needs independent conditional posterior draws and randomized ties; flat ranks alone do not prove correctness.
+
 ## Build it
 
 ```bash
@@ -76,13 +78,13 @@ python tools/lecture_length.py stats15 --floor 50
 | 1 | The machinery | Beta(2, 2) × 7 of 10 → Beta(9, 5) |
 | 2 | Conjugacy | posterior mean 0.643; horse kicks Gamma(123, 201), mean 0.612, 95% [0.509, 0.725]; heights N(169.3, 2.74²), data weight 92.5%, truth 169.5 |
 | 3 | Summaries | Beta(3, 12): mode 0.154, median 0.186, mean 0.200; equal-tailed [0.047, 0.428], HPD [0.029, 0.395]; Laplace approximation SD 0.100 |
-| 4 | Prediction | next 10 trials: SD 1.92 (predictive) vs 1.45 (plug-in); P(no horse-kick death) 0.543 either way |
+| 4 | Prediction | next 10 trials: SD 1.92 (predictive) vs 1.52 (plug-in at the same posterior mean); P(no horse-kick death) 0.543 either way |
 | 5 | Priors | n = 10: means 0.45–0.68; n = 100: 0.64–0.70; Beta(2, 8) predicts ≥ 7 of 10 with probability 0.015 |
 | 6 | The normal model | 8 adults: 95% [165.06, 175.89] = the t-interval; σ ∈ [4.28, 13.19] |
-| 7 | Grids | Challenger: E[β₁] = −0.287, P(β₁ < 0) = 0.9987; p(31): median 0.9999, P(> 0.9) = 0.973; mixture prior P(0.4 < p < 0.6) = 0.65 |
-| 8 | When grids fail | ESS of 5,000 draws: 12 (tiny), 212 (good), 48 (huge); raw coordinates 12; long chain ESS 510, matches the grid; OR per 10 °F median 14 |
+| 7 | Grids | Challenger: E[β₁] ≈ −0.291, P(β₁ < 0) ≈ 0.9989; p(31): median 0.9999, P(> 0.9) ≈ 0.976; mixture prior P(0.4 < p < 0.6) = 0.65 |
+| 8 | When grids fail | ESS of 5,000 draws: 12 (tiny), 212 (good), 48 (huge); raw coordinates 12; long-chain slope ESS 510; summaries agree with the expanded grid within Monte Carlo error; OR per 10 °F median 15 (all retained draws) |
 | 9 | Bayes and frequency | the six board rows above |
-| 10 | Hypotheses | 60 of 100: p = 0.057, BF₁₀ = 0.91, P(H₀ \| y) = 0.52; at fixed p ≈ 0.05: BF₁₀ = 0.91, 0.27, 0.086, 0.027 for n = 10², …, 10⁵; Sellke bound BF₀₁ ≥ 0.41; births log₁₀ BF ≈ 38 |
+| 10 | Hypotheses | 60 of 100: p = 0.057, BF₁₀ = 0.91, P(H₀ \| y) = 0.52; at fixed p ≈ 0.05: BF₁₀ = 0.91, 0.27, 0.086, 0.027 for n = 10², …, 10⁵; Sellke bound BF₀₁ ≥ 0.41 in its continuous p-value model class; births log₁₀ BF ≈ 38 |
 | 11 | Outro | — |
 
 ## Sources

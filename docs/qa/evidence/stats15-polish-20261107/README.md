@@ -1,0 +1,11 @@
+# Part 15: First Bayes — scientific source review
+
+Reviewed all 12 scenes, problem solutions, the 12 compute items (including a new analytic mixture update), local plotting helpers and the first-course Bayesian toolkit. All scenes import, all compute items have been refreshed, and seven new reference checks plus five existing toolkit checks pass **12 tests**.
+
+The Challenger grid now extends from intercept -20 to 100 and slope -1.5 to 0.3, with 325,141 points. A wider, finer independent integration checks its mean and negative-slope probability. The corrected mean slope is -0.290869 rather than -0.286611 from the truncated grid. Trapezoidal weights replace sampled grid summaries and independent coordinate jitter. Grid and MCMC target the same proper posterior under the flat improper coefficient prior; the finite grid is explicitly numerical truncation.
+
+The predictive and plug-in binomials now use the same posterior mean: their SDs are 1.917 and 1.515. Their variance difference is m(m-1) times the posterior variance, so one future Bernoulli trial agrees exactly with the plug-in mean. The tiny Paris-births probability uses the representable exact beta tail, and conjugate mixture weights and probabilities update analytically. Odds-ratio summaries use every retained MCMC draw rather than the displayed thinned subset. Density outlines and traces are clipped geometrically without flattening off-scale values.
+
+Other corrections qualify the pseudo-observation interpretation, continuous MAP loss, infinite exchangeability, regular posterior asymptotics, nonconstant-data requirements for the normal reference posterior, MCMC ergodicity and function-specific precision, prior-data conflict, proper priors for ordinary Bayes factors, and the restricted continuous p-value class behind the Sellke bound. The wrong-prior illustration now uses an attainable integer count. SBC requires independent conditional draws and appropriate tie handling; flat ranks alone do not prove correctness. Introductory headings support narration before formulas appear.
+
+English visual verification is next. Chinese translation tables, continuous listening/playback and final bilingual masters remain open.
