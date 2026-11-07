@@ -1,0 +1,73 @@
+{
+ "video": "stats9",
+ "scene": "Compare",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 5,
+ "lines": [
+  {
+   "raw": "Chapter eleven. Comparing estimators.",
+   "spoken": "Chapter eleven. Comparing estimators.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/7cb98a148fa1d48c.wav",
+   "duration": 3.025,
+   "tokens": 4,
+   "peak": 0.548431396484375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Time to compare the recipes, and to test them on more than the textbook model. Here's an MSE board: four estimators, each graded on ten thousand factories with three hundred tanks, five captured, under three different worlds. The big number is the root mean squared error; underneath are the bias and the standard deviation. We've added a fourth recipe, built from the range between the smallest and largest serial, for a reason that will become clear. <bookmark mark='a'/> In the textbook world, where every tank is equally likely to be captured, the best unbiased estimator wins, at fifty. The maximum is biased low, the moment estimator is noisy, and the range estimator is noisier still, since it uses two order statistics and an assumption less. <bookmark mark='b'/> Now suppose newer tanks, the ones with higher serials, are more likely to be at the front and so more likely to be captured, with sequential sampling weights up to three times as large. These are sampling weights, not an exact ratio of marginal inclusion probabilities. Every estimator is pushed upward. The moment estimator is now biased by nearly fifty. The best unbiased estimator is biased too, by sixteen, but it still wins on error. <bookmark mark='c'/> Finally, suppose the numbering doesn't start at one, but at a thousand and one, and nobody told us. Every estimator that assumed a start at one is off by hundreds or thousands. Only the range estimator, which never assumed where the numbers start, is still right on average, with the same error of about eighty it had everywhere else.",
+   "spoken": "Time to compare the recipes, and to test them on more than the textbook model. Here's an MSE board: four estimators, each graded on ten thousand factories with three hundred tanks, five captured, under three different worlds. The big number is the root mean squared error; underneath are the bias and the standard deviation. We've added a fourth recipe, built from the range between the smallest and largest serial, for a reason that will become clear. In the textbook world, where every tank is equally likely to be captured, the best unbiased estimator wins, at fifty. The maximum is biased low, the moment estimator is noisy, and the range estimator is noisier still, since it uses two order statistics and an assumption less. Now suppose newer tanks, the ones with higher serials, are more likely to be at the front and so more likely to be captured, with sequential sampling weights up to three times as large. These are sampling weights, not an exact ratio of marginal inclusion probabilities. Every estimator is pushed upward. The moment estimator is now biased by nearly fifty. The best unbiased estimator is biased too, by sixteen, but it still wins on error. Finally, suppose the numbering doesn't start at one, but at a thousand and one, and nobody told us. Every estimator that assumed a start at one is off by hundreds or thousands. Only the range estimator, which never assumed where the numbers start, is still right on average, with the same error of about eighty it had everywhere else.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/21e37e74b8919911.wav",
+   "duration": 90.7,
+   "tokens": 257,
+   "peak": 0.73541259765625,
+   "issues": [],
+   "elapsed": 0.07,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Is the best unbiased estimator the best, full stop? <bookmark mark='a'/> Consider every recipe of the form a times the maximum, minus one. The maximum's distribution is known exactly, so each recipe's mean squared error can be computed exactly, with no simulation. <bookmark mark='b'/> The unbiased choice, a equals one plus one over k, gives fifty point four. <bookmark mark='c'/> But the minimum is a little to the left, at a multiplier close to k plus two over k plus one. That recipe is biased low, slightly, and its error is slightly smaller, forty-nine point seven. And a star barely depends on N, so the shrunken recipe can be approximated without knowing N by the fixed multiplier k plus two over k plus one. The exact optimum shown still uses the simulated truth. <bookmark mark='d'/> Part 8's lesson again: accepting a little bias can buy a little variance. Here the gain is small, about one and a half percent. The big differences on the board came from the model, not from bias.",
+   "spoken": "Is the best unbiased estimator the best, full stop? Consider every recipe of the form a times the maximum, minus one. The maximum's distribution is known exactly, so each recipe's mean squared error can be computed exactly, with no simulation. The unbiased choice, a equals one plus one over k, gives fifty point four. But the minimum is a little to the left, at a multiplier close to k plus two over k plus one. That recipe is biased low, slightly, and its error is slightly smaller, forty-nine point seven. And a star barely depends on N, so the shrunken recipe can be approximated without knowing N by the fixed multiplier k plus two over k plus one. The exact optimum shown still uses the simulated truth. Part 8's lesson again: accepting a little bias can buy a little variance. Here the gain is small, about one and a half percent. The big differences on the board came from the model, not from bias.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/c411dc094c62aab8.wav",
+   "duration": 57.325,
+   "tokens": 164,
+   "peak": 0.603179931640625,
+   "issues": [],
+   "elapsed": 0.05,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> And here is the game, built into statkit, so you can play it yourself. <bookmark mark='b'/> Write any recipe as a function of the captured serials, one row per factory. This one is the maximum plus the maximum over k, a near-miss of the best unbiased estimator. <bookmark mark='c'/> The game simulates ten thousand factories and grades the recipe, reporting its bias, its standard deviation and its root mean squared error, with Monte Carlo standard errors for bias and RMSE, as Part 7 insisted; SD is reported as a point estimate. <bookmark mark='d'/> And you can grade it on worlds it didn't assume. Try to beat forty-two under the textbook model. The theory of this part says you can't with an unbiased recipe, while within the multiplier family shown, a modest shrinkage buys a small gain here. A biased estimator can do much better at a particular N and worse elsewhere.",
+   "spoken": "And here is the game, built into statkit, so you can play it yourself. Write any recipe as a function of the captured serials, one row per factory. This one is the maximum plus the maximum over k, a near-miss of the best unbiased estimator. The game simulates ten thousand factories and grades the recipe, reporting its bias, its standard deviation and its root mean squared error, with Monte Carlo standard errors for bias and RMSE, as Part 7 insisted; SD is reported as a point estimate. And you can grade it on worlds it didn't assume. Try to beat forty-two under the textbook model. The theory of this part says you can't with an unbiased recipe, while within the multiplier family shown, a modest shrinkage buys a small gain here. A biased estimator can do much better at a particular N and worse elsewhere.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/b2ec4b55c5f5ddd4.wav",
+   "duration": 53.75,
+   "tokens": 145,
+   "peak": 0.587982177734375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "What does the board teach? <bookmark mark='a'/> Efficiency is bought with assumptions. <bookmark mark='b'/> The best unbiased estimator is the best only in the world it was derived for, where serials start at one and every tank is equally likely to be caught. The range estimator gives up sixty percent more error to survive not knowing where the numbers start. Which to use is a judgement about which world you're in. <bookmark mark='c'/> The wartime statisticians knew this. Much of their real work was learning how the Germans numbered things: blocks of serials allotted to each manufacturer, codes stamped on gearboxes, and wheel moulds that could be counted directly. <bookmark mark='d'/> When the model is wrong, maximum likelihood still estimates something: the member of the model closest to the truth in Kullback–Leibler divergence, which Part 22 makes precise. <bookmark mark='e'/> And estimators designed to degrade gracefully when the model is a little wrong are the subject of robust statistics, in Part 30.",
+   "spoken": "What does the board teach? Efficiency is bought with assumptions. The best unbiased estimator is the best only in the world it was derived for, where serials start at one and every tank is equally likely to be caught. The range estimator gives up sixty percent more error to survive not knowing where the numbers start. Which to use is a judgement about which world you're in. The wartime statisticians knew this. Much of their real work was learning how the Germans numbered things: blocks of serials allotted to each manufacturer, codes stamped on gearboxes, and wheel moulds that could be counted directly. When the model is wrong, maximum likelihood still estimates something: the member of the model closest to the truth in Kullback–Leibler divergence, which Part 22 makes precise. And estimators designed to degrade gracefully when the model is a little wrong are the subject of robust statistics, in Part 30.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/737c0cdc35a8217c.wav",
+   "duration": 56.4,
+   "tokens": 152,
+   "peak": 0.828155517578125,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats9/en/Compare_motion/result.json",
+ "input_sha256": "5da70d4cfe550e36afd83465b591fc2324d93b6aa71230f8b2196b12ee6740f4"
+}

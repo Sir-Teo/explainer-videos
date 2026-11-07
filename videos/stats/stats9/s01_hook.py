@@ -88,6 +88,7 @@ class Hook(VoiceoverScene):
             MathTex(rf"2\bar x - 1 = {d['one_est']['mom']:.0f},\qquad m\big(1 + \tfrac16\big) - 1 = {d['one_est']['umvue']:.0f}", font_size=30,
                     color=SIM),
         ), 12.6, 0.28, [0, -1.8, 0])
+        context = label(r"Infer the unseen population from a random sample", font_size=36).move_to([0, -1.5, 0])
         ans = MathTex(rf"N = {d['N']}", font_size=40, color=EXACT).move_to(q)
         game = label(r"Built in this part: \ the tank factory game, \ which grades any estimator on 10,000 factories", font_size=24,
                      color=S.ACCENT).to_edge(DOWN, buff=0.35)
@@ -102,10 +103,11 @@ class Hook(VoiceoverScene):
             "how good any recipe could possibly be. That's what estimation theory answers."
         ) as vo:
             self.add(f.tanks)
-            self.play(FadeIn(q))
+            self.play(FadeIn(q), FadeIn(context))
             vo.wait_until("a")
             self.play(f.tanks.animate.set_fill(opacity=0.12))
             vo.wait_until("b")
+            self.play(FadeOut(context), run_time=0.25)
             self.play(f.capture_anims(lag=0.25))
             self.play(FadeIn(rows[0]))
             vo.wait_until("c")

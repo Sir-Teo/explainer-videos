@@ -74,6 +74,7 @@ class Outro(VoiceoverScene):
             (r"irregular rates, superefficiency", [47, 50]),
             (r"misspecification, robustness", [22, 30, 60]),
         ], font_size=22)
+        intro = label('Where estimation theory returns', font_size=36)
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Likelihood is the backbone of the rest of the course: the "
             "likelihood ratio test in Part 10, logistic and Poisson regression in Parts 14 and 24, and likelihood in "
@@ -82,7 +83,9 @@ class Outro(VoiceoverScene):
             "theory. And the Cramér–Rao bound becomes the theory of efficiency: asymptotic in Part 47, semiparametric "
             "in Part 49, and minimax in Part 50."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3),
                       run_time=6.0)
         self.clear_scene()

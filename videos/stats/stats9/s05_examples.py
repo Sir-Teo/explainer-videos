@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import numpy as np
-from scipy import special
+from scipy import special, stats
 
 from videos.stats.stats9.common import *  # noqa: F403
 
@@ -35,6 +35,7 @@ class Examples(VoiceoverScene):
         rows[3][2].set_color(LIK)
         whys = [why(r"the normal density, \ logged and summed"), why(r"the mean: \ the sample mean, \ for any $\sigma$"),
                 why(r"plug in $\hat\mu$ and solve"), why(r"biased by $(n-1)/n$: \ the MLE is not unbiased (Part 8)")]
+        intro = label('Fit the normal mean and variance by likelihood', font_size=36)
         with self.voiceover(
             "The normal distribution first. <bookmark mark='a'/> The log-likelihood has two parameters, the mean and "
             "the variance. The second term is minus the sum of squared deviations over twice the variance, so "
@@ -45,9 +46,12 @@ class Examples(VoiceoverScene):
             "biased, by a factor of n minus one over n, exactly the bias Part 8 removed. Maximum likelihood doesn't care "
             "about unbiasedness. As Part 8 also showed, the divisor n has a smaller mean squared error anyway."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.6, buff=0.8, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 

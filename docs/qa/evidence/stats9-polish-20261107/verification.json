@@ -1,0 +1,23 @@
+{
+  "part": "stats9",
+  "fingerprint": "f12665929dfc90ddba66c3b6b4394aa47c6eb6a511abc1f8a0cc448538c22ebf",
+  "english_endpoints": 13,
+  "native_1080_endpoints": 8,
+  "silent_motion_chapters": 5,
+  "audio_scene": "Compare",
+  "audio_lines": 5,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats9/en/Compare/videos/s12_compare/480p15/Compare.mp4",
+    "seconds": 266.733333,
+    "narration_sha256": "f33c45111eb6d8ba9bd2e79c947378bdfeda191f3bc851df63cdb84389e98874",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 267 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 267 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

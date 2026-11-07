@@ -1,0 +1,61 @@
+{
+  "fingerprint": "f12665929dfc90ddba66c3b6b4394aa47c6eb6a511abc1f8a0cc448538c22ebf",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 16,
+      "warnings": {
+        "narration-translation": 4
+      },
+      "input_record": "renders/qa/series/stats9/en/Hook_motion/result.json",
+      "input_sha256": "316c49366e885025a063d8133d3d40b0303a202539e32821ff44e06b55c02dbc",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 178 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 178 s\n"
+    },
+    {
+      "scene": "Examples",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats9/en/Examples_motion/result.json",
+      "input_sha256": "d7337989e4bedc23c62bd56d07bf2f66d88e62f80a8c0530e3abaf541ad2005f",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 302 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 302 s\n"
+    },
+    {
+      "scene": "RaoBlackwell",
+      "status": "needs-review",
+      "frames": 34,
+      "warnings": {
+        "narration-translation": 9
+      },
+      "input_record": "renders/qa/series/stats9/en/RaoBlackwell_motion/result.json",
+      "input_sha256": "174d3f6a2b8e26d69a0b14da777ffc3631f27f973b5ef4519eeef4bbe25aec8b",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 396 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 396 s\n"
+    },
+    {
+      "scene": "CramerRao",
+      "status": "needs-review",
+      "frames": 42,
+      "warnings": {
+        "narration-translation": 9
+      },
+      "input_record": "renders/qa/series/stats9/en/CramerRao_motion/result.json",
+      "input_sha256": "86ad7094b31ad38f9dd8bb93d32e9a0fd3830fcb468609a56d0d94aa48b62c2e",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 431 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 431 s\n"
+    },
+    {
+      "scene": "Compare",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 5
+      },
+      "input_record": "renders/qa/series/stats9/en/Compare_motion/result.json",
+      "input_sha256": "5da70d4cfe550e36afd83465b591fc2324d93b6aa71230f8b2196b12ee6740f4",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 301 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 301 s\n"
+    }
+  ]
+}

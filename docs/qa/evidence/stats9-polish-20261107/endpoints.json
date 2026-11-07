@@ -1,0 +1,149 @@
+{
+  "fingerprint": "f12665929dfc90ddba66c3b6b4394aa47c6eb6a511abc1f8a0cc448538c22ebf",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 16,
+      "warnings": {
+        "narration-translation": 4,
+        "untranslated-on-screen": 29
+      },
+      "input_record": "renders/qa/series/stats9/en/Hook/result.json",
+      "input_sha256": "ad98be71d731c2b0a50712cbc2bafcfb1c7575fd73d45ec416f7b16e8f43a64a"
+    },
+    {
+      "scene": "Recipes",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 38
+      },
+      "input_record": "renders/qa/series/stats9/en/Recipes/result.json",
+      "input_sha256": "41de567200f139a2fe5992276a96b2b64c4da3a10c539eb89700ed975bac819d"
+    },
+    {
+      "scene": "Moments",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 38
+      },
+      "input_record": "renders/qa/series/stats9/en/Moments/result.json",
+      "input_sha256": "7eb9634e3d7c4ccc141169f98537bcfd63c5dfb3baf46c6144cee246de6b0996"
+    },
+    {
+      "scene": "Likelihood",
+      "status": "needs-review",
+      "frames": 33,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 43
+      },
+      "input_record": "renders/qa/series/stats9/en/Likelihood/result.json",
+      "input_sha256": "fb43c021019ebe11d269210d3be5c561f548a85711a556dc8a94d187c00a16b4"
+    },
+    {
+      "scene": "Examples",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 32
+      },
+      "input_record": "renders/qa/series/stats9/en/Examples/result.json",
+      "input_sha256": "a4fabbb431aa23a4fb8415067dc14f962ea5ec859f0755bb0301997110a2d7e2"
+    },
+    {
+      "scene": "Properties",
+      "status": "needs-review",
+      "frames": 33,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 36
+      },
+      "input_record": "renders/qa/series/stats9/en/Properties/result.json",
+      "input_sha256": "d688e01e487bcab43fa90748b257d54b59e5e340b7b711b7c0f3afde531987f8"
+    },
+    {
+      "scene": "Sufficiency",
+      "status": "needs-review",
+      "frames": 36,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 47
+      },
+      "input_record": "renders/qa/series/stats9/en/Sufficiency/result.json",
+      "input_sha256": "01576a6816b8f21026b0ab44944eb92dedc02e0fa11a9373c3ee8c85099388bd"
+    },
+    {
+      "scene": "RaoBlackwell",
+      "status": "needs-review",
+      "frames": 34,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 49
+      },
+      "input_record": "renders/qa/series/stats9/en/RaoBlackwell/result.json",
+      "input_sha256": "36496bfef004248c3f98d9390d03b9f6a0630ac3af887069ec264ecdaea76249"
+    },
+    {
+      "scene": "UMVUE",
+      "status": "needs-review",
+      "frames": 32,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 50
+      },
+      "input_record": "renders/qa/series/stats9/en/UMVUE/result.json",
+      "input_sha256": "475e013fd1650d15355b24724351f1643121735b9ea78e9d0c8f8a84f0d0f904"
+    },
+    {
+      "scene": "Information",
+      "status": "needs-review",
+      "frames": 33,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 44
+      },
+      "input_record": "renders/qa/series/stats9/en/Information/result.json",
+      "input_sha256": "6cfba318ffd6efbc3cbb22c380d052c0b55da5047034669f61fc1e6f65dc49f4"
+    },
+    {
+      "scene": "CramerRao",
+      "status": "needs-review",
+      "frames": 42,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 56
+      },
+      "input_record": "renders/qa/series/stats9/en/CramerRao/result.json",
+      "input_sha256": "bbe326c3e8f1f7b43087a6419294ae966d9e8843e202b4b36bbc4601005d0ffa"
+    },
+    {
+      "scene": "Compare",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 39
+      },
+      "input_record": "renders/qa/series/stats9/en/Compare/result.json",
+      "input_sha256": "40ede89d55b5bcd5ec6ae705667bc73ab29f5e80379e403b7193c5235ac4dabc"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 7,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 61
+      },
+      "input_record": "renders/qa/series/stats9/en/Outro/result.json",
+      "input_sha256": "54cab264ee65d9a33bb6ad1612038efb910346c3f80a2509087deac098a3bd94"
+    }
+  ]
+}

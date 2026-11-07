@@ -124,6 +124,7 @@ class RaoBlackwell(VoiceoverScene):
         whys = [why(r"a function of $\lambda$ we want"), why(r"uses one observation, \ and only says 0 or 1"),
                 why(r"given the total, \ each event falls in corps-year 1 with chance $1/n$"),
                 why(r"Rao--Blackwellized: \ uses every observation, \ still unbiased")]
+        intro = label('Improve a quiet-year probability estimate', font_size=36)
         with self.voiceover(
             "Let's watch it work. <bookmark mark='a'/> Suppose we want the probability of a quiet year, one with no "
             "deaths: e to the minus lambda, for Poisson counts. <bookmark mark='b'/> Here's a terrible estimator: look "
@@ -135,9 +136,12 @@ class RaoBlackwell(VoiceoverScene):
             "the power S. That's the improved estimator. It uses all the data, through their total, and it's still "
             "exactly unbiased."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.6, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -195,6 +199,7 @@ class RaoBlackwell(VoiceoverScene):
         rows[3][2].set_color(UMVUE)
         whys = [why(r"chapter 2's moment estimator"), why(r"the max, \ plus $k - 1$ uniform draws from $1, \dots, m - 1$, \ mean $m/2$"),
                 why(r"simplify"), why(r"Rao--Blackwell turns the moment estimator into the scaled maximum")]
+        intro = label('Condition the moment estimator on the maximum', font_size=36)
         with self.voiceover(
             "Now the tanks. <bookmark mark='a'/> Start with the moment estimator, two x-bar minus one. It's unbiased, "
             "but it isn't a function of the sufficient statistic, the maximum m. So condition on m. "
@@ -205,9 +210,12 @@ class RaoBlackwell(VoiceoverScene):
             "estimator that won chapter one. It wasn't a lucky guess. It's what you get by stripping the noise out of "
             "the average."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.6, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 

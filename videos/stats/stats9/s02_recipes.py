@@ -31,6 +31,7 @@ class Recipes(VoiceoverScene):
             label(r"so an estimator has a sampling distribution (Part 8), \ and we grade the distribution, \ not one estimate",
                   font_size=26, color=S.ACCENT),
         ), 12.6, 0.32, [0, -1.8, 0])
+        intro = label('A model, an estimator, and an estimate', font_size=36)
         with self.voiceover(
             "First, some words. <bookmark mark='a'/> A model is a family of distributions, indexed by an unknown "
             "parameter theta. The data are drawn from one member of the family. An estimator is any function of the "
@@ -42,7 +43,9 @@ class Recipes(VoiceoverScene):
             "or unlucky. A recipe is good if its sampling distribution sits tightly around the truth, whatever the truth "
             "happens to be."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(dc, shift=UP * 0.2))
             for k, m_ in enumerate("bcd"):
                 vo.wait_until(m_)
