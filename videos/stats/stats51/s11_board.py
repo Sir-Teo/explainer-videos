@@ -144,7 +144,7 @@ class ConcentrationIntervals(VoiceoverScene):
         rows = [
             cmath(r"\text{a sequence of intervals}", r":", r"P\big(\forall n: \ p \in CI_n\big) \ge 1 - \alpha", font_size=34),
             cmath(r"\text{union over } n", r":", r"\alpha_n = \alpha / (n(n+1)): \ \text{Hoeffding at each } n", font_size=32),
-            cmath(r"\text{Ville's inequality}", r":", r"P\big(\sup_n M_n \ge 1/\alpha\big) \le \alpha \ \text{\text{for a nonnegative martingale, }M_0=1}", font_size=30),
+            cmath(r"\text{Ville's inequality}", r":", r"P\big(\sup_n M_n \ge 1/\alpha\big) \le \alpha \ \text{for a nonnegative martingale, }M_0=1", font_size=30),
             cmath(r"\text{the payoff}", r":", r"\text{look at the data as often as you like: \ valid at stopping times; \ wider than fixed-time intervals}", font_size=30),
         ]
         rows[0][-1].set_color(GOODC)
