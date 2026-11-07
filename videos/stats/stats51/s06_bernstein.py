@@ -51,6 +51,9 @@ class MatrixBernstein(VoiceoverScene):
         rows[2][-1].set_color(BNDC)
         rows[3][-1].set_color(BNDC)
         whys = [why(r"bounded, \ centred"), why(r"variance in operator norm"), why(r"Tropp (2012); \ Ahlswede--Winter (2002)"), why(r"the price: \ $\log p$")]
+        heading = label('Matrix Bernstein requires centered bounded independent summands', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> The setting: independent, symmetric, p by p random matrices, each with mean zero and operator "
             "norm at most L. <bookmark mark='b'/> Their matrix variance, v, is the operator norm of the sum of the expected "
@@ -112,23 +115,18 @@ class MatrixBernstein(VoiceoverScene):
     def dimension(self):
         rows = [
             cmath(r"\text{diagonal } X_i = \varepsilon_i\, e_{k_i} e_{k_i}^\top", r":", r"\|\textstyle\sum X_i\| = \max_k |\text{a sum of } n/p \text{ signs}|", font_size=30),
-            cmath(r"\text{there}", r":", r"\text{the max of } p \text{ independent sums: \ } \sqrt{(n/p)\, 2\log p}: \ \log p \text{ is real}", font_size=30),
+            cmath(r"\text{there}", r":", r"\text{conditional on balanced counts, independent sums:  \ } \sqrt{(n/p)\, 2\log p}: \ \log p \text{ is needed in this regime}", font_size=30),
             cmath(r"\text{rotation-invariant } X_i", r":", r"\text{no } \log p: \ \text{Marchenko--Pastur's } 2\sqrt{p/n}", font_size=30),
             cmath(r"\text{closing the gap}", r":", r"\text{Bandeira, \ Boedihardjo \& van Handel (2023)}", font_size=30),
         ]
         rows[1][-1].set_color(BADC)
         rows[2][-1].set_color(GOODC)
         whys = [why(r"commuting matrices"), why(r"the bound is attained"), why(r"what we just simulated"), why(r"intrinsic freeness")]
+        heading = label('The logarithmic dimension factor is necessary for some matrix sums', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Is the log p factor a weakness of the proof? Not in general. Take diagonal matrices, each a "
-            "random sign in one random diagonal position. Their sum is diagonal, and its norm is the largest of p independent "
-            "sums of signs. <bookmark mark='b'/> That is the maximum of p roughly Gaussian variables, of size the root of two "
-            "log p: the log p factor is real. <bookmark mark='c'/> For matrices that are spread out in every direction, like "
-            "the sphere's rank-one matrices we just simulated, the log p disappears, and the truth is Marchenko–Pastur's two "
-            "root p over n. <bookmark mark='d'/> When the log p is and is not needed was settled only in 2023, by Afonso "
-            "Bandeira, March Boedihardjo and Ramon van Handel, whose theory of intrinsic freeness says when a random matrix "
-            "behaves like the free, rotation-invariant model."
-        ) as vo:
+            "<bookmark mark='a'/> Is the log p factor a weakness of the proof? Not in general. Take diagonal matrices, each a random sign in one random diagonal position. Their sum is diagonal. Conditional on the position counts, its diagonal entries are independent sign sums; the counts themselves are dependent. <bookmark mark='b'/> That is the maximum of p roughly Gaussian variables, of size the root of two log p: the log p factor is real. <bookmark mark='c'/> For matrices that are spread out in every direction, like the sphere's rank-one matrices we just simulated, the log p disappears, and the truth is Marchenko–Pastur's two root p over n. <bookmark mark='d'/> A major advance on when the log p can be reduced came in 2023, by Afonso Bandeira, March Boedihardjo and Ramon van Handel, whose theory of intrinsic freeness says when a random matrix behaves like the free, rotation-invariant model."       ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -138,18 +136,13 @@ class MatrixBernstein(VoiceoverScene):
     def uses(self):
         rows = fit_rows(VGroup(
             label(r"what matrix Bernstein buys:", font_size=28, color=GREY_A),
-            label(r"covariance estimation for bounded vectors: \ $n \gtrsim p\log p / \varepsilon^2$", font_size=26, color=MATC),
+            label(r"isotropic vectors with $\|x\|^2\lesssim p$: \ $n \gtrsim p\log p / \varepsilon^2$", font_size=26, color=MATC),
             label(r"spectral clustering: \ a random graph's adjacency is its mean plus a small matrix", font_size=26, color=MATC),
             label(r"matrix completion: \ sampled entries concentrate around the full matrix (Part 52)", font_size=26, color=MATC),
             label(r"randomized SVD and sketching: \ sampled columns preserve the spectrum", font_size=26, color=MATC),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> What it buys. <bookmark mark='b'/> Covariance estimation for any bounded vectors, not just "
-            "Gaussian ones, with p log p over epsilon squared observations. <bookmark mark='c'/> Spectral clustering, because "
-            "a random graph's adjacency matrix is its expected value plus a matrix whose norm the inequality controls, so the "
-            "top eigenvectors reveal the communities. <bookmark mark='d'/> Matrix completion, in Part fifty-two, where a few "
-            "observed entries concentrate around the full matrix. <bookmark mark='e'/> And randomized numerical linear "
-            "algebra, where a sample of columns preserves a matrix's spectrum."
+            "<bookmark mark='a'/> What it buys. <bookmark mark='b'/> For isotropic vectors whose squared norm is bounded by a constant times p, matrix Bernstein gives covariance estimation with order p log p over epsilon squared observations, for small epsilon. <bookmark mark='c'/> Spectral clustering, because a random graph's adjacency matrix is its expected value plus a matrix whose norm the inequality controls, so the top eigenvectors reveal the communities. <bookmark mark='d'/> Matrix completion, in Part fifty-two, where a few observed entries concentrate around the full matrix. <bookmark mark='e'/> And randomized numerical linear algebra, where a sample of columns preserves a matrix's spectrum."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

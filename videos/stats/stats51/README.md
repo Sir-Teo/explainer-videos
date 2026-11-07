@@ -4,7 +4,7 @@ Part 51 of a sixty-five-part course in statistics, from a first course to a PhD 
 and [the syllabus](../SYLLABUS.md)), and the ninth part of Stage IV, the PhD core.
 
 It opens with Lévy's equator: pick a point uniformly on the sphere in a thousand dimensions, and its first coordinate
-is within 0.062 of zero with probability 95%, whichever coordinate you choose. The part asks what randomness looks
+is within 0.062 of zero with probability 95%, for each coordinate fixed before observing the point. This does not hold simultaneously over all equators. The part asks what randomness looks
 like when the dimension is large, and finds it predictable:
 - sub-Gaussian and sub-exponential variables, Orlicz norms, and Hoeffding, Bernstein and Chernoff against exact tails;
 - thin shells, near-orthogonality and the Johnson–Lindenstrauss lemma;
@@ -16,7 +16,7 @@ like when the dimension is large, and finds it predictable:
 - chaining revisited: Dudley's integral, Sudakov's minoration, Talagrand's ellipsoid and generic chaining;
 - Gaussian comparison: Slepian, Sudakov–Fernique, Gordon, and the convex Gaussian min-max theorem;
 - Gaussian widths and Gordon's escape through the mesh;
-- the statistical dimension (Amelunxen, Lotz, McCoy & Tropp 2014), which explains the Donoho–Tanner curve;
+- the statistical dimension and its computable upper proxy (Amelunxen, Lotz, McCoy & Tropp 2014), which explains the Donoho–Tanner curve;
 - intervals from concentration, on the Board.
 
 It keeps three promises:
@@ -37,7 +37,7 @@ It keeps three promises:
     density; matrix Bernstein for rank-one sums;
   - exchangeable maxima (Slepian), Sudakov's minoration; Brownian motion's grid maximum, Dudley's integral and the
     union bound;
-  - Gaussian widths of the ℓ₁ and ℓ₂ balls; the statistical dimension of the ℓ₁ descent cone and the Donoho–Tanner
+  - Gaussian widths of the ℓ₁ and ℓ₂ balls; an infimum-of-expectations upper proxy for the statistical dimension of the ℓ₁ descent cone and the Donoho–Tanner
     curve.
 - **The `SphereShell`** (in `explainer/stats/viz.py`), the part's instrument: the sphere drawn as a circle, with its
   equatorial band of the true half-width for the stated n, the Gaussian shell, scattered points, and (chapter 8) the
@@ -75,14 +75,14 @@ python tools/lecture_length.py stats51 --floor 50
 |---|---|---|
 | 0 | The sphere's equator | 95% half-width of x₁: 0.95 (n = 3), 0.60 (10), 0.196 (100), 0.062 (1,000), 0.0196 (10,000); mass within 0.1: 10% → 100% |
 | 1 | Sub-Gaussian and sub-exponential | ψ₂(N(0, 1)) = √(8/3) = 1.63, ψ₂(Rademacher) = 1/√(log 2) = 1.20; Hoeffding vs Bernstein vs exact at p = 0.02, n = 200 |
-| 2 | Geometry | SD of ‖g‖: 0.65 (n = 2) → 0.72 (n = 10,000); angle SD 51.6° → 0.58°; JL with N = 200 in R⁵⁰⁰⁰: k = 500 worst distortion 26%, 89% of pairs within 10% |
+| 2 | Geometry | SD of ‖g‖: 0.655 (n = 2) → 0.707 (n = 10,000); angle SD 51.6° → 0.58°; JL with N = 200 in R⁵⁰⁰⁰: k = 500 worst **squared-distance** distortion 26%, 89% of squared-distance ratios within 10%; all-pairs 95% sufficient bound k = 1,208 for ε = 0.3 |
 | 3 | Lipschitz functions | n = 1,000: Var‖g‖ = 0.49, Var max gᵢ = 0.125 (bound 1); E max: 1.54 (n = 10) → 3.85 (10,000) |
-| 4 | Random matrices | n = 400: s_max 29.72 vs 30 and s_min 10.14 vs 10 at p = 100; MP with γ = 1/4: eigenvalues 0.26–2.24; cancer: 5 eigenvalues above the MP edge 1.51, top 13.28 (44%), top five 85%; shuffled top 1.47 |
+| 4 | Random matrices | n = 400: s_max 29.72 vs 30 and s_min 10.14 vs 10 at p = 100; MP with γ = 1/4: eigenvalues 0.26–2.24; cancer: 5 eigenvalues above the MP edge 1.51, top 13.28 (44%), top five 85%; one shuffled top 1.47; 399-shuffle maximum threshold 1.513 and global independence-null top-eigenvalue p = 0.0025 |
 | 5 | Matrix Bernstein | p = 50: E‖S − I‖ 1.73 (n = 100) → 0.25 (n = 3,200); bound about 1.6× the truth; MP edge close |
-| 6 | Chaining | Brownian grid max 0.80 = √(2/π); union bound 4.29 at N = 10⁴; Dudley's integral → √(π/2) = 1.25; ellipsoid aₖ = 1/√k: E sup 1.67 → 3.11 vs log p 2.3 → 9.2 |
+| 6 | Chaining | Brownian grid max 0.80 = √(2/π); union bound 4.29 at N = 10⁴; entropy-rate integral → √(π/2) = 1.25, without a theorem constant or covering discretization correction; ellipsoid aₖ = 1/√k: E sup 1.67 → 3.11 vs log p 2.3 → 9.2 |
 | 7 | Gaussian comparison | 1,000 exchangeable normals: E max 3.24 √(1 − ρ); ρ = 1/2 attains Sudakov's 2.29 |
 | 8 | Widths | w(B₂) = 3.08 → 100.0; w(B₁) = 1.88 → 4.02 for p = 10 → 10,000 |
-| 9 | Statistical dimension | p = 100: δ = 6.1 (s = 1), 32.9 (s = 10), 75.0 (s = 40); half-success at m = 35 for s = 10; simulated E min dist² 32.2 vs 32.9 |
+| 9 | Statistical dimension | p = 100: upper proxy = 6.1 (s = 1), 32.9 (s = 10), 75.0 (s = 40); half-success at m = 35 for s = 10; exact-per-draw simulated δ = 32.211 (MCSE 0.093, 10,000 draws) vs upper proxy 32.879; 20 trials per recovery square, not an exact finite-p half-success threshold |
 | 10 | The Board | Wald 90.9% at p = 0.02; Hoeffding half-width 0.096 vs Wald 0.019; 4/200: Clopper–Pearson [0.0055, 0.0504] |
 | 11 | Outro | — |
 
@@ -133,7 +133,7 @@ python tools/lecture_length.py stats51 --floor 50
 3. **Johnson–Lindenstrauss for one pair.**
    - For a k × d matrix G with N(0, 1) entries and a unit u, Gu ~ N(0, I_k), so ‖Gu‖² ~ χ²_k.
    - χ²_k − k is sub-exponential, and Bernstein gives P(|χ²_k/k − 1| > ε) ≤ 2e^{−kε²/8} for ε ≤ 1.
-   - A union bound over N² pairs needs k ≥ 16 log N/ε².
+   - For 0 < ε ≤ 1 and failure probability α, a union bound over N(N − 1)/2 pairs is at most N(N − 1)e^{−kε²/8}. Thus k ≥ (8/ε²) log(N(N − 1)/α) suffices. The order log N/ε² alone does not specify a confidence level.
 4. **Three Lipschitz functions.**
    - The reverse triangle inequality gives |‖x‖ − ‖y‖| ≤ ‖x − y‖. Also |max xᵢ − max yᵢ| ≤ max|xᵢ − yᵢ| ≤ ‖x − y‖.
    - |s_max(A) − s_max(B)| ≤ ‖A − B‖_op ≤ ‖A − B‖_F, the Euclidean norm of the entries.
@@ -171,3 +171,17 @@ python tools/lecture_length.py stats51 --floor 50
 - **Part 54**: Rademacher complexity, contraction and uniform laws for learning theory.
 - **Part 58**: confidence sequences from Ville's inequality.
 - **Part 59**: proportional asymptotics, where Marchenko–Pastur and the CGMT give exact risks.
+
+## QA reconciliation
+
+All fourteen numerical inputs have been regenerated. Seventeen checks cover eleven independent edge cases and six existing toolkit checks. The local computation corrects Chernoff at the closed support endpoint, uses literal inclusive binomial events without an arbitrary lattice shift, solves empirical Orlicz norms in the log domain, centers Gaussian tail simulations at the theoretical means, and preserves histogram mass. The legacy shared toolkit's `stat_dim_l1` name returns the deterministic upper proxy, not the exact finite-dimensional dimension; this part now states that distinction explicitly.
+
+For the ℓ₁ cone, δ = E minτ dist²(g, τ∂‖x‖₁), whereas minτ E dist² is an upper bound. The actual per-draw optimum is solved from its active set, without a threshold grid or truncation. Its independent scalar-optimization checks and Monte Carlo errors are retained. Basis-pursuit solver status and primal feasibility must pass; numerical failures cannot count as recovery failures. Gaussian kinematic transitions have a confidence-dependent O(√p) window. Universality needs the theorem's moment, normalization, symmetry and design assumptions.
+
+The breast-cancer data match all 17,070 original UCI feature values and all 569 diagnoses exactly. The centered Gaussian MP reference uses p/(n−1); it is not a finite-sample band for these non-Gaussian margins. Independent column permutations calibrate a global independence-null top-eigenvalue test, conditional on the margins and independent exchangeable rows. The minimum plus-one p-value is 1/400. Neither crossing the MP edge nor retaining five eigenvalues above a global-null maximum estimates a proven count of latent factors.
+
+The Board uses the unbiased sample variance and empirical Monte Carlo errors across 20,000 independent samples. Exact binomial enumeration gives coverage [0.908094, 1.000000, 1.000000] at p = .02 and [0.944034, 0.994315, 0.999986] at p = .5, in Wald/Hoeffding/empirical-Bernstein order. An observed 100% Monte Carlo coverage is not a proof of certain coverage. All displayed interval endpoints are clipped to [0,1] consistently when widths are reported. Width curves evaluate the sample formulas at the observed proportion. Confidence sequences require normalized nonnegative martingales and pay width for simultaneous validity.
+
+Gaussian and convex bounded-product concentration state their Lipschitz and input-law requirements. Sub-Gaussian MGF equivalence and weighted-sum bounds require centering; equivalence is up to universal constants. Matrix Bernstein's covariance rate requires a dimension-controlled norm bound, and diagonal signs are conditionally independent given occupancy counts. Gaussian comparison distinguishes Slepian's equal-variance tail ordering from Sudakov–Fernique expectation ordering. CGMT is a tail comparison under compactness and convex–concave conditions, not random-value equality. Escape through the mesh uses Eχ_m and a positive width gap; a converse requires convex-cone structure. Generic chaining starts with a singleton net. The Brownian entropy-rate integral and ellipsoid log-p growth column are illustrations, not computed certified finite-grid upper bounds.
+
+English endpoint, native-resolution, motion and representative narrated visual checks remain pending. Chinese narration/captions, continuous listening and final master approval remain open.

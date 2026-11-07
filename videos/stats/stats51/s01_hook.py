@@ -20,19 +20,12 @@ class Hook(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"pick a point uniformly on the sphere in $\mathbb R^n$; \ look at its first coordinate", font_size=28),
             label(r"in 3 dimensions: \ anything from $-1$ to $1$, \ evenly spread", font_size=26, color=GREY_A),
-            label(r"in 1,000 dimensions: \ almost surely within $\pm 0.06$ of zero", font_size=26, color=SPHC),
+            label(r"in 1,000 dimensions: \ within $\pm 0.062$ of zero with probability 95\%", font_size=26, color=SPHC),
             label(r"so almost all of the sphere lies near the equator, \ \emph{whichever} equator you pick", font_size=26, color=SPHC),
             label(r"Lévy (1922): \ the first concentration of measure", font_size=26, color=GOODC),
         ), 12.4, 0.55, [0, -0.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Choose a point uniformly at random on the surface of a sphere and look at one of its "
-            "coordinates. <bookmark mark='b'/> In three dimensions that coordinate is spread evenly between minus one and one: "
-            "Archimedes knew that the sphere's area is uniform in height. <bookmark mark='c'/> In a thousand dimensions it is "
-            "almost certainly within six hundredths of zero. <bookmark mark='d'/> So almost all of a high-dimensional sphere "
-            "lies in a thin band around its equator. And since nothing distinguishes one coordinate from another, the same is "
-            "true of every equator at once. <bookmark mark='e'/> Paul Lévy noticed this in his 1922 lectures. It was the "
-            "first instance of what is now called concentration of measure, and it is the key to this part."
-        ) as vo:
+            "<bookmark mark='a'/> Choose a point uniformly at random on the surface of a sphere and look at one of its coordinates. <bookmark mark='b'/> In three dimensions that coordinate is spread evenly between minus one and one: Archimedes knew that the sphere's area is uniform in height. <bookmark mark='c'/> In a thousand dimensions it is within about six hundredths of zero with probability ninety-five percent. <bookmark mark='d'/> So almost all of a high-dimensional sphere lies in a thin band around its equator. And since nothing distinguishes one coordinate from another, the same is true for each fixed equator. This is not a simultaneous claim: every point is the pole of some equator. <bookmark mark='e'/> Paul Lévy noticed this in his 1922 lectures. It was the first instance of what is now called concentration of measure, and it is the key to this part."        ) as vo:
             self.play(FadeIn(tl))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
@@ -115,13 +108,9 @@ class Hook(VoiceoverScene):
         tab = table_rows(rows, font_size=30, col_buff=0.7, row_buff=0.45, colors=[GREY_B, SPHC, GAUSSC])
         tab.move_to([0, 0.8, 0])
         foot = label(r"a band of fixed width swallows the sphere; \ the band holding a fixed share shrinks like $1/\sqrt n$", font_size=24, color=GREY_A).move_to([0, -1.2, 0])
-        foot2 = label(r"most of a high-dimensional sphere is near \emph{every} equator at once", font_size=26, color=SPHC).move_to([0, -2.0, 0])
+        foot2 = label(r"95\% near each fixed equator; \ no simultaneous claim over all equators", font_size=26, color=SPHC).move_to([0, -2.0, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The same numbers as a table. The share of the sphere within a tenth of the equator is "
-            f"{100 * d['band01'][0]:.0f} percent in three dimensions, {100 * d['band01'][2]:.0f} percent in a hundred, and "
-            f"{100 * d['band01'][3]:.1f} percent in a thousand. <bookmark mark='b'/> A fixed band swallows the whole sphere, "
-            f"and the band holding a fixed share shrinks like one over root n. <bookmark mark='c'/> Most of the sphere is near "
-            f"every equator at once, which is impossible to picture and perfectly true."
+            f"<bookmark mark='a'/> The same numbers as a table. The share of the sphere within a tenth of the equator is {100 * d['band01'][0]:.0f} percent in three dimensions, {100 * d['band01'][2]:.0f} percent in a hundred, and {100 * d['band01'][3]:.1f} percent in a thousand. <bookmark mark='b'/> A fixed band swallows the whole sphere, and the band holding a fixed share shrinks like one over root n. <bookmark mark='c'/> Most of the sphere is near any equator fixed in advance. The equator cannot be chosen after seeing the point."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tab), FadeIn(exact_tag(r"exact")))
@@ -136,16 +125,11 @@ class Hook(VoiceoverScene):
             label(r"the same phenomenon, \ everywhere:", font_size=28, color=GREY_A),
             label(r"a Gaussian vector's length is $\sqrt n \pm 0.7$: \ a thin shell", font_size=26, color=GAUSSC),
             label(r"independent random directions are nearly orthogonal", font_size=26, color=SPHC),
-            label(r"any Lipschitz function of many independent variables is nearly constant", font_size=26, color=GOODC),
+            label(r"Gaussian inputs, \ bounded Lipschitz constant: \ dimension-free concentration", font_size=26, color=GOODC),
             label(r"a random matrix's singular values sit at $\sqrt n \pm \sqrt p$", font_size=26, color=MATC),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The sphere's equator is one face of a single phenomenon. <bookmark mark='b'/> A Gaussian "
-            "vector in n dimensions has length root n, give or take about point seven, whatever n is: it lives on a thin "
-            "shell. <bookmark mark='c'/> Two independent random directions are almost exactly perpendicular. <bookmark "
-            "mark='d'/> Any smooth function of many independent variables is nearly constant. <bookmark mark='e'/> And the "
-            "singular values of a random matrix sit in a predictable window. This part makes each of these precise, "
-            "non-asymptotically, with explicit constants, because Part fifty-two will need them at finite n and p."
+            "<bookmark mark='a'/> The sphere's equator is one face of a single phenomenon. <bookmark mark='b'/> A Gaussian vector in n dimensions has length root n, give or take about point seven, whatever n is: it lives on a thin shell. <bookmark mark='c'/> Two independent random directions are almost exactly perpendicular. <bookmark mark='d'/> A Lipschitz function of Gaussian inputs has dimension-free concentration when its Lipschitz constant stays bounded. <bookmark mark='e'/> And the singular values of a random matrix sit in a predictable window. This part makes each of these precise, non-asymptotically, with explicit constants, because Part fifty-two will need them at finite n and p."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
@@ -188,12 +172,7 @@ class Hook(VoiceoverScene):
         prereq = note(r"prerequisites: \ Parts 43, \ 48").to_corner(DL, buff=0.3)
         built = note(r"built: \ \texttt{statkit.hdp}, \ the sphere-and-shell picture").to_corner(DR, buff=0.3)
         with self.voiceover(
-            "<bookmark mark='a'/> Part fifty-one: high-dimensional probability. <bookmark mark='b'/> We'll define sub-Gaussian "
-            "and sub-exponential variables and sharpen Hoeffding and Bernstein; meet thin shells, near-orthogonality and the "
-            "Johnson–Lindenstrauss lemma; prove that Lipschitz functions of Gaussians concentrate; bound random matrices "
-            "without asymptotics, and test the bounds on a real covariance matrix; revisit chaining; compare Gaussian "
-            "processes with Slepian, Sudakov and Gordon; and end with Gaussian widths and the statistical dimension, which "
-            "explain exactly when sparse recovery succeeds."
+            "<bookmark mark='a'/> Part fifty-one: high-dimensional probability. <bookmark mark='b'/> We'll define sub-Gaussian and sub-exponential variables and sharpen Hoeffding and Bernstein; meet thin shells, near-orthogonality and the Johnson–Lindenstrauss lemma; prove that Lipschitz functions of Gaussians concentrate; bound random matrices without asymptotics, and test the bounds on a real covariance matrix; revisit chaining; compare Gaussian processes with Slepian, Sudakov and Gordon; and end with Gaussian widths and the statistical dimension, which locate the sparse-recovery transition, with a finite-dimensional uncertainty window."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head, shift=UP * 0.2))

@@ -1,0 +1,86 @@
+[
+  {
+    "name": "hook",
+    "path": ".cache/stats51/hook.json",
+    "sha256": "14778767a48a10a0a68d882d3c3878b0bc4666ff1b31bfcf368e809ab75d843f",
+    "bytes": 98521
+  },
+  {
+    "name": "shells",
+    "path": ".cache/stats51/shells.json",
+    "sha256": "63ab75c6b95975b8bfd7440f93a043a263d07e7212a213c715f7724f55048fbd",
+    "bytes": 42994
+  },
+  {
+    "name": "jl",
+    "path": ".cache/stats51/jl.json",
+    "sha256": "58da48f384f8aa3fff7c23ab7c3ec794c3590751fd5a88f28f67648a8d17864a",
+    "bytes": 1599
+  },
+  {
+    "name": "tails",
+    "path": ".cache/stats51/tails.json",
+    "sha256": "fa9ce4f0604d2c153038cba91bca30426297a6d5488b2f07b59ad45ff3f898bb",
+    "bytes": 20145
+  },
+  {
+    "name": "orlicz",
+    "path": ".cache/stats51/orlicz.json",
+    "sha256": "0af8a170588e25fec580706a8d7b6b0c50bf1a73f64098b8ddb49f78c0a5a06a",
+    "bytes": 515
+  },
+  {
+    "name": "lipschitz",
+    "path": ".cache/stats51/lipschitz.json",
+    "sha256": "217e8806f84e3fffc74e051e4db1b4f8ad9aece9ab881e7ea9471d242ab2bd61",
+    "bytes": 4183
+  },
+  {
+    "name": "matrices",
+    "path": ".cache/stats51/matrices.json",
+    "sha256": "3c545da0f2a9df35bd98c69f848f44bd6f0ecd2edc855376558fed301b713f3a",
+    "bytes": 20361
+  },
+  {
+    "name": "bernstein",
+    "path": ".cache/stats51/bernstein.json",
+    "sha256": "d50faae03fc455b5eaebe7d12710fb0265b1df8ad68fb43c798d473fa8941e04",
+    "bytes": 902
+  },
+  {
+    "name": "compare",
+    "path": ".cache/stats51/compare.json",
+    "sha256": "a885f8adf32d2e0a58c2304a41fa107d3816aa6b67747b6233101ab21c23e446",
+    "bytes": 441
+  },
+  {
+    "name": "chaining",
+    "path": ".cache/stats51/chaining.json",
+    "sha256": "86bc94ee3fac1e7d17384554122e42d07c06e43109f65dacd1dc0f38f936c2c1",
+    "bytes": 1102
+  },
+  {
+    "name": "widths",
+    "path": ".cache/stats51/widths.json",
+    "sha256": "b48e503aec3dd8e265c447836c55ca8eb9834585dc8934f6973121ad0da40480",
+    "bytes": 1374
+  },
+  {
+    "name": "statdim",
+    "path": ".cache/stats51/statdim.json",
+    "sha256": "9043faa8e5f041fc56d5132d2449413e6c04d3599d9332f5cc7a2ce52c4b3470",
+    "bytes": 16600
+  },
+  {
+    "name": "cancer",
+    "path": ".cache/stats51/cancer.json",
+    "sha256": "253632c24ad9233aeb2ab10169056ac77cc75daed654e7cc686d9a33b284c82a",
+    "bytes": 10385
+  },
+  {
+    "name": "board",
+    "path": ".cache/stats51/board.json",
+    "sha256": "d4f8a245e18e2325a7389cf5a3f38b42897e22e9a0cd8aead0d8777104bd781e",
+    "bytes": 2041
+  }
+]

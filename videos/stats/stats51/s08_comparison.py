@@ -17,22 +17,19 @@ class Comparison(VoiceoverScene):
 
     def cgmt(self):
         rows = [
-            cmath(r"\text{convex } \min\max", r":", r"\text{Gordon's inequality becomes two-sided}", font_size=34),
-            cmath(r"\min_w \max_u \ u^\top G w + \psi(w, u)", r"\approx", r"\min_w \max_u \ \|w\|g^\top u + \|u\|h^\top w + \psi", font_size=30),
+            cmath(r"\text{compact sets, continuous }\psi\text{ convex--concave}", r":", r"\text{CGMT: tail bounds, probability factors }2", font_size=34),
+            cmath(r"\Phi=\min_w \max_u \ u^\top G w + \psi(w, u)", r"\ \text{compared with}\ ", r"\min_w \max_u \ \|w\|g^\top u + \|u\|h^\top w + \psi", font_size=30),
             cmath(r"\text{the lasso, \ } p/n \to \delta", r":", r"\text{its exact risk, \ from a two-dimensional problem}", font_size=32),
             cmath(r"\text{the moral}", r":", r"\text{comparison gives not just bounds, \ but limits}", font_size=32),
         ]
         rows[1][-1].set_color(GAUSSC)
         rows[2][-1].set_color(MATC)
         whys = [why(r"Stojnic (2013)"), why(r"Thrampoulidis, \ Oymak \& Hassibi (2015)"), why(r"Part 59"), why(r"proportional asymptotics")]
+        heading = label('Compact convex--concave problems admit Gaussian tail comparison', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> A modern sharpening. Mihailo Stojnic noticed in 2013 that when the min-max problem is "
-            "convex, Gordon's inequality holds in both directions. <bookmark mark='b'/> Christos Thrampoulidis, Samet Oymak "
-            "and Babak Hassibi turned this into the convex Gaussian min-max theorem of 2015: a min-max involving a Gaussian "
-            "matrix behaves like the much simpler one built from two Gaussian vectors. <bookmark mark='c'/> Since the lasso "
-            "and many other estimators are such min-max problems, their exact risk, when p and n grow in proportion, can be "
-            "read off from a problem in two scalar variables. <bookmark mark='d'/> Comparison inequalities give not just "
-            "bounds but exact limits, which is the subject of Part fifty-nine."
+            "<bookmark mark='a'/> A modern sharpening. Mihailo Stojnic noticed in 2013 that under compactness, continuity and convex-concave structure, Gaussian min-max comparison controls both tails, with probability factors of two. It is not equality of the two random problems. <bookmark mark='b'/> Christos Thrampoulidis, Samet Oymak and Babak Hassibi turned this into the convex Gaussian min-max theorem of 2015: a min-max involving a Gaussian matrix behaves like the much simpler one built from two Gaussian vectors. <bookmark mark='c'/> Since the lasso and many other estimators are such min-max problems, their exact risk, when p and n grow in proportion, can be read off from a problem in two scalar variables. <bookmark mark='d'/> Comparison inequalities give not just bounds but exact limits, which is the subject of Part fifty-nine."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -56,6 +53,9 @@ class Comparison(VoiceoverScene):
         rows[1][-1].set_color(GAUSSC)
         rows[2][-1].set_color(GAUSSC)
         whys = [why(r"equal variances"), why(r"Slepian's lemma (1962)"), why(r"integrate the tails"), why(r"Gaussian integration by parts")]
+        heading = label('Equal Gaussian variances and covariance order compare maximum tails', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> David Slepian, at Bell Labs in 1962, asked how the correlations of Gaussian variables affect "
             "their maximum. Take two centred Gaussian vectors with the same variances. <bookmark mark='b'/> If every pairwise "
@@ -120,14 +120,11 @@ class Comparison(VoiceoverScene):
         ]
         rows[1][-1].set_color(GAUSSC)
         whys = [why(r"larger increments"), why(r"Sudakov--Fernique (1971, 1975)"), why(r"chapter 6's lower bound"), why(r"a corollary")]
+        heading = label('Increment order alone compares expected Gaussian maxima', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Sudakov and Fernique removed the condition of equal variances. If every increment of X is "
-            "at least as large as the corresponding increment of Y, <bookmark mark='b'/> then X's expected maximum is at least "
-            "Y's. Only distances matter, which is why the supremum is a property of the canonical metric. <bookmark mark='c'/> "
-            "Sudakov's minoration follows at once: on an epsilon-separated set, the increments are at least those of "
-            "independent normals with variance epsilon squared over two. <bookmark mark='d'/> So does a contraction principle: "
-            "mapping the index set through a one-Lipschitz map can only shrink the expected supremum, which is how Rademacher "
-            "complexities of composed function classes are bounded in learning theory."
+            "<bookmark mark='a'/> Sudakov and Fernique removed the condition of equal variances. If every increment of X is at least as large as the corresponding increment of Y, <bookmark mark='b'/> then X's expected maximum is at least Y's. Only distances matter, which is why the supremum is a property of the canonical metric. <bookmark mark='c'/> Sudakov's minoration follows at once: on an epsilon-separated set, the increments are at least those of independent normals with variance epsilon squared over two. <bookmark mark='d'/> So does a contraction principle: a one-Lipschitz map between Euclidean index sets can only shrink the Gaussian expected supremum. Rademacher contraction is a separate theorem with its own conditions."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -137,7 +134,7 @@ class Comparison(VoiceoverScene):
 
     def gordon(self):
         rows = [
-            cmath(r"\text{a min--max}", r":", r"\min_{u} \max_{v} X_{uv} \ \ \text{for doubly indexed processes}", font_size=34),
+            cmath(r"u\in S^{p-1},\ v\in S^{n-1},\ G_{ij}\stackrel{\rm iid}{\sim}N(0,1)", r":", r"\min_{u} \max_{v} X_{uv} \ \ \text{for doubly indexed processes}", font_size=34),
             cmath(r"X_{uv} = \langle Gu, v\rangle", r",", r"\ Y_{uv} = \langle g, u\rangle + \langle h, v\rangle", font_size=34),
             cmath(r"E\min_u\max_v X_{uv}", r"\ge", r"E\min_u\max_v Y_{uv}: \ \text{Gordon (1985)}", font_size=34),
             cmath(r"\Rightarrow", r"\;", r"E\, s_{\min}(G) \ge \sqrt n - \sqrt p, \ \ E\, s_{\max}(G) \le \sqrt n + \sqrt p", font_size=34),
@@ -145,14 +142,11 @@ class Comparison(VoiceoverScene):
         rows[2][-1].set_color(GAUSSC)
         rows[3][-1].set_color(MATC)
         whys = [why(r"the smallest singular value is one"), why(r"a matrix vs \ two vectors"), why(r"increments compared"), why(r"chapter 4's white curves")]
+        heading = label('Unit-sphere min--max comparison bounds expected singular values', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Yehoram Gordon extended the comparison in 1985 to min-max quantities, minimum over one index "
-            "of a maximum over another. The smallest singular value of a matrix is such a quantity. <bookmark mark='b'/> Compare "
-            "u transpose G v, for a Gaussian matrix G and unit vectors u and v, with the much simpler process built from two "
-            "independent Gaussian vectors. <bookmark mark='c'/> Their increments satisfy Gordon's conditions, so the min-max of "
-            "the first is at least that of the second. <bookmark mark='d'/> Evaluating the simple one gives the expected "
-            "smallest singular value at least root n minus root p, and Slepian gives the largest at most root n plus root p: "
-            "chapter four's white curves, exact bounds at every n and p."
+            "<bookmark mark='a'/> Yehoram Gordon extended the comparison in 1985 to min-max quantities, minimum over one index of a maximum over another. The smallest singular value of a matrix is such a quantity. <bookmark mark='b'/> Compare u transpose G v, for an n by p standard Gaussian matrix G, u on the p-dimensional unit sphere and v on the n-dimensional unit sphere, with the much simpler process built from two independent Gaussian vectors. <bookmark mark='c'/> Their increments satisfy Gordon's conditions, so the min-max of the first is at least that of the second. <bookmark mark='d'/> Evaluating the simple one gives the expected smallest singular value at least root n minus root p, and Slepian gives the largest at most root n plus root p: chapter four's white curves, exact bounds at every n and p."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):

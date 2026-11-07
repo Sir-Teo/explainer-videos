@@ -26,19 +26,15 @@ class RandomMatrices(VoiceoverScene):
             cmath(r"\|A\|_{op}", r"=", r"\sup_{\|u\| = \|v\| = 1} u^\top A v: \ \text{a supremum of linear forms}", font_size=32),
             cmath(r"\varepsilon\text{-net } \mathcal N \text{ of } S^{p-1}", r":", r"|\mathcal N| \le (1 + 2/\varepsilon)^p, \ \ \|A\| \le \tfrac{1}{1 - \varepsilon}\max_{v \in \mathcal N} \|Av\|", font_size=30),
             cmath(r"\text{each } \|Av\|", r":", r"\text{concentrates (chapter 3); \ a union bound over } e^{O(p)} \text{ points}", font_size=30),
-            cmath(r"\Rightarrow", r"\;", r"\|A\| \le C(\sqrt n + \sqrt p + t) \ \text{w.p. } 1 - 2e^{-t^2}, \ \text{sub-Gaussian entries}", font_size=30),
+            cmath(r"\Rightarrow", r"\;", r"\|A\| \le C(\sqrt n + \sqrt p + t) \ \text{w.p. } 1 - 2e^{-t^2}, \ \text{independent centred entries, uniformly bounded }\psi_2", font_size=30),
         ]
         rows[3][-1].set_color(MATC)
         whys = [why(r"a Lipschitz function of $A$"), why(r"a volume argument"), why(r"concentration $\times$ counting"), why(r"Vershynin's Theorem 4.4.5")]
+        heading = label('A finite net controls a centered sub-Gaussian matrix norm', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> The operator norm of a matrix is the supremum of u transpose A v over unit vectors: a "
-            "supremum of linear forms, so the methods of chapter three apply. <bookmark mark='b'/> The standard argument "
-            "replaces the sphere by a finite epsilon-net, a set of points within epsilon of every unit vector. A volume "
-            "argument shows one exists with at most one plus two over epsilon, to the p, points, and the norm on the net "
-            "controls the norm everywhere. <bookmark mark='c'/> Each A v has a concentrated length, and a union bound over "
-            "the exponentially many net points costs only a term of order p in the exponent. <bookmark mark='d'/> The result: "
-            "for an n by p matrix with independent sub-Gaussian entries, the operator norm is at most a constant times root n "
-            "plus root p, with overwhelming probability."
+            "<bookmark mark='a'/> The operator norm of a matrix is the supremum of u transpose A v over unit vectors: a supremum of linear forms, so the methods of chapter three apply. <bookmark mark='b'/> The standard argument replaces the sphere by a finite epsilon-net, a set of points within epsilon of every unit vector. A volume argument shows one exists with at most one plus two over epsilon, to the p, points, and the norm on the net controls the norm everywhere. <bookmark mark='c'/> Each A v has a concentrated length, and a union bound over the exponentially many net points costs only a term of order p in the exponent. <bookmark mark='d'/> The result: for an n by p matrix with independent, mean-zero sub-Gaussian entries with a common norm bound, the operator norm is at most a constant times root n plus root p, with overwhelming probability."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -63,16 +59,10 @@ class RandomMatrices(VoiceoverScene):
             label(r"white: \ $\sqrt n + \sqrt p$ \ and \ $\sqrt n - \sqrt p$", font_size=22, color=EXACTC),
             label(rf"teal: \ the largest: \ {r100['max']:.2f} at $p = 100$ \ (30)", font_size=22, color=MATC),
             label(rf"gold: \ the smallest: \ {r100['min']:.2f} \ (10)", font_size=22, color=SPHC),
-            label(r"$p = n$: \ the smallest hits zero", font_size=22, color=BADC),
+            label(r"$p=n$: \ smallest positive a.s.; \ tends to zero with size", font_size=22, color=BADC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Gaussian matrices with four hundred rows and a varying number of columns. <bookmark "
-            f"mark='b'/> Yehoram Gordon's inequality, from chapter seven, gives the white curves: the expected largest "
-            f"singular value is at most root n plus root p, and the smallest at least root n minus root p. <bookmark "
-            f"mark='c'/> The simulated largest values sit just under the upper curve: {say(r100['max'], 1)} at a hundred "
-            f"columns, against thirty. <bookmark mark='d'/> The smallest sit just above the lower one: {say(r100['min'], 1)} "
-            f"against ten. <bookmark mark='e'/> When the matrix is square the smallest singular value falls to zero, and the "
-            f"matrix becomes nearly singular, which is why least squares fails when p approaches n."
+            f"<bookmark mark='a'/> Gaussian matrices with four hundred rows and a varying number of columns. <bookmark mark='b'/> Yehoram Gordon's inequality, from chapter seven, gives the white curves: the expected largest singular value is at most root n plus root p, and the smallest at least root n minus root p. <bookmark mark='c'/> The simulated largest values sit just under the upper curve: {say(r100['max'], 1)} at a hundred columns, against thirty. <bookmark mark='d'/> The smallest sit just above the lower one: {say(r100['min'], 1)} against ten. <bookmark mark='e'/> As square Gaussian matrices grow, their smallest singular value tends to zero; at a fixed size it is positive almost surely, and the matrix becomes nearly singular, which is why least squares fails when p approaches n."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated; \ curves exact")))
             vo.wait_until("a")
@@ -168,21 +158,12 @@ class RandomMatrices(VoiceoverScene):
         side = fit_rows(VGroup(
             label(rf"Wisconsin breast cancer: \ $n = {d['n']}$, \ $p = {d['p']}$", font_size=22),
             label(rf"teal band: \ Marchenko--Pastur, \ $[{d['mp_lo']:.2f}, {d['mp_hi']:.2f}]$", font_size=22, color=MATC),
-            label(rf"gold: \ {d['above']} eigenvalues above the band: \ real structure", font_size=22, color=SPHC),
+            label(rf"gold: \ {d['above']} above an asymptotic reference edge", font_size=22, color=SPHC),
             label(rf"the top one: \ {100 * d['share_top']:.0f}\% of the variance; \ top five: \ {100 * d['share_top5']:.0f}\%", font_size=22, color=SPHC),
             label(r"below the band: \ near-collinear features", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Real data: the Wisconsin breast cancer measurements of Part thirty-four, five hundred and "
-            f"sixty-nine biopsies and thirty features of the cell nuclei. <bookmark mark='b'/> If the features were independent "
-            f"noise, the eigenvalues of their correlation matrix would fall in the Marchenko–Pastur band, from "
-            f"{say(d['mp_lo'], 2)} to {say(d['mp_hi'], 2)}. <bookmark mark='c'/> {d['above']} eigenvalues stand clearly above "
-            f"it: real structure, which no amount of noise would produce. <bookmark mark='d'/> The largest alone carries "
-            f"{100 * d['share_top']:.0f} percent of the total variance, and the top five {100 * d['share_top5']:.0f} percent. "
-            f"<bookmark mark='e'/> Many eigenvalues fall below the band, because several features are nearly linear "
-            f"combinations of others, radius, perimeter and area, for instance. Random matrix theory supplies the null against "
-            f"which a spectrum is judged."
-        ) as vo:
+            f"<bookmark mark='a'/> Real data: the Wisconsin breast cancer measurements of Part thirty-four, five hundred and sixty-nine biopsies and thirty features of the cell nuclei. <bookmark mark='b'/> The Marchenko–Pastur band is an asymptotic reference for standardized independent noise, not a finite-sample confidence band. Its edges here are {say(d['mp_lo'], 2)} to {say(d['mp_hi'], 2)}. <bookmark mark='c'/> {d['above']} eigenvalues stand clearly above it. This suggests strong dependence, but crossing an asymptotic edge alone is not a calibrated test. <bookmark mark='d'/> The largest alone carries {100 * d['share_top']:.0f} percent of the total variance, and the top five {100 * d['share_top5']:.0f} percent. <bookmark mark='e'/> Many eigenvalues fall below the band, because several features are nearly linear combinations of others, radius, perimeter and area, for instance. Random matrix theory supplies the null against which a spectrum is judged."       ) as vo:
             self.play(FadeIn(A), FadeIn(museum_tag(r"Wolberg, \ Street \& Mangasarian (1995)")))
             vo.wait_until("a")
             self.play(FadeIn(side[0]))
@@ -202,21 +183,17 @@ class RandomMatrices(VoiceoverScene):
             cmath(r"\text{shuffle each column independently}", r":", r"\text{the margins kept, \ every dependence destroyed}", font_size=32),
             cmath(r"\text{the shuffled spectrum}", r":", rf"\text{{largest }} {d['ev_shuffled'][0]:.2f}, \ \text{{inside the band's edge }} {d['mp_hi']:.2f}", font_size=32),
             cmath(r"\text{the real spectrum}", r":", rf"\text{{largest }} {d['ev'][0]:.2f}: \ \text{{{d['ev'][0] / d['mp_hi']:.0f} times the edge}}", font_size=32),
-            cmath(r"\text{a permutation null for PCA}", r":", r"\text{keep components above the shuffled maximum}", font_size=32),
+            cmath(r"\text{399 column permutations}", r":", rf"\text{{95\% max threshold }} {d['top_threshold95']:.2f},\ \text{{top-eigenvalue }} p={d['top_pvalue']:.4f}", font_size=30),
         ]
         rows[1][-1].set_color(MATC)
         rows[2][-1].set_color(SPHC)
         rows[3][-1].set_color(GOODC)
-        whys = [why(r"Part 16's permutations"), why(r"noise looks like Marchenko--Pastur"), why(r"signal does not"), why(r"Horn's parallel analysis (1965)")]
+        whys = [why(r"Part 16's permutations"), why(r"one shuffled realization, not a calibrated test"), why(r"signal does not"), why(r"Horn's parallel analysis (1965)")]
+        heading = label('Repeated column permutations calibrate a global independence null', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            f"<bookmark mark='a'/> A check that needs no theory: shuffle each feature's values independently, keeping every "
-            f"margin but destroying all dependence. <bookmark mark='b'/> The shuffled data's largest eigenvalue is "
-            f"{say(d['ev_shuffled'][0], 2)}, inside the Marchenko–Pastur edge of {say(d['mp_hi'], 2)}, as the theory predicts "
-            f"for pure noise. <bookmark mark='c'/> The real largest eigenvalue is {say(d['ev'][0], 1)}, about "
-            f"{d['ev'][0] / d['mp_hi']:.0f} times the edge. <bookmark mark='d'/> Comparing a spectrum with its shuffled "
-            f"version is John Horn's parallel analysis of 1965, a permutation test for how many principal components to keep, "
-            f"and random matrix theory explains why it works."
-        ) as vo:
+            f"<bookmark mark='a'/> A check that needs no theory: shuffle each feature's values independently, keeping every empirical margin and breaking the rowwise associations, under an independent-column null. <bookmark mark='b'/> The shuffled data's largest eigenvalue is {say(d['ev_shuffled'][0], 2)}, inside the Marchenko–Pastur edge of {say(d['mp_hi'], 2)}, in this one shuffle. A single shuffle does not calibrate a test. <bookmark mark='c'/> The real largest eigenvalue is {say(d['ev'][0], 1)}, about {d['ev'][0] / d['mp_hi']:.0f} times the edge. <bookmark mark='d'/> To calibrate the comparison we also use three hundred ninety-nine independent column permutations. Their largest-eigenvalue distribution gives a global independence-null reference. This is related to Horn's parallel analysis; it does not prove a count of latent factors."     ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

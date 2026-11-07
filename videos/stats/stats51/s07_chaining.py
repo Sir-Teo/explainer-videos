@@ -31,6 +31,9 @@ class Chaining(VoiceoverScene):
         rows[2][-1].set_color(BNDC)
         rows[3][-1].set_color(BADC)
         whys = [why(r"Part 48's chaining, \ now Gaussian"), why(r"Sudakov; \ Dudley (1967)"), why(r"one scale only"), why(r"wasteful when points cluster")]
+        heading = label('Canonical distances describe a Gaussian supremum', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> A centred Gaussian process indexed by a set T, with its canonical metric: the distance "
             "between two indices is the standard deviation of the difference of their variables. <bookmark mark='b'/> The "
@@ -54,6 +57,9 @@ class Chaining(VoiceoverScene):
         ]
         rows[3][-1].set_color(BNDC)
         whys = [why(r"approximations at every scale"), why(r"a telescoping sum"), why(r"coarse: \ few links, \ long"), why(r"Dudley's entropy integral (1967)")]
+        heading = label('Successive nets turn proximity into a bound on increments', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> Chaining, as in Part forty-eight. Approximate each index t by its nearest point in a net at "
             "scale two to the minus k, for every k. <bookmark mark='b'/> Then the variable at t is a telescoping sum of links "
@@ -72,7 +78,7 @@ class Chaining(VoiceoverScene):
     def chart(self):
         d = load("chaining")
         lN = np.log10(d["Ns"])
-        A = axes([0.9, 4.1], [0, 4.6], x_length=7.4, y_length=4.4, xlabel=r"grid points $N$ \ (log scale)", ylabel=r"$E\max_{j \le N} B(j/N)$ \ and bounds",
+        A = axes([0.9, 4.1], [0, 4.6], x_length=7.4, y_length=4.4, xlabel=r"grid steps $N$ ($N+1$ points) \ (log scale)", ylabel=r"$E\max_{j \le N} B(j/N)$ \ and bounds",
                  xticks=[1, 2, 3, 4], xfmt=lambda v: f"10^{{{int(v)}}}", yticks=[0, 1, 2, 3, 4], center=[-2.5, 0.2, 0])
         ax = A.ax
         cu = VGroup(polyline(ax, lN, d["union"], BADC, 4), *[Dot(ax.c2p(a, b), radius=0.07, color=BADC) for a, b in zip(lN, d["union"])])
@@ -82,22 +88,15 @@ class Chaining(VoiceoverScene):
         dinf = DashedLine(ax.c2p(0.9, d["dudley_inf"]), ax.c2p(4.1, d["dudley_inf"]), color=BNDC, stroke_width=2)
         side = fit_rows(VGroup(
             label(r"Brownian motion on a grid of $N$ points; \ $d(s,t) = \sqrt{|s-t|}$", font_size=22),
-            label(rf"red: \ the union bound $\sqrt{{2\log N}}$, \ {d['union'][-1]:.2f} at $10^4$", font_size=22, color=BADC),
+            label(rf"red: \ the union bound $\sqrt{{2\log(N+1)}}$, \ {d['union'][-1]:.2f} at $10^4$", font_size=22, color=BADC),
             label(rf"blue: \ simulated, \ {d['walk'][-1]:.2f}; \ white: \ $\sqrt{{2/\pi}} = {d['limit']:.3f}$", font_size=22, color=GAUSSC),
-            label(rf"purple: \ Dudley's integral, \ to $\sqrt{{\pi/2}} = {d['dudley_inf']:.3f}$", font_size=22, color=BNDC),
+            label(rf"purple: \ entropy-rate integral, \ to $\sqrt{{\pi/2}} = {d['dudley_inf']:.3f}$", font_size=22, color=BNDC),
             label(r"chaining stays bounded; \ the union bound does not", font_size=22, color=GOODC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> An example: Brownian motion observed at N equally spaced times on the unit interval. Its "
-            f"canonical distance is the root of the time difference, so an epsilon-net needs about one over epsilon squared "
-            f"points. <bookmark mark='b'/> The union bound, in red, grows without limit: {say(d['union'][-1], 1)} at ten "
-            f"thousand points. <bookmark mark='c'/> The simulated expected maximum, in blue, levels off at the root of two "
-            f"over pi, {say(d['limit'], 2)}, the exact answer from the reflection principle. <bookmark mark='d'/> Dudley's "
-            f"integral, in purple, computed down to the grid's resolution, also levels off, at the root of pi over two, "
-            f"{say(d['dudley_inf'], 2)}, before the theorem's constant. <bookmark mark='e'/> Chaining sees that the "
-            f"maximum of a continuous process is finite; a single-scale union bound cannot."
+            f"<bookmark mark='a'/> An example: Brownian motion observed at N equally spaced times on the unit interval. Its canonical distance is the root of the time difference, so an epsilon-net needs about one over epsilon squared points. <bookmark mark='b'/> The union bound, in red, grows without limit: {say(d['union'][-1], 1)} at ten thousand points. <bookmark mark='c'/> The simulated expected maximum, in blue, levels off at the root of two over pi, {say(d['limit'], 2)}, the exact answer from the reflection principle. <bookmark mark='d'/> The entropy-rate integral, in purple, computed down to the grid's resolution, also levels off, at the root of pi over two, {say(d['dudley_inf'], 2)}, before a theorem constant and covering-number discretization corrections. This truncated rate integral alone is not a certified finite-grid upper bound. <bookmark mark='e'/> Chaining sees that the maximum of a continuous process is finite; a single-scale union bound cannot."
         ) as vo:
-            self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated; \ bounds exact")))
+            self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated; \ union bound; \ entropy-rate illustration")))
             vo.wait_until("a")
             self.play(FadeIn(side[0]))
             vo.wait_until("b")
@@ -115,22 +114,17 @@ class Chaining(VoiceoverScene):
         rows = [
             cmath(r"\text{a lower bound}", r":", r"\text{if } T \text{ holds } N \text{ points pairwise } \ge \varepsilon \text{ apart}", font_size=32),
             cmath(r"E\sup_T X_t", r"\ge", r"c\,\varepsilon\sqrt{\log N}: \ \text{Sudakov's minoration (1969)}", font_size=34),
-            cmath(r"\text{proof}", r":", r"\text{compare with independent } N(0, \varepsilon^2/2) \text{ (chapter 7's Slepian)}", font_size=30),
+            cmath(r"\text{proof}", r":", r"\text{compare with independent } N(0, \varepsilon^2/2) \text{ by Sudakov--Fernique}", font_size=30),
             cmath(r"N = 1{,}000, \ \varepsilon = 1", r":", rf"E\sup \ge \tfrac{{1}}{{\sqrt2}}\, E\max_{{1000}} Z = {d['sudakov']:.2f}", font_size=32),
         ]
         rows[1][-1].set_color(BNDC)
         rows[3][-1].set_color(GAUSSC)
         whys = [why(r"an $\varepsilon$-separated set"), why(r"Dudley's integrand, \ at one scale"), why(r"separated $\Rightarrow$ less correlated"), why(r"exact constant")]
+        heading = label('Sudakov--Fernique gives a lower bound from separated points', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            f"<bookmark mark='a'/> A lower bound in the other direction. Suppose T contains N points that are pairwise at "
-            f"least epsilon apart in the canonical metric. <bookmark mark='b'/> Vladimir Sudakov proved in 1969 that the "
-            f"expected supremum is then at least a constant times epsilon times the root of log N: Dudley's integrand, at a "
-            f"single scale, is a lower bound. <bookmark mark='c'/> The proof compares the process with independent normals of "
-            f"variance epsilon squared over two, using Slepian's lemma from the next chapter: separated variables are less "
-            f"correlated, and less correlated variables have a larger maximum. <bookmark mark='d'/> For a thousand points one "
-            f"unit apart, the expected supremum is at least {say(d['sudakov'], 2)}. So Dudley's integral is an upper bound and "
-            f"its largest integrand a lower bound; how far apart they can be is the next question."
-        ) as vo:
+            f"<bookmark mark='a'/> A lower bound in the other direction. Suppose T contains N points that are pairwise at least epsilon apart in the canonical metric. <bookmark mark='b'/> Vladimir Sudakov proved in 1969 that the expected supremum is then at least a constant times epsilon times the root of log N: Epsilon times the entropy integrand is a lower bound at each scale. <bookmark mark='c'/> The proof compares the process with independent normals of variance epsilon squared over two, using the Sudakov–Fernique expectation comparison from the next chapter: separated variables are less correlated, and less correlated variables have a larger maximum. <bookmark mark='d'/> For a thousand points one unit apart, the expected supremum is at least {say(d['sudakov'], 2)}. So Dudley's integral is an upper bound and the largest epsilon times its integrand a lower bound; how far apart they can be is the next question."       ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -141,8 +135,8 @@ class Chaining(VoiceoverScene):
         d = load("chaining")
         rows = [[r"dimension $p$"] + [f"{r['p']:,}" for r in d["ell"]],
                 [r"$E\sup_{t \in \mathcal E} \langle g, t\rangle$, \ simulated"] + [f"{r['sup']:.2f}" for r in d["ell"]],
-                [r"$\big(\sum_k a_k^2\big)^{1/2} \approx \sqrt{\log p}$"] + [f"{r['sqrt_log']:.2f}" for r in d["ell"]],
-                [r"Dudley's order, \ $\log p$"] + [f"{r['log']:.2f}" for r in d["ell"]]]
+                [r"Jensen upper bound $\big(\sum_k a_k^2\big)^{1/2}\asymp\sqrt{\log p}$"] + [f"{r['sqrt_log']:.2f}" for r in d["ell"]],
+                [r"Dudley growth proxy $\log p$ (not a computed integral)"] + [f"{r['log']:.2f}" for r in d["ell"]]]
         tab = table_rows(rows, font_size=28, col_buff=0.6, row_buff=0.4, colors=[GREY_B, GAUSSC, EXACTC, BADC])
         if tab.width > 12.6:
             tab.width = 12.6
@@ -169,7 +163,7 @@ class Chaining(VoiceoverScene):
 
     def generic(self):
         rows = [
-            cmath(r"\gamma_2(T, d)", r"=", r"\inf_{(T_k)} \sup_{t} \textstyle\sum_k 2^{k/2}\, d(t, T_k), \ \ |T_k| \le 2^{2^k}", font_size=32),
+            cmath(r"\gamma_2(T, d)", r"=", r"\inf_{(T_k)} \sup_{t} \textstyle\sum_k 2^{k/2}\, d(t, T_k), \ \ |T_0|=1,\ |T_k| \le 2^{2^k}", font_size=32),
             cmath(r"\text{Fernique--Talagrand}", r":", r"c\,\gamma_2(T, d) \le E\sup_T X_t \le C\,\gamma_2(T, d)", font_size=34),
             cmath(r"\text{the difference from Dudley}", r":", r"\text{the nets may adapt to each point } t", font_size=32),
             cmath(r"\text{the moral}", r":", r"\text{the Gaussian supremum is geometry, \ exactly, \ up to constants}", font_size=32),
@@ -177,16 +171,11 @@ class Chaining(VoiceoverScene):
         rows[1][-1].set_color(GOODC)
         rows[3][-1].set_color(SPHC)
         whys = [why(r"Talagrand's functional"), why(r"majorizing measures, \ 1975 and 1987"), why(r"one sum per $t$, \ then a sup"), why(r"Talagrand, \ \emph{Upper and Lower Bounds} (2021)")]
+        heading = label('Admissible nets can adapt to different parts of the index set', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> The fix, in a glimpse: generic chaining. Instead of integrating covering numbers, choose a "
-            "sequence of sets, the k-th with at most two to the two to the k points, and measure each point's distances to "
-            "them; Talagrand's gamma-two functional is the best possible worst-case sum. <bookmark mark='b'/> Xavier Fernique "
-            "proved the upper bound in 1975, and Michel Talagrand proved in 1987 that it is also a lower bound: the expected "
-            "supremum of a Gaussian process equals gamma two up to universal constants. <bookmark mark='c'/> The only change "
-            "from Dudley is that the sum over scales is taken for each point separately before the supremum, so the sets can "
-            "be fine where the set is large and coarse where it is thin. <bookmark mark='d'/> The moral: the size of a "
-            "Gaussian supremum is a purely geometric quantity, known exactly up to constants. Talagrand received the Abel Prize "
-            "in 2024, in part for this theorem."
+            "<bookmark mark='a'/> The fix, in a glimpse: generic chaining. Instead of integrating covering numbers, choose a sequence of sets, the k-th with at most two to the two to the k points, and measure each point's distances to them. The first net has exactly one point. Talagrand's gamma-two functional is the best possible worst-case sum for a separable process with the required metric regularity. <bookmark mark='b'/> Xavier Fernique proved the upper bound in 1975, and Michel Talagrand proved in 1987 that it is also a lower bound: the expected supremum of a Gaussian process equals gamma two up to universal constants. <bookmark mark='c'/> The only change from Dudley is that the sum over scales is taken for each point separately before the supremum, so the sets can be fine where the set is large and coarse where it is thin. <bookmark mark='d'/> The moral: the size of a Gaussian supremum is a purely geometric quantity, known exactly up to constants. Talagrand received the Abel Prize in 2024, in part for this theorem."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):

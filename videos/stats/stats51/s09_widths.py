@@ -25,21 +25,18 @@ class Widths(VoiceoverScene):
     def width(self):
         rows = [
             cmath(r"w(T)", r"=", r"E\sup_{t \in T} \langle g, t\rangle, \ \ g \sim N(0, I_p)", font_size=36),
-            cmath(r"\text{geometrically}", r":", r"\text{the average half-width of } T \text{ in a random direction, } \times \sqrt p", font_size=30),
+            cmath(r"\text{geometrically}", r":", r"\text{the average half-width of } T \text{ in a random direction, } \times E\chi_p\sim\sqrt p", font_size=30),
             cmath(r"w(B_2^p) \approx \sqrt p", r",", r"\ w(B_1^p) \approx \sqrt{2\log 2p}", font_size=36),
             cmath(r"\text{the effective dimension}", r":", r"w(T \cap S^{p-1})^2: \ \text{how many dimensions } T \text{ really uses}", font_size=30),
         ]
         rows[2][-1].set_color(SPHC)
         rows[3][-1].set_color(GOODC)
         whys = [why(r"a Gaussian supremum"), why(r"the mean width"), why(r"the cross-polytope is thin"), why(r"a cone's 'dimension'")]
+        heading = label('Gaussian width measures an average support function', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> The Gaussian width of a set T is the expected supremum of the Gaussian process indexed by T: "
-            "the largest inner product of a random Gaussian direction with a point of T. Everything in the last two chapters "
-            "applies to it. <bookmark mark='b'/> Geometrically, it is the average half-width of T measured along a random "
-            "direction, scaled by root p. <bookmark mark='c'/> The Euclidean ball has width about root p. The l-one ball, the "
-            "cross-polytope, has width only about the root of two log two p, because a random direction is nearly orthogonal "
-            "to all of its corners at once. <bookmark mark='d'/> For a cone, the squared width of its intersection with the "
-            "sphere acts as its effective dimension: how many dimensions the cone really occupies."
+            "<bookmark mark='a'/> The Gaussian width of a set T is the expected supremum of the Gaussian process indexed by T: the largest inner product of a random Gaussian direction with a point of T. Everything in the last two chapters applies to it. <bookmark mark='b'/> Geometrically, it is the average half-width of T measured along a random direction, scaled by the mean length of a standard Gaussian vector, asymptotic to root p. <bookmark mark='c'/> The Euclidean ball has width about root p. The l-one ball, the cross-polytope, has width only about the root of two log two p, because a random direction is nearly orthogonal to all of its corners at once. <bookmark mark='d'/> For a cone, the squared width of its intersection with the sphere acts as its effective dimension: how many dimensions the cone really occupies."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -85,6 +82,9 @@ class Widths(VoiceoverScene):
         rows[2][-1].set_color(GOODC)
         rows[3][-1].set_color(SPHC)
         whys = [why(r"fewer equations than unknowns"), why(r"a linear program"), why(r"the null space misses a cone"), why(r"the descent cone")]
+        heading = label('Unique basis pursuit requires the null space to miss the descent cone', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> The question the widths answer. We take m Gaussian measurements of a p-dimensional vector "
             "with only s non-zero entries, with fewer measurements than unknowns. <bookmark mark='b'/> Basis pursuit, from Part "
@@ -148,23 +148,20 @@ class Widths(VoiceoverScene):
 
     def mesh(self):
         rows = [
-            cmath(r"T \subset S^{p-1}, \ \ E \text{ uniform, codim } m", r":", r"\text{Gordon's escape through the mesh (1988)}", font_size=30),
-            cmath(r"w(T) < \sqrt{m}", r"\Rightarrow", r"P(E \cap T = \emptyset) \ge 1 - \tfrac72 e^{-(\sqrt m - w(T))^2/18}", font_size=32),
+            cmath(r"T \subset S^{p-1}\text{ compact}, \ \ E \text{ uniform, codim } m", r":", r"\text{Gordon's escape through the mesh (1988)}", font_size=30),
+            cmath(r"w(T)<a_m:=E\chi_m", r"\Rightarrow", r"P(E \cap T = \emptyset) \ge 1-e^{-(a_m-w(T))^2/2}", font_size=32),
             cmath(r"T = D(x_0) \cap S^{p-1}", r":", r"w^2 \lesssim 2s\log(p/s) \ \Rightarrow \ m \gtrsim 2s\log(p/s) \text{ suffice}", font_size=30),
-            cmath(r"\text{and conversely}", r":", r"m \ll w^2 \Rightarrow \text{failure, \ with high probability}", font_size=32),
+            cmath(r"\text{closed convex cones only}", r":", r"m \ll w^2 \Rightarrow \text{failure away from the transition window}", font_size=32),
         ]
         rows[1][-1].set_color(GOODC)
         rows[2][-1].set_color(SPHC)
         rows[3][-1].set_color(BADC)
         whys = [why(r"from his min--max comparison"), why(r"an explicit probability"), why(r"Chandrasekaran et al. (2012)"), why(r"a sharp threshold, \ chapter 9")]
+        heading = label('A positive Gaussian-width gap controls the escape probability', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Yehoram Gordon answered it in 1988 with his min-max comparison: the escape through the mesh. "
-            "<bookmark mark='b'/> A uniformly random subspace of codimension m misses a subset T of the sphere with high "
-            "probability as soon as the Gaussian width of T is less than root m. <bookmark mark='c'/> For the descent cone of "
-            "the l-one norm at an s-sparse vector, the squared width is at most about two s log of p over s, so that many "
-            "measurements suffice, as Venkat Chandrasekaran, Benjamin Recht, Pablo Parrilo and Alan Willsky showed in 2012. "
-            "<bookmark mark='d'/> And the converse holds too: with many fewer measurements than the squared width, recovery "
-            "fails. The change is sharp, and the next chapter measures exactly where it happens."
+            "<bookmark mark='a'/> Yehoram Gordon answered it in 1988 with his min-max comparison: the escape through the mesh. <bookmark mark='b'/> For a compact subset T of the sphere, a uniformly random subspace of codimension m misses T with high probability when its width lies sufficiently below the mean length of an m-dimensional Gaussian vector. The gap sets the probability bound. <bookmark mark='c'/> For the descent cone of the l-one norm at an s-sparse vector, the squared width is at most about two s log of p over s, so that many measurements suffice, as Venkat Chandrasekaran, Benjamin Recht, Pablo Parrilo and Alan Willsky showed in 2012. <bookmark mark='d'/> For closed convex descent cones, the next chapter supplies a converse with a finite-dimensional transition window. There is no such converse for every arbitrary subset of the sphere."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):

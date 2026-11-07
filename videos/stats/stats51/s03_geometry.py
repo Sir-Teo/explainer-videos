@@ -30,14 +30,11 @@ class Geometry(VoiceoverScene):
         rows[2][-1].set_color(GAUSSC)
         rows[3][-1].set_color(SPHC)
         whys = [why(r"a $\chi^2_n$"), why(r"the delta method"), why(r"concentration of the norm"), why(r"almost no mass near the centre")]
+        heading = label('A Gaussian length has a shell of constant absolute width', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Take a standard Gaussian vector in n dimensions. Its squared length is a chi-square with n "
-            "degrees of freedom: mean n, standard deviation root two n. <bookmark mark='b'/> Taking the square root, the "
-            "length is root n plus a fluctuation whose standard deviation tends to one over root two, about point seven one, "
-            "whatever n is. <bookmark mark='c'/> And the tails are Gaussian: the length is within t of root n except with "
-            "probability e to the minus c t squared. <bookmark mark='d'/> So a Gaussian in a thousand dimensions does not "
-            "fill a ball. Its mass sits on a thin spherical shell of radius about thirty-two, like a soap bubble, with almost "
-            "nothing near the centre, even though the density is largest there."
+            "<bookmark mark='a'/> Take a standard Gaussian vector in n dimensions. Its squared length is a chi-square with n degrees of freedom: mean n, standard deviation root two n. <bookmark mark='b'/> Taking the square root, the length is root n plus a fluctuation whose standard deviation tends to one over root two, about point seven one, in the large-dimension limit. <bookmark mark='c'/> And the tails are Gaussian: the length is within t of root n except with probability e to the minus c t squared. <bookmark mark='d'/> So a Gaussian in a thousand dimensions does not fill a ball. Its mass sits on a thin spherical shell of radius about thirty-two, like a soap bubble, with almost nothing near the centre, even though the density is largest there."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -117,21 +114,17 @@ class Geometry(VoiceoverScene):
         rows = [
             cmath(r"x_1, \dots, x_N \in \mathbb R^d", r",", r"G: k \times d \text{ Gaussian}, \ \ f(x) = Gx/\sqrt k", font_size=34),
             cmath(r"\text{one pair}", r":", r"\|f(x) - f(y)\|^2 / \|x - y\|^2 \sim \chi^2_k / k: \ \text{within } 1 \pm \varepsilon \text{ w.p. } 1 - 2e^{-c\varepsilon^2 k}", font_size=28),
-            cmath(r"\text{all } \binom N2 \text{ pairs}", r":", rf"k \ge \frac{{4 \log N}}{{\varepsilon^2/2 - \varepsilon^3/3}}: \ k = {d['k_needed_30']} \text{{ for }} N = {d['N']}, \ \varepsilon = 0.3", font_size=30),
+            cmath(r"\text{all } \binom N2 \text{ pairs}", r":", rf"k \ge 8\varepsilon^{{-2}}\log(N(N-1)/0.05): \ k = {d['k_needed_30']} \text{{ for }} N = {d['N']}, \ \varepsilon = 0.3", font_size=30),
             cmath(r"\text{Johnson \& Lindenstrauss (1984)}", r":", r"\text{the dimension needed does not depend on } d", font_size=32),
         ]
         rows[2][-1].set_color(GOODC)
         rows[3][-1].set_color(SPHC)
-        whys = [why(r"a random projection"), why(r"chapter 1's $\chi^2$ tail"), why(r"a union bound; \ Dasgupta \& Gupta"), why(r"AI, Built, \ Part 3")]
+        whys = [why(r"a random projection"), why(r"chapter 1's $\chi^2$ tail"), why(r"all pairs; \ failure probability $\le0.05$"), why(r"AI, Built, \ Part 3")]
+        heading = label('A union bound gives a stated probability for all squared distances', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            f"<bookmark mark='a'/> These facts give the Johnson–Lindenstrauss lemma. Take N points in a huge dimension d, and "
-            f"map them by a random Gaussian matrix with k rows, scaled by one over root k. <bookmark mark='b'/> For a single "
-            f"pair, the squared distance after projection, relative to before, is a chi-square with k degrees of freedom over "
-            f"k, which is within one plus or minus epsilon except with probability e to the minus c epsilon squared k. "
-            f"<bookmark mark='c'/> A union bound over all pairs needs only k of order log N over epsilon squared: for two "
-            f"hundred points and thirty percent distortion, {d['k_needed_30']} dimensions. <bookmark mark='d'/> William Johnson "
-            f"and Joram Lindenstrauss proved this in 1984. The striking part is what is absent: the original dimension d does "
-            f"not appear at all."
+            f"<bookmark mark='a'/> These facts give the Johnson–Lindenstrauss lemma. Take N points in a huge dimension d, and map them by a random Gaussian matrix with k rows, scaled by one over root k. <bookmark mark='b'/> For a single pair, the squared distance after projection, relative to before, is a chi-square with k degrees of freedom over k, which is within one plus or minus epsilon except with probability e to the minus c epsilon squared k. <bookmark mark='c'/> A union bound over all pairs needs only k of order log N over epsilon squared: for two hundred points and thirty percent squared-distance distortion and at least ninety-five percent simultaneous success probability, {d['k_needed_30']} dimensions. <bookmark mark='d'/> William Johnson and Joram Lindenstrauss proved this in 1984. The striking part is what is absent: the original dimension d does not appear at all."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -142,7 +135,7 @@ class Geometry(VoiceoverScene):
     def chart(self):
         d = load("jl")
         lk = np.log10([r["k"] for r in d["rows"]])
-        A = axes([0.9, 3.4], [-1.0, 0.5], x_length=7.4, y_length=4.4, xlabel=r"projection dimension $k$ \ (log scale)", ylabel=r"$\log_{10}$ worst distortion",
+        A = axes([0.9, 3.4], [-1.0, 0.5], x_length=7.4, y_length=4.4, xlabel=r"projection dimension $k$ \ (log scale)", ylabel=r"$\log_{10}$ worst squared-distance distortion",
                  xticks=[1, 2, 3], xfmt=lambda v: f"{10 ** v:,.0f}", yticks=[-1, -0.5, 0, 0.5], center=[-2.5, 0.2, 0])
         ax = A.ax
         dev = np.log10([r["max_dev"] for r in d["rows"]])
@@ -152,18 +145,13 @@ class Geometry(VoiceoverScene):
         w = {r["k"]: r for r in d["rows"]}
         side = fit_rows(VGroup(
             label(rf"{d['N']} points in $\mathbb R^{{{d['d']:,}}}$, \ two loose clusters", font_size=22),
-            label(r"gold: \ the worst pair's distortion, \ $\max |\text{ratio} - 1|$", font_size=22, color=SPHC),
-            label(r"purple: \ $\sqrt{8 \log N / k}$: \ the slope $-1/2$", font_size=22, color=BNDC),
+            label(r"gold: \ worst squared-distance distortion, \ $\max |\text{ratio} - 1|$", font_size=22, color=SPHC),
+            label(r"purple: \ $\sqrt{8 \log N / k}$, \ rate proxy, \ not a bound", font_size=22, color=BNDC),
             label(rf"$k = 500$: \ worst {w[500]['max_dev']:.2f}; \ {100 * w[500]['within10']:.0f}\% of pairs within 10\%", font_size=22, color=GOODC),
-            label(r"from 5,000 coordinates to 500, \ geometry kept", font_size=22, color=GREY_A),
+            label(r"5,000 coordinates to 500; \ squared-distance ratios measured", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Two hundred points in five thousand dimensions, arranged in two loose clusters, projected "
-            f"to k dimensions. <bookmark mark='b'/> In gold, the worst distortion over all nineteen thousand nine hundred pairs. "
-            f"<bookmark mark='c'/> It falls like one over root k, as the purple line from the theory predicts. <bookmark "
-            f"mark='d'/> At five hundred dimensions the worst pair is distorted by {100 * w[500]['max_dev']:.0f} percent and "
-            f"{100 * w[500]['within10']:.0f} percent of pairs are within ten. <bookmark mark='e'/> A tenfold reduction in "
-            f"dimension, with the geometry intact, and by a matrix that never looked at the data."
+            f"<bookmark mark='a'/> Two hundred points in five thousand dimensions, arranged in two loose clusters, projected to k dimensions. <bookmark mark='b'/> In gold, the worst squared-distance distortion over all nineteen thousand nine hundred pairs. <bookmark mark='c'/> The purple line is the root-log-N-over-k rate proxy; it is not a confidence bound. <bookmark mark='d'/> At five hundred dimensions the worst pair is distorted by {100 * w[500]['max_dev']:.0f} percent and {100 * w[500]['within10']:.0f} percent of pairs are within ten. <bookmark mark='e'/> A tenfold reduction in dimension, with these measured squared-distance distortions, and by a matrix that never looked at the data."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated")))
             vo.wait_until("a")
