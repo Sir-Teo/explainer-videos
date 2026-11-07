@@ -40,6 +40,9 @@ class Fisher(VoiceoverScene):
             "13 and 16. <bookmark mark='d'/> The p-value is the share of possible assignments giving a statistic at least "
             "as extreme as the one observed. It is exact for any sample size, and needs no model for the outcomes."
         ) as vo:
+            intro=label('A sharp null imputes the entire science table',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -91,14 +94,13 @@ class Fisher(VoiceoverScene):
             label(r"all 924 differences, \ under the sharp null", font_size=22),
             label(rf"observed: \ ${d['obs']:+.1f}$", font_size=22, color=TAUC),
             label(rf"$p = {d['p']:.2f}$: \ entirely ordinary", font_size=22, color=Y0C),
-            label(r"12 patients cannot see an 8-point effect", font_size=22, color=MISSC),
+            label(r"this pilot has little precision for an 8-point average effect", font_size=22, color=MISSC),
         ), 4.2, 0.42, [4.6, 0.3, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Here are all nine hundred and twenty-four. <bookmark mark='b'/> The observed difference "
-            "sits in the middle of them. <bookmark mark='c'/> The share at least as far from zero is " + say(d["p"]) + ", so "
-            "nothing in this pilot is surprising if the drug does nothing. <bookmark mark='d'/> That is not evidence that "
-            "it does nothing. The patients' pressures differ from one another by ten or twenty points, so with twelve of "
-            "them, a real effect of eight points is invisible."
+            "sits in the middle of them. <bookmark mark='c'/> The share at least as far from zero is " + say(d["p"]) + ", so nothing in this pilot is surprising if the drug does nothing. <bookmark mark='d'/> That is not "
+            "evidence that it does nothing. The patients' pressures differ from one another by ten or twenty points, "
+            "so this particular twelve-patient draw gives little evidence about an eight-point average effect."
         ) as vo:
             self.add(trial_tag())
             self.play(FadeIn(A), FadeIn(bars))
@@ -120,15 +122,19 @@ class Fisher(VoiceoverScene):
         ]
         rows[3][-1].set_color(TAUC)
         whys = [why(r"a constant effect $\tau_0$"), why(r"again, \ no missing data"), why(r"a 90\% set by test inversion"),
-                why(r"honest, \ and very wide")]
+                why(r"constant-effect model; \ half-point grid")]
         with self.voiceover(
             "<bookmark mark='a'/> Fisher's test also gives an interval. Any constant-effect hypothesis, that the drug "
             "changes everyone's pressure by exactly tau nought, is also sharp. <bookmark mark='b'/> It too fills in the "
             "science: subtract tau nought from the treated outcomes to get their untreated ones. <bookmark mark='c'/> Test "
             "each tau nought in turn, and keep those not rejected at ten percent. <bookmark mark='d'/> For the pilot, the "
-            "interval runs from minus " + say(-d["ci"][0], 0) + " to plus " + say(d["ci"][1], 1) + " points: honest, and "
-            "far too wide to be useful."
+            "interval runs from minus " + say(-d["ci"][0], 0) + " to plus " + say(d["ci"][1], 1) + " points on our half-point grid. We enumerate all assignments at each grid value. This set targets a "
+            "common constant effect; it is not a general confidence interval for the heterogeneous average effect in "
+            "our World."
         ) as vo:
+            intro=label('Test inversion targets a constant effect under that model',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -142,15 +148,16 @@ class Fisher(VoiceoverScene):
             label(r"so sample 10,000 of them at random", font_size=26, color=GREY_A),
             label(rf"observed difference: \ ${d['big_obs']:.2f}$", font_size=26, color=TAUC),
             label(rf"the largest of 10,000 null differences: \ {d['big_max']:.2f} \ (SD {d['big_sd']:.2f})", font_size=26, color=Y0C),
-            label(r"$p < 1/10{,}000$: \ the drug does something to someone", font_size=26, color=BANDC),
+            label(r"$p_{\rm MC}=1/10{,}001$: \ strong evidence against the sharp null", font_size=26, color=BANDC),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> With all two thousand patients there are about ten to the six hundred possible "
             "assignments, <bookmark mark='b'/> so we sample ten thousand of them at random instead. <bookmark mark='c'/> "
             "The observed difference is minus " + say(-d["big_obs"], 1) + " points. <bookmark mark='d'/> The largest of the "
-            "ten thousand null differences is only " + say(d["big_max"], 1) + ", and their standard deviation is half a "
-            "point. <bookmark mark='e'/> So the p-value is below one in ten thousand: the drug certainly does something to "
-            "someone."
+            "ten thousand null differences is only " + say(d["big_max"], 1) + ", and their standard deviation is half a point. <bookmark mark='e'/> None of the ten thousand sampled "
+            "assignments is as extreme. The plus-one Monte Carlo p-value is one over ten thousand and one, strong "
+            "evidence against the sharp null. This is simulation resolution, not a proven upper bound on the exact "
+            "randomization p-value."
         ) as vo:
             self.add(trial_tag())
             for k, m_ in enumerate("abcde"):

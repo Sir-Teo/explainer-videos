@@ -73,19 +73,23 @@ class Surrogates(VoiceoverScene):
             cmath(r"\text{first}", r":", r"\text{the treatment changes the surrogate } S", font_size=30),
             cmath(r"\text{second}", r":", r"S \text{ predicts the outcome } Y", font_size=30),
             cmath(r"\text{third}", r":", r"\text{given } S, \text{ the treatment tells us nothing more about } Y", font_size=30),
-            cmath(r"\text{3 fails}", r"\Rightarrow", r"\text{another path from drug to outcome}", font_size=30),
+            cmath(r"\text{a regression residual association}", r"\Rightarrow", r"\text{does not alone identify the causal mechanism}", font_size=30),
         ]
         rows[2][-1].set_color(TAUC)
-        whys = [why(r"Prentice (1989)"), why(r"the reason it was chosen"), why(r"the whole effect runs through $S$"),
+        whys = [why(r"Prentice (1989)"), why(r"the reason it was chosen"), why(r"statistical condition, \ not a mediation proof"),
                 why(r"CAST's drugs: \ pro-arrhythmic")]
         with self.voiceover(
-            "<bookmark mark='a'/> Ross Prentice set out criteria in 1989, the year CAST's first results appeared. First, "
-            "the treatment must change the surrogate. <bookmark mark='b'/> Second, the surrogate must predict the outcome. "
-            "<bookmark mark='c'/> Third, and crucially, once the surrogate is known, the treatment must tell us nothing more "
-            "about the outcome: the whole effect must run through the surrogate. <bookmark mark='d'/> When the third fails, "
-            "the drug reaches the outcome by another path. Encainide and flecainide, it turned out, could themselves "
-            "provoke fatal arrhythmias."
+            "<bookmark mark='a'/> Ross Prentice set out criteria in 1989, the year CAST's first results appeared. "
+            "First, the treatment must change the surrogate. <bookmark mark='b'/> Second, the surrogate must predict "
+            "the outcome. <bookmark mark='c'/> Third, and crucially, once the surrogate is known, the treatment must "
+            "tell us nothing more about the outcome: this is a statistical conditional-independence requirement. It "
+            "is not by itself an identified causal mediation statement. <bookmark mark='d'/> Failure can reflect "
+            "another pathway, confounding after conditioning on the surrogate, or model misspecification. Encainide "
+            "and flecainide, it turned out, could themselves provoke fatal arrhythmias."
         ) as vo:
+            intro=label('Statistical surrogacy conditions do not identify mediation',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -117,18 +121,18 @@ class Surrogates(VoiceoverScene):
         rows = [[r"", r"drug A", r"drug B"],
                 [r"pressure change (surrogate)", rf"{A['s_diff']:.1f}", rf"{B['s_diff']:.1f}"],
                 [r"stroke: \ drug vs control", rf"{100 * A['risk_t']:.1f}\% \ vs \ {100 * A['risk_c']:.1f}\%", rf"{100 * B['risk_t']:.1f}\% \ vs \ {100 * B['risk_c']:.1f}\%"],
-                [r"Prentice 1: \ $t$ for drug on $S$", rf"{A['prentice']['z_on_s'][1]:.1f}", rf"{B['prentice']['z_on_s'][1]:.1f}"],
-                [r"Prentice 2: \ $t$ for $S$ on $Y$", rf"{A['prentice']['s_on_y'][1]:.1f}", rf"{B['prentice']['s_on_y'][1]:.1f}"],
-                [r"Prentice 3: \ $t$ for drug, \ given $S$", rf"{A['prentice']['z_given_s'][1]:.2f}", rf"{B['prentice']['z_given_s'][1]:.1f}"]]
+                [r"linear diagnostic 1: \ $t$ for drug on $S$", rf"{A['prentice']['z_on_s'][1]:.1f}", rf"{B['prentice']['z_on_s'][1]:.1f}"],
+                [r"linear diagnostic 2: \ $t$ for $S$ on $Y$", rf"{A['prentice']['s_on_y'][1]:.1f}", rf"{B['prentice']['s_on_y'][1]:.1f}"],
+                [r"linear diagnostic 3: \ $t$ for drug, \ given $S$", rf"{A['prentice']['z_given_s'][1]:.2f}", rf"{B['prentice']['z_given_s'][1]:.1f}"]]
         tab = table_rows(rows, font_size=26, col_buff=0.8, row_buff=0.28, colors=[GREY_A, Y0C, TAUC, None, None, MISSC]).move_to([0, 0.6, 0])
         with self.voiceover(
             "<bookmark mark='a'/> A trial of each, with stroke counted. <bookmark mark='b'/> The surrogate cannot tell them "
             "apart: both lower pressure by about eight points. <bookmark mark='c'/> The outcome can: drug A cuts strokes from "
             + say(100 * A["risk_c"], 1) + " to " + say(100 * A["risk_t"], 1) + " percent; drug B raises them, from "
-            + say(100 * B["risk_c"], 1) + " to " + say(100 * B["risk_t"], 1) + ". <bookmark mark='d'/> Prentice's first two "
-            "criteria hold for both. The third separates them: for drug A, given the pressure, the drug adds nothing; for "
-            "drug B, it still predicts stroke strongly, with a t of about five. The surrogate was valid for one drug and "
-            "not the other."
+            + say(100 * B["risk_c"], 1) + " to " + say(100 * B["risk_t"], 1) + ". <bookmark mark='d'/> These linear-regression diagnostics are inspired by Prentice's conditions, rather"
+            " than complete tests of them. Drug B retains a strong treatment coefficient after pressure adjustment. "
+            "Drug A's small coefficient does not prove conditional independence. We know their mechanisms because we "
+            "specified this toy model."
         ) as vo:
             self.add(trial_tag())
             self.play(FadeIn(tab[0]))
@@ -145,16 +149,17 @@ class Surrogates(VoiceoverScene):
             label(r"a surrogate is valid for a mechanism, \ not for every drug", font_size=26, color=TAUC),
             label(r"Fleming \& DeMets (1996): \ `Surrogate end points in clinical trials: \ are we being misled?'", font_size=26, color=GREY_A),
             label(r"modern validation: \ meta-analyses of many trials (Buyse et al. 2000)", font_size=26),
-            label(r"Prentice's third criterion is about mediation: \ Part 36's question", font_size=26, color=BANDC),
+            label(r"conditional independence is not causal mediation: \ further assumptions are needed", font_size=26, color=BANDC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The lesson is that a surrogate is valid for a mechanism, not for every drug that moves it. "
-            "<bookmark mark='b'/> Thomas Fleming and David DeMets, in a 1996 paper titled Surrogate end points in clinical "
-            "trials: are we being misled?, collected the failures. <bookmark mark='c'/> Modern validation uses meta-analyses "
-            "of many trials, asking whether the effects on the surrogate predict the effects on the outcome across drugs, "
-            "as in Marc Buyse and colleagues' work of 2000. <bookmark mark='d'/> And Prentice's third criterion is a "
-            "statement about mediation, how much of an effect runs through an intermediate variable, which needs the tools "
-            "of Part 36, because the surrogate itself is not randomized."
+            "<bookmark mark='a'/> The lesson is that a surrogate is valid for a mechanism, not for every drug that "
+            "moves it. <bookmark mark='b'/> Thomas Fleming and David DeMets, in a 1996 paper titled Surrogate end "
+            "points in clinical trials: are we being misled?, collected the failures. <bookmark mark='c'/> Modern "
+            "validation uses meta-analyses of many trials, asking whether the effects on the surrogate predict the "
+            "effects on the outcome across drugs, as in Marc Buyse and colleagues' work of 2000. <bookmark mark='d'/>"
+            " Prentice's conditional-independence criterion and causal mediation are distinct. A causal "
+            "interpretation needs additional assumptions, because the surrogate itself is not randomized; Part 36 "
+            "develops that point."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

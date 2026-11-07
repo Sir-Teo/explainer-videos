@@ -83,9 +83,12 @@ class Subgroups(VoiceoverScene):
             "same two point four points. <bookmark mark='b'/> Split the patients into twelve star signs completely at "
             "random, about seven hundred per arm in each. <bookmark mark='c'/> In " + f"{100 * d['p_any_no_benefit']:.0f}"
             + " percent of such trials, at least one sign shows no benefit at all, or harm. <bookmark mark='d'/> And in "
-            + f"{100 * d['p_any_sig_interaction']:.0f}" + " percent, at least one sign's effect differs from the overall "
-            "effect significantly at five percent: a publishable interaction, made of noise."
+            + f"{100 * d['p_any_sig_interaction']:.0f}" + " percent, at least one sign's effect differs from the effect estimated in all other signs significantly "
+            "at five percent: a publishable interaction, made of noise."
         ) as vo:
+            intro=label('Compare each subgroup with an estimated complement effect',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -114,9 +117,9 @@ class Subgroups(VoiceoverScene):
             label(r"red: \ `no benefit'", font_size=22, color=MISSC),
         ), 3.6, 0.42, [5.2, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Here is one simulated trial, sign by sign. <bookmark mark='b'/> The true effect, the dashed "
-            "line, is identical in all twelve. <bookmark mark='c'/> The estimates scatter from harm to five points of "
-            "benefit, and three signs show none at all. Each would make a headline."
+            "<bookmark mark='a'/> Here is one simulated trial, sign by sign. <bookmark mark='b'/> The true effect, "
+            "the dashed line, is identical in all twelve. <bookmark mark='c'/> The estimates scatter from harm to "
+            "five points of benefit, and some signs show no benefit. Each would make a headline."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A), FadeIn(labs), Create(zero))
@@ -132,20 +135,24 @@ class Subgroups(VoiceoverScene):
         rows = [
             cmath(r"\mathrm{se}(\hat\tau_{\rm subgroup})", r"\approx", r"\sqrt{12}\ \mathrm{se}(\hat\tau)", font_size=32),
             cmath(r"\mathrm{se}(\text{difference of two})", r"\approx", r"\sqrt{2}\sqrt{12}\ \mathrm{se}(\hat\tau)", font_size=30),
-            cmath(r"\text{power for an interaction}", r":", r"\text{about a sixteenth of the main effect's}", font_size=28),
+            cmath(r"\text{two equal subgroups; half-size interaction}", r":", r"\text{needs about }16\times\text{ total }n\text{ for equal power}", font_size=28),
             cmath(r"\text{many looks}", r":", r"\text{Part 33's multiplicity}", font_size=32),
         ]
         rows[2][-1].set_color(MISSC)
         whys = [why(r"a twelfth of the data"), why(r"comparing two subgroups"),
                 why(r"Gelman: \ you need 16 times the sample"), why(r"the garden of forking paths")]
         with self.voiceover(
-            "<bookmark mark='a'/> The arithmetic: a subgroup with a twelfth of the patients has a standard error about the "
-            "square root of twelve times larger. <bookmark mark='b'/> Comparing two subgroups multiplies it by root two "
-            "again. <bookmark mark='c'/> As Andrew Gelman likes to say, estimating an interaction half the size of the main "
-            "effect takes sixteen times the sample size. Trials are sized for the main effect, so their subgroup analyses "
-            "are almost pure noise. <bookmark mark='d'/> And twelve looks is Part 33's multiplicity problem: something will "
-            "turn up."
+            "<bookmark mark='a'/> The arithmetic: a subgroup with a twelfth of the patients has a standard error "
+            "about the square root of twelve times larger. <bookmark mark='b'/> Comparing two subgroups multiplies it"
+            " by root two again. <bookmark mark='c'/> For two equally sized subgroups, an interaction half the size "
+            "of the overall effect needs about sixteen times the total sample size for comparable power. That is a "
+            "separate calculation from splitting into twelve groups. Trials sized for a main effect can have very low"
+            " power for interactions. <bookmark mark='d'/> And twelve looks is Part 33's multiplicity problem: "
+            "something will turn up."
         ) as vo:
+            intro=label('Interaction power depends on group size and contrast size',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

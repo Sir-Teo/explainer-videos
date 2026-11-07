@@ -47,11 +47,11 @@ class Cluster(VoiceoverScene):
             label(rf"schools differ: \ intraclass correlation {d['icc']:.3f}", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The World has four hundred schools, from Parts 23 and 25, with about sixty pupils each. "
-            "<bookmark mark='b'/> A tutoring programme is randomized to half of them. <bookmark mark='c'/> In the World's "
-            "science, it raises every pupil's score by twenty points, a fifth of a standard deviation. <bookmark mark='d'/> "
-            "And schools differ: pupils in the same school resemble each other, with an intraclass correlation of about "
-            "point one five, through shared teachers, neighbourhoods and intakes."
+            "<bookmark mark='a'/> The World has four hundred schools, from Parts 23 and 25, with about sixty pupils "
+            "each. <bookmark mark='b'/> A tutoring programme is randomized to half of them. <bookmark mark='c'/> In "
+            "the World's science, it raises every pupil's score by twenty points, a fifth of a standard deviation. "
+            "<bookmark mark='d'/> And schools differ: pupils in the same school resemble each other, through shared "
+            "school effects and background. The unadjusted model's intraclass correlation includes both sources."
         ) as vo:
             self.add(schools_tag())
             for k, m_ in enumerate("abcd"):
@@ -64,20 +64,24 @@ class Cluster(VoiceoverScene):
         rows = [
             cmath(r"\mathrm{Var}(\bar Y_{\rm cluster})", r"=", r"\dfrac{\sigma^2}{m}\big(1 + (m - 1)\rho\big)", font_size=32),
             cmath(r"\text{deff}", r"=", r"1 + (m - 1)\rho", font_size=34),
-            cmath(r"m = 60, \ \rho = 0.145", r":", rf"\text{{deff}} \approx {d['deff']:.1f}", font_size=32),
+            cmath(r"m \approx 60, \ \rho \approx 0.171", r":", rf"\text{{deff}} \approx {d['deff']:.1f}", font_size=32),
             cmath(r"\text{so}", r":", rf"{d['n']:,} \text{{ pupils}} \approx {d['n'] / d['deff']:,.0f} \text{{ independent ones}}", font_size=30),
         ]
         rows[2][-1].set_color(MISSC)
         whys = [why(r"$m$ pupils, \ correlation $\rho$"), why(r"Kish's design effect, \ Part 18"),
-                why(r"the World's schools"), why(r"the effective sample size")]
+                why(r"the World's schools"), why(r"equal-size approximation; \ school sizes vary")]
         with self.voiceover(
-            "<bookmark mark='a'/> The mean of m correlated pupils varies more than the mean of m independent ones, by a "
-            "factor of one plus m minus one times the intraclass correlation. <bookmark mark='b'/> That factor is Kish's "
-            "design effect, from Part 18. <bookmark mark='c'/> With sixty pupils per school and a correlation of point one "
-            "four five, it is about " + say(d["deff"], 1) + ". <bookmark mark='d'/> So the trial's twenty-four thousand pupils "
-            "carry about as much information as two and a half thousand independent ones. The correlation looks small; its "
-            "consequence is not."
+            "<bookmark mark='a'/> The mean of m correlated pupils varies more than the mean of m independent ones, by"
+            " a factor of one plus m minus one times the intraclass correlation. <bookmark mark='b'/> That factor is "
+            "Kish's design effect, from Part 18. <bookmark mark='c'/> Including school and pupil background "
+            "variation, the unadjusted intraclass correlation is about point one seven. With about sixty pupils per "
+            "school, it is about " + say(d["deff"], 1) + ". <bookmark mark='d'/> So the trial's twenty-four thousand pupils carry information on the scale of only"
+            " a few thousand independent ones. This equal-size formula is an approximation for these varying school "
+            "sizes. The correlation looks small; its consequence is not."
         ) as vo:
+            intro=label('The equal-size design effect depends on the unadjusted ICC',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -100,8 +104,9 @@ class Cluster(VoiceoverScene):
             "averages " + say(d["se_naive"], 2) + " points, and ninety percent intervals cover the true effect only "
             + f"{100 * d['cover_naive']:.0f}" + " percent of the time. <bookmark mark='c'/> Treating each school's mean as one "
             "observation, the standard error is " + say(d["se_cluster"], 2) + ", and the coverage is "
-            + say(100 * d["cover_cluster"], 1) + " percent. <bookmark mark='d'/> The pupil-level standard error is about three "
-            "times too small: the square root of the design effect."
+            + say(100 * d["cover_cluster"], 1) + " percent. <bookmark mark='d'/> The pupil-level standard error is about three times too small: roughly "
+            "the square root of the design effect. School-level and pupil-level averages are different estimands in "
+            "general; the constant treatment effect makes their targets equal here."
         ) as vo:
             self.add(schools_tag())
             vo.wait_until("a")
@@ -129,12 +134,13 @@ class Cluster(VoiceoverScene):
             label(r"design: \ count clusters, \ not people; \ with few clusters, \ the wild cluster bootstrap", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Jerome Cornfield wrote in 1978 that randomizing by cluster and then analysing as if "
-            "individuals had been randomized <bookmark mark='b'/> is an exercise in self-deception. <bookmark mark='c'/> "
-            "Valid analyses use the cluster means, or cluster-robust standard errors from Part 23, or the mixed models of "
-            "Part 25. <bookmark mark='d'/> And at the design stage, the number that matters is the number of clusters, not "
-            "of people; with only a handful of clusters, even cluster-robust errors fail, and Part 23's wild cluster "
-            "bootstrap is the tool."
+            "<bookmark mark='a'/> Jerome Cornfield wrote in 1978 that randomizing by cluster and then analysing as if"
+            " individuals had been randomized <bookmark mark='b'/> is an exercise in self-deception. <bookmark "
+            "mark='c'/> Valid analyses use the cluster means, or cluster-robust standard errors from Part 23, or the "
+            "mixed models of Part 25. <bookmark mark='d'/> And at the design stage, the number that matters is the "
+            "number of clusters, not of people; with only a handful of clusters, conventional cluster-robust "
+            "approximations can be unreliable. Small-sample corrections, design-based randomization tests or a "
+            "suitable wild cluster bootstrap need careful assessment."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

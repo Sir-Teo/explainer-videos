@@ -41,6 +41,9 @@ class Neyman(VoiceoverScene):
             "mark='d'/> The first two can be estimated from the two arms. The third cannot, because no patient shows us "
             "their effect. So the usual estimate drops it, and is too large on average: conservative."
         ) as vo:
+            intro=label('Neyman variance describes complete randomization of a fixed population',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -58,14 +61,17 @@ class Neyman(VoiceoverScene):
         whys = [why(r"Fisher's world"), why(r"the usual world"), why(r"a finite population gives back a little"),
                 why(r"for the PATE, \ not the SATE")]
         with self.voiceover(
-            "<bookmark mark='a'/> If every patient had the same effect, S tau would be zero and the usual estimate would be "
-            "exactly unbiased. <bookmark mark='b'/> When effects vary, it overstates the variance. <bookmark mark='c'/> The "
-            "subtracted term reflects a finite population: a patient in the treated group is, by that fact, absent from the "
-            "control group, and the two arms' errors partly cancel. <bookmark mark='d'/> If instead we want the average "
-            "effect in a superpopulation from which the patients were sampled, the extra sampling variation exactly "
-            "restores the missing term, and the usual estimate is right. The conservative formula is the correct one for "
-            "the population average."
+            "<bookmark mark='a'/> If every patient had the same effect, S tau would be zero and the usual estimate "
+            "would be exactly unbiased. <bookmark mark='b'/> When effects vary, it overstates the variance. <bookmark"
+            " mark='c'/> The subtracted term reflects a finite population: a patient in the treated group is, by that"
+            " fact, absent from the control group, and the two arms' errors partly cancel. <bookmark mark='d'/> If "
+            "instead we want the average effect in a superpopulation from which the patients were sampled "
+            "independently and identically, the extra sampling variation exactly restores the missing term, and the "
+            "usual estimate is right. The conservative formula is the correct one for the population average."
         ) as vo:
+            intro=label('Heterogeneous effects create a gap in the conservative variance',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -121,11 +127,13 @@ class Neyman(VoiceoverScene):
             label(rf"90\% intervals cover the SATE: \ {100 * d['cover']:.1f}\%", font_size=22, color=BANDC),
         ), 4.2, 0.42, [4.6, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The randomization distribution of the estimate, over four thousand draws of the coin. "
-            "<bookmark mark='b'/> It is close to normal, with Neyman's standard deviation, by the finite-population central "
-            "limit theorem. <bookmark mark='c'/> Ninety percent intervals built from the conservative standard error cover "
-            "the trial's average effect " + say(100 * d["cover"], 1) + " percent of the time: slightly more than promised, as "
-            "a conservative variance should."
+            "<bookmark mark='a'/> The randomization distribution of the estimate, over four thousand draws of the "
+            "coin. <bookmark mark='b'/> It is close to normal, with Neyman's standard deviation, as a "
+            "finite-population central limit theorem predicts when neither arm is dominated by a few extreme units. "
+            "<bookmark mark='c'/> Ninety percent intervals built from the conservative standard error cover the "
+            "trial's average effect " + say(100 * d["cover"], 1) + " percent of the time: slightly above ninety percent in this example. A conservative variance supports "
+            "asymptotic coverage under regularity; it does not by itself guarantee finite-sample normal-interval "
+            "coverage."
         ) as vo:
             self.add(trial_tag())
             self.play(FadeIn(A), FadeIn(bars), FadeIn(side[0]))
@@ -151,12 +159,13 @@ class Neyman(VoiceoverScene):
             label(r"the general lesson: \ some features of the science are beyond any experiment", font_size=26, color=MISSC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The variance of the effects cannot be estimated, but it can be bounded, because we do "
-            "know the distributions of the treated and untreated outcomes separately. <bookmark mark='b'/> Its smallest "
-            "value consistent with those distributions comes from pairing the sorted treated outcomes with the sorted "
-            "untreated ones. <bookmark mark='c'/> Peter Aronow, Donald Green and Donald Lee used this in 2014 to sharpen "
-            "Neyman's variance estimate without losing validity. <bookmark mark='d'/> The lesson is more general: some "
-            "features of the science, such as the share of patients harmed, are beyond any experiment, however large."
+            "<bookmark mark='a'/> The variance of the effects cannot be estimated, but it can be bounded, because we "
+            "do know the distributions of the treated and untreated outcomes separately. <bookmark mark='b'/> Its "
+            "smallest value consistent with those distributions comes from pairing the sorted treated outcomes with "
+            "the sorted untreated ones. <bookmark mark='c'/> Peter Aronow, Donald Green and Donald Lee used this in "
+            "2014 to sharpen Neyman's variance estimate while retaining asymptotic validity under their regularity "
+            "conditions. <bookmark mark='d'/> The lesson is more general: some features of the science, such as the "
+            "exact share of patients harmed, are not generally identified by a parallel-arm randomized trial alone."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

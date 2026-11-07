@@ -37,6 +37,9 @@ class Adjust(VoiceoverScene):
             "outcome noise, as blocking would have. <bookmark mark='d'/> But nothing in the randomization says that the "
             "outcomes follow this linear model with a common slope and constant variance."
         ) as vo:
+            intro=label('Regression adjustment is an analysis choice after randomization',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -55,8 +58,9 @@ class Adjust(VoiceoverScene):
             "<bookmark mark='a'/> On the World's trial, with two thousand patients and equal arms, adjust for baseline "
             "pressure and age. <bookmark mark='b'/> Over six hundred randomizations, the unadjusted estimate has a standard "
             "deviation of " + say(d["sd_unadj"], 3) + ". <bookmark mark='c'/> Both adjusted estimates have about "
-            + say(d["sd_ancova"], 3) + ". <bookmark mark='d'/> The variance falls by nearly two fifths, the same gain blocking "
-            "achieved. In a large, balanced trial, adjustment is simply good."
+            + say(d["sd_ancova"], 3) + ". <bookmark mark='d'/> The variance falls by nearly two fifths, the same gain blocking achieved. Here "
+            "the baseline covariates improve precision. Lin's result describes the asymptotic comparison under "
+            "suitable conditions."
         ) as vo:
             self.add(trial_tag())
             for k, m_ in enumerate("abcd"):
@@ -95,14 +99,19 @@ class Adjust(VoiceoverScene):
         whys = [why(r"interact $Z$ with centred covariates"), why(r"each arm its own slope"),
                 why(r"Part 23's sandwich"), why(r"Lin (2013)")]
         with self.voiceover(
-            "<bookmark mark='a'/> Winston Lin, then a graduate student at Berkeley, answered in 2013. Centre the covariates, "
-            "and interact them with the treatment indicator. <bookmark mark='b'/> That is the same as fitting a separate "
-            "regression in each arm and comparing their predictions at the average covariate. <bookmark mark='c'/> And use "
-            "Part 23's sandwich standard errors, the HC2 version. <bookmark mark='d'/> Lin proved that this estimate is, "
-            "asymptotically, never less precise than the unadjusted difference in means, and that its sandwich standard "
-            "error is consistent or conservative, all within Neyman's framework. Freedman's problems came from forcing a "
-            "common slope and a common variance on the two arms."
+            "<bookmark mark='a'/> Winston Lin, then a graduate student at Berkeley, answered in 2013. Centre the "
+            "covariates, and interact them with the treatment indicator. <bookmark mark='b'/> That is the same as "
+            "fitting a separate regression in each arm and comparing their predictions at the average covariate. "
+            "<bookmark mark='c'/> And use Part 23's sandwich standard errors, the HC2 version. <bookmark mark='d'/> "
+            "Lin proved that this estimate is, asymptotically, never less precise than the unadjusted difference in "
+            "means, and that its sandwich standard error is consistent or conservative, all within Neyman's "
+            "framework, with a fixed number of covariates, stable treatment fractions and regular finite-population "
+            "moments. Interactions and robust errors address the efficiency and variance problems. Small "
+            "finite-sample bias can still remain."
         ) as vo:
+            intro=label('Interactions and robust errors give an asymptotic precision guarantee',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -152,14 +161,15 @@ class Adjust(VoiceoverScene):
             label(r"choose the covariates before seeing outcomes: \ in the protocol", font_size=26, color=BANDC),
             label(r"interact them with treatment; \ use sandwich standard errors", font_size=26, color=BANDC),
             label(r"in small trials, \ adjust for a few strong predictors only", font_size=26, color=GREY_A),
-            label(r"the FDA's 2023 guidance on covariate adjustment says much the same", font_size=26, color=TAUC),
+            label(r"FDA (2023): \ prespecify prognostic covariates; \ interactions are optional", font_size=26, color=TAUC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The practical rules that came out of this exchange: choose the covariates before seeing "
-            "any outcomes, and write them into the protocol, so that adjustment cannot become a fishing expedition. "
-            "<bookmark mark='b'/> Interact them with treatment, and use sandwich standard errors. <bookmark mark='c'/> In "
-            "small trials, adjust for a few strong predictors of the outcome only. <bookmark mark='d'/> The American Food "
-            "and Drug Administration's 2023 guidance on covariate adjustment in randomized trials says much the same."
+            "<bookmark mark='a'/> The practical rules that came out of this exchange: choose the covariates before "
+            "seeing any outcomes, and write them into the protocol, so that adjustment cannot become a fishing "
+            "expedition. <bookmark mark='b'/> Interact them with treatment, and use sandwich standard errors. "
+            "<bookmark mark='c'/> In small trials, adjust for a few strong predictors of the outcome only. <bookmark "
+            "mark='d'/> The American Food and Drug Administration's 2023 guidance emphasizes prespecified prognostic "
+            "covariates and appropriate standard errors. Interactions are allowed, rather than universally required."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
