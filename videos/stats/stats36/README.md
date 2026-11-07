@@ -76,7 +76,7 @@ From there the part covers:
     |---|---|---|---|
     | linear OLS | 1.12 | | 0% |
     | forest AIPW, no cross-fitting | 0.58 | 0.087 | 0% |
-    | DML, cross-fitted | 0.08 | 0.187 | 86.7% |
+    | DML, cross-fitted | 0.08 | 0.187 | 88.0% |
 
   - The partially linear model (Robinson 1988).
 - **Heterogeneous effects.**
@@ -148,7 +148,7 @@ The Coverage Board gains nine rows (90% intervals):
 | AIPW, both models wrong | same | 55.9% | broken |
 | OLS adjustment, linear | nonlinear confounding, n = 1,000 | 0.0% | broken |
 | AIPW with forests, no cross-fitting | same | 0.0% | broken |
-| DML: forests, cross-fitted | same | 86.7% | kept |
+| DML: forests, cross-fitted | same | 88.0% | kept |
 
 ## Build it
 
@@ -174,7 +174,7 @@ python tools/lecture_length.py stats36 --floor 50
 | 7 | Propensity scores | ATT −12.43; strata −8.59 |
 | 8 | Weighting | −8.48; max weight 36 |
 | 9 | Double robustness | −9.91; Kang–Schafer bias −21.5 |
-| 10 | Double machine learning | 86.7% vs 0% |
+| 10 | Double machine learning | 88.0% vs 0% |
 | 11 | Heterogeneous effects | latent-effect RMSE 4.35 → 2.76 (forest), 1.20 (linear) |
 | 12 | Sensitivity analysis | Γ* ≈ 2.8; RV 0.30 |
 | 13 | Smoking and lung cancer | 647/649 vs 622/649; E = 17.5 |

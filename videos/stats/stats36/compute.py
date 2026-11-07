@@ -25,6 +25,7 @@ Items:
 from __future__ import annotations
 
 import math
+from functools import lru_cache
 from dataclasses import asdict
 
 import numpy as np
@@ -84,11 +85,17 @@ def ols_effect(y, t, X):
 # ------------------------------------------------------------------------------------------------- the World's study
 
 
+@lru_cache(maxsize=1)
+def observational_pool():
+    """Reuse the fixed World population; each study still draws fresh patients and assignments."""
+    return World().trial
+
+
 def obs_sample(g, n=3000, frailty=0.0):
     """n patients from the World's eligible pool; doctors prescribe with log-odds (base - 152)/6 + 0.04 (age - 65) +
     0.03 (bmi - 28), plus ``frailty`` times an unmeasured frailty u ~ N(0, 1), which also raises the untreated
     pressure by 3u mm Hg."""
-    t = World().trial
+    t = observational_pool()
     k = g.choice(len(t["pool"]), n, replace=False)
     base, age, bmi, fem = t["base_pool"][k], t["age_pool"][k], t["bmi_pool"][k], t["female_pool"][k].astype(float)
     u = g.standard_normal(n)

@@ -60,3 +60,27 @@ def test_nsw_primary_package_tables_agree_to_disclosed_cent_precision():
     for r in rows:
         assert np.max(r['maximum_absolute_errors'][:7])==0
         assert np.max(r['maximum_absolute_errors'][7:])<.00500000001
+
+
+def test_dml_coverage_matches_population_target_and_stored_replicates():
+    d=C.load('dml');r=d['replicates'];q=stats.norm.ppf(.95)
+    assert d['ate']==3.0 and len(r)==d['reps']==150
+    for key in ['dml','nocf']:
+        est=np.array([v[key+'_est'] for v in r]);se=np.array([v[key+'_se'] for v in r])
+        hits=abs(est-3.)<=q*se
+        assert hits.tolist()==[v[key+'_hit'] for v in r]
+        assert hits.mean()==pytest.approx(d[key]['cover'])
+        assert est.mean()-3.==pytest.approx(d[key]['bias'])
+    # 88% is within one nominal Monte Carlo SE of 90%, not an exact guarantee.
+    assert abs(d['dml']['cover']-.9)<(.9*.1/d['reps'])**.5
+
+
+def test_reusing_world_pool_preserves_seeded_study_draws(monkeypatch):
+    cached=C.observational_pool()
+    before={k:np.asarray(cached[k]).copy() for k in ['base_pool','tau_pool','y0_pool']}
+    actual=C.obs_sample(C.rng(636),120,frailty=1.)
+    with monkeypatch.context() as m:
+        m.setattr(C,'observational_pool',lambda:C.World().trial)
+        fresh=C.obs_sample(C.rng(636),120,frailty=1.)
+    for k in actual:np.testing.assert_array_equal(actual[k],fresh[k])
+    for k in before:np.testing.assert_array_equal(cached[k],before[k])
