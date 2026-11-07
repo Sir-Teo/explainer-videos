@@ -126,8 +126,9 @@ class Frontier(VoiceoverScene, ThreeDScene):
         leg.next_to(g, UP, buff=0.1).align_to(g, LEFT)
         k = 3
         side = VGroup(
-            MathTex(rf"n = {rq['ns'][k]:,}".replace(",", "{,}") + rf":\ \ \text{{mean}}\ {rq['mean'][k]:.1e},\ \ "
-                    rf"\text{{median}}\ {rq['median'][k]:.1e}", font_size=26, color=GOOD),
+            MathTex(rf"n = {rq['ns'][k]:,}".replace(",", "{,}"), font_size=26, color=GOOD),
+            MathTex(rf"\text{{mean}} = {sci(rq['mean'][k], 1)}", font_size=24, color=QC.THETA),
+            MathTex(rf"\text{{median}} = {sci(rq['median'][k], 1)}", font_size=24, color=GOOD),
             wrapped_label(r"Pan and Owen (\textit{Math.\ Comp.}\ 2023): the median of independent randomisations of "
                           r"nets: conditional super-polynomial results require analytic derivative bounds and growing repetition count. "
                           r"Here 11 fixed repeats and 30 experiments use 30-bit grids; plateau near $8\times10^{-10}$ is consistent with grid bias, not double precision.", 4.6, 18, GREY_A),
@@ -156,7 +157,7 @@ class Frontier(VoiceoverScene, ThreeDScene):
             (2018, r"Ga{\ss}, Glau, Mahlstedt, Mair; Glau, Kressner, Statti (2020)", r"Chebyshev and low-rank tensor "
              r"pricers: the offline--online split behind fast calibration."),
         ]
-        g = VGroup(*[history_card(y, w, t, color=QC.IDEA, width=4.3, font_size=16) for y, w, t in cards])
+        g = VGroup(*[history_card(y, w, t, color=QC.IDEA, width=4.3, font_size=20) for y, w, t in cards])
         g.arrange_in_grid(rows=2, cols=3, buff=0.25)
         if g.height > 7.2:
             g.scale_to_fit_height(7.2)

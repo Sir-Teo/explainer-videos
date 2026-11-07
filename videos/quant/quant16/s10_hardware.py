@@ -66,17 +66,17 @@ class Hardware(VoiceoverScene):
         a = firm_card(r"Danske Bank", r"Risk.net's In-House System of the Year for 2015, for adjoint differentiation "
                       r"across its pricing and risk: counterparty valuation adjustments with their sensitivities in "
                       r"seconds on ordinary hardware (as reported by Risk.net). Antoine Savine, then at Danske, wrote the "
-                      r"2018 textbook on the method.", width=6.3, font_size=18)
+                      r"2018 textbook on the method.", width=6.3, font_size=22)
         b = firm_card(r"JPMorgan and Maxeler", r"The bank and the vendor reported moving its credit-derivatives risk "
                       r"computation onto FPGA chips: a run of about eight hours fell to under four minutes (Weston, "
                       r"Spooner, Racani\`ere and Mencer 2012; as reported, 2011). JPMorgan took a stake in Maxeler.",
-                      width=6.3, font_size=18)
+                      width=6.3, font_size=22)
         c = history_card(r"benchmark", r"STAC-A2", r"Designed by bank quants with STAC: Monte Carlo Greeks of a multi-asset, "
                          r"path-dependent Heston option with early exercise. Chapters 2--11 in one test; results are "
-                         r"reported for specific implementations, including STAC-audited results.", color=QC.IDEA, width=6.3, font_size=18)
+                         r"reported for specific implementations, including STAC-audited results.", color=QC.IDEA, width=6.3, font_size=22)
         d = history_card(r"open and cleared", r"QuantLib, ORE, the OCC", r"QuantLib (open source since 2000) ships Sobol "
                          r"paths with a Brownian bridge; ORE builds valuation and risk analytics on QuantLib. The OCC's official "
-                         r"methodology describes STANS as a full-portfolio Monte Carlo margin system, introduced in 2006.", color=QC.IDEA, width=6.3, font_size=18)
+                         r"methodology describes STANS as a full-portfolio Monte Carlo margin system, introduced in 2006.", color=QC.IDEA, width=6.3, font_size=22)
         grid = VGroup(VGroup(a, b).arrange(RIGHT, buff=0.3, aligned_edge=UP),
                       VGroup(c, d).arrange(RIGHT, buff=0.3, aligned_edge=UP)).arrange(DOWN, buff=0.25)
         if grid.height > 7.3:
@@ -123,7 +123,7 @@ class Hardware(VoiceoverScene):
             x1 = np.log10(t)
             bars.add(VGroup(Rectangle(width=max(ax.c2p(x1, 0)[0] - ax.c2p(baseline, 0)[0], 0.02), height=0.42, stroke_width=0,
                                       fill_color=col, fill_opacity=0.85).move_to(ax.c2p(baseline, y), aligned_edge=LEFT),
-                            label(nm, font_size=17, color=col).next_to(ax.c2p(baseline, y), LEFT, buff=0.15),
+                            label(nm, font_size=20, color=col).next_to(ax.c2p(baseline, y), LEFT, buff=0.15),
                             MathTex(rf"{t:.3g}\,\text{{s}}", font_size=20, color=GREY_A).next_to(ax.c2p(x1, y), RIGHT, buff=0.1)))
         p = par["procs"]
         sp4 = base / p["4"] if "4" in p else float("nan")
@@ -163,8 +163,8 @@ class Hardware(VoiceoverScene):
 
     def validation(self, env):
         head = wrapped_label(r"Selected repository numerical tests: ten tests passed in this review", 12.0, 28, QC.HOUSE).to_edge(UP, buff=0.3)
-        rows = VGroup(*[VGroup(wrapped_label(title, 6.0, 23, QC.HOUSE),
-                              wrapped_label(detail, 6.0, 19, GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        rows = VGroup(*[VGroup(wrapped_label(title, 6.0, 26, QC.HOUSE),
+                              wrapped_label(detail, 6.0, 22, GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
                        for title, detail in VALIDATION])
         rows.arrange_in_grid(rows=4, cols=2, cell_alignment=UL, buff=(0.45, 0.28)).next_to(head, DOWN, buff=0.35)
         if rows.height > 5.8:

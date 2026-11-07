@@ -103,8 +103,7 @@ class Research(VoiceoverScene):
             LEFT * 2.3 + DOWN * 0.2)
         ax = g.ax
         tru = DashedLine(ax.c2p(0.5, L["true"]), ax.c2p(12.5, L["true"]), color=WHITE, stroke_width=2)
-        tl = label(rf"tree: {L['true']:.3f}", font_size=15, color=GREY_A).next_to(ax.c2p(12.5, L["true"]), UP, buff=0.06).shift(
-            LEFT * 0.6)
+        tl = label(rf"3{{,}}000-step tree reference: {L['true']:.3f}", font_size=18, color=GREY_A).next_to(g, UP, buff=0.15).align_to(g, LEFT)
         lines = VGroup()
         for N, col in N_COL.items():
             rows = L["grid"][N]
