@@ -63,6 +63,41 @@ def nest(obj):
     return obj
 
 
+def histogram_density(values, edges):
+    """Density per full sample; observations outside the viewport retain their mass."""
+    counts, _ = np.histogram(values, edges)
+    return counts / (len(values) * np.diff(edges))
+
+
+def clipped_segments(xs, ys, rectangle):
+    """Clip line segments to a rectangle without flattening off-scale values."""
+    xmin, xmax, ymin, ymax = rectangle
+    points = np.column_stack((xs, ys))
+    result = []
+    for start, end in zip(points[:-1], points[1:]):
+        if not np.isfinite([start, end]).all():
+            continue
+        delta = end - start
+        lo, hi = 0.0, 1.0
+        for k, lower, upper in ((0, xmin, xmax), (1, ymin, ymax)):
+            if delta[k] == 0:
+                if not lower <= start[k] <= upper:
+                    hi = -1
+                    break
+            else:
+                a, b = sorted(((lower - start[k]) / delta[k], (upper - start[k]) / delta[k]))
+                lo, hi = max(lo, a), min(hi, b)
+        if lo <= hi:
+            result.append((start + lo * delta, start + hi * delta))
+    return result
+
+
+def monte_carlo_pvalue(observed, simulated):
+    """Two-sided randomization rank including the observed exchangeable assignment."""
+    extreme = np.sum(np.abs(simulated) >= abs(observed) - 1e-12)
+    return float((extreme + 1) / (len(simulated) + 1))
+
+
 def compute_arbuthnot():
     m, f = np.asarray(museum.ARB_MALES), np.asarray(museum.ARB_FEMALES)
     share = m / (m + f)
@@ -121,7 +156,7 @@ def compute_permute():
         perm = g.permutation(14)
         shuffles.append(perm)
     t = T.t_test(xa, xb)
-    truth = {"a": float(W.height[men & (W.region == 0)].mean()), "b": float(W.height[men & (W.region == 3)].mean())}
+    truth = {"a": float(a.mean()), "b": float(b.mean())}
     return nest({"a": xa, "b": xb, "obs": r["stat"], "p": r["p"], "n_splits": len(null), "edges": ed,
                  "hist": np.histogram(null, ed)[0], "shuffles": shuffles, "t_p": t["p"], "truth": truth,
                  "extreme": int(np.sum(np.abs(null) >= abs(r["stat"]) - 1e-9))})
@@ -188,7 +223,7 @@ def compute_wilks():
         S = g.poisson(lam0 * n, 100000).astype(float)
         with np.errstate(divide="ignore", invalid="ignore"):
             w = 2 * (np.where(S > 0, S * np.log(S / (n * lam0)), 0.0) - (S - n * lam0))
-        out[str(n)] = {"hist": np.histogram(w, ed, density=True)[0], "size": float(np.mean(w > stats.chi2.ppf(0.95, 1))),
+        out[str(n)] = {"hist": histogram_density(w, ed), "size": float(np.mean(w > stats.chi2.ppf(0.95, 1))),
                        "mean": float(w.mean())}
     out["edges"] = ed
     xs = np.linspace(0.05, 8, 200)
@@ -232,7 +267,7 @@ def compute_mendel():
     x2 = ((sim - e) ** 2 / e).sum(1)
     ed = np.linspace(0, 14, 57)
     xs = np.linspace(0.05, 14, 200)
-    return nest({"shape": shape, "colour": colour, "di": di, "n": n, "edges": ed, "hist": np.histogram(x2, ed, density=True)[0],
+    return nest({"shape": shape, "colour": colour, "di": di, "n": n, "edges": ed, "hist": histogram_density(x2, ed),
                  "xs": xs, "chi2_3": stats.chi2.pdf(xs, 3), "sim_size": float(np.mean(x2 > stats.chi2.ppf(0.95, 3))),
                  "sim_below": float(np.mean(x2 <= di["chi2"]))})
 
@@ -370,7 +405,8 @@ def compute_board():
     hits = 0
     for _ in range(2000):
         a, b = inc[g.integers(0, len(inc), 8)], inc[g.integers(0, len(inc), 8)]
-        hits += T.permutation_test(a, b, reps=999, seed=int(g.integers(1 << 30)))["p"] < 0.05
+        result = T.permutation_test(a, b, reps=999, seed=int(g.integers(1 << 30)))
+        hits += monte_carlo_pvalue(result["stat"], result["null"]) <= 0.05
     rows.append(Row(10, r"permutation test", r"incomes, $n = 8, 8$", "size", 0.05, hits / 2000, 2000))
     save_rows(10, rows)
     return {"rows": [asdict(r) | {"verdict": r.verdict, "se": r.se} for r in rows]}

@@ -124,7 +124,7 @@ class Power(VoiceoverScene):
         truth = DashedLine(nl.n2p(0.1) + DOWN * 0.1, nl.n2p(0.1) + UP * 3.1, color=EXACT, stroke_width=2.5)
         g = np.random.Generator(np.random.PCG64(7))
         ys = 0.45 + g.random(len(est)) * 2.5
-        dots = VGroup(*[Dot([nl.n2p(float(np.clip(e, -0.79, 0.89)))[0], y, 0], radius=0.04, color=SIM) for e, y in zip(est, ys)])
+        dots = VGroup(*[Dot([nl.n2p(float(e))[0], y, 0], radius=0.04, color=SIM) for e, y in zip(est, ys)])
         sig = [i for i, e in enumerate(est) if abs(e) > 1.96 * se]
         rows = fit_rows(VGroup(
             label(rf"true effect $0.1$, \ standard error $0.2$ \ (two groups of 50): \ power {100 * sm['power']:.0f}\%", font_size=24),
@@ -179,7 +179,7 @@ class Power(VoiceoverScene):
             "How bad it is depends on the power. <bookmark mark='a'/> At eight percent power, significant estimates are "
             "nearly five times too large. At thirty-two percent, about one and three quarter times. "
             "<bookmark mark='b'/> At eighty-one percent, only twelve percent too large, and the wrong sign essentially "
-            "never. A well-powered study isn't just more likely to find an effect; what it finds can be believed."
+            "never. A well-powered study isn't just more likely to find an effect; selection exaggeration is much smaller in this model. Power alone does not remove confounding, measurement bias or model error."
         ) as vo:
             self.play(FadeIn(hdr))
             vo.wait_until("a")
@@ -203,7 +203,7 @@ class Power(VoiceoverScene):
             "studies are repeated, the effects shrink: the large replication project in psychology published in 2015 "
             "found effects about half the size of the originals, on average. <bookmark mark='d'/> The remedies are "
             "adequate power, deciding the analysis in advance, reporting estimates with honest intervals, the subject of "
-            "Part 11, and the shrinkage estimators of Part 25, which correct for the selection directly."
+            "Part 11, and the shrinkage estimators of Part 25, which can reduce exaggeration under an appropriate hierarchical model; selection still needs to be accounted for."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

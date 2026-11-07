@@ -44,8 +44,7 @@ class Exact(VoiceoverScene):
             "<bookmark mark='b'/> The counts are one, sixteen, thirty-six, sixteen and one, out of seventy. "
             "<bookmark mark='c'/> All four right has probability one in seventy. That's the p-value if she gets them "
             "all. <bookmark mark='d'/> But three right, or better, has probability seventeen in seventy, about one in "
-            "four. Fisher was explicit: with this design only a perfect score would count as evidence. One mistake, and "
-            "the experiment says nothing."
+            "four. Fisher was explicit: with this design only a perfect score would count as evidence. One mistake, and it does not reject at five percent, though the result still contains information about her skill."
         ) as vo:
             self.play(FadeIn(A), FadeIn(rows[0]))
             vo.wait_until("a")
@@ -73,10 +72,10 @@ class Exact(VoiceoverScene):
                              MathTex(rf"\tfrac{{1}}{{{r['splits']}}} = {r['all']:.4f}", font_size=30, color=OBS).move_to([xs[2], y, 0])))
         pw = d["power"]
         rows = fit_rows(VGroup(
-            label(r"and a lady with real but imperfect skill? \ right about each cup with chance $q$:", font_size=24),
+            label(r"and a lady with real but imperfect skill? \ independent binary perceptions correct with chance $q$; choose four, breaking ties randomly:", font_size=24),
             MathTex(rf"P(\text{{perfect score with 8 cups}}):\ \ q = 0.7:\ {pw['0.7']:.2f},\quad q = 0.8:\ {pw['0.8']:.2f},\quad q = 0.9:\ {pw['0.9']:.2f}",
                     font_size=28, color=ALTC),
-            label(r"a test that only a perfect taster can pass: \ Fisher's design has little \emph{power} \ (ch.~4)", font_size=24,
+            label(r"only a perfect observed score passes; even a skilled taster can fail: \ Fisher's design has little \emph{power} \ (ch.~4)", font_size=24,
                   color=GREY_A),
         ), 12.6, 0.3, [0, -1.9, 0])
         tag = simulated_tag(r"simulated: \ 40,000 sessions per $q$", corner=DR)
@@ -85,7 +84,7 @@ class Exact(VoiceoverScene):
             "perfect score has probability one in twenty under guessing: not much. With eight, one in seventy. With ten, "
             "one in two hundred and fifty-two; with twelve, one in nine hundred and twenty-four. More cups, more "
             "possible evidence. <bookmark mark='b'/> But consider a lady with real, imperfect skill, right about each cup "
-            "with probability q. <bookmark mark='c'/> Simulating her sessions: if she's right seventy percent of the time, "
+            "with probability q, before enforcing the choice of exactly four milk-first cups by random tie-breaking. These power numbers depend on that response model. <bookmark mark='c'/> Simulating her sessions: if she's right seventy percent of the time, "
             "she achieves a perfect score with eight cups only eleven percent of the time; at eighty percent, a quarter "
             "of the time; even at ninety percent, only half. <bookmark mark='d'/> The test controls the chance of being "
             "fooled by a guesser, but it often fails to detect a genuine skill. That second kind of failure is what "
@@ -204,7 +203,7 @@ class Exact(VoiceoverScene):
         mark = DashedLine(bx.c2p(314, 0), bx.c2p(314, 1300), color=OBS, stroke_width=2.5)
         g = np.random.Generator(np.random.PCG64(1935))
         rows = fit_rows(VGroup(
-            label(r"if crossing does nothing, \ which plant of a pair is which is a coin toss: \ each sign could be flipped", font_size=24),
+            label(r"under independent sign symmetry or a sharp null with randomized within-pair assignments: each sign can be flipped", font_size=24),
             MathTex(rf"\#\{{\text{{patterns with }} \textstyle\sum \ge 314\}} = {d['count']} \text{{ of }} {d['total']:,}".replace(",", "{,}"),
                     font_size=30, color=OBS),
             MathTex(rf"p_{{\text{{one-sided}}}} = {d['p_one']:.4f},\qquad p_{{\text{{two-sided}}}} = {d['p_two']:.4f}", font_size=30, color=OBS),
@@ -213,7 +212,7 @@ class Exact(VoiceoverScene):
                   color=GREY_A),
         ), 12.6, 0.26, [0, -2.2, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Fisher's idea: suppose crossing makes no difference. Then within each pair, which "
+            "<bookmark mark='a'/> Fisher's calculation uses sign-exchangeability under the null: for example, independent symmetric differences, or a sharp no-effect null with randomized assignments within pairs. Then within each pair, which "
             "plant ended up taller has nothing to do with how it was fertilized, and each difference was equally likely "
             "to come out positive or negative. So flip the signs. <bookmark mark='b'/> Here's one random flip; the sum "
             "changes. Here's another, and another. <bookmark mark='c'/> There are two to the fifteen, thirty-two "
@@ -223,7 +222,7 @@ class Exact(VoiceoverScene):
             "two point six percent, and two-sided, five point three. Fisher counted them without a computer. "
             "<bookmark mark='e'/> Student's t-test, which assumes normality, gives point zero four nine seven, almost the "
             "same. Fisher's conclusion was that the t-test is justified as an approximation to the randomization test, "
-            "whatever the shape of the data."
+            "in this dataset. Exact design-based validity needs the actual random assignment mechanism and a sharp null; a t approximation is not universally accurate for every data shape."
         ) as vo:
             self.play(FadeIn(A), Create(zero), FadeIn(bars), FadeIn(sum_t), FadeIn(B))
             vo.wait_until("a")
@@ -265,7 +264,7 @@ class Exact(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"7 men from each of two of the World's regions: \ do their heights differ?", font_size=24),
             MathTex(rf"p = \frac{{{d['extreme']:,}}}{{3{{,}}432}} = {d['p']:.3f}".replace(",", "{,}", 1), font_size=30, color=OBS),
-            label(rf"truth: \ the regions' means are {d['truth']['a']:.1f} and {d['truth']['b']:.1f} cm; \ $H_0$ is true here", font_size=24,
+            label(rf"source-pool means: {d['truth']['a']:.1f} and {d['truth']['b']:.1f} cm; matching means do not establish exchangeability", font_size=24,
                   color=EXACT),
             label(r"Built: \ the permutation machine; \ \texttt{statkit.tests.permutation\_test}", font_size=22, color=GREY_A),
         ), 12.6, 0.28, [0, -2.3, 0])
@@ -281,7 +280,7 @@ class Exact(VoiceoverScene):
             "<bookmark mark='d'/> Our observed difference sits in the middle of the pile: more than half the splits are "
             "at least as extreme, so the p-value is point five six. No evidence of a difference. "
             "<bookmark mark='e'/> And the World knows the truth: the two regions' men average the same, to a tenth of a "
-            "centimetre. The null is true, and the test, correctly, finds nothing."
+            "centimetre. Similar means do not establish identical distributions or prove the permutation null. This result fails to reject exchangeability; it does not establish it."
         ) as vo:
             self.play(FadeIn(m), FadeIn(ga), FadeIn(gb), FadeIn(st), FadeIn(B), FadeIn(tag))
             vo.wait_until("a")
@@ -308,18 +307,18 @@ class Exact(VoiceoverScene):
     def why_random(self):
         rows = fit_rows(VGroup(
             label(r"where the null distribution comes from", font_size=32, color=OBS),
-            label(r"in the tea and in Darwin's pots, \ the experimenter randomized: \ the null distribution is that randomization",
+            label(r"in a properly randomized experiment: the sharp no-effect null supplies the randomization distribution",
                   font_size=24),
-            label(r"no model of the data is needed: \ no normality, \ no independence assumption beyond the coin flips",
+            label(r"no normality model needed; the assignment mechanism, sharp null and no-interference assumptions still matter",
                   font_size=24),
             label(r"in the World's regions, \ nobody randomized: \ exchangeability under $H_0$ is an assumption", font_size=24,
                   color=GREY_A),
             label(r"randomization inference: \ Parts 13 and 35; \ permutation tests and ranks: \ Part 16", font_size=24, color=GREY_A),
         ), 12.6, 0.42, [0, 0.0, 0])
+        intro = label('Randomization and exchangeability are different justifications', font_size=36)
         with self.voiceover(
             "There's a deep point here about where null distributions come from. <bookmark mark='a'/> <bookmark mark='b'/> "
-            "In the tea test and in a properly designed experiment, the experimenter randomized: which cups got milk "
-            "first, which plant of a pair was crossed. Then the null distribution isn't a model at all. It's the "
+            "In the tea test and in a properly designed experiment, the experimenter randomized: for example, the order of the tea cups. For Darwin's historical data, do not assume an undocumented random assignment mechanism; the sign-flip calculation can instead be read under a symmetry model. Then the null distribution isn't a model at all. It's the "
             "randomization itself, which we know exactly because we did it. <bookmark mark='c'/> No assumption of "
             "normality, no model for the data: the test is valid by design. That was Fisher's great insight, and it's "
             "why he insisted on randomization. <bookmark mark='d'/> In the World's regions, nobody randomized which man "
@@ -327,7 +326,10 @@ class Exact(VoiceoverScene):
             "<bookmark mark='e'/> Randomization inference returns with designed experiments in Part 13 and causal "
             "inference in Part 35, and permutation and rank tests in Part 16."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()

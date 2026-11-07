@@ -26,7 +26,7 @@ class Logic(VoiceoverScene):
 
     def ingredients(self):
         items = [
-            (r"1.\ \ a \emph{null hypothesis} $H_0$: \ a model of how the data arise if nothing interesting is going on", NULLC),
+            (r"1.\ \ a \emph{null hypothesis} $H_0$: \ a specified statistical claim and its sampling assumptions", NULLC),
             (r"2.\ \ a \emph{test statistic} $T(X)$: \ a number that is large when the data disagree with $H_0$", WHITE),
             (r"3.\ \ the \emph{$p$-value}: \ $p = P_{H_0}\big(T(X) \ge T(x_{\mathrm{obs}})\big)$", OBS),
         ]
@@ -37,9 +37,10 @@ class Logic(VoiceoverScene):
             label(r"the tea: \ $H_0$: \ she is guessing; \ $T$ = milk-first cups found; \ $p = P(T \ge 4) = 1/70$", font_size=24,
                   color=GREY_A),
         ), 12.6, 0.3, [0, -2.0, 0])
+        intro = label('A specified null, a statistic, and its null tail probability', font_size=36)
         with self.voiceover(
             "Arbuthnot's argument, and the tea, share a structure that Fisher made into a method. "
-            "<bookmark mark='a'/> First, a null hypothesis: a model for how the data would arise if nothing "
+            "<bookmark mark='a'/> First, a null hypothesis: a specified claim and sampling model, here how the data would arise if nothing "
             "interesting were happening, if the years were coins or the lady were guessing. "
             "<bookmark mark='b'/> Second, a test statistic: a number computed from the data that tends to be large when "
             "the data disagree with the null. <bookmark mark='c'/> Third, the p-value: the probability, computed under "
@@ -49,8 +50,11 @@ class Logic(VoiceoverScene):
             "p-value is one in seventy. Notice what's absent: there's no alternative hypothesis anywhere. Fisher's test "
             "only asks how surprising the data are, if the null is true."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
             vo.wait_until("d")
             self.play(FadeIn(ex[0]))
@@ -82,7 +86,7 @@ class Logic(VoiceoverScene):
             "percent. <bookmark mark='c'/> Arbuthnot's case is the far end of a much longer row: eighty-two out of "
             "eighty-two, a single bar so small it's two to the minus eighty-two. <bookmark mark='d'/> The test throws "
             "away everything but the sign of each year, which is why it's called the sign test. It's the oldest "
-            "significance test there is, and it still gets used, because it assumes almost nothing."
+            "significance test there is, and it still gets used, because it needs no model for the magnitudes. Its binomial calibration still needs independent signs with probability one half under the null, after ties are handled."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
@@ -106,6 +110,7 @@ class Logic(VoiceoverScene):
             label(r"``the null hypothesis is never proved or established, \ but is possibly disproved'' \ (\emph{Design}, 1935)",
                   font_size=24, color=GREY_A),
         ), 12.6, 0.36, [0, -1.6, 0])
+        intro = label('Interpreting incompatibility with a null model', font_size=36)
         with self.voiceover(
             "What does a small p-value license us to say? <bookmark mark='a'/> Fisher put it as a disjunction: either "
             "an exceptionally rare chance has occurred, or the theory of random distribution is not true. "
@@ -115,7 +120,9 @@ class Logic(VoiceoverScene):
             "<bookmark mark='d'/> In The Design of Experiments he wrote that the null hypothesis is never proved or "
             "established, but is possibly disproved, in the course of experimentation."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(q), FadeIn(who))
             for k, m_ in enumerate("bcd"):
                 vo.wait_until(m_)
@@ -126,36 +133,40 @@ class Logic(VoiceoverScene):
         d = load("arbuthnot")
         n_year = (d["males"] + d["females"]) / d["n"]
         p = d["males"] / (d["males"] + d["females"])
-        z = (p - 0.5) / np.sqrt(0.25 / n_year)
-        py = stats.norm.cdf(z)
+        year_size = round(n_year)
+        py = stats.binom.sf(year_size // 2, year_size, p)
         rows = [
             cmath(r"P(\text{a christening is a boy})", r"=", rf"p \approx {p:.3f}", r"\quad\text{(the 82-year share)}", font_size=32),
-            cmath(r"P(\text{boys win a year of } \approx 11{,}400)", r"=", rf"\Phi\Big(\frac{{p - 0.5}}{{\sqrt{{0.25/11400}}}}\Big) \approx {py:.5f}",
+            cmath(r"P(\text{boys win a year of } \approx 11{,}400)", r"=", rf"P\{{\mathrm{{Binomial}}({year_size},p)>{year_size // 2}\}} \approx {py:.5f}",
                   font_size=30),
             cmath(r"P(\text{boys win all 82 years})", r"\approx", rf"{py:.5f}^{{82}} \approx {py ** 82:.2f}", font_size=32),
         ]
         rows[2][2].set_color(OBS)
-        whys = [why(r"what the data say: \ about 107 boys for every 100 girls"), why(r"Part 6's CLT for one year"),
+        whys = [why(r"what the data say: \ about 107 boys for every 100 girls"), why(r"equal-year illustration, independent children and years"),
                 why(r"with a 51.6\% coin, \ 82 straight wins are \emph{expected}")]
         foot = fit_rows(VGroup(
             label(r"rejecting $H_0$ does not prove your favourite alternative", font_size=28, color=OBS),
             label(r"Arbuthnot rejected ``a fair coin each year'', \ not ``chance'': \ a biased coin explains it all", font_size=24,
                   color=GREY_A),
         ), 12.6, 0.3, [0, -2.3, 0])
+        intro = label('Rejecting one chance model does not reject chance', font_size=36)
         with self.voiceover(
             "So did Arbuthnot prove Providence? <bookmark mark='a'/> His null was a fair coin each year. But across the "
             "eighty-two years, about fifty-one point six percent of christenings were boys. <bookmark mark='b'/> A "
-            "year has about eleven thousand four hundred christenings, so by the central limit theorem, if each child is "
+            "year has about eleven thousand four hundred christenings, so in a simplified equal-year model with independent children, if each child is "
             "a boy with probability point five one six, boys win a given year with probability about point nine nine "
-            "nine seven five. "
+            "nine seven five, approximately. This illustration fixes every year at the average size; it does not fit the full pattern of historical annual counts. "
             "<bookmark mark='c'/> Over eighty-two years, that's a ninety-eight percent chance of a clean sweep. Under "
             "this chance model, what Arbuthnot saw was entirely expected. <bookmark mark='d'/> The lesson is the most "
             "important one in this part: rejecting a null hypothesis doesn't prove the alternative you had in mind. "
             "Arbuthnot rejected one particular chance model, a fair coin, not chance itself."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.6, x=0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             vo.wait_until("d")
             self.play(FadeIn(foot))
@@ -167,15 +178,18 @@ class Logic(VoiceoverScene):
         h2 = history_card(1713, r"Nicolaus Bernoulli", r"replies that a die with 35 faces, \ 18 marked ``boy'', \ fits the yearly "
                           r"counts well: \ chance, \ with the right model", color=DATA, width=6.0, font_size=22).move_to([3.3, 0.9, 0])
         foot = label(r"the first argument over which null hypothesis to test", font_size=26, color=OBS).to_edge(DOWN, buff=1.0)
+        intro = label('Which probability model should explain the births?', font_size=36)
         with self.voiceover(
             "The point was made at the time. <bookmark mark='a'/> In 1712 the Dutch mathematician Willem 's Gravesande "
             "redid the argument with a finer statistic, the number of boys in each year, and still found a fair coin "
             "wanting. <bookmark mark='b'/> But Nicolaus Bernoulli, nephew of Jacob, replied that the yearly counts fit "
             "very well if each birth is like the throw of a die with thirty-five faces, eighteen of them marked boy. "
-            "Chance explains the data perfectly, provided it's the right chance. <bookmark mark='c'/> It was the first "
+            "A biased probability model can explain a persistent male excess without Providence; whether it fits the full data is a separate question. <bookmark mark='c'/> It was the first "
             "argument over which null hypothesis to test, and it has never stopped."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(h1, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(h2, shift=UP * 0.2))

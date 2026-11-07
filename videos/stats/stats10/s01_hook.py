@@ -30,7 +30,7 @@ class Hook(VoiceoverScene):
                           color=DATA, width=8.6, font_size=24).move_to([0, 0.9, 0])
         rows = fit_rows(VGroup(
             label(r"London's christenings, \ 1629 to 1710: \ more boys than girls in every one of 82 years", font_size=26),
-            label(r"if each year were a fair coin, \ the chance of 82 heads in a row:", font_size=26, color=GREY_A),
+            label(r"if years were independent fair coins, \ the chance of 82 heads in a row:", font_size=26, color=GREY_A),
             MathTex(r"\big(\tfrac12\big)^{82} \approx 2.1 \times 10^{-25}", font_size=40, color=OBS),
         ), 12.6, 0.3, [0, -1.8, 0])
         with self.voiceover(
@@ -38,7 +38,7 @@ class Hook(VoiceoverScene):
             "Swift, read a paper to the Royal Society with a theological title: an argument for divine providence, "
             "taken from the constant regularity in the births of both sexes. <bookmark mark='b'/> He had the London "
             "christening records for the eighty-two years from 1629 to 1710, and in every single year more boys had "
-            "been christened than girls. <bookmark mark='c'/> Suppose, he said, that each year is like a fair coin, "
+            "been christened than girls. <bookmark mark='c'/> Suppose, he said, that years are independent, each like a fair coin, "
             "equally likely to favour boys or girls. Then the chance of boys winning eighty-two years in a row is "
             "<bookmark mark='d'/> one half to the power eighty-two: about two in ten to the twenty-five. Chance can't "
             "explain it, he concluded; it must be art, by which he meant Providence."

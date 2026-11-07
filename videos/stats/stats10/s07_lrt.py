@@ -32,8 +32,9 @@ class LRT(VoiceoverScene):
         rows[1][2].set_color(OBS)
         whys = [why(r"the best fit allowed by $H_0$, \ over the best fit overall"), why(r"twice the log-likelihood lost by imposing $H_0$"),
                 why(r"Part 9's Poisson log-likelihood, \ $\hat\lambda = S/n$")]
-        foot = label(r"for simple hypotheses, \ the Neyman--Pearson ratio; \ for composite ones, \ maximize each side", font_size=24,
+        foot = label(r"NP compares $L_1/L_0$; the generalized ratio compares the null fit with the full-model fit", font_size=24,
                      color=GREY_A).to_edge(DOWN, buff=0.5)
+        intro = label('Compare the null fit with the full-model fit', font_size=36)
         with self.voiceover(
             "The Neyman–Pearson lemma compares two single distributions. Most real hypotheses are composite: a "
             "normal mean is zero, but the variance is unknown; a treatment has no effect, whatever the baseline. "
@@ -41,19 +42,22 @@ class LRT(VoiceoverScene):
             "overall. Lambda is the ratio of the two maximized likelihoods. It's at most one. <bookmark mark='b'/> "
             "Minus twice its log, W, is twice the log-likelihood lost by imposing the null. Large W means the null "
             "costs a lot of fit. <bookmark mark='c'/> For a Poisson rate, with Part 9's log-likelihood, W has this "
-            "closed form. <bookmark mark='d'/> For two simple hypotheses it's exactly the Neyman–Pearson ratio; in "
+            "closed form. <bookmark mark='d'/> The simple-versus-simple Neyman–Pearson test compares the two likelihoods directly. This generalized full-model ratio follows that idea; in "
             "general it's a recipe, not a theorem, but an extraordinarily good one."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.6, x=0.4, buff=0.9, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             vo.wait_until("d")
             self.play(FadeIn(foot))
         self.clear_scene()
 
     def wilks(self):
-        tc = theorem_card(r"Wilks' theorem", r"Under the regularity conditions of Part 9, \ if $H_0$ fixes $r$ of the parameters and is true, \ "
+        tc = theorem_card(r"Wilks' theorem", r"Under the regularity conditions of Part 9, \ if the true null is a smooth interior submodel of codimension $r$, \ "
                           r"then $W = -2\log\Lambda \to \chi^2_r$ as $n \to \infty$.", who=r"S. S. Wilks, \ \emph{Ann.\ Math.\ Stat.} 9 (1938)",
                           color=ALTC, width=10.4, font_size=26).move_to([0, 2.0, 0])
         rows = [
@@ -64,6 +68,7 @@ class LRT(VoiceoverScene):
         rows[2][2].set_color(OBS)
         whys = [why(r"Part 9: \ the log-likelihood is a parabola near its peak"), why(r"twice the drop"),
                 why(r"Part 9's asymptotic normality: \ a squared normal")]
+        intro = label("Wilks' theorem needs a regular interior null", font_size=36)
         with self.voiceover(
             "What's the null distribution of W? <bookmark mark='a'/> In 1938 Samuel Wilks proved that, in regular "
             "problems, if the null is true, W is approximately chi-squared, with degrees of freedom equal to the number "
@@ -74,7 +79,9 @@ class LRT(VoiceoverScene):
             "standard normal: chi-squared with one degree of freedom. One recipe, one reference distribution, for "
             "almost every test."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(tc, shift=UP * 0.2))
             step = ladder(self, rows, whys, keep=3, top=0.6, x=-0.6, buff=0.5, edge=6.9)
             for k, m_ in enumerate("bcd"):
@@ -87,10 +94,10 @@ class LRT(VoiceoverScene):
         ed, xs = np.asarray(d["edges"]), np.asarray(d["xs"])
         panels = VGroup()
         for j, n in enumerate(("3", "30")):
-            A = axes([0, 8], [0, 1.2], x_length=5.4, y_length=3.4, xlabel=rf"$W$, \ $n = {n}$, \ $\lambda_0 = 2$", xticks=[0, 2, 3.84, 6, 8],
+            A = axes([0, 8], [0, max(1.2, 1.1 * max(max(d[k]["hist"]) for k in ("3", "30")))], x_length=5.4, y_length=3.4, xlabel=rf"$W$, \ $n = {n}$, \ $\lambda_0 = 2$", xticks=[0, 2, 3.84, 6, 8],
                      yticks=[0, 0.5, 1], center=[-3.4 + 6.8 * j, 0.5, 0])
             ax = A.ax
-            h = np.minimum(np.asarray(d[n]["hist"]), 1.2)
+            h = np.asarray(d[n]["hist"])
             bars = hist_bars(ax, ed, h, color=SIM, opacity=0.65)
             cv = clip_curve(ax, xs, d["chi2"], OBS, 3, ymax=1.2)
             cut = DashedLine(ax.c2p(3.84, 0), ax.c2p(3.84, 1.2), color=REJ, stroke_width=2)
@@ -146,8 +153,7 @@ class LRT(VoiceoverScene):
             "is point five per corps-year. <bookmark mark='b'/> The likelihood ratio test measures the vertical drop "
             "from the peak to the null value. <bookmark mark='c'/> Abraham Wald's test, from 1943, measures the "
             "horizontal distance from the MLE to the null, in standard errors. <bookmark mark='d'/> And C. R. Rao's "
-            "score test, from 1948, measures the slope of the log-likelihood at the null value: if the null were right, "
-            "the curve would be flat there. The score test never needs the MLE at all, which makes it the cheapest of "
+            "score test, from 1948, measures the slope of the log-likelihood at the null value: under the null the score is centred at zero, and the test scales its observed departure by its null variance. The score test never needs the MLE at all, which makes it the cheapest of "
             "the three."
         ) as vo:
             self.play(FadeIn(A))
@@ -211,12 +217,13 @@ class LRT(VoiceoverScene):
                 sh.add(shade(ax, xs[xs <= lo], stats.norm.pdf(xs[xs <= lo]), REJ, 0.6))
             panels.add(VGroup(A, cv, sh, label(ttl, font_size=24).next_to(A, UP, buff=0.15)))
         rows = fit_rows(VGroup(
-            label(r"a one-sided test puts all of $\alpha$ in one tail: \ more power in that direction, \ none in the other", font_size=24),
+            label(r"a one-sided test puts all of $\alpha$ in one tail: \ more power in that direction, \ no rejection for estimates in the opposite tail", font_size=24),
             label(r"the direction must be chosen before seeing the data; \ choosing it after doubles the real size", font_size=24,
                   color=OBS),
-            label(r"$W$ is two-sided; \ its signed root $\mathrm{sign}(\hat\theta - \theta_0)\sqrt W$ gives one-sided tests", font_size=24,
+            label(r"in a regular scalar two-sided test, the signed root of $W$, $\mathrm{sign}(\hat\theta - \theta_0)\sqrt W$ gives one-sided tests", font_size=24,
                   color=GREY_A),
         ), 12.6, 0.3, [0, -2.0, 0])
+        intro = label('Choose the direction before seeing the data', font_size=36)
         with self.voiceover(
             "A last practical point: one tail or two? <bookmark mark='a'/> A one-sided test puts the whole five percent "
             "in one tail, so it rejects more readily in that direction, and never in the other. "
@@ -226,7 +233,9 @@ class LRT(VoiceoverScene):
             "percent. <bookmark mark='d'/> The likelihood ratio statistic is naturally two-sided; its signed square "
             "root gives the one-sided version."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(panels[0]), FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(FadeIn(panels[1]))

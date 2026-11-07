@@ -31,6 +31,7 @@ class Misreadings(VoiceoverScene):
         rows[2][2].set_color(OBS)
         whys = [why(r"a statement about the data, \ assuming $H_0$"), why(r"the transposed conditional (Part 2's screening test)"),
                 why(r"Bayes' rule: \ it depends on how many tested hypotheses were true to begin with")]
+        intro = label('A null tail probability is not a posterior probability', font_size=36)
         with self.voiceover(
             "The most common misreading first. <bookmark mark='a'/> A p-value is a probability about the data, computed "
             "assuming the null is true. <bookmark mark='b'/> It is not the probability that the null is true, given the "
@@ -39,9 +40,12 @@ class Misreadings(VoiceoverScene):
             "a significant result is a false alarm comes from Bayes' rule, and it depends on something the p-value "
             "knows nothing about: what fraction of the hypotheses being tested were true to begin with."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.6, buff=0.9, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -63,17 +67,19 @@ class Misreadings(VoiceoverScene):
             label(r"with 1 real in 100, \ 86\%", font_size=22, color=GREY_A),
             label(r"Ioannidis (2005): \ ``Why most published research findings are false''", font_size=22, color=GREY_A),
         ), 5.0, 0.3, [4.4, 0.2, 0])
+        intro = label('Expected outcomes among a thousand tested hypotheses', font_size=36)
         with self.voiceover(
             "Here it is in pictures. <bookmark mark='a'/> A thousand hypotheses are tested, in some field where one in "
-            "ten is a real effect: the green squares. <bookmark mark='b'/> With eighty percent power, eighty of the "
-            "hundred real effects come out significant. <bookmark mark='c'/> With a five percent false-alarm rate, "
-            "forty-five of the nine hundred nulls come out significant too. <bookmark mark='d'/> So of the hundred and "
+            "ten is a real effect: the green squares. <bookmark mark='b'/> With eighty percent power, eighty real effects are significant in expectation. The picture fixes the expected counts for illustration. <bookmark mark='c'/> With a five percent false-alarm rate, "
+            "forty-five of the nine hundred nulls are significant in expectation. <bookmark mark='d'/> So of the hundred and "
             "twenty-five significant results, forty-five, thirty-six percent, are false, even though every test was "
             "performed perfectly at the five percent level. <bookmark mark='e'/> If only one hypothesis in a hundred is "
             "real, the false share rises to eighty-six percent. John Ioannidis built a famous argument on exactly this "
             "arithmetic in 2005."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(arr, lag_ratio=0.001), FadeIn(rows[0]), run_time=2.0)
             vo.wait_until("b")
             self.play(*[arr[i].animate.set_fill(OBS) for i in hits if i < n_real], FadeIn(rows[1]))
@@ -153,8 +159,7 @@ class Misreadings(VoiceoverScene):
             "five and a p-value of about four in ten thousand. <bookmark mark='c'/> In heights, that's a difference of "
             "about a third of a millimetre: highly significant, and utterly unimportant. The p-value mixes the size of the "
             "effect with the size of the sample. <bookmark mark='d'/> Fourth: a large p-value doesn't mean no effect. "
-            "Absence of evidence isn't evidence of absence. <bookmark mark='e'/> With six cups, the tea test can't reach "
-            "point zero five at all, however skilled the lady: its smallest possible p-value is exactly one in twenty."
+            "Absence of evidence isn't evidence of absence. <bookmark mark='e'/> With six cups, the tea test cannot go below point zero five, however skilled the lady: its smallest possible p-value is exactly one in twenty."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
@@ -165,25 +170,24 @@ class Misreadings(VoiceoverScene):
         A = axes([-0.5, 2.5], [-10, 55], x_length=5.0, y_length=4.2, ylabel=r"estimated effect", yticks=[0, 25, 50], center=[-3.6, -0.2, 0])
         ax = A.ax
         zero = DashedLine(ax.c2p(-0.5, 0), ax.c2p(2.5, 0), color=GREY_B, stroke_width=1.5)
-        specs = [(0, 25, 10, OBS, r"A: \ $25 \pm 10$, \ $p = 0.012$"), (2, 10, 10, NULLC, r"B: \ $10 \pm 10$, \ $p = 0.32$")]
+        specs = [(0, 25, 10, OBS, r"A: estimate 25, SE 10; $p = 0.012$"), (2, 10, 10, NULLC, r"B: estimate 10, SE 10; $p = 0.32$")]
         est = VGroup()
         for x, m, s_, c, t in specs:
             est.add(VGroup(Line(ax.c2p(x, m - 1.96 * s_), ax.c2p(x, m + 1.96 * s_), color=c, stroke_width=4), Dot(ax.c2p(x, m), radius=0.08, color=c),
                            label(t, font_size=22, color=c).next_to(ax.c2p(x, m + 1.96 * s_), UP, buff=0.15).shift(RIGHT * (0.6 if x == 0 else 0))))
         rows = fit_rows(VGroup(
             label(r"fifth: \ ``significant'' vs ``not significant''", font_size=26, color=OBS),
-            label(r"is not itself a significant difference", font_size=26, color=OBS),
+            label(r"need not be a significant difference", font_size=26, color=OBS),
             MathTex(r"A - B = 15 \pm \sqrt{10^2 + 10^2} = 15 \pm 14.1:\ \ z = 1.06,\ \ p = 0.29", font_size=28),
             label(r"Gelman \& Stern (2006)", font_size=22, color=GREY_A),
             label(r"sixth: \ $p$ depends on the stopping rule", font_size=26, color=OBS),
             label(r"and on the analyses tried (ch.~10, \ ch.~12)", font_size=26, color=OBS),
         ), 5.6, 0.34, [3.6, -0.1, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Fifth, and subtler: the difference between significant and not significant is not "
-            "itself statistically significant. <bookmark mark='b'/> Study A estimates an effect of twenty-five, plus or "
+            "<bookmark mark='a'/> Fifth, and subtler: a significant result and a non-significant result need not differ significantly from one another. <bookmark mark='b'/> Study A estimates an effect of twenty-five, plus or "
             "minus ten: p equals point zero one two. Study B estimates ten, plus or minus ten: p equals point three two. "
             "It's tempting to say A found an effect and B didn't, so they disagree. <bookmark mark='c'/> But the "
-            "difference between them is fifteen, with a standard error of fourteen: z of about one, p of point two nine. "
+            "difference between them is fifteen, assuming independent studies, with a standard error of fourteen: z of about one, p of point two nine. "
             "No evidence that they differ at all. Andrew Gelman and Hal Stern made the point in 2006. "
             "<bookmark mark='d'/> And sixth: a p-value depends not only on the data but on the stopping rule and on how "
             "many analyses were tried, as chapters ten and twelve show."

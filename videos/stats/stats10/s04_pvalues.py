@@ -54,6 +54,7 @@ class PValues(VoiceoverScene):
         rows[3][2].set_color(OBS)
         whys = [why(r"continuous $T$"), why(r"rearrange"), why(r"$F_0(T) \sim$ Uniform: \ the probability integral transform (Parts 3, 7)"),
                 why(r"so $P(p \le 0.05) = 0.05$: \ the size of the test")]
+        intro = label('Exact continuous-null p-values are uniform', font_size=36)
         with self.voiceover(
             "Here's the key fact. <bookmark mark='a'/> If the null is true and the statistic is continuous, the "
             "chance that the p-value is at most u is the chance that one minus F of T is at most u, <bookmark mark='b'/> "
@@ -63,9 +64,12 @@ class PValues(VoiceoverScene):
             "p-value is uniformly distributed between zero and one. Every value is equally likely. That's why rejecting "
             "when p is below point zero five makes a mistake exactly five percent of the time when the null is true."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.75, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -75,11 +79,11 @@ class PValues(VoiceoverScene):
         panels = VGroup()
         specs = (("0.0", r"$H_0$ true: \ $\delta = 0$", NULLC), ("0.3", r"$\delta = 0.3\sigma$", ALTC), ("0.8", r"$\delta = 0.8\sigma$", ALTC))
         for j, (k, t, c) in enumerate(specs):
-            ymax = 6.0 if k != "0.0" else 1.6
-            A = axes([0, 1], [0, ymax], x_length=3.6, y_length=3.0, xlabel=r"$p$", xticks=[0, 0.5, 1], center=[-4.4 + 4.4 * j, 0.6, 0],
+            ymax = max(1.6, 1.12 * max(max(d[key]["hist"]) for key in ("0.0", "0.3", "0.8")))
+            A = axes([0, 1], [0, ymax], x_length=3.6, y_length=3.0, xlabel=r"$p$", ylabel=r"density", xticks=[0, 0.5, 1], center=[-4.4 + 4.4 * j, 0.6, 0],
                      font_size=18)
             ax = A.ax
-            h = np.minimum(np.asarray(d[k]["hist"]), ymax)
+            h = np.asarray(d[k]["hist"])
             bars = hist_bars(ax, ed, h, color=c, opacity=0.7)
             ttl = label(t, font_size=24, color=c).next_to(A, UP, buff=0.15)
             num = MathTex(rf"P(p < 0.05) = {d[k]['below05']:.3f}", font_size=26, color=OBS).next_to(A, DOWN, buff=0.25)
@@ -171,6 +175,7 @@ class PValues(VoiceoverScene):
                       label(r"the surprise in bits: \ as surprising as $s$ fair coins all landing heads", font_size=24, color=GREY_A)
                       ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.4)
         foot = label(r"Arbuthnot: \ $s = 82$ \ \ (Greenland 2019 calls it the $S$-value)", font_size=24, color=GREY_A).to_edge(DOWN, buff=0.5)
+        intro = label('Translate a null tail probability into bits', font_size=36)
         with self.voiceover(
             "How surprising is a given p-value? A helpful translation, popularized by Sander Greenland, turns it into "
             "coin flips. <bookmark mark='a'/> Minus the log, base two, of p, measures the surprise in bits: a p-value "
@@ -180,7 +185,9 @@ class PValues(VoiceoverScene):
             "five is seven and a half. <bookmark mark='c'/> And Arbuthnot's eighty-two years are, of course, eighty-two "
             "coins. Thinking in coins is a useful antidote to treating point zero five as proof."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(head))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in rows], lag_ratio=0.4), run_time=4.0)

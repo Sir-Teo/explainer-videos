@@ -88,31 +88,35 @@ class Many(VoiceoverScene):
     def bonferroni(self):
         d = load("many")
         rows = [
-            cmath(r"P\Big(\bigcup_{i=1}^m \{p_i \le \alpha/m\}\Big)", r"\le", r"\sum_{i=1}^m P\big(p_i \le \alpha/m\big)", font_size=32),
-            cmath(r"\vphantom{x}", r"\le", r"m \cdot \frac{\alpha}{m} = \alpha", font_size=32),
+            cmath(r"P\Big(\bigcup_{i\in I_0} \{p_i \le \alpha/m\}\Big)", r"\le", r"\sum_{i\in I_0} P\big(p_i \le \alpha/m\big)", font_size=32),
+            cmath(r"\vphantom{x}", r"\le", r"|I_0|\,\frac{\alpha}{m} \le \alpha", font_size=32),
         ]
         rows[1][2].set_color(OBS)
-        whys = [why(r"the union bound (Part 2)"), why(r"each $p_i$ is (super-)uniform: \ any dependence at all")]
+        whys = [why(r"the union bound (Part 2)"), why(r"true-null set $I_0$: each null $p_i$ is super-uniform; any dependence")]
         foot = fit_rows(VGroup(
             label(rf"20 tests at $0.05/20$: \ the family-wise error rate falls from {100 * d['sim20_any']:.0f}\% to {100 * d['sim20_bonf']:.1f}\%",
                   font_size=26, color=OBS),
             label(r"the price: \ power. \ $0.05/20 = 0.0025$ needs $|z| > 3.02$ instead of $1.96$", font_size=24),
-            label(r"Holm (1979) is uniformly better; \ false discovery rates (Benjamini \& Hochberg, 1995) ask for less: \ Part 33",
+            label(r"Holm (1979) rejects at least as many while controlling FWER; \ false discovery rates (Benjamini \& Hochberg, 1995) ask for less: \ Part 33",
                   font_size=24, color=GREY_A),
         ), 12.6, 0.32, [0, -1.7, 0])
+        intro = label('Bound the probability of any false rejection', font_size=36)
         with self.voiceover(
             "That's the Bonferroni correction, named for Carlo Bonferroni's inequality. <bookmark mark='a'/> The "
-            "chance that any of m p-values falls below alpha over m is at most the sum of the individual chances, by "
+            "chance that any true-null p-value among m tested hypotheses falls below alpha over m is at most the sum of the individual chances, by "
             "the union bound of Part 2. <bookmark mark='b'/> Each of those is at most alpha over m, so the total is at "
             "most alpha, whatever the dependence between the tests. <bookmark mark='c'/> With twenty tests, the "
             "family-wise error rate drops from sixty-four percent to five. <bookmark mark='d'/> The price is power: each "
             "test now needs a z of three instead of two. <bookmark mark='e'/> Sture Holm's 1979 step-down version is "
-            "uniformly better, and Yoav Benjamini and Yosef Hochberg's false discovery rate, in 1995, asks for less, "
-            "controlling the share of discoveries that are false rather than the chance of any. That's Part 33."
+            "at least as powerful with the same family-wise error control, and Yoav Benjamini and Yosef Hochberg's false discovery rate, in 1995, asks for less, "
+            "controlling the expected false-discovery proportion rather than the chance of any. That's Part 33."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=2.6, x=0.2, buff=0.8, edge=6.9)
             for k, m_ in enumerate("ab"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             for k, m_ in enumerate("cde"):
                 vo.wait_until(m_)
@@ -128,6 +132,7 @@ class Many(VoiceoverScene):
             label(r"with correction for multiple comparisons, \ the salmon's activity disappears", font_size=26, color=OBS),
             label(r"the poster won an Ig Nobel prize (2012), \ and changed how neuroimaging papers were reviewed", font_size=22, color=GREY_A),
         ), 12.6, 0.3, [0, -1.8, 0])
+        intro = label('A dead salmon and many uncorrected comparisons', font_size=36)
         with self.voiceover(
             "The most memorable demonstration came from neuroscience. <bookmark mark='a'/> In 2009, Craig Bennett and "
             "his colleagues put a dead Atlantic salmon in an MRI scanner, showed it photographs of people in social "
@@ -137,7 +142,9 @@ class Many(VoiceoverScene):
             "<bookmark mark='c'/> With a correction, the dead fish's thoughts vanished. <bookmark mark='d'/> The poster "
             "won an Ig Nobel prize, and helped make multiple-comparison corrections standard in the field."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(hc, shift=UP * 0.2))
             for k, m_ in enumerate("bcd"):
                 vo.wait_until(m_)
