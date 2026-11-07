@@ -1,0 +1,237 @@
+{
+  "source": "https://raw.githubusercontent.com/cran/MASS/master/data/gehan.rda",
+  "sha256": "1fea660482ef3963c656b0995becec13011bc050fb387ef45849ba0741e403fd",
+  "pairs": [
+    {
+      "pair": 1,
+      "placebo": {
+        "time": 1.0,
+        "event": 1
+      },
+      "mp": {
+        "time": 10.0,
+        "event": 1
+      }
+    },
+    {
+      "pair": 2,
+      "placebo": {
+        "time": 22.0,
+        "event": 1
+      },
+      "mp": {
+        "time": 7.0,
+        "event": 1
+      }
+    },
+    {
+      "pair": 3,
+      "placebo": {
+        "time": 3.0,
+        "event": 1
+      },
+      "mp": {
+        "time": 32.0,
+        "event": 0
+      }
+    },
+    {
+      "pair": 4,
+      "placebo": {
+        "time": 12.0,
+        "event": 1
+      },
+      "mp": {
+        "time": 23.0,
+        "event": 1
+      }
+    },
+    {
+      "pair": 5,
+      "placebo": {
+        "time": 8.0,
+        "event": 1
+      },
+      "mp": {
+        "time": 22.0,
+        "event": 1
+      }
+    },
+    {
+      "pair": 6,
+      "placebo": {
+        "time": 17.0,
+        "event": 1
+      },
+      "mp": {
+        "time": 6.0,
+        "event": 1
+      }
+    },
+    {
+      "pair": 7,
+      "placebo": {
+        "time": 2.0,
+        "event": 1
+      },
+      "mp": {
+        "time": 16.0,
+        "event": 1
+      }
+    },
+    {
+      "pair": 8,
+      "placebo": {
+        "time": 11.0,
+        "event": 1
+      },
+      "mp": {
+        "time": 34.0,
+        "event": 0
+      }
+    },
+    {
+      "pair": 9,
+      "placebo": {
+        "time": 8.0,
+        "event": 1
+      },
+      "mp": {
+        "time": 32.0,
+        "event": 0
+      }
+    },
+    {
+      "pair": 10,
+      "placebo": {
+        "time": 12.0,
+        "event": 1
+      },
+      "mp": {
+        "time": 25.0,
+        "event": 0
+      }
+    },
+    {
+      "pair": 11,
+      "placebo": {
+        "time": 2.0,
+        "event": 1
+      },
+      "mp": {
+        "time": 11.0,
+        "event": 0
+      }
+    },
+    {
+      "pair": 12,
+      "placebo": {
+        "time": 5.0,
+        "event": 1
+      },
+      "mp": {
+        "time": 20.0,
+        "event": 0
+      }
+    },
+    {
+      "pair": 13,
+      "placebo": {
+        "time": 4.0,
+        "event": 1
+      },
+      "mp": {
+        "time": 19.0,
+        "event": 0
+      }
+    },
+    {
+      "pair": 14,
+      "placebo": {
+        "time": 15.0,
+        "event": 1
+      },
+      "mp": {
+        "time": 6.0,
+        "event": 1
+      }
+    },
+    {
+      "pair": 15,
+      "placebo": {
+        "time": 8.0,
+        "event": 1
+      },
+      "mp": {
+        "time": 17.0,
+        "event": 0
+      }
+    },
+    {
+      "pair": 16,
+      "placebo": {
+        "time": 23.0,
+        "event": 1
+      },
+      "mp": {
+        "time": 35.0,
+        "event": 0
+      }
+    },
+    {
+      "pair": 17,
+      "placebo": {
+        "time": 5.0,
+        "event": 1
+      },
+      "mp": {
+        "time": 6.0,
+        "event": 1
+      }
+    },
+    {
+      "pair": 18,
+      "placebo": {
+        "time": 11.0,
+        "event": 1
+      },
+      "mp": {
+        "time": 13.0,
+        "event": 1
+      }
+    },
+    {
+      "pair": 19,
+      "placebo": {
+        "time": 4.0,
+        "event": 1
+      },
+      "mp": {
+        "time": 9.0,
+        "event": 0
+      }
+    },
+    {
+      "pair": 20,
+      "placebo": {
+        "time": 1.0,
+        "event": 1
+      },
+      "mp": {
+        "time": 6.0,
+        "event": 0
+      }
+    },
+    {
+      "pair": 21,
+      "placebo": {
+        "time": 8.0,
+        "event": 1
+      },
+      "mp": {
+        "time": 10.0,
+        "event": 0
+      }
+    }
+  ]
+}

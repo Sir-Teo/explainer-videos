@@ -26,15 +26,16 @@ class Competing(VoiceoverScene):
             label(r"MGUS: \ a harmless-looking protein in the blood, \ found in older adults", font_size=26),
             label(r"some progress to myeloma or a related cancer; \ most die of something else first", font_size=26, color=TAUC),
             label(r"a death is not a censoring: \ that patient can never progress", font_size=26, color=MISSC),
-            label(r"1 $-$ KM, \ treating deaths as censored, \ answers a question about an immortal world", font_size=26, color=GREY_A),
+            label(r"1 $-$ KM gives net risk; causal elimination of other causes needs assumptions", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Monoclonal gammopathy of undetermined significance, MGUS, is an abnormal protein in the "
-            "blood, common in older adults. <bookmark mark='b'/> A few patients progress to multiple myeloma or a related "
-            "cancer; most die of something else first. <bookmark mark='c'/> A death is not a censoring: censoring hides a "
-            "progression that will still happen, while death prevents it for ever. <bookmark mark='d'/> So one minus the "
-            "Kaplan-Meier curve, treating deaths as censored, estimates the chance of progression in a world where nobody "
-            "dies of anything else."
+            "<bookmark mark='a'/> Monoclonal gammopathy of undetermined significance, MGUS, is an abnormal protein in"
+            " the blood, common in older adults. <bookmark mark='b'/> A few patients progress to multiple myeloma or "
+            "a related cancer; most die of something else first. <bookmark mark='c'/> A death is not a censoring: "
+            "right censoring leaves later progression unknown, while death prevents it for ever. <bookmark mark='d'/>"
+            " So one minus the Kaplan-Meier curve, treating deaths as censored, gives a net-risk quantity constructed"
+            " from the observed cause-specific hazard. Interpreting it as a causal risk in a world where nobody dies "
+            "of anything else requires extra assumptions about eliminating the competing cause."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -58,6 +59,9 @@ class Competing(VoiceoverScene):
             "mark='d'/> The incidences of all the causes add up to one minus the all-cause survival, as probabilities of "
             "a real world should."
         ) as vo:
+            heading = label('Cumulative incidence accounts for every competing cause', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -100,8 +104,7 @@ class Competing(VoiceoverScene):
             + str(round(100 * d["at20"]["cif2"])) + " percent by twenty years. <bookmark mark='d'/> The cumulative incidence "
             "of progression reaches " + str(round(100 * d["at20"]["cif1"])) + " percent by twenty years. <bookmark "
             "mark='e'/> One minus Kaplan-Meier says " + str(round(100 * d["at20"]["naive1"])) + " percent by twenty and "
-            + str(round(100 * d["at30"]["naive1"])) + " by thirty: double, and more, because it pretends that the many who "
-            "died would have lived on to progress."
+            + str(round(100 * d["at30"]["naive1"])) + " by thirty: double, and more. This net-risk construction removes competing deaths from the risk set instead of counting them as outcomes that preclude progression."
         ) as vo:
             self.add(mgus_tag())
             vo.wait_until("a")
@@ -160,15 +163,19 @@ class Competing(VoiceoverScene):
             cmath(r"\text{answers}", r":", r"\text{does } x \text{ change the chance of } k \text{ actually happening?}", font_size=30),
         ]
         rows[2][-1].set_color(CIFC)
-        whys = [why(r"censor the other causes"), why(r"aetiology"), why(r"Fine \& Gray (1999)"), why(r"prognosis")]
+        whys = [why(r"censor the other causes"), why(r"cause-specific association"), why(r"Fine \& Gray (1999)"), why(r"prognosis")]
         with self.voiceover(
-            "<bookmark mark='a'/> Two regressions answer two questions. A cause-specific Cox model treats the other causes "
-            "as censoring, <bookmark mark='b'/> and asks whether a covariate changes the rate of this event among people "
-            "still alive: a question about mechanism. <bookmark mark='c'/> Jason Fine and Robert Gray's model of 1999 "
-            "puts proportional hazards on the subdistribution, keeping those who died of other causes in the risk set with "
-            "weights, <bookmark mark='d'/> and asks whether the covariate changes the chance that the event actually "
-            "happens: a question about prognosis. They can disagree, and both can be right."
+            "<bookmark mark='a'/> Two regressions answer two questions. A cause-specific Cox model treats the other "
+            "causes as censoring, <bookmark mark='b'/> and asks whether a covariate changes the rate of this event "
+            "among people still alive: an association among those still event-free, not by itself a causal statement "
+            "about mechanism. <bookmark mark='c'/> Jason Fine and Robert Gray's model of 1999 puts proportional "
+            "hazards on the subdistribution, keeping those who died of other causes in the risk set with weights, "
+            "<bookmark mark='d'/> and asks whether the covariate changes the chance that the event actually happens: "
+            "a question about prognosis. They can disagree, and both can be right."
         ) as vo:
+            heading = label('Cause-specific and subdistribution hazards answer different questions', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -185,15 +192,16 @@ class Competing(VoiceoverScene):
         tab = table_rows(rows, font_size=28, col_buff=1.2, row_buff=0.36, colors=[GREY_A, GREY_B, SURVC, CIFC]).move_to([0, 0.7, 0])
         foot = fit_rows(VGroup(
             label(r"age speeds progression a little among the living, \ but older patients progress less often:", font_size=24, color=TAUC),
-            label(r"they die of something else first", font_size=24, color=TAUC),
+            label(r"they die of something else first; FG intervals use 399 patient bootstraps", font_size=24, color=TAUC),
         ), 12.4, 0.2, [0, -1.7, 0])
         with self.voiceover(
             "<bookmark mark='a'/> In the MGUS data, each decade of age at diagnosis multiplies the death rate by "
             + say(np.exp(cs2["beta"][1]), 2) + ". <bookmark mark='b'/> Its cause-specific effect on progression is "
             + say(np.exp(cs["beta"][1]), 2) + ": among the living, older patients progress at least as fast. <bookmark "
-            "mark='c'/> But the Fine-Gray hazard ratio is " + say(np.exp(fg["beta"][1]), 2) + ": older patients are less "
-            "likely ever to progress, because death comes first. The first number is about biology, the second about "
-            "what to tell a patient."
+            "mark='c'/> But the Fine-Gray hazard ratio is " + say(np.exp(fg["beta"][1]), 2) + ": older patients are less likely ever to progress, because death comes first. The cause-specific "
+            "coefficient describes the observed event rate; the subdistribution coefficient concerns cumulative "
+            "incidence and is not an ordinary risk ratio. Neither establishes biology or causation. The second can "
+            "help with what to tell a patient."
         ) as vo:
             self.add(mgus_tag())
             vo.wait_until("a")

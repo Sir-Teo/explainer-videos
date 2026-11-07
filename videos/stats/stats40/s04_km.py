@@ -44,6 +44,9 @@ class KaplanMeier(VoiceoverScene):
             "maximum likelihood estimate of S. <bookmark mark='d'/> A censored patient never causes a step: they simply "
             "leave the risk set, after contributing to every factor up to the time they were last seen."
         ) as vo:
+            heading = label('Kaplan-Meier multiplies estimated conditional survivals', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -179,7 +182,7 @@ class KaplanMeier(VoiceoverScene):
             cmath(r"\hat t_{1/2}", r"=", r"\min\{t: \hat S(t) \le 1/2\}", font_size=32),
             cmath(r"\text{6-MP}", r":", rf"\hat t_{{1/2}} = {d['mp']['median']:.0f} \text{{ weeks}}, \ \ \text{{95\% CI from }} {d['mp']['median_ci'][0]:.0f} \text{{ to beyond 35}}", font_size=30),
             cmath(r"\text{placebo}", r":", rf"\hat t_{{1/2}} = {d['pl']['median']:.0f}, \ \ \text{{95\% CI }} {d['pl']['median_ci'][0]:.0f}\text{{--}}{d['pl']['median_ci'][1]:.0f}", font_size=30),
-            cmath(r"\text{mean}", r":", r"\text{not estimable when the curve never reaches } 0", font_size=30),
+            cmath(r"\text{mean}", r":", r"\text{unrestricted mean needs assumptions about the unseen tail}", font_size=30),
         ]
         rows[1][-1].set_color(MPC)
         whys = [why(r"read across at one half"), why(r"Brookmeyer \& Crowley (1982)"), why(r"invert the band"),
@@ -189,10 +192,13 @@ class KaplanMeier(VoiceoverScene):
             "6-MP it is " + str(round(d["mp"]["median"])) + " weeks, and its confidence interval, from the times where "
             "the curve's band crosses one half, runs from " + str(round(d["mp"]["median_ci"][0])) + " weeks to beyond the end "
             "of the data. <bookmark mark='c'/> On placebo it is " + str(round(d["pl"]["median"])) + ", from "
-            + str(round(d["pl"]["median_ci"][0])) + " to " + str(round(d["pl"]["median_ci"][1])) + ". <bookmark mark='d'/> "
-            "The mean cannot be estimated at all when the curve stops above zero, because the tail is unknown: chapter ten's "
-            "restricted mean is the fix."
+            + str(round(d["pl"]["median_ci"][0])) + " to " + str(round(d["pl"]["median_ci"][1])) + ". <bookmark mark='d'/> The unrestricted mean is not identified nonparametrically when follow-up ends "
+            "with survival above zero: the unseen tail requires additional assumptions. chapter ten's restricted mean"
+            " is the fix."
         ) as vo:
+            heading = label('The median needs a crossing; the unrestricted mean needs the tail', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

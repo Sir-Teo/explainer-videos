@@ -27,15 +27,14 @@ times as if all had relapsed gives 17.1 weeks; averaging only the relapses gives
 
 From there the part covers:
 - **Lifetimes.** S, h, H and S = e^{−H}; Graunt (1662) and Halley (1693); Gompertz (1825), with the World's hazards
-  doubling about every 8 years; a 60-year-old man in the World has a median of 18.8 more years; Weibull and bathtub
+  doubling about every 8 years; a model man recruited at 60, with SBP 130 and BMI 27 and frailty integrated at recruitment, has a median of 18.6 more years; Weibull and bathtub
   hazards.
 - **Censoring and truncation.**
   - The four kinds; independent censoring and the likelihood.
   - The World's cohort: 4,000 adults aged 40–79 followed 15 years; 1,086 deaths, 1,702 alive at the end, 1,212 lost.
   - Ten-year survival: truth 0.786, KM 0.786; censored counted as deaths 0.590; censored dropped 0.320; censored as
     alive 0.815.
-  - On the age scale, ignoring delayed entry moves the median age at death from 78 (the truth, and the
-    delayed-entry KM) to 81.
+  - A separate age-40 simulation draws independent scheduled entry ages and observes only survivors to entry. Reference median age at death is 78.3, delayed-entry KM is 78.7, and ignoring entry gives 82.1. Covariate triples preserve their joint empirical distribution; frailty is drawn at 40 and selected by survival, rather than reset at recruitment.
 - **Kaplan–Meier.** The product-limit estimator; the staircase for 6-MP (week 6: n = 21, d = 3; week 7: n = 17); the
   curve ends at 0.448. Efron's redistribute-to-the-right. Medians 23 weeks (95% CI from 13 to beyond the data) and 8
   (4–11).
@@ -44,7 +43,7 @@ From there the part covers:
   (Cutler & Ederer 1958); log H against log t as a diagnostic.
 - **Counting processes.** N, Y, Λ and M = N − Λ. Over 4,000 seeded paths M(1) has mean −0.01 and variance 26.0,
   against EΛ(1) = 26.3. Every estimator here is an integral against dM (Aalen 1978; Andersen & Gill 1982).
-- **The log-rank test.** On Gehan's data the 6-MP arm had 9 relapses against 19.3 expected: χ² = 16.8,
+- **The unstratified log-rank test.** On Gehan's data the 6-MP arm had 9 relapses against 19.3 expected: χ² = 16.8,
   p = 4.2 × 10⁻⁵. Gehan's weighted version gives 13.5; Fleming–Harrington weights.
 - **Cox.**
   - The partial likelihood, derived; Breslow and Efron ties.
@@ -52,13 +51,13 @@ From there the part covers:
   - The Mayo model on 312 patients with 125 deaths. HRs: age per decade 1.39, edema 2.19, log bilirubin 2.41, log
     albumin 0.05, log prothrombin time 20.4. Doubling bilirubin multiplies the hazard by 1.84.
   - D-penicillamine against placebo: HR 1.06 (0.75–1.50), log-rank p = 0.75.
-- **Checking Cox.** Schoenfeld residuals and Grambsch–Therneau.
-  - VA trial: Karnofsky HR 0.71 per 10 points, GT p = 0.001. Split at 90 days, the HR is 0.61 early and 1.01 late.
-  - The Mayo model passes (p ≥ 0.055).
+- **Checking Cox.** Schoenfeld residuals and an approximate KM-transformed scaled-residual diagnostic, motivated by Grambsch–Therneau. The teaching implementation uses a simplified constant covariance and Breslow risk-set residuals; its p-values are not exact reproductions of software’s tie-adjusted test.
+  - VA trial: Karnofsky HR 0.71 per 10 points, approximate diagnostic p = 0.001. Split at 90 days, the HR is 0.61 early and 1.01 late.
+  - The Mayo diagnostics give p ≥ 0.055. This does not establish proportional hazards; test power depends on the departure and event information.
 - **What hazard ratios mean.**
-  - A seeded trial in which every patient's HR is 0.5, with a gamma frailty: the period HRs are 0.52, 0.67, 0.67 and
-    0.76, and Cox's single HR is 0.58 (Hernán 2010).
-  - RMST to 35 weeks on Gehan's data: 23.3 against 8.7, a gain of 14.6 weeks (8.5–20.8).
+  - A seeded trial in which every patient's HR is 0.5, with a gamma frailty: the empirical period incidence-rate ratios are 0.52, 0.67, 0.67 and
+    0.76, and Cox's HR on a fixed one-in-twenty subsample (1,000 patients) is 0.58 (Hernán 2010).
+  - RMST to 35 weeks on Gehan's data: 23.3 against 8.7, a gain of 14.6 weeks (paired-bootstrap 95% percentile interval 8.0–21.3; 3,999 resamples of the original 21 pairs). The curve is carried flat to 35 weeks in each resample; this tail convention and the small trial limit precision.
 - **Immortal time.**
   - The Oscar winners (Redelmeier & Singh 2001; Sylvestre et al. 2006).
   - Stanford: 103 patients, 69 transplanted after a median 25 days, 30 died waiting. Ever-transplanted HR 0.27
@@ -82,7 +81,7 @@ From there the part covers:
   - Shared gamma frailty (Clayton). Kidney infections: θ̂ = 0.50. The female HR is 0.43 by Cox, 0.41 by Weibull and
     0.15 conditional on the frailty. LR for θ = 0 is 8.6 (boundary p = 0.002).
   - Recurrent events.
-- **Prediction.** PBC, 416 patients, a third held out.
+- **Prediction.** PBC, 416 patients, a third held out in one seeded split; this comparison does not establish a universal model ranking.
   - Concordance: bilirubin alone 0.773, Cox 0.828 (0.838 on its training data), a random survival forest 0.804.
   - Five-year IPCW Brier: no model 0.218, Cox 0.133, forest 0.148.
   - Conformal lower bounds under censoring (Candès, Lei & Ren 2023).
@@ -99,7 +98,7 @@ Data:
     and log-log intervals; medians and Brookmeyer–Crowley intervals; redistribute-to-the-right; Nelson–Aalen; RMST
     with its variance.
   - **Tests and Cox:** log-rank, Gehan–Breslow and Fleming–Harrington tests. Cox by Newton with Breslow or Efron ties,
-    start-stop rows and weights, with Breslow's baseline. Schoenfeld residuals and the Grambsch–Therneau test.
+    start-stop rows and weights, with Breslow's baseline. Schoenfeld residuals and an approximate KM-transform trend diagnostic; see its limitations above.
   - **Parametric:** exponential, Weibull, log-normal and log-logistic AFT models.
   - **Competing risks and frailty:** Aalen–Johansen; Fine–Gray with IPCW weights; the shared gamma frailty Weibull.
   - **Prediction:** Harrell's C; the IPCW Brier score; a random survival forest with log-rank splits; conformal
@@ -116,10 +115,22 @@ The Coverage Board gains seven rows:
 | S(t) from the known fates only (censored dropped) | exponential lifetimes, uniform censoring, n = 200 | 69.8% | broken |
 | KM 90% CI, plain Greenwood | exponential lifetimes, n = 20, S(t) = 0.30 | 87.0% | broken |
 | KM 90% CI, log-log | same | 90.8% | kept |
-| Cox Wald 90% CI for β | exponential, n = 60, censoring 30% | 89.8% | kept |
+| Cox Wald 90% CI for β | exponential, n = 60, about 33% censored | 89.8% | kept |
 | Cox CI, ever-treated (immortal time) | a null treatment started during follow-up, n = 400 | 0.0% | broken |
 | Cox CI, treatment as time-varying | same | 91.2% | kept |
 | conformal lower bound for T (90%) | Weibull lifetimes, exponential censoring, a wrong q(x) | 90.2% | kept |
+
+Scientific conditions and implementation scope:
+
+- Hazard-density identities and the Gaussian-process limits use the stated continuous-lifetime and regularity assumptions. Greenwood intervals are approximate and pointwise; the plotted plain interval is clipped to [0,1]. Simultaneous critical values depend on the chosen band and time interval. Orthogonal martingale increments justify the variance calculation, rather than independent nonlinear KM factors.
+- Unadjusted KM needs independent censoring in the pooled population; independence only conditional on covariates does not by itself suffice. Delayed entry additionally needs independent truncation (or suitable adjustment). Nelson–Aalen is unbiased for a stopped cumulative-hazard target while the risk set is nonempty, not unrestricted H after everyone leaves.
+- The displayed trial log-rank and Cox calculations are unstratified teaching analyses, without incorporating matched-pair strata. Restricted-mean uncertainty resamples the original pairs. Prognostic coefficients, including bilirubin and age associations, are not causal intervention effects. Censoring liver transplants requires the relevant independent-censoring assumptions.
+- Failure to detect D-penicillamine or transplant benefit does not establish no benefit. Time-varying treatment removes immortal-time classification but does not itself remove treatment confounding. Stanford zero-duration intervals use a stated half-day convention; the simulated statin’s exact null is known from its generator, not proved by an adjusted Cox estimate near one.
+- Treating competing events as removed from risk sets identifies cause-specific hazards without independent latent failure times. The resulting net-risk 1−KM is not automatically a causal risk under elimination of other causes. Fine–Gray ratios describe subdistribution hazards, not ordinary risk ratios. Its displayed intervals use standard errors from 399 patient bootstrap fits, including refitting censoring KM; they are approximate, with bootstrap Monte Carlo variation, rather than inverse conditional-information intervals.
+- Gamma frailty has shape 1/theta and scale theta. Integrated shared-frailty likelihoods use hazards before multiplying by the latent frailty. Conditional coefficients need not have a universal size ordering relative to marginal coefficients. The boundary likelihood-ratio reference is asymptotic, particularly approximate with 38 clusters.
+- A finite plateau alone cannot distinguish a cure fraction from an unseen long tail. Weibull’s joint AFT/PH characterization assumes regular nondegenerate continuous common-scale models.
+- The pooled IPCW Brier evaluation requires unconditional independent censoring and positive censoring support; covariate-dependent censoring needs conditional weights. Deaths use G(T−), survivors use right-continuous G(t). The score reduces to ordinary binary MSE without censoring.
+- The conformal demonstration knows censoring times even for early failures, and censoring is independent of covariates and lifetimes. Separately trained predictors, exchangeability and correct censoring weights are needed; estimated weights do not generally give exact finite-sample guarantees. Coverage is marginal, not conditional for every patient. The Board averages 200 independent calibrations, each evaluated on 400 new lifetimes; its Monte Carlo SE is 0.171 percentage points across calibrations, not based on a fabricated independent-prediction count.
 
 ## Build it
 
@@ -136,7 +147,7 @@ python tools/lecture_length.py stats40 --floor 50
 | # | Chapter | Numbers |
 |---|---|---|
 | 0 | The 6-MP trial | 12 of 21 censored |
-| 1 | Lifetimes | median 18.8 years from 60 |
+| 1 | Lifetimes | median 18.6 years from 60 (specified covariates) |
 | 2 | Censoring and truncation | 0.786 vs 0.590 / 0.320 / 0.815 |
 | 3 | Kaplan–Meier | medians 23 vs 8 weeks |
 | 4 | Greenwood's variance | plain 87.0% vs log-log 90.8% |

@@ -39,6 +39,9 @@ class Cox(VoiceoverScene):
             "<bookmark mark='d'/> A few parameters of interest and an infinite-dimensional nuisance: a semiparametric "
             "model, the kind Part forty-nine studies."
         ) as vo:
+            heading = label('The Cox model separates baseline shape from covariate effects', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -64,6 +67,9 @@ class Cox(VoiceoverScene):
             "likelihood. <bookmark mark='d'/> Its score is a sum over events of each failure's covariate minus the "
             "hazard-weighted average among those at risk: observed minus expected once more."
         ) as vo:
+            heading = label('Conditioning on the failing subject removes the baseline hazard', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -78,15 +84,20 @@ class Cox(VoiceoverScene):
             cmath(r"\text{exact}", r":", r"\text{all orderings, \ or a conditional logistic likelihood}", font_size=30),
         ]
         rows[2][-1].set_color(TAUC)
-        whys = [why(r"continuous time, \ discrete data"), why(r"Breslow (1974): \ simple, \ biased toward 0"),
+        whys = [why(r"continuous time, \ discrete data"), why(r"Breslow (1974): simple tie approximation"),
                 why(r"Efron (1977): \ the usual default"), why(r"Kalbfleisch \& Prentice")]
         with self.voiceover(
-            "<bookmark mark='a'/> The model is for continuous time, but real times are rounded, so several events share a "
-            "time. <bookmark mark='b'/> Norman Breslow's approximation lets every tied failure face the full risk set; it "
-            "is simple, and pulls estimates toward zero when ties are many. <bookmark mark='c'/> Efron's approximation of "
-            "1977 removes the tied failures from the risk set gradually, one average share at a time, and is the usual "
-            "default. <bookmark mark='d'/> Exact methods average over all orderings."
+            "<bookmark mark='a'/> The model is for continuous time, but real times are rounded, so several events "
+            "share a time. <bookmark mark='b'/> Norman Breslow's approximation lets every tied failure face the full "
+            "risk set; it is simple but can differ materially from other tie methods when ties are numerous; the "
+            "direction is not universal. <bookmark mark='c'/> Efron's approximation of 1977 removes the tied failures"
+            " from the risk set gradually, one average share at a time, and is the usual default. <bookmark "
+            "mark='d'/> An exact continuous-time treatment sums over possible failure orderings; a discrete "
+            "conditional likelihood sums over failing subsets. These are distinct formulations."
         ) as vo:
+            heading = label('Tied event times require an explicit likelihood approximation', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -103,7 +114,7 @@ class Cox(VoiceoverScene):
                 [r"score test", f"{b['score']:.2f}", f"{e['score']:.2f}"]]
         tab = table_rows(rows, font_size=28, col_buff=1.0, row_buff=0.34, colors=[GREY_A, None, TAUC, None, GREY_B]).move_to([0, 0.8, 0])
         foot = fit_rows(VGroup(
-            label(rf"the placebo arm's hazard is about {e['hr']:.1f} times the drug arm's, \ at every week", font_size=24, color=TAUC),
+            label(rf"under PH, the placebo arm's hazard is about {e['hr']:.1f} times the drug arm's, \ at every week", font_size=24, color=TAUC),
             label(rf"without ties, \ Cox's score test is the log-rank test exactly \ (here: \ {b['score']:.1f} vs {d['logrank']['chi2']:.1f})", font_size=24, color=GREY_A),
         ), 12.4, 0.3, [0, -1.9, 0])
         with self.voiceover(
@@ -137,10 +148,13 @@ class Cox(VoiceoverScene):
         ), 12.4, 0.3, [0, -2.0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> A real regression. Primary biliary cholangitis is a slow autoimmune disease of the "
-            "liver's bile ducts. The Mayo Clinic's trial of 1974 to 1984 followed three hundred and twelve patients; one "
-            "hundred and twenty-five died. <bookmark mark='b'/> Cox's model with age, oedema, and the logs of bilirubin, "
-            "albumin and prothrombin time reproduces the famous Mayo model. Older age, oedema, high bilirubin and slow "
-            "clotting raise the hazard; albumin lowers it. <bookmark mark='c'/> Doubling bilirubin multiplies the hazard by "
+            "liver's bile ducts. The Mayo Clinic's trial of 1974 to 1984 followed three hundred and twelve patients; "
+            "one hundred and twenty-five died. <bookmark mark='b'/> Cox's model with age, oedema, and the logs of "
+            "bilirubin, albumin and prothrombin time refits the five-variable form of the famous Mayo model; these "
+            "are not a reproduction of every detail of the original published score. Transplants are censored, "
+            "requiring appropriate independent-censoring assumptions for the mortality interpretation. Older age, "
+            "oedema, high bilirubin and slow clotting raise the hazard; albumin lowers it. <bookmark mark='c'/> "
+            "Doubling bilirubin multiplies the hazard by "
             + say(d["hr"][2] ** np.log(2), 2) + ". <bookmark mark='d'/> E. Rolland Dickson and colleagues turned these five "
             "into a risk score that hepatologists used to decide when to transplant."
         ) as vo:
@@ -210,14 +224,15 @@ class Cox(VoiceoverScene):
             label(r"green: \ D-penicillamine; \ grey: \ placebo", font_size=22),
             label(rf"HR {d['trt_hr']:.2f} \ (95\% CI {d['trt_ci'][0]:.2f}--{d['trt_ci'][1]:.2f})", font_size=22, color=TAUC),
             label(rf"log-rank $p = {d['trt_logrank_p']:.2f}$", font_size=22, color=TAUC),
-            label(r"a well-powered null: \ the drug does not help", font_size=22, color=GREY_A),
+            label(r"no detected benefit; inspect the interval, not only the p-value", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The trial itself tested D-penicillamine against placebo. <bookmark mark='b'/> The "
             "curves lie on top of each other: a hazard ratio of " + say(d["trt_hr"], 2) + ", with an interval from "
             + say(d["trt_ci"][0], 2) + " to " + say(d["trt_ci"][1], 1) + ", <bookmark mark='c'/> and a log-rank p-value of "
-            + say(d["trt_logrank_p"], 2) + ". <bookmark mark='d'/> The drug did not help. The lasting value of the trial was "
-            "its careful follow-up, which gave medicine the prognostic model."
+            + say(d["trt_logrank_p"], 2) + ". <bookmark mark='d'/> This analysis detects no survival benefit; its confidence interval still allows "
+            "clinically relevant effects. The lasting value of the trial was its careful follow-up, which gave "
+            "medicine the prognostic model."
         ) as vo:
             self.add(pbc_tag())
             vo.wait_until("a")

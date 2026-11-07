@@ -38,7 +38,7 @@ class Outro(VoiceoverScene):
         head = label(r"Part 40, \ in twelve lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Part forty in twelve lines. <bookmark mark='a'/> Twelve children still in remission made the average "
+            "Part forty in twelve lines. <bookmark mark='a'/> Twelve patients still in remission made the average "
             "remission impossible to compute naively. The survival function, the hazard and the cumulative hazard are "
             "three faces of one distribution, and Gompertz's law gives the shape of adult mortality. Censoring and "
             "truncation must be handled, never ignored. Kaplan and Meier multiply conditional survivals over the risk "
@@ -79,6 +79,7 @@ class Outro(VoiceoverScene):
             (r"the Kaplan--Meier process", [48]), (r"Cox as a semiparametric model", [49]),
             (r"group-sequential survival trials", [58]),
         ], font_size=22)
+        self.add(card.head)
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part forty-one treats censoring as one kind of missing data, and "
             "its weights as inverse probability weights. Part forty-four proves the martingale theory behind every "
@@ -87,7 +88,7 @@ class Outro(VoiceoverScene):
             "the data accumulate."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):

@@ -33,12 +33,16 @@ class LogRank(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> At each event time, form a two by two table: group by event, among those at risk. "
             "<bookmark mark='b'/> If the groups have the same hazard, the events among the at-risk are shared out at "
-            "random, so group one's count is hypergeometric, as in Part fourteen's Fisher test, with expectation d k times "
-            "group one's share of the risk set. <bookmark mark='c'/> Its variance is the hypergeometric one. <bookmark "
-            "mark='d'/> Sum observed minus expected over all event times, square, and divide by the summed variance: Nathan "
-            "Mantel's log-rank statistic of 1966, the Cochran-Mantel-Haenszel test with time as the strata. Under the null "
-            "it is chi-squared on one degree of freedom."
+            "random, so group one's count is hypergeometric, as in Part fourteen's Fisher test, with expectation d k "
+            "times group one's share of the risk set. <bookmark mark='c'/> Its variance is the hypergeometric one. "
+            "<bookmark mark='d'/> Sum observed minus expected over all event times, square, and divide by the summed "
+            "variance: Nathan Mantel's log-rank statistic of 1966, the Cochran-Mantel-Haenszel test with time as the "
+            "strata. Under the null it is asymptotically chi-squared on one degree of freedom under the usual "
+            "event-count and risk-set conditions."
         ) as vo:
+            heading = label('The log-rank statistic sums observed minus expected events', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -75,8 +79,8 @@ class LogRank(VoiceoverScene):
     def result(self):
         d = load("gehan")
         lr = d["logrank"]
-        A = axes([0, 20], [0, 0.5], x_length=7.4, y_length=4.0, xlabel=r"$\chi^2_1$", ylabel=r"density",
-                 xticks=[0, 5, 10, 15, 20], yticks=[0, 0.25, 0.5], xfmt=lambda v: f"{v:g}", yfmt=lambda v: f"{v:g}", center=[-2.5, 0.2, 0])
+        A = axes([0, 20], [0, 1.1], x_length=7.4, y_length=4.0, xlabel=r"$\chi^2_1$", ylabel=r"density",
+                 xticks=[0, 5, 10, 15, 20], yticks=[0, 0.5, 1.], xfmt=lambda v: f"{v:g}", yfmt=lambda v: f"{v:g}", center=[-2.5, 0.2, 0])
         ax = A.ax
         xs = np.linspace(0.15, 20, 300)
         from scipy import stats as st
@@ -116,12 +120,16 @@ class LogRank(VoiceoverScene):
         rows[1][-1].set_color(TAUC)
         whys = [why(r"a weighted family"), why(r"Peto \& Peto (1972)"), why(r"Gehan (1965)"), why(r"choose before seeing the data")]
         with self.voiceover(
-            "<bookmark mark='a'/> The log-rank test is one member of a family that weights the tables. <bookmark mark='b'/> "
-            "Equal weights are optimal when the hazards are proportional. <bookmark mark='c'/> Weighting by the number at "
-            "risk stresses early differences. <bookmark mark='d'/> Thomas Fleming and David Harrington's weights can "
-            "stress early, late or middle times. The weights must be chosen before looking, or the test is Part "
-            "thirty-three's garden of forking paths."
+            "<bookmark mark='a'/> The log-rank test is one member of a family that weights the tables. <bookmark "
+            "mark='b'/> Equal weights are locally efficient against proportional-hazards alternatives under the "
+            "standard model. <bookmark mark='c'/> Weighting by the number at risk stresses early differences. "
+            "<bookmark mark='d'/> Thomas Fleming and David Harrington's weights can stress early, late or middle "
+            "times. The weights must be chosen before looking, or the test is Part thirty-three's garden of forking "
+            "paths."
         ) as vo:
+            heading = label('Prespecified weights target different patterns of hazard differences', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
