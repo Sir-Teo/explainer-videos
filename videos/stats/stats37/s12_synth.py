@@ -5,9 +5,9 @@ import numpy as np
 from videos.stats.stats37.common import *  # noqa: F403
 
 
-def cig_axes(center=(-1.8, 0.2, 0), y=(30, 140)):
+def cig_axes(center=(-1.8, 0.2, 0), y=(30, 150)):
     return axes([1970, 2000], list(y), x_length=7.6, y_length=4.4, xlabel=r"year", ylabel=r"cigarette packs per person",
-                xticks=[1970, 1980, 1990, 2000], yticks=[40, 80, 120], xfmt=lambda v: f"{v:.0f}", center=list(center))
+                xticks=[1970, 1980, 1990, 2000], yticks=[40, 80, 120, 140], xfmt=lambda v: f"{v:.0f}", center=list(center))
 
 
 class Synth(VoiceoverScene):
@@ -56,7 +56,7 @@ class Synth(VoiceoverScene):
         ax = A.ax
         cal = polyline(ax, yrs, d["cal"], Y1C, 3.5)
         avg = polyline(ax, yrs, d["avg_others"], Y0C, 3.5)
-        start = DashedLine(ax.c2p(1988.5, 30), ax.c2p(1988.5, 140), color=GREY_B, stroke_width=1.5)
+        start = DashedLine(ax.c2p(1988.5, 30), ax.c2p(1988.5, 150), color=GREY_B, stroke_width=1.5)
         side = fit_rows(VGroup(
             label(r"red: \ California", font_size=22, color=Y1C),
             label(r"blue: \ the average of 38 states \ without large tobacco programmes", font_size=22, color=Y0C),
@@ -115,7 +115,7 @@ class Synth(VoiceoverScene):
         ax = A.ax
         cal = polyline(ax, yrs, d["cal"], Y1C, 3.5)
         syn = polyline(ax, yrs, d["synth"], BANDC, 3.5)
-        start = DashedLine(ax.c2p(1988.5, 30), ax.c2p(1988.5, 140), color=GREY_B, stroke_width=1.5)
+        start = DashedLine(ax.c2p(1988.5, 30), ax.c2p(1988.5, 150), color=GREY_B, stroke_width=1.5)
         w = d["weights"][:5]
         wrows = VGroup(label(r"the synthetic California:", font_size=22, color=BANDC),
                        *[label(rf"{n}: \ {v:.2f}", font_size=22, color=GREY_A) for n, v in w],
@@ -170,7 +170,10 @@ class Synth(VoiceoverScene):
     def placebo(self):
         d = load("synth")
         yrs = np.asarray(d["years"], float)
-        A = axes([1970, 2000], [-40, 40], x_length=7.6, y_length=4.4, xlabel=r"year", ylabel=r"gap (packs)",
+        gaps = np.asarray([p["gap"] for p in d["placebo"]], float)
+        ylo = 10 * np.floor(gaps.min() / 10) - 5
+        yhi = 10 * np.ceil(gaps.max() / 10) + 5
+        A = axes([1970, 2000], [ylo, yhi], x_length=7.6, y_length=4.4, xlabel=r"year", ylabel=r"gap (packs)",
                  xticks=[1970, 1980, 1990, 2000], yticks=[-40, -20, 0, 20, 40], xfmt=lambda v: f"{v:.0f}", center=[-1.8, 0.2, 0])
         ax = A.ax
         others = VGroup(*[clip_curve(ax, yrs, p["gap"], GREY_D, 1.5) for p in d["placebo"] if p["state"] != "California"])
