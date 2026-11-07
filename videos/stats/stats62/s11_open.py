@@ -29,8 +29,13 @@ class OpenProblems(LectureMixin, VoiceoverScene):
         ]
         cols = [GREY_B, IDC, HIDC, IDC, TRTC, TRTC, HIDC, IDC, GOLDC]
         tab = table_rows([hdr] + body, font_size=24, col_buff=0.7, row_buff=0.25, colors=cols).move_to([0, 0.1, 0])
-        if tab.width > 13.4:
-            tab.width = 13.4
+        if tab.width > 12.6:
+            tab.width = 12.6
+        heading = Tex(r"Causal inference: assumptions, replacements and guarantees", font_size=36, color=WHITE)
+        if heading.width > 12.6:
+            heading.width = 12.6
+        heading.move_to([0, 3.3, 0])
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> The part in one table: each textbook assumption, what replaces it when it fails, and what "
             "that buys. <bookmark mark='b'/> The do-calculus and the front door where no blocking set exists. A sensitivity "
