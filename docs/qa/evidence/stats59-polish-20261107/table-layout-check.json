@@ -1,0 +1,13 @@
+{
+  "part": 59,
+  "table_bounds": [
+    -5.854358545833331,
+    5.854358545833331,
+    -1.737066090625,
+    1.937066090625
+  ],
+  "table_width": 11.708717091666662,
+  "heading_width": 8.3132655375,
+  "production_template_compiles": true,
+  "scope": "Production objects constructed from corrected source; sampled render review remains pending."
+}
