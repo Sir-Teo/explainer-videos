@@ -1,0 +1,12 @@
+[
+  {
+    "file": "yule1.dat",
+    "url": "https://raw.githubusercontent.com/FinYang/tsdl/e56a918d210eb637a2683c1cc6f4abb4c1bd8922/data-raw/roberts/yule1.dat",
+    "sha256": "f3fea16a6c57551422792bfcab529f2aae7607ec4a781f67bd599527b72b643d"
+  },
+  {
+    "file": "yule2.dat",
+    "url": "https://raw.githubusercontent.com/FinYang/tsdl/e56a918d210eb637a2683c1cc6f4abb4c1bd8922/data-raw/roberts/yule2.dat",
+    "sha256": "aedee8779dc2c8f90c14356a9f2796c4dc9bcac7e594f5ad57ac20a04105fbdd"
+  }
+]

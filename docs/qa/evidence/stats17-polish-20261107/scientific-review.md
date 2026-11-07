@@ -1,0 +1,14 @@
+# Part 17 scientific source review
+
+All 12 scenes, the README/solutions, all 14 compute items, local helpers and the time-series toolkit were reviewed. All 14 items were refreshed, all 12 scenes import, and seven independent reference checks plus thirteen existing toolkit checks pass.
+
+- Historical Yule values match all 46 entries of both archived TSDL source files. The evidence retains those files and pinned source URLs/hashes. CO₂ missing-month dates were checked: no interpolated gap crosses the 1998 forecast split.
+- The spurious-regression illustration now uses the first fixed seed pair (0, 1), rather than selecting a striking result. Its cached and displayed calculations agree: t = −13.2081, R² = 0.640305, DW = 0.287515 and nominal p = 1.73932e−23. The differenced simulation uses 97 residual degrees of freedom. Histograms retain omitted tail mass rather than folding extreme statistics into edge bins.
+- The block-bootstrap example now uses the same basic interval as the Coverage Board. The exact finite-sample AR(1) mean variance is independently checked against the full covariance matrix; the effective sample-size shortcut is identified as asymptotic.
+- Geometric clipping preserves explosive series and broken paths at missing values. Numerical clamping no longer draws false flat tails. Plot bounds accommodate the corrected block interval.
+- Narration distinguishes finite-variance weak stationarity, causality, invertibility, Wold's linearly deterministic component and uncorrelated innovations. Pointwise IID ACF bands are not simultaneous bounds or a general guarantee for every white-noise process. Random walks lack mean reversion; they are not claimed never to return.
+- Partial autocorrelation is defined through linear residuals, with conditional-correlation equivalence qualified. The AR(2) damping factor applies per step, not per cycle. Conditional-mean forecasting and Gaussian plug-in intervals state their innovation/parameter assumptions. Stable causal ARMA reversion is not claimed for all stationary processes.
+- AIC compares a common sample and omits only a common constant. Residual non-rejection is not proof of white noise. Retrospective trend/season filtering induces residual dependence, so the filtered remainder's Ljung–Box Q is descriptive and does not alone prove a changing seasonal pattern.
+- Finite exponential-smoothing initialization is explicit. The Holt–Winters formula repeats the last matching seasonal state for horizons longer than one season, consistent with its 48-month forecast code. Forecast combinations' variance argument states the equal-variance/unbiased conditions; the illustrative competition does not establish improvement under every loss.
+
+Nineteen section introductions gain context headings. Visual verification follows. This source receipt is not visual, continuous-listening or bilingual approval.

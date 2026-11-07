@@ -6,14 +6,14 @@ from scipy import stats
 from explainer.stats.board import coverage_board, load_all
 from explainer.stats.kit import ts as T
 from videos.stats.stats17.common import *  # noqa: F403
-from videos.stats.stats17.compute import rng, spurious_stats
+
 
 def sci_p(p: float) -> str:
     e = int(np.floor(np.log10(p)))
     return rf"p \approx {p / 10 ** e:.0f} \times 10^{{{e}}}"
 
 
-SEED = 2  # the first seed pair (2s, 2s + 1) whose walks give |t| > 8
+# The illustrative example uses the first fixed seed pair, without selection.
 
 
 class Spurious(VoiceoverScene):
@@ -34,8 +34,9 @@ class Spurious(VoiceoverScene):
         self.play(FadeOut(card))
 
     def example(self):
-        x, y = T.random_walk(100, rng(2 * SEED)), T.random_walk(100, rng(2 * SEED + 1))
-        t, r2, dw = spurious_stats(x, y)
+        d = load("spurious")
+        x, y = np.asarray(d["ex"])
+        t, r2, dw = d["ex_t"], d["ex_r2"], d["ex_dw"]
         b = np.polyfit(x, y, 1)
         lo, hi = min(x.min(), y.min()), max(x.max(), y.max())
         A = axes([0, 100], [lo, hi], x_length=5.6, y_length=3.4, xlabel=r"time", center=[-3.6, 0.8, 0], font_size=18)
@@ -54,15 +55,17 @@ class Spurious(VoiceoverScene):
         ), 2.6, 0.38, [5.4, 0.8, 0])
         tag = simulated_tag(r"seeded walks, \ $n = 100$", corner=DR)
         self.ex = (t, r2, dw)
+        intro = label('Independent random walks can produce misleading regressions', font_size=36)
         with self.voiceover(
             "Yule's nonsense correlations have a modern name: spurious regression. <bookmark mark='a'/> Here are two random "
             "walks of a hundred steps, generated completely independently. <bookmark mark='b'/> Regress one on the other by "
-            "Part 12's least squares. <bookmark mark='c'/> The slope's t statistic is fourteen and a half. "
-            "<bookmark mark='d'/> R squared is point six eight, <bookmark mark='e'/> and the p-value has twenty-five zeros "
-            "after the decimal point. <bookmark mark='f'/> And the two series have nothing to do with each other."
+            "Part 12's least squares. <bookmark mark='c'/> The slope's t statistic is minus thirteen point two. "
+            "<bookmark mark='d'/> R squared is point six four, <bookmark mark='e'/> and the nominal p-value is about two times ten to the minus twenty-three. <bookmark mark='f'/> And the two series have nothing to do with each other."
         ) as vo:
+            self.play(FadeIn(intro))
             self.add(tag)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(A), Create(l1), Create(l2), FadeIn(rows[0]), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(B), FadeIn(dots), Create(fl))
@@ -78,14 +81,14 @@ class Spurious(VoiceoverScene):
         A = axes([-30, 30], [0, 0.42], x_length=9.0, y_length=4.0, xlabel=r"the slope's $t$ statistic", ylabel=r"density",
                  xticks=[-30, -20, -10, 0, 10, 20, 30], yticks=[0, 0.2, 0.4], center=[-1.2, 0.3, 0])
         ax = A.ax
-        h = np.histogram(np.clip(t, -29.9, 29.9), e)[0] / (len(t) * 1.0)
+        h = np.histogram(t, e)[0] / (len(t) * 1.0)
         bars = hist_bars(ax, e, h, color=RES, opacity=0.75)
         xs = np.linspace(-6, 6, 300)
         tc = curve(ax, xs, stats.t(98).pdf(xs), GREY_A, 3)
         crit = VGroup(*[DashedLine(ax.c2p(s * 1.98, 0), ax.c2p(s * 1.98, 0.4), color=GREY_B, stroke_width=1.5) for s in (1, -1)])
         rows = fit_rows(VGroup(
             label(r"grey: \ Student's $t$, \ what the test assumes", font_size=22, color=GREY_A),
-            label(r"red: \ 5,000 pairs of independent walks", font_size=22, color=RES),
+            label(rf"red: \ {100*d['visible_mass']:.2f}\% of 5,000 pairs in view", font_size=22, color=RES),
             MathTex(rf"P(|t| > 1.98) = {d['reject']:.2f}", font_size=30, color=RES),
             label(r"half of the $|t|$ exceed 4.4", font_size=22),
         ), 3.6, 0.4, [5.2, 0.4, 0])
@@ -114,11 +117,12 @@ class Spurious(VoiceoverScene):
             cmath(r"y_t", r"=", r"a + b x_t + u_t,\ \ \text{true } b = 0", font_size=32),
             cmath(r"u_t", r"=", r"y_t - a\ \ \text{is a random walk}", font_size=32),
             cmath(r"\text{OLS SE}", r":", r"\text{assumes independent } u_t", font_size=32),
-            cmath(r"t", r"\sim", r"\sqrt n \times \text{(a random limit)}", font_size=32),
+            cmath(r"t/\sqrt n", r"\Rightarrow", r"\text{a nonstandard random limit}", font_size=32),
         ]
         rows[3][2].set_color(RES)
         whys = [why(r"the regression we ran"), why(r"the errors inherit the wandering"),
                 why(r"far too small for errors this persistent"), why(r"Phillips (1986): \ $t$ grows with $n$")]
+        intro = label('Persistent errors invalidate the ordinary regression test', font_size=36)
         with self.voiceover(
             "Why does it happen? <bookmark mark='a'/> The true slope is zero, so the regression's error term is just the "
             "second walk itself, minus a constant. <bookmark mark='b'/> That error is a random walk: not independent, not even "
@@ -127,9 +131,12 @@ class Spurious(VoiceoverScene):
             "<bookmark mark='d'/> Peter Phillips proved in 1986 that the t statistic doesn't settle down to any distribution: "
             "it grows like the square root of n. More data makes the nonsense more significant, not less."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -144,17 +151,21 @@ class Spurious(VoiceoverScene):
         rows[3][2].set_color(OBS)
         whys = [why(r"Durbin \& Watson (1950)"), why(r"no autocorrelation in the residuals"),
                 why(r"the residuals barely change from step to step"), why(r"a rule of thumb, \ 1974")]
+        intro = label('Residual persistence is a warning sign', font_size=36)
         with self.voiceover(
             "There's a warning light. <bookmark mark='a'/> James Durbin and Geoffrey Watson's statistic of 1950 compares "
             "the squared changes in the residuals with their squares: roughly two times one minus their lag-one "
             "autocorrelation. <bookmark mark='b'/> Independent residuals give a value near two. <bookmark mark='c'/> In the "
             "random-walk regressions, the median is point one five: the residuals hardly change from one step to the next. "
             "<bookmark mark='d'/> Granger and Newbold's rule of thumb: when R squared exceeds the Durbin–Watson statistic, "
-            "suspect a spurious regression. In our example, R squared point six eight, Durbin–Watson point four seven."
+            "suspect a spurious regression. In our example, R squared point six four, Durbin–Watson point two nine."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -217,15 +228,14 @@ class Spurious(VoiceoverScene):
             label(r"look at the residuals: \ Durbin--Watson far below 2 is a red flag", font_size=24, color=RES),
             label(r"difference, \ or model the dependence, \ before testing", font_size=24, color=HIT),
             label(r"Yule's marriages and deaths: \ $r = 0.95$ in levels, \ 0.02 in changes", font_size=24, color=OBS),
-            label(r"the same trap: \ anything that trends correlates with anything else that trends", font_size=22, color=GREY_A),
+            label(r"the same trap: \ shared trends can create misleading level correlations", font_size=22, color=GREY_A),
         ), 12.4, 0.5, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> So: regressing one trending series on another proves nothing by itself. "
             "<bookmark mark='b'/> Look at the residuals; a Durbin–Watson statistic far below two is a red flag. "
             "<bookmark mark='c'/> Difference, or model the dependence, before believing a test. <bookmark mark='d'/> Yule's "
             "marriages and deaths showed it in 1926: point nine five in levels, point oh two in changes. "
-            "<bookmark mark='e'/> The trap is everywhere. Anything that changes steadily over time correlates with anything "
-            "else that does: in a famous joke, global temperatures with the falling number of pirates."
+            "<bookmark mark='e'/> The trap is everywhere. Common trends can create misleading association between unrelated series: in a famous joke, global temperatures with the falling number of pirates."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

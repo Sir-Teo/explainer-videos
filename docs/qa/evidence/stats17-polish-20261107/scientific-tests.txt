@@ -1,0 +1,12 @@
+....................                                                     [100%]
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/pydub/utils.py:14
+  /workspace/explainer-videos/.venv/lib/python3.12/site-packages/pydub/utils.py:14: DeprecationWarning: 'audioop' is deprecated and slated for removal in Python 3.13
+    import audioop
+
+tests/test_stats_kit_ts.py::test_yule_walker_matches_statsmodels
+  /workspace/explainer-videos/tests/test_stats_kit_ts.py:24: FutureWarning: yule_walker currently returns a plain tuple whose length depends on the inv argument. In release 0.16 or after July 2028, whichever is later, the default behavior will switch to returning a YuleWalkerResult NamedTuple. Set result_object=True to switch now, or result_object=False to keep the current behavior and silence this warning.
+    rho, sig = yule_walker(x, order=2, method="mle")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+20 passed, 2 warnings in 5.37s

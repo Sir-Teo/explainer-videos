@@ -22,7 +22,7 @@ class Hook(VoiceoverScene):
                           r"merely drift with time can correlate almost perfectly", color=SERIES, width=10.4, font_size=24
                           ).move_to([0, 1.1, 0])
         rows = fit_rows(VGroup(
-            label(r"every method so far assumed independent observations", font_size=24),
+            label(r"ordinary sampling methods need independence or exchangeability", font_size=24),
             label(r"a time series remembers: \ this year looks like last year", font_size=24, color=RES),
             label(r"what goes wrong, \ and what to do instead", font_size=26, color=OBS),
         ), 12.4, 0.3, [0, -1.6, 0])
@@ -30,7 +30,7 @@ class Hook(VoiceoverScene):
             "<bookmark mark='a'/> In January 1926 George Udny Yule gave his presidential address to the Royal Statistical "
             "Society. His title was a question: why do we sometimes get nonsense correlations between time series? "
             "<bookmark mark='b'/> Every method in this course so far has assumed that the observations are independent, or at "
-            "least exchangeable. <bookmark mark='c'/> A time series isn't like that. This year looks like last year; each "
+            "least exchangeable. <bookmark mark='c'/> An ordered time series generally lacks that permutation symmetry. This year looks like last year; each "
             "observation remembers the one before. <bookmark mark='d'/> This part is about what goes wrong when we forget "
             "that, and what to do instead."
         ) as vo:
@@ -88,7 +88,7 @@ class Hook(VoiceoverScene):
         B = axes([-5, 5], [-0.6, 0.6], x_length=5.0, y_length=3.8, xlabel=r"change in marriages", ylabel=r"change in mortality",
                  xticks=[-4, 0, 4], yticks=[-0.4, 0, 0.4], center=[3.2, 0.4, 0], font_size=18)
         d1 = scatter(A.ax, c, m, radius=0.07)
-        d2 = scatter(B.ax, np.diff(c), np.clip(np.diff(m), -0.58, 0.58), color=S.ALT, radius=0.07)
+        d2 = scatter(B.ax, np.diff(c), np.diff(m), color=S.ALT, radius=0.07)
         ta = MathTex(rf"\text{{levels}}:\ r = {d['r']:.2f}", font_size=28, color=OBS).next_to(A, UP, buff=0.15)
         tb = MathTex(rf"\text{{year-on-year changes}}:\ r = {d['r_diff']:.2f}", font_size=28, color=S.ALT).next_to(B, UP, buff=0.15)
         foot = fit_rows(VGroup(
@@ -97,10 +97,10 @@ class Hook(VoiceoverScene):
         ), 12.4, 0.25, [0, -2.7, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Plotted against each other, the forty-six years lie almost on a line. <bookmark mark='b'/> "
-            "But look at the changes from one year to the next. If marriages and deaths were linked, a year with an unusual "
+            "But look at the changes from one year to the next. A simple contemporaneous link would suggest that a year with an unusual "
             "drop in church weddings should bring an unusual drop in deaths. The correlation of the changes is point oh two: "
-            "nothing. <bookmark mark='c'/> Both series simply drift downward over the half-century, for unrelated reasons, and "
-            "any two drifting series will line up. <bookmark mark='d'/> The forty-six years aren't forty-six independent "
+            "little linear association in these changes. <bookmark mark='c'/> Both series simply drift downward over the half-century, for unrelated reasons, and "
+            "shared trends can create strong level correlations without a direct relationship. Differencing does not by itself settle causality. <bookmark mark='d'/> The forty-six years aren't forty-six independent "
             "observations. They're closer to one observation each of two trends."
         ) as vo:
             vo.wait_until("a")

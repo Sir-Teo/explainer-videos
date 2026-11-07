@@ -33,23 +33,26 @@ class Smoothing(VoiceoverScene):
         rows = [
             cmath(r"\ell_t", r"=", r"\alpha y_t + (1 - \alpha)\,\ell_{t-1}", font_size=32),
             cmath(r"\hat y_{t+h}", r"=", r"\ell_t\ \ \text{for every } h", font_size=32),
-            cmath(r"\ell_t", r"=", r"\alpha \textstyle\sum_{j \ge 0} (1 - \alpha)^j\, y_{t-j}", font_size=32),
+            cmath(r"\ell_t", r"=", r"\alpha \textstyle\sum_{j=0}^{t-1}(1-\alpha)^j y_{t-j}+(1-\alpha)^t\ell_0", font_size=32),
         ]
         g = VGroup(*rows).arrange(DOWN, aligned_edge=LEFT, buff=0.4).move_to([-3.4, 1.4, 0])
         rows[2][2].set_color(MODEL)
         lab = label(r"$\alpha = 0.3$: \ weights $0.3,\ 0.21,\ 0.147, \ldots$", font_size=20, color=GREY_A).next_to(A, UP, buff=0.15)
         hist = historical_tag(r"Brown (1956), \ Holt (1957), \ Winters (1960)", corner=DL)
+        intro = label('Exponential smoothing gives recent observations more weight', font_size=36)
         with self.voiceover(
             "In the 1950s, operations researchers forecasting inventories for the US Navy and for factories needed something "
             "simpler than Box and Jenkins. <bookmark mark='a'/> Robert Brown and Charles Holt proposed simple exponential "
             "smoothing: keep a running level, and each period move it a fraction alpha of the way toward the new observation. "
             "<bookmark mark='b'/> The forecast for every future period is the current level. <bookmark mark='c'/> Unrolled, the "
-            "level is a weighted average of all past observations, with weights that fall off geometrically, by a factor one "
+            "level is a weighted average of the observed history plus a diminishing initialization term, with weights that fall off geometrically, by a factor one "
             "minus alpha per period: recent data count most, and the past is forgotten gracefully. Alpha near one tracks the "
             "latest value; alpha near zero averages over a long history."
         ) as vo:
+            self.play(FadeIn(intro))
             self.add(hist)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(g[0]))
             vo.wait_until("b")
             self.play(FadeIn(g[1]))
@@ -97,7 +100,7 @@ class Smoothing(VoiceoverScene):
             cmath(r"\ell_t", r"=", r"\alpha (y_t - s_{t-m}) + (1 - \alpha)(\ell_{t-1} + b_{t-1})", font_size=28),
             cmath(r"b_t", r"=", r"\beta (\ell_t - \ell_{t-1}) + (1 - \beta)\, b_{t-1}", font_size=28),
             cmath(r"s_t", r"=", r"\gamma (y_t - \ell_t) + (1 - \gamma)\, s_{t-m}", font_size=28),
-            cmath(r"\hat y_{t+h}", r"=", r"\ell_t + h\, b_t + s_{t+h-m}", font_size=30),
+            cmath(r"\hat y_{t+h}", r"=", r"\ell_t + h\, b_t + s_{t-m+1+((h-1)\bmod m)}", font_size=30),
         ]
         rows[3][2].set_color(FC)
         whys = [why(r"the level, \ with last year's season removed"), why(r"the slope: \ Holt (1957)"),
@@ -226,16 +229,20 @@ class Smoothing(VoiceoverScene):
         rows[3][2].set_color(OBS)
         whys = [why(r"Muth (1960)"), why(r"a random walk plus noise"),
                 why(r"Hyndman, \ Koehler, \ Snyder \& Grose (2002)"), why(r"ad hoc rules, \ given a statistical model")]
+        intro = label('A statistical model gives smoothing an uncertainty calculation', font_size=36)
         with self.voiceover(
             "Is this ad hoc? Less than it looks. <bookmark mark='a'/> John Muth showed in 1960 that simple exponential "
             "smoothing gives the optimal forecast for a particular model, <bookmark mark='b'/> an ARIMA zero one one, which is "
             "a random walk observed with noise: the smoothing constant is set by the ratio of the two variances. "
-            "<bookmark mark='c'/> In 2002 Rob Hyndman and colleagues showed that every exponential smoothing method is the "
-            "forecast of a state-space model, the ETS family, for error, trend and season. <bookmark mark='d'/> So smoothing "
+            "<bookmark mark='c'/> In 2002 Rob Hyndman and colleagues showed that the standard exponential smoothing methods can be represented as "
+            "forecasts of state-space models, the ETS family, for error, trend and season. <bookmark mark='d'/> So smoothing "
             "methods have likelihoods, prediction intervals and information criteria, like everything else in this part."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()

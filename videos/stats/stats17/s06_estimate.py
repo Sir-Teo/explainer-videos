@@ -33,6 +33,7 @@ class Estimate(VoiceoverScene):
         rows[3][2].set_color(MODEL)
         whys = [why(r"multiply the model by $X_{t-1}$, \ $X_{t-2}$; \ take expectations"), why(r"the Yule--Walker equations"),
                 why(r"the sunspots' sample ACF"), why(r"Yule (1927), \ Walker (1931): \ the method of moments")]
+        intro = label('Autocovariances identify autoregressive coefficients', font_size=36)
         with self.voiceover(
             "How did Yule estimate his coefficients? <bookmark mark='a'/> Multiply the AR two by the value one step back and "
             "take expectations, then do the same with the value two steps back. Out come two equations linking the "
@@ -42,9 +43,12 @@ class Estimate(VoiceoverScene):
             "sunspots, point eight one and point four three, <bookmark mark='d'/> and solve: one point three two six and minus "
             "point six four two. It's Part 9's method of moments, for a series."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -98,14 +102,14 @@ class Estimate(VoiceoverScene):
         star = VGroup(Dot(ax.c2p(d["best"], 0.6), radius=0.09, color=HIT),
                       MathTex(r"\text{min}", font_size=20, color=HIT).next_to(ax.c2p(d["best"], 0.6), UP, buff=0.12))
         rows = fit_rows(VGroup(
-            MathTex(r"\text{AIC} = n \log \hat\sigma^2_p + 2(p + 1)", font_size=28),
+            MathTex(r"\text{AIC} = n_c \log \hat\sigma^2_p + 2(p + 1) + C", font_size=28),
             label(r"Akaike (1973): \ fit, \ penalized by size", font_size=22, color=GREY_A),
             label(rf"best: \ $p = {d['best']}$", font_size=24, color=HIT),
             label(rf"$p = 2$: \ {rel[2]:.1f} higher", font_size=22, color=OBS),
         ), 4.0, 0.4, [4.9, 0.4, 0])
         with self.voiceover(
             "How many lags? <bookmark mark='a'/> Hirotugu Akaike's information criterion, from 1973, balances fit against size: "
-            "n times the log of the residual variance, plus twice the number of parameters. Smaller is better. "
+            "on a common sample, take its size times the log mean squared residual, plus twice the number of fitted mean parameters. A common constant includes the innovation-variance penalty. Smaller is better. "
             "<bookmark mark='b'/> For the sunspots, over orders zero to twelve: zero and one lag are hopeless. "
             "<bookmark mark='c'/> The minimum is at order eight. <bookmark mark='d'/> Yule's AR two is four point nine units "
             "worse: a real difference, but not a crushing one. Part 28 explains what such differences mean; for now, AIC "
@@ -136,7 +140,7 @@ class Estimate(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"if the model is right, \ the residuals are white noise", font_size=24),
             label(r"AR(2): \ a bump at lag 11, \ just outside: \ the cycle it missed", font_size=22, color=OBS),
-            label(rf"AR({best}): \ nothing left", font_size=22, color=HIT),
+            label(rf"AR({best}): \ no large linear correlations detected", font_size=22, color=HIT),
         ), 12.4, 0.25, [0, -2.4, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Then check. If the model has captured the dependence, its residuals should be white noise, "
@@ -168,33 +172,37 @@ class Estimate(VoiceoverScene):
         ]
         rows[3][2].set_color(HIT)
         whys = [why(r"all the residual autocorrelations at once"), why(r"Ljung \& Box (1978); \ lose a d.f. per coefficient"),
-                why(r"passes, \ despite the lag-11 bump"), why(r"comfortably white")]
+                why(r"passes, \ despite the lag-11 bump"), why(r"no rejection; \ not proof of white noise")]
+        intro = label('Check several residual autocorrelations together', font_size=36)
         with self.voiceover(
             "One test can summarize a whole correlogram. <bookmark mark='a'/> Greta Ljung and George Box's Q statistic adds "
             "up the squared residual autocorrelations over the first h lags, with weights that improve its small-sample "
             "behaviour. <bookmark mark='b'/> If the residuals are white noise, Q is approximately chi-squared, with one degree "
-            "of freedom subtracted for each fitted coefficient. <bookmark mark='c'/> For the AR two, Q over twenty lags is "
+            "of freedom subtracted for each fitted AR or MA coefficient. For a model chosen after looking at these data, read the p-values as descriptive checks. <bookmark mark='c'/> For the AR two, Q over twenty lags is "
             "twenty-four point one, p equals point one five: it passes, the lag-eleven bump diluted among twenty lags. "
             "<bookmark mark='d'/> For the AR eight, p equals point four eight. Both pass. A portmanteau test like this one is "
             "a coarse net: passing it doesn't make a model right."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
     def choice(self):
         best = load("order")["best"]
         rows = fit_rows(VGroup(
-            label(r"Yule--Walker and least squares agree for a long AR series", font_size=24),
+            label(r"Yule--Walker and least squares approach the same regular AR target", font_size=24),
             label(r"AIC chooses how much memory to keep", font_size=24, color=HIT),
             label(r"residual checks catch what the model missed; \ Ljung--Box is coarse", font_size=24, color=RES),
             label(rf"AR(2): \ 3 parameters, \ the physics; \ AR({best}): \ 9, \ the better fit", font_size=24, color=OBS),
             label(r"the honest referee is prediction: \ next chapter", font_size=26, color=FC),
         ), 12.4, 0.5, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> So: for a long autoregressive series, Yule–Walker and least squares agree. "
+            "<bookmark mark='a'/> So: under regular stable autoregressive assumptions, Yule–Walker and least squares approach the same target. "
             "<bookmark mark='b'/> AIC chooses how much memory to keep. <bookmark mark='c'/> Residual checks catch what a model "
             "has missed, though summary tests like Ljung–Box are coarse. <bookmark mark='d'/> Yule's AR two has three "
             "parameters and a physical story; the AR eight has nine, and fits better. <bookmark mark='e'/> Which is better in "

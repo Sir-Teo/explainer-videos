@@ -27,7 +27,7 @@ class Arma(VoiceoverScene):
         rows = [
             cmath(r"X_t", r"=", r"\phi X_{t-1} + e_t", font_size=34),
             cmath(r"\ ", r"=", r"e_t + \phi e_{t-1} + \phi^2 e_{t-2} + \cdots", font_size=34),
-            cmath(r"\mathrm{Var}(X_t)", r"=", r"\frac{\sigma^2}{1 - \phi^2},\ \ \rho(h) = \phi^{h}", font_size=32),
+            cmath(r"\mathrm{Var}(X_t)", r"=", r"\frac{\sigma^2}{1 - \phi^2},\ \ \rho(h) = \phi^{|h|}", font_size=32),
             cmath(r"\text{needs}", r":", r"|\phi| < 1", font_size=34),
         ]
         rows[3][2].set_color(OBS)
@@ -62,6 +62,7 @@ class Arma(VoiceoverScene):
             cg = Correlogram(B.ax, np.asarray(d[key]["acf"])[:13], theory=None, color=col, width=0.55)
             nm_ = label(nm, font_size=20, color=col).next_to(A, UP, buff=0.05)
             panels.add(VGroup(A, ln, B, cg, nm_))
+        intro = label('Different memories leave different autocorrelation patterns', font_size=36)
         with self.voiceover(
             "A gallery, each with a simulated path and its theoretical autocorrelations. <bookmark mark='a'/> Phi equal to "
             "point nine: long, slow swells, and correlations that fade slowly. <bookmark mark='b'/> Phi equal to minus point "
@@ -72,8 +73,11 @@ class Arma(VoiceoverScene):
             "from a lag-one value set by the moving-average part. Different memories, different fingerprints in the "
             "autocorrelation function."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 p = panels[k]
                 self.play(FadeIn(p[0]), FadeIn(p[4]), Create(p[1]), FadeIn(p[2]), run_time=1.2)
                 self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in p[3].bars], lag_ratio=0.05), FadeIn(p[3].zero))
@@ -93,7 +97,7 @@ class Arma(VoiceoverScene):
                  yticks=[0, 20, 40], center=[-1.6, 0.2, 0])
         ax = A.ax
         cols = {0.5: SERIES, 1.0: OBS, 1.08: RES}
-        lines = {p: series_line(ax, np.arange(n), np.clip(x, -12, 40), cols[p], 3) for p, x in paths.items()}
+        lines = {p: series_line(ax, np.arange(n), x, cols[p], 3) for p, x in paths.items()}
         rows = fit_rows(VGroup(
             label(r"the same shocks, \ three values of $\phi$", font_size=22),
             label(r"$\phi = 0.5$: \ stationary, \ hugs zero", font_size=22, color=SERIES),
@@ -103,9 +107,9 @@ class Arma(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> Feed the same sixty shocks into three autoregressions. <bookmark mark='b'/> With phi equal to "
             "a half, the series hugs zero: each shock is half forgotten by the next step. <bookmark mark='c'/> With phi equal "
-            "to one, nothing is forgotten: the random walk, which wanders without returning, and whose variance grows without "
+            "to one, nothing is forgotten: the random walk, which has no mean reversion, and whose variance grows without "
             "limit. Part 38 will test for this unit root. <bookmark mark='d'/> With phi just above one, each step amplifies the "
-            "last, and the series explodes. Only the first is stationary."
+            "last, and the series explodes. Only the first converges from this zero start to a causal stationary law."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
@@ -122,7 +126,7 @@ class Arma(VoiceoverScene):
                  ([1.0], r"$\phi = 1$: \ on the circle, \ a unit root"), (d["roots"], r"Yule's sunspot AR(2): \ $1.03 \pm 0.69i$")]
         rows = [
             cmath(r"\phi(z)", r"=", r"1 - \phi_1 z - \cdots - \phi_p z^p", font_size=30),
-            cmath(r"\text{stationary}", r"\iff", r"\text{every root of } \phi(z) \text{ has } |z| > 1", font_size=28),
+            cmath(r"\text{causal stationary}", r"\iff", r"\text{every root of } \phi(z) \text{ has } |z| > 1", font_size=28),
         ]
         g = VGroup(*rows).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([3.4, 2.4, 0])
         for r_ in g:
@@ -136,7 +140,7 @@ class Arma(VoiceoverScene):
         mod = MathTex(rf"|z| = {d['modulus']:.2f} > 1", font_size=28, color=HIT).move_to([3.4, -2.6, 0])
         with self.voiceover(
             "There's a single test for all autoregressions. <bookmark mark='a'/> Write the coefficients as a polynomial, one "
-            "minus phi one z, minus phi two z squared, and so on. <bookmark mark='b'/> The model is stationary exactly when "
+            "minus phi one z, minus phi two z squared, and so on. <bookmark mark='b'/> A causal stationary AR solution, driven by innovations orthogonal to its past, exists exactly when "
             "every root of that polynomial lies outside the unit circle in the complex plane. <bookmark mark='c'/> For an "
             "AR one with phi a half, the root is at two: comfortably outside. <bookmark mark='d'/> Phi of point nine puts it at "
             "one point one one, close to the edge: long memory. <bookmark mark='e'/> Phi of one puts it on the circle: the "
@@ -206,18 +210,21 @@ class Arma(VoiceoverScene):
         rows[3][2].set_color(OBS)
         whys = [why(r"a moving average of order 1"), why(r"$\theta = 0.5$ and $\theta = 2$: \ identical ACFs"),
                 why(r"the shocks can be recovered from the past"), why(r"the convention that makes MA models identifiable")]
+        intro = label('Invertibility recovers innovations from observed history', font_size=36)
         with self.voiceover(
             "Moving averages have a subtlety of their own. <bookmark mark='a'/> An MA one is the current shock plus theta "
             "times the last. <bookmark mark='b'/> Its lag-one autocorrelation is theta over one plus theta squared, and that's "
-            "the same for theta and one over theta: point five and two give identical autocorrelations, so the data can't "
-            "tell them apart. <bookmark mark='c'/> With theta inside the unit interval, the shocks can be rebuilt from the "
+            "the same for theta and one over theta: point five and two give identical autocorrelations, so autocorrelations alone cannot distinguish them. For Gaussian shocks their full laws agree after rescaling the innovation variance. <bookmark mark='c'/> With theta inside the unit interval, the shocks can be rebuilt from the "
             "observed past, a convergent sum. <bookmark mark='d'/> That's invertibility, and the rule is the mirror of "
             "stationarity: the moving-average polynomial's roots must lie outside the unit circle. By convention we always "
             "choose the invertible version."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -234,11 +241,11 @@ class Arma(VoiceoverScene):
                 why(r"$\phi = 0.7$, \ $\theta = 0.5$"), why(r"ARMA: \ a few parameters for a long memory")]
         with self.voiceover(
             "<bookmark mark='a'/> In general an ARMA of orders p and q combines both: a polynomial in the backshift operator on "
-            "the series, and another on the shocks. <bookmark mark='b'/> If it's stationary, the series is an infinite moving "
+            "the series, and another on the shocks. <bookmark mark='b'/> For a causal stable model, the centred series is an infinite moving "
             "average of shocks, with weights psi from dividing one polynomial by the other. <bookmark mark='c'/> For the "
             "ARMA one-one of the gallery: one, one point two, point eight four, point five eight eight, decaying. "
-            "<bookmark mark='d'/> Herman Wold proved in 1938 that every stationary series can be written as a predictable "
-            "part plus an infinite moving average of shocks. ARMA models are a way of approximating that infinite list of "
+            "<bookmark mark='d'/> Herman Wold proved in 1938 that every finite-variance weakly stationary series can be written as a linearly deterministic "
+            "part, predictable from its infinite past, plus an infinite moving average of uncorrelated innovations. The deterministic part need not be a nonrandom path. ARMA models are a way of approximating that infinite list of "
             "weights with a handful of parameters."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)

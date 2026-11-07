@@ -32,7 +32,7 @@ class Cycles(VoiceoverScene):
         ]
         rows[3][2].set_color(OBS)
         whys = [why(r"complex roots"), why(r"a damped cosine: \ the pendulum's swing"),
-                why(r"the frequency from the roots' angle"), why(r"each cycle 22\% smaller, \ about 11 steps long")]
+                why(r"the frequency from the roots' angle"), why(r"envelope 22\% smaller per step, \ about 11 steps per cycle")]
         with self.voiceover(
             "<bookmark mark='a'/> Take an AR two whose polynomial has complex roots. <bookmark mark='b'/> Its autocorrelation "
             "function is a damped cosine: correlations that swing positive and negative while shrinking by a factor r each "
@@ -94,17 +94,20 @@ class Cycles(VoiceoverScene):
             label(r"smoothing independent noise manufactures waves: \ beware of cycles in averaged data", font_size=22, color=OBS),
         ), 12.4, 0.2, [0, -3.1, 0])
         tag = simulated_tag(r"Slutsky's experiment", corner=UR)
+        intro = label('Averaging independent shocks can manufacture apparent waves', font_size=36)
         with self.voiceover(
             "The same year, in Moscow, Eugen Slutsky made a related discovery. <bookmark mark='a'/> Start with pure white "
             "noise: independent shocks, no rhythm at all. <bookmark mark='b'/> Replace each value by the sum of the last ten. "
             "Waves appear: smooth rises and falls with something like a period, which Slutsky compared with the English "
             "business cycle of the nineteenth century, and found an uncomfortable resemblance. <bookmark mark='c'/> His paper "
             "was called The summation of random causes as the source of cyclic processes. <bookmark mark='d'/> The lesson cuts "
-            "both ways. Random shocks passed through any averaging mechanism produce cycles, so a cycle in the data doesn't "
+            "both ways. Averaging random shocks can produce apparent waves, so a cycle in the data doesn't "
             "prove a periodic cause; and smoothing a series yourself can manufacture waves that weren't there."
         ) as vo:
+            self.play(FadeIn(intro))
             self.add(tag)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(A), FadeIn(ta), Create(l1), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(B), FadeIn(tb), Create(l2), run_time=2.5)
@@ -133,7 +136,7 @@ class Cycles(VoiceoverScene):
             "<bookmark mark='b'/> Fitting an AR two by least squares gives coefficients one point three three six and minus "
             "point six five oh, with standard errors near point oh six. <bookmark mark='c'/> The implied period is ten point "
             "six years, and the damping factor point eight one a year. <bookmark mark='d'/> Yule's own estimates were one "
-            "point three four and minus point six five: the same answer from the same data, ninety-nine years apart."
+            "point three four and minus point six five: a close agreement with a modern fit to the statsmodels record over his year window."
         ) as vo:
             self.play(FadeIn(A), FadeIn(tag))
             vo.wait_until("a")

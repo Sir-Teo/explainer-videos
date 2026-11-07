@@ -14,12 +14,12 @@ Items:
     slutsky     moving sums of white noise make cycles (Slutsky 1927); an AR(2) with complex roots
     sunspot     Yule's AR(2) for the sunspots of 1749-1924: Yule-Walker, least squares, roots, period
     identify    simulated AR(2) and MA(2): sample ACF and PACF
-    order       sunspots: AIC over AR orders, Ljung-Box for AR(2) and AR(9)
-    forecast    sunspots 1925-1955 forecast from 1749-1924: AR(2) and AR(9), intervals, MASE
+    order       sunspots: AIC over AR orders, Ljung-Box for AR(2) and AR(8)
+    forecast    sunspots 1925-1955 forecast from 1749-1924: AR(2) and AR(8), intervals, MASE
     co2         Mauna Loa: classical decomposition, the seasonal figure, the trend's growth
     hw          Holt-Winters on CO2 1959-1997, forecasts for 1998-2001, MASE vs the seasonal naive
     spurious    two independent random walks: r, R^2 and the slope t-test; differenced
-    mcomp       a small forecasting competition: naive, drift, SES, Holt, AR(AIC), and their combination
+    mcomp       a small forecasting competition: naive, drift, SES, AR(AIC), and their combination
     board       Coverage Board rows
 """
 
@@ -58,6 +58,29 @@ def nest(obj):
     if isinstance(obj, np.bool_):
         return bool(obj)
     return obj
+
+
+def clipped_segments(xs, ys, rectangle):
+    """Clip line segments to a rectangle without flattening off-scale values."""
+    xmin, xmax, ymin, ymax = rectangle
+    points = np.column_stack((xs, ys))
+    result = []
+    for start, end in zip(points[:-1], points[1:]):
+        if not np.isfinite([start, end]).all():
+            continue
+        delta = end - start
+        lo, hi = 0.0, 1.0
+        for k, lower, upper in ((0, xmin, xmax), (1, ymin, ymax)):
+            if delta[k] == 0:
+                if not lower <= start[k] <= upper:
+                    hi = -1
+                    break
+            else:
+                a, b = sorted(((lower - start[k]) / delta[k], (upper - start[k]) / delta[k]))
+                lo, hi = max(lo, a), min(hi, b)
+        if lo <= hi:
+            result.append((start + lo * delta, start + hi * delta))
+    return result
 
 
 def sunspot_window(y0=1749, y1=1924):
@@ -103,7 +126,7 @@ def compute_meanci():
     exact_var = (1 + 2 * np.sum((1 - k / n) * rho ** k)) / (1 - rho ** 2) / n
     return nest({"x": x, "n": n, "rho": rho, "mean": x.mean(), "s": s, "iid": iid, "iid_se": s / np.sqrt(n), "nw_se": nw,
                  "nw": (x.mean() - 1.96 * nw, x.mean() + 1.96 * nw), "block_se": bm.std(ddof=1),
-                 "block": np.quantile(bm, [0.025, 0.975]), "real_sd": means.std(ddof=1), "exact_sd": np.sqrt(exact_var),
+                 "block": 2*x.mean() - np.quantile(bm, [0.975, 0.025]), "real_sd": means.std(ddof=1), "exact_sd": np.sqrt(exact_var),
                  "inflation": (1 + rho) / (1 - rho), "neff": T.ar1_neff(n, rho), "acf": T.acf(x, 12),
                  "nw_lags": int(np.floor(4 * (n / 100) ** (2 / 9)))})
 
@@ -237,11 +260,11 @@ def compute_spurious():
         td.append(spurious_stats(np.diff(x), np.diff(y))[0])
     ts_, r2s, dws, td = map(np.asarray, (ts_, r2s, dws, td))
     crit = stats.t.ppf(0.975, n - 2)
-    ex = (T.random_walk(n, rng(3)), T.random_walk(n, rng(4)))
+    ex = (T.random_walk(n, rng(0)), T.random_walk(n, rng(1)))
     t, r2, dw = spurious_stats(*ex)
     return nest({"t": ts_, "r2": r2s, "dw": dws, "t_diff": td, "reject": np.mean(np.abs(ts_) > crit),
-                 "reject_diff": np.mean(np.abs(td) > crit), "median_r2": np.median(r2s), "median_dw": np.median(dws),
-                 "ex": ex, "ex_t": t, "ex_r2": r2, "ex_dw": dw, "n": n})
+                 "reject_diff": np.mean(np.abs(td) > stats.t.ppf(0.975, n - 3)), "median_r2": np.median(r2s), "median_dw": np.median(dws),
+                 "ex": ex, "ex_t": t, "ex_r2": r2, "ex_dw": dw, "ex_p": 2 * stats.t.sf(abs(t), n - 2), "visible_mass": float(np.mean(np.abs(ts_) <= 30)), "n": n})
 
 
 def _fc_methods(train, h):

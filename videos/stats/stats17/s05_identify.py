@@ -33,12 +33,13 @@ class Identify(VoiceoverScene):
         rows = [
             cmath(r"\text{best AR}(h)", r":", r"\hat X_t = \phi_{h1} X_{t-1} + \cdots + \phi_{hh} X_{t-h}", font_size=30),
             cmath(r"\alpha(h)", r"=", r"\phi_{hh}", font_size=32),
-            cmath(r"\ ", r"=", r"\mathrm{corr}(X_t, X_{t-h} \mid X_{t-1}, \ldots, X_{t-h+1})", font_size=30),
+            cmath(r"\ ", r"=", r"\mathrm{corr}(r_t, r_{t-h})\quad\text{linear residuals after intervening lags}", font_size=30),
             cmath(r"\text{AR}(p)", r":", r"\alpha(h) = 0 \text{ for } h > p", font_size=32),
         ]
         rows[3][2].set_color(OBS)
         whys = [why(r"the linear predictor from $h$ lags"), why(r"its last coefficient: \ the partial autocorrelation"),
-                why(r"the correlation left after the lags in between"), why(r"an AR($p$) needs nothing beyond lag $p$")]
+                why(r"linear partial correlation; \ conditional correlation under Gaussianity"), why(r"an AR($p$) needs nothing beyond lag $p$")]
+        intro = label('Partial autocorrelation removes the intervening linear effects', font_size=36)
         with self.voiceover(
             "The autocorrelation function has a partner. <bookmark mark='a'/> Fit the best linear predictor of the series from "
             "its last h values. <bookmark mark='b'/> Its last coefficient, phi h h, is the partial autocorrelation at lag h. "
@@ -47,9 +48,12 @@ class Identify(VoiceoverScene):
             "recursion computes them all from the autocorrelations. <bookmark mark='d'/> For an AR of order p, once the p "
             "previous values are known, older ones add nothing, so the partial autocorrelation is exactly zero beyond lag p."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -64,7 +68,7 @@ class Identify(VoiceoverScene):
         foot = label(r"a duality: \ an AR is an MA($\infty$), \ an invertible MA is an AR($\infty$)", font_size=24,
                      color=GREY_A).to_edge(DOWN, buff=0.9)
         with self.voiceover(
-            "That gives a table of fingerprints. <bookmark mark='a'/> An autoregression of order p: its autocorrelations "
+            "For minimal causal, invertible ARMA models with no cancelling factors, this gives theoretical fingerprints. <bookmark mark='a'/> An autoregression of order p: its autocorrelations "
             "tail off gradually, and its partial autocorrelations cut off sharply after lag p. <bookmark mark='b'/> A moving "
             "average of order q: the reverse. Its autocorrelations cut off after lag q, since shocks more than q steps apart "
             "share nothing, and its partial autocorrelations tail off. <bookmark mark='c'/> A mixed model: both tail off. "
@@ -92,6 +96,7 @@ class Identify(VoiceoverScene):
             return AnimationGroup(FadeIn(p[0]), FadeIn(p[2]), FadeIn(p[1].zero), FadeIn(p[1].bands),
                                   LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in p[1].bars], lag_ratio=0.04))
 
+        intro = label('Compare the theoretical signatures with finite samples', font_size=36)
         with self.voiceover(
             "Two simulated series of three hundred, and their four correlograms. <bookmark mark='a'/> An AR two: the "
             "autocorrelations swing and fade, a damped wave, <bookmark mark='b'/> while the partial autocorrelations are large "
@@ -101,9 +106,12 @@ class Identify(VoiceoverScene):
             "autocorrelations don't stop cleanly: in theory they decay forever, and here they leave small values of both signs. On real data the cut-offs are rarely this clean, but the signatures "
             "usually narrow the choice to a few candidates."
         ) as vo:
+            self.play(FadeIn(intro))
             self.add(tag)
             for m_, p in zip("abcd", (p1, p2, p3, p4)):
                 vo.wait_until(m_)
+                if m_ == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(show(p))
         self.clear_scene()
 
@@ -181,16 +189,20 @@ class Identify(VoiceoverScene):
         rows[2][2].set_color(OBS)
         whys = [why(r"the first difference"), why(r"differencing removes a unit root"),
                 why(r"Box \& Jenkins's ``integrated'' models"), why(r"the hook, \ revisited")]
+        intro = label('Differencing can remove a stochastic trend', font_size=36)
         with self.voiceover(
             "What about series that wander, like the random walk, or trend? Box and Jenkins's answer was to difference them. "
             "<bookmark mark='a'/> The first difference is the change from one period to the next. <bookmark mark='b'/> A "
             "random walk's differences are just its shocks: white noise. <bookmark mark='c'/> If the d-th differences of a "
             "series are a stationary ARMA, the series is called ARIMA, the I for integrated. <bookmark mark='d'/> That's what we "
-            "did to Yule's marriages and deaths in the hook: their differences turned out to be unrelated. Whether a series "
+            "did to Yule's marriages and deaths in the hook: their changes had little contemporaneous linear correlation. Whether a series "
             "really needs differencing is a question for a test, and Part 38 has it."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()

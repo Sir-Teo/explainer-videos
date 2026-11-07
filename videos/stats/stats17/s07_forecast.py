@@ -27,14 +27,14 @@ class Forecast(VoiceoverScene):
             cmath(r"\hat X_{n+h}", r"=", r"E[X_{n+h} \mid X_n, X_{n-1}, \ldots]", font_size=32),
             cmath(r"\text{AR}(p)", r":", r"\text{run the recursion, \ with future shocks set to } 0", font_size=30),
             cmath(r"\text{AR(1)}", r":", r"\hat X_{n+h} - \mu = \phi^h (X_n - \mu)", font_size=32),
-            cmath(r"\text{error}", r":", r"\sigma^2 \textstyle\sum_{j=0}^{h-1} \psi_j^2", font_size=32),
+            cmath(r"\text{error variance}", r":", r"\sigma^2 \textstyle\sum_{j=0}^{h-1} \psi_j^2", font_size=32),
         ]
         rows[3][2].set_color(FC)
         whys = [why(r"the minimum mean squared error forecast"), why(r"the shocks we can't yet see average zero"),
                 why(r"memory fades: \ forecasts return to the mean"), why(r"the shocks between now and then, \ weighted")]
         with self.voiceover(
             "<bookmark mark='a'/> The best forecast, in mean squared error, is the conditional mean of the future given the "
-            "past. <bookmark mark='b'/> For an autoregression it's easy to compute: run the model's recursion forward, setting "
+            "past. <bookmark mark='b'/> For the Gaussian innovation models used here, future shocks have conditional mean zero, so it is easy to compute: run the model's recursion forward, setting "
             "every future shock to its mean, zero. <bookmark mark='c'/> For an AR one, the forecast h steps ahead is the "
             "current deviation from the mean, shrunk by phi to the h. As h grows, the forecast returns to the mean: memory "
             "fades. <bookmark mark='d'/> Its error is made of the shocks that will arrive between now and then, weighted by "
@@ -67,7 +67,7 @@ class Forecast(VoiceoverScene):
             "<bookmark mark='b'/> One step ahead it's just sigma, the size of a single shock. <bookmark mark='c'/> It grows "
             "with the horizon, and levels off at the standard deviation of the series itself, one point six seven sigma. "
             "<bookmark mark='d'/> Far enough ahead, the past tells us nothing: the forecast is the mean, and its interval is "
-            "the series' ordinary range. Every stationary model forecasts this way. A random walk, whose variance has no "
+            "the series' ordinary range. Stable causal ARMA models with decaying impulse weights behave this way; a stationary deterministic component can remain predictable. A random walk, whose variance has no "
             "limit, has intervals that widen forever."
         ) as vo:
             self.play(FadeIn(A))
@@ -142,7 +142,7 @@ class Forecast(VoiceoverScene):
             "<bookmark mark='a'/> Now the sunspots. Stand in 1924, at the end of Yule's data, with everything before it to "
             "fit. <bookmark mark='b'/> The AR two forecasts one damped swing up from the low of 1924, peaking a little above "
             "fifty, and then settles to the mean of forty-four. The band is the ninety-five percent forecast interval, "
-            "widening quickly to the full range of the series, and past zero, which a sunspot count can't reach: the normal "
+            "widening quickly to the full range of the series, and below zero, which a sunspot count cannot be: the normal "
             "shocks are only an approximation. <bookmark mark='c'/> In grey, what actually happened: three full cycles, with a "
             "peak of a hundred and fifty-two in 1947. The AR two caught the first rise, and after that it only knew the mean."
         ) as vo:
@@ -199,6 +199,7 @@ class Forecast(VoiceoverScene):
         rows[3][2].set_color(HIT)
         whys = [why(r"Hyndman \& Koehler (2006): \ below 1 beats the naive forecast's usual error"),
                 why(r"the first 11 years, \ 1925--1935"), why(r"knows only the level"), why(r"memory pays")]
+        intro = label('Scale forecast errors using the training data', font_size=36)
         with self.voiceover(
             "How to score forecasts fairly across series of different scales? <bookmark mark='a'/> Rob Hyndman and Anne "
             "Koehler's mean absolute scaled error divides the forecast's average absolute error by the average one-step change "
@@ -208,9 +209,12 @@ class Forecast(VoiceoverScene):
             "<bookmark mark='d'/> Yule's AR two, one point two oh. And the AR eight, point five eight: half the AR two's error. "
             "Here the extra memory that AIC chose was worth having."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -225,7 +229,7 @@ class Forecast(VoiceoverScene):
         ), 12.4, 0.48, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Some cautions. Forecast intervals assume the model is right and its parameters known. "
-            "<bookmark mark='b'/> Estimated parameters add error, which a bootstrap over the fitted model, Part 16's "
+            "<bookmark mark='b'/> Estimated parameters add error, which refitting simulated training histories and adding new future shocks in Part 16's "
             "parametric bootstrap, can include. <bookmark mark='c'/> Normal shocks gave intervals that went below zero; "
             "sunspot numbers are skewed, and a square-root transformation is often used. <bookmark mark='d'/> Of the thirty-one "
             "years forecast, eighty-seven percent of the outcomes fell inside the AR two's ninety-five percent bands, and ninety "
