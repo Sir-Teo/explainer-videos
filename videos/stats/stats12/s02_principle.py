@@ -178,7 +178,7 @@ class Principle(VoiceoverScene):
         la = fit_line(ax, d["lad"][0], d["lad"][1], 3, 15, S.POST)
         out = Circle(radius=0.22, color=RES).move_to(ax.c2p(13, 12.74))
         rows = fit_rows(VGroup(
-            label(r"Boscovich (1757), \ then Laplace: \ minimize $\sum |e_i|$", font_size=24, color=S.POST),
+            label(r"Boscovich, \ then Laplace: \ minimize $\sum |e_i|$", font_size=24, color=S.POST),
             MathTex(rf"\text{{least squares: }} {d['ls'][0]:.2f} + {d['ls'][1]:.3f}\,x", font_size=28, color=FIT),
             MathTex(rf"\text{{least absolute: }} {d['lad'][0]:.2f} + {d['lad'][1]:.3f}\,x", font_size=28, color=S.POST),
             label(r"one point tilts least squares; \ the absolute-error line follows the other ten closely", font_size=24, color=GREY_A),
@@ -209,7 +209,7 @@ class Principle(VoiceoverScene):
 
     def gauss_derivation(self):
         rows = [
-            cmath(r"\text{postulate}", r":", r"\text{for repeated measurements, \ the average is the most probable value}", font_size=28),
+            cmath(r"\text{postulate}", r":", r"\text{the mean maximizes likelihood for every sample}", font_size=28),
             cmath(r"\sum_i \frac{\phi'(x_i - \mu)}{\phi(x_i - \mu)}", r"=", r"0 \ \text{ exactly when } \ \sum_i (x_i - \mu) = 0", font_size=30),
             cmath(r"\frac{\phi'(u)}{\phi(u)}", r"=", r"-k\,u", font_size=32),
             cmath(r"\phi(u)", r"\propto", r"e^{-k u^2/2}", r"\quad\text{the normal law}", font_size=34),

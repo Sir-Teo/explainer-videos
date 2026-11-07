@@ -1,0 +1,72 @@
+{
+  "fingerprint": "c7e7b8fc0910329e32bd1ee6fc2d3e991ef5ba8b7f95fb3fad0992ec13945f8b",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Geometry",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats12/en/Geometry_motion/result.json",
+      "input_sha256": "309494745eb1c0d9443e77dea7ae08b24b51c1f0683c11c33b63d1c907741d26",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 280 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 280 s\n"
+    },
+    {
+      "scene": "FWL",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats12/en/FWL_motion/result.json",
+      "input_sha256": "5cdcfb3032d21a1cc844e1470863925163bc74ef8dbcd0f90703cd030cd06ecf",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 249 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 249 s\n"
+    },
+    {
+      "scene": "Bands",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 5
+      },
+      "input_record": "renders/qa/series/stats12/en/Bands_motion/result.json",
+      "input_sha256": "ed401bceef4f32c5141034a57eb23bc47a83d5f43a647a21141f91e6116d2bf4",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 162 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 162 s\n"
+    },
+    {
+      "scene": "Collinear",
+      "status": "needs-review",
+      "frames": 16,
+      "warnings": {
+        "narration-translation": 5
+      },
+      "input_record": "renders/qa/series/stats12/en/Collinear_motion/result.json",
+      "input_sha256": "e4fdabdec7bee0074a4d65ebec41c322b3e456e975497d04e5f4250021fd0d94",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 175 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 175 s\n"
+    },
+    {
+      "scene": "Diagnostics",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats12/en/Diagnostics_motion/result.json",
+      "input_sha256": "88957ccd65418f42b5cc8c8594d45e5f41cef53a9f4c90cd29d5a3a0aed0f97e",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 291 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 291 s\n"
+    },
+    {
+      "scene": "Fallacy",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats12/en/Fallacy_motion/result.json",
+      "input_sha256": "3c53d7e7d03d873fd07f3c697606cb9e0fa3d4b6eca44ad7eb8ed7c561314010",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 241 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 241 s\n"
+    }
+  ]
+}

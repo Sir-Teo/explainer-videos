@@ -1,0 +1,149 @@
+{
+  "fingerprint": "c7e7b8fc0910329e32bd1ee6fc2d3e991ef5ba8b7f95fb3fad0992ec13945f8b",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 13,
+      "warnings": {
+        "narration-translation": 4,
+        "untranslated-on-screen": 28
+      },
+      "input_record": "renders/qa/series/stats12/en/Hook/result.json",
+      "input_sha256": "90dc956acc2ffcf20c0bb1ce8d674b9376d4acef3da8147be1e954f2523205d8"
+    },
+    {
+      "scene": "Principle",
+      "status": "needs-review",
+      "frames": 33,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 50
+      },
+      "input_record": "renders/qa/series/stats12/en/Principle/result.json",
+      "input_sha256": "45ebd8ea42357078c54b33357c22e4a9a79bead8086627a2357597f480b171ae"
+    },
+    {
+      "scene": "Geometry",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 43
+      },
+      "input_record": "renders/qa/series/stats12/en/Geometry/result.json",
+      "input_sha256": "0f44e70a5a0ea6957310b722a14a3b6dbf934b5055e70cb7d55fd05fd2a807c8"
+    },
+    {
+      "scene": "GaussMarkov",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 35
+      },
+      "input_record": "renders/qa/series/stats12/en/GaussMarkov/result.json",
+      "input_sha256": "6833fe03601104292837b6b303c9337723a934b5814123a3dcb7eb686577a8ef"
+    },
+    {
+      "scene": "NormalTheory",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 53
+      },
+      "input_record": "renders/qa/series/stats12/en/NormalTheory/result.json",
+      "input_sha256": "2ca72106e3a60df5b6c7dd980ca1110277dc2fe88da9a13897e549c1f4000337"
+    },
+    {
+      "scene": "FWL",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 46
+      },
+      "input_record": "renders/qa/series/stats12/en/FWL/result.json",
+      "input_sha256": "905f01a1308f3657ba7ead555efd0b1c5bedc79d3314480eb3b2cd1c3e05f71a"
+    },
+    {
+      "scene": "Interpret",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 59
+      },
+      "input_record": "renders/qa/series/stats12/en/Interpret/result.json",
+      "input_sha256": "f23656b1fac4eb1f561be98b342f9bddc7c52ca97bf7a3561c1e88a7a19c010a"
+    },
+    {
+      "scene": "Bands",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 30
+      },
+      "input_record": "renders/qa/series/stats12/en/Bands/result.json",
+      "input_sha256": "58cc2c8da6f14dc53eb6a4f11238aa589a1fafc28eb7c41eb736a6e1a2007226"
+    },
+    {
+      "scene": "Collinear",
+      "status": "needs-review",
+      "frames": 16,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 17
+      },
+      "input_record": "renders/qa/series/stats12/en/Collinear/result.json",
+      "input_sha256": "e50d51bde36a473bc5b348838cdda457c690a053328068ed3fe42b38fa3ac078"
+    },
+    {
+      "scene": "Diagnostics",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 45
+      },
+      "input_record": "renders/qa/series/stats12/en/Diagnostics/result.json",
+      "input_sha256": "6df6403a97f479bc25211ddab4063760a8c7b7dbcab81419f777e9c09bfb9e60"
+    },
+    {
+      "scene": "Hetero",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 45
+      },
+      "input_record": "renders/qa/series/stats12/en/Hetero/result.json",
+      "input_sha256": "dc017450525480ce6e600bfd00d72d41dc1298543507d75aa1fc69cb8b252dbd"
+    },
+    {
+      "scene": "Fallacy",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 43
+      },
+      "input_record": "renders/qa/series/stats12/en/Fallacy/result.json",
+      "input_sha256": "4b9f1381e35bce9db0114a526507f3ec5977f5075936233e7e6d3d0b5aca8a17"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 7,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 62
+      },
+      "input_record": "renders/qa/series/stats12/en/Outro/result.json",
+      "input_sha256": "7168d18796d47eced8fa18a47bd3d3f689b03d316ab3209b28208f3eb06f027c"
+    }
+  ]
+}

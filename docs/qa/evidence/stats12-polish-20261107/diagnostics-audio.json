@@ -1,0 +1,106 @@
+{
+ "video": "stats12",
+ "scene": "Diagnostics",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 8,
+ "lines": [
+  {
+   "raw": "Chapter nine. Diagnostics.",
+   "spoken": "Chapter nine. Diagnostics.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/27e8ece44ab3f0a6.wav",
+   "duration": 2.5,
+   "tokens": 3,
+   "peak": 0.28289794921875,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "In 1973 Francis Anscombe published four small datasets to make a point. <bookmark mark='a'/> All four have the same means, the same variances, the same correlation, and the same fitted line: three plus a half x, with R squared of point six seven. <bookmark mark='b'/> The first is an ordinary noisy line. The second is a smooth curve, for which a straight line is the wrong model. The third is nearly a line with one outlier. The fourth has no relationship at all, except for a single point far to the right that decides the entire slope. <bookmark mark='c'/> Identical numbers, four different stories. Diagnostics are how you tell them apart without having to look at every plot.",
+   "spoken": "In 1973 Francis Anscombe published four small datasets to make a point. All four have the same means, the same variances, the same correlation, and the same fitted line: three plus a half x, with R squared of point six seven. The first is an ordinary noisy line. The second is a smooth curve, for which a straight line is the wrong model. The third is nearly a line with one outlier. The fourth has no relationship at all, except for a single point far to the right that decides the entire slope. Identical numbers, four different stories. Diagnostics are how you tell them apart without having to look at every plot.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/c8ce047cd6068884.wav",
+   "duration": 39.425,
+   "tokens": 112,
+   "peak": 0.470428466796875,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Two quantities do most of the work. <bookmark mark='a'/> The leverage of a point is its diagonal entry in the hat matrix, and for one predictor it measures how far its x is from the others. <bookmark mark='b'/> Leverages add up to p, so the average is p over n. <bookmark mark='c'/> A residual's variance is sigma squared times one minus the leverage: high-leverage points drag the line toward themselves, so their residuals look deceptively small. <bookmark mark='d'/> Dividing by that standard deviation gives the studentized residuals, which are comparable across points.",
+   "spoken": "Two quantities do most of the work. The leverage of a point is its diagonal entry in the hat matrix, and for one predictor it measures how far its x is from the others. Leverages add up to p, so the average is p over n. A residual's variance is sigma squared times one minus the leverage: high-leverage points drag the line toward themselves, so their residuals look deceptively small. Dividing by that standard deviation gives the studentized residuals, which are comparable across points.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/19220448d3a38167.wav",
+   "duration": 28.025,
+   "tokens": 84,
+   "peak": 0.77862548828125,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Here's the instrument built for this part, the influence probe. <bookmark mark='a'/> Twenty points and their fitted line. One point, in orange, can be dragged, and the line refits as it moves. The readout shows the slope, the point's leverage, and its Cook's distance, which measures how much the whole fit depends on it. <bookmark mark='b'/> Move it straight up, in the middle of the data. It gets a big residual, but the slope barely changes: at the centre, a point has little leverage. <bookmark mark='c'/> Now bring it back and slide it far to the right, along the line. Its leverage soars, but it agrees with the others, so nothing changes. <bookmark mark='d'/> Finally, far to the right and far off the line. Now the slope swings, and Cook's distance explodes. Influence needs both: leverage, from an unusual x, and a residual, from an unusual y.",
+   "spoken": "Here's the instrument built for this part, the influence probe. Twenty points and their fitted line. One point, in orange, can be dragged, and the line refits as it moves. The readout shows the slope, the point's leverage, and its Cook's distance, which measures how much the whole fit depends on it. Move it straight up, in the middle of the data. It gets a big residual, but the slope barely changes: at the centre, a point has little leverage. Now bring it back and slide it far to the right, along the line. Its leverage soars, but it agrees with the others, so nothing changes. Finally, far to the right and far off the line. Now the slope swings, and Cook's distance explodes. Influence needs both: leverage, from an unusual x, and a residual, from an unusual y.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/dd143ac6196d4c25.wav",
+   "duration": 43.725,
+   "tokens": 139,
+   "peak": 0.614593505859375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Dennis Cook's distance, from 1977, summarizes influence in one number: how far all the fitted values move when a point is deleted, scaled by the noise. It's a residual squared times a function of leverage, so it needs both. <bookmark mark='b'/> In Anscombe's third dataset, the outlier has a Cook's distance of one point four. A common rule of thumb says anything above one deserves a hard look. <bookmark mark='c'/> In the fourth, the lone point on the right has leverage exactly one: the slope is determined by that single point, the fit passes through it, and its residual is zero. Deleting it leaves no slope at all.",
+   "spoken": "Dennis Cook's distance, from 1977, summarizes influence in one number: how far all the fitted values move when a point is deleted, scaled by the noise. It's a residual squared times a function of leverage, so it needs both. In Anscombe's third dataset, the outlier has a Cook's distance of one point four. A common rule of thumb says anything above one deserves a hard look. In the fourth, the lone point on the right has leverage exactly one: the slope is determined by that single point, the fit passes through it, and its residual is zero. Deleting it leaves no slope at all.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/4d09c52cf224fbcc.wav",
+   "duration": 36.9,
+   "tokens": 104,
+   "peak": 0.64935302734375,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> What should you do with an influential point? <bookmark mark='b'/> First, check it. Is it a typing error, a member of a different population, a broken instrument? <bookmark mark='c'/> Then report the fit with and without it, and if the conclusions change, say so. <bookmark mark='d'/> Never delete points simply because they're inconvenient: that's one of Part 10's forking paths. <bookmark mark='e'/> And if outliers are part of the process, use a method designed for them, the robust regression of Part 30.",
+   "spoken": "What should you do with an influential point? First, check it. Is it a typing error, a member of a different population, a broken instrument? Then report the fit with and without it, and if the conclusions change, say so. Never delete points simply because they're inconvenient: that's one of Part 10's forking paths. And if outliers are part of the process, use a method designed for them, the robust regression of Part 30.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/16d92cdd7193dd9c.wav",
+   "duration": 24.8,
+   "tokens": 74,
+   "peak": 0.735565185546875,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "The single most useful diagnostic is a plot. <bookmark mark='a'/> Plot the residuals against the fitted values. For Anscombe's second dataset, the residuals form an arch. <bookmark mark='b'/> A curve means the model is missing a term: here, a square. <bookmark mark='c'/> A funnel means the noise grows with the fitted value, the subject of the next chapter. <bookmark mark='d'/> A few far points mean outliers or influence. <bookmark mark='e'/> A shapeless cloud is what you hope to see: whatever's left is noise.",
+   "spoken": "The single most useful diagnostic is a plot. Plot the residuals against the fitted values. For Anscombe's second dataset, the residuals form an arch. A curve means the model is missing a term: here, a square. A funnel means the noise grows with the fitted value, the subject of the next chapter. A few far points mean outliers or influence. A shapeless cloud is what you hope to see: whatever's left is noise.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/a781ac16ea08eb3e.wav",
+   "duration": 25.325,
+   "tokens": 73,
+   "peak": 0.530426025390625,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "One more plot belongs in every regression. <bookmark mark='a'/> Part 1's normal quantile plot, applied to the studentized residuals. Under IID homoskedastic normal errors, these dependent internally studentized residuals should lie approximately near the diagonal; this is a diagnostic, not a proof. <bookmark mark='b'/> Here they don't: both tails bend away, far heavier than normal. These are the funnel-shaped data of the next chapter, where the noisiest points are also the most influential. The plot can't tell you why the tails are heavy, but it tells you to find out.",
+   "spoken": "One more plot belongs in every regression. Part 1's normal quantile plot, applied to the studentized residuals. Under IID homoskedastic normal errors, these dependent internally studentized residuals should lie approximately near the diagonal; this is a diagnostic, not a proof. Here they don't: both tails bend away, far heavier than normal. These are the funnel-shaped data of the next chapter, where the noisiest points are also the most influential. The plot can't tell you why the tails are heavy, but it tells you to find out.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/967100cc0c4289db.wav",
+   "duration": 32.6,
+   "tokens": 86,
+   "peak": 0.480743408203125,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats12/en/Diagnostics_motion/result.json",
+ "input_sha256": "88957ccd65418f42b5cc8c8594d45e5f41cef53a9f4c90cd29d5a3a0aed0f97e"
+}

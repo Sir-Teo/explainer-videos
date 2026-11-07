@@ -68,6 +68,7 @@ class Collinear(VoiceoverScene):
                           MathTex(rf"\mathrm{{SE}}(\hat\beta_1 + \hat\beta_2) = {c['sum_se']:.2f}", font_size=24, color=OBS)
                           ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(A, DOWN, buff=0.2)
             panels.add(VGroup(A, ell, truth, est, label(ttl, font_size=26).next_to(A, UP, buff=0.12), info, sumline))
+        panels.shift(UP * 0.3)
         tag = simulated_tag(r"simulated: \ $y = 1 + x_1 + x_2 + \varepsilon$, \ $n = 50$", corner=UR)
         with self.voiceover(
             "Here's what it looks like. Two predictors, both with true coefficient one, fifty observations. "

@@ -1,0 +1,23 @@
+{
+  "part": "stats12",
+  "fingerprint": "c7e7b8fc0910329e32bd1ee6fc2d3e991ef5ba8b7f95fb3fad0992ec13945f8b",
+  "english_endpoints": 13,
+  "native_1080_endpoints": 8,
+  "silent_motion_chapters": 6,
+  "audio_scene": "Diagnostics",
+  "audio_lines": 8,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats12/en/Diagnostics/videos/s10_diagnostics/480p15/Diagnostics.mp4",
+    "seconds": 242.132682,
+    "narration_sha256": "9e51ded41e529c5fcf0b2a470d6d579a460d446278dea5f78849475739c018e1",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 242 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 242 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

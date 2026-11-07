@@ -1,0 +1,94 @@
+{
+  "fingerprint": "c7e7b8fc0910329e32bd1ee6fc2d3e991ef5ba8b7f95fb3fad0992ec13945f8b",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Principle",
+      "status": "needs-review",
+      "frames": 33,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 50
+      },
+      "input_record": "renders/qa/native1080/stats12/en/Principle/result.json",
+      "input_sha256": "c4189f76829240d264c287c926066e9ca59e64b59c4351152b025042e4b8fbc9"
+    },
+    {
+      "scene": "Geometry",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 43
+      },
+      "input_record": "renders/qa/native1080/stats12/en/Geometry/result.json",
+      "input_sha256": "32b030625f0ff4950996d0548d866be013fa9cbd81a1e08aa58b457783254da5"
+    },
+    {
+      "scene": "NormalTheory",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 53
+      },
+      "input_record": "renders/qa/native1080/stats12/en/NormalTheory/result.json",
+      "input_sha256": "7b34e65c711a84354a4625e519d08cca0c4fe370748128233b2ff49756017235"
+    },
+    {
+      "scene": "FWL",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 46
+      },
+      "input_record": "renders/qa/native1080/stats12/en/FWL/result.json",
+      "input_sha256": "05fe35ea5c2a305d6f87967d2bc02db7d8687fe79e13f91f1a2a3071a08d3ead"
+    },
+    {
+      "scene": "Bands",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 30
+      },
+      "input_record": "renders/qa/native1080/stats12/en/Bands/result.json",
+      "input_sha256": "fce8fc772fe70e2e6ab43ffb0e24d850b8f85967fbfbd7cb959a63fce6ff13df"
+    },
+    {
+      "scene": "Collinear",
+      "status": "needs-review",
+      "frames": 16,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 17
+      },
+      "input_record": "renders/qa/native1080/stats12/en/Collinear/result.json",
+      "input_sha256": "2fce693afa0ac9b91ed93308693c9c5dd9290594061c3b1226d40efc72ec654a"
+    },
+    {
+      "scene": "Diagnostics",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 45
+      },
+      "input_record": "renders/qa/native1080/stats12/en/Diagnostics/result.json",
+      "input_sha256": "c600c16b003a5af096d21f079a02afe3a29741afbdd12e1566183f6f922fd16d"
+    },
+    {
+      "scene": "Fallacy",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 43
+      },
+      "input_record": "renders/qa/native1080/stats12/en/Fallacy/result.json",
+      "input_sha256": "1f81bb52aca45ee0359b2881712d2eea99cf792be63e2a1b18ee0261386ac48b"
+    }
+  ]
+}
