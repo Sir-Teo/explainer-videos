@@ -40,6 +40,9 @@ class Equivariance(VoiceoverScene):
             "mark='d'/> So the risk curve is a single number, the stopped clocks are excluded, and a best equivariant rule "
             "can exist: we just minimize that number."
         ) as vo:
+            heading=label('Equivariance makes location risk constant',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -57,14 +60,18 @@ class Equivariance(VoiceoverScene):
         rows[3][-1].set_color(BAYESC)
         whys = [why(r"one rule plus a function of the gaps"), why(r"chapter 7's ancillary"), why(r"Pitman (1939)"), why(r"generalized Bayes")]
         with self.voiceover(
-            "<bookmark mark='a'/> Every equivariant rule is one of them, say the first observation, minus some function of "
-            "the gaps between the observations. <bookmark mark='b'/> The gaps are ancillary: their law does not involve "
-            "theta. Minimizing the risk means choosing that function as the conditional mean of the first rule given the "
-            "gaps, with theta set to zero. <bookmark mark='c'/> Edwin Pitman worked out the answer in 1939: the integral of "
-            "t times the likelihood, over the integral of the likelihood. <bookmark mark='d'/> That is the posterior mean "
-            "under a flat, improper prior on theta. The best equivariant estimator is a generalized Bayes rule, as chapter "
-            "three said the good ones would be."
+            "<bookmark mark='a'/> Every equivariant rule is one of them, chosen to have finite risk, such as the "
+            "median for five Cauchy observations, minus some function of the gaps between the observations. <bookmark"
+            " mark='b'/> The gaps are ancillary: their law does not involve theta. Minimizing the risk means choosing"
+            " that function as the conditional mean of the first rule given the gaps, with theta set to zero. "
+            "<bookmark mark='c'/> Edwin Pitman worked out the answer in 1939: the integral of t times the likelihood,"
+            " over the integral of the likelihood. <bookmark mark='d'/> That is the posterior mean under a flat, "
+            "improper prior on theta. When these integrals and the required moments exist, the best equivariant "
+            "estimator is a generalized Bayes rule, as chapter three said the good ones would be."
         ) as vo:
+            heading=label('A finite-risk equivariant rule can be improved using its gaps',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -85,13 +92,7 @@ class Equivariance(VoiceoverScene):
             label(r"normal: \ Pitman = the mean; \ uniform: \ Pitman = the midrange", font_size=24, color=ADMC),
         ), 12.4, 0.2, [0, -2.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Pitman's estimator under four error laws, five observations each, against the mean and "
-            f"the median. <bookmark mark='b'/> For normal errors, it is the mean, and the median is about forty percent "
-            f"worse. <bookmark mark='c'/> For Laplace errors, the median beats the mean, and Pitman beats both. <bookmark "
-            f"mark='d'/> For uniform errors, Pitman is the midrange, with about a third of the median's mean squared error. "
-            f"<bookmark mark='e'/> For Cauchy errors, the mean has no finite risk at all; the median is reasonable, and "
-            f"Pitman is still seventeen percent better. In every case the best equivariant rule adapts itself to the shape "
-            f"of the errors."
+            f"<bookmark mark='a'/> Pitman's estimator under four error laws, five observations each, against the mean and the median. <bookmark mark='b'/> For normal errors, it is the mean, and the median is about forty percent worse. <bookmark mark='c'/> For Laplace errors, the median beats the mean, and Pitman beats both. <bookmark mark='d'/> For uniform errors, Pitman is the midrange, with about a third of the median's mean squared error. <bookmark mark='e'/> For Cauchy errors, the mean has no finite risk at all; the median is reasonable, and the numerical Pitman approximation has about seventeen percent less estimated risk in this finite simulation. This is a Monte Carlo comparison, with whole-line adaptive integration, rather than an exact percentage for the population. In every case the best equivariant rule adapts itself to the shape of the errors."
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(note_[0]), FadeIn(exact_tag(r"simulated: 4,000 samples per family")))
             for k, m_ in enumerate("bcde"):
@@ -139,22 +140,29 @@ class Equivariance(VoiceoverScene):
 
     def scale(self):
         rows = [
-            cmath(r"X_i = \sigma \varepsilon_i", r":", r"\text{a scale family; \ loss } (d/\sigma^2 - 1)^2", font_size=32),
-            cmath(r"\delta(cx)", r"=", r"c^2 \delta(x): \ \text{scale equivariance}", font_size=34),
+            cmath(r"X_i=\mu+\sigma\varepsilon_i,\quad\varepsilon_i\sim N(0,1)", r":", r"\text{unknown }\mu,\sigma;\ \text{loss } (d/\sigma^2 - 1)^2", font_size=32),
+            cmath(r"\delta(a+cx)", r"=", r"c^2 \delta(x): \ \text{location-scale equivariance}", font_size=34),
             cmath(r"\text{normal}", r":", r"\text{the best is } \textstyle\sum (x_i - \bar x)^2 / (n + 1)", font_size=34),
-            cmath(r"\text{the minimum-risk scale rule}", r"=", r"\text{generalized Bayes for } \pi(\sigma) \propto 1/\sigma", font_size=30),
+            cmath(r"\text{relative-loss Bayes action}", r"=", r"\frac{E[\sigma^{-2}\mid x]}{E[\sigma^{-4}\mid x]};\quad \pi(d\mu,d\sigma)\propto d\mu\,d\sigma/\sigma", font_size=30),
         ]
         rows[2][-1].set_color(ADMC)
         rows[3][-1].set_color(BAYESC)
-        whys = [why(r"multiply the data, \ multiply the answer"), why(r"invariant loss"), why(r"chapter 3's winner"), why(r"Jeffreys's prior")]
+        whys = [why(r"multiply the data, \ multiply the answer"), why(r"invariant loss"), why(r"chapter 3's winner"), why(r"right Haar; relative squared loss")]
         with self.voiceover(
-            "<bookmark mark='a'/> The same idea works for scale. If each observation is sigma times a known error, and the "
-            "loss compares the estimate to sigma squared in relative terms, <bookmark mark='b'/> then rescaling the data "
-            "should rescale the answer. <bookmark mark='c'/> For normal data, the best scale-equivariant estimator of the "
-            "variance divides the sum of squares by n plus one: chapter three's winner, now with a reason. <bookmark "
-            "mark='d'/> And again it is generalized Bayes, for the prior one over sigma: Jeffreys's prior for a scale "
-            "parameter."
+            "<bookmark mark='a'/> The same idea works for scale. For normal observations with unknown mean mu and "
+            "variance sigma squared, use relative squared loss for estimating the variance and the full "
+            "location-scale group. <bookmark mark='b'/> Shifting and rescaling the data must leave a variance "
+            "estimate unchanged by shifts and multiply it by the squared scale factor. <bookmark mark='c'/> For "
+            "normal data, the best location-scale-equivariant estimator of the variance divides the sum of squares by"
+            " n plus one: chapter three's winner, now with a reason. <bookmark mark='d'/> And again it is generalized"
+            " Bayes, under the right Haar measure d mu d sigma over sigma. For this relative loss the Bayes action is"
+            " the ratio of posterior inverse-variance moments, not the posterior mean of the variance. If the mean is"
+            " instead known to be zero, the pure-scale answer uses the uncentered sum of squares divided by n plus "
+            "two."
         ) as vo:
+            heading=label('Location-scale variance estimation uses relative squared loss',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -166,19 +174,20 @@ class Equivariance(VoiceoverScene):
             label(r"in general: \ a group acts on the data and the parameter; \ the loss is invariant", font_size=26),
             label(r"the best equivariant rule = \ generalized Bayes for the right Haar measure", font_size=26, color=BAYESC),
             label(r"Girshick \& Savage (1951): \ Pitman's estimator is minimax", font_size=26, color=MMC),
-            label(r"Stein (1959), \ Brown (1966): \ admissible in 1 and 2 dimensions, \ \emph{not} in 3", font_size=26, color=INADC),
+            label(r"normal means with identity covariance: $X$ admissible iff $p\le2$", font_size=26, color=INADC),
             label(r"in $\mathbb R^p$ with $f = N(0, I)$: \ Pitman's estimator is $X$ \ itself", font_size=26, color=S.ACCENT),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The general setting: a group acts on the sample space and on the parameter, and the loss "
-            "is unchanged by it. <bookmark mark='b'/> Under conditions, the best equivariant rule is the generalized Bayes "
-            "rule for the right Haar measure of the group, the flat prior and one over sigma being two cases. <bookmark "
-            "mark='c'/> Meyer Girshick and Savage proved in 1951 that Pitman's estimator is minimax. <bookmark mark='d'/> "
-            "Stein proved in 1959 that it is admissible in one dimension, and Brown in 1966 that it is admissible in two but, quite generally, not in three or more. "
-            "<bookmark mark='e'/> For normal errors in p dimensions, Pitman's estimator is just X: best equivariant, "
-            "minimax, and, as the hook showed, inadmissible. Equivariance cannot see Stein's paradox, because the "
-            "James–Stein estimator is not translation equivariant: it shrinks toward a particular point."
-        ) as vo:
+            "<bookmark mark='a'/> The general setting: a group acts on the sample space and on the parameter, and the"
+            " loss is unchanged by it. <bookmark mark='b'/> Under conditions, the best equivariant rule is the "
+            "generalized Bayes rule for the right Haar measure of the group, the flat prior and one over sigma being "
+            "two cases. <bookmark mark='c'/> Meyer Girshick and Savage proved in 1951 that Pitman's estimator is "
+            "minimax. <bookmark mark='d'/> Admissibility results for general location families require their own "
+            "moment and regularity assumptions. For the identity-covariance normal-mean problem, the exact threshold "
+            "is one or two dimensions versus at least three. <bookmark mark='e'/> For normal errors in p dimensions, "
+            "Pitman's estimator is just X: best equivariant, minimax, and, as the hook showed, inadmissible. "
+            "Equivariance cannot see Stein's paradox, because the James–Stein estimator is not translation "
+            "equivariant: it shrinks toward a particular point."       ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))

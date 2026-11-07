@@ -1,0 +1,58 @@
+[
+  {
+    "path": ".cache/stats45/basu.json",
+    "sha256": "2c1d221c54a4bb195db4d97cb0671e423a6f9c4e7ee036b068b2ad3268b25c68"
+  },
+  {
+    "path": ".cache/stats45/binomial.json",
+    "sha256": "d583eb687d4a3052ad475c0f46eb7e41167c99189f7e767b619ff6706ccedb57"
+  },
+  {
+    "path": ".cache/stats45/board.json",
+    "sha256": "72f38c01e827506491e12cf0bf6c2bcc97722c5c6cd5c4c7abef0651c6b7de3a"
+  },
+  {
+    "path": ".cache/stats45/brown.json",
+    "sha256": "9ac9dc87b9a21f301f0037698185ed05a9cf862a4474247bf521b3abdbad6190"
+  },
+  {
+    "path": ".cache/stats45/complete.json",
+    "sha256": "b6d1d24de6535e6e030778d2ad6397c1c3ad396e40c11a554e02187653e3a6cc"
+  },
+  {
+    "path": ".cache/stats45/decision.json",
+    "sha256": "bf3d5fe70d23d7eef3d16d79101b86c343bbeeab13f8b095463cd9c7712c599f"
+  },
+  {
+    "path": ".cache/stats45/eb.json",
+    "sha256": "6619067339aca84b610d8d6f754ac2bcbb2af6ff9671165bcec840163fea86b5"
+  },
+  {
+    "path": ".cache/stats45/expfam.json",
+    "sha256": "2d6d2e15513641ae1bc292738d311287fd8a0bf814ca19631a5b80c2d8b8efb5"
+  },
+  {
+    "path": ".cache/stats45/hook.json",
+    "sha256": "71300c1e1dd9aa52d7ff79dd66b9fdc3895fac49fe31385594e48c390a5d7ede"
+  },
+  {
+    "path": ".cache/stats45/info.json",
+    "sha256": "c40ada92c65269421ced82d933bdc35adbaf6452e62c40e3c81f63da0d9a2afc"
+  },
+  {
+    "path": ".cache/stats45/minimax.json",
+    "sha256": "d63f457351ac584601e504226f9b29e7ff611912ab3720569039b55204541b6c"
+  },
+  {
+    "path": ".cache/stats45/pitman.json",
+    "sha256": "834b001e4785186fdccfeddebed5e5b9ac560db7b84014291ab5ac558c36cb42"
+  },
+  {
+    "path": ".cache/stats45/stein.json",
+    "sha256": "0b5ede4dddf4908f9cc39ec8a5e89ff0552c091ce5f59561a8a91b334f3a9865"
+  },
+  {
+    "path": ".cache/stats45/suff.json",
+    "sha256": "b028a074cbcfd85bc837a8aa403bd100d4e55e2d3b203ce0dda40467095e252b"
+  }
+]

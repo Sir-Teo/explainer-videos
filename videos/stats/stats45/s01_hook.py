@@ -23,13 +23,13 @@ class Hook(VoiceoverScene):
             label(r"1961: \ with Willard James, \ an explicit one: \ the James--Stein estimator", font_size=26, color=S.ACCENT),
         ), 12.4, 0.55, [0, -0.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> At the Third Berkeley Symposium, held in 1954 and 1955 and published in 1956, Charles "
-            "Stein presented a result that many statisticians at first refused to believe. <bookmark mark='b'/> If you estimate three or more normal means, each from its "
-            "own observation, the obvious estimate, the observations themselves, is inadmissible. <bookmark mark='c'/> There "
-            "is another estimator whose expected squared error is smaller for every possible value of the means, with no "
-            "exceptions. <bookmark mark='d'/> Six years later, with his student Willard James, he wrote one down: the "
-            "James–Stein estimator, which shrinks every observation toward zero."
-        ) as vo:
+            "<bookmark mark='a'/> At the Third Berkeley Symposium, held in 1954 and 1955 and published in 1956, "
+            "Charles Stein presented a result that many statisticians at first refused to believe. <bookmark "
+            "mark='b'/> If you estimate three or more normal means, each from its own observation, the obvious "
+            "estimate, the observations themselves, is inadmissible. <bookmark mark='c'/> There is another estimator "
+            "whose expected squared error is smaller for every possible value of the means, with no exceptions. "
+            "<bookmark mark='d'/> In 1961, with Willard James, he wrote one down: the James–Stein estimator, which "
+            "shrinks every observation toward zero."       ) as vo:
             self.play(FadeIn(tl))
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -50,16 +50,17 @@ class Hook(VoiceoverScene):
             label(r"blue: \ $\hat\theta = X$, \ risk $p$ everywhere", font_size=22, color=MLEC),
             label(r"$\hat\theta_{JS} = \big(1 - \tfrac{p - 2}{\|X\|^2}\big) X$", font_size=22, color=JSC),
             label(r"exact risk: \ teal $p = 3$, \ purple $5$, \ green $10$", font_size=22, color=JSC),
-            label(r"at $\theta = 0$: \ risk 2, \ whatever $p$", font_size=22, color=S.ACCENT),
+            label(r"at $\theta = 0$: \ risk 2 for every $p\ge3$", font_size=22, color=S.ACCENT),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Here is the claim, drawn exactly. Observe X, normal with mean vector theta and identity "
-            "covariance in p dimensions, and pay the squared distance from your estimate to theta. <bookmark mark='b'/> "
-            "The obvious estimate, X itself, has expected loss p, whatever theta is: the flat blue line, divided by p. "
-            "<bookmark mark='c'/> James and Stein multiply X by one minus p minus two over the squared length of X. "
-            "<bookmark mark='d'/> Its risk, computed exactly from a Poisson mixture of chi-squares, lies below the line "
-            "everywhere, in three, five and ten dimensions. <bookmark mark='e'/> At theta equal to zero the risk is two, "
-            "whatever the dimension; far away it creeps back up to p, but never reaches it."
+            "<bookmark mark='a'/> Here is the claim, drawn exactly. Observe X, normal with mean vector theta and "
+            "identity covariance in p dimensions, and pay the squared distance from your estimate to theta. <bookmark"
+            " mark='b'/> The obvious estimate, X itself, has expected loss p, whatever theta is: the flat blue line, "
+            "divided by p. <bookmark mark='c'/> James and Stein multiply X by one minus p minus two over the squared "
+            "length of X. <bookmark mark='d'/> Its risk, computed exactly from a Poisson mixture of chi-squares, lies"
+            " below the line everywhere, in three, five and ten dimensions. <bookmark mark='e'/> At theta equal to "
+            "zero the risk is two, for every dimension at least three; far away it creeps back up to p, but never "
+            "reaches it."
         ) as vo:
             self.play(FadeIn(A), FadeIn(exact_tag(r"exact: \ Poisson mixtures of $\chi^2$")))
             vo.wait_until("a")
@@ -83,13 +84,14 @@ class Hook(VoiceoverScene):
             label(r"no single coordinate is guaranteed to improve", font_size=26, color=INADC),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> What made the result so hard to accept is that the coordinates need have nothing to do "
-            "with each other: the price of tea in Leeds, a hitter's batting average, the brightness of a star. <bookmark "
-            "mark='b'/> Measure each once, with unit noise. <bookmark mark='c'/> The James–Stein estimate shrinks all three "
-            "toward zero by a common factor that depends on all three measurements. <bookmark mark='d'/> And its total "
-            "squared error is smaller on average, for every combination of tea, hitter and star. <bookmark mark='e'/> The "
-            "catch, which we will make precise, is that the guarantee is for the total; no single coordinate is promised an "
-            "improvement."
+            "<bookmark mark='a'/> What made the result so hard to accept is that the coordinates need have nothing to"
+            " do with each other: the price of tea in Leeds, a hitter's batting average, the brightness of a star. "
+            "<bookmark mark='b'/> Measure each once, with independent unit-variance Gaussian noise after choosing the"
+            " measurement scale and squared-error weights. <bookmark mark='c'/> The James–Stein estimate shrinks all "
+            "three toward zero by a common factor that depends on all three measurements. <bookmark mark='d'/> And "
+            "its total squared error is smaller on average, for every combination of tea, hitter and star. <bookmark "
+            "mark='e'/> The catch, which we will make precise, is that the guarantee is for the total; no single "
+            "coordinate is promised an improvement."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

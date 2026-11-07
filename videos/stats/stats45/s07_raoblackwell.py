@@ -33,14 +33,19 @@ class RaoBlackwell(VoiceoverScene):
         rows[3][-1].set_color(ADMC)
         whys = [why(r"sufficiency is used here"), why(r"the tower property"), why(r"Part 44's variance decomposition"), why(r"Rao (1945), \ Blackwell (1947)")]
         with self.voiceover(
-            "<bookmark mark='a'/> Take any estimator and average it over the data given a sufficient statistic. Because T "
-            "is sufficient, that conditional expectation does not depend on theta, so it is a genuine estimator, computable "
-            "from data. <bookmark mark='b'/> By the tower property it has the same expectation, hence the same bias. "
-            "<bookmark mark='c'/> By the conditional variance decomposition its variance is smaller, by the average "
-            "conditional variance that was thrown away. <bookmark mark='d'/> And for any convex loss, Jensen's inequality "
-            "gives smaller risk at every theta. That is the theorem of C. R. Rao, 1945, and David Blackwell, 1947: under "
-            "convex loss, only functions of a sufficient statistic are worth considering."
+            "<bookmark mark='a'/> Take an integrable estimator with actions in a convex space and average it over the"
+            " data given a sufficient statistic. Because T is sufficient, that conditional expectation does not "
+            "depend on theta, so it is a genuine estimator, computable from data. <bookmark mark='b'/> By the tower "
+            "property it has the same expectation, hence the same bias. <bookmark mark='c'/> By the conditional "
+            "variance decomposition for square-integrable estimators its variance is no larger, by the average "
+            "conditional variance that was thrown away. <bookmark mark='d'/> And for any convex loss, Jensen's "
+            "inequality gives no larger risk at every theta whenever the relevant convex-loss expectations exist. "
+            "That is the theorem of C. R. Rao, 1945, and David Blackwell, 1947: under convex loss, only functions of "
+            "a sufficient statistic are worth considering."
         ) as vo:
+            heading=label('Under convex loss, Rao-Blackwellization cannot increase risk',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -104,6 +109,9 @@ class RaoBlackwell(VoiceoverScene):
             "statistic beats every unbiased estimator, at every theta, under every convex loss: the uniformly minimum-"
             "variance unbiased estimator. Part nine stated this; here it is proved."
         ) as vo:
+            heading=label('Complete sufficiency singles out the best unbiased estimator',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -158,14 +166,15 @@ class RaoBlackwell(VoiceoverScene):
             label(r"blue: \ the MLE $e^{-2X}$, \ biased, \ far better", font_size=22, color=MLEC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> But unbiasedness can be absurd. Observe one Poisson count with mean lambda and estimate e "
-            "to the minus two lambda: the chance of no events in the next two periods. <bookmark mark='b'/> Expanding the "
-            "Poisson probabilities shows that the only unbiased estimator is minus one to the power X: plus one for an even "
-            "count, minus one for an odd count. <bookmark mark='c'/> The count is complete and sufficient, so this is the "
-            "UMVUE, and it estimates a probability by minus one half of the time. <bookmark mark='d'/> Replacing minus one "
-            "by zero, the indicator that X is even, is biased but dominates it everywhere. <bookmark mark='e'/> And the "
-            "maximum likelihood estimate, e to the minus two X, is better still across this range. Best among unbiased "
-            "estimators can mean best among bad ones."
+            "<bookmark mark='a'/> But unbiasedness can be absurd. Observe one Poisson count with mean lambda and "
+            "estimate e to the minus two lambda: the chance of no events in the next two periods. <bookmark "
+            "mark='b'/> Expanding the Poisson probabilities shows that the only unbiased estimator is minus one to "
+            "the power X: plus one for an even count, minus one for an odd count. <bookmark mark='c'/> The count is "
+            "complete and sufficient, so this is the UMVUE, and it can estimate a probability by minus one. That "
+            "probability is one minus e to the minus two lambda, divided by two; it approaches a half only as lambda "
+            "grows. <bookmark mark='d'/> Replacing minus one by zero, the indicator that X is even, is biased but "
+            "dominates it everywhere. <bookmark mark='e'/> And the maximum likelihood estimate, e to the minus two X,"
+            " is better still across this range. Best among unbiased estimators can mean best among bad ones."
         ) as vo:
             self.play(FadeIn(A), FadeIn(exact_tag(r"exact: \ Poisson generating functions")))
             vo.wait_until("a")
@@ -188,11 +197,12 @@ class RaoBlackwell(VoiceoverScene):
             label(r"chapter 3's $s^2$ and this $(-1)^X$: \ unbiased, \ and inadmissible", font_size=26, color=S.ACCENT),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The lessons. Rao–Blackwell is a universal improvement: whatever you do, condition on a "
-            "sufficient statistic. <bookmark mark='b'/> Lehmann–Scheffé, with completeness, singles out the best unbiased "
-            "estimator. <bookmark mark='c'/> But unbiasedness is a restriction on the competition, not a virtue in itself, "
-            "and it can exclude every sensible rule. <bookmark mark='d'/> Chapter three's sample variance and this chapter's "
-            "minus one to the X are both unbiased and both inadmissible."
+            "<bookmark mark='a'/> The lessons. For integrable estimators, convex actions and convex loss, "
+            "Rao–Blackwellization cannot increase risk. Equality is possible. <bookmark mark='b'/> Lehmann–Scheffé, "
+            "with completeness, singles out the best unbiased estimator. <bookmark mark='c'/> But unbiasedness is a "
+            "restriction on the competition, not a virtue in itself, and it can exclude every sensible rule. "
+            "<bookmark mark='d'/> Chapter three's sample variance and this chapter's minus one to the X are both "
+            "unbiased and both inadmissible."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

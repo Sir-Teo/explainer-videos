@@ -1,0 +1,45 @@
+  compute hook ...
+  done    hook in 0s
+  compute decision ...
+  done    decision in 0s
+  compute binomial ...
+  done    binomial in 0s
+  compute complete ...
+  done    complete in 0s
+  compute expfam ...
+  done    expfam in 0s
+  compute suff ...
+  done    suff in 1s
+  compute basu ...
+  done    basu in 0s
+  compute info ...
+  done    info in 0s
+  compute pitman ...
+  done    pitman in 5s
+  compute stein ...
+  done    stein in 0s
+  compute brown ...
+  done    brown in 0s
+  compute minimax ...
+  done    minimax in 1s
+  compute eb ...
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspace/explainer-videos/videos/stats/stats45/compute.py", line 480, in <module>
+    CACHE.main({k: (lambda f=f: nest(f())) for k, f in ITEMS.items()}, __doc__)
+  File "/workspace/explainer-videos/explainer/ai/cache.py", line 137, in main
+    self.save(name, items[name]())
+                    ^^^^^^^^^^^^^
+  File "/workspace/explainer-videos/videos/stats/stats45/compute.py", line 480, in <lambda>
+    CACHE.main({k: (lambda f=f: nest(f())) for k, f in ITEMS.items()}, __doc__)
+                                     ^^^
+  File "/workspace/explainer-videos/videos/stats/stats45/compute.py", line 408, in compute_eb
+    npm = poisson_mixture(f)
+          ^^^^^^^^^^^^^^^^^^
+  File "/workspace/explainer-videos/videos/stats/stats45/compute.py", line 122, in poisson_mixture
+    raise RuntimeError(f"Poisson mixture likelihood certificate did not converge: {last}")
+RuntimeError: Poisson mixture likelihood certificate did not converge: {'grid': array([0.        , 0.34644076, 2.56363503, 0.13970222, 0.20694726,
+       0.3410201 , 0.2576428 , 2.56030518]), 'w': array([0.40438621, 0.51777323, 0.00484966, 0.04254914, 0.00745261,
+       0.0091061 , 0.01024603, 0.00363702]), 'post_mean': array([0.1679868 , 0.36281716, 0.53029943, 1.25581884, 2.20476039,
+       2.50629841, 2.55450421, 2.5611693 ]), 'loglik': -5340.703496543298, 'kkt_gap_per_observation': 1.6668718183510123e-08, 'loglik_gap_bound': 0.00015770274273418927, 'iterations': 6, 'support_domain': [0.0, 7.0], 'optimizer_success': True}

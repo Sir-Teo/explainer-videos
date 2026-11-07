@@ -25,22 +25,26 @@ class Sufficiency(VoiceoverScene):
         rows = [
             cmath(r"T \text{ sufficient}", r":", r"P_\theta(X \in \cdot \mid T) \text{ does not depend on } \theta", font_size=32),
             cmath(r"\text{equivalently}", r":", r"E_\theta[f(X) \mid \sigma(T)] \text{ is the same for all } \theta", font_size=32),
-            cmath(r"\{P_\theta\} \ll \nu", r"\Rightarrow", r"T \text{ sufficient} \iff p_\theta(x) = g_\theta(T(x))\, h(x)", font_size=32),
+            cmath(r"\{P_\theta\}\ll\nu,\ \nu\text{ sigma-finite}", r"\Rightarrow", r"T \text{ sufficient} \iff p_\theta(x) = g_\theta(T(x))\, h(x)", font_size=32),
             cmath(r"\text{proof}", r":", r"\text{a countable mixture } \textstyle\sum c_i P_{\theta_i} \text{ dominates all } P_\theta", font_size=30),
         ]
         rows[0][-1].set_color(S.ACCENT)
         rows[2][-1].set_color(ADMC)
         whys = [why(r"Fisher (1922)"), why(r"Part 44's conditional expectation"), why(r"Halmos--Savage (1949)"), why(r"the key lemma")]
         with self.voiceover(
-            "<bookmark mark='a'/> Fisher's definition, from 1922: a statistic T is sufficient if, once T is known, the "
-            "conditional law of the rest of the data no longer depends on the parameter. <bookmark mark='b'/> In Part "
-            "forty-four's language, conditional expectations given the sigma-algebra of T can be chosen the same for every "
-            "theta. <bookmark mark='c'/> Paul Halmos and Jimmie Savage proved the factorization theorem in this generality "
-            "in 1949: for a family dominated by one measure, T is sufficient exactly when each density factors into a "
-            "function of theta and T, times a function of the data alone. <bookmark mark='d'/> The key step is a lemma: any "
-            "dominated family is dominated by a countable mixture of its own members, which plays the role of a reference "
-            "measure that no parameter value can see past."
+            "<bookmark mark='a'/> Fisher's definition, from 1922: a statistic T is sufficient if, once T is known, "
+            "the conditional law of the rest of the data no longer depends on the parameter. <bookmark mark='b'/> In "
+            "Part forty-four's language, conditional expectations given the sigma-algebra of T can be chosen the same"
+            " for every theta. <bookmark mark='c'/> Paul Halmos and Jimmie Savage proved the factorization theorem in"
+            " this generality in 1949: for a family dominated by a common sigma-finite measure, T is sufficient "
+            "exactly when each density factors into a function of theta and T, times a function of the data alone. "
+            "<bookmark mark='d'/> The key step is a lemma: a family dominated by a sigma-finite measure admits a "
+            "dominating countable mixture of its own members, which plays the role of a reference measure that no "
+            "parameter value can see past."
         ) as vo:
+            heading=label('Sufficiency permits a common parameter-free conditional law',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -59,13 +63,16 @@ class Sufficiency(VoiceoverScene):
         whys = [why(r"the coarsest lossless summary"), why(r"Lehmann--Scheff\'e (1950)"), why(r"the ratio of two samples"), why(r"two numbers, \ any $n$")]
         with self.voiceover(
             "<bookmark mark='a'/> Sufficient statistics are not unique: the whole data set is one. The useful one is "
-            "minimal, a function of every other sufficient statistic, the coarsest summary that loses nothing. <bookmark "
-            "mark='b'/> Erich Lehmann and Henry Scheffé gave a test in 1950: two samples should be lumped together exactly "
-            "when their likelihood ratio does not depend on the parameter. <bookmark mark='c'/> For the normal, the ratio "
-            "involves the data only through the sums of the observations and of their squares, <bookmark mark='d'/> so "
-            "those two numbers, or equivalently the mean and the sample variance, are minimal sufficient, whatever the "
-            "sample size."
+            "minimal, a function of every other sufficient statistic, the coarsest summary that loses nothing. "
+            "<bookmark mark='b'/> Erich Lehmann and Henry Scheffé gave a test in 1950: two samples should be lumped "
+            "together exactly when their likelihood ratio does not depend on the parameter. <bookmark mark='c'/> For "
+            "the normal, the ratio involves the data only through the sums of the observations and of their squares, "
+            "<bookmark mark='d'/> so those two numbers, or equivalently its mean and the sample variance, are minimal"
+            " sufficient for n at least two."
         ) as vo:
+            heading=label('Minimal sufficiency identifies proportional likelihoods',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -78,7 +85,7 @@ class Sufficiency(VoiceoverScene):
                 [r"Poisson, \ binomial", r"$\sum x_i$", r"yes"],
                 [r"$U(0, \theta)$", r"$\max x_i$", r"yes"],
                 [r"$U(\theta, \theta + 1)$", r"$(\min x_i, \max x_i)$", r"no"],
-                [r"$N(\theta, \theta^2)$", r"$(\sum x_i, \sum x_i^2)$", r"no"],
+                [r"$N(\theta, \theta^2)$, $\theta>0$", r"$(\sum x_i, \sum x_i^2)$", r"no"],
                 [r"Cauchy, \ Laplace location", r"the order statistics", r"no"]]
         tab = table_rows(rows, font_size=28, col_buff=1.0, row_buff=0.28, colors=[GREY_A, None, None, None, MMC, MMC, INADC]).move_to([0, 0.3, 0])
         with self.voiceover(
@@ -111,14 +118,18 @@ class Sufficiency(VoiceoverScene):
         rows[2][-1].set_color(INADC)
         whys = [why(r"only zero is unbiased for zero"), why(r"a polynomial with all roots"), why(r"not complete"), why(r"for Lehmann--Scheff\'e")]
         with self.voiceover(
-            "<bookmark mark='a'/> A statistic is complete if the only function of it with mean zero for every theta is zero "
-            "itself. <bookmark mark='b'/> For the binomial, a function with mean zero gives a polynomial in the odds that "
-            "vanishes for every value of the odds, so every coefficient is zero: the count is complete. <bookmark "
-            "mark='c'/> For the uniform on theta to theta plus one, the range minus its expectation, n minus one over n plus "
-            "one, has mean zero for every theta but is not zero: the minimal sufficient statistic is not complete. <bookmark "
-            "mark='d'/> Completeness says that the statistic carries no component whose average is always nothing, no pure "
+            "<bookmark mark='a'/> A statistic is complete if every function integrable under all parameter values, "
+            "with mean zero for every theta, vanishes almost surely under every model law. <bookmark mark='b'/> For "
+            "the binomial, a function with mean zero gives a polynomial in the odds that vanishes for every value of "
+            "the odds, so every coefficient is zero: the count is complete. <bookmark mark='c'/> For the uniform on "
+            "theta to theta plus one, the range minus its expectation, n minus one over n plus one, has mean zero for"
+            " every theta but is not zero: the minimal sufficient statistic is not complete. <bookmark mark='d'/> "
+            "Completeness says that the statistic carries no component whose average is always nothing, no pure "
             "noise. That is exactly what the next chapter needs to make a best unbiased estimator unique."
         ) as vo:
+            heading=label('Completeness rules out integrable nonzero unbiased zeros',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -139,7 +150,7 @@ class Sufficiency(VoiceoverScene):
             label(rf"$n = {n}$ from $U(\theta, \theta + 1)$", font_size=22),
             label(r"the range has density $n(n - 1) r^{n-2}(1 - r)$", font_size=22, color=MMC),
             label(r"the same for $\theta = 0$, \ $\theta = 5$, \ any $\theta$: \ ancillary", font_size=22, color=S.ACCENT),
-            label(rf"its mean $\tfrac{{n - 1}}{{n + 1}} = {mean:.3f}$: \ a mean-zero function of $T$", font_size=22, color=INADC),
+            label(rf"$R-E R$: mean zero; $E R={mean:.3f}$; a nonzero function of $T$", font_size=22, color=INADC),
             label(r"yet it tells us how precise this sample is", font_size=22, color=ADMC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(

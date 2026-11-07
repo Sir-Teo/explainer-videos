@@ -1,0 +1,32 @@
+{
+  "independent_datasets": [
+    {
+      "dataset": "Efron-Morris hitters",
+      "rows": 18,
+      "comparison": "All names, first-45 hits, rest-season at-bats and published three-decimal rest-season averages agree exactly",
+      "source": "https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/pscl/EfronMorris.csv",
+      "sha256": "18859844ec0c0d7fcfb35c1a625a75965750b026ab54cf0de7822d8c1eee33bc"
+    },
+    {
+      "dataset": "Automobile claim frequencies",
+      "policies": 9461,
+      "counts": [
+        7840,
+        1317,
+        239,
+        42,
+        14,
+        4,
+        4,
+        1
+      ],
+      "comparison": "All eight frequency cells in Efron and Hastie Table 6.1 match exactly",
+      "source": "https://hastie.su.domains/CASI_files/PDF/casi.pdf.download.html",
+      "download": "https://drive.google.com/uc?export=download&id=1--hEc7dt-bfMxF-qhKsPuDxDEVJzLalS",
+      "sha256": "b9452a7e64809f003bf751bf942611c754d0c49c47615bcdd96e29eb560aa5fd"
+    }
+  ],
+  "not_independently_retrieved": [
+    "Ruggles-Brodie historical production table: cited 1947 article; exact tank sampling formulas separately checked"
+  ]
+}

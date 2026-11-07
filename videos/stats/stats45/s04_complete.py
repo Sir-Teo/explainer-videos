@@ -23,7 +23,7 @@ class CompleteClass(VoiceoverScene):
 
     def bayes_admissible(self):
         rows = [
-            cmath(r"\delta_\pi", r":", r"\text{the unique Bayes rule for a proper prior } \pi", font_size=32),
+            cmath(r"\delta_\pi", r":", r"\text{proper prior; finite Bayes risk; uniqueness under all model laws}", font_size=32),
             cmath(r"\text{if } \delta' \text{ dominates } \delta_\pi", r"\Rightarrow", r"r(\pi, \delta') \le r(\pi, \delta_\pi)", font_size=32),
             cmath(r"\Rightarrow", r"\;", r"\delta' \text{ is Bayes too, } \ \text{so } \delta' = \delta_\pi: \ \text{no strict domination}", font_size=30),
             cmath(r"\text{so}", r":", r"\text{unique Bayes rules are admissible}", font_size=34),
@@ -31,13 +31,18 @@ class CompleteClass(VoiceoverScene):
         rows[3][-1].set_color(ADMC)
         whys = [why(r"e.g.\ a posterior mean"), why(r"average the domination over $\pi$"), why(r"uniqueness"), why(r"one direction")]
         with self.voiceover(
-            "<bookmark mark='a'/> First, the easy direction. Take a proper prior whose Bayes rule is unique, as a posterior "
-            "mean under squared error usually is. <bookmark mark='b'/> If some rule dominated it, then averaging its "
-            "smaller-or-equal risk over the prior would give a Bayes risk no larger. <bookmark mark='c'/> So the dominating "
-            "rule would also be Bayes, and by uniqueness it would be the same rule: there is no strict domination. <bookmark "
-            "mark='d'/> Unique Bayes rules are admissible. The deeper question is the converse: is every admissible rule "
-            "Bayes?"
+            "<bookmark mark='a'/> First, the easy direction. Take a proper prior with finite Bayes risk and a Bayes "
+            "rule unique up to sets null under every model law. This holds for the full-support finite example and "
+            "for the Gaussian examples here. Posterior uniqueness only under the prior predictive law would not be "
+            "sufficient in every statistical model. <bookmark mark='b'/> If some rule dominated it, then averaging "
+            "its smaller-or-equal risk over the prior would give a Bayes risk no larger. <bookmark mark='c'/> So the "
+            "dominating rule would also be Bayes, and by uniqueness it would be the same rule: there is no strict "
+            "domination. <bookmark mark='d'/> Unique Bayes rules are admissible. The deeper question is the converse:"
+            " is every admissible rule Bayes?"
         ) as vo:
+            heading=label('Uniqueness under every model law makes a Bayes rule admissible',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -59,17 +64,18 @@ class CompleteClass(VoiceoverScene):
             label(r"sweep the prior $\pi$ from 0 to 1", font_size=22),
             label(r"each supporting line touches the edge", font_size=22, color=BAYESC),
             label(r"corners: \ Bayes rules; \ edges: \ mixtures", font_size=22, color=ADMC),
-            label(r"finite $\Theta$: \ Bayes rules are complete", font_size=22, color=S.ACCENT),
+            label(r"this finite randomized problem: Bayes rules form a complete class", font_size=22, color=S.ACCENT),
             label(r"the supporting-hyperplane theorem, \ in 2D", font_size=22, color=GREY_B),
         ), 4.4, 0.42, [4.4, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In the coin problem, sweep the prior from zero to one. <bookmark mark='b'/> Each prior's "
-            "supporting line touches the lower edge somewhere, <bookmark mark='c'/> and as the prior moves, the touching "
-            "points visit every corner; points between corners are mixtures of two Bayes rules, Bayes for the prior at "
-            "which the line lies flat along that edge. So every admissible rule is Bayes. <bookmark mark='d'/> That is "
-            "Wald's complete class theorem for finitely many states: the Bayes rules form a complete class, meaning that any "
-            "rule outside it is dominated by one inside. <bookmark mark='e'/> The proof is the supporting-hyperplane "
-            "theorem for convex sets, which this picture shows in two dimensions."
+            "<bookmark mark='a'/> In the coin problem, sweep the prior from zero to one. <bookmark mark='b'/> Each "
+            "prior's supporting line touches the lower edge somewhere, <bookmark mark='c'/> and as the prior moves, "
+            "the touching points visit every corner; points between corners are mixtures of two Bayes rules, Bayes "
+            "for the prior at which the line lies flat along that edge. So every admissible rule is Bayes. <bookmark "
+            "mark='d'/> That is the finite randomized decision theorem for this compact risk polytope: the Bayes "
+            "rules form a complete class, meaning that any rule outside it is dominated by one inside. <bookmark "
+            "mark='e'/> The proof is the supporting-hyperplane theorem for convex sets, which this picture shows in "
+            "two dimensions."
         ) as vo:
             self.play(FadeIn(A), FadeIn(base))
             vo.wait_until("a")
@@ -88,15 +94,18 @@ class CompleteClass(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"infinitely many $\theta$: \ admissible rules need not be Bayes for any proper prior", font_size=26),
             label(r"Wald (1950), \ Le Cam (1955), \ Brown (1986): \ they are \emph{limits} of Bayes rules", font_size=26, color=BAYESC),
-            label(r"in exponential families: \ admissible $\Rightarrow$ generalized Bayes, \ for a possibly improper prior", font_size=26, color=ADMC),
+            label(r"generalized Bayes representations require model, loss and regularity conditions", font_size=26, color=ADMC),
             label(r"so the search for good rules is a search over priors", font_size=28, color=S.ACCENT),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> With infinitely many parameter values the converse fails as stated: there are admissible "
-            "rules that are Bayes for no proper prior. <bookmark mark='b'/> What survives, in the work of Wald, Lucien Le "
-            "Cam and Lawrence Brown, is that admissible rules are limits of Bayes rules. <bookmark mark='c'/> In exponential "
-            "families it can be sharpened: every admissible estimator is generalized Bayes, a formal posterior mean for "
-            "some prior that may be improper. <bookmark mark='d'/> So the search for good rules becomes a search over priors, "
+            "<bookmark mark='a'/> With infinitely many parameter values the converse fails as stated: there are "
+            "admissible rules that are Bayes for no proper prior. <bookmark mark='b'/> Under the relevant "
+            "compactness, continuity and loss assumptions, complete-class theorems of Wald, Le Cam and Brown "
+            "represent admissible rules through suitable limits of Bayes rules. Mere pointwise convergence alone does"
+            " not prove admissibility. <bookmark mark='c'/> In particular regular exponential-family decision "
+            "problems, with the specified loss and complete-class conditions, one obtains generalized Bayes "
+            "representations, possibly using improper priors. This is not a statement about every loss and "
+            "exponential family. <bookmark mark='d'/> So the search for good rules becomes a search over priors, "
             "whether or not one believes in them. That is a frequentist argument for Bayesian methods."
         ) as vo:
             for k, m_ in enumerate("abcd"):
@@ -112,21 +121,23 @@ class CompleteClass(VoiceoverScene):
         ax = A.ax
         mle = polyline(ax, p, d["mle"], MLEC, 5)
         cols = {"4.0": S.PRIOR, "1.0": BAYESC, "0.25": S.ALT, "0.05": MMC}
-        cs = {k: polyline(ax, p, np.minimum(d["curves"][k], 0.03), c, 3) for k, c in cols.items()}
+        cs = {k: polyline(ax, p, d["curves"][k], c, 3) for k, c in cols.items()}
         side = fit_rows(VGroup(
             label(r"$\mathrm{Beta}(\varepsilon, \varepsilon)$ prior: \ Bayes rule $(X + \varepsilon)/(n + 2\varepsilon)$", font_size=22),
             label(r"$\varepsilon = 4, \ 1, \ 0.25, \ 0.05$", font_size=22, color=BAYESC),
-            label(r"blue: \ the limit $X/n$, \ unbiased, \ so not Bayes", font_size=22, color=MLEC),
-            label(r"formal Bayes for $\pi(p) \propto \tfrac{1}{p(1 - p)}$", font_size=22, color=GREY_A),
+            label(r"blue: $X/n$, a limit of proper Beta posterior means", font_size=22, color=MLEC),
+            label(r"Haldane: formal posterior only for $0<X<n$; endpoints by a limit", font_size=22, color=GREY_A),
             label(r"and it is admissible", font_size=22, color=ADMC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The binomial shows it. A Beta prior with both parameters equal to epsilon has Bayes rule X "
-            "plus epsilon over n plus two epsilon. <bookmark mark='b'/> As epsilon shrinks from four to one, a quarter and "
-            "a twentieth, the risk curves close in on one limit, <bookmark mark='c'/> the risk of the sample proportion, "
-            "which is unbiased, and an unbiased estimator is never a Bayes rule under squared error, except for degenerate "
-            "priors on zero and one that make the problem trivial. <bookmark mark='d'/> "
-            "It is the formal posterior mean for Haldane's improper prior, one over p times one minus p. <bookmark "
+            "<bookmark mark='a'/> The binomial shows it. A Beta prior with both parameters equal to epsilon has Bayes"
+            " rule X plus epsilon over n plus two epsilon. <bookmark mark='b'/> As epsilon shrinks from four to one, "
+            "a quarter and a twentieth, the risk curves close in on one limit, <bookmark mark='c'/> the risk of the "
+            "sample proportion, The sample proportion is not Bayes for a nondegenerate proper interior prior. Priors "
+            "on the endpoints are an exception because the experiment then reveals the parameter. Unbiasedness alone "
+            "is not a universal obstruction to every Bayes representation in all models. <bookmark mark='d'/> For "
+            "interior counts it is the formal posterior mean under Haldane's improper prior. At zero or n heads that "
+            "posterior is improper; the endpoint answers come from the limit of the proper Beta rules. <bookmark "
             "mark='e'/> And it is admissible, as a limit of Bayes rules whose risks converge fast enough."
         ) as vo:
             self.play(FadeIn(A), FadeIn(exact_tag(r"exact risk functions, \ $n = 16$")))
@@ -152,15 +163,20 @@ class CompleteClass(VoiceoverScene):
         rows[3][-1].set_color(ADMC)
         whys = [why(r"normal priors, \ wider and wider"), why(r"the gap closes like $1/\tau^2$"), why(r"the prior's mass near 0: \ $\sim 1/\tau$"), why(r"Blyth (1951)")]
         with self.voiceover(
-            "<bookmark mark='a'/> Colin Blyth's 1951 method makes the limit argument precise. Observe one normal with mean "
-            "theta, and use normal priors with variance tau squared; the Bayes rule shrinks X by tau squared over one plus "
-            "tau squared. <bookmark mark='b'/> The Bayes risk of X itself exceeds the Bayes rule's by one over one plus tau "
-            "squared: the gap closes like one over tau squared. <bookmark mark='c'/> Now suppose some rule beat X by epsilon "
-            "on an interval near zero. A normal prior of width tau puts mass of order one over tau there, so the rival would "
-            "gain at least a constant times epsilon over tau in Bayes risk. <bookmark mark='d'/> For large tau that gain is "
-            "larger than the whole gap, which is impossible. So X is admissible in one dimension. Chapter eleven will show "
-            "that the same race between gap and mass is lost in three."
+            "<bookmark mark='a'/> Colin Blyth's 1951 method makes the limit argument precise. Observe one normal with"
+            " mean theta, and use normal priors with variance tau squared; the Bayes rule shrinks X by tau squared "
+            "over one plus tau squared. <bookmark mark='b'/> The Bayes risk of X itself exceeds the Bayes rule's by "
+            "one over one plus tau squared: the gap closes like one over tau squared. <bookmark mark='c'/> Suppose a "
+            "dominating finite-risk rule improved by epsilon near some fixed parameter value. Continuity of its "
+            "normal-model risk provides an interval of strict improvement, not necessarily around zero. A normal "
+            "prior of width tau puts mass of order one over tau there, so the rival would gain at least a constant "
+            "times epsilon over tau in Bayes risk. <bookmark mark='d'/> For large tau that gain is larger than the "
+            "whole gap, which is impossible. So X is admissible in one dimension. Chapter eleven will show that the "
+            "same race between gap and mass is lost in three."
         ) as vo:
+            heading=label('Blyth compares a Bayes-risk gap with local prior mass',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

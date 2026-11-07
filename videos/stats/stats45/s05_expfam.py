@@ -33,13 +33,18 @@ class ExpFamilies(VoiceoverScene):
         rows[3][-1].set_color(MMC)
         whys = [why(r"natural parameter $\eta$"), why(r"the cumulant function"), why(r"differentiate under the integral"), why(r"the score is $T - A'(\eta)$")]
         with self.voiceover(
-            "<bookmark mark='a'/> An exponential family has densities of this form: a base measure h, a statistic T, a "
-            "natural parameter eta, and a normalizer A of eta. <bookmark mark='b'/> A is the log of the Laplace transform of "
-            "h along T, and by Hölder's inequality it is convex. <bookmark mark='c'/> Its derivatives are the moments of T: "
-            "the first is the mean, the second the variance, which is also the Fisher information about eta. <bookmark "
-            "mark='d'/> The score is T minus A prime of eta, so the maximum likelihood estimate simply matches the model's "
-            "mean of T to the sample's. Everything about the family is coded in the single convex function A."
+            "<bookmark mark='a'/> An exponential family has densities of this form: a base measure h, a statistic T, "
+            "a natural parameter eta, and a normalizer A of eta. <bookmark mark='b'/> A is the log of the Laplace "
+            "transform of h along T, and by Hölder's inequality it is convex. <bookmark mark='c'/> At interior "
+            "natural parameters the required differentiations are valid. Its first two derivatives give the mean and "
+            "variance of T: the first is the mean, the second the variance, which is also the Fisher information "
+            "about eta. <bookmark mark='d'/> The score is T minus A prime of eta, so a finite interior maximum "
+            "likelihood estimate, when it exists, matches the model's mean of T to the sample mean. Everything about "
+            "the family is coded in the single convex function A."
         ) as vo:
+            heading=label('A regular exponential family is governed by its cumulant',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -57,7 +62,7 @@ class ExpFamilies(VoiceoverScene):
         ca = polyline(A.ax, eta, d["A"], MLEC, 4)
         cb = polyline(B.ax, mu, d["Astar"], JSC, 4)
         e0, a0, m0 = d["slope_at"], d["A_at"], d["mu_at"]
-        tan = Line(A.ax.c2p(e0 - 2.2, a0 - 2.2 * m0), A.ax.c2p(e0 + 2.2, a0 + 2.2 * m0), color=MMC, stroke_width=3)
+        tan = polyline(A.ax,[e0-2.2,e0+2.2],[a0-2.2*m0,a0+2.2*m0],MMC,3)
         dot_a = Dot(A.ax.c2p(e0, a0), radius=0.09, color=MMC)
         as0 = m0 * np.log(m0) + (1 - m0) * np.log(1 - m0)
         tb = Line(B.ax.c2p(m0 - 0.25, as0 - 0.25 * e0), B.ax.c2p(m0 + 0.25, as0 + 0.25 * e0), color=MMC, stroke_width=3)
@@ -92,21 +97,27 @@ class ExpFamilies(VoiceoverScene):
         rows = [
             cmath(r"A^*(\mu)", r"=", r"\sup_\eta\, \{\eta \mu - A(\eta)\}", font_size=36),
             cmath(r"\ell(\eta)", r"=", r"n\{\eta \bar T - A(\eta)\} + \text{const}", font_size=34),
-            cmath(r"\max_\eta \ell / n", r"=", r"A^*(\bar T): \ \text{the conjugate, at the data}", font_size=34),
-            cmath(r"\text{mean-value parameter}", r":", r"\mu = A'(\eta) \in \text{the interior of the convex hull of } T", font_size=30),
+            cmath(r"\sup_\eta\{\ell-\sum_i\log h(x_i)\}/n", r"=", r"A^*(\bar T): \ \text{the conjugate, at the data}", font_size=34),
+            cmath(r"\text{mean-value parameter}", r":", r"\mu=A'(\eta);\quad \bar T\in A'(H)\text{ for an interior MLE}", font_size=30),
         ]
         rows[0][-1].set_color(JSC)
         rows[2][-1].set_color(MMC)
         whys = [why(r"Legendre--Fenchel"), why(r"the log-likelihood"), why(r"maximum likelihood is a Legendre transform"), why(r"Barndorff-Nielsen (1978)")]
         with self.voiceover(
-            "<bookmark mark='a'/> The conjugate is the Legendre–Fenchel transform: the largest gap between a line of slope "
-            "mu and the curve A. <bookmark mark='b'/> And look at the log-likelihood of n observations: n times eta times the "
-            "average of T, minus A of eta. <bookmark mark='c'/> Maximizing over eta is exactly the Legendre transform, "
-            "evaluated at the sample mean of T. Maximum likelihood in an exponential family is convex duality. <bookmark "
-            "mark='d'/> The two parametrizations, natural and mean-value, are dual coordinates, and the MLE exists exactly "
-            "when the sample mean of T lies inside the convex hull of T's possible values, as Ole Barndorff-Nielsen showed "
-            "in 1978. All heads, in a Bernoulli sample, lies on the edge: no finite log-odds."
+            "<bookmark mark='a'/> The conjugate is the Legendre–Fenchel transform: the largest gap between a line of "
+            "slope mu and the curve A. <bookmark mark='b'/> And look at the log-likelihood of n observations: n times"
+            " eta times the average of T, minus A of eta. <bookmark mark='c'/> Maximizing the parameter-dependent "
+            "part over eta is the Legendre transform at the sample mean of T. The base-density term is an additional "
+            "constant in eta. Maximum likelihood in an exponential family is convex duality. <bookmark mark='d'/> The"
+            " two parametrizations, natural and mean-value, are dual coordinates, and in a full minimal steep regular"
+            " exponential family, an interior MLE exists when the sample statistic is inside the convex support. "
+            "Without steepness, the safe condition is that it lie in the image of the mean map. Barndorff-Nielsen's "
+            "theory makes these distinctions precise. All heads, in a Bernoulli sample, lies on the edge: no finite "
+            "log-odds."
         ) as vo:
+            heading=label('The parameter-dependent likelihood is a convex conjugate',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -119,19 +130,17 @@ class ExpFamilies(VoiceoverScene):
             cmath(r"D_{A^*}(\mu_1, \mu_2)", r"=", r"A^*(\mu_1) - A^*(\mu_2) - (A^*)'(\mu_2)(\mu_1 - \mu_2)", font_size=32),
             cmath(r"\mathrm{KL}(p_{\mu_1} \,\|\, p_{\mu_2})", r"=", r"D_{A^*}(\mu_1, \mu_2): \ \text{a Bregman divergence}", font_size=32),
             cmath(r"\mu_1 = 0.3, \ \mu_2 = 0.7", r":", rf"\mathrm{{KL}} = {d['kl']:.4f}, \ \ D_{{A^*}} = {d['bregman']:.4f}", font_size=32),
-            cmath(r"\text{deviance}", r"=", r"2n\, D_{A^*}(\bar T, \hat\mu_0): \ \text{Part 24's, \ for any family}", font_size=32),
+            cmath(r"\text{deviance}", r"=", r"2n\, D_{A^*}(\bar T, \hat\mu_0): \ \text{full canonical likelihood-ratio deviance}", font_size=32),
         ]
         rows[1][-1].set_color(JSC)
         rows[2][-1].set_color(MMC)
         whys = [why(r"the gap below a tangent"), why(r"the family's geometry"), why(r"two coins, \ checked"), why(r"likelihood-ratio tests")]
         with self.voiceover(
-            f"<bookmark mark='a'/> Duality also gives the family its geometry. The Bregman divergence of a convex function "
-            f"is the gap between the function and its tangent line. <bookmark mark='b'/> For A star, that gap is exactly the "
-            f"Kullback–Leibler divergence between the two members of the family. <bookmark mark='c'/> For coins with "
-            f"success probabilities point three and point seven, both are {say(d['kl'], 4)}. <bookmark mark='d'/> And the "
-            f"deviance of Part twenty-four, the likelihood-ratio statistic, is twice n times the Bregman gap between the "
-            f"sample mean and the fitted mean, in every exponential family at once."
+            f"<bookmark mark='a'/> Duality also gives the family its geometry. The Bregman divergence of a convex function is the gap between the function and its tangent line. <bookmark mark='b'/> For A star, that gap is exactly the Kullback–Leibler divergence between the two members of the family. <bookmark mark='c'/> For coins with success probabilities point three and point seven, both are {say(d['kl'], 4)}. <bookmark mark='d'/> And the deviance of Part twenty-four, the likelihood-ratio statistic, is twice n times the Bregman gap between the sample mean and the fitted mean, for the corresponding full canonical model, using the appropriate boundary extension when needed."
         ) as vo:
+            heading=label('Mean-coordinate Bregman gaps equal the family KL divergence',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -150,17 +159,20 @@ class ExpFamilies(VoiceoverScene):
             label(r"in $\eta$: \ $I(\eta) = \lambda$; \ \ in $\lambda$: \ $I(\lambda) = 1/\lambda$", font_size=22, color=MMC),
             label(r"$\bar X$ is unbiased for $\lambda$ \ with variance $\lambda/n$: \ the bound, \ attained", font_size=22, color=ADMC),
             label(r"no unbiased estimator of $\eta = \log\lambda$ exists at all", font_size=22, color=INADC),
-            label(r"the bound is attained only for $\mu = A'(\eta)$ \ (and linear maps of it)", font_size=22, color=S.ACCENT),
+            label(r"globally efficient scalar unbiased rules require the score equality conditions", font_size=22, color=S.ACCENT),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In the Poisson family A is the exponential function, so the mean, the variance and A "
-            "itself all coincide: one blue curve. <bookmark mark='b'/> Dashed in gold, the information about eta, the same curve "
-            "again. The information about "
-            "eta is lambda; about lambda it is one over lambda. <bookmark mark='c'/> The sample mean is unbiased for lambda "
-            "with variance lambda over n, exactly the Cramér–Rao bound. <bookmark mark='d'/> But no unbiased estimator of "
-            "the log of lambda exists at all, because a single zero count has positive probability. <bookmark mark='e'/> In "
-            "general the Cramér–Rao bound is attained only by the mean-value parameter and affine functions of it, and only "
-            "in exponential families: the bound singles out the family's dual coordinates."
+            "<bookmark mark='a'/> In the Poisson family A is the exponential function, so the mean, the variance and "
+            "A itself all coincide: one blue curve. <bookmark mark='b'/> Dashed in gold, the information about eta, "
+            "the same curve again. The information about eta is lambda; about lambda it is one over lambda. <bookmark"
+            " mark='c'/> The sample mean is unbiased for lambda with variance lambda over n, exactly the Cramér–Rao "
+            "bound. <bookmark mark='d'/> But no unbiased estimator of the log of lambda exists at all, if the "
+            "estimator must be finite-valued and integrable at every positive lambda. As lambda decreases to zero, "
+            "its expectation tends to its value at the all-zero sample, whereas log lambda diverges to minus "
+            "infinity. <bookmark mark='e'/> Within a regular one-parameter full exponential family, a globally "
+            "efficient unbiased estimator is affine in the canonical statistic, and hence estimates an affine "
+            "function of the mean map. Such characterizations require the score and moment regularity: the bound "
+            "singles out the family's dual coordinates."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
@@ -178,19 +190,21 @@ class ExpFamilies(VoiceoverScene):
     def pkd(self):
         rows = fit_rows(VGroup(
             label(r"Pitman, \ Koopman, \ Darmois (1935--36):", font_size=28, color=S.ACCENT),
-            label(r"if, \ for every $n$, \ a statistic of fixed dimension is sufficient \ (and the support does not move)", font_size=26),
+            label(r"regular smooth iid model + statistic, common support, fixed-dimensional sufficiency", font_size=26),
             label(r"then the family is exponential", font_size=28, color=JSC),
             label(r"the exception that proves it: \ $U(0, \theta)$, \ whose support moves: \ $\max X_i$ suffices", font_size=26, color=MMC),
             label(r"the Cauchy family: \ nothing smaller than the whole sorted sample", font_size=26, color=INADC),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Why do exponential families matter so much? Edwin Pitman, Bernard Koopman and Georges "
-            "Darmois proved independently, in 1935 and 1936, <bookmark mark='b'/> that if a statistic of fixed dimension is "
-            "sufficient for every sample size, and the support of the distribution does not depend on the parameter, <bookmark "
-            "mark='c'/> then the family is exponential. Data reduction without loss, at every n, essentially characterizes "
-            "them. <bookmark mark='d'/> The uniform on zero to theta escapes because its support moves; its maximum is "
-            "sufficient. <bookmark mark='e'/> And the Cauchy location family, at the other extreme, admits no reduction below "
-            "the sorted sample: the next chapter makes these ideas precise."
+            "<bookmark mark='a'/> Why do exponential families matter so much? Edwin Pitman, Bernard Koopman and "
+            "Georges Darmois proved independently, in 1935 and 1936, <bookmark mark='b'/> that under the usual smooth"
+            " iid model and statistic regularity, a nonpathological sufficient statistic of fixed dimension for every"
+            " sample size, together with parameter-independent support, <bookmark mark='c'/> forces an exponential "
+            "family. Arbitrary measurable encodings of the whole sample into one real number are excluded by those "
+            "regularity conditions. Data reduction without loss, at every n, essentially characterizes them. "
+            "<bookmark mark='d'/> The uniform on zero to theta escapes because its support moves; its maximum is "
+            "sufficient. <bookmark mark='e'/> And the Cauchy location family, at the other extreme, admits no "
+            "reduction below the sorted sample: the next chapter makes these ideas precise."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
