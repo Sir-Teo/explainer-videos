@@ -238,7 +238,7 @@ def compute_adjust():
 def compute_cluster():
     w = World()
     s = w.schools
-    eff = 100 * w.PROGRAMME_EFFECT
+    eff = 100 * w.SCHOOL_PROGRAMME_EFFECT
     prog = s["programme"]
     sch = s["school"]
     y0 = s["score"] - eff * prog[sch]
