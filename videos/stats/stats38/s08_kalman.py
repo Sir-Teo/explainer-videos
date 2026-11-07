@@ -53,8 +53,8 @@ class Kalman(VoiceoverScene):
         d = load("kalman")["track"]
         mp, Pp, mf, Pf = (np.asarray(d[k], float) for k in ("mp", "Pp", "mf", "Pf"))
         ys, xs = np.asarray(d["y"], float), np.asarray(d["x"], float)
-        A = axes([-2, 10], [-1.5, 3.5], x_length=9.0, y_length=4.4, xlabel=r"position", ylabel=r"velocity",
-                 xticks=[0, 4, 8], yticks=[0, 1, 2, 3], center=[-1.2, 0.3, 0])
+        A = axes([-3, 10], [-2, 3.5], x_length=9.0, y_length=4.4, xlabel=r"position", ylabel=r"velocity",
+                 xticks=[-2, 0, 4, 8], yticks=[-1, 0, 1, 2, 3], center=[-1.2, 0.3, 0])
         K = KalmanEllipses(A.ax, k=2.0)
         side = fit_rows(VGroup(
             label(r"purple: \ predicted", font_size=22, color=SPECC),
