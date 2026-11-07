@@ -405,7 +405,7 @@ class Async(VoiceoverScene):
         ok = all(r["agreement"] == 1.0 and r["terminated"] == 1.0 for r in bo)
         agr = label(r"every run agreed and ended" if ok else r"some runs failed", font_size=17,
                     color=YES if ok else NO).next_to(mx, DOWN, buff=0.1)
-        src = note(r"theory.py, \ 200 runs each, \ random delays", font_size=16).next_to(agr, DOWN, buff=0.1)
+        src = note(r"theory.py, \ 200 runs each: \ crashes at the start, \ then only the coins differ", font_size=16).next_to(agr, DOWN, buff=0.1)
         foot = wrapped_label(r"private coins: \ the wait can grow exponentially with $n$; \ a common coin, \ seen "
                              r"alike by all, \ makes it constant", 12.4, font_size=19, color=HEAD).to_edge(DOWN,
                                                                                                     buff=0.25)

@@ -39,7 +39,7 @@ class Linial(VoiceoverScene):
 
     def card(self):
         card = chapter_card(3, r"Linial's lower bound", r"Could a ring be coloured in constant time?",
-                            lit=(1987, 2019), extra=((1987, r"Linial: \ locality in distributed graph algorithms"),
+                            lit=(1987, 2019), extra=((1987, r"Linial: \ global solutions from local data"),
                                                      (1992, r"the journal version, \ SIAM J.\ Computing"),
                                                      (2019, r"Brandt: \ automatic round elimination")), part=PART)
         with self.voiceover("Chapter three. Linial's lower bound."):

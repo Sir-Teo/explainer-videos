@@ -52,15 +52,15 @@ class Outro(VoiceoverScene):
 
     def payoffs(self):
         card = payoff_card([
-            (r"hardware networks and their topologies", [60]),
-            (r"open problems as research", [61]),
+            (r"grids of cells passing numbers to neighbours", [60]),
+            (r"choosing an open problem, \ and measuring honestly", [61]),
             (r"consensus in practice", [38]),
             (r"scale and replication", [39]),
             (r"verifying protocols", [54]),
         ], font_size=23)
         with self.voiceover(
             "Where this comes back. Part 60's accelerators are networks of processing elements that pass messages to "
-            "neighbours. Part 61 gathers this part's open problems with the series' others. And looking back, it is "
+            "neighbours. Part 61 asks how to choose an open problem and measure honestly. And looking back, it is "
             "the theory under Part 38's consensus, Part 39's replication, and the protocols Part 54 checked."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],

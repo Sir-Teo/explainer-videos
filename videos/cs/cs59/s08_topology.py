@@ -327,7 +327,7 @@ class Topology(VoiceoverScene):
         colg.arrange(DOWN, aligned_edge=LEFT, buff=0.24)
         here = label(rf"here: \ {ex['count']} rainbow of {ex['triangles']} triangles, \ {len(doors)} boundary doors",
                      font_size=19, color=HEAD)
-        check = wrapped_label(rf"{chk['trials']} more random colourings: \ {chk['min']} to {chk['max']} rainbow "
+        check = wrapped_label(rf"{chk['trials']} more random colourings of a finer, \ 100-triangle grid: \ {chk['min']} to {chk['max']} rainbow "
                               r"triangles, \ " + (r"always odd" if chk["all_odd"] else r"not always odd"), W,
                               font_size=19, color=YES if chk["all_odd"] else NO)
         right = VGroup(rule, colg, here, check).arrange(DOWN, aligned_edge=LEFT, buff=0.32).move_to([3.3, -0.1, 0])
@@ -341,7 +341,7 @@ class Topology(VoiceoverScene):
             "boundary door once. <bookmark mark='d'/> A rainbow triangle has exactly one door, any other none or "
             "two. <bookmark mark='e'/> So the rainbow count has the parity of the boundary doors, which all lie on "
             "the zero-one side, where the colour switches an odd number of times. Two hundred more random "
-            "colourings: always odd."
+            "colourings, of a finer grid of a hundred triangles: always odd."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
