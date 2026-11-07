@@ -79,6 +79,8 @@ class Puzzle(VoiceoverScene):
                               font_size=24, color=IV),
                       MathTex(rf"\text{{Heston's index:}}\ {100 * h['volvol_median']:.0f}\%,\ \rho = {h['corr_median']:+.2f}",
                               font_size=24, color=MODEL_COL["Heston"])).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+        if nums.width > 3.65:
+            nums.scale_to_fit_width(3.65)
         nums.next_to(hg, DOWN, buff=0.5).align_to(hg, LEFT)
         src = simulated(r"the fitted Heston simulated for four years, 200 paths, its index $\sqrt{\mathrm{VIX}^2(v_t)}$; "
                         r"DVOL 2021--2025", corner=DL)
