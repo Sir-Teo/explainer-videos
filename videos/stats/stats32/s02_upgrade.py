@@ -49,15 +49,20 @@ class Upgrade(VoiceoverScene):
         ]
         rows[3][-1].set_color(SPIKE)
         whys = [why(r"more unknowns than equations"), why(r"no unique least-squares fit"),
-                why(r"a $(p - n)$-dimensional family of exact fits"), why(r"the assumption that rescues us")]
+                why(r"null-space dimension $p-\mathrm{rank}(X)$"), why(r"the assumption that rescues us")]
         with self.voiceover(
             "<bookmark mark='a'/> The problem, precisely. A linear model with more coefficients than observations. "
-            "<bookmark mark='b'/> X transpose X has rank at most n, so it is singular and the normal equations have no unique "
-            "solution. <bookmark mark='c'/> Add any vector from the null space of X to a solution and the fit is unchanged: "
-            "a family of exact fits of dimension p minus n, and nothing in the data prefers one to another. "
-            "<bookmark mark='d'/> The rescue is an assumption: that only s of the coefficients are nonzero, with s much "
-            "smaller than n. Then the question becomes which s, and that the data can answer."
+            "<bookmark mark='b'/> X transpose X has rank at most n, so it is singular and the normal equations have "
+            "no unique solution. <bookmark mark='c'/> Add any vector from the null space of X to a solution and the "
+            "fit is unchanged: a family with dimension p minus the rank of X; exact interpolation requires the "
+            "outcome to lie in its column space, and nothing in the data prefers one to another. <bookmark mark='d'/>"
+            " The rescue is an assumption: that only s of the coefficients are nonzero, with s much smaller than n. "
+            "Identifying which coefficients matter also needs a suitable design and sufficiently strong signals; "
+            "identical columns can prevent unique support identification."
         ) as vo:
+            intro=label('An underdetermined regression needs structure for identifiability',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -73,15 +78,19 @@ class Upgrade(VoiceoverScene):
         ]
         rows[2][-1].set_color(SPIKE)
         whys = [why(r"which $s$ of the $p$?"), why(r"an information count"), why(r"chapter nine; \ Part 50's lower bound"),
-                why(r"a hundred patients can be enough")]
+                why(r"design, noise, signal strength and constants matter")]
         with self.voiceover(
-            "<bookmark mark='a'/> A counting argument says how much data that needs. If s of p coefficients are nonzero, "
-            "there are p choose s possible supports. <bookmark mark='b'/> Naming one takes about s log of p over s bits. "
-            "<bookmark mark='c'/> And the theory of this part shows that, with the right method, the number of observations "
-            "needed grows like s log of p over s: linearly in the number of true effects, only logarithmically in the number "
-            "of candidates. <bookmark mark='d'/> With twenty thousand genes and ten that matter, that is about seventy-six: a "
-            "hundred patients can be enough, if the bet on sparsity is right."
+            "<bookmark mark='a'/> A counting argument says how much data that needs. If s of p coefficients are "
+            "nonzero, there are p choose s possible supports. <bookmark mark='b'/> Naming one takes about s log of p "
+            "over s bits. <bookmark mark='c'/> And the theory of this part shows that, with the right method, the "
+            "number of observations needed grows like s log of p over s: linearly in the number of true effects, only"
+            " logarithmically in the number of candidates. <bookmark mark='d'/> With twenty thousand genes and ten "
+            "that matter, that is about seventy-six: seventy-six is an order-of-magnitude count, not a clinical "
+            "sample-size guarantee. Constants, noise, signal strength and design conditions also matter."
         ) as vo:
+            intro=label('Sparse recovery sample counts depend on design, signal strength and noise',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -91,16 +100,17 @@ class Upgrade(VoiceoverScene):
     def plan(self):
         rows = fit_rows(VGroup(
             label(r"penalize: \ $\min_\beta \ \tfrac1{2n}\|y - X\beta\|^2 + \lambda\, \mathrm{pen}(\beta)$", font_size=26),
-            label(r"$\mathrm{pen} = \|\beta\|_2^2$: \ ridge, \ stable but never sparse", font_size=26, color=RIDGE),
+            label(r"$\mathrm{pen} = \|\beta\|_2^2$: \ ridge, \ generically dense, without a selection threshold", font_size=26, color=RIDGE),
             label(r"$\mathrm{pen} = \|\beta\|_0$: \ best subset, \ sparse but intractable", font_size=26, color=RES),
             label(r"$\mathrm{pen} = \|\beta\|_1$: \ the lasso, \ sparse and convex", font_size=26, color=LASSO),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Every method in this part adds a penalty to the least-squares loss. "
-            "<bookmark mark='b'/> Penalize the squared length of beta and you get ridge regression: stable, but it never "
-            "sets a coefficient to zero. <bookmark mark='c'/> Penalize the number of nonzero coefficients and you get best "
-            "subset selection: sparse, but computationally intractable. <bookmark mark='d'/> Penalize the sum of absolute "
-            "values and you get the lasso: sparse, and convex. The next three chapters take them in turn."
+            "<bookmark mark='a'/> Every method in this part adds a penalty to the least-squares loss. <bookmark "
+            "mark='b'/> Penalize the squared length of beta and you get ridge regression: stable and generically "
+            "dense; individual coordinates can cross zero, but it does not create a selection threshold. <bookmark "
+            "mark='c'/> Penalize the number of nonzero coefficients and you get best subset selection: sparse, but "
+            "computationally intractable. <bookmark mark='d'/> Penalize the sum of absolute values and you get the "
+            "lasso: sparse, and convex. The next three chapters take them in turn."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

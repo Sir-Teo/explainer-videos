@@ -46,21 +46,25 @@ class Completion(VoiceoverScene):
     def lowrank(self):
         rows = [
             cmath(r"M", r"=", r"U V^\top, \ \ U \in \mathbb R^{m \times r}, \ V \in \mathbb R^{k \times r}, \ r \ll m, k", font_size=30),
-            cmath(r"\text{parameters}", r":", r"r(m + k) \ \ll \ mk", font_size=32),
+            cmath(r"\text{parameters}", r":", r"r(m+k-r) \ \ll \ mk", font_size=32),
             cmath(r"\min \ \mathrm{rank}(Z)", r"\text{ s.t. }", r"Z_{ij} = M_{ij} \text{ on the observed } \Omega", font_size=28),
             cmath(r"\mathrm{rank}(Z)", r"=", r"\|\sigma(Z)\|_0: \ \text{the } \ell_0 \text{ norm of the singular values}", font_size=28),
         ]
         rows[3][-1].set_color(SPIKE)
-        whys = [why(r"each user a mix of $r$ tastes"), why(r"few unknowns, \ if $r$ is small"), why(r"NP-hard again"),
+        whys = [why(r"each user a mix of $r$ tastes"), why(r"subtract $r^2$ factorization redundancies"), why(r"NP-hard again"),
                 why(r"the same problem as chapter three")]
         with self.voiceover(
-            "<bookmark mark='a'/> Suppose the full matrix has low rank: each user's ratings a combination of a few taste "
-            "profiles. <bookmark mark='b'/> Then it has about r times m plus k free numbers, far fewer than its m times k "
-            "entries, and a fraction of the entries might determine the rest. <bookmark mark='c'/> The direct problem, the "
-            "matrix of smallest rank that agrees with the known entries, is NP-hard. <bookmark mark='d'/> And look at it "
-            "this way: the rank is the number of nonzero singular values, the zero norm of the vector of singular values. "
-            "It is chapter three's problem in disguise."
+            "<bookmark mark='a'/> Suppose the full matrix has low rank: each user's ratings a combination of a few "
+            "taste profiles. <bookmark mark='b'/> Then its identifiable rank-r dimension is r times m plus k minus r,"
+            " removing factorization redundancies, far fewer than its m times k entries, and a fraction of the "
+            "entries might determine the rest. <bookmark mark='c'/> The direct problem, the matrix of smallest rank "
+            "that agrees with the known entries, is NP-hard. <bookmark mark='d'/> And look at it this way: the rank "
+            "is the number of nonzero singular values, the zero norm of the vector of singular values. It is chapter "
+            "three's problem in disguise."
         ) as vo:
+            intro=label('Low rank reduces the identifiable dimension of a matrix model',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -78,12 +82,16 @@ class Completion(VoiceoverScene):
         whys = [why(r"the nuclear norm: \ $\ell_1$ of the singular values"), why(r"Fazel (2002), \ as chapter three"),
                 why(r"the matrix lasso"), why(r"singular value thresholding")]
         with self.voiceover(
-            "<bookmark mark='a'/> The same relaxation works. Replace the rank by the nuclear norm, the sum of the singular "
-            "values, their one norm. <bookmark mark='b'/> Maryam Fazel showed in 2002 that it is the convex envelope of rank, "
-            "exactly as the one norm is for counting. <bookmark mark='c'/> Fit the observed entries with a nuclear-norm "
-            "penalty: a matrix lasso. <bookmark mark='d'/> Its proximal step is the matrix version of soft thresholding: "
-            "take the SVD and soft-threshold the singular values."
+            "<bookmark mark='a'/> The same relaxation works. Replace the rank by the nuclear norm, the sum of the "
+            "singular values, their one norm. <bookmark mark='b'/> Maryam Fazel showed in 2002 that it is the convex "
+            "envelope of rank on the unit operator-norm ball, paralleling the bounded-box count relaxation. <bookmark"
+            " mark='c'/> Fit the observed entries with a nuclear-norm penalty: a matrix lasso. <bookmark mark='d'/> "
+            "Its proximal step is the matrix version of soft thresholding: take the SVD and soft-threshold the "
+            "singular values."
         ) as vo:
+            intro=label('The nuclear norm relaxes rank on an operator-norm ball',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -106,6 +114,9 @@ class Completion(VoiceoverScene):
             "<bookmark mark='d'/> Repeat. It is like EM from Part 22, with imputation and shrinkage alternating, and like the "
             "lasso it is computed along a decreasing sequence of lambdas with warm starts."
         ) as vo:
+            intro=label('SoftImpute alternates filling missing cells and spectral shrinkage',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -115,20 +126,30 @@ class Completion(VoiceoverScene):
     def blocks(self):
         d = load("mc")
         T, O, F = (np.asarray(d[k], float) for k in ("truth_block", "obs_block", "fit_block"))
-        O = np.where(np.isnan(O), -99, O)
+        missing=np.isnan(O)
+        O = np.where(missing, -99, O)
         p1 = PhantomPanel(T, size=3.6, caption=r"truth \ (rank 4)", lo=-6, hi=6, tint=LASSO, center=[-4.4, 0.5, 0])
         p2 = PhantomPanel(O, size=3.6, caption=rf"observed: \ {100 * d['frac']:.0f}\%, \ with noise", lo=-6, hi=6, tint=LASSO,
                           center=[0, 0.5, 0])
+        # A distinct hatch distinguishes missing cells from observed low intensities.
+        corner=p2.image.get_corner(UL);dx=p2.image.width/O.shape[1];dy=p2.image.height/O.shape[0]
+        hatch=VGroup()
+        for i,j in np.argwhere(missing):
+            center=corner+RIGHT*(j+.5)*dx+DOWN*(i+.5)*dy
+            hatch.add(Line(center+LEFT*.32*dx+DOWN*.32*dy,
+                           center+RIGHT*.32*dx+UP*.32*dy,color=GREY_A,stroke_width=1))
+        p2.add(hatch)
         p3 = PhantomPanel(F, size=3.6, caption=rf"SoftImpute, \ $\lambda = {d['best']['lam']:g}$", lo=-6, hi=6, tint=LASSO,
                           center=[4.4, 0.5, 0], caption_color=HIT)
-        foot = label(rf"a $24 \times 18$ corner of a ${d['m']} \times {d['k']}$ matrix; \ dark cells unobserved; \ held-out error {100 * d['best']['test']:.0f}\%",
+        foot = label(rf"a $24 \times 18$ corner of a ${d['m']} \times {d['k']}$ matrix; \ hatched cells unobserved; display clipped to $[-6,6]$; test error {100 * d['best']['test']:.0f}\%",
                      font_size=22, color=GREY_A).move_to([0, -2.9, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> A simulated example: a hundred and twenty by ninety matrix of rank four, a corner of which "
-            "is shown with brightness for the value. <bookmark mark='b'/> We observe thirty percent of the entries, each "
-            "with noise; the dark cells are missing. <bookmark mark='c'/> SoftImpute fills them in. The pattern returns, and "
-            "the error on the entries we never saw is twenty-eight percent of their size, from noisy data on less than a "
-            "third of the matrix."
+            "<bookmark mark='a'/> A simulated example: a hundred and twenty by ninety matrix of rank four, a corner "
+            "of which is shown with brightness for the value. <bookmark mark='b'/> We observe thirty percent of the "
+            "entries, each with noise; the hatched cells are missing. Brightness uses a common scale, clipped at plus"
+            " and minus six. <bookmark mark='c'/> SoftImpute fills them in. The pattern returns, and the relative "
+            "error against latent truth on untouched test cells is about twenty-seven percent. Lambda was selected by"
+            " noisy validation-cell error, without using test cells or latent truth for tuning."
         ) as vo:
             self.add(seeded_tag())
             vo.wait_until("a")
@@ -143,10 +164,10 @@ class Completion(VoiceoverScene):
         d = load("mc")
         P = d["path"]
         lam = np.array([o["lam"] for o in P])
-        te = np.array([o["test"] for o in P])
+        te = np.array([o["validation_mse"] for o in P])
         rk = np.array([o["rank"] for o in P])
-        A = axes([-0.1, 1.9], [0, 1.1], x_length=6.6, y_length=4.4, xlabel=r"$\log_{10}\lambda$",
-                 ylabel=r"held-out relative error", xticks=[0, 0.5, 1, 1.5], yticks=[0, 0.5, 1], center=[-2.6, 0.3, 0])
+        A = axes([-0.1, 1.9], [0, max(1.1,float(te.max())*1.08)], x_length=6.6, y_length=4.4, xlabel=r"$\log_{10}\lambda$",
+                 ylabel=r"validation-cell mean squared error", xticks=[0, 0.5, 1, 1.5], yticks=[0, 1, 2, 3, 4], center=[-2.6, 0.3, 0])
         ax = A.ax
         x = np.log10(lam)
         l = VGroup(polyline(ax, x, te, LASSO, 3), *[Dot(ax.c2p(a, b), radius=0.07, color=LASSO) for a, b in zip(x, te)])
@@ -154,17 +175,17 @@ class Completion(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"the path, \ from large $\lambda$ \ (right) \ to small", font_size=22),
             label(r"gold numbers: \ the fitted rank", font_size=22, color=SPIKE),
-            label(r"rank 4 is reached at $\lambda = 15$, \ but shrunk too far", font_size=22),
-            label(r"best held-out error at $\lambda = 3$", font_size=22, color=HIT),
-            label(r"with a few tiny extra singular values", font_size=22, color=HIT),
+            label(r"at $\lambda=15$: fitted rank 4, validation MSE 1.58", font_size=22),
+            label(rf"validation chooses $\lambda = {d['best']['lam']:g}$; final test untouched", font_size=22, color=HIT),
+            label(r"test relative error 27.4\%; fitted rank 23 with small extra singular values", font_size=22, color=HIT),
         ), 4.4, 0.42, [4.4, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The SoftImpute path, from a large lambda on the right, where the answer is the zero "
-            "matrix, to small. <bookmark mark='b'/> The gold numbers are the rank of each fit. <bookmark mark='c'/> The "
-            "correct rank of four is reached at lambda fifteen, but those four singular values are shrunk so far that the "
-            "error is still fifty-six percent. <bookmark mark='d'/> The best held-out error comes at lambda three, which "
-            "keeps the four large singular values less shrunk and lets in a few tiny extra ones: the lasso's bias trade-off, "
-            "again."
+            "<bookmark mark='a'/> The SoftImpute path, from a large lambda on the right, where the answer is the zero"
+            " matrix, to small. <bookmark mark='b'/> The gold numbers are the rank of each fit. <bookmark mark='c'/> "
+            "The fitted rank is four at lambda fifteen, with validation mean squared error about one point five "
+            "eight. <bookmark mark='d'/> The smallest validation error is about point five eight at lambda three, "
+            "which keeps the four large singular values less shrunk and lets in a few tiny extra ones: the lasso's "
+            "bias trade-off, again."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A))
@@ -182,19 +203,19 @@ class Completion(VoiceoverScene):
         d = load("mc")
         st, sf = np.asarray(d["sv_truth"]), np.asarray(d["sv_fit"])
         hdr = [r"\textbf{singular value}", r"\textbf{1}", r"\textbf{2}", r"\textbf{3}", r"\textbf{4}", r"\textbf{5}", r"\textbf{6}"]
-        body = [[r"truth"] + [f"{v:.0f}" for v in st[:6]], [r"SoftImpute, \ $\lambda = 3$"] + [f"{v:.0f}" for v in sf[:6]]]
+        body = [[r"truth"] + [f"{v:.0f}" for v in st[:6]], [rf"SoftImpute, \ $\lambda = {d['best']['lam']:g}$"] + [f"{v:.0f}" for v in sf[:6]]]
         tb = table_rows([hdr] + body, font_size=26, col_buff=0.7, row_buff=0.35, colors=[GREY_A, SPIKE, LASSO])
         tb.move_to([0, 0.9, 0])
         foot = fit_rows(VGroup(
             label(r"the top four are recovered, \ each shrunk by 15--20\%", font_size=22, color=LASSO),
-            label(r"the extra ones are small: \ the fit is nearly rank 4", font_size=22),
+            label(r"four dominant singular values; fitted rank 23, including many smaller ones", font_size=22),
             label(r"refit or reweight, \ as in chapter six, \ to remove the shrinkage", font_size=22, color=GREY_A),
         ), 12.0, 0.22, [0, -1.9, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The singular values tell the story. The four true ones are recovered, each shrunk by "
-            "fifteen to twenty percent. <bookmark mark='b'/> The extra ones are an order of magnitude smaller, so the fit is nearly "
-            "rank four. <bookmark mark='c'/> And as with the lasso, refitting or reweighting can remove the shrinkage, the "
-            "matrix versions of chapter six's remedies."
+            "<bookmark mark='a'/> The singular values tell the story. The four true ones are recovered, each shrunk "
+            "by fifteen to twenty percent. <bookmark mark='b'/> The extra ones are an order of magnitude smaller, so "
+            "the fit is nearly rank four. <bookmark mark='c'/> And as with the lasso, refitting or reweighting can "
+            "reduce shrinkage at a possible variance cost, the matrix versions of chapter six's remedies."
         ) as vo:
             self.add(seeded_tag())
             vo.wait_until("a")
@@ -216,13 +237,18 @@ class Completion(VoiceoverScene):
         whys = [why(r"Cand\`es \& Recht (2009); \ Cand\`es \& Tao (2010); \ Recht (2011)"), why(r"the analogue of RIP"),
                 why(r"exact, \ without noise"), why(r"incoherence is necessary")]
         with self.voiceover(
-            "<bookmark mark='a'/> The theory mirrors chapter nine. Emmanuel Candès and Benjamin Recht proved in 2009 that if "
-            "the number of observed entries is a constant times the rank times the dimensions, up to logarithms, "
-            "<bookmark mark='b'/> and the matrix is incoherent, meaning its singular vectors are spread over many rows and "
-            "columns, <bookmark mark='c'/> then nuclear-norm minimization recovers the matrix exactly with high probability. "
-            "<bookmark mark='d'/> Incoherence is necessary: a matrix that is zero except for one entry cannot be recovered "
-            "unless that entry is observed. Part 52 returns to low-rank recovery with noise."
+            "<bookmark mark='a'/> The theory mirrors chapter nine. Emmanuel Candès and Benjamin Recht proved in 2009 "
+            "that if the number of observed entries is a constant times the rank times the dimensions, up to "
+            "logarithms, <bookmark mark='b'/> entries are sampled uniformly at random, and the matrix satisfies the "
+            "theorem's incoherence conditions, with singular vectors spread over rows and columns, <bookmark "
+            "mark='c'/> then nuclear-norm minimization recovers the matrix exactly with high probability. <bookmark "
+            "mark='d'/> For uniform recovery from few randomly sampled entries, concentration can obstruct recovery: "
+            "a matrix that is zero except for one entry cannot be recovered unless that entry is observed. Part 52 "
+            "returns to low-rank recovery with noise."
         ) as vo:
+            intro=label('Exact matrix completion requires sampling and incoherence conditions',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

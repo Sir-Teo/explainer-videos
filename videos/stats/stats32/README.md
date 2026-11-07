@@ -17,7 +17,7 @@ k-space mask and its reconstructions, on a common scale. Its kit is `statkit.spa
 It opens with Candès's 2004 experiment (Candès, Romberg & Tao 2006). The modified Shepp–Logan phantom (128 × 128) is
 measured on 22 radial lines of its Fourier transform, 20.6% of the coefficients:
 - the minimum-energy (zero-filled) reconstruction has a relative error of 48.2%;
-- minimum total variation, by Chambolle–Pock, recovers it exactly: errors 19.2%, 4.6%, 0.22%, 1.2 × 10⁻⁵ and
+- minimum total variation, by Chambolle–Pock, recovers it to numerical tolerance in this example: errors 19.2%, 4.6%, 0.22%, 1.2 × 10⁻⁵ and
   1.6 × 10⁻¹⁰ after 20, 100, 400, 1,500 and 4,000 iterations;
 - only 4.6% of horizontal neighbours differ: the image is sparse in its jumps.
 
@@ -30,7 +30,7 @@ From there the part covers:
   - Singular values 42.2 … 1.95 (condition number 21.7). Shrinkage factors at λ = 10 are 0.99 … 0.78, 0.28; at
     λ = 1,000 they are 0.64 … 0.004.
   - The weakest direction is −0.71·tc + 0.56·ldl + …; the ridge trace against df.
-  - Ridge as a normal prior; Hoerl and Kennard's existence theorem (dMSE/dλ at 0 = −2σ²Σd_j⁻⁴ < 0).
+  - Ridge as a normal prior with fixed variances; Hoerl and Kennard's existence theorem (dMSE/dλ at 0 = −2σ²Σd_j⁻⁴ < 0).
 - **From ℓ0 to ℓ1.**
   - Best subset and hard thresholding; 2⁶⁴ = 1.8 × 10¹⁹ subsets (585 years at 10⁹ fits a second); Natarajan's
     NP-hardness (1995).
@@ -39,7 +39,7 @@ From there the part covers:
   - The KKT conditions; λ_max = ‖Xᵀy‖∞/n.
   - Soft, hard and ridge thresholding; the diamond touching at a corner (1.5, 0) where the disc touches at
     (1.42, 0.47).
-  - Uniqueness, at most min(n, p) nonzeros, df = E#{nonzero} (Zou, Hastie & Tibshirani 2007); the bias of λ.
+  - Uniqueness and support bounds under general position; Gaussian fixed-design, fixed-λ df = E rank(X_active), equal to the expected nonzero count under general position (Zou, Hastie & Tibshirani 2007); the bias of λ.
 - **Computing the path.** Coordinate descent with warm starts, active sets and strong rules (glmnet). LARS and its
   lasso modification. On the diabetes data:
   - the order of entry is BMI, log triglycerides, blood pressure, HDL, sex, glucose, total cholesterol, TC/HDL, LDL,
@@ -52,25 +52,25 @@ From there the part covers:
     effect.
   - Group lasso (block soft thresholding); fused lasso (RMSE 0.23 against 0.55 raw on a three-step signal); adaptive
     lasso; SCAD and MCP and their thresholding rules.
-  - Support recovery: 200 data sets, n = 100, p = 200, eight effects of 0.5–1, AR(0.5) design, common
-    λ = 1.1√(2 log p/n):
+  - Support recovery: 200 data sets, n = 100, p = 200, eight effects of 0.5–1, AR(0.5) design, base
+    λ = 1.1√(2 log p/n) for lasso/SCAD/MCP, with a separately rescaled adaptive penalty:
 
     | Penalty | True found (of 8) | False included | Exact support | ‖β̂ − β‖² |
     |---|---|---|---|---|
-    | lasso | 7.02 | 2.74 | 3.0% | 1.50 |
-    | adaptive lasso | 7.71 | 2.75 | 8.5% | 0.35 |
-    | SCAD | 7.07 | 1.88 | 8.0% | 1.34 |
-    | MCP | 7.16 | 0.40 | 32.5% | 0.84 |
+    | lasso | 7.02 | 2.74 | 3.0% | 1.45 |
+    | adaptive lasso | 7.71 | 2.75 | 8.5% | 0.32 |
+    | SCAD | 7.07 | 1.88 | 8.0% | 1.28 |
+    | MCP | 7.16 | 0.40 | 32.5% | 0.78 |
 
 - **Choosing λ** on the LARS paper's 64-term quadratic model (main effects, interactions, squares of the standardized
   variables).
-  - 10-fold CV: the minimum (λ = 2.94) keeps 15 terms with CV MSE 2,957, against 5,906 with none. The one-SE rule
-    (λ = 5.82) keeps 11: sex, BMI, BP, HDL, LTG, age×sex, age×BP, age×glucose, BMI×BP, BMI² and glucose².
+  - 10-fold CV: the minimum (λ = 3.02) keeps 15 terms with CV MSE 2,957, against 5,943 with none. The one-SE rule
+    (λ = 5.42) keeps 11: sex, BMI, BP, HDL, LTG, age×sex, age×BP, age×glucose, BMI×BP, BMI² and glucose².
   - CV is not selection-consistent.
-  - Stability selection (60 half-samples) finds 9 terms with Π ≥ 0.8: sex, BMI, BP, HDL, LTG, glucose, age×sex,
+  - Stability selection (60 half-samples) finds 11 terms with Π ≥ 0.8 on the stated path: sex, BMI, BP, HDL, LTG, glucose, age×sex, age×LDL, sex×BMI,
     BMI×BP and glucose².
 - **Bayesian sparsity.**
-  - The lasso is the Laplace posterior mode. Its posterior mean is never zero and biased by λ; the Bayesian lasso
+  - The lasso is the Laplace posterior mode. In independent normal means, its posterior mean is nonzero for nonzero observations (zero at y=0), with asymptotic large-observation shrinkage rather than literal thresholding; the Bayesian lasso
     (Park & Casella 2008).
   - The horseshoe (Carvalho, Polson & Scott 2010) and its Beta(½, ½) shrinkage.
   - 200 normal means, 10 at 5:
@@ -110,7 +110,7 @@ From there the part covers:
 - **Matrix completion.**
   - The Netflix Prize; the nuclear norm as the convex envelope of rank (Fazel 2002).
   - SoftImpute (Mazumder, Hastie & Tibshirani 2010) on a 120 × 90 rank-4 matrix with 30% of its entries observed
-    with noise. The best λ = 3 gives held-out error 27.6%. Singular values 133, 113, 93, 70 become 114, 96, 76, 57;
+    with noise. Noisy validation cells choose λ = 3; latent-truth relative error on untouched test cells is 27.4%. Singular values 133, 113, 93, 70 become 114, 96, 76, 57;
     the next are 8 and 6.
   - Candès & Recht's recovery theorem; incoherence.
 
@@ -147,6 +147,18 @@ The Coverage Board gains five rows. 95% intervals, 1,000 data sets each:
 Naive intervals for false positives cover 0 only 25% of the time. For the 0.25 effect, given that it is selected, they
 cover 92%.
 
+Scientific scope and repairs: the radial Fourier/TV phantom is a deterministic, noiseless numerical example, not a uniform guarantee from a random-measurement theorem. The reported 4.6% counts horizontal neighbor differences. A fraction of sampled complex Fourier coefficients does not count independent real equations because conjugate pairs repeat information. TV weights jumps by contrast; panel brightness is clipped to the displayed common range. Sparse recovery needs design and signal/noise assumptions, not merely an order-of-magnitude s log(p/s) count. Alternatives such as smoothness, low rank and dense regularization are available when sparsity is unsuitable.
+
+Ridge is generically dense; individual coefficients can cross zero at finite lambda. It does not create the lasso's thresholded zero region. Effective degrees of freedom start at rank(X), and the oracle MSE-improvement argument requires a full-column-rank design and positive noise variance. Its improving lambda can depend on unknown beta; this is not uniform dominance by one fixed penalty. The lambda=10 table now uses that exact value, rather than the nearest path-grid point. The convex-envelope comparison uses a bounded coordinate box. Group thresholding uses orthonormalized group coordinates. Flat SCAD/MCP derivatives reduce shrinkage but do not guarantee finite-sample unbiasedness after selection. Correlated designs do not shrink each coefficient by one common lambda shift.
+
+Every main-effect and polynomial-feature centering/scaling operation is now fitted inside its CV training fold, with validation transformed by those parameters. The absolute lambda grid is predetermined (80 down to 0.08); validation outcomes do not set its maximum. Half-sample stability analysis also refits those transformations. CV fold standard errors and the one-SE rule are descriptive heuristics, not confidence bands. Support consistency is not generally guaranteed by prediction tuning. Stability error bounds require assumptions including exchangeable noise and a suitable base selector; for a whole lambda region q counts the per-subsample union. The observed mean union size is 37.65, not the eleven retained stable terms, and no verified false-discovery guarantee is claimed for the diabetes data.
+
+The coefficient-error comparison now uses beta multiplied by each simulated design column's original SD, matching the standardized coefficient target. The adaptive procedure has a separately rescaled weighted penalty; these are illustrative tuning choices rather than an optimally matched comparison. The pooled selected-interval coverage Board now uses independent-dataset ratio-estimator MCSE: 0.005668 across 1,000 datasets, allowing dependent intervals and a random number selected (5,651 total). The other rows report one interval per dataset. Debiasing and double-selection claims include design, precision-estimation, variance and exogeneity assumptions; neither fixes unobserved confounding. The red estimate histogram is explicitly conditional on selection.
+
+Both Laplace and horseshoe are continuous priors without point mass at zero. The horseshoe mean curve now uses endpoint-resolved quadrature checked independently in kappa coordinates. Its simulation uses four independent chains, each with 25,000 retained draws after 5,000 warmup iterations. The global-scale Rhat is 1.00170, bulk ESS 1,618 and tail ESS 2,988; these check the global scale and between-chain mean stability, not every latent variable. Its SSE is 31.48 in this one seeded experiment, not a universal ranking. The Bayesian-lasso Gibbs approximation is compared with its independent closed-form normal-means mean.
+
+Matrix completion no longer tunes on hidden latent truth: 3,260 cells train the fits, 1,610 noisy validation cells choose lambda and 5,930 untouched cells evaluate the selected fit. Every SoftImpute path fit is checked for convergence; the selected rank is 23 with four dominant singular values, not an exactly rank-four fit. Missing cells have a separate hatch, and brightness saturation at ±6 is disclosed. Exact noiseless recovery theory requires the stated random-entry sampling and incoherence conditions; observational recommender ratings need not satisfy them.
+
 ## Build it
 
 ```bash
@@ -168,11 +180,11 @@ python tools/lecture_length.py stats32 --floor 50
 | 4 | The lasso | corner (1.5, 0) vs (1.42, 0.47) |
 | 5 | Computing the path | 12 steps; HDL leaves at 0.81 |
 | 6 | The penalty zoo | MCP 0.40 false vs lasso 2.74 |
-| 7 | Choosing λ | 15 / 11 terms; 9 stable |
+| 7 | Choosing λ | 15 / 11 terms; 11 stable |
 | 8 | Bayesian sparsity | SSE 203 / 86 / 74 / 31 |
 | 9 | Compressed sensing | ρ(0.5) = 0.386; 16 lines 3.7%, 22 exact |
 | 10 | Inference after the lasso | 75.1% vs 95.6%; 9.2% vs 94.2% |
-| 11 | Matrix completion | held-out 27.6%; rank 4 at λ = 15 |
+| 11 | Matrix completion | validation chooses λ = 3; test error 27.4%; fitted rank 23 |
 | 12 | Outro | — |
 
 ## Sources

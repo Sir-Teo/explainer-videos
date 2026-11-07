@@ -54,13 +54,17 @@ class Lasso(VoiceoverScene):
         whys = [why(r"the subgradient: \ Part 21"), why(r"optimality for a convex function"),
                 why(r"active: \ correlation pinned at $\pm\lambda$"), why(r"inactive: \ correlation below $\lambda$")]
         with self.voiceover(
-            "<bookmark mark='a'/> The absolute value has no derivative at zero, but it has a subgradient: the sign where it "
-            "is smooth, and anything between minus one and one at the kink. <bookmark mark='b'/> A convex function is "
-            "minimized where zero is in its subdifferential, Part 21's condition. <bookmark mark='c'/> Read off for each "
-            "coordinate: if a coefficient is nonzero, the correlation of its variable with the residual is pinned at exactly "
-            "plus or minus lambda. <bookmark mark='d'/> If it is zero, that correlation is at most lambda in size. Every "
-            "active variable is equally correlated with what remains; every inactive one is less so."
+            "<bookmark mark='a'/> The absolute value has no derivative at zero, but it has a subgradient: the sign "
+            "where it is smooth, and anything between minus one and one at the kink. <bookmark mark='b'/> A convex "
+            "function is minimized where zero is in its subdifferential, Part 21's condition. <bookmark mark='c'/> "
+            "Read off for each coordinate: if a coefficient is nonzero, the correlation of its variable with the "
+            "residual is pinned at exactly plus or minus lambda. <bookmark mark='d'/> If it is zero, that correlation"
+            " is at most lambda in size. Every active variable is equally correlated with what remains; every "
+            "inactive one has no larger absolute residual inner product; equality can occur at a knot."
         ) as vo:
+            intro=label('Subgradient conditions distinguish zero and nonzero lasso coefficients',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -78,12 +82,16 @@ class Lasso(VoiceoverScene):
         whys = [why(r"KKT at $\beta = 0$"), why(r"where the path begins"), why(r"the path: \ chapter five"),
                 why(r"the largest correlations with the outcome")]
         with self.voiceover(
-            "<bookmark mark='a'/> Two consequences. Setting beta to zero in the conditions, the lasso returns all zeros "
-            "exactly when every variable's correlation with the outcome is at most lambda. <bookmark mark='b'/> So the path "
-            "starts at lambda max, the largest of those correlations. <bookmark mark='c'/> As lambda decreases, variables "
-            "enter one by one, each when its correlation with the current residual catches up. <bookmark mark='d'/> For the "
-            "diabetes data, body-mass index enters first, then log triglycerides."
+            "<bookmark mark='a'/> Two consequences. Setting beta to zero in the conditions, the lasso returns all "
+            "zeros exactly when every variable's correlation with the outcome is at most lambda. <bookmark mark='b'/>"
+            " So the path starts at lambda max, the largest of those correlations. <bookmark mark='c'/> As lambda "
+            "decreases, under generic non-tied conditions, variables enter at successive knots, each when its "
+            "correlation with the current residual catches up. <bookmark mark='d'/> For the diabetes data, body-mass "
+            "index enters first, then log triglycerides."
         ) as vo:
+            intro=label('The largest residual inner product determines the all-zero threshold',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -107,6 +115,9 @@ class Lasso(VoiceoverScene):
             "lambda, and stop at zero. <bookmark mark='d'/> Ridge instead divides by one plus lambda, shrinking in "
             "proportion; best subset keeps or kills, hard thresholding at root two lambda."
         ) as vo:
+            intro=label('Orthogonal columns separate the lasso into scalar threshold problems',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -127,18 +138,19 @@ class Lasso(VoiceoverScene):
                       curve(ax, z[z > t], z[z > t], RES, 3))
         rows = fit_rows(VGroup(
             label(r"$\lambda = 1$, \ orthonormal design", font_size=22),
-            label(r"ridge: \ every estimate halved, \ none zero", font_size=22, color=RIDGE),
+            label(r"ridge: halves the estimate; zero only at $z=0$", font_size=22, color=RIDGE),
             label(r"subset: \ keep or kill at $\sqrt2$", font_size=22, color=RES),
             label(r"lasso: \ zero inside $\pm\lambda$, \ shifted by $\lambda$ outside", font_size=22, color=LASSO),
             label(r"continuous, \ sparse; \ but large effects are biased by $\lambda$", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.2, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The three rules side by side, with lambda one. <bookmark mark='b'/> Ridge halves every "
-            "estimate and never reaches zero. <bookmark mark='c'/> Best subset keeps an estimate untouched or kills it, with "
-            "a jump at root two: unstable, since a tiny change in the data can flip a variable in or out. "
-            "<bookmark mark='d'/> The lasso is zero inside a band of half-width lambda and shifted towards zero by lambda "
-            "outside it. <bookmark mark='e'/> It is continuous and sparse at once, the compromise; its price is that even "
-            "large effects are shrunk by lambda, a bias that chapter six's penalties repair."
+            "<bookmark mark='a'/> The three rules side by side, with lambda one. <bookmark mark='b'/> Ridge halves "
+            "every estimate and is zero exactly when that scalar estimate is zero, without a thresholded interval. "
+            "<bookmark mark='c'/> Best subset keeps an estimate untouched or kills it, with a jump at root two: "
+            "unstable, since a tiny change in the data can flip a variable in or out. <bookmark mark='d'/> The lasso "
+            "is zero inside a band of half-width lambda and shifted towards zero by lambda outside it. <bookmark "
+            "mark='e'/> It is continuous and sparse at once, the compromise; its price is that even large effects are"
+            " shrunk by lambda, a bias that chapter six's penalties repair."
         ) as vo:
             self.play(FadeIn(A), Create(idl))
             vo.wait_until("a")
@@ -194,21 +206,26 @@ class Lasso(VoiceoverScene):
         rows = [
             cmath(r"X\hat\beta", r":", r"\text{unique, \ even when } \hat\beta \text{ is not}", font_size=30),
             cmath(r"\text{generic } X", r":", r"\hat\beta \text{ unique, \ at most } \min(n, p) \text{ nonzero}", font_size=30),
-            cmath(r"\mathrm{df}(\hat\beta_\lambda)", r"=", r"E\, \#\{j : \hat\beta_j \ne 0\}", font_size=32),
+            cmath(r"\mathrm{df}(X\hat\beta_\lambda)", r"=", r"E\, \#\{j : \hat\beta_j \ne 0\}", font_size=32),
             cmath(r"\text{so}", r":", r"C_p, \ \text{AIC and SURE use the count of nonzeros}", font_size=30),
         ]
         rows[2][-1].set_color(LASSO)
-        whys = [why(r"strict convexity in the fit"), why(r"Tibshirani (2013)"), why(r"Zou, \ Hastie \& Tibshirani (2007)"),
+        whys = [why(r"strict convexity in the fit"), why(r"Tibshirani (2013)"), why(r"Gaussian fixed-design, fixed $\lambda$; general position"),
                 why(r"Part 28's criteria")]
         with self.voiceover(
-            "<bookmark mark='a'/> A few facts about the solution. The fitted values are always unique, since the loss is "
-            "strictly convex in them, even when the coefficients are not. <bookmark mark='b'/> For a design in general "
-            "position the coefficients are unique too, and at most min of n and p are nonzero: the lasso can never select "
-            "more variables than there are observations. <bookmark mark='c'/> And, beautifully, the degrees of freedom of "
-            "the lasso fit equal the expected number of nonzero coefficients, a result of Hui Zou, Trevor Hastie and Robert "
-            "Tibshirani from Stein's lemma. <bookmark mark='d'/> So Part 28's criteria apply with the count of selected "
-            "variables, despite the selection."
+            "<bookmark mark='a'/> A few facts about the solution. The fitted values are always unique, since the loss"
+            " is strictly convex in them, even when the coefficients are not. <bookmark mark='b'/> For a design in "
+            "general position the coefficients are unique too, and at most min of n and p are nonzero: this support "
+            "bound uses general position. With duplicate columns, nonunique coefficient solutions can have more "
+            "nonzeros. <bookmark mark='c'/> And, beautifully, under fixed design, Gaussian noise and a fixed penalty,"
+            " the fit degrees of freedom equal the expected active-set rank, or the expected nonzero count in general"
+            " position, a result of Hui Zou, Trevor Hastie and Robert Tibshirani from Stein's lemma. <bookmark "
+            "mark='d'/> The nonzero count can estimate degrees of freedom in that fixed-penalty setting, adding one "
+            "for an unpenalized intercept. Choosing the penalty from the data introduces further tuning complexity."
         ) as vo:
+            intro=label('Lasso degrees of freedom require a specified design and fixed penalty',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -223,12 +240,13 @@ class Lasso(VoiceoverScene):
             label(r"fixes: \ refit (relaxed lasso), \ reweight (adaptive), \ or bend the penalty (MCP, SCAD)", font_size=26, color=LASSO),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The lasso does two jobs with one tuning parameter: it selects variables and it shrinks "
-            "their coefficients. <bookmark mark='b'/> A lambda large enough to remove every noise variable also shrinks the "
-            "real effects by lambda. <bookmark mark='c'/> A lambda small enough to leave the real effects nearly unbiased "
-            "lets noise variables in. <bookmark mark='d'/> The fixes separate the jobs: refit the selected variables with a "
-            "smaller penalty, the relaxed lasso; reweight the penalty by a first estimate, the adaptive lasso; or bend the "
-            "penalty so that large coefficients are not penalized at all. Chapter six."
+            "<bookmark mark='a'/> The lasso does two jobs with one tuning parameter: it selects variables and it "
+            "shrinks their coefficients. <bookmark mark='b'/> A lambda large enough to remove every noise variable "
+            "also biases the real effects; the simple shift by lambda is specific to orthonormal coordinates. "
+            "<bookmark mark='c'/> A lambda small enough to leave the real effects nearly unbiased lets noise "
+            "variables in. <bookmark mark='d'/> The fixes separate the jobs: refit the selected variables with a "
+            "smaller penalty, the relaxed lasso; reweight the penalty by a first estimate, the adaptive lasso; or "
+            "bend the penalty so that large coefficients are not penalized at all. Chapter six."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

@@ -27,7 +27,7 @@ class Compressed(VoiceoverScene):
     def bp(self):
         rows = [
             cmath(r"y", r"=", r"A x, \ \ A \in \mathbb R^{n \times p}, \ n < p, \ \|x\|_0 = s", font_size=32),
-            cmath(r"\min \|z\|_0", r"\text{ s.t. }", r"Az = y: \ \text{finds } x \text{ if } n \ge 2s, \ \text{but intractable}", font_size=28),
+            cmath(r"\min \|z\|_0", r"\text{ s.t. }", r"Az=y:\ \text{unique sparse }x\text{ if every }2s\text{ columns independent}", font_size=28),
             cmath(r"\min \|z\|_1", r"\text{ s.t. }", r"Az = y: \ \text{a linear program}", font_size=30),
             cmath(r"\text{question}", r":", r"\text{when are the two answers the same?}", font_size=30),
         ]
@@ -41,6 +41,9 @@ class Compressed(VoiceoverScene):
             "norm subject to the equations is a linear program, basis pursuit. <bookmark mark='d'/> The question of "
             "compressed sensing is when the tractable answer equals the intractable one."
         ) as vo:
+            intro=label('Basis pursuit replaces a support count by a linear program',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -102,6 +105,9 @@ class Compressed(VoiceoverScene):
             "<bookmark mark='d'/> Requiring that for every set of size s is the null space property, and it is both necessary "
             "and sufficient for basis pursuit to recover every s-sparse vector."
         ) as vo:
+            intro=label('The null-space property characterizes uniform sparse recovery',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -119,13 +125,17 @@ class Compressed(VoiceoverScene):
         whys = [why(r"the restricted isometry property"), why(r"Cand\`es \& Tao (2005); \ Cand\`es (2008)"),
                 why(r"robust to near-sparsity and noise"), why(r"but random $A$ satisfy it")]
         with self.voiceover(
-            "<bookmark mark='a'/> A more usable condition is the restricted isometry property of Candès and Tao: A nearly "
-            "preserves the length of every sparse vector. <bookmark mark='b'/> If the isometry constant at level two s is "
-            "below root two minus one, the null space property follows, and more: <bookmark mark='c'/> recovery is stable. "
-            "With noise of size epsilon, or an x that is only nearly sparse, the error is bounded by the noise plus the size "
-            "of x's tail. <bookmark mark='d'/> Checking the property for a given matrix is itself NP-hard. The rescue is "
-            "randomness."
+            "<bookmark mark='a'/> A more usable condition is the restricted isometry property of Candès and Tao: A "
+            "nearly preserves the length of every sparse vector. <bookmark mark='b'/> If the isometry constant at "
+            "level two s is below root two minus one, the null space property follows, and more: <bookmark mark='c'/>"
+            " recovery is stable. For basis-pursuit denoising constrained by a residual norm at most epsilon, with "
+            "actual noise norm at most epsilon, the error is bounded by the noise plus the best sparse-approximation "
+            "tail under those RIP conditions. <bookmark mark='d'/> Checking the property for a given matrix is itself"
+            " NP-hard. The rescue is randomness."
         ) as vo:
+            intro=label('Restricted isometry yields stable recovery under noise constraints',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -143,12 +153,17 @@ class Compressed(VoiceoverScene):
         whys = [why(r"Gaussian measurements"), why(r"Baraniuk et al. (2008)"), why(r"Rudelson \& Vershynin (2008)"),
                 why(r"Part 51")]
         with self.voiceover(
-            "<bookmark mark='a'/> A matrix with independent Gaussian entries <bookmark mark='b'/> satisfies the restricted "
-            "isometry property with high probability as soon as the number of measurements is a constant times s log of p "
-            "over s: the count from chapter one. <bookmark mark='c'/> Randomly chosen Fourier coefficients, the MRI case, "
-            "need only a few more logarithms. <bookmark mark='d'/> The proof combines concentration of measure for a single "
-            "sparse vector with a union bound over all supports, and Part 51 does it in full."
+            "<bookmark mark='a'/> A matrix with independent Gaussian entries <bookmark mark='b'/> satisfies the "
+            "restricted isometry property with high probability as soon as the number of measurements is a constant "
+            "times s log of p over s: the count from chapter one. <bookmark mark='c'/> Uniformly random Fourier rows "
+            "give related sparse-vector guarantees with extra logarithms. They do not directly certify the fixed "
+            "radial mask or gradient-sparse TV phantom in the hook. <bookmark mark='d'/> The proof combines "
+            "concentration of measure for a single sparse vector with a union bound over all supports, and Part 51 "
+            "does it in full."
         ) as vo:
+            intro=label('Random measurement ensembles can satisfy recovery conditions',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -174,19 +189,21 @@ class Compressed(VoiceoverScene):
         cur = clip_curve(ax, np.asarray(d["curve_d"]), np.asarray(d["curve_r"]), WHITE, 3.5, ymax=1.0)
         rows = fit_rows(VGroup(
             label(r"basis pursuit with $p = 100$, \ 20 trials per cell", font_size=22),
-            label(r"green: \ always exact; \ red: \ never", font_size=22, color=HIT),
+            label(r"green: 20/20 numerical successes; red: 0/20", font_size=22, color=HIT),
             label(r"white: \ Donoho \& Tanner's asymptotic curve", font_size=22),
             label(rf"at $\delta = 0.5$: \ up to $s \approx {d['rho_half']:.2f}\, n$ spikes", font_size=22, color=LASSO),
             label(r"a sharp phase transition, \ not a gradual decline", font_size=22, color=SPIKE),
         ), 4.2, 0.42, [4.6, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> How sharp is it? For each combination of measurements per unknown, delta, and sparsity "
-            "per measurement, rho, twenty random problems with a hundred unknowns. <bookmark mark='b'/> Green where basis "
-            "pursuit always recovers the signal exactly, red where it never does. <bookmark mark='c'/> The white curve is "
-            "David Donoho and Jared Tanner's asymptotic phase transition, from the combinatorial geometry of random "
-            "polytopes. <bookmark mark='d'/> With half as many measurements as unknowns, signals with up to about point "
-            "three nine n spikes are recovered. <bookmark mark='e'/> And the change from success to failure is abrupt: a "
-            "phase transition, like water freezing."
+            "<bookmark mark='a'/> How sharp is it? For each combination of measurements per unknown, delta, and "
+            "sparsity per measurement, rho, twenty random problems with a hundred unknowns. <bookmark mark='b'/> "
+            "Green means all twenty trials recovered to solver tolerance; red means none did. Finite trial counts do "
+            "not give probabilities exactly one or zero. <bookmark mark='c'/> The white curve is David Donoho and "
+            "Jared Tanner's asymptotic phase transition, from the combinatorial geometry of random polytopes. "
+            "<bookmark mark='d'/> With half as many measurements as unknowns, the asymptotic weak threshold is about "
+            "point three nine n spikes for typical random supports and signs, not a uniform guarantee over every "
+            "sparse signal. <bookmark mark='e'/> And the change from success to failure is abrupt: a phase "
+            "transition, like water freezing."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A))
@@ -216,14 +233,15 @@ class Compressed(VoiceoverScene):
             label(r"red: \ minimum energy improves slowly", font_size=22, color=RES),
             label(r"blue: \ minimum TV", font_size=22, color=LASSO),
             label(r"28\% at 12 lines, \ 3.7\% at 16, \ exact at 22", font_size=22, color=LASSO),
-            label(r"the same phase transition, \ in an image", font_size=22, color=SPIKE),
+            label(r"this phantom and deterministic masks: numerical accuracy, not a uniform theorem", font_size=22, color=SPIKE),
         ), 4.2, 0.42, [4.6, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The phantom shows the same transition. Its reconstruction error, on a log scale, against "
-            "the number of radial lines measured. <bookmark mark='b'/> Minimum energy improves slowly and is still forty "
-            "percent wrong at thirty lines. <bookmark mark='c'/> Minimum total variation is twenty-eight percent wrong at "
-            "twelve lines, four percent at sixteen, and exact, to eight decimal places, at twenty-two. "
-            "<bookmark mark='d'/> Below a threshold, failure; above it, perfection."
+            "<bookmark mark='a'/> The phantom shows the same transition. Its reconstruction error, on a log scale, "
+            "against the number of radial lines measured. <bookmark mark='b'/> Minimum energy improves slowly and is "
+            "still forty percent wrong at thirty lines. <bookmark mark='c'/> Minimum total variation is twenty-eight "
+            "percent wrong at twelve lines, four percent at sixteen, and exact, to eight decimal places, at "
+            "twenty-two. <bookmark mark='d'/> These few deterministic masks show a sharp numerical improvement for "
+            "this phantom. They do not establish a universal threshold or an asymptotic phase transition."
         ) as vo:
             self.add(phantom_tag())
             self.play(FadeIn(A))

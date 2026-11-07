@@ -39,6 +39,9 @@ class Computing(VoiceoverScene):
             "converges to the minimum because the non-smooth part of the objective is separable across coordinates, a "
             "theorem of Paul Tseng."
         ) as vo:
+            intro=label('Coordinate updates soft-threshold a partial-residual inner product',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -50,15 +53,17 @@ class Computing(VoiceoverScene):
             label(r"warm starts: \ solve for a decreasing grid of $\lambda$, \ each from the last", font_size=26, color=LASSO),
             label(r"active sets: \ sweep only the nonzero coefficients until they settle", font_size=26, color=LASSO),
             label(r"strong rules: \ discard $j$ if $|x_j^\top r|/n < 2\lambda - \lambda_{\text{prev}}$, \ then check KKT", font_size=26, color=LASSO),
-            label(r"glmnet (Friedman, \ Hastie \& Tibshirani 2010): \ a whole path in the time of one least-squares fit", font_size=26, color=SPIKE),
+            label(r"glmnet (Friedman, \ Hastie \& Tibshirani 2010): \ fast paths in many examples; no universal timing ratio", font_size=26, color=SPIKE),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Three tricks make it fast. Warm starts: solve for a decreasing grid of lambdas, starting "
-            "each from the previous solution, which is already close. <bookmark mark='b'/> Active sets: once the nonzero "
-            "coefficients settle, sweep only those, and check the rest occasionally. <bookmark mark='c'/> Strong rules: "
-            "discard in advance any variable whose correlation with the residual is safely below the next lambda, then "
-            "confirm with the optimality conditions. <bookmark mark='d'/> Together, in Friedman, Hastie and Tibshirani's "
-            "glmnet, they compute a whole path of a hundred lambdas in about the time of a single least-squares fit."
+            "<bookmark mark='a'/> Three tricks make it fast. Warm starts: solve for a decreasing grid of lambdas, "
+            "starting each from the previous solution, which is already close. <bookmark mark='b'/> Active sets: once"
+            " the nonzero coefficients settle, sweep only those, and check the rest occasionally. <bookmark "
+            "mark='c'/> Strong rules: discard in advance any variable using a strong-rule heuristic based on its "
+            "previous residual inner product, then check every discarded variable against KKT and restore any "
+            "violations. <bookmark mark='d'/> Together, in Friedman, Hastie and Tibshirani's glmnet, they can make "
+            "full paths fast on favorable problems; the cost depends on dimensions, conditioning, sparsity and the "
+            "convergence tolerance."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -76,14 +81,17 @@ class Computing(VoiceoverScene):
         whys = [why(r"forward, \ but cautious"), why(r"a step, \ not a full fit"), why(r"keep all active correlations tied"),
                 why(r"equal angles with every active variable")]
         with self.voiceover(
-            "<bookmark mark='a'/> The path itself can be computed exactly. Efron, Hastie, Johnstone and Tibshirani's least "
-            "angle regression of 2004 starts at zero and finds the variable most correlated with the outcome. "
-            "<bookmark mark='b'/> Rather than fitting it fully, it moves the fit along that variable only until a second "
-            "variable has just as large a correlation with the residual. <bookmark mark='c'/> Then it moves along the "
-            "direction that keeps the two correlations tied, decreasing together. <bookmark mark='d'/> In general that is "
-            "the equiangular vector of the active set, making equal angles with every active variable. When a third variable "
-            "catches up, it joins, and so on."
+            "<bookmark mark='a'/> The path itself can be computed exactly. Efron, Hastie, Johnstone and Tibshirani's "
+            "least angle regression of 2004 starts at zero and finds the variable most correlated with the outcome. "
+            "<bookmark mark='b'/> Rather than fitting it fully, it moves the fit along that variable only until a "
+            "second variable has just as large a correlation with the residual. <bookmark mark='c'/> Then it moves "
+            "along the direction that keeps the two correlations tied, decreasing together. <bookmark mark='d'/> In "
+            "general that is the equiangular vector of the active set, making equal angles with the signed, "
+            "standardized active columns. When a third variable catches up, it joins, and so on."
         ) as vo:
+            intro=label('LARS follows an equiangular direction among signed active columns',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -109,6 +117,9 @@ class Computing(VoiceoverScene):
             "modification LARS traces the entire lasso path exactly. It is piecewise linear in lambda, with a knot wherever "
             "a variable enters or leaves."
         ) as vo:
+            intro=label('Dropping a zero-crossing coefficient enforces lasso sign conditions',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -204,13 +215,17 @@ class Computing(VoiceoverScene):
         whys = [why(r"Efron et al. (2004)"), why(r"here: \ 12 steps for 10 variables"),
                 why(r"boosting's cousin, \ Part 34"), why(r"glmnet")]
         with self.voiceover(
-            "<bookmark mark='a'/> LARS needs only p steps for its pure form, about the cost of one least-squares fit. "
-            "<bookmark mark='b'/> The lasso version adds a step for each drop: twelve for our ten variables. "
-            "<bookmark mark='c'/> A third variant, forward stagewise regression, takes tiny steps along the most correlated "
-            "variable and turns out to be closely related to boosting, which Part 34 explains. <bookmark mark='d'/> In "
-            "practice, coordinate descent on a grid of lambdas is simpler and extends to logistic, Poisson and Cox models, "
-            "which LARS does not. Both give the same answer where both apply."
+            "<bookmark mark='a'/> LARS needs only p steps for its pure form, about the cost of one least-squares fit."
+            " <bookmark mark='b'/> The lasso path can take additional drop and re-entry steps, twelve steps for these"
+            " ten variables; in general it can be much longer. <bookmark mark='c'/> A third variant, forward "
+            "stagewise regression, takes tiny steps along the most correlated variable and turns out to be closely "
+            "related to boosting, which Part 34 explains. <bookmark mark='d'/> In practice, coordinate descent on a "
+            "grid of lambdas is simpler and extends to logistic, Poisson and Cox models, which LARS does not. Both "
+            "give the same answer where both apply."
         ) as vo:
+            intro=label('Path complexity depends on design and drop events',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

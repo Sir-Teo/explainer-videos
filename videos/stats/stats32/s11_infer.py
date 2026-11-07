@@ -33,7 +33,7 @@ class Inference(VoiceoverScene):
         rows = [
             cmath(r"\text{naive}", r":", r"\text{select with the lasso, \ refit by OLS, \ report } t\text{-intervals}", font_size=28),
             cmath(r"\text{selected}", r"\Leftarrow", r"|\hat\beta_j| \text{ happened to be large}", font_size=30),
-            cmath(r"E(\hat\beta_j \mid \text{selected})", r">", r"\beta_j: \ \text{the winner's curse}", font_size=30),
+            cmath(r"E(\hat\beta_j\mid\text{selected, positive direction})", r">", r"\beta_j: \ \text{the winner's curse}", font_size=30),
             cmath(r"\text{noise variables}", r":", r"\text{selected for looking real, \ so their intervals exclude } 0", font_size=28),
         ]
         rows[2][-1].set_color(RES)
@@ -47,6 +47,9 @@ class Inference(VoiceoverScene):
             "of Part 33. <bookmark mark='d'/> Worst of all, noise variables are selected exactly when they look real, so their "
             "intervals usually exclude zero, the true value."
         ) as vo:
+            intro=label('Selection changes the distribution of the coefficients reported',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -137,14 +140,19 @@ class Inference(VoiceoverScene):
         whys = [why(r"one Newton-like step from the lasso"), why(r"an approximate inverse"),
                 why(r"van de Geer et al.; \ Zhang \& Zhang (2014)"), why(r"sparser than estimation needs")]
         with self.voiceover(
-            "<bookmark mark='a'/> The debiased lasso adds back what the penalty took away. Take the lasso estimate and add a "
-            "correction: an approximate inverse of the covariance applied to the correlation of X with the lasso residuals. "
-            "<bookmark mark='b'/> If theta were the exact inverse, this would be one Newton step from the lasso to least "
-            "squares. <bookmark mark='c'/> The result, scaled by root n, is a normal term plus a remainder that vanishes, as "
-            "shown independently by Sara van de Geer, Peter Bühlmann, Ya'acov Ritov and Ruben Dezeure, and by Cun-Hui and "
-            "Stephanie Zhang, and by Adel Javanmard and Andrea Montanari. <bookmark mark='d'/> The price: the true model must "
-            "be sparser than for estimation alone, s log p over root n going to zero."
+            "<bookmark mark='a'/> The debiased lasso adds back what the penalty took away. Take the lasso estimate "
+            "and add a correction: an approximate inverse of the covariance applied to the correlation of X with the "
+            "lasso residuals. <bookmark mark='b'/> If theta were the exact inverse, this would be one Newton step "
+            "from the lasso to least squares. <bookmark mark='c'/> The result, scaled by root n, is a normal term "
+            "plus a remainder that vanishes, as shown independently by Sara van de Geer, Peter Bühlmann, Ya'acov "
+            "Ritov and Ruben Dezeure, and by Cun-Hui and Stephanie Zhang, and by Adel Javanmard and Andrea Montanari."
+            " <bookmark mark='d'/> The small remainder needs design, tail, precision-estimation and "
+            "variance-estimation conditions as well as sufficiently strong sparsity, such as s log p over root n "
+            "tending to zero."
         ) as vo:
+            intro=label('A one-step correction reduces lasso bias under stronger conditions',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -168,6 +176,9 @@ class Inference(VoiceoverScene):
             "minus the coefficients over tau squared elsewhere, the formula Part 31 used for graphs. "
             "<bookmark mark='d'/> The standard error follows from the variance of the normal term."
         ) as vo:
+            intro=label('Nodewise residuals construct an approximate precision row',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -183,12 +194,12 @@ class Inference(VoiceoverScene):
         edges = np.linspace(-0.3, 0.9, 41)
         w = edges[1] - edges[0]
         hd = hist_bars(ax, edges, np.histogram(db, edges)[0] / (len(db) * w), color=DEB, opacity=0.6)
-        hn = hist_bars(ax, edges, np.histogram(nv, edges)[0] / (len(db) * w), color=NAIVE, opacity=0.75)
+        hn = hist_bars(ax, edges, np.histogram(nv, edges)[0] / (len(nv) * w), color=NAIVE, opacity=0.75)
         tline = DashedLine(ax.c2p(0.25, 0), ax.c2p(0.25, 6.8), color=SPIKE, stroke_width=3)
         rows = fit_rows(VGroup(
             label(r"green: \ debiased estimates, \ all 1,000", font_size=22, color=DEB),
             label(rf"centred at {b['deb_mean']:.2f}; \ intervals cover {100 * b['deb_cov']:.1f}\%", font_size=22, color=DEB),
-            label(rf"red: \ naive estimates, \ only the {b['naive_sel']} selected", font_size=22, color=NAIVE),
+            label(rf"red: conditional on selection, only the {b['naive_sel']} selected", font_size=22, color=NAIVE),
             label(rf"centred at {b['naive_mean']:.2f}: \ cut off below", font_size=22, color=NAIVE),
         ), 3.6, 0.42, [5.2, 0.3, 0])
         with self.voiceover(
@@ -221,14 +232,18 @@ class Inference(VoiceoverScene):
         whys = [why(r"a treatment effect with many possible confounders"), why(r"$d$ absorbs their effect"),
                 why(r"omitted-variable bias, \ Part 23"), why(r"Belloni, \ Chernozhukov \& Hansen (2014)")]
         with self.voiceover(
-            "<bookmark mark='a'/> A related problem in causal work. We want the effect alpha of a treatment d, with many "
-            "possible confounders X that affect both the treatment and the outcome. <bookmark mark='b'/> A lasso of the "
-            "outcome on the treatment and the controls tends to drop confounders whose direct effect on the outcome is "
-            "small, because the treatment, correlated with them, absorbs their effect. <bookmark mark='c'/> The result is "
-            "Part 23's omitted-variable bias. <bookmark mark='d'/> Alexandre Belloni, Victor Chernozhukov and Christian "
-            "Hansen's double selection runs two lassos, the outcome on the controls and the treatment on the controls, and "
-            "keeps the union: any variable that predicts either one."
+            "<bookmark mark='a'/> A related problem in causal work. We want the effect alpha of a treatment d, with "
+            "many possible confounders X that affect both the treatment and the outcome. <bookmark mark='b'/> A lasso"
+            " of the outcome on the treatment and the controls tends to drop confounders whose direct effect on the "
+            "outcome is small, because the treatment, correlated with them, absorbs their effect. <bookmark "
+            "mark='c'/> The result is Part 23's omitted-variable bias. <bookmark mark='d'/> Alexandre Belloni, Victor"
+            " Chernozhukov and Christian Hansen's double selection runs two lassos, the outcome on the controls and "
+            "the treatment on the controls, and keeps the union. A causal interpretation still requires exogeneity "
+            "and adequate controls; this cannot repair unmeasured confounding."
         ) as vo:
+            intro=label('Double selection seeks controls predictive of outcome or treatment',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -269,9 +284,11 @@ class Inference(VoiceoverScene):
         b = coverage_board(rows, lit_part=32, placeholders=0, font_size=20, row_h=0.62)
         b.scale_to_fit_width(min(b.width, 13.0)).move_to(ORIGIN)
         with self.voiceover(
-            "<bookmark mark='a'/> On the Board. Naive post-lasso intervals: broken, seventy-five percent. "
-            "<bookmark mark='b'/> The debiased lasso: kept, for the weak effect and for a null coefficient alike. "
-            "<bookmark mark='c'/> Single selection: broken, nine percent. Double selection: kept."
+            "<bookmark mark='a'/> On the Board. Naive post-lasso intervals: broken, seventy-five percent. Their Monte"
+            " Carlo margin uses a thousand independent datasets, accounting for correlated selected intervals and a "
+            "random number of intervals per dataset. <bookmark mark='b'/> The debiased lasso: kept, for the weak "
+            "effect and for a null coefficient alike. <bookmark mark='c'/> Single selection: broken, nine percent. "
+            "Double selection: kept."
         ) as vo:
             self.play(FadeIn(b.head), FadeIn(b.axis), FadeIn(b.legend))
             vo.wait_until("a")
@@ -292,10 +309,12 @@ class Inference(VoiceoverScene):
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> One subtlety remains: which target? The true coefficient in the full model, or the "
-            "coefficient of a variable in whatever model was selected? <bookmark mark='b'/> Debiasing aims at the true "
-            "coefficient and relies on sparsity. <bookmark mark='c'/> Richard Berk and colleagues' post-selection inference, "
-            "and Jason Lee and colleagues' exact selective inference, aim at the selected model's coefficients and need no "
-            "sparsity, at the price of wider intervals. <bookmark mark='d'/> Part 56 develops both."
+            "coefficient of a variable in whatever model was selected? <bookmark mark='b'/> Debiasing aims at the "
+            "true coefficient and relies on sparsity. <bookmark mark='c'/> Richard Berk and colleagues' "
+            "post-selection inference, and Jason Lee and colleagues' exact selective inference, can target "
+            "selected-model coefficients without a sparse full-model assumption, under their Gaussian design and "
+            "noise conditions. The interval cost depends on the selection and target. <bookmark mark='d'/> Part 56 "
+            "develops both."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
