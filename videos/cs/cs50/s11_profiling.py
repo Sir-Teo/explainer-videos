@@ -141,8 +141,8 @@ class Profiling(VoiceoverScene):
             "some probability p, so the count is binomial: a share from n samples has a standard error of the "
             "square root of p times one minus p, over n. <bookmark mark='b'/> The emulator also counts every "
             "instruction exactly. Scan is sampled at forty-two point eight percent, give or take zero point six; "
-            "exactly, it is forty-three point five. <bookmark mark='c'/> Every row misses by two standard errors or "
-            "fewer, as a binomial should. <bookmark mark='d'/> The error shrinks only as one over the square root "
+            "exactly, it is forty-three point five. <bookmark mark='c'/> Every row but one misses by two standard "
+            "errors or fewer, and that one by just over two, about what a binomial gives across this many rows. <bookmark mark='d'/> The error shrinks only as one over the square root "
             "of n: four times the samples to halve it. And a routine below one sample's worth of time can vanish: "
             "the digit printer ran nearly fourteen hundred instructions, and was never sampled."
         ) as vo:
