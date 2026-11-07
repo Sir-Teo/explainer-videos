@@ -1,62 +1,137 @@
 # Quant, Built — Part 15: Exotics and Structured Products
 
-Part 15 of a forty-three-part series on quantitative finance (see [the series plan](../README.md) and
-[the syllabus](../SYLLABUS.md)), in Act III, Derivatives: a hook, eighteen chapters, a chapter for the researcher and an outro, about 64 minutes.
-It covers:
+Part 15 of the [43-part series](../README.md), in Act III, Derivatives. A hook, eighteen chapters, a research chapter and an outro; approximately 65 minutes of narration before animation and reading pauses. English and Mandarin narration use the same assumptions, numbers and qualifications.
 
-* a structured note taken apart into priced pieces, the issuer's funding and margin, and what buyers earned;
-* barriers: reflection, the closed form and its PDE image, discrete monitoring, and static hedges;
-* digitals, one-touches and the call-spread hedge, simulated; Asians and lookbacks;
-* the snowball (雪球): the coupon as a linear solve, its outcomes, carry, and the issuer's Greeks in 3D;
-* January 2024 rebuilt on the real CSI 500 path; Korea's HSCEI-linked ELS in 2015–16 and 2021–24; Natixis (2018);
-* worst-of payoffs, correlation and the correlation skew; cliquets and the risk vega cannot see;
-* uncertain volatility, model risk measured on the bitcoin Surface, and a book's hedging flows;
-* a neural surrogate trained on screen against a polynomial; how desks reserve; the 2023–2026 frontier.
+The central example is a **stylized snowball**, not a reconstruction of an actual traded contract. Specify its cash flows before interpreting its coupon, Greeks or a dealer's hedge. Numerical examples come from the original fixed-seed [`compute.py`](compute.py) and the House's [`exotics.py`](../../../explainer/quant/house/exotics.py). Public episode figures come from the dated sources below.
 
-Every number is computed by the series' own code ([`compute.py`](compute.py), and the House's
-[`exotics`](../../../explainer/quant/house/exotics.py) pricer, tested in `tests/test_quant_house.py`).
+## Chapters
 
-*An education in methods, not investment advice. Firms and episodes are described from the public record;
-investors' losses are reported as the regulators and the press reported them.*
+| # | Chapter | Experiment |
+|---|---|---|
+| — | The snowball | Actual ETF path, hypothetical note barriers, historical context |
+| 1 | Anatomy of a note, and the margin | Pathwise decomposition; funding-spread illustration |
+| 2 | Who buys, and what they earned | 84 overlapping hypothetical vintages; investor research |
+| 3 | Barriers: reflection, the closed form, the PDE | Grid-reflection illustration, count histograms, value and delta surfaces |
+| 4 | Discrete monitoring and static vanilla hedges | BGK approximation; finite static portfolios; conditional put–call symmetry |
+| 5 | Digitals, one-touches and the call-spread hedge | Near-expiry delta; discrete hedge errors; first passage; smile chain rule |
+| 6 | Averages and extremes: Asians and lookbacks | Geometric control variate; all 1,500 saved scatter points; Vecer PDE |
+| 7 | The snowball, priced | Redemption states; 40,000 paths; affine coupon solve |
+| 8 | The issuer's Greeks, in three dimensions | Full displayed grids; state and sign conventions; bump-size replay |
+| 9 | January 2024: the snowballs melt | Hypothetical 36-note hedge on the actual ETF path |
+| 10 | Korea's ELS, twice, and a dealer's loss | Stylized 2015/2021 vintages; dated FSC/FSS record; Natixis disclosure |
+| 11 | Worst-of, correlation and the correlation skew | Unequal-volatility cloud; worst-of put and autocall; conditional correlations |
+| 12 | Cliquets: the risk vega cannot see | Local caps, finite-grid vega maximum, volatility uncertainty |
+| 13 | Uncertain volatility: the price of not knowing | Finite BSB solver; non-additivity; finite Lagrangian optimization |
+| 14 | One market surface, different exotic prices | Four approximate fits; empirical entropy tilt |
+| 15 | Dealer flows: when the hedges move the market | Fixed-parameter book sensitivities; conditional hedge and impact mechanisms |
+| 16 | A neural pricer for the book, trained on screen | Three training seeds, polynomial baseline, original synthetic references |
+| 17 | Industry: how desks mark, reserve and report | Prudent valuation, day-one recognition, capital, conduct, model validation |
+| 18 | Frontier, 2023–2026 | Digital-delta estimators over five seeds; scoped paper findings |
+| R | What the vanillas alone say about a one-touch | Martingale superhedge; terminal atoms and gaps; finite empirical illustration |
+| — | Recap, desk questions, problems | Three spoken desk questions, an extra dependence question, ten worked problems |
 
-## Chapters (about 64 minutes)
+## Contract and numerical conventions
 
-| # | Chapter | Min | Signature visual · experiment |
-|---|---|---|---|
-| — | The snowball (hook) | 2.4 | CSI 500 path with 2022–23 knock-in levels; the history strip 1973–2024 |
-| 1 | Anatomy of a note, and the margin | 3.0 | the note's value stacked block by block (`decompose`); coupon against funding spread |
-| 2 | Who buys, and what they earned | 2.2 | 84 vintages 2017–2023 riding the real path (`buyers`); the research record |
-| 3 | Barriers: reflection, the closed form, the PDE | 2.9 | mirrored paths and their histograms; DOC value and delta surfaces in 3D (`barrier_surface`); lab |
-| 4 | Watched at the close, hedged without trading | 3.5 | unseen excursions; BGK table (`barrier`); Derman–Ergener–Kani (`dek`); Carr–Ellis–Gupta under skew (`static`) |
-| 5 | Digitals, one-touches and the call-spread hedge | 3.2 | delta spike; the two hedges on one path and on 40,000 (`digital_hedge`); one-touch (`onetouch`); skew (`digital_skew`) |
-| 6 | Averages and extremes: Asians and lookbacks | 2.3 | running average and minimum; the control-variate scatter (`asian_scatter`); lab |
-| 7 | The snowball, priced | 3.6 | lab; 150 paths stopping and reddening (`outcomes`); V(c) = A + cB; carry and knock-in (`coupon_q`) |
-| 8 | The issuer's Greeks, in three dimensions | 4.0 | value with the knock-in cliff; hedge, gamma, vega surfaces (`greeks3d`); bump-size replay (`bump_curve`) |
-| 9 | January 2024: the snowballs melt | 3.2 | crisis file; the 36-note book run day by day (`book2024`); the hedgers' daily trades |
-| 10 | Korea's ELS, twice, and a dealer's loss | 3.2 | 2015 vintages (`korea2015`); FSC 2016; 2021 vintages (`korea`); FSS 2024–25; Natixis firm file |
-| 11 | Worst-of, correlation and the correlation skew | 3.9 | the folded payoff in 3D with the correlated cloud collapsing; regimes (`corr_regimes`); worst-of snowball (`worstof_ac`) |
-| 12 | Cliquets: the risk vega cannot see | 2.7 | monthly resets; the cliquet surface over (σ, cap) with its zero-vega ridge (`cliquet`) |
-| 13 | Uncertain volatility: the price of not knowing | 2.8 | the BSB solve marching back with its σ map (`uvm_film`); lab; non-additivity and the Lagrangian replay (`uvm_book`) |
-| 14 | Same vanillas, different exotics | 3.0 | four models' path fans and smiles; exotics table (`modelrisk`); the entropic tilt (`robust`) |
-| 15 | Dealer flows: when the hedges move the market | 2.5 | a book's vega 2021–2024 on the real path (`book_vega`); the vega supply (schematic) |
-| 16 | A neural pricer for the book, trained on screen | 2.6 | lab; `TrainingReplay` with 3 seeds (`surrogate_replay`); the polynomial baseline; speed |
-| 17 | Industry: how desks mark, reserve and report | 2.9 | prudent valuation, day-one P&L, FRTB, conduct, validation; the House's Rule 15 |
-| 18 | Frontier, 2023–2026 | 2.3 | three digital-delta estimators racing, 5 seeds (`pathwise_digital`); the papers |
-| R | For the researcher: what the vanillas alone say about a one-touch | 4.6 | the super-hedge (puts plus forwards at the touch), Hobson / Brown–Hobson–Rogers bounds; Bitcoin Surface, four fitted models, 79 days |
-| — | Recap, desk questions, problems | 2.6 | twelve lines, three desk questions, ten problems (two at qualifying-exam level) |
+Normalize initial spot and notional to one. On observations corresponding to months **3 through 24 inclusive**, spot at or above **1.03** redeems the note for `1 + c m/12`. A daily close **strictly below 0.75** sets a persistent knock-in flag. Knock-out can still occur afterward. At maturity, a surviving note without knock-in pays `1 + 2c`; a surviving knocked-in note pays `min(S_T,1)` without coupon. Recovery can therefore restore par. Coupons are paid on redemption or qualifying maturity, rather than in monthly installments.
 
-**For the researcher.** A down one-touch at B is dominated, on every path and in every model, by 1/(K − B) puts at
-K > B plus 1/(K − B) forwards bought at the first touch (a gap below B only lowers their cost), so
-P(S_T ≤ B) ≤ OT ≤ min_{K>B} P(K)/(K − B), the upper bound attained by a continuous model consistent with the puts
-(Hobson 1998; Brown, Hobson and Rogers 2001). On the four models fitted to the Bitcoin Surface (20,000 daily paths,
-79 days), floor / Heston / ceiling: 0.081/0.142/0.208 at B = 0.7, 0.164/0.285/0.408 at 0.8, 0.296/0.538/0.716 at 0.9;
-at 0.8 the models span 0.281–0.297 (Black–Scholes at the at-the-money vol 0.333). The super-hedge on the Heston paths
-at 0.8 (K* = 0.96, cost 0.408): minimum surplus 0, mean 0.126. Variance gamma, a pure-jump model, lies inside too.
+The original convention is **21 trading observations per month**, hence 504 over two model years, rather than exact calendar-month schedules. Historical simple returns are annualized by holding months divided by twelve; they are not compounded portfolio returns. Historical volatility uses a 244-day annualization while pricing uses a 252-step model year; this retained convention is an approximation. Korean ELS examples use 123 trading observations per half-year. First-redemption events are conditional on survival, and redemption cancels the loss leg.
 
-**Labs** (House code on screen, then run): `down_out_call` (ch. 3), `static_dic_hedge` (ch. 4),
-`geometric_asian_call` (ch. 6), `snowball_payoff` (ch. 7), `uvm_price` (ch. 13), the surrogate's training loop
-(ch. 16). **Replays:** the surrogate (3 seeds, polynomial baseline, label-noise floor), the Lagrangian UVM optimiser,
-the bump-size curve (3 seeds), the entropic tilt, the three delta estimators (5 seeds). **3D:** chapters 3, 8, 11, 12.
+| Original cached result | Value and interpretation |
+|---|---|
+| 2021–23 CSI 500 ETF volatility | 19.98%; retrospectively fixed for the reconstruction |
+| Fair snowball coupon | 13.3537%; `A = 0.93828165`, `B = 0.46218164`, `c* = (1−A)/B` |
+| Decomposition | Bond 0.96078944 + earlier repayment 0.02295316 + redemption coupons 0.05161465 + maturity coupon 0.01010370 − autocall-cancelled loss 0.04546095 = 1 |
+| Outcome frequencies | 78.415% knock out; 17.6475% survive after knock-in; 3.9375% survive without knock-in |
+| Expected life | 9.895 months; this is different from discounted coupon-accrual coefficient B |
+| Historical buyers | 26 losses among 84 overlapping hypothetical vintages; worst simple return −31.94%; 25 beat the ETF's price change over their own holding periods |
+| 2024 ETF fall | −17.83%, 29 December 2023 to 5 February 2024; an ETF proxy, not the index itself |
+| Hypothetical book | Cash hedge exposure peaks at 25.19 note-notionals; at the ETF low it is 14.59. After the initial hedge, modeled purchases total 24.86 and sales 24.44 |
+| Worst-of autocall | Coupon 23.26% at correlation 0.3 and 13.57% at 1, under the specified unequal asset volatilities |
+| UVM book | Finite-solver lower/upper 0.31373/0.62340; with the selected vanilla hedge 0.41175/0.52007; separate leg uppers sum to 1.00055 |
+| Neural proxy | Original 150-reference in-model RMSE 0.01661, maximum absolute error 0.10381; polynomial RMSE 0.01084 |
+| Proxy timing | 0.304 microseconds per output averaged over repeated 150-output batches; original 40,000-path single-price timing 0.309 s. Training labels 51.19 s and training 2.26 s are separate |
+
+Decomposition and coupon solve use the **same seeds and paths**, so their sample identity is exact up to rounding. A fresh sample need not price at exactly one. The loss claim is an **autocall-cancelled knock-in loss**, rather than an unconditional down-and-in put. Initial model margin excludes hedge costs, reserves and other expenses. Discounting the promise at `r+s` while pricing the option at `r` is a funding heuristic, not a default/recovery/wrong-way-risk model.
+
+The historical buyer observations overlap. They are neither independent trials nor actual client trades. ETF price comparisons omit index dividends. A lower absolute issue price does not mechanically increase the initial distance to a barrier defined relative to that same issue price.
+
+## What the experiments establish
+
+Barrier monitoring matters. The constant-coefficient, continuously monitored zero-rebate DOC is 7.28087; the original monthly monitored MC is 7.44370 and the 2,520-step grid MC is 7.29390. The latter is still a discrete grid. BGK is an asymptotic correction, particularly delicate near a barrier. Displayed twice-naive-standard-error bands are diagnostics, rather than confidence guarantees for dependent antithetic observations. The saved weekly schedule also has a terminal remainder. The reflection fan is a grid illustration, not an exact pathwise continuous reflection construction.
+
+Exact Carr–Ellis–Gupta static replication requires conditional put–call symmetry **at every potential touch**, not simply a symmetric initial smile. The skew comparison contains Monte Carlo and monitoring errors. A finite portfolio's convergence is a numerical example, rather than a universal replication proof.
+
+A digital has a continuous frictionless Black–Scholes replication; its finite-time delta is smooth. Near expiry, discrete replication becomes difficult. A held call spread's **terminal payoff dominance** does not imply a safer discrete dynamic hedge in every regime. With zero rates/dividends, its delta is bounded by `1/ε`. Where a differentiable implied-volatility smile slopes downward, the digital is dearer than Black–Scholes **at the same strike volatility**, by the chain rule. A comparison against a fixed ATM volatility also changes the volatility level.
+
+For continuous geometric averaging, log variance is `σ²T/3`; this is not a universal half-price rule for arithmetic Asians. The fixed population-optimal control coefficient gives the familiar `1−ρ²` variance ratio. A coefficient estimated from the same sample adds estimation effects. The displayed scatter includes all 1,500 saved points, while the coefficient and correlation use the original 4,000 observations. The Vecer transform is shown for continuous averaging and `r=q=0`.
+
+Issuer position delta is the negative of the positive underlying hedge. Units and cash exposure differ. The 2024 rebalancing bars use **current price × change in underlying units**, after the initial hedge; differencing cash exposure would also count mark-to-market changes. The cached knock-in-day exposure diagnostic contains spot and aging effects, rather than a pure state jump. Model Greeks, hypothetical hedge policies, actual orders and causal market impact are separate objects. The longer book reconstruction interpolates a fixed Greek table and retains its endpoint clamping; it is not observed dealer inventory or a hedge P&L.
+
+The buyer of a typical worst-of note sells the loss put and is long correlation; its issuer owns the loss put and is short correlation. Unequal asset volatilities prevent correlation one from making the normalized paths identical. Historical correlations are not risk-neutral correlation quotes; conditioning alone changes correlation. The reported regimes provide no universal crash-correlation law or formal significance test.
+
+Cliquet aggregate vega can be near zero while other risks remain. A finite grid maximum is not an exact zero, and a local Taylor argument about a random constant volatility is not a theorem for arbitrary stochastic volatility. UVM values have grid error, and the finite optimizer is not a global optimality certificate.
+
+The four models fit the observed surface with **different residual errors**. Their exotic-price spread includes fit, simulation and discretization differences; it is not a certified range over models sharing identical vanilla marginals. The KL calculation tilts empirical payoffs without imposing martingale or calibration constraints. Its ambiguity radius is assumed, not validated as plausible, a confidence level or a regulatory AVA. Its threshold compares present value with `0.97 exp(−0.04)`, rather than measuring a uniform three-percent realized loss.
+
+The proxy has three variable inputs with contract, carry, coupon and volatility fixed. Its original synthetic test references were inspected repeatedly; they are not an untouched market holdout. A local label-noise estimate of 0.00310 at one state is below the observed errors, rather than a global error floor. Batch inference timing excludes label generation, training, calibration and individual-request overhead.
+
+## Desk questions and solutions
+
+1. **Price a strict digital using a call spread.** Buy `1/ε` calls at `K−ε` and sell the same number at K. The payoff dominates `1{S_T>K}`. Under a smooth density, excess price is approximately `ε/2` times the discounted density at K. Wider spreads trade more overpayment for a lower maximum delta; the simulated hedge-error comparison is specific to the rebalancing experiment.
+2. **What is the snowball issuer's vega?** Differentiate every contingent leg: loss minus earlier-redemption and coupon vegas. The displayed above-barrier region is often positive, but sign and peak depend on state, model and contract. Knock-in does not universally eliminate vega or mandate an option buyback.
+3. **A one-touch from a digital?** For centered log price with zero drift, reflection gives twice the matching terminal digital for a maturity-paid touch. Zero stock drift is a different assumption: with `r=q=0`, log drift is `−σ²/2`. At `S=100,H=90,T=0.5,σ=25%`, the continuous touch price is 0.58015, against twice the terminal digital 0.61172.
+4. **A worst-of on three indices?** Owning the worst-of loss put generally benefits from lower correlation in the specified model. A note buyer selling that put has the opposite exposure. Dependence smiles, basis, contract states and model uncertainty need more than a single historical correlation estimate.
+
+## Ten problems, with worked solutions
+
+1. **Reflection and a DOC.** For constant Black–Scholes coefficients, `S>H`, `K≥H`, zero rebate and `r=q=0`, change measure for the reflected log process. The image term is `(S/H) C(H²/S,K)`, so `DOC=C(S,K)−(S/H)C(H²/S,K)`. Both terms satisfy the PDE, their difference vanishes at H, and the image payoff is zero on the allowed terminal domain. These conditions are essential.
+2. **BGK correction.** A sampled path can cross and return between observations. The Gaussian random-walk overshoot contributes `βσ√Δt`, with `β=−ζ(1/2)/√(2π)≈0.5826`. Move a down barrier down to `H exp(−βσ√Δt)` (an up barrier up) in the continuous approximation. The finite monitoring comparison illustrates convergence; it does not prove an exact identity or an error bound near the barrier.
+3. **Geometric Asian.** `log G=n⁻¹Σ log S_ti` is Gaussian with mean `log S₀+(r−q−σ²/2)t̄` and variance `σ²n⁻²Σ min(t_i,t_j)`. The double sum converges to `σ²T/3` for continuous uniform averaging. For log mean m and variance v, the discounted call is `e^(−rT)[e^(m+v/2)N(d₁)−K N(d₂)]`, where `d₂=(m−log K)/√v` and `d₁=d₂+√v`.
+4. **Call-spread bound and its boundary.** The payoff is zero below `K−ε`, a linear ramp on `[K−ε,K]`, and one at or above K. It dominates the strict digital everywhere. Its pointwise limit is **`1{S_T≥K}`**, including one at K. Thus price convergence to a strict digital needs **no terminal atom at K**; otherwise the limiting excess is `e^(−rT)Pr(S_T=K)`.
+5. **Decompose the snowball.** Start with a maturity bond; add the value of earlier principal repayment and coupons conditional on first redemption or survival without knock-in; subtract terminal loss only on surviving knocked-in paths. Knock-out cancels that loss. Differentiate all these legs for vega. A plain down-and-in put alone omits autocall cancellation and is insufficient.
+6. **Solve the coupon.** Every discounted path payoff is `a+c b`, with coupon-independent a and b. At first redemption m, `b=D_m m/12`; at surviving no-knock-in maturity, `b=2D_T`; otherwise b is zero. Hence `V(c)=A+cB` and, when `B>0`, `c*=(1−A)/B`. Original values give 13.3537%. Selling three percentage points below that coupon creates `0.03B=0.01386545` initial model margin before costs and reserves.
+7. **Chooser parity.** Assume identical strike K and expiry T for both choices at `t₁≤T`, deterministic r and q. At `t₁`, `max(C,P)=C+e^(−q(T−t₁))(K e^(−(r−q)(T−t₁))−S_t₁)⁺`. Its initial value is a call to T plus `e^(−q(T−t₁))` puts to t₁ at strike `K e^(−(r−q)(T−t₁))`.
+8. **Margrabe.** For two positive tradable GBMs with zero dividends and constant coefficients, use S₂ as numeraire. Their ratio is a martingale under the associated measure with variance rate `σ_X²=σ₁²+σ₂²−2ρσ₁σ₂`. The exchange call is `S₁(0)N(d₁)−S₂(0)N(d₂)`, with `d₁=[log(S₁/S₂)+σ_X²T/2]/(σ_X√T)` and `d₂=d₁−σ_X√T`. Take the deterministic payoff limit when `σ_X=0`; dividends require the corresponding prepaid-forward adjustment.
+9. **Down-touch bounds (advanced).** Assume a nonnegative uniformly integrable price martingale, zero rates/dividends, frictionless admissible trading and maturity payment, with `B<S₀`. Terminal price at or below B implies a prior touch, giving `Pr(S_T≤B)≤OT`. For any `K>B`, hold `1/(K−B)` puts and buy that many forwards at first passage `τ`. At a touch, `S_τ≤B`, so terminal portfolio payoff is at least `[(K−S_T)⁺+S_T−B]/(K−B)≥1`; without touch it is nonnegative. Optional sampling makes the forward strategy zero cost under the stated integrability conditions. Thus `OT≤inf_(K>B) P(K)/(K−B)`. At a smooth interior minimizer, `(K*−B)P′(K*)=P(K*)`. With atoms use the convex subgradient condition; neither uniqueness nor attainment follows from convexity alone. The terminal floor is the **right put derivative** at B when there is an atom. Sharpness of the upper bound under suitable continuous-model/marginal assumptions does not prove sharpness of the floor or attainability of every intermediate value.
+10. **Up-touch bound (advanced).** For `B>S₀`, hold `1/(B−K)` calls at `K<B` and sell the same number of forwards at first up-touch. On touch the payoff is at least `(S_τ−K)/(B−K)≥1`; an upward overshoot helps. Hence `OT_up≤inf_(K<B) C(K)/(B−K)` under the same martingale and trading conditions. In the specified zero-rate/dividend Black–Scholes example `S₀=1,σ=50%,T=0.25,B=1.2`, numerical strike minimization gives approximately `K*=0.973`, upper bound 0.494, model touch 0.424 and terminal digital 0.196. Finite minimization is an illustration, rather than a proof of an attained global optimum.
+
+## Research illustration
+
+The displayed band uses **Heston's own empirical puts** and a finite strike grid. The other approximate fits have different marginals. Their plotted touch values lying inside this band therefore do not test a theorem about a shared terminal law.
+
+| Down barrier | Heston terminal floor | Heston daily-grid touch | Heston empirical put upper |
+|---|---:|---:|---:|
+| 0.70 | 0.08465 | 0.14360 | 0.21359 |
+| 0.80 | 0.16360 | 0.28550 | 0.41431 |
+| 0.90 | 0.29875 | 0.53555 | 0.72117 |
+
+These are original 20,000-path, 79-day simulations. At B=0.8, other fitted models' daily touch values run from 0.28045 to 0.29965. The Heston superhedge at K=0.96 has minimum sampled surplus zero and mean 0.12707. Its priced gap is 0.12881; the difference is the sample mean forward gain, rather than an exact finite-sample expectation identity. Histogram shares divide by all 20,000 paths; 127 observations outside the displayed range are omitted without renormalizing. Daily monitoring and finite strike/Monte Carlo errors prevent a numerical certificate for continuous-model sharp bounds.
+
+## Reproduce and validate
+
+```bash
+# Restore or build original fixed-seed caches; do not force new market trials.
+python -m videos.quant.quant15.compute
+EXPLAINER_TTS=silent python tools/qa_series.py quant15 --cached-only
+python tools/make.py quant15 --cpu-voice -q m
+```
+
+`modelrisk` depends on Part 13 calibrations and `digital_skew` on Part 12's Surface. Build those dependencies first. China Southern CSI 500 ETF (510500.SS), China CSI 1000 ETF (512100.SS), and HSCEI (^HSCE) closes come from the checksummed Yahoo chart windows. Correlations involving 512100 begin in 2017 after the saved 2016 rebasing discontinuity. The Surface is Deribit, 10 December 2025. Model algorithms, the House, frozen manifest, envelope and trial ledger are preserved during presentation polish. Normal restoration adds no market trials or sealed holdout access.
+
+The polish evidence records actual endpoint and motion renders, inspected artifacts, numerical tests and sampled CPU speech integrity. Sampled signal and token timing checks do **not** complete full continuous production-voice pronunciation and synchronization listening.
+
+## Primary sources and dated context
+
+- Petra Vokata, [“Engineering Lemons,” JFE 142(2), 737–755 (2021)](https://petravokata.com/research). Its sample and fee estimates are not assumptions about Chinese snowballs. Calvet, Célérier, Sodini and Vallée (2023), JF 78(4), study Swedish capital-guarantee products and model-dependent household welfare.
+- Korea FSC, [21 January 2016 release](https://www.fsc.go.kr/eng/pr010101/22122?curPage=6&srchBeginDt=&srchCtgry=1&srchEndDt=&srchKey=&srchText=): knock-in is different from realized maturity loss. Later press figures and November 2025 preliminary penalty notices are labeled with their historical status.
+- Natixis, [18 December 2018 announcement](https://www.globenewswire.com/news-release/2018/12/18/1668988/0/en/natixis-natixis-confirms-its-strategic-ambitions-and-the-payment-of-a-1-5bn-special-dividend-despite-negative-non-recurring-items-in-4q18.html): €100m revenue reduction plus €160m provision. The [4Q2018 results](https://natixis.groupebpce.com/wp-content/uploads/2022/08/natixis_4q18.pdf) report a €259m non-recurring charge. Initial estimates, final accounting charges and realized cash losses are different quantities.
+- [EU 2016/101, Article 11](https://www.legislation.gov.uk/eur/2016/101/article/11) addresses model-risk AVAs and 90% certainty of prudent exit value. A coupon spread between different contracts is not that calculation. [EBA's official day-one/AVA Q&A](https://www.eba.europa.eu/single-rule-book-qa/qna/view/publicId/2019_4458) and [AASB 9 B5.1.2A, the Australian IFRS 9 equivalent](https://standards.aasb.gov.au/aasb-9-feb-2025) specify the active-identical-quote or observable-input recognition condition. Deferral is conditional; release follows relevant valuation-factor changes, including time, rather than a universal straight-line rule.
+- [Basel market-risk framework, MAR23](https://www.bis.org/committees/bcbs/basel-framework/standard/mar), residual-risk scope and exemptions; [FINRA Notice 12-03 (2012)](https://www.finra.org/sites/default/files/NoticeDocument/p125397.pdf), complex-product supervision. Local implementation and applicability matter.
+- Federal Reserve [SR 26-2, 17 April 2026](https://www.federalreserve.gov/supervisionreg/srletters/SR2602.htm), supersedes SR 11-7 and SR 21-8; risk-based, tailored guidance, most relevant to institutions above $30bn. Existing House tests are evidence, rather than independent validation of every function.
+- Hobson (1998) and Brown, Hobson and Rogers (2001), [author copy of “Robust hedging of barrier options”](https://www.skokholm.co.uk/wp-content/uploads/2013/02/barriers.pdf). See the martingale, marginal and trading assumptions above.
+- Frontier sources: [Zeron–Wu–Ruiz, 2023 preprint / 2025 revision](https://arxiv.org/abs/2305.06215); Sharma et al. [distributional RL](https://arxiv.org/abs/2407.10903) and [multi-asset pricing](https://arxiv.org/abs/2411.01121); [Cibrario et al. 2025](https://arxiv.org/abs/2507.19039); [Goudenège–Molent–Zanette, 2025 preprint / 2026 publication](https://arxiv.org/abs/2502.10300); [Glasserman–Karmarkar, 2025 preprint / April 2026 revision](https://arxiv.org/abs/2512.05301); [Higgins 2026](https://arxiv.org/abs/2602.01376); [Che–Lim–Sun 2026](https://arxiv.org/abs/2602.02996); [Lakshtanov 2026](https://arxiv.org/abs/2609.06137); [Fukasawa 2026](https://arxiv.org/abs/2610.00340); [Lopez-Piqueres et al., 30 October 2026](https://arxiv.org/abs/2610.42119). Their benchmarks and regularity conditions differ. Payoff-circuit depth, high-order Greek accuracy and simulated hedge results are not end-to-end hardware or general live-market guarantees.
+
+The wider textbook and paper map is in [READING.md](../READING.md).
 
 ## Textbook audit
 
@@ -85,212 +160,105 @@ the bump-size curve (3 seeds), the entropic tilt, the three delta estimators (5 
 | Gatheral, *The Volatility Surface*: barrier options (put–call symmetry, static hedge); exotic cliquets | ch. 4; ch. 12 |
 | Taleb, *Dynamic Hedging*: binaries, barriers, multi-asset options | ch. 5, 3–4, 11 |
 
-## Papers
-
-Classics: Merton (1973); Margrabe (1978); Goldman, Sosin, Gatto (1979); Stulz (1982); Johnson (1987); Kemna, Vorst
-(1990); Reiner, Rubinstein (1991); Conze, Viswanathan (1991); Rubinstein (1991, "Somewhere over the rainbow");
-Avellaneda, Levy, Parás (1995); Lyons (1995); Derman, Ergener, Kani (1995); Avellaneda, Parás (1996); Broadie,
-Glasserman, Kou (1997); Carr, Ellis, Gupta (1998); Boyer, Gibson, Loretan (1999); Vecer (2001); Forbes, Rigobon
-(2002); Cont (2006); Carr, Lee (2009); Glasserman, Xu (2014).
-Investors: Henderson, Pearson (2011); Célérier, Vallée (2017); Egan (2019); Vokata, "Engineering lemons" (working
-paper); Calvet, Célérier, Sodini, Vallée (2023).
-Frontier: Zeron, Wu, Ruiz (2023); Sharma, Chen, Noh, DeJesus, Schlener (2024, two papers); Cibrario et al. (2025);
-Goudenège, Molent, Zanette (2025); Glasserman, Karmarkar (2025); Higgins (2026); Che, Lim, Sun (2026); Lakshtanov
-(2026); Fukasawa (2026); Lopez-Piqueres, Acharya, Sun, Kumar (2026). Full citations and the public-record sources
-are in [READING.md](../READING.md).
-
-*Reading notes.* Compound options (Geske 1979) return in Part 20 as equity priced as an option on a firm. Thematic
-and risk-control indices (Bouzoubaa–Osseiran ch. 21) belong to Part 32. Branching diffusions (Guyon–Henry-Labordère)
-are beyond this part. A digital's price is minus the call's slope in strike, so the digital-vega identity in
-Bouzoubaa–Osseiran's appendix B is chapter 5's skew term.
-
-## Build it
-
-```bash
-python -m videos.quant.quant15.compute                    # every number (greeks3d, surrogate, cliquet take minutes)
-EXPLAINER_TTS=silent python tools/qa_scene.py quant15 Greeks   # one chapter, silent, with a contact sheet
-python tools/make.py quant15 --cpu-voice -q m             # English and Chinese, narrated by Kokoro on the CPU
-```
-
-`modelrisk` reads Part 13's calibrations (`.cache/quant13/calibrate.json`) and `digital_skew` Part 12's Surface;
-build Parts 12 and 13 first. About 25 CPU-minutes on an idle core in all.
-
-## Desk questions, with solutions
-
-1. **A digital as a call spread.**
-   * Buy the K − ε call and sell the K call, ×1/ε. It pays at least the digital everywhere.
-   * The extra cost is about ε/2 times the risk-neutral density at K (chapter 5: 0.541 against 0.486 at ε = 2).
-   * Its delta is bounded by 1/ε. Wider is dearer but hedgeable: in chapter 5 its hedging error falls about
-     three-fold when rebalancing 16 times as often, the digital's under two-fold.
-2. **The snowball issuer's vega: sign, and where it peaks.**
-   * The issuer is long the down-and-in put the buyer sold and short the coupons: more volatility makes a knock-in
-     likelier, so the issuer is long vega.
-   * It peaks with spot between the barrier and the start (about 0.9 of the start for a 75% knock-in), not at the
-     barrier, where a knock-in is nearly certain and the put already behaves like a deep vanilla.
-   * Once knocked in, the vega collapses. The issuer sells long-dated options against it: a vega supply that
-     turns into demand when barriers break (chapter 15).
-3. **A one-touch with zero drift, given the digital.** Twice the digital. Every path that ends beyond the barrier
-   touched it, and by reflection every path that touched it is matched by a mirror path that ends beyond it. With
-   r = q = 0 the log price drifts at −σ²/2 and the exact price is N(−d₂) + (S/H) N(−d₁), a little less than twice.
-4. **(Extra) A worst-of on three indices.** You own the put on the worst performer, so you are short correlation (the
-   put's cross-gamma is negative). No market quotes that input directly, and in a crash correlations rise (chapter
-   11: 0.76 to 0.91 for the CSI 500 and CSI 1000): your marks move on a number you cannot hedge. Desks charge
-   through the correlation skew and a reserve.
-
-## Problems, with solutions
-
-1. **Reflection.**
-   * With r = q = 0, a path that touches H and ends at S_T > K has a mirror image ending at H²/S_T, below H²/K.
-   * Counting the touched paths and weighting by S/H (the change of measure that keeps the mirrored path a
-     martingale) gives DOC = C(S, K) − (S/H) C(H²/S, K).
-2. **BGK.**
-   * Between monitoring dates the path can cross and return unseen.
-   * Siegmund's corrected diffusion approximation: the overshoot of a random walk at first passage has limiting mean
-     β σ√Δt, β = −ζ(½)/√(2π) ≈ 0.5826.
-   * So the discrete barrier acts like a continuous one moved away by that amount. Check: chapter 4's table.
-3. **Geometric average.**
-   * log G = (1/n) Σ log S_{t_i} is a linear map of a Gaussian vector: Gaussian, mean log S₀ + (r − q − σ²/2) t̄.
-   * Variance σ² Σ_{i,j} min(t_i, t_j)/n² → σ²T/3 in continuous time.
-   * Black–Scholes with these moments gives the closed form.
-4. **The call spread's bound.**
-   * The payoff [(S − K + ε)⁺ − (S − K)⁺]/ε is 1 for S ≥ K, (S − K + ε)/ε on [K − ε, K], 0 below.
-   * It is never less than 1_{S>K}, so it dominates the digital; it converges as ε → 0.
-5. **The snowball taken apart.**
-   * Notional repaid unless knocked in and below 1 at maturity: a zero-coupon bond minus a down-and-in put.
-   * The coupons: claims contingent on knock-out, or on survival without knock-in.
-   * The buyer is short the put, so short vega, apart from a small long-vega piece in the coupons. The issuer is the
-     reverse.
-6. **The coupon as a linear solve.**
-   * On each path the payoff is a + c·b, with a and b independent of c (a: the repaid principal or the knocked-in
-     index; b: months/12 at a knock-out, 2 if alive and never knocked in, 0 otherwise, all discounted).
-   * Taking expectations, V(c) = A + cB; V(c*) = 1 gives c* = (1 − A)/B (chapter 7: 13.35%).
-7. **The chooser.** At t₁ the holder takes max(C, P). By parity P = C − S e^{−q(T−t₁)} + K e^{−r(T−t₁)}, so
-   max(C, P) = C + (K e^{−r(T−t₁)} − S e^{−q(T−t₁)})⁺: a call to T plus e^{−q(T−t₁)} puts to t₁ struck at
-   K e^{−(r−q)(T−t₁)}.
-8. **Margrabe.**
-   * Use S₂ as numéraire: E^Q[e^{−rT}(S₁ − S₂)⁺] = S₂(0) E^{Q2}[(S₁/S₂ − 1)⁺].
-   * Under Q2, X = S₁/S₂ is a martingale with volatility σ² = σ₁² + σ₂² − 2ρσ₁σ₂ (Itô for a ratio).
-   * So the price is S₁(0)N(d₁) − S₂(0)N(d₂), d₁ = [log(S₁/S₂) + σ²T/2]/(σ√T), d₂ = d₁ − σ√T.
-9. **(qual) The one-touch's model-free bounds.**
-   * Floor: on {S_T ≤ B} the price has touched B, so 1{touched} ≥ 1{S_T ≤ B} pathwise; take expectations.
-   * Ceiling: with τ the first time S ≤ B and K > B, the portfolio (K − S_T)⁺/(K − B) + 1{τ ≤ T}(S_T − S_τ)/(K − B)
-     costs P(K)/(K − B) (forwards are free at zero rates). Touched: since S_τ ≤ B, it is at least
-     [(K − S_T)⁺ + S_T − B]/(K − B) ≥ 1. Untouched: at least 0. So OT ≤ P(K)/(K − B) for every K > B.
-   * The minimizer: d/dK[P(K)/(K − B)] = 0 gives P′(K*)(K* − B) = P(K*): the line from (B, 0) to (K*, P(K*)) has the
-     slope of the put curve at K*, a tangent; since P is convex, it is unique.
-10. **(qual) The up one-touch.** Hold 1/(B − K) calls at K < B and sell 1/(B − K) forwards at the first time S ≥ B.
-   Touched: (S_T − K)⁺/(B − K) − (S_T − S_τ)/(B − K) ≥ (S_τ − K)/(B − K) ≥ 1, and an upward gap (S_τ > B) only adds.
-   So OT_up ≤ min_{K<B} C(K)/(B − K). In Black–Scholes with σ = 50%, T = 0.25, B = 1.2: K* ≈ 0.973, bound 0.494,
-   against the model's own continuous-monitoring price 0.424 and the digital 0.196.
-
-## For the researcher
-
-* **The theorems.** Hobson (1998), "Robust hedging of the lookback option," *Finance Stoch.* 2; Brown, Hobson and
-  Rogers (2001), "Robust hedging of barrier options," *Math. Finance* 11(3); Cox and Obłój (2011) for double-touch
-  options; Beiglböck, Henry-Labordère and Penkner (2013) for the transport framework (Part 9).
-* **Simplifications.** Zero rates; one maturity's vanillas; a down one-touch paying at expiry; models simulated daily,
-  so their touch prices are slightly below the continuous-monitoring values; the bound from one model's puts (the four
-  models' puts nearly coincide).
-* **Open problems.** Sharp bounds with more marginals or other barriers; bounds over plausible model classes; gaps
-  and discrete monitoring.
-
-## Data and reproducibility
-
-* China Southern CSI 500 ETF (510500.SS), China CSI 1000 ETF (512100.SS) and the HSCEI (^HSCE), daily closes, from
-  Yahoo Finance's chart API (CSI index levels themselves have no history there); 2015–2025, checksummed.
-* The snowball book, the Korean notes and the surrogate are stylized and labelled so; the episodes' facts come from
-  Bloomberg, Reuters (via Asia Financial), Risk.net, StructuredRetailProducts and the Korean press.
-* 512100.SS's Yahoo closes jump by a factor of 2.7 on 4 November 2016 (a rebasing): correlations use it from 2017.
-* The bitcoin Surface (Deribit, 10 December 2025) and the four calibrated models come from Parts 12 and 13's caches.
-* Regulators' and companies' own documents are cited where they exist (FSC 2016, Natixis 2018, EU 2016/101); press
-  reports are labelled "as reported"; preliminary penalties are labelled preliminary.
-* No strategy was tested; the trial counter is unchanged.
 
 ---
 
 # 量化金融，从零搭建 — 第15部分：奇异期权与结构化产品
 
-开场、十八章、写给研究者的一章和结尾，约64分钟。本部分讲：
+本部分包括开场、十八章、研究篇与结尾，讲稿约65分钟，动画与阅读停顿另计。英文与中文采用相同的假设、数值及适用范围。核心例子是**示意雪球合约**，并非某笔真实成交。先写清现金流，再解释票息、希腊字母及发行人的对冲。
 
-* 把一张结构化票据拆成有价格的零件：发行人的融资与利润，以及买家赚了什么；
-* 障碍期权：反射原理、闭式解与偏微分方程的镜像、离散观察，以及静态对冲；
-* 数字期权、一触即付和看涨价差对冲的模拟；亚式期权与回望期权；
-* 雪球：票息是一个线性求解，它的结局分布、持有收益，以及发行人三维的希腊字母；
-* 在中证500真实路径上重建2024年1月；韩国挂钩国企指数的ELS（2015–16与2021–24）；法国外贸银行（2018）；
-* 最差表现、相关性与相关性偏斜；棘轮期权与vega看不见的风险；
-* 不确定波动率、在比特币曲面上度量的模型风险，以及一本账的对冲流量；
-* 在屏幕上训练、与多项式对比的神经网络替代定价器；交易台如何计提准备；2023–2026年的前沿。
+## 章节
 
-*讲的是方法，不构成投资建议。涉及的公司与事件均依据公开记录；投资者亏损按监管机构和媒体的报道描述。*
+| 章 | 内容 |
+|---|---|
+| 开场 | 雪球：真实ETF路径、假设票据障碍与历史背景 |
+| 1–2 | 票据拆解、融资与初始模型利润；84个重叠的假设发行批次与投资者研究 |
+| 3–4 | 反射、闭式解与PDE；离散观察与静态香草对冲 |
+| 5–6 | 数字期权、一触期权与看涨价差；亚式、回望、控制变量与Vecer变换 |
+| 7–8 | 雪球定价、状态与线性票息求解；完整展示网格上的发行人希腊字母 |
+| 9–10 | 2024年1月的假设对冲账；韩国ELS两次事件与Natixis的历史披露 |
+| 11–12 | 最差表现、相关性及条件相关性；棘轮与总vega以外的风险 |
+| 13–14 | 不确定波动率与有限优化；同一市场曲面的不同近似拟合及熵倾斜 |
+| 15–16 | 交易商流量的条件机制；三个种子的神经网络训练与多项式基线 |
+| 17–18 | 审慎估值、首日利润、资本与模型验证；2023–2026年文献前沿 |
+| 研究篇 | 香草期权能够给出的一触上界：鞅、原子、跳空与超对冲 |
+| 结尾 | 三道口述交易台题、一道补充相关性题及十道有解习题 |
 
-## 章节（约64分钟）
+## 合约与数值约定
 
-| # | 章节 | 分钟 |
-|---|---|---|
-| — | 雪球（开场） | 2.4 |
-| 1 | 票据的解剖，以及利润 | 3.0 |
-| 2 | 谁在买，他们赚了什么 | 2.2 |
-| 3 | 障碍期权：反射、闭式解与偏微分方程 | 2.9 |
-| 4 | 收盘时观察，以及不交易的对冲 | 3.5 |
-| 5 | 数字期权、一触即付和看涨价差对冲 | 3.2 |
-| 6 | 平均与极值：亚式期权和回望期权 | 2.3 |
-| 7 | 雪球的定价 | 3.6 |
-| 8 | 发行人的希腊字母，三维呈现 | 4.0 |
-| 9 | 2024年1月：雪球融化 | 3.2 |
-| 10 | 韩国的ELS：两次危机与一家交易商的亏损 | 3.2 |
-| 11 | 最差表现、相关性与相关性偏斜 | 3.9 |
-| 12 | 棘轮期权：vega看不见的风险 | 2.7 |
-| 13 | 不确定波动率：不知道的代价 | 2.8 |
-| 14 | 同样的香草期权，不同的奇异期权 | 3.0 |
-| 15 | 交易商流量：当对冲推动市场 | 2.5 |
-| 16 | 账本的神经网络定价器，在屏幕上训练 | 2.6 |
-| 17 | 业界：交易台如何估值、计提准备和报告 | 2.9 |
-| 18 | 前沿，2023-2026 | 2.3 |
-| R | 写给研究者：只凭普通期权，能对一触即付期权说什么 | 4.6 |
-| — | 回顾、交易台问题与习题（十道习题，两道为资格考试水平） | 2.6 |
+初始价格与本金均归一化为1。第**3至24个月，含两端**，观察价达到或超过1.03时，首次敲出，支付`1+c m/12`。某个日收盘价**严格低于0.75**时，敲入标记永久保留，但以后仍可敲出。到期未敲出的票据，若从未敲入，支付`1+2c`；若曾敲入，支付`min(S_T,1)`且无票息。因此，到期反弹仍可能恢复本金。票息在赎回或符合条件的到期日支付，并非按月现金分红。
 
-**写给研究者。** 在每条路径、每个模型中，B处的向下一触即付期权都被K > B处的1/(K − B)份看跌期权加上首次触碰时买入的1/(K − B)份远期所占优（跳到B以下只会降低它们的成本），所以P(S_T ≤ B) ≤ OT ≤ min_{K>B} P(K)/(K − B)，上界由一个与看跌期权一致的连续模型达到（霍布森1998；布朗、霍布森与罗杰斯2001）。在拟合比特币曲面的四个模型上（20,000条日度路径，79天），下限/赫斯顿/上限：B = 0.7时0.081/0.142/0.208，0.8时0.164/0.285/0.408，0.9时0.296/0.538/0.716；0.8处各模型为0.281–0.297（平值波动率的布莱克–斯科尔斯为0.333）。赫斯顿路径上0.8处的超对冲（K* = 0.96，成本0.408）：最小盈余0，平均0.126。纯跳跃的方差伽马也在区间内。
+原始计算每月使用**21个交易观察日**，两年共504日，不是严格的日历月安排。历史简单收益用持有月数除以12年化，既不是复利组合收益，也不是独立样本。历史波动率按244日年化，定价采用252步模型年；保留的这一约定属于近似。韩国ELS每半年使用123个交易观察日，各赎回事件以此前未赎回为条件，赎回会取消损失腿。
 
-教科书对照表与论文清单见上面的英文部分。
+| 原始缓存结果 | 数值与含义 |
+|---|---|
+| 2021–2023年中证500ETF波动率 | 19.98%；在历史重建中固定使用 |
+| 公平雪球票息 | 13.3537%；A=0.93828165，B=0.46218164，c*=(1−A)/B |
+| 逐路径拆解 | 债券0.96078944＋提前还本0.02295316＋敲出票息0.05161465＋到期票息0.01010370−自动赎回取消的损失腿0.04546095＝1 |
+| 模拟结局 | 78.415%敲出；17.6475%曾敲入后存续到期；3.9375%从未敲入并存续到期 |
+| 预期寿命 | 9.895个月；与折现票息累积系数B不同 |
+| 假设历史买家 | 84个重叠批次中26个亏损，最差简单收益−31.94%；25个在各自持有期内超过ETF价格涨幅 |
+| 2024年ETF跌幅 | 2023年12月29日至2024年2月5日为−17.83%；ETF代理并非指数本身 |
+| 假设账簿 | 现金对冲敞口最高25.19个票据本金，在ETF低点为14.59；初始对冲之后，模型买入24.86、卖出24.44 |
+| 最差表现自动赎回 | 指定的不等波动率下，相关性0.3时票息23.26%，相关性1时13.57% |
+| UVM账簿 | 有限求解器下界/上界0.31373/0.62340；加入所选香草对冲后0.41175/0.52007；逐腿上界之和1.00055 |
+| 神经网络替代器 | 原始150个模型内参考点RMSE为0.01661，最大绝对误差0.10381；多项式RMSE为0.01084 |
+| 速度 | 重复150点批量推断平均每输出0.304微秒；原始单次4万路径估值约0.309秒。训练标签51.19秒、训练2.26秒另计 |
 
-## 交易台问题与解答
+拆解与票息求解使用**相同种子及路径**，因此样本恒等式只差舍入；换一批路径不保证恰好为1。损失腿会被自动赎回取消，不能直接当作一只无条件敲入看跌期权。初始模型利润未扣除对冲成本、准备金及其他费用。以r+s折现承诺、以r定价期权只是融资利差示意，并未联合模拟违约、回收与错向风险。
 
-1. **用看涨价差做数字期权。**
-   * 买入K − ε看涨、卖出K看涨，乘以1/ε。它在任何地方的赔付都至少和数字期权一样多。
-   * 额外成本约为ε/2乘以K处的风险中性密度（第5章：ε = 2时0.541对0.486）。
-   * delta不超过1/ε。越宽越贵，但越能对冲：第5章中调仓频率提高16倍时，价差的对冲误差降为约三分之一，数字期权还不到一半。
-2. **雪球发行人的vega：符号，以及峰值在哪里。**
-   * 发行人持有买家卖出的向下敲入看跌期权，并欠着票息：波动率越高，敲入越可能，所以发行人做多vega。
-   * 峰值出现在现价位于障碍和起点之间时（敲入线75%时约为起点的0.9），而不在障碍处：那里敲入几乎已成定局，看跌期权已经像深度实值的香草期权。
-   * 敲入之后vega崩塌。发行人对冲时卖出长期期权：这种vega供给在障碍被击穿时变成需求（第15章）。
-3. **零漂移的一触即付，已知数字期权。** 两倍的数字期权。每条在障碍外结束的路径都碰过障碍；由反射原理，每条碰过障碍的路径都对应一条在障碍外结束的镜像路径。
-   r = q = 0时对数价格以−σ²/2漂移，精确价格是N(−d₂) + (S/H) N(−d₁)，略低于两倍。
-4. **（附加）挂钩三个指数的最差表现。** 你持有表现最差者的看跌期权，交叉gamma为负，所以做空相关性。没有市场直接报价这个输入，
-   而危机中相关性上升（第11章：中证500与中证1000从0.76升到0.91）：你的估值随一个无法对冲的数字变动。交易台通过相关性偏斜和准备金收费。
+84个历史发行批次并非真实客户交易，彼此重叠，也不是84次独立市场试验。ETF价格比较不含指数股息。若障碍按发行价比例定义，较低的绝对发行价不会机械地扩大初始相对障碍距离。
 
-## 习题与解答
+## 各实验的适用范围
 
-1. **反射。** r = q = 0时，一条触及H并收于S_T > K的路径有一条收于H²/S_T的镜像，位于H²/K之下。计数被触及的路径并乘以S/H
-   （让镜像路径保持为鞅的测度变换），得DOC = C(S, K) − (S/H) C(H²/S, K)。
-2. **BGK修正。** 在两个观察日之间，路径可能越过又回来而不被看见。西格蒙德的修正扩散近似表明，随机游走首次穿越时的超出量极限均值为
-   β σ√Δt，β = −ζ(½)/√(2π) ≈ 0.5826。所以离散障碍相当于向外移动这么多的连续障碍。验证：第4章的表。
-3. **几何平均。** log G = (1/n) Σ log S_{t_i}是高斯向量的线性变换，均值为log S₀ + (r − q − σ²/2) t̄，方差为σ² Σ_{i,j} min(t_i, t_j)/n²，
-   连续时间下趋于σ²T/3。代入布莱克-斯科尔斯即得闭式解。
-4. **看涨价差的界。** 收益[(S − K + ε)⁺ − (S − K)⁺]/ε在S ≥ K时为1，在[K − ε, K]上为(S − K + ε)/ε，以下为0。它不小于1_{S>K}，
-   所以占优于数字期权，并在ε → 0时收敛。
-5. **拆开雪球。** 除非敲入且到期时低于1，本金都会偿还：零息债券减去向下敲入看跌期权。票息是以敲出、或未敲入而存续为条件的权益。
-   买方做空看跌期权，所以做空vega，票息中只有一小部分做多vega；发行人正好相反。
-6. **票息作为线性求解。** 每条路径上的收益是a + c·b，a和b与c无关（a：偿还的本金或敲入后的指数；b：敲出时为月数/12，存续且未敲入时为2，否则为0，均已贴现）。
-   取期望得V(c) = A + cB；令V(c*) = 1得c* = (1 − A)/B（第7章：13.35%）。
-7. **选择期权。** 在t₁时持有人取max(C, P)。由平价P = C − S e^{−q(T−t₁)} + K e^{−r(T−t₁)}，所以max(C, P) = C + (K e^{−r(T−t₁)} − S e^{−q(T−t₁)})⁺：
-   一份到T的看涨期权，加上e^{−q(T−t₁)}份到t₁、执行价为K e^{−(r−q)(T−t₁)}的看跌期权。
-8. **马格拉布公式。** 以S₂为计价单位：E^Q[e^{−rT}(S₁ − S₂)⁺] = S₂(0) E^{Q2}[(S₁/S₂ − 1)⁺]。在Q2下X = S₁/S₂是鞅，
-   波动率σ² = σ₁² + σ₂² − 2ρσ₁σ₂（比值的伊藤公式）。所以价格为S₁(0)N(d₁) − S₂(0)N(d₂)，d₁ = [log(S₁/S₂) + σ²T/2]/(σ√T)，d₂ = d₁ − σ√T。
-9. **（资格考试）一触即付的无模型界。** 下限：在{S_T ≤ B}上价格必已触碰B，所以逐路径1{触碰} ≥ 1{S_T ≤ B}，取期望即得。上限：τ为首次S ≤ B的时刻、K > B，组合(K − S_T)⁺/(K − B) + 1{τ ≤ T}(S_T − S_τ)/(K − B)的成本为P(K)/(K − B)（零利率下远期免费）。触碰时由S_τ ≤ B，它至少为[(K − S_T)⁺ + S_T − B]/(K − B) ≥ 1；未触碰时至少为0。最小化点：P′(K*)(K* − B) = P(K*)，即从(B, 0)到看跌期权曲线的切线；P是凸的，所以唯一。
-10. **（资格考试）向上一触即付。** 持有K < B处的1/(B − K)份看涨期权，在首次S ≥ B时卖出1/(B − K)份远期。触碰时(S_T − K)⁺/(B − K) − (S_T − S_τ)/(B − K) ≥ (S_τ − K)/(B − K) ≥ 1，向上跳空（S_τ > B）只会增加。所以OT_up ≤ min_{K<B} C(K)/(B − K)。布莱克–斯科尔斯中σ = 50%、T = 0.25、B = 1.2时：K* ≈ 0.973，界为0.494，模型自身的连续观察价格0.424，数字期权0.196。
+**障碍与静态对冲。** 常系数、连续观察、零返还DOC价格为7.28087；月度观察MC为7.44370，2520步网格MC为7.29390，后者仍不是连续观察。BGK是渐近修正，靠近障碍时尤其需要谨慎。显示的两倍朴素标准误不能在相关的对偶路径下直接当作置信保证。原始周度安排存在期末余数。路径反射图是网格示意。精确Carr–Ellis–Gupta复制需要**每个潜在触障时刻的条件看涨看跌对称性**，而非只有初始微笑对称；偏斜实验还含MC与观察网格误差。
 
-## 写给研究者
+**数字与亚式。** 连续、无摩擦Black–Scholes中数字期权可以复制，剩余期限大于零时delta平滑。临近到期难点在离散对冲。持有看涨价差的终值逐状态支配，不等于所有情况下离散动态对冲误差更小。零利率零股息时，其delta上界为1/ε。微笑斜率为负处的数字价格比较，应使用**相同行权价的波动率**；若和固定平值波动率比较，还混入波动率水平变化。连续几何平均的对数方差为σ²T/3，不代表算术亚式普遍只值香草的一半。1−ρ²方差公式假定固定的总体最优控制系数；同一样本估计系数还带来估计效应。散点显示全部1500个保存点，统计系数来自原始4000条路径。Vecer PDE限定连续平均且r=q=0。
 
-* **定理。** 霍布森（1998），*Finance Stoch.* 2；布朗、霍布森与罗杰斯（2001），*Math. Finance* 11(3)；Cox与Obłój（2011）论双触碰期权；Beiglböck、Henry-Labordère与Penkner（2013）的运输框架（第9部分）。
-* **简化。** 零利率；只有一个到期日的普通期权；到期支付的向下一触即付；模型按日模拟，所以触碰价格略低于连续观察的值；界来自一个模型的看跌期权（四个模型的看跌期权几乎重合）。
-* **开放问题。** 加入更多边际或其他障碍时的紧界；在合理模型类上的界；跳空与离散观察。
+**对冲与流量。** 发行人头寸delta等于正向标的对冲数量的负值；单位数与现金敞口不同。重平衡柱形图计算**当前价格乘标的数量变化**，不包含初始建仓。直接差分现金敞口还会算入盯市变化。缓存中的敲入日敞口变化混合了价格与时间变化，不是纯粹状态跳变。模型希腊字母、假设对冲策略、真实订单及因果市场冲击需要分别识别。长时期账簿使用固定希腊字母表插值，并保留端点截断；它不是实际库存或对冲损益。
+
+**相关性、棘轮与不确定波动率。** 最差表现票据买家卖出损失看跌腿，因此做多相关性；发行人持有该腿，方向相反。两资产波动率不同时，相关性1也不会让归一化路径相同。历史相关性不是风险中性报价；条件筛选本身也会改变相关性，样本危机区间不能证明普遍规律或统计显著性。棘轮的总vega接近零仍有其他风险，有限网格最大值不等于精确零；随机常数波动率的局部Taylor分析不等于任意随机波动率定理。UVM存在网格误差，有限优化也不是全局证书。
+
+**模型与替代器。** 四种曲面的近似拟合残差不同，奇异期权差价还混入拟合、模拟及离散化误差，不能当作共享完全相同香草边际分布的模型区间。KL只倾斜经验支付，没有施加鞅与校准约束；半径是指定参数，不是经验证的合理性、置信度或监管AVA。阈值比较现值与0.97 exp(−0.04)，不是统一的3%实际亏损。替代器只变三个输入，其余合约参数固定；150个合成参考点被反复查看，不能称为未触碰的市场留出集。单个状态的标签噪声0.00310低于观察误差，不能当作全局误差下限。批量推断速度不含标签、训练、校准及单次请求开销。
+
+## 交易台题与解答
+
+1. **用价差定价严格数字期权。** 买入K−ε看涨、卖出K看涨，各1/ε份；终值处处支配1{S_T>K}。光滑密度下，多付价格约为ε/2乘折现终值密度。更宽价差以较高价格换取较低最大delta；所示离散对冲误差只属于指定实验。
+2. **发行人的vega符号与峰值？** 对所有现金流求导：损失腿减去提前还本及条件票息的vega。展示的障碍以上区域通常为正，但符号与峰值依赖状态、模型和合约；敲入不保证vega归零，也不强制回购期权。
+3. **从数字价格得到一触价格？** 居中对数价格零漂移时，反射给出到期支付一触价格为匹配数字价格的两倍。标的零漂移是另一条件：r=q=0时，对数漂移为−σ²/2。S=100、H=90、T=0.5、σ=25%时，连续一触为0.58015，终值数字两倍为0.61172。
+4. **三个指数的最差表现？** 在指定模型中，持有最差表现损失看跌通常受益于相关性下降；卖出该腿的票据买家方向相反。依赖微笑、基差、合约状态和模型风险不能由一个历史相关系数概括。
+
+## 十道习题及推导
+
+1. **反射与DOC。** 假设常系数Black–Scholes、S>H、K≥H、零返还、r=q=0。反射对数过程并换测度得到镜像项(S/H)C(H²/S,K)，故DOC=C(S,K)−(S/H)C(H²/S,K)。两项均满足PDE，差在H处为零，镜像项在允许的终值区域支付为零。结论依赖这些条件。
+2. **BGK。** 离散观察会漏掉观察间触障后返回的路径。高斯随机游走的超越量带来βσ√Δt，β=−ζ(1/2)/√(2π)≈0.5826。下障碍移到H exp(−βσ√Δt)，上障碍向上移，用连续公式近似。有限模拟展示收敛，不证明精确恒等式或障碍附近误差界。
+3. **几何亚式。** log G=n⁻¹Σ log S_ti为高斯，均值log S₀+(r−q−σ²/2)t̄，方差σ²n⁻²Σ min(t_i,t_j)，连续均匀平均极限为σ²T/3。对数均值m、方差v时，价格e^(−rT)[e^(m+v/2)N(d₁)−KN(d₂)]，其中d₂=(m−log K)/√v，d₁=d₂+√v。
+4. **价差上界与边界。** 终值在K−ε以下为零，在[K−ε,K]线性上升，在K及以上为1。因此处处支配严格数字期权，但逐点极限是**1{S_T≥K}**，在K处仍为1。价格收敛到严格数字需要**K处没有终值原子**；否则极限多出e^(−rT)Pr(S_T=K)。
+5. **雪球拆解。** 从到期债券开始，加提前还本价值、首次赎回票息及未敲入存续到期票息；仅在敲入后仍未赎回的路径扣除终值损失。赎回取消该损失腿。vega需对所有腿求导，仅用普通敲入看跌会漏掉取消条件。
+6. **线性票息。** 每条折现支付为a+c b。第m个月首次赎回时b=D_m m/12；从未敲入并到期时b=2D_T；其他情况为零。故V=A+cB，B>0时c*=(1−A)/B=13.3537%。少给三个百分点票息产生0.03B=0.01386545的初始模型利润，尚未扣成本和准备金。
+7. **选择期权。** 在t₁≤T选择，两个期权同K、同T，r与q确定。看涨看跌平价给出max(C,P)=C+e^(−q(T−t₁))(K e^(−(r−q)(T−t₁))−S_t₁)⁺。初始价格为一只到T的看涨，加e^(−q(T−t₁))份到t₁、行权价K e^(−(r−q)(T−t₁))的看跌。
+8. **Margrabe。** 两个正的可交易GBM、零股息、常系数，以S₂为计价物。比值在对应测度下为鞅，方差率σ_X²=σ₁²+σ₂²−2ρσ₁σ₂。交换看涨价格S₁(0)N(d₁)−S₂(0)N(d₂)，d₁=[log(S₁/S₂)+σ_X²T/2]/(σ_X√T)，d₂=d₁−σ_X√T。σ_X=0取确定性极限；有股息需调整预付远期。
+9. **下触界（进阶）。** 非负一致可积价格鞅、零利率股息、无摩擦且允许相应策略、一触到期支付、B<S₀。S_T≤B必已触障，故Pr(S_T≤B)≤OT。任取K>B，持有1/(K−B)份看跌，在首次下触τ买入等量远期。触障时S_τ≤B，终值至少[(K−S_T)⁺+S_T−B]/(K−B)≥1；未触障时非负。可选抽样在可积条件下使远期策略零初始成本，所以OT≤inf_(K>B)P(K)/(K−B)。光滑内点最优满足(K*−B)P′(K*)=P(K*)；有原子时用凸次梯度，凸性本身不保证唯一或达到最优。B处有原子时，终值下界使用看跌的**右导数**。适当连续模型及边际条件下上界尖锐，不代表该下界也尖锐或中间每个价格都可达到。
+10. **上触界（进阶）。** B>S₀，任取K<B，持有1/(B−K)份看涨，在首次上触时卖出等量远期。触障后的终值至少(S_τ−K)/(B−K)≥1，上跳超越量只会增加保护。相同鞅及交易条件下，OT_up≤inf_(K<B)C(K)/(B−K)。零利率股息、S₀=1、σ=50%、T=0.25、B=1.2时，数值结果约K*=0.973、上界0.494、模型一触0.424、终值数字0.196；有限数值最小化不是全局最优达到性的证明。
+
+## 研究篇的数据解释
+
+图中带状范围来自**Heston自身的经验看跌价格**与有限行权价网格。其他模型近似拟合的终值边际不同，落在同一带内不是共享边际定理的检验。
+
+| 下障碍 | Heston终值下界 | Heston日网格一触 | Heston经验看跌上界 |
+|---|---:|---:|---:|
+| 0.70 | 0.08465 | 0.14360 | 0.21359 |
+| 0.80 | 0.16360 | 0.28550 | 0.41431 |
+| 0.90 | 0.29875 | 0.53555 | 0.72117 |
+
+原始模拟为2万条路径、79天。B=0.8时，其他模型一触为0.28045至0.29965。K=0.96的Heston超对冲最小样本盈余为零、平均0.12707；价格差为0.12881，两者差是远期收益的样本均值，不是有限样本中严格为零的恒等式。直方图均除以全部2万路径，展示窗口以外127个样本不重新归一化。日观察、有限行权价与MC误差使该例不能成为连续模型尖锐界的数值证书。
+
+## 复现、来源与验证状态
+
+上方命令使用原始固定种子缓存。modelrisk依赖第13部分校准，digital_skew依赖第12部分曲面。价格数据是带校验和的Yahoo窗口：510500.SS、512100.SS与^HSCE；512100的相关性从2017年开始，以避开保存数据中的2016年重定基准。曲面来自2025年12月10日Deribit。展示润色保持原算法、House、冻结市场清单、风险约束与试验台账，不增加市场试验或读取封存留出集。
+
+英文上方提供主来源链接。Petra Vokata的《Engineering Lemons》发表于2021年JFE，不能继续标为未确认工作论文；瑞典福利研究的结论依赖模型。FSC 2016区分敲入与实际损失；2025年罚款通知按当时初步状态描述。Natixis 2018年12月初始披露为1亿欧元收入减少加1.6亿准备，最终季度报告为2.59亿非经常费用；这些不是同一种已实现现金损失。
+
+EU 2016/101第11条的90%审慎退出价值要求不等于不同合约票息之差。IFRS 9及AASB等效准则B5.1.2A的首日确认条件包括相同工具活跃报价或仅使用可观察市场输入；不满足时的递延与释放取决于相关估值因素变化，并非所有雪球都直线摊销。MAR23的范围、豁免与本地实施均需核对。美联储2026年4月17日SR 26-2取代SR 11-7与SR 21-8，强调风险及规模相称。现有代码测试不等于每个函数均经独立验证。前沿论文各有正则性与基准条件，支付电路深度、模拟对冲或特定高阶希腊字母结果不能外推成端到端硬件优势或实盘保证。
+
+润色证据区分实际端点/运动渲染、人工查看、数值测试与抽样CPU语音信号检查。抽样信号及词时序检查**不能代替完整生产语音的连续发音与同步听审**；该项继续单独跟踪。
