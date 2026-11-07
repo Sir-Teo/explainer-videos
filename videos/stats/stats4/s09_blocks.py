@@ -139,7 +139,7 @@ class Blocks(VoiceoverScene):
         whys = [why(r"$Z$: \ intercept and father's height; \ $\mathbf x$: \ mother's"),
                 why(r"$M_Z = I - P_Z$: \ the block inverse, \ written as projections")]
         A = axes([-20, 20], [-25, 25], x_length=4.4, y_length=2.9, xlabel=r"mother's height, \ father removed",
-                 ylabel=r"child, \ father removed", xticks=[-15, 0, 15], yticks=[-20, 0, 20], center=[-3.8, -2.2, 0])
+                 ylabel=r"child, \ father removed", xticks=[-15, 0, 15], yticks=[-20, 0, 20], center=[-3.8, -1.9, 0])
         ax = A.ax
         dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.025, color=DATA, fill_opacity=0.7) for a, b in zip(rx, ry) if abs(a) < 20 and abs(b) < 25])
         ln = Line(ax.c2p(-18, -18 * e["b_fwl"]), ax.c2p(18, 18 * e["b_fwl"]), color=EXACT, stroke_width=3)

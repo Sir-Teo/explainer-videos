@@ -214,8 +214,8 @@ class Hook(VoiceoverScene):
             "learning to read it fluently. We'll prove what we use, check every identity numerically, and keep the "
             "statistics in view: every chapter ends with what the tool is for."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(head, shift=UP * 0.2))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq))
             vo.wait_until("c")

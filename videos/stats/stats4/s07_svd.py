@@ -134,8 +134,9 @@ class SVD(VoiceoverScene):
         labs = {k: MathTex(rf"r = {k}:\ \ \text{{error }} {d['err'][str(k)]:.2f} = \sqrt{{\textstyle\sum_{{k > {k}}} \sigma_k^2}},\ \ "
                            rf"\text{{storage }} {d['storage'][str(k)]:,}", font_size=24).move_to([3.4, -1.0, 0]) for k in ks}
         s = np.asarray(d["s"])
-        A = axes([0, 30], [0, 1.0], x_length=5.4, y_length=1.8, xlabel=r"$k$", ylabel=r"share of $\sum \sigma^2$",
-                 xticks=[1, 5, 10, 25], yticks=[0, 0.5, 1], center=[-3.6, -2.6, 0])
+        A = axes([0, 30], [0, 1.0], x_length=5.4, y_length=1.5, xlabel=r"$k$", ylabel=r"",
+                 xticks=[1, 5, 10, 25], yticks=[0, 0.5, 1], center=[-3.6, -2.4, 0])
+        energy_label = label(r"cumulative share of $\sum \sigma^2$", font_size=18, color=GREY_A).move_to([-3.6, -1.55, 0])
         en = np.asarray(d["energy"])[:30]
         ec = curve(A.ax, np.arange(1, 31), en, S.ACCENT, 3)
         tag = simulated_tag(r"simulated: the World's towns, \ log population density", corner=UL)
@@ -169,7 +170,7 @@ class SVD(VoiceoverScene):
             vo.wait_until("d")
             self.play(Transform(cur, approx[ks[4]]), Transform(cl, labs[ks[4]]), run_time=1.2)
             vo.wait_until("e")
-            self.play(FadeIn(A), Create(ec))
+            self.play(FadeIn(A), FadeIn(energy_label), Create(ec))
         self.clear_scene()
 
     def pca(self):
@@ -188,7 +189,7 @@ class SVD(VoiceoverScene):
         ).arrange(DOWN, buff=0.3).to_edge(DOWN, buff=0.7)
         nums[0][0].set_color(SIM)
         nums[0][2].set_color(EIG)
-        intro = label('PCA from a data matrix', font_size=36)
+        intro = label('PCA from a data matrix', font_size=36).to_edge(UP, buff=0.35)
         with self.voiceover(
             "The SVD and the spectral theorem are two views of the same thing in statistics. "
             "<bookmark mark='a'/> Take the SVD of the centred data matrix. <bookmark mark='b'/> Then the sample "
@@ -200,7 +201,6 @@ class SVD(VoiceoverScene):
             self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=2.4, x=-0.6, buff=0.6, edge=6.9)
             vo.wait_until("a")
-            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1, transform=False)
