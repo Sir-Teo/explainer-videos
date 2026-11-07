@@ -113,12 +113,7 @@ class Duality(LectureMixin, VoiceoverScene):
 
     def brenier(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> In many dimensions there is no ordering, but there is a substitute. <bookmark mark='b'/> "
-            "Yann Brenier proved in 1991 that for the squared distance, if mu has a density, the optimal plan is a map, and "
-            "the map is the gradient of a convex function. <bookmark mark='c'/> A gradient of a convex function is the "
-            "natural many-dimensional version of a monotone function: it never crosses itself. <bookmark mark='d'/> The "
-            "convex function is the dual potential, up to a quadratic; this is what makes multivariate ranks possible in "
-            "chapter seven.",
+            "<bookmark mark='a'/> In several dimensions, convex gradients replace scalar monotone rearrangement. <bookmark mark='b'/> For quadratic cost and laws with finite second moments, absolute continuity of the source ensures a unique optimal transport map almost everywhere, given by the gradient of a convex potential. <bookmark mark='c'/> Such gradients are monotone in the displayed inner-product sense and satisfy cyclic monotonicity. Monotonicity alone does not imply injectivity or an arbitrary no-crossing claim. <bookmark mark='d'/> For half squared-distance cost, the convex potential equals half the source norm squared minus a source Kantorovich potential.",
             [(r"d > 1", r":", r"\text{no ordering}", 40),
              (r"\text{Brenier}", r":", r"T^* = \nabla\varphi, \ \ \varphi \text{ convex}", 40),
              (r"\text{monotone}", r":", r"\langle \nabla\varphi(x) - \nabla\varphi(y), \ x - y\rangle \ge 0", 40),
@@ -128,15 +123,10 @@ class Duality(LectureMixin, VoiceoverScene):
 
     def algorithms(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Exact algorithms. <bookmark mark='b'/> With equal weights on n points each, the optimal "
-            "coupling is a permutation, and the problem is the assignment problem. Harold Kuhn's Hungarian method of 1955, "
-            "built on the work of Kőnig and Egerváry, solves it in n cubed operations. <bookmark mark='c'/> Dimitri "
-            "Bertsekas's auction algorithm, from 1979, lets targets raise their prices as sources bid for them: the dual "
-            "prices made into a market. <bookmark mark='d'/> Network simplex methods solve general discrete problems. All are "
-            "exact, and all scale roughly like n cubed: chapter four's motive.",
-            [(r"\text{equal weights}", r":", r"\text{the optimal plan is a permutation}", 40),
+            "<bookmark mark='a'/> Exact discrete transport has several algorithms, with different complexity guarantees. <bookmark mark='b'/> For uniform equal-size clouds an optimal permutation coupling exists by the transport polytope's structure. Other optimal couplings can be mixtures of permutations. Modern Hungarian implementations have cubic worst-case complexity for a dense square assignment problem; the original 1955 implementation was slower. <bookmark mark='c'/> Auction algorithms use price updates and require suitable precision or termination rules. <bookmark mark='d'/> General weighted transport can use network or linear-programming methods. Their costs are not all described by one universal cubic formula.",
+            [(r"\text{equal weights}", r":", r"\text{an optimal permutation plan exists}", 40),
              (r"\text{Hungarian}", r":", r"O(n^3), \ \text{Kuhn (1955)}", 40),
              (r"\text{auction}", r":", r"\text{bids raise the dual prices}", 40),
-             (r"\text{exact methods}", r":", r"\approx n^3: \ \text{too slow at scale}", 40)],
+             (r"\text{exact methods}", r":", r"\text{cost depends on algorithm, size and precision}", 40)],
             [r"Birkhoff's theorem", r"K\H{o}nig; \ Egerv\'ary", r"Bertsekas (1979)", r"chapter 4"],
             colors=[(1, PLANC)])

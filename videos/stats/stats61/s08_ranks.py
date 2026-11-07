@@ -98,11 +98,7 @@ class Ranks(LectureMixin, VoiceoverScene):
 
     def free(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Why these ranks matter for testing. <bookmark mark='b'/> Under the null that n points are "
-            "independent draws from one law with a density, the assignment of points to the fixed grid is uniformly random "
-            "over all permutations. <bookmark mark='c'/> So any statistic computed from the ranks has a null distribution "
-            "that does not depend on the law: it can be tabulated once. <bookmark mark='d'/> That is the property that made "
-            "Wilcoxon's and Kruskal's tests useful, now in every dimension.",
+            "<bookmark mark='a'/> Transport ranks use a fixed reference grid and a sample-equivariant assignment rule. <bookmark mark='b'/> For IID observations with an almost surely unique assignment, exchangeability makes the assignment a uniform permutation of the fixed reference points. Randomized tie handling can preserve the symmetry when ties occur. <bookmark mark='c'/> Rank statistics then have a distribution-free null under these conditions; reference choice and sample sizes still determine that null. <bookmark mark='d'/> This extends the logic of scalar rank tests, with additional care about grid construction and ties.",
             [(r"H_0", r":", r"X_1, \dots, X_n \ \text{i.i.d.} \sim P, \ \text{a density}", 40),
              (r"\text{then}", r":", r"\text{the assignment to the grid is a uniform permutation}", 38),
              (r"\text{so}", r":", r"\text{rank statistics are distribution-free}", 40),
@@ -112,11 +108,7 @@ class Ranks(LectureMixin, VoiceoverScene):
 
     def test(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Nabarun Deb and Bodhisattva Sen's rank energy test, published in 2023, is the two-sample "
-            "version. <bookmark mark='b'/> Pool the two samples and compute their transport ranks against a fixed reference "
-            "set. <bookmark mark='c'/> Measure how differently the two groups' ranks are spread, by the energy distance "
-            "between them. <bookmark mark='d'/> Because the pooled ranks are a fixed set under the null, permuting group "
-            "labels gives the exact null distribution, for any law, with no moment conditions at all.",
+            "<bookmark mark='a'/> Deb and Sen's rank energy test compares pooled transport ranks. <bookmark mark='b'/> Our reference is a fixed distinct Halton set, and we randomize pooled row order before assignment to avoid label-dependent resolution of ties. <bookmark mark='c'/> Compute energy distance between the two groups' assigned reference points. Pairwise reference distances are cached once. <bookmark mark='d'/> Under independent IID samples from the same law, exchangeability and the randomized assignment give a valid permutation test without moment assumptions. We use one hundred and ninety-nine permutations with a plus-one p-value and reject at p at most five percent; discreteness and ties can make the test conservative.",
             [(r"\text{pool}", r":", r"Z = X \cup Y, \ \ N = n + m", 40),
              (r"\text{ranks}", r":", r"R = \text{assignment of } Z \text{ to a fixed reference set}", 38),
              (r"\text{statistic}", r":", r"\mathcal E(R_X, R_Y) = 2E\|R_X - R_Y\| - E\|R_X - R_X'\| - E\|R_Y - R_Y'\|", 32),
@@ -130,7 +122,7 @@ class Ranks(LectureMixin, VoiceoverScene):
                    f"<bookmark mark='a'/> On the Board, under the null, with bivariate Cauchy data, forty points per sample, and a "
                    f"thousand repetitions. Hotelling's T squared rejects {100 * br[0]['achieved']:.1f} percent of the time at "
                    f"nominal five: conservative, its normal theory confused by the heavy tails. <bookmark mark='b'/> The rank "
-                   f"energy test rejects {100 * br[1]['achieved']:.1f} percent: kept, as the theory promises for any law.",
+                   f"energy test rejects {100 * br[1]['achieved']:.1f} percent: consistent with level control in this Monte Carlo experiment; exact equality to five percent is not promised.",
                    [("a", [0]), ("b", [1])])
 
     def power(self):
@@ -150,15 +142,10 @@ class Ranks(LectureMixin, VoiceoverScene):
 
     def properties(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The center-outward quantile contours have the properties one wants. <bookmark mark='b'/> "
-            "They are nested, since the map is monotone in Brenier's sense, and each region has exactly the probability of "
-            "its level, which ellipses only have for normal data. <bookmark mark='c'/> The empirical ranks converge "
-            "uniformly to the population ones, a Glivenko–Cantelli theorem, proved by Hallin and co-authors. <bookmark "
-            "mark='d'/> The regions need not be convex: for a law with two clusters they bend, and for a crescent they "
-            "curve, which Part sixty's Tukey depth cannot do.",
+            "<bookmark mark='a'/> Define population quantile regions as inverse images, or quantile-map images, of reference balls under the appropriate regularity assumptions. <bookmark mark='b'/> Their nesting follows from nested reference balls. The spherical reference has a uniform radius, so probability content is tau when the transport has the needed inverse and no boundary mass. This is not a statement about any smoothed polygon drawn through finite data. <bookmark mark='c'/> Empirical center-outward maps have consistency results under specified population regularity and on the domains in the theorem. A global supremum over arbitrary out-of-sample extensions is not automatic. <bookmark mark='d'/> Population regions can be nonconvex. Our joined, smoothed ring points illustrate this geometry rather than supplying exact finite-sample confidence contours.",
             [(r"\text{nested}", r":", r"\tau < \tau' \Rightarrow \mathcal C_\tau \subset \mathcal C_{\tau'}", 40),
-             (r"\text{probability content}", r":", r"P(\mathcal C_\tau) = \tau, \ \text{for any law}", 40),
-             (r"\text{Glivenko--Cantelli}", r":", r"\sup_x\|\hat F_\pm(x) - F_\pm(x)\| \to 0", 40),
+             (r"\text{probability content}", r":", r"P(\mathcal C_\tau)=\tau\quad\text{under population regularity}", 40),
+             (r"\text{Glivenko--Cantelli}", r":", r"\text{empirical-map consistency under stated regularity}", 40),
              (r"\text{shape}", r":", r"\text{not necessarily convex}", 40)],
             [r"monotone maps", r"unlike ellipses", r"Hallin et al. (2021)", r"unlike depth"],
             colors=[(1, PLANC)])

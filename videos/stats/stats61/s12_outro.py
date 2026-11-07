@@ -27,7 +27,7 @@ class Outro(LectureMixin, VoiceoverScene):
             (r"the line: \ sort and pair", PLANC), (r"$W_p$: \ a geometry on laws", PLANC),
             (r"NHANES BMI: \ $W_1 = 1.25$, \ mostly spread", SRC), (r"geodesics: \ clouds in transit", FLOWC),
             (r"the curse: \ $n^{-1/d}$", NAIVEC2), (r"Sinkhorn: \ blur, \ and $n^{-1/2}$", ENTC),
-            (r"maps: \ entropic beats empirical", ENTC), (r"barycenters: \ average positions", PLANC),
+            (r"maps: \ entropic smoothing helps in the example", ENTC), (r"barycenters: \ average positions", PLANC),
             (r"ranks: \ exactly distribution-free", TGT), (r"flows: \ Langevin, \ flow matching", FLOWC),
         ]
         rows = VGroup(*[label(rf"{i}.\ \ {t}", font_size=26, color=c) for i, (t, c) in enumerate(items)])
@@ -38,13 +38,7 @@ class Outro(LectureMixin, VoiceoverScene):
         head = label(r"Part 61, \ in twelve lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "<bookmark mark='a'/> Part sixty-one in twelve lines. Monge asked how to move earth at least cost, and "
-            "Kantorovich made it a linear program. Its dual is a system of prices. On the line, the solution sorts and "
-            "pairs. The Wasserstein distance is a geometry on distributions; in NHANES, men's and women's body-mass index "
-            "differ by one and a quarter units, mostly in spread. Geodesics are clouds in transit. <bookmark mark='b'/> The "
-            "plug-in is cursed, at n to the minus one over d. Sinkhorn's blur restores the parametric rate. Entropic maps "
-            "beat empirical ones. Barycenters average positions, not heights. Transport ranks give exactly "
-            "distribution-free tests. And sampling and generation are flows in the space of distributions."
+            "<bookmark mark='a'/> Part sixty-one in twelve lines. Monge asked how to move earth at least cost, and Kantorovich made it a linear program. Its dual is a system of prices. On the line, the solution sorts and pairs. The Wasserstein distance is a geometry on distributions; in NHANES, men's and women's body-mass index differ by one and a quarter units, mostly in spread. Geodesics are clouds in transit. <bookmark mark='b'/> The plug-in is cursed, at n to the minus one over d. Fixed-epsilon entropic estimation has parametric bounds under stated conditions. Entropic maps improve the illustrated Gaussian fit. Barycenters average positions, not heights. Transport ranks give exactly distribution-free tests. And sampling and generation are flows in the space of distributions."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -125,9 +119,7 @@ class Outro(LectureMixin, VoiceoverScene):
         tr.to_edge(UP, buff=0.8)
         nxt.next_to(tr, DOWN, buff=1.0)
         with self.voiceover(
-            "Sixty-one parts of sixty-five. <bookmark mark='a'/> Monge noticed in 1781 that optimal paths never cross; two "
-            "centuries later the same fact straightened the flows that generate images. <bookmark mark='b'/> Next, Part "
-            "sixty-two: frontiers of causal inference."
+            "Sixty-one parts of sixty-five. <bookmark mark='a'/> Monge's earthworks led to transport geometry; two centuries later transport pairing became a useful tool for learning generative flows. <bookmark mark='b'/> Next, Part sixty-two: frontiers of causal inference."
         ) as vo:
             self.play(FadeIn(tr))
             vo.wait_until("a")

@@ -20,11 +20,11 @@ class Maps(LectureMixin, VoiceoverScene):
     def problem(self):
         self.lad_voiceover(
             "<bookmark mark='a'/> Often the map matters more than the distance. A cell biologist with snapshots of a tissue "
-            "at two times wants to know where each cell went; a survey statistician wants to adjust one population's "
+            "at two times models plausible couplings between snapshots, without identifying individual cell lineages from marginals alone; a survey statistician wants to adjust one population's "
             "covariates to look like another's. <bookmark mark='b'/> From n points of mu and n of nu, estimate the Brenier "
             "map T, the gradient of a convex function pushing mu onto nu. <bookmark mark='c'/> The loss is the mean squared "
             "error of the map under mu. <bookmark mark='d'/> Geoffrey Schiebinger and co-authors' Waddington-OT, in 2019, "
-            "used entropic maps to trace cells through development.",
+            "used growth-aware unbalanced transport to model developmental couplings; this is not direct observation of each cell trajectory.",
             [(r"\text{why maps}", r":", r"\text{trajectories, \ adjustments, \ couplings of data}", 38),
              (r"\text{target}", r":", r"T = \nabla\varphi, \ \ T_\#\mu = \nu", 40),
              (r"\text{loss}", r":", r"\int \|\hat T(x) - T(x)\|^2\,d\mu(x)", 40),
@@ -34,30 +34,21 @@ class Maps(LectureMixin, VoiceoverScene):
 
     def minimax(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Jan-Christian Hütter and Philippe Rigollet found the minimax rate in 2021. <bookmark "
-            "mark='b'/> If the map has alpha derivatives, the best possible squared error is n to the minus two alpha over "
-            "two alpha minus two plus d, up to logarithms: <bookmark mark='c'/> the rate of nonparametric regression for a "
-            "function with one more derivative, as if the map's potential were being estimated. <bookmark mark='d'/> Smooth "
-            "maps defeat the curse in a way the distance itself cannot: with alpha large, the rate approaches one over n.",
+            "<bookmark mark='a'/> Hutter and Rigollet derive minimax rates for a specified smooth transport-map class. <bookmark mark='b'/> Under bounded support and density, smoothness and Hessian conditions, squared-map risk has the displayed nonparametric term, together with a parametric one-over-n floor, up to logarithmic factors. Alpha describes map smoothness. <bookmark mark='c'/> The denominator differs from ordinary nonparametric regression because observations are unpaired marginals and the convex potential links them. This is not simply the usual regression formula with one extra derivative. <bookmark mark='d'/> Sufficient smoothness brings the rate near the parametric floor, under the theorem's remaining assumptions.",
             [(r"\text{minimax}", r":", r"\inf_{\hat T}\sup_T E\|\hat T - T\|^2_{L^2(\mu)}", 40),
-             (r"\text{rate}", r"\asymp", r"n^{-2\alpha/(2\alpha - 2 + d)} \ \text{(up to logs)}", 40),
-             (r"\text{like}", r":", r"\text{regression of a function with } \alpha \text{ derivatives}", 38),
+             (r"\text{rate}", r"\asymp", r"n^{-1}\vee n^{-2\alpha/(2\alpha-2+d)}\quad\text{(up to logs; stated model)}", 40),
+             (r"\text{like}", r":", r"\text{unpaired marginals + a smooth convex potential}", 38),
              (r"\alpha \to \infty", r":", r"\to n^{-1}", 40)],
             [r'H\"utter \& Rigollet (2021)', r"smoothness $\alpha$", r"Part 29's rates", r"smoothness helps"],
             colors=[(1, PLANC)])
 
     def estimators(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Two estimators. <bookmark mark='b'/> The empirical map: solve the assignment between the "
-            "two samples, and extend it to new points by sending each to the partner of its nearest sample point. It is a "
-            "step function, and it inherits the curse. <bookmark mark='c'/> The entropic map, from Aram-Alexandre Pooladian "
-            "and Jonathan Niles-Weed in 2021: the barycentric projection of the Sinkhorn plan, a soft average of target "
-            "points weighted by the dual potential. <bookmark mark='d'/> It is smooth, defined everywhere, computed in a "
-            "few Sinkhorn iterations, and with epsilon shrinking as n grows it is near minimax for smooth maps.",
+            "<bookmark mark='a'/> We compare two finite-sample map estimators. <bookmark mark='b'/> The first matches two samples and extends each match by nearest source neighbor. It is one particular step-function extension. <bookmark mark='c'/> The entropic estimator uses the barycentric projection of the entropic plan and its target potential to define a smooth out-of-sample function. <bookmark mark='d'/> Statistical rates require specific smoothness and support conditions and a compatible epsilon schedule. They are not a blanket near-minimax guarantee for every smooth map. Our Gaussian simulation uses a heuristic half n-to-minus-one-third schedule and explicitly checks Sinkhorn convergence.",
             [(r"\text{empirical}", r":", r"\hat T(x) = y_{\sigma(\mathrm{nn}(x))}", 40),
              (r"\text{entropic}", r":", r"\hat T_\varepsilon(x) = \frac{\sum_j y_j e^{(g_j - \|x - y_j\|^2/2)/\varepsilon}}{\sum_j e^{(g_j - \|x - y_j\|^2/2)/\varepsilon}}", 32),
-             (r"\text{properties}", r":", r"\text{smooth, \ fast, \ near minimax}", 40),
-             (r"\varepsilon", r"\asymp", r"n^{-1/(d' + 4)} \ \text{or similar}", 40)],
+             (r"\text{properties}", r":", r"\text{smooth extension; \ solver and statistical error both matter}", 40),
+             (r"\varepsilon", r"\asymp", r"\text{theorem-specific; simulation: }0.5n^{-1/3}", 40)],
             [r"a nearest-neighbour step", r"Pooladian \& Niles-Weed (2021)", r"Sinkhorn's dual", r"a tuning rate"],
             colors=[(1, ENTC)])
 
@@ -81,7 +72,7 @@ class Maps(LectureMixin, VoiceoverScene):
             f"<bookmark mark='a'/> A test where the truth is known: the standard Gaussian in the plane pushed to a correlated "
             f"Gaussian, whose Brenier map is linear. <bookmark mark='b'/> The empirical map's squared error falls with slope "
             f"{say(d['slope_emp'], 2)}. <bookmark mark='c'/> The entropic map, with epsilon shrinking like n to the minus a "
-            f"third, falls with slope {say(d['slope_ent'], 2)}, and is lower at every n: {say(d['ent'][-1], 3)} against "
+            f"third, falls with slope {say(d['slope_ent'], 2)}, and has lower mean error at these tested sizes: {say(d['ent'][-1], 3)} against "
             f"{say(d['emp'][-1], 3)} at eight hundred points. Smoothing pays, because the true map is smooth."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated, \ 4 repetitions, \ 500 test points")))

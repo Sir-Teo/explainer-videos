@@ -20,13 +20,7 @@ class Wasserstein(LectureMixin, VoiceoverScene):
 
     def metric(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The Wasserstein distance of order p is the p-th root of the optimal cost with the p-th "
-            "power of distance as the cost. The name comes from Leonid Vaserstein's 1969 paper, through Roland Dobrushin. "
-            "<bookmark mark='b'/> It is a genuine metric on the distributions with p finite moments: symmetric, zero only "
-            "for equal laws, and satisfying the triangle inequality, by gluing two couplings together. <bookmark mark='c'/> "
-            "Convergence in it means weak convergence plus convergence of p-th moments. <bookmark mark='d'/> Unlike total "
-            "variation or Kullback–Leibler, it is finite between laws with disjoint supports, and measures how far apart "
-            "they are.",
+            "<bookmark mark='a'/> For p at least one, Wasserstein distance is the p-th root of the minimum p-power transport cost. <bookmark mark='b'/> It is a metric on laws with finite p-th moments. A gluing construction proves its triangle inequality. <bookmark mark='c'/> Convergence is equivalent to weak convergence together with convergence of p-th moments in Euclidean space. <bookmark mark='d'/> For such laws it can be finite across disjoint supports and quantify geometric separation. Total variation is also finite there, but does not measure that separation.",
             [(r"W_p(\mu, \nu)", r"=", r"\inf_{\pi \in \Pi(\mu, \nu)} \big(E_\pi\|X - Y\|^p\big)^{1/p}", 40),
              (r"\text{a metric}", r":", r"\text{on } \mathcal P_p(\mathbb R^d); \ \text{triangle by gluing}", 40),
              (r"W_p(\mu_n, \mu) \to 0", r"\iff", r"\mu_n \Rightarrow \mu \ \text{and} \ \textstyle\int\|x\|^p d\mu_n \to \int\|x\|^p d\mu", 34),
@@ -51,7 +45,7 @@ class Wasserstein(LectureMixin, VoiceoverScene):
     def bmi_chart(self):
         d = load("quantile")
         xs, Fm, Fw = np.asarray(d["xs"]), np.asarray(d["Fm"]), np.asarray(d["Fw"])
-        A = axes([14, 60], [0, 1.02], x_length=7.4, y_length=4.4, xlabel=r"body-mass index", ylabel=r"cumulative fraction",
+        A = axes([float(xs.min()), float(xs.max())], [0, 1.02], x_length=7.4, y_length=4.4, xlabel=r"body-mass index", ylabel=r"cumulative fraction",
                  xticks=[20, 30, 40, 50, 60], yticks=[0, 0.5, 1], center=[-2.5, 0.2, 0])
         ax = A.ax
         cm, cw = curve(ax, xs, Fm, SRC, 3.5), curve(ax, xs, Fw, TGT, 3.5)
@@ -72,7 +66,7 @@ class Wasserstein(LectureMixin, VoiceoverScene):
             f"distribution into the other. <bookmark mark='d'/> W two, which weights large moves more heavily, is "
             f"{say(d['w2'], 2)}."
         ) as vo:
-            self.play(FadeIn(A), FadeIn(museum_tag(r"NHANES (CDC)")))
+            self.play(FadeIn(A), FadeIn(museum_tag(r"NHANES unweighted empirical extract (CDC)")))
             vo.wait_until("a")
             self.play(Create(cm), Create(cw), FadeIn(side[0]), run_time=2.0)
             vo.wait_until("b")
@@ -92,7 +86,7 @@ class Wasserstein(LectureMixin, VoiceoverScene):
             f"squared difference in means: here {say(dm2, 2)}. <bookmark mark='c'/> The squared difference in standard "
             f"deviations: {say(ds2, 2)}, the largest part. <bookmark mark='d'/> And a shape term, from how far the "
             f"standardized quantile functions differ: {say(d['shape_term'], 2)}, since their correlation is "
-            f"{say(d['rho'], 4)}. The sum matches the squared distance, {say(d['w2'] ** 2, 2)}, up to the discretization of the quantiles: men and women differ in BMI mostly "
+            f"{say(d['rho'], 4)}. The sum matches the squared distance, {say(d['w2'] ** 2, 2)}, using exact integration of the empirical step quantiles: these two extract distributions differ mostly "
             f"in spread, not in centre or shape.",
             [(r"W_2^2", r"=", r"(\mu_1 - \mu_2)^2 + (\sigma_1 - \sigma_2)^2 + 2\sigma_1\sigma_2(1 - \rho)", 36),
              (r"\text{location}", r":", rf"{dm2:.2f}", 40),
@@ -105,9 +99,9 @@ class Wasserstein(LectureMixin, VoiceoverScene):
         self.lad_voiceover(
             "<bookmark mark='a'/> For Gaussians, the distance has a closed form. <bookmark mark='b'/> W two squared is the "
             "squared distance between the means, plus the Bures distance between the covariance matrices. <bookmark "
-            "mark='c'/> The optimal map is linear: a symmetric positive matrix, the unique one that pushes the first "
+            "mark='c'/> For positive-definite covariances, the optimal map is affine with a symmetric positive linear part, the unique one that pushes the first "
             "covariance onto the second. <bookmark mark='d'/> For commuting covariances it is just the ratio of standard "
-            "deviations along each axis; in general it rotates and stretches.",
+            "deviations along each axis; in general its principal axes need not match the axes of either covariance. Its symmetric positive linear part has no separate rotation factor.",
             [(r"W_2^2", r"=", r"\|m_1 - m_2\|^2 + \mathcal B^2(\Sigma_1, \Sigma_2)", 40),
              (r"\mathcal B^2", r"=", r"\mathrm{tr}\big(\Sigma_1 + \Sigma_2 - 2(\Sigma_1^{1/2}\Sigma_2\Sigma_1^{1/2})^{1/2}\big)", 36),
              (r"T(x)", r"=", r"m_2 + A(x - m_1), \ \ A\Sigma_1A = \Sigma_2, \ A \succ 0", 38),
@@ -158,7 +152,7 @@ class Wasserstein(LectureMixin, VoiceoverScene):
             "<bookmark mark='a'/> Robert McCann's displacement interpolation, in 1997, gives the space of distributions a "
             "geometry. <bookmark mark='b'/> Its geodesics are the clouds in transit; the distance along one grows linearly in "
             "t. <bookmark mark='c'/> A functional that is convex along these paths, displacement convexity, can be "
-            "non-convex in the usual sense: the entropy, and the energy of interacting particles, are examples. <bookmark "
+            "non-convex in the usual sense: negative differential entropy is an example; interaction energies require appropriate convexity conditions. <bookmark "
             "mark='d'/> Felix Otto's calculus, in 2001, adds gradients and Hessians, and turns some partial differential "
             "equations into gradient flows: chapter eight.",
             [(r"\mu_t", r"=", r"\big((1 - t)\,\mathrm{id} + tT\big)_\#\mu", 40),
@@ -170,14 +164,9 @@ class Wasserstein(LectureMixin, VoiceoverScene):
 
     def compare(self):
         self.list_voiceover(
-            "<bookmark mark='a'/> How Wasserstein compares with the distances of earlier parts. <bookmark mark='b'/> Total "
-            "variation and Hellinger compare densities point by point: blind to how far apart mass sits, and maximal between "
-            "any two laws with disjoint supports. <bookmark mark='c'/> Kullback–Leibler is infinite when the supports "
-            "differ, which is why it fails as a training loss for models on low-dimensional sets. <bookmark mark='d'/> The "
-            "MMD sees geometry through a kernel, with a parametric rate but a bandwidth to choose. <bookmark mark='e'/> "
-            "Wasserstein sees geometry through the cost itself, at the price of the curse.",
+            "<bookmark mark='a'/> These discrepancies answer different questions. <bookmark mark='b'/> Total variation and Hellinger reach their maximum for mutually singular probability laws, regardless of geometric separation. They remain finite. <bookmark mark='c'/> KL is infinite when the first law is not absolutely continuous with respect to the second; merely having different supports is not sufficient for infinity in both directions. <bookmark mark='d'/> MMD uses a kernel and has root-n empirical-error bounds for bounded fixed kernels, with kernel-dependent sensitivity. <bookmark mark='e'/> Wasserstein uses the ground distance, with sampling rates depending on dimension, moments, order and regularity.",
             [(r"compared with earlier distances:", GREY_A),
              (r"TV, \ Hellinger: \ pointwise, \ blind to distance \ (Part 50)", NAIVEC2),
-             (r"KL: \ infinite across different supports \ (Part 22)", NAIVEC2),
+             (r"KL: \ infinite without the needed absolute continuity \ (Part 22)", NAIVEC2),
              (r"MMD: \ geometry by a kernel, \ $n^{-1/2}$ \ (Part 60)", ENTC),
-             (r"$W_p$: \ geometry by the cost, \ $n^{-1/d}$", PLANC)])
+             (r"$W_p$: \ geometry by cost; \ rates depend on order, dimension and tails", PLANC)])

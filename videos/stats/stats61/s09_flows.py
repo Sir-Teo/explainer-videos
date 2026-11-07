@@ -45,7 +45,7 @@ class GradientFlows(LectureMixin, VoiceoverScene):
         cloud = VGroup(*[Dot(ax.c2p(*p), radius=0.035, color=FLOWC, fill_opacity=0.8) for p in snaps[0]])
         side = side_groups([
             [(r"gold: \ the target $N(0, \Sigma)$, \ $\rho = 0.8$", TGT), (r"(its 2-sd ellipse)", GREY_A)],
-            [(r"teal: \ 600 particles from $N((4, -3), 0.2I)$", FLOWC), (rf"Euler--Maruyama, \ $h = {d['h']}$", GREY_A)],
+            [(r"teal: \ 300 of 600 particles from $N((4, -3), 0.2I)$", FLOWC), (rf"Euler--Maruyama, \ $h = {d['h']}$", GREY_A)],
             [(r"the cloud's law follows the flow", WHITE), (r"of KL in Wasserstein space", WHITE)],
         ], width=4.6, pos=(4.1, 0.2, 0))
         with self.voiceover(
@@ -81,16 +81,10 @@ class GradientFlows(LectureMixin, VoiceoverScene):
             [(r"teal: \ the exact flow, \ Gaussian", FLOWC), (r"at every $t$", FLOWC)],
             [(r"white: \ the particles' fitted Gaussian", WHITE)],
             [(r"grey: \ the guarantee $e^{-2t/C_{\mathrm{LS}}}$", GREY_B), (rf"$C_{{\mathrm{{LS}}}} = \lambda_{{\max}}(\Sigma) = {1 / d['rate']:.1f}$", GREY_B)],
-            [(r"the floor: \ 600 particles' noise", GREY_A)],
+            [(r"the floor: \ sampling noise and Euler bias", GREY_A)],
         ])
         with self.voiceover(
-            f"<bookmark mark='a'/> For a Gaussian target and a Gaussian start, the flow stays Gaussian, with mean and "
-            f"covariance solving linear equations, so its Kullback–Leibler divergence is known exactly: the teal curve, "
-            f"from {say(ke[0], 0)} at the start. <bookmark mark='b'/> The particles' fitted Gaussian, in white, tracks it until "
-            f"the particles' own sampling noise sets a floor. <bookmark mark='c'/> The grey line is the general guarantee: "
-            f"for a target with log-Sobolev constant C, the divergence falls at least like e to the minus two t over C. Here "
-            f"C is the largest variance, {say(1 / d['rate'], 1)}. <bookmark mark='d'/> The actual decay is faster at first, "
-            f"because the start is offset along the target's narrow direction, which contracts quickly."
+            f"<bookmark mark='a'/> For a Gaussian target and a Gaussian start, the flow stays Gaussian, with mean and covariance solving linear equations, so its Kullback–Leibler divergence is known exactly: the teal curve, from {say(ke[0], 0)} at the start. <bookmark mark='b'/> The particles' fitted Gaussian, in white, tracks it with discrepancies from both finite-particle noise and Euler bias. The exact discrete Gaussian law is also recorded; a finite atomic empirical measure itself has infinite KL to a continuous target. <bookmark mark='c'/> The grey line is the general guarantee: for a target with log-Sobolev constant C, the divergence falls at least like e to the minus two t over C. Here C is the largest variance, {say(1 / d['rate'], 1)}. <bookmark mark='d'/> The actual decay is faster at first, because the start is offset along the target's narrow direction, which contracts quickly."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"exact flow; \ particles simulated")))
             vo.wait_until("a")
@@ -119,27 +113,18 @@ class GradientFlows(LectureMixin, VoiceoverScene):
 
     def discretize(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> In practice the flow is discretized, and the discretization has a cost. <bookmark "
-            "mark='b'/> The unadjusted Langevin algorithm is biased: its stationary law is not the target, with an error of "
-            "order root h in Wasserstein distance. <bookmark mark='c'/> Arnak Dalalyan, and Alain Durmus and Éric Moulines, "
-            "gave non-asymptotic bounds from 2017: to reach accuracy epsilon in d dimensions takes of order d over epsilon "
-            "squared steps for strongly log-concave targets. <bookmark mark='d'/> Part twenty-seven's Metropolis correction "
-            "removes the bias, and Hamiltonian methods, with momentum, are the accelerated gradient descent of this space.",
+            "<bookmark mark='a'/> Euler discretization changes the continuous Langevin law. <bookmark mark='b'/> For a Gaussian target we can compute that discrete law exactly and separate its stationary bias from finite-particle noise. Under suitable strong convexity and smoothness, general Wasserstein discretization bounds have order root h with dimension-dependent constants; Gaussian bias can have a sharper order. <bookmark mark='c'/> Step-complexity bounds such as dimension over accuracy squared suppress condition numbers, initialization and logarithmic terms, and need stable step sizes and smoothness. <bookmark mark='d'/> A Metropolis correction restores the target invariant law under the usual conditions, rather than exact independent draws after finitely many steps. Hamiltonian methods offer different dynamics; calling all of them accelerated Wasserstein gradient descent would be too literal.",
             [(r"\text{ULA}", r":", r"X_{k+1} = X_k + h\nabla\log\pi(X_k) + \sqrt{2h}\,Z_k", 40),
              (r"\text{bias}", r":", r"W_2(\pi_h, \pi) = O(\sqrt h)", 40),
              (r"\text{steps}", r":", r"O(d/\varepsilon^2) \ \text{for strongly log-concave } \pi", 40),
-             (r"\text{fixes}", r":", r"\text{MALA; \ HMC = acceleration}", 40)],
+             (r"\text{fixes}", r":", r"\text{MALA corrects invariant bias; \ HMC uses momentum}", 40)],
             [r"Euler--Maruyama", r"discretization", r"Dalalyan; \ Durmus \& Moulines", r"Part 27"],
             colors=[(1, NAIVEC2), (3, FLOWC)])
 
     def svgd(self):
         self.list_voiceover(
-            "<bookmark mark='a'/> Other flows of the same divergence. <bookmark mark='b'/> Stein variational gradient "
-            "descent, from Qiang Liu and Dilin Wang in 2016, replaces the noise by a kernel repulsion between particles: a "
-            "deterministic flow. <bookmark mark='c'/> Mean-field variational inference runs the flow restricted to product "
-            "laws. <bookmark mark='d'/> And the training of wide two-layer networks is itself a Wasserstein gradient flow of "
-            "the loss over the distribution of neurons, as Mei, Montanari and Nguyen, and Chizat and Bach, showed in 2018.",
-            [(r"other Wasserstein flows:", GREY_A),
+            "<bookmark mark='a'/> Related variational particle methods use different geometries. <bookmark mark='b'/> Stein variational gradient descent uses a kernel-restricted transport direction, including attraction and repulsion; it is not simply the ordinary Wasserstein flow with the Brownian term removed. <bookmark mark='c'/> Product-law variational inference restricts the family of distributions and introduces approximation error. <bookmark mark='d'/> Mean-field limits of suitable wide two-layer networks describe training as a Wasserstein gradient flow over neuron-parameter laws under the model's scaling and assumptions.",
+            [(r"related variational and mean-field methods:", GREY_A),
              (r"SVGD: \ kernel repulsion instead of noise \ (Liu \& Wang 2016)", FLOWC),
              (r"mean-field variational inference \ (Part 27)", ENTC),
              (r"wide two-layer networks \ (Mei et al.; \ Chizat \& Bach 2018)", TGT)])

@@ -50,15 +50,9 @@ class Barycenters(LectureMixin, VoiceoverScene):
             [(rf"green: \ the $W_2$ barycenter, \ sd {d['bary_sd']:.1f}", PLANC), (r"a typical shape, \ at the average place", PLANC)],
         ])
         with self.voiceover(
-            f"<bookmark mark='a'/> NHANES systolic pressure in three age groups, eighteen to thirty-nine, forty to fifty-nine, "
-            f"and sixty to eighty, with means {d['means'][0]:.0f}, {d['means'][1]:.0f} and {d['means'][2]:.0f}. <bookmark "
-            f"mark='b'/> Their mixture, weighted by group size, in red: wide, with standard deviation {say(d['mix_sd'], 1)}, "
-            f"because it stacks three laws at three places. <bookmark mark='c'/> Their Wasserstein barycenter, in green, "
-            f"averages the quantiles instead: one law, at the average place, with the groups' typical spread, standard "
-            f"deviation {say(d['bary_sd'], 1)}. It describes a representative adult, where the mixture describes the whole "
-            f"population."
+            f"<bookmark mark='a'/> NHANES systolic pressure in three age groups, eighteen to thirty-nine, forty to fifty-nine, and sixty to eighty, with means {d['means'][0]:.0f}, {d['means'][1]:.0f} and {d['means'][2]:.0f}. <bookmark mark='b'/> Their mixture, weighted by group size, in red: wide, with standard deviation {say(d['mix_sd'], 1)}, because it stacks three laws at three places. <bookmark mark='c'/> Their Wasserstein barycenter, in green, averages the quantiles instead: one law, at the average place, with the groups' typical spread, standard deviation {say(d['bary_sd'], 1)}. It is a mathematical summary of these empirical group distributions, not a model of a representative individual or a national population."
         ) as vo:
-            self.play(FadeIn(A), FadeIn(museum_tag(r"NHANES (CDC)")))
+            self.play(FadeIn(A), FadeIn(museum_tag(r"NHANES unweighted empirical extract (CDC)")))
             vo.wait_until("a")
             self.play(*[Create(g) for g in gs], FadeIn(side[0]), run_time=2.0)
             vo.wait_until("b")
@@ -71,17 +65,11 @@ class Barycenters(LectureMixin, VoiceoverScene):
         d = load("bary")
         sbar = float(np.sum(np.asarray(d["wts"]) * np.asarray(d["sds"])))
         self.lad_voiceover(
-            f"<bookmark mark='a'/> On the line the barycenter's moments are simple. <bookmark mark='b'/> Its mean is the "
-            f"weighted mean of the group means, {say(d['bary_mean'], 1)}, the same as the mixture's. <bookmark mark='c'/> If the "
-            f"groups differed only in location and scale, its standard deviation would be the weighted average of theirs, "
-            f"{say(sbar, 1)}; their shapes differ a little, and it is {say(d['bary_sd'], 1)}. Either way there is no "
-            f"between-group term. <bookmark mark='d'/> The mixture's variance adds the spread of the means, which is why it is "
-            f"{say(d['mix_sd'], 1)}: Part eight's decomposition of variance into within and between, with the Wasserstein "
-            f"barycenter keeping only the within.",
+            "<bookmark mark='a'/> A one-dimensional barycenter averages quantiles. <bookmark mark='b'/> Consequently its mean is exactly the weighted average of the empirical group means; we now compute its moments by exact integration of the step quantiles. <bookmark mark='c'/> Its variance is the weighted sum of all pairwise covariances of the centered quantile functions. Its standard deviation equals the weighted average of group standard deviations only for a common standardized shape; in general it is at most that average. <bookmark mark='d'/> The mixture instead adds average within-group variance to variance of group means. The barycenter variance is not literally the mixture's within-group variance.",
             [(r"\text{mean}", r":", rf"\textstyle\sum_k w_k m_k = {d['bary_mean']:.1f}", 40),
-             (r"\text{sd}", r":", rf"\approx \textstyle\sum_k w_k \sigma_k = {sbar:.1f}; \ \text{{here}} \ {d['bary_sd']:.1f}", 40),
+             (r"\text{sd}", r":", rf"\le \textstyle\sum_k w_k \sigma_k = {sbar:.1f}; \ \text{{here}} \ {d['bary_sd']:.1f}", 40),
              (r"\text{mixture variance}", r"=", r"\text{within} + \text{between}", 40),
-             (r"\text{barycenter}", r":", r"\text{within only, \ at the average shape}", 40)],
+             (r"\text{barycenter}", r":", r"\sum_{i,j}w_iw_j\operatorname{Cov}(Q_i(U),Q_j(U))", 40)],
             [r"both agree", r"location-scale family", r"Part 8", r"a different question"],
             colors=[(1, PLANC)])
 
@@ -89,12 +77,7 @@ class Barycenters(LectureMixin, VoiceoverScene):
         d = load("bary")
         S = np.asarray(d["gauss_bary"])
         self.lad_voiceover(
-            f"<bookmark mark='a'/> In many dimensions there is no closed form, except for Gaussians. <bookmark mark='b'/> The "
-            f"barycenter of centred Gaussians is Gaussian, with a covariance solving a matrix fixed-point equation. <bookmark "
-            f"mark='c'/> Pedro Álvarez-Esteban and co-authors' iteration solves it in a few steps. <bookmark mark='d'/> For "
-            f"two Gaussians with covariances diag one four and diag four one, the barycenter is {say(S[0][0], 2)} times the "
-            f"identity, the square of the average standard deviation: round, not the arithmetic mean's diag two and a half, "
-            f"two and a half, and not a cross.",
+            "<bookmark mark='a'/> A barycenter of positive-definite Gaussian laws is Gaussian. <bookmark mark='b'/> Its covariance satisfies the displayed nonlinear matrix fixed-point equation. General noncommuting covariances do not give a simple closed-form solution. <bookmark mark='c'/> The Alvarez-Esteban iteration is one computational method; convergence and definiteness need checking. <bookmark mark='d'/> For the commuting diagonal example, standard deviations average along common axes, giving two point two five times the identity.",
             [(r"\bar\Sigma", r"=", r"\sum_k w_k\big(\bar\Sigma^{1/2}\Sigma_k\bar\Sigma^{1/2}\big)^{1/2}", 40),
              (r"\text{iterate}", r":", r"\bar\Sigma \leftarrow \bar\Sigma^{-1/2}\big(\textstyle\sum_k w_k(\cdots)^{1/2}\big)^2\bar\Sigma^{-1/2}", 36),
              (r"\text{example}", r":", r"\mathrm{diag}(1, 4), \ \mathrm{diag}(4, 1)", 40),
@@ -132,12 +115,7 @@ class Barycenters(LectureMixin, VoiceoverScene):
 
     def theory(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The statistics of barycenters. <bookmark mark='b'/> If the k laws are themselves a random "
-            "sample from a population of laws, the barycenter of the sample estimates a population Fréchet mean. Thibaut Le "
-            "Gouic and Jean-Michel Loubes proved consistency in 2017. <bookmark mark='c'/> Rates depend on the curvature of "
-            "Wasserstein space, which is nonnegative, unlike the spaces where Fréchet means behave best. <bookmark mark='d'/> "
-            "On the line the space is flat, and the barycenter is just an average of quantile functions: the root k rate of "
-            "Part six's law of large numbers.",
+            "<bookmark mark='a'/> The statistics of barycenters. <bookmark mark='b'/> If the k laws are themselves a random sample from a population of laws, the barycenter of the sample estimates a population Fréchet mean. Thibaut Le Gouic and Jean-Michel Loubes proved consistency in 2017. <bookmark mark='c'/> Rates depend on the curvature of Wasserstein space, which is nonnegative, unlike the spaces where Fréchet means behave best. <bookmark mark='d'/> On the line the space is flat, and the barycenter is just an average of quantile functions: a root-k rate when the random quantile function has a finite second moment in the relevant Hilbert space; the law of large numbers alone does not supply a root-k rate.",
             [(r"\text{laws as data}", r":", r"\mu_1, \dots, \mu_k \sim \mathbb P \text{ on } \mathcal P_2", 40),
              (r"\text{consistency}", r":", r"\hat{\bar\mu}_k \to \bar\mu", 40),
              (r"\text{curvature}", r":", r"\text{nonnegative: \ rates need extra conditions}", 40),

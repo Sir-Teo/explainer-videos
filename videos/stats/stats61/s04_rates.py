@@ -19,16 +19,11 @@ class Rates(LectureMixin, VoiceoverScene):
 
     def question(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The plug-in estimate of a Wasserstein distance replaces each law by its empirical "
-            "distribution. How far is the empirical distribution of n points from the law itself? <bookmark mark='b'/> On a "
-            "line, the answer is of order one over root n, the usual parametric rate. <bookmark mark='c'/> In d dimensions, "
-            "Richard Dudley showed in 1969 that the answer is of order n to the minus one over d, for d at least three. "
-            "<bookmark mark='d'/> Nicolas Fournier and Arnaud Guillin gave sharp non-asymptotic versions in 2015: the rate "
-            "cannot be beaten for any law with a density, however smooth.",
+            "<bookmark mark='a'/> Empirical Wasserstein error depends on the order, geometry and tails. Our main rate example concerns W one on bounded regular distributions. <bookmark mark='b'/> On a line, root-n expected W-one error needs a tail-integrability condition; finite first moment alone does not ensure it. <bookmark mark='c'/> For full-dimensional bounded regular laws in dimension at least three, the empirical W-one rate is n to the minus one over d. The critical dimension two has logarithmic effects. <bookmark mark='d'/> Fournier and Guillin give nonasymptotic moment-dependent bounds. Smooth density alone does not remove the empirical measure's quantization barrier, but these are not unconditional two-sided rates for every absolutely continuous law.",
             [(r"\text{question}", r":", r"E\,W_1(\hat\mu_n, \mu) \ \text{as } n \to \infty", 40),
              (r"d = 1", r":", r"\asymp n^{-1/2}", 40),
              (r"d \ge 3", r":", r"\asymp n^{-1/d}", 40),
-             (r"\text{sharp}", r":", r"\text{for every absolutely continuous } \mu", 40)],
+             (r"\text{sharp}", r":", r"\text{requires moment, support and regularity assumptions}", 40)],
             [r"the plug-in", r"parametric", r"Dudley (1969)", r"Fournier \& Guillin (2015)"],
             colors=[(2, NAIVEC2)])
 
@@ -77,50 +72,35 @@ class Rates(LectureMixin, VoiceoverScene):
             "order. <bookmark mark='d'/> The upper bound partitions the cube dyadically and matches mass level by level: a "
             "chaining argument, like Part forty-eight's.",
             [(r"\text{spacing}", r"\asymp", r"n^{-1/d}", 40),
-             (r"\text{lower bound}", r":", r"\text{every point moves at least that far}", 40),
+             (r"\text{lower bound}", r":", r"\text{expected nearest-neighbor displacement has this scale}", 40),
              (r"\text{upper bound}", r":", r"\text{dyadic partitions, \ level by level}", 40),
-             (r"\text{so}", r":", r"W_1(\hat\mu_n, \mu) \asymp n^{-1/d}", 40)],
+             (r"\text{so}", r":", r"E W_1(\hat\mu_n, \mu) \asymp n^{-1/d}\quad(d\ge3,\ \text{regular cube model})", 40)],
             [r"nearest neighbours", r"no escape", r"Part 48's chaining", r"the curse"],
             colors=[(3, NAIVEC2)])
 
     def intrinsic(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The rate depends on the data's intrinsic dimension, not the ambient one. Jonathan Weed and "
-            "Francis Bach showed in 2019 that if the law lives near a k-dimensional set, the rate is n to the minus one over "
-            "k. <bookmark mark='b'/> Images, which live on low-dimensional manifolds inside huge pixel spaces, are therefore "
-            "less cursed than their pixel count suggests. <bookmark mark='c'/> Smoothness of the densities does not help the "
-            "plug-in, but it helps smoothed estimators. <bookmark mark='d'/> And the distance between two different laws can "
-            "be estimated faster than either law: the error of the plug-in for W between mu and nu is governed by the "
-            "smaller of the two dimensions, as Hundrieser, Staudt and Munk showed.",
+            "<bookmark mark='a'/> Intrinsic geometry can improve empirical rates under precise covering and mass conditions, as studied by Weed and Bach. <bookmark mark='b'/> Exact low-dimensional support and noisy concentration near a manifold are different: fixed full-dimensional noise can change the eventual rate, even if smaller samples show a lower-dimensional regime. <bookmark mark='c'/> Smoothness can help suitably smoothed estimators, while the raw empirical measure still has discrete-support error. <bookmark mark='d'/> Lower-complexity adaptation for estimating a transport cost between distinct laws holds under specified cost and support assumptions. It is not a universal rule that the smaller raw dimension always governs every Wasserstein problem.",
             [(r"\text{intrinsic dim } k", r":", r"n^{-1/k}", 40),
              (r"\text{images}", r":", r"\text{low-dimensional, \ in high ambient dimension}", 38),
              (r"\text{smoothness}", r":", r"\text{helps smoothed estimators}", 40),
-             (r"W(\hat\mu_n, \hat\nu_n)", r":", r"\text{the smaller dimension governs}", 40)],
+             (r"W(\hat\mu_n, \hat\nu_n)", r":", r"\text{lower-complexity adaptation under cost/support conditions}", 40)],
             [r"Weed \& Bach (2019)", r"manifold data", r"Niles-Weed \& Berthet (2022)", r"lower complexity adaptation"],
             colors=[(0, PLANC)])
 
     def one_d(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> On the line there is a full distribution theory. <bookmark mark='b'/> For two different "
-            "laws, the plug-in W two squared is asymptotically normal at rate root n, with a variance computable from the "
-            "quantile functions: Eustasio del Barrio and co-authors, from 1999 on. <bookmark mark='c'/> When the two laws are "
-            "equal, the limit is not normal: under conditions on the tails, it is the integral of a squared Brownian bridge, weighted by the density, "
-            "the cousin of Part forty-eight's Cramér–von Mises statistic. <bookmark mark='d'/> So the bootstrap works away "
-            "from the null and needs care at it, a pattern this course has seen at every boundary.",
-            [(r"\mu \ne \nu", r":", r"\sqrt n\,(\widehat{W}_2^2 - W_2^2) \Rightarrow N(0, \sigma^2)", 40),
-             (r"\mu = \nu", r":", r"n\widehat{W}_2^2 \Rightarrow \int_0^1 B(u)^2/f(F^{-1}(u))^2\,du", 38),
+            "<bookmark mark='a'/> One-dimensional asymptotic distributions also need tail and smoothness conditions. <bookmark mark='b'/> Away from equality, squared-W-two estimates can have a nondegenerate normal limit under suitable quantile regularity. With independent samples of sizes n and m, the natural scale uses n m over n plus m, and the variance combines both samples. <bookmark mark='c'/> At equality, this effective size times squared W two can converge to a weighted squared-Brownian-bridge integral when the integral is finite. For one empirical sample against a known law, the scale is n instead. <bookmark mark='d'/> Bootstrap validity depends on the functional, centering and null regime; an off-null theorem should not be reused at equality without checking it.",
+            [(r"\mu \ne \nu", r":", r"\sqrt{n_{\rm eff}}\,(\widehat{W}_2^2 - W_2^2) \Rightarrow N(0, \sigma^2)", 40),
+             (r"\mu = \nu", r":", r"n_{\rm eff}\widehat{W}_2^2 \Rightarrow \int_0^1 B(u)^2/f(F^{-1}(u))^2\,du", 38),
              (r"\text{like}", r":", r"\text{Cram\'er--von Mises}", 40),
-             (r"\text{bootstrap}", r":", r"\text{fine away from the null; \ careful at it}", 40)],
+             (r"\text{bootstrap}", r":", r"\text{validity depends on centering and the null regime}", 40)],
             [r"del Barrio et al.", r"a Brownian bridge", r"Part 48", r"Part 47's boundaries"],
             colors=[(0, PLANC)])
 
     def consequences(self):
         self.list_voiceover(
-            "<bookmark mark='a'/> What the curse means in practice. <bookmark mark='b'/> A Wasserstein two-sample test in "
-            "high dimension has little power, unless the laws differ grossly. <bookmark mark='c'/> Distributionally robust "
-            "optimization with a Wasserstein ball needs a radius of order n to the minus one over d to contain the truth, "
-            "which is large. <bookmark mark='d'/> And any method that needs the distance itself must be smoothed, sliced or "
-            "projected: chapter four's entropic transport is the main smoothing.",
+            "<bookmark mark='a'/> These rates inform method choice. <bookmark mark='b'/> High-dimensional Wasserstein testing can have poor power for some alternatives, but a simple large mean shift can still be easy to detect. <bookmark mark='c'/> An empirical-centered DRO ball needs a radius calibrated for its order, tail assumptions, confidence and effective dimension. For the displayed regular high-dimensional regime, this includes an n-to-minus-one-over-d scale. <bookmark mark='d'/> Smoothing, slicing and projection are useful alternatives. Each changes the estimand or the detectable geometry and requires its own rate statement.",
             [(r"in practice:", GREY_A),
              (r"Wasserstein two-sample tests: \ weak in high dimension", NAIVEC2),
              (r"Wasserstein DRO: \ a radius of order $n^{-1/d}$", TGT),
@@ -128,15 +108,10 @@ class Rates(LectureMixin, VoiceoverScene):
 
     def sliced(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The simplest escape from the curse is to slice. <bookmark mark='b'/> Project both laws "
-            "onto a random direction, compute the one-dimensional distance by sorting, and average over directions: the "
-            "sliced Wasserstein distance of Julien Rabin and co-authors, and Nicolas Bonneel and co-authors. <bookmark "
-            "mark='c'/> Each slice costs a sort, n log n, and the plug-in converges at the parametric rate in any "
-            "dimension. <bookmark mark='d'/> The price is geometry: slicing sees only one direction at a time, and a "
-            "difference hidden in a few directions is diluted by all the others.",
+            "<bookmark mark='a'/> Sliced transport compares one-dimensional projections. <bookmark mark='b'/> For each direction, compute the projected Wasserstein distance by sorting, and integrate its p-th power over directions before taking the p-th root. <bookmark mark='c'/> Sorting costs n log n per direction. Dimension-independent rate exponents require tail and order assumptions; a root-n statement for a squared or powered discrepancy is not automatically a root-n rate for every sliced distance itself. Finite directions add integration error. <bookmark mark='d'/> Slicing can dilute differences concentrated in a few directions.",
             [(r"SW_p^p(\mu, \nu)", r"=", r"\int_{S^{d-1}} W_p^p(\theta_\#\mu, \theta_\#\nu)\,d\sigma(\theta)", 40),
              (r"\text{cost}", r":", r"O(n\log n) \text{ per direction}", 40),
-             (r"\text{rate}", r":", r"n^{-1/2}, \ \text{any } d", 40),
+             (r"\text{rate}", r":", r"\text{order/tail-dependent; \ finite directions add error}", 40),
              (r"\text{price}", r":", r"\text{differences in few directions are diluted}", 40)],
             [r"Rabin et al. (2011); \ Bonneel et al. (2015)", r"sorting", r"Nadjahi et al. (2020)", r"chapter 10's surrogates"],
             colors=[(2, PLANC)])
