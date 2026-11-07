@@ -59,7 +59,7 @@ class Outro(VoiceoverScene):
             (r"the VIX is that strip, truncated; ours tracks Deribit's DVOL", IV),
             (rf"the variance premium: positive {100 * p['share_pos']:.0f}\% of weeks, $t = {p['t']:.1f}$; this descriptive fit does not establish "
              rf"return predictability", RV),
-            (rf"'daily inverse targets can require buying after a rise; the model note lost 96 percent in one day'{abs(100 * x['note_feb5']):.0f}\%", BAD),
+            (rf"daily inverse targets can require buying after a rise; model note loss: {abs(100 * x['note_feb5']):.0f}\% in one day", BAD),
             (r"dealer gamma damps or amplifies; the 0DTE evidence is mixed", OPT),
             (rf"a grid-penalized network, with remaining calendar flags: {float(np.mean(n['pen_test'])):.2f} vol points held out", LV),
         ]

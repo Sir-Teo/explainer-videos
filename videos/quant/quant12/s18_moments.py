@@ -133,13 +133,11 @@ class Moments(VoiceoverScene):
     def svix(self, m):
         h = load("history")
         notes = VGroup(
-            wrapped_label(r"Martin (2017): for the S\&P 500 the bound averaged about 5\% a year, and rose above 20\% at "
-                          r"the height of the 2008 crisis: expected returns are highest when options are dearest", 11.0, 22,
+            wrapped_label('Martin (2017): the S\\&P 500 annualized lower bound averaged about 5\\% and exceeded 20\\% in the 2008 crisis, under its assumptions; a lower bound does not rank actual expected returns', 11.0, 22,
                           GREY_A),
             wrapped_label(rf"for bitcoin, from the same weekly strips: {100 * m['svix_mean']:.0f}\% annualized 30-day statistic on average since "
                           rf"2021, {100 * m['svix_late']:.0f}\% in 2024--2025", 11.0, 22, IV),
-            wrapped_label(r"it holds only if bitcoin's falls coincide with bad times for its marginal holder: an "
-                          r"assumption, not a measurement. Martin and Wagner (2019) extend the bound to single stocks", 11.0,
+            wrapped_label('requires $\\operatorname{cov}(mR,R)\\le0$, not established here for Bitcoin; Martin--Wagner (2019) extend the approach to individual stocks', 11.0,
                           22, GREY_B),
             wrapped_label('pause and predict: does a large conditional, annualized statistic justify buying?', 11.0, 22, QC.HOUSE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(ORIGIN)

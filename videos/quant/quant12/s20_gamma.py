@@ -28,7 +28,7 @@ class Gamma(VoiceoverScene):
         ax = axes([0, n], [-0.05, 0.05], x_length=8.4, y_length=4.2, xlabel=r"minutes of a trading day",
                   ylabel='cumulative minute return (linear toy)', xticks=[0, 360, 390], yticks=[-0.04, 0, 0.04],
                   yfmt=lambda u: f"{100 * u:+.0f}\\%", font_size=16).to_edge(LEFT, buff=0.5).shift(DOWN * 0.2)
-        news_path = curve(ax.ax, m, e, GREY_C, stroke_width=1.5).set_opacity(0.5)
+        news_path = curve(ax.ax, m, e, GREY_C, stroke_width=1.5).set_stroke(opacity=0.5)
         tr = ValueTracker(2)
         close = Rectangle(width=ax.ax.c2p(390, 0)[0] - ax.ax.c2p(360, 0)[0], height=ax.ax.c2p(0, 0.05)[1] - ax.ax.c2p(0, -0.05)[1],
                           stroke_width=0, fill_color=QC.HOUSE, fill_opacity=0.12).move_to(ax.ax.c2p(375, 0))

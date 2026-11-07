@@ -38,7 +38,7 @@ class Replicate(VoiceoverScene):
         g2 = axes([0, 30], [lo - 0.02, hi + 0.02], x_length=6.2, y_length=2.8, xlabel=r"days since the strip was bought",
                   ylabel=r"variance units (annualized)", xticks=[0, 10, 20, 30], yticks=[0, round(hi, 2)],
                   font_size=15).next_to(g1, DOWN, buff=0.45).align_to(g1, LEFT)
-        history_path = curve(g1.ax, hrs, S, GREY_B, stroke_width=1.5).set_opacity(0.6)
+        history_path = curve(g1.ax, hrs, S, GREY_B, stroke_width=1.5).set_stroke(opacity=0.6)
         tr = ValueTracker(1)
 
         def upto(ax, y, col, sw=3):
