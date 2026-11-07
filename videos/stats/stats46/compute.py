@@ -30,7 +30,7 @@ import math
 from dataclasses import asdict
 
 import numpy as np
-from scipy import optimize, stats
+from scipy import optimize, stats, integrate, special
 
 from explainer.ai.cache import Cache
 from explainer.stats import museum
@@ -61,11 +61,82 @@ def nest(obj):
     return obj
 
 
-def eff_reps(per_rep, nominal=0.95) -> int:
-    v = np.var(np.asarray(per_rep, float), ddof=1) / len(per_rep)
-    if v == 0:
-        return len(per_rep)
-    return int(round(nominal * (1 - nominal) / max(v, 1e-12)))
+def bf_critical(phi, n1, n2, alpha=.05):
+    """Stable convolution quadrature, conditioning on the smaller weighted t.
+
+    Swapping the independent terms ensures the conditional survival function
+    never has a nearly zero scale. Symmetry reduces the two-sided tail to twice
+    one tail. Special functions avoid slow distribution-object quadrature.
+    """
+    sp,cp=math.sin(phi),math.cos(phi);d1,d2=n1-1,n2-1
+    if cp>sp: sp,cp,d1,d2=cp,sp,d2,d1
+    if cp<1e-12: return float(stats.t.isf(alpha/2,d1))
+    constant=math.exp(special.gammaln((d2+1)/2)-special.gammaln(d2/2))/math.sqrt(d2*math.pi)
+    def tail(c):
+        return 2*integrate.quad(lambda t:constant*(1+t*t/d2)**(-(d2+1)/2)*special.stdtr(d1,-(c+cp*t)/sp),-np.inf,np.inf,epsabs=1e-11,epsrel=1e-10,limit=300)[0]
+    return optimize.brentq(lambda c:tail(c)-alpha,0.,60.,xtol=1e-10)
+
+
+def two_sample_sizes(n1: int, s1: float, n2: int, s2: float, reps: int, rng, alpha: float = 0.05, grid: int = 41) -> dict:
+    """Rejection rates under H0 (equal means) of the pooled t test, Welch's test and the Behrens-Fisher test, with
+    unequal variances.  The Behrens-Fisher critical values are interpolated over a grid of phi."""
+    x = rng.normal(0, s1, (reps, n1))
+    y = rng.normal(0, s2, (reps, n2))
+    m1, m2 = x.mean(1), y.mean(1)
+    v1, v2 = x.var(1, ddof=1), y.var(1, ddof=1)
+    sp2 = ((n1 - 1) * v1 + (n2 - 1) * v2) / (n1 + n2 - 2)
+    t_pool = (m1 - m2) / np.sqrt(sp2 * (1 / n1 + 1 / n2))
+    se = np.sqrt(v1 / n1 + v2 / n2)
+    d = (m1 - m2) / se
+    df = TK.welch_df(v1 / n1, v2 / n2, n1, n2)
+    rej_pool = np.abs(t_pool) > stats.t.ppf(1 - alpha / 2, n1 + n2 - 2)
+    rej_welch = np.abs(d) > stats.t.ppf(1 - alpha / 2, df)
+    phis = np.linspace(0, math.pi / 2, grid)
+    cs = np.array([bf_critical(p, n1, n2, alpha) for p in phis])
+    phi = np.arctan2(np.sqrt(v1 / n1), np.sqrt(v2 / n2))
+    rej_bf = np.abs(d) > np.interp(phi, phis, cs)
+    return {"pooled": rej_pool, "welch": rej_welch, "bf": rej_bf, "df": df, "phis": phis, "cs": cs}
+
+
+def bernoulli_se(hits):
+    hits = np.asarray(hits, float)
+    return float(hits.std(ddof=1) / np.sqrt(len(hits)))
+
+
+def fieller(a, b, va, vb, cab=0., level=.95):
+    """Invert a joint-normal pivot, including zero quadratic coefficients."""
+    if va <= 0 or vb <= 0 or va*vb <= cab*cab:
+        raise ValueError("A positive definite covariance matrix is required")
+    z2=stats.norm.ppf((1+level)/2)**2
+    A,B,C=b*b-z2*vb,-2*(a*b-z2*cab),a*a-z2*va
+    if A == 0:
+        if B == 0: return {"kind":"all"} if C <= 0 else {"kind":"empty"}
+        root=-C/B
+        return {"kind":"halfline","lo":-np.inf if B>0 else root,"hi":root if B>0 else np.inf}
+    disc=B*B-4*A*C
+    if disc < 0: return {"kind":"all"} if A<0 else {"kind":"empty"}
+    root=np.sqrt(max(0.,disc));lo,hi=sorted(((-B-root)/(2*A),(-B+root)/(2*A)))
+    return {"kind":"bounded" if A>0 else "exclusive","lo":float(lo),"hi":float(hi)}
+
+
+def flipflop_intervals(b, level=.9, nmax=60):
+    """Retain genuinely empty classical intervals after a downward fluctuation."""
+    result=TK.flipflop_intervals(b,level,nmax)
+    empty=(result["hi"] == 0)
+    result["lo"][empty]=np.inf
+    return result
+
+
+def t2_conditional_exact(delta, k=1+np.sqrt(2)):
+    """Independent quadrature: s ~ |N(0,1)|, xbar ~ N(delta,1/2)."""
+    root2=np.sqrt(2)
+    def mass(s,covered):
+        lo,hi=-k*s,k*s
+        if covered: lo,hi=max(lo,delta-s/root2),min(hi,delta+s/root2)
+        return 0. if lo>=hi else 2*stats.norm.pdf(s)*(stats.norm.cdf((hi-delta)*root2)-stats.norm.cdf((lo-delta)*root2))
+    share=integrate.quad(lambda v:mass(v,False),0,np.inf,epsabs=2e-11)[0]
+    numerator=integrate.quad(lambda v:mass(v,True),0,np.inf,epsabs=2e-11,limit=300)[0]
+    return {"share":share,"conditional":numerator/share}
 
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -74,13 +145,14 @@ def compute_bf():
     settings = [(10, 1.0, 10, 1.0), (10, 1.0, 10, 3.0), (5, 3.0, 25, 1.0), (25, 3.0, 5, 1.0)]
     rows = []
     for n1, s1, n2, s2 in settings:
-        r = TK.two_sample_sizes(n1, s1, n2, s2, 20000, g)
+        r = two_sample_sizes(n1, s1, n2, s2, 20000, g)
         rows.append({"n1": n1, "s1": s1, "n2": n2, "s2": s2, "pooled": float(r["pooled"].mean()),
-                     "welch": float(r["welch"].mean()), "bf": float(r["bf"].mean())})
+                     "welch": float(r["welch"].mean()), "bf": float(r["bf"].mean()), "reps": 20000,
+                     "mc_se": {k: bernoulli_se(r[k]) for k in ("pooled","welch","bf")}})
     phis = np.linspace(0, math.pi / 2, 31)
     curves = {}
     for n1, n2 in ((5, 25), (10, 10)):
-        curves[f"{n1}_{n2}"] = [TK.bf_critical(p, n1, n2) for p in phis]
+        curves[f"{n1}_{n2}"] = [bf_critical(p, n1, n2) for p in phis]
     # Old Faithful: eruption durations after short and long waits
     er, wt = museum.faithful()
     a, b = er[wt < 70], er[wt >= 70]
@@ -186,9 +258,9 @@ def compute_lrt():
     z = g.normal(0, 1, 200000)
     lrb = np.maximum(z, 0) ** 2
     return {"wilks_q": q, "chi2_q": stats.chi2.ppf([0.5, 0.9, 0.95, 0.99], 1), "wilks_size": float(np.mean(lr > stats.chi2.ppf(0.95, 1))),
-            "lr_hist": np.histogram(lr, bins=40, range=(0, 8), density=True)[0], "chibar_crit": TK.chibar_critical(0.05),
+            "lr_hist": np.histogram(lr, bins=40, range=(0, 8))[0] / (len(lr)*.2), "chibar_crit": TK.chibar_critical(0.05),
             "chi2_crit": float(stats.chi2.ppf(0.95, 1)), "naive_size": float(np.mean(lrb > stats.chi2.ppf(0.95, 1))),
-            "chibar_size": float(np.mean(lrb > TK.chibar_critical(0.05))), "zero_share": float(np.mean(lrb == 0))}
+            "chibar_size": float(np.mean(lrb > TK.chibar_critical(0.05))), "zero_share": float(np.mean(lrb == 0)), "wilks_reps": len(lr), "boundary_reps": len(z)}
 
 
 def compute_belt():
@@ -203,18 +275,22 @@ def compute_belt():
 
 
 def _logistic(dose, n, k):
-    X = np.c_[np.ones_like(dose), dose]
-
+    center=float(np.mean(dose));scale=float(np.std(dose))
+    X=np.c_[np.ones_like(dose),(dose-center)/scale]
     def nll(b):
-        eta = X @ b
-        return -np.sum(k * eta - n * np.logaddexp(0, eta))
-
-    r = optimize.minimize(nll, [-60, 34], method="BFGS")
-    b = r.x
-    p = 1 / (1 + np.exp(-(X @ b)))
-    W = n * p * (1 - p)
-    V = np.linalg.inv(X.T @ (W[:, None] * X))
-    return b, V
+        eta=X@b
+        return np.sum(n*np.logaddexp(0,eta)-k*eta)
+    def jac(b):
+        return X.T@(n*stats.logistic.cdf(X@b)-k)
+    def hess(b):
+        pr=stats.logistic.cdf(X@b)
+        return X.T@((n*pr*(1-pr))[:,None]*X)
+    result=optimize.minimize(nll,[0.,2.],jac=jac,hess=hess,method="trust-exact",options={"gtol":1e-9})
+    polished=optimize.root(jac,result.x,jac=hess,tol=1e-11)
+    result.x=polished.x
+    if np.max(np.abs(jac(result.x)))>1e-9: raise RuntimeError(polished.message)
+    transform=np.array([[1.,-center/scale],[0.,1/scale]])
+    return transform@result.x,transform@np.linalg.inv(hess(result.x))@transform.T
 
 
 def compute_fieller():
@@ -232,7 +308,7 @@ def compute_fieller():
         kinds = {"bounded": 0, "exclusive": 0, "all": 0}
         cov_f = np.zeros(reps, bool)
         for i in range(reps):
-            f = TK.fieller(a[i], b[i], 1.0, 1.0)
+            f = fieller(a[i], b[i], 1.0, 1.0)
             kinds[f["kind"]] += 1
             if f["kind"] == "bounded":
                 cov_f[i] = f["lo"] <= rho <= f["hi"]
@@ -241,12 +317,13 @@ def compute_fieller():
             else:
                 cov_f[i] = True
         out[str(beta)] = {"delta": float(cov_delta.mean()), "fieller": float(cov_f.mean()),
-                          "kinds": {k: v / reps for k, v in kinds.items()}, "cov_delta": cov_delta, "cov_f": cov_f}
+                          "kinds": {k: v / reps for k, v in kinds.items()}, "cov_delta": cov_delta, "cov_f": cov_f, "reps": reps,
+                          "mc_se": {"delta":bernoulli_se(cov_delta),"fieller":bernoulli_se(cov_f)}}
     # Bliss's beetles: LD50 by Fieller and by the delta method
     dose, n, k = museum.bliss()
     b, V = _logistic(dose, n, k)
     ld = -b[0] / b[1]
-    f = TK.fieller(-b[0], b[1], V[0, 0], V[1, 1], -V[0, 1])
+    f = fieller(-b[0], b[1], V[0, 0], V[1, 1], -V[0, 1])
     grad = np.array([-1 / b[1], b[0] / b[1] ** 2])
     se = math.sqrt(grad @ V @ grad)
     bliss = {"ld50": float(ld), "fieller": [f["lo"], f["hi"]], "delta": [ld - 1.96 * se, ld + 1.96 * se], "b": b, "z_slope": float(b[1] / math.sqrt(V[1, 1]))}
@@ -258,7 +335,7 @@ def compute_fc():
     b = 3.0
     grid = np.linspace(0, 15, 1501)
     fc = TK.fc_intervals(b, 0.9, mu_grid=grid, nmax=40)
-    ff = TK.flipflop_intervals(b, 0.9, nmax=40)
+    ff = flipflop_intervals(b, 0.9, nmax=40)
     mus = grid[grid <= 8 + 1e-9][::2]  # on the construction's grid, where its coverage is guaranteed
     cov_fc = TK.poisson_coverage(fc["lo"], fc["hi"], b, mus)
     cov_ff = TK.poisson_coverage(ff["lo"], ff["hi"], b, mus)
@@ -267,7 +344,9 @@ def compute_fc():
     return {"b": b, "n": fc["n"][:11], "fc_lo": fc["lo"][:11], "fc_hi": fc["hi"][:11], "ff_lo": ff["lo"][:11], "ff_hi": ff["hi"][:11],
             "mus": mus, "cov_fc": cov_fc, "cov_ff": cov_ff, "ff_min": float(cov_ff.min()), "ff_argmin": float(mus[np.argmin(cov_ff)]),
             "fc_min": float(cov_fc.min()), "b0": {"lo": f0["lo"][:6], "hi": f0["hi"][:6]},
-            "classical_upper_n0": float(-math.log(0.1) - b)}
+            "classical_upper_n0": float(-math.log(0.1) - b),
+            "construction_step": float(grid[1]-grid[0]), "coverage_scope":"construction-grid signals; finite Poisson support 0..40",
+            "maximum_omitted_tail": float(stats.poisson.sf(40, b+mus.max()))}
 
 
 def compute_simul():
@@ -285,7 +364,7 @@ def compute_buehler():
     g = rng(4604)
     k = 1 + math.sqrt(2)
     mus = [0.0, 0.25, 0.5, 1.0, 2.0, 4.0]
-    rows = [TK.t2_conditional(m, k, 200000, g) | {"mu": m} for m in mus]
+    rows = [TK.t2_conditional(m, k, 200000, g) | {"mu": m,"reps":200000,"quadrature":t2_conditional_exact(m,k)} for m in mus]
     return {"k": k, "rows": rows}
 
 
@@ -303,35 +382,35 @@ def compute_gof():
     ks20 = TK.ks_estimated(20, 40000, g)
     ks100 = TK.ks_estimated(100, 20000, g)
     return {"x2_q": np.quantile(X2, [0.5, 0.9, 0.95, 0.99]), "chi2_q": stats.chi2.ppf([0.5, 0.9, 0.95, 0.99], k - 1),
-            "x2_size": float(np.mean(X2 > stats.chi2.ppf(0.95, k - 1))), "x2_hist": np.histogram(X2, bins=36, range=(0, 18), density=True)[0],
-            "ks20": {k_: v for k_, v in ks20.items() if k_ != "D"}, "ks100": {k_: v for k_, v in ks100.items() if k_ != "D"},
-            "D20_hist": np.histogram(ks20["D"], bins=40, range=(0, 0.4), density=True)[0]}
+            "x2_size": float(np.mean(X2 > stats.chi2.ppf(0.95, k - 1))), "x2_hist": np.histogram(X2, bins=36, range=(0, 18))[0] / (len(X2)*.5),
+            "ks20": {k_: v for k_, v in ks20.items() if k_ != "D"} | {"reps":40000,"rejections":int(np.sum(ks20["D"]>ks20["crit_naive"]))}, "ks100": {k_: v for k_, v in ks100.items() if k_ != "D"} | {"reps":20000,"rejections":int(np.sum(ks100["D"]>ks100["crit_naive"]))},
+            "D20_hist": np.histogram(ks20["D"], bins=40, range=(0, 0.4))[0] / (len(ks20["D"])*.01)}
 
 
 def compute_board():
     g = rng(4699)
     rows = []
-    r = TK.two_sample_sizes(5, 3.0, 25, 1.0, 20000, g)
+    r = two_sample_sizes(5, 3.0, 25, 1.0, 20000, g)
     for key, name in (("pooled", "pooled t test"), ("welch", "Welch's test"), ("bf", "Behrens--Fisher test")):
-        rows.append(Row(46, name, "n = 5 (SD 3) vs n = 25 (SD 1)", "size", 0.05, float(r[key].mean()), len(r[key])))
+        rows.append(Row(46, name, "n = 5 (SD 3) vs n = 25 (SD 1)", "size", 0.05, float(r[key].mean()), len(r[key]),mc_se=bernoulli_se(r[key])))
     fl = load("fieller")
     cov = fl["_cov"]["0.5"]
     rows.append(Row(46, "delta-method interval for a ratio", "denominator mean 0.5, SE 1", "coverage", 0.95,
-                    float(np.mean(cov["delta"])), len(cov["delta"])))
+                    float(np.mean(cov["delta"])), len(cov["delta"]),mc_se=bernoulli_se(cov["delta"])))
     rows.append(Row(46, "Fieller's set for a ratio", "denominator mean 0.5, SE 1", "coverage", 0.95,
-                    float(np.mean(cov["fieller"])), len(cov["fieller"])))
+                    float(np.mean(cov["fieller"])), len(cov["fieller"]),mc_se=bernoulli_se(cov["fieller"])))
     # flip-flopping vs Feldman-Cousins at the flip-flop's worst mu: simulate Poisson counts
     fc = load("fc")
     mu = fc["ff_argmin"]
     nobs = g.poisson(mu + fc["b"], 20000)
     full_fc = TK.fc_intervals(3.0, 0.9, mu_grid=np.linspace(0, 15, 1501), nmax=60)
-    full_ff = TK.flipflop_intervals(3.0, 0.9, nmax=60)
+    full_ff = flipflop_intervals(3.0, 0.9, nmax=60)
     hit_ff = (full_ff["lo"][nobs] <= mu + 1e-12) & (mu <= full_ff["hi"][nobs] + 1e-12)
     hit_fc = (full_fc["lo"][nobs] <= mu + 1e-12) & (mu <= full_fc["hi"][nobs] + 1e-12)
-    rows.append(Row(46, "flip-flopping Poisson limits", f"background 3, mu = {mu:.2f}", "coverage", 0.9, float(hit_ff.mean()), len(hit_ff)))
-    rows.append(Row(46, "Feldman--Cousins limits", f"background 3, mu = {mu:.2f}", "coverage", 0.9, float(hit_fc.mean()), len(hit_fc)))
+    rows.append(Row(46, "flip-flopping Poisson limits", f"background 3, mu = {mu:.2f}", "coverage", 0.9, float(hit_ff.mean()), len(hit_ff),mc_se=bernoulli_se(hit_ff)))
+    rows.append(Row(46, "Feldman--Cousins limits", f"background 3, mu = {mu:.2f}", "coverage", 0.9, float(hit_fc.mean()), len(hit_fc),mc_se=bernoulli_se(hit_fc)))
     ks = TK.ks_estimated(20, 20000, g)
-    rows.append(Row(46, "KS test, estimated mean and SD", "normal data, n = 20", "size", 0.05, ks["size"], 20000))
+    rows.append(Row(46, "KS test, estimated mean and SD", "normal data, n = 20", "size", 0.05, ks["size"], 20000,mc_se=bernoulli_se(ks["D"]>ks["crit_naive"])))
     save_rows(46, rows)
     return {"rows": [asdict(r) | {"verdict": r.verdict, "se": r.se} for r in rows]}
 

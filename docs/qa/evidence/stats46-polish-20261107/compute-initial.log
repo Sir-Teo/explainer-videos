@@ -1,0 +1,34 @@
+  compute bf ...
+  done    bf in 6s
+  compute np ...
+  done    np in 0s
+  compute mlr ...
+  done    mlr in 0s
+  compute umpu ...
+  done    umpu in 0s
+  compute neyman ...
+  done    neyman in 0s
+  compute invariance ...
+  done    invariance in 0s
+  compute lrt ...
+  done    lrt in 0s
+  compute belt ...
+  done    belt in 0s
+  compute fieller ...
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspace/explainer-videos/videos/stats/stats46/compute.py", line 424, in <module>
+    
+  File "/workspace/explainer-videos/explainer/ai/cache.py", line 137, in main
+    self.save(name, items[name]())
+                    ^^^^^^^^^^^^^
+  File "/workspace/explainer-videos/videos/stats/stats46/compute.py", line 424, in <lambda>
+    
+  File "/workspace/explainer-videos/videos/stats/stats46/compute.py", line 322, in compute_fieller
+    # Bliss's beetles: LD50 by Fieller and by the delta method
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/explainer-videos/videos/stats/stats46/compute.py", line 289, in _logistic
+    polished=optimize.root(jac,result.x,jac=hess,tol=1e-11)
+                                           ^^^^^^^^^^^^^^^^^
+RuntimeError: A bad approximation caused failure to predict improvement.

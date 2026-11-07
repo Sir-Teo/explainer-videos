@@ -40,6 +40,9 @@ class NPLemma(VoiceoverScene):
             "size is alpha, its power is at least that of any other test of size at most alpha. And for every alpha, k and "
             "gamma can be chosen to make the size exactly alpha."
         ) as vo:
+            heading=label('A likelihood-ratio threshold is most powerful for simple hypotheses',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -51,18 +54,22 @@ class NPLemma(VoiceoverScene):
             cmath(r"(\phi^* - \phi)(f_1 - k f_0)", r"\ge", r"0 \ \text{everywhere}", font_size=34),
             cmath(r"\textstyle\int (\phi^* - \phi)(f_1 - k f_0)", r"\ge", r"0", font_size=34),
             cmath(r"E_1\phi^* - E_1\phi", r"\ge", r"k\,(E_0\phi^* - E_0\phi) \ge 0", font_size=34),
-            cmath(r"\text{necessity}", r":", r"\text{any most powerful test equals } \phi^* \text{ where } f_1 \ne k f_0", font_size=30),
+            cmath(r"\text{necessity}", r":", r"\text{any most powerful test equals a.e. } \phi^* \text{ where } f_1 \ne k f_0", font_size=30),
         ]
         rows[2][-1].set_color(UMPC)
         whys = [why(r"check the three cases"), why(r"integrate"), why(r"rearrange; \ sizes $\alpha$ vs $\le \alpha$"), why(r"strict unless equal")]
         with self.voiceover(
-            "<bookmark mark='a'/> The proof is one line. Where f one exceeds k f nought, phi star is one, so phi star minus "
-            "phi is at least zero; where it falls short, phi star is zero and the difference is at most zero. Either way the "
-            "product is non-negative. <bookmark mark='b'/> Integrate. <bookmark mark='c'/> The power of phi star minus "
-            "that of phi is at least k times the difference in sizes, which is non-negative. <bookmark mark='d'/> If phi is "
-            "also most powerful, the integral must be zero, so phi agrees with phi star wherever the likelihood ratio "
-            "differs from k: the lemma's form is necessary as well as sufficient."
+            "<bookmark mark='a'/> The proof is one line. Where f one exceeds k f nought, phi star is one, so phi star"
+            " minus phi is at least zero; where it falls short, phi star is zero and the difference is at most zero. "
+            "Either way the product is non-negative. <bookmark mark='b'/> Integrate. <bookmark mark='c'/> The power "
+            "of phi star minus that of phi is at least k times the difference in sizes, which is non-negative. "
+            "<bookmark mark='d'/> If phi is also most powerful, the integral must be zero, so phi agrees with phi "
+            "star almost everywhere, with respect to the dominating measure, where f one differs from k times f "
+            "nought: the lemma's form is necessary as well as sufficient."
         ) as vo:
+            heading=label('The sign of the likelihood gap proves optimality',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -81,7 +88,7 @@ class NPLemma(VoiceoverScene):
         phi = np.asarray(d["phi"])
         rej = VGroup(*[b0[i].copy().set_fill(REJC, opacity=0.95) for i in range(n + 1) if phi[i] == 1])
         part = b0[d["c"]].copy().set_fill(REJC, opacity=0.95)
-        part.stretch(max(d["gamma"], 0.08), 1, about_edge=DOWN)
+        part.stretch(d["gamma"], 1, about_edge=DOWN)
         side = fit_rows(VGroup(
             label(r"$H_0$: \ $p = 0.3$ \ (blue); \ \ $H_1$: \ $p = 0.5$ \ (teal)", font_size=22),
             label(r"the ratio $f_1/f_0$ increases in $x$: \ reject large $x$", font_size=22, color=GREY_A),
@@ -146,20 +153,26 @@ class NPLemma(VoiceoverScene):
             cmath(r"\max_\phi \textstyle\int \phi f_1", r"\ \text{s.t.}\ ", r"\textstyle\int \phi\, g_i = c_i, \ i = 1, \ldots, m", font_size=32),
             cmath(r"\phi^*", r"=", r"\mathbf 1\{f_1 > \textstyle\sum_i k_i g_i\} \ (+\ \gamma \text{ on equality})", font_size=32),
             cmath(r"\text{existence}", r":", r"\{0 \le \phi \le 1\} \text{ is weak-* compact in } L^\infty", font_size=32),
-            cmath(r"\text{a linear programme}", r":", r"k_i = \text{the dual variables \ (Part 21)}", font_size=32),
+            cmath(r"\text{a linear programme}", r":", r"\text{feasible integrable constraints; \ suitable dual multipliers (Part 21)}", font_size=32),
         ]
         rows[1][-1].set_color(UMPC)
         rows[3][-1].set_color(S.ACCENT)
         whys = [why(r"several side conditions"), why(r"Dantzig \& Wald (1951)"), why(r"Banach--Alaoglu"), why(r"the simplex, \ again")]
         with self.voiceover(
-            "<bookmark mark='a'/> The general version allows several side conditions: maximize the power subject to m "
-            "linear constraints on phi, not just the size. <bookmark mark='b'/> George Dantzig and Wald showed in 1951 that "
-            "the solution again rejects where f one exceeds a combination of the constraint functions, with multipliers k "
-            "i. <bookmark mark='c'/> A maximizer exists because the set of tests, functions between zero and one, is compact "
-            "in the weak-star topology, by the Banach–Alaoglu theorem. <bookmark mark='d'/> For discrete data it is "
-            "literally a linear programme, the one Dantzig's simplex method solves, and the multipliers are its dual "
-            "variables: Part twenty-one's dual, at work in testing. Chapter three uses it with two constraints."
+            "<bookmark mark='a'/> The general version allows several side conditions: maximize the power subject to m"
+            " linear constraints on phi, not just the size. <bookmark mark='b'/> George Dantzig and Wald showed in "
+            "1951 that whenever suitable multipliers exist, a rule rejecting where f one exceeds a combination of the"
+            " constraint functions is optimal if it satisfies the side conditions. <bookmark mark='c'/> With "
+            "integrable objective and constraint functions and nonempty feasible constraints, the feasible set is "
+            "weak-star closed inside the compact set of tests between zero and one. The continuous objective "
+            "therefore attains its maximum. Multiplier representations require a further supporting-hyperplane "
+            "condition. <bookmark mark='d'/> For discrete data it is literally a linear programme, the one Dantzig's "
+            "simplex method solves, and the multipliers are its dual variables: Part twenty-one's dual, at work in "
+            "testing. Chapter three uses it with two constraints."
         ) as vo:
+            heading=label('Linear side conditions define a compact feasible testing problem',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -169,16 +182,17 @@ class NPLemma(VoiceoverScene):
     def randomization(self):
         rows = fit_rows(VGroup(
             label(r"randomized tests: \ a theoretical device, \ rarely a practical one", font_size=26),
-            label(r"they make the size exact, \ the power function smooth, \ the theory clean", font_size=26, color=UMPC),
-            label(r"in practice: \ report the p-value, \ or the mid-p value $P(X > x) + \tfrac12 P(X = x)$", font_size=26, color=S.ACCENT),
+            label(r"they fill discrete gaps in attainable size; \ nonrandomized binomial power is also smooth", font_size=26, color=UMPC),
+            label(r"exact tail p-value: \ super-uniform; \ mid-p $P(X>x)+\tfrac12P(X=x)$: \ may exceed level", font_size=26, color=S.ACCENT),
             label(r"or condition, \ or accept a conservative size: \ chapter 3's Fisher exact test", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Few statisticians would actually flip a coin to decide a test. Randomized tests are a "
-            "device of the theory. <bookmark mark='b'/> They make sizes exact, power functions smooth, and optimal tests "
-            "exist for every alpha. <bookmark mark='c'/> In practice one reports a p-value, or Lancaster's mid-p value, "
-            "which counts half the probability of the observed point, <bookmark mark='d'/> or accepts a conservative size, "
-            "as Fisher's exact test of chapter three does."
+            "<bookmark mark='a'/> Few statisticians would actually flip a coin to decide a test. Randomized tests are"
+            " a device of the theory. <bookmark mark='b'/> They fill gaps in attainable size and allow exact level "
+            "alpha at discrete boundaries. Nonrandomized binomial tests also have smooth power functions. <bookmark "
+            "mark='c'/> In practice one reports a p-value, or Lancaster's mid-p value, which counts half the "
+            "probability of the observed point but need not be super-uniform and can exceed nominal type-one error, "
+            "<bookmark mark='d'/> or accepts a conservative size, as Fisher's exact test of chapter three does."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

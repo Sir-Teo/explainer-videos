@@ -39,13 +39,14 @@ class Outro(VoiceoverScene):
         head = label(r"Part 46, \ in thirteen lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.45)
         with self.voiceover(
-            "<bookmark mark='a'/> Part forty-six in thirteen lines. The Behrens–Fisher problem, Welch's answer and Linnik's "
-            "theorem. The Neyman–Pearson lemma with its randomization and its linear programme. Monotone likelihood ratio "
-            "and Karlin–Rubin, and the absence of a UMP two-sided test. Unbiased tests by Neyman structure, and the t "
-            "test's optimality. Invariance, Hunt–Stein and the F test. Wilks's theorem and Chernoff's boundary. Confidence "
-            "sets by inversion. <bookmark mark='b'/> Fieller's unbounded sets and Gleser and Hwang's impossibility. Feldman "
-            "and Cousins against flip-flopping. Scheffé's projections and closed testing. Welch's uniform example and "
-            "Buehler's recognizable subsets. Berger and Sellke's bounds. And goodness of fit, with Lilliefors and Durbin."
+            "<bookmark mark='a'/> Part forty-six in thirteen lines. The Behrens–Fisher problem, Welch's answer and "
+            "Linnik's theorem. The Neyman–Pearson lemma with its randomization and its linear programme. Monotone "
+            "likelihood ratio and Karlin–Rubin, and the absence of a UMP two-sided test in the binomial example. "
+            "Unbiased tests by Neyman structure, and the t test's optimality. Invariance, Hunt–Stein and the F test. "
+            "Wilks's theorem and Chernoff's boundary. Confidence sets by inversion. <bookmark mark='b'/> Fieller's "
+            "unbounded sets and Gleser and Hwang's impossibility. Feldman and Cousins against flip-flopping. "
+            "Scheffé's projections and closed testing. Welch's uniform example and Buehler's recognizable subsets. "
+            "Berger and Sellke's bounds. And goodness of fit, with Lilliefors and Durbin."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -79,15 +80,16 @@ class Outro(VoiceoverScene):
             (r"selective inference: \ conditioning on the selection", [56]), (r"conformal and permutation tests, \ exact", [57]),
             (r"e-values and anytime-valid confidence sequences", [58]),
         ], font_size=22)
+        self.add(card.head)
         with self.voiceover(
-            "Where it comes back. <bookmark mark='a'/> Part forty-seven proves Wilks's theorem and the local power of the "
-            "score and Wald tests. Part forty-eight studies the processes behind Kolmogorov–Smirnov. Part fifty-six "
-            "conditions on selection, as chapter ten conditioned on ancillaries. Part fifty-seven builds exact "
-            "distribution-free tests. And Part fifty-eight turns tests into e-values and confidence sequences that stay "
-            "valid however long you watch."
+            "Where it comes back. <bookmark mark='a'/> Part forty-seven proves Wilks's theorem and the local power of"
+            " the score and Wald tests. Part forty-eight studies the processes behind Kolmogorov–Smirnov. Part "
+            "fifty-six conditions on selection, while chapter ten examined recognizable subsets, which need not be "
+            "ancillary. Part fifty-seven builds exact distribution-free tests. And Part fifty-eight turns tests into "
+            "e-values and confidence sequences that stay valid however long you watch."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):
@@ -105,7 +107,7 @@ class Outro(VoiceoverScene):
 
     def references(self):
         card = reference_card(
-            [r"E. Lehmann \& J. Romano, \emph{Testing Statistical Hypotheses} (4th ed. 2022)",
+            [r"E. Lehmann \& J. Romano, \emph{Testing Statistical Hypotheses}",
              r"J. Shao, \emph{Mathematical Statistics} (2nd ed. 2003); \ M. Schervish, \emph{Theory of Statistics} (1995)",
              r"Y. Linnik, \emph{Statistical Problems with Nuisance Parameters} (1968)"],
             [r"J. Neyman \& E. Pearson (1933); \ J. Neyman (1937); \ S. Wilks (1938); \ B. Welch (1938, 1947)",

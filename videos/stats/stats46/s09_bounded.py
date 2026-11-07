@@ -26,22 +26,18 @@ class Bounded(VoiceoverScene):
         rows = [
             cmath(r"n \sim \text{Poisson}(\mu + b)", r",", r"\ \mu \ge 0 \ \text{the signal}, \ b = 3 \ \text{known background}", font_size=30),
             cmath(r"n = 0", r":", rf"\text{{classical 90\% upper limit}} \ -\log 0.1 - b = {d['classical_upper_n0']:.2f}", font_size=30),
-            cmath(r"\text{an empty interval}", r":", r"\text{valid coverage, \ absurd report}", font_size=32),
+            cmath(r"\text{an empty interval}", r":", r"\text{unconditional coverage can allow an empty set on some outcomes}", font_size=32),
             cmath(r"\text{flip-flopping}", r":", r"\text{upper limit if } n \text{ is small, \ central interval if large}", font_size=30),
         ]
         rows[2][-1].set_color(REJC)
         rows[3][-1].set_color(REJC)
         whys = [why(r"a particle search"), why(r"below the physical boundary"), why(r"the Neyman construction allows it"), why(r"decided after seeing $n$")]
         with self.voiceover(
-            f"<bookmark mark='a'/> A problem from particle physics. A detector counts events: a Poisson number with mean "
-            f"equal to an unknown signal mu, which cannot be negative, plus a known background of three. <bookmark "
-            f"mark='b'/> Suppose it counts nothing. The classical ninety percent upper limit, from the one-sided Poisson "
-            f"test, is minus the log of point one minus three: {say(d['classical_upper_n0'], 2)}, a negative signal. "
-            f"<bookmark mark='c'/> The interval is empty. The Neyman construction allows this and still covers ninety "
-            f"percent of the time on average, but no physicist will publish it. <bookmark mark='d'/> The common practice "
-            f"was to flip-flop: quote an upper limit if the count looks small, a two-sided interval if it looks large, "
-            f"deciding after seeing the data."
+            f"<bookmark mark='a'/> A problem from particle physics. A detector counts events: a Poisson number with mean equal to an unknown signal mu, which cannot be negative, plus a known background of three. <bookmark mark='b'/> Suppose it counts nothing. The classical ninety percent upper limit, from the one-sided Poisson test, is minus the log of point one minus three: {say(d['classical_upper_n0'], 2)}, a negative signal. <bookmark mark='c'/> The interval is empty. The Neyman construction allows this and retains at least ninety percent unconditional coverage at each admissible signal value. An empty set on one outcome is compatible with that procedure-level guarantee. <bookmark mark='d'/> The common practice was to flip-flop: quote an upper limit if the count looks small, a two-sided interval if it looks large, deciding after seeing the data."
         ) as vo:
+            heading=label('A valid procedure can report an empty set on some outcomes',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -67,6 +63,9 @@ class Bounded(VoiceoverScene):
             "upper limits to two-sided intervals by themselves, as the count grows, with the coverage guaranteed. Their "
             "ordering is the likelihood ratio test's acceptance region, so this is chapter five's test, inverted."
         ) as vo:
+            heading=label('A prespecified likelihood ordering calibrates a unified belt',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -81,16 +80,19 @@ class Bounded(VoiceoverScene):
         tab = table_rows(rows, font_size=20, col_buff=0.28, row_buff=0.35, colors=[GREY_A, UMPC, REJC]).move_to([0, 0.9, 0])
         if tab.width > 13.2:
             tab.width = 13.2
-        check = label(r"check: \ with $b = 0$, \ $n = 0, \ldots, 3$ give $[0, 2.44]$, \ $[0.11, 4.36]$, \ $[0.53, 5.91]$, \ $[1.10, 7.42]$: \ Feldman \& Cousins's Table II", font_size=22, color=GREY_A).move_to([0, -1.5, 0])
+        check = label(r"check: \ with $b = 0$, \ $n = 0, \ldots, 3$ give $[0, 2.44]$, \ $[0.11, 4.36]$, \ $[0.53, 5.91]$, \ $[1.10, 7.42]$: \ Feldman \& Cousins's Table IV ($b=0$)", font_size=22, color=GREY_A).move_to([0, -1.5, 0])
         if check.width > 12.6:
             check.width = 12.6
-        note_ = label(r"FC: \ upper limits up to $n = 5$, \ two-sided from $n = 6$, \ chosen by the ordering, \ not by us", font_size=24, color=S.ACCENT).move_to([0, -2.4, 0])
+        note_ = label(r"raw likelihood-ratio ordering: \ upper limits up to $n = 5$, \ two-sided from $n = 6$, \ chosen by the ordering, \ not by us", font_size=24, color=S.ACCENT).move_to([0, -2.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The intervals for zero to ten counts, with a background of three. <bookmark mark='b'/> "
-            "Feldman and Cousins's are upper limits for up to five counts, and two-sided from six on. Zero counts give a "
-            "signal between zero and point nine five. <bookmark mark='c'/> The flip-flopping intervals are empty at zero and "
-            "switch from limits to intervals at nine, the background plus three standard deviations. <bookmark mark='d'/> "
-            "The construction in statkit reproduces the published table for zero background exactly."
+            "<bookmark mark='a'/> The intervals for zero to ten counts, with a background of three. <bookmark "
+            "mark='b'/> Feldman and Cousins's are upper limits for up to five counts, and two-sided from six on. The "
+            "raw likelihood-ratio ordering here gives zero to about point nine five for zero counts. The published "
+            "Table Four adds an across-background monotonicity correction and reports an upper endpoint of one point "
+            "zero eight at background three. We display the unmodified ordering, with its own valid construction-grid"
+            " coverage. <bookmark mark='c'/> The flip-flopping intervals are empty at zero and switch from limits to "
+            "intervals at nine, the background plus three standard deviations. <bookmark mark='d'/> The numerical "
+            "construction reproduces the published zero-background table within its grid resolution and rounding."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tab[0]))
@@ -105,25 +107,20 @@ class Bounded(VoiceoverScene):
     def coverage(self):
         d = load("fc")
         mus = np.asarray(d["mus"])
-        A = axes([0, 8], [0.75, 1.0], x_length=7.4, y_length=4.4, xlabel=r"the true signal $\mu$", ylabel=r"exact coverage",
+        A = axes([0, 8], [0.75, 1.0], x_length=7.4, y_length=4.4, xlabel=r"the true signal $\mu$", ylabel=r"Poisson-summed coverage on the construction grid",
                  xticks=[0, 2, 4, 6, 8], yticks=[0.8, 0.85, 0.9, 0.95, 1.0], center=[-2.5, 0.2, 0])
         ax = A.ax
         cf = polyline(ax, mus, d["cov_fc"], UMPC, 3)
         cp = polyline(ax, mus, d["cov_ff"], REJC, 3)
         nom = DashedLine(ax.c2p(0, 0.9), ax.c2p(8, 0.9), color=GREY_B, stroke_width=2)
         side = fit_rows(VGroup(
-            label(r"green: \ Feldman--Cousins: \ never below 90\%", font_size=22, color=UMPC),
+            label(r"green: \ FC coverage $\ge90\%$ at construction-grid signals", font_size=22, color=UMPC),
             label(rf"red: \ flip-flopping: \ as low as {100 * d['ff_min']:.1f}\% \ (at $\mu = {d['ff_argmin']:.2f}$)", font_size=22, color=REJC),
-            label(r"deciding the kind of interval after seeing $n$ \ breaks the guarantee", font_size=22, color=S.ACCENT),
+            label(r"this uncalibrated switch breaks coverage; \ a calibrated unified rule can be valid", font_size=22, color=S.ACCENT),
             label(r"the sawtooth: \ Poisson discreteness", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The exact coverage of both, at every signal strength. Feldman and Cousins's intervals "
-            f"never cover less than ninety percent. <bookmark mark='b'/> The flip-flopping intervals fall to "
-            f"{100 * d['ff_min']:.1f} percent, near a signal of {say(d['ff_argmin'], 1)}. <bookmark mark='c'/> Each piece "
-            f"of the flip-flop is a valid interval on its own; choosing between them after seeing the count is what breaks "
-            f"the guarantee, exactly like Part thirty-three's p-hacking. <bookmark mark='d'/> The teeth come from the "
-            f"discreteness of the counts."
+            f"<bookmark mark='a'/> Poisson-summed coverage at the displayed signals on the construction grid. The stored endpoints use steps of point zero one, so endpoint locations are numerical approximations. Feldman and Cousins's intervals never cover less than ninety percent. <bookmark mark='b'/> The flip-flopping intervals fall to {100 * d['ff_min']:.1f} percent, near a signal of {say(d['ff_argmin'], 1)}. <bookmark mark='c'/> Each piece of the flip-flop is a valid interval on its own; combining them by this particular count-dependent switch breaks their original guarantee. A data-dependent transition can be valid when calibrated as one complete procedure, as the unified construction demonstrates. <bookmark mark='d'/> The teeth come from the discreteness of the counts."
         ) as vo:
             self.play(FadeIn(A), Create(nom), FadeIn(exact_tag(r"exact: \ Poisson sums")))
             vo.wait_until("a")

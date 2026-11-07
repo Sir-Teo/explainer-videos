@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Old Faithful",
+    "url": "https://vincentarelbundock.github.io/Rdatasets/csv/datasets/faithful.csv",
+    "sha256": "5043db1e2c51c8e8fd67e0868c768ae589770cc76ad0ac0c5b7afd1fca31fc57",
+    "checked": "272 pairs exact"
+  },
+  {
+    "name": "Faithful documentation",
+    "url": "https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/faithful.html",
+    "sha256": "c82281217a2cfa7fdca3191b4efd045314b5c719ac4c9130acc159145c17bed9",
+    "checked": "recorded waiting is to the next eruption"
+  },
+  {
+    "name": "ISIS-2",
+    "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:2899772%20AND%20SRC:MED&format=json&resultType=core",
+    "sha256": "6e02833d52ceade8db141da78aec4597d455267cb430b067b660e12cd072a27d",
+    "checked": "804/8587 vs 1016/8600 vascular deaths"
+  },
+  {
+    "name": "Feldman-Cousins",
+    "url": "https://arxiv.org/pdf/physics/9711021",
+    "sha256": "be73bc5d702935aec2135ec5bb00be6a7113b9a17f2bed2b7753ad1ff9c42007",
+    "checked": "Table IV b=0 first four endpoint pairs; section IV explains across-background correction omitted by raw construction"
+  }
+]
