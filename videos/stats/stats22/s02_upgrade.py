@@ -48,15 +48,19 @@ class Upgrade(VoiceoverScene):
         rows[2][2].set_color(LIK)
         whys = [why(r"the score: \ the slope of one log likelihood"), why(r"swap derivative and integral"),
                 why(r"differentiate the first identity once more"), why(r"independent scores add")]
+        intro = label('Score identities require differentiation under the integral', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "Two identities carry everything. <bookmark mark='a'/> The score is the derivative of an observation's log "
-            "likelihood with respect to theta. <bookmark mark='b'/> At the true theta its expectation is zero: it's the "
-            "derivative of the integral of the density, which is one for every theta. <bookmark mark='c'/> Differentiate that "
-            "identity again and you find that the score's variance equals minus the expected second derivative: the Fisher "
-            "information, two definitions that agree. <bookmark mark='d'/> For n independent observations the scores add: mean "
-            "zero, variance n times I. Both steps need the derivative to pass through the integral, our first regularity "
-            "condition."
+            "Two identities carry everything. <bookmark mark='a'/> The score is the derivative of an observation's "
+            "log likelihood with respect to theta. <bookmark mark='b'/> At the true theta its expectation is zero: "
+            "it's the derivative of the integral of the density, which is one for every theta. <bookmark mark='c'/> "
+            "Differentiate that identity again and you find that the score's variance equals minus the expected "
+            "second derivative: the Fisher information, two definitions that agree. <bookmark mark='d'/> For n "
+            "independent identically distributed observations the scores add: mean zero, variance n times I. Both "
+            "steps need the derivative to pass through the integral, our first regularity condition."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.78, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -67,20 +71,22 @@ class Upgrade(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"1. \ the support does not depend on $\theta$", font_size=24, color=LIK),
             label(r"2. \ the truth is inside the parameter space, \ not on its edge", font_size=24, color=LIK),
-            label(r"3. \ three derivatives, \ bounded near the truth", font_size=24, color=LIK),
+            label(r"3. \ local smoothness, \ integrable derivative envelopes, \ nonsingular information", font_size=24, color=LIK),
             label(r"4. \ identifiable: \ different $\theta$, \ different distributions", font_size=24, color=LIK),
             label(r"5. \ a fixed number of parameters, \ however large $n$", font_size=24, color=LIK),
             label(r"6. \ the model is true", font_size=24, color=LIK),
             label(r"broken here: \ 1 in chapter 1, \ 2--4 in chapter 9, \ 5 in chapter 7, \ 6 in chapter 10", font_size=22, color=RES),
         ), 12.4, 0.38, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Here are the regularity conditions the classical proofs use. The set of possible values "
-            "doesn't depend on theta; <bookmark mark='b'/> the true value is in the interior of the parameter space; "
-            "<bookmark mark='c'/> the log likelihood has three derivatives, suitably bounded; <bookmark mark='d'/> the model is "
-            "identifiable, so different parameters give different distributions; <bookmark mark='e'/> the number of "
-            "parameters stays fixed as n grows; <bookmark mark='f'/> and the model is true. <bookmark mark='g'/> This part "
-            "breaks every one of them: the first in a moment, the second, third and fourth in chapter nine, the fifth in "
-            "chapter seven, the sixth in chapter ten."
+            "<bookmark mark='a'/> Here is a useful checklist of sufficient regularity assumptions, not a complete "
+            "theorem. We also need integrability and uniform local derivative control, nonsingular information, and a"
+            " consistent interior solution. The set of possible values doesn't depend on theta; <bookmark mark='b'/> "
+            "the true value is in the interior of the parameter space; <bookmark mark='c'/> the log likelihood has "
+            "three derivatives, suitably bounded; <bookmark mark='d'/> the model is identifiable, so different "
+            "parameters give different distributions; <bookmark mark='e'/> the number of parameters stays fixed as n "
+            "grows; <bookmark mark='f'/> and the model is true. <bookmark mark='g'/> This part breaks every one of "
+            "them: the first in a moment, the second, third and fourth in chapter nine, the fifth in chapter seven, "
+            "the sixth in chapter ten."
         ) as vo:
             for k, m_ in enumerate("abcdefg"):
                 vo.wait_until(m_)
@@ -95,16 +101,22 @@ class Upgrade(VoiceoverScene):
             cmath(r"n(\theta - \hat\theta)/\theta", r"\to", r"\text{Exponential}(1), \ \text{not normal}", font_size=30),
         ]
         rows[3][2].set_color(RES)
-        whys = [why(r"Part 9's German tanks"), why(r"the likelihood $\theta^{-n}$ on $\theta \ge \max X_i$"),
+        whys = [why(r"continuous analogue of Part 9's tanks"), why(r"the likelihood $\theta^{-n}$ on $\theta \ge \max X_i$"),
                 why(r"faster than the usual rate"), why(r"no score identity, \ no CLT")]
+        intro = label('Parameter-dependent support changes the limiting distribution', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Part 9's German tank problem breaks the first condition. Serial numbers uniform from zero to "
-            "theta have a support that depends on theta. <bookmark mark='b'/> The likelihood is theta to the minus n, but only "
-            "for theta at least the largest serial number, so the maximum likelihood estimate is the largest number seen. "
-            "<bookmark mark='c'/> Its error shrinks like one over n, much faster than the usual one over root n, "
-            "<bookmark mark='d'/> and its scaled error is exponential, not normal. The theory of this part doesn't apply, and "
-            "the estimator is better than the theory would predict."
+            "<bookmark mark='a'/> A continuous analogue of Part 9's German tank problem breaks the fixed-support "
+            "assumption. Independent Uniform zero theta observations have a support that depends on theta. This "
+            "differs from discrete serial numbers sampled without replacement. <bookmark mark='b'/> The likelihood is"
+            " theta to the minus n, but only for theta at least the largest serial number, so the maximum likelihood "
+            "estimate is the largest number seen. <bookmark mark='c'/> Its error shrinks like one over n, much faster"
+            " than the usual one over root n, <bookmark mark='d'/> and its scaled error is exponential, not normal. "
+            "The theory of this part doesn't apply, and the root-n regular benchmark does not apply to this different"
+            " model."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.78, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

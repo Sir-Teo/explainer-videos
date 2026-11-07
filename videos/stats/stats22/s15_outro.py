@@ -24,7 +24,7 @@ class Outro(VoiceoverScene):
         items = [
             (r"Pearson's nonic vs likelihood", PATH), (r"upgrade: \ six conditions", GREY_A),
             (r"consistency: \ KL $\ge 0$, \ the argmax", LIK), (r"normality: \ expand the score", LIK),
-            (r"observed beats expected", LIK), (r"many parameters: \ the profile", PATH),
+            (r"observed vs expected: \ conditional precision", LIK), (r"many parameters: \ the profile", PATH),
             (r"Wald, \ score, \ LR; \ Hauck--Donner", LRC), (r"Neyman--Scott: \ $\sigma^2/2$", RES),
             (r"EM: \ Jensen's bound, \ 1,622 steps", CRAB1), (r"spikes, \ twins and edges", RES),
             (r"the sandwich: \ 77\% vs 93\%", HIT), (r"quasi-, \ composite, \ pseudo", TEAL),
@@ -38,16 +38,18 @@ class Outro(VoiceoverScene):
         head = label(r"Part 22, \ in fourteen lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Part twenty-two in fourteen lines. <bookmark mark='a'/> Pearson split Weldon's crabs with a ninth-degree "
-            "polynomial; maximum likelihood did it better. The classical theory rests on six conditions. Consistency follows "
-            "from the Kullback–Leibler inequality and the argmax of a converging curve; asymptotic normality from expanding "
-            "the score. The observed information describes the sample in hand better than the expected. With many parameters, "
-            "profile along the ridge. Wald, score and likelihood-ratio tests read one curve three ways, and can disagree badly. "
-            "Neyman and Scott's incidental parameters halve the variance forever. EM climbs a lower bound built from the "
-            "missing labels, surely but slowly. Mixture likelihoods spike, switch labels, and sit on edges. Under a wrong "
-            "model the estimate finds the closest wrong answer, and the sandwich measures its precision honestly. Quasi-, "
-            "composite and pseudo-likelihoods replace likelihoods we can't write down. The likelihood principle asks whether "
-            "unseen outcomes should matter. And the information is a ruler on the space of distributions."
+            "Part twenty-two in fourteen lines. <bookmark mark='a'/> Pearson split Weldon's crabs with a ninth-degree"
+            " polynomial; a midpoint-density local fit improved the likelihood. Our six-item checklist summarizes "
+            "assumptions; precise theorems need additional integrability and information conditions. Consistency "
+            "follows from the Kullback–Leibler inequality and the argmax of a converging curve; asymptotic normality "
+            "from expanding the score. Observed information tracked conditional variance well in the Cauchy example. "
+            "With many parameters, profile along the ridge. Wald, score and likelihood-ratio tests read one curve "
+            "three ways, and can disagree badly. Neyman and Scott's incidental parameters halve the variance forever."
+            " EM climbs a lower bound built from the missing labels, surely but slowly. Mixture likelihoods spike, "
+            "switch labels, and sit on edges. Under a wrong model the estimate finds the closest wrong answer, and a "
+            "sandwich estimates asymptotic precision under its own sampling and regularity assumptions. Quasi-, "
+            "composite and pseudo-likelihoods replace likelihoods we can't write down. The likelihood principle asks "
+            "whether unseen outcomes should matter. And the information is a ruler on the space of distributions."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -61,6 +63,7 @@ class Outro(VoiceoverScene):
             (r"AIC: \ estimating the KL divergence", [28]), (r"M-estimators: \ the sandwich again", [30]),
             (r"EM for missing data", [41]), (r"LAN, \ Hodges and Le Cam", [47]),
         ], font_size=22)
+        intro = label("Where the likelihood methods return", font_size=36)
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part 24 builds generalized linear models on quasi-likelihood, and GEE "
             "on the sandwich. Part 25's restricted likelihood cures Neyman–Scott for mixed models. Part 26 derives Jeffreys "
@@ -69,8 +72,10 @@ class Outro(VoiceoverScene):
             "for missing data. And Part 47 rebuilds this part's asymptotics on Le Cam's local asymptotic normality, where "
             "Hodges's estimator finally gets its explanation."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(FadeOut(intro), FadeIn(card.head), run_time=0.35)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):

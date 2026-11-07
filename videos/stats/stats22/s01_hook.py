@@ -42,12 +42,12 @@ class Hook(VoiceoverScene):
             label(r"five unknowns: \ the mix, \ two means, \ two spreads", font_size=24, color=GREY_A),
         ), 12.0, 0.35, [0, -1.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In 1893 the zoologist Raphael Weldon measured a thousand shore crabs from the Bay of Naples. "
-            "Among other things he recorded the breadth of each crab's forehead as a fraction of its body length. The "
-            "histogram came out lopsided, and Weldon wondered whether he was looking at two races of crab mixed together, "
-            "perhaps one evolving away from the other. <bookmark mark='b'/> He asked his friend Karl Pearson: is this the sum "
-            "of two normal curves? <bookmark mark='c'/> That question has five unknowns: the share of each race, their two "
-            "means, and their two spreads."
+            "<bookmark mark='a'/> In 1893 the zoologist Walter Frank Raphael Weldon measured a thousand shore crabs "
+            "from the Bay of Naples. Among other things he recorded the breadth of each crab's forehead as a fraction"
+            " of its body length. The histogram came out lopsided, and Weldon wondered whether he was looking at two "
+            "races of crab mixed together, perhaps one evolving away from the other. <bookmark mark='b'/> He asked "
+            "his friend Karl Pearson: is this the sum of two normal curves? <bookmark mark='c'/> That question has "
+            "five unknowns: the share of each race, their two means, and their two spreads."
         ) as vo:
             self.play(FadeIn(tl))
             vo.wait_until("a")
@@ -134,11 +134,11 @@ class Hook(VoiceoverScene):
             label(r"but why moments at all? \ and how sure are these numbers?", font_size=24, color=RES),
         ), 12.0, 0.3, [0, -2.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Solving Pearson's five equations numerically, from hundreds of starting points, finds exactly "
-            "two admissible solutions, both with two components close together. <bookmark mark='b'/> Their sixth moments differ, "
-            "and solution B is the closer to the data's. <bookmark mark='c'/> But this raises the questions of this part. Why "
-            "should matching moments give good estimates at all? Which method is best? And how sure can we be of numbers "
-            "like these?"
+            "<bookmark mark='a'/> Solving Pearson's five equations numerically, from hundreds of starting points, "
+            "finds two admissible solutions; multistart search alone does not prove completeness, both with two "
+            "components close together. <bookmark mark='b'/> Their sixth moments differ, and solution B is the closer"
+            " to the data's. <bookmark mark='c'/> But this raises the questions of this part. Why should matching "
+            "moments give good estimates at all? Which method is best? And how sure can we be of numbers like these?"
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(t[0]), FadeIn(t[1]), FadeIn(t[2]), FadeIn(t[3]), FadeIn(foot[0]))
@@ -161,21 +161,22 @@ class Hook(VoiceoverScene):
         tot = curve(ax, gr, s * np.asarray(d["dens"]), PATH, 3.5)
         th = d["theta"]
         rows = fit_rows(VGroup(
-            label(r"maximum likelihood, \ by EM (chapter 8)", font_size=22, color=PATH),
+            label(r"midpoint-density local fit, \ by EM (chapter 8)", font_size=22, color=PATH),
             label(rf"blue: \ {100 * th[0]:.0f}\% at {th[1]:.4f}, \ SD {th[2]:.4f}", font_size=22, color=CRAB1),
             label(rf"red: \ {100 * (1 - th[0]):.0f}\% at {th[3]:.4f}, \ SD {th[4]:.4f}", font_size=22, color=CRAB2),
             VGroup(label(rf"log likelihood \ {d['loglik'][-1]:.2f}", font_size=22, color=PATH),
                    label(rf"moments B \ {d['ll_pearson'][1]:.2f}; \ one normal \ {d['ll_one']:.2f}", font_size=20)).arrange(DOWN, aligned_edge=LEFT, buff=0.12),
-            label(r"Fisher (1922): \ why this is the efficient answer", font_size=20, color=GREY_A),
+            label(r"local fit; \ efficiency needs regularity", font_size=20, color=GREY_A),
         ), 3.45, 0.42, [5.1, 0.2, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Fisher's alternative, from 1922, is maximum likelihood: choose the five numbers that make the "
-            "observed crabs most probable. Here it is, computed by the EM algorithm of chapter eight. <bookmark mark='b'/> "
-            "Forty-three percent of the crabs in a broader component centred at point six three two, <bookmark mark='c'/> the "
-            "rest in a narrower one at point six five five. <bookmark mark='d'/> Its log likelihood beats both of Pearson's "
-            "solutions, and beats a single normal by twenty-seven units. <bookmark mark='e'/> This part explains why maximum "
-            "likelihood works, how to measure its uncertainty, how to compute it, and what happens when the model itself is "
-            "wrong."
+            "<bookmark mark='a'/> Fisher formalized maximum-likelihood theory in 1922. For these grouped crab data we"
+            " first use a midpoint-density approximation. The displayed EM fit is an interior local maximum, not a "
+            "global maximum of the unrestricted mixture likelihood; chapter nine shows why. <bookmark mark='b'/> "
+            "Forty-three percent of the crabs in a broader component centred at point six three two, <bookmark "
+            "mark='c'/> the rest in a narrower one at point six five five. <bookmark mark='d'/> Its log likelihood "
+            "beats both of Pearson's solutions, and beats a single normal by twenty-seven units. <bookmark mark='e'/>"
+            " This part explains when maximum likelihood works, how to measure its uncertainty, how to compute it, "
+            "and what happens when the model itself is wrong."
         ) as vo:
             self.add(crab_tag())
             self.play(FadeIn(A), FadeIn(bars))

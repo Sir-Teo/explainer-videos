@@ -7,7 +7,7 @@ import numpy as np
 from explainer.stats import *  # noqa: F403
 from explainer.stats import museum  # noqa: F401
 
-from .compute import load  # noqa: F401
+from .compute import load, clipped_segments  # noqa: F401
 
 PART = 22
 
@@ -20,10 +20,16 @@ REJ = S.RESID  # the rejection region
 OBS = S.ACCENT  # the observed statistic
 
 
-def polyline(ax, xs, ys, color, stroke_width=2.5, opacity=1.0) -> VMobject:
-    m = VMobject(stroke_color=color, stroke_width=stroke_width, stroke_opacity=opacity)
-    m.set_points_as_corners([ax.c2p(a, b) for a, b in zip(xs, ys)])
-    return m
+def polyline(ax, xs, ys, color, stroke_width=2.5, opacity=1.0):
+    segments = clipped_segments(xs, ys, bounds(ax))
+    return VGroup(*[Line(ax.c2p(*p), ax.c2p(*q), color=color,
+                        stroke_width=stroke_width, stroke_opacity=opacity)
+                    for p,q in segments])
+
+
+def curve(ax, xs, ys, color, stroke_width=3):
+    return polyline(ax, xs, ys, color, stroke_width)
+
 
 
 def fit_rows(rows: VGroup, width: float, buff: float, pos) -> VGroup:
@@ -35,13 +41,13 @@ def fit_rows(rows: VGroup, width: float, buff: float, pos) -> VGroup:
 
 
 def clip_curve(ax, xs, ys, color, stroke_width=3, ymin=None, ymax=None):
-    xs, ys = np.asarray(xs, float), np.asarray(ys, float)
-    keep = np.isfinite(ys)
+    rectangle = list(bounds(ax))
     if ymin is not None:
-        keep &= ys >= ymin
+        rectangle[2] = max(rectangle[2], ymin)
     if ymax is not None:
-        keep &= ys <= ymax
-    return curve(ax, xs[keep], ys[keep], color, stroke_width)
+        rectangle[3] = min(rectangle[3], ymax)
+    return VGroup(*[Line(ax.c2p(*p), ax.c2p(*q), color=color, stroke_width=stroke_width)
+                    for p,q in clipped_segments(xs,ys,rectangle)])
 
 
 def shade(ax, xs, ys, color, opacity=0.35):

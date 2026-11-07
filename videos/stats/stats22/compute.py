@@ -28,7 +28,8 @@ from __future__ import annotations
 from dataclasses import asdict
 
 import numpy as np
-from scipy import stats
+from scipy import stats, optimize
+from scipy.special import expit, logsumexp, digamma, polygamma
 
 from explainer.ai.cache import Cache
 from explainer.stats import museum
@@ -62,13 +63,175 @@ def nest(obj):
     return obj
 
 
+def logistic_slope_tests(x, y):
+    """Stable finite logistic fit; explicitly identify separation in one continuous predictor."""
+    x, y = np.asarray(x, float), np.asarray(y, float)
+    X = np.column_stack([np.ones(len(x)), x])
+    ll0 = float(np.sum(stats.bernoulli.logpmf(y, y.mean())))
+    separated = len(np.unique(y)) == 1
+    direction = 0
+    if not separated:
+        if x[y == 0].max() < x[y == 1].min():
+            separated, direction = True, 1
+        elif x[y == 1].max() < x[y == 0].min():
+            separated, direction = True, -1
+    if separated:
+        return dict(b=np.array([np.nan, direction*np.inf if direction else np.nan]),
+                    se=np.inf, z=np.nan, ll=0., lr=-2*ll0, finite=False, direction=direction)
+    b = np.zeros(2)
+    loglik = lambda v: float(np.sum(y*(X@v)-np.logaddexp(0, X@v)))
+    for _ in range(100):
+        pr = expit(X@b)
+        score = X.T@(y-pr)
+        info = X.T@((pr*(1-pr))[:,None]*X)
+        step = np.linalg.solve(info, score)
+        scale, old = 1., loglik(b)
+        while loglik(b+scale*step) < old-1e-12:
+            scale *= .5
+            if scale < 1e-12:
+                raise RuntimeError("Logistic line search failed")
+        b += scale*step
+        if np.max(np.abs(score)) < 1e-9:
+            break
+    else:
+        raise RuntimeError("Logistic fit did not converge")
+    pr = expit(X@b)
+    info = X.T@((pr*(1-pr))[:,None]*X)
+    se = float(np.sqrt(np.linalg.inv(info)[1,1]))
+    return dict(b=b, se=se, z=b[1]/se, ll=loglik(b), lr=2*(loglik(b)-ll0),
+                finite=True, direction=0)
+
+
+def logistic_profile_ci(x, y, level=.95):
+    """Profile by monotone intercept-score roots, then bracket slope LR roots."""
+    x, y = np.asarray(x, float), np.asarray(y, float)
+    fit = logistic_slope_tests(x, y)
+    if len(np.unique(y)) == 1:
+        return -np.inf, np.inf
+    cut = fit["ll"]-stats.chi2.ppf(level,1)/2
+    def profile(b):
+        bx = b*x
+        a = optimize.brentq(lambda a: np.sum(y-expit(a+bx)),
+                            -bx.max()-40, -bx.min()+40, xtol=1e-12)
+        return float(np.sum(y*(a+bx)-np.logaddexp(0,a+bx)))
+    if fit["finite"]:
+        center = fit["b"][1]
+        width = fit["se"]
+    else:
+        center, width = float(fit["direction"]), 1.
+        while profile(center) < cut:
+            center *= 2
+    roots = []
+    for sign in (-1,1):
+        if not fit["finite"] and sign == fit["direction"]:
+            roots.append(sign*np.inf)
+            continue
+        width_ = width
+        for _ in range(60):
+            edge = center+sign*width_
+            if profile(edge) < cut:
+                roots.append(optimize.brentq(lambda b: profile(b)-cut,
+                                             *sorted([center,edge]),xtol=1e-10))
+                break
+            width_ *= 2
+        else:
+            raise RuntimeError("Profile endpoint could not be bracketed")
+    return tuple(roots)
+
+
+def louis_mixture_information(x, w, theta):
+    """Observed information via E[-H_complete|x] - Cov(score_complete|x)."""
+    p,m1,s1,m2,s2 = np.asarray(theta,float)
+    x,w = np.asarray(x,float),np.asarray(w,float)
+    logparts = np.array([np.log(p)+stats.norm.logpdf(x,m1,s1),
+                         np.log1p(-p)+stats.norm.logpdf(x,m2,s2)])
+    resp = np.exp(logparts-logsumexp(logparts,axis=0))
+    scores = np.zeros((2,len(x),5))
+    hess = np.zeros((2,len(x),5,5))
+    for k,(mean,sd,weight,sgn,mi,si) in enumerate(
+        [(m1,s1,p,1,1,2),(m2,s2,1-p,-1,3,4)]):
+        u = x-mean
+        scores[k,:,0] = sgn/weight
+        scores[k,:,mi] = u/sd**2
+        scores[k,:,si] = -1/sd+u**2/sd**3
+        hess[k,:,0,0] = -1/weight**2
+        hess[k,:,mi,mi] = -1/sd**2
+        hess[k,:,mi,si] = hess[k,:,si,mi] = -2*u/sd**3
+        hess[k,:,si,si] = 1/sd**2-3*u**2/sd**4
+    avg = np.einsum("kn,knj->nj",resp,scores)
+    complete = -np.einsum("n,kn,knij->ij",w,resp,hess)
+    meat = np.einsum("n,kn,kni,knj->ij",w,resp,scores,scores)
+    missing = meat-np.einsum("n,ni,nj->ij",w,avg,avg)
+    return complete-missing
+
+
+def binned_counts(y, upper):
+    """Include the entire real line in the first and last displayed classes."""
+    return np.bincount(np.searchsorted(np.asarray(upper)[:-1],y),minlength=len(upper)).astype(float)
+
+
+def midpoint_em(x, counts, starts, min_sd=.002, iters=3000, tol=1e-10):
+    """A specified multistart, SD-constrained midpoint-density fit, not an unrestricted LR."""
+    x, counts = np.asarray(x,float),np.asarray(counts,float)
+    best = None
+    for start in starts:
+        th = np.asarray(start,float).copy()
+        old = -np.inf
+        for _ in range(iters):
+            p,m1,s1,m2,s2 = th
+            parts = np.array([np.log(p)+stats.norm.logpdf(x,m1,s1),
+                              np.log1p(-p)+stats.norm.logpdf(x,m2,s2)])
+            r = np.exp(parts[0]-logsumexp(parts,axis=0))
+            w1,w2 = counts*r,counts*(1-r)
+            n1,n2 = w1.sum(),w2.sum()
+            if min(n1,n2) <= 1e-12:
+                break
+            a,b = w1@x/n1,w2@x/n2
+            th = np.array([n1/(n1+n2),a,max(min_sd,np.sqrt(w1@(x-a)**2/n1)),
+                           b,max(min_sd,np.sqrt(w2@(x-b)**2/n2))])
+            ll = M.mix_loglik(x,th,counts)
+            if abs(ll-old) < tol:
+                break
+            old = ll
+        candidate = dict(theta=th,loglik=M.mix_loglik(x,th,counts))
+        if best is None or candidate["loglik"] > best["loglik"]:
+            best = candidate
+    return best
+
+
+def clipped_segments(xs, ys, rectangle):
+    """Intersect segments with the viewport, preserving crossings and missing breaks."""
+    xmin, xmax, ymin, ymax = rectangle
+    points = np.column_stack((xs, ys))
+    result = []
+    for start, end in zip(points[:-1], points[1:]):
+        if not np.isfinite([start, end]).all():
+            continue
+        delta = end-start
+        lo, hi = 0., 1.
+        for j, lower, upper in ((0, xmin, xmax), (1, ymin, ymax)):
+            if delta[j] == 0:
+                if not lower <= start[j] <= upper:
+                    hi = -1
+                    break
+            else:
+                a, b = sorted(((lower-start[j])/delta[j], (upper-start[j])/delta[j]))
+                lo, hi = max(lo, a), min(hi, b)
+        if lo <= hi:
+            result.append((start+lo*delta, start+hi*delta))
+    return result
+
 def compute_crabs():
     x, w = museum.crabs()
     em = M.em_mixture(x, START, w=w, iters=5000, tol=1e-13)
     th = em["theta"]
-    H = M.numerical_hessian(lambda t: M.mix_loglik(x, t, w), th, h=1e-5)
-    se = np.sqrt(np.diag(np.linalg.inv(-H)))
+    info = louis_mixture_information(x,w,th)
+    se = np.sqrt(np.diag(np.linalg.inv(info)))
     pm = M.pearson_moments(x, w)
+    order = np.argsort([-v[0] for v in pm["solutions"]])
+    pm["solutions"] = [pm["solutions"][j] for j in order]
+    pm["sixth"] = [pm["sixth"][j] for j in order]
+    em["resp"] = th[0]*stats.norm.pdf(x,th[1],th[2])/(th[0]*stats.norm.pdf(x,th[1],th[2])+(1-th[0])*stats.norm.pdf(x,th[3],th[4]))
     one_mu = (w @ x) / w.sum()
     one_sd = np.sqrt((w @ (x - one_mu) ** 2) / w.sum())
     ll_one = float(np.sum(w * stats.norm.logpdf(x, one_mu, one_sd)))
@@ -104,7 +267,7 @@ def compute_asymp():
         x = g.standard_cauchy(n)
         mles.append(M.cauchy_mle(x))
         meds.append(float(np.median(x)))
-    return nest({"n": n, "R": R, "mle": np.asarray(mles)[:1500], "med": np.asarray(meds)[:1500], "sd_mle": float(np.std(mles)),
+    return nest({"n": n, "R": R, "mle": np.asarray(mles), "med": np.asarray(meds), "sd_mle": float(np.std(mles)),
                  "sd_med": float(np.std(meds)), "theory_mle": float(np.sqrt(2 / n)), "theory_med": float(np.pi / (2 * np.sqrt(n)))})
 
 
@@ -129,20 +292,24 @@ def compute_efron():
 def compute_gamma():
     idx = W.sample(150, among=W.adult, seed=2201)
     x = W.income[idx] / 1000
-    x = x[x < 300]  # the Pareto tail is part of chapter ten's story; keep the body here
+    # Retain the entire seeded sample, including any upper-tail observations.
     a_grid = np.linspace(0.8, 4.5, 140)
     b_grid = np.linspace(0.01, 0.12, 140)
     ll = np.array([[M.gamma_loglik(x, a, b) for a in a_grid] for b in b_grid])
     pr = M.gamma_profile(x, np.linspace(0.8, 4.5, 3701))
-    a_hat, b_hat = pr["a_hat"], pr["rate_hat"]
-    H = M.numerical_hessian(lambda t: M.gamma_loglik(x, t[0], t[1]), [a_hat, b_hat])
+    mean, meanlog = float(x.mean()),float(np.log(x).mean())
+    a_hat = optimize.brentq(lambda a: np.log(a)-digamma(a)-np.log(mean)+meanlog,1e-4,1e4)
+    b_hat = a_hat/mean
+    H = len(x)*np.array([[-polygamma(1,a_hat),1/b_hat],[1/b_hat,-a_hat/b_hat**2]])
     se = np.sqrt(np.diag(np.linalg.inv(-H)))
-    cut = pr["profile"].max() - stats.chi2.ppf(0.95, 1) / 2
-    inside = pr["shapes"][pr["profile"] >= cut]
+    top = M.gamma_loglik(x,a_hat,b_hat)
+    cut = top-stats.chi2.ppf(.95,1)/2
+    f = lambda a: M.gamma_loglik(x,a,a/mean)-cut
+    inside = [optimize.brentq(f,1e-5,a_hat),optimize.brentq(f,a_hat,10*a_hat)]
     corr = float(np.linalg.inv(-H)[0, 1] / (se[0] * se[1]))
     return nest({"n": len(x), "a_grid": a_grid, "b_grid": b_grid, "ll": ll, "a_hat": a_hat, "b_hat": b_hat, "se": se,
-                 "wald": [a_hat - 1.96 * se[0], a_hat + 1.96 * se[0]], "profile_ci": [float(inside.min()), float(inside.max())],
-                 "prof_a": pr["shapes"][::37], "prof_ll": pr["profile"][::37], "corr": corr, "mean": float(x.mean())})
+                 "wald": [a_hat - 1.96 * se[0], a_hat + 1.96 * se[0]], "profile_ci": [float(min(inside)), float(max(inside))],
+                 "loglik_max":top, "prof_a": pr["shapes"][::10], "prof_ll": pr["profile"][::10], "corr": corr, "mean": float(x.mean())})
 
 
 def compute_trinity():
@@ -157,20 +324,21 @@ def compute_hauck():
     g = rng(1977)
     n, R = 60, 300
     betas = [0, 1, 2, 3, 4, 5, 6, 7]
-    z, lr = [], []
+    z, lr, retained = [], [], []
     for b in betas:
         zs, ls = [], []
         for _ in range(R):
             x = g.normal(size=n)
             y = (g.random(n) < 1 / (1 + np.exp(-b * x))).astype(float)
-            r = M.logistic_slope_tests(x, y)
-            if not np.isfinite(r["z"]) or abs(r["b"][1]) > 40:  # complete separation: no finite MLE
+            r = logistic_slope_tests(x, y)
+            if not r["finite"]:  # Complete separation: no finite MLE; disclose exclusions.
                 continue
             zs.append(abs(r["z"]))
             ls.append(np.sqrt(max(r["lr"], 0)))
+        retained.append(len(zs))
         z.append(float(np.median(zs)))
         lr.append(float(np.median(ls)))
-    return nest({"n": n, "betas": betas, "wald_z": z, "lr_root": lr})
+    return nest({"n": n, "betas": betas, "wald_z": z, "lr_root": lr, "retained": retained, "attempted":R})
 
 
 def compute_neyman():
@@ -214,14 +382,25 @@ def compute_sandwich():
                  "phi": r["phi"], "mean": float(y.mean()), "var": float(y.var()), "y_hist": np.bincount(y.astype(int))[:15]})
 
 
+def grouped_mix_loglik(upper, counts, theta):
+    """Actual interval-probability likelihood, including both unbounded tail classes."""
+    p,m1,s1,m2,s2 = theta
+    edges = np.r_[-np.inf,np.asarray(upper,float)]
+    prob = p*np.diff(stats.norm.cdf(edges,m1,s1))+(1-p)*np.diff(stats.norm.cdf(edges,m2,s2))
+    counts = np.asarray(counts,float)
+    use = counts>0
+    return float(np.sum(counts[use]*np.log(np.maximum(prob[use],np.finfo(float).tiny))))
+
+
 def compute_misbehave():
     x, w = museum.crabs()
     th = load("crabs")["theta"]
     j = int(np.argmax(w))  # put component 1's mean on the busiest interval
     sig = np.logspace(-1.5, -12, 80)
     ll = [M.mix_loglik(x, [th[0], x[j], s, th[3], th[4]], w) for s in sig]
+    grouped = [grouped_mix_loglik(museum.CRAB_UPPER,w,[th[0],x[j],v,th[3],th[4]]) for v in sig]
     swapped = M.em_mixture(x, [1 - START[0], START[3], START[4], START[1], START[2]], w=w, iters=5000, tol=1e-13)["theta"]
-    return nest({"sigma": sig, "ll": ll, "mu_at": float(x[j]), "ll_mle": float(load("crabs")["loglik"][-1]), "swapped": swapped})
+    return nest({"sigma": sig, "ll": ll, "grouped_ll": grouped, "mu_at": float(x[j]), "ll_mle": float(load("crabs")["loglik"][-1]), "swapped": swapped})
 
 
 def compute_ising():
@@ -264,27 +443,27 @@ def compute_em_mm():
 
 
 def compute_lrboot():
-    """Two normals against one: the likelihood-ratio statistic's null distribution by parametric bootstrap."""
-    x, w = museum.crabs()
-    d = load("crabs")
-    mu, sd = d["one"]
-    up = np.array(museum.CRAB_UPPER)
-    g = rng(1985)
-    lrs = []
-    for _ in range(200):
-        y = g.normal(mu, sd, int(w.sum()))
-        cnt = np.bincount(np.searchsorted(up, y), minlength=len(up))[: len(up)].astype(float)
-        m1 = (cnt @ x) / cnt.sum()
-        s1 = np.sqrt((cnt @ (x - m1) ** 2) / cnt.sum())
-        best = -np.inf
-        for start in ([0.5, m1 - 0.5 * s1, 0.8 * s1, m1 + 0.5 * s1, 0.8 * s1], [0.3, m1 - s1, 0.7 * s1, m1 + 0.3 * s1, 0.8 * s1]):
-            best = max(best, M.em_mixture(x, start, w=cnt, iters=3000, tol=1e-10)["loglik"][-1])
-        l1 = float(np.sum(cnt * stats.norm.logpdf(x, m1, s1)))
-        lrs.append(2 * (best - l1))
-    lrs = np.asarray(lrs)
-    obs = 2 * (d["loglik"][-1] - d["ll_one"])
-    return nest({"lr": lrs, "q95": float(np.quantile(lrs, 0.95)), "obs": float(obs), "R": len(lrs),
-                 "p_boot": float((1 + np.sum(lrs >= obs)) / (len(lrs) + 1)), "chi2_1": 3.84, "chi2_3": 7.81})
+    """Parametric-bootstrap calibration of a specified SD-constrained EM improvement statistic."""
+    x,w = museum.crabs()
+    upper = np.asarray(museum.CRAB_UPPER)
+    def statistic(counts):
+        mu = float(counts@x/counts.sum())
+        sd = float(np.sqrt(counts@(x-mu)**2/counts.sum()))
+        starts = [[.5,mu-.5*sd,.8*sd,mu+.5*sd,.8*sd],
+                  [.3,mu-sd,.7*sd,mu+.3*sd,.8*sd]]
+        fit = midpoint_em(x,counts,starts)
+        one = float(np.sum(counts*stats.norm.logpdf(x,mu,sd)))
+        return max(0.,2*(fit["loglik"]-one))
+    mu,sd = load("crabs")["one"]
+    gen = rng(1985)
+    lrs = np.array([statistic(binned_counts(gen.normal(mu,sd,int(w.sum())),upper)) for _ in range(200)])
+    obs = statistic(w)
+    exceed = int(np.sum(lrs>=obs))
+    upper95 = float(stats.beta.ppf(.95,exceed+1,len(lrs)-exceed)) if exceed<len(lrs) else 1.
+    return nest(dict(lr=lrs,q95=float(np.quantile(lrs,.95)),obs=obs,R=len(lrs),exceedances=exceed,
+                     p_boot=(1+exceed)/(len(lrs)+1), exceedance_upper95=upper95,
+                     min_sd=.002,statistic="same two-start SD-constrained midpoint-density EM improvement",
+                     chi2_1=3.84,chi2_3=7.81))
 
 
 def compute_board():
@@ -296,15 +475,15 @@ def compute_board():
     for _ in range(R):
         x = g.normal(size=n)
         y = (g.random(n) < 1 / (1 + np.exp(-b_true * x))).astype(float)
-        r = M.logistic_slope_tests(x, y)
-        wald_hit += abs(r["b"][1] - b_true) <= 1.96 * r["se"]
-        lo, hi = M.logistic_profile_ci(x, y)
+        r = logistic_slope_tests(x, y)
+        wald_hit += r["finite"] and abs(r["b"][1] - b_true) <= 1.96 * r["se"]
+        lo, hi = logistic_profile_ci(x, y)
         lr_hit += lo <= b_true <= hi
     # (2) Neyman-Scott: Wald interval for sigma^2 from the MLE, 200 pairs
     ns_hit = 0
     for _ in range(R):
         e = M.neyman_scott(200, 1.0, g)
-        se = e["mle"] * np.sqrt(2 / 200)  # the MLE's own SE: sigma^2-hat sqrt(2/n), n pairs
+        se = e["mle"] / np.sqrt(200)  # inverse curvature of the n-pair profile likelihood
         ns_hit += abs(e["mle"] - 1.0) <= 1.96 * se
     # (3) Poisson regression of overdispersed counts: model-based vs sandwich
     mod_hit = sand_hit = 0

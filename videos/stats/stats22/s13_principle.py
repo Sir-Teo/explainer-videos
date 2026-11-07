@@ -32,13 +32,17 @@ class Principle(VoiceoverScene):
         rows[3][2].set_color(LIK)
         whys = [why(r"the same twelve tosses"), why(r"binomial: \ $n$ fixed"), why(r"negative binomial: \ tails fixed"),
                 why(r"the same likelihood, \ up to a constant")]
+        intro = label('Different stopping plans can yield proportional likelihoods', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Two people watch the same twelve tosses of a coin: nine heads and three tails. Is the coin "
-            "biased towards heads? <bookmark mark='b'/> Alice had planned to toss twelve times. For her, the number of heads is "
-            "binomial. <bookmark mark='c'/> Bob had planned to toss until the third tail. For him, the number of heads is "
-            "negative binomial, with a different constant in front. <bookmark mark='d'/> As functions of theta, the two "
-            "likelihoods are proportional: the same curve, rescaled."
+            "<bookmark mark='a'/> Consider a sequence whose twelfth toss is its third tail, with nine heads in total."
+            " Is the coin biased towards heads? <bookmark mark='b'/> Alice had planned to toss twelve times. For her,"
+            " the number of heads is binomial. <bookmark mark='c'/> Bob had planned to toss until the third tail. For"
+            " him, the number of heads is negative binomial, with a different constant in front. <bookmark mark='d'/>"
+            " As functions of theta, the two likelihoods are proportional: the same curve, rescaled."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.82, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -63,10 +67,12 @@ class Principle(VoiceoverScene):
             label(r"so the evidence about $\theta$ is the same?", font_size=22, color=HIT),
         ), 3.45, 0.42, [5.1, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Here is Alice's likelihood, scaled to peak at one. <bookmark mark='b'/> Bob's, dashed, lies "
-            "exactly on top of it. <bookmark mark='c'/> Both peak at three quarters. <bookmark mark='d'/> Both say a fair coin "
-            "is about a fifth as likely as the best value. <bookmark mark='e'/> If the likelihood is all the data have to say "
-            "about theta, then Alice and Bob have the same evidence, and should reach the same conclusion."
+            "<bookmark mark='a'/> Here is Alice's likelihood, scaled to peak at one. <bookmark mark='b'/> Bob's, "
+            "dashed, lies exactly on top of it. <bookmark mark='c'/> Both peak at three quarters. <bookmark "
+            "mark='d'/> The observed data have about a fifth as much likelihood under a fair coin as under the fitted"
+            " probability. This is not a posterior probability that the coin is fair. <bookmark mark='e'/> If the "
+            "likelihood is all the data have to say about theta, then Alice and Bob have the same evidence, and "
+            "should reach the same conclusion."
         ) as vo:
             self.play(FadeIn(A), Create(half))
             vo.wait_until("a")
@@ -119,14 +125,20 @@ class Principle(VoiceoverScene):
         ]
         rows[2][2].set_color(PRIOR)
         whys = [why(r"Part 15's conjugate prior"), why(r"the constants $\binom{12}{9}$, \ $\binom{11}{9}$ cancel"),
-                why(r"the same for Alice and Bob"), why(r"Part 15: \ the plan never enters")]
+                why(r"the same for Alice and Bob"), why(r"Part 15: \ theta-free stopping; \ same fixed prior")]
+        intro = label('The same fixed prior gives the same posterior here', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> A Bayesian with Part 15's uniform prior sees no difference at all. <bookmark mark='b'/> The "
-            "posterior is proportional to prior times likelihood, the constants in front cancel, and both Alice and Bob get a "
-            "beta with parameters ten and four. <bookmark mark='c'/> The posterior probability that the coin favours heads is "
-            "point nine five four, for both. <bookmark mark='d'/> Their ninety-five percent credible intervals are identical "
-            "too, point four six to point nine one. The plan never enters the calculation."
+            "<bookmark mark='a'/> A Bayesian with Part 15's uniform prior sees no difference at all. <bookmark "
+            "mark='b'/> The posterior is proportional to prior times likelihood, the constants in front cancel, and "
+            "both Alice and Bob get a beta with parameters ten and four. <bookmark mark='c'/> The posterior "
+            "probability that the coin favours heads is point nine five four, for both. <bookmark mark='d'/> Their "
+            "ninety-five percent credible intervals are identical too, point four six to point nine one. For these "
+            "theta-free stopping rules and the same fixed prior, the stopping factor cancels. Informative sampling or"
+            " selection and data-dependent prior choices must be modeled."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.82, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -143,17 +155,22 @@ class Principle(VoiceoverScene):
         rows[2][2].set_color(LIK)
         whys = [why(r"Part 9: \ nobody objects"), why(r"Fisher; \ chapter four's ancillaries; \ Cox (1958)"),
                 why(r"Birnbaum (1962): \ the likelihood principle"), why(r"stopping rules stop mattering")]
+        intro = label('The likelihood principle depends on the interpretation of conditionality', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "In 1962 Allan Birnbaum turned this into a theorem that alarmed his colleagues. <bookmark mark='a'/> Start from "
-            "two principles almost everyone accepts. Sufficiency: two data sets with the same sufficient statistic carry the "
-            "same evidence. <bookmark mark='b'/> Conditionality: if a coin flip chose which of two experiments to run, judge "
-            "the result by the experiment actually run, the idea behind chapter four's conditioning, and David Cox's 1958 "
-            "example of two measuring instruments. <bookmark mark='c'/> Birnbaum showed that together they imply the "
-            "likelihood principle: experiments with proportional likelihoods give the same evidence. <bookmark mark='d'/> "
-            "Bayesian inference obeys it automatically, since the posterior uses the data only through the likelihood. "
-            "P-values, confidence intervals and unbiasedness all violate it, because they average over outcomes that didn't "
-            "happen. And for a Bayesian, a stopping rule doesn't matter."
+            "In 1962 Allan Birnbaum turned this into a theorem that alarmed his colleagues. <bookmark mark='a'/> "
+            "Start from two principles almost everyone accepts. Sufficiency: two data sets with the same sufficient "
+            "statistic carry the same evidence. <bookmark mark='b'/> Conditionality: if a coin flip chose which of "
+            "two experiments to run, judge the result by the experiment actually run, the idea behind chapter four's "
+            "conditioning, and David Cox's 1958 example of two measuring instruments. <bookmark mark='c'/> Birnbaum "
+            "showed that together they imply the likelihood principle: experiments with proportional likelihoods give"
+            " the same evidence. <bookmark mark='d'/> Bayesian updating with the same fixed prior obeys it when the "
+            "full sampling and stopping likelihoods are proportional. Conventional p-values and confidence procedures"
+            " generally use sampling distributions beyond the observed likelihood. Their operating properties depend "
+            "on the plan. And for a Bayesian, a stopping rule doesn't matter."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.82, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -162,19 +179,21 @@ class Principle(VoiceoverScene):
 
     def debate(self):
         rows = fit_rows(VGroup(
-            label(r"Savage (1962): \ the principle made him take Bayes seriously", font_size=24, color=PRIOR),
+            label(r"Savage (1962): \ praised the principle\'s implications", font_size=24, color=PRIOR),
             label(r"Birnbaum himself later doubted it; \ Mayo (2014): \ the proof has a gap", font_size=24, color=RES),
             label(r"Gandenberger (2015), \ Evans (2013): \ the argument repaired and re-attacked", font_size=24, color=GREY_A),
             label(r"the practical answer: \ coverage is a property of the procedure", font_size=24, color=HIT),
             label(r"so the plan matters to the Board: \ peeking, \ optional stopping, \ Part 58", font_size=24, color=OBS),
         ), 12.4, 0.5, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Jimmie Savage, discussing the paper, said it was the likelihood principle that first made him take Bayesian statistics seriously. <bookmark mark='b'/> "
-            "Birnbaum himself later had doubts, and Deborah Mayo argued in 2014 that the proof has a gap: the conditionality "
-            "principle is being applied where it doesn't belong. <bookmark mark='c'/> Others have repaired and re-attacked the "
-            "argument since; the debate is open. <bookmark mark='d'/> For this series, the practical answer is that coverage "
-            "is a property of a procedure, and the procedure includes the plan. <bookmark mark='e'/> An analyst who peeks at "
-            "the data and stops when the result looks good does change the Board's verdict, even when the final likelihood is "
+            "<bookmark mark='a'/> Jimmie Savage, discussing the paper, said the likelihood principle had striking "
+            "implications for statistical inference. Savage had already published his Bayesian Foundations of "
+            "Statistics in 1954. <bookmark mark='b'/> Birnbaum himself later had doubts, and Deborah Mayo argued in "
+            "2014 that the proof has a gap: the conditionality principle is being applied where it doesn't belong. "
+            "<bookmark mark='c'/> Others have repaired and re-attacked the argument since; the debate is open. "
+            "<bookmark mark='d'/> For this series, the practical answer is that coverage is a property of a "
+            "procedure, and the procedure includes the plan. <bookmark mark='e'/> An analyst who peeks at the data "
+            "and stops when the result looks good does change the Board's verdict, even when the final likelihood is "
             "the same. Part 58 builds tests that stay valid however you stop."
         ) as vo:
             for k, m_ in enumerate("abcde"):

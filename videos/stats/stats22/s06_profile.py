@@ -30,6 +30,9 @@ class Profile(VoiceoverScene):
         rows[3][2].set_color(RES)
         whys = [why(r"curvature in every direction"), why(r"the inverse, \ not the reciprocal of each entry"),
                 why(rf"{d['n']} of the World's incomes, \ thousands"), why(r"a long ridge: \ shape and rate trade off")]
+        intro = label('Invert the full information matrix for joint uncertainty', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> With several parameters the information is a matrix: the expected curvature of the log "
             "likelihood in every direction. <bookmark mark='b'/> The estimates' covariance is approximately its inverse, and "
@@ -39,6 +42,7 @@ class Profile(VoiceoverScene):
             "estimates are correlated point eight nine: a larger shape and a larger rate fit almost equally well, because both "
             "keep the mean, shape over rate, near the sample's."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.78, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -51,21 +55,24 @@ class Profile(VoiceoverScene):
         A = axes([ag[0], ag[-1]], [bg[0], bg[-1]], x_length=6.4, y_length=5.2, xlabel=r"shape $a$", ylabel=r"rate $b$",
                  xticks=[1, 2, 3, 4], yticks=[0.02, 0.05, 0.08, 0.11], center=[-2.6, 0.0, 0], font_size=18)
         ax = A.ax
-        L = LikelihoodLandscape(ax, np.asarray(d["ll"]), (ag[0], ag[-1]), (bg[0], bg[-1]), color=LIK, stroke_width=1.8)
-        ridge = L.ridge(color=PATH)
-        pk = L.peak()
+        L = LikelihoodLandscape(ax, np.asarray(d["ll"]), (ag[0], ag[-1]), (bg[0], bg[-1]), levels_below=tuple(v + float(np.max(d["ll"])) - d["loglik_max"] for v in (0.5,1.92,3.0,8,20,50)), color=LIK, stroke_width=1.8)
+        ag_ = np.asarray(ag)
+        ridge = curve(ax, ag_, ag_ / d["mean"], PATH, 3)
+        pk = Dot(ax.c2p(d["a_hat"], d["b_hat"]), radius=0.08, color=MLE_C)
         rows = fit_rows(VGroup(
             label(r"contours: \ 0.5 to 50 below the peak", font_size=22, color=LIK),
-            label(r"the 1.92 and 3.0 contours: \ 95\% regions (chapter six)", font_size=22, color=GREY_A),
+            label(r"drop 3.0: joint 95\%; \ drop 1.92: one-parameter profile cut", font_size=22, color=GREY_A),
             label(r"gold: \ the ridge, \ the best rate for each shape", font_size=22, color=PATH),
             label(r"along it: \ rate $= a / \bar x$", font_size=22),
         ), 4.6, 0.45, [4.3, 0.0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Here is that likelihood as a landscape: contours of the log likelihood over shape and rate, "
-            "from half a unit below the peak down to fifty below. <bookmark mark='b'/> It's a long, tilted ridge, chapter one's "
-            "correlation made visible. Two of these contours, one point nine two and three below the peak, will turn out to be "
-            "confidence regions. <bookmark mark='c'/> In gold, the profile ridge: for each value of the shape, the rate that "
-            "fits best. <bookmark mark='d'/> For the gamma it has a formula, the shape divided by the sample mean."
+            "<bookmark mark='a'/> Here is that likelihood as a landscape: contours of the log likelihood over shape "
+            "and rate, from half a unit below the peak down to fifty below. <bookmark mark='b'/> It's a long, tilted "
+            "ridge, chapter one's correlation made visible. A drop of about three defines an asymptotic joint "
+            "ninety-five percent region for two parameters. A one point nine two drop is the one-parameter profile "
+            "cutoff; its full two-dimensional contour is not a joint ninety-five percent region. <bookmark mark='c'/>"
+            " In gold, the profile ridge: for each value of the shape, the rate that fits best. <bookmark mark='d'/> "
+            "For the gamma it has a formula, the shape divided by the sample mean."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
@@ -81,7 +88,7 @@ class Profile(VoiceoverScene):
     def profile_curve(self):
         d = load("gamma")
         a, pl = np.asarray(d["prof_a"]), np.asarray(d["prof_ll"])
-        top = float(pl.max())
+        top = d["loglik_max"]
         A = axes([0.8, 4.5], [top - 12, top + 1], x_length=8.0, y_length=4.4, xlabel=r"shape $a$", ylabel=r"profile log likelihood",
                  xticks=[1, 2, 3, 4], yticks=[], center=[-1.6, 0.3, 0])
         ax = A.ax
@@ -125,20 +132,27 @@ class Profile(VoiceoverScene):
         rows = [
             cmath(r"\ell_p(\psi)", r"=", r"\max_\lambda \ell(\psi, \lambda)", font_size=30),
             cmath(r"-2\{\ell_p(\psi_0) - \ell_p(\hat\psi)\}", r"\to", r"\chi^2_{\dim\psi}", font_size=30),
-            cmath(r"\text{a warning}", r":", r"\ell_p \text{ is not a real likelihood}", font_size=30),
+            cmath(r"\text{a warning}", r":", r"\ell_p \text{ is generally not a sampling density}", font_size=30),
             cmath(r"\text{fixes}", r":", r"\text{modified profiles (Barndorff-Nielsen; Cox \& Reid 1987)}", font_size=28),
         ]
         rows[1][2].set_color(PATH)
         whys = [why(r"$\psi$ of interest, \ $\lambda$ a nuisance"), why(r"Wilks (1938): \ chapter six"),
-                why(r"it ignores the uncertainty in $\hat\lambda_\psi$"), why(r"they matter when $\dim\lambda$ is large")]
+                why(r"first-order nuisance adjustment is included; \ higher-order bias can remain"), why(r"they matter when $\dim\lambda$ is large")]
+        intro = label('Profiling includes first-order nuisance adjustment', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> In general, split the parameters into psi, which we care about, and lambda, a nuisance, and "
-            "maximize lambda away. <bookmark mark='b'/> Twice the drop in the profile log likelihood has, in large samples, a "
-            "chi-squared distribution with as many degrees of freedom as psi has components, which is why the cut works. "
-            "<bookmark mark='c'/> But the profile is not a real likelihood: it treats the best lambda for each psi as if it "
-            "were known exactly. <bookmark mark='d'/> When there are many nuisance parameters that matters a great deal, and "
-            "modified profile likelihoods correct it. Chapter seven shows how badly the plain version can fail."
+            "<bookmark mark='a'/> In general, split the parameters into psi, which we care about, and lambda, a "
+            "nuisance, and maximize lambda away. <bookmark mark='b'/> Twice the drop in the profile log likelihood "
+            "has, in large samples, a chi-squared distribution with as many degrees of freedom as psi has components,"
+            " which is why the cut works. <bookmark mark='c'/> The profile is generally not itself a normalized "
+            "sampling likelihood. Its curvature does account for nuisance estimation to first order through the "
+            "information matrix's Schur complement; higher-order bias can remain. <bookmark mark='d'/> When there are"
+            " many nuisance parameters that matters a great deal, and suitable modified profiles can reduce "
+            "higher-order nuisance effects under their assumptions. Chapter seven shows how badly the plain version "
+            "can fail."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.78, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

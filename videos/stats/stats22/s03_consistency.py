@@ -29,14 +29,19 @@ class Consistency(VoiceoverScene):
         rows[2][2].set_color(LIK)
         whys = [why(r"the average log likelihood: \ a random curve"), why(r"the law of large numbers, \ at each $\theta$"),
                 why(r"Jensen (Part 21): \ Kullback--Leibler"), why(r"equality only if $f_\theta = f_{\theta_0}$")]
+        intro = label('Expected log likelihood is maximized at an identifiable truth', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "Why should maximum likelihood find the truth? <bookmark mark='a'/> Divide the log likelihood by n: it's an average "
-            "of independent terms, a random curve over theta. <bookmark mark='b'/> By the law of large numbers, at each theta "
-            "it converges to a fixed curve M of theta, the expected log likelihood under the true distribution. "
-            "<bookmark mark='c'/> And by Jensen's inequality from Part 21, M at the truth minus M anywhere else is a "
-            "Kullback–Leibler divergence, which is never negative. <bookmark mark='d'/> If the model is identifiable, the "
-            "divergence is zero only at the truth, so the limiting curve has its unique peak exactly at theta zero."
+            "Why should maximum likelihood find the truth? <bookmark mark='a'/> Divide the log likelihood by n: it's "
+            "an average of independent terms, a random curve over theta. <bookmark mark='b'/> By the law of large "
+            "numbers, at each theta under suitable integrability it converges to a fixed curve M of theta, the "
+            "expected log likelihood under the true distribution. <bookmark mark='c'/> And by Jensen's inequality "
+            "from Part 21, M at the truth minus M anywhere else is a Kullback–Leibler divergence, which is never "
+            "negative. <bookmark mark='d'/> If the model is identifiable, the divergence is zero only at the truth, "
+            "so the limiting curve has its unique peak exactly at theta zero."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.78, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -50,11 +55,11 @@ class Consistency(VoiceoverScene):
                  ylabel=r"average log likelihood (up to a constant)", xticks=[0.25, 0.61, 1.0, 1.5, 2.0], yticks=[-1.5, -1.25, -1],
                  center=[-1.5, 0.3, 0])
         ax = A.ax
-        exp_c = curve(ax, th, np.clip(d["expected"], -1.6, 0), TRUE, 4)
+        exp_c = curve(ax, th, d["expected"], TRUE, 4)
         cols = {"10": GREY_C, "100": TEAL, "1000": BLUE, "10000": PATH}
         cs = VGroup()
         for k, c in cols.items():
-            y = np.clip(np.asarray(d["curves"][k]["ll"]), -1.6, 0)
+            y = np.asarray(d["curves"][k]["ll"])
             cs.add(VGroup(curve(ax, th, y, c, 2.5), Dot(ax.c2p(d["curves"][k]["argmax"], float(np.interp(d["curves"][k]["argmax"], th, y))), radius=0.06, color=c)))
         truth = DashedLine(ax.c2p(d["lam0"], -1.6), ax.c2p(d["lam0"], -0.8), color=TRUE, stroke_width=2)
         rows = fit_rows(VGroup(
@@ -97,14 +102,19 @@ class Consistency(VoiceoverScene):
         rows[2][-1].set_color(HIT)
         whys = [why(r"uniform, \ not just pointwise, \ convergence"), why(r"a well-separated peak"),
                 why(r"the MLE is consistent"), why(r"conditions that make the uniform step work")]
+        intro = label('Uniform convergence and a separated maximum give consistency', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "Turning the picture into a proof needs two things. <bookmark mark='a'/> The random curves must converge "
-            "uniformly over theta, not just at each point, so that no stray spike far away can win. <bookmark mark='b'/> And "
-            "the limiting peak must be well separated: everywhere at least epsilon away, M is lower by a margin. "
-            "<bookmark mark='c'/> Then the probability that the estimate lands more than epsilon from the truth goes to zero. "
-            "<bookmark mark='d'/> Abraham Wald gave conditions for the uniform step in 1949, a compact parameter space, "
-            "continuity, and a bound on the log density, and that is the classical consistency theorem."
+            "uniformly over theta, not just at each point, so that no stray spike far away can win. <bookmark "
+            "mark='b'/> And the limiting peak must be well separated: everywhere at least epsilon away, M is lower by"
+            " a margin. <bookmark mark='c'/> Then the probability that the estimate lands more than epsilon from the "
+            "truth goes to zero. <bookmark mark='d'/> Abraham Wald gave conditions for the uniform step in 1949, "
+            "compactness, suitable continuity and integrable domination can provide a modern sufficient route. Wald's"
+            " 1949 theorem is a foundational result; versions differ in their precise assumptions."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.78, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -120,12 +130,13 @@ class Consistency(VoiceoverScene):
             label(r"the same argument: \ M-estimators in general, \ Part 47", font_size=22, color=GREY_A),
         ), 12.4, 0.5, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Notice what the argument didn't use: no normality, no smoothness, not even a derivative. "
-            "<bookmark mark='b'/> It needs identifiability and a parameter space that stays fixed as n grows. "
-            "<bookmark mark='c'/> Let the parameters multiply with the data and it can fail, as chapter seven shows. "
-            "<bookmark mark='d'/> Let the model be wrong and the estimate still converges, but to the peak of the wrong M, the "
-            "model's closest approximation to the truth, as chapter ten shows. <bookmark mark='e'/> And the same argument works "
-            "for any estimator defined by maximizing an average, which Part 47 exploits."
+            "<bookmark mark='a'/> Notice what the argument didn't use: no normality, no smoothness, not even a "
+            "derivative. <bookmark mark='b'/> It needs identifiability and a parameter space that stays fixed as n "
+            "grows. <bookmark mark='c'/> Let the parameters multiply with the data and it can fail, as chapter seven "
+            "shows. <bookmark mark='d'/> Under the same uniform-convergence and separated-maximum conditions, a "
+            "misspecified estimate can still converge, but to the peak of the wrong M, the model's closest "
+            "approximation to the truth, as chapter ten shows. <bookmark mark='e'/> And the same argument applies to "
+            "other average-objective estimators when its conditions hold, which Part 47 exploits."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

@@ -44,7 +44,10 @@ class Quasi(VoiceoverScene):
         ]
         rows[3][2].set_color(HIT)
         whys = [why(r"a mean and a variance function, \ no distribution"), why(r"Wedderburn (1974): \ the score, \ without a likelihood"),
-                why(r"chapter ten's counts: \ Pearson's dispersion"), why(r"the same $\hat\beta$, \ honest SEs")]
+                why(r"chapter ten's counts: \ Pearson's dispersion"), why(r"Poisson mean estimates; \ SEs need the variance model")]
+        intro = label('Quasi-likelihood uses a specified mean and variance relation', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "Chapter ten fixed the standard errors after the fact. Robert Wedderburn's quasi-likelihood, from 1974, builds the "
             "doubt in from the start. <bookmark mark='a'/> Assume only how the mean depends on the covariates, and that the "
@@ -55,6 +58,7 @@ class Quasi(VoiceoverScene):
             "<bookmark mark='d'/> Multiply the Poisson standard errors by its square root, and they come out close to the "
             "sandwich. The generalized estimating equations of Part 24 carry the same idea to correlated data."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -70,12 +74,12 @@ class Quasi(VoiceoverScene):
         top = label(r"the Ising model: \ $P(x) \propto \exp\big(\beta \sum_{i \sim j} x_i x_j\big)$, \ $x_i = \pm 1$",
                     font_size=26).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "<bookmark mark='a'/> Here's a model whose likelihood can't even be written down in practice: the Ising model, "
-            "from physics, used in statistics for images and spatial data. Each site of a grid is plus or minus one, and the "
-            "probability of a pattern grows with beta times the number of neighbouring pairs that agree. "
-            "<bookmark mark='b'/> With beta at point three, a forty-eight by forty-eight lattice drawn by Gibbs sampling shows "
-            "small patches. <bookmark mark='c'/> At point six, past the critical value near point four four, almost every site "
-            "agrees: the lattice has magnetized."
+            "<bookmark mark='a'/> Here's a model whose normalizing constant makes naive likelihood evaluation "
+            "expensive: the Ising model, from physics, used in statistics for images and spatial data. Each site of a"
+            " grid is plus or minus one, and the probability of a pattern grows with beta times the number of "
+            "neighbouring pairs that agree. <bookmark mark='b'/> With beta at point three, a forty-eight by "
+            "forty-eight lattice drawn by Gibbs sampling shows small patches. <bookmark mark='c'/> At point six, past"
+            " the critical value near point four four, almost every site agrees: the lattice has magnetized."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(top))
@@ -91,18 +95,25 @@ class Quasi(VoiceoverScene):
             cmath(r"P(x;\beta)", r"=", r"\exp\big(\beta S(x)\big) / Z(\beta)", font_size=30),
             cmath(r"Z(\beta)", r"=", r"\textstyle\sum_{\text{all } x} \exp\big(\beta S(x)\big)", font_size=30),
             cmath(r"\text{all } x", r":", rf"2^{{{d['sites']}}} \approx 10^{{{int(d['sites'] * np.log10(2))}}} \ \text{{patterns}}", font_size=30),
-            cmath(r"\text{the likelihood}", r":", r"\text{one number per } \beta, \ \text{and it cannot be computed}", font_size=28),
+            cmath(r"\text{the likelihood}", r":", r"\text{naive enumeration is infeasible; \ structure can help}", font_size=28),
         ]
         rows[2][2].set_color(RES)
         whys = [why(r"$S$: \ the number of agreeing neighbours, \ minus disagreeing"), why(r"the normalizing constant"),
-                why(r"the atoms in the universe, \ $10^{80}$, \ to the eighth power"), why(r"MCMC can approximate it: \ slowly")]
+                why(r"too many states for direct enumeration"), why(r"MCMC can approximate it: \ slowly")]
+        intro = label('The partition function normalizes the spatial model', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> The trouble is the normalizing constant. The probability of a pattern is the exponential of "
-            "beta times its agreement score, divided by Z. <bookmark mark='b'/> Z is the sum of that exponential over every "
-            "possible pattern. <bookmark mark='c'/> On our lattice that's two to the two thousand three hundred and four, about "
-            "ten to the six hundred and ninety-three patterns. <bookmark mark='d'/> So the likelihood is a perfectly well "
-            "defined function of beta that nobody can evaluate. Monte Carlo can approximate it, slowly."
+            "<bookmark mark='a'/> The trouble is the normalizing constant. The probability of a pattern is the "
+            "exponential of beta times its agreement score, divided by Z. <bookmark mark='b'/> Z is the sum of that "
+            "exponential over every possible pattern. <bookmark mark='c'/> On our lattice that's two to the two "
+            "thousand three hundred and four, about ten to the six hundred and ninety-three patterns. <bookmark "
+            "mark='d'/> So the likelihood is a well-defined function whose naive enumeration is infeasible. Special "
+            "zero-field two-dimensional Ising models do have exact methods; transfer-matrix, analytic and Monte Carlo"
+            " approaches can exploit structure. The difficulty becomes more general with fields and irregular spatial"
+            " models."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -114,20 +125,26 @@ class Quasi(VoiceoverScene):
             cmath(r"P(x_i \mid \text{the rest})", r"=", r"P(x_i \mid \text{4 neighbours}) = \dfrac{1}{1 + e^{-2\beta x_i s_i}}", font_size=30),
             cmath(r"\mathrm{PL}(\beta)", r"=", r"\textstyle\prod_i P(x_i \mid x_{\partial i};\beta)", font_size=30),
             cmath(r"\text{maximize}", r":", r"\text{a logistic regression of each site on its neighbours}", font_size=28),
-            cmath(r"\text{consistent}", r":", r"\text{yes; \ less efficient than the full MLE}", font_size=30),
+            cmath(r"\text{consistent}", r":", r"\text{under identification and spatial asymptotic regularity}", font_size=30),
         ]
         rows[1][2].set_color(PATH)
-        whys = [why(r"$s_i$: \ the sum of the neighbours; \ $Z$ cancels"), why(r"Besag (1975): \ not a likelihood of anything"),
+        whys = [why(r"$s_i$: \ the sum of the neighbours; \ $Z$ cancels"), why(r"Besag (1975): \ generally not a joint density"),
                 why(r"seconds, \ by Newton"), why(r"its SEs need the sandwich")]
+        intro = label('Conditional probabilities avoid the global normalizer', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Julian Besag's way out, in 1975. A single site, given all the others, depends only on its "
-            "four neighbours, and that conditional probability is a simple logistic function: the constant Z cancels. "
-            "<bookmark mark='b'/> Multiply these conditionals over all sites. The product isn't the likelihood of anything, "
-            "because the factors aren't independent, but it's a function of beta we can compute. <bookmark mark='c'/> "
-            "Maximizing it is just a logistic regression of each site on its neighbour sum. <bookmark mark='d'/> The estimate "
-            "is consistent, a little less efficient than the full maximum likelihood estimate, and its standard error needs "
-            "chapter ten's sandwich, since the pseudo-likelihood's curvature doesn't equal its score's variance."
+            "<bookmark mark='a'/> Julian Besag's way out, in 1975. A single site, given all the others, depends only "
+            "on its four neighbours, and that conditional probability is a simple logistic function: the constant Z "
+            "cancels. <bookmark mark='b'/> Multiply these conditionals over all sites. The product is generally not a"
+            " normalized joint sampling density; the conditional factors reuse dependent sites, but it's a function "
+            "of beta we can compute. <bookmark mark='c'/> Maximizing it is just a logistic regression of each site on"
+            " its neighbour sum. <bookmark mark='d'/> With identifiable parameters and suitable increasing-domain and"
+            " ergodicity conditions, pseudo-likelihood can be consistent, generally with an efficiency loss relative "
+            "to regular full-likelihood inference, and its standard error needs chapter ten's sandwich, since the "
+            "pseudo-likelihood's curvature doesn't equal its score's variance."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -146,13 +163,15 @@ class Quasi(VoiceoverScene):
             label(rf"{len(est)} lattices, \ $\beta = 0.3$, \ {d['sites']:,} sites each", font_size=22),
             label(rf"mean {d['est_mean']:.3f}, \ SD {d['est_sd']:.3f}", font_size=22, color=PATH),
             label(r"each fit: \ well under a second", font_size=22, color=GREY_A),
-            label(r"the full likelihood: \ $10^{693}$ terms", font_size=22, color=RES),
+            label(r"naive enumeration: \ about $10^{693}$ terms", font_size=22, color=RES),
         ), 3.45, 0.45, [5.1, 0.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Does it work? Twelve independent lattices drawn with beta at point three. "
-            "<bookmark mark='b'/> The pseudo-likelihood estimates average point two nine nine, with a spread of point oh one "
-            "three: right on target. <bookmark mark='c'/> Each takes a fraction of a second. <bookmark mark='d'/> The full "
-            "likelihood would need a sum of ten to the six hundred and ninety-three terms."
+            "<bookmark mark='a'/> Does it work? Twelve independently seeded finite Gibbs runs at beta point three. "
+            "Finite sweeps approximate equilibrium; this small study does not prove consistency. <bookmark mark='b'/>"
+            " The pseudo-likelihood estimates average point two nine nine, with a spread of point oh one three: right"
+            " on target. <bookmark mark='c'/> Each takes a fraction of a second. <bookmark mark='d'/> direct "
+            "enumeration would require about ten to the six hundred and ninety-three terms. That count does not rule "
+            "out structured exact methods."
         ) as vo:
             self.play(FadeIn(A), Create(truth))
             vo.wait_until("a")
@@ -174,15 +193,22 @@ class Quasi(VoiceoverScene):
         rows[2][2].set_color(PATH)
         whys = [why(r"Lindsay (1988)"), why(r"spatial extremes, \ genetics, \ long time series"),
                 why(r"Godambe's sandwich: \ chapter ten again"), why(r"Varin, \ Reid \& Firth (2011)")]
+        intro = label('Composite inference needs a suitable score covariance', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Pseudo-likelihood is one member of a family Bruce Lindsay named composite likelihood in 1988: "
-            "multiply together likelihoods of pieces of the data, each a genuine likelihood, ignoring their dependence. "
-            "<bookmark mark='b'/> Pairwise likelihoods, for instance, use only the joint density of each pair of observations, "
-            "which makes models for spatial extremes and statistical genetics feasible. <bookmark mark='c'/> The estimates are "
-            "consistent, and their covariance is a sandwich, the Godambe information. <bookmark mark='d'/> Likelihood-ratio "
-            "tests need adjusting too, since the pieces' dependence breaks Wilks. The lesson of chapters ten and eleven: "
-            "estimating equations can come from anywhere; the sandwich tells you how well they did."
+            "<bookmark mark='a'/> Pseudo-likelihood is one member of a family Bruce Lindsay named composite "
+            "likelihood in 1988: multiply together likelihoods of pieces of the data, each a genuine likelihood, "
+            "ignoring their dependence. <bookmark mark='b'/> Pairwise likelihoods, for instance, use only the joint "
+            "density of each pair of observations, which makes models for spatial extremes and statistical genetics "
+            "feasible. <bookmark mark='c'/> Under correct component models, identification and suitable sampling "
+            "regularity, estimates can be consistent. Their asymptotic covariance is a sandwich; its inverse is "
+            "Godambe information. <bookmark mark='d'/> Likelihood-ratio tests need adjusting too, since the pieces' "
+            "dependence breaks Wilks. The lesson of chapters ten and eleven: estimating equations can come from "
+            "anywhere; the appropriate score covariance assesses their asymptotic precision. For dependent spatial "
+            "sites that covariance must include dependence, not just independent-site outer products."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
