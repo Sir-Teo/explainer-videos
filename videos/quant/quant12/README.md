@@ -15,7 +15,7 @@ VIX3M, Yahoo Finance's S&P 500 and Cboe's VIX futures settlements.
 
 *An education in methods, not investment advice.*
 
-## Chapters (about 63 minutes)
+## Chapters (about 61 minutes)
 
 * **The shape of fear.** A 3D tour of the Surface (10 December 2025): 254 reconstructed marks, with 193 filtered observations used for an SSVI fit at 0.74 vol points,
   vega-weighted. How we got here (1973–2024), a flat Black–Scholes plane bending into the Surface, the objectives,
@@ -291,7 +291,7 @@ paper; Deribit DVOL methodology: ch. 11.
 * 基准曲面：2025年12月10日和11日的Deribit比特币期权成交。
 * 周度曲面：2021年4月7日至2025年11月26日每个周三的Deribit成交（UTC 00:00–12:00），共243天，无缺失，每一份都记录校验和。
 * 币安BTCUSDT小时数据；Deribit DVOL；FRED的VIXCLS与VXVCLS；雅虎财经^GSPC；Cboe期货交易所的VX结算价（`data.cboe_vx`）。
-* 没有检验任何策略；第12章的预测回归是描述性的。试验计数器保持310。
+* 没有检验任何策略；第12章的预测回归是描述性的。试验计数器保持312。
 
 ## 写给研究者
 
@@ -380,7 +380,17 @@ Their gap is not attributed solely to the wings.
 All 28 original compute items are restored from frozen inputs. The original
 compute and House sources, manifest, registry and track record remain unchanged.
 The as-of-Part-12 counter is 312 and the global registry 23,562; this pass adds no
-market trials and opens no sealed holdout. Visual and playback QA are still in
-progress. Full production-voice listening remains pending.
+market trials and opens no sealed holdout. The bilingual visual and English
+silent-playback pass is complete. Full production-voice listening remains pending.
 
 SVXY changed its daily target from −1× to −0.5× effective at the close of 27 February 2018, as stated in [the issuer announcement filed with the SEC](https://www.sec.gov/Archives/edgar/data/1415311/000119312518059052/d503117dex991.htm). The XIV discussion labels the 2021 appeal as a pleading-stage decision, without treating allegations as findings. A February 2025 class-certification order is also retained in the source-check artifacts; it concerns procedure, not a merits determination.
+
+
+## Sequential polish validation
+
+The [Part 12 evidence record](../../../docs/qa/quant12-polish-evidence.json)
+records 66 current, reviewed bilingual endpoint and English silent-playback receipts,
+reviewed sheet hashes, original calculation-source preservation, frozen cache
+restoration, existing tests and 57 sampled speech lines. Full production-voice
+listening and synchronization remain pending. The local chaptered preview is
+`renders/quant12_polished_silent.mp4`.

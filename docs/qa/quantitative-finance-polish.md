@@ -30,8 +30,9 @@ Delivery workflow: continue directly on `quantitative-finance`. Commit and push 
 | 9 | Visual pass complete; full production-voice listening pending |
 | 10 | Visual pass complete; full production-voice listening pending |
 | 11 | Visual pass complete; full production-voice listening pending |
-| 12 | In progress: scientific, narration and visual QA |
-| 13–43 | Pending; do not infer approval from historical build notes |
+| 12 | Visual pass complete; full production-voice listening pending |
+| 13 | In progress: scientific, narration and visual QA |
+| 14–43 | Pending; do not infer approval from historical build notes |
 
 ## Part 1: The Fair Game
 
@@ -852,4 +853,93 @@ reports. Local git-ignored review artifacts are:
   opening, 190.9 seconds, with its reviewed contact
   sheet and dead-air scan.
 
-Part 12 is next in the sequential pass.
+Part 12’s completed visual pass is recorded below.
+
+
+## Part 12: The Volatility Surface — completed visual pass
+
+The Surface is a retrospective pool of option marks from midnight through noon,
+with an eight-o’clock reference. Its 254 reconstructed marks, 193 filtered fit
+observations, nine SSVI calibration maturities and eleven separate SVI slices are
+distinguished. The SVI/SSVI short-end error gap has different training eligibility
+and flexibility; it does not isolate the cost of no-arbitrage constraints.
+Pricing derivations state diffusion, martingale, integrability and zero-carry
+assumptions. Gyöngy matches marginal laws under suitable conditions. Density
+nonnegativity also needs the tail boundary; Lee’s critical exponent does not
+determine endpoint finiteness. SSVI’s gamma-above-one-half threshold and finite
+grid checks do not certify every optimizer step or arbitrarily short maturity.
+
+Replication uses hypothetical model payoffs and 243 overlapping thirty-day
+windows. The running strip line is intrinsic payoff at current spot; historical
+Jensen means are distinct from fair Q-measure strikes. The variance-strike
+narration now takes the square root before expressing percentage volatility.
+The VIX proxy and DVOL differ in observations, timing, eligibility, filtering and
+fitting. VX settlement uses the special opening quotation. Martin’s covariance
+condition is unverified for Bitcoin; an annualized thirty-day statistic is not a
+one-year return promise or a ranking of actual expected returns.
+
+Daily-reset flow uses pre-move NAV and the nonlinear leverage coefficient.
+Halving target leverage does not halve reset demand. Possible feedback is
+distinguished from actual issuer orders and identified causal impact. The
+limited-liability note excludes fees and intraday acceleration. Gamma derivations
+separate share and dollar units, immediate and half-deferred hedging, and
+dispersion across days of pre-close returns. Five-seed ranges are descriptive;
+the August 2025 62.4% share concerns SPX options. Coinbase’s filed consideration,
+the historical SVXY change date, settlement methodology and research references
+were checked against primary records. XIV allegations and procedural decisions
+are not presented as merits findings.
+
+The VAE and PCA use full-sample fitting. The frontier illustration is an MLP
+conditioned on codes from the week’s full fitted grid; its PCA baseline is
+identified correctly, and its late-week test is conditional reconstruction.
+Three neural quote splits retain the remaining calendar flag; grid penalties
+and decoded latent scenarios do not provide global no-arbitrage guarantees.
+The research derivation uses leading local MSE with nonzero curvature. Its
+high-noise optimum lies beyond the sampled grid, and trade–mark dispersion is not
+identified independent measurement noise. The worked pause halves width and
+quarters approximate RMSE after a sixteenfold noise reduction. The correlated
+error exercise specifies the outer-pair covariance and valid correlation range.
+
+All recorded sticky-rule errors, latent points, replication windows, return
+moments and saved Heston terminal points remain visible. Training plots retain
+all residual calls and loss extrema; solver nfev is distinguished from numerical
+Jacobian calls. Illustrative surface height caps are labeled. Camera motion
+settles after at most eight seconds; six duplicate complete-stage fades and a
+sparse graph transition are repaired. Initial curves and underlying paths appear
+during their explanations. Mandarin captions, Cboe’s name, table n/a, aggregation,
+tree spacing, side summaries and footer overlap are corrected. Runtime issues
+from label arguments and TeX percent escaping were caught and repaired before
+the final pass.
+
+All 28 original compute items are cached after 28 normal restoration invocations.
+Frozen raw dates and hashes were checked; all 243 history dates are present with
+none skipped. Original compute, House, shared replay helper, manifest, registry
+and track record remain unchanged from the Part 11 completion baseline. The
+as-of-Part-12 counter remains 312 and the global registry 23,562. No new market
+trial or sealed holdout was opened. Twelve relevant existing tests pass.
+
+Validation: 66 current reviewed receipts: 22 English
+endpoint checks, 22 Mandarin checks and 22 English silent playback checks.
+The opening scan flags two sparse transitions: ordinary surface fades into the
+timeline and objectives, inspected at half-second intervals. There are no
+blank runs of at least 1.5 seconds. The flags and their review are retained.
+Every endpoint sheet and forty-frame motion sheet was inspected; final approval
+hashes match the actual artifacts. Chinese narration coverage is 122/122 source
+entries and spliced sentences; the narration estimate is
+61.3 minutes. Nine actual Kokoro
+speech reports cover Hook, Learning, Frontier, Research, Replicate and SSVI in
+English and Hook, Frontier and Research in Mandarin: 57 lines pass signal and
+token-time checks. These do not certify pronunciation; full production-voice
+listening and synchronization remain pending.
+
+The [compact evidence record](quant12-polish-evidence.json) preserves source,
+input, receipt, sheet and report hashes, calculation and display audits, source
+checks, cache restoration, tests and speech checks. Local git-ignored artifacts:
+
+- `renders/quant12_polished_silent.mp4`: 71:25, 480p15, with 22 embedded chapters,
+  English soft subtitles and companion subtitle and chapter files.
+- `media/quant12/narrated_qa/videos/s01_hook/480p15/Hook.mp4`: the actual English
+  opening, 181.3 seconds, with reviewed contact sheet,
+  dead-air scan, stream probe and volume measurements.
+
+Part 13 is next in the sequential pass.
