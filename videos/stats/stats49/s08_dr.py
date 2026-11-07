@@ -93,7 +93,7 @@ class DoubleRobust(VoiceoverScene):
 
     def structure(self):
         rows = fit_rows(VGroup(
-            label(r"why products? \ $the conditional population bias factors into two nuisance errors", font_size=26),
+            label(r"why products? \ the conditional population bias factors into two nuisance errors", font_size=26),
             label(r"other doubly robust estimators, \ same reason: \ the mean under MAR, \ the ATT, \ mediation, \ IV", font_size=26, color=TANC),
             label(r"but `double robustness' is a \emph{bias} property: \ the variance is efficient only when both are right", font_size=26, color=EFFC),
             label(r"and with both slightly wrong, \ the bias is small but can be larger than the SE: \ Kang \& Schafer (2007)", font_size=26, color=NUIC),

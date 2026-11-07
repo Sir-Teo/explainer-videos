@@ -1,51 +1,11 @@
-[11/07/26 16:01:02] INFO     Writing                     tex_file_writing.py:110
+[11/07/26 16:02:00] INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}why                                
-                             products? \ $the                                   
-                             conditional population bias                        
-                             factors into two nuisance                          
+                             products? \ the conditional                        
+                             population bias factors                            
+                             into two nuisance                                  
                              errors\special{dvisvgm:raw                         
                              </g>} to                                           
-                             media/Tex/a581a1a9b676abb3.                        
+                             media/Tex/e78fcce2e813f128.                        
                              tex                                                
-[11/07/26 16:01:03] ERROR    LaTeX compilation error:    tex_file_writing.py:320
-                             LaTeX Error: Command                               
-                             \end{center} invalid in                            
-                             math mode.                                         
-                                                                                
-                    ERROR    Context of error:           tex_file_writing.py:354
-                             -> \special{dvisvgm:raw <g                         
-                             id='unique000'>}why                                
-                             products? \ $the                                   
-                             conditional population bias                        
-                             factors into two nuisance                          
-                             errors\special{dvisvgm:raw                         
-                             </g>}                                              
-                             \end{center}                                       
-                             \end{document}                                     
-Traceback (most recent call last):
-  File "<stdin>", line 6, in <module>
-  File "/workspace/explainer-videos/explainer/analysis/__init__.py", line 52, in label
-    t = Tex(text, color=color, font_size=font_size, **kw)
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/functools.py", line 391, in _method
-    return self.func(cls_or_self, *self.args, *args, **keywords)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/explainer-videos/.venv/lib/python3.12/site-packages/manim/mobject/text/tex_mobject.py", line 638, in __init__
-    super().__init__(
-  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/functools.py", line 391, in _method
-    return self.func(cls_or_self, *self.args, *args, **keywords)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/explainer-videos/.venv/lib/python3.12/site-packages/manim/mobject/text/tex_mobject.py", line 329, in __init__
-    raise compilation_error
-  File "/workspace/explainer-videos/.venv/lib/python3.12/site-packages/manim/mobject/text/tex_mobject.py", line 306, in __init__
-    super().__init__(
-  File "/workspace/explainer-videos/.venv/lib/python3.12/site-packages/manim/mobject/text/tex_mobject.py", line 81, in __init__
-    file_name = tex_to_svg_file(
-                ^^^^^^^^^^^^^^^^
-  File "/workspace/explainer-videos/.venv/lib/python3.12/site-packages/manim/utils/tex_file_writing.py", line 65, in tex_to_svg_file
-    dvi_file = compile_tex(
-               ^^^^^^^^^^^^
-  File "/workspace/explainer-videos/.venv/lib/python3.12/site-packages/manim/utils/tex_file_writing.py", line 218, in compile_tex
-    raise ValueError(
-ValueError: latex error converting to dvi. See log output above or the log file: media/Tex/a581a1a9b676abb3.log
+PASS: the actual corrected product-bias caption compiles with the production TeX template.
