@@ -71,6 +71,7 @@ class Outro(LectureMixin, VoiceoverScene):
             (r"robustness and privacy, \ two sides of one coin", [63]), (r"the accuracy line of large models", [64]),
             (r"the dissertation's robustness checks", [65]),
         ], font_size=22)
+        self.play(FadeIn(card.head))
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part sixty-one's study of Wasserstein distances. Part sixty-two's "
             "transport of causal effects to new populations. Part sixty-three, where robustness and differential privacy "
@@ -78,7 +79,7 @@ class Outro(LectureMixin, VoiceoverScene):
             "dissertation's robustness checks."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):

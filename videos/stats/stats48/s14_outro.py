@@ -80,6 +80,7 @@ class Outro(VoiceoverScene):
             (r"concentration, \ chaining and suprema in high dimensions", [51]), (r"VC, \ Rademacher and margin bounds", [54]),
             (r"multiplier bootstraps for simultaneous inference", [56]),
         ], font_size=22)
+        self.play(FadeIn(card.head))
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part forty-nine needs Donsker conditions for its one-step and targeted "
             "estimators. Part fifty turns entropy into minimax rates, with the lower bounds of Fano and Le Cam. Part "
@@ -88,7 +89,7 @@ class Outro(VoiceoverScene):
             "bootstrap for inference after selection."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):

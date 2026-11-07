@@ -77,6 +77,7 @@ class Outro(VoiceoverScene):
             (r"Bayesian anytime-valid inference: \ e-values and mixtures", [58]), (r"Bayesian causal inference with propensity priors", [62]),
             (r"Bayesian deep learning, \ and its calibration", [64]),
         ], font_size=22)
+        self.play(FadeIn(card.head))
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part fifty-four bounds the risk of Gibbs posteriors by PAC-Bayes. Part "
             "fifty-six asks about credible sets after selection. Part fifty-eight builds anytime-valid tests from Bayesian "
@@ -84,7 +85,7 @@ class Outro(VoiceoverScene):
             "asks whether Bayesian deep learning is calibrated."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):
