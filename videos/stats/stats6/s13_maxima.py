@@ -31,6 +31,7 @@ class Maxima(VoiceoverScene):
         rows = VGroup(MathTex(r"P(\max_i X_i \le x) = P(\text{all } X_i \le x) = F(x)^n", font_size=28),
                       label(r"exponential waiting times: \ the curve slides right by $\log 10 \approx 2.3$ for each tenfold $n$",
                             font_size=22, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(UP, buff=0.4)
+        intro = label('The largest of independent draws', font_size=36)
         with self.voiceover(
             "Averages are not the only thing we need to predict. A sea wall has to survive the highest tide of the "
             "century, not the average one; a bridge, the heaviest load; an insurer, the worst year. These are "
@@ -40,8 +41,10 @@ class Maxima(VoiceoverScene):
             "right, by about two point three for every tenfold increase, but its shape stops changing. That's a hint "
             "that, once we follow it, the maximum has a limiting shape of its own."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(A))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(LaggedStart(*[Create(c) for c in cvs], lag_ratio=0.4), FadeIn(leg), FadeIn(rows[1]), run_time=3.0)

@@ -198,7 +198,7 @@ class Convergence(VoiceoverScene):
                      Arrow(L2.get_right(), P.get_left() + DOWN * 0.2, buff=0.1, color=GREY_B),
                      Arrow(P.get_right(), D.get_left(), buff=0.1, color=GREY_B))
         notes = VGroup(note(r"bounded convergence of indicators"), note(r"Chebyshev, \ as in the weak law"), note(r"the converse fails: \ the mirror"))
-        notes[0].next_to(arr[0], UP, buff=0.05).shift(RIGHT * 0.3)
+        notes[0].move_to([-1.3, 1.8, 0])
         notes[1].next_to(arr[1].get_center(), DR, buff=0.12)
         notes[2].next_to(D, DOWN, buff=0.25)
         no = label(r"the typewriter: \ in probability, \ not almost surely", font_size=22, color=BOUND).to_edge(DOWN, buff=1.0)

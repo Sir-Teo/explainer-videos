@@ -78,9 +78,9 @@ class Fail(VoiceoverScene):
             step = ladder(self, rows, whys, keep=3, top=2.6, x=-1.0, buff=0.9, edge=6.9)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                step(k, transform=False)
                 if k == 0:
                     self.play(FadeOut(intro), run_time=0.25)
-                step(k, transform=False)
             vo.wait_until("d")
             self.play(FadeIn(tab), FadeIn(tag))
         self.clear_scene()
@@ -128,12 +128,12 @@ class Fail(VoiceoverScene):
     def stable(self):
         thm = theorem_card(r"The generalized central limit theorem", r"if suitably centred and scaled sums of i.i.d.\ variables "
                            r"converge to a non-degenerate law, \ the limit is a \emph{stable} law, \ with index $0 < \alpha \le 2$; \ $\alpha = 2$ is the "
-                           r"normal; finite variance is sufficient for its domain of attraction", who=r"L\'evy, 1925; \ Gnedenko \& Kolmogorov, 1949",
+                           r"normal; finite positive variance is sufficient for its domain of attraction", who=r"L\'evy, 1925; \ Gnedenko \& Kolmogorov, 1949",
                            color=S.PRIOR, width=10.6, font_size=24).to_edge(UP, buff=0.5)
         rows = VGroup(
-            MathTex(r"\alpha = 2:\ \text{normal},\ \ \text{scale } \sqrt n", font_size=30, color=EXACT),
+            MathTex(r"\alpha = 2:\ \text{normal},\ \ \text{scale } \sqrt n\,L(n)\text{; finite variance: }\sqrt n", font_size=30, color=EXACT),
             MathTex(r"1 < \alpha < 2:\ \text{mean finite, variance infinite},\ \ \text{scale } n^{1/\alpha}L(n)", font_size=30, color=S.POST),
-            MathTex(r"\alpha = 1:\ \text{includes the symmetric Cauchy},\ \ \text{scale } n \text{ (averaging does nothing)}", font_size=30, color=BOUND),
+            MathTex(r"\alpha = 1:\ \text{scale }nL(n);\quad\text{symmetric Cauchy: }n\text{ (no concentration)}", font_size=30, color=BOUND),
             label(r"heavy tails in the wild: \ city sizes, \ insurance claims, \ wealth, \ daily stock returns (Mandelbrot, 1963)",
                   font_size=22, color=GREY_A),
             label(r"before you average, \ look at the tail (Part 30, \ Part 60)", font_size=26, color=S.ACCENT),
@@ -148,7 +148,7 @@ class Fail(VoiceoverScene):
             "variables converge to a non-degenerate law along the full sequence, after deterministic centring and scaling, the limit must be a stable law, a family with an "
             "index alpha between zero and two. Paul Lévy found them in 1925; Boris Gnedenko and Kolmogorov wrote "
             "the theory down in 1949. <bookmark mark='b'/> Index two is the normal, and it attracts everything with "
-            "a finite variance. <bookmark mark='c'/> Between one and two, the mean exists, the variance doesn't, and "
+            "a finite positive variance, with the usual square-root normalization. Some infinite-variance laws also approach a normal limit, with a slowly varying correction to that scale. <bookmark mark='c'/> Between one and two, the mean exists, the variance doesn't, and "
             "the normalization is n to the one over alpha times a slowly varying factor, which is constant for a pure Pareto tail. <bookmark mark='d'/> At one, the symmetric Cauchy is one example where averaging buys nothing. Other index-one stable laws can be skewed and need different centring. <bookmark mark='e'/> Heavy tails are common in the real world: city sizes, insurance "
             "claims, fortunes; Benoit Mandelbrot argued in 1963 that cotton prices had them. <bookmark mark='f'/> "
             "Before you trust an average, look at the tail."
