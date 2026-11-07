@@ -35,19 +35,12 @@ class Taylor(VoiceoverScene, ThreeDScene):
         whys = [why(r"Taylor (1993): the neutral real rate $r^*$, plus inflation $\pi$, plus half the inflation gap and "
                     r"half the output gap $y$, in percent"),
                 why(r"his own numbers: 2\% for both. Each point of inflation raises the rate by one and a half"),
-                why(r"the Taylor principle: the real rate rises when inflation does, which leans against it. A "
-                    r"coefficient below one would let inflation feed itself"),
+                why(r"holding the output gap and neutral rate fixed, the nominal rate rises more than current inflation. Stabilization also depends on expectations, policy timing and the economic model"),
                 why(r"the output gap, here from the CBO's estimate of potential output; inflation is the GDP deflator "
                     r"over four quarters, as Taylor used")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.6, buff=0.55, edge=6.9)
         with self.voiceover(
-            "In 1993 John Taylor proposed a rule of thumb for the policy rate. Take the neutral real rate, add "
-            "inflation, then lean against two gaps: half of inflation's distance from its target, and half of output's "
-            "distance from its potential. <bookmark mark='a'/> With his numbers, two percent for each, every point of "
-            "inflation adds one and a half points to the rate. <bookmark mark='b'/> That one and a half is the point: "
-            "the real rate rises when inflation rises, so policy pushes back. A coefficient below one would let "
-            "inflation lower real rates and feed itself. <bookmark mark='c'/> The output gap needs an estimate of "
-            "potential output, which nobody observes; here it is the Congressional Budget Office's."
+            "Taylor's 1993 rule is a conditional benchmark for a nominal policy rate. Add a neutral real rate to inflation, then add half the inflation gap and half the output gap, all measured in percentage points. <bookmark mark='a'/> With a two-percent neutral real rate and two-percent inflation target, the formula becomes one plus one-and-a-half times inflation plus half the output gap. <bookmark mark='b'/> Holding other terms fixed, a point more inflation raises the nominal-minus-current-inflation rate by half a point. This illustrates the Taylor principle. It is not a standalone theorem of stability: expectations, inertia, output responses and policy constraints matter. <bookmark mark='c'/> Potential output and the neutral real rate are unobserved. This retrospective chart uses a pinned revised CBO estimate and revised inflation data, not the real-time information available to each historical committee."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -81,7 +74,7 @@ class Taylor(VoiceoverScene, ThreeDScene):
             MathTex(rf"\rho_{{1987-2007}} = {t['corr_1987_2007']:.2f}", font_size=28, color=WHITE),
             wrapped_label(rf"2003--05: funds rate {abs(t['dev_2003_05']):.1f} points below the rule, on average", 4.0, 17,
                           QC.SPOT),
-            wrapped_label(r"2009--15: the rule went below zero; the funds rate could not, so the Fed bought bonds", 4.0,
+            wrapped_label(r"some post-crisis quarters: the benchmark is negative. The Fed used a near-zero target range and additional tools; negative nominal rates are not mechanically impossible", 4.0,
                           17, GREY_A),
             wrapped_label(rf"2021--22: {abs(t['dev_2021_22']):.1f} points below, on average; in "
                           rf"{int(t['worst']['t'])} the rule said {t['worst']['rule']:.0f}\%, the Fed was at "
@@ -89,14 +82,7 @@ class Taylor(VoiceoverScene, ThreeDScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(leg, DOWN, buff=0.35, aligned_edge=LEFT)
         notes.shift(LEFT * max(0.0, notes.get_right()[0] - 6.75))
         with self.voiceover(
-            "Here is the rule against what the Fed actually did, every quarter since 1987. <bookmark mark='a'/> From "
-            "1987 to 2007 they moved together, with a correlation of "
-            f"{t['corr_1987_2007']:.2f}; this is why Taylor's rule became the benchmark. <bookmark mark='b'/> But "
-            f"from 2003 to 2005 the Fed held rates about {abs(t['dev_2003_05']):.0f} points below it, a gap that "
-            "Taylor himself later blamed for the housing boom. <bookmark mark='c'/> After 2008 the rule called for "
-            "negative rates, which the Fed could not set, so it bought bonds instead. <bookmark mark='d'/> And in 2021 "
-            "and 2022, with inflation high and the economy hot, the rule called for double digits while the Fed sat "
-            "near zero. Core inflation, in orange, tells a milder story, but the same one."
+            f"This is a retrospective comparison of quarterly average federal funds with two versions of the rule, using revised data. <bookmark mark='a'/> Their pre-2008 correlation is {t['corr_1987_2007']:.2f}. Correlation does not establish that this specification was the committee's reaction function. <bookmark mark='b'/> In 2003 through 2005 the saved average rate lies {abs(t['dev_2003_05']):.1f} percentage points below the GDP-deflator benchmark. That difference alone does not identify a cause of the housing boom. <bookmark mark='c'/> The benchmark turns negative in some post-crisis quarters. The Fed chose a near-zero target and other tools; negative nominal rates were not a mathematical impossibility. <bookmark mark='d'/> In the second quarter of 2022 this rule gives about thirteen percent against an actual quarterly average of about zero-point-eight percent. The Fed subsequently raised rates substantially. Using core PCE changes the benchmark, showing the sensitivity to inflation measure, neutral-rate assumptions and revised output gaps."
         ) as vo:
             self.play(FadeIn(g), Create(zero), Create(lf), FadeIn(leg[0]), run_time=2)
             vo.wait_until("a")
@@ -107,13 +93,13 @@ class Taylor(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(sh[1]), FadeIn(notes[2]))
             vo.wait_until("d")
             self.play(FadeIn(sh[2]), Create(lc), FadeIn(leg[2]), FadeIn(notes[3]), run_time=2)
-        self.add(illustration(r"FRED: FEDFUNDS, GDPDEF, PCEPILFE, GDPC1, GDPPOT"))
+        self.add(illustration(r"Pinned revised FRED/CBO series, quarterly: retrospective comparison, not a real-time policy forecast"))
         self.wait(0.5)
         self.clear_scene()
 
     def plane(self, t):
         infl, gap, ff, T = (np.asarray(t[k]) for k in ("inflation", "gap", "ff", "t"))
-        ax = surf3d_axes([-1, 8, 1], [-10, 4, 2], [-6, 14, 2], x_length=6.4, y_length=5.2, z_length=4.0)
+        ax = surf3d_axes([-1, 8, 1], [-10, 4, 2], [-6, 16, 2], x_length=6.4, y_length=5.2, z_length=4.0)
         ax.shift(RIGHT * 0.9 + DOWN * 0.4)
         pl = Surface(lambda u, v: ax.c2p(u, v, 1 + 1.5 * u + 0.5 * v), u_range=(-1, 8), v_range=(-10, 4),
                      resolution=(12, 12), fill_color=RULE, fill_opacity=0.35, stroke_color=RULE, stroke_width=0.6,
@@ -130,12 +116,7 @@ class Taylor(VoiceoverScene, ThreeDScene):
         self.add_fixed_in_frame_mobjects(key)
         self.remove(key)
         with self.voiceover(
-            "Another way to see it. The rule is a plane: the rate it prescribes over every combination of inflation and "
-            "output gap. <bookmark mark='a'/> Each dot is one quarter's actual funds rate, standing above or hanging "
-            "below the plane, with a thread to the point the rule called for. <bookmark mark='b'/> The early, blue "
-            "quarters hug the plane. The red ones of 2021 and 2022 hang far beneath it, where high inflation met a rate "
-            "near zero. A rule is a summary of past behaviour, not a law; the neutral rate it assumes is itself a guess, "
-            "and the next parts treat it as one."
+            "The formula is a plane over inflation and the output gap. Its complete displayed range is retained, including a fifteen-percent rate at the upper corner. <bookmark mark='a'/> Each dot is one quarter's actual average rate, with a stem to the conditional benchmark evaluated at that quarter's revised inputs. <bookmark mark='b'/> Distances from this plane are specification-dependent residuals, not measured policy mistakes. The neutral rate, inflation target, output-gap estimate, timing and reaction coefficients can all change the comparison. This full-sample retrospective picture does not prove that any alternative policy would have delivered a better outcome."
         ) as vo:
             self.play(Create(ax), FadeIn(key), run_time=1.5)
             self.play(FadeIn(pl), run_time=1.5)
@@ -143,12 +124,10 @@ class Taylor(VoiceoverScene, ThreeDScene):
             self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.01), Create(stems), run_time=3)
             vo.wait_until("b")
             self.move_camera(theta=-110 * DEGREES, run_time=6)
-        q = ask(r"in 2022 the rule said 13\%; the Fed was at 1\%. Name two reasons the rule could be wrong, and one "
-                r"reason the Fed could be.").set_z_index(10)
+        q = ask(r"in Q2 2022 one benchmark was about 13\%, versus a 0.8\% quarterly funds rate. Which assumptions and information vintages could change that comparison?").set_z_index(10)
         self.add_fixed_in_frame_mobjects(q)
         self.remove(q)
-        with self.voiceover("Pause on this one: name two reasons the rule could have been wrong in 2022, and one reason "
-                            "the Fed could have been."):
+        with self.voiceover('Pause and predict: name two assumptions or information vintages that could change this comparison, and one independent way to assess the outcomes of the actual policy.'):
             self.play(FadeIn(q))
         self.wait(0.5)
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, run_time=0.5)

@@ -58,14 +58,7 @@ class Balance(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(leg, DOWN, buff=0.5, aligned_edge=LEFT)
         side.shift(LEFT * max(0.0, side.get_right()[0] - 6.75))
         with self.voiceover(
-            "The floor needs plenty of reserves, and the Fed created them by buying bonds. In August 2008 its balance "
-            f"sheet was under a trillion dollars. <bookmark mark='a'/> Three rounds of quantitative easing took it to "
-            "four and a half trillion by 2014. A first runoff shrank it from 2017, until the repo market seized in "
-            "September 2019. <bookmark mark='b'/> In March 2020 it bought more in a few weeks than in any earlier year, "
-            f"and by April 2022 it held {pk['bn'] / 1e3:.2f} trillion. <bookmark mark='c'/> Reserves, in pink, are most "
-            "of what it owes; the overnight reverse repos, in teal, are cash that money-market funds park at the Fed "
-            "when they have nowhere better to put it. Buying long bonds also takes interest-rate risk out of private "
-            "hands, which is meant to lower long yields. Chapter fourteen measures what investors charge for that risk."
+            f"An ample-reserves operating system can control overnight rates with administered prices. Asset purchases were one source of abundant reserves. In August 2008 the Fed's assets were under a trillion dollars. <bookmark mark='a'/> Successive purchase programs expanded them, followed by runoff beginning in 2017 and the repo-market disruption of September 2019. <bookmark mark='b'/> Purchases accelerated sharply in 2020; the saved weekly series peaks at {pk['bn'] / 1e3:.2f} trillion in April 2022. <bookmark mark='c'/> Pink shows reserve balances, a large liability category; teal shows ON RRP balances, held by eligible cash investors including money-market funds. The coloured areas overlap and omit other liabilities and capital. They are not a stacked accounting decomposition. Buying long bonds removes duration from private portfolios and can affect term premia, but the chart alone does not identify a causal yield effect."
         ) as vo:
             self.play(FadeIn(g), Create(A_tot), FadeIn(leg[0]), run_time=2)
             vo.wait_until("a")
@@ -74,29 +67,21 @@ class Balance(VoiceoverScene):
             self.play(FadeIn(marks[4]), FadeIn(side[0]), FadeIn(side[1]))
             vo.wait_until("c")
             self.play(FadeIn(A_res), FadeIn(A_rrp), FadeIn(leg[1]), FadeIn(leg[2]), FadeIn(marks[5]), FadeIn(side[2]))
-        self.add(illustration(r"FRED: WALCL, WRESBAL, RRPONTSYD; weekly"))
+        self.add(illustration(r"FRED weekly: total assets and two liability components; coloured areas overlap, not a stacked balance sheet"))
         self.wait(0.5)
         self.clear_scene()
 
     def identity(self, p):
-        rows = [cmath(r"\text{assets}", r"=", r"\text{currency} + \text{reserves} + \text{RRP} + \text{TGA} + \text{other}",
-                      font_size=34, colors={r"\text{assets}": TOT}),
-                cmath(r"\Delta\,\text{reserves}", r"=", r"\Delta\,\text{assets} - \Delta\,\text{RRP} - \Delta\,\text{TGA}"
-                      r" - \Delta\,\text{currency} - \dots", font_size=34, colors={r"\Delta\,\text{reserves}": RES}),
-                cmath(r"\text{QT}:\ \Delta\,\text{assets} < 0", r"\Rightarrow",
-                      r"\text{reserves fall, unless RRP falls first}", font_size=34, colors={r"\Rightarrow": WHITE})]
-        whys = [why(r"the balance sheet balances: every dollar the Fed holds is a dollar it owes someone"),
-                why(r"so a change in what it owns must show up in one of its liabilities; TGA is the Treasury's own "
-                    r"account at the Fed"),
-                why(r"the reverse repo facility is a buffer: money funds take their cash out to buy the bills the "
-                    r"Treasury issues instead, and reserves are spared")]
+        rows = [cmath(r"A", r"=", r"C+R+O+T+L+K", font_size=42, colors={r"A": TOT}),
+                cmath(r"\Delta R", r"=", r"\Delta A-\Delta O-\Delta T-\Delta C-\Delta L-\Delta K",
+                      font_size=34, colors={r"\Delta R": RES}),
+                cmath(r"\Delta A<0", r"\not\Rightarrow", r"\Delta R=\Delta A", font_size=38)]
+        whys = [why(r"assets equal currency, reserves, ON RRP, the Treasury account, other liabilities and capital; symbols $A,C,R,O,T,L,K$"),
+                why(r"an accounting identity: reserve changes depend on every other item, including Treasury cash flows and currency demand"),
+                why(r"a fall in ON RRP can offset asset runoff, other things equal; reserve distribution and market frictions also matter")]
         step = ladder(self, rows, whys, keep=3, top=2.6, x=-1.2, buff=0.7, edge=6.8)
         with self.voiceover(
-            "Why the two colours matter: the balance sheet balances. Everything the Fed owns is matched by something "
-            "it owes. <bookmark mark='a'/> So when its assets shrink, some liability must shrink with them: reserves, "
-            "the reverse repos, the Treasury's account, or currency. <bookmark mark='b'/> Which one is not up to the "
-            "Fed. If money-market funds pull cash out of the reverse repo facility to buy Treasury bills, the shrinking "
-            "comes out of that buffer, and banks' reserves are spared."
+            "The balance sheet identity includes capital as well as liabilities. Here the symbols mean assets, currency, reserve balances, overnight reverse repos, the Treasury account, other liabilities and capital. <bookmark mark='a'/> Rearranging their changes gives the reserve-balance identity. An asset decline does not determine the reserve decline by itself. <bookmark mark='b'/> If ON RRP falls while other items stay fixed, it offsets part of asset runoff. Treasury cash flows, currency demand and other balance-sheet movements can reinforce or offset that effect. This is accounting, not a causal model or a promise that the next dollar of runoff must remove one dollar of reserves."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -130,13 +115,7 @@ class Balance(VoiceoverScene):
                           5.0, 18, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "Quantitative tightening tested it. From June 2022 the Fed let bonds mature without replacing them. "
-            f"<bookmark mark='a'/> From the peak to November 2025, its assets fell by {a['walcl'] - b['walcl']:.1f} "
-            f"trillion dollars. The reverse repos fell by {a['rrp'] - b['rrp']:.1f} trillion, nearly all the way to "
-            f"zero. Reserves fell by only {a['reserves'] - b['reserves']:.1f}. <bookmark mark='b'/> With the buffer "
-            "empty, the next dollar of runoff would come straight out of reserves, and repo rates had begun to creep "
-            "above the floor. On the twenty-ninth of October 2025 the committee announced that runoff would stop on "
-            "the first of December."
+            f"Quantitative tightening began in June 2022 with limits on how much principal could run off without reinvestment. <bookmark mark='a'/> Between the saved April 2022 peak and November 2025 endpoints, assets fell {a['walcl'] - b['walcl']:.1f} trillion dollars, ON RRP fell {a['rrp'] - b['rrp']:.1f} trillion, and reserve balances fell {a['reserves'] - b['reserves']:.1f} trillion. The April starting point precedes the formal June runoff start. <bookmark mark='b'/> A smaller ON RRP balance leaves less of that buffer, but Treasury flows and other items still matter. On October twenty-ninth, 2025, the FOMC announced that aggregate securities runoff would end on December first. That is a dated policy decision, not evidence that reserves obey a one-for-one runoff rule."
         ) as vo:
             self.play(FadeIn(g), LaggedStart(*[FadeIn(b_) for b_ in bars], lag_ratio=0.15, run_time=2.5),
                       FadeIn(side[0]))
@@ -144,8 +123,8 @@ class Balance(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(s_) for s_ in side[1:4]], lag_ratio=0.5))
             vo.wait_until("b")
             self.play(FadeIn(side[4]))
-        q = ask(r"QT ran for three and a half years. Why did repo rates start rising only at the very end?")
-        with self.voiceover("A question for you: QT ran for three and a half years. Why did the strain show only at the end?"):
+        q = ask(r"Which liability changes and reserve-distribution effects can make repo conditions tighten during QT?")
+        with self.voiceover('Pause and predict: which other liabilities and reserve-distribution effects could tighten repo conditions as quantitative tightening proceeds? The accounting identity is the starting point, not the whole explanation.'):
             self.play(FadeIn(q))
         self.wait(0.5)
         self.clear_scene()
