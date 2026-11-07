@@ -38,7 +38,8 @@ def simulated(text: str, corner=DR):
 
 def pause(question: str, width: float = 6.0, font_size=22, corner=DR):
     """A pause-and-predict card, in a corner."""
-    return pause_card(question, width=width, font_size=font_size).to_corner(corner, buff=0.3)
+    return wrapped_label(rf"Pause and predict: {question}", max_width=width, font_size=font_size,
+                         color=QC.IDEA).to_corner(corner, buff=0.3)
 
 
 def yr(ts):
