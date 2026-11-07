@@ -39,6 +39,9 @@ class MH(VoiceoverScene):
             "would bias the answer. <bookmark mark='d'/> For a symmetric proposal, the correction cancels, leaving the 1953 "
             "rule."
         ) as vo:
+            intro = label('The Hastings correction accounts for proposal asymmetry', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -54,7 +57,7 @@ class MH(VoiceoverScene):
         ]
         rows[3][2].set_color(HIT)
         whys = [why(r"Part 7's detailed balance"), why(r"multiply out the acceptance"), why(r"the same expression either way"),
-                why(r"plus irreducibility: \ the chain converges to $\pi$")]
+                why(r"with recurrence and aperiodicity: \ convergence")]
         with self.voiceover(
             "<bookmark mark='a'/> Why it works is Part 7's detailed balance: the flow of probability from x to x prime equals "
             "the flow back. <bookmark mark='b'/> Multiply out: the flow from x to x prime is the smaller of two products, "
@@ -63,6 +66,9 @@ class MH(VoiceoverScene):
             "doesn't cycle, it converges to the target from anywhere, and long-run averages converge to posterior "
             "expectations."
         ) as vo:
+            intro = label('Detailed balance gives stationarity; convergence needs more', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -118,12 +124,12 @@ class MH(VoiceoverScene):
             label(r"Roberts, Gelman \& Gilks (1997): \ 0.234 as $d \to \infty$", font_size=22, color=GREY_A),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Measure it. For a range of step sizes, the acceptance rate against the effective sample "
-            "size per iteration. <bookmark mark='b'/> Efficiency rises and then falls. <bookmark mark='c'/> The peak is near "
-            "an acceptance rate of a quarter, where the chain gives about one point six effective draws per hundred "
-            "iterations. <bookmark mark='d'/> Gareth Roberts, Andrew Gelman and Wally Gilks proved that in high dimensions "
-            "the optimal acceptance rate tends to point two three four, with the step shrinking like one over the square "
-            "root of the dimension."
+            "<bookmark mark='a'/> Measure it. For a range of step sizes, the acceptance rate against the effective "
+            "sample size per iteration. <bookmark mark='b'/> Efficiency rises and then falls. <bookmark mark='c'/> "
+            "The peak is near an acceptance rate of a quarter, where the chain gives about one point six effective "
+            "draws per hundred iterations. <bookmark mark='d'/> For a smooth product-target limit and an isotropic "
+            "random walk, Gareth Roberts, Andrew Gelman and Wally Gilks proved an optimal acceptance rate tending to "
+            "point two three four, with the step shrinking like one over the square root of the dimension."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A))
@@ -148,13 +154,16 @@ class MH(VoiceoverScene):
         whys = [why(r"or almost every proposal is rejected"), why(r"a diffusion: \ distance grows like $\sqrt{\text{steps}}$"),
                 why(r"and the chain crawls along the wide one"), why(r"Hamiltonian Monte Carlo")]
         with self.voiceover(
-            "<bookmark mark='a'/> The trouble is scaling. In d dimensions the step must shrink like one over root d, "
-            "<bookmark mark='b'/> and a random walk's distance grows only like the square root of the number of steps, so "
-            "crossing the posterior takes a number of iterations proportional to d. <bookmark mark='c'/> With correlated "
-            "parameters it's worse: the step is limited by the narrowest direction, and the chain crawls along the widest. "
-            "<bookmark mark='d'/> The way out is to stop guessing directions and follow the gradient, chapter five's "
-            "Hamiltonian Monte Carlo."
+            "<bookmark mark='a'/> The trouble is scaling. In that product-target limit, the proposal SD shrinks like "
+            "one over root d, <bookmark mark='b'/> and a random walk's distance grows only like the square root of "
+            "the number of steps, so crossing the posterior takes a number of iterations proportional to d. <bookmark"
+            " mark='c'/> With correlated parameters it's worse: the step is limited by the narrowest direction, and "
+            "the chain crawls along the widest. <bookmark mark='d'/> The way out is to stop guessing directions and "
+            "follow the gradient, chapter five's Hamiltonian Monte Carlo."
         ) as vo:
+            intro = label('Scaling comparisons require a specified target and work count', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -165,19 +174,25 @@ class MH(VoiceoverScene):
         rows = [
             cmath(r"\text{independence}", r":", r"q(x') \text{ ignores } x: \ \text{good only if } q \approx \pi", font_size=28),
             cmath(r"\text{Langevin (MALA)}", r":", r"x' = x + \tfrac{\epsilon^2}{2}\nabla\log\pi(x) + \epsilon\, \xi", font_size=30),
-            cmath(r"\text{optimal}", r":", r"\text{accept } 0.574, \ \text{step } \propto d^{-1/3}", font_size=30),
+            cmath(r"\text{optimal}", r":", r"\text{accept } 0.574; \ \epsilon^2\propto d^{-1/3}, \ \epsilon\propto d^{-1/6}", font_size=30),
             cmath(r"\text{HMC}", r":", r"\text{many gradient steps, \ step } \propto d^{-1/4}", font_size=30),
         ]
         rows[1][-1].set_color(SAMPLER)
-        whys = [why(r"chapter one's proposal, \ as a chain"), why(r"drift up the gradient, \ plus noise"), why(r"Roberts \& Rosenthal (1998)"), why(r"chapter five")]
+        whys = [why(r"chapter one's proposal, \ as a chain"), why(r"drift up the gradient, \ plus noise"), why(r"Roberts \& Rosenthal (1998): \ smooth product targets"), why(r"chapter five")]
         with self.voiceover(
-            "<bookmark mark='a'/> Other proposals fill the gap. An independence sampler proposes from a fixed distribution, "
-            "chapter one's proposal turned into a chain, and works only when that distribution resembles the target. "
-            "<bookmark mark='b'/> The Metropolis-adjusted Langevin algorithm drifts each proposal up the gradient of the log "
-            "density before adding noise. <bookmark mark='c'/> Its optimal acceptance rate is point five seven four, and its "
-            "step can shrink more slowly with dimension, like d to the minus one third. <bookmark mark='d'/> Hamiltonian "
-            "Monte Carlo takes many gradient steps per proposal and does better still, d to the minus one quarter."
+            "<bookmark mark='a'/> Other proposals fill the gap. An independence sampler proposes from a fixed "
+            "distribution, chapter one's proposal turned into a chain, and works only when that distribution "
+            "resembles the target. <bookmark mark='b'/> The Metropolis-adjusted Langevin algorithm drifts each "
+            "proposal up the gradient of the log density before adding noise. <bookmark mark='c'/> For smooth product"
+            " targets, its limiting optimal acceptance is point five seven four. The squared noise scale shrinks like"
+            " d to the minus one third, so the noise SD epsilon shrinks like d to the minus one sixth. <bookmark "
+            "mark='d'/> For HMC on suitable product targets at fixed integration time, the leapfrog step scales like "
+            "d to the minus one quarter. These rules describe particular asymptotic settings, not every posterior or "
+            "a universal cost ranking."
         ) as vo:
+            intro = label('MALA noise SD scales differently from its squared step', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

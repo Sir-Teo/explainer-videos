@@ -42,13 +42,14 @@ class PPL(VoiceoverScene):
             label(r"5. \ diagnostics on everything: \ $\hat R$, \ ESS, \ divergences", font_size=26, color=PATH),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Everything so far assembles into a probabilistic programming language, the design of Stan "
-            "and PyMC, and statkit now has a small one. A model is just a function returning the log density. "
-            "<bookmark mark='b'/> Its gradient comes from the reverse-mode automatic differentiation that AI, Built's fourth "
-            "part wrote: no derivative is ever worked out by hand. <bookmark mark='c'/> Parameters with constraints, like a "
-            "positive standard deviation, are transformed to the whole real line, and the transform's Jacobian is added to "
-            "the log density. <bookmark mark='d'/> NUTS with Stan's warmup runs on the transformed space, several chains at "
-            "once, <bookmark mark='e'/> and every result comes with R-hat, effective sample sizes and divergence counts."
+            "<bookmark mark='a'/> Everything so far assembles into a probabilistic programming language, the design "
+            "of Stan and PyMC, and statkit now has a small one. A model is just a function returning the log density."
+            " <bookmark mark='b'/> Its gradient comes from the reverse-mode automatic differentiation that AI, "
+            "Built's fourth part wrote: no derivative is ever worked out by hand. <bookmark mark='c'/> Parameters "
+            "with constraints, like a positive standard deviation, are transformed to the whole real line, and the "
+            "transform's Jacobian is added to the log density. <bookmark mark='d'/> NUTS with a simplified "
+            "Stan-inspired warmup runs on the transformed space, with several chains run sequentially here, <bookmark"
+            " mark='e'/> and the output supports R-hat, effective sample sizes and divergence checks."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
@@ -85,12 +86,16 @@ class PPL(VoiceoverScene):
         rows[2][2].set_color(SAMPLER)
         whys = [why(r"positive"), why(r"a probability"), why(r"change of variables"), why(r"the commonest home-made bug")]
         with self.voiceover(
-            "<bookmark mark='a'/> The transforms deserve a moment. A positive parameter becomes the exponential of an "
-            "unconstrained u, <bookmark mark='b'/> a probability the logistic of one. <bookmark mark='c'/> The sampler works "
-            "with u, so the log density must include the log of the transform's derivative, the change-of-variables rule. "
-            "<bookmark mark='d'/> Forget it, and you have silently changed the prior; it is the commonest bug in home-made "
-            "samplers, and chapter twelve's calibration catches it."
+            "<bookmark mark='a'/> The transforms deserve a moment. A positive parameter becomes the exponential of an"
+            " unconstrained u, <bookmark mark='b'/> a probability the logistic of one. <bookmark mark='c'/> The "
+            "sampler works with u, so the log density must include the log of the transform's derivative, the "
+            "change-of-variables rule. <bookmark mark='d'/> Forget it, and you have silently changed the prior; it is"
+            " a common sampler bug. Part 26's simulation-based calibration can detect many such errors, though a "
+            "passing check is not proof of correctness."
         ) as vo:
+            intro = label('Constrained coordinates require the change-of-variables Jacobian', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -106,13 +111,15 @@ class PPL(VoiceoverScene):
             r[1].set_color(EXACTC)
             r[2].set_color(HIT)
         tb.move_to([0, 0.6, 0])
-        foot = label(r"every answer within its Monte Carlo error of the exact one; \ also tested in \texttt{tests/test\_stats\_kit\_ppl.py}",
+        foot = label(r"numerical comparisons; \ MC SE shown for two means; \ independent tests use explicit tolerances",
                      font_size=22, color=GREY_A).move_to([0, -2.6, 0])
         with self.voiceover(
             "<bookmark mark='a'/> A sampler must be checked against answers known in closed form. A normal mean, a "
-            "proportion with its logistic transform, a Poisson rate with its log transform, and the eight schools against "
-            "Part 26's exact grid. <bookmark mark='b'/> Each NUTS answer is within its Monte Carlo error of the exact one, and "
-            "the same checks run in the test suite every time the code changes."
+            "proportion with its logistic transform, a Poisson rate with its log transform, and the eight schools "
+            "against a numerical grid using this chapter's proper priors. <bookmark mark='b'/> The displayed "
+            "comparisons are numerical smoke checks; Monte Carlo standard errors are shown for the first and third "
+            "means. The test suite independently checks several conjugate posteriors, gradients and diagnostics, with"
+            " explicit tolerances."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tb[0]), LaggedStart(*[FadeIn(r) for r in tb[1:]], lag_ratio=0.3), run_time=3.0)
@@ -176,6 +183,9 @@ class PPL(VoiceoverScene):
             "one evaluation of the density, however many parameters there are. <bookmark mark='d'/> That single fact is why "
             "gradient-based samplers scale to thousands of dimensions, and why the same machinery trains neural networks."
         ) as vo:
+            intro = label('Reverse mode computes all gradients through the same graph', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

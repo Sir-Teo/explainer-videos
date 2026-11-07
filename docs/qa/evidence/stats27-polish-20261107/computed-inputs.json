@@ -1,0 +1,100 @@
+{
+  "items": [
+    {
+      "item": "disks",
+      "path": ".cache/stats27/disks.json",
+      "bytes": 13706,
+      "sha256": "4280eb8bacf843e53d6023be6557b12e7006a9a00d4c718d843378ff46895caa"
+    },
+    {
+      "item": "banana",
+      "path": ".cache/stats27/banana.json",
+      "bytes": 558934,
+      "sha256": "fbf9ca5a7de4bd2581534b5073d5889a221713e3606c51ca35b57b532d783ca7"
+    },
+    {
+      "item": "importance",
+      "path": ".cache/stats27/importance.json",
+      "bytes": 59418,
+      "sha256": "f6de0627ad445f3abf922a755003193ddb34d9e0c24df6b7e698e4dc5a8fed34"
+    },
+    {
+      "item": "rwm",
+      "path": ".cache/stats27/rwm.json",
+      "bytes": 43353,
+      "sha256": "7ac5894df848e4f9dcc4598c789357132d7bc3255fc77787d9a405203d739ce5"
+    },
+    {
+      "item": "gibbs",
+      "path": ".cache/stats27/gibbs.json",
+      "bytes": 22872,
+      "sha256": "849ff92c130e4193cb425850f89808c2cff41a67864f4c8698f9a56d93f77523"
+    },
+    {
+      "item": "diagnostics",
+      "path": ".cache/stats27/diagnostics.json",
+      "bytes": 95701,
+      "sha256": "ea78cbbb5307c8184c45d73f1743fe21bc2492de31cc2e88457b2fd74f471710"
+    },
+    {
+      "item": "hmc",
+      "path": ".cache/stats27/hmc.json",
+      "bytes": 30950,
+      "sha256": "fbfa2adcc416a716c2cc11f0c9ac31b4c1d8759cdc203aa87a23041cc67918ea"
+    },
+    {
+      "item": "nuts",
+      "path": ".cache/stats27/nuts.json",
+      "bytes": 2849,
+      "sha256": "e403ef0d45d5b4935dc6f296d3b0464cebeaa2e0a2f6d27cbec1daafa413bb0e"
+    },
+    {
+      "item": "funnel",
+      "path": ".cache/stats27/funnel.json",
+      "bytes": 364327,
+      "sha256": "367be9cbf5486ba0d3c122908fe03d9eb9ba4118f2d8ac9a2847fe33d080e16a"
+    },
+    {
+      "item": "ppl",
+      "path": ".cache/stats27/ppl.json",
+      "bytes": 664,
+      "sha256": "d7167fa9fff31b39d0dbb78d6066f09fe52a2ddb7d0d1d463487e83e582b1ef2"
+    },
+    {
+      "item": "smc",
+      "path": ".cache/stats27/smc.json",
+      "bytes": 8097,
+      "sha256": "b426e476eac78f0907734816734cafe96211be73371f2af65dd25547f264a34c"
+    },
+    {
+      "item": "vi",
+      "path": ".cache/stats27/vi.json",
+      "bytes": 140280,
+      "sha256": "9ded8577b994c89fb60cf207f0d241df148394e45076021597bceded70e91aee"
+    },
+    {
+      "item": "laplace",
+      "path": ".cache/stats27/laplace.json",
+      "bytes": 28784,
+      "sha256": "57b1f04f2839c331c69c82045ce282b0c4f87825caaeecbf9f9f83d98e9c5247"
+    },
+    {
+      "item": "abc",
+      "path": ".cache/stats27/abc.json",
+      "bytes": 13573,
+      "sha256": "74036da6eb44b0eac240cf212e3e61459f318c8b6b13895c5d15e99f37815bd5"
+    },
+    {
+      "item": "cftp",
+      "path": ".cache/stats27/cftp.json",
+      "bytes": 10713,
+      "sha256": "014bd6a1ac5ba4c9796c51bd0e09385c9e17d1899248e607029fd02eabdd5542"
+    },
+    {
+      "item": "board",
+      "path": ".cache/stats27/board.json",
+      "bytes": 5191,
+      "sha256": "b4321ac119220191f772973d29db4b3e9b0218bf507c8284962567032b9908a7"
+    }
+  ]
+}

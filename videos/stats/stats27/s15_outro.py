@@ -23,11 +23,11 @@ class Outro(VoiceoverScene):
     def recap(self):
         items = [
             (r"hard disks: \ a random walk integrates", PATH), (r"importance: \ $\hat k$ 0.93 says no", RES),
-            (r"Metropolis--Hastings; \ accept 0.234", SAMPLER), (r"Gibbs and data augmentation", SAMPLER),
+            (r"MH; \ 0.234 for a smooth product-target limit", SAMPLER), (r"Gibbs and data augmentation", SAMPLER),
             (r"$\hat R$ 1.53 for stuck chains", RES), (r"HMC: \ 140 times the random walk", HIT),
             (r"NUTS: \ stop at the U-turn", HIT), (r"the funnel: \ non-centre", HIT),
             (r"a PPL, \ checked against exact answers", SAMPLER), (r"particles; \ SMC evidence within 0.15", SAMPLER),
-            (r"VI: \ too narrow, \ fast", VIC), (r"Laplace and INLA", HIT),
+            (r"VI: \ scalable, \ uncertainty needs checking", VIC), (r"Laplace and INLA", HIT),
             (r"ABC: \ the summary decides", RES), (r"coupling from the past: \ exact", PATH),
         ]
         rows = VGroup(*[label(rf"{i}.\ \ {t}", font_size=26, color=c) for i, (t, c) in enumerate(items)])
@@ -38,16 +38,17 @@ class Outro(VoiceoverScene):
         head = label(r"Part 27, \ in fourteen lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Part twenty-seven in fourteen lines. <bookmark mark='a'/> A random walk over hard disks integrated what no grid "
-            "could. Importance sampling reweights a proposal, and Pareto's k-hat says when not to trust it. "
-            "Metropolis–Hastings needs only density ratios, and tunes best near a quarter acceptance. Gibbs updates one "
-            "coordinate at a time, helped by latent variables. R-hat and effective sample sizes caught stuck chains. "
-            "Hamiltonian Monte Carlo follows the gradient, a hundred and forty times more efficient in a hundred dimensions. "
-            "NUTS stops each trajectory at its U-turn and tunes itself. Neal's funnel defeats it until the model is "
-            "non-centred. Statkit's probabilistic programming language reproduces exact answers. Particle filters track "
-            "hidden states, and tempered SMC found the evidence. Variational inference is fast and too narrow. Laplace and "
-            "INLA put normals at the mode. ABC needs only a simulator, and lives or dies by its summaries. And coupling from "
-            "the past samples exactly."
+            "Part twenty-seven in fourteen lines. <bookmark mark='a'/> A random walk over hard disks integrated what "
+            "no grid could. Importance sampling reweights a proposal, and Pareto's k-hat says when not to trust it. "
+            "Metropolis–Hastings needs only density ratios, with a quarter-acceptance guideline in a specific smooth "
+            "high-dimensional product-target limit. Gibbs updates one coordinate at a time, helped by latent "
+            "variables. R-hat and effective sample sizes caught stuck chains. Hamiltonian Monte Carlo follows the "
+            "gradient, a hundred and forty times more efficient in a hundred dimensions. NUTS stops each trajectory "
+            "at its U-turn and tunes itself. Neal's funnel defeats it until the model is non-centred. Statkit's "
+            "probabilistic programming language reproduces exact answers. Particle filters track hidden states, and "
+            "tempered SMC found the evidence. Variational inference can scale well but may understate uncertainty. "
+            "Laplace and INLA put normals at the mode. ABC needs only a simulator, and lives or dies by its "
+            "summaries. And coupling from the past samples exactly."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -113,10 +114,11 @@ class Outro(VoiceoverScene):
         tr.to_edge(UP, buff=0.8)
         nxt.next_to(tr, DOWN, buff=1.0)
         with self.voiceover(
-            "Twenty-seven parts of sixty-five. <bookmark mark='a'/> Any model we can write down, we can now fit and check. "
-            "<bookmark mark='b'/> Which makes the next question unavoidable: which model should we believe? In 1983 David "
-            "Freedman regressed pure noise on fifty columns of noise, kept the columns that looked significant, refitted, and "
-            "found a highly significant regression. Part 28: which model?"
+            "Twenty-seven parts of sixty-five. <bookmark mark='a'/> We now have tools to fit and check many models, "
+            "alongside limits from geometry, identifiability and computational cost. <bookmark mark='b'/> Which makes"
+            " the next question unavoidable: which model should we believe? In 1983 David Freedman regressed pure "
+            "noise on fifty columns of noise, kept the columns that looked significant, refitted, and found a highly "
+            "significant regression. Part 28: which model?"
         ) as vo:
             self.play(FadeIn(tr))
             self.play(*[tr.cells[i].animate.set_fill(S.ACCENT, opacity=0.9) for i in range(27)])

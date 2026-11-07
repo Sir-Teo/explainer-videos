@@ -26,19 +26,24 @@ class VI(VoiceoverScene):
             cmath(r"q^*", r"=", r"\arg\min_{q \in \mathcal Q} \mathrm{KL}(q \,\|\, p(\theta \mid y))", font_size=30),
             cmath(r"\log p(y)", r"=", r"\underbrace{E_q \log p(y, \theta) - E_q \log q}_{\text{ELBO}} + \mathrm{KL}(q \,\|\, p)", font_size=28),
             cmath(r"\text{maximize}", r":", r"\text{the ELBO: \ no normalizing constant needed}", font_size=30),
-            cmath(r"\text{reverse KL}", r":", r"q \text{ avoids where } p \text{ is small: \ it under-covers}", font_size=30),
+            cmath(r"\text{reverse KL}", r":", r"q \text{ avoids low } p; \ \text{restricted families often under-disperse}", font_size=30),
         ]
         rows[1][2].set_color(VIC)
         whys = [why(r"the nearest member of a simple family"), why(r"the evidence lower bound"),
                 why(r"Jordan et al.\ (1999); \ Blei et al.\ (2017)"), why(r"`zero-forcing'")]
         with self.voiceover(
-            "<bookmark mark='a'/> Variational inference trades sampling for optimization: find, within a simple family of "
-            "distributions, the one closest to the posterior in Kullback–Leibler divergence. <bookmark mark='b'/> The log "
-            "evidence splits into a lower bound plus that divergence, <bookmark mark='c'/> so maximizing the evidence lower "
-            "bound, the ELBO, minimizes the divergence without ever computing the normalizing constant. "
-            "<bookmark mark='d'/> But note the direction: the divergence from q to the posterior punishes q for putting mass "
-            "where the posterior has little, and not the reverse. The answer is cautious: too narrow."
+            "<bookmark mark='a'/> Variational inference trades sampling for optimization: find, within a simple "
+            "family of distributions, the one closest to the posterior in Kullback–Leibler divergence. <bookmark "
+            "mark='b'/> The log evidence splits into a lower bound plus that divergence, <bookmark mark='c'/> so "
+            "maximizing the evidence lower bound, the ELBO, minimizes the divergence without ever computing the "
+            "normalizing constant. <bookmark mark='d'/> But note the direction: the divergence from q to the "
+            "posterior punishes q for putting mass where the posterior has little, and not the reverse. A restricted "
+            "family and this divergence often favour concentrated approximations, but under-dispersion is not a "
+            "universal theorem."
         ) as vo:
+            intro = label('A restricted approximation maximizes an evidence lower bound', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -54,19 +59,21 @@ class VI(VoiceoverScene):
         L = Landscape(ax, lambda X, Y: np.exp(-0.5 * (X ** 2 - 2 * rho * X * Y + Y ** 2) / (1 - rho ** 2)), (-3, 3), (-3, 3),
                       levels=[0.135], color=EXACTC, stroke_width=3)
         sd = np.asarray(d["mf_sd"])
-        ell = ParametricFunction(lambda t: ax.c2p(2 * sd[0] * np.cos(t), 2 * sd[1] * np.sin(t)), t_range=[0, TAU], color=VIC, stroke_width=3)
+        ell = ParametricFunction(lambda t: ax.c2p(d["mf_mean"][0]+2 * sd[0] * np.cos(t), d["mf_mean"][1]+2 * sd[1] * np.sin(t)), t_range=[0, TAU], color=VIC, stroke_width=3)
         rows = fit_rows(VGroup(
             label(rf"gold: \ the posterior's 2-SD contour, \ correlation {rho}", font_size=22, color=EXACTC),
-            label(r"purple: \ the best mean-field Gaussian", font_size=22, color=VIC),
+            label(r"purple: \ finite stochastic ADVI fit, \ not the exact optimum", font_size=22, color=VIC),
             label(rf"its SDs: \ {sd[0]:.2f}, \ {sd[1]:.2f}; \ the true marginal SDs are 1", font_size=22, color=RES),
             label(r"$\sqrt{1 - \rho^2} = 0.44$: \ the conditional SD, \ not the marginal", font_size=22, color=GREY_A),
         ), 5.8, 0.42, [3.6, 0.1, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The classic failure. The posterior is a correlated normal, its two-standard-deviation "
-            "contour in gold. <bookmark mark='b'/> The best mean-field approximation, independent normals for each "
-            "coordinate, fitted by statkit's ADVI, is the purple ellipse. <bookmark mark='c'/> Its standard deviations are "
-            "about point four, where the true ones are one: <bookmark mark='d'/> mean field recovers the conditional spread, "
-            "the square root of one minus rho squared, and reports far too much certainty about each coordinate."
+            "<bookmark mark='a'/> The classic failure. The posterior is a correlated normal, its "
+            "two-standard-deviation contour in gold. <bookmark mark='b'/> The purple ellipse is a stochastic ADVI fit"
+            " with independent normal coordinates. The exact optimum in this family has SD root one minus rho "
+            "squared, about point four four; the finite optimization has additional error. <bookmark mark='c'/> Its "
+            "standard deviations are about point four, where the true ones are one: <bookmark mark='d'/> mean field "
+            "recovers the conditional spread, the square root of one minus rho squared, and reports far too much "
+            "certainty about each coordinate."
         ) as vo:
             self.play(FadeIn(A), FadeIn(L.levels))
             vo.wait_until("a")
@@ -89,15 +96,19 @@ class VI(VoiceoverScene):
         ]
         rows[3][2].set_color(RES)
         whys = [why(r"a normal sample, \ mean and precision unknown"), why(r"each factor given the other's moments"),
-                why(r"coordinate ascent: \ Bishop (2006), \ section 10.1.3"), why(r"under-dispersed, \ as promised")]
+                why(r"coordinate ascent: \ Bishop (2006), \ section 10.1.3"), why(r"under-dispersed in this example")]
         with self.voiceover(
-            "<bookmark mark='a'/> For conditionally conjugate models the optimization has closed-form steps. A normal sample "
-            "with unknown mean and precision, approximated by independent factors. <bookmark mark='b'/> The best factor for "
-            "the mean, holding the other fixed, is the expected log joint under it, <bookmark mark='c'/> which is again "
-            "normal, and the precision's is a gamma; alternate until they stop changing: coordinate ascent variational "
-            "inference. <bookmark mark='d'/> It converges in a few iterations, and its standard deviation for the mean, point "
-            "two seven six, is below the exact posterior's point two eight nine: under-dispersed, as reverse KL predicts."
+            "<bookmark mark='a'/> For conditionally conjugate models the optimization has closed-form steps. A normal"
+            " sample with unknown mean and precision, approximated by independent factors. <bookmark mark='b'/> The "
+            "best factor for the mean, holding the other fixed, is the expected log joint under it, <bookmark "
+            "mark='c'/> which is again normal, and the precision's is a gamma; alternate until they stop changing: "
+            "coordinate ascent variational inference. <bookmark mark='d'/> It converges in a few iterations, and its "
+            "standard deviation for the mean, point two seven six, is below the exact posterior's point two eight "
+            "nine: under-dispersed in this example."
         ) as vo:
+            intro = label('Coordinate updates optimize each factor against the others', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -108,8 +119,9 @@ class VI(VoiceoverScene):
         d = load("vi")
         lv, ln = np.asarray(d["logtau_vi"]), np.asarray(d["logtau_nuts"])
         edges = np.linspace(-5, 4, 46)
-        hv, _ = np.histogram(lv, edges, density=True)
-        hn, _ = np.histogram(ln, edges, density=True)
+        hv, _ = np.histogram(lv, edges)
+        hn, _ = np.histogram(ln, edges)
+        hv=hv/len(lv)/np.diff(edges);hn=hn/len(ln)/np.diff(edges)
         A = axes([-5, 4], [0, float(max(hv.max(), hn.max())) * 1.1], x_length=7.2, y_length=4.2, xlabel=r"$\log\tau$",
                  ylabel=r"density", xticks=[-4, -2, 0, 2, 4], yticks=[], center=[-2.0, 0.3, 0])
         ax = A.ax
@@ -153,12 +165,13 @@ class VI(VoiceoverScene):
             label(r"check it: \ PSIS $\hat k$ \ (Yao et al.\ 2018), \ or SBC", font_size=24, color=HIT),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Variational inference wins on scale: millions of parameters, streaming data, topic models "
-            "and neural networks, where sampling is out of reach. <bookmark mark='b'/> Automatic differentiation variational "
-            "inference, ADVI, is the generic version built here: transform every parameter to the real line, fit a Gaussian "
-            "by stochastic gradients. <bookmark mark='c'/> It loses on uncertainty, on funnels and on multiple modes. "
-            "<bookmark mark='d'/> So check it, with Yuling Yao and colleagues' Pareto k-hat, or with chapter twelve's "
-            "simulation-based calibration."
+            "<bookmark mark='a'/> Variational inference wins on scale: millions of parameters, streaming data, topic "
+            "models and neural networks, where sampling is out of reach. <bookmark mark='b'/> Automatic "
+            "differentiation variational inference, ADVI, is the generic version built here: transform every "
+            "parameter to the real line, fit a Gaussian by stochastic gradients. <bookmark mark='c'/> It loses on "
+            "uncertainty, on funnels and on multiple modes. <bookmark mark='d'/> So check it, with Yuling Yao and "
+            "colleagues' Pareto k-hat, or with Part 26's simulation-based calibration, remembering that a passing "
+            "diagnostic is not proof of accuracy."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -169,18 +182,22 @@ class VI(VoiceoverScene):
         rows = [
             cmath(r"\text{full-rank Gaussian}", r":", r"\text{correlations, \ } d^2 \text{ parameters}", font_size=30),
             cmath(r"\text{normalizing flows}", r":", r"q = \text{a learned invertible map of a normal}", font_size=30),
-            cmath(r"\text{forward KL}", r":", r"\text{expectation propagation: \ mass-covering}", font_size=30),
+            cmath(r"\text{EP}", r":", r"\text{local moment-matching projections; \ not global forward KL}", font_size=30),
             cmath(r"\text{still}", r":", r"\text{an approximation: \ check it}", font_size=30),
         ]
         rows[3][-1].set_color(PATH)
         whys = [why(r"fixes the ellipse, \ not the funnel"), why(r"Rezende \& Mohamed (2015)"), why(r"Minka (2001)"), why(r"PSIS $\hat k$, \ SBC")]
         with self.voiceover(
-            "<bookmark mark='a'/> Richer families help. A full-rank Gaussian captures correlations, at the cost of d squared "
-            "parameters. <bookmark mark='b'/> Normalizing flows learn an invertible transformation of a normal, flexible "
-            "enough for curved posteriors. <bookmark mark='c'/> Minimizing the divergence in the other direction, as "
-            "expectation propagation roughly does, covers the posterior's mass instead of hiding inside it. "
-            "<bookmark mark='d'/> Each remains an approximation whose error has to be checked rather than assumed."
+            "<bookmark mark='a'/> Richer families help. A full-rank Gaussian captures correlations, at the cost of d "
+            "squared parameters. <bookmark mark='b'/> Normalizing flows learn an invertible transformation of a "
+            "normal, flexible enough for curved posteriors. <bookmark mark='c'/> Forward KL often favours covering "
+            "mass. Expectation propagation uses local moment matching and tilted-distribution projections; it does "
+            "not generally minimize one global forward KL. <bookmark mark='d'/> Each remains an approximation whose "
+            "error has to be checked rather than assumed."
         ) as vo:
+            intro = label('Richer approximations still need accuracy checks', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

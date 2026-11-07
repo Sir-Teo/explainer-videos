@@ -4,7 +4,7 @@ Part 27 of a sixty-five-part course in statistics, from a first course to a PhD 
 and [the syllabus](../SYLLABUS.md)), and the seventh part of Stage III, Master's. Part 26 integrated over one
 hyperparameter on a grid. This part computes posteriors no grid can reach:
 - importance sampling, Metropolis–Hastings, Gibbs, and Hamiltonian Monte Carlo with NUTS;
-- the diagnostics that say whether a run worked, and the reparametrization that fixes Neal's funnel;
+- diagnostics that can detect failures but cannot prove convergence, and the reparametrization that fixes Neal's funnel;
 - particle methods, variational inference, Laplace and INLA, likelihood-free inference, and exact sampling.
 
 Its centrepiece is `statkit.ppl`, a small probabilistic programming language built on *AI, Built*'s automatic
@@ -50,13 +50,13 @@ From there the part covers:
 - **NUTS.**
   - The U-turn criterion. Three trajectories on a correlation-0.95 normal take 7, 15 and 7 leapfrog steps.
   - Stan's warmup (dual averaging; windowed diagonal metric).
-  - The eight schools, non-centred: mostly depth 3, 8.4 steps on average, ε 0.59, R̂(log τ) 1.002, ESS 1,830, no
+  - The eight schools, non-centred: mostly depth 3, 8.4 steps on average, ε 0.42, R̂(log τ) 1.002, ESS 1,830, no
     divergences.
   - Divergences; discrete parameters marginalized.
 - **Neal's funnel and the eight schools.**
   - The funnel. Centred NUTS never enters the neck: the 5% point of v is −2.12 against the true −4.93, with one
     divergence. Non-centred gives −4.98.
-  - The eight schools, τ ~ half-Cauchy(5), μ ~ N(0, 5²), against the exact grid (5% point 0.24, median 2.74):
+  - The eight schools, τ ~ half-Cauchy(5), μ ~ N(0, 5²), against an independently checked numerical grid (5% point 0.2464, median 2.7487):
 
     | Form | Divergences | R̂ | ESS | 5% point of τ | Gradients |
     |---|---|---|---|---|---|
@@ -69,7 +69,7 @@ From there the part covers:
 - **A probabilistic programming language.**
   - Models as log densities; autodiff; transforms and Jacobians.
   - The twelve-line eight schools model. Checks against closed forms: a normal mean, a proportion, a Poisson rate, and
-    the eight schools' median τ and E θ_A, each within Monte Carlo error.
+    the eight schools' median τ and E θ_A, with explicit numerical-test tolerances; MCSE is shown for two posterior means.
   - Debugging; Stan, PyMC, NumPyro, Turing.
 - **Sequential Monte Carlo.**
   - The bootstrap particle filter tracks the Kalman filter on a 60-step local-level series.
@@ -106,7 +106,7 @@ Every number on screen is computed in [`compute.py`](compute.py):
   `tests/test_stats_kit_ppl.py`:
   - **Models:** `Model` (real/positive/unit supports with Jacobians), with log densities on autodiff Tensors.
   - **Samplers:**
-    - leapfrog, HMC, and NUTS with Stan-style warmup;
+    - leapfrog, HMC, and NUTS with simplified Stan-inspired warmup;
     - random-walk Metropolis;
     - Albert–Chib Gibbs.
   - **Diagnostics:** rank-normalized split R̂; bulk, tail and basic ESS; PSIS with k̂.
@@ -120,15 +120,16 @@ Every number on screen is computed in [`compute.py`](compute.py):
 The Coverage Board gains four rows: simulation-based coverage of 90% intervals for the eight schools' effects. Truths
 are drawn from the prior (μ ~ N(0, 5²), τ ~ half-Cauchy(5)), 100 simulated data sets, 8 schools each.
 
-| Method | Setting | Reps | Achieved | Verdict |
+| Method | Independent datasets / intervals | Achieved | Empirical MCSE | Board verdict |
 |---|---|---|---|---|
-| exact grid draws | eight schools, truths from the prior | 800 | 90.5% | kept |
-| NUTS, non-centred | eight schools, truths from the prior | 800 | 90.9% | kept |
-| NUTS, centred | eight schools, truths from the prior | 800 | 91.0% | kept |
-| mean-field ADVI | eight schools, truths from the prior | 800 | 87.5% | kept (short, within the margin) |
+| numerical grid draws | 100 / 800 | 90.375% | 1.397 percentage points | kept |
+| NUTS, non-centred | 100 / 800 | 87.875% | 1.470 percentage points | kept |
+| NUTS, centred | 100 / 800 | 90.750% | 1.252 percentage points | kept |
+| mean-field ADVI | 100 / 800 | 84.750% | 2.007 percentage points | kept (short, within the three-MCSE margin) |
 
-Calibration averaged over the prior can pass while a particular data set's answer is biased. The centred sampler's
-error at small τ (chapter seven) barely moves the schools' coverage.
+Each dataset contributes eight correlated interval indicators. MCSE is the standard error of the 100 dataset-level average coverages, not a binomial error treating 800 intervals as independent. All four methods produced valid finite ordered intervals on all 100 datasets. Invalid intervals would count as noncoverage and their dataset counts are stored separately. The simulation is resumable without changing the seeded stream.
+
+These are noisy prior-averaged computational checks, not proof of calibration for every parameter value or dataset. The centred sampler's coverage is close to nominal in this run despite the separate observed-data tau distortion; this does not establish a general lack of effect. ADVI's shortfall is visible even though the Board's coarse three-MCSE rule retains its promise.
 
 ## Build it
 
@@ -150,9 +151,9 @@ python tools/lecture_length.py stats27 --floor 50
 | 3 | Gibbs sampling | ESS 33 of 2,000; probit slope 19.80 vs 19.73 |
 | 4 | Diagnostics | R̂ 1.53 (stuck) vs 1.008 |
 | 5 | Hamiltonian Monte Carlo | Euler 0.5 → 88; leapfrog ±0.011; 140× in 100-D |
-| 6 | NUTS | 7 / 15 / 7 steps; ε 0.59; ESS 1,830 |
-| 7 | Neal's funnel and the eight schools | v: −2.12 vs −4.93; τ 5%: 0.90 / 0.55 / 0.25 vs 0.24 |
-| 8 | A probabilistic programming language | all checks within Monte Carlo error |
+| 6 | NUTS | 7 / 15 / 7 steps; ε 0.42; ESS 1,830 |
+| 7 | Neal's funnel and the eight schools | v: −2.12 vs −4.93; τ 5%: 0.90 / 0.55 / 0.25 vs 0.25 |
+| 8 | A probabilistic programming language | numerical comparisons with explicit test tolerances |
 | 9 | Sequential Monte Carlo | log-lik SD 1.20 / 0.66 / 0.21; evidence within 0.15 |
 | 10 | Variational inference | SD 0.41 vs 1; τ [0.65, 6.66] vs [0.26, 10.3]; k̂ 0.62 |
 | 11 | Laplace and INLA | 95% point 5.55 vs 4.77 (n = 20); 2.18 vs 2.14 (n = 400) |
@@ -221,7 +222,7 @@ w_s is equal, and (Σ w)²/Σ w² = n.
 *Solution.* x₁ | x₂ ~ N(ρx₂, 1 − ρ²) and x₂ | x₁ ~ N(ρx₁, 1 − ρ²). Over one sweep,
 x₁^{(t+1)} = ρ x₂^{(t)} + e and x₂^{(t)} = ρ x₁^{(t)} + e′, so x₁^{(t+1)} = ρ² x₁^{(t)} + (noise). That is an AR(1) with
 φ = ρ², whose ESS per draw is (1 − φ)/(1 + φ) = (1 − ρ²)/(1 + ρ²). For ρ = 0.95 this is 0.051, about 100 from 2,000,
-the right order for the 33 seen (the chain starts far out).
+the stationary large-run reference. The displayed finite-run ESS estimate of 33 has substantial sampling uncertainty and is not a second theoretical value.
 
 **4. Leapfrog preserves volume and is reversible.**
 
@@ -256,7 +257,7 @@ parameter.
   - chains whose limit is the posterior;
   - propose and accept by the Hastings ratio;
   - balanced flows;
-  - tuned near 0.234 (RWM) or 0.574 (MALA);
+  - limiting guidelines 0.234 (RWM) or 0.574 (MALA) for specific smooth product targets;
   - Langevin proposals.
 - **Gibbs sampling; full conditional; data augmentation; blocking; collapsing**:
   - coordinate-wise exact draws;
@@ -300,3 +301,23 @@ parameter.
 | stochastic approximation | 50 |
 | BvM and posterior contraction | 53 |
 | the Coverage Board | every part; 65 |
+
+## QA qualifications and numerical references
+
+The hierarchy here uses proper priors mu ~ N(0, 5²), tau ~ half-Cauchy(5). These differ from Part 26's opening flat-prior model. The grid is a numerical reference, not an exact sampler: it now uses trapezoidal CDF integration, continuous inverse-CDF draws and an upper range that expands with simulated data. This matters for prior-predictive calibration under the heavy-tailed half-Cauchy. Infinite-range quadrature gives tau quantiles (5%, 50%, 95%) = (0.2463914, 2.7487311, 9.8419494); posterior mass above 80 is about 5.58e-8 for the observed eight schools. Conditional Gaussian sampling includes the proper mean prior.
+
+Coverage rows use 100 independent simulated datasets, each contributing eight correlated intervals. Their Monte Carlo standard errors are calculated across the dataset coverage averages and preserved by the shared Board. Prior-averaged coverage is a limited computation check: it does not validate a particular dataset, every parameter, or the whole posterior. Final recomputed Board values replace the historical table after computation completes.
+
+The 0.234 and 0.574 acceptance guidelines require particular smooth product-target asymptotics. In the displayed MALA parameterization the noise SD epsilon scales as d^(-1/6); its square scales as d^(-1/3). The d^(-1/4) leapfrog guideline for HMC also requires a suitable product-target limit at fixed integration time. These are not universal cost comparisons. The HMC demonstration reports retained-transition work, excludes warmup, distinguishes gradients from density evaluations and uses illustrative traces with different subsampling. Its roughly 140-fold ratio is specific to one coordinate and these short runs. With kinetic energy p' M^(-1) p / 2, inverse mass, rather than mass, approximates posterior covariance.
+
+Importance proposals must cover target support and relevant moments must exist. Kish ESS measures weight concentration, not the accuracy of every function. The proposal proportional to |f| pi minimizes variance for ordinary IS with a known normalized target; zero variance requires a fixed-sign f. For self-normalized IS the optimal proposal instead involves |f - E_pi f| pi. A positive population Pareto shape k implies finite moments of order r < 1/k. Estimated k-hat is a noisy tail diagnostic; low values alone cannot guarantee accuracy, and high values call for improved overlap, more effective draws or refitting.
+
+MCMC averages require ergodicity and integrability; central limit theorems require additional assumptions. Antithetic correlation can produce ESS larger than the number of draws. Rank-normalized split/folded R-hat, bulk/tail ESS and rank plots detect some failures, not all. Thinning usually loses precision per generated transition, but a categorical claim that ESS can never increase is too strong. The local sampler uses a simplified Stan-inspired adaptation schedule and runs its chains sequentially. Its divergence flag uses the slice-based energy criterion of the original slice NUTS algorithm; production Stan has additional and different safeguards.
+
+A nonnegative unbiased likelihood estimate supports pseudo-marginal inference only with a valid augmented-state construction, retaining the current estimate on rejection; its logarithm is generally biased. Tempered SMC produces an estimate of evidence, not the exact finite-particle integral. All likelihood comparisons here use the same specified initial-state distribution.
+
+Mean-field reverse KL often under-disperses in restricted families, not universally. For the correlated Gaussian, the exact optimal factor SD is sqrt(1-rho²) = 0.43589; the finite stochastic ADVI fit has additional optimization error and is drawn at its fitted mean. EP uses local tilted-distribution moment projections rather than generally minimizing a single global forward KL. Laplace/BIC claims require regularity and retain order-one prior constants; the 95th percentile is not the endpoint of a normal distribution. INLA's speed and accuracy depend on the sparse latent-Gaussian structure and hyperparameter dimension.
+
+At a fixed tolerance ABC targets a summary-based approximation. With sufficient summaries and tolerance tending to zero it can recover the data posterior under suitable regularity; for the discrete Poisson mean, tolerance below the lattice spacing selects the sufficient sum exactly. The observed median example conditions on a different statistic; it does not establish universal downward bias of Poisson medians. Neural amortization is limited to the trained model and design.
+
+The monotone CFTP example requires ferromagnetic interactions. Its random coalescence horizon is not an exact mixing time, and the finite torus has no sharp phase transition at the infinite lattice's critical inverse temperature. Unbiased coupled MCMC estimates expectations, rather than providing an exact posterior draw, and needs meeting-time/moment conditions. Curves are clipped at segment intersections, omitted histogram tails retain their original mass, and dashed curves remain VMobjects.

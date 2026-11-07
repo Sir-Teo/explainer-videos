@@ -1,0 +1,13 @@
+# Part 27 scientific review
+
+Read all fifteen scene files, the README including solutions/glossary, all sixteen compute items, common helpers, the PPL kit and its thirteen tests. Twenty-three checks pass: ten new reference/regression checks and thirteen existing PPL checks. The numerical suite emits eight expected overflow/domain warnings from rejected proposals; no tests fail.
+
+Corrected grid sampling uses a continuous normalized inverse CDF and a resolved long-tail tau grid under the stated proper normal prior on mu. Independent integration on the full positive half-line checks eight-school quantiles and tail mass. School effects/standard errors are the same historical eight-school input independently checked against Stan in Part 26, rather than a newly discovered primary dataset.
+
+The funnel demonstration now states observed divergences, ESS/Rhat, gradient costs and actual step sizes consistently. Cost comparisons separate retained iterations from warmup. HMC/MALA scaling statements include their asymptotic model assumptions; diagnostics, ESS and tail-index checks are evidence rather than guarantees. Importance-sampling optimality distinguishes ordinary and self-normalized estimators. Adaptation and simplified Stan-inspired NUTS schedules are qualified.
+
+Posterior numerical comparisons distinguish grid targets, Monte Carlo estimates and checks with explicit tolerances; only comparisons of posterior means with measured MCSE claim that scale of agreement. Particle likelihood estimates, log-evidence bias, retaining estimates on rejection, ADVI ellipse centers, EP, conditional INLA and ABC limits are corrected or qualified. CFTP's finite torus is not assigned an infinite-lattice phase transition, and unbiased coupled estimators are distinguished from exact draws.
+
+The completed 100-dataset prior-averaged interval experiment stores all dataset-level coverage fractions and invalid-interval counts. Its MCSE uses independent datasets despite eight correlated intervals in each. Fresh numbers replace stale narration and the misleading independent-interval precision. Checkpoint resumption is tested against uninterrupted execution on the same seeded stream. No invalid interval datasets occurred. The grid is numerical, not an exact symbolic sampler; coarse Board verdicts do not establish casewise calibration.
+
+Visual polish adds persistent context headings and data-coordinate curve clipping that preserves boundary crossings without flattening the data. Endpoint, native, motion and narrated verification are subsequent gates. Chinese narration/caption tables, continuous listening/playback and final narrated masters remain unapproved.

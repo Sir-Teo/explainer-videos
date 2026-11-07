@@ -40,6 +40,9 @@ class Funnel(VoiceoverScene):
             "spread across a wide mouth. <bookmark mark='d'/> No single step size suits both, and the curvature in the neck is "
             "so extreme that HMC's trajectories diverge before they can enter it."
         ) as vo:
+            intro = label('A hierarchy can have strongly changing local curvature', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -54,8 +57,8 @@ class Funnel(VoiceoverScene):
             A = axes([-20, 20], [-10, 9], x_length=4.6, y_length=4.4, xlabel=r"$x_1$", ylabel=r"$v$", xticks=[-15, 0, 15],
                      yticks=[-8, -4, 0, 4, 8], center=[-3.4 + 6.4 * k, 0.4, 0])
             vv = np.linspace(-10, 9, 200)
-            edge = VGroup(curve(A.ax, np.clip(2 * np.exp(vv / 2), -20, 20), vv, GREY_C, 1.5),
-                          curve(A.ax, np.clip(-2 * np.exp(vv / 2), -20, 20), vv, GREY_C, 1.5))
+            edge = VGroup(curve(A.ax, 2 * np.exp(vv / 2), vv, GREY_C, 1.5),
+                          curve(A.ax, -2 * np.exp(vv / 2), vv, GREY_C, 1.5))
             m = (np.abs(x) < 20) & (v > -10) & (v < 9)
             pts = scatter_pts(A.ax, x[m][::2], v[m][::2], col, 0.025, 0.6)
             nm = label(name, font_size=22, color=col).next_to(A, DOWN, buff=0.25)
@@ -66,12 +69,12 @@ class Funnel(VoiceoverScene):
         ), 12.0, 0.2, [0, -3.15, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Two thousand NUTS draws of v against the first x. The grey lines mark two standard "
-            "deviations of x at each height. <bookmark mark='b'/> Sampling v and x directly, the centred form, the draws stop "
-            "at v of about minus two: the neck, below, is never visited. The true five percent point of v is minus four point "
-            "nine; the sampler's is minus two point one, a badly biased answer with only one divergence to warn of it. "
-            "<bookmark mark='c'/> Now sample v and standard normals z instead, and set x to e to the v over two times z: the "
-            "non-centred form. Now the sampler's landscape is a round normal, and the draws fill the whole funnel, neck "
-            "included."
+            "deviations of x at each height. <bookmark mark='b'/> Sampling v and x directly, the centred form, the "
+            "draws stop at v of about minus two: the neck, below, is never visited. The true five percent point of v "
+            "is minus four point nine; the sampler's is minus two point one, a badly biased answer with only one "
+            "divergence to warn of it. <bookmark mark='c'/> Now sample v and standard normals z instead, and set x to"
+            " e to the v over two times z: the non-centred form. Now the coordinates are independent normals, with "
+            "v's different scale handled by adaptation, and the draws fill the whole funnel, neck included."
         ) as vo:
             self.add(seeded_tag())
             A0, e0, p0, n0 = g[0]
@@ -89,8 +92,8 @@ class Funnel(VoiceoverScene):
         sc = d["schools"]["centred"]
         lt, dens = np.asarray(d["lt"]), np.asarray(d["dens_lt"])
         edges = np.linspace(-6, 4, 51)
-        h, _ = np.histogram(np.asarray(sc["logtau"]), edges, density=True)
-        dens = dens / np.trapezoid(dens, lt)
+        h, _ = np.histogram(np.asarray(sc["logtau"]), edges)
+        h=h/len(sc["logtau"])/np.diff(edges)
         ymax = float(max(h.max(), dens.max())) * 1.1
         A = axes([-6, 4], [0, ymax], x_length=7.2, y_length=4.2, xlabel=r"$\log\tau$", ylabel=r"density", xticks=[-6, -4, -2, 0, 2, 4],
                  yticks=[], center=[-2.0, 0.3, 0])
@@ -100,18 +103,20 @@ class Funnel(VoiceoverScene):
         divs = VGroup(*[Line(ax.c2p(v, 0), ax.c2p(v, ymax * 0.06), color=DIV, stroke_width=2.5) for v in sc["div_logtau"]])
         rows = fit_rows(VGroup(
             label(r"$\theta_j \sim N(\mu, \tau^2)$, \ sampled directly: \ centred", font_size=22),
-            label(r"gold: \ the exact posterior of $\log\tau$, \ Part 26's grid", font_size=22, color=EXACTC),
+            label(r"gold: \ numerical reference; \ proper $N(0,25)$ and half-Cauchy(5) priors", font_size=22, color=EXACTC),
             label(rf"red: \ NUTS, \ 4 chains; \ {sc['divergent']} divergences", font_size=22, color=RES),
             label(r"ticks: \ where they happened: \ small $\tau$", font_size=22, color=DIV),
             label(rf"5\% point of $\tau$: \ {sc['q05']:.2f} vs exact {d['exact']['q05']:.2f}", font_size=22, color=RES),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The eight schools are a funnel: tau plays v, and the eight effects play x. Sampled "
-            "directly, as Part 26 wrote the model, <bookmark mark='b'/> against the exact posterior of log tau from Part 26's "
-            "grid, <bookmark mark='c'/> NUTS gives forty-seven divergences in four thousand iterations, <bookmark mark='d'/> "
-            "all at small tau, where the neck is. <bookmark mark='e'/> The histogram misses the left tail: the five percent "
-            "point of tau is point nine instead of point two four. R-hat is one point oh five and the effective sample size "
-            "sixty: the diagnostics are worried, and right to be."
+            "<bookmark mark='a'/> The eight schools are a funnel: log tau controls the width, and the eight effects "
+            "play x. Sampled directly, as Part 26 wrote the model, <bookmark mark='b'/> against a numerical-grid "
+            "reference, using a normal prior with SD five on mu and a half-Cauchy prior with scale five on tau. These"
+            " are proper priors, different from Part 26's opening flat-prior fit, <bookmark mark='c'/> NUTS gives "
+            "forty-seven divergences in four thousand iterations, <bookmark mark='d'/> all at small tau, where the "
+            "neck is. <bookmark mark='e'/> The histogram misses the left tail: the five percent point of tau is point"
+            " nine instead of about point two five. R-hat is one point oh five and the effective sample size sixty: "
+            "the diagnostics are worried, and right to be."
         ) as vo:
             self.add(schools_tag())
             self.play(FadeIn(A))
@@ -131,9 +136,9 @@ class Funnel(VoiceoverScene):
         d = load("funnel")
         sc = d["schools"]["noncentred"]
         lt, dens = np.asarray(d["lt"]), np.asarray(d["dens_lt"])
-        dens = dens / np.trapezoid(dens, lt)
         edges = np.linspace(-6, 4, 51)
-        h, _ = np.histogram(np.asarray(sc["logtau"]), edges, density=True)
+        h, _ = np.histogram(np.asarray(sc["logtau"]), edges)
+        h=h/len(sc["logtau"])/np.diff(edges)
         ymax = float(max(h.max(), dens.max())) * 1.1
         A = axes([-6, 4], [0, ymax], x_length=7.2, y_length=4.2, xlabel=r"$\log\tau$", ylabel=r"density", xticks=[-6, -4, -2, 0, 2, 4],
                  yticks=[], center=[-2.0, 0.3, 0])
@@ -147,11 +152,11 @@ class Funnel(VoiceoverScene):
             label(rf"5\% point {sc['q05']:.2f}, \ median {sc['median']:.2f}: \ exact {d['exact']['q05']:.2f}, \ {d['exact']['median']:.2f}", font_size=22, color=HIT),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Now write each effect as mu plus tau times a standard normal z, and sample the z's. "
-            "<bookmark mark='b'/> It is the same model: only the coordinates the sampler moves in have changed. "
-            "<bookmark mark='c'/> No divergences, R-hat of one point oh oh three, and an effective sample size of nineteen "
-            "hundred. <bookmark mark='d'/> The histogram lies on the exact curve: five percent point point two five, median two "
-            "point six nine, against the grid's point two four and two point seven four."
+            "<bookmark mark='a'/> Now write each effect as mu plus tau times a standard normal z, and sample the z's."
+            " <bookmark mark='b'/> It is the same model: only the coordinates the sampler moves in have changed. "
+            "<bookmark mark='c'/> No divergences, R-hat of one point oh oh three, and an effective sample size of "
+            "nineteen hundred. <bookmark mark='d'/> The histogram lies on the exact curve: five percent point point "
+            "two five, median two point six nine, against the grid's about point two five and two point seven five."
         ) as vo:
             self.add(schools_tag())
             self.play(FadeIn(A), Create(ex))
@@ -173,19 +178,20 @@ class Funnel(VoiceoverScene):
         for k, name in (("centred", r"centred, \ $\delta = 0.8$"), ("centred99", r"centred, \ $\delta = 0.99$"), ("noncentred", r"non-centred")):
             v = s[k]
             body.append([name, f"{v['divergent']}", f"{v['rhat']:.3f}", f"{v['ess']:,.0f}", f"{v['q05']:.2f}", f"{v['n_grad']:,}"])
-        body.append([r"exact grid", r"", r"", r"", f"{d['exact']['q05']:.2f}", r""])
+        body.append([r"numerical grid", r"", r"", r"", f"{d['exact']['q05']:.2f}", r""])
         tb = table_rows([hdr] + body, font_size=24, col_buff=0.55, row_buff=0.3, colors=[GREY_A, RES, PATH, HIT, EXACTC])
         tb.move_to([0, 0.8, 0])
         foot = fit_rows(VGroup(
-            label(r"a smaller step ($\delta = 0.99$) hides most divergences, \ costs six times the gradients, \ and is still biased", font_size=22, color=PATH),
-            label(r"the cure is geometry, \ not effort", font_size=22, color=HIT),
+            label(r"$\delta=0.99$: \ fewer divergences, \ about 3.2 times the original gradients; \ tail still inaccurate", font_size=22, color=PATH),
+            label(r"non-centring improves exploration in this weak-data example", font_size=22, color=HIT),
         ), 12.0, 0.22, [0, -1.9, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> A tempting response to divergences is to force a smaller step size by raising the target "
-            "acceptance rate. <bookmark mark='b'/> At point nine nine the divergences fall from forty-seven to four, the run "
-            "costs six times as many gradients, and the five percent point of tau is still point five five, not point two "
-            "four: the problem is hidden, not solved. <bookmark mark='c'/> The non-centred model is exact at half the cost of "
-            "the original. The cure is geometry, not effort."
+            "<bookmark mark='a'/> A tempting response to divergences is to force a smaller step size by raising the "
+            "target acceptance rate. <bookmark mark='b'/> At point nine nine the divergences fall from forty-seven to"
+            " four, the run costs about three point two times the original gradients, and the five percent point of "
+            "tau is still point five five, not about point two five: the problem is hidden, not solved. <bookmark "
+            "mark='c'/> The non-centred run agrees closely with the reference at about half the original gradient "
+            "count. Reparametrization helps this weak-data example more than just increasing effort."
         ) as vo:
             self.add(schools_tag())
             vo.wait_until("a")
@@ -231,6 +237,9 @@ class Funnel(VoiceoverScene):
             "quantities on the log scale, which the transforms already do. <bookmark mark='d'/> The common principle is to "
             "find coordinates in which the posterior looks like a standard normal, the shape HMC handles best."
         ) as vo:
+            intro = label('Coordinate changes must preserve the intended prior', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

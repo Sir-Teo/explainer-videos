@@ -1,0 +1,36 @@
+.......................                                                  [100%]
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/pydub/utils.py:14
+  /workspace/explainer-videos/.venv/lib/python3.12/site-packages/pydub/utils.py:14: DeprecationWarning: 'audioop' is deprecated and slated for removal in Python 3.13
+    import audioop
+
+tests/test_stats_kit_ppl.py::test_nuts_beta_binomial_with_unit_transform
+  /workspace/explainer-videos/explainer/ai/autodiff.py:110: RuntimeWarning: divide by zero encountered in log
+    return self._make(np.log(self.data), [(self, lambda g: g / self.data)], "log")
+
+tests/test_stats_kit_ppl.py::test_nuts_beta_binomial_with_unit_transform
+  /workspace/explainer-videos/explainer/ai/autodiff.py:84: RuntimeWarning: divide by zero encountered in reciprocal
+    return self._make(self.data ** k, [(self, lambda g: g * k * self.data ** (k - 1))], f"**{k}")
+
+tests/test_stats_kit_ppl.py::test_nuts_beta_binomial_with_unit_transform
+  /workspace/explainer-videos/explainer/ai/autodiff.py:49: RuntimeWarning: invalid value encountered in add
+    return self._make(self.data + o.data, [(self, lambda g: _unbroadcast(g, self.data.shape)),
+
+tests/test_stats_kit_ppl.py::test_nuts_beta_binomial_with_unit_transform
+  /workspace/explainer-videos/explainer/ai/autodiff.py:110: RuntimeWarning: divide by zero encountered in divide
+    return self._make(np.log(self.data), [(self, lambda g: g / self.data)], "log")
+
+tests/test_stats_kit_ppl.py::test_nuts_beta_binomial_with_unit_transform
+  /workspace/explainer-videos/explainer/ai/autodiff.py:67: RuntimeWarning: invalid value encountered in multiply
+    return _unbroadcast(g * o.data, self.data.shape)
+
+tests/test_stats_kit_ppl.py::test_nuts_beta_binomial_with_unit_transform
+  /workspace/explainer-videos/explainer/ai/autodiff.py:84: RuntimeWarning: divide by zero encountered in power
+    return self._make(self.data ** k, [(self, lambda g: g * k * self.data ** (k - 1))], f"**{k}")
+
+tests/test_stats_kit_ppl.py::test_nuts_beta_binomial_with_unit_transform
+  /workspace/explainer-videos/explainer/ai/autodiff.py:84: RuntimeWarning: invalid value encountered in multiply
+    return self._make(self.data ** k, [(self, lambda g: g * k * self.data ** (k - 1))], f"**{k}")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+23 passed, 8 warnings in 110.68s (0:01:50)

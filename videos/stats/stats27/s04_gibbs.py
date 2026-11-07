@@ -26,7 +26,7 @@ class Gibbs(VoiceoverScene):
             cmath(r"x_1^{(t+1)}", r"\sim", r"\pi(x_1 \mid x_2^{(t)}, \dots, x_d^{(t)})", font_size=30),
             cmath(r"x_2^{(t+1)}", r"\sim", r"\pi(x_2 \mid x_1^{(t+1)}, x_3^{(t)}, \dots)", font_size=30),
             cmath(r"\text{acceptance}", r"=", r"1: \ \text{an MH step with } q = \pi(\cdot \mid \text{rest})", font_size=30),
-            cmath(r"\text{needs}", r":", r"\text{full conditionals you can sample: \ conjugacy}", font_size=30),
+            cmath(r"\text{needs}", r":", r"\text{sampleable full conditionals; \ conjugacy can help}", font_size=30),
         ]
         rows[2][2].set_color(HIT)
         whys = [why(r"draw each coordinate given the others"), why(r"using the newest values"),
@@ -39,6 +39,9 @@ class Gibbs(VoiceoverScene):
             "exactly one. <bookmark mark='d'/> It needs full conditionals you can sample, which is where Part 26's "
             "conjugate pairs earn their keep: inside a big model, each piece is often conjugate given the rest."
         ) as vo:
+            intro = label('Exact conditional updates leave the joint target invariant', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -101,6 +104,9 @@ class Gibbs(VoiceoverScene):
             "the coefficients are an ordinary least-squares posterior. <bookmark mark='d'/> Neither conditional is hard, "
             "though the posterior of beta alone has no closed form: add latent variables until every conditional is easy."
         ) as vo:
+            intro = label('Latent Gaussian variables make probit conditionals sampleable', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -122,12 +128,13 @@ class Gibbs(VoiceoverScene):
             label(rf"ESS {d['ess_slope']:.0f} of {d['n']:,}: \ the latent $z$'s slow it", font_size=22, color=RES),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> On Bliss's beetles from Part 24, four hundred and eighty-one of them, the Gibbs sampler "
-            "for the probit model. <bookmark mark='b'/> The posterior mean slope is nineteen point eight, <bookmark mark='c'/> "
-            "beside the maximum likelihood estimate of nineteen point seven three, with matching uncertainty, as "
-            "Bernstein–von Mises promised for this much data. <bookmark mark='d'/> But the trace wanders: two thousand five "
-            "hundred iterations are worth about two hundred and thirty independent draws, because beta and the hidden z's "
-            "are strongly dependent and each conditional update can only move a little."
+            "<bookmark mark='a'/> On Bliss's beetles from Part 24, four hundred and eighty-one of them, the Gibbs "
+            "sampler for the probit model. <bookmark mark='b'/> The posterior mean slope is nineteen point eight, "
+            "<bookmark mark='c'/> beside the maximum likelihood estimate of nineteen point seven three, with similar "
+            "uncertainty, consistent with the regular large-sample approximation. This finite sample has no automatic"
+            " Bernstein–von Mises guarantee. <bookmark mark='d'/> But the trace wanders: two thousand five hundred "
+            "iterations are worth about two hundred and thirty independent draws, because beta and the hidden z's are"
+            " strongly dependent and each conditional update can only move a little."
         ) as vo:
             self.add(historical_tag(r"Bliss (1935)", corner=DR))
             self.play(FadeIn(A), Create(mle))
@@ -168,15 +175,18 @@ class Gibbs(VoiceoverScene):
             cmath(r"\text{eight schools}", r":", r"\text{draw } \mu \text{ and } \theta \text{ jointly given } \tau", font_size=30),
         ]
         rows[3][-1].set_color(HIT)
-        whys = [why(r"the zigzag, \ straightened"), why(r"Liu (1994): \ fewer, \ freer parameters"), why(r"chapter seven's non-centring"), why(r"Part 26's exact factorization")]
+        whys = [why(r"the zigzag, \ straightened"), why(r"Liu (1994): \ fewer, \ freer parameters"), why(r"chapter seven's non-centring"), why(r"Part 26's conditional Gaussian factorization")]
         with self.voiceover(
             "<bookmark mark='a'/> Three standard cures for slow Gibbs samplers. Block: update strongly correlated "
-            "parameters together, drawing them jointly from their conditional. <bookmark mark='b'/> Collapse: integrate a "
-            "parameter out analytically, so the remaining ones move more freely. <bookmark mark='c'/> Reparametrize, so that "
-            "the coordinates are nearly independent, chapter seven's trick. <bookmark mark='d'/> Part 26's exact sampler for "
-            "the eight schools was the extreme case: given tau, it drew mu and every effect jointly, collapsing the whole "
-            "problem to one dimension."
+            "parameters together, drawing them jointly from their conditional. <bookmark mark='b'/> Collapse: "
+            "integrate a parameter out analytically, so the remaining ones move more freely. <bookmark mark='c'/> "
+            "Reparametrize, so that the coordinates are nearly independent, chapter seven's trick. <bookmark "
+            "mark='d'/> Part 26's numerical-grid sampler for the eight schools used a useful factorization: given "
+            "tau, it drew mu and every effect jointly, collapsing the whole problem to one dimension."
         ) as vo:
+            intro = label('Blocking and reparametrization can improve conditional mixing', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

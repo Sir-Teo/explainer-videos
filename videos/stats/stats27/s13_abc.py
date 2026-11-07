@@ -40,6 +40,9 @@ class ABC(VoiceoverScene):
             "parameters approach the posterior given the summaries. <bookmark mark='d'/> That is the posterior given the data "
             "only if the summaries are sufficient."
         ) as vo:
+            intro = label('ABC conditions on simulated summaries within a chosen tolerance', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -55,8 +58,8 @@ class ABC(VoiceoverScene):
         A = axes([0, 7], [0, ymax], x_length=7.2, y_length=4.2, xlabel=r"Poisson rate $\lambda$", ylabel=r"density",
                  xticks=[0, 2, 4, 6], yticks=[], center=[-2.0, 0.3, 0])
         ax = A.ax
-        ex = curve(ax, g, np.minimum(d["exact_pdf"], ymax), EXACTC, 3.5)
-        bars = {eps: hist_bars(ax, e, np.minimum(res[eps]["hist"], ymax), color=col, opacity=0.45)
+        ex = curve(ax, g, d["exact_pdf"], EXACTC, 3.5)
+        bars = {eps: hist_bars(ax, e, res[eps]["hist"], color=col, opacity=0.45)
                 for eps, col in (("1.0", RES), ("0.3", PATH), ("0.05", SAMPLER))}
         return A, ex, bars, res, d
 
@@ -100,11 +103,12 @@ class ABC(VoiceoverScene):
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Now the same data with the median as the summary, which throws information away. "
-            "<bookmark mark='b'/> Even at the tightest tolerance, ABC's posterior has mean two point one and standard "
-            "deviation point four nine, <bookmark mark='c'/> where the exact answer is two point five six and point four. "
-            "<bookmark mark='d'/> It isn't merely wider; it is in the wrong place, because the median of Poisson counts is "
-            "biased low and can only take a few values. <bookmark mark='e'/> No tolerance can fix a poor summary: choosing "
-            "summaries is the heart of ABC."
+            "<bookmark mark='b'/> Even at the tightest tolerance, ABC's posterior has mean two point one and standard"
+            " deviation point four nine, <bookmark mark='c'/> where the exact answer is two point five six and point "
+            "four. <bookmark mark='d'/> It isn't merely wider; it is in the wrong place, because conditioning on this"
+            " discrete median gives a different posterior from conditioning on all the counts. A low value in this "
+            "dataset is not a universal downward-bias property of Poisson medians. <bookmark mark='e'/> No tolerance "
+            "can fix a poor summary: choosing summaries is the heart of ABC."
         ) as vo:
             self.play(FadeIn(A), Create(ex))
             vo.wait_until("a")
@@ -124,16 +128,17 @@ class ABC(VoiceoverScene):
             label(r"regression ABC: \ adjust kept draws by regressing $\theta$ on $S$ \ (Beaumont et al.\ 2002)", font_size=24),
             label(r"synthetic likelihood: \ a normal fitted to simulated summaries \ (Wood 2010)", font_size=24),
             label(r"neural posterior estimation: \ train a network to output $p(\theta \mid y)$ from simulations", font_size=24, color=SAMPLER),
-            label(r"amortized: \ train once, \ infer in milliseconds for every new data set", font_size=24, color=HIT),
+            label(r"amortized: \ train once, \ infer in milliseconds for data within the training model and design", font_size=24, color=HIT),
             label(r"and check every one of them with SBC", font_size=24, color=PATH),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Better versions keep more of the simulations: Mark Beaumont's regression adjustment corrects "
-            "each kept draw for how far its summaries missed. <bookmark mark='b'/> Simon Wood's synthetic likelihood fits a "
-            "normal to simulated summaries. <bookmark mark='c'/> And neural posterior estimation trains a network to map "
-            "simulated data straight to a posterior, <bookmark mark='d'/> after which inference on any new data set is a "
-            "single forward pass. <bookmark mark='e'/> All of them approximate, so all of them need checking, by Part 26's "
-            "simulation-based calibration: the Board."
+            "<bookmark mark='a'/> Better versions keep more of the simulations: Mark Beaumont's regression adjustment"
+            " corrects each kept draw for how far its summaries missed. <bookmark mark='b'/> Simon Wood's synthetic "
+            "likelihood fits a normal to simulated summaries. <bookmark mark='c'/> And neural posterior estimation "
+            "trains a network to map simulated data straight to a posterior, <bookmark mark='d'/> after which "
+            "inference on new datasets within the training model and design can be fast. Out-of-distribution data "
+            "require additional checks. <bookmark mark='e'/> All of them approximate, so all of them need checking, "
+            "by Part 26's simulation-based calibration: the Board."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
@@ -146,16 +151,17 @@ class ABC(VoiceoverScene):
         b.scale_to_fit_width(min(b.width, 13.0)).move_to(ORIGIN)
         r = {x.method: x for x in rows}
         with self.voiceover(
-            "<bookmark mark='a'/> The Board tests computation itself. Draw the eight schools' parameters from the prior, "
-            "simulate eight estimates, and compute each school's ninety percent interval; a hundred times. If the "
-            "computation is right, the intervals cover ninety percent of the true effects, averaged over the prior. The exact "
-            "grid draws cover ninety point five percent. <bookmark mark='b'/> NUTS on the non-centred model, ninety point "
-            "nine. <bookmark mark='c'/> NUTS on the centred model, ninety-one: averaged over the prior, its trouble at "
-            "small tau barely moves the schools' coverage, though chapter seven showed it distorts tau itself. "
-            "<bookmark mark='d'/> Mean-field ADVI covers eighty-seven and a half percent, short, as its narrow "
-            "posteriors predict, though within the Board's margin for eight hundred intervals. Calibration can pass "
-            "while a particular data set's answer is still biased; it checks the computation on average, not case by "
-            "case."
+            "<bookmark mark='a'/> The Board tests computation itself. Draw the eight schools' parameters from the "
+            "prior, simulate eight estimates, and compute each school's ninety percent interval; a hundred times. If "
+            "the computation is right, the intervals cover ninety percent of the true effects, averaged over the "
+            "prior. The numerical grid draws cover ninety point four percent. <bookmark mark='b'/> NUTS on the "
+            "non-centred model, eighty-seven point nine. <bookmark mark='c'/> NUTS on the centred model, ninety point"
+            " eight. Its coverage is close to nominal in this noisy run, despite the observed-data tau distortion in "
+            "chapter seven. <bookmark mark='d'/> Mean-field ADVI covers eighty-four point eight percent, a visible "
+            "shortfall, although still inside the Board's coarse three-standard-error margin. Uncertainty is computed"
+            " across one hundred independent datasets, each contributing eight correlated intervals. Calibration can "
+            "pass while a particular data set's answer is still biased; it checks the computation on average, not "
+            "case by case."
         ) as vo:
             self.play(FadeIn(b.head), FadeIn(b.axis), FadeIn(b.legend))
             for k, m_ in enumerate("abcd"):
@@ -180,6 +186,9 @@ class ABC(VoiceoverScene):
             "sequence of shrinking tolerances, as chapter nine's tempering did with temperatures. <bookmark mark='d'/> All "
             "target the same approximate posterior; they differ in how many simulations it costs."
         ) as vo:
+            intro = label('ABC algorithms target a tolerance-dependent summary posterior', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

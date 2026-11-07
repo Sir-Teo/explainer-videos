@@ -68,6 +68,9 @@ class CFTP(VoiceoverScene):
             "coalescence instead would bias the result. <bookmark mark='d'/> For monotone chains we needn't track every state: "
             "only the highest and the lowest, since every other copy is trapped between them."
         ) as vo:
+            intro = label('Replay shared randomness from the past until all states coalesce', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -83,7 +86,7 @@ class CFTP(VoiceoverScene):
         ]
         rows[0][2].set_color(SAMPLER)
         whys = [why(r"the Ising model: \ Part 22's pseudo-likelihood"), why(r"Gibbs for one spin"),
-                why(r"the coupling preserves order"), why(r"two chains bound every other")]
+                why(r"ferromagnetic $\beta\ge0$: \ order preserved"), why(r"two chains bound every other")]
         with self.voiceover(
             "<bookmark mark='a'/> Propp and Wilson's showcase was the Ising model of Part 22: spins on a grid, plus or minus "
             "one, preferring to agree with their neighbours, more strongly as beta grows. <bookmark mark='b'/> The Gibbs "
@@ -92,6 +95,9 @@ class CFTP(VoiceoverScene):
             "one with fewer: the coupling is monotone. <bookmark mark='d'/> So it is enough to run two chains, from all plus "
             "and all minus."
         ) as vo:
+            intro = label('Ferromagnetic heat-bath updates preserve the spin order', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -119,12 +125,13 @@ class CFTP(VoiceoverScene):
             label(rf"$\beta = 0.42$, \ nearer the critical 0.44: \ $T = {d['near']['T']}$", font_size=22, color=PATH),
         ), 12.0, 0.2, [0, -3.25, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> A sixteen-by-sixteen grid. In green, the magnetization of the chain started from all plus; "
-            "in red, from all minus. <bookmark mark='b'/> At beta of point three the two meet within thirty-two sweeps, and "
-            "the state they share at time zero, shown below, is an exact draw from the Ising distribution. "
-            "<bookmark mark='c'/> At point four two, close to the critical point at about point four four, they need a hundred "
-            "and twenty-eight: near criticality the chain mixes slowly, and coupling from the past tells you exactly how "
-            "slowly."
+            "<bookmark mark='a'/> A sixteen-by-sixteen grid. In green, the magnetization of the chain started from "
+            "all plus; in red, from all minus. <bookmark mark='b'/> At beta of point three the two meet within "
+            "thirty-two sweeps, and the state they share at time zero, shown below, is an exact draw from the Ising "
+            "distribution. <bookmark mark='c'/> At point four two, closer to the infinite square lattice's critical "
+            "inverse temperature of about point four four. This finite torus has no sharp phase transition; in this "
+            "seeded run, they need a hundred and twenty-eight: near criticality the chain mixes slowly, and the "
+            "observed coalescence horizon is a random computational cost, not the exact mixing time."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(group), FadeIn(rows[0]))
@@ -162,15 +169,19 @@ class CFTP(VoiceoverScene):
             cmath(r"\text{works for}", r":", r"\text{MH, \ Gibbs, \ HMC: \ no monotonicity needed}", font_size=30),
         ]
         rows[1][-1].set_color(HIT)
-        whys = [why(r"Jacob, O'Leary \& Atchad\'e (2020)"), why(r"debiasing the burn-in"), why(r"a diagnostic with a guarantee"), why(r"coupling, \ revived")]
+        whys = [why(r"Jacob, O'Leary \& Atchad\'e (2020)"), why(r"debiasing the burn-in"), why(r"under coupling and moment conditions"), why(r"coupling, \ revived")]
         with self.voiceover(
-            "<bookmark mark='a'/> The coupling idea has recently returned in a practical form. Pierre Jacob, John O'Leary "
-            "and Yves Atchadé couple two copies of an ordinary Markov chain, one lagged behind the other. "
-            "<bookmark mark='b'/> Once they meet, a simple correction turns finite runs into unbiased estimates of posterior "
-            "expectations, with no burn-in bias. <bookmark mark='c'/> The distribution of meeting times bounds how far the "
-            "chain is from stationarity, a diagnostic with a guarantee. <bookmark mark='d'/> And it works for "
-            "Metropolis–Hastings, Gibbs and HMC, without needing monotonicity."
-        ) as vo:
+            "<bookmark mark='a'/> The coupling idea has recently returned in a practical form. Pierre Jacob, John "
+            "O'Leary and Yves Atchadé couple two copies of an ordinary Markov chain, one lagged behind the other. "
+            "<bookmark mark='b'/> Once they meet, a simple correction turns finite runs into unbiased estimates of "
+            "posterior expectations, under appropriate coupling, meeting-time and moment conditions. The unbiased "
+            "object is an expectation estimator, not an exact posterior draw. <bookmark mark='c'/> The distribution "
+            "of meeting times bounds how far the chain is from stationarity, under the relevant coupling and "
+            "integrability assumptions. <bookmark mark='d'/> And it works for Metropolis–Hastings, Gibbs and HMC, "
+            "without needing monotonicity."       ) as vo:
+            intro = label('Coupled expectation estimators need meeting-time conditions', font_size=36).move_to([0, 3.3, 0])
+            if intro.width > 12.5: intro.width = 12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
