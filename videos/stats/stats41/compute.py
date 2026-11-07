@@ -82,7 +82,7 @@ def compute_wald():
     expect = share * counts[survive].sum() / share.sum()
     return nest({"areas": areas, "share": share, "kill": kill, "n": n, "returned": int(survive.sum()), "all_hits": all_hits,
                  "ret_hits": ret_hits, "expected_if_harmless": expect, "ret_share": ret_hits / ret_hits.sum(),
-                 "deficit": 1 - ret_hits / expect})
+                 "deficit": 1 - ret_hits / expect, "deficit_scope": "relative area-normalized share deficit, not per-hit kill probability", "expected_return_share": share * (1-kill) / np.sum(share*(1-kill))})
 
 
 def compute_mech():
@@ -182,7 +182,7 @@ def compute_em():
         B = S[np.ix_([0], ob)] @ np.linalg.inv(S[np.ix_(ob, ob)])
         fills.append(float((mu[0] + B @ (row[ob] - mu[ob]))[0]))
     return nest({"n": len(X), "n_miss_oz": int(miss.sum()), "n_miss_solar": int(np.isnan(a["solar"]).sum()), "n_cc": len(cc),
-                 "cc_mean": float(np.nanmean(a["ozone"])), "em_mean": float(mu[0]), "path": path_oz, "ll": e["ll"], "iters": e["iters"],
+                 "cc_mean": float(cc[:, 0].mean()), "observed_ozone_mean": float(np.nanmean(a["ozone"])), "em_mean": float(mu[0]), "path": path_oz, "ll": e["ll"], "iters": e["iters"],
                  "temp": a["temp"], "ozone": a["ozone"], "miss": miss, "fills": fills,
                  "temp_miss_mean": float(a["temp"][miss].mean()), "temp_obs_mean": float(a["temp"][~miss].mean()),
                  "S": S, "mu": mu})
@@ -268,6 +268,19 @@ def compute_heckman():
                  "gamma": two["gamma"], "mean_wage": float(d["wage"][w].mean()), "kids5_rate": [float(lfp[d["kids5"] == k].mean()) for k in (0, 1, 2)]})
 
 
+def delta_curve(completions, missing, deltas):
+    """Vary the sensitivity assumption using the same completed datasets at every delta."""
+    completions = np.asarray(completions, float)
+    rows = []
+    for delta in deltas:
+        shifted = completions + float(delta) * np.asarray(missing, bool)[None, :]
+        estimates = shifted.mean(axis=1)
+        variances = shifted.var(axis=1, ddof=1) / shifted.shape[1]
+        pooled = MI.rubin(estimates, variances, df_complete=shifted.shape[1]-1)
+        rows.append(dict(delta=float(delta), est=pooled['est'], lo=pooled['ci'][0], hi=pooled['ci'][1]))
+    return rows
+
+
 def compute_tipping():
     W = World()
     m = W.missing
@@ -277,19 +290,13 @@ def compute_tipping():
     miss = m["mnar"]
     yo = np.where(miss, np.nan, li)
     g = rng(4105)
-    deltas = np.round(np.arange(0, 1.01, 0.1), 2)
-    res = []
-    for dlt in deltas:
-        ests, vs = [], []
-        for _ in range(20):
-            yy = MI.impute_norm(yo, X, g, "proper")
-            yy[miss] += dlt
-            ests.append(yy.mean())
-            vs.append(yy.var(ddof=1) / len(yy))
-        r = MI.rubin(ests, vs, df_complete=len(li) - 1)
-        res.append({"delta": float(dlt), "est": r["est"], "lo": r["ci"][0], "hi": r["ci"][1]})
-    true_shift = float(li[miss].mean() - np.mean([MI.impute_norm(yo, X, g, "mean")[miss].mean()]))
-    return nest({"rows": res, "truth": float(li.mean()), "true_delta": true_shift, "rate": float(miss.mean())})
+    completions = np.asarray([MI.impute_norm(yo, X, g, "proper") for _ in range(20)])
+    deltas = np.round(np.arange(0, 1.01, .1), 2)
+    rows = delta_curve(completions, miss, deltas)
+    true_shift = float((li.mean() - completions.mean()) / miss.mean())
+    return nest(dict(rows=rows, truth=float(li.mean()), true_delta=true_shift, rate=float(miss.mean()),
+                     base_estimates=completions.mean(axis=1), imputations=len(completions),
+                     delta_scope="oracle aggregate mean-matching shift, not an identified conditional departure"))
 
 
 def optin_sample(W, g, n=3000):
@@ -313,6 +320,13 @@ def cells(W, idx):
     return ab, W.male[idx].astype(int), W.region[idx], ib
 
 
+MRP_GRID = (.1, .3, .6)
+
+
+def mrp_factors(ab, sx, rg, ib):
+    return [ab, sx, rg, ib, ab * 2 + sx]
+
+
 def compute_mrp():
     W = World()
     vote = W.survey["vote_blue"]
@@ -322,7 +336,7 @@ def compute_mrp():
     idx = optin_sample(W, g)
     y = vote[idx].astype(float)
     ab, sx, rg, ib = cells(W, idx)
-    fit = MI.mrp_fit(y, [ab, sx, rg, ib, ab * 2 + sx])
+    fit = MI.mrp_fit(y, mrp_factors(ab, sx, rg, ib), grid=MRP_GRID)
     # population cells
     pab, psx, prg, pib = cells(W, ad)
     key = ((pab * 2 + psx) * 10 + prg) * 5 + pib
@@ -331,7 +345,7 @@ def compute_mrp():
     csx = (uk // 5 // 10) % 2
     crg = (uk // 5) % 10
     cib = uk % 5
-    pc, draws = MI.mrp_predict(fit, [cab, csx, crg, cib, cab * 2 + csx], draws=400, rng=g)
+    pc, draws = MI.mrp_predict(fit, mrp_factors(cab, csx, crg, cib), draws=400, rng=g)
     est = float(np.sum(pc * counts) / counts.sum())
     dist = (draws * counts[:, None]).sum(0) / counts.sum()
     # raking on age band, sex, region, income band
@@ -348,7 +362,7 @@ def compute_mrp():
             "sample_male": float(sx.mean()), "pop_male": float(psx.mean())}
     return nest({"truth": truth, "raw": float(y.mean()), "raw_se": float(y.std() / math.sqrt(len(y))), "raked": raked, "mrp": est,
                  "mrp_ci": [float(np.quantile(dist, 0.05)), float(np.quantile(dist, 0.95))], "taus": fit["taus"], "n": len(y),
-                 "by_region": by_region, "comp": comp})
+                 "by_region": by_region, "comp": comp, "hyperparameter_grid": MRP_GRID, "includes_age_sex_factor": True, "interval_scope": "normal approximation at mode, conditional on fitted group spreads"})
 
 
 def compute_meas():
@@ -380,7 +394,7 @@ def compute_meas():
     lam_theory = 0.8 ** 2 / (0.8 ** 2 + 1.0)
     return nest({"n": int(ok.sum()), "rel": rel, "corr_w1w2": rel, "naive": {"b": b1[1], "se": math.sqrt(V1[1, 1])},
                  "mean2": {"b": b2[1], "se": math.sqrt(V2[1, 1])}, "rc": {"b": b3[1], "lam": rc["lam"]}, "simex": sx,
-                 "su2": su2, "var_w": float(np.var(w1, ddof=1)),
+                 "su2": su2, "var_w": float(np.var(w1, ddof=1)), "unrecorded_bp_medication_status": int(np.isnan(nh["bp_meds"][ok]).sum()), "analysis_scope": "unweighted complete cases not recorded as taking prescribed antihypertensives; missing medication fields include structural skips",
                  "seeded": {"naive": naive, "rc": rcb, "simex": sxs, "truth": 2.0, "lam_theory": lam_theory, "lam_rc": rcs["lam"]}})
 
 
@@ -461,11 +475,11 @@ def compute_board():
         y = vote[idx].astype(float)
         ab, sx, rg, ib = cells(W, idx)
         raw_c.append(abs(y.mean() - truth) <= z * y.std() / math.sqrt(len(y)))
-        fit = MI.mrp_fit(y, [ab, sx, rg, ib], grid=(0.1, 0.3, 0.6))
-        pc, dr = MI.mrp_predict(fit, [cab, csx, crg, cib], draws=300, rng=g)
+        fit = MI.mrp_fit(y, mrp_factors(ab, sx, rg, ib), grid=MRP_GRID)
+        pc, dr = MI.mrp_predict(fit, mrp_factors(cab, csx, crg, cib), draws=300, rng=g)
         dist = (dr * counts[:, None]).sum(0) / counts.sum()
         mrp_c.append(np.quantile(dist, 0.05) <= truth <= np.quantile(dist, 0.95))
-    # measurement error: naive slope vs regression calibration (bootstrap-free: RC with the naive SE inflated by 1/lam)
+    # Measurement error: naive slope vs calibration, including both-stage bootstrap uncertainty.
     me_n, me_rc = [], []
     for _ in range(reps):
         n = 500
@@ -477,9 +491,9 @@ def compute_board():
         from explainer.stats.kit import capstone as CAP
         rc = CAP.regression_calibration(v1, v2)
         b2, V2 = ols(np.column_stack([np.ones(n), rc["xhat"]]), y)
-        # delta-method inflation for the estimated calibration (Carroll et al.): approximate with bootstrap of 50
+        # Resample complete triples and refit both stages; 199 bootstrap draws per dataset.
         bs = []
-        for _ in range(50):
+        for _ in range(199):
             i = g.integers(0, n, n)
             rcb = CAP.regression_calibration(v1[i], v2[i])
             bs.append(ols(np.column_stack([np.ones(n), rcb["xhat"]]), y[i])[0][1])
@@ -496,7 +510,7 @@ def compute_board():
         Row(41, r"regression calibration, \ bootstrap SE", r"same, \ with a replicate", "coverage", 0.9, float(np.mean(me_rc)), reps),
     ]
     save_rows(41, rows)
-    return nest({"rows": [asdict(r) | {"verdict": r.verdict, "se": r.se} for r in rows]})
+    return nest({"rows": [asdict(r) | {"verdict": r.verdict, "se": r.se} for r in rows], "mrp_hyperparameter_grid": MRP_GRID, "mrp_includes_age_sex_factor": True, "calibration_bootstrap_reps": 199})
 
 
 ITEMS = {
