@@ -1,5 +1,7 @@
 # Quant, Built — Part 18: Money, Bonds and the Curve
 
+The sequential scientific and bilingual polish pass is in progress. The active butterfly chapter now shows descriptive factor exposures and an unfinished validation design; this pass opens no sealed strategy-return window. The term-premium illustration has a separately named reproducible build because the live NY Fed comparison file no longer matches the pinned vintage. Current-source visual QA and reconciliation of the chapter notes below remain pending. See the [sequential QA record](../../../docs/qa/quantitative-finance-polish.md).
+
 Part 18 of a forty-three-part series on quantitative finance (see [the series plan](../README.md) and
 [the syllabus](../SYLLABUS.md)), part of Act III, Derivatives (Q), and the first of its five parts on rates, credit and the basis (18–22). It covers:
 

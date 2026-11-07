@@ -4,13 +4,13 @@ import numpy as np
 
 from explainer.quant import *  # noqa: F403
 from explainer.quant.house import rates as R
-from videos.quant.quant18.common import CURV, LEVEL, PART, SLOPE, load
+from videos.quant.quant18.common import CURV, LEVEL, PART, SLOPE, butterfly_example, load
 
 
 def positions():
     """Four positions off the curve of 31 December 2025: their key-rate DV01s at the PCA maturities, and the dollar
     risk (per 100 of face) of a one-standard-deviation daily move in each factor."""
-    c, p, f, im = load("curve_day")["20251231"], load("pca"), load("fly"), load("immunize")
+    c, p, f, im = load("curve_day")["20251231"], load("pca"), butterfly_example(), load("immunize")
     cv = R.Curve(c["nodes_t"], c["nodes_z"])
     keys = np.asarray(p["mats"], float)
     L, sd = np.asarray(p["loadings"]), np.asarray(p["sd_bp"])
@@ -35,13 +35,14 @@ def positions():
     out = {}
     for k, fl in pos.items():
         kr = sum(R.key_rate_dv01(t, cf, cv, keys) for t, cf in fl)
-        out[k] = {"dv01": float(kr.sum()), "krd": kr, "factor": np.abs(L @ kr) * sd}
+        out[k] = {"dv01": float(kr.sum()), "krd": kr, "factor": -(L @ kr) * sd}
     return keys, out
 
 
 class House(VoiceoverScene):
     def construct(self):
-        env = load("envelope")
+        from explainer.quant.house import pit
+        env = {"trials": pit.trials_upto(PART)}
         self.card()
         self.report()
         self.module(env)
@@ -68,25 +69,17 @@ class House(VoiceoverScene):
             y = y0 - 0.95 * i
             row = VGroup(label(n, font_size=19).move_to([xs[0], y, 0]),
                          MathTex(f"{r['dv01']:+.3f}", font_size=28).move_to([xs[1], y, 0]))
-            big = int(np.argmax(r["factor"]))
+            big = int(np.argmax(np.abs(r["factor"])))
             for k in range(3):
                 col = [LEVEL, SLOPE, CURV][k]
-                row.add(MathTex(f"{r['factor'][k]:.3f}", font_size=28, color=col if k == big else GREY_B).move_to(
+                row.add(MathTex(f"{r['factor'][k]:+.3f}", font_size=28, color=col if k == big else GREY_B).move_to(
                     [xs[2 + k], y, 0]))
             cells.add(row)
         title = label(r"Four positions, three ways to report them", font_size=30).to_edge(UP, buff=0.4)
-        foot = wrapped_label(r"\$ per 100 of face: DV01 for a 1 bp parallel fall; factor columns, the size of the loss "
-                             r"or gain in a one-standard-deviation daily move of each factor (chapter 10), from the key-rate "
-                             r"DV01s at nine maturities. Curve: 31 December 2025", 12.4, 18, GREY_A).to_edge(DOWN, buff=0.4)
+        foot = wrapped_label(r"Dollars: note face 100; steepener 10y face 100; fly 5y face 100; fund liability PV 100. DV01 sums one-sided 1bp key-bump value changes. Factor columns are signed first-order P\&L for a positive one-SD fitted PCA shock, not VaR or confidence limits. Coupon cash flows leave residual factor exposures.", 12.4, 16, GREY_A).to_edge(DOWN, buff=0.35)
         st, im = out[names[1]], out[names[3]]
         with self.voiceover(
-            "Rule eighteen is about how the desk sees a position. Four of them, each reported three ways: the single "
-            "DV01, and the risk in each of the three factors. <bookmark mark='a'/> A plain ten-year note: all three "
-            "agree, it is a level bet. <bookmark mark='b'/> The steepener: a DV01 of zero, and a real slope risk. "
-            "<bookmark mark='c'/> The butterfly: small in every factor, which is the point of it, and why chapter "
-            "sixteen's risk lived elsewhere. <bookmark mark='d'/> And the immunized pension fund: a DV01 of zero, and "
-            f"its largest exposure is to curvature, {im['factor'][2]:.2f} per hundred on an ordinary day. A barbell "
-            "against a bullet is a curvature trade, whether its owner meant one or not."
+            "These four illustrative positions are reported by aggregate key-rate DV01 and signed first-order profit or loss under positive one-standard-deviation fitted factor shocks. Their notional conventions are stated below. A standard deviation is not a stress limit or a confidence bound. <bookmark mark='a'/> The ten-year note has exposures to the fitted factors; level is not literally a parallel shift. <bookmark mark='b'/> The steepener cancels the displayed aggregate bump sensitivity but retains factor risk. <bookmark mark='c'/> The butterfly uses the same full-sample yield weights as chapter sixteen. Actual coupon cash flows distribute its key-rate risk, so the two point-maturity neutrality equations do not transfer exactly. <bookmark mark='d'/> The matched-value and duration fund still has nonzero factor exposures. These are local sensitivities, not realized daily returns or a certificate that any hedge survives large twists."
         ) as vo:
             self.play(FadeIn(title), FadeIn(head), FadeIn(foot))
             for i, m in enumerate(("a", "b", "c", "d")):
@@ -115,21 +108,9 @@ class House(VoiceoverScene):
         tab.next_to(chart, DOWN, buff=0.3)
         if tab.width > 13.0:
             tab.scale_to_fit_width(13.0)
-        rule = wrapped_label(r"Rule 18: every curve the House builds reprices its inputs and is checked against an "
-                             r"independent fit; every rates position is reported by its key-rate DV01s and its exposure "
-                             r"to level, slope and curvature, never by one duration number; and every hedge is tested on "
-                             r"twists and on the largest historical moves, not only on parallel shifts.  "
-                             rf"One strategy tested here: the counter reads {env['trials']}.", 12.4, 21,
-                             QC.HOUSE).to_edge(DOWN, buff=0.3)
+        rule = wrapped_label(rf"Rule 18: report pricing conventions and fit errors, key-rate and factor exposures, and the shocks actually tested. These examples do not implement a complete desk validation service. No butterfly return test or new registration in this pass; existing cumulative counter through Part 18: {env['trials']}.", 12.4, 20, QC.HOUSE).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "The rates desk opens with these tools. <bookmark mark='a'/> Bond arithmetic; the curve and its bootstrap; "
-            "the Svensson fit; factors, factor-neutral trades and key rates; swaps, futures and SOFR; and the term "
-            "premium, the Taylor rule, and the leveraged hedge in a fire sale. <bookmark mark='b'/> And the eighteenth "
-            "rule. Every curve the House builds reprices its inputs and is checked against an independent fit. Every "
-            "rates position is reported by its key-rate risks and its exposure to level, slope and curvature, never by "
-            "one duration number. And every hedge is tested on twists and on the largest moves in history, not only on "
-            f"parallel shifts. One strategy was tested in this part, the butterfly, and the counter reads "
-            f"{env['trials']}."
+            f"The rates module provides bond arithmetic, curves and bootstraps, parametric fits, factor and key-rate calculations, single-curve instrument examples and model illustrations. <bookmark mark='a'/> An exact synthetic-input bootstrap and an approximate fitted curve have different validation criteria. Report their conventions, residuals and independent comparisons. <bookmark mark='b'/> Rule eighteen is a proposed reporting standard: show key-rate and factor exposures and test stated parallel, twist and funding scenarios. These demonstrations are not a complete desk validation service, and they do not establish that every hedge was tested against all historical shocks. No butterfly return test or new registration is performed in this pass. The existing cumulative counter through Part eighteen is {env['trials']}."
         ) as vo:
             self.play(FadeIn(chart))
             self.play(Indicate(chart.desk["rates"], color=QC.HOUSE, scale_factor=1.05))

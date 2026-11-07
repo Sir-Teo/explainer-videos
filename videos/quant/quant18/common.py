@@ -131,3 +131,20 @@ def house_lab(title, obj, first, count, extra=(), width=6.6):
         lines += [""] + src_lines(o, f, c)
     src = inspect.getsourcefile(obj).split("explainer-videos/")[-1]
     return lab_card(title, lines, source=f"{src}: {obj.__qualname__}", width=width)
+
+
+def butterfly_example():
+    """Descriptive exposure weights from the already-restored full-sample PCA.
+
+    This is not the legacy pre-2021 strategy, and loads no fly returns or scores.
+    Yield weights map to positive-down-bump DV01 weights on bond positions;
+    first-order portfolio P&L has the opposite sign to the yield combination.
+    """
+    from explainer.quant.house import rates as R
+    p = load("pca")
+    legs = [p["mats"].index(m) for m in [2, 5, 10]]
+    L = np.asarray(p["loadings"], float)
+    w = R.fly_weights(L, legs)
+    return {"weights": w, "factor_loading": L[:, legs] @ w,
+            "factor_sd_bp": (L[:, legs] @ w) * np.asarray(p["sd_bp"]),
+            "scope": "Descriptive full-sample PCA basis; no return validation."}

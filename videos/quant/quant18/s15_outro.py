@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant18.common import BAD, CURV, FWD, GOOD, LEVEL, PAR, PART, POLICY, SLOPE, ZERO, load
+from videos.quant.quant18.common import BAD, CURV, FWD, GOOD, LEVEL, PAR, PART, POLICY, SLOPE, ZERO, load, butterfly_example
 
 DESK = [
     (r"A 10-year zero yields 4\% (annual). Duration? Price change for +1 bp?",
@@ -47,7 +47,7 @@ PROBLEMS = [
 class Outro(VoiceoverScene):
     def construct(self):
         self.recap(load("policy"), load("taylor"), load("bonds"), load("curve_day"), load("pca"), load("swaps"),
-                   load("futures"), load("sofr"), load("term"), load("fomc"), load("fly"), load("ldi"), load("svb"))
+                   load("futures"), load("sofr"), load("term_example"), load("fomc"), butterfly_example(), load("ldi"), load("svb"))
         self.desk()
         self.problems()
         self.payoffs()
@@ -58,21 +58,20 @@ class Outro(VoiceoverScene):
         rep = sv["facts"]["HeldToMaturitySecuritiesAccumulatedUnrecognizedHoldingLoss"]["2022-12-31"]
         eq = sv["facts"]["StockholdersEquity"]["2022-12-31"]
         items = [
-            (r"the Fed sets rates by paying them: interest on reserves and the reverse repo bracket the market", POLICY),
+            (r"administered rates guide market rates; access frictions prevent a guaranteed corridor", POLICY),
             (rf"QT shrank the balance sheet by \${po['qt']['peak']['walcl'] - po['qt']['end']['walcl']:.1f} trillion, "
              rf"mostly out of reverse repos", POLICY),
-            (rf"Taylor's rule tracked policy until 2008; in 2022 it called for {ta['worst']['rule']:.0f}\%", POLICY),
+            (rf"one retrospective Taylor benchmark, using revised inputs, reached {ta['worst']['rule']:.0f}\%", POLICY),
             (r"a bond is a bundle of zeros; forwards are marginal rates; conventions decide the numbers", PAR),
             (r"bootstrapped from Treasury's quotes, fitted by Svensson, checked against the Fed's curve", ZERO),
             (rf"duration is the balance point; convexity is on the holder's side; DV01 of a 10-year zero "
              rf"{bo['zero10']['dv01']:.3f}", PAR),
-            (rf"level, slope and curvature: {100 * np.sum(pc['share'][:3]):.0f}\% of daily moves", LEVEL),
-            (rf"swap spreads turned negative: balance sheet, not risk", FWD),
-            (r"the future tracks the cheapest note, and the cheapest switches at about 6\%", FWD),
+            (rf"first three fitted PCs: {100 * np.sum(pc['share'][:3]):.0f}\% of sample yield-change variance", LEVEL),
+            (rf"swap spreads reflect funding, balance sheet, collateral supply, hedging demand and credit conventions", FWD),
+            (r"futures delivery economics depend on eligible bonds, financing, timing and delivery options", FWD),
             (rf"SOFR in arrears paid {so['gap_hikes_bp']:.0f} bp more than its first day while the Fed hiked", FWD),
             (rf"the term premium, re-estimated: {te['tp_1981']:.1f}\% in 1981, {te['tp_min']['v']:.1f}\% in 2020", CURV),
-            (rf"the butterfly, pre-registered: Sharpe {fl['out']['sharpe']:.2f} in the hold-out; counter {fl['trials']}",
-             BAD),
+            (r"butterfly factor exposures and an unfinished validation design; no sealed-return test in this pass", CURV),
             (rf"gilts: leverage turned a solvent hedge into a fire sale; SVB: a \${rep:.1f} bn loss against \${eq:.1f} bn "
              rf"of equity", BAD),
         ]
@@ -87,16 +86,7 @@ class Outro(VoiceoverScene):
         if rows.height > 6.7:
             rows.scale_to_fit_height(6.7)
         with self.voiceover(
-            "Part eighteen in thirteen lines. The Fed sets rates by paying them, and the market lives between its "
-            "administered rates. Quantitative tightening came mostly out of the reverse repo buffer. Taylor's rule "
-            "tracked policy until 2008, and was ignored in 2022. A bond is a bundle of zero-coupon bonds, forwards are "
-            "marginal rates, and conventions decide the numbers. We bootstrapped a curve from Treasury's quotes, fitted "
-            "it, and checked it against the Fed's. Duration is a balance point, convexity a gift to the holder. Three "
-            "factors move the curve. Swap spreads went negative for reasons of balance sheet, not risk. A future tracks "
-            "its cheapest bond, and SOFR in arrears makes borrowers bear hikes as they happen. The term premium "
-            "explains why long yields can rise while the Fed cuts. One relative-value trade, tested honestly, lost. "
-            "And two crises showed how default-free bonds still break things: through leverage, and through funding "
-            "that can leave in a day."
+            "Part eighteen in thirteen lines. Administered rates guide money markets without guaranteeing a strict corridor. Quantitative tightening changes several balance-sheet items. Taylor's rule is a conditional benchmark, especially when evaluated using revised historical data. A bond is a bundle of cash flows, and conventions determine the quoted rates. Bootstraps and approximate curve fits need different error checks. Duration and convexity are local sensitivities for specified cash flows. Three fitted factors explain most sample yield-change variance. Swap spreads involve funding, collateral, credit conventions and balance sheet. Futures have delivery options, and compounded overnight rates are realized over time. The term-premium split is model dependent. A butterfly exposure is not a completed return test; that validation remains unfinished here. The gilt episode and SVB show how leverage and unstable funding can turn low-credit-risk securities into severe balance-sheet losses."
         ):
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.6,
                                                  run_time=24))
