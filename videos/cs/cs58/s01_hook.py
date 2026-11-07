@@ -65,7 +65,7 @@ class Hook(VoiceoverScene):
         for t, d, c in ((r"compilers", r"a compiler is correct if the meaning of its output equals the meaning of "
                          r"its input \ (CompCert, \ Part 54)", HEAD),
                         (r"refactoring", r"two programs are interchangeable if no context can tell them apart", YES),
-                        (r"language design", r"WebAssembly was specified formally before it shipped \ (2017)", DATA)):
+                        (r"language design", r"WebAssembly was specified formally from its first version \ (2017)", DATA)):
             r = RoundedRectangle(width=4.0, height=2.4, corner_radius=0.15, stroke_color=c, stroke_width=2,
                                  fill_color=BG, fill_opacity=1)
             g = VGroup(label(t, font_size=24, color=c), wrapped_label(d, 3.6, font_size=18, color=GREY_A)).arrange(
@@ -81,7 +81,7 @@ class Hook(VoiceoverScene):
             "<bookmark mark='b'/> A refactoring is safe when no surrounding program can tell the old code from the "
             "new. <bookmark mark='c'/> And languages can be designed with their meaning written down first: "
             "WebAssembly's specification was formal before the language shipped. <bookmark mark='d'/> In this part "
-            f"we build three interpreters for one small language and check that they agree, on all {a['n']} random "
+            f"we build three interpreters for one small language and check that they agree, on {a['agree']} of {a['n']} random "
             "programs we tried; then we prove why."
         ) as vo:
             self.play(FadeIn(head))

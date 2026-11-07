@@ -104,7 +104,7 @@ class Dependent(VoiceoverScene):
         foot = label(r"Martin-L\"of type theory \ (from 1972): \ built on $\Pi$ and $\Sigma$",
                      font_size=20, color=GREY_B).to_edge(DOWN, buff=0.25).align_to(right, LEFT)
         with self.voiceover(
-            "In Part 14 a type could never mention a value. <bookmark mark='a'/> Picture a family of types, one for "
+            "Part 14 gave a first glimpse of types that mention values; here is how far the idea goes. <bookmark mark='a'/> Picture a family of types, one for "
             "each x in A, each a column above its point. <bookmark mark='b'/> A dependent function picks an element "
             "from every column, so its result type depends on its argument. Its type is a capital pi. <bookmark "
             "mark='c'/> When B does not mention x, every column is the same, and pi is the ordinary arrow. <bookmark "
@@ -166,7 +166,7 @@ class Dependent(VoiceoverScene):
         ill = note(r"illustrative values", font_size=16).next_to(vb, RIGHT, buff=0.3)
         keep_in(ill)
         with self.voiceover(
-            "The classic example: a list that carries its length in its type. <bookmark mark='a'/> Vec A n is the "
+            "Part 14's example, now in full: a list that carries its length in its type. <bookmark mark='a'/> Vec A n is the "
             "type of lists of exactly n elements of A. <bookmark mark='b'/> nil has length zero, and cons, on a "
             "vector of length n, gives length n plus one. <bookmark mark='c'/> Now head can demand a vector of "
             "length n plus one, <bookmark mark='d'/> and append, given lengths m and n, returns length m plus n. "
@@ -427,8 +427,8 @@ class Dependent(VoiceoverScene):
         hist = VGroup(
             wrapped_label(r"Coquand and Huet \ (1988): \ the calculus of constructions, \ the core of Coq, \ later "
                           r"extended with inductive types", 12.4, font_size=20, color=GREY_A),
-            wrapped_label(r"trust only the kernel: \ Part 55's trusted base in miniature, \ and what checks Part 54's "
-                          r"verified compilers and kernels", 12.4, font_size=20, color=YES),
+            wrapped_label(r"trust only the kernel: \ Part 54's small trusted kernel again, \ the idea behind "
+                          r"checked proofs such as CompCert's", 12.4, font_size=20, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(big, DOWN, buff=0.8).set_x(0)
         with self.voiceover(
             "This is why a proof assistant can be trusted. <bookmark mark='a'/> Thierry Coquand and G\u00e9rard Huet's "
@@ -436,8 +436,8 @@ class Dependent(VoiceoverScene):
             "extended with inductive types. <bookmark mark='b'/> Around the core sits a large, clever, untrusted "
             "layer: tactics, automation, and an elaborator that fills in what the user leaves out. Its only output "
             "is a proof term. <bookmark mark='c'/> The kernel, a small type checker, checks that term, and only the "
-            "kernel has to be right. <bookmark mark='d'/> This is Part 55's trusted base in miniature, and it checks "
-            "the proofs behind Part 54's verified compilers and kernels."
+            "kernel has to be right. <bookmark mark='d'/> It is the idea of Part 54's small trusted kernel again, and "
+            "a kernel like this one checks the proof of Part 54's verified compiler, CompCert."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

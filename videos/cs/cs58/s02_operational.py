@@ -345,7 +345,7 @@ class Operational(VoiceoverScene):
             " plus two: the function is a value, the argument evaluates to three, and the body, three times three, to"
             " nine. <bookmark mark='c'/> The two semantics agree: e evaluates to v exactly when e reaches v in small "
             "steps. Our big-step evaluator uses environments instead of substitution, and it agrees with the small-"
-            f"step interpreter on all {a['n']} random programs."
+            f"step interpreter on {a['agree']} of {a['n']} random programs."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

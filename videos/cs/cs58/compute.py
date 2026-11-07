@@ -11,7 +11,7 @@ Items:
     kleene      the Kleene chain of the factorial functional
     nbe         normalization by evaluation against normal-order reduction on Church numerals
     free        free theorems checked by property tests, and sort's counterexample for a non-monotone map
-    bisim       a.(b + c) against a.b + a.c: the same traces, not bisimilar; two vending machines that are
+    bisim       a.(b + c) against a.b + a.c: the same traces, not bisimilar; two vending machines that are bisimilar
     monads      one program in the Maybe, State and List monads
 """
 

@@ -37,7 +37,7 @@ class Frontier(VoiceoverScene):
                  r"compilation preserves it \ (Leroy, \ 2009)", HEAD),
             tile(r"ML, \ end to end", r"CakeML: \ a verified compiler for a dialect of ML that compiles itself \ "
                  r"(Kumar et al., \ 2014)", YES),
-            tile(r"WebAssembly", r"specified by small-step rules before release; \ its type system proved sound in "
+            tile(r"WebAssembly", r"specified by small-step rules from its first version; \ its type system proved sound in "
                  r"Isabelle \ (Haas et al. \ 2017; \ Watt \ 2018)", DATA),
         ).arrange(RIGHT, buff=0.3).next_to(head, DOWN, buff=0.6)
         foot = wrapped_label(r"still missing: \ C's full concurrency model \ (Part 33's out-of-thin-air problem), \ "
@@ -48,7 +48,7 @@ class Frontier(VoiceoverScene):
             "CompCert gave a large subset of C a semantics in the Coq proof assistant, and proved that its compiler "
             "preserves it. <bookmark mark='b'/> CakeML did the same for a dialect of ML, with a verified compiler "
             "that compiles itself. <bookmark mark='c'/> And WebAssembly was specified by small-step rules like "
-            "chapter one's before it shipped, with its type system later proved sound in Isabelle. "
+            "chapter one's from its first version, with its type system later proved sound in Isabelle. "
             "<bookmark mark='d'/> Still missing are a full semantics of C's concurrency, the out-of-thin-air problem "
             "of Part 33, and almost every language people actually write."
         ) as vo:
