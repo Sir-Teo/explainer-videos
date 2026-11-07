@@ -90,7 +90,7 @@ class Scalp(VoiceoverScene, ThreeDScene):
         pts = [ax.c2p(x, d, dg(x, d)) + OUT * 0.05 for x, d in zip(S, t)]
         path = VMobject(stroke_color=YELLOW, stroke_width=5).set_points_as_corners(pts)
         hint = hint3d((r"bitcoin (per 100)", SPOT), (r"days from 1 May 2021", THETA),
-                      (r"dollar gamma $\Gamma S^2$ of the straddle", GAMMA), ax=ax)
+                      (r"scaled $\Gamma S^2/100$; display cap 12", GAMMA), ax=ax)
         cap = wrapped_label(r"the path climbs the ridge while bitcoin stays near the strike, then the crash of the "
                             r"19th happens on the lowland, where a squared move earns little", 5.0, 21,
                             GREY_A).to_corner(DL, buff=0.35)

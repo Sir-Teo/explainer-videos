@@ -30207,7 +30207,8 @@
     "between the 10-delta strikes: RMSE 0.19 vol points against the fitted smile; in the far wings, off by up to 12": "10 Delta行权价之间：相对拟合微笑的均方根误差0.19波动率点；远端翼部误差最高12点",
     "dollars, unit-sized model tickets": "美元，按单位计的模型票券",
     "85{,}103 out-of-the-money option trade records": "85{,}103条虚值期权交易记录",
-    "Deribit BTC trades, 100 Wednesdays 2024--2025; one unit per record, amount ignored; Binance 08:00 expiry-price proxy; 60 records drawn at random": "Deribit比特币交易，2024至2025年100个周三；每条记录按一单位计，忽略成交量；Binance 08:00价格代理到期结算；随机展示60条记录"
+    "Deribit BTC trades, 100 Wednesdays 2024--2025; one unit per record, amount ignored; Binance 08:00 expiry-price proxy; 60 records drawn at random": "Deribit比特币交易，2024至2025年100个周三；每条记录按一单位计，忽略成交量；Binance 08:00价格代理到期结算；随机展示60条记录",
+    "scaled $\\Gamma S^2/100$; display cap 12": "缩放$\\Gamma S^2/100$；显示上限12"
   },
   "phrases": {
     "you owe": "你欠",

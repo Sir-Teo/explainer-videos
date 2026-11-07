@@ -102,7 +102,7 @@ class SecondOrder(VoiceoverScene, ThreeDScene):
         with self.voiceover(
             """Differentiate d one with respect to volatility: minus d two over sigma. <bookmark mark='a'/> Chain rules give vanna, minus the normal density times d two over sigma, and volga, vega times d one d two over sigma, for the zero-rate, zero-yield vanilla model. <bookmark mark='b'/> At the forward, d one d two equals minus one quarter total variance: volga is small and negative here, not exactly zero. With unadjusted twenty-five-delta quotes, the call has d one minus point six seven four and the put plus point six seven four. The put wing's volga is positive when total volatility is below point six seven four; the call wing's is positive. <bookmark mark='c'/> Risk reversal and butterfly are smile quote coordinates associated with mixed Greek exposures, useful proxies rather than isolated Greek prices. <bookmark mark='d'/> For the same vega in this short-maturity example, the twenty-five-delta strangle has more volga than the at-the-money straddle."""
         ) as vo:
-            step(0)
+            step(0, run_time=0.5)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")

@@ -72,7 +72,7 @@ statements; the reviewed record through 7 November 2026 contains no final merits
   the House's tree with the exercise region (only the step before the dividend): American 4.55 against European 4.19.
   Conversions and reversals. The dividend play as an assignment lottery (Pool–Stoll–Whaley 2008; Hao–Kalay–Mayhew 2010).
 * **13. Dispersion and implied correlation.** A correlation matrix heating; σ_I(ρ, σ̄) in 3D sliced at the index vol;
-  derivation (large-N ρ ≈ σ_I²/σ̄²); lab `implied_correlation` (0.44 for 20% against 30%). Cboe COR3M 2006–2025: mean
+  derivation (large-N ρ ≈ σ_I²/σ̄²); lab `implied_correlation` (50-member value 0.43, large-N approximation 0.44 for 20% against 30%). Cboe COR3M 2006–2025: mean
   42.0, peak 90.8 (8 December 2011), 90.3 in March 2020, record lows 7.6 (July 2024) and 11.1 (January 2025);
   Driessen–Maenhout–Vilkov. The trade simulated: P&L against ρ_impl − ρ_real, correlation 0.92, right sign in 95%.
 * **14. India's expiry-day boom, and what lottery tickets pay.** SEBI's studies (91% lost; ₹1.8 lakh crore over three
@@ -130,6 +130,9 @@ gap does not resolve quote-input timing. Its five ordinary bootstrap refits form
 a descriptive range, not a confidence or prediction interval. R-squared uses the
 fixed initial-sample mean; the running-error panel also shows an expanding-mean
 benchmark. None of these replays is newly evaluated in this polish pass.
+
+The gamma landscape displays ΓS²/100 with a view cap of 12; this is a scaled
+illustration, distinct from the recorded path’s cumulative gamma P&L.
 
 Greek P&L explains are finite-step approximations. The log-contract variance
 replication is exact for continuous quadratic variation under its stated

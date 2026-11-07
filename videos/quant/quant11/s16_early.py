@@ -142,7 +142,7 @@ class Early(VoiceoverScene):
             "nine's parity. <bookmark mark='a'/> Stock plus a synthetic short forward is a conversion, riskless. "
             "<bookmark mark='b'/> Its mirror is the reversal: how a market maker turns a call into a put."
         ) as vo:
-            step(0)
+            step(0, run_time=0.5)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
