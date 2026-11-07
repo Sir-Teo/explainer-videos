@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import numpy as np
+from scipy import stats
 
 from videos.stats.stats26.common import *  # noqa: F403
 
@@ -21,12 +22,12 @@ class Occam(VoiceoverScene):
         self.play(FadeOut(card))
 
     def idea(self):
-        A = axes([0, 10], [0, 0.5], x_length=7.4, y_length=4.0, xlabel=r"all possible data sets, \ in a row",
+        A = axes([0, 10], [0, 0.5], x_length=7.4, y_length=4.0, xlabel=r"one-dimensional illustration; \ tails outside viewport",
                  ylabel=r"$p(y \mid \text{model})$", xticks=[], yticks=[], center=[-2.0, 0.3, 0])
         ax = A.ax
         xs = np.linspace(0, 10, 300)
-        simple = 0.42 * np.exp(-0.5 * ((xs - 3.5) / 0.9) ** 2)
-        flex = 0.13 * np.exp(-0.5 * ((xs - 5) / 3.0) ** 2)
+        simple = stats.norm.pdf(xs,3.5,.9)
+        flex = stats.norm.pdf(xs,5.,3.)
         c1 = curve(ax, xs, simple, SHRUNK, 3.5)
         c2 = curve(ax, xs, flex, RES, 3.5)
         obs = DashedLine(ax.c2p(3.8, 0), ax.c2p(3.8, 0.48), color=PATH, stroke_width=2.5)
@@ -38,13 +39,14 @@ class Occam(VoiceoverScene):
             label(r"the simple model wins: \ it risked more", font_size=22, color=HIT),
         ), 4.2, 0.42, [4.6, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Bayes factors carry a built-in Occam's razor, as David MacKay explained in 1992. Line up "
-            "every data set that could possibly occur. Each model's predictions must sum to one over them. "
-            "<bookmark mark='b'/> A simple model makes few, confident predictions: a tall narrow curve. "
-            "<bookmark mark='c'/> A flexible model can fit almost anything, so its predictions are spread thin. "
-            "<bookmark mark='d'/> If the data land where the simple model predicted, <bookmark mark='e'/> it wins, even "
-            "though the flexible one could fit them just as well, because it committed to them in advance. No penalty term "
-            "was added: the razor is in the arithmetic of probability."
+            "<bookmark mark='a'/> Bayes factors carry a built-in Occam's razor, as David MacKay explained in 1992. "
+            "Line up every data set that could possibly occur. Each model's predictions must sum to one over them. "
+            "<bookmark mark='b'/> A simple model makes few, confident predictions: a tall narrow curve. <bookmark "
+            "mark='c'/> In this illustration the flexible model's prior spreads its predictions more widely. "
+            "Flexibility alone does not determine a model's prior predictive distribution. <bookmark mark='d'/> If "
+            "the data land where the simple model predicted, <bookmark mark='e'/> it wins, even though the flexible "
+            "one could fit them just as well, because it committed to them in advance. No penalty term was added: the"
+            " razor is in the arithmetic of probability."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
@@ -140,20 +142,25 @@ class Occam(VoiceoverScene):
         rows = [
             cmath(r"p(y \mid M)", r"=", r"\textstyle\int p(y \mid w, M)\, p(w \mid M)\, dw", font_size=30),
             cmath(r"", r"\approx", r"p(y \mid \hat w, M) \times \dfrac{\sigma_{w \mid y}}{\sigma_w}", font_size=32),
-            cmath(r"\text{Occam factor}", r"=", r"\dfrac{\text{posterior width}}{\text{prior width}} < 1", font_size=30),
+            cmath(r"\text{Occam factor}", r"=", r"\dfrac{p(y\mid M)}{\sup_w p(y\mid w,M)}\le1", font_size=30),
             cmath(r"k \text{ parameters}", r":", r"\text{one factor each: } \ \log p(y) \approx \ell(\hat w) - \tfrac k2 \log n + O(1)", font_size=28),
         ]
         rows[1][-1].set_color(SHRUNK)
         whys = [why(r"the evidence"), why(r"best fit times a shrinkage of volume"),
                 why(r"how much the data narrowed the parameter"), why(r"chapter six's BIC, \ recovered")]
+        intro = label('An exact evidence-to-best-likelihood ratio is at most one', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> MacKay's accounting. The evidence is the likelihood averaged over the prior. "
-            "<bookmark mark='b'/> When the posterior is peaked, it's roughly the best-fit likelihood times a ratio: the "
-            "posterior's width over the prior's. <bookmark mark='c'/> That ratio, the Occam factor, is the fraction of the "
-            "prior's range the data left standing, always less than one. <bookmark mark='d'/> Each parameter contributes "
-            "its own factor; with posterior widths shrinking like one over root n, they give chapter six's BIC penalty, a "
-            "half log n per parameter."
+            "<bookmark mark='a'/> Evidence averages the likelihood over a proper prior. Dividing it by the maximum "
+            "likelihood gives an exact factor no larger than one. <bookmark mark='b'/> For a concentrated unimodal "
+            "posterior and a broad, locally flat prior, Laplace approximation interprets this as a posterior-to-prior"
+            " volume ratio. <bookmark mark='c'/> A single width ratio is a heuristic in that setting; posterior "
+            "standard deviation is not always smaller than prior standard deviation. Correlated parameters require a "
+            "joint volume calculation. <bookmark mark='d'/> In regular fixed-dimensional models, widths of order one "
+            "over root n yield the leading BIC penalty, with prior-dependent terms of order one omitted."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -168,11 +175,14 @@ class Occam(VoiceoverScene):
             label(r"the evidence asks about the prior too: \ a silly prior loses", font_size=24, color=RES),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The evidence is also a tool for tuning. Maximizing it over hyperparameters, like the prior "
-            "precision or the noise level, is empirical Bayes once more, <bookmark mark='b'/> called type two maximum "
-            "likelihood; Part 25's REML was an example. <bookmark mark='c'/> Gaussian processes choose their length scales "
-            "the same way, in Part 39. <bookmark mark='d'/> And because the evidence averages over the prior, it judges the "
-            "prior as well as the model: a model with a silly prior predicts badly and loses."
+            "<bookmark mark='a'/> The evidence is also a tool for tuning. Maximizing it over hyperparameters, like "
+            "the prior precision or the noise level, is empirical Bayes once more, <bookmark mark='b'/> called type "
+            "two maximum likelihood; REML has a related fixed-design interpretation through error contrasts or "
+            "integration over beta. Its improper-flat-prior constant cannot compare different fixed-effect spaces. "
+            "<bookmark mark='c'/> Gaussian processes choose their length scales the same way, in Part 39. <bookmark "
+            "mark='d'/> And because the evidence averages over the prior, it judges the prior as well as the model: "
+            "the choice of prior is part of the prediction being judged. Tuning hyperparameters also leaves "
+            "uncertainty that plug-in estimates do not propagate."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

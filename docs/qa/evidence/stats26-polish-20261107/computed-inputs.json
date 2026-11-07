@@ -1,0 +1,88 @@
+{
+  "items": [
+    {
+      "item": "schools",
+      "path": ".cache/stats26/schools.json",
+      "bytes": 179976,
+      "sha256": "0e857f13cbb9a045ad513d81a45079cd6f68fbaab8b73fb30fbcf9c77cb38b68"
+    },
+    {
+      "item": "priors",
+      "path": ".cache/stats26/priors.json",
+      "bytes": 487221,
+      "sha256": "c44c5a548e7ee8050f3dfbe47a06788cc8a9cc121bb5af974f3e53df8785df46"
+    },
+    {
+      "item": "jeffreys",
+      "path": ".cache/stats26/jeffreys.json",
+      "bytes": 50784,
+      "sha256": "6f48aab5f151b180986c59dddcc3782f1b6589d3dcace959baa5932008a6c69e"
+    },
+    {
+      "item": "conjugate",
+      "path": ".cache/stats26/conjugate.json",
+      "bytes": 853,
+      "sha256": "cc45f8af733bb63a427613f6031b1a549c6f258dede425420e5ca09aec27eaf1"
+    },
+    {
+      "item": "bvm",
+      "path": ".cache/stats26/bvm.json",
+      "bytes": 69800,
+      "sha256": "f1b95bfdb7d08fee4f827e1b6071dcdd5a17528ed58016cd6c0b2a98d96ad57c"
+    },
+    {
+      "item": "bf",
+      "path": ".cache/stats26/bf.json",
+      "bytes": 13302,
+      "sha256": "25a0489c22ea55b48e134b1b970b44bd6cd3728fae2f3d632ed8980003b40a5f"
+    },
+    {
+      "item": "lindley",
+      "path": ".cache/stats26/lindley.json",
+      "bytes": 2345,
+      "sha256": "abc2420981431ad072b6cce5b98a9b7fb72e6b3bebf0737e7d701b3c469ba5ea"
+    },
+    {
+      "item": "occam",
+      "path": ".cache/stats26/occam.json",
+      "bytes": 51939,
+      "sha256": "7747e4f0d17fc0ca74e716221876bcf4eee5fe973b32b03a300b248fca6955b3"
+    },
+    {
+      "item": "decision",
+      "path": ".cache/stats26/decision.json",
+      "bytes": 1341,
+      "sha256": "0d4215ef72596911deabb80f879e54d18e8301ac5fc741c0c928676abac4c9e0"
+    },
+    {
+      "item": "ppc",
+      "path": ".cache/stats26/ppc.json",
+      "bytes": 7113,
+      "sha256": "5a680582fbe1cc147d71482010d39ea457f5915d1d11b2c186b96b51fb7fc186"
+    },
+    {
+      "item": "priorpred",
+      "path": ".cache/stats26/priorpred.json",
+      "bytes": 2485,
+      "sha256": "e164c8676076c0e6baa9ccfe9e37a3f58c29c6ba57d4591bfb6f3ac34055e876"
+    },
+    {
+      "item": "sbc",
+      "path": ".cache/stats26/sbc.json",
+      "bytes": 686,
+      "sha256": "c1ea0fd4586f5d03b63644f88fb851bbc7e585a092bdbe5f85f755d9ef4d358a"
+    },
+    {
+      "item": "dp",
+      "path": ".cache/stats26/dp.json",
+      "bytes": 4797,
+      "sha256": "d5cb009572087c1cc2d182e969e0ee5fa4728ef8d41c8f81c2dc3be796936b43"
+    },
+    {
+      "item": "board",
+      "path": ".cache/stats26/board.json",
+      "bytes": 27980,
+      "sha256": "972d489b4939bf9f19f08ade3e74ffe4f939728c50e10c45b33678d4632e5b75"
+    }
+  ]
+}

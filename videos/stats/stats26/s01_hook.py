@@ -105,17 +105,19 @@ class Hook(VoiceoverScene):
         moves = [dots[j].animate.move_to(ax.c2p(j, pm)) for j in range(8)]
         rows = fit_rows(VGroup(
             label(r"no pooling: \ believe each school's own estimate", font_size=22, color=RAW),
-            label(rf"complete pooling: \ one effect, \ ${pm:.1f} \pm {pse:.1f}$", font_size=22, color=POOLED),
+            label(rf"complete pooling: \ one effect, \ ${pm:.1f} \pm {pse:.1f}$ (1 SE; band 95\%)", font_size=22, color=POOLED),
             label(rf"test of equal effects: \ $Q = {d['Q']:.1f}$ on 7 df, \ $p = {d['p_Q']:.2f}$", font_size=22),
             label(r"A at 28 and C at $-3$, \ both 7.7?", font_size=22, color=RES),
         ), 3.3, 0.42, [5.2, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Two obvious answers. No pooling: believe each school's own estimate, so coaching gained "
-            "twenty-eight points at A and lost three at C. <bookmark mark='b'/> Complete pooling: the schools are alike, so "
-            "combine all eight into one precision-weighted average, seven point seven points, give or take four. "
-            "<bookmark mark='c'/> A test of equal effects doesn't come close to rejecting them: the scatter of the eight "
-            "estimates is no larger than their standard errors predict. <bookmark mark='d'/> Yet telling school A, whose "
-            "own experiment showed twenty-eight, that its effect was seven point seven, feels wrong too."
+            "<bookmark mark='a'/> Two obvious answers. No pooling: use each school's own noisy estimate, twenty-eight"
+            " points at A and minus three at C, with its uncertainty. <bookmark mark='b'/> Complete pooling: the "
+            "schools are alike, so combine all eight into one precision-weighted average, seven point seven points, "
+            "with a standard error of four. The band is an approximate ninety-five-percent interval under the "
+            "common-effect model. <bookmark mark='c'/> A test of equal effects doesn't come close to rejecting them: "
+            "the scatter of the eight estimates is no larger than their standard errors predict. <bookmark mark='d'/>"
+            " Yet telling school A, whose own experiment showed twenty-eight, that its effect was seven point seven, "
+            "feels wrong too."
         ) as vo:
             self.add(schools_tag())
             self.play(FadeIn(A), FadeIn(dots), FadeIn(names))
@@ -137,11 +139,12 @@ class Hook(VoiceoverScene):
             label(r"a Bayesian treats $\tau$ as unknown, \ and averages over it", font_size=26, color=SHRUNK),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Both answers are extreme choices of one unknown, tau, the standard deviation of the true "
-            "effects across schools. No pooling takes tau to be infinite. <bookmark mark='b'/> Complete pooling takes it to "
-            "be zero. <bookmark mark='c'/> Part 25's empirical Bayes estimates tau, and for these data its maximum likelihood "
-            "estimate is exactly zero, so empirical Bayes collapses to complete pooling. <bookmark mark='d'/> The Bayesian "
-            "answer treats tau itself as unknown, with a prior, and averages over everything the data leave uncertain."
+            "<bookmark mark='a'/> Both answers are extreme choices of one unknown, tau, the standard deviation of the"
+            " true effects across schools. No pooling takes tau to be infinite. <bookmark mark='b'/> Complete pooling"
+            " takes it to be zero. <bookmark mark='c'/> A plug-in empirical-Bayes analysis estimates tau at the zero "
+            "boundary for these data, so empirical Bayes collapses to complete pooling. <bookmark mark='d'/> The "
+            "Bayesian answer treats tau itself as unknown, with a prior, and averages over everything the data leave "
+            "uncertain."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

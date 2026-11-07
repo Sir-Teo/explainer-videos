@@ -1,0 +1,27 @@
+{
+  "url": "https://raw.githubusercontent.com/stan-dev/example-models/master/misc/eight_schools/eight_schools.data.R",
+  "sha256": "fccd1624bd240b0c26a8b668f4d2181f0653000e4b169d393b3dc815a0b46952",
+  "observations": 8,
+  "y": [
+    28.0,
+    8.0,
+    -3.0,
+    7.0,
+    -1.0,
+    1.0,
+    18.0,
+    12.0
+  ],
+  "sigma": [
+    15.0,
+    10.0,
+    16.0,
+    11.0,
+    9.0,
+    11.0,
+    10.0,
+    18.0
+  ],
+  "matches": "Museum eight-school observations and standard errors",
+  "scope": "PEAR counts match the repository Museum; no independent primary-source PEAR retrieval claimed"
+}

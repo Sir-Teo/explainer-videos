@@ -30,6 +30,9 @@ class Checking(VoiceoverScene):
         rows[2][2].set_color(SHRUNK)
         whys = [why(r"replicated data from the fitted model"), why(r"zeros, \ extremes, \ spread"),
                 why(r"Rubin (1984); \ Gelman, Meng \& Stern (1996)"), why(r"a check, \ not a test of truth")]
+        intro = label('Predictive discrepancies check chosen model features', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> A posterior is only as good as its model, and Bayesian inference never says so on its own. "
             "Posterior predictive checking asks: if the fitted model were true, what data would it produce? Draw parameters "
@@ -38,6 +41,7 @@ class Checking(VoiceoverScene):
             "p-value of Donald Rubin, and Andrew Gelman, Xiao-Li Meng and Hal Stern. <bookmark mark='d'/> A value near zero "
             "or one says the model doesn't reproduce that feature."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -48,7 +52,7 @@ class Checking(VoiceoverScene):
         d = load("ppc")["school"]
         panels = VGroup()
         anims = []
-        for k, (key, name) in enumerate((("max", r"largest effect"), ("min", r"smallest effect"), ("sd", r"SD of the effects"))):
+        for k, (key, name) in enumerate((("max", r"largest effect"), ("min", r"smallest effect"), ("sd", r"SD of observed estimates"))):
             P = d[key]
             e, h = np.asarray(P["edges"]), np.asarray(P["hist"], float)
             h = h / h.sum() / (e[1] - e[0])
@@ -94,17 +98,19 @@ class Checking(VoiceoverScene):
         obs = Line(ax.c2p(d["zero_obs"], 0), ax.c2p(d["zero_obs"], float(max(hp.max(), hn.max())) * 1.1), color=PATH, stroke_width=4)
         rows = fit_rows(VGroup(
             label(rf"500 of the World's adults: \ {100 * d['zero_obs']:.0f}\% had no visits", font_size=22, color=PATH),
-            label(rf"red: \ Poisson replicates; \ $p_B = {d['p_pois']:.3f}$", font_size=22, color=RES),
+            label(rf"red: \ Poisson; \ 0 of {d['replicates']} exceedances", font_size=22, color=RES),
             label(rf"green: \ negative binomial; \ $p_B = {d['p_nb']:.2f}$", font_size=22, color=SHRUNK),
             label(rf"mean {d['mean']:.2f}, \ variance {d['var']:.1f}: \ overdispersed", font_size=22, color=GREY_A),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Now the doctor visits from chapter four, where the Poisson model's interval missed. Of five "
-            "hundred adults, forty-three percent saw no doctor all year. <bookmark mark='b'/> Replicated data from the "
-            "fitted Poisson model have about eleven percent zeros, never more than seventeen: the check's p-value is zero, "
-            "and the model is plainly wrong. <bookmark mark='c'/> A negative binomial model, Part 24's, reproduces the zeros easily, "
-            "with a p-value of point four seven. <bookmark mark='d'/> The sample variance, eleven point six, is five times the "
-            "mean; the check makes that failure impossible to miss."
+            "<bookmark mark='a'/> In the sample of five hundred adults, forty-three percent reported no doctor "
+            "visits. <bookmark mark='b'/> None of two thousand posterior-predictive Poisson replicates has as many "
+            "zeros. That is zero simulated exceedances, not a mathematically zero tail probability. The discrepancy "
+            "is strong evidence of a failure to reproduce this feature. <bookmark mark='c'/> A negative-binomial "
+            "model reproduces the zero fraction. Its check now uses a proper joint numerical posterior for log mean "
+            "and log shape, with stated normal priors, rather than substituting bootstrap parameter estimates for "
+            "posterior draws. <bookmark mark='d'/> The sample variance is about five times its mean. Matching zeros "
+            "is useful, but does not establish that every aspect of the negative-binomial model is correct."
         ) as vo:
             self.add(simulated_tag())
             self.play(FadeIn(A), Create(obs))
@@ -127,10 +133,11 @@ class Checking(VoiceoverScene):
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> One caution. These p-values use the data twice, once to fit and once to check, "
-            "<bookmark mark='b'/> so even when the model is right they aren't uniform; they crowd towards a half. "
-            "<bookmark mark='c'/> A failed check, like the Poisson's, is real news. A passed check, like the schools', is "
-            "weaker evidence than it looks. <bookmark mark='d'/> Calibrated alternatives check each observation against a "
-            "fit made without it, or check against fresh data."
+            "<bookmark mark='b'/> they generally are not uniform and often concentrate towards a half. Their behavior"
+            " depends on the chosen discrepancy. <bookmark mark='c'/> A failed check, like the Poisson's, is real "
+            "news. A passed check, like the schools', is weaker evidence than it looks. <bookmark mark='d'/> Held-out"
+            " or cross-validated checks reduce data reuse. Their calibration still depends on the model, discrepancy "
+            "and sampling scheme."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -140,25 +147,29 @@ class Checking(VoiceoverScene):
     def prior_predictive(self):
         d = load("priorpred")
         e = np.asarray(d["edges"])
-        A = axes([0, 1], [0, 9], x_length=7.4, y_length=4.2, xlabel=r"predicted probability, \ before any data",
-                 ylabel=r"prior predictive density", xticks=[0, 0.5, 1], yticks=[0, 4, 8], center=[-2.0, 0.3, 0])
+        ymax=1.1*max(max(d["wide"]["hist"]),max(d["weak"]["hist"]))
+        A = axes([0, 1], [0, ymax], x_length=7.4, y_length=4.2, xlabel=r"predicted probability, \ before any data",
+                 ylabel=r"prior density of conditional risks", xticks=[0, 0.5, 1], yticks=[0, 4, 8], center=[-2.0, 0.3, 0])
         ax = A.ax
-        bw = hist_bars(ax, e, np.minimum(d["wide"]["hist"], 9), color=RES, opacity=0.55)
-        bk = hist_bars(ax, e, np.minimum(d["weak"]["hist"], 9), color=SHRUNK, opacity=0.6)
+        bw = hist_bars(ax, e, d["wide"]["hist"], color=RES, opacity=0.55)
+        bk = hist_bars(ax, e, d["weak"]["hist"], color=SHRUNK, opacity=0.6)
         rows = fit_rows(VGroup(
             label(r"logistic regression, \ 5 standardized predictors", font_size=22),
             label(rf"red: \ coefficients $\sim N(0, 10^2)$: \ {100 * d['wide']['extreme']:.0f}\% below 1\% or above 99\%", font_size=22, color=RES),
             label(rf"green: \ $N(0, 1)$: \ {100 * d['weak']['extreme']:.0f}\%", font_size=22, color=SHRUNK),
-            label(r"the `vague' prior is a strong belief in near-certainty", font_size=22, color=PATH),
+            label(r"the `vague' prior implies extreme conditional risks", font_size=22, color=PATH),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Prior predictive checks run the same idea before seeing data: simulate from the prior and "
-            "the model, and ask whether the results are believable. A logistic regression with five standardized "
-            "predictors. <bookmark mark='b'/> With 'vague' normal priors of standard deviation ten on every coefficient, the "
-            "model predicts that eighty-three percent of people have a probability below one percent or above ninety-nine: "
-            "it is nearly sure of every outcome before it has seen one. <bookmark mark='c'/> Standard normal priors give six "
-            "percent, a far more sensible belief. <bookmark mark='d'/> Flat-looking priors on one scale can be strong "
-            "beliefs on the scale that matters, chapter three's lesson, caught by simulation."
+            "<bookmark mark='a'/> Prior predictive checks run the same idea before seeing data: simulate from the "
+            "prior and the model, and ask whether the results are believable. A logistic regression with five "
+            "standardized predictors. <bookmark mark='b'/> With 'vague' normal priors of standard deviation ten on "
+            "every coefficient, the model predicts that eighty-three percent of people have a probability below one "
+            "percent or above ninety-nine: it puts much prior mass on extreme conditional risks, without knowing "
+            "which outcomes will occur. In fact symmetry gives a marginal prior-predictive probability of one half "
+            "for each fixed predictor vector. <bookmark mark='c'/> Standard normal priors give about six percent "
+            "extreme conditional risks in this standardized example. Which risk distribution is sensible depends on "
+            "the application. <bookmark mark='d'/> Flat-looking priors on one scale can be strong beliefs on the "
+            "scale that matters, chapter three's lesson, caught by simulation."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")

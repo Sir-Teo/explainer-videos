@@ -28,18 +28,18 @@ from __future__ import annotations
 from dataclasses import asdict
 
 import numpy as np
-from scipy import special, stats
+from scipy import integrate, optimize, special, stats
 
 from explainer.ai.cache import Cache
 from explainer.stats import museum
-from explainer.stats.board import Row, save_rows
+from explainer.stats.board import Row, save_rows, load_all as _load_board
 from explainer.stats.kit import bayes as B
 from explainer.stats.world import World
 
 CACHE = Cache("stats26")
 load = CACHE.load
 W = World()
-TAU = np.linspace(0, 40, 4001)
+TAU = np.r_[np.linspace(0, .1, 101), np.geomspace(.101, 1e6, 10000)]
 
 
 def rng(seed: int) -> np.random.Generator:
@@ -62,29 +62,146 @@ def nest(obj):
     return obj
 
 
+class Hier(B.Hier):
+    """Independent conditional draws from a checked, finite numerical tau approximation."""
+    def draws(self, n, rng):
+        cdf = integrate.cumulative_trapezoid(self.post_tau, self.tau, initial=0.)
+        tau = np.interp(rng.random(n), cdf/cdf[-1], self.tau)
+        t2 = tau[:, None]**2
+        s2 = self.sigma[None, :]**2
+        w = 1/(s2+t2)
+        mp = getattr(self, "mu_prior", None)
+        m0, p0 = (0., 0.) if mp is None else (mp[0], 1/mp[1]**2)
+        vm = 1/(w.sum(1)+p0)
+        mu = vm*((w*self.y).sum(1)+p0*m0)+np.sqrt(vm)*rng.standard_normal(n)
+        own = t2/(t2+s2)
+        mean = own*self.y+(1-own)*mu[:, None]
+        theta = mean+np.sqrt(s2*own)*rng.standard_normal((n,len(self.y)))
+        return dict(tau=tau, mu=mu, theta=theta)
+
+
+def hier_normal(y, sigma, grid=TAU, log_prior_tau=None):
+    """Flat-mean hierarchy on a wide nonuniform grid; no endpoint atoms or cell jitter."""
+    y,sigma,grid=map(lambda x:np.asarray(x,float),(y,sigma,grid))
+    if y.ndim!=1 or not len(y) or sigma.shape!=y.shape or np.any(sigma<=0) or not np.all(np.isfinite(y+sigma)):
+        raise ValueError("finite observations and positive finite known SDs required")
+    if grid.ndim!=1 or len(grid)<2 or grid[0]<0 or not np.all(np.isfinite(grid)) or np.any(np.diff(grid)<=0):
+        raise ValueError("strictly increasing finite nonnegative tau grid required")
+    base=B.hier_normal(y,sigma,grid,log_prior_tau)
+    return Hier(base.y,base.sigma,base.tau,base.post_tau,base.mu_hat,base.v_mu)
+
+
+def tau_kernel(tau, y, sigma):
+    y,sigma=np.asarray(y),np.asarray(sigma)
+    v=sigma**2+tau**2;w=1/v;vm=1/w.sum();mu=vm*(w*y).sum()
+    return float(.5*np.log(vm)-.5*np.log(v).sum()-.5*(w*(y-mu)**2).sum())
+
+
+def tau_reference(y,sigma,log_prior=None):
+    """Adaptive infinite-range reference for quantiles and omitted tail mass."""
+    if log_prior is None and len(y)<3:raise ValueError("flat mean and flat tau give an improper posterior with fewer than three groups")
+    prior=(lambda t:np.zeros_like(t)) if log_prior is None else log_prior
+    kernel=lambda t:tau_kernel(t,y,sigma)+float(np.asarray(prior(np.array([t]))).reshape(-1)[0])
+    shift=max(kernel(t) for t in [.01,.1,1.,5.,10.,30.])
+    f=lambda t:float(np.exp(kernel(t)-shift))
+    normalizer=integrate.quad(f,0,np.inf,epsabs=1e-10,epsrel=1e-9,limit=300)[0]
+    def quantile(q):
+        cdf=lambda t:integrate.quad(f,0,t,epsabs=1e-10,epsrel=1e-9,limit=300)[0]/normalizer-q
+        upper=40.
+        while cdf(upper)<0:upper*=2
+        return optimize.brentq(cdf,0,upper,xtol=1e-7)
+    return dict(median=quantile(.5),q95=quantile(.95),
+                tail_over40=integrate.quad(f,40,np.inf,epsabs=1e-11,limit=300)[0]/normalizer,
+                tail_over_grid=integrate.quad(lambda u:f(1/u)/u**2,0,1/TAU[-1],
+                                               epsabs=1e-14,limit=300)[0]/normalizer)
+
+
+def integration_weights(grid):
+    d=np.diff(grid)
+    return np.r_[d[0]/2,(d[:-1]+d[1:])/2,d[-1]/2]
+
+
+def normal_mixture_information(mean,variance,weights,cost,se):
+    """Linear adopt/reject utility and information value, integrated without binning pilot results."""
+    mean,variance,weights=map(np.asarray,(mean,variance,weights))
+    weights=weights/weights.sum()
+    if np.any(variance<=0) or se<0:raise ValueError("positive component variances and nonnegative pilot SE required")
+    sd=np.sqrt(variance);gain=mean-cost
+    now=max(float(weights@gain),0.)
+    perfect=float(weights@(gain*special.ndtr(gain/sd)+sd*stats.norm.pdf(gain/sd)))
+    if se==0:return dict(eu_adopt=float(weights@gain),evpi=perfect-now,evsi=perfect-now,threshold=cost)
+    pv=variance+se**2;ps=np.sqrt(pv)
+    def conditional_gain(value):
+        logw=np.log(np.maximum(weights,1e-300))+stats.norm.logpdf(value,mean,ps)
+        a=np.exp(logw-logw.max());a/=a.sum()
+        return float(a@(gain+variance/pv*(value-mean)))
+    lower=min(float(mean.min()),cost)-10*float(ps.max())
+    upper=max(float(mean.max()),cost)+10*float(ps.max())
+    while conditional_gain(lower)>0:lower=cost-2*(cost-lower)
+    while conditional_gain(upper)<0:upper=cost+2*(upper-cost)
+    threshold=optimize.brentq(conditional_gain,lower,upper,xtol=1e-9)
+    z=(threshold-mean)/ps
+    sample=float(weights@(gain*stats.norm.sf(z)+variance/ps*stats.norm.pdf(z)))
+    return dict(eu_adopt=float(weights@gain),evpi=perfect-now,evsi=sample-now,threshold=threshold)
+
+
+def nb_posterior_grid(x,points=241):
+    """Proper NB2 posterior on log mean and log shape, with explicit normal priors on both."""
+    x=np.asarray(x)
+    if x.ndim!=1 or not len(x) or np.any(x<0) or np.any(x!=np.floor(x)):
+        raise ValueError("nonnegative integer counts required")
+    lm=np.linspace(np.log(.05),np.log(20),points)
+    lk=np.linspace(np.log(.02),np.log(30),points)
+    mu=np.exp(lm[:,None]);shape=np.exp(lk[None,:]);den=np.log(shape+mu)
+    counts=np.bincount(x.astype(int))
+    lp=np.zeros((points,points))
+    for value,count in enumerate(counts):
+        if count:
+            lp+=count*(special.gammaln(value+shape)-special.gammaln(shape)-special.gammaln(value+1)
+                       +shape*(lk[None,:]-den)+value*(lm[:,None]-den))
+    lp+=stats.norm.logpdf(lm,np.log(3),1)[:,None]+stats.norm.logpdf(lk,0,1.5)[None,:]
+    weights=np.exp(lp-lp.max())*np.outer(integration_weights(lm),integration_weights(lk))
+    weights/=weights.sum()
+    edge=float(weights[[0,-1],:].sum()+weights[:,[0,-1]].sum())
+    if edge>1e-4:raise ValueError("NB posterior reaches numerical grid boundary; expand the grid")
+    return dict(logmu=lm,logshape=lk,weights=weights,edge_mass=edge,
+                prior="log(mu) ~ N(log(3),1); log(shape) ~ N(0,1.5^2)")
+
+
+# The shared Board preserves this empirical SE when later parts reload the row.
+CoverageRow=Row
+
+
+def coverage_rows():
+    return _load_board(upto=26)
+
+
 def compute_schools():
     lab, y, s = museum.eight_schools()
     w = 1 / s ** 2
     pooled = float(np.sum(w * y) / w.sum())
     pooled_se = float(1 / np.sqrt(w.sum()))
     Q = float(np.sum(w * (y - pooled) ** 2))
-    h = B.hier_normal(y, s, TAU)
+    h = hier_normal(y, s, TAU)
     mean, var = h.cond_theta()
     d = h.draws(200_000, rng(1981))
     th = d["theta"]
     q = lambda a, p: np.percentile(a, p, axis=0)  # noqa: E731
     best = np.bincount(np.argmax(th, 1), minlength=8) / len(th)
-    keep = np.linspace(0, len(TAU) - 1, 401).astype(int)
+    plot_tau = np.linspace(0,40,401)
+    plot_mean = np.column_stack([np.interp(plot_tau,TAU,col) for col in mean.T])
+    plot_sd = np.column_stack([np.interp(plot_tau,TAU,col) for col in np.sqrt(var).T])
+    reference = tau_reference(y,s)
     return nest({"labels": lab, "y": y, "sigma": s, "pooled": pooled, "pooled_se": pooled_se, "Q": Q,
-                 "p_Q": float(stats.chi2.sf(Q, 7)), "tau": TAU[keep], "post_tau": h.post_tau[keep],
-                 "cond_mean": mean[keep], "cond_sd": np.sqrt(var[keep]), "mu_hat": h.mu_hat[keep],
+                 "p_Q": float(stats.chi2.sf(Q, 7)), "tau": plot_tau, "post_tau": np.interp(plot_tau,TAU,h.post_tau),
+                 "cond_mean": plot_mean, "cond_sd": plot_sd, "mu_hat": np.interp(plot_tau,TAU,h.mu_hat),
                  "theta_mean": th.mean(0), "theta_med": np.median(th, 0), "theta_lo": q(th, 2.5), "theta_hi": q(th, 97.5),
                  "mu_mean": float(d["mu"].mean()), "mu_lo": float(np.percentile(d["mu"], 2.5)), "mu_hi": float(np.percentile(d["mu"], 97.5)),
-                 "tau_med": float(np.median(d["tau"])), "tau_lo": float(np.percentile(d["tau"], 2.5)),
+                 "tau_med": reference["median"], "tau_infinite_reference": reference, "tau_lo": float(np.percentile(d["tau"], 2.5)),
                  "tau_hi": float(np.percentile(d["tau"], 97.5)), "tau_mode": float(TAU[np.argmax(h.post_tau)]),
                  "p_A_gt_C": float(np.mean(th[:, 0] > th[:, 2])), "p_best": best,
                  "draws_theta": th[:20], "draws_tau": d["tau"][:20], "draws_mu": d["mu"][:20],
-                 "tau_hist": np.histogram(d["tau"], np.linspace(0, 40, 41), density=True)[0]})
+                 "tau_hist": np.histogram(d["tau"], np.linspace(0, 40, 41))[0]/len(d["tau"])})
 
 
 def compute_priors():
@@ -96,21 +213,22 @@ def compute_priors():
         "ig1": lambda t: stats.invgamma.logpdf(np.maximum(t, 1e-6) ** 2, 1, scale=1) + np.log(2 * np.maximum(t, 1e-6)),
         "ig001": lambda t: stats.invgamma.logpdf(np.maximum(t, 1e-6) ** 2, 0.001, scale=0.001) + np.log(2 * np.maximum(t, 1e-6)),
     }
-    grid = np.linspace(0, 40, 801)
-    gfine = np.concatenate([np.geomspace(1e-4, 0.05, 200), np.linspace(0.05, 40, 4000)[1:]])
+    grid = np.geomspace(1e-3,1e3,1201)
+    gfine = TAU
     out = {"tau": grid}
     for subset, idx in (("eight", slice(None)), ("three", slice(0, 3))):
         out[subset] = {}
         for k, f in priors.items():
-            h = B.hier_normal(y[idx], s[idx], gfine, f)
+            h = hier_normal(y[idx], s[idx], gfine, f)
             dens = np.interp(grid, gfine, h.post_tau)
-            cdf = np.cumsum(h.post_tau * np.gradient(gfine))
+            cdf = integrate.cumulative_trapezoid(h.post_tau,gfine,initial=0.)
             cdf /= cdf[-1]
-            out[subset][k] = {"dens": dens, "median": float(np.interp(0.5, cdf, gfine)),
-                              "q95": float(np.interp(0.95, cdf, gfine)), "prior": np.exp(f(np.maximum(grid, 1e-3)))}
+            reference = tau_reference(y[idx],s[idx],f)
+            out[subset][k] = {"dens": dens, "median": reference["median"], "infinite_reference": reference,
+                              "q95": reference["q95"], "prior": np.exp(f(np.maximum(grid, 1e-3)))}
     # improper: p(log tau) flat, i.e. p(tau) ∝ 1/tau; the marginal posterior of log tau tends to a constant at -inf
     lt = np.linspace(-12, 4, 400)
-    h = B.hier_normal(y, s, np.exp(lt))  # flat in tau, evaluated on exp grid; converting: p(log tau) = p(tau) tau
+    h = hier_normal(y, s, np.exp(lt))  # The likelihood kernel is also the log-tau posterior kernel for a flat log-tau prior.
     like = h.post_tau  # ∝ likelihood in tau (flat prior)
     out["improper"] = {"logtau": lt, "dens_logtau": like / like.max()}
     return nest(out)
@@ -154,7 +272,10 @@ def compute_bvm():
         grid = np.linspace(max(mle - 5 * np.sqrt(max(mle, 0.3) / n), 1e-3), mle + 5 * np.sqrt(max(mle, 0.3) / n), 300)
         post = stats.gamma.pdf(grid, a, scale=1 / b)
         approx = stats.norm.pdf(grid, mle, np.sqrt(mle / n))
-        tv = 0.5 * np.trapezoid(np.abs(post - approx), grid)
+        difference=lambda t:abs(stats.gamma.pdf(t,a,scale=1/b)-stats.norm.pdf(t,mle,np.sqrt(mle/n)))
+        tv=.5*(integrate.quad(difference,0,mle,epsabs=1e-10,limit=200)[0]
+               +integrate.quad(difference,mle,np.inf,epsabs=1e-10,limit=200)[0]
+               +stats.norm.cdf(0,mle,np.sqrt(mle/n)))
         out["panels"].append({"n": n, "grid": grid, "post": post, "approx": approx, "mle": mle, "tv": float(tv)})
     # exact frequentist coverage of the 95% equal-tailed Jeffreys interval at lam = 2, as n grows
     ns = np.arange(1, 101)
@@ -173,11 +294,11 @@ def compute_bf():
     xbar = z * sigma / np.sqrt(n)
     taus = np.geomspace(0.01, 1000, 300)
     bf = np.array([B.bf01_normal(xbar, n, sigma, t) for t in taus])
-    k = int(np.argmin(bf))
+    tau_min=sigma*np.sqrt(max(z*z-1,0)/n)
     bic01 = float(np.exp(0.5 * (np.log(n) - z ** 2)))  # BIC approximation to BF_01 (unit-information prior)
     unit = B.bf01_normal(xbar, n, sigma, sigma)
-    return nest({"n": n, "z": z, "p": float(2 * stats.norm.sf(z)), "taus": taus, "bf01": bf, "tau_min": float(taus[k]),
-                 "bf_min": float(bf[k]), "bic01": bic01, "unit01": unit})
+    return nest({"n": n, "z": z, "p": float(2 * stats.norm.sf(z)), "taus": taus, "bf01": bf, "tau_min": float(tau_min),
+                 "bf_min": B.bf01_normal(xbar,n,sigma,tau_min), "bic01": bic01, "unit01": unit})
 
 
 def compute_lindley():
@@ -190,7 +311,7 @@ def compute_lindley():
     log_m1 = -np.log(n + 1)
     bf01 = float(np.exp(log_m0 - log_m1))
     post_h0 = bf01 / (1 + bf01)
-    ns = np.geomspace(10, 1e8, 60)
+    ns = np.unique(np.geomspace(10, 1e8, 60).astype(int))
     z05 = 1.959964
     bf_n = [B.bf01_normal(z05 / np.sqrt(m), int(m), 1.0, 1.0) for m in ns]
     ps = np.array([0.1, 0.05, 0.01, 0.005, 0.001])
@@ -223,7 +344,7 @@ def compute_occam():
 
 def compute_decision():
     lab, y, s = museum.eight_schools()
-    h = B.hier_normal(y, s, TAU)
+    h = hier_normal(y, s, TAU)
     d = h.draws(400_000, rng(2620))
     g = rng(2621)
     theta_new = d["mu"] + d["tau"] * g.standard_normal(len(d["mu"]))
@@ -231,22 +352,18 @@ def compute_decision():
     gain = theta_new - cost
     eu_adopt = float(gain.mean())
     evpi = float(np.mean(np.maximum(gain, 0)) - max(eu_adopt, 0.0))
-    # EVSI: run one more experiment in the new school with SE 10, then decide
-    se = 10.0
-    ynew = theta_new + se * g.standard_normal(len(theta_new))
-    # posterior mean of theta_new given ynew, by binning ynew (pre-posterior analysis by simulation)
-    bins = np.quantile(ynew, np.linspace(0, 1, 201))
-    k = np.clip(np.searchsorted(bins, ynew) - 1, 0, 199)
-    cond = np.bincount(k, gain, 200) / np.bincount(k, minlength=200)
-    evsi = float(np.mean(np.maximum(cond[k], 0)) - max(eu_adopt, 0.0))
+    se=10.
+    weights=h.post_tau*integration_weights(h.tau)
+    information=normal_mixture_information(h.mu_hat,h.tau**2+h.v_mu,weights,cost,se)
+    eu_adopt=information["eu_adopt"];evpi=information["evpi"];evsi=information["evsi"]
     return nest({"cost": cost, "p_exceed": float(np.mean(theta_new > cost)), "mean_new": float(theta_new.mean()),
-                 "sd_new": float(theta_new.std()), "eu_adopt": eu_adopt, "evpi": evpi, "evsi": evsi, "se": se,
-                 "hist": np.histogram(theta_new, np.linspace(-40, 50, 46), density=True)[0], "edges": np.linspace(-40, 50, 46)})
+                 "sd_new": float(theta_new.std()), "integration": information, "eu_adopt": eu_adopt, "evpi": evpi, "evsi": evsi, "se": se,
+                 "hist": np.histogram(theta_new, np.linspace(-40, 50, 46))[0]/len(theta_new)/2, "edges": np.linspace(-40, 50, 46)})
 
 
 def compute_ppc():
     lab, y, s = museum.eight_schools()
-    h = B.hier_normal(y, s, TAU)
+    h = hier_normal(y, s, TAU)
     g = rng(1984)
     d = h.draws(20_000, g)
     yrep = d["theta"] + s[None, :] * g.standard_normal(d["theta"].shape)
@@ -263,19 +380,18 @@ def compute_ppc():
     lam = rng(25).gamma(0.5 + x.sum(), 1 / n, 4000)
     zero_obs = float(np.mean(x == 0))
     zp = np.array([np.mean(rng(100 + i).poisson(l, n) == 0) for i, l in enumerate(lam[:2000])])
-    # NB by moments with parameter uncertainty from a parametric bootstrap
-    m, v2 = x.mean(), x.var(ddof=1)
-    k_hat = m ** 2 / max(v2 - m, 1e-6)
-    gnb = rng(26)
-    znb = []
-    for i in range(2000):
-        xb = gnb.choice(x, n)
-        mb, vb = xb.mean(), xb.var(ddof=1)
-        kb = mb ** 2 / max(vb - mb, 1e-6)
-        znb.append(np.mean(gnb.negative_binomial(kb, kb / (kb + mb), n) == 0))
-    znb = np.array(znb)
+    m,v2=x.mean(),x.var(ddof=1)
+    posterior=nb_posterior_grid(x)
+    gnb=rng(26)
+    selected=gnb.choice(posterior["weights"].size,2000,p=posterior["weights"].ravel())
+    mi,ki=np.unravel_index(selected,posterior["weights"].shape)
+    mus=np.exp(posterior["logmu"][mi]);ks=np.exp(posterior["logshape"][ki])
+    znb=(gnb.negative_binomial(ks[:,None],(ks/(ks+mus))[:,None],size=(2000,n))==0).mean(1)
+    k_hat=float(posterior["weights"].sum(0)@np.exp(posterior["logshape"]))
     return nest({"school": school, "zero_obs": zero_obs, "zero_pois": np.histogram(zp, np.linspace(0, 0.6, 61))[0],
                  "zero_nb": np.histogram(znb, np.linspace(0, 0.6, 61))[0], "edges": np.linspace(0, 0.6, 61),
+                 "replicates": len(zp), "pois_exceedances": int(np.sum(zp>=zero_obs)),
+                 "nb_prior": posterior["prior"], "nb_edge_mass": posterior["edge_mass"],
                  "p_pois": float(np.mean(zp >= zero_obs)), "p_nb": float(np.mean(znb >= zero_obs)), "mean": float(m),
                  "var": float(v2), "k_hat": float(k_hat), "n": n})
 
@@ -352,8 +468,9 @@ def compute_board():
     R, J, m = 1000, 8, 10
     hits = {"none": 0, "pooled": 0, "hier": 0}
     width = {"none": 0.0, "pooled": 0.0, "hier": 0.0}
-    grid = np.linspace(0, 200, 801)
+    grid = TAU
     by_rank = np.zeros(J)
+    replicate_coverage={key:[] for key in hits}
     for _ in range(R):
         pick = g.choice(n_sch, J, replace=False)
         yj, sj, tj = [], [], []
@@ -366,29 +483,36 @@ def compute_board():
             tj.append(means[k])
         yj, sj, tj = map(np.asarray, (yj, sj, tj))
         lo, hi = yj - 1.96 * sj, yj + 1.96 * sj
-        hits["none"] += np.sum((lo <= tj) & (tj <= hi))
+        hit=(lo<=tj)&(tj<=hi)
+        hits["none"] += np.sum(hit)
+        replicate_coverage["none"].append(float(hit.mean()))
         width["none"] += np.mean(hi - lo)
         w = 1 / sj ** 2
         pm, pse = np.sum(w * yj) / w.sum(), 1 / np.sqrt(w.sum())
-        hits["pooled"] += np.sum(np.abs(tj - pm) <= 1.96 * pse)
+        hit=np.abs(tj-pm)<=1.96*pse
+        hits["pooled"] += np.sum(hit)
+        replicate_coverage["pooled"].append(float(hit.mean()))
         width["pooled"] += 2 * 1.96 * pse
-        h = B.hier_normal(yj, sj, grid)
+        h = hier_normal(yj, sj, grid)
         dr = h.draws(2000, g)["theta"]
         lo, hi = np.percentile(dr, 2.5, 0), np.percentile(dr, 97.5, 0)
         hit = (lo <= tj) & (tj <= hi)
         hits["hier"] += np.sum(hit)
+        replicate_coverage["hier"].append(float(hit.mean()))
         order = np.argsort(np.abs(yj - yj.mean()))  # 0 = nearest the middle
         by_rank += hit[order]
         width["hier"] += np.mean(hi - lo)
     N = R * J
     rows = [
-        Row(26, r"no pooling, \ $\bar y_j \pm 1.96\sigma_j$", r"8 schools, \ 10 pupils each", "coverage", 0.95, hits["none"] / N, N),
-        Row(26, r"complete pooling", r"8 schools, \ 10 pupils each", "coverage", 0.95, hits["pooled"] / N, N),
-        Row(26, r"hierarchical, \ 95\% credible", r"8 schools, \ 10 pupils each", "coverage", 0.95, hits["hier"] / N, N),
+        CoverageRow(26, r"no pooling, \ $\bar y_j \pm 1.96\sigma_j$", r"8 schools, \ 10 pupils each", "coverage", 0.95, hits["none"] / N, R, mc_se=float(np.std(replicate_coverage["none"],ddof=1)/np.sqrt(R))),
+        CoverageRow(26, r"complete pooling", r"8 schools, \ 10 pupils each", "coverage", 0.95, hits["pooled"] / N, R, mc_se=float(np.std(replicate_coverage["pooled"],ddof=1)/np.sqrt(R))),
+        CoverageRow(26, r"hierarchical, \ 95\% credible", r"8 schools, \ 10 pupils each", "coverage", 0.95, hits["hier"] / N, R, mc_se=float(np.std(replicate_coverage["hier"],ddof=1)/np.sqrt(R))),
     ]
     save_rows(26, rows)
     return {"rows": [asdict(r) | {"verdict": r.verdict, "se": r.se} for r in rows], "width": {k: v / R for k, v in width.items()},
-            "within": within, "by_rank": by_rank / R}
+            "within": within, "by_rank": by_rank / R, "intervals": N,
+            "replicate_coverage": replicate_coverage,
+            "mc_scope": "1000 independent simulated datasets; eight correlated intervals per dataset"}
 
 
 ITEMS = {
@@ -399,3 +523,26 @@ ITEMS = {
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)
+
+
+def clipped_segments(xs, ys, rectangle):
+    """Intersect segments with the viewport, preserving crossings and missing breaks."""
+    xmin, xmax, ymin, ymax = rectangle
+    points = np.column_stack((xs, ys))
+    result = []
+    for start, end in zip(points[:-1], points[1:]):
+        if not np.isfinite([start, end]).all():
+            continue
+        delta = end-start
+        lo, hi = 0., 1.
+        for j, lower, upper in ((0, xmin, xmax), (1, ymin, ymax)):
+            if delta[j] == 0:
+                if not lower <= start[j] <= upper:
+                    hi = -1
+                    break
+            else:
+                a, b = sorted(((lower-start[j])/delta[j], (upper-start[j])/delta[j]))
+                lo, hi = max(lo, a), min(hi, b)
+        if lo <= hi:
+            result.append((start+lo*delta, start+hi*delta))
+    return result

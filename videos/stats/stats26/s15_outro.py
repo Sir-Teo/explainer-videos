@@ -22,11 +22,11 @@ class Outro(VoiceoverScene):
 
     def recap(self):
         items = [
-            (r"eight schools: \ neither 28 nor 7.7", PATH), (r"exchangeability is the hierarchy", PRIOR),
+            (r"eight schools: \ neither 28 nor 7.7", PATH), (r"exchangeability motivates sharing; \ normality is a choice", PRIOR),
             (r"$p(\tau \mid y)$ on a grid; \ A: \ 10 [$-2$, 31]", SHRUNK), (r"Jeffreys, \ reference, \ half-Cauchy", PRIOR),
             (r"conjugacy: \ priors as pseudo-data", SHRUNK), (r"BvM: \ TV 0.08 $\to$ 0.008", HIT),
             (r"Bayes factors: \ Bartlett's warning", RES), (r"PEAR: \ $p = 0.0003$, \ BF 12 for $H_0$", RES),
-            (r"Occam: \ the evidence peaks at the truth", SHRUNK), (r"decisions; \ EVPI 2.2, \ EVSI 1.2", POST),
+            (r"Occam: \ evidence peaks at the simulated degree here", SHRUNK), (r"decisions; \ EVPI 2.20, \ EVSI 1.23", POST),
             (r"checks: \ Poisson fails, \ NB passes", HIT), (r"workflow; \ SBC catches two bugs", HIT),
             (r"coherence, \ and calibrated Bayes", PATH), (r"the Dirichlet process", SHRUNK),
         ]
@@ -38,17 +38,19 @@ class Outro(VoiceoverScene):
         head = label(r"Part 26, \ in fourteen lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Part twenty-six in fourteen lines. <bookmark mark='a'/> The eight schools' coaching effects were neither each "
-            "school's own estimate nor one pooled number. Exchangeability, through de Finetti, is what justifies the "
-            "hierarchy. Tau's posterior on a grid gave exact draws, and school A's twenty-eight became ten, with an interval "
-            "from minus two to thirty-one. Jeffreys's rule, reference priors and weakly informative half-Cauchys replaced "
-            "priors by habit. Conjugate priors act as pseudo-data. Bernstein–von Mises made posteriors and sampling "
-            "distributions agree as data grew. Bayes factors compare predictions, and depend on the alternative's prior, as "
-            "Bartlett warned. The PEAR data were significant at three in ten thousand, and favoured the null twelve to one. "
-            "The evidence carries Occam's razor. Decisions maximize expected utility, and information has a price. Checks "
-            "caught the Poisson model and passed the negative binomial. Simulation-based calibration caught two bugs. "
-            "Coherence is the Bayesian's case, and calibrated Bayes the working truce. And the Dirichlet process puts a prior "
-            "on distributions themselves."
+            "Part twenty-six in fourteen lines. <bookmark mark='a'/> The eight schools' coaching effects were neither"
+            " each school's own estimate nor one pooled number. Infinite exchangeability motivates a mixture "
+            "representation; a normal population and its hyperprior remain additional choices. A checked wide-grid "
+            "approximation to tau's posterior gave independent conditional draws, and school A's twenty-eight became "
+            "ten, with an interval from minus two to about thirty-two. Jeffreys's rule, reference priors and weakly "
+            "informative half-Cauchys replaced priors by habit. Conjugate priors act as pseudo-data. Bernstein–von "
+            "Mises made posteriors and sampling distributions agree as data grew. Bayes factors compare predictions, "
+            "and depend on the alternative's prior, as Bartlett warned. The PEAR data were significant at three in "
+            "ten thousand, and favoured the null twelve to one. The evidence carries Occam's razor. Decisions "
+            "maximize expected utility, and information has a price. Checks flagged the Poisson zero fraction; the "
+            "negative binomial reproduced that chosen feature. Simulation-based calibration caught two bugs. "
+            "Coherence is the Bayesian's case, and calibrated Bayes the working truce. And the Dirichlet process puts"
+            " a prior on distributions themselves."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -57,7 +59,7 @@ class Outro(VoiceoverScene):
 
     def payoffs(self):
         card = payoff_card([
-            (r"computing any posterior: \ MCMC, \ HMC, \ the funnel", [27]), (r"choosing models: \ LOO, \ WAIC, \ BIC", [28]),
+            (r"computing high-dimensional posteriors: \ MCMC, \ HMC, \ the funnel", [27]), (r"choosing models: \ LOO, \ WAIC, \ BIC", [28]),
             (r"priors for sparsity: \ the horseshoe", [32]), (r"empirical Bayes for many tests", [33]),
             (r"decisions in experiments", [35]), (r"Gaussian processes", [39]),
             (r"decision theory and admissibility", [45]), (r"BvM proved; \ Bayesian nonparametrics", [53]),
@@ -70,6 +72,7 @@ class Outro(VoiceoverScene):
             "Gaussian process priors on functions. Part 45 builds decision theory properly. And Part 53 proves "
             "Bernstein–von Mises and develops Bayesian nonparametrics."
         ) as vo:
+            self.add(card.head)
             vo.wait_until("a")
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()

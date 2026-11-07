@@ -31,14 +31,18 @@ class Decisions(VoiceoverScene):
         rows[1][2].set_color(SHRUNK)
         whys = [why(r"what we can do; \ what we care about"), why(r"maximize expected utility"),
                 why(r"von Neumann \& Morgenstern (1944); \ Savage (1954)"), why(r"Part 45's decision theory")]
+        intro = label('A decision needs both a probability model and a utility', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Statistics is often done to decide something. Write down the actions available, and a "
-            "utility saying how good each action is if the truth is theta. <bookmark mark='b'/> The Bayesian rule is to "
-            "choose the action with the highest expected utility under the posterior. <bookmark mark='c'/> Leonard Savage's "
-            "1954 theorem says any coherent ordering of preferences among gambles behaves as if it maximized expected "
-            "utility under some probability, which is one of the deepest arguments for being Bayesian. "
+            "<bookmark mark='a'/> Statistics is often done to decide something. Write down the actions available, and"
+            " a utility saying how good each action is if the truth is theta. <bookmark mark='b'/> The Bayesian rule "
+            "is to choose the action with the highest expected utility under the posterior. <bookmark mark='c'/> "
+            "Leonard Savage's 1954 theorem says preferences satisfying Savage's full axioms have an expected-utility "
+            "representation with a subjective probability, which is one of the deepest arguments for being Bayesian. "
             "<bookmark mark='d'/> The posterior is an input to decisions, not the end of the analysis."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -49,19 +53,25 @@ class Decisions(VoiceoverScene):
         rows = [
             cmath(r"(a - \theta)^2", r"\Rightarrow", r"a^* = \text{posterior mean}", font_size=30),
             cmath(r"|a - \theta|", r"\Rightarrow", r"a^* = \text{posterior median}", font_size=30),
-            cmath(r"1\{a \ne \theta\}", r"\Rightarrow", r"a^* = \text{posterior mode}", font_size=30),
+            cmath(r"1\{a\ne\theta\},\ \theta\text{ discrete}", r"\Rightarrow", r"a^* = \text{posterior mode}", font_size=30),
             cmath(r"c_1(\theta - a)_+ + c_2(a - \theta)_+", r"\Rightarrow", r"\text{the } \tfrac{c_1}{c_1 + c_2} \text{ quantile}", font_size=28),
         ]
         rows[3][2].set_color(SHRUNK)
         whys = [why(r"squared error"), why(r"absolute error"), why(r"all-or-nothing"),
                 why(r"Part 23's check loss: \ overstock vs understock")]
+        intro = label('The loss function determines the appropriate posterior summary', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Even a point estimate is a decision. Under squared-error loss the best estimate is the "
-            "posterior mean; <bookmark mark='b'/> under absolute error, the posterior median; <bookmark mark='c'/> under "
-            "all-or-nothing loss, the mode. <bookmark mark='d'/> And when overestimating costs differently from "
-            "underestimating, as when a baker must not run out of bread, the best estimate is a quantile, the check loss of "
-            "Part 23's quantile regression. 'Which estimate?' is answered by 'what does an error cost?'"
+            "<bookmark mark='a'/> Even a point estimate is a decision. Under squared-error loss the best estimate is "
+            "the posterior mean; <bookmark mark='b'/> under absolute error, the posterior median; <bookmark "
+            "mark='c'/> under zero-one loss for a discrete parameter, a value with maximum posterior mass. For a "
+            "continuous parameter, exact-match zero-one loss is one for every action and does not select a mode. "
+            "<bookmark mark='d'/> And when overestimating costs differently from underestimating, as when a baker "
+            "must not run out of bread, the best estimate is a quantile, the check loss of Part 23's quantile "
+            "regression. 'Which estimate?' is answered by 'what does an error cost?'"
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -86,15 +96,17 @@ class Decisions(VoiceoverScene):
             label(r"it pays if the effect exceeds 5 points", font_size=22, color=PATH),
             label(rf"P($\theta_{{\text{{new}}}} > 5$) $= {d['p_exceed']:.2f}$", font_size=22, color=SHRUNK),
             label(rf"expected gain: \ ${d['mean_new']:.1f} - 5 = {d['eu_adopt']:.1f}$ points", font_size=22, color=HIT),
-            label(r"adopt, \ though it fails in 1 school out of 3", font_size=22, color=GREY_A),
+            label(r"linear-utility choice; \ posterior downside probability about 1/3", font_size=22, color=GREY_A),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> A ninth school is deciding whether to buy the coaching course. Its effect there, theta "
-            "new, is a fresh draw from the population of schools, so the posterior predictive for it combines every source of "
-            "uncertainty: draw mu and tau from the posterior, then a new effect. <bookmark mark='b'/> Suppose the course is "
-            "worth its cost if it raises scores by at least five points. <bookmark mark='c'/> The chance it does is two "
-            "thirds. <bookmark mark='d'/> Measured in points above cost, the expected gain is about three. "
-            "<bookmark mark='e'/> So adopt it, knowing it will disappoint about one school in three."
+            "<bookmark mark='a'/> A ninth school is deciding whether to buy the coaching course. Its effect there, "
+            "theta new, is a fresh draw from the population of schools, so the posterior predictive for it combines "
+            "parameter uncertainty within the assumed exchangeable hierarchy: draw mu and tau from the posterior, "
+            "then a new effect. <bookmark mark='b'/> Suppose the course is worth its cost if it raises scores by at "
+            "least five points. <bookmark mark='c'/> The chance it does is two thirds. <bookmark mark='d'/> Measured "
+            "in points above cost, the expected gain is about three. <bookmark mark='e'/> Under the stated linear "
+            "utility, adopting maximizes expected gain. The model still assigns about a one-third chance of a "
+            "negative gain; that is a posterior probability, not a demonstrated repeated-use rate."
         ) as vo:
             self.add(schools_tag())
             self.play(FadeIn(A))
@@ -121,14 +133,18 @@ class Decisions(VoiceoverScene):
         rows[2][2].set_color(SHRUNK)
         whys = [why(r"decide now"), why(r"decide after learning the truth"), why(r"the expected value of perfect information"),
                 why(r"Raiffa \& Schlaifer (1961)")]
+        intro = label('Information has value through the decisions it can improve', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> What would it be worth to find out first? Deciding now, the expected gain is two point nine "
-            "three points. <bookmark mark='b'/> If we could learn the school's true effect before deciding, we'd adopt only "
-            "when it pays, and the expected gain would rise to five point one two. <bookmark mark='c'/> The difference, two "
-            "point one nine points, is the expected value of perfect information. <bookmark mark='d'/> No study, however "
-            "large, can be worth more than that, a ceiling on what to spend finding out, from Howard Raiffa and Robert "
-            "Schlaifer's 1961 book."
+            "<bookmark mark='a'/> What would it be worth to find out first? Deciding now, the expected gain is two "
+            "point nine three points. <bookmark mark='b'/> If we could learn the school's true effect before "
+            "deciding, we'd adopt only when it pays, and the expected gain would rise to five point one four. "
+            "<bookmark mark='c'/> The difference, two point two zero points, is the expected value of perfect "
+            "information. <bookmark mark='d'/> No study, however large, can be worth more than that, a ceiling on "
+            "what to spend finding out, from Howard Raiffa and Robert Schlaifer's 1961 book."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -146,15 +162,15 @@ class Decisions(VoiceoverScene):
             label(rf"perfect information: \ {d['evpi']:.2f} points", font_size=24, color=GREY_A),
             label(rf"one pilot experiment in the school, \ SE {d['se']:.0f}: \ {d['evsi']:.2f} points", font_size=24, color=SHRUNK),
             label(r"run the pilot if it costs less than that", font_size=24, color=HIT),
-            label(r"pre-posterior analysis: \ simulate the study, \ then the decision", font_size=22, color=GREY_A),
+            label(r"pre-posterior analysis: \ integrate possible results and decisions", font_size=22, color=GREY_A),
         ), 11.0, 0.35, [0, -1.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Real studies are imperfect. The outer box is the value of perfect information. "
-            "<bookmark mark='b'/> A pilot experiment in the new school, as noisy as the original eight, with a standard "
-            "error of ten points, is worth one point two one: the expected value of sample information, a little over half "
-            "the ceiling. <bookmark mark='c'/> If the pilot costs less than that, run it. <bookmark mark='d'/> It is computed "
-            "by simulation: imagine the pilot's result, update, decide, and average over possible results, a pre-posterior "
-            "analysis. The same reasoning sizes clinical trials, Part 35."
+            "<bookmark mark='a'/> Perfect information gives the outer limit on value in this specified utility model."
+            " <bookmark mark='b'/> A pilot with standard error ten is worth about one point two three points before "
+            "subtracting its cost, a little over half the perfect-information value. <bookmark mark='c'/> Run it if "
+            "its cost in the same utility units is less than that. <bookmark mark='d'/> We integrate over the pilot's"
+            " possible results and the decision after each result. Direct normal-mixture integration replaces an "
+            "earlier binned simulation estimate, avoiding its grouping and fitting error."
         ) as vo:
             self.add(schools_tag())
             vo.wait_until("a")
@@ -177,14 +193,19 @@ class Decisions(VoiceoverScene):
         rows[3][2].set_color(SHRUNK)
         whys = [why(r"average over data, \ for fixed $\theta$"), why(r"then average over the prior"),
                 why(r"minimizing pointwise minimizes the average"), why(r"the complete class theorem: \ Part 45")]
+        intro = label('Complete-class conclusions depend on the decision problem and regularity', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Decision theory also links the two schools. A frequentist judges a rule by its risk, the "
-            "expected loss over data for each fixed theta. <bookmark mark='b'/> Average that over a prior and you get the "
-            "Bayes risk. <bookmark mark='c'/> The rule minimizing it is found case by case, by minimizing posterior "
-            "expected loss for the data actually seen. <bookmark mark='d'/> Abraham Wald's complete class theorem says the "
-            "admissible rules, those no other rule beats everywhere, are essentially the Bayes rules and their limits. "
-            "Stein's paradox in Part 25 was a frequentist discovering this the hard way."
+            "<bookmark mark='a'/> Decision theory also links the two schools. A frequentist judges a rule by its "
+            "risk, the expected loss over data for each fixed theta. <bookmark mark='b'/> Average that over a prior "
+            "and you get the Bayes risk. <bookmark mark='c'/> The rule minimizing it is found case by case, by "
+            "minimizing posterior expected loss for the data actually seen. <bookmark mark='d'/> Under appropriate "
+            "regularity conditions, complete-class theorems relate admissible rules to Bayes rules and their limits. "
+            "Admissible means no alternative has at most the risk everywhere and strictly less somewhere; this does "
+            "not make every arbitrary Bayes rule admissible."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
