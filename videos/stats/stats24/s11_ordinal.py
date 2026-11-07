@@ -34,6 +34,9 @@ class Ordinal(VoiceoverScene):
         rows[0][2].set_color(MODEL)
         whys = [why(r"baseline-category logits: \ the softmax"), why(r"each category against the baseline"),
                 why(r"one coefficient vector per extra category"), why(r"the red bus and the blue bus")]
+        intro = label('Baseline logits give a softmax probability model', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> With more than two unordered outcomes, the multinomial logit gives each category its own "
             "linear predictor and turns them into probabilities with the softmax, one category serving as the baseline. "
@@ -43,6 +46,7 @@ class Ordinal(VoiceoverScene):
             "the car over the red bus don't change when a blue bus, identical but for colour, is added. Daniel McFadden's "
             "famous example shows how odd that can be."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -59,6 +63,9 @@ class Ordinal(VoiceoverScene):
         rows[2][2].set_color(PATH)
         whys = [why(r"a latent continuous scale"), why(r"cut-points chop it into categories"),
                 why(r"McCullagh (1980)"), why(r"the odds ratio is the same at every cut")]
+        intro = label('Proportional odds shares coefficients across ordered cut-points', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> When categories are ordered, underweight, normal, overweight, obese, use the order. Imagine "
             "a continuous latent scale, a linear predictor plus logistic noise, <bookmark mark='b'/> chopped into categories "
@@ -66,6 +73,7 @@ class Ordinal(VoiceoverScene):
             "transpose beta: Peter McCullagh's proportional-odds model, from 1980. <bookmark mark='d'/> A single coefficient "
             "vector serves every cut-point, so each covariate has one odds ratio, whichever way the categories are split."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -84,15 +92,20 @@ class Ordinal(VoiceoverScene):
         ]
         rows[2][2].set_color(PATH)
         whys = [why(r"BMI categories of the World's adults"), why(r"the latent scale rises with age"),
-                why(r"heavier categories, \ at every cut"), why(r"no sex difference: \ as the World was built")]
+                why(r"heavier categories, \ at every cut"), why(r"compatible with zero; \ no direct sex term in the generator")]
+        intro = label('The fitted proportional-odds model describes an approximate age trend', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> Three thousand of the World's adults, classified by body mass index: eighty-two "
-            "underweight, a thousand normal, a thousand and forty-five overweight, eight hundred and seventy-three obese. "
-            "<bookmark mark='b'/> In the proportional-odds model, ten years of age move the latent scale up by point one "
-            "seven three. <bookmark mark='c'/> So the odds of being in a heavier category, at any cut, are one point one "
-            "nine times higher per decade. <bookmark mark='d'/> Sex makes no difference, which is right: the World's body "
-            "mass index doesn't depend on sex."
+            "underweight, a thousand normal, a thousand and forty-five overweight, eight hundred and seventy-three "
+            "obese. <bookmark mark='b'/> In the proportional-odds model, ten years of age move the latent scale up by"
+            " point one seven three. <bookmark mark='c'/> So the odds of being in a heavier category, at any cut, are"
+            " one point one nine times higher per decade. <bookmark mark='d'/> The fitted sex coefficient is "
+            "compatible with zero. The World's BMI generator has no direct sex term, but a finite fitted coefficient "
+            "need not be exactly zero."
         ) as vo:
+            self.add(intro)
             self.add(simulated_tag())
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -116,7 +129,7 @@ class Ordinal(VoiceoverScene):
             bands.add(Polygon(*pts, stroke_width=0, fill_color=CCOL[j], fill_opacity=0.6))
         rows = fit_rows(VGroup(
             *[label(name, font_size=22, color=c) for name, c in zip(CATS, CCOL)],
-            label(r"one latent shift, \ four probabilities", font_size=22, color=GREY_A),
+            label(r"men shown: \ one latent shift, four probabilities", font_size=22, color=GREY_A),
         ), 3.45, 0.42, [5.1, 0.3, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Here are the fitted probabilities of the four categories across age, stacked. "
@@ -143,6 +156,9 @@ class Ordinal(VoiceoverScene):
         rows[2][-1].set_color(PATH)
         whys = [why(r"this chapter's model"), why(r"neighbouring steps"), why(r"stages passed in order: \ grades, \ survival"),
                 why(r"cloglog: \ a grouped proportional-hazards model")]
+        intro = label('Different ordinal models compare different category splits', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> The cumulative logit is one of several ordinal models. <bookmark mark='b'/> Adjacent-"
             "category logits compare each category with the next. <bookmark mark='c'/> Continuation ratios model the "
@@ -151,6 +167,7 @@ class Ordinal(VoiceoverScene):
             "gives the ordered probit, and a complementary log-log gives a grouped version of Part 40's proportional-hazards "
             "model."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -168,16 +185,18 @@ class Ordinal(VoiceoverScene):
         t.move_to([0, 0.9, 0])
         foot = fit_rows(VGroup(
             label(r"separate logistic regressions at each cut: \ the slopes should agree", font_size=22),
-            label(r"the first is twice the others: \ age matters more at the bottom", font_size=22, color=RES),
+            label(r"first slope is larger; \ consider its sampling uncertainty", font_size=22, color=RES),
             label(r"remedies: \ partial proportional odds, \ or the multinomial", font_size=22, color=GREY_A),
         ), 12.0, 0.25, [0, -1.8, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Is one coefficient enough? Fit a separate logistic regression at each cut: underweight "
-            "against the rest, normal or less against overweight or more, and so on. If the odds were proportional, the "
-            "slopes would agree. <bookmark mark='b'/> They don't quite: at the bottom cut the age slope is point three one, "
-            "nearly twice the others, so age matters more for leaving underweight than for crossing into obesity. "
-            "<bookmark mark='c'/> A partial proportional-odds model lets that one slope differ; or fall back on the "
-            "multinomial, at the price of many more parameters."
+            "<bookmark mark='a'/> Is one coefficient enough? Fit a separate logistic regression at each cut: "
+            "underweight against the rest, normal or less against overweight or more, and so on. Under proportional "
+            "odds the population slopes would agree, while fitted slopes still vary with sampling noise. <bookmark "
+            "mark='b'/> They don't quite: at the bottom cut the age slope is point three one, nearly twice the "
+            "others, suggesting a possible difference at that cut. The underweight group is small, and correlated "
+            "estimation uncertainty must be considered before declaring nonproportionality. <bookmark mark='c'/> A "
+            "partial proportional-odds model lets that one slope differ; or fall back on the multinomial, at the "
+            "price of many more parameters."
         ) as vo:
             self.add(simulated_tag())
             self.play(FadeIn(t[0]), FadeIn(foot[0]))

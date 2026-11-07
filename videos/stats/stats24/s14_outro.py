@@ -38,16 +38,19 @@ class Outro(VoiceoverScene):
         head = label(r"Part 24, \ in fourteen lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Part twenty-four in fourteen lines. <bookmark mark='a'/> Bliss's probits fitted the beetles; the asymmetric "
-            "complementary log-log fitted them best. A generalized linear model has a family, a linear predictor and a link. "
-            "The exponential dispersion family is defined by its canonical parameter, its cumulant function and its variance "
-            "function. IRLS is Fisher scoring written as weighted least squares, seven steps for the beetles. The deviance "
-            "and quantile residuals judge fit; for binary data the deviance alone raised false alarms sixty-three percent of "
-            "the time. Separation sends coefficients to infinity, and Firth brings them back. Quasi-Poisson rescues some "
-            "coverage, the sandwich all of it. The negative binomial beat zero inflation and hurdles for the doctor visits. "
-            "Log-linear models turn independence into missing terms. Proportional odds share one slope across cut-points, "
-            "which must be checked. GEE turned fifty-five percent coverage into ninety-five; it estimates marginal effects, "
-            "not conditional ones. And probability forecasts are graded by proper scores, which accuracy is not."
+            "Part twenty-four in fourteen lines. <bookmark mark='a'/> Bliss's probits fitted the beetles; the "
+            "asymmetric complementary log-log fitted them best. A generalized linear model has a family, a linear "
+            "predictor and a link. The exponential dispersion family is defined by its canonical parameter, its "
+            "cumulant function and its variance function. IRLS is Fisher scoring written as weighted least squares, "
+            "seven steps for the beetles. The deviance and quantile residuals judge fit; for binary data the deviance"
+            " alone raised false alarms sixty-three percent of the time. Separation sends coefficients to infinity, "
+            "and Firth brings them back. In our experiment quasi-Poisson improves coverage and the sandwich reaches "
+            "the Board's tolerance; neither has a universal finite-sample guarantee. The negative binomial beat zero "
+            "inflation and hurdles for the doctor visits. Graphical log-linear models encode particular independences"
+            " through missing interactions; not every hierarchical model is graphical. Proportional odds share one "
+            "slope across cut-points, which must be checked. GEE turned fifty-five percent coverage into ninety-five;"
+            " it estimates marginal effects, not conditional ones. And probability forecasts are graded by proper "
+            "scores, which accuracy is not."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -62,12 +65,14 @@ class Outro(VoiceoverScene):
             (r"Cox regression as a Poisson GLM", [40]), (r"scoring rules for conformal and calibration", [34]),
         ], font_size=22)
         with self.voiceover(
-            "Where it comes back. <bookmark mark='a'/> Part 25 fits generalized linear mixed models, the conditional effects "
-            "of chapter eleven. Part 26 puts priors on GLM coefficients, which also cures separation. Part 28 chooses links and "
-            "terms by AIC and cross-validation. Part 30 makes GLMs robust. Part 32 penalizes them, the lasso for logistic "
-            "regression. Part 34 uses proper scores to grade calibrated predictions. Part 36's propensity scores are fitted "
-            "GLMs. And Part 40 fits Cox's survival model as a Poisson GLM."
+            "Where it comes back. <bookmark mark='a'/> Part 25 fits generalized linear mixed models, the conditional "
+            "effects of chapter eleven. Part 26 uses suitable proper priors to regularize GLM coefficients under "
+            "separation. Part 28 chooses links and terms by AIC and cross-validation. Part 30 makes GLMs robust. Part"
+            " 32 penalizes them, the lasso for logistic regression. Part 34 uses proper scores to grade calibrated "
+            "predictions. Part 36's propensity scores are fitted GLMs. And Part 40 fits Cox's survival model as a "
+            "Poisson GLM."
         ) as vo:
+            self.add(card.head)
             vo.wait_until("a")
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
@@ -75,10 +80,11 @@ class Outro(VoiceoverScene):
     def problems(self):
         ps = problem_set(PROBLEMS, font_size=20)
         with self.voiceover(
-            "Six problems, with full solutions in the README. <bookmark mark='a'/> The gamma as an exponential dispersion "
-            "family; Fisher scoring as weighted least squares; the Poisson deviance with an intercept; why separation sends "
-            "the likelihood to zero; the negative binomial as a gamma mixture; and whether the Brier and absolute scores are "
-            "proper. Pause here if you want to try them."
+            "Six problems, with full solutions in the README. <bookmark mark='a'/> The gamma as an exponential "
+            "dispersion family; Fisher scoring as weighted least squares; the Poisson deviance with an intercept; why"
+            " separation sends the log likelihood towards its unattained supremum of zero; the negative binomial as a"
+            " gamma mixture; and whether the Brier and absolute scores are proper. Pause here if you want to try "
+            "them."
         ) as vo:
             self.play(FadeIn(ps.head))
             vo.wait_until("a")

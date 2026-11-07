@@ -9,7 +9,7 @@ probability forecasts.
 It opens with Chester Bliss's 1935 flour beetles: 481 beetles at eight doses of carbon disulphide, with deaths rising
 from 6/59 to 60/60.
 - Bliss's probit, the logit and the complementary log-log all fit; their deviances on 6 df are 10.12, 11.23 and 3.45.
-- The asymmetric cloglog wins, with AIC 33.6 against 41.4 for the logit.
+- Among the three fitted links, cloglog has the lowest AIC, with AIC 33.6 against 41.4 for the logit.
 - Its LD50 is a log dose of 1.7788 (60 mg/l), with Fieller interval [1.7702, 1.7862]. The logit's 1.7717 sits near the
   bottom of that interval.
 
@@ -24,7 +24,7 @@ From there the part covers:
 - **IRLS derived.**
   - Fisher scoring as weighted least squares on the working response.
   - The beetles from β = 0: slope 21.3 → 30.4 → 33.8 → 34.26 → 34.27. The deviance goes 306 → 38.8 → 13.3 → 11.26 →
-    11.23, converging in 7 steps.
+    11.23, converging in 7 steps from the displayed zero start, using a coefficient-change tolerance.
   - Step-halving; non-canonical links.
 - **Deviance.**
   - The saturated model; the beetles' deviances.
@@ -55,9 +55,8 @@ From there the part covers:
   - The World's truth is a zero-inflated NB (15% never-goers, k = 1.2). The NB fits best by shrinking k to 0.82.
 - **Log-linear models.**
   - Sex × age group × told high blood pressure for 5,000 adults.
-  - Deviances: [SA][T] 798 on 5 df, [SA][AT] 39.1 on 3, [SA][AT][ST] 16.4 on 2 (p = 0.0003). Only the saturated model
-    fits, because the sex gap changes with age.
-  - Common OR 0.68; graphical models; the Poisson trick.
+  - Deviances: [SA][T] 798 on 5 df, [SA][AT] 39.1 on 3, [SA][AT][ST] 16.4 on 2 (p = 0.0003). The saturated model fits by definition, because the sex gap changes with age.
+  - Homogeneous-association OR 0.68 (the common-OR model is rejected); graphical models; the Poisson trick.
 - **Multinomial and ordinal.**
   - Baseline-category logits and IIA.
   - Proportional odds for four BMI categories in 3,000 adults: age 0.173 per decade (OR 1.19); sex −0.04 (none, as the
@@ -67,7 +66,7 @@ From there the part covers:
 - **GEE.**
   - Pupils passing 550 in 40 of the World's schools. The iid SE of the programme is 0.094; GEE-independence gives the
     same estimate (0.453) with robust SE 0.228. Exchangeable (α̂ = 0.089) gives 0.405 with model and robust SEs agreeing.
-  - The World's marginal coefficient is 0.392. Marginal against conditional effects (Zeger, Liang & Albert 1988);
+  - The census independence-logistic projection is 0.392; the census exchangeable-equation target is 0.378. The working mean is approximate, so the two targets need not coincide. Marginal against conditional effects (Zeger, Liang & Albert 1988);
     choosing the working correlation.
   - Three Board rows.
 - **Proper scoring rules.**
@@ -76,11 +75,11 @@ From there the part covers:
 
     | Forecaster | Log score | Brier | Accuracy |
     |---|---|---|---|
-    | calibrated | 0.373 | 0.115 | 83.5% |
+    | fitted logistic reference | 0.373 | 0.115 | 83.5% |
     | overconfident | 0.438 | 0.131 | 81.9% |
     | base rate | 0.463 | 0.144 | 82.6% |
 
-  - The calibration plot: the overconfident model says 86% where 54% happen, with the same AUC.
+  - The held-out calibration plot, with 200 adults per risk decile and Wilson uncertainty bars: the overconfident model says 86% where 54% happen, with the same AUC.
   - CRPS (0.560 honest, 0.604 too narrow, 0.653 too wide); Murphy's decomposition.
 
 Every number on screen is computed in [`compute.py`](compute.py):
@@ -89,7 +88,7 @@ Every number on screen is computed in [`compute.py`](compute.py):
 - the rest are seeded simulations.
 
 **Built in this part:**
-- **`statkit.glm` II** ([`explainer/stats/kit/glm.py`](../../../explainer/stats/kit/glm.py)), checked in
+- **`statkit.glm` II** ([`explainer/stats/kit/glm.py`](../../../../explainer/stats/kit/glm.py)), checked in
   `tests/test_stats_kit_glm2.py`:
   - `Family`, with links (identity, log, logit, probit, cloglog, inverse), variance functions and unit deviances;
   - `glm_fit`, a general IRLS recording its path, with deviance, Pearson/deviance/randomized quantile residuals, φ̂, and
@@ -114,7 +113,7 @@ The Coverage Board gains six rows:
 | sandwich SE | doctor visits, n = 500 | 1,000 | 94.4% | kept |
 | logistic, iid SE | 40 schools, pupils clustered | 500 | 54.8% | broken |
 | GEE, independence | 40 schools, robust SE | 500 | 95.0% | kept |
-| GEE, exchangeable | 40 schools, robust SE | 500 | 95.2% | kept |
+| GEE, exchangeable | 40 schools, robust SE; own census target | 500 | 95.8% | kept |
 
 ## Build it
 
@@ -141,7 +140,7 @@ python tools/lecture_length.py stats24 --floor 50
 | 8 | Counts | zeros 40% vs 19% vs 39%; AIC 9,375 / 8,248 / 8,171 / 7,453; k̂ 0.82 vs 1.2 |
 | 9 | Log-linear models | 798 / 39.1 / 16.4; OR 0.68 |
 | 10 | Multinomial and ordinal | 0.173 per decade (OR 1.19); cut slopes 0.31 / 0.18 / 0.15 |
-| 11 | GEE | SE 0.094 vs 0.228; α̂ 0.089; truth 0.392; Board 54.8 / 95.0 / 95.2% |
+| 11 | GEE | SE 0.094 vs 0.228; α̂ 0.089; truth 0.392; Board 54.8 / 95.0 / 95.8% (method-specific census targets) |
 | 12 | Proper scoring rules | log 0.373 / 0.438 / 0.463; says 86%, sees 54%; CRPS 0.560 / 0.604 / 0.653 |
 | 13 | Outro | — |
 
@@ -215,22 +214,21 @@ p < ½ and at q = 1 when p > ½, so the absolute score is improper: it rewards r
   linear in the covariates.
 - **Exponential dispersion family; canonical parameter; cumulant function b; dispersion φ; variance function V**:
   f = exp{(yθ − b(θ))/φ + c}; μ = b′(θ); Var y = φV(μ).
-- **Canonical link**: g(μ) = θ, giving score X'(y − μ) and sufficient X'y.
+- **Canonical link**: g(μ) = θ, giving score X′diag(w)(y − μ)/φ and sufficient X′diag(w)y for β at known dispersion and fixed prior weights.
 - **Probit; logit; complementary log-log; tolerance distribution**: inverse links for probabilities; the latent
   threshold story behind them.
 - **IRLS; working response; working weights**: Fisher scoring as repeated weighted least squares.
 - **Deviance; saturated model; analysis of deviance**: twice the log-likelihood gap to a perfect fit; comparing
   nested models by drops.
 - **Pearson, deviance and randomized quantile residuals**: standardized differences; signed root unit deviances;
-  Φ⁻¹ of a randomized fitted CDF, exactly N(0, 1) under the model.
+  Φ⁻¹ of a randomized CDF; exactly N(0, 1) for the known true conditional CDF, with fitted residuals used diagnostically.
 - **Separation; Firth's penalized likelihood**: perfect prediction and infinite MLEs; the Jeffreys-prior penalty
   that keeps them finite.
 - **Overdispersion; quasi-likelihood; quasi-Poisson; beta-binomial**: more variation than the family allows; a
   mean–variance model without a distribution; φμ; a binomial with beta-distributed p.
 - **Negative binomial; zero-inflated model; hurdle model; offset**: a gamma-mixed Poisson; structural zeros plus a
   count model; a gate then a truncated count; a log exposure with coefficient 1.
-- **Log-linear model; conditional independence; graphical model**: Poisson models for table counts; zero
-  interactions; the picture of which interactions remain.
+- **Log-linear model; conditional independence; graphical model**: Poisson models for table counts; specific absent interaction sets; graphical models retain all maximal-clique interactions.
 - **Multinomial logit; IIA; proportional odds; cut-points**: softmax over categories; the independence of irrelevant
   alternatives; one slope for all cumulative logits; the thresholds on the latent scale.
 - **GEE; working correlation; marginal vs conditional effect**: cluster-wise score equations with a robust
@@ -251,3 +249,22 @@ p < ½ and at q = 1 when p > ½, so the absolute score is improper: it rewards r
 | propensity scores | 36 |
 | Cox regression as a Poisson GLM | 40 |
 | the Coverage Board | every part; 65 |
+
+
+## QA clarifications
+
+All 14 scenes and the 12 computation items were reviewed alongside the GLM kit and its reference tests.
+
+- Prior weights enter both the exponential-dispersion variance (φV(μ)/w) and IRLS information. The displayed canonical sufficient statistic includes those weights. Gamma and inverse-Gaussian natural parameters are −1/μ and −1/(2μ²); the commonly named inverse links can absorb fixed signs/scales in their coefficients.
+- The local IRLS implementation uses weighted QR, recomputes each step-halving candidate, and raises on failed search or nonconvergence. It is checked against grouped likelihood fits in statsmodels, including a Poisson example that requires halving. The noncanonical scoring rate need not be quadratic, and stopping tolerance is distinct from machine precision.
+- Deviance here is unscaled D = 2φ(ℓ_sat − ℓ_fit); known-dispersion LR statistics use ΔD/φ. Quasi F references are approximate outside the Gaussian identity-link model. A binary saturated-model χ² test is unreliable, while regular fixed-dimensional nested likelihood differences can still use Wilks. Boundary, separation and misspecification require different references.
+- The overdispersion LR is computed directly from both fitted log likelihoods (1924.0), avoiding arithmetic with rounded values. The one-sided NB2 score and the special single-boundary 50/50 null mixture are stated with their assumptions.
+- Raw count variance exceeding the raw mean is not by itself evidence against a conditional Poisson model: covariate mean variation also inflates marginal variance. Pearson dispersion, residuals and coverage checks provide further information. A lower dispersion estimate under another link does not prove that the first curve was the sole cause.
+- Exact randomized quantile normality requires the true conditional CDF. Estimated parameters make fitted residuals dependent and alter their finite-sample distribution. Displayed QQ points are sampled and viewport-limited, without flattening extreme values onto a boundary.
+- Missing high-order interactions need not encode independence. Graphical log-linear models are a subset of hierarchical models and include every maximal-clique interaction. The all-pairs/no-three-way model is not the complete-graph graphical model. Its estimated common OR is a summary from a rejected model and is not identically the Mantel–Haenszel estimator.
+- The ordinal sex coefficient is compatible with zero; point estimates do not establish an exact null. Differences among separate cut-point slopes are an informal diagnostic with correlated uncertainty. The probability stack displays men.
+- Binary GEE uses the analytic exchangeable inverse and records constraints needed for positive-definite working correlation. Both working structures match statsmodels. The finite-World logistic approximation has census programme coefficients 0.391567 (independence) and 0.378283 (exchangeable); the Board uses the matching target for each method. Exchangeable coverage is 95.8%, versus 95.0% for independence. This finite-population simulation does not establish a universal coverage guarantee.
+- GEE robustness requires a suitable conditional mean, independent clusters, moments and design conditions; changing working correlation under mean misspecification can change the target. Model/robust SE agreement in one sample is not proof of a correct covariance. Marginal-versus-conditional coincidence is not exclusive to identity-link models.
+- The probability forecaster labelled “logistic” is a fitted reference, not an assumed perfectly calibrated oracle. Holdout deciles retain counts and Wilson bars; a monotone transformation preserves AUC while changing calibration and proper losses. Murphy's decomposition is exact in population conditional-rate form; arbitrary finite bins need within-bin terms unless forecasts are constant within bins. Resolution is distinct from AUC.
+- The mean log loss is the negative average held-out log likelihood. Expected excess log loss, rather than total expected log loss, equals KL divergence. CRPS values are Monte Carlo averages of 20,000 common simulated outcomes.
+- All curves use local geometric viewport clipping that preserves crossings and missing gaps. Persistent section headings retain context through narration introductions. Chinese tables, continuous listening and final narrated masters remain separate production gates.
