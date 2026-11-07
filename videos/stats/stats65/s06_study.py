@@ -47,12 +47,12 @@ class Study(LectureMixin, VoiceoverScene):
             "weights, logistic estimated weights, tempered weights, and weights from a classifier that sees only the size "
             "of x. <bookmark mark='e'/> Performance: mean coverage with its Monte Carlo error over a thousand replicates "
             "per cell, widths, infinite intervals, and the bound.",
-            [(r"ADEMP:", GREY_A),
+            [(r"ADEMP: aims, data, estimand, methods, performance", GREY_A),
              (r"Aims: \ the coverage lost; \ is the bound right, \ and tight?", THESISC),
              (r"Data: \ $\mu \in \{0.5, 1, 1.5\}$; \ noise $e^{\gamma x}$, \ $\gamma \in \{0, 0.5, 1\}$", GREY_A),
              (r"Estimand: \ target coverage; \ Methods: \ none, \ true, \ estimated, \ tempered, \ misspecified", GREY_A),
              (r"Performance: \ coverage $\pm$ MC SE, \ 1{,}000 replicates per cell", HONC)],
-            buff=0.4, font_size=24, head_size=32)
+            buff=0.4, font_size=24, head_size=36)
 
     def mc(self):
         st = cells()
