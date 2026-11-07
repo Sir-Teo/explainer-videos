@@ -29,15 +29,15 @@ class MLMC(VoiceoverScene):
         panels = VGroup()
         for l, pr in enumerate(mi["pairs"], 1):
             f, c = np.asarray(pr["fine"]), np.asarray(pr["coarse"])
-            g = axes([0, 1], [70, 140], x_length=2.8, y_length=2.2, xticks=[], yticks=[], font_size=12)
+            g = axes([0, 1], data_range(*[p[k] for p in mi["pairs"] for k in ("fine", "coarse")]), x_length=2.8, y_length=2.2, xticks=[], yticks=[], font_size=12)
             ax = g.ax
             tf = np.linspace(0, 1, len(f))
             tc = np.linspace(0, 1, len(c))
-            fl = polyline(ax, tf, np.clip(f, 70, 140), QC.DELTA, stroke_width=2.5, radius=0.035)
-            cl = polyline(ax, tc, np.clip(c, 70, 140), GREY_B, stroke_width=2, radius=0.035)
+            fl = polyline(ax, tf, f, QC.DELTA, stroke_width=2.5, radius=0.035)
+            cl = polyline(ax, tc, c, GREY_B, stroke_width=2, radius=0.035)
             gap = Line(ax.c2p(1, c[-1]), ax.c2p(1, f[-1]), stroke_color=BAD, stroke_width=7)
             t = label(rf"level {l}: {2 ** l} steps against {2 ** (l - 1)}", font_size=16, color=GREY_A).next_to(g, UP, buff=0.08)
-            d = MathTex(rf"P_{l} - P_{l - 1}:\ {f[-1] - c[-1]:+.2f}", font_size=22, color=BAD).next_to(g, DOWN, buff=0.08)
+            d = MathTex(rf"S_{l} - S_{l - 1}:\ {f[-1] - c[-1]:+.2f}", font_size=22, color=BAD).next_to(g, DOWN, buff=0.08)
             panels.add(VGroup(g, cl, fl, gap, t, d))
         panels.arrange(RIGHT, buff=0.3).to_edge(UP, buff=0.6)
         top = m["mlmc"][-1]
@@ -58,14 +58,7 @@ class MLMC(VoiceoverScene):
                             r"millions of cheap coarse paths, a few thousand fine ones", 4.8, 18, GREY_A)
         cap.next_to(bars, RIGHT, buff=0.9).shift(UP * 0.3)
         with self.voiceover(
-            "A simulation with time steps has two errors: noise, which falls with more paths, and bias, which falls "
-            "with finer steps. Mike Giles's idea in 2008 was to stop simulating every path at the finest step. "
-            "Here is one path simulated twice, with fine steps in gold and steps twice as long in grey, from the "
-            "same random numbers. <bookmark mark='a'/> At level one the two disagree by dollars. At "
-            "level four, by cents. The difference between neighbouring levels is small, and so is its variance. "
-            "<bookmark mark='b'/> So estimate the fine price as the coarse price plus a ladder of corrections, each "
-            "with its own number of paths. At a target accuracy of one cent, millions of paths go to the cheap "
-            "coarse level and only thousands to the expensive fine ones."
+            "Time-stepped simulation has sampling noise and discretization bias. Multilevel Monte Carlo allocates work across resolutions. The panels show stock paths, with fine and coarse increments coupled through the same Brownian noise. <bookmark mark='a'/> The terminal stock differences become small in this example. One path is illustrative; the method relies on the variance of payoff corrections across many coupled paths. <bookmark mark='b'/> The finest-grid expectation equals a coarse expectation plus successive payoff corrections. Cheap coarse estimates get many paths, while small-variance fine corrections need fewer. The displayed allocation targets a one-cent error budget using estimated variance and bias, rather than certifying the realised total error."
         ) as vo:
             self.play(FadeIn(panels[0]))
             vo.wait_until("a")
@@ -91,22 +84,13 @@ class MLMC(VoiceoverScene):
         whys = [why(r"telescoping: unbiased for the finest level if each correction is estimated without bias"),
                 why(r"independent levels: variances add; then the bias of the finest step. Give each half of $\varepsilon^2$"),
                 why(r"minimise $\sum N_l C_l$ subject to $\sum V_l/N_l = \varepsilon^2/2$ with a Lagrange multiplier"),
-                why(r"Giles's theorem (bias $\le c\,M^{-\alpha l}$): $\sum_l M^{(\gamma - \beta)l/2}$ is a geometric series "
-                    r"that converges, grows like $L \sim \log\varepsilon^{-1}$, or is dominated by its last term"),
-                why(r"$V_l$ is the strong error squared: Euler's strong order $\frac12$ gives $\beta = 1$, Milstein's "
-                    r"order 1 gives $\beta = 2$")]
+                why(r"bias $O(M^{-\alpha L})$; positive $\alpha,\beta,\gamma$, $\alpha\ge\frac12\min(\beta,\gamma)$; "
+                    r"independent levels, regularity and integer-allocation conditions in Giles's theorem"),
+                why(r"Lipschitz payoff and suitable SDE regularity: strong error bounds control correction variance; "
+                    r"Milstein order one requires scalar or appropriate commutative-noise conditions")]
         step = ladder(self, rows, whys, keep=3, top=3.0, x=-1.0, buff=0.55, edge=6.9)
         with self.voiceover(
-            "The proof fits on one screen. The fine-level expectation telescopes into the coarse one plus corrections. "
-            "<bookmark mark='a'/> With independent levels, the mean squared error is the sum of each level's variance "
-            "over its paths, plus the bias squared; give each half the budget. <bookmark mark='b'/> Minimise the "
-            "total cost subject to that budget with a Lagrange multiplier: each level gets paths in proportion to the "
-            "root of its variance over its cost. <bookmark mark='c'/> Now assume the corrections' variance falls like M to the minus "
-            "beta l while the cost grows like M to the gamma l. The sum is a geometric series. If beta beats gamma it "
-            "converges, and the cost is epsilon to the minus two: as cheap as if every path were exact. If they tie, "
-            "the cost picks up a log squared. <bookmark mark='d'/> Euler's scheme ties, with beta equal to one; "
-            "Milstein's scheme, accurate to first order path by path, has beta two and wins. Plain Monte Carlo pays "
-            "epsilon to the minus three."
+            "The expectation telescopes. <bookmark mark='a'/> With unbiased independent level estimates, mean square error is the sum of level variances divided by sample counts, plus finest-level bias squared. <bookmark mark='b'/> Ignoring integer rounding, a Lagrange multiplier allocates paths proportional to the square root of variance divided by cost. <bookmark mark='c'/> Giles's complexity theorem also assumes a weak-bias rate alpha, positive variance and work exponents beta and gamma, and alpha at least half the smaller of beta and gamma, together with its regularity and allocation conditions. The geometric sum then gives the three displayed complexity regimes. <bookmark mark='d'/> For suitable Lipschitz payoffs and regular SDEs, Euler strong order one half yields the familiar beta-one bound. Scalar or commutative Milstein can give beta two. Standard Monte Carlo costs epsilon to minus two minus gamma over alpha; epsilon to minus three is the case alpha equals gamma equals one. These are conditional rates, not properties of every option."
         ) as vo:
             for i, mk in enumerate("abcd"):
                 step(i)
@@ -119,11 +103,13 @@ class MLMC(VoiceoverScene):
         runs = tr["runs"]
         log = runs[0]["trace"]
         Lmax = max(p["L"] for p in log)
-        g = axes([-0.5, Lmax + 0.5], [-3, 2.5], x_length=5.6, y_length=3.0, xlabel=r"level $l$",
+        vr = data_range(*[np.log10(p["V"]) for p in log])
+        nr = data_range(*[np.log10(p["N"]) for p in log], [0])
+        g = axes([-0.5, Lmax + 0.5], vr, x_length=5.6, y_length=3.0, xlabel=r"level $l$",
                  ylabel=r"$\log_{10} V_l$", xticks=list(range(0, Lmax + 1, 2)), yticks=[-2, 0, 2], font_size=15)
         g.to_edge(LEFT, buff=0.7).to_edge(UP, buff=0.45)
         ax = g.ax
-        h = axes([-0.5, Lmax + 0.5], [0, 7.5], x_length=5.6, y_length=1.6, xlabel=r"level $l$",
+        h = axes([-0.5, Lmax + 0.5], nr, x_length=5.6, y_length=1.6, xlabel=r"level $l$",
                  ylabel=r"$\log_{10} N_l$", xticks=[], yticks=[0, 3, 6], font_size=15).next_to(g, DOWN, buff=0.35)
         hx = h.ax
 
@@ -135,7 +121,7 @@ class MLMC(VoiceoverScene):
                                       stroke_width=0, fill_color=QC.DELTA, fill_opacity=0.8)
                             .move_to(hx.c2p(l, 0), aligned_edge=DOWN) for l, n in enumerate(N)])
             txt = VGroup(MathTex(rf"\text{{pass}}\ {k + 1}:\ L = {p['L']}", font_size=30, color=WHITE),
-                         MathTex(rf"\text{{bias estimate}}\ {p['bias']:.4f}\ \ \text{{vs}}\ \ \varepsilon/\sqrt2 = "
+                         MathTex(rf"\text{{bias proxy}}\ {p['bias']:.4f}\ \ \text{{vs}}\ \ \varepsilon/\sqrt2 = "
                                  rf"{tr['eps'] / np.sqrt(2):.4f}", font_size=26,
                                  color=GOOD if p["bias"] < tr["eps"] / np.sqrt(2) else BAD),
                          MathTex(rf"\text{{cost so far: }}{p['cost'] / 1e6:.1f}\ \text{{million steps}}", font_size=26,
@@ -150,13 +136,7 @@ class MLMC(VoiceoverScene):
                         font_size=24, color=GOOD).to_edge(RIGHT, buff=0.4).shift(DOWN * 1.2)
         src = illustration(r"the House's adaptive loop at $\varepsilon = 0.01$ (continuously averaged Asian, Euler), pass by pass")
         with self.voiceover(
-            "Now watch the House's estimator choose its own levels, at an accuracy of one cent. Three levels of pilot "
-            "paths first; it measures each correction's variance, the dots, and allocates paths by the formula, the "
-            "bars. <bookmark mark='a'/> Then it tests the bias using the "
-            "last correction's mean. Too big: add a level, re-estimate, re-allocate. Pass by pass the dots step down "
-            "a straight line. <bookmark mark='b'/> It stops when "
-            f"the bias test passes, here at {runs[0]['levels']} levels. Across four seeds the final cost varies by "
-            f"{100 * (max(costs) - min(costs)) / min(costs):.1f} percent: the algorithm is stable."
+            f"Here the adaptive loop targets a one-cent error budget. Pilot samples estimate correction variances, and the allocation formula supplies the path counts. <bookmark mark='a'/> The last correction mean, with a weak-rate assumption, supplies a bias proxy. If it is too large, add a level and repeat. This diagnostic can underestimate remaining bias; passing it is not a guarantee of total mean square accuracy. <bookmark mark='b'/> The first seed stops at {runs[0]['levels']} levels. Four saved seeds have final work differing by {100 * (max(costs) - min(costs)) / min(costs):.1f} percent. That is a small reproducibility check on these runs, rather than proof of stability for every payoff or tolerance."
         ) as vo:
             self.play(FadeIn(g), FadeIn(h), FadeIn(src), FadeIn(cur))
             vo.wait_until("a")
@@ -201,18 +181,18 @@ class MLMC(VoiceoverScene):
         eps = np.asarray(m["eps"])
         cm = np.array([r["cost"] for r in m["mlmc"]])
         cs = np.array([r["cost"] for r in m["standard"]])
-        g = axes([np.log10(0.008), np.log10(0.05)], [6.3, 9.6], x_length=5.0, y_length=3.1,
+        g = axes(data_range(np.log10(eps)), data_range(np.log10(cs), np.log10(cm)), x_length=5.0, y_length=3.1,
                  xlabel=r"target accuracy $\varepsilon$", ylabel=r"cost (steps simulated)",
                  xticks=list(np.log10(eps)), xfmt=lambda u: f"{10 ** u:.2f}", yticks=[7, 8, 9],
                  yfmt=lambda u: f"10^{{{int(round(u))}}}", font_size=14, log_x=True)
         g.to_edge(LEFT, buff=0.6).shift(UP * 0.35)  # the pause card takes the corner below
         ax = g.ax
-        ls = polyline(ax, np.log10(eps), np.clip(np.log10(cs), 6.3, 9.6), BAD)
+        ls = polyline(ax, np.log10(eps), np.log10(cs), BAD)
         lm = polyline(ax, np.log10(eps), np.log10(cm), GOOD)
         leg = legend([(BAD, r"standard MC at the finest step"), (GOOD, r"multilevel")], font_size=15)
         leg.next_to(g, UP, buff=0.1).align_to(g, LEFT)
         lv = mi["levels"]
-        g2 = axes([0.5, 8.5], [-5.5, 1], x_length=4.6, y_length=3.0, xlabel=r"level $l$", ylabel=r"$\log_{10} V_l$",
+        g2 = axes([0.5, 8.5], data_range(np.log10(lv["euler"]), np.log10(lv["milstein"])), x_length=4.6, y_length=3.0, xlabel=r"level $l$", ylabel=r"$\log_{10} V_l$",
                    xticks=[2, 4, 6, 8], yticks=[-4, -2, 0], font_size=14).to_edge(RIGHT, buff=0.5).shift(UP * 1.2)
         ax2 = g2.ax
         le = polyline(ax2, np.arange(1, 9), np.log10(lv["euler"]), METHOD_COL["euler"])
@@ -232,18 +212,7 @@ class MLMC(VoiceoverScene):
         q = predict(r"Milstein's $V_l$ falls four times per level, not two. What happens to $\varepsilon^2\cdot$cost "
                     r"as $\varepsilon \to 0$?", width=5.2, font_size=19).to_corner(DL, buff=0.25)
         with self.voiceover(
-            "The payoff, on the Asian: the cost of each accuracy, standard against multilevel. At one cent, "
-            f"multilevel is {cs[last] / cm[last]:.0f} times cheaper. "
-            "<bookmark mark='a'/> On the right, a European call, the theorem's textbook case: the corrections' "
-            f"variance falls with slope {mi['beta']['euler']:.2f} under Euler and {mi['beta']['milstein']:.2f} under "
-            "Milstein, as the theory says. <bookmark mark='b'/> Pause and predict. With beta two, what happens to "
-            "epsilon squared times the cost? <bookmark mark='c'/> The theorem says it stops growing. Measured on the "
-            f"call, as epsilon falls eightfold, Euler's goes from {e2[0]:,.0f} to {e2[-1]:,.0f}, and Milstein's from "
-            f"{m2[0]:,.0f} to {m2[-1]:,.0f}. On the Asian, the average already smooths Euler's path errors, and Milstein's run at a "
-            f"half cent cost {mil_a[-1] / mi['euler_0.005']['cost']:.2f} times Euler's. One more card: Chang-han Rhee "
-            "and Peter Glynn showed in 2015 that picking the level at random, and weighting by its probability, "
-            "removes the bias entirely when beta beats gamma."
-            " Simulation runs forward; early exercise looks back. Next: American options by simulation."
+            f"The left comparison counts estimated simulated steps, not measured seconds. Standard work is estimated on the same finest grid and error budget; it is not a matched, independently verified total-RMSE experiment. The recorded work ratio at one cent is {cs[last] / cm[last]:.0f}. <bookmark mark='a'/> For this European call the fitted correction-variance exponents are {mi['beta']['euler']:.2f} for Euler and {mi['beta']['milstein']:.2f} for Milstein. <bookmark mark='b'/> What happens to epsilon squared times work when beta exceeds gamma? <bookmark mark='c'/> Under the theorem's assumptions it remains bounded as tolerance shrinks. Here Euler's displayed product goes from {e2[0]:,.0f} to {e2[-1]:,.0f}, and Milstein's from {m2[0]:,.0f} to {m2[-1]:,.0f}. Finite-sample allocation noise and bias estimates still matter. Randomized-level estimators can remove discretization bias using proper tail weights. Finite variance and finite expected work require suitable tail and regularity conditions; beta greater than gamma helps meet them, but is not sufficient by itself. Next, exercise policies learned from simulated paths."
         ) as vo:
             self.play(FadeIn(g), Create(ls), Create(lm), FadeIn(leg))
             vo.wait_until("a")

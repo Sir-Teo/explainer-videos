@@ -29,7 +29,8 @@ class Bridge(VoiceoverScene, ThreeDScene):
         self.play(FadeOut(c))
 
     def staircase(self, e):
-        ax = ThreeDAxes(x_range=[0, 1, 0.25], y_range=[0, 16, 4], z_range=[-0.5, 1.0, 0.5], x_length=6.5, y_length=6.0,
+        zr = data_range(*[e["cols16"][k] for k, _, _ in KINDS], [0])
+        ax = ThreeDAxes(x_range=[0, 1, 0.25], y_range=[0, 16, 4], z_range=[*zr, (zr[1] - zr[0]) / 3], x_length=6.5, y_length=6.0,
                         z_length=3.0, tips=False, axis_config={"stroke_color": GREY_C, "include_ticks": False,
                                                                "stroke_width": 2})
         ax.shift(DOWN * 0.3)
@@ -40,7 +41,7 @@ class Bridge(VoiceoverScene, ThreeDScene):
             col = dict((k, c) for k, _, c in KINDS)[kind]
             g = VGroup()
             for k in range(16):
-                pts = [ax.c2p(0, k + 0.5, 0)] + [ax.c2p(tt, k + 0.5, np.clip(L[j, k], -0.5, 1.0)) for j, tt in enumerate(t)]
+                pts = [ax.c2p(0, k + 0.5, 0)] + [ax.c2p(tt, k + 0.5, L[j, k]) for j, tt in enumerate(t)]
                 op = 1.0 if k < 4 else 0.55
                 g.add(VMobject(stroke_color=col, stroke_width=3 if k < 4 else 2, stroke_opacity=op).set_points_as_corners(pts))
             return g
@@ -58,17 +59,7 @@ class Bridge(VoiceoverScene, ThreeDScene):
         self.set_camera_orientation(phi=68 * DEGREES, theta=-55 * DEGREES, zoom=0.85)
         fixed(self, hint, src, *names.values(), *nums.values())
         with self.voiceover(
-            "Chapter two ended with a fact: any matrix whose product with its transpose is Brownian motion's "
-            "covariance builds the same paths. Here is what each normal does under three such matrices. Across is "
-            "time; going back, the sixteen normals in order; up, what each normal adds to the path. "
-            "<bookmark mark='a'/> Step by step, every normal adds the same small step from its own moment on: "
-            "a flat field, every coordinate equally important. <bookmark mark='b'/> The Brownian bridge spends the "
-            "first normal on where the path ends, a ramp over the whole year; the second on the midpoint, a tent; "
-            "then quarter points, smaller and smaller. <bookmark mark='c'/> Principal components go further: smooth "
-            "waves, the first carrying almost everything. <bookmark mark='d'/> For the average of a sixty-four-step "
-            f"path, the first normal carries {100 * sh['step'][0]:.1f} percent of the variance step by step, "
-            f"{100 * sh['bridge'][0]:.1f} percent with the bridge and {100 * sh['pca'][0]:.1f} with principal "
-            "components."
+            f"A covariance factor maps independent normals into a Gaussian path with the required joint law. Different factors need not give identical paths from identical inputs. Across is time; back is the input coordinate; height is its path contribution. <bookmark mark='a'/> Step construction gives equal increment variances, but early increments affect more dates and therefore contribute more to a time average. <bookmark mark='b'/> The bridge assigns the first normal to the endpoint, then the midpoint and successively finer conditional points. <bookmark mark='c'/> Principal components order the covariance eigenmodes by path energy. <bookmark mark='d'/> For this linear sixty-four-date Brownian average, the first normal carries {100 * sh['step'][0]:.1f} percent of variance with steps, {100 * sh['bridge'][0]:.1f} with the bridge and {100 * sh['pca'][0]:.1f} with principal components. These shares describe the linear average, not the full nonlinear Asian call."
         ) as vo:
             self.play(Create(ax), FadeIn(hint), FadeIn(src), run_time=1.5)
             vo.wait_until("a")
@@ -92,7 +83,7 @@ class Bridge(VoiceoverScene, ThreeDScene):
         z = np.random.default_rng(4).standard_normal((1, 64))
         W = np.concatenate([[0.0], E.brownian_bridge(z, 1.0)[0]])
         t = np.linspace(0, 1, 65)
-        g = axes([0, 1], [-1.6, 1.6], x_length=9.0, y_length=4.4, xlabel=r"time $t$", ylabel=r"$W_t$",
+        g = axes([0, 1], data_range(W), x_length=9.0, y_length=4.4, xlabel=r"time $t$", ylabel=r"$W_t$",
                  xticks=[0, 0.5, 1], yticks=[-1, 0, 1], font_size=16).shift(DOWN * 0.3)
         ax = g.ax
         stages = []
@@ -133,22 +124,16 @@ class Bridge(VoiceoverScene, ThreeDScene):
             cmath(r"L_{\text{PCA}}", r"=", r"V\Lambda^{1/2},\qquad \lambda_j \approx \frac{T^2}{(j - \frac12)^2\pi^2}",
                   font_size=34, colors={r"L_{\text{PCA}}": METHOD_COL["PCA"]}),
         ]
-        whys = [why(r"the ANOVA decomposition: orthogonal pieces depending on subsets $u$ of the coordinates"),
+        whys = [why(r"finite-variance ANOVA under independent product inputs: orthogonal pieces indexed by coordinate subsets"),
                 why(r"truncation dimension (Caflisch, Morokoff and Owen 1997); the superposition dimension counts "
                     r"$|u| \le s$ instead"),
                 why(r"for a linear payoff each normal's share is its squared weight: the heights in the 3D picture"),
                 why(rf"Karhunen--Lo\`eve: the 64-step eigenvalues {lam[0]:.3f}, {lam[1]:.3f}, {lam[2]:.3f} (times $1/64$: "
                     rf"{lam[0] / 64:.3f}, {lam[1] / 64:.4f}, {lam[2] / 64:.4f}) against {kl[0]:.3f}, {kl[1]:.4f}, {kl[2]:.4f}; "
-                    r"PCA front-loads the most variance of any $L$ (Eckart--Young)")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.8, buff=0.6, edge=6.9)
+                    r"PCA maximises leading-mode discrete path energy, not the variance captured for every payoff")]
+        step = ladder(self, rows, whys, keep=3, top=3.0, x=-0.8, buff=0.42, edge=6.9)
         with self.voiceover(
-            "The idea has a name. Split any function of d inputs into pieces, each depending on one subset of the "
-            "coordinates; the pieces are orthogonal, so their variances add. <bookmark mark='a'/> The truncation "
-            "dimension is how many leading coordinates hold ninety-nine percent of the variance. Caflisch, Morokoff "
-            "and Owen introduced it in 1997 to explain why quasi-Monte Carlo worked on mortgage securities at all. "
-            "<bookmark mark='b'/> For a payoff linear in the path, each normal's share is just its squared weight: "
-            "the heights you saw in three dimensions. <bookmark mark='c'/> Principal components use the covariance's "
-            "eigenvectors, whose eigenvalues fall like one over j squared: no other matrix front-loads more."
+            "For a finite-variance function of independent product inputs, ANOVA splits the function into orthogonal coordinate-subset components. <bookmark mark='a'/> Truncation dimension asks how many leading coordinates explain ninety-nine percent of its variance. It depends on both the payoff and the factorization. <bookmark mark='b'/> For a linear Brownian average, the coordinate weights give the shares exactly through their squared magnitudes. This is an illustration, rather than an ANOVA calculation for the nonlinear Asian option. <bookmark mark='c'/> Principal components maximise leading-mode discrete path energy. Grid eigenvalues divided by sixty-four approximate the continuous covariance-operator eigenvalues shown. PCA does not maximise variance captured for every payoff: a rotation targeted specifically to a linear average can put all its variance into one coordinate."
         ) as vo:
             for i, mk in enumerate("abc"):
                 step(i)
@@ -159,13 +144,15 @@ class Bridge(VoiceoverScene, ThreeDScene):
 
     def measured(self, e, q):
         ns = np.log10(np.asarray(q["ns"], float))
-        g = loglog(2.2, 4.4, -4, 0, r"paths", r"spread of the price over 20 scrambles", x_length=5.8, y_length=4.0,
+        series = [("pseudo-random", q["sd"]["pseudo-random"]), ("Sobol", q["sd"]["Sobol"]),
+                  ("Sobol + bridge", q["sd"]["Sobol + bridge"]), ("PCA", e["pca_sd"])]
+        xr = data_range(ns)
+        yr = data_range(*[np.log10(v) for _, v in series])
+        g = loglog(*xr, *yr, r"paths", r"spread of the price over 20 scrambles", x_length=5.8, y_length=4.0,
                    xt=[3, 4], yt=[-4, -3, -2, -1, 0])
         g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
         ax = g.ax
-        series = [("pseudo-random", q["sd"]["pseudo-random"]), ("Sobol", q["sd"]["Sobol"]),
-                  ("Sobol + bridge", q["sd"]["Sobol + bridge"]), ("PCA", e["pca_sd"])]
-        lines = VGroup(*[polyline(ax, ns, np.clip(np.log10(v), -4, 0), METHOD_COL[k]) for k, v in series])
+        lines = VGroup(*[polyline(ax, ns, np.log10(v), METHOD_COL[k]) for k, v in series])
         names = {"pseudo-random": r"pseudo-random", "Sobol": r"Sobol, step by step", "Sobol + bridge": r"Sobol + bridge",
                  "PCA": r"Sobol + principal components"}
         leg = legend([(METHOD_COL[k], names[k]) for k, _ in series], font_size=16).next_to(g, UP, buff=0.1).align_to(g, LEFT)
@@ -183,17 +170,7 @@ class Bridge(VoiceoverScene, ThreeDScene):
         src = illustration(r"arithmetic Asian call, 64 fixings; PCA costs $O(d^2)$ per path and needs a fixed grid",
                            corner=DL)
         with self.voiceover(
-            "On the Asian option with sixty-four fixings, the spread over twenty scrambles. Pseudo-random points fall "
-            "on their square-root line. Sobol fed step by step does better, then stalls: "
-            f"{q['sd']['Sobol'][2]:.4f} at 4,096 paths and {q['sd']['Sobol'][3]:.4f} at 16,384. <bookmark mark='a'/> "
-            f"The bridge reaches {sd['Sobol + bridge']:.4f}, and principal components {sd['PCA']:.5f}, "
-            f"{sd['pseudo-random'] / sd['PCA']:.0f} times less spread than random paths. Principal components cost a "
-            "dense matrix product per path and need a fixed grid, so desks usually take the bridge. "
-            "<bookmark mark='b'/> History in two cards: Spassimir Paskov and Joseph Traub's mortgage obligation in "
-            "1995, and the explanation two years later. <bookmark mark='c'/> And the stall? Step by step, the "
-            f"variance is spread over all sixty-four coordinates: the first four carry only "
-            f"{100 * e['shares']['step'][3]:.0f} percent, so the later, less even coordinates decide the answer."
-            " Another way to spend less: take coarse steps on most paths. Next: multilevel Monte Carlo."
+            f"On this sixty-four-fixing Asian call, the plot shows sample standard deviations over twenty independent replicates. These measure sampling dispersion, rather than total error or a confidence interval; discretization and transformation bias remain separate. Stepwise Sobol records {q['sd']['Sobol'][2]:.4f} at four thousand and ninety-six paths and {q['sd']['Sobol'][3]:.4f} at sixteen thousand. <bookmark mark='a'/> At the largest sample size the bridge reaches {sd['Sobol + bridge']:.4f}, and PCA {sd['PCA']:.5f}, compared with {sd['pseudo-random']:.4f} for random paths. PCA needs precomputation and a dense matrix product per path; the bridge has a cheaper structured transform. Method choice depends on payoff and workload. <bookmark mark='b'/> The mortgage-security work of Paskov and Traub, followed by the effective-dimension explanation of Caflisch, Morokoff and Owen, helped establish this approach in finance. <bookmark mark='c'/> The linear-average shares suggest why coordinate ordering matters, but do not prove the cause of every finite-sample stall in this nonlinear payoff. Next, multilevel simulation."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(lines[0]), Create(lines[1]), FadeIn(leg[:2]), run_time=2)
             vo.wait_until("a")
