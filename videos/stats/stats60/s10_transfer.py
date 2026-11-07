@@ -18,11 +18,7 @@ class Transfer(LectureMixin, VoiceoverScene):
 
     def bound(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Transfer learning: much data from a source distribution, little from the target. When does "
-            "the source help? <bookmark mark='b'/> Shai Ben-David and co-authors gave the classic bound in 2010: the "
-            "target error of a classifier is at most its source error, <bookmark mark='c'/> plus a divergence between the "
-            "two covariate distributions, as seen by the class of classifiers, <bookmark mark='d'/> plus the error of the "
-            "best single classifier on both. If no classifier does well on both, no amount of source data helps.",
+            "<bookmark mark='a'/> Transfer learning combines source data with a smaller target sample. <bookmark mark='b'/> A classic binary-classification bound relates target risk to source risk. <bookmark mark='c'/> It adds one half of the hypothesis-disagreement divergence between covariate distributions. <bookmark mark='d'/> It also adds the minimum combined source and target error within the hypothesis class. A large joint error makes this bound uninformative; it does not prove that no source information can help any procedure.",
             [(r"\text{setting}", r":", r"n_S \text{ source points}, \ n_T \ll n_S \text{ target points}", 40),
              (r"R_T(h)", r"\le", r"R_S(h)", 40),
              (r"\text{the shift}", r"+", r"\tfrac12 d_{\mathcal H\Delta\mathcal H}(P_S, P_T)", 40),
@@ -48,12 +44,7 @@ class Transfer(LectureMixin, VoiceoverScene):
 
     def translasso(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> For high-dimensional regression, Sai Li, Tony Cai and Hongzhe Li's Trans-Lasso, in 2022. "
-            "Suppose the source coefficient w differs from the target's beta in only a few coordinates. <bookmark mark='b'/> "
-            "Step one: a lasso on the pooled data estimates w, using all the source data. <bookmark mark='c'/> Step two: a "
-            "lasso on the target's residuals estimates the sparse difference, using only the target data, but for a much "
-            "simpler problem. <bookmark mark='d'/> The rate improves from s log p over n T to roughly s log p over n S plus "
-            "n T, plus a term for the difference: the source pays for the hard part, the target for the correction.",
+            "<bookmark mark='a'/> Li, Cai and Li study high-dimensional transfer under restricted coefficient contrasts. An l-one bound h describes the total contrast, rather than a single-coordinate shift. <bookmark mark='b'/> Our demonstration uses one chosen source: first fit a lasso on the pooled source and target. <bookmark mark='c'/> Then fit a sparse correction on target residuals. This is a simplified two-step core, without the paper's adaptive source aggregation. <bookmark mark='d'/> Theoretical gains depend on sparsity, design, sample sizes, contrast size and tuning. A source can pay for shared structure when target data can estimate the correction.",
             [(r"\text{model}", r":", r"w = \beta + \delta, \ \ \|\delta\|_1 \le h", 40),
              (r"\text{step 1}", r":", r"\hat w = \text{lasso on source} \cup \text{target}", 40),
              (r"\text{step 2}", r":", r"\hat\delta = \text{lasso of } y_T - X_T\hat w \text{ on } X_T", 40),
@@ -82,20 +73,20 @@ class Transfer(LectureMixin, VoiceoverScene):
         A2, L2, T2 = panel(d["h1"], 3.4, r"a dissimilar source: \ 5 differ by 1")
         a, b = d["h0.15"], d["h1"]
         key = fit_rows(VGroup(
-            label(r"red: \ target-only lasso; \ gold band: \ pooled lasso; \ green: \ Trans-Lasso", font_size=24),
+            label(r"red: \ target-only lasso; \ gold band: \ pooled lasso; \ green: \ two-step transfer core", font_size=24),
             label(rf"similar, \ $n_T = 50$: \ target {a['target'][0]:.2f}, \ pooled {a['pooled'][0]:.2f}, \ transfer {a['transfer'][0]:.2f}", font_size=24, color=FIXC),
             label(rf"dissimilar, \ $n_T = 400$: \ pooled {b['pooled'][-1]:.2f}, \ target {b['target'][-1]:.2f}, \ transfer {b['transfer'][-1]:.2f}", font_size=24, color=GREY_A),
         ), 12.0, 0.22, [0, -2.85, 0])
         with self.voiceover(
             f"<bookmark mark='a'/> A simulation: two hundred predictors, ten of them active, a thousand source points, and "
-            f"between fifty and four hundred target points. <bookmark mark='b'/> With a similar source, the target-only lasso, "
+            f"between fifty and four hundred target points. <bookmark mark='b'/> The total l-one contrasts are zero point seven five and five. With a similar source, the target-only lasso, "
             f"in red, needs many target points; with fifty its error is {say(a['target'][0], 2)}. Pooling everything, in gold, "
             f"and Trans-Lasso, in green, are both near {say(a['transfer'][0], 2)}: the source does almost all the work. "
             f"<bookmark mark='c'/> With a dissimilar source, pooling is a disaster: {say(b['pooled'][-1], 2)} even with four "
             f"hundred target points, worse than ignoring the source. <bookmark mark='d'/> Trans-Lasso's correction step "
-            f"repairs it: {say(b['transfer'][-1], 2)}, still better than the target alone at {say(b['target'][-1], 2)}."
+            f"reduces the error in these repetitions: {say(b['transfer'][-1], 2)}, still better than the target alone at {say(b['target'][-1], 2)}."
         ) as vo:
-            self.play(FadeIn(A1), FadeIn(T1), FadeIn(A2), FadeIn(T2), FadeIn(simulated_tag(r"simulated, \ 40 repetitions")))
+            self.play(FadeIn(A1), FadeIn(T1), FadeIn(A2), FadeIn(T2), FadeIn(simulated_tag(r"simulated, \ 40 repetitions; \ Monte Carlo errors recorded")))
             vo.wait_until("a")
             self.play(FadeIn(key[0]))
             vo.wait_until("b")
@@ -118,7 +109,7 @@ class Transfer(LectureMixin, VoiceoverScene):
              (r"\text{needs}", r":", r"\text{knowing or estimating the similarity}", 40),
              (r"\text{many sources}", r":", r"\text{aggregate with held-out target data}", 40),
              (r"\text{principle}", r":", r"\text{never much worse than target-only}", 40)],
-            [r"the gold line", r"$h$, \ or its estimate", r"Trans-Lasso's aggregation", r"a safety guarantee"],
+            [r"the gold line", r"$h$, \ or its estimate", r"Trans-Lasso's aggregation", r"an objective requiring model and aggregation assumptions"],
             colors=[(0, NAIVEC), (3, FIXC)])
 
     def domain(self):

@@ -20,21 +20,15 @@ class Hook(LectureMixin, VoiceoverScene):
         tl = timeline(lit=(2019,)).to_edge(UP, buff=0.35)
         hc = history_card(2019, r"B. Recht, \ R. Roelofs, \ L. Schmidt \& V. Shankar, \ \emph{Do ImageNet classifiers generalize to ImageNet?}",
                           r"at ICML: \ they rebuilt ImageNet's test set from new images, \ following the original collection "
-                          r"process as closely as they could; \ every model they tested lost accuracy, \ between 11 and 14 points "
+                          r"process as closely as they could; \ MatchedFrequency collection: \ evaluated models lost 11--14 percentage points "
                           r"of top-1 accuracy", color=NAIVEC, width=11.4, font_size=23).move_to([0, 1.0, 0])
         rows = fit_rows(VGroup(
-            label(r"not overfitting to a reused test set: \ the ranking of models was preserved", font_size=26, color=GREY_A),
-            label(r"but a small, \ invisible change in the distribution of images", font_size=26, color=TGTC),
+            label(r"benchmark improvements generally transferred; \ rankings alone do not exclude overfitting", font_size=26, color=GREY_A),
+            label(r"similar collection procedures can produce consequential distribution shifts", font_size=26, color=TGTC),
             label(r"a test set is a sample from one distribution; \ deployment is another", font_size=26, color=NAIVEC),
         ), 12.4, 0.35, [0, -1.8, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In 2019 Benjamin Recht, Rebecca Roelofs, Ludwig Schmidt and Vaishaal Shankar rebuilt the "
-            "test set of ImageNet, the benchmark on which a decade of image classifiers had been compared. They collected new "
-            "images, following the original process as closely as they could. Every model they tested lost accuracy, between "
-            "eleven and fourteen points. <bookmark mark='b'/> It was not overfitting to a reused test set: the models kept "
-            "their order, and improvements on the old test set still carried over. <bookmark mark='c'/> It was a small, "
-            "invisible change in the distribution of images. <bookmark mark='d'/> A test set is a sample from one "
-            "distribution, and deployment is another."
+            "<bookmark mark='a'/> Recht, Roelofs, Schmidt and Shankar rebuilt ImageNet's test set in 2019. On their MatchedFrequency collection the evaluated classifiers lost eleven to fourteen percentage points of top-one accuracy. Other collection variants gave different gaps. <bookmark mark='b'/> Improvements on the old benchmark generally transferred to the new one. Preserved rankings alone do not rule out adaptive overfitting. <bookmark mark='c'/> The result shows that apparently similar collection procedures can produce consequential distribution differences. <bookmark mark='d'/> A test set samples one collection process; deployment may use another."
         ) as vo:
             self.play(FadeIn(tl))
             vo.wait_until("a")
@@ -46,11 +40,7 @@ class Hook(LectureMixin, VoiceoverScene):
 
     def lesson(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Every guarantee in this course so far assumed the data come from the distribution we "
-            "care about. <bookmark mark='b'/> Two things break that. Some of the data may be wrong: corrupted, mislabelled, "
-            "planted by an adversary. <bookmark mark='c'/> Or all of the data may be right, but from a different "
-            "distribution than the one where the answer will be used. <bookmark mark='d'/> The first is robustness, the "
-            "second is distribution shift, and both have a modern theory with exact rates and practical corrections.",
+            "<bookmark mark='a'/> Our guarantees depend on assumptions about sampling, dependence and the target. Earlier parts already considered adaptation and drift; here we study contamination and distribution shift directly. <bookmark mark='b'/> Some observations may be corrupted or adversarial. <bookmark mark='c'/> Alternatively, valid observations may come from a distribution different from the target. <bookmark mark='d'/> Robust estimation and shift correction address these problems under explicit structural assumptions.",
             [(r"\text{so far}", r":", r"\text{data from the distribution of interest}", 40),
              (r"\text{threat 1}", r":", r"\text{a fraction } \varepsilon \text{ of the data are wrong}", 40),
              (r"\text{threat 2}", r":", r"\text{all data right, \ from } P \ne Q", 40),
@@ -76,9 +66,9 @@ class Hook(LectureMixin, VoiceoverScene):
     def covshift_preview(self):
         d = load("covshift")
         self.lad_voiceover(
-            f"<bookmark mark='a'/> A preview on real data. The NHANES survey's {d['N']:,} adults have mean systolic pressure "
+            f"<bookmark mark='a'/> A preview on real data. This fixed, unweighted complete-case NHANES extract of {d['N']:,} adults have mean systolic pressure "
             f"{say(d['truth'], 1)}. <bookmark mark='b'/> Draw samples of {d['n']} that over-represent the young, as an online "
-            f"panel might: their mean age is {d['mean_age_sample']:.0f}, against {d['mean_age_pop']:.0f} in the population. "
+            f"panel might: their mean age is {d['mean_age_sample']:.0f}, against {d['mean_age_pop']:.0f} in the empirical extract. "
             f"<bookmark mark='c'/> The sample mean pressure is about {say(d['mean_u'], 1)}, and its ninety-five percent interval "
             f"contains the truth in {100 * d['cov_u']:.0f} percent of {d['reps']} samples. <bookmark mark='d'/> Reweighting by "
             f"estimated importance weights recovers {say(d['mean_w'], 1)}, and covers {100 * d['cov_w']:.1f} percent of the "
@@ -87,14 +77,14 @@ class Hook(LectureMixin, VoiceoverScene):
              (r"\text{a young sample}", r":", rf"\text{{mean age }} {d['mean_age_sample']:.0f} \ \text{{vs}} \ {d['mean_age_pop']:.0f}", 38),
              (r"\text{unweighted}", r":", rf"{d['mean_u']:.1f}; \ \text{{covers }} {100 * d['cov_u']:.0f}\%", 38),
              (r"\text{importance-weighted}", r":", rf"{d['mean_w']:.1f}; \ \text{{covers }} {100 * d['cov_w']:.1f}\%", 38)],
-            [r"the population", r"an online panel", r"confidently wrong", r"chapter 5"],
+            [r"the empirical extract", r"an online panel", r"confidently wrong", r"chapter 5"],
             colors=[(2, NAIVEC), (3, FIXC)])
 
     def board(self):
         br = load("board")["rows"]
         show_board(self, board_rows("shifted sample", "importance-weighted"),
                    f"<bookmark mark='a'/> On the Board: the ordinary interval from the young-skewed sample covers the "
-                   f"population's mean pressure {100 * br[0]['achieved']:.0f} percent of the time: broken. <bookmark mark='b'/> "
+                   f"extract's mean pressure {100 * br[0]['achieved']:.0f} percent of the time: broken. <bookmark mark='b'/> "
                    f"The importance-weighted interval covers {100 * br[1]['achieved']:.1f} percent: kept.", [("a", [0]), ("b", [1])])
 
     def taxonomy(self):

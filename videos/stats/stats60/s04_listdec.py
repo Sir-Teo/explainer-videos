@@ -22,11 +22,11 @@ class ListDecoding(LectureMixin, VoiceoverScene):
             "<bookmark mark='b'/> Moses Charikar, Jacob Steinhardt and Gregory Valiant asked in 2017 for a list instead: a short "
             "list of candidates, one of which is close to the inliers' mean. <bookmark mark='c'/> The list must have about one "
             "over alpha entries, since the adversary can plant that many fake populations. <bookmark mark='d'/> Its best entry "
-            "can be within order one over root alpha of the truth, in any dimension.",
+            "can achieve dimension-free error of order one over root alpha for bounded-covariance inliers, apart from sampling terms.",
             [(r"\alpha < \tfrac12", r":", r"\text{no single answer is identifiable}", 40),
              (r"\text{output}", r":", r"\text{a list } L, \ \ \min_{\ell \in L}\|\ell - \mu\| \text{ small}", 40),
              (r"|L|", r"\approx", r"1/\alpha", 40),
-             (r"\text{accuracy}", r":", r"O(1/\sqrt\alpha), \ \text{any dimension}", 40)],
+             (r"\text{accuracy}", r":", r"O(1/\sqrt\alpha), \ \text{bounded covariance + sampling terms}", 40)],
             [r"a majority of outliers", r"Charikar, \ Steinhardt \& Valiant (2017)", r"one per fake population", r"dimension-free"],
             colors=[(1, FIXC)])
 
@@ -70,15 +70,10 @@ class ListDecoding(LectureMixin, VoiceoverScene):
 
     def theory(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Clustering works when the populations are well separated, as in the picture. The theory "
-            "asks for guarantees with no separation at all. <bookmark mark='b'/> Charikar, Steinhardt and Valiant's algorithm "
-            "solves a convex program that finds a sub-population with small covariance, then rounds it. <bookmark mark='c'/> "
-            "Later algorithms, using filters and sum-of-squares, reach error of order one over root alpha, which is the best "
-            "possible, in nearly linear time. <bookmark mark='d'/> The model also explains a practical setting: crowdsourcing, "
-            "where most raters may be careless or adversarial, but a minority is reliable.",
+            "<bookmark mark='a'/> Clustering is adequate for these four well-separated groups. K-means has no adversarial list-decoding guarantee here. <bookmark mark='b'/> Theoretical algorithms use convex relaxation, filtering or moment certificates and need explicit inlier covariance and sample assumptions. <bookmark mark='c'/> For bounded covariance, dimension-free error of order one over root alpha is the reference scale. Runtime depends on the chosen accuracy, list size and model; we make no universal near-linear runtime claim. <bookmark mark='d'/> Crowdsourcing provides one motivation: a reliable minority may need a small amount of trusted information to select from the list.",
             [(r"\text{clustering}", r":", r"\text{fine when separated}", 40),
              (r"\text{no separation}", r":", r"\text{a convex program, \ then rounding}", 40),
-             (r"\text{optimal}", r":", r"O(1/\sqrt\alpha), \ \text{nearly linear time}", 40),
+             (r"\text{optimal}", r":", r"O(1/\sqrt\alpha) \ \text{for bounded-covariance inliers}", 40),
              (r"\text{use}", r":", r"\text{crowdsourcing with a reliable minority}", 40)],
             [r"the easy case", r"Charikar et al.", r"later work", r"Steinhardt's motivation"],
             colors=[(2, FIXC)])
@@ -96,16 +91,10 @@ class ListDecoding(LectureMixin, VoiceoverScene):
 
     def lower(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Why must the list be long, and the error of order one over root alpha? <bookmark "
-            "mark='b'/> The adversary can arrange its points as one over alpha minus one further Gaussian populations, each "
-            "exactly as large as the true one: the data are then symmetric among the groups, and any list shorter than one "
-            "over alpha misses the truth with positive probability. <bookmark mark='c'/> And it can blend fake points into "
-            "the inliers so that, along some direction, a population with a mean shifted by about one over root alpha looks "
-            "the same. <bookmark mark='d'/> Both limits are attained, so the problem is settled for Gaussians: list size one "
-            "over alpha, error one over root alpha, up to constants.",
-            [(r"\text{list size}", r"\ge", r"1/\alpha: \ \text{fake populations as large as the true one}", 38),
+            "<bookmark mark='a'/> List size and accuracy are separate questions, and both depend on the inlier model. <bookmark mark='b'/> Around one over alpha equally plausible clusters force a list of comparable order in worst-case constructions. The exact integer count involves rounding. <bookmark mark='c'/> For inliers with covariance bounded by the identity, the natural worst-case accuracy scale is one over root alpha, apart from sampling terms and the specified list-size regime. <bookmark mark='d'/> Gaussian inliers have additional structure and allow stronger accuracy guarantees with list-size and computational trade-offs. The bounded-covariance lower bound is not a Gaussian minimax theorem.",
+            [(r"\text{list size}", r"\ge", r"\lfloor 1/\alpha\rfloor: \ \text{equally plausible clusters}", 38),
              (r"\text{symmetric}", r":", r"\text{no data can tell them apart}", 40),
              (r"\text{error}", r"\gtrsim", r"1/\sqrt\alpha: \ \text{a blended shift}", 40),
-             (r"\text{both}", r":", r"\text{attained, \ up to constants}", 40)],
+             (r"\text{both}", r":", r"\text{model, list size and sample assumptions matter}", 40)],
             [r"a counting argument", r"exchangeable groups", r"a moment-matching construction", r"Diakonikolas \& Kane (2023)"],
             colors=[(3, FIXC)])

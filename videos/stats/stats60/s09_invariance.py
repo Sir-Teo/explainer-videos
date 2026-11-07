@@ -25,31 +25,21 @@ class Invariance(LectureMixin, VoiceoverScene):
 
     def idea(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> A causal mechanism does not care which hospital, country or year the data came from. "
-            "<bookmark mark='b'/> If y is caused by some of the covariates, the conditional law of y given those causes is "
-            "the same in every environment, whatever the environments do to the covariates. <bookmark mark='c'/> Other "
-            "predictors, such as effects of y, or proxies for hidden causes, have relations with y that change between "
-            "environments. <bookmark mark='d'/> So invariance across the environments one has seen is evidence of "
-            "causation, and a model built on causes is robust to every intervention that leaves y's mechanism alone.",
+            "<bookmark mark='a'/> A structural outcome mechanism may remain fixed across some environments. This is an assumption, not a property of every hospital or year. <bookmark mark='b'/> For a linear causal model with independent outcome noise, interventions on covariates can preserve the conditional law given all direct causes, provided the outcome mechanism and noise law are unchanged. <bookmark mark='c'/> Noncausal predictors may change their association with the outcome, but can also remain invariant by coincidence or insufficient environmental diversity. <bookmark mark='d'/> Observed invariance is therefore evidence under a causal model, not a standalone proof of causation or robustness to arbitrary future change.",
             [(r"\text{causes } S^*", r":", r"P_e(Y \mid X_{S^*}) \ \text{the same for every } e", 40),
-             (r"\text{non-causes}", r":", r"P_e(Y \mid X_S) \ \text{changes with } e", 40),
+             (r"\text{non-causes}", r":", r"P_e(Y \mid X_S) \ \text{may change with } e", 40),
              (r"\text{so}", r":", r"\text{invariance} \Rightarrow \text{evidence of causation}", 40),
-             (r"\text{and}", r":", r"\text{causal models are robust to interventions on } X", 38)],
+             (r"\text{and}", r":", r"\text{requires unchanged outcome mechanism and noise}", 38)],
             [r"modularity", r"children, \ proxies", r"turned around", r"the robustness of causes"],
             colors=[(0, FIXC)])
 
     def icp_method(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Jonas Peters, Peter Bühlmann and Nicolai Meinshausen turned this into a test in 2016: "
-            "invariant causal prediction. <bookmark mark='b'/> For every subset S of the predictors, test whether the "
-            "residuals of regressing y on X_S have the same distribution in every environment. <bookmark mark='c'/> The "
-            "estimate is the intersection of all accepted subsets. <bookmark mark='d'/> Its guarantee is one-sided and "
-            "honest: with probability at least one minus alpha, every variable it names is a true cause. It may name too "
-            "few, never too many.",
+            "<bookmark mark='a'/> Invariant causal prediction tests candidate parent sets across environments. <bookmark mark='b'/> Our implementation tests a common Gaussian linear conditional model, combining a pooled-versus-environment coefficient F test with residual-variance F tests and Bonferroni corrections. Distribution-free residual comparisons would not give the same guarantee. <bookmark mark='c'/> Intersect the accepted subsets. <bookmark mark='d'/> If the true-parent subset has a valid level-alpha test and the structural assumptions hold, the selected set contains no false parent with probability at least one minus alpha. False positives remain possible with probability at most alpha; an empty result is allowed.",
             [(r"\text{for each } S", r":", r"H_{0,S}: \ \text{the residuals of } Y \sim X_S \text{ are invariant}", 38),
              (r"\hat S", r"=", r"\bigcap_{S: \ H_{0,S} \text{ accepted}} S", 40),
              (r"\text{guarantee}", r":", r"P(\hat S \subseteq S^*) \ge 1 - \alpha", 40),
-             (r"\text{so}", r":", r"\text{conservative: \ too few, \ never too many}", 40)],
+             (r"\text{so}", r":", r"\text{no false parent with probability at least }1-\alpha", 40)],
             [r'Peters, \ B\"uhlmann \& Meinshausen (2016)', r"a two-sample problem per $S$", r"what all invariant sets share", r"a confidence statement"],
             colors=[(2, FIXC)])
 
@@ -71,7 +61,7 @@ class Invariance(LectureMixin, VoiceoverScene):
             "environments: rejected. <bookmark mark='c'/> Using X one, the residuals look the same everywhere: a p-value of "
             "one, accepted. <bookmark mark='d'/> Using X two, or both, the child's relation to y changes with the "
             "environment: rejected. <bookmark mark='e'/> The intersection of accepted sets is X one, the true parent. The "
-            "child, which would be the better predictor within any one environment, is correctly left out."
+            "child, which can be useful for prediction within an environment, is correctly left out."
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(simulated_tag(r"simulated")))
             vo.wait_until("a")
@@ -88,17 +78,11 @@ class Invariance(LectureMixin, VoiceoverScene):
 
     def anchor(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Invariance is a strong demand: with hidden confounders, no subset may be invariant. "
-            "Dominik Rothenhäusler, Nicolai Meinshausen, Peter Bühlmann and Jonas Peters relaxed it in 2021: anchor "
-            "regression. <bookmark mark='b'/> Exogenous anchor variables A, such as the environment, push on the system. "
-            "Penalize the part of the residual that the anchors explain, with weight gamma. <bookmark mark='c'/> Gamma equal "
-            "to one is least squares; gamma to infinity is instrumental-variables regression; in between, a trade-off. "
-            "<bookmark mark='d'/> The guarantee: the anchor solution minimizes the worst-case risk over all shifts in the "
-            "anchors' direction up to strength gamma. It is a DRO, with an uncertainty set built from causal structure.",
+            "<bookmark mark='a'/> Hidden confounding may prevent exact conditional invariance. Anchor regression instead penalizes residual association with exogenous anchors. <bookmark mark='b'/> Its criterion is residual energy orthogonal to the anchors plus gamma times projected residual energy. <bookmark mark='c'/> Gamma one is least squares. The infinite-gamma limit agrees with a unique two-stage-least-squares solution only when the projected design identifies the coefficients. This simulation has fewer anchor directions than coefficients, so that uniqueness condition fails. <bookmark mark='d'/> Under the paper's linear structural model and exogeneity conditions, the population criterion has a worst-case shift interpretation for a specified anchor-induced perturbation class. The finite simulation illustrates prediction under one shift, not a certificate for every intervention.",
             [(r"\text{relax}", r":", r"\text{invariance fails with hidden confounders}", 40),
              (r"\hat b_\gamma", r"=", r"\arg\min_b \|(I - P_A)(y - Xb)\|^2 + \gamma\|P_A(y - Xb)\|^2", 38),
-             (r"\gamma = 1", r":", r"\text{OLS}; \ \ \gamma \to \infty: \ \text{IV}", 40),
-             (r"\text{guarantee}", r":", r"\min_b \sup_{\text{shifts } v: \ vv' \preceq \gamma E[AA']} E_v[(Y - X'b)^2]", 38)],
+             (r"\gamma = 1", r":", r"\text{OLS}; \ \ \gamma \to \infty: \ \text{2SLS if the projected design is identified}", 40),
+             (r"\text{guarantee}", r":", r"\text{population minimax interpretation under a linear SEM} ", 38)],
             [r'Rothenh\"ausler et al. (2021)', r"$P_A$: \ projection on the anchors", r"Part 37's 2SLS", r"chapter 7, \ causally"],
             colors=[(1, FIXC), (3, FIXC)])
 
@@ -121,16 +105,10 @@ class Invariance(LectureMixin, VoiceoverScene):
             [(r"blue: \ training error", SRCC), (r"gold: \ test error", TGTC)],
             [(rf"OLS ($\gamma = 1$): \ test {te[i_ols]:.2f}", NAIVEC), (rf"$b = ({cf[i_ols][0]:.2f}, \ {cf[i_ols][1]:.2f})$", NAIVEC)],
             [(rf"$\gamma = {g[i_best]:.0f}$: \ test {te[i_best]:.2f}", FIXC), (rf"$b = ({cf[i_best][0]:.2f}, \ {cf[i_best][1]:.2f})$", FIXC)],
-            [(rf"partialling out ($\gamma = 0$): \ {te[0]:.2f}", GREY_A)],
+            [(rf"partialling out ($\gamma \approx 0$): \ {te[0]:.2f}", GREY_A)],
         ])
         with self.voiceover(
-            f"<bookmark mark='a'/> A simulated system with a hidden confounder. The anchor pushes on X one and on X two; in "
-            f"training its mean is zero, in the test environment three. <bookmark mark='b'/> As gamma grows, the training "
-            f"error, in blue, rises a little: the fit gives up some in-sample accuracy. <bookmark mark='c'/> Least squares, "
-            f"at gamma one, has test error {say(te[i_ols], 2)}. <bookmark mark='d'/> At gamma {g[i_best]:.0f}, the test error falls to "
-            f"{say(te[i_best], 2)}, half of least squares': the coefficient on X one turns negative, cancelling the part of "
-            f"the child X two that the anchor contaminates. <bookmark mark='e'/> Partialling the anchors out entirely, gamma "
-            f"zero, is the worst of all, {say(te[0], 2)}: it fits exactly the directions that will shift."
+            f"<bookmark mark='a'/> A simulated system with a hidden confounder. The anchor pushes on X one and on X two; in training its mean is zero, in the test environment three. <bookmark mark='b'/> As gamma grows, beyond least squares the training error, in blue, rises: the fit gives up some in-sample accuracy. <bookmark mark='c'/> Least squares, at gamma one, has test error {say(te[i_ols], 2)}. <bookmark mark='d'/> At gamma {g[i_best]:.0f}, the test error falls to {say(te[i_best], 2)}, half of least squares': the coefficient on X one turns negative, cancelling the part of the child X two that the anchor contaminates. <bookmark mark='e'/> Partialling the anchors out entirely, gamma zero, is the worst of all, {say(te[0], 2)}: it fits exactly the directions that will shift."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated")))
             vo.wait_until("a")
@@ -147,17 +125,10 @@ class Invariance(LectureMixin, VoiceoverScene):
 
     def irm(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> In machine learning, Martin Arjovsky, Léon Bottou, Ishaan Gulrajani and David Lopez-Paz "
-            "proposed invariant risk minimization in 2019: learn a representation on which the same classifier is optimal "
-            "in every environment. <bookmark mark='b'/> Its theory is fragile: Elan Rosenfeld, Pradeep Ravikumar and Andrej "
-            "Risteski showed in 2021 that it can fail unless there are more environments than spurious dimensions. "
-            "<bookmark mark='c'/> And Gulrajani and Lopez-Paz's DomainBed comparison, the same year, found that careful "
-            "ordinary training matched the many invariance methods on standard benchmarks. <bookmark mark='d'/> Invariance "
-            "is a powerful idea where the environments are diverse and the causal structure is simple; with deep "
-            "representations, it remains a promise more than a method.",
+            "<bookmark mark='a'/> Invariant risk minimization seeks a representation on which the same classifier is optimal across training environments. <bookmark mark='b'/> Rosenfeld, Ravikumar and Risteski give failures and environment-diversity requirements in their studied models; more environments than spurious dimensions is not a universal theorem for all IRM settings. <bookmark mark='c'/> DomainBed found carefully tuned empirical-risk minimization competitive with evaluated domain-generalization methods on its benchmarks and selection protocols. It did not establish that every invariance method always ties ordinary training. <bookmark mark='d'/> Causal structure, environmental diversity and model selection determine how far these ideas transfer.",
             [(r"\text{IRM}", r":", r"\text{one classifier optimal in every environment}", 40),
-             (r"\text{fragile}", r":", r"\text{needs more environments than spurious dimensions}", 38),
-             (r"\text{DomainBed}", r":", r"\text{careful ERM matches the invariance methods}", 38),
+             (r"\text{fragile}", r":", r"\text{counterexamples depend on the model and environments}", 38),
+             (r"\text{DomainBed}", r":", r"\text{careful ERM competitive on evaluated benchmarks}", 38),
              (r"\text{so}", r":", r"\text{simple structure: \ yes; \ deep features: \ open}", 40)],
             [r"Arjovsky et al. (2019)", r"Rosenfeld, \ Ravikumar \& Risteski (2021)", r"Gulrajani \& Lopez-Paz (2021)", r"chapter 11"],
             colors=[(1, NAIVEC), (2, NAIVEC)])

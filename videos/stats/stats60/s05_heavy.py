@@ -75,7 +75,7 @@ class HeavyTails(LectureMixin, VoiceoverScene):
             f"slowly: one sample in a hundred, the dashed line, has error above {say(mq[2], 3)}. <bookmark mark='c'/> The median of {d['k']} block means, "
             f"with the geometric median for the vector case, falls much faster: its one-in-a-hundred error is {say(gq[2], 3)}. <bookmark "
             f"mark='d'/> Their typical errors differ less, {say(mq[0], 3)} against {say(gq[0], 3)}: the gain is in the tail, which "
-            f"is what a confidence statement is about."
+            f"illustrates upper-tail behavior. The empirical ninety-ninth percentile uses only about four tail observations among four hundred; its order-statistic uncertainty is recorded with the computation."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated, \ 400 samples")))
             vo.wait_until("a")
@@ -105,12 +105,8 @@ class HeavyTails(LectureMixin, VoiceoverScene):
 
     def catoni(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> A last word on heavy tails. Olivier Catoni's estimator, from Part thirty, solves a smoothed "
-            "M-estimating equation and attains the optimal constant in one dimension. <bookmark mark='b'/> The same ideas "
-            "give heavy-tailed regression and covariance estimation with sub-Gaussian guarantees. <bookmark mark='c'/> And "
-            "median of means combines with contamination: block medians resist both heavy tails and a small fraction of "
-            "outliers at once. <bookmark mark='d'/> Robustness and heavy tails, once separate subjects, now share one theory.",
-            [(r"\text{Catoni}", r":", r"\text{the optimal constant in one dimension}", 40),
+            "<bookmark mark='a'/> Catoni's scalar estimator uses a smoothed estimating equation. Near-optimal constants require the theorem's variance information, tuning and confidence range. <bookmark mark='b'/> Extensions to regression and covariance estimation require their own moment and structural assumptions. <bookmark mark='c'/> Median-of-means methods can also resist adversarial observations, provided enough blocks remain clean: the block count must account for the number of corrupted points as well as the confidence level. A fixed thirty-block choice does not resist an arbitrary fraction at every sample size. <bookmark mark='d'/> Heavy-tail and contamination guarantees can be combined when these conditions are made explicit.",
+            [(r"\text{Catoni}", r":", r"\text{near-optimal constants under scale/tuning conditions}", 40),
              (r"\text{extensions}", r":", r"\text{regression, \ covariance}", 40),
              (r"\text{combined}", r":", r"\text{heavy tails and outliers together}", 40),
              (r"\text{so}", r":", r"\text{one theory}", 40)],
@@ -119,15 +115,10 @@ class HeavyTails(LectureMixin, VoiceoverScene):
 
     def delta(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> A subtlety: the number of blocks depends on delta, so the median of means is built for one "
-            "confidence level. <bookmark mark='b'/> Luc Devroye, Matthieu Lerasle, Gábor Lugosi and Roberto Oliveira asked in "
-            "2016 whether one estimator could be sub-Gaussian at every level at once. <bookmark mark='c'/> With only a finite "
-            "variance, no: an estimator must be told the confidence level in advance. <bookmark mark='d'/> With one more "
-            "condition, a bounded kurtosis, a single estimator works for all levels down to e to the minus n: the price of "
-            "knowing less about the tails is knowing more about the question.",
+            "<bookmark mark='a'/> Median of means tunes its block count to a requested confidence level, with at most n nonempty blocks. <bookmark mark='b'/> Devroye, Lerasle, Lugosi and Oliveira distinguish this from a single estimator with guarantees at many confidence levels. <bookmark mark='c'/> Over the full class of finite-variance laws, without further scale information, that stronger property is impossible. Known variance, or variance known within fixed factors, changes the answer. <bookmark mark='d'/> Bounded kurtosis also permits multiple-confidence estimators over stated ranges. Near-optimal constants require a smaller range than a blanket claim down to exponential minus n; the constants and kurtosis bound enter the theorem.",
             [(r"k \asymp \log(1/\delta)", r":", r"\text{one estimator per confidence level}", 40),
              (r"\text{question}", r":", r"\text{one estimator for every } \delta?", 40),
-             (r"\text{two moments}", r":", r"\text{no: \ } \delta \text{ must be known}", 40),
-             (r"\text{bounded kurtosis}", r":", r"\text{yes, \ down to } \delta \approx e^{-n}", 40)],
+             (r"\text{two moments}", r":", r"\text{full finite-variance class: \ no multiple-}\delta\text{ estimator}", 40),
+             (r"\text{bounded kurtosis}", r":", r"\text{yes, \ with theorem-specific constants and range}", 40)],
             [r"a tuned estimator", r"Devroye et al. (2016)", r"an impossibility", r"a little more assumed"],
             colors=[(2, NAIVEC), (3, FIXC)])

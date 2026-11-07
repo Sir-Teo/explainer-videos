@@ -67,11 +67,7 @@ class DRO(LectureMixin, VoiceoverScene):
         d = load("dro")
         g, r = d["groups"], d["grisk"]
         self.lad_voiceover(
-            f"<bookmark mark='a'/> An example. Fit a regression of systolic pressure on sex and body-mass index, using only "
-            f"NHANES adults under forty. <bookmark mark='b'/> Its mean squared error on the young, in units of ten millimetres "
-            f"squared, is {say(r[0], 2)}. <bookmark mark='c'/> Applied to adults of forty to fifty-nine, it is {say(r[1], 2)}. "
-            f"<bookmark mark='d'/> At sixty to eighty, it is {say(r[2], 2)}: more than seven times the training error, because "
-            f"pressure rises with age and the young-trained model never learned it.",
+            f"<bookmark mark='a'/> An example. Fit a regression of systolic pressure on sex and body-mass index, using only NHANES adults under forty. <bookmark mark='b'/> Its mean squared error on the young, in units of ten millimetres of mercury, squared, is {say(r[0], 2)}. <bookmark mark='c'/> Applied to adults of forty to fifty-nine, it is {say(r[1], 2)}. <bookmark mark='d'/> At sixty to eighty, it is {say(r[2], 2)}: more than seven times the training error, because pressure rises with age and the young-trained model never learned it.",
             [(r"\text{model}", r":", r"\text{SBP on sex and BMI, \ fit on ages 18--39}", 40),
              (r"\text{ages } 18\text{--}39", r":", rf"\text{{MSE}} = {r[0]:.2f}", 40),
              (r"\text{ages } 40\text{--}59", r":", rf"\text{{MSE}} = {r[1]:.2f}", 40),
@@ -82,7 +78,7 @@ class DRO(LectureMixin, VoiceoverScene):
     def chart(self):
         d = load("dro")
         rh, c2, kl, gr = np.asarray(d["rhos"]), np.asarray(d["chi2"]), np.asarray(d["kl"]), d["grisk"]
-        A = axes([0, 1.0], [0, 14.0], x_length=7.4, y_length=4.4, xlabel=r"radius $\rho$ of the ball", ylabel=r"certified risk",
+        A = axes([0, 1.0], [0, 14.0], x_length=7.4, y_length=4.4, xlabel=r"radius $\rho$ of the ball", ylabel=r"worst-case empirical risk",
                  xticks=[0, 0.25, 0.5, 0.75, 1.0], yticks=[0, 4, 8, 12], center=[-2.5, 0.2, 0])
         ax = A.ax
         l_c2 = VGroup(polyline(ax, rh, c2, FIXC, 3.5), *[Dot(ax.c2p(a, b), radius=0.06, color=FIXC) for a, b in zip(rh, c2)])
@@ -94,19 +90,13 @@ class DRO(LectureMixin, VoiceoverScene):
             [(rf"grey: \ training risk, \ {gr[0]:.2f}", GREY_B)],
             [(r"green: \ the $\chi^2$ ball's worst case", FIXC)],
             [(r"purple: \ the KL ball's worst case", DEPTHC)],
-            [(r"orange, \ red: \ the true risks", BADC), (r"at ages 40--59 and 60--80", BADC)],
-            [(rf"KL certifies 40--59 at $\rho \approx {k1:.2f}$", GREY_A), (rf"and 60--80 at $\rho \approx {k2:.2f}$", GREY_A)],
+            [(r"orange, \ red: \ observed empirical risks", BADC), (r"at ages 40--59 and 60--80", BADC)],
+            [(rf"crossings do not establish group membership", GREY_A), (rf"all-adult group membership checked separately", GREY_A)],
         ])
         with self.voiceover(
-            f"<bookmark mark='a'/> The worst-case risk, from fifteen hundred training losses, as the radius grows. At radius "
-            f"zero it is the training risk. <bookmark mark='b'/> The chi-square ball's worst case, in green, grows like the "
-            f"square root of the radius. <bookmark mark='c'/> The Kullback–Leibler ball's, in purple, grows faster: it can "
-            f"pile weight on the largest losses. <bookmark mark='d'/> The dashed lines are the true risks for the older "
-            f"groups. <bookmark mark='e'/> A Kullback–Leibler radius of about {say(k1, 2)} certifies the middle group's risk, "
-            f"and about {say(k2, 2)} the oldest group's; the chi-square ball needs {say(q1, 2)} for the middle group. Without "
-            f"knowing the target, a radius is a statement of how large a shift one is willing to insure."
+            "<bookmark mark='a'/> These curves use fifteen hundred young-adult training losses; radius zero is that subsample's mean loss. The full young group's risk is a separate dashed comparison. <bookmark mark='b'/> The green curve is chi-square DRO, evaluated with a feasible primal weighting and a checked dual upper bound. <bookmark mark='c'/> Purple is KL DRO with the same numerical checks. Their radii are different divergence units and are not directly interchangeable. <bookmark mark='d'/> The older groups' observed empirical risks are comparisons, not certified by the young-only balls: those groups have different support. A curve crossing a dashed line does not prove membership. <bookmark mark='e'/> For a valid finite-empirical group bound, instead take all adults as the base. A group of mass p lies in the chi-square ball of radius one half times one over p minus one, or the KL ball of radius minus log p. We compute and verify those bounds separately; neither is a national-population guarantee."
         ) as vo:
-            self.play(FadeIn(A), FadeIn(museum_tag(r"NHANES; \ dual computations exact")))
+            self.play(FadeIn(A), FadeIn(museum_tag(r"NHANES extract; \ primal/dual residuals checked")))
             vo.wait_until("a")
             self.play(Create(hl[0]), FadeIn(side[0]))
             vo.wait_until("b")
@@ -121,13 +111,7 @@ class DRO(LectureMixin, VoiceoverScene):
 
     def wasserstein(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The Wasserstein ball has its own duality, from Peyman Mohajerin Esfahani and Daniel Kuhn, "
-            "and from Jose Blanchet and Karthyek Murthy. <bookmark mark='b'/> For a loss that is Lipschitz in the data, the "
-            "worst case adds the radius times the Lipschitz constant: <bookmark mark='c'/> for linear regression, it is a norm "
-            "penalty on the coefficients: Blanchet, Kang and Murthy showed that the square-root lasso is exactly a "
-            "Wasserstein-robust regression. <bookmark "
-            "mark='d'/> And adversarial training, which perturbs each input within a small ball, is a Wasserstein DRO in "
-            "the infinity-Wasserstein distance: Part sixty-four's robust networks start here.",
+            "<bookmark mark='a'/> Transport duality can turn Wasserstein uncertainty into tractable optimization. The ground cost is part of the specification. <bookmark mark='b'/> For a globally Lipschitz loss, a one-Wasserstein radius gives an upper bound equal to empirical risk plus radius times Lipschitz constant. Equality needs additional conditions. <bookmark mark='c'/> The square-root-lasso identity uses squared feature transport with outcomes held fixed and the appropriate dual norm: worst-case root mean squared loss becomes empirical root mean squared loss plus a norm penalty. A quadratic loss is not globally Lipschitz under arbitrary joint transport. <bookmark mark='d'/> Label-preserving perturbations bounded pointwise correspond to an infinity-Wasserstein formulation under a matching ground metric.",
             [(r"\text{duality}", r":", r"\text{Esfahani \& Kuhn (2018); \ Blanchet \& Murthy (2019)}", 38),
              (r"\text{Lipschitz loss}", r":", r"\sup_{W \le \rho} E_Q[\ell] \le E_{\hat P}[\ell] + \rho\,\mathrm{Lip}(\ell)", 38),
              (r"\text{linear models}", r":", r"\text{a norm penalty: \ regularization is robustness}", 38),
@@ -152,15 +136,10 @@ class DRO(LectureMixin, VoiceoverScene):
 
     def fairness(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The age example is also a fairness example: the model serves the group it was trained on, "
-            "and fails the others. <bookmark mark='b'/> Tatsunori Hashimoto and co-authors showed in 2018 that ordinary "
-            "training can make it worse over time: a minority that is served badly leaves, its share of the data shrinks, "
-            "and the model serves it worse still. <bookmark mark='c'/> A chi-square DRO, which needs no group labels, "
-            "upweights whoever has large losses, and so protects every group above a minimum size. <bookmark mark='d'/> "
-            "Robustness to shift and fairness to subgroups are the same mathematics: Part sixty-three returns to it.",
+            "<bookmark mark='a'/> This age example displays unequal empirical risks. It does not by itself establish every notion of fairness. <bookmark mark='b'/> Hashimoto and co-authors study a feedback mechanism in which poorly served groups leave and become less represented. <bookmark mark='c'/> A divergence ball can bound every subgroup risk when its radius is large enough to contain each subgroup-conditional distribution of the same base law. For our chi-square convention, groups of mass at least alpha fit at radius one half times one over alpha minus one. Moving from an empirical base to a population needs generalization assumptions. <bookmark mark='d'/> This links robust worst-group risk with one fairness objective. It does not ensure parity or individual fairness.",
             [(r"\text{the age model}", r":", r"\text{good for the young, \ bad for the old}", 40),
              (r"\text{feedback}", r":", r"\text{poorly served groups leave, \ and shrink}", 40),
-             (r"\chi^2 \text{ DRO}", r":", r"\text{protects all groups above a size}", 40),
-             (r"\text{so}", r":", r"\text{shift robustness} = \text{subgroup fairness}", 40)],
+             (r"\chi^2 \text{ DRO}", r":", r"\rho\ge\tfrac12(\alpha^{-1}-1) \ \text{covers groups of mass }\ge\alpha", 40),
+             (r"\text{so}", r":", r"\text{robust worst-group risk is one fairness objective}", 40)],
             [r"a disparity", r"Hashimoto et al. (2018)", r"no demographics needed", r"Part 63"],
             colors=[(2, FIXC)])

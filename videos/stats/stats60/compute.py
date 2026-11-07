@@ -31,7 +31,7 @@ from scipy import stats
 from explainer.ai.cache import Cache
 from explainer.stats import museum
 from explainer.stats.board import Row, save_rows
-from explainer.stats.kit import shift as H
+from . import checked as H
 
 CACHE = Cache("stats60")
 load = CACHE.load
@@ -60,7 +60,10 @@ def nest(obj):
 
 def _nhanes():
     d = museum.nhanes()
-    sbp = np.nanmean(np.column_stack([d["sbp1"], d["sbp2"], d["sbp3"]]), axis=1)
+    readings = np.column_stack([d["sbp1"], d["sbp2"], d["sbp3"]])
+    counts = np.isfinite(readings).sum(axis=1)
+    sbp = np.divide(np.nansum(readings, axis=1), counts,
+                    out=np.full(len(readings), np.nan), where=counts > 0)
     ok = np.isfinite(sbp) & np.isfinite(d["bmi"]) & np.isfinite(d["age"]) & np.isfinite(d["sex"])
     return {k: d[k][ok] for k in ("age", "sex", "bmi")} | {"sbp": sbp[ok]}
 
@@ -75,7 +78,7 @@ def compute_depth():
     tmc = H.tukey_median_2d(Xc, 50)
     return {"X": X, "bad": bad, "median": tm["median"], "depth": tm["depth"], "grid": tm["grid"], "depth_grid": tm["depth_grid"],
             "mean": X.mean(0), "median_c": tmc["median"], "mean_c": Xc.mean(0), "coord_median_c": np.median(Xc, 0),
-            "depth_grid_c": tmc["depth_grid"], "grid_c": tmc["grid"]}
+            "depth_grid_c": tmc["depth_grid"], "grid_c": tmc["grid"], "median_scope": tm["scope"]}
 
 
 def compute_robust():
@@ -84,12 +87,14 @@ def compute_robust():
     rows = []
     for d in ds:
         e = [H.robust_mean_errors(2000, d, 0.1, r) for _ in range(4)]
-        rows.append({"d": d, **{k: float(np.mean([x[k] for x in e])) for k in e[0]}})
+        rows.append({"d": d, **{k: float(np.mean([x[k] for x in e])) for k in e[0]},
+                     "draws": e, "mcse": {k:H.mcse([x[k] for x in e]) for k in e[0]}})
     eps = [0.02, 0.05, 0.1, 0.15, 0.2]
     rows_e = []
     for ep in eps:
         e = [H.robust_mean_errors(2000, 100, ep, r) for _ in range(4)]
-        rows_e.append({"eps": ep, **{k: float(np.mean([x[k] for x in e])) for k in e[0]}})
+        rows_e.append({"eps": ep, **{k: float(np.mean([x[k] for x in e])) for k in e[0]},
+                       "draws": e, "mcse": {k:H.mcse([x[k] for x in e]) for k in e[0]}})
     return {"n": 2000, "eps": 0.1, "rows": rows, "d_fixed": 100, "rows_eps": rows_e}
 
 
@@ -103,7 +108,7 @@ def compute_listdec():
     dist = np.linalg.norm(L - mu, axis=1)
     return {"X": X, "n_in": 90, "list": L, "truth": mu, "best": float(dist.min()), "mean": X.mean(0),
             "mean_err": float(np.linalg.norm(X.mean(0) - mu)),
-            "oracle": float(np.linalg.norm(inl.mean(0) - mu))}
+            "oracle": float(np.linalg.norm(inl.mean(0) - mu)), "scope": "four well-separated clusters, k-means illustration, not an adversarial list-decoding guarantee"}
 
 
 def compute_heavy():
@@ -117,7 +122,8 @@ def compute_heavy():
     em, eg = np.asarray(em), np.asarray(eg)
     qs = [0.5, 0.9, 0.99]
     return {"n": n, "d": d, "reps": reps, "df": 2.5, "k": 30, "mean_q": [float(np.quantile(em, q)) for q in qs],
-            "mom_q": [float(np.quantile(eg, q)) for q in qs], "qs": qs, "mean_err": em, "mom_err": eg}
+            "mom_q": [float(np.quantile(eg, q)) for q in qs], "qs": qs, "mean_err": em, "mom_err": eg, "quantile_ci_mean": [H.quantile_interval(em,q) for q in qs],
+            "quantile_ci_mom": [H.quantile_interval(eg,q) for q in qs], "scope": "geometric median of block means; not the optimal covariance-dependent tournament estimator"}
 
 
 def _young_sample(f, n, r):
@@ -125,7 +131,7 @@ def _young_sample(f, n, r):
     over-represented, as in an online panel."""
     pr = np.exp(-(f["age"] - 18) / 20.0)
     pr /= pr.sum()
-    return r.choice(len(f["sbp"]), n, replace=False, p=pr)
+    return r.choice(len(f["sbp"]), n, replace=True, p=pr)
 
 
 def compute_covshift():
@@ -135,40 +141,38 @@ def compute_covshift():
     r = rng(6005)
     reps, n = 400, 600
     cov_u = cov_w = 0
+    hits_u,hits_w,interval_se,naive_se = [],[],[],[]
     est_u, est_w, ess = [], [], []
     Zall = np.column_stack([f["age"] / 10, (f["age"] / 10) ** 2, f["sex"] == 2, f["bmi"] / 10])
     for _ in range(reps):
         idx = _young_sample(f, n, r)
         y = f["sbp"][idx]
         cu = H.weighted_mean_ci(y, np.ones(n))
-        ref = r.choice(N, 2000, replace=False)  # unlabelled draws from the population: covariates only
-        wfun = H.logistic_density_ratio(Zall[idx], Zall[ref])
-        wt = wfun(Zall[idx])
-        cw = H.weighted_mean_ci(y, wt)
+        ref = r.choice(N, 2000, replace=True)  # unlabelled draws from the population: covariates only
+        cw = H.ratio_weighted_mean_ci(Zall[idx],y,Zall[ref])
         cov_u += cu["lo"] <= truth <= cu["hi"]
         cov_w += cw["lo"] <= truth <= cw["hi"]
+        hits_u.append(cu["lo"] <= truth <= cu["hi"])
+        hits_w.append(cw["lo"] <= truth <= cw["hi"])
+        interval_se.append(cw["se"]);naive_se.append(cw["naive_fixed_weight_se"])
         est_u.append(cu["mean"])
         est_w.append(cw["mean"])
         ess.append(cw["ess"])
     idx = _young_sample(f, n, r)
     return {"N": N, "n": n, "reps": reps, "truth": truth, "cov_u": cov_u / reps, "cov_w": cov_w / reps, "mean_u": float(np.mean(est_u)),
-            "mean_w": float(np.mean(est_w)), "sd_u": float(np.std(est_u)), "sd_w": float(np.std(est_w)), "ess": float(np.mean(ess)),
-            "age_sample": f["age"][idx], "age_pop": f["age"][r.choice(N, 2000, replace=False)],
+            "mean_w": float(np.mean(est_w)), "sd_u": float(np.std(est_u,ddof=1)), "sd_w": float(np.std(est_w,ddof=1)), "ess": float(np.mean(ess)),
+            "age_sample": f["age"][idx], "age_pop": f["age"][r.choice(N, 2000, replace=True)],
+            "cov_u_mcse": H.mcse(hits_u), "cov_w_mcse": H.mcse(hits_w), "estimate_draws_u": est_u, "estimate_draws_w": est_w,
+            "joint_se_draws": interval_se, "fixed_weight_se_draws": naive_se,
+            "scope": "IID source/target resampling from fixed unweighted complete-case empirical population; joint logistic-ratio/Hajek sandwich",
             "mean_age_sample": float(f["age"][idx].mean()), "mean_age_pop": float(f["age"].mean())}
 
 
-def _logit_fit(X, y, lam=1e-2, iters=50):
-    X1 = np.column_stack([np.ones(len(X)), X])
-    b = np.zeros(X1.shape[1])
-    for _ in range(iters):
-        p = 1 / (1 + np.exp(-(X1 @ b)))
-        g = X1.T @ (y - p) - lam * np.r_[0, b[1:]]
-        Hm = (X1 * (p * (1 - p))[:, None]).T @ X1 + lam * np.diag(np.r_[0, np.ones(len(b) - 1)])
-        step = np.linalg.solve(Hm, g)
-        b += step
-        if np.max(np.abs(step)) < 1e-9:
-            break
-    return lambda Z: 1 / (1 + np.exp(-(np.column_stack([np.ones(len(Z)), Z]) @ b)))
+def _logit_fit(X,y,lam=1e-2,iters=80):
+    design=np.column_stack([np.ones(len(X)),X])
+    fit=H._logit(design,y,lam,iters)
+    from scipy.special import expit
+    return lambda Z: np.clip(expit(np.column_stack([np.ones(len(Z)),Z])@fit["beta"]),1e-12,1-1e-12)
 
 
 def compute_labshift():
@@ -179,37 +183,50 @@ def compute_labshift():
     reps = 300
     q_true = 0.70
     out = {"cc": [], "bbse": [], "em": [], "cc_cov": 0, "bbse_cov": 0}
+    failures=0;em_unconverged=0;condition_numbers=[]
     for _ in range(reps):
         o = r.permutation(len(y))
         tr, ca, rest = o[:250], o[250:400], o[400:]
         clf = _logit_fit(Z[tr], y[tr])
-        # a target sample of 150 with 70% malignant, drawn from the held-out rest
-        mal, ben = rest[y[rest] == 1], rest[y[rest] == 0]
-        nt = 100
-        k = int(q_true * nt)
-        te = np.r_[r.choice(mal, k, replace=True), r.choice(ben, nt - k, replace=True)]
+        # Both evaluation samples use the SAME held-out class-conditional laws.
+        reservoir = o[250:]
+        mal,ben = reservoir[y[reservoir]==1],reservoir[y[reservoir]==0]
+        def labelled_draw(count,prevalence):
+            labels=(r.random(count)<prevalence).astype(int)
+            return np.array([r.choice(mal if label else ben) for label in labels])
+        ca = labelled_draw(150,float(y.mean()))
+        te = labelled_draw(100,q_true)
         pred_ca = (clf(Z[ca]) > 0.5).astype(int)
         pred_te = (clf(Z[te]) > 0.5).astype(int)
         cc = float(pred_te.mean())
         b = H.bbse_weights(pred_ca, y[ca], pred_te, 2)
-        em = H.em_label_shift(np.column_stack([1 - clf(Z[te]), clf(Z[te])]), np.bincount(y[tr], minlength=2) / len(tr))
-        # intervals by a bootstrap over the target and calibration sets
+        em = H.em_label_shift(np.column_stack([1 - clf(Z[te]), clf(Z[te])]), np.array([1-y.mean(), y.mean()]))
+        em_unconverged += int(not em["converged"])
+        condition_numbers.append(b["condition_number"])
+        # IID bootstrap over independent target and calibration samples
         bs_cc, bs_b = [], []
         for _ in range(100):
             i = r.choice(len(te), len(te))
             j = r.choice(len(ca), len(ca))
             bs_cc.append(pred_te[i].mean())
-            bs_b.append(H.bbse_weights(pred_ca[j], y[ca][j], pred_te[i], 2)["q"][1])
+            try:bs_b.append(H.bbse_weights(pred_ca[j],y[ca][j],pred_te[i],2)["q"][1])
+            except ValueError:
+                failures+=1;bs_b.append(np.nan)
         lo, hi = np.quantile(bs_cc, [0.025, 0.975])
         out["cc_cov"] += lo <= q_true <= hi
-        lo, hi = np.quantile(bs_b, [0.025, 0.975])
+        lo,hi = (0.,1.) if not np.isfinite(bs_b).all() else np.quantile(bs_b,[.025,.975])
         out["bbse_cov"] += lo <= q_true <= hi
         out["cc"].append(cc)
         out["bbse"].append(float(b["q"][1]))
         out["em"].append(float(em["q"][1]))
     return {"reps": reps, "q_true": q_true, "p_train": float(np.mean(y)), "cc_mean": float(np.mean(out["cc"])), "bbse_mean": float(np.mean(out["bbse"])),
-            "em_mean": float(np.mean(out["em"])), "cc_sd": float(np.std(out["cc"])), "bbse_sd": float(np.std(out["bbse"])), "em_sd": float(np.std(out["em"])),
-            "cc_cov": out["cc_cov"] / reps, "bbse_cov": out["bbse_cov"] / reps, "cc": out["cc"], "bbse": out["bbse"], "em": out["em"]}
+            "em_mean": float(np.mean(out["em"])), "cc_sd": float(np.std(out["cc"],ddof=1)), "bbse_sd": float(np.std(out["bbse"],ddof=1)), "em_sd": float(np.std(out["em"],ddof=1)),
+            "cc_cov": out["cc_cov"] / reps, "bbse_cov": out["bbse_cov"] / reps, "cc": out["cc"], "bbse": out["bbse"], "em": out["em"],
+            "bootstrap_singular_draws": failures, "em_unconverged": em_unconverged,
+            "confusion_condition_numbers": condition_numbers,
+            "cc_cov_mcse": math.sqrt(out["cc_cov"]/reps*(1-out["cc_cov"]/reps)/reps),
+            "bbse_cov_mcse": math.sqrt(out["bbse_cov"]/reps*(1-out["bbse_cov"]/reps)/reps),
+            "scope": "conditional on training/held-out empirical class laws; IID mixtures with source prevalence P(Y=1) and target .70; percentile bootstrap approximate"}
 
 
 def compute_dro():
@@ -225,8 +242,24 @@ def compute_dro():
     grisk = [float(loss[(f["age"] >= a) & (f["age"] < c)].mean()) for a, c in groups]
     sub = r.choice(train_loss, 1500, replace=False)
     rhos = [0.0, 0.05, 0.1, 0.2, 0.3, 0.5, 0.75, 1.0]
-    return {"groups": [f"{a}--{c - 1}" for a, c in groups], "grisk": grisk, "rhos": rhos, "chi2": [H.dro_chi2(sub, rh) for rh in rhos],
-            "kl": [H.dro_kl(sub, rh) for rh in rhos], "train": float(train_loss.mean())}
+    chi2=[H.dro_chi2(sub,rh,return_audit=True) for rh in rhos]
+    kl=[H.dro_kl(sub,rh,return_audit=True) for rh in rhos]
+    membership=[]
+    for (a,c),risk in zip(groups,grisk):
+        mask=(f["age"]>=a)&(f["age"]<c);prob=float(mask.mean())
+        c_radius=.5*(1/prob-1);k_radius=-math.log(prob)
+        c_bound=H.dro_chi2(loss,c_radius)
+        k_bound=H.dro_kl(loss,k_radius)
+        assert risk<=min(c_bound,k_bound)+1e-8
+        membership.append(dict(group=f"{a}--{c-1}",probability=prob,risk=risk,
+            chi2_radius=c_radius,kl_radius=k_radius,chi2_bound=c_bound,kl_bound=k_bound))
+    return {"groups":[f"{a}--{c-1}" for a,c in groups],"grisk":grisk,"rhos":rhos,
+            "chi2":[d["value"] for d in chi2],"kl":[d["value"] for d in kl],
+            "chi2_audit":chi2,"kl_audit":kl,"train":float(train_loss.mean()),
+            "empirical_base_mean":float(sub.mean()),"base_loss_count":len(sub),
+            "all_adult_group_membership":membership,
+            "all_adult_base_mean":float(loss.mean()),
+            "scope":"young-loss curve does not certify older groups; separate all-adult empirical group conditional laws have verified ball membership, not population guarantees"}
 
 
 def compute_invariance():
@@ -270,6 +303,7 @@ def compute_transfer():
     out = {"p": p, "s": s, "ns": ns, "reps": reps, "nts": nts, "k_diff": 5, "h": [0.15, 1.0]}
     for h in out["h"]:
         res = {"transfer": [], "pooled": [], "target": []}
+        res_draws={k:[] for k in res};res_se={k:[] for k in res}
         for nt in nts:
             E = {k: [] for k in res}
             for _ in range(reps):
@@ -287,7 +321,9 @@ def compute_transfer():
                     E[k].append(float(np.sum((o[k] - b) ** 2)))
             for k in res:
                 res[k].append(float(np.mean(E[k])))
-        out[f"h{h:g}"] = res
+                res_draws[k].append(E[k]);res_se[k].append(H.mcse(E[k]))
+        out[f"h{h:g}"] = res | {"draws":res_draws,"mcse":res_se,"contrast_l1":5*h,
+                               "scope":"one chosen source, pooled lasso plus target residual correction; not adaptive source aggregation"}
     return out
 
 
@@ -296,27 +332,24 @@ def compute_detect():
     r = rng(6009)
     Z = np.column_stack([f["age"] / 10, f["bmi"] / 5, f["sex"]])
     idx = _young_sample(f, 300, r)
-    ref = r.choice(len(f["sbp"]), 300, replace=False)
+    ref = r.choice(len(f["sbp"]), 300, replace=True)
     t_shift = H.mmd_test(Z[idx], Z[ref], r, 300)
-    ref2 = r.choice(len(f["sbp"]), 300, replace=False)
+    ref2 = r.choice(len(f["sbp"]), 300, replace=True)
     t_same = H.mmd_test(Z[ref2], Z[ref], r, 300)
     # a classifier two-sample test: held-out accuracy of a logistic classifier of sample against population
     Zs, Zp = Z[idx], Z[ref]
-    tr = np.r_[np.arange(150)]
     clf = _logit_fit(np.vstack([Zs[:150], Zp[:150]]), np.r_[np.ones(150), np.zeros(150)])
-    acc = float(np.mean(np.r_[clf(Zs[150:]) > 0.5, clf(Zp[150:]) <= 0.5]))
-    p_acc = float(stats.binom.sf(int(acc * 300) - 1, 300, 0.5))
-    del tr
-    return {"mmd_shift": t_shift, "mmd_same": t_same, "acc": acc, "p_acc": p_acc}
+    exact=H.classifier_holdout_test(clf(Zs[150:])>.5,clf(Zp[150:])>.5)
+    return {"mmd_shift": t_shift, "mmd_same": t_same, **exact}
 
 
 def compute_board():
     c = load("covshift")
     l = load("labshift")
-    rows = [Row(60, r"unweighted interval, \ shifted sample", r"NHANES pressure, \ young-skewed $n = 600$", "coverage", 0.95, c["cov_u"], c["reps"]),
-            Row(60, r"importance-weighted interval", r"NHANES pressure, \ young-skewed $n = 600$", "coverage", 0.95, c["cov_w"], c["reps"]),
-            Row(60, r"classify-and-count prevalence interval", r"biopsies, \ 37\% $\to$ 70\% malignant", "coverage", 0.95, l["cc_cov"], l["reps"]),
-            Row(60, r"BBSE label-shift interval", r"biopsies, \ 37\% $\to$ 70\% malignant", "coverage", 0.95, l["bbse_cov"], l["reps"])]
+    rows = [Row(60, r"unweighted interval, \ shifted sample", r"NHANES pressure, \ young-skewed $n = 600$", "coverage", 0.95, c["cov_u"], c["reps"], mc_se=c["cov_u_mcse"]),
+            Row(60, r"importance-weighted interval", r"NHANES pressure, \ young-skewed $n = 600$", "coverage", 0.95, c["cov_w"], c["reps"], mc_se=c["cov_w_mcse"]),
+            Row(60, r"classify-and-count prevalence interval", r"biopsies, \ 37\% $\to$ 70\% malignant", "coverage", 0.95, l["cc_cov"], l["reps"], mc_se=l["cc_cov_mcse"]),
+            Row(60, r"BBSE label-shift interval", r"biopsies, \ 37\% $\to$ 70\% malignant", "coverage", 0.95, l["bbse_cov"], l["reps"], mc_se=l["bbse_cov_mcse"])]
     save_rows(60, rows)
     return {"rows": [asdict(q) | {"verdict": q.verdict, "se": q.se} for q in rows]}
 

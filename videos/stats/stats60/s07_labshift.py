@@ -20,30 +20,20 @@ class LabelShift(LectureMixin, VoiceoverScene):
     def definition(self):
         d = load("labshift")
         self.lad_voiceover(
-            f"<bookmark mark='a'/> The mirror image of covariate shift. A classifier for breast biopsies is trained at one "
-            f"clinic, where {100 * d['p_train']:.0f} percent of biopsies are malignant. <bookmark mark='b'/> It is used at a "
-            f"referral centre, where seventy percent are. <bookmark mark='c'/> A malignant biopsy looks the same at both: "
-            f"the law of the features given the label is unchanged; only the label's distribution moved. <bookmark "
-            f"mark='d'/> Two questions: what is the new prevalence, and how should the classifier's probabilities be "
-            f"corrected? Neither needs a single label from the new site.",
+            f"<bookmark mark='a'/> The mirror image of covariate shift. A classifier for breast biopsies is trained on an empirical biopsy sample, where {100 * d['p_train']:.0f} percent of biopsies are malignant. <bookmark mark='b'/> We simulate a target mixture, where seventy percent are. <bookmark mark='c'/> A malignant biopsy looks the same at both: the law of the features given the label is unchanged; only the label's distribution moved. <bookmark mark='d'/> Two questions: what is the new prevalence, and how should the classifier's probabilities be corrected? Neither needs a single label from the new site.",
             [(r"\text{train}", r":", rf"P(y = 1) = {d['p_train']:.2f}", 40),
              (r"\text{target}", r":", rf"Q(y = 1) = {d['q_true']:.2f}", 40),
              (r"\text{assumed}", r":", r"P(x \mid y) = Q(x \mid y)", 40),
              (r"\text{goals}", r":", r"Q(y), \ \text{and } Q(y \mid x), \ \text{from unlabelled } x", 40)],
-            [r"Wisconsin biopsies", r"a referral centre", r"anticausal: \ $y$ causes $x$", r"no target labels"],
+            [r"Wisconsin biopsies", r"a simulated target mixture", r"anticausal: \ $y$ causes $x$", r"no target labels"],
             colors=[(2, FIXC)])
 
     def cc_bias(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The naive answer, classify and count: the fraction of new biopsies the classifier calls "
-            "malignant. <bookmark mark='b'/> Its expectation mixes the classifier's true positive rate and false positive "
-            "rate, weighted by the true prevalence. <bookmark mark='c'/> Unless the classifier is perfect, that pulls the "
-            "count toward the middle: a high prevalence is underestimated, a low one overestimated. <bookmark mark='d'/> "
-            "George Forman's adjusted count, from 2005, inverts the relation, using the rates measured on held-out "
-            "training data.",
+            "<bookmark mark='a'/> Classify and count uses the fraction predicted malignant. <bookmark mark='b'/> Its expectation is q times the true-positive rate plus one minus q times the false-positive rate. <bookmark mark='c'/> The bias is q times TPR minus one, plus one minus q times FPR. Its sign depends on both rates and q; it is not always toward one half. The observed downward bias is specific to this example. <bookmark mark='d'/> Forman's adjusted count inverts this relation if TPR differs from FPR. Estimated rates add uncertainty and boundary projection can add finite-sample bias.",
             [(r"\hat q_{\text{CC}}", r"=", r"\tfrac1m\#\{\text{predicted malignant}\}", 40),
              (r"E[\hat q_{\text{CC}}]", r"=", r"q\,\mathrm{TPR} + (1 - q)\,\mathrm{FPR}", 40),
-             (r"\text{so}", r":", r"\text{biased toward the middle}", 40),
+             (r"\text{so}", r":", r"\text{bias}=q(\mathrm{TPR}-1)+(1-q)\mathrm{FPR}", 40),
              (r"\hat q_{\text{ACC}}", r"=", r"(\hat q_{\text{CC}} - \mathrm{FPR})/(\mathrm{TPR} - \mathrm{FPR})", 40)],
             [r"the obvious estimate", r"a mixture of rates", r"attenuation", r"Forman (2005)"],
             colors=[(2, NAIVEC), (3, FIXC)])
@@ -59,7 +49,7 @@ class LabelShift(LectureMixin, VoiceoverScene):
             [(r"\hat C_{ij}", r"=", r"\hat P(\hat y = i, \ y = j) \ \text{on held-out training data}", 38),
              (r"\hat\mu_i", r"=", r"\hat Q(\hat y = i) \ \text{on the target}", 40),
              (r"\mu", r"=", r"C\,w, \ \ w_j = Q(y = j)/P(y = j)", 40),
-             (r"\hat w", r"=", r"\hat C^{-1}\hat\mu", 40)],
+             (r"\hat w", r"=", r"\hat C^{-1}\hat\mu \ \text{before simplex projection}", 40)],
             [r"Lipton, \ Wang \& Smola (2018)", r"the confusion matrix", r"the moment equation", r"a black box suffices"],
             colors=[(3, FIXC)])
 
@@ -101,13 +91,7 @@ class LabelShift(LectureMixin, VoiceoverScene):
             [(r"purple: \ EM", DEPTHC), (rf"mean {d['em_mean']:.3f}, \ sd {d['em_sd']:.3f}", DEPTHC)],
         ])
         with self.voiceover(
-            f"<bookmark mark='a'/> The Wisconsin biopsies, {d['reps']} times over. Each time, a logistic classifier is trained "
-            f"on two hundred and fifty biopsies, its confusion matrix estimated on a hundred and fifty more, and the target is "
-            f"a hundred biopsies, seventy percent malignant. <bookmark mark='b'/> The true prevalence is the gold line. "
-            f"<bookmark mark='c'/> Classify and count, in red, averages {say(d['cc_mean'], 3)}: biased down, as the formula said. "
-            f"<bookmark mark='d'/> BBSE, in green, averages {say(d['bbse_mean'], 3)}: unbiased, with a wider spread. <bookmark "
-            f"mark='e'/> EM, in purple, averages {say(d['em_mean'], 3)}, with the smallest spread: the logistic probabilities are "
-            f"nearly calibrated here."
+            "<bookmark mark='a'/> These are three hundred semi-synthetic repetitions on the Wisconsin dataset. Each classifier trains on two hundred and fifty biopsies. Independent calibration and target draws then use the same remaining class-conditional reservoir, with replacement, at source prevalence about thirty-seven percent and target prevalence seventy percent. Realized target counts fluctuate. <bookmark mark='b'/> The gold line is the target mixture parameter. The curves are smoothed empirical densities. <bookmark mark='c'/> Classify and count is biased downward in this experiment. <bookmark mark='d'/> Projected BBSE is close to the truth on average but is not exactly unbiased; both calibration and target variation contribute to its spread. <bookmark mark='e'/> EM is more concentrated here but retains finite-sample bias. This plot alone does not establish calibrated probabilities or clinical performance."
         ) as vo:
             self.play(FadeIn(A), FadeIn(museum_tag(r"Wolberg, \ Street \& Mangasarian (1995); \ the shift is simulated")))
             vo.wait_until("a")
@@ -127,20 +111,14 @@ class LabelShift(LectureMixin, VoiceoverScene):
         show_board(self, board_rows("classify-and-count", "BBSE"),
                    f"<bookmark mark='a'/> On the Board, with bootstrap intervals for the prevalence. Classify and count's interval "
                    f"contains the true seventy percent only {100 * br[2]['achieved']:.0f} percent of the time: broken, because its centre is wrong. "
-                   f"<bookmark mark='b'/> BBSE covers {100 * br[3]['achieved']:.0f} percent: kept.", [("a", [0]), ("b", [1])])
+                   f"<bookmark mark='b'/> BBSE covers {100 * br[3]['achieved']:.1f} percent in these runs. Its percentile bootstrap remains an approximation; the observed undercoverage is part of the result.", [("a", [0]), ("b", [1])])
 
     def recalibrate(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> With the weights in hand, the classifier is corrected by the same Bayes step: multiply "
-            "its probabilities by the weight of each class and renormalize. <bookmark mark='b'/> For decisions, this moves "
-            "the threshold: at seventy percent prevalence, a biopsy scored forty percent malignant by the clinic's "
-            "classifier is, at the new site, about seventy-three percent likely to be malignant. <bookmark mark='c'/> The theory: BBSE's error "
-            "shrinks like one over root m, the target size, times the condition number of the confusion matrix. <bookmark "
-            "mark='d'/> Covariate shift or label shift? The causal direction decides: features caused by the label, as a "
-            "tumour causes its cells' shape, suggest label shift.",
+            "<bookmark mark='a'/> Under exact label shift, known source posterior probabilities can be adjusted by the class-prior ratio and normalized. Estimated probabilities and weights introduce error. <bookmark mark='b'/> A source score of forty percent would become about seventy-three percent under these priors if that score were the correct source posterior. <bookmark mark='c'/> BBSE uncertainty depends on both source calibration and target sample sizes, amplified by inverse confusion-matrix conditioning. <bookmark mark='d'/> A causal story may suggest a shift model, but the direction of causation alone does not identify the actual shift from unlabelled data.",
             [(r"Q(y \mid x)", r"\propto", r"\hat w(y)\,P(y \mid x)", 40),
              (r"\text{decisions}", r":", r"\text{the threshold moves}", 40),
-             (r"\text{error}", r"\lesssim", r"\kappa(C)\,/\sqrt m", 40),
-             (r"\text{which shift?}", r":", r"x \to y: \ \text{covariate}; \ \ y \to x: \ \text{label}", 40)],
+             (r"\text{error}", r"\lesssim", r"\|C^{-1}\|\,[O_p(n_S^{-1/2})+O_p(n_T^{-1/2})]", 40),
+             (r"\text{which shift?}", r":", r"\text{causal story suggests assumptions; \ data must support them}", 40)],
             [r"Bayes, \ once more", r"$0.40 \to 0.73$", r"Lipton et al.'s bound", r'Sch\"olkopf et al. (2012)'],
             colors=[(0, FIXC)])

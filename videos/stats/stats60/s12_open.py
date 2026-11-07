@@ -18,10 +18,10 @@ class OpenProblems(LectureMixin, VoiceoverScene):
     def map_(self):
         hdr = [r"threat", r"assumption", r"method", r"guarantee"]
         body = [
-            [r"$\varepsilon$ of the data adversarial", r"Gaussian inliers", r"depth; \ the filter", r"$O(\varepsilon)$, \ free of $d$"],
-            [r"most data adversarial", r"$\alpha$ inliers", r"list decoding", r"a list, \ $O(1/\sqrt\alpha)$"],
+            [r"$\varepsilon$ of the data adversarial", r"isotropic Gaussian", r"exact depth / certified algorithms", r"$O(\varepsilon)+$ sampling term"],
+            [r"most data adversarial", r"$\alpha$ inliers, bounded covariance", r"list decoding", r"a list, \ $O(1/\sqrt\alpha)$"],
             [r"heavy tails", r"two moments", r"median of means", r"sub-Gaussian width"],
-            [r"covariate shift", r"$P(y \mid x)$ fixed, \ overlap", r"importance weights", r"coverage kept"],
+            [r"covariate shift", r"$P(y \mid x)$ fixed, \ overlap", r"importance weights", r"valid variance + ratio conditions"],
             [r"label shift", r"$P(x \mid y)$ fixed", r"BBSE, \ EM", r"consistent prevalence"],
             [r"unknown shift", r"$Q$ in a ball", r"DRO", r"a risk certificate"],
             [r"interventions", r"causal structure", r"ICP, \ anchors", r"robust to anchor shifts"],
@@ -47,14 +47,9 @@ class OpenProblems(LectureMixin, VoiceoverScene):
 
     def op_gaps(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Problem one: what can be computed. <bookmark mark='b'/> For Gaussian means, the efficient "
-            "error epsilon root log one over epsilon is matched by a statistical query lower bound, from Diakonikolas, Kane "
-            "and Stewart in 2017, while the information-theoretic error is epsilon. <bookmark mark='c'/> For sparse means, "
-            "covariances in some norms, and mixtures, the gaps between what is possible and what is efficient are known "
-            "only in restricted models of computation. <bookmark mark='d'/> Which gaps are real, under standard complexity "
-            "assumptions, is open.",
+            "<bookmark mark='a'/> Computational gaps are model-specific. <bookmark mark='b'/> For isotropic Gaussian means, information-theoretic contamination error is order epsilon. Strong or total-variation corruption has statistical-query and related restricted-model evidence for a larger efficient-error scale. Huber mixtures instead admit order-epsilon polynomial algorithms, including the 2023 almost-linear-time result. <bookmark mark='c'/> Sparse means, covariance estimation and mixtures have different gaps, assumptions and reductions. Restricted-model lower bounds are not unconditional lower bounds for every polynomial algorithm. <bookmark mark='d'/> Pinning down which gaps follow from standard complexity assumptions remains an active question.",
             [(r"\text{problem 1}", r":", r"\text{statistical-computational gaps}", 40),
-             (r"\text{Gaussian mean}", r":", r"\varepsilon \ \text{possible}; \ \varepsilon\sqrt{\log(1/\varepsilon)} \ \text{efficient (SQ)}", 36),
+             (r"\text{Gaussian mean}", r":", r"\text{Huber } O(\varepsilon);\ \text{strong corruption: SQ barrier}", 36),
              (r"\text{harder problems}", r":", r"\text{gaps only in restricted models}", 40),
              (r"\text{open}", r":", r"\text{which gaps are real}", 40)],
             [r"computation as a resource", r"Diakonikolas, \ Kane \& Stewart (2017)", r"sparse, \ covariance, \ mixtures", r"Part 59's hard phase, \ again"],
@@ -62,13 +57,9 @@ class OpenProblems(LectureMixin, VoiceoverScene):
 
     def op_which(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Problem two: which shift is it? <bookmark mark='b'/> Covariate shift and label shift need "
-            "opposite assumptions, and from unlabelled target data alone they cannot always be told apart. <bookmark "
-            "mark='c'/> Real shifts mix them, and add changes in the mechanism, as the ImageNet rebuild did, where no "
-            "simple assumption held. <bookmark mark='d'/> Identifying the kind of shift from data, or bounding the target "
-            "risk under every shift consistent with what one sees, partial identification in Manski's sense, is open.",
+            "<bookmark mark='a'/> Which shift happened? <bookmark mark='b'/> Unlabelled target covariates do not in general distinguish covariate shift, label shift and outcome-mechanism changes. These models impose different assumptions, which can overlap in special cases. <bookmark mark='c'/> Real shifts can combine several changes. ImageNetV2 alone does not identify which conditional mechanism changed. <bookmark mark='d'/> Identification and sharp risk bounds require a specified model, labels, multiple environments or other information; many formulations remain open.",
             [(r"\text{problem 2}", r":", r"\text{identifying the kind of shift}", 40),
-             (r"\text{covariate vs label}", r":", r"\text{opposite assumptions}", 40),
+             (r"\text{covariate vs label}", r":", r"\text{different, generally untestable without labels}", 40),
              (r"\text{real shifts}", r":", r"\text{mixtures, \ plus a changed mechanism}", 40),
              (r"\text{open}", r":", r"\text{identification, \ or sharp bounds}", 40)],
             [r"the modelling question", r"chapters 5--6", r"the hook", r"Part 37's Manski bounds"],
@@ -76,11 +67,7 @@ class OpenProblems(LectureMixin, VoiceoverScene):
 
     def op_radius(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Problem three: how large a ball? <bookmark mark='b'/> DRO's certificate is only as good "
-            "as its uncertainty set, and the radius is usually a guess. <bookmark mark='c'/> Choosing it by cross-validation "
-            "defeats the purpose, since the validation data come from the training distribution. <bookmark mark='d'/> "
-            "Principled, data-driven uncertainty sets, from several past environments, from domain knowledge, or from a "
-            "model of how the world drifts, with guarantees for the next environment, are open.",
+            "<bookmark mark='a'/> The uncertainty set is the essential modeling choice. <bookmark mark='b'/> A risk bound is useful only when the target is actually in that set. <bookmark mark='c'/> Ordinary random-split validation evaluates the same distribution and cannot certify protection from an arbitrary unseen shift. Environment-held-out validation and theoretically calibrated radii can still help under suitable assumptions. <bookmark mark='d'/> Learning useful future-environment sets from limited environments, domain knowledge or drift models remains an active problem.",
             [(r"\text{problem 3}", r":", r"\text{choosing the uncertainty set}", 40),
              (r"\text{radius}", r":", r"\text{usually a guess}", 40),
              (r"\text{cross-validation}", r":", r"\text{validates the wrong distribution}", 40),
@@ -105,12 +92,7 @@ class OpenProblems(LectureMixin, VoiceoverScene):
 
     def op_inference(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Problem five: inference, not just prediction, under shift. <bookmark mark='b'/> Chapter "
-            "five's interval kept its coverage with estimated weights in four covariates. In high dimensions, estimated "
-            "weights are noisy and extreme, and the effective sample size collapses. <bookmark mark='c'/> Doubly robust "
-            "estimators, balancing weights, and weighted conformal prediction each help, under their own assumptions. "
-            "<bookmark mark='d'/> Valid confidence statements for target parameters under estimated high-dimensional shift, "
-            "with honest accounting for weak overlap, are open.",
+            "<bookmark mark='a'/> Inference under shift needs more than point estimation. <bookmark mark='b'/> Our low-dimensional example includes ratio-fit and reference-sample uncertainty, but its observed coverage is a finite Monte Carlo result under a correctly specified logistic ratio. It is not a guarantee for arbitrary estimated weights. <bookmark mark='c'/> Doubly robust estimation, balance and weighted conformal each require their own support, fitting and error-rate assumptions. <bookmark mark='d'/> Honest inference in high dimensions and under weak overlap requires careful formulation of the estimand and what can be identified.",
             [(r"\text{problem 5}", r":", r"\text{inference under shift}", 40),
              (r"\text{high dimensions}", r":", r"\text{extreme weights, \ small } n_{\text{eff}}", 40),
              (r"\text{partial tools}", r":", r"\text{doubly robust, \ balancing, \ conformal}", 40),
