@@ -64,12 +64,13 @@ class Outro(VoiceoverScene):
             label(r"the Master's", font_size=48, color=S.ACCENT),
         ), 12.4, 0.5, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> That completes the third stage, the master's. <bookmark mark='b'/> Optimization and "
-            "likelihood, linear and generalized linear models, hierarchical and Bayesian models and their computation; "
-            "<bookmark mark='c'/> choosing models, smoothing, robustness, many variables, sparsity, many tests and "
-            "prediction with guarantees; <bookmark mark='d'/> experiments and causes, natural experiments, time series, "
-            "space, survival, and the data we did not see. <bookmark mark='e'/> And an exam: two clients and twelve "
-            "problems, every one solved. <bookmark mark='f'/> That is a master's degree in statistics."
+            "<bookmark mark='a'/> That completes the third stage, the master's. <bookmark mark='b'/> Optimization and"
+            " likelihood, linear and generalized linear models, hierarchical and Bayesian models and their "
+            "computation; <bookmark mark='c'/> choosing models, smoothing, robustness, many variables, sparsity, many"
+            " tests and prediction with guarantees; <bookmark mark='d'/> experiments and causes, natural experiments,"
+            " time series, space, survival, and the data we did not see. <bookmark mark='e'/> And an exam: two "
+            "clients and twelve problems, every one solved. <bookmark mark='f'/> That completes this course's "
+            "master's-level stage; it is not an accredited degree."
         ) as vo:
             for k, m_ in enumerate("abcdef"):
                 vo.wait_until(m_)
@@ -82,11 +83,13 @@ class Outro(VoiceoverScene):
                             r"that the limits exist and the approximations hold, \ taken on trust",
                             r"Parts 43--47: \ measure, \ martingales, \ estimation, \ testing, \ asymptotics")
         with self.voiceover(
-            "<bookmark mark='a'/> A promise for the next stage. Every standard error in this exam leaned on asymptotics: the "
-            "sandwich, the influence-function standard error of AIPW, the normal approximations behind every interval. "
-            "<bookmark mark='b'/> We took on trust that the limits exist and that the approximations hold. <bookmark "
-            "mark='c'/> The PhD core proves it, starting from the foundations: measure-theoretic probability, martingales, "
-            "the theory of estimation and of testing, and asymptotic statistics."
+            "<bookmark mark='a'/> A promise for the next stage. Many standard errors in this exam leaned on "
+            "asymptotics: the sandwich, the influence-function standard error of AIPW, and normal approximations "
+            "behind several intervals. The Gaussian regression t intervals and split-conformal rank bound have "
+            "different, explicit finite-sample justifications. <bookmark mark='b'/> We took on trust that the limits "
+            "exist and that the approximations hold. <bookmark mark='c'/> The PhD core proves it, starting from the "
+            "foundations: measure-theoretic probability, martingales, the theory of estimation and of testing, and "
+            "asymptotic statistics."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(card[0]), FadeIn(card[1][0]), FadeIn(card[1][1][0]))
@@ -101,14 +104,16 @@ class Outro(VoiceoverScene):
             (r"what a random variable is; \ why the limits hold", [43]), (r"the sandwich's asymptotics, \ proved", [47]),
             (r"AIPW's efficiency bound", [49]), (r"the qualifying exam", [55]), (r"anytime-valid trials and adaptive designs", [58]),
         ], font_size=22)
+        self.add(card.head)
         with self.voiceover(
-            "Where it comes back. <bookmark mark='a'/> Part forty-three asks what a random variable really is and why the "
-            "laws of large numbers hold. Part forty-seven proves the sandwich's asymptotics. Part forty-nine shows that the "
-            "augmented estimator attains the efficiency bound. Part fifty-five is the next exam, the qualifying exam of the "
-            "PhD. And Part fifty-eight revisits trial design, with experiments that can be watched and stopped at any time."
+            "Where it comes back. <bookmark mark='a'/> Part forty-three asks what a random variable really is and why"
+            " the laws of large numbers hold. Part forty-seven proves the sandwich's asymptotics. Part forty-nine "
+            "shows when the augmented estimator attains the efficiency bound, including correct nuisance limits and "
+            "regularity conditions. Part fifty-five is the next exam, the qualifying exam of the PhD. And Part "
+            "fifty-eight revisits trial design, with experiments that can be watched and stopped at any time."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):

@@ -63,12 +63,7 @@ class ExamLikelihood(ExamMixin, VoiceoverScene):
             label(rf"the World's whole adult population: \ variance / mean $= {d['dispersion']:.1f}$", font_size=24, color=EXACT),
         ), 12.4, 0.5, [0, -0.9, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Which to report? A Poisson's variance equals its mean, but these twelve counts have mean "
-            f"{say(d['lam'], 2)} and variance {say(s2, 1)}. <bookmark mark='b'/> They are overdispersed, so the model-based "
-            f"standard error, which trusts the Poisson's variance, is too small by about half. <bookmark mark='c'/> Report "
-            f"the sandwich, which needs only the mean model to be right, or fit a negative binomial as in Part twenty-four. "
-            f"<bookmark mark='d'/> In the World's whole adult population, the variance of visits is {say(d['dispersion'], 1)} "
-            f"times the mean, so this was no fluke of twelve people."
+            f"<bookmark mark='a'/> Which to report? A Poisson's variance equals its mean, but these twelve counts have mean {say(d['lam'], 2)} and variance {say(s2, 1)}. <bookmark mark='b'/> They are overdispersed, so the model-based standard error, which trusts the Poisson's variance, is too small by about half. <bookmark mark='c'/> For a mean, the sandwich needs independent sampling and finite variance for its asymptotic calibration. With only twelve observations it can still be inaccurate. Report it with that limitation, or fit a negative binomial as in Part twenty-four. <bookmark mark='d'/> In the World's whole adult population, the variance of visits is {say(d['dispersion'], 1)} times the mean, so this was no fluke of twelve people."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -202,13 +197,7 @@ class ExamLikelihood(ExamMixin, VoiceoverScene):
             label(rf"20,000 simulations: \ means {d['sim_ml']:,.0f} \ and {d['sim_reml']:,.0f}", font_size=22, color=EXACT),
         ), 4.6, 0.36, [4.45, -1.0, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> For Longley's data the residual sum of squares is about {d['rss'] / 1e3:.0f} thousand. "
-            f"<bookmark mark='b'/> The ordinary likelihood peaks at that over sixteen, {d['s2_ml'] / 1e3:.0f} thousand; "
-            f"<bookmark mark='c'/> the restricted likelihood at that over nine, {d['s2_reml'] / 1e3:.0f} thousand. <bookmark "
-            f"mark='d'/> With seven coefficients and only sixteen years, maximum likelihood is forty-four percent too low. "
-            f"<bookmark mark='e'/> Simulating twenty thousand data sets from Longley's own design, with sigma squared at the "
-            f"REML value, the ML estimates average nine sixteenths of the truth and the REML estimates average the truth. "
-            f"In the mixed models of Part twenty-five the same correction applies to every variance component."
+            f"<bookmark mark='a'/> For Longley's data the residual sum of squares is about {d['rss'] / 1000.0:.0f} thousand. <bookmark mark='b'/> The ordinary likelihood peaks at that over sixteen, {d['s2_ml'] / 1000.0:.0f} thousand; <bookmark mark='c'/> the restricted likelihood at that over nine, {d['s2_reml'] / 1000.0:.0f} thousand. <bookmark mark='d'/> With seven coefficients and only sixteen years, maximum likelihood is forty-four percent too low. <bookmark mark='e'/> Simulating twenty thousand data sets from Longley's own design, with sigma squared at the REML value, the ML estimates average nine sixteenths of the truth and the REML estimates average the truth. In mixed models REML also removes fixed-effect dimensions, but it does not generally make every variance-component estimator exactly unbiased."
         ) as vo:
             self.play(FadeIn(A), FadeIn(museum_tag(r"Longley (1967): \ US employment, \ 1947--1962")))
             vo.wait_until("a")

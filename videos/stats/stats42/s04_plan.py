@@ -33,15 +33,17 @@ class TrialPlan(VoiceoverScene):
             label(r"6. \ \ registered before randomization; \ the ICC reported, \ whatever the result", font_size=25, color=GREY_A),
         ), 12.4, 0.42, [0, -0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The protocol has six lines. <bookmark mark='b'/> First, draw the forty-two towns at random "
-            "from the two hundred, so that the trial's answer is the island's. <bookmark mark='c'/> Second, randomize twenty-one "
-            "of them to the programme and twenty-one to control, by computer, after the towns have agreed to take part, so "
-            "that no town can choose its arm. <bookmark mark='d'/> Third, after a year, measure fifty adults drawn at random from "
-            "each town's register, by examiners who do not know the town's arm. <bookmark mark='e'/> Fourth, the primary "
-            "analysis: regress the town means on arm and on the pilot's town mean, with a t on thirty-nine degrees of freedom. "
-            "<bookmark mark='f'/> Fifth, secondary analyses: a mixed model on the adults, and the person-weighted effect. "
-            "<bookmark mark='g'/> And sixth, register all of this before randomization, and report the intraclass "
-            "correlation whatever the result, so the next planner has a better number than ours."
+            "<bookmark mark='a'/> The protocol has six lines. <bookmark mark='b'/> First, draw the forty-two towns at"
+            " random from the two hundred, to support inference about the island's town-average effect, provided "
+            "recruitment and follow-up preserve that sampling design. <bookmark mark='c'/> Second, randomize "
+            "twenty-one of them to the programme and twenty-one to control, by computer, after the towns have agreed "
+            "to take part, so that no town can choose its arm. <bookmark mark='d'/> Third, after a year, measure "
+            "fifty adults drawn at random from each town's register, by examiners who do not know the town's arm. "
+            "<bookmark mark='e'/> Fourth, the primary analysis: regress the town means on arm and on the pilot's town"
+            " mean, with a t on thirty-nine degrees of freedom. <bookmark mark='f'/> Fifth, secondary analyses: a "
+            "mixed model on the adults, and the person-weighted effect. <bookmark mark='g'/> And sixth, register all "
+            "of this before randomization, and report the intraclass correlation whatever the result, so the next "
+            "planner has a better number than ours."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head))
@@ -55,19 +57,25 @@ class TrialPlan(VoiceoverScene):
             cmath(r"\bar y_j", r"=", r"\alpha + \tau z_j + \beta (\bar x_j - \bar x) + \varepsilon_j", font_size=36),
             cmath(r"\bar x_j", r":", r"\text{the town's pilot mean: \ it carries } b_j \text{, the town's own deviation}", font_size=30),
             cmath(r"\text{reliability}", r"=", r"\frac{\hat\sigma_b^2}{\hat\sigma_b^2 + \hat\sigma_w^2 / 30} \approx \frac{9.4}{9.4 + 8.8} = 0.52", font_size=32),
-            cmath(r"\text{Var}(\hat\tau)", r"\downarrow", r"\text{randomization keeps } \hat\tau \text{ unbiased; } \ \bar x_j \text{ only removes noise}", font_size=30),
+            cmath(r"\text{Var}(\hat\tau)", r"\downarrow", r"\text{reduced here under the specified Gaussian town model}", font_size=30),
         ]
         rows[0][-1].set_color(CASE1)
         whys = [why(r"cluster-level ANCOVA"), why(r"a baseline covariate"), why(r"how much of $b_j$ it sees"),
                 why(r"Part 35's covariate adjustment")]
         with self.voiceover(
-            "<bookmark mark='a'/> Why adjust for the pilot? The primary model regresses each town's mean on its arm and on its "
-            "own pilot mean, centred. <bookmark mark='b'/> The pilot mean carries the town's lasting deviation, the b j that "
-            "made the design effect so expensive. <bookmark mark='c'/> How much of it? The pilot's town mean is a noisy reading of b j "
-            "with reliability about a half, by the pilot's own estimates: the between-town variance over itself plus the "
-            "within variance over thirty. <bookmark mark='d'/> Randomization keeps the adjusted estimate unbiased whatever the covariate, as in "
-            "Part thirty-five; the covariate only removes noise. Because it is named in the protocol, there is no fishing."
+            "<bookmark mark='a'/> Why adjust for the pilot? The primary model regresses each town's mean on its arm "
+            "and on its own pilot mean, centred. <bookmark mark='b'/> The pilot mean carries the town's lasting "
+            "deviation, the b j that made the design effect so expensive. <bookmark mark='c'/> How much of it? The "
+            "pilot's town mean is a noisy reading of b j with reliability about a half, by the pilot's own estimates:"
+            " the between-town variance over itself plus the within variance over thirty. <bookmark mark='d'/> Under "
+            "our specified Gaussian town model this ANCOVA has unbiased coefficients and valid t inference. "
+            "Randomization alone does not make arbitrary regression adjustment exactly unbiased in finite samples, "
+            "and covariates need not always improve precision. Because it is named in the protocol, there is no "
+            "fishing."
         ) as vo:
+            heading = label('Baseline adjustment is justified here by the Gaussian town model', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -101,15 +109,7 @@ class TrialPlan(VoiceoverScene):
             label(rf"SD of $\hat\tau$: \ {p['sd']['t']:.2f} $\to$ {p['sd']['ancova']:.2f}", font_size=24, color=GOODC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> A plan should be tested before it is used, and the World lets us test it: four thousand "
-            f"trials drawn from the towns' law, each analysed three ways. Faint bars are trials with no effect at all; "
-            f"<bookmark mark='b'/> solid bars, trials with the four millimetre effect. <bookmark mark='c'/> Analysing adults "
-            f"as if independent declares a significant effect in {100 * p['size']['naive']:.0f} percent of trials where "
-            f"there is none: six times the promised five. Both cluster-level analyses hold their five percent. <bookmark "
-            f"mark='d'/> And the adjustment pays: power rises from {100 * p['power']['t']:.0f} percent to "
-            f"{100 * p['power']['ancova']:.0f}, <bookmark mark='e'/> because the standard deviation of the estimate falls "
-            f"from {say(p['sd']['t'], 2)} to {say(p['sd']['ancova'], 2)}. With the pilot in the model, about twenty-eight "
-            f"towns would have done. We keep forty-two: the pilot's ICC was uncertain, and so is its covariate's strength."
+            f"<bookmark mark='a'/> A plan should be tested before it is used, and the World lets us test it: four thousand trials drawn from the towns' law, each analysed three ways. Faint bars are trials with no effect at all; <bookmark mark='b'/> solid bars, trials with the four millimetre effect. <bookmark mark='c'/> Analysing adults as if independent declares a significant effect in {100 * p['size']['naive']:.0f} percent of trials where there is none: six times the promised five. Both cluster-level analyses hold their five percent. <bookmark mark='d'/> And the adjustment pays: power rises from {100 * p['power']['t']:.0f} percent to {100 * p['power']['ancova']:.0f}, <bookmark mark='e'/> because the standard deviation of the estimate falls from {say(p['sd']['t'], 2)} to {say(p['sd']['ancova'], 2)}. With the pilot in the model, a smaller trial might have achieved the target power under this simulated law; a separate size calculation is needed before choosing that smaller count. We keep forty-two: the pilot's ICC was uncertain, and so is its covariate's strength."
         ) as vo:
             self.play(FadeIn(A), FadeIn(tags), FadeIn(line05), FadeIn(trial_tag()))
             vo.wait_until("a")
@@ -181,14 +181,7 @@ class TrialPlan(VoiceoverScene):
             label(r"the World's truth: \ $-4.00$", font_size=24, color=EXACT),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Here is the result. Each dot is a town: its pilot mean across, its mean a year later up. "
-            f"Programme towns in green, controls in blue. <bookmark mark='b'/> The pre-specified analysis fits two parallel "
-            f"lines; the gap between them is the effect, {say(r['ancova'][0], 2)} millimetres, with a ninety-five percent "
-            f"interval from {say(r['ancova'][2], 2)} to {say(r['ancova'][3], 2)}. <bookmark mark='c'/> The unadjusted "
-            f"cluster t finds {say(r['t'][0], 2)}, with an interval that crosses zero: the same data, less precisely used. "
-            f"<bookmark mark='d'/> The individual-level analysis reports the same estimate as the cluster t with an interval "
-            f"less than half as wide, a precision the design never had. <bookmark mark='e'/> The World's true effect is minus four. "
-            f"This trial, like most, landed a little short of the truth; only the honest analyses say how short it might be."
+            f"<bookmark mark='a'/> Here is the result. Each dot is a town: its pilot mean across, its mean a year later up. Programme towns in green, controls in blue. <bookmark mark='b'/> The pre-specified analysis fits two parallel lines; the gap between them is the effect, {say(r['ancova'][0], 2)} millimetres, with a ninety-five percent interval from {say(r['ancova'][2], 2)} to {say(r['ancova'][3], 2)}. <bookmark mark='c'/> The unadjusted cluster t finds {say(r['t'][0], 2)}, with an interval that crosses zero: the same data, less precisely used. <bookmark mark='d'/> The individual-level analysis reports the same estimate as the cluster t with an interval less than half as wide, a precision the design never had. <bookmark mark='e'/> The World's true effect is minus four. This particular trial estimated a smaller reduction than the truth; only the honest analyses say how short it might be."
         ) as vo:
             self.play(FadeIn(A), FadeIn(trial_tag()))
             vo.wait_until("a")
@@ -221,11 +214,11 @@ class TrialPlan(VoiceoverScene):
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The report follows the CONSORT statement's extension for cluster trials, <bookmark "
-            "mark='b'/> which asks for the flow of towns and adults through every stage, the intraclass correlation, and an "
-            "analysis that accounts for clustering. <bookmark mark='c'/> It should also say what the trial did not learn: one "
-            "year, one island, and blood pressure rather than the strokes the ministry actually cares about. <bookmark "
-            "mark='d'/> Trials like this are real. The largest, published in 2021, randomized six hundred Chinese villages, "
-            "and its subject is the second case."
+            "mark='b'/> which asks for the flow of towns and adults through every stage, the intraclass correlation, "
+            "and an analysis that accounts for clustering. <bookmark mark='c'/> It should also say what the trial did"
+            " not learn: one year, one island, and blood pressure rather than the strokes the ministry actually cares"
+            " about. <bookmark mark='d'/> Trials like this are real. A major example, published in 2021, randomized "
+            "six hundred Chinese villages, and its subject is the second case."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

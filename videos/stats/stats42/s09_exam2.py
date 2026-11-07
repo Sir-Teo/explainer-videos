@@ -43,13 +43,14 @@ class ExamBayes(ExamMixin, VoiceoverScene):
         rows[1][-1].set_color(POST)
         whys = [why(r"normal-normal"), why(r"integrate out $\mu$, \ flat prior"), why(r"precision weights"), why(r"shrinkage")]
         with self.voiceover(
-            "<bookmark mark='a'/> Integrate out each school's true effect: given mu and tau, each estimate is normal around "
-            "mu with variance sigma j squared plus tau squared. <bookmark mark='b'/> Integrate out mu under its flat prior, "
-            "completing the square, and the marginal posterior of tau is the root of V mu, times the product of the normal "
-            "densities evaluated at mu hat. <bookmark mark='c'/> Here mu hat of tau is the precision-weighted mean of the "
-            "estimates and V mu its variance. <bookmark mark='d'/> Given tau, each school's effect is shrunk from its own "
-            "estimate towards mu hat by the factor B j, its sampling variance over its total variance. Averaging that over "
-            "the posterior of tau, on a grid, gives the answer."
+            "<bookmark mark='a'/> Integrate out each school's true effect: given mu and tau, each estimate is normal "
+            "around mu with variance sigma j squared plus tau squared. <bookmark mark='b'/> Integrate out mu under "
+            "its flat prior, completing the square, and the marginal posterior of tau is the root of V mu, times the "
+            "product of the normal densities evaluated at mu hat. <bookmark mark='c'/> Here mu hat of tau is the "
+            "precision-weighted mean of the estimates and V mu its variance. <bookmark mark='d'/> Given tau, each "
+            "school's effect is shrunk from its own estimate towards mu hat by the factor B j, its sampling variance "
+            "over its total variance. Integrating over the full positive half-line for tau gives the answer; the "
+            "density plot displays only zero to thirty."
         ) as vo:
             step = ladder(self, rows, whys, keep=3, top=LTOP, x=-0.9, buff=0.8, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -60,7 +61,7 @@ class ExamBayes(ExamMixin, VoiceoverScene):
         A = axes([0, 30], [0, 0.12], x_length=5.0, y_length=3.0, xlabel=r"$\tau$", ylabel=r"$p(\tau \mid y)$",
                  xticks=[0, 10, 20, 30], yticks=[0, 0.05, 0.1], center=[-4.0, -1.1, 0])
         ax = A.ax
-        dc = density(ax, tau, np.minimum(dens, 0.12), POST)
+        dc = density(ax, tau, dens, POST)
         B = axes([0, 1], [-5, 30], x_length=3.6, y_length=3.4, xticks=[], yticks=[0, 10, 20, 30], center=[1.0, -1.0, 0])
         bx = B.ax
         lines = VGroup()
@@ -76,13 +77,7 @@ class ExamBayes(ExamMixin, VoiceoverScene):
             label(r"partial pooling: \ between \emph{no} pooling and \emph{complete}", font_size=20, color=GREY_A),
         ), 3.6, 0.38, [5.0, -1.0, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> On a grid, the posterior of tau piles up near zero but has a long tail: its median is "
-            f"{say(d['tau_median'], 1)}, and ninety percent of it lies below {say(d['tau_q90'], 1)}. The data cannot rule out "
-            f"that coaching works equally everywhere. <bookmark mark='b'/> Averaging the shrinkage over that posterior, "
-            f"school A's twenty-eight becomes {say(d['theta'][0], 1)}. <bookmark mark='c'/> Every school is pulled towards "
-            f"the pooled mean of {say(d['pooled'], 1)}, the noisier ones further, and the order is almost unchanged. "
-            f"<bookmark mark='d'/> It is the compromise of Parts twenty-five and twenty-six, between treating the schools as "
-            f"unrelated and treating them as identical, with the data choosing where to stand."
+            f"<bookmark mark='a'/> The full posterior of tau piles up near zero but has a long tail: its median is {say(d['tau_median'], 1)}, and ninety percent of it lies below {say(d['tau_q90'], 1)}. There is substantial density near zero, although the continuous prior assigns zero probability to an exactly common effect. <bookmark mark='b'/> Averaging the shrinkage over that posterior, school A's twenty-eight becomes {say(d['theta'][0], 1)}. <bookmark mark='c'/> Shrinkage is towards a tau-dependent precision-weighted mean, not one fixed pooled target. For comparison, complete pooling gives {say(d['pooled'], 1)}, the noisier ones further, and the order is almost unchanged. <bookmark mark='d'/> It is the compromise of Parts twenty-five and twenty-six, between treating the schools as unrelated and treating them as identical, with the data choosing where to stand."
         ) as vo:
             self.play(FadeIn(A), FadeIn(B), FadeIn(heads), FadeIn(museum_tag(r"Rubin (1981): \ the eight schools")))
             vo.wait_until("a")
@@ -112,21 +107,22 @@ class ExamBayes(ExamMixin, VoiceoverScene):
             f"effective sample size is {bad['ess_bulk']:.0f}, and {100 * bad['accept']:.0f} percent of proposals were "
             f"accepted. What do these numbers say, what went wrong, and what would you change? Pause and try it.", card)
         rows = [
-            cmath(r"\hat R", r"=", r"\sqrt{\frac{\frac{n-1}{n} W + \frac1n B}{W}} \ \ \text{(split, rank-normalized)}", font_size=30),
+            cmath(r"\hat R", r"=", r"\sqrt{\frac{\frac{n-1}{n} W + \frac1n B}{W}} \ \ \text{(rank-split; take max with folded version)}", font_size=30),
             cmath(r"1.45", r"\gg", r"1.01: \ \text{the chains disagree about the distribution}", font_size=30),
             cmath(r"\text{ESS}", r"=", rf"{bad['ess_bulk']:.0f}: \ \text{{4,000 draws worth eight independent ones}}", font_size=30),
             cmath(rf"{100 * bad['accept']:.0f}\%", r":", r"\text{steps too small to cross between the modes}", font_size=30),
         ]
         rows[1][-1].set_color(S.TREAT)
-        whys = [why(r"between vs within"), why(r"Vehtari et al. (2021)"), why(r"autocorrelation"), why(r"aim for 20--50\%")]
+        whys = [why(r"between vs within"), why(r"Vehtari et al. (2021)"), why(r"autocorrelation"), why(r"acceptance alone is not a convergence diagnostic")]
         with self.voiceover(
-            "<bookmark mark='a'/> R hat compares the variance between chains with the variance within them; when the chains "
-            "have all forgotten their starts and explore the same distribution, it is one. <bookmark mark='b'/> At one point "
-            "four five, far above the modern threshold of one point oh one, the chains are describing different "
-            "distributions. <bookmark mark='c'/> An effective sample size of eight says the four thousand retained draws "
-            "carry the information of eight independent ones. <bookmark mark='d'/> And an acceptance rate near ninety "
-            "percent is the clue: the steps are so small that almost every one is accepted, and no chain can cross the "
-            "valley between the modes."
+            "<bookmark mark='a'/> R hat compares the variance between chains with the variance within them; when the "
+            "chains have all forgotten their starts and explore the same distribution, it is one. <bookmark "
+            "mark='b'/> At one point four five, far above the modern threshold of one point oh one, the chains are "
+            "describing different distributions. <bookmark mark='c'/> An effective sample size of eight says the four"
+            " thousand retained draws carry the information of eight independent ones. <bookmark mark='d'/> And an "
+            "acceptance rate near ninety percent is the clue: the steps are so small that almost every one is "
+            "accepted, and mode crossing becomes very slow. A high acceptance rate alone does not diagnose all "
+            "samplers."
         ) as vo:
             step = ladder(self, rows, whys, keep=3, top=LTOP, x=-0.9, buff=0.8, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -145,13 +141,7 @@ class ExamBayes(ExamMixin, VoiceoverScene):
                         font_size=20, color=S.TREAT if i == 0 else GOODC).next_to(A, UP, buff=0.12)
             panels.add(VGroup(A, lines, cap))
         with self.voiceover(
-            f"<bookmark mark='a'/> The traces show it. On the left, two chains live near minus three and two near plus "
-            f"three, and none ever crosses. <bookmark mark='b'/> On the right, the same chains with proposals ten times "
-            f"wider: about {100 * good['accept']:.0f} percent are accepted, every chain visits both modes many times, R hat "
-            f"is {say(good['rhat'], 2)} and the effective sample size {good['ess_bulk']:.0f}. <bookmark mark='c'/> One "
-            f"caution belongs in every answer: R hat can only compare what the chains found. Had all four started near "
-            f"plus three, the slow sampler would have reported a perfect R hat and half the distribution would be missing. "
-            f"Overdispersed starts, as here, are what exposed it."
+            f"<bookmark mark='a'/> The traces show it. On the left, two chains live near minus three and two near plus three, and crossings are rare or absent in the displayed run. <bookmark mark='b'/> On the right, the same chains with proposals ten times wider: about {100 * good['accept']:.0f} percent are accepted, every chain visits both modes many times, R hat is {say(good['rhat'], 2)} and the effective sample size {good['ess_bulk']:.0f}. <bookmark mark='c'/> One caution belongs in every answer: R hat can only compare what the chains found. Had all four started near plus three, the slow sampler could report an apparently satisfactory R hat while missing half the distribution. Overdispersed starts, as here, are what exposed it."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(panels[0][0]), FadeIn(panels[0][2]), Create(panels[0][1]), run_time=2.0)
@@ -219,17 +209,10 @@ class ExamBayes(ExamMixin, VoiceoverScene):
             label(rf"AIC: \ levels off near {d['p_aic'][-1]:.2f}", font_size=24, color=AICC),
             label(rf"one extra term passes when $\chi^2_1 > 2$: \ {d['chi2_tail']:.3f}", font_size=22, color=AICC),
             label(rf"BIC: \ $\to 1$ \ ({d['p_bic'][-1]:.2f} at $n = {d['ns'][-1]:,}$)", font_size=24, color=BICC),
-            label(r"BIC is consistent; \ AIC predicts better", font_size=24, color=GREY_A),
+            label(r"BIC: selection; AIC: predictive-risk motivation; conditions apply", font_size=24, color=GREY_A),
         ), 4.6, 0.36, [4.45, -1.0, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The second half is theory, checked by simulation: a true quadratic, candidates of degree "
-            f"one to six, six hundred data sets at each sample size. <bookmark mark='b'/> AIC's chance of choosing the truth "
-            f"rises and then levels off near {say(d['p_aic'][-1], 2)}, <bookmark mark='c'/> because a needless term is "
-            f"added whenever its likelihood-ratio statistic, chi-squared on one degree of freedom, exceeds two, which happens "
-            f"{100 * d['chi2_tail']:.0f} percent of the time at any sample size. <bookmark mark='d'/> BIC's penalty grows with "
-            f"log n, so that chance goes to zero, and BIC finds the truth with probability tending to one. <bookmark "
-            f"mark='e'/> BIC is consistent; AIC is efficient for prediction, as Part twenty-eight showed. Name the goal "
-            f"before naming the criterion."
+            f"<bookmark mark='a'/> The second half is theory, checked by simulation: a true quadratic, candidates of degree one to six, six hundred data sets at each sample size. <bookmark mark='b'/> AIC's chance of choosing the truth rises and then levels off near {say(d['p_aic'][-1], 2)}, <bookmark mark='c'/> because a needless term is added whenever its likelihood-ratio statistic, chi-squared on one degree of freedom, exceeds two, whose asymptotic null tail probability is {100 * d['chi2_tail']:.0f} percent under the regular one-extra-term null approximation. This is not an exact probability at every finite sample size or the overall selection probability among six candidates. <bookmark mark='d'/> BIC's penalty grows with log n, so that chance goes to zero, and BIC finds the truth with probability tending to one. <bookmark mark='e'/> BIC is consistent in this fixed, regular candidate set containing the truth. AIC targets predictive risk under its asymptotic conditions; it does not universally predict better than BIC. Name the goal before naming the criterion."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")

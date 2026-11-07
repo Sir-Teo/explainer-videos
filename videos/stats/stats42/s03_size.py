@@ -27,22 +27,18 @@ class TrialSize(VoiceoverScene):
         s = load("size")
         rows = [
             cmath(r"\hat\tau", r"\sim", r"N\big(\tau, \ 2\sigma^2 / n\big) \ \ \text{(n adults per arm, independent)}", font_size=32),
-            cmath(r"\text{power}", r"=", r"P\big(\hat\tau / \text{SE} > z_{0.975}\big) = \Phi\big(\delta / \text{SE} - z_{0.975}\big) = 0.8", font_size=30),
+            cmath(r"\text{power}", r"\approx", r"\Phi\big(|\tau| / \text{SE} - z_{0.975}\big) = 0.8 \quad (\delta=|\tau|)", font_size=30),
             cmath(r"n", r"=", r"\frac{2 (z_{0.975} + z_{0.80})^2 \sigma^2}{\delta^2} = \frac{2 (1.96 + 0.84)^2 \times 16.5^2}{4^2}", font_size=32),
             cmath(r"\phantom{n}", r"=", rf"{s['n_ind']:.0f} \text{{ adults per arm}}", font_size=34),
         ]
         rows[3][-1].set_color(CASE1)
         whys = [why(r"two arms, \ Part 13"), why(r"80\% power at 5\%"), why(r"solve for $n$"), why(r"if adults were independent")]
         with self.voiceover(
-            f"<bookmark mark='a'/> Start as if adults were independent, as in Part thirteen. With n adults per arm, the "
-            f"difference in means is normal around the true effect, with variance two sigma squared over n. <bookmark "
-            f"mark='b'/> We want an eighty percent chance of a significant result at the five percent level when the effect is "
-            f"the ministry's four millimetres. The power is the normal probability that the estimate, in standard errors, "
-            f"clears one point nine six. <bookmark mark='c'/> Setting it to eighty percent and solving gives the familiar "
-            f"formula: two times one point nine six plus point eight four, squared, times sigma squared, over delta squared. "
-            f"<bookmark mark='d'/> With sigma sixteen and a half, that is {s['n_ind']:.0f} adults per arm. If only adults were "
-            f"what we randomized."
+            f"<bookmark mark='a'/> Start as if adults were independent, as in Part thirteen. With n adults per arm, the difference in means is normal around the true effect, with variance two sigma squared over n. <bookmark mark='b'/> We want an eighty percent chance of a significant result at the five percent level when the effect is the ministry's four millimetres. The usual planning approximation keeps the rejection tail in the direction of the effect; the opposite tail is negligible here. For a reduction in pressure the relevant tail is negative, with delta denoting its magnitude. <bookmark mark='c'/> Setting it to eighty percent and solving gives the familiar formula: two times one point nine six plus point eight four, squared, times sigma squared, over delta squared. <bookmark mark='d'/> With sigma sixteen and a half, that is {s['n_ind']:.0f} adults per arm. If only adults were what we randomized."
         ) as vo:
+            heading = label('Normal-approximation planning uses the magnitude of the effect', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -68,6 +64,9 @@ class TrialSize(VoiceoverScene):
             f"{say(s['de50'], 2)}. <bookmark mark='d'/> Fifty correlated adults carry the information of about thirteen and a "
             f"half independent ones. A small correlation, multiplied by a large town, is a large cost."
         ) as vo:
+            heading = label('The design effect assumes equal-sized, independent clusters', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -94,6 +93,9 @@ class TrialSize(VoiceoverScene):
             f"{r50['k_t']} towns in each arm, {2 * r50['k_t']} of the island's two hundred, and "
             f"{2 * r50['people']:,} adults measured at the end."
         ) as vo:
+            heading = label('Round up clusters and allow for a finite-cluster t analysis', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -107,7 +109,7 @@ class TrialSize(VoiceoverScene):
                  ylabel=r"towns needed per arm", xticks=[1, 2, 3], yticks=[0, 20, 40, 60], log_x=True,
                  xfmt=lambda v: f"{10 ** v:g}", center=[-2.5, 0.2, 0])
         ax = A.ax
-        line = curve(ax, np.log10(ms), np.minimum(kc, 60), CASE1, 4)
+        line = curve(ax, np.log10(ms), kc, CASE1, 4)
         floor = DashedLine(ax.c2p(np.log10(5), s["k_inf"]), ax.c2p(3, s["k_inf"]), color=S.ACCENT, stroke_width=2.5)
         fl = label(rf"$2(z+z)^2 \rho\sigma^2 / \delta^2 = {s['k_inf']:.1f}$", font_size=20, color=S.ACCENT).next_to(ax.c2p(2.2, s["k_inf"]), DOWN, buff=0.12)
         dots = VGroup(*[Dot(ax.c2p(np.log10(r["m"]), r["k"]), radius=0.07, color=WHITE) for r in s["rows"]])
@@ -116,13 +118,7 @@ class TrialSize(VoiceoverScene):
         tab.move_to([4.45, 0.6, 0])
         msg = label(r"adults are cheap; \ towns are the sample size", font_size=24, color=S.ACCENT).move_to([4.45, -2.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Could we buy fewer towns by measuring more adults in each? Here is the number of towns needed "
-            f"per arm against the number of adults per town, on a log scale. <bookmark mark='b'/> More adults help at first, "
-            f"then hardly at all. <bookmark mark='c'/> The curve can never fall below this floor: even with infinitely many "
-            f"adults, each town's mean still carries its own deviation, and {say(s['k_inf'], 1)} towns per arm is the least "
-            f"any design can use. <bookmark mark='d'/> In the table, ten adults per town needs eighty-two towns; fifty needs "
-            f"forty-two; five hundred still needs thirty-four, and seventeen thousand measurements. "
-            f"<bookmark mark='e'/> In a cluster trial, adults are cheap, and towns are the sample size."
+            f"<bookmark mark='a'/> Could we buy fewer towns by measuring more adults in each? Here is the number of towns needed per arm against the number of adults per town, on a log scale. <bookmark mark='b'/> More adults help at first, then hardly at all. <bookmark mark='c'/> The curve can never fall below this floor: even with infinitely many adults, each town's mean still carries its own deviation, and {say(s['k_inf'], 1)} towns per arm is the limiting normal-approximation count for this unadjusted equal-size design. Baseline adjustment or a different target can change it. <bookmark mark='d'/> In the table, ten adults per town needs eighty-two towns; fifty needs forty-two; five hundred still needs thirty-four, and seventeen thousand measurements. <bookmark mark='e'/> In a cluster trial, adults are cheap, and towns are the sample size."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
@@ -142,7 +138,7 @@ class TrialSize(VoiceoverScene):
         p = load("pilot")
         rhos = np.linspace(0.0, 0.1, 101)
         k = s["n_ind"] * (1 + 49 * rhos) / 50
-        A = axes([0, 0.1], [0, 40], x_length=7.4, y_length=4.4, xlabel=r"intraclass correlation $\rho$",
+        A = axes([0, 0.1], [0, 40], x_length=7.4, y_length=4.4, xlabel=r"intraclass correlation $\rho$ (before the extra $t$ town)",
                  ylabel=r"towns per arm \ ($m = 50$)", xticks=[0, 0.025, 0.05, 0.075, 0.1], yticks=[0, 10, 20, 30, 40],
                  center=[-2.5, 0.2, 0])
         ax = A.ax
@@ -161,12 +157,7 @@ class TrialSize(VoiceoverScene):
             label(r"each 0.01 of $\rho$ costs about 2.6 towns per arm", font_size=24, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The answer is only as good as rho. Here is the number of towns per arm against the "
-            f"intraclass correlation, with the pilot's interval shaded. <bookmark mark='b'/> Plan with the pilot's estimate "
-            f"and you would recruit {k_p} towns per arm. <bookmark mark='c'/> Plan with our more cautious value and you recruit "
-            f"twenty, before the extra one for the t. <bookmark mark='d'/> Every hundredth of correlation costs about two and a half towns per "
-            f"arm: the line is straight, because the design effect is linear in rho. An exam answer that reports one sample "
-            f"size, without this line, is half an answer."
+            f"<bookmark mark='a'/> The answer is only as good as rho. Here is the number of towns per arm against the intraclass correlation, with the pilot's interval shaded. <bookmark mark='b'/> Plan with the pilot's estimate and you would recruit {k_p} towns per arm. <bookmark mark='c'/> Plan with our more cautious value and you recruit twenty, before the extra one for the t. <bookmark mark='d'/> Every hundredth of correlation costs about two and a half towns per arm before rounding: the unrounded design effect is linear in rho. An exam answer that reports one sample size, without this line, is half an answer."
         ) as vo:
             self.play(FadeIn(A), FadeIn(band_))
             vo.wait_until("a")
@@ -199,12 +190,7 @@ class TrialSize(VoiceoverScene):
             label(rf"8 towns per arm: \ claimed {pn[i8]:.2f}, \ true {pw[i8]:.2f}", font_size=24, color=NAIVEC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Finally, the power curve itself, computed honestly: cluster means, and a noncentral t with "
-            f"two k minus two degrees of freedom. <bookmark mark='b'/> At twenty-one towns per arm, the power is "
-            f"{say(pw[i21], 2)}, as planned. <bookmark mark='c'/> In red, the power one would claim by treating every adult as "
-            f"independent. <bookmark mark='d'/> At eight towns per arm, that calculation promises {pn[i8] * 100:.0f} percent "
-            f"power; the true power is {pw[i8] * 100:.0f} percent. This is the self-deception Cornfield warned of, and it "
-            f"happens at the planning stage, before a single adult is measured."
+            f"<bookmark mark='a'/> Finally, the power curve itself, computed honestly: cluster means, and a noncentral t with two k minus two degrees of freedom. <bookmark mark='b'/> At twenty-one towns per arm, the power is {say(pw[i21], 2)}, as planned. <bookmark mark='c'/> In red, the power one would claim by treating every adult as independent. <bookmark mark='d'/> At eight towns per arm, that calculation promises {pn[i8] * 100:.0f} percent power; the power under this Gaussian cluster model is {pw[i8] * 100:.0f} percent. This is the self-deception Cornfield warned of, and it happens at the planning stage, before a single adult is measured."
         ) as vo:
             self.play(FadeIn(A), FadeIn(line80))
             vo.wait_until("a")

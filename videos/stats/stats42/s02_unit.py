@@ -47,15 +47,20 @@ class TrialUnit(VoiceoverScene):
         whys = [why(r"potential outcomes, \ Part 35"), why(r"the town-average effect"), why(r"or the person-average"),
                 why(r"the ministry's number")]
         with self.voiceover(
-            "<bookmark mark='a'/> First, the question has to become an estimand. Write Y i j of z for the pressure of adult i "
-            "in town j a year from now, with the programme, z equal to one, or without it. <bookmark mark='b'/> The ministry "
-            "would roll the programme out town by town, so the natural target is the town-average effect: over the island's "
-            "towns, the change in a town's mean pressure. <bookmark mark='c'/> One could instead weight towns by population, "
-            "which asks about the average person; with towns as unequal as the World's, the two can differ, and the protocol "
-            "must say which. <bookmark mark='d'/> And the ministry's economists supply the most important number in any "
-            "sample size calculation: the smallest effect worth detecting. A fall of four millimetres would pay for the health "
-            "workers in strokes avoided. Anything smaller, and the money is better spent elsewhere."
+            "<bookmark mark='a'/> First, the question has to become an estimand. Write Y i j of z for the pressure of"
+            " adult i in town j a year from now, with the programme, z equal to one, or without it. <bookmark "
+            "mark='b'/> The ministry would roll the programme out town by town, so the natural target is the "
+            "town-average effect: over the island's towns, the change in a town's mean pressure. <bookmark mark='c'/>"
+            " One could instead weight towns by population, which asks about the average person; with towns as "
+            "unequal as the World's, the two can differ, and the protocol must say which. <bookmark mark='d'/> And "
+            "the ministry's economists supply the most important number in any sample size calculation: the smallest "
+            "effect worth detecting. A fall of four millimetres would pay for the health workers in strokes avoided. "
+            "That is the planning threshold for this illustrative cost model, not a universal cutoff for useful "
+            "effects."
         ) as vo:
+            heading = label('Choose the town-average or person-average target before designing', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -84,13 +89,15 @@ class TrialUnit(VoiceoverScene):
             label(r"so the unit of randomization is the town: \ the programme is delivered to towns", font_size=24, color=CASE1),
         ), 12.4, 0.3, [0, -2.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Next, what to randomize. The cheapest-looking design randomizes households within each town: "
-            "half get visits, half don't, and every town contributes both. <bookmark mark='b'/> But health workers talk to "
-            "neighbours, neighbours talk to each other, and a town's shops and clinics change for everyone. The controls are "
-            "contaminated, and the contrast between arms is diluted towards zero. In the language of Part thirty-five, the "
-            "no-interference assumption fails inside a town. <bookmark mark='c'/> So the unit of randomization should be the "
-            "unit of delivery: whole towns, some with the programme <bookmark mark='d'/> and some without. That choice costs "
-            "precision, as we will see, but it buys an answer to the question actually asked."
+            "<bookmark mark='a'/> Next, what to randomize. The cheapest-looking design randomizes households within "
+            "each town: half get visits, half don't, and every town contributes both. <bookmark mark='b'/> But health"
+            " workers talk to neighbours, neighbours talk to each other, and a town's shops and clinics change for "
+            "everyone. Under this beneficial spillover story, controls also receive some benefit and the direct "
+            "contrast is diluted. Interference need not always bias a contrast towards zero. In the language of Part "
+            "thirty-five, the no-interference assumption fails inside a town. <bookmark mark='c'/> So we randomize "
+            "whole towns to estimate the effect of this delivery policy, assuming negligible spillovers between "
+            "towns: some with the programme <bookmark mark='d'/> and some without. That choice costs precision, as we"
+            " will see, but it buys an answer to the question actually asked."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(v1), FadeIn(cap[0]))
@@ -185,6 +192,9 @@ class TrialUnit(VoiceoverScene):
             f"adults from the same town are correlated about three hundredths. <bookmark mark='d'/> Resampling whole towns "
             f"gives a ninety percent interval from {say(lo, 3)} to {say(hi, 3)}. A small number, and a poorly known one."
         ) as vo:
+            heading = label('ANOVA separates within- and between-town variation', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
