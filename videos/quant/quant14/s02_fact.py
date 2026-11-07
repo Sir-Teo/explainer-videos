@@ -86,7 +86,7 @@ class Fact(VoiceoverScene, ThreeDScene):
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, frame_center=ORIGIN,
                          added_anims=[FadeOut(VGroup(ax, rows, fits)), FadeOut(hint), FadeOut(src),
                                       FadeOut(VGroup(hist_ax, bars, med, medl))], run_time=1.5)
-        self.clear_scene()
+        self.clear_scene(run_time=0.1)
 
     def law(self, s, w):
         T = np.asarray(s["T"])

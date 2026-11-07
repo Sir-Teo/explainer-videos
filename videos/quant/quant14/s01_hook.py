@@ -124,7 +124,7 @@ class Hook(VoiceoverScene):
             vo.wait_until("d")
             self.play(LaggedStart(*[FadeIn(e) for e in events[11:]], lag_ratio=0.6, run_time=2))
         self.wait(0.5)
-        self.clear_scene()
+        self.clear_scene(run_time=0.2)
 
     def objectives(self):
         card = objectives_card([

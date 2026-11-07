@@ -184,7 +184,7 @@ class Adams(VoiceoverScene, ThreeDScene):
             self.move_camera(theta=-30 * DEGREES, phi=70 * DEGREES, run_time=max(vo.remaining(0.0) - 0.5, 2))
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0,
                          added_anims=[FadeOut(VGroup(ax, s5)), FadeOut(hint), FadeOut(tag2)], run_time=1.2)
-        self.clear_scene()
+        self.clear_scene(run_time=0.1)
 
     def profile(self, p):
         rows = p["rows"]

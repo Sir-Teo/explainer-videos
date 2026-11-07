@@ -101,7 +101,7 @@ class SkewMath(VoiceoverScene, ThreeDScene):
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0,
                          added_anims=[FadeOut(VGroup(ax, sf, floor)), FadeOut(fixed), FadeOut(dot), FadeOut(src),
                                       FadeOut(VGroup(ce, cp))], run_time=1.2)
-        self.clear_scene()
+        self.clear_scene(run_time=0.1)
 
     def derive(self):
         rows = [

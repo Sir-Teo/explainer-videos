@@ -149,7 +149,7 @@ class Debate(VoiceoverScene, ThreeDScene):
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0,
                          added_anims=[FadeOut(VGroup(ax, surf, plane, gold, ylabs)), FadeOut(hint), FadeOut(src),
                                       FadeOut(note_)], run_time=1.2)
-        self.clear_scene()
+        self.clear_scene(run_time=0.1)
 
     def derive(self):
         rows = [cmath(r"\widehat{RV}_t", r"=", r"\int_t^{t + 1}\sigma^2_s\,ds + \varepsilon_t", font_size=38,
