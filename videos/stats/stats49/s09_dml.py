@@ -100,7 +100,7 @@ class DMLTheory(VoiceoverScene):
 
     def practice(self):
         rows = fit_rows(VGroup(
-            label(r"DML in practice:", font_size=28, color=GREY_A),
+            label(r"Double machine learning in practice", font_size=36, color=GREY_A),
             label(r"$K = 5$ folds is typical; \ average the scores over all folds (DML2) \ rather than the estimates (DML1)", font_size=26, color=OSC),
             label(r"repeat the random split and take the median estimate: \ the split is a nuisance too", font_size=26, color=GRADC),
             label(r"choose learners by cross-validated prediction error \ \emph{for each nuisance separately}", font_size=26, color=TANC),
