@@ -26,18 +26,24 @@ class Scaling(VoiceoverScene):
             cmath(r"p(z_1, \dots, z_n)", r"=", r"\textstyle\prod_i p(z_i \mid z_1, \dots, z_{i-1})", font_size=32),
             cmath(r"\text{Vecchia (1988)}", r":", r"p(z_i \mid z_{1:i-1}) \approx p(z_i \mid z_{N(i)}), \ \ |N(i)| \le m", font_size=30),
             cmath(r"\text{cost}", r":", r"O(n m^3) \text{ instead of } O(n^3)", font_size=32),
-            cmath(r"\text{why it works}", r":", r"\text{near neighbours screen off the rest}", font_size=30),
+            cmath(r"\text{why it works}", r":", r"\text{nearby observations can approximately screen distant ones}", font_size=30),
         ]
         rows[1][-1].set_color(FIELDC)
         whys = [why(r"exact: \ the chain rule"), why(r"keep only the $m$ nearest earlier points"), why(r"linear in $n$"),
                 why(r"the screening effect \ (Stein 2002)")]
         with self.voiceover(
-            "<bookmark mark='a'/> Any joint density factors exactly, by the chain rule, into a product of conditionals: "
-            "each value given all the earlier ones. <bookmark mark='b'/> Aldo Vecchia's idea of 1988: condition each value "
-            "only on its m nearest earlier neighbours. <bookmark mark='c'/> Each factor then needs only an m by m matrix, "
-            "so the cost grows linearly in n. <bookmark mark='d'/> It works because of screening: once you know the values "
-            "close to a point, distant ones add almost nothing, the spatial version of Part thirty-eight's Markov property."
+            "<bookmark mark='a'/> Any joint density factors exactly, by the chain rule, into a product of "
+            "conditionals: each value given all the earlier ones. <bookmark mark='b'/> Aldo Vecchia's idea of 1988: "
+            "condition each value only on its m nearest earlier neighbours. <bookmark mark='c'/> Each factor then "
+            "needs only an m by m matrix, so the cost grows linearly in n. <bookmark mark='d'/> It can work well "
+            "through approximate screening under suitable covariance and observation conditions: once you know values"
+            " close to a point, distant ones add almost nothing, This is not exact conditional independence for a "
+            "general Matérn field. Our fast implementation searches among four m nearest overall candidates and may "
+            "retain fewer than m earlier points."
         ) as vo:
+            intro=label('Vecchia approximates a joint density with smaller conditionals',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -134,16 +140,18 @@ class Scaling(VoiceoverScene):
         side = fit_rows(VGroup(
             label(r"gold: \ the exact likelihood in $\rho$", font_size=22, color=TRUEC),
             label(r"blue: \ Vecchia with $m = 10$", font_size=22, color=FIELDC),
-            label(rf"both peak at $\rho = {b1:.3g}$ \ (true 0.2)", font_size=22, color=BANDC),
+            label(rf"grid maxima: exact {b1:.3g}, approximate {b2:.3g}; generating range 0.2", font_size=22, color=BANDC),
             label(r"Vecchia's curve is flatter:", font_size=22, color=GREY_A),
-            label(r"intervals from it too wide", font_size=22, color=GREY_A),
+            label(r"curvature-based intervals require separate calibration", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> For estimation, what matters is the shape. The exact log-likelihood as a function of the "
-            "range, <bookmark mark='b'/> and Vecchia's with ten neighbours, each shifted to peak at zero. <bookmark "
-            "mark='c'/> They peak at the same place, the true range. <bookmark mark='d'/> Vecchia's curve is flatter, so "
-            "intervals read off it would be somewhat too wide: the approximation loses information, as it must, but it "
-            "does not move the estimate."
+            "<bookmark mark='a'/> For estimation, what matters is the shape. The exact log-likelihood as a function "
+            "of the range, <bookmark mark='b'/> and Vecchia's with ten neighbours, each shifted to peak at zero. "
+            "<bookmark mark='c'/> Here their maxima on the displayed grid are close to the generating range. This is "
+            "one realization, not a guarantee that the estimates coincide. <bookmark mark='d'/> In this example "
+            "Vecchia's curve is flatter, so intervals read off this curve would be wider. Curvature and uncertainty "
+            "calibration can be distorted in either direction, and the approximation can move an estimate; it needs "
+            "validation."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A))
@@ -166,8 +174,10 @@ class Scaling(VoiceoverScene):
             label(r"nearest-neighbour GPs \ (Datta et al.\ 2016): \ Vecchia as a prior, \ for MCMC on millions", font_size=28, color=TAUC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Now a hundred thousand locations on the World's island. <bookmark mark='b'/> The exact "
-            "likelihood would need about " + f"{d['cubic_extrap_hours']:,.0f}" + " hours and eighty gigabytes of memory for "
+            "<bookmark mark='a'/> Now a timing benchmark with a hundred thousand jittered land-node locations on the "
+            "World's island. The field values are reused from the nearest selected grid nodes, so this is a speed "
+            "illustration rather than an exact covariance-model simulation at the jittered sites. <bookmark "
+            "mark='b'/> The exact likelihood would need about " + f"{d['cubic_extrap_hours']:,.0f}" + " hours and eighty gigabytes of memory for "
             "the matrix alone. <bookmark mark='c'/> Vecchia with ten neighbours takes " + say(d["big_time"], 1) + " seconds "
             "on one core. <bookmark mark='d'/> Abhirup Datta and colleagues turned the idea into a prior, the "
             "nearest-neighbour Gaussian process of 2016, so that Bayesian spatial models with millions of locations can be "

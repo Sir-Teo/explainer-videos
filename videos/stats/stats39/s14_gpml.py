@@ -27,7 +27,7 @@ class GPML(VoiceoverScene):
                 [r"kriging", r"GP regression"],
                 [r"covariance, \ variogram", r"kernel"],
                 [r"range, \ sill, \ nugget", r"length-scale, \ signal variance, \ noise"],
-                [r"REML, \ variogram fitting", r"maximizing the marginal likelihood"],
+                [r"likelihood, REML or variogram fitting (different objectives)", r"maximizing the marginal likelihood"],
                 [r"kriging variance", r"predictive uncertainty"]]
         tab = table_rows(rows, font_size=26, col_buff=1.4, row_buff=0.32, colors=[GREY_A, FIELDC, TAUC, BANDC, PTC, AREAC]).move_to([0, 0.6, 0])
         foot = label(r"Rasmussen \& Williams, \ \emph{Gaussian Processes for Machine Learning} \ (2006)", font_size=22, color=GREY_A).move_to([0, -2.4, 0])
@@ -55,12 +55,13 @@ class GPML(VoiceoverScene):
             label(r"no noise: \ the GP interpolates, \ and its variance says where to run next", font_size=26, color=BANDC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Before machine learning, statisticians had already moved kriging off the map. Jerome "
-            "Sacks, William Welch, Toby Mitchell and Henry Wynn wrote in 1989 on the design and analysis of computer "
-            "experiments. <bookmark mark='b'/> A simulator, a climate model or a crash test, may take hours for each run. "
-            "<bookmark mark='c'/> Run it at a few well-chosen inputs and krige the outputs over the input space: an "
-            "emulator, cheap to evaluate anywhere. <bookmark mark='d'/> The simulator has no noise, so the process "
-            "interpolates, and its variance shows where the emulator is unsure, and so where to run the simulator next."
+            "<bookmark mark='a'/> Before machine learning, statisticians had already moved kriging off the map. "
+            "Jerome Sacks, William Welch, Toby Mitchell and Henry Wynn wrote in 1989 on the design and analysis of "
+            "computer experiments. <bookmark mark='b'/> A simulator, a climate model or a crash test, may take hours "
+            "for each run. <bookmark mark='c'/> Run it at a few well-chosen inputs and krige the outputs over the "
+            "input space: an emulator, cheap to evaluate anywhere. <bookmark mark='d'/> For a deterministic "
+            "simulator, a zero-noise GP with nonsingular covariance interpolates, and its variance shows where the "
+            "emulator is unsure, and so where to run the simulator next."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -85,6 +86,9 @@ class GPML(VoiceoverScene):
             "balances two pulls: a low predicted mean, exploitation, and a high predictive spread, exploration. <bookmark "
             "mark='d'/> Evaluate next where it is largest, update, and repeat."
         ) as vo:
+            intro=label('Expected improvement balances predicted value and uncertainty',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -93,19 +97,22 @@ class GPML(VoiceoverScene):
 
     def _frame(self, d, s, k):
         grid = np.asarray(d["grid"], float)
-        A = axes([-2, 2], [-1.5, 3], x_length=7.6, y_length=3.1, xlabel=r"$x$", ylabel=r"$f(x)$", xticks=[-2, -1, 0, 1, 2],
+        lows = [np.min(np.asarray(q["mu"])-1.645*np.asarray(q["sd"])) for q in d["steps"]]
+        highs = [np.max(np.asarray(q["mu"])+1.645*np.asarray(q["sd"])) for q in d["steps"]]
+        lower, upper = float(np.floor(min(lows))), float(np.ceil(max(highs)))
+        A = axes([-2, 2], [lower, upper], x_length=7.6, y_length=3.1, xlabel=r"$x$", ylabel=r"$f(x)$", xticks=[-2, -1, 0, 1, 2],
                  yticks=[-1, 0, 1, 2, 3], xfmt=lambda v: f"{v:g}", yfmt=lambda v: f"{v:g}", center=[-1.6, 1.3, 0])
         ax = A.ax
         mu, sd = np.asarray(s["mu"], float), np.asarray(s["sd"], float)
-        lo, hi = np.clip(mu - 1.645 * sd, -1.5, 3), np.clip(mu + 1.645 * sd, -1.5, 3)
-        g = VGroup(band(ax, grid, lo, hi, FIELDC, 0.25), polyline(ax, grid, np.clip(mu, -1.5, 3), FIELDC, 3),
+        lo, hi = mu - 1.645 * sd, mu + 1.645 * sd
+        g = VGroup(band(ax, grid, lo, hi, FIELDC, 0.25), polyline(ax, grid, mu, FIELDC, 3),
                    scatter(ax, s["x"], s["y"], OBSC, 0.08))
         ei = np.asarray(s["ei"], float)
         B = axes([-2, 2], [0, 1], x_length=7.6, y_length=1.3, xlabel=r"", ylabel=r"EI", xticks=[], yticks=[],
                  center=[-1.6, -2.3, 0])
         bx = B.ax
         e = polyline(bx, grid, ei / max(ei.max(), 1e-12), TAUC, 3)
-        nx = DashedLine(bx.c2p(s["next"], 0), ax.c2p(s["next"], 3), color=TAUC, stroke_width=2)
+        nx = DashedLine(bx.c2p(s["next"], 0), ax.c2p(s["next"], upper), color=TAUC, stroke_width=2)
         t = label(rf"after {len(s['x'])} evaluations", font_size=24, color=GREY_A).move_to([4.8, 2.4, 0])
         return A, B, g, e, nx, t
 
@@ -118,7 +125,7 @@ class GPML(VoiceoverScene):
         side = fit_rows(VGroup(
             label(r"grey: \ the hidden function", font_size=22, color=GREY_B),
             label(r"blue: \ the GP mean and 90\% band", font_size=22, color=FIELDC),
-            label(r"gold: \ expected improvement \ (scaled)", font_size=22, color=TAUC),
+            label(r"gold: EI divided by its maximum separately at each step", font_size=22, color=TAUC),
         ), 3.6, 0.4, [5.0, 0.6, 0])
         with self.voiceover(
             "<bookmark mark='a'/> A one-dimensional example. A function with two dips, hidden from the optimizer, "
@@ -154,11 +161,12 @@ class GPML(VoiceoverScene):
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The true minimum is at " + say(d["true_min"], 2) + ". <bookmark mark='b'/> Bayesian "
-            "optimization found " + say(d["found"], 2) + " within eight evaluations, counting the first three. <bookmark "
-            "mark='c'/> A grid at the same resolution would need four hundred and one. <bookmark mark='d'/> Jasper "
-            "Snoek, Hugo Larochelle and Ryan Adams showed in 2012 that this beats experts at tuning the hyperparameters of "
-            "neural networks, where each evaluation is a full training run. Krige's mine valuation, choosing learning "
-            "rates."
+            "optimization found " + say(d["found"], 2) + " within eight evaluations, counting the first three. <bookmark mark='c'/> This run makes eleven function"
+            " evaluations in total; its best point is first reached at evaluation eight. Exhaustively evaluating the "
+            "401-point reference grid costs four hundred and one evaluations. That grid optimum is not a certified "
+            "continuous global optimum. <bookmark mark='d'/> Jasper Snoek, Hugo Larochelle and Ryan Adams showed in "
+            "2012 that this beats experts at tuning the hyperparameters of neural networks, where each evaluation is "
+            "a full training run. Krige's mine valuation, choosing learning rates."
         ) as vo:
             self.add(seeded_tag())
             for k, m_ in enumerate("abcd"):
@@ -168,17 +176,19 @@ class GPML(VoiceoverScene):
 
     def wider(self):
         rows = fit_rows(VGroup(
-            label(r"Neal (1996): \ a neural network with one infinitely wide hidden layer \ is a Gaussian process", font_size=26, color=FIELDC),
+            label(r"Neal (1996): suitably scaled i.i.d. network priors have a GP limit as width grows", font_size=26, color=FIELDC),
             label(r"kernel ridge regression \ (Part 29) \ = the GP posterior mean", font_size=26, color=TAUC),
             label(r"splines \ (Kimeldorf \& Wahba 1970) \ = a GP with a particular covariance", font_size=26, color=BANDC),
             label(r"one object, \ found by miners, \ meteorologists, \ statisticians and computer scientists", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The connections run further. Radford Neal showed in 1996 that a neural network with one "
-            "hidden layer becomes a Gaussian process as the layer grows infinitely wide. <bookmark mark='b'/> Part "
-            "twenty-nine's kernel ridge regression is the posterior mean of a Gaussian process, <bookmark mark='c'/> and "
-            "George Kimeldorf and Grace Wahba showed in 1970 that smoothing splines are too. <bookmark mark='d'/> One "
-            "mathematical object, found independently by miners, meteorologists, statisticians and computer scientists."
+            "<bookmark mark='a'/> The connections run further. Radford Neal showed in 1996 that the prior over "
+            "functions of a single-hidden-layer network, with appropriately scaled independent weights and suitable "
+            "activation moments, converges to a Gaussian process as width grows. This is not a statement that any "
+            "trained network is a GP. <bookmark mark='b'/> Part twenty-nine's kernel ridge regression is the "
+            "posterior mean of a Gaussian process, <bookmark mark='c'/> and George Kimeldorf and Grace Wahba showed "
+            "in 1970 that smoothing splines are too. <bookmark mark='d'/> One mathematical object, found "
+            "independently by miners, meteorologists, statisticians and computer scientists."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -190,19 +200,24 @@ class GPML(VoiceoverScene):
             cmath(r"\log p(y \mid \theta)", r"=", r"-\tfrac12 y^\top K_\theta^{-1} y \; - \; \tfrac12 \log |K_\theta| \; - \; \tfrac n2 \log 2\pi", font_size=30),
             cmath(r"\text{fit}", r":", r"-\tfrac12 y^\top K_\theta^{-1} y \ \text{ rewards kernels that explain } y", font_size=30),
             cmath(r"\text{complexity}", r":", r"-\tfrac12 \log|K_\theta| \ \text{ penalizes kernels that could explain anything}", font_size=30),
-            cmath(r"\text{so}", r":", r"\text{wiggly kernels fit better, \ but pay}", font_size=30),
+            cmath(r"\text{so}", r":", r"\text{fit and normalization trade off; neither is monotone in roughness}", font_size=30),
         ]
         rows[2][-1].set_color(TAUC)
         whys = [why(r"chapter 6's likelihood"), why(r"the data term"), why(r"the volume of plausible data"),
                 why(r"MacKay (1992)")]
         with self.voiceover(
             "<bookmark mark='a'/> Machine learning fits the kernel's hyperparameters by the log marginal likelihood, "
-            "which is chapter six's likelihood with the field integrated out. <bookmark mark='b'/> Its first term rewards "
-            "kernels under which the observed data are typical. <bookmark mark='c'/> Its second penalizes kernels that "
-            "spread their probability over many possible data sets, such as a very short length-scale, which could fit "
-            "almost anything. <bookmark mark='d'/> So a wigglier kernel fits better but pays for it: David MacKay called "
-            "this the automatic Occam's razor of Bayesian evidence, the same balance as Part twenty-eight's model choice."
+            "which is chapter six's likelihood with the field integrated out. <bookmark mark='b'/> Its first term "
+            "rewards kernels under which the observed data are typical. <bookmark mark='c'/> Its second penalizes "
+            "kernels that spread their probability over many possible data sets, such as a very short length-scale, "
+            "which could fit almost anything. <bookmark mark='d'/> The quadratic data-fit and log-determinant terms "
+            "must be assessed jointly; more wiggle does not invariably improve fit or make either term monotone.  "
+            "David MacKay called this the automatic Occam's razor of Bayesian evidence, the same balance as Part "
+            "twenty-eight's model choice."
         ) as vo:
+            intro=label('Gaussian marginal likelihood balances data fit and normalization',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

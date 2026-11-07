@@ -16,7 +16,7 @@ class Hook(VoiceoverScene):
     def story(self):
         tl = timeline(lit=(1951,)).to_edge(UP, buff=0.35)
         hc = history_card(1951, r"Danie Krige, \ \emph{A Statistical Approach to Some Basic Mine Valuation Problems on the Witwatersrand}",
-                          r"A young South African mining engineer had core samples from boreholes, \ a few metres across, \ and "
+                          r"A young South African mining engineer had core samples from boreholes, \ a few centimetres across, \ and "
                           r"had to value whole blocks of ore around them. \ Averaging the nearby samples overvalued rich blocks and "
                           r"undervalued poor ones; \ the samples were correlated with each other and with the block, \ and the "
                           r"right weights had to account for both",
@@ -26,13 +26,13 @@ class Hook(VoiceoverScene):
             label(r"the answer: \ weights from how values covary with distance", font_size=24, color=FIELDC),
         ), 12.0, 0.35, [0, -1.7, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In 1951 Danie Krige, a young mining engineer on South Africa's Witwatersrand gold fields, "
-            "published a master's thesis about a very practical question. Mines drilled boreholes and assayed the cores, a "
-            "few centimetres across, and then had to decide which blocks of ore, many metres across, were worth mining. "
-            "Simple averages of nearby samples systematically overvalued the rich blocks and undervalued the poor ones. "
-            "<bookmark mark='b'/> The real question was the value of the ground where nobody had drilled. <bookmark "
-            "mark='c'/> Krige's answer was to weight the samples using how gold grades covary with distance: with each "
-            "other, and with the block."
+            "<bookmark mark='a'/> In 1951 Danie Krige, a young mining engineer on South Africa's Witwatersrand gold "
+            "fields, published a master's thesis about a very practical question. Mines drilled boreholes and assayed"
+            " the cores, a few centimetres across, and then had to decide which blocks of ore, many metres across, "
+            "were worth mining. Naively treating selected rich or poor samples as representative of a whole block "
+            "misses regression toward the mean and differences in sampling support. <bookmark mark='b'/> The real "
+            "question was the value of the ground where nobody had drilled. <bookmark mark='c'/> Krige's answer was "
+            "to weight the samples using how gold grades covary with distance: with each other, and with the block."
         ) as vo:
             self.play(FadeIn(tl))
             vo.wait_until("a")
@@ -127,7 +127,7 @@ class Hook(VoiceoverScene):
         built = note(r"built: \ \texttt{statkit.spatial}; \ the field surface; \ data: \ Meuse, \ Snow's map").to_corner(DR, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Part thirty-nine: space. <bookmark mark='b'/> We'll describe random fields and their "
-            "variograms; derive kriging; meet the Matérn family and a parameter no amount of data can pin down; estimate by "
+            "variograms; derive kriging; meet the Matérn family and a parameter fixed-domain sampling cannot consistently separate from the variance; estimate by "
             "likelihood, and scale it to a hundred thousand locations; map disease rates in areas, and test point patterns, "
             "including Snow's map; see how spatial random effects can confound a regression; move to space and time; and "
             "end with Gaussian processes in machine learning, and honest prediction."

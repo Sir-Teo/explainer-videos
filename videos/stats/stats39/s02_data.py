@@ -147,6 +147,9 @@ class SpatialData(VoiceoverScene):
             "mark='d'/> And independent noise, which geostatisticians call the nugget, after the nuggets of gold that make "
             "two samples a few centimetres apart differ."
         ) as vo:
+            intro=label('Separate the mean trend, correlated field and independent noise',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -156,10 +159,10 @@ class SpatialData(VoiceoverScene):
     def neff(self):
         d = load("extra")
         rows = [
-            cmath(r"\text{Var}(\bar Z)", r"=", r"\tfrac{1}{n^2} \textstyle\sum_{i,j} C(s_i - s_j)", font_size=32),
-            cmath(r"n_{\text{eff}}", r"=", r"\text{Var}(Z)\,/\,\text{Var}(\bar Z)", font_size=32),
+            cmath(r"\text{Var}(\overline{Z-\mu})", r"=", r"\tfrac{1}{n^2} \textstyle\sum_{i,j} C(s_i - s_j)", font_size=32),
+            cmath(r"n_{\text{eff}}", r"=", r"\text{Var}(Z)\,/\,\text{Var}(\overline{Z-\mu})", font_size=32),
             cmath(r"\text{the World}", r":", rf"300 \text{{ stations}}, \ n_{{\text{{eff}}}} = {d['n_eff']:.1f}", font_size=32),
-            cmath(r"\text{SE of the mean}", r":", rf"{d['se_true']:.2f}, \ \text{{not}} \ \sigma/\sqrt{{n}} = {d['se_naive']:.2f}", font_size=32),
+            cmath(r"\text{model-based SE}", r":", rf"{d['se_true']:.2f}, \ \text{{not}} \ \sigma/\sqrt{{n}} = {d['se_naive']:.2f}", font_size=32),
         ]
         rows[2][-1].set_color(MISSC)
         whys = [why(r"every pair's covariance counts"), why(r"the effective sample size"), why(r"the true covariance"),
@@ -169,11 +172,16 @@ class SpatialData(VoiceoverScene):
             "observations of their covariance, not just the n variances. <bookmark mark='b'/> Divide the variance of one "
             "value by it, and we get the effective sample size: the number of independent values the average is worth. "
             "<bookmark mark='c'/> For the World's three hundred stations, with the true covariance, it is " + say(d["n_eff"], 1)
-            + ". On an island only a few ranges wide, the stations mostly repeat one another about the island-wide level. "
-            "<bookmark mark='d'/> The honest standard error of their mean is " + say(d["se_true"], 2) + ", seven times the "
+            + ". On an island only a few ranges wide, the stations give limited independent information about a "
+            "trend-removed ensemble mean level under the specified covariance model. This calculation is not the "
+            "prediction-error standard deviation for this realized island's spatial average. <bookmark mark='d'/> The"
+            " model-based standard error of the trend-removed station mean is " + say(d["se_true"], 2) + ", seven times the "
             "textbook formula's " + say(d["se_naive"], 2) + ". Prediction at a place is a different matter: there, nearby "
             "stations are exactly what we want."
         ) as vo:
+            intro=label('A station average targets a specified ensemble mean',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

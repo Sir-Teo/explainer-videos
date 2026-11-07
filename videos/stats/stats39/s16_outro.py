@@ -25,7 +25,7 @@ class Outro(VoiceoverScene):
         items = [
             (r"Krige: \ weights from covariance, \ 1951", TAUC), (r"Tobler; \ three kinds of spatial data", GREY_A),
             (r"Bochner: \ which functions are covariances", FIELDC), (r"variograms: \ nugget, \ sill, \ range", VARC),
-            (r"kriging: \ the BLUP, \ and the GP posterior", FIELDC), (r"Mat\'ern; \ only $\sigma^2/\rho^{2\nu}$ is learnable", TAUC),
+            (r"kriging: \ the BLUP, \ and the GP posterior", FIELDC), (r"Mat\'ern: fixed-domain microergodic combination, for known $\nu$", TAUC),
             (r"ML and REML; \ the $O(n^3)$ wall", BANDC), (r"Vecchia: \ 100,000 sites in seconds", BANDC),
             (r"GMRFs, \ the SPDE, \ INLA", FIELDC), (r"Moran's $I$; \ BYM disease maps", AREAC),
             (r"Ripley's $K$; \ Snow's pump; \ Cox processes", PTC), (r"confounding; \ space--time; \ BO; \ honest CV", MISSC),
@@ -43,11 +43,11 @@ class Outro(VoiceoverScene):
             "or points. Bochner's theorem says which functions can be covariances: those with non-negative spectra. The "
             "variogram describes dependence by its nugget, sill and range. Kriging is the best linear unbiased predictor, "
             "and the posterior mean of a Gaussian process. The Matérn family has a smoothness parameter, and under infill "
-            "only one combination of variance and range can be learned, the one predictions need. Likelihood and REML fit "
+            "under its known-smoothness, low-dimensional Gaussian conditions, variance and range cannot both be estimated consistently; local prediction can still be asymptotically efficient. Likelihood and REML fit "
             "the covariance and the trend together, at a cubic cost. Vecchia's conditioning on a few neighbours handles a "
             "hundred thousand locations in seconds. Markov random fields and the SPDE make the precision sparse, and INLA "
             "fits them fast. Moran's I detects clustering in areas, and the BYM model smooths a speckled disease map. "
-            "Ripley's K found Snow's cluster, and Cox processes model it. And a spatial random effect does not adjust for a "
+            "A modern Ripley K analysis describes the cluster in Snow's digitized map, and Cox processes model it. And a spatial random effect does not adjust for a "
             "confounder; separable covariances are a choice; Gaussian processes optimize expensive functions; and coverage "
             "must be checked with a cross-validation that matches the task."
         ) as vo:
@@ -80,6 +80,7 @@ class Outro(VoiceoverScene):
             (r"Brownian motion, \ a Gaussian process", [44]), (r"GP priors: \ how fast posteriors contract", [53]),
             (r"new regions as distribution shift", [60]),
         ], font_size=22)
+        self.add(card.head)
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part forty uses shared random effects, frailties, for lifetimes. "
             "Part forty-one treats prediction at unmeasured places as imputation, and measurement error as a nugget. Part "
@@ -88,7 +89,7 @@ class Outro(VoiceoverScene):
             "distribution shift."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):

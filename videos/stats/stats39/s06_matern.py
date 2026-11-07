@@ -34,13 +34,15 @@ class Matern(VoiceoverScene):
         whys = [why(r"Bertil Mat\'ern (1960), \ forests"), why(r"half-integers: \ closed forms"), why(r"$\nu$ controls the roughness"),
                 why(r"the limit")]
         with self.voiceover(
-            "<bookmark mark='a'/> Bertil Matérn, a Swedish forester, wrote down this family in his 1960 thesis on the "
-            "spatial variation of forests. It has a variance sigma squared, a range rho, and a smoothness nu, with K nu a "
-            "modified Bessel function. <bookmark mark='b'/> At half-integers it has closed forms: the exponential at one "
-            "half, and at three halves an exponential times a linear term. <bookmark mark='c'/> The point of nu: the field "
-            "is k times differentiable exactly when nu exceeds k. <bookmark mark='d'/> As nu grows without bound, the "
-            "Matérn becomes the Gaussian covariance, infinitely smooth."
-        ) as vo:
+            "<bookmark mark='a'/> Bertil Matérn, a Swedish forester, wrote down this family in his 1960 thesis on the"
+            " spatial variation of forests. It has a variance sigma squared, a range rho, and a smoothness nu, with K"
+            " nu a modified Bessel function. <bookmark mark='b'/> At half-integers it has closed forms: the "
+            "exponential at one half, and at three halves an exponential times a linear term. <bookmark mark='c'/> "
+            "The point of nu: the field is k times mean-square differentiable exactly when nu exceeds k. <bookmark "
+            "mark='d'/> As nu grows without bound, the Matérn becomes the Gaussian covariance, infinitely smooth."        ) as vo:
+            intro=label('Matérn smoothness controls mean-square differentiability',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -95,6 +97,9 @@ class Matern(VoiceoverScene):
             "mark='d'/> Peter Whittle noticed in 1954 that the Matérn field solves a stochastic partial differential "
             "equation driven by white noise, which will make it fast in chapter eight."
         ) as vo:
+            intro=label('High-frequency spectral decay controls local smoothness',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -130,8 +135,8 @@ class Matern(VoiceoverScene):
     def ridge(self):
         d = load("ident")
         rho, sig = np.asarray(d["rho"], float), np.asarray(d["sigma2"], float)
-        xm = float(np.ceil(np.percentile(rho, 98) / 0.2) * 0.2)
-        ym = float(np.ceil(np.percentile(sig, 98) / 1.0) * 1.0)
+        xm = float(np.ceil(np.max(rho) / 0.2) * 0.2)
+        ym = float(np.ceil(np.max(sig) / 1.0) * 1.0)
         A = axes([0, xm], [0, ym], x_length=7.0, y_length=4.4, xlabel=r"estimated range $\hat\rho$", ylabel=r"estimated variance $\hat\sigma^2$",
                  xticks=list(np.round(np.linspace(0, xm, 5), 2)), yticks=list(np.round(np.linspace(0, ym, 5), 1)),
                  xfmt=lambda v: f"{v:g}", yfmt=lambda v: f"{v:g}", center=[-2.6, 0.1, 0])
@@ -172,20 +177,25 @@ class Matern(VoiceoverScene):
             cmath(r"\text{Zhang (2004)}", r":", r"\sigma^2 \text{ and } \rho \text{ cannot both be estimated consistently under infill}", font_size=28),
             cmath(r"\text{but}", r":", r"\sigma^2 / \rho^{2\nu} \text{ can: \ the microergodic parameter}", font_size=30),
             cmath(r"\text{here}", r":", rf"\text{{CV of }} \hat\sigma^2/\hat\rho = {100 * d['cv_micro']:.0f}\% \ \text{{against}} \ {100 * d['cv_rho']:.0f}\% \text{{ for }} \hat\rho", font_size=30),
-            cmath(r"\text{and}", r":", r"\text{predictions depend on it, \ not on the two separately}", font_size=30),
+            cmath(r"\text{and}", r":", r"\text{asymptotic local prediction can be robust; finite predictions still depend on both}", font_size=30),
         ]
         rows[1][-1].set_color(TAUC)
-        whys = [why(r"equivalent Gaussian measures"), why(r"for the Mat\'ern, \ $d \le 3$"), why(r"the ridge, \ measured"),
+        whys = [why(r"equivalent Gaussian measures"), why(r"Gaussian Mat\'ern, known $\nu$, fixed bounded domain, $d\le3$"), why(r"the ridge, \ measured"),
                 why(r"so kriging still works")]
         with self.voiceover(
-            "<bookmark mark='a'/> Hao Zhang proved in 2004 that this is not a failure of the method. Under infill, Matérn "
-            "fields with different variances and ranges can be mathematically indistinguishable, so no estimator gets both "
-            "right however much data there are. <bookmark mark='b'/> What can be estimated is the combination sigma "
-            "squared over rho to the two nu, called the microergodic parameter. <bookmark mark='c'/> In the experiment its "
-            "estimate varies by only " + str(round(100 * d["cv_micro"])) + " percent. <bookmark mark='d'/> And predictions "
-            "depend on that combination, so kriging works even though its parameters are not identified. A parameter that "
-            "no amount of data can pin down, and that does not matter."
+            "<bookmark mark='a'/> Hao Zhang proved in 2004 that this is not a failure of the method. For Gaussian "
+            "Matérn fields of known smoothness in dimensions at most three on a fixed bounded domain, certain "
+            "different variances and ranges give equivalent Gaussian measures, so no estimator consistently gets both"
+            " right as sampling becomes denser in that domain. Equivalent measures are not identical finite-sample "
+            "distributions, and growing the spatial domain changes the problem. <bookmark mark='b'/> What can be "
+            "estimated is the combination sigma squared over rho to the two nu, called the microergodic parameter. "
+            "<bookmark mark='c'/> In the experiment its estimate varies by only " + str(round(100 * d["cv_micro"])) + " percent. <bookmark mark='d'/> The combination supports asymptotically efficient local prediction under "
+            "additional regularity; finite predictions and uncertainty still depend on variance and range separately."
+            " A parameter that fixed-domain infill cannot consistently separate can still matter in a finite study."
         ) as vo:
+            intro=label('Known-smoothness fixed-domain theory identifies a microergodic combination',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -211,8 +221,9 @@ class Matern(VoiceoverScene):
             "microergodic parameter fixed. The predictions, their standard errors and the coverage barely move. "
             "<bookmark mark='c'/> The same on the other side of the ridge. <bookmark mark='d'/> But double the range "
             "alone, leaving the ridge, and the standard errors shrink and coverage falls to " + str(round(100 * r[3]["cover"]))
-            + " percent; <bookmark mark='e'/> halve it, and the intervals become too wide. The data cannot tell points on "
-            "the ridge apart, and neither can the predictions."
+            + " percent; <bookmark mark='e'/> halve it, and the intervals become too wide. This one-field comparison "
+            "shows similar predictions along the ridge; it does not establish that finite data distributions or "
+            "predictions are identical."
         ) as vo:
             self.add(pollution_tag())
             vo.wait_until("a")

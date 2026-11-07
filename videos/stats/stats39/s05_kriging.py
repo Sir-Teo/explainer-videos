@@ -32,14 +32,18 @@ class Kriging(VoiceoverScene):
         whys = [why(r"a weighted average"), why(r"ordinary kriging"), why(r"the prediction error variance"),
                 why(r"a Lagrange multiplier $m$")]
         with self.voiceover(
-            "<bookmark mark='a'/> Kriging predicts the value at a new site as a weighted average of the observations. "
-            "<bookmark mark='b'/> For the prediction to be unbiased whatever the unknown constant mean, the weights must "
-            "add to one. <bookmark mark='c'/> Among such weights, choose the ones that minimize the variance of the "
-            "prediction error. That variance involves K, the covariances among the observations, and k nought, their "
-            "covariances with the new site. <bookmark mark='d'/> A Lagrange multiplier turns the problem into one linear "
-            "system. Its solution gives samples near the new site large weights, but discounts samples that cluster "
-            "together, since they tell the same story: Krige's insight."
+            "<bookmark mark='a'/> Kriging predicts the value at a new site as a weighted average of the observations."
+            " <bookmark mark='b'/> For the prediction to be unbiased whatever the unknown constant mean, the weights "
+            "must add to one. <bookmark mark='c'/> Among such weights, choose the ones that minimize the variance of "
+            "the prediction error. That variance involves K, the covariances among the observations, and k nought, "
+            "their covariances with the new site. <bookmark mark='d'/> A Lagrange multiplier turns the problem into "
+            "one linear system. With the specified covariance, its solution often gives nearby sites more weight and "
+            "discounts samples that cluster together. Weights depend on the full covariance and may be negative; "
+            "proximity alone does not determine them."
         ) as vo:
+            intro=label('Kriging minimizes prediction variance under unbiasedness constraints',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -107,8 +111,9 @@ class Kriging(VoiceoverScene):
                 [r"universal kriging \ (river distance)", f"{r['uk']:.3f}"]]
         tab = table_rows(rows, font_size=28, col_buff=1.2, row_buff=0.32, colors=[GREY_A, MISSC, TAUC, FIELDC, BANDC]).move_to([0, 0.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> How much does it help? Leave out each sample in turn and predict it from the others. "
-            "<bookmark mark='b'/> The overall mean misses by " + say(r["mean"], 2) + " on the log scale. <bookmark "
+            "<bookmark mark='a'/> How much does it help? Leave out each sample in turn, fit the variogram and trend "
+            "using only the other samples, then predict it. Covariance fitting is inside every fold. <bookmark "
+            "mark='b'/> The overall mean misses by " + say(r["mean"], 2) + " on the log scale. <bookmark "
             "mark='c'/> Inverse-distance weighting, the usual ad hoc interpolator, by " + say(r["idw"], 2) + ". <bookmark "
             "mark='d'/> Ordinary kriging by " + say(r["ok"], 2) + ", <bookmark mark='e'/> and universal kriging with the "
             "river's distance by " + say(r["uk"], 2) + ": almost half the error of the mean."
@@ -167,12 +172,16 @@ class Kriging(VoiceoverScene):
         whys = [why(r"Part 26's Bayes, \ infinite-dimensional"), why(r"Part 5's conditional normal"), why(r"the kriging variance"),
                 why(r"Kimeldorf \& Wahba; \ O'Hagan (1978)")]
         with self.voiceover(
-            "<bookmark mark='a'/> Kriging has a Bayesian reading. Treat the field as a Gaussian process: a prior over "
-            "functions. <bookmark mark='b'/> Conditioning on the observations, by Part five's conditional normal, gives a "
-            "posterior mean <bookmark mark='c'/> and variance <bookmark mark='d'/> that are exactly simple kriging's, and "
-            "universal kriging is what a flat prior on the trend coefficients gives. Statisticians, geologists and "
+            "<bookmark mark='a'/> Kriging has a Bayesian reading. Treat the field as a Gaussian process: a prior over"
+            " functions. <bookmark mark='b'/> Conditioning on the observations, by Part five's conditional normal, "
+            "gives a posterior mean <bookmark mark='c'/> and variance <bookmark mark='d'/> that are exactly simple "
+            "kriging's, and with known covariance, full-rank trend design and a proper resulting posterior, universal"
+            " kriging is what an improper flat prior on the trend coefficients gives. Statisticians, geologists and "
             "machine-learning researchers found the same object three times."
         ) as vo:
+            intro=label('Known-covariance Gaussian conditioning gives simple kriging',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

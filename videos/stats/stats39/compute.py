@@ -96,14 +96,24 @@ def lattice_marginal_variance(nx, ny, kappa):
     return float(np.mean(1 / (kappa**2 + ly[:, None] + lx[None, :])**2))
 
 
+def circulant_embedding(nx, ny, h, sigma2, rho, nu):
+    """Expand the torus until the covariance embedding is positive semidefinite."""
+    for factor in (2, 4, 8, 16, 32, 64):
+        mx, my = factor * nx, factor * ny
+        dx = np.minimum(np.arange(mx), mx - np.arange(mx)) * h
+        dy = np.minimum(np.arange(my), my - np.arange(my)) * h
+        C = SP.matern(np.hypot(dx[None, :], dy[:, None]), sigma2, rho, nu)
+        lam = np.fft.fft2(C).real
+        tolerance = 1e-12 * max(1., float(lam.max()))
+        if lam.min() >= -tolerance:
+            return np.maximum(lam, 0)
+    raise ValueError('Matérn circulant embedding remains indefinite; increase the domain')
+
+
 def circulant_field(nx, ny, h, sigma2, rho, nu, g):
-    """A Matern field on an nx x ny grid with spacing h, by circulant embedding."""
-    mx, my = 2 * nx, 2 * ny
-    dx = np.minimum(np.arange(mx), mx - np.arange(mx)) * h
-    dy = np.minimum(np.arange(my), my - np.arange(my)) * h
-    D = np.sqrt(dx[None, :] ** 2 + dy[:, None] ** 2)
-    C = SP.matern(D, sigma2, rho, nu)
-    lam = np.clip(np.fft.fft2(C).real, 0, None)
+    """A Matérn field from a checked PSD circulant covariance embedding."""
+    lam = circulant_embedding(nx, ny, h, sigma2, rho, nu)
+    my, mx = lam.shape
     Z = g.standard_normal((my, mx)) + 1j * g.standard_normal((my, mx))
     return np.fft.fft2(np.sqrt(lam / (mx * my)) * Z).real[:ny, :nx]
 
@@ -388,7 +398,7 @@ def compute_bayesopt():
         xs.append(nxt)
     true_min = float(grid[np.argmin(f(grid))])
     return nest({"grid": grid, "f": f(grid), "steps": steps, "true_min": true_min, "found": float(xs[int(np.argmin(f(np.array(xs))))]),
-                 "f_min": float(f(grid).min())})
+                 "f_min": float(f(grid).min()), "evaluations": len(xs), "evaluated_x": xs, "evaluated_y": f(np.array(xs)), "first_best_evaluation": int(np.argmin(f(np.array(xs)))) + 1})
 
 
 def compute_blockcv():

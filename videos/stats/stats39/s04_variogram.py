@@ -27,7 +27,7 @@ class Variogram(VoiceoverScene):
             cmath(r"\gamma(h)", r"=", r"\tfrac12\, E\,[Z(s + h) - Z(s)]^2", font_size=32),
             cmath(r"\text{stationary}", r":", r"\gamma(h) = C(0) - C(h)", font_size=30),
             cmath(r"\hat\gamma(h)", r"=", r"\dfrac{1}{2N(h)} \textstyle\sum_{|s_i - s_j| \approx h} (Z_i - Z_j)^2", font_size=30),
-            cmath(r"\text{why not } C", r":", r"\gamma \text{ needs no mean, \ and exists even without stationarity}", font_size=28),
+            cmath(r"\text{why not } C", r":", r"\gamma \text{ can describe intrinsic stationary increments without stationary levels}", font_size=28),
         ]
         rows[2][-1].set_color(VARC)
         whys = [why(r"the semivariogram"), why(r"the covariance, \ upside down"), why(r"Matheron (1962)"),
@@ -40,6 +40,9 @@ class Variogram(VoiceoverScene):
             "mark='d'/> It needs no estimate of the mean, and it exists for fields with stationary increments even when "
             "the covariance does not, like the random walk of Part thirty-eight."
         ) as vo:
+            intro=label('Semivariograms describe squared increments under stated stationarity',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -65,14 +68,14 @@ class Variogram(VoiceoverScene):
             label(r"Meuse, \ log zinc: \ 15 distance bins", font_size=22),
             label(r"dot size: \ number of pairs", font_size=22, color=GREY_A),
             label(r"rising, \ then levelling off", font_size=22, color=VARC),
-            label(rf"spherical fit: \ nugget {fs['nugget']:.3f}, \ sill {fs['sill']:.2f}, \ range {fs['range']:.2f} km", font_size=22, color=BANDC),
+            label(rf"spherical fit: \ nugget {fs['nugget']:.3f}, \ partial sill {fs['sill']:.2f}, \ range {fs['range']:.2f} km", font_size=22, color=BANDC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The empirical semivariogram of log zinc at Meuse, in fifteen distance bins, each dot "
-            "sized by the number of pairs behind it. <bookmark mark='b'/> It rises with distance, as Tobler's law says it "
-            "should, <bookmark mark='c'/> then levels off: beyond about a kilometre, two samples are no more alike than "
-            "two random ones. <bookmark mark='d'/> A spherical model, fitted by Noel Cressie's weighted least squares of "
-            "1985, has a nugget of " + say(fs["nugget"], 2) + ", a sill of " + say(fs["sill"], 2) + ", and a range of "
+            "<bookmark mark='a'/> The empirical semivariogram of log zinc at Meuse, in fifteen distance bins, each "
+            "dot sized by the number of pairs behind it. <bookmark mark='b'/> It rises with distance, as Tobler's law"
+            " says it should, <bookmark mark='c'/> the fitted spherical model then levels off: beyond its range it "
+            "assigns zero residual covariance, as if comparing two random ones. <bookmark mark='d'/> A spherical "
+            "model, fitted by Noel Cressie's weighted least squares of 1985, has a nugget of " + say(fs["nugget"], 2) + ", a partial sill of " + say(fs["sill"], 2) + ", and a range of "
             + say(fs["range"], 1) + " kilometres."
         ) as vo:
             self.add(meuse_tag())
@@ -127,14 +130,15 @@ class Variogram(VoiceoverScene):
             label(r"squared differences: \ one outlier pair dominates its bin", font_size=22, color=MISSC),
             label(r"Cressie \& Hawkins (1980): \ average $|Z_i - Z_j|^{1/2}$, \ then raise to the 4th power", font_size=22, color=BANDC),
             label(r"gold: \ classical; \ green: \ robust", font_size=22, color=GREY_A),
-            label(r"close here: \ log zinc has no gross outliers", font_size=22, color=GREY_A),
+            label(r"close here; similarity does not prove absence of outliers", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Squared differences are sensitive: one outlying sample enters every pair it belongs to, "
-            "and can dominate a bin. <bookmark mark='b'/> Noel Cressie and Douglas Hawkins proposed in 1980 to average the "
-            "square roots of the absolute differences instead, then raise the average to the fourth power and correct its "
-            "bias, Part thirty's robustness applied to variograms. <bookmark mark='c'/> On log zinc the two estimates are "
-            "close, <bookmark mark='d'/> because taking logs has already tamed the large values."
+            "<bookmark mark='a'/> Squared differences are sensitive: one outlying sample enters every pair it belongs"
+            " to, and can dominate a bin. <bookmark mark='b'/> Noel Cressie and Douglas Hawkins proposed in 1980 to "
+            "average the square roots of the absolute differences instead, then raise the average to the fourth power"
+            " and correct its bias, Part thirty's robustness applied to variograms. <bookmark mark='c'/> On log zinc "
+            "the two estimates are close, <bookmark mark='d'/> consistent with the logs reducing the influence of "
+            "large concentrations; agreement does not establish that no outliers remain."
         ) as vo:
             self.add(meuse_tag())
             self.play(FadeIn(A))
@@ -161,16 +165,18 @@ class Variogram(VoiceoverScene):
         truth = polyline(ax, hs, tp["tau2"] + tp["sigma2"] - SPK.matern(hs, tp["sigma2"], tp["rho"], 1.5), TRUEC, 2.5)
         side = fit_rows(VGroup(
             label(r"the World's 300 stations, \ after removing the traffic trend", font_size=22),
-            label(r"gold: \ the true variogram \ (sill 6.25, \ nugget 0.64)", font_size=22, color=TRUEC),
+            label(r"gold: \ nominal Mat\'ern variogram: partial sill 6.25, nugget 0.64", font_size=22, color=TRUEC),
             label(r"the empirical one keeps rising: \ the island is only a few ranges wide", font_size=22, color=VARC),
             label(r"one field, \ one island: \ the far bins rest on few, \ dependent pairs", font_size=22, color=MISSC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The World's stations, after subtracting the traffic trend. <bookmark mark='b'/> The true "
-            "variogram, in gold, levels off at a sill of about six. <bookmark mark='c'/> The empirical one tracks it at short "
-            "distances, then keeps rising. <bookmark mark='d'/> The island is only a few ranges wide, and at large distances "
-            "the bins rest on pairs that are all part of one realization, so they are noisy and dependent. Variograms are "
-            "best trusted at the distances that matter for prediction: short ones."
+            "<bookmark mark='a'/> The World's stations, after subtracting the traffic trend. <bookmark mark='b'/> The"
+            " true variogram, in gold, levels off at total sill six point eight nine, including the nugget. The World"
+            " uses a very fine numerical approximation to the Matérn grid covariance. <bookmark mark='c'/> The "
+            "empirical one tracks it at short distances, then keeps rising. <bookmark mark='d'/> The island is only a"
+            " few ranges wide, and at large distances the bins rest on pairs that are all part of one realization, so"
+            " they are noisy and dependent. Variograms are best trusted at the distances that matter for prediction: "
+            "short ones."
         ) as vo:
             self.add(pollution_tag())
             self.play(FadeIn(A), FadeIn(side[0]))
@@ -198,13 +204,14 @@ class Variogram(VoiceoverScene):
             label(r"geometric anisotropy: \ stretch the coordinates, \ then fit as before", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Isotropy is an assumption, and it can be checked. Group the pairs of samples by the "
-            "direction between them, and compute a variogram for each direction. <bookmark mark='b'/> North to south and "
-            "east to west lie in between. <bookmark mark='c'/> Along the north-east diagonal, the direction the river "
-            "runs, values change most slowly: <bookmark mark='d'/> across the river they change fastest, because moving "
-            "away from the bank changes how often the soil was flooded. <bookmark mark='e'/> Such geometric anisotropy is "
-            "handled by stretching the coordinates before using an isotropic model, and universal kriging's river-distance "
-            "trend absorbs much of it here."
+            "<bookmark mark='a'/> Isotropy is an assumption, and it can be checked. Group the pairs of samples by the"
+            " direction between them, and compute a variogram for each direction. <bookmark mark='b'/> North to south"
+            " and east to west lie in between. <bookmark mark='c'/> Along the north-east diagonal, the direction the "
+            "river runs, values change most slowly: <bookmark mark='d'/> across the river they change fastest, "
+            "because moving away from the bank changes how often the soil was flooded. <bookmark mark='e'/> These raw"
+            " directional differences can reflect the river-distance trend as well as anisotropic residual "
+            "covariance. Genuine geometric anisotropy can be modelled by stretching the coordinates before using an "
+            "isotropic model, and universal kriging's river-distance trend absorbs much of it here."
         ) as vo:
             self.add(meuse_tag())
             vo.wait_until("a")

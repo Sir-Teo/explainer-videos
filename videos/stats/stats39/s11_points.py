@@ -85,8 +85,8 @@ class Points(VoiceoverScene):
             label(r"Snow had the pump's handle removed on 8 September", font_size=22, color=GREY_A),
         ), 3.8, 0.35, [4.9, -1.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Assign each death to its nearest pump, as Snow did with a diagram of walking distances. "
-            "<bookmark mark='b'/> " + str(cnt[d["broad"]]) + " of the " + str(d["n"]) + " deaths, " + str(round(100 * d["share_broad"]))
+            "<bookmark mark='a'/> Assign each digitized death to the nearest pump by straight-line distance. This is "
+            "not a reconstruction of Snow's walking-distance boundaries. <bookmark mark='b'/> " + str(cnt[d["broad"]]) + " of the " + str(d["n"]) + " deaths, " + str(round(100 * d["share_broad"]))
             + " percent, are nearest the Broad Street pump; the next pump has " + str(cnt[order[1]]) + ". <bookmark "
             "mark='c'/> Snow persuaded the parish to remove the pump's handle on the eighth of September. The epidemic was "
             "already declining, so the removal proved little by itself; the map, and the brewery and workhouse whose "
@@ -119,6 +119,9 @@ class Points(VoiceoverScene):
             "Besag's L, is a straight line. <bookmark mark='d'/> L minus r above zero means clustering at that scale, below "
             "zero means regularity, like trees competing for light."
         ) as vo:
+            intro=label('Ripley K compares pair counts with an intensity-based reference',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -136,15 +139,17 @@ class Points(VoiceoverScene):
         env = band(ax, r, lo, hi, NULLC, 0.45)
         c = polyline(ax, r, L, PTC, 3)
         side = fit_rows(VGroup(
-            label(r"grey: \ 95\% band from 199 CSR patterns", font_size=22, color=NULLC),
+            label(r"grey: \ pointwise 95\% reference from 199 fixed-count CSR patterns", font_size=22, color=NULLC),
             label(r"red: \ Snow's deaths", font_size=22, color=PTC),
             label(r"far above at every scale: \ strongly clustered", font_size=22, color=PTC),
         ), 4.6, 0.45, [4.45, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Simulate a hundred and ninety-nine random patterns of the same size in the same window, "
-            "and the middle ninety-five percent of their L minus r curves form a thin band around zero. <bookmark "
-            "mark='b'/> Snow's deaths lie far above it, <bookmark mark='c'/> at every scale: the deaths are strongly "
-            "clustered."
+            "<bookmark mark='a'/> Simulate a hundred and ninety-nine random patterns of the same size in the same "
+            "window, At each distance separately, their two point five and ninety-seven point five percent quantiles "
+            "give the band. It is a pointwise reference, not a simultaneous ninety-five percent band for the whole "
+            "curve. The window was chosen using the deaths, so this is exploratory rather than a calibrated global "
+            "test. <bookmark mark='b'/> Snow's deaths lie far above it, <bookmark mark='c'/> at every scale: the "
+            "deaths are strongly clustered."
         ) as vo:
             self.add(snowmap_tag())
             self.play(FadeIn(A))
@@ -187,13 +192,16 @@ class Points(VoiceoverScene):
         whys = [why(r"independent counts in disjoint sets"), why(r"Cox (1955): \ doubly stochastic"),
                 why(r"M{\o}ller et al.\ (1998)"), why(r"chapter 8 again")]
         with self.voiceover(
-            "<bookmark mark='a'/> Models for points start from the Poisson process, whose counts in disjoint regions are "
-            "independent Poisson variables with mean the integral of the intensity. <bookmark mark='b'/> David Cox in 1955 "
-            "made the intensity itself random. <bookmark mark='c'/> In the log-Gaussian Cox process, the log intensity is "
-            "a regression plus a Gaussian process: clustering comes from the hills of the hidden field. <bookmark "
-            "mark='d'/> Counting the points on a fine grid turns it into a Poisson model with a Markov random field, so "
-            "chapter eight's tools fit it."
+            "<bookmark mark='a'/> Models for points start from the Poisson process, whose counts in disjoint regions "
+            "are independent Poisson variables with mean the integral of the intensity. <bookmark mark='b'/> David "
+            "Cox in 1955 made the intensity itself random. <bookmark mark='c'/> In the log-Gaussian Cox process, the "
+            "log intensity is a regression plus a Gaussian process: clustering comes from the hills of the hidden "
+            "field. <bookmark mark='d'/> Approximating the intensity integral on a fine grid and using an SPDE "
+            "approximation gives a Poisson latent Gaussian model, so chapter eight's tools fit it."
         ) as vo:
+            intro=label('Cox processes model a random spatial intensity',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
