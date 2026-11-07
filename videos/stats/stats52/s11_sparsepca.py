@@ -25,19 +25,16 @@ class SparsePCA(VoiceoverScene):
             cmath(r"v \text{ has } k \ll p \text{ non-zero entries}", r":", r"\text{the signal lives on a few variables}", font_size=32),
             cmath(r"\text{PCA}", r":", r"\text{inconsistent when } p/n \not\to 0, \ \text{and blind below } \sqrt{p/n}", font_size=32),
             cmath(r"\text{diagonal thresholding}", r":", r"\text{keep the } k \text{ largest variances, \ then PCA on them}", font_size=32),
-            cmath(r"\text{rate}", r":", r"\sin^2\angle(\hat v, v) \lesssim \frac{k\log p}{n\,\ell^2}: \ p \text{ only in a log}", font_size=32),
+            cmath(r"\text{minimax benchmark, not diagonal-thresholding guarantee}", r":", r"\sin^2\angle(\hat v, v) \lesssim 1\wedge\frac{(1+\ell)k\log(ep/k)}{n\ell^2}: \ p \text{ only in a log}", font_size=32),
         ]
         rows[2][-1].set_color(LASSOC)
         rows[3][-1].set_color(GOODC)
         whys = [why(r"interpretable components"), why(r"Johnstone \& Lu (2009)"), why(r"Johnstone \& Lu's estimator"), why(r"Vu \& Lei (2013), \ minimax")]
+        heading = label('Diagonal thresholding and the sparse-PCA minimax benchmark differ', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> If the signal direction has only k non-zero entries, so that the signal lives on a few "
-            "variables, structure can help. <bookmark mark='b'/> Iain Johnstone and Arthur Lu showed in 2009 that ordinary PCA "
-            "is inconsistent whenever p over n does not go to zero, and blind below the BBP threshold. <bookmark mark='c'/> "
-            "Their remedy, diagonal thresholding, is almost embarrassingly simple: the variables carrying the signal have "
-            "larger variances, so keep the k with the largest sample variances and run PCA on those alone. <bookmark "
-            "mark='d'/> Vincent Vu and Jing Lei found the minimax rate in 2013: the squared sine of the angle is of order k "
-            "log p over n ell squared, so the dimension enters only through a log, as for the lasso."
+            "<bookmark mark='a'/> If the signal direction has only k non-zero entries, so that the signal lives on a few variables, structure can help. <bookmark mark='b'/> Iain Johnstone and Arthur Lu showed in 2009 that ordinary PCA is inconsistent whenever p over n does not go to zero, and blind below the BBP threshold. <bookmark mark='c'/> Their remedy, diagonal thresholding, is almost embarrassingly simple: the variables carrying the signal have larger variances, so keep the k with the largest sample variances and run PCA on those alone. <bookmark mark='d'/> The minimax squared-angle rate is capped at one and involves one plus ell over ell squared, times k log of p over k over n in the appropriate sparse-spike regime. This is a benchmark for suitable estimators; plain diagonal thresholding need not attain it."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -88,21 +85,16 @@ class SparsePCA(VoiceoverScene):
         rows = [
             cmath(r"\text{information}", r":", r"n \gtrsim k\log p/\ell^2 \text{ suffices for some estimator}", font_size=32),
             cmath(r"\text{diagonal thresholding}", r":", r"\text{needs } n \gtrsim k^2\log p/\ell^2 \text{ in the hardest cases}", font_size=32),
-            cmath(r"\text{the gap}", r":", r"k\log p \text{ vs } k^2\log p: \ \text{no fast method known}", font_size=32),
+            cmath(r"\text{the gap}", r":", r"k\log p \text{ vs } k^2\log p: \ \text{conditional, regime-specific computational evidence}", font_size=32),
             cmath(r"\text{evidence}", r":", r"\text{reduction from planted clique \ (Part 50)}", font_size=32),
         ]
         rows[2][-1].set_color(BADC)
         whys = [why(r"exhaustive search"), why(r"and SDPs: \ d'Aspremont et al. (2007)"), why(r"a computational barrier"), why(r"Berthet \& Rigollet (2013)")]
+        heading = label('Sparse-PCA computational gaps are conditional and regime dependent', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> But there is a catch, and Part fifty met it. In principle, k log p over ell squared "
-            "observations suffice, for an estimator that searches over all supports of size k. <bookmark mark='b'/> Every known "
-            "polynomial-time method, diagonal thresholding and the semidefinite relaxations of Alexandre d'Aspremont and "
-            "colleagues included, needs about k squared log p in the hardest cases. <bookmark mark='c'/> The gap between k "
-            "and k squared is a statistical–computational gap. <bookmark mark='d'/> Quentin Berthet and Philippe Rigollet "
-            "showed in 2013 that closing it would solve the planted clique problem quickly, which is widely believed impossible. "
-            "Sparse PCA is the standard example of a problem where the information is in the data but may not be extractable "
-            "in reasonable time."
-        ) as vo:
+            "<bookmark mark='a'/> But there is a catch, and Part fifty met it. In principle, k log p over ell squared observations suffice, for an estimator that searches over all supports of size k. <bookmark mark='b'/> For flat sparse spikes, diagonal thresholding typically needs order k squared log p over ell squared samples. Computational lower bounds are conditional and regime-specific; there is no single universal sample requirement for every polynomial-time algorithm. <bookmark mark='c'/> The gap between k and k squared is a statistical–computational gap. <bookmark mark='d'/> Quentin Berthet and Philippe Rigollet showed in 2013 that sufficiently strong improvements in their specified asymptotic detection regimes would yield fast planted-clique algorithms, contrary to a standard conjecture. This is conditional evidence, not an unconditional finite-sample lower bound. Sparse PCA is the standard example of a problem where the information is in the data but may not be extractable in reasonable time."       ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -114,19 +106,16 @@ class SparsePCA(VoiceoverScene):
             cmath(r"x \sim N(0, \Sigma), \ \Theta = \Sigma^{-1}", r":", r"\Theta_{jk} = 0 \iff x_j \perp x_k \mid \text{rest}", font_size=32),
             cmath(r"\text{neighbourhood selection}", r":", r"\text{lasso of each } x_j \text{ on the others; \ edges where selected}", font_size=30),
             cmath(r"\text{the graphical lasso}", r":", r"\max_\Theta \log\det\Theta - \mathrm{tr}(S\Theta) - \lambda\|\Theta\|_1", font_size=32),
-            cmath(r"\text{consistency}", r":", r"n \gtrsim d^2\log p, \ \ d = \text{max degree; \ irrepresentability again}", font_size=30),
+            cmath(r"\text{consistency}", r":", r"n \gtrsim d^2\log p, \ \ d = \text{max degree; beta-min, spectra and incoherence conditions}", font_size=30),
         ]
         rows[1][-1].set_color(LASSOC)
         rows[2][-1].set_color(BULKC)
         whys = [why(r"Part 31's graphs"), why(r"Meinshausen \& Bühlmann (2006)"), why(r"Friedman, \ Hastie \& Tibshirani (2008)"), why(r"Ravikumar et al. (2011)")]
+        heading = label('Gaussian graph recovery needs signal, spectrum and incoherence conditions', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Sparsity in the inverse covariance means something different: a zero entry of the precision "
-            "matrix says two variables are independent given all the others, an absent edge in a graphical model, as in Part "
-            "thirty-one. <bookmark mark='b'/> Nicolai Meinshausen and Peter Bühlmann's neighbourhood selection of 2006 "
-            "regresses each variable on all the others by the lasso, and draws an edge wherever a coefficient survives. "
-            "<bookmark mark='c'/> The graphical lasso of Friedman, Hastie and Tibshirani penalizes the Gaussian likelihood "
-            "directly. <bookmark mark='d'/> Both recover the graph once n exceeds about the squared maximum degree times log "
-            "p, under an irrepresentable condition like the lasso's, as Pradeep Ravikumar and colleagues proved in 2011."
+            "<bookmark mark='a'/> Sparsity in the inverse covariance means something different: a zero entry of the precision matrix says two variables are independent given all the others, an absent edge in a graphical model, as in Part thirty-one. <bookmark mark='b'/> Nicolai Meinshausen and Peter Bühlmann's neighbourhood selection of 2006 regresses each variable on all the others by the lasso, and draws an edge wherever a coefficient survives. <bookmark mark='c'/> The graphical lasso of Friedman, Hastie and Tibshirani penalizes the Gaussian likelihood directly. <bookmark mark='d'/> Graph recovery also requires minimum edge strength, controlled spectra and the method-specific incoherence conditions; a degree-squared-log-p sample order is a representative sufficient regime, as Pradeep Ravikumar and colleagues proved in 2011."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -147,16 +136,11 @@ class SparsePCA(VoiceoverScene):
             label(r"neighbourhood selection, \ the AND rule", font_size=22),
             label(r"the truth: \ a chain, \ $x_j$ linked to $x_{j \pm 1}$ only", font_size=22, color=TRUEC),
             label(rf"green: \ true edges found, \ {100 * g[25]['tpr']:.0f}\% at $n = 25$, \ {100 * g[100]['tpr']:.0f}\% at 100", font_size=22, color=GOODC),
-            label(rf"red: \ false edges, \ {100 * g[25]['fpr']:.1f}\% \ to {100 * g[400]['fpr']:.1f}\%", font_size=22, color=BADC),
+            label(rf"red: \ fraction of absent edges selected, \ {100 * g[25]['fpr']:.1f}\% \ to {100 * g[400]['fpr']:.1f}\%", font_size=22, color=BADC),
             label(r"25 observations, \ 435 possible edges", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> A test of neighbourhood selection, keeping an edge only when both regressions select it. "
-            f"<bookmark mark='b'/> The truth is a chain of thirty variables, each linked only to its neighbours. <bookmark "
-            f"mark='c'/> With twenty-five observations it finds {100 * g[25]['tpr']:.0f} percent of the true edges, and from a "
-            f"hundred on, all of them. <bookmark mark='d'/> The rate of false edges stays between {100 * g[400]['fpr']:.1f} and "
-            f"{100 * g[25]['fpr']:.1f} percent. <bookmark mark='e'/> That is with twenty-five observations and four hundred "
-            f"and thirty-five possible edges: sparsity makes the graph learnable from far fewer observations than parameters."
+            f"<bookmark mark='a'/> A test of neighbourhood selection, keeping an edge only when both regressions select it. <bookmark mark='b'/> The truth is a chain of thirty variables, each linked only to its neighbours. <bookmark mark='c'/> With twenty-five observations it finds {100 * g[25]['tpr']:.0f} percent of the true edges, and the plotted average true-edge rate reaches one in the sampled replicates. This does not establish certain exact-graph recovery. <bookmark mark='d'/> The rate of false edges stays between {100 * g[400]['fpr']:.1f} and {100 * g[25]['fpr']:.1f} percent. <bookmark mark='e'/> That is with twenty-five observations and four hundred and thirty-five possible edges: sparsity makes the graph learnable from far fewer observations than parameters."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated")))
             vo.wait_until("a")

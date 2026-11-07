@@ -25,19 +25,16 @@ class Support(VoiceoverScene):
             cmath(r"\text{goal}", r":", r"\mathrm{sign}(\hat\beta) = \mathrm{sign}(\beta^*): \ \text{exactly the right variables, \ right signs}", font_size=30),
             cmath(r"\text{irrepresentability}", r":", r"\big\|X_{S^c}^\top X_S (X_S^\top X_S)^{-1}\, \mathrm{sign}(\beta^*_S)\big\|_\infty < 1", font_size=30),
             cmath(r"\text{read}", r":", r"\text{no noise variable is well explained by the signal variables}", font_size=30),
-            cmath(r"\text{necessary}", r":", r"\text{if it fails, \ the lasso picks a wrong variable at every } \lambda", font_size=30),
+            cmath(r"\text{asymptotic caveat}", r":", r"\text{population violation can prevent asymptotic sign consistency}", font_size=30),
         ]
         rows[1][-1].set_color(LASSOC)
         rows[3][-1].set_color(BADC)
         whys = [why(r"model selection consistency"), why(r"Zhao \& Yu (2006); \ Zou (2006)"), why(r"a regression of $X_{S^c}$ on $X_S$"), why(r"not just sufficient")]
+        heading = label('Irrepresentability concerns sign-consistency under stated assumptions', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> A small estimation error is not the same as finding the right variables. The stronger goal "
-            "is exact support recovery: the lasso's non-zero coefficients are exactly the true ones, with the right signs. "
-            "<bookmark mark='b'/> Peng Zhao and Bin Yu, and independently Hui Zou, found the condition in 2006: the "
-            "irrepresentable condition. <bookmark mark='c'/> Regress each noise variable on the signal variables, and weight "
-            "the coefficients by the true signs. The result must be less than one in absolute value: no noise variable may be "
-            "too well explained by the signals. <bookmark mark='d'/> And the condition is necessary: if it fails, then at "
-            "every value of lambda, the lasso includes a wrong variable or drops a right one."
+            "<bookmark mark='a'/> A small estimation error is not the same as finding the right variables. The stronger goal is exact support recovery: the lasso's non-zero coefficients are exactly the true ones, with the right signs. <bookmark mark='b'/> Peng Zhao and Bin Yu, and independently Hui Zou, found the condition in 2006: the irrepresentable condition. <bookmark mark='c'/> Regress each noise variable on the signal variables, and weight the coefficients by the true signs. The result must be less than one in absolute value: no noise variable may be too well explained by the signals. <bookmark mark='d'/> Strict irrepresentability is central to sign-consistency theorems. A population violation can prevent asymptotic sign consistency under their conditions. It does not rule out recovery for every finite noise realization and every penalty."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -54,16 +51,12 @@ class Support(VoiceoverScene):
         ]
         rows[2][-1].set_color(GOODC)
         rows[3][-1].set_color(SPIKEC)
-        whys = [why(r"an oracle problem"), why(r"the subgradient off $S$"), why(r"strict dual feasibility"), why(r"Gaussian design, \ $\Sigma = I$")]
+        whys = [why(r"an oracle problem"), why(r"the subgradient off $S$"), why(r"strict dual feasibility"), why(r"isotropic Gaussian; \ asymptotic, beta-min and tuning conditions")]
+        heading = label('Strict dual feasibility needs correct restricted signs and uniqueness', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Martin Wainwright's primal–dual witness of 2009 is the standard proof. First solve the lasso "
-            "as if the support were known, and record the signs. <bookmark mark='b'/> Then construct the subgradient on the "
-            "other coordinates from the optimality conditions. <bookmark mark='c'/> If every one of those is strictly less than "
-            "one in absolute value, the witness is the lasso solution, and it is unique, so the lasso has exactly the right "
-            "support. Bounding them needs the irrepresentable condition and a union bound over the noise variables. <bookmark "
-            "mark='d'/> For Gaussian designs the result is sharp: n greater than two s log of p minus s observations suffice, "
-            "and with fewer the lasso fails with high probability."
-        ) as vo:
+            "<bookmark mark='a'/> Martin Wainwright's primal–dual witness of 2009 is the standard proof. First solve the lasso as if the support were known, and record the signs. <bookmark mark='b'/> Then construct the subgradient on the other coordinates from the optimality conditions. <bookmark mark='c'/> If every one of those is strictly less than one in absolute value, the witness is the lasso solution, and it is unique if the restricted Gram matrix is nonsingular. Recovering the signed support also requires the restricted coefficients to retain the true nonzero signs. Bounding them needs the irrepresentable condition and a union bound over the noise variables. <bookmark mark='d'/> For Gaussian designs the result is sharp: the leading two s log of p minus s threshold arises in specified growing-dimensional isotropic-Gaussian regimes, with beta-min and penalty conditions. It is not a finite-sample sample-size guarantee by itself."       ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -86,16 +79,10 @@ class Support(VoiceoverScene):
             label(r"grey, \ teal, \ blue: \ $p = 128$, \ 256, \ 512", font_size=22, color=LASSOC),
             label(r"success: \ some $\lambda$ on the exact LARS path is right", font_size=22),
             label(rf"at $\theta = 1$: \ {100 * c['128'][3]:.0f}\%, \ {100 * c['256'][3]:.0f}\%, \ {100 * c['512'][3]:.0f}\%", font_size=22, color=SPIKEC),
-            label(r"the curves collapse, \ and sharpen with $p$", font_size=22, color=GOODC),
+            label(r"30 trials per point; \ full-path oracle criterion", font_size=22, color=GOODC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> A test of the threshold, with eight true variables. For each problem, we compute the "
-            f"lasso's entire path exactly, by LARS, and ask whether any value of lambda gives exactly the right signed support. "
-            f"<bookmark mark='b'/> Three dimensions, a hundred and twenty-eight, two hundred and fifty-six and five hundred and "
-            f"twelve, plotted against Wainwright's rescaled sample size. <bookmark mark='c'/> At theta one half, success is "
-            f"rare; at theta two, certain. <bookmark mark='d'/> At theta one, the three curves are at {100 * c['128'][3]:.0f}, "
-            f"{100 * c['256'][3]:.0f} and {100 * c['512'][3]:.0f} percent. <bookmark mark='e'/> After rescaling, the "
-            f"curves collapse onto one another and steepen as p grows, the signature of a sharp threshold at two s log p."
+            f"<bookmark mark='a'/> A test of the threshold, with eight true variables. For each problem, we compute the lasso's entire path exactly, by LARS, and ask whether any value of lambda gives exactly the right signed support. <bookmark mark='b'/> Three dimensions, a hundred and twenty-eight, two hundred and fifty-six and five hundred and twelve, plotted against Wainwright's rescaled sample size. <bookmark mark='c'/> At theta one half, success is rare; the observed recovery rates rise near theta two. Thirty successful trials do not establish certainty. <bookmark mark='d'/> At theta one, the three curves are at {100 * c['128'][3]:.0f}, {100 * c['256'][3]:.0f} and {100 * c['512'][3]:.0f} percent. <bookmark mark='e'/> After rescaling, these small experiments illustrate the threshold scale. Searching the full path using the true support is an oracle criterion, not a usable rule for choosing lambda."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated")))
             vo.wait_until("a")
@@ -118,15 +105,9 @@ class Support(VoiceoverScene):
         tab = table_rows(rows, font_size=30, col_buff=0.8, row_buff=0.45, colors=[GREY_B, GOODC, BADC])
         tab.move_to([0, 0.9, 0])
         foot = label(rf"$n = {d['n']}$, \ $p = {d['p']}$, \ three true variables; \ 30 designs each", font_size=24, color=GREY_A).move_to([0, -1.0, 0])
-        foot2 = label(r"more data does not help: \ the lasso prefers the impostor at every $\lambda$", font_size=24, color=BADC).move_to([0, -1.8, 0])
+        foot2 = label(r"population violations obstruct sign consistency; \ finite exceptions can occur", font_size=24, color=BADC).move_to([0, -1.8, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> And when the condition fails? Three true variables among fifty, four hundred observations. "
-            f"With independent columns, the irrepresentable value is {say(d['irr_good'], 2)}, and the right support appears "
-            f"on the path every time. Now make the fourth, irrelevant column nearly the average of the three true ones: the "
-            f"value becomes {say(d['irr_bad'], 2)}, above one, and the right support never appears. <bookmark mark='b'/> "
-            f"Thirty designs of each kind. <bookmark mark='c'/> More data would not help: the impostor summarizes the truth so "
-            f"well that the lasso includes it at every lambda. The adaptive lasso of Part thirty-two, or a non-convex penalty, "
-            f"can escape; the lasso cannot."
+            f"<bookmark mark='a'/> And when the condition fails? Three true variables among fifty, four hundred observations. With independent columns, the irrepresentable value is {say(d['irr_good'], 2)}, and the right support appears on the path every time. Now make the fourth, irrelevant column nearly the average of the three true ones: the value becomes {say(d['irr_bad'], 2)}, above one, and the right support never appears. <bookmark mark='b'/> Thirty designs of each kind. <bookmark mark='c'/> In this sampled experiment the impostor prevents signed recovery along the path. A population irrepresentability violation is a barrier to asymptotic sign consistency under the relevant conditions. It is not a deterministic statement about every dataset or every lambda. Other penalties require their own assumptions."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tab), FadeIn(simulated_tag(r"simulated")))
@@ -145,12 +126,7 @@ class Support(VoiceoverScene):
             label(r"which is why chapter 11 builds intervals that do not need the support", font_size=26, color=SPIKEC),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Two more requirements stand between the lasso and the right variables. <bookmark mark='b'/> "
-            "The beta-min condition: every true coefficient must be larger than the noise level, sigma times the root of log "
-            "p over n, or it is indistinguishable from zero. <bookmark mark='c'/> And whether it holds cannot be checked from "
-            "the data, because a small coefficient looks exactly like a zero one. <bookmark mark='d'/> So good prediction and "
-            "estimation need much less than correct selection. <bookmark mark='e'/> That is why chapter eleven builds "
-            "confidence intervals that do not depend on selecting the right model."
+            "<bookmark mark='a'/> Two more requirements stand between the lasso and the right variables. <bookmark mark='b'/> The beta-min condition: every true coefficient must be larger than the noise level, sigma times the root of log p over n, or it is indistinguishable from zero. <bookmark mark='c'/> And whether it holds cannot be checked from the data, because arbitrarily small coefficients can be statistically indistinguishable from zero without an assumed separation. <bookmark mark='d'/> So good prediction and estimation need much less than correct selection. <bookmark mark='e'/> That is why chapter eleven builds confidence intervals that do not depend on selecting the right model."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

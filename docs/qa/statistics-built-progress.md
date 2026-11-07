@@ -65,7 +65,7 @@ No part is signed off for bilingual production. The branch has zero narration_zh
 | 36 | `stats36` | 17 | English source and visual review complete; bilingual/listening/master gates open |
 | 37 | `stats37` | 16 | Scientific source corrections and 23 checks complete; visual verification in progress |
 | 38 | `stats38` | 14 | English source and sampled visual review complete; 19 checks, 14 endpoint / 13 native / 13 motion sheets; bilingual production gates open |
-| 39 | `stats39` | 16 | Full source read; scientific corrections and 22 checks pass; numerical reconciliation and visuals in progress |
+| 39 | `stats39` | 16 | Scientific source and numerical reconciliation complete; 22 checks pass; visual verification pending |
 | 40 | `stats40` | 17 | Scientific source corrections complete; visual verification in progress |
 | 41 | `stats41` | 11 | Scientific source corrections complete; visual verification in progress |
 | 42 | `stats42` | 12 | Scientific source corrections complete; visual verification in progress |
@@ -77,8 +77,8 @@ No part is signed off for bilingual production. The branch has zero narration_zh
 | 48 | `stats48` | 14 | Scientific source corrections and 18 checks complete; visual verification in progress |
 | 49 | `stats49` | 13 | Scientific source and numerical reconciliation complete; 14 checks pass; visual verification pending |
 | 50 | `stats50` | 12 | Scientific source and numerical corrections complete; 17 checks pass; visual verification pending |
-| 51 | `stats51` | 12 | Not yet reviewed chapter by chapter |
-| 52 | `stats52` | 13 | Not yet reviewed chapter by chapter |
+| 51 | `stats51` | 12 | Scientific source and numerical reconciliation complete; 17 checks pass; visual verification pending |
+| 52 | `stats52` | 13 | Scientific source and numerical reconciliation complete; 19 checks pass; visual verification pending |
 | 53 | `stats53` | 13 | Not yet reviewed chapter by chapter |
 | 54 | `stats54` | 12 | Not yet reviewed chapter by chapter |
 | 55 | `stats55` | 8 | Not yet reviewed chapter by chapter |
