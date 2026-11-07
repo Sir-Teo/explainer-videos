@@ -80,8 +80,9 @@ class Sensitivity(VoiceoverScene):
         rw = d["rosen_world"]
         gs = sorted(float(k) for k in rw)
         lp = [max(-np.log10(max(rw[str(g) if str(g) in rw else f"{g:.1f}"], 1e-300)), 0) for g in gs]
-        A = axes([1, 7], [0, 150], x_length=7.4, y_length=4.2, xlabel=r"hidden bias $\Gamma$", ylabel=r"$-\log_{10}$ worst $p$",
-                 xticks=[1, 2, 3, 4, 5, 6, 7], yticks=[0, 50, 100, 150], center=[-2.0, 0.2, 0])
+        upper = max(2.0, float(np.ceil(max(lp) / 5) * 5))
+        A = axes([1, 7], [0, upper], x_length=7.4, y_length=4.2, xlabel=r"hidden bias $\Gamma$", ylabel=r"$-\log_{10}$ worst $p$",
+                 xticks=[1, 2, 3, 4, 5, 6, 7], yticks=[0, upper / 2, upper], center=[-2.0, 0.2, 0])
         ax = A.ax
         line = VGroup(polyline(ax, gs, lp, PSC, 3), *[Dot(ax.c2p(g, v), radius=0.06, color=PSC) for g, v in zip(gs, lp)])
         sig = DashedLine(ax.c2p(1, -np.log10(0.05)), ax.c2p(7, -np.log10(0.05)), color=MISSC, stroke_width=2)
