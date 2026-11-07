@@ -2,8 +2,9 @@
 
 Part 17 of the [43-part series](../README.md) covers learned pricing maps, calibration,
 differential regression, BSDEs, optimal stopping, hedging with costs and model sensitivity.
-Scientific corrections are committed; current-source bilingual visual QA is in progress.
-See the [sequential QA record](../../../docs/qa/quantitative-finance-polish.md).
+Scientific corrections and the current-source bilingual visual pass are complete.
+See the [sequential QA record](../../../docs/qa/quantitative-finance-polish.md) and
+[artifact-bound evidence](../../../docs/qa/quant17-polish-evidence.json).
 Continuous production-voice listening remains a separate pending pass.
 
 ## What this implementation establishes

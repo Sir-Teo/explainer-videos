@@ -35,7 +35,7 @@ Delivery workflow: continue directly on `quantitative-finance`. Commit and push 
 | 14 | Visual pass complete; full production-voice listening pending |
 | 15 | Visual pass complete; full production-voice listening pending |
 | 16 | Visual pass complete; full production-voice listening pending |
-| 17 | In progress: scientific, narration and visual QA |
+| 17 | Visual pass complete; full production-voice listening pending |
 | 18–43 | Pending; do not infer approval from historical build notes |
 
 ## Part 1: The Fair Game
@@ -1162,3 +1162,22 @@ Validation: 44 actual current bilingual endpoint renders and 22 actual English m
 The [compact evidence record](quant16-polish-evidence.json) binds all 66 receipts, input hashes, manual review artifacts, 13 CPU speech reports (72 sampled lines, zero signal/token-timing issues), and the actual narrated opening (208.7 seconds). Signal and token checks do not certify pronunciation or full continuous synchronization. Full production-voice listening remains pending.
 
 Local ignored artifacts: `renders/quant16_polished_silent.mp4`, 75:30 including animation and pauses, with 22 embedded chapters and English soft subtitles; adjacent `.srt` and `.chapters.txt`; and `media/quant16/narrated_qa/videos/s01_hook/480p15/Hook.mp4`.
+
+
+## Part 17: Deep Pricing and Hedging
+
+Visual pass complete on `quantitative-finance`:
+
+- Qualify approximation, optimizer, derivative and calibration claims. Separate correlated simulation labels, surrogate error, inverse-volatility bias, parameter boundaries and descriptive quote fits. Retain full finite plotted ranges and distinguish descriptive seed ranges from confidence intervals.
+- State the pathwise differentiation assumptions and the GP working likelihood. Distinguish Brownian BSDE exposure from share holdings, Euler batch loss from continuous population error, and iteration scatter from independent uncertainty. Display the linear benchmark discrepancy openly.
+- Derive stopping-policy expectation bounds, cash-invariant indifference premiums and the optimized no-claim baseline. Qualify exponential moments, empirical expected shortfall, physical drift and continuous-model investment demand.
+- Correct the reflected-band turnover factor and cube-root objective; match the live replay and learned surface. Explain structural width limits, hard clamping, local optimization and finite-grid model sensitivity without claiming certified price bounds.
+- Replace the BTC generator and overlapping-history comparison with an exact stationary-Gaussian reverse-process illustration and an explicitly unfinished disjoint-history validation plan. The three legacy BTC cache jobs were deliberately not executed.
+- Verify dated deployment and research claims, the nonbinding scope of SR 26-2 and its generative/agentic-AI exclusion. Proposed controls and fallback routing are described as plans. Reveal worked answers after pauses and provide ten full bilingual solutions.
+- Align Mandarin narration and add 244 exact onscreen translations while preserving all earlier caption entries. Reflow dense explanations, charts and exercise panels.
+
+Validation: 44 actual current bilingual endpoint renders and 22 actual English motion renders passed with zero unresolved warnings. Every endpoint and forty-frame motion sheet was actually inspected, together with 37 current native frames. The motion scanner raised 7 raw warning records covering 9 distinct movie intervals; exact artifact-bound decisions are retained in the evidence. All 151/151 narration sources have Mandarin coverage; estimated narration is 63.7 minutes. Eleven existing numerical tests passed. Twenty-nine permitted original cache items were restored through normal commands. All 98 protected files, including compute drivers, House algorithms and global registries, remain unchanged. The three legacy BTC jobs were deliberately not executed; no new market trial, sealed-return read or envelope opening occurred in this pass. Counters remain 312 for the part and 23,562 globally.
+
+The [compact evidence record](quant17-polish-evidence.json) binds all 66 current receipts, input hashes, visual reviews, 13 CPU speech reports (94 sampled lines, zero signal/token-timing issues), and the actual narrated opening (208.975 seconds). The opening has zero blank-screen flags and two sparse transition flags, both separately inspected. Signal and token checks do not certify pronunciation or continuous synchronization. Full production-voice listening remains pending.
+
+Local ignored artifacts: `renders/quant17_polished_silent.mp4`, 74:38 including animation and pauses, with 22 embedded chapters and English soft subtitles; adjacent `.srt` and `.chapters.txt`; and `media/quant17/narrated_qa/videos/s01_hook/480p15/Hook.mp4`.
