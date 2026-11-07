@@ -7,7 +7,7 @@ SCENES = [
     ("s02_business", "Business", "1. Anatomy of a note, and the margin"),
     ("s13_buyers", "Buyers", "2. Who buys, and what they earned"),
     ("s03_barriers", "Barriers", "3. Barriers: reflection, the closed form, the PDE"),
-    ("s14_static", "Static", "4. Watched at the close, hedged without trading"),
+    ("s14_static", "Static", "4. Discrete monitoring and static vanilla hedges"),
     ("s04_digitals", "Digitals", "5. Digitals, one-touches and the call-spread hedge"),
     ("s15_asian", "Asian", "6. Averages and extremes: Asians and lookbacks"),
     ("s05_snowball", "Snowball", "7. The snowball, priced"),

@@ -28,16 +28,21 @@ class Correlation(VoiceoverScene, ThreeDScene):
         s1, s2 = w["sig1"], w["sig2"]
         rh = np.asarray(w["rhos"])
         pr = np.asarray(w["prices"])
-        ax = ThreeDAxes(x_range=[0.4, 1.6, 0.2], y_range=[0.4, 1.6, 0.2], z_range=[0, 0.6, 0.2], x_length=5.6,
+        g = np.random.default_rng(3)
+        z1, z3 = g.standard_normal(300), g.standard_normal(300)
+        radial = float(np.sqrt(z1 * z1 + z3 * z3).max())
+        lo = min(0.4, float(np.exp(-0.5 * s1 * s1 - s1 * abs(z1).max())),
+                 float(np.exp(-0.5 * s2 * s2 - s2 * radial)))
+        hi = max(1.6, float(np.exp(-0.5 * s1 * s1 + s1 * abs(z1).max())),
+                 float(np.exp(-0.5 * s2 * s2 + s2 * radial)))
+        ax = ThreeDAxes(x_range=[lo, hi, (hi-lo)/4], y_range=[lo, hi, (hi-lo)/4], z_range=[0, 1-lo, (1-lo)/3], x_length=5.6,
                         y_length=5.6, z_length=2.6, tips=False, axis_config={"stroke_color": GREY_C,
                                                                               "include_ticks": False, "stroke_width": 2})
         ax.shift(LEFT * 1.6 + DOWN * 0.5)
-        surf = Surface(lambda u, v: ax.c2p(u, v, max(1.0 - min(u, v), 0.0)), u_range=[0.4, 1.6], v_range=[0.4, 1.6],
+        surf = Surface(lambda u, v: ax.c2p(u, v, max(1.0 - min(u, v), 0.0)), u_range=[lo, hi], v_range=[lo, hi],
                        resolution=(24, 24), fill_opacity=0.55, stroke_width=0.3, stroke_color=GREY_D)
         surf.set_fill_by_value(axes=ax, colorscale=[(SPOT, 0), (OPT, 0.3), ("#F7A8D8", 0.6)], axis=2)
-        crease = Line(ax.c2p(0.4, 0.4, 0.6), ax.c2p(1.0, 1.0, 0), stroke_color=WHITE, stroke_width=3)
-        g = np.random.default_rng(3)
-        z1, z3 = g.standard_normal(300), g.standard_normal(300)
+        crease = Line(ax.c2p(lo, lo, 1-lo), ax.c2p(1.0, 1.0, 0), stroke_color=WHITE, stroke_width=3)
         rho = ValueTracker(-0.2)
 
         def pts():
@@ -45,7 +50,7 @@ class Correlation(VoiceoverScene, ThreeDScene):
             z2 = r * z1 + np.sqrt(max(1 - r * r, 0)) * z3
             x = np.exp(-0.5 * s1 ** 2 + s1 * z1)
             y = np.exp(-0.5 * s2 ** 2 + s2 * z2)
-            return VGroup(*[Dot(ax.c2p(float(np.clip(a, 0.4, 1.6)), float(np.clip(b, 0.4, 1.6)), 0), radius=0.03,
+            return VGroup(*[Dot(ax.c2p(float(a), float(b), 0), radius=0.03,
                                 color=IV if min(a, b) < 1 else GREY_B) for a, b in zip(x, y)])
         cloud = always_redraw(pts)
         ro = readout(r"\rho =", lambda: rho.get_value(), digits=2, font_size=32, color=IV)
@@ -61,13 +66,7 @@ class Correlation(VoiceoverScene, ThreeDScene):
         for r_ in (ro, rp):  # each number rebuilds itself as it changes: pin it to the frame again
             r_[1].add_updater(lambda m: cam.add_fixed_in_frame_mobjects(m))
         with self.voiceover(
-            "Structurers raise the coupon by linking a note to the worst of two or three indices. Here is the put "
-            "the buyer sells, over the final levels of two indices: a folded surface, creased along the diagonal. "
-            "<bookmark mark='a'/> On the floor, three hundred joint outcomes. With correlation near zero "
-            "the cloud is round, and many points have one index or the other below the strike. "
-            "<bookmark mark='b'/> Now raise the correlation toward one. The cloud collapses onto the diagonal, the "
-            "two indices move as one, and the put shrinks to a put on a single index. The price readout follows: "
-            f"from {pr[0]:.3f} at minus 0.2 to {pr[-1]:.3f} at one."
+            f"A worst-of put pays the loss on the weaker terminal asset. The investor sells that loss claim inside a worst-of note, while the issuer buys it. The folded payoff surface makes the distinction visible. <bookmark mark='a'/> These three hundred fixed Gaussian draws show joint terminal outcomes as correlation changes; the full cloud is retained. Different marginal volatilities mean the cloud need not be round at zero correlation. <bookmark mark='b'/> As correlation reaches one, only one Brownian shock remains. With unequal volatilities the points lie on a curve, not necessarily the price diagonal; the two assets are still different. In this example the put falls from {pr[0]:.3f} at minus 0.2 to {pr[-1]:.3f} at one. Equal volatilities and matched carry would be needed for identical paths."
         ) as vo:
             self.play(FadeIn(hint), Create(ax), Create(surf), run_time=3)
             self.play(Create(crease))
@@ -79,7 +78,7 @@ class Correlation(VoiceoverScene, ThreeDScene):
         cloud.clear_updaters()
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, added_anims=[FadeOut(VGroup(ax, surf, crease, cloud)), FadeOut(hint)],
                          run_time=1.2)
-        self.clear_scene()
+        self.clear_scene(run_time=0.1)
 
     def derive(self):
         rows = [
@@ -89,10 +88,10 @@ class Correlation(VoiceoverScene, ThreeDScene):
             cmath(r"\sigma^2", r"=", r"\sigma_1^2 + \sigma_2^2 - 2\rho\,\sigma_1\sigma_2", font_size=36,
                   colors={r"\sigma^2": IV}),
             cmath(r"\min(S_1, S_2)", r"=", r"S_1 - (S_1 - S_2)^+", font_size=36, colors={r"\min(S_1, S_2)": SPOT}),
-            cmath(r"\frac{\partial V}{\partial\rho}", r"=", r"\mathbb E\Big[\int_0^T \sigma_1\sigma_2 S_1 S_2\,"
+            cmath(r"\frac{\partial V}{\partial\rho}", r"=", r"\mathbb E\Big[\int_0^T e^{-rt}\sigma_1\sigma_2 S_1 S_2\,"
                   r"\partial_{12}V\,dt\Big]", font_size=34, colors={r"\frac{\partial V}{\partial\rho}": BAD}),
         ]
-        whys = [why(r"Margrabe (1978): change the numeraire to $S_2$ (Part 9); the exchange option becomes a call on the "
+        whys = [why(r"constant-parameter GBM, no dividends; constant-parameter GBM, no dividends; Margrabe (1978): change the numeraire to $S_2$ (Part 9); the exchange option becomes a call on the "
                     r"ratio, struck at 1"),
                 why(r"It\^o for a ratio (Part 5): $S_1/S_2$ is a $\mathbb Q^{(2)}$-martingale with this volatility; so the "
                     r"price is Black--Scholes with $\sigma$, $K = 1$"),
@@ -143,7 +142,7 @@ class Correlation(VoiceoverScene, ThreeDScene):
                           r"a put on the worst performer, so the coupon is higher", 4.4, 19, GREY_A),
             wrapped_label(rf"at the measured correlation the put is worth {pm:.3f}, against {s2:.3f} for the riskier "
                           r"index alone: the buyer is paid for the chance that one of the two falls", 4.4, 19, WHITE),
-            wrapped_label(r"the dealer owns the put: it is short correlation, an input no market quotes directly", 4.4,
+            wrapped_label(r"the dealer owns the put: it is short correlation, a risk-neutral dependence input; historical return correlation is not its market quote", 4.4,
                           19, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
         src = real_data(rf"vols from 2021--2023: CSI 500 ETF {100 * w['sig1']:.0f}\%, HSCEI {100 * w['sig2']:.0f}\%; "
@@ -151,12 +150,7 @@ class Correlation(VoiceoverScene, ThreeDScene):
         pp = pause_card(r"Correlation jumps toward one in a crash. Does the dealer, long the worst-of put, gain or lose "
                         r"on the correlation?", width=4.6).to_corner(UR, buff=0.3)
         with self.voiceover(
-            "The price against correlation, for the CSI 500 and the HSCEI at their 2021 to 2023 volatilities. The "
-            "lower the correlation, the dearer the put. Between these two indices the measured correlation was "
-            f"{w['rho_measured']:.2f}, where the put is worth {pm:.3f}, against {s2:.3f} for the riskier index alone. "
-            "<bookmark mark='a'/> Pause and predict: in a crash, correlations jump toward one. Does the dealer, who "
-            "owns the worst-of put, gain or lose on that? <bookmark mark='b'/> It loses: the put is worth less when "
-            "the indices move together. The dealer is short correlation, a number no market quotes."
+            f"For these fixed volatilities and this payoff, the put becomes dearer as correlation falls. The historical 2021 through 2023 return correlation is {w['rho_measured']:.2f}; inserting it gives {pm:.3f}, versus {s2:.3f} for the higher-volatility asset alone. That historical estimate is a parameter proxy, not a risk-neutral market quote. <bookmark mark='a'/> Holding all other inputs fixed, what happens to the issuer's long put when modeled correlation rises? <bookmark mark='b'/> Its value falls. The issuer is short correlation through that put; the note investor, who sold it, has the opposite exposure. Changes in spot, volatility and dependence occur together in a real crash, so the correlation Greek alone does not determine the total profit or loss. Dependence can be inferred or partly hedged through traded baskets and options, but no unique historical statistic fixes its full dynamics."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]), Create(line), Create(h1), FadeIn(h1l), Create(mk),
                       FadeIn(mkl), run_time=2.5)
@@ -190,9 +184,9 @@ class Correlation(VoiceoverScene, ThreeDScene):
         cav.to_edge(DOWN, buff=0.5)
         src = real_data(r"Yahoo Finance: 510500.SS, 512100.SS (from 2017; its 2016 rebasing excluded), \^{}HSCE; daily "
                         r"log returns", corner=UR)
-        verdict = ("So the asymmetry is real: the bias cannot make down days more correlated than up days."
+        verdict = ("The observed down/up difference is larger than in this symmetric Gaussian illustration; this is not a significance test."
                    if beyond else
-                   "So the measured gap is within what conditioning alone can produce.")
+                   "This simple comparison does not establish a changing correlation law or test significance.")
         with self.voiceover(
             "Does correlation jump when it matters? The CSI 500 against the CSI 1000: "
             f"{A[0]['rho']:.2f} over 2021 to 2023, {A[1]['rho']:.2f} in January and February 2024, {A[2]['rho']:.2f} in "
@@ -230,16 +224,11 @@ class Correlation(VoiceoverScene, ThreeDScene):
                           r"the fair coupon at each correlation, 20{,}000 paths", 4.4, 19, GREY_A),
             wrapped_label(rf"single index: {100 * wa['single'][0]:.1f}\%. Worst-of at the measured "
                           rf"{wa['rho_measured']:.2f}: {100 * cm:.1f}\%; at 0.3: {100 * cp[0]:.1f}\%", 4.4, 19, WHITE),
-            wrapped_label(r"the higher headline coupon is the price of selling correlation, and the correlation sold "
-                          r"is the one that rises in a fall", 4.4, 19, GREY_A),
+            wrapped_label(r"the investor sells a worst-of loss claim (long correlation); the issuer owns it (short correlation). Historical dependence "
+                          r"does not identify the risk-neutral dynamics", 4.4, 19, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "Put the two ideas together: a worst-of snowball on the CSI 500 and the CSI 1000, with the usual terms, "
-            "reading whichever index is lower. At perfect correlation it is the single-index note, "
-            f"{100 * wa['single'][0]:.1f} percent. <bookmark mark='a'/> At the correlation measured over 2021 to "
-            f"2023, {wa['rho_measured']:.2f}, the fair coupon is {100 * cm:.1f} percent, and at 0.3 it would be "
-            f"{100 * cp[0]:.1f}. The higher headline is the price of selling correlation, and it is a correlation "
-            "that rises exactly when the indices fall."
+            f"Combine the payoff and dependence in a worst-of snowball, reading the lower relative index at every observation. This calculation uses two different volatility estimates. Even at correlation one its coupon is {100 * cp[-1]:.1f} percent, versus {100 * wa['single'][0]:.1f} for the CSI 500 alone; perfect correlation does not equate different-volatility paths. <bookmark mark='a'/> At the measured return correlation {wa['rho_measured']:.2f}, interpolation gives {100 * cm:.1f} percent, and at 0.3 the computed coupon is {100 * cp[0]:.1f}. In this parameter family lower correlation increases the loss claim sold by the investor and supports more coupon. The investor is long correlation through the short put; the issuer is short correlation. These fixed-input comparisons are not forecasts of dependence during a crash."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[0]), Create(sg), FadeIn(sgl), Create(line), FadeIn(dots), run_time=2.5)
             vo.wait_until("a")
@@ -259,8 +248,8 @@ class Correlation(VoiceoverScene, ThreeDScene):
                             r"and locks in its return; the Everest pays on the worst of many; the Altiplano pays a "
                             r"coupon only if no asset falls below a barrier", color=OPT, width=6.2, font_size=20),
         ).arrange(RIGHT, buff=0.35, aligned_edge=UP).move_to(UP * 0.2)
-        foot = wrapped_label(r"best-of and rainbow options (Rubinstein's ``Somewhere over the rainbow'', 1991) are the "
-                             r"long-correlation mirror: dispersion trading and implied correlation are Part 11; quantos, "
+        foot = wrapped_label(r"best-of and rainbow options (Rubinstein 1991) have payoff-specific correlation signs; "
+                             r"dispersion trading and implied correlation are Part 11; quantos, "
                              r"which add a currency correlation, are Part 22", 11.6, 19, GREY_A).to_edge(DOWN, buff=0.5)
         with self.voiceover(
             "Two more names. The correlation skew: implied correlation is higher for downside strikes, as implied "

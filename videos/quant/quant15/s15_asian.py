@@ -73,29 +73,22 @@ class Asian(VoiceoverScene):
                   r"\frac{\sigma^2 T}{3}", font_size=32, colors={r"\operatorname{Var}\log G": QC.HOUSE}),
             cmath(r"\hat\theta_{cv}", r"=", r"\bar Y_A - b\,(\bar Y_G - \mu_G),\quad \operatorname{Var} = "
                   r"\operatorname{Var}\bar Y_A\,(1 - \rho^2)", font_size=32, colors={r"\hat\theta_{cv}": GOOD}),
-            cmath(r"u_t + \tfrac12\sigma^2\big(q(t) - x\big)^2 u_{xx}", r"=", r"0,\quad V = S_0\,u(0, X_0)",
-                  font_size=32, colors={r"u_t + \tfrac12\sigma^2\big(q(t) - x\big)^2 u_{xx}": IV}),
+            cmath(r"u_t + \tfrac12\sigma^2\big(a(t) - x\big)^2 u_{xx}", r"=", r"0,\quad V = S_0\,u(0, X_0)",
+                  font_size=32, colors={r"u_t + \tfrac12\sigma^2\big(a(t) - x\big)^2 u_{xx}": IV}),
         ]
         whys = [why(r"$m_G = \log S_0 + (r - q - \tfrac{\sigma^2}{2})\bar t$, $s_G^2 = \tfrac{\sigma^2}{n^2}"
                     r"\sum_{i,j}\min(t_i, t_j)$: a linear map of a Gaussian vector is Gaussian, so the geometric Asian "
                     r"is log-normal, priced in closed form (Kemna and Vorst 1990)"),
-                why(r"$\iint \min(s,t) = T^3/3$: the effective volatility is $\sigma/\sqrt 3$, which is why Asians are "
+                why(r"$\iint \min(s,t) = T^3/3$: the geometric average has log-volatility $\sigma/\sqrt 3$; an arithmetic Asian is not universally half a vanilla, merely often "
                     r"cheap"),
-                why(rf"optimal $b = \operatorname{{Cov}}/\operatorname{{Var}}$; the measured correlation $\rho = "
+                why(rf"fixed population-optimal $b=\operatorname{{Cov}}/\operatorname{{Var}}$; a same-sample estimate is approximate. The measured correlation $\rho = "
                     rf"{sc['rho']:.4f}$ cuts the noise {sc['ratio']:.0f}-fold"),
-                why(r"Shreve II 7.5; Vecer (2001): change to the numeraire $S$, with $X_t$ the remaining average per unit "
-                    r"of $S$, and the two-dimensional problem in $(S, A)$ becomes one PDE in $x$")]
+                why(r"Vecer (2001), continuous averaging and $r=q=0$: $Y_t=T^{-1}\int_0^t S_s ds$, $a(t)=(T-t)/T$, $X_t=a(t)+(Y_t-K)/S_t$; use the stock numeraire instead "
+                    r"of a two-dimensional $(S,Y)$ PDE; terminal condition $u(T,x)=x^+$")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.6, buff=0.75, edge=6.9)
-        pp = pause_card(r"Why is an Asian call worth about half a vanilla?", width=5.4).to_corner(DR, buff=0.3)
+        pp = pause_card(r"Why is the Asian cheaper in this specified example?", width=5.4).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Why are Asians cheap? The log of the geometric average is an average of Gaussian log prices, so it is "
-            "Gaussian, with a variance built from the minimum of every pair of fixing times. <bookmark mark='a'/> In "
-            "continuous time that double integral is T cubed over three: averaging divides the variance by three. "
-            "<bookmark mark='p'/> So why is an Asian call worth about half a vanilla? Its effective volatility is about "
-            "fifty-eight percent of the price's. <bookmark mark='b'/> The arithmetic average has no closed form, but moves "
-            "almost exactly with the geometric one: simulate both, and correct by the geometric one's known error. "
-            "<bookmark mark='c'/> Or change the numeraire to the stock, as Shreve does after Vecer, and the problem in "
-            "spot and average collapses to one equation in one variable."
+            "The geometric average is tractable because its log is a linear combination of jointly Gaussian log prices under constant-parameter Black-Scholes. <bookmark mark='a'/> For dense uniform averaging, the covariance integral is T cubed over three, giving log variance sigma squared T over three. This is a statement about the geometric log average, not a universal price ratio for arithmetic Asians. <bookmark mark='p'/> Why is our Asian cheaper than the matching vanilla? Averaging changes the whole payoff distribution; the geometric variance gives intuition, while the arithmetic price still needs calculation. <bookmark mark='b'/> A geometric control variate uses its known expected discounted payoff. With a fixed population-optimal coefficient the variance factor is one minus correlation squared; estimating the coefficient on the same data makes that formula approximate. <bookmark mark='c'/> A separate route is Vecer's stock-numeraire reduction. For continuous averaging and zero rates and dividends, define Y, a and X as shown. The payoff is S T times positive X T, so one PDE in x replaces the two-state problem. Our numerical daily-fixing example uses its own nonzero rate."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -112,7 +105,7 @@ class Asian(VoiceoverScene):
 
     def scatter(self, sc, a):
         ya, yg = np.asarray(sc["ya"]), np.asarray(sc["yg"])
-        top = float(np.quantile(ya, 0.99)) * 1.1
+        top = float(max(ya.max(), yg.max())) * 1.08
         g = axes([0, top], [0, top], x_length=5.0, y_length=5.0, xlabel=r"geometric Asian payoff",
                  ylabel=r"arithmetic Asian payoff", xticks=[0, round(top / 2), round(top)],
                  yticks=[0, round(top / 2), round(top)], font_size=15).to_edge(LEFT, buff=0.9).shift(DOWN * 0.1)
@@ -121,10 +114,12 @@ class Asian(VoiceoverScene):
                         for x, y in zip(yg, ya) if x < top and y < top])
         b = sc["b"]
         mx, my = float(yg.mean()), float(ya.mean())
-        line = Line(ax.c2p(0, my - b * mx), ax.c2p(top, my + b * (top - mx)), stroke_color=GOOD, stroke_width=3)
+        intercept = my - b * mx
+        lx0, lx1 = max(0.0, -intercept / b), min(top, (top - intercept) / b)
+        line = Line(ax.c2p(lx0, intercept + b * lx0), ax.c2p(lx1, intercept + b * lx1), stroke_color=GOOD, stroke_width=3)
         side = VGroup(
             MathTex(rf"b = {b:.3f},\quad \rho = {sc['rho']:.4f}", font_size=32, color=GOOD),
-            wrapped_label(rf"{len(ya):,} paths: the two payoffs fall on a line. What the control variate leaves to "
+            wrapped_label(rf"all {len(ya):,} saved points shown; the coefficient and correlation use the original 4,000 paths. What the control variate leaves to "
                           rf"estimate is only the thin scatter around it: the noise falls {sc['ratio']:.0f}-fold, as if "
                           rf"with {sc['ratio'] ** 2:.0f} times the paths".replace(",", "{,}"), 4.8, 19, GREY_A),
             MathTex(rf"\text{{geometric (closed form) }} {a['geo_cf']:.2f},\ \text{{arithmetic }} {a['price']:.2f},"

@@ -37,7 +37,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
                         y_length=5.0, z_length=3.2, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
         ax.shift(DOWN * 0.6)
-        surf = Surface(lambda u, w: ax.c2p(u, w, float(f((w, u)))), u_range=[0.65, 1.10], v_range=[0, 22],
+        surf = Surface(lambda u, w: ax.c2p(u, w, float(f((w, u)))), u_range=[0.75, 1.10], v_range=[0, 22],
                        resolution=(30, 22), fill_opacity=0.85, stroke_width=0.3, stroke_color=GREY_D)
         surf.set_fill_by_value(axes=ax, colorscale=[(BAD, 0.65), (IV, 0.9), (GOOD, 1.15)], axis=2)
         sheet = Surface(lambda u, w: ax.c2p(u, w, float(fk((w, u)))), u_range=[0.65, 1.10], v_range=[0, 22],
@@ -49,20 +49,14 @@ class Greeks(VoiceoverScene, ThreeDScene):
                       label(r"months since issue", font_size=22, color=GREY_A),
                       label(r"value of the note, per 1 invested", font_size=22, color=OPT)).arrange(DOWN, aligned_edge=LEFT,
                                                                                                 buff=0.1).to_corner(UL, buff=0.4)
-        cliff = label(r"the knock-in line: below it, the note is the index", font_size=20, color=BARRIER).to_corner(DR, buff=0.4)
+        cliff = label(r"knock-in persists; recovery and autocall can still change repayment", font_size=20, color=BARRIER).to_corner(DR, buff=0.4)
         cliff2 = label(r"red sheet: the same note, already knocked in", font_size=20, color=BAD).next_to(cliff, UP, buff=0.15)
         cliff2.align_to(cliff, RIGHT)
         self.set_camera_orientation(phi=64 * DEGREES, theta=-120 * DEGREES, zoom=0.85)
         self.add_fixed_in_frame_mobjects(hint, cliff, cliff2)
         self.remove(hint, cliff, cliff2)
         with self.voiceover(
-            "Here is the note's value, not yet knocked in, over the index level and the months since issue. Near "
-            "the start it is worth a little more than it cost. <bookmark mark='a'/> On the left, the surface falls away toward the knock-in line. Cross it, and "
-            "the note stops being a bond with a coupon and becomes a position in the index, a loss of a quarter or "
-            "more on the day it happens. <bookmark mark='b'/> Underneath, in red, the same note once it has knocked "
-            "in: it has stepped off the upper surface onto a lower one, for good, even if the index recovers. The "
-            "gap between the two sheets is the cliff the product is built on; every Greek we draw next is that cliff, "
-            "differentiated."
+            "These are interpolated model values for a live note as spot and age vary. We draw the not-yet-knocked-in state only at or above the barrier; below it that state is impossible at an observation. <bookmark mark='a'/> Approaching the barrier increases exposure to the conditional loss leg. Crossing a daily knock-in records history, not an immediate realized twenty-five percent loss. <bookmark mark='b'/> The red sheet represents already-knocked-in notes. Their flag remains set after recovery, but future knock-out can still redeem them with coupon, and terminal recovery can restore par. Differences between the state surfaces above the barrier value that history. They are not a proof of a discontinuous price jump at a continuously monitored barrier. These coarse, noisy grids describe the discrete contract and pricing convention used here."
         ) as vo:
             self.play(FadeIn(hint), Create(ax), Create(surf), run_time=3)
             vo.wait_until("a")
@@ -73,7 +67,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
             self.move_camera(theta=-160 * DEGREES, phi=78 * DEGREES, run_time=max(vo.remaining(1.0) - 1.0, 1.0))
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, surf, ki, sheet)), FadeOut(hint),
                                                                   FadeOut(cliff), FadeOut(cliff2)], run_time=1.5)
-        self.clear_scene()
+        self.clear_scene(run_time=0.1)
 
     def greek3d(self, g, which):
         sp = np.asarray(g["spots"])
@@ -86,13 +80,12 @@ class Greeks(VoiceoverScene, ThreeDScene):
             K = np.asarray(g[f"ki_{which}"], float)
         if which == "delta":  # show the hedge the issuer holds: minus its delta, in index units per 1 of notes
             A, K = -A, -K
-        lo = float(np.nanpercentile(np.concatenate([A.ravel(), K.ravel()]), 2))
-        hi = float(np.nanpercentile(np.concatenate([A.ravel(), K.ravel()]), 98))
+        support = np.concatenate([A[:, sp > 0.75].ravel(), K.ravel()])
+        lo, hi = data_range(support, zero=True)
         if lo > 0:
             lo = 0.0
         if hi < 0:
             hi = 0.0
-        A, K = np.clip(A, lo, hi), np.clip(K, lo, hi)
         fa = RegularGridInterpolator((mo, sp), A, bounds_error=False, fill_value=None)
         fk = RegularGridInterpolator((mo, sp), K, bounds_error=False, fill_value=None)
         zl = 3.0
@@ -105,7 +98,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
             return (v - lo) * sc
 
         col = {"delta": DELTA, "gamma": QC.GAMMA, "vega": VEGA}[which]
-        up = Surface(lambda u, w: ax.c2p(u, w, z(float(fa((w, u))))), u_range=[0.755, 1.12], v_range=[0, 23],
+        up = Surface(lambda u, w: ax.c2p(u, w, z(float(fa((w, u))))), u_range=[float(sp[sp > 0.75][0]), 1.12], v_range=[0, 23],
                      resolution=(26, 20), fill_opacity=0.85, stroke_width=0.25, stroke_color=GREY_D)
         up.set_fill_by_value(axes=ax, colorscale=[(SPOT, 0), (col, zl * 0.6), (WHITE, zl)], axis=2)
         dn = Surface(lambda u, w: ax.c2p(u, w, z(float(fk((w, u))))), u_range=[0.66, 1.12], v_range=[0, 23],
@@ -114,13 +107,13 @@ class Greeks(VoiceoverScene, ThreeDScene):
         zero = Polygon(ax.c2p(0.66, 0, z(0)), ax.c2p(1.12, 0, z(0)), ax.c2p(1.12, 23, z(0)), ax.c2p(0.66, 23, z(0)),
                        stroke_width=1, stroke_color=GREY_C, fill_color=GREY_D, fill_opacity=0.15)
         kil = Line(ax.c2p(0.75, 0, z(0)), ax.c2p(0.75, 23, z(0)), stroke_color=BARRIER, stroke_width=4)
-        title = {"delta": r"the issuer's hedge: index futures held per 1 of notes",
-                 "gamma": r"the issuer's gamma: how fast that hedge changes",
+        title = {"delta": r"the issuer's hedge: normalized-index units per note",
+                 "gamma": r"issuer gamma: minus the slope of the positive hedge",
                  "vega": r"the issuer's vega, per vol point"}[which]
         hint = VGroup(label(title, font_size=22, color=col),
                       label(r"spot 0.66 to 1.12 of the start; months 0 to 23; red: knocked in", font_size=18,
                             color=GREY_A),
-                      label(rf"range shown: {lo:.3g} to {hi:.3g}; grey plane: zero", font_size=18, color=GREY_B)
+                      label(rf"full displayed grid range: {lo:.3g} to {hi:.3g}; grey plane: zero", font_size=18, color=GREY_B)
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).to_corner(UL, buff=0.35)
         return {"ax": ax, "up": up, "dn": dn, "zero": zero, "kil": kil, "hint": hint}
 
@@ -139,7 +132,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(o["ax"], o["up"], o["dn"], o["zero"],
                                                                                  o["kil"])), FadeOut(o["hint"])],
                          run_time=1.2)
-        self.clear_scene()
+        self.clear_scene(run_time=0.1)
 
     def delta3d(self, g):
         o = self.greek3d(g, "delta")
@@ -151,13 +144,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
         s_above = float(sp[above][np.argmax(-A[j6][above])])
         h_ki = float(np.mean(-K[j6][sp < 0.75]))
         with self.voiceover(
-            "Start with the hedge: how many index futures the issuer holds per unit of notes. Far above the "
-            "barrier, near the knock-out, it is modest. As the index falls toward the knock-in it climbs into "
-            f"a ridge: six months in, it peaks at {h_above:.2f} times the notional, at a spot of {s_above:.2f}. "
-            "<bookmark mark='a'/> Then it falls off the cliff, onto the red sheet of knocked-in notes, where "
-            f"the hedge is about {h_ki:.2f}: the note has become the index, and the issuer is short it. "
-            "<bookmark mark='b'/> Seen along the barrier, the drop is the trade the issuer must make on the "
-            "day of a knock-in. It sells the difference into a market that has just fallen."
+            f"Start with the positive hedge of a short-note issuer: minus its position delta. Units are normalized-index units per note; multiply by relative spot for current cash exposure. Near knock-out the live value can vanish through redemption. Six months in, the not-yet-knocked-in hedge peaks at {h_above:.2f} units, near spot {s_above:.2f}. <bookmark mark='a'/> The red knocked-in state averages about {h_ki:.2f} units below the barrier in this slice. It is not exactly an unbounded equity holding: recovery, the par cap and possible autocall remain in the payoff. <bookmark mark='b'/> A fall from the peak region into the knocked-in state can reduce the required hedge, implying a sale under a delta-neutral policy. The size and sign depend on state, observation timing and model. These surfaces are finite Monte Carlo differences, not executed dealer positions."
         ) as vo:
             self._g3play(vo, o)
         self._g3end(o)
@@ -169,12 +156,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
         j6 = int(np.argmin(np.abs(mo - 6)))
         m_above = float(np.max(np.abs(A[j6][sp > 0.755])))
         with self.voiceover(
-            "Now the gamma: how fast that hedge must change as the index moves. Over most of the surface it is "
-            "small. <bookmark mark='a'/> Along the knock-in line it spikes, because the hedge is steep there "
-            f"and about to jump; six months in, its largest size above the barrier is {m_above:.1f} per unit "
-            "of spot. And there are ripples at each monthly knock-out date, where a note can vanish. "
-            "<bookmark mark='b'/> Gamma is a promise to trade: to buy as the index falls toward the barrier, in "
-            "amounts that grow as it nears."
+            f"Now plot issuer gamma, the slope of its position delta, computed here by differentiating the delta grid. Because the hedge is the negative position delta, its slope has the opposite sign. <bookmark mark='a'/> In the six-month slice the largest absolute slope above the barrier is {m_above:.1f} per normalized spot unit. Sign varies across the surface; monthly redemption dates and Monte Carlo noise create pronounced features. We keep the entire grid range rather than clipping percentile tails. <bookmark mark='b'/> Positive issuer gamma means a delta-neutral hedge buys as spot falls, holding time and state fixed. Negative issuer gamma implies the reverse. State changes, time decay and knock-outs add separate rebalancing terms. A single sign cannot describe the whole book or every knock-in."
         ) as vo:
             self._g3play(vo, o)
         self._g3end(o)
@@ -190,14 +172,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
         i_m, i_s = np.unravel_index(np.argmax(A[:, above]), A[:, above].shape)
         m_pk, s_pk2 = int(mo[i_m]), float(sp[above][i_s])
         with self.voiceover(
-            "And the vega. Above the barrier the issuer is long volatility, a hill: it owns the down-and-in "
-            "put the buyer sold, and more volatility makes a knock-in likelier. Six months in, the hill peaks "
-            f"at {v_pk:.4f} per vol point, at a spot of {s_pk:.2f}, between the barrier and the start. "
-            f"<bookmark mark='a'/> Over the whole grid, the peak is at month {m_pk} and spot {s_pk2:.2f}. That is "
-            "what practitioners call peak vega: not at the barrier, where a knock-in is nearly certain, but on the way "
-            "down to it. "
-            "<bookmark mark='b'/> On the red sheet, once knocked in, the put is a deep vanilla put with little vega "
-            "left, and the hill is gone."
+            f"Issuer vega here is the negative note-value change per volatility point, with the contract coupon held fixed. In much of the above-barrier region it is positive. At six months its maximum is {v_pk:.4f}, near spot {s_pk:.2f}. <bookmark mark='a'/> The maximum over the displayed underlying grid occurs at month {m_pk}, spot {s_pk2:.2f}; these are grid observations, not universal peak-vega coordinates. <bookmark mark='b'/> After knock-in the vega profile changes markedly, and may be small or negative in some regions. Autocall and conditional coupons mean that neither the note nor the issuer has a universal vega sign. The full ranges remain visible, including negative values and numerical fluctuations."
         ) as vo:
             self._g3play(vo, o)
         self._g3end(o)
@@ -209,7 +184,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
                   colors={r"\text{error}": BAD}),
             cmath(r"\operatorname{Var}\big[\hat\Delta_{\text{CRN}}\big]", r"=", r"O\Big(\frac{1}{hN}\Big)\ \text{near a "
                   r"barrier}", font_size=36, colors={r"\operatorname{Var}\big[\hat\Delta_{\text{CRN}}\big]": IV}),
-            cmath(r"\mathcal V_{\text{issuer}}", r"=", r"-\mathcal V_{\text{note}} = \mathcal V_{DIP} - "
+            cmath(r"\mathcal V_{\text{issuer}}", r"=", r"-\mathcal V_{\text{note}} = \mathcal V_{\text{loss}} - \mathcal V_{\text{early}} - "
                   r"\mathcal V_{\text{coupon strip}}", font_size=36, colors={r"\mathcal V_{\text{issuer}}": VEGA}),
         ]
         whys = [why(r"a central difference: bump the spot both ways and reprice"),
@@ -217,19 +192,13 @@ class Greeks(VoiceoverScene, ThreeDScene):
                     r"drowns in noise"),
                 why(r"with common random numbers the noise cancels on smooth payoffs, but near a barrier a path flips "
                     r"between knocked in and not as $h$ crosses it: an indicator jumps on a set of measure $O(h)$"),
-                why(r"the decomposition of chapter 1: the issuer owns the put and owes the coupons. The put's vega is "
-                    r"largest near the barrier; once knocked in, it is a deep vanilla put with little vega")]
+                why(r"the full decomposition: loss leg minus early-redemption and conditional-coupon vegas; signs are model/state dependent. "
+                    r"Already-knocked-in notes retain recovery, cap and autocall features")]
         step = ladder(self, rows, whys, keep=2, top=2.9, x=-1.2, buff=0.8, edge=6.9)
         pp = pause_card(r"Where is the issuer's vega largest: at the start, on the way down to the knock-in, or after it?",
                         width=6.0).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "How are these numbers made? By bumping the spot up and down by h and repricing. "
-            "<bookmark mark='a'/> With independent simulations, the error is the Taylor remainder, h squared, plus "
-            "noise divided by h, which explodes as h shrinks. <bookmark mark='b'/> Common random numbers cancel most "
-            "of the noise, for smooth payoffs. Near a barrier, paths flip state as the bump crosses them, and the "
-            "variance returns, of order one over h N. "
-            "<bookmark mark='c'/> And the issuer's vega sign comes from chapter one: it owns the down-and-in put and "
-            "owes the coupons. <bookmark mark='p'/> Where is it largest? On the way down to the knock-in, not at it."
+            "A central spot difference estimates a delta. <bookmark mark='a'/> The h-squared truncation term requires a sufficiently smooth price; independent price noise is amplified by dividing by h. <bookmark mark='b'/> Common random numbers can cancel smooth-path noise. For a jump payoff crossing a regular boundary on a set of probability of order h, variance can instead scale like one over h N. That is a local regularity argument, not a universal barrier convergence theorem. <bookmark mark='c'/> Issuer vega comes from the full decomposition: loss-leg vega minus early-repayment and coupon-leg vegas, since the fixed-maturity bond has no volatility dependence here. <bookmark mark='p'/> Where does this example peak? In the plotted grid, on the way toward the barrier. Other states and parameters can have different signs and peaks."
         ) as vo:
             step(0)
             vo.wait_until("a")

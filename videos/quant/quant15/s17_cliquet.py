@@ -96,27 +96,22 @@ class Cliquet(VoiceoverScene, ThreeDScene):
             cmath(r"V_{\text{cliquet}}", r"=", r"\mathbb E\Big[\max\Big(\textstyle\sum_i \min\big(\max(r_i, f), c\big),\ "
                   r"F\Big)\Big]", font_size=32, colors={r"V_{\text{cliquet}}": OPT}),
             cmath(r"\frac{\partial V}{\partial\sigma}", r"=", r"0\ \ \text{on the ridge, yet}\ \ "
-                  r"\frac{\partial^2 V}{\partial\sigma^2} < 0", font_size=34,
+                  r"\frac{\partial^2 V}{\partial\sigma^2} \le 0", font_size=34,
                   colors={r"\frac{\partial V}{\partial\sigma}": VEGA}),
-            cmath(r"\mathbb E\big[V(\sigma)\big]", r"\le", r"V\big(\mathbb E\,\sigma\big)", font_size=36,
-                  colors={r"\mathbb E\big[V(\sigma)\big]": BAD}),
+            cmath(r"\mathbb E\big[V(\bar\sigma+\varepsilon)\big]", r"\approx", r"V(\bar\sigma)+\tfrac12 V^{\prime\prime}(\bar\sigma)\operatorname{Var}(\varepsilon)", font_size=36,
+                  colors={r"\mathbb E\big[V(\bar\sigma+\varepsilon)\big]": BAD}),
         ]
         whys = [why(r"a forward-start option: homogeneity of degree one and independent increments; it depends only on "
                     r"the forward volatility between $t_1$ and $t_2$"),
                 why(r"a strip of capped and floored forward returns; the global floor $F$ makes it more than a sum of "
                     r"forward-starts"),
-                why(r"where the price peaks in $\sigma$ its Black--Scholes vega is zero, but it is concave there "
+                why(r"at a smooth interior maximum vega is zero; strict concavity requires more than the maximum condition "
                     r"(negative volga)"),
-                why(r"Jensen: if volatility is random, a concave price is lower on average. Black--Scholes vega says no "
-                    r"risk; a model with random volatility says otherwise (Bergomi's smile dynamics, Part 13)")]
+                why(r"local Taylor illustration for a small mean-zero random constant volatility; Jensen needs concavity on the full support. This is not a general stochastic-volatility "
+                    r"comparison")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.0, buff=0.8, edge=6.9)
         with self.voiceover(
-            "The building block is the forward-start option. Black–Scholes prices are homogeneous of degree one, so it is "
-            "today's spot times a call struck at alpha: it depends only on the forward volatility. <bookmark mark='a'/> A "
-            "cliquet is a strip of capped and floored forward returns, with a global floor on top. <bookmark mark='b'/> Now "
-            "the trap. As volatility rises, each month gains on the floor and loses on the cap, and the two can cancel: "
-            "vega zero, but the price is concave. <bookmark mark='c'/> By Jensen's inequality, if volatility is random, a "
-            "concave price averages lower. No vega, and still volatility risk."
+            "Under constant-parameter Black-Scholes, homogeneity and independent increments price a forward-start option through a normalized call over the remaining interval. The displayed formula assumes the stated constant dividend yield. <bookmark mark='a'/> Our cliquet is a sum of capped and floored returns with a global floor. The numerical cliquet examples use zero rates and dividends; the displayed expectation then needs no discount factor. <bookmark mark='b'/> Near an interior smooth price maximum in constant volatility, aggregate vega is zero. That alone does not imply strictly negative volga or zero bucketed forward-volatility risk. <bookmark mark='c'/> For a small, mean-zero random constant-volatility perturbation, Taylor's expansion introduces the volga term shown. Jensen requires concavity over the entire perturbation support. A general stochastic-volatility process changes joint return laws and is not automatically this mixture. Zero first-order vega can still leave substantial higher-order and dynamic-model risk."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -155,20 +150,13 @@ class Cliquet(VoiceoverScene, ThreeDScene):
         hint = VGroup(label(r"volatility, 5\% to 50\%", font_size=21, color=IV),
                       label(r"local cap, 1\% to 6\% (local floor $-3\%$, global floor 0)", font_size=21, color=GREY_A),
                       label(r"price of the 12-month cliquet", font_size=21, color=OPT),
-                      label(r"white: the ridge, where vega is zero", font_size=21, color=WHITE)).arrange(
+                      label(r"white: interpolated grid maxima; not exact vega roots", font_size=21, color=WHITE)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.1).to_corner(UL, buff=0.35)
         self.set_camera_orientation(phi=64 * DEGREES, theta=-125 * DEGREES, zoom=0.85)
         self.add_fixed_in_frame_mobjects(hint)
         self.remove(hint)
         with self.voiceover(
-            "Here is the cliquet's Black–Scholes price over volatility and the local cap, from two hundred thousand "
-            "paths with common random numbers. <bookmark mark='a'/> At low caps the price only falls with "
-            "volatility: the cap clips the upside and the global floor rarely helps. At high caps it only rises. In "
-            "between, the price rises and then falls, and its peak traces a ridge across the surface, where vega is "
-            f"exactly zero. <bookmark mark='b'/> At a three percent cap the peak is at {100 * c['peak_vol']:.0f} "
-            f"percent volatility, at {100 * c['peak']:.2f} percent of notional, and the price barely moves from "
-            f"{100 * row3[3]:.2f} at twenty percent to {100 * row3[5]:.2f} at thirty. A desk that hedged this cliquet "
-            "with vanillas by its Black–Scholes vega would hold no options at all."
+            f"This is the zero-rate Black-Scholes cliquet value over volatility and local cap, estimated with two hundred thousand paths and common random numbers. <bookmark mark='a'/> The low-cap rows decline on the sampled grid; high-cap rows tend to rise. Intermediate rows have grid maxima tracing the white ridge. Linear interpolation and a finite volatility mesh do not certify an exact zero of vega. <bookmark mark='b'/> At a three-percent cap the largest sampled value occurs at {100 * c['peak_vol']:.0f} percent volatility, worth {100 * c['peak']:.2f} percent of notional. The twenty and thirty percent values are {100 * row3[3]:.2f} and {100 * row3[5]:.2f}. A small aggregate vega is not a reason to hold no options: separate forward-volatility buckets, volga and smile dynamics still matter. This coupon payoff alone does not provide principal protection."
         ) as vo:
             self.play(FadeIn(hint[:3]), Create(ax), Create(surf), run_time=3)
             vo.wait_until("a")
@@ -178,7 +166,7 @@ class Cliquet(VoiceoverScene, ThreeDScene):
             self.move_camera(theta=-170 * DEGREES, phi=55 * DEGREES, run_time=max(vo.remaining(1.0) - 1.0, 1.0))
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, surf, ridge)), FadeOut(hint)],
                          run_time=1.2)
-        self.clear_scene()
+        self.clear_scene(run_time=0.1)
 
     def variants(self, c):
         vols = np.asarray(c["vols"])

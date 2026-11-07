@@ -17,9 +17,9 @@ class Static(VoiceoverScene):
         self.skew(load("static"))
 
     def card(self):
-        c = chapter_card(4, r"Watched at the close, hedged without trading", r"What if the barrier is checked once a day, "
+        c = chapter_card(4, r"Discrete monitoring and static vanilla hedges", r"What if the barrier is checked once a day, "
                          r"and can a barrier be hedged with vanillas?", lit=(1997,), part=PART)
-        with self.voiceover("Chapter four. Watched at the close, and hedged without trading."):
+        with self.voiceover('Chapter four. Discrete monitoring and static vanilla hedges.'):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -59,7 +59,7 @@ class Static(VoiceoverScene):
                    "survived." if not seen else
                    "This path was caught at an observation, but only after slipping through unseen first.")
         with self.voiceover(
-            "The formula of chapter three assumes the barrier is watched at every instant. Term sheets watch it at "
+            "The formula of chapter three assumes the barrier is watched at every instant. Some term sheets check it at "
             "the close, once a day, or once a month. Watch a path with monthly looks. <bookmark mark='a'/> In red, "
             f"the moments it spent below the barrier. {verdict} A barrier that is checked less often is harder to "
             "hit, so a knock-out is worth more than the formula says, and a knock-in less."
@@ -178,7 +178,7 @@ class Static(VoiceoverScene):
             cmath(r"\text{at the touch, } F = H:\ C(K)", r"=", r"\frac{K}{H}\,P\Big(\frac{H^2}{K}\Big)", font_size=34,
                   colors={r"\text{at the touch, } F = H:\ C(K)": BARRIER}),
         ]
-        whys = [why(r"put--call symmetry: $r = q = 0$ and a smile symmetric in $\log K/F$ (Carr, Ellis and Gupta "
+        whys = [why(r"put--call symmetry: $r=q=0$ and conditional put--call symmetry at every potential touch (Carr, Ellis and Gupta "
                     r"1998; Carr and Lee 2009)"),
                 why(r"under Black--Scholes, change measure with density $S_T/F$: the law of $F^2/S_T$ is the law of $S_T$"),
                 why(r"so $K/H$ puts struck at $H^2/K$ are worth the call on the barrier, and expire worthless if it is "
@@ -250,16 +250,7 @@ class Static(VoiceoverScene):
         src = illustration(r"$S = K = 100$, $H = 90$, six months, $r = q = 0$; 50{,}000 paths of 500 steps; Heston "
                            r"$v_0 = \theta = 0.0625$, $\kappa = 2$, $\xi = 0.8$", corner=UL)
         with self.voiceover(
-            "Pause and predict: with a negative skew, is the put-symmetry hedge too dear or too cheap? "
-            "<bookmark mark='a'/> Under Black–Scholes the hedge costs "
-            f"{M['BS']['hedge']:.3f} and the barrier is worth {M['BS']['dic']:.3f} on a grid of five hundred steps; "
-            f"the gap, {g_bs:+.3f}, is only the monitoring error of the last section. Heston with no correlation "
-            f"keeps the smile symmetric, and the gap stays small, {g0:+.3f}. <bookmark mark='b'/> Now give it a "
-            f"skew, correlation minus 0.7. {verdict} The puts at 81 carry a higher implied volatility than the call "
-            "at 100, so the hedge is too dear. It still covers the barrier, and at every touch the puts sell for more "
-            "than the call costs, as the ledger shows; but nobody can charge a client its price. Static hedges are "
-            "exact only under symmetry."
-            " Next: the simplest exotic of all, the digital."
+            f"With a negative skew, is this put-symmetry hedge cheap or dear in our chosen models? <bookmark mark='a'/> Under Black-Scholes it costs {M['BS']['hedge']:.3f}, versus the grid-monitored call's Monte Carlo estimate {M['BS']['dic']:.3f}. The gap {g_bs:+.3f} includes missed continuous touches and sampling error. The rho-zero Heston mixture preserves conditional symmetry, with observed gap {g0:+.3f}. <bookmark mark='b'/> At correlation minus 0.7 the gap is {g7:+.3f}: here the put hedge costs substantially more. The four displayed touch ledgers illustrate swap costs in that model. They do not prove payoff dominance for every path or every skewed model. Exact semi-static replication requires conditional symmetry at every possible touch, matching monitoring and the ability to trade the switch. Initial smile symmetry alone is insufficient. Next, digitals."
         ) as vo:
             self.play(FadeIn(pp))
             vo.wait_until("a")

@@ -34,7 +34,13 @@ class Barriers(VoiceoverScene, ThreeDScene):
         t = np.linspace(0, 1, n + 1)
         W = np.vstack([np.zeros(m), np.cumsum(g.standard_normal((n, m)) * np.sqrt(1 / n), axis=0)])
         hb = -0.5
-        ax = axes([0, 1], [-2.6, 2.2], x_length=6.0, y_length=4.8, xlabel=r"time", ylabel=r"Brownian motion",
+        g2 = np.random.default_rng(16)
+        big = np.cumsum(g2.standard_normal((1000, 20000)) * np.sqrt(1 / 1000), axis=0)
+        x = 0.0
+        touched_above = big[-1][(np.minimum(big.min(axis=0), 0) <= hb) & (big[-1] >= x)]
+        below_mirror = big[-1][big[-1] <= 2 * hb - x]
+        yr = data_range(W, 2 * hb - W, touched_above, 2 * hb - below_mirror)
+        ax = axes([0, 1], yr, x_length=6.0, y_length=4.8, xlabel=r"time", ylabel=r"Brownian motion",
                   xticks=[], yticks=[], font_size=16).to_edge(LEFT, buff=0.5).shift(DOWN * 0.2)
         a = ax.ax
         bar = DashedLine(a.c2p(0, hb), a.c2p(1, hb), stroke_color=BARRIER, stroke_width=3)
@@ -47,30 +53,33 @@ class Barriers(VoiceoverScene, ThreeDScene):
                 k = hit[0]
                 mirrors.add(curve(a, t[k:], 2 * hb - W[k:, j], OPT, stroke_width=1.3).set_stroke(opacity=0.55))
         # the histogram at the horizon, from many more draws (the same law)
-        g2 = np.random.default_rng(16)
-        big = np.cumsum(g2.standard_normal((1000, 20000)) * np.sqrt(1 / 1000), axis=0)
-        x = 0.0
-        touched_above = big[-1][(np.minimum(big.min(axis=0), 0) <= hb) & (big[-1] >= x)]
-        below_mirror = big[-1][big[-1] <= 2 * hb - x]
         n1, n2 = len(touched_above), len(below_mirror)
         gap = 100 * (1 - n1 / n2)
-        h1 = side_density(a, touched_above, (-2.6, 2.2), bins=30, width=1.2, color=BAD, opacity=0.6)
-        h2 = side_density(a, 2 * hb - below_mirror, (-2.6, 2.2), bins=30, width=1.2, color=OPT, opacity=0.45)
+        hist1, edges = np.histogram(touched_above, bins=30, range=yr)
+        hist2, _ = np.histogram(2 * hb - below_mirror, bins=30, range=yr)
+        scale = max(hist1.max(), hist2.max(), 1)
+
+        def count_bars(hist, color, opacity):
+            bars = VGroup()
+            x0 = a.get_right()[0] + 0.12
+            for k, count in enumerate(hist):
+                if count == 0:
+                    continue
+                width = 1.2 * count / scale
+                y0, y1 = a.c2p(0, edges[k])[1], a.c2p(0, edges[k + 1])[1]
+                bars.add(Rectangle(width=width, height=max(y1 - y0 - 0.01, 0.005), stroke_width=0,
+                                   fill_color=color, fill_opacity=opacity).move_to([x0 + width / 2, (y0 + y1) / 2, 0]))
+            return bars
+        h1 = count_bars(hist1, BAD, 0.6)
+        h2 = count_bars(hist2, OPT, 0.45)
         rows = VGroup(
             MathTex(r"P(m_T \le b,\ W_T \ge x) = P(W_T \le 2b - x)", font_size=28, color=OPT),
             wrapped_label(rf"of 20{{,}}000 paths on 1{{,}}000 steps, {n1} touched $b$ and ended above $x = 0$; {n2} "
                           r"ended below the mirror point $2b - x$", 4.6, 19, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3).shift(UP * 0.5)
-        src = illustration(r"60 Brownian paths drawn; the histograms from 20{,}000; $m_T$ the minimum, $b$ the barrier")
+        src = illustration(r"grid-reflection illustration; 60 paths; 20{,}000 histogram paths, common count scale; $b<0$")
         with self.voiceover(
-            "Sixty Brownian paths run to the horizon; those that touch the barrier turn red. <bookmark mark='a'/> After its first touch, each red path gets a mirror twin, reflected "
-            "across the barrier. The twin is just as likely, because Brownian motion forgets its past and is "
-            "symmetric. <bookmark mark='b'/> So on the right, the paths that touched and ended above any level x "
-            "pile up like all the paths that ended below the mirror point, two b minus x. Counted on twenty "
-            f"thousand simulated paths: {n1} against {n2}. The touched count is {gap:.0f} percent short, and not by "
-            "chance: on a grid, some paths cross the barrier between two steps and come back unseen, the subject of "
-            "chapter four. In continuous time the two are equal, and that identity gives the joint law of the "
-            "minimum and the endpoint, and from it every barrier price."
+            f"Sixty Brownian paths run to the horizon; those observed below the barrier turn red. <bookmark mark='a'/> Continuous Brownian reflection starts exactly at the first touch. Strong Markov symmetry makes the reflected path equally likely. Our drawing mirrors at the first grid crossing, which can overshoot, so it illustrates that theorem rather than implementing an exact continuous coupling. <bookmark mark='b'/> For b below zero and x at least b, the probability of touching b and finishing above x equals the probability of finishing below two b minus x. On twenty thousand thousand-step paths we count {n1} against {n2}, a shortfall of {gap:.0f} percent. Grid monitoring misses crossings; Monte Carlo fluctuation also contributes. The two histograms use the same count scale. The continuous identity supplies the killed Brownian density used for the barrier formula."
         ) as vo:
             self.play(FadeIn(ax), Create(bar), FadeIn(src))
             self.play(LaggedStart(*[Create(p) for p in paths], lag_ratio=0.03, run_time=4))
@@ -98,21 +107,14 @@ class Barriers(VoiceoverScene, ThreeDScene):
         ]
         whys = [why(r"reflection after the first touch: the strong Markov property and symmetry ($m_T$ the minimum)"),
                 why(r"drift $\nu$ by Girsanov (Part 5): re-weight each driftless path by its density"),
-                why(r"integrate the payoff against the killed density; in log price $\nu = (r - q)/\sigma - \sigma/2$"),
+                why(r"constant Black--Scholes coefficients; zero rebate, $S>H$, $K\ge H$; scaled log-return drift $\nu=(r-q)/\sigma-\sigma/2$"),
                 why(r"the same price from the PDE side: Black--Scholes on $S > H$, killed on the barrier"),
                 why(r"the method of images: subtract the image of the vanilla and the boundary condition holds; the "
                     r"image term is exactly the reflected vanilla"),
                 why(r"in--out parity: on every path exactly one of the two is alive at expiry")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.2, buff=0.75, edge=6.9)
         with self.voiceover(
-            "Now the derivation. Reflection gives the joint law of the minimum and the endpoint: touching b and ending "
-            "above x is as likely as ending below two b minus x. <bookmark mark='a'/> Prices have drift, so re-weight "
-            "each path by its Girsanov density, as in Part five. <bookmark mark='b'/> Integrate the call's payoff against "
-            "this killed density: the vanilla, minus the vanilla seen from the mirrored spot, scaled by H over S to the "
-            "power two lambda minus two. <bookmark mark='c'/> The same price solves Black–Scholes above the barrier, "
-            "pinned to zero on it. <bookmark mark='d'/> The two views meet in the method of images: if V solves "
-            "Black–Scholes, so does this reflection of it, and subtracting it makes the boundary condition hold. "
-            "<bookmark mark='e'/> And a down-and-in plus a down-and-out is the vanilla: on every path exactly one is alive."
+            "Reflection gives the joint law of the minimum and endpoint for driftless Brownian motion. <bookmark mark='a'/> Add a constant drift by its Girsanov density. Here the coordinate is log return divided by sigma, so its drift is r minus q over sigma, minus sigma over two. <bookmark mark='b'/> Integrating the killed density gives this vanilla-minus-image formula for a continuously monitored down-and-out call, with constant Black-Scholes coefficients, zero rebate, spot above H, and strike at least H. Below that strike domain a different formula is needed. <bookmark mark='c'/> The price solves Black-Scholes above the barrier with zero boundary value. <bookmark mark='d'/> The image transformation preserves this constant-coefficient PDE; subtraction imposes the boundary and the appropriate terminal payoff. <bookmark mark='e'/> With matching monitoring, rebate and other terms, the down-and-in plus down-and-out equals the vanilla pathwise."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -183,30 +185,23 @@ class Barriers(VoiceoverScene, ThreeDScene):
         surf = Surface(lambda u, w: ax.c2p(u, w, val(u, w)), u_range=[H, 130], v_range=[0.005, 0.5],
                        resolution=(40, 18), fill_opacity=0.85, stroke_width=0.3, stroke_color=GREY_D)
         surf.set_fill_by_value(axes=ax, colorscale=[(QC.DELTA, 0), (OPT, 12), ("#F7A8D8", 30)], axis=2)
-        dsurf = Surface(lambda u, w: ax.c2p(u, w, zs * float(np.clip(fD((max(w, 0.005), max(u, H + 0.05))), 0, 1.2))),
+        dsurf = Surface(lambda u, w: ax.c2p(u, w, zs * float(fD((max(w, 0.005), max(u, H + 0.05))))),
                         u_range=[H, 130], v_range=[0.005, 0.5], resolution=(40, 18), fill_opacity=0.8,
                         stroke_width=0.3, stroke_color=GREY_D)
         dsurf.set_fill_by_value(axes=ax, colorscale=[(SPOT, 0), (DELTA, 20), (BAD, 34)], axis=2)
         wall = Polygon(ax.c2p(H, 0, 0), ax.c2p(H, 0.5, 0), ax.c2p(H, 0.5, 30), ax.c2p(H, 0, 30), stroke_color=BARRIER,
                        stroke_width=2, fill_color=BARRIER, fill_opacity=0.25)
         hint = VGroup(label(r"spot, 80 to 130", font_size=21, color=SPOT),
-                      label(r"time to expiry, 0 to six months", font_size=21, color=GREY_A),
+                      label(r"time to expiry, 0.005 to 0.5 years", font_size=21, color=GREY_A),
                       label(r"value of the down-and-out call", font_size=21, color=OPT)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.1).to_corner(UL, buff=0.4)
-        hint2 = label(r"now its delta: a ridge along the wall", font_size=21, color=DELTA).to_corner(UL, buff=0.4)
+        hint2 = label(r"delta: same height scale maps 0--1.2 units", font_size=21, color=DELTA).to_corner(UL, buff=0.4)
         wl = label(r"the barrier: $V = 0$ on the wall", font_size=20, color=BARRIER).to_corner(DR, buff=0.4)
         self.set_camera_orientation(phi=64 * DEGREES, theta=-115 * DEGREES, zoom=0.85)
         self.add_fixed_in_frame_mobjects(hint, wl, hint2)
         self.remove(hint, wl, hint2)
         with self.voiceover(
-            "Here is the whole price, over spot and time to expiry. At expiry, the front edge, it is the call's "
-            "hockey stick, cut off at the barrier. Further from expiry it rises and smooths, like any call. "
-            "<bookmark mark='a'/> But it is pinned to zero along the barrier, a wall it can never cross, and right "
-            "next to the wall the surface climbs steeply. <bookmark mark='b'/> Swap the height for the slope, the "
-            "delta. A vanilla's delta near this spot would be modest. The barrier's delta stands as a ridge along "
-            "the wall: the option is worth almost nothing there, yet its hedge is large, and it falls to zero the "
-            "instant the barrier is touched."
-            " Real barriers are watched at the close, and there is a way to hedge them without trading. Next."
+            "Here is the price over spot and remaining time, from 0.005 years to six months. The near-expiry edge approaches the call payoff; it is not the exact expiry slice. <bookmark mark='a'/> For this zero-rebate contract the value is zero at the barrier. <bookmark mark='b'/> Replace price height by the numerical delta, without clipping it; the height scale now represents zero to 1.2 delta units. We interpolate a finite spot grid, so the slope at the absorbing boundary is a numerical approximation. Upon knock-out the position's remaining value and delta are zero. Contracts can be monitored continuously or at stated observation dates. Next, discrete monitoring and vanilla hedges."
         ) as vo:
             self.play(FadeIn(hint), Create(ax), Create(surf), run_time=3)
             vo.wait_until("a")
@@ -217,5 +212,5 @@ class Barriers(VoiceoverScene, ThreeDScene):
             self.move_camera(theta=-80 * DEGREES, phi=62 * DEGREES, run_time=max(vo.remaining(1.0) - 1.0, 1.0))
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, added_anims=[FadeOut(VGroup(ax, dsurf, wall)), FadeOut(hint2),
                                                                   FadeOut(wl)], run_time=1.5)
-        self.clear_scene()
+        self.clear_scene(run_time=0.1)
 

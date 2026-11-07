@@ -32,22 +32,17 @@ class Digitals(VoiceoverScene):
         VGroup(g1, g2).arrange(RIGHT, buff=0.9).to_edge(UP, buff=1.0)
         cols = {"a month": GREY_B, "a day": IV, "an hour": BAD}
         L1 = VGroup(*[curve(g1.ax, S, np.asarray(c["price"]), cols[k], stroke_width=2.5) for k, c in d["curves"].items()])
-        L2 = VGroup(*[curve(g2.ax, S, np.clip(np.asarray(c["delta"]), 0, 0.75), cols[k], stroke_width=2.5)
+        L2 = VGroup(*[curve(g2.ax, S, np.asarray(c["delta"]), cols[k], stroke_width=2.5)
                       for k, c in d["curves"].items()])
         leg = legend([(cols[k], rf"{k} to expiry") for k in d["curves"]], font_size=17)
         leg.arrange(RIGHT, buff=0.4).next_to(VGroup(g1, g2), DOWN, buff=0.3)
         mx = d["curves"]["an hour"]["max_delta"]
         foot = wrapped_label(rf"an hour before expiry, the digital's delta at the strike is {mx:.2f} units per unit of payout: "
-                             r"for a payout of a million, a hedge of hundreds of thousands of units that flips to zero on a "
-                             r"tick. A digital is a smooth price on an impossible hedge", 11.5, 20, GREY_A).to_edge(DOWN, buff=0.7)
+                             r"for a payout of a million, hundreds of thousands of hedge units near the strike. Discrete rebalancing near expiry is "
+                             r"difficult; continuous frictionless Black--Scholes replication remains possible", 11.5, 20, GREY_A).to_edge(DOWN, buff=0.7)
         src = illustration(r"cash-or-nothing call struck at 100, volatility 25\%")
         with self.voiceover(
-            "A digital pays one if the price ends above the strike, and nothing otherwise. Its price is simple: the "
-            "risk-neutral probability of finishing above, discounted. A month from expiry it is a gentle S-curve. "
-            "<bookmark mark='a'/> But as expiry nears, the curve steepens into a step, and its slope, the delta, "
-            f"spikes at the strike: {mx:.2f} units per unit of payout an hour before expiry. On a payout of a "
-            "million, that is a hedge of hundreds of thousands of units, which must flip to zero on a tick. A digital "
-            "is a smooth price on an impossible hedge."
+            f"A cash digital pays one above the terminal strike and zero otherwise. Black-Scholes prices it by a discounted risk-neutral probability. A month out its price is smooth. <bookmark mark='a'/> As expiry approaches, the transition narrows and delta becomes concentrated near the strike. The sampled one-hour curve reaches {mx:.2f} units per payout unit. For a million-unit payout that is a large underlying position, sensitive to spot and time. At positive remaining time delta is still smooth; it does not literally jump to zero on any tick. Perfect continuous frictionless replication exists in this model. Finite rebalancing, costs and uncertain dynamics make the near-expiry hedge difficult in practice."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2), FadeIn(src), Create(L1[0]), Create(L2[0]), FadeIn(leg[0]))
             vo.wait_until("a")
@@ -58,7 +53,7 @@ class Digitals(VoiceoverScene):
 
     def spread(self, d):
         rows = d["spread"]
-        tab = VGroup(VGroup(label(r"call spread width", font_size=22, color=GREY_A), label(r"price", font_size=22, color=GREY_A),
+        tab = VGroup(VGroup(label(r"call spread width", font_size=22, color=GREY_A), label(r"price, 1 month", font_size=22, color=GREY_A),
                             label(r"largest delta, a day out", font_size=22, color=GREY_A)))
         tab.add(VGroup(label(r"the digital itself", font_size=24), MathTex(f"{d['digital_atm']:.3f}", font_size=28),
                        MathTex(f"{d['curves']['a day']['max_delta']:.3f}", font_size=28, color=BAD)))
@@ -71,16 +66,12 @@ class Digitals(VoiceoverScene):
                 cell.move_to([xs[j], 2.4 - 0.62 * i, 0])
         eq = MathTex(r"\text{digital} \le \frac{C(K - \varepsilon) - C(K)}{\varepsilon}", font_size=34, color=OPT)
         eq.to_edge(DOWN, buff=1.2)
-        note_ = wrapped_label(r"the seller books the digital as a call spread struck just below: it pays at least as much in "
+        note_ = wrapped_label(r"a call spread held to expiry pays at least as much as the digital in "
                               r"every state, costs a little more, and has a delta capped at $1/\varepsilon$ per unit. The "
                               r"width is a trade between that extra cost and a hedge the desk can actually run",
                               11.0, 20, GREY_A).next_to(eq, DOWN, buff=0.25)
         with self.voiceover(
-            "Desks do not hedge a digital as a digital. They book it as a tight call spread, long a call just below "
-            "the strike and short one at it, scaled by one over the width. <bookmark mark='a'/> The spread pays at "
-            "least as much as the digital in every state, so the seller is safe; it costs a little more, and the "
-            "wider it is, the more it costs and the gentler its delta. Choosing the width is choosing between a "
-            "price the client will pay and a hedge the desk can run."
+            "One alternative is a call spread: buy the K minus epsilon call, sell the K call, and divide by epsilon. <bookmark mark='a'/> Its terminal payoff dominates the cash digital in every state. If the options are held and settle as specified, that static dominance is model-independent. Dynamically delta-hedging the spread is a different strategy and still has risk. In fixed-parameter Black-Scholes with positive strikes, its delta is bounded by one over epsilon, including the zero-rate case here. The table compares one-month prices with maximum deltas one day before expiry. A wider spread buys more payoff excess and a lower peak delta. The extra price is a cost of that payoff cushion, not a guarantee against hedging losses."
         ) as vo:
             self.play(FadeIn(tab[:2]), FadeIn(eq))
             vo.wait_until("a")
@@ -130,7 +121,7 @@ class Digitals(VoiceoverScene):
                               rf"{r_d:.1f}-fold and the spread's {r_s:.1f}-fold", 5.6, 18, GREY_A)
         note_.next_to(tab, DOWN, buff=0.35).align_to(tab, LEFT)
         verdict = (f"the spread's error falls {r_s:.1f}-fold, the digital's only {r_d:.1f}-fold. The extra "
-                   f"{hs[21]['price'] - hd[21]['price']:.3f} the spread costs is the price of a book that can be hedged."
+                   f"{hs[21]['price'] - hd[21]['price']:.3f} the spread costs buys a payoff cushion; these simulated discrete hedges still have losses."
                    if faster else
                    f"both errors fall at a similar rate, {r_d:.1f}-fold and {r_s:.1f}-fold; the spread's advantage is its "
                    "smaller error at every frequency.")
@@ -162,7 +153,7 @@ class Digitals(VoiceoverScene):
             cmath(r"r = q = 0:\quad OT", r"=", r"N(-d_2) + \frac{S}{H}\,N(-d_1)", font_size=34,
                   colors={r"r = q = 0:\quad OT": IV}),
         ]
-        whys = [why(r"$X = \log S$, $b = \log(H/S) < 0$, $\mu = r - q - \sigma^2/2$: the first-passage law of Brownian "
+        whys = [why(r"$X_t=\log(S_t/S_0)$, $X_0=0$, $b=\log(H/S_0)<0$, $\mu = r - q - \sigma^2/2$: the first-passage law of Brownian "
                     r"motion with drift (Part 5: reflection, then Girsanov)"),
                 why(r"no drift: every path that ends below $b$ touched it, and so did its mirror image"),
                 why(r"with the price a martingale the log drifts down, and the rule of thumb ``twice the digital'' "
@@ -173,14 +164,7 @@ class Digitals(VoiceoverScene):
                             rf"formula: {o['bgk']:.3f}); twice the digital put {o['two_digital']:.3f}", 12.0, 20,
                             GREY_A).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "A one-touch pays if the barrier is touched before expiry. Its price is the probability of touching, the "
-            "first-passage law of Part five. <bookmark mark='a'/> With no drift in the log price, every path that "
-            "ends below the barrier touched it, and so did its mirror twin: the one-touch is worth exactly twice the "
-            "digital, a traders' rule of thumb. <bookmark mark='b'/> With zero rates, though, "
-            "the price is a martingale and its log drifts down, and the exact price is a digital plus a little less "
-            f"than a second one. Here: closed form {o['closed']:.3f}, simulation {o['mc']:.3f} on a grid of a "
-            f"thousand steps, which misses a few touches between steps, and twice the digital, {o['two_digital']:.3f}, "
-            "a few points too high."
+            f"Here the down one-touch pays one at maturity if the barrier was reached. First calculate its hitting probability for centered log return, starting at zero. With nonzero rates the maturity-paid price is this probability times the discount factor; pay-at-touch is a different contract. <bookmark mark='a'/> With zero log drift, reflection makes the hitting probability twice the terminal digital probability. <bookmark mark='b'/> With r and q both zero, the stock is a martingale but its log drifts downward. The formula becomes a digital put plus the weighted second term. Our continuous price is {o['closed']:.3f}; thousand-step Monte Carlo gives {o['mc']:.3f} and misses between-step touches. Twice the digital is {o['two_digital']:.3f}, too high here. Zero stock drift and zero log drift must remain distinct."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -208,25 +192,18 @@ class Digitals(VoiceoverScene):
         side = VGroup(rows[0],
                       wrapped_label(r"the chain rule: the call depends on the strike directly and through the smile. "
                                     r"Where the smile falls with strike ($\sigma' < 0$, the equity skew), the digital is "
-                                    r"dearer than $N(d_2)$", 5.0, 19, GREY_A),
+                                    r"dearer than Black--Scholes at the same strike volatility $\sigma(K)$ (rates zero here)", 5.0, 19, GREY_A),
                       wrapped_label(rf"at the money: {100 * d['atm_diff']:+.1f} points against the flat-vol price; at "
                                     rf"$k = 0.1$, where the bitcoin smile turns up, {d['at_k']['skew']:.3f} against "
                                     rf"{d['at_k']['flat']:.3f}", 5.0, 19, WHITE),
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
-        pp = pause_card(r"Equity skew. Is a digital call dearer or cheaper than Black--Scholes at the at-the-money vol?",
+        pp = pause_card(r"At the money, with negative smile slope: how does the digital compare with Black--Scholes at the same volatility?",
                         width=6.4).to_corner(UR, buff=0.3)
         src = real_data(r"the Surface: Part 12's SSVI fit to Deribit bitcoin options, 10 December 2025, 30-day slice")
         cheaper = d["at_k"]["skew"] < d["at_k"]["flat"]
         tail = (", and further out, where the bitcoin smile turns up, it is cheaper." if cheaper else ".")
         with self.voiceover(
-            "One more thing a digital knows: the smile. Pause and predict. With an equity skew, is a digital call "
-            "dearer or cheaper than Black–Scholes at the at-the-money volatility? <bookmark mark='a'/> A digital is "
-            "minus the slope of the call price in strike. But as the strike moves, the implied volatility moves too, "
-            "so the chain rule adds a term: vega times the smile's slope. Where the smile falls with strike, that "
-            "term makes the digital dearer. <bookmark mark='b'/> On the bitcoin Surface, thirty days out, the "
-            f"digital at the money is {100 * d['atm_diff']:.1f} points dearer than the flat-volatility price{tail} "
-            "The white dots check it by differentiating call prices on the smile. A digital is a bet on the "
-            "smile's slope as much as on the spot. Next: options on averages and extremes."
+            f"What does the smile add? At the money, under a negative smile slope, compare a digital with Black-Scholes at that same implied volatility. <bookmark mark='a'/> The digital is minus the strike derivative of the entire call-price curve. The chain rule subtracts vega times sigma prime. A negative slope raises the digital relative to Black-Scholes evaluated at the same strike's volatility. Away from the money, that is not necessarily the flat ATM-volatility comparator drawn here. <bookmark mark='b'/> At the money on this bitcoin slice, the difference is {100 * d['atm_diff']:+.1f} probability points. At k of 0.1, the smile-based value is {d['at_k']['skew']:.3f}, versus {d['at_k']['flat']:.3f} under flat ATM volatility. White dots verify the derivative numerically on this fitted curve. A spline-based slice is not a guarantee of arbitrage freedom outside the checked domain. Next, averages and extremes."
         ) as vo:
             self.play(FadeIn(pp))
             vo.wait_until("a")

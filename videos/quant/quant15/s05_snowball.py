@@ -26,29 +26,22 @@ class Snowball(VoiceoverScene):
     def payoff(self, s):
         t = s["terms"]
         rows = VGroup(
-            VGroup(label(r"every month after the third:", font_size=24, color=GREY_A),
+            VGroup(label(r"months 3 through 24 (inclusive):", font_size=24, color=GREY_A),
                    label(rf"index $\ge$ {100 * t['ko']:.0f}\% of its start $\Rightarrow$ repaid, plus the coupon for the months "
                          r"held", font_size=24, color=GOOD)).arrange(DOWN, aligned_edge=LEFT, buff=0.08),
             VGroup(label(r"every day:", font_size=24, color=GREY_A),
                    label(rf"index closes below {100 * t['ki']:.0f}\% $\Rightarrow$ knocked in", font_size=24, color=BAD))
             .arrange(DOWN, aligned_edge=LEFT, buff=0.08),
             VGroup(label(rf"after {t['months']} months, never knocked out:", font_size=24, color=GREY_A),
-                   label(r"never knocked in $\Rightarrow$ the full coupon; knocked in $\Rightarrow$ the index's loss, "
+                   label(r"never knocked in $\Rightarrow$ par plus coupon; knocked in $\Rightarrow$ par minus any terminal loss, "
                          r"one for one", font_size=24, color=WHITE)).arrange(DOWN, aligned_edge=LEFT, buff=0.08),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.4).move_to(UP * 0.6)
-        eq = MathTex(r"\text{snowball} = \text{bond} + \text{coupon, while alive} - \text{down-and-in put}",
+        eq = MathTex(r"\text{snowball} = \text{bond} + \text{coupon, while alive} - \text{autocall-cancelled loss leg}",
                      font_size=34, color=OPT).to_edge(DOWN, buff=1.2)
         note_ = wrapped_label(r"the name: the coupon accrues month by month, like a snowball rolling; the risk is the "
-                              r"knock-in, which turns the note into the index itself", 11.0, 20, GREY_A).next_to(eq, DOWN, buff=0.25)
+                              r"knock-in flag persists, but later knock-out or recovery still affects repayment", 11.0, 20, GREY_A).next_to(eq, DOWN, buff=0.25)
         with self.voiceover(
-            "The snowball, xueqiu in Chinese, was the best-selling structured product in China, linked mostly to "
-            "the CSI 500 and CSI 1000 indices. Its terms fit on a card. Every month after the third, if the index "
-            "is above its starting level, the note is repaid with its coupon for the months held. <bookmark mark='a'/> "
-            "Every day, if the index closes below about three-quarters of its start, the note is knocked in. "
-            "<bookmark mark='b'/> If it reaches maturity without being repaid, the buyer gets the full coupon if it "
-            "never knocked in, and otherwise takes the index's loss, one for one. <bookmark mark='c'/> In option "
-            "terms, the buyer owns a bond and a coupon, and has sold a down-and-in put. The coupon is the put's "
-            "premium, paid in instalments."
+            "Here are our stylized snowball terms; actual term sheets vary. At months three through twenty-four, inclusive, a level at least 103 percent of the start triggers repayment of par plus the annual simple coupon pro rata for months held. <bookmark mark='a'/> A daily close strictly below 75 percent records knock-in. <bookmark mark='b'/> If the note never knocks out, an unknocked-in survivor pays par plus two years of coupon. A knocked-in survivor pays the smaller of its terminal relative level and one, with no coupon: a recovery above par restores par, not an equity gain. Later knock-out can still pay the coupon after a knock-in. <bookmark mark='c'/> The buyer owns repayment and conditional coupons and sells an autocall-cancelled knock-in loss leg. The advertised rate alone does not specify that package, and the coupon is not paid monthly."
         ) as vo:
             self.play(FadeIn(rows[0]))
             vo.wait_until("a")
@@ -120,10 +113,10 @@ class Snowball(VoiceoverScene):
             seg = curve(ax, t[:end + 1], y, col, stroke_width=1.2).set_stroke(opacity=op)
             lines.add(seg)
         h = np.asarray(o["ko_hist"], float)
-        hb = axes([0, 24], [0, 1], x_length=4.4, y_length=2.4, xlabel=r"knock-out month", ylabel=r"share",
+        hb = axes([0, 24], [0, float(h.max() / len(o["pv"])) * 1.2], x_length=4.4, y_length=2.4, xlabel=r"knock-out month", ylabel=r"share of all paths",
                   xticks=[3, 6, 12, 18, 24], yticks=[], font_size=14).to_corner(UR, buff=0.5)
         bars = VGroup()
-        top = h.max()
+        top = len(o["pv"])
         for m in range(3, 25):
             y1 = hb.ax.c2p(m, h[m] / top)[1]
             y0 = hb.ax.c2p(m, 0)[1]
@@ -160,7 +153,7 @@ class Snowball(VoiceoverScene):
             self.play(FadeIn(hb), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.05),
                       FadeIn(stats[0]))
             vo.wait_until("c")
-            self.play(FadeIn(stats[1]), FadeIn(stats[2]))
+            self.play(FadeIn(stats[1]), FadeIn(stats[2]), FadeIn(stats[3]))
         self.wait(0.4)
         self.clear_scene()
 
@@ -181,7 +174,7 @@ class Snowball(VoiceoverScene):
                                      r"\min(S_T, 1)\,\mathbf 1_I\big)\big]", font_size=26, color=GREY_A),
                              MathTex(r"B = \textstyle\sum_m \tfrac{m}{12}\,\mathbb E[D_m\mathbf 1_{O_m}] + "
                                      r"2\,\mathbb E[D_T\mathbf 1_N]", font_size=26, color=GREY_A),
-                             label(r"$O_m$ knocked out in month $m$; $N$ never knocked in; $I$ knocked in",
+                             label(r"$O_m$ knocked out in month $m$; $N$ survives without knock-in; $I$ survives after knock-in",
                                    font_size=18, color=GREY_B)).arrange(DOWN, aligned_edge=LEFT, buff=0.15),
                       rows[1],
                       wrapped_label(rf"one simulation gives both: $A = {A:.4f}$, $B = {B:.4f}$. No root search: the "
@@ -191,12 +184,7 @@ class Snowball(VoiceoverScene):
             side.scale_to_fit_width(6.0)
         side.to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "How was the fair coupon found? Not by search. On every path, the payoff is a fixed amount plus the coupon "
-            "times something that does not depend on it. <bookmark mark='a'/> So the value is a straight line in the "
-            "coupon, A plus c B: A is the note with no coupon, B the present value of one unit of coupon a year, roughly "
-            "the note's expected life. <bookmark mark='b'/> "
-            f"One simulation gives both: A is {A:.3f}, B is {B:.3f}, and the line crosses one at one minus A over B, "
-            f"{100 * c:.2f} percent."
+            f"The coupon solve follows directly from the payoff. On each fixed path, cash flow is a fixed amount plus coupon c times a coefficient that does not depend on c. <bookmark mark='a'/> Hence V equals A plus c B. A is principal repayment including conditional losses, and B is the discounted coupon-accrual coefficient. Knocked-in survivors receive no coupon, so B is not simply the note's expected life. <bookmark mark='b'/> On our forty thousand paths, A is {A:.3f} and B is {B:.3f}. The par coupon is one minus A over B, {100 * c:.2f} percent. That equality holds on this pricing sample; a fresh Monte Carlo estimate fluctuates. Volatility is the full 2021 through 2023 historical estimate, not a time-varying market calibration available to each earlier vintage."
         ) as vo:
             self.play(FadeIn(g), Create(one), FadeIn(side[0]), FadeIn(side[1]))
             vo.wait_until("a")
@@ -209,7 +197,7 @@ class Snowball(VoiceoverScene):
     def carry(self, cq):
         bq = cq["by_q"]
         bk = cq["by_ki"]
-        g1 = axes([-0.012, 0.088], [0, 0.32], x_length=5.0, y_length=3.6, xlabel=r"carry $q$: dividend plus futures discount",
+        g1 = axes([-0.012, 0.088], [0, 0.32], x_length=5.0, y_length=3.6, xlabel=r"effective carry $q$ (forward-matching proxy)",
                   ylabel=r"fair coupon", xticks=[0, 0.02, 0.04, 0.06, 0.08], xfmt=lambda u: f"{100 * u:.0f}\\%",
                   yticks=[0, 0.1, 0.2, 0.3], yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=14)
         g2 = axes([0.62, 0.88], [0, 0.32], x_length=5.0, y_length=3.6, xlabel=r"knock-in level",
@@ -228,7 +216,7 @@ class Snowball(VoiceoverScene):
                       for r, b_ in zip(bk, b2)])
         rows = VGroup(
             MathTex(r"F_t = S_t\,e^{(r - q_{\text{eff}})(T - t)}", font_size=30, color=IV),
-            wrapped_label(r"the issuer hedges with index futures. When they trade at a discount to spot, the hedge earns "
+            wrapped_label(r"the issuer hedges with index futures. When they trade at a discount to spot, a long futures position can earn "
                           r"the roll, and pricing with the futures' forward is pricing with a dividend yield $q_{\text{eff}}$: "
                           r"a lower forward makes a knock-in likelier, the put the buyer sells dearer, and the coupon "
                           r"higher", 11.6, 19, GREY_A),
