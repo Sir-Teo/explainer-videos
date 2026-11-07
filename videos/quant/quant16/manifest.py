@@ -11,7 +11,7 @@ SCENES = [
     ("s03_qmc", "QMC", "5. Quasi-Monte Carlo: filling space evenly"),
     ("s16_bridge", "Bridge", "6. QMC on paths: the Brownian bridge and effective dimension"),
     ("s04_mlmc", "MLMC", "7. Multilevel Monte Carlo"),
-    ("s05_american", "American", "8. American options I: Longstaff-Schwartz on real paths"),
+    ("s05_american", "American", "8. American options I: Longstaff-Schwartz on simulated paths"),
     ("s17_dual", "Dual", "9. American options II: the dual bound, and five assets"),
     ("s06_greeks", "Greeks", "10. Greeks three ways"),
     ("s18_aad", "AAD", "11. Adjoint differentiation"),

@@ -27,24 +27,25 @@ class Greeks(VoiceoverScene, ThreeDScene):
         hs, ns = np.log10(b["hs"]), np.log10(b["ns"])
         Zi = np.log10(np.asarray(b["indep"]))
         Zc = np.log10(np.asarray(b["crn"]))
-        ax = ThreeDAxes(x_range=[-2, 1.5, 1], y_range=[3, 5, 1], z_range=[-2.5, 1.2, 1], x_length=6.5, y_length=4.5,
+        zr = data_range(Zi, Zc)
+        ax = ThreeDAxes(x_range=[*data_range(hs), 1], y_range=[*data_range(ns), 1], z_range=[*zr, 1], x_length=6.5, y_length=4.5,
                         z_length=3.4, tips=False, axis_config={"stroke_color": GREY_C, "include_ticks": False,
                                                                "stroke_width": 2})
         ax.shift(DOWN * 0.5)
 
         def surf(Z, colors):
-            f = RegularGridInterpolator((ns, hs), np.clip(Z, -2.5, 1.2))
+            f = RegularGridInterpolator((ns, hs), Z)
             s = Surface(lambda u, v: ax.c2p(u, v, float(f((v, u)))), u_range=[hs[0], hs[-1]], v_range=[ns[0], ns[-1]],
                         resolution=(28, 12), fill_opacity=0.85, stroke_width=0.4, stroke_color="#0E1117",
                         checkerboard_colors=False)
-            s.set_fill_by_value(axes=ax, colorscale=list(zip(colors, [-2.3, -1, 0.8])), axis=2)
+            s.set_fill_by_value(axes=ax, colorscale=list(zip(colors, [zr[0], sum(zr) / 2, zr[1]])), axis=2)
             return s
 
         si = surf(Zi, [QC.GAIN, QC.DELTA, QC.LOSS])
         sc = surf(Zc, [QC.GAIN, QC.DELTA, QC.LOSS])
-        hint = VGroup(label(r"across: the bump $h$ (log, $0.01$ to $30$)", font_size=21, color=GREY_A),
+        hint = VGroup(label(rf"across: bump $h$ (log, ${10 ** hs[0]:.2g}$ to ${10 ** hs[-1]:.2g}$)", font_size=21, color=GREY_A),
                       label(r"back: paths $n$ (log, $10^3$ to $10^5$)", font_size=21, color=GREY_A),
-                      label(r"up: error of the bumped delta (log)", font_size=21, color=GREY_A)).arrange(
+                      label(r"up: 30-seed RMSE of bumped delta (log)", font_size=21, color=GREY_A)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.1).to_corner(UL, buff=0.35)
         t_i = label(r"independent random numbers at $S_0 \pm h$", font_size=26, color=BAD).to_corner(UR, buff=0.4)
         t_c = label(r"common random numbers", font_size=26, color=GOOD).to_corner(UR, buff=0.4)
@@ -56,13 +57,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
         self.set_camera_orientation(phi=65 * DEGREES, theta=-60 * DEGREES, zoom=0.85)
         fixed(self, hint, t_i, t_c, nums_i, nums_c)
         with self.voiceover(
-            "The simplest Greek: bump the spot up and down by h, reprice, and take the difference. How big should h "
-            "be? Here is the error of that delta, over thirty seeds, for every bump size and every number of paths. "
-            "<bookmark mark='a'/> With fresh random numbers for the two prices, the surface is a valley. On the left "
-            "wall, small bumps divide the noise by a tiny h and the error explodes; on the right wall, large bumps "
-            "are biased. The floor slopes down as paths grow, and the best bump sits in between. "
-            "<bookmark mark='b'/> Now use the same random numbers for both prices. The left wall collapses. The two "
-            "prices' noise cancels, and the error is flat, for any small bump, until the bias of a huge one returns."
+            "A central bump reprices at spot plus and minus h. This surface shows root mean square delta error over thirty seeds, rather than a standard error or confidence interval. Every saved error is retained on the logarithmic height scale. <bookmark mark='a'/> With independent random numbers, dividing a noisy price difference by a small h amplifies noise; large h introduces finite-difference bias. <bookmark mark='b'/> Common random numbers strongly reduce the left wall for this Lipschitz call payoff. The finite tested small-bump region is flatter. It does not imply that every arbitrarily tiny bump works: rounding, cancellation and payoff regularity still matter."
         ) as vo:
             self.play(Create(ax), FadeIn(hint), run_time=1.5)
             vo.wait_until("a")
@@ -90,23 +85,16 @@ class Greeks(VoiceoverScene, ThreeDScene):
         ]
         whys = [why(r"Taylor: bias $h^2$. Independent draws: $\operatorname{Var}(Y_+ - Y_-) = O(1)$, so the best $h \sim "
                     r"n^{-1/6}$ and error $\sim n^{-1/3}$; common numbers and a Lipschitz payoff: $O(h^2)$, error "
-                    r"$n^{-1/2}$ for any small $h$"),
+                    r"$n^{-1/2}$ sampling order under the required moment bounds; bias and roundoff remain"),
                 why(r"pathwise: differentiate inside the expectation ($\partial S_T/\partial S_0 = S_T/S_0$; the payoff "
                     r"is Lipschitz, so dominated convergence allows it)"),
-                why(r"likelihood ratio: differentiate the density, never the payoff (Broadie and Glasserman 1996); "
+                why(r"likelihood ratio for parameter-independent payoff and regular density/support; add direct payoff derivatives otherwise; "
                     r"for $\sigma$: $\frac{Z^2 - 1}{\sigma} - Z\sqrt T$"),
                 why(r"Malliavin weights (Fourni\'e, Lasry, Lebuchoux, Lions and Touzi 1999): integration by parts on "
-                    r"Wiener space; works for path-dependent payoffs with no known density")]
-        step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.4, buff=0.4, edge=6.9)
+                    r"Wiener space under nondegeneracy and integrability conditions, including suitable path-dependent payoffs")]
+        step = ladder(self, rows, whys, keep=3, top=3.2, x=-0.4, buff=0.4, edge=6.9)
         with self.voiceover(
-            "The valley in symbols. A central bump has bias of order h squared, and with independent numbers a "
-            "variance of order one over n h squared, so the best bump shrinks like n to the minus a sixth and the "
-            "error only like n to the minus a third. Common numbers kill the h squared in the denominator. "
-            "<bookmark mark='a'/> The second way skips the bump: differentiate the payoff along each path; for a call, "
-            "delta is the discounted indicator times the stock's growth ratio. <bookmark mark='b'/> The third differentiates the "
-            "density instead: the payoff times the derivative of the log density, the score. <bookmark mark='c'/> And "
-            "Malliavin calculus, brought to finance by Fournié, Lasry, Lebuchoux, Lions and Touzi in 1999, finds such "
-            "weights by integrating by parts on the space of paths, even when no density is known."
+            "If the price has three suitable derivatives, a central bump has leading bias of order h squared. With independent draws and nonzero leading constants, balancing bias and variance gives optimal h of order n to minus one sixth, and RMSE of order n to minus one third. Common-number payoff differences can have variance of order h squared for a regular Lipschitz reparameterization; a digital generally behaves differently. <bookmark mark='a'/> Pathwise differentiation exchanges derivative and expectation only under suitable domination and integrability conditions. For this call those conditions justify the indicator formula. <bookmark mark='b'/> The displayed likelihood-ratio identity assumes no explicit parameter dependence in the payoff and a regular density with appropriate support. Otherwise direct derivative or boundary terms must be included. <bookmark mark='c'/> Malliavin integration by parts constructs path-space weights under nondegeneracy and integrability conditions. It extends the toolkit, rather than guaranteeing a usable weight for every model and payoff."
         ) as vo:
             for i, mk in enumerate("abc"):
                 step(i)
@@ -138,13 +126,9 @@ class Greeks(VoiceoverScene, ThreeDScene):
         ratio = g["digital"]["bump"]["delta_se"] / g["digital"]["likelihood ratio"]["delta_se"]
         foot = wrapped_label(rf"for the digital, the likelihood ratio's standard error is {ratio:.1f} times smaller than "
                              r"the bump's (bump $h = 1$, common numbers)", 11.6, 20, GREY_A).to_edge(DOWN, buff=0.9)
-        src = illustration(r"200{,}000 paths; one-year at-the-money call and cash-or-nothing digital", corner=UR)
+        src = illustration(r"200{,}000 paths; entries $\pm$ one estimated s.e.; bump bias reported separately", corner=UR)
         with self.voiceover(
-            "All three on two products, with two hundred thousand paths. For the call they agree with the exact "
-            "delta; the bump with common numbers and the pathwise method are equally precise, and the likelihood "
-            "ratio is noisier. <bookmark mark='a'/> For a digital, which pays one above the strike, the pathwise "
-            "derivative is zero almost everywhere: it fails. The likelihood ratio never touches the payoff, and its "
-            f"standard error is {ratio:.1f} times smaller than the bump's."
+            f"The table uses two hundred thousand paths and displays estimates plus or minus one estimated sampling standard error. Bump bias is separate. For this call the methods are close to the analytical delta; pathwise and common-number bump estimators have similar dispersion. <bookmark mark='a'/> For the cash-or-nothing digital, a continuous terminal distribution gives path derivative zero almost surely, but its expected payoff changes with spot. Interchanging derivative and expectation fails. In this specific benchmark the likelihood-ratio standard error is {ratio:.1f} times smaller than the common-number bump with h equal to one. This is not a universal ranking."
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(tab[1]), FadeIn(tab[2]), FadeIn(tab[3]), FadeIn(tab[4]), FadeIn(src))
             vo.wait_until("a")
@@ -173,13 +157,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
         q = predict(r"Bump with $h = 0.0001$ and fresh random numbers. What do you get?", width=5.6,
                     font_size=21).to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "Why pathwise fails for the digital, in one picture. The payoff is a step. Along any path its slope is "
-            "zero, except at the strike, where it is infinite, and a simulation never lands exactly there. "
-            "<bookmark mark='a'/> The likelihood ratio moves the derivative onto the density: each path's payoff is "
-            "multiplied by a weight that is linear in its normal. Gamma of a call has the same problem, one level "
-            "up, and the same cure. <bookmark mark='b'/> Pause and predict: a bump of one ten-thousandth with fresh "
-            "random numbers. You get noise: the error grows like one over h, the left wall of the valley."
-            " Next: every Greek at once, for the cost of a few prices. Adjoint differentiation."
+            "The digital payoff is a step. Its ordinary derivative is zero away from the strike and undefined at the strike. The arrow represents a Dirac distribution, not an infinite ordinary slope. With continuous terminal stock prices, the almost-sure zero path derivative therefore misses the derivative of expected payoff. <bookmark mark='a'/> A regular likelihood-ratio method differentiates the density instead. Hybrid pathwise and score estimators can also handle a call's gamma under suitable conditions. <bookmark mark='b'/> A tiny bump with independent price simulations magnifies sampling noise roughly as one over h in standard deviation, before other numerical effects. Next, reverse differentiation of the implemented pricing code."
         ) as vo:
             self.play(FadeIn(ga), Create(step), FadeIn(slope), FadeIn(cap1))
             vo.wait_until("a")

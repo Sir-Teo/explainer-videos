@@ -60,8 +60,8 @@ class Importance(VoiceoverScene):
             return float(np.interp(t.get_value(), th, arr))
 
         rd = VGroup(readout(r"\theta =", lambda: t.get_value(), digits=2, font_size=30, color=OPT),
-                    readout(r"\text{variance} \div", lambda: at(ratio), digits=6, font_size=28, color=GOOD),
-                    readout(r"\text{ESS}/n =", lambda: at(ess), digits=12, font_size=28, color=GREY_A),
+                    readout(r"\log_{10}(\mathrm{variance\ gain}) =", lambda: np.log10(at(ratio)), digits=2, font_size=23, color=GOOD),
+                    readout(r"\log_{10}(\mathrm{ESS}/n) =", lambda: np.log10(at(ess)), digits=2, font_size=23, color=GREY_A),
                     ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(RIGHT, buff=0.6).shift(UP * 0.8)
         tag = label(rf"the payoff lives here: $z > {zs:.2f}$ ({100 * s['share_in_money']:.1f}\% of draws)", font_size=18,
                     color=BAD).next_to(ta.c2p(zs + 0.2, 0.3), RIGHT, buff=0.1)
