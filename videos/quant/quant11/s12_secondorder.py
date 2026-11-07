@@ -95,13 +95,12 @@ class SecondOrder(VoiceoverScene, ThreeDScene):
         whys = [why(r"differentiate $d_1 = (\ln F/K + \tfrac12\sigma^2\tau)/(\sigma\sqrt\tau)$ in $\sigma$"),
                 why(r"the chain rule on $\Delta = N(d_1)$ and on $\mathcal{V} = S\varphi(d_1)\sqrt\tau$"),
                 why(r"at 25 delta, $d_1=\pm0.674$; positive put-wing volga requires total volatility below 0.674"),
-                why(r"the market's quotes: the risk reversal is the price of vanna (it is long one wing, short the "
-                    r"other), the butterfly the price of volga")]
+                why(r"RR and BF are smile quote coordinates with mixed Greek exposures; useful vanna/volga proxies under a chosen convention")]
         step = ladder(self, rows, whys, keep=3, top=3.0, x=-0.4, buff=0.55, edge=6.9)  # leaves the corner for the card
         pc = pause(r"Same vega: an at-the-money straddle, or a 25-delta strangle. Which has more volga?", width=5.0,
                    font_size=21)
         with self.voiceover(
-            "The algebra is two lines. Differentiate d one in volatility: minus d two over sigma. <bookmark mark='a'/> The chain rule then gives vanna, minus the normal density times d two over sigma, and volga, vega times d one d two over sigma. <bookmark mark='b'/> At the money, d one and d two straddle zero and their product is tiny, so volga is almost zero, the flat yellow line. At twenty-five delta both sit about two thirds of a standard deviation out on the same side, and volga is positive. <bookmark mark='c'/> That is why desks quote the smile with two numbers besides the at-the-money volatility. The risk reversal, the call wing's volatility minus the put wing's, is long one wing and short the other: it is the market's price of vanna. The butterfly, the average wing minus the middle, is the price of volga. <bookmark mark='d'/> Pause and predict: for the same vega, which has more volga, a straddle or a strangle? The strangle: it is made of wings. That wing-sign description assumes total volatility below point six seven four on the put side. Risk reversal and butterfly are quote coordinates and exposure proxies, not isolated prices of a single Greek."
+            """Differentiate d one with respect to volatility: minus d two over sigma. <bookmark mark='a'/> Chain rules give vanna, minus the normal density times d two over sigma, and volga, vega times d one d two over sigma, for the zero-rate, zero-yield vanilla model. <bookmark mark='b'/> At the forward, d one d two equals minus one quarter total variance: volga is small and negative here, not exactly zero. With unadjusted twenty-five-delta quotes, the call has d one minus point six seven four and the put plus point six seven four. The put wing's volga is positive when total volatility is below point six seven four; the call wing's is positive. <bookmark mark='c'/> Risk reversal and butterfly are smile quote coordinates associated with mixed Greek exposures, useful proxies rather than isolated Greek prices. <bookmark mark='d'/> For the same vega in this short-maturity example, the twenty-five-delta strangle has more volga than the at-the-money straddle."""
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -133,14 +132,14 @@ class SecondOrder(VoiceoverScene, ThreeDScene):
         lv = always_redraw(lambda: curve(ax, ks[:max(int(tr.get_value()), 2)],
                                          np.clip(vv[:max(int(tr.get_value()), 2)], 0.3, 0.75), OPT, stroke_width=4))
         # the pillar weights at the strike being priced, as three live bars
-        wb = axes([0, 3], [-1.2, 1.6], x_length=3.0, y_length=2.0, ylabel=r"weights $x_i(K)$", yticks=[-1, 0, 1],
+        wb = axes([0, 3], [-1.5, 1.6], x_length=3.0, y_length=2.0, ylabel=r"weights $x_i(K)$", yticks=[-1, 0, 1],
                   font_size=15).to_corner(UR, buff=0.5).shift(LEFT * 0.4)
 
         def wbars():
             i = int(np.clip(tr.get_value(), 0, len(ks) - 1))
             gr = VGroup()
             for j, c in enumerate((QC.LOSS, WHITE, QC.GAIN)):
-                v = float(np.clip(X[i, j], -1.2, 1.6))
+                v = float(X[i, j])
                 a, b = wb.ax.c2p(j + 0.5, 0), wb.ax.c2p(j + 0.5, v)
                 gr.add(Rectangle(width=0.5, height=max(abs(b[1] - a[1]), 0.01), stroke_width=0, fill_color=c,
                                  fill_opacity=0.85).move_to((a + b) / 2))
@@ -151,7 +150,7 @@ class SecondOrder(VoiceoverScene, ThreeDScene):
         eq2 = MathTex(r"\sum_i x_i\,(\mathcal{V}_i, \text{vanna}_i, \text{volga}_i) = (\mathcal{V}, \text{vanna}, "
                       r"\text{volga})(K)", font_size=26, color=GREY_A).next_to(eq, DOWN, buff=0.15).align_to(eq, LEFT)
         good = so["rmse_in"] < 1.0
-        verdict = (rf"between the 10-delta strikes: RMSE {so['rmse_in']:.2f} vol points of the fitted smile; in the "
+        verdict = (rf"between the 10-delta strikes: RMSE {so['rmse_in']:.2f} vol points against the fitted smile; in the "
                    rf"far wings, off by up to {so['maxerr_wing']:.0f}" if good else
                    rf"between the 10-delta strikes: off by {so['rmse_in']:.1f} vol points")
         side = VGroup(

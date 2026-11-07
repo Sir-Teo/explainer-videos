@@ -121,7 +121,7 @@ class Hook(VoiceoverScene):
         card = objectives_card([
             r"Positions as Greeks; a real day's P\&L explained; vanna, volga, and what each structure bets on",
             r"Gamma scalping on a real path; how often to hedge",
-            r"The volatility premium in option returns; a forecaster's edge, tested; how much to bet",
+            r"Volatility premium, forecast timing diagnostics and sizing limits",
             r"Making a market: the spread, inventory, and a market maker that learns; hedging the book",
             r"Expiry, pinning and early exercise; dispersion and implied correlation",
             r"India's expiry-day boom, and the SEBI case against Jane Street (allegations, contested)",

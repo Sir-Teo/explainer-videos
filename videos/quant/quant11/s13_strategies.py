@@ -8,12 +8,12 @@ from videos.quant.quant11.common import (ALT, GAMMA, OPT, PART, SPOT, THETA, VEG
                                          real_data, surf)
 
 NAMES = ["straddle", "strangle", "risk reversal", "butterfly", "call spread", "calendar"]
-BETS = {"straddle": (r"+", r"+", r"0", r"a big move either way, or vol rising"),
-        "strangle": (r"+", r"+", r"0", r"a bigger move, for less premium"),
-        "risk reversal": (r"0", r"0", r"+", r"up, and the skew flattening (vanna)"),
-        "butterfly": (r"$-$", r"$-$", r"0", r"staying put; vol falling"),
+BETS = {"straddle": (r"+", r"+", r"$\approx0$", r"a big move either way, or vol rising"),
+        "strangle": (r"+", r"+", r"$\approx0$", r"a bigger move, for less premium"),
+        "risk reversal": (r"$\approx0$", r"$\approx0$", r"+", r"up, and the skew flattening (vanna)"),
+        "butterfly": (r"$-$", r"$-$", r"$\approx0$", r"staying put; vol falling"),
         "call spread": (r"$\pm$", r"$\pm$", r"+", r"up, but not too far"),
-        "calendar": (r"$-$", r"+", r"0", r"a calm near month, later vol holding")}
+        "calendar": (r"$-$", r"+", r"$\approx0$", r"a calm near month, later vol holding")}
 SIG, T = 0.5, 30 / 365
 
 
@@ -53,7 +53,7 @@ class Strategies(VoiceoverScene, ThreeDScene):
             return surf(ax, f, (-0.25, 0.25), (-0.1, 0.1), [(QC.LOSS, -1), (GREY_D, 0), (QC.GAIN, 1)],
                         resolution=(24, 16), opacity=0.85)
         hint = hint3d((r"spot move, $\pm 25\%$", SPOT), (r"implied-vol move, $\pm 10$ points", VEGA),
-                      (r"P\&L after a week (each scaled to the box)", OPT), ax=ax)
+                      (r"model P\&L (each surface scaled separately)", OPT), ax=ax)
         name_lab = label(r"straddle", font_size=34, color=OPT).to_corner(UL, buff=0.4)
         fixed(self, hint, name_lab)
         self.set_camera_orientation(phi=64 * DEGREES, theta=-55 * DEGREES, zoom=0.9)
@@ -100,14 +100,13 @@ class Strategies(VoiceoverScene, ThreeDScene):
         rows = [cmath(r"\Gamma_{\text{straddle}}", r"=", r"2\,\Gamma_{\text{ATM}},\qquad \mathcal{V}_{\text{cal}} = "
                       r"\mathcal{V}_{2T} - \mathcal{V}_{T} > 0,\quad \Gamma_{\text{cal}} = \Gamma_{2T} - \Gamma_{T} < 0",
                       font_size=30)]
-        whys = [why(r"a structure's Greeks are the sums of its legs': vega grows like $\sqrt\tau$ and gamma shrinks "
-                    r"like $1/\sqrt\tau$, so a calendar is long vega and short gamma")]
+        whys = [why(r"local ATM toy with common IV and short maturities; leg Greeks sum, and signs can change away from this point")]
         rows[0].next_to(cells, DOWN, buff=0.5)
         whys[0].next_to(rows[0], DOWN, buff=0.2)
         pc = pause(r"On real bitcoin smiles, 2024--2025: which structure lost money in the most weeks?", width=5.0,
                    font_size=21)
         with self.voiceover(
-            "The table a trader carries in their head. For each structure: the sign of its gamma, its vega, its "
+            "A local guide near the initial at-the-money toy point, with common IV; zeros mean approximately small exposures. For each structure: the sign of its gamma, its vega, its "
             "delta, and what it is a bet on. <bookmark mark='a'/> The Greeks of a structure are the sums of its legs. "
             "A straddle has twice an at-the-money option's gamma. A calendar is long vega and short gamma at once, "
             "because vega grows like the square root of time and gamma shrinks like one over it. "

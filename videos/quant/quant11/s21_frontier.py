@@ -68,7 +68,7 @@ class Frontier(VoiceoverScene):
         z = DashedLine(g1.ax.c2p(w[0], 0), g1.ax.c2p(w[-1], 0), color=GREY_C, stroke_width=1)
 
         def bands():
-            n = max(int(tr.get_value()), 2)
+            n = min(max(int(np.floor(tr.get_value())) + 1, 2), len(w))
             return VGroup(band(g1.ax, w[:n], np.clip(br.min(0)[:n], -lim, lim), np.clip(br.max(0)[:n], -lim, lim), VEGA, 0.25),
                           band(g1.ax, w[:n], np.clip(bb.min(0)[:n], -lim, lim), np.clip(bb.max(0)[:n], -lim, lim), GAMMA, 0.2))
         B = always_redraw(bands)

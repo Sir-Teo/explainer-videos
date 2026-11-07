@@ -10,7 +10,7 @@ SCENES = [
     ("s12_secondorder", "SecondOrder", "4. Vega, vanna, volga"),
     ("s13_strategies", "Strategies", "5. Strategies: what each bets on, and what it paid"),
     ("s14_premium", "Premium", "6. The volatility premium in option returns"),
-    ("s04_vrp", "VRP", "7. A forecaster's edge, and how much to bet"),
+    ("s04_vrp", "VRP", "7. Forecast diagnostics, and how much to bet"),
     ("s05_mm", "MarketMaker", "8. Making a market: the spread"),
     ("s15_inventory", "Inventory", "9. Inventory, and a market maker that learns"),
     ("s08_hedging", "Hedging", "10. Hedging the book"),

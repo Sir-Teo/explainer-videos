@@ -24,9 +24,9 @@ class VRP(VoiceoverScene):
         self.kelly(load("kelly"))
 
     def card(self):
-        c = chapter_card(7, r"A forecaster's edge, and how much to bet", r"When is implied volatility too high?",
+        c = chapter_card(7, r"Forecast diagnostics, and how much to bet", r"When is implied volatility too high?",
                          part=PART)
-        with self.voiceover("Chapter seven. A forecaster's edge, tested, and how much to bet."):
+        with self.voiceover("""Chapter seven. Forecast diagnostics, and how much to bet."""):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -153,14 +153,14 @@ class VRP(VoiceoverScene):
                 cmath(r"f", r"<", r"1/|x_{\min}|\quad(\log 0 = -\infty)", font_size=32)]
         eqs = VGroup(*rows).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4).shift(UP * 1.4)
         notes = VGroup(
-            wrapped_label(rf"the empirical optimum sits against the wall, at {k['f_emp']:.0f}: the sample's worst month "
-                          rf"({100 * k['min']:.1f}\% of notional) is the only thing that stops it", 4.6, 19, GREY_A),
+            wrapped_label(rf"sample optimum {k['f_emp']:.1f}, near the sample bankruptcy wall; worst observed window "
+                          rf"{100 * k['min']:.1f}\% of notional. Future losses need not respect that wall", 4.6, 19, GREY_A),
             wrapped_label(rf"half that leverage keeps {100 * half / k['g_max']:.0f}\% of the growth, and survives a month "
                           r"twice as bad as any seen", 4.6, 19, GAMMA),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(eqs, DOWN, buff=0.35).align_to(eqs, LEFT)
         src = real_data(rf"Part 10's {k['n']} one-month P\&Ls of a sold, hourly-hedged 30-day bitcoin call, one started each "
                        r"day (they overlap), as returns on notional")
-        pc = pause(r"Your edge has $t = 2.4$ on 43 months. Lever it five times?", width=4.6, font_size=21,
+        pc = pause(r"Does the worst observed loss bound an unseen loss?", width=4.6, font_size=21,
                    corner=DR).shift(UP * 0.4)  # the left corner holds the chart's axis label; clear the source line
         at_wall = k["f_emp"] > 0.9 * k["f_ruin"]
         ksay = (f"The curve keeps rising until it hits the wall at {k['f_ruin']:.0f}: in this sample the optimum is "

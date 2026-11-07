@@ -107,17 +107,18 @@ class Research(VoiceoverScene):
         leg = legend([(c, n) for _, c, n in sets], font_size=16).to_edge(RIGHT, buff=0.3).shift(UP * 1.4)
         fit_right(leg)
         side = wrapped_label(rf"Merton jump-diffusion: $\sigma = {100 * t['sigma']:.0f}\%$, {t['lam']:.0f} jumps a year of "
-                             rf"mean ${100 * t['mj']:.0f}\%$ and spread ${100 * t['sj']:.0f}\%$; out-of-the-money puts below "
+                             rf"log-jump mean ${100 * t['mj']:.0f}\%$ and sd ${100 * t['sj']:.0f}\%$; out-of-the-money puts below "
                              rf"100, calls above; delta at the total volatility {100 * t['hedge_vol']:.0f}\%; 40{{,}}000 "
-                             r"paths", 3.3, 14, GREY_A).next_to(leg, DOWN, buff=0.3)
+                             r"jump paths; diffusion comparisons: 8{,}000 paths at 52\%", 3.3, 14, GREY_A).next_to(leg, DOWN, buff=0.3)
         fit_right(side)
         with self.voiceover(
             "How large is the residual? Simulate a jump-diffusion like Bitcoin's, and delta-hedge one-month options daily. <bookmark mark='a'/> With jumps the residual is one to two percent of the underlying, largest at the money. <bookmark mark='b'/> Remove the jumps and it falls by half or more. <bookmark mark='c'/> Hedge hourly as well, and it nearly disappears. The more complete the market, the less room demand has to move prices. This is an illustrative zero-drift model, not a fitted Bitcoin law. The jump mean and spread quoted are log-jump parameters. The jump case uses forty thousand paths; each diffusion comparison uses eight thousand."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(side))
+            self.play(FadeIn(g), FadeIn(side), FadeIn(lines[0]), FadeIn(leg[0]))
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
-                self.play(FadeIn(lines[k]), FadeIn(leg[k]), run_time=1.2)
+                if k:
+                    self.play(FadeIn(lines[k]), FadeIn(leg[k]), run_time=1.2)
         self.wait(0.4)
         self.clear_scene()
 
@@ -137,7 +138,7 @@ class Research(VoiceoverScene):
         leg = legend([(c, n) for _, c, n in sets], font_size=16).to_edge(RIGHT, buff=0.3).shift(UP * 1.4)
         fit_right(leg)
         p85 = t["scen"]["put85"]["d_iv_pts"]
-        side = wrapped_label(rf"$\gamma$ set so that one unit of demand moves the 85 put's own volatility one point; it "
+        side = wrapped_label(rf"$\gamma$ set so that local vega calibration targets one vol point at the 85 put (repriced: about 0.99); it "
                              rf"then moves the 80 put {p85[0]:.1f} points and the 120 call {p85[-1]:.1f}", 3.3, 14,
                              GREY_A).next_to(leg, DOWN, buff=0.3)
         fit_right(side)
@@ -145,7 +146,7 @@ class Research(VoiceoverScene):
         with self.voiceover(
             "Now apply demand. <bookmark mark='a'/> The grey line is the risk-neutral smile of the jump model: already "
             "skewed, by the jumps. <bookmark mark='b'/> Demand for a single eighty-five put lifts its own volatility one "
-            f"point, by construction, and lifts the eighty put {p85[0]:.1f} points and even the hundred-and-twenty call "
+            f"point approximately, under the local vega calibration, and lifts the eighty put {p85[0]:.1f} points and even the hundred-and-twenty call "
             f"{p85[-1]:.1f}. <bookmark mark='c'/> Demand for every put steepens the skew: {pu[0]:.1f} points at eighty, "
             f"{pu[-1]:.1f} at a hundred and twenty. <bookmark mark='d'/> Demand for calls tilts it the other way. The "
             "shape of the smile carries the shape of the demand."
@@ -181,9 +182,9 @@ class Research(VoiceoverScene):
         with self.voiceover(
             f"""Compare the first-order line with exponential tilting of these forty thousand centered residuals, keeping the delta hedge fixed. This is a finite empirical calculation, not an optimized-hedge utility price or a proof that the population exponential moment exists. <bookmark mark='a'/> At small positions they nearly agree. <bookmark mark='b'/> The option residual, a liability to the short dealer, has positive skewness {i['skew_eps']:.1f}. The empirical marginal premium is {100 * r1:.0f} percent above the line at {q[j1]:.2f} units and {100 * r4:.0f} percent at four. Nonlinearity and sample-tail sensitivity matter; those percentages are properties of this finite simulation."""
         ) as vo:
-            self.play(FadeIn(g), FadeIn(side))
+            self.play(FadeIn(g), FadeIn(side), Create(mv), FadeIn(leg[1]))
             vo.wait_until("a")
-            self.play(Create(mv), FadeIn(leg[1]), run_time=1.2)
+            self.play(Indicate(mv), run_time=1.2)
             vo.wait_until("b")
             self.play(Create(ex), FadeIn(leg[0]), run_time=1.5)
         self.wait(0.4)
@@ -214,9 +215,9 @@ class Research(VoiceoverScene):
         with self.voiceover(
             f"What does demand look like? On the Surface's two days of Deribit trades, count the side that crossed the spread, a rough proxy for end users. <bookmark mark='a'/> Near the money, buying and selling balance; within a month, takers were net sellers of out-of-the-money puts, {100 * f['otm_put_short']['net_share']:+.0f} percent. <bookmark mark='b'/> Beyond a month, takers were net buyers of out-of-the-money puts, {100 * f['otm_put_long']['net_share']:+.0f} percent of their vega, and net sellers of out-of-the-money calls, {100 * f['otm_call_long']['net_share']:+.0f}: protection bought, upside sold, a collar. The theory says such flow should steepen the long-dated skew. Two days describe it; a test needs years. Only eligible trades with reported IV and more than one day to expiry enter these bins. Takers need not be end users; aggregate put buying and call selling do not identify the same investors or prove a collar or a causal demand effect."
         ) as vo:
-            self.play(FadeIn(tab[0]), FadeIn(foot))
+            self.play(FadeIn(tab[0]), FadeIn(foot), FadeIn(tab[3]), FadeIn(tab[4]))
             vo.wait_until("a")
-            self.play(FadeIn(tab[3]), FadeIn(tab[4]), FadeIn(tab[1]), FadeIn(tab[5]))
+            self.play(FadeIn(tab[1]), FadeIn(tab[5]))
             vo.wait_until("b")
             self.play(FadeIn(tab[2]), FadeIn(tab[6]))
             self.play(Indicate(tab[2], color=THETA), Indicate(tab[6], color=GAMMA))
@@ -240,9 +241,11 @@ class Research(VoiceoverScene):
             "hedging demand, is debated. <bookmark mark='c'/> And with many dealers, inventories carried through time, "
             "and the quote dynamics of Chapter 9, choose a specific model and compare its equilibrium prices and quote dynamics."
         ) as vo:
+            self.play(FadeIn(cards[0], shift=UP * 0.2))
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
-                self.play(FadeIn(cards[k], shift=UP * 0.2))
+                if k:
+                    self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
 

@@ -157,7 +157,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
         with self.voiceover(
             "In the House this is one function. A book is a list of legs; its Greeks are the sum of theirs. "
             "<bookmark mark='a'/> Desks quote them in cash: delta in dollars of the underlying, gamma as the profit "
-            "on a one percent move, vega per volatility point, theta per day. Here is a five-leg Bitcoin book on the "
+            "on a one percent move, vega per volatility point, theta per day. Here is a five-contract Bitcoin book on the "
             "Surface day: long an at-the-money straddle, short two puts ten percent below, long a call ten percent "
             "above. <bookmark mark='b'/> Run it. The book is long "
             f"{c['delta']:,.0f} dollars of delta, makes {c['gamma_1pct']:.0f} dollars on a one percent move from "
@@ -203,21 +203,21 @@ class Greeks(VoiceoverScene, ThreeDScene):
         verdict = (rf"the six terms explain all but {share:.1f}\% of the day" if share < 5 else
                    rf"{share:.0f}\% is left unexplained: a day too big for a second-order Taylor series")
         side = VGroup(
-            label(rf"bitcoin {100 * e['move']:+.2f}\% overnight", font_size=22, color=SPOT),
+            label(rf"forward input {100 * e['move']:+.2f}\%", font_size=22, color=SPOT),
             label(rf"30-day ATM vol {100 * e['atm0']:.1f}\% $\to$ {100 * e['atm1']:.1f}\%", font_size=22, color=VEGA),
             wrapped_label(verdict, 4.0, 21, GREY_A),
-            wrapped_label(r"vanna: spot and vol fell together, and the book's delta rose as vol fell", 4.0, 20, ALT),
+            wrapped_label(r"vanna: the forward input and IV fell together; full repricing uses strike-specific fitted IVs", 4.0, 20, ALT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         src = real_data(r"the Surface: Deribit BTC, 10 and 11 December 2025, 08:00 UTC; SSVI smiles; one bitcoin per leg")
         branch = (f"the six terms explain all but {share:.1f} percent of it." if share < 5 else
                   f"{share:.0f} percent is left over: too big a day for a second-order series.")
         with self.voiceover(
             "Every morning a risk system does what this chart does: the profit and loss explain. Take the book to "
-            "the next day's Surface. Overnight Bitcoin moved "
+            "the next day's Surface. The forward input moved "
             f"{100 * e['move']:+.1f} percent, and thirty-day volatility fell from {100 * e['atm0']:.1f} to "
             f"{100 * e['atm1']:.1f} percent. <bookmark mark='a'/> Build the day term by term. Delta did most of it, "
             f"{e['delta']:,.0f} dollars. Gamma added {e['gamma']:,.0f}, theta took {-e['theta']:,.0f}, vega "
-            f"{e['vega']:,.0f}. <bookmark mark='b'/> Then the cross terms: vanna {e['vanna']:+,.0f}, because spot "
+            f"{e['vega']:,.0f}. <bookmark mark='b'/> Then the cross terms: vanna {e['vanna']:+,.0f}, because the forward input "
             "and volatility fell together; volga a few dollars. <bookmark mark='c'/> The full revaluation lost "
             f"{-e['actual']:,.0f}, and {branch} When the explain fails, a desk has a risk it is not measuring."
             " Gamma is the term worth watching. Next: trading it on a real path."

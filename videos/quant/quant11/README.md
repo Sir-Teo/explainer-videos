@@ -46,7 +46,7 @@ statements; no final finding had been made at the time of writing.*
   ledgers filling: mean −1.22 per 100, positive in 26% of weeks, NW t = −3.6. Coval–Shumway (2001: about −3% a week)
   and Bakshi–Kapadia (2003). Unhedged on BTC: −4% of premium on average (t −0.2), median −29%. Derivation: P-mean
   versus the Q-martingale; the premium as the gap.
-* **7. A forecaster's edge, and how much to bet.** DVOL vs HAR vs realized, traced; the cached retrospective diagnostic (1.75 vs 0.57,
+* **7. Forecast diagnostics, and how much to bet.** DVOL vs HAR vs realized, traced; the cached retrospective diagnostic (1.75 vs 0.57,
   ordinary t ≈ 2.4; entry-day variance includes later hours). Goyal–Saretto (2009). Kelly on Part 10's 1,706 monthly P&Ls: mean/variance heuristic = 46, the sample ruin wall 1/|x_min| = 30,
   the empirical optimum against the wall at 29.8; half of it keeps most of the growth.
 * **8. Making a market: the spread.** The die game; Glosten–Milgrom running (beliefs, bid and ask converging);
@@ -99,7 +99,7 @@ statements; no final finding had been made at the time of writing.*
   Gârleanu, Pedersen and Poteshman 2009): own impact γVar ε_i, cross-impact γCov(ε_i, ε_j), none when Σ_ε = 0.
   Simulation: a Merton jump-diffusion (σ 45%, 4 jumps a year of mean −8%, spread 10%), 30-day OTM options at strikes
   80–120, hedged daily at the total volatility 52%, 40,000 paths: residual sd 1.1–2.0 per 100 (no jumps 0.4–0.9,
-  hourly 0.08–0.19). With γ set so that one unit of 85-put demand moves its own volatility one point, it moves the
+  hourly 0.08–0.19). With γ set so that one unit of 85-put demand targets one point locally (about 0.99 on repricing), it moves the
   80 put 1.1 points and the 120 call 0.19 (no jumps, daily: 0.13; hourly: 0.006); demand for every put adds 4.0 points
   at 80 and 1.0 at 120, demand for calls tilts the smile the other way (1.4 at 80, 2.4 at 120). Exact exponential-
   utility indifference against the first-order line, the short put's residual skewness 4.6: the marginal premium is

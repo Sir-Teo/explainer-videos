@@ -203,7 +203,7 @@ class Dispersion(VoiceoverScene, ThreeDScene):
     def trade(self, ds):
         x = ds["rho_impl"] - np.asarray(ds["rho_real"])
         y = np.clip(np.asarray(ds["pnl"]), -12, 12)
-        g = axes([-0.5, 0.5], [-12, 12], x_length=6.2, y_length=4.2, xlabel=r"implied minus realized correlation",
+        g = axes([-0.55, 0.55], [-12, 12], x_length=6.2, y_length=4.2, xlabel=r"implied minus realized correlation",
                  ylabel=r"dispersion P\&L, per 100", xticks=[-0.4, 0, 0.4], yticks=[-10, 0, 10], font_size=16)
         g.to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
         dots = VGroup(*[Dot(g.ax.c2p(a, b), radius=0.035, color=QC.GAIN if b > 0 else QC.LOSS, fill_opacity=0.7)

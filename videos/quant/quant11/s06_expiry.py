@@ -131,27 +131,30 @@ class Expiry(VoiceoverScene, ThreeDScene):
     # ------------------------------------------------------------------
     def pinning(self, p):
         t = np.asarray(p["t"])
+        endpoints = np.concatenate([np.asarray(p[n]["terminal"], float) for n in ("long", "short", "none")])
+        ylo = float(5 * np.floor(endpoints.min() / 5))
+        yhi = float(5 * np.ceil(endpoints.max() / 5))
         panels = VGroup()
         objs = []
         for name, title, col in (("long", r"hedgers net long gamma at 100", GAMMA),
                                  ("short", r"hedgers net short gamma at 100", THETA)):
-            g = axes([0, 48], [94, 106], x_length=4.6, y_length=3.4, xlabel=r"hours", ylabel=title,
-                     xticks=[0, 24, 48], yticks=[95, 100, 105], font_size=15)
+            g = axes([0, 48], [ylo, yhi], x_length=4.6, y_length=3.4, xlabel=r"hours", ylabel=title,
+                     xticks=[0, 24, 48], yticks=np.arange(ylo, yhi + 0.1, 5), font_size=15)
             panels.add(g)
             objs.append((g, name, col))
         panels.arrange(RIGHT, buff=1.8).to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
         fans, hists = VGroup(), VGroup()
         for g, name, col in objs:
-            P = np.clip(np.asarray(p[name]["paths"]), 94, 106)
+            P = np.asarray(p[name]["paths"])
             fans.add(path_fan(g.ax, t, P, color=col, opacity=0.35, max_paths=60))
-            hists.add(side_density(g.ax, np.asarray(p[name]["terminal"]), (94, 106), bins=48, width=1.1, color=col))
+            hists.add(side_density(g.ax, np.asarray(p[name]["terminal"]), (ylo, yhi), bins=48, width=1.1, color=col))
         side = VGroup(
             label(rf"ending within 0.5 of the strike:", font_size=20, color=GREY_A),
             label(rf"no hedgers {100 * p['none']['near']:.0f}\%", font_size=20, color=GREY_B),
             label(rf"net long {100 * p['long']['near']:.0f}\%", font_size=20, color=GAMMA),
             label(rf"net short {100 * p['short']['near']:.1f}\%", font_size=20, color=THETA),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_corner(UR, buff=0.4)
-        src = illustration(r"simulated: 2{,}000 paths over the last two days, 50\% vol; the House's \texttt{pin\_simulation}")
+        src = illustration(r"2{,}000 simulated paths per case, 50\% vol; fans show 60. Full terminal range, common bins; histogram widths scaled to each panel's peak")
         with self.voiceover(
             "Simulate it. Two thousand paths over an option's last two days, with hedgers net long gamma at a strike "
             "of a hundred, and their trades moving the price. <bookmark mark='a'/> The paths fan out, then are drawn "

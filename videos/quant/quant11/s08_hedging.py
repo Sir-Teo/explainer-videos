@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.quant import *  # noqa: F403
 from explainer.quant.house import quoting as Q
-from videos.quant.quant11.common import ALT, GAMMA, OPT, PART, SPOT, THETA, VEGA, illustration, load, pause
+from videos.quant.quant11.common import ALT, GAMMA, OPT, PART, SPOT, THETA, VEGA, FullRangeReplay, illustration, load, pause
 
 
 class Hedging(VoiceoverScene):
@@ -255,7 +255,7 @@ class Hedging(VoiceoverScene):
             a = axes([-0.3, 0.3], [0, 1], x_length=4.0, y_length=2.6, xlabel=r"hedge minus delta",
                      ylabel=r"share of the gap closed", xticks=[-0.3, 0, 0.3], yticks=[0, 1], font_size=14)
             return VGroup(a, curve(a.ax, gaps, np.asarray(runs["1-0"]["snaps"][c]), GAMMA, stroke_width=3))
-        rp = TrainingReplay(steps, L, frame, hr["checkpoints"], ylabel=r"variance $+\ \kappa\cdot$cost ($\kappa = 1$)",
+        rp = FullRangeReplay(steps, L, frame, hr["checkpoints"], ylabel=r"variance $+\ \kappa\cdot$cost ($\kappa = 1$)",
                             xlabel=r"training step", color=GAMMA, left=LEFT * 3.6 + DOWN * 0.2,
                             right=RIGHT * 3.0 + DOWN * 0.2, x_length=5.2, y_length=3.2)
         with self.voiceover(
@@ -309,11 +309,7 @@ class Hedging(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
         src = illustration(r"GBM at 60\%; 120 rebalancing points; all finite recorded points shown; only $\kappa=1$ has three replay seeds")
         with self.voiceover(
-            "The scoreboard: risk against cost on the same paths, lower left is better. Rehedging every six hours "
-            "is safest and dearest; the Whalley-Wilmott bands trace the better curve. <bookmark mark='a'/> The deep hedger, at three cost weights, "
-            "with three seeds only at kappa equal to one, lands close to that curve, without being told what a band is. The classical answer was "
-            "already very good; the learner's value is that it scales to books with no formula, Part seventeen."
-            " Every option eventually expires. Next: what happens on that day."
+            """The scoreboard compares risk against cost in the same geometric-Brownian setup; lower left is better. The fixed rules use twenty thousand paths, while the learner is evaluated on five thousand held-out paths. Rehedging every six hours is safest and dearest here; the Whalley-Wilmott bands trace a better curve. <bookmark mark='a'/> The deep hedger uses three cost weights, with three replay seeds only at kappa equal to one. It lands close to the classical curve without being told the band. That is a useful benchmark before extending learning to books without a formula, in Part seventeen. Every option eventually expires. Next: what happens on that day."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg[:3]), FadeIn(side[0]), FadeIn(src), FadeIn(dots), Create(lines[1]),
                       Create(lines[2]), run_time=2)

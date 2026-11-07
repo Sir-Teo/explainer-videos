@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.quant import *  # noqa: F403
 from explainer.quant.house import quoting as Q
-from videos.quant.quant11.common import (ALT, GAMMA, OPT, PART, SPOT, THETA, VEGA, illustration, load, pause)
+from videos.quant.quant11.common import (ALT, GAMMA, OPT, PART, SPOT, THETA, VEGA, FullRangeReplay, illustration, load, pause)
 
 SHOW = [0, 10_000, 40_000, 160_000, 800_000]
 
@@ -168,7 +168,7 @@ class Inventory(VoiceoverScene):
             ql = VGroup(label(r"long 10", font_size=15, color=GREY_B).next_to(a[0][-1], LEFT, buff=0.1),
                         label(r"short 10", font_size=15, color=GREY_B).next_to(a[0][0], LEFT, buff=0.1))
             return VGroup(a, b, ql)
-        rp = TrainingReplay(ck, vals, frame, SHOW, ylabel=r"greedy policy's value, \% of the optimum",
+        rp = FullRangeReplay(ck, vals, frame, SHOW, ylabel=r"greedy policy's value, \% of the optimum",
                             xlabel=r"simulated clients", color=GAMMA, left=LEFT * 4.2 + DOWN * 0.3,
                             right=RIGHT * 2.2 + DOWN * 0.2, x_length=6.0, y_length=3.6)
         ax = rp.ax

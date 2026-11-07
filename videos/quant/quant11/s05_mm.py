@@ -64,7 +64,9 @@ class MarketMaker(VoiceoverScene):
             bid = pi * (1 - mu) / 2 / ps
             path.append((pi, bid, ask))
             pi = ask if tr_ > 0 else bid
-        path.append((pi, path[-1][1], path[-1][2]))
+        pb = pi * (mu + (1 - mu) / 2) + (1 - pi) * (1 - mu) / 2
+        ps = pi * (1 - mu) / 2 + (1 - pi) * (mu + (1 - mu) / 2)
+        path.append((pi, pi * (1 - mu) / 2 / ps, pi * (mu + (1 - mu) / 2) / pb))
         gp = axes([0, n], [0, 1], x_length=7.0, y_length=3.8, xlabel=r"trades", ylabel=r"value: low 0, high 1",
                   xticks=[0, 8, 16, 24], yticks=[0, 0.5, 1], font_size=16).to_edge(LEFT, buff=0.6).shift(DOWN * 0.4)
         ax = gp.ax
@@ -91,14 +93,7 @@ class MarketMaker(VoiceoverScene):
                       r"\text{a sell}]$")], font_size=18).next_to(gp, UP, buff=0.05).align_to(gp, LEFT)
         src = illustration(rf"illustration: {int(100 * mu)}\% of traders informed, the value is high")
         with self.voiceover(
-            "Glosten and Milgrom's model, running. An asset is worth either nothing or one; only some traders know "
-            "which. Here it is truly worth one, and thirty percent of the traders know it, so they always buy; the "
-            "rest buy or sell at random. The market maker cannot tell them apart. <bookmark mark='a'/> So it quotes "
-            "an ask equal to the value expected given that someone buys, and a bid equal to the value expected given "
-            "a sell. Every trade is evidence: a buy pushes its belief up, a sell pushes it down. "
-            "<bookmark mark='b'/> Trade by trade the belief climbs toward the truth, the quotes rise with it, and the "
-            "spread narrows: once the market maker knows the value, there is nothing left to fear, and no spread. "
-            "The spread is the price of not knowing who is on the other side."
+            """Glosten and Milgrom's model. The asset is worth zero or one; the true value here is one. Thirty percent of clients are informed and always buy; the rest trade randomly. <bookmark mark='a'/> The ask is expected value conditional on a buy, the bid conditional on a sell. A buy raises the belief and a sell lowers it. <bookmark mark='b'/> This particular twenty-four-trade sequence has twelve buys and twelve sells, so its final posterior returns to one half: a short sample can remain uncertain. The displayed final quotes are recomputed from that posterior. With more informative observations, the correctly specified model learns the value and its spread tends toward zero. Information is learned through noisy flow, not revealed by every trade."""
         ) as vo:
             self.play(FadeIn(gp), FadeIn(bl), FadeIn(src), FadeIn(leg))
             self.add(bel)
@@ -165,12 +160,7 @@ class MarketMaker(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.4).shift(UP * 0.4)
         src = real_data(r"Deribit BTC option trades, 00:00--12:00 UTC; the dots: 4 June 2025")
         with self.voiceover(
-            "Now real flow. Every Bitcoin option trade on Deribit during one Wednesday morning, falling into place on "
-            "a plane of strike against expiry: gold when the taker bought, blue when the taker sold, larger for larger "
-            "trades. <bookmark mark='a'/> Over "
-            f"{fl['days']} Wednesdays of 2024 and 2025 that is {fl['n']:,} trades. By vega, takers bought and sold "
-            "out-of-the-money calls in about equal measure, and the same for puts: the market maker's book is not "
-            "one-sided."
+            f"""Eligible Bitcoin option trades on one Wednesday morning, plotted by strike and expiry: gold for taker buys, blue for sells, with size represented by the dots. The original filters require maturity above one day, IV between five and three hundred percent, enough vega and a bounded initial mark edge. The chart selects absolute log-moneyness below point four and maturity below one year. <bookmark mark='a'/> Across {fl['days']} Wednesdays, the filtered sample has {fl['n']:,} trades. Taker direction describes transactions, not verified customer identity. Its vega shares are aggregate flow; the same investor need not be on both sides or remain a customer throughout."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(src))
             self.play(ShowIncreasingSubsets(dots), run_time=max(vo.until("a") - 0.3, 2.0), rate_func=linear)
@@ -207,25 +197,16 @@ class MarketMaker(VoiceoverScene):
         ], source="explainer/quant/house/quoting.py", width=6.6, font_size=17).to_edge(RIGHT, buff=0.35).to_edge(UP, buff=0.3)
         lab = fl["lab"]
         cov = fl["coverage"]
-        verdict = (rf"an hour later the maker keeps {100 * kept:.0f}\% of its edge: the rest went to traders who knew "
-                   r"something")
-        note_ = wrapped_label(rf"{verdict}; measured against Deribit's own mark price, on the {100 * cov[-1]:.0f}\% of "
-                              r"trades with a later print", 5.8, 18, GREY_A).next_to(g, DOWN, buff=0.25).align_to(g, LEFT)
-        pc = pause(r"Your quote is hit, and then the market moves against you. Was your spread too narrow, or too "
-                   r"wide?", width=4.6, font_size=19, corner=DR)  # the left half holds the chart and its note
+        note_ = wrapped_label(
+            rf"one-hour matched-cohort retention {100 * kept:.0f}\%; later prints available for {100 * cov[-1]:.0f}\% of trades. "
+            r"Mark-based diagnostic; each horizon may use a different cohort.",
+            5.8, 18, GREY_A).next_to(g, DOWN, buff=0.25).align_to(g, LEFT)
+        pc = pause(r"Do markouts alone identify informed traders?", width=4.6, font_size=19, corner=DR)  # the left half holds the chart and its note
         ksay = (f"An hour later it keeps about {100 * kept:.0f} percent of that: the rest went back to traders who knew "
                 "where the price was going." if kept < 0.9 else
                 f"An hour later it keeps {100 * kept:.0f} percent: adverse selection here is small.")
         with self.voiceover(
-            "And the spread's split. Here is the House's markout function: the edge at the trade, then each later "
-            "mark, with the delta hedge counted, in volatility points. <bookmark mark='a'/> Run on one day, then on "
-            f"all of them. Against Deribit's own mark, the maker's average edge at the trade is {c[0]:.2f} volatility "
-            f"points. <bookmark mark='b'/> Five minutes later, {c[1]:.2f}; half an hour, {c[2]:.2f}; an hour, "
-            f"{c[3]:.2f}. {ksay} The largest trades pay a wider edge, {cb[0]:.2f}, and more of it goes back: an hour "
-            f"later {cb[3]:.2f}. The market maker is right to charge them more. "
-            "<bookmark mark='c'/> So, pause and predict: your quote is hit, and the market moves against you. Too "
-            "narrow, or too wide? Narrow, if it happens every time: that is adverse selection, priced too cheaply."
-            " Every fill leaves inventory. Next: what to do with it."
+            f"""The House computes a mark edge and a later delta-hedged markout in volatility points. <bookmark mark='a'/> Across the filtered sample, the initial average is {c[0]:.2f}. Marks are valuation proxies; spreads, fees and funding are not executed here. <bookmark mark='b'/> At the first print after five minutes the mean is {c[1]:.2f}; after thirty, {c[2]:.2f}; after sixty, {c[3]:.2f}. Availability of later prints changes the sample across horizons. Using the same one-hour trades in numerator and initial-edge denominator, retention is {100 * kept:.0f} percent. The largest five percent of trade sizes start at {cb[0]:.2f} and end at {cb[3]:.2f}. <bookmark mark='c'/> Do these changes identify informed traders? No: information, ordinary price discovery, model error and selection all affect markouts. Next: inventory."""
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")

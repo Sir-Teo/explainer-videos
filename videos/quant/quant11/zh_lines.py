@@ -47,9 +47,9 @@ ZH = {
     'f"Now the algebra. A finite-step Taylor approximation in spot, time and implied ':
         "现在看代数。现价、时间与隐含波动率的有限步长泰勒近似给出Delta、Gamma、Theta、Vega，现价与波动率的混合导数Vanna，以及波动率的二阶导数Volga。<bookmark mark='a'/>画面闭式公式针对零利率、零收益率的普通欧式看涨期权；组合希腊值是各头寸之和。<bookmark mark='b'/>固定模型波动率时，Black–Scholes把Theta与Gamma联系起来。<bookmark mark='c'/>Delta对冲步长的首阶损益是二分之一Gamma乘现价平方，再乘平方收益减模型方差乘步长。波动率50%时，日度首阶盈亏平衡变动多大？<bookmark mark='d'/>按日历日约{be:.1f}%。高阶变动、隐含波动率变化、跳跃和成本都会改变比较。<bookmark mark='e'/>对每个普通期权，Vega等于波动率乘剩余时间乘现价平方乘Gamma。共同波动率与到期日下，多Gamma意味着多Vega；跨期限或波动率标记时，整个组合没有这一比例。",
     'f"In the House this is one function.':
-        "在我们的公司里，这就是一个函数。一本账是一串期权腿；它的希腊字母就是各条腿的和。<bookmark mark='a'/>交易台用现金来报这些数：delta以标的的美元计，伽马是价格变动百分之一时的利润，vega按每个波动率点，theta按每天。这是Surface那天的一本五条腿的比特币账本：买入一个平值跨式组合，卖出两份低百分之十的看跌，买入一份高百分之十的看涨。<bookmark mark='b'/>运行它。这本账持有{c['delta']:,.0f}美元的delta多头，价格变动百分之一时伽马带来{c['gamma_1pct']:.0f}美元，每个波动率点{c['vega_pt']:.0f}美元，每天付出{-c['theta_day']:.0f}美元的时间损耗。",
+        "在我们的公司里，这就是一个函数。一本账是一串期权腿；它的希腊字母就是各条腿的和。<bookmark mark='a'/>交易台用现金来报这些数：delta以标的的美元计，伽马是价格变动百分之一时的利润，vega按每个波动率点，theta按每天。这是Surface那天的一本五份合约的比特币账本：买入一个平值跨式组合，卖出两份低百分之十的看跌，买入一份高百分之十的看涨。<bookmark mark='b'/>运行它。这本账持有{c['delta']:,.0f}美元的delta多头，价格变动百分之一时伽马带来{c['gamma_1pct']:.0f}美元，每个波动率点{c['vega_pt']:.0f}美元，每天付出{-c['theta_day']:.0f}美元的时间损耗。",
     'f"Every morning a risk system does what this chart does':
-        "每天早上，风险系统都做这张图做的事：损益归因。把这本账带到第二天的Surface上。隔夜比特币变动了{100 * e['move']:+.1f}%，三十天波动率从{100 * e['atm0']:.1f}%降到{100 * e['atm1']:.1f}%。<bookmark mark='a'/>逐项拼出这一天。delta贡献了大部分，{e['delta']:,.0f}美元。伽马加了{e['gamma']:,.0f}，theta拿走{-e['theta']:,.0f}，vega是{e['vega']:,.0f}。<bookmark mark='b'/>然后是交叉项：vanna{e['vanna']:+,.0f}，因为现货和波动率一起下跌；volga只有几美元。<bookmark mark='c'/>完整重新估值亏了{-e['actual']:,.0f}，而{branch}归因失败时，交易台就有一项它没在衡量的风险。伽马是最值得关注的一项。下一章：在真实路径上交易它。",
+        "每天早上，风险系统都做这张图做的事：损益归因。把这本账带到第二天的Surface上。远期输入变动了{100 * e['move']:+.1f}%，三十天波动率从{100 * e['atm0']:.1f}%降到{100 * e['atm1']:.1f}%。<bookmark mark='a'/>逐项拼出这一天。delta贡献了大部分，{e['delta']:,.0f}美元。伽马加了{e['gamma']:,.0f}，theta拿走{-e['theta']:,.0f}，vega是{e['vega']:,.0f}。<bookmark mark='b'/>然后是交叉项：vanna{e['vanna']:+,.0f}，因为远期输入和波动率一起下降；volga只有几美元。<bookmark mark='c'/>完整重新估值亏了{-e['actual']:,.0f}，而{branch}归因失败时，交易台就有一项它没在衡量的风险。伽马是最值得关注的一项。下一章：在真实路径上交易它。",
     "f'the six terms explain all but":
         '这六项解释了除{share:.1f}%以外的全部。',
     "f'{share:.0f} percent is left over":
@@ -95,11 +95,11 @@ ZH = {
     "f'For Bitcoin from 2021 to 2025 the ratio":
         '对2021到2025年的比特币，这个比值是{vr:.3f}：频率改变了你得到的报酬。',
     'Chapter four. Vega, vanna and volga':
-        '第4章。vega、vanna与volga：风险逆转与蝶式价差。',
+        '第四章：波动率与二阶敏感度，风险逆转和蝶式。',
     "Chapter one's Taylor series had two cross terms.":
         "第1章的泰勒级数有两个交叉项。为了看清它们，把vega本身画成一张曲面，横轴是执行价和隐含波动率，对象是一份三十天期权。<bookmark mark='a'/>三面旗子：二十五delta的看跌、平值期权、二十五delta的看涨，交易台就用这三份期权报出一条微笑。<bookmark mark='b'/>在平值处沿波动率轴走，黄色那条：vega几乎不变。它对波动率的斜率，也就是volga，接近零。<bookmark mark='c'/>在两翼，绿色那条，vega随波动率上升而爬升：volga为正，翼部期权在波动率上升时持有更多波动率。<bookmark mark='d'/>跨过各个执行价，曲面在看跌一侧朝一个方向倾斜，在看涨一侧朝另一个方向：这个倾斜就是vanna，即波动率变动时delta怎么变。",
-    'The algebra is two lines.':
-        "代数只有两行。d一对波动率求导：负的d二除以sigma。<bookmark mark='a'/>链式法则给出vanna，等于负的正态密度乘d二除以sigma；以及volga，等于vega乘d一乘d二除以sigma。<bookmark mark='b'/>在平值处，d一和d二分居零的两侧，乘积很小，所以volga几乎为零，就是那条平的黄线。在二十五delta处，两者都在同一侧，离开约三分之二个标准差，volga为正。<bookmark mark='c'/>这就是为什么交易台除了平值波动率，还用两个数报出微笑。风险逆转，即看涨翼的波动率减看跌翼的，是一翼多头、另一翼空头：它是市场给vanna的价格。蝶式价差，即两翼平均减去中间，是volga的价格。<bookmark mark='d'/>停下来预测一下：vega相同时，跨式和宽跨式哪个volga更多？宽跨式：它是由翼部组成的。这个看跌翼符号描述要求总波动率低于0.674。风险逆转与蝶式是报价坐标和风险敞口代理，并非某个单独希腊值的独立价格。",
+    'Differentiate d one with respect to volatility: minus d two over sigma. <bookmar':
+        "对波动率求导，d1的导数是负d2除以波动率。<bookmark mark='a'/>零利率、零收益率的普通期权模型中，链式法则给出Vanna为负正态密度乘d2除以波动率，Volga为Vega乘d1d2除以波动率。<bookmark mark='b'/>远期平值处d1d2等于负四分之一总方差，本例Volga很小且为负，并非恰好为零。不作权利金调整的25 Delta报价中，看涨的d1为负0.674，看跌为正0.674；总波动率低于0.674时看跌翼Volga为正，看涨翼则为正。<bookmark mark='c'/>风险逆转与蝶式是微笑报价坐标，关联混合希腊值敞口，可作代理但不是单一希腊值的独立价格。<bookmark mark='d'/>在本例短期限、相同Vega条件下，25 Delta宽跨式的Volga高于平值跨式。",
     'f"Can three quotes rebuild a whole smile?':
         "三个报价能重建一整条微笑吗？这就是vanna-volga方法，外汇交易台的主力工具，由安东尼奥·卡斯塔尼亚和法比奥·梅尔库里奥在2007年写下。先用平坦的平值波动率给每个执行价定价，再加一个对冲：三份支柱期权的数量，使它们合起来具有这个执行价自己的vega、vanna和volga。<bookmark mark='a'/>每个执行价有三个权重，由一个三乘三的方程组解出；这就是它们，扫过各个执行价，它们携带的价格修正变成了洋红色的微笑。<bookmark mark='b'/>在Surface那天，风险逆转是{100 * so['rr']:+.1f}个点，蝶式价差是{100 * so['bf']:+.1f}。{vsay}三个数就承载了一条微笑的大部分；两翼还需要更多。",
     "f'Between the ten-delta strikes":
@@ -116,8 +116,8 @@ ZH = {
         '第5章。策略：每种结构押注什么，又赚了多少。',
     'Every standard structure is a shape.':
         "每种标准结构都是一个形状。这是一个月期期权持有一周后的利润，横向是现货的变动，从左到右，纵深是隐含波动率的变动，从前到后；绿色为盈，红色为亏。跨式组合是一道两端翘起、并随波动率向上倾斜的山谷：伽马多头，vega多头。<bookmark mark='a'/>让时间过去，三周：整道山谷沉下去。这就是时间损耗。<bookmark mark='b'/>现在变形。宽跨式：同样的押注，更宽的山谷，更便宜。<bookmark mark='c'/>风险逆转，买入上方的看涨、卖出下方的看跌：一个倾斜的平面，押注方向，几乎没有vega。<bookmark mark='d'/>蝶式价差：一座小山，倒过来的跨式，什么都不发生时它赢。<bookmark mark='e'/>看涨价差：押涨，但有上限。<bookmark mark='f'/>最后是日历价差，买第二个月、卖第一个月：大幅变动时亏，波动率上升时赚，同时是伽马空头和vega多头。",
-    'The table a trader carries in their head.':
-        "交易员脑子里的那张表。每种结构：伽马的符号、vega、delta，以及它押注什么。<bookmark mark='a'/>结构的希腊字母是各条腿的和。跨式组合的伽马是平值期权的两倍。日历价差同时是vega多头和伽马空头，因为vega像时间的平方根那样增长，伽马像时间平方根的倒数那样缩小。<bookmark mark='b'/>停下来预测一下：每周在真实的比特币微笑上买入，这些结构里哪个亏钱最频繁？",
+    'A local guide near the initial at-the-money toy point, with common IV; zeros mea':
+        "这是初始平值示例、共同隐含波动率下的局部指南，零表示近似较小敞口。交易员脑子里的那张表。每种结构：伽马的符号、vega、delta，以及它押注什么。<bookmark mark='a'/>结构的希腊字母是各条腿的和。跨式组合的伽马是平值期权的两倍。日历价差同时是vega多头和伽马空头，因为vega像时间的平方根那样增长，伽马像时间平方根的倒数那样缩小。<bookmark mark='b'/>停下来预测一下：每周在真实的比特币微笑上买入，这些结构里哪个亏钱最频繁？",
     'f"Here is the record.':
         "这是记录。2024年和2025年的每个星期三，在当天真实的Deribit微笑上买入每种结构，二十八天后按比特币价格结算。<bookmark mark='a'/>每种{nW}笔交易，逐周填满。<bookmark mark='b'/>问题的答案：{st['worst']}，它在{100 * (1 - worst['win']):.0f}%的星期里亏钱。看白色的中位数：{med_say}黄色的均值更高，被少见的大赢拉高，也就是尾部。<bookmark mark='c'/>{rr_say}<bookmark mark='d'/>{tsay}一个资产、两年、一段上涨行情，能显示这些形状做了什么；不能证明其中任何一个有优势。这些形状背后有一个持久的数字。下一章：波动率溢价。",
     'below zero for every structure':
@@ -148,8 +148,8 @@ ZH = {
         '即使对冲后也很难看出',
     'Interpret the identity under its assumptions: continuous diffusion paths, contin':
         "须在假设下解释恒等式：连续扩散路径、连续无成本对冲、零利率与收益率、固定模型隐含波动率。<bookmark mark='a'/>对凸期权，若隐含方差超过以Gamma乘现价平方归一化加权的预期实际方差，买方的期望损益为负。<bookmark mark='b'/>若初始权利金是正确的Q测度价格，对冲策略可容许且可积，那么零成本对冲终值收益的Q期望为零。<bookmark mark='c'/>其P期望是对冲期权风险溢价。负的经验估计符合波动率风险被定价的解释，但不证明唯一机制；实际数据中的跳跃、交易成本和有限步长误差都重要。<bookmark mark='d'/>卖方为什么仍会失败？第十六章看崩盘风险。先看预测比较能确立什么。",
-    "Chapter seven. A forecaster's edge, tested, and how much to bet.":
-        '第7章。预测者的优势：检验它，以及下多大的注。',
+    'Chapter seven. Forecast diagnostics, and how much to bet.':
+        '第七章：预测诊断与仓位大小。',
     "Chapter six measured a historical premium. Part ten's hypothetical dollar calls ":
         "第六章测量了历史溢价。第十部分的假设美元看涨期权用DVOL代理定价，并按小时用现货对冲，并非可执行的Deribit交易。<bookmark mark='a'/>卖方可以尝试比较隐含波动率与预测。这里HAR系数每周仅用此前日期重新拟合，但缓存输入包含入场当日完整方差，包括早八点入场之后的小时；次日预测又被用作月度代理。因此这是回顾性诊断，不是入场时可得的信号。<bookmark mark='b'/>绿线是随后一个月的实际波动率，按窗口起点对齐。尖峰仍很重要，但这个比较不能确立可交易的预测优势。",
     'f"Split disjoint thirty-day windows by the cached diagnostic. When DVOL exceeded':
@@ -166,14 +166,14 @@ ZH = {
         '第8章。做市：价差，以及你在和谁交易。',
     'The classic market-making interview game.':
         "经典的做市面试游戏。请为一次掷骰子做市。期望点数是三点五，所以你围绕它报价：三点三买，三点七卖。价差是你的收入，也是你的保护。<bookmark mark='a'/>然后面试官说：点数是偶数。你的公允价值跳到四，报价也随之移动。这个教训统治着每一个期权交易台：和你交易的人可能知道些什么，所以每笔交易之后，公允价值往往朝不利于你的方向移动。劳伦斯·格洛斯滕和保罗·米尔格罗姆在1985年称之为逆向选择。",
-    "Glosten and Milgrom's model, running.":
-        "格洛斯滕和米尔格罗姆的模型，跑起来。一项资产要么一文不值，要么值一；只有部分交易者知道是哪一种。这里它实际值一，百分之三十的交易者知道，所以他们总是买；其余的人随机买或卖。做市商分不清他们。<bookmark mark='a'/>于是它把卖价报成有人买入时的期望价值，把买价报成有人卖出时的期望价值。每笔交易都是证据：一次买入把它的信念往上推，一次卖出往下推。<bookmark mark='b'/>一笔接一笔，信念朝真相爬升，报价随之上移，价差收窄：一旦做市商知道了价值，就没什么可怕的了，也就没有价差。价差是不知道对面是谁的代价。",
+    "Glosten and Milgrom's model. The asset is worth zero or one; the true value here":
+        "Glosten–Milgrom模型中，资产值为0或1，本例真实值为1。30%的客户知情并总是买入，其余随机交易。<bookmark mark='a'/>卖价是买入条件下的期望值，买价是卖出条件下的期望值；买入提高信念，卖出降低信念。<bookmark mark='b'/>这段24笔序列恰有12买、12卖，最终后验回到一半，短样本可以仍然不确定。最终报价用这一后验重新计算。信息观察更多时，设定正确的模型学到真实价值，价差趋近零；信息经带噪订单流逐渐学习，并非每笔交易都直接揭示真相。",
     'The algebra of it.':
         "它的代数。由贝叶斯公式，卖价是给定一次买入的期望价值：价值高时，所有知情交易者都买，其他人里有一半买。<bookmark mark='a'/>在机会均等时：价差等于知情者比例乘以不确定性。<bookmark mark='b'/>要在真实交易上测量它，就把它拆开。做市商的优势是交易那一刻相对公允价值收取的部分。盯市回报是一段时间后剩下的部分，期权重新估值、delta对冲也计入。<bookmark mark='c'/>两者之差就是逆向选择。这里s表示主动成交方向，Delta是期权多头Delta，s乘整个对冲收益，期权价先转换为美元，再除以每波动率点Vega，标记价只是估值代理。初始优势减后续标记收益还包含价格发现和标记模型误差，不是被单独识别的纯逆向选择成分。后续标记取所请求时距之后的第一笔成交，不一定恰好在该时刻；未计费用与执行。",
-    'f"Now real flow.':
-        "现在看真实的订单流。Deribit上某个星期三上午的每一笔比特币期权交易，落在执行价对到期日的平面上：吃单方买入是金色，卖出是蓝色，交易越大点越大。<bookmark mark='a'/>在2024和2025年的{fl['days']}个星期三里，共有{fl['n']:,}笔交易。按vega算，吃单方买入和卖出虚值看涨的数量大致相当，看跌也一样：做市商的账本并不是一边倒的。",
-    'f"And the spread\'s split.':
-        "再看价差的拆分。这是我们公司的盯市回报函数：交易时的优势，然后是之后每次重新估值，计入delta对冲，以波动率点计。<bookmark mark='a'/>先在一天上运行，再在所有天上。相对Deribit自己的标记价格，做市商交易时的平均优势是{c[0]:.2f}个波动率点。<bookmark mark='b'/>五分钟后{c[1]:.2f}；半小时后{c[2]:.2f}；一小时后{c[3]:.2f}。{ksay}最大的那些交易付出更宽的优势，{cb[0]:.2f}，而且回吐得更多：一小时后只剩{cb[3]:.2f}。做市商向它们多收是对的。<bookmark mark='c'/>所以，停下来预测一下：你的报价被成交，然后市场朝不利于你的方向走。价差是太窄还是太宽？如果每次都这样，就是太窄：那是定价过低的逆向选择。每次成交都留下库存。下一章：怎么处理它。",
+    'f"Eligible Bitcoin option trades on one Wednesday morning, plotted by strike and':
+        "把一个周三上午的合格比特币期权成交按行权价与期限画出：金色为主动买入、蓝色为主动卖出，点大小代表数量。原始过滤要求距到期超过一天、隐含波动率在5%至300%、Vega足够大、初始标记优势在界内；图中再选绝对对数价差小于0.4、期限不到一年。<bookmark mark='a'/>全部{fl['days']}个周三的过滤样本有{fl['n']:,}笔成交。主动方向描述交易，不验证客户身份；Vega占比是汇总流量，不意味着同一投资者处于两边或始终是客户。",
+    'f"The House computes a mark edge and a later delta-hedged markout in volatility ':
+        "House按波动率点计算初始标记优势，以及后续Delta对冲标记收益。<bookmark mark='a'/>过滤样本的初始均值为{c[0]:.2f}；标记价是估值代理，这里没有执行价差、费用或融资。<bookmark mark='b'/>五分钟后的首笔成交处均值为{c[1]:.2f}，三十分钟后{c[2]:.2f}，六十分钟后{c[3]:.2f}。不同时间窗能找到后续成交的样本不同；分子与初始优势分母采用相同的一小时样本时，保留比例为{100 * kept:.0f}%。规模最大的5%成交由{cb[0]:.2f}变为{cb[3]:.2f}。<bookmark mark='c'/>这些变化识别了知情交易者吗？不能：信息、普通价格发现、模型误差与样本选择都会影响结果。下一章看库存。",
     "f'An hour later it keeps about":
         '一小时后，它保留了其中约{100 * kept:.0f}%：其余的回到了知道价格去向的交易者手里。',
     "f'An hour later it keeps {100":
@@ -214,8 +214,8 @@ ZH = {
         "Whalley与Wilmott于1997年推导了小成本渐近不交易带。带内不动，带外交易回边缘。<bookmark mark='a'/>在此模型中，半宽是比例成本乘现价乘Gamma平方、除以风险厌恶参数后取立方根，并含画面中的常数与贴现因子。距到期15天，现价90时宽度{hw[90.0]:.3f}，行权价处{hw[100.0]:.3f}，现价110时{hw[110.0]:.3f}。<bookmark mark='b'/>本例接近行权价时最宽。这条渐近规则依赖目标与模型，并非普遍最优的交易带。",
     'Can a network learn the band':
         "一个网络能在没人告诉它的情况下学会这条带吗？汉斯·比勒及其合作者的深度对冲，训练一个小网络在每一步决定把对冲朝delta移动多远，通过模拟器训练，最小化利润方差加上成本乘以价格kappa。<bookmark mark='a'/>看它学习，三个种子画成一条带。左边是它在期权生命中段学到的策略：对冲与delta的差距被它补上的比例，对应差距的大小。它一开始是平的，然后学会放过小差距、补上大差距：一条柔性的带。",
-    'The scoreboard: risk against cost':
-        "记分板：同样路径上的风险对成本，越靠左下越好。每六小时再对冲最安全也最贵；惠利–威尔莫特带画出更好的曲线。<bookmark mark='a'/>深度对冲者，三种成本权重，第一种有三个种子，落在那条曲线附近，没人告诉它带是什么。经典答案已经非常好；学习器的价值在于它能扩展到没有公式的账本，那是第17部分。每份期权终会到期。下一章：到期那天会发生什么。",
+    'The scoreboard compares risk against cost in the same geometric-Brownian setup; ':
+        "记分板在相同的几何布朗运动设定下比较风险和成本，越靠左下越好。固定规则用两万条路径，学习器在五千条留出路径上评估。这里每六小时对冲最安全也最贵；Whalley–Wilmott带给出更好的曲线。<bookmark mark='a'/>深度对冲者使用三种成本权重，只有κ等于一时有三个重放种子。它没有被告知带的形状，却接近经典曲线。这是第17部分扩展到无解析公式账本前的有用基准。每份期权终会到期，下一章看到期当天。",
     'Chapter eleven. Expiry, and pin risk.':
         '第11章。到期与钉住风险。',
     'f"Options are most dangerous at the end.':
@@ -329,7 +329,7 @@ ZH = {
     'How large is the residual?':
         "残差有多大？模拟一个像比特币那样的跳跃扩散，每天对一个月期期权做Delta对冲。<bookmark mark='a'/>有跳跃时，残差是标的的百分之一到二，在平值处最大。<bookmark mark='b'/>去掉跳跃，它下降一半或更多。<bookmark mark='c'/>再改成每小时对冲，它几乎消失。市场越完全，需求移动价格的余地就越小。这是零漂移模型示例，不是拟合的比特币规律。所报跳跃均值与尺度是对数跳跃参数；跳跃情形用4万条路径，两个扩散比较各用8000条。",
     "f'Now apply demand.":
-        "现在加上需求。<bookmark mark='a'/>灰线是跳跃模型的风险中性微笑：已经因为跳跃而偏斜。<bookmark mark='b'/>对单独一份八十五看跌期权的需求，按构造把它自己的波动率抬高一个点，同时把八十看跌抬高{p85[0]:.1f}个点，甚至把一百二十看涨抬高{p85[-1]:.1f}个点。<bookmark mark='c'/>对每个看跌期权的需求让偏斜变陡：八十处{pu[0]:.1f}个点，一百二十处{pu[-1]:.1f}个点。<bookmark mark='d'/>对看涨期权的需求让它向另一边倾斜。微笑的形状承载着需求的形状。",
+        "现在加上需求。<bookmark mark='a'/>灰线是跳跃模型的风险中性微笑：已经因为跳跃而偏斜。<bookmark mark='b'/>对单独一份八十五看跌期权的需求，按局部Vega校准近似把它自己的波动率抬高一个点，同时把八十看跌抬高{p85[0]:.1f}个点，甚至把一百二十看涨抬高{p85[-1]:.1f}个点。<bookmark mark='c'/>对每个看跌期权的需求让偏斜变陡：八十处{pu[0]:.1f}个点，一百二十处{pu[-1]:.1f}个点。<bookmark mark='d'/>对看涨期权的需求让它向另一边倾斜。微笑的形状承载着需求的形状。",
     'f"Compare the first-order line with exponential tilting of these forty thousand ':
         "把首阶直线与这4万个中心化余项的指数倾斜比较，保持Delta对冲固定。这是有限经验样本的计算，不是优化对冲后的效用价格，也不证明总体指数矩存在。<bookmark mark='a'/>小头寸时两者接近。<bookmark mark='b'/>期权余项是卖方交易商的负债，其正偏度为{i['skew_eps']:.1f}；经验边际溢价在{q[j1]:.2f}单位时比直线高{100 * r1:.0f}%，4单位时高{100 * r4:.0f}%。非线性与样本尾部敏感性很重要，这些百分比属于这次有限模拟。",
     "f'What does demand look like?":

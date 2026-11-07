@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from explainer.quant import *  # noqa: F403
 from explainer.ai.lecture import pause_card as _boxed_pause_card
+from videos.quant.quant10.common import FullRangeReplay
 
 from .compute import load  # noqa: F401
 
