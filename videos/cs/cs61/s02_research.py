@@ -69,7 +69,7 @@ class Research(VoiceoverScene):
     def question(self):
         head = label(r"A question that could come out wrong", font_size=36).to_edge(UP, buff=0.3)
         vague = box(r"Does the environment affect speed?", GREY_B, size=24, h=0.9)
-        st = wrapped_label(r"Does growing an unused environment variable from 0 to 4{,}096 bytes move the Job's median "
+        st = wrapped_label(r"Does growing an unused environment variable from 0 to 4{,}096 bytes move our word-count program's median "
                            r"time on this machine by more than its run-to-run noise?", 11.8, font_size=22, color=WHITE)
         sr = RoundedRectangle(width=12.4, height=st.height + 0.4, corner_radius=0.1, stroke_color=HEAD,
                               stroke_width=1.8, fill_color=HEAD, fill_opacity=0.12)

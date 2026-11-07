@@ -7,6 +7,7 @@ Results are cached in ``.cache/cs61/<name>.json``; scenes call ``load(name)``.  
 
 Items:
     bias        measurement bias on this machine: environment size and link order against a C version of the Job
+    stack       does the stack start at the same address on every run? (a C probe, run 20 times)
     timing      the Job in Python, timed 30 times: bootstrap intervals, and how they narrow with runs
     means       arithmetic against geometric means of speedups
     goldbach    Goldbach's conjecture checked to two million, with its records
@@ -32,6 +33,10 @@ def _M():
 
 def compute_bias() -> dict:
     return _M().measurement_bias()
+
+
+def compute_stack() -> dict:
+    return _M().stack_randomization()
 
 
 def compute_timing() -> dict:

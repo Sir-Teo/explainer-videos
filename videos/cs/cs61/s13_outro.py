@@ -17,6 +17,7 @@ class Outro(VoiceoverScene):
     def construct(self):
         self.act11()
         self.map_()
+        self.problems()
         self.shelf()
         self.goodbye()
 
@@ -59,6 +60,32 @@ class Outro(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(smap), FadeIn(foot))
         self.wait(1.0)
+        self.clear_scene()
+
+    def problems(self):
+        ps = problem_set([
+            r"Thirty-three settings, \ five runs each, \ and no real effect: \ show why the spread of the 33 medians "
+            r"grows with the number of settings, \ and estimate the runs per setting that bring it under 2\%.",
+            r"Prove that the geometric mean of speedups does not depend on the reference machine, \ and build two "
+            r"programs on which the arithmetic mean of ratios favours each machine in turn.",
+            r"Derive the bootstrap percentile interval for a median, \ and show its width falls like $1/\sqrt{n}$; "
+            r"\ check it on chapter 3's thirty runs.",
+            r"Twenty independent comparisons are each tested at $\alpha = 0.05$. \ Derive the chance of at least one "
+            r"false positive, \ and the Bonferroni threshold that keeps it under 5\%.",
+            r"\textit{Build.} \ Rerun chapter 2's experiment with stack randomization turned off, \ more runs per "
+            r"setting, \ and a permutation test: \ does environment size move the time on this machine?",
+            r"$\bigstar$ \textit{Research.} \ Pick one star from chapter 9's map, \ find its smallest open special "
+            r"case, \ and settle it.",
+        ], font_size=22)
+        with self.voiceover(
+            "Six problems, the last of the series, with full solutions in the part's notes. Pause on any of them. "
+            "The fifth is a build problem: repeat this part's own experiment with the stack held still, and decide, "
+            "with a permutation test, whether the effect that noise hid is really there. The last, marked with a "
+            "star, is the research problem of chapter nine, and it is the series' last word: pick one open problem, "
+            "find its smallest open case, and settle it."
+        ):
+            self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
+        self.wait(6.0)
         self.clear_scene()
 
     def shelf(self):

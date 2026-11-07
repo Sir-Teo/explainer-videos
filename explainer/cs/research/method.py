@@ -93,6 +93,29 @@ def measurement_bias(env_sizes=range(0, 4097, 128), orders=(("kernel", "mix", "m
             min(r["median"] for r in link), "reps": reps}
 
 
+STACK_PROBE = r"""
+#include <stdio.h>
+int main(void) { int x = 0; printf("%lu\n", (unsigned long) &x); return x; }
+"""
+
+
+def stack_randomization(runs: int = 20) -> dict:
+    """Does the stack start at the same address on every run?  Compile a one-line C program that prints the address
+    of a local variable, run it ``runs`` times, and count the distinct addresses and their offsets within a 64-byte
+    cache line and a 4 KiB page (Linux randomises the stack with ASLR unless it is turned off)."""
+    with tempfile.TemporaryDirectory() as td:
+        d = Path(td)
+        (d / "probe.c").write_text(STACK_PROBE)
+        subprocess.run(["gcc", "-O0", "probe.c", "-o", "probe"], cwd=d, check=True)
+        addrs = [int(subprocess.run([str(d / "probe")], capture_output=True, text=True).stdout) for _ in range(runs)]
+    try:
+        aslr = int(Path("/proc/sys/kernel/randomize_va_space").read_text())
+    except OSError:
+        aslr = None
+    return {"runs": runs, "distinct": len(set(addrs)), "line_offsets": len({a % 64 for a in addrs}),
+            "page_offsets": len({a % 4096 for a in addrs}), "randomize_va_space": aslr}
+
+
 def bootstrap(xs, stat=np.median, B: int = 10_000, alpha: float = 0.05, seed: int = 0):
     rng = np.random.default_rng(seed)
     xs = np.asarray(xs)
