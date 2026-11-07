@@ -104,17 +104,17 @@ class LinearProbability(VoiceoverScene):
             cmath(r"y \mid x", r"\sim", r"\text{Bernoulli}(p(x))", font_size=34),
             cmath(r"\mathrm{Var}(y \mid x)", r"=", r"p(x)\,\big(1 - p(x)\big)", font_size=34),
             cmath(r"\text{residual}", r"\in", r"\{-\hat p(x),\ 1 - \hat p(x)\}", font_size=34),
-            cmath(r"\text{so}", r":", r"\text{heteroskedastic, \ never normal, \ unbounded fits}", font_size=32),
+            cmath(r"\text{so}", r":", r"\text{generally heteroskedastic; nonnormal; fits can leave }[0,1]", font_size=32),
         ]
         rows[1][2].set_color(OBS)
         rows[3][2].set_color(RES)
         whys = [why(r"a yes/no outcome"), why(r"the variance is tied to the mean"),
-                why(r"only two values at each $x$"), why(r"three of Part 12's assumptions fail at once")]
+                why(r"only two values at each $x$"), why(r"normal-theory inference and global probability predictions need care")]
         with self.voiceover(
             "There are deeper problems too. <bookmark mark='a'/> A yes-or-no outcome is a Bernoulli variable, with probability "
             "p of x. <bookmark mark='b'/> Its variance is p times one minus p: tied to the mean, so it changes with x, largest "
             "at a half and vanishing near zero and one. <bookmark mark='c'/> The residuals at each x take only two values. "
-            "<bookmark mark='d'/> So the errors are heteroskedastic, never normal, and the fit is unbounded. The sandwich "
+            "<bookmark mark='d'/> When p varies, Bernoulli variance generally varies too; it can coincide at symmetric probabilities. The errors are nonnormal and unconstrained linear predictions can leave zero to one. The sandwich "
             "standard errors of Part 12 can patch the first problem, and economists still use the linear probability model "
             "for its simple coefficients. But for prediction, and especially for extrapolation, we need a different curve."
         ) as vo:
@@ -158,7 +158,7 @@ class LinearProbability(VoiceoverScene):
     def economists(self):
         rows = [
             cmath(r"\hat p", r"=", r"\hat\beta_0 + \hat\beta_1 x", font_size=34),
-            cmath(r"\hat\beta_1", r"=", r"\text{change in probability per unit of } x", font_size=32),
+            cmath(r"\hat\beta_1", r"=", r"\text{change in the fitted linear probability per unit of } x", font_size=32),
             cmath(r"\mathrm{SE}", r":", r"\text{HC3 sandwich (Part 12)}", font_size=32),
             cmath(r"\text{fine for}", r":", r"\text{average effects in the middle; \ not for } \hat p(31)", font_size=32),
         ]
@@ -166,10 +166,10 @@ class LinearProbability(VoiceoverScene):
                 why(r"the heteroskedasticity is known, \ so fix it"), why(r"a summary, \ not a forecast")]
         with self.voiceover(
             "In fairness to the straight line: <bookmark mark='a'/> economists use the linear probability model all the time. "
-            "<bookmark mark='b'/> Its coefficient is a change in probability per unit of x, easy to read and the same "
+            "<bookmark mark='b'/> Its coefficient is a change in the fitted linear probability per unit of x, easy to read and the same "
             "everywhere. <bookmark mark='c'/> The heteroskedasticity is known, so it can be handled with Part 12's sandwich "
-            "standard errors. <bookmark mark='d'/> For the average effect of a variable over the middle of the data, the line "
-            "is often close to the logistic curve's slope there. It fails as a forecast, and fails badly at the edges, which "
+            "standard errors. <bookmark mark='d'/> As a descriptive linear projection over a restricted range, the line "
+            "is often close to the logistic curve's slope there. Its probability forecasts can fail badly at the edges, which "
             "is exactly where Challenger's question lay."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)

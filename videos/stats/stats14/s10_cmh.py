@@ -96,14 +96,13 @@ class ThreeWay(VoiceoverScene):
         ]
         rows[3][2].set_color(OBS)
         whys = [why(r"each stratum's expected count, \ given its margins"), why(r"its hypergeometric variance (Part 10)"),
-                why(r"pool the deviations, \ not the tables"), why(r"no evidence of an association within departments")]
+                why(r"pool the deviations, \ not the tables"), why(r"no evidence of a common directional association")]
         with self.voiceover(
             "And a test. <bookmark mark='a'/> In each department, condition on the margins, as in Fisher's exact test: the count "
             "of admitted men then has a known expected value <bookmark mark='b'/> and a hypergeometric variance. "
             "<bookmark mark='c'/> The Cochran–Mantel–Haenszel statistic adds up the deviations across departments before "
             "squaring, so that consistent small effects accumulate and opposite ones cancel. <bookmark mark='d'/> For Berkeley "
-            "it's one point five two, p equals point two two: no evidence of any association between sex and admission once "
-            "the department is taken into account. The p of ten to the minus twenty-one has evaporated."
+            "it's one point five two, p equals point two two: no clear common directional association after stratification. Opposite associations can cancel, so this does not establish independence in every department. The p of ten to the minus twenty-one has evaporated."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -123,14 +122,14 @@ class ThreeWay(VoiceoverScene):
         ]
         rows[2][2].set_color(OBS)
         whys = [why(r"department dummies: \ a separate baseline per department"), why(r"the sign has flipped"),
-                why(r"close to Mantel--Haenszel's 1.11"), why(r"Part 12's omitted-variable bias, \ on the log-odds scale")]
+                why(r"close to Mantel--Haenszel's 1.11"), why(r"adjustment changes the comparison; logistic ORs are noncollapsible")]
         with self.voiceover(
             "<bookmark mark='a'/> The same conclusion comes from logistic regression with a dummy for each department, so each "
             "department gets its own baseline log-odds. <bookmark mark='b'/> The coefficient for women is now plus point one "
             "oh. The sign has flipped. <bookmark mark='c'/> As an odds ratio, one point one oh, with an interval from about "
             "point nine four to one point three: close to Mantel and Haenszel's estimate. <bookmark mark='d'/> Without the "
             "department dummies it was minus point six one. Leaving out the department, a variable related both to sex, "
-            "through where people applied, and to admission, is Part 12's omitted-variable bias on the log-odds scale."
+            "through where people applied, and to admission, changes the comparison. Unlike linear regression, odds ratios are also noncollapsible: marginal and conditional ORs may differ without confounding, so Part 12's linear bias identity does not transfer."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.0, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -153,7 +152,7 @@ class ThreeWay(VoiceoverScene):
             "Institute, and their 1959 paper was about retrospective studies of disease, building on William Cochran's work "
             "of 1954. <bookmark mark='b'/> Their setting was patients with a disease and comparable people without it, "
             "stratified by age and other factors. <bookmark mark='c'/> In that setting the odds ratio isn't just convenient. It's "
-            "the only measure of association the data can estimate. That's the next chapter. <bookmark mark='d'/> Their paper "
+            "a disease odds ratio identifiable without knowing the case/control sampling fractions. That's the next chapter. <bookmark mark='d'/> Their paper "
             "became one of the most cited in epidemiology."
         ) as vo:
             vo.wait_until("a")
@@ -173,17 +172,20 @@ class ThreeWay(VoiceoverScene):
         ]
         rows[3][2].set_color(OBS)
         whys = [why(r"is pooling sensible?"), why(r"Breslow \& Day (1980): \ the odds ratios differ"),
-                why(r"the other five agree"), why(r"report A separately")]
+                why(r"no detected heterogeneity in the selected five"), why(r"report A separately")]
+        intro = label('Does a common odds ratio summarize the strata?', font_size=36)
         with self.voiceover(
             "A pooled odds ratio summarizes well only if the strata roughly agree. <bookmark mark='a'/> Test that: do all six "
             "departments share one odds ratio? <bookmark mark='b'/> Norman Breslow and Nicholas Day's test says no: chi-squared "
             "of eighteen point eight on five degrees of freedom, p of point zero zero two. <bookmark mark='c'/> Leave out "
-            "department A and the other five are entirely consistent with a common odds ratio. <bookmark mark='d'/> So the honest "
-            "summary has two parts: in five departments, no association between sex and admission; in department A, women "
+            "department A and the other five are entirely consistent with a common odds ratio. <bookmark mark='d'/> Removing A is exploratory, since the data suggested it. A descriptive summary has two parts: in the selected five, no clear common association between sex and admission; in department A, women "
             "were admitted at a notably higher rate than men. Neither part shows the bias the pooled table seemed to."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()

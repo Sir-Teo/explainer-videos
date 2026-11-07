@@ -41,7 +41,7 @@ class Outro(VoiceoverScene):
             "flights that had no damage hid the effect of cold. Least squares on zeros and ones gives impossible probabilities. "
             "Logistic regression makes the log-odds linear, so its coefficients are log odds ratios, and the logit and probit "
             "agree where the data are. Maximum likelihood is fitted by iteratively reweighted least squares, and deviances "
-            "compare models, with likelihood ratios more trustworthy than Wald tests. At thirty-one degrees the fit gives "
+            "compare models, with both likelihood-ratio and Wald calibrations requiring checking. At thirty-one degrees the fit gives "
             "point nine nine nine six, with a profile interval from point eight to one, but that number lives in the model's "
             "tail. Poisson regression models rates through an offset, and overdispersion makes its standard errors far too "
             "small. Tables have chi-squared tests, odds ratios and relative risks, and Berkeley's admissions reverse when "
@@ -111,7 +111,7 @@ class Outro(VoiceoverScene):
         nxt.next_to(tr, DOWN, buff=1.0)
         with self.voiceover(
             "Fourteen parts of sixty-five, the fourth of Stage II. <bookmark mark='a'/> We can regress yes-or-no outcomes and "
-            "counts, read tables without being fooled, and judge a forecast. <bookmark mark='b'/> All along, probability has "
+            "counts, interpret tables with their assumptions, and judge a forecast. <bookmark mark='b'/> All along, probability has "
             "described data: how often things happen. But the engineers at that teleconference were really arguing about a "
             "degree of belief in a single launch. Around the middle of the eighteenth century a Presbyterian minister, Thomas Bayes, imagined a ball rolled "
             "on a table, and showed how to put a probability on something you cannot see. Part 15: first Bayes."

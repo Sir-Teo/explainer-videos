@@ -123,7 +123,7 @@ class Logistic(VoiceoverScene):
             "at every temperature, though the change in probability isn't. <bookmark mark='c'/> Ten degrees colder, the odds "
             "of distress are multiplied by about ten. <bookmark mark='d'/> With only twenty-three flights the uncertainty is "
             "large: the profile-likelihood interval, which we'll build in chapter four, runs from about two to about a hundred "
-            "and seventy. But it excludes one: colder was worse."
+            "and seventy. Under the fitted model it excludes one: lower temperature is associated with more distress."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -149,17 +149,17 @@ class Logistic(VoiceoverScene):
 
         pic = always_redraw(dens)
         thr = DashedLine(ax.c2p(0, 0), ax.c2p(0, 0.3), color=S.ACCENT, stroke_width=3)
-        tl = label(r"failure threshold", font_size=20, color=S.ACCENT).next_to(thr, UP, buff=0.08)
+        tl = label(r"illustrative distress threshold", font_size=20, color=S.ACCENT).next_to(thr, UP, buff=0.08)
         readout = always_redraw(lambda: MathTex(rf"\eta = {eta.get_value():+.1f}:\ \ P(y^* > 0) = {1 / (1 + np.exp(-eta.get_value())):.2f}",
                                                 font_size=30, color=EVENT).move_to([4.6, 1.6, 0]))
         rows = fit_rows(VGroup(
             label(r"imagine a hidden strain on the seal: \ $y^* = \beta_0 + \beta_1 x + \varepsilon$", font_size=24),
-            label(r"the seal fails when $y^* > 0$", font_size=24, color=EVENT),
+            label(r"distress when $y^* > 0$: a hypothetical latent model", font_size=24, color=EVENT),
             label(r"logistic noise $\varepsilon$ \ $\Rightarrow$ \ $P(y = 1) = $ the logistic curve", font_size=24, color=OBS),
             label(r"normal noise \ $\Rightarrow$ \ $\Phi(\eta)$: \ the probit model (Bliss 1934)", font_size=24, color=S.ALT),
         ), 12.4, 0.26, [0, -2.2, 0])
         with self.voiceover(
-            "A second way to see the model. <bookmark mark='a'/> Imagine a hidden strain on the seal, y star, which is a "
+            "A second, hypothetical latent-variable representation; it is not a physical seal-failure mechanism. <bookmark mark='a'/> Imagine a hidden strain on the seal, y star, which is a "
             "straight line in temperature plus random noise. <bookmark mark='b'/> The seal shows distress when the strain "
             "crosses a threshold, zero. <bookmark mark='c'/> If the noise has the logistic distribution, the probability "
             "of crossing is exactly the logistic curve of eta. As the temperature drops, eta rises, the whole distribution "
@@ -199,7 +199,7 @@ class Logistic(VoiceoverScene):
             label(r"logit (gold) \ and probit (teal), \ both fitted", font_size=24),
             MathTex(rf"\hat\beta_{{\text{{logit}}}} / \hat\beta_{{\text{{probit}}}} = {d['ratio'][1]:.2f}", font_size=28),
             label(r"the logistic SD is $\pi/\sqrt3 = 1.81$; \ the curves are matched near the middle", font_size=22, color=GREY_A),
-            label(r"indistinguishable where the data are", font_size=24, color=OBS),
+            label(r"close over the observed temperatures", font_size=24, color=OBS),
             MathTex(rf"\text{{at }}31^\circ\text{{F:}}\ \ {load('challenger')['p31']:.4f}\ \text{{vs}}\ {d['probit_31']:.6f}", font_size=26),
             label(r"the tails come from the model, \ not the data", font_size=22, color=RES),
         ), 4.6, 0.32, [4.5, 0.2, 0])
@@ -207,7 +207,7 @@ class Logistic(VoiceoverScene):
             "<bookmark mark='a'/> Fit both models to the flights. <bookmark mark='b'/> The logit coefficients are about one "
             "point seven times the probit ones, <bookmark mark='c'/> because the logistic distribution is more spread out than "
             "the standard normal; its standard deviation is pi over root three. <bookmark mark='d'/> Where the data are, the two "
-            "curves are indistinguishable. <bookmark mark='e'/> At thirty-one degrees, both say distress is nearly certain, "
+            "curves are close. <bookmark mark='e'/> At thirty-one degrees, both say distress is nearly certain, "
             "but the logit model leaves four chances in ten thousand of no distress, and the probit about two in a million. "
             "<bookmark mark='f'/> That difference comes entirely from the assumed shape of the tail. The data can't "
             "tell the two apart, which is the first warning about extrapolating."

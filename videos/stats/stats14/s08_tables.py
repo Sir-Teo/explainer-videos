@@ -67,7 +67,7 @@ class Tables(VoiceoverScene):
             "10, adds up the squared gaps between observed and expected counts, each divided by the expected count. "
             "<bookmark mark='c'/> Here it's ninety-two, on one degree of freedom, a p-value of about ten to the minus "
             "twenty-one. <bookmark mark='d'/> Fisher's exact test, conditioning on the table's margins, agrees. Whatever is "
-            "going on, it isn't chance. The question is what it is."
+            "going on, these counts strongly disagree with the aggregate independence model. The question is what it is."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.8, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -86,6 +86,7 @@ class Tables(VoiceoverScene):
         rows[2][2].set_color(OBS)
         whys = [why(r"14 percentage points"), why(r"men 1.47 times as likely to be admitted"),
                 why(r"the odds of admission, \ men over women"), why(r"Woolf (1955): \ the interval on the log scale")]
+        intro = label('Risk difference, risk ratio and odds ratio', font_size=36)
         with self.voiceover(
             "Three ways to say how different the two proportions are. <bookmark mark='a'/> The risk difference: forty-four and a "
             "half minus thirty point four, fourteen percentage points. <bookmark mark='b'/> The relative risk: men were one point "
@@ -94,9 +95,12 @@ class Tables(VoiceoverScene):
             "log has a simple standard error, the square root of the sum of the reciprocals of the four counts, which Barnet "
             "Woolf gave in 1955. Why have three measures, and why do statisticians love the odds ratio?"
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -114,7 +118,7 @@ class Tables(VoiceoverScene):
             label(r"hold the odds ratio at 2", font_size=24, color=OBS),
             label(r"the relative risk depends on the baseline", font_size=24, color=S.ALT),
             label(r"rare outcomes: \ OR $\approx$ RR", font_size=24),
-            label(r"common outcomes: \ OR exaggerates RR", font_size=24, color=RES),
+            label(r"common outcomes: \ OR is farther from 1 than RR when OR $>1$", font_size=24, color=RES),
             label(r"but the OR survives case--control sampling: \ chapter ten", font_size=22, color=GREY_A),
         ), 4.6, 0.36, [4.5, 0.2, 0])
         with self.voiceover(
@@ -168,7 +172,7 @@ class Tables(VoiceoverScene):
             cmath(r"\text{both enormous}", r":", r"\text{the department is tied to admission and to sex}", font_size=30),
         ]
         rows[3][2].set_color(OBS)
-        whys = [why(r"the same test for any number of categories"), why(r"departments admit at very different rates"),
+        whys = [why(r"asymptotic reference; sufficient expected counts"), why(r"departments admit at very different rates"),
                 why(r"men and women applied to different departments"), why(r"the ingredients of the next chapter")]
         with self.voiceover(
             "The chi-squared test isn't limited to two-by-two tables. <bookmark mark='a'/> For a table with r rows and c "

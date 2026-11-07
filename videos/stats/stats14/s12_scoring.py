@@ -31,6 +31,7 @@ class Scoring(VoiceoverScene):
             label(r"model 1$'$: \ model 1 with every risk's odds multiplied by four", font_size=26, color=RES),
             label(rf"the condition affects {100 * d['prevalence']:.1f}\% of them: \ how good is each forecast?", font_size=24, color=GREY_A),
         ), 12.4, 0.44, [0, 0, 0])
+        intro = label('Evaluate forecasts on adults excluded from training', font_size=36)
         with self.voiceover(
             "Logistic regression produces probabilities. How do you judge a probability forecast? <bookmark mark='a'/> Fit risk "
             "models for the World's silent condition on fifty thousand adults, and judge them on fifty thousand others. "
@@ -39,8 +40,11 @@ class Scoring(VoiceoverScene):
             "multiplies every risk's odds by four. <bookmark mark='e'/> The condition affects one adult in a hundred. Which "
             "forecasts are good, and in what sense?"
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()
 
@@ -82,7 +86,7 @@ class Scoring(VoiceoverScene):
     def auc_meaning(self):
         d = load("scoring")
         rows = [
-            cmath(r"\text{AUC}", r"=", r"P(\text{score of a random case} > \text{score of a random non-case})", font_size=30),
+            cmath(r"\text{AUC}", r"=", r"P(S_1>S_0) + \tfrac12P(S_1=S_0)", font_size=30),
             cmath(r"\text{AUC}", r"=", r"\frac{U}{n_1 n_0}\quad\text{(Mann--Whitney, Part 16)}", font_size=32),
             cmath(r"\text{age alone}", r":", rf"{d['auc']:.3f}", font_size=32),
             cmath(r"\text{model 1}' \text{(odds} \times 4)", r":", rf"{d['auc']:.3f}\ \ \text{{as well!}}", font_size=32),
@@ -92,9 +96,9 @@ class Scoring(VoiceoverScene):
                 why(r"same ranking, \ same AUC: \ it cannot see calibration")]
         with self.voiceover(
             "<bookmark mark='a'/> The area under the curve has a lovely meaning: pick one person with the condition and one "
-            "without, at random; the AUC is the probability that the model gives the first a higher score. <bookmark mark='b'/> "
+            "without, at random; the AUC is the probability that the model gives the case a higher score, plus half the probability of a tie. <bookmark mark='b'/> "
             "It's the Mann–Whitney statistic of Part 16, scaled. <bookmark mark='c'/> For age alone, point seven two five: "
-            "about three times in four, the case is older than the non-case. <bookmark mark='d'/> But the deliberately bad "
+            "its ranking credit is about three quarters, counting an age tie as half. <bookmark mark='d'/> But the deliberately bad "
             "model, with every risk's odds quadrupled, has exactly the same AUC, because multiplying the odds doesn't change "
             "anyone's rank. The AUC can't tell whether the probabilities mean what they say."
         ) as vo:
@@ -114,7 +118,7 @@ class Scoring(VoiceoverScene):
         bad = VGroup(*[Dot(ax.c2p(a, b), radius=0.09, color=RES) for a, b in zip(d["cal_pred_bad"], d["cal_obs_bad"]) if a < 0.11])
         rows = fit_rows(VGroup(
             label(r"ten groups by forecast: \ forecast vs outcome", font_size=24),
-            label(r"model 1: \ on the diagonal, \ calibrated", font_size=24, color=S.ALT),
+            label(r"model 1: \ close to the diagonal in these bins", font_size=24, color=S.ALT),
             label(r"model 1$'$: \ every forecast too high, \ by up to fourfold", font_size=24, color=RES),
             label(r"a ``10\%'' should come true one time in ten", font_size=24, color=OBS),
         ), 6.0, 0.36, [3.4, 0.1, 0])
@@ -122,7 +126,7 @@ class Scoring(VoiceoverScene):
             "The second question is calibration: do the probabilities mean what they say? <bookmark mark='a'/> Sort the test "
             "set into ten groups by forecast risk, and plot each group's average forecast against the fraction who actually "
             "had the condition. <bookmark mark='b'/> Model one's points lie along the diagonal: when it says two percent, about "
-            "two percent have the condition. It's calibrated. <bookmark mark='c'/> The odds-quadrupled model's points lie far "
+            "two percent have the condition. This binned check is compatible with calibration, subject to sampling error; it does not prove calibration at every forecast value. <bookmark mark='c'/> The odds-quadrupled model's points lie far "
             "to the right: it forecasts too high everywhere, by up to four times. <bookmark mark='d'/> A forecast of ten percent "
             "should come true one time in ten. A doctor, an insurer or a launch director acting on these numbers needs that, and "
             "the AUC doesn't check it."
@@ -140,7 +144,7 @@ class Scoring(VoiceoverScene):
 
     def brier(self):
         d = load("scoring")
-        vals = [(r"always forecast 1\%", d["brier_base"], GREY_B), (r"age alone", d["brier"], S.ALT), (r"odds $\times$ 4", d["brier_bad"], RES),
+        vals = [(r"training prevalence (0.9\%)", d["brier_base"], GREY_B), (r"age alone", d["brier"], S.ALT), (r"odds $\times$ 4", d["brier_bad"], RES),
                 (r"age + tests", d["brier_both"], OBS)]
         A = axes([0, 0.0125], [-0.6, 3.6], x_length=6.4, y_length=3.8, xlabel=r"Brier score \ (lower is better)", ylabel=r"",
                  xticks=[0, 0.005, 0.01], yticks=[], center=[1.0, 0.4, 0], xfmt=lambda v: f"{v:.3f}")
@@ -159,11 +163,11 @@ class Scoring(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> One number can judge both at once. Glenn Brier's 1950 score for weather forecasts is the "
             "average squared difference between the forecast probability and what happened, one or zero. Lower is better. "
-            "<bookmark mark='b'/> A forecaster who always says one percent, the base rate, scores point zero zero nine nine. "
+            "<bookmark mark='b'/> A forecaster who always says the training prevalence, point nine percent, scores point zero zero nine nine. "
             "<bookmark mark='c'/> Age alone improves on that only slightly: age is a weak predictor of a rare condition. "
-            "<bookmark mark='d'/> The odds-quadrupled model scores worse than saying one percent to everyone, though it ranks "
+            "<bookmark mark='d'/> The odds-quadrupled model scores worse than the constant training-prevalence forecast, though it ranks "
             "people exactly as well as model one: its miscalibration costs more than its ranking gains. <bookmark mark='e'/> "
-            "With the screening tests, the score halves."
+            "With correctly encoded screening tests, the score falls to about point zero zero three four five, roughly a third of the baseline."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
@@ -182,15 +186,14 @@ class Scoring(VoiceoverScene):
         ]
         rows[1][2].set_color(OBS)
         whys = [why(r"forecast $q$ when the true chance is $p$"), why(r"a proper scoring rule: \ honesty is optimal"),
-                why(r"Murphy (1973): \ calibration, \ sharpness, \ base rate"), why(r"Good (1952)")]
+                why(r"Murphy (1973): \ calibration, \ information, \ base rate"), why(r"Good (1952)")]
         with self.voiceover(
             "Why squares? <bookmark mark='a'/> If the true chance is p and you forecast q, your expected Brier score is q minus p "
             "squared, plus a term you can't control. <bookmark mark='b'/> It's smallest when q equals p: the score rewards "
             "forecasting exactly what you believe. That makes it a proper scoring rule. <bookmark mark='c'/> Allan Murphy "
-            "showed in 1973 that it splits into three parts: reliability, which is calibration; resolution, how much the "
+            "showed in 1973 that the population Brier score splits into three parts, conditioning on the forecast: reliability, which is calibration; resolution, how much the "
             "forecasts vary with the outcome; and the uncertainty of the base rate itself. <bookmark mark='d'/> The logarithmic "
-            "score, minus the log of the probability given to what happened, is also proper, as I. J. Good noted in 1952. Summed "
-            "over a dataset, it's half the deviance, so maximum likelihood is fitting by the log score. Part 34 returns to "
+            "score, minus the log of the probability given to what happened, is also proper, as I. J. Good noted in 1952. For individual Bernoulli outcomes, summing it gives half the deviance, so maximum likelihood is fitting by the log score. Part 34 returns to "
             "prediction with guarantees."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.0, buff=0.7, edge=6.9)
@@ -208,8 +211,9 @@ class Scoring(VoiceoverScene):
             cmath(r"\text{so}", r":", r"\text{the threshold is a decision, \ not a statistic}", font_size=30),
         ]
         rows[1][2].set_color(OBS)
-        whys = [why(r"every point of the ROC curve is a threshold"), why(r"flag when the expected cost of not flagging is larger"),
+        whys = [why(r"every point of the ROC curve is a threshold"), why(r"zero cost for correct decisions; constant error costs"),
                 why(r"flag anyone with a 1\% risk"), why(r"it needs calibrated probabilities")]
+        intro = label('Choose a risk threshold from decision costs', font_size=36)
         with self.voiceover(
             "Finally, a forecast becomes an action through a threshold. <bookmark mark='a'/> Flag everyone whose risk exceeds "
             "t, trading missed cases against false alarms; each point on the ROC curve is one threshold. <bookmark mark='b'/> "
@@ -219,9 +223,12 @@ class Scoring(VoiceoverScene):
             "not a property of the data, and the rule only works if the probabilities are calibrated. A model with a fine AUC "
             "but inflated risks would flag far too many people."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         del d
         self.clear_scene()

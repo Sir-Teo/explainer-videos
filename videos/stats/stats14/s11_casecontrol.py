@@ -33,8 +33,7 @@ class CaseControl(VoiceoverScene):
                           [r"other patients (controls)", rf"{dh['controls_smokers']}", rf"{dh['controls'] - dh['controls_smokers']}", rf"{dh['controls']}"]],
                          font_size=26, col_buff=0.8, row_buff=0.3, colors=[GREY_B, EVENT, NOEVENT]).move_to([0, -0.4, 0])
         rows = fit_rows(VGroup(
-            MathTex(rf"\widehat{{\text{{OR}}}} = \frac{{647 \times 27}}{{2 \times 622}} = {t['or']:.1f}\ \ [{t['or_ci'][0]:.1f},\ {t['or_ci'][1]:.0f}],"
-                    rf"\quad \text{{Fisher}}\ p = 1.3\times10^{{-6}}", font_size=28, color=OBS),
+            MathTex(rf"\widehat{{\text{{OR}}}} = \frac{{647 \times 27}}{{2 \times 622}} = {t['or']:.1f}\quad\text{{(crude aggregate OR; matching ignored)}}", font_size=28, color=OBS),
         ), 12.4, 0.2, [0, -2.4, 0])
         tag = historical_tag(r"Doll \& Hill (1950)", corner=DR)
         with self.voiceover(
@@ -42,8 +41,7 @@ class CaseControl(VoiceoverScene):
             "in twenty London hospitals. Each patient was matched with another patient, of the same sex and age group, who did "
             "not have lung cancer, and everyone was asked about their smoking. <bookmark mark='b'/> Among six hundred and "
             "forty-nine men with lung cancer, only two had never smoked. Among the six hundred and forty-nine controls, "
-            "twenty-seven had never smoked. <bookmark mark='c'/> The odds ratio is fourteen, with a wide interval because two is "
-            "a very small count, from about three to about sixty; Fisher's exact test gives a p-value around one in a million. "
+            "twenty-seven had never smoked. <bookmark mark='c'/> The crude aggregated odds ratio is fourteen. Inference for the matched design requires the paired or matched-stratum data, so this marginal table alone does not justify an unmatched confidence interval or Fisher test. "
             "But notice what the design fixed: the number of people with cancer. So what can such a study estimate?"
         ) as vo:
             self.play(FadeIn(tag))
@@ -63,7 +61,7 @@ class CaseControl(VoiceoverScene):
             cmath(r"\text{so}", r":", r"\text{the OR is the same either way round}", font_size=30),
         ]
         rows[3][2].set_color(OBS)
-        whys = [why(r"risk needs a cohort"), why(r"what the study measures directly"),
+        whys = [why(r"risk needs sampling fractions or external prevalence"), why(r"what the study measures directly"),
                 why(r"what we want to know"), why(r"Cornfield (1951)")]
         with self.voiceover(
             "<bookmark mark='a'/> The study can't estimate the risk of lung cancer for a smoker: it decided for itself that half "
@@ -84,7 +82,7 @@ class CaseControl(VoiceoverScene):
             cmath(r"\text{population}", r":", r"\text{logit}\,P(y = 1 \mid x) = \beta_0 + \beta_1 x", font_size=30),
             cmath(r"\text{sample cases at rate } \pi_1", r",", r"\text{ controls at rate } \pi_0", font_size=30),
             cmath(r"\text{logit}\,P(y = 1 \mid x, \text{sampled})", r"=", r"\beta_0 + \log\frac{\pi_1}{\pi_0} + \beta_1 x", font_size=30),
-            cmath(r"\text{so}", r":", r"\text{fit ordinary logistic regression; \ only the intercept is off}", font_size=30),
+            cmath(r"\text{so}", r":", r"\text{outcome-only sampling: logistic slopes survive asymptotically}", font_size=30),
         ]
         rows[2][2].set_color(OBS)
         whys = [why(r"the truth, \ which a cohort would see"), why(r"sampling that depends only on the outcome"),
@@ -94,9 +92,7 @@ class CaseControl(VoiceoverScene):
             "linear in a risk factor x. <bookmark mark='b'/> Sample the cases at one rate and the controls at another, the rates "
             "depending only on the outcome. <bookmark mark='c'/> By Bayes's rule, among the sampled people the log-odds are "
             "still linear in x, with the same slope; only the intercept shifts, by the log of the ratio of sampling rates. "
-            "<bookmark mark='d'/> So an ordinary logistic regression on case–control data estimates every odds ratio correctly, "
-            "and its standard errors are right too, as Ross Prentice and Ronald Pyke proved in 1979. Only the baseline risk is "
-            "lost."
+            "<bookmark mark='d'/> So an ordinary logistic regression on case–control data consistently estimates the population logistic slopes with asymptotically valid model-based standard errors under the stated regularity and sampling assumptions, as Ross Prentice and Ronald Pyke proved in 1979. Without sampling fractions or external prevalence, the baseline risk is not identifiable; matched or exposure-dependent sampling needs a design-appropriate analysis."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -119,6 +115,7 @@ class CaseControl(VoiceoverScene):
             label(r"800 people, \ half of them cases, \ nearly match 40,000 people with 373 cases", font_size=24, color=S.ALT),
         ), 12.4, 0.3, [0, -1.9, 0])
         tag = simulated_tag(r"the World's screening condition", corner=DR)
+        intro = label('Compare cohort and case-control sampling in the World', font_size=36)
         with self.voiceover(
             "Check it on the World, where we know the truth. <bookmark mark='a'/> Among all seven hundred and forty thousand "
             "adults, the log-odds of the silent condition rise by point four five per decade of age. A cohort of forty "
@@ -130,8 +127,10 @@ class CaseControl(VoiceoverScene):
             "the outcome, give a standard error only forty percent larger than forty thousand people chosen at random. For a "
             "rare disease, that's why case–control studies exist."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tag))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(tab, lag_ratio=0.08))
             for k, m_ in enumerate("bcd"):
                 vo.wait_until(m_)
@@ -170,8 +169,8 @@ class CaseControl(VoiceoverScene):
     def rare(self):
         rows = fit_rows(VGroup(
             label(r"for a rare disease, \ the odds ratio is close to the relative risk \ (chapter seven)", font_size=26),
-            label(r"so case--control studies estimate relative risks of rare diseases cheaply", font_size=26, color=OBS),
-            label(r"their weak point is not the arithmetic but the controls: \ are they like the cases in every other way?", font_size=24, color=RES),
+            label(r"case--control ORs can approximate risk ratios when risks are small", font_size=26, color=OBS),
+            label(r"their weak point is not the arithmetic but the controls: \ do they represent exposure in the source population?", font_size=24, color=RES),
             label(r"and recall: \ cases may remember their past differently", font_size=24, color=RES),
             label(r"Doll \& Hill then followed 40,000 British doctors from 1951: \ the cohort confirmed it", font_size=24, color=GREY_A),
         ), 12.4, 0.46, [0, 0, 0])
@@ -179,8 +178,7 @@ class CaseControl(VoiceoverScene):
             "<bookmark mark='a'/> For a rare disease, chapter seven showed that the odds ratio is close to the relative risk. "
             "<bookmark mark='b'/> So a case–control study can estimate how much a factor multiplies the risk of a rare "
             "disease, with a few hundred subjects instead of a cohort of hundreds of thousands followed for decades. "
-            "<bookmark mark='c'/> Its weak point isn't the arithmetic. It's the controls: are they like the cases in every "
-            "respect except the disease? <bookmark mark='d'/> And people with a disease may remember their past differently. "
+            "<bookmark mark='c'/> Its weak point isn't the arithmetic. It's the controls: do they represent the exposure distribution in the source population that generated the cases, within the chosen strata? <bookmark mark='d'/> And people with a disease may remember their past differently. "
             "<bookmark mark='e'/> Doll and Hill knew this, and in 1951 began following forty thousand British doctors forward "
             "in time. The cohort confirmed the case–control result, and then some."
         ) as vo:

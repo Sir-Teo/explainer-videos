@@ -31,19 +31,23 @@ class Fitting(VoiceoverScene):
         rows[2][2].set_color(OBS)
         whys = [why(r"Part 9: \ the probability of the data"), why(r"$\eta_i = x_i^\top\beta$: \ concave in $\beta$"),
                 why(r"the score: \ residuals orthogonal to the columns, \ as in Part 12"), why(r"the information: \ Part 9's Fisher information")]
+        intro = label('Fit a finite logistic model by maximum likelihood', font_size=36)
         with self.voiceover(
             "There's no formula for the logistic coefficients. They come from Part 9's maximum likelihood. <bookmark mark='a'/> "
             "The likelihood is the product, over flights, of p for the flights with distress and one minus p for the others. "
             "<bookmark mark='b'/> Its logarithm simplifies to a sum of y times eta minus log of one plus e to the eta, a "
-            "concave function of the coefficients, so it has a single maximum. <bookmark mark='c'/> At the maximum the score "
+            "strictly concave function at finite coefficients when X has full column rank. A finite maximum is unique if it exists; separation can make it nonexistent. <bookmark mark='c'/> At the maximum the score "
             "is zero: X transpose times the residuals, y minus p, vanishes. That's Part 12's normal equations, with the "
             "fitted probabilities in place of fitted values. But p depends on beta nonlinearly, so we can't solve it in one "
             "step. <bookmark mark='d'/> The curvature is X transpose W X, with weights p times one minus p: the Fisher "
             "information, whose inverse gives the standard errors."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -101,14 +105,14 @@ class Fitting(VoiceoverScene):
         ]
         rows[2][2].set_color(OBS)
         whys = [why(r"Newton's step: \ gradient over curvature"), why(r"the working response: \ a linearized $y$"),
-                why(r"a weighted least squares fit! \ (Part 12)"), why(r"iteratively reweighted least squares (IRLS)")]
+                why(r"a weighted least squares fit \ (Part 12)"), why(r"iteratively reweighted least squares (IRLS)")]
         with self.voiceover(
             "<bookmark mark='a'/> Use Newton's method: step by the gradient divided by the curvature. <bookmark mark='b'/> "
             "Now a little algebra. Define a working response z: the current linear predictor, plus the residuals divided by "
             "the weights. It's what y looks like on the log-odds scale, to first order. <bookmark mark='c'/> Then the Newton "
             "step is exactly a weighted least squares regression of z on X, with weights W: Part 12's machinery, reused. "
             "<bookmark mark='d'/> Recompute the probabilities, the weights and the working response, and fit again. "
-            "Iteratively reweighted least squares, the algorithm inside every generalized linear model program since John "
+            "Iteratively reweighted least squares, a standard algorithm in generalized linear model programs since John "
             "Nelder and Robert Wedderburn's 1972 paper. Part 24 develops the theory."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
@@ -142,7 +146,7 @@ class Fitting(VoiceoverScene):
                 t.move_to([x, 2.0 - 0.5 * k, 0])
             lines.append(r)
         cur = curve(ax, xs, special.expit(path[0][0] + path[0][1] * xs), OBS, 4)
-        foot = label(r"each step: \ one weighted least squares fit; \ the log-likelihood never falls", font_size=22, color=GREY_A).move_to([0, -3.1, 0])
+        foot = label(r"each step: \ one weighted least squares fit; \ step-halving ensures the log-likelihood never falls", font_size=22, color=GREY_A).move_to([0, -3.1, 0])
         with self.voiceover(
             "Watch it work on the flights. <bookmark mark='a'/> Start from zero: every flight gets probability one half, a flat "
             "line. The log-likelihood is minus fifteen point nine. <bookmark mark='b'/> One weighted regression later, the curve "
@@ -166,26 +170,30 @@ class Fitting(VoiceoverScene):
         d = load("challenger")
         z = d["coef"][1] / d["se"][1]
         rows = [
-            cmath(r"D", r"=", rf"-2\,\ell(\hat\beta) = {d['deviance']:.2f}\ \ \text{{(21 df)}}", font_size=32),
-            cmath(r"D_0", r"=", rf"{d['null_dev']:.2f}\ \ \text{{(intercept only, 22 df)}}", font_size=32),
-            cmath(r"D_0 - D", r"=", rf"{d['lr']:.2f}\ \sim\ \chi^2_1:\ \ p = {d['lr_p']:.4f}", font_size=32),
+            cmath(r"D", r"=", rf"-2\,\ell(\hat\beta) = {d['deviance']:.2f}\ \ \text{{(21 residual df)}}", font_size=32),
+            cmath(r"D_0", r"=", rf"{d['null_dev']:.2f}\ \ \text{{(intercept only, 22 residual df)}}", font_size=32),
+            cmath(r"D_0 - D", r"=", rf"{d['lr']:.2f}\ \approx\ \chi^2_1:\ \ p = {d['lr_p']:.4f}", font_size=32),
             cmath(r"\text{Wald}", r":", rf"z = {d['coef'][1]:.3f}/{d['se'][1]:.3f} = {z:.2f},\ \ p = {2 * stats.norm.sf(abs(z)):.3f}", font_size=30),
         ]
         rows[2][2].set_color(OBS)
         whys = [why(r"the deviance: \ for 0/1 data, \ minus twice the log-likelihood"), why(r"a model with no temperature"),
-                why(r"Part 10's likelihood-ratio test"), why(r"the coefficient over its SE: \ cruder")]
+                why(r"Part 10's likelihood-ratio test"), why(r"the coefficient over its SE: \ a different approximation")]
+        intro = label('Compare temperature models using likelihood', font_size=36)
         with self.voiceover(
             "How good is the fit, and does temperature matter? <bookmark mark='a'/> The deviance, which for zero-one data is "
             "minus twice the maximized log-likelihood, is twenty point three. <bookmark mark='b'/> A model with no temperature "
             "at all, the same probability for every flight, has deviance twenty-eight point three. <bookmark mark='c'/> The "
             "drop, seven point nine five, is Part 10's likelihood-ratio statistic, approximately chi-squared with one degree of "
             "freedom: p of point zero zero five. <bookmark mark='d'/> The Wald test, the coefficient divided by its standard "
-            "error, gives z of minus two point one four, p of point zero three: the same conclusion, less sharply, because "
+            "error, gives z of minus two point one four, p of point zero three: the same rejection here; neither approximation guarantees finite-sample calibration, and "
             "the Wald test leans on a quadratic approximation that's poor with twenty-three flights. Deviances are to "
             "generalized linear models what sums of squares are to least squares."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.2, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
