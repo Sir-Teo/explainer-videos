@@ -26,6 +26,9 @@ class Hook(VoiceoverScene):
             label(r"the question: \ how does blood pressure depend on salt?", font_size=30, color=BP),
             label(r"and how much can a survey tell us about it?", font_size=26, color=OBS),
         ), 12.4, 0.45, [0, -0.6, 0])
+        intro = label('An observational analysis of sodium and blood pressure', font_size=36).move_to([0, 1.9, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "This is the last part of the bachelor's degree, and it introduces no new method. Instead we take one "
             "question all the way through, the way a working statistician would. <bookmark mark='a'/> The question is"
@@ -36,6 +39,7 @@ class Hook(VoiceoverScene):
             "raise it, and high pressure causes strokes and heart attacks. So, how does blood pressure depend on "
             "salt? <bookmark mark='e'/> And how much can a national survey tell us about that?"
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tl))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

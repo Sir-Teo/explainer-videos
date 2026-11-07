@@ -55,6 +55,9 @@ class Outro(VoiceoverScene):
             (r"measurement error and missing data, \ in full", [41]), (r"inference after selection", [56]),
             (r"privacy, \ guaranteed", [63]),
         ], font_size=22)
+        intro = label('The analysis motivates methods in the later parts', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> The master's begins with Part 21, on how estimates are actually "
             "computed. Part 23 takes the linear model apart properly, and Part 25 builds the multilevel models that surveys use "
@@ -62,8 +65,10 @@ class Outro(VoiceoverScene):
             "couldn't do. Part 41 gives measurement error and missing data their full theory. Part 56 handles inference after "
             "the data have chosen the analysis, and Part 63 makes privacy a theorem."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(FadeOut(intro), FadeIn(card.head), run_time=0.35)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def references(self):

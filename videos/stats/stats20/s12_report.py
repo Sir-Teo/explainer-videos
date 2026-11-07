@@ -32,6 +32,9 @@ class Report(VoiceoverScene):
                       label(r"so this survey neither confirms nor contradicts them.", font_size=21)).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
         VGroup(bad, good).arrange(DOWN, aligned_edge=LEFT, buff=0.7).move_to(ORIGIN)
         crosses = VGroup(*[Cross(r, stroke_color=RES, stroke_width=2).scale(0.98) for r in bad[1:]])
+        intro = label('An honest report states the estimate, uncertainty and limitations', font_size=36)
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "The analysis is done; now it has to be said. <bookmark mark='a'/> Here are three ways to say it badly. "
             "Salt has no effect on blood pressure: a causal claim, from an absence of evidence. <bookmark mark='b'/> "
@@ -41,8 +44,10 @@ class Report(VoiceoverScene):
             "the estimate in its units, with its interval; and the one limitation that changes how to read it, stated"
             " plainly, with what it means for the trials."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
             self.play(FadeIn(bad[0]), FadeIn(bad[1]))
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(Create(crosses[0]))
             vo.wait_until("b")
             self.play(FadeIn(bad[2]), Create(crosses[1]))
@@ -65,7 +70,7 @@ class Report(VoiceoverScene):
             sec(r"DATA", rf"NHANES 2017--18; \ {d['n']:,} adults 20+ not on BP medicine; \ design-weighted, \ 15 df."),
             sec(r"FINDING", rf"{d['est']:+.2f} mm Hg per g/day (95\% CI {d['lo']:+.2f} to {d['hi']:+.2f}); \ 64 alternative analyses: \ all near 0."),
             sec(r"BUT", rf"one day's recall: \ correlation {d['reliability']:.2f}, \ calibration slope 0.06 given energy; \ correction without energy: \ $-1.9$ to $+2.7$."),
-            sec(r"SO", r"Consistent with no effect and with the trials' 2--3 mm Hg per g. \ The survey cannot decide."),
+            sec(r"SO", r"Recall-day association compatible with zero; \ trial effects have a different estimand."),
             sec(r"NOT", r"Evidence that salt is harmless. \ Causal claims rest on randomized trials."),
         )
         for b in blocks:

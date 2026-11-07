@@ -212,7 +212,7 @@ class Checking(VoiceoverScene):
             label(r"no influential handful", font_size=24, color=HIT),
             label(r"these checks do not establish that the model is correct", font_size=26, color=SALT),
         ), 12.4, 0.45, [0, 0, 0])
-        intro = label('Diagnostics can reveal problems without proving a model correct', font_size=36)
+        intro = label('Diagnostics can reveal problems without proving a model correct', font_size=36).move_to([0, 3.2, 0])
         if intro.width > 12.5:
             intro.width = 12.5
         with self.voiceover(
@@ -223,10 +223,8 @@ class Checking(VoiceoverScene):
             "mark='f'/> These checks leave the main recall-day estimate similar. They cannot prove the model correct "
             "or explain every difference from trials."
         ) as vo:
-            self.play(FadeIn(intro))
+            self.add(intro)
             for k, m_ in enumerate("abcdef"):
                 vo.wait_until(m_)
-                if k == 0:
-                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()

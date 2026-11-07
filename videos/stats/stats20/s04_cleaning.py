@@ -193,6 +193,9 @@ class Cleaning(VoiceoverScene):
             label(r"rules fixed in advance; \ never ``remove the outliers'' after the fit", font_size=24, color=RES),
             label(r"a step that changes the population changes the estimand: \ say so", font_size=24, color=SALT),
         ), 12.4, 0.5, [0, 0, 0])
+        intro = label('Apply explicit plausibility rules and retain an audit trail', font_size=36).move_to([0, 3.2, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "So the rules of cleaning. <bookmark mark='a'/> Read the codebook before the data. <bookmark mark='b'/> Never edit "
             "the raw file: do every step in code, starting from the original download, so the whole chain can be rerun. "
@@ -200,6 +203,7 @@ class Cleaning(VoiceoverScene):
             "fitting, and never drop points afterwards because they pull the line the wrong way. <bookmark mark='e'/> And when a "
             "step changes who is in the population, it changes the question, and the report must say so."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))

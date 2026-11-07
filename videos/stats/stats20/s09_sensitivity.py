@@ -29,8 +29,10 @@ class Sensitivity(VoiceoverScene):
         d = load("spec")
         runs = sorted(d["runs"], key=lambda r: r["est"])
         n = len(runs)
-        A = axes([0, n + 1], [-1, 1.4], x_length=10.6, y_length=3.0, xlabel=r"", ylabel=r"sodium slope, \ mm Hg per g",
-                 yticks=[-1, -0.5, 0, 0.5, 1], center=[0.3, 1.5, 0], font_size=18)
+        lower = np.floor(min(r["est"] - r["critical"] * r["se"] for r in runs))
+        upper = np.ceil(max(r["est"] + r["critical"] * r["se"] for r in runs))
+        A = axes([0, n + 1], [lower, upper], x_length=10.6, y_length=3.0, xlabel=r"", ylabel=r"sodium slope, \ mm Hg per g",
+                 yticks=list(np.arange(lower, upper + 0.1, 1)), center=[0.3, 1.5, 0], font_size=18)
         ax = A.ax
         zero = DashedLine(ax.c2p(0, 0), ax.c2p(n + 1, 0), color=GREY_C, stroke_width=1.5)
         prim = next(i for i, r in enumerate(runs) if r["spec"] == {"meds": "exclude", "energy": True, "weights": True,
@@ -38,7 +40,7 @@ class Sensitivity(VoiceoverScene):
         bars, dots = VGroup(), VGroup()
         for i, r in enumerate(runs):
             c = SALT if i == prim else DES
-            bars.add(Line(ax.c2p(i + 1, max(-1, r["est"] - r["critical"] * r["se"])), ax.c2p(i + 1, min(1.4, r["est"] + r["critical"] * r["se"])),
+            bars.add(Line(ax.c2p(i + 1, r["est"] - r["critical"] * r["se"]), ax.c2p(i + 1, r["est"] + r["critical"] * r["se"]),
                           color=c, stroke_width=1.6, stroke_opacity=0.7))
             dots.add(Dot(ax.c2p(i + 1, r["est"]), radius=0.045 if i != prim else 0.08, color=c))
         grid = VGroup()
@@ -117,7 +119,7 @@ class Sensitivity(VoiceoverScene):
             label(rf"{d['n2']:,} adults with two reliable recalls", font_size=22),
             label(rf"correlation \ $r = {d['reliability']:.2f}$", font_size=26, color=SALT),
             label(rf"SD of one day: \ {d['sd_day1']:.2f} g; \ of day-to-day change: \ {d['sd_diff']:.2f} g", font_size=22),
-            label(r"most of one day's variation is that day, \ not the person", font_size=22, color=RES),
+            label(r"independent replicate errors imply substantial within-person variation", font_size=22, color=RES),
             label(r"$r$ equals reliability only with independent equal-variance replicate errors", font_size=22, color=OBS),
         ), 5.6, 0.42, [3.5, 0.2, 0])
         with self.voiceover(

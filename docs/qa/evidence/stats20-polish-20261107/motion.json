@@ -1,0 +1,105 @@
+{
+  "fingerprint": "6dc53d18b13dada7776e1d27b03da20774793ec5a29bcd2cc6050e7f74615924",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 5
+      },
+      "input_record": "renders/qa/series/stats20/en/Hook_motion/result.json",
+      "input_sha256": "10b97b6b521b3faf9002063e7d6b83ab986eb5deeb49f1a10e8ddb568302c070",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 227 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 227 s\n"
+    },
+    {
+      "scene": "Estimand",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats20/en/Estimand_motion/result.json",
+      "input_sha256": "773c20235da4f71070fa50c31ce8b8db5db8a858a819263f5505fd6acf9e7ae4",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 249 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 249 s\n"
+    },
+    {
+      "scene": "Design",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats20/en/Design_motion/result.json",
+      "input_sha256": "e9fd44e0c340089f0bbdf4d7436be376fb9f96b03d36e2e6fff906adefc02213",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 246 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 246 s\n"
+    },
+    {
+      "scene": "Checking",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats20/en/Checking_motion/result.json",
+      "input_sha256": "eacdf0c44d6c726ade53cb337a445b0ecf509fa541f5aa1d89d11bf3aaf66761",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 246 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 246 s\n"
+    },
+    {
+      "scene": "Uncertainty",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats20/en/Uncertainty_motion/result.json",
+      "input_sha256": "0aedc31e8e95ca17aeb0a668c43dee9baf3fde5b42d1feeecac2bcd84de4fafd",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 198 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 198 s\n"
+    },
+    {
+      "scene": "Sensitivity",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats20/en/Sensitivity_motion/result.json",
+      "input_sha256": "f605e38fceaafafd0e6b6715a6d1c73ccb15fdbbf71697f09aec378408f9f18b",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 270 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 270 s\n"
+    },
+    {
+      "scene": "CausalOrNot",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats20/en/CausalOrNot_motion/result.json",
+      "input_sha256": "b9cd12d7661a5d7017b7d5862c35a89c3ebfa85640a22cfecd4c42c99568f35c",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 242 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 242 s\n"
+    },
+    {
+      "scene": "OnTheWorld",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats20/en/OnTheWorld_motion/result.json",
+      "input_sha256": "ecacc35521591b74fd2d8cda839c3a98a39a4ba41586c5f39ffff3130b407451",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 253 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 253 s\n"
+    },
+    {
+      "scene": "Report",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 5
+      },
+      "input_record": "renders/qa/series/stats20/en/Report_motion/result.json",
+      "input_sha256": "64d6e2dd65d68570f785dcfc0d665c93c8b52faeffb7a2805a586119d863e35b",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 151 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 151 s\n"
+    }
+  ]
+}

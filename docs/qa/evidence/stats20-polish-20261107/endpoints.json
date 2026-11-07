@@ -1,0 +1,171 @@
+{
+  "fingerprint": "6dc53d18b13dada7776e1d27b03da20774793ec5a29bcd2cc6050e7f74615924",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 50
+      },
+      "input_record": "renders/qa/series/stats20/en/Hook/result.json",
+      "input_sha256": "7fb1aa4cdfe2c603a00a2bfbd60df5645cdcf7ae89359b2bbbfc7d854068ffe7"
+    },
+    {
+      "scene": "Estimand",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 56
+      },
+      "input_record": "renders/qa/series/stats20/en/Estimand/result.json",
+      "input_sha256": "e06b3ebbcd115a240a3c2721df576c561a3913dee3aad4cc798975f8e89b0a8d"
+    },
+    {
+      "scene": "Design",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 60
+      },
+      "input_record": "renders/qa/series/stats20/en/Design/result.json",
+      "input_sha256": "1ea9d4873d23cb3225c6ba1038d378d962cd8e2c45e88115c9355eeedccae0f0"
+    },
+    {
+      "scene": "Cleaning",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 56
+      },
+      "input_record": "renders/qa/series/stats20/en/Cleaning/result.json",
+      "input_sha256": "2994cecdf92912e1fb6451075c70d3763aba64d09eaedc7a5d1ba76879603f22"
+    },
+    {
+      "scene": "Exploration",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 39
+      },
+      "input_record": "renders/qa/series/stats20/en/Exploration/result.json",
+      "input_sha256": "2da5f35ffa6b93dbaacce8f1c19954a01ae1bb5c4c15484239f0567f795ec3e1"
+    },
+    {
+      "scene": "FirstModel",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 57
+      },
+      "input_record": "renders/qa/series/stats20/en/FirstModel/result.json",
+      "input_sha256": "ea75c5a5f20a2bd00f7b5814efcb79ec96fb417ba813ebf5f1921993ee968c02"
+    },
+    {
+      "scene": "Checking",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 51
+      },
+      "input_record": "renders/qa/series/stats20/en/Checking/result.json",
+      "input_sha256": "234d389b4595229791a8a84d5e04763715aab3c87e65e019ec6598f692642b0f"
+    },
+    {
+      "scene": "Uncertainty",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 40
+      },
+      "input_record": "renders/qa/series/stats20/en/Uncertainty/result.json",
+      "input_sha256": "649437d01651845586c18a42805ae38e21656ab5e1815724b020d8fe1188d091"
+    },
+    {
+      "scene": "Sensitivity",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 45
+      },
+      "input_record": "renders/qa/series/stats20/en/Sensitivity/result.json",
+      "input_sha256": "07f2a422a5821bd12e16d364380f7144560ae861d69f90818ad1f1830b3ce006"
+    },
+    {
+      "scene": "CausalOrNot",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 51
+      },
+      "input_record": "renders/qa/series/stats20/en/CausalOrNot/result.json",
+      "input_sha256": "02a56dbb5289aa1a85bc95cdd5cbd02470c8087fc2631923033a600c29d2f4e1"
+    },
+    {
+      "scene": "OnTheWorld",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 55
+      },
+      "input_record": "renders/qa/series/stats20/en/OnTheWorld/result.json",
+      "input_sha256": "ecc8743c2712521f4402fc05ba7fa016c287479c58548f4b11c35f0eeca0ae27"
+    },
+    {
+      "scene": "Report",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 43
+      },
+      "input_record": "renders/qa/series/stats20/en/Report/result.json",
+      "input_sha256": "f468afa119b9ce1a598aaca9908c9f001d294ec4b5989095b9f879096d1d101e"
+    },
+    {
+      "scene": "Reproducibility",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 65
+      },
+      "input_record": "renders/qa/series/stats20/en/Reproducibility/result.json",
+      "input_sha256": "62ee9bc9cbd9ef32fef76e48914f58bdef68d9d5d0b3a11fb93b58901a389379"
+    },
+    {
+      "scene": "BScProblems",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 55
+      },
+      "input_record": "renders/qa/series/stats20/en/BScProblems/result.json",
+      "input_sha256": "91242d6aee8381d352fb46c8fa03c44dabc9e0f116890a1180a75acc0f771b29"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 9,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 62
+      },
+      "input_record": "renders/qa/series/stats20/en/Outro/result.json",
+      "input_sha256": "df061fb0fcd6abbd02f9a61d7bf3460893a25625feb5a6aac8d7169c64418b0a"
+    }
+  ]
+}

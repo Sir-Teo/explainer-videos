@@ -1,0 +1,95 @@
+{
+ "video": "stats20",
+ "scene": "Sensitivity",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 7,
+ "lines": [
+  {
+   "raw": "Chapter eight. Sensitivity.",
+   "spoken": "Chapter eight. Sensitivity.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/4977ac43c583e215.wav",
+   "duration": 2.375,
+   "tokens": 3,
+   "peak": 0.384521484375,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "The plan promised all sixty-four analyses. Here they are: a specification curve, as Uri Simonsohn and colleagues called it. <bookmark mark='a'/> Each dot is one analysis's sodium slope, sorted from smallest to largest, with design t intervals using the degrees of freedom of each fit. <bookmark mark='b'/> Below, which choices it made: medicine users in or out, energy in the model or not, weights or not, a spline for age, which readings, one recall day or the mean of two. <bookmark mark='c'/> The pre-specified analysis is in gold, near the middle. <bookmark mark='d'/> The sixty-four slopes run from minus point one eight to plus point six four, and not one is distinguishable from zero. The estimates include both signs. None of these sixty-four intervals excludes zero.",
+   "spoken": "The plan promised all sixty-four analyses. Here they are: a specification curve, as Uri Simonsohn and colleagues called it. Each dot is one analysis's sodium slope, sorted from smallest to largest, with design t intervals using the degrees of freedom of each fit. Below, which choices it made: medicine users in or out, energy in the model or not, weights or not, a spline for age, which readings, one recall day or the mean of two. The pre-specified analysis is in gold, near the middle. The sixty-four slopes run from minus point one eight to plus point six four, and not one is distinguishable from zero. The estimates include both signs. None of these sixty-four intervals excludes zero.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/7016e615c376dc18.wav",
+   "duration": 42.95,
+   "tokens": 118,
+   "peak": 0.833984375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Which choices move the answer most? Average the slope over the analyses with and without each choice. <bookmark mark='b'/> Two stand out. Including people on blood-pressure medicine pulls the slope down, from about plus point two zero to minus point zero seven. Using the mean of two recall days instead of one pushes it up, by about a tenth. <bookmark mark='c'/> Weights, the age spline, energy and the readings rule barely matter. <bookmark mark='d'/> The choices that matter are about who is in the sample and how the exposure is measured. Both point to the next two problems.",
+   "spoken": "Which choices move the answer most? Average the slope over the analyses with and without each choice. Two stand out. Including people on blood-pressure medicine pulls the slope down, from about plus point two zero to minus point zero seven. Using the mean of two recall days instead of one pushes it up, by about a tenth. Weights, the age spline, energy and the readings rule barely matter. The choices that matter are about who is in the sample and how the exposure is measured. Both point to the next two problems.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/5081ace5ce6e4648.wav",
+   "duration": 28.8,
+   "tokens": 92,
+   "peak": 0.56689453125,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Two thousand six hundred and fifty-nine adults in our analytic sample supplied two reliable recalls, usually several days apart. This unweighted scatter compares their reported sodium. <bookmark mark='b'/> The correlation is point three two. <bookmark mark='c'/> The standard deviation of a single day is one point seven six grams, and the standard deviation of the day difference divided by root two is one point four two. <bookmark mark='d'/> Under independent replicate errors, that difference measures within-person variation. <bookmark mark='e'/> Calling the correlation a reliability requires equal replicate error variances and no shared reporting error. Two days alone cannot verify those assumptions.",
+   "spoken": "Two thousand six hundred and fifty-nine adults in our analytic sample supplied two reliable recalls, usually several days apart. This unweighted scatter compares their reported sodium. The correlation is point three two. The standard deviation of a single day is one point seven six grams, and the standard deviation of the day difference divided by root two is one point four two. Under independent replicate errors, that difference measures within-person variation. Calling the correlation a reliability requires equal replicate error variances and no shared reporting error. Two days alone cannot verify those assumptions.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/1cf6bf63a3ee84ae.wav",
+   "duration": 39.4,
+   "tokens": 93,
+   "peak": 0.575164794921875,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> In the classical model, a recalled day W is usual intake X plus independent mean-zero noise U. <bookmark mark='b'/> With accurately measured covariates Z and the appropriate linear mean model, the sodium coefficient is attenuated by the residual reliability lambda. <bookmark mark='c'/> Predicting the second day from the first, age, sex and BMI with the two-day dietary weights gives a calibration coefficient near point two four. <bookmark mark='d'/> Adding recall-day energy reduces it to point zero six. That is weak calibration, not proof that precisely ninety-four percent of the remaining sodium is noise: energy is noisy too, and its reporting error can correlate with sodium's. The attenuation interpretation needs assumptions these data cannot establish.",
+   "spoken": "In the classical model, a recalled day W is usual intake X plus independent mean-zero noise U. With accurately measured covariates Z and the appropriate linear mean model, the sodium coefficient is attenuated by the residual reliability lambda. Predicting the second day from the first, age, sex and BMI with the two-day dietary weights gives a calibration coefficient near point two four. Adding recall-day energy reduces it to point zero six. That is weak calibration, not proof that precisely ninety-four percent of the remaining sodium is noise: energy is noisy too, and its reporting error can correlate with sodium's. The attenuation interpretation needs assumptions these data cannot establish.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/962a3ceec72cbf45.wav",
+   "duration": 44.75,
+   "tokens": 108,
+   "peak": 0.629974365234375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Regression calibration replaces the first recall by its linear prediction from a second recall and the model covariates. We use the CDC's two-day dietary weights and jointly linearize both regressions, so the interval accounts for estimating the calibration equation. <bookmark mark='b'/> Gold is the primary recall-day estimate, grey the estimate without energy. <bookmark mark='c'/> Blue is calibration without energy: plus point three seven, with an approximate interval from minus one point nine to plus two point seven. <bookmark mark='d'/> With energy, the estimate is plus point six five and the delta-method margin is about eight point seven, wider than this axis. Such weak calibration makes even that approximation fragile. <bookmark mark='e'/> These exploratory corrections are imprecise and assumption-dependent. They do not establish agreement or disagreement with a particular trial; they show how much uncertainty a single recalled day leaves.",
+   "spoken": "Regression calibration replaces the first recall by its linear prediction from a second recall and the model covariates. We use the CDC's two-day dietary weights and jointly linearize both regressions, so the interval accounts for estimating the calibration equation. Gold is the primary recall-day estimate, grey the estimate without energy. Blue is calibration without energy: plus point three seven, with an approximate interval from minus one point nine to plus two point seven. With energy, the estimate is plus point six five and the delta-method margin is about eight point seven, wider than this axis. Such weak calibration makes even that approximation fragile. These exploratory corrections are imprecise and assumption-dependent. They do not establish agreement or disagreement with a particular trial; they show how much uncertainty a single recalled day leaves.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/ab900238bc2c59fd.wav",
+   "duration": 53.15,
+   "tokens": 131,
+   "peak": 0.67694091796875,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The sixty-four specified alternatives all remain compatible with zero. <bookmark mark='b'/> The two-recall correlation and the small conditional calibration slope raise serious measurement concerns. <bookmark mark='c'/> Correcting under a classical replicate model produces broad, approximate intervals; shared reporting error, noisy energy and weak calibration remain limitations. <bookmark mark='d'/> Better measurement could include more recall days or repeated twenty-four-hour urine collections, with attention to collection completeness. <bookmark mark='e'/> INTERSALT collected urine in ten thousand and seventy-nine adults across fifty-two centres. It found an ecological association between sodium and the rise of pressure with age; that cross-centre comparison alone does not establish an individual causal effect.",
+   "spoken": "The sixty-four specified alternatives all remain compatible with zero. The two-recall correlation and the small conditional calibration slope raise serious measurement concerns. Correcting under a classical replicate model produces broad, approximate intervals; shared reporting error, noisy energy and weak calibration remain limitations. Better measurement could include more recall days or repeated twenty-four-hour urine collections, with attention to collection completeness. INTERSALT collected urine in ten thousand and seventy-nine adults across fifty-two centres. It found an ecological association between sodium and the rise of pressure with age; that cross-centre comparison alone does not establish an individual causal effect.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/c4e29f96a3c4ebac.wav",
+   "duration": 47.425,
+   "tokens": 96,
+   "peak": 0.54217529296875,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats20/en/Sensitivity_motion/result.json",
+ "input_sha256": "f605e38fceaafafd0e6b6715a6d1c73ccb15fdbbf71697f09aec378408f9f18b"
+}
