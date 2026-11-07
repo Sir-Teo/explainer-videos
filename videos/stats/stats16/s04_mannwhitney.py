@@ -57,7 +57,7 @@ class MannWhitney(VoiceoverScene):
             "<bookmark mark='a'/> Part 14's twenty-three shuttle flights before Challenger return. <bookmark mark='b'/> Sixteen "
             "had no O-ring distress, seven had some. Here are their launch temperatures. <bookmark mark='c'/> The samples are "
             "small, the temperatures aren't normal, and several are tied. <bookmark mark='d'/> Part 14 fitted a logistic "
-            "regression. Here's a question that needs no model: are the distress flights colder, in the sense that a random "
+            "regression. Here's a question that needs no normal model: are the distress flights colder, in the sense that a random "
             "distress flight tends to be colder than a random undistressed one?"
         ) as vo:
             self.play(FadeIn(A), FadeIn(tag))
@@ -99,8 +99,7 @@ class MannWhitney(VoiceoverScene):
             "<bookmark mark='c'/> Henry Mann and Donald Whitney, at Ohio State in 1947, subtracted the smallest possible value, "
             "seven times eight over two, giving U equals twenty-four and a half, and worked out its distribution. It's the same "
             "test, under two names, and it's called the Wilcoxon–Mann–Whitney test to be fair to both. "
-            "<bookmark mark='d'/> The ties need care: with them the exact table is no longer quite right, and software applies a "
-            "correction."
+            "<bookmark mark='d'/> The ties need care: with them we recompute the exact conditional law from the pooled midranks rather than use an untied table."
         ) as vo:
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(c_[0]) for c_ in cells], lag_ratio=0.03))
@@ -136,6 +135,7 @@ class MannWhitney(VoiceoverScene):
             MathTex(rf"U_{{\text{{no distress}}}} = {d['U']:g}", font_size=32, color=OBS),
             MathTex(r"= 112 - 24.5", font_size=28),
         ), 4.2, 0.34, [4.6, 0.4, 0])
+        intro = label('Count all pairs, giving half credit to ties', font_size=36)
         with self.voiceover(
             "Mann and Whitney's form has a direct meaning. <bookmark mark='a'/> Pair every undistressed flight with every distress "
             "flight: sixteen times seven, a hundred and twelve pairs. <bookmark mark='b'/> Colour a pair blue when the "
@@ -144,7 +144,9 @@ class MannWhitney(VoiceoverScene):
             "half. <bookmark mark='e'/> It's a hundred and twelve minus the twenty-four and a half we found from the ranks. "
             "Counting pairs and summing ranks are the same calculation."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(xl), FadeIn(yl), FadeIn(rows[0]), LaggedStart(*[FadeIn(g_) for g_ in grid], lag_ratio=0.005), run_time=1.6)
             for k, m_ in enumerate("bcde"):
                 vo.wait_until(m_)
@@ -154,18 +156,18 @@ class MannWhitney(VoiceoverScene):
     def null(self):
         d = load("mw")
         pmf = np.asarray(d["pmf"])
-        u = np.arange(len(pmf))
-        A = axes([-2, 114], [0, 0.03], x_length=8.2, y_length=3.8, xlabel=r"$U$", ylabel=r"probability under $H_0$ (no ties)",
+        u = np.asarray(d["u_grid"])
+        A = axes([-2, 114], [0, 0.03], x_length=8.2, y_length=3.8, xlabel=r"$U$", ylabel=r"conditional probability under $H_0$",
                  xticks=[0, 24.5, 56, 87.5, 112], yticks=[0, 0.01, 0.02, 0.03], center=[-1.4, 0.3, 0])
         ax = A.ax
-        hi = [i for i in u if i >= 88 or i <= 24]
-        bars = bars_at(ax, u, pmf, 0.85, NULLC, highlight=hi, hcolor=OBS)
-        tie_p = stats.mannwhitneyu(d["warm"], d["cold"], alternative="two-sided").pvalue
+        hi = np.flatnonzero(np.abs(u - 56) >= abs(d["U"] - 56) - 1e-12).tolist()
+        bars = bars_at(ax, u, pmf, 0.42, NULLC, highlight=hi, hcolor=OBS)
+        tie_p = d["asymptotic_p"]
         rows = [
             cmath(r"H_0", r":", r"\text{the 23 temperatures exchangeable}", font_size=28),
             cmath(r"P(U = u)", r"=", r"\frac{\#\{\text{rankings giving } u\}}{\binom{23}{7}}", font_size=28),
-            cmath(r"p", r"\approx", rf"{d['p']:.3f}", font_size=30),
-            cmath(r"\text{tie-corrected}", r":", rf"{tie_p:.3f}", font_size=28),
+            cmath(r"p", r"=", rf"{d['p']:.4f}", font_size=30),
+            cmath(r"\text{normal approx.}", r":", rf"{tie_p:.3f}", font_size=28),
         ]
         rows[2][2].set_color(OBS)
         g = VGroup(*rows).arrange(DOWN, aligned_edge=LEFT, buff=0.36).move_to([4.7, 0.5, 0])
@@ -175,11 +177,9 @@ class MannWhitney(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> The null hypothesis is that temperature and distress are unrelated: all twenty-three "
             "temperatures exchangeable, so any seven of them were equally likely to be the distress flights. It's chapter one's "
-            "permutation test, applied to ranks. <bookmark mark='b'/> Because ranks are always one to twenty-three, the null "
-            "distribution of U is the same for every problem with these sample sizes. A short recursion counts the rankings: "
-            "here it is, symmetric about fifty-six. <bookmark mark='c'/> A U as far from fifty-six as eighty-seven and a half: "
-            "p is about point oh three three, ignoring ties. <bookmark mark='d'/> With the usual correction for ties, point oh "
-            "three eight. Either way, evidence, from sixteen and seven flights and no model, that distress came with the cold."
+            "permutation test, applied to ranks. <bookmark mark='b'/> With ties, the conditional null depends on these pooled midranks. A subset-sum recursion counts all 245,157 assignments: "
+            "here it is, centred at fifty-six; ties need not leave the distribution symmetric. <bookmark mark='c'/> A U as far from fifty-six as eighty-seven and a half: "
+            "the exact two-sided p-value, point oh three three five, includes all assignments at least this far from the null mean. <bookmark mark='d'/> The tie-corrected normal approximation is about point oh three eight. Both give evidence of association in these flights under the exchangeability null."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
@@ -198,18 +198,17 @@ class MannWhitney(VoiceoverScene):
             cmath(r"\frac{U}{mn}", r"=", rf"\frac{{{d['U']:g}}}{{112}} = {d['auc']:.3f}", font_size=34),
             cmath(r"\ ", r"\approx", r"P(X > Y) + \tfrac12 P(X = Y)", font_size=32),
             cmath(r"\ ", r"=", r"\text{the area under the ROC curve (Part 14)}", font_size=30),
-            cmath(r"H_0", r":", r"P(X > Y) = \tfrac12", font_size=32),
+            cmath(r"H_0", r":", r"F_X=F_Y \ \Rightarrow \ \mathrm{AUC}=\tfrac12", font_size=32),
         ]
         rows[0][2].set_color(OBS)
         whys = [why(r"the share of blue cells"), why(r"$X$: \ a random undistressed flight's temperature"),
-                why(r"temperature as a score for ``no distress''"), why(r"what the test is really about")]
+                why(r"temperature as a score for ``no distress''"), why(r"the usual exact calibration assumes equal distributions")]
         with self.voiceover(
             "<bookmark mark='a'/> Divide U by the number of pairs: point seven eight one. <bookmark mark='b'/> That estimates the "
             "probability that a random undistressed flight was warmer than a random distress flight, counting ties as half. "
             "<bookmark mark='c'/> It's also a number from Part 14: the area under the ROC curve, if temperature is used as a "
             "score to separate the two kinds of flight. The Mann–Whitney statistic and the AUC are the same thing; David Bamber "
-            "pointed that out in 1975. <bookmark mark='d'/> So the parameter the test is really about is that probability, and "
-            "its null hypothesis is that it equals one half."
+            "pointed that out in 1975. <bookmark mark='d'/> The statistic estimates that probability with half credit for ties. The usual exact test assumes equal distributions; AUC equal to one half alone is a weaker null and needs different calibration."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -229,15 +228,13 @@ class MannWhitney(VoiceoverScene):
         tb = label(r"same median, \ different spread", font_size=22, color=RES).next_to(B, DOWN, buff=0.15)
         rows = fit_rows(VGroup(
             label(r"under a shift model, \ the WMW test compares medians, \ and Hodges--Lehmann estimates the shift", font_size=22),
-            label(r"in general it tests $P(X > Y) = \frac12$, \ not ``equal medians''", font_size=22, color=OBS),
+            label(r"exact calibration: \ identical distributions, \ stronger than AUC $=1/2$", font_size=22, color=OBS),
             label(r"with unequal spreads its size is off: \ the rank version of Behrens--Fisher (Part 10)", font_size=22, color=RES),
         ), 12.4, 0.3, [0, -2.2, 0])
         with self.voiceover(
             "A warning about what's tested. <bookmark mark='a'/> If the two distributions have the same shape and differ only "
             "by a shift, the test compares medians, or any other location, and the Hodges–Lehmann median of the pairwise "
-            "differences estimates the shift. <bookmark mark='b'/> Without that assumption, it's a test that P of X greater than "
-            "Y is one half, which is not the same as equal medians. <bookmark mark='c'/> Two distributions with the same median "
-            "and very different spreads have P of X greater than Y exactly one half, yet the test, calibrated for identical "
+            "differences estimates the shift. <bookmark mark='b'/> Without that shape assumption, U estimates the AUC, but its usual permutation calibration still assumes identical distributions. <bookmark mark='c'/> The two symmetric normal distributions pictured have the same median and AUC one half despite different spreads, yet the test, calibrated for identical "
             "distributions, rejects them seven percent of the time with twenty in each group, and with unequal group sizes it can "
             "be off in either direction: the rank version of the Behrens–Fisher problem from "
             "Part 10. Ranks free us from normality, not from thinking about what the null hypothesis says."

@@ -113,8 +113,8 @@ class MoreRanks(VoiceoverScene):
             "here four treatments in five blocks, <bookmark mark='b'/> so whatever makes one block better than another drops "
             "out: only the order inside a block counts. <bookmark mark='c'/> Milton Friedman, the economist, proposed the "
             "statistic in 1937, as a young statistician: it compares the treatments' rank sums with what chance would give. "
-            "<bookmark mark='d'/> For these ranks Q is ten point two, p about point oh two on three degrees of freedom. "
-            "<bookmark mark='e'/> With two treatments, Friedman's test is the sign test."
+            "<bookmark mark='d'/> For these ranks Q is ten point two. The chi-squared approximation gives p about point oh two, but five blocks is small: exact within-block permutations are preferable under independent exchangeable blocks. "
+            "<bookmark mark='e'/> With two treatments it ranks outcomes like a sign test, but its chi-squared p-value is only an approximation to the exact sign-test tail."
         ) as vo:
             self.play(FadeIn(tag))
             vo.wait_until("a")
@@ -143,7 +143,7 @@ class MoreRanks(VoiceoverScene):
             MathTex(r"r_S = \text{corr}\big(\text{rank}(x), \text{rank}(y)\big)", font_size=26),
             MathTex(rf"\text{{Pearson}}\ r = {d['pearson']:.3f}", font_size=28),
             MathTex(rf"\text{{Spearman}}\ r_S = {d['spearman']:.3f}", font_size=28, color=RANK),
-            label(r"unchanged by any increasing transformation", font_size=20, color=GREY_A),
+            label(r"unchanged by any strictly increasing transformation", font_size=20, color=GREY_A),
         ), 3.6, 0.36, [5.2, 0.6, 0])
         foot = label(r"Spearman (1904), \ the psychologist of general intelligence", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.4)
         with self.voiceover(
@@ -151,7 +151,7 @@ class MoreRanks(VoiceoverScene):
             "each LSAT and each GPA by its rank among the fifteen. <bookmark mark='c'/> Charles Spearman's correlation, from "
             "1904, is Pearson's correlation computed on the ranks. <bookmark mark='d'/> Pearson's r is point seven seven six; "
             "<bookmark mark='e'/> Spearman's is point seven nine six. <bookmark mark='f'/> Because ranks don't change when you "
-            "take logs, square roots, or any increasing transformation, neither does Spearman's correlation. It measures how "
+            "take logs, square roots, or any strictly increasing transformation, neither does Spearman's correlation. It measures how "
             "monotone the relationship is, not how straight."
         ) as vo:
             vo.wait_until("a")

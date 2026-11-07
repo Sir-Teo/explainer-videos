@@ -34,7 +34,7 @@ class CrossValidation(VoiceoverScene):
         curves = VGroup()
         for deg, col in ((1, S.ALT), (3, FIT), (8, RES)):
             c = np.polyfit(x, y, deg)
-            curves.add(polyline(ax, ga, np.clip(np.polyval(c, gx), 9, 12.5), col, 3.5))
+            curves.add(polyline(ax, ga, np.polyval(c, gx), col, 3.5))
         rows = fit_rows(VGroup(
             label(r"200 adults from the World, \ under 70", font_size=22),
             label(r"degree 1: \ a straight line", font_size=22, color=S.ALT),
@@ -151,10 +151,10 @@ class CrossValidation(VoiceoverScene):
             cmath(r"\text{degree 8}", r":", rf"{tr[7]:.4f} + \frac{{2 \cdot {s2:.3f} \cdot 9}}{{200}} = {tr[7] + 2 * s2 * 9 / 200:.4f}\ \ (\text{{CV}}\ {cv[7]:.4f})", font_size=28),
         ]
         rows[3][2].set_color(OBS)
-        whys = [why(r"the optimism of the training error: \ Mallows's $C_p$ (1973)"), why(r"from the cubic's residuals"),
+        whys = [why(r"same-design fresh responses; \ homoskedastic linear errors"), why(r"from the cubic's residuals"),
                 why(r"$p = 4$ coefficients"), why(r"$p = 9$: \ the formula and CV agree")]
         with self.voiceover(
-            "Why does the training error mislead? <bookmark mark='a'/> For least squares there's a formula: on average the "
+            "Why does the training error mislead? <bookmark mark='a'/> For a fixed full-rank linear model with homoskedastic errors, compare fresh responses at the same design: on average the "
             "training error is too small by two sigma squared p over n, where p is the number of coefficients. Colin Mallows "
             "built his C-p criterion on it in 1973, and Part 19 will derive it. <bookmark mark='b'/> The cubic's residuals give "
             "sigma squared about point three three. <bookmark mark='c'/> For the cubic, four coefficients: training error plus "
@@ -174,20 +174,19 @@ class CrossValidation(VoiceoverScene):
             cmath(r"K = n", r":", r"\text{leave-one-out}", font_size=32),
             cmath(r"\text{for least squares}", r":", r"y_i - \hat y^{(-i)}_i = \frac{y_i - \hat y_i}{1 - h_{ii}}", font_size=32),
             cmath(r"\text{LOOCV}", r"=", r"\frac1n \textstyle\sum_i \Big(\frac{e_i}{1 - h_{ii}}\Big)^2", font_size=32),
-            cmath(r"K = 5 \text{ or } 10", r":", r"\text{a little bias, \ much less variance}", font_size=30),
+            cmath(r"K = 5 \text{ or } 10", r":", r"\text{a common cost, bias and variance compromise}", font_size=30),
         ]
         rows[2][2].set_color(OBS)
         whys = [why(r"the jackknife's scheme"), why(r"Part 12's leverage: \ no refitting needed"),
                 why(r"Allen's PRESS (1974): \ one fit, \ $n$ predictions"), why(r"the usual choice")]
         with self.voiceover(
             "<bookmark mark='a'/> With as many folds as observations, cross-validation is leave-one-out: the jackknife's "
-            "scheme. <bookmark mark='b'/> For least squares it needs no refitting at all. The prediction error for a point "
+            "scheme. <bookmark mark='b'/> For least squares, when every deleted design has full rank and leverage is below one, it needs no refitting. The prediction error for a point "
             "left out is its ordinary residual divided by one minus its leverage, Part 12's h-i-i: high-leverage points pull the "
             "fit towards themselves, so their residuals understate their prediction errors. <bookmark mark='c'/> The whole "
             "leave-one-out error comes from one fit. David Allen called it PRESS, the prediction sum of squares, in 1974. "
             "<bookmark mark='d'/> In general, though, five or ten folds are the usual choice: fits on ninety percent of the data "
-            "are slightly worse than on all of it, so the estimate is a little pessimistic, but it varies much less than "
-            "leave-one-out."
+            "can differ from fits on all the data. The bias and variance trade-off depends on the learning method and data; fewer folds are cheaper, not universally less variable."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -203,6 +202,7 @@ class CrossValidation(VoiceoverScene):
             label(r"folds must respect the structure: \ whole clusters, \ blocks of time", font_size=24, color=RES),
             label(r"Part 19: \ prediction, \ bias and variance, \ and model choice in full", font_size=24, color=GREY_A),
         ), 12.4, 0.46, [0, 0, 0])
+        intro = label('Validation must match how predictions will be used', font_size=36)
         with self.voiceover(
             "Some cautions. <bookmark mark='a'/> Cross-validation estimates how well a procedure performs on data like these, "
             "not the error of the one fitted curve. <bookmark mark='b'/> If you try many models and report the smallest "
@@ -212,7 +212,10 @@ class CrossValidation(VoiceoverScene):
             "whole clusters, or blocks of time, never single points from them. <bookmark mark='e'/> Part 19 takes prediction "
             "and model choice up in full."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()

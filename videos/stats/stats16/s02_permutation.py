@@ -99,15 +99,15 @@ class Permutation(VoiceoverScene):
             MathTex(rf"\binom{{24}}{{12}} = {d['n_alloc']:,}\ \text{{splits}}", font_size=26),
             MathTex(rf"\text{{exact}}\ p = {d['p']:.3f}", font_size=30, color=OBS),
             MathTex(rf"\text{{Welch}}\ p = {d['welch_p']:.3f}", font_size=26, color=S.ALT),
-            label(r"the World's truth: \ no difference", font_size=22, color=S.TRUTH),
+            label(rf"World population mean difference: \ {d['truth']:.2f} thousand", font_size=22, color=S.TRUTH),
         ), 3.8, 0.34, [5.0, 0.4, 0])
         with self.voiceover(
             "<bookmark mark='a'/> There are two million seven hundred thousand ways to split twenty-four incomes into two groups "
             "of twelve, few enough for a computer to try every one. Here is the exact distribution of the difference in means "
             "under the null. <bookmark mark='b'/> A difference as large as twenty thousand, either way, happens in twenty-three "
             "percent of the splits: p equals point two three. <bookmark mark='c'/> Welch's test, Part 10's, gives point two four: "
-            "the normal approximation is decent even here. <bookmark mark='d'/> And in the World, incomes don't depend on sex at "
-            "all. The permutation test made no assumption about how incomes are distributed, and was right not to be impressed."
+            "the normal approximation is decent even here. <bookmark mark='d'/> The World generates income without a direct sex effect, but its finite population has a small realized difference. "
+            "The permutation null requires exchangeable groups, not merely equal means."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
@@ -144,11 +144,8 @@ class Permutation(VoiceoverScene):
         self.clear_scene()
 
     def correlation(self):
-        L, G = np.asarray(museum.LAW_LSAT, float), np.asarray(museum.LAW_GPA, float)
-        g = np.random.Generator(np.random.PCG64(1))
-        r = np.corrcoef(L, G)[0, 1]
-        c = np.array([np.corrcoef(L, g.permutation(G))[0, 1] for _ in range(20000)])
-        p = float(np.mean(np.abs(c) >= r))
+        d = load("association")
+        r, c, p = d["r"], np.asarray(d["null"]), d["p"]
         A = axes([-1, 1], [0, 1700], x_length=8.4, y_length=3.6, xlabel=r"correlation after shuffling the GPAs", ylabel=r"shuffles",
                  xticks=[-1, -0.5, 0, 0.5, 1], yticks=[0, 500, 1000, 1500], center=[-1.2, 0.5, 0])
         ax = A.ax
@@ -159,14 +156,14 @@ class Permutation(VoiceoverScene):
             label(r"$H_0$: \ LSAT and GPA independent", font_size=24),
             label(r"shuffle one column against the other", font_size=24),
             MathTex(rf"20{{,}}000\ \text{{shuffles:}}\ p = {p:.4f}", font_size=30, color=OBS),
-            label(r"the law schools' correlation is real", font_size=24, color=OBS),
+            label(r"evidence against independence", font_size=24, color=OBS),
         ), 3.8, 0.36, [5.0, 0.5, 0])
         with self.voiceover(
             "Permutations test association too. <bookmark mark='a'/> If LSAT and GPA were independent across law schools, "
             "<bookmark mark='b'/> pairing each school's LSAT with a random school's GPA would be as likely as the real pairing. "
             "Shuffle the GPA column twenty thousand times and recompute the correlation each time. <bookmark mark='c'/> A "
             "correlation as large as point seven seven six turns up in fewer than two shuffles in a thousand. "
-            "<bookmark mark='d'/> The association is real, with no assumption of normality."
+            "<bookmark mark='d'/> This is evidence against independence under IID sampling, without a normality assumption. The Monte Carlo p-value includes the observed pairing."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
@@ -183,17 +180,21 @@ class Permutation(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"the null must make the data exchangeable", font_size=26),
             label(r"``same mean, \ different spreads'' does not: \ the test then answers a different question", font_size=24, color=RES),
-            label(r"dependent data (time, \ clusters) are not exchangeable: \ Part 17", font_size=24, color=RES),
-            label(r"a test, \ not an interval: \ for intervals we need the bootstrap", font_size=24, color=BOOT),
+            label(r"time and cluster dependence may require restricted permutations: \ Part 17", font_size=24, color=RES),
+            label(r"invert permutation tests for intervals; \ bootstrap also estimates SEs", font_size=24, color=BOOT),
         ), 12.4, 0.5, [0, 0, 0])
+        intro = label('Exact calibration depends on the null symmetry', font_size=36)
         with self.voiceover(
             "The limits. <bookmark mark='a'/> The null hypothesis must make the observations exchangeable. "
             "<bookmark mark='b'/> \"Same mean, but perhaps different spreads\" doesn't: shuffling then tests whether the "
             "distributions are identical, a different question. <bookmark mark='c'/> Data that depend on each other, in time or in "
-            "clusters, aren't exchangeable at all: that's Part 17. <bookmark mark='d'/> And a permutation test gives a p-value, "
-            "not an interval. For a standard error or an interval without a model, we'll need the bootstrap."
+            "clusters, generally need permutations that respect their dependence: Part 17. Some dependent laws are exchangeable. <bookmark mark='d'/> Permutation tests can also be inverted for confidence sets. "
+            "For standard errors and another approach to intervals, we turn to the bootstrap."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()

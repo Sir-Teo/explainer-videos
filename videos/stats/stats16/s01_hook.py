@@ -73,7 +73,7 @@ class Hook(VoiceoverScene):
             cmath(r"\mathrm{SE}(r)", r"\approx", rf"\frac{{1 - r^2}}{{\sqrt{{n - 3}}}} = {d['se_normal']:.3f}", font_size=34),
             cmath(r"\text{assumes}", r":", r"\text{(LSAT, GPA) bivariate normal}", font_size=32),
             cmath(r"\text{the bootstrap}", r":", rf"\mathrm{{SE}}(r) \approx {d['se_boot']:.3f}", font_size=34),
-            cmath(r"\text{assumes}", r":", r"\text{only that the 15 schools are a random sample}", font_size=32),
+            cmath(r"\text{assumes}", r":", r"\text{IID schools; regularity and finite moments}", font_size=32),
         ]
         rows[2][2].set_color(BOOT)
         whys = [why(r"Fisher's $z$ (1915), \ by the delta method"), why(r"a model for the population"),
@@ -83,7 +83,7 @@ class Hook(VoiceoverScene):
             "over the square root of n minus three, point one one five. <bookmark mark='b'/> But that formula assumes the "
             "two scores are bivariate normal, which nobody has checked and fifteen points can't confirm. "
             "<bookmark mark='c'/> Efron's bootstrap, which we'll build in chapter seven, gives point one three five, "
-            "<bookmark mark='d'/> assuming only that the fifteen schools are a random sample from some population. This part is "
+            "<bookmark mark='d'/> assuming independent, identically distributed schools, nonzero variances and suitable finite moments. This part is "
             "about methods like that: answers that lean on the data rather than on a model."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
@@ -103,7 +103,7 @@ class Hook(VoiceoverScene):
             "<bookmark mark='a'/> The name is a joke: to pull oneself up by one's own bootstraps, an impossible feat attributed to "
             "Baron Munchausen. <bookmark mark='b'/> The bootstrap seems to get something from nothing: a whole sampling "
             "distribution from a single sample. We'll see why it works, and when it doesn't. <bookmark mark='c'/> The part also "
-            "covers an older family of methods built on ranks, which give exact tests with no distributional assumption at all: "
+            "covers an older family of methods built on ranks, which give exact tests under exchangeability or symmetry, without a normal model: "
             "Frank Wilcoxon's of 1945, Henry Mann and Donald Whitney's of 1947. <bookmark mark='d'/> Both families rest on the "
             "same idea: use the symmetries the data themselves possess."
         ) as vo:
@@ -124,7 +124,7 @@ class Hook(VoiceoverScene):
         prereq = note(r"prerequisites: \ Parts 8, \ 10 and 11").to_corner(DL, buff=0.3)
         built = note(r"built: \ \texttt{statkit.bootstrap}, \ \texttt{statkit.ranks}; \ the resampler").to_corner(DR, buff=0.3)
         with self.voiceover(
-            "<bookmark mark='a'/> Part sixteen: without assumptions. <bookmark mark='b'/> We'll build permutation tests from "
+            "<bookmark mark='a'/> Part sixteen: without assumptions is the title, but weaker assumptions is the promise. <bookmark mark='b'/> We'll build permutation tests from "
             "exchangeability; the rank tests, from the sign test to Kendall's tau, and see how little they cost; the jackknife "
             "and the bootstrap principle; four kinds of bootstrap interval, tested on the Coverage Board, and a case where the "
             "bootstrap fails; and two methods we'll meet again: cross-validation and kernel density estimation."

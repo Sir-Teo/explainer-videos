@@ -76,8 +76,8 @@ class Jackknife(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> Average the leave-one-out values. <bookmark mark='b'/> Quenouille's bias estimate is n minus "
             "one times the difference between that average and the full-sample correlation: minus point oh oh six five, tiny "
-            "here. It removes the part of an estimator's bias that shrinks like one over n. <bookmark mark='c'/> Tukey's standard "
-            "error looks like an ordinary standard deviation of the fifteen values, but multiplied by n minus one. That's "
+            "here. For estimators with a smooth bias expansion, it removes the leading one-over-n term. <bookmark mark='c'/> Tukey's standard "
+            "error looks like the standard error of the mean of the fifteen leave-one-out values, multiplied by n minus one. That's "
             "because the leave-one-out values are far too alike: any two share thirteen of their fourteen schools, so their "
             "spread must be scaled up. <bookmark mark='d'/> The result is point one four three, with no model at all: larger "
             "than the normal-theory formula's point one one five, and close to the bootstrap's point one three five."
@@ -122,7 +122,7 @@ class Jackknife(VoiceoverScene):
                  yticks=[2.8, 3.2, 3.6], center=[-3.0, 0.2, 0])
         ax = A.ax
         sz = np.abs(infl) / np.abs(infl).max()
-        dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.06 + 0.16 * s, color=RES if v < 0 else S.CTRL, fill_opacity=0.8)
+        dots = VGroup(*[Dot(ax.c2p(a, b), radius=np.sqrt(0.06**2 + 0.16**2 * s), color=RES if v < 0 else S.CTRL, fill_opacity=0.8)
                         for a, b, s, v in zip(L, G, sz, infl)])
         i0 = int(np.argmax(np.abs(infl)))
         rows = fit_rows(VGroup(
@@ -135,7 +135,7 @@ class Jackknife(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> The jackknife has a second use. Scale each school's change by n minus one, and you have a "
             "measure of how hard that school pulls on the estimate: a finite-sample version of what Part 30 will call the "
-            "influence function. <bookmark mark='b'/> Draw each school with its size proportional to its pull. "
+            "influence function. <bookmark mark='b'/> Draw each school with its marker area above a fixed baseline proportional to its absolute pull. "
             "<bookmark mark='c'/> Red schools lower the correlation, blue ones raise it. <bookmark mark='d'/> One school dominates: "
             "LSAT five seven six, GPA three point three nine, far above the trend. Without it the correlation is point eight nine "
             "three. <bookmark mark='e'/> It's Part 12's influence probe, extended to any statistic: not only regression "
@@ -170,7 +170,7 @@ class Jackknife(VoiceoverScene):
             MathTex(rf"\widehat{{\mathrm{{SE}}}}_{{\text{{jack}}}} = {j['se']:.1f}", font_size=28, color=BOOT),
             MathTex(rf"\widehat{{\mathrm{{SE}}}}_{{\text{{boot}}}} = {bse:.1f}", font_size=28),
             label(r"the median isn't smooth: \ removing one point barely moves it, \ or jumps it", font_size=20, color=RES),
-            label(r"Efron (1982): \ the jackknife SE of a median doesn't even converge", font_size=20, color=RES),
+            label(r"Efron (1982): \ median jackknife SE: \ relative consistency fails", font_size=20, color=RES),
         ), 4.6, 0.36, [4.4, 0.4, 0])
         with self.voiceover(
             "But the jackknife has a blind spot. <bookmark mark='a'/> Leave one LSAT out at a time and take the median of the "
@@ -179,7 +179,7 @@ class Jackknife(VoiceoverScene):
             "is fourteen point seven; <bookmark mark='c'/> the bootstrap, which we're about to build, gives eighteen point four. "
             "<bookmark mark='d'/> The jackknife works by small perturbations, so it needs a statistic that changes smoothly "
             "with the data, and the median jumps. <bookmark mark='e'/> Efron showed in 1982 that for the median the jackknife "
-            "standard error isn't even consistent: it stays noisy however large the sample. Something that perturbs the data "
+            "standard error fails relative consistency: after multiplication by the square root of n it remains noisy. The unscaled error estimate still shrinks. Something that perturbs the data "
             "more boldly is needed."
         ) as vo:
             self.play(FadeIn(A))

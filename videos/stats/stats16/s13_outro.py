@@ -5,7 +5,7 @@ from videos.stats.stats16.common import *  # noqa: F403
 PROBLEMS = [
     r"Two groups $\{3, 5, 9\}$ and $\{1, 2, 4\}$: \ the exact permutation $p$-value for the difference in means, \ one-sided.",
     r"$n = 4$: \ list the null distribution of Wilcoxon's $W^+$, \ and find $P(W^+ \ge 9)$.",
-    r"Show that $U = R - m(m+1)/2$ counts the pairs $(i, j)$ with $x_i > y_j$, \ where $R$ is the rank sum of the $x$'s.",
+    r"With no ties, show that $U = R - m(m+1)/2$ counts the pairs $(i, j)$ with $x_i > y_j$, \ where $R$ is the rank sum of the $x$'s.",
     r"Show that the jackknife bias correction of $\hat\sigma^2 = \frac1n\sum(x_i - \bar x)^2$ gives exactly $s^2$.",
     r"For $n$ distinct values, \ find $P^*(\text{a resample contains } x_1)$, \ and its limit.",
     r"Show that the percentile interval for $\max_i x_i$ from Uniform$(0, \theta)$ never contains $\theta$.",
@@ -39,15 +39,15 @@ class Outro(VoiceoverScene):
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
             "Part sixteen in thirteen lines. <bookmark mark='a'/> Efron asked for the standard error of a correlation from "
-            "fifteen law schools, without a model. Permutation tests give exact p-values whenever the null makes the data "
-            "exchangeable. The sign test uses only signs, and Fisher's sign flip tested Darwin's maize exactly. Wilcoxon's "
-            "signed rank needs only symmetry, and the Hodges–Lehmann estimate goes with it. Mann and Whitney's U counts pairs, "
+            "fifteen law schools, without a normal model. Permutation tests give exact p-values whenever the null makes the data "
+            "exchangeable. The sign test uses only signs, and Fisher's sign flip has exact calibration under independent symmetric differences or a justified assignment mechanism. Wilcoxon's "
+            "signed rank assumes independent symmetric continuous differences, and the Hodges–Lehmann estimate goes with it. Mann and Whitney's U counts pairs, "
             "and divided by their number it's the area under the ROC curve. Ranks extend to many groups, to blocks and to "
-            "correlation. They cost four and a half percent at the normal, never more than fourteen, and can gain without "
+            "correlation. They cost four and a half percent at the normal, with a regular-location efficiency bound of 0.864, and can gain without "
             "limit. The jackknife estimates bias and standard error, and measures each point's influence, but fails for the "
             "median. The bootstrap mirrors the real world with the empirical distribution. Its intervals come in four kinds, "
-            "and the Board found none of them reaches ninety-five percent for a mean of fifteen skewed incomes. For a maximum, "
-            "it fails outright. Cross-validation measures prediction honestly, and kernel estimates draw a density without "
+            "and the Board found none of those four recipes reaches ninety-five percent for a mean of fifteen skewed incomes. For a maximum, "
+            "its usual n-scaled bootstrap approximation fails. Cross-validation measures prediction honestly, and kernel estimates draw a density without "
             "bins, if the bandwidth is right."
         ) as vo:
             self.play(FadeIn(head))
@@ -63,15 +63,18 @@ class Outro(VoiceoverScene):
             (r"bootstrap theory: \ Edgeworth expansions, \ second-order accuracy", [47]),
             (r"permutation tests and multiple testing", [33]), (r"conformal prediction", [34, 57]),
         ], font_size=22)
+        intro = label('Where resampling and ranks return', font_size=36)
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part 17 resamples dependent data in blocks. Part 19 makes cross-"
             "validation the centre of model choice. Part 29 builds nonparametric regression from kernels and meets the curse "
             "of dimensionality. Part 30 proves the efficiency results and measures robustness with influence functions. Part 47 "
             "explains, with Edgeworth expansions, why the bootstrap-t and BCa are second-order accurate. Permutation methods "
             "return for multiple testing in Part 33, and exchangeability gives conformal prediction, intervals with guaranteed "
-            "coverage and no model at all, in Parts 34 and 57."
+            "marginal coverage under exchangeability, in Parts 34 and 57."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
@@ -117,7 +120,7 @@ class Outro(VoiceoverScene):
         nxt.next_to(tr, DOWN, buff=1.0)
         with self.voiceover(
             "Sixteen parts of sixty-five, the sixth of Stage II. <bookmark mark='a'/> We can now test, estimate and draw "
-            "intervals with very few assumptions. <bookmark mark='b'/> All but one: independence. Every method in this part "
+            "intervals with very few assumptions. <bookmark mark='b'/> Now relax independence. The ordinary procedures illustrated here "
             "shuffled or resampled observations as if each were a separate draw. In 1926 George Udny Yule found that marriages "
             "in the Church of England correlated nought point nine five with mortality, and asked why time series produce such "
             "nonsense. Part 17: time series."

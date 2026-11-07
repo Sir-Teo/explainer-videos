@@ -50,15 +50,15 @@ class BootIntervals(VoiceoverScene):
             label(r"the 2.5th and 97.5th percentiles of $r^*$", font_size=22),
             MathTex(rf"[{lo:.3f},\ {hi:.3f}]", font_size=32, color=BOOT),
             label(r"respects $r \le 1$; \ transformation-invariant", font_size=22, color=HIT),
-            label(r"but assumes $r^*$'s spread matches $r$'s, \ with no bias", font_size=22, color=RES),
+            label(r"regularity is needed; \ finite-sample coverage can be poor", font_size=22, color=RES),
         ), 4.6, 0.36, [4.6, 0.5, 0])
         with self.voiceover(
             "We have two thousand bootstrap correlations. How do we make an interval? <bookmark mark='a'/> The simplest answer, "
             "Efron's first: <bookmark mark='b'/> take the middle ninety-five percent of the replicates, from the two and a "
             "half to the ninety-seven and a half percentile. <bookmark mark='c'/> Point four four seven to point nine six two. "
             "<bookmark mark='d'/> It has nice properties. It can't leave the range of possible values, and if you transform "
-            "the statistic, say by Fisher's z, the interval transforms with it. <bookmark mark='e'/> But it's justified only if "
-            "there's some transformation that makes the estimate unbiased and normal with constant variance. When the "
+            "the statistic, say by Fisher's z, ideal percentile endpoints transform with it. Finite Monte Carlo interpolation introduces small discrepancies. <bookmark mark='e'/> One useful sufficient motivation is that "
+            "a transformation makes the estimate approximately unbiased and normal with constant variance. This is not a necessary condition. When the "
             "estimate is biased or its spread changes with the parameter, the percentile interval is off."
         ) as vo:
             self.play(FadeIn(A), FadeIn(bars), Create(one), Create(obs))
@@ -149,7 +149,7 @@ class BootIntervals(VoiceoverScene):
             "is symmetric: twenty-eight to fifty-seven. <bookmark mark='e'/> The percentile interval is narrower: "
             "thirty-one to fifty-five. Both catch the truth this time, but both sit nearly symmetrically around a mean that's too low. <bookmark mark='f'/> The bootstrap-t interval "
             "stretches to the right, thirty to sixty-two, because with a right-skewed population a low sample mean usually "
-            "comes with a low standard deviation too. Peter Hall showed in 1988 that this interval is accurate to second order: "
+            "comes with a low standard deviation too. Peter Hall showed in 1988 that this interval is accurate to second order under suitable smoothness and moment conditions: "
             "its coverage error shrinks like one over n rather than one over root n."
         ) as vo:
             vo.wait_until("a")
@@ -165,11 +165,12 @@ class BootIntervals(VoiceoverScene):
 
     def bca(self):
         d = load("law")
+        low, high = d["bca_levels"]
         rows = [
-            cmath(r"z_0", r"=", rf"\Phi^{{-1}}\big(\#\{{r^* < r\}}/B\big) = {d['z0']:.3f}", font_size=30),
+            cmath(r"z_0", r"=", rf"\Phi^{{-1}}\big((\#\{{r^* < r\}}+\tfrac12\#\{{r^*=r\}})/B\big) = {d['z0']:.3f}", font_size=30),
             cmath(r"a", r"=", rf"\frac{{\sum (\bar r_{{(\cdot)}} - r_{{(i)}})^3}}{{6 \big[\sum (\bar r_{{(\cdot)}} - r_{{(i)}})^2\big]^{{3/2}}}} = {d['a']:.3f}", font_size=28),
-            cmath(r"\alpha_{1,2}", r"=", r"\Phi\Big(z_0 + \frac{z_0 + z_\alpha}{1 - a(z_0 + z_\alpha)}\Big) = 0.004,\ 0.929", font_size=28),
-            cmath(r"\text{BCa}", r"=", rf"[q^*_{{.004}},\ q^*_{{.929}}] = [{d['bca'][0]:.3f},\ {d['bca'][1]:.3f}]", font_size=30),
+            cmath(r"\alpha_{1,2}", r"=", rf"\Phi\Big(z_0 + \frac{{z_0 + z_\alpha}}{{1 - a(z_0 + z_\alpha)}}\Big) = {low:.3f},\ {high:.3f}", font_size=28),
+            cmath(r"\text{BCa}", r"=", rf"[q^*_{{{low:.3f}}},\ q^*_{{{high:.3f}}}] = [{d['bca'][0]:.3f},\ {d['bca'][1]:.3f}]", font_size=30),
         ]
         rows[3][2].set_color(OBS)
         whys = [why(r"bias: \ only 45\% of replicates fall below $r$"), why(r"acceleration: \ the jackknife's skewness"),
@@ -233,7 +234,7 @@ class BootIntervals(VoiceoverScene):
             "five and a half percent: broken. <bookmark mark='b'/> BCa, eighty-six point seven: broken too, barely better. "
             "<bookmark mark='c'/> The bootstrap-t, ninety-one point six: still broken, but the best by far. "
             "<bookmark mark='d'/> And Student's t, the method that assumes normality: eighty-eight point four. Between the "
-            "percentile and the bootstrap-t. With fifteen observations from a population this skewed, nothing reaches "
+            "percentile and the bootstrap-t. With fifteen observations from a population this skewed, none of these four recipes reaches "
             "ninety-five percent. The bootstrap is not magic: it can't conjure the incomes in the long right tail that the "
             "sample didn't happen to contain."
         ) as vo:
@@ -246,18 +247,18 @@ class BootIntervals(VoiceoverScene):
 
     def lessons(self):
         rows = fit_rows(VGroup(
-            label(r"percentile: \ simple, \ in range, \ but first-order: \ too narrow when $n$ is small", font_size=24, color=BOOT),
+            label(r"percentile: \ in range; \ usually first-order under regularity", font_size=24, color=BOOT),
             label(r"basic: \ the right logic, \ but it can leave the parameter space", font_size=24, color=RES),
             label(r"bootstrap-$t$: \ second-order, \ needs a standard error for every resample", font_size=24, color=OBS),
-            label(r"BCa: \ second-order, \ in range, \ the usual default", font_size=24, color=OBS),
+            label(r"BCa: \ second-order under regularity; \ a common option", font_size=24, color=OBS),
             label(r"none can see the tail the sample missed", font_size=26, color=GREY_A),
         ), 12.4, 0.46, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The percentile interval is simple and stays in range, but its coverage error shrinks slowly "
-            "and it's too narrow in small samples. <bookmark mark='b'/> The basic interval has the right logic but can leave the "
-            "parameter space. <bookmark mark='c'/> The bootstrap-t is second-order accurate but needs a standard error for every "
+            "and small-sample coverage can be poor in either direction. <bookmark mark='b'/> The basic interval has the right logic but can leave the "
+            "parameter space. <bookmark mark='c'/> Under stronger smoothness and moment conditions, the bootstrap-t is second-order accurate but needs a standard error for every "
             "resample, which for complicated statistics means a bootstrap inside the bootstrap. <bookmark mark='d'/> BCa is "
-            "second-order accurate and stays in range, and is the usual default in software. <bookmark mark='e'/> And none of "
+            "second-order accurate under suitable regularity, stays in range, and is a common software option. Its finite-sample fitted acceleration need not transform exactly. <bookmark mark='e'/> And none of "
             "them can see what the sample didn't contain."
         ) as vo:
             for k, m_ in enumerate("abcde"):
