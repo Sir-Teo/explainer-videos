@@ -19,7 +19,7 @@
    "tokens": 3,
    "peak": 0.28289794921875,
    "issues": [],
-   "elapsed": 0.01,
+   "elapsed": 0.03,
    "asr_review_leads": []
   },
   {
@@ -30,7 +30,7 @@
    "tokens": 112,
    "peak": 0.470428466796875,
    "issues": [],
-   "elapsed": 0.01,
+   "elapsed": 0.07,
    "asr_review_leads": []
   },
   {
@@ -41,7 +41,7 @@
    "tokens": 84,
    "peak": 0.77862548828125,
    "issues": [],
-   "elapsed": 0.01,
+   "elapsed": 0.02,
    "asr_review_leads": []
   },
   {
@@ -52,7 +52,7 @@
    "tokens": 139,
    "peak": 0.614593505859375,
    "issues": [],
-   "elapsed": 0.02,
+   "elapsed": 0.06,
    "asr_review_leads": []
   },
   {
@@ -63,7 +63,7 @@
    "tokens": 104,
    "peak": 0.64935302734375,
    "issues": [],
-   "elapsed": 0.01,
+   "elapsed": 0.03,
    "asr_review_leads": []
   },
   {
@@ -74,7 +74,7 @@
    "tokens": 74,
    "peak": 0.735565185546875,
    "issues": [],
-   "elapsed": 0.01,
+   "elapsed": 0.05,
    "asr_review_leads": []
   },
   {
@@ -85,7 +85,7 @@
    "tokens": 73,
    "peak": 0.530426025390625,
    "issues": [],
-   "elapsed": 0.01,
+   "elapsed": 0.03,
    "asr_review_leads": []
   },
   {
@@ -96,11 +96,11 @@
    "tokens": 86,
    "peak": 0.480743408203125,
    "issues": [],
-   "elapsed": 0.01,
+   "elapsed": 0.07,
    "asr_review_leads": []
   }
  ],
  "issues": [],
  "input_record": "renders/qa/series/stats12/en/Diagnostics_motion/result.json",
- "input_sha256": "88957ccd65418f42b5cc8c8594d45e5f41cef53a9f4c90cd29d5a3a0aed0f97e"
+ "input_sha256": "a460c226d3d8568ca91c9c4c27555ee89ced68d5b63e9a30cada8ac4fb3f389d"
 }

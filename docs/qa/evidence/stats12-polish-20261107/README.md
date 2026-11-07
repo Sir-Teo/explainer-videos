@@ -7,3 +7,5 @@ The visual pass fits the rotating model-space plane, retains context through the
 The 242.133-second narrated Diagnostics preview matches the current narration and was inspected as a contact sheet. All eight speech signal/alignment checks are clean; its scan found no blank or sparse runs of at least 1.5 seconds. Receipts preserve source/data provenance and translation warnings.
 
 This is an English source/visual pass. Chinese narration/captions, continuous listening/full playback, and final narrated masters remain open. No bilingual production approval is implied.
+
+[Shared-source refresh](shared-source-refresh.json): all endpoint/native/motion captures and speech checks rerun after the World programme-name and Board covariance corrections; narrated source matching verified.
