@@ -120,11 +120,14 @@ def compute_fullboard():
     missing=expected-{r.part for r in rows}
     if missing:raise RuntimeError(f'Cannot publish full Board: missing parts {sorted(missing)}')
     stage = lambda p: 1 if p <= 10 else 2 if p <= 20 else 3 if p <= 42 else 4 if p <= 55 else 5  # noqa: E731
+    historical_inputs = [p for p in sorted(Path(".cache").glob("stats*/board.json"))
+                         if int(p.parent.name[5:]) <= 65]
+    historical_inputs.append(Path(".cache/stats64/holdout.json"))
     out = {"n": len(rows), "parts": len({r.part for r in rows}), "verdict": Counter(r.verdict for r in rows),
            "kind": Counter(r.kind for r in rows),
            "holdout_reuse_accuracy": Cache("stats64").load("holdout")["reuse"]["holdout"][-1],
            "by_stage": {s: Counter(r.verdict for r in rows if stage(r.part) == s) for s in range(1, 6)},
-           "input_hashes": [{"file":str(p),"sha256":hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(Path(".cache").glob("stats*/board.json")) if int(p.parent.name[5:])<=65],
+           "input_hashes": [{"file":str(p),"sha256":hashlib.sha256(p.read_bytes()).hexdigest()} for p in historical_inputs],
            "rows": [{"part": r.part, "method": r.method, "kind": r.kind, "nominal": r.nominal, "achieved": r.achieved,
                      "verdict": r.verdict, "reps": r.reps, "mc_se": r.se, "setting": r.setting} for r in rows]}
     return {k: (dict(v) if isinstance(v, Counter) else ({s: dict(c) for s, c in v.items()} if k == "by_stage" else v)) for k, v in out.items()}
