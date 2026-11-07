@@ -1,0 +1,171 @@
+{
+  "fingerprint": "87436f8c610ab8d9e8dbad09dacf007582f19e78c5b6b2e74c6bcce9a03c9fa4",
+  "scope": "English sampled visual review; continuous playback/listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 41
+      },
+      "input_record": "renders/qa/series/stats45/en/Hook/result.json",
+      "input_sha256": "fccc4be7522d2250240258fe9b6c1b0b75e349db39ef700d43a203c1a5fc6bbe"
+    },
+    {
+      "scene": "Decision",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 51
+      },
+      "input_record": "renders/qa/series/stats45/en/Decision/result.json",
+      "input_sha256": "863967358c950d7f4bcac1ade45742f417b765c4634cba5734f117d91699aee3"
+    },
+    {
+      "scene": "RiskSets",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 41
+      },
+      "input_record": "renders/qa/series/stats45/en/RiskSets/result.json",
+      "input_sha256": "e7a8668e8077d05cc0e20c4091e82c20799a6aeeec2c1e4ddd78126df3a4a65a"
+    },
+    {
+      "scene": "CompleteClass",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 44
+      },
+      "input_record": "renders/qa/series/stats45/en/CompleteClass/result.json",
+      "input_sha256": "18caca4a327374fba041b8926f9ae1c072bec26199f01782336cada24447296f"
+    },
+    {
+      "scene": "ExpFamilies",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 42
+      },
+      "input_record": "renders/qa/series/stats45/en/ExpFamilies/result.json",
+      "input_sha256": "fce4769a7fe34ed0e7d33b3e98a94cc1b50c952ae2259e31163f3b05896e49d0"
+    },
+    {
+      "scene": "Sufficiency",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 58
+      },
+      "input_record": "renders/qa/series/stats45/en/Sufficiency/result.json",
+      "input_sha256": "811117df9f5702e807eaa0d2c5ad02b64a50acfa8ea216483bedf29562a713bc"
+    },
+    {
+      "scene": "RaoBlackwell",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 57
+      },
+      "input_record": "renders/qa/series/stats45/en/RaoBlackwell/result.json",
+      "input_sha256": "8439015e38559108cb81a88cb4eacfe0bcd989e1b3a0f807ef0c86b1918be4c1"
+    },
+    {
+      "scene": "Ancillarity",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 57
+      },
+      "input_record": "renders/qa/series/stats45/en/Ancillarity/result.json",
+      "input_sha256": "81da3f468ec25ad3996caa790bd77e6f3f8a9be5dc49673ba73d5af21831b2fb"
+    },
+    {
+      "scene": "Information",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 49
+      },
+      "input_record": "renders/qa/series/stats45/en/Information/result.json",
+      "input_sha256": "1c4d49c2e66e80a564e6d8645bdcb681195d2d226ca630dc8249b2bac9ba1d02"
+    },
+    {
+      "scene": "Equivariance",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 57
+      },
+      "input_record": "renders/qa/series/stats45/en/Equivariance/result.json",
+      "input_sha256": "7735ee3df467b2a55c0089fc6dfd70e66fb9f05c39ea946159a6ad703205b66a"
+    },
+    {
+      "scene": "SteinLemma",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 44
+      },
+      "input_record": "renders/qa/series/stats45/en/SteinLemma/result.json",
+      "input_sha256": "eef8ba6cf1f8dd27fe084eb5990f07b226c0276510076432d9b373885ed25afb"
+    },
+    {
+      "scene": "Brown",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 52
+      },
+      "input_record": "renders/qa/series/stats45/en/Brown/result.json",
+      "input_sha256": "86f1539deaf3231a1c6afa4b156639d8c626e605b4839e9cf6aa929a78d81a47"
+    },
+    {
+      "scene": "NormalMeans",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 50
+      },
+      "input_record": "renders/qa/series/stats45/en/NormalMeans/result.json",
+      "input_sha256": "228730bbeb7d7fe95cdf677374bf0eb9ad9b668d18075402255bd36f9e2177e5"
+    },
+    {
+      "scene": "EmpiricalBayes",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 45
+      },
+      "input_record": "renders/qa/series/stats45/en/EmpiricalBayes/result.json",
+      "input_sha256": "99fe15a6f8878228df069b04a505805a421218c1fa994e84b88412b15d9f2d93"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 12,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 63
+      },
+      "input_record": "renders/qa/series/stats45/en/Outro/result.json",
+      "input_sha256": "d6858ea90dca34bec0e4950156084c0ff14505c043f02b02faaf00301d85e4af"
+    }
+  ]
+}

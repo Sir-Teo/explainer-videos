@@ -1,0 +1,23 @@
+{
+  "part": "stats45",
+  "fingerprint": "87436f8c610ab8d9e8dbad09dacf007582f19e78c5b6b2e74c6bcce9a03c9fa4",
+  "english_endpoints": 15,
+  "native_1080_endpoints": 14,
+  "silent_motion_chapters": 14,
+  "audio_scene": "Equivariance",
+  "audio_lines": 7,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats45/en/Equivariance/videos/s10_equivariance/480p15/Equivariance.mp4",
+    "seconds": 272.7999999999983,
+    "narration_sha256": "c9025cf7d8c41bf4cc024bb76f96b1f811a7dd343ba27fc2b09bd4298e6cf50d",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 273 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 273 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

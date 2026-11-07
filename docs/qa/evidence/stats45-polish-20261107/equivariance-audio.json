@@ -1,0 +1,95 @@
+{
+ "video": "stats45",
+ "scene": "Equivariance",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 7,
+ "lines": [
+  {
+   "raw": "Chapter nine. Equivariance: rules that respect the symmetry of the problem.",
+   "spoken": "Chapter nine. Equivariance: rules that respect the symmetry of the problem.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/55da4039bf87dcf0.wav",
+   "duration": 5.15,
+   "tokens": 11,
+   "peak": 0.422027587890625,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Chapter one's second escape: restrict the competition by symmetry. In a location family, each observation is theta plus an error with a known density f. <bookmark mark='b'/> If we shift every observation by c, the problem is the same problem shifted, so a sensible estimate should shift by c too. Such rules are called equivariant; the mean, the median and the midrange all are. <bookmark mark='c'/> An equivariant rule's risk is the same at every theta, because shifting theta just shifts the data. <bookmark mark='d'/> So the risk curve is a single number, the stopped clocks are excluded, and a best equivariant rule can exist: we just minimize that number.",
+   "spoken": "Chapter one's second escape: restrict the competition by symmetry. In a location family, each observation is theta plus an error with a known density f. If we shift every observation by c, the problem is the same problem shifted, so a sensible estimate should shift by c too. Such rules are called equivariant; the mean, the median and the midrange all are. An equivariant rule's risk is the same at every theta, because shifting theta just shifts the data. So the risk curve is a single number, the stopped clocks are excluded, and a best equivariant rule can exist: we just minimize that number.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/9d171cbb7cd81315.wav",
+   "duration": 36.525,
+   "tokens": 104,
+   "peak": 0.5408935546875,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Every equivariant rule is one of them, chosen to have finite risk, such as the median for five Cauchy observations, minus some function of the gaps between the observations. <bookmark mark='b'/> The gaps are ancillary: their law does not involve theta. Minimizing the risk means choosing that function as the conditional mean of the first rule given the gaps, with theta set to zero. <bookmark mark='c'/> Edwin Pitman worked out the answer in 1939: the integral of t times the likelihood, over the integral of the likelihood. <bookmark mark='d'/> That is the posterior mean under a flat, improper prior on theta. When these integrals and the required moments exist, the best equivariant estimator is a generalized Bayes rule, as chapter three said the good ones would be.",
+   "spoken": "Every equivariant rule is one of them, chosen to have finite risk, such as the median for five Cauchy observations, minus some function of the gaps between the observations. The gaps are ancillary: their law does not involve theta. Minimizing the risk means choosing that function as the conditional mean of the first rule given the gaps, with theta set to zero. Edwin Pitman worked out the answer in 1939: the integral of t times the likelihood, over the integral of the likelihood. That is the posterior mean under a flat, improper prior on theta. When these integrals and the required moments exist, the best equivariant estimator is a generalized Bayes rule, as chapter three said the good ones would be.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/1262772cbb459128.wav",
+   "duration": 43.025,
+   "tokens": 121,
+   "peak": 0.604339599609375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Pitman's estimator under four error laws, five observations each, against the mean and the median. <bookmark mark='b'/> For normal errors, it is the mean, and the median is about forty percent worse. <bookmark mark='c'/> For Laplace errors, the median beats the mean, and Pitman beats both. <bookmark mark='d'/> For uniform errors, Pitman is the midrange, with about a third of the median's mean squared error. <bookmark mark='e'/> For Cauchy errors, the mean has no finite risk at all; the median is reasonable, and the numerical Pitman approximation has about seventeen percent less estimated risk in this finite simulation. This is a Monte Carlo comparison, with whole-line adaptive integration, rather than an exact percentage for the population. In every case the best equivariant rule adapts itself to the shape of the errors.",
+   "spoken": "Pitman's estimator under four error laws, five observations each, against the mean and the median. For normal errors, it is the mean, and the median is about forty percent worse. For Laplace errors, the median beats the mean, and Pitman beats both. For uniform errors, Pitman is the midrange, with about a third of the median's mean squared error. For Cauchy errors, the mean has no finite risk at all; the median is reasonable, and the numerical Pitman approximation has about seventeen percent less estimated risk in this finite simulation. This is a Monte Carlo comparison, with whole-line adaptive integration, rather than an exact percentage for the population. In every case the best equivariant rule adapts itself to the shape of the errors.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/ac158fccf199724a.wav",
+   "duration": 47.675,
+   "tokens": 123,
+   "peak": 0.6328125,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The uniform case is worth seeing exactly. <bookmark mark='b'/> The sample mean's mean squared error is one over twelve n. <bookmark mark='c'/> The midrange, Pitman's estimator here, has one over two times n plus one times n plus two. <bookmark mark='d'/> The ratio of the two is n plus one times n plus two over six n, which grows without bound: nearly nine at fifty observations, <bookmark mark='e'/> because it converges at chapter eight's rate of one over n squared: the edges of the data carry almost all the information.",
+   "spoken": "The uniform case is worth seeing exactly. The sample mean's mean squared error is one over twelve n. The midrange, Pitman's estimator here, has one over two times n plus one times n plus two. The ratio of the two is n plus one times n plus two over six n, which grows without bound: nearly nine at fifty observations, because it converges at chapter eight's rate of one over n squared: the edges of the data carry almost all the information.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/72d76e89e907858e.wav",
+   "duration": 27.7,
+   "tokens": 82,
+   "peak": 0.800323486328125,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The same idea works for scale. For normal observations with unknown mean mu and variance sigma squared, use relative squared loss for estimating the variance and the full location-scale group. <bookmark mark='b'/> Shifting and rescaling the data must leave a variance estimate unchanged by shifts and multiply it by the squared scale factor. <bookmark mark='c'/> For normal data, the best location-scale-equivariant estimator of the variance divides the sum of squares by n plus one: chapter three's winner, now with a reason. <bookmark mark='d'/> And again it is generalized Bayes, under the right Haar measure d mu d sigma over sigma. For this relative loss the Bayes action is the ratio of posterior inverse-variance moments, not the posterior mean of the variance. If the mean is instead known to be zero, the pure-scale answer uses the uncentered sum of squares divided by n plus two.",
+   "spoken": "The same idea works for scale. For normal observations with unknown mean mu and variance sigma squared, use relative squared loss for estimating the variance and the full location-scale group. Shifting and rescaling the data must leave a variance estimate unchanged by shifts and multiply it by the squared scale factor. For normal data, the best location-scale-equivariant estimator of the variance divides the sum of squares by n plus one: chapter three's winner, now with a reason. And again it is generalized Bayes, under the right Haar measure d mu d sigma over sigma. For this relative loss the Bayes action is the ratio of posterior inverse-variance moments, not the posterior mean of the variance. If the mean is instead known to be zero, the pure-scale answer uses the uncentered sum of squares divided by n plus two.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/6ab42f67fd9187e7.wav",
+   "duration": 51.475,
+   "tokens": 138,
+   "peak": 0.559661865234375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The general setting: a group acts on the sample space and on the parameter, and the loss is unchanged by it. <bookmark mark='b'/> Under conditions, the best equivariant rule is the generalized Bayes rule for the right Haar measure of the group, the flat prior and one over sigma being two cases. <bookmark mark='c'/> Meyer Girshick and Savage proved in 1951 that Pitman's estimator is minimax. <bookmark mark='d'/> Admissibility results for general location families require their own moment and regularity assumptions. For the identity-covariance normal-mean problem, the exact threshold is one or two dimensions versus at least three. <bookmark mark='e'/> For normal errors in p dimensions, Pitman's estimator is just X: best equivariant, minimax, and, as the hook showed, inadmissible. Equivariance cannot see Stein's paradox, because the James–Stein estimator is not translation equivariant: it shrinks toward a particular point.",
+   "spoken": "The general setting: a group acts on the sample space and on the parameter, and the loss is unchanged by it. Under conditions, the best equivariant rule is the generalized Bayes rule for the right Haar measure of the group, the flat prior and one over sigma being two cases. Meyer Girshick and Savage proved in 1951 that Pitman's estimator is minimax. Admissibility results for general location families require their own moment and regularity assumptions. For the identity-covariance normal-mean problem, the exact threshold is one or two dimensions versus at least three. For normal errors in p dimensions, Pitman's estimator is just X: best equivariant, minimax, and, as the hook showed, inadmissible. Equivariance cannot see Stein's paradox, because the James–Stein estimator is not translation equivariant: it shrinks toward a particular point.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/87cc1dc1e7f69104.wav",
+   "duration": 53.525,
+   "tokens": 131,
+   "peak": 0.79083251953125,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats45/en/Equivariance_motion/result.json",
+ "input_sha256": "058c0518c165582010df25ea45b295a82ea0f83586c59ff680aa09a404c5d0a0"
+}

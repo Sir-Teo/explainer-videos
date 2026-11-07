@@ -1,0 +1,160 @@
+{
+  "fingerprint": "87436f8c610ab8d9e8dbad09dacf007582f19e78c5b6b2e74c6bcce9a03c9fa4",
+  "scope": "English sampled visual review; continuous playback/listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats45/en/Hook_motion/result.json",
+      "input_sha256": "79ee54c39b2deb6c541f2b4f1fccff12f9302e7d4a66511797e68757384d5055",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 228 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 228 s\n"
+    },
+    {
+      "scene": "Decision",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats45/en/Decision_motion/result.json",
+      "input_sha256": "bdb1581b47e5578d8d4992f22462c35234de5211347a809cca4fda44a1de19af",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 267 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 267 s\n"
+    },
+    {
+      "scene": "RiskSets",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats45/en/RiskSets_motion/result.json",
+      "input_sha256": "28dbabbddd143e4a6392f12759bce9769cc9b507d0e2b26e54bc9cd596a5c844",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 252 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 252 s\n"
+    },
+    {
+      "scene": "CompleteClass",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats45/en/CompleteClass_motion/result.json",
+      "input_sha256": "5d77144d5164058fdae80aa28e3897a3d19bc35ca144ab87940f8de232dd73a1",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 315 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 315 s\n"
+    },
+    {
+      "scene": "ExpFamilies",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats45/en/ExpFamilies_motion/result.json",
+      "input_sha256": "f95cb7d81f4f16d752225438d7bbc062bbaa0ac870adad9851952fa9692f000c",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 319 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 319 s\n"
+    },
+    {
+      "scene": "Sufficiency",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats45/en/Sufficiency_motion/result.json",
+      "input_sha256": "78f35e682dcb62dc4a42283c60de9f745ab9799404604cd6563bcc64fcd6d05d",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 269 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 269 s\n"
+    },
+    {
+      "scene": "RaoBlackwell",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats45/en/RaoBlackwell_motion/result.json",
+      "input_sha256": "fbbbfcc9ab792f95fa63d49d925287d1e1355295944adee72b6abbb267809823",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 273 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 273 s\n"
+    },
+    {
+      "scene": "Ancillarity",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats45/en/Ancillarity_motion/result.json",
+      "input_sha256": "1549395c1b07c8298f3fe9573d5d6609a03683e496d6cae2d56549ad99c2cd76",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 288 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 288 s\n"
+    },
+    {
+      "scene": "Information",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats45/en/Information_motion/result.json",
+      "input_sha256": "90715035689b9764838f2c802e6f930f58291235613c62ea84ff10ec5fd48c91",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 319 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 319 s\n"
+    },
+    {
+      "scene": "Equivariance",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats45/en/Equivariance_motion/result.json",
+      "input_sha256": "058c0518c165582010df25ea45b295a82ea0f83586c59ff680aa09a404c5d0a0",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 299 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 299 s\n"
+    },
+    {
+      "scene": "SteinLemma",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats45/en/SteinLemma_motion/result.json",
+      "input_sha256": "528161e29c88086d65b26f134111a512eff6fc440916925761a07ccc49c15a26",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 318 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 318 s\n"
+    },
+    {
+      "scene": "Brown",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats45/en/Brown_motion/result.json",
+      "input_sha256": "542bf3b93dd87b608f204123ca62752eb39b6f641c716a323708eb73fb9dfd6f",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 291 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 291 s\n"
+    },
+    {
+      "scene": "NormalMeans",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats45/en/NormalMeans_motion/result.json",
+      "input_sha256": "c70e1d983c4bf625ae5c882dd14f79df35e41eb9305a34912bb0b008ae3a2d75",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 321 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 321 s\n"
+    },
+    {
+      "scene": "EmpiricalBayes",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats45/en/EmpiricalBayes_motion/result.json",
+      "input_sha256": "127ad4bd359269245ade433199bde2cc50eb6418939edf73e6ad30b05aa7614c",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 338 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 338 s\n"
+    }
+  ]
+}
