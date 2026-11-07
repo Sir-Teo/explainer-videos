@@ -1,0 +1,127 @@
+{
+  "fingerprint": "926286d03c2696373317fcc8666d4e9badb58b0ef8336f9ccdf55b70f2686979",
+  "scope": "English sampled visual review; continuous playback/listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 42
+      },
+      "input_record": "renders/qa/series/stats41/en/Hook/result.json",
+      "input_sha256": "32c00ba9b024bd3dd01d5f694c92015d97d4a9cb9fc16266eda7cb981c49ebc2"
+    },
+    {
+      "scene": "Mechanisms",
+      "status": "needs-review",
+      "frames": 36,
+      "warnings": {
+        "narration-translation": 10,
+        "untranslated-on-screen": 74
+      },
+      "input_record": "renders/qa/series/stats41/en/Mechanisms/result.json",
+      "input_sha256": "c9004edd0b3f47041d921f9b712c59fe8c6ac3539ecbc50d2b607af44f4df23a"
+    },
+    {
+      "scene": "Sins",
+      "status": "needs-review",
+      "frames": 39,
+      "warnings": {
+        "narration-translation": 12,
+        "untranslated-on-screen": 94
+      },
+      "input_record": "renders/qa/series/stats41/en/Sins/result.json",
+      "input_sha256": "1c0819348bf81f96eba935c21e0f33632fc6122924dc368b35f1e32c1ae8c52b"
+    },
+    {
+      "scene": "Likelihood",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 70
+      },
+      "input_record": "renders/qa/series/stats41/en/Likelihood/result.json",
+      "input_sha256": "3934e30cfe0293f49c08ac10d738f163de4cc838aef9144d6b9fc7ec90e2665d"
+    },
+    {
+      "scene": "MultipleImputation",
+      "status": "needs-review",
+      "frames": 43,
+      "warnings": {
+        "narration-translation": 13,
+        "untranslated-on-screen": 90
+      },
+      "input_record": "renders/qa/series/stats41/en/MultipleImputation/result.json",
+      "input_sha256": "a778438c27d34725eb687be360057d8af5c8b286ad6f22be01b2f0419e75b256"
+    },
+    {
+      "scene": "Weighting",
+      "status": "needs-review",
+      "frames": 33,
+      "warnings": {
+        "narration-translation": 10,
+        "untranslated-on-screen": 71
+      },
+      "input_record": "renders/qa/series/stats41/en/Weighting/result.json",
+      "input_sha256": "af95667d35e98f5f8fc045c5bbb056bffc2d59ea1935c0bc2ee9a2f6ae73e12a"
+    },
+    {
+      "scene": "MNAR",
+      "status": "needs-review",
+      "frames": 37,
+      "warnings": {
+        "narration-translation": 11,
+        "untranslated-on-screen": 67
+      },
+      "input_record": "renders/qa/series/stats41/en/MNAR/result.json",
+      "input_sha256": "2e0705298cdd338bd0ab198fafb93e4013e88c9d2a2f8659fc309518cac6027c"
+    },
+    {
+      "scene": "MRP",
+      "status": "needs-review",
+      "frames": 37,
+      "warnings": {
+        "narration-translation": 11,
+        "untranslated-on-screen": 69
+      },
+      "input_record": "renders/qa/series/stats41/en/MRP/result.json",
+      "input_sha256": "a6f0396ddc234a5b1b853a641945e95dc1750b867a70dd9901f08217868ca387"
+    },
+    {
+      "scene": "Measurement",
+      "status": "needs-review",
+      "frames": 46,
+      "warnings": {
+        "narration-translation": 13,
+        "untranslated-on-screen": 106
+      },
+      "input_record": "renders/qa/series/stats41/en/Measurement/result.json",
+      "input_sha256": "ef35420798fd3ca1a057ab1a578668ddbf840f79adc73ca95da42f0931d2dcd6"
+    },
+    {
+      "scene": "Misclassification",
+      "status": "needs-review",
+      "frames": 32,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 50
+      },
+      "input_record": "renders/qa/series/stats41/en/Misclassification/result.json",
+      "input_sha256": "cd31b7857d6f34910694ac3f9df02bceef54dac5c3facab4f7afe46b6648f6b8"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 11,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 61
+      },
+      "input_record": "renders/qa/series/stats41/en/Outro/result.json",
+      "input_sha256": "b4b75e40231835a6e8aee66cc51c3802330c22ff438962f6c66e186e3188b778"
+    }
+  ]
+}
