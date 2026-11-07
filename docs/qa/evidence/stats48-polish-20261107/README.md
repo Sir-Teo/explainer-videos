@@ -9,3 +9,5 @@ The course-connection heading now appears before its spoken introduction, elimin
 Native chart review found early empirical-CDF gap values above the fixed 0.6 axis ceiling, despite narration following the paths from sample size one. The plot now uses the full [0, 1] range of a Kolmogorov distance and retains every simulated path value. Fresh full-part captures are required.
 
 The estimated-parameter KS table note now uses two shorter lines at 28-point type. The original fit-to-frame sentence was too dense in the native contact sheet; production geometry was checked against a 12.6-unit width limit. Fresh captures remain required.
+
+The half-plane shattering diagrams now start under a persistent descriptive heading, providing context during their staggered reveal. Flagged frames and scan reports are retained; fresh captures are required.
