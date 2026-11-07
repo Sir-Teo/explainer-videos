@@ -34,5 +34,30 @@ def ymd_to_year(d):
     out = []
     for x in d:
         t = date(x // 10000, (x // 100) % 100, x % 100)
-        out.append(t.year + (t.timetuple().tm_yday - 1) / 365)
+        out.append(t.year + (t.timetuple().tm_yday - 1) / ((date(t.year + 1, 1, 1) - date(t.year, 1, 1)).days))
     return np.array(out)
+
+
+def data_range(*arrays, pad=0.06, zero=False):
+    """Full finite support for display; no winsorization of computed observations."""
+    import numpy as np
+    values = np.concatenate([np.asarray(a, float).ravel() for a in arrays])
+    values = values[np.isfinite(values)]
+    if zero:
+        values = np.r_[values, 0.0]
+    if not len(values):
+        raise ValueError("No finite observations")
+    lo, hi = float(values.min()), float(values.max())
+    margin = max(hi - lo, abs(lo) * 0.05, 1e-8) * pad
+    return lo - margin, hi + margin
+
+
+_base_axes = axes
+
+
+def axes(x_range, y_range, **kwargs):
+    """Keep selected tick labels inside the displayed support."""
+    for name, support in (("xticks", x_range), ("yticks", y_range)):
+        if kwargs.get(name) is not None:
+            kwargs[name] = [x for x in kwargs[name] if support[0] <= x <= support[1]]
+    return _base_axes(x_range, y_range, **kwargs)

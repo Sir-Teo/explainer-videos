@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant15.common import BAD, CASH, GOOD, IV, OPT, PART, SPOT, illustration, load
+from videos.quant.quant15.common import BAD, CASH, GOOD, IV, OPT, PART, SPOT, illustration, load, axes, data_range
 
 
 class Business(VoiceoverScene):
@@ -49,27 +49,20 @@ class Business(VoiceoverScene):
         names.arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(blocks, RIGHT, buff=0.5).align_to(blocks, UP)
         top = lo
         dip = block(top + b["dip"], top, BAD, 0.85)
-        dipn = label(rf"minus the down-and-in put the buyer sold: ${b['dip']:.3f}$", font_size=19, color=BAD)
+        dipn = label(rf"minus the autocall-cancelled knock-in loss leg: ${abs(b['dip']):.3f}$", font_size=19, color=BAD)
         dipn.next_to(names, DOWN, buff=0.18, aligned_edge=LEFT)
         line = DashedLine(ax.c2p(0, 1.0) + LEFT * 0.2, [x + w / 2 + 0.2, ax.c2p(0, 1.0)[1], 0], stroke_color=WHITE,
                           stroke_width=2)
         tot = MathTex(rf"\text{{sum}} = {d['total']:.4f}", font_size=34, color=OPT).next_to(dipn, DOWN, buff=0.35,
                                                                                           aligned_edge=LEFT)
-        sub = wrapped_label(rf"each piece is its own Monte Carlo on the same {d['n_paths']:,} paths, at the fair coupon "
+        sub = wrapped_label(rf"all pieces are valued on the same {d['n_paths']:,} paths, at the fair coupon "
                             rf"{100 * c:.2f}\% a year; the pieces add up to the note exactly, because on every path the "
-                            r"payoff is one of them".replace(",", "{,}"), 6.4, 19, GREY_A).next_to(tot, DOWN, buff=0.25,
+                            r"pieces add pathwise; the same seeds and paths used in the coupon solve make this sample total one".replace(",", "{,}"), 6.4, 19, GREY_A).next_to(tot, DOWN, buff=0.25,
                                                                                                    aligned_edge=LEFT)
         src = illustration(rf"the CSI 500 snowball: 24 months, knock-out 103\%, knock-in 75\%; $\sigma = "
                            rf"{100 * d['sigma']:.1f}\%$, $r = 2\%$")
         with self.voiceover(
-            "A structured note is sold as one security but built from parts, each with a price. Take chapter seven's "
-            "snowball at its fair coupon, and price every piece on the same paths. "
-            f"<bookmark mark='a'/> A zero-coupon bond: {b['bond']:.3f}, the promise to repay in two years, discounted. "
-            f"<bookmark mark='b'/> Most notes are repaid early, and money back sooner is worth a little more: {b['early']:.3f}. "
-            f"<bookmark mark='c'/> The coupons: {b['strip']:.3f} paid at a knock-out, {b['maturity_coupon']:.3f} at maturity. "
-            "<bookmark mark='d'/> And the piece the buyer does not see: a put that comes alive only if the index falls "
-            f"through the barrier, worth {abs(b['dip']):.3f}. It takes the stack back down to exactly one. The coupon is "
-            "the put's premium, paid in instalments."
+            f"A structured note is sold as one security but built from priced pieces. Take chapter seven's contract and value all pieces on the same paths. <bookmark mark='a'/> A zero-coupon bond contributes {b['bond']:.3f}. <bookmark mark='b'/> Earlier repayment adds {b['early']:.3f}. <bookmark mark='c'/> Conditional coupons add {b['strip']:.3f} at knock-out and {b['maturity_coupon']:.3f} at maturity. <bookmark mark='d'/> Subtract {abs(b['dip']):.3f} for losses after knock-in on paths that never knock out. Autocall cancels that loss leg, so it is more specific than an unconditional down-and-in put. The pieces add pathwise to the note. Reusing the coupon solve's forty thousand paths makes this sample total {d['total']:.4f}, exactly one up to rounding; a fresh sample need not equal one. Coupons are paid at redemption or qualifying maturity, rather than in monthly instalments."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             vo.wait_until("a")
@@ -100,7 +93,7 @@ class Business(VoiceoverScene):
                   font_size=36, colors={r"\text{margin}": BAD}),
         ]
         whys = [why(r"the simplest note: a bond that pays $1 + c$, minus a put the buyer has sold"),
-                why(r"the issuer discounts its own promise at its funding rate $r + s$; the put is priced at $r$"),
+                why(r"funding-spread illustration: discount the promise at $r+s$, the put at $r$; no default, recovery or wrong-way model"),
                 why(r"set $V = 1$: both the put's premium and the issuer's credit spread feed the coupon"),
                 why(r"three disjoint events: $O_m$, knocked out in month $m$; $N$, alive and never knocked in; $I$, "
                     r"alive and knocked in"),
@@ -111,15 +104,7 @@ class Business(VoiceoverScene):
                            rf"{d['B']:.3f}$, so selling it at {100 * d['coupon'] - 3:.1f}\% instead of "
                            rf"{100 * d['coupon']:.1f}\% keeps {3 * d['B']:.2f} points", 12.0, 21, GREY_A).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Now the algebra. The simplest note, the reverse convertible, pays one plus a coupon, unless the stock "
-            "has fallen, when the buyer bears the fall: a bond minus a put. <bookmark mark='a'/> The issuer discounts "
-            "its own promise at its funding rate, r plus s. <bookmark mark='b'/> Set the value to one and solve: the fair coupon grows with the put's "
-            f"premium and with the issuer's credit spread. At twenty percent volatility over a year it is "
-            f"{100 * rc['coupon']:.1f} percent. <bookmark mark='c'/> The snowball is the same idea with memory: its "
-            "payoff splits on three disjoint events, knocked out in month m, alive and never knocked in, alive and "
-            "knocked in. <bookmark mark='d'/> And the margin is the issue price minus the fair value of what was "
-            "sold. The value is a straight line in the coupon, with slope B. Every point of coupon an issuer "
-            f"withholds is worth {d['B']:.2f} points of price to it."
+            f"Now the algebra. This reverse convertible pays one plus its coupon minus an at-the-money put payoff. A fall reduces repayment; the coupon remains in this simple contract. <bookmark mark='a'/> For a funding illustration, discount the issuer's promise at r plus s, while pricing the put at r. This is a spread heuristic, not a joint default, recovery and market-risk model. <bookmark mark='b'/> Set that illustrative value to one: the coupon rises with the put price and spread, here {100 * rc['coupon']:.1f} percent with twenty percent volatility and zero spread. <bookmark mark='c'/> The snowball instead separates three disjoint states: knock-out in month m, surviving without knock-in, and surviving after knock-in. <bookmark mark='d'/> Its model value is affine in coupon, with slope B. Reducing the coupon by one percentage point lowers value by {d['B']:.2f} price points. That is an initial model margin before hedging costs, reserves and other expenses."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -139,7 +124,7 @@ class Business(VoiceoverScene):
         s = np.array([r["s"] for r in f])
         c = np.array([r["coupon"] for r in f])
         g = axes([0, 0.02], [0.12, 0.18], x_length=6.0, y_length=4.0, xlabel=r"issuer's funding spread $s$",
-                 ylabel=r"fair snowball coupon", xticks=[0, 0.005, 0.01, 0.015, 0.02],
+                 ylabel=r"model snowball coupon", xticks=[0, 0.005, 0.01, 0.015, 0.02],
                  xfmt=lambda u: f"{1e4 * u:.0f}" + r"\,\text{bp}", yticks=[0.12, 0.14, 0.16, 0.18],
                  yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=15).to_edge(LEFT, buff=0.8).shift(DOWN * 0.2)
         ax = g.ax
@@ -159,12 +144,7 @@ class Business(VoiceoverScene):
         pp = pause_card(r"The issuer's credit spread widens by 100 bp. Does the coupon it can offer rise or fall?",
                         width=6.0).to_corner(UR, buff=0.3)
         with self.voiceover(
-            "<bookmark mark='p'/> Pause and predict: if the issuer's credit spread widens by a hundred basis "
-            "points, does its coupon rise or fall? <bookmark mark='a'/> It rises: the bond block shrinks, and the room "
-            "goes "
-            f"into the coupon: from {100 * c[0]:.1f} percent at no spread to {100 * c[2]:.1f} at a hundred basis "
-            f"points and {100 * c[-1]:.1f} at two hundred. Part of every coupon pays the buyer for lending to the "
-            "bank. Lehman Brothers' note buyers learned in 2008 that this part is not free."
+            f"<bookmark mark='p'/> In this funding-spread calculation, does a hundred-basis-point widening raise or lower the model coupon? <bookmark mark='a'/> It raises it: discounting shrinks the promised cash flows, so a larger coupon restores the modeled issue value. The result runs from {100 * c[0]:.1f} percent at zero spread to {100 * c[2]:.1f} at a hundred basis points and {100 * c[-1]:.1f} at two hundred. The extra headline rate compensates for lending to the issuer; it does not make the product safer. Our discount-spread calculation does not simulate issuer default or recovery. Lehman's note holders in 2008 illustrate why the credit exposure belongs in the discussion."
         ) as vo:
             vo.wait_until("p")
             self.play(FadeIn(pp))

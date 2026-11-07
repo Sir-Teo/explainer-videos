@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant15.common import BAD, BARRIER, GOOD, OPT, PART, SPOT, illustration, load, real_data, ymd_to_year
+from videos.quant.quant15.common import BAD, BARRIER, GOOD, OPT, PART, SPOT, illustration, load, real_data, ymd_to_year, axes, data_range
 
 
 def _closest(k):

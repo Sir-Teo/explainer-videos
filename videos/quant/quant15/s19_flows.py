@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant15.common import BAD, GOOD, IV, OPT, PART, SPOT, VEGA, illustration, load, real_data, ymd_to_year
+from videos.quant.quant15.common import BAD, GOOD, IV, OPT, PART, SPOT, VEGA, illustration, load, real_data, ymd_to_year, axes, data_range
 
 
 class Flows(VoiceoverScene):

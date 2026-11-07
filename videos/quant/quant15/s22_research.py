@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant15.common import BAD, BARRIER, CASH, GOOD, IV, OPT, PART, SPOT, load
+from videos.quant.quant15.common import BAD, BARRIER, CASH, GOOD, IV, OPT, PART, SPOT, load, axes, data_range
 
 MODELS = ["LV", "Heston", "Bates", "VG"]
 COLS = {"LV": QC.SPOT, "Heston": QC.OPTION, "Bates": QC.GAIN, "VG": QC.IMPLIED}

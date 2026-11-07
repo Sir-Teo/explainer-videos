@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant15.common import BAD, BARRIER, GOOD, OPT, PART, SPOT, load, real_data, ymd_to_year
+from videos.quant.quant15.common import BAD, BARRIER, GOOD, OPT, PART, SPOT, load, real_data, ymd_to_year, axes, data_range
 
 
 class Hook(VoiceoverScene):
@@ -44,18 +44,13 @@ class Hook(VoiceoverScene):
             t0 = ymd_to_year([nt["start"]])[0]
             lvl = 0.75 * nt["S0"]
             kis.add(Line(ax.c2p(t0, lvl), ax.c2p(2024.2, lvl), stroke_color=BARRIER, stroke_width=1.4, stroke_opacity=0.7))
-        lbl = label(r"knock-in levels of notes sold in 2022--2023", font_size=19, color=BARRIER).next_to(
+        lbl = label(r"2022--2023 stylized notes that knocked in during 2024", font_size=19, color=BARRIER).next_to(
             ax.c2p(2022.3, 4.0), UP, buff=0.05)
         low = int(np.argmin(np.where((d[w] >= 20240101) & (d[w] <= 20240229), px[w], np.inf)))
         dot = Dot(ax.c2p(t[low], px[w][low]), radius=0.09, color=BAD)
         src = real_data(r"Yahoo Finance: China Southern CSI 500 ETF, daily closes; notes: chapter 9's stylized book")
         with self.voiceover(
-            "This is China's CSI 500 index, through its largest fund, from 2021. Over those years Chinese brokers "
-            "sold a note called the snowball, tens of billions of dollars of it by some estimates. It paid around "
-            "fifteen percent a year, unless the index fell by about a quarter. <bookmark mark='a'/> Here are the knock-in levels of notes sold in "
-            "2022 and 2023. <bookmark mark='b'/> In January 2024 the index went through them, and the snowballs "
-            "melted. This part is about how such products are built, priced and hedged, and why their hedges move "
-            "the market they are written on."
+            "This is the CSI 500 through the daily closes of its 510500 ETF, from 2021. Chinese brokers sold snowball notes linked to such indices; public estimates of their size differ. Our illustration uses a fifteen percent annual coupon, monthly knock-out at 103 percent after three months, daily knock-in below 75 percent, and a two-year limit. <bookmark mark='a'/> These are the levels of our stylized 2022 and 2023 notes that knocked in during 2024. <bookmark mark='b'/> The winter sell-off crossed them. Knock-in records a state, not an immediate realized loss: subsequent recovery or knock-out can still matter. We will price the contractual cash flows and reconstruct a hypothetical hedge on this historical ETF path. It illustrates possible trading pressure; it does not identify the cause of the market fall."
         ) as vo:
             self.play(FadeIn(g), Create(line), FadeIn(src), run_time=3)
             vo.wait_until("a")
@@ -66,12 +61,10 @@ class Hook(VoiceoverScene):
         self.clear_scene()
 
     def predict(self):
-        card = pause_card(r"A note pays 15\% a year unless the index falls by a quarter. Is 15\% a gift, a fair price, "
-                          r"or a bargain for the bank?", width=9.0)
+        card = pause_card(r"A note advertises 15\% a year with a 75\% knock-in. Which claims fund the coupon, "
+                          r"and what margin does the issuer keep?", width=9.0)
         with self.voiceover(
-            "Before we start, a question to hold on to. A note pays fifteen percent a year, unless the index falls by "
-            "a quarter. Is that a gift, a fair price, or a bargain for the bank? Chapter seven answers it with a "
-            "simulation."
+            'Keep a question in mind. A note advertises fifteen percent a year, with conditional repayment and a knock-in a quarter below its starting level. Which contingent claims fund that coupon, and how much margin remains for the issuer? Chapter seven prices our specified contract; the headline rate alone cannot answer.'
         ):
             self.play(FadeIn(card, shift=UP * 0.2))
         self.play(FadeOut(card))

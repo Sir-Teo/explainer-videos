@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant15.common import BAD, GOOD, IV, OPT, PART, SPOT, illustration, load
+from videos.quant.quant15.common import BAD, GOOD, IV, OPT, PART, SPOT, illustration, load, axes, data_range
 
 
 class Asian(VoiceoverScene):

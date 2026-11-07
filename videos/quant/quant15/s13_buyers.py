@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant15.common import BAD, GOOD, IV, OPT, PART, SPOT, illustration, load, real_data, ymd_to_year
+from videos.quant.quant15.common import BAD, GOOD, IV, OPT, PART, SPOT, illustration, load, real_data, ymd_to_year, axes, data_range
 
 
 class Buyers(VoiceoverScene):
@@ -52,13 +52,7 @@ class Buyers(VoiceoverScene):
         src = real_data(r"Yahoo Finance: 510500.SS, daily closes; stylized terms, one note a month, 2017--2023")
         by = b["by_year"]
         with self.voiceover(
-            "What did buyers actually get? Take one stylized snowball, fifteen percent a year, knock-out at 103 "
-            "percent after three months, knock-in at 75, two years, and issue it on the first trading day of every "
-            "month from 2017 to 2023 on the CSI 500's real path. <bookmark mark='a'/> Each line is a note, from the "
-            "day it was sold to the day it ended. Gold if it was repaid with its coupon, red if it knocked in and "
-            "came back below par. <bookmark mark='b'/> Watch the vintages. Notes sold in 2017, near a peak, ran into "
-            f"2018's fall: {by['2017']['KI']} of 12 lost money. Every note sold in 2019 and 2020 knocked out within "
-            "months, at fifteen percent. And the notes of 2021 to 2023 met January 2024."
+            f"What would our specified snowball have paid on this historical ETF path? Give it a fifteen percent annual simple coupon, knock-out at 103 percent from month three, daily knock-in below 75 percent, and twenty-four months. Issue one at the first trading day of each month, 2017 through 2023. <bookmark mark='a'/> Each line is a hypothetical vintage: gold for knock-out, red for a repayment below par after knock-in. These are reconstructed contract payoffs, not actual client trades. <bookmark mark='b'/> Of twelve 2017 vintages, {by['2017']['KI']} lost money. All 2019 and 2020 vintages knocked out, earning the annual rate pro rata for their holding periods. Later vintages faced the 2024 fall. Their outcomes share one market history and overlap in time; they are not independent performance trials."
         ) as vo:
             self.play(FadeIn(g), Create(line), FadeIn(src), run_time=2)
             vo.wait_until("a")
@@ -92,13 +86,7 @@ class Buyers(VoiceoverScene):
                              r"have happened", 12.0, 21, GREY_A).to_edge(DOWN, buff=0.5)
         pp = pause_card(r"Notes sold near the index's top, or near its bottom: which did better?", width=7.0)
         with self.voiceover(
-            "Pause and predict: did the notes sold near the index's top do better, or the ones sold near its bottom? "
-            "<bookmark mark='a'/> Here is the tally by vintage. The bottom did better, by far: a note bought low "
-            "is far from its knock-in and close to its knock-out. <bookmark mark='b'/> Over all "
-            f"{b['n']} notes, {b['n_loss']} lost money, the worst {100 * abs(b['worst']):.0f} percent. The naive "
-            f"average of their annualised returns is {100 * b['mean_ann']:.1f} percent, and {b['beat_index']} of them "
-            "beat simply holding the index over the same months. But this is one path of history. It describes what "
-            "happened; it is not a sample of what could have."
+            f"Pause: in this history, which vintages did better, those issued near peaks or near troughs? <bookmark mark='a'/> The trough vintages did better here because of their subsequent paths. Every new note starts with the same proportional barrier distances; a lower absolute starting price does not mechanically put it farther from its own knock-in. <bookmark mark='b'/> Across {b['n']} reconstructed notes, {b['n_loss']} lost money, the worst loss {100 * abs(b['worst']):.0f} percent. The simple average of annualized returns is {100 * b['mean_ann']:.1f} percent; {b['beat_index']} beat the ETF's price change over their own holding periods. This average is neither a compound portfolio return nor an ex-ante expected return. It ignores reinvestment, dividends, client fees and issuer default, and the overlapping notes are dependent."
         ) as vo:
             self.play(FadeIn(pp))
             vo.wait_until("a")
@@ -118,7 +106,7 @@ class Buyers(VoiceoverScene):
                          r"adding complexity, more so when rates were low", color=QC.IDEA, width=4.2, font_size=19),
             history_card(2019, r"Egan", r"US reverse convertibles: brokers sold dominated products, those paying brokers "
                          r"the most", color=QC.IDEA, width=4.2, font_size=19),
-            history_card(2020, r"Vokata (working paper)", r"over 28,000 US yield-enhancement products, 2006--2015: "
+            history_card(2021, r"Petra Vokata (JFE)", r"over 28,000 US yield-enhancement products, 2006--2015: "
                          r"attractive yields, negative returns, embedded fees of about 6--7\% a year; often dominated by "
                          r"cheap listed options".replace("28,000", "28{,}000"), color=QC.IDEA, width=4.2, font_size=19),
             history_card(2023, r"Calvet, C\'el\'erier, Sodini, Vall\'ee", r"Sweden: capital-guaranteed products drew "
@@ -131,16 +119,7 @@ class Buyers(VoiceoverScene):
         if VGroup(*cards).height > 7.2:
             VGroup(*cards).scale_to_fit_height(7.2)
         with self.voiceover(
-            "The research record is less kind than our lucky vintages. Brian Henderson and Neil Pearson priced Morgan "
-            "Stanley's SPARQS notes and found them sold about eight percent above fair value, with expected returns "
-            "below the risk-free rate. Claire Célérier and Boris Vallée found European banks raising headline rates "
-            "by adding complexity. <bookmark mark='a'/> Mark Egan found US brokers selling reverse convertibles that "
-            "were dominated by others on the shelf, the ones that paid the broker most. Pavel Vokata's working paper "
-            "studies over twenty-eight thousand US yield-enhancement products: attractive yields, negative returns, "
-            "and embedded fees of about six to seven percent a year. <bookmark mark='b'/> But design is not only a "
-            "trap. Laurent Calvet and his co-authors found Swedish capital-guaranteed products drawing cautious "
-            "households into the stock market, to their benefit."
-            " Every note in this part is built from a few pieces. Next: the first, the barrier."
+            "The published record covers different products and markets. Henderson and Pearson estimated Morgan Stanley SPARQS notes were sold about eight percent above model value, with expected returns below the risk-free rate. Célérier and Vallée linked complexity to higher advertised yields in European retail products. <bookmark mark='a'/> Egan studied dominated US reverse convertibles and broker incentives. Petra Vokata's Engineering Lemons, published in the Journal of Financial Economics in 2021, studies over twenty-eight thousand US yield-enhancement products. Its estimated annual fees average six to seven percent; that is a sample finding, not a fee assumed for our Chinese snowballs. <bookmark mark='b'/> Calvet and co-authors' 2023 study documents Swedish capital-guarantee products drawing cautious households into equity risk. Welfare benefits in their analysis depend on the household model. These studies show why design, distribution and the population being studied must all be stated. Next, barriers."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(c, shift=UP * 0.2) for c in cards[:2]], lag_ratio=0.5))
             vo.wait_until("a")
