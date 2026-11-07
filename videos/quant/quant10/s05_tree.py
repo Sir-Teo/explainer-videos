@@ -130,7 +130,7 @@ class Tree(VoiceoverScene, ThreeDScene):
                 self.remove(nt)
                 self.play(FadeOut(cur), FadeIn(groups[N]), FadeOut(tg), FadeIn(nt), run_time=1.2)
                 cur, tg = groups[N], nt
-            self.move_camera(theta=-20 * DEGREES, phi=62 * DEGREES, run_time=max(vo.remaining(1.0) - 0.5, 1.5))
+            self.move_camera(theta=-20 * DEGREES, phi=62 * DEGREES, run_time=min(max(vo.remaining(1.0) - 0.5, 1.5), 4.0))
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, surf, cur)), FadeOut(hint),
                                                                   FadeOut(tg)], run_time=0.5)
         self.clear_scene(run_time=0.1)
