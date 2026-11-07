@@ -56,7 +56,11 @@ class Principle(VoiceoverScene):
                  ylabel=r"likelihood, \ scaled to 1", xticks=[0.3, 0.5, 0.7, 0.9], yticks=[0, 0.5, 1], center=[-1.6, 0.3, 0])
         ax = A.ax
         alice = curve(ax, th, lk, LIK, 5)
-        bob = DashedVMobject(curve(ax, th, lk, PATH, 3), num_dashes=40)
+        # DashedVMobject requires a path with its own points, not a VGroup.
+        segments = curve(ax, th, lk, PATH, 3)
+        bob_path = VMobject(stroke_color=PATH, stroke_width=3)
+        bob_path.set_points(np.concatenate([segment.points for segment in segments]))
+        bob = DashedVMobject(bob_path, num_dashes=40)
         half = DashedLine(ax.c2p(0.5, 0), ax.c2p(0.5, 1.1), color=GREY_B, stroke_width=2)
         ratio = float((0.5 ** 12) / (0.75 ** 9 * 0.25 ** 3))
         rows = fit_rows(VGroup(
