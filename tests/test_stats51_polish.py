@@ -92,3 +92,17 @@ def test_empirical_orlicz_log_domain_known_laws():
     x=np.array([0,1.,10000.])
     norm=C.psi_norm_empirical(x,2)
     assert np.exp((x/norm)**2).mean()==pytest.approx(2)
+
+
+@pytest.mark.parametrize('xs,ys,expected',[
+    ([0.,1.], [0.,1e-320], [[[0.,0.],[1.,1e-320]]]),
+    ([-1.,2.], [0.,1e-320], [[[0.,1e-320/3],[1.,2e-320/3]]]),
+    ([-1.,2.], [2.,2.+1e-15], []),
+])
+def test_curve_clipping_handles_tiny_deltas_without_overflow(xs,ys,expected):
+    from videos.stats.stats51.common import clipped_segments
+    with np.errstate(over='raise',invalid='raise',divide='raise'):
+        got=clipped_segments(xs,ys,(0.,1.,-1.,1.))
+    assert len(got)==len(expected)
+    if expected:
+        assert np.array_equal(np.asarray(got),np.asarray(expected))

@@ -346,6 +346,10 @@ def clipped_segments(xs, ys, rectangle):
         delta = end-start
         lo, hi = 0., 1.
         for j, lower, upper in ((0, xmin, xmax), (1, ymin, ymax)):
+            # A slab containing both endpoints cannot clip this segment.
+            # Avoid dividing by subnormal deltas (e.g. a Gaussian tail).
+            if lower <= start[j] <= upper and lower <= end[j] <= upper:
+                continue
             if delta[j] == 0:
                 if not lower <= start[j] <= upper:
                     hi = -1
