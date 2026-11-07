@@ -41,7 +41,7 @@
    "tokens": 103,
    "peak": 0.608001708984375,
    "issues": [],
-   "elapsed": 0.01,
+   "elapsed": 0.03,
    "asr_review_leads": []
   },
   {
@@ -52,11 +52,11 @@
    "tokens": 127,
    "peak": 0.644622802734375,
    "issues": [],
-   "elapsed": 0.03,
+   "elapsed": 0.02,
    "asr_review_leads": []
   }
  ],
  "issues": [],
  "input_record": "renders/qa/series/stats5/en/Lines_motion/result.json",
- "input_sha256": "e04a7d33f90bce2ed577a7d1b73bbbe8f6c0c85626c0694852f8b4178cc3a667"
+ "input_sha256": "ad4b95e787886f7360a84c34a98bff75ae00a73da285ae4f77a9bfa4a8b10f3f"
 }

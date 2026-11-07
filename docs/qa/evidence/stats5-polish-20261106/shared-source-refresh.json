@@ -1,7 +1,7 @@
 {
-  "reason": "Shared World school/health programme names separated; this part does not use schools",
-  "previous_fingerprint": "6a2a823bd30443dc0e79f157d4b681c241f3d8870f45a49fa4c9879d9ca1b8c3",
-  "current_fingerprint": "2d71a4b5d662aaef89ae5b5c02d6fb628f43874410004bd700a893a398dcadcd",
+  "reason": "Shared Board preserves optional empirical Monte Carlo errors; legacy-row values are unchanged. Previous World programme correction retained.",
+  "previous_fingerprint": "2d71a4b5d662aaef89ae5b5c02d6fb628f43874410004bd700a893a398dcadcd",
+  "current_fingerprint": "753e5300967c250854a7af5e66f54f674729a09482431d0f10373d5505d66719",
   "fresh_english_endpoint_scenes": 16,
   "fresh_native_scenes": [
     "Joint",
