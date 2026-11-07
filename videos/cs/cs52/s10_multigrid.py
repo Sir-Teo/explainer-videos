@@ -206,7 +206,7 @@ class Multigrid(VoiceoverScene):
                         for i, r in enumerate(steps, 1)])
         loop = SurroundingRectangle(steps[2], color=HEAD, buff=0.07, stroke_width=1.6)
         whys[2].next_to(loop, DOWN, buff=0.06).align_to(steps[2], LEFT)
-        rec = label(r"the same kind of problem: \ recurse", font_size=18, color=HEAD).next_to(loop, RIGHT, buff=0.2)
+        rec = label(r"same problem: \ recurse", font_size=18, color=HEAD).next_to(loop, RIGHT, buff=0.2)
         with self.voiceover(
             "Here is the trick. <bookmark mark='a'/> A smooth wave on a fine grid of fifteen points, mode six, sits "
             "in the lower half of the spectrum, where relaxation is slow. <bookmark mark='b'/> Keep every other "

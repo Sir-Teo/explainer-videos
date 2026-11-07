@@ -141,7 +141,8 @@ class Speed(VoiceoverScene):
                           font_size=19, color=YES),
             wrapped_label(r"small \texttt{axpy} and \texttt{gemv} problems fit in cache and run fast; \ from "
                           r"memory they crawl \ (Part 9)", 4.0, font_size=19, color=WHITE),
-            note(r"NumPy's BLAS, \ best of 3--5 runs, \ on a shared, \ busy machine", font_size=16),
+            wrapped_label(r"NumPy's BLAS, \ best of 3--5 runs, \ on a shared, \ busy machine", 4.0, font_size=16,
+                          color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(tab, DOWN, buff=0.4)
         notes.align_to(tab, LEFT)
         with self.voiceover(
