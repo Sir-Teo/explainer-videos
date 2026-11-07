@@ -445,7 +445,7 @@ class Circuits(VoiceoverScene):
             "simulator prints the amplitudes: nought point seven zero seven on zero zero and on one one. <bookmark "
             "mark='c'/> A real device never shows those. It returns samples of the measured bits, about half zero "
             "zero and half one one. <bookmark mark='d'/> And before a circuit runs, a compiler rewrites it into the "
-            "machine's native gates, routing each two-qubit gate to physically connected qubits inserting swaps "
+            "machine's native gates, routing each two-qubit gate to physically connected qubits, inserting swaps "
             "where needed."
         ) as vo:
             self.play(FadeIn(head))

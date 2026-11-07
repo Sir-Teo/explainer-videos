@@ -228,7 +228,7 @@ class Phase(VoiceoverScene):
         c2 = VGroup(g2, s2).move_to([3.9, -1.3, 0])
         l1 = label(rf"$m = {m1}$: \ the {T} terms nearly line up; \ $|a_m|^2 = {P[m1]:.3f}$", font_size=19,
                    color=YES).next_to(c1, DOWN, buff=0.2)
-        l2 = label(rf"$m = {m2}$: \ they curl once round and mostly cancel; \ $|a_m|^2 = {P[m2]:.4f}$", font_size=19,
+        l2 = label(rf"$m = {m2}$: \ they curl most of the way round and largely cancel; \ $|a_m|^2 = {P[m2]:.4f}$", font_size=19,
                    color=NO).next_to(c2, DOWN, buff=0.2)
         for lab_ in (l1, l2):
             if lab_.get_right()[0] > 6.85:
@@ -239,8 +239,8 @@ class Phase(VoiceoverScene):
             "Run the inverse Fourier transform on the counting register. <bookmark mark='a'/> The amplitude of "
             "outcome m is an average of T phases, each turning by theta minus m over T per step. "
             "<bookmark mark='b'/> Draw the terms as arrows, head to tail. For the m nearest to theta times T, they "
-            "turn slowly and nearly line up, and the average is long. One outcome further on, they turn faster, curl "
-            "once round, and mostly cancel. Interference again. <bookmark mark='c'/> The sum is a geometric series, and its size gives "
+            "turn slowly and nearly line up, and the average is long. One outcome further on, they turn faster, curl most of the way "
+            "round, and largely cancel. Interference again. <bookmark mark='c'/> The sum is a geometric series, and its size gives "
             "the probability of each outcome. <bookmark mark='d'/> For the nearest m, the leftover angle is at most "
             "half a step, and then the probability is at least four over pi squared, about forty per cent. In fact "
             "it is usually far more, and if theta is exactly m over T, it is one."

@@ -324,7 +324,7 @@ class Qft(VoiceoverScene):
     # ------------------------------------------------------------------ counting, and checking
     def count(self):
         q = load("qft")["rows"]
-        head = label(r"$n(n+1)/2$ gates for $2^n$ points", font_size=36).to_edge(UP, buff=0.3)
+        head = label(r"$n(n+1)/2$ gates, \ plus swaps, \ for $2^n$ points", font_size=36).to_edge(UP, buff=0.3)
         n = 4
         wires, gates, ys = qft_circuit(n, -6.2, 2.25, dx=0.56, dy=0.5, box=0.42, size=18)
         qk = VGroup(*[MathTex(rf"q_{i}", font_size=22, color=GREY_A).next_to([-6.2, y, 0], LEFT, buff=0.08)
