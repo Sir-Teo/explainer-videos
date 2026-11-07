@@ -1,0 +1,41 @@
+[
+  {
+    "dataset": "Stamey prostate",
+    "url": "https://hastie.su.domains/ElemStatLearn/datasets/prostate.data",
+    "sha256": "65e3c8581c1a140aa4ad27d857df18e024d3ea7560f6a653417740e783daad71",
+    "verification": "all 97 rows, eight predictors, log-PSA responses and training flags agree with ESL distribution to the stored seven decimal places (maximum predictor rounding difference 5e-8); responses and flags agree exactly",
+    "scope": "primary textbook data distribution"
+  },
+  {
+    "dataset": "Wisconsin diagnostic breast cancer",
+    "url": "https://archive.ics.uci.edu/static/public/17/breast+cancer+wisconsin+diagnostic.zip",
+    "archive_sha256": "bc154869ef13f753f9e2b5a17e248cfe1ba4b6721db7c4da9f4880e40b05d3af",
+    "data_sha256": "d606af411f3e5be8a317a5a8b652b425aaf0ff38ca683d5327ffff94c3695f4a",
+    "records": 569,
+    "features": 30,
+    "verification": "all 17,070 feature values and all 569 diagnoses agree exactly in row order with UCI wdbc.data"
+  },
+  {
+    "dataset": "faithful",
+    "url": "https://vincentarelbundock.github.io/Rdatasets/csv/datasets/faithful.csv",
+    "sha256": "5043db1e2c51c8e8fd67e0868c768ae589770cc76ad0ac0c5b7afd1fca31fc57",
+    "verification": "all 272 eruption-duration/wait-to-next-eruption pairs agree exactly in row order",
+    "scope": "independent package distribution; historical original not independently retrieved"
+  },
+  {
+    "dataset": "newcomb",
+    "url": "https://vincentarelbundock.github.io/Rdatasets/csv/MASS/newcomb.csv",
+    "sha256": "fa1289ffe98f14d79cc26758999a4b68f63e6821fc1c0b700be193490bbefb9e",
+    "verification": "all 66 passage times agree as a multiset; row order differs and is not used",
+    "scope": "independent package distribution; historical original not independently retrieved"
+  },
+  {
+    "dataset": "Singh prostate microarray",
+    "url": "https://raw.githubusercontent.com/cran/sda/master/data/singh2002.rda",
+    "sha256": "b9d09321644e79973bb0e0fbac519c55f5eca1356d1fa2c68d9e2116a48912e2",
+    "verification": "All 6033 pooled-variance two-sample t statistics and df=100 Gaussian quantile transforms recomputed from the 102 by 6033 expression matrix; stored six-decimal CSV agrees within 1e-6",
+    "max_abs_t_difference": 5.61836931589621e-07,
+    "max_abs_z_difference": 5.868517525819961e-07,
+    "scope": "Independent current package distribution; small rounding differences retained, not an exact match or laboratory record verification"
+  }
+]

@@ -1,0 +1,6 @@
+[
+  {"source":"Jin and Candes (2023), JMLR 24, paper 22-1176","url":"https://www.jmlr.org/papers/volume24/22-1176/22-1176.pdf","checked":"Theorem 3, Lemma 5, Theorem 6: joint null-event validity, oracle/modified-vector dependence argument and conditional exchangeability extension; conditional null superuniformity is not claimed."},
+  {"source":"Benjamini and Yekutieli (2005), JASA 100","url":"https://www.math.tau.ac.il/~yekutiel/eBayes/by_2005.pdf","checked":"Definition 3 and Theorem 1: coordinate-specific minimum selected size, nested marginal intervals and independent coordinates. Remark 1 gives cases where the observed selected size suffices."},
+  {"source":"Andrews, Kitagawa and McCloskey (2024), QJE 139","url":"https://doi.org/10.1093/qje/qjad043","checked":"Proposition 6 and surrounding hybrid construction: adjusted miscoverage (alpha-beta)/(1-beta), conditional band coverage (1-alpha)/(1-beta), unconditional coverage at least 1-alpha. This part implements the independent equal-variance specialization."},
+  {"source":"Jin and Candes, weighted conformal selection","url":"https://doi.org/10.1093/biomet/asaf066","checked":"Ordinary BH on weighted conformal p-values need not control FDR even with known weights; use the specified weighted selection procedure."}
+]

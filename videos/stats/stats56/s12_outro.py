@@ -6,9 +6,9 @@ PROBLEMS = [
     r"Show that $Z = Y - c\,\eta'Y$ with $c = \Sigma\eta/(\eta'\Sigma\eta)$ is independent of $\eta'Y$ when $Y \sim N(\mu, \Sigma)$.",
     r"For marginal screening $\{|Y_j| > t\}$, \ write the selection event as a union of polyhedra, \ and find $[\mathcal V^-, \mathcal V^+]$.",
     r"Show that the truncated-normal survival function $P_\mu(Y > y \mid Y \in [a, b])$ is increasing in $\mu$.",
-    r"For $K$ i.i.d.\ $N(0, 1)$, \ show $E\max_k Y_k \le \sqrt{2\log K}$, \ and hence the winner's curse grows at that rate.",
+    r"For $K$ i.i.d.\ $N(0, 1)$, \ show $E\max_k Y_k \le \sqrt{2\log K}$, \ an upper growth bound for the winner's curse.",
     r"Prove that fission's $f = X + \tau Z$ and $g = X - Z/\tau$ are independent, \ and find the $\tau$ minimizing $\mathrm{Var}\,g$ given $\mathrm{Var}\,f \le v$.",
-    r"Show that a conformal $p$-value for a null test unit is super-uniform under exchangeability.",
+    r"For IID calibration and test pairs, \ prove $P(p_j\le t, Y_j\le c)\le t$; \ explain why this is not conditional null validity.",
 ]
 
 
@@ -56,12 +56,9 @@ class Outro(VoiceoverScene):
 
     def upgrade(self):
         card = upgrade_card(56, r"selective inference, \ exact under a model", r"a Gaussian model, \ or a known law of $X$",
-                            r"Part 57: \ what can be guaranteed with no model at all, \ and what cannot")
+                            r"Part 57: \ what can be guaranteed without a parametric model, \ and what cannot")
         with self.voiceover(
-            "<bookmark mark='a'/> A promise for the next part. Most of this part's exact results needed a model: Gaussian "
-            "noise for the polyhedral lemma, a known covariate law for knockoffs. <bookmark mark='b'/> Only conformal "
-            "selection asked for nothing but exchangeability. <bookmark mark='c'/> Part fifty-seven asks what can be "
-            "guaranteed with no model at all, and proves what cannot."
+            "<bookmark mark='a'/> A promise for the next part. Most of this part's exact results needed a model: Gaussian noise for the polyhedral lemma, a known covariate law for knockoffs. <bookmark mark='b'/> Only conformal selection asked for the stated independent or conditional exchangeability assumptions and separate predictor training. <bookmark mark='c'/> Part fifty-seven asks what can be guaranteed without a parametric model, and proves what cannot."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(card[0]), FadeIn(card[1][0]), FadeIn(card[1][1][0]))
@@ -124,15 +121,12 @@ class Outro(VoiceoverScene):
     def transcript(self):
         tr = transcript_card(done=56, current=None)
         nxt = VGroup(label(r"Part 57", font_size=30, color=GREY_B), label(r"Distribution-Free Inference", font_size=48),
-                     label(r"what can be guaranteed with no assumptions, \ and what is impossible?", font_size=28, color=GREY_A))
+                     label(r"what can be guaranteed under exchangeability, \ and what is impossible?", font_size=28, color=GREY_A))
         nxt.arrange(DOWN, buff=0.25)
         tr.to_edge(UP, buff=0.8)
         nxt.next_to(tr, DOWN, buff=1.0)
         with self.voiceover(
-            "Fifty-six parts of sixty-five. <bookmark mark='a'/> The first research part is done. <bookmark mark='b'/> In "
-            "1956 Raghu Raj Bahadur and Leonard Savage proved that no honest confidence interval for a mean exists over "
-            "all distributions. Next, Part fifty-seven: distribution-free inference, what can be guaranteed with no "
-            "assumptions, and what cannot."
+            "Fifty-six parts of sixty-five. <bookmark mark='a'/> The first research part is done. <bookmark mark='b'/> In 1956 Raghu Raj Bahadur and Leonard Savage proved that no informative finite-width uniformly honest confidence interval for a mean exists over the unrestricted class of finite-mean distributions. The whole real line is a valid but uninformative interval. Next, Part fifty-seven: distribution-free inference, what can be guaranteed under distribution-free sampling assumptions, and what cannot."
         ) as vo:
             self.play(FadeIn(tr))
             vo.wait_until("a")

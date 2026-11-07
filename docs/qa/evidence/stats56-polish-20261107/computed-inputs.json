@@ -1,0 +1,68 @@
+[
+  {
+    "name": "hook",
+    "path": ".cache/stats56/hook.json",
+    "sha256": "9e6ac91450fe0c18099d71b415bcec085d93c329c67c3eb889d2d19c1ade96d6",
+    "bytes": 2085
+  },
+  {
+    "name": "winners",
+    "path": ".cache/stats56/winners.json",
+    "sha256": "303e1e3dbf82386cf280f582209b8c7cb463a2a842d74ebe589abb9df36a12d2",
+    "bytes": 764750
+  },
+  {
+    "name": "posi",
+    "path": ".cache/stats56/posi.json",
+    "sha256": "2730779b3431c5f24bc81dd886c10b8d4c0ca6175410a0625539f818fa035914",
+    "bytes": 4270
+  },
+  {
+    "name": "lasso",
+    "path": ".cache/stats56/lasso.json",
+    "sha256": "e54a26464e0e0d011c1e681f23512a31bc0c60f8c9d7f49fbb29be524d164d7a",
+    "bytes": 83607
+  },
+  {
+    "name": "carving",
+    "path": ".cache/stats56/carving.json",
+    "sha256": "0475a39af6c1e1480d4c3846938577a7866db4ec66f9d23a342c679f5c25fd7b",
+    "bytes": 40246
+  },
+  {
+    "name": "fission",
+    "path": ".cache/stats56/fission.json",
+    "sha256": "67f275e00c047f16d8dda48280b7c86e348db0ea71f220ddddfe5abe2fb6f56e",
+    "bytes": 823
+  },
+  {
+    "name": "knockoffs",
+    "path": ".cache/stats56/knockoffs.json",
+    "sha256": "b6a605d230ec64eac729ab276c1fa9f662b68e807fd241927c0da3948be5e280",
+    "bytes": 1669
+  },
+  {
+    "name": "conformal",
+    "path": ".cache/stats56/conformal.json",
+    "sha256": "3131c874c3234de0d3f92627a7fd48645ed9750383bac827a680732267dfb299",
+    "bytes": 7007
+  },
+  {
+    "name": "microarray",
+    "path": ".cache/stats56/microarray.json",
+    "sha256": "6e9deb4f79bc5e622a8ae6e8236a05856d0a48b39f67b2ef5be456fec3303269",
+    "bytes": 404
+  },
+  {
+    "name": "cluster",
+    "path": ".cache/stats56/cluster.json",
+    "sha256": "0c1c065a585f3811fe9345e13baf346a257435901fd985eb515d8c8b94eabc7b",
+    "bytes": 78423
+  },
+  {
+    "name": "board",
+    "path": ".cache/stats56/board.json",
+    "sha256": "c0ba60801192fdb813da56dab9db3dbcbb4dd7f112e5f1b2016be76d09737a77",
+    "bytes": 1976
+  }
+]

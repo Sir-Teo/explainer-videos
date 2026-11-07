@@ -23,19 +23,13 @@ class OpenProblems(VoiceoverScene):
             [r"conditional (polyhedral)", r"the exact rule; \ Gaussian noise", r"long intervals near the edge"],
             [r"randomization, \ carving", r"to randomize the rule", r"noisier selection"],
             [r"splitting, \ fission, \ thinning", r"a divisible family", r"half the information"],
-            [r"knockoffs, \ conformal selection", r"the law of $X$, \ or exchangeability", r"an error rate, \ not intervals"],
+            [r"knockoffs, \ conformal selection", r"known covariate law, \ or stated sampling conditions", r"an error rate, \ not intervals"],
             [r"hybrid (winners)", r"a simultaneous band", r"$\beta$ of the level"],
         ]
         tab = table_rows([hdr] + body, font_size=28, col_buff=0.7, row_buff=0.3,
                          colors=[GREY_B, SIMC, CONDC, SPLITC, SPLITC, HYBC, HYBC]).move_to([0, 0.1, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The part in one table: what each approach needs, and what it costs. <bookmark mark='b'/> "
-            "PoSI needs nothing about the selection rule and costs up to root p in width. Conditional inference needs the "
-            "exact rule and Gaussian noise, and its intervals grow long near the edge of the selection region. "
-            "Randomization needs you to randomize, and costs noisier selection. Splitting, fission and thinning need a "
-            "divisible family, and cost information. Knockoffs and conformal selection need the law of the covariates or "
-            "exchangeability, and give an error rate instead of intervals. And the hybrid needs a simultaneous band, and "
-            "costs a small slice of the level."
+            "<bookmark mark='a'/> The part in one table: what each approach needs, and what it costs. <bookmark mark='b'/> PoSI needs nothing about the selection rule and costs up to root p in width. Conditional inference needs the exact rule and Gaussian noise, and its intervals grow long near the edge of the selection region. Randomization needs you to randomize, and costs noisier selection. Splitting, fission and thinning need a divisible family, and cost information. Knockoffs and conformal selection need the law of the covariates or the stated independent or conditional exchangeability assumptions, and give an error rate instead of intervals. And the hybrid needs a simultaneous band, and costs a small slice of the level."
         ) as vo:
             self.play(FadeIn(tab[0]))
             vo.wait_until("a")
@@ -53,6 +47,9 @@ class OpenProblems(VoiceoverScene):
         ]
         rows[3][-1].set_color(HYBC)
         whys = [why(r"the first question"), why(r"the forking paths"), why(r"conditional or average"), why(r"the cheapest fixes")]
+        head = label('Referee', font_size=32, color=SELC).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
             "<bookmark mark='a'/> The part also gives a referee's checklist. Was the question fixed before the data "
             "were seen? <bookmark mark='b'/> If not, what selected it, and was the selection reported, including the "
@@ -79,14 +76,7 @@ class OpenProblems(VoiceoverScene):
         ), 12.6, 0.42, [0, 0, 0])
         rows[0].set_x(0)
         with self.voiceover(
-            "<bookmark mark='a'/> Six open problems. <bookmark mark='b'/> First, exact conditional inference beyond the "
-            "Gaussian linear model, including dependent estimates such as correlated genes. <bookmark mark='c'/> Second, "
-            "complex, iterative selection: what exactly was conditioned on when an analyst tried twenty models and looked at "
-            "a plot? <bookmark mark='d'/> Third, optimal trade-offs: how much randomization or fission maximizes power for a "
-            "given task? <bookmark mark='e'/> Fourth, honest inference on what a forest or a neural network selects. "
-            "<bookmark mark='f'/> Fifth, combining selected findings across studies without the winner's curse. <bookmark "
-            "mark='g'/> And sixth, selective inference for causal effects chosen after looking: the subgroup, the outcome, "
-            "the specification."
+            "<bookmark mark='a'/> Six open problems. <bookmark mark='b'/> First, exact conditional inference beyond the Gaussian linear model, including non-Gaussian dependent estimates and unknown high dimensional covariance. Gaussian dependence with known covariance is already covered by the lemma. <bookmark mark='c'/> Second, complex, iterative selection: what exactly was conditioned on when an analyst tried twenty models and looked at a plot? <bookmark mark='d'/> Third, optimal trade-offs: how much randomization or fission maximizes power for a given task? <bookmark mark='e'/> Fourth, honest inference on what a forest or a neural network selects. <bookmark mark='f'/> Fifth, combining selected findings across studies without the winner's curse. <bookmark mark='g'/> And sixth, selective inference for causal effects chosen after looking: the subgroup, the outcome, the specification."
         ) as vo:
             for k, m_ in enumerate("abcdefg"):
                 vo.wait_until(m_)

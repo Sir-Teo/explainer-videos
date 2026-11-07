@@ -33,6 +33,9 @@ class Problem(VoiceoverScene):
         rows[1][-1].set_color(SELC)
         rows[3][-1].set_color(NAIVEC)
         whys = [why(r"effects, \ coefficients, \ clusters"), why(r"a selection rule"), why(r"marginal coverage"), why(r"selection is part of the experiment")]
+        head = label('Selection changes the question', font_size=32, color=SELC).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
             "<bookmark mark='a'/> The setting. Data Y, and many questions one might ask of it: K effects, coefficients or "
             "differences. <bookmark mark='b'/> A selection rule, S of Y, looks at the data and chooses which question to "
@@ -50,7 +53,7 @@ class Problem(VoiceoverScene):
     def curse(self):
         d = load("winners")["curse"]
         lk = np.log10([r["K"] for r in d])
-        A = axes([-0.1, 3.1], [0, 3.5], x_length=7.4, y_length=4.4, xlabel=r"$K$ candidates, \ all null \ (log scale)", ylabel=r"",
+        A = axes([-0.1, 3.1], [-.15, 3.5], x_length=7.4, y_length=4.4, xlabel=r"$K$ candidates, \ all null \ (log scale)", ylabel=r"",
                  xticks=[0, 1, 2, 3], xfmt=lambda v: f"{10 ** v:,.0f}", yticks=[0, 1, 2, 3], center=[-2.5, 0.2, 0])
         ax = A.ax
         cb = VGroup(polyline(ax, lk, [r["bias"] for r in d], SELC, 4), *[Dot(ax.c2p(a, r["bias"]), radius=0.07, color=SELC) for a, r in zip(lk, d)])
@@ -61,18 +64,12 @@ class Problem(VoiceoverScene):
         side = fit_rows(VGroup(
             label(r"$K$ standard normals; \ report the largest", font_size=22),
             label(rf"gold: \ the bias: \ {k10['bias']:.2f} $(K = 10)$, \ {d[-1]['bias']:.2f} $(1{{,}}000)$", font_size=22, color=SELC),
-            label(r"red: \ coverage of $\max \pm 1.96$ \ (dashed: \ 95\%)", font_size=22, color=NAIVEC),
+            label(r"red: \ 3 times coverage of $\max \pm 1.96$ \ (95\% at 2.85)", font_size=22, color=NAIVEC),
             label(rf"{100 * k10['naive']:.0f}\% at $K = 10$, \ {100 * k100['naive']:.0f}\% at 100, \ {100 * d[-1]['naive']:.0f}\% at 1,000", font_size=22, color=NAIVEC),
             label(r"the bias grows like $\sqrt{2\log K}$: \ Part 51's maxima", font_size=22, color=GREY_A),
         ), 4.6, 0.4, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The simplest case. K independent standard normals, every true mean zero, and we report the "
-            f"largest. <bookmark mark='b'/> The reported value's average is its bias: {say(k10['bias'], 2)} with ten "
-            f"candidates and {say(d[-1]['bias'], 2)} with a thousand, growing like the root of two log K, the Gaussian maxima "
-            f"of Part fifty-one. <bookmark mark='c'/> In red, how often the usual interval, the maximum plus or minus one "
-            f"point nine six, covers the true value of zero. <bookmark mark='d'/> {100 * k10['naive']:.0f} percent with ten "
-            f"candidates, {100 * k100['naive']:.0f} with a hundred, and never with a thousand. <bookmark mark='e'/> Nothing "
-            f"is wrong with the interval; it is being asked a question it was not built for."
+            f"<bookmark mark='a'/> The simplest case. K independent standard normals, every true mean zero, and we report the largest. <bookmark mark='b'/> The reported value's average is its bias: {say(k10['bias'], 2)} with ten candidates and {say(d[-1]['bias'], 2)} with a thousand, growing like the root of two log K, the Gaussian maxima of Part fifty-one. <bookmark mark='c'/> In red, how often the usual interval, the maximum plus or minus one point nine six, covers the true value of zero. <bookmark mark='d'/> {100 * k10['naive']:.0f} percent with ten candidates, {100 * k100['naive']:.0f} with a hundred, and no hits in these four thousand draws with a thousand candidates; the exact probability is tiny and positive. <bookmark mark='e'/> Nothing is wrong with the interval; it is being asked a question it was not built for."
         ) as vo:
             self.play(FadeIn(A), FadeIn(nom), FadeIn(simulated_tag(r"simulated, \ 4,000 runs")))
             vo.wait_until("a")
@@ -96,14 +93,11 @@ class Problem(VoiceoverScene):
         ]
         rows[2][-1].set_color(HYBC)
         whys = [why(r"Dawid (1994)"), why(r"the catch"), why(r"Part 25"), why(r"borrowing strength")]
+        head = label('Shrink link', font_size=32, color=SELC).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> A Bayesian aside. Philip Dawid pointed out that a posterior for a selected mean is "
-            "the same whether or not it was selected: selection does not change the likelihood of the data you "
-            "condition on. <bookmark mark='b'/> But this is reassuring only if the prior is right; the selection "
-            "effect is moved into the prior, not removed. <bookmark mark='c'/> Empirical Bayes makes it concrete. "
-            "Tweedie's formula from Part twenty-five shrinks each estimate toward the bulk using the estimated density "
-            "of all of them, and it shrinks the winners most. <bookmark mark='d'/> Bradley Efron proposed it in 2011 "
-            "as a frequentist correction for the winner's curse, learned from all K estimates at once."
+            "<bookmark mark='a'/> A Bayesian aside. Philip Dawid pointed out that a posterior for a selected mean is the same whether or not it was selected: selection does not change the likelihood of the data you condition on. <bookmark mark='b'/> But this is reassuring only if the prior is right; the selection effect is moved into the prior, not removed. <bookmark mark='c'/> Empirical Bayes makes it concrete. Tweedie's formula from Part twenty-five shrinks each estimate toward the bulk using the estimated density of all of them. The identity uses the true Gaussian marginal density; estimating its derivative introduces error and gives no individual confidence guarantee. Shrinkage need not always be largest at the winner. <bookmark mark='d'/> Bradley Efron proposed it in 2011 as a frequentist correction for the winner's curse, learned from all K estimates at once."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -115,7 +109,7 @@ class Problem(VoiceoverScene):
         rows = [
             cmath(r"\text{simultaneous}", r":", r"P\big(\theta_j \in C_j \ \forall j\big) \ge 1 - \alpha \ \Rightarrow \ \text{any selection is covered}", font_size=32),
             cmath(r"\text{conditional}", r":", r"P\big(\theta_j \in C_j \mid \hat\jmath = j\big) \ge 1 - \alpha \ \text{ for every } j", font_size=32),
-            cmath(r"\text{on average}", r":", r"\text{FCR} = E\Big[\frac{\#\text{selected intervals missing}}{\#\text{selected}}\Big] \le \alpha", font_size=32),
+            cmath(r"\text{on average}", r":", r"\text{FCR} = E\Big[\frac{\#\text{selected intervals missing}}{\#\text{selected}\vee1}\Big] \le \alpha", font_size=32),
             cmath(r"\text{or}", r":", r"\text{use independent data for the two jobs}", font_size=34),
         ]
         rows[0][-1].set_color(SIMC)
@@ -123,14 +117,11 @@ class Problem(VoiceoverScene):
         rows[2][-1].set_color(HYBC)
         rows[3][-1].set_color(SPLITC)
         whys = [why(r"PoSI, \ projection: \ chapter 2"), why(r"Fithian, \ Sun \& Taylor: \ chapters 3, \ 8, \ 9"), why(r"Benjamini \& Yekutieli (2005), \ Part 33"), why(r"splitting, \ fission: \ chapters 4, \ 5")]
+        head = label('Goals', font_size=32, color=SELC).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> What should a valid interval promise? Three answers. Simultaneous coverage: the intervals "
-            "for all questions cover together, so whatever is selected is covered. <bookmark mark='b'/> Conditional "
-            "coverage: given that question j was selected, its interval covers with probability one minus alpha, for every j. "
-            "This is the strongest, and the one William Fithian, Dennis Sun and Jonathan Taylor argue matches what a reader "
-            "of the selected finding wants. <bookmark mark='c'/> Coverage on average over the selected set: the false "
-            "coverage rate of Yoav Benjamini and Daniel Yekutieli, from Part thirty-three. <bookmark mark='d'/> Or sidestep "
-            "the problem, using independent pieces of data for selecting and for inferring."
+            "<bookmark mark='a'/> What should a valid interval promise? Three answers. Simultaneous coverage: the intervals for all questions cover together, so whatever is selected is covered. <bookmark mark='b'/> Conditional coverage: given that question j was selected, its interval covers with probability one minus alpha, for every j. Conditional and simultaneous coverage are different guarantees: neither implies the other in general. Fithian, Sun and Taylor argue that conditioning matches what a reader of a selected finding wants. <bookmark mark='c'/> Coverage on average over the selected set: the false coverage rate of Yoav Benjamini and Daniel Yekutieli, from Part thirty-three. <bookmark mark='d'/> Or sidestep the problem, using independent pieces of data for selecting and for inferring."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -148,6 +139,9 @@ class Problem(VoiceoverScene):
         rows[0][-1].set_color(CONDC)
         rows[1][-1].set_color(HYBC)
         whys = [why(r"Fithian, \ Sun \& Taylor"), why(r"Andrews, \ Kitagawa \& McCloskey's hybrid"), why(r"the argument for conditioning"), why(r"the argument against")]
+        head = label('Debate', font_size=32, color=SELC).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
             "<bookmark mark='a'/> The choice between conditional and unconditional guarantees is a real debate. A "
             "conditional guarantee is valid for the question actually asked, whatever else might have been selected. "
@@ -187,21 +181,19 @@ class Problem(VoiceoverScene):
 
     def fcr(self):
         rows = [
-            cmath(r"\text{select } \hat S \text{ by any rule}", r",", r"R = |\hat S|", font_size=36),
+            cmath(r"\text{select } \hat S \text{ by a simple rule}", r",", r"R = |\hat S|", font_size=36),
             cmath(r"C_j^{\text{FCR}}", r"=", r"\text{the marginal interval at level } 1 - \alpha R/K", font_size=36),
-            cmath(r"\Rightarrow", r"\;", r"E\Big[\frac{\#\{j \in \hat S: \theta_j \notin C_j\}}{R \vee 1}\Big] \le \alpha \ \text{ for independent estimates}", font_size=30),
+            cmath(r"\Rightarrow", r"\;", r"E\Big[\frac{\#\{j \in \hat S: \theta_j \notin C_j\}}{R \vee 1}\Big] \le \alpha \ \text{ for independent estimates and a simple rule}", font_size=30),
             cmath(r"\text{cost}", r":", r"\text{wide when few of many are selected}", font_size=32),
         ]
         rows[1][-1].set_color(HYBC)
         rows[2][-1].set_color(PROOFC)
-        whys = [why(r"any selection"), why(r"Benjamini \& Yekutieli (2005)"), why(r"the false coverage rate"), why(r"the price of averaging")]
+        whys = [why(r"independent coordinates; \ simple selection rule"), why(r"Benjamini \& Yekutieli (2005)"), why(r"the false coverage rate"), why(r"the price of averaging")]
+        head = label('False coverage rate: assumptions matter', font_size=32, color=SELC).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> The simplest correction, from Benjamini and Yekutieli in 2005, works for any "
-            "selection rule. Suppose R of the K questions are selected. <bookmark mark='b'/> Report each selected "
-            "question's marginal interval, but at level one minus alpha R over K instead of one minus alpha. <bookmark "
-            "mark='c'/> For independent estimates, the expected fraction of the selected intervals that miss is then "
-            "at most alpha: the false coverage rate. <bookmark mark='d'/> The cost is width: when few are selected out "
-            "of many, each interval is as wide as a Bonferroni interval at alpha R over K."
+            "<bookmark mark='a'/> The simplest correction, from Benjamini and Yekutieli in 2005, has this simple form for independent coordinate estimates and a simple selection rule. Simple means that varying one selected coordinate while keeping it selected leaves the number selected unchanged. Suppose R of the K questions are selected. <bookmark mark='b'/> Use a nested family of valid marginal intervals. Report each selected question's interval, but at level one minus alpha R over K instead of one minus alpha. <bookmark mark='c'/> For independent estimates, the expected fraction of the selected intervals that miss is then at most alpha: the false coverage rate. <bookmark mark='d'/> For arbitrary selection, replace R for each coordinate by the smallest possible selected size while that coordinate remains selected, as specified in their theorem. The cost is width: when few are selected out of many, each interval is as wide as a Bonferroni interval at alpha R over K."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
