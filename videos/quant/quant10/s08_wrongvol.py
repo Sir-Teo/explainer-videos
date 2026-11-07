@@ -157,15 +157,16 @@ class WrongVol(VoiceoverScene, ThreeDScene):
         mark = VGroup(*[MathTex(rf"\sigma_r = 25\%:\ \text{{sd}}\ {s25['imp_sd']:.2f}\ \text{{vs}}\ {s25['act_sd']:.2f};"
                                 rf"\ \text{{losing paths}}\ {100 * s25['imp_loss']:.2f}\%\ \text{{vs}}\ "
                                 rf"{100 * s25['act_loss']:.2f}\%", font_size=24, color=GREY_B)]).to_edge(DOWN, buff=0.3)
+        preview = VGroup(panels[0][0], panels[0][3], panels[1][0], panels[1][3])
         loss_more = "the actual-volatility hedge" if s25["act_loss"] > s25["imp_loss"] else "the implied-volatility hedge"
         with self.voiceover(
             f"""Buy a call at twenty percent, then compare hedges on twenty thousand GBM paths with constant thirty-percent volatility and ten-percent annual drift. Zero rates and costs. Pause: which hedge has less terminal dispersion? <bookmark mark='a'/> Hedging at the known true volatility would lock in {s30['locked']:.2f} continuously; in steps its standard deviation is {s30['act_sd']:.2f}. <bookmark mark='b'/> Hedging at twenty gives a sample mean of {s30['imp_mean']:.2f} and standard deviation {s30['imp_sd']:.2f}. The displayed histograms share bins and a count scale. Similar sample means here are not a general equality under arbitrary physical dynamics. <bookmark mark='c'/> On the separate twenty-five-percent-volatility paths, {loss_more} has more losing paths. Knowing future constant volatility is an assumption, not an available forecast."""
         ) as vo:
-            self.play(FadeIn(top))
+            self.play(FadeIn(top), FadeIn(preview))
             vo.wait_until("a")
-            self.play(FadeIn(panels[1], shift=UP * 0.2), FadeIn(lockl))
+            self.play(FadeIn(VGroup(panels[1][1], panels[1][2], panels[1][4]), shift=UP * 0.2), FadeIn(lockl))
             vo.wait_until("b")
-            self.play(FadeIn(panels[0], shift=UP * 0.2))
+            self.play(FadeIn(VGroup(panels[0][1], panels[0][2], panels[0][4]), shift=UP * 0.2))
             vo.wait_until("c")
             self.play(FadeIn(mark), FadeIn(computed(corner=DR).shift(UP * 0.5)))
         self.wait(0.4)

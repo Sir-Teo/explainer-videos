@@ -228,9 +228,9 @@ class Research(VoiceoverScene):
         with self.voiceover(
             f"""On Bitcoin minute closes, these thirty-day calls start every fifteen days in 2019 and 2020, so windows overlap. Each uses its own future realized volatility. The common band threshold is also tuned using all these windows to match the average trade count. Both choices are retrospective. <bookmark mark='a'/> At about sixteen trades, the measured error spread is {f['time']['sd_pct_premium']:.0f} versus {f['fukasawa']['sd_pct_premium']:.0f} percent of model premium. <bookmark mark='b'/> At sixty-four, {l_['time']['sd_pct_premium']:.0f} versus {l_['fukasawa']['sd_pct_premium']:.0f}. This descriptive timing comparison excludes costs and does not test a deployable policy or establish the cause of its positive mean."""
         ) as vo:
-            self.play(FadeIn(tab[0]), FadeIn(foot))
+            self.play(FadeIn(tab[0]), FadeIn(tab[1]), FadeIn(foot))
             vo.wait_until("a")
-            self.play(FadeIn(tab[1]), FadeIn(tab[2]))
+            self.play(FadeIn(tab[2]))
             vo.wait_until("b")
             self.play(FadeIn(tab[3]), FadeIn(tab[4]))
         self.wait(0.4)

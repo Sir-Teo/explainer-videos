@@ -136,6 +136,8 @@ class Carry(VoiceoverScene):
             rows.add(VGroup(label(a, font_size=24), label(b_, font_size=24, color=QQ), label(c, font_size=20,
                                                                                                 color=GREY_B)))
         for r_ in rows:
+            if r_[1].width > 3.35:
+                r_[1].scale_to_fit_width(3.35)
             r_[0].move_to([-4.0, 0, 0], aligned_edge=LEFT)
             r_[1].move_to([0.3, 0, 0], aligned_edge=LEFT)
             r_[2].move_to([4.0, 0, 0], aligned_edge=LEFT)

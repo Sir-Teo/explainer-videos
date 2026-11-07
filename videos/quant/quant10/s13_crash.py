@@ -135,7 +135,7 @@ class Crash(VoiceoverScene):
             f"{100 * o5['w']:.0f} percent on the fifth of October. <bookmark mark='a'/> The market falls for days, "
             f"and the rule sells: {100 * o16['w']:.0f} percent by Friday the sixteenth. <bookmark mark='b'/> On "
             f"Monday the market gaps down with the portfolio still {100 * o19['w']:.0f} percent in stocks, straight "
-            f"through the floor; next morning the model sells down to {100 * o20['w']:.0f}. October ends at "
+            f"through the floor; <bookmark mark='d'/> next morning the model sells down to {100 * o20['w']:.0f}. <bookmark mark='e'/> October ends at "
             f"{eo['V']:.1f}, {floor_word} the floor of {ins['floor_value']:.1f}. <bookmark mark='c'/> The Brady Commission: sixty to ninety billion "
             "dollars insured, models selling more than a fifth on a ten percent fall, and that Monday twelve "
             "billion that should have been sold, of which less than four had been. Pause and predict: what "
@@ -147,8 +147,10 @@ class Crash(VoiceoverScene):
             self.play(k.animate.set_value(i16), run_time=max(vo.until("b") - 0.5, 2.0), rate_func=linear)
             vo.wait_until("b")
             self.play(k.animate.set_value(i19), run_time=0.6, rate_func=linear)
-            self.play(k.animate.set_value(i20), run_time=2, rate_func=linear)
-            self.play(k.animate.set_value(n), run_time=4, rate_func=linear)
+            vo.wait_until("d")
+            self.play(k.animate.set_value(i20), run_time=0.6, rate_func=linear)
+            vo.wait_until("e")
+            self.play(k.animate.set_value(n), run_time=1.5, rate_func=linear)
             for m_ in (mkt, port, fill, wl, day):
                 m_.clear_updaters()
             vo.wait_until("c")
