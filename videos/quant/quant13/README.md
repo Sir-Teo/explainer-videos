@@ -238,3 +238,26 @@ Selected primary sources for the qualifications above: [Reisinger–Tsianni](htt
 * **定理。** 安德森与皮捷尔巴格（2007），*Finance Stoch.* 11；李（2004），*Math. Finance* 14；贝纳伊姆与弗里茨（2008、2009）论正则变化与上极限即极限；Gulisashvili与Stein（2010）；Friz、Gerhold、Gulisashvili与Sturm（2011）论赫斯顿两翼的精细展开；Keller-Ressel（2011）论仿射模型。
 * **简化。** 零利率；只讨论价格矩的爆炸时间（方差的矩是另一个问题）；有限行权价外侧四分之一的斜率只是外推代理，不必等于渐近斜率；临界指数也不能独自判断边界可积性。
 * **开放问题。** 仿射模型之外的两翼（粗糙、SLV）；用二阶项稳健外推；风险中性尾部与现实尾部之差。
+
+
+## Validation in this polish pass
+
+All 21 English and 21 Mandarin narration-beat checks and 21 English silent
+motion checks pass against the current source. One simulation motion scan flags
+a 1.5-second sparse formula transition, manually inspected and retained; the other
+62 receipts have zero automated warnings. Their sheets were visually reviewed.
+Chinese source coverage is 140/140;
+the narration estimate is 61.5 minutes. Eleven sampled speech reports cover
+67 lines, and the actual 161.0-second narrated English opening has a reviewed
+contact sheet, dead-air scan and verified audio stream. Full continuous
+production-voice listening and synchronization remain pending.
+
+The local silent preview is `renders/quant13_polished_silent.mp4` (69:51,
+21 embedded chapters and English subtitles). The actual opening is
+`media/quant13/narrated_qa/videos/s01_hook/480p15/Hook.mp4`.
+See [the evidence record](../../../docs/qa/quant13-polish-evidence.json) and
+[the sequential QA log](../../../docs/qa/quantitative-finance-polish.md).
+
+本轮通过21个英文与21个中文叙述节点检查，以及21个英文静音动画检查，其中模拟章节保留一处1.5秒稀疏转场警告，已逐半秒人工检查；其余62份无自动警告，联系表已人工审阅。
+中文覆盖140/140，约61.5分钟。十一份实际语音报告检查67句的信号与时间标记，实际英文开场也已审阅。
+完整连续生产语音聆听和同步仍待单独完成；这些检查不证明发音正确。

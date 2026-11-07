@@ -31,8 +31,9 @@ Delivery workflow: continue directly on `quantitative-finance`. Commit and push 
 | 10 | Visual pass complete; full production-voice listening pending |
 | 11 | Visual pass complete; full production-voice listening pending |
 | 12 | Visual pass complete; full production-voice listening pending |
-| 13 | In progress: scientific, narration and visual QA |
-| 14–43 | Pending; do not infer approval from historical build notes |
+| 13 | Visual pass complete; full production-voice listening pending |
+| 14 | In progress: scientific, narration and visual QA |
+| 15–43 | Pending; do not infer approval from historical build notes |
 
 ## Part 1: The Fair Game
 
@@ -942,4 +943,104 @@ checks, cache restoration, tests and speech checks. Local git-ignored artifacts:
   opening, 181.3 seconds, with reviewed contact sheet,
   dead-air scan, stream probe and volume measurements.
 
-Part 13 is next in the sequential pass.
+Part 13’s completed visual pass is recorded below.
+
+
+## Part 13: Stochastic Volatility and Jumps — completed visual pass
+
+The explanation distinguishes pooled option marks from executable trades and
+unequal vanilla fits from a controlled comparison of dynamics. The five saved
+cliquet prices span about nine percent relative to their mean; numerical and fit
+errors also contribute. Contemporary correlation, finite autocorrelation and
+historical Gaussian tail calculations carry their appropriate limits.
+
+The variance Taylor expansion now uses C_ww = vega(d1 d2 − 1)/(4 sigma³).
+Conditional Gaussian Heston returns retain a shifted mean and residual variance
+when correlation is nonzero. Monte Carlo sampling error excludes discretization
+bias. Heston dials interact, the BBF relation uses a harmonic local-volatility
+average, attainable CIR zero is distinct from a positive-time atom, and QE's
+numerical atom and martingale correction have explicit qualifications.
+
+SABR's asymptotic formula, signed density and effective one-dimensional PDE are
+distinguished from the exact two-dimensional law. Finite-interval density mass
+excludes boundary atoms. Merton's log-jump mean, finite Bates bounds, VG's
+martingale domain and CGMY activity/variation regimes are stated correctly.
+The saved Bates replay shows 300 observations per trace out of 345, 383 and 345
+original calls; its sampling is disclosed in narration and captions. Finite-grid
+skew regressions and near-Gaussian cumulant heuristics are not universal
+short-maturity jump theorems.
+
+SLV keeps the original raw Euler variance and kernel algorithm, conditional
+variance floor and uncapped leverage. All saved particles, including small
+negative Euler variances, remain visible. Logarithmic displays retain leverage
+above 2700 and the full three-dimensional grid; sparse-wing estimates are not
+identified market spikes. Exact marginal matching requires regularity and
+existence assumptions. Particle and Euler-time convergence have distinct Feller
+conditions. The cached mixing-fraction prices are nonmonotone, and the total
+diffusion includes the spatial derivative of leverage.
+
+Bergomi's finite variance strip, piecewise forward curve and kernel-average
+heuristic are explicit. The full Heston relative forward-variance diffusion peak
+near 958 percent is shown. Fixed absolute maturity martingales differ from
+rolling-tenor curves. Forward-start ratio payoffs, asset-weighted contracts,
+local coupon floors and active global floors are distinguished. Bitcoin's
+simulation is an illustration of the volatility puzzle, not a joint SPX/VIX
+measurement. Girsanov's local quadratic-variation statement and Jensen's bound
+specify the measure, state, dates and index definition.
+
+Calibration separates price-over-vega residuals from reported IV RMSE, raw
+penalty coordinates from log-coordinate diagnostics, and normalized from
+unnormalized objectives. Gauss–Newton uncertainty needs unverified noise/model
+assumptions; regularization does not establish improved hedging. The industry
+example is a synthetic Black proxy with fixed and strictly-past rolling fits.
+Its Heston delta uses a variance Greek and its roughly 90 percent variance
+reduction is stated with the saved numbers. EU prudent-exit valuation is not a
+five-model min–max confidence interval.
+
+Research claims were checked against primary sources: reversionary NIG limits,
+quintic OU's input curve, exact versus approximate simulation, regularized SLV
+convergence and the 2026 synthetic neural benchmark. Lee's theorem concerns a
+limsup ratio; derivative limits and finite-wing extrapolation require additional
+assumptions. Continuous moment explosion cannot be established by a finite QE
+sample. The worked pause reveals the three wing answers, approximately 0.202,
+two and zero. Both language tracks and all nine README solutions are aligned.
+
+Full signed density ranges, loss extrema, negative coupon returns, simulation
+particles and research running means remain visible. Transition fades are
+shortened, initial content appears during narration, and the shared pause helper
+uses its supported API. Translated statistics fit their panels, and exported
+chapter titles match the illustration’s scope. All 35 original compute items
+were restored through 35 normal invocations. All 100 original Wednesdays are present with none skipped.
+The 58 protected compute, House, replay and global registry files match the base.
+The part counter remains 312 and the global counter 23,562; no new trial or
+holdout was opened. Twelve existing tests and nine independent numerical
+variance-curvature checks pass.
+
+Validation: all 63 current receipts pass: 21 English narration-beat checks,
+21 Mandarin checks and 21 English silent playback checks. One simulation motion
+scan flags a 1.5-second sparse fade from the comparison table into the first CIR
+moment equation. That interval was inspected at half-second steps and approved
+with exact artifact hashes; the warning is retained. No blank run lasts at least
+1.5 seconds. The other 62 receipts have zero automated warnings.
+Every endpoint and forty-frame motion sheet was inspected; artifact hashes bind
+each review. Pixel-identical prior judgments were retained only after fresh
+actual current-source renders. 12 focused native frames were also inspected.
+All 140 source entries and spliced sentences have paired Chinese coverage;
+the narration estimate is 61.5 minutes. Eleven actual Kokoro reports cover
+eight English and three Mandarin chapters: 67 sampled lines pass signal
+and token-time checks. These do not certify pronunciation; full continuous
+production-voice listening and synchronization remain pending.
+
+The [compact evidence record](quant13-polish-evidence.json) binds source, inputs,
+receipts, sheets, speech reports and the reviewed actual opening. Local
+git-ignored artifacts:
+
+- `renders/quant13_polished_silent.mp4`: 69:51, 480p15, with 21 embedded
+  chapters, English soft subtitles and companion subtitle and chapter files.
+- `media/quant13/narrated_qa/videos/s01_hook/480p15/Hook.mp4`: the actual English
+  opening, 161.0 seconds, with reviewed contact sheet, dead-air scan,
+  stream probe and volume measurements. Its current scan has no blank or sparse
+  run lasting at least 1.5 seconds; the agenda transition was also inspected at
+  half-second steps.
+
+Part 14 is next in the sequential pass.
