@@ -22,70 +22,66 @@ steps as moving Gaussian ellipses, with the measurement as a band. Its real data
 - US quarterly macro data, 1959–2009 (statsmodels).
 
 It opens with Hurst (1951). The Nile minima's rescaled range grows like n^0.85. White noise of the same length gives
-0.56 (0.48–0.63), and an AR(1) fitted to the Nile 0.69. The range of the cumulative surplus is 10,647.
+0.56 (0.48–0.63), and an AR(1) fitted to the Nile 0.69. The range of cumulative minimum-level anomalies is 10,647 level-years. These are gauge minima, not flow volumes: their cumulative range is a teaching analogue, not an actual reservoir capacity.
 
 From there the part covers:
 - **What Part 17 assumed.** Four seeded departures from it: a random walk, GARCH, ARFIMA, a hidden level. Also Wold's
   decomposition and ergodicity.
 - **Spectra.**
-  - Herglotz; the periodogram is unbiased but inconsistent. For white noise its spread is 1.11 at n = 128 and 1.08 at
+  - Herglotz; the periodogram is exactly unbiased for white noise and asymptotically unbiased under suitable general short-memory conditions, but inconsistent without smoothing. For white noise its spread is 1.11 at n = 128 and 1.08 at
     n = 2,048; Welch's estimate brings it to 0.18.
   - Welch; multitaper.
   - The sunspot peak: periodogram 11.0 years, Welch 10.7, multitaper 10.7, Yule's AR(2) 10.9.
 - **Unit roots.**
-  - Dickey–Fuller and its Brownian limit. Over 20,000 random walks the 5% point is −2.88, against MacKinnon's −2.89.
-    The normal −1.645 rejects 45% of true unit roots.
+  - Dickey–Fuller and its Brownian limit. Over 20,000 random walks the 5% point is −2.86, against MacKinnon's −2.89.
+    The normal −1.645 rejects 45.6% of true unit roots.
   - KPSS.
-  - US series: log GDP has a unit root; unemployment, the T-bill rate and inflation cannot be told apart; GDP growth is
+  - US series: ADF nonrejection and KPSS rejection for log GDP are consistent with a unit root under these lag/deterministic specifications; unemployment, the T-bill rate and inflation cannot be told apart; GDP growth is
     stationary.
   - Perron's breaks.
 - **Spurious regression and cointegration.**
   - Two independent walks give |t| > 1.96 77% of the time (Granger & Newbold: 76%), with median R² 0.18.
   - Engle–Granger on log consumption and income: β̂ = 1.03, τ = −2.90 against −3.37, so it cannot reject.
-  - Johansen with investment: trace 30.2 against 29.8 for rank 0, and 11.5 against 15.5 for rank 1, so one relation,
-    barely.
+  - Johansen with investment: trace 30.2 against 29.8 for rank 0, and 11.5 against 15.5 for rank 1, so the sequential test selects one relation, barely, under the chosen lag/deterministic specification. Neither rank selection nor unit-root nonrejection proves the null.
   - Super-consistency; FM-OLS and DOLS.
 - **Volatility.** DAX returns:
   - kurtosis 9.3; ARCH LM 70 (p ≈ 10⁻¹³);
   - GARCH(1,1) with α = 0.068, β = 0.888 (persistence 0.956, half-life 15 days);
-  - 1% VaR exceedances: constant variance 0.54% when calm and 2.91% when turbulent; GARCH 1.51% and 1.72%;
-  - volatility forecasts: 0.39 of today's excess remains after a month.
+  - In-sample 1% VaR diagnostics, with full-record parameter estimates and volatility groups defined by fitted conditional scale: constant variance 0.54% when calm and 2.91% when turbulent; GARCH 1.51% and 1.72%;
+  - at horizon 21, about 0.41 of the one-day variance forecast's excess over its long-run level remains: the exponent is h−1, not h. Estimated tails and conditional calibration still need out-of-sample validation.
 - **Long memory.**
   - ARFIMA (Granger & Joyeux; Hosking).
   - GPH on the minima ranges from 0.40 to 0.58 by bandwidth; local Whittle gives d = 0.41 (0.06), so H ≈ 0.91.
-  - With d = 0.41 the SE of the mean is 47.5 instead of 3.4: an effective sample of 3.5 of 663 years.
+  - With d = 0.41 the SE of the mean is 47.5 instead of 3.4: an effective sample of 3.5 of 663 years. This is an ARFIMA plug-in approximation using estimated d and marginal variance; it omits parameter uncertainty and does not establish that the true physical process is fractional.
   - Long memory elsewhere; breaks that mimic it.
 - **Kalman.**
   - Gaussian conditioning; the ellipses on a tracking example.
   - The Nile local level: MLE σ²_w = 1,469.0 and σ²_v = 15,099, matching Durbin & Koopman.
   - The steady-state gain is 0.27, which is exponential smoothing (Muth 1960).
-  - The smoothed level's largest fall is into 1899; a shift there of −316 has LR 10.5.
+  - The smoothed level's largest fall is into 1899; a shift there of −316 improves twice the log likelihood by 10.5 while holding variances at their no-shift estimates. The date was inspected in the same record: this is a descriptive fixed-nuisance comparison, not a calibrated likelihood-ratio test or causal attribution to a dam.
 - **Smoothing and learning.**
   - RTS.
-  - Missing years 1891–1910 and 1931–1950.
-  - The prediction-error likelihood. EM raises the likelihood at every step and converges to the MLE (1,469 and
-    15,099).
+  - Hidden years 1891–1910 and 1931–1950, using variances fitted to the full record. This illustrates smoothing with gaps rather than an honest missing-data forecast benchmark. Ignorable missingness is required to skip updates without modelling the observation process.
+  - The prediction-error likelihood. The illustrated EM path raises the likelihood and approaches the direct solution (1,469 and 15,099). General EM theory guarantees nondecrease under exact steps, not convergence to a unique global maximum.
   - Structural time-series models; Apollo.
 - **Nonlinear filtering.**
-  - Kitagawa–Gordon's benchmark, RMSE over 30 series: EKF 20.6, UKF 10.5, particle filter 4.4.
-  - PMCMC.
-  - Hamilton's regimes in US growth: −1.1% and +4.1% a year, lasting 4 and 18 quarters. The filtered recession
-    probability averages 0.64 inside NBER recessions and 0.06 outside.
+  - Kitagawa–Gordon's benchmark, mean RMSE over 30 series: EKF 20.6, UKF 10.5, particle filter 4.4.
+  - Particle central quantile intervals can span both modes; they do not split into a multimodal set, and their mean can lie between modes. No wall-time cost ratio was measured. PMCMC targets the exact invariant posterior under its nonnegative unbiased-likelihood construction; finite chains still need convergence diagnostics.
+  - Hamilton's regimes in US growth: −1.1% and +4.1% a year, lasting 4 and 18 quarters. The low-regime probability averages 0.64 inside NBER recessions and 0.06 outside. Filtering uses past observations at each step but full-sample parameter estimates; this is retrospective, not a real-time forecast evaluation or a reproduction of Hamilton's full autoregressive model.
 - **VARs.** A VAR(4) of inflation, unemployment and the T-bill rate.
-  - Granger tests: inflation → unemployment p = 0.007, unemployment → T-bill p = 0.010, T-bill → inflation p = 0.038.
+  - Conventional model-based Granger F tests (unadjusted p-values; persistence and misspecification can affect their calibration): inflation → unemployment p = 0.007, unemployment → T-bill p = 0.010, T-bill → inflation p = 0.038.
   - Responses to a rate shock: unemployment rises over 2–3 years; inflation rises at first (the price puzzle).
-  - Variance decompositions; local projections.
+  - Variance decompositions; local projections. Agreement with VAR responses requires adequate lag controls, compatible identification and regularity, rather than any fixed finite VAR. Bootstrap bands are pointwise and conditional on the fitted model/order.
 - **Block bootstrap.**
   - AR(1) with φ = 0.5 and n = 500, SE of the mean: i.i.d. 0.055, moving-block 0.091, stationary 0.092, Newey–West
     0.088, truth 0.089.
-  - The Nile minima's block SE keeps rising with the block length (5.8 → 16.5), so it never plateaus under long
-    memory.
+  - The Nile minima's block SE keeps rising with the block length (5.8 → 16.5), with no plateau in the four lengths tried. This finite plot does not prove long memory or rule out specialized long-memory bootstraps/subsampling with appropriate rates.
   - Choosing b.
 - **Forecasting.**
   - M4 and M5; pretrained forecasters.
   - Rolling-origin MASE on CO₂ (11 origins, 2 years ahead): naive 2.16, seasonal naive 1.80, seasonal naive plus trend
     0.60, Holt–Winters 0.48.
-  - Leakage: 0.15 against the honest 0.19.
+  - Leakage: selecting among 50 tweaks on the test outcomes gives 0.15 against the untuned 0.19. There is no subsequent period available here to establish future performance. Overlapping 24-month evaluation windows are not eleven independent error estimates.
 
 Data:
 - the Nile, its minima, the sunspots, the DAX, the macro series and CO₂ are the Museum's;
@@ -117,6 +113,8 @@ The Coverage Board gains seven rows:
 | i.i.d. bootstrap 90% CI for the mean | AR(1), φ = 0.5, n = 500 | 66.4% | broken |
 | moving-block bootstrap CI (blocks of 30) | same | 89.0% | kept |
 
+Wold's representation applies to the purely nondeterministic square-integrable stationary component. Mean ergodicity from vanishing autocovariance is weaker than full ergodicity; nonstationary estimators use their own limit theory. Long-memory evidence and finite-sample summaries are kept separate from model assumptions.
+
 ## Build it
 
 ```bash
@@ -134,7 +132,7 @@ python tools/lecture_length.py stats38 --floor 50
 | 0 | Hurst's Nile | H = 0.85 vs 0.56 |
 | 1 | What Part 17 assumed | four departures; ergodicity |
 | 2 | Spectra | 11-year sunspot cycle |
-| 3 | Unit roots | 45% vs 5% |
+| 3 | Unit roots | 46% vs 5% |
 | 4 | Spurious regression and cointegration | 77%; trace 30.2 vs 29.8 |
 | 5 | Volatility | α + β = 0.956 |
 | 6 | Long memory | d = 0.41; n_eff = 3.5 |
@@ -191,9 +189,9 @@ python tools/lecture_length.py stats38 --floor 50
 
 ## Problems and solutions
 
-1. **White-noise periodogram.** At the Fourier frequency f_j, the cosine and sine sums are uncorrelated Gaussians with
-   variance nσ²/2 each, and different j are orthogonal. So I(f_j) = (C² + S²)/n is σ²/2 times a χ²₂, that is σ² Exp(1),
-   and the ordinates are independent.
+1. **White-noise periodogram.** At an interior positive Fourier frequency f_j (excluding Nyquist), the cosine and sine sums are uncorrelated Gaussians with
+   variance nσ²/2 each, and different interior positive j are orthogonal. So I(f_j) = (C² + S²)/n is σ²/2 times a χ²₂, that is σ² Exp(1),
+   and the ordinates are independent. The zero and, for even n, Nyquist frequencies are exceptions: their real Gaussian transform gives a scaled χ²₁ rather than Exp(1).
 2. **The Dickey–Fuller numerator.** Squaring x_t = x_{t−1} + ε_t gives x_t² = x_{t−1}² + 2x_{t−1}ε_t + ε_t².
    - Summing, Σx_{t−1}ε_t = (x_T² − x_0² − Σε_t²)/2.
    - Divide by Tσ²: with x_0 = 0 this is ½(x_T²/(Tσ²) − σ̂²/σ²) → ½(W(1)² − 1) = ∫W dW.

@@ -40,6 +40,9 @@ class Nonlinear(VoiceoverScene):
             "Gordon, David Salmond and Adrian Smith, in 1993, met in Part twenty-seven, drops the Gaussian altogether: it "
             "carries thousands of samples forward, weights each by how well it explains the new observation, and resamples."
         ) as vo:
+            intro=label('Nonlinear filters approximate the evolving state distribution',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -50,23 +53,26 @@ class Nonlinear(VoiceoverScene):
         d = load("nonlinear")
         x = np.asarray(d["x"], float)
         t = np.arange(len(x))
-        A = axes([0, 100], [-30, 30], x_length=10.0, y_length=4.0, xlabel=r"time", ylabel=r"state", xticks=[0, 50, 100],
+        low = min(float(np.min(d[k])) for k in ("x", "ekf", "pf_lo")) - 2
+        high = max(float(np.max(d[k])) for k in ("x", "ekf", "pf_hi")) + 2
+        A = axes([0, 100], [low, high], x_length=10.0, y_length=4.0, xlabel=r"time", ylabel=r"state", xticks=[0, 50, 100],
                  yticks=[-20, 0, 20], center=[0, 0.5, 0])
         ax = A.ax
         tr = polyline(ax, t, x, TRUEC, 2.5)
-        ek = polyline(ax, t, np.clip(d["ekf"], -30, 30), MISSC, 2)
-        b = band(ax, t, np.clip(d["pf_lo"], -30, 30), np.clip(d["pf_hi"], -30, 30), STATEC, 0.25)
+        ek = polyline(ax, t, d["ekf"], MISSC, 2)
+        b = band(ax, t, np.asarray(d["pf_lo"], float), np.asarray(d["pf_hi"], float), STATEC, 0.25)
         pf = polyline(ax, t, d["pf"], STATEC, 2)
         foot = fit_rows(VGroup(
-            label(r"$x_t = \frac{x}{2} + \frac{25x}{1 + x^2} + 8\cos 1.2t + w_t$, \ \ $y_t = x_t^2/20 + v_t$: \ the sign of $x$ is never measured", font_size=22),
+            label(r"$x_t = \frac{x}{2} + \frac{25x}{1 + x^2} + 8\cos 1.2t + w_t$, \ \ $y_t = x_t^2/20 + v_t$: \ sign is unobserved; filters share prior N(0.1,5), generator starts at 0.1", font_size=22),
             label(r"gold: \ truth; \ red: \ extended filter; \ blue: \ particle filter, \ 3,000 particles, \ 90\% band", font_size=22, color=GREY_A),
         ), 12.4, 0.25, [0, -2.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The standard test, used by Gordon and his colleagues: a state that swings between positive "
-            "and negative values, observed through its square, so the sign is never measured directly. The truth is in gold. "
-            "<bookmark mark='b'/> The extended filter, in red, often locks onto the wrong sign and stays there, because its "
-            "linearization cannot represent two possibilities at once. <bookmark mark='c'/> The particle filter, in blue, "
-            "keeps both: its band splits when the sign is ambiguous, and its mean follows the truth."
+            "<bookmark mark='a'/> The standard test, used by Gordon and his colleagues: a state that swings between "
+            "positive and negative values, observed through its square, so the sign is never measured directly. The "
+            "truth is in gold. <bookmark mark='b'/> The extended filter, in red, often locks onto the wrong sign and "
+            "stays there, because its linearization cannot represent two possibilities at once. <bookmark mark='c'/> "
+            "The particle filter, in blue, can retain both modes. The plotted central quantile band spans them rather"
+            " than splitting, and can include low-density states; its mean can lie between modes."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A), Create(tr), FadeIn(foot[0]))
@@ -82,13 +88,13 @@ class Nonlinear(VoiceoverScene):
                 [r"extended Kalman", f"{d['ekf']:.1f}"], [r"unscented Kalman", f"{d['ukf']:.1f}"],
                 [r"particle, \ 2,000 particles", f"{d['pf']:.1f}"]]
         tab = table_rows(rows, font_size=30, col_buff=1.2, row_buff=0.36, colors=[GREY_A, MISSC, TAUC, STATEC]).move_to([0, 0.6, 0])
-        foot = label(r"the particle filter costs thousands of times more computation: \ worth it here, \ not always",
+        foot = label(r"particle count is not a measured wall-time ratio; performance is benchmark-specific",
                      font_size=24, color=GREY_A).move_to([0, -1.8, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Over thirty simulated series: <bookmark mark='b'/> the extended filter's error is about "
             + say(d["ekf"], 0) + ". <bookmark mark='c'/> The unscented filter halves it. <bookmark mark='d'/> The particle "
-            "filter cuts it to about " + say(d["pf"], 0) + ", at thousands of times the computing cost. When the "
-            "distribution is close to Gaussian, Kalman's equations or their extensions are cheaper and nearly as good."
+            "filter cuts it to about " + say(d["pf"], 0) + ", with a much larger particle population; no wall-time ratio is measured here. When the distribution is "
+            "close to Gaussian, Kalman's equations or their extensions are cheaper and nearly as good."
         ) as vo:
             self.add(seeded_tag())
             vo.wait_until("a")
@@ -117,6 +123,9 @@ class Nonlinear(VoiceoverScene):
             "quarter's growth is under each. <bookmark mark='d'/> The product of the normalizing constants is the "
             "likelihood, maximized as before."
         ) as vo:
+            intro=label('A switching-mean model filters a discrete hidden regime',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -128,7 +137,7 @@ class Nonlinear(VoiceoverScene):
         t, gr, p = (np.asarray(d[k], float) for k in ("t", "growth", "p_low"))
         A = axes([1959, 2010], [-10, 16], x_length=10.0, y_length=2.4, xlabel=r"", ylabel=r"GDP growth (\%)", xticks=[],
                  yticks=[-8, 0, 8], center=[0, 1.6, 0])
-        B = axes([1959, 2010], [0, 1], x_length=10.0, y_length=1.8, xlabel=r"year", ylabel=r"P(recession)",
+        B = axes([1959, 2010], [0, 1], x_length=10.0, y_length=1.8, xlabel=r"year", ylabel=r"P(low regime)",
                  xticks=[1960, 1970, 1980, 1990, 2000, 2010], yticks=[0, 1], xfmt=lambda v: f"{v:.0f}", center=[0, -1.3, 0])
         shades = VGroup(*[Rectangle(width=B.ax.c2p(b, 0)[0] - B.ax.c2p(a, 0)[0], height=B.ax.c2p(0, 1)[1] - B.ax.c2p(0, 0)[1],
                                     stroke_width=0, fill_color=GREY_C, fill_opacity=0.35).move_to(B.ax.c2p((a + b) / 2, 0.5))
@@ -143,8 +152,8 @@ class Nonlinear(VoiceoverScene):
             "shrinking at about " + say(-d["mu"][0], 1) + " percent, lasting on average " + str(round(d["dur_high"])) + " "
             "and " + str(round(d["dur_low"])) + " quarters. <bookmark mark='c'/> The filtered probability of the low regime, "
             "in red, rises in the recessions that the National Bureau of Economic Research later dated by committee, in grey: "
-            "an average of " + say(d["p_in"], 2) + " inside them and " + say(d["p_out"], 2) + " outside, computed from GDP "
-            "alone and in real time."
+            "an average of " + say(d["p_in"], 2) + " inside them and " + say(d["p_out"], 2) + " outside, filtered using GDP observations only up to each displayed quarter, but with parameters "
+            "estimated from the entire sample. This is a retrospective filter, not a real-time forecast evaluation."
         ) as vo:
             self.add(macro_tag())
             self.play(FadeIn(A), Create(cg))
@@ -156,19 +165,21 @@ class Nonlinear(VoiceoverScene):
 
     def pmcmc(self):
         rows = fit_rows(VGroup(
-            label(r"the particle filter's average weight is an unbiased estimate of the likelihood", font_size=26, color=STATEC),
+            label(r"the product of stepwise mean unnormalized weights estimates the likelihood without bias", font_size=26, color=STATEC),
             label(r"Andrieu, \ Doucet \& Holenstein (2010): \ use it inside Metropolis--Hastings: \ PMCMC", font_size=26, color=TAUC),
             label(r"exact Bayesian inference for parameters of nonlinear state space models", font_size=26, color=BANDC),
             label(r"stochastic volatility, \ epidemic models, \ ecology: \ Part 27's ideas, \ at scale", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The particle filter also gives a likelihood. The average of each step's unnormalized weights, "
-            "multiplied over time, is an unbiased estimate of the likelihood of the parameters. <bookmark mark='b'/> "
-            "Christophe Andrieu, Arnaud Doucet and Roman Holenstein showed in 2010 that plugging this noisy but unbiased "
-            "estimate into a Metropolis-Hastings sampler still targets the exact posterior: particle Markov chain Monte Carlo. "
-            "<bookmark mark='c'/> It makes exact Bayesian inference possible for nonlinear state-space models. <bookmark "
-            "mark='d'/> Stochastic volatility, epidemic models and animal populations are fitted this way: the ideas of Part "
-            "twenty-seven, at scale."
+            "<bookmark mark='a'/> The particle filter also gives a likelihood. The average of each step's "
+            "unnormalized weights, multiplied over time, is an unbiased estimate of the likelihood of the parameters."
+            " <bookmark mark='b'/> Christophe Andrieu, Arnaud Doucet and Roman Holenstein showed in 2010 that "
+            "plugging this noisy but unbiased estimate into a Metropolis-Hastings sampler still targets the exact "
+            "posterior: particle Markov chain Monte Carlo. <bookmark mark='c'/> With a nonnegative unbiased "
+            "likelihood estimate and the extended-state construction, its invariant parameter distribution is the "
+            "exact posterior. Finite MCMC runs still require convergence checks. <bookmark mark='d'/> Stochastic "
+            "volatility, epidemic models and animal populations are fitted this way: the ideas of Part twenty-seven, "
+            "at scale."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

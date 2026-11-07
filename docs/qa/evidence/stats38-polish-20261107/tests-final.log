@@ -1,0 +1,22 @@
+...................                                                      [100%]
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/pydub/utils.py:14
+  /workspace/explainer-videos/.venv/lib/python3.12/site-packages/pydub/utils.py:14: DeprecationWarning: 'audioop' is deprecated and slated for removal in Python 3.13
+    import audioop
+
+tests/test_stats_kit_ts2.py::test_adf_and_critical_values_match_statsmodels
+tests/test_stats_kit_ts2.py::test_adf_and_critical_values_match_statsmodels
+tests/test_stats_kit_ts2.py::test_adf_and_critical_values_match_statsmodels
+  /workspace/explainer-videos/tests/test_stats_kit_ts2.py:24: FutureWarning: adfuller currently returns a plain tuple whose length depends on the store and autolag arguments. In release 0.16 or after July 2027, whichever is later, the default behavior will switch to always returning an ADFullerResult. Set result_object=True to switch now, or result_object=False to keep the current behavior and silence this warning.
+    s = adfuller(x, maxlag=3, regression=tr, autolag=None)
+
+tests/test_stats_kit_ts2.py::test_kpss_engle_granger_and_johansen_match_statsmodels
+  /workspace/explainer-videos/.venv/lib/python3.12/site-packages/statsmodels/tsa/vector_ar/vecm.py:717: ComplexWarning: Casting complex values to real discards the imaginary part
+    lr1[i] = -t * np.sum(tmp, 0)
+
+tests/test_stats_kit_ts2.py::test_kpss_engle_granger_and_johansen_match_statsmodels
+  /workspace/explainer-videos/.venv/lib/python3.12/site-packages/statsmodels/tsa/vector_ar/vecm.py:718: ComplexWarning: Casting complex values to real discards the imaginary part
+    lr2[i] = -t * np.log(1 - a[i])
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+19 passed, 6 warnings in 53.34s

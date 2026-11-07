@@ -1,0 +1,31 @@
+[
+  {
+    "dataset": "Nile minima",
+    "rows": 663,
+    "start": 622,
+    "end": 1284,
+    "source": "https://raw.githubusercontent.com/cran/longmemo/master/data/NileMin.R",
+    "max_error": 0,
+    "download_sha256": "7431f72bf9c296d502b3431fec3edd700b22d5c280c4a115161eac8be94dd9e6"
+  },
+  {
+    "dataset": "European stock prices",
+    "rows": 1860,
+    "columns": 4,
+    "source": "https://raw.githubusercontent.com/wch/r-source/trunk/src/library/datasets/data/EuStockMarkets.R",
+    "max_error": {
+      "DAX": 0.0,
+      "SMI": 0.0,
+      "CAC": 0.0,
+      "FTSE": 0.0
+    },
+    "download_sha256": "599ecf4de6fc43d5142239a40859871f9fb3e3d436f5a224c3aaadf0a80da64b"
+  },
+  {
+    "dataset": "Nile flow",
+    "rows": 100,
+    "source": "https://raw.githubusercontent.com/wch/r-source/trunk/src/library/datasets/data/Nile.R",
+    "max_error": 0,
+    "download_sha256": "2dc87603b04ca38731b850078dbb75aa8ef41e113f7b58d3e8499132803c0c9c"
+  }
+]

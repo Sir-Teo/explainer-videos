@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats38.common import *  # noqa: F403
 
 PROBLEMS = [
-    r"For Gaussian white noise, \ show that periodogram ordinates at distinct Fourier frequencies are independent $\sigma^2 \cdot$ Exp(1).",
+    r"For Gaussian white noise, \ show that periodogram ordinates at distinct interior positive Fourier frequencies are independent $\sigma^2 \cdot$ Exp(1).",
     r"For $\Delta x_t = \gamma x_{t-1} + \varepsilon_t$ with $\gamma = 0$, \ show $\frac{1}{T}\sum x_{t-1}\varepsilon_t = \frac{\sigma^2}{2}(x_T^2/(\sigma^2 T) - \hat\sigma^2/\sigma^2)$ approximately.",
     r"For GARCH(1,1), \ show $E\sigma_t^2 = \omega/(1-\alpha-\beta)$ and that $\varepsilon_t^2$ follows an ARMA(1,1).",
     r"For ARFIMA$(0,d,0)$, \ show $\rho_1 = d/(1-d)$.",
@@ -78,6 +78,7 @@ class Outro(VoiceoverScene):
             (r"nonstandard limits", [47]), (r"Gaussian processes", [53]), (r"sequential, \ anytime-valid inference", [58]),
             (r"nonstationarity as distribution shift", [60]), (r"pretrained forecasters, \ honestly", [64]),
         ], font_size=22)
+        self.add(card.head)
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part thirty-nine takes dependence into space. Part forty-one uses EM "
             "for missing data. Part forty-four proves the functional central limit theorem behind Dickey and Fuller. Part "
@@ -86,7 +87,7 @@ class Outro(VoiceoverScene):
             "nonstationarity as distribution shift. And Part sixty-four returns to large pretrained models."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):

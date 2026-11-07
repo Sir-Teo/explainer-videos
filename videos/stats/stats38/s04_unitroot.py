@@ -71,6 +71,9 @@ class UnitRoot(VoiceoverScene):
             "distribution is skewed to the left, and its five percent point, with a constant in the regression, is minus "
             "two point eight six, not minus one point six four."
         ) as vo:
+            intro=label('Unit-root statistics require a nonstandard reference distribution',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -86,13 +89,13 @@ class UnitRoot(VoiceoverScene):
                  ylabel=r"density", xticks=[-4, -2.89, -1.645, 0, 2], yticks=[0, 0.2, 0.4], xfmt=lambda v: f"{v:g}",
                  yfmt=lambda v: f"{v:g}", center=[-1.6, 0.2, 0])
         ax = A.ax
-        bars = hist_bars(ax, e, h / h.sum() / w, color=MISSC, opacity=0.55)
+        bars = hist_bars(ax, e, h / d["hist_n"] / w, color=MISSC, opacity=0.55)
         xs = np.linspace(-5, 3, 200)
         nrm = curve(ax, xs, stats.norm.pdf(xs), GREY_A, 3)
         c1 = DashedLine(ax.c2p(-1.645, 0), ax.c2p(-1.645, 0.6), color=GREY_A, stroke_width=2.5)
         c2 = DashedLine(ax.c2p(d["crit"], 0), ax.c2p(d["crit"], 0.6), color=BANDC, stroke_width=2.5)
         side = fit_rows(VGroup(
-            label(r"20,000 random walks", font_size=22),
+            label(rf"20,000 walks; {d['hist_outside']} outside view", font_size=22),
             label(r"grey: \ the normal the $t$-table assumes", font_size=22, color=GREY_A),
             label(rf"using $-1.645$: \ rejects {100 * d['size_normal']:.0f}\% of true unit roots", font_size=22, color=MISSC),
             label(rf"MacKinnon's $-2.89$: \ the simulated 5\% point is {d['q05']:.2f}", font_size=22, color=BANDC),
@@ -103,7 +106,7 @@ class UnitRoot(VoiceoverScene):
             "sits well to its left, centred near minus one and a half. <bookmark mark='c'/> A test that rejects the unit "
             "root when tau is below minus one point six four five rejects " + str(round(100 * d["size_normal"])) + " "
             "percent of the time when the unit root is true. <bookmark mark='d'/> James MacKinnon's critical value for this "
-            "sample size, minus two point eight nine, matches the simulated five percent point, " + say(d["q05"], 2) + "."
+            "sample size, minus two point eight nine, is close to the simulated five percent point, " + say(d["q05"], 2) + "."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A), FadeIn(bars), FadeIn(side[0]))
@@ -123,13 +126,14 @@ class UnitRoot(VoiceoverScene):
             label(r"use both: \ the four combinations of verdicts say different things", font_size=26, color=TAUC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Dickey and Fuller's null hypothesis is the unit root, so failing to reject it is weak "
-            "evidence for it. <bookmark mark='b'/> A stationary series with coefficient nought point nine five is hard to "
-            "tell from a random walk in a few decades of data, and the test's power is low. <bookmark mark='c'/> Denis "
-            "Kwiatkowski, Peter Phillips, Peter Schmidt and Yongcheol Shin reversed the roles in 1992: their KPSS test takes "
-            "stationarity as the null, and rejects when the partial sums of the deviations wander too far. <bookmark "
-            "mark='d'/> Using both gives four possible verdicts: unit root, stationary, both rejected, or neither, which "
-            "means the data cannot tell."
+            "<bookmark mark='a'/> Dickey and Fuller's null hypothesis is the unit root, so failing to reject it is "
+            "weak evidence for it. <bookmark mark='b'/> A stationary series with coefficient nought point nine five "
+            "is hard to tell from a random walk in a few decades of data, and the test's power is low. <bookmark "
+            "mark='c'/> Denis Kwiatkowski, Peter Phillips, Peter Schmidt and Yongcheol Shin reversed the roles in "
+            "1992: their KPSS test takes stationarity as the null, and rejects when the partial sums of the "
+            "deviations wander too far. <bookmark mark='d'/> Using both gives four rejection patterns. One may "
+            "support a unit-root or stationary model, but neither outcome proves the null. Both rejected suggests "
+            "misspecification; neither rejected means the data cannot tell."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -139,25 +143,26 @@ class UnitRoot(VoiceoverScene):
     def macro(self):
         d = load("unitroot")["tests"]
         rows = [[r"series, \ US 1959--2009", r"ADF $\tau$", r"5\% point", r"KPSS", r"5\% point", r"verdict"]]
-        verdict = {"log real GDP": r"unit root", "unemployment": r"cannot tell", "T-bill rate": r"cannot tell",
+        verdict = {"log real GDP": r"consistent with I(1)", "unemployment": r"cannot tell", "T-bill rate": r"cannot tell",
                    "inflation": r"cannot tell", "GDP growth": r"stationary"}
         cols = [GREY_A]
         for k in ("log real GDP", "unemployment", "T-bill rate", "inflation", "GDP growth"):
             v = d[k]
             rows.append([k, f"{v['adf']:.2f}".replace("-", "$-$"), f"{v['crit']:.2f}".replace("-", "$-$"), f"{v['kpss']:.3f}",
                          f"{v['kcrit']:.3f}", verdict[k]])
-            cols.append(MISSC if verdict[k] == "unit root" else (BANDC if verdict[k] == "stationary" else TAUC))
+            cols.append(MISSC if verdict[k] == "consistent with I(1)" else (BANDC if verdict[k] == "stationary" else TAUC))
         tab = table_rows(rows, font_size=22, col_buff=0.55, row_buff=0.3, colors=cols).move_to([0, 0.6, 0])
         foot = label(r"log GDP with a trend in both tests; \ 4 lags in the ADF; \ Nelson \& Plosser (1982) began this debate",
                      font_size=22, color=GREY_A).move_to([0, -2.2, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> US quarterly data, 1959 to 2009. <bookmark mark='b'/> Log real gross domestic product: the "
-            "Dickey-Fuller test, allowing a trend, cannot reject a unit root, and KPSS rejects trend-stationarity. Both "
-            "point to a unit root, as Charles Nelson and Charles Plosser argued for most US series in 1982. <bookmark "
-            "mark='c'/> Unemployment, the Treasury-bill rate and inflation: neither test rejects. Fifty years of quarterly "
-            "data cannot say whether these series revert. <bookmark mark='d'/> The growth rate of GDP: Dickey-Fuller rejects "
-            "the unit root decisively, and KPSS does not reject stationarity. Differencing a unit-root series gives a "
-            "stationary one."
+            "<bookmark mark='a'/> US quarterly data, 1959 to 2009. <bookmark mark='b'/> Log real gross domestic "
+            "product: the Dickey-Fuller test, allowing a trend, cannot reject a unit root, and KPSS rejects "
+            "trend-stationarity. This pattern is consistent with a unit root, as Charles Nelson and Charles Plosser "
+            "argued for most US series in 1982. <bookmark mark='c'/> Unemployment, the Treasury-bill rate and "
+            "inflation: neither test rejects. These tests with these deterministic terms and lag choices do not "
+            "settle whether these series revert. <bookmark mark='d'/> The growth rate of GDP: Dickey-Fuller rejects "
+            "the unit root decisively, and KPSS does not reject stationarity. Differencing a unit-root series gives a"
+            " stationary one."
         ) as vo:
             self.add(macro_tag())
             vo.wait_until("a")

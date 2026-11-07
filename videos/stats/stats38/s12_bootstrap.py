@@ -29,11 +29,12 @@ class BlockBootstrap(VoiceoverScene):
             label(r"positive autocorrelation: \ that is too small", font_size=26, color=MISSC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Part sixteen's bootstrap resamples the observations independently, with replacement. "
-            "<bookmark mark='b'/> Applied to a time series, it shuffles the order away: every resampled series is white "
-            "noise, whatever the original was. <bookmark mark='c'/> So it estimates the variability the mean would have if "
-            "the observations were independent. <bookmark mark='d'/> With positive autocorrelation, that is too small, just "
-            "as the naive standard error was in Part seventeen."
+            "<bookmark mark='a'/> Part sixteen's bootstrap resamples the observations independently, with "
+            "replacement. <bookmark mark='b'/> Applied to a time series, it shuffles the order away: the resampled "
+            "observations are conditionally independent draws from the empirical distribution, erasing the original "
+            "serial dependence. <bookmark mark='c'/> So it estimates the variability the mean would have if the "
+            "observations were independent. <bookmark mark='d'/> With positive autocorrelation, that is too small, "
+            "just as the naive standard error was in Part seventeen."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -128,16 +129,17 @@ class BlockBootstrap(VoiceoverScene):
             label(rf"the Nile minima: \ i.i.d.\ {d['nile_iid']:.1f}", font_size=22, color=GREY_A),
             label(rf"blocks of 5, \ 20, \ 50, \ 100: \ {nb['5']:.1f}, \ {nb['20']:.1f}, \ {nb['50']:.1f}, \ {nb['100']:.1f}", font_size=22, color=BANDC),
             label(rf"gold: \ the ARFIMA answer, \ {d['nile_lm']:.0f}", font_size=22, color=LMC),
-            label(r"no plateau: \ under long memory, \ no block is long enough", font_size=22, color=MISSC),
+            label(r"no plateau in these four choices; short-memory justification needs checking", font_size=22, color=MISSC),
         ), 3.8, 0.42, [4.9, 0.4, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Now try it on the Nile minima. With short memory, the block bootstrap's standard error "
             "rises with the block length and then levels off, once the blocks are longer than the memory. <bookmark "
             "mark='b'/> Here it keeps rising: " + say(nb["5"], 1) + " with blocks of five years, " + say(nb["100"], 1)
             + " with blocks of a century. <bookmark mark='c'/> The long-memory calculation of chapter six says about "
-            + str(round(d["nile_lm"])) + ". <bookmark mark='d'/> There is no plateau because, under long memory, no block "
-            "is long enough. The block bootstrap assumes the memory is short, and that assumption, like every other in this "
-            "part, has to be checked."
+            + str(round(d["nile_lm"])) + ". <bookmark mark='d'/> These four lengths show no plateau. Under a fractional long-memory model the "
+            "usual short-memory mean-bootstrap argument fails; this finite plot alone does not prove that no block is"
+            " long enough. The block bootstrap assumes the memory is short, and that assumption, like every other in "
+            "this part, has to be checked."
         ) as vo:
             self.add(minima_tag())
             self.play(FadeIn(A), FadeIn(side[0]))
@@ -163,16 +165,18 @@ class BlockBootstrap(VoiceoverScene):
             label(r"too short a block: \ the dependence is cut, \ the SE too small; \ too long: \ few blocks, \ noisy", font_size=26, color=MISSC),
             label(r"Politis \& White (2004): \ choose $b$ automatically from the estimated autocorrelations", font_size=26, color=TAUC),
             label(r"alternatives: \ subsampling, \ the sieve bootstrap \ (fit an AR, \ resample its residuals)", font_size=26, color=BANDC),
-            label(r"all assume short memory: \ the Nile breaks them all", font_size=26, color=GREY_A),
+            label(r"long-memory subsampling and specialized bootstraps require different theory", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Choosing the block length is the bootstrap's own bias-variance trade. Too short, and the "
-            "dependence is cut at too many joins, so the standard error is too small. Too long, and there are few distinct "
-            "blocks, so it is noisy. <bookmark mark='b'/> Dimitris Politis and Halbert White proposed in 2004 a rule that "
-            "chooses the length from the estimated autocorrelations. <bookmark mark='c'/> Alternatives include subsampling, "
-            "which recomputes the statistic on shorter stretches of the series, and the sieve bootstrap, which fits a long "
-            "autoregression and resamples its residuals. <bookmark mark='d'/> All of them assume the memory is short, which "
-            "the Nile's minima do not respect."
+            "<bookmark mark='a'/> Choosing the block length is the bootstrap's own bias-variance trade. Too short, "
+            "and the dependence is cut at too many joins, so the standard error is too small. Too long, and there are"
+            " few distinct blocks, so it is noisy. <bookmark mark='b'/> Dimitris Politis and Halbert White proposed "
+            "in 2004 a rule that chooses the length from the estimated autocorrelations. <bookmark mark='c'/> "
+            "Alternatives include subsampling, which recomputes the statistic on shorter stretches of the series, and"
+            " the sieve bootstrap, which fits a long autoregression and resamples its residuals. <bookmark mark='d'/>"
+            " The usual short-memory versions need additional theory here. Subsampling with an appropriate "
+            "long-memory rate, or specialized fractional bootstraps, can still be valid; the plain formulas shown are"
+            " not justified if the Nile's minima do not respect."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

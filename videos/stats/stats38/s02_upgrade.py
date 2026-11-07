@@ -74,21 +74,25 @@ class Upgrade(VoiceoverScene):
     def wold(self):
         rows = [
             cmath(r"X_t", r"=", r"\mu + \textstyle\sum_{j \ge 0} \psi_j \varepsilon_{t-j} \quad \text{(Wold, 1938)}", font_size=30),
-            cmath(r"\text{unit root}", r":", r"\psi_j \not\to 0 \ \Rightarrow \ \text{no stationary mean}", font_size=30),
+            cmath(r"\text{unit root}", r":", r"\psi_j \not\to 0 \ \Rightarrow \ \text{not covariance-stationary}", font_size=30),
             cmath(r"\text{long memory}", r":", r"\psi_j \sim j^{d-1} \ \Rightarrow \ \textstyle\sum_h |\rho_h| = \infty", font_size=30),
             cmath(r"\text{GARCH}", r":", r"\varepsilon_t \text{ uncorrelated, \ but not independent}", font_size=30),
         ]
         rows[0][-1].set_color(TAUC)
-        whys = [why(r"every stationary series, \ linearly"), why(r"shocks never fade"), why(r"shocks fade, \ slowly"),
+        whys = [why(r"the purely nondeterministic stationary component"), why(r"shocks never fade"), why(r"shocks fade, \ slowly"),
                 why(r"the variance has memory")]
         with self.voiceover(
-            "<bookmark mark='a'/> Herman Wold proved in 1938 that every stationary series, after removing its predictable "
-            "part, is a moving average of past uncorrelated shocks, with weights that die away. <bookmark mark='b'/> A unit "
-            "root is a series whose weights never die away: a shock today moves the series forever. <bookmark mark='c'/> "
-            "Long memory has weights that do die away, but so slowly, like a power of the lag, that the autocorrelations "
-            "cannot be added up. <bookmark mark='d'/> And GARCH keeps the shocks uncorrelated but not independent: their "
-            "sizes are predictable even though their signs are not. Wold's theorem speaks only of correlations."
+            "<bookmark mark='a'/> Herman Wold proved in 1938 that every covariance-stationary square-integrable "
+            "series, after removing its linearly deterministic part, is a moving average of past uncorrelated shocks,"
+            " with weights that die away. <bookmark mark='b'/> A unit root is a series whose weights never die away: "
+            "a shock today moves the series forever. <bookmark mark='c'/> Long memory has weights that do die away, "
+            "but so slowly, like a power of the lag, that the autocorrelations cannot be added up. <bookmark "
+            "mark='d'/> And GARCH keeps the shocks uncorrelated but not independent: their sizes are predictable even"
+            " though their signs are not. Wold's theorem speaks only of correlations."
         ) as vo:
+            intro=label('Wold represents the purely nondeterministic stationary component',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -119,17 +123,19 @@ class Upgrade(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"we see one realization: \ one Nile, \ one DAX, \ one history", font_size=26, color=GREY_A),
             label(r"ergodicity: \ time averages converge to the averages over realizations", font_size=26, color=TAUC),
-            label(r"stationarity plus fading memory gives it; \ a unit root or a break does not", font_size=26, color=MISSC),
-            label(r"every estimate in this part leans on it, \ and each departure weakens it", font_size=26, color=BANDC),
+            label(r"mixing can ensure ergodicity; covariance decay alone ensures mean convergence", font_size=26, color=MISSC),
+            label(r"nonstationary models require their own limit conditions", font_size=26, color=BANDC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> One thing every time-series method assumes quietly. We observe one realization: one Nile, "
-            "one stock index, one history. Probability talks about averages over many possible histories. <bookmark "
-            "mark='b'/> Ergodicity is the property that lets an average over time stand in for an average over realizations: "
-            "the sample mean of one long series converges to the expected value. <bookmark mark='c'/> Stationarity with "
-            "memory that fades is enough; a unit root, or a break, is not, and long memory makes the convergence painfully "
-            "slow. <bookmark mark='d'/> Every estimate in this part leans on ergodicity, and each departure from Part "
-            "seventeen's world weakens it."
+            "<bookmark mark='a'/> One thing every time-series method assumes quietly. We observe one realization: one"
+            " Nile, one stock index, one history. Probability talks about averages over many possible histories. "
+            "<bookmark mark='b'/> Ergodicity is the property that lets an average over time stand in for an average "
+            "over realizations: the sample mean of one long series converges to the expected value. <bookmark "
+            "mark='c'/> Stationarity with sufficient mixing is one route to ergodicity. Vanishing autocovariances "
+            "suffice for mean convergence in mean square, but not for full ergodicity. Unit roots need different "
+            "asymptotics, and long memory can make mean convergence very slow. <bookmark mark='d'/> Different methods"
+            " in this part require different stationarity, ergodicity or nonstationary limit conditions. Leaving Part"
+            " seventeen's world requires checking which conditions survive."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

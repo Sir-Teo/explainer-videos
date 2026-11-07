@@ -1,0 +1,72 @@
+[
+  {
+    "item": "hurst",
+    "path": ".cache/stats38/hurst.json",
+    "sha256": "66b3baad8afb00e188c930a2ecf39bad44cc7263503f15e6db8dd6b153aa7563"
+  },
+  {
+    "item": "spectra",
+    "path": ".cache/stats38/spectra.json",
+    "sha256": "3fc71cb027fed3036b7424b9e4853c3dc1e74a123d19143f795e33f317fdf21f"
+  },
+  {
+    "item": "unitroot",
+    "path": ".cache/stats38/unitroot.json",
+    "sha256": "84ffd3f2078d317cec31b13152576cbf49e20bb0676ced925c37a2835a1f10f2"
+  },
+  {
+    "item": "coint",
+    "path": ".cache/stats38/coint.json",
+    "sha256": "00ac4e8648ceb9a693188fb9b72de8354955883cbe9c147b1a4201bb838d3e95"
+  },
+  {
+    "item": "garch",
+    "path": ".cache/stats38/garch.json",
+    "sha256": "54ac708c0a46ab1a6acce2cdf87a21f413bc3254254f0ec65e08ea3fd8470992"
+  },
+  {
+    "item": "longmem",
+    "path": ".cache/stats38/longmem.json",
+    "sha256": "956cb0fee251546f523ed8ebf3b0e685eb7752db0ecc8d707e668562d593726a"
+  },
+  {
+    "item": "kalman",
+    "path": ".cache/stats38/kalman.json",
+    "sha256": "5522e1f06ef3aa176c068fa322c7ded8b6d588abe68937b86a819a6391e68ffd"
+  },
+  {
+    "item": "em",
+    "path": ".cache/stats38/em.json",
+    "sha256": "cc9ec6db77e6a058ee8b8f4a852633d9841ebce3aae6cc0ff5aa9761622a3f5e"
+  },
+  {
+    "item": "nonlinear",
+    "path": ".cache/stats38/nonlinear.json",
+    "sha256": "52c817a0b2393e4ca504334f7974a2af190fbdbb38d0ff6a1608598079f2549e"
+  },
+  {
+    "item": "var",
+    "path": ".cache/stats38/var.json",
+    "sha256": "4c21096069f5dfd10e772f0dd281a8093fa7333e310a09676978f38901dcb887"
+  },
+  {
+    "item": "bootstrap",
+    "path": ".cache/stats38/bootstrap.json",
+    "sha256": "d433e48cc66bd25f1a318fbce904ce991c71ee8d77f3b857e698e6e918ceb59b"
+  },
+  {
+    "item": "forecast",
+    "path": ".cache/stats38/forecast.json",
+    "sha256": "51ab4ef4748da7eb53b78a7b2e113b655322b3294a5f44d36b8a000f35876dac"
+  },
+  {
+    "item": "gallery",
+    "path": ".cache/stats38/gallery.json",
+    "sha256": "d62c074eb6c888d4d70c517cec72b1d32981b5dd5fdb35e4385b3f9cd7a4988c"
+  },
+  {
+    "item": "board",
+    "path": ".cache/stats38/board.json",
+    "sha256": "7f588cb7b088759da8ce844c335d635f66943ae3303c325c4ea73898d1109df1"
+  }
+]
