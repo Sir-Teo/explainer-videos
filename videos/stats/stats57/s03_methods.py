@@ -52,7 +52,10 @@ class Methods(VoiceoverScene):
     def compare(self):
         d = load("full")
         rows = fit_rows(VGroup(
-            label(rf"ridge regression, \ $n = {d['n']}$, \ $p = {d['p']}$, \ {d['reps']} repetitions, \ $\alpha = 0.1$", font_size=28, color=GREY_A),
+            VGroup(
+                label(r"Full versus split conformal: a ridge-regression experiment", font_size=36, color=WHITE),
+                label(rf"ridge regression, \ $n = {d['n']}$, \ $p = {d['p']}$, \ {d['reps']} repetitions, \ $\alpha = 0.1$", font_size=26, color=GREY_A),
+            ).arrange(DOWN, buff=0.2),
             label(rf"full conformal: \ coverage {100 * d['full']['coverage']:.1f}\%, \ median length {d['full']['len']:.2f}", font_size=28, color=COVC),
             label(rf"split conformal \ (20 to fit, \ 20 to calibrate): \ {100 * d['split']['coverage']:.1f}\%, \ {d['split']['len']:.2f}", font_size=28, color=CALC),
             label(rf"in this simulation, \ full is {100 * (1 - d['full']['len'] / d['split']['len']):.0f}\% shorter, \ because no data are set aside", font_size=28, color=TESTPT),
@@ -186,7 +189,7 @@ class Methods(VoiceoverScene):
 
     def cvplus(self):
         rows = fit_rows(VGroup(
-            label(r"the menu:", font_size=28, color=GREY_A),
+            label(r"Conformal methods: guarantees and computation", font_size=36, color=WHITE),
             label(r"split: \ one fit; \ $\ge 1 - \alpha$; \ wastes the calibration half", font_size=26, color=CALC),
             label(r"CV$+$: \ $K$ fits; \ $\ge 1 - 2\alpha$, \ less a small term in $K$ and $n$", font_size=26, color=CALC),
             label(r"jackknife$+$: \ $n$ fits; \ $\ge 1 - 2\alpha$", font_size=26, color=COVC),

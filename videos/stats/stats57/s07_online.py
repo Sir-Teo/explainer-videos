@@ -148,7 +148,7 @@ class Online(VoiceoverScene):
 
     def beyond(self):
         rows = fit_rows(VGroup(
-            label(r"what it does and does not say:", font_size=28, color=GREY_A),
+            label(r"Online coverage: average error and per-time limits", font_size=36, color=WHITE),
             label(r"long-run frequency of misses $\to \alpha$, \ for any data", font_size=26, color=COVC),
             label(r"nothing about any single time, \ or about a subgroup", font_size=26, color=MISSC),
             label(r"choosing $\gamma$: \ fast adaptation or stable sets; \ later work adapts $\gamma$ itself", font_size=26, color=WEIGHTC),

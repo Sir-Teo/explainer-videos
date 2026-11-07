@@ -171,7 +171,7 @@ class Groups(VoiceoverScene):
 
     def fairness(self):
         rows = fit_rows(VGroup(
-            label(r"why it matters:", font_size=28, color=GREY_A),
+            label(r"Why group-specific coverage matters for deployment", font_size=36, color=WHITE),
             label(r"a marginal guarantee can be met by over-serving the majority and under-serving a minority", font_size=26, color=MISSC),
             label(r"group-conditional coverage is a fairness requirement that can be audited", font_size=26, color=COVC),
             label(r"its price: \ wider intervals in harder groups, \ and enough data in each", font_size=26, color=WEIGHTC),
