@@ -30,6 +30,10 @@ class OpenProblems(LectureMixin, VoiceoverScene):
         tab = table_rows([hdr] + body, font_size=24, col_buff=0.6, row_buff=0.28, colors=cols).move_to([0, 0.1, 0])
         if tab.width > 13.4:
             tab.width = 13.4
+        heading = label(r"Robustness and shift: assumptions, methods and guarantees", font_size=36).move_to([0, 3.3, 0])
+        if heading.width > 12.6:
+            heading.width = 12.6
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> The part in one table: each threat, the assumption that tames it, the method, and what it "
             "guarantees. <bookmark mark='b'/> A small adversarial fraction, against Gaussian inliers: depth and the filter, "

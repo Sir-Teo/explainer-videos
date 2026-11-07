@@ -67,6 +67,10 @@ class VC(VoiceoverScene):
         t3 = label(rf"3 points: \ all 8 labellings by half-planes \ ({d['three_hp']} counted)", font_size=24, color=GOODC).next_to(p3, DOWN, buff=0.3)
         t4 = label(rf"4 points: \ the diagonals cannot be split \ ({d['four_hp']} of 16)", font_size=24, color=BADC).next_to(xor, DOWN, buff=0.55)
         note_ = label(r"Radon: \ any 4 points in the plane split into two parts whose hulls meet", font_size=24, color=GREY_A).move_to([0, -2.6, 0])
+        heading = label(r"Why half-planes shatter three points, but never four", font_size=36).move_to([0, 3.3, 0])
+        if heading.width > 12.6:
+            heading.width = 12.6
+        self.add(heading)
         with self.voiceover(
             f"<bookmark mark='a'/> Here is why half-planes have dimension three. Three points in general position: every one "
             f"of the eight labellings, from none to all, is cut out by some half-plane. The brute-force count agrees: "
