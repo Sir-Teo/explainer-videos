@@ -163,15 +163,7 @@ class Hook(VoiceoverScene):
         marks = ["a", "b", "c", "d", "e"]
         groups = [(0, 1), (1, 4), (4, 8), (8, 11), (11, 12)]
         with self.voiceover(
-            "How we got here. In 1985 Hayne Leland priced hedging with costs. In 1989 Hodges and Neuberger priced by "
-            "indifference, and George Cybenko proved that one hidden layer can approximate any continuous function. "
-            "<bookmark mark='a'/> In 1994 Hutchinson, Lo and Poggio let a network learn option prices; in 1997 Whalley "
-            "and Wilmott derived the corridor you just saw. In 2011 American supervisors wrote the rules for model risk. "
-            "<bookmark mark='b'/> Then the deep wave: calibration by a network in 2016, the deep BSDE solver in 2017, "
-            "deep hedging and deep optimal stopping in 2019. <bookmark mark='c'/> Differential machine learning and "
-            "generative market models in 2020; neural calibration of rough volatility and band networks in 2021; neural "
-            "models for robust bounds in 2022. <bookmark mark='d'/> And in 2026 the supervisors rewrote their rules, "
-            "while researchers began to build generators of whole option markets."
+            "How we got here. In 1985 Hayne Leland priced hedging with costs. In 1989 Hodges and Neuberger priced by indifference, and George Cybenko proved that a suitable wide hidden layer can approximate continuous functions on compact sets. <bookmark mark='a'/> In 1994 Hutchinson, Lo and Poggio let a network learn option prices; in 1997 Whalley and Wilmott derived the corridor you just saw. In 2011 American supervisors issued model-risk guidance. <bookmark mark='b'/> Then the deep wave: calibration by a network in 2016, the deep BSDE solver in 2017, deep hedging and deep optimal stopping in 2019. <bookmark mark='c'/> Differential machine learning and generative market models in 2020; neural calibration of rough volatility and band networks in 2021; neural models for robust bounds in 2022. <bookmark mark='d'/> And in 2026 the supervisors revised their guidance, while researchers began to build generators of whole option markets."
         ) as vo:
             self.play(FadeIn(head), Create(strip[0]), FadeIn(strip[1]))
             for (a, b), m in zip(groups, [None] + marks[:4]):
@@ -185,20 +177,17 @@ class Hook(VoiceoverScene):
     def objectives(self):
         card = objectives_card([
             r"Learning a pricing formula from prices (Hutchinson, Lo and Poggio 1994), and a network's Greeks",
-            r"The neural calibrator: rough Bergomi in milliseconds, every week of 2024--2025",
+            r"Neural calibration: surrogate timings and descriptive weekly 2024--2025 fits",
             r"Differential machine learning, and its classical twin, a Gaussian process with gradients",
             r"High dimensions: the deep BSDE solver and deep optimal stopping",
             r"The deep hedger: costs, entropic risk and CVaR, indifference prices, the drift trap",
             r"Where not to trade: Leland, Whalley--Wilmott, and the band a network learns",
-            r"Neural SDEs: how far vanillas leave an exotic's price free",
-            r"Market generators, and hedgers tested across them",
+            r"Neural SDEs: penalized candidates and model sensitivity",
+            r"Generators: a Gaussian illustration and a cross-generator validation plan",
             r"Production (SR 26-2), what has reached desks, and the frontier of 2023--2026",
         ], color=QC.IDEA)
         with self.voiceover(
-            "The plan, in nine steps: pricing networks and their Greeks; neural calibration; derivatives as labels; "
-            "a hundred dimensions and early exercise; the deep hedger and its traps; where not to trade; model risk; "
-            "market generators; and what it takes to let any of them trade. Every network is trained on screen, more "
-            "than once, and checked against an answer we already know."
+            'The plan: learned prices and Greeks; neural calibration; derivative labels; high-dimensional BSDEs and stopping; hedging risk and drift; bands; model sensitivity; generators; and validation. Replays show selected fixed-seed training runs and numerical cross-checks within explicit limits. The generator chapter uses an analytical Gaussian example; the disjoint-history cross-generator test remains a plan.'
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
                                                      lag_ratio=0.5, run_time=16))
@@ -207,8 +196,7 @@ class Hook(VoiceoverScene):
     def house(self):
         chart = house_chart(PART, lit=("vol", "research"))
         with self.voiceover(
-            "In the House, the volatility desk gets a deep hedger, and research gets a market generator. "
-            "<bookmark mark='a'/> The finale will use that generator to stress-test the whole firm."
+            "The House's code contains pricing, hedging and generative-model tools. <bookmark mark='a'/> This part distinguishes the numerical illustrations we checked from proposed validation. Later parts must state their own data and stress-model scope."
         ) as vo:
             self.play(FadeIn(chart))
             vo.wait_until("a")
