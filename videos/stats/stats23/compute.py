@@ -198,7 +198,7 @@ def compute_schools():
     per = [(float(y[sch == k].mean()), bool(X[sch == k, 1][0]), int(np.sum(sch == k))) for k in np.unique(sch)]
     return nest({"G": 40, "n": len(y), "coef": f.coef, "se_iid": f.se(), "se_cr1": np.sqrt(np.diag(V)),
                  "m_bar": m_bar, "rho_e": rho_e, "rho_x": rho_x, "moulton": O.moulton(m_bar, rho_x, rho_e),
-                 "ratio": float(np.sqrt(V[1, 1]) / f.se()[1]), "truth": 100 * W.PROGRAMME_EFFECT, "per_school": per,
+                 "ratio": float(np.sqrt(V[1, 1]) / f.se()[1]), "truth": 100 * W.SCHOOL_PROGRAMME_EFFECT, "per_school": per,
                  "icc_world": O.icc(s["score"], s["school"])})
 
 
@@ -415,7 +415,7 @@ def compute_masking():
 def compute_board():
     g = rng(2324)
     R = 1000
-    truth = 100 * W.PROGRAMME_EFFECT
+    truth = 100 * W.SCHOOL_PROGRAMME_EFFECT
     q = stats.norm.ppf(0.975)
     # (1, 2) 40 schools: iid vs CR1
     iid = cr = 0

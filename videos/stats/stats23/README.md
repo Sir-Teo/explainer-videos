@@ -93,7 +93,7 @@ Every number on screen is computed in [`compute.py`](compute.py):
   - quantile-regression sandwich SEs.
 - **The digits board** (`DigitsBoard` in `explainer/stats/viz.py`): correct digits per coefficient per method.
 - **The World**: the `schools` block, with 400 schools, about 24,000 pupils, a school-level programme
-  (`PROGRAMME_EFFECT` = 0.20 SD), school effects (SD 0.35) and SES. It is reused in Parts 25 and 26.
+  (`SCHOOL_PROGRAMME_EFFECT` = 0.20 SD), school effects (SD 0.35) and SES. It is reused in Parts 25 and 26.
 - **The Museum**: `longley()`, `LONGLEY_CERTIFIED`, and `HUBBLE_1929` / `hubble()`.
 
 The Coverage Board gains eight rows:

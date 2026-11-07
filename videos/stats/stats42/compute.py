@@ -77,7 +77,7 @@ def eff_reps(per_rep, nominal=0.9) -> int:
 
 
 # ===================================================================================================== Case 1
-TAU1 = World.PROGRAMME_EFFECT
+TAU1 = World.HEALTH_PROGRAMME_EFFECT
 M_TRIAL = 50  # adults measured per town at follow-up
 K_ARM = 21  # towns per arm in the plan
 

@@ -290,7 +290,7 @@ class World:
     SES_SCHOOL_SD = 0.45  # SD of schools' mean home background (SES)
     SES_SLOPE = 0.30  # score per unit of a pupil's own SES
     SES_CONTEXT = 0.15  # extra score per unit of the school's mean SES (the contextual effect)
-    PROGRAMME_EFFECT = 0.20  # the tutoring programme's effect, in score SD units
+    SCHOOL_PROGRAMME_EFFECT = 0.20  # the tutoring programme's effect, in score SD units
 
     @cached_property
     def schools(self) -> dict:
@@ -310,7 +310,7 @@ class World:
         school = np.repeat(np.arange(k), size)
         ses = ses_school[school] + 0.9 * g.standard_normal(len(school))
         z = (self.SES_SLOPE * ses + self.SES_CONTEXT * ses_school[school] + u[school]
-             + self.PROGRAMME_EFFECT * programme[school] + self.PUPIL_SD * g.standard_normal(len(school)))
+             + self.SCHOOL_PROGRAMME_EFFECT * programme[school] + self.PUPIL_SD * g.standard_normal(len(school)))
         return {"town": town, "size": size, "ses_school": ses_school, "u": u, "programme": programme,
                 "school": school, "ses": ses, "score": 500 + 100 * z}
 
@@ -707,7 +707,7 @@ class World:
     TOWN_DRIFT = 1.5  # SD of a town's change from the pilot year to the trial year
     PERSON_SD = 16.0  # SD of systolic pressure between adults within a town
     PILOT_M = 30  # adults measured per town in the pilot survey
-    PROGRAMME_EFFECT = -4.0  # mm Hg: the community health workers' effect on a town's adults
+    HEALTH_PROGRAMME_EFFECT = -4.0  # mm Hg: the community health workers' effect on a town's adults
     SUBSTITUTE_EFFECT = -3.0  # mm Hg: the salt substitute's effect on everyone who uses it
     SUBSTITUTE_N = 3000
 
