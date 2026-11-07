@@ -32,10 +32,15 @@ class OpenProblems(LectureMixin, VoiceoverScene):
         ]
         cols = [GREY_B, MODB, MODB, MODB, MODB, HONC, JUDGEC, NAIVEC, HONC, MODB, JUDGEC, HONC]
         tab = table_rows([hdr] + body, font_size=24, col_buff=0.7, row_buff=0.2, colors=cols).move_to([0, 0.1, 0])
-        if tab.width > 13.4:
-            tab.width = 13.4
-        if tab.height > 6.8:
-            tab.height = 6.8
+        if tab.width > 12.6:
+            tab.width = 12.6
+        if tab.height > 5.6:
+            tab.height = 5.6
+        heading = Tex(r"AI evaluation: statistical tools and changing settings", font_size=36, color=WHITE)
+        if heading.width > 12.6:
+            heading.width = 12.6
+        heading.move_to([0, 3.3, 0])
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> The part in one table: each claim made about AI systems, the old statistical tool that "
             "checks it, and what is new about the setting. <bookmark mark='b'/> A model's accuracy is a mean with a standard "

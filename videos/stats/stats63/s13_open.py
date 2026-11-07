@@ -31,8 +31,15 @@ class OpenProblems(LectureMixin, VoiceoverScene):
         ]
         cols = [GREY_B, PRIVC, PRIVC, OKC, BADC, OKC, PRIVC, PRIVC, GRPA, OKC, GRPB]
         tab = table_rows([hdr] + body, font_size=24, col_buff=0.7, row_buff=0.22, colors=cols).move_to([0, 0.1, 0])
-        if tab.width > 13.4:
-            tab.width = 13.4
+        if tab.width > 12.6:
+            tab.width = 12.6
+        if tab.height > 5.6:
+            tab.height = 5.6
+        heading = Tex(r"Privacy and fairness: tools, guarantees and costs", font_size=36, color=WHITE)
+        if heading.width > 12.6:
+            heading.width = 12.6
+        heading.move_to([0, 3.3, 0])
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> The part in one table: each worry, the tool that answers it, and what the tool costs. "
             "<bookmark mark='b'/> Linkage and reconstruction, answered by differential privacy, at the price of noise. An "
