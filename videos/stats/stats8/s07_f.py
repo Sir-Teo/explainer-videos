@@ -32,6 +32,7 @@ class FDist(VoiceoverScene):
         whys = [why(r"a ratio of two independent mean squares"), why(r"two independent normal samples (chapter 4)"),
                 why(r"so the ratio tests equal variances; \ and, in Part 13, \ equal means")]
         hc = note(r"named by George Snedecor (1934) for R. A. Fisher, \ who had worked with $\tfrac12 \log F$ (1924)").to_edge(DOWN, buff=0.4)
+        intro = label('A ratio of independent scaled chi-squares', font_size=36)
         with self.voiceover(
             "If chi-squared measures one variance, a ratio of two measures how they compare. <bookmark mark='a'/> The F "
             "distribution is a ratio of two independent chi-squareds, each divided by its degrees of freedom. "
@@ -41,9 +42,12 @@ class FDist(VoiceoverScene):
             "Fisher, who had used half its logarithm ten years earlier. In Part 13 the same ratio compares the "
             "variation between groups to the variation within them."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.6, buff=1.0, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             self.play(FadeIn(hc))
         self.clear_scene()
@@ -57,12 +61,12 @@ class FDist(VoiceoverScene):
         keep = xs <= 5
         cvs = VGroup(*[pdf_curve(ax, xs[keep], np.asarray(d["shapes"][k])[keep], c, 3, ymax=1.6) for k, c in F_COLS.items()])
         leg = legend([(c, rf"$F_{{{k}}}$") for k, c in F_COLS.items()], font_size=24).move_to([4.6, 1.6, 0])
-        rows = fit_rows(VGroup(label(r"centred near 1: \ the two variances agree", font_size=24),
+        rows = fit_rows(VGroup(label(r"1 marks equality of the two sample variances", font_size=24),
                                label(r"skewed right; \ concentrates at 1 as both $df$ grow", font_size=24, color=GREY_A),
-                               MathTex(r"F_{a,b} = 1/F_{b,a}", font_size=28)), 4.8, 0.3, [4.6, -0.6, 0])
+                               MathTex(r"F_{a,b} \overset{d}{=} 1/F_{b,a}", font_size=28)), 4.8, 0.3, [4.6, -0.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Here are a few F distributions. They're all centred near one, where the two variances "
-            "agree, and skewed to the right, since a ratio can be large but not negative. <bookmark mark='b'/> With "
+            "<bookmark mark='a'/> Here are a few F distributions. The value one marks equal sample variances. The curves need not have mean or mode one; they "
+            "are skewed to the right, since a ratio can be large but not negative. <bookmark mark='b'/> With "
             "thirty degrees of freedom on each side, the curve tightens around one: more data, a sharper comparison. "
             "And turning the ratio upside down just swaps the two degrees of freedom."
         ) as vo:
@@ -79,14 +83,14 @@ class FDist(VoiceoverScene):
         A = axes([0, 6], [0, 0.8], x_length=7.4, y_length=4.2, xlabel=r"$s_1^2/s_2^2$: \ 5 men vs 10 men", xticks=[0, 1, 2, 3, 4, 5, 6],
                  yticks=[0, 0.4, 0.8], center=[-2.0, -0.4, 0])
         ax = A.ax
-        h = hist_bars(ax, ed, np.clip(np.asarray(d["hist"]), 0, 0.8), color=SIM, opacity=0.65)
+        h = hist_bars(ax, ed, np.asarray(d["hist"]), color=SIM, opacity=0.65)
         cv = pdf_curve(ax, xs, np.asarray(d["pdf"]), EXACT, 3, ymax=0.8)
         qs = VGroup(DashedLine(ax.c2p(d["q"], 0), ax.c2p(d["q"], 0.8), color=S.RESID, stroke_width=2),
                     DashedLine(ax.c2p(d["q_lo"], 0), ax.c2p(d["q_lo"], 0.8), color=S.RESID, stroke_width=2))
         rows = fit_rows(VGroup(
             MathTex(r"F_{4,9}", font_size=32, color=EXACT),
             MathTex(rf"2.5\%,\ 97.5\%:\ \ {d['q_lo']:.2f},\ \ {d['q']:.2f}", font_size=28, color=S.RESID),
-            label(r"a ratio below 4.7 is unremarkable:", font_size=24, color=GREY_A),
+            label(r"compare both tails: below 0.11 or above 4.72", font_size=24, color=GREY_A),
             label(r"variances are hard to compare with small samples", font_size=24, color=GREY_A),
         ), 4.8, 0.3, [4.6, 0.4, 0])
         tag = simulated_tag(r"simulated: 20,000 pairs of samples of the World's men")
@@ -108,23 +112,27 @@ class FDist(VoiceoverScene):
 
     def relations(self):
         rows = fit_rows(VGroup(
-            MathTex(r"t_k^2 = F_{1,k}", r"\quad \text{a squared } t \text{ is an } F \text{ with one numerator df}", font_size=30),
+            MathTex(r"t_k^2 \overset{d}{=} F_{1,k}", r"\quad \text{a squared } t \text{ is an } F \text{ with one numerator df}", font_size=30),
             MathTex(r"a\,F_{a,b} \to \chi^2_a \ \ (b \to \infty)", r"\quad \text{the denominator becomes exact}", font_size=30),
             MathTex(r"\frac{a F_{a,b}}{b + a F_{a,b}} \sim \mathrm{Beta}\big(\tfrac a2, \tfrac b2\big)", r"\quad \text{Part 3's family tree}", font_size=30),
-            label(r"normal, \ $\chi^2$, \ $t$, \ $F$, \ beta, \ gamma: \ one family, \ all from squared normal coordinates", font_size=26,
+            label(r"normal, \ $\chi^2$, \ $t$, \ $F$, \ beta, \ gamma: \ normal-theory cases come from squared normal coordinates", font_size=26,
                   color=S.ACCENT),
         ), 12.6, 0.42, [0, 0.2, 0])
         for r in rows[:3]:
             r[1].set_color(GREY_B)
+        intro = label('Links within the normal-theory family', font_size=36)
         with self.voiceover(
             "The four distributions of normal theory are one family. <bookmark mark='a'/> A squared t is an F with one "
             "degree of freedom on top. <bookmark mark='b'/> As the denominator's degrees of freedom grow, a times F "
             "becomes chi-squared with a degrees of freedom. <bookmark mark='c'/> And a simple transformation of F is a "
             "beta, which puts all of them on Part 3's family tree. <bookmark mark='d'/> Normal, chi-squared, t, F, "
-            "beta, gamma: all of them are lengths and ratios of normal coordinates in Fisher's round cloud."
+            "beta, gamma: the normal-theory cases are lengths and ratios of normal coordinates in Fisher's round cloud."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()
 
@@ -137,18 +145,21 @@ class FDist(VoiceoverScene):
         ]
         rows[1][2].set_color(EXACT)
         whys = [why(r"Cochran: \ two orthogonal projections, \ $k - 1$ and $n - k$ dimensions"),
-                why(r"Fisher's analysis of variance (1918--1925): \ Part 13")]
+                why(r"IID normal errors, common variance, nonempty groups, $n>k$: \ Part 13")]
         foot = label(r"the same $F$, \ now comparing \emph{means} through variances", font_size=26, color=S.ACCENT).to_edge(DOWN, buff=0.7)
+        intro = label('Compare group means through mean squares', font_size=36)
         with self.voiceover(
             "The F distribution's most important use isn't comparing two variances at all. <bookmark mark='a'/> With "
             "several groups, the total sum of squares splits into a between-group part, how far the group means are "
             "from the overall mean, and a within-group part: two orthogonal projections, by Cochran's theorem. "
-            "<bookmark mark='b'/> If all the group means are equal, the ratio of the two mean squares has an F "
+            "<bookmark mark='b'/> Under independent normal errors with a common variance and equal group means, the ratio of the two mean squares has an F "
             "distribution. Fisher's analysis of variance, developed at Rothamsted in the early 1920s, compares means by "
             "comparing variances, and it's the subject of Part 13."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=2.2, x=-1.6, buff=1.3, edge=6.9)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1, transform=False)

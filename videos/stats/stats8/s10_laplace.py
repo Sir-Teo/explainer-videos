@@ -3,6 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from videos.stats.stats8.common import *  # noqa: F403
+from videos.stats.stats8.compute import histogram_density
 
 
 class Laplace(VoiceoverScene):
@@ -60,14 +61,17 @@ class Laplace(VoiceoverScene):
         ]
         rows[0][4].set_color(SIM)
         whys = [why(r"$B$: \ the known national births; \ the ratio estimator"), why(r"its error: \ how both means wobble, \ together")]
+        intro = label('A known auxiliary total and a sample ratio', font_size=36)
         with self.voiceover(
             "In modern terms. <bookmark mark='a'/> The estimate is the known national total of births, times the ratio "
             "of two sample means: people per commune over births per commune. This is the ratio estimator, still used "
             "by every statistics office. <bookmark mark='b'/> Its uncertainty comes from how both means wobble, and "
             "how they wobble together: exactly the job of Part 6's delta method for a function of two means."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=2.0, x=-1.2, buff=1.1, edge=6.9)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1, transform=False)
@@ -82,8 +86,8 @@ class Laplace(VoiceoverScene):
         ]
         rows[1][2].set_color(EXACT)
         whys = [why(r"linearize: \ the error is an average of residuals $e_i = y_i - R x_i$"),
-                why(r"the standard error of that average: \ $k$ sampled communes"), why(r"scale up")]
-        foot = label(r"the same formula gives SEs for survey ratios (Part 18) \ and for odds ratios (Part 14)", font_size=24,
+                why(r"IID pairs, finite second moments, $\mu_x\ne0$; add design FPC for SRS without replacement"), why(r"scale up")]
+        foot = label(r"survey ratios: this formula; odds ratios: the same delta principle (Parts 18, 14)", font_size=24,
                      color=GREY_A).to_edge(DOWN, buff=0.6)
         with self.voiceover(
             "<bookmark mark='a'/> Write the error of the ratio as an average of residuals: each commune's people minus "
@@ -113,18 +117,18 @@ class Laplace(VoiceoverScene):
         pts = VGroup(*[Dot(ax.c2p(np.log10(b), np.log10(p)), radius=0.04, color=S.WORLD) for b, p in zip(bir[ok], pop[ok])])
         rl = Line(ax.c2p(0.6, 0.6 + np.log10(d["ratio_true"])), ax.c2p(3.6, 3.6 + np.log10(d["ratio_true"])), color=EXACT, stroke_width=2.5)
         ests = np.asarray(d["ests"]) / 1e3
-        B = axes([880, 1120], [0, 0.018], x_length=4.6, y_length=3.4, xlabel=r"$\hat N$ (thousands), \ 30 towns", xticks=[900, 1000, 1100],
+        B = axes([880, 1120], [0, 0.028], x_length=4.6, y_length=3.4, xlabel=r"$\hat N$ (thousands), \ 30 towns", xticks=[900, 1000, 1100],
                  center=[1.0, -0.6, 0])
         ed = np.linspace(880, 1120, 41)
-        h = hist_bars(B.ax, ed, np.histogram(ests, ed, density=True)[0], color=SIM, opacity=0.7)
-        tr = DashedLine(B.ax.c2p(d["N"] / 1e3, 0), B.ax.c2p(d["N"] / 1e3, 0.018), color=EXACT, stroke_width=2)
+        h = hist_bars(B.ax, ed, histogram_density(ests, ed), color=SIM, opacity=0.7)
+        tr = DashedLine(B.ax.c2p(d["N"] / 1e3, 0), B.ax.c2p(d["N"] / 1e3, 0.028), color=EXACT, stroke_width=2)
         rows = fit_rows(VGroup(
             MathTex(rf"N = {d['N']:,.0f}".replace(",", "{,}"), font_size=26, color=EXACT),
             MathTex(rf"\text{{SD of }} \hat N:\ {d['sd_est']:,.0f}".replace(",", "{,}"), font_size=26, color=SIM),
             MathTex(rf"\text{{average delta SE}}:\ {d['mean_se']:,.0f}".replace(",", "{,}"), font_size=26, color=S.POST),
             MathTex(rf"\hat N \pm 1.96\,\mathrm{{SE}} \text{{ covers }} {100 * d['cover']:.1f}\%", font_size=26, color=S.RESID),
             label(r"30 towns of very different sizes:", font_size=22, color=GREY_A),
-            label(r"first order is not quite enough", font_size=22, color=GREY_A),
+            label(r"design FPC included; first-order intervals still miss", font_size=22, color=GREY_A),
         ), 3.6, 0.28, [5.2, -0.2, 0])
         tag = simulated_tag(r"simulated: 10,000 samples of 30 of the World's 200 towns")
         with self.voiceover(
@@ -133,8 +137,8 @@ class Laplace(VoiceoverScene):
             "about sixty-seven, and it varies from town to town. <bookmark mark='b'/> Sample thirty towns, form the "
             "ratio, scale up by the island's births, ten thousand times. The estimates centre on the true million, "
             "with a standard deviation of about twenty-four thousand. <bookmark mark='c'/> The delta-method standard "
-            "error averages twenty-three thousand: close, but a little small, and an interval of plus or minus one "
-            "point nine six standard errors covers the truth ninety-one and a half percent of the time, not "
+            "error, including the finite-population correction, is shown alongside the actual simulation spread. An interval of plus or minus one "
+            "point nine six standard errors has the coverage shown, below "
             "ninety-five. With only thirty towns of very different sizes, the ratio's distribution is still skewed. "
             "First-order approximations need checking, which is exactly what the Coverage Board is for."
         ) as vo:
@@ -153,10 +157,11 @@ class Laplace(VoiceoverScene):
             label(r"his error formula treated the sample as if drawn at random from a ``super-population''", font_size=24,
                   color=GREY_A),
             label(r"the theory of random sampling from a finite list: \ Bowley (1906), \ Neyman (1934)", font_size=24),
-            label(r"Neyman showed that \emph{purposive} selection can fail badly, \ and randomization guarantees the SE", font_size=24,
+            label(r"Neyman showed that \emph{purposive} selection can fail badly, \ and randomization supports design-based uncertainty calculations", font_size=24,
                   color=RESID),
             label(r"chapter 10, \ and Part 18", font_size=24, color=S.ACCENT),
         ), 12.6, 0.36, [0, 0.2, 0])
+        intro = label('Selection determines which error calculation applies', font_size=36)
         with self.voiceover(
             "There's a subtlety in Laplace's survey that took another century to resolve. <bookmark mark='a'/> He didn't "
             "pick his communes at random: he chose them for reliable registers and a spread of regions. "
@@ -166,7 +171,10 @@ class Laplace(VoiceoverScene):
             "fail badly, and that random selection is what makes a standard error trustworthy. "
             "<bookmark mark='e'/> The next chapter and Part 18 take this up."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()

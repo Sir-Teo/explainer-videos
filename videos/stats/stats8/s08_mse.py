@@ -31,10 +31,11 @@ class MSE(VoiceoverScene):
             rings = VGroup(*[Circle(radius=r, color=GREY_C, stroke_width=1.5).move_to([cx, 0.3, 0]) for r in (0.4, 0.8, 1.2)])
             bull = Dot([cx, 0.3, 0], radius=0.06, color=EXACT)
             pts = g.normal(0, sd, (14, 2)) + np.array(off)
-            darts = VGroup(*[Dot([cx + a, 0.3 + b, 0], radius=0.05, color=c) for a, b in np.clip(pts, -1.3, 1.3)])
+            darts = VGroup(*[Dot([cx + a, 0.3 + b, 0], radius=0.05, color=c) for a, b in pts])
             t = label(nm, font_size=22, color=c).move_to([cx, -1.4, 0])
             boards.add(VGroup(rings, bull, darts, t))
         head = label(r"each dart: \ the estimate from one sample; \ the bullseye: \ the truth", font_size=26).to_edge(UP, buff=0.6)
+        intro = label('Center and spread both affect squared error', font_size=36)
         with self.voiceover(
             "There are many ways to estimate a quantity from a sample. How do we judge them? <bookmark mark='a'/> "
             "Think of each sample's estimate as a dart, and the truth as the bullseye. <bookmark mark='b'/> A good "
@@ -42,7 +43,9 @@ class MSE(VoiceoverScene):
             "scattered: unbiased, with high variance. <bookmark mark='d'/> Another can be tight but off-centre: "
             "precise, but biased. <bookmark mark='e'/> And the worst is both."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(head), *[FadeIn(b[:2]) for b in boards])
             for k, m_ in enumerate("bcde"):
                 vo.wait_until(m_)
@@ -59,6 +62,7 @@ class MSE(VoiceoverScene):
         rows[2][2].set_color(S.ACCENT)
         whys = [why(r"the average squared miss"), why(r"add and subtract the estimator's own mean"),
                 why(r"the cross term has mean zero: \ Part 1's loss decomposition")]
+        intro = label('Split mean squared error into two pieces', font_size=36)
         with self.voiceover(
             "One number combines the two failures. <bookmark mark='a'/> The mean squared error is the average squared "
             "distance from the truth. <bookmark mark='b'/> Add and subtract the estimator's own average. "
@@ -66,9 +70,12 @@ class MSE(VoiceoverScene):
             "the spread of the darts, plus the squared bias, the distance from their centre to the bullseye. A little "
             "bias can be worth it, if it buys a big reduction in variance."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.6, buff=1.0, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -88,8 +95,8 @@ class MSE(VoiceoverScene):
             marks.add(VGroup(Dot(ax.c2p(c, v), radius=0.08, color=col),
                              MathTex(rf"{lab}:\ {v:.3f}", font_size=22, color=col).next_to(ax.c2p(c, v), DR if c == 4 else UP, buff=0.12)))
         rows = fit_rows(VGroup(
-            MathTex(r"\mathrm{MSE}(c) = \Big(\frac{n - 1}{c} - 1\Big)^2 + \frac{2(n - 1)}{c^2}", font_size=26),
-            label(r"minimized at $c = n + 1$, \ not $n - 1$", font_size=24, color=S.ACCENT),
+            MathTex(r"\mathrm{MSE}(c)/\sigma^4 = \Big(\frac{n - 1}{c} - 1\Big)^2 + \frac{2(n - 1)}{c^2}", font_size=26),
+            label(r"among estimators SS$/c$, minimum at $c=n+1$", font_size=24, color=S.ACCENT),
             MathTex(rf"\text{{simulated: }} {d['sim']['4']:.3f},\ {d['sim']['5']:.3f},\ {d['sim']['6']:.3f}", font_size=24, color=GREY_A),
             label(r"unbiased is not the same as best", font_size=26, color=S.ACCENT),
         ), 5.0, 0.3, [4.5, -0.6, 0])
@@ -97,7 +104,7 @@ class MSE(VoiceoverScene):
         with self.voiceover(
             "Here's a surprise about the n minus one. <bookmark mark='a'/> Divide the sum of squares by any constant c. "
             "For normal data we know its distribution exactly, so we can compute its bias and variance. "
-            "<bookmark mark='b'/> Larger c means more bias, downward; <bookmark mark='c'/> but less variance. "
+            "<bookmark mark='b'/> Increasing c lowers the expectation; beyond n minus one it introduces downward bias; <bookmark mark='c'/> but less variance. "
             "<bookmark mark='d'/> Their sum, the mean squared error, is smallest not at n minus one, which removes the "
             "bias, but at n plus one. For five observations: point five for n minus one, point three six for n, point "
             "three three for n plus one, and the simulation agrees. <bookmark mark='e'/> Unbiased is not the same as "
@@ -121,23 +128,27 @@ class MSE(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"the bias--variance trade-off", font_size=30, color=S.ACCENT),
             label(r"shrinkage: \ pull an estimate toward a fixed point, \ accept bias, \ cut variance", font_size=26),
-            label(r"James \& Stein (1961): \ for 3 or more means, \ shrinkage beats the sample means in expected total MSE (Part 25)",
+            label(r"James--Stein: $p\ge3$ independent normal coordinates, known common variance; fixed-center shrinkage",
                   font_size=24, color=GREY_A),
-            label(r"ridge and lasso (Part 32), \ smoothing (Part 29), \ every prior (Part 15)", font_size=24, color=GREY_A),
+            label(r"ridge and lasso (Part 32), \ smoothing (Part 29), \ many priors (Part 15)", font_size=24, color=GREY_A),
             label(r"but MSE is not everything: \ intervals need the bias to be understood, \ not just small", font_size=24,
                   color=GREY_A),
         ), 12.6, 0.38, [0, 0.2, 0])
+        intro = label('Shrinkage can trade bias for reduced variance', font_size=36)
         with self.voiceover(
             "This is the first glimpse of an idea that runs through modern statistics. <bookmark mark='a'/> The "
             "bias–variance trade-off. <bookmark mark='b'/> Pull an estimate toward a fixed point, accept some bias, "
             "and cut the variance. <bookmark mark='c'/> In 1961 Willard James and Charles Stein showed that for three "
-            "or more means estimated at once, shrinking them toward each other beats the sample means in expected total "
-            "squared error, whatever the true means are: Part 25. <bookmark mark='d'/> Ridge regression, the lasso, smoothing and every Bayesian "
+            "or more means estimated at once, under independent normal observations with a known common variance, shrinking toward a fixed center can beat the observations in expected total "
+            "squared error, whatever the true means are: Part 25. <bookmark mark='d'/> Ridge regression, the lasso, smoothing and many Bayesian "
             "prior are versions of the same bargain. <bookmark mark='e'/> But mean squared error isn't everything: an "
             "interval needs its bias to be understood, not just small."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()
 
@@ -154,7 +165,7 @@ class MSE(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(rf"shrinkage wins for ${d['cross'][0]:.2f} < p < {d['cross'][1]:.2f}$", font_size=24, color=S.POST),
             label(r"and loses near 0 and 1, \ where its bias is largest", font_size=24, color=GREY_A),
-            label(r"no estimator is best for every $p$: \ Part 45's decision theory", font_size=22, color=S.ACCENT),
+            label(r"neither of these two estimators dominates: \ Part 45", font_size=22, color=S.ACCENT),
             label(r"Agresti \& Coull (1998) use it for intervals: \ Part 11", font_size=22, color=GREY_A),
         ), 5.0, 0.3, [4.4, -0.4, 0])
         tag = note(r"exact: \ sums over the binomial").to_corner(DR, buff=0.3)
@@ -164,7 +175,7 @@ class MSE(VoiceoverScene):
             "hump. <bookmark mark='b'/> Now add two imaginary successes and two failures: x plus two over n plus four. "
             "That pulls every estimate toward a half, so it's biased. But its mean squared error, in orange, is lower "
             "for every p between about point two and point eight. <bookmark mark='c'/> Near zero and one, where the "
-            "pull toward a half costs the most, it loses. No estimator is best everywhere, which is the starting point "
+            "pull toward a half costs the most, it loses. Neither of these two estimators wins everywhere, illustrating the starting point "
             "of decision theory in Part 45. Alan Agresti and Brent Coull built an interval on this idea, which "
             "Part 11 tests."
         ) as vo:
@@ -179,25 +190,29 @@ class MSE(VoiceoverScene):
 
     def bound(self):
         rows = [
-            cmath(r"\mathrm{Var}(\hat\theta)", r"\ge", r"\frac{1}{n\,I(\theta)}", r"\quad \text{for every unbiased } \hat\theta", font_size=34),
+            cmath(r"\mathrm{Var}(\hat\theta)", r"\ge", r"\frac{1}{n\,I(\theta)}", r"\quad \text{for regular unbiased } \hat\theta", font_size=34),
             cmath(r"N(\mu, \sigma^2):\ I(\mu) = \frac{1}{\sigma^2}", r"\ \Rightarrow\ ", r"\mathrm{Var}(\bar x) = \frac{\sigma^2}{n} \text{ attains it}",
                   font_size=30),
-            cmath(r"\text{the median}:\ \frac{\pi}{2}\cdot\frac{\sigma^2}{n}", r"\ >\ ", r"\frac{\sigma^2}{n}", font_size=30),
+            cmath(r"\text{median, asymptotically}:\ \frac{\pi}{2}\cdot\frac{\sigma^2}{n}", r"\ >\ ", r"\frac{\sigma^2}{n}", font_size=30),
         ]
         rows[0][2].set_color(EXACT)
-        whys = [why(r"the Cram\'er--Rao bound (1945--46): \ $I$, \ Fisher information"),
+        whys = [why(r"regular IID model, support and differentiation conditions; $I$ per observation"),
                 why(r"no unbiased estimator of a normal mean beats $\bar x$"), why(r"chapter 1's efficiency, \ explained")]
+        intro = label('A lower bound under regularity conditions', font_size=36)
         with self.voiceover(
             "Is there a limit to how good an unbiased estimator can be? <bookmark mark='a'/> Yes. The Cramér–Rao bound, "
-            "found by Harald Cramér and C. R. Rao in the mid-1940s, says no unbiased estimator can have variance below "
+            "found by Harald Cramér and C. R. Rao in the mid-1940s, under regularity conditions says an unbiased estimator cannot have variance below "
             "one over n times the Fisher information, a measure of how sharply the data's distribution depends on the "
             "parameter. <bookmark mark='b'/> For the mean of a normal, the information is one over sigma squared, and "
             "the sample mean's variance, sigma squared over n, sits exactly on the bound: nothing unbiased beats it. "
-            "<bookmark mark='c'/> The median's variance is pi over two times larger, which is chapter one's efficiency "
+            "<bookmark mark='c'/> For large normal samples the median's variance is approximately pi over two times larger, which is chapter one's efficiency "
             "of two over pi. Part 9 derives the bound and builds estimators that reach it."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.6, buff=1.0, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()

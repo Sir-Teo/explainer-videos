@@ -27,14 +27,14 @@ class Machine(VoiceoverScene):
         m = SamplingMachine(pop, value_range=(150, 202), stat_range=(166, 186), bins=40, n_dots=700,
                             value_label=r"heights in this sample (cm)", stat_label=r"the sample mean (cm)",
                             ticks=[155, 175, 195], stat_ticks=[168, 172, 176, 180, 184], seed=8)
-        mu = d["mu"]
+        mu = d["values_mean"]
         tl = Line(m.hist_ax[0].c2p(mu, 0), m.hist_ax[0].c2p(mu, 0.95), color=EXACT, stroke_width=3)
         tlab = MathTex(rf"\mu = {mu:.1f}", font_size=28, color=EXACT).next_to(tl, UP, buff=0.06)
         g = np.random.Generator(np.random.PCG64(8))
         samples = [pop[g.integers(0, len(pop), 4)] for _ in range(24)]
-        tag = simulated_tag(r"simulated: the World's adult men, \ samples of 4")
+        tag = simulated_tag(r"simulated: 3,000 World men as the source pool; \ samples of 4")
         with self.voiceover(
-            "Part 1 met the sampling machine; now we use it in earnest. <bookmark mark='a'/> The population: the "
+            "Part 1 met the sampling machine; now we use it in earnest. <bookmark mark='a'/> The source pool: three thousand of the "
             "World's adult men. The machine draws four at random. <bookmark mark='b'/> Their heights land on the "
             "line, and their mean drops into the chart. <bookmark mark='c'/> Another four, another mean. "
             "<bookmark mark='d'/> Keep going. The chart that builds up is the sampling distribution of the mean: the "
@@ -61,8 +61,8 @@ class Machine(VoiceoverScene):
                  xticks=[160, 168, 176, 184, 192], yticks=[0, 0.2, 0.4], center=[-1.6, -0.4, 0])
         ax = A.ax
         cols = {"4": S.POST, "16": S.LIK, "64": SIM}
-        hs = VGroup(*[hist_bars(ax, ed, np.clip(np.asarray(d[n]["hist"]), 0, 0.48), color=c, opacity=0.5) for n, c in cols.items()])
-        mu = d["mu"]
+        hs = VGroup(*[hist_bars(ax, ed, np.asarray(d[n]["hist"]), color=c, opacity=0.5) for n, c in cols.items()])
+        mu = d["values_mean"]
         tl = DashedLine(ax.c2p(mu, 0), ax.c2p(mu, 0.48), color=EXACT, stroke_width=2)
         leg = legend([(c, rf"$n = {n}$: \ SD {d[n]['sd_mean']:.2f}") for n, c in cols.items()], font_size=24).move_to([4.7, 1.6, 0])
         rows = fit_rows(VGroup(
@@ -76,7 +76,7 @@ class Machine(VoiceoverScene):
             "Now the full sampling distributions, twenty thousand samples each. <bookmark mark='a'/> Means of four "
             "men: a wide bell. <bookmark mark='b'/> Means of sixteen: half as wide. <bookmark mark='c'/> Means of "
             "sixty-four: half as wide again. <bookmark mark='d'/> The spread falls like sigma over root n, Part 6's "
-            "square-root law, and the simulated standard deviations match the formula to two decimals. And all three "
+            "square-root law, and the simulated standard deviations closely approximate the formula within simulation noise. And all three "
             "are centred on the true mean: the sample mean is unbiased."
         ) as vo:
             self.play(FadeIn(A), Create(tl), FadeIn(tag))
@@ -95,12 +95,13 @@ class Machine(VoiceoverScene):
         ]
         rows[0][2].set_color(EXACT)
         rows[1][2].set_color(SIM)
-        whys = [why(r"Part 4's variance of a sum: \ $\mathrm{Var}\,\bar X = \sigma^2/n$"), why(r"plug in $s$ for $\sigma$")]
+        whys = [why(r"IID draws with finite variance:  \ $\mathrm{Var}\,\bar X = \sigma^2/n$"), why(r"plug in $s$ for $\sigma$")]
         rem = fit_rows(VGroup(
             label(r"the standard error is how much the estimate would wobble \emph{if} we sampled again", font_size=26),
             label(r"one sample estimates it: \ the sample's spread stands in for the population's", font_size=24, color=GREY_A),
             label(r"but $s$ itself wobbles: \ for small $n$, \ badly (the hook; \ chapter 5)", font_size=24, color=RESID),
         ), 12.6, 0.3, [0, -1.8, 0])
+        intro = label('Estimating how much a mean varies', font_size=36)
         with self.voiceover(
             "This is the miracle of statistics. <bookmark mark='a'/> The spread of the sampling distribution, the "
             "standard deviation of the mean over all possible samples, is sigma over root n. <bookmark mark='b'/> We "
@@ -109,8 +110,10 @@ class Machine(VoiceoverScene):
             "would wobble if we sampled again. The catch is that s wobbles too, and with small samples it wobbles "
             "badly. That was Gosset's problem, and chapter five is its solution."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=2.4, x=-2.4, buff=1.0, edge=6.9)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1, transform=False)
@@ -124,8 +127,8 @@ class Machine(VoiceoverScene):
         A = axes([166, 186], [0, 0.48], x_length=7.4, y_length=4.2, xlabel=r"statistic, \ samples of 64 men (cm)",
                  xticks=[168, 172, 176, 180, 184], yticks=[0, 0.2, 0.4], center=[-2.0, -0.4, 0])
         ax = A.ax
-        hm = hist_bars(ax, ed, np.clip(np.asarray(d["64"]["hist"]), 0, 0.48), color=SIM, opacity=0.6)
-        hd = hist_bars(ax, ed, np.clip(np.asarray(d["64"]["hist_med"]), 0, 0.48), color=S.POST, opacity=0.5)
+        hm = hist_bars(ax, ed, np.asarray(d["64"]["hist"]), color=SIM, opacity=0.6)
+        hd = hist_bars(ax, ed, np.asarray(d["64"]["hist_med"]), color=S.POST, opacity=0.5)
         leg = legend([(SIM, rf"mean: \ SD {d['64']['sd_mean']:.2f}"), (S.POST, rf"median: \ SD {d['64']['sd_median']:.2f}")],
                      font_size=24).move_to([4.4, 1.6, 0])
         e64 = d["eff"]["64"]
@@ -138,7 +141,7 @@ class Machine(VoiceoverScene):
         tag = simulated_tag(r"simulated: 20,000 samples of 64")
         with self.voiceover(
             "Every statistic has a sampling distribution, not just the mean. <bookmark mark='a'/> Here are the mean "
-            "and the median of samples of sixty-four men. Both centre on the truth, since heights are symmetric. "
+            "and the median of samples of sixty-four men. They lie near their population centers; the male-height population is approximately symmetric. "
             "<bookmark mark='b'/> But the median's distribution is wider. The ratio of their variances, the "
             f"efficiency, is about {e64:.2f}, close to two over pi, which theory gives for normal data. To match the "
             "mean's precision, the median needs about one point six times as much data. <bookmark mark='c'/> In "
@@ -162,10 +165,11 @@ class Machine(VoiceoverScene):
             cmath(r"n = 64,\ \sigma = 7.10", r":\ ", rf"{d['64']:.2f}\ \text{{cm}} \quad (\text{{simulated }} {d['sim']:.2f})", font_size=32),
         ]
         rows[2][2].set_color(EXACT)
-        whys = [why(r"Laplace (1818): \ the density at the median sets its precision"), why(r"so the efficiency is $2/\pi$"),
+        whys = [why(r"asymptotic: IID, unique median, continuous positive density there"), why(r"so the efficiency is $2/\pi$"),
                 why(r"a formula for one sample's SE, \ if we can estimate $f(m)$ (Part 29)")]
+        intro = label('The median needs a local density estimate', font_size=36)
         with self.voiceover(
-            "The median's spread has a formula too, found by Laplace. <bookmark mark='a'/> Its standard deviation is "
+            "The median's spread has a formula too, found by Laplace. <bookmark mark='a'/> Under regularity conditions, its large-sample standard deviation is approximately "
             "one over twice the density at the median, times root n. Where the data are dense near the middle, the "
             "median is pinned down tightly; where they're sparse, it wanders. <bookmark mark='b'/> For a normal "
             "population the density at the median is one over sigma root two pi, which gives sigma times root pi over "
@@ -173,9 +177,12 @@ class Machine(VoiceoverScene):
             "point one one centimetres, and the simulation says one point one oh. To use the formula on real data we "
             "need to estimate a density, which is the business of Part 29."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.8, buff=1.0, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 

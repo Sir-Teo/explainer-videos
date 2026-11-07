@@ -72,7 +72,7 @@ class NMinus1(VoiceoverScene):
             "<bookmark mark='b'/> Take expectations. The first part is n sigma squared; the subtracted part is n times "
             "the variance of the mean, which is one sigma squared. What's left is n minus one sigma squared. "
             "<bookmark mark='c'/> The sample mean is, by construction, the point closest to the data, so deviations "
-            "from it are too small, by exactly the variance of the mean itself."
+            "about it have an expected total shortfall of n times the variance of the mean, one sigma squared."
         ) as vo:
             step = ladder(self, rows, whys, keep=2, top=2.4, x=-1.0, buff=1.0, edge=6.9)
             vo.wait_until("a")
@@ -139,33 +139,38 @@ class NMinus1(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"degrees of freedom: \ the dimension of the space the residuals live in", font_size=28, color=S.ACCENT),
             MathTex(r"\text{one mean estimated: } n - 1", font_size=30),
-            MathTex(r"\text{a regression with } p \text{ coefficients: } n - p \quad \text{(Part 4's hat matrix; Part 12)}", font_size=30),
+            MathTex(r"\text{a full-rank linear regression with } p \text{ coefficients: } n - p \quad \text{(Part 4's hat matrix; Part 12)}", font_size=30),
             MathTex(r"\text{a } k\text{-group comparison: } n - k \quad \text{(Part 13)}", font_size=30),
-            label(r"each estimated parameter uses up one direction of the data", font_size=26, color=GREY_A),
+            label(r"each independent fitted linear direction uses one residual dimension", font_size=26, color=GREY_A),
         ), 12.6, 0.4, [0, 0.2, 0])
+        intro = label('Independent fitted directions use residual dimensions', font_size=36)
         with self.voiceover(
             "This idea has a name that will follow us through the course. <bookmark mark='a'/> Degrees of freedom: the "
             "dimension of the space the residuals live in. <bookmark mark='b'/> Estimate one mean, lose one dimension: "
-            "n minus one. <bookmark mark='c'/> Fit a regression with p coefficients, and the residuals live in n minus "
+            "n minus one. <bookmark mark='c'/> Fit a full-column-rank linear regression with p coefficients, and the residuals live in n minus "
             "p dimensions, the trace of Part 4's residual projection. <bookmark mark='d'/> Compare k groups, and it's "
-            "n minus k. <bookmark mark='e'/> Each parameter you estimate uses up one direction of the data."
+            "n minus k. <bookmark mark='e'/> Each independent fitted linear direction uses one dimension; redundant coefficients do not."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()
 
     def sbias(self):
         d = load("extras")["c4"]
         rows = [
-            cmath(r"E\,s^2 = \sigma^2", r"\ \text{ but }\ ", r"E\,s < \sigma", font_size=34),
+            cmath(r"E\,s^2 = \sigma^2", r"\ \text{ but }\ ", r"E\,s \le \sigma", font_size=34),
             cmath(r"E\,s", r"=", r"c_4(n)\,\sigma,\quad c_4(n) = \sqrt{\frac{2}{n - 1}}\,\frac{\Gamma(n/2)}{\Gamma((n - 1)/2)}", font_size=30),
             cmath(r"c_4", r":\ ", rf"n = 2:\ {d['2']:.3f},\quad n = 5:\ {d['5']:.3f},\quad n = 30:\ {d['30']:.3f}", font_size=30),
         ]
         rows[0][2].set_color(RESID)
-        whys = [why(r"Jensen (Part 6): \ the square root is concave"), why(r"from the $\chi$ distribution (normal data)"),
+        whys = [why(r"Jensen: strict when $s$ is nonconstant; assume finite variance, $n>1$"), why(r"from the $\chi$ distribution (normal data)"),
                 why(r"quality-control charts divide by $c_4$; \ most of statistics doesn't bother")]
         hist = note(r"Gauss derived the $n - 1$ in 1823; \ Bessel's name stuck to it").to_edge(DOWN, buff=0.5)
+        intro = label('Unbiased variance does not mean unbiased standard deviation', font_size=36)
         with self.voiceover(
             "One subtlety. <bookmark mark='a'/> Dividing by n minus one makes the variance unbiased, but not the "
             "standard deviation. The square root is concave, so by Jensen's inequality from Part 6, the average of s "
@@ -175,9 +180,12 @@ class NMinus1(VoiceoverScene):
             "bother, because unbiasedness isn't preserved by nonlinear functions anyway. The n minus one itself goes "
             "back to Gauss in 1823, though it's usually called Bessel's correction."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.6, buff=1.0, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             self.play(FadeIn(hist))
         self.clear_scene()

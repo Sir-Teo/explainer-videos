@@ -26,7 +26,7 @@ Every number on screen is computed in [`compute.py`](compute.py). The Museum sup
 
 Everything else is the World (seed 1662) or a seeded simulation, and is tagged as such.
 
-**Built in this part:** the first rows of the Coverage Board ([`explainer/stats/board.py`](../../../explainer/stats/board.py)),
+**Built in this part:** the first rows of the Coverage Board ([`explainer/stats/board.py`](../../../../explainer/stats/board.py)),
 written to `.cache/stats8/board.json` by `python -m videos.stats.stats8.compute --force board`. Each row has R = 10,000
 replications.
 
@@ -63,10 +63,10 @@ python tools/lecture_length.py stats8 --floor 50
 | 6 | The F distribution | Definition; shapes; World variance ratios against F₄,₉; ANOVA preview; t² = F, the beta link. | 95% range 0.11 to 4.72 |
 | 7 | Bias, variance, MSE | Dartboards; MSE = Var + bias²; the divisor n + 1; add-two shrinkage for a proportion; the bias–variance trade-off; Cramér–Rao preview. | MSE/σ⁴ at n = 5: 0.500, 0.360, 0.333 for n − 1, n, n + 1; shrinkage wins for 0.21 < p < 0.80 at n = 20 |
 | 8 | Consistency and plug-in | T(F̂ₙ); five plug-in paths converging; Fisher's z for r; consistent vs unbiased; the sample maximum; the bootstrap preview. | Fisher z: SD 0.370 vs 1/√7 = 0.378; E max of 10 from 1,000 = 910 |
-| 9 | Standard errors for ratios | Laplace's 1802 census; the ratio estimator; the delta-method SE; purposive vs random selection; the World version. | 28.35 people per birth → 28.35 million; World: SD 24,195, mean SE 23,214, coverage 91.6% |
-| 10 | Finite populations | The negative covariance of draws without replacement; FPC; simulation; sample-size planning; n, not N. | n₀ = 1,067; N = 2,000: 696; N = 10⁷: 1,067 |
+| 9 | Standard errors for ratios | Laplace's 1802 census; the ratio estimator; the delta-method SE; purposive vs random selection; the World version. | 28.35 people per birth → 28.35 million; World: SD 24,195, mean design-linearized SE 21,402 (FPC included), coverage 89.7% |
+| 10 | Finite populations | The negative covariance of draws without replacement; FPC; simulation; sample-size planning; n, not N. | n₀ = 1,068 after rounding up; N = 2,000: 697; N = 10⁷: 1,067 |
 | 11 | The Coverage Board opens | The protocol; 40 intervals each way; the first seven rows; what they say. | the table above |
-| 12 | How robust is normal theory? | t-test and F-test sizes under four distributions; Var(s²) and kurtosis; one-sided misses under skew; Box (1953). | t: 4.9–5.4% except exponential 10.0% (9.5% low, 0.4% high); F: 1.0% (uniform) to 23.2% (exponential) |
+| 12 | How robust is normal theory? | t-test and F-test sizes under four distributions; Var(s²) and kurtosis (3.7 times the normal-theory variance at n = 10 when excess kurtosis is 6); one-sided misses under skew; Box (1953). | t: 4.9–5.4% except exponential 10.0% (9.5% low, 0.4% high); F: 1.0% (uniform) to 23.2% (exponential) |
 | 13 | Outro | Recap, payoffs, problems, references, the Transcript, Part 9's question. | — |
 
 ## Sources
@@ -95,7 +95,7 @@ python tools/lecture_length.py stats8 --floor 50
 **1. E Σ(xᵢ − x̄)² = (n − 1)σ².**
 
 *Solution.* Σ(xᵢ − x̄)² = Σ(xᵢ − μ)² − n(x̄ − μ)². The cross term is 2(x̄ − μ)Σ(xᵢ − x̄) = 0. Taking expectations
-gives nσ² − n·σ²/n = (n − 1)σ². Only independence and a finite variance are used.
+gives nσ² − n·σ²/n = (n − 1)σ². Identical means and variances, independence, and a finite variance are sufficient.
 
 **2. Two intervals.** n = 9, x̄ = 50, s = 6.
 
@@ -103,7 +103,7 @@ gives nσ² − n·σ²/n = (n − 1)σ². Only independence and a finite varian
 - **For μ:** 50 ± t₈,₀.₉₇₅ · 6/3 = 50 ± 2.306 · 2 = [45.39, 54.61].
 - **For σ²:** [8 · 36/χ²₈,₀.₉₇₅, 8 · 36/χ²₈,₀.₀₂₅] = [288/17.53, 288/2.180] = [16.4, 132.1]. So σ ∈ [4.05, 11.49].
 
-The second interval is only valid for normal data (chapter 4's coverage check).
+Both intervals have exact coverage under IID normal data; the variance interval is especially sensitive to nonnormality (chapter 4's coverage check).
 
 **3. t² = F.**
 
@@ -129,7 +129,7 @@ against 2σ⁴/(n − 1) for the unbiased divisor.
 
 ȳ/x̄ − R = (ȳ − Rx̄)/x̄ ≈ (1/μ_x) · mean(yᵢ − Rxᵢ).
 
-So SE(ȳ/x̄) ≈ (1/μ_x)√((σ_y² − 2Rσ_xy + R²σ_x²)/n). Estimate it by plugging in x̄, R̂ and the sample variance of the
+So SE(ȳ/x̄) ≈ (1/|μ_x|)√((σ_y² − 2Rσ_xy + R²σ_x²)/n). Estimate it by plugging in x̄, R̂ and the sample variance of the
 residuals eᵢ = yᵢ − R̂xᵢ.
 
 **6. A sample size from N = 2,000.**

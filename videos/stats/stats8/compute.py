@@ -57,6 +57,34 @@ def nest(obj):
     return obj
 
 
+def histogram_density(draws, edges):
+    """Displayed bins retain the mass of omitted and infinite tail draws."""
+    return np.histogram(draws, edges)[0] / (len(draws) * np.diff(edges))
+
+
+def clipped_segments(xs, ys, rectangle):
+    """Clip line segments to a rectangle without flattening off-scale values."""
+    xmin, xmax, ymin, ymax = rectangle
+    points = np.column_stack((xs, ys))
+    result = []
+    for start, end in zip(points[:-1], points[1:]):
+        if not np.isfinite([start, end]).all():
+            continue
+        delta = end - start
+        lo, hi = 0.0, 1.0
+        for k, lower, upper in ((0, xmin, xmax), (1, ymin, ymax)):
+            if delta[k] == 0:
+                if not lower <= start[k] <= upper:
+                    hi = -1
+                    break
+            else:
+                a, b = sorted(((lower - start[k]) / delta[k], (upper - start[k]) / delta[k]))
+                lo, hi = max(lo, a), min(hi, b)
+        if lo <= hi:
+            result.append((start + lo * delta, start + hi * delta))
+    return result
+
+
 def crim_heights() -> np.ndarray:
     T = np.asarray(museum.CRIM_TABLE)
     return np.repeat(np.asarray(museum.CRIM_HEIGHT_CM), T.sum(0))
@@ -89,24 +117,24 @@ def compute_student():
     tw = (x.mean(1) - pm) / (x.std(1, ddof=1) / 2)
     T = np.asarray(museum.CRIM_TABLE)
     return nest({"heights": np.asarray(museum.CRIM_HEIGHT_CM), "counts": T.sum(0), "mu": mu, "sigma": sig,
-                 "first": samples[:6], "t": t, "edges": ed, "hist": np.histogram(t, ed, density=True)[0],
+                 "first": samples[:6], "t": t, "edges": ed, "hist": histogram_density(t, ed),
                  "cover_z": cover_z, "cover_t": cover_t, "zq": zq, "tq": tq, "ties": ties,
                  "tail_z": float(np.mean(np.abs(t) > zq)), "world_cover_z": float(np.mean(np.abs(tw) <= zq)),
-                 "world_cover_t": float(np.mean(np.abs(tw) <= tq)), "world_hist": np.histogram(tw, ed, density=True)[0]})
+                 "world_cover_t": float(np.mean(np.abs(tw) <= tq)), "world_hist": histogram_density(tw, ed)})
 
 
 def compute_machine():
     a = W.height[W.adult & W.male]
     mu, sig = float(a.mean()), float(a.std())
     g = rng(81)
-    out = {"mu": mu, "sigma": sig, "values": rng(82).choice(a, 3000, replace=False)}
+    out = {"mu": mu, "sigma": sig, "values": rng(82).choice(a, 3000, replace=False), "values_mean": float(rng(82).choice(a, 3000, replace=False).mean())}
     for n in (4, 16, 64):
         x = a[g.integers(0, len(a), (20000, n))]
         m = x.mean(1)
         md = np.median(x, 1)
         out[str(n)] = {"means": m[:2000], "sd_mean": float(m.std()), "sd_median": float(md.std()),
-                       "hist": np.histogram(m, np.linspace(150, 190, 81), density=True)[0],
-                       "hist_med": np.histogram(md, np.linspace(150, 190, 81), density=True)[0]}
+                       "hist": histogram_density(m, np.linspace(150, 190, 81)),
+                       "hist_med": histogram_density(md, np.linspace(150, 190, 81))}
     out["edges"] = np.linspace(150, 190, 81)
     out["eff"] = {str(n): (out[str(n)]["sd_mean"] / out[str(n)]["sd_median"]) ** 2 for n in (4, 16, 64)}
     return nest(out)
@@ -150,7 +178,7 @@ def compute_chisq():
     for n in (4, 10):
         x = a[g.integers(0, len(a), (20000, n))]
         q = (n - 1) * x.var(1, ddof=1) / sig2
-        out[str(n)] = {"hist": np.histogram(q, out["edges"], density=True)[0], "mean": float(q.mean()), "var": float(q.var())}
+        out[str(n)] = {"hist": histogram_density(q, out["edges"]), "mean": float(q.mean()), "var": float(q.var())}
     xs = np.linspace(0.05, 30, 300)
     out["xs"] = xs
     out["pdf"] = {str(k): stats.chi2.pdf(xs, k) for k in (1, 2, 3, 5, 9, 15)}
@@ -181,7 +209,7 @@ def compute_fdist():
     f = x1.var(1, ddof=1) / x2.var(1, ddof=1)
     ed = np.linspace(0, 6, 61)
     xs = np.linspace(0.01, 6, 300)
-    return nest({"n1": n1, "n2": n2, "edges": ed, "hist": np.histogram(f, ed, density=True)[0], "xs": xs,
+    return nest({"n1": n1, "n2": n2, "edges": ed, "hist": histogram_density(f, ed), "xs": xs,
                  "pdf": stats.f.pdf(xs, n1 - 1, n2 - 1), "q": float(stats.f.ppf(0.975, n1 - 1, n2 - 1)),
                  "q_lo": float(stats.f.ppf(0.025, n1 - 1, n2 - 1)),
                  "shapes": {f"{a_},{b_}": stats.f.pdf(xs, a_, b_) for a_, b_ in ((2, 10), (5, 10), (10, 10), (30, 30))}})
@@ -226,6 +254,14 @@ def compute_plugin():
     return nest({"ns": ns, "truth": truth, "paths": paths})
 
 
+def ratio_total_se(y, x, known_total, sampling_fraction=0.0):
+    """First-order design SE of known_total * mean(y)/mean(x), for SRS."""
+    y, x = np.asarray(y), np.asarray(x)
+    ratio = y.sum() / x.sum()
+    residuals = y - ratio * x
+    return abs(known_total / x.mean()) * np.sqrt((1 - sampling_fraction) * residuals.var(ddof=1) / len(x))
+
+
 def compute_laplace():
     L = museum.LAPLACE
     births = L["sample_births_3yr"] / 3
@@ -245,27 +281,34 @@ def compute_laplace():
         s = g.choice(elig, k, replace=False)
         r = pop[s].sum() / bir[s].sum()
         ests.append(r * B)
-        # delta-method (linearization) SE of the ratio, without the finite-population correction
-        e = pop[s] - r * bir[s]
-        se_r = np.sqrt(np.sum(e ** 2) / (k - 1) / k) / bir[s].mean()
-        ses.append(se_r * B)
+        # design-linearized SE for simple random sampling without replacement
+        ses.append(ratio_total_se(pop[s], bir[s], B, k / len(elig)))
     ests, ses = np.asarray(ests), np.asarray(ses)
     z = (ests - N) / ses
     return nest({"laplace": {"births": births, "ratio": ratio, "estimate": est},
                  "world": {"N": N, "B": B, "ratio_true": N / B, "n_towns": int(keep.sum()), "k": k,
                            "mean_est": float(ests.mean()), "sd_est": float(ests.std()), "mean_se": float(ses.mean()),
-                           "cover": float(np.mean(np.abs(z) <= 1.96)), "ests": ests[:2000],
+                           "cover": float(np.mean(np.abs(z) <= 1.96)), "ests": ests,
                            "pop": pop[keep], "bir": bir[keep]}})
+
+
+def srs_mean_se(population, n, replace=False):
+    """Exact design SD with the population-variance (divisor N) convention."""
+    population = np.asarray(population)
+    n = np.asarray(n)
+    variance = population.var() / n
+    if not replace:
+        variance = variance * (len(population) - n) / (len(population) - 1)
+    return np.sqrt(variance)
 
 
 def compute_fpc():
     a = adult_heights()
     pop = rng(89).choice(a, 400, replace=False)
     N = len(pop)
-    sig = pop.std(ddof=1)
     ns = np.arange(1, N + 1)
-    se_wr = sig / np.sqrt(ns)
-    se_wor = se_wr * np.sqrt((N - ns) / (N - 1))
+    se_wr = srs_mean_se(pop, ns, replace=True)
+    se_wor = srs_mean_se(pop, ns)
     g = rng(90)
     sim_ns = [10, 50, 100, 200, 300, 380]
     sim = []
@@ -360,7 +403,7 @@ def compute_extras():
     N, nn = 1000, 10
     mx = np.array([g.choice(N, nn, replace=False).max() + 1 for _ in range(20000)])
     out["maximum"] = {"N": N, "n": nn, "mean_max": float(mx.mean()), "theory": N * nn / (nn + 1) + nn / (nn + 1),
-                      "hist": np.histogram(mx, np.linspace(500, 1000, 51), density=True)[0], "edges": np.linspace(500, 1000, 51),
+                      "hist": histogram_density(mx, np.linspace(500, 1000, 51)), "edges": np.linspace(500, 1000, 51),
                       "fixed_mean": float((mx * (1 + 1 / nn) - 1).mean())}
     # 40 intervals from samples of 5 heights: z with s vs t
     h = adult_heights()
@@ -388,17 +431,18 @@ def compute_extras2():
     tall = h > 180
     p = float(tall.mean())
     g = rng(94)
-    ph = tall[g.integers(0, len(h), (20000, 100))].mean(1)
+    counts = tall[g.integers(0, len(h), (20000, 100))].sum(1)
+    ph = counts / 100
     out["prop"] = {"p": p, "se": float(np.sqrt(p * (1 - p) / 100)), "sim": float(ph.std()),
-                   "hist": np.bincount((ph * 100).astype(int), minlength=101)[:60] / 20000}
+                   "hist": np.bincount(counts, minlength=101) / 20000}
     # Fisher's z for the correlation: samples of 10 from a bivariate normal with rho = 0.8
     rho, n = 0.8, 10
     L = np.linalg.cholesky(np.array([[1, rho], [rho, 1]]))
     z = g.standard_normal((20000, n, 2)) @ L.T
     r = np.array([np.corrcoef(a[:, 0], a[:, 1])[0, 1] for a in z])
     zr = np.arctanh(r)
-    out["fisherz"] = {"rho": rho, "n": n, "r_hist": np.histogram(r, np.linspace(-0.2, 1, 61), density=True)[0],
-                      "z_hist": np.histogram(zr, np.linspace(-0.4, 2.4, 57), density=True)[0], "r_mean": float(r.mean()),
+    out["fisherz"] = {"rho": rho, "n": n, "r_hist": histogram_density(r, np.linspace(-0.2, 1, 61)),
+                      "z_hist": histogram_density(zr, np.linspace(-0.4, 2.4, 57)), "r_mean": float(r.mean()),
                       "z_sd": float(zr.std()), "z_sd_theory": float(1 / np.sqrt(n - 3)), "z_mean": float(zr.mean()),
                       "atanh_rho": float(np.arctanh(rho)), "r_edges": np.linspace(-0.2, 1, 61), "z_edges": np.linspace(-0.4, 2.4, 57),
                       "r_skew": float(stats.skew(r)), "z_skew": float(stats.skew(zr))}

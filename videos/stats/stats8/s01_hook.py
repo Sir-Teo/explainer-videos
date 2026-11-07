@@ -74,8 +74,8 @@ class Hook(VoiceoverScene):
             "prisons, measured to the inch. <bookmark mark='b'/> He wrote each man's height on a piece of card, "
             "three thousand cards. Shuffled them thoroughly. <bookmark mark='c'/> And dealt them out in fours: seven "
             "hundred and fifty samples of four men. <bookmark mark='d'/> For each four he computed the mean, the "
-            "standard deviation, and the ratio of the mean's error to its estimated standard error. It was the first "
-            "Monte Carlo study of a statistical method, done by hand."
+            "standard deviation, and the ratio of the mean's error to its estimated standard error. It was an early "
+            "simulation study of a statistical method, done by hand."
         ) as vo:
             self.play(FadeIn(A), FadeIn(src))
             vo.wait_until("a")
@@ -93,10 +93,10 @@ class Hook(VoiceoverScene):
         ed, hist = np.asarray(d["edges"]), np.asarray(d["hist"])
         t_ = load("tdist")
         xs = np.asarray(t_["xs"])
-        A = axes([-6, 6], [0, 0.45], x_length=7.6, y_length=4.4, xlabel=r"$t = (\bar x - \mu)/(s/\sqrt 4)$",
-                 xticks=[-6, -4, -2, 0, 2, 4, 6], yticks=[0, 0.2, 0.4], center=[-2.0, -0.4, 0])
+        A = axes([-6, 6], [0, 0.62], x_length=7.6, y_length=4.4, xlabel=r"$t = (\bar x - \mu)/(s/\sqrt 4)$",
+                 xticks=[-6, -4, -2, 0, 2, 4, 6], yticks=[0, 0.2, 0.4, 0.6], center=[-2.0, -0.4, 0])
         ax = A.ax
-        h = hist_bars(ax, ed, np.clip(hist, 0, 0.45), color=DATA, opacity=0.65)
+        h = hist_bars(ax, ed, hist, color=DATA, opacity=0.65)
         nrm = curve(ax, xs, np.asarray(t_["normal"]), NORMAL, 3)
         t3 = curve(ax, xs, np.asarray(t_["pdf"]["3"]), EXACT, 3.5)
         leg = legend([(NORMAL, r"the normal curve"), (EXACT, r"Student's curve, \ $t_3$")], font_size=22).move_to([4.6, 2.1, 0])
@@ -115,7 +115,7 @@ class Hook(VoiceoverScene):
             f"point nine six, covers the true mean only {100 * d['cover_z']:.0f} percent of the time, not ninety-five. "
             "<bookmark mark='c'/> Gosset found the right curve, partly by inspired guesswork that Fisher later made "
             "rigorous: Student's t distribution with three degrees of freedom, in gold, which follows the histogram. Its multiplier is three point one eight, and with it the "
-            f"interval covers {100 * d['cover_t']:.0f} percent; slightly over, because the heights were rounded to "
+            f"interval covers {100 * d['cover_t']:.0f} percent. This is a single shuffled, rounded finite population, not an exact normal sampling model; heights were recorded in "
             "whole inches. <bookmark mark='d'/> The same experiment on three thousand residents of the World tells the "
             "same story. The tails are heavy because, now and then, four men happen to be similar in height, s comes "
             "out far too small, and the ratio explodes."
@@ -172,6 +172,7 @@ class Hook(VoiceoverScene):
             label(r"1907: \ counting yeast cells with a haemocytometer \ \textemdash{} \ he rediscovered the Poisson law (Part 3)",
                   font_size=24, color=GREY_A),
         ), 12.6, 0.36, [0, 0.2, 0])
+        intro = label("A brewer's small-sample problem", font_size=36)
         with self.voiceover(
             "Gosset's problems were real ones. <bookmark mark='a'/> In a 1904 report to the Guinness board he set out "
             "to apply the law of error to the work of the brewery. <bookmark mark='b'/> His experiments compared barley "
@@ -181,7 +182,10 @@ class Hook(VoiceoverScene):
             "of hundreds, not a brewer's handful. <bookmark mark='e'/> The same year he studied counts of yeast cells "
             "under a microscope, and rediscovered the Poisson distribution of Part 3."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()

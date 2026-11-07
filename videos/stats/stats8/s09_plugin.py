@@ -33,10 +33,11 @@ class PlugIn(VoiceoverScene):
             cmath(r"\int (x - \mu)^2 dF", r"\ \to\ ", r"\tfrac1n \textstyle\sum (x_i - \bar x)^2", font_size=30),
         ]
         rows[1][2].set_color(SIM)
-        whys = [why(r"a statistical functional"), why(r"plug in the empirical distribution"), why(r"every familiar summary is a plug-in"),
+        whys = [why(r"a statistical functional"), why(r"plug in the empirical distribution"), why(r"these summaries follow the plug-in principle"),
                 why(r"the variance, \ with divisor $n$")]
         note_ = label(r"(the plug-in variance divides by $n$: \ chapter 2's small bias, \ which vanishes as $n$ grows)", font_size=22,
                       color=GREY_B).to_edge(DOWN, buff=0.8)
+        intro = label('Apply a population summary to the empirical distribution', font_size=36)
         with self.voiceover(
             "How do we invent estimators in the first place? The simplest answer is a principle. <bookmark mark='a'/> "
             "Most quantities we care about are features of the population's distribution: its mean, its median, its "
@@ -46,9 +47,12 @@ class PlugIn(VoiceoverScene):
             "median; the variance, the average squared deviation, with divisor n, and so a small bias that disappears "
             "as n grows."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.6, buff=0.8, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             step(3, transform=False)
             self.play(FadeIn(note_))
@@ -66,26 +70,29 @@ class PlugIn(VoiceoverScene):
             A = axes([1, 4], [-lim, lim], x_length=3.6, y_length=1.9, xticks=[1, 2, 3, 4], yticks=[-lim, 0, lim],
                      xfmt=lambda v: f"10^{{{int(v)}}}", center=[-4.4 + 4.4 * (k % 3), 1.3 - 3.0 * (k // 3), 0], font_size=16)
             zero = DashedLine(A.ax.c2p(1, 0), A.ax.c2p(4, 0), color=EXACT, stroke_width=1.5)
-            ln = polyline(A.ax, np.log10(ns), np.clip(dev, -lim, lim), c, 2.5)
+            ln = polyline(A.ax, np.log10(ns), dev, c, 2.5)
             t = label(nm, font_size=22, color=c).next_to(A, UP, buff=0.08)
             panels.add(VGroup(A, zero, ln, t))
         side = fit_rows(VGroup(
             label(r"relative error of the plug-in estimate \ (difference, for $r$)", font_size=20, color=GREY_A),
             label(r"one sample from the World, \ growing from 10 to 10,000", font_size=20, color=GREY_A),
-            label(r"every path settles on zero: \ consistency", font_size=22, color=S.ACCENT),
+            label(r"finite paths approach zero; \ consistency is an asymptotic property", font_size=22, color=S.ACCENT),
         ), 3.8, 0.2, [4.4, -1.7, 0])
         tag = simulated_tag()
+        intro = label('Follow estimates as the sample grows', font_size=36)
         with self.voiceover(
             "Plug-in estimators are consistent, under mild conditions. <bookmark mark='a'/> Take one sample from the "
             "World and let it grow from ten people to ten thousand, recomputing five estimates as it grows: the mean and "
             "standard deviation of height, the median and interquartile range of income, and the father–son "
             "correlation. Each panel shows the error, relative to the truth. <bookmark mark='b'/> Every path wanders "
             "early and settles on zero: the estimates converge to the population values. The empirical CDF converges "
-            "to the true CDF, uniformly, by the Glivenko–Cantelli theorem of Part 48, and any feature that depends "
-            "continuously on the CDF follows it."
+            "to the true CDF, uniformly, by the Glivenko–Cantelli theorem of Part 48, and a feature continuous in the relevant topology follows it. Means and variances also require moment control; quantiles require uniqueness and continuity. It is not true that every feature follows merely from "
+            "uniform CDF convergence."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tag))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(*[FadeIn(p[0]) for p in panels], *[FadeIn(p[3]) for p in panels], *[Create(p[1]) for p in panels])
             vo.wait_until("b")
             self.play(*[Create(p[2]) for p in panels], FadeIn(side), run_time=3.0)
@@ -99,6 +106,7 @@ class PlugIn(VoiceoverScene):
             MathTex(r"x_1 \text{ alone}:\ \text{unbiased for } \mu,\ \text{not consistent}", font_size=28),
             label(r"consistency is the least we ask; \ Part 9 asks how fast, \ and how efficiently", font_size=24, color=GREY_A),
         ), 12.6, 0.38, [0, 0.2, 0])
+        intro = label('Unbiasedness and consistency are different properties', font_size=36)
         with self.voiceover(
             "<bookmark mark='a'/> An estimator that converges in probability to the truth is called consistent. "
             "<bookmark mark='b'/> Notice that this is a different property from unbiasedness. <bookmark mark='c'/> The "
@@ -107,8 +115,11 @@ class PlugIn(VoiceoverScene):
             "not consistent. <bookmark mark='e'/> Consistency is the least we should ask of an estimator. Part 9 asks "
             "how fast it converges, and whether any estimator could do better."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()
 
@@ -124,7 +135,7 @@ class PlugIn(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"plug-in for $N$: \ the sample maximum", font_size=24),
             MathTex(rf"E\max = \frac{{n}}{{n + 1}}(N + 1) = {d['theory']:.0f}", font_size=28, color=RESID),
-            label(r"always too small", font_size=24, color=GREY_A),
+            label(r"never above $N$; \ downward biased", font_size=24, color=GREY_A),
             MathTex(rf"\max \cdot \Big(1 + \frac1n\Big) - 1:\ \text{{average }} {d['fixed_mean']:.0f}", font_size=28, color=EXACT),
             label(r"the German tank problem: \ Part 9", font_size=24, color=S.ACCENT),
         ), 5.0, 0.3, [3.9, 0.2, 0])
@@ -132,9 +143,9 @@ class PlugIn(VoiceoverScene):
         with self.voiceover(
             "Plug-in has its limits. <bookmark mark='a'/> Suppose objects carry serial numbers one to N, and we see ten "
             "of them at random. To estimate N, the plug-in answer is the largest serial number in the sample. "
-            "<bookmark mark='b'/> It's always too small: the sample maximum can never exceed the true maximum, and on "
+            "<bookmark mark='b'/> It can equal the endpoint but can never exceed the true maximum, and on "
             "average, with ten serials out of a thousand, it's nine hundred and ten. <bookmark mark='c'/> A small "
-            "correction, scaling up by one plus one over n and subtracting one, removes the bias almost exactly. Where "
+            "correction, scaling up by one plus one over n and subtracting one, is exactly unbiased under simple random sampling without replacement. Where "
             "that correction comes from, and why it's the best possible, is the opening story of Part 9: the German "
             "tank problem."
         ) as vo:
@@ -149,9 +160,9 @@ class PlugIn(VoiceoverScene):
 
     def fisherz(self):
         d = load("extras2")["fisherz"]
-        A = axes([-0.2, 1], [0, 3.6], x_length=5.2, y_length=3.8, xlabel=r"$r$, \ samples of 10, \ $\rho = 0.8$", xticks=[0, 0.5, 1],
-                 yticks=[0, 1, 2, 3], center=[-3.6, -0.4, 0])
-        h1 = hist_bars(A.ax, np.asarray(d["r_edges"]), np.clip(np.asarray(d["r_hist"]), 0, 3.6), color=S.ACCENT, opacity=0.7)
+        A = axes([-0.2, 1], [0, 4.3], x_length=5.2, y_length=3.8, xlabel=r"$r$, \ samples of 10, \ $\rho = 0.8$", xticks=[0, 0.5, 1],
+                 yticks=[0, 1, 2, 3, 4], center=[-3.6, -0.4, 0])
+        h1 = hist_bars(A.ax, np.asarray(d["r_edges"]), np.asarray(d["r_hist"]), color=S.ACCENT, opacity=0.7)
         B = axes([-0.4, 2.4], [0, 1.2], x_length=5.2, y_length=3.8, xlabel=r"$z = \tanh^{-1} r$", xticks=[0, 1, 2], yticks=[0, 0.5, 1],
                  center=[2.6, -0.4, 0])
         h2 = hist_bars(B.ax, np.asarray(d["z_edges"]), np.asarray(d["z_hist"]), color=SIM, opacity=0.7)
@@ -161,15 +172,15 @@ class PlugIn(VoiceoverScene):
             MathTex(rf"\text{{skewness}}\ {d['r_skew']:.2f}", font_size=26, color=S.ACCENT).next_to(A, UP, buff=0.15),
             MathTex(rf"\text{{skewness}}\ {d['z_skew']:.2f},\ \ \mathrm{{SD}}\ {d['z_sd']:.3f} \approx \tfrac{{1}}{{\sqrt{{n - 3}}}} = {d['z_sd_theory']:.3f}",
                     font_size=24, color=SIM).next_to(B, UP, buff=0.15))
-        foot = label(r"Fisher (1915, 1921): \ a transformation that makes the sampling distribution normal, \ with a known SE", font_size=22,
+        foot = label(r"Fisher (1915, 1921): \ a transformation that approximately normal for bivariate-normal data; \ SE $\approx1/\sqrt{n-3}$", font_size=22,
                      color=GREY_A).to_edge(DOWN, buff=0.3)
         tag = note(r"simulated: 20,000 samples").to_corner(UR, buff=0.25)
         with self.voiceover(
             "Plug-in estimates can have awkward sampling distributions, and sometimes a transformation tames them. "
-            "<bookmark mark='a'/> The sample correlation, with ten pairs from a population whose correlation is point "
+            "<bookmark mark='a'/> The sample correlation, with ten independent bivariate-normal pairs whose correlation is point "
             "eight, is squeezed against its ceiling of one and badly skewed. <bookmark mark='b'/> Fisher's 1915 paper, the "
             "one that introduced his geometry, found the cure: take the inverse hyperbolic tangent. The transformed "
-            "values are almost exactly normal, with standard deviation one over root n minus three, whatever the true "
+            "values are approximately normal, with an approximate standard deviation of one over root n minus three; finite-sample bias and accuracy still depend on the true "
             "correlation. Intervals are built on that scale and transformed back."
         ) as vo:
             self.play(FadeIn(A), FadeIn(tag))
@@ -186,17 +197,21 @@ class PlugIn(VoiceoverScene):
             MathTex(r"\Rightarrow\ \text{estimate it by } \mathrm{SE}_{\hat F_n}(\hat\theta)", font_size=30, color=SIM),
             label(r"compute it by simulation: \ resample the data with replacement (Part 7's inverted ECDF), \ recompute, \ repeat",
                   font_size=24, color=GREY_A),
-            label(r"Efron's bootstrap (1979): \ a standard error for almost anything \ \textemdash{} \ Part 16", font_size=26, color=S.ACCENT),
+            label(r"Efron's bootstrap (1979): \ a resampling standard error under regularity conditions \ \textemdash{} \ Part 16", font_size=26, color=S.ACCENT),
         ), 12.6, 0.36, [0, 0.2, 0])
+        intro = label('Estimate sampling uncertainty by resampling', font_size=36)
         with self.voiceover(
             "The plug-in principle has a second, more powerful use. <bookmark mark='a'/> Apply it one level up. "
             "<bookmark mark='b'/> The standard error of any estimator is itself a feature of the unknown population. "
             "<bookmark mark='c'/> So estimate it by the same feature of the sample's distribution. <bookmark mark='d'/> "
             "There's rarely a formula, but there's always a simulation: draw new samples from the data itself, with "
             "replacement, recompute the estimator each time, and measure the spread. <bookmark mark='e'/> That is "
-            "Bradley Efron's bootstrap of 1979, a standard error for almost anything, and the subject of Part 16."
+            "Bradley Efron's bootstrap of 1979, a resampling standard error under regularity conditions, and the subject of Part 16."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()

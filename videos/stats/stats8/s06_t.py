@@ -35,6 +35,7 @@ class StudentT(VoiceoverScene):
                 why(r"the integral is a gamma integral (Part 3)")]
         foot = label(r"a scale mixture of normals: \ the uncertainty in $s$ fattens the tails", font_size=26, color=S.ACCENT)
         foot.to_edge(DOWN, buff=0.25)
+        intro = label('Average a normal density over an independent scale', font_size=36)
         with self.voiceover(
             "Now the derivation. <bookmark mark='a'/> The t statistic is a standard normal divided by the square root "
             "of an independent chi-squared over its degrees of freedom: the mean's coordinate, over the deviations' "
@@ -44,9 +45,12 @@ class StudentT(VoiceoverScene):
             "density: a power of one plus t squared over k. <bookmark mark='d'/> It's a scale mixture of normals. "
             "Uncertainty about the scale is what fattens the tails."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.6, buff=0.8, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             vo.wait_until("d")
             self.play(FadeIn(foot))
@@ -68,7 +72,7 @@ class StudentT(VoiceoverScene):
         ), 5.0, 0.22, [4.6, -1.8, 0])
         with self.voiceover(
             "Here's the family. <bookmark mark='a'/> With one degree of freedom, it's the Cauchy, Part 6's distribution "
-            "whose average never settles: the chance of exceeding two is thirty percent. <bookmark mark='b'/> With "
+            "whose average never settles: the chance of an absolute value exceeding two is thirty percent. <bookmark mark='b'/> With "
             "three, ten and thirty degrees of freedom the tails thin out, <bookmark mark='c'/> and in the limit the t "
             "distribution becomes the normal, because s converges to sigma, which is Part 6's Slutsky argument. By "
             "thirty degrees of freedom the two are hard to tell apart in the middle, though not far out in the tails."
@@ -86,12 +90,12 @@ class StudentT(VoiceoverScene):
         d = load("tdist")
         q = d["q975"]
         ks = [1, 2, 3, 4, 5, 9, 20, 60, 120]
-        A = axes([0, np.log10(150)], [1.8, 4.6], x_length=7.4, y_length=4.2, xlabel=r"degrees of freedom $k$ (log scale)",
-                 ylabel=r"$t_{k,\,0.975}$", xticks=[0, 1, 2], yticks=[2, 3, 4], xfmt=lambda v: f"10^{{{int(v)}}}", center=[-2.0, -0.4, 0])
+        A = axes([0, np.log10(150)], [1.8, 13.5], x_length=7.4, y_length=4.2, xlabel=r"degrees of freedom $k$ (log scale)",
+                 ylabel=r"$t_{k,\,0.975}$", xticks=[0, 1, 2], yticks=[2, 5, 10, 13], xfmt=lambda v: f"10^{{{int(v)}}}", center=[-2.0, -0.4, 0])
         ax = A.ax
-        pts = VGroup(*[Dot(ax.c2p(np.log10(k), min(q[str(k)], 4.6)), radius=0.08, color=EXACT) for k in ks])
-        labs = VGroup(*[MathTex(f"{q[str(k)]:.2f}", font_size=20, color=GREY_A).next_to(ax.c2p(np.log10(k), min(q[str(k)], 4.6)), UR, buff=0.05)
-                        for k in ks if k in (2, 3, 4, 9, 30, 120) or k == 120])
+        pts = VGroup(*[Dot(ax.c2p(np.log10(k), q[str(k)]), radius=0.08, color=EXACT) for k in ks])
+        labs = VGroup(*[MathTex(f"{q[str(k)]:.2f}", font_size=20, color=GREY_A).next_to(ax.c2p(np.log10(k), q[str(k)]), UR, buff=0.05)
+                        for k in ks if k in (1, 3, 9, 120)])
         z = DashedLine(ax.c2p(0, 1.96), ax.c2p(np.log10(150), 1.96), color=GREY_B, stroke_width=2)
         zl = MathTex(r"1.96", font_size=24, color=GREY_B).next_to(ax.c2p(np.log10(150), 1.96), RIGHT, buff=0.1)
         rows = fit_rows(VGroup(
@@ -135,7 +139,7 @@ class StudentT(VoiceoverScene):
             MathTex(rf"95\%:\ {d['mean']:.2f} \pm 2.26 \times {d['sd'] / np.sqrt(10):.2f} = [{d['ci'][0]:.2f},\ {d['ci'][1]:.2f}]",
                     font_size=26, color=EXACT),
             MathTex(rf"P(|t_9| \ge {d['t']:.2f}) = {d['p_t']:.4f}\quad \text{{vs normal }} {d['p_z']:.5f}", font_size=24, color=GREY_A),
-            label(r"pairing: \ each patient is his own control (Part 13)", font_size=22, color=GREY_A),
+            label(r"paired analysis: IID approximately normal differences; \ each patient is their own control", font_size=22, color=GREY_A),
         ), 5.6, 0.3, [3.6, 0.2, 0])
         src = historical_tag(r"Cushny \& Peebles (1905), \ in Student (1908)", corner=DL)
         with self.voiceover(
@@ -145,7 +149,7 @@ class StudentT(VoiceoverScene):
             "standard deviation of one point two three. <bookmark mark='c'/> The t statistic is four point oh six on "
             "nine degrees of freedom, and the ninety-five percent interval runs from point seven to two point four six "
             "hours. <bookmark mark='d'/> Treating t as normal would have overstated the evidence: a tail probability of "
-            "five in a hundred thousand, where the right answer is about three in a thousand. Comparing each patient "
+            "five in a hundred thousand, where the normal-differences t model gives about three in a thousand. Comparing each patient "
             "with himself, a paired design, is an idea Part 13 develops."
         ) as vo:
             self.play(FadeIn(A), Create(zero), FadeIn(src))
@@ -170,6 +174,7 @@ class StudentT(VoiceoverScene):
             label(r"patients differ a lot from each other; \ pairing subtracts that variation out", font_size=24, color=S.ACCENT),
             label(r"the design decides the analysis: \ Part 10 (two-sample tests), \ Part 13 (blocking)", font_size=22, color=GREY_A),
         ), 12.6, 0.35, [0, 0.2, 0])
+        intro = label('Ignoring the pairing changes the analysis', font_size=36)
         with self.voiceover(
             "What if Student had ignored the pairing? <bookmark mark='a'/> Treat the same twenty numbers as two "
             "independent groups of ten. <bookmark mark='b'/> The two-sample t statistic is only one point eight six, "
@@ -179,7 +184,10 @@ class StudentT(VoiceoverScene):
             "subtracts that variation out. <bookmark mark='e'/> The way the data were collected decides the right "
             "analysis, a theme of Parts 10 and 13."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k] if k < 4 else rows[4:], shift=RIGHT * 0.2))
         self.clear_scene()
