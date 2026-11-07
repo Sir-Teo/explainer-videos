@@ -50,9 +50,9 @@ class Metropolis(VoiceoverScene):
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.8, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                step(k, transform=False)
                 if k == 0:
                     self.play(FadeOut(intro), run_time=0.25)
-                step(k, transform=False)
         self.clear_scene()
 
     def why_works(self):
@@ -65,6 +65,7 @@ class Metropolis(VoiceoverScene):
         rows[2][2].set_color(POST)
         whys = [why(r"flow from $\theta$ to $\theta'$, \ symmetric $q$"), why(r"equals the flow back"),
                 why(r"the posterior is the chain's long-run distribution"), why(r"Part 7's ergodic theorem")]
+        intro = label('Detailed balance preserves the target distribution', font_size=36)
         with self.voiceover(
             "Why does it work? <bookmark mark='a'/> With a symmetric proposal, the probability flow from theta to theta prime, "
             "in equilibrium, is the smaller of the two posterior values times the proposal density. <bookmark mark='b'/> That's "
@@ -72,10 +73,13 @@ class Metropolis(VoiceoverScene):
             "chain's stationary distribution. <bookmark mark='d'/> With irreducibility, appropriate recurrence and integrability, averages along the chain converge to posterior "
             "expectations, though successive draws are correlated, which is the price."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def steps(self):
@@ -224,11 +228,10 @@ class Metropolis(VoiceoverScene):
             "plausible. <bookmark mark='d'/> And practical questions get direct "
             "answers: the posterior probability that ten degrees of cold multiplies the odds of distress by more than five."
         ) as vo:
+            intro.scale_to_fit_width(min(intro.width, 12.5)).move_to([0, 3.2, 0])
             self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
-                if k == 0:
-                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()

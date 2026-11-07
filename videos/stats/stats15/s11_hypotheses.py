@@ -44,9 +44,9 @@ class Hypotheses(VoiceoverScene):
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                step(k, transform=False)
                 if k == 0:
                     self.play(FadeOut(intro), run_time=0.25)
-                step(k, transform=False)
         self.clear_scene()
 
     def coin(self):
@@ -131,9 +131,9 @@ class Hypotheses(VoiceoverScene):
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                step(k, transform=False)
                 if k == 0:
                     self.play(FadeOut(intro), run_time=0.25)
-                step(k, transform=False)
         self.clear_scene()
 
     def scale(self):
@@ -176,6 +176,7 @@ class Hypotheses(VoiceoverScene):
         rows[2][2].set_color(POST)
         whys = [why(r"boys and girls equally likely, \ or not"), why(r"the hook's data"), why(r"far beyond Jeffreys's ``decisive'' 100"),
                 why(r"when the data are overwhelming, \ every method agrees")]
+        intro = label('Compare the two models using the birth counts', font_size=36)
         with self.voiceover(
             "The other extreme. <bookmark mark='a'/> Test Laplace's question as a pair of hypotheses: boys and girls exactly "
             "equally likely, or a chance of a boy that could be anything. <bookmark mark='b'/> With the Paris births, "
@@ -183,8 +184,11 @@ class Hypotheses(VoiceoverScene):
             "the same thing; it's in the borderline cases, like sixty heads in a hundred, that they part company, and that's "
             "where the care is needed."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
