@@ -1,0 +1,95 @@
+{
+ "video": "stats25",
+ "scene": "GLMM",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 7,
+ "lines": [
+  {
+   "raw": "Chapter ten. Generalized linear mixed models.",
+   "spoken": "Chapter ten. Generalized linear mixed models.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/6f3b616fecc594f8.wav",
+   "duration": 3.575,
+   "tokens": 6,
+   "peak": 0.3695068359375,
+   "issues": [],
+   "elapsed": 0.04,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Put a random effect inside Part 24's logistic regression: each school shifts the log odds of passing by its own amount. <bookmark mark='b'/> The likelihood averages each school's probability of its pupils' results over the distribution of its effect, <bookmark mark='c'/> and unlike the linear case the integral has no closed form, one for every school. <bookmark mark='d'/> Norman Breslow and David Clayton's penalized quasi-likelihood of 1993 linearizes and iterates, but it can be substantially biased for binary data with small clusters; the direction need not be the same for every parameter, so modern software integrates directly.",
+   "spoken": "Put a random effect inside Part 24's logistic regression: each school shifts the log odds of passing by its own amount. The likelihood averages each school's probability of its pupils' results over the distribution of its effect, and unlike the linear case the integral has no closed form, one for every school. Norman Breslow and David Clayton's penalized quasi-likelihood of 1993 linearizes and iterates, but it can be substantially biased for binary data with small clusters; the direction need not be the same for every parameter, so modern software integrates directly.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/42ada5061d06bf9c.wav",
+   "duration": 38.025,
+   "tokens": 91,
+   "peak": 0.54571533203125,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Each school's integrand is a bump in its random effect; here a small school of four pupils who all passed, whose bump is lopsided. <bookmark mark='b'/> The Laplace approximation of Part 22 replaces it with a normal curve at its peak, matched in curvature, and integrates that exactly. <bookmark mark='c'/> Adaptive Gauss–Hermite quadrature, from José Pinheiro and Douglas Bates, places a few nodes around the same peak with the same scale, and adds up the integrand at them with weights. <bookmark mark='d'/> With one node it is the Laplace approximation; increasing the node count improves the approximation only when numerical checks confirm stability. Ten nodes are not a universal accuracy guarantee.",
+   "spoken": "Each school's integrand is a bump in its random effect; here a small school of four pupils who all passed, whose bump is lopsided. The Laplace approximation of Part 22 replaces it with a normal curve at its peak, matched in curvature, and integrates that exactly. Adaptive Gauss–Hermite quadrature, from José Pinheiro and Douglas Bates, places a few nodes around the same peak with the same scale, and adds up the integrand at them with weights. With one node it is the Laplace approximation; increasing the node count improves the approximation only when numerical checks confirm stability. Ten nodes are not a universal accuracy guarantee.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/f9d96ac0815b83d5.wav",
+   "duration": 40.425,
+   "tokens": 105,
+   "peak": 0.7117919921875,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Part 24's forty schools again, with passing meaning a score above five fifty. <bookmark mark='b'/> The Laplace fit gives a programme effect of point four three eight on the log odds, a school standard deviation of point seven oh. <bookmark mark='c'/> Ten-node quadrature agrees to the third decimal: with sixty pupils per school, each integrand is nearly normal already. With five pupils per school, they would differ. <bookmark mark='d'/> Part 24's GEE estimates were smaller, point four oh five, and that is not an error: it answers a different question.",
+   "spoken": "Part 24's forty schools again, with passing meaning a score above five fifty. The Laplace fit gives a programme effect of point four three eight on the log odds, a school standard deviation of point seven oh. Ten-node quadrature agrees to the third decimal: with sixty pupils per school, each integrand is nearly normal already. With five pupils per school, they would differ. Part 24's GEE estimates were smaller, point four oh five, and that is not an error: it answers a different question.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/ee0fef80b312e087.wav",
+   "duration": 31.325,
+   "tokens": 84,
+   "peak": 0.6737060546875,
+   "issues": [],
+   "elapsed": 0.05,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The mixed model's coefficients are conditional: they describe a pupil's odds within a given school. Each grey curve is a school. <bookmark mark='b'/> Green is the typical school. <bookmark mark='c'/> Averaging the curves over all schools gives the yellow curve, a population-averaged probability. GEE fits a working marginal mean; a logistic-normal mixture need not be exactly logistic, and an average of steep logistic curves is a flatter one; the picture uses a large school spread to make the flattening visible. <bookmark mark='d'/> Its slope is smaller by about the square root of one plus point three four six times the school variance, a result of Scott Zeger, Kung-Yee Liang and Paul Albert. <bookmark mark='e'/> The predicted and observed ratios happen to be close here. Noncollapsibility, mean-model approximation and different working targets all matter; this is not an exact conversion or a causal policy effect.",
+   "spoken": "The mixed model's coefficients are conditional: they describe a pupil's odds within a given school. Each grey curve is a school. Green is the typical school. Averaging the curves over all schools gives the yellow curve, a population-averaged probability. GEE fits a working marginal mean; a logistic-normal mixture need not be exactly logistic, and an average of steep logistic curves is a flatter one; the picture uses a large school spread to make the flattening visible. Its slope is smaller by about the square root of one plus point three four six times the school variance, a result of Scott Zeger, Kung-Yee Liang and Paul Albert. The predicted and observed ratios happen to be close here. Noncollapsibility, mean-model approximation and different working targets all matter; this is not an exact conversion or a causal policy effect.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/28c224c42e3a269e.wav",
+   "duration": 51.575,
+   "tokens": 136,
+   "peak": 0.677825927734375,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Shrinkage matters most where rankings carry consequences. The World's sixty hospitals each perform an operation between seventeen and nearly nine hundred times a year, and newspapers rank them by death rate. <bookmark mark='b'/> The average is four point one percent. <bookmark mark='c'/> David Spiegelhalter's funnel plot draws the range an average hospital would show by chance, wide for small hospitals and narrow for large ones. <bookmark mark='d'/> The five worst hospitals by raw rate, in red, <bookmark mark='e'/> are led by two tiny ones, nineteen operations each, where three deaths make a rate of sixteen percent and two make eleven. Both sit inside the outer funnel: the normal reference is compatible with chance. It is only an approximation, especially for such small expected counts.",
+   "spoken": "Shrinkage matters most where rankings carry consequences. The World's sixty hospitals each perform an operation between seventeen and nearly nine hundred times a year, and newspapers rank them by death rate. The average is four point one percent. David Spiegelhalter's funnel plot draws the range an average hospital would show by chance, wide for small hospitals and narrow for large ones. The five worst hospitals by raw rate, in red, are led by two tiny ones, nineteen operations each, where three deaths make a rate of sixteen percent and two make eleven. Both sit inside the outer funnel: the normal reference is compatible with chance. It is only an approximation, especially for such small expected counts.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/a62ad99fea6880c4.wav",
+   "duration": 45.175,
+   "tokens": 116,
+   "peak": 0.72509765625,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Fit a random-intercept logistic model with no predictors and rank the hospitals by their shrunk rates. <bookmark mark='b'/> The raw table's five worst include one hospital truly among the ten worst; the shrunk table's include two, and every one of its five has at least two hundred operations, where a high rate is evidence. The tiny hospitals drop out: two deaths in nineteen operations is not evidence of a bad hospital by itself: small samples are noisy, and these results do not rule out a truly high underlying risk. <bookmark mark='c'/> Over all sixty, these rates, obtained by transforming conditional modes rather than posterior mean probabilities, are about seven times closer to the truth in mean squared error. <bookmark mark='d'/> But look at the ranks: even shrunk, their correlation with the true ranking is only point three eight. With true differences this small, a league table is mostly noise, as Harvey Goldstein and David Spiegelhalter warned in 1996; report intervals for ranks, not ranks.",
+   "spoken": "Fit a random-intercept logistic model with no predictors and rank the hospitals by their shrunk rates. The raw table's five worst include one hospital truly among the ten worst; the shrunk table's include two, and every one of its five has at least two hundred operations, where a high rate is evidence. The tiny hospitals drop out: two deaths in nineteen operations is not evidence of a bad hospital by itself: small samples are noisy, and these results do not rule out a truly high underlying risk. Over all sixty, these rates, obtained by transforming conditional modes rather than posterior mean probabilities, are about seven times closer to the truth in mean squared error. But look at the ranks: even shrunk, their correlation with the true ranking is only point three eight. With true differences this small, a league table is mostly noise, as Harvey Goldstein and David Spiegelhalter warned in 1996; report intervals for ranks, not ranks.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/f633f1487851d507.wav",
+   "duration": 58.45,
+   "tokens": 158,
+   "peak": 0.58428955078125,
+   "issues": [],
+   "elapsed": 0.07,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats25/en/GLMM_motion/result.json",
+ "input_sha256": "acbd16db9d2d53520dc591249c7c38d1886ffa02996b9ba19cbc6f62f0f4e32e"
+}

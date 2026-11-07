@@ -1,0 +1,171 @@
+{
+  "fingerprint": "cc5993943275ec150714300c162c6a511063c610029b1248fd5404572b0c059d",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 17,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 41
+      },
+      "input_record": "renders/qa/series/stats25/en/Hook/result.json",
+      "input_sha256": "c7856b07ab8faa1f0e370a07819138dd56b1e513413cf2293e171ae20ec686f4"
+    },
+    {
+      "scene": "Stein",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 47
+      },
+      "input_record": "renders/qa/series/stats25/en/Stein/result.json",
+      "input_sha256": "ca27cce49d39f27b50fc3167c0b6ee3ffa0280b25f680882febc876151d054fa"
+    },
+    {
+      "scene": "EB",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 46
+      },
+      "input_record": "renders/qa/series/stats25/en/EB/result.json",
+      "input_sha256": "1009786d677649fce7ae48ab13a68fdb246fd30af20ad791d9c60ba92f4820f9"
+    },
+    {
+      "scene": "Components",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 43
+      },
+      "input_record": "renders/qa/series/stats25/en/Components/result.json",
+      "input_sha256": "7e14c16380a96595a569820908d53dd0d54779fbb99c3acc196ffa589773b7bd"
+    },
+    {
+      "scene": "LMM",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 52
+      },
+      "input_record": "renders/qa/series/stats25/en/LMM/result.json",
+      "input_sha256": "bd8b5e6057d48758c0974b19c8b086c28cf33136005582cc2c712a81eff7a299"
+    },
+    {
+      "scene": "REML",
+      "status": "needs-review",
+      "frames": 15,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 42
+      },
+      "input_record": "renders/qa/series/stats25/en/REML/result.json",
+      "input_sha256": "37443495e666df3bc3f3e32a8ab3c755e7ce469d15e32fe35f122abd90762afa"
+    },
+    {
+      "scene": "Inference",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 50
+      },
+      "input_record": "renders/qa/series/stats25/en/Inference/result.json",
+      "input_sha256": "664dee8573398d57383b8da69bd06e4e0c9e51c917638246d99fb93b16718279"
+    },
+    {
+      "scene": "Growth",
+      "status": "needs-review",
+      "frames": 17,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 45
+      },
+      "input_record": "renders/qa/series/stats25/en/Growth/result.json",
+      "input_sha256": "64c28666a820218fc390efa9d637bcc4076e69a26d02535628de8576a3ccd84a"
+    },
+    {
+      "scene": "Nested",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 48
+      },
+      "input_record": "renders/qa/series/stats25/en/Nested/result.json",
+      "input_sha256": "116aa34efe5b7c36bbe8d9a3467a69f48566206e1aa16c12d228cc9cf5634695"
+    },
+    {
+      "scene": "Fixed",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 54
+      },
+      "input_record": "renders/qa/series/stats25/en/Fixed/result.json",
+      "input_sha256": "d78263f425dec49bbfeb3a166c28acbffcaadbb66f0984e00251e006b35391de"
+    },
+    {
+      "scene": "GLMM",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 54
+      },
+      "input_record": "renders/qa/series/stats25/en/GLMM/result.json",
+      "input_sha256": "e49b7dc864968dc4f7d3995bf9656986306b50d693361b81f207857db84409a1"
+    },
+    {
+      "scene": "SmallArea",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 39
+      },
+      "input_record": "renders/qa/series/stats25/en/SmallArea/result.json",
+      "input_sha256": "9e5692f807e248a0100fc49fbc2abec6e471e17ef535e9bda80aeaec19b470eb"
+    },
+    {
+      "scene": "Meta",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 64
+      },
+      "input_record": "renders/qa/series/stats25/en/Meta/result.json",
+      "input_sha256": "2d6956a5e7dc9f6e9fdad3a74d28cbb5e7de0a7eeb36a4b5fdc90b35eb70fca7"
+    },
+    {
+      "scene": "Rasch",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 42
+      },
+      "input_record": "renders/qa/series/stats25/en/Rasch/result.json",
+      "input_sha256": "edf9667f5d6f9c50c2f1df62cfa6e732ad7ec77132b9338276346d796930e946"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 8,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 62
+      },
+      "input_record": "renders/qa/series/stats25/en/Outro/result.json",
+      "input_sha256": "a1c6a89fc4716bc54cb860aa5ac88ac683fde5891f6ad551c734ece16d0db549"
+    }
+  ]
+}

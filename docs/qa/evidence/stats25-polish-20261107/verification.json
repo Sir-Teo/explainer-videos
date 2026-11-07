@@ -1,0 +1,23 @@
+{
+  "part": "stats25",
+  "fingerprint": "cc5993943275ec150714300c162c6a511063c610029b1248fd5404572b0c059d",
+  "english_endpoints": 15,
+  "native_1080_endpoints": 14,
+  "silent_motion_chapters": 14,
+  "audio_scene": "GLMM",
+  "audio_lines": 7,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats25/en/GLMM/videos/s11_glmm/480p15/GLMM.mp4",
+    "seconds": 276.199349,
+    "narration_sha256": "a6a233dd243ff4968e53b643aec9f14e280264dd55346cf172f24ed69e8b5442",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 276 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 276 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

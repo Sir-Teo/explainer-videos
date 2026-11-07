@@ -1,0 +1,160 @@
+{
+  "fingerprint": "cc5993943275ec150714300c162c6a511063c610029b1248fd5404572b0c059d",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 17,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats25/en/Hook_motion/result.json",
+      "input_sha256": "bc7d0d939c211446ae8d359d7412c484d937ef9549933e38ce364203c0ca0e1c",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 194 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 194 s\n"
+    },
+    {
+      "scene": "Stein",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats25/en/Stein_motion/result.json",
+      "input_sha256": "036556048a56fe55a863b0e4267a89e5dfa2b7e03fb19d93cc586f9456f0da33",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 224 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 224 s\n"
+    },
+    {
+      "scene": "EB",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats25/en/EB_motion/result.json",
+      "input_sha256": "f7abc937deaf84bd310354c4955376799698708b86058a98915dc1da3ecaebb7",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 248 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 248 s\n"
+    },
+    {
+      "scene": "Components",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats25/en/Components_motion/result.json",
+      "input_sha256": "4060bec1988a73b67c5b887b8f2c6e6add77ae10d4480a0d3726ed03762508c6",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 168 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 168 s\n"
+    },
+    {
+      "scene": "LMM",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats25/en/LMM_motion/result.json",
+      "input_sha256": "b490fc33485a02d4d2b81200759ba8bc734fe4147596e95c47fed12b13f62847",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 223 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 223 s\n"
+    },
+    {
+      "scene": "REML",
+      "status": "needs-review",
+      "frames": 15,
+      "warnings": {
+        "narration-translation": 5
+      },
+      "input_record": "renders/qa/series/stats25/en/REML_motion/result.json",
+      "input_sha256": "c7206a3b17dbde5fe7df32ec3bc268603205acdc6634b2729fa0d1b6aba5e740",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 160 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 160 s\n"
+    },
+    {
+      "scene": "Inference",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats25/en/Inference_motion/result.json",
+      "input_sha256": "b79eb8deb62789d5558b05dc3b3d346af2b287df909f042b0081d63e6d6d11a1",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 245 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 245 s\n"
+    },
+    {
+      "scene": "Growth",
+      "status": "needs-review",
+      "frames": 17,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats25/en/Growth_motion/result.json",
+      "input_sha256": "a6715cde0cb70f0cd713f9bb11301c2e75bc57b091a243680b2511c9eaffdd4f",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 192 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 192 s\n"
+    },
+    {
+      "scene": "Nested",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats25/en/Nested_motion/result.json",
+      "input_sha256": "8612012a284e5819138c231e73ec4e0a29994b43892cfb493dbb78173b11f099",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 241 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 241 s\n"
+    },
+    {
+      "scene": "Fixed",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats25/en/Fixed_motion/result.json",
+      "input_sha256": "2a02b47b683d592be321f56fd6ee5d6b093dd2bae6b6db16c85796bb2b2b3c20",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 252 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 252 s\n"
+    },
+    {
+      "scene": "GLMM",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats25/en/GLMM_motion/result.json",
+      "input_sha256": "acbd16db9d2d53520dc591249c7c38d1886ffa02996b9ba19cbc6f62f0f4e32e",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 292 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 292 s\n"
+    },
+    {
+      "scene": "SmallArea",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats25/en/SmallArea_motion/result.json",
+      "input_sha256": "fdf0053fc733b301a1798019ceebe5ae1e63fd7533e00ab8f8177b4f80dd0627",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 241 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 241 s\n"
+    },
+    {
+      "scene": "Meta",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats25/en/Meta_motion/result.json",
+      "input_sha256": "2327b5c303c613c1e6a2e25f2dcc144c4491e314ed37971817c737f1f3ddeeea",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 254 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 254 s\n"
+    },
+    {
+      "scene": "Rasch",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats25/en/Rasch_motion/result.json",
+      "input_sha256": "b1e2451511dfab8b81bc653ec568aba64f40f797ce39a604a40bda0ad9e3909e",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 193 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 193 s\n"
+    }
+  ]
+}
