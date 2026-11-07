@@ -1,0 +1,24 @@
+{
+  "reason": "Shared World school/health programme names separated; this part does not use schools",
+  "previous_fingerprint": "5326591e610633b46f8c99cb2086cc65ae1a2c97b918d23c2cf40cf68586beef",
+  "current_fingerprint": "2b8db39ee49fd91f4c6f7a02fd2f65a3382dac27a973f83f8637b71ee88ab705",
+  "fresh_english_endpoint_scenes": 16,
+  "fresh_native_scenes": [
+    "Center",
+    "Correlation",
+    "Integrity",
+    "QQ",
+    "Quantiles",
+    "Spread"
+  ],
+  "fresh_motion_scenes": [
+    "Spread",
+    "QQ",
+    "SameStats",
+    "Integrity"
+  ],
+  "narration_matches_current_source": true,
+  "previous_visual_inspection_retained": true,
+  "current_checks": "Fresh rendering plus runtime/bounds/blank checks; fresh motion blank/sparse scans; fresh speech checks",
+  "production_approval": false
+}

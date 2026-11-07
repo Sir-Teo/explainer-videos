@@ -1,6 +1,6 @@
 {
-  "fingerprint": "5326591e610633b46f8c99cb2086cc65ae1a2c97b918d23c2cf40cf68586beef",
-  "scope": "English silent animation endpoints; no production approval",
+  "fingerprint": "2b8db39ee49fd91f4c6f7a02fd2f65a3382dac27a973f83f8637b71ee88ab705",
+  "scope": "English render review; listening and bilingual production gates remain open",
   "records": [
     {
       "scene": "Hook",
@@ -9,7 +9,9 @@
       "warnings": {
         "narration-translation": 5,
         "untranslated-on-screen": 107
-      }
+      },
+      "input_record": "renders/qa/series/stats1/en/Hook/result.json",
+      "input_sha256": "e00db7ff6ad5975bc9df3ec420695c5844dedc599a9e46aa044b3660e4ea29f1"
     },
     {
       "scene": "Populations",
@@ -18,7 +20,9 @@
       "warnings": {
         "narration-translation": 5,
         "untranslated-on-screen": 28
-      }
+      },
+      "input_record": "renders/qa/series/stats1/en/Populations/result.json",
+      "input_sha256": "5720ae60f8ccaf5ce8d0de707953c34f6074e930b142aa14da6deb7820b85657"
     },
     {
       "scene": "TheWorld",
@@ -27,7 +31,9 @@
       "warnings": {
         "narration-translation": 5,
         "untranslated-on-screen": 43
-      }
+      },
+      "input_record": "renders/qa/series/stats1/en/TheWorld/result.json",
+      "input_sha256": "4e9b320b0615feb6e01e81b7554dad750a4b1d9b4341a6d004890146ac75fc09"
     },
     {
       "scene": "Pictures",
@@ -36,7 +42,9 @@
       "warnings": {
         "narration-translation": 6,
         "untranslated-on-screen": 29
-      }
+      },
+      "input_record": "renders/qa/series/stats1/en/Pictures/result.json",
+      "input_sha256": "663289d4a4479867dc25b928d41c267bc55e060c5b535aaf9ad6c33de1168855"
     },
     {
       "scene": "Center",
@@ -45,7 +53,9 @@
       "warnings": {
         "narration-translation": 6,
         "untranslated-on-screen": 29
-      }
+      },
+      "input_record": "renders/qa/series/stats1/en/Center/result.json",
+      "input_sha256": "51fb51679395b1cfb328c109b07a1276b95d4ed06440c236e42dbf967fe4a289"
     },
     {
       "scene": "Spread",
@@ -54,7 +64,9 @@
       "warnings": {
         "narration-translation": 5,
         "untranslated-on-screen": 29
-      }
+      },
+      "input_record": "renders/qa/series/stats1/en/Spread/result.json",
+      "input_sha256": "8a557f9afceb8c118154172eb4f4935a78941dceff7762e2c564f3ebcee5dcd0"
     },
     {
       "scene": "Quantiles",
@@ -63,7 +75,9 @@
       "warnings": {
         "narration-translation": 5,
         "untranslated-on-screen": 30
-      }
+      },
+      "input_record": "renders/qa/series/stats1/en/Quantiles/result.json",
+      "input_sha256": "88a3684a7776b45cc0c7b022e5c08136b3f038053dea3742bd599a457e226134"
     },
     {
       "scene": "Shape",
@@ -72,7 +86,9 @@
       "warnings": {
         "narration-translation": 5,
         "untranslated-on-screen": 28
-      }
+      },
+      "input_record": "renders/qa/series/stats1/en/Shape/result.json",
+      "input_sha256": "b2ee7368137f64bc2f12ad0223a6535f99f0e0f13fb01ab39282a2f472529f5a"
     },
     {
       "scene": "QQ",
@@ -81,7 +97,9 @@
       "warnings": {
         "narration-translation": 5,
         "untranslated-on-screen": 35
-      }
+      },
+      "input_record": "renders/qa/series/stats1/en/QQ/result.json",
+      "input_sha256": "d0a78c2bceff9af16d3ce6bb56b69d85a64d2aa2ed423720b02b13cff9a63250"
     },
     {
       "scene": "Transform",
@@ -90,7 +108,9 @@
       "warnings": {
         "narration-translation": 5,
         "untranslated-on-screen": 22
-      }
+      },
+      "input_record": "renders/qa/series/stats1/en/Transform/result.json",
+      "input_sha256": "eea2ddc882d8384b412e4e3fbf1909cfd507e76e2457fc7af7bfcc0e2bd3cff0"
     },
     {
       "scene": "Correlation",
@@ -99,7 +119,9 @@
       "warnings": {
         "narration-translation": 5,
         "untranslated-on-screen": 27
-      }
+      },
+      "input_record": "renders/qa/series/stats1/en/Correlation/result.json",
+      "input_sha256": "f40f298ee499ca703e2fc6fd5a33a1fbb1198401f8071ffdf5dfb127add4efae"
     },
     {
       "scene": "SameStats",
@@ -108,7 +130,9 @@
       "warnings": {
         "narration-translation": 4,
         "untranslated-on-screen": 32
-      }
+      },
+      "input_record": "renders/qa/series/stats1/en/SameStats/result.json",
+      "input_sha256": "5ef89f60ee6abe50bf6e7465f54c61c532105eaad3e7b6d4030705507f236690"
     },
     {
       "scene": "Simpson",
@@ -117,7 +141,9 @@
       "warnings": {
         "narration-translation": 6,
         "untranslated-on-screen": 30
-      }
+      },
+      "input_record": "renders/qa/series/stats1/en/Simpson/result.json",
+      "input_sha256": "67b0a6a1ad07aa098a702a1da71e81ce736ac7c8f215e9ae1c87a5637ac4a4f3"
     },
     {
       "scene": "Integrity",
@@ -126,7 +152,9 @@
       "warnings": {
         "narration-translation": 6,
         "untranslated-on-screen": 37
-      }
+      },
+      "input_record": "renders/qa/series/stats1/en/Integrity/result.json",
+      "input_sha256": "5d30fbf3397e5804e7f7bbdee7517200ffdc31d9f8054b645af4f12a44ea2818"
     },
     {
       "scene": "Random",
@@ -135,7 +163,9 @@
       "warnings": {
         "narration-translation": 5,
         "untranslated-on-screen": 15
-      }
+      },
+      "input_record": "renders/qa/series/stats1/en/Random/result.json",
+      "input_sha256": "0d7a73633b9bc6d76650b001002b35430d12516dc4e9d06bfb20c1b5f1573a92"
     },
     {
       "scene": "Outro",
@@ -144,7 +174,9 @@
       "warnings": {
         "narration-translation": 5,
         "untranslated-on-screen": 63
-      }
+      },
+      "input_record": "renders/qa/series/stats1/en/Outro/result.json",
+      "input_sha256": "3dfd48f035902b1ff7d42ca266a0213b3e4248087d3eac4966a71eacf02a4d7f"
     }
   ]
 }

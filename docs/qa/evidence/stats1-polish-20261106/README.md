@@ -46,3 +46,5 @@ The branch has no Chinese narration tables for any of its 65 parts and no statis
 Full continuous playback/listening and final narrated masters in both languages remain pending. The QA runner's `needs-review` verdict must be retained while these translation warnings exist.
 
 Parts 2–65 have not received this chapter-by-chapter review. See [the progress tracker](../../statistics-built-progress.md).
+
+[Shared-source refresh](shared-source-refresh.json): all endpoint/native/motion captures and speech checks rerun after the World programme-name correction; narrated source matching verified.

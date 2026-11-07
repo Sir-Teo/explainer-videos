@@ -1,66 +1,72 @@
 {
-  "fingerprint": "5326591e610633b46f8c99cb2086cc65ae1a2c97b918d23c2cf40cf68586beef",
-  "scope": "1920x1080 English silent endpoints",
+  "fingerprint": "2b8db39ee49fd91f4c6f7a02fd2f65a3382dac27a973f83f8637b71ee88ab705",
+  "scope": "English render review; listening and bilingual production gates remain open",
   "records": [
     {
       "scene": "Center",
+      "status": "needs-review",
       "frames": 23,
-      "image_size": [
-        1920,
-        1080
-      ],
-      "sheet": "center-1080-sheet.png",
-      "status": "needs-review"
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 29
+      },
+      "input_record": "renders/qa/native1080/stats1/en/Center/result.json",
+      "input_sha256": "12218752741beb23fdad9663b38ca92c8d28613f14ae74ff23637346989c61f1"
     },
     {
       "scene": "Correlation",
+      "status": "needs-review",
       "frames": 21,
-      "image_size": [
-        1920,
-        1080
-      ],
-      "sheet": "correlation-1080-sheet.png",
-      "status": "needs-review"
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 27
+      },
+      "input_record": "renders/qa/native1080/stats1/en/Correlation/result.json",
+      "input_sha256": "6f4bdf0be0153c9bc825ebaad4bcc562329735b9dc5688391d9eb26c19a6a232"
     },
     {
       "scene": "Integrity",
+      "status": "needs-review",
       "frames": 19,
-      "image_size": [
-        1920,
-        1080
-      ],
-      "sheet": "integrity-1080-sheet.png",
-      "status": "needs-review"
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 37
+      },
+      "input_record": "renders/qa/native1080/stats1/en/Integrity/result.json",
+      "input_sha256": "76d9be2d4a2d7086739206f02abcf99b57f842c052d608135f36555d2feec404"
     },
     {
       "scene": "QQ",
+      "status": "needs-review",
       "frames": 18,
-      "image_size": [
-        1920,
-        1080
-      ],
-      "sheet": "qq-1080-sheet.png",
-      "status": "needs-review"
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 35
+      },
+      "input_record": "renders/qa/native1080/stats1/en/QQ/result.json",
+      "input_sha256": "2d15873fa0bd0ab2588a8b0173ced91e897a9538c2df2d313150335d88be62c6"
     },
     {
       "scene": "Quantiles",
+      "status": "needs-review",
       "frames": 20,
-      "image_size": [
-        1920,
-        1080
-      ],
-      "sheet": "quantiles-1080-sheet.png",
-      "status": "needs-review"
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 30
+      },
+      "input_record": "renders/qa/native1080/stats1/en/Quantiles/result.json",
+      "input_sha256": "ca4f7b86797d1300b9b10a106563b707d893832136627b9f957efecb17f07a41"
     },
     {
       "scene": "Spread",
+      "status": "needs-review",
       "frames": 20,
-      "image_size": [
-        1920,
-        1080
-      ],
-      "sheet": "spread-1080-sheet.png",
-      "status": "needs-review"
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 29
+      },
+      "input_record": "renders/qa/native1080/stats1/en/Spread/result.json",
+      "input_sha256": "5e026084d494c69efc0be5adb58555a67863f905e50e9886e52fa4b77c11a547"
     }
   ]
 }

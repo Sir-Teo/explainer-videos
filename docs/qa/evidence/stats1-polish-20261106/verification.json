@@ -1,18 +1,19 @@
 {
   "part": "stats1",
-  "fingerprint": "5326591e610633b46f8c99cb2086cc65ae1a2c97b918d23c2cf40cf68586beef",
-  "tests": {
-    "command": "python -m pytest tests/test_stats*.py tests/test_qa*.py -q",
-    "passed": 540,
-    "subtests_passed": 5,
-    "warnings": 15
-  },
+  "fingerprint": "2b8db39ee49fd91f4c6f7a02fd2f65a3382dac27a973f83f8637b71ee88ab705",
   "english_endpoints": 16,
   "native_1080_endpoints": 6,
   "silent_motion_chapters": 4,
-  "narrated_center_seconds": 234,
-  "center_audio_lines": 6,
-  "center_audio_issues": 0,
+  "audio_scene": "Center",
+  "audio_lines": 6,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats1/en/Center/videos/s05_center/480p15/Center.mp4",
+    "seconds": 234.333333,
+    "narration_sha256": "fca3e24f0469c6d0eb6f87d5e16258c9cfb165e758b42ea0896a2d3b22ac67a5",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 234 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 234 s\n"
+  },
   "bilingual_production_approval": false,
   "remaining": [
     "Chinese narration/caption tables missing",

@@ -1,37 +1,50 @@
 {
-  "scope": "480p15 silent motion; sampled sheets reviewed, not continuous playback approval",
+  "fingerprint": "2b8db39ee49fd91f4c6f7a02fd2f65a3382dac27a973f83f8637b71ee88ab705",
+  "scope": "English render review; listening and bilingual production gates remain open",
   "records": [
     {
       "scene": "Spread",
-      "duration": 276.8666666666651,
-      "movie": "renders/qa/series/stats1/en/Spread_motion/media/videos/480p15/Spread.mp4",
-      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 277 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 277 s\n",
       "status": "needs-review",
-      "fingerprint": "5326591e610633b46f8c99cb2086cc65ae1a2c97b918d23c2cf40cf68586beef"
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 5
+      },
+      "input_record": "renders/qa/series/stats1/en/Spread_motion/result.json",
+      "input_sha256": "442a8ae02fead040f806d0d0f4ca208ecb3d4446f13c7e68de5fd4ec19ce603f",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 277 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 277 s\n"
     },
     {
       "scene": "QQ",
-      "duration": 235.99999999999926,
-      "movie": "renders/qa/series/stats1/en/QQ_motion/media/videos/480p15/QQ.mp4",
-      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 236 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 236 s\n",
       "status": "needs-review",
-      "fingerprint": "5326591e610633b46f8c99cb2086cc65ae1a2c97b918d23c2cf40cf68586beef"
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 5
+      },
+      "input_record": "renders/qa/series/stats1/en/QQ_motion/result.json",
+      "input_sha256": "dd772ac364e79f153343e509cb2ef317f7a4a2f7bb1aa3700bba4547062f0d0a",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 236 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 236 s\n"
     },
     {
       "scene": "SameStats",
-      "duration": 172.0666666666655,
-      "movie": "renders/qa/series/stats1/en/SameStats_motion/media/videos/480p15/SameStats.mp4",
-      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 172 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 172 s\n",
       "status": "needs-review",
-      "fingerprint": "5326591e610633b46f8c99cb2086cc65ae1a2c97b918d23c2cf40cf68586beef"
+      "frames": 8,
+      "warnings": {
+        "narration-translation": 4
+      },
+      "input_record": "renders/qa/series/stats1/en/SameStats_motion/result.json",
+      "input_sha256": "e9e9ebd89cb087e1dabdcfa95537c26065525da7e00b78af98587c5b8748ba0f",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 172 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 172 s\n"
     },
     {
       "scene": "Integrity",
-      "duration": 270.06666666666484,
-      "movie": "renders/qa/series/stats1/en/Integrity_motion/media/videos/480p15/Integrity.mp4",
-      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 270 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 270 s\n",
       "status": "needs-review",
-      "fingerprint": "5326591e610633b46f8c99cb2086cc65ae1a2c97b918d23c2cf40cf68586beef"
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats1/en/Integrity_motion/result.json",
+      "input_sha256": "8cd705ab2f7f3e2673cd5f5100efec983d234239360737d0158390e578e4a678",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 270 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 270 s\n"
     }
   ]
 }
