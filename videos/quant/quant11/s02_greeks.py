@@ -84,7 +84,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0,
                          added_anims=[FadeOut(VGroup(ax, sf, slice0, tang, moving, bowl_seg, drop_seg)),
                                       FadeOut(hint), FadeOut(par), FadeOut(cap)], run_time=0.5)
-        self.clear_scene()
+        self.clear()  # the camera reset has already faded every visible object
 
     # ------------------------------------------------------------------
     def derive(self):

@@ -189,4 +189,4 @@ class Case(VoiceoverScene, ThreeDScene):
             self.move_camera(theta=-25 * DEGREES, phi=68 * DEGREES, run_time=min(max(vo.remaining(1.0) - 0.3, 1.0), 8.0))
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, added_anims=[FadeOut(VGroup(ax, sf, edge)), FadeOut(hint),
                                                                              FadeOut(eqs)], run_time=0.5)
-        self.clear_scene()
+        self.clear()  # the camera reset has already faded every visible object
