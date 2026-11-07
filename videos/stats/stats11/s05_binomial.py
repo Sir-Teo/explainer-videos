@@ -35,6 +35,7 @@ class Binomial(VoiceoverScene):
                      font_size=24, color=METHOD_COL["jeffreys"]).to_edge(DOWN, buff=1.0)
         if foot.width > 12.6:
             foot.width = 12.6
+        intro = label('A century of alternatives to the Wald interval', font_size=36)
         with self.voiceover(
             "The better intervals have been available for almost a century. <bookmark mark='a'/> In 1927 Edwin Bidwell "
             "Wilson, a mathematician and physicist who had been Gibbs's student, inverted the score test. "
@@ -44,8 +45,11 @@ class Binomial(VoiceoverScene):
             "two failures and then using the Wald formula. <bookmark mark='d'/> And Brown, Cai and DasGupta found that "
             "the Bayesian interval from Jeffreys' prior also behaves like a good confidence interval."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
             vo.wait_until("d")
             self.play(FadeIn(foot))
@@ -87,20 +91,20 @@ class Binomial(VoiceoverScene):
             A = axes([0, 1], [0.8, 1], x_length=3.6, y_length=1.8, xticks=[0, 0.5, 1], yticks=[0.8, 0.95, 1], yfmt=lambda v: f"{v:.2f}",
                      center=[-4.3 + 4.3 * c, 1.6 - 3.3 * r, 0], font_size=16)
             ax = A.ax
-            cov = np.clip(np.asarray(d["cov"][k]), 0.8, 1.0)
+            cov = np.asarray(d["cov"][k])
             cv = polyline(ax, ps, cov, METHOD_COL[k], 1.6)
             nom = DashedLine(ax.c2p(0, 0.95), ax.c2p(1, 0.95), color=EXACT, stroke_width=1.5)
             ttl = label(METHOD_TEX[k], font_size=22, color=METHOD_COL[k]).next_to(A, UP, buff=0.08)
-            num = MathTex(rf"\text{{mean }} {100 * d['mean'][k]:.1f}\%,\ \min {100 * d['min'][k]:.1f}\%", font_size=20,
+            num = MathTex(rf"\text{{grid mean }} {100 * d['mean'][k]:.1f}\%,\ \text{{grid min }} {100 * d['min'][k]:.1f}\%", font_size=20,
                           color=METHOD_COL[k]).next_to(A, DOWN, buff=0.1)
             panels.add(VGroup(A, nom, cv, ttl, num))
         tag = note(r"exact coverage, \ $n = 50$, \ clipped at 80\%").to_corner(DR, buff=0.2)
         with self.voiceover(
-            "Now the comparison, with exact coverage curves for fifty trials. <bookmark mark='a'/> Wald: mean ninety "
+            "Now the comparison, with exact coverage curves for fifty trials. All averages and minima here refer to the displayed parameter grid. <bookmark mark='a'/> Wald: mean ninety "
             "point seven, and a minimum off the bottom of the chart, twenty-two percent near the edges. "
             "<bookmark mark='b'/> Wilson: mean ninety-five point two, close to the promise, with dips to ninety-one near "
             "the edges. <bookmark mark='c'/> Agresti–Coull: slightly conservative, ninety-five point eight on average, "
-            "and never below ninety-three and a half. <bookmark mark='d'/> Clopper–Pearson: always at or above "
+            "and no sampled grid value below ninety-three and a half. <bookmark mark='d'/> Clopper–Pearson: always at or above "
             "ninety-five, as guaranteed, but at the price of averaging ninety-seven: it promises ninety-five and delivers "
             "more, by being wide. <bookmark mark='e'/> Jeffreys: mean ninety-five point oh, with deep dips near zero "
             "and one. <bookmark mark='f'/> And the likelihood ratio interval: mean ninety-four point eight, also dipping "
@@ -116,7 +120,7 @@ class Binomial(VoiceoverScene):
     def widths(self):
         d = load("binom")
         order = ["wald", "wilson", "agresti_coull", "clopper_pearson", "jeffreys", "lr"]
-        hdr = VGroup(*[label(t, font_size=24, color=GREY_B) for t in (r"interval", r"mean coverage", r"width at $p = 0.05$", r"width at $p = 0.5$")])
+        hdr = VGroup(*[label(t, font_size=24, color=GREY_B) for t in (r"interval", r"grid mean coverage", r"width at $p = 0.05$", r"width at $p = 0.5$")])
         xs = [-4.4, -1.2, 1.6, 4.4]
         for j, h in enumerate(hdr):
             h.move_to([xs[j], 2.4, 0])
@@ -130,7 +134,7 @@ class Binomial(VoiceoverScene):
         foot = label(r"Wald is narrowest near the edge \ because it is wrong there; \ coverage must be compared before width", font_size=24,
                      color=OBS).to_edge(DOWN, buff=0.7)
         with self.voiceover(
-            "What do the honest intervals cost? <bookmark mark='a'/> Width. At p equals a half, they're all about the same, "
+            "What do the better intervals cost? <bookmark mark='a'/> Width. At p equals a half, they're all about the same, "
             "around point two seven. <bookmark mark='b'/> At p equals point zero five, the Wald interval is the narrowest, "
             "point one zero, and Agresti–Coull and Clopper–Pearson the widest, near point one four. "
             "<bookmark mark='c'/> But the Wald interval is narrow there precisely because it's wrong there. A short "
@@ -177,7 +181,7 @@ class Binomial(VoiceoverScene):
             cov = [float(I.binom_coverage(I.BINOMIAL[k], int(n), [0.2])[0]) for n in ns]
             curves.add(polyline(ax, ns, cov, METHOD_COL[k], 2.2))
         leg = legend([(METHOD_COL[k], METHOD_TEX[k]) for k in ("wald", "wilson", "agresti_coull")], font_size=22).to_edge(UP, buff=0.3).shift(RIGHT * 4)
-        foot = label(r"the honest intervals sawtooth too, \ but around 95\%, \ not below it", font_size=26, color=OBS).to_edge(DOWN, buff=0.5)
+        foot = label(r"better approximations still oscillate above and below 95\%; \ no uniform guarantee", font_size=26, color=OBS).to_edge(DOWN, buff=0.5)
         with self.voiceover(
             "Back to the hook's picture, with the better intervals added. <bookmark mark='a'/> The Wald interval's coverage "
             "at p equals point two, as n grows. <bookmark mark='b'/> Wilson's: still a sawtooth, from ninety-two and a half "
@@ -219,7 +223,7 @@ class Binomial(VoiceoverScene):
         ), 12.6, 0.3, [0, -2.4, 0])
         tag = simulated_tag(r"the World: \ screening", corner=UR)
         with self.voiceover(
-            "A realistic case from the World, which has a silent condition affecting just under one percent of adults. "
+            "A realistic case from the World, which has a silent condition affecting just under one percent of adults. Binomial calculations approximate this survey without replacement; the sampling fraction is small. "
             "<bookmark mark='a'/> A survey of three hundred adults finds four cases. <bookmark mark='b'/> The Wald interval "
             "runs from point zero zero zero four to point zero two six; Wilson's and Clopper–Pearson's from about point "
             "zero zero four to point zero three four. <bookmark mark='c'/> All three happen to contain the truth this "

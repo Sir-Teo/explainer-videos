@@ -30,7 +30,7 @@ class Prediction(VoiceoverScene):
                             Rectangle(width=6.0 * v + 0.01, height=0.5, stroke_width=0, fill_color=c, fill_opacity=0.8).move_to([-0.2, y, 0], aligned_edge=LEFT),
                             MathTex(rf"{100 * v:.1f}\%", font_size=32, color=c).move_to([6.4, y, 0])))
         head = label(r"how often does the interval from 10 men contain the \emph{next} man's height?", font_size=26).to_edge(UP, buff=0.8)
-        foot = label(r"a confidence interval is for the mean, \ not for individuals: \ it is $\sqrt n$ times too narrow", font_size=26,
+        foot = label(r"a confidence interval is for the mean, \ not for individuals: \ the normal prediction width is $\sqrt{n+1}$ times the mean-CI width", font_size=26,
                      color=OBS).to_edge(DOWN, buff=0.9)
         tag = simulated_tag(r"simulated: \ the World, \ 20,000 samples", corner=DR)
         with self.voiceover(
@@ -61,9 +61,9 @@ class Prediction(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> The new observation differs from the sample mean by its own deviation, variance sigma "
             "squared, plus the mean's error, variance sigma squared over n. <bookmark mark='b'/> Studentized, that's again "
-            "a t pivot. <bookmark mark='c'/> So the prediction interval is x-bar plus or minus t times s times root one "
+            "a t pivot for independent normal observations. <bookmark mark='c'/> So the prediction interval is x-bar plus or minus t times s times root one "
             "plus one over n. As n grows it doesn't shrink to a point, as a confidence interval does: it settles at the "
-            "mean plus or minus one point nine six standard deviations, the range of the population itself."
+            "mean plus or minus one point nine six standard deviations, the central ninety-five percent range of a normal population."
         ) as vo:
             step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.4, buff=0.9, edge=6.9)
             for k, m_ in enumerate("abc"):
@@ -108,17 +108,20 @@ class Prediction(VoiceoverScene):
         rows[1][2].set_color(HIT)
         whys = [why(r"$n + 1$ exchangeable draws: \ the new one is equally likely to be any rank"),
                 why(r"any continuous distribution whatsoever")]
+        intro = label('Exchangeability gives an unconditional prediction guarantee', font_size=36)
         with self.voiceover(
             "It doesn't, and the argument is one of the prettiest in statistics, due to Samuel Wilks in 1941. "
             "<bookmark mark='a'/> Nineteen observations cut the line into twenty gaps. <bookmark mark='b'/> Add a new "
             "observation from the same distribution. Among the twenty draws, the new one is equally likely to have any "
-            "rank, so it's equally likely to land in any of the twenty gaps. <bookmark mark='c'/> It falls between the "
+            "rank, so before observing the spacings, its rank is uniform over those twenty gaps. Conditional on the observed data, gap probabilities generally differ. <bookmark mark='c'/> It falls between the "
             "smallest and the largest of the first nineteen unless it lands in one of the two end gaps: probability "
             "eighteen in twenty, ninety percent, for every continuous distribution. <bookmark mark='d'/> On the World's "
             "incomes, simulated: eighty-nine point six. This symmetry argument, exchangeability of the new point with the "
             "old ones, is the seed of conformal prediction, Part 34."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(Create(nl), LaggedStart(*[FadeIn(dt, scale=1.5) for dt in dots], lag_ratio=0.05))
             vo.wait_until("b")
             self.play(FadeIn(gaps))
@@ -130,7 +133,7 @@ class Prediction(VoiceoverScene):
         self.clear_scene()
 
     def tolerance(self):
-        dc = definition_card(r"Tolerance interval", r"$[L(X), U(X)]$ is a $(P, \gamma)$ tolerance interval if, \ with probability $\gamma$ over "
+        dc = definition_card(r"Tolerance interval", r"$[L(X), U(X)]$ is a $(P, \gamma)$ tolerance interval if, \ with probability at least $\gamma$ over "
                              r"the sample, \ it contains at least a proportion $P$ of the population.", color=OBS, width=9.6,
                              font_size=26).move_to([0, 1.4, 0])
         rows = fit_rows(VGroup(
@@ -177,6 +180,7 @@ class Prediction(VoiceoverScene):
             label(r"and the back-transformed interval is lopsided, \ as the incomes are", font_size=24, color=GREY_A),
         ), 12.6, 0.4, [0, 0.0, 0])
         tag = simulated_tag(r"simulated: \ the World, \ 10,000 samples of 19", corner=DR)
+        intro = label('Predict incomes on the log scale', font_size=36)
         with self.voiceover(
             "Sometimes the shape problem has a simple cure. <bookmark mark='a'/> The World's incomes are roughly "
             "log-normal, so take logs, build the normal prediction interval there, and exponentiate the ends. "
@@ -185,8 +189,11 @@ class Prediction(VoiceoverScene):
             "exactly: the new income is between e to the a and e to the b exactly when its log is between a and b. "
             "<bookmark mark='d'/> And the back-transformed interval is lopsided, long on the high side, just like incomes."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tag))
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()

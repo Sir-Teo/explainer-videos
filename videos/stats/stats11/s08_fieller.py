@@ -49,19 +49,23 @@ class Fieller(VoiceoverScene):
             cmath(r"(\bar x^2 - z^2 v_x)\,\rho^2 - 2(\bar x\bar y - z^2 c_{xy})\,\rho + (\bar y^2 - z^2 v_y)", r"\le", r"0", font_size=28),
         ]
         rows[2][0].set_color(OBS)
-        whys = [why(r"at the true $\rho$: \ an exact pivot, \ for normal means"), why(r"accept $\rho$ if the pivot is small"),
+        whys = [why(r"at the true $\rho$: \ an exact pivot: \ jointly normal means, known covariance"), why(r"accept $\rho$ if the pivot is small"),
                 why(r"a quadratic inequality in $\rho$: \ Fieller (1940, 1954)")]
+        intro = label('Avoid dividing by an uncertain denominator', font_size=36)
         with self.voiceover(
             "Edgar Fieller's idea, in 1940, was to avoid dividing at all. <bookmark mark='a'/> At the true ratio rho, the "
-            "combination y-bar minus rho x-bar has mean zero, and for normal means it's exactly normal, with a variance "
+            "combination y-bar minus rho x-bar has mean zero, and for jointly normal means with known covariance it's exactly normal, with a variance "
             "we can write down. <bookmark mark='b'/> So accept every rho for which this pivot is within z standard "
             "errors of zero. <bookmark mark='c'/> Squared out, that's a quadratic inequality in rho. Its solution set is "
-            "Fieller's confidence set, and its coverage is exact. But a quadratic inequality doesn't always describe an "
+            "Fieller's confidence set, and its coverage is exact under this known-covariance normal model. A common independent estimated variance scale uses a t cutoff instead. But a quadratic inequality doesn't always describe an "
             "interval."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.4, x=0.6, buff=0.9, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -100,7 +104,7 @@ class Fieller(VoiceoverScene):
             "large the ratio could be. <bookmark mark='c'/> At one point seven, the denominator might plausibly be zero, "
             "and the solution of the quadratic is two rays: everything above one point one seven, and everything below "
             "minus nineteen. The ratio could be huge, of either sign. <bookmark mark='d'/> And at point eight, the "
-            "confidence set is the whole line. The data say nothing about the ratio, and Fieller's method says so, where "
+            "confidence set is the whole line. At this confidence level no finite ratio is excluded, and Fieller's method says so, where "
             "the delta method confidently reports a finite interval."
         ) as vo:
             self.play(FadeIn(leg))
@@ -110,7 +114,7 @@ class Fieller(VoiceoverScene):
         self.clear_scene()
 
     def impossible(self):
-        tc = theorem_card(r"Gleser \& Hwang (1987)", r"When a parameter can become unidentified at the edge of the model, \ as a ratio does when "
+        tc = theorem_card(r"Gleser \& Hwang (1987)", r"In weakly identified ratio models satisfying their conditions, \ as a ratio does when "
                           r"$\mu_x = 0$, \ any confidence set with coverage $1 - \alpha > 0$ for every parameter value \ must be unbounded "
                           r"with positive probability.", color=OBS, width=10.4, font_size=26).move_to([0, 1.2, 0])
         rows = fit_rows(VGroup(
@@ -120,7 +124,7 @@ class Fieller(VoiceoverScene):
         ), 12.6, 0.34, [0, -1.7, 0])
         with self.voiceover(
             "Is the infinite answer a defect? <bookmark mark='a'/> No. Leon Gleser and Jiunn Tzon Hwang proved in 1987 that "
-            "whenever a parameter can become unidentified, as a ratio does when the denominator's mean is zero, every "
+            "under appropriate weak-identification conditions, as a ratio does when the denominator's mean is zero, every "
             "confidence procedure that keeps its promise for every parameter value must sometimes return an unbounded "
             "set. <bookmark mark='b'/> Fieller's infinite answers are honesty, not failure. <bookmark mark='c'/> Any "
             "method that always reports a finite interval for a ratio must break its promise near a zero denominator. "
@@ -148,6 +152,7 @@ class Fieller(VoiceoverScene):
         if vals.width > 12.6:
             vals.width = 12.6
         foot = label(r"a common rule: \ use the delta method only when $g < 0.05$", font_size=24, color=GREY_A).to_edge(DOWN, buff=0.6)
+        intro = label('Measure the uncertainty in the denominator', font_size=36)
         with self.voiceover(
             "There's a one-number summary of which case you're in. <bookmark mark='a'/> Fieller's index g is z squared "
             "times the denominator's variance over its squared estimate: one over the denominator's squared z-score, "
@@ -156,9 +161,12 @@ class Fieller(VoiceoverScene):
             "four, point eight, one point three and six. <bookmark mark='d'/> A common rule in bioassay is to trust the "
             "delta method only when g is below about point zero five."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=2.2, x=-0.4, buff=0.9, edge=6.9)
             for k, m_ in enumerate("ab"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             vo.wait_until("c")
             self.play(FadeIn(vals))

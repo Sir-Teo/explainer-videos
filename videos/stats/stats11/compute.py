@@ -61,6 +61,53 @@ def men():
     return W.height[W.adult & W.male]
 
 
+def clipped_segments(xs, ys, rectangle):
+    """Clip line segments to a rectangle without flattening off-scale values."""
+    xmin, xmax, ymin, ymax = rectangle
+    points = np.column_stack((xs, ys))
+    result = []
+    for start, end in zip(points[:-1], points[1:]):
+        if not np.isfinite([start, end]).all():
+            continue
+        delta = end - start
+        lo, hi = 0.0, 1.0
+        for k, lower, upper in ((0, xmin, xmax), (1, ymin, ymax)):
+            if delta[k] == 0:
+                if not lower <= start[k] <= upper:
+                    hi = -1
+                    break
+            else:
+                a, b = sorted(((lower - start[k]) / delta[k], (upper - start[k]) / delta[k]))
+                lo, hi = max(lo, a), min(hi, b)
+        if lo <= hi:
+            result.append((start + lo * delta, start + hi * delta))
+    return result
+
+
+
+def empirical_cdf_sup(sample, population, *, population_sorted=False):
+    """Exact empirical-CDF sup, with ties and both jump limits.
+
+    Between sample jumps the difference is monotone, so its extrema occur at
+    their left or right limits. Sorting the finite population once avoids a
+    population-sized union for every simulation replicate.
+    """
+    sample = np.sort(np.asarray(sample, float))
+    population = np.asarray(population, float)
+    if not population_sorted:
+        population = np.sort(population)
+    if not len(sample) or not len(population):
+        raise ValueError("CDFs require nonempty samples")
+    jumps, first, counts = np.unique(sample, return_index=True, return_counts=True)
+    left = first / len(sample) - np.searchsorted(population, jumps, side="left") / len(population)
+    right = (first + counts) / len(sample) - np.searchsorted(population, jumps, side="right") / len(population)
+    return float(max(np.max(np.abs(left)), np.max(np.abs(right))))
+
+
+def jeffreys_credible(x, n, alpha=0.05):
+    """Unmodified equal-tailed posterior interval, including at x=0,n."""
+    return tuple(float(v) for v in stats.beta.ppf([alpha / 2, 1 - alpha / 2], x + .5, n - x + .5))
+
 def compute_sawtooth():
     ns = np.arange(10, 101)
     cov_n = [float(I.binom_coverage(I.wald, int(n), [0.2])[0]) for n in ns]
@@ -107,12 +154,10 @@ def compute_belt():
     for p in ps:
         cdf = stats.binom.cdf(np.arange(n + 1), n, p)
         sf = stats.binom.sf(np.arange(n + 1) - 1, n, p)  # P(X >= x)
-        a = int(np.argmax(sf <= alpha / 2)) - 1 if np.any(sf <= alpha / 2) else n
         # acceptance: x with P(X <= x) > alpha/2 and P(X >= x) > alpha/2
         acc = np.flatnonzero((cdf > alpha / 2) & (sf > alpha / 2))
         lo.append(int(acc.min()))
         hi.append(int(acc.max()))
-        del a
     x = 7
     return nest({"n": n, "ps": ps, "lo": lo, "hi": hi, "x": x, "cp": I.clopper_pearson(x, n), "wald": I.wald(x, n)})
 
@@ -134,9 +179,9 @@ def compute_binom():
 def compute_likelihood():
     x, n = 2, 30
     ints = {k: m(x, n) for k, m in I.BINOMIAL.items()}
-    ps = np.linspace(0.0005, 0.3, 300)
+    ps = np.unique(np.r_[np.linspace(0.0005, 0.3, 300), x / n])
     ll = x * np.log(ps) + (n - x) * np.log(1 - ps)
-    ll -= ll.max()
+    ll -= x * np.log(x / n) + (n - x) * np.log1p(-x / n)
     three = {str(nn): {"exact": 1 - 0.05 ** (1 / nn), "rule": 3 / nn} for nn in (10, 30, 100, 1000)}
     return nest({"x": x, "n": n, "ints": ints, "ps": ps, "ll": ll, "three": three})
 
@@ -183,18 +228,19 @@ def compute_simultaneous():
     xs, lo, hi, eps = I.dkw_band(x)
     # coverage of the band (whole curve inside) vs pointwise 95% intervals (all inside at once) over 2,000 samples
     grid = np.linspace(155, 197, 200)
-    Ftrue = np.searchsorted(np.sort(h), grid, side="right") / len(h)
+    h_sorted = np.sort(h)
+    Ftrue = np.searchsorted(h_sorted, grid, side="right") / len(h)
     band_ok = point_ok = 0
     R = 2000
     for _ in range(R):
         s = np.sort(h[g.integers(0, len(h), n)])
         Fh = np.searchsorted(s, grid, side="right") / n
-        band_ok += np.all(np.abs(Fh - Ftrue) <= eps)
+        band_ok += empirical_cdf_sup(s, h_sorted, population_sorted=True) <= eps
         se = np.sqrt(np.maximum(Fh * (1 - Fh), 1e-12) / n)
         point_ok += np.all(np.abs(Fh - Ftrue) <= 1.96 * se + 1e-12)
-    # Bonferroni: five region means, each at 99%
+    # The DKW check is over the whole line; the Wald check is only over the stated grid.
     return nest({"x": xs, "lo": lo, "hi": hi, "eps": eps, "grid": grid, "Ftrue": Ftrue, "band_cov": band_ok / R,
-                 "point_cov": point_ok / R, "n": n})
+                 "point_cov": point_ok / R, "point_grid_size": len(grid), "R": R, "n": n})
 
 
 def compute_prediction():
@@ -236,14 +282,14 @@ def compute_welch():
 def compute_credible():
     n = 50
     ps = np.linspace(0.005, 0.995, 397)
-    cov_j = I.binom_coverage(I.jeffreys, n, ps)
+    cov_j = I.binom_coverage(jeffreys_credible, n, ps)
 
     def flat(x, n, alpha=0.05):
         return float(stats.beta.ppf(alpha / 2, x + 1, n - x + 1)), float(stats.beta.ppf(1 - alpha / 2, x + 1, n - x + 1))
 
     cov_f = I.binom_coverage(flat, n, ps)
     return nest({"ps": ps, "jeffreys": cov_j, "flat": cov_f, "j_mean": float(cov_j.mean()), "f_mean": float(cov_f.mean()),
-                 "f_small": float(I.binom_coverage(flat, n, [0.01])[0]), "j_small": float(I.binom_coverage(I.jeffreys, n, [0.01])[0])})
+                 "f_small": float(I.binom_coverage(flat, n, [0.01])[0]), "j_small": float(I.binom_coverage(jeffreys_credible, n, [0.01])[0])})
 
 
 R_BOARD = 10000

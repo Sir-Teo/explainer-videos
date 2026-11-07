@@ -16,7 +16,7 @@ class Belt(VoiceoverScene):
         self.family()
 
     def card(self):
-        card = chapter_card(3, r"Inverting tests", r"An interval is every value a test would not reject", part=PART)
+        card = chapter_card(3, r"Inverting tests", r"A confidence set contains every value a test would not reject", part=PART)
         with self.voiceover("Chapter three. Inverting tests."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
@@ -31,6 +31,7 @@ class Belt(VoiceoverScene):
         ]
         rows[0][2].set_color(OBS)
         whys = [why(r"the same event, \ read two ways: \ the proof is one line")]
+        intro = label('A confidence set inverts a family of tests', font_size=36)
         with self.voiceover(
             "There's a second way to build intervals, and it works almost everywhere. <bookmark mark='a'/> For every "
             "candidate value theta-nought, run a test of whether the parameter equals theta-nought. The confidence set is "
@@ -39,7 +40,9 @@ class Belt(VoiceoverScene):
             "the set is the event that the data land in the true theta's acceptance region, which has probability at least "
             "one minus alpha. Tests and intervals are two views of one object."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(tc, shift=UP * 0.2))
             step = ladder(self, rows, whys, keep=1, top=-1.4, x=-0.6, buff=0.8, edge=6.9)
             vo.wait_until("b")
@@ -73,7 +76,7 @@ class Belt(VoiceoverScene):
         ), 4.8, 0.34, [4.5, -0.2, 0])
         with self.voiceover(
             "Neyman drew this as a picture, the confidence belt. <bookmark mark='a'/> Twenty trials. For a given true "
-            "p, say point three, an exact two-sided test at five percent accepts the counts from two to ten: those are the "
+            "p, say point three, the central equal-tail exact test at five percent accepts the counts from two to ten: those are the "
             "outcomes not too surprising if p is point three. <bookmark mark='b'/> At p equals point seven, it accepts "
             "ten to eighteen. <bookmark mark='c'/> Do that for every p, and the accepted regions sweep out a belt. Read "
             "across, the belt is a family of tests. <bookmark mark='d'/> Now read it the other way. We observed seven "
@@ -112,7 +115,7 @@ class Belt(VoiceoverScene):
             label(r"the $p$-value function \ (or confidence curve)", font_size=26, color=OBS),
             label(r"cut at 0.05: \ the 95\% interval", font_size=24, color=MISS),
             label(r"cut at 0.5: \ a 50\% interval", font_size=24, color=GREY_A),
-            label(r"its peak: \ the most compatible value", font_size=24, color=GREY_A),
+            label(r"its plateau: \ most compatible under this test ordering", font_size=24, color=GREY_A),
             label(r"every interval at every level, \ in one picture", font_size=24, color=OBS),
         ), 5.0, 0.34, [4.4, -0.3, 0])
         with self.voiceover(
@@ -120,7 +123,7 @@ class Belt(VoiceoverScene):
             "test every possible p-nought and plot the p-value. This is the p-value function, sometimes called the "
             "confidence curve. <bookmark mark='b'/> Cut it at point zero five, and the values above the line are the "
             "ninety-five percent interval. <bookmark mark='c'/> Cut at point five, and you get a fifty percent interval. "
-            "<bookmark mark='d'/> Its peak is the value most compatible with the data. It shows every interval at every "
+            "<bookmark mark='d'/> Its maximum can be a plateau: the most compatible values under this particular test ordering. It shows every interval at every "
             "level at once, and it makes clear that the edges of a ninety-five percent interval aren't walls: values just "
             "outside are barely less compatible than values just inside."
         ) as vo:
@@ -137,11 +140,11 @@ class Belt(VoiceoverScene):
 
     def family(self):
         items = [
-            (r"exact two-sided binomial tests", r"Clopper--Pearson", METHOD_COL["clopper_pearson"]),
+            (r"equal-tail exact binomial tests", r"Clopper--Pearson", METHOD_COL["clopper_pearson"]),
             (r"the score test, \ $\frac{\hat p - p_0}{\sqrt{p_0(1 - p_0)/n}}$", r"Wilson", METHOD_COL["wilson"]),
             (r"the likelihood ratio test", r"the likelihood interval", METHOD_COL["lr"]),
             (r"the Wald test, \ $\frac{\hat p - p_0}{\sqrt{\hat p(1 - \hat p)/n}}$", r"Wald", METHOD_COL["wald"]),
-            (r"the permutation test of a shift", r"Hodges--Lehmann (Part 16)", GREY_A),
+            (r"Wilcoxon rank test: \ common shift model", r"Hodges--Lehmann (Part 16)", GREY_A),
         ]
         rows = VGroup()
         for t, i, c in items:
@@ -155,13 +158,13 @@ class Belt(VoiceoverScene):
             r[0].set_x(-3.0)
             r[1].set_x(0.9)
             r[2].set_x(3.8)
-        head = label(r"invert a test, \ get an interval", font_size=32, color=OBS).to_edge(UP, buff=0.5)
+        head = label(r"invert tests, \ get a confidence set", font_size=32, color=OBS).to_edge(UP, buff=0.5)
         with self.voiceover(
-            "<bookmark mark='a'/> Every test inverts into an interval. <bookmark mark='b'/> Exact binomial tests give "
+            "<bookmark mark='a'/> A family of tests inverts into a confidence set, which need not be an interval. <bookmark mark='b'/> Central equal-tail exact binomial tests give "
             "Clopper–Pearson. <bookmark mark='c'/> The score test, which uses the standard error the null hypothesis "
             "implies, gives Wilson's interval. <bookmark mark='d'/> The likelihood ratio test gives the likelihood "
             "interval. <bookmark mark='e'/> The Wald test, which uses the estimated standard error, gives the Wald "
-            "interval. <bookmark mark='f'/> And a permutation test of a shift gives the Hodges–Lehmann interval of Part "
+            "interval. <bookmark mark='f'/> And in a common location-shift model, inversion of a Wilcoxon rank test gives the Hodges–Lehmann interval of Part "
             "16. The quality of the interval is the quality of the test, and the next chapter compares them."
         ) as vo:
             vo.wait_until("a")
@@ -193,6 +196,7 @@ class Belt(VoiceoverScene):
             label(r"Wald's belt pinches shut near $p = 0$ and $1$: \ there the outcomes it accepts have too little probability", font_size=24,
                   color=MISS),
         ), 12.6, 0.28, [0, -3.0, 0])
+        intro = label('Compare the probability accepted by each belt', font_size=36)
         with self.voiceover(
             "Every family of intervals has a belt, and comparing belts shows what goes wrong. <bookmark mark='a'/> On the "
             "left, Clopper–Pearson's belt, built from exact tests. <bookmark mark='b'/> On the right, the belt the Wald "
@@ -201,7 +205,9 @@ class Belt(VoiceoverScene):
             "carry far less than ninety-five percent of the probability. That pinch is the collapse of coverage at the "
             "edges, seen from the side."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(panels[0][0]), FadeIn(panels[0][2]), LaggedStart(*[Create(s_) for s_ in panels[0][1]], lag_ratio=0.01), run_time=2.5)
             vo.wait_until("b")
             self.play(FadeIn(panels[1][0]), FadeIn(panels[1][2]), LaggedStart(*[Create(s_) for s_ in panels[1][1]], lag_ratio=0.01), run_time=2.5)

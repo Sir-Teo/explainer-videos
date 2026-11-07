@@ -79,7 +79,7 @@ class Discrete(VoiceoverScene):
             label(r"with $n + 1$ possible outcomes, \ coverage is a finite sum of polynomials in $p$, \ with jumps", font_size=26),
             label(r"it cannot equal 0.95 for every $p$: \ exact coverage is impossible without randomization", font_size=28, color=OBS),
             label(r"randomized intervals (Stevens, 1950) achieve it, \ by tossing a coin after seeing the data", font_size=24, color=GREY_A),
-            label(r"nobody reports a confidence interval that depends on a coin toss: \ so we choose what to give up", font_size=24,
+            label(r"randomized intervals need an additional random draw: \ so we choose what to give up", font_size=24,
                   color=GREY_A),
         ), 12.6, 0.42, [0, 0.0, 0])
         with self.voiceover(
@@ -88,8 +88,7 @@ class Discrete(VoiceoverScene):
             "<bookmark mark='b'/> So it can't equal ninety-five percent for every p. Exact coverage is impossible. "
             "<bookmark mark='c'/> Wilfred Stevens showed in 1950 that it can be achieved by randomization: after seeing "
             "the data, toss a coin to decide exactly where the interval ends, just as the Neyman–Pearson lemma "
-            "randomized at ties. <bookmark mark='d'/> But no scientist wants to report an interval that depends on a coin "
-            "toss. So we have to choose what to give up."
+            "randomized at ties. <bookmark mark='d'/> Many applications avoid intervals that depend on an additional random draw. So we have to choose what to give up."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -103,10 +102,10 @@ class Discrete(VoiceoverScene):
                  xticks=[0, 0.25, 0.5, 0.75, 1], yticks=[0.9, 0.95, 1], yfmt=lambda v: f"{v:.2f}", center=[-1.8, -0.3, 0])
         ax = A.ax
         nom = DashedLine(ax.c2p(0, 0.95), ax.c2p(1, 0.95), color=EXACT, stroke_width=2)
-        cp = polyline(ax, ps, np.clip(d["cp"], 0.88, 1), METHOD_COL["clopper_pearson"], 2.5)
-        mp = polyline(ax, ps, np.clip(d["mid"], 0.88, 1), S.POST, 2.5)
-        leg = legend([(METHOD_COL["clopper_pearson"], rf"Clopper--Pearson: \ mean {100 * d['cp_mean']:.1f}\%, \ min {100 * d['cp_min']:.1f}\%"),
-                      (S.POST, rf"mid-$p$: \ mean {100 * d['mid_mean']:.1f}\%, \ min {100 * d['mid_min']:.1f}\%")], font_size=22).to_edge(UP, buff=0.35)
+        cp = polyline(ax, ps, d["cp"], METHOD_COL["clopper_pearson"], 2.5)
+        mp = polyline(ax, ps, d["mid"], S.POST, 2.5)
+        leg = legend([(METHOD_COL["clopper_pearson"], rf"Clopper--Pearson: \ grid mean {100 * d['cp_mean']:.1f}\%, \ grid min {100 * d['cp_min']:.1f}\%"),
+                      (S.POST, rf"mid-$p$: \ grid mean {100 * d['mid_mean']:.1f}\%, \ grid min {100 * d['mid_min']:.1f}\%")], font_size=22).to_edge(UP, buff=0.35)
         rows = fit_rows(VGroup(
             MathTex(r"p_{\mathrm{mid}} = P(T > t) + \tfrac12 P(T = t)", font_size=28, color=S.POST),
             label(r"count only half the observed outcome's probability", font_size=22, color=GREY_A),
@@ -114,12 +113,11 @@ class Discrete(VoiceoverScene):
         ), 4.2, 0.32, [4.8, -0.6, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The Clopper–Pearson interval chooses to guarantee the promise. At twenty-five trials its "
-            "coverage never dips below ninety-five percent, but it averages ninety-seven and a half: it's too careful "
+            "coverage never dips below ninety-five percent, but its displayed grid average is ninety-seven and a half: it's too careful "
             "nearly everywhere. <bookmark mark='b'/> The mid-p version, from Henry Lancaster in 1961, counts only half "
-            "the probability of the observed outcome when computing the tail. Its coverage averages ninety-five point "
+            "the probability of the observed outcome when computing the tail. Its displayed grid coverage averages ninety-five point "
             "nine, much closer to the promise, but it dips to ninety-three. <bookmark mark='c'/> That's the choice in a "
-            "nutshell: guarantee the promise everywhere, and be wide; or keep it on average, and be shorter. There's no "
-            "interval that does both."
+            "nutshell: guarantee the promise everywhere, and be wide; or accept some undercoverage in exchange for shorter intervals. There is no deterministic exact ninety-five percent calibration at every p."
         ) as vo:
             self.play(FadeIn(A), Create(nom))
             vo.wait_until("a")
@@ -130,18 +128,18 @@ class Discrete(VoiceoverScene):
 
     def choice(self):
         rows = fit_rows(VGroup(
-            label(r"two honest readings of ``95\%''", font_size=32, color=OBS),
+            label(r"guaranteed and approximate uses of ``95\%''", font_size=32, color=OBS),
             label(r"strict: \ at least 95\% for every $p$ \ (Neyman's definition): \ Clopper--Pearson", font_size=26,
                   color=METHOD_COL["clopper_pearson"]),
             label(r"on average: \ close to 95\%, \ dipping a little: \ Wilson, \ Jeffreys, \ mid-$p$", font_size=26, color=METHOD_COL["wilson"]),
-            label(r"dishonest: \ far below 95\% for whole ranges of $p$: \ Wald", font_size=26, color=METHOD_COL["wald"]),
+            label(r"poor approximation: \ far below 95\% for whole ranges of $p$: \ Wald", font_size=26, color=METHOD_COL["wald"]),
             label(r"the Board's verdicts: \ kept within 3 MC SEs, \ ``conservative'' above, \ ``broken'' below", font_size=24, color=GREY_A),
         ), 12.6, 0.42, [0, 0.0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> So there are two honest readings of ninety-five percent. <bookmark mark='b'/> The strict "
+            "<bookmark mark='a'/> Distinguish guaranteed coverage from approximate nominal coverage. <bookmark mark='b'/> The strict "
             "one, Neyman's: at least ninety-five percent for every p. Clopper–Pearson keeps it. <bookmark mark='c'/> The "
-            "average one: close to ninety-five percent, with small dips. Wilson, Jeffreys and mid-p keep it. "
-            "<bookmark mark='d'/> And one dishonest reading: far below ninety-five for whole ranges of p, which is the "
+            "approximate one: close to ninety-five percent on the displayed grid, with dips that can be substantial near boundaries. Wilson, Jeffreys and mid-p do not guarantee the strict promise. "
+            "<bookmark mark='d'/> And one poor approximation: far below ninety-five for whole ranges of p, which is the "
             "Wald interval. <bookmark mark='e'/> The Coverage Board's verdicts reflect this: kept within Monte Carlo "
             "error, conservative if well above, broken if well below."
         ) as vo:
@@ -174,9 +172,9 @@ class Discrete(VoiceoverScene):
                     color=METHOD_COL["clopper_pearson"]),
             label(rf"never below 95\% \ (min {100 * min(cg):.1f}\%)", font_size=24, color=METHOD_COL["clopper_pearson"]),
             MathTex(r"\text{Wald: } x \pm 1.96\sqrt x", font_size=26, color=METHOD_COL["wald"]),
-            label(rf"averages {100 * np.mean(cw):.0f}\%, \ and 0 at $x = 0$", font_size=24, color=METHOD_COL["wald"]),
+            label(rf"averages {100 * np.mean(cw):.0f}\%, \ and collapses to $[0,0]$ when $x = 0$", font_size=24, color=METHOD_COL["wald"]),
             MathTex(rf"x = 0:\ \lambda \le {garwood(0)[1]:.2f}", font_size=26),
-            label(r"the Poisson rule of three, \ two-sided", font_size=22, color=GREY_A),
+            label(r"two-sided 95\%: \ 3.69; \ one-sided 95\%: \ 3.00", font_size=22, color=GREY_A),
         ), 5.0, 0.3, [4.4, -0.3, 0])
         with self.voiceover(
             "Counts of events, Poisson rather than binomial, have the same problem and the same cure. <bookmark mark='a'/> "
@@ -184,7 +182,7 @@ class Discrete(VoiceoverScene):
             "closed form. Its coverage, in orange, never falls below ninety-five percent. <bookmark mark='b'/> The Wald "
             "interval, the count plus or minus one point nine six root count, averages eighty-five percent over this range "
             "and is useless when the count is zero. <bookmark mark='c'/> After zero events, Garwood's two-sided upper "
-            "limit is three point six nine, the Poisson version of the rule of three."
+            "limit is three point six nine. The rule of three instead refers to the one-sided ninety-five percent upper bound, minus log point zero five, about three."
         ) as vo:
             self.play(FadeIn(A), Create(nom))
             vo.wait_until("a")
@@ -208,8 +206,9 @@ class Discrete(VoiceoverScene):
                 why(r"for any continuous distribution; \ $r = 7$ gives only " + f"{covs[3][1]:.3f}")]
         foot = label(r"distribution-free, \ exact, \ and discrete: \ only a few levels are possible \ (Thompson, 1936)", font_size=24,
                      color=GREY_A).to_edge(DOWN, buff=0.6)
+        intro = label('Invert the sign test under IID continuous sampling', font_size=36)
         with self.voiceover(
-            "One more exact interval, which needs no model at all. <bookmark mark='a'/> Each observation falls below the "
+            "One more exact interval, which needs independent identically distributed continuous data, but no parametric shape model. <bookmark mark='a'/> Each observation falls below the "
             "population median with probability one half, whatever the distribution. So the number below the median is "
             "binomial with probability a half, and the interval between the r-th smallest and r-th largest observations "
             "covers the median with a probability we can compute exactly. It's Part 10's sign test, inverted. "
@@ -218,9 +217,12 @@ class Discrete(VoiceoverScene):
             "discrete again: the next choice in only covers eighty-eight percent, so ninety-five exactly isn't available. "
             "William Thompson published it in 1936."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=1.8, x=0.0, buff=1.0, edge=6.9)
             for k, m_ in enumerate("ab"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             vo.wait_until("c")
             self.play(FadeIn(foot))

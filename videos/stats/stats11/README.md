@@ -8,7 +8,7 @@ It opens with the textbook (Wald) interval for a proportion. Its exact coverage 
 p = 0.005 it covers 94.5% with n = 591 and 79.2% with n = 592 (Brown, Cai & DasGupta 2001). From there the part
 covers:
 - Neyman's definition, and the interval rain;
-- pivots, including the tank problem's [214, 353], and shortest vs equal-tailed intervals;
+- pivots, including the continuous IID approximation to the tank problem's [214, 353], and shortest vs equal-tailed intervals;
 - Neyman's belt and the test–interval duality;
 - the binomial family, with exact coverage curves;
 - likelihood intervals and the rule of three;
@@ -19,13 +19,17 @@ covers:
 - credible vs confidence intervals, with Welch's 1939 paradox;
 - the Coverage Board's protocol, stated formally.
 
+Exact pivot claims require the stated IID model: normal samples for t, chi-squared and F (independent samples for F), exponential waiting times for the rate, and jointly normal means with known covariance for the displayed z-Fieller sets. The World's height intervals are model approximations. Wilson, Agresti–Coull, Jeffreys and Wilks likelihood intervals have approximate nominal coverage, not a uniform 95% guarantee. Means and minima of coverage curves refer to the displayed parameter grid, not a confidence coefficient over the whole parameter space.
+
+The DKW simulation checks the exact sup distance between the sample and finite-World CDFs over all jump points and both limits. The pointwise comparison checks 200 nominal Wald intervals; those also fail marginally in the tails, so the comparison does not isolate multiplicity. The credible-interval comparison uses the unmodified equal-tailed Jeffreys posterior, distinct from the boundary-modified interval recommended for frequentist coverage. The rule of three is a one-sided 95% bound; the two-sided Poisson zero-event bound is 3.69.
+
 Every number on screen is computed in [`compute.py`](compute.py) or inline in a scene:
 - Binomial and Poisson coverages are exact sums over the outcomes.
 - Heights, incomes and the screening condition come from the World (seed 1662).
 - Everything else is a seeded simulation.
 
 **Built in this part:**
-- **`statkit.intervals`** ([`explainer/stats/kit/intervals.py`](../../../explainer/stats/kit/intervals.py)):
+- **`statkit.intervals`** ([`explainer/stats/kit/intervals.py`](../../../../explainer/stats/kit/intervals.py)):
   Wald, Wilson, Agresti–Coull, Clopper–Pearson, Jeffreys and likelihood-ratio intervals for a proportion;
   `binom_coverage` and `binom_width` (exact); the t, variance and rate pivots; Fieller; the DKW band; prediction
   intervals; Wilks' order-statistic coverage. It is tested in `tests/test_stats_kit_intervals.py` (against SciPy, and
@@ -58,17 +62,17 @@ python tools/lecture_length.py stats11 --floor 50
 
 | # | Chapter | What it does | Numbers |
 |---|---|---|---|
-| 0 | The sawtooth | The Wald formula; exact coverage against n at p = 0.2 and against p at n = 50; BCD (2001); objectives. | 81.5–95.4% at p = 0.2; 591 vs 592: 94.5% vs 79.2%; mean over p 90.7% |
-| 1 | Neyman's promise | Neyman (1937); the definition; the interval rain on the World's men; what 95% does not mean; one-sided bounds; levels and widths; planning a poll. | 93 of 100; 94.9% of 10,000; mean width 9.9 cm; n ≈ 1,067 for ±3% |
+| 0 | The sawtooth | The Wald formula; exact coverage against n at p = 0.2 and against p at n = 50; BCD (2001); objectives. | 81.5–95.4% at p = 0.2; 591 vs 592: 94.5% vs 79.2%; mean over the displayed p grid 90.7% |
+| 1 | Neyman's promise | Neyman (1937); the definition; the interval rain on the World's men; what 95% does not mean; one-sided bounds; levels and widths; planning a poll. | 93 of 100; 94.9% of 10,000; mean width 9.9 cm; n = 1,068 after rounding up for ±3% |
 | 2 | Pivots | The recipe; five pivots and their checks; equal tails vs shortest; the tanks; the asymptotic pivot and its failures. | rate 95.4%, F 94.9%; tanks [214, 353]; shortest σ² interval 16% shorter |
 | 3 | Inverting tests | The duality theorem; Neyman's belt at n = 20; Clopper–Pearson from it; Wald's pinched belt; the p-value function; which test gives which interval. | x = 7: [0.154, 0.592] (Wald [0.141, 0.559]) |
-| 4 | The binomial family | Wilson, Clopper–Pearson, Agresti–Coull, Jeffreys; Wilson's derivation; six exact coverage curves; sawtooths against n; widths; the World's rare condition; advice. | means 90.7 / 95.2 / 95.8 / 96.9 / 95.0 / 94.8%; 4 of 300 |
+| 4 | The binomial family | Wilson, Clopper–Pearson, Agresti–Coull, Jeffreys; Wilson's derivation; six exact coverage curves; sawtooths against n; widths; the World's rare condition; advice. | grid means 90.7 / 95.2 / 95.8 / 96.9 / 95.0 / 94.8%; 4 of 300 |
 | 5 | Likelihood intervals | Six intervals for 2 of 30; the skewed likelihood; invariance and log-odds; agreement at large n (horse kicks); the rule of three. | LR [0.011, 0.192]; 3/n vs 1 − 0.05^(1/n) |
-| 6 | Discreteness | Why coverage jumps; exact coverage is impossible; mid-p; Garwood's Poisson interval; the order-statistic median interval; two honest readings of 95%. | CP mean 97.5%, mid-p 95.9% (n = 25); Garwood min 95.6%, Wald 85% on average; (X₍₆₎, X₍₁₅₎) 95.9% |
+| 6 | Discreteness | Why coverage jumps; exact 95% coverage at every p is impossible without randomization; mid-p; Garwood's Poisson interval; the order-statistic median interval; guaranteed versus approximate nominal coverage. | CP grid mean 97.5%, mid-p 95.9% (n = 25); Garwood min 95.6%, Wald 85% on average; (X₍₆₎, X₍₁₅₎) 95.9% |
 | 7 | Ratios: Fieller | Where ratios arise; Fieller's quadratic; four cases (bounded, skewed, two rays, the whole line); the g index; Gleser & Hwang (1987). | g = 0.04, 0.79, 1.33, 6.0 |
-| 8 | Simultaneous intervals | 0.95ᵏ; Bonferroni; ten intervals simulated; Scheffé (1953); the DKW band on 100 heights; band vs pointwise. | 60% vs 95%; ε = 0.136; band 96.8% vs pointwise 0.8% |
+| 8 | Simultaneous intervals | 0.95ᵏ; Bonferroni; ten intervals simulated; Scheffé (1953); the DKW band on 100 heights; band vs pointwise. | 60% vs 95%; ε = 0.136; whole-CDF band 95.85% vs 200 pointwise Wald intervals jointly 0.8% |
 | 9 | Prediction and tolerance | CI vs PI for the next man; the PI pivot; skewed incomes; the log scale; Wilks (1941); tolerance intervals. | 49.8% vs 95.1%; incomes 93.7%, log scale ≈ 95%; order statistics 89.6% vs 90% |
-| 10 | Credible vs confidence | The Jeffreys posterior; frequentist coverage of credible intervals; HPD vs equal tails; Welch (1939); the moral. | Jeffreys 95.0%, flat 95.2%; at p = 0.01: 98.6% vs 91.1%; Welch 0.5 = 0.25 × 1 + 0.75 × ⅓ |
+| 10 | Credible vs confidence | The Jeffreys posterior; frequentist coverage of credible intervals; HPD vs equal tails; Welch (1939); the moral. | unmodified equal-tailed Jeffreys posterior: grid mean 95.0%, flat 95.2%; at p = 0.01: 98.6% vs 91.1%; Welch 0.5 = 0.25 × 1 + 0.75 × ⅓ |
 | 11 | The Coverage Board, formally | ADEMP; the Monte Carlo SE and verdict rule; choosing R; Part 11's rows; four lessons. | SE 0.22% at R = 10,000 |
 | 12 | Outro | Recap, payoffs, problems, references, the Transcript. | — |
 
