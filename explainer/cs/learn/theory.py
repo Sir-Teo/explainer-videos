@@ -84,7 +84,7 @@ def rectangle_curves(ms=(10, 20, 50, 100, 200, 500, 1000, 2000), trials: int = 2
             else:
                 errs.append(area_t)
         d = 4
-        vc = (4 / m) * (d * math.log2(2 * math.e * m / d) + math.log2(2 / delta))
+        vc = (2 / m) * (d * math.log2(2 * math.e * m / d) + math.log2(2 / delta))
         rows.append({"m": m, "mean": float(np.mean(errs)), "p95": float(np.quantile(errs, 1 - delta)),
                      "rect_bound": 4 / m * math.log(4 / delta), "vc_bound": min(1.0, vc)})
     return {"rows": rows, "target": list(target), "delta": delta}
