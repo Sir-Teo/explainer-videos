@@ -153,6 +153,7 @@ class CrossValidation(VoiceoverScene):
         rows[3][2].set_color(OBS)
         whys = [why(r"same-design fresh responses; \ homoskedastic linear errors"), why(r"from the cubic's residuals"),
                 why(r"$p = 4$ coefficients"), why(r"$p = 9$: \ the formula and CV agree")]
+        intro = label('Training error is optimistic about future predictions', font_size=36)
         with self.voiceover(
             "Why does the training error mislead? <bookmark mark='a'/> For a fixed full-rank linear model with homoskedastic errors, compare fresh responses at the same design: on average the "
             "training error is too small by two sigma squared p over n, where p is the number of coefficients. Colin Mallows "
@@ -163,10 +164,13 @@ class CrossValidation(VoiceoverScene):
             "validation finds the optimism by brute force, with no formula, and so it works where no formula exists: trees, "
             "neural networks, anything that predicts."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.2, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def loo(self):
@@ -179,6 +183,7 @@ class CrossValidation(VoiceoverScene):
         rows[2][2].set_color(OBS)
         whys = [why(r"the jackknife's scheme"), why(r"Part 12's leverage: \ no refitting needed"),
                 why(r"Allen's PRESS (1974): \ one fit, \ $n$ predictions"), why(r"the usual choice")]
+        intro = label('Leave-one-out error can be computed from a single OLS fit', font_size=36)
         with self.voiceover(
             "<bookmark mark='a'/> With as many folds as observations, cross-validation is leave-one-out: the jackknife's "
             "scheme. <bookmark mark='b'/> For least squares, when every deleted design has full rank and leverage is below one, it needs no refitting. The prediction error for a point "
@@ -188,6 +193,8 @@ class CrossValidation(VoiceoverScene):
             "<bookmark mark='d'/> In general, though, five or ten folds are the usual choice: fits on ninety percent of the data "
             "can differ from fits on all the data. The bias and variance trade-off depends on the learning method and data; fewer folds are cheaper, not universally less variable."
         ) as vo:
+            intro.scale_to_fit_width(min(intro.width, 12.5)).move_to([0, 3.2, 0])
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

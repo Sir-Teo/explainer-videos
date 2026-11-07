@@ -31,6 +31,7 @@ class Permutation(VoiceoverScene):
         rows[3][2].set_color(OBS)
         whys = [why(r"no shape assumed: \ not normal, \ not anything"), why(r"Part 5: \ the joint law ignores the order"),
                 why(r"every split into groups equally likely"), why(r"exact for any statistic $T$, \ any distribution")]
+        intro = label('Exchangeability justifies relabelling under the null', font_size=36)
         with self.voiceover(
             "Part 10's permutation machine and Part 13's randomization test return, now as a general principle. "
             "<bookmark mark='a'/> Suppose the null hypothesis is that two samples come from the same distribution, whatever it "
@@ -41,10 +42,13 @@ class Permutation(VoiceoverScene):
             "distribution. In an experiment the justification is the randomization, as in Part 13; in observational data, "
             "it's exchangeability under the null."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def machine(self):

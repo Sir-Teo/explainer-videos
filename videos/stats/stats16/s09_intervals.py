@@ -85,6 +85,7 @@ class BootIntervals(VoiceoverScene):
         rows[3][2].set_color(RES)
         whys = [why(r"the bootstrap principle, \ for the error"), why(r"read the error's quantiles off the replicates"),
                 why(r"the ``basic'' interval: \ the percentiles reflected"), why(r"its upper end is above 1: \ impossible")]
+        intro = label('The basic interval reflects the bootstrap errors', font_size=36)
         with self.voiceover(
             "The bootstrap principle suggests something different. <bookmark mark='a'/> It says the error of a replicate about "
             "the estimate mimics the error of the estimate about the truth. <bookmark mark='b'/> So the error lies between the "
@@ -96,10 +97,13 @@ class BootIntervals(VoiceoverScene):
             "reflection takes it out of bounds: it's only as good as the approximation that the error's distribution doesn't "
             "depend on theta."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.2, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def boot_t(self):
@@ -175,6 +179,7 @@ class BootIntervals(VoiceoverScene):
         rows[3][2].set_color(OBS)
         whys = [why(r"bias: \ only 45\% of replicates fall below $r$"), why(r"acceleration: \ the jackknife's skewness"),
                 why(r"shifted percentile levels"), why(r"Efron (1987): \ stated here, \ proved in Part 30")]
+        intro = label('BCa adjusts for bias and acceleration', font_size=36)
         with self.voiceover(
             "Efron's answer to the percentile interval's flaws, in 1987, was BCa: bias-corrected and accelerated. It's "
             "stated here, not derived. <bookmark mark='a'/> The bias correction z-nought measures how far the replicates are "
@@ -187,10 +192,13 @@ class BootIntervals(VoiceoverScene):
             "interval's good properties, staying in range and transforming correctly, and it's second-order accurate like "
             "the bootstrap-t."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def compare(self):
