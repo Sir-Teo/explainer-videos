@@ -166,6 +166,31 @@ def ambiguous(video: str) -> list[str]:
     return out
 
 
+_ONES = ("zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen "
+         "seventeen eighteen nineteen").split()
+_TENS = dict(zip("twenty thirty forty fifty sixty seventy eighty ninety".split(), range(20, 100, 10)))
+
+
+def spoken_int(v: str) -> int | None:
+    """A whole number spelled out in English ('one hundred and ten', 'twenty-three thousand'), or None."""
+    words = v.lower().replace("-", " ").replace(",", " ").split()
+    if not words or any(w not in _ONES and w not in _TENS and w not in ("hundred", "thousand", "million", "and")
+                        for w in words) or words[0] == "and" or words[-1] == "and":
+        return None
+    total = part = 0
+    for w in words:
+        if w in _ONES:
+            part += _ONES.index(w)
+        elif w in _TENS:
+            part += _TENS[w]
+        elif w == "hundred":
+            part = (part or 1) * 100
+        elif w in ("thousand", "million"):
+            total += (part or 1) * (1000 if w == "thousand" else 1_000_000)
+            part = 0
+    return total + part
+
+
 class Translator:
     def __init__(self, video: str):
         t = table(video)
@@ -180,6 +205,9 @@ class Translator:
             z = self(v, depth + 1)
             if z is not None:
                 return z
+        n = spoken_int(v)
+        if n is not None:
+            return str(n)                                  # a number spelled out for the English voice: digits in Chinese
         return v.replace(",", "") if re.fullmatch(r"-?\d{1,3}(,\d{3})+(\.\d+)?", v) else v
 
     def __call__(self, en: str, depth: int = 0) -> str | None:
