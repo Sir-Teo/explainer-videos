@@ -1,0 +1,17 @@
+{
+  "url": "https://www.gutenberg.org/cache/epub/18/pg18.txt",
+  "retrieved_utc": "2026-11-07",
+  "source_sha256": "a6c9d1135a04d10955fe11d210b7f642e1c2341d4f2c8369b9a832cc97839d94",
+  "asset": "explainer/stats/data/federalist_counts.json",
+  "asset_sha256": "068a1e27644dbe1859d0265de9356d30074c2fa2e9f5df9a00fe25454301e978",
+  "generator": "tools/federalist_counts.py",
+  "papers_verified": 85,
+  "all_records_and_metadata_match": true,
+  "source_type": "public-domain text; attribution categories subsequently normalized by museum.federalist",
+  "primary_references": [
+    "https://www.tandfonline.com/doi/abs/10.1080/01621459.1963.10500849",
+    "https://gwern.net/doc/statistics/bayes/1963-mosteller.pdf",
+    "https://pmc.ncbi.nlm.nih.gov/articles/PMC11412612/",
+    "https://guides.loc.gov/federalist-papers/full-text"
+  ]
+}

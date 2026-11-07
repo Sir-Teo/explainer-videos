@@ -34,6 +34,7 @@ class NaiveBayes(VoiceoverScene):
         rows[3][2].set_color(MAD)
         whys = [why(r"how each author's words are produced"), why(r"Part 2, \ Part 15"), why(r"only the boundary matters"),
                 why(r"Part 14's model")]
+        intro = label('Model the features or model the conditional class probability', font_size=36)
         with self.voiceover(
             "There are two ways to build a classifier. <bookmark mark='a'/> The generative way models how the data are produced "
             "within each class: how Hamilton's word counts are distributed, how Madison's are, and how common each author is. "
@@ -41,10 +42,14 @@ class NaiveBayes(VoiceoverScene):
             "the words. <bookmark mark='c'/> The discriminative way skips the words' distribution and models the probability "
             "of the class given the words directly. <bookmark mark='d'/> Part 14's logistic regression is the standard example."
         ) as vo:
+            intro.scale_to_fit_width(min(intro.width, 12.5))
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def poisson_model(self):
@@ -58,6 +63,7 @@ class NaiveBayes(VoiceoverScene):
         rows[1][2].set_color(OBS)
         whys = [why(r"$t$: \ the paper's length; \ $r$: \ uses per word"), why(r"a weighted sum of word counts"),
                 why(r"false, \ and often harmless"), why(r"91 rates per author: \ 70 function words and 21 markers")]
+        intro = label('Poisson word counts yield a linear log-likelihood ratio', font_size=36)
         with self.voiceover(
             "Mosteller and Wallace's model was generative. In its simplest form: <bookmark mark='a'/> each word's count in a "
             "paper of length t is Poisson, with a rate that depends on the author, and the words are independent of each other. "
@@ -67,10 +73,14 @@ class NaiveBayes(VoiceoverScene):
             "<bookmark mark='d'/> Fitting means estimating each author's rate for each of ninety-one words from the papers "
             "whose authors are known."
         ) as vo:
+            intro.scale_to_fit_width(min(intro.width, 12.5))
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def weights(self):
@@ -86,7 +96,7 @@ class NaiveBayes(VoiceoverScene):
         bars = VGroup()
         names = VGroup()
         for k, j in enumerate(pick):
-            v = float(np.clip(lr[j], -4.4, 4.4))
+            v = float(lr[j])
             top, bot = ax.c2p(k, max(v, 0)), ax.c2p(k, min(v, 0))
             bars.add(Rectangle(width=ax.c2p(0.6, 0)[0] - ax.c2p(0, 0)[0], height=max(0.01, top[1] - bot[1]), stroke_width=0,
                                fill_color=MAD if v > 0 else HAM, fill_opacity=0.9).move_to((top + bot) / 2))
@@ -121,6 +131,7 @@ class NaiveBayes(VoiceoverScene):
         rows[3][2].set_color(HIT)
         whys = [why(r"cross-validation with 65 folds"), why(r"word rates as features"),
                 why(r"91 rates, \ a ridge penalty (chapter seven)"), why(r"the function words really are fingerprints")]
+        intro = label('Leave one known paper out before fitting each classifier', font_size=36)
         with self.voiceover(
             "<bookmark mark='a'/> How good are they? Leave one known paper out, fit on the other sixty-four, and classify the "
             "one left out, sixty-five times. <bookmark mark='b'/> Poisson naive Bayes makes no errors. <bookmark mark='c'/> "
@@ -128,10 +139,14 @@ class NaiveBayes(VoiceoverScene):
             "tame, also makes none. <bookmark mark='d'/> On the papers we can check, both are perfect: the function words really "
             "are fingerprints."
         ) as vo:
+            intro.scale_to_fit_width(min(intro.width, 12.5))
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def curves(self):
@@ -149,16 +164,17 @@ class NaiveBayes(VoiceoverScene):
             label(r"blue: \ ridge logistic", font_size=22, color=MAD),
             MathTex(rf"6\ \text{{papers}}: {100 * d['curves']['nb'][0]:.1f}\%\ \text{{vs}}\ {100 * d['curves']['lr'][0]:.1f}\%", font_size=26),
             label(r"Ng \& Jordan (2002):", font_size=20, color=GREY_A),
-            label(r"generative learns faster; \ both converge", font_size=20, color=GREY_A),
+            label(r"different sample-complexity regimes; model-dependent", font_size=20, color=GREY_A),
         ), 3.45, 0.4, [5.1, 0.3, 0])
         tag = simulated_tag(r"200 random splits per size", corner=DR)
         with self.voiceover(
-            "With fewer training papers, the two differ. <bookmark mark='a'/> Train naive Bayes, and <bookmark mark='b'/> "
-            "logistic regression, on a few random known papers and test on the rest, two hundred times at each size. "
-            "<bookmark mark='c'/> With six papers to learn from, naive Bayes misclassifies six percent, logistic regression "
-            "eleven. <bookmark mark='d'/> Andrew Ng and Michael Jordan showed in 2002 that this is typical: a generative model, "
-            "with stronger assumptions, learns from fewer examples, while a discriminative model catches up, and often "
-            "overtakes, as the data grow."
+            "With fewer training papers, the two differ. <bookmark mark='a'/> Train naive Bayes, and <bookmark "
+            "mark='b'/> logistic regression, on a few random known papers and test on the rest, two hundred times at "
+            "each size. <bookmark mark='c'/> With six papers to learn from, naive Bayes misclassifies six percent, "
+            "logistic regression eleven. <bookmark mark='d'/> Andrew Ng and Michael Jordan showed in 2002 that "
+            "particular generative and discriminative models can have different sample-complexity regimes. Our "
+            "fixed-penalty learning curves illustrate a possibility, not a guarantee that all generative models learn"
+            " faster or all discriminative models eventually win."
         ) as vo:
             self.play(FadeIn(A), FadeIn(tag))
             vo.wait_until("a")
@@ -180,15 +196,22 @@ class NaiveBayes(VoiceoverScene):
             label(r"the ranking can be right while the probabilities are wildly overconfident", font_size=22, color=OBS),
             label(r"Mosteller \& Wallace: \ negative binomial rates, \ careful priors, \ sensitivity analysis", font_size=22, color=HIT),
         ), 12.4, 0.45, [0, 0, 0])
+        intro = label('Classification accuracy does not establish calibration', font_size=36)
         with self.voiceover(
-            "A warning before we use it. <bookmark mark='a'/> On the disputed papers, our naive Bayes gives log odds, base ten, "
-            "as large as twenty: <bookmark mark='b'/> odds of a hundred billion billion to one, which nobody should believe. "
-            "<bookmark mark='c'/> Independence counts words that travel together as separate pieces of evidence, so the evidence "
-            "is multiplied many times over. <bookmark mark='d'/> Naive Bayes often classifies well while its probabilities are "
-            "wildly overconfident. <bookmark mark='e'/> Mosteller and Wallace knew this, and used negative binomial rates, careful "
-            "priors and extensive checks of sensitivity, so that their final odds could be taken seriously."
+            "A warning before we use it. <bookmark mark='a'/> On the disputed papers, our naive Bayes gives log odds,"
+            " base ten, as large as twenty: <bookmark mark='b'/> odds of a hundred billion billion to one, which "
+            "nobody should believe. <bookmark mark='c'/> Independence counts words that travel together as separate "
+            "pieces of evidence, so the evidence is multiplied many times over. <bookmark mark='d'/> Naive Bayes "
+            "often classifies well while its probabilities are wildly overconfident. <bookmark mark='e'/> Mosteller "
+            "and Wallace knew this, and used negative binomial rates, careful priors and extensive checks of "
+            "sensitivity, to assess how sensitive their odds were to the modelling assumptions. Our plug-in "
+            "calculation also omits uncertainty in the estimated word rates."
         ) as vo:
+            intro.scale_to_fit_width(min(intro.width, 12.5))
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()

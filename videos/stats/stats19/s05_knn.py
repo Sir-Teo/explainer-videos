@@ -28,12 +28,11 @@ class Neighbours(VoiceoverScene):
         G = np.array([[a, b] for b in ys for a in xs])
         sc = np.array([1.0, 1 / 35.0])  # put log income and age on comparable scales
         pr = L.knn_predict(X * sc, v, G * sc, k)
-        cw = ax.c2p(xs[1], 0)[0] - ax.c2p(xs[0], 0)[0]
-        ch = ax.c2p(0, ys[1])[1] - ax.c2p(0, ys[0])[1]
+        dx, dy = xs[1]-xs[0], ys[1]-ys[0]
         cells = VGroup()
         for (a, b), p in zip(G, pr):
-            cells.add(Rectangle(width=cw, height=ch, stroke_width=0, fill_color=BLUE if p > 0.5 else RED, fill_opacity=0.18 + 0.3 * abs(p - 0.5))
-                      .move_to(ax.c2p(a, b)))
+            cells.add(plot_cell(ax, a, b, dx, dy, BLUE if p > 0.5 else RED,
+                                0.18+0.3*abs(p-0.5)))
         return cells
 
     def regions(self):
@@ -46,7 +45,7 @@ class Neighbours(VoiceoverScene):
                      xfmt=lambda u: f"{10 ** u:.0f}")
             ax = A.ax
             cells = self.region_map(ax, X, v, k)
-            dots = VGroup(*[Dot(ax.c2p(min(max(a, 0.62), 2.58), b), radius=0.035, color=BLUE if c else RED) for (a, b), c in zip(X, v)])
+            dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.035, color=BLUE if c else RED) for (a, b), c in zip(X, v) if 0.6 <= a <= 2.6 and 18 <= b <= 95])
             t = label(rf"$k = {k}$", font_size=24, color=GREY_A).next_to(A, UP, buff=0.1)
             panels.add(VGroup(A, cells, dots, t))
         rows = fit_rows(VGroup(
@@ -56,12 +55,13 @@ class Neighbours(VoiceoverScene):
         ), 12.4, 0.25, [0, -2.6, 0])
         tag = simulated_tag(r"the World's survey block", corner=UR)
         with self.voiceover(
-            "<bookmark mark='a'/> Nearest neighbours classify too. Here are six hundred adults from the World, by income and age, "
-            "coloured by their vote. Shade each spot of the plane by the vote of its nearest neighbours. "
-            "<bookmark mark='b'/> With one neighbour, the map is a patchwork: every point claims a little territory, noise "
-            "included. That's a rule with no bias and enormous variance. <bookmark mark='c'/> With fifty-one neighbours, the map "
-            "is smooth, and shows the real pattern: Blue's support grows with income. The vote is hard to predict from income "
-            "and age alone, and the smoother map is honest about that."
+            "<bookmark mark='a'/> Nearest neighbours classify too. Here are six hundred adults from the World, by "
+            "income and age, coloured by their vote. Shade each spot of the plane by the vote of its nearest "
+            "neighbours. <bookmark mark='b'/> With one neighbour, the map is a patchwork: every point claims a little"
+            " territory, noise included. It interpolates the training labels and can have high variance; that does "
+            "not make its predictions at new points unbiased. <bookmark mark='c'/> With fifty-one neighbours, the map"
+            " is smooth, and shows the real pattern: Blue's support grows with income. The vote is hard to predict "
+            "from income and age alone, and the smoother map is honest about that."
         ) as vo:
             self.add(tag)
             vo.wait_until("a")
@@ -84,6 +84,7 @@ class Neighbours(VoiceoverScene):
             label(r"local is no longer local", font_size=26, color=OBS),
             label(r"Bellman (1961): \ the curse of dimensionality", font_size=22, color=GREY_A),
         ), 12.4, 0.35, [0, -1.4, 0])
+        intro = label('Neighbourhoods spread across high-dimensional cubes', font_size=36)
         with self.voiceover(
             "Nearest neighbours rely on there being near neighbours, and in many dimensions there aren't. "
             "<bookmark mark='a'/> Spread data uniformly in a unit cube, and ask how big a sub-cube must be to hold ten percent "
@@ -92,7 +93,10 @@ class Neighbours(VoiceoverScene):
             "neighbourhood that holds enough points to average is no longer local at all. <bookmark mark='d'/> Richard Bellman "
             "called this the curse of dimensionality, in 1961."
         ) as vo:
+            intro.scale_to_fit_width(min(intro.width, 12.5))
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(tab[0]), FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(FadeIn(tab[1]), FadeIn(rows[1]))
@@ -196,17 +200,20 @@ class Neighbours(VoiceoverScene):
         ), 3.45, 0.38, [5.1, 0.3, 0])
         tag = simulated_tag(r"simulated: \ 20 training sets per $n$")
         with self.voiceover(
-            "Nearest neighbours have one beautiful guarantee, in low dimensions. <bookmark mark='a'/> Take two classes, normal "
-            "with means zero and one and a half, and the same spread. <bookmark mark='b'/> The best possible rule, the Bayes "
-            "rule, knows the distributions and cuts halfway between the means. Its error is twenty-two point seven percent, and "
-            "no rule can do better. <bookmark mark='c'/> One nearest neighbour knows nothing about normal distributions, yet as "
-            "the data grows its error settles at thirty-one percent. <bookmark mark='d'/> Thomas Cover and Peter Hart proved in "
-            "1967 that this limit is never more than twice the Bayes error: two R star times one minus R star, here thirty-five "
-            "percent. Half the information in the data, they put it, is in the nearest neighbour. <bookmark mark='e'/> And let "
-            "k grow with n, here the square root of n, and the error falls toward the Bayes rate itself, twenty-two point six "
-            "percent at three thousand points. Charles Stone showed in 1977 that this holds for every distribution, which is "
-            "what makes nearest neighbours a universally consistent rule, as long as the dimension doesn't ruin the "
-            "neighbourhoods first."
+            "Nearest neighbours have one beautiful guarantee, in low dimensions. <bookmark mark='a'/> Take two "
+            "classes, normal with means zero and one and a half, and the same spread. <bookmark mark='b'/> The best "
+            "possible rule, the Bayes rule, knows the distributions and cuts halfway between the means. Its error is "
+            "twenty-two point seven percent, and no rule can do better. <bookmark mark='c'/> One nearest neighbour "
+            "knows nothing about normal distributions, yet as the data grows its error settles at thirty-one percent."
+            " <bookmark mark='d'/> Thomas Cover and Peter Hart proved in 1967 that this limit is never more than "
+            "twice the Bayes error: two R star times one minus R star, here thirty-five percent. Half the information"
+            " in the data, they put it, is in the nearest neighbour. <bookmark mark='e'/> And let k grow with n, here"
+            " the square root of n, and the error falls toward the Bayes rate itself, twenty-two point six percent on"
+            " this finite test sample at three thousand training points. Sample error can fall slightly below the "
+            "population Bayes rate by chance. Charles Stone showed in 1977 that with IID observations in a fixed "
+            "finite-dimensional Euclidean space, consistency holds as k tends to infinity while k over n tends to "
+            "zero. High dimension can make the required sample size enormous; it affects the rate, rather than "
+            "invalidating that fixed-dimension limit."
         ) as vo:
             self.add(tag)
             self.play(FadeIn(A))
@@ -232,11 +239,12 @@ class Neighbours(VoiceoverScene):
             label(r"Parts 29, \ 51 and 52: \ smoothing and high-dimensional statistics", font_size=22, color=GREY_A),
         ), 12.4, 0.5, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> So nearest neighbours make no model at all: they just average locally. <bookmark mark='b'/> In "
-            "low dimensions with plenty of data, that works remarkably well. <bookmark mark='c'/> In high dimensions, "
-            "neighbourhoods stop being local. <bookmark mark='d'/> There, structure beats proximity: assumptions about the form of "
-            "the rule, such as linearity or sparsity, buy back what the dimensions take away. <bookmark mark='e'/> Parts 29, 51 "
-            "and 52 take this further."
+            "<bookmark mark='a'/> So nearest neighbours impose no parametric response model, while relying on the "
+            "sampling assumptions and a meaningful distance: they just average locally. <bookmark mark='b'/> In low "
+            "dimensions with plenty of data, that works remarkably well. <bookmark mark='c'/> In high dimensions, "
+            "neighbourhoods stop being local. <bookmark mark='d'/> There, structure beats proximity: assumptions "
+            "about the form of the rule, such as linearity or sparsity, buy back what the dimensions take away. "
+            "<bookmark mark='e'/> Parts 29, 51 and 52 take this further."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

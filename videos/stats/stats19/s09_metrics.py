@@ -75,12 +75,13 @@ class Metrics(VoiceoverScene):
             label(r"the right threshold depends on what each mistake costs", font_size=22, color=OBS),
         ), 5.2, 0.4, [3.6, 0.2, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The threshold is a choice. Call Blue whenever the probability exceeds thirty-five percent. "
-            "<bookmark mark='b'/> Recall rises from twenty-four to sixty-four percent: most Blue voters are now found. "
-            "<bookmark mark='c'/> Precision falls from fifty-seven to forty-eight. <bookmark mark='d'/> And accuracy falls too, "
-            "from sixty-five to sixty-one. <bookmark mark='e'/> Which is better depends entirely on what the two kinds of mistake "
-            "cost: a campaign mailing leaflets cares about missing supporters; a screening test, Part 2's problem, about false "
-            "alarms. Decision theory, Part 45, makes the choice formal."
+            "<bookmark mark='a'/> The threshold is a choice. Call Blue whenever the probability exceeds thirty-five "
+            "percent. <bookmark mark='b'/> Recall rises from twenty-four to sixty-four percent: most Blue voters are "
+            "now found. <bookmark mark='c'/> Precision falls from fifty-seven to forty-eight. <bookmark mark='d'/> "
+            "And accuracy falls too, from sixty-five to sixty-one. <bookmark mark='e'/> Which is better depends "
+            "entirely on what the two kinds of mistake cost: different applications place different costs on missed "
+            "cases and false alarms; neither priority is universal. Decision theory, Part 45, makes the choice "
+            "formal."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(M), FadeIn(rows[0]))
@@ -102,16 +103,17 @@ class Metrics(VoiceoverScene):
             label(r"every threshold at once", font_size=22),
             label(r"red: \ 0.5; \ green: \ 0.35", font_size=22, color=GREY_A),
             MathTex(rf"\text{{AUC}} = {d['auc']:.3f}", font_size=30, color=OBS),
-            label(r"the chance a random Blue voter scores above a random Red one", font_size=20),
+            label(r"ranking credit: a Blue score wins, with half-credit for a tie", font_size=20),
             label(r"Part 16's Mann--Whitney $U$, \ and Part 14's Challenger", font_size=20, color=GREY_A),
         ), 5.2, 0.4, [3.4, 0.2, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> To see every threshold at once, plot the true positive rate against the false positive rate as "
-            "the threshold sweeps from one to zero: the ROC curve, from Part 14. <bookmark mark='b'/> Our two thresholds are two "
-            "points on it. <bookmark mark='c'/> The area under the curve is point six six. <bookmark mark='d'/> It's the "
-            "probability that a random Blue voter gets a higher score than a random Red voter, <bookmark mark='e'/> Part 16's "
-            "Mann–Whitney statistic again. Point five is guessing; one is perfect. Point six six says income and age carry real "
-            "but limited information about the vote."
+            "<bookmark mark='a'/> To see every threshold at once, plot the true positive rate against the false "
+            "positive rate as the threshold sweeps from one to zero: the ROC curve, from Part 14. <bookmark "
+            "mark='b'/> Our two thresholds are two points on it. <bookmark mark='c'/> The area under the curve is "
+            "point six six. <bookmark mark='d'/> It's the probability that a random Blue voter gets a higher score "
+            "than a random Red voter, plus half the probability of a tied score, <bookmark mark='e'/> Part 16's "
+            "Mann–Whitney statistic again. Point five is guessing; one is perfect. Point six six says income and age "
+            "carry real but limited information about the vote."
         ) as vo:
             self.play(FadeIn(A), Create(diag))
             vo.wait_until("a")
@@ -161,19 +163,21 @@ class Metrics(VoiceoverScene):
         dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.09, color=HIT) for a, b in zip(pred, obs)])
         rows = fit_rows(VGroup(
             label(r"ten groups of 200, \ by predicted probability", font_size=22),
-            label(r"on the diagonal: \ calibrated", font_size=22, color=HIT),
+            label(r"near the diagonal: compatible with binned calibration", font_size=22, color=HIT),
             MathTex(rf"\text{{Brier score}} = {d['brier']:.3f}", font_size=26),
             label(r"probabilities that mean what they say: \ Part 14", font_size=20, color=GREY_A),
-            label(r"naive Bayes would fail this badly: \ chapter five", font_size=20, color=RES),
+            label(r"extreme probabilities need a separate calibration check", font_size=20, color=RES),
         ), 5.2, 0.4, [3.4, 0.2, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Finally, are the probabilities honest? Group the held-out adults by their predicted probability, "
-            "ten groups of two hundred, and compare each group's average prediction with the share who actually voted Blue. "
-            "<bookmark mark='b'/> The points lie close to the diagonal: when the model says forty percent, about forty percent "
-            "vote Blue. That's calibration. <bookmark mark='c'/> The Brier score, Part 14's mean squared error of the "
-            "probabilities, is point two one five. <bookmark mark='d'/> A calibrated model's probabilities can be used directly "
-            "for decisions. <bookmark mark='e'/> Chapter five's naive Bayes, with its odds of ten to the twenty, would fail this "
-            "test spectacularly, while still classifying well."
+            "<bookmark mark='a'/> Finally, are the probabilities honest? Group the held-out adults by their predicted"
+            " probability, ten groups of two hundred, and compare each group's average prediction with the share who "
+            "actually voted Blue. <bookmark mark='b'/> The points lie close to the diagonal: when the model says "
+            "forty percent, about forty percent vote Blue. That is a coarse check compatible with calibration, with "
+            "sampling uncertainty; it does not establish calibration at every individual score. <bookmark mark='c'/> "
+            "The Brier score, Part 14's mean squared error of the probabilities, is point two one five. <bookmark "
+            "mark='d'/> A calibrated model's probabilities can be used directly for decisions. <bookmark mark='e'/> "
+            "Chapter five's authorship model is a different prediction task. Its extreme probabilities need their own"
+            " independent calibration check; accurate classifications alone do not validate those probabilities."
         ) as vo:
             self.play(FadeIn(A), Create(diag))
             vo.wait_until("a")
@@ -189,13 +193,13 @@ class Metrics(VoiceoverScene):
         runs = d["runs"]
         cols = {"1": GREY_A, "2": OBS, "5": RES}
         A = axes([0, 1], [0.2, 1.0], x_length=8.0, y_length=4.4, xlabel=r"threshold: \ call if $\hat p \ge t$",
-                 ylabel=r"expected cost per adult", xticks=[0, 0.25, 0.5, 0.75, 1], yticks=[0.2, 0.4, 0.6, 0.8, 1.0],
+                 ylabel=r"empirical average cost per adult", xticks=[0, 0.25, 0.5, 0.75, 1], yticks=[0.2, 0.4, 0.6, 0.8, 1.0],
                  center=[-1.6, 0.3, 0])
         ax = A.ax
         curves, marks = VGroup(), VGroup()
         for c in ("1", "2", "5"):
             r = runs[c]
-            cv = np.minimum(np.asarray(r["cost"]), 1.0)
+            cv = np.asarray(r["cost"])
             curves.add(polyline(ax, ths, cv, cols[c], 3.5))
             marks.add(VGroup(Dot(ax.c2p(r["best_t"], r["best_cost"]), radius=0.08, color=cols[c]),
                              DashedLine(ax.c2p(r["theory_t"], 0.2), ax.c2p(r["theory_t"], r["best_cost"]), color=cols[c],
@@ -206,18 +210,21 @@ class Metrics(VoiceoverScene):
             label(rf"$c = 2$: \ best $t = {runs['2']['best_t']:.2f}$", font_size=22, color=OBS),
             label(rf"$c = 5$: \ best $t = {runs['5']['best_t']:.2f}$", font_size=22, color=RES),
             MathTex(r"\text{theory: } t^* = \frac{1}{1 + c}", font_size=30, color=HIT),
-            label(r"dashed: \ $\tfrac12$, \ $\tfrac13$, \ $\tfrac16$; \ it works because $\hat p$ is calibrated", font_size=20, color=GREY_B),
+            label(r"dashed: \ $\tfrac12$, \ $\tfrac13$, \ $\tfrac16$; \ optimal for calibrated risks; finite-sample minima can differ", font_size=20, color=GREY_B),
         ), 3.45, 0.36, [5.1, 0.3, 0])
         with self.voiceover(
-            "Calibration also settles the question we left open: where should the threshold go? "
-            "<bookmark mark='a'/> Suppose a campaign phones the people it predicts will vote Blue. Missing a Blue voter costs c; "
-            "a wasted call on a Red voter costs one. <bookmark mark='b'/> With equal costs, the expected cost per adult is "
-            "smallest near a threshold of a half, as accuracy suggested. <bookmark mark='c'/> If a missed voter costs twice as "
-            "much, the best threshold falls to about a third, <bookmark mark='d'/> and at five times, to about a sixth. "
-            "<bookmark mark='e'/> Decision theory predicts exactly this. Call a person when the expected cost of not calling, c "
-            "times p, exceeds the cost of calling, one minus p: that is, when p is above one over one plus c. <bookmark mark='f'/> "
-            "The empirical minima sit on the dashed lines because the probabilities are calibrated. With naive Bayes's "
-            "probabilities, the formula would put the threshold in the wrong place, however good the ranking."
+            "Calibration also settles the question we left open: where should the threshold go? <bookmark mark='a'/> "
+            "Suppose a campaign phones the people it predicts will vote Blue. Missing a Blue voter costs c; a wasted "
+            "call on a Red voter costs one. <bookmark mark='b'/> With equal costs, the empirical average cost in this"
+            " held-out sample is smallest near a threshold of a half, as accuracy suggested. <bookmark mark='c'/> If "
+            "a missed voter costs twice as much, the best threshold falls to about a third, <bookmark mark='d'/> and "
+            "at five times, to about a sixth. <bookmark mark='e'/> Decision theory predicts exactly this. Call a "
+            "person when the expected cost of not calling, c times p, exceeds the cost of calling, one minus p: that "
+            "is, when p is above one over one plus c. <bookmark mark='f'/> The empirical minima are near, but not "
+            "exactly on, the theoretical thresholds. Sampling variation and imperfect calibration can shift them. "
+            "These curves are retrospective diagnostics; choose costs and thresholds using validation data before a "
+            "final independent test. With naive Bayes's probabilities, the formula would put the threshold in the "
+            "wrong place, however good the ranking."
         ) as vo:
             self.play(FadeIn(A), FadeIn(rows[0]))
             for k, m_ in enumerate("bcd"):

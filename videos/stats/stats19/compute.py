@@ -82,6 +82,60 @@ def truth_curve(x):
     return np.sin(2 * np.pi * x) + 0.5 * x
 
 
+def clipped_segments(xs, ys, rectangle):
+    """Intersect segments with the viewport, preserving crossings and missing breaks."""
+    xmin, xmax, ymin, ymax = rectangle
+    points = np.column_stack((xs, ys))
+    result = []
+    for start, end in zip(points[:-1], points[1:]):
+        if not np.isfinite([start, end]).all():
+            continue
+        delta = end-start
+        lo, hi = 0., 1.
+        for j, lower, upper in ((0, xmin, xmax), (1, ymin, ymax)):
+            if delta[j] == 0:
+                if not lower <= start[j] <= upper:
+                    hi = -1
+                    break
+            else:
+                a, b = sorted(((lower-start[j])/delta[j], (upper-start[j])/delta[j]))
+                lo, hi = max(lo, a), min(hi, b)
+        if lo <= hi:
+            result.append((start+lo*delta, start+hi*delta))
+    return result
+
+
+def knn_population_risk(x, y, k, noise=.09):
+    """Exact squared-error risk for our curve, uniform X in [0,1], and distinct training x.
+
+    In one dimension, the k-neighbour window changes at (x_i+x_{i+k})/2.
+    Integrate the squared difference on each constant-prediction interval.
+    """
+    order = np.argsort(x)
+    x, y = np.asarray(x, float)[order], np.asarray(y, float)[order]
+    if not 1 <= k <= len(x) or len(np.unique(x)) != len(x):
+        raise ValueError('Require distinct training inputs and 1 <= k <= n')
+    cuts = np.r_[0., (x[:-k]+x[k:])/2, 1.] if k < len(x) else np.array([0., 1.])
+    if np.any(np.diff(cuts) < 0):
+        raise ValueError('Training inputs must lie in [0,1]')
+    pred = np.convolve(y, np.ones(k)/k, mode='valid')
+    omega = 2*np.pi
+    primitive = -np.cos(omega*cuts)/omega + cuts**2/4
+    primitive2 = (cuts/2 - np.sin(2*omega*cuts)/(4*omega)
+                  - cuts*np.cos(omega*cuts)/omega + np.sin(omega*cuts)/omega**2
+                  + cuts**3/12)
+    return float(noise + np.sum(np.diff(primitive2)-2*pred*np.diff(primitive)+pred**2*np.diff(cuts)))
+
+
+def threshold_pr_curve(scores, labels):
+    """Evaluate only complete score-tie groups, including the full-recall endpoint."""
+    scores, labels = np.asarray(scores), np.asarray(labels)
+    order = np.argsort(-scores, kind='stable')
+    ends = np.r_[np.flatnonzero(np.diff(scores[order]) != 0), len(scores)-1]
+    tp = np.cumsum(labels[order])[ends]
+    return np.r_[1., tp/(ends+1)], np.r_[0., tp/labels.sum()]
+
+
 def compute_rates():
     words, C, n, a, no = fed_matrix()
     out = {}
@@ -108,7 +162,7 @@ def compute_poly():
         te.append(float(np.mean((np.polyval(c, xt) - yt) ** 2)))
         if d in (1, 3, 5, 12):
             grid = np.linspace(0, 1, 200)
-            fits[d] = np.clip(np.polyval(c, grid), -3, 3)
+            fits[d] = np.polyval(c, grid)
     return nest({"x": x, "y": y, "train": tr, "test": te, "fits": fits, "grid": np.linspace(0, 1, 200), "noise": 0.09})
 
 
@@ -243,7 +297,8 @@ def compute_tree():
                 "left": dump(node.left), "right": dump(node.right)}
 
     small = L.prune_to(big, 4)
-    return nest({"sizes": sizes, "cv": cv, "best": best, "test_pruned": test_err, "test_full": test_full,
+    return nest({"sizes": sizes, "cv": cv, "best": best, "pruned_leaves": len(L.leaves(pruned)),
+                 "test_pruned": test_err, "test_full": test_full,
                  "n_leaves_full": n_leaves_full, "small": dump(small), "pruned": dump(pruned), "base": float(v[te].mean()),
                  "sample_x": X[:600], "sample_v": v[:600]})
 
@@ -261,8 +316,9 @@ def compute_lasso():
     lam_max = float(np.max(np.abs(Xs.T @ yc)) / n)
     lams = lam_max * np.logspace(0, -2.5, 60)
     path = L.lasso_path(Xs, yc, lams)
-    rl = np.logspace(3, -1, 60)
-    rpath = np.array([L.ridge(Xs, yc, l) for l in rl])
+    # Per-observation ridge objective: SSE/(2n) + lambda*||b||^2/2.
+    rl = np.logspace(3, -1, 60)/n
+    rpath = np.array([L.ridge(Xs, yc, n*l) for l in rl])
     folds = L.kfold(n, 10, rng(7))
     cvm = []
     cvs = []
@@ -279,7 +335,7 @@ def compute_lasso():
         cvs.append(float(np.std(errs, ddof=1) / np.sqrt(10)))
     best, simple = L.one_se_rule(cvm, cvs)  # lams decreasing = complexity increasing
     ols = np.linalg.lstsq(Xs, yc, rcond=None)[0]
-    return nest({"lams": lams, "path": path, "ridge_lams": rl, "ridge_path": rpath, "cv": cvm, "cv_se": cvs, "best": best,
+    return nest({"n": n, "lams": lams, "path": path, "ridge_lams": rl, "ridge_path": rpath, "cv": cvm, "cv_se": cvs, "best": best,
                  "one_se": simple, "b_best": path[best], "b_one_se": path[simple], "true": beta * sd, "ols": ols,
                  "nz_best": int(np.count_nonzero(path[best])), "nz_one_se": int(np.count_nonzero(path[simple]))})
 
@@ -302,10 +358,10 @@ def compute_metrics():
         c = L.confusion(v[te], p >= t)
         fpr.append(c["fp"] / max(1, c["fp"] + c["tn"]))
         tpr.append(c["tp"] / max(1, c["tp"] + c["fn"]))
-    prec, rec = L.pr_curve(p, v[te])
+    prec, rec = threshold_pr_curve(p, v[te])
     cal = G.calibration(p, v[te], bins=10)
-    return nest({"b": b, "conf": conf, "conf35": conf3, "fpr": fpr, "tpr": tpr, "auc": L.auc(p, v[te]), "prec": prec[::10],
-                 "rec": rec[::10], "base": float(v[te].mean()), "calibration": cal, "brier": G.brier(p, v[te])})
+    return nest({"b": b, "conf": conf, "conf35": conf3, "fpr": fpr, "tpr": tpr, "auc": L.auc(p, v[te]), "prec": prec,
+                 "rec": rec, "base": float(v[te].mean()), "calibration": cal, "brier": G.brier(p, v[te])})
 
 
 def compute_costs():
@@ -404,8 +460,9 @@ def compute_nested():
     ks = [1, 2, 3, 5, 8, 12, 17, 25, 35]
     reps = 200
     mins, trues, nesteds = [], [], []
+    # Retain the original RNG schedule for the training samples. Risk below is exact.
     xt = g.uniform(0, 1, 4000)
-    yt = truth_curve(xt) + g.normal(0, 0.3, 4000)
+    _ = truth_curve(xt) + g.normal(0, 0.3, 4000)
 
     def tune(x, y, seed):
         cvs = [L.cv_score(lambda a, b, c, k=k: L.knn_predict(a, b, c, k), x[:, None], y, 5, rng(seed))["mean"] for k in ks]
@@ -417,7 +474,7 @@ def compute_nested():
         y = truth_curve(x) + g.normal(0, 0.3, 100)
         k, m = tune(x, y, 10_000 + r)
         mins.append(m)
-        trues.append(float(np.mean((L.knn_predict(x[:, None], y, xt[:, None], k) - yt) ** 2)))
+        trues.append(knn_population_risk(x, y, k))
         outer = L.kfold(100, 5, rng(20_000 + r))
         e = 0.0
         for f in outer:
@@ -434,7 +491,15 @@ def compute_cp():
     n, s2 = len(d["x"]), d["noise"]
     deg = np.arange(1, 15)
     cp = np.asarray(d["train"]) + 2 * s2 * (deg + 1) / n
+    x = np.asarray(d['x'])
+    signal = truth_curve(x)
+    fixed_risk = []
+    for degree in deg:
+        Q, _ = np.linalg.qr(np.polynomial.legendre.legvander(2*x-1, degree))
+        bias = signal-Q@(Q.T@signal)
+        fixed_risk.append(np.mean(bias**2)+s2*(1+(degree+1)/n))
     return nest({"deg": deg, "cp": cp, "train": d["train"], "test": d["test"], "n": n, "sigma2": s2,
+                 "fixed_design_expected_risk": fixed_risk,
                  "cp_best": int(deg[np.argmin(cp)]), "test_best": int(deg[np.argmin(d["test"])])})
 
 
@@ -493,14 +558,15 @@ def compute_board():
     g = rng(19_000)
     hits = 0
     widths = []
+    # Preserve the original training draws without a noisy finite reference test set.
     xt = g.uniform(0, 1, 20_000)
-    yt = truth_curve(xt) + g.normal(0, 0.3, 20_000)
+    _ = truth_curve(xt) + g.normal(0, 0.3, 20_000)
     for _ in range(R_BOARD):
         x = g.uniform(0, 1, 100)
         y = truth_curve(x) + g.normal(0, 0.3, 100)
         r = L.cv_score(lambda a, b, c: L.knn_predict(a, b, c, 10), x[:, None], y, 10, g)
         lo, hi = r["mean"] - 1.96 * r["se"], r["mean"] + 1.96 * r["se"]
-        err = float(np.mean((L.knn_predict(x[:, None], y, xt[:, None], 10) - yt) ** 2))
+        err = knn_population_risk(x, y, 10)
         hits += lo <= err <= hi
         widths.append(hi - lo)
     rows = [Row(19, r"10-fold CV $\pm$ 1.96 SE", r"$k$-NN test error, \ $n = 100$", "coverage", 0.95, hits / R_BOARD, R_BOARD)]

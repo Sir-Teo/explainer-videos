@@ -8,7 +8,7 @@ It opens with the *Federalist* papers of 1787–88. Hamilton, Madison and Jay al
 were claimed by both Hamilton and Madison. Mosteller and Wallace (1964) settled the question with the rates of dull
 words. *upon* appears in every one of Hamilton's 51 papers, at 1.0–7.5 per 1,000 words. It is absent from 11 of
 Madison's 14 and from 10 of the 12 disputed papers. The texts come from Project Gutenberg, counted by
-[`tools/federalist_counts.py`](../../../tools/federalist_counts.py).
+[`tools/federalist_counts.py`](../../../../tools/federalist_counts.py).
 
 From there the part covers:
 - **Prediction error.** Training and test error; polynomials of degree 1–14 fitted to 30 points.
@@ -22,7 +22,7 @@ From there the part covers:
 - **Cross-validation.**
   - 10-fold CV of k picks k = 8 (test error 0.119); the true optimum is k = 7.
   - The one-SE rule picks k = 17 (test error 0.141).
-  - What CV estimates (Bates, Hastie & Tibshirani 2023), with a Board row; leave-one-out.
+  - What CV estimates (Bates, Hastie & Tibshirani, online 2023 / volume 2024), with a Board row; leave-one-out.
 - **k-nearest neighbours.**
   - Regions for the World's vote with k = 1 and k = 51.
   - The curse of dimensionality: a cube holding 10% of the data has edge 0.79 in 10 dimensions. The ratio of
@@ -37,7 +37,7 @@ From there the part covers:
   - Naive Bayes is overconfident.
 - **Trees.** CART on the World's vote from income and age.
   - Splits at incomes of 31.4k and 76.4k.
-  - Cost-complexity pruning; CV picks 4 leaves.
+  - Cost-complexity pruning; CV selects a leaf budget of 4; weakest-link pruning gives 3 actual leaves.
   - Test error 35.9% pruned vs 38.5% for the full 35-leaf tree; always guessing Red scores 37.6%.
 - **Ridge and the lasso.**
   - The ℓ₁ diamond against the ℓ₂ disc (`L1Geometry`).
@@ -66,7 +66,7 @@ Every number on screen is computed in [`compute.py`](compute.py) or inline in a 
   examples).
 
 **Built in this part:**
-- **`statkit.learn`** ([`explainer/stats/kit/learn.py`](../../../explainer/stats/kit/learn.py)), checked in
+- **`statkit.learn`** ([`explainer/stats/kit/learn.py`](../../../../explainer/stats/kit/learn.py)), checked in
   `tests/test_stats_kit_learn.py`:
   - K-fold splits, CV scores with fold SEs, and the one-SE rule;
   - k-NN regression and classification;
@@ -82,7 +82,7 @@ The Coverage Board gains one row: a 95% interval for test error.
 
 | Method | Setting | Reps | Achieved | Verdict |
 |---|---|---|---|---|
-| 10-fold CV ± 1.96 SE | k-NN test error, n = 100 | 2,000 | 90.5% | broken |
+| 10-fold CV ± 1.96 SE | k-NN test error, n = 100 | 2,000 | 90.15% | broken |
 
 ## Build it
 
@@ -101,14 +101,14 @@ python tools/lecture_length.py stats19 --floor 50
 | 0 | Hamilton or Madison? 1964 | 51 Hamilton, 14 Madison, 5 Jay, 3 joint, 12 disputed; *upon* in 51/51 Hamilton papers, absent in 11/14 Madison and 10/12 disputed |
 | 1 | Prediction error | best degree 3 (test 0.100); degree 14: train 0.04, test 346; noise 0.09; cubic train 0.071; Cp picks degree 3 |
 | 2 | Bias and variance | 3,000 training sets of 100 at x₀ = 0.25; best k = 12 (total 0.098) |
-| 3 | Cross-validation | CV picks k = 8 (test 0.119); one-SE k = 17 (test 0.141); true optimum k = 7 (0.117); Board 90.5% |
+| 3 | Cross-validation | CV picks k = 8 (test 0.119); one-SE k = 17 (test 0.141); true optimum k = 7 (0.117); Board 90.15% |
 | 4 | k-nearest neighbours | cube edge 0.79 at p = 10; distance ratio 0.003 → 0.81; 10-NN error 0.086 → 0.43; 1-NN 30.5% (limit 31.0%, bound 35.1%), √n-NN 22.6%, Bayes 22.7% |
 | 5 | Naive Bayes vs logistic | 91 words; LOO 0/65 errors each; 6 training papers: 6.1% vs 10.7%; *upon* odds factor about 17 |
-| 6 | Trees | splits at 31.4k (Blue 25.1%) and 76.4k (42.7% / 63.1%); CV picks 4 leaves; test 35.9% vs 38.5% (35 leaves); always Red 37.6% |
+| 6 | Trees | splits at 31.4k (Blue 25.1%) and 76.4k (42.7% / 63.1%); CV selects a leaf budget of 4; weakest-link pruning gives 3 actual leaves; test 35.9% vs 38.5% (35 leaves); always Red 37.6% |
 | 7 | Ridge and the lasso | lasso (1.20, 0.00) vs ridge (1.05, 0.58) in the picture; CV keeps 8, one-SE keeps 3; true (3.81, −1.94, 1.61), fitted (3.15, −1.48, 1.48) |
 | 8 | Classification metrics | accuracy 65.2% (always Red 62.9%); recall 23.7% → 63.8%, precision 57.5% → 47.7% at t = 0.35; AUC 0.663; Brier 0.215; best t 0.43 / 0.34 / 0.17 for c = 1 / 2 / 5 |
 | 9 | The *Federalist* decided | log₁₀ odds 0.6 (No. 55) to 19.7; logistic P(Madison) 0.30 for No. 55, 0.74–0.99 otherwise; joint papers 28, 17, 9; without *upon*: 11 of 12, No. 55 at −2.2 |
-| 10 | Leakage and honest evaluation | 11.3% vs 50.1% (n = 60, p = 2,000, 100 data sets); best random guess 54.9%, vote 72.4% vs 50.4% fresh; min CV 0.1075, true 0.1135, nested 0.1153 |
+| 10 | Leakage and honest evaluation | 11.3% vs 50.1% (n = 60, p = 2,000, 100 data sets); best random guess 54.9%, vote 72.4% vs 50.4% fresh; min CV 0.1075, true 0.1094, nested 0.1153 |
 | 11 | Outro | — |
 
 ## Sources
@@ -157,7 +157,7 @@ The gap is 2σ²p/n, Mallows' penalty.
 term averages to zero.
 - **Bias.** Since Σj² = m(m + 1)(2m + 1)/3, dividing by k = 2m + 1 gives bias = h²m(m + 1)/3, whatever x₀.
 - **Variance.** σ²/k.
-- **MSE.** h⁴m²(m + 1)²/9 + σ²/(2m + 1). The bias grows like k⁴ and the variance falls like 1/k.
+- **MSE.** h⁴m²(m + 1)²/9 + σ²/(2m + 1). The squared bias grows like k⁴ and the variance falls like 1/k.
 
 **3. Neighbourhoods in high dimensions.**
 
@@ -171,14 +171,13 @@ log[P_M(x)/P_H(x)] = x log(r_M/r_H) − t(r_M − r_H). With x = 0 and t = 2, it
 6.24/ln 10 ≈ 2.71 in base 10: about 500 to 1 for Madison from the absence of a single word. Hamilton would expect
 6.6 uses in such a paper, and e^{−6.6} is tiny.
 
-**5. Ridge and the lasso for an orthonormal design.**
+**5. Ridge and the lasso for a standardized orthogonal design.**
 
-*Solution.* With XᵀX = I, ‖y − Xβ‖² = ‖y − Xβ̂‖² + ‖β − β̂‖², where β̂ = Xᵀy is least squares.
-- **Ridge.** Minimize ‖β − β̂‖² + λ‖β‖²: setting the gradient to zero gives β = β̂/(1 + λ).
-- **The lasso.** Written as ½‖y − Xβ‖² + λ‖β‖₁, it separates into ½(β_j − β̂_j)² + λ|β_j| for each j. For β_j > 0
-  the minimum is β̂_j − λ, valid if β̂_j > λ; symmetrically for β_j < 0; otherwise 0. That is
-  sign(β̂_j)(|β̂_j| − λ)₊, the soft threshold. (Our scenes write the lasso with 1/(2n); with XᵀX = nI the result is
-  the same.)
+*Solution.* Centre the predictors and response and let XᵀX = nI. Then β̂ = Xᵀy/n and SSE/(2n) = constant + ½||β − β̂||².
+- **Ridge.** Adding (λ/2)||β||² and setting the gradient to zero gives β = β̂/(1 + λ).
+- **Lasso.** Adding λ||β||₁ separates into ½(βⱼ − β̂ⱼ)² + λ|βⱼ|. The minimizer is sign(β̂ⱼ)(|β̂ⱼ| − λ)₊.
+
+These use the same per-observation conventions as the scenes. The intercept is not penalized. With XᵀX = I and unnormalized loss, the effective penalty must be rescaled accordingly.
 
 **6. A good test for a rare condition.**
 
@@ -230,3 +229,20 @@ positive.
 | why test error can be bounded: learning theory | 54 |
 | inference after the data chose the model | 56 |
 | the Coverage Board | every part; 65 |
+
+
+## Review clarifications
+
+The stored word-count asset was regenerated from the current Gutenberg eBook 18 and matched all 85 records exactly. The historical feature list is a reproduction aid: literature-based selection using this same corpus means that zero leave-one-out errors are not an independent external validation of feature discovery. Naive Bayes uses equal author priors here; ridge logistic has its fitted intercept. Their probabilities have not been shown to be calibrated by classification accuracy alone.
+
+The covariance penalty uses fresh responses at the same fixed training inputs. The polynomial test curve instead uses new random inputs; high-degree instability between training points is a different risk target. The added same-input expected-risk curve includes approximation bias even when the signal is not in the polynomial space. A training error below the noise variance is possible under a well-specified model and is not proof of harmful overfitting.
+
+Ridge and lasso now use consistent per-observation objectives: ridge minimizes SSE/(2n) + λ||β||²/2, and lasso minimizes SSE/(2n) + λ||β||₁. With XᵀX = nI, their coefficients are β̂/(1+λ) and soft(β̂, λ), respectively. The ridge code multiplies λ by n before calling the toolkit's unnormalized solver. The path axes show −log₁₀λ, so weaker penalties lie to the right. Refitting after lasso removes the explicit penalty, not selection bias.
+
+The tree's CV parameter is a maximum leaf budget. Weakest-link pruning can skip sizes: the selected budget of four yields three actual leaves. Classification impurity in this implementation is Gini; held-out evaluation uses misclassification.
+
+K-neighbour noise variance σ²/k is conditional on training locations. The displayed random-design variance also includes variation in neighbour signal values. Classical U-shaped risk and monotone bias/variance tradeoffs are illustrative patterns rather than universal laws. Universal k-NN consistency assumes IID observations, fixed finite dimension, k→∞ and k/n→0.
+
+The Board and nested-CV comparison now use exact one-dimensional population risk. For the known sinusoid-plus-linear signal and uniform future inputs, k-neighbour predictions are constant between (xᵢ+xᵢ₊ₖ)/2 boundaries; integrating their squared errors avoids noise from a shared finite reference test set. Board coverage is 90.15%; the nested example has mean CV minimum 0.1075, exact selected-fit risk 0.1094, and outer-CV loss 0.1153. Outer fits use 80 observations rather than 100. Bates et al.'s specialized nested variance interval is distinct from ordinary nested tuning/evaluation.
+
+Precision–recall curves evaluate complete tied-score groups and retain full recall. Binned calibration is a limited diagnostic. The cost curves are retrospective empirical averages, with minima near but not equal to calibrated-risk thresholds; choose costs and thresholds before a final independent test. Evaluation splits must follow the intended target: new patients require patient grouping, whereas closed-set authorship necessarily includes known authors on both sides.

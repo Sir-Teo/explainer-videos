@@ -66,17 +66,22 @@ class Leakage(VoiceoverScene):
             label(r"step 2: \ 5-fold CV of 5-nearest neighbours on those", font_size=24, color=CVC),
         ), 12.0, 0.25, [0, -2.6, 0])
         tag = simulated_tag(r"simulated: \ pure noise")
+        intro = label('Feature selection can leak labels from held-out observations', font_size=36)
         with self.voiceover(
-            "Here's an experiment, adapted from Hastie, Tibshirani and Friedman's textbook. <bookmark mark='a'/> Sixty people, "
-            "two thousand measurements on each, like a gene-expression study, and a yes-or-no outcome. But every measurement "
-            "is pure noise and the outcome is a coin flip. <bookmark mark='b'/> So there is nothing to learn: every rule, "
-            "however clever, is right exactly half the time on new people. <bookmark mark='c'/> A natural analysis: first, keep "
-            "the twenty measurements most correlated with the outcome, since two thousand is far too many. <bookmark mark='d'/> "
-            "Then estimate the error of a five-nearest-neighbour classifier on those twenty, by five-fold cross-validation, "
-            "exactly as chapter three taught."
+            "Here's an experiment, adapted from Hastie, Tibshirani and Friedman's textbook. <bookmark mark='a'/> "
+            "Sixty people, two thousand measurements on each, like a gene-expression study, and a yes-or-no outcome. "
+            "But every measurement is pure noise and the outcome is a coin flip. <bookmark mark='b'/> So there is "
+            "nothing to learn: a rule that has not seen the new labels has expected accuracy one half on fresh "
+            "people, with finite-sample variation. <bookmark mark='c'/> A natural analysis: first, keep the twenty "
+            "measurements most correlated with the outcome, since two thousand is far too many. <bookmark mark='d'/> "
+            "Then estimate the error of a five-nearest-neighbour classifier on those twenty, by five-fold "
+            "cross-validation, exactly as chapter three taught."
         ) as vo:
+            intro.scale_to_fit_width(min(intro.width, 12.5))
+            self.play(FadeIn(intro))
             self.add(tag)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(grid), FadeIn(top), FadeIn(xl), FadeIn(yl), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(msg[0], shift=UP * 0.1))
@@ -175,6 +180,7 @@ class Leakage(VoiceoverScene):
         rows[3][2].set_color(RES)
         whys = [why(r"the top 20 of 2,000: \ $|r| \approx 0.33$ to $0.45$, \ $n = 60$"), why(r"the answers leaked into the rule"),
                 why(r"their chance correlation includes those people"), why(r"held out in name only")]
+        intro = label('The selected noise features already encode the held-out labels', font_size=36)
         with self.voiceover(
             "Why does it happen? <bookmark mark='a'/> Among two thousand noise columns, a few correlate with the outcome by "
             "chance; with sixty people the top twenty have correlations between about point three and point four five. <bookmark mark='b'/> But those "
@@ -183,10 +189,14 @@ class Leakage(VoiceoverScene):
             "those very people. <bookmark mark='d'/> Cross-validation then measures how well the rule remembers, not how well "
             "it predicts. The held-out fold was held out in name only."
         ) as vo:
+            intro.scale_to_fit_width(min(intro.width, 12.5))
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def catalogue(self):
@@ -194,7 +204,7 @@ class Leakage(VoiceoverScene):
             (r"preprocessing", r"scaling, \ imputing, \ PCA fitted on all the data", OBS),
             (r"selection", r"variables or features chosen with every outcome", RES),
             (r"tuning on the test set", r"the dial turned until the test error looks good", CVC),
-            (r"duplicates and groups", r"the same patient, \ the same author, \ in both", BLUE),
+            (r"duplicates and groups", r"related records crossing a split intended for new independent cases", BLUE),
             (r"time", r"tomorrow's data used to predict today", TEST),
             (r"target leakage", r"a feature recorded because of the outcome", RED),
         ]
@@ -210,15 +220,17 @@ class Leakage(VoiceoverScene):
         head = label(r"Six ways the answers leak", font_size=36).to_edge(UP, buff=0.6)
         cite = note(r"Kaufman, \ Rosset, \ Perlich \& Stitelman (2012): \ leakage in data mining", color=GREY_B).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Selection is one leak among many. <bookmark mark='a'/> Preprocessing: standardizing, filling in missing values or "
-            "computing principal components on all the data, before splitting. The effect is usually small, but it's the same "
-            "mistake. <bookmark mark='b'/> Selection, as we've just seen. <bookmark mark='c'/> Tuning on the test set: trying "
-            "settings until the test error looks good, which turns the test set into a training set. <bookmark mark='d'/> "
-            "Duplicates and groups: the same patient's two scans, or two essays by the same author, one in training and one in "
-            "test. <bookmark mark='e'/> Time: using tomorrow's information to predict today, which a random split of a time "
-            "series does quietly. <bookmark mark='f'/> And target leakage: a feature recorded because of the outcome, like a "
-            "treatment that's only given once the disease is diagnosed. A model that uses it predicts perfectly in the data and "
-            "uselessly in practice."
+            "Selection is one leak among many. <bookmark mark='a'/> Preprocessing: standardizing, filling in missing "
+            "values or computing principal components on all the data, before splitting. The size of the effect "
+            "depends on the data and preprocessing; it can be substantial. <bookmark mark='b'/> Selection, as we've "
+            "just seen. <bookmark mark='c'/> Tuning on the test set: trying settings until the test error looks good,"
+            " which turns the test set into a training set. <bookmark mark='d'/> Duplicates and groups: related "
+            "records that violate the intended evaluation target, such as the same patient's scans on both sides when"
+            " predicting for new patients. In closed-set authorship, known authors must occur on both sides; repeated"
+            " fragments or closely related papers still need care. <bookmark mark='e'/> Time: using tomorrow's "
+            "information to predict today, which a random split of a time series does quietly. <bookmark mark='f'/> "
+            "And target leakage: a feature recorded because of the outcome, like a treatment that's only given once "
+            "the disease is diagnosed. A model that uses it predicts perfectly in the data and uselessly in practice."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cite))
             for k, m_ in enumerate("abcdef"):
@@ -249,15 +261,17 @@ class Leakage(VoiceoverScene):
         cite = note(r"Blum \& Hardt (2015): \ the leaderboard attack; \ Dwork et al.\ (2015): \ the reusable holdout",
                     color=GREY_B).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "There's a subtler leak, which catches people who never touch the test set by hand. <bookmark mark='a'/> Picture a "
-            "prediction competition with a leaderboard: you submit predictions, it reports your accuracy on a holdout of a "
-            "thousand cases. Suppose the labels are coin flips, and you submit a thousand random guesses. <bookmark mark='b'/> "
-            "Their scores scatter around fifty percent, and the best is fifty-five. <bookmark mark='c'/> Now combine the five "
-            "hundred and thirteen that scored above fifty percent by majority vote. That one submission scores seventy-two point "
-            "four percent on the leaderboard. <bookmark mark='d'/> On fresh labels, it's fifty point four, as it must be. "
-            "<bookmark mark='e'/> Every score the leaderboard reported was honest; using them to choose and combine was not. "
-            "Avrim Blum and Moritz Hardt described this attack in 2015, and Cynthia Dwork and colleagues showed how to build a "
-            "holdout that can be safely reused, by adding noise to its answers."
+            "There's a subtler leak, which catches people who never touch the test set by hand. <bookmark mark='a'/> "
+            "Picture a prediction competition with a leaderboard: you submit predictions, it reports your accuracy on"
+            " a holdout of a thousand cases. Suppose the labels are coin flips, and you submit a thousand random "
+            "guesses. <bookmark mark='b'/> Their scores scatter around fifty percent, and the best is fifty-five. "
+            "<bookmark mark='c'/> Now combine the five hundred and thirteen that scored above fifty percent by "
+            "majority vote. That one submission scores seventy-two point four percent on the leaderboard. <bookmark "
+            "mark='d'/> On fresh labels, it is fifty point four, compatible with the fifty-percent population "
+            "accuracy. <bookmark mark='e'/> Every score the leaderboard reported was honest; using them to choose and"
+            " combine was not. Avrim Blum and Moritz Hardt described this attack in 2015, and Cynthia Dwork and "
+            "colleagues showed how to build controlled reusable-holdout mechanisms, using calibrated randomization "
+            "and limits on adaptive access; arbitrary noise alone is not a general guarantee."
         ) as vo:
             self.play(FadeIn(A), FadeIn(rows[0]))
             vo.wait_until("b")
@@ -295,15 +309,19 @@ class Leakage(VoiceoverScene):
             label(r"small here; \ large when the search is large", font_size=22, color=GREY_A),
         ), 5.0, 0.42, [3.9, 0.3, 0])
         with self.voiceover(
-            "Even a careful analysis leaks a little in one more way. <bookmark mark='a'/> Chapter three chose k by minimizing "
-            "the cross-validated error and then, tempting as it is, one reports that minimum as the error of the chosen rule. "
-            "Here are two hundred training sets of a hundred, with k tuned over nine values. <bookmark mark='b'/> The minimum of "
-            "the CV curve averages point one oh seven five. <bookmark mark='c'/> The true test error of the rule it picks "
-            "averages point one one three five. The minimum of several noisy estimates is biased down, the winner's curse "
-            "again. <bookmark mark='d'/> Nested cross-validation fixes it: an outer loop holds out a fold, an inner loop tunes "
-            "k on the rest, and the outer fold scores the tuned rule. It averages point one one five three, slightly "
-            "pessimistic, as cross-validation on smaller training sets should be. <bookmark mark='e'/> Here the optimism is five "
-            "percent; with thousands of settings, or a whole menu of models, it can be most of the reported accuracy."
+            "Even a careful analysis leaks a little in one more way. <bookmark mark='a'/> Chapter three chose k by "
+            "minimizing the cross-validated error and then, tempting as it is, one reports that minimum as the error "
+            "of the chosen rule. Here are two hundred training sets of a hundred, with k tuned over nine values. "
+            "<bookmark mark='b'/> The minimum of the CV curve averages point one oh seven five. <bookmark mark='c'/> "
+            "The true test error of the rule it picks has exact population risk averaging about point one oh nine "
+            "four. We integrate over a uniform future input and its independent noise, rather than using a finite "
+            "reference test set. The minimum of several noisy estimates is biased down, the winner's curse again. "
+            "<bookmark mark='d'/> Nested cross-validation separates tuning from evaluation: an outer loop holds out a"
+            " fold, an inner loop tunes k on the rest, and the outer fold scores the tuned rule. It averages point "
+            "one one five three, higher here, partly because each outer fit trains on eighty observations rather than"
+            " a hundred. Smaller training size does not guarantee pessimism for every learner. <bookmark mark='e'/> "
+            "Here the gap between the CV minimum and exact risk is about two percent; with thousands of settings, or "
+            "a whole menu of models, it can be most of the reported accuracy."
         ) as vo:
             self.play(FadeIn(A), FadeIn(rows[0]))
             for k, m_ in enumerate("bcd"):
@@ -332,6 +350,7 @@ class Leakage(VoiceoverScene):
             label(r"report the test error once, \ with its uncertainty", font_size=24, color=HIT),
             label(r"the same discipline as a preregistered trial (Part 10's forking paths)", font_size=22, color=GREY_A),
         ), 12.4, 0.42, [0, -0.7, 0])
+        intro = label('Separate fitting, selection and final evaluation', font_size=36)
         with self.voiceover(
             "So here is the discipline. <bookmark mark='a'/> Split the data first, into a part for fitting, a part for "
             "choosing among fits, and a test set, and lock the test set away before you look at anything. With little data, "
@@ -343,7 +362,10 @@ class Leakage(VoiceoverScene):
             "a preregistered trial. Part 10's garden of forking paths, and this chapter's leaks, are the same problem: the "
             "data has been used to choose what it is then asked to judge."
         ) as vo:
+            intro.scale_to_fit_width(min(intro.width, 12.5))
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(LaggedStart(*[FadeIn(r) for r in strip], lag_ratio=0.3), FadeIn(names), FadeIn(rows[0]), run_time=2.0)
             for k, m_ in enumerate("bcde"):
                 vo.wait_until(m_)
@@ -355,17 +377,19 @@ class Leakage(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"Mosteller \& Wallace chose their words on some papers, \ then checked them on others", font_size=24, color=MAD),
             label(r"words picked for discriminating looked weaker on new papers: \ the selection effect, \ measured", font_size=22),
-            label(r"our 91 words: \ their list, \ fixed before we looked", font_size=22, color=GREY_A),
+            label(r"our fixed literature-based features: a reproduction, not external validation", font_size=22, color=GREY_A),
             label(r"an error estimate is only as honest as the separation behind it", font_size=26, color=OBS),
         ), 12.4, 0.5, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Mosteller and Wallace knew all this. They chose their discriminating words using some papers "
-            "and checked them on others. <bookmark mark='b'/> And they found exactly what this chapter predicts: words chosen "
-            "because they separated the authors separated them less well on fresh papers. They measured the selection effect "
-            "and allowed for it. <bookmark mark='c'/> Our ninety-one words are their list, fixed before we looked at our "
-            "counts, which is why chapter nine's leave-one-out errors could be trusted. <bookmark mark='d'/> The lesson of the "
-            "whole part, in a sentence: an error estimate is only as honest as the separation between what was learned and "
-            "what it's tested on."
+            "<bookmark mark='a'/> Mosteller and Wallace knew all this. They chose their discriminating words using "
+            "some papers and checked them on others. <bookmark mark='b'/> And they found exactly what this chapter "
+            "predicts: words chosen because they separated the authors separated them less well on fresh papers. They"
+            " measured the selection effect and allowed for it. <bookmark mark='c'/> Our illustration fixes seventy "
+            "function words and twenty-one additional markers drawn from the literature before fitting. Historical "
+            "word selection used this same corpus, so zero leave-one-out errors are a conditional reproduction "
+            "result, not pristine external validation of feature discovery. <bookmark mark='d'/> The lesson of the "
+            "whole part, in a sentence: an error estimate is only as honest as the separation between what was "
+            "learned and what it's tested on."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
