@@ -20,20 +20,26 @@ will reappear. Then comes the Legendre (1805) vs Gauss (1809) priority dispute. 
 - heteroskedasticity, White's sandwich and HC3;
 - the regression fallacy: Galton's 1886 table, the World's fathers both ways, Secrist (1933), Bland & Altman.
 
+The normal-model t, F, Working–Hotelling and prediction guarantees require an exogenous full-rank linear model with independent normal errors of common variance. World sampling is an empirical approximation check. Gauss–Markov uses second moments and an exogenous design; GLS additionally needs a known positive-definite covariance shape. Robust HC3 inference is asymptotic and assumes independent observations and regular moments/design; it does not repair confounding, misspecified means or arbitrary dependence.
+
+The joint two-slope confidence ellipses use the exact `2 F(2, n−p)` cutoff with estimated variance. Cropped histograms retain full sample mass, and paths are geometrically clipped instead of flattening values. The remedy example's gain is 1.30 raw score units, 0.92 SD of a test score (each test has variance 2). Exponentiated predictions of log income are geometric-scale summaries, not arithmetic means. Regression in both directions does not rule out causal relationships, and causal interpretation of adjusted coefficients requires additional identification assumptions.
+
+The orbit is explicitly a constructed schematic, not a reproduction of Piazzi's observations or Gauss's historical calculation. The role of least squares in the 1801 recovery is distinguished from Gauss's published 1809 treatment.
+
 Every number on screen is computed in [`compute.py`](compute.py) or inline in a scene:
 - the families, heights, incomes and clinic come from the World (seed 1662);
 - Anscombe's quartet and Galton's table come from the Museum;
 - everything else is a seeded simulation.
 
 **Built in this part:**
-- **`statkit.ols`** ([`explainer/stats/kit/ols.py`](../../../explainer/stats/kit/ols.py)): QR-based fits with:
+- **`statkit.ols`** ([`explainer/stats/kit/ols.py`](../../../../explainer/stats/kit/ols.py)): QR-based fits with:
   - classical and HC0–HC3 covariances;
   - t, p and intervals, R² and adjusted R², nested F-tests;
   - confidence, Working–Hotelling and prediction bands;
   - leverage, studentized residuals and Cook's distance;
   - VIFs and a least-absolute-deviations line.
 
-  Every output is checked against statsmodels in `tests/test_stats_kit_ols.py`.
+  Reference outputs are checked against statsmodels in `tests/test_stats_kit_ols.py`.
 - **The influence probe** (`InfluenceProbe` in `explainer/stats/viz.py`): drag one point and watch the fit, its
   leverage and Cook's distance respond.
 
@@ -74,7 +80,7 @@ python tools/lecture_length.py stats12 --floor 50
 | 8 | Collinearity | VIF 1.0 vs 7.2; SE 0.12 vs 0.34; SE of the sum 0.15 vs 0.13 |
 | 9 | Diagnostics | Anscombe: all 3.00 + 0.500x, R² 0.67; max Cook's D 1.39 (set 3); leverage 1 (set 4) |
 | 10 | Uneven noise | funnel data: classical SE 0.095 vs HC3 0.267; the board rows above |
-| 11 | The regression fallacy | Galton 1886: slope 0.646; World: fathers +1.94σ → children +0.77σ; children +1.94σ → fathers +0.76σ; a useless remedy "gains" 1.30 SD |
+| 11 | The regression fallacy | Galton 1886: slope 0.646; World: fathers +1.94σ → children +0.77σ; children +1.94σ → fathers +0.76σ; a useless remedy "gains" 1.30 raw units = 0.92 test SD |
 | 12 | Outro | — |
 
 ## Sources

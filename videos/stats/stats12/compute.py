@@ -65,6 +65,36 @@ def fam():
     return f, mid
 
 
+def clipped_segments(xs, ys, rectangle):
+    """Clip line segments to a rectangle without flattening off-scale values."""
+    xmin, xmax, ymin, ymax = rectangle
+    points = np.column_stack((xs, ys))
+    result = []
+    for start, end in zip(points[:-1], points[1:]):
+        if not np.isfinite([start, end]).all():
+            continue
+        delta = end - start
+        lo, hi = 0.0, 1.0
+        for k, lower, upper in ((0, xmin, xmax), (1, ymin, ymax)):
+            if delta[k] == 0:
+                if not lower <= start[k] <= upper:
+                    hi = -1
+                    break
+            else:
+                a, b = sorted(((lower - start[k]) / delta[k], (upper - start[k]) / delta[k]))
+                lo, hi = max(lo, a), min(hi, b)
+        if lo <= hi:
+            result.append((start + lo * delta, start + hi * delta))
+    return result
+
+
+def histogram_density(values, edges):
+    """Density per full sample; observations outside the viewport retain their mass."""
+    counts, _ = np.histogram(values, edges)
+    return counts / (len(values) * np.diff(edges))
+
+
+
 def compute_line():
     f, mid = fam()
     g = rng(1806)
@@ -95,7 +125,7 @@ def compute_gm():
     b_ols, b_end = np.asarray(b_ols), np.asarray(b_end)
     ed = np.linspace(-0.5, 1.5, 81)
     return nest({"x": x, "sd_ols": b_ols.std(), "sd_end": b_end.std(), "mean_ols": b_ols.mean(), "mean_end": b_end.mean(),
-                 "edges": ed, "h_ols": np.histogram(b_ols, ed, density=True)[0], "h_end": np.histogram(b_end, ed, density=True)[0],
+                 "edges": ed, "h_ols": histogram_density(b_ols, ed), "h_end": histogram_density(b_end, ed),
                  "theory_ols": 2 / np.sqrt(((x - x.mean()) ** 2).sum()), "theory_end": 2 * np.sqrt(2) / (x[-1] - x[0])})
 
 
@@ -121,7 +151,7 @@ def compute_normal():
     full = ols.fit(ols.design(f["father"][idx], f["mother"][idx]), yc)
     ft = full.f_test(small)
     tss = float(((yc - yc.mean()) ** 2).sum())
-    return nest({"true": true, "sd": slopes.std(), "cover": cover / R, "t_edges": ed, "t_hist": np.histogram(ts, ed, density=True)[0],
+    return nest({"true": true, "sd": slopes.std(), "cover": cover / R, "t_edges": ed, "t_hist": histogram_density(ts, ed),
                  "F": ft, "rss_small": small.rss, "rss_full": full.rss, "tss": tss, "r2_small": small.r2, "r2_full": full.r2,
                  "t_mother": full.t()[2]})
 
@@ -185,7 +215,7 @@ def compute_poly():
            "spline": spl.predict(ols.design(*gb)), "r2": [lin.r2, quad.r2, spl.r2], "quad_coef": quad.coef}
     # extrapolation: the quadratic at age 120 and 150
     out["extrap"] = {str(a): float(quad.predict(ols.design(np.array([a]), np.array([a * a])))[0]) for a in (120, 150)}
-    # the World's true median log income by age (the career curve)
+    # the World's mean log income in three-year age bins (not mean raw income)
     a = W.age[W.adult].astype(float)
     li = np.log(W.income[W.adult])
     out["true_mean"] = [float(li[(a >= lo) & (a < lo + 3)].mean()) for lo in range(18, 99, 3)]
@@ -217,7 +247,7 @@ def compute_collin():
         X = ols.design(a, b)
         r = ols.fit(X, y)
         C = r.cov()[1:, 1:]
-        out[name] = {"coef": r.coef[1:], "cov": C, "vif": ols.vif(X), "se": r.se()[1:], "sum_se": float(np.sqrt(C.sum())), "rho": rho}
+        out[name] = {"coef": r.coef[1:], "cov": C, "df": r.df, "vif": ols.vif(X), "se": r.se()[1:], "sum_se": float(np.sqrt(C.sum())), "rho": rho}
     return nest(out)
 
 
@@ -239,7 +269,7 @@ def compute_hetero():
     r = ols.fit(ols.design(age), inc)
     rl = ols.fit(ols.design(age), np.log(inc))
     return nest({"age": age, "inc": inc, "coef": r.coef, "se": r.se(), "hc3": r.se("HC3"), "resid": r.resid,
-                 "log_se": rl.se(), "log_hc3": rl.se("HC3")})
+                 "log_coef": rl.coef, "log_se": rl.se(), "log_hc3": rl.se("HC3")})
 
 
 def compute_fallacy():
@@ -261,6 +291,7 @@ def compute_fallacy():
     out["worst_t1"] = float(t1[worst].mean())
     out["worst_t2"] = float(t2[worst].mean())
     out["gain"] = float(t2[worst].mean() - t1[worst].mean())
+    out["gain_sd"] = out["gain"] / np.sqrt(2)  # each test has population variance 2
     return nest(out)
 
 
@@ -307,7 +338,7 @@ def compute_hetsim():
     g = rng(1985)
     x, y = hetero_sample(g, 200)
     r = ols.fit(ols.design(x), y)
-    return nest({"x": x, "y": y, "coef": r.coef, "se": r.se(), "hc0": r.se("HC0"), "hc3": r.se("HC3"), "resid": r.resid})
+    return nest({"x": x, "y": y, "coef": r.coef, "se": r.se(), "hc0": r.se("HC0"), "hc3": r.se("HC3"), "oracle_se": np.sqrt(np.diag(r.XtX_inv @ ((r.X * x[:, None] ** 2).T @ r.X) @ r.XtX_inv)), "resid": r.resid})
 
 
 ITEMS = {

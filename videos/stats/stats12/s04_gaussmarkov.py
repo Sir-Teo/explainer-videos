@@ -21,7 +21,7 @@ class GaussMarkov(VoiceoverScene):
         self.play(FadeOut(card))
 
     def statement(self):
-        tc = theorem_card(r"Gauss--Markov", r"If $y = X\beta + \varepsilon$ with $E\varepsilon = 0$ and $\mathrm{Var}\,\varepsilon = \sigma^2 I$ \ "
+        tc = theorem_card(r"Gauss--Markov", r"For fixed full-column-rank $X$, if $y = X\beta + \varepsilon$ with $E\varepsilon = 0$ and $\mathrm{Var}\,\varepsilon = \sigma^2 I$ \ "
                           r"(uncorrelated, \ equal variances, \ \emph{not necessarily normal}), \ then for any linear unbiased estimator "
                           r"$\tilde\beta = Cy$ \ and any vector $c$, \ $\mathrm{Var}(c^\top\tilde\beta) \ge \mathrm{Var}(c^\top\hat\beta)$.",
                           who=r"Gauss (1821); \ Markov (1912)", color=FIT, width=10.6,
@@ -30,15 +30,18 @@ class GaussMarkov(VoiceoverScene):
             label(r"BLUE: \ the \textbf{B}est \textbf{L}inear \textbf{U}nbiased \textbf{E}stimator", font_size=28, color=OBS),
             label(r"no normality needed: \ only means, \ variances, \ and no correlation between errors", font_size=24),
         ), 12.6, 0.34, [0, -1.7, 0])
+        intro = label('Optimality among linear unbiased estimators', font_size=36)
         with self.voiceover(
-            "Gauss's second justification, from 1821, needs no normal distribution at all. <bookmark mark='a'/> Suppose the "
+            "Gauss's second justification, from 1821, needs no normal distribution at all. <bookmark mark='a'/> For fixed full-column-rank X, suppose the "
             "errors have mean zero, are uncorrelated, and all have the same variance. Then among all estimators that are "
             "linear in y and unbiased, least squares has the smallest variance, for every coefficient and every linear "
             "combination of coefficients. Andrey Markov restated it in 1912, and it has carried both their names since the 1930s. "
             "<bookmark mark='b'/> Least squares is BLUE: the best linear unbiased estimator. <bookmark mark='c'/> And the "
             "conditions are mild: means, variances, and no correlation between the errors."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(tc, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(rows[0]))
@@ -56,6 +59,7 @@ class GaussMarkov(VoiceoverScene):
         rows[3][2].set_color(OBS)
         whys = [why(r"any linear rule, \ written as OLS plus a difference $D$"), why(r"unbiased for every $\beta$: \ $CX = I$"),
                 why(r"the cross terms vanish because $DX = 0$"), why(r"positive semidefinite (Part 4): \ OLS is never beaten")]
+        intro = label('Write a rival linear estimator as OLS plus a difference', font_size=36)
         with self.voiceover(
             "The proof is four lines of Part 4's matrix algebra. <bookmark mark='a'/> Write any linear estimator as C times y, "
             "and write C as the least squares matrix plus some difference D. <bookmark mark='b'/> Unbiasedness for every "
@@ -64,9 +68,12 @@ class GaussMarkov(VoiceoverScene):
             "least squares' by sigma squared D D transpose, which is positive semidefinite. Every linear combination of the "
             "rival's coefficients has at least as much variance. Least squares is never beaten."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -76,8 +83,8 @@ class GaussMarkov(VoiceoverScene):
         A = axes([-0.5, 1.5], [0, 2.2], x_length=7.4, y_length=4.2, xlabel=r"estimated slope (truth 0.5), \ $n = 20$", ylabel=r"density",
                  xticks=[-0.5, 0, 0.5, 1, 1.5], yticks=[0, 1, 2], center=[-2.0, -0.3, 0])
         ax = A.ax
-        h1 = hist_bars(ax, ed, np.minimum(np.asarray(d["h_ols"]), 2.2), color=FIT, opacity=0.6)
-        h2 = hist_bars(ax, ed, np.minimum(np.asarray(d["h_end"]), 2.2), color=S.POST, opacity=0.5)
+        h1 = hist_bars(ax, ed, np.asarray(d["h_ols"]), color=FIT, opacity=0.6)
+        h2 = hist_bars(ax, ed, np.asarray(d["h_end"]), color=S.POST, opacity=0.5)
         tr = DashedLine(ax.c2p(0.5, 0), ax.c2p(0.5, 2.2), color=EXACT, stroke_width=2)
         leg = legend([(FIT, r"least squares"), (S.POST, r"the slope through the two end points")], font_size=22).to_edge(UP, buff=0.35)
         rows = fit_rows(VGroup(
@@ -109,16 +116,16 @@ class GaussMarkov(VoiceoverScene):
             label(r"what Gauss--Markov does not say", font_size=30, color=OBS),
             label(r"``linear'': \ a nonlinear estimator can win, \ by far, \ when errors have heavy tails (LAD, \ Part 30)", font_size=24),
             label(r"``unbiased'': \ a biased one can win in MSE: \ ridge regression and James--Stein (Parts 25, 32)", font_size=24),
-            label(r"``equal variances, \ uncorrelated'': \ otherwise generalized least squares (Aitken, 1935) is BLUE", font_size=24),
-            label(r"and it says nothing about standard errors or tests: \ those need more (ch.~4, \ ch.~10)", font_size=24, color=GREY_A),
+            label(r"``equal variances, \ uncorrelated'': \ known positive-definite covariance: \ generalized least squares is BLUE", font_size=24),
+            label(r"and its covariance formula needs only second moments; \ exact tests need more (ch.~4, \ ch.~10)", font_size=24, color=GREY_A),
         ), 12.6, 0.42, [0, 0.0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> It matters what the theorem doesn't say. <bookmark mark='b'/> It compares only linear "
             "estimators. With heavy-tailed errors a nonlinear estimator, like least absolute deviations, can be far better. "
             "<bookmark mark='c'/> It compares only unbiased ones. Biased estimators like ridge regression can have smaller "
             "mean squared error, Parts 25 and 32. <bookmark mark='d'/> It assumes equal variances and no correlation. When "
-            "that fails, Alexander Aitken's generalized least squares, from 1935, is the best linear unbiased estimator "
-            "instead. <bookmark mark='e'/> And it says nothing at all about standard errors or tests, which need more, as "
+            "the covariance is known and positive definite, Alexander Aitken's generalized least squares, from 1935, is the best linear unbiased estimator "
+            "instead. <bookmark mark='e'/> It gives the classical covariance formula under its assumptions; exact distributional tests need more, as "
             "the next chapter and chapter ten show."
         ) as vo:
             for k, m_ in enumerate("abcde"):
@@ -146,6 +153,7 @@ class GaussMarkov(VoiceoverScene):
         rows[2][2].set_color(OBS)
         whys = [why(r"the rescaled errors have equal variance: \ Gauss--Markov applies"), why(r"Aitken (1935): \ generalized least squares"),
                 why(r"SD $\propto x$, \ 6,000 simulated samples of 50: \ both unbiased")]
+        intro = label('Known error variances give inverse-variance weights', font_size=36)
         with self.voiceover(
             "What if the variances are unequal but known? <bookmark mark='a'/> Divide each row of the data by its error "
             "standard deviation. The rescaled errors all have variance one, so Gauss–Markov applies to the rescaled problem. "
@@ -154,8 +162,11 @@ class GaussMarkov(VoiceoverScene):
             "grows with x, both estimators are unbiased, but weighting cuts the slope's standard deviation by about a "
             "quarter. Noisy points should count for less."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.4, buff=0.9, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()

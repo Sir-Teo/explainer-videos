@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import numpy as np
+from scipy import stats
 
 from videos.stats.stats12.common import *  # noqa: F403
 
@@ -53,7 +54,7 @@ class Collinear(VoiceoverScene):
             C = np.asarray(c["cov"])
             m = np.asarray(c["coef"])
             vals, vecs = np.linalg.eigh(C)
-            r = np.sqrt(5.991)
+            r = np.sqrt(2 * stats.f.ppf(.95, 2, c["df"]))
             ts = np.linspace(0, 2 * np.pi, 120)
             circ = np.stack([np.cos(ts), np.sin(ts)])
             pts_ = (vecs @ np.diag(np.sqrt(vals)) @ circ) * r + m[:, None]
@@ -75,8 +76,7 @@ class Collinear(VoiceoverScene):
             "correlate point nine five, the region becomes a long thin ellipse, lying along a diagonal. The individual "
             "standard errors triple, and here the estimates split the effect unevenly, one point two and point six. "
             "<bookmark mark='c'/> But look along the diagonal: the sum of the two coefficients is estimated as precisely as "
-            "before, even a little more precisely. The data can't tell the two predictors apart, but they know exactly what "
-            "the two do together."
+            "before, even a little more precisely. The data can't tell the two predictors apart, but they estimate the sum more precisely in this model."
         ) as vo:
             self.play(FadeIn(tag), *[FadeIn(p[0]) for p in panels], *[FadeIn(p[4]) for p in panels], *[FadeIn(p[2]) for p in panels])
             vo.wait_until("a")
@@ -90,7 +90,7 @@ class Collinear(VoiceoverScene):
     def remedies(self):
         rows = fit_rows(VGroup(
             label(r"collinearity is a shortage of information, \ not a bug", font_size=30, color=OBS),
-            label(r"the estimates are still unbiased; \ the model still predicts well where the predictors move together", font_size=24),
+            label(r"the estimates are still unbiased; \ prediction can remain precise along the observed predictor combinations", font_size=24),
             label(r"what you cannot learn: \ the separate effects of things that never vary separately", font_size=24),
             label(r"cures: \ more data, \ data where they vary separately (design, \ Part 13), \ or ask about combinations", font_size=24,
                   color=GREY_A),
@@ -98,7 +98,7 @@ class Collinear(VoiceoverScene):
         ), 12.6, 0.42, [0, 0.0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Collinearity is a shortage of information, not an error in the method. "
-            "<bookmark mark='b'/> The estimates are still unbiased, and the model still predicts well, as long as the "
+            "<bookmark mark='b'/> The estimates are still unbiased, and collinearity alone need not ruin predictions, as long as the "
             "predictors keep moving together. <bookmark mark='c'/> What you can't learn is the separate effect of things "
             "that never varied separately in your data. <bookmark mark='d'/> The cures: more data; better data, collected so "
             "that the predictors do vary separately, which is design, Part 13; or questions about combinations rather than "
@@ -117,19 +117,23 @@ class Collinear(VoiceoverScene):
             cmath(r"\text{digits lost}", r"\approx", r"\log_{10}\kappa", font_size=34),
         ]
         rows[2][2].set_color(OBS)
-        whys = [why(r"how close the columns are to dependent"), why(r"for two standardized predictors: \ $(1 + \rho)/(1 - \rho)$"),
+        whys = [why(r"how close the columns are to dependent"), why(r"for two standardized predictors: \ $(1 + |\rho|)/(1 - |\rho|)$; \ centred two-column block"),
                 why(r"statistical uncertainty (VIF) and numerical error grow together")]
+        intro = label('Near dependence also causes numerical sensitivity', font_size=36)
         with self.voiceover(
             "Collinearity also has a numerical face. <bookmark mark='a'/> The condition number of X, its largest singular "
             "value over its smallest, measures how close the columns are to being linearly dependent. "
             "<bookmark mark='b'/> For two standardized predictors with correlation rho, the condition number of X transpose X "
-            "is one plus rho over one minus rho: thirty-nine at point nine five, twenty thousand at point nine nine nine nine. "
+            "for the centred two-predictor Gram block is one plus absolute rho over one minus absolute rho: thirty-nine at point nine five, twenty thousand at point nine nine nine nine. "
             "<bookmark mark='c'/> Roughly, you lose the log, base ten, of the condition number in digits of accuracy. The "
             "statistical cost, the variance inflation factor, and the numerical cost grow together, which is no coincidence: "
             "both measure how little the data say about the separate directions."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.4, buff=0.9, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()

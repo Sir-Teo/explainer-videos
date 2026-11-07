@@ -85,19 +85,23 @@ class Geometry(VoiceoverScene):
             cmath(r"\mathrm{tr}\,H", r"=", r"p,\qquad \mathrm{tr}(I - H) = n - p", font_size=34),
         ]
         rows[3][2].set_color(OBS)
-        whys = [why(r"the hat matrix: \ it puts the hat on $y$"), why(r"eigenvalues 0 and 1 only"),
+        whys = [why(r"full column rank $X$; \ the hat matrix puts the hat on $y$"), why(r"eigenvalues 0 and 1 only"),
                 why(r"the residual maker, \ also a projection"), why(r"degrees of freedom: \ the residuals live in $n - p$ dimensions")]
+        intro = label('A matrix projects observations onto the fitted space', font_size=36)
         with self.voiceover(
             "In matrix form, <bookmark mark='a'/> the fitted values are a matrix H, the hat matrix, times y: it puts the hat "
             "on y. <bookmark mark='b'/> H is symmetric and idempotent, a projection, the object Part 4 opened with, so its "
             "eigenvalues are zero and one. <bookmark mark='c'/> One minus H makes the residuals, and it's also a projection, "
-            "onto the space perpendicular to the columns. <bookmark mark='d'/> The trace of H is the number of columns, p, so "
+            "onto the space perpendicular to the columns. <bookmark mark='d'/> For full column rank X, the trace of H is the number of columns, p, including the intercept, so "
             "the residuals live in n minus p dimensions. That's why the variance estimate divides the residual sum of "
             "squares by n minus p, Part 8's n minus one, generalized."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -112,6 +116,7 @@ class Geometry(VoiceoverScene):
         rows[2][2].set_color(OBS)
         whys = [why(r"a right angle: \ Pythagoras"), why(r"total = explained + residual"),
                 why(r"the share explained: \ a squared cosine"), why(r"for one predictor, \ the squared correlation")]
+        intro = label('An orthogonal decomposition gives the sums of squares', font_size=36)
         with self.voiceover(
             "And because there's a right angle, there's Pythagoras. <bookmark mark='a'/> Centre everything at the mean. "
             "The squared length of the data's deviation from its mean equals the squared length of the fitted values' "
@@ -121,9 +126,12 @@ class Geometry(VoiceoverScene):
             "families, point one eight: the squared correlation. Parents' heights explain under a fifth of the variation in "
             "these children's heights. Chapter four turns this Pythagoras into the F-test."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -138,6 +146,7 @@ class Geometry(VoiceoverScene):
         whys = [why(r"Gram--Schmidt on the columns (Part 4): \ an orthonormal basis of the column space"),
                 why(r"back-substitution: \ no inverse anywhere"), why(r"projection onto an orthonormal basis; \ leverages for free"),
                 why(r"the condition number squares: \ digits lost twice over")]
+        intro = label('Compute least squares with an orthogonal factorization', font_size=36)
         with self.voiceover(
             "How does a computer actually find the projection? <bookmark mark='a'/> It orthonormalizes the columns of X, "
             "Part 4's Gram–Schmidt, writing X as Q times R, where Q has orthonormal columns spanning the same plane and R is "
@@ -145,11 +154,14 @@ class Geometry(VoiceoverScene):
             "back-substitution, with no inverse anywhere. <bookmark mark='c'/> The hat matrix is just Q Q transpose, and each "
             "point's leverage is the squared length of its row of Q, for free. <bookmark mark='d'/> Forming X transpose X "
             "squares the condition number, so if X is nearly collinear you lose twice as many digits. That's why statkit, like "
-            "every serious package, uses QR."
+            "many numerical routines, uses QR; SVD is another stable approach."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.65, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -165,6 +177,7 @@ class Geometry(VoiceoverScene):
         ]
         whys = [why(r"zero to machine precision"), why(r"the normal equations, \ checked"), why(r"so residuals vs fitted values must show no trend")]
         foot = label(r"a residual plot with a linear trend means a bug, \ not a finding", font_size=24, color=OBS).to_edge(DOWN, buff=0.8)
+        intro = label('Check orthogonality on the thirty families', font_size=36)
         with self.voiceover(
             "You can check the right angle numerically on the thirty families. <bookmark mark='a'/> The residuals add up to zero, "
             "to fifteen decimal places: they're perpendicular to the ones vector. <bookmark mark='b'/> Their products with x add "
@@ -172,9 +185,12 @@ class Geometry(VoiceoverScene):
             "combination of the two. <bookmark mark='d'/> That's why a plot of residuals against fitted values can never show a "
             "linear trend from least squares itself. If yours does, something is wrong with the computation, not with the world."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.2, x=-0.4, buff=0.9, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             vo.wait_until("d")
             self.play(FadeIn(foot))
@@ -182,21 +198,20 @@ class Geometry(VoiceoverScene):
 
     def many_x(self):
         rows = fit_rows(VGroup(
-            label(r"with $p$ predictors the picture is the same, \ one dimension up", font_size=28),
+            label(r"with $p$ independent columns, including the intercept, the picture is the same, \ one dimension up", font_size=28),
             label(r"the fit is a $p$-dimensional plane in $\mathbb R^n$; \ $\hat y$ is the foot of the perpendicular from $y$", font_size=24),
             label(r"every coefficient is a FWL slope (ch.~5): \ its predictor, \ cleaned of all the others", font_size=24, color=OBS),
-            label(r"the residual space has $n - p$ dimensions: \ with $p$ close to $n$, \ almost nothing is left to estimate $\sigma$", font_size=24,
+            label(r"the residual space has $n - p$ dimensions: \ with rank $p$ close to $n$, \ almost nothing is left to estimate $\sigma$", font_size=24,
                   color=GREY_A),
-            label(r"$p > n$: \ the plane is all of $\mathbb R^n$, \ the fit is perfect, \ and meaningless (Part 32)", font_size=24, color=MISS),
+            label(r"$p > n$, full row rank: \ interpolation; \ prediction needs further structure (Part 32)", font_size=24, color=MISS),
         ), 12.6, 0.42, [0, 0.0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> With many predictors, nothing in the picture changes except the dimension. "
             "<bookmark mark='b'/> The possible fits form a p-dimensional plane inside n-dimensional space, and the fitted values "
             "are the foot of the perpendicular from y. <bookmark mark='c'/> Each coefficient is a Frisch–Waugh–Lovell slope: the "
-            "effect of its predictor after cleaning out all the others, as chapter five shows. <bookmark mark='d'/> The residuals "
+            "partial linear association after projecting out the others, as chapter five shows. <bookmark mark='d'/> The residuals "
             "live in the remaining n minus p dimensions, so as p approaches n there's little left over to estimate the noise. "
-            "<bookmark mark='e'/> And when p exceeds n, the plane fills the whole space, the fit is perfect, and it means "
-            "nothing. That's the starting point of Part 32."
+            "<bookmark mark='e'/> And when p exceeds n, a full-row-rank design spans the whole space and can interpolate the data. Prediction then needs further structure or regularization. That's the starting point of Part 32."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

@@ -36,26 +36,29 @@ class Fallacy(VoiceoverScene):
         whys = [why(r"tall fathers: \ children closer to average"), why(r"short fathers: \ the same, upward"),
                 why(r"read backwards: \ tall children's fathers regress too"), why(r"and the population does not shrink at all")]
         tag = simulated_tag(r"the World: \ 50,000 families", corner=UR)
+        intro = label('Selection creates regression toward the mean in either direction', font_size=36)
         with self.voiceover(
             "Part 5 met regression to the mean. With regression in hand, here's how it fools people. "
             "<bookmark mark='a'/> In the World, fathers more than one and a half standard deviations above average have children "
             "only point seven seven above. <bookmark mark='b'/> Short fathers' children are closer to average too. It looks as "
             "if the population is converging on mediocrity, as Galton first feared. <bookmark mark='c'/> But read the data "
             "backwards: the fathers of very tall children are only point seven six above average. Regression goes both ways, "
-            "which no causal story could produce. <bookmark mark='d'/> And the spread of children's heights is exactly the "
-            "spread of fathers': nothing is shrinking. Regression to the mean is what imperfect correlation looks like, in "
+            "which does not establish a causal shrinking of the population. Causal relationships can still underlie the association. <bookmark mark='d'/> And the spread is approximately one in each generation's own standardized units: nothing is shrinking. Regression to the mean is what imperfect correlation looks like, in "
             "either direction."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tag))
             step = ladder(self, rows, whys, keep=4, top=2.4, x=-0.6, buff=0.75, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
     def treatment(self):
         d = load("fallacy")
-        A = axes([0, 3], [-3, 0], x_length=5.6, y_length=4.4, ylabel=r"mean test score (SD units)", yticks=[-3, -2, -1, 0], center=[-3.0, -0.3, 0])
+        A = axes([0, 3], [-3, 0], x_length=5.6, y_length=4.4, ylabel=r"mean test score (raw units; \ population SD $= \sqrt2$)", yticks=[-3, -2, -1, 0], center=[-3.0, -0.3, 0])
         ax = A.ax
         bars = VGroup(
             Rectangle(width=1.0, height=abs(ax.c2p(0, d["worst_t1"])[1] - ax.c2p(0, 0)[1]), stroke_width=0, fill_color=RES, fill_opacity=0.8)
@@ -67,7 +70,7 @@ class Fallacy(VoiceoverScene):
                       MathTex(f"{d['worst_t2']:.2f}", font_size=26, color=FIT).next_to(bars[1], DOWN, buff=0.55))
         rows = fit_rows(VGroup(
             label(r"the worst 10\% on a noisy test get a ``remedy'' that does nothing", font_size=24),
-            MathTex(rf"\text{{``improvement'': }} {d['gain']:+.2f}\ \text{{SD}}", font_size=30, color=OBS),
+            MathTex(rf"\text{{``improvement'': }} {d['gain']:+.2f}\ \text{{score units}} = {d['gain_sd']:.2f}\ \text{{test SD}}", font_size=30, color=OBS),
             label(r"luck was part of why they scored so low; \ it does not repeat", font_size=24, color=GREY_A),
             label(r"the cure: \ a randomized control group, \ selected the same way (Part 13)", font_size=24, color=FIT),
             label(r"Kahneman's flight instructors: \ praise after a great landing ``fails'', \ criticism after a bad one ``works''", font_size=22,
@@ -77,10 +80,10 @@ class Fallacy(VoiceoverScene):
         with self.voiceover(
             "The fallacy has a costly form. <bookmark mark='a'/> Give ten thousand students a noisy test. Take the worst ten "
             "percent, give them a remedy that does absolutely nothing, and test them again. <bookmark mark='b'/> Their average "
-            "rises by one point three standard deviations. It looks like a spectacular success. <bookmark mark='c'/> But part of "
+            "rises by one point three raw score units, about point nine two standard deviations of a test score. It looks like a spectacular success. <bookmark mark='c'/> But part of "
             "why they scored so badly the first time was bad luck on the day, and luck doesn't repeat. "
-            "<bookmark mark='d'/> The only way to see through it is a control group, chosen the same way and randomly denied "
-            "the remedy. Then both groups regress equally, and the difference is the effect. <bookmark mark='e'/> Daniel "
+            "<bookmark mark='d'/> A direct way to handle it is a control group, chosen the same way and randomly denied "
+            "the remedy. Then both groups regress equally in expectation, and the difference is the effect. <bookmark mark='e'/> Daniel "
             "Kahneman told of flight instructors convinced that praise after a great landing made pilots worse and criticism "
             "after a bad one made them better: regression to the mean, both times."
         ) as vo:
@@ -139,7 +142,7 @@ class Fallacy(VoiceoverScene):
         for i, p_ in enumerate(P):
             for j, c in enumerate(C):
                 if T[i, j] > 0:
-                    cells.add(Dot(ax.c2p(p_, c), radius=0.025 + 0.012 * np.sqrt(T[i, j]), color=DATA, fill_opacity=0.7))
+                    cells.add(Dot(ax.c2p(p_, c), radius=0.028 * np.sqrt(T[i, j]), color=DATA, fill_opacity=0.7))
         diag = DashedLine(ax.c2p(63.5, 63.5), ax.c2p(73.5, 73.5), color=GREY_B, stroke_width=1.5)
         ln = fit_line(ax, a, b, 63.5, 73.5)
         rows = fit_rows(VGroup(
@@ -175,7 +178,7 @@ class Fallacy(VoiceoverScene):
             label(r"patients enrol in a trial because their blood pressure is high \emph{today}", font_size=24),
             label(r"next month, \ untreated, \ it is lower on average: \ partly real variation, \ partly regression", font_size=24),
             label(r"a before--after comparison credits the drug with all of it", font_size=24, color=MISS),
-            label(r"the placebo arm of a randomized trial regresses by the same amount, \ and subtracts it out", font_size=24, color=FIT),
+            label(r"the placebo arm of a randomized trial regresses by the same amount in expectation, \ and subtracts it out", font_size=24, color=FIT),
             label(r"Bland \& Altman, \ ``Regression towards the mean'' (\emph{BMJ}, 1994)", font_size=22, color=GREY_A),
         ), 12.6, 0.4, [0, 0.0, 0])
         with self.voiceover(
@@ -183,7 +186,7 @@ class Fallacy(VoiceoverScene):
             "because a measurement, say blood pressure, is high on the day they're tested. <bookmark mark='c'/> A month later, "
             "even untreated, it's lower on average, partly because the high reading was partly chance. <bookmark mark='d'/> A "
             "before-and-after comparison credits the drug with all of that fall. <bookmark mark='e'/> The placebo arm of a "
-            "randomized trial regresses by the same amount, so comparing arms subtracts it out. <bookmark mark='f'/> Martin "
+            "randomized trial regresses by the same amount in expectation, so comparing arms subtracts it out. <bookmark mark='f'/> Martin "
             "Bland and Douglas Altman's short note on this, in the British Medical Journal in 1994, is still worth reading."
         ) as vo:
             for k, m_ in enumerate("abcdef"):

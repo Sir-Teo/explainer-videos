@@ -36,14 +36,14 @@ class Hetero(VoiceoverScene):
             label(r"heteroskedasticity: \ $\mathrm{Var}(\varepsilon_i)$ depends on $x_i$", font_size=24, color=OBS),
             MathTex(rf"\hat\beta_{{\text{{age}}}} = {d['coef'][1]:.2f}\ \text{{thousand per year}}", font_size=26, color=FIT),
             MathTex(rf"\text{{classical SE}}\ {d['se'][1]:.3f},\quad \text{{HC3}}\ {d['hc3'][1]:.3f}", font_size=26),
-            label(r"close here; \ chapter 9's funnel is mild", font_size=22, color=GREY_A),
+            label(r"close here; \ this World-income comparison differs from ch.~9's stronger simulated funnel", font_size=22, color=GREY_A),
         ), 5.4, 0.32, [3.9, -0.2, 0])
         tag = simulated_tag(r"the World: \ 400 adults under 67", corner=DR)
         with self.voiceover(
             "Gauss–Markov and the classical standard errors assume every observation has the same error variance. "
             "<bookmark mark='a'/> Real data often don't. Here are four hundred of the World's working-age adults: income against "
             "age. The spread of incomes grows with their level, a funnel. <bookmark mark='b'/> Unequal variances are called "
-            "heteroskedasticity. <bookmark mark='c'/> Least squares still estimates the slope without bias, about seven hundred "
+            "heteroskedasticity. <bookmark mark='c'/> In a correctly specified exogenous linear model, least squares remains unbiased; here it estimates a linear summary of a curved age relationship, about seven hundred "
             "a year. <bookmark mark='d'/> Here the classical standard error and a robust one, which we'll build in a moment, "
             "happen to agree. But they don't always."
         ) as vo:
@@ -71,7 +71,8 @@ class Hetero(VoiceoverScene):
             label(r"the worst case: \ the noise is largest exactly where $x$ is extreme", font_size=24),
             label(r"those points have the most leverage on the slope", font_size=24, color=OBS),
             MathTex(rf"\text{{classical SE}}\ {d['se'][1]:.3f}\quad\text{{vs}}\quad\text{{HC3}}\ {d['hc3'][1]:.3f}", font_size=28),
-            label(r"the classical formula assumes their noise is average: \ it is 2.8 times too small", font_size=22, color=MISS),
+            label(r"the classical formula assumes their noise is average: \ HC3 is about 2.8 times the classical estimate in this sample", font_size=22, color=MISS),
+            MathTex(rf"\text{{known-model slope SE}} = {d['oracle_se'][1]:.3f}", font_size=25, color=EXACT),
         ), 5.4, 0.34, [3.9, -0.3, 0])
         tag = simulated_tag(r"simulated: \ 200 points", corner=DR)
         with self.voiceover(
@@ -79,7 +80,7 @@ class Hetero(VoiceoverScene):
             "simulated case: a skewed x, and errors whose spread is proportional to x. <bookmark mark='b'/> The extreme x's "
             "have the most leverage on the slope, and they're also the noisiest points. <bookmark mark='c'/> The classical "
             "formula pretends their noise is average, and reports a standard error of point zero nine five. The robust "
-            "standard error is point two seven: nearly three times larger. <bookmark mark='d'/> Intervals built on the "
+            "standard error is point two seven: nearly three times larger. The exact conditional standard error in this simulated model is point two nine nine; HC3 is still an estimate. <bookmark mark='d'/> Intervals built on the "
             "classical one would be far too narrow."
         ) as vo:
             self.play(FadeIn(A), FadeIn(tag))
@@ -101,17 +102,16 @@ class Hetero(VoiceoverScene):
             cmath(r"\mathrm{HC3}", r":", r"e_i^2 \to \frac{e_i^2}{(1 - h_{ii})^2}", font_size=34),
         ]
         rows[2][2].set_color(OBS)
-        whys = [why(r"exact, \ for any error covariance $\Sigma$: \ a sandwich"), why(r"only if every variance is equal"),
+        whys = [why(r"exact, \ for any error covariance $\Sigma$: \ a sandwich"), why(r"uncorrelated errors with equal variances"),
                 why(r"White (1980): \ estimate the meat with squared residuals"), why(r"MacKinnon \& White (1985): \ inflate high-leverage residuals")]
         with self.voiceover(
             "<bookmark mark='a'/> The exact variance of beta-hat, for any error covariance, is a sandwich: X transpose X inverse "
-            "on both sides, and X transpose Sigma X in the middle. <bookmark mark='b'/> If every variance is equal, the middle "
+            "on both sides, and X transpose Sigma X in the middle. <bookmark mark='b'/> If errors are uncorrelated with equal variance, the middle "
             "collapses and you get the classical formula. <bookmark mark='c'/> Halbert White's insight, in 1980, published "
             "in what became one of the most cited papers in economics: you can't estimate each error variance, but you don't "
-            "need to. Estimate the middle of the sandwich with the squared residuals, and the result is consistent whatever "
-            "the pattern of variances. <bookmark mark='d'/> James MacKinnon and White's HC3 version divides each squared "
+            "need to. Estimate the middle of the sandwich with the squared residuals, and the result is consistent under independent sampling, suitable finite moments and a non-dominating design, allowing unequal variances. It does not handle arbitrary error correlation. <bookmark mark='d'/> James MacKinnon and White's HC3 version divides each squared "
             "residual by one minus its leverage, squared, because high-leverage points have deceptively small residuals, "
-            "as chapter nine showed. It behaves best in small samples."
+            "as chapter nine showed. It often improves small-sample behavior, but has no universal finite-sample coverage guarantee."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.6, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -146,7 +146,7 @@ class Hetero(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"in practice", font_size=30, color=OBS),
             label(r"plot residuals against fitted values: \ a funnel is visible", font_size=24),
-            label(r"report HC3 standard errors by default; \ when they agree with the classical ones, \ nothing is lost", font_size=24),
+            label(r"report HC3 standard errors by default; \ independent-data inference; \ still an approximation, especially at high leverage", font_size=24),
             label(r"a transformation (log income) often removes the funnel, \ and changes the question to a proportional one", font_size=24,
                   color=GREY_A),
             label(r"if the variance pattern is known, \ weight by it: \ weighted least squares, \ BLUE again", font_size=24, color=GREY_A),
@@ -154,8 +154,7 @@ class Hetero(VoiceoverScene):
         ), 12.6, 0.4, [0, 0.0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> In practice: <bookmark mark='b'/> plot the residuals against the fitted values, where a "
-            "funnel is easy to see. <bookmark mark='c'/> Report HC3 standard errors by default; when the noise is even they "
-            "agree with the classical ones and nothing is lost. <bookmark mark='d'/> A transformation, like taking logs of "
+            "funnel is easy to see. <bookmark mark='c'/> Report HC3 standard errors by default; under independent sampling they are useful against heteroskedasticity, though finite-sample efficiency and calibration can differ from classical inference. <bookmark mark='d'/> A transformation, like taking logs of "
             "incomes, often removes the funnel, and changes the question to one about proportional effects. "
             "<bookmark mark='e'/> If you know how the variance changes, weight each observation by the inverse of its "
             "variance: weighted least squares is the best linear unbiased estimator again. <bookmark mark='f'/> And when errors "
@@ -172,8 +171,8 @@ class Hetero(VoiceoverScene):
             label(r"the World's incomes on the log scale", font_size=28),
             MathTex(rf"\widehat{{\beta}}_{{\text{{age}}}}\ \text{{on log income}}:\ \ \text{{classical SE}}\ {d['log_se'][1]:.4f},\ \ \text{{HC3}}\ {d['log_hc3'][1]:.4f}",
                     font_size=30),
-            label(r"logs turn multiplicative noise into additive noise of constant size", font_size=24, color=OBS),
-            label(r"the coefficient now means a percentage: \ about 1.5\% more income per year of age, \ on average, \ under 67", font_size=24,
+            label(r"logs can stabilize multiplicative spread; \ the mean model still needs checking", font_size=24, color=OBS),
+            label(r"the coefficient now means a percentage: \ a fitted log-income association under 67, \ not a causal age effect", font_size=24,
                   color=GREY_A),
             label(r"choose the scale for the question first; \ fix the standard errors second", font_size=24, color=GREY_A),
         ), 12.6, 0.42, [0, 0.0, 0])

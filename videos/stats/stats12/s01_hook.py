@@ -30,8 +30,7 @@ class Hook(VoiceoverScene):
             "Astronomers made predictions, and they disagreed. <bookmark mark='c'/> A twenty-four-year-old mathematician "
             "in Brunswick, Carl Friedrich Gauss, took Piazzi's few, noisy positions and fitted an orbit to them. "
             "<bookmark mark='d'/> On the last night of 1801, Franz von Zach found Ceres within half a degree of where Gauss "
-            "said it would be. Gauss was famous overnight. His method, which he didn't publish for eight years, was least "
-            "squares."
+            "said it would be. Gauss became famous for his orbit calculation. In 1809 he published a systematic treatment of least squares for astronomical observations; the exact role of least squares in the 1801 recovery is historically disputed."
         ) as vo:
             self.play(FadeIn(tl))
             vo.wait_until("a")
@@ -56,7 +55,6 @@ class Hook(VoiceoverScene):
             r_ = a * (1 - e * e) / (1 + e * np.cos(t))
             obs.append(sun.get_center() + np.array([r_ * np.cos(t), 0.72 * r_ * np.sin(t), 0]) + np.r_[g.normal(0, 0.04, 2), 0])
         dots = VGroup(*[Dot(p_, radius=0.05, color=DATA) for p_ in obs])
-        arc_fit = VMobject(stroke_color=FIT, stroke_width=3).set_points_smoothly(pts[:]).set_opacity(0)
         pred_t = 2.7
         r_ = a * (1 - e * e) / (1 + e * np.cos(pred_t))
         pred = Dot(sun.get_center() + np.array([r_ * np.cos(pred_t), 0.72 * r_ * np.sin(pred_t), 0]), radius=0.09, color=OBS)
@@ -66,14 +64,14 @@ class Hook(VoiceoverScene):
             label(r"find the orbit that misses them by the least, \ in total squared error", font_size=24, color=FIT),
             label(r"follow it around to where Ceres will be", font_size=24, color=OBS),
         ), 4.8, 0.3, [4.4, -1.6, 0])
+        tag = simulated_tag(r"schematic: \ constructed orbit and noisy points", corner=DR)
         with self.voiceover(
-            "The problem, schematically. <bookmark mark='a'/> Piazzi's observations were a handful of noisy points on a "
-            "short arc of a long orbit. <bookmark mark='b'/> Many orbits pass near those points. Gauss chose the one whose "
-            "total squared miss, summed over the observations, was smallest. <bookmark mark='c'/> Then he followed it "
-            "around the Sun, to where Ceres would be months later. A short arc pins down a long orbit only if you use every "
+            "A constructed orbital illustration, not a reconstruction of Piazzi's records or Gauss's fit. <bookmark mark='a'/> Piazzi's observations were a handful of noisy points on a "
+            "short arc of a long orbit. <bookmark mark='b'/> Many orbits pass near those points. Least squares would choose an orbit minimizing total squared residuals under a specified observation model. The curve shown here is constructed to explain extrapolation. <bookmark mark='c'/> Then he followed it "
+            "around the Sun, to where Ceres would be months later. A short arc constrains a long orbit only if you use every "
             "observation as well as possible, and squaring the errors turned out to be the way."
         ) as vo:
-            self.play(FadeIn(sun), FadeIn(sl), Create(earth_orbit))
+            self.play(FadeIn(sun), FadeIn(sl), Create(earth_orbit), FadeIn(tag))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(d, scale=1.5) for d in dots], lag_ratio=0.1), FadeIn(rows[0]))
             vo.wait_until("b")
@@ -92,6 +90,7 @@ class Hook(VoiceoverScene):
             label(r"Legendre was furious; \ the priority dispute was never settled", font_size=24, color=GREY_A),
             label(r"Stigler (1981): \ Gauss's claim is plausible, \ but Legendre's was the method the world learned", font_size=22, color=GREY_A),
         ), 12.6, 0.3, [0, -2.2, 0])
+        intro = label('Legendre publishes first; Gauss claims earlier use', font_size=36)
         with self.voiceover(
             "And then came one of the great priority disputes in science. <bookmark mark='a'/> In 1805 Adrien-Marie Legendre, "
             "in an appendix to a book on comet orbits, published the method, named it, the method of least squares, and "
@@ -100,7 +99,9 @@ class Hook(VoiceoverScene):
             "since 1795. <bookmark mark='c'/> Legendre was furious. Historians, including Stephen Stigler, think Gauss's "
             "claim is plausible, but it was Legendre's clear account that the world learned from."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(h1, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(h2, shift=UP * 0.2))
