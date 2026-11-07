@@ -5,7 +5,7 @@ The branch contains **65 parts and 888 chapters**. All manifests resolve to exis
 
 ## Current checkpoint
 
-All 65 parts have received English scientific source review and focused numerical checks. Parts 1–48, 52 and 54 have completed their recorded sampled visual passes. The remaining visual checks are running, including fresh source-matched renders after the layout repairs. Part 65's six computation items are reconciled, including the complete 319-row historical Board from all 57 contributing parts.
+All 65 parts have received English scientific source review and focused numerical checks. Parts 1–48, 50, 52 and 54 have completed their recorded sampled visual passes. The remaining visual checks are running, including fresh source-matched renders after the layout repairs. Part 65's six computation items are reconciled, including the complete 319-row historical Board from all 57 contributing parts.
 
 A [shared World programme-name collision](evidence/world-programmes-20261107/README.md) has been corrected. The [Coverage Board now preserves empirical Monte Carlo uncertainty](evidence/board-mc-20261107/README.md) for correlated intervals within one simulation. Legacy-row values are unchanged. Parts 1–22 retain the visual inspections recorded at their commits; their conservative shared-code fingerprints are being refreshed after the Board correction. Parts 1–12 have completed that latest refresh; further parts remain queued. Part 23's final receipts include the corrected shared source.
 
@@ -76,7 +76,7 @@ No part is signed off for bilingual production. The branch has zero narration_zh
 | 47 | `stats47` | 15 | English scientific source and sampled visual review complete; bilingual/listening/master approval open |
 | 48 | `stats48` | 14 | English scientific source and sampled visual review complete; bilingual/listening/master approval open |
 | 49 | `stats49` | 13 | Scientific source and numerical reconciliation complete; 14 checks pass; visual verification pending |
-| 50 | `stats50` | 12 | Scientific source and numerical corrections complete; 17 checks pass; visual verification pending |
+| 50 | `stats50` | 12 | English scientific source and sampled visual review complete; bilingual/listening/master approval open |
 | 51 | `stats51` | 12 | Scientific source and numerical reconciliation complete; 17 checks pass; visual verification pending |
 | 52 | `stats52` | 13 | English scientific source and sampled visual review complete; bilingual/listening/master approval open |
 | 53 | `stats53` | 13 | Scientific source and numerical reconciliation complete; 21 checks pass; visual verification pending |
