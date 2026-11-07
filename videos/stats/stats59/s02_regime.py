@@ -192,11 +192,11 @@ class Regime(LectureMixin, VoiceoverScene):
             "justification. <bookmark mark='e'/> The biopsy example is a semi-synthetic stress test outside the "
             'Gaussian theorem, not evidence that its coverage guarantee automatically transfers.'
         ),
-            [(r"assumptions:", GREY_A),
+            [('Assumptions of proportional-regime asymptotics', GREY_A),
              (r"Gaussian theorem; \ specified universality extensions need conditions", PROPC),
              (r"a spread signal: \ no single coefficient dominates", PROPC),
              (r"correlated Gaussian inference uses conditional predictor scales", CLASSC),
-             (r"chapter 9: \ a real design", AMPC)])
+             (r"chapter 9: \ a real design", AMPC)], head_size=36)
 
     def null_worked(self):
         heading = label('Global-null logistic calibration', font_size=30, color=PROPC).move_to([0, 3.35, 0])

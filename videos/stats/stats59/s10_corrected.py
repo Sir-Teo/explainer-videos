@@ -136,10 +136,10 @@ class Corrected(LectureMixin, VoiceoverScene):
             (
             "<bookmark mark='a'/> Other corrections in the proportional regime. <bookmark mark='b'/> Debiased lasso intervals need a degrees-of-freedom adjustment when the support is a constant fraction of n, as Pierre Bellec and Cun-Hui Zhang showed. <bookmark mark='c'/> Under suitable model and validation assumptions, cross-validation can consistently estimate its target risk, but training-sample size and dependence between folds matter for both target and uncertainty. <bookmark mark='d'/> The bootstrap can fail: El Karoui and Purdom showed in 2018 that resampling residuals or pairs misstates the variance of regression estimates when p is a fraction of n."
         ),
-            [(r"other corrections:", GREY_A),
+            [('Further corrections for high-dimensional inference', GREY_A),
              (r"debiased lasso: \ a degrees-of-freedom adjustment \ (Bellec \& Zhang)", PROPC),
              (r"cross-validation: \ consistent for risk, \ not for its uncertainty", SIMC),
-             (r"the bootstrap can fail \ (El Karoui \& Purdom 2018)", CLASSC)])
+             (r"the bootstrap can fail \ (El Karoui \& Purdom 2018)", CLASSC)], head_size=36)
 
     def worked_interval(self):
         heading = label('A hypothetical Gaussian-coordinate interval', font_size=30, color=PROPC).move_to([0, 3.35, 0])
